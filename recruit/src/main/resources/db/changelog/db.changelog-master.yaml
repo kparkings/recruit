@@ -1,0 +1,36 @@
+databaseChangeLog:
+  - changeSet:
+      id: recruiter
+      author: kparkings
+      changes:
+        - createTable:
+            tableName: recruiter
+            columns:
+              - column:
+                  name: email
+                  type: varchar
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: firstname
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: surnaname
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: agency
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: contact_frequency
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+                    
+                    

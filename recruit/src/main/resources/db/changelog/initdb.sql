@@ -1,0 +1,3 @@
+CREATE DATABASE recruitdb;
+CREATE USER recruitadmin WITH PASSWORD Fender1980;
+GRANT ALL PRIVILEGES ON SCHEMA recruitdb TO recruitadmin;
