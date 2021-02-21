@@ -1,4 +1,4 @@
-package com.arenella.recruit.beans;
+package com.arenella.recruit.candidate.entities;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -6,21 +6,21 @@ import java.time.LocalDate;
 
 import org.junit.jupiter.api.Test;
 
-import com.arenella.recruit.beans.Candidate.COUNTRY;
+import com.arenella.recruit.candidate.beans.Candidate.COUNTRY;
 
 /**
-* Unit test for the Candidate Class
+* Unit tests for the CandidateEntity class
 * @author K Parkings
 */
-public class CandidateTest {
+public class CandidateEntityTest {
 
 	/**
-	* Test Builder values used to initialize instance of the Candidate Class 
+	* Test Builder values used to initialize instance of the CandidateEntity Class 
 	*/
 	@Test
 	public void testInitializationFromBuilder() {
 		
-		final String 		candidateId 			=	"Candidate1";
+		final String 		candidateId 			= "Candidate1";
 		final COUNTRY 		country 				= COUNTRY.NETHERLANDS;
 		final String 		city 					= "Den Haag";
 		final boolean 		available 				= true;
@@ -30,7 +30,7 @@ public class CandidateTest {
 		final LocalDate 	registerd 				= LocalDate.of(2021, 02, 20);
 		final int 			yearsExperience 		= 21;
 		
-		Candidate candidate = Candidate
+		CandidateEntity candidateEntity = CandidateEntity
 						.builder()
 							.candidateId(candidateId)
 							.country(country)
@@ -43,16 +43,15 @@ public class CandidateTest {
 							.yearsExperience(yearsExperience)
 							.build();
 		
-		assertEquals(candidate.getCandidateId(), candidateId);
-		assertEquals(candidate.getCountry(), country);
-		assertEquals(candidate.getCity(), city);
-		assertEquals(candidate.isAvailable(), available);
-		assertEquals(candidate.isFreelance(), freelance);
-		assertEquals(candidate.isPerm(), perm);
-		assertEquals(candidate.getLastAvailabilityCheckOn(), lastAvailabilityCheck);
-		assertEquals(candidate.getRegisteredOn(), registerd);
-		assertEquals(candidate.getYearsExperience(), yearsExperience);
-		
+		assertEquals(candidateEntity.getCandidateId(), candidateId);
+		assertEquals(candidateEntity.getCountry(), country);
+		assertEquals(candidateEntity.getCity(), city);
+		assertEquals(candidateEntity.isAvailable(), available);
+		assertEquals(candidateEntity.isFreelance(), freelance);
+		assertEquals(candidateEntity.isPerm(), perm);
+		assertEquals(candidateEntity.getLastAvailabilityCheckOn(), lastAvailabilityCheck);
+		assertEquals(candidateEntity.getRegisteredOn(), registerd);
+		assertEquals(candidateEntity.getYearsExperience(), yearsExperience);
 		
 	}
 	

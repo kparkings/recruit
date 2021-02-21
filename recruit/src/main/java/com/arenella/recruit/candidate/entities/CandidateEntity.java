@@ -1,42 +1,67 @@
-package com.arenella.recruit.beans;
+package com.arenella.recruit.candidate.entities;
 
 import java.time.LocalDate;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+import com.arenella.recruit.candidate.beans.Candidate.COUNTRY;
+
 /**
-* Class represents a Recruitment Candidate. A Candidate that 
-* can be place on a project
+* Entity representation of a Candidate. A Candidate is 
+* someone who is potentially open to Work.
 * @author K Parkings
 */
-public class Candidate {
+@Entity
+@Table(name="candidate")
+public class CandidateEntity {
 
-	public static enum COUNTRY {NETHERLANDS, BELGIUM, UK}
-	
+	@Id
+	@Column(name="candidate_id")
 	private String 		candidateId;
+	
+	@Column(name="country")
 	private COUNTRY 	country;
+	
+	@Column(name="city")
 	private String 		city;
+	
+	@Column(name="perm")
 	private boolean 	perm;
+	
+	@Column(name="freelance")
 	private boolean 	freelance;
+	
+	@Column(name="years_experience")
 	private int			yearsExperience;
+	
+	@Column(name="available")
 	private boolean 	available;
+	
+	@Column(name="registered")
 	private LocalDate 	registerd;
+	
+	@Column(name="last_availability_check")
 	private LocalDate 	lastAvailabilityCheck;
 	
 	/**
 	* Constructor based upon a builder
-	* @param builder = Contains initialization information
+	* @param builder - Contains initialization parameters
 	*/
-	public Candidate(CandidateBuilder builder) {
+	public CandidateEntity(CandidateEntityBuilder builder) {
 		
-		this.candidateId				= builder.candidateId;
-		this.country					= builder.country;
-		this.city 						= builder.city;
-		this.perm 						= builder.perm;
-		this.freelance 					= builder.freelance;
-		this.yearsExperience 			= builder.yearsExperience;
-		this.available 					= builder.available;
-		this.registerd 					= builder.registerd;
-		this.lastAvailabilityCheck 		= builder.lastAvailabilityCheck;
-	
+		this.candidateId 			= builder.candidateId;
+		this.country 				= builder.country;
+		this.city 					= builder.city;
+		this.perm 					= builder.perm;
+		this.freelance 				= builder.freelance;
+		this.yearsExperience 		= builder.yearsExperience;
+		this.available 				= builder.available;
+		this.registerd 				= builder.registerd;
+		this.lastAvailabilityCheck 	= builder.lastAvailabilityCheck;
+		
 	}
 	
 	/**
@@ -115,19 +140,19 @@ public class Candidate {
 	}
 	
 	/**
-	* Builder for the Candidate class
-	* @return A Builder for the Candidate class
+	* Returns a Builder for the CandidateEntity class
+	* @return Builder for the CandidateEntity class
 	*/
-	public static final CandidateBuilder builder() {
-		return new CandidateBuilder();
+	public static CandidateEntityBuilder builder() {
+		return new CandidateEntityBuilder();
 	}
 	
 	/**
-	* Builder Class for the Candidate Class
+	* Builder for the CandidateEntity class
 	* @author K Parkings
 	*/
-	public static class CandidateBuilder {
-		
+	public static class CandidateEntityBuilder {
+	
 		private String 		candidateId;
 		private COUNTRY 	country;
 		private String 		city;
@@ -137,106 +162,107 @@ public class Candidate {
 		private boolean 	available;
 		private LocalDate 	registerd;
 		private LocalDate 	lastAvailabilityCheck;
-		
+	
 		/**
-		* Sets the candidates Unique identifier in the System
-		* @param candidateId - Unique identifier of the Candidate
+		* Sets the Unique Identifier of the Candidate
+		* @param candidateId - UniqueId of the Candidate
 		* @return Builder
 		*/
-		public CandidateBuilder candidateId(String candidateId) {
+		public CandidateEntityBuilder candidateId(String candidateId) {
 			this.candidateId = candidateId;
 			return this;
 		}
 		
 		/**
-		* Returns the Country where the Candidate is located
-		* @param country - Country where the Candidate is located
+		* Sets the Country where the Candidate is located
+		* @param country - Name of the Country
 		* @return Builder
 		*/
-		public CandidateBuilder country(COUNTRY country) {
+		public CandidateEntityBuilder country(COUNTRY country) {
 			this.country = country;
 			return this;
 		}
 		
 		/**
 		* Sets the City where the Candidate is located
-		* @param city - City where the Candidate is located
+		* @param city - Name of the City
 		* @return Builder
 		*/
-		public CandidateBuilder city(String city) {
+		public CandidateEntityBuilder city(String city) {
 			this.city = city;
 			return this;
 		}
 		
 		/**
-		* Sets whether the Candidate is looking for perm roles
-		* @param freelance - Whether or not the Candidate is interested in perm roles
+		* Sets whether the Candidate is looking for Perm roles
+		* @param perm - Whether candidate is looking for Perm roles
 		* @return Builder
 		*/
-		public CandidateBuilder perm(boolean perm) {
+		public CandidateEntityBuilder perm(boolean perm) {
 			this.perm = perm;
 			return this;
 		}
 		
 		/**
 		* Sets whether the Candidate is looking for freelance roles
-		* @param freelance - Whether or not the Candidate is interested in freelance roles
+		* @param perm - Whether candidate is looking for freelance roles
 		* @return Builder
 		*/
-		public CandidateBuilder freelance(boolean freelance) {
+		public CandidateEntityBuilder freelance(boolean freelance) {
 			this.freelance = freelance;
 			return this;
 		}
 		
 		/**
-		* Sets the number of years experience the Candidate has in the industry
-		* @param yearsExperience - years of work experience in the industry
+		* Sets the number of years experience the Candidate has in the Industry
+		* @param yearsOfExperience - number of years of experience
 		* @return Builder
 		*/
-		public CandidateBuilder yearsExperience(int yearsExperience) {
+		public CandidateEntityBuilder yearsExperience(int yearsExperience) {
 			this.yearsExperience = yearsExperience;
 			return this;
 		}
 		
 		/**
-		* Sets whether or not the Candidate is currently available
-		* @param available - whether or not the Candidate is currently looking for work
+		* Sets whether or not the Candidate is currently looking for work
+		* @param available - Whether the Candidate is available for work
 		* @return Builder
 		*/
-		public CandidateBuilder available(boolean available) {
+		public CandidateEntityBuilder available(boolean available) {
 			this.available = available;
 			return this;
 		}
 		
 		/**
 		* Sets the Date the Candidate was registered in the System
-		* @param registerd - Date of registration
+		* @param registerd - date of registration
 		* @return Builder
 		*/
-		public CandidateBuilder registerd(LocalDate registerd) {
+		public CandidateEntityBuilder registerd(LocalDate registerd) {
 			this.registerd = registerd;
 			return this;
 		}
 		
 		/**
-		* Sets the Date of the last time the Candidates availability 
-		* was checked
-		* @param lastAvailabilityCheck - Date of last availability check
+		* Sets the Date of the last check performed to check if the Candidate is still
+		* available
+		* @param lastAvailabilityCheck - Date of last availability check performed
 		* @return Builder
 		*/
-		public CandidateBuilder lastAvailabilityCheck(LocalDate lastAvailabilityCheck) {
+		public CandidateEntityBuilder lastAvailabilityCheck(LocalDate lastAvailabilityCheck) {
 			this.lastAvailabilityCheck = lastAvailabilityCheck;
 			return this;
 		}
 		
 		/**
-		* Returns an instance of Candidate initialized with the 
-		* values in the builder
-		* @return Initialized instance of Candidate
+		* Returns a CandidateEntity instance initialized with 
+		* the values in the Builder
+		* @return Instance of CandidateEntity
 		*/
-		public Candidate build() {
-			return new Candidate(this);
+		public CandidateEntity build() {
+			return new CandidateEntity(this);
 		}
+		
 	}
 	
 }

@@ -1,4 +1,4 @@
-package com.arenella.recruit;
+package com.arenella.recruit.candidate;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
