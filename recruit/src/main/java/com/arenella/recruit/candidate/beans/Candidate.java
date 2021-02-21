@@ -11,9 +11,11 @@ import com.arenella.recruit.candidate.entities.CandidateEntity;
 */
 public class Candidate {
 
-	public static enum COUNTRY {NETHERLANDS, BELGIUM, UK}
+	public static enum COUNTRY 	{NETHERLANDS, BELGIUM, UK}
+	public static enum FUNCTION {JAVA_DEV, CSHARP_DEV, SUPPORT, BA, UI_UX, PROJECT_MANAGER, SOFTWARE_ARCHITECT, SOLUTIONS_ARCHITECT, ENTERPRISE_ARCHITECT, TESTER, WEB_DEV}
 	
 	private String 		candidateId;
+	private FUNCTION	function;
 	private COUNTRY 	country;
 	private String 		city;
 	private boolean 	perm;
@@ -30,6 +32,7 @@ public class Candidate {
 	public Candidate(CandidateBuilder builder) {
 		
 		this.candidateId				= builder.candidateId;
+		this.function				 	= builder.function;
 		this.country					= builder.country;
 		this.city 						= builder.city;
 		this.perm 						= builder.perm;
@@ -47,6 +50,14 @@ public class Candidate {
 	*/
 	public String getCandidateId() {
 		return this.candidateId;
+	}
+	
+	/**
+	* Returns the function the Candidate performs
+	* @return function the Candidate performs
+	*/
+	public FUNCTION getFunction() {
+		return this.function;
 	}
 	
 	/**
@@ -131,6 +142,7 @@ public class Candidate {
 	public static class CandidateBuilder {
 		
 		private String 		candidateId;
+		private FUNCTION	function;
 		private COUNTRY 	country;
 		private String 		city;
 		private boolean 	perm;
@@ -147,6 +159,16 @@ public class Candidate {
 		*/
 		public CandidateBuilder candidateId(String candidateId) {
 			this.candidateId = candidateId;
+			return this;
+		}
+		
+		/**
+		* Sets the function the candidate performs
+		* @param function - Function performed by the Candidate
+		* @return Builder
+		*/
+		public CandidateBuilder function(FUNCTION function) {
+			this.function = function;
 			return this;
 		}
 		
@@ -253,6 +275,7 @@ public class Candidate {
 					.builder()
 						.available(candidate.isAvailable())
 						.candidateId(candidate.getCandidateId())
+						.function(candidate.getFunction())
 						.city(candidate.getCity())
 						.country(candidate.getCountry())
 						.freelance(candidate.isFreelance())
@@ -276,6 +299,7 @@ public class Candidate {
 					.builder()
 						.available(candidateEntity.isAvailable())
 						.candidateId(candidateEntity.getCandidateId())
+						.function(candidateEntity.getFunction())
 						.city(candidateEntity.getCity())
 						.country(candidateEntity.getCountry())
 						.freelance(candidateEntity.isFreelance())

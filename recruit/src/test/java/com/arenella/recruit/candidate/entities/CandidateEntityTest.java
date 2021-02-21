@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import org.junit.jupiter.api.Test;
 
 import com.arenella.recruit.candidate.beans.Candidate.COUNTRY;
+import com.arenella.recruit.candidate.beans.Candidate.FUNCTION;
 
 /**
 * Unit tests for the CandidateEntity class
@@ -21,6 +22,7 @@ public class CandidateEntityTest {
 	public void testInitializationFromBuilder() {
 		
 		final String 		candidateId 			= "Candidate1";
+		final FUNCTION		function				= FUNCTION.JAVA_DEV;
 		final COUNTRY 		country 				= COUNTRY.NETHERLANDS;
 		final String 		city 					= "Den Haag";
 		final boolean 		available 				= true;
@@ -33,6 +35,7 @@ public class CandidateEntityTest {
 		CandidateEntity candidateEntity = CandidateEntity
 						.builder()
 							.candidateId(candidateId)
+							.function(function)
 							.country(country)
 							.city(city)
 							.available(available)
@@ -43,15 +46,16 @@ public class CandidateEntityTest {
 							.yearsExperience(yearsExperience)
 							.build();
 		
-		assertEquals(candidateEntity.getCandidateId(), candidateId);
-		assertEquals(candidateEntity.getCountry(), country);
-		assertEquals(candidateEntity.getCity(), city);
-		assertEquals(candidateEntity.isAvailable(), available);
-		assertEquals(candidateEntity.isFreelance(), freelance);
-		assertEquals(candidateEntity.isPerm(), perm);
-		assertEquals(candidateEntity.getLastAvailabilityCheckOn(), lastAvailabilityCheck);
-		assertEquals(candidateEntity.getRegisteredOn(), registerd);
-		assertEquals(candidateEntity.getYearsExperience(), yearsExperience);
+		assertEquals(candidateEntity.getCandidateId(), 				candidateId);
+		assertEquals(candidateEntity.getFunction(), 				function);
+		assertEquals(candidateEntity.getCountry(), 					country);
+		assertEquals(candidateEntity.getCity(), 					city);
+		assertEquals(candidateEntity.isAvailable(), 				available);
+		assertEquals(candidateEntity.isFreelance(), 				freelance);
+		assertEquals(candidateEntity.isPerm(), 						perm);
+		assertEquals(candidateEntity.getLastAvailabilityCheckOn(), 	lastAvailabilityCheck);
+		assertEquals(candidateEntity.getRegisteredOn(), 			registerd);
+		assertEquals(candidateEntity.getYearsExperience(), 			yearsExperience);
 		
 	}
 	

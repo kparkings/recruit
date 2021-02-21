@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import com.arenella.recruit.candidate.beans.Candidate;
 import com.arenella.recruit.candidate.beans.Candidate.COUNTRY;
+import com.arenella.recruit.candidate.beans.Candidate.FUNCTION;
 import com.arenella.recruit.candidate.entities.CandidateEntity;
 
 /**
@@ -17,6 +18,7 @@ import com.arenella.recruit.candidate.entities.CandidateEntity;
 public class CandidateTest {
 
 	private static final String 		candidateId 			= "Candidate1";
+	private static final FUNCTION		function				= FUNCTION.JAVA_DEV;
 	private static final COUNTRY 		country 				= COUNTRY.NETHERLANDS;
 	private static final String 		city 					= "Den Haag";
 	private static final boolean 		available 				= true;
@@ -35,6 +37,7 @@ public class CandidateTest {
 		Candidate candidate = Candidate
 						.builder()
 							.candidateId(candidateId)
+							.function(function)
 							.country(country)
 							.city(city)
 							.available(available)
@@ -46,6 +49,7 @@ public class CandidateTest {
 							.build();
 		
 		assertEquals(candidate.getCandidateId(), 				candidateId);
+		assertEquals(candidate.getFunction(), 					function);
 		assertEquals(candidate.getCountry(), 					country);
 		assertEquals(candidate.getCity(), 						city);
 		assertEquals(candidate.isAvailable(), 					available);
@@ -68,6 +72,7 @@ public class CandidateTest {
 		Candidate candidate = Candidate
 				.builder()
 					.candidateId(candidateId)
+					.function(function)
 					.country(country)
 					.city(city)
 					.available(available)
@@ -81,6 +86,7 @@ public class CandidateTest {
 		CandidateEntity candidateEntity = Candidate.convertToEntity(candidate);
 
 		assertEquals(candidateEntity.getCandidateId(), 				candidateId);
+		assertEquals(candidateEntity.getFunction(),					function);
 		assertEquals(candidateEntity.getCountry(), 					country);
 		assertEquals(candidateEntity.getCity(), 					city);
 		assertEquals(candidateEntity.isAvailable(), 				available);
@@ -103,6 +109,7 @@ public class CandidateTest {
 		CandidateEntity candidateEntity = CandidateEntity
 				.builder()
 					.candidateId(candidateId)
+					.function(function)
 					.country(country)
 					.city(city)
 					.available(available)
@@ -116,6 +123,7 @@ public class CandidateTest {
 		Candidate candidate = Candidate.convertFromEntity(candidateEntity);
 
 		assertEquals(candidate.getCandidateId(), 				candidateId);
+		assertEquals(candidate.getFunction(), 					function);
 		assertEquals(candidate.getCountry(), 					country);
 		assertEquals(candidate.getCity(), 						city);
 		assertEquals(candidate.isAvailable(), 					available);

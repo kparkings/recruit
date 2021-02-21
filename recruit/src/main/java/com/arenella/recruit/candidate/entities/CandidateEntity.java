@@ -4,11 +4,13 @@ import java.time.LocalDate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
 import com.arenella.recruit.candidate.beans.Candidate.COUNTRY;
-
+import com.arenella.recruit.candidate.beans.Candidate.FUNCTION;
 /**
 * Entity representation of a Candidate. A Candidate is 
 * someone who is potentially open to Work.
@@ -22,7 +24,12 @@ public class CandidateEntity {
 	@Column(name="candidate_id")
 	private String 		candidateId;
 	
+	@Column(name="function")
+	@Enumerated(EnumType.STRING)
+	private FUNCTION function;
+	
 	@Column(name="country")
+	@Enumerated(EnumType.STRING)
 	private COUNTRY 	country;
 	
 	@Column(name="city")
@@ -53,6 +60,7 @@ public class CandidateEntity {
 	public CandidateEntity(CandidateEntityBuilder builder) {
 		
 		this.candidateId 			= builder.candidateId;
+		this.function				= builder.function;
 		this.country 				= builder.country;
 		this.city 					= builder.city;
 		this.perm 					= builder.perm;
@@ -70,6 +78,10 @@ public class CandidateEntity {
 	*/
 	public String getCandidateId() {
 		return this.candidateId;
+	}
+	
+	public FUNCTION getFunction() {
+		return this.function;
 	}
 	
 	/**
@@ -154,6 +166,7 @@ public class CandidateEntity {
 	public static class CandidateEntityBuilder {
 	
 		private String 		candidateId;
+		private FUNCTION	function;
 		private COUNTRY 	country;
 		private String 		city;
 		private boolean 	perm;
@@ -170,6 +183,16 @@ public class CandidateEntity {
 		*/
 		public CandidateEntityBuilder candidateId(String candidateId) {
 			this.candidateId = candidateId;
+			return this;
+		}
+		
+		/**
+		* Sets the Function performed by the Candidate
+		* @param function - Function performed by the Candidate
+		* @return Builder
+		*/
+		public CandidateEntityBuilder function(FUNCTION function) {
+			this.function = function;
 			return this;
 		}
 		
