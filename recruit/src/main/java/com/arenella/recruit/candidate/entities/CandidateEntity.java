@@ -1,17 +1,24 @@
 package com.arenella.recruit.candidate.entities;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.arenella.recruit.candidate.beans.Language;
+import com.arenella.recruit.candidate.beans.Candidate;
 import com.arenella.recruit.candidate.beans.Candidate.COUNTRY;
 import com.arenella.recruit.candidate.beans.Candidate.FUNCTION;
 /**
@@ -56,9 +63,13 @@ public class CandidateEntity {
 	@Column(name="last_availability_check")
 	private LocalDate 	lastAvailabilityCheck;
 	
-	private Set<String> 	skills						= new LinkedHashSet<>();
+	@ElementCollection(targetClass=String.class)
+	@CollectionTable(name="candidate_skill", joinColumns=@JoinColumn(name="candidate_id"))
+	@Column(name="skill")
+	private Set<String> 			skills						= new LinkedHashSet<>();
 	
-	private Set<Language> 	languages					= new LinkedHashSet<>();
+	@OneToMany
+	private Set<LanguageEntity> 	languages					= new LinkedHashSet<>();
 	
 	/**
 	* Constructor based upon a builder
@@ -78,7 +89,7 @@ public class CandidateEntity {
 		this.lastAvailabilityCheck 	= builder.lastAvailabilityCheck;
 		
 		this.skills.addAll(builder.skills);
-		this.languages.addAll(builder.languages);
+		this.languages.addAll(languages.stream().map(lang -> LanguageEntity.builder().candidate(this).language(lang.getLanguage()).level(lang.getLevel()).build()).collect(Collectors.toSet()));
 		
 	}
 	
@@ -173,7 +184,7 @@ public class CandidateEntity {
 	* Returns the Languages spoken by the Candidate
 	* @return Languages spoken by the Candidate
 	*/
-	public Set<Language> getLanguages(){
+	public Set<LanguageEntity> getLanguages(){
 		return this.languages;
 	}
 	
@@ -336,6 +347,58 @@ public class CandidateEntity {
 		public CandidateEntity build() {
 			return new CandidateEntity(this);
 		}
+		
+	}
+	
+	/**
+	* Converts a Domain representation of a Candidate Object to an Entity 
+	* representation
+	* @param candidate - Instance of Candidate to convert to an Entity
+	* @return Entity representation of a Candidate object
+	*/
+	public static CandidateEntity convertToEntity(Candidate candidate) {
+		
+		return CandidateEntity
+					.builder()
+						.available(candidate.isAvailable())
+						.candidateId(candidate.getCandidateId())
+						.function(candidate.getFunction())
+						.city(candidate.getCity())
+						.country(candidate.getCountry())
+						.freelance(candidate.isFreelance())
+						.lastAvailabilityCheck(candidate.getLastAvailabilityCheckOn())
+						.perm(candidate.isPerm())
+						.registerd(candidate.getRegisteredOn())
+						.yearsExperience(candidate.getYearsExperience())
+						.skills(candidate.getSkills())
+						.languages(candidate.getLanguages())
+						.build();
+		
+	}
+
+	/**
+	* Converts a Entity representation of a Candidate Object to an Domain 
+	* representation
+	* @param candidate - Instance of Candidate to convert
+	* @return Domain representation of a Candidate object
+	*/
+	public static Candidate convertFromEntity(CandidateEntity candidateEntity) {
+		
+		return Candidate
+					.builder()
+						.available(candidateEntity.isAvailable())
+						.candidateId(candidateEntity.getCandidateId())
+						.function(candidateEntity.getFunction())
+						.city(candidateEntity.getCity())
+						.country(candidateEntity.getCountry())
+						.freelance(candidateEntity.isFreelance())
+						.lastAvailabilityCheck(candidateEntity.getLastAvailabilityCheckOn())
+						.perm(candidateEntity.isPerm())
+						.registerd(candidateEntity.getRegisteredOn())
+						.yearsExperience(candidateEntity.getYearsExperience())
+						.skills(candidateEntity.getSkills())
+						.languages(candidateEntity.getLanguages().stream().map(lang -> Language.builder().language(lang.getLanguage()).level(lang.getLevel()).build()).collect(Collectors.toCollection(HashSet::new)))
+						.build();
 		
 	}
 	

@@ -4,8 +4,6 @@ import java.time.LocalDate;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import com.arenella.recruit.candidate.entities.CandidateEntity;
-
 /**
 * Class represents a Recruitment Candidate. A Candidate that 
 * can be place on a project
@@ -310,55 +308,5 @@ public class Candidate {
 		}
 	}
 	
-	/**
-	* Converts a Domain representation of a Candidate Object to an Entity 
-	* representation
-	* @param candidate - Instance of Candidate to convert to an Entity
-	* @return Entity representation of a Candidate object
-	*/
-	public static CandidateEntity convertToEntity(Candidate candidate) {
-		
-		return CandidateEntity
-					.builder()
-						.available(candidate.isAvailable())
-						.candidateId(candidate.getCandidateId())
-						.function(candidate.getFunction())
-						.city(candidate.getCity())
-						.country(candidate.getCountry())
-						.freelance(candidate.isFreelance())
-						.lastAvailabilityCheck(candidate.getLastAvailabilityCheckOn())
-						.perm(candidate.isPerm())
-						.registerd(candidate.getRegisteredOn())
-						.yearsExperience(candidate.getYearsExperience())
-						.skills(candidate.getSkills())
-						.languages(candidate.getLanguages())
-						.build();
-		
-	}
 
-	/**
-	* Converts a Entity representation of a Candidate Object to an Domain 
-	* representation
-	* @param candidate - Instance of Candidate to convert
-	* @return Domain representation of a Candidate object
-	*/
-	public static Candidate convertFromEntity(CandidateEntity candidateEntity) {
-		
-		return Candidate
-					.builder()
-						.available(candidateEntity.isAvailable())
-						.candidateId(candidateEntity.getCandidateId())
-						.function(candidateEntity.getFunction())
-						.city(candidateEntity.getCity())
-						.country(candidateEntity.getCountry())
-						.freelance(candidateEntity.isFreelance())
-						.lastAvailabilityCheck(candidateEntity.getLastAvailabilityCheckOn())
-						.perm(candidateEntity.isPerm())
-						.registerd(candidateEntity.getRegisteredOn())
-						.yearsExperience(candidateEntity.getYearsExperience())
-						.skills(candidateEntity.getSkills())
-						.languages(candidateEntity.getLanguages())
-						.build();
-		
-	}
 }

@@ -12,16 +12,12 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import com.arenella.recruit.candidate.beans.Candidate;
 import com.arenella.recruit.candidate.beans.Candidate.COUNTRY;
 import com.arenella.recruit.candidate.beans.Candidate.FUNCTION;
+import com.arenella.recruit.candidate.entities.CandidateEntity;
 
-/**
-* Unit test for the Candidate Class
-* @author K Parkings
-*/
 @RunWith(MockitoJUnitRunner.class)
-public class CandidateTest {
+public class CandidateEntityTest {
 
 	@Mock
 	private Language mockLanguage;
@@ -41,36 +37,68 @@ public class CandidateTest {
 	private static final String			skill					= "Java";
 	
 	/**
-	* Sets up test environment 
+	* Tests that conversion returns an Entity representation of the 
+	* Domain representation of a Candidate and the state is copied 
+	* successfully 
 	*/
-	public CandidateTest(){
-		languages.add(mockLanguage);
-		skills.add(skill);
+	@Test
+	public void testConversionToEntity() {
 		
+		Candidate candidate = Candidate
+				.builder()
+					.candidateId(candidateId)
+					.function(function)
+					.country(country)
+					.city(city)
+					.available(available)
+					.freelance(freelance)
+					.perm(perm)
+					.lastAvailabilityCheck(lastAvailabilityCheck)
+					.registerd(registerd)
+					.yearsExperience(yearsExperience)
+					.build();
+		
+		CandidateEntity candidateEntity = CandidateEntity.convertToEntity(candidate);
+
+		assertEquals(candidateEntity.getCandidateId(), 				candidateId);
+		assertEquals(candidateEntity.getFunction(),					function);
+		assertEquals(candidateEntity.getCountry(), 					country);
+		assertEquals(candidateEntity.getCity(), 					city);
+		assertEquals(candidateEntity.isAvailable(), 				available);
+		assertEquals(candidateEntity.isFreelance(), 				freelance);
+		assertEquals(candidateEntity.isPerm(), 						perm);
+		assertEquals(candidateEntity.getLastAvailabilityCheckOn(), 	lastAvailabilityCheck);
+		assertEquals(candidateEntity.getRegisteredOn(), 			registerd);
+		assertEquals(candidateEntity.getYearsExperience(), 			yearsExperience);
+
 	}
 	
 	/**
-	* Test Builder values used to initialize instance of the Candidate Class 
+	* Tests that conversion returns a Domain representation of the 
+	* Entity representation of a Candidate and the state is copied 
+	* successfully 
 	*/
 	@Test
-	public void testInitializationFromBuilder() {
+	public void testConversionFromEntity() {
 		
-		Candidate candidate = Candidate
-						.builder()
-							.candidateId(candidateId)
-							.function(function)
-							.country(country)
-							.city(city)
-							.available(available)
-							.freelance(freelance)
-							.perm(perm)
-							.lastAvailabilityCheck(lastAvailabilityCheck)
-							.registerd(registerd)
-							.yearsExperience(yearsExperience)
-							.skills(skills)
-							.languages(languages)
-							.build();
+		CandidateEntity candidateEntity = CandidateEntity
+				.builder()
+					.candidateId(candidateId)
+					.function(function)
+					.country(country)
+					.city(city)
+					.available(available)
+					.freelance(freelance)
+					.perm(perm)
+					.lastAvailabilityCheck(lastAvailabilityCheck)
+					.registerd(registerd)
+					.yearsExperience(yearsExperience)
+					.skills(skills)
+					.languages(languages)
+					.build();
 		
+		Candidate candidate = CandidateEntity.convertFromEntity(candidateEntity);
+
 		assertEquals(candidate.getCandidateId(), 				candidateId);
 		assertEquals(candidate.getFunction(), 					function);
 		assertEquals(candidate.getCountry(), 					country);
@@ -84,7 +112,7 @@ public class CandidateTest {
 		
 		assertTrue(candidate.getSkills().contains(skill));
 		assertTrue(candidate.getLanguages().contains(mockLanguage));
-		
+	
 	}
 	
 }
