@@ -1,6 +1,8 @@
 package com.arenella.recruit.candidate.entities;
 
 import java.time.LocalDate;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,6 +11,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.arenella.recruit.candidate.beans.Language;
 import com.arenella.recruit.candidate.beans.Candidate.COUNTRY;
 import com.arenella.recruit.candidate.beans.Candidate.FUNCTION;
 /**
@@ -53,6 +56,10 @@ public class CandidateEntity {
 	@Column(name="last_availability_check")
 	private LocalDate 	lastAvailabilityCheck;
 	
+	private Set<String> 	skills						= new LinkedHashSet<>();
+	
+	private Set<Language> 	languages					= new LinkedHashSet<>();
+	
 	/**
 	* Constructor based upon a builder
 	* @param builder - Contains initialization parameters
@@ -69,6 +76,9 @@ public class CandidateEntity {
 		this.available 				= builder.available;
 		this.registerd 				= builder.registerd;
 		this.lastAvailabilityCheck 	= builder.lastAvailabilityCheck;
+		
+		this.skills.addAll(builder.skills);
+		this.languages.addAll(builder.languages);
 		
 	}
 	
@@ -152,6 +162,22 @@ public class CandidateEntity {
 	}
 	
 	/**
+	* Returns the Skills the Candidate has experience with
+	* @return Candidates Skills
+	*/
+	public Set<String> getSkills(){
+		return this.skills;
+	}
+	
+	/**
+	* Returns the Languages spoken by the Candidate
+	* @return Languages spoken by the Candidate
+	*/
+	public Set<Language> getLanguages(){
+		return this.languages;
+	}
+	
+	/**
 	* Returns a Builder for the CandidateEntity class
 	* @return Builder for the CandidateEntity class
 	*/
@@ -165,16 +191,19 @@ public class CandidateEntity {
 	*/
 	public static class CandidateEntityBuilder {
 	
-		private String 		candidateId;
-		private FUNCTION	function;
-		private COUNTRY 	country;
-		private String 		city;
-		private boolean 	perm;
-		private boolean 	freelance;
-		private int			yearsExperience;
-		private boolean 	available;
-		private LocalDate 	registerd;
-		private LocalDate 	lastAvailabilityCheck;
+		private String 			candidateId;
+		private FUNCTION		function;
+		private COUNTRY 		country;
+		private String 			city;
+		private boolean 		perm;
+		private boolean 		freelance;
+		private int				yearsExperience;
+		private boolean 		available;
+		private LocalDate 		registerd;
+		private LocalDate 		lastAvailabilityCheck;
+		
+		private Set<String> 	skills						= new LinkedHashSet<>();
+		private Set<Language> 	languages					= new LinkedHashSet<>();
 	
 		/**
 		* Sets the Unique Identifier of the Candidate
@@ -274,6 +303,28 @@ public class CandidateEntity {
 		*/
 		public CandidateEntityBuilder lastAvailabilityCheck(LocalDate lastAvailabilityCheck) {
 			this.lastAvailabilityCheck = lastAvailabilityCheck;
+			return this;
+		}
+		
+		/**
+		* Sets the skills that the Candidate has
+		* @param skills - Skills Candidate has experience with
+		* @return Builder
+		*/
+		public CandidateEntityBuilder skills(Set<String> skills) {
+			this.skills.clear();
+			this.skills.addAll(skills);
+			return this;
+		}
+		
+		/**
+		* Sets the languages spoken by the Candidate
+		* @param languages - Languages spoken by the Candidate
+		* @return Builder
+		*/
+		public CandidateEntityBuilder languages(Set<Language> languages) {
+			this.languages.clear();
+			this.languages.addAll(languages);
 			return this;
 		}
 		

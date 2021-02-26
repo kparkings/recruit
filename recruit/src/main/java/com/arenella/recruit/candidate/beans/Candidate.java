@@ -1,6 +1,8 @@
 package com.arenella.recruit.candidate.beans;
 
 import java.time.LocalDate;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 import com.arenella.recruit.candidate.entities.CandidateEntity;
 
@@ -14,16 +16,18 @@ public class Candidate {
 	public static enum COUNTRY 	{NETHERLANDS, BELGIUM, UK}
 	public static enum FUNCTION {JAVA_DEV, CSHARP_DEV, SUPPORT, BA, UI_UX, PROJECT_MANAGER, SOFTWARE_ARCHITECT, SOLUTIONS_ARCHITECT, ENTERPRISE_ARCHITECT, TESTER, WEB_DEV}
 	
-	private String 		candidateId;
-	private FUNCTION	function;
-	private COUNTRY 	country;
-	private String 		city;
-	private boolean 	perm;
-	private boolean 	freelance;
-	private int			yearsExperience;
-	private boolean 	available;
-	private LocalDate 	registerd;
-	private LocalDate 	lastAvailabilityCheck;
+	private String 			candidateId;
+	private FUNCTION		function;
+	private COUNTRY 		country;
+	private String 			city;
+	private boolean 		perm;
+	private boolean 		freelance;
+	private int				yearsExperience;
+	private boolean 		available;
+	private LocalDate 		registerd;
+	private LocalDate 		lastAvailabilityCheck;
+	private Set<String> 	skills						= new LinkedHashSet<>();
+	private Set<Language> 	languages					= new LinkedHashSet<>();
 	
 	/**
 	* Constructor based upon a builder
@@ -41,6 +45,9 @@ public class Candidate {
 		this.available 					= builder.available;
 		this.registerd 					= builder.registerd;
 		this.lastAvailabilityCheck 		= builder.lastAvailabilityCheck;
+	
+		this.skills.addAll(builder.skills);
+		this.languages.addAll(builder.languages);
 	
 	}
 	
@@ -128,6 +135,22 @@ public class Candidate {
 	}
 	
 	/**
+	* Returns the Skills the candidate has experience with
+	* @return candidates skills
+	*/
+	public Set<String> getSkills(){
+		return this.skills;
+	}
+	
+	/**
+	* Returns the languages spoken by the Candidate
+	* @return Languages the candidate can speak
+	*/
+	public Set<Language> getLanguages(){
+		return this.languages;
+	}
+	
+	/**
 	* Builder for the Candidate class
 	* @return A Builder for the Candidate class
 	*/
@@ -141,16 +164,18 @@ public class Candidate {
 	*/
 	public static class CandidateBuilder {
 		
-		private String 		candidateId;
-		private FUNCTION	function;
-		private COUNTRY 	country;
-		private String 		city;
-		private boolean 	perm;
-		private boolean 	freelance;
-		private int			yearsExperience;
-		private boolean 	available;
-		private LocalDate 	registerd;
-		private LocalDate 	lastAvailabilityCheck;
+		private String 			candidateId;
+		private FUNCTION		function;
+		private COUNTRY 		country;
+		private String 			city;
+		private boolean 		perm;
+		private boolean 		freelance;
+		private int				yearsExperience;
+		private boolean 		available;
+		private LocalDate 		registerd;
+		private LocalDate 		lastAvailabilityCheck;
+		private Set<String> 	skills						= new LinkedHashSet<>();
+		private Set<Language> 	languages					= new LinkedHashSet<>();
 		
 		/**
 		* Sets the candidates Unique identifier in the System
@@ -254,6 +279,28 @@ public class Candidate {
 		}
 		
 		/**
+		* Sets the skills that the Candidate has
+		* @param skills - Skills Candidate has experience with
+		* @return Builder
+		*/
+		public CandidateBuilder skills(Set<String> skills) {
+			this.skills.clear();
+			this.skills.addAll(skills);
+			return this;
+		}
+		
+		/**
+		* Sets the languages spoken by the Candidate
+		* @param languages - Languages spoken by the Candidate
+		* @return Builder
+		*/
+		public CandidateBuilder languages(Set<Language> languages) {
+			this.languages.clear();
+			this.languages.addAll(languages);
+			return this;
+		}
+		
+		/**
 		* Returns an instance of Candidate initialized with the 
 		* values in the builder
 		* @return Initialized instance of Candidate
@@ -283,6 +330,8 @@ public class Candidate {
 						.perm(candidate.isPerm())
 						.registerd(candidate.getRegisteredOn())
 						.yearsExperience(candidate.getYearsExperience())
+						.skills(candidate.getSkills())
+						.languages(candidate.getLanguages())
 						.build();
 		
 	}
@@ -307,6 +356,8 @@ public class Candidate {
 						.perm(candidateEntity.isPerm())
 						.registerd(candidateEntity.getRegisteredOn())
 						.yearsExperience(candidateEntity.getYearsExperience())
+						.skills(candidateEntity.getSkills())
+						.languages(candidateEntity.getLanguages())
 						.build();
 		
 	}

@@ -1,10 +1,16 @@
 package com.arenella.recruit.candidate.beans;
 
+import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.time.LocalDate;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import com.arenella.recruit.candidate.beans.Candidate;
 import com.arenella.recruit.candidate.beans.Candidate.COUNTRY;
@@ -15,8 +21,12 @@ import com.arenella.recruit.candidate.entities.CandidateEntity;
 * Unit test for the Candidate Class
 * @author K Parkings
 */
+@RunWith(MockitoJUnitRunner.class)
 public class CandidateTest {
 
+	@Mock
+	private Language mockLanguage;
+	
 	private static final String 		candidateId 			= "Candidate1";
 	private static final FUNCTION		function				= FUNCTION.JAVA_DEV;
 	private static final COUNTRY 		country 				= COUNTRY.NETHERLANDS;
@@ -27,6 +37,18 @@ public class CandidateTest {
 	private static final LocalDate 		lastAvailabilityCheck 	= LocalDate.of(1980, 12, 3);
 	private static final LocalDate 		registerd 				= LocalDate.of(2021, 02, 20);
 	private static final int 			yearsExperience 		= 21;
+	private static final Set<String>	skills					= new LinkedHashSet<>();
+	private static final Set<Language>	languages				= new LinkedHashSet<>();
+	private static final String			skill					= "Java";
+	
+	/**
+	* Sets up test environment 
+	*/
+	public CandidateTest(){
+		languages.add(mockLanguage);
+		skills.add(skill);
+		
+	}
 	
 	/**
 	* Test Builder values used to initialize instance of the Candidate Class 
@@ -46,6 +68,8 @@ public class CandidateTest {
 							.lastAvailabilityCheck(lastAvailabilityCheck)
 							.registerd(registerd)
 							.yearsExperience(yearsExperience)
+							.skills(skills)
+							.languages(languages)
 							.build();
 		
 		assertEquals(candidate.getCandidateId(), 				candidateId);
@@ -58,6 +82,9 @@ public class CandidateTest {
 		assertEquals(candidate.getLastAvailabilityCheckOn(), 	lastAvailabilityCheck);
 		assertEquals(candidate.getRegisteredOn(), 				registerd);
 		assertEquals(candidate.getYearsExperience(), 			yearsExperience);
+		
+		assertTrue(candidate.getSkills().contains(skill));
+		assertTrue(candidate.getLanguages().contains(mockLanguage));
 		
 	}
 	
@@ -118,6 +145,8 @@ public class CandidateTest {
 					.lastAvailabilityCheck(lastAvailabilityCheck)
 					.registerd(registerd)
 					.yearsExperience(yearsExperience)
+					.skills(skills)
+					.languages(languages)
 					.build();
 		
 		Candidate candidate = Candidate.convertFromEntity(candidateEntity);
@@ -132,6 +161,9 @@ public class CandidateTest {
 		assertEquals(candidate.getLastAvailabilityCheckOn(), 	lastAvailabilityCheck);
 		assertEquals(candidate.getRegisteredOn(), 				registerd);
 		assertEquals(candidate.getYearsExperience(), 			yearsExperience);
+		
+		assertTrue(candidate.getSkills().contains(skill));
+		assertTrue(candidate.getLanguages().contains(mockLanguage));
 	
 	}
 	
