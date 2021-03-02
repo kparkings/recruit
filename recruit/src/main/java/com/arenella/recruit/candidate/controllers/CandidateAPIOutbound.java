@@ -1,23 +1,20 @@
-package com.arenella.recruit.candidate.beans;
+package com.arenella.recruit.candidate.controllers;
 
 import java.time.LocalDate;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import com.arenella.recruit.candidate.beans.Language;
 import com.arenella.recruit.candidate.enums.COUNTRY;
 import com.arenella.recruit.candidate.enums.FUNCTION;
 
 /**
-* Class represents a Recruitment Candidate. A Candidate that 
-* can be place on a project
+* Outboud API representation of a Candidate
 * @author K Parkings
 */
-public class Candidate {
+public class CandidateAPIOutbound {
 
 	private String 			candidateId;
-	private String 			firstname;
-	private String 			surname;
-	private String 			email;
 	private FUNCTION		function;
 	private COUNTRY 		country;
 	private String 			city;
@@ -25,7 +22,6 @@ public class Candidate {
 	private boolean 		freelance;
 	private int				yearsExperience;
 	private boolean 		available;
-	private LocalDate 		registerd;
 	private LocalDate 		lastAvailabilityCheck;
 	private Set<String> 	skills						= new LinkedHashSet<>();
 	private Set<Language> 	languages					= new LinkedHashSet<>();
@@ -34,12 +30,9 @@ public class Candidate {
 	* Constructor based upon a builder
 	* @param builder = Contains initialization information
 	*/
-	public Candidate(CandidateBuilder builder) {
+	public CandidateAPIOutbound(CandidateAPIOutboundBuilder builder) {
 		
 		this.candidateId				= builder.candidateId;
-		this.firstname					= builder.firstname;
-		this.surname					= builder.surname;
-		this.email						= builder.email;
 		this.function				 	= builder.function;
 		this.country					= builder.country;
 		this.city 						= builder.city;
@@ -47,7 +40,6 @@ public class Candidate {
 		this.freelance 					= builder.freelance;
 		this.yearsExperience 			= builder.yearsExperience;
 		this.available 					= builder.available;
-		this.registerd 					= builder.registerd;
 		this.lastAvailabilityCheck 		= builder.lastAvailabilityCheck;
 	
 		this.skills.addAll(builder.skills);
@@ -62,33 +54,7 @@ public class Candidate {
 	public String getCandidateId() {
 		return this.candidateId;
 	}
-	
-	/***
-	* Returns the name of the Candidate
-	* @return Candidates name
-	*/
-	public String getFirstname() {
-		return this.firstname;
-	}
-	
-	/***
-	* Returns the surname of the Candidate
-	* @return Candidates name
-	*/
-	public String getSurname() {
-		return this.surname;
-	}
-	
-	/**
-	* Returns the Candidates Email address
-	* @return Email address
-	*/
-	public String getEmail() {
-		return this.email;
-	}
-	
 
-	
 	/**
 	* Returns the function the Candidate performs
 	* @return function the Candidate performs
@@ -148,14 +114,6 @@ public class Candidate {
 	}
 	
 	/**
-	* Returns the Date that the Candidate was registered in the System
-	* @return Date the Candidate Registered
-	*/
-	public LocalDate getRegisteredOn() {
-		return this.registerd;
-	}
-	
-	/**
 	* Returns the Date of the last time the Candidate was contacted to check 
 	* that they were still available for a new role
 	* @return Date of last availability check
@@ -182,22 +140,19 @@ public class Candidate {
 	
 	/**
 	* Builder for the Candidate class
-	* @return A Builder for the Candidate class
+	* @return A Builder for the CandidateAPIOutbound class
 	*/
-	public static final CandidateBuilder builder() {
-		return new CandidateBuilder();
+	public static final CandidateAPIOutboundBuilder builder() {
+		return new CandidateAPIOutboundBuilder();
 	}
 	
 	/**
-	* Builder Class for the Candidate Class
+	* Builder Class for the CandidateAPIOutbound Class
 	* @author K Parkings
 	*/
-	public static class CandidateBuilder {
+	public static class CandidateAPIOutboundBuilder {
 		
 		private String 			candidateId;
-		private String 			firstname;
-		private String			surname;
-		private String 			email;
 		private FUNCTION		function;
 		private COUNTRY 		country;
 		private String 			city;
@@ -205,7 +160,6 @@ public class Candidate {
 		private boolean 		freelance;
 		private int				yearsExperience;
 		private boolean 		available;
-		private LocalDate 		registerd;
 		private LocalDate 		lastAvailabilityCheck;
 		private Set<String> 	skills						= new LinkedHashSet<>();
 		private Set<Language> 	languages					= new LinkedHashSet<>();
@@ -215,49 +169,17 @@ public class Candidate {
 		* @param candidateId - Unique identifier of the Candidate
 		* @return Builder
 		*/
-		public CandidateBuilder candidateId(String candidateId) {
+		public CandidateAPIOutboundBuilder candidateId(String candidateId) {
 			this.candidateId = candidateId;
 			return this;
 		}
-		
-		/**
-		* Sets the First name of the Candidate
-		* @param firstname - Candidates first name
-		* @return Builder
-		*/
-		public CandidateBuilder firstname(String firstname) {
-			this.firstname = firstname;
-			return this;
-		}
-		
-		/**
-		* Sets the Surname of the Candidate
-		* @param surname - Candidates Surname
-		* @return Builder
-		*/
-		public CandidateBuilder surname(String surname) {
-			this.surname = surname;
-			return this;
-		}
-		
-		/**
-		* Sets the Email address of the Candidate
-		* @param email - Email address
-		* @return Builder
-		*/
-		public CandidateBuilder email(String email) {
-			this.email = email;
-			return this;
-		}
-		
-
 		
 		/**
 		* Sets the function the candidate performs
 		* @param function - Function performed by the Candidate
 		* @return Builder
 		*/
-		public CandidateBuilder function(FUNCTION function) {
+		public CandidateAPIOutboundBuilder function(FUNCTION function) {
 			this.function = function;
 			return this;
 		}
@@ -267,7 +189,7 @@ public class Candidate {
 		* @param country - Country where the Candidate is located
 		* @return Builder
 		*/
-		public CandidateBuilder country(COUNTRY country) {
+		public CandidateAPIOutboundBuilder country(COUNTRY country) {
 			this.country = country;
 			return this;
 		}
@@ -277,7 +199,7 @@ public class Candidate {
 		* @param city - City where the Candidate is located
 		* @return Builder
 		*/
-		public CandidateBuilder city(String city) {
+		public CandidateAPIOutboundBuilder city(String city) {
 			this.city = city;
 			return this;
 		}
@@ -287,7 +209,7 @@ public class Candidate {
 		* @param freelance - Whether or not the Candidate is interested in perm roles
 		* @return Builder
 		*/
-		public CandidateBuilder perm(boolean perm) {
+		public CandidateAPIOutboundBuilder perm(boolean perm) {
 			this.perm = perm;
 			return this;
 		}
@@ -297,7 +219,7 @@ public class Candidate {
 		* @param freelance - Whether or not the Candidate is interested in freelance roles
 		* @return Builder
 		*/
-		public CandidateBuilder freelance(boolean freelance) {
+		public CandidateAPIOutboundBuilder freelance(boolean freelance) {
 			this.freelance = freelance;
 			return this;
 		}
@@ -307,7 +229,7 @@ public class Candidate {
 		* @param yearsExperience - years of work experience in the industry
 		* @return Builder
 		*/
-		public CandidateBuilder yearsExperience(int yearsExperience) {
+		public CandidateAPIOutboundBuilder yearsExperience(int yearsExperience) {
 			this.yearsExperience = yearsExperience;
 			return this;
 		}
@@ -317,18 +239,8 @@ public class Candidate {
 		* @param available - whether or not the Candidate is currently looking for work
 		* @return Builder
 		*/
-		public CandidateBuilder available(boolean available) {
+		public CandidateAPIOutboundBuilder available(boolean available) {
 			this.available = available;
-			return this;
-		}
-		
-		/**
-		* Sets the Date the Candidate was registered in the System
-		* @param registerd - Date of registration
-		* @return Builder
-		*/
-		public CandidateBuilder registerd(LocalDate registerd) {
-			this.registerd = registerd;
 			return this;
 		}
 		
@@ -338,7 +250,7 @@ public class Candidate {
 		* @param lastAvailabilityCheck - Date of last availability check
 		* @return Builder
 		*/
-		public CandidateBuilder lastAvailabilityCheck(LocalDate lastAvailabilityCheck) {
+		public CandidateAPIOutboundBuilder lastAvailabilityCheck(LocalDate lastAvailabilityCheck) {
 			this.lastAvailabilityCheck = lastAvailabilityCheck;
 			return this;
 		}
@@ -348,7 +260,7 @@ public class Candidate {
 		* @param skills - Skills Candidate has experience with
 		* @return Builder
 		*/
-		public CandidateBuilder skills(Set<String> skills) {
+		public CandidateAPIOutboundBuilder skills(Set<String> skills) {
 			this.skills.clear();
 			this.skills.addAll(skills);
 			return this;
@@ -359,7 +271,7 @@ public class Candidate {
 		* @param languages - Languages spoken by the Candidate
 		* @return Builder
 		*/
-		public CandidateBuilder languages(Set<Language> languages) {
+		public CandidateAPIOutboundBuilder languages(Set<Language> languages) {
 			this.languages.clear();
 			this.languages.addAll(languages);
 			return this;
@@ -370,8 +282,8 @@ public class Candidate {
 		* values in the builder
 		* @return Initialized instance of Candidate
 		*/
-		public Candidate build() {
-			return new Candidate(this);
+		public CandidateAPIOutbound build() {
+			return new CandidateAPIOutbound(this);
 		}
 	}
 	

@@ -19,8 +19,9 @@ import javax.persistence.Table;
 
 import com.arenella.recruit.candidate.beans.Language;
 import com.arenella.recruit.candidate.beans.Candidate;
-import com.arenella.recruit.candidate.beans.Candidate.COUNTRY;
-import com.arenella.recruit.candidate.beans.Candidate.FUNCTION;
+import com.arenella.recruit.candidate.enums.COUNTRY;
+import com.arenella.recruit.candidate.enums.FUNCTION;
+
 /**
 * Entity representation of a Candidate. A Candidate is 
 * someone who is potentially open to Work.
@@ -33,6 +34,15 @@ public class CandidateEntity {
 	@Id
 	@Column(name="candidate_id")
 	private String 		candidateId;
+	
+	@Column(name="name")
+	private String 		firstname;
+	
+	@Column(name="surname")
+	private String 		surname;
+	
+	@Column(name="email")
+	private String 		email;
 	
 	@Column(name="function")
 	@Enumerated(EnumType.STRING)
@@ -78,6 +88,9 @@ public class CandidateEntity {
 	public CandidateEntity(CandidateEntityBuilder builder) {
 		
 		this.candidateId 			= builder.candidateId;
+		this.firstname				= builder.firstname;
+		this.surname				= builder.surname;
+		this.email					= builder.email;
 		this.function				= builder.function;
 		this.country 				= builder.country;
 		this.city 					= builder.city;
@@ -89,7 +102,7 @@ public class CandidateEntity {
 		this.lastAvailabilityCheck 	= builder.lastAvailabilityCheck;
 		
 		this.skills.addAll(builder.skills);
-		this.languages.addAll(languages.stream().map(lang -> LanguageEntity.builder().candidate(this).language(lang.getLanguage()).level(lang.getLevel()).build()).collect(Collectors.toSet()));
+		this.languages.addAll(builder.languages.stream().map(lang -> LanguageEntity.builder().candidate(this).language(lang.getLanguage()).level(lang.getLevel()).build()).collect(Collectors.toSet()));
 		
 	}
 	
@@ -101,6 +114,35 @@ public class CandidateEntity {
 		return this.candidateId;
 	}
 	
+	/***
+	* Returns the name of the Candidate
+	* @return Candidates name
+	*/
+	public String getFirstname() {
+		return this.firstname;
+	}
+	
+	/***
+	* Returns the surname of the Candidate
+	* @return Candidates name
+	*/
+	public String getSurname() {
+		return this.surname;
+	}
+	
+	/**
+	* Returns the Candidates Email address
+	* @return Email address
+	*/
+	public String getEmail() {
+		return this.email;
+	}
+	
+	/**
+	* Returns the function the Candidate is 
+	* searching for
+	* @return what the candidate does
+	*/
 	public FUNCTION getFunction() {
 		return this.function;
 	}
@@ -203,6 +245,9 @@ public class CandidateEntity {
 	public static class CandidateEntityBuilder {
 	
 		private String 			candidateId;
+		private String 			firstname;
+		private String			surname;
+		private String 			email;
 		private FUNCTION		function;
 		private COUNTRY 		country;
 		private String 			city;
@@ -223,6 +268,36 @@ public class CandidateEntity {
 		*/
 		public CandidateEntityBuilder candidateId(String candidateId) {
 			this.candidateId = candidateId;
+			return this;
+		}
+		
+		/**
+		* Sets the First name of the Candidate
+		* @param firstname - Candidates first name
+		* @return Builder
+		*/
+		public CandidateEntityBuilder firstname(String firstname) {
+			this.firstname = firstname;
+			return this;
+		}
+		
+		/**
+		* Sets the Surname of the Candidate
+		* @param surname - Candidates Surname
+		* @return Builder
+		*/
+		public CandidateEntityBuilder surname(String surname) {
+			this.surname = surname;
+			return this;
+		}
+		
+		/**
+		* Sets the Email address of the Candidate
+		* @param email - Email address
+		* @return Builder
+		*/
+		public CandidateEntityBuilder email(String email) {
+			this.email = email;
 			return this;
 		}
 		
@@ -362,6 +437,9 @@ public class CandidateEntity {
 					.builder()
 						.available(candidate.isAvailable())
 						.candidateId(candidate.getCandidateId())
+						.firstname(candidate.getFirstname())
+						.surname(candidate.getSurname())
+						.email(candidate.getEmail())
 						.function(candidate.getFunction())
 						.city(candidate.getCity())
 						.country(candidate.getCountry())
@@ -388,6 +466,9 @@ public class CandidateEntity {
 					.builder()
 						.available(candidateEntity.isAvailable())
 						.candidateId(candidateEntity.getCandidateId())
+						.firstname(candidateEntity.getFirstname())
+						.surname(candidateEntity.getSurname())
+						.email(candidateEntity.getEmail())
 						.function(candidateEntity.getFunction())
 						.city(candidateEntity.getCity())
 						.country(candidateEntity.getCountry())

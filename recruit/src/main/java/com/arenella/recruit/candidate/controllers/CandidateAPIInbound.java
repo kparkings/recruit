@@ -1,9 +1,13 @@
-package com.arenella.recruit.candidate.beans;
+package com.arenella.recruit.candidate.controllers;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
+import com.arenella.recruit.candidate.beans.Candidate;
+import com.arenella.recruit.candidate.beans.Language;
 import com.arenella.recruit.candidate.enums.COUNTRY;
 import com.arenella.recruit.candidate.enums.FUNCTION;
 
@@ -12,7 +16,7 @@ import com.arenella.recruit.candidate.enums.FUNCTION;
 * can be place on a project
 * @author K Parkings
 */
-public class Candidate {
+public class CandidateAPIInbound {
 
 	private String 			candidateId;
 	private String 			firstname;
@@ -34,7 +38,7 @@ public class Candidate {
 	* Constructor based upon a builder
 	* @param builder = Contains initialization information
 	*/
-	public Candidate(CandidateBuilder builder) {
+	public CandidateAPIInbound(CandidateAPIInboundBuilder builder) {
 		
 		this.candidateId				= builder.candidateId;
 		this.firstname					= builder.firstname;
@@ -184,15 +188,15 @@ public class Candidate {
 	* Builder for the Candidate class
 	* @return A Builder for the Candidate class
 	*/
-	public static final CandidateBuilder builder() {
-		return new CandidateBuilder();
+	public static final CandidateAPIInboundBuilder builder() {
+		return new CandidateAPIInboundBuilder();
 	}
 	
 	/**
-	* Builder Class for the Candidate Class
+	* Builder Class for the CandidateAPIInbound Class
 	* @author K Parkings
 	*/
-	public static class CandidateBuilder {
+	public static class CandidateAPIInboundBuilder {
 		
 		private String 			candidateId;
 		private String 			firstname;
@@ -215,7 +219,7 @@ public class Candidate {
 		* @param candidateId - Unique identifier of the Candidate
 		* @return Builder
 		*/
-		public CandidateBuilder candidateId(String candidateId) {
+		public CandidateAPIInboundBuilder candidateId(String candidateId) {
 			this.candidateId = candidateId;
 			return this;
 		}
@@ -225,7 +229,7 @@ public class Candidate {
 		* @param firstname - Candidates first name
 		* @return Builder
 		*/
-		public CandidateBuilder firstname(String firstname) {
+		public CandidateAPIInboundBuilder firstname(String firstname) {
 			this.firstname = firstname;
 			return this;
 		}
@@ -235,7 +239,7 @@ public class Candidate {
 		* @param surname - Candidates Surname
 		* @return Builder
 		*/
-		public CandidateBuilder surname(String surname) {
+		public CandidateAPIInboundBuilder surname(String surname) {
 			this.surname = surname;
 			return this;
 		}
@@ -245,19 +249,17 @@ public class Candidate {
 		* @param email - Email address
 		* @return Builder
 		*/
-		public CandidateBuilder email(String email) {
+		public CandidateAPIInboundBuilder email(String email) {
 			this.email = email;
 			return this;
 		}
-		
-
 		
 		/**
 		* Sets the function the candidate performs
 		* @param function - Function performed by the Candidate
 		* @return Builder
 		*/
-		public CandidateBuilder function(FUNCTION function) {
+		public CandidateAPIInboundBuilder function(FUNCTION function) {
 			this.function = function;
 			return this;
 		}
@@ -267,7 +269,7 @@ public class Candidate {
 		* @param country - Country where the Candidate is located
 		* @return Builder
 		*/
-		public CandidateBuilder country(COUNTRY country) {
+		public CandidateAPIInboundBuilder country(COUNTRY country) {
 			this.country = country;
 			return this;
 		}
@@ -277,7 +279,7 @@ public class Candidate {
 		* @param city - City where the Candidate is located
 		* @return Builder
 		*/
-		public CandidateBuilder city(String city) {
+		public CandidateAPIInboundBuilder city(String city) {
 			this.city = city;
 			return this;
 		}
@@ -287,7 +289,7 @@ public class Candidate {
 		* @param freelance - Whether or not the Candidate is interested in perm roles
 		* @return Builder
 		*/
-		public CandidateBuilder perm(boolean perm) {
+		public CandidateAPIInboundBuilder perm(boolean perm) {
 			this.perm = perm;
 			return this;
 		}
@@ -297,7 +299,7 @@ public class Candidate {
 		* @param freelance - Whether or not the Candidate is interested in freelance roles
 		* @return Builder
 		*/
-		public CandidateBuilder freelance(boolean freelance) {
+		public CandidateAPIInboundBuilder freelance(boolean freelance) {
 			this.freelance = freelance;
 			return this;
 		}
@@ -307,7 +309,7 @@ public class Candidate {
 		* @param yearsExperience - years of work experience in the industry
 		* @return Builder
 		*/
-		public CandidateBuilder yearsExperience(int yearsExperience) {
+		public CandidateAPIInboundBuilder yearsExperience(int yearsExperience) {
 			this.yearsExperience = yearsExperience;
 			return this;
 		}
@@ -317,7 +319,7 @@ public class Candidate {
 		* @param available - whether or not the Candidate is currently looking for work
 		* @return Builder
 		*/
-		public CandidateBuilder available(boolean available) {
+		public CandidateAPIInboundBuilder available(boolean available) {
 			this.available = available;
 			return this;
 		}
@@ -327,7 +329,7 @@ public class Candidate {
 		* @param registerd - Date of registration
 		* @return Builder
 		*/
-		public CandidateBuilder registerd(LocalDate registerd) {
+		public CandidateAPIInboundBuilder registerd(LocalDate registerd) {
 			this.registerd = registerd;
 			return this;
 		}
@@ -338,7 +340,7 @@ public class Candidate {
 		* @param lastAvailabilityCheck - Date of last availability check
 		* @return Builder
 		*/
-		public CandidateBuilder lastAvailabilityCheck(LocalDate lastAvailabilityCheck) {
+		public CandidateAPIInboundBuilder lastAvailabilityCheck(LocalDate lastAvailabilityCheck) {
 			this.lastAvailabilityCheck = lastAvailabilityCheck;
 			return this;
 		}
@@ -348,7 +350,7 @@ public class Candidate {
 		* @param skills - Skills Candidate has experience with
 		* @return Builder
 		*/
-		public CandidateBuilder skills(Set<String> skills) {
+		public CandidateAPIInboundBuilder skills(Set<String> skills) {
 			this.skills.clear();
 			this.skills.addAll(skills);
 			return this;
@@ -359,7 +361,7 @@ public class Candidate {
 		* @param languages - Languages spoken by the Candidate
 		* @return Builder
 		*/
-		public CandidateBuilder languages(Set<Language> languages) {
+		public CandidateAPIInboundBuilder languages(Set<Language> languages) {
 			this.languages.clear();
 			this.languages.addAll(languages);
 			return this;
@@ -370,9 +372,38 @@ public class Candidate {
 		* values in the builder
 		* @return Initialized instance of Candidate
 		*/
-		public Candidate build() {
-			return new Candidate(this);
+		public CandidateAPIInbound build() {
+			return new CandidateAPIInbound(this);
 		}
+	}
+	
+	/**
+	* Converts an incoming API representation of a Canidate to the 
+	* Domain version
+	* @param candiateAPIInbound - API Incoming version of the Candidate
+	* @return Domain version of the Candidate
+	*/
+	public static Candidate convertToCandidate(CandidateAPIInbound candiateAPIInbound) {
+		
+		return Candidate
+				.builder()
+					.available(candiateAPIInbound.isAvailable())
+					.candidateId(candiateAPIInbound.getCandidateId())
+					.firstname(candiateAPIInbound.getFirstname())
+					.surname(candiateAPIInbound.getSurname())
+					.email(candiateAPIInbound.getEmail())
+					.function(candiateAPIInbound.getFunction())
+					.city(candiateAPIInbound.getCity())
+					.country(candiateAPIInbound.getCountry())
+					.freelance(candiateAPIInbound.isFreelance())
+					.lastAvailabilityCheck(candiateAPIInbound.getLastAvailabilityCheckOn())
+					.perm(candiateAPIInbound.isPerm())
+					.registerd(candiateAPIInbound.getRegisteredOn())
+					.yearsExperience(candiateAPIInbound.getYearsExperience())
+					.skills(candiateAPIInbound.getSkills())
+					.languages(candiateAPIInbound.getLanguages().stream().map(lang -> Language.builder().language(lang.getLanguage()).level(lang.getLevel()).build()).collect(Collectors.toCollection(HashSet::new)))
+					.build();
+		
 	}
 	
 }

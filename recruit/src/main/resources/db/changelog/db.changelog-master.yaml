@@ -46,6 +46,21 @@ databaseChangeLog:
                     primaryKey: true
                     nullable: false
               - column:
+                  name: firstname
+                  type: varchar
+                  constraints:
+                    nullable: false
+              - column:
+                  name: surname
+                  type: varchar
+                  constraints:
+                    nullable: false
+              - column:
+                  name: email
+                  type: varchar
+                  constraints:
+                    nullable: false
+              - column:
                   name: country
                   type: varchar
                   constraints:

@@ -1,4 +1,4 @@
-package com.arenella.recruit.candidate.beans;
+package com.arenella.recruit.candidate.controllers;
 
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -10,16 +10,17 @@ import java.util.Set;
 import org.junit.jupiter.api.Test;
 
 import com.arenella.recruit.candidate.beans.Candidate;
+import com.arenella.recruit.candidate.beans.Language;
 import com.arenella.recruit.candidate.beans.Language.LANGUAGE;
 import com.arenella.recruit.candidate.beans.Language.LEVEL;
 import com.arenella.recruit.candidate.enums.COUNTRY;
 import com.arenella.recruit.candidate.enums.FUNCTION;
 
 /**
-* Unit test for the Candidate Class
+* Unit tests for the CandidateAPIInboundTest class
 * @author K Parkings
 */
-public class CandidateTest {
+public class CandidateAPOutboundTest {
 
 	private static final String 		candidateId 			= "Candidate1";
 	private static final FUNCTION		function				= FUNCTION.JAVA_DEV;
@@ -39,7 +40,7 @@ public class CandidateTest {
 	/**
 	* Sets up test environment 
 	*/
-	public CandidateTest(){
+	public CandidateAPOutboundTest(){
 		
 		languages.add(language);
 		skills.add(skill);

@@ -1,4 +1,4 @@
-package com.arenella.recruit.candidate.beans;
+package com.arenella.recruit.candidate.controllers;
 
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -10,18 +10,22 @@ import java.util.Set;
 import org.junit.jupiter.api.Test;
 
 import com.arenella.recruit.candidate.beans.Candidate;
+import com.arenella.recruit.candidate.beans.Language;
 import com.arenella.recruit.candidate.beans.Language.LANGUAGE;
 import com.arenella.recruit.candidate.beans.Language.LEVEL;
 import com.arenella.recruit.candidate.enums.COUNTRY;
 import com.arenella.recruit.candidate.enums.FUNCTION;
 
 /**
-* Unit test for the Candidate Class
+* Unit tests for the CandidateAPOutnboundTest
 * @author K Parkings
 */
-public class CandidateTest {
+public class CandidateAPIInboundTest {
 
 	private static final String 		candidateId 			= "Candidate1";
+	private static final String 		firstname				= "Kevin";
+	private static final String 		surname					= "Parkings";
+	private static final String 		email					= "kparkings@gmail.com";
 	private static final FUNCTION		function				= FUNCTION.JAVA_DEV;
 	private static final COUNTRY 		country 				= COUNTRY.NETHERLANDS;
 	private static final String 		city 					= "Den Haag";
@@ -39,7 +43,7 @@ public class CandidateTest {
 	/**
 	* Sets up test environment 
 	*/
-	public CandidateTest(){
+	public CandidateAPIInboundTest(){
 		
 		languages.add(language);
 		skills.add(skill);
@@ -52,9 +56,12 @@ public class CandidateTest {
 	@Test
 	public void testInitializationFromBuilder() {
 		
-		Candidate candidate = Candidate
+		CandidateAPIInbound candidate = CandidateAPIInbound
 						.builder()
 							.candidateId(candidateId)
+							.firstname(firstname)
+							.surname(surname)
+							.email(email)
 							.function(function)
 							.country(country)
 							.city(city)
@@ -69,6 +76,9 @@ public class CandidateTest {
 							.build();
 		
 		assertEquals(candidate.getCandidateId(), 				candidateId);
+		assertEquals(candidate.getFirstname(), 					firstname);
+		assertEquals(candidate.getSurname(), 					surname);
+		assertEquals(candidate.getEmail(), 						email);
 		assertEquals(candidate.getFunction(), 					function);
 		assertEquals(candidate.getCountry(), 					country);
 		assertEquals(candidate.getCity(), 						city);
@@ -83,5 +93,54 @@ public class CandidateTest {
 		candidate.getLanguages().stream().filter(l -> l.getLanguage() == language.getLanguage()).findAny().orElseThrow();
 		
 	}
+	
+	/**
+	* Tests that conversion returns a Domain representation of the 
+	* Entity representation of a Candidate and the state is copied 
+	* successfully 
+	*/
+	@Test
+	public void testConversionToCandidate() {
+		
+		CandidateAPIInbound candidateEntity = CandidateAPIInbound
+				.builder()
+					.candidateId(candidateId)
+					.firstname(firstname)
+					.surname(surname)
+					.email(email)
+					.function(function)
+					.country(country)
+					.city(city)
+					.available(available)
+					.freelance(freelance)
+					.perm(perm)
+					.lastAvailabilityCheck(lastAvailabilityCheck)
+					.registerd(registerd)
+					.yearsExperience(yearsExperience)
+					.skills(skills)
+					.languages(languages)
+					.build();
+		
+		Candidate candidate = CandidateAPIInbound.convertToCandidate(candidateEntity);
+
+		assertEquals(candidate.getCandidateId(), 				candidateId);
+		assertEquals(candidate.getFirstname(), 					firstname);
+		assertEquals(candidate.getSurname(), 					surname);
+		assertEquals(candidate.getEmail(), 						email);
+		assertEquals(candidate.getFunction(), 					function);
+		assertEquals(candidate.getCountry(), 					country);
+		assertEquals(candidate.getCity(), 						city);
+		assertEquals(candidate.isAvailable(), 					available);
+		assertEquals(candidate.isFreelance(), 					freelance);
+		assertEquals(candidate.isPerm(), 						perm);
+		assertEquals(candidate.getLastAvailabilityCheckOn(), 	lastAvailabilityCheck);
+		assertEquals(candidate.getRegisteredOn(), 				registerd);
+		assertEquals(candidate.getYearsExperience(), 			yearsExperience);
+		
+		assertTrue(candidate.getSkills().contains(skill));
+		assertEquals(candidate.getLanguages().stream().findFirst().get().getLanguage(), language.getLanguage());
+	
+	}
+
 	
 }
