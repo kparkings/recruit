@@ -1,9 +1,12 @@
 {
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "cli": {
+    "analytics": "d44475e2-adf7-4695-a774-e11e9f2d9070"
+  },
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "recruit-gui": {
+    "recruit-ui": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:application": {
@@ -17,7 +20,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/recruit-gui",
+            "outputPath": "dist/recruit-ui",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -28,9 +31,13 @@
               "src/assets"
             ],
             "styles": [
+              "node_modules/bootstrap/dist/css/bootstrap.css",
               "src/styles.css"
             ],
-            "scripts": []
+            "scripts": [
+              "node_modules/popper.js/dist/umd/popper.min.js",
+              "node_modules/bootstrap/dist/js/bootstrap.min.js"
+            ]
           },
           "configurations": {
             "production": {
@@ -65,18 +72,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "recruit-gui:build"
+            "browserTarget": "recruit-ui:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "recruit-gui:build:production"
+              "browserTarget": "recruit-ui:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "recruit-gui:build"
+            "browserTarget": "recruit-ui:build"
           }
         },
         "test": {
@@ -113,16 +120,16 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "recruit-gui:serve"
+            "devServerTarget": "recruit-ui:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "recruit-gui:serve:production"
+              "devServerTarget": "recruit-ui:serve:production"
             }
           }
         }
       }
     }
   },
-  "defaultProject": "recruit-gui"
+  "defaultProject": "recruit-ui"
 }

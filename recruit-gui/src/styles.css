@@ -1,1 +1,35 @@
 /* You can add global styles to this file, and also import other style files */
+.bg-arenella-primary {
+	background: #2b2b2b;
+}
+
+.nav-primary{
+	color:#ffffff;
+}
+
+.nav-secondary{
+	color:#000000;
+}
+
+.bg-tab-hdr{
+	background: #6c757d;
+	color: #ffffff;
+}
+
+.col-fixed-width{
+	width:250px;
+}
+
+.row-section{
+	margin-top:15px;
+}
+
+.row-section-body{
+	padding-top:5px;
+	background: #CACACA;
+	padding-bottom: 5px;
+}
+
+.inpt-tab-std{
+	width:150px;
+}
