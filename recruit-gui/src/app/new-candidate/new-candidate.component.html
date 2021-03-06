@@ -1,72 +1,92 @@
-<div class=".container m-2">
+<form [formGroup]="formBean">
 
-	<div class="row" style="margin:10px">
+	<div class=".container m-2">
+
+		<div class="row" style="margin:10px">
 			<div class="col">
-					<div class="row row-section">
-						<div class="col-sm-12 bg-tab-hdr">Basic details</div>
-					</div>
-					<div class="row row-section-body">
-						<div class="col">CandidateId</div>
-						<div class="col"><input type="text" class="inpt-tab-std"/></div>
-						<div class="col">Firstname</div>
-						<div class="col"><input type="text" class="inpt-tab-std"/></div>
-						<div class="col">Surname</div>
-						<div class="col"><input type="text" class="inpt-tab-std"/></div>
-						<div class="col">email</div>
-						<div class="col"><input type="text" class="inpt-tab-std"/></div>
-					</div>
-					<div class="row row-section">
-						<div class="col-sm-12 bg-tab-hdr">Location details</div>
-					</div>
-					<div class="row row-section-body">
-						<div class="col">Country</div>
-						<div class="col">
-							<select class="inpt-tab-std">
-								<option>NL</option>
-								<option>BE</option>
-								<option>UK</option>
-							</select>
-						</div>
-						<div class="col">City</div>
-						<div class="col">
-							<select class="inpt-tab-std">
-								<option>Amsterdam</option>
-								<option>Rotterdam</option>
-								<option>Den Haag</option>
-							</select>
-						</div>
-						<div class="col">&nbsp;</div>
-						<div class="col">&nbsp;</div>
-						<div class="col">&nbsp;</div>
-						<div class="col">&nbsp;</div>
-					</div>
-					<div class="row row-section">
-						<div class="col-sm-12 bg-tab-hdr">Role type</div>
-					</div>
-					<div>
-						<div class="row row-section-body">
-						<div class="col">Permanent</div>
-						<div class="col"><input type="checkbox" class="inpt-tab-std"/></div>
-						<div class="col">Freelance</div>
-						<div class="col"><input type="checkbox" class="inpt-tab-std"/></div>
-						<div class="col"></div>
-						<div class="col"></div>
-						<div class="col"></div>
-					<div class="col"></div>
-				</div>
+				
 				<div class="row row-section">
+					<div class="col-sm-12 bg-tab-hdr">Basic details</div>
+				</div>
+				<div class="row row-section-body">
+					<div class="col">CandidateId</div>
+					<div class="col"><input type="text" class="inpt-tab-std" formControlName="candidateId"/></div>
+					<div class="col">Firstname</div>
+					<div class="col"><input type="text" class="inpt-tab-std" formControlName="firstname"/></div>
+					<div class="col">Surname</div>
+					<div class="col"><input type="text" class="inpt-tab-std" formControlName="surname"/></div>
+					<div class="col">email</div>
+					<div class="col"><input type="text" class="inpt-tab-std" formControlName="email"/></div>
+				</div>	
+
+				<div class="row row-section">
+					<div class="col-sm-12 bg-tab-hdr">Location details</div>
+				</div>
+				<div class="row row-section-body">
+					<div class="col">Country</div>
+					<div class="col">
+						<select class="inpt-tab-std" formControlName="country">
+							<option>NL</option>
+							<option>BE</option>
+							<option>UK</option>
+						</select>
+					</div>
+					<div class="col">City</div>
+					<div class="col"><input type="text" class="inpt-tab-std" formControlName="city"/></div>
+					<div class="col">&nbsp;</div>
+					<div class="col">&nbsp;</div>
+					<div class="col">&nbsp;</div>
+					<div class="col">&nbsp;</div>
+				</div>
+
+				<div class="row row-section">
+					<div class="col-sm-12 bg-tab-hdr">Role type</div>
+				</div>
+				<div>
+					<div class="row row-section-body">
+						<div class="col">Permanent</div>
+						<div class="col"><input type="checkbox" class="inpt-tab-std" formControlName="permanent"/></div>
+						<div class="col">Freelance</div>
+						<div class="col"><input type="checkbox" class="inpt-tab-std" formControlName="freelance"/></div>
+						<div class="col"></div>
+						<div class="col"></div>
+						<div class="col"></div>
+						<div class="col"></div>
+					</div>
+				</div>	
+				
+								<div class="row row-section">
 					<div class="col-sm-12 bg-tab-hdr">Language details</div>
 				</div>
 				<div>
 					<div class="row row-section-body">
-					<div class="col">Dutch</div>
-					<div class="col"><input type="checkbox" class="inpt-tab-std"/></div>
-					<div class="col">English</div>
-					<div class="col"><input type="checkbox" class="inpt-tab-std"/></div>
-					<div class="col">French</div>
-					<div class="col"><input type="checkbox" class="inpt-tab-std"/></div>
-					<div class="col"></div>
-					<div class="col"></div>
+						<div class="col">Dutch</div>
+						<div class="col">
+							<select class="inpt-tab-std" formControlName="dutch">
+								<option>No</option>
+								<option>Yes</option>
+								<option>Basic</option>
+							</select>
+						</div>
+						<div class="col">English</div>
+						<div class="col">
+							<select class="inpt-tab-std" formControlName="english">
+								<option>No</option>
+								<option>Yes</option>
+								<option>Basic</option>
+							</select>
+						</div>
+						<div class="col">French</div>
+						<div class="col">
+							<select class="inpt-tab-std" formControlName="french">
+								<option>No</option>
+								<option>Yes</option>
+								<option>Basic</option>
+							</select>
+						</div>
+						<div class="col"></div>
+						<div class="col"></div>
+					</div>
 				</div>
 
 				<div class="row row-section">
@@ -75,13 +95,14 @@
 				<div>
 					<div class="row row-section-body">
 					<div class="col">Function</div>
-					<div class="col"><input type="text" class="inpt-tab-std"/></div>
-					<div class="col">Years Experience</div>
-					<div class="col"><input type="text" class="inpt-tab-std"/></div>
-					<div class="col"></div>
-					<div class="col"></div>
-					<div class="col"></div>
-					<div class="col"></div>
+						<div class="col"><input type="text" class="inpt-tab-std" formControlName="function"/></div>
+						<div class="col">Years Experience</div>
+						<div class="col"><input type="text" class="inpt-tab-std" formControlName="yearsExperience"/></div>
+						<div class="col"></div>
+						<div class="col"></div>
+						<div class="col"></div>
+						<div class="col"></div>
+					</div>
 				</div>
 
 				<div class="row row-section">
@@ -89,17 +110,39 @@
 				</div>
 				<div>
 					<div class="row row-section-body">
-					<div class="col">Skills</div>
+						<div class="col">Skills</div>
+					</div>
 				</div>
+				
+				<div class="row row-section-body">
+					<div class="col"><input type="text" style="width:80%;" formControlName="skills"/></div>
+				</div>
+				
 				<div>
 					<div class="row row-section-body">
-					<div class="col"><input type="text" style="width:80%;"/></div>
+						<div class="col"><button (click)="addCandidate()">Save</button></div>
+					</div>
 				</div>
-				<div>
-					<div class="row row-section-body">
-					<div class="col"><button>Save</button></div>
-				</div>
-					
+
+			</div>
 		</div>
+		
 	</div>
-</div>
+
+</form>
+
+
+
+
+
+				
+
+				
+				
+				
+
+
+				
+
+
+
