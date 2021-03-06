@@ -44,7 +44,9 @@ export class NewCandidateComponent implements OnInit {
   */
   public addCandidate(): void {
     //TODO: Convert Formbean to object before passing to Service
-    this.candidateService.addCandidate(this.formBean);
+    this.candidateService.addCandidate(this.formBean).subscribe(d=>{
+      console.log("Sent");
+    });
   };
 
 }
