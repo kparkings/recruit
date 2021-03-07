@@ -1,9 +1,14 @@
 package com.arenella.recruit.candidate.beans;
 
+import com.arenella.recruit.candidate.controllers.CandidateAPIInbound;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
+
 /**
 * Represents a language spoken by a Candidate
 * @author K Parkings
 */
+@JsonDeserialize(builder=Language.LanguageBuilder.class)
 public class Language {
 
 	public static enum LANGUAGE {DUTCH, ENGLISH, FRENCH}
@@ -49,6 +54,7 @@ public class Language {
 	* Builder for the Language class
 	* @author K Parkings
 	*/
+	@JsonPOJOBuilder(buildMethodName="build", withPrefix="")
 	public static class LanguageBuilder {
 	
 		private LANGUAGE 	language;

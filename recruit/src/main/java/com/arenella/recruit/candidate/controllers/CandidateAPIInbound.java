@@ -10,12 +10,15 @@ import com.arenella.recruit.candidate.beans.Candidate;
 import com.arenella.recruit.candidate.beans.Language;
 import com.arenella.recruit.candidate.enums.COUNTRY;
 import com.arenella.recruit.candidate.enums.FUNCTION;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 
 /**
 * Class represents a Recruitment Candidate. A Candidate that 
 * can be place on a project
 * @author K Parkings
 */
+@JsonDeserialize(builder=CandidateAPIInbound.CandidateAPIInboundBuilder.class)
 public class CandidateAPIInbound {
 
 	private String 			candidateId;
@@ -196,6 +199,7 @@ public class CandidateAPIInbound {
 	* Builder Class for the CandidateAPIInbound Class
 	* @author K Parkings
 	*/
+	@JsonPOJOBuilder(buildMethodName="build", withPrefix="")
 	public static class CandidateAPIInboundBuilder {
 		
 		private String 			candidateId;
