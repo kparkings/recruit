@@ -1,5 +1,7 @@
 package com.arenella.recruit.candidate.entities;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -12,12 +14,15 @@ import com.arenella.recruit.candidate.beans.Language.LEVEL;
 
 @Entity
 @Table(name="candidate_language")
-public class LanguageEntity {
+public class LanguageEntity implements Serializable{
+
+	private static final long serialVersionUID = -7723031022369804453L;
 
 	@Id
 	@Column(name="candidate_id")
 	private String candidateId;
 	
+	//@Id
 	@Column(name="language")
 	@Enumerated(EnumType.STRING)
 	private LANGUAGE 			language;
@@ -26,13 +31,15 @@ public class LanguageEntity {
 	@Enumerated(EnumType.STRING)
 	private LEVEL 				level;
 	
+	private LanguageEntity() {}
+	
 	public LanguageEntity(LanguageEntityBuilder builder) {
 		this.candidateId 	= builder.candidate.getCandidateId();
 		this.language 		= builder.language;
 		this.level 			= builder.level;
 	}
 	
-	public String getCandidatId() {
+	public String getCandidateId() {
 		return candidateId;
 	}
 	

@@ -61,6 +61,11 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
+                  name: function
+                  type: varchar
+                  constraints:
+                    nullable: false
+              - column:
                   name: country
                   type: varchar
                   constraints:
@@ -110,14 +115,15 @@ databaseChangeLog:
                   name: candidate_id
                   type: varchar
                   constraints:
-                    nullable: false
+                    nullable: false                    
+                    foreignKeyName: fk_candidate_skill
+                    references: candidate(candidate_id)
               - column:
                   name: skill
                   type: varchar
                   constraints:
-                    nullable: false                    
-                    foreignKeyName: fk_candidate_skill
-                    references: candidate(candidate_id)
+                    nullable: false
+
         - addPrimaryKey:  
             columnNames:  candidate_id, skill  
             constraintName:  pk_candidate_skill  
@@ -132,6 +138,11 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: language
+                  type: varchar
+                  constraints:
+                    nullable: false
+              - column:
+                  name: level
                   type: varchar
                   constraints:
                     nullable: false

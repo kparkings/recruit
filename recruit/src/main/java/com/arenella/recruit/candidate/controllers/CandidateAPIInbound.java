@@ -32,8 +32,8 @@ public class CandidateAPIInbound {
 	private boolean 		freelance;
 	private int				yearsExperience;
 	private boolean 		available;
-	private LocalDate 		registerd;
-	private LocalDate 		lastAvailabilityCheck;
+	//private LocalDate 		registerd;
+	//private LocalDate 		lastAvailabilityCheck;
 	private Set<String> 	skills						= new LinkedHashSet<>();
 	private Set<Language> 	languages					= new LinkedHashSet<>();
 	
@@ -54,8 +54,8 @@ public class CandidateAPIInbound {
 		this.freelance 					= builder.freelance;
 		this.yearsExperience 			= builder.yearsExperience;
 		this.available 					= builder.available;
-		this.registerd 					= builder.registerd;
-		this.lastAvailabilityCheck 		= builder.lastAvailabilityCheck;
+		//this.registerd 					= builder.registerd;
+		//this.lastAvailabilityCheck 		= builder.lastAvailabilityCheck;
 	
 		this.skills.addAll(builder.skills);
 		this.languages.addAll(builder.languages);
@@ -158,18 +158,18 @@ public class CandidateAPIInbound {
 	* Returns the Date that the Candidate was registered in the System
 	* @return Date the Candidate Registered
 	*/
-	public LocalDate getRegisteredOn() {
-		return this.registerd;
-	}
+	//public LocalDate getRegisteredOn() {
+	//	return this.registerd;
+	//}
 	
 	/**
 	* Returns the Date of the last time the Candidate was contacted to check 
 	* that they were still available for a new role
 	* @return Date of last availability check
 	*/
-	public LocalDate getLastAvailabilityCheckOn() {
-		return this.lastAvailabilityCheck;
-	}
+	//public LocalDate getLastAvailabilityCheckOn() {
+	//	return this.lastAvailabilityCheck;
+	//}
 	
 	/**
 	* Returns the Skills the candidate has experience with
@@ -400,9 +400,9 @@ public class CandidateAPIInbound {
 					.city(candiateAPIInbound.getCity())
 					.country(candiateAPIInbound.getCountry())
 					.freelance(candiateAPIInbound.isFreelance())
-					.lastAvailabilityCheck(candiateAPIInbound.getLastAvailabilityCheckOn())
+					//.lastAvailabilityCheck(candiateAPIInbound.getLastAvailabilityCheckOn())
 					.perm(candiateAPIInbound.isPerm())
-					.registerd(candiateAPIInbound.getRegisteredOn())
+					//.registerd(candiateAPIInbound.getRegisteredOn())
 					.yearsExperience(candiateAPIInbound.getYearsExperience())
 					.skills(candiateAPIInbound.getSkills())
 					.languages(candiateAPIInbound.getLanguages().stream().map(lang -> Language.builder().language(lang.getLanguage()).level(lang.getLevel()).build()).collect(Collectors.toCollection(HashSet::new)))

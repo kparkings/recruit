@@ -6,6 +6,7 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
@@ -35,7 +36,7 @@ public class CandidateEntity {
 	@Column(name="candidate_id")
 	private String 		candidateId;
 	
-	@Column(name="name")
+	@Column(name="firstname")
 	private String 		firstname;
 	
 	@Column(name="surname")
@@ -78,7 +79,8 @@ public class CandidateEntity {
 	@Column(name="skill")
 	private Set<String> 			skills						= new LinkedHashSet<>();
 	
-	@OneToMany
+	//TODO: Think the primary key columns need to be specified here
+	@OneToMany(mappedBy = "candidateId", cascade = CascadeType.ALL)
 	private Set<LanguageEntity> 	languages					= new LinkedHashSet<>();
 	
 	/**
@@ -103,8 +105,10 @@ public class CandidateEntity {
 		
 		this.skills.addAll(builder.skills);
 		this.languages.addAll(builder.languages.stream().map(lang -> LanguageEntity.builder().candidate(this).language(lang.getLanguage()).level(lang.getLevel()).build()).collect(Collectors.toSet()));
-		
+
 	}
+	
+	private CandidateEntity() {}
 	
 	/**
 	* Returns the unique identifier of the Candidate
@@ -255,8 +259,8 @@ public class CandidateEntity {
 		private boolean 		freelance;
 		private int				yearsExperience;
 		private boolean 		available;
-		private LocalDate 		registerd;
-		private LocalDate 		lastAvailabilityCheck;
+		private LocalDate 		registerd					= LocalDate.now();				//Set app to work with UAT
+		private LocalDate 		lastAvailabilityCheck		= LocalDate.now();
 		
 		private Set<String> 	skills						= new LinkedHashSet<>();
 		private Set<Language> 	languages					= new LinkedHashSet<>();

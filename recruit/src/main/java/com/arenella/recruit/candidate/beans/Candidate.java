@@ -25,8 +25,8 @@ public class Candidate {
 	private boolean 		freelance;
 	private int				yearsExperience;
 	private boolean 		available;
-	private LocalDate 		registerd;
-	private LocalDate 		lastAvailabilityCheck;
+	private LocalDate 		registerd					= LocalDate.now();
+	private LocalDate 		lastAvailabilityCheck		= LocalDate.now();	
 	private Set<String> 	skills						= new LinkedHashSet<>();
 	private Set<Language> 	languages					= new LinkedHashSet<>();
 	
@@ -205,8 +205,8 @@ public class Candidate {
 		private boolean 		freelance;
 		private int				yearsExperience;
 		private boolean 		available;
-		private LocalDate 		registerd;
-		private LocalDate 		lastAvailabilityCheck;
+		private LocalDate 		registerd					= LocalDate.now();;
+		private LocalDate 		lastAvailabilityCheck		= LocalDate.now();;
 		private Set<String> 	skills						= new LinkedHashSet<>();
 		private Set<Language> 	languages					= new LinkedHashSet<>();
 		
