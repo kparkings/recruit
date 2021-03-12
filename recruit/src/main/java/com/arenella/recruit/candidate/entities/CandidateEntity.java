@@ -80,7 +80,7 @@ public class CandidateEntity {
 	private Set<String> 			skills						= new LinkedHashSet<>();
 	
 	//TODO: Think the primary key columns need to be specified here
-	@OneToMany(mappedBy = "candidateId", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "id.candidateId", cascade = CascadeType.ALL, orphanRemoval=true)
 	private Set<LanguageEntity> 	languages					= new LinkedHashSet<>();
 	
 	/**
