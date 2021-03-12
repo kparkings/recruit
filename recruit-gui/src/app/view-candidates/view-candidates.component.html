@@ -1,0 +1,36 @@
+<div class=".container m-2">
+
+    <div class="row" style="margin:10px">
+    
+        <div class="col">
+            
+            <div class="row row-section">
+                <div class="col bg-tab-hdr">CandidateId</div>
+                <div class="col bg-tab-hdr">Country</div>
+                <div class="col bg-tab-hdr">City</div>
+                <div class="col bg-tab-hdr">Function</div>
+                <div class="col bg-tab-hdr">Perm</div>
+                <div class="col bg-tab-hdr">Freelance</div>
+                <div class="col bg-tab-hdr">Years Exp</div>
+                <div class="col bg-tab-hdr">Dutch</div>
+                <div class="col bg-tab-hdr">English</div>
+                <div class="col bg-tab-hdr">French</div>
+                <div class="col bg-tab-hdr">Skills</div>
+            </div>
+            <div class="row row-section-body" *ngFor="let candidate of candidates">
+                <div class="col">{{candidate.candidateId}}</div>
+                <div class="col">{{candidate.country}}</div>
+                <div class="col">{{candidate.city}}</div>
+                <div class="col">{{candidate.function}}</div>
+                <div class="col">{{candidate.permanent}}</div>
+                <div class="col">{{candidate.freelance}}</div>
+                <div class="col">{{candidate.yearsExperience}}</div>
+                <div class="col">{{candidate.getDutch()}}</div>
+                <div class="col">{{candidate.getEnglish()}}</div>
+                <div class="col">{{candidate.getFrench()}}</div>
+                <div class="col">{{candidate.getSkills()}}</div>
+            </div>	
+
+    </div>
+    
+</div>

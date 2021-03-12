@@ -1,6 +1,5 @@
 package com.arenella.recruit.candidate.controllers;
 
-import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -32,8 +31,6 @@ public class CandidateAPIInbound {
 	private boolean 		freelance;
 	private int				yearsExperience;
 	private boolean 		available;
-	//private LocalDate 		registerd;
-	//private LocalDate 		lastAvailabilityCheck;
 	private Set<String> 	skills						= new LinkedHashSet<>();
 	private Set<Language> 	languages					= new LinkedHashSet<>();
 	
@@ -54,8 +51,6 @@ public class CandidateAPIInbound {
 		this.freelance 					= builder.freelance;
 		this.yearsExperience 			= builder.yearsExperience;
 		this.available 					= builder.available;
-		//this.registerd 					= builder.registerd;
-		//this.lastAvailabilityCheck 		= builder.lastAvailabilityCheck;
 	
 		this.skills.addAll(builder.skills);
 		this.languages.addAll(builder.languages);
@@ -93,9 +88,7 @@ public class CandidateAPIInbound {
 	public String getEmail() {
 		return this.email;
 	}
-	
-
-	
+		
 	/**
 	* Returns the function the Candidate performs
 	* @return function the Candidate performs
@@ -155,23 +148,6 @@ public class CandidateAPIInbound {
 	}
 	
 	/**
-	* Returns the Date that the Candidate was registered in the System
-	* @return Date the Candidate Registered
-	*/
-	//public LocalDate getRegisteredOn() {
-	//	return this.registerd;
-	//}
-	
-	/**
-	* Returns the Date of the last time the Candidate was contacted to check 
-	* that they were still available for a new role
-	* @return Date of last availability check
-	*/
-	//public LocalDate getLastAvailabilityCheckOn() {
-	//	return this.lastAvailabilityCheck;
-	//}
-	
-	/**
 	* Returns the Skills the candidate has experience with
 	* @return candidates skills
 	*/
@@ -213,8 +189,6 @@ public class CandidateAPIInbound {
 		private boolean 		freelance;
 		private int				yearsExperience;
 		private boolean 		available;
-		private LocalDate 		registerd;
-		private LocalDate 		lastAvailabilityCheck;
 		private Set<String> 	skills						= new LinkedHashSet<>();
 		private Set<Language> 	languages					= new LinkedHashSet<>();
 		
@@ -327,28 +301,7 @@ public class CandidateAPIInbound {
 			this.available = available;
 			return this;
 		}
-		
-		/**
-		* Sets the Date the Candidate was registered in the System
-		* @param registerd - Date of registration
-		* @return Builder
-		*/
-		public CandidateAPIInboundBuilder registerd(LocalDate registerd) {
-			this.registerd = registerd;
-			return this;
-		}
-		
-		/**
-		* Sets the Date of the last time the Candidates availability 
-		* was checked
-		* @param lastAvailabilityCheck - Date of last availability check
-		* @return Builder
-		*/
-		public CandidateAPIInboundBuilder lastAvailabilityCheck(LocalDate lastAvailabilityCheck) {
-			this.lastAvailabilityCheck = lastAvailabilityCheck;
-			return this;
-		}
-		
+			
 		/**
 		* Sets the skills that the Candidate has
 		* @param skills - Skills Candidate has experience with
@@ -400,9 +353,7 @@ public class CandidateAPIInbound {
 					.city(candiateAPIInbound.getCity())
 					.country(candiateAPIInbound.getCountry())
 					.freelance(candiateAPIInbound.isFreelance())
-					//.lastAvailabilityCheck(candiateAPIInbound.getLastAvailabilityCheckOn())
 					.perm(candiateAPIInbound.isPerm())
-					//.registerd(candiateAPIInbound.getRegisteredOn())
 					.yearsExperience(candiateAPIInbound.getYearsExperience())
 					.skills(candiateAPIInbound.getSkills())
 					.languages(candiateAPIInbound.getLanguages().stream().map(lang -> Language.builder().language(lang.getLanguage()).level(lang.getLevel()).build()).collect(Collectors.toCollection(HashSet::new)))

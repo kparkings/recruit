@@ -68,8 +68,6 @@ public class CandidateAPIInboundTest {
 							.available(available)
 							.freelance(freelance)
 							.perm(perm)
-							.lastAvailabilityCheck(lastAvailabilityCheck)
-							.registerd(registerd)
 							.yearsExperience(yearsExperience)
 							.skills(skills)
 							.languages(languages)
@@ -85,8 +83,6 @@ public class CandidateAPIInboundTest {
 		assertEquals(candidate.isAvailable(), 					available);
 		assertEquals(candidate.isFreelance(), 					freelance);
 		assertEquals(candidate.isPerm(), 						perm);
-		//assertEquals(candidate.getLastAvailabilityCheckOn(), 	lastAvailabilityCheck);
-		//assertEquals(candidate.getRegisteredOn(), 				registerd);
 		assertEquals(candidate.getYearsExperience(), 			yearsExperience);
 		
 		assertTrue(candidate.getSkills().contains(skill));
@@ -114,8 +110,6 @@ public class CandidateAPIInboundTest {
 					.available(available)
 					.freelance(freelance)
 					.perm(perm)
-					.lastAvailabilityCheck(lastAvailabilityCheck)
-					.registerd(registerd)
 					.yearsExperience(yearsExperience)
 					.skills(skills)
 					.languages(languages)

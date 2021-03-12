@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import com.arenella.recruit.candidate.beans.Candidate;
 import com.arenella.recruit.candidate.beans.Language;
 import com.arenella.recruit.candidate.enums.COUNTRY;
 import com.arenella.recruit.candidate.enums.FUNCTION;
@@ -18,7 +19,7 @@ public class CandidateAPIOutbound {
 	private FUNCTION		function;
 	private COUNTRY 		country;
 	private String 			city;
-	private boolean 		perm;
+	private boolean 		permanent;
 	private boolean 		freelance;
 	private int				yearsExperience;
 	private boolean 		available;
@@ -36,7 +37,7 @@ public class CandidateAPIOutbound {
 		this.function				 	= builder.function;
 		this.country					= builder.country;
 		this.city 						= builder.city;
-		this.perm 						= builder.perm;
+		this.permanent 					= builder.permanent;
 		this.freelance 					= builder.freelance;
 		this.yearsExperience 			= builder.yearsExperience;
 		this.available 					= builder.available;
@@ -93,8 +94,8 @@ public class CandidateAPIOutbound {
 	* Returns whether or not the Candidate is interested in permanent roles
 	* @return Whether or not the Candidate is interested in permanent roles
 	*/
-	public boolean isPerm() {
-		return this.perm;
+	public boolean isPermanent() {
+		return this.permanent;
 	}
 	
 	/**
@@ -156,7 +157,7 @@ public class CandidateAPIOutbound {
 		private FUNCTION		function;
 		private COUNTRY 		country;
 		private String 			city;
-		private boolean 		perm;
+		private boolean 		permanent;
 		private boolean 		freelance;
 		private int				yearsExperience;
 		private boolean 		available;
@@ -209,8 +210,8 @@ public class CandidateAPIOutbound {
 		* @param freelance - Whether or not the Candidate is interested in perm roles
 		* @return Builder
 		*/
-		public CandidateAPIOutboundBuilder perm(boolean perm) {
-			this.perm = perm;
+		public CandidateAPIOutboundBuilder perm(boolean permanent) {
+			this.permanent = permanent;
 			return this;
 		}
 		
@@ -285,6 +286,29 @@ public class CandidateAPIOutbound {
 		public CandidateAPIOutbound build() {
 			return new CandidateAPIOutbound(this);
 		}
+	}
+	
+	/**
+	* Converts an incoming API representation of a Canidate to the 
+	* Domain version
+	* @param candiateAPIInbound - API Incoming version of the Candidate
+	* @return Domain version of the Candidate
+	*/
+	public static CandidateAPIOutbound convertFromCandidate(Candidate candidate) {
+		
+		return CandidateAPIOutbound
+				.builder()
+					.candidateId(candidate.getCandidateId())
+					.country(candidate.getCountry())
+					.function(candidate.getFunction())
+					.city(candidate.getCity())
+					.freelance(candidate.isFreelance())
+					.perm(candidate.isPerm())
+					.languages(candidate.getLanguages())
+					.skills(candidate.getSkills())
+					.yearsExperience(candidate.getYearsExperience())
+					.build();
+		
 	}
 	
 }

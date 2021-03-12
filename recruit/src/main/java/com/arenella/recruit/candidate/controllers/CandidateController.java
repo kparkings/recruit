@@ -1,7 +1,8 @@
 package com.arenella.recruit.candidate.controllers;
 
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -33,9 +34,13 @@ public class CandidateController {
 		candidateService.persistCandidate(CandidateAPIInbound.convertToCandidate(candidate));
 	}
 	
-	@GetMapping(path="candidate", consumes="application/json", produces="application/json")
+	/**
+	* Returns all available Candidates
+	* @return Available Candidates
+	*/
+	@GetMapping(path="candidate")
 	public Set<CandidateAPIOutbound> getCandidate() {
-		return new HashSet<>();
+		return candidateService.getCandidates().stream().map(candidate -> CandidateAPIOutbound.convertFromCandidate(candidate)).collect(Collectors.toCollection(LinkedHashSet::new));
 	}
 	
 }

@@ -1,6 +1,9 @@
 package com.arenella.recruit.candidate.services;
 
+import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -39,8 +42,8 @@ public class CandidateServiceImpl implements CandidateService{
 	*/
 	@Override
 	public Set<Candidate> getCandidates() {
-		// TODO Auto-generated method stub
-		return null;
+		return StreamSupport.stream(candidateDao.findAll().spliterator(), false)
+								.map(candidate -> CandidateEntity.convertFromEntity(candidate)).collect(Collectors.toCollection(LinkedHashSet::new));
 	}
 
 	/**
