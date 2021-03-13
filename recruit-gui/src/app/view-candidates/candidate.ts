@@ -44,12 +44,12 @@ export class Candidate {
 	/**
 	* Whether or not the Candidate is lookig for perm positions
 	*/
-	permanent:			string 				= "";
+	permanent:			boolean 				= false;
 	
 	/**
 	* Whether or not the Candidate is looking for freelance positions
 	*/
-	freelance: 			string 				= "";
+	freelance: 			boolean 				= false;
 	
 	/**
 	* Years of experience the candidate has

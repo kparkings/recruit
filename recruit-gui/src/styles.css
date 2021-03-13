@@ -12,8 +12,10 @@
 }
 
 .bg-tab-hdr{
-	background: #6c757d;
-	color: #ffffff;
+	color: #000000;
+	border-bottom: 2px solid  black;
+	font-weight: bold;
+	
 }
 
 .col-fixed-width{
@@ -26,10 +28,13 @@
 
 .row-section-body{
 	padding-top:5px;
-	background: #CACACA;
-	padding-bottom: 5px;
+	padding-bottom: 2px;
 }
 
 .inpt-tab-std{
 	width:150px;
+}
+
+.hdr_label{
+	
 }

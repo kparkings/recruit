@@ -1,0 +1,17 @@
+.col{
+    border:1px black solid;
+    background-color: #ffffff;    font-size: x-small;
+    text-align: center;
+    margin: 0px;
+    padding: 5px;
+}
+
+.bg-tab-hdr{
+	background: #6c757d;
+    color: #ffffff;
+    column-width: 100px;
+}
+
+.candidate-table{
+    margin:20px;
+}
