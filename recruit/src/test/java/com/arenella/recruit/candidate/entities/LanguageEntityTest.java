@@ -4,8 +4,10 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import com.arenella.recruit.candidate.beans.Language.LANGUAGE;
-import com.arenella.recruit.candidate.beans.Language.LEVEL;
+import com.arenella.recruit.beans.Language.LANGUAGE;
+import com.arenella.recruit.beans.Language.LEVEL;
+import com.arenella.recruit.entities.CandidateEntity;
+import com.arenella.recruit.entities.LanguageEntity;
 
 /**
 * Unit tests for the LanguageEntity class

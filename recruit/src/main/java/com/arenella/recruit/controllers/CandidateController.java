@@ -1,4 +1,4 @@
-package com.arenella.recruit.candidate.controllers;
+package com.arenella.recruit.controllers;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -11,14 +11,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.arenella.recruit.candidate.services.CandidateService;
+import com.arenella.recruit.services.CandidateService;
 
 /**
 * REST API for working with Candidates
 * @author K Parkings
 */
 @RestController
-@CrossOrigin(origins = "*", allowedHeaders = "*")
+//@CrossOrigin(origins = "http://127.0.0.1:4200", allowedHeaders = "*")
 public class CandidateController {
 
 	@Autowired

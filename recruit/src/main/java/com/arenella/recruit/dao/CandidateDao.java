@@ -1,8 +1,8 @@
-package com.arenella.recruit.candidate.dao;
+package com.arenella.recruit.dao;
 
 import org.springframework.data.repository.CrudRepository;
 
-import com.arenella.recruit.candidate.entities.CandidateEntity;
+import com.arenella.recruit.entities.CandidateEntity;
 
 /**
 * Defines DAO functions for interacting with CandidateEntity objects

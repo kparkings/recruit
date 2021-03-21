@@ -1,8 +1,8 @@
-package com.arenella.recruit.candidate.services;
+package com.arenella.recruit.services;
 
 import java.util.Set;
 
-import com.arenella.recruit.candidate.beans.Candidate;
+import com.arenella.recruit.beans.Candidate;
 
 /**
 * Defines services available for interacting with Candidates

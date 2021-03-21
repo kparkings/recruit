@@ -9,13 +9,13 @@ import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 
-import com.arenella.recruit.candidate.beans.Candidate;
-import com.arenella.recruit.candidate.beans.Language;
-import com.arenella.recruit.candidate.beans.Language.LANGUAGE;
-import com.arenella.recruit.candidate.beans.Language.LEVEL;
-import com.arenella.recruit.candidate.entities.CandidateEntity;
-import com.arenella.recruit.candidate.enums.COUNTRY;
-import com.arenella.recruit.candidate.enums.FUNCTION;
+import com.arenella.recruit.beans.Candidate;
+import com.arenella.recruit.beans.Language;
+import com.arenella.recruit.beans.Language.LANGUAGE;
+import com.arenella.recruit.beans.Language.LEVEL;
+import com.arenella.recruit.entities.CandidateEntity;
+import com.arenella.recruit.enums.COUNTRY;
+import com.arenella.recruit.enums.FUNCTION;
 
 /**
 * Unit tests for the CandidateEntity class

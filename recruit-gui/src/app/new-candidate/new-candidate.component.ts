@@ -37,6 +37,13 @@ export class NewCandidateComponent implements OnInit {
   *  Init 
   */
   ngOnInit(): void {
+
+  //satrt
+    this.candidateService.authenticate().subscribe( data => {
+      console.log("Done");
+    });
+    //end
+
   }
 
   /**

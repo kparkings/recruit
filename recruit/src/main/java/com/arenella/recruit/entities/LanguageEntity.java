@@ -1,4 +1,4 @@
-package com.arenella.recruit.candidate.entities;
+package com.arenella.recruit.entities;
 
 import java.io.Serializable;
 
@@ -9,8 +9,8 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Table;
 
-import com.arenella.recruit.candidate.beans.Language.LANGUAGE;
-import com.arenella.recruit.candidate.beans.Language.LEVEL;
+import com.arenella.recruit.beans.Language.LANGUAGE;
+import com.arenella.recruit.beans.Language.LEVEL;
 
 /**
 * Entity representation of a Language spoken by a Candidate

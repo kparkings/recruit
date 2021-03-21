@@ -1,4 +1,4 @@
-package com.arenella.recruit.candidate.services;
+package com.arenella.recruit.services;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -8,10 +8,10 @@ import java.util.stream.StreamSupport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.arenella.recruit.candidate.beans.Candidate;
-import com.arenella.recruit.candidate.dao.CandidateDao;
-import com.arenella.recruit.candidate.entities.CandidateEntity;
-import com.arenella.recruit.candidate.entities.LanguageEntity;
+import com.arenella.recruit.beans.Candidate;
+import com.arenella.recruit.dao.CandidateDao;
+import com.arenella.recruit.entities.CandidateEntity;
+import com.arenella.recruit.entities.LanguageEntity;
 
 /**
 * Provides services related to Candidates

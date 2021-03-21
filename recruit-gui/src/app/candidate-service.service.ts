@@ -1,10 +1,13 @@
-import { Injectable }                         from '@angular/core';
-import { FormGroup }                          from '@angular/forms';
-import { HttpClient, HttpResponse }           from '@angular/common/http';
-import { Observable, throwError }             from 'rxjs';
-import { catchError, retry }                  from 'rxjs/operators';
-import { NewCandidate }                       from './new-candidate/new-candidate';
-import { Language}                            from './new-candidate/language';
+// tslint:disable: no-trailing-whitespace
+// tslint:disable: jsdoc-format
+// tslint:disable: import-spacing
+import { Injectable }                             from '@angular/core';
+import { FormGroup }                              from '@angular/forms';
+import { HttpClient, HttpResponse, HttpHeaders }  from '@angular/common/http';
+import { Observable, throwError }                 from 'rxjs';
+import { catchError, retry }                      from 'rxjs/operators';
+import { NewCandidate }                           from './new-candidate/new-candidate';
+import { Language}                                from './new-candidate/language';
 
 /**
 * Services for new Candidates
@@ -17,17 +20,34 @@ export class CandidateServiceService {
 
   constructor(private httpClient: HttpClient) { }
 
-  public getCandidates():Observable<any>{
+  httpOptions = {
+      headers: new HttpHeaders({ 'Content-Type': 'application/json' }), withCredentials: true
+    };
 
-    const headers = { 'content-type': 'application/json'};
+  headers = { 'content-type': 'application/json'};
 
-    return this.httpClient.get<any>('http://localhost:8080/candidate', { headers});
-  
+  /**
+  * Returns a list of available Candidates 
+  */
+  public getCandidates(): Observable<any>{
+    return this.httpClient.get<any>('http://127.0.0.1:8080/candidate', this.httpOptions);
   }
 
-  public addCandidate(formBean:FormGroup): Observable<any>{
+  /**
+  * Authenticates a User with the System 
+  */
+  public authenticate(): Observable<any>{
 
-    const headers = { 'content-type': 'application/json'};
+     const authDetails: any = {'username':'javainuse', 'password': 'password'};
+
+     return this.httpClient.post<any>('http://127.0.0.1:8080/authenticate', authDetails, this.httpOptions);
+
+  }
+
+  /**
+  * Adds a new Candidate 
+  */
+  public addCandidate(formBean:FormGroup): Observable<any>{
 
     const newCandidate:NewCandidate = new NewCandidate();
 
@@ -41,41 +61,37 @@ export class CandidateServiceService {
     newCandidate.freelance        = formBean.get('freelance')?.value;
     newCandidate.yearsExperience  = formBean.get('yearsExperience')?.value;
     newCandidate.function         = formBean.get('function')?.value;
-    
-    const langDutch:string = formBean.get('dutch')?.value;
-    const langFrench:string = formBean.get('french')?.value;
-    const langEnglish:string = formBean.get('english')?.value;
 
-    console.log("EN -> " + langEnglish);
+    const langDutch: string       = formBean.get('dutch')?.value;
+    const langFrench: string      = formBean.get('french')?.value;
+    const langEnglish: string     = formBean.get('english')?.value;
+
     if (langDutch === 'Yes') {
-      newCandidate.languages.push(new Language("DUTCH","PROFICIENT"));
+      newCandidate.languages.push(new Language('DUTCH', 'PROFICIENT'));
     }
     
     if (langDutch === 'Basic') {
-      newCandidate.languages.push(new Language("DUTCH","BASIC"));
+      newCandidate.languages.push(new Language('DUTCH', 'BASIC'));
     }
     
-    
     if (langFrench === 'Yes') {
-      newCandidate.languages.push(new Language("FRENCH","PROFICIENT"));
+      newCandidate.languages.push(new Language('FRENCH', 'PROFICIENT'));
     }
     
     if (langFrench === 'Basic') {
-      newCandidate.languages.push(new Language("FRENCH","BASIC"));
+      newCandidate.languages.push(new Language('FRENCH', 'BASIC'));
     }
-    
-
-    
+        
     if (langEnglish === 'Yes') {
-      newCandidate.languages.push(new Language("ENGLISH","PROFICIENT"));
+      newCandidate.languages.push(new Language('ENGLISH', 'PROFICIENT'));
     }
     
     if (langEnglish === 'Basic') {
-      newCandidate.languages.push(new Language("ENGLISH","BASIC"));
+      newCandidate.languages.push(new Language('ENGLISH', 'BASIC'));
     }
     
-    const skills                      = formBean.get('skills')?.value ? formBean.get('skills')?.value : "";
-    const skillTokens:Array<string>   = skills.split(",");
+    const skills                       = formBean.get('skills')?.value ? formBean.get('skills')?.value : '';
+    const skillTokens: Array<string>   = skills.split(',');
     
     newCandidate.skills = new Array<string>();
 
@@ -83,8 +99,8 @@ export class CandidateServiceService {
       newCandidate.skills.push(skillToken);
     });
 
-    return this.httpClient.post<any>('http://localhost:8080/candidate', JSON.stringify(newCandidate), { headers});
-    
+    return this.httpClient.post<any>('http://127.0.0.1:8080/candidate', JSON.stringify(newCandidate), this.httpOptions);
+
   }
 
 }
