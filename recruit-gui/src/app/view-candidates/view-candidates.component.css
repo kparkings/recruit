@@ -1,9 +1,28 @@
-.col{
+.col-1{
     border:1px black solid;
     background-color: #ffffff;    font-size: x-small;
     text-align: center;
     margin: 0px;
     padding: 5px;
+    max-width: 120px;
+}
+
+
+.microcol{
+    max-width: 60px;
+}
+
+.medicol{
+    max-width: 90px;
+}
+.col-2{
+    border:1px black solid;
+    background-color: #ffffff;    font-size: x-small;
+    text-align: left;
+    margin: 0px;
+    padding: 5px;
+    min-width: 580px;
+    max-width:580px;
 }
 
 .bg-tab-hdr{
@@ -12,6 +31,11 @@
     column-width: 100px;
 }
 
+.centerdiv{
+    margin: 0 auto;
+}
+
 .candidate-table{
-    margin:20px;
+    margin:0 auto;
+    width:1400px;
 }

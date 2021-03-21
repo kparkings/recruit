@@ -22,7 +22,7 @@ export class ViewCandidatesComponent implements OnInit {
 
       candidate.candidateId       = c.candidateId;
       candidate.city              = c.city;
-      candidate.country           = c.country;
+      candidate.country           = this.getCountryCode(c.country);
       candidate.freelance         = c.freelance;
       candidate.function          = c.function;
       candidate.permanent         = c.permanent;
@@ -40,6 +40,24 @@ export class ViewCandidatesComponent implements OnInit {
         
     })
     
+  }
+
+  getCountryCode(country:string):string{
+
+    switch(country){
+      case "NETHERLANDS":{
+        return "NL";
+      }
+      case "BELGIUM":{
+        return "BE";
+      }
+      case "UK":{
+        return "UK";
+      }
+    }
+
+     return 'NA';
+
   }
 
 }
