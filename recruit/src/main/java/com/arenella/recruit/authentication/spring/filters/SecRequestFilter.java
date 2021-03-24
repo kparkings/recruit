@@ -29,9 +29,6 @@ import com.arenella.recruit.authentication.utils.JwtTokenUtil;
 
 @Component
 public class SecRequestFilter extends OncePerRequestFilter {
-
-	@Autowired
-	private UserDetailsService 	userDetailsService;
 	
 	@Autowired
 	private JwtTokenUtil 		jwtTokenUtil;
@@ -68,17 +65,11 @@ public class SecRequestFilter extends OncePerRequestFilter {
 					String username = this.jwtTokenUtil.getUsernameFromToken(token);
 					
 					//TODO: Check if Token comes form us. There is a check for this.
-					
-					//UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
-					//UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-					
-					//usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 				
 					PreAuthenticatedAuthenticationToken authToken = new PreAuthenticatedAuthenticationToken(username, new ArrayList<>());
 					authToken.setAuthenticated(true);
 					
 					SecurityContextHolder.getContext().setAuthentication(authToken);
-					//SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
 					
 				}
 			}); 
