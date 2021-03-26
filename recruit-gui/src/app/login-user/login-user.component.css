@@ -1,0 +1,26 @@
+.login-table{
+    margin:0 auto;
+    width:700px;
+    margin-top:200px;
+}
+
+.leftcol{
+    text-align:right;
+    margin-right:5px;
+    margin-bottom:5px;    
+}
+
+.rightcol{
+    text-align:left;
+    margin-right:5px;
+    margin-bottom:5px;
+
+}
+
+input{
+    width:300px;
+}
+
+.loginbutton{
+    width:300px;
+}

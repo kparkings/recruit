@@ -11,10 +11,21 @@
 	color:#000000;
 }
 
+.centerdiv{
+    margin: 0 auto;
+}
+
+.wholepage{
+    margin:0 auto;
+	width:800px;
+}
+
 .bg-tab-hdr{
 	color: #000000;
-	border-bottom: 2px solid  black;
+	border-bottom: 2px solid black;
 	font-weight: bold;
+	padding:10px;
+	margin-bottom:50px;
 	
 }
 
@@ -35,6 +46,19 @@
 	width:150px;
 }
 
-.hdr_label{
-	
+.skills{
+	width:350px;
+	height:130px;
+	text-align: top;
+	margin-bottom:20px;
+}
+
+.rowadduser{
+	margin-top:5px;
+}
+
+.halpagecol{
+	margin-left:10px;
+	margin-right:10px;
+	max-width: 400px;
 }
