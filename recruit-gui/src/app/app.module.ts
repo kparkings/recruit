@@ -6,12 +6,17 @@ import { AppComponent } from './app.component';
 import { NewCandidateComponent } from './new-candidate/new-candidate.component';
 import { HttpClientModule } from '@angular/common/http';
 import { ViewCandidatesComponent } from './view-candidates/view-candidates.component';
+import { LoginUserComponent } from './login-user/login-user.component';
+import { AuthService } from './auth.service';
+import { AuthGuardService } from './auth-guard.service';
+import { RouterModule} from '@angular/router';
 
 @NgModule({
   declarations: [
     AppComponent,
     NewCandidateComponent,
-    ViewCandidatesComponent
+    ViewCandidatesComponent,
+    LoginUserComponent
   ],
   imports: [
     BrowserModule,
@@ -19,7 +24,7 @@ import { ViewCandidatesComponent } from './view-candidates/view-candidates.compo
     ReactiveFormsModule,
     HttpClientModule
   ],
-  providers: [],
+  providers: [AuthGuardService, AuthService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

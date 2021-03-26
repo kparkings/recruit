@@ -1,0 +1,36 @@
+<form [formGroup]="formBean">
+
+	<div class=".container m-2">
+
+		<div class="row" style="margin:10px">
+
+            <div class="col">
+                Username
+            </div>
+            <div class="col">
+                <div class="col"><input type="text" class="inpt-tab-std" formControlName="username"/></div>
+            </div>
+
+
+        </div>
+
+        <div class="row" style="margin:10px">
+
+            <div class="col">
+                Password
+            </div>
+            <div class="col">
+                <div class="col"><input type="text" class="inpt-tab-std" formControlName="password"/></div>
+            </div>
+
+            
+        </div>
+
+        <div>
+		    <div class="row row-section-body">
+			    <div class="col hdr_label"><button (click)="login()">Save</button></div>
+					
+			</div>
+        </div>
+    </div>
+</form>

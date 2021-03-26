@@ -18,7 +18,7 @@ import com.arenella.recruit.services.CandidateService;
 * @author K Parkings
 */
 @RestController
-//@CrossOrigin(origins = "http://127.0.0.1:4200", allowedHeaders = "*")
+@CrossOrigin(origins = "http://127.0.0.1:4200", allowedHeaders = "*")
 public class CandidateController {
 
 	@Autowired
