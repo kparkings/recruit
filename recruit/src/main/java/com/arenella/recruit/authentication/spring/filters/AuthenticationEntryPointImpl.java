@@ -25,12 +25,8 @@ public class AuthenticationEntryPointImpl implements AuthenticationEntryPoint, S
 	* Refer to AuthenticationEntryPointInterface for details
 	*/
 	@Override
-	public void commence(HttpServletRequest request, HttpServletResponse response,
-
-			AuthenticationException authException) throws IOException, ServletException {
-		
+	public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
 		response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
-		
 	}
 
 }

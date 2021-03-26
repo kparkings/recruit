@@ -4,8 +4,6 @@ import javax.servlet.http.Cookie;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -35,10 +33,20 @@ public class AuthenticationServiceImpl implements AuthenticationService{
 	@Override
 	public Cookie authenticateUser(String userName, String password) {
 		
+		/**
+		* Perform actual authentication. Uses the UserDetails service to load a matching user. If 
+		* no matching user is found it will throw an exception 
+		*/
 		this.authenticate(userName, password);
 		
+		/**
+		* Loads the details of the just authenticated User
+		*/
 		final UserDetails userDetails = this.userDetailsService.loadUserByUsername(userName);
 		
+		/**
+		* Creates an Auth token for a User. Wraps it in a cookie and returns it. 
+		*/
 		final String token = this.jwtTokenUtil.generateToken(userDetails);
 		
 		return this.jwtTokenUtil.wrapInCookie(token);
@@ -53,13 +61,7 @@ public class AuthenticationServiceImpl implements AuthenticationService{
 	*/
 	private void authenticate(String username, String password) {
 		
-		try {
-			this.authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
-		}catch(DisabledException e) {
-			throw new RuntimeException("USER_DISABLED", e);
-		}catch(BadCredentialsException e) {
-			throw new RuntimeException("INVALID_CREDENTIALS", e);
-		}
+		this.authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
 		
 	}
 

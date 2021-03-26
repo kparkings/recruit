@@ -3,36 +3,34 @@ package com.arenella.recruit.authentication.spring.filters;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Enumeration;
-import java.util.HashSet;
-import java.util.Set;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.arenella.recruit.authentication.utils.JwtTokenUtil;
 
-
+/**
+* Performs authentication of each incomming request
+* @author K Parkings
+*/
 @Component
 public class SecRequestFilter extends OncePerRequestFilter {
 	
 	@Autowired
 	private JwtTokenUtil 		jwtTokenUtil;
 	
+	/**
+	* Refer to the OncePerRequestFilter for details 
+	*/
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 		
@@ -54,19 +52,19 @@ public class SecRequestFilter extends OncePerRequestFilter {
 			}
 					
 			Arrays.asList(request.getCookies()).forEach(cookie -> {
+				
 				if (cookie.getName().equals("Authorization")) {
 					
 					String token = cookie.getValue();
-					
+				
 					if (this.jwtTokenUtil.isTokenExpired(token)) {
 						throw new BadCredentialsException("Token expired");
 					}
 					
 					String username = this.jwtTokenUtil.getUsernameFromToken(token);
-					
-					//TODO: Check if Token comes form us. There is a check for this.
 				
 					PreAuthenticatedAuthenticationToken authToken = new PreAuthenticatedAuthenticationToken(username, new ArrayList<>());
+
 					authToken.setAuthenticated(true);
 					
 					SecurityContextHolder.getContext().setAuthentication(authToken);

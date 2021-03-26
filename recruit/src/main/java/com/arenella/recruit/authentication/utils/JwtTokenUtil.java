@@ -28,7 +28,16 @@ public class JwtTokenUtil implements Serializable{
 	private static final int JWT_TOKEN_VALIDITY = 5 * 60 * 60;
 	
 	@Value("${jwt.secret}")
-	private String secret;
+	private String 		secret;
+	
+	@Value("${jwt.cookie.secure}")
+	private boolean	 	cookieSecure;
+	
+	@Value("${jtw.cookie.domain}")
+	private String cookieDomain;
+	
+	@Value("${jwt.cookie.maxage}")
+	private int cookieMaxAge;		
 	
 	/**
 	* Extracts the Username from the token
@@ -66,7 +75,10 @@ public class JwtTokenUtil implements Serializable{
 	* @return claims
 	*/
 	private Claims getAllClaimsFromToken(String token) {
-		return Jwts.parser().setSigningKey(this.secret).parseClaimsJws(token).getBody();
+		
+		Claims claims = Jwts.parser().setSigningKey(this.secret).parseClaimsJws(token).getBody(); 
+		
+		return claims;
 	}
 		
 	/**
@@ -90,7 +102,7 @@ public class JwtTokenUtil implements Serializable{
 							.setSubject(userDetails.getUsername())
 							.setIssuedAt(new Date(System.currentTimeMillis()))
 							.setExpiration(new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY * 1000))
-							.signWith(SignatureAlgorithm.HS512, secret).compact();
+							.signWith(SignatureAlgorithm.HS512, this.secret).compact();
 	}
 	
 	/**
@@ -112,9 +124,9 @@ public class JwtTokenUtil implements Serializable{
 	public Cookie wrapInCookie(String token) {
 		
 		Cookie cookie = new Cookie("Authorization", token);
-		cookie.setDomain("127.0.0.1");
-		cookie.setMaxAge(500000);
-		cookie.setSecure(false); //TODO: Change when we are live and using https (setup with profiles or application.properties)
+		cookie.setDomain(cookieDomain);
+		cookie.setMaxAge(cookieMaxAge);
+		cookie.setSecure(cookieSecure);
 		
 		return cookie;
 		

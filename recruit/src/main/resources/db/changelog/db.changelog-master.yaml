@@ -5,6 +5,7 @@ databaseChangeLog:
       changes:
         - createTable:
             tableName: recruiter
+            schemaName: recruiter
             columns:
               - column:
                   name: email
@@ -38,6 +39,7 @@ databaseChangeLog:
       changes:
         - createTable:
             tableName: candidate
+            schemaName: candidate
             columns:
               - column:
                   name: candidate_id
@@ -59,7 +61,7 @@ databaseChangeLog:
                   name: email
                   type: varchar
                   constraints:
-                    nullable: false
+                    nullable: true
               - column:
                   name: function
                   type: varchar
@@ -110,6 +112,7 @@ databaseChangeLog:
                     nullable: false
         - createTable:
             tableName: candidate_skill
+            schemaName: candidate
             columns:
               - column:
                   name: candidate_id
@@ -117,7 +120,7 @@ databaseChangeLog:
                   constraints:
                     nullable: false                    
                     foreignKeyName: fk_candidate_skill
-                    references: candidate(candidate_id)
+                    references: candidate.candidate(candidate_id)
               - column:
                   name: skill
                   type: varchar
@@ -128,8 +131,10 @@ databaseChangeLog:
             columnNames:  candidate_id, skill  
             constraintName:  pk_candidate_skill  
             tableName:  candidate_skill  
+            schemaName: candidate
         - createTable:
             tableName: candidate_language
+            schemaName: candidate
             columns:
               - column:
                   name: candidate_id
@@ -150,3 +155,4 @@ databaseChangeLog:
             columnNames:  candidate_id, language  
             constraintName:  pk_candidate_language  
             tableName:  candidate_language  
+            schemaName: candidate

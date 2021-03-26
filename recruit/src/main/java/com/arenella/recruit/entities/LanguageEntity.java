@@ -17,7 +17,7 @@ import com.arenella.recruit.beans.Language.LEVEL;
 * @author K Parkings
 */
 @Entity
-@Table(name="candidate_language")
+@Table(schema="candidate", name="candidate_language")
 public class LanguageEntity implements Serializable{
 
 	private static final long serialVersionUID = -7723031022369804453L;

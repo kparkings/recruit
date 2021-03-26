@@ -29,7 +29,7 @@ import com.arenella.recruit.enums.FUNCTION;
 * @author K Parkings
 */
 @Entity
-@Table(name="candidate")
+@Table(schema="candidate", name="candidate")
 public class CandidateEntity {
 
 	@Id
@@ -75,11 +75,10 @@ public class CandidateEntity {
 	private LocalDate 	lastAvailabilityCheck;
 	
 	@ElementCollection(targetClass=String.class)
-	@CollectionTable(name="candidate_skill", joinColumns=@JoinColumn(name="candidate_id"))
+	@CollectionTable(schema="candidate", name="candidate_skill", joinColumns=@JoinColumn(name="candidate_id"))
 	@Column(name="skill")
 	private Set<String> 			skills						= new LinkedHashSet<>();
 	
-	//TODO: Think the primary key columns need to be specified here
 	@OneToMany(mappedBy = "id.candidateId", cascade = CascadeType.ALL, orphanRemoval=true)
 	private Set<LanguageEntity> 	languages					= new LinkedHashSet<>();
 	
@@ -108,7 +107,13 @@ public class CandidateEntity {
 
 	}
 	
-	private CandidateEntity() {}
+	/**
+	* Default constructor 
+	*/
+	@SuppressWarnings("unused")
+	private CandidateEntity() {
+		//Hibernate
+	}
 	
 	/**
 	* Returns the unique identifier of the Candidate
