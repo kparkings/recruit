@@ -10,13 +10,15 @@ import { LoginUserComponent } from './login-user/login-user.component';
 import { AuthService } from './auth.service';
 import { AuthGuardService } from './auth-guard.service';
 import { RouterModule} from '@angular/router';
+import { HomeComponent } from './home/home.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     NewCandidateComponent,
     ViewCandidatesComponent,
-    LoginUserComponent
+    LoginUserComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,

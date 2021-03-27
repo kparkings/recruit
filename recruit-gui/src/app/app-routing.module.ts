@@ -3,10 +3,11 @@ import { RouterModule, Routes, CanActivate } from '@angular/router';
 import { NewCandidateComponent } from './new-candidate/new-candidate.component';
 import { ViewCandidatesComponent } from './view-candidates/view-candidates.component';
 import { LoginUserComponent } from './login-user/login-user.component';
+import { HomeComponent } from './home/home.component';
 import { AuthGuardService } from './auth-guard.service';
 
 const routes: Routes = [
-  {path: '', component: NewCandidateComponent, canActivate: [AuthGuardService]},
+  {path: '', component: HomeComponent},
   {path: 'new-candidate', component: NewCandidateComponent, canActivate: [AuthGuardService]},
   {path: 'view-candidates', component: ViewCandidatesComponent, canActivate: [AuthGuardService]},
   {path: 'login-user', component: LoginUserComponent}
