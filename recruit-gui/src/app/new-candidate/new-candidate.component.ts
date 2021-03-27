@@ -1,6 +1,7 @@
 import { Component, OnInit }                              from '@angular/core';
 import { ReactiveFormsModule, FormGroup, FormControl }    from '@angular/forms';
 import { CandidateServiceService }                        from '../candidate-service.service';
+import { CandidateFunction }                              from '../candidate-function';
 
 @Component({
   selector: 'app-new-candidate',
@@ -9,6 +10,8 @@ import { CandidateServiceService }                        from '../candidate-ser
 })
 export class NewCandidateComponent implements OnInit {
 
+   public functionTypes: Array<CandidateFunction> = new Array<CandidateFunction>();
+   
    public formBean:FormGroup = new FormGroup({
      
     candidateId:      new FormControl("C1001"),
@@ -31,7 +34,13 @@ export class NewCandidateComponent implements OnInit {
   /**
   * Constructor
   */
-  constructor(private candidateService:CandidateServiceService) { }
+  constructor(private candidateService: CandidateServiceService) {
+    
+    this.candidateService.loadFunctionTypes().forEach(funcType => {
+      this.functionTypes.push(funcType);
+    });
+
+  }
 
   /**
   *  Init 

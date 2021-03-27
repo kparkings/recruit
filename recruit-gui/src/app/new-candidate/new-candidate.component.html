@@ -103,7 +103,12 @@
 
 					<div class="row rowadduser">
 						<div class="col hdr_label">Function</div>
-						<div class="col"><input type="text" class="inpt-tab-std" formControlName="function"/></div>
+						<div class="col">
+							<select formControlName="function" class="inpt-tab-std">
+								<option></option>
+								<option *ngFor="let f of functionTypes" [ngValue]="f.id">{{f.desc}}</option>
+							</select>
+						</div>
 					</div>
 
 					<div class="row rowadduser">

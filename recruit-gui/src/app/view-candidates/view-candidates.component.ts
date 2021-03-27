@@ -1,6 +1,8 @@
 import { Component, OnInit }                              from '@angular/core';
 import { CandidateServiceService }                        from '../candidate-service.service';
-import { Candidate }                       from './candidate';
+import { Candidate }                                      from './candidate';
+import { CandidateFunction }                            from '../candidate-function';
+
 @Component({
   selector: 'app-view-candidates',
   templateUrl: './view-candidates.component.html',
@@ -8,9 +10,17 @@ import { Candidate }                       from './candidate';
 })
 export class ViewCandidatesComponent implements OnInit {
 
-  candidates:Array<Candidate> = new Array<Candidate>();
+  public functionTypes: Array<CandidateFunction> = new Array<CandidateFunction>();
 
-  constructor(private candidateService:CandidateServiceService) { }
+  candidates: Array<Candidate> = new Array<Candidate>();
+
+  constructor(private candidateService:CandidateServiceService) {
+
+    this.candidateService.loadFunctionTypes().forEach(funcType => {
+      this.functionTypes.push(funcType);
+    });
+
+   }
 
   ngOnInit(): void {
 
@@ -58,6 +68,17 @@ export class ViewCandidatesComponent implements OnInit {
 
      return 'NA';
 
+  }
+
+  /**
+  * Returns the humand readable decription of a function 
+  * based upon its id
+  * @param id - id of the function to return the desc for 
+  */
+  public pretifyFunction(id: string): string {
+
+    return this.functionTypes.filter(ft => ft.id === id)[0].desc;
+    
   }
 
 }

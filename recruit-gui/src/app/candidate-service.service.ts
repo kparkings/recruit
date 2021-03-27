@@ -8,6 +8,7 @@ import { Observable, throwError }                 from 'rxjs';
 import { catchError, retry }                      from 'rxjs/operators';
 import { NewCandidate }                           from './new-candidate/new-candidate';
 import { Language}                                from './new-candidate/language';
+import { CandidateFunction }                      from './candidate-function';
 
 /**
 * Services for new Candidates
@@ -100,6 +101,29 @@ export class CandidateServiceService {
     });
 
     return this.httpClient.post<any>('http://127.0.0.1:8080/candidate', JSON.stringify(newCandidate), this.httpOptions);
+
+  }
+
+  /**
+  * Returns detials of avialable Canidate Functions
+  */
+  public loadFunctionTypes(): Array<CandidateFunction>{
+
+    const functionTypes: Array<CandidateFunction> = new Array<CandidateFunction>();
+
+    functionTypes.push(new CandidateFunction('JAVA_DEV','Java Developer'));
+    functionTypes.push(new CandidateFunction('CSHARP_DEV','C# Developer'));
+    functionTypes.push(new CandidateFunction('SUPPORT','Support analyst'));
+    functionTypes.push(new CandidateFunction('BA','Business Analyst'));
+    functionTypes.push(new CandidateFunction('UI_UX','UI \ UX'));
+    functionTypes.push(new CandidateFunction('PROJECT_MANAGER','Project Manager'));
+    functionTypes.push(new CandidateFunction('SOFTWARE_ARCHITECT','Software Architect'));
+    functionTypes.push(new CandidateFunction('SOLUTIONS_ARCHITECT','Solutions Architect'));
+    functionTypes.push(new CandidateFunction('ENTERPRISE_ARCHITECT','Enterprise Architect'));
+    functionTypes.push(new CandidateFunction('TESTER','Test Analyset'));
+    functionTypes.push(new CandidateFunction('WEB_DEV','Web Developer'));
+
+    return functionTypes;
 
   }
 
