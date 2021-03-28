@@ -1,6 +1,6 @@
-package com.arenella.recruit.beans;
+package com.arenella.recruit.candudates.beans;
 
-import com.arenella.recruit.controllers.CandidateAPIInbound;
+import com.arenella.recruit.candidates.controllers.CandidateAPIInbound;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 

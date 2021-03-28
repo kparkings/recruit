@@ -3,6 +3,7 @@ import { CandidateServiceService }                        from '../candidate-ser
 import { Candidate }                                      from './candidate';
 import { CandidateFunction }                            from '../candidate-function';
 
+import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
 @Component({
   selector: 'app-view-candidates',
   templateUrl: './view-candidates.component.html',
@@ -11,10 +12,11 @@ import { CandidateFunction }                            from '../candidate-funct
 export class ViewCandidatesComponent implements OnInit {
 
   public functionTypes: Array<CandidateFunction> = new Array<CandidateFunction>();
+  closeResult: string = "";
 
   candidates: Array<Candidate> = new Array<Candidate>();
 
-  constructor(private candidateService:CandidateServiceService) {
+  constructor(private candidateService:CandidateServiceService, private modalService: NgbModal) {
 
     this.candidateService.loadFunctionTypes().forEach(funcType => {
       this.functionTypes.push(funcType);
@@ -79,6 +81,25 @@ export class ViewCandidatesComponent implements OnInit {
 
     return this.functionTypes.filter(ft => ft.id === id)[0].desc;
     
+  }
+
+  
+    public open(content:any) {
+      this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
+        this.closeResult = `Closed with: ${result}`;
+      }, (reason) => {
+        this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+      });
+  }
+
+    private getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return  `with: ${reason}`;
+    }
   }
 
 }

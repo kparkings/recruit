@@ -1,4 +1,4 @@
-package com.arenella.recruit.entities;
+package com.arenella.recruit.candidates.entities;
 
 import java.io.Serializable;
 
@@ -7,7 +7,7 @@ import javax.persistence.Embeddable;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 
-import com.arenella.recruit.beans.Language.LANGUAGE;
+import com.arenella.recruit.candudates.beans.Language.LANGUAGE;
 
 /**
 * Composite key for the LanguageEntity class

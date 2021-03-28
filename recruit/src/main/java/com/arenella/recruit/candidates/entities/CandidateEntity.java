@@ -1,4 +1,4 @@
-package com.arenella.recruit.entities;
+package com.arenella.recruit.candidates.entities;
 
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -18,10 +18,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.arenella.recruit.beans.Candidate;
-import com.arenella.recruit.beans.Language;
-import com.arenella.recruit.enums.COUNTRY;
-import com.arenella.recruit.enums.FUNCTION;
+import com.arenella.recruit.candidates.enums.COUNTRY;
+import com.arenella.recruit.candidates.enums.FUNCTION;
+import com.arenella.recruit.candudates.beans.Candidate;
+import com.arenella.recruit.candudates.beans.Language;
 
 /**
 * Entity representation of a Candidate. A Candidate is 

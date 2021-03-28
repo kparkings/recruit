@@ -1,4 +1,4 @@
-package com.arenella.recruit.enums;
+package com.arenella.recruit.candidates.enums;
 
 /**
 * Country where the Candidate lives
