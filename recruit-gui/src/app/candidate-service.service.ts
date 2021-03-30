@@ -104,6 +104,22 @@ export class CandidateServiceService {
 
   }
 
+ // public downloadCandidatesAsXls():Observable<blob>{
+
+  
+  //  const  httpOptions = {
+  //     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+  //     , withCredentials: true
+      
+   // };
+
+
+   //return this.httpClient.get<blob>('http://127.0.0.1:8080/candidate/download', {withCredentials:true; responseType: 'blob'});
+
+
+
+//  }
+
   /**
   * Returns detials of avialable Canidate Functions
   */

@@ -2,8 +2,8 @@ import { Component, OnInit }                              from '@angular/core';
 import { CandidateServiceService }                        from '../candidate-service.service';
 import { Candidate }                                      from './candidate';
 import { CandidateFunction }                            from '../candidate-function';
-
 import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
+
 @Component({
   selector: 'app-view-candidates',
   templateUrl: './view-candidates.component.html',
@@ -101,5 +101,14 @@ export class ViewCandidatesComponent implements OnInit {
       return  `with: ${reason}`;
     }
   }
+
+  //public downloadCandidatesAsXls():void{
+  // // console.log("XXX");
+  //  this.candidateService.downloadCandidatesAsXls().subscribe( (response: any) => {
+  //    let blob:any = new Blob([response.blob()], { type: 'text/json; charset=utf-8' });
+   //   const url= window.URL.createObjectURL(blob);
+   //     window.open(url);
+   //   });
+ // }
 
 }
