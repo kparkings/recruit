@@ -1,7 +1,6 @@
 package com.arenella.recruit.candidates.controllers;
 
 import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -9,8 +8,6 @@ import java.util.stream.Collectors;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
-import org.springframework.core.io.InputStreamResource;
-import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -30,7 +27,7 @@ import com.arenella.recruit.candidates.services.CandidateService;
 * @author K Parkings
 */
 @RestController
-@CrossOrigin(origins = "http://127.0.0.1:4200", allowedHeaders = "*")
+@CrossOrigin(origins = {"http://127.0.0.1:4200", "http://127.0.0.1:8080"}, allowedHeaders = "*")
 public class CandidateController {
 
 	@Autowired

@@ -37,7 +37,7 @@ public class SimpleCORSFilter extends OncePerRequestFilter {
 	    response.setHeader("Access-Control-Allow-Credentials", 			"true");
 	    response.setHeader("Access-Control-Allow-Methods", 				"POST, GET, OPTIONS, DELETE");
 	    response.setHeader("Access-Control-Max-Age", 					"3600");
-	    response.setHeader("Access-Control-Allow-Headers", 				"Content-Type, Accept, X-Requested-With, remember-me");
+	    response.setHeader("Access-Control-Allow-Headers", 				"Content-Type, Accept, X-Requested-With, remember-me, responseType");
 	
 	    if ("OPTIONS".equals(request.getMethod())) {
 	        response.setStatus(HttpServletResponse.SC_OK);

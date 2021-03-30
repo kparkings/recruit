@@ -14,12 +14,14 @@ import org.apache.poi.ss.usermodel.FillPatternType;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.poi.ss.usermodel.Font; 
 import org.springframework.stereotype.Service;
 
 import com.arenella.recruit.candidates.controllers.CandidateAPIOutbound;
+import com.arenella.recruit.candidates.enums.FUNCTION;
 import com.arenella.recruit.candudates.beans.Candidate;
 import com.arenella.recruit.candudates.beans.Language;
 import com.arenella.recruit.candudates.beans.Language.LANGUAGE;
@@ -41,11 +43,14 @@ public class CandidateDownloadServiceImpl implements CandidateDownloadService{
 		XSSFWorkbook	workbook	= new XSSFWorkbook();
 		XSSFSheet		sheet		= workbook.createSheet("Candidates");
 		
+		sheet.createFreezePane(0, 2);
+		sheet.addMergedRegion(new CellRangeAddress(0,0,0,10));
+		
 		Set<CandidateAPIOutbound> candidatesForOutput = candidates.stream().map(candidate -> CandidateAPIOutbound.convertFromCandidate(candidate)).collect(Collectors.toCollection(LinkedHashSet::new));
 		
 		this.createHeader(workbook, sheet);
 		
-		AtomicInteger counter = new AtomicInteger(1);
+		AtomicInteger counter = new AtomicInteger(2);
 		
 		candidatesForOutput.stream().forEach(candidate -> {
 			
@@ -76,7 +81,7 @@ public class CandidateDownloadServiceImpl implements CandidateDownloadService{
 			englishCell.setCellValue(getLanguageValue(english));	
 			frenchCell.setCellValue(getLanguageValue(french));
 			yearsExperienceCell.setCellValue(candidate.getYearsExperience());
-			roleCell.setCellValue(candidate.getFunction().toString());
+			roleCell.setCellValue(this.getHumanReadableCandidateFunction((candidate.getFunction())));
 			skillsCell.setCellValue(String.join(",", candidate.getSkills()));	 
 			
 			CellStyle  cellStyle = workbook.createCellStyle();
@@ -130,7 +135,47 @@ public class CandidateDownloadServiceImpl implements CandidateDownloadService{
 	*/
 	private void createHeader(XSSFWorkbook	workbook, XSSFSheet sheet) {
 		
-		Row row = sheet.createRow(0);
+		Row rowBanner = sheet.createRow(0);
+		rowBanner.setHeight(Short.valueOf("700"));
+		
+		Font bannerFont = workbook.createFont();  
+		bannerFont.setBold(true);
+		bannerFont.setFontHeightInPoints(Short.valueOf("28"));
+		bannerFont.setColor(IndexedColors.LAVENDER.index);
+		
+		CellStyle  bannerCellStyle = workbook.createCellStyle();
+		bannerCellStyle.setAlignment(HorizontalAlignment.LEFT);
+		bannerCellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+		bannerCellStyle.setFillBackgroundColor(IndexedColors.BLACK.getIndex());
+		bannerCellStyle.setFont(bannerFont);
+		
+		Cell bannerCandidateCell0 		= rowBanner.createCell(0, CellType.STRING);
+		Cell bannerCandidateCell1 		=rowBanner.createCell(1, CellType.STRING);
+		Cell bannerCandidateCell2 		=rowBanner.createCell(2, CellType.STRING);
+		Cell bannerCandidateCell3 		=rowBanner.createCell(3, CellType.STRING);
+		Cell bannerCandidateCell4 		=rowBanner.createCell(4, CellType.STRING);
+		Cell bannerCandidateCell5 		=rowBanner.createCell(5, CellType.STRING);
+		Cell bannerCandidateCell6 		=rowBanner.createCell(6, CellType.STRING);
+		Cell bannerCandidateCell7 		=rowBanner.createCell(7, CellType.STRING);
+		Cell bannerCandidateCell8 		=rowBanner.createCell(8, CellType.STRING);
+		Cell bannerCandidateCell9 		=rowBanner.createCell(9, CellType.STRING);
+		Cell bannerCandidateCell10 		=rowBanner.createCell(10, CellType.STRING);
+		
+		bannerCandidateCell0.setCellValue("  Arenella ICT Candidate Recruitment");
+		
+		bannerCandidateCell0.setCellStyle(bannerCellStyle);
+		bannerCandidateCell1.setCellStyle(bannerCellStyle);
+		bannerCandidateCell2.setCellStyle(bannerCellStyle);
+		bannerCandidateCell3.setCellStyle(bannerCellStyle);
+		bannerCandidateCell4.setCellStyle(bannerCellStyle);
+		bannerCandidateCell5.setCellStyle(bannerCellStyle);
+		bannerCandidateCell6.setCellStyle(bannerCellStyle);
+		bannerCandidateCell7.setCellStyle(bannerCellStyle);
+		bannerCandidateCell8.setCellStyle(bannerCellStyle);
+		bannerCandidateCell9.setCellStyle(bannerCellStyle);
+		bannerCandidateCell10.setCellStyle(bannerCellStyle);
+		
+		Row row = sheet.createRow(1);
 	
 		Cell candidateCell 			= row.createCell(0, CellType.STRING);
 		Cell countryCell 			= row.createCell(1, CellType.STRING);
@@ -158,11 +203,13 @@ public class CandidateDownloadServiceImpl implements CandidateDownloadService{
 		
 		Font font = workbook.createFont();  
 		font.setBold(true);
+		font.setColor(IndexedColors.WHITE.index);
 		
 		CellStyle  cellStyle = workbook.createCellStyle();
 		cellStyle.setAlignment(HorizontalAlignment.CENTER);
 		cellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
-		cellStyle.setFillBackgroundColor(IndexedColors.LIGHT_BLUE.getIndex());
+		cellStyle.setFillForegroundColor(IndexedColors.GREY_80_PERCENT.getIndex());
+		cellStyle.setFillBackgroundColor(IndexedColors.GREY_80_PERCENT.getIndex());
 		cellStyle.setFont(font);
 		cellStyle.setBorderTop(BorderStyle.THIN);
 		cellStyle.setBorderBottom(BorderStyle.THIN);
@@ -182,7 +229,13 @@ public class CandidateDownloadServiceImpl implements CandidateDownloadService{
 		skillsCell.setCellStyle(cellStyle);
 		
 	}
-	
+
+	/**
+	* Returns human readable value to represent a language spoken 
+	* by the Candidate
+	* @param language - Language spoken by the Candidate
+	* @return human readable version of the Language
+	*/
 	private String getLanguageValue(Optional<Language> language) {
 		
 		if (language.isEmpty()) {
@@ -190,6 +243,30 @@ public class CandidateDownloadServiceImpl implements CandidateDownloadService{
 		}
 		
 		return language.get().getLevel() == LEVEL.PROFICIENT ? "X" : "X (basic)";
+		
+	}
+	
+	/**
+	* Returns a human readable representation of the Function the Candidate performs
+	* @param function - Function the Candidate performs
+	* @return Human readable representation of the Function
+	*/
+	private String getHumanReadableCandidateFunction(FUNCTION function) {
+
+		switch(function){
+			case JAVA_DEV: 					return "Java Developer";
+			case CSHARP_DEV: 				return "C# Developer";
+			case SUPPORT: 					return "Support analyst";
+			case BA: 						return "Business Analyst";
+			case UI_UX: 					return "UI \\ UX";
+			case PROJECT_MANAGER: 			return "Project Manager";
+			case SOFTWARE_ARCHITECT: 		return "Software Architect";
+			case SOLUTIONS_ARCHITECT: 		return "Solutions Architect";
+			case ENTERPRISE_ARCHITECT: 		return "Enterprise Architect";
+			case TESTER: 					return "Test Analyset";
+			case WEB_DEV: 					return "Web Developer";
+			default: return function.toString();
+		}
 		
 	}
 
