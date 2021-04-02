@@ -14,12 +14,18 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.arenella.recruit.candidates.enums.COUNTRY;
+import com.arenella.recruit.candidates.enums.FUNCTION;
+import com.arenella.recruit.candidates.enums.RESULT_ORDER;
 import com.arenella.recruit.candidates.services.CandidateDownloadService;
 import com.arenella.recruit.candidates.services.CandidateService;
+import com.arenella.recruit.candudates.beans.CandidateFilterOptions;
+import com.arenella.recruit.candudates.beans.Language;
 
 
 /**
@@ -51,15 +57,44 @@ public class CandidateController {
 	* @return Available Candidates
 	*/
 	@GetMapping(path="candidate")
-	public Set<CandidateAPIOutbound> getCandidate() {
-		return candidateService.getCandidates().stream().map(candidate -> CandidateAPIOutbound.convertFromCandidate(candidate)).collect(Collectors.toCollection(LinkedHashSet::new));
+	public Set<CandidateAPIOutbound> getCandidate(  @PathVariable(required = false) 	String 				orderAttribute,
+													@PathVariable(required = false) 	RESULT_ORDER		order,
+												 	@PathVariable(required = false) 	Set<String> 		candidateId,
+												 	@PathVariable(required = false) 	Set<COUNTRY> 		countries,
+												 	@PathVariable(required = false) 	Set<FUNCTION> 		functions,
+												 	@PathVariable(required = false) 	Boolean 			freelance,
+												 	@PathVariable(required = false) 	Boolean 			perm,
+												 	@PathVariable(required = false) 	Integer				yearsExperienceGtEq,
+												 	@PathVariable(required = false) 	Language.LEVEL 		dutch,
+												 	@PathVariable(required = false) 	Language.LEVEL 		english,
+												 	@PathVariable(required = false) 	Language.LEVEL 		french,
+												 	@PathVariable(required = false) 	Set<String>			skills
+												 	) {
+		
+		CandidateFilterOptions filterOptions = CandidateFilterOptions
+													.builder()
+													.orderAttribute(orderAttribute)
+													.order(order)
+													.candidateIds(candidateId)
+													.countries(countries)
+													.functions(functions)
+													.freelance(freelance)
+													.perm(perm)
+													.yearsExperienceGtEq(yearsExperienceGtEq)
+													.dutch(dutch)
+													.english(english)
+													.french(french)
+													.skills(skills)
+													.build();
+		
+		return candidateService.getCandidates(filterOptions).stream().map(candidate -> CandidateAPIOutbound.convertFromCandidate(candidate)).collect(Collectors.toCollection(LinkedHashSet::new));
 	}
 	
 	@GetMapping(path="candidate/download")
 	public ResponseEntity<ByteArrayResource> downloadCandidates() throws Exception{
 		
 		ByteArrayOutputStream 	stream 		= new ByteArrayOutputStream();
-		XSSFWorkbook 			workbook 	= this.candidateDownloadService.createXLSCandidateDownload(candidateService.getCandidates());
+		XSSFWorkbook 			workbook 	= this.candidateDownloadService.createXLSCandidateDownload(candidateService.getCandidates(CandidateFilterOptions.builder().build()));
 		
 		HttpHeaders header = new HttpHeaders();
 		header.setContentType(new MediaType("application", "force-download"));

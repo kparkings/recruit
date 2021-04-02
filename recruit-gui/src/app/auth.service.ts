@@ -19,6 +19,7 @@ export class AuthService {
 constructor(private httpClient: HttpClient) { }
 
   httpOptions = {
+    
       headers: new HttpHeaders({ 'Content-Type': 'application/json' }), withCredentials: true
     };
 
@@ -30,6 +31,8 @@ constructor(private httpClient: HttpClient) { }
   * @param password - password user is attempting to log in with
   */
   public authenticate(username: string, password: string): Observable<any>{
+
+
 
      const authDetails: any = {'username':username, 'password': password};
 

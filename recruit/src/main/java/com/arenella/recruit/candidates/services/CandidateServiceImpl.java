@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.arenella.recruit.candidates.entities.CandidateEntity;
 import com.arenella.recruit.candidates.entities.LanguageEntity;
 import com.arenella.recruit.candudates.beans.Candidate;
+import com.arenella.recruit.candudates.beans.CandidateFilterOptions;
 import com.arenella.recruit.candudates.dao.CandidateDao;
 
 /**
@@ -41,8 +42,8 @@ public class CandidateServiceImpl implements CandidateService{
 	* Refer to the CandidateService Interface for Details
 	*/
 	@Override
-	public Set<Candidate> getCandidates() {
-		return StreamSupport.stream(candidateDao.findAll().spliterator(), false)
+	public Set<Candidate> getCandidates(CandidateFilterOptions filterOptions) {
+		return StreamSupport.stream(candidateDao.findAll(filterOptions).spliterator(), false)
 								.map(candidate -> CandidateEntity.convertFromEntity(candidate)).collect(Collectors.toCollection(LinkedHashSet::new));
 	}
 

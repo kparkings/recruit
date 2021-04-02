@@ -3,6 +3,7 @@ package com.arenella.recruit.candidates.services;
 import java.util.Set;
 
 import com.arenella.recruit.candudates.beans.Candidate;
+import com.arenella.recruit.candudates.beans.CandidateFilterOptions;
 
 /**
 * Defines services available for interacting with Candidates
@@ -19,9 +20,10 @@ public interface CandidateService {
 	
 	/**
 	* Retrieves a list of Candidates
+	* @param filterOptions - filters to apply to the results
 	* @return Candidates
 	*/
-	public Set<Candidate> getCandidates();
+	public Set<Candidate> getCandidates(CandidateFilterOptions filterOptions);
 	
 	/**
 	* Retrieves a specific Candidate based upon 
