@@ -23,51 +23,44 @@ import com.arenella.recruit.candudates.beans.CandidateFilterOptions;
 */
 public interface CandidateDao extends CrudRepository<CandidateEntity, String>, JpaSpecificationExecutor<CandidateEntity> {
 
+	/**
+	* Returns all Candidates matching the filter options
+	* @param filterOptions - options to filter Candidates on
+	* @return Candidates matching the fitler options
+	*/
 	public default Iterable<CandidateEntity> findAll(CandidateFilterOptions filterOptions) {
 		return this.findAll(new FilterSpecification(filterOptions));
 	}
 			
-	
+	/**
+	* FilterSpecifiation reflecting the values in the FilterOptiions
+	* @author K Parkings
+	*/
 	public static class FilterSpecification implements Specification<CandidateEntity>{
 		
 		private static final long serialVersionUID = -4056828138503774297L;
 
 		private CandidateFilterOptions filterOptions;
 		
+		/**
+		* Constructor
+		* @param filterOptions - Information on how to set up the FilterSpecification
+		*/
 		public FilterSpecification(CandidateFilterOptions filterOptions){
 			this.filterOptions = filterOptions;
 		}
 		
+		/**
+		* Refer to the JpaSpecificationExecutor interface for details 
+		*/
 		@Override
 		public Predicate toPredicate(Root<CandidateEntity> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
-			//return criteriaBuilder.equal(root.get("candidateId"), "C1001");
-
-			//Set<String> s1 = new HashSet<>();
-			//Set<COUNTRY> s2 = new HashSet<>();
-			//Set<FUNCTION> s3 = new HashSet<>();
 			
-			//s1.add("C1001");
-			//s1.add("C1004");
-			//s1.add("C1009");
-			
-			//s2.add(COUNTRY.NETHERLANDS);
-			
-			
-			//s3.add(FUNCTION.JAVA_DEV);
-			
-			
-			
-			
-			Expression<String> cityExpression 				= root.get("city");
-			
-			
-			
-			
+			//Expression<String> cityExpression 				= root.get("city");
 			//Expression<String> dutchExpression 			= root.get("perm");
 			//Expression<String> englishExpression 			= root.get("perm");
 			//Expression<String> frenchExpression 			= root.get("perm");
 			//Expression<String> skillsExpression 			= root.get("perm");
-			
 			
 			List<Predicate> predicates = new ArrayList<>();
 			
@@ -107,6 +100,7 @@ public interface CandidateDao extends CrudRepository<CandidateEntity, String>, J
 			//predicates.add(criteriaBuilder.equal(cityExpression, 		"Noordwijk"));
 			
 			Expression<String> sortExpression 				= root.get("candidateId");
+			
 			if (this.filterOptions.getOrderAttribute().isPresent()) {
 				sortExpression 				= root.get(filterOptions.getOrderAttribute().get());
 				if (this.filterOptions.getOrder().get() == RESULT_ORDER.asc) {
@@ -121,7 +115,6 @@ public interface CandidateDao extends CrudRepository<CandidateEntity, String>, J
 			}
 			
 			return criteriaBuilder.and(predicates.stream().toArray(n -> new Predicate[n]));
-			
 			
 		}
 		

@@ -53,8 +53,20 @@ public class CandidateController {
 	}
 	
 	/**
-	* Returns all available Candidates
-	* @return Available Candidates
+	* Fetches Candidates
+	* @param orderAttribute			- Optional attribute to order the results on
+	* @param order					- Optional direction of ordering
+	* @param candidateId			- Optional candidates ids to filter on
+	* @param countries				- Optional countries to filter on
+	* @param functions				- Optional functions to filter on
+	* @param freelance				- Optional freelance value to filter on
+	* @param perm					- Optional perm value to filter on
+	* @param yearsExperienceGtEq	- Optional years experience value to filter on
+	* @param dutch					- Optional Dutch language proficiency value to filter on 
+	* @param english				- Optional English language proficiency value to filter on
+	* @param french					- Optional French language proficiency value to filter on
+	* @param skills					- Optional Skills to filter on
+	* @return
 	*/
 	@GetMapping(path="candidate")
 	public Set<CandidateAPIOutbound> getCandidate(  @PathVariable(required = false) 	String 				orderAttribute,
@@ -90,11 +102,54 @@ public class CandidateController {
 		return candidateService.getCandidates(filterOptions).stream().map(candidate -> CandidateAPIOutbound.convertFromCandidate(candidate)).collect(Collectors.toCollection(LinkedHashSet::new));
 	}
 	
+	/**
+	* Downloads Candidates
+	* @param orderAttribute			- Optional attribute to order the results on
+	* @param order					- Optional direction of ordering
+	* @param candidateId			- Optional candidates ids to filter on
+	* @param countries				- Optional countries to filter on
+	* @param functions				- Optional functions to filter on
+	* @param freelance				- Optional freelance value to filter on
+	* @param perm					- Optional perm value to filter on
+	* @param yearsExperienceGtEq	- Optional years experience value to filter on
+	* @param dutch					- Optional Dutch language proficiency value to filter on 
+	* @param english				- Optional English language proficiency value to filter on
+	* @param french					- Optional French language proficiency value to filter on
+	* @param skills					- Optional Skills to filter on
+	* @return Xls download of candidates
+	*/
 	@GetMapping(path="candidate/download")
-	public ResponseEntity<ByteArrayResource> downloadCandidates() throws Exception{
+	public ResponseEntity<ByteArrayResource> downloadCandidates(@PathVariable(required = false) 	String 				orderAttribute,
+																@PathVariable(required = false) 	RESULT_ORDER		order,
+																@PathVariable(required = false) 	Set<String> 		candidateId,
+																@PathVariable(required = false) 	Set<COUNTRY> 		countries,
+																@PathVariable(required = false) 	Set<FUNCTION> 		functions,
+																@PathVariable(required = false) 	Boolean 			freelance,
+																@PathVariable(required = false) 	Boolean 			perm,
+																@PathVariable(required = false) 	Integer				yearsExperienceGtEq,
+																@PathVariable(required = false) 	Language.LEVEL 		dutch,
+																@PathVariable(required = false) 	Language.LEVEL 		english,
+																@PathVariable(required = false) 	Language.LEVEL 		french,
+																@PathVariable(required = false) 	Set<String>			skills) throws Exception{
+		
+		CandidateFilterOptions filterOptions = CandidateFilterOptions
+				.builder()
+				.orderAttribute(orderAttribute)
+				.order(order)
+				.candidateIds(candidateId)
+				.countries(countries)
+				.functions(functions)
+				.freelance(freelance)
+				.perm(perm)
+				.yearsExperienceGtEq(yearsExperienceGtEq)
+				.dutch(dutch)
+				.english(english)
+				.french(french)
+				.skills(skills)
+				.build();
 		
 		ByteArrayOutputStream 	stream 		= new ByteArrayOutputStream();
-		XSSFWorkbook 			workbook 	= this.candidateDownloadService.createXLSCandidateDownload(candidateService.getCandidates(CandidateFilterOptions.builder().build()));
+		XSSFWorkbook 			workbook 	= this.candidateDownloadService.createXLSCandidateDownload(candidateService.getCandidates(filterOptions));
 		
 		HttpHeaders header = new HttpHeaders();
 		header.setContentType(new MediaType("application", "force-download"));

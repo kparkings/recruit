@@ -46,3 +46,16 @@
     margin-right:50px;
 }
 
+.fltrcol{
+    background:#E8E8E8;
+    text-align:center;
+    height:25px;
+    cursor:pointer;
+}
+.material-icons {
+    font-size: 16px;
+    color:#6c757d;
+    background:#E8E8E8;
+    text-align:center;
+    cursor:pointer;
+}

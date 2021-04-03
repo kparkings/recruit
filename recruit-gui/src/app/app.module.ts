@@ -12,6 +12,8 @@ import { AuthGuardService } from './auth-guard.service';
 import { RouterModule} from '@angular/router';
 import { HomeComponent } from './home/home.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { MatIconModule } from '@angular/material/icon';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -26,7 +28,9 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     AppRoutingModule,
     ReactiveFormsModule,
     HttpClientModule,
-    NgbModule
+    NgbModule,
+    MatIconModule,
+    BrowserAnimationsModule
   ],
   providers: [AuthGuardService, AuthService],
   bootstrap: [AppComponent]

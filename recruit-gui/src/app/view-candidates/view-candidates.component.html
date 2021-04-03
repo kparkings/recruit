@@ -1,5 +1,4 @@
 <div class=".container m-2">
-
     <div class='candidate-table'>
             <div class="row">
               <div class="col-sm-11"></div>
@@ -8,7 +7,7 @@
               </div> 
             </div>
             <div class="row">
-                <div class="col-1 bg-tab-hdr medicol" (click)="open(mymodal)">CandidateId</div>
+                <div class="col-1 bg-tab-hdr medicol">CandidateId</div>
                 <div class="col-1 bg-tab-hdr microcol">Country</div>
                 <div class="col-1 bg-tab-hdr">City</div>
                 <div class="col-1 bg-tab-hdr">Function</div>
@@ -19,6 +18,41 @@
                 <div class="col-1 bg-tab-hdr medicol">English</div>
                 <div class="col-1 bg-tab-hdr medicol">French</div>
                 <div class="col-2 bg-tab-hdr">Skills</div>
+            </div>
+             <div class="row">
+                <div class="col-1 bg-tab-hdr medicol fltrcol" (click)="open(mymodal)">
+                  <span class="material-icons">filter_alt</span>
+                </div>
+                <div class="col-1 bg-tab-hdr microcol fltrcol" (click)="open(mymodal)">
+                  <span class="material-icons">filter_alt</span>
+                </div>
+                <div class="col-1 bg-tab-hdr fltrcol" (click)="open(mymodal)">
+                  <span class="material-icons">filter_alt</span>
+                </div>
+                <div class="col-1 bg-tab-hdr fltrcol" (click)="open(mymodal)">
+                  <span class="material-icons">filter_alt</span>
+                </div>
+                <div class="col-1 bg-tab-hdr microcol fltrcol" (click)="open(mymodal)">
+                  <span class="material-icons">filter_alt</span>
+                </div>
+                <div class="col-1 bg-tab-hdr microcol fltrcol" (click)="open(mymodal)">
+                  <span class="material-icons">filter_alt</span>
+                </div>
+                <div class="col-1 bg-tab-hdr microcol fltrcol" (click)="open(mymodal)">
+                  <span class="material-icons">filter_alt</span>
+                </div>
+                <div class="col-1 bg-tab-hdr medicol fltrcol" (click)="open(mymodal)">
+                  <span class="material-icons">filter_alt</span>
+                </div>
+                <div class="col-1 bg-tab-hdr medicol fltrcol" (click)="open(mymodal)">
+                  <span class="material-icons">filter_alt</span>
+                </div>
+                <div class="col-1 bg-tab-hdr medicol fltrcol" (click)="open(mymodal)">
+                  <span class="material-icons">filter_alt</span>
+                </div>
+                <div class="col-2 bg-tab-hdr medicol fltrcol" (click)="open(mymodal)">
+                  <span class="material-icons">filter_alt</span>
+                </div>
             </div>
             <div class="row" *ngFor="let candidate of candidates">
                 <div class="col-1 medicol">{{candidate.candidateId}}</div>
@@ -41,13 +75,27 @@
 
 <ng-template #mymodal let-modal>
   <div class="modal-header">
-    <h4 class="modal-title" id="modal-basic-title">Bootstrap Modal</h4>
+    <h4 class="modal-title" id="modal-basic-title">Filter Options</h4>
     <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
       <span aria-hidden="true">×</span>
     </button>
   </div>
   <div class="modal-body">
-    This is example from ItSolutionStuff.com
+
+  <div class="row">
+          <div class="col-1">
+            Order
+          </div>
+          <div class="col-1">
+            <select>
+              <option></option>
+              <option>Asc</option>
+              <option>Desc</option>
+            </select>
+          </div>
+        <div>      
+      </div>
+    </div>
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Ok</button>
