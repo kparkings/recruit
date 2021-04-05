@@ -73,7 +73,7 @@ public class CandidateController {
 	public Set<CandidateAPIOutbound> getCandidate(  @RequestParam("orderAttribute") 	String 				orderAttribute,
 													@RequestParam("order") 				RESULT_ORDER		order,
 													@RequestParam(required = false) 	Set<String> 		candidateId,
-													@RequestParam(required = false) 	Set<COUNTRY> 		countries,
+													@RequestParam("countries") 			Set<COUNTRY> 		countries,
 													@RequestParam(required = false) 	Set<FUNCTION> 		functions,
 													@RequestParam(required = false) 	Boolean 			freelance,
 													@RequestParam(required = false) 	Boolean 			perm,

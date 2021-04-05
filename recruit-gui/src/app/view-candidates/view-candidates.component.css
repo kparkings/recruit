@@ -44,6 +44,7 @@
 .btnRight{
     margin-bottom:20px;
     margin-right:50px;
+    min-width:100px;
 }
 
 .fltrcol{
@@ -80,4 +81,8 @@
  .filterColmnSpecific{
      margin-top:25px;
      border-top:1px blak solid;
+ }
+
+ .filterSelected{
+     color:blue;
  }

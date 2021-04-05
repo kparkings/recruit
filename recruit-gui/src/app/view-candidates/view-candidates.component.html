@@ -1,7 +1,10 @@
 <div class=".container m-2">
     <div class='candidate-table'>
             <div class="row">
-              <div class="col-sm-11"></div>
+              <div class="col-sm-10"></div>
+              <div class="col-sm-1">
+                <button class="btn btn-secondary btnRight" (click)="resetFilters()" download>Reset</button>
+              </div>
               <div class="col-sm-1">
                 <a class="btn btn-secondary btnRight" href="{{getCandidateDownloadUrl()}}" download>Download</a>
               </div> 
@@ -21,16 +24,16 @@
             </div>
              <div class="row">
                 <div class="col-1 bg-tab-hdr medicol fltrcol" (click)="open(mymodal, 'candidateId')">
-                  <span class="material-icons">filter_alt</span>
+                <span class="material-icons {{isFilterCandidateIdActiveClass()}}">filter_alt</span>
                 </div>
                 <div class="col-1 bg-tab-hdr microcol fltrcol" (click)="open(mymodal, 'country')">
-                  <span class="material-icons">filter_alt</span>
+                <span class="material-icons {{isFilterCountryActiveClass()}}">filter_alt</span>
                 </div>
                 <div class="col-1 bg-tab-hdr fltrcol" (click)="open(mymodal, 'city')">
-                  <span class="material-icons">filter_alt</span>
+                <span class="material-icons {{isFilterCityActiveClass()}}">filter_alt</span>
                 </div>
                 <div class="col-1 bg-tab-hdr fltrcol" (click)="open(mymodal, 'function')">
-                  <span class="material-icons">filter_alt</span>
+                <span class="material-icons {{isFilterFunctionActiveClass()}}">filter_alt</span>
                 </div>
                 <div class="col-1 bg-tab-hdr microcol fltrcol" (click)="open(mymodal, 'perm')">
                   <span class="material-icons">filter_alt</span>
@@ -39,7 +42,7 @@
                   <span class="material-icons">filter_alt</span>
                 </div>
                 <div class="col-1 bg-tab-hdr microcol fltrcol" (click)="open(mymodal, 'yearsExperience')">
-                  <span class="material-icons">filter_alt</span>
+                <span class="material-icons {{isFilterYearsExperienceActiveClass()}}">filter_alt</span>
                 </div>
                 <div class="col-1 bg-tab-hdr medicol fltrcol" (click)="open(mymodal, 'dutch')">
                   <span class="material-icons">filter_alt</span>
@@ -89,8 +92,8 @@
                 <span>
           <select (change)="updateSortOrder($event.target)">
             <option value=''></option>
-            <option value='asc'>Asc</option>
-            <option value='desc'>Desc</option>
+            <option value='asc'  [selected]="selectedSortOrderForFilter == 'asc'">Asc</option>
+            <option value='desc' [selected]="selectedSortOrderForFilter == 'desc'">Desc</option>
           </select>
         </span>
               </div>
@@ -107,28 +110,28 @@
           
           </div>
           <div  *ngSwitchCase="'country'">
-          
-            <div class="row">
-              <div class="col">
-                <label class="modal-label">Countries</label>
+            <form [formGroup]="countryFilterForm">
+              <div class="row">
+                <div class="col">
+                  <label class="modal-label">Countries</label>
+                </div>
+                <div class="col">
+                  <div>
+                  <input class="filtercheckbox" type="checkbox" name="countries" value="NETHERLANDS" formControlName="NETHERLANDS" (change)="updateFilters()">
+                <label>Netherlands</label>
               </div>
-              <div class="col">
-                <div>
-                <input class="filtercheckbox" type="checkbox" name="countries" value="NL">
-              <label>Netherlands</label>
-            </div>
-            <div>
-              <input class="filtercheckbox" type="checkbox" name="countries" value="BE">
-              <label>Belgium</label>
-            </div>
-            <div>
-              <input class="filtercheckbox" type="checkbox" name="countries" value="Uk">
-              <label>UK</label>
-            </div>
+              <div>
+                <input class="filtercheckbox" type="checkbox" name="countries" value="BELGIUM" formControlName="BELGIUM" (change)="updateFilters()">
+                <label>Belgium</label>
               </div>
-            </div>
+              <div>
+                <input class="filtercheckbox" type="checkbox" name="countries" value="UK" formControlName="UK" (change)="updateFilters()">
+                <label>UK</label>
+              </div>
+                </div>
+              </div>
             
-            
+            </form>
           </div>
           <div  *ngSwitchCase="'city'">C
           </div>

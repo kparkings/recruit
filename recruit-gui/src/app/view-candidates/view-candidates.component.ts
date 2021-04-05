@@ -1,8 +1,9 @@
 import { Component, OnInit }                              from '@angular/core';
 import { CandidateServiceService }                        from '../candidate-service.service';
 import { Candidate }                                      from './candidate';
-import { CandidateFunction }                            from '../candidate-function';
-import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
+import { CandidateFunction }                              from '../candidate-function';
+import {NgbModal, ModalDismissReasons}                    from '@ng-bootstrap/ng-bootstrap';
+import { ReactiveFormsModule, FormGroup, FormControl }    from '@angular/forms';
 
 @Component({
   selector: 'app-view-candidates',
@@ -17,10 +18,22 @@ export class ViewCandidatesComponent implements OnInit {
   /**
   * Filters
   */
-  public activeFilter:string = '';
-  private sortColumn:string = 'candidateId';
-  private sortOrder:string = 'desc'
-  public showSortOptons:boolean = false;
+  public  activeFilter: string                = '';
+  private sortColumn:  string                 = 'candidateId';
+  private sortOrder: string                   = 'desc'
+  public  showSortOptons: boolean             = false;
+  public  selectedSortOrderForFilter: string  = '';
+  public  countryFiltNL: boolean              = false;
+  public  countryFiltBE: boolean              = false;
+  public  countryFiltUK: boolean              = false;
+
+  public countryFilterForm:FormGroup = new FormGroup({
+     
+    NETHERLANDS:  new FormControl(''),
+    BELGIUM:      new FormControl(''),
+    UK:           new FormControl('')
+   
+  });
 
   /**
   * Constructor
@@ -31,6 +44,16 @@ export class ViewCandidatesComponent implements OnInit {
       this.functionTypes.push(funcType);
     });
 
+   }
+
+   public sortOrderValue():string{
+     
+      if(this.sortColumn === this.activeFilter) {
+        return this.sortOrder;
+      }
+      
+      return "";
+      
    }
 
   /**
@@ -75,8 +98,35 @@ export class ViewCandidatesComponent implements OnInit {
   * Builder a query parameter string with the selected filter options
   */
   private getCandidateFilterParamString():string{
-    let filterParams:string = 'orderAttribute=' + this.sortColumn + "&order=" + this.sortOrder;
+    const filterParams:string = 'orderAttribute=' + this.sortColumn + "&order=" + this.sortOrder + this.getCountryFilterParamString();
     return filterParams;
+  }
+
+  /**
+  * Creates a query param string with the filter options to apply to the candidate
+  * search
+  */
+  private getCountryFilterParamString(): string{
+
+    const countries: Array<string> = new Array<string>();
+
+    if (this.countryFilterForm.get('NETHERLANDS')?.value === true) {
+      countries.push('NETHERLANDS');
+    }
+    
+    if (this.countryFilterForm.get('BELGIUM')?.value === true) {
+      countries.push('BELGIUM');
+    }
+
+    if (this.countryFilterForm.get('UK')?.value === true) {
+      countries.push('UK');
+    }
+
+    if (countries.length === 0) {
+      return '';
+    }
+
+    return '&countries=' + countries.toString();
   }
 
   /**
@@ -128,6 +178,13 @@ export class ViewCandidatesComponent implements OnInit {
     this.activeFilter = column;
     this.showOrderFilter();
     this.modalService.open(content, { centered: true });
+
+    if (this.activeFilter === this.sortColumn) {
+      this.selectedSortOrderForFilter = this.sortOrder;
+    } else {
+      this.selectedSortOrderForFilter = '';
+    }
+
   }
 
   /**
@@ -135,7 +192,7 @@ export class ViewCandidatesComponent implements OnInit {
   * the selected colum and orders by the selected direction
   * @param order - asc | desc 
   */
-  public updateSortOrder(order:any){
+  public updateSortOrder(order:any):void{
 
     let indx:number = order.selectedIndex;
 
@@ -162,6 +219,13 @@ export class ViewCandidatesComponent implements OnInit {
   }
 
   /**
+  * Fetches the candidates with the lastes filter selections applied 
+  */
+  public updateFilters(): void{
+    this.fetchCandidates();
+  }
+
+  /**
   * Sets whether or not to show the Order filters based upon 
   * which column the filters are open for
   */
@@ -181,6 +245,63 @@ export class ViewCandidatesComponent implements OnInit {
     }
 
     this.showSortOptons = false;
+
+  }
+
+  public isFilterCandidateIdActiveClass(): string{
+    return this.sortColumn === 'candidateId' ? 'filterSelected' : '';
+  }
+
+  public isFilterCountryActiveClass(): string{
+    
+    if (this.sortColumn === 'country') {
+      return 'filterSelected';
+    }
+
+    if (this.getCountryFilterParamString() !== '') {
+      return 'filterSelected';
+    } 
+
+    return '';
+
+  }
+
+  public isFilterCityActiveClass(): string{
+    return this.sortColumn === 'city' ? 'filterSelected' : '';
+  }
+
+  public isFilterFunctionActiveClass(): string{
+    return this.sortColumn === 'function' ? 'filterSelected' : '';
+  }
+
+  public isFilterYearsExperienceActiveClass(): string{
+    return this.sortColumn === 'yearsExperience' ? 'filterSelected' : '';
+  }
+
+  /**
+  * Resets the filters to their initial state
+  */
+  public resetFilters(): void{
+
+    this.activeFilter                 = '';
+    this.sortColumn                   = 'candidateId';
+    this.sortOrder                    = 'desc'
+    this.showSortOptons               = false;
+    this.selectedSortOrderForFilter   = '';
+    this.countryFiltNL                = false;
+    this.countryFiltBE                = false;
+    this.countryFiltUK                = false;
+
+
+    this.countryFilterForm = new FormGroup({
+     
+      NETHERLANDS:  new FormControl(''),
+      BELGIUM:      new FormControl(''),
+      UK:           new FormControl('')
+   
+    });
+
+    this.fetchCandidates();
 
   }
 
