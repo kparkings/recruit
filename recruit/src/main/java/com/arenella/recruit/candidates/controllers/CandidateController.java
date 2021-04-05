@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.arenella.recruit.candidates.enums.COUNTRY;
@@ -69,18 +70,18 @@ public class CandidateController {
 	* @return
 	*/
 	@GetMapping(path="candidate")
-	public Set<CandidateAPIOutbound> getCandidate(  @PathVariable(required = false) 	String 				orderAttribute,
-													@PathVariable(required = false) 	RESULT_ORDER		order,
-												 	@PathVariable(required = false) 	Set<String> 		candidateId,
-												 	@PathVariable(required = false) 	Set<COUNTRY> 		countries,
-												 	@PathVariable(required = false) 	Set<FUNCTION> 		functions,
-												 	@PathVariable(required = false) 	Boolean 			freelance,
-												 	@PathVariable(required = false) 	Boolean 			perm,
-												 	@PathVariable(required = false) 	Integer				yearsExperienceGtEq,
-												 	@PathVariable(required = false) 	Language.LEVEL 		dutch,
-												 	@PathVariable(required = false) 	Language.LEVEL 		english,
-												 	@PathVariable(required = false) 	Language.LEVEL 		french,
-												 	@PathVariable(required = false) 	Set<String>			skills
+	public Set<CandidateAPIOutbound> getCandidate(  @RequestParam("orderAttribute") 	String 				orderAttribute,
+													@RequestParam("order") 				RESULT_ORDER		order,
+													@RequestParam(required = false) 	Set<String> 		candidateId,
+													@RequestParam(required = false) 	Set<COUNTRY> 		countries,
+													@RequestParam(required = false) 	Set<FUNCTION> 		functions,
+													@RequestParam(required = false) 	Boolean 			freelance,
+													@RequestParam(required = false) 	Boolean 			perm,
+													@RequestParam(required = false) 	Integer				yearsExperienceGtEq,
+													@RequestParam(required = false) 	Language.LEVEL 		dutch,
+													@RequestParam(required = false) 	Language.LEVEL 		english,
+													@RequestParam(required = false) 	Language.LEVEL 		french,
+													@RequestParam(required = false) 	Set<String>			skills
 												 	) {
 		
 		CandidateFilterOptions filterOptions = CandidateFilterOptions
@@ -119,18 +120,18 @@ public class CandidateController {
 	* @return Xls download of candidates
 	*/
 	@GetMapping(path="candidate/download")
-	public ResponseEntity<ByteArrayResource> downloadCandidates(@PathVariable(required = false) 	String 				orderAttribute,
-																@PathVariable(required = false) 	RESULT_ORDER		order,
-																@PathVariable(required = false) 	Set<String> 		candidateId,
-																@PathVariable(required = false) 	Set<COUNTRY> 		countries,
-																@PathVariable(required = false) 	Set<FUNCTION> 		functions,
-																@PathVariable(required = false) 	Boolean 			freelance,
-																@PathVariable(required = false) 	Boolean 			perm,
-																@PathVariable(required = false) 	Integer				yearsExperienceGtEq,
-																@PathVariable(required = false) 	Language.LEVEL 		dutch,
-																@PathVariable(required = false) 	Language.LEVEL 		english,
-																@PathVariable(required = false) 	Language.LEVEL 		french,
-																@PathVariable(required = false) 	Set<String>			skills) throws Exception{
+	public ResponseEntity<ByteArrayResource> downloadCandidates(@RequestParam(required = false) 	String 				orderAttribute,
+																@RequestParam(required = false) 	RESULT_ORDER		order,
+																@RequestParam(required = false) 	Set<String> 		candidateId,
+																@RequestParam(required = false) 	Set<COUNTRY> 		countries,
+																@RequestParam(required = false) 	Set<FUNCTION> 		functions,
+																@RequestParam(required = false) 	Boolean 			freelance,
+																@RequestParam(required = false) 	Boolean 			perm,
+																@RequestParam(required = false) 	Integer				yearsExperienceGtEq,
+																@RequestParam(required = false) 	Language.LEVEL 		dutch,
+																@RequestParam(required = false) 	Language.LEVEL 		english,
+																@RequestParam(required = false) 	Language.LEVEL 		french,
+																@RequestParam(required = false) 	Set<String>			skills) throws Exception{
 		
 		CandidateFilterOptions filterOptions = CandidateFilterOptions
 				.builder()

@@ -45,7 +45,7 @@ export class NewCandidate {
 	/**
 	* Whether or not the Candidate is lookig for perm positions
 	*/
-	permanent:			string 				= "";
+	perm:			string 					= "";
 	
 	/**
 	* Whether or not the Candidate is looking for freelance positions

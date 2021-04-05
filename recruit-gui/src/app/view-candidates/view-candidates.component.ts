@@ -11,11 +11,20 @@ import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
 })
 export class ViewCandidatesComponent implements OnInit {
 
-  public functionTypes: Array<CandidateFunction> = new Array<CandidateFunction>();
-  closeResult: string = "";
+  public functionTypes: Array<CandidateFunction>  = new Array<CandidateFunction>();
+  public candidates:    Array<Candidate>          = new Array<Candidate>();
 
-  candidates: Array<Candidate> = new Array<Candidate>();
+  /**
+  * Filters
+  */
+  public activeFilter:string = '';
+  private sortColumn:string = 'candidateId';
+  private sortOrder:string = 'desc'
+  public showSortOptons:boolean = false;
 
+  /**
+  * Constructor
+  */
   constructor(private candidateService:CandidateServiceService, private modalService: NgbModal) {
 
     this.candidateService.loadFunctionTypes().forEach(funcType => {
@@ -24,9 +33,21 @@ export class ViewCandidatesComponent implements OnInit {
 
    }
 
+  /**
+  * Initializes component
+  */
   ngOnInit(): void {
+    this.fetchCandidates();    
+  }
 
-    this.candidateService.getCandidates().subscribe( data => {
+  /**
+  * Retrieves candidates from the backend
+  */
+  private fetchCandidates():void{
+    
+    this.candidates = new Array<Candidate>();
+
+    this.candidateService.getCandidates(this.getCandidateFilterParamString()).subscribe( data => {
     
       data.forEach((c:Candidate) => {
         
@@ -37,24 +58,39 @@ export class ViewCandidatesComponent implements OnInit {
       candidate.country           = this.getCountryCode(c.country);
       candidate.freelance         = c.freelance;
       candidate.function          = c.function;
-      candidate.permanent         = c.permanent;
+      candidate.perm              = c.perm;
       candidate.yearsExperience   = c.yearsExperience;
       candidate.languages = c.languages;
       candidate.skills = c.skills;
-      
 
       this.candidates.push(candidate);
-
-      
-      console.log("ADDED CANDIDATE " + JSON.stringify(c));
 
       });
         
     })
-    
+
   }
 
-  getCountryCode(country:string):string{
+  /**
+  * Builder a query parameter string with the selected filter options
+  */
+  private getCandidateFilterParamString():string{
+    let filterParams:string = 'orderAttribute=' + this.sortColumn + "&order=" + this.sortOrder;
+    return filterParams;
+  }
+
+  /**
+  * Returns the url to perform the download of the filterable candidate list
+  */
+  public getCandidateDownloadUrl(){
+    return 'http://127.0.0.1:8080/candidate/download?' + this.getCandidateFilterParamString();
+  }
+
+  /**
+  * Returns the code identifying the country
+  * @param country - Country to get the country code for
+  */
+  public getCountryCode(country:string):string{
 
     switch(country){
       case "NETHERLANDS":{
@@ -83,32 +119,69 @@ export class ViewCandidatesComponent implements OnInit {
     
   }
 
-  
-    public open(content:any) {
-      this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
-        this.closeResult = `Closed with: ${result}`;
-      }, (reason) => {
-        this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-      });
+  /**
+  * Opens the modal filter 
+  * @param content - modal to display
+  * @param column  - column to display modal for
+  */
+  public open(content:any, column:string) {
+    this.activeFilter = column;
+    this.showOrderFilter();
+    this.modalService.open(content, { centered: true });
   }
 
-    private getDismissReason(reason: any): string {
-    if (reason === ModalDismissReasons.ESC) {
-      return 'by pressing ESC';
-    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-      return 'by clicking on a backdrop';
-    } else {
-      return  `with: ${reason}`;
+  /**
+  * Changes the order of the candidates to be based upon 
+  * the selected colum and orders by the selected direction
+  * @param order - asc | desc 
+  */
+  public updateSortOrder(order:any){
+
+    let indx:number = order.selectedIndex;
+
+    switch (indx) {
+      case 0:{
+          this.sortColumn = 'candidateId';
+          this.sortOrder = 'desc'
+          break;
+      }
+      case 1:{
+        this.sortOrder = 'asc'
+        this.sortColumn = this.activeFilter;
+        break;
+      }
+      case 2:{
+        this.sortOrder = 'desc'
+        this.sortColumn = this.activeFilter;
+        break;
+      }
     }
+
+    this.fetchCandidates();
+
   }
 
-  //public downloadCandidatesAsXls():void{
-  // // console.log("XXX");
-  //  this.candidateService.downloadCandidatesAsXls().subscribe( (response: any) => {
-  //    let blob:any = new Blob([response.blob()], { type: 'text/json; charset=utf-8' });
-   //   const url= window.URL.createObjectURL(blob);
-   //     window.open(url);
-   //   });
- // }
+  /**
+  * Sets whether or not to show the Order filters based upon 
+  * which column the filters are open for
+  */
+  public showOrderFilter():void{
+    switch(this.activeFilter) {
+
+      case 'candidateId':
+      case 'country':
+      case 'city':
+      case 'function':
+      case 'yearsExperience':{
+        this.showSortOptons = true;
+        console.log("T");
+        return;
+      }
+
+    }
+
+    this.showSortOptons = false;
+
+  }
 
 }

@@ -30,8 +30,8 @@ export class CandidateServiceService {
   /**
   * Returns a list of available Candidates 
   */
-  public getCandidates(): Observable<any>{
-    return this.httpClient.get<any>('http://127.0.0.1:8080/candidate', this.httpOptions);
+  public getCandidates(filterParams:string): Observable<any>{
+    return this.httpClient.get<any>('http://127.0.0.1:8080/candidate'+'?'+filterParams, this.httpOptions);
   }
 
   /**
@@ -58,7 +58,7 @@ export class CandidateServiceService {
     newCandidate.email            = formBean.get('email')?.value;
     newCandidate.country          = formBean.get('country')?.value;
     newCandidate.city             = formBean.get('city')?.value;
-    newCandidate.permanent        = formBean.get('permanent')?.value;
+    newCandidate.perm             = formBean.get('perm')?.value;
     newCandidate.freelance        = formBean.get('freelance')?.value;
     newCandidate.yearsExperience  = formBean.get('yearsExperience')?.value;
     newCandidate.function         = formBean.get('function')?.value;
@@ -103,22 +103,6 @@ export class CandidateServiceService {
     return this.httpClient.post<any>('http://127.0.0.1:8080/candidate', JSON.stringify(newCandidate), this.httpOptions);
 
   }
-
- // public downloadCandidatesAsXls():Observable<blob>{
-
-  
-  //  const  httpOptions = {
-  //     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
-  //     , withCredentials: true
-      
-   // };
-
-
-   //return this.httpClient.get<blob>('http://127.0.0.1:8080/candidate/download', {withCredentials:true; responseType: 'blob'});
-
-
-
-//  }
 
   /**
   * Returns detials of avialable Canidate Functions

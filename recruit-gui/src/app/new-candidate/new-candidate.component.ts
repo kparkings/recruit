@@ -20,7 +20,7 @@ export class NewCandidateComponent implements OnInit {
     email:            new FormControl(),
     country:          new FormControl(),
     city:             new FormControl(),
-    permanent:        new FormControl(),
+    perm:             new FormControl(),
     freelance:        new FormControl(),
     dutch:            new FormControl(),
     english:          new FormControl(),

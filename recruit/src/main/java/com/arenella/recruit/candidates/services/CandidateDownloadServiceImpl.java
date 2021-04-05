@@ -76,7 +76,7 @@ public class CandidateDownloadServiceImpl implements CandidateDownloadService{
 			countryCell.setCellValue(candidate.getCountry().toString());				
 			cityCell.setCellValue(candidate.getCity());
 			freelanceCell.setCellValue(candidate.isFreelance() 		? "-" : "X");	
-			permCell.setCellValue(candidate.isPermanent() 			? "-" : "X");
+			permCell.setCellValue(candidate.isPerm() 				? "-" : "X");
 			dutchCell.setCellValue(getLanguageValue(dutch) );	
 			englishCell.setCellValue(getLanguageValue(english));	
 			frenchCell.setCellValue(getLanguageValue(french));

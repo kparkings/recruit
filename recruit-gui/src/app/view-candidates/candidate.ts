@@ -44,7 +44,7 @@ export class Candidate {
 	/**
 	* Whether or not the Candidate is lookig for perm positions
 	*/
-	permanent:			boolean 				= false;
+	perm:			boolean 				= false;
 	
 	/**
 	* Whether or not the Candidate is looking for freelance positions

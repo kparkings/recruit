@@ -104,7 +104,7 @@ public interface CandidateDao extends CrudRepository<CandidateEntity, String>, J
 			if (this.filterOptions.getOrderAttribute().isPresent()) {
 				sortExpression 				= root.get(filterOptions.getOrderAttribute().get());
 				if (this.filterOptions.getOrder().get() == RESULT_ORDER.asc) {
-					query.orderBy(criteriaBuilder.desc(sortExpression));
+					query.orderBy(criteriaBuilder.asc(sortExpression));
 				} else {
 					query.orderBy(criteriaBuilder.desc(sortExpression));
 				}

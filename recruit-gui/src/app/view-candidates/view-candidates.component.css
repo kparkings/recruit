@@ -59,3 +59,25 @@
     text-align:center;
     cursor:pointer;
 }
+
+ .modal-header{
+     background:#181414;
+     color:#6A5ACD;
+     font-weight:bold;
+ }
+
+ .modal-label{
+     padding-right:10px;
+
+     
+ }
+
+ .filtercheckbox{
+    margin-right:5px;
+ }
+
+
+ .filterColmnSpecific{
+     margin-top:25px;
+     border-top:1px blak solid;
+ }

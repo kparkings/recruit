@@ -19,7 +19,7 @@ public class CandidateAPIOutbound {
 	private FUNCTION		function;
 	private COUNTRY 		country;
 	private String 			city;
-	private boolean 		permanent;
+	private boolean 		perm;
 	private boolean 		freelance;
 	private int				yearsExperience;
 	private boolean 		available;
@@ -37,7 +37,7 @@ public class CandidateAPIOutbound {
 		this.function				 	= builder.function;
 		this.country					= builder.country;
 		this.city 						= builder.city;
-		this.permanent 					= builder.permanent;
+		this.perm	 					= builder.perm;
 		this.freelance 					= builder.freelance;
 		this.yearsExperience 			= builder.yearsExperience;
 		this.available 					= builder.available;
@@ -94,8 +94,8 @@ public class CandidateAPIOutbound {
 	* Returns whether or not the Candidate is interested in permanent roles
 	* @return Whether or not the Candidate is interested in permanent roles
 	*/
-	public boolean isPermanent() {
-		return this.permanent;
+	public boolean isPerm() {
+		return this.perm;
 	}
 	
 	/**
@@ -157,7 +157,7 @@ public class CandidateAPIOutbound {
 		private FUNCTION		function;
 		private COUNTRY 		country;
 		private String 			city;
-		private boolean 		permanent;
+		private boolean 		perm;
 		private boolean 		freelance;
 		private int				yearsExperience;
 		private boolean 		available;
@@ -210,8 +210,8 @@ public class CandidateAPIOutbound {
 		* @param freelance - Whether or not the Candidate is interested in perm roles
 		* @return Builder
 		*/
-		public CandidateAPIOutboundBuilder perm(boolean permanent) {
-			this.permanent = permanent;
+		public CandidateAPIOutboundBuilder perm(boolean perm) {
+			this.perm = perm;
 			return this;
 		}
 		

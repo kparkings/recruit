@@ -3,7 +3,7 @@
             <div class="row">
               <div class="col-sm-11"></div>
               <div class="col-sm-1">
-                <a class="btn btn-secondary btnRight" href="http://127.0.0.1:8080/candidate/download" download>Download</a>
+                <a class="btn btn-secondary btnRight" href="{{getCandidateDownloadUrl()}}" download>Download</a>
               </div> 
             </div>
             <div class="row">
@@ -20,37 +20,37 @@
                 <div class="col-2 bg-tab-hdr">Skills</div>
             </div>
              <div class="row">
-                <div class="col-1 bg-tab-hdr medicol fltrcol" (click)="open(mymodal)">
+                <div class="col-1 bg-tab-hdr medicol fltrcol" (click)="open(mymodal, 'candidateId')">
                   <span class="material-icons">filter_alt</span>
                 </div>
-                <div class="col-1 bg-tab-hdr microcol fltrcol" (click)="open(mymodal)">
+                <div class="col-1 bg-tab-hdr microcol fltrcol" (click)="open(mymodal, 'country')">
                   <span class="material-icons">filter_alt</span>
                 </div>
-                <div class="col-1 bg-tab-hdr fltrcol" (click)="open(mymodal)">
+                <div class="col-1 bg-tab-hdr fltrcol" (click)="open(mymodal, 'city')">
                   <span class="material-icons">filter_alt</span>
                 </div>
-                <div class="col-1 bg-tab-hdr fltrcol" (click)="open(mymodal)">
+                <div class="col-1 bg-tab-hdr fltrcol" (click)="open(mymodal, 'function')">
                   <span class="material-icons">filter_alt</span>
                 </div>
-                <div class="col-1 bg-tab-hdr microcol fltrcol" (click)="open(mymodal)">
+                <div class="col-1 bg-tab-hdr microcol fltrcol" (click)="open(mymodal, 'perm')">
                   <span class="material-icons">filter_alt</span>
                 </div>
-                <div class="col-1 bg-tab-hdr microcol fltrcol" (click)="open(mymodal)">
+                <div class="col-1 bg-tab-hdr microcol fltrcol" (click)="open(mymodal, 'freelance')">
                   <span class="material-icons">filter_alt</span>
                 </div>
-                <div class="col-1 bg-tab-hdr microcol fltrcol" (click)="open(mymodal)">
+                <div class="col-1 bg-tab-hdr microcol fltrcol" (click)="open(mymodal, 'yearsExperience')">
                   <span class="material-icons">filter_alt</span>
                 </div>
-                <div class="col-1 bg-tab-hdr medicol fltrcol" (click)="open(mymodal)">
+                <div class="col-1 bg-tab-hdr medicol fltrcol" (click)="open(mymodal, 'dutch')">
                   <span class="material-icons">filter_alt</span>
                 </div>
-                <div class="col-1 bg-tab-hdr medicol fltrcol" (click)="open(mymodal)">
+                <div class="col-1 bg-tab-hdr medicol fltrcol" (click)="open(mymodal, 'english')">
                   <span class="material-icons">filter_alt</span>
                 </div>
-                <div class="col-1 bg-tab-hdr medicol fltrcol" (click)="open(mymodal)">
+                <div class="col-1 bg-tab-hdr medicol fltrcol" (click)="open(mymodal, 'french')">
                   <span class="material-icons">filter_alt</span>
                 </div>
-                <div class="col-2 bg-tab-hdr medicol fltrcol" (click)="open(mymodal)">
+                <div class="col-2 bg-tab-hdr medicol fltrcol" (click)="open(mymodal, 'skills')">
                   <span class="material-icons">filter_alt</span>
                 </div>
             </div>
@@ -59,7 +59,7 @@
                 <div class="col-1 microcol">{{candidate.country}}</div>
                 <div class="col-1">{{candidate.city}}</div>
                 <div class="col-1">{{pretifyFunction(candidate.function)}}</div>
-                <div class="col-1 microcol">{{candidate.permanent}}</div>
+                <div class="col-1 microcol">{{candidate.perm}}</div>
                 <div class="col-1 microcol">{{candidate.freelance}}</div>
                 <div class="col-1 microcol">{{candidate.yearsExperience}}</div>
                 <div class="col-1 medicol">{{candidate.getDutch()}}</div>
@@ -75,29 +75,71 @@
 
 <ng-template #mymodal let-modal>
   <div class="modal-header">
-    <h4 class="modal-title" id="modal-basic-title">Filter Options</h4>
-    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
-      <span aria-hidden="true">×</span>
-    </button>
+    <h4 class="modal-title">Filters</h4>
   </div>
   <div class="modal-body">
+      <div *ngIf="showSortOptons">
 
-  <div class="row">
-          <div class="col-1">
-            Order
-          </div>
-          <div class="col-1">
-            <select>
-              <option></option>
-              <option>Asc</option>
-              <option>Desc</option>
-            </select>
-          </div>
-        <div>      
+
+        <div class="row">
+              <div class="col">
+                <label class="modal-label">Order</label>
+              </div>
+              <div class="col">
+                <span>
+          <select (change)="updateSortOrder($event.target)">
+            <option value=''></option>
+            <option value='asc'>Asc</option>
+            <option value='desc'>Desc</option>
+          </select>
+        </span>
+              </div>
+        </div>
+
+
+        
+        
       </div>
-    </div>
+      <div>
+       
+      <div [ngSwitch]="activeFilter" class="filterColmnSpecific">
+          <div  *ngSwitchCase="'candidateId'">
+          
+          </div>
+          <div  *ngSwitchCase="'country'">
+          
+            <div class="row">
+              <div class="col">
+                <label class="modal-label">Countries</label>
+              </div>
+              <div class="col">
+                <div>
+                <input class="filtercheckbox" type="checkbox" name="countries" value="NL">
+              <label>Netherlands</label>
+            </div>
+            <div>
+              <input class="filtercheckbox" type="checkbox" name="countries" value="BE">
+              <label>Belgium</label>
+            </div>
+            <div>
+              <input class="filtercheckbox" type="checkbox" name="countries" value="Uk">
+              <label>UK</label>
+            </div>
+              </div>
+            </div>
+            
+            
+          </div>
+          <div  *ngSwitchCase="'city'">C
+          </div>
+          
+        </div>
+
+      </div>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Ok</button>
   </div>
 </ng-template>
+
+
+
