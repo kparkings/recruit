@@ -36,10 +36,10 @@
                 <span class="material-icons {{isFilterFunctionActiveClass()}}">filter_alt</span>
                 </div>
                 <div class="col-1 bg-tab-hdr microcol fltrcol" (click)="open(mymodal, 'perm')">
-                  <span class="material-icons">filter_alt</span>
+                  <span class="material-icons  {{isFilterPermActiveClass()}}">filter_alt</span>
                 </div>
                 <div class="col-1 bg-tab-hdr microcol fltrcol" (click)="open(mymodal, 'freelance')">
-                  <span class="material-icons">filter_alt</span>
+                  <span class="material-icons {{isFilterFreelanceActiveClass()}}">filter_alt</span>
                 </div>
                 <div class="col-1 bg-tab-hdr microcol fltrcol" (click)="open(mymodal, 'yearsExperience')">
                 <span class="material-icons {{isFilterYearsExperienceActiveClass()}}">filter_alt</span>
@@ -133,9 +133,71 @@
             
             </form>
           </div>
-          <div  *ngSwitchCase="'city'">C
+          <div *ngSwitchCase="'city'">
+          </div>
+          <div *ngSwitchCase="'function'">
+            
+            <form [formGroup]="functionTypeFilterForm">
+              <div class="row">
+                <div class="col">
+                  <label class="modal-label">Functions</label>
+                </div>
+              </div>
+              
+              <div class="row"> 
+                <div class="col">
+                  <div *ngFor="let funcType of candidateService.loadFunctionTypes()">
+                    <input class="filtercheckbox" type="checkbox" name="funcTypes" value="{{funcType.id}}" formControlName="{{funcType.id}}" (change)="updateFilters()">
+                    <label>{{funcType.desc}}</label>
+                  </div>
+                </div>
+              </div>
+            
+            </form>
+            
+          </div>
+
+          <div  *ngSwitchCase="'perm'">
+            <div class="row">
+              <div class="col">
+                <label class="modal-label">Include non Perm candidates</label>
+              </div>
+              <div class="col">
+                <form [formGroup]="permFilterForm">
+                  <div>
+                    <input class="filtercheckbox" type="radio" value="false" formControlName="include" (change)="updateFilters()">
+                    <label>Yes</label>
+                  </div>
+                  <div>
+                    <input class="filtercheckbox" type="radio" value="true"   formControlName="include" (change)="updateFilters()">
+                    <label>No</label>
+                  </div>
+                </form>
+              </div>
+            </div>
           </div>
           
+          <div  *ngSwitchCase="'freelance'">
+            <div class="row">
+              <div class="col">
+                <label class="modal-label">Include non freelance candidates</label>
+              </div>
+              <div class="col">
+                <form [formGroup]="freelanceFilterForm">
+                  <div>
+                    <input class="filtercheckbox" type="radio" value="false" formControlName="include" (change)="updateFilters()">
+                    <label>Yes</label>
+                  </div>
+                  <div>
+                    <input class="filtercheckbox" type="radio" value="true"  formControlName="include" (change)="updateFilters()">
+                    <label>No</label>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+          
+
         </div>
 
       </div>

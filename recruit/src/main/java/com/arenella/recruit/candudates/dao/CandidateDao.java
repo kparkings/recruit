@@ -84,12 +84,12 @@ public interface CandidateDao extends CrudRepository<CandidateEntity, String>, J
 			
 			if (!this.filterOptions.isFreelance()) {
 				Expression<String> freelanceExpression 			= root.get("freelance");
-				predicates.add(criteriaBuilder.equal(freelanceExpression, 	false));
+				predicates.add(criteriaBuilder.equal(freelanceExpression, 	true));
 			}
 			
 			if (!this.filterOptions.isPerm()) {
 				Expression<String> permExpression 				= root.get("perm");
-				predicates.add(criteriaBuilder.equal(permExpression, 		false));
+				predicates.add(criteriaBuilder.equal(permExpression, 		true));
 			}
 			
 			if (this.filterOptions.getYearsExperienceGtEq() > 0 ) {

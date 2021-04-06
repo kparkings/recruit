@@ -73,7 +73,7 @@ public class CandidateController {
 	public Set<CandidateAPIOutbound> getCandidate(  @RequestParam("orderAttribute") 	String 				orderAttribute,
 													@RequestParam("order") 				RESULT_ORDER		order,
 													@RequestParam(required = false) 	Set<String> 		candidateId,
-													@RequestParam("countries") 			Set<COUNTRY> 		countries,
+													@RequestParam(required = false) 	Set<COUNTRY> 		countries,
 													@RequestParam(required = false) 	Set<FUNCTION> 		functions,
 													@RequestParam(required = false) 	Boolean 			freelance,
 													@RequestParam(required = false) 	Boolean 			perm,
@@ -120,8 +120,8 @@ public class CandidateController {
 	* @return Xls download of candidates
 	*/
 	@GetMapping(path="candidate/download")
-	public ResponseEntity<ByteArrayResource> downloadCandidates(@RequestParam(required = false) 	String 				orderAttribute,
-																@RequestParam(required = false) 	RESULT_ORDER		order,
+	public ResponseEntity<ByteArrayResource> downloadCandidates(@RequestParam("orderAttribute") 	String 				orderAttribute,
+																@RequestParam("order") 				RESULT_ORDER		order,
 																@RequestParam(required = false) 	Set<String> 		candidateId,
 																@RequestParam(required = false) 	Set<COUNTRY> 		countries,
 																@RequestParam(required = false) 	Set<FUNCTION> 		functions,

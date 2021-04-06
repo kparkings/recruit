@@ -35,20 +35,33 @@ export class ViewCandidatesComponent implements OnInit {
    
   });
 
+  public functionTypeFilterForm: FormGroup = new FormGroup({
+    //Set dynamically
+  });
+
+  public freelanceFilterForm: FormGroup = new FormGroup({
+    include:  new FormControl('false'),
+  });
+
+  public permFilterForm: FormGroup = new FormGroup({
+    include:  new FormControl('false'),
+  });
+
   /**
   * Constructor
   */
-  constructor(private candidateService:CandidateServiceService, private modalService: NgbModal) {
+  constructor(public candidateService:CandidateServiceService, private modalService: NgbModal) {
 
     this.candidateService.loadFunctionTypes().forEach(funcType => {
       this.functionTypes.push(funcType);
+      this.functionTypeFilterForm.addControl(funcType.id, new FormControl(''));
     });
 
    }
 
    public sortOrderValue():string{
      
-      if(this.sortColumn === this.activeFilter) {
+      if (this.sortColumn === this.activeFilter) {
         return this.sortOrder;
       }
       
@@ -95,11 +108,42 @@ export class ViewCandidatesComponent implements OnInit {
   }
 
   /**
-  * Builder a query parameter string with the selected filter options
+  * Builds a query parameter string with the selected filter options
   */
   private getCandidateFilterParamString():string{
-    const filterParams:string = 'orderAttribute=' + this.sortColumn + "&order=" + this.sortOrder + this.getCountryFilterParamString();
+    const filterParams:string = 'orderAttribute=' + this.sortColumn
+                                                         + "&order=" 
+                                                         + this.sortOrder 
+                                                         + this.getCountryFilterParamString() 
+                                                         + this.getFunctionTypeFilterParamString()
+                                                         + this.getPermFilterParamString()
+                                                         + this.getFreelanceFilterParamString();
     return filterParams;
+  }
+
+
+  /**
+  * Creates a query param string with the filter options to apply to the perm
+  */
+  private getPermFilterParamString(): string{
+  
+      if (this.permFilterForm.get('include')?.value !== 'true') {
+        return '&perm=true';
+      }
+
+      return '&perm=false';
+  }
+
+    /**
+  * Creates a query param string with the filter options to apply to the perm
+  */
+  private getFreelanceFilterParamString(): string{
+  
+      if (this.freelanceFilterForm.get('include')?.value !== 'true') {
+        return '&freelance=true';
+      }
+
+      return '&freelance=false';
   }
 
   /**
@@ -127,6 +171,31 @@ export class ViewCandidatesComponent implements OnInit {
     }
 
     return '&countries=' + countries.toString();
+  }
+
+/**
+  * Creates a query param string with the filter options to apply to the candidate
+  * search
+  */
+  private getFunctionTypeFilterParamString(): string{
+
+    const functionTypes: Array<string> = new Array<string>();
+
+    Object.keys(this.functionTypeFilterForm.controls).forEach(key => {
+     
+      const control: any = this.functionTypeFilterForm.get(key);
+     
+      if (control?.value === true) {
+        functionTypes.push(key);
+      } 
+     
+    });
+
+    if (functionTypes.length === 0) {
+      return '';
+    }
+
+    return '&functions=' + functionTypes.toString();
   }
 
   /**
@@ -271,12 +340,44 @@ export class ViewCandidatesComponent implements OnInit {
   }
 
   public isFilterFunctionActiveClass(): string{
-    return this.sortColumn === 'function' ? 'filterSelected' : '';
+    
+    if(this.sortColumn === 'function') {
+      return 'filterSelected';
+    }
+
+    if (this.getFunctionTypeFilterParamString() !== ''){
+      return 'filterSelected';
+    }
+
+    return '';
+
   }
 
   public isFilterYearsExperienceActiveClass(): string{
     return this.sortColumn === 'yearsExperience' ? 'filterSelected' : '';
   }
+
+  public isFilterPermActiveClass(): string{
+
+    const permVal: any = this.permFilterForm.get('include')?.value;
+
+    if (permVal !== 'false') {
+      return 'filterSelected';
+    }
+    return '';
+  }
+
+    public isFilterFreelanceActiveClass(): string{
+
+      const freelanceVal: any = this.freelanceFilterForm.get('include')?.value;
+
+      if (freelanceVal !== 'false') {
+        return 'filterSelected';
+      }
+
+      return '';
+  }
+
 
   /**
   * Resets the filters to their initial state
@@ -299,6 +400,20 @@ export class ViewCandidatesComponent implements OnInit {
       BELGIUM:      new FormControl(''),
       UK:           new FormControl('')
    
+    });
+
+    this.permFilterForm = new FormGroup({
+      include:  new FormControl('false')
+    });
+
+    this.freelanceFilterForm = new FormGroup({
+      include:  new FormControl('false')
+    });
+
+    this.functionTypeFilterForm = new FormGroup({});
+
+    this.functionTypes.forEach(funcType => {
+      this.functionTypeFilterForm.addControl(funcType.id,new FormControl(''));
     });
 
     this.fetchCandidates();
