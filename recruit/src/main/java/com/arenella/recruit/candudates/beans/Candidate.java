@@ -5,7 +5,9 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 import com.arenella.recruit.candidates.enums.COUNTRY;
+import com.arenella.recruit.candidates.enums.FREELANCE;
 import com.arenella.recruit.candidates.enums.FUNCTION;
+import com.arenella.recruit.candidates.enums.PERM;
 
 /**
 * Class represents a Recruitment Candidate. A Candidate that 
@@ -22,8 +24,8 @@ public class Candidate {
 	private FUNCTION		function;
 	private COUNTRY 		country;
 	private String 			city;
-	private boolean 		perm;
-	private boolean 		freelance;
+	private PERM 			perm;
+	private FREELANCE 		freelance;
 	private int				yearsExperience;
 	private boolean 		available;
 	private LocalDate 		registerd					= LocalDate.now();
@@ -129,7 +131,7 @@ public class Candidate {
 	* freelance projects
 	* @return Whether or not the Candidate is interested in freelance roles
 	*/
-	public boolean isFreelance() {
+	public FREELANCE isFreelance() {
 		return this.freelance;
 	}
 	
@@ -137,7 +139,7 @@ public class Candidate {
 	* Returns whether or not the Candidate is interested in permanent roles
 	* @return Whether or not the Candidate is interested in permanent roles
 	*/
-	public boolean isPerm() {
+	public PERM isPerm() {
 		return this.perm;
 	}
 	
@@ -212,8 +214,8 @@ public class Candidate {
 		private FUNCTION		function;
 		private COUNTRY 		country;
 		private String 			city;
-		private boolean 		perm;
-		private boolean 		freelance;
+		private PERM 			perm;
+		private FREELANCE 		freelance;
 		private int				yearsExperience;
 		private boolean 		available;
 		private LocalDate 		registerd					= LocalDate.now();;
@@ -306,7 +308,7 @@ public class Candidate {
 		* @param freelance - Whether or not the Candidate is interested in perm roles
 		* @return Builder
 		*/
-		public CandidateBuilder perm(boolean perm) {
+		public CandidateBuilder perm(PERM perm) {
 			this.perm = perm;
 			return this;
 		}
@@ -316,7 +318,7 @@ public class Candidate {
 		* @param freelance - Whether or not the Candidate is interested in freelance roles
 		* @return Builder
 		*/
-		public CandidateBuilder freelance(boolean freelance) {
+		public CandidateBuilder freelance(FREELANCE freelance) {
 			this.freelance = freelance;
 			return this;
 		}

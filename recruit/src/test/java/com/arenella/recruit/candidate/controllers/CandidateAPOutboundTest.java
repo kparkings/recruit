@@ -10,7 +10,9 @@ import java.util.Set;
 import org.junit.jupiter.api.Test;
 
 import com.arenella.recruit.candidates.enums.COUNTRY;
+import com.arenella.recruit.candidates.enums.FREELANCE;
 import com.arenella.recruit.candidates.enums.FUNCTION;
+import com.arenella.recruit.candidates.enums.PERM;
 import com.arenella.recruit.candudates.beans.Candidate;
 import com.arenella.recruit.candudates.beans.Language;
 import com.arenella.recruit.candudates.beans.Language.LANGUAGE;
@@ -27,8 +29,8 @@ public class CandidateAPOutboundTest {
 	private static final COUNTRY 		country 				= COUNTRY.NETHERLANDS;
 	private static final String 		city 					= "Den Haag";
 	private static final boolean 		available 				= true;
-	private static final boolean 		freelance 				= true;
-	private static final boolean 		perm 					= true;
+	private static final FREELANCE 		freelance 				= FREELANCE.TRUE;
+	private static final PERM	 		perm 					= PERM.TRUE;
 	private static final LocalDate 		lastAvailabilityCheck 	= LocalDate.of(1980, 12, 3);
 	private static final LocalDate 		registerd 				= LocalDate.of(2021, 02, 20);
 	private static final int 			yearsExperience 		= 21;

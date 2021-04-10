@@ -92,10 +92,10 @@ export class ViewCandidatesComponent implements OnInit {
       candidate.candidateId       = c.candidateId;
       candidate.city              = c.city;
       candidate.country           = this.getCountryCode(c.country);
-      candidate.freelance         = c.freelance;
+      candidate.freelance         = this.getFreelanceOption(c.freelance);
       candidate.roleSought        = c.roleSought;
       candidate.function          = c.function;
-      candidate.perm              = c.perm;
+      candidate.perm              = this.getPermOption(c.perm);
       candidate.yearsExperience   = c.yearsExperience;
       candidate.languages = c.languages;
       candidate.skills = c.skills;
@@ -105,6 +105,36 @@ export class ViewCandidatesComponent implements OnInit {
       });
         
     })
+
+  }
+
+  /**
+  * Converts freelance option to display format
+  */
+  private getFreelanceOption(freelance: string): string{
+
+      switch (freelance){
+        case  'TRUE': {return 'X';}
+        case  'FALSE': {return '-';}
+        case  'UNKNOWN': {return '?';}
+      }
+
+      return '..'+freelance;
+
+  }
+
+    /**
+  * Converts perm option to display format
+  */
+  private getPermOption(perm: string): string{
+
+      switch (perm){
+        case  'TRUE': {return 'X';}
+        case  'FALSE': {return '-';}
+        case  'UNKNOWN': {return '?';}
+      }
+
+      return '';
 
   }
 

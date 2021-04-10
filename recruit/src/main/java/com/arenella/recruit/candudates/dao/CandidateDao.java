@@ -14,6 +14,8 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.CrudRepository;
 
 import com.arenella.recruit.candidates.entities.CandidateEntity;
+import com.arenella.recruit.candidates.enums.FREELANCE;
+import com.arenella.recruit.candidates.enums.PERM;
 import com.arenella.recruit.candidates.enums.RESULT_ORDER;
 import com.arenella.recruit.candudates.beans.CandidateFilterOptions;
 
@@ -84,12 +86,12 @@ public interface CandidateDao extends CrudRepository<CandidateEntity, String>, J
 			
 			if (!this.filterOptions.isFreelance()) {
 				Expression<String> freelanceExpression 			= root.get("freelance");
-				predicates.add(criteriaBuilder.equal(freelanceExpression, 	true));
+				predicates.add(criteriaBuilder.equal(freelanceExpression, 	FREELANCE.TRUE));
 			}
 			
 			if (!this.filterOptions.isPerm()) {
 				Expression<String> permExpression 				= root.get("perm");
-				predicates.add(criteriaBuilder.equal(permExpression, 		true));
+				predicates.add(criteriaBuilder.equal(permExpression, 		PERM.TRUE));
 			}
 			
 			if (this.filterOptions.getYearsExperienceGtEq() > 0 ) {

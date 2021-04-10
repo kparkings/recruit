@@ -46,7 +46,7 @@ public class LanguageEntity implements Serializable{
 	* Returns the unique identifier of the Candidaye
 	* @return candidate Id
 	*/
-	public String getCandidateId() {
+	public long getCandidateId() {
 		return id.getCandidateId();
 	}
 	

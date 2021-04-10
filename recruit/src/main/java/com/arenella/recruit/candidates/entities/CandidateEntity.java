@@ -19,7 +19,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.arenella.recruit.candidates.enums.COUNTRY;
+import com.arenella.recruit.candidates.enums.FREELANCE;
 import com.arenella.recruit.candidates.enums.FUNCTION;
+import com.arenella.recruit.candidates.enums.PERM;
 import com.arenella.recruit.candudates.beans.Candidate;
 import com.arenella.recruit.candudates.beans.Language;
 
@@ -34,7 +36,7 @@ public class CandidateEntity {
 
 	@Id
 	@Column(name="candidate_id")
-	private String 		candidateId;
+	private Long		candidateId;
 	
 	@Column(name="firstname")
 	private String 		firstname;
@@ -60,10 +62,12 @@ public class CandidateEntity {
 	private String 		city;
 	
 	@Column(name="perm")
-	private boolean 	perm;
+	@Enumerated(EnumType.STRING)
+	private PERM 		perm;
 	
 	@Column(name="freelance")
-	private boolean 	freelance;
+	@Enumerated(EnumType.STRING)
+	private FREELANCE 	freelance;
 	
 	@Column(name="years_experience")
 	private int			yearsExperience;
@@ -123,7 +127,7 @@ public class CandidateEntity {
 	* Returns the unique identifier of the Candidate
 	* @return unique Id of the candidate
 	*/
-	public String getCandidateId() {
+	public long getCandidateId() {
 		return this.candidateId;
 	}
 	
@@ -190,7 +194,7 @@ public class CandidateEntity {
 	* freelance projects
 	* @return Whether or not the Candidate is interested in freelance roles
 	*/
-	public boolean isFreelance() {
+	public FREELANCE isFreelance() {
 		return this.freelance;
 	}
 	
@@ -198,7 +202,7 @@ public class CandidateEntity {
 	* Returns whether or not the Candidate is interested in permanent roles
 	* @return Whether or not the Candidate is interested in permanent roles
 	*/
-	public boolean isPerm() {
+	public PERM isPerm() {
 		return this.perm;
 	}
 	
@@ -265,7 +269,7 @@ public class CandidateEntity {
 	*/
 	public static class CandidateEntityBuilder {
 	
-		private String 			candidateId;
+		private Long 			candidateId;
 		private String 			firstname;
 		private String			surname;
 		private String 			email;
@@ -273,8 +277,8 @@ public class CandidateEntity {
 		private FUNCTION		function;
 		private COUNTRY 		country;
 		private String 			city;
-		private boolean 		perm;
-		private boolean 		freelance;
+		private PERM	 		perm;
+		private FREELANCE 		freelance;
 		private int				yearsExperience;
 		private boolean 		available;
 		private LocalDate 		registerd					= LocalDate.now();				//Set app to work with UAT
@@ -289,7 +293,7 @@ public class CandidateEntity {
 		* @return Builder
 		*/
 		public CandidateEntityBuilder candidateId(String candidateId) {
-			this.candidateId = candidateId;
+			this.candidateId = Long.valueOf(candidateId);
 			return this;
 		}
 		
@@ -368,7 +372,7 @@ public class CandidateEntity {
 		* @param perm - Whether candidate is looking for Perm roles
 		* @return Builder
 		*/
-		public CandidateEntityBuilder perm(boolean perm) {
+		public CandidateEntityBuilder perm(PERM perm) {
 			this.perm = perm;
 			return this;
 		}
@@ -378,7 +382,7 @@ public class CandidateEntity {
 		* @param perm - Whether candidate is looking for freelance roles
 		* @return Builder
 		*/
-		public CandidateEntityBuilder freelance(boolean freelance) {
+		public CandidateEntityBuilder freelance(FREELANCE freelance) {
 			this.freelance = freelance;
 			return this;
 		}
@@ -498,7 +502,7 @@ public class CandidateEntity {
 		return Candidate
 					.builder()
 						.available(candidateEntity.isAvailable())
-						.candidateId(candidateEntity.getCandidateId())
+						.candidateId(String.valueOf(candidateEntity.getCandidateId()))
 						.firstname(candidateEntity.getFirstname())
 						.surname(candidateEntity.getSurname())
 						.email(candidateEntity.getEmail())

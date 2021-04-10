@@ -93,12 +93,24 @@
 
 					<div class="row rowadduser">
 						<div class="col hdr_label">Permanent</div>
-						<div class="col"><input type="checkbox" class="inpt-tab-std" formControlName="perm"/></div>
+						<div class="col">
+							<select class="inpt-tab-std" formControlName="perm">
+								<option value="FALSE">No</option>
+								<option value="TRUE">Yes</option>
+								<option value="UNKNOWN">Unknown</option>
+							</select>
+						</div>
 					</div>
 
 					<div class="row rowadduser">
 						<div class="col hdr_label">Freelance</div>
-						<div class="col"><input type="checkbox" class="inpt-tab-std" formControlName="freelance"/></div>
+						<div class="col">
+							<select class="inpt-tab-std" formControlName="freelance">
+								<option value="FALSE">No</option>
+								<option value="TRUE">Yes</option>
+								<option value="UNKNOWN">Unknown</option>
+							</select>
+						</div>
 					</div>
 
 					<div class="row rowadduser">
@@ -135,7 +147,7 @@
 			</div>
 			<div class="row" >
 					<div class="col"></div>
-					<div class="col hdr_label" style="text-align:right; margin-right:30px;"><button (click)="addCandidate()">Save</button></div>
+					<div class="col hdr_label" style="text-align:right; margin-right:260px;"><button (click)="addCandidate()">Save</button></div>
 				</div>
 		</div>
 	</div>

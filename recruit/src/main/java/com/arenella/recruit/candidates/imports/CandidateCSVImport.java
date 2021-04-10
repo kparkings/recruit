@@ -21,7 +21,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.ResourceUtils;
 
 import com.arenella.recruit.candidates.enums.COUNTRY;
+import com.arenella.recruit.candidates.enums.FREELANCE;
 import com.arenella.recruit.candidates.enums.FUNCTION;
+import com.arenella.recruit.candidates.enums.PERM;
 import com.arenella.recruit.candidates.services.CandidateService;
 import com.arenella.recruit.candudates.beans.Candidate;
 import com.arenella.recruit.candudates.beans.Language;
@@ -109,7 +111,7 @@ public class CandidateCSVImport {
 			Candidate candidate = Candidate
 					.builder()
 						.available(true)
-						.candidateId(candidateId.getStringCellValue())
+						.candidateId(candidateId.getStringCellValue().replace("C", ""))
 						.city(city.getStringCellValue())
 						.country(getCountry(country))
 						.email("unknown")
@@ -389,9 +391,9 @@ public class CandidateCSVImport {
 		
 		Set<Language> languages = new HashSet<>();
 		
-		Optional<Language> 	dutchLang 		= getLanguage(dutch, LANGUAGE.DUTCH);
-		Optional<Language> 	englishLang 	= getLanguage(dutch, LANGUAGE.ENGLISH);
-		Optional<Language> 	frenchLang 		= getLanguage(dutch, LANGUAGE.FRENCH);
+		Optional<Language> 	dutchLang 		= getLanguage(dutch, 	LANGUAGE.DUTCH);
+		Optional<Language> 	englishLang 	= getLanguage(english, 	LANGUAGE.ENGLISH);
+		Optional<Language> 	frenchLang 		= getLanguage(french, 	LANGUAGE.FRENCH);
 		
 		if (dutchLang.isPresent()) {
 			languages.add(dutchLang.get());
@@ -419,6 +421,9 @@ public class CandidateCSVImport {
 			case "-":{
 				return Optional.empty();
 			} 
+			case "?": {
+				return Optional.of(Language.builder().language(language).level(LEVEL.UNKNOWN).build());
+			}
 			case "X (medior)":
 			case "X (basic)" :{
 				return Optional.of(Language.builder().language(language).level(LEVEL.BASIC).build());
@@ -432,46 +437,46 @@ public class CandidateCSVImport {
 		
 	}
 	
-	private boolean getPerm(XSSFCell perm) {
+	private PERM getPerm(XSSFCell perm) {
 		
 		switch(perm.getStringCellValue()) {
-			case "X": {
-				return true;
-			}
-			case "": {
-				return false;
-			}
 			case "x":
-			case "-":
+			case "X": {
+				return PERM.TRUE;
+			}
+			case "-": {
+				return PERM.FALSE;
+			}
+			case "":
 			case "?": {
-				return true;
+				return PERM.UNKNOWN;
 			}
 			default:{
 				System.out.println("Failed: Perm:" + perm.getRichStringCellValue());
-				return false;
+				return PERM.UNKNOWN;
 			}
 		}
 		
 	}
 	
-	private boolean getFreelance(XSSFCell freelance) {
+	private FREELANCE getFreelance(XSSFCell freelance) {
 		
 		switch(freelance.getStringCellValue()) {
 			case "X": {
-				return true;
+				return FREELANCE.TRUE;
 			}
 			case "": {
-				return false;
+				return FREELANCE.FALSE;
 			}
 			case "? (2+ jaar)":
 			case "(2+ jaar)":
 			case "-":
 			case "?": {
-				return true;
+				return FREELANCE.UNKNOWN;
 			}
 			default:{
 				System.out.println("Failed: Freelance:" + freelance.getRichStringCellValue());
-				return false;
+				return FREELANCE.UNKNOWN;
 			}
 		}
 		

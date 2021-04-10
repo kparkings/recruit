@@ -1,6 +1,5 @@
 package com.arenella.recruit.candudates.beans;
 
-import com.arenella.recruit.candidates.controllers.CandidateAPIInbound;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 
@@ -12,7 +11,7 @@ import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 public class Language {
 
 	public static enum LANGUAGE {DUTCH, ENGLISH, FRENCH}
-	public static enum LEVEL {BASIC, PROFICIENT}
+	public static enum LEVEL {BASIC, PROFICIENT, UNKNOWN}
 
 	private LANGUAGE 	language;
 	private LEVEL 		level;

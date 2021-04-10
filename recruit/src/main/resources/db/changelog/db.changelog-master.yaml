@@ -43,7 +43,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: candidate_id
-                  type: varchar
+                  type: bigint
                   constraints:
                     primaryKey: true
                     nullable: false
@@ -84,13 +84,13 @@ databaseChangeLog:
                     nullable: false 
               - column:
                   name: perm
-                  type: boolean
+                  type: VARCHAR(7)
                   constraints:
                     nullable: false
                     default: false
               - column:
                   name: freelance
-                  type: boolean
+                  type: VARCHAR(7)
                   constraints:
                     nullable: false
                     default: false
@@ -121,7 +121,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: candidate_id
-                  type: varchar
+                  type: bigint
                   constraints:
                     nullable: false                    
                     foreignKeyName: fk_candidate_skill
@@ -143,7 +143,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: candidate_id
-                  type: varchar
+                  type: bigint
                   constraints:
                     nullable: false
               - column:

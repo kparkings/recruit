@@ -21,7 +21,7 @@ public class LanguageEntityId implements Serializable{
 	public LanguageEntityId() {}
 	
 	@Column(name="candidate_id")
-	private String 		candidateId;
+	private long 		candidateId;
 	
 	@Enumerated(EnumType.STRING)
 	@Column(name="language")
@@ -31,7 +31,7 @@ public class LanguageEntityId implements Serializable{
 	* Sets the unique identifier of the Candidayte
 	* @param candidateId - Candidate Id
 	*/
-	public void setCandidateId(String candidateId) {
+	public void setCandidateId(long candidateId) {
 		this.candidateId = candidateId;
 	}
 	
@@ -47,7 +47,7 @@ public class LanguageEntityId implements Serializable{
 	* Returns the Candidates unique Id
 	* @return Candidate ID
 	*/
-	public String getCandidateId() {
+	public long getCandidateId() {
 		return this.candidateId;
 	}
 	

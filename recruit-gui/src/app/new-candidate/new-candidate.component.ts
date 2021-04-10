@@ -14,7 +14,7 @@ export class NewCandidateComponent implements OnInit {
    
    public formBean:FormGroup = new FormGroup({
      
-    candidateId:      new FormControl("C1001"),
+    candidateId:      new FormControl(''),
     firstname:        new FormControl(),
     surname:          new FormControl(),
     email:            new FormControl(),

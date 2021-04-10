@@ -6,7 +6,9 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.arenella.recruit.candidates.enums.COUNTRY;
+import com.arenella.recruit.candidates.enums.FREELANCE;
 import com.arenella.recruit.candidates.enums.FUNCTION;
+import com.arenella.recruit.candidates.enums.PERM;
 import com.arenella.recruit.candudates.beans.Candidate;
 import com.arenella.recruit.candudates.beans.Language;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -28,8 +30,8 @@ public class CandidateAPIInbound {
 	private FUNCTION		function;
 	private COUNTRY 		country;
 	private String 			city;
-	private boolean 		perm;
-	private boolean 		freelance;
+	private PERM 			perm;
+	private FREELANCE 		freelance;
 	private int				yearsExperience;
 	private boolean 		available;
 	private Set<String> 	skills						= new LinkedHashSet<>();
@@ -129,7 +131,7 @@ public class CandidateAPIInbound {
 	* freelance projects
 	* @return Whether or not the Candidate is interested in freelance roles
 	*/
-	public boolean isFreelance() {
+	public FREELANCE  isFreelance() {
 		return this.freelance;
 	}
 	
@@ -137,7 +139,7 @@ public class CandidateAPIInbound {
 	* Returns whether or not the Candidate is interested in permanent roles
 	* @return Whether or not the Candidate is interested in permanent roles
 	*/
-	public boolean isPerm() {
+	public PERM isPerm() {
 		return this.perm;
 	}
 	
@@ -196,8 +198,8 @@ public class CandidateAPIInbound {
 		private FUNCTION		function;
 		private COUNTRY 		country;
 		private String 			city;
-		private boolean 		perm;
-		private boolean 		freelance;
+		private PERM 			perm;
+		private FREELANCE 		freelance;
 		private int				yearsExperience;
 		private boolean 		available;
 		private Set<String> 	skills						= new LinkedHashSet<>();
@@ -288,7 +290,7 @@ public class CandidateAPIInbound {
 		* @param freelance - Whether or not the Candidate is interested in perm roles
 		* @return Builder
 		*/
-		public CandidateAPIInboundBuilder perm(boolean perm) {
+		public CandidateAPIInboundBuilder perm(PERM perm) {
 			this.perm = perm;
 			return this;
 		}
@@ -298,7 +300,7 @@ public class CandidateAPIInbound {
 		* @param freelance - Whether or not the Candidate is interested in freelance roles
 		* @return Builder
 		*/
-		public CandidateAPIInboundBuilder freelance(boolean freelance) {
+		public CandidateAPIInboundBuilder freelance(FREELANCE freelance) {
 			this.freelance = freelance;
 			return this;
 		}

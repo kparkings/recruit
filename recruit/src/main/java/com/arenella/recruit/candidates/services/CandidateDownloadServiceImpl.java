@@ -21,7 +21,10 @@ import org.apache.poi.ss.usermodel.Font;
 import org.springframework.stereotype.Service;
 
 import com.arenella.recruit.candidates.controllers.CandidateAPIOutbound;
-import com.arenella.recruit.candidates.enums.FUNCTION;
+import com.arenella.recruit.candidates.enums.COUNTRY;
+import com.arenella.recruit.candidates.enums.FREELANCE;
+import com.arenella.recruit.candidates.enums.PERM;
+//import com.arenella.recruit.candidates.enums.FUNCTION;
 import com.arenella.recruit.candudates.beans.Candidate;
 import com.arenella.recruit.candudates.beans.Language;
 import com.arenella.recruit.candudates.beans.Language.LANGUAGE;
@@ -72,16 +75,17 @@ public class CandidateDownloadServiceImpl implements CandidateDownloadService{
 			Optional<Language> english 	= candidate.getLanguages().stream().filter(lang -> lang.getLanguage() == LANGUAGE.ENGLISH).findAny();
 			Optional<Language> french 	= candidate.getLanguages().stream().filter(lang -> lang.getLanguage() == LANGUAGE.FRENCH).findAny();
 			
-			candidateCell.setCellValue(candidate.getCandidateId());
-			countryCell.setCellValue(candidate.getCountry().toString());				
+			candidateCell.setCellValue("C"+candidate.getCandidateId());
+			countryCell.setCellValue(getHumanReadableCountry(candidate.getCountry()));				
 			cityCell.setCellValue(candidate.getCity());
-			freelanceCell.setCellValue(candidate.isFreelance() 		? "-" : "X");	
-			permCell.setCellValue(candidate.isPerm() 				? "-" : "X");
+			freelanceCell.setCellValue(getFreelanceValue(candidate.getFreelance()));	
+			permCell.setCellValue(getPermValue(candidate.getPerm()));
 			dutchCell.setCellValue(getLanguageValue(dutch) );	
 			englishCell.setCellValue(getLanguageValue(english));	
 			frenchCell.setCellValue(getLanguageValue(french));
 			yearsExperienceCell.setCellValue(candidate.getYearsExperience());
-			roleCell.setCellValue(this.getHumanReadableCandidateFunction((candidate.getFunction())));
+			//roleCell.setCellValue(this.getHumanReadableCandidateFunction((candidate.getFunction())));
+			roleCell.setCellValue(candidate.getRoleSought());
 			skillsCell.setCellValue(String.join(",", candidate.getSkills()));	 
 			
 			CellStyle  cellStyle = workbook.createCellStyle();
@@ -242,6 +246,10 @@ public class CandidateDownloadServiceImpl implements CandidateDownloadService{
 			return "-";
 		}
 		
+		if (language.get().getLevel() == LEVEL.UNKNOWN) {
+			return "?";
+		}
+		
 		return language.get().getLevel() == LEVEL.PROFICIENT ? "X" : "X (basic)";
 		
 	}
@@ -251,27 +259,75 @@ public class CandidateDownloadServiceImpl implements CandidateDownloadService{
 	* @param function - Function the Candidate performs
 	* @return Human readable representation of the Function
 	*/
-	private String getHumanReadableCandidateFunction(FUNCTION function) {
+	//private String getHumanReadableCandidateFunction(FUNCTION function) {
 
-		switch(function){
-			case JAVA_DEV: 					return "Java Developer";
-			case CSHARP_DEV: 				return "C# Developer";
-			case SUPPORT: 					return "Support analyst";
-			case BA: 						return "Business Analyst";
-			case UI_UX: 					return "UI \\ UX";
-			case PROJECT_MANAGER: 			return "Project Manager";
-			case ARCHITECT:			 		return "Architect";
-			case TESTER: 					return "Test Analyset";
-			case WEB_DEV: 					return "Web Developer";
-			case SCRUM_MASTER:				return "Scrum Master";
-			case DATA_SCIENTIST:			return "Data Scientist";
-			case NETWORK_ADMINISTRATOR:		return "Network Administrator";
-			case SOFTWARE_DEVELOPER:		return "Software Developer";
-			case IT_SECURITY:				return "IT Security";
-			case SOFTWARE_DEV_IN_TEST:		return "Software Dev In Test";
-			default: return function.toString();
+	//	switch(function){
+	//		case JAVA_DEV: 					return "Java Developer";
+	//		case CSHARP_DEV: 				return "C# Developer";
+	//		case SUPPORT: 					return "Support analyst";
+	//		case BA: 						return "Business Analyst";
+	//		case UI_UX: 					return "UI \\ UX";
+	//		case PROJECT_MANAGER: 			return "Project Manager";
+	//		case ARCHITECT:			 		return "Architect";
+	//		case TESTER: 					return "Test Analyset";
+	//		case WEB_DEV: 					return "Web Developer";
+	//		case SCRUM_MASTER:				return "Scrum Master";
+	//		case DATA_SCIENTIST:			return "Data Scientist";
+	//		case NETWORK_ADMINISTRATOR:		return "Network Administrator";
+	//		case SOFTWARE_DEVELOPER:		return "Software Developer";
+	//		case IT_SECURITY:				return "IT Security";
+	//		case SOFTWARE_DEV_IN_TEST:		return "Software Dev In Test";
+	//		default: return function.toString();
+	//	}
+		
+	//}
+	
+	/**
+	* Returns human readable version of the COUNTRY
+	* @param country - COUNTRY value
+	* @return human readable country value
+	*/
+	private String getHumanReadableCountry(COUNTRY country) {
+		
+		switch (country) {
+			case NETHERLANDS:	{ return "NL";}
+			case UK:		 	{ return "UK";}
+			case BELGIUM:		{ return "BE";}
+			case EUROPE:		{ return "EU";}
+			default: 			{return "NA";}
 		}
 		
+	}
+	
+	/**
+	* Converts the FREELANCE value to a human readable form
+	* @param freelance - Whether the Candidate is interested in Freelance roles
+	* @return human readable FREELANCE option
+	*/
+	public String getFreelanceValue(FREELANCE freelance) {
+		
+		switch (freelance) {
+			case TRUE: {return "X";}
+			case FALSE: {return "-";}
+			case UNKNOWN: {return "?";}
+		}
+		return "?";
+	}
+
+	/**
+	* Converts the PERM value to a human readable form
+	* @param perm - Whether the Candidate is interested in Perm roles
+	* @return human readable PERM option
+	*/
+	public String getPermValue(PERM perm) {
+		
+		switch (perm) {
+			case TRUE: {return "X";}
+			case FALSE: {return "-";}
+			case UNKNOWN: {return "?";}
+		}
+		
+		return "?";
 	}
 
 }

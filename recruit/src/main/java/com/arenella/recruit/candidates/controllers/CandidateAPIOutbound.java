@@ -5,7 +5,9 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 import com.arenella.recruit.candidates.enums.COUNTRY;
+import com.arenella.recruit.candidates.enums.FREELANCE;
 import com.arenella.recruit.candidates.enums.FUNCTION;
+import com.arenella.recruit.candidates.enums.PERM;
 import com.arenella.recruit.candudates.beans.Candidate;
 import com.arenella.recruit.candudates.beans.Language;
 
@@ -20,8 +22,8 @@ public class CandidateAPIOutbound {
 	private String			roleSought;
 	private COUNTRY 		country;
 	private String 			city;
-	private boolean 		perm;
-	private boolean 		freelance;
+	private PERM 			perm;
+	private FREELANCE 		freelance;
 	private int				yearsExperience;
 	private boolean 		available;
 	private LocalDate 		lastAvailabilityCheck;
@@ -96,7 +98,7 @@ public class CandidateAPIOutbound {
 	* freelance projects
 	* @return Whether or not the Candidate is interested in freelance roles
 	*/
-	public boolean isFreelance() {
+	public FREELANCE getFreelance() {
 		return this.freelance;
 	}
 	
@@ -104,7 +106,7 @@ public class CandidateAPIOutbound {
 	* Returns whether or not the Candidate is interested in permanent roles
 	* @return Whether or not the Candidate is interested in permanent roles
 	*/
-	public boolean isPerm() {
+	public PERM getPerm() {
 		return this.perm;
 	}
 	
@@ -168,8 +170,8 @@ public class CandidateAPIOutbound {
 		private String			roleSought;
 		private COUNTRY 		country;
 		private String 			city;
-		private boolean 		perm;
-		private boolean 		freelance;
+		private PERM 			perm;
+		private FREELANCE 		freelance;
 		private int				yearsExperience;
 		private boolean 		available;
 		private LocalDate 		lastAvailabilityCheck;
@@ -231,7 +233,7 @@ public class CandidateAPIOutbound {
 		* @param freelance - Whether or not the Candidate is interested in perm roles
 		* @return Builder
 		*/
-		public CandidateAPIOutboundBuilder perm(boolean perm) {
+		public CandidateAPIOutboundBuilder perm(PERM perm) {
 			this.perm = perm;
 			return this;
 		}
@@ -241,7 +243,7 @@ public class CandidateAPIOutbound {
 		* @param freelance - Whether or not the Candidate is interested in freelance roles
 		* @return Builder
 		*/
-		public CandidateAPIOutboundBuilder freelance(boolean freelance) {
+		public CandidateAPIOutboundBuilder freelance(FREELANCE freelance) {
 			this.freelance = freelance;
 			return this;
 		}

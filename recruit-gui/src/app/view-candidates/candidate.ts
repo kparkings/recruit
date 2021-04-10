@@ -9,57 +9,57 @@ export class Candidate {
 	/**
 	* Unique identifier of the Candidate
 	*/
-	candidateId:		string 			= "";
+	candidateId:		string 			= '';
 	
 	/**
 	* first name of the Candidate
 	*/
-	firstname:			string			= "";
+	firstname:			string			= '';
 
 	/**
 	* Surname of the Candidate
 	*/
-	surname:			string 			= "";
+	surname:			string 			= '';
 	
 	/**
 	* Candidates email address
 	*/
-	email: 				string 			= "";
+	email: 				string 			= '';
 
 	/**
 	* Role sought by Candidates
 	*/
-	roleSought: 		string 			= "";
+	roleSought: 		string 			= '';
 	
 	/**
 	* Function the candidate performs
 	*/
-	function: 			string 			= "";
+	function: 			string 			= '';
 
 	/**
 	* Country where the candidate is located 
 	*/
-	country: 			string 			= "";
+	country: 			string 			= '';
 	
 	/**
 	* City where the Candidate is located
 	*/
-	city: 				string 			= "";
+	city: 				string 			= '';
 	
 	/**
 	* Whether or not the Candidate is lookig for perm positions
 	*/
-	perm:			boolean 			= false;
+	perm:			string 			= '';
 	
 	/**
 	* Whether or not the Candidate is looking for freelance positions
 	*/
-	freelance: 			boolean 		= false;
+	freelance: 			string 		= '';
 	
 	/**
 	* Years of experience the candidate has
 	*/
-	yearsExperience: 	string 			= "";
+	yearsExperience: 	string 		= '';
 	
 	/**
 	* List of skills the Candidate has
