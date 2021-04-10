@@ -27,6 +27,7 @@ public class CandidateEntityTest {
 	private static final String 		firstname				= "Kevin";
 	private static final String 		surname					= "Parkings";
 	private static final String 		email					= "kparkings@gmail.com";
+	private static final String			roleSought				= "Python Developer";
 	private static final FUNCTION		function				= FUNCTION.JAVA_DEV;
 	private static final COUNTRY 		country 				= COUNTRY.NETHERLANDS;
 	private static final String 		city 					= "Den Haag";
@@ -65,6 +66,7 @@ public class CandidateEntityTest {
 					.firstname(firstname)
 					.surname(surname)
 					.email(email)
+					.roleSought(roleSought)
 					.function(function)
 					.country(country)
 					.city(city)
@@ -82,7 +84,7 @@ public class CandidateEntityTest {
 		assertEquals(candidateEntity.getFirstname(), 				firstname);
 		assertEquals(candidateEntity.getSurname(), 					surname);
 		assertEquals(candidateEntity.getEmail(), 					email);
-		
+		assertEquals(candidateEntity.getRoleSought(),				roleSought);
 		assertEquals(candidateEntity.getFunction(),					function);
 		assertEquals(candidateEntity.getCountry(), 					country);
 		assertEquals(candidateEntity.getCity(), 					city);
@@ -109,6 +111,7 @@ public class CandidateEntityTest {
 					.firstname(firstname)
 					.surname(surname)
 					.email(email)
+					.roleSought(roleSought)
 					.function(function)
 					.country(country)
 					.city(city)
@@ -128,6 +131,7 @@ public class CandidateEntityTest {
 		assertEquals(candidate.getFirstname(), 					firstname);
 		assertEquals(candidate.getSurname(), 					surname);
 		assertEquals(candidate.getEmail(), 						email);
+		assertEquals(candidate.getRoleSought(),					roleSought);
 		assertEquals(candidate.getFunction(), 					function);
 		assertEquals(candidate.getCountry(), 					country);
 		assertEquals(candidate.getCity(), 						city);

@@ -18,6 +18,7 @@ public class Candidate {
 	private String 			firstname;
 	private String 			surname;
 	private String 			email;
+	private String			roleSought;
 	private FUNCTION		function;
 	private COUNTRY 		country;
 	private String 			city;
@@ -40,6 +41,7 @@ public class Candidate {
 		this.firstname					= builder.firstname;
 		this.surname					= builder.surname;
 		this.email						= builder.email;
+		this.roleSought					= builder.roleSought;
 		this.function				 	= builder.function;
 		this.country					= builder.country;
 		this.city 						= builder.city;
@@ -87,7 +89,15 @@ public class Candidate {
 		return this.email;
 	}
 	
-
+	/**
+	* Returns the title on the role the user is looking for. This can be a more 
+	* specific description of the users role that provided by the function 
+	* attribute
+	* @return Role sought my the Candidate
+	*/
+	public String getRoleSought() {
+		return this.roleSought;
+	}
 	
 	/**
 	* Returns the function the Candidate performs
@@ -198,6 +208,7 @@ public class Candidate {
 		private String 			firstname;
 		private String			surname;
 		private String 			email;
+		private String			roleSought;
 		private FUNCTION		function;
 		private COUNTRY 		country;
 		private String 			city;
@@ -250,7 +261,15 @@ public class Candidate {
 			return this;
 		}
 		
-
+		/**
+		* Sets the Role sought by the Candidate 
+		* @param roleSought - Role the candidate is looking for
+		* @return Builder
+		*/
+		public CandidateBuilder roleSought(String roleSought) {
+			this.roleSought = roleSought;
+			return this;
+		}
 		
 		/**
 		* Sets the function the candidate performs

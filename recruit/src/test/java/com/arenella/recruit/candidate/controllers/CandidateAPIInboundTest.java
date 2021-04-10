@@ -27,6 +27,7 @@ public class CandidateAPIInboundTest {
 	private static final String 		firstname				= "Kevin";
 	private static final String 		surname					= "Parkings";
 	private static final String 		email					= "kparkings@gmail.com";
+	private static final String			roleSought				= "Junior C# developer";
 	private static final FUNCTION		function				= FUNCTION.JAVA_DEV;
 	private static final COUNTRY 		country 				= COUNTRY.NETHERLANDS;
 	private static final String 		city 					= "Den Haag";
@@ -63,6 +64,7 @@ public class CandidateAPIInboundTest {
 							.firstname(firstname)
 							.surname(surname)
 							.email(email)
+							.roleSought(roleSought)
 							.function(function)
 							.country(country)
 							.city(city)
@@ -79,6 +81,7 @@ public class CandidateAPIInboundTest {
 		assertEquals(candidate.getSurname(), 					surname);
 		assertEquals(candidate.getEmail(), 						email);
 		assertEquals(candidate.getFunction(), 					function);
+		assertEquals(candidate.getRoleSought(),					roleSought);
 		assertEquals(candidate.getCountry(), 					country);
 		assertEquals(candidate.getCity(), 						city);
 		assertEquals(candidate.isAvailable(), 					available);
@@ -105,6 +108,7 @@ public class CandidateAPIInboundTest {
 					.firstname(firstname)
 					.surname(surname)
 					.email(email)
+					.roleSought(roleSought)
 					.function(function)
 					.country(country)
 					.city(city)
@@ -122,6 +126,7 @@ public class CandidateAPIInboundTest {
 		assertEquals(candidate.getFirstname(), 					firstname);
 		assertEquals(candidate.getSurname(), 					surname);
 		assertEquals(candidate.getEmail(), 						email);
+		assertEquals(candidate.getRoleSought(),					roleSought);
 		assertEquals(candidate.getFunction(), 					function);
 		assertEquals(candidate.getCountry(), 					country);
 		assertEquals(candidate.getCity(), 						city);
@@ -136,6 +141,5 @@ public class CandidateAPIInboundTest {
 		assertEquals(candidate.getLanguages().stream().findFirst().get().getLanguage(), language.getLanguage());
 	
 	}
-
 	
 }

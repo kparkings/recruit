@@ -260,11 +260,15 @@ public class CandidateDownloadServiceImpl implements CandidateDownloadService{
 			case BA: 						return "Business Analyst";
 			case UI_UX: 					return "UI \\ UX";
 			case PROJECT_MANAGER: 			return "Project Manager";
-			case SOFTWARE_ARCHITECT: 		return "Software Architect";
-			case SOLUTIONS_ARCHITECT: 		return "Solutions Architect";
-			case ENTERPRISE_ARCHITECT: 		return "Enterprise Architect";
+			case ARCHITECT:			 		return "Architect";
 			case TESTER: 					return "Test Analyset";
 			case WEB_DEV: 					return "Web Developer";
+			case SCRUM_MASTER:				return "Scrum Master";
+			case DATA_SCIENTIST:			return "Data Scientist";
+			case NETWORK_ADMINISTRATOR:		return "Network Administrator";
+			case SOFTWARE_DEVELOPER:		return "Software Developer";
+			case IT_SECURITY:				return "IT Security";
+			case SOFTWARE_DEV_IN_TEST:		return "Software Dev In Test";
 			default: return function.toString();
 		}
 		

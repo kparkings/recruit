@@ -7,5 +7,6 @@ package com.arenella.recruit.candidates.enums;
 public enum COUNTRY {
 	NETHERLANDS, 
 	BELGIUM, 
-	UK
+	UK,
+	EUROPE
 }

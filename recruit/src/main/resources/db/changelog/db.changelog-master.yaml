@@ -63,6 +63,11 @@ databaseChangeLog:
                   constraints:
                     nullable: true
               - column:
+                  name: role_sought
+                  type: varchar
+                  constraints:
+                    nullable: true
+              - column:
                   name: function
                   type: varchar
                   constraints:

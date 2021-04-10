@@ -18,6 +18,7 @@ export class NewCandidateComponent implements OnInit {
     firstname:        new FormControl(),
     surname:          new FormControl(),
     email:            new FormControl(),
+    roleSought:       new FormControl(),
     country:          new FormControl(),
     city:             new FormControl(),
     perm:             new FormControl(),

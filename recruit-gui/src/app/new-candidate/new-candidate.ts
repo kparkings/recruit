@@ -28,6 +28,11 @@ export class NewCandidate {
 	email: 				string 			= "";
 	
 	/**
+	* Role sought by candidate
+	*/
+	roleSought: 		string 			= "";
+
+	/**
 	* Function the candidate performs
 	*/
 	function: 		string 				= "";

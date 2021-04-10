@@ -93,6 +93,7 @@ export class ViewCandidatesComponent implements OnInit {
       candidate.city              = c.city;
       candidate.country           = this.getCountryCode(c.country);
       candidate.freelance         = c.freelance;
+      candidate.roleSought        = c.roleSought;
       candidate.function          = c.function;
       candidate.perm              = c.perm;
       candidate.yearsExperience   = c.yearsExperience;

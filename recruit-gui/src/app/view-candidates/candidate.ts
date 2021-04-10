@@ -25,36 +25,41 @@ export class Candidate {
 	* Candidates email address
 	*/
 	email: 				string 			= "";
+
+	/**
+	* Role sought by Candidates
+	*/
+	roleSought: 		string 			= "";
 	
 	/**
 	* Function the candidate performs
 	*/
-	function: 		string 				= "";
+	function: 			string 			= "";
 
 	/**
 	* Country where the candidate is located 
 	*/
-	country: 			string 				= "";
+	country: 			string 			= "";
 	
 	/**
 	* City where the Candidate is located
 	*/
-	city: 				string 				= "";
+	city: 				string 			= "";
 	
 	/**
 	* Whether or not the Candidate is lookig for perm positions
 	*/
-	perm:			boolean 				= false;
+	perm:			boolean 			= false;
 	
 	/**
 	* Whether or not the Candidate is looking for freelance positions
 	*/
-	freelance: 			boolean 				= false;
+	freelance: 			boolean 		= false;
 	
 	/**
 	* Years of experience the candidate has
 	*/
-	yearsExperience: 	string 				= "";
+	yearsExperience: 	string 			= "";
 	
 	/**
 	* List of skills the Candidate has

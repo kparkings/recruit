@@ -24,6 +24,7 @@ public class CandidateAPIInbound {
 	private String 			firstname;
 	private String 			surname;
 	private String 			email;
+	private String			roleSought;
 	private FUNCTION		function;
 	private COUNTRY 		country;
 	private String 			city;
@@ -45,6 +46,7 @@ public class CandidateAPIInbound {
 		this.surname					= builder.surname;
 		this.email						= builder.email;
 		this.function				 	= builder.function;
+		this.roleSought					= builder.roleSought;
 		this.country					= builder.country;
 		this.city 						= builder.city;
 		this.perm 						= builder.perm;
@@ -87,6 +89,14 @@ public class CandidateAPIInbound {
 	*/
 	public String getEmail() {
 		return this.email;
+	}
+	
+	/**
+	* Returns the role the Candidate is looking for
+	* @return Role sought by the Candidate
+	*/
+	public String getRoleSought() {
+		return this.roleSought;
 	}
 		
 	/**
@@ -182,6 +192,7 @@ public class CandidateAPIInbound {
 		private String 			firstname;
 		private String			surname;
 		private String 			email;
+		private String			roleSought;
 		private FUNCTION		function;
 		private COUNTRY 		country;
 		private String 			city;
@@ -229,6 +240,16 @@ public class CandidateAPIInbound {
 		*/
 		public CandidateAPIInboundBuilder email(String email) {
 			this.email = email;
+			return this;
+		}
+		
+		/**
+		* Sets the Role sought by the Candidate 
+		* @param roleSought - Role sought by the Candidate
+		* @return Builder
+		*/
+		public CandidateAPIInboundBuilder roleSought(String roleSought) {
+			this.roleSought = roleSought;
 			return this;
 		}
 		
@@ -349,6 +370,7 @@ public class CandidateAPIInbound {
 					.firstname(candiateAPIInbound.getFirstname())
 					.surname(candiateAPIInbound.getSurname())
 					.email(candiateAPIInbound.getEmail())
+					.roleSought(candiateAPIInbound.roleSought)
 					.function(candiateAPIInbound.getFunction())
 					.city(candiateAPIInbound.getCity())
 					.country(candiateAPIInbound.getCountry())

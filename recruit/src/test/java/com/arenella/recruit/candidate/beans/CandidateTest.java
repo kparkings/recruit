@@ -26,6 +26,8 @@ public class CandidateTest {
 	private static final FUNCTION		function				= FUNCTION.JAVA_DEV;
 	private static final COUNTRY 		country 				= COUNTRY.NETHERLANDS;
 	private static final String 		city 					= "Den Haag";
+	private static final String 		email					= "kparkings@gmail.com";
+	private static final String 		roleSought				= "Senior java Dev";
 	private static final boolean 		available 				= true;
 	private static final boolean 		freelance 				= true;
 	private static final boolean 		perm 					= true;
@@ -59,6 +61,8 @@ public class CandidateTest {
 							.function(function)
 							.country(country)
 							.city(city)
+							.email(email)
+							.roleSought(roleSought)
 							.available(available)
 							.freelance(freelance)
 							.perm(perm)
@@ -73,6 +77,8 @@ public class CandidateTest {
 		assertEquals(candidate.getFunction(), 					function);
 		assertEquals(candidate.getCountry(), 					country);
 		assertEquals(candidate.getCity(), 						city);
+		assertEquals(candidate.getEmail(), 						email);
+		assertEquals(candidate.getRoleSought(), 				roleSought);
 		assertEquals(candidate.isAvailable(), 					available);
 		assertEquals(candidate.isFreelance(), 					freelance);
 		assertEquals(candidate.isPerm(), 						perm);

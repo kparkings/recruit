@@ -45,6 +45,9 @@ public class CandidateEntity {
 	@Column(name="email")
 	private String 		email;
 	
+	@Column(name="role_sought")
+	private String roleSought;
+	
 	@Column(name="function")
 	@Enumerated(EnumType.STRING)
 	private FUNCTION function;
@@ -92,6 +95,7 @@ public class CandidateEntity {
 		this.firstname				= builder.firstname;
 		this.surname				= builder.surname;
 		this.email					= builder.email;
+		this.roleSought				= builder.roleSought;
 		this.function				= builder.function;
 		this.country 				= builder.country;
 		this.city 					= builder.city;
@@ -145,6 +149,14 @@ public class CandidateEntity {
 	*/
 	public String getEmail() {
 		return this.email;
+	}
+	
+	/**
+	* Returns the name of the Role sought by the Candidate
+	* @return Role Sought
+	*/
+	public String getRoleSought() {
+		return this.roleSought;
 	}
 	
 	/**
@@ -257,6 +269,7 @@ public class CandidateEntity {
 		private String 			firstname;
 		private String			surname;
 		private String 			email;
+		private String			roleSought;
 		private FUNCTION		function;
 		private COUNTRY 		country;
 		private String 			city;
@@ -307,6 +320,16 @@ public class CandidateEntity {
 		*/
 		public CandidateEntityBuilder email(String email) {
 			this.email = email;
+			return this;
+		}
+		
+		/**
+		* Sets the name of the Role sought by the Candidate
+		* @param roleSought - role sought by the Candidate
+		* @return Builder
+		*/
+		public CandidateEntityBuilder roleSought(String roleSought) {
+			this.roleSought = roleSought;
 			return this;
 		}
 		
@@ -449,6 +472,7 @@ public class CandidateEntity {
 						.firstname(candidate.getFirstname())
 						.surname(candidate.getSurname())
 						.email(candidate.getEmail())
+						.roleSought(candidate.getRoleSought())
 						.function(candidate.getFunction())
 						.city(candidate.getCity())
 						.country(candidate.getCountry())
@@ -478,6 +502,7 @@ public class CandidateEntity {
 						.firstname(candidateEntity.getFirstname())
 						.surname(candidateEntity.getSurname())
 						.email(candidateEntity.getEmail())
+						.roleSought(candidateEntity.getRoleSought())
 						.function(candidateEntity.getFunction())
 						.city(candidateEntity.getCity())
 						.country(candidateEntity.getCountry())

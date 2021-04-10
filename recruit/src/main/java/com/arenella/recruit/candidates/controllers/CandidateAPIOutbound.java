@@ -17,6 +17,7 @@ public class CandidateAPIOutbound {
 
 	private String 			candidateId;
 	private FUNCTION		function;
+	private String			roleSought;
 	private COUNTRY 		country;
 	private String 			city;
 	private boolean 		perm;
@@ -35,6 +36,7 @@ public class CandidateAPIOutbound {
 		
 		this.candidateId				= builder.candidateId;
 		this.function				 	= builder.function;
+		this.roleSought					= builder.roleSought;
 		this.country					= builder.country;
 		this.city 						= builder.city;
 		this.perm	 					= builder.perm;
@@ -62,6 +64,14 @@ public class CandidateAPIOutbound {
 	*/
 	public FUNCTION getFunction() {
 		return this.function;
+	}
+	
+	/**
+	* Returns the role the Candidate is looking for
+	* @return role Sought by the Candidate
+	*/
+	public String getRoleSought() {
+		return this.roleSought;
 	}
 	
 	/**
@@ -155,6 +165,7 @@ public class CandidateAPIOutbound {
 		
 		private String 			candidateId;
 		private FUNCTION		function;
+		private String			roleSought;
 		private COUNTRY 		country;
 		private String 			city;
 		private boolean 		perm;
@@ -182,6 +193,16 @@ public class CandidateAPIOutbound {
 		*/
 		public CandidateAPIOutboundBuilder function(FUNCTION function) {
 			this.function = function;
+			return this;
+		}
+		
+		/**
+		* Sets the role sought by the Candidate
+		* @param roleSought - Role the Candidate is looking for
+		* @return Builder
+		*/
+		public CandidateAPIOutboundBuilder roleSought(String roleSought) {
+			this.roleSought = roleSought;
 			return this;
 		}
 		
@@ -301,6 +322,7 @@ public class CandidateAPIOutbound {
 					.candidateId(candidate.getCandidateId())
 					.country(candidate.getCountry())
 					.function(candidate.getFunction())
+					.roleSought(candidate.getRoleSought())
 					.city(candidate.getCity())
 					.freelance(candidate.isFreelance())
 					.perm(candidate.isPerm())

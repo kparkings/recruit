@@ -62,6 +62,7 @@ export class CandidateServiceService {
     newCandidate.freelance        = formBean.get('freelance')?.value;
     newCandidate.yearsExperience  = formBean.get('yearsExperience')?.value;
     newCandidate.function         = formBean.get('function')?.value;
+    newCandidate.roleSought       = formBean.get('roleSought')?.value;
 
     const langDutch: string       = formBean.get('dutch')?.value;
     const langFrench: string      = formBean.get('french')?.value;
@@ -117,12 +118,16 @@ export class CandidateServiceService {
     functionTypes.push(new CandidateFunction('BA','Business Analyst'));
     functionTypes.push(new CandidateFunction('UI_UX','UI \ UX'));
     functionTypes.push(new CandidateFunction('PROJECT_MANAGER','Project Manager'));
-    functionTypes.push(new CandidateFunction('SOFTWARE_ARCHITECT','Software Architect'));
-    functionTypes.push(new CandidateFunction('SOLUTIONS_ARCHITECT','Solutions Architect'));
-    functionTypes.push(new CandidateFunction('ENTERPRISE_ARCHITECT','Enterprise Architect'));
+    functionTypes.push(new CandidateFunction('ARCHITECT','Software Architect'));
     functionTypes.push(new CandidateFunction('TESTER','Test Analyset'));
     functionTypes.push(new CandidateFunction('WEB_DEV','Web Developer'));
-
+    functionTypes.push(new CandidateFunction('SCRUM_MASTER','Scrum Master'));
+    functionTypes.push(new CandidateFunction('DATA_SCIENTIST','Data Scientist'));
+    functionTypes.push(new CandidateFunction('NETWORK_ADMINISTRATOR','Network Administrator'));
+    functionTypes.push(new CandidateFunction('SOFTWARE_DEVELOPER','Software Developer'));
+    functionTypes.push(new CandidateFunction('IT_SECURITY','IT Security'));
+    functionTypes.push(new CandidateFunction('SOFTWARE_DEV_IN_TEST','Software Dev In Test'));
+    
     return functionTypes;
 
   }
