@@ -2,6 +2,8 @@ import { Component, OnInit }                              from '@angular/core';
 import { ReactiveFormsModule, FormGroup, FormControl }    from '@angular/forms';
 import { CandidateServiceService }                        from '../candidate-service.service';
 import { CandidateFunction }                              from '../candidate-function';
+import {NgbModal, NgbModalOptions, ModalDismissReasons}                    from '@ng-bootstrap/ng-bootstrap';
+import {TemplateRef, ViewChild,ElementRef, AfterViewInit  } from '@angular/core';
 
 @Component({
   selector: 'app-new-candidate',
@@ -9,6 +11,8 @@ import { CandidateFunction }                              from '../candidate-fun
   styleUrls: ['./new-candidate.component.css']
 })
 export class NewCandidateComponent implements OnInit {
+
+@ViewChild('feedbackBox', { static: false }) private content:any;
 
    public functionTypes: Array<CandidateFunction> = new Array<CandidateFunction>();
    
@@ -35,7 +39,7 @@ export class NewCandidateComponent implements OnInit {
   /**
   * Constructor
   */
-  constructor(private candidateService: CandidateServiceService) {
+  constructor(private candidateService: CandidateServiceService , private modalService: NgbModal) {
     
     this.candidateService.loadFunctionTypes().forEach(funcType => {
       this.functionTypes.push(funcType);
@@ -62,8 +66,34 @@ export class NewCandidateComponent implements OnInit {
   public addCandidate(): void {
     //TODO: Convert Formbean to object before passing to Service
     this.candidateService.addCandidate(this.formBean).subscribe(d=>{
-      console.log("Sent");
+      this.open('feedbackBox', "Success",  true)
     });
   };
+
+  public feedbackBoxClass:string = '';
+  public feedbackBoxTitle = '';
+  public feedbackBoxText:string = '';
+
+
+
+
+  public open(content:any, msg:string, success:boolean):void {
+    
+    if (success) {
+      this.feedbackBoxTitle = 'Success';
+      this.feedbackBoxText = 'Candidate Added';
+      this.feedbackBoxClass = 'feedback-success';
+    } else {
+      this.feedbackBoxTitle = 'Failure';
+      this.feedbackBoxText = 'Unable to add Candidate';
+      this.feedbackBoxClass = 'feedback-failure';
+    }
+
+      let options: NgbModalOptions = {
+     centered: true
+   };
+
+  this.modalService.open(this.content, options);
+  }
 
 }

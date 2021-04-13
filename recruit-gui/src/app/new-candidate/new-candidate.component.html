@@ -1,155 +1,177 @@
-<form [formGroup]="formBean">
+<div>
+	<form [formGroup]="formBean">
 
-	<div class="wholepage">
-		<div class="centerdiv" >
-			
-			<div class="row wholepagerow">
-				<div class="col halpagecol">
+		<div class="wholepage">
+			<div class="centerdiv" >
+				
+				<div class="row wholepagerow">
+					<div class="col halpagecol">
 
-					<div class="row rowadduser">
-						<div class="col bg-tab-hdr">User</div>
-					</div>
-					
-					<div class="row rowadduser">
-						<div class="col hdr_label">Candidate Id</div>
-						<div class="col"><input type="text" class="inpt-tab-std" formControlName="candidateId"/></div>
-					</div>
-
-					<div class="row rowadduser">
-						<div class="col hdr_label">First name</div>
-						<div class="col"><input type="text" class="inpt-tab-std" formControlName="firstname"/></div>
-					</div>
-
-					<div class="row rowadduser">
-						<div class="col hdr_label">Surname</div>
-						<div class="col"><input type="text" class="inpt-tab-std" formControlName="surname"/></div>
-					</div>
-
-					<div class="row rowadduser">
-						<div class="col hdr_label">email</div>
-						<div class="col"><input type="text" class="inpt-tab-std" formControlName="email"/></div>
-					</div>
-
-					<div class="row rowadduser">
-						<div class="col hdr_label">Country</div>
-						<div class="col">
-							<select class="inpt-tab-std" formControlName="country">
-								<option>NETHERLANDS</option>
-								<option>BELGIUM</option>
-								<option>UK</option>
-							</select>
+						<div class="row rowadduser">
+							<div class="col bg-tab-hdr">User</div>
 						</div>
-					</div>
+						
+						<div class="row rowadduser">
+							<div class="col hdr_label">Candidate Id</div>
+							<div class="col"><input type="text" class="inpt-tab-std" formControlName="candidateId"/></div>
+						</div>
 
-					<div class="row rowadduser">
-						<div class="col hdr_label">City</div>
-						<div class="col"><input type="text" class="inpt-tab-std" formControlName="city"/></div>
-					</div>
+						<div class="row rowadduser">
+							<div class="col hdr_label">First name</div>
+							<div class="col"><input type="text" class="inpt-tab-std" formControlName="firstname"/></div>
+						</div>
 
-					<div class="row rowadduser">
-						<div class="col hdr_label">Dutch</div>
+						<div class="row rowadduser">
+							<div class="col hdr_label">Surname</div>
+							<div class="col"><input type="text" class="inpt-tab-std" formControlName="surname"/></div>
+						</div>
+
+						<div class="row rowadduser">
+							<div class="col hdr_label">email</div>
+							<div class="col"><input type="text" class="inpt-tab-std" formControlName="email"/></div>
+						</div>
+
+						<div class="row rowadduser">
+							<div class="col hdr_label">Country</div>
 							<div class="col">
-								<select class="inpt-tab-std" formControlName="dutch">
-									<option>No</option>
-									<option>Yes</option>
-									<option>Basic</option>
+								<select class="inpt-tab-std" formControlName="country">
+									<option>NETHERLANDS</option>
+									<option>BELGIUM</option>
+									<option>UK</option>
 								</select>
 							</div>
+						</div>
+
+						<div class="row rowadduser">
+							<div class="col hdr_label">City</div>
+							<div class="col"><input type="text" class="inpt-tab-std" formControlName="city"/></div>
+						</div>
+
+						<div class="row rowadduser">
+							<div class="col hdr_label">Dutch</div>
+								<div class="col">
+									<select class="inpt-tab-std" formControlName="dutch">
+										<option>No</option>
+										<option>Yes</option>
+										<option>Basic</option>
+									</select>
+								</div>
+						</div>
+
+						<div class="row rowadduser">
+
+							<div class="col hdr_label">English</div>
+								<div class="col">
+									<select class="inpt-tab-std" formControlName="english">
+										<option>No</option>
+										<option>Yes</option>
+										<option>Basic</option>
+									</select>
+								</div>
+
+						</div>
+
+						<div class="row rowadduser">
+
+							<div class="col hdr_label">French</div>
+								<div class="col">
+									<select class="inpt-tab-std" formControlName="french">
+										<option>No</option>
+										<option>Yes</option>
+										<option>Basic</option>
+									</select>
+								</div>
+
+						</div>
+
 					</div>
 
-					<div class="row rowadduser">
+					<div class="col halpagecol">
 
-						<div class="col hdr_label">English</div>
+						<div class="row rowadduser">
+							<div class="col bg-tab-hdr">Function</div>
+						</div>
+
+						<div class="row rowadduser">
+							<div class="col hdr_label">Permanent</div>
 							<div class="col">
-								<select class="inpt-tab-std" formControlName="english">
-									<option>No</option>
-									<option>Yes</option>
-									<option>Basic</option>
+								<select class="inpt-tab-std" formControlName="perm">
+									<option value="FALSE">No</option>
+									<option value="TRUE">Yes</option>
+									<option value="UNKNOWN">Unknown</option>
 								</select>
 							</div>
+						</div>
 
-					</div>
-
-					<div class="row rowadduser">
-
-						<div class="col hdr_label">French</div>
+						<div class="row rowadduser">
+							<div class="col hdr_label">Freelance</div>
 							<div class="col">
-								<select class="inpt-tab-std" formControlName="french">
-									<option>No</option>
-									<option>Yes</option>
-									<option>Basic</option>
+								<select class="inpt-tab-std" formControlName="freelance">
+									<option value="FALSE">No</option>
+									<option value="TRUE">Yes</option>
+									<option value="UNKNOWN">Unknown</option>
 								</select>
 							</div>
+						</div>
+
+						<div class="row rowadduser">
+							<div class="col hdr_label">Function</div>
+							<div class="col">
+								<select formControlName="function" class="inpt-tab-std">
+									<option></option>
+									<option *ngFor="let f of functionTypes" [ngValue]="f.id">{{f.desc}}</option>
+								</select>
+							</div>
+						</div>
+
+						<div class="row rowadduser">
+							<div class="col hdr_label">Role Sought</div>
+							<div class="col"><input type="text" class="inpt-tab-std" formControlName="roleSought"/></div>
+						</div>
+
+
+						<div class="row rowadduser">
+							<div class="col hdr_label">Years Experience</div>
+							<div class="col"><input type="text" class="inpt-tab-std" formControlName="yearsExperience"/></div>
+						</div>
+
+						<div class="row rowadduser">
+							<div class="col-sm-2 hdr_label">Skills</div>
+						</div>
+
+						<div class="row rowadduser">
+							<div class="col-sm-2"><textarea  class="skills" formControlName="skills"></textarea></div>
+						</div>
 
 					</div>
 
 				</div>
-
-				<div class="col halpagecol">
-
-					<div class="row rowadduser">
-						<div class="col bg-tab-hdr">Function</div>
+				<div class="row" >
+						<div class="col"></div>
+						<div class="col hdr_label" style="text-align:right; margin-right:260px;"><button (click)="addCandidate()">Save</button></div>
 					</div>
-
-					<div class="row rowadduser">
-						<div class="col hdr_label">Permanent</div>
-						<div class="col">
-							<select class="inpt-tab-std" formControlName="perm">
-								<option value="FALSE">No</option>
-								<option value="TRUE">Yes</option>
-								<option value="UNKNOWN">Unknown</option>
-							</select>
-						</div>
-					</div>
-
-					<div class="row rowadduser">
-						<div class="col hdr_label">Freelance</div>
-						<div class="col">
-							<select class="inpt-tab-std" formControlName="freelance">
-								<option value="FALSE">No</option>
-								<option value="TRUE">Yes</option>
-								<option value="UNKNOWN">Unknown</option>
-							</select>
-						</div>
-					</div>
-
-					<div class="row rowadduser">
-						<div class="col hdr_label">Function</div>
-						<div class="col">
-							<select formControlName="function" class="inpt-tab-std">
-								<option></option>
-								<option *ngFor="let f of functionTypes" [ngValue]="f.id">{{f.desc}}</option>
-							</select>
-						</div>
-					</div>
-
-					<div class="row rowadduser">
-						<div class="col hdr_label">Role Sought</div>
-						<div class="col"><input type="text" class="inpt-tab-std" formControlName="roleSought"/></div>
-					</div>
-
-
-					<div class="row rowadduser">
-						<div class="col hdr_label">Years Experience</div>
-						<div class="col"><input type="text" class="inpt-tab-std" formControlName="yearsExperience"/></div>
-					</div>
-
-					<div class="row rowadduser">
-						<div class="col-sm-2 hdr_label">Skills</div>
-					</div>
-
-					<div class="row rowadduser">
-						<div class="col-sm-2"><textarea  class="skills" formControlName="skills"></textarea></div>
-					</div>
-
-				</div>
-
 			</div>
-			<div class="row" >
-					<div class="col"></div>
-					<div class="col hdr_label" style="text-align:right; margin-right:260px;"><button (click)="addCandidate()">Save</button></div>
-				</div>
 		</div>
-	</div>
 
-</form>
+	</form>
+
+</div>
+
+	<ng-template #feedbackBox let-modal>
+	
+		<div class="feedbackBox; {{feedbackBoxClass}}">
+			<div class="modal-header">
+				<p class="modal-header-text">{{feedbackBoxTitle}}</p>
+			</div>
+			<div class="modal-body">
+				<p class="modal-body-text">{{feedbackBoxText}}</p>
+			</div>       
+		</div>
+
+	</ng-template>
+
+
+
+        
+        
+    

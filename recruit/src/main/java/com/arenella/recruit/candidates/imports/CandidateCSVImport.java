@@ -93,7 +93,7 @@ public class CandidateCSVImport {
 		while (currentRow.get() < totalCandidateRows) {
 			
 			XSSFRow row = sheet.getRow(currentRow.getAndIncrement());
-			
+	
 			XSSFCell candidateId 		= row.getCell(0);
 			XSSFCell country 			= row.getCell(1);
 			XSSFCell city 				= row.getCell(2);
