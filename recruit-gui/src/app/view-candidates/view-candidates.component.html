@@ -9,6 +9,26 @@
                 <a class="btn btn-secondary btnRight" href="{{getCandidateDownloadUrl()}}" download>Download</a>
               </div> 
             </div>
+
+
+
+            <div class="row pagination-row">
+              <div class="col-sm-10"></div>
+              <div class="col-sm-1 pagination-col">
+                <span [ngSwitch]="showNavPrev()">
+                  <span *ngSwitchCase="true"  class="candidate-nav" (click)="previousPage()"><<<<<</span>
+                  <span *ngSwitchCase="false" class="candidate-nav-disabled"><<<<<</span>
+                </span>
+               
+                <span class="">{{currentPage}}</span>
+               
+                <span [ngSwitch]="showNavNext()">
+                  <span *ngSwitchCase="true"class="candidate-nav" (click)="nextPage()">>>>>></span>
+                  <span *ngSwitchCase="false"class="candidate-nav-disabled">>>>>></span>
+                </span>
+              </div>
+            </div>
+
             <div class="row">
                 <div class="col-1 bg-tab-hdr medicol">CandidateId</div>
                 <div class="col-1 bg-tab-hdr microcol">Country</div>
@@ -73,6 +93,7 @@
             </div>	
 
     </div>
+
 
 </div>
 

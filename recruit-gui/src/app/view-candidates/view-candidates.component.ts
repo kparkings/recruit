@@ -26,6 +26,46 @@ export class ViewCandidatesComponent implements OnInit {
   public  countryFiltNL: boolean              = false;
   public  countryFiltBE: boolean              = false;
   public  countryFiltUK: boolean              = false;
+  private pageSize:number                     = 8;
+  public  totalPages:number                   = 0;
+  public  currentPage:number                  = 1;
+
+  public nextPage(): void{
+
+    if ((this.currentPage + 1) < this.totalPages) {
+      this.currentPage = this.currentPage + 1;
+      this.fetchCandidates(false);
+    }
+    
+  }
+
+  public previousPage(): void{
+    if ((this.currentPage - 1) > 0) {
+      this.currentPage = this.currentPage - 1;
+      this.fetchCandidates(false);
+    }
+  }
+
+
+  public showNavPrev(): boolean{
+    
+    if (this.totalPages === 0) {
+      return false;
+    }
+
+    return this.currentPage > 1;
+
+  }
+
+  public showNavNext():boolean{
+    
+    if (this.totalPages === 0) {
+      return false;
+    }
+
+    return this.currentPage < this.totalPages;
+
+  }
 
   public countryFilterForm:FormGroup = new FormGroup({
      
@@ -73,19 +113,26 @@ export class ViewCandidatesComponent implements OnInit {
   * Initializes component
   */
   ngOnInit(): void {
-    this.fetchCandidates();    
+    this.fetchCandidates(true);    
   }
 
   /**
   * Retrieves candidates from the backend
   */
-  private fetchCandidates():void{
+  private fetchCandidates(resetPagination: boolean): void{
     
+    if (resetPagination) {
+        this.totalPages = 0;
+        this.currentPage = 1
+    }
+
     this.candidates = new Array<Candidate>();
 
     this.candidateService.getCandidates(this.getCandidateFilterParamString()).subscribe( data => {
     
-      data.forEach((c:Candidate) => {
+      this.totalPages = data.totalPages;
+  
+      data.content.forEach((c:Candidate) => {
         
         const candidate:Candidate = new Candidate();
 
@@ -145,6 +192,8 @@ export class ViewCandidatesComponent implements OnInit {
     const filterParams:string = 'orderAttribute=' + this.sortColumn
                                                          + "&order=" 
                                                          + this.sortOrder 
+                                                         + '&page=' + this.currentPage
+                                                         + '&size=' + this.pageSize
                                                          + this.getCountryFilterParamString() 
                                                          + this.getFunctionTypeFilterParamString()
                                                          + this.getPermFilterParamString()
@@ -314,7 +363,7 @@ export class ViewCandidatesComponent implements OnInit {
       }
     }
 
-    this.fetchCandidates();
+    this.fetchCandidates(true);
 
   }
 
@@ -322,7 +371,7 @@ export class ViewCandidatesComponent implements OnInit {
   * Fetches the candidates with the lastes filter selections applied 
   */
   public updateFilters(): void{
-    this.fetchCandidates();
+    this.fetchCandidates(true);
   }
 
   /**
@@ -447,7 +496,7 @@ export class ViewCandidatesComponent implements OnInit {
       this.functionTypeFilterForm.addControl(funcType.id,new FormControl(''));
     });
 
-    this.fetchCandidates();
+    this.fetchCandidates(true);
 
   }
 

@@ -8,6 +8,8 @@ import java.util.stream.Collectors;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -70,7 +72,7 @@ public class CandidateController {
 	* @return
 	*/
 	@GetMapping(path="candidate")
-	public Set<CandidateAPIOutbound> getCandidate(  @RequestParam("orderAttribute") 	String 				orderAttribute,
+	public Page<CandidateAPIOutbound> getCandidate(  @RequestParam("orderAttribute") 	String 				orderAttribute,
 													@RequestParam("order") 				RESULT_ORDER		order,
 													@RequestParam(required = false) 	Set<String> 		candidateId,
 													@RequestParam(required = false) 	Set<COUNTRY> 		countries,
@@ -81,7 +83,8 @@ public class CandidateController {
 													@RequestParam(required = false) 	Language.LEVEL 		dutch,
 													@RequestParam(required = false) 	Language.LEVEL 		english,
 													@RequestParam(required = false) 	Language.LEVEL 		french,
-													@RequestParam(required = false) 	Set<String>			skills
+													@RequestParam(required = false) 	Set<String>			skills,
+													Pageable pageable
 												 	) {
 		
 		CandidateFilterOptions filterOptions = CandidateFilterOptions
@@ -100,7 +103,9 @@ public class CandidateController {
 													.skills(skills)
 													.build();
 		
-		return candidateService.getCandidates(filterOptions).stream().map(candidate -> CandidateAPIOutbound.convertFromCandidate(candidate)).collect(Collectors.toCollection(LinkedHashSet::new));
+		//return candidateService.getCandidates(filterOptions, pageable).stream().map(candidate -> CandidateAPIOutbound.convertFromCandidate(candidate)).collect(Collectors.toCollection(LinkedHashSet::new));
+		return candidateService.getCandidates(filterOptions, pageable).map(candidate -> CandidateAPIOutbound.convertFromCandidate(candidate));	
+	
 	}
 	
 	/**

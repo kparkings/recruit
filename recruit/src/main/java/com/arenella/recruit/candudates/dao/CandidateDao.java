@@ -9,6 +9,7 @@ import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.CrudRepository;
@@ -25,6 +26,15 @@ import com.arenella.recruit.candudates.beans.CandidateFilterOptions;
 */
 public interface CandidateDao extends CrudRepository<CandidateEntity, String>, JpaSpecificationExecutor<CandidateEntity> {
 
+	/**
+	* Returns all Candidates matching the filter options
+	* @param filterOptions - options to filter Candidates on
+	* @return Candidates matching the fitler options
+	*/
+	public default Page<CandidateEntity> findAll(CandidateFilterOptions filterOptions, org.springframework.data.domain.Pageable pageable) {
+		return this.findAll(new FilterSpecification(filterOptions), pageable);
+	}
+	
 	/**
 	* Returns all Candidates matching the filter options
 	* @param filterOptions - options to filter Candidates on
