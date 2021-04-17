@@ -39,8 +39,25 @@ export class LoginUserComponent implements OnInit {
   public login(): void{
     
     this.authService.authenticate(this.formBean.get('username')?.value, this.formBean.get('password')?.value).subscribe( data => {
-      
-      sessionStorage.setItem('loggedIn', 'true');
+     
+      const roles:Array<string> = data;
+
+
+      if (roles.includes('ROLE_ADMIN')) {
+        sessionStorage.setItem('isAdmin',      'true');
+      } else {
+        sessionStorage.setItem('isAdmin',      'false');
+      }
+
+      if (roles.includes('ROLE_RECRUITER')) {
+        sessionStorage.setItem('isRecruiter',      'true');
+      } else {
+        sessionStorage.setItem('isRecruiter',      'false');
+      }
+
+      console.log(JSON.stringify(data));
+
+      sessionStorage.setItem('loggedIn',      'true');
       
       const beforeAuthPage: any = sessionStorage.getItem('beforeAuthPage');
     

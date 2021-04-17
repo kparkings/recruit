@@ -1,10 +1,16 @@
 package com.arenella.recruit.authentication.controllers;
 
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,6 +28,9 @@ public class AuthenticationController {
 	@Autowired
 	private AuthenticationService		authenticationService;
 	
+	@Autowired
+	private UserDetailsService			userDetailsService;
+	
 	/**
 	* EndPoint validated users login credentials and returns a JWT token wrapped 
 	* in a Cookie which can be used to access other endpoints
@@ -30,13 +39,21 @@ public class AuthenticationController {
 	* @throws Exception
 	*/
 	@PostMapping(path="authenticate", consumes="application/json", produces="application/json")
-	public void createAuthenticationToken(@RequestBody JwtRequest authenticationRequest, HttpServletResponse response) throws Exception{
+	public Set<String> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest, HttpServletResponse response) throws Exception{
 		
 		Cookie tokenCookie = authenticationService.authenticateUser(authenticationRequest.getUsername(), authenticationRequest.getPassword());
+		
+		UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
+		
+		Set<String> roles = userDetails.getAuthorities().stream().map(r -> r.getAuthority()).collect(Collectors.toSet());
 		
 		response.addCookie(tokenCookie);
 		response.setStatus(HttpStatus.OK.value());
 		
+		return roles;
+		
 	}
+	
+	
 	
 }

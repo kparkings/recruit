@@ -28,7 +28,7 @@ export class ViewCandidatesComponent implements OnInit {
   public  countryFiltUK: boolean              = false;
   private pageSize:number                     = 8;
   public  totalPages:number                   = 0;
-  public  currentPage:number                  = 1;
+  public  currentPage:number                  = 0;
 
   public nextPage(): void{
 
@@ -63,7 +63,7 @@ export class ViewCandidatesComponent implements OnInit {
       return false;
     }
 
-    return this.currentPage < this.totalPages;
+    return this.currentPage < (this.totalPages -1);
 
   }
 
@@ -123,7 +123,7 @@ export class ViewCandidatesComponent implements OnInit {
     
     if (resetPagination) {
         this.totalPages = 0;
-        this.currentPage = 1
+        this.currentPage = 0;
     }
 
     this.candidates = new Array<Candidate>();

@@ -10,6 +10,7 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.CrudRepository;
@@ -31,14 +32,21 @@ public interface CandidateDao extends CrudRepository<CandidateEntity, String>, J
 	* @param filterOptions - options to filter Candidates on
 	* @return Candidates matching the fitler options
 	*/
-	public default Page<CandidateEntity> findAll(CandidateFilterOptions filterOptions, org.springframework.data.domain.Pageable pageable) {
+	public default Page<CandidateEntity> findAll(CandidateFilterOptions filterOptions, Pageable pageable) {
+		
+		//START
+		Page<CandidateEntity> ce = this.findAll(new FilterSpecification(filterOptions), pageable);
+		
+		
+		//END
+		
 		return this.findAll(new FilterSpecification(filterOptions), pageable);
 	}
 	
 	/**
 	* Returns all Candidates matching the filter options
 	* @param filterOptions - options to filter Candidates on
-	* @return Candidates matching the fitler options
+	* @return Candidates matching the filter options
 	*/
 	public default Iterable<CandidateEntity> findAll(CandidateFilterOptions filterOptions) {
 		return this.findAll(new FilterSpecification(filterOptions));

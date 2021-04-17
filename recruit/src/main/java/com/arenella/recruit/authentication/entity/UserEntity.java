@@ -7,6 +7,8 @@ import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Table;
@@ -32,7 +34,8 @@ public class UserEntity {
 	@Column(name="enabled")
 	private boolean 			enabled;
 	
-	@ElementCollection(targetClass=String.class)
+	@Enumerated(EnumType.STRING)
+	@ElementCollection(targetClass=USER_ROLE.class)
 	@CollectionTable(schema="users", name="user_roles", joinColumns=@JoinColumn(name="username"))
 	@Column(name="role")
 	private Set<USER_ROLE> 		roles		= new LinkedHashSet<>();
@@ -184,7 +187,7 @@ public class UserEntity {
 	* @return Domain version of User
 	*/
 	public static User convertFromEntity(UserEntity userEntity) {
-		
+
 		return User
 				.builder()
 					.username(userEntity.getUsername())

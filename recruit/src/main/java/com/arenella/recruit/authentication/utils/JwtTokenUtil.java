@@ -98,6 +98,9 @@ public class JwtTokenUtil implements Serializable{
 	*/
 	public String generateToken(UserDetails userDetails) {
 		Map<String,Object> claims = new HashMap<>();
+		
+		claims.put("KPTEST", "KPALUE");
+		
 		return Jwts.builder().setClaims(claims)
 							.setSubject(userDetails.getUsername())
 							.setIssuedAt(new Date(System.currentTimeMillis()))
@@ -127,6 +130,7 @@ public class JwtTokenUtil implements Serializable{
 		cookie.setDomain(cookieDomain);
 		cookie.setMaxAge(cookieMaxAge);
 		cookie.setSecure(cookieSecure);
+		cookie.setHttpOnly(true);
 		
 		return cookie;
 		
