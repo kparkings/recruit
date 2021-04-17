@@ -99,6 +99,7 @@
 <ng-template #mymodal let-modal>
   <div class="modal-header">
     <h4 class="modal-title">Filters</h4>
+    <div class="filter-close-box" (click)="closeModal()">X</div>
   </div>
   <div class="modal-body">
       <div *ngIf="showSortOptons">
@@ -166,7 +167,13 @@
               
               <div class="row"> 
                 <div class="col">
-                  <div *ngFor="let funcType of candidateService.loadFunctionTypes()">
+                  <div *ngFor="let funcType of functionOptionsPage1">
+                    <input class="filtercheckbox" type="checkbox" name="funcTypes" value="{{funcType.id}}" formControlName="{{funcType.id}}" (change)="updateFilters()">
+                    <label>{{funcType.desc}}</label>
+                  </div>
+                </div>
+                <div class="col">
+                  <div *ngFor="let funcType of functionOptionsPage2">
                     <input class="filtercheckbox" type="checkbox" name="funcTypes" value="{{funcType.id}}" formControlName="{{funcType.id}}" (change)="updateFilters()">
                     <label>{{funcType.desc}}</label>
                   </div>

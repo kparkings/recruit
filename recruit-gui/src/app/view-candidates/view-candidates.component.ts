@@ -30,6 +30,9 @@ export class ViewCandidatesComponent implements OnInit {
   public  totalPages:number                   = 0;
   public  currentPage:number                  = 0;
 
+  public functionOptionsPage1: Array<CandidateFunction> = new Array<CandidateFunction>();
+  public functionOptionsPage2: Array<CandidateFunction> = new Array<CandidateFunction>();
+
   public nextPage(): void{
 
     if ((this.currentPage + 1) < this.totalPages) {
@@ -92,9 +95,23 @@ export class ViewCandidatesComponent implements OnInit {
   */
   constructor(public candidateService:CandidateServiceService, private modalService: NgbModal) {
 
+    let counter:number = 0;
+
     this.candidateService.loadFunctionTypes().forEach(funcType => {
       this.functionTypes.push(funcType);
       this.functionTypeFilterForm.addControl(funcType.id, new FormControl(''));
+
+
+      if (counter < 8) {
+        console.log('COUNTER A=> ' + counter);
+        this.functionOptionsPage1.push(funcType);
+      } else {
+        console.log('COUNTER B=> ' + counter);
+        this.functionOptionsPage2.push(funcType);
+      }
+
+      counter = counter +1;
+
     });
 
    }
@@ -323,7 +340,7 @@ export class ViewCandidatesComponent implements OnInit {
   * @param content - modal to display
   * @param column  - column to display modal for
   */
-  public open(content:any, column:string) {
+  public open (content: any, column: string) {
     this.activeFilter = column;
     this.showOrderFilter();
     this.modalService.open(content, { centered: true });
@@ -334,6 +351,13 @@ export class ViewCandidatesComponent implements OnInit {
       this.selectedSortOrderForFilter = '';
     }
 
+  }
+
+  /**
+  *  Closes the filter popup
+  */
+  public closeModal(): void {
+    this.modalService.dismissAll();
   }
 
   /**

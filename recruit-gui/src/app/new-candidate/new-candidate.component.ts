@@ -65,9 +65,9 @@ export class NewCandidateComponent implements OnInit {
   */
   public addCandidate(): void {
     //TODO: Convert Formbean to object before passing to Service
-    this.candidateService.addCandidate(this.formBean).subscribe(d=>{
+   // this.candidateService.addCandidate(this.formBean).subscribe(d=>{
       this.open('feedbackBox', "Success",  true)
-    });
+   // });
   };
 
   public feedbackBoxClass:string = '';
@@ -75,7 +75,7 @@ export class NewCandidateComponent implements OnInit {
   public feedbackBoxText:string = '';
 
 
-
+//this.open('feedbackBox', "Success",  true);
 
   public open(content:any, msg:string, success:boolean):void {
     
@@ -94,6 +94,13 @@ export class NewCandidateComponent implements OnInit {
    };
 
   this.modalService.open(this.content, options);
+  }
+
+    /**
+  *  Closes the confirm popup
+  */
+  public closeModal(): void {
+    this.modalService.dismissAll();
   }
 
 }

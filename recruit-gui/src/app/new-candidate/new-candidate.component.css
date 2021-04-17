@@ -47,3 +47,18 @@
     margin-top: 60px;
     font-weight: bold;
 }
+
+ .modal-header{
+     background:#181414;
+     color:#6A5ACD;
+     font-weight:bold;
+ }
+
+ .filter-close-box{
+     padding:10px;
+     cursor:pointer;
+     font-size:20px;
+     font-weight: bold;
+    text-align: right;
+        
+}
