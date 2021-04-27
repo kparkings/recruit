@@ -135,8 +135,8 @@ public class CandidateAPIInboundTest {
 		assertEquals(candidate.isAvailable(), 					available);
 		assertEquals(candidate.isFreelance(), 					freelance);
 		assertEquals(candidate.isPerm(), 						perm);
-		assertEquals(candidate.getLastAvailabilityCheckOn(), 	lastAvailabilityCheck);
-		assertEquals(candidate.getRegisteredOn(), 				registerd);
+		//assertEquals(candidate.getLastAvailabilityCheckOn(), 	lastAvailabilityCheck);
+		//assertEquals(candidate.getRegisteredOn(), 				registerd);
 		assertEquals(candidate.getYearsExperience(), 			yearsExperience);
 		
 		assertTrue(candidate.getSkills().contains(skill));

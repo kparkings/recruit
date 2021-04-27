@@ -43,7 +43,7 @@ export class ViewCandidatesComponent implements OnInit {
   }
 
   public previousPage(): void{
-    if ((this.currentPage - 1) > 0) {
+    if ((this.currentPage) > 0) {
       this.currentPage = this.currentPage - 1;
       this.fetchCandidates(false);
     }
@@ -52,11 +52,11 @@ export class ViewCandidatesComponent implements OnInit {
 
   public showNavPrev(): boolean{
     
-    if (this.totalPages === 0) {
+    if (this.totalPages === -1) {
       return false;
     }
 
-    return this.currentPage > 1;
+    return this.currentPage > 0;
 
   }
 
@@ -103,10 +103,8 @@ export class ViewCandidatesComponent implements OnInit {
 
 
       if (counter < 8) {
-        console.log('COUNTER A=> ' + counter);
         this.functionOptionsPage1.push(funcType);
       } else {
-        console.log('COUNTER B=> ' + counter);
         this.functionOptionsPage2.push(funcType);
       }
 
@@ -408,7 +406,7 @@ export class ViewCandidatesComponent implements OnInit {
       case 'candidateId':
       case 'country':
       case 'city':
-      case 'function':
+      case 'roleSought':
       case 'yearsExperience':{
         this.showSortOptons = true;
         console.log("T");
@@ -445,7 +443,7 @@ export class ViewCandidatesComponent implements OnInit {
 
   public isFilterFunctionActiveClass(): string{
     
-    if(this.sortColumn === 'function') {
+    if(this.sortColumn === 'roleSought') {
       return 'filterSelected';
     }
 

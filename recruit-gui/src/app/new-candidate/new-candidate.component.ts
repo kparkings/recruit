@@ -65,9 +65,9 @@ export class NewCandidateComponent implements OnInit {
   */
   public addCandidate(): void {
     //TODO: Convert Formbean to object before passing to Service
-   // this.candidateService.addCandidate(this.formBean).subscribe(d=>{
+    this.candidateService.addCandidate(this.formBean).subscribe(d=>{
       this.open('feedbackBox', "Success",  true)
-   // });
+    });
   };
 
   public feedbackBoxClass:string = '';
