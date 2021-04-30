@@ -1,6 +1,7 @@
 import { Component, OnInit }                              	from '@angular/core';
 import { ReactiveFormsModule, FormGroup, FormControl }    	from '@angular/forms';
 import { CandidateServiceService }                        	from '../candidate-service.service';
+import { CurriculumService }                        		from '../curriculum.service';
 import { CandidateFunction }                              	from '../candidate-function';
 import {NgbModal, NgbModalOptions, ModalDismissReasons}   	from '@ng-bootstrap/ng-bootstrap';
 import {TemplateRef, ViewChild,ElementRef, AfterViewInit  } from '@angular/core';
@@ -40,7 +41,7 @@ export class NewCandidateComponent implements OnInit {
   /**
   * Constructor
   */
-  constructor(private candidateService: CandidateServiceService , private modalService: NgbModal, private router: Router) {
+  constructor(private curriculumService: CurriculumService , private candidateService: CandidateServiceService , private modalService: NgbModal, private router: Router) {
     
     this.candidateService.loadFunctionTypes().forEach(funcType => {
       this.functionTypes.push(funcType);
@@ -54,9 +55,9 @@ export class NewCandidateComponent implements OnInit {
   ngOnInit(): void {
 
   //satrt
-    this.candidateService.authenticate().subscribe( data => {
-      console.log("Done");
-    });
+  //  this.candidateService.authenticate().subscribe( data => {
+   //   console.log("Done");
+    //});
     //end
 
   }
@@ -103,6 +104,24 @@ export class NewCandidateComponent implements OnInit {
   public closeModal(): void {
     this.modalService.dismissAll();
     this.router.navigate(['view-candidates']);
+  }
+  
+  private curriculumFile!:File;
+  
+  public uploadCurriculumFile(event:any):void{
+  
+  		if (event.target.files.length <= 0) {
+  			return;
+  		}
+  	
+  		this.curriculumFile = event.target.files[0];
+  
+  		console.log("file = " + this.curriculumFile);
+  		
+  		this.curriculumService.uploadCurriculum(this.curriculumFile).subscribe(d=>{
+      		console.log(d);
+    	});
+  		
   }
 
 }
