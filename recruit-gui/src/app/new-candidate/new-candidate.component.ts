@@ -1,9 +1,10 @@
-import { Component, OnInit }                              from '@angular/core';
-import { ReactiveFormsModule, FormGroup, FormControl }    from '@angular/forms';
-import { CandidateServiceService }                        from '../candidate-service.service';
-import { CandidateFunction }                              from '../candidate-function';
-import {NgbModal, NgbModalOptions, ModalDismissReasons}                    from '@ng-bootstrap/ng-bootstrap';
+import { Component, OnInit }                              	from '@angular/core';
+import { ReactiveFormsModule, FormGroup, FormControl }    	from '@angular/forms';
+import { CandidateServiceService }                        	from '../candidate-service.service';
+import { CandidateFunction }                              	from '../candidate-function';
+import {NgbModal, NgbModalOptions, ModalDismissReasons}   	from '@ng-bootstrap/ng-bootstrap';
 import {TemplateRef, ViewChild,ElementRef, AfterViewInit  } from '@angular/core';
+import { Router} 											from '@angular/router';
 
 @Component({
   selector: 'app-new-candidate',
@@ -39,7 +40,7 @@ export class NewCandidateComponent implements OnInit {
   /**
   * Constructor
   */
-  constructor(private candidateService: CandidateServiceService , private modalService: NgbModal) {
+  constructor(private candidateService: CandidateServiceService , private modalService: NgbModal, private router: Router) {
     
     this.candidateService.loadFunctionTypes().forEach(funcType => {
       this.functionTypes.push(funcType);
@@ -101,6 +102,7 @@ export class NewCandidateComponent implements OnInit {
   */
   public closeModal(): void {
     this.modalService.dismissAll();
+    this.router.navigate(['view-candidates']);
   }
 
 }
