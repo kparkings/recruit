@@ -3,6 +3,9 @@ package com.arenella.recruit.authentication.spring.filters;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -11,8 +14,10 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -62,10 +67,12 @@ public class SecRequestFilter extends OncePerRequestFilter {
 					}
 					
 					String username = this.jwtTokenUtil.getUsernameFromToken(token);
-				
-					PreAuthenticatedAuthenticationToken authToken = new PreAuthenticatedAuthenticationToken(username, new ArrayList<>());
-
-					authToken.setAuthenticated(true);
+					
+					Set<String> roleNames = this.jwtTokenUtil.getRoles(token);
+					
+					List<GrantedAuthority> roles = roleNames.stream().map(role -> new SimpleGrantedAuthority(role)).collect(Collectors.toList());
+					
+					UsernamePasswordAuthenticationToken  authToken = new UsernamePasswordAuthenticationToken(username, "", roles);
 					
 					SecurityContextHolder.getContext().setAuthentication(authToken);
 					

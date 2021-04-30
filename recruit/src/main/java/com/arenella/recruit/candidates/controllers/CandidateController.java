@@ -1,9 +1,7 @@
 package com.arenella.recruit.candidates.controllers;
 
 import java.io.ByteArrayOutputStream;
-import java.util.LinkedHashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,9 +12,9 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -50,6 +48,7 @@ public class CandidateController {
 	* @param candidate - Contains candidate details
 	* @return id of the candidate
 	*/
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@PostMapping(path="candidate", consumes="application/json", produces="application/json")
 	public void addCandidate(@RequestBody CandidateAPIInbound candidate) {
 		candidateService.persistCandidate(CandidateAPIInbound.convertToCandidate(candidate));

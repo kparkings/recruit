@@ -1,10 +1,14 @@
 package com.arenella.recruit.authentication.utils;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.Cookie;
 
@@ -70,6 +74,25 @@ public class JwtTokenUtil implements Serializable{
 	}
 	
 	/**
+	* Extracts roles from the token
+	* @param token - contains role information
+	* @return roles assigned to the user
+	*/
+	public Set<String> getRoles(String token){
+		
+		Claims claims = this.getAllClaimsFromToken(token);
+		
+		String roles = claims.get("ROLES", String.class);
+		
+		if (roles.isBlank()) {
+			return new HashSet<>();
+		}
+		
+		return Arrays.asList(roles.split(",")).stream().collect(Collectors.toSet());
+		
+	}
+	
+	/**
 	* Returns all the Claims in the Token 
 	* @param token - Token containing claims
 	* @return claims
@@ -99,7 +122,7 @@ public class JwtTokenUtil implements Serializable{
 	public String generateToken(UserDetails userDetails) {
 		Map<String,Object> claims = new HashMap<>();
 		
-		claims.put("KPTEST", "KPALUE");
+		claims.put("ROLES", String.join(",", userDetails.getAuthorities().stream().map(auth -> auth.getAuthority()).collect(Collectors.toSet())));
 		
 		return Jwts.builder().setClaims(claims)
 							.setSubject(userDetails.getUsername())
