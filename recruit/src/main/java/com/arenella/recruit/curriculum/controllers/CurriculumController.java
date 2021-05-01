@@ -1,4 +1,4 @@
-package com.arenella.recruit.curriculum;
+package com.arenella.recruit.curriculum.controllers;
 
 import java.io.ByteArrayOutputStream;
 
@@ -25,7 +25,7 @@ public class CurriculumController {
 		
 		testCurriculum = fileBytes;
 		
-		return "Id";
+		return "{'id':'1'}";
 		
 	}
 	

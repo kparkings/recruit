@@ -9,6 +9,7 @@ import { catchError, retry }                      from 'rxjs/operators';
 import { NewCandidate }                           from './new-candidate/new-candidate';
 import { Language}                                from './new-candidate/language';
 import { CandidateFunction }                      from './candidate-function';
+import { environment }                                                                from './../environments/environment';
 
 /**
 * Services for new Candidates
@@ -31,19 +32,22 @@ export class CandidateServiceService {
   * Returns a list of available Candidates 
   */
   public getCandidates(filterParams:string): Observable<any>{
-    return this.httpClient.get<any>('http://127.0.0.1:8080/candidate'+'?'+filterParams, this.httpOptions);
+      
+      const backendUrl:string = environment.backendUrl +'candidate?'+filterParams;
+  
+    return this.httpClient.get<any>(backendUrl, this.httpOptions);
   }
 
   /**
   * Authenticates a User with the System 
   */
-  public authenticate(): Observable<any>{
+  //public authenticate(): Observable<any>{
 
-     const authDetails: any = {'username':'javainuse', 'password': 'password'};
+     //const authDetails: any = {'username':'javainuse', 'password': 'password'};
 
-     return this.httpClient.post<any>('http://127.0.0.1:8080/authenticate', authDetails, this.httpOptions);
+     //return this.httpClient.post<any>('http://127.0.0.1:8080/authenticate', authDetails, this.httpOptions);
 
-  }
+  //}
 
   /**
   * Adds a new Candidate 
@@ -101,7 +105,9 @@ export class CandidateServiceService {
       newCandidate.skills.push(skillToken);
     });
 
-    return this.httpClient.post<any>('http://127.0.0.1:8080/candidate', JSON.stringify(newCandidate), this.httpOptions);
+    const backendUrl:string = environment.backendUrl +'candidate';
+    
+    return this.httpClient.post<any>(backendUrl, JSON.stringify(newCandidate), this.httpOptions);
 
   }
 

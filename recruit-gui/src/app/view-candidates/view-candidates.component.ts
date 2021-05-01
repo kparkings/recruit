@@ -1,9 +1,10 @@
-import { Component, OnInit }                              from '@angular/core';
-import { CandidateServiceService }                        from '../candidate-service.service';
-import { Candidate }                                      from './candidate';
-import { CandidateFunction }                              from '../candidate-function';
-import {NgbModal, ModalDismissReasons}                    from '@ng-bootstrap/ng-bootstrap';
-import { ReactiveFormsModule, FormGroup, FormControl }    from '@angular/forms';
+import { Component, OnInit }                                                    from '@angular/core';
+import { CandidateServiceService }                                           from '../candidate-service.service';
+import { Candidate }                                                                   from './candidate';
+import { CandidateFunction }                                                     from '../candidate-function';
+import {NgbModal, ModalDismissReasons}                              from '@ng-bootstrap/ng-bootstrap';
+import {  FormGroup, FormControl }                                          from '@angular/forms';
+import { environment }                                                                from '../../environments/environment';
 
 @Component({
   selector: 'app-view-candidates',
@@ -12,23 +13,23 @@ import { ReactiveFormsModule, FormGroup, FormControl }    from '@angular/forms';
 })
 export class ViewCandidatesComponent implements OnInit {
 
-  public functionTypes: Array<CandidateFunction>  = new Array<CandidateFunction>();
-  public candidates:    Array<Candidate>          = new Array<Candidate>();
+  public functionTypes: Array<CandidateFunction>    = new Array<CandidateFunction>();
+  public candidates:    Array<Candidate>                    = new Array<Candidate>();
 
   /**
   * Filters
   */
-  public  activeFilter: string                = '';
-  private sortColumn:  string                 = 'candidateId';
-  private sortOrder: string                   = 'desc'
-  public  showSortOptons: boolean             = false;
-  public  selectedSortOrderForFilter: string  = '';
-  public  countryFiltNL: boolean              = false;
-  public  countryFiltBE: boolean              = false;
-  public  countryFiltUK: boolean              = false;
-  private pageSize:number                     = 8;
-  public  totalPages:number                   = 0;
-  public  currentPage:number                  = 0;
+  public  activeFilter: string                                = '';
+  private sortColumn:  string                              = 'candidateId';
+  private sortOrder: string                                  = 'desc'
+  public  showSortOptons: boolean                  = false;
+  public  selectedSortOrderForFilter: string      = '';
+  public  countryFiltNL: boolean                       = false;
+  public  countryFiltBE: boolean                       = false;
+  public  countryFiltUK: boolean                      = false;
+  private pageSize:number                               = 8;
+  public  totalPages:number                             = 0;
+  public  currentPage:number                           = 0;
 
   public functionOptionsPage1: Array<CandidateFunction> = new Array<CandidateFunction>();
   public functionOptionsPage2: Array<CandidateFunction> = new Array<CandidateFunction>();
@@ -294,10 +295,12 @@ export class ViewCandidatesComponent implements OnInit {
   }
 
   /**
-  * Returns the url to perform the download of the filterable candidate list
+  *  Returns the url to perform the download of the filterable candidate list
   */
   public getCandidateDownloadUrl(){
-    return 'http://127.0.0.1:8080/candidate/download?' + this.getCandidateFilterParamString();
+      
+      return  environment.backendUrl + 'candidate/download?'+ this.getCandidateFilterParamString();
+  
   }
 
   /**
