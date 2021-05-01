@@ -14,7 +14,7 @@
 						<div class="row rowadduser">
 							<div class="col hdr_label">Curriculum</div>
 							<div class="col">
-								<input type="file" (change)="uploadCurriculumFile($event)">
+								<input type="file" style="padding-right:45px" (change)="uploadCurriculumFile($event)">
 							</div>
 						</div>
 						
@@ -41,7 +41,7 @@
 						<div class="row rowadduser">
 							<div class="col hdr_label">Country</div>
 							<div class="col">
-								<select class="inpt-tab-std" formControlName="country">
+								<select class="inpt-tab-std" formControlName="country" (change)="updateCountry()">
 									<option>NETHERLANDS</option>
 									<option>BELGIUM</option>
 									<option>UK</option>
@@ -58,9 +58,9 @@
 							<div class="col hdr_label">Dutch</div>
 								<div class="col">
 									<select class="inpt-tab-std" formControlName="dutch">
-										<option>No</option>
-										<option>Yes</option>
-										<option>Basic</option>
+										<option value="NO">No</option>
+										<option value="YES">Yes</option>
+										<option value="BASIC">Basic</option>
 									</select>
 								</div>
 						</div>
@@ -70,9 +70,9 @@
 							<div class="col hdr_label">English</div>
 								<div class="col">
 									<select class="inpt-tab-std" formControlName="english">
-										<option>No</option>
-										<option>Yes</option>
-										<option>Basic</option>
+										<option value="NO">No</option>
+										<option value="YES">Yes</option>
+										<option value="BASIC">Basic</option>
 									</select>
 								</div>
 
@@ -83,9 +83,9 @@
 							<div class="col hdr_label">French</div>
 								<div class="col">
 									<select class="inpt-tab-std" formControlName="french">
-										<option>No</option>
-										<option>Yes</option>
-										<option>Basic</option>
+										<option value="NO">No</option>
+										<option value="YES">Yes</option>
+										<option value="BASIC">Basic</option>
 									</select>
 								</div>
 
