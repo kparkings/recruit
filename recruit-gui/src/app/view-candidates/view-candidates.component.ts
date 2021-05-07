@@ -13,8 +13,9 @@ import { environment }                                                          
 })
 export class ViewCandidatesComponent implements OnInit {
 
-  public functionTypes: Array<CandidateFunction>    = new Array<CandidateFunction>();
-  public candidates:    Array<Candidate>                    = new Array<Candidate>();
+  public functionTypes:                                 Array<CandidateFunction>        = new Array<CandidateFunction>();
+  public candidates:                                     Array<Candidate>                       = new Array<Candidate>();
+  public yearsExperienceOptions:               Array<number>                            = new Array<number>();
 
   /**
   * Filters
@@ -90,16 +91,24 @@ export class ViewCandidatesComponent implements OnInit {
   public permFilterForm: FormGroup = new FormGroup({
     include:  new FormControl('false'),
   });
+  
+  public yearsExperienceFilterForm:FormGroup = new FormGroup({
+      yearsExperienceGtEq: new FormControl(''),
+      yearsExperienceLtEq: new FormControl('')
+  });
 
   /**
   * Constructor
   */
   constructor(public candidateService:CandidateServiceService, private modalService: NgbModal) {
 
+    this.getYearsExperienceOption();
+      
     let counter:number = 0;
 
     this.candidateService.loadFunctionTypes().forEach(funcType => {
-      this.functionTypes.push(funcType);
+
+        this.functionTypes.push(funcType);
       this.functionTypeFilterForm.addControl(funcType.id, new FormControl(''));
 
 
@@ -213,7 +222,8 @@ export class ViewCandidatesComponent implements OnInit {
                                                          + this.getCountryFilterParamString() 
                                                          + this.getFunctionTypeFilterParamString()
                                                          + this.getPermFilterParamString()
-                                                         + this.getFreelanceFilterParamString();
+                                                         + this.getFreelanceFilterParamString()
+                                                         + this.getYearsExperienceFilterParamAsString();
     return filterParams;
   }
 
@@ -228,6 +238,33 @@ export class ViewCandidatesComponent implements OnInit {
       }
 
       return '&perm=false';
+  }
+  
+  private getYearsExperienceFilterParamAsString(): string{
+      
+      let values:string = '';
+  
+      if (this.yearsExperienceFilterForm.get('yearsExperienceGtEq')?.value.length > 0 ) {
+          values = values  + '&yearsExperienceGtEq=' + this.yearsExperienceFilterForm.get('yearsExperienceGtEq')?.value;
+      }
+      
+      if (this.yearsExperienceFilterForm.get('yearsExperienceLtEq')?.value.length > 0) {
+          values = values  + '&yearsExperienceLtEq=' + this.yearsExperienceFilterForm.get('yearsExperienceLtEq')?.value;
+      }
+  
+      return values;
+      
+  }
+  
+  public getYearsExperienceOption():void{
+  
+      let i:number = 1;
+  
+      while(i <= 100) {
+          this.yearsExperienceOptions.push(i);''
+          i = i + 1;
+      }
+      
   }
 
     /**
@@ -459,7 +496,17 @@ export class ViewCandidatesComponent implements OnInit {
   }
 
   public isFilterYearsExperienceActiveClass(): string{
-    return this.sortColumn === 'yearsExperience' ? 'filterSelected' : '';
+      
+      if (this.yearsExperienceFilterForm.get('yearsExperienceGtEq')?.value.length > 0) {
+          return 'filterSelected';
+      }
+      
+      if (this.yearsExperienceFilterForm.get('yearsExperienceLtEq')?.value.length > 0 ) {
+          return 'filterSelected';
+      }
+   
+      return this.sortColumn === 'yearsExperience' ? 'filterSelected' : '';
+      
   }
 
   public isFilterPermActiveClass(): string{
@@ -482,7 +529,6 @@ export class ViewCandidatesComponent implements OnInit {
 
       return '';
   }
-
 
   /**
   * Resets the filters to their initial state
@@ -513,6 +559,11 @@ export class ViewCandidatesComponent implements OnInit {
 
     this.freelanceFilterForm = new FormGroup({
       include:  new FormControl('false')
+    });
+    
+    this.yearsExperienceFilterForm = new FormGroup({
+        yearsExperienceGtEq: new FormControl(''),
+        yearsExperienceLtEq: new FormControl('')
     });
 
     this.functionTypeFilterForm = new FormGroup({});

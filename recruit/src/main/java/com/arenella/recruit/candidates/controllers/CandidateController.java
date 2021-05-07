@@ -64,6 +64,7 @@ public class CandidateController {
 	* @param freelance				- Optional freelance value to filter on
 	* @param perm					- Optional perm value to filter on
 	* @param yearsExperienceGtEq	- Optional years experience value to filter on
+	* @param yearsExperienceGtEq	- Optional years experience value to filter on
 	* @param dutch					- Optional Dutch language proficiency value to filter on 
 	* @param english				- Optional English language proficiency value to filter on
 	* @param french					- Optional French language proficiency value to filter on
@@ -79,6 +80,7 @@ public class CandidateController {
 													@RequestParam(required = false) 	Boolean 			freelance,
 													@RequestParam(required = false) 	Boolean 			perm,
 													@RequestParam(required = false) 	Integer				yearsExperienceGtEq,
+													@RequestParam(required = false) 	Integer				yearsExperienceLtEq,
 													@RequestParam(required = false) 	Language.LEVEL 		dutch,
 													@RequestParam(required = false) 	Language.LEVEL 		english,
 													@RequestParam(required = false) 	Language.LEVEL 		french,
@@ -96,6 +98,7 @@ public class CandidateController {
 													.freelance(freelance)
 													.perm(perm)
 													.yearsExperienceGtEq(yearsExperienceGtEq)
+													.yearsExperienceLtEq(yearsExperienceLtEq)
 													.dutch(dutch)
 													.english(english)
 													.french(french)
@@ -117,6 +120,7 @@ public class CandidateController {
 	* @param freelance				- Optional freelance value to filter on
 	* @param perm					- Optional perm value to filter on
 	* @param yearsExperienceGtEq	- Optional years experience value to filter on
+	* @param yearsExperienceLtEq	- Optional years experience value to filter on
 	* @param dutch					- Optional Dutch language proficiency value to filter on 
 	* @param english				- Optional English language proficiency value to filter on
 	* @param french					- Optional French language proficiency value to filter on
@@ -132,6 +136,7 @@ public class CandidateController {
 																@RequestParam(required = false) 	Boolean 			freelance,
 																@RequestParam(required = false) 	Boolean 			perm,
 																@RequestParam(required = false) 	Integer				yearsExperienceGtEq,
+																@RequestParam(required = false) 	Integer				yearsExperienceLtEq,
 																@RequestParam(required = false) 	Language.LEVEL 		dutch,
 																@RequestParam(required = false) 	Language.LEVEL 		english,
 																@RequestParam(required = false) 	Language.LEVEL 		french,
@@ -147,6 +152,7 @@ public class CandidateController {
 				.freelance(freelance)
 				.perm(perm)
 				.yearsExperienceGtEq(yearsExperienceGtEq)
+				.yearsExperienceLtEq(yearsExperienceLtEq)
 				.dutch(dutch)
 				.english(english)
 				.french(french)

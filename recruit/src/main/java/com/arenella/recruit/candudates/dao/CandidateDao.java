@@ -35,7 +35,7 @@ public interface CandidateDao extends CrudRepository<CandidateEntity, String>, J
 	public default Page<CandidateEntity> findAll(CandidateFilterOptions filterOptions, Pageable pageable) {
 		
 		//START
-		Page<CandidateEntity> ce = this.findAll(new FilterSpecification(filterOptions), pageable);
+		//Page<CandidateEntity> ce = this.findAll(new FilterSpecification(filterOptions), pageable);
 		
 		
 		//END
@@ -114,7 +114,12 @@ public interface CandidateDao extends CrudRepository<CandidateEntity, String>, J
 			
 			if (this.filterOptions.getYearsExperienceGtEq() > 0 ) {
 				Expression<Integer> yearsExperienceExpression 	= root.get("yearsExperience");
-				predicates.add(criteriaBuilder.greaterThanOrEqualTo(yearsExperienceExpression, 21));
+				predicates.add(criteriaBuilder.greaterThanOrEqualTo(yearsExperienceExpression, this.filterOptions.getYearsExperienceGtEq()));
+			}
+			
+			if (this.filterOptions.getYearsExperienceLtEq() > 0 ) {
+				Expression<Integer> yearsExperienceExpression 	= root.get("yearsExperience");
+				predicates.add(criteriaBuilder.lessThanOrEqualTo(yearsExperienceExpression, this.filterOptions.getYearsExperienceLtEq()));
 			}
 			
 			//predicates.add(criteriaBuilder.equal(cityExpression, 		"Noordwijk"));

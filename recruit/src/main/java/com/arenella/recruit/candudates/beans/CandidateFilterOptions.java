@@ -23,6 +23,7 @@ public class CandidateFilterOptions {
 	private boolean 		freelance				= true;
 	private boolean 		perm					= true;
 	private int 			yearsExperienceGtEq;
+	private int				yearsExperienceLtEq;
 	private Language.LEVEL 	dutch;
 	private Language.LEVEL 	english;
 	private Language.LEVEL 	french;
@@ -42,6 +43,7 @@ public class CandidateFilterOptions {
 		this.freelance 						= builder.freelance;
 		this.perm 							= builder.perm;
 		this.yearsExperienceGtEq 			= builder.yearsExperienceGtEq;
+		this.yearsExperienceLtEq			= builder.yearsExperienceLtEq;
 		this.dutch							= builder.dutch;
 		this.english						= builder.english;
 		this.french							= builder.french;
@@ -114,6 +116,15 @@ public class CandidateFilterOptions {
 	}
 	
 	/**
+	* Filters on candidates to exclude those with more 
+	* than the specified number of years experience
+	* @return maximum number of years experience to filter on
+	*/
+	public int getYearsExperienceLtEq() {
+		return this.yearsExperienceLtEq;
+	}
+	
+	/**
 	* Returns the level of Dutch to filter on
 	* @return Candidates level in Dutch
 	*/
@@ -167,6 +178,7 @@ public class CandidateFilterOptions {
 		private boolean 		freelance				= true;
 		private boolean 		perm					= true;
 		private int 			yearsExperienceGtEq;
+		private int				yearsExperienceLtEq;
 		private Language.LEVEL 	dutch;
 		private Language.LEVEL 	english;
 		private Language.LEVEL 	french;
@@ -262,6 +274,21 @@ public class CandidateFilterOptions {
 		public CandidateFilterOptionsBuilder yearsExperienceGtEq(Integer yearsExperienceGtEq) {
 			if (Optional.ofNullable(yearsExperienceGtEq).isPresent()) {
 				this.yearsExperienceGtEq = yearsExperienceGtEq;
+			}
+			return this;
+		
+		
+		}
+		
+		/**
+		* Sets maximum number of years experience the candidate can have 
+		* to be included in the results
+		* @param yearsExperienceLtEq - Maximum number of years experience
+		* @return Builder
+		*/
+		public CandidateFilterOptionsBuilder yearsExperienceLtEq(Integer yearsExperienceLtEq) {
+			if (Optional.ofNullable(yearsExperienceLtEq).isPresent()) {
+				this.yearsExperienceLtEq = yearsExperienceLtEq;
 			}
 			return this;
 		}

@@ -224,6 +224,32 @@
             </div>
           </div>
           
+           <div  *ngSwitchCase="'yearsExperience'">
+            <div class="row">
+              <div class="col">
+                <label class="modal-label">Years Experience</label>
+              </div>
+              <div class="col">
+                <form [formGroup]="yearsExperienceFilterForm">
+                  <div>
+                  	<label>Greater than or equal to</label>
+                    <select class="inpt-tab-std" formControlName="yearsExperienceGtEq" (change)="updateFilters()" size="4">
+						<option value=""></option>
+						<option *ngFor="let opt of yearsExperienceOptions" value="{{opt}}">{{opt}}</option>
+					</select>
+                  </div>
+                  <div>
+                  	<label>Less than or equal to</label>
+                    <select class="inpt-tab-std" formControlName="yearsExperienceLtEq" (change)="updateFilters()" size="4">
+						<option value=""></option>
+						<option *ngFor="let opt of yearsExperienceOptions" value="{{opt}}">{{opt}}</option>
+					</select>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+          
 
         </div>
 
