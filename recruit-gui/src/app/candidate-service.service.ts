@@ -1,11 +1,7 @@
-// tslint:disable: no-trailing-whitespace
-// tslint:disable: jsdoc-format
-// tslint:disable: import-spacing
 import { Injectable }                             from '@angular/core';
 import { FormGroup }                              from '@angular/forms';
 import { HttpClient, HttpResponse, HttpHeaders }  from '@angular/common/http';
 import { Observable, throwError }                 from 'rxjs';
-import { catchError, retry }                      from 'rxjs/operators';
 import { NewCandidate }                           from './new-candidate/new-candidate';
 import { Language}                                from './new-candidate/language';
 import { CandidateFunction }                      from './candidate-function';
@@ -39,65 +35,53 @@ export class CandidateServiceService {
   }
 
   /**
-  * Authenticates a User with the System 
-  */
-  //public authenticate(): Observable<any>{
-
-     //const authDetails: any = {'username':'javainuse', 'password': 'password'};
-
-     //return this.httpClient.post<any>('http://127.0.0.1:8080/authenticate', authDetails, this.httpOptions);
-
-  //}
-
-  /**
   * Adds a new Candidate 
   */
   public addCandidate(formBean:FormGroup): Observable<any>{
 
     const newCandidate:NewCandidate = new NewCandidate();
 
-    newCandidate.candidateId      = formBean.get('candidateId')?.value;
-    newCandidate.firstname        = formBean.get('firstname')?.value;
-    newCandidate.surname          = formBean.get('surname')?.value;
-    newCandidate.email            = formBean.get('email')?.value;
-    newCandidate.country          = formBean.get('country')?.value;
-    newCandidate.city             = formBean.get('city')?.value;
-    newCandidate.perm             = formBean.get('perm')?.value;
-    newCandidate.freelance        = formBean.get('freelance')?.value;
-    newCandidate.yearsExperience  = formBean.get('yearsExperience')?.value;
-    newCandidate.function         = formBean.get('function')?.value;
-    newCandidate.roleSought       = formBean.get('roleSought')?.value;
+    newCandidate.candidateId           = formBean.get('candidateId')?.value;
+    newCandidate.firstname               = formBean.get('firstname')?.value;
+    newCandidate.surname                = formBean.get('surname')?.value;
+    newCandidate.email                     = formBean.get('email')?.value;
+    newCandidate.country                  = formBean.get('country')?.value;
+    newCandidate.city                        = formBean.get('city')?.value;
+    newCandidate.perm                     = formBean.get('perm')?.value;
+    newCandidate.freelance              = formBean.get('freelance')?.value;
+    newCandidate.yearsExperience   = formBean.get('yearsExperience')?.value;
+    newCandidate.function                = formBean.get('function')?.value;
+    newCandidate.roleSought           = formBean.get('roleSought')?.value;
+    const langDutch: string                 = formBean.get('dutch')?.value;
+    const langFrench: string                = formBean.get('french')?.value;
+    const langEnglish: string               = formBean.get('english')?.value;
 
-    const langDutch: string       = formBean.get('dutch')?.value;
-    const langFrench: string      = formBean.get('french')?.value;
-    const langEnglish: string     = formBean.get('english')?.value;
-
-    if (langDutch === 'Yes') {
+    if (langDutch === 'YES') {
       newCandidate.languages.push(new Language('DUTCH', 'PROFICIENT'));
     }
     
-    if (langDutch === 'Basic') {
+    if (langDutch === 'BASIC') {
       newCandidate.languages.push(new Language('DUTCH', 'BASIC'));
     }
     
-    if (langFrench === 'Yes') {
+    if (langFrench === 'YES') {
       newCandidate.languages.push(new Language('FRENCH', 'PROFICIENT'));
     }
     
-    if (langFrench === 'Basic') {
+    if (langFrench === 'BASIC') {
       newCandidate.languages.push(new Language('FRENCH', 'BASIC'));
     }
         
-    if (langEnglish === 'Yes') {
+    if (langEnglish === 'YES') {
       newCandidate.languages.push(new Language('ENGLISH', 'PROFICIENT'));
     }
     
-    if (langEnglish === 'Basic') {
+    if (langEnglish === 'BASIC') {
       newCandidate.languages.push(new Language('ENGLISH', 'BASIC'));
     }
     
-    const skills                       = formBean.get('skills')?.value ? formBean.get('skills')?.value : '';
-    const skillTokens: Array<string>   = skills.split(',');
+    const skills                                        = formBean.get('skills')?.value ? formBean.get('skills')?.value : '';
+    const skillTokens: Array<string>      = skills.split(',');
     
     newCandidate.skills = new Array<string>();
 

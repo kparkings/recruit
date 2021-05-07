@@ -120,7 +120,7 @@ export class NewCandidateComponent implements OnInit {
   public selectOptionLangFrench:string = '';
  
   public isSelected(language:string):void{
-      console.log("XXX1");
+      
       switch(language) {
           case 'dutch':{
            //   this.selectOptionLangDutch = this.formBean.get('dutch')!.value;
