@@ -92,6 +92,18 @@ export class ViewCandidatesComponent implements OnInit {
     include:  new FormControl('false'),
   });
   
+  public dutchFilterForm: FormGroup = new FormGroup({
+      level: new FormControl(''),
+    });
+  
+  public frenchFilterForm: FormGroup = new FormGroup({
+      level:  new FormControl(''),
+    });
+  
+  public englishFilterForm: FormGroup = new FormGroup({
+      level:  new FormControl(''),
+    });
+  
   public yearsExperienceFilterForm:FormGroup = new FormGroup({
       yearsExperienceGtEq: new FormControl(''),
       yearsExperienceLtEq: new FormControl('')
@@ -209,7 +221,7 @@ export class ViewCandidatesComponent implements OnInit {
       return '';
 
   }
-
+  
   /**
   * Builds a query parameter string with the selected filter options
   */
@@ -223,10 +235,49 @@ export class ViewCandidatesComponent implements OnInit {
                                                          + this.getFunctionTypeFilterParamString()
                                                          + this.getPermFilterParamString()
                                                          + this.getFreelanceFilterParamString()
-                                                         + this.getYearsExperienceFilterParamAsString();
+                                                         + this.getYearsExperienceFilterParamAsString()
+                                                         +this.getDutchParamString()
+                                                         +this.getFrenchParamString()
+                                                         +this.getEnglishParamString();
     return filterParams;
   }
-
+  
+  /**
+  * Creates a query param string with the filter options to apply to the dutch languge filter
+  */
+  private getDutchParamString():string{
+  
+      if (this.dutchFilterForm.get('level')?.value.length > 0 ) {
+          return  '&dutch=' + this.dutchFilterForm.get('level')?.value;
+      }
+  
+      return '';
+  }
+  
+  /**
+   * Creates a query param string with the filter options to apply to the french languge filter
+   */
+   private getFrenchParamString():string{
+   
+       if (this.frenchFilterForm.get('level')?.value.length > 0 ) {
+           return  '&french=' + this.frenchFilterForm.get('level')?.value;
+       }
+   
+       return '';
+   }
+   
+   /**
+    * Creates a query param string with the filter options to apply to the english  languge filter
+    */
+    private getEnglishParamString():string{
+    
+        if (this.englishFilterForm.get('level')?.value.length > 0 ) {
+            return  '&english=' + this.englishFilterForm.get('level')?.value;
+        }
+    
+        return '';
+    }
+ 
 
   /**
   * Creates a query param string with the filter options to apply to the perm
@@ -529,6 +580,41 @@ export class ViewCandidatesComponent implements OnInit {
 
       return '';
   }
+    
+    public isFilterFrenchActiveClass(): string{
+
+        const frenchVal: any = this.frenchFilterForm.get('level')?.value;
+
+        if (frenchVal.length > 0) {
+          return 'filterSelected';
+        }
+
+        return '';
+    }
+
+    public isFilterEnglishActiveClass(): string{
+
+        const englishVal: any = this.englishFilterForm.get('level')?.value;
+
+        if (englishVal.length > 0) {
+          return 'filterSelected';
+        }
+
+        return '';
+    }
+    
+    public isFilterDutchActiveClass(): string{
+
+        const dutchVal: any = this.dutchFilterForm.get('level')?.value;
+
+        if (dutchVal.length > 0) {
+          return 'filterSelected';
+        }
+
+        return '';
+    }
+    
+    
 
   /**
   * Resets the filters to their initial state
@@ -571,6 +657,18 @@ export class ViewCandidatesComponent implements OnInit {
     this.functionTypes.forEach(funcType => {
       this.functionTypeFilterForm.addControl(funcType.id,new FormControl(''));
     });
+    
+    this.dutchFilterForm = new FormGroup({
+        level: new FormControl(''),
+      });
+    
+    this.frenchFilterForm = new FormGroup({
+        level:  new FormControl(''),
+      });
+    
+    this.englishFilterForm = new FormGroup({
+        level:  new FormControl(''),
+      });
 
     this.fetchCandidates(true);
 

@@ -1,11 +1,15 @@
 package com.arenella.recruit.candudates.dao;
 
 import java.util.ArrayList;
+import com.arenella.recruit.candidates.entities.LanguageEntity;
 import java.util.List;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Expression;
+import javax.persistence.criteria.Fetch;
+import javax.persistence.criteria.Join;
+import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
@@ -20,6 +24,8 @@ import com.arenella.recruit.candidates.enums.FREELANCE;
 import com.arenella.recruit.candidates.enums.PERM;
 import com.arenella.recruit.candidates.enums.RESULT_ORDER;
 import com.arenella.recruit.candudates.beans.CandidateFilterOptions;
+import com.arenella.recruit.candudates.beans.Language.LANGUAGE;
+import com.arenella.recruit.candudates.beans.Language.LEVEL;
 
 /**
 * Defines DAO functions for interacting with CandidateEntity objects
@@ -82,7 +88,54 @@ public interface CandidateDao extends CrudRepository<CandidateEntity, String>, J
 			//Expression<String> frenchExpression 			= root.get("perm");
 			//Expression<String> skillsExpression 			= root.get("perm");
 			
+			
+			//Expression<String> dutchExpression 			= root.get("languages.level");
+			
+			
+			
+			
 			List<Predicate> predicates = new ArrayList<>();
+			
+			//START
+			
+			
+			
+			//todo: make distinct
+			
+			if (!this.filterOptions.getDutch().isEmpty()) {
+				Join<CandidateEntity,LanguageEntity> dutchJoin = root.join("languages", JoinType.INNER);
+				
+				dutchJoin.on(criteriaBuilder.and(
+							criteriaBuilder.equal(dutchJoin.get("id").get("language"), LANGUAGE.DUTCH),
+							criteriaBuilder.equal(dutchJoin.get("level"), this.filterOptions.getDutch().get())
+						));
+			}
+			
+			if (!this.filterOptions.getFrench().isEmpty()) {
+				Join<CandidateEntity,LanguageEntity> frenchJoin = root.join("languages", JoinType.INNER);
+				
+				frenchJoin.on(criteriaBuilder.and(
+							criteriaBuilder.equal(frenchJoin.get("id").get("language"), LANGUAGE.FRENCH),
+							criteriaBuilder.equal(frenchJoin.get("level"), this.filterOptions.getFrench().get())
+						));
+			}
+			
+			if (!this.filterOptions.getEnglish().isEmpty()) {
+				Join<CandidateEntity,LanguageEntity> frenchJoin = root.join("languages", JoinType.INNER);
+				
+				frenchJoin.on(criteriaBuilder.and(
+							criteriaBuilder.equal(frenchJoin.get("id").get("language"), LANGUAGE.ENGLISH),
+							criteriaBuilder.equal(frenchJoin.get("level"), this.filterOptions.getEnglish().get())
+						));
+			}
+			
+			//Join j1 = root.join("languages").join("id").join("language").in(LANGUAGE.DUTCH);
+			//Join j2 = root.join("languages").join("level").in(LEVEL.PROFICIENT);
+			
+			//predicates.add(j1);
+			//predicates.add(j2);
+			
+			//END
 			
 			
 			if (!this.filterOptions.getCandidateIds().isEmpty()) {
