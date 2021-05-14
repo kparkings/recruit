@@ -9,14 +9,14 @@ import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 
+import com.arenella.recruit.candidates.beans.Candidate;
+import com.arenella.recruit.candidates.beans.Language;
+import com.arenella.recruit.candidates.beans.Language.LANGUAGE;
+import com.arenella.recruit.candidates.beans.Language.LEVEL;
 import com.arenella.recruit.candidates.enums.COUNTRY;
 import com.arenella.recruit.candidates.enums.FREELANCE;
 import com.arenella.recruit.candidates.enums.FUNCTION;
 import com.arenella.recruit.candidates.enums.PERM;
-import com.arenella.recruit.candudates.beans.Candidate;
-import com.arenella.recruit.candudates.beans.Language;
-import com.arenella.recruit.candudates.beans.Language.LANGUAGE;
-import com.arenella.recruit.candudates.beans.Language.LEVEL;
 
 /**
 * Unit test for the Candidate Class

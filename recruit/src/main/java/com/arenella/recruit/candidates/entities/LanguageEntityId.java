@@ -7,7 +7,7 @@ import javax.persistence.Embeddable;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 
-import com.arenella.recruit.candudates.beans.Language.LANGUAGE;
+import com.arenella.recruit.candidates.beans.Language.LANGUAGE;
 
 /**
 * Composite key for the LanguageEntity class

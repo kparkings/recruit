@@ -7,11 +7,11 @@ import java.util.Set;
 
 import org.junit.Test;
 
+import com.arenella.recruit.candidates.beans.CandidateFilterOptions;
+import com.arenella.recruit.candidates.beans.Language;
 import com.arenella.recruit.candidates.enums.COUNTRY;
 import com.arenella.recruit.candidates.enums.FUNCTION;
 import com.arenella.recruit.candidates.enums.RESULT_ORDER;
-import com.arenella.recruit.candudates.beans.CandidateFilterOptions;
-import com.arenella.recruit.candudates.beans.Language;
 
 /**
 * Unit tests for the CandidateFilterOptions class

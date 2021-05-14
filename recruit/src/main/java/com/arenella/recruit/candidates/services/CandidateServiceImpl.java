@@ -10,10 +10,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.arenella.recruit.candidates.beans.Candidate;
+import com.arenella.recruit.candidates.beans.CandidateFilterOptions;
+import com.arenella.recruit.candidates.dao.CandidateDao;
 import com.arenella.recruit.candidates.entities.CandidateEntity;
-import com.arenella.recruit.candudates.beans.Candidate;
-import com.arenella.recruit.candudates.beans.CandidateFilterOptions;
-import com.arenella.recruit.candudates.dao.CandidateDao;
 
 /**
 * Provides services related to Candidates

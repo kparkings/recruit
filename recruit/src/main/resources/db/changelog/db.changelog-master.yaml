@@ -220,4 +220,27 @@ databaseChangeLog:
             referencedTableSchemaName: users
             referencedColumnNames: username  
 
-            
+  - changeSet:
+      id: curriculum_tables
+      author: kparkings
+      changes:
+        - createTable:
+            tableName: curriculum
+            schemaName: curriculum
+            columns:
+              - column:
+                  name: id
+                  type: number
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: file_type
+                  type: varchar
+                  constraints:
+                    nullable: false
+              - column:
+                  name: file_bytes
+                  type: bytea
+                  constraints:
+                    nullable: false

@@ -1,4 +1,4 @@
-package com.arenella.recruit.candudates.beans;
+package com.arenella.recruit.candidates.beans;
 
 import java.time.LocalDate;
 import java.util.LinkedHashSet;

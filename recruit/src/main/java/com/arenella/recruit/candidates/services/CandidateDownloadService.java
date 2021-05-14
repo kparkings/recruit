@@ -4,7 +4,7 @@ import java.util.Set;
 
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import com.arenella.recruit.candudates.beans.Candidate;
+import com.arenella.recruit.candidates.beans.Candidate;
 
 /**
 * Defines services for downloading Candidate Details

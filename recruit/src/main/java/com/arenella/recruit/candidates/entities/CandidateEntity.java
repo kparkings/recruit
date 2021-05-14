@@ -18,12 +18,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.arenella.recruit.candidates.beans.Candidate;
+import com.arenella.recruit.candidates.beans.Language;
 import com.arenella.recruit.candidates.enums.COUNTRY;
 import com.arenella.recruit.candidates.enums.FREELANCE;
 import com.arenella.recruit.candidates.enums.FUNCTION;
 import com.arenella.recruit.candidates.enums.PERM;
-import com.arenella.recruit.candudates.beans.Candidate;
-import com.arenella.recruit.candudates.beans.Language;
 
 /**
 * Entity representation of a Candidate. A Candidate is 

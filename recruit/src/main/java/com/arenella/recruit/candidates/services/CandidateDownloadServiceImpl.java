@@ -20,15 +20,14 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.poi.ss.usermodel.Font; 
 import org.springframework.stereotype.Service;
 
+import com.arenella.recruit.candidates.beans.Candidate;
+import com.arenella.recruit.candidates.beans.Language;
+import com.arenella.recruit.candidates.beans.Language.LANGUAGE;
+import com.arenella.recruit.candidates.beans.Language.LEVEL;
 import com.arenella.recruit.candidates.controllers.CandidateAPIOutbound;
 import com.arenella.recruit.candidates.enums.COUNTRY;
 import com.arenella.recruit.candidates.enums.FREELANCE;
 import com.arenella.recruit.candidates.enums.PERM;
-//import com.arenella.recruit.candidates.enums.FUNCTION;
-import com.arenella.recruit.candudates.beans.Candidate;
-import com.arenella.recruit.candudates.beans.Language;
-import com.arenella.recruit.candudates.beans.Language.LANGUAGE;
-import com.arenella.recruit.candudates.beans.Language.LEVEL;
 
 /**
 * Services for dowloading Candidate details
@@ -253,34 +252,6 @@ public class CandidateDownloadServiceImpl implements CandidateDownloadService{
 		return language.get().getLevel() == LEVEL.PROFICIENT ? "X" : "X (basic)";
 		
 	}
-	
-	/**
-	* Returns a human readable representation of the Function the Candidate performs
-	* @param function - Function the Candidate performs
-	* @return Human readable representation of the Function
-	*/
-	//private String getHumanReadableCandidateFunction(FUNCTION function) {
-
-	//	switch(function){
-	//		case JAVA_DEV: 					return "Java Developer";
-	//		case CSHARP_DEV: 				return "C# Developer";
-	//		case SUPPORT: 					return "Support analyst";
-	//		case BA: 						return "Business Analyst";
-	//		case UI_UX: 					return "UI \\ UX";
-	//		case PROJECT_MANAGER: 			return "Project Manager";
-	//		case ARCHITECT:			 		return "Architect";
-	//		case TESTER: 					return "Test Analyset";
-	//		case WEB_DEV: 					return "Web Developer";
-	//		case SCRUM_MASTER:				return "Scrum Master";
-	//		case DATA_SCIENTIST:			return "Data Scientist";
-	//		case NETWORK_ADMINISTRATOR:		return "Network Administrator";
-	//		case SOFTWARE_DEVELOPER:		return "Software Developer";
-	//		case IT_SECURITY:				return "IT Security";
-	//		case SOFTWARE_DEV_IN_TEST:		return "Software Dev In Test";
-	//		default: return function.toString();
-	//	}
-		
-	//}
 	
 	/**
 	* Returns human readable version of the COUNTRY

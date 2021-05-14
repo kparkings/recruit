@@ -20,15 +20,15 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ResourceUtils;
 
+import com.arenella.recruit.candidates.beans.Candidate;
+import com.arenella.recruit.candidates.beans.Language;
+import com.arenella.recruit.candidates.beans.Language.LANGUAGE;
+import com.arenella.recruit.candidates.beans.Language.LEVEL;
 import com.arenella.recruit.candidates.enums.COUNTRY;
 import com.arenella.recruit.candidates.enums.FREELANCE;
 import com.arenella.recruit.candidates.enums.FUNCTION;
 import com.arenella.recruit.candidates.enums.PERM;
 import com.arenella.recruit.candidates.services.CandidateService;
-import com.arenella.recruit.candudates.beans.Candidate;
-import com.arenella.recruit.candudates.beans.Language;
-import com.arenella.recruit.candudates.beans.Language.LANGUAGE;
-import com.arenella.recruit.candudates.beans.Language.LEVEL;
 
 /**
 * Bean checks if import.csv is present. If so it replaces the Candidates

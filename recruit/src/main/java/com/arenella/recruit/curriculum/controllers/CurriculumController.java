@@ -42,6 +42,13 @@ public class CurriculumController {
 	@PostMapping(value="/curriculum",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public String uploadCurriculum(@RequestParam("file") MultipartFile curriculumFile) throws Exception{
 		
+		
+		//1. Need to get next cv id and remame doc
+		//2. Need to parse doc and extract skills that match a predefined list (this list should be updated as recruiters enter new search terms
+		//3. Need to return extracted search terms, candidateId
+		//4. Need to persist CV to DB
+		
+		
 		String postFix = curriculumFile.getOriginalFilename().substring(curriculumFile.getOriginalFilename().lastIndexOf('.')+1);
 		
 		// TEST STAT

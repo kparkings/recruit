@@ -1,4 +1,4 @@
-package com.arenella.recruit.candudates.dao;
+package com.arenella.recruit.candidates.dao;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -18,13 +18,13 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.CrudRepository;
 
+import com.arenella.recruit.candidates.beans.CandidateFilterOptions;
+import com.arenella.recruit.candidates.beans.Language.LANGUAGE;
 import com.arenella.recruit.candidates.entities.CandidateEntity;
 import com.arenella.recruit.candidates.entities.LanguageEntity;
 import com.arenella.recruit.candidates.enums.FREELANCE;
 import com.arenella.recruit.candidates.enums.PERM;
 import com.arenella.recruit.candidates.enums.RESULT_ORDER;
-import com.arenella.recruit.candudates.beans.CandidateFilterOptions;
-import com.arenella.recruit.candudates.beans.Language.LANGUAGE;
 
 /**
 * Defines DAO functions for interacting with CandidateEntity objects
