@@ -7,8 +7,6 @@ import java.time.LocalDate;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import org.junit.jupiter.api.Test;
-
 import com.arenella.recruit.candidates.entities.CandidateEntity;
 import com.arenella.recruit.candidates.enums.COUNTRY;
 import com.arenella.recruit.candidates.enums.FREELANCE;

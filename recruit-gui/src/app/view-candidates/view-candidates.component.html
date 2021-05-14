@@ -72,7 +72,7 @@
                   <span class="material-icons {{isFilterFrenchActiveClass()}}">filter_alt</span>
                 </div>
                 <div class="col-2 bg-tab-hdr medicol fltrcol" (click)="open(mymodal, 'skills')">
-                  <span class="material-icons">filter_alt</span>
+                  <span class="material-icons {{isFilterSkillsActiveClass()}}">filter_alt</span>
                 </div>
             </div>
             <div class="row" *ngFor="let candidate of candidates">
@@ -313,13 +313,31 @@
             </div>
           </div>
           
+          <div  *ngSwitchCase="'skills'">
+            <div class="row">
+              <div class="col">
+                  <div>Add Skill</div>
+                  <div>
+                  	<form [formGroup]="skillFilterForm">
+	                  	<input type="text" formControlName="skill" class="inpt-tab-std input-small"/>
+	                  	<button (click)="updateSkillFilters()">Add</button>
+                  	</form>
+                  </div>
+                  <div class="selected-skills-filter">
+                  	<span *ngFor="let skill of skillFilterSelections" class="selected-skill" (click)="removeSkill(skill)">
+                  		{{skill}}
+                  	</span>
+                  </div>
+              </div>
+            </div>
+          </div>
+          
 
         </div>
 
       </div>
   </div>
-  <div class="modal-footer">
-  </div>
+ 
 </ng-template>
 
 

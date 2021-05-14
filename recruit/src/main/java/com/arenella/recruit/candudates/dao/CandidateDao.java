@@ -1,13 +1,12 @@
 package com.arenella.recruit.candudates.dao;
 
 import java.util.ArrayList;
-import com.arenella.recruit.candidates.entities.LanguageEntity;
+import java.util.Collection;
 import java.util.List;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Expression;
-import javax.persistence.criteria.Fetch;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
@@ -20,12 +19,12 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.CrudRepository;
 
 import com.arenella.recruit.candidates.entities.CandidateEntity;
+import com.arenella.recruit.candidates.entities.LanguageEntity;
 import com.arenella.recruit.candidates.enums.FREELANCE;
 import com.arenella.recruit.candidates.enums.PERM;
 import com.arenella.recruit.candidates.enums.RESULT_ORDER;
 import com.arenella.recruit.candudates.beans.CandidateFilterOptions;
 import com.arenella.recruit.candudates.beans.Language.LANGUAGE;
-import com.arenella.recruit.candudates.beans.Language.LEVEL;
 
 /**
 * Defines DAO functions for interacting with CandidateEntity objects
@@ -39,13 +38,6 @@ public interface CandidateDao extends CrudRepository<CandidateEntity, String>, J
 	* @return Candidates matching the fitler options
 	*/
 	public default Page<CandidateEntity> findAll(CandidateFilterOptions filterOptions, Pageable pageable) {
-		
-		//START
-		//Page<CandidateEntity> ce = this.findAll(new FilterSpecification(filterOptions), pageable);
-		
-		
-		//END
-		
 		return this.findAll(new FilterSpecification(filterOptions), pageable);
 	}
 	
@@ -82,25 +74,17 @@ public interface CandidateDao extends CrudRepository<CandidateEntity, String>, J
 		@Override
 		public Predicate toPredicate(Root<CandidateEntity> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
 			
-			//Expression<String> cityExpression 				= root.get("city");
-			//Expression<String> dutchExpression 			= root.get("perm");
-			//Expression<String> englishExpression 			= root.get("perm");
-			//Expression<String> frenchExpression 			= root.get("perm");
-			//Expression<String> skillsExpression 			= root.get("perm");
-			
-			
-			//Expression<String> dutchExpression 			= root.get("languages.level");
-			
-			
-			
-			
 			List<Predicate> predicates = new ArrayList<>();
 			
-			//START
+			if (!this.filterOptions.getSkills().isEmpty()) {
+				
+				Expression<Collection<String>> skillValues = root.get("skills");
 			
-			
-			
-			//todo: make distinct
+				this.filterOptions.getSkills().forEach(skill -> {
+					predicates.add(criteriaBuilder.isMember(skill.toLowerCase().trim(), skillValues));
+				});
+				
+			}
 			
 			if (!this.filterOptions.getDutch().isEmpty()) {
 				Join<CandidateEntity,LanguageEntity> dutchJoin = root.join("languages", JoinType.INNER);
@@ -128,15 +112,6 @@ public interface CandidateDao extends CrudRepository<CandidateEntity, String>, J
 							criteriaBuilder.equal(frenchJoin.get("level"), this.filterOptions.getEnglish().get())
 						));
 			}
-			
-			//Join j1 = root.join("languages").join("id").join("language").in(LANGUAGE.DUTCH);
-			//Join j2 = root.join("languages").join("level").in(LEVEL.PROFICIENT);
-			
-			//predicates.add(j1);
-			//predicates.add(j2);
-			
-			//END
-			
 			
 			if (!this.filterOptions.getCandidateIds().isEmpty()) {
 				Predicate candidateIdFltr 						= root.get("candidateId").in(filterOptions.getCandidateIds());
@@ -174,8 +149,6 @@ public interface CandidateDao extends CrudRepository<CandidateEntity, String>, J
 				Expression<Integer> yearsExperienceExpression 	= root.get("yearsExperience");
 				predicates.add(criteriaBuilder.lessThanOrEqualTo(yearsExperienceExpression, this.filterOptions.getYearsExperienceLtEq()));
 			}
-			
-			//predicates.add(criteriaBuilder.equal(cityExpression, 		"Noordwijk"));
 			
 			Expression<String> sortExpression 				= root.get("candidateId");
 			

@@ -105,6 +105,6 @@ export class Candidate {
 	}
 
 	getSkills():string{
-		return this.skills.toString();
+		return this.skills.join(', ');
 	}
 }

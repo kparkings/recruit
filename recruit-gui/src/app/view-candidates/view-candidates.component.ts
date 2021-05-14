@@ -84,6 +84,27 @@ export class ViewCandidatesComponent implements OnInit {
     //Set dynamically
   });
 
+  public  skillFilterSelections:Array<string> = new Array<string>();
+
+  public skillFilterForm: FormGroup = new FormGroup({
+      skill:  new FormControl(''),
+    });
+  
+  /**
+  * Adds new skill to filter 
+  */
+  public updateSkillFilters():void{
+      this.skillFilterSelections.push(this.skillFilterForm.get('skill')?.value)
+      this.skillFilterForm.get('skill')?.setValue('');
+      this.updateFilters();
+  }
+  
+  public removeSkill(skill:string):void{
+      console.log('>>' + skill);
+      this.skillFilterSelections = this.skillFilterSelections.filter(s => s  !== skill);
+      this.updateFilters();
+  }
+  
   public freelanceFilterForm: FormGroup = new FormGroup({
     include:  new FormControl('false'),
   });
@@ -173,16 +194,16 @@ export class ViewCandidatesComponent implements OnInit {
         
         const candidate:Candidate = new Candidate();
 
-      candidate.candidateId       = c.candidateId;
-      candidate.city              = c.city;
-      candidate.country           = this.getCountryCode(c.country);
-      candidate.freelance         = this.getFreelanceOption(c.freelance);
-      candidate.roleSought        = c.roleSought;
-      candidate.function          = c.function;
-      candidate.perm              = this.getPermOption(c.perm);
-      candidate.yearsExperience   = c.yearsExperience;
-      candidate.languages = c.languages;
-      candidate.skills = c.skills;
+      candidate.candidateId              = c.candidateId;
+      candidate.city                            = c.city;
+      candidate.country                      = this.getCountryCode(c.country);
+      candidate.freelance                   = this.getFreelanceOption(c.freelance);
+      candidate.roleSought                = c.roleSought;
+      candidate.function                     = c.function;
+      candidate.perm                          = this.getPermOption(c.perm);
+      candidate.yearsExperience        = c.yearsExperience;
+      candidate.languages                 = c.languages;
+      candidate.skills                          = c.skills;
 
       this.candidates.push(candidate);
 
@@ -238,8 +259,16 @@ export class ViewCandidatesComponent implements OnInit {
                                                          + this.getYearsExperienceFilterParamAsString()
                                                          +this.getDutchParamString()
                                                          +this.getFrenchParamString()
-                                                         +this.getEnglishParamString();
+                                                         +this.getEnglishParamString()
+                                                         + this.getSkillsParamString();
     return filterParams;
+  }
+  
+  private getSkillsParamString():string{
+      if (this.skillFilterSelections.length > 0) {
+         return '&skills='+encodeURIComponent(this.skillFilterSelections.toString()); 
+      }
+      return '';
   }
   
   /**
@@ -581,6 +610,15 @@ export class ViewCandidatesComponent implements OnInit {
       return '';
   }
     
+    public isFilterSkillsActiveClass(): string{
+      
+      if (this.skillFilterSelections.length > 0) {
+          return 'filterSelected';
+      }
+     
+        return '';
+     }
+    
     public isFilterFrenchActiveClass(): string{
 
         const frenchVal: any = this.frenchFilterForm.get('level')?.value;
@@ -669,6 +707,12 @@ export class ViewCandidatesComponent implements OnInit {
     this.englishFilterForm = new FormGroup({
         level:  new FormControl(''),
       });
+    
+    this.skillFilterForm = new FormGroup({
+        skill:  new FormControl(''),
+      });
+    
+    this.skillFilterSelections = new Array<string>();
 
     this.fetchCandidates(true);
 

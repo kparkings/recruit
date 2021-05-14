@@ -1,18 +1,18 @@
 package com.arenella.recruit.authentication.controllers;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletResponse;
+//import javax.servlet.http.Cookie;
+//import javax.servlet.http.HttpServletResponse;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.Spy;
-import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.http.HttpStatus;
+//import org.junit.Test;
+//import org.junit.runner.RunWith;
+//import org.mockito.InjectMocks;
+//import org.mockito.Mock;
+//import org.mockito.Mockito;
+//import org.mockito.Spy;
+//import org.mockito.junit.MockitoJUnitRunner;
+//import org.springframework.http.HttpStatus;
 
-import com.arenella.recruit.authentication.services.AuthenticationService;
+//import com.arenella.recruit.authentication.services.AuthenticationService;
 
 /**
 * Unit tests for the AuthenticationController

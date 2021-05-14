@@ -485,7 +485,7 @@ public class CandidateEntity {
 						.perm(candidate.isPerm())
 						.registerd(candidate.getRegisteredOn())
 						.yearsExperience(candidate.getYearsExperience())
-						.skills(candidate.getSkills())
+						.skills(candidate.getSkills().stream().map(skill -> skill.trim()).map(skill ->skill.toLowerCase()).collect(Collectors.toSet()))
 						.languages(candidate.getLanguages())
 						.build();
 		

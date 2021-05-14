@@ -33,8 +33,6 @@ public class CandidateServiceImpl implements CandidateService{
 		
 		CandidateEntity entity = CandidateEntity.convertToEntity(candidate);
 		
-		//TODO: Works with single country. Fails with multiple. Because we need to set up the composite key
-		
 		candidateDao.save(entity);
 		
 	}
@@ -46,7 +44,6 @@ public class CandidateServiceImpl implements CandidateService{
 	public Page<Candidate> getCandidates(CandidateFilterOptions filterOptions, Pageable pageable) {
 		
 		return candidateDao.findAll(filterOptions, pageable).map(candidate -> CandidateEntity.convertFromEntity(candidate));
-		
 	}
 	
 	/**

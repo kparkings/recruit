@@ -3,7 +3,6 @@ package com.arenella.recruit.candidate.controllers;
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.time.LocalDate;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -36,8 +35,8 @@ public class CandidateAPIInboundTest {
 	private static final boolean 		available 				= true;
 	private static final FREELANCE 		freelance 				= FREELANCE.TRUE;
 	private static final PERM	 		perm 					= PERM.TRUE;
-	private static final LocalDate 		lastAvailabilityCheck 	= LocalDate.of(1980, 12, 3);
-	private static final LocalDate 		registerd 				= LocalDate.of(2021, 02, 20);
+	//private static final LocalDate 		lastAvailabilityCheck 	= LocalDate.of(1980, 12, 3);
+	//private static final LocalDate 		registerd 				= LocalDate.of(2021, 02, 20);
 	private static final int 			yearsExperience 		= 21;
 	private static final Set<String>	skills					= new LinkedHashSet<>();
 	private static final Set<Language>	languages				= new LinkedHashSet<>();
