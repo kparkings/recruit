@@ -40,11 +40,9 @@ public class AuthenticationController {
 	@PostMapping(path="authenticate", consumes="application/json", produces="application/json")
 	public Set<String> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest, HttpServletResponse response) throws Exception{
 		
-		Cookie tokenCookie = authenticationService.authenticateUser(authenticationRequest.getUsername(), authenticationRequest.getPassword());
-		
-		UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
-		
-		Set<String> roles = userDetails.getAuthorities().stream().map(r -> r.getAuthority()).collect(Collectors.toSet());
+		Cookie 			tokenCookie 	= authenticationService.authenticateUser(authenticationRequest.getUsername(), authenticationRequest.getPassword());
+		UserDetails 	userDetails 	= userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
+		Set<String> 	roles 			= userDetails.getAuthorities().stream().map(r -> r.getAuthority()).collect(Collectors.toSet());
 		
 		response.addCookie(tokenCookie);
 		response.setStatus(HttpStatus.OK.value());
@@ -52,7 +50,5 @@ public class AuthenticationController {
 		return roles;
 		
 	}
-	
-	
 	
 }

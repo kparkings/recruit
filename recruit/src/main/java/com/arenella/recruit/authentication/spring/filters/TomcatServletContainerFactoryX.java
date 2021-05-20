@@ -6,6 +6,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
 import org.springframework.context.annotation.Bean;
 
+/**
+* Used by Apache to connect to the internal Tomcat server
+* @author K Parkings
+*/
 @Component
 public class TomcatServletContainerFactoryX {
 

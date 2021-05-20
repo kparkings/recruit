@@ -28,7 +28,6 @@ import com.arenella.recruit.candidates.enums.RESULT_ORDER;
 import com.arenella.recruit.candidates.services.CandidateDownloadService;
 import com.arenella.recruit.candidates.services.CandidateService;
 
-
 /**
 * REST API for working with Candidates
 * @author K Parkings

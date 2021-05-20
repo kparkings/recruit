@@ -331,6 +331,8 @@ public class CandidateAPIOutbound {
 					.languages(candidate.getLanguages())
 					.skills(candidate.getSkills())
 					.yearsExperience(candidate.getYearsExperience())
+					.available(candidate.isAvailable())
+					.lastAvailabilityCheck(candidate.getLastAvailabilityCheckOn())
 					.build();
 		
 	}
