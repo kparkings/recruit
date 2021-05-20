@@ -73,8 +73,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements W
 		http.csrf().disable();
 		//http.csrf().ignoringAntMatchers("/authenticate");
 		http
-			.authorizeRequests().antMatchers("/authenticate").permitAll() 
-			.antMatchers(HttpMethod.OPTIONS,"/**").permitAll()
+			.authorizeRequests()
+				.antMatchers("/api/authenticate").permitAll() 
+				.antMatchers("/authenticate").permitAll() 
+				.antMatchers("authenticate").permitAll() 
+				.antMatchers("api/authenticate").permitAll() 
+				.antMatchers("https://arenella-ict.wosah.nl/api/authenticate").permitAll() 
+				.antMatchers("arenella-ict.wosah.nl/api/authenticate").permitAll() 
+				
+				
+				.antMatchers(HttpMethod.OPTIONS,"/**").permitAll()
 			.anyRequest().authenticated().and()
 			.exceptionHandling().authenticationEntryPoint(authenticationEntryPoint)
 				.and()

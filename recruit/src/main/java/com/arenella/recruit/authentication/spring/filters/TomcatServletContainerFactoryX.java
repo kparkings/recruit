@@ -16,11 +16,13 @@ public class TomcatServletContainerFactoryX {
 		Connector 						ajpConnector 	= new Connector("org.apache.coyote.ajp.AjpNioProtocol");
 		AjpNioProtocol 					protocol		= (AjpNioProtocol)ajpConnector.getProtocolHandler();
 	      
-		protocol.setSecret("myapjsecret");
+		protocol.setSecret("arenella2022NW1");
+		protocol.setSecretRequired(true);
+		
 		ajpConnector.setPort(9090);
 		ajpConnector.setSecure(false);
 		ajpConnector.setScheme("http");
-	      
+		
 		tomcat.addAdditionalTomcatConnectors(ajpConnector);
 	      
 		return tomcat;

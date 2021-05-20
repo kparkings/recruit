@@ -88,7 +88,7 @@ public class CandidateController {
 	* @return
 	*/
 	@GetMapping(path="candidate")
-	public Page<CandidateAPIOutbound> getCandidate(  @RequestParam("orderAttribute") 	String 				orderAttribute,
+	public Page<CandidateAPIOutbound> getCandidate( @RequestParam("orderAttribute") 	String 				orderAttribute,
 													@RequestParam("order") 				RESULT_ORDER		order,
 													@RequestParam(required = false) 	Set<String> 		candidateId,
 													@RequestParam(required = false) 	Set<COUNTRY> 		countries,

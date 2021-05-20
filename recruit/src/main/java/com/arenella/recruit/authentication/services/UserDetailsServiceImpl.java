@@ -32,7 +32,7 @@ public class UserDetailsServiceImpl implements UserDetailsService{
 	@Override
 	@Transactional
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-	
+		
 		User user = userDao.fetchUser(username).orElseThrow(() -> new UsernameNotFoundException("Unknown User"));
 		
 		//User user = User.builder().username("javainuse").password("$2a$10$slYQmyNdGzTn7ZLBXBChFOC9f6kFjAqPhccnP6DxlWXx2lPk1C3G6").enabled(true).roles(roles).build();
