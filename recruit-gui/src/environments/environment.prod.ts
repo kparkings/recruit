@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  backendUrl:'https://api-arenella-ict.wosah.nl/'
+  backendUrl:'https://arenella-ict.wosah.nl/api/'
 };
