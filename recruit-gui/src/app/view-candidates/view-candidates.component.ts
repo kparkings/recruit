@@ -419,6 +419,15 @@ export class ViewCandidatesComponent implements OnInit {
       return  environment.backendUrl + 'candidate/download?'+ this.getCandidateFilterParamString();
   
   }
+  
+  /**
+   *  Returns the url to perform the download of the candidates CV
+   */
+   public getCurriculumDownloadUrl(curriculumId:string){
+       
+       return  environment.backendUrl + '/curriculum/'+ curriculumId;
+   
+   }
 
   /**
   * Returns the code identifying the country

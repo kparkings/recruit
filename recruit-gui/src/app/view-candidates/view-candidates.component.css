@@ -7,6 +7,35 @@
     max-width: 120px;
 }
 
+.action-buttons{
+	text-align:right;
+	margin-right:40px;
+}
+
+ .pagination-options{
+    margin-bottom:10px;
+    text-align:right;
+    margin-right:95px;
+ }
+
+ .pagination-col{
+     margin-left:25px;
+ }
+ .candidate-nav{
+     cursor:pointer;
+     color:blue;
+     font-weight:bold;
+     margin-left:20px;
+     margin-right:20px;
+ }
+
+ .candidate-nav-disabled{
+     color:grey;
+     font-weight:bold;
+     margin-left:20px;
+     margin-right:20px;
+ }
+
 
 .microcol{
     max-width: 60px;
@@ -42,8 +71,9 @@
 }
 
 .btnRight{
+	margin-top:20px;
     margin-bottom:20px;
-    margin-right:50px;
+    margin-right:20px;
     min-width:100px;
 }
 
@@ -87,28 +117,6 @@
 
  .candidate-id-prefix{
      color:#6A5ACD;
- }
-
- .pagination-row{
-    margin-bottom:10px;
- }
-
- .pagination-col{
-     margin-left:25px;
- }
- .candidate-nav{
-     cursor:pointer;
-     color:blue;
-     font-weight:bold;
-     margin-left:20px;
-     margin-right:20px;
- }
-
- .candidate-nav-disabled{
-     color:grey;
-     font-weight:bold;
-     margin-left:20px;
-     margin-right:20px;
  }
 
  .filter-close-box{

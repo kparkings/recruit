@@ -15,7 +15,7 @@ import com.arenella.recruit.curriculum.enums.FileType;
 * @author K Parkings
 */
 @Entity
-@Table(schema="curriculum", name="curriculums")
+@Table(schema="curriculum", name="curriculum")
 public class CurriculumEntity {
 
 	@Id

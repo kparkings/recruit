@@ -38,5 +38,5 @@ export class CurriculumService {
     return this.httpClient.post<any>(backendUrl, fd, this.httpOptions);
   
   }
-  
+
 }

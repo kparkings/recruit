@@ -57,7 +57,7 @@ public class CurriculumController {
 		testCurriculum = fileBytes;
 		//TEST END
 		
-		Curriculum curriculum = Curriculum.builder().fileType(FileType.valueOf(postFix)).file(curriculumFile.getBytes()).build();
+		Curriculum curriculum = Curriculum.builder().fileType(FileType.valueOf(postFix)).file(curriculumFile.getBytes()).id("1").build();
 		
 		return "{'id':'"+curriculumService.persistCurriculum(curriculum)+"'}";
 		

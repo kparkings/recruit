@@ -1,18 +1,15 @@
 <div class=".container m-2">
-    <div class='candidate-table'>
-            <div class="row">
-              <div class="col-sm-10"></div>
-              <div class="col-sm-1">
+    <div>
+            <div class="action-buttons">
                 <button class="btn btn-secondary btnRight" (click)="resetFilters()" download>Reset</button>
-              </div>
-              <div class="col-sm-1">
                 <a class="btn btn-secondary btnRight" href="{{getCandidateDownloadUrl()}}" download>Download</a>
-              </div> 
             </div>
 
-            <div class="row pagination-row">
+            <div class="pagination-options">
+           	<!--  
               <div class="col-sm-10"></div>
               <div class="col-sm-1 pagination-col">
+            -->
                 <span [ngSwitch]="showNavPrev()">
                   <span *ngSwitchCase="true"  class="candidate-nav" (click)="previousPage()"><<<<<</span>
                   <span *ngSwitchCase="false" class="candidate-nav-disabled"><<<<<</span>
@@ -24,9 +21,10 @@
                   <span *ngSwitchCase="true"class="candidate-nav" (click)="nextPage()">>>>>></span>
                   <span *ngSwitchCase="false"class="candidate-nav-disabled">>>>>></span>
                 </span>
-              </div>
+             <!--   </div> -->
             </div>
-
+      </div>
+	  <div class='candidate-table'>
             <div class="row">
                 <div class="col-1 bg-tab-hdr medicol">CandidateId</div>
                 <div class="col-1 bg-tab-hdr microcol">Country</div>
