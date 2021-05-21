@@ -8,6 +8,6 @@ import com.arenella.recruit.curriculum.entity.CurriculumEntity;
 * Dao for persisting Curriculum Entities
 * @author K Parkings
 */
-public interface CurriculumDao extends CrudRepository<CurriculumEntity, String> {
+public interface CurriculumDao extends CrudRepository<CurriculumEntity, Long> {
 
 }

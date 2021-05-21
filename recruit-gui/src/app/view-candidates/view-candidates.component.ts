@@ -425,7 +425,7 @@ export class ViewCandidatesComponent implements OnInit {
    */
    public getCurriculumDownloadUrl(curriculumId:string){
        
-       return  environment.backendUrl + '/curriculum/'+ curriculumId;
+       return  environment.backendUrl + 'curriculum/'+ curriculumId;
    
    }
 

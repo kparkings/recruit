@@ -1,97 +1,110 @@
 <div class=".container m-2">
-    <div>
-            <div class="action-buttons">
-                <button class="btn btn-secondary btnRight" (click)="resetFilters()" download>Reset</button>
-                <a class="btn btn-secondary btnRight" href="{{getCandidateDownloadUrl()}}" download>Download</a>
-            </div>
+	<div>
+		<!-- Action buttons -->
+		<div class="action-buttons">
+			<button class="btn btn-secondary btnRight" (click)="resetFilters()" download>Reset</button>
+			<a class="btn btn-secondary btnRight" href="{{getCandidateDownloadUrl()}}" download>Download</a>
+		</div>
 
-            <div class="pagination-options">
-           	<!--  
-              <div class="col-sm-10"></div>
-              <div class="col-sm-1 pagination-col">
-            -->
-                <span [ngSwitch]="showNavPrev()">
-                  <span *ngSwitchCase="true"  class="candidate-nav" (click)="previousPage()"><<<<<</span>
-                  <span *ngSwitchCase="false" class="candidate-nav-disabled"><<<<<</span>
-                </span>
-               
-                <span class="">{{currentPage+1}}</span>
-               
-                <span [ngSwitch]="showNavNext()">
-                  <span *ngSwitchCase="true"class="candidate-nav" (click)="nextPage()">>>>>></span>
-                  <span *ngSwitchCase="false"class="candidate-nav-disabled">>>>>></span>
-                </span>
-             <!--   </div> -->
-            </div>
+		<!-- Pagination -->
+		<div class="pagination-options">
+           	
+			<span [ngSwitch]="showNavPrev()">
+				<span *ngSwitchCase="true"  class="candidate-nav" (click)="previousPage()"><<<<<</span>
+				<span *ngSwitchCase="false" class="candidate-nav-disabled"><<<<<</span>
+			</span>
+			<span>{{currentPage+1}}</span>
+			<span [ngSwitch]="showNavNext()">
+				<span *ngSwitchCase="true"class="candidate-nav" (click)="nextPage()">>>>>></span>
+				<span *ngSwitchCase="false"class="candidate-nav-disabled">>>>>></span>
+			</span>
+		</div>
       </div>
-	  <div class='candidate-table'>
-            <div class="row">
-                <div class="col-1 bg-tab-hdr medicol">CandidateId</div>
-                <div class="col-1 bg-tab-hdr microcol">Country</div>
-                <div class="col-1 bg-tab-hdr">City</div>
-                <div class="col-1 bg-tab-hdr">Function</div>
-                <div class="col-1 bg-tab-hdr microcol" style>Perm</div>
-                <div class="col-1 bg-tab-hdr microcol">Freelance</div>
-                <div class="col-1 bg-tab-hdr microcol">Years Exp</div>
-                <div class="col-1 bg-tab-hdr medicol">Dutch</div>
-                <div class="col-1 bg-tab-hdr medicol">English</div>
-                <div class="col-1 bg-tab-hdr medicol">French</div>
-                <div class="col-2 bg-tab-hdr">Skills</div>
-            </div>
-             <div class="row">
-                <div class="col-1 bg-tab-hdr medicol fltrcol" (click)="open(mymodal, 'candidateId')">
+      
+      
+      <table class="table candidate-table">
+      	<thead>
+      		<tr>
+      			<!-- Table Headers -->
+      			<th class="bg-tab-hdr">CandidateId</th>
+      			<th class="bg-tab-hdr">CandidateId</th>
+                <th class="bg-tab-hdr">Country</th>
+                <th class="bg-tab-hdr">City</th>
+                <th class="bg-tab-hdr">Function</th>
+                <th class="bg-tab-hdr">Perm</th>
+                <th class="bg-tab-hdr">Freelance</th>
+                <th class="bg-tab-hdr">Years Exp</th>
+                <th class="bg-tab-hdr">Dutch</th>
+                <th class="bg-tab-hdr">English</th>
+                <th class="bg-tab-hdr">French</th>
+                <th class="bg-tab-hdr">Skills</th>
+      		</tr>
+      		<tr>
+      			<!-- Table Filters -->
+      			<th class="bg-tab-hdr fltrcol"></th>
+      			<th class="bg-tab-hdr fltrcol" (click)="open(mymodal, 'candidateId')">
                 <span class="material-icons {{isFilterCandidateIdActiveClass()}}">filter_alt</span>
-                </div>
-                <div class="col-1 bg-tab-hdr microcol fltrcol" (click)="open(mymodal, 'country')">
+                </th>
+                <th class="bg-tab-hdr fltrcol" (click)="open(mymodal, 'country')">
                 <span class="material-icons {{isFilterCountryActiveClass()}}">filter_alt</span>
-                </div>
-                <div class="col-1 bg-tab-hdr fltrcol" (click)="open(mymodal, 'city')">
+                </th>
+                <th class="bg-tab-hdr fltrcol" (click)="open(mymodal, 'city')">
                 <span class="material-icons {{isFilterCityActiveClass()}}">filter_alt</span>
-                </div>
-                <div class="col-1 bg-tab-hdr fltrcol" (click)="open(mymodal, 'roleSought')">
+                </th>
+                <th class="bg-tab-hdr fltrcol" (click)="open(mymodal, 'roleSought')">
                 <span class="material-icons {{isFilterFunctionActiveClass()}}">filter_alt</span>
-                </div>
-                <div class="col-1 bg-tab-hdr microcol fltrcol" (click)="open(mymodal, 'perm')">
+                </th>
+                <th class="bg-tab-hdr fltrcol" (click)="open(mymodal, 'perm')">
                   <span class="material-icons  {{isFilterPermActiveClass()}}">filter_alt</span>
-                </div>
-                <div class="col-1 bg-tab-hdr microcol fltrcol" (click)="open(mymodal, 'freelance')">
+                </th>
+                <th class="bg-tab-hdr fltrcol" (click)="open(mymodal, 'freelance')">
                   <span class="material-icons {{isFilterFreelanceActiveClass()}}">filter_alt</span>
-                </div>
-                <div class="col-1 bg-tab-hdr microcol fltrcol" (click)="open(mymodal, 'yearsExperience')">
+                </th>
+                <th class="bg-tab-hdr fltrcol" (click)="open(mymodal, 'yearsExperience')">
                 <span class="material-icons {{isFilterYearsExperienceActiveClass()}}">filter_alt</span>
-                </div>
-                <div class="col-1 bg-tab-hdr medicol fltrcol" (click)="open(mymodal, 'dutch')">
+                </th>
+                <th class="bg-tab-hdr fltrcol" (click)="open(mymodal, 'dutch')">
                   <span class="material-icons {{isFilterDutchActiveClass()}}">filter_alt</span>
-                </div>
-                <div class="col-1 bg-tab-hdr medicol fltrcol" (click)="open(mymodal, 'english')">
+                </th>
+                <th class="bg-tab-hdr fltrcol" (click)="open(mymodal, 'english')">
                   <span class="material-icons {{isFilterEnglishActiveClass()}}">filter_alt</span>
-                </div>
-                <div class="col-1 bg-tab-hdr medicol fltrcol" (click)="open(mymodal, 'french')">
+                </th>
+                <th class="bg-tab-hdr fltrcol" (click)="open(mymodal, 'french')">
                   <span class="material-icons {{isFilterFrenchActiveClass()}}">filter_alt</span>
-                </div>
-                <div class="col-2 bg-tab-hdr medicol fltrcol" (click)="open(mymodal, 'skills')">
+                </th>
+                <th class="bg-tab-hdr fltrcol" (click)="open(mymodal, 'skills')">
                   <span class="material-icons {{isFilterSkillsActiveClass()}}">filter_alt</span>
-                </div>
-            </div>
-            <div class="row" *ngFor="let candidate of candidates">
-                <div class="col-1 medicol"><span class="candidate-id-prefix">C</span>{{candidate.candidateId}}</div>
-                <div class="col-1 microcol">{{candidate.country}}</div>
-                <div class="col-1">{{candidate.city}}</div>
-                <!--<div class="col-1">{{pretifyFunction(candidate.function)}}</div>-->
-                <div class="col-1">{{candidate.roleSought}}</div>
-                <div class="col-1 microcol">{{candidate.perm}}</div>
-                <div class="col-1 microcol">{{candidate.freelance}}</div>
-                <div class="col-1 microcol">{{candidate.yearsExperience}}</div>
-                <div class="col-1 medicol">{{candidate.getDutch()}}</div>
-                <div class="col-1 medicol">{{candidate.getEnglish()}}</div>
-                <div class="col-1 medicol">{{candidate.getFrench()}}</div>
-                <div class="col-2">{{candidate.getSkills()}}</div>
-            </div>	
+                </th>
+      		</tr>
+      	</thead>
+      	<tbody>
+      		<!-- Table row -->
+      		<tr *ngFor="let candidate of candidates">
+      			<td class="candidate-tab-col">
+      				
+      					<span class="material-icons">
+      						<a href="{{getCurriculumDownloadUrl('0')}}" >
+      							insert_drive_file
+      						</a>
+      					</span>
+      				
+      				
+      			</td>
+      			<td class="candidate-tab-col"><span class="candidate-id-prefix">C</span>{{candidate.candidateId}}</td>
+                <td class="candidate-tab-col mini-col"> {{candidate.country}}</td>
+                <td class="candidate-tab-col medicol">{{candidate.city}}</td>
+                <td class="candidate-tab-col medicol">{{candidate.roleSought}}</td>
+                <td class="candidate-tab-col mini-col">{{candidate.perm}}</td>
+                <td class="candidate-tab-col mini-col">{{candidate.freelance}}</td>
+                <td class="candidate-tab-col mini-col">{{candidate.yearsExperience}}</td>
+                <td class="candidate-tab-col lang-col">{{candidate.getDutch()}}</td>
+                <td class="candidate-tab-col lang-col">{{candidate.getEnglish()}}</td>
+                <td class="candidate-tab-col lang-col">{{candidate.getFrench()}}</td>
+                <td class="candidate-tab-col">{{candidate.getSkills()}}</td>
+      		</tr>	
+      	</tbody>
+      </table>
 
-    </div>
-
-
-</div>
 
 
 <ng-template #mymodal let-modal>

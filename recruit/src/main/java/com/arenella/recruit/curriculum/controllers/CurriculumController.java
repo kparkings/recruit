@@ -72,6 +72,20 @@ public class CurriculumController {
 	@GetMapping(value="/curriculum/{curriculumId}")
 	public ResponseEntity<ByteArrayResource> getCurriculum(@PathVariable("curriculumId")String curriculumId) throws Exception{
 		
+		Curriculum curriculum = curriculumService.fetchCurriculum(curriculumId);
+		
+		ByteArrayOutputStream 	stream 		= new ByteArrayOutputStream(curriculum.getFile().length);
+		stream.write(curriculum.getFile());
+		
+		
+		HttpHeaders header = new HttpHeaders();
+		header.setContentType(new MediaType("application", "force-download"));
+		header.set(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=curriculum.pdf");
+		
+		return new ResponseEntity<>(new ByteArrayResource(stream.toByteArray()), header, HttpStatus.OK);
+		
+		
+		/**
 		ByteArrayOutputStream 	stream 		= new ByteArrayOutputStream(testCurriculum.length);
 		stream.write(testCurriculum);
 		
@@ -81,6 +95,6 @@ public class CurriculumController {
 		header.set(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=curriculum.pdf");
 		
 		return new ResponseEntity<>(new ByteArrayResource(stream.toByteArray()), header, HttpStatus.OK);
-		
+		*/
 	}
 }

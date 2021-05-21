@@ -12,6 +12,13 @@ public interface CurriculumService {
 	* Persists a Curriculum
 	* @return Unique Id of the Curriculum
 	*/
-	public String persistCurriculum(Curriculum curriculum); 
+	public String persistCurriculum(Curriculum curriculum);
+
+	/**
+	* Retrieves a Curriculum matching the ID
+	* @param curriculumId
+	* @return Curriculum natching curriculumId
+	*/
+	public Curriculum fetchCurriculum(String curriculumId); 
 	
 }

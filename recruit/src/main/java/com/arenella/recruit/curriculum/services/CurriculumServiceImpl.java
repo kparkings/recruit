@@ -1,5 +1,7 @@
 package com.arenella.recruit.curriculum.services;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +30,18 @@ public class CurriculumServiceImpl implements CurriculumService{
 		curriculumDao.save(entity);
 		
 		return "1";
+	}
+
+	/**
+	* Refer to the CurriculumService interface for details
+	*/
+	@Override
+	public Curriculum fetchCurriculum(String curriculumId) {
+		
+		Optional<CurriculumEntity> entity = this.curriculumDao.findById(Long.valueOf(curriculumId));
+		
+		return CurriculumEntity.convertFromEntity(entity.get());
+		
 	}
 
 }

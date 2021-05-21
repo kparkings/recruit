@@ -30,6 +30,11 @@ public class CurriculumEntity {
 	private byte[] 		file;
 
 	/**
+	* Default constructor for Hibernate
+	*/
+	public CurriculumEntity() {}
+	
+	/**
 	* Constructor based upon a builder
 	* @param builder - contains initialization values
 	*/
@@ -39,6 +44,31 @@ public class CurriculumEntity {
 		this.fileType 			= builder.fileType;
 		this.file 				= builder.file;
 		 
+	}
+	
+	/**
+	* Returns unique Id of the Curriculum
+	* @return unique Id
+	*/
+	public long getCurriculumId() {
+		return curriculumId;
+	}
+	
+	/**
+	* Returns the format of the File
+	* @return type of file
+	*/
+	public FileType getFileType() {
+		return fileType;
+	}
+	
+	/**
+	* Returns the bytes that constitute the 
+	* physical file
+	* @return file bytes
+	*/
+	public byte[] getFile() {
+		return file;
 	}
 	
 	/**
@@ -109,10 +139,25 @@ public class CurriculumEntity {
 		
 		return CurriculumEntity
 							.builder()
-								.curriculumId(0)	//TODO: [KP] Need to decide where how to set up the sequence
+								.curriculumId(Long.valueOf(curriculum.getId().get()))	//TODO: [KP] Need to decide where how to set up the sequence
 								.fileType(curriculum.getFileType())
 								.file(curriculum.getFile())
 							.build();
+	}
+
+	/**
+	* Converts an Entity representation of a Curriculum to an Domain version
+	* @param curriculumEntity - Curriculum to convert
+	* @return Domain representation of an Entity
+	*/
+	public static Curriculum convertFromEntity(CurriculumEntity curriculumEntity) {
+		
+		return Curriculum
+						.builder()
+							.id(String.valueOf(curriculumEntity.getCurriculumId()))	//TODO: [KP] Need to decide where how to set up the sequence
+							.fileType(curriculumEntity.getFileType())
+							.file(curriculumEntity.getFile())
+						.build();
 	}
 	
 }
