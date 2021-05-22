@@ -109,8 +109,8 @@ export class NewCandidateComponent implements OnInit {
   
   		console.log("file = " + this.curriculumFile);
   		
-  		this.curriculumService.uploadCurriculum(this.curriculumFile).subscribe(d=>{
-      		console.log(d);
+  		this.curriculumService.uploadCurriculum(this.curriculumFile).subscribe(data=>{
+      		this.formBean.get('candidateId')?.setValue(data.id);
     	});
   		
   }

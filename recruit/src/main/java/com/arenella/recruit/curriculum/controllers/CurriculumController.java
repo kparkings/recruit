@@ -42,24 +42,11 @@ public class CurriculumController {
 	@PostMapping(value="/curriculum",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public String uploadCurriculum(@RequestParam("file") MultipartFile curriculumFile) throws Exception{
 		
+		String 			postFix						= curriculumFile.getOriginalFilename().substring(curriculumFile.getOriginalFilename().lastIndexOf('.')+1);
+		long 			nextAvailableCurriculumId	= curriculumService.getNextCurriculumId();
+		Curriculum 		curriculum					= Curriculum.builder().fileType(FileType.valueOf(postFix)).file(curriculumFile.getBytes()).id(String.valueOf(nextAvailableCurriculumId)).build();
 		
-		//1. Need to get next cv id and remame doc
-		//2. Need to parse doc and extract skills that match a predefined list (this list should be updated as recruiters enter new search terms
-		//3. Need to return extracted search terms, candidateId
-		//4. Need to persist CV to DB
-		
-		
-		String postFix = curriculumFile.getOriginalFilename().substring(curriculumFile.getOriginalFilename().lastIndexOf('.')+1);
-		
-		// TEST STAT
-		byte[] fileBytes = curriculumFile.getBytes();
-		
-		testCurriculum = fileBytes;
-		//TEST END
-		
-		Curriculum curriculum = Curriculum.builder().fileType(FileType.valueOf(postFix)).file(curriculumFile.getBytes()).id("1").build();
-		
-		return "{'id':'"+curriculumService.persistCurriculum(curriculum)+"'}";
+		return "{\"id\":\""+curriculumService.persistCurriculum(curriculum)+"\"}";
 		
 	}
 	
@@ -72,29 +59,16 @@ public class CurriculumController {
 	@GetMapping(value="/curriculum/{curriculumId}")
 	public ResponseEntity<ByteArrayResource> getCurriculum(@PathVariable("curriculumId")String curriculumId) throws Exception{
 		
-		Curriculum curriculum = curriculumService.fetchCurriculum(curriculumId);
-		
+		Curriculum 				curriculum = curriculumService.fetchCurriculum(curriculumId);
 		ByteArrayOutputStream 	stream 		= new ByteArrayOutputStream(curriculum.getFile().length);
+		
 		stream.write(curriculum.getFile());
 		
-		
 		HttpHeaders header = new HttpHeaders();
 		header.setContentType(new MediaType("application", "force-download"));
 		header.set(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=curriculum.pdf");
 		
 		return new ResponseEntity<>(new ByteArrayResource(stream.toByteArray()), header, HttpStatus.OK);
 		
-		
-		/**
-		ByteArrayOutputStream 	stream 		= new ByteArrayOutputStream(testCurriculum.length);
-		stream.write(testCurriculum);
-		
-		
-		HttpHeaders header = new HttpHeaders();
-		header.setContentType(new MediaType("application", "force-download"));
-		header.set(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=curriculum.pdf");
-		
-		return new ResponseEntity<>(new ByteArrayResource(stream.toByteArray()), header, HttpStatus.OK);
-		*/
 	}
 }

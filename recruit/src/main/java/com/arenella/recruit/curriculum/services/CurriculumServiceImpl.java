@@ -29,7 +29,7 @@ public class CurriculumServiceImpl implements CurriculumService{
 		
 		curriculumDao.save(entity);
 		
-		return "1";
+		return curriculum.getId().get();
 	}
 
 	/**
@@ -41,6 +41,18 @@ public class CurriculumServiceImpl implements CurriculumService{
 		Optional<CurriculumEntity> entity = this.curriculumDao.findById(Long.valueOf(curriculumId));
 		
 		return CurriculumEntity.convertFromEntity(entity.get());
+		
+	}
+
+	/**
+	* Refer to the CurriculumService interface for details
+	*/
+	@Override
+	public long getNextCurriculumId() {
+		
+		Optional<CurriculumEntity> entity = this.curriculumDao.findTopByOrderByCurriculumIdDesc();
+		
+		return entity.isEmpty() ? 1 : entity.get().getCurriculumId() + 1;
 		
 	}
 

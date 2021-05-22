@@ -21,4 +21,10 @@ public interface CurriculumService {
 	*/
 	public Curriculum fetchCurriculum(String curriculumId); 
 	
+	/**
+	* Returns the next available Curriculum Id
+	* @return next available CurriculumId
+	*/
+	public long getNextCurriculumId();
+	
 }
