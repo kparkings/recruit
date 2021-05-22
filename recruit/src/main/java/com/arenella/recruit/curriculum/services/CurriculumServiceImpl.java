@@ -40,6 +40,8 @@ public class CurriculumServiceImpl implements CurriculumService{
 		
 		Optional<CurriculumEntity> entity = this.curriculumDao.findById(Long.valueOf(curriculumId));
 		
+		//TODO: [KP] Validation Curriculum does not exist and how to handle that in FE
+		
 		return CurriculumEntity.convertFromEntity(entity.get());
 		
 	}
