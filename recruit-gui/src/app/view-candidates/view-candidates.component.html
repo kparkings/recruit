@@ -8,8 +8,7 @@
 
 		<!-- Pagination -->
 		<div class="pagination-options">
-           	
-			<span [ngSwitch]="showNavPrev()">
+           	<span [ngSwitch]="showNavPrev()">
 				<span *ngSwitchCase="true"  class="candidate-nav" (click)="previousPage()"><<<<<</span>
 				<span *ngSwitchCase="false" class="candidate-nav-disabled"><<<<<</span>
 			</span>
@@ -19,337 +18,338 @@
 				<span *ngSwitchCase="false"class="candidate-nav-disabled">>>>>></span>
 			</span>
 		</div>
-      </div>
+	</div>
       
+    <!-- Candidates table -->  
+	<div>
       
-      <table class="table candidate-table">
-      	<thead>
-      		<tr>
-      			<!-- Table Headers -->
-      			<th class="bg-tab-hdr">CandidateId</th>
-      			<th class="bg-tab-hdr">CandidateId</th>
-                <th class="bg-tab-hdr">Country</th>
-                <th class="bg-tab-hdr">City</th>
-                <th class="bg-tab-hdr">Function</th>
-                <th class="bg-tab-hdr">Perm</th>
-                <th class="bg-tab-hdr">Freelance</th>
-                <th class="bg-tab-hdr">Years Exp</th>
-                <th class="bg-tab-hdr">Dutch</th>
-                <th class="bg-tab-hdr">English</th>
-                <th class="bg-tab-hdr">French</th>
-                <th class="bg-tab-hdr">Skills</th>
-      		</tr>
-      		<tr>
-      			<!-- Table Filters -->
-      			<th class="bg-tab-hdr fltrcol"></th>
-      			<th class="bg-tab-hdr fltrcol" (click)="open(mymodal, 'candidateId')">
-                <span class="material-icons {{isFilterCandidateIdActiveClass()}}">filter_alt</span>
-                </th>
-                <th class="bg-tab-hdr fltrcol" (click)="open(mymodal, 'country')">
-                <span class="material-icons {{isFilterCountryActiveClass()}}">filter_alt</span>
-                </th>
-                <th class="bg-tab-hdr fltrcol" (click)="open(mymodal, 'city')">
-                <span class="material-icons {{isFilterCityActiveClass()}}">filter_alt</span>
-                </th>
-                <th class="bg-tab-hdr fltrcol" (click)="open(mymodal, 'roleSought')">
-                <span class="material-icons {{isFilterFunctionActiveClass()}}">filter_alt</span>
-                </th>
-                <th class="bg-tab-hdr fltrcol" (click)="open(mymodal, 'perm')">
-                  <span class="material-icons  {{isFilterPermActiveClass()}}">filter_alt</span>
-                </th>
-                <th class="bg-tab-hdr fltrcol" (click)="open(mymodal, 'freelance')">
-                  <span class="material-icons {{isFilterFreelanceActiveClass()}}">filter_alt</span>
-                </th>
-                <th class="bg-tab-hdr fltrcol" (click)="open(mymodal, 'yearsExperience')">
-                <span class="material-icons {{isFilterYearsExperienceActiveClass()}}">filter_alt</span>
-                </th>
-                <th class="bg-tab-hdr fltrcol" (click)="open(mymodal, 'dutch')">
-                  <span class="material-icons {{isFilterDutchActiveClass()}}">filter_alt</span>
-                </th>
-                <th class="bg-tab-hdr fltrcol" (click)="open(mymodal, 'english')">
-                  <span class="material-icons {{isFilterEnglishActiveClass()}}">filter_alt</span>
-                </th>
-                <th class="bg-tab-hdr fltrcol" (click)="open(mymodal, 'french')">
-                  <span class="material-icons {{isFilterFrenchActiveClass()}}">filter_alt</span>
-                </th>
-                <th class="bg-tab-hdr fltrcol" (click)="open(mymodal, 'skills')">
-                  <span class="material-icons {{isFilterSkillsActiveClass()}}">filter_alt</span>
-                </th>
-      		</tr>
-      	</thead>
-      	<tbody>
-      		<!-- Table row -->
-      		<tr *ngFor="let candidate of candidates">
-      			<td class="candidate-tab-col">
-      				
-      					<span class="material-icons">
-      						<a href="{{getCurriculumDownloadUrl('0')}}" >
-      							insert_drive_file
-      						</a>
-      					</span>
-      				
-      				
-      			</td>
-      			<td class="candidate-tab-col"><span class="candidate-id-prefix">C</span>{{candidate.candidateId}}</td>
-                <td class="candidate-tab-col mini-col"> {{candidate.country}}</td>
-                <td class="candidate-tab-col medicol">{{candidate.city}}</td>
-                <td class="candidate-tab-col medicol">{{candidate.roleSought}}</td>
-                <td class="candidate-tab-col mini-col">{{candidate.perm}}</td>
-                <td class="candidate-tab-col mini-col">{{candidate.freelance}}</td>
-                <td class="candidate-tab-col mini-col">{{candidate.yearsExperience}}</td>
-                <td class="candidate-tab-col lang-col">{{candidate.getDutch()}}</td>
-                <td class="candidate-tab-col lang-col">{{candidate.getEnglish()}}</td>
-                <td class="candidate-tab-col lang-col">{{candidate.getFrench()}}</td>
-                <td class="candidate-tab-col">{{candidate.getSkills()}}</td>
-      		</tr>	
-      	</tbody>
-      </table>
+		<table class="table candidate-table">
+			<thead>
+	      		<tr>
+	      			<!-- Table Headers -->
+	      			<th class="bg-tab-hdr">CandidateId</th>
+	      			<th class="bg-tab-hdr">CandidateId</th>
+	                <th class="bg-tab-hdr">Country</th>
+	                <th class="bg-tab-hdr">City</th>
+	                <th class="bg-tab-hdr">Function</th>
+	                <th class="bg-tab-hdr">Perm</th>
+	                <th class="bg-tab-hdr">Freelance</th>
+	                <th class="bg-tab-hdr">Years Exp</th>
+	                <th class="bg-tab-hdr">Dutch</th>
+	                <th class="bg-tab-hdr">English</th>
+	                <th class="bg-tab-hdr">French</th>
+	                <th class="bg-tab-hdr">Skills</th>
+	      		</tr>
+	      		<tr>
+	      			<!-- Table Filters -->
+	      			<th class="bg-tab-hdr fltrcol"></th>
+	      			<th class="bg-tab-hdr fltrcol" (click)="open(mymodal, 'candidateId')">
+	                <span class="material-icons {{isFilterCandidateIdActiveClass()}}">filter_alt</span>
+	                </th>
+	                <th class="bg-tab-hdr fltrcol" (click)="open(mymodal, 'country')">
+	                <span class="material-icons {{isFilterCountryActiveClass()}}">filter_alt</span>
+	                </th>
+	                <th class="bg-tab-hdr fltrcol" (click)="open(mymodal, 'city')">
+	                <span class="material-icons {{isFilterCityActiveClass()}}">filter_alt</span>
+	                </th>
+	                <th class="bg-tab-hdr fltrcol" (click)="open(mymodal, 'roleSought')">
+	                <span class="material-icons {{isFilterFunctionActiveClass()}}">filter_alt</span>
+	                </th>
+	                <th class="bg-tab-hdr fltrcol" (click)="open(mymodal, 'perm')">
+	                  <span class="material-icons  {{isFilterPermActiveClass()}}">filter_alt</span>
+	                </th>
+	                <th class="bg-tab-hdr fltrcol" (click)="open(mymodal, 'freelance')">
+	                  <span class="material-icons {{isFilterFreelanceActiveClass()}}">filter_alt</span>
+	                </th>
+	                <th class="bg-tab-hdr fltrcol" (click)="open(mymodal, 'yearsExperience')">
+	                <span class="material-icons {{isFilterYearsExperienceActiveClass()}}">filter_alt</span>
+	                </th>
+	                <th class="bg-tab-hdr fltrcol" (click)="open(mymodal, 'dutch')">
+	                  <span class="material-icons {{isFilterDutchActiveClass()}}">filter_alt</span>
+	                </th>
+	                <th class="bg-tab-hdr fltrcol" (click)="open(mymodal, 'english')">
+	                  <span class="material-icons {{isFilterEnglishActiveClass()}}">filter_alt</span>
+	                </th>
+	                <th class="bg-tab-hdr fltrcol" (click)="open(mymodal, 'french')">
+	                  <span class="material-icons {{isFilterFrenchActiveClass()}}">filter_alt</span>
+	                </th>
+	                <th class="bg-tab-hdr fltrcol" (click)="open(mymodal, 'skills')">
+	                  <span class="material-icons {{isFilterSkillsActiveClass()}}">filter_alt</span>
+	                </th>
+	      		</tr>
+	      	</thead>
+	      	<tbody>
+	      		<!-- Table row -->
+	      		<tr *ngFor="let candidate of candidates">
+	      			<td class="candidate-tab-col">
+						<span class="material-icons">
+	      					<a class="currliculum-link" href="{{getCurriculumDownloadUrl('0')}}" >
+	      						insert_drive_file
+	      					</a>
+	      				</span>
+	      			</td>
+	      			<td class="candidate-tab-col"><span class="candidate-id-prefix">C</span>{{candidate.candidateId}}</td>
+	                <td class="candidate-tab-col mini-col"> {{candidate.country}}</td>
+	                <td class="candidate-tab-col medicol">{{candidate.city}}</td>
+	                <td class="candidate-tab-col medicol">{{candidate.roleSought}}</td>
+	                <td class="candidate-tab-col mini-col">{{candidate.perm}}</td>
+	                <td class="candidate-tab-col mini-col">{{candidate.freelance}}</td>
+	                <td class="candidate-tab-col mini-col">{{candidate.yearsExperience}}</td>
+	                <td class="candidate-tab-col lang-col">{{candidate.getDutch()}}</td>
+	                <td class="candidate-tab-col lang-col">{{candidate.getEnglish()}}</td>
+	                <td class="candidate-tab-col lang-col">{{candidate.getFrench()}}</td>
+	                <td class="candidate-tab-col">{{candidate.getSkills()}}</td>
+	      		</tr>	
+	      	</tbody>
+		</table>
+	</div>
 
-
-
-<ng-template #mymodal let-modal>
-  <div class="modal-header">
-    <h4 class="modal-title">Filters</h4>
-    <div class="filter-close-box" (click)="closeModal()">X</div>
-  </div>
-  <div class="modal-body">
-      <div *ngIf="showSortOptons">
-
-
-        <div class="row">
-              <div class="col">
-                <label class="modal-label">Order</label>
-              </div>
-              <div class="col">
-                <span>
-          <select (change)="updateSortOrder($event.target)">
-            <option value=''></option>
-            <option value='asc'  [selected]="selectedSortOrderForFilter == 'asc'">Asc</option>
-            <option value='desc' [selected]="selectedSortOrderForFilter == 'desc'">Desc</option>
-          </select>
-        </span>
-              </div>
-        </div>
-
-
-        
-        
-      </div>
-      <div>
-       
-      <div [ngSwitch]="activeFilter" class="filterColmnSpecific">
-          <div  *ngSwitchCase="'candidateId'">
-          
-          </div>
-          <div  *ngSwitchCase="'country'">
-            <form [formGroup]="countryFilterForm">
-              <div class="row">
-                <div class="col">
-                  <label class="modal-label">Countries</label>
-                </div>
-                <div class="col">
-                  <div>
-                  <input class="filtercheckbox" type="checkbox" name="countries" value="NETHERLANDS" formControlName="NETHERLANDS" (change)="updateFilters()">
-                <label>Netherlands</label>
-              </div>
-              <div>
-                <input class="filtercheckbox" type="checkbox" name="countries" value="BELGIUM" formControlName="BELGIUM" (change)="updateFilters()">
-                <label>Belgium</label>
-              </div>
-              <div>
-                <input class="filtercheckbox" type="checkbox" name="countries" value="UK" formControlName="UK" (change)="updateFilters()">
-                <label>UK</label>
-              </div>
-                </div>
-              </div>
-            
-            </form>
-          </div>
-          <div *ngSwitchCase="'city'">
-          </div>
-          <div *ngSwitchCase="'roleSought'">
-            
-            <form [formGroup]="functionTypeFilterForm">
-              <div class="row">
-                <div class="col">
-                  <label class="modal-label">Functions</label>
-                </div>
-              </div>
-              
-              <div class="row"> 
-                <div class="col">
-                  <div *ngFor="let funcType of functionOptionsPage1">
-                    <input class="filtercheckbox" type="checkbox" name="funcTypes" value="{{funcType.id}}" formControlName="{{funcType.id}}" (change)="updateFilters()">
-                    <label>{{funcType.desc}}</label>
-                  </div>
-                </div>
-                <div class="col">
-                  <div *ngFor="let funcType of functionOptionsPage2">
-                    <input class="filtercheckbox" type="checkbox" name="funcTypes" value="{{funcType.id}}" formControlName="{{funcType.id}}" (change)="updateFilters()">
-                    <label>{{funcType.desc}}</label>
-                  </div>
-                </div>
-              </div>
-            
-            </form>
-            
-          </div>
-
-          <div  *ngSwitchCase="'perm'">
-            <div class="row">
-              <div class="col">
-                <label class="modal-label">Include non Perm candidates</label>
-              </div>
-              <div class="col">
-                <form [formGroup]="permFilterForm">
-                  <div>
-                    <input class="filtercheckbox" type="radio" value="false" formControlName="include" (change)="updateFilters()">
-                    <label>Yes</label>
-                  </div>
-                  <div>
-                    <input class="filtercheckbox" type="radio" value="true"   formControlName="include" (change)="updateFilters()">
-                    <label>No</label>
-                  </div>
-                </form>
-              </div>
-            </div>
-          </div>
-          
-          <div  *ngSwitchCase="'freelance'">
-            <div class="row">
-              <div class="col">
-                <label class="modal-label">Include non freelance candidates</label>
-              </div>
-              <div class="col">
-                <form [formGroup]="freelanceFilterForm">
-                  <div>
-                    <input class="filtercheckbox" type="radio" value="false" formControlName="include" (change)="updateFilters()">
-                    <label>Yes</label>
-                  </div>
-                  <div>
-                    <input class="filtercheckbox" type="radio" value="true"  formControlName="include" (change)="updateFilters()">
-                    <label>No</label>
-                  </div>
-                </form>
-              </div>
-            </div>
-          </div>
-          
-           <div  *ngSwitchCase="'yearsExperience'">
-            <div class="row">
-              <div class="col">
-                <label class="modal-label">Years Experience</label>
-              </div>
-              <div class="col">
-                <form [formGroup]="yearsExperienceFilterForm">
-                  <div>
-                  	<label>Greater than or equal to</label>
-                    <select class="inpt-tab-std" formControlName="yearsExperienceGtEq" (change)="updateFilters()" size="4">
-						<option value=""></option>
-						<option *ngFor="let opt of yearsExperienceOptions" value="{{opt}}">{{opt}}</option>
-					</select>
-                  </div>
-                  <div>
-                  	<label>Less than or equal to</label>
-                    <select class="inpt-tab-std" formControlName="yearsExperienceLtEq" (change)="updateFilters()" size="4">
-						<option value=""></option>
-						<option *ngFor="let opt of yearsExperienceOptions" value="{{opt}}">{{opt}}</option>
-					</select>
-                  </div>
-                </form>
-              </div>
-            </div>
-          </div>
-          
-           <div  *ngSwitchCase="'dutch'">
-            <div class="row">
-              <div class="col">
-                <label class="modal-label">Dutch Language</label>
-              </div>
-              <div class="col">
-                <form [formGroup]="dutchFilterForm">
-                  <div>
-                  	<label>Greater than or equal to</label>
-                    <select class="inpt-tab-std" formControlName="level" (change)="updateFilters()">
-						<option value=""></option>
-						<option value="PROFICIENT">Proficient</option>
-						<option value="BASIC">Basic</option>
-						
-					</select>
-                  </div>
-                 </form>
-              </div>
-            </div>
-          </div>
-          
-           <div  *ngSwitchCase="'french'">
-            <div class="row">
-              <div class="col">
-                <label class="modal-label">Dutch Language</label>
-              </div>
-              <div class="col">
-                <form [formGroup]="frenchFilterForm">
-                  <div>
-                  	<label>Greater than or equal to</label>
-                    <select class="inpt-tab-std" formControlName="level" (change)="updateFilters()">
-						<option value=""></option>
-						<option value="PROFICIENT">Proficient</option>
-						<option value="BASIC">Basic</option>
-						
-					</select>
-                  </div>
-                 </form>
-              </div>
-            </div>
-          </div>
-          
-           <div  *ngSwitchCase="'english'">
-            <div class="row">
-              <div class="col">
-                <label class="modal-label">Dutch Language</label>
-              </div>
-              <div class="col">
-                <form [formGroup]="englishFilterForm">
-                  <div>
-                  	<label>Greater than or equal to</label>
-                    <select class="inpt-tab-std" formControlName="level" (change)="updateFilters()">
-						<option value=""></option>
-						<option value="PROFICIENT">Proficient</option>
-						<option value="BASIC">Basic</option>
-						
-					</select>
-                  </div>
-                 </form>
-              </div>
-            </div>
-          </div>
-          
-          <div  *ngSwitchCase="'skills'">
-            <div class="row">
-              <div class="col">
-                  <div>Add Skill</div>
-                  <div>
-                  	<form [formGroup]="skillFilterForm">
-	                  	<input type="text" formControlName="skill" class="inpt-tab-std input-small"/>
-	                  	<button (click)="updateSkillFilters()">Add</button>
-                  	</form>
-                  </div>
-                  <div class="selected-skills-filter">
-                  	<span *ngFor="let skill of skillFilterSelections" class="selected-skill" (click)="removeSkill(skill)">
-                  		{{skill}}
-                  	</span>
-                  </div>
-              </div>
-            </div>
-          </div>
-          
-
-        </div>
-
-      </div>
-  </div>
- 
-</ng-template>
-
-
-
+	<!-- Filters -->
+	<ng-template #mymodal let-modal>
+	
+		<!-- Filter Header -->
+		<div class="modal-header">
+			<h4 class="modal-title">Filters</h4>
+			<div class="filter-close-box" (click)="closeModal()">X</div>
+		</div>
+		
+		<!--  Filter Body -->
+		<div class="modal-body">
+			
+			<!-- Sort Options -->
+			<div *ngIf="showSortOptons">
+				<div class="row">
+					<div class="col">
+						<label class="modal-label">Order</label>
+					</div>
+					<div class="col">
+						<span>
+							<select (change)="updateSortOrder($event.target)">
+								<option value=''></option>
+								<option value='asc'  [selected]="selectedSortOrderForFilter == 'asc'">Asc</option>
+								<option value='desc' [selected]="selectedSortOrderForFilter == 'desc'">Desc</option>
+							</select>
+						</span>
+					</div>
+				</div>
+			</div>
+			
+			<!--  Specific Filters -->
+			<div>
+             	<div [ngSwitch]="activeFilter" class="filterColmnSpecific">
+					
+					<!-- Candidate Id Filters -->
+					<div  *ngSwitchCase="'candidateId'">
+		          
+					</div>
+		          
+		          	<!-- Country Filters -->
+					<div  *ngSwitchCase="'country'">
+						<form [formGroup]="countryFilterForm">
+							<div class="row">
+								<div class="col">
+									<label class="modal-label">Countries</label>
+								</div>
+								<div class="col">
+									<div>
+										<input class="filtercheckbox" type="checkbox" name="countries" value="NETHERLANDS" formControlName="NETHERLANDS" (change)="updateFilters()">
+										<label>Netherlands</label>
+									</div>
+									<div>
+										<input class="filtercheckbox" type="checkbox" name="countries" value="BELGIUM" formControlName="BELGIUM" (change)="updateFilters()">
+										<label>Belgium</label>
+									</div>
+									<div>
+										<input class="filtercheckbox" type="checkbox" name="countries" value="UK" formControlName="UK" (change)="updateFilters()">
+										<label>UK</label>
+									</div>
+								</div>
+							</div>
+						</form>
+					</div>
+		
+					<!-- City Filters -->
+					<div *ngSwitchCase="'city'">
+					</div>
+		          
+					<!-- Role --> 
+					<div *ngSwitchCase="'roleSought'">
+						<form [formGroup]="functionTypeFilterForm">
+							<div class="row">
+								<div class="col">
+									<label class="modal-label">Functions</label>
+								</div>
+							</div>
+							<div class="row"> 
+								<div class="col">
+									<div *ngFor="let funcType of functionOptionsPage1">
+										<input class="filtercheckbox" type="checkbox" name="funcTypes" value="{{funcType.id}}" formControlName="{{funcType.id}}" (change)="updateFilters()">
+										<label>{{funcType.desc}}</label>
+									</div>
+								</div>
+								<div class="col">
+									<div *ngFor="let funcType of functionOptionsPage2">
+										<input class="filtercheckbox" type="checkbox" name="funcTypes" value="{{funcType.id}}" formControlName="{{funcType.id}}" (change)="updateFilters()">
+										<label>{{funcType.desc}}</label>
+									</div>
+								</div>
+							</div>
+		            	</form>
+		          	</div>
+		
+					<!-- Perm Filters -->
+					<div  *ngSwitchCase="'perm'">
+						<div class="row">
+							<div class="col">
+								<label class="modal-label">Include non Perm candidates</label>
+							</div>
+							<div class="col">
+								<form [formGroup]="permFilterForm">
+									<div>
+										<input class="filtercheckbox" type="radio" value="false" formControlName="include" (change)="updateFilters()">
+										<label>Yes</label>
+									</div>
+									<div>
+										<input class="filtercheckbox" type="radio" value="true"   formControlName="include" (change)="updateFilters()">
+										<label>No</label>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+		          
+					<!--  Freelance Filters -->
+					<div  *ngSwitchCase="'freelance'">
+						<div class="row">
+							<div class="col">
+								<label class="modal-label">Include non freelance candidates</label>
+							</div>
+							<div class="col">
+								<form [formGroup]="freelanceFilterForm">
+									<div>
+										<input class="filtercheckbox" type="radio" value="false" formControlName="include" (change)="updateFilters()">
+										<label>Yes</label>
+									</div>
+									<div>
+										<input class="filtercheckbox" type="radio" value="true"  formControlName="include" (change)="updateFilters()">
+										<label>No</label>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+		          
+					<!--  Years Experience Filters -->
+					<div  *ngSwitchCase="'yearsExperience'">
+						<div class="row">
+							<div class="col">
+								<label class="modal-label">Years Experience</label>
+							</div>
+							<div class="col">
+								<form [formGroup]="yearsExperienceFilterForm">
+									<div>
+										<label>Greater than or equal to</label>
+										<select class="inpt-tab-std" formControlName="yearsExperienceGtEq" (change)="updateFilters()" size="4">
+											<option value=""></option>
+											<option *ngFor="let opt of yearsExperienceOptions" value="{{opt}}">{{opt}}</option>
+										</select>
+									</div>
+									<div>
+										<label>Less than or equal to</label>
+										<select class="inpt-tab-std" formControlName="yearsExperienceLtEq" (change)="updateFilters()" size="4">
+											<option value=""></option>
+											<option *ngFor="let opt of yearsExperienceOptions" value="{{opt}}">{{opt}}</option>
+										</select>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+		          
+					<!-- Dutch Language Filters -->
+					<div  *ngSwitchCase="'dutch'">
+						<div class="row">
+							<div class="col">
+								<label class="modal-label">Dutch Language</label>
+							</div>
+							<div class="col">
+								<form [formGroup]="dutchFilterForm">
+									<div>
+										<label>Greater than or equal to</label>
+										<select class="inpt-tab-std" formControlName="level" (change)="updateFilters()">
+											<option value=""></option>
+											<option value="PROFICIENT">Proficient</option>
+											<option value="BASIC">Basic</option>
+										</select>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+		          
+		          	<!--  French Language Filters -->
+					<div  *ngSwitchCase="'french'">
+						<div class="row">
+							<div class="col">
+								<label class="modal-label">Dutch Language</label>
+							</div>
+							<div class="col">
+								<form [formGroup]="frenchFilterForm">
+									<div>
+										<label>Greater than or equal to</label>
+										<select class="inpt-tab-std" formControlName="level" (change)="updateFilters()">
+											<option value=""></option>
+											<option value="PROFICIENT">Proficient</option>
+											<option value="BASIC">Basic</option>
+										</select>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+		          
+		          	<!-- English filter options -->
+					<div  *ngSwitchCase="'english'">
+						<div class="row">
+							<div class="col">
+								<label class="modal-label">Dutch Language</label>
+							</div>
+							<div class="col">
+								<form [formGroup]="englishFilterForm">
+									<div>
+										<label>Greater than or equal to</label>
+										<select class="inpt-tab-std" formControlName="level" (change)="updateFilters()">
+											<option value=""></option>
+											<option value="PROFICIENT">Proficient</option>
+											<option value="BASIC">Basic</option>
+										</select>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+		  		
+					<!-- Skills Filters -->
+					<div  *ngSwitchCase="'skills'">
+						<div class="row">
+							<div class="col">
+								<div>Add Skill</div>
+								<div>
+									<form [formGroup]="skillFilterForm">
+										<input type="text" formControlName="skill" class="inpt-tab-std input-small"/>
+										<button (click)="updateSkillFilters()">Add</button>
+									</form>
+								</div>
+								<div class="selected-skills-filter">
+									<span *ngFor="let skill of skillFilterSelections" class="selected-skill" (click)="removeSkill(skill)">
+										{{skill}}
+									</span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div> 
+	</ng-template>
+</div>

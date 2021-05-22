@@ -9,9 +9,6 @@
     margin-right:95px;
  }
 
- .pagination-col{
-     margin-left:25px;
- }
  .candidate-nav{
      cursor:pointer;
      color:blue;
@@ -33,7 +30,6 @@
 	vertical-align:middle;
 }
 
-
 .bg-tab-hdr{
 	border:1px black solid;
 	background: #6c757d;
@@ -53,6 +49,7 @@
     background:#E8E8E8;
     padding:0px;
     margin:0px;
+    padding-top:5px;
     cursor:pointer;
 }
 
@@ -76,14 +73,14 @@
 	width:65px;
 }
 
-
-.centerdiv{
-    margin: 0 auto;
+.currliculum-link{
+	text-decoration:none;
+	color:#6f42c1;
 }
 
 .candidate-table{
     margin:0 auto;
-    width:1400px;
+    width:98%;
     margin-top:25px;
 }
 
@@ -93,7 +90,6 @@
     margin-right:20px;
     min-width:100px;
 }
-
 
 .material-icons {
     font-size: 16px;
@@ -116,7 +112,6 @@
  .filtercheckbox{
     margin-right:5px;
  }
-
 
  .filterColmnSpecific{
      margin-top:25px;
@@ -168,5 +163,3 @@
 .modal-body{
 	min-height:150px;
 }
- 
- 
