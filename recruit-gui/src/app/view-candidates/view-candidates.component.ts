@@ -1,10 +1,11 @@
-import { Component, OnInit }                                                    from '@angular/core';
-import { CandidateServiceService }                                           from '../candidate-service.service';
-import { Candidate }                                                                   from './candidate';
-import { CandidateFunction }                                                     from '../candidate-function';
-import {NgbModal, ModalDismissReasons}                              from '@ng-bootstrap/ng-bootstrap';
-import {  FormGroup, FormControl }                                          from '@angular/forms';
-import { environment }                                                                from '../../environments/environment';
+import { Component, OnInit }					from '@angular/core';
+import { CandidateServiceService }				from '../candidate-service.service';
+import { Candidate }							from './candidate';
+import { CandidateFunction }					from '../candidate-function';
+import { NgbModal, ModalDismissReasons}			from '@ng-bootstrap/ng-bootstrap';
+import { FormGroup, FormControl }				from '@angular/forms';
+import { environment }							from '../../environments/environment';
+import { Router}								from '@angular/router';
 
 @Component({
   selector: 'app-view-candidates',
@@ -13,241 +14,269 @@ import { environment }                                                          
 })
 export class ViewCandidatesComponent implements OnInit {
 
-  public functionTypes:                                 Array<CandidateFunction>        = new Array<CandidateFunction>();
-  public candidates:                                     Array<Candidate>                       = new Array<Candidate>();
-  public yearsExperienceOptions:               Array<number>                            = new Array<number>();
+	public functionTypes:					Array<CandidateFunction>	= new Array<CandidateFunction>();
+  	public candidates:					Array<Candidate>			= new Array<Candidate>();
+  	public yearsExperienceOptions:		Array<number>				= new Array<number>();
 
-  /**
-  * Filters
-  */
-  public  activeFilter: string                                = '';
-  private sortColumn:  string                              = 'candidateId';
-  private sortOrder: string                                  = 'desc'
-  public  showSortOptons: boolean                  = false;
-  public  selectedSortOrderForFilter: string      = '';
-  public  countryFiltNL: boolean                       = false;
-  public  countryFiltBE: boolean                       = false;
-  public  countryFiltUK: boolean                      = false;
-  private pageSize:number                               = 8;
-  public  totalPages:number                             = 0;
-  public  currentPage:number                           = 0;
+  	/**
+  	* Filters
+  	*/
+  	public	activeFilter:					string						= '';
+  	private	sortColumn:						string						= 'candidateId';
+  	private	sortOrder:						string						= 'desc'
+  	public	showSortOptons:					boolean						= false;
+  	public	selectedSortOrderForFilter:		string						= '';
+  	public	countryFiltNL:					boolean						= false;
+  	public	countryFiltBE:					boolean						= false;
+  	public	countryFiltUK:					boolean						= false;
+  	private	pageSize:						number						= 8;
+  	public	totalPages:						number						= 0;
+  	public	currentPage:					number						= 0;
+  	public	functionOptionsPage1:			Array<CandidateFunction>	= new Array<CandidateFunction>();
+  	public	functionOptionsPage2:			Array<CandidateFunction>	= new Array<CandidateFunction>();
 
-  public functionOptionsPage1: Array<CandidateFunction> = new Array<CandidateFunction>();
-  public functionOptionsPage2: Array<CandidateFunction> = new Array<CandidateFunction>();
+	/**
+  	* Constructor
+	*/
+	constructor(public candidateService:CandidateServiceService, private modalService: NgbModal, private router: Router) {
 
-  public nextPage(): void{
+		this.getYearsExperienceOption();
+      
+		let counter:number = 0;
 
-    if ((this.currentPage + 1) < this.totalPages) {
-      this.currentPage = this.currentPage + 1;
-      this.fetchCandidates(false);
-    }
+		this.candidateService.loadFunctionTypes().forEach(funcType => {
+
+			this.functionTypes.push(funcType);
+			this.functionTypeFilterForm.addControl(funcType.id, new FormControl(''));
+
+			if (counter < 8) {
+        		this.functionOptionsPage1.push(funcType);
+      		} else {
+        		this.functionOptionsPage2.push(funcType);
+      		}
+
+      		counter = counter +1;
+
+    	});
+
+	}
+
+	/**
+	* Fetches and displays the next page 
+	* of candidtes
+	*/
+	public nextPage(): void{
+
+    	if ((this.currentPage + 1) < this.totalPages) {
+      		this.currentPage = this.currentPage + 1;
+      		this.fetchCandidates(false);
+    	}
     
-  }
+	}
 
-  public previousPage(): void{
-    if ((this.currentPage) > 0) {
-      this.currentPage = this.currentPage - 1;
-      this.fetchCandidates(false);
-    }
-  }
-
-
-  public showNavPrev(): boolean{
+	/**
+	* Fetches and displays the previous page of Candidates
+	*/
+	public previousPage(): void{
     
-    if (this.totalPages === -1) {
-      return false;
-    }
+		if ((this.currentPage) > 0) {
+      		this.currentPage = this.currentPage - 1;
+      		this.fetchCandidates(false);
+    	}
+  	}
 
-    return this.currentPage > 0;
-
-  }
-
-  public showNavNext():boolean{
+	/**
+	* Whether or not the previous page button 
+	* should be active
+	* */
+	public showNavPrev(): boolean{
     
-    if (this.totalPages === 0) {
-      return false;
-    }
+		if (this.totalPages === -1) {
+      		return false;
+    	}
 
-    return this.currentPage < (this.totalPages -1);
+    	return this.currentPage > 0;
 
-  }
+  	}
 
-  public countryFilterForm:FormGroup = new FormGroup({
+	/**
+	* Whether or not the next page 
+	* button should be active
+	*/
+	public showNavNext():boolean{
+    
+    	if (this.totalPages === 0) {
+      		return false;
+    	}
+
+    	return this.currentPage < (this.totalPages -1);
+
+	}
+
+	public countryFilterForm:FormGroup = new FormGroup({
      
-    NETHERLANDS:  new FormControl(''),
-    BELGIUM:      new FormControl(''),
-    UK:           new FormControl('')
+    	NETHERLANDS:  new FormControl(''),
+    	BELGIUM:      new FormControl(''),
+    	UK:           new FormControl('')
    
-  });
+	});
 
-  public functionTypeFilterForm: FormGroup = new FormGroup({
-    //Set dynamically
-  });
+	public functionTypeFilterForm: FormGroup = new FormGroup({
+    	//Set dynamically
+	});
 
-  public  skillFilterSelections:Array<string> = new Array<string>();
+	public  skillFilterSelections:Array<string> = new Array<string>();
 
-  public skillFilterForm: FormGroup = new FormGroup({
-      skill:  new FormControl(''),
-    });
+  	public skillFilterForm: FormGroup = new FormGroup({
+		skill:  new FormControl(''),
+	});
   
-  /**
-  * Adds new skill to filter 
-  */
-  public updateSkillFilters():void{
-      this.skillFilterSelections.push(this.skillFilterForm.get('skill')?.value)
-      this.skillFilterForm.get('skill')?.setValue('');
-      this.updateFilters();
-  }
+	/**
+	* Adds new skill to filter 
+	*/
+	public updateSkillFilters():void{
+		this.skillFilterSelections.push(this.skillFilterForm.get('skill')?.value)
+      	this.skillFilterForm.get('skill')?.setValue('');
+      	this.updateFilters();
+  	}
   
-  public removeSkill(skill:string):void{
-      console.log('>>' + skill);
-      this.skillFilterSelections = this.skillFilterSelections.filter(s => s  !== skill);
-      this.updateFilters();
-  }
+  	public removeSkill(skill:string):void{
+		console.log('>>' + skill);
+		this.skillFilterSelections = this.skillFilterSelections.filter(s => s  !== skill);
+		this.updateFilters();
+	}
   
-  public freelanceFilterForm: FormGroup = new FormGroup({
-    include:  new FormControl('false'),
-  });
+	public freelanceFilterForm: FormGroup = new FormGroup({
+		include:  new FormControl('false'),
+	});
 
-  public permFilterForm: FormGroup = new FormGroup({
-    include:  new FormControl('false'),
-  });
+	public permFilterForm: FormGroup = new FormGroup({
+		include:  new FormControl('false'),
+	});
   
-  public dutchFilterForm: FormGroup = new FormGroup({
-      level: new FormControl(''),
-    });
+	public dutchFilterForm: FormGroup = new FormGroup({
+		level: new FormControl(''),
+	});
   
-  public frenchFilterForm: FormGroup = new FormGroup({
-      level:  new FormControl(''),
-    });
+	public frenchFilterForm: FormGroup = new FormGroup({
+		level:  new FormControl(''),
+	});
   
-  public englishFilterForm: FormGroup = new FormGroup({
-      level:  new FormControl(''),
-    });
+	public englishFilterForm: FormGroup = new FormGroup({
+		level:  new FormControl(''),
+	});
   
-  public yearsExperienceFilterForm:FormGroup = new FormGroup({
-      yearsExperienceGtEq: new FormControl(''),
-      yearsExperienceLtEq: new FormControl('')
-  });
-
-  /**
-  * Constructor
-  */
-  constructor(public candidateService:CandidateServiceService, private modalService: NgbModal) {
-
-    this.getYearsExperienceOption();
-      
-    let counter:number = 0;
-
-    this.candidateService.loadFunctionTypes().forEach(funcType => {
-
-        this.functionTypes.push(funcType);
-      this.functionTypeFilterForm.addControl(funcType.id, new FormControl(''));
-
-
-      if (counter < 8) {
-        this.functionOptionsPage1.push(funcType);
-      } else {
-        this.functionOptionsPage2.push(funcType);
-      }
-
-      counter = counter +1;
-
-    });
-
-   }
-
-   public sortOrderValue():string{
+	public yearsExperienceFilterForm:FormGroup = new FormGroup({
+		yearsExperienceGtEq: new FormControl(''),
+		yearsExperienceLtEq: new FormControl('')
+	});
+	
+	/**
+	* Returns whether the candidates are being sorted in 
+	* ASC or DESC order
+	* @return direction of the sorting for the candidate results 
+	*/
+	public sortOrderValue():string{
      
-      if (this.sortColumn === this.activeFilter) {
-        return this.sortOrder;
-      }
+		if (this.sortColumn === this.activeFilter) {
+        	return this.sortOrder;
+      	}
       
-      return "";
+      	return "";
       
-   }
+   	}
 
-  /**
-  * Initializes component
-  */
-  ngOnInit(): void {
-    this.fetchCandidates(true);    
-  }
+	/**
+  	* Initializes component
+  	*/
+  	ngOnInit(): void {
+    	this.fetchCandidates(true);    
+  	}
 
-  /**
-  * Retrieves candidates from the backend
-  */
-  private fetchCandidates(resetPagination: boolean): void{
+	/**
+	* Retrieves candidates from the backend
+	*/
+	private fetchCandidates(resetPagination: boolean): void{
     
-    if (resetPagination) {
-        this.totalPages = 0;
-        this.currentPage = 0;
-    }
+		if (resetPagination) {
+        	this.totalPages = 0;
+        	this.currentPage = 0;
+		}
 
-    this.candidates = new Array<Candidate>();
+    	this.candidates = new Array<Candidate>();
 
-    this.candidateService.getCandidates(this.getCandidateFilterParamString()).subscribe( data => {
+    	this.candidateService.getCandidates(this.getCandidateFilterParamString()).subscribe( data => {
     
-      this.totalPages = data.totalPages;
+      		this.totalPages = data.totalPages;
   
-      data.content.forEach((c:Candidate) => {
+      		data.content.forEach((c:Candidate) => {
         
-        const candidate:Candidate = new Candidate();
+        		const candidate:Candidate = new Candidate();
 
-      candidate.candidateId              = c.candidateId;
-      candidate.city                            = c.city;
-      candidate.country                      = this.getCountryCode(c.country);
-      candidate.freelance                   = this.getFreelanceOption(c.freelance);
-      candidate.roleSought                = c.roleSought;
-      candidate.function                     = c.function;
-      candidate.perm                          = this.getPermOption(c.perm);
-      candidate.yearsExperience        = c.yearsExperience;
-      candidate.languages                 = c.languages;
-      candidate.skills                          = c.skills;
+      			candidate.candidateId		= c.candidateId;
+      			candidate.city				= c.city;
+      			candidate.country			= this.getCountryCode(c.country);
+      			candidate.freelance			= this.getFreelanceOption(c.freelance);
+      			candidate.roleSought		= c.roleSought;
+      			candidate.function			= c.function;
+      			candidate.perm				= this.getPermOption(c.perm);
+      			candidate.yearsExperience	= c.yearsExperience;
+      			candidate.languages			= c.languages;
+      			candidate.skills			= c.skills;
 
-      this.candidates.push(candidate);
+      			this.candidates.push(candidate);
 
-      });
+			});
         
-    })
+		}, err => {
+			
+			if (err.status === 401 || err.status === 0) {
+				sessionStorage.removeItem('isAdmin');
+				sessionStorage.removeItem('isRecruter');
+				sessionStorage.removeItem('loggedIn');
+				sessionStorage.setItem('beforeAuthPage', 'view-candidates');
+				this.router.navigate(['login-user']);
+			}
+    	})
 
-  }
+	}
 
-  /**
-  * Converts freelance option to display format
-  */
-  private getFreelanceOption(freelance: string): string{
+	/**
+	* Converts freelance option to display format
+	*/
+	private getFreelanceOption(freelance: string): string{
 
-      switch (freelance){
-        case  'TRUE': {return 'X';}
-        case  'FALSE': {return '-';}
-        case  'UNKNOWN': {return '?';}
-      }
+		switch (freelance){
+        	case  'TRUE': {return 'X';}
+        	case  'FALSE': {return '-';}
+        	case  'UNKNOWN': {return '?';}
+      	}
 
-      return '..'+freelance;
+      	return '..'+freelance;
 
-  }
+	}
 
     /**
-  * Converts perm option to display format
-  */
-  private getPermOption(perm: string): string{
+	* Converts perm option to display format
+	*/
+	private getPermOption(perm: string): string{
 
-      switch (perm){
-        case  'TRUE': {return 'X';}
-        case  'FALSE': {return '-';}
-        case  'UNKNOWN': {return '?';}
-      }
+		switch (perm){
+        	case  'TRUE': {return 'X';}
+        	case  'FALSE': {return '-';}
+        	case  'UNKNOWN': {return '?';}
+      	}
 
-      return '';
+      	return '';
 
-  }
+	}
   
-  /**
-  * Builds a query parameter string with the selected filter options
-  */
-  private getCandidateFilterParamString():string{
-    const filterParams:string = 'orderAttribute=' + this.sortColumn
+	/**
+	* Builds a query parameter string with the selected filter options
+	*/
+	private getCandidateFilterParamString():string{
+    	
+		const filterParams:string = 'orderAttribute=' + this.sortColumn
                                                          + "&order=" 
                                                          + this.sortOrder 
                                                          + '&page=' + this.currentPage
@@ -257,36 +286,41 @@ export class ViewCandidatesComponent implements OnInit {
                                                          + this.getPermFilterParamString()
                                                          + this.getFreelanceFilterParamString()
                                                          + this.getYearsExperienceFilterParamAsString()
-                                                         +this.getDutchParamString()
-                                                         +this.getFrenchParamString()
-                                                         +this.getEnglishParamString()
+                                                         + this.getDutchParamString()
+                                                         + this.getFrenchParamString()
+                                                         + this.getEnglishParamString()
                                                          + this.getSkillsParamString();
-    return filterParams;
-  }
+		return filterParams;
+	
+	}
   
-  private getSkillsParamString():string{
-      if (this.skillFilterSelections.length > 0) {
-         return '&skills='+encodeURIComponent(this.skillFilterSelections.toString()); 
-      }
+	private getSkillsParamString():string{
+      
+		if (this.skillFilterSelections.length > 0) {
+			return '&skills='+encodeURIComponent(this.skillFilterSelections.toString()); 
+      	}
+
       return '';
-  }
+ 
+	}
   
-  /**
-  * Creates a query param string with the filter options to apply to the dutch languge filter
-  */
-  private getDutchParamString():string{
+  	/**
+  	* Creates a query param string with the filter options to apply to the dutch languge filter
+  	*/
+	private getDutchParamString():string{
   
-      if (this.dutchFilterForm.get('level')?.value.length > 0 ) {
-          return  '&dutch=' + this.dutchFilterForm.get('level')?.value;
-      }
+		if (this.dutchFilterForm.get('level')?.value.length > 0 ) {
+			return  '&dutch=' + this.dutchFilterForm.get('level')?.value;
+		}
   
-      return '';
-  }
+	return '';
   
-  /**
-   * Creates a query param string with the filter options to apply to the french languge filter
-   */
-   private getFrenchParamString():string{
+	}
+  
+	/**
+	* Creates a query param string with the filter options to apply to the french languge filter
+	*/
+	private getFrenchParamString():string{
    
        if (this.frenchFilterForm.get('level')?.value.length > 0 ) {
            return  '&french=' + this.frenchFilterForm.get('level')?.value;
@@ -306,186 +340,181 @@ export class ViewCandidatesComponent implements OnInit {
     
         return '';
     }
- 
 
-  /**
-  * Creates a query param string with the filter options to apply to the perm
-  */
-  private getPermFilterParamString(): string{
+	/**
+	* Creates a query param string with the filter options to apply to the perm
+	*/
+	private getPermFilterParamString(): string{
   
-      if (this.permFilterForm.get('include')?.value !== 'true') {
-        return '&perm=true';
-      }
+		if (this.permFilterForm.get('include')?.value !== 'true') {
+			return '&perm=true';
+		}
 
-      return '&perm=false';
-  }
+      	return '&perm=false';
+	}
   
-  private getYearsExperienceFilterParamAsString(): string{
+	private getYearsExperienceFilterParamAsString(): string{
       
-      let values:string = '';
+		let values:string = '';
   
-      if (this.yearsExperienceFilterForm.get('yearsExperienceGtEq')?.value.length > 0 ) {
-          values = values  + '&yearsExperienceGtEq=' + this.yearsExperienceFilterForm.get('yearsExperienceGtEq')?.value;
-      }
+		if (this.yearsExperienceFilterForm.get('yearsExperienceGtEq')?.value.length > 0 ) {
+			values = values  + '&yearsExperienceGtEq=' + this.yearsExperienceFilterForm.get('yearsExperienceGtEq')?.value;
+		}
       
-      if (this.yearsExperienceFilterForm.get('yearsExperienceLtEq')?.value.length > 0) {
-          values = values  + '&yearsExperienceLtEq=' + this.yearsExperienceFilterForm.get('yearsExperienceLtEq')?.value;
-      }
+		if (this.yearsExperienceFilterForm.get('yearsExperienceLtEq')?.value.length > 0) {
+			values = values  + '&yearsExperienceLtEq=' + this.yearsExperienceFilterForm.get('yearsExperienceLtEq')?.value;
+		}
   
-      return values;
+		return values;
       
-  }
+	}
   
-  public getYearsExperienceOption():void{
+	public getYearsExperienceOption():void{
   
-      let i:number = 1;
+		let i:number = 1;
   
-      while(i <= 100) {
-          this.yearsExperienceOptions.push(i);''
-          i = i + 1;
-      }
+		while(i <= 100) {
+			this.yearsExperienceOptions.push(i);''
+			i = i + 1;
+		}
       
-  }
+	}
 
     /**
-  * Creates a query param string with the filter options to apply to the perm
-  */
-  private getFreelanceFilterParamString(): string{
+	* Creates a query param string with the filter options to apply to the perm
+	*/
+	private getFreelanceFilterParamString(): string{
   
-      if (this.freelanceFilterForm.get('include')?.value !== 'true') {
-        return '&freelance=true';
-      }
+		if (this.freelanceFilterForm.get('include')?.value !== 'true') {
+			return '&freelance=true';
+		}
 
-      return '&freelance=false';
-  }
+		return '&freelance=false';
+	}
 
-  /**
-  * Creates a query param string with the filter options to apply to the candidate
-  * search
-  */
-  private getCountryFilterParamString(): string{
+	/**
+	* Creates a query param string with the filter options to apply to the candidate
+	* search
+	*/
+	private getCountryFilterParamString(): string{
 
-    const countries: Array<string> = new Array<string>();
+		const countries: Array<string> = new Array<string>();
 
-    if (this.countryFilterForm.get('NETHERLANDS')?.value === true) {
-      countries.push('NETHERLANDS');
-    }
+    	if (this.countryFilterForm.get('NETHERLANDS')?.value === true) {
+      		countries.push('NETHERLANDS');
+    	}
     
-    if (this.countryFilterForm.get('BELGIUM')?.value === true) {
-      countries.push('BELGIUM');
-    }
+    	if (this.countryFilterForm.get('BELGIUM')?.value === true) {
+     	 	countries.push('BELGIUM');
+    	}
 
-    if (this.countryFilterForm.get('UK')?.value === true) {
-      countries.push('UK');
-    }
+    	if (this.countryFilterForm.get('UK')?.value === true) {
+      		countries.push('UK');
+    	}
 
-    if (countries.length === 0) {
-      return '';
-    }
+    	if (countries.length === 0) {
+      		return '';
+    	}
 
-    return '&countries=' + countries.toString();
-  }
+    	return '&countries=' + countries.toString();
+  	}
 
-/**
-  * Creates a query param string with the filter options to apply to the candidate
-  * search
-  */
-  private getFunctionTypeFilterParamString(): string{
+	/**
+  	* Creates a query param string with the filter options to apply to the candidate
+  	* search
+  	*/
+	private getFunctionTypeFilterParamString(): string{
 
-    const functionTypes: Array<string> = new Array<string>();
+		const functionTypes: Array<string> = new Array<string>();
 
-    Object.keys(this.functionTypeFilterForm.controls).forEach(key => {
+		Object.keys(this.functionTypeFilterForm.controls).forEach(key => {
      
-      const control: any = this.functionTypeFilterForm.get(key);
+			const control: any = this.functionTypeFilterForm.get(key);
      
-      if (control?.value === true) {
-        functionTypes.push(key);
-      } 
+			if (control?.value === true) {
+				functionTypes.push(key);
+			} 
      
-    });
+		});
 
-    if (functionTypes.length === 0) {
-      return '';
-    }
+		if (functionTypes.length === 0) {
+			return '';
+		}
 
-    return '&functions=' + functionTypes.toString();
-  }
+		return '&functions=' + functionTypes.toString();
 
-  /**
-  *  Returns the url to perform the download of the filterable candidate list
-  */
-  public getCandidateDownloadUrl(){
-      
-      return  environment.backendUrl + 'candidate/download?'+ this.getCandidateFilterParamString();
+	}
+
+	/**
+	*  Returns the url to perform the download of the filterable candidate list
+	*/
+	public getCandidateDownloadUrl(){
+		return  environment.backendUrl + 'candidate/download?'+ this.getCandidateFilterParamString();
+	}
   
-  }
-  
-  /**
-   *  Returns the url to perform the download of the candidates CV
-   */
-   public getCurriculumDownloadUrl(curriculumId:string){
-       
-       return  environment.backendUrl + 'curriculum/'+ curriculumId;
-   
-   }
+	/**
+	*  Returns the url to perform the download of the candidates CV
+	*/
+	public getCurriculumDownloadUrl(curriculumId:string){
+		return  environment.backendUrl + 'curriculum/'+ curriculumId;
+	}
 
-  /**
-  * Returns the code identifying the country
-  * @param country - Country to get the country code for
-  */
-  public getCountryCode(country:string):string{
+	/**
+	* Returns the code identifying the country
+	* @param country - Country to get the country code for
+	*/
+	public getCountryCode(country:string):string{
 
-    switch(country){
-      case "NETHERLANDS":{
-        return "NL";
-      }
-      case "BELGIUM":{
-        return "BE";
-      }
-      case "UK":{
-        return "UK";
-      }
-    }
+		switch(country){
+			case "NETHERLANDS":{
+				return "NL";
+			}
+			case "BELGIUM":{
+				return "BE";
+			}
+			case "UK":{
+				return "UK";
+			}
+		}
 
-     return 'NA';
+     	return 'NA';
 
-  }
+  	}
 
-  /**
-  * Returns the humand readable decription of a function 
-  * based upon its id
-  * @param id - id of the function to return the desc for 
-  */
-  public pretifyFunction(id: string): string {
+	/**
+  	* Returns the humand readable decription of a function 
+  	* based upon its id
+  	* @param id - id of the function to return the desc for 
+  	*/
+  	public pretifyFunction(id: string): string {
+    	return this.functionTypes.filter(ft => ft.id === id)[0].desc;
+	}
 
-    return this.functionTypes.filter(ft => ft.id === id)[0].desc;
+	/**
+	* Opens the modal filter 
+	* @param content - modal to display
+	* @param column  - column to display modal for
+	*/
+	public open (content: any, column: string) {
     
-  }
+		this.activeFilter = column;
+    	this.showOrderFilter();
+    	this.modalService.open(content, { centered: true });
 
-  /**
-  * Opens the modal filter 
-  * @param content - modal to display
-  * @param column  - column to display modal for
-  */
-  public open (content: any, column: string) {
-    this.activeFilter = column;
-    this.showOrderFilter();
-    this.modalService.open(content, { centered: true });
+    	if (this.activeFilter === this.sortColumn) {
+      		this.selectedSortOrderForFilter = this.sortOrder;
+    	} else {
+      		this.selectedSortOrderForFilter = '';
+    	}
 
-    if (this.activeFilter === this.sortColumn) {
-      this.selectedSortOrderForFilter = this.sortOrder;
-    } else {
-      this.selectedSortOrderForFilter = '';
-    }
+  	}
 
-  }
-
-  /**
-  *  Closes the filter popup
-  */
-  public closeModal(): void {
-    this.modalService.dismissAll();
-  }
+	/**
+  	*  Closes the filter popup
+  	*/
+  	public closeModal(): void {
+    	this.modalService.dismissAll();
+  	}
 
   /**
   * Changes the order of the candidates to be based upon 
@@ -548,86 +577,126 @@ export class ViewCandidatesComponent implements OnInit {
 
   }
 
-  public isFilterCandidateIdActiveClass(): string{
-    return this.sortColumn === 'candidateId' ? 'filterSelected' : '';
-  }
+	/**
+	* Returns the appropriate CSS class for the filter icon
+	* based upon whether the Filter is active or not
+	*/
+	public isFilterCandidateIdActiveClass(): string{
+    	return this.sortColumn === 'candidateId' ? 'filterSelected' : '';
+	}
 
-  public isFilterCountryActiveClass(): string{
+	/**
+	* Returns the appropriate CSS class for the filter icon
+	* based upon whether the Filter is active or not
+	*/
+	public isFilterCountryActiveClass(): string{
     
-    if (this.sortColumn === 'country') {
-      return 'filterSelected';
-    }
+		if (this.sortColumn === 'country') {
+      		return 'filterSelected';
+    	}
 
-    if (this.getCountryFilterParamString() !== '') {
-      return 'filterSelected';
-    } 
+    	if (this.getCountryFilterParamString() !== '') {
+      		return 'filterSelected';
+    	} 
 
-    return '';
+    	return '';
 
-  }
+	}
 
-  public isFilterCityActiveClass(): string{
-    return this.sortColumn === 'city' ? 'filterSelected' : '';
-  }
+	/**
+	* Returns the appropriate CSS class for the filter icon
+	* based upon whether the Filter is active or not
+	*/
+	public isFilterCityActiveClass(): string{
+    	return this.sortColumn === 'city' ? 'filterSelected' : '';
+	}
 
-  public isFilterFunctionActiveClass(): string{
+	/**
+	* Returns the appropriate CSS class for the filter icon
+	* based upon whether the Filter is active or not
+	*/
+	public isFilterFunctionActiveClass(): string{
     
-    if(this.sortColumn === 'roleSought') {
-      return 'filterSelected';
-    }
+		if (this.sortColumn === 'roleSought') {
+			return 'filterSelected';
+    	}
 
-    if (this.getFunctionTypeFilterParamString() !== ''){
-      return 'filterSelected';
-    }
+    	if (this.getFunctionTypeFilterParamString() !== ''){
+      		return 'filterSelected';
+    	}
 
-    return '';
+    	return '';
 
-  }
+  	}
 
-  public isFilterYearsExperienceActiveClass(): string{
+	/**
+	* Returns the appropriate CSS class for the filter icon
+	* based upon whether the Filter is active or not
+	*/
+	public isFilterYearsExperienceActiveClass(): string{
       
-      if (this.yearsExperienceFilterForm.get('yearsExperienceGtEq')?.value.length > 0) {
-          return 'filterSelected';
-      }
+		if (this.yearsExperienceFilterForm.get('yearsExperienceGtEq')?.value.length > 0) {
+			return 'filterSelected';
+		}
       
-      if (this.yearsExperienceFilterForm.get('yearsExperienceLtEq')?.value.length > 0 ) {
-          return 'filterSelected';
-      }
+		if (this.yearsExperienceFilterForm.get('yearsExperienceLtEq')?.value.length > 0 ) {
+			return 'filterSelected';
+		}
    
-      return this.sortColumn === 'yearsExperience' ? 'filterSelected' : '';
+		return this.sortColumn === 'yearsExperience' ? 'filterSelected' : '';
       
-  }
+	}
 
-  public isFilterPermActiveClass(): string{
+	/**
+	* Returns the appropriate CSS class for the filter icon
+	* based upon whether the Filter is active or not
+	*/
+	public isFilterPermActiveClass(): string{
 
-    const permVal: any = this.permFilterForm.get('include')?.value;
+		const permVal: any = this.permFilterForm.get('include')?.value;
 
-    if (permVal !== 'false') {
-      return 'filterSelected';
-    }
-    return '';
-  }
+		if (permVal !== 'false') {
+      		return 'filterSelected';
+    	}
+    	
+		return '';
+  	
+	}
 
-    public isFilterFreelanceActiveClass(): string{
+	/**
+	* Returns the appropriate CSS class for the filter icon
+	* based upon whether the Filter is active or not
+	*/
+	public isFilterFreelanceActiveClass(): string{
 
-      const freelanceVal: any = this.freelanceFilterForm.get('include')?.value;
+		const freelanceVal: any = this.freelanceFilterForm.get('include')?.value;
 
-      if (freelanceVal !== 'false') {
-        return 'filterSelected';
-      }
+      	if (freelanceVal !== 'false') {
+        	return 'filterSelected';
+      	}
 
-      return '';
-  }
+      	return '';
+  	
+	}
     
+	/**
+	* Returns the appropriate CSS class for the filter icon
+	* based upon whether the Filter is active or not
+	*/
     public isFilterSkillsActiveClass(): string{
       
-      if (this.skillFilterSelections.length > 0) {
-          return 'filterSelected';
-      }
+		if (this.skillFilterSelections.length > 0) {
+			return 'filterSelected';
+		}
      
-        return '';
+		return '';
+		
      }
-    
+
+	/**
+	* Returns the appropriate CSS class for the filter icon
+	* based upon whether the Filter is active or not
+	*/    
     public isFilterFrenchActiveClass(): string{
 
         const frenchVal: any = this.frenchFilterForm.get('level')?.value;
@@ -639,6 +708,10 @@ export class ViewCandidatesComponent implements OnInit {
         return '';
     }
 
+	/**
+	* Returns the appropriate CSS class for the filter icon
+	* based upon whether the Filter is active or not
+	*/
     public isFilterEnglishActiveClass(): string{
 
         const englishVal: any = this.englishFilterForm.get('level')?.value;
@@ -650,6 +723,10 @@ export class ViewCandidatesComponent implements OnInit {
         return '';
     }
     
+	/**
+	* Returns the appropriate CSS class for the filter icon
+	* based upon whether the Filter is active or not
+	*/
     public isFilterDutchActiveClass(): string{
 
         const dutchVal: any = this.dutchFilterForm.get('level')?.value;
@@ -660,8 +737,6 @@ export class ViewCandidatesComponent implements OnInit {
 
         return '';
     }
-    
-    
 
   /**
   * Resets the filters to their initial state
@@ -676,7 +751,6 @@ export class ViewCandidatesComponent implements OnInit {
     this.countryFiltNL                = false;
     this.countryFiltBE                = false;
     this.countryFiltUK                = false;
-
 
     this.countryFilterForm = new FormGroup({
      

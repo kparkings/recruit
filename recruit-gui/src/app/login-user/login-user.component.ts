@@ -1,7 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import { ReactiveFormsModule, FormGroup, FormControl }    from '@angular/forms';
-import { AuthService }                        from '../auth.service';
-import { Router} from '@angular/router';
+import { Component, OnInit }									from '@angular/core';
+import { ReactiveFormsModule, FormGroup, FormControl }			from '@angular/forms';
+import { AuthService }                                          from '../auth.service';
+import { Router}                                                from '@angular/router';
+import {TemplateRef, ViewChild,ElementRef, AfterViewInit  }		from '@angular/core';
+import {NgbModal, NgbModalOptions, ModalDismissReasons}			from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-login-user',
@@ -12,20 +14,20 @@ import { Router} from '@angular/router';
 * Component for logging Users into the System 
 */
 export class LoginUserComponent implements OnInit {
+	
+	@ViewChild('feedbackBox', { static: false }) private content:any;
 
-   public formBean:FormGroup = new FormGroup({
-     
-    username: new FormControl(),
-    password: new FormControl()
-
-   });
+   	public formBean:FormGroup = new FormGroup({
+		username: new FormControl(),
+		password: new FormControl()
+	});
 
    /**
    * Constructor 
    * @param authService - Services for authenticating users
    * @param router      - Angular router
    */
-  constructor(private authService: AuthService, private router: Router) { }
+  constructor(private authService: AuthService, private modalService: NgbModal, private router: Router) { }
 
   /**
   * Performs initialization
@@ -65,8 +67,29 @@ export class LoginUserComponent implements OnInit {
     
         this.router.navigate([beforeAuthPage]);
     
+    }, err => {
+        if (err.status === 401) {
+            console.log('Failed Login. Show Box');
+			this.open('feedbackBox');
+        }
     });
 
+  }
+
+  public open(content:any):void {
+
+	let options: NgbModalOptions = {
+     centered: true
+   	};
+
+  	this.modalService.open(this.content, options);
+  }
+
+  /**
+  *  Closes the popup
+  */
+  public closeModal(): void {
+    this.modalService.dismissAll();
   }
 
 }

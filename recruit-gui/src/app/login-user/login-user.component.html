@@ -35,3 +35,15 @@
         </div>
     </div>
 </form>
+
+<ng-template #feedbackBox let-modal>
+	<div class="modal-header">
+		<h4 class="modal-title">&nbsp;</h4>
+   		<div class="filter-close-box" (click)="closeModal()">X</div>
+ 	</div>
+	<div class="feedbackBox">
+		<div class="modal-body">
+			Invalid Login attempt
+		</div>       
+	</div>
+</ng-template>

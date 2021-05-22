@@ -1,11 +1,11 @@
-import { Component, OnInit }                                                                   from '@angular/core';
-import { ReactiveFormsModule, FormGroup, FormControl }                   from '@angular/forms';
-import { CandidateServiceService }                                                          from '../candidate-service.service';
-import { CurriculumService }                                                                     from '../curriculum.service';
-import { CandidateFunction }                                                                    from '../candidate-function';
-import {NgbModal, NgbModalOptions, ModalDismissReasons}            from '@ng-bootstrap/ng-bootstrap';
-import {TemplateRef, ViewChild,ElementRef, AfterViewInit  }                 from '@angular/core';
-import { Router}                                                                                         from '@angular/router';
+import { Component, OnInit }										from '@angular/core';
+import { ReactiveFormsModule, FormGroup, FormControl }				from '@angular/forms';
+import { CandidateServiceService }									from '../candidate-service.service';
+import { CurriculumService }										from '../curriculum.service';
+import { CandidateFunction }										from '../candidate-function';
+import {NgbModal, NgbModalOptions, ModalDismissReasons}				from '@ng-bootstrap/ng-bootstrap';
+import {TemplateRef, ViewChild,ElementRef, AfterViewInit  }			from '@angular/core';
+import { Router}													from '@angular/router';
 
 @Component({
   selector: 'app-new-candidate',
@@ -20,21 +20,21 @@ export class NewCandidateComponent implements OnInit {
    
    public formBean:FormGroup = new FormGroup({
      
-       candidateId:                    new FormControl(''),
-       firstname:                        new FormControl(),
-       surname:                         new FormControl(),
-       email:                              new FormControl(),
-       roleSought:                     new FormControl(),
-       country:                           new FormControl(),
-       city:                                 new FormControl(),
-       perm:                              new FormControl(),
-       freelance:                       new FormControl(),
-       dutch:                             new FormControl(),
-       english:                           new FormControl(),
-       french:                            new FormControl(),
-       function:                         new FormControl(),
-       yearsExperience:            new FormControl(),
-       skills:                               new FormControl()
+       candidateId:			new FormControl(''),
+       firstname:			new FormControl(),
+       surname:				new FormControl(),
+       email:				new FormControl(),
+       roleSought:			new FormControl(),
+       country:				new FormControl(),
+       city:				new FormControl(),
+       perm:				new FormControl(),
+       freelance:			new FormControl(),
+       dutch:				new FormControl(),
+       english:				new FormControl(),
+       french:				new FormControl(),
+       function:			new FormControl(),
+       yearsExperience:		new FormControl(),
+       skills:				new FormControl()
 
   });
 
