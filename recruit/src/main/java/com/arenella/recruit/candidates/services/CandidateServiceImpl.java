@@ -33,8 +33,11 @@ public class CandidateServiceImpl implements CandidateService{
 		
 		CandidateEntity entity = CandidateEntity.convertToEntity(candidate);
 		
+		try {
 		candidateDao.save(entity);
-		
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**

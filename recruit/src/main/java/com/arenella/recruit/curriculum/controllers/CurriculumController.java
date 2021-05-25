@@ -27,8 +27,6 @@ import com.arenella.recruit.curriculum.services.CurriculumService;
 @RestController
 public class CurriculumController {
 
-	private static byte[] testCurriculum = null;
-	
 	@Autowired
 	private CurriculumService curriculumService;
 	
@@ -66,7 +64,7 @@ public class CurriculumController {
 		
 		HttpHeaders header = new HttpHeaders();
 		header.setContentType(new MediaType("application", "force-download"));
-		header.set(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=curriculum.pdf");
+		header.set(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename="+curriculum.getId().get()+"." + curriculum.getFileType());
 		
 		return new ResponseEntity<>(new ByteArrayResource(stream.toByteArray()), header, HttpStatus.OK);
 		
