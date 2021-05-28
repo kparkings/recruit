@@ -2,7 +2,7 @@ import { Component, OnInit }					from '@angular/core';
 import { CandidateServiceService }				from '../candidate-service.service';
 import { Candidate }							from './candidate';
 import { CandidateFunction }					from '../candidate-function';
-import { NgbModal, ModalDismissReasons}			from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal}								from '@ng-bootstrap/ng-bootstrap';
 import { FormGroup, FormControl }				from '@angular/forms';
 import { environment }							from '../../environments/environment';
 import { Router}								from '@angular/router';

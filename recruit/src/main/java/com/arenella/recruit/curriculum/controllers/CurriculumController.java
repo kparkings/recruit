@@ -80,38 +80,4 @@ public class CurriculumController {
 		
 	}
 	
-	//@Bean
-	//public ResponseEntity<Void> bulkUpload() throws Exception{
-		
-		//Files.walk(Paths.get(Paths.get("").toAbsolutePath().toString()+"/cvs")).forEach(curriculumFile -> {
-			
-		//	String originalFileName = curriculumFile.getFileName().toString();
-			
-		//	if(!originalFileName.equals("cvs") && !originalFileName.contains("placed by another")) {
-			
-		//		String 			postFix						= originalFileName.substring(originalFileName.lastIndexOf('.')+1);
-		//		String 			fileName					= originalFileName.substring(1,originalFileName.lastIndexOf('.'));
-				
-		//		byte[] fileBytes = null;
-				
-		//		try {
-		//			fileBytes = FileUtils.readFileToByteArray(curriculumFile.toFile());
-		//		} catch (IOException e) {
-		//			e.printStackTrace();
-		//		}
-				
-				
-		//		Curriculum 		curriculum					= Curriculum.builder().fileType(FileType.valueOf(postFix.toLowerCase())).file(fileBytes).id(fileName).build();
-				
-		//		System.out.println(originalFileName + " -> " + fileName);
-				
-		//		curriculumService.persistCurriculum(curriculum);
-		//	}
-			
-		//});
-		
-		//return ResponseEntity.ok(null);		
-		
-	//}
-	
 }

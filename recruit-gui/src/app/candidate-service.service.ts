@@ -1,11 +1,11 @@
-import { Injectable }                             from '@angular/core';
-import { FormGroup }                              from '@angular/forms';
-import { HttpClient, HttpResponse, HttpHeaders }  from '@angular/common/http';
-import { Observable, throwError }                 from 'rxjs';
-import { NewCandidate }                           from './new-candidate/new-candidate';
-import { Language}                                from './new-candidate/language';
-import { CandidateFunction }                      from './candidate-function';
-import { environment }                                                                from './../environments/environment';
+import { Injectable }                             	from '@angular/core';
+import { FormGroup }                              	from '@angular/forms';
+import { HttpClient, HttpResponse, HttpHeaders }  	from '@angular/common/http';
+import { Observable, throwError }                 	from 'rxjs';
+import { NewCandidate }                           	from './new-candidate/new-candidate';
+import { Language}                                	from './new-candidate/language';
+import { CandidateFunction }                      	from './candidate-function';
+import { environment }								from './../environments/environment';
 
 /**
 * Services for new Candidates
