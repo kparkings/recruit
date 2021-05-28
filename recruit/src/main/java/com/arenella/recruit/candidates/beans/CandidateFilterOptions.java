@@ -47,7 +47,7 @@ public class CandidateFilterOptions {
 		this.dutch							= builder.dutch;
 		this.english						= builder.english;
 		this.french							= builder.french;
-		this.skills							 = builder.skills;
+		this.skills							= builder.skills;
 		
 	}
 	

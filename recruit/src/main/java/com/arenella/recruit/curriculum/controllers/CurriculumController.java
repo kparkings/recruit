@@ -1,8 +1,14 @@
 package com.arenella.recruit.curriculum.controllers;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.security.Principal;
 
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -50,6 +56,8 @@ public class CurriculumController {
 	
 	/**
 	* Returns the Curriculum file 
+	* @param  - curriculumId - Unique Id of the curriculum to download
+	* @param  - principal	 - Contains id of User who made the request
 	* @return - Requested curriculum file
 	* @throws Exception
 	*/
@@ -64,9 +72,46 @@ public class CurriculumController {
 		
 		HttpHeaders header = new HttpHeaders();
 		header.setContentType(new MediaType("application", "force-download"));
-		header.set(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename="+curriculum.getId().get()+"." + curriculum.getFileType());
+		header.set(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=C"+curriculum.getId().get()+"." + curriculum.getFileType());
+		
+		curriculumService.logCurriculumDownloadedEvent(curriculumId);
 		
 		return new ResponseEntity<>(new ByteArrayResource(stream.toByteArray()), header, HttpStatus.OK);
 		
 	}
+	
+	//@Bean
+	//public ResponseEntity<Void> bulkUpload() throws Exception{
+		
+		//Files.walk(Paths.get(Paths.get("").toAbsolutePath().toString()+"/cvs")).forEach(curriculumFile -> {
+			
+		//	String originalFileName = curriculumFile.getFileName().toString();
+			
+		//	if(!originalFileName.equals("cvs") && !originalFileName.contains("placed by another")) {
+			
+		//		String 			postFix						= originalFileName.substring(originalFileName.lastIndexOf('.')+1);
+		//		String 			fileName					= originalFileName.substring(1,originalFileName.lastIndexOf('.'));
+				
+		//		byte[] fileBytes = null;
+				
+		//		try {
+		//			fileBytes = FileUtils.readFileToByteArray(curriculumFile.toFile());
+		//		} catch (IOException e) {
+		//			e.printStackTrace();
+		//		}
+				
+				
+		//		Curriculum 		curriculum					= Curriculum.builder().fileType(FileType.valueOf(postFix.toLowerCase())).file(fileBytes).id(fileName).build();
+				
+		//		System.out.println(originalFileName + " -> " + fileName);
+				
+		//		curriculumService.persistCurriculum(curriculum);
+		//	}
+			
+		//});
+		
+		//return ResponseEntity.ok(null);		
+		
+	//}
+	
 }

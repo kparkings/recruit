@@ -3,6 +3,7 @@ package com.arenella.recruit.curriculum.services;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
@@ -14,6 +15,8 @@ import org.mockito.Mockito;
 
 import com.arenella.recruit.curriculum.beans.Curriculum;
 import com.arenella.recruit.curriculum.dao.CurriculumDao;
+import com.arenella.recruit.curriculum.dao.CurriculumDownloadedEventDao;
+import com.arenella.recruit.curriculum.entity.CurriculumDownloadedEventEntity;
 import com.arenella.recruit.curriculum.entity.CurriculumEntity;
 import com.arenella.recruit.curriculum.enums.FileType;
 
@@ -22,12 +25,20 @@ import com.arenella.recruit.curriculum.enums.FileType;
 * @author K Parkings
 */
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 @ExtendWith(MockitoExtension.class)
 public class CurriculumServiceImplTest {
 
 	@Mock
-	private 				CurriculumDao			 mockCurriculumDao;
+	private 				CurriculumDao			 		mockCurriculumDao;
+	
+	@Mock
+	private					CurriculumDownloadedEventDao	mockCurriculumDownloadedEventDao;
+	
+	@Mock
+	private					Authentication					mockAuthentication;
 	
 	@InjectMocks
 	private static final 	CurriculumServiceImpl 	service 			= new CurriculumServiceImpl();
@@ -116,6 +127,32 @@ public class CurriculumServiceImplTest {
 		Mockito.when(mockCurriculumDao.findTopByOrderByCurriculumIdDesc()).thenReturn(Optional.of(CurriculumEntity.builder().curriculumId(lastCurriculumId).build()));
 		
 		assertEquals(lastCurriculumId + 1, service.getNextCurriculumId());
+		
+	}
+	
+	/**
+	* Tests that method leads to an event being persisted for 
+	* the curriculum 
+	* @throws Exception
+	*/
+	@Test
+	public void testLogCurriculumDownloadedEvent() throws Exception{
+		
+		final String curriculumId = "100";
+		
+		SecurityContextHolder.getContext().setAuthentication(mockAuthentication);
+		
+		ArgumentCaptor<CurriculumDownloadedEventEntity> captor = ArgumentCaptor.forClass(CurriculumDownloadedEventEntity.class);
+		
+		Mockito.when(mockAuthentication.getPrincipal()).thenReturn("kparkings");
+		Mockito.when(mockAuthentication.getAuthorities()).thenReturn(List.of());
+		Mockito.when(mockCurriculumDownloadedEventDao.save(captor.capture())).thenReturn(null);
+		
+		service.logCurriculumDownloadedEvent(curriculumId);
+		
+		Mockito.verify(mockCurriculumDownloadedEventDao).save(Mockito.any(CurriculumDownloadedEventEntity.class));
+		
+		assertEquals(curriculumId, captor.getValue().getCurriculumId());
 		
 	}
 	

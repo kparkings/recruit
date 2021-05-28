@@ -27,4 +27,10 @@ public interface CurriculumService {
 	*/
 	public long getNextCurriculumId();
 	
+	/**
+	* Persists an CurriculumDownloadedEvent
+	* @param curriculumId - Unique Id of the downlaoded Curriculum
+	*/
+	public void logCurriculumDownloadedEvent(String curriculumId);
+	
 }

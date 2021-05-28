@@ -120,7 +120,6 @@ public class CandidateController {
 													.skills(skills)
 													.build();
 		
-		//return candidateService.getCandidates(filterOptions, pageable).stream().map(candidate -> CandidateAPIOutbound.convertFromCandidate(candidate)).collect(Collectors.toCollection(LinkedHashSet::new));
 		return candidateService.getCandidates(filterOptions, pageable).map(candidate -> CandidateAPIOutbound.convertFromCandidate(candidate));	
 	
 	}

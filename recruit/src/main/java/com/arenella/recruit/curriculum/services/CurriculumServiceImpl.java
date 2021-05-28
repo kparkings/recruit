@@ -6,7 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.arenella.recruit.curriculum.beans.Curriculum;
+import com.arenella.recruit.curriculum.beans.CurriculumDownloadedEvent;
 import com.arenella.recruit.curriculum.dao.CurriculumDao;
+import com.arenella.recruit.curriculum.dao.CurriculumDownloadedEventDao;
+import com.arenella.recruit.curriculum.entity.CurriculumDownloadedEventEntity;
 import com.arenella.recruit.curriculum.entity.CurriculumEntity;
 
 /**
@@ -17,7 +20,10 @@ import com.arenella.recruit.curriculum.entity.CurriculumEntity;
 public class CurriculumServiceImpl implements CurriculumService{
 
 	@Autowired
-	private CurriculumDao curriculumDao;
+	private CurriculumDao 					curriculumDao;
+	
+	@Autowired
+	private CurriculumDownloadedEventDao 	curriculumDownloadedEventDao;
 	
 	/**
 	* Refer to the CurriculumService interface for details
@@ -55,6 +61,18 @@ public class CurriculumServiceImpl implements CurriculumService{
 		Optional<CurriculumEntity> entity = this.curriculumDao.findTopByOrderByCurriculumIdDesc();
 		
 		return entity.isEmpty() ? 1 : entity.get().getCurriculumId() + 1;
+		
+	}
+	
+	/**
+	* Refer to the CurriculumService interface for details
+	*/
+	@Override
+	public void logCurriculumDownloadedEvent(String curriculumId) {
+		
+		CurriculumDownloadedEvent event = CurriculumDownloadedEvent.builder().curriculumId(curriculumId).build();
+		curriculumDownloadedEventDao.save(CurriculumDownloadedEventEntity.toEntity(event));
+		
 		
 	}
 

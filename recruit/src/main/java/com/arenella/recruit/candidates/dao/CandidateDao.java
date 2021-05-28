@@ -120,8 +120,8 @@ public interface CandidateDao extends CrudRepository<CandidateEntity, String>, J
 			}
 			
 			//TODO: [KP] need to add filter to show/hide inactive users
-			//Predicate isActiveFltr 						= root.get("available").in(true);
-			//predicates.add(isActiveFltr);
+			Predicate isActiveFltr 						= root.get("available").in(true);
+			predicates.add(isActiveFltr);
 			
 			
 			if (!this.filterOptions.getCountries().isEmpty()) {

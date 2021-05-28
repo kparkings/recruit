@@ -80,8 +80,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements W
 				.antMatchers("api/authenticate").permitAll() 
 				.antMatchers("https://arenella-ict.wosah.nl/api/authenticate").permitAll() 
 				.antMatchers("arenella-ict.wosah.nl/api/authenticate").permitAll() 
-				
-				
 				.antMatchers(HttpMethod.OPTIONS,"/**").permitAll()
 			.anyRequest().authenticated().and()
 			.exceptionHandling().authenticationEntryPoint(authenticationEntryPoint)

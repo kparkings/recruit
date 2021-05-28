@@ -33,7 +33,7 @@ public class CandidateAPIInbound {
 	private PERM 			perm;
 	private FREELANCE 		freelance;
 	private int				yearsExperience;
-	private boolean 		available;
+	private boolean 		available					= true;
 	private Set<String> 	skills						= new LinkedHashSet<>();
 	private Set<Language> 	languages					= new LinkedHashSet<>();
 	

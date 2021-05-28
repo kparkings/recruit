@@ -14,7 +14,7 @@ import { Router}								from '@angular/router';
 })
 export class ViewCandidatesComponent implements OnInit {
 
-	public functionTypes:					Array<CandidateFunction>	= new Array<CandidateFunction>();
+	public functionTypes:				Array<CandidateFunction>	= new Array<CandidateFunction>();
   	public candidates:					Array<Candidate>			= new Array<Candidate>();
   	public yearsExperienceOptions:		Array<number>				= new Array<number>();
 
