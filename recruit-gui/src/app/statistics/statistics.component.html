@@ -1,21 +1,42 @@
+
+
 <div class=".container m-2">
 
-	<div style="width:40%">
-	
-		<h3>Daily downloads</h3>
-	
-		<div class="chart-wrapper">
-		    <canvas baseChart 
-		        [datasets]="lineChartData" 
-		        [labels]="lineChartLabels" 
-		        [options]="lineChartOptions"
-		        [colors]="lineChartColors" 
-		        [legend]="lineChartLegend" 
-		        [chartType]="lineChartType" 
-		        [plugins]="lineChartPlugins">
-		    </canvas>
-		</div>
+	<div>
+      
+		<table class="table candidate-table">
+			<tr>
+				<td>
+					<div class="chart-wrapper"  style="width:600px">
+						<h3>Daily downloads</h3>
+		   	 			<canvas baseChart 
+		        				[datasets]="lineChartData" 
+		        				[labels]="lineChartLabels" 
+		        				[options]="lineChartOptions"
+		        				[colors]="lineChartColors" 
+		        				[legend]="lineChartLegend" 
+		        				[chartType]="lineChartType" 
+		       			 		[plugins]="lineChartPlugins">
+		   				 </canvas>
+					</div>
+				</td>
+				<td>
+					<div class="chart-wrapper"  style="width:600px">
+						<h3>Recruiter downloads</h3>
+		    			<canvas baseChart 
+		        				[datasets]="recruiterDownloadsChartData" 
+		        				[labels]="recruiterDownloadsChartLabels" 
+		        				[options]="recruiterDownloadsChartOptions"
+		        				[colors]="recruiterDownloadsChartColors" 
+		        				[legend]="recruiterDownloadsChartLegend" 
+		        				[chartType]="recruiterDownloadsChartType" 
+		        				[plugins]="recruiterDownloadsChartPlugins">
+		    			</canvas>
+					</div>
+				</td>
+			</tr>		
+		</table>
+		
 	</div>
-	
-</div>
 
+</div>

@@ -18,25 +18,52 @@ export class StatisticsComponent implements OnInit {
 
 		this.statisticsService.getCurriculumDownloadStatistics().forEach(stat => {
 
-			console.log(stat.dailyDownloads);
-			console.log(Object.keys(stat.dailyDownloads));
-			console.log(Object.values(stat.dailyDownloads));
-			
 			let downloads:number[] 		= Object.values(stat.dailyDownloads);
 			let downloadDates:string[] 	= Object.keys(stat.dailyDownloads);
 			
 			this.lineChartData = [{ data: downloads, label: 'Downloads' },];
 			this.lineChartLabels = downloadDates;
+			
+			let recruiterDownloads:number[] 		= Object.values(stat.recruiterDownloads);
+			let recruiterDownloadNames:string[] 	= Object.keys(stat.recruiterDownloads);
+			
+			this.recruiterDownloadsChartData = [{ data: recruiterDownloads, label: 'Downloads' },];
+			this.recruiterDownloadsChartLabels = recruiterDownloadNames;
 
     	});
+//getCurriculumDownloadStatistics
 
 	}
 
 	ngOnInit(): void {
 	}
 
+	/**
+	* recruiter Downloads
+	*/
+	recruiterDownloadsChartData: 		ChartDataSets[] 	= [];
+	recruiterDownloadsChartLabels: 		Label[] 			= [];
 
-	lineChartData: 		ChartDataSets[] 	= [];// 	= [{ data: [85, 72, 78, 75, 77, 75], label: 'Downloads' },];
+  	recruiterDownloadsChartOptions = {
+    	responsive: true,
+  	};
+
+  	recruiterDownloadsChartColors: Color[] = [
+    	{
+      		borderColor: 'black',
+      		backgroundColor: 'rgba(0,0,0,0.28)',
+    	},
+  	];
+
+  	recruiterDownloadsChartLegend = true;
+  	recruiterDownloadsChartPlugins = [];
+  	recruiterDownloadsChartType:ChartType = 'bar';
+ 
+
+	/**
+	* Daily Downloads
+	*/
+	lineChartData: 		ChartDataSets[] 	= [];
 	lineChartLabels: 	Label[] 			= [];
 
   	lineChartOptions = {
@@ -54,5 +81,4 @@ export class StatisticsComponent implements OnInit {
   	lineChartPlugins = [];
   	lineChartType:ChartType = 'line';
  
-  
 }
