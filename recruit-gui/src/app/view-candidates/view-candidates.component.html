@@ -27,7 +27,7 @@
 			<thead>
 	      		<tr>
 	      			<!-- Table Headers -->
-	      			<th class="bg-tab-hdr">CandidateId</th>
+	      			<th class="bg-tab-hdr">&nbsp;</th>
 	      			<th class="bg-tab-hdr">CandidateId</th>
 	                <th class="bg-tab-hdr">Country</th>
 	                <th class="bg-tab-hdr">City</th>
@@ -270,12 +270,11 @@
 					<div  *ngSwitchCase="'dutch'">
 						<div class="row">
 							<div class="col">
-								<label class="modal-label">Dutch Language</label>
+								<label class="modal-label modal-label-right">Level</label>
 							</div>
 							<div class="col">
 								<form [formGroup]="dutchFilterForm">
 									<div>
-										<label>Greater than or equal to</label>
 										<select class="inpt-tab-std" formControlName="level" (change)="updateFilters()">
 											<option value=""></option>
 											<option value="PROFICIENT">Proficient</option>
@@ -291,12 +290,11 @@
 					<div  *ngSwitchCase="'french'">
 						<div class="row">
 							<div class="col">
-								<label class="modal-label">Dutch Language</label>
+								<label class="modal-label modal-label-right">Level</label>
 							</div>
 							<div class="col">
 								<form [formGroup]="frenchFilterForm">
 									<div>
-										<label>Greater than or equal to</label>
 										<select class="inpt-tab-std" formControlName="level" (change)="updateFilters()">
 											<option value=""></option>
 											<option value="PROFICIENT">Proficient</option>
@@ -312,12 +310,11 @@
 					<div  *ngSwitchCase="'english'">
 						<div class="row">
 							<div class="col">
-								<label class="modal-label">Dutch Language</label>
+								<label class="modal-label modal-label-right">Level</label>
 							</div>
 							<div class="col">
 								<form [formGroup]="englishFilterForm">
 									<div>
-										<label>Greater than or equal to</label>
 										<select class="inpt-tab-std" formControlName="level" (change)="updateFilters()">
 											<option value=""></option>
 											<option value="PROFICIENT">Proficient</option>
