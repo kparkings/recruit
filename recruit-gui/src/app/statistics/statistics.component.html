@@ -1,10 +1,19 @@
+<div class=".container m-2" >
 
+	<ul class="nav nav-tabs">
+	  <li class="nav-item">
+	    <span class="nav-link statsChartTab" (click)="switchTab('downloads')">Active</span>
+	  </li>
+	  <li class="nav-item statsChartTab">
+	    <span class="nav-link" (click)="switchTab('availability')">Link</span>
+	  </li>
+	</ul>
 
-<div class=".container m-2">
-
-	<div>
-      
-		<table class="table candidate-table">
+	
+	<!-- Downloads -->
+	
+	<div *ngIf="showStatsDownloads">
+		<table class="table stats-table">
 			<tr>
 				<td>
 					<div class="chart-wrapper"  style="width:600px">
@@ -21,7 +30,7 @@
 					</div>
 				</td>
 				<td>
-					<div class="chart-wrapper"  style="width:600px">
+					<div class="chart-wrapper"  style="width:600px;">
 						<h3>Recruiter downloads</h3>
 		    			<canvas baseChart 
 		        				[datasets]="recruiterDownloadsChartData" 
@@ -35,21 +44,46 @@
 					</div>
 				</td>
 			</tr>		
-			<tr>
-				<td>
-					<h3>Totals:</h3>
-					<table>
-						<tr>
-							<td>Active Users</td>
-							<td>{{totalNumberActiveCandidates}}</td>
-						</tr>
-					</table>
-				</td>
-				<td>
-				</td>
-			</tr>
+						
 		</table>
-		
+
 	</div>
 
+	<!-- Availability -->
+	<div *ngIf="showStatsAvailability">
+		<table class="table stats-table">
+			<tr>
+				<td>
+					<div class="chart-wrapper"  style="width:600px;">
+						<h5>Totals:</h5>
+						<table>
+							<tr>
+								<td>Active Users</td>
+								<td>{{totalNumberActiveCandidates}}</td>
+							</tr>
+						</table>
+					</div>
+				</td>
+		
+				<td>
+					<div class="chart-wrapper"  style="width:600px;">
+						<h5>Available by Function</h5>
+   						<canvas baseChart 
+       						[datasets]="functionChartData" 
+       						[labels]="functionChartLabels" 
+       						[options]="functionChartOptions"
+       						[colors]="functionChartColors" 
+       						[legend]="functionChartLegend" 
+       						[chartType]="functionChartType" 
+       						[plugins]="functionChartPlugins">
+    					</canvas>
+					</div>
+					
+				</td>
+				
+			</tr>		
+				
+		</table>
+	</div>	
+      
 </div>

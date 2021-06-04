@@ -1,5 +1,9 @@
 package com.arenella.recruit.candidates.controllers;
 
+import java.util.LinkedList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -45,6 +49,14 @@ public class CandidateStatisticsController {
 		return ResponseEntity.ok(candidateStatisticsService.fetchNumberOfAvailableCandidates());
 	}
 	
-	
+	/**
+	* Returns a breakdown of the number of available candidates
+	* per Function
+	* @return
+	*/
+	@GetMapping(path="candidate/stat/function-count")
+	public ResponseEntity<List<CandidateRoleStatsAPIOutbound>> fetchCandidateRoleStats(){
+		return ResponseEntity.ok(candidateStatisticsService.fetchCandidateRoleStats().stream().map(stat -> CandidateRoleStatsAPIOutbound.convertFromDomain(stat)).collect(Collectors.toCollection(LinkedList::new)));
+	}
 	
 }

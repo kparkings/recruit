@@ -12,6 +12,10 @@ import { Color, Label } 						from 'ng2-charts';
 export class StatisticsComponent implements OnInit {
 
 	totalNumberActiveCandidates:number = 0;
+	candidatesByFunction:Map<string,number> = new Map<string,number>();
+	currentTab:string = "downloads";
+	showStatsDownloads:boolean=true;
+	showStatsAvailability:boolean=false;
 
 	/**
   	* Constructor
@@ -40,9 +44,49 @@ export class StatisticsComponent implements OnInit {
 
     	});
 
+		this.statisticsService.getAvailableCandidatesByFunctionStatistics().forEach(data => {
+		
+			let stats:any[] = data;
+			
+			let functionStatCount:Array<number> 		= new Array<number>(); //Object.values(stat.recruiterDownloads);
+			let functionStatName:Array<string> 			= new Array<string>(); //'Object.keys(stat.recruiterDownloads);
+				
+			stats.forEach(functonStat => {
+				//this.candidatesByFunction.set(functonStat.function, functonStat.availableCandidates);
+				
+				functionStatName.push(functonStat.function);
+				functionStatCount.push(functonStat.availableCandidates);
+				
+			});
+			
+			this.functionChartData = [{ data: functionStatCount, label: 'Function' },];
+			this.functionChartLabels = functionStatName;
+			
+			
+    	});
+
 	}
 
 	ngOnInit(): void {
+	}
+	
+	public switchTab(tab:string){
+		this.currentTab = tab;
+		console.log("XXX" + tab)
+		switch(tab){
+			case "downloads":{
+				this.showStatsDownloads=true;
+				this.showStatsAvailability=false;
+				break;
+			}
+			case "availability":{
+				this.showStatsDownloads=false;
+				this.showStatsAvailability=true;
+				break;
+			}
+		}
+		
+		
 	}
 
 	/**
@@ -88,4 +132,24 @@ export class StatisticsComponent implements OnInit {
   	lineChartPlugins = [];
   	lineChartType:ChartType = 'line';
  
+	/**
+	* Availability by Function
+	*/
+	functionChartData: 		ChartDataSets[] 	= [];
+	functionChartLabels: 	Label[] 			= [];
+
+  	functionChartOptions = {
+    	responsive: true,
+  	};
+
+  	functionChartColors: Color[] = [
+    	{
+      		borderColor: 'black',
+      		backgroundColor: 'rgba(0,0,0,0.28)',
+    	},
+  	];
+
+  	functionChartLegend = true;
+  	functionChartPlugins = [];
+  	functionChartType:ChartType = 'bar';
 }

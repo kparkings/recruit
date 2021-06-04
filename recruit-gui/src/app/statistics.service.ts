@@ -42,4 +42,18 @@ export class StatisticsService {
 		return this.httpClient.get<any>(backendUrl, this.httpOptions);
 
 	}
+	
+	/**
+	* Returns a list of functions and available candidates 
+	*/
+	public getAvailableCandidatesByFunctionStatistics(): Observable<any>{
+      
+		const backendUrl:string = environment.backendUrl +'candidate/stat/function-count';
+  
+		return this.httpClient.get<any>(backendUrl, this.httpOptions);
+
+	}
+	
+	
+	
 }

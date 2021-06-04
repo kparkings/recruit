@@ -1,0 +1,12 @@
+.stats-table{
+	margin-left:20px;
+	margin-right:20px;
+	vertical-align:middle;
+	    margin:0 auto;
+    width:98%;
+    margin-top:25px;
+}
+
+.statsChartTab{
+	cursor:pointer;
+}

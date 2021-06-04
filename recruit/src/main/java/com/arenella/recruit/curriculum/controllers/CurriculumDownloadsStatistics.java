@@ -36,10 +36,10 @@ public class CurriculumDownloadsStatistics {
 			
 		});
 		
-		recruiterDownloads.entrySet().stream()
-        .sorted(Map.Entry.<String, Integer>comparingByValue().reversed()) 
-        .limit(10) 
-        .forEach(System.out::println);
+		//recruiterDownloads.entrySet().stream()
+        //.sorted(Map.Entry.<String, Integer>comparingByValue().reversed()) 
+        //.limit(10) 
+        //.forEach(System.out::println);
 		
 		this.recruiterDownloads = this.recruiterDownloads.entrySet()
 									.stream()

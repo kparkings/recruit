@@ -16,11 +16,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 import com.arenella.recruit.candidates.beans.CandidateFilterOptions;
 import com.arenella.recruit.candidates.beans.Language.LANGUAGE;
 import com.arenella.recruit.candidates.entities.CandidateEntity;
+import com.arenella.recruit.candidates.entities.CandidateRoleStatsView;
 import com.arenella.recruit.candidates.entities.LanguageEntity;
 import com.arenella.recruit.candidates.enums.FREELANCE;
 import com.arenella.recruit.candidates.enums.PERM;
@@ -185,4 +187,13 @@ public interface CandidateDao extends CrudRepository<CandidateEntity, String>, J
 	*/
 	public Long countByAvailable(boolean active);
 	
+	/**
+	* Retrieves stats showing the number of available candidates 
+	* per function
+	* @return candidate function stats
+	*/
+	//@Query("Select c.function as function, count(c.function) as functionCount from CandidateEntity as c where c.available = true group by c.function order by c.function")
+	@Query("Select new com.arenella.recruit.candidates.entities.CandidateRoleStatsView(c.function, count(c.function) ) from CandidateEntity c where c.available = true group by c.function order by c.function")
+	public List<CandidateRoleStatsView> getCandidateRoleStats();
+		
 }
