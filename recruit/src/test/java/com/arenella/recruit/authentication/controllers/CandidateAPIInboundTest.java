@@ -52,7 +52,7 @@ public class CandidateAPIInboundTest {
 		assertTrue("Expect empty but instantiated Set", candidate.getSkills().isEmpty());
 		assertTrue("Expect empty but instantiated Set", candidate.getLanguages().isEmpty());
 		assertEquals(0, 								candidate.getYearsExperience());
-		assertFalse(candidate.isAvailable());
+		assertTrue(candidate.isAvailable());
 		assertNull(candidate.isFreelance());
 		assertNull(candidate.isPerm());
 		assertNull(candidate.getFunction());

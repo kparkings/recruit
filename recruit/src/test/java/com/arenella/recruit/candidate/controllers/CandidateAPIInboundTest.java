@@ -143,4 +143,17 @@ public class CandidateAPIInboundTest {
 	
 	}
 	
+	/**
+	* Tests that by default the Candidate is available
+	* @throws Exception
+	*/
+	@Test
+	public void testAvailableByDefault() throws Exception {
+		
+		CandidateAPIInbound candidate = CandidateAPIInbound.builder().build();
+		
+		assertTrue(candidate.isAvailable());
+		
+	}
+	
 }
