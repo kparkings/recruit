@@ -46,6 +46,14 @@ public class SecRequestFilter extends OncePerRequestFilter {
 			return;
 		}
 		
+		/**
+		* We want to allow the stats url to be accessed before authentication
+		*/
+		if (request.getRequestURI().equals("/candidate/stats/total-active")) {
+			filterChain.doFilter(request, response);
+			return;
+		}
+		
 		if (!request.getMethod().equals("OPTIONS")) {
 			
 			/**

@@ -1,5 +1,5 @@
 import { Component, OnInit } 					from '@angular/core';
-import { CandidateServiceService }				from '../candidate-service.service';
+//import { CandidateServiceService }				from '../candidate-service.service';
 import { StatisticsService } 					from '../statistics.service';
 import { ChartDataSets, ChartOptions, ChartType } 			from 'chart.js';
 import { Color, Label } 						from 'ng2-charts';
@@ -10,6 +10,8 @@ import { Color, Label } 						from 'ng2-charts';
   styleUrls: ['./statistics.component.css']
 })
 export class StatisticsComponent implements OnInit {
+
+	totalNumberActiveCandidates:number = 0;
 
 	/**
   	* Constructor
@@ -31,7 +33,12 @@ export class StatisticsComponent implements OnInit {
 			this.recruiterDownloadsChartLabels = recruiterDownloadNames;
 
     	});
-//getCurriculumDownloadStatistics
+
+		this.statisticsService.getTotalNumberOfActiceCandidatesStatistics().forEach(count => {
+
+			this.totalNumberActiveCandidates = count;
+
+    	});
 
 	}
 

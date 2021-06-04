@@ -32,4 +32,14 @@ export class StatisticsService {
 
 	}
 
+	/**
+	* Returns a list of available Candidates 
+	*/
+	public getTotalNumberOfActiceCandidatesStatistics(): Observable<any>{
+      
+		const backendUrl:string = environment.backendUrl +'candidate/stats/total-active';
+  
+		return this.httpClient.get<any>(backendUrl, this.httpOptions);
+
+	}
 }

@@ -176,4 +176,13 @@ public interface CandidateDao extends CrudRepository<CandidateEntity, String>, J
 		
 	}
 	
+	/**
+	* Returns the number of Candidates that are either
+	* actively looking for a new role or who are not 
+	* actively looking for a new role
+	* @param active - Whether the Candidates are looking for a new role
+	* @return count of matching Candidates
+	*/
+	public Long countByAvailable(boolean active);
+	
 }

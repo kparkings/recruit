@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit } 					from '@angular/core';
+import { StatisticsService } 					from '../statistics.service';
 
 @Component({
   selector: 'app-home',
@@ -7,7 +8,21 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HomeComponent implements OnInit {
 
-  constructor() { }
+	totalNumberActiveCandidates:number = 0;
+
+	/**	
+	* Constructor
+	* @param statisticsService - provides statistics about the system
+	*/
+  	constructor(public statisticsService:StatisticsService) {
+	
+		this.statisticsService.getTotalNumberOfActiceCandidatesStatistics().forEach(count => {
+
+			this.totalNumberActiveCandidates = count;
+
+    	});
+	
+  	}
 
   ngOnInit(): void {
   }
