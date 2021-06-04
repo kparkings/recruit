@@ -29,7 +29,7 @@ export class ViewCandidatesComponent implements OnInit {
   	public	countryFiltNL:					boolean						= false;
   	public	countryFiltBE:					boolean						= false;
   	public	countryFiltUK:					boolean						= false;
-  	private	pageSize:						number						= 8;
+  	private	pageSize:						number						= 7;
   	public	totalPages:						number						= 0;
   	public	currentPage:					number						= 0;
   	public	functionOptionsPage1:			Array<CandidateFunction>	= new Array<CandidateFunction>();
