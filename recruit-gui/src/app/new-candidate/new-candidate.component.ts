@@ -66,7 +66,7 @@ export class NewCandidateComponent implements OnInit {
   };
 
   public feedbackBoxClass:string            = '';
-  public feedbackBoxTitle                       = '';
+  public feedbackBoxTitle                   = '';
   public feedbackBoxText:string             = '';
 
 
@@ -111,6 +111,8 @@ export class NewCandidateComponent implements OnInit {
   		
   		this.curriculumService.uploadCurriculum(this.curriculumFile).subscribe(data=>{
       		this.formBean.get('candidateId')?.setValue(data.id);
+			this.formBean.get('email')?.setValue(data.emailAddress);
+			this.formBean.get('skills')?.setValue(data.skills.join(", "));
     	});
   		
   }

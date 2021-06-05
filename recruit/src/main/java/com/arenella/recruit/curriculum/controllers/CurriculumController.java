@@ -38,13 +38,13 @@ public class CurriculumController {
 	*/
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@PostMapping(value="/curriculum",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-	public String uploadCurriculum(@RequestParam("file") MultipartFile curriculumFile) throws Exception{
+	public CurriculumUpdloadDetails uploadCurriculum(@RequestParam("file") MultipartFile curriculumFile) throws Exception{
 		
-		String 			postFix						= curriculumFile.getOriginalFilename().substring(curriculumFile.getOriginalFilename().lastIndexOf('.')+1);
+		String 			postFix						= curriculumFile.getOriginalFilename().substring(curriculumFile.getOriginalFilename().lastIndexOf('.')+1).toLowerCase();
 		long 			nextAvailableCurriculumId	= curriculumService.getNextCurriculumId();
 		Curriculum 		curriculum					= Curriculum.builder().fileType(FileType.valueOf(postFix)).file(curriculumFile.getBytes()).id(String.valueOf(nextAvailableCurriculumId)).build();
 		
-		return "{\"id\":\""+curriculumService.persistCurriculum(curriculum)+"\"}";
+		return curriculumService.extractDetails(curriculumService.persistCurriculum(curriculum), postFix, curriculumFile.getBytes());
 		
 	}
 	

@@ -2,16 +2,12 @@ package com.arenella.recruit.curriculum.controllers;
 
 import java.time.format.DateTimeFormatter;
 import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 import com.arenella.recruit.curriculum.beans.CurriculumDownloadedEvent;
-
-import liquibase.pro.packaged.e;
 
 /**
 * Contains stats of Curriculums downladed per day

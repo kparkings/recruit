@@ -1,14 +1,23 @@
 package com.arenella.recruit.curriculum.services;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.text.PDFTextStripper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.arenella.recruit.curriculum.beans.Curriculum;
 import com.arenella.recruit.curriculum.beans.CurriculumDownloadedEvent;
+import com.arenella.recruit.curriculum.controllers.CurriculumUpdloadDetails;
 import com.arenella.recruit.curriculum.dao.CurriculumDao;
 import com.arenella.recruit.curriculum.dao.CurriculumDownloadedEventDao;
+import com.arenella.recruit.curriculum.entity.CurriculumDetailsExtractionFactory;
 import com.arenella.recruit.curriculum.entity.CurriculumDownloadedEventEntity;
 import com.arenella.recruit.curriculum.entity.CurriculumEntity;
 
@@ -75,5 +84,24 @@ public class CurriculumServiceImpl implements CurriculumService{
 		
 		
 	}
+	
+	/**
+	* Refer to the CurriculumService interface for details
+	*/
+	@Override
+	public CurriculumUpdloadDetails extractDetails(String curriculumId, String fileType, byte[] curriculumFileBytes) throws IOException {
+		
+		//START - WART
+		try {
+				
+			return CurriculumDetailsExtractionFactory.getInstance(fileType).extract(curriculumId, curriculumFileBytes);
+				
+		}catch(Exception e) {
+			return CurriculumUpdloadDetails.builder().id(curriculumId).build();
+		}
+				
+				
+	} 
+	
 
 }
