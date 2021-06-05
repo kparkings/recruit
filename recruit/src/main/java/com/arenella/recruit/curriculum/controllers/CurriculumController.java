@@ -31,8 +31,8 @@ public class CurriculumController {
 	private CurriculumService curriculumService;
 	
 	/**
-	* Endoint for uploading a Curriculum
-	* @param curriculum		- Multipart representation of file
+	* EndPoint for uploading a Curriculum
+	* @param curriculum		- MultiPart representation of file
 	* @return Id of the Curriculum
 	* @throws Exception
 	*/
@@ -44,7 +44,7 @@ public class CurriculumController {
 		long 			nextAvailableCurriculumId	= curriculumService.getNextCurriculumId();
 		Curriculum 		curriculum					= Curriculum.builder().fileType(FileType.valueOf(postFix)).file(curriculumFile.getBytes()).id(String.valueOf(nextAvailableCurriculumId)).build();
 		
-		return curriculumService.extractDetails(curriculumService.persistCurriculum(curriculum), postFix, curriculumFile.getBytes());
+		return curriculumService.extractDetails(curriculumService.persistCurriculum(curriculum), FileType.valueOf(postFix), curriculumFile.getBytes());
 		
 	}
 	

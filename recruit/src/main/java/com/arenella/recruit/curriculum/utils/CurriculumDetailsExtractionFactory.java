@@ -1,4 +1,4 @@
-package com.arenella.recruit.curriculum.entity;
+package com.arenella.recruit.curriculum.utils;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -12,6 +12,7 @@ import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.xwpf.extractor.XWPFWordExtractor;
 
 import com.arenella.recruit.curriculum.controllers.CurriculumUpdloadDetails;
+import com.arenella.recruit.curriculum.enums.FileType;
 
 /**
 * Factory for extracting information out of Curriculum Files
@@ -30,15 +31,20 @@ public class CurriculumDetailsExtractionFactory {
 													 ,"jira"
 													 ,"git"
 													 ,"react");
-	
-	public static CurriculumDetailsExtractor getInstance(String fileType) {
+	/**
+	* Returns an implementation of the Extractor suitable for
+	* the FileType of the Curriculum
+	* @param fileType - FileType of the Curriculum
+	* @return Extractor
+	*/
+	public static CurriculumDetailsExtractor getInstance(FileType fileType) {
 		
-		switch(fileType.toLowerCase()) {
-			case "pdf":{
+		switch(fileType) {
+			case pdf:{
 				return new PDFCurriculumDetailsExtractor();
 			}
-			case "doc":
-			case "docx":{
+			case doc:
+			case docx:{
 				return new WordCurriculumDetailsExtractor(); 
 			}
 		}
@@ -46,14 +52,26 @@ public class CurriculumDetailsExtractionFactory {
 		return null;
 	}
 	
+	/**
+	* Defines the behaviour of a CurriculumDetailsExtractor. That is 
+	* an extractor that can extract details from a Curriculum file
+	* @author K Parkings
+	*/
 	public static interface CurriculumDetailsExtractor {
 		
 		public CurriculumUpdloadDetails extract(String curriculumId, byte[] curriculumFileBytes) throws Exception; 
 		
 	}
-	
+
+	/**
+	* PDF specific implementation of a CurriculumDetailsExtractor
+	* @author K Parkings
+	*/
 	public static class PDFCurriculumDetailsExtractor implements CurriculumDetailsExtractor{
 
+		/**
+		* Refer to the CurriculumDetailsExtractor interface for details
+		*/
 		@Override
 		public CurriculumUpdloadDetails extract(String curriculumId,  byte[] curriculumFileBytes) throws Exception{
 			
@@ -63,14 +81,22 @@ public class CurriculumDetailsExtractionFactory {
 			
 			text = text.toLowerCase();
 			doc.close();
+			
 			return CurriculumUpdloadDetails.builder().id(curriculumId).emailAddress(extractEmailAddress(text)).skills(extractSkills(text)).build();
 			
 		}
 		
 	}
 	
+	/**
+	* Word (doc/docx) specific implementation of a CurriculumDetailsExtractor
+	* @author K Parkings
+	*/
 	public static class WordCurriculumDetailsExtractor implements CurriculumDetailsExtractor{
 
+		/**
+		* Refer to the CurriculumDetailsExtractor interface for details
+		*/
 		@Override
 		public CurriculumUpdloadDetails extract(String curriculumId, byte[] curriculumFileBytes) throws Exception {
 			
@@ -86,6 +112,12 @@ public class CurriculumDetailsExtractionFactory {
 		
 	}
 	
+	/**
+	* Extracts the skills of interest where they are present
+	* in the Curriculum file
+	* @param text - text content from the Curriculum file
+	* @return Collection of skills found in the Curriculum
+	*/
 	private static Set<String> extractSkills(String text) {
 		
 		Set<String> skills = new HashSet<>();
@@ -104,6 +136,11 @@ public class CurriculumDetailsExtractionFactory {
 		
 	}
 	
+	/**
+	* Extracts the email address from the Curriculum file
+	* @param text - Text from the Curriculum file
+	* @return email address in the Curriculum
+	*/
 	private static String extractEmailAddress(String text) {
 		
 		Set<String> email = new HashSet<>();

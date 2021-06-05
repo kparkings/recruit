@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import com.arenella.recruit.curriculum.beans.Curriculum;
 import com.arenella.recruit.curriculum.controllers.CurriculumUpdloadDetails;
+import com.arenella.recruit.curriculum.enums.FileType;
 
 /**
 * Defines services for working with Curriculums
@@ -43,6 +44,6 @@ public interface CurriculumService {
 	* @param  curriculumFileBytes	- bytes of the actual Curriculum file
 	* @Throws IOException
 	*/
-	CurriculumUpdloadDetails extractDetails(String curriculumId, String fileType, byte[] curriculumFileBytes) throws IOException;
+	CurriculumUpdloadDetails extractDetails(String curriculumId, FileType fileType, byte[] curriculumFileBytes) throws IOException;
 	
 }

@@ -18,11 +18,8 @@ public class Wart {
 	@Test
 	public void testAdminUser() throws Exception{
 		
-		Random x = new Random();
-		
 		final String 	email 		=	"kparkings@gmail.com";
 		final String 	username	=	email.substring(0, email.indexOf("@")); 
-		final String 	code 		=	"";
 		
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 		

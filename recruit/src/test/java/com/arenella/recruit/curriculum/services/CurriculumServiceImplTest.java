@@ -14,6 +14,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 
 import com.arenella.recruit.curriculum.beans.Curriculum;
+import com.arenella.recruit.curriculum.controllers.CurriculumUpdloadDetails;
 import com.arenella.recruit.curriculum.dao.CurriculumDao;
 import com.arenella.recruit.curriculum.dao.CurriculumDownloadedEventDao;
 import com.arenella.recruit.curriculum.entity.CurriculumDownloadedEventEntity;
@@ -156,4 +157,22 @@ public class CurriculumServiceImplTest {
 		
 	}
 	
+	/**
+	* Tests if there is a Exception the response is still returned with the id
+	* for the Curriculum
+	* @throws Exception
+	*/
+	@Test
+	public void testExtractDetails_failure_returnsMinumum() throws Exception {
+		
+		final String 		curriculumId 	= "897";
+		final FileType 		fileType 		= FileType.pdf;
+		final byte[] 		file 			= new byte[] {};
+		
+		CurriculumUpdloadDetails extractedDetails = service.extractDetails(curriculumId, fileType, file);
+		
+		assertEquals(curriculumId, extractedDetails.getId());
+		
+	}
+
 }
