@@ -279,3 +279,20 @@ databaseChangeLog:
                   type: timestamp
                   constraints:
                     nullable: false
+  - changeSet:
+      id: create_curriculum_skills_table
+      author: kparkings
+      changes:
+        - createTable:
+            tableName: skills
+            schemaName: curriculum
+            columns:
+              - column:
+                  name: skill
+                  type: varchar(36)
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+
+            
+            

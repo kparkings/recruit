@@ -2,6 +2,10 @@ package com.arenella.recruit.curriculum.services;
 
 import java.io.IOException;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,6 +14,7 @@ import com.arenella.recruit.curriculum.beans.CurriculumDownloadedEvent;
 import com.arenella.recruit.curriculum.controllers.CurriculumUpdloadDetails;
 import com.arenella.recruit.curriculum.dao.CurriculumDao;
 import com.arenella.recruit.curriculum.dao.CurriculumDownloadedEventDao;
+import com.arenella.recruit.curriculum.dao.SkillsDao;
 import com.arenella.recruit.curriculum.utils.CurriculumDetailsExtractionFactory;
 import com.arenella.recruit.curriculum.entity.CurriculumDownloadedEventEntity;
 import com.arenella.recruit.curriculum.entity.CurriculumEntity;
@@ -27,6 +32,9 @@ public class CurriculumServiceImpl implements CurriculumService{
 	
 	@Autowired
 	private CurriculumDownloadedEventDao 	curriculumDownloadedEventDao;
+	
+	@Autowired
+	private SkillsDao						skillsDao;
 	
 	/**
 	* Refer to the CurriculumService interface for details
@@ -87,7 +95,9 @@ public class CurriculumServiceImpl implements CurriculumService{
 		
 		try {
 				
-			return CurriculumDetailsExtractionFactory.getInstance(fileType).extract(curriculumId, curriculumFileBytes);
+			Set<String> skills = StreamSupport.stream(skillsDao.findAll().spliterator(), false).map(skill -> skill.getSkill()).collect(Collectors.toSet());
+			
+			return CurriculumDetailsExtractionFactory.getInstance(fileType).extract(skills, curriculumId, curriculumFileBytes);
 				
 		}catch(Exception e) {
 			return CurriculumUpdloadDetails.builder().id(curriculumId).build();

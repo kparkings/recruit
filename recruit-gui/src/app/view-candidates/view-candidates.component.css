@@ -81,6 +81,24 @@
 
 .skills-col{
 	text-align:left;
+	white-space:nowrap;
+  	overflow:hidden;
+  	text-overflow:ellipsis;
+	max-width:300px;
+	cursor:pointer;
+}
+.skills-col:hover{
+	text-align:left;
+	white-space:nowrap;
+  	overflow:hidden;
+  	text-overflow:ellipsis;
+	max-width:300px;
+	background:#6f42c175;
+	cursor:pointer;
+}
+
+.skills-infobox-text{
+	font-size:12px;
 }
 
 .currliculum-link{

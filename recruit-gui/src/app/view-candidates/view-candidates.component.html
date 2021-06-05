@@ -98,7 +98,7 @@
 	                <td class="candidate-tab-col lang-col">{{candidate.getDutch()}}</td>
 	                <td class="candidate-tab-col lang-col">{{candidate.getEnglish()}}</td>
 	                <td class="candidate-tab-col lang-col">{{candidate.getFrench()}}</td>
-	                <td class="candidate-tab-col skills-col">{{candidate.getSkills()}}</td>
+	                <td class="candidate-tab-col skills-col" (click)="showCandidateSkills(infomodal, candidate.getSkills())" >{{candidate.getSkills()}}</td>
 	      		</tr>	
 	      	</tbody>
 		</table>
@@ -345,6 +345,61 @@
 							</div>
 						</div>
 					</div>
+					
+					<!-- Skill Details -->
+					<div  *ngSwitchCase="'showCandidateSkills'">
+						<div class="row">
+							<div class="col">
+								{{selectedCandidateSkills}}
+							</div>
+						</div>
+					</div>
+					
+				</div>
+			</div>
+		</div> 
+	</ng-template>
+	
+	<!-- Info -->
+	<ng-template #infomodal let-modal>
+	
+		
+		<!--  Filter Body -->
+		<div class="modal-body">
+			
+			<!--  Specific Filters -->
+			<div>
+             	<div [ngSwitch]="activeInfoBox" class="filterColmnSpecific">
+					
+					<!-- Skills Filters -->
+					<div  *ngSwitchCase="'skills'">
+						<div class="row">
+							<div class="col">
+								<div>Add Skill</div>
+								<div>
+									<form [formGroup]="skillFilterForm">
+										<input type="text" formControlName="skill" class="inpt-tab-std input-small"/>
+										<button (click)="updateSkillFilters()">Add</button>
+									</form>
+								</div>
+								<div class="selected-skills-filter">
+									<span *ngFor="let skill of skillFilterSelections" class="selected-skill" (click)="removeSkill(skill)">
+										{{skill}}
+									</span>
+								</div>
+							</div>
+						</div>
+					</div>
+					
+					<!-- Skill Details -->
+					<div  *ngSwitchCase="'showCandidateSkills'">
+						<div class="row">
+							<div class="col skills-infobox-text">
+								{{selectedCandidateSkills}}
+							</div>
+						</div>
+					</div>
+					
 				</div>
 			</div>
 		</div> 

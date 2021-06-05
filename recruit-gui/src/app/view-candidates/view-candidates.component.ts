@@ -17,6 +17,7 @@ export class ViewCandidatesComponent implements OnInit {
 	public functionTypes:				Array<CandidateFunction>	= new Array<CandidateFunction>();
   	public candidates:					Array<Candidate>			= new Array<Candidate>();
   	public yearsExperienceOptions:		Array<number>				= new Array<number>();
+	public selectedCandidateSkills:		string						= "";
 
   	/**
   	* Filters
@@ -29,12 +30,17 @@ export class ViewCandidatesComponent implements OnInit {
   	public	countryFiltNL:					boolean						= false;
   	public	countryFiltBE:					boolean						= false;
   	public	countryFiltUK:					boolean						= false;
-  	private	pageSize:						number						= 7;
+  	private	pageSize:						number						= 8;
   	public	totalPages:						number						= 0;
   	public	currentPage:					number						= 0;
   	public	functionOptionsPage1:			Array<CandidateFunction>	= new Array<CandidateFunction>();
   	public	functionOptionsPage2:			Array<CandidateFunction>	= new Array<CandidateFunction>();
 
+	/**
+	* Info Boxes
+	*/
+	public	activeInfoBox:					string						= '';
+	
 	/**
   	* Constructor
 	*/
@@ -61,6 +67,14 @@ export class ViewCandidatesComponent implements OnInit {
 
 	}
 
+	public showCandidateSkills(content: any, candidateSkills:string):void {
+		console.log('xxxx');
+		this.selectedCandidateSkills = candidateSkills;
+		this.activeInfoBox = 'showCandidateSkills';
+		this.modalService.open(content, { centered: true });
+
+	}
+	
 	/**
 	* Fetches and displays the next page 
 	* of candidtes

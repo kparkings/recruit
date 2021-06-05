@@ -20,17 +20,6 @@ import com.arenella.recruit.curriculum.enums.FileType;
 */
 public class CurriculumDetailsExtractionFactory {
 
-	private static Set<String> soughtSkills = Set.of( "java"
-													 ,"angular"
-													 ,"css"
-													 ,"html"
-													 ,"c"
-													 ,"c++"
-													 ,"c#"
-													 ,"typescript"
-													 ,"jira"
-													 ,"git"
-													 ,"react");
 	/**
 	* Returns an implementation of the Extractor suitable for
 	* the FileType of the Curriculum
@@ -59,7 +48,7 @@ public class CurriculumDetailsExtractionFactory {
 	*/
 	public static interface CurriculumDetailsExtractor {
 		
-		public CurriculumUpdloadDetails extract(String curriculumId, byte[] curriculumFileBytes) throws Exception; 
+		public CurriculumUpdloadDetails extract(Set<String> skills, String curriculumId, byte[] curriculumFileBytes) throws Exception; 
 		
 	}
 
@@ -73,7 +62,7 @@ public class CurriculumDetailsExtractionFactory {
 		* Refer to the CurriculumDetailsExtractor interface for details
 		*/
 		@Override
-		public CurriculumUpdloadDetails extract(String curriculumId,  byte[] curriculumFileBytes) throws Exception{
+		public CurriculumUpdloadDetails extract(Set<String> skills, String curriculumId,  byte[] curriculumFileBytes) throws Exception{
 			
 			PDDocument 			doc 			= PDDocument.load(new ByteArrayInputStream(curriculumFileBytes));
 			PDFTextStripper 	pdfStripper 	= new PDFTextStripper();
@@ -82,7 +71,7 @@ public class CurriculumDetailsExtractionFactory {
 			text = text.toLowerCase();
 			doc.close();
 			
-			return CurriculumUpdloadDetails.builder().id(curriculumId).emailAddress(extractEmailAddress(text)).skills(extractSkills(text)).build();
+			return CurriculumUpdloadDetails.builder().id(curriculumId).emailAddress(extractEmailAddress(text)).skills(extractSkills(skills, text)).build();
 			
 		}
 		
@@ -98,7 +87,7 @@ public class CurriculumDetailsExtractionFactory {
 		* Refer to the CurriculumDetailsExtractor interface for details
 		*/
 		@Override
-		public CurriculumUpdloadDetails extract(String curriculumId, byte[] curriculumFileBytes) throws Exception {
+		public CurriculumUpdloadDetails extract(Set<String> skills, String curriculumId, byte[] curriculumFileBytes) throws Exception {
 			
 			InputStream 		is 				= new ByteArrayInputStream(curriculumFileBytes);
 			OPCPackage 			docPackage 		= OPCPackage.open(is);
@@ -107,7 +96,7 @@ public class CurriculumDetailsExtractionFactory {
 			
 			extractor.close();
 			
-			return CurriculumUpdloadDetails.builder().id(curriculumId).emailAddress(extractEmailAddress(text)).skills(extractSkills(text)).build();
+			return CurriculumUpdloadDetails.builder().id(curriculumId).emailAddress(extractEmailAddress(text)).skills(extractSkills(skills, text)).build();
 		}
 		
 	}
@@ -118,7 +107,7 @@ public class CurriculumDetailsExtractionFactory {
 	* @param text - text content from the Curriculum file
 	* @return Collection of skills found in the Curriculum
 	*/
-	private static Set<String> extractSkills(String text) {
+	private static Set<String> extractSkills(Set<String> soughtSkills, String text) {
 		
 		Set<String> skills = new HashSet<>();
 		
