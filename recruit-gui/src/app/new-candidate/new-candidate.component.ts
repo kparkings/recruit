@@ -1,11 +1,11 @@
-import { Component, OnInit }										from '@angular/core';
-import { ReactiveFormsModule, FormGroup, FormControl }				from '@angular/forms';
-import { CandidateServiceService }									from '../candidate-service.service';
-import { CurriculumService }										from '../curriculum.service';
-import { CandidateFunction }										from '../candidate-function';
-import {NgbModal, NgbModalOptions, ModalDismissReasons}				from '@ng-bootstrap/ng-bootstrap';
-import {TemplateRef, ViewChild,ElementRef, AfterViewInit  }			from '@angular/core';
-import { Router}													from '@angular/router';
+import { Component, OnInit }							from '@angular/core';
+import { FormGroup, FormControl }						from '@angular/forms';
+import { CandidateServiceService }						from '../candidate-service.service';
+import { CurriculumService }							from '../curriculum.service';
+import { CandidateFunction }							from '../candidate-function';
+import { NgbModal, NgbModalOptions}						from '@ng-bootstrap/ng-bootstrap';
+import { ViewChild }									from '@angular/core';
+import { Router}										from '@angular/router';
 
 @Component({
   selector: 'app-new-candidate',

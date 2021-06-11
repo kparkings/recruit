@@ -1,0 +1,57 @@
+<div class=".container m-2" >
+
+	<ul class="nav nav-tabs">
+	  <li class="nav-item">
+	    <span class="nav-link tabNav" (click)="switchTab('recruiters')">Recruiters</span>
+	  </li>
+	  <li class="nav-item tabNav">
+	    <span class="nav-link" (click)="switchTab('candidates')">Candidates</span>
+	  </li>
+	</ul>
+	
+	<!-- Recruiters-->
+	<div *ngIf="showRecruitersTab">
+		<h3>Create Account</h3>
+		<form [formGroup]="createRecruiterAccountForm">
+			<table class="table create-recruiter-account-table">
+				<tr>
+					<td>
+						<label>Username</label>
+					</td>
+					<td>
+						<input type="input" formControlName="proposedUserName"/>
+					</td>
+					<td>
+						<button (click)="createRecruiterAccount()">Create Account</button>
+					</td>
+				</tr>
+				<tr *ngIf="createAccountDetailsAvailable">
+					<td>
+						Username
+					</td>
+					<td>
+						{{recruiterUsername}}
+					</td>
+				</tr>
+				<tr *ngIf="createAccountDetailsAvailable">
+					<td>
+						Password
+					</td>
+					<td>
+						{{recruiterPassword}}
+					</td>
+				</tr>
+			</table>
+		</form>
+	</div>
+	
+	<!-- Candidates-->
+	<div *ngIf="showCandidatesTab">
+		<h3>Candidates</h3>
+		<table class="table stats-table">
+			<tr>
+			</tr>
+		</table>
+	</div>
+	
+</div>

@@ -46,7 +46,7 @@ public class Wart {
 		
 		Random x = new Random();
 		
-		final String 	email 		=	"arye.kirzner@gmail.com";
+		final String 	email 		=	"ckroonstadt@bluetrail.nl";
 		final String 	username	=	email.substring(0, email.indexOf("@")); 
 		final String 	code 		=	String.valueOf(x.nextInt()).substring(1,5);
 		

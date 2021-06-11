@@ -41,17 +41,17 @@ export class CandidateServiceService {
 
     const newCandidate:NewCandidate = new NewCandidate();
 
-    newCandidate.candidateId           = formBean.get('candidateId')?.value;
-    newCandidate.firstname               = formBean.get('firstname')?.value;
-    newCandidate.surname                = formBean.get('surname')?.value;
-    newCandidate.email                     = formBean.get('email')?.value;
-    newCandidate.country                  = formBean.get('country')?.value;
-    newCandidate.city                        = formBean.get('city')?.value;
-    newCandidate.perm                     = formBean.get('perm')?.value;
-    newCandidate.freelance              = formBean.get('freelance')?.value;
-    newCandidate.yearsExperience   = formBean.get('yearsExperience')?.value;
-    newCandidate.function                = formBean.get('function')?.value;
-    newCandidate.roleSought           = formBean.get('roleSought')?.value;
+    newCandidate.candidateId           		= formBean.get('candidateId')?.value;
+    newCandidate.firstname               	= formBean.get('firstname')?.value;
+    newCandidate.surname                	= formBean.get('surname')?.value;
+    newCandidate.email                     	= formBean.get('email')?.value;
+    newCandidate.country                  	= formBean.get('country')?.value;
+    newCandidate.city                       = formBean.get('city')?.value;
+    newCandidate.perm                     	= formBean.get('perm')?.value;
+    newCandidate.freelance              	= formBean.get('freelance')?.value;
+    newCandidate.yearsExperience   			= formBean.get('yearsExperience')?.value;
+    newCandidate.function                	= formBean.get('function')?.value;
+    newCandidate.roleSought           		= formBean.get('roleSought')?.value;
     const langDutch: string                 = formBean.get('dutch')?.value;
     const langFrench: string                = formBean.get('french')?.value;
     const langEnglish: string               = formBean.get('english')?.value;

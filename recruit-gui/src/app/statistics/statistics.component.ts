@@ -69,10 +69,13 @@ export class StatisticsComponent implements OnInit {
 
 	ngOnInit(): void {
 	}
-	
+
+	/**
+	* Switches between tabs in the gui
+	* param tab - id of the tab to show
+	*/	
 	public switchTab(tab:string){
 		this.currentTab = tab;
-		console.log("XXX" + tab)
 		switch(tab){
 			case "downloads":{
 				this.showStatsDownloads=true;
