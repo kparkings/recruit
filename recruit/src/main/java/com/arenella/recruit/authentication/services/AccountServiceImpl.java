@@ -13,7 +13,7 @@ import com.arenella.recruit.authentication.beans.User;
 import com.arenella.recruit.authentication.beans.User.USER_ROLE;
 import com.arenella.recruit.authentication.dao.UserDao;
 import com.arenella.recruit.authentication.entity.UserEntity;
-import com.arenella.recruit.candidates.controllers.CreateAccountAPIInbound.AccountType;
+import com.arenella.recruit.authentication.enums.AccountType;
 
 /**
 * Services for interaction with User Accounts

@@ -1,7 +1,7 @@
 package com.arenella.recruit.authentication.services;
 
 import com.arenella.recruit.authentication.beans.User;
-import com.arenella.recruit.candidates.controllers.CreateAccountAPIInbound.AccountType;
+import com.arenella.recruit.authentication.enums.AccountType;
 
 /**
 * Defines Services for interaction with User Accounts

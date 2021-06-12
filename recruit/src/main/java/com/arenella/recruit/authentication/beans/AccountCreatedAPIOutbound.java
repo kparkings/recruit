@@ -1,6 +1,4 @@
-package com.arenella.recruit.candidates.controllers;
-
-import com.arenella.recruit.authentication.beans.User;
+package com.arenella.recruit.authentication.beans;
 
 /**
 * Returns the username and password 

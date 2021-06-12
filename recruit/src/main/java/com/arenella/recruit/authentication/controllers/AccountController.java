@@ -7,9 +7,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.arenella.recruit.authentication.beans.AccountCreatedAPIOutbound;
+import com.arenella.recruit.authentication.beans.CreateAccountAPIInbound;
 import com.arenella.recruit.authentication.services.AccountService;
-import com.arenella.recruit.candidates.controllers.AccountCreatedAPIOutbound;
-import com.arenella.recruit.candidates.controllers.CreateAccountAPIInbound;
 
 @CrossOrigin(origins = {	"https://api-arenella-ict.wosah.nl/authenticate"	
 		,	"https://arenella-ict.wosah.nl"
@@ -42,7 +42,7 @@ public class AccountController {
 	*/
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@PostMapping(path="account", consumes="application/json", produces="application/json")
-	public AccountCreatedAPIOutbound createAuthenticationToken(@RequestBody CreateAccountAPIInbound account) throws Exception{
+	public AccountCreatedAPIOutbound createAccount(@RequestBody CreateAccountAPIInbound account) throws Exception{
 		 
 		return AccountCreatedAPIOutbound.convertFromUser(accountService.createAccount(account.getProposedUsername(), account.getAccountType()));
 		

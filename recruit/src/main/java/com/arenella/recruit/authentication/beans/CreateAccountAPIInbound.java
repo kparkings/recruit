@@ -1,12 +1,15 @@
-package com.arenella.recruit.candidates.controllers;
+package com.arenella.recruit.authentication.beans;
+
+import com.arenella.recruit.authentication.enums.AccountType;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 
 /**
 * Contains details of the new account to be created
 * @author K Parkings
 */
+@JsonDeserialize(builder = CreateAccountAPIInbound.CreateAccountAPIInboundBuilder.class)
 public class CreateAccountAPIInbound {
-
-	public static enum AccountType {RECRUITER} //TODO: Move to domain version
 
 	private String 			proposedUsername;
 	private AccountType 	accountType;
@@ -53,6 +56,7 @@ public class CreateAccountAPIInbound {
 	* Builder for the CreateAccountAPIInbound class
 	* @author K Parkings
 	*/
+	@JsonPOJOBuilder(buildMethodName = "build", withPrefix = "")
 	public static class CreateAccountAPIInboundBuilder{
 	
 		private String 			proposedUsername;
