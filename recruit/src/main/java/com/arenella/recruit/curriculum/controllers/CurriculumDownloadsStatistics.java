@@ -1,5 +1,8 @@
 package com.arenella.recruit.curriculum.controllers;
 
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -17,6 +20,9 @@ public class CurriculumDownloadsStatistics {
 
 	private Map<String,Integer> 	dailyDownloads 				= new TreeMap<>();
 	private Map<String, Integer> 	recruiterDownloads 			= new TreeMap<>();
+	private Map<String, Integer>	recruiterDownloadsDaily		= new TreeMap<>();
+	private Map<String, Integer>	recruiterDownloadsWeekly	= new TreeMap<>();
+	private Map<String, Integer>	recruiterDownloadsMonthly	= new TreeMap<>();
 	
 	/**
 	* Constructor. Reads in a list of events and generates the 
@@ -31,12 +37,7 @@ public class CurriculumDownloadsStatistics {
 			this.processRecruiterDownloads(event);
 			
 		});
-		
-		//recruiterDownloads.entrySet().stream()
-        //.sorted(Map.Entry.<String, Integer>comparingByValue().reversed()) 
-        //.limit(10) 
-        //.forEach(System.out::println);
-		
+	
 		this.recruiterDownloads = this.recruiterDownloads.entrySet()
 									.stream()
 									.sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
@@ -73,8 +74,33 @@ public class CurriculumDownloadsStatistics {
 		
 		if (recruiterDownloads.containsKey(event.getUserId())) {
 			recruiterDownloads.put(event.getUserId(), recruiterDownloads.get(event.getUserId()) + 1 );
+			
+			if (event.getTimestamp().isAfter(LocalDateTime.now().withDayOfMonth(1))) {
+				recruiterDownloadsMonthly.put(event.getUserId(), recruiterDownloadsMonthly.get(event.getUserId()) + 1 );
+			}
+
+			if (event.getTimestamp().isAfter(LocalDateTime.now().with(DayOfWeek.MONDAY))) {
+				recruiterDownloadsWeekly.put(event.getUserId(), recruiterDownloadsWeekly.get(event.getUserId()) + 1 );
+			}
+			
+			if (event.getTimestamp().isAfter(LocalDate.now().atStartOfDay())) {
+				recruiterDownloadsDaily.put(event.getUserId(), recruiterDownloadsDaily.get(event.getUserId()) + 1 );
+			}
+			
 		} else {
 			recruiterDownloads.put(event.getUserId(), 1);
+			
+			if (event.getTimestamp().isAfter(LocalDateTime.now().withDayOfMonth(1))) {
+				recruiterDownloadsMonthly.put(event.getUserId(), 1 );
+			}
+
+			if (event.getTimestamp().isAfter(LocalDateTime.now().with(DayOfWeek.MONDAY))) {
+				recruiterDownloadsWeekly.put(event.getUserId(), 1 );
+			}
+			
+			if (event.getTimestamp().isAfter(LocalDate.now().atStartOfDay())) {
+				recruiterDownloadsDaily.put(event.getUserId(),  1 );
+			}
 		}
 		
 	}
@@ -94,5 +120,28 @@ public class CurriculumDownloadsStatistics {
 	public Map<String, Integer> getRecruiterDownloads() {
 		return this.recruiterDownloads;
 	}
+
+	/**
+	* Downloads per recruiter current day
+	* @return stats
+	*/
+	public Map<String, Integer> getRecruiterDownloadsDaily() {
+		return this.recruiterDownloadsDaily;
+	}
 	
+	/**
+	* Downloads per recruiter current day
+	* @return stats
+	*/
+	public Map<String, Integer> getRecruiterDownloadsWeekly() {
+		return this.recruiterDownloadsWeekly;
+	}
+	
+	/**
+	* Downloads per recruiter current day
+	* @return stats
+	*/
+	public Map<String, Integer> getRecruiterDownloadsMonthly() {
+		return this.recruiterDownloadsMonthly;
+	}
 }

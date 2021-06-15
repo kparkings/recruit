@@ -11,11 +11,11 @@ import { Color, Label } 						from 'ng2-charts';
 })
 export class StatisticsComponent implements OnInit {
 
-	totalNumberActiveCandidates:number = 0;
-	candidatesByFunction:Map<string,number> = new Map<string,number>();
-	currentTab:string = "downloads";
-	showStatsDownloads:boolean=true;
-	showStatsAvailability:boolean=false;
+	totalNumberActiveCandidates:number 			= 0;
+	candidatesByFunction:Map<string,number> 	= new Map<string,number>();
+	currentTab:string 							= "downloads";
+	showStatsDownloads:boolean					=true;
+	showStatsAvailability:boolean				=false;
 
 	/**
   	* Constructor
@@ -30,10 +30,18 @@ export class StatisticsComponent implements OnInit {
 			this.lineChartData = [{ data: downloads, label: 'Downloads' },];
 			this.lineChartLabels = downloadDates;
 			
-			let recruiterDownloads:number[] 		= Object.values(stat.recruiterDownloads);
-			let recruiterDownloadNames:string[] 	= Object.keys(stat.recruiterDownloads);
+			let recruiterDownloads:number[] 			= Object.values(stat.recruiterDownloads);
+			let recruiterDownloadNames:string[] 		= Object.keys(stat.recruiterDownloads);
 			
-			this.recruiterDownloadsChartData = [{ data: recruiterDownloads, label: 'Downloads' },];
+			let recruiterDownloadsDaily:number[] 		= Object.values(stat.recruiterDownloadsDaily);
+			let recruiterDownloadsWeekly:number[] 		= Object.values(stat.recruiterDownloadsWeekly);
+			let recruiterDownloadsMonthly:number[] 		= Object.values(stat.recruiterDownloadsMonthly);
+			
+			this.recruiterDownloadsChartData = [	{ data: recruiterDownloads, label: 'Downloads' }
+												, 	{ data: recruiterDownloadsDaily, label: 'Today' }
+												, 	{ data: recruiterDownloadsWeekly, label: 'This week' } 
+												,	{ data: recruiterDownloadsMonthly, label: 'This month' }];
+												
 			this.recruiterDownloadsChartLabels = recruiterDownloadNames;
 
     	});
