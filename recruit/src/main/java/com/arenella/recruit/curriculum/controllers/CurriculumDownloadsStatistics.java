@@ -74,33 +74,38 @@ public class CurriculumDownloadsStatistics {
 		
 		if (recruiterDownloads.containsKey(event.getUserId())) {
 			recruiterDownloads.put(event.getUserId(), recruiterDownloads.get(event.getUserId()) + 1 );
-			
-			if (event.getTimestamp().isAfter(LocalDateTime.now().withDayOfMonth(1))) {
-				recruiterDownloadsMonthly.put(event.getUserId(), recruiterDownloadsMonthly.get(event.getUserId()) + 1 );
-			}
-
-			if (event.getTimestamp().isAfter(LocalDateTime.now().with(DayOfWeek.MONDAY))) {
-				recruiterDownloadsWeekly.put(event.getUserId(), recruiterDownloadsWeekly.get(event.getUserId()) + 1 );
-			}
-			
-			if (event.getTimestamp().isAfter(LocalDate.now().atStartOfDay())) {
-				recruiterDownloadsDaily.put(event.getUserId(), recruiterDownloadsDaily.get(event.getUserId()) + 1 );
-			}
-			
 		} else {
 			recruiterDownloads.put(event.getUserId(), 1);
+		}
+		
+		if (event.getTimestamp().isAfter(LocalDateTime.now().withDayOfMonth(1))) {
 			
-			if (event.getTimestamp().isAfter(LocalDateTime.now().withDayOfMonth(1))) {
+			if (recruiterDownloadsMonthly.containsKey(event.getUserId())) {
+				recruiterDownloadsMonthly.put(event.getUserId(), recruiterDownloadsMonthly.get(event.getUserId()) + 1 );
+			} else {
 				recruiterDownloadsMonthly.put(event.getUserId(), 1 );
 			}
 
-			if (event.getTimestamp().isAfter(LocalDateTime.now().with(DayOfWeek.MONDAY))) {
+		}
+		
+		if (event.getTimestamp().isAfter(LocalDateTime.now().with(DayOfWeek.MONDAY))) {
+			
+			if (recruiterDownloadsWeekly.containsKey(event.getUserId())) {
+				recruiterDownloadsWeekly.put(event.getUserId(), recruiterDownloadsWeekly.get(event.getUserId()) + 1 );
+			} else {
 				recruiterDownloadsWeekly.put(event.getUserId(), 1 );
 			}
-			
-			if (event.getTimestamp().isAfter(LocalDate.now().atStartOfDay())) {
-				recruiterDownloadsDaily.put(event.getUserId(),  1 );
+
+		}
+
+		if (event.getTimestamp().isAfter(LocalDate.now().atStartOfDay())) {
+	
+			if (recruiterDownloadsDaily.containsKey(event.getUserId())) {
+				recruiterDownloadsDaily.put(event.getUserId(), recruiterDownloadsDaily.get(event.getUserId()) + 1 );
+			} else {
+				recruiterDownloadsDaily.put(event.getUserId(), 1 );
 			}
+
 		}
 		
 	}
