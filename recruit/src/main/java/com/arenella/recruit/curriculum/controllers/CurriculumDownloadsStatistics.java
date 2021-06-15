@@ -43,6 +43,24 @@ public class CurriculumDownloadsStatistics {
 									.sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
 									.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
 										    (oldValue, newValue) -> oldValue, LinkedHashMap::new));
+		
+		this.recruiterDownloadsMonthly = this.recruiterDownloadsMonthly.entrySet()
+				.stream()
+				.sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
+				.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
+					    (oldValue, newValue) -> oldValue, LinkedHashMap::new));
+		
+		this.recruiterDownloadsWeekly = this.recruiterDownloadsWeekly.entrySet()
+				.stream()
+				.sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
+				.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
+					    (oldValue, newValue) -> oldValue, LinkedHashMap::new));
+		
+		this.recruiterDownloadsDaily = this.recruiterDownloadsDaily.entrySet()
+				.stream()
+				.sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
+				.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
+					    (oldValue, newValue) -> oldValue, LinkedHashMap::new));
 								
 		
 	}
