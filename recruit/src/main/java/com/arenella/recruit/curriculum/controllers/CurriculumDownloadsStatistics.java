@@ -106,7 +106,7 @@ public class CurriculumDownloadsStatistics {
 
 		}
 		
-		if (event.getTimestamp().isAfter(LocalDateTime.now().with(DayOfWeek.MONDAY))) {
+		if (event.getTimestamp().isAfter(LocalDateTime.now().with(DayOfWeek.MONDAY).minusDays(1))) {
 			
 			if (recruiterDownloadsWeekly.containsKey(event.getUserId())) {
 				recruiterDownloadsWeekly.put(event.getUserId(), recruiterDownloadsWeekly.get(event.getUserId()) + 1 );
