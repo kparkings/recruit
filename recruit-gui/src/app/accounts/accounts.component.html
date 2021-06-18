@@ -47,11 +47,55 @@
 	
 	<!-- Candidates-->
 	<div *ngIf="showCandidatesTab">
-		<h3>Candidates</h3>
-		<table class="table stats-table">
-			<tr>
-			</tr>
+		<form [formGroup]="candidateFormGroup">
+			<h3>Candidates</h3>
+			<span>
+				<label 	class="control-spacing">Firstname</label>
+				<input 	class="control-spacing" type="text" formControlName="firstname"/>
+				<label 	class="control-spacing">Surname</label>
+				<input 	class="control-spacing" type="text" formControlName="surname"/>
+				<label 	class="control-spacing">email</label>
+				<input 	class="control-spacing" type="text" formControlName="email"/>
+				<button	class="control-spacing" (click)="fetchCandidates()">Filter</button>
+			</span>
+			
+		</form>
+		<!-- Candidates table -->  
+	<div>
+      
+		<table class="table candidate-table">
+			<thead>
+	      		<tr>
+	      			<!-- Table Headers -->
+	      			<th class="bg-tab-hdr">CandidateId</th>
+	      			<th class="bg-tab-hdr">Firstname</th>
+	                <th class="bg-tab-hdr">Surname</th>
+	                <th class="bg-tab-hdr">Email</th>
+	                <th class="bg-tab-hdr">Actions</th>
+	              
+	      		</tr>
+	      	</thead>
+	      	<tbody>
+	      		<!-- Table row -->
+	      		<tr *ngFor="let candidate of candidates">
+	      			<td class="candidate-tab-col"><span class="candidate-id-prefix">C</span>{{candidate.candidateId}}</td>
+	                <td class="candidate-tab-col mini-col"> {{candidate.firstname}}</td>
+	                <td class="candidate-tab-col medicol">{{candidate.surname}}</td>
+	                <td class="candidate-tab-col medicol">{{candidate.email}}</td>
+	                <td class="candidate-tab-col medicol">
+	                	<div [ngSwitch]="candidate.available">
+	                		<div  *ngSwitchCase="true">
+	                			<button	class="control-spacing" (click)="disableCandidate(candidate.candidateId)">Disable</button>
+	                		</div>
+	                		<div  *ngSwitchCase="false">
+	                			<button	class="control-spacing" (click)="disableCandidate(candidate.candidateId)">Enable</button>
+	                		</div>
+	                	</div>
+	                </td>
+	      		</tr>	
+	      	</tbody>
 		</table>
+	</div>
 	</div>
 	
 </div>

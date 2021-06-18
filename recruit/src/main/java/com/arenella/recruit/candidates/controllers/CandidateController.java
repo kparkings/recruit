@@ -3,6 +3,8 @@ package com.arenella.recruit.candidates.controllers;
 import java.io.ByteArrayOutputStream;
 import java.util.Set;
 
+import javax.websocket.server.PathParam;
+
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
@@ -13,14 +15,17 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.arenella.recruit.candidates.beans.CandidateFilterOptions;
+import com.arenella.recruit.candidates.beans.CandidateFilterOptions.CandidateFilterOptionsBuilder;
 import com.arenella.recruit.candidates.beans.Language;
 import com.arenella.recruit.candidates.enums.COUNTRY;
 import com.arenella.recruit.candidates.enums.FUNCTION;
@@ -69,6 +74,17 @@ public class CandidateController {
 		candidateService.persistCandidate(CandidateAPIInbound.convertToCandidate(candidate));
 	}
 	
+	enum CANDIDATE_UPDATE_ACTIONS {enable, disable}
+	
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@PutMapping(path="candidate/{candidateId}")
+	public ResponseEntity<Void> updateCandidate(@RequestBody String fakeBody, @PathParam("CandidateId") String candidateId, @RequestParam("action") CANDIDATE_UPDATE_ACTIONS action) {
+		
+		System.out.println("UPDATEING CANDIDATE " + candidateId + " action = " + action);
+		
+		return ResponseEntity.ok().build();
+	}
+	
 	/**
 	* Fetches Candidates
 	* @param orderAttribute			- Optional attribute to order the results on
@@ -100,25 +116,41 @@ public class CandidateController {
 													@RequestParam(required = false) 	Language.LEVEL 		english,
 													@RequestParam(required = false) 	Language.LEVEL 		french,
 													@RequestParam(required = false) 	Set<String>			skills,
+													@RequestParam(required = false) 	String				firstname,
+													@RequestParam(required = false) 	String				surname,
+													@RequestParam(required = false) 	String				email,
 													Pageable pageable
 												 	) {
 		
-		CandidateFilterOptions filterOptions = CandidateFilterOptions
-													.builder()
-													.orderAttribute(orderAttribute)
-													.order(order)
-													.candidateIds(candidateId)
-													.countries(countries)
-													.functions(functions)
-													.freelance(freelance)
-													.perm(perm)
-													.yearsExperienceGtEq(yearsExperienceGtEq)
-													.yearsExperienceLtEq(yearsExperienceLtEq)
-													.dutch(dutch)
-													.english(english)
-													.french(french)
-													.skills(skills)
-													.build();
+		boolean isAdminUser	= SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream().filter(role -> role.getAuthority().equals("ROLE_ADMIN")).findAny().isPresent();
+		
+		CandidateFilterOptionsBuilder builder = CandidateFilterOptions.builder()
+																		.orderAttribute(orderAttribute)
+																		.order(order)
+																		.candidateIds(candidateId)
+																		.countries(countries)
+																		.functions(functions)
+																		.freelance(freelance)
+																		.perm(perm)
+																		.yearsExperienceGtEq(yearsExperienceGtEq)
+																		.yearsExperienceLtEq(yearsExperienceLtEq)
+																		.dutch(dutch)
+																		.english(english)
+																		.french(french)
+																		.skills(skills);
+		
+		/**
+		* Some details are private and not open to the Recruiters at present.
+		*/
+		if (isAdminUser) {
+			builder
+				.firstname(firstname)
+				.surname(surname)
+				.email(email);
+				
+		}
+		
+		CandidateFilterOptions filterOptions = builder.build();
 		
 		return candidateService.getCandidates(filterOptions, pageable).map(candidate -> CandidateAPIOutbound.convertFromCandidate(candidate));	
 	

@@ -15,6 +15,8 @@ import { environment }								from './../environments/environment';
   providedIn: 'root'
 })
 export class CandidateServiceService {
+	
+  
 
   constructor(private httpClient: HttpClient) { }
 
@@ -33,6 +35,31 @@ export class CandidateServiceService {
   
     return this.httpClient.get<any>(backendUrl, this.httpOptions);
   }
+
+	/**
+	* Enables a Candidate  
+	*/
+	enableCandidate(candidateId: string) {
+	    
+		console.log("disableX -> " + candidateId);
+		const backendUrl:string = environment.backendUrl +'candidate/'+candidateId+'/?action=enable';
+		
+		this.httpClient.put<any>(backendUrl, '{}',  this.httpOptions)
+        .subscribe(data => console.log('XXXXXXXXXXXXXXXY'));
+  	}
+  
+	/**
+	* Disables a Candidate  
+	*/
+	disableCandidate(candidateId: string) {
+    
+		console.log("disable -> " + candidateId);
+		const backendUrl:string = environment.backendUrl +'candidate/'+candidateId+'/?action=enable';
+		
+		this.httpClient.put<any>(backendUrl,  '{}', this.httpOptions)
+        .subscribe(data => console.log('XXXXXXXXXXXXXXXx'));
+
+	}
 
   /**
   * Adds a new Candidate 

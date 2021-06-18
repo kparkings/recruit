@@ -68,7 +68,7 @@ export class ViewCandidatesComponent implements OnInit {
 	}
 
 	public showCandidateSkills(content: any, candidateSkills:string):void {
-		console.log('xxxx');
+		
 		this.selectedCandidateSkills = candidateSkills;
 		this.activeInfoBox = 'showCandidateSkills';
 		this.modalService.open(content, { centered: true });

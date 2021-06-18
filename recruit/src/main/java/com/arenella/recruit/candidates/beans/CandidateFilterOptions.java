@@ -28,6 +28,9 @@ public class CandidateFilterOptions {
 	private Language.LEVEL 	english;
 	private Language.LEVEL 	french;
 	private Set<String>		skills					= new HashSet<>();
+	private String			firstname;
+	private String 			surname;
+	private String 			email;
 	
 	/**
 	* Builder for the  
@@ -48,6 +51,9 @@ public class CandidateFilterOptions {
 		this.english						= builder.english;
 		this.french							= builder.french;
 		this.skills							= builder.skills;
+		this.firstname						= builder.firstname;
+		this.surname						= builder.surname;
+		this.email							= builder.email;
 		
 	}
 	
@@ -157,6 +163,30 @@ public class CandidateFilterOptions {
 	}	
 	
 	/**
+	* Returns the firstname to filter on
+	* @return firstname to filter on
+	*/
+	public Optional<String> getFirstname(){
+		return Optional.ofNullable(firstname);
+	}
+	
+	/**
+	* Returns the surname to filter on 
+	* @return Surname to filter on
+	*/
+	public Optional<String> getSurname(){
+		return Optional.ofNullable(surname);
+	}
+	
+	/**
+	* Returns the email address to filter on 
+	* @return email to filter on
+	*/
+	public Optional<String> getEmail(){
+		return Optional.ofNullable(email);
+	}
+	
+	/**
 	* Returns a Builder for the CandidateFilterOptions class
 	* @return
 	*/
@@ -183,6 +213,9 @@ public class CandidateFilterOptions {
 		private Language.LEVEL 	english;
 		private Language.LEVEL 	french;
 		private Set<String>		skills					= new HashSet<>();
+		private String			firstname;
+		private String 			surname;
+		private String 			email;
 		
 		/**
 		* Sets the name of the attribute to order on
@@ -335,6 +368,36 @@ public class CandidateFilterOptions {
 			if (Optional.ofNullable(skills).isPresent()) {
 				this.skills.addAll(skills);
 			}
+			return this;
+		}
+		
+		/**
+		* Sets the firstname of the Candidate to filter on 
+		* @param firstname firstname of the candidate to filter on
+		* @return Builder
+		*/
+		public CandidateFilterOptionsBuilder firstname(String firstname) {
+			this.firstname = firstname;
+			return this;
+		}
+		
+		/**
+		* Sets the surname of the Candidate to filter on 
+		* @param surname surname of the candidate to filter on
+		* @return Builder
+		*/
+		public CandidateFilterOptionsBuilder surname(String surname) {
+			this.surname = surname;
+			return this;
+		}
+		
+		/**
+		* Sets the email of the Candidate to filter on 
+		* @param email email of the candidate to filter on
+		* @return Builder
+		*/
+		public CandidateFilterOptionsBuilder email(String email) {
+			this.email = email;
 			return this;
 		}
 		

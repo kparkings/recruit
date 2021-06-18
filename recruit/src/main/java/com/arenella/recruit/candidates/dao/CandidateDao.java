@@ -78,6 +78,26 @@ public interface CandidateDao extends CrudRepository<CandidateEntity, String>, J
 			
 			List<Predicate> predicates = new ArrayList<>();
 			
+			if (!this.filterOptions.getFirstname().isEmpty()) {
+				Expression<String> permExpression 						= root.get("firstname");
+				Expression<String> upperExpression 						= criteriaBuilder.upper(permExpression);
+				predicates.add(criteriaBuilder.like(upperExpression, this.filterOptions.getFirstname().get().toUpperCase()));
+			}
+			
+			if (!this.filterOptions.getSurname().isEmpty()) {
+				Expression<String> permExpression 						= root.get("surname");
+				Expression<String> upperExpression 						= criteriaBuilder.upper(permExpression);
+				predicates.add(criteriaBuilder.like(upperExpression, this.filterOptions.getSurname().get().toUpperCase()));
+			}
+			
+			
+			if (!this.filterOptions.getEmail().isEmpty()) {
+				Expression<String> permExpression 						= root.get("email");
+				Expression<String> upperExpression 						= criteriaBuilder.upper(permExpression);
+				predicates.add(criteriaBuilder.like(upperExpression, this.filterOptions.getEmail().get().toUpperCase()));
+			}
+			
+			
 			if (!this.filterOptions.getSkills().isEmpty()) {
 				
 				Expression<Collection<String>> skillValues = root.get("skills");

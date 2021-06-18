@@ -62,6 +62,9 @@ public class CandidateAPIOutboundTest {
 															.roleSought(roleSought)
 															.skills(skills)
 															.yearsExperience(yearsExperience)
+															.firstname(firstname)
+															.surname(surname)
+															.email(email)
 														.build();
 		
 		assertEquals(candidateId, 				candidate.getCandidateId());
@@ -74,6 +77,10 @@ public class CandidateAPIOutboundTest {
 		assertEquals(yearsExperience, 			candidate.getYearsExperience());
 		assertEquals(available, 				candidate.isAvailable());
 		assertEquals(lastAvailabilityCheck, 	candidate.getLastAvailabilityCheckOn());
+		assertEquals(firstname, 				candidate.getFirstname());
+		assertEquals(surname, 					candidate.getSurname());
+		assertEquals(email, 					candidate.getEmail());
+		
 		
 		assertTrue( candidate.getSkills().contains("Java"));
 		assertTrue(candidate.getSkills().contains("Angular"));
@@ -138,6 +145,9 @@ public class CandidateAPIOutboundTest {
 		assertEquals(yearsExperience, 			candidateAPIOutbound.getYearsExperience());
 		assertEquals(available, 				candidateAPIOutbound.isAvailable());
 		assertEquals(lastAvailabilityCheck, 	candidateAPIOutbound.getLastAvailabilityCheckOn());
+		assertEquals(firstname, 				candidate.getFirstname());
+		assertEquals(surname, 					candidate.getSurname());
+		assertEquals(email, 					candidate.getEmail());
 		
 		assertTrue(candidateAPIOutbound.getSkills().contains("Java"));
 		assertTrue(candidateAPIOutbound.getSkills().contains("Angular"));

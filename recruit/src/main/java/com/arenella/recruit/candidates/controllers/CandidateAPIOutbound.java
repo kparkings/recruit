@@ -29,6 +29,9 @@ public class CandidateAPIOutbound {
 	private LocalDate 		lastAvailabilityCheck;
 	private Set<String> 	skills						= new LinkedHashSet<>();
 	private Set<Language> 	languages					= new LinkedHashSet<>();
+	private String			firstname;
+	private String			surname;
+	private String			email;
 	
 	/**
 	* Constructor based upon a builder
@@ -46,6 +49,9 @@ public class CandidateAPIOutbound {
 		this.yearsExperience 			= builder.yearsExperience;
 		this.available 					= builder.available;
 		this.lastAvailabilityCheck 		= builder.lastAvailabilityCheck;
+		this.firstname					= builder.firstname;
+		this.surname					= builder.surname;
+		this.email						= builder.email;
 	
 		this.skills.addAll(builder.skills);
 		this.languages.addAll(builder.languages);
@@ -152,6 +158,30 @@ public class CandidateAPIOutbound {
 	}
 	
 	/**
+	* Returns the Candidates firstname
+	* @return firstname of the Candidate
+	*/
+	public String getFirstname() {
+		return this.firstname;
+	}
+	
+	/**
+	* Returns the Surname of the Candidate
+	* @return Candidates Surname
+	*/
+	public String getSurname() {
+		return this.surname;
+	}
+	
+	/**
+	* Returns the email address of the Candidate
+	* @return Candidates Email address
+	*/
+	public String getEmail() {
+		return this.email;
+	}
+	
+	/**
 	* Builder for the Candidate class
 	* @return A Builder for the CandidateAPIOutbound class
 	*/
@@ -177,6 +207,10 @@ public class CandidateAPIOutbound {
 		private LocalDate 		lastAvailabilityCheck;
 		private Set<String> 	skills						= new LinkedHashSet<>();
 		private Set<Language> 	languages					= new LinkedHashSet<>();
+		private String			firstname;
+		private String			surname;
+		private String			email;
+		
 		
 		/**
 		* Sets the candidates Unique identifier in the System
@@ -302,6 +336,36 @@ public class CandidateAPIOutbound {
 		}
 		
 		/**
+		* Sets the Candidates firstname
+		* @param firstname - Firstname of the Candidate
+		* @return Builder
+		*/
+		public CandidateAPIOutboundBuilder firstname(String firstname) {
+			this.firstname = firstname;
+			return this;
+		}
+		
+		/**
+		* Sets the Candidates surname
+		* @param surname - surname of the Candidate
+		* @return Builder
+		*/
+		public CandidateAPIOutboundBuilder surname(String surname) {
+			this.surname = surname;
+			return this;
+		}
+		
+		/**
+		* Sets the Candidates email address
+		* @param email - Email address of the Candidate
+		* @return Builder
+		*/
+		public CandidateAPIOutboundBuilder email(String email) {
+			this.email = email;
+			return this;
+		}
+		
+		/**
 		* Returns an instance of Candidate initialized with the 
 		* values in the builder
 		* @return Initialized instance of Candidate
@@ -333,7 +397,10 @@ public class CandidateAPIOutbound {
 					.yearsExperience(candidate.getYearsExperience())
 					.available(candidate.isAvailable())
 					.lastAvailabilityCheck(candidate.getLastAvailabilityCheckOn())
-					.build();
+					.firstname(candidate.getFirstname())
+					.surname(candidate.getSurname())
+					.email(candidate.getEmail())
+				.build();
 		
 	}
 	
