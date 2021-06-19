@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 
 import com.arenella.recruit.candidates.beans.Candidate;
 import com.arenella.recruit.candidates.beans.CandidateFilterOptions;
+import com.arenella.recruit.candidates.controllers.CandidateController.CANDIDATE_UPDATE_ACTIONS;
 
 /**
 * Defines services available for interacting with Candidates
@@ -20,6 +21,13 @@ public interface CandidateService {
 	* @return CandidateId
 	*/
 	public void persistCandidate(Candidate candidate);
+	
+	/**
+	* Performs an update on a specific Candidate
+	* @param candidateId	- Unique identifier of the Candidate to be updated
+	* @param updateAction	- Update action to be performed
+	*/
+	public void updateCandidate(String candidateId, CANDIDATE_UPDATE_ACTIONS updateAction);
 	
 	/**
 	* Retrieves a list of Candidates

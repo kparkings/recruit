@@ -216,7 +216,7 @@ public class CandidateEntity {
 	
 	/**
 	* Returns whether the Candidate is currently available for work
-	* @return Whether the Candidate is avilable for work
+	* @return Whether the Candidate is available for work
 	*/
 	public boolean isAvailable() {
 		return this.available;
@@ -253,6 +253,14 @@ public class CandidateEntity {
 	*/
 	public Set<LanguageEntity> getLanguages(){
 		return this.languages;
+	}
+	
+	/**
+	* Updates the availability of the Candidate
+	* @param available - Whether or not the Candidate is available
+	*/
+	public void setAvailable(boolean available) {
+		this.available = available;
 	}
 	
 	/**

@@ -1,5 +1,6 @@
 package com.arenella.recruit.candidate.controllers;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
@@ -13,6 +14,8 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -22,6 +25,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import com.arenella.recruit.candidates.beans.Candidate;
 import com.arenella.recruit.candidates.beans.CandidateFilterOptions;
 import com.arenella.recruit.candidates.controllers.CandidateController;
+import com.arenella.recruit.candidates.controllers.CandidateController.CANDIDATE_UPDATE_ACTIONS;
 import com.arenella.recruit.candidates.services.CandidateDownloadService;
 import com.arenella.recruit.candidates.services.CandidateService;
 
@@ -40,6 +44,7 @@ public class CandidateControllerTest {
 	
 	@Mock
 	private Authentication 				mockAuthentication;
+	
 	@InjectMocks
 	private CandidateController 		controller;
 	
@@ -132,6 +137,26 @@ public class CandidateControllerTest {
 	*/
 	@Test
 	public void testGetCandidate() throws Exception{
+		
+	}
+	
+	/**
+	* Happy path test for updating Candidate
+	* @throws Exception
+	*/
+	@Test
+	public void testUpdateCandidate() throws Exception {
+		
+		final String					candidateId	 = "100";
+		final CANDIDATE_UPDATE_ACTIONS	updateAction = CANDIDATE_UPDATE_ACTIONS.disable;
+		
+		Mockito.doNothing().when(this.mockCandidateService).updateCandidate(candidateId, updateAction);
+		
+		ResponseEntity<Void> response = controller.updateCandidate("{}","100", CANDIDATE_UPDATE_ACTIONS.disable);
+		
+		Mockito.verify(this.mockCandidateService).updateCandidate(candidateId, updateAction);
+		
+		assertEquals(HttpStatus.OK, response.getStatusCode());
 		
 	}
 	

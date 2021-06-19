@@ -2,10 +2,13 @@ package com.arenella.recruit.candidate.entities;
 
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import java.time.LocalDate;
 import java.util.LinkedHashSet;
 import java.util.Set;
+
+import org.junit.jupiter.api.Test;
 
 import com.arenella.recruit.candidates.beans.Candidate;
 import com.arenella.recruit.candidates.beans.Language;
@@ -23,7 +26,7 @@ import com.arenella.recruit.candidates.enums.PERM;
 */
 public class CandidateEntityTest {
 
-	private static final String 		candidateId 			= "Candidate1";
+	private static final String	 		candidateId 			= "100";
 	private static final String 		firstname				= "Kevin";
 	private static final String 		surname					= "Parkings";
 	private static final String 		email					= "kparkings@gmail.com";
@@ -57,7 +60,7 @@ public class CandidateEntityTest {
 	* Domain representation of a Candidate and the state is copied 
 	* successfully 
 	*/
-	//@Test
+	@Test
 	public void testConversionToEntity() {
 		
 		Candidate candidate = Candidate
@@ -80,7 +83,7 @@ public class CandidateEntityTest {
 		
 		CandidateEntity candidateEntity = CandidateEntity.convertToEntity(candidate);
 
-		assertEquals(candidateEntity.getCandidateId(), 				candidateId);
+		assertEquals(candidateEntity.getCandidateId(), 				Long.valueOf(candidateId));
 		assertEquals(candidateEntity.getFirstname(), 				firstname);
 		assertEquals(candidateEntity.getSurname(), 					surname);
 		assertEquals(candidateEntity.getEmail(), 					email);
@@ -102,7 +105,7 @@ public class CandidateEntityTest {
 	* Entity representation of a Candidate and the state is copied 
 	* successfully 
 	*/
-	//@Test
+	@Test
 	public void testConversionFromEntity() {
 		
 		CandidateEntity candidateEntity = CandidateEntity
@@ -145,6 +148,27 @@ public class CandidateEntityTest {
 		assertTrue(candidate.getSkills().contains(skill));
 		assertEquals(candidate.getLanguages().stream().findFirst().get().getLanguage(), language.getLanguage());
 	
+	}
+	
+	/**
+	* Tests updating of attributes on existing entity
+	* @throws Exception
+	*/
+	@Test
+	public void testUpdateExistingCandidate() throws Exception {
+		
+		CandidateEntity candidate = CandidateEntity.builder().build();
+		
+		assertFalse(candidate.isAvailable());
+		
+		candidate.setAvailable(true);
+		
+		assertTrue(candidate.isAvailable());
+		
+		candidate.setAvailable(false);
+		
+		assertFalse(candidate.isAvailable());
+		
 	}
 	
 }

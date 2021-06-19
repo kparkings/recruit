@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.arenella.recruit.candidates.beans.Candidate;
 import com.arenella.recruit.candidates.beans.CandidateFilterOptions;
+import com.arenella.recruit.candidates.controllers.CandidateController.CANDIDATE_UPDATE_ACTIONS;
 import com.arenella.recruit.candidates.dao.CandidateDao;
 import com.arenella.recruit.candidates.entities.CandidateEntity;
 
@@ -65,6 +66,32 @@ public class CandidateServiceImpl implements CandidateService{
 	public Candidate getCandidate(String candidateId) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	/**
+	* Refer to the CandidateService Interface for Details
+	*/
+	@Override
+	public void updateCandidate(String candidateId, CANDIDATE_UPDATE_ACTIONS updateAction) {
+		
+		CandidateEntity candidate = this.candidateDao.findById(Long.valueOf(candidateId)).orElseThrow(() -> new RuntimeException("Cannot perform update on unknown Candidate: " + candidateId));
+		
+		switch (updateAction) {
+			case enable: {
+				candidate.setAvailable(true);
+				break;
+			}
+			case disable: {
+				candidate.setAvailable(false);
+				break;
+			}
+			default: {
+				throw new IllegalArgumentException("Unknown update action requested for Candidate");
+			}
+		}
+		
+		this.candidateDao.save(candidate);
+		
 	}
 	
 }

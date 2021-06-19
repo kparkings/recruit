@@ -3,8 +3,6 @@ package com.arenella.recruit.candidates.controllers;
 import java.io.ByteArrayOutputStream;
 import java.util.Set;
 
-import javax.websocket.server.PathParam;
-
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
@@ -18,6 +16,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -74,13 +73,13 @@ public class CandidateController {
 		candidateService.persistCandidate(CandidateAPIInbound.convertToCandidate(candidate));
 	}
 	
-	enum CANDIDATE_UPDATE_ACTIONS {enable, disable}
+	public static enum CANDIDATE_UPDATE_ACTIONS {enable, disable}
 	
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	@PutMapping(path="candidate/{candidateId}")
-	public ResponseEntity<Void> updateCandidate(@RequestBody String fakeBody, @PathParam("CandidateId") String candidateId, @RequestParam("action") CANDIDATE_UPDATE_ACTIONS action) {
+	@PutMapping(path="candidate/{candidateId}/")
+	public ResponseEntity<Void> updateCandidate(@RequestBody String fakeBody, @PathVariable("candidateId") String candidateId, @RequestParam("action") CANDIDATE_UPDATE_ACTIONS action) {
 		
-		System.out.println("UPDATEING CANDIDATE " + candidateId + " action = " + action);
+		this.candidateService.updateCandidate(candidateId, action);
 		
 		return ResponseEntity.ok().build();
 	}

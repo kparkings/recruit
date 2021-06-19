@@ -32,7 +32,7 @@ import com.arenella.recruit.candidates.enums.RESULT_ORDER;
 * Defines DAO functions for interacting with CandidateEntity objects
 * @author K Parkings
 */
-public interface CandidateDao extends CrudRepository<CandidateEntity, String>, JpaSpecificationExecutor<CandidateEntity> {
+public interface CandidateDao extends CrudRepository<CandidateEntity, Long>, JpaSpecificationExecutor<CandidateEntity> {
 
 	/**
 	* Returns all Candidates matching the filter options

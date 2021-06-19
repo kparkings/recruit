@@ -54,7 +54,7 @@ export class CandidateServiceService {
 	disableCandidate(candidateId: string) {
     
 		console.log("disable -> " + candidateId);
-		const backendUrl:string = environment.backendUrl +'candidate/'+candidateId+'/?action=enable';
+		const backendUrl:string = environment.backendUrl +'candidate/'+candidateId+'/?action=disable';
 		
 		this.httpClient.put<any>(backendUrl,  '{}', this.httpOptions)
         .subscribe(data => console.log('XXXXXXXXXXXXXXXx'));
