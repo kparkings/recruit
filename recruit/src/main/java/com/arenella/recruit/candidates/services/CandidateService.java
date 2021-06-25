@@ -43,12 +43,4 @@ public interface CandidateService {
 	*/
 	public Set<Candidate> getCandidates(CandidateFilterOptions filterOptions);
 	
-	/**
-	* Retrieves a specific Candidate based upon 
-	* their candidate ID
-	* @param candidateId - Unique Id of the Candidate
-	* @return Candidate matching the Id
-	*/
-	public Candidate getCandidate(String candidateId);
-	
 }

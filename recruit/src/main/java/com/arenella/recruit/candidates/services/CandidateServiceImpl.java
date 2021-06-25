@@ -24,7 +24,10 @@ import com.arenella.recruit.candidates.entities.CandidateEntity;
 public class CandidateServiceImpl implements CandidateService{
 	
 	@Autowired
-	private CandidateDao candidateDao;
+	private CandidateDao 				candidateDao;
+	
+	@Autowired
+	private CandidateStatisticsService 	statisticsService;
 	
 	/**
 	* Refer to the CandidateService Interface for Details
@@ -47,6 +50,8 @@ public class CandidateServiceImpl implements CandidateService{
 	@Override
 	public Page<Candidate> getCandidates(CandidateFilterOptions filterOptions, Pageable pageable) {
 		
+		this.statisticsService.logCandidateSearchEvent(filterOptions);
+		
 		return candidateDao.findAll(filterOptions, pageable).map(candidate -> CandidateEntity.convertFromEntity(candidate));
 	}
 	
@@ -55,17 +60,11 @@ public class CandidateServiceImpl implements CandidateService{
 	*/
 	@Override
 	public Set<Candidate> getCandidates(CandidateFilterOptions filterOptions) {
+		
+		this.statisticsService.logCandidateSearchEvent(filterOptions);
+		
 		return StreamSupport.stream(candidateDao.findAll(filterOptions).spliterator(), false)
 								.map(candidate -> CandidateEntity.convertFromEntity(candidate)).collect(Collectors.toCollection(LinkedHashSet::new));
-	}
-
-	/**
-	* Refer to the CandidateService Interface for Details
-	*/
-	@Override
-	public Candidate getCandidate(String candidateId) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	/**

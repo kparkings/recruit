@@ -2,6 +2,7 @@ package com.arenella.recruit.candidates.services;
 
 import java.util.List;
 
+import com.arenella.recruit.candidates.beans.CandidateFilterOptions;
 import com.arenella.recruit.candidates.beans.CandidateRoleStats;
 
 /**
@@ -22,5 +23,11 @@ public interface CandidateStatisticsService {
 	* @return
 	*/
 	public List<CandidateRoleStats> fetchCandidateRoleStats();
+	
+	/**
+	* Logs details of a Candidate Search performed
+	* @param filterOptions - Contains detials of the Search
+	*/
+	public void logCandidateSearchEvent(CandidateFilterOptions filterOptions);
 	
 }
