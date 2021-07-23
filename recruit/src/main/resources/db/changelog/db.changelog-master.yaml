@@ -294,5 +294,83 @@ databaseChangeLog:
                     primaryKey: true
                     nullable: false
 
-            
-            
+  - changeSet:
+      id: event_candidate_search
+      author: kparkings
+      changes:
+        - createTable:
+            tableName: event_candidate_search
+            schemaName: candidate
+            columns:
+              - column:
+                  name: event_id
+                  type: varchar(36)
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: search_id
+                  type: varchar(36)
+                  constraints:
+                    nullable: false            
+              - column:
+                  name: timestamp
+                  type: timestamp
+                  constraints:
+                    nullable: false             
+              - column:
+                  name: user_id
+                  type: varchar
+                  constraints:
+                    nullable: false 
+              - column:
+                  name: country
+                  type: varchar
+                  constraints:
+                    nullable: true 
+              - column:
+                  name: function
+                  type: varchar
+                  constraints:
+                    nullable: true            
+              - column:
+                  name: years_experience_gt_eq
+                  type: varchar
+                  constraints:
+                    nullable: true 
+              - column:
+                  name: years_experience_lt_eq
+                  type: varchar
+                  constraints:
+                    nullable: true             
+              - column:
+                  name: freelance
+                  type: varchar
+                  constraints:
+                    nullable: true             
+              - column:
+                  name: perm
+                  type: varchar
+                  constraints:
+                    nullable: true             
+              - column:
+                  name: dutch
+                  type: varchar
+                  constraints:
+                    nullable: true             
+              - column:
+                  name: english
+                  type: varchar
+                  constraints:
+                    nullable: true             
+              - column:
+                  name: french
+                  type: varchar
+                  constraints:
+                    nullable: true       
+              - column:
+                  name: skill
+                  type: varchar
+                  constraints:
+                    nullable: true
+                    

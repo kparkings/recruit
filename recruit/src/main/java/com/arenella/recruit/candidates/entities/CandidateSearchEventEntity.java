@@ -1,40 +1,74 @@
-package com.arenella.recruit.candidates.beans;
+package com.arenella.recruit.candidates.entities;
 
 import java.time.LocalDate;
 import java.util.Optional;
 import java.util.UUID;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+import com.arenella.recruit.candidates.beans.CandidateSearchEvent;
+import com.arenella.recruit.candidates.beans.Language;
 import com.arenella.recruit.candidates.enums.COUNTRY;
 import com.arenella.recruit.candidates.enums.FUNCTION;
 
 /**
-* Event represents a Search for Candidates by a User
+* Entity representation of a CandidateSearchEvent
 * @author K Parkings
 */
-public class CandidateSearchEvent {
+@Entity
+@Table(schema="candidate", name="event_candidate_search")
+public class CandidateSearchEventEntity {
 
-	private UUID			eventId;
-	private UUID			searchId;
-	private LocalDate 		timestamp;
+	@Id
+	@Column(name="event_id")
+	private String			eventId;
+	
+	@Column(name="search_id")
+	private String			searchId;
+
+	@Column(name="user_id")
 	private String			userId;
-	private COUNTRY			country;
-	private FUNCTION		function;
+	
+	@Column(name="years_experience_gt_eq")
 	private Integer			yearsExperienceGtEq;
+	
+	@Column(name="years_experience_lt_eq")
 	private Integer			yearsExperienceLtEq;
+	
+	private LocalDate 		timestamp				= LocalDate.now();
+	
+	@Enumerated(EnumType.STRING)
+	private COUNTRY			country;
+	
+	@Enumerated(EnumType.STRING)
+	private FUNCTION		function;
+	
 	private Boolean			freelance;
 	private Boolean			perm;
+	
+	@Enumerated(EnumType.STRING)
 	private Language.LEVEL 	dutch;
+	
+	@Enumerated(EnumType.STRING)
 	private Language.LEVEL 	english;
+	
+	@Enumerated(EnumType.STRING)
 	private Language.LEVEL 	french;
+	
 	private String 			skill;
 	
-	public CandidateSearchEvent() {}
+	public CandidateSearchEventEntity() {}
 	
 	/**
 	* Constructor based upon a builder
 	* @param builder Contains initialization values
 	*/
-	public CandidateSearchEvent(CandidateSearchEventBuilder builder) {
+	public CandidateSearchEventEntity(CandidateSearchEventEntityBuilder builder) {
 
 		this.eventId				= builder.eventId;
 		this.searchId				= builder.searchId;
@@ -52,14 +86,14 @@ public class CandidateSearchEvent {
 		this.skill 					= builder.skill;
 		
 	}
-	
+
 	/**
 	* Returns Unique Id of the Event. A Search can have 
 	* multiple Events. This is  the unique Id of the 
 	* Event
 	* @return Id of the Search
 	*/
-	public UUID getEventId() {
+	public String getEventId() {
 		return this.eventId;
 	}
 	
@@ -69,7 +103,7 @@ public class CandidateSearchEvent {
 	* Event
 	* @return Id of the Search
 	*/
-	public UUID getSearchId() {
+	public String getSearchId() {
 		return this.searchId;
 	}
 	
@@ -176,19 +210,19 @@ public class CandidateSearchEvent {
 	* Returns an instance of the Builder for the class
 	* @return
 	*/
-	public static CandidateSearchEventBuilder builder() {
-		return new CandidateSearchEventBuilder();
+	public static CandidateSearchEventEntityBuilder builder() {
+		return new CandidateSearchEventEntityBuilder();
 	}
 	
 	/**
 	* Builder for the class 
 	* @author K Parkings
 	*/
-	public static class CandidateSearchEventBuilder {
+	public static class CandidateSearchEventEntityBuilder {
 		
-		private UUID			eventId					= UUID.randomUUID();
-		private UUID			searchId				= UUID.randomUUID();
-		private LocalDate 		timestamp				= LocalDate.now();
+		private String			eventId;
+		private String			searchId;
+		private LocalDate 		timestamp;
 		private String			userId;
 		private COUNTRY			country;
 		private FUNCTION		function;
@@ -200,14 +234,14 @@ public class CandidateSearchEvent {
 		private Language.LEVEL 	english;
 		private Language.LEVEL 	french;
 		private String 			skill;
-
+		
 		/**
 		* Sets the Unique id of the Event. This is the id of 
 		* Event. A single search can produce multiple events
 		* @param eventId - Unique Id of the Event
 		* @return Builder
 		*/
-		public CandidateSearchEventBuilder eventId(UUID eventId) {
+		public CandidateSearchEventEntityBuilder eventId(String eventId) {
 			this.eventId = eventId;
 			return this;
 		}
@@ -218,17 +252,17 @@ public class CandidateSearchEvent {
 		* @param searchId - Unique Id of the Search
 		* @return Builder
 		*/
-		public CandidateSearchEventBuilder searchId(UUID searchId) {
+		public CandidateSearchEventEntityBuilder searchId(String searchId) {
 			this.searchId = searchId;
 			return this;
 		}
-		
+
 		/**
 		* Sets the timestamp of the Search. T
 		* @param timestamp - when the event occurred
 		* @return Builder
 		*/
-		public CandidateSearchEventBuilder timestamp(LocalDate timestamp) {
+		public CandidateSearchEventEntityBuilder timestamp(LocalDate timestamp) {
 			this.timestamp = timestamp;
 			return this;
 		}
@@ -238,7 +272,7 @@ public class CandidateSearchEvent {
 		* @param userId - Unique Id of the user
 		* @return Builder
 		*/
-		public CandidateSearchEventBuilder userId(String userId) {
+		public CandidateSearchEventEntityBuilder userId(String userId) {
 			this.userId = userId;
 			return this;
 		}
@@ -248,7 +282,7 @@ public class CandidateSearchEvent {
 		* @param country country searched on
 		* @return Builder
 		*/
-		public CandidateSearchEventBuilder country(COUNTRY country) {
+		public CandidateSearchEventEntityBuilder country(COUNTRY country) {
 			this.country = country;
 			return this;
 		}
@@ -258,7 +292,7 @@ public class CandidateSearchEvent {
 		* @param function Function searched on
 		* @return Builder
 		*/
-		public CandidateSearchEventBuilder function(FUNCTION function) {
+		public CandidateSearchEventEntityBuilder function(FUNCTION function) {
 			this.function = function;
 			return this;
 		}
@@ -268,7 +302,7 @@ public class CandidateSearchEvent {
 		* @param yearsExperienceGtEq GtEq number of years searched on
 		* @return Builder
 		*/
-		public CandidateSearchEventBuilder yearsExperienceGtEq(int yearsExperienceGtEq) {
+		public CandidateSearchEventEntityBuilder yearsExperienceGtEq(int yearsExperienceGtEq) {
 			this.yearsExperienceGtEq = yearsExperienceGtEq;
 			return this;
 		}
@@ -278,7 +312,7 @@ public class CandidateSearchEvent {
 		* @param yearsExperienceLtEq LtEq number of years searched on
 		* @return Builder
 		*/
-		public CandidateSearchEventBuilder yearsExperienceLtEq(int yearsExperienceLtEq) {
+		public CandidateSearchEventEntityBuilder yearsExperienceLtEq(int yearsExperienceLtEq) {
 			this.yearsExperienceLtEq = yearsExperienceLtEq;
 			return this;
 		}
@@ -288,7 +322,7 @@ public class CandidateSearchEvent {
 		* @param freelance
 		* @return Builder
 		*/
-		public CandidateSearchEventBuilder freelance(boolean freelance) {
+		public CandidateSearchEventEntityBuilder freelance(boolean freelance) {
 			this.freelance = freelance;
 			return this;
 		}
@@ -298,7 +332,7 @@ public class CandidateSearchEvent {
 		* @param perm whether the Search was for perm candidates
 		* @return Builder
 		*/
-		public CandidateSearchEventBuilder perm(boolean perm) {
+		public CandidateSearchEventEntityBuilder perm(boolean perm) {
 			this.perm = perm;
 			return this;
 		}
@@ -308,7 +342,7 @@ public class CandidateSearchEvent {
 		* @param dutch - Dutch language level searched on
 		* @return Builder
 		*/
-		public CandidateSearchEventBuilder dutch(Language.LEVEL dutch) {
+		public CandidateSearchEventEntityBuilder dutch(Language.LEVEL dutch) {
 			this.dutch = dutch;
 			return this;
 		}
@@ -318,7 +352,7 @@ public class CandidateSearchEvent {
 		* @param english - English language level searched on
 		* @return Builder
 		*/
-		public CandidateSearchEventBuilder english(Language.LEVEL english) {
+		public CandidateSearchEventEntityBuilder english(Language.LEVEL english) {
 			this.english = english;
 			return this;
 		}
@@ -328,7 +362,7 @@ public class CandidateSearchEvent {
 		* @param french - French language level searched on
 		* @return Builder
 		*/
-		public CandidateSearchEventBuilder french(Language.LEVEL french) {
+		public CandidateSearchEventEntityBuilder french(Language.LEVEL french) {
 			this.french = french;
 			return this;
 		}
@@ -338,7 +372,7 @@ public class CandidateSearchEvent {
 		* @param skill Skill that was searched on
 		* @return Builder
 		*/
-		public CandidateSearchEventBuilder skill(String skill) {
+		public CandidateSearchEventEntityBuilder skill(String skill) {
 			this.skill = skill;
 			return this;
 		}
@@ -348,9 +382,63 @@ public class CandidateSearchEvent {
 		* initialized with the values in the builder
 		* @return instance of CandidateSearchEvent
 		*/
-		public CandidateSearchEvent build() {
-			return new CandidateSearchEvent(this);
+		public CandidateSearchEventEntity build() {
+			return new CandidateSearchEventEntity(this);
 		} 
+	}
+	
+	/**
+	* 
+	* @param entity
+	* @return
+	*/
+	public static CandidateSearchEvent fromEntity(CandidateSearchEventEntity entity) {
+
+		return CandidateSearchEvent
+				.builder()
+					.userId(entity.getUserId())
+					.timestamp(entity.getTimestamp())
+					.country(entity.getCountry().orElseGet(null))
+					.dutch(entity.getDutch().orElseGet(null))
+					.english(entity.getEnglish().orElseGet(null))
+					.french(entity.getFrench().orElseGet(null))
+					.perm(entity.getPerm().orElseGet(null))
+					.searchId(UUID.fromString(entity.getSearchId()))
+					.eventId(UUID.fromString(entity.getEventId()))
+					.skill(entity.getSkill().orElseGet(null))
+					.freelance(entity.getFreelance().orElseGet(null))
+					.function(entity.getFunction().orElseGet(null))
+					.yearsExperienceGtEq(entity.getYearsExperienceGtEq().orElseGet(null))
+					.yearsExperienceLtEq(entity.getYearsExperienceLtEq().orElseGet(null))
+				.build();
+		
+	}
+	
+	/**
+	* 
+	* @param event
+	* @return
+	*/
+	public static CandidateSearchEventEntity toEntity(CandidateSearchEvent event) {
+		
+		return CandidateSearchEventEntity
+									.builder()
+										.userId(event.getUserId())
+										.timestamp(event.getTimestamp())
+										.country(event.getCountry().orElse(null))
+										.dutch(event.getDutch().orElse(null))
+										.english(event.getEnglish().orElse(null))
+										.french(event.getFrench().orElse(null))
+										.perm(event.getPerm().orElse(null))
+										.searchId(event.getSearchId().toString())
+										.eventId(event.getEventId().toString())
+										.skill(event.getSkill().orElse(null))
+										.freelance(event.getFreelance().orElse(null))
+										.function(event.getFunction().orElse(null))
+										.yearsExperienceGtEq(event.getYearsExperienceGtEq().orElse(null))
+										.yearsExperienceLtEq(event.getYearsExperienceLtEq().orElse(null))
+									.build();
+		
 	}
 
 }

@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.arenella.recruit.candidates.adapters.ExternalEventPublisher;
 import com.arenella.recruit.candidates.beans.Candidate;
 import com.arenella.recruit.candidates.beans.CandidateFilterOptions;
 import com.arenella.recruit.candidates.controllers.CandidateController.CANDIDATE_UPDATE_ACTIONS;
@@ -28,6 +29,9 @@ public class CandidateServiceImpl implements CandidateService{
 	
 	@Autowired
 	private CandidateStatisticsService 	statisticsService;
+	
+	@Autowired
+	private ExternalEventPublisher		externalEventPublisher;
 	
 	/**
 	* Refer to the CandidateService Interface for Details
@@ -52,6 +56,8 @@ public class CandidateServiceImpl implements CandidateService{
 		
 		this.statisticsService.logCandidateSearchEvent(filterOptions);
 		
+		this.externalEventPublisher.publishSearchedSkillsEvent(filterOptions.getSkills());
+		
 		return candidateDao.findAll(filterOptions, pageable).map(candidate -> CandidateEntity.convertFromEntity(candidate));
 	}
 	
@@ -62,6 +68,8 @@ public class CandidateServiceImpl implements CandidateService{
 	public Set<Candidate> getCandidates(CandidateFilterOptions filterOptions) {
 		
 		this.statisticsService.logCandidateSearchEvent(filterOptions);
+		
+		this.externalEventPublisher.publishSearchedSkillsEvent(filterOptions.getSkills());
 		
 		return StreamSupport.stream(candidateDao.findAll(filterOptions).spliterator(), false)
 								.map(candidate -> CandidateEntity.convertFromEntity(candidate)).collect(Collectors.toCollection(LinkedHashSet::new));

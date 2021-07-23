@@ -1,4 +1,4 @@
-package com.arenella.recruit.candidate.services;
+package com.arenella.recruit.candidates.adapters;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

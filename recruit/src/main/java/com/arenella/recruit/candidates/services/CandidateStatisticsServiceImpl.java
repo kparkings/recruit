@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,11 +15,11 @@ import com.arenella.recruit.candidates.beans.CandidateFilterOptions;
 import com.arenella.recruit.candidates.beans.CandidateRoleStats;
 import com.arenella.recruit.candidates.beans.CandidateSearchEvent;
 import com.arenella.recruit.candidates.dao.CandidateDao;
+import com.arenella.recruit.candidates.dao.CandidateSearchStatisticsDao;
 import com.arenella.recruit.candidates.entities.CandidateRoleStatsView;
+import com.arenella.recruit.candidates.entities.CandidateSearchEventEntity;
 import com.arenella.recruit.candidates.enums.COUNTRY;
 import com.arenella.recruit.candidates.enums.FUNCTION;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
 * Services for retrieving statistics relating to Candidates
@@ -28,10 +29,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class CandidateStatisticsServiceImpl implements CandidateStatisticsService{
 
 	@Autowired
-	private CandidateDao candidateDao;
+	private CandidateDao 					candidateDao;
 	
 	@Autowired
-	ObjectMapper om;
+	private CandidateSearchStatisticsDao 	statisticsDao;
 	
 	/**
 	* Refer to StatisticsService for details 
@@ -59,71 +60,108 @@ public class CandidateStatisticsServiceImpl implements CandidateStatisticsServic
 		boolean isAdminUser	= SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream().filter(role -> role.getAuthority().equals("ROLE_ADMIN")).findAny().isPresent();
 		
 		/**
-		* We dont want to log these events for Admin users
+		* We don't want to log these events for Admin users
 		*/
 		if (isAdminUser) {
 			return;
 		}
 		
-		String userId = SecurityContextHolder.getContext().getAuthentication().getName();
-		
-		Set<CandidateSearchEvent> events = new HashSet<>();
+		String 						userId 		= SecurityContextHolder.getContext().getAuthentication().getName();
+		UUID						searchId	= UUID.randomUUID();
+		Set<CandidateSearchEvent> 	events 		= new HashSet<>();
 		
 		if (isAllOptionsAvailable(filterOptions)) {
-			events = this.allOptionsAvailable(userId, filterOptions);
+			events = this.allOptionsAvailable(userId, searchId, filterOptions);
 		} else if (isCountryAndFunctionAvailable(filterOptions)) {
-			events = this.countryAndFunctionAvailable(userId, filterOptions);
+			events = this.countryAndFunctionAvailable(userId, searchId, filterOptions);
 		} else if (isCountryAndSkillAvailable(filterOptions)) {
-			events = this.countryAndSkillAvailable(userId, filterOptions);
+			events = this.countryAndSkillAvailable(userId, searchId, filterOptions);
 		} else if (isSkillAndFunctionAvailable(filterOptions)) {
-			events = this.skillAndFunctionAvailable(userId, filterOptions);
+			events = this.skillAndFunctionAvailable(userId, searchId, filterOptions);
 		} else if (isOnlySkillAvailable(filterOptions)) {
-			events = this.onlySkillAvailable(userId, filterOptions);
+			events = this.onlySkillAvailable(userId, searchId, filterOptions);
 		} else if (isOnlyFunctionAvailable(filterOptions)) {
-			events = this.onlyFunctionAvailable(userId, filterOptions);
+			events = this.onlyFunctionAvailable(userId, searchId, filterOptions);
 		} else if (isOnlyCountryAvailable(filterOptions)) {
-			events = this.onlyCountryAvailable(userId, filterOptions);
+			events = this.onlyCountryAvailable(userId, searchId, filterOptions);
+		} else {
+			events.add(this.onlyGeneralValuesAvailable(userId, searchId, filterOptions));
 		}
-				
-		
-		events.forEach(event -> {
-			try {
-				System.out.println("" + om.writeValueAsString(event));
-			} catch (JsonProcessingException e) {
-				e.printStackTrace();
-			}
-		});
+			
+		statisticsDao.saveAll(events.stream().map(e -> CandidateSearchEventEntity.toEntity(e)).collect(Collectors.toSet()));
 		
 	}
 	
+	/**
+	* Whether or not all values present in Search (And general search attributes)
+	* @param filterOptions - Contains all search values
+	* @return Whether or not all values available
+	*/
 	public boolean isAllOptionsAvailable(CandidateFilterOptions filterOptions) {
 		return !filterOptions.getCountries().isEmpty() && !filterOptions.getFunctions().isEmpty() && !filterOptions.getSkills().isEmpty();
 	}
 	
+	/**
+	* Whether or not only Country and Function values present in Search (And general search attributes)
+	* @param filterOptions - Contains all search values
+	* @return Whether or not only Country and Function values available
+	*/
 	public boolean isCountryAndFunctionAvailable(CandidateFilterOptions filterOptions) {
 		return !filterOptions.getCountries().isEmpty() && !filterOptions.getFunctions().isEmpty() && filterOptions.getSkills().isEmpty();
 	}
 	
+	/**
+	* Whether or not only Skill and Country values present in Search (And general search attributes)
+	* @param filterOptions - Contains all search values
+	* @return Whether or not only Skill and Country values available
+	*/
 	public boolean isCountryAndSkillAvailable(CandidateFilterOptions filterOptions) {
 		return !filterOptions.getCountries().isEmpty() && filterOptions.getFunctions().isEmpty() && !filterOptions.getSkills().isEmpty();
 	}
 	
+	/**
+	* Whether or not only Skill and Function values present in Search (And general search attributes)
+	* @param filterOptions - Contains all search values
+	* @return Whether or not only Skill and Function values available
+	*/
 	public boolean isSkillAndFunctionAvailable(CandidateFilterOptions filterOptions) {
 		return filterOptions.getCountries().isEmpty() && filterOptions.getFunctions().isEmpty() && !filterOptions.getSkills().isEmpty();
 	}
 	
+	/**
+	* Whether or not only Skill values present in Search (And general search attributes)
+	* @param filterOptions - Contains all search values
+	* @return Whether or not only Skill values available
+	*/
 	public boolean isOnlySkillAvailable(CandidateFilterOptions filterOptions) {
 		return filterOptions.getCountries().isEmpty() && filterOptions.getFunctions().isEmpty() && !filterOptions.getSkills().isEmpty();
 	}
 	
+	/**
+	* Whether or not only Function values present in Search (And general search attributes)
+	* @param filterOptions - Contains all search values
+	* @return Whether or not only Function values available
+	*/
 	public boolean isOnlyFunctionAvailable(CandidateFilterOptions filterOptions) {
 		return filterOptions.getCountries().isEmpty() && !filterOptions.getFunctions().isEmpty() && !filterOptions.getSkills().isEmpty();
 	}
+	
+	/**
+	* Whether or not only Country values present in Search (And general search attributes)
+	* @param filterOptions - Contains all search values
+	* @return Whether or not only county values available
+	*/
 	public boolean isOnlyCountryAvailable(CandidateFilterOptions filterOptions) {
 		return !filterOptions.getCountries().isEmpty() && filterOptions.getFunctions().isEmpty() && filterOptions.getSkills().isEmpty();
 	};
 	
-	public Set<CandidateSearchEvent> allOptionsAvailable(String userId, CandidateFilterOptions filterOptions) {
+	/**
+	* Process Event for Search where only Options selected (And general search attributes)
+	* @param userId			- Unique Id of user who performed the Search
+	* @param filterOptions	- General search attributes
+	* @return Events
+	*/
+	public Set<CandidateSearchEvent> allOptionsAvailable(String userId, UUID searchId, CandidateFilterOptions filterOptions) {
 		
 		Set<CandidateSearchEvent> events = new HashSet<>();
 		
@@ -132,7 +170,7 @@ public class CandidateStatisticsServiceImpl implements CandidateStatisticsServic
 			filterOptions.getCountries().stream().forEach(country -> {
 				
 				filterOptions.getFunctions().stream().forEach(function -> {
-					events.add(this.generateEvent(userId, skill, country, function, filterOptions));
+					events.add(this.generateEvent(userId, searchId ,skill, country, function, filterOptions));
 				});
 				
 			});
@@ -143,15 +181,20 @@ public class CandidateStatisticsServiceImpl implements CandidateStatisticsServic
 		
 	}
 	
-	
-	public Set<CandidateSearchEvent> countryAndFunctionAvailable(String userId, CandidateFilterOptions filterOptions) {
+	/**
+	* Process Event for Search where Country and Function selected (And general search attributes)
+	* @param userId			- Unique Id of user who performed the Search
+	* @param filterOptions	- General search attributes
+	* @return Events
+	*/
+	public Set<CandidateSearchEvent> countryAndFunctionAvailable(String userId, UUID searchId, CandidateFilterOptions filterOptions) {
 		
 		Set<CandidateSearchEvent> events = new HashSet<>();
 			
 		filterOptions.getCountries().stream().forEach(country -> {
 			
 			filterOptions.getFunctions().stream().forEach(function -> {
-				events.add(this.generateEvent(userId, null, country, function, filterOptions));
+				events.add(this.generateEvent(userId, searchId, null, country, function, filterOptions));
 			});
 			
 		});
@@ -160,8 +203,13 @@ public class CandidateStatisticsServiceImpl implements CandidateStatisticsServic
 		
 	}
 	
-	
-	public Set<CandidateSearchEvent> countryAndSkillAvailable(String userId, CandidateFilterOptions filterOptions) {
+	/**
+	* Process Event for Search where only Skill and Country selected (And general search attributes)
+	* @param userId			- Unique Id of user who performed the Search
+	* @param filterOptions	- General search attributes
+	* @return Events
+	*/
+	public Set<CandidateSearchEvent> countryAndSkillAvailable(String userId, UUID searchId, CandidateFilterOptions filterOptions) {
 		
 		Set<CandidateSearchEvent> events = new HashSet<>();
 		
@@ -169,7 +217,7 @@ public class CandidateStatisticsServiceImpl implements CandidateStatisticsServic
 			
 			filterOptions.getCountries().stream().forEach(country -> {
 				
-					events.add(this.generateEvent(userId, skill, country, null, filterOptions));
+					events.add(this.generateEvent(userId, searchId, skill, country, null, filterOptions));
 				
 			});
 			
@@ -179,14 +227,20 @@ public class CandidateStatisticsServiceImpl implements CandidateStatisticsServic
 		
 	}
 	
-	public Set<CandidateSearchEvent> skillAndFunctionAvailable(String userId, CandidateFilterOptions filterOptions) {
+	/**
+	* Process Event for Search where only Skill and Function selected (And general search attributes)
+	* @param userId			- Unique Id of user who performed the Search
+	* @param filterOptions	- General search attributes
+	* @return Events
+	*/
+	public Set<CandidateSearchEvent> skillAndFunctionAvailable(String userId, UUID searchId, CandidateFilterOptions filterOptions) {
 		
 		Set<CandidateSearchEvent> events = new HashSet<>();
 		
 		filterOptions.getSkills().stream().forEach(skill -> {
 			
 			filterOptions.getFunctions().stream().forEach(function -> {
-				events.add(this.generateEvent(userId, skill, null, function, filterOptions));
+				events.add(this.generateEvent(userId, searchId, skill, null, function, filterOptions));
 			});
 			
 		});
@@ -194,21 +248,61 @@ public class CandidateStatisticsServiceImpl implements CandidateStatisticsServic
 		return events;
 		
 	}
-	public Set<CandidateSearchEvent> onlySkillAvailable(String userId, CandidateFilterOptions filterOptions) {
-		return filterOptions.getSkills().stream().map(skill -> (CandidateSearchEvent)this.generateEvent(userId, skill, null, null, filterOptions)).collect(Collectors.toSet());
-	}
-	public Set<CandidateSearchEvent> onlyFunctionAvailable(String userId, CandidateFilterOptions filterOptions) {
-		return filterOptions.getFunctions().stream().map(function -> (CandidateSearchEvent)this.generateEvent(userId, null, null, function, filterOptions)).collect(Collectors.toSet());
+	
+	/**
+	* Process Event for Search where only Skill was selected (And general search attributes)
+	* @param userId			- Unique Id of user who performed the Search
+	* @param filterOptions	- General search attributes
+	* @return Events
+	*/
+	public Set<CandidateSearchEvent> onlySkillAvailable(String userId, UUID searchId, CandidateFilterOptions filterOptions) {
+		return filterOptions.getSkills().stream().map(skill -> (CandidateSearchEvent)this.generateEvent(userId, searchId, skill, null, null, filterOptions)).collect(Collectors.toSet());
 	}
 	
-	public Set<CandidateSearchEvent> onlyCountryAvailable(String userId, CandidateFilterOptions filterOptions) {
-		return filterOptions.getCountries().stream().map(country -> (CandidateSearchEvent)this.generateEvent(userId, null, country, null, filterOptions)).collect(Collectors.toSet());
+	/**
+	* Process Event for Search where only Function was selected (And general search attributes)
+	* @param userId			- Unique Id of user who performed the Search
+	* @param filterOptions	- General search attributes
+	* @return Events
+	*/
+	public Set<CandidateSearchEvent> onlyFunctionAvailable(String userId, UUID searchId, CandidateFilterOptions filterOptions) {
+		return filterOptions.getFunctions().stream().map(function -> (CandidateSearchEvent)this.generateEvent(userId, searchId, null, null, function, filterOptions)).collect(Collectors.toSet());
+	}
+	
+	/**
+	* Process Event for Search where only Country was selected (And general search attributes)
+	* @param userId			- Unique Id of user who performed the Search
+	* @param filterOptions	- General search attributes
+	* @return Events
+	*/
+	public Set<CandidateSearchEvent> onlyCountryAvailable(String userId, UUID searchId, CandidateFilterOptions filterOptions) {
+		return filterOptions.getCountries().stream().map(country -> (CandidateSearchEvent)this.generateEvent(userId, searchId, null, country, null, filterOptions)).collect(Collectors.toSet());
 	};
 	
-	private CandidateSearchEvent generateEvent(String userId, String skill, COUNTRY country, FUNCTION function, CandidateFilterOptions filterOptions) {
+	/**
+	* Generates an event where no multiple search values where selected
+	* @param userId			- Id of the User who performed the Search
+	* @param filterOptions	- Other filter options
+	* @return
+	*/
+	public CandidateSearchEvent onlyGeneralValuesAvailable(String userId, UUID searchId, CandidateFilterOptions filterOptions) {
+		return generateEvent(userId, searchId, null, null, null, filterOptions);
+	};
+	
+	/**
+	* Produces an event based upon the provided attribute values
+	* @param userId			- Id of the User who performed the Search
+	* @param skill			- Skill Searched for
+	* @param country		- Country searched on
+	* @param function		- Function searched on
+	* @param filterOptions	- Other filter options
+	* @return Event
+	*/
+	private CandidateSearchEvent generateEvent(String userId, UUID searchId, String skill, COUNTRY country, FUNCTION function, CandidateFilterOptions filterOptions) {
 		
 		return CandidateSearchEvent
 							.builder()
+								.searchId(searchId)
 								.country(country)
 								.dutch(filterOptions.getDutch().orElse(null))
 								.english(filterOptions.getEnglish().orElse(null))

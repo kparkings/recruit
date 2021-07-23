@@ -1,4 +1,4 @@
-package com.arenella.recruit.candidate.beans;
+package com.arenella.recruit.candidates.beans;
 
 import static org.junit.Assert.assertEquals;
 
