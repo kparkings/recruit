@@ -100,5 +100,19 @@ public class CandidateServiceImpl implements CandidateService{
 		this.candidateDao.save(candidate);
 		
 	}
+
+	/**
+	* Refer to the CandidateService Interface for Details
+	*/
+	@Override
+	public void flagCandidateAvailability(long candidateId, boolean available) {
+		
+		CandidateEntity candidate = this.candidateDao.findById(candidateId).orElseThrow(() -> new IllegalArgumentException("Unknown candidate Id " + candidateId));
+		
+		candidate.setFlaggedAsUnavailable(available);
+		
+		this.candidateDao.save(candidate);
+		
+	}
 	
 }

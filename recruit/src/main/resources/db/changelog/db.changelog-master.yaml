@@ -373,4 +373,18 @@ databaseChangeLog:
                   type: varchar
                   constraints:
                     nullable: true
-                    
+
+
+  - changeSet:
+      id: addColumn-flagged_as_unavailable
+      author: kevin
+      changes:
+        - addColumn:
+            tableName: candidate
+            schemaName: candidate
+            columns:
+            - column:
+                name: flagged_as_unavailable
+                type: boolean
+                constraints:
+                  default: false

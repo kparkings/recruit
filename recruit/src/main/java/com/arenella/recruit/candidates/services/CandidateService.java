@@ -30,6 +30,14 @@ public interface CandidateService {
 	public void updateCandidate(String candidateId, CANDIDATE_UPDATE_ACTIONS updateAction);
 	
 	/**
+	* Flags a Candidate as being unavailable. This does not deactivate the Candidate as 
+	* the availability needs to be confirmed by an admin user.
+	* @param candidateId - Unique Id of the candidate
+	* @param available 		- Whether or not the candidate is available
+	*/
+	public void flagCandidateAvailability(long candidateId, boolean available);
+	
+	/**
 	* Retrieves a list of Candidates
 	* @param filterOptions  - filters to apply to the results
 	* @return Candidates

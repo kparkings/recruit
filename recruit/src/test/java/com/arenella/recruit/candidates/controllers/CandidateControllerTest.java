@@ -24,7 +24,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 import com.arenella.recruit.candidates.beans.Candidate;
 import com.arenella.recruit.candidates.beans.CandidateFilterOptions;
-import com.arenella.recruit.candidates.controllers.CandidateController;
 import com.arenella.recruit.candidates.controllers.CandidateController.CANDIDATE_UPDATE_ACTIONS;
 import com.arenella.recruit.candidates.services.CandidateDownloadService;
 import com.arenella.recruit.candidates.services.CandidateService;
@@ -155,6 +154,26 @@ public class CandidateControllerTest {
 		ResponseEntity<Void> response = controller.updateCandidate("{}","100", CANDIDATE_UPDATE_ACTIONS.disable);
 		
 		Mockito.verify(this.mockCandidateService).updateCandidate(candidateId, updateAction);
+		
+		assertEquals(HttpStatus.OK, response.getStatusCode());
+		
+	}
+	
+	/**
+	* Happy path test for UpdateCandidateflaggedAsUnavailable
+	* @throws Exception
+	*/
+	@Test
+	public void testUpdateCandidateflaggedAsUnavailable() throws Exception {
+		
+		final long		candidateId	 			= 100L;
+		final boolean 	flaggedAsUnavailable	= true;
+		
+		Mockito.doNothing().when(this.mockCandidateService).flagCandidateAvailability(candidateId, flaggedAsUnavailable);
+		
+		ResponseEntity<Void> response = controller.updateCandidateflaggedAsUnavailable("{}",candidateId, flaggedAsUnavailable);
+		
+		Mockito.verify(this.mockCandidateService).flagCandidateAvailability(candidateId, flaggedAsUnavailable);
 		
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		

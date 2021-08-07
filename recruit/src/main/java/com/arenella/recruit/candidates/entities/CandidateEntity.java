@@ -75,6 +75,9 @@ public class CandidateEntity {
 	@Column(name="available")
 	private boolean 	available;
 	
+	@Column(name="flagged_as_unavailable")
+	private boolean setFlaggedAsUnavailable;
+	
 	@Column(name="registered")
 	private LocalDate 	registerd;
 	
@@ -95,20 +98,21 @@ public class CandidateEntity {
 	*/
 	public CandidateEntity(CandidateEntityBuilder builder) {
 		
-		this.candidateId 			= builder.candidateId;
-		this.firstname				= builder.firstname;
-		this.surname				= builder.surname;
-		this.email					= builder.email;
-		this.roleSought				= builder.roleSought;
-		this.function				= builder.function;
-		this.country 				= builder.country;
-		this.city 					= builder.city;
-		this.perm 					= builder.perm;
-		this.freelance 				= builder.freelance;
-		this.yearsExperience 		= builder.yearsExperience;
-		this.available 				= builder.available;
-		this.registerd 				= builder.registerd;
-		this.lastAvailabilityCheck 	= builder.lastAvailabilityCheck;
+		this.candidateId 				= builder.candidateId;
+		this.firstname					= builder.firstname;
+		this.surname					= builder.surname;
+		this.email						= builder.email;
+		this.roleSought					= builder.roleSought;
+		this.function					= builder.function;
+		this.country 					= builder.country;
+		this.city 						= builder.city;
+		this.perm 						= builder.perm;
+		this.freelance 					= builder.freelance;
+		this.yearsExperience 			= builder.yearsExperience;
+		this.available 					= builder.available;
+		this.registerd 					= builder.registerd;
+		this.lastAvailabilityCheck 		= builder.lastAvailabilityCheck;
+		this.setFlaggedAsUnavailable	= builder.flaggedAsUnavailable;
 		
 		this.skills.addAll(builder.skills);
 		this.languages.addAll(builder.languages.stream().map(lang -> LanguageEntity.builder().candidate(this).language(lang.getLanguage()).level(lang.getLevel()).build()).collect(Collectors.toSet()));
@@ -223,6 +227,15 @@ public class CandidateEntity {
 	}
 	
 	/**
+	* Returns whether or not the Candidate has been Flagged as
+	* being unavailable 
+	* @return whether the Canidate is potentially unavailable
+	*/
+	public boolean isFlaggedAsUnavailable() {
+		return this.setFlaggedAsUnavailable;
+	}
+	
+	/**
 	* Returns the Date that the Candidate was registered in the System
 	* @return Date the Candidate Registered
 	*/
@@ -264,6 +277,15 @@ public class CandidateEntity {
 	}
 	
 	/**
+	* Sets whether or not someone has marked the Candidate as 
+	* being unavailable
+	* @param flaggedAsUnavailable - Whether Candidate is flagged as being unavailable
+	*/
+	public void setFlaggedAsUnavailable(boolean flaggedAsUnavailable) {
+		this.setFlaggedAsUnavailable = flaggedAsUnavailable;
+	}
+	
+	/**
 	* Returns a Builder for the CandidateEntity class
 	* @return Builder for the CandidateEntity class
 	*/
@@ -291,6 +313,7 @@ public class CandidateEntity {
 		private boolean 		available;
 		private LocalDate 		registerd					= LocalDate.now();				//Set app to work with UAT
 		private LocalDate 		lastAvailabilityCheck		= LocalDate.now();
+		private boolean			flaggedAsUnavailable;
 		
 		private Set<String> 	skills						= new LinkedHashSet<>();
 		private Set<Language> 	languages					= new LinkedHashSet<>();
@@ -416,6 +439,17 @@ public class CandidateEntity {
 		}
 		
 		/**
+		* Sets whether or not the Candidate has been marked as being 
+		* potentially unavailable
+		* @param flaggedAsUnavailable - Whether the Candidate is potentially unavailable
+		* @return Builder
+		*/
+		public CandidateEntityBuilder flaggedAsUnavailable(boolean flaggedAsUnavailable) {
+			this.flaggedAsUnavailable = flaggedAsUnavailable;
+			return this;
+		}
+		
+		/**
 		* Sets the Date the Candidate was registered in the System
 		* @param registerd - date of registration
 		* @return Builder
@@ -480,6 +514,7 @@ public class CandidateEntity {
 		return CandidateEntity
 					.builder()
 						.available(candidate.isAvailable())
+						.flaggedAsUnavailable(candidate.isFlaggedAsUnavailable())
 						.candidateId(candidate.getCandidateId())
 						.firstname(candidate.getFirstname())
 						.surname(candidate.getSurname())
@@ -510,6 +545,7 @@ public class CandidateEntity {
 		return Candidate
 					.builder()
 						.available(candidateEntity.isAvailable())
+						.flaggedAsUnavailable(candidateEntity.isFlaggedAsUnavailable())
 						.candidateId(String.valueOf(candidateEntity.getCandidateId()))
 						.firstname(candidateEntity.getFirstname())
 						.surname(candidateEntity.getSurname())

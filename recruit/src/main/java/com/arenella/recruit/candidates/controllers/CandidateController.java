@@ -85,6 +85,18 @@ public class CandidateController {
 	}
 	
 	/**
+	* Endpoint marks a Candidate as no possibly being no longer available. 
+	* @return ResponseEntity
+	*/
+	@PutMapping(path="candidate/{candidateId}/{flaggedAsUnavailable}/")
+	public ResponseEntity<Void> updateCandidateflaggedAsUnavailable(@RequestBody String fakeBody, @PathVariable("candidateId") long candidateId, @PathVariable("flaggedAsUnavailable") boolean flaggedAsUnavailable){
+		
+			this.candidateService.flagCandidateAvailability(candidateId, flaggedAsUnavailable);
+		
+			return ResponseEntity.ok().build();
+	}
+	
+	/**
 	* Fetches Candidates
 	* @param orderAttribute			- Optional attribute to order the results on
 	* @param order					- Optional direction of ordering

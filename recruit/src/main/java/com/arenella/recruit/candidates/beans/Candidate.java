@@ -28,6 +28,7 @@ public class Candidate {
 	private FREELANCE 		freelance;
 	private int				yearsExperience;
 	private boolean 		available;
+	private boolean			flaggedAsUnavailable;
 	private LocalDate 		registerd					= LocalDate.now();
 	private LocalDate 		lastAvailabilityCheck		= LocalDate.now();	
 	private Set<String> 	skills						= new LinkedHashSet<>();
@@ -51,6 +52,7 @@ public class Candidate {
 		this.freelance 					= builder.freelance;
 		this.yearsExperience 			= builder.yearsExperience;
 		this.available 					= builder.available;
+		this.flaggedAsUnavailable		= builder.flaggedAsUnavailable;
 		this.registerd 					= builder.registerd;
 		this.lastAvailabilityCheck 		= builder.lastAvailabilityCheck;
 	
@@ -153,10 +155,19 @@ public class Candidate {
 	
 	/**
 	* Returns whether the Candidate is currently available for work
-	* @return Whether the Candidate is avilable for work
+	* @return Whether the Candidate is available for work
 	*/
 	public boolean isAvailable() {
 		return this.available;
+	}
+	
+	/**
+	* Returns whether or not somebody has flagged the Candidate 
+	* as no longer being available
+	* @return if the Candidate is flagged as unavailable
+	*/
+	public boolean isFlaggedAsUnavailable() {
+		return this.flaggedAsUnavailable;
 	}
 	
 	/**
@@ -218,6 +229,7 @@ public class Candidate {
 		private FREELANCE 		freelance;
 		private int				yearsExperience;
 		private boolean 		available;
+		private boolean 		flaggedAsUnavailable;
 		private LocalDate 		registerd					= LocalDate.now();;
 		private LocalDate 		lastAvailabilityCheck		= LocalDate.now();;
 		private Set<String> 	skills						= new LinkedHashSet<>();
@@ -340,6 +352,16 @@ public class Candidate {
 		*/
 		public CandidateBuilder available(boolean available) {
 			this.available = available;
+			return this;
+		}
+		
+		/**
+		* Sets whether or not somebody has marked the candidate as being unavailable
+		* @param flaggedAsUnavailable - If Candidate flagged as Unavailable
+		* @return Builder
+		*/
+		public CandidateBuilder flaggedAsUnavailable(boolean flaggedAsUnavailable) {
+			this.flaggedAsUnavailable = flaggedAsUnavailable;
 			return this;
 		}
 		

@@ -14,7 +14,6 @@ import com.arenella.recruit.candidates.beans.Candidate;
 import com.arenella.recruit.candidates.beans.Language;
 import com.arenella.recruit.candidates.beans.Language.LANGUAGE;
 import com.arenella.recruit.candidates.beans.Language.LEVEL;
-import com.arenella.recruit.candidates.entities.CandidateEntity;
 import com.arenella.recruit.candidates.enums.COUNTRY;
 import com.arenella.recruit.candidates.enums.FREELANCE;
 import com.arenella.recruit.candidates.enums.FUNCTION;
@@ -35,6 +34,7 @@ public class CandidateEntityTest {
 	private static final COUNTRY 		country 				= COUNTRY.NETHERLANDS;
 	private static final String 		city 					= "Den Haag";
 	private static final boolean 		available 				= true;
+	private static final boolean		flaggedAsUnavailable	= true;
 	private static final FREELANCE 		freelance 				= FREELANCE.TRUE;
 	private static final PERM 			perm 					= PERM.TRUE;
 	private static final LocalDate 		lastAvailabilityCheck 	= LocalDate.of(1980, 12, 3);
@@ -74,6 +74,7 @@ public class CandidateEntityTest {
 					.country(country)
 					.city(city)
 					.available(available)
+					.flaggedAsUnavailable(flaggedAsUnavailable)
 					.freelance(freelance)
 					.perm(perm)
 					.lastAvailabilityCheck(lastAvailabilityCheck)
@@ -92,6 +93,7 @@ public class CandidateEntityTest {
 		assertEquals(candidateEntity.getCountry(), 					country);
 		assertEquals(candidateEntity.getCity(), 					city);
 		assertEquals(candidateEntity.isAvailable(), 				available);
+		assertEquals(candidateEntity.isFlaggedAsUnavailable(), 		flaggedAsUnavailable);
 		assertEquals(candidateEntity.isFreelance(), 				freelance);
 		assertEquals(candidateEntity.isPerm(), 						perm);
 		assertEquals(candidateEntity.getLastAvailabilityCheckOn(), 	lastAvailabilityCheck);
@@ -119,6 +121,7 @@ public class CandidateEntityTest {
 					.country(country)
 					.city(city)
 					.available(available)
+					.flaggedAsUnavailable(flaggedAsUnavailable)
 					.freelance(freelance)
 					.perm(perm)
 					.lastAvailabilityCheck(lastAvailabilityCheck)
@@ -139,6 +142,7 @@ public class CandidateEntityTest {
 		assertEquals(candidate.getCountry(), 					country);
 		assertEquals(candidate.getCity(), 						city);
 		assertEquals(candidate.isAvailable(), 					available);
+		assertEquals(candidate.isFlaggedAsUnavailable(), 		flaggedAsUnavailable);
 		assertEquals(candidate.isFreelance(), 					freelance);
 		assertEquals(candidate.isPerm(), 						perm);
 		assertEquals(candidate.getLastAvailabilityCheckOn(), 	lastAvailabilityCheck);
@@ -168,6 +172,17 @@ public class CandidateEntityTest {
 		candidate.setAvailable(false);
 		
 		assertFalse(candidate.isAvailable());
+		
+		assertFalse(candidate.isFlaggedAsUnavailable());
+		
+		candidate.setFlaggedAsUnavailable(true);
+		
+		assertTrue(candidate.isFlaggedAsUnavailable());
+		
+		candidate.setFlaggedAsUnavailable(false);
+		
+		assertFalse(candidate.isFlaggedAsUnavailable());
+	
 		
 	}
 	

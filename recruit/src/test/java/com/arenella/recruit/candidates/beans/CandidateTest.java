@@ -9,8 +9,6 @@ import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 
-import com.arenella.recruit.candidates.beans.Candidate;
-import com.arenella.recruit.candidates.beans.Language;
 import com.arenella.recruit.candidates.beans.Language.LANGUAGE;
 import com.arenella.recruit.candidates.beans.Language.LEVEL;
 import com.arenella.recruit.candidates.enums.COUNTRY;
@@ -31,6 +29,7 @@ public class CandidateTest {
 	private static final String 		email					= "kparkings@gmail.com";
 	private static final String 		roleSought				= "Senior java Dev";
 	private static final boolean 		available 				= true;
+	private static final boolean 		flaggedAsUnavailable	= true;
 	private static final FREELANCE 		freelance 				= FREELANCE.TRUE;
 	private static final PERM 			perm 					= PERM.TRUE;
 	private static final LocalDate 		lastAvailabilityCheck 	= LocalDate.of(1980, 12, 3);
@@ -66,6 +65,7 @@ public class CandidateTest {
 							.email(email)
 							.roleSought(roleSought)
 							.available(available)
+							.flaggedAsUnavailable(flaggedAsUnavailable)
 							.freelance(freelance)
 							.perm(perm)
 							.lastAvailabilityCheck(lastAvailabilityCheck)
@@ -82,6 +82,7 @@ public class CandidateTest {
 		assertEquals(candidate.getEmail(), 						email);
 		assertEquals(candidate.getRoleSought(), 				roleSought);
 		assertEquals(candidate.isAvailable(), 					available);
+		assertEquals(candidate.isFlaggedAsUnavailable(), 		flaggedAsUnavailable);
 		assertEquals(candidate.isFreelance(), 					freelance);
 		assertEquals(candidate.isPerm(), 						perm);
 		assertEquals(candidate.getLastAvailabilityCheckOn(), 	lastAvailabilityCheck);
