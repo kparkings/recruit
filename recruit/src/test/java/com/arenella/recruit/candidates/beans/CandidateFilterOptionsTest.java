@@ -5,10 +5,8 @@ import static org.junit.Assert.assertEquals;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
-import com.arenella.recruit.candidates.beans.CandidateFilterOptions;
-import com.arenella.recruit.candidates.beans.Language;
 import com.arenella.recruit.candidates.enums.COUNTRY;
 import com.arenella.recruit.candidates.enums.FUNCTION;
 import com.arenella.recruit.candidates.enums.RESULT_ORDER;
@@ -27,22 +25,23 @@ public class CandidateFilterOptionsTest {
 	@Test
 	public void testBuilder() throws Exception{
 		
-		Set<String> 			candidateIds 		= new HashSet<>();
-		Set<COUNTRY> 			countries 			= new HashSet<>();
-		Set<FUNCTION> 			functions 			= new HashSet<>();
-		Set<String> 			skills 				= new HashSet<>();
-		Language.LEVEL 			dutch 				= Language.LEVEL.PROFICIENT;
-		Language.LEVEL 			english 			= Language.LEVEL.BASIC;
-		Language.LEVEL 			french 				= Language.LEVEL.BASIC;
-		boolean 				freelance	 		= false;
-		boolean 				perm 				= true;
-		String 					orderAttribute 		= "candidateId";
-		int 					yearsExperienceGtEq = 2;
-		String 					candidateId 		= "aCandidateId";
-		String 					skill 				= "aSkill";
-		String					firstname			= "kevin";
-		String					surname				= "Parkings";
-		String					email				= "email";
+		Set<String> 			candidateIds 			= new HashSet<>();
+		Set<COUNTRY> 			countries 				= new HashSet<>();
+		Set<FUNCTION> 			functions 				= new HashSet<>();
+		Set<String> 			skills 					= new HashSet<>();
+		Language.LEVEL 			dutch 					= Language.LEVEL.PROFICIENT;
+		Language.LEVEL 			english 				= Language.LEVEL.BASIC;
+		Language.LEVEL 			french 					= Language.LEVEL.BASIC;
+		boolean 				freelance	 			= false;
+		boolean 				perm 					= true;
+		String 					orderAttribute 			= "candidateId";
+		int 					yearsExperienceGtEq 	= 2;
+		String 					candidateId 			= "aCandidateId";
+		String 					skill 					= "aSkill";
+		String					firstname				= "kevin";
+		String					surname					= "Parkings";
+		String					email					= "email";
+		Boolean					flaggedAsUnavailable	= true;	
 		
 		candidateIds.add(candidateId);
 		skills.add(skill);
@@ -67,6 +66,7 @@ public class CandidateFilterOptionsTest {
 													.firstname(firstname)
 													.surname(surname)
 													.email(email)
+													.flaggedAsUnavailable(flaggedAsUnavailable)
 													.build();
 		
 		assertEquals(filters.getCandidateIds().stream().findAny().get(), 	candidateId);
@@ -83,7 +83,7 @@ public class CandidateFilterOptionsTest {
 		assertEquals(firstname, 											filters.getFirstname().get());
 		assertEquals(surname, 												filters.getSurname().get());
 		assertEquals(email, 												filters.getEmail().get());
-		
+		assertEquals(flaggedAsUnavailable, 									filters.isFlaggedAsUnavailable().get());
 		
 	}
 	

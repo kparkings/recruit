@@ -227,16 +227,17 @@ export class ViewCandidatesComponent implements OnInit {
         
         		const candidate:Candidate = new Candidate();
 
-      			candidate.candidateId		= c.candidateId;
-      			candidate.city				= c.city;
-      			candidate.country			= this.getCountryCode(c.country);
-      			candidate.freelance			= this.getFreelanceOption(c.freelance);
-      			candidate.roleSought		= c.roleSought;
-      			candidate.function			= c.function;
-      			candidate.perm				= this.getPermOption(c.perm);
-      			candidate.yearsExperience	= c.yearsExperience;
-      			candidate.languages			= c.languages;
-      			candidate.skills			= c.skills;
+      			candidate.candidateId				= c.candidateId;
+      			candidate.city						= c.city;
+      			candidate.country					= this.getCountryCode(c.country);
+      			candidate.freelance					= this.getFreelanceOption(c.freelance);
+      			candidate.roleSought				= c.roleSought;
+      			candidate.function					= c.function;
+      			candidate.perm						= this.getPermOption(c.perm);
+      			candidate.yearsExperience			= c.yearsExperience;
+      			candidate.languages					= c.languages;
+      			candidate.skills					= c.skills;
+				candidate.flaggedAsUnavailable 		= c.flaggedAsUnavailable;
 
       			this.candidates.push(candidate);
 
@@ -520,6 +521,16 @@ export class ViewCandidatesComponent implements OnInit {
     	} else {
       		this.selectedSortOrderForFilter = '';
     	}
+
+  	}
+
+	public selectedCandidate:Candidate = new Candidate();
+	
+	public openSettingsOptons(content: any, candidate: Candidate) {
+    
+		this.selectedCandidate = candidate;
+		
+    	this.modalService.open(content, { centered: true });
 
   	}
 
@@ -814,5 +825,13 @@ export class ViewCandidatesComponent implements OnInit {
     this.fetchCandidates(true);
 
   }
+
+	/**
+	* Flags a Candidate as being potentially unavailable
+	*/
+	public markCandidateAsUnavailable():void {
+		this.candidateService.markCandidateAsUnavailable(this.selectedCandidate.candidateId).subscribe(data => {});
+		this.selectedCandidate.flaggedAsUnavailable = true;
+	}
 
 }

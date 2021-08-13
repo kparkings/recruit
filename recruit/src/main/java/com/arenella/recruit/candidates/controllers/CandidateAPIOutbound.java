@@ -27,6 +27,7 @@ public class CandidateAPIOutbound {
 	private int				yearsExperience;
 	private boolean 		available;
 	private LocalDate 		lastAvailabilityCheck;
+	private boolean			flaggedAsUnavailable;
 	private Set<String> 	skills						= new LinkedHashSet<>();
 	private Set<Language> 	languages					= new LinkedHashSet<>();
 	private String			firstname;
@@ -48,6 +49,7 @@ public class CandidateAPIOutbound {
 		this.freelance 					= builder.freelance;
 		this.yearsExperience 			= builder.yearsExperience;
 		this.available 					= builder.available;
+		this.flaggedAsUnavailable		= builder.flaggedAsUnavailable;
 		this.lastAvailabilityCheck 		= builder.lastAvailabilityCheck;
 		this.firstname					= builder.firstname;
 		this.surname					= builder.surname;
@@ -133,6 +135,15 @@ public class CandidateAPIOutbound {
 	}
 	
 	/**
+	* Returns whether the Candidate has been marked as being 
+	* potentially unavailable
+	* @return whether the Canidate has been flagged as unavailable
+	*/
+	public boolean isFlaggedAsUnavailable() {
+		return this.flaggedAsUnavailable;
+	}
+	
+	/**
 	* Returns the Date of the last time the Candidate was contacted to check 
 	* that they were still available for a new role
 	* @return Date of last availability check
@@ -204,6 +215,7 @@ public class CandidateAPIOutbound {
 		private FREELANCE 		freelance;
 		private int				yearsExperience;
 		private boolean 		available;
+		private boolean			flaggedAsUnavailable;
 		private LocalDate 		lastAvailabilityCheck;
 		private Set<String> 	skills						= new LinkedHashSet<>();
 		private Set<Language> 	languages					= new LinkedHashSet<>();
@@ -303,6 +315,17 @@ public class CandidateAPIOutbound {
 		}
 		
 		/**
+		* Sets whether or not the Candidate has been marked as being 
+		* unavailable
+		* @param flaggedAsUnavailable - Whether the Candidate has been flagged as unavialble
+		* @return Builder
+		*/
+		public CandidateAPIOutboundBuilder flaggedAsUnavailable(boolean flaggedAsUnavailable) {
+			this.flaggedAsUnavailable = flaggedAsUnavailable;
+			return this;
+		}
+		
+		/**
 		* Sets the Date of the last time the Candidates availability 
 		* was checked
 		* @param lastAvailabilityCheck - Date of last availability check
@@ -396,6 +419,7 @@ public class CandidateAPIOutbound {
 					.skills(candidate.getSkills())
 					.yearsExperience(candidate.getYearsExperience())
 					.available(candidate.isAvailable())
+					.flaggedAsUnavailable(candidate.isFlaggedAsUnavailable())
 					.lastAvailabilityCheck(candidate.getLastAvailabilityCheckOn())
 					.firstname(candidate.getFirstname())
 					.surname(candidate.getSurname())

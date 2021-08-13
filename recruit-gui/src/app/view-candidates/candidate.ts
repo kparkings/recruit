@@ -67,6 +67,11 @@ export class Candidate {
 	skills: 			Array<string> 	= new Array<string>();
 	
 	/**
+	* Someone in the network has marked the Candiate as being unavailable 
+	*/
+	flaggedAsUnavailable: boolean = false;
+	
+	/**
 	* Languages the candidate speaks
 	*/
 	languages: 			Array<Language> 	= new Array<Language>();

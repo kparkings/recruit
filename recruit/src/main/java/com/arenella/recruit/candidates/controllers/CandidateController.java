@@ -88,7 +88,7 @@ public class CandidateController {
 	* Endpoint marks a Candidate as no possibly being no longer available. 
 	* @return ResponseEntity
 	*/
-	@PutMapping(path="candidate/{candidateId}/{flaggedAsUnavailable}/")
+	@PutMapping(path="candidate/{candidateId}/flaggedAsUnavailable/{flaggedAsUnavailable}/")
 	public ResponseEntity<Void> updateCandidateflaggedAsUnavailable(@RequestBody String fakeBody, @PathVariable("candidateId") long candidateId, @PathVariable("flaggedAsUnavailable") boolean flaggedAsUnavailable){
 		
 			this.candidateService.flagCandidateAvailability(candidateId, flaggedAsUnavailable);
@@ -130,6 +130,7 @@ public class CandidateController {
 													@RequestParam(required = false) 	String				firstname,
 													@RequestParam(required = false) 	String				surname,
 													@RequestParam(required = false) 	String				email,
+													@RequestParam(required = false) 	Boolean				flaggedAsUnavailable,
 													Pageable pageable
 												 	) {
 		
@@ -148,7 +149,8 @@ public class CandidateController {
 																		.dutch(dutch)
 																		.english(english)
 																		.french(french)
-																		.skills(skills);
+																		.skills(skills)
+																		.flaggedAsUnavailable(flaggedAsUnavailable);
 		
 		/**
 		* Some details are private and not open to the Recruiters at present.

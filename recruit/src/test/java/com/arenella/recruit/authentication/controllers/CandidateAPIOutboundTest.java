@@ -35,6 +35,7 @@ public class CandidateAPIOutboundTest {
 	private final PERM 				perm					= PERM.FALSE;
 	private final FREELANCE 		freelance				= FREELANCE.TRUE;
 	private final int				yearsExperience			= 22;
+	private final boolean			flaggedAsUnavailable	= true;
 	private final boolean 			available				= true;
 	private final Set<String> 		skills					= Set.of("Java","Angular");
 	private final Set<Language> 	languages				= Set.of(Language.builder().language(LANGUAGE.DUTCH).level(LEVEL.PROFICIENT).build());
@@ -57,6 +58,7 @@ public class CandidateAPIOutboundTest {
 															.freelance(freelance)
 															.function(function)
 															.languages(languages)
+															.flaggedAsUnavailable(flaggedAsUnavailable)
 															.lastAvailabilityCheck(lastAvailabilityCheck)
 															.perm(perm)
 															.roleSought(roleSought)
@@ -76,6 +78,7 @@ public class CandidateAPIOutboundTest {
 		assertEquals(freelance, 				candidate.getFreelance());
 		assertEquals(yearsExperience, 			candidate.getYearsExperience());
 		assertEquals(available, 				candidate.isAvailable());
+		assertEquals(flaggedAsUnavailable, 		candidate.isFlaggedAsUnavailable());
 		assertEquals(lastAvailabilityCheck, 	candidate.getLastAvailabilityCheckOn());
 		assertEquals(firstname, 				candidate.getFirstname());
 		assertEquals(surname, 					candidate.getSurname());
@@ -114,6 +117,7 @@ public class CandidateAPIOutboundTest {
 		
 		Candidate candidate = Candidate
 									.builder()
+										.flaggedAsUnavailable(flaggedAsUnavailable)
 										.available(available)
 										.candidateId(candidateId)
 										.city(city)
@@ -144,6 +148,7 @@ public class CandidateAPIOutboundTest {
 		assertEquals(freelance, 				candidateAPIOutbound.getFreelance());
 		assertEquals(yearsExperience, 			candidateAPIOutbound.getYearsExperience());
 		assertEquals(available, 				candidateAPIOutbound.isAvailable());
+		assertEquals(flaggedAsUnavailable, 		candidateAPIOutbound.isFlaggedAsUnavailable());
 		assertEquals(lastAvailabilityCheck, 	candidateAPIOutbound.getLastAvailabilityCheckOn());
 		assertEquals(firstname, 				candidate.getFirstname());
 		assertEquals(surname, 					candidate.getSurname());

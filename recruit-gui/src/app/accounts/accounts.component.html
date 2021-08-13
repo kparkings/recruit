@@ -7,6 +7,9 @@
 	  <li class="nav-item tabNav">
 	    <span class="nav-link" (click)="switchTab('candidates')">Candidates</span>
 	  </li>
+	  <li class="nav-item tabNav">
+	    <span class="nav-link" (click)="switchTab('flaggedAsUnavailable')">Flagged as unavailable</span>
+	  </li>
 	</ul>
 	
 	<!-- Recruiters-->
@@ -97,5 +100,41 @@
 		</table>
 	</div>
 	</div>
+	
+	<!-- Flagged as Unavailable-->
+	<div *ngIf="showFlaggedAsUnavailableTab">
+		<form [formGroup]="candidateFormGroup">
+			<h3>Flagged as Unavailable</h3>
+			
+			<table class="table candidate-table">
+			<thead>
+	      		<tr>
+	      			<!-- Table Headers -->
+	      			<th class="bg-tab-hdr">CandidateId</th>
+	      			<th class="bg-tab-hdr">Firstname</th>
+	                <th class="bg-tab-hdr">Surname</th>
+	                <th class="bg-tab-hdr">Email</th>
+	                <th class="bg-tab-hdr">Actions</th>
+	              
+	      		</tr>
+	      	</thead>
+	      	<tbody>
+	      		<!-- Table row -->
+	      		<tr *ngFor="let candidate of candidates">
+	      			<td class="candidate-tab-col"><span class="candidate-id-prefix">C</span>{{candidate.candidateId}}</td>
+	                <td class="candidate-tab-col mini-col"> {{candidate.firstname}}</td>
+	                <td class="candidate-tab-col medicol">{{candidate.surname}}</td>
+	                <td class="candidate-tab-col medicol">{{candidate.email}}</td>
+	                <td class="candidate-tab-col medicol">
+	                	<button	class="control-spacing" (click)="disableFlaggedAsUnavailableCandidate(candidate.candidateId)">Disable</button>
+	                	<button	class="control-spacing" (click)="removeFlaggedAsUnavailableFlag(candidate.candidateId)">Remove Flag</button>
+	                </td>
+	      		</tr>	
+	      	</tbody>
+		</table>
+			
+		</form>
+		<!-- Candidates table -->  
+	<div>
 	
 </div>

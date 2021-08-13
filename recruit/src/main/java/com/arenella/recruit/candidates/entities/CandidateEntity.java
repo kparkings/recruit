@@ -76,7 +76,7 @@ public class CandidateEntity {
 	private boolean 	available;
 	
 	@Column(name="flagged_as_unavailable")
-	private boolean setFlaggedAsUnavailable;
+	private boolean flaggedAsUnavailable;
 	
 	@Column(name="registered")
 	private LocalDate 	registerd;
@@ -112,7 +112,7 @@ public class CandidateEntity {
 		this.available 					= builder.available;
 		this.registerd 					= builder.registerd;
 		this.lastAvailabilityCheck 		= builder.lastAvailabilityCheck;
-		this.setFlaggedAsUnavailable	= builder.flaggedAsUnavailable;
+		this.flaggedAsUnavailable		= builder.flaggedAsUnavailable;
 		
 		this.skills.addAll(builder.skills);
 		this.languages.addAll(builder.languages.stream().map(lang -> LanguageEntity.builder().candidate(this).language(lang.getLanguage()).level(lang.getLevel()).build()).collect(Collectors.toSet()));
@@ -232,7 +232,7 @@ public class CandidateEntity {
 	* @return whether the Canidate is potentially unavailable
 	*/
 	public boolean isFlaggedAsUnavailable() {
-		return this.setFlaggedAsUnavailable;
+		return this.flaggedAsUnavailable;
 	}
 	
 	/**
@@ -282,7 +282,7 @@ public class CandidateEntity {
 	* @param flaggedAsUnavailable - Whether Candidate is flagged as being unavailable
 	*/
 	public void setFlaggedAsUnavailable(boolean flaggedAsUnavailable) {
-		this.setFlaggedAsUnavailable = flaggedAsUnavailable;
+		this.flaggedAsUnavailable = flaggedAsUnavailable;
 	}
 	
 	/**

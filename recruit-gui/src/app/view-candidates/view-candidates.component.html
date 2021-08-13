@@ -28,7 +28,7 @@
 	      		<tr>
 	      			<!-- Table Headers -->
 	      			<th class="bg-tab-hdr">&nbsp;</th>
-	      			<th class="bg-tab-hdr">CandidateId</th>
+					<th class="bg-tab-hdr">CandidateId</th>
 	                <th class="bg-tab-hdr">Country</th>
 	                <th class="bg-tab-hdr">City</th>
 	                <th class="bg-tab-hdr">Function</th>
@@ -43,7 +43,7 @@
 	      		<tr>
 	      			<!-- Table Filters -->
 	      			<th class="bg-tab-hdr fltrcol"></th>
-	      			<th class="bg-tab-hdr fltrcol" (click)="open(mymodal, 'candidateId')">
+					<th class="bg-tab-hdr fltrcol" (click)="open(mymodal, 'candidateId')">
 	                <span class="material-icons {{isFilterCandidateIdActiveClass()}}">filter_alt</span>
 	                </th>
 	                <th class="bg-tab-hdr fltrcol" (click)="open(mymodal, 'country')">
@@ -87,8 +87,11 @@
 	      						insert_drive_file
 	      					</a>
 	      				</span>
+						<span class="material-icons" (click)="openSettingsOptons(settingsModal, candidate)">
+	      					settings
+	      				</span>
 	      			</td>
-	      			<td class="candidate-tab-col"><span class="candidate-id-prefix">C</span>{{candidate.candidateId}}</td>
+					<td class="candidate-tab-col"><span class="candidate-id-prefix">C</span>{{candidate.candidateId}}</td>
 	                <td class="candidate-tab-col mini-col"> {{candidate.country}}</td>
 	                <td class="candidate-tab-col medicol">{{candidate.city}}</td>
 	                <td class="candidate-tab-col medicol">{{candidate.roleSought}}</td>
@@ -404,4 +407,29 @@
 			</div>
 		</div> 
 	</ng-template>
+	
+	<ng-template #settingsModal let-modal>
+	
+		<!--  Options -->
+		<div class="modal-header">
+			<h4 class="modal-title">Actions</h4>
+			<div class="filter-close-box" (click)="closeModal()">X</div>
+		</div>
+		<div class="modal-body">
+			<!--  Specific Filters -->
+			<div>
+				<div  *ngIf="selectedCandidate.flaggedAsUnavailable">
+					<p>This candidate has been marked as unavailable by a recruiter in the Network. After confirmation the Candidate will be removed.</p>
+				</div>
+				<div  *ngIf="!selectedCandidate.flaggedAsUnavailable">
+					<p>
+					<b>Is this candidate unavailable? </b>
+					
+					<p>Please click on the button to flag the Candidate as unavailable. The availability will then be confirmed and the candidate removed from the list.</p>
+					<button class="modal-action-button-center" (click)="markCandidateAsUnavailable()">Flag as Unavailable</button>
+				</div>
+			</div>
+		</div> 
+	</ng-template>
+	
 </div>

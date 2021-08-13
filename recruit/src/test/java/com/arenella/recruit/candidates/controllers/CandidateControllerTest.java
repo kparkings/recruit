@@ -81,7 +81,7 @@ public class CandidateControllerTest {
 		
 		Mockito.when(mockCandidateService.getCandidates(filterCaptor.capture(), Mockito.any())).thenReturn(mockPage);
 		
-		controller.getCandidate(null, null, null, null, null, null, null, null, null, null, null, null, null, firstname, surname, email, null);
+		controller.getCandidate(null, null, null, null, null, null, null, null, null, null, null, null, null, firstname, surname, email, null, null);
 		
 		filterCaptor.getValue().getFirstname().orElseThrow();
 		filterCaptor.getValue().getSurname().orElseThrow();
@@ -113,7 +113,7 @@ public class CandidateControllerTest {
 		
 		Mockito.when(mockCandidateService.getCandidates(filterCaptor.capture(), Mockito.any())).thenReturn(mockPage);
 		
-		controller.getCandidate(null, null, null, null, null, null, null, null, null, null, null, null, null, firstname, surname, email, null);
+		controller.getCandidate(null, null, null, null, null, null, null, null, null, null, null, null, null, firstname, surname, email, null, null);
 		
 		assertTrue(filterCaptor.getValue().getFirstname().isEmpty());
 		assertTrue(filterCaptor.getValue().getSurname().isEmpty());

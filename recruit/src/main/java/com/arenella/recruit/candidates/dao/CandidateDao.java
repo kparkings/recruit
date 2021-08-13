@@ -146,6 +146,13 @@ public interface CandidateDao extends CrudRepository<CandidateEntity, Long>, Jpa
 			predicates.add(isActiveFltr);
 			
 			
+			if (!this.filterOptions.isFlaggedAsUnavailable().isEmpty()) {
+				Predicate isFlaggedAsUnavailableFltr 						= root.get("flaggedAsUnavailable").in(true);
+				predicates.add(isFlaggedAsUnavailableFltr);
+				
+			}
+			
+			
 			if (!this.filterOptions.getCountries().isEmpty()) {
 				Predicate countriesFltr 						= root.get("country").in(filterOptions.getCountries());
 				predicates.add(countriesFltr);

@@ -31,6 +31,7 @@ public class CandidateFilterOptions {
 	private String			firstname;
 	private String 			surname;
 	private String 			email;
+	private Boolean			flaggedAsUnavailable 	= false;
 	
 	/**
 	* Builder for the  
@@ -54,6 +55,7 @@ public class CandidateFilterOptions {
 		this.firstname						= builder.firstname;
 		this.surname						= builder.surname;
 		this.email							= builder.email;
+		this.flaggedAsUnavailable			= builder.flaggedAsUnavailable;
 		
 	}
 	
@@ -187,6 +189,15 @@ public class CandidateFilterOptions {
 	}
 	
 	/**
+	* Returns whether to filter on Candidates that 
+	* have been flagged as Unavailable
+	* @return flagged as unavailable
+	*/
+	public Optional<Boolean> isFlaggedAsUnavailable(){
+		return Optional.ofNullable(this.flaggedAsUnavailable);
+	}
+	
+	/**
 	* Returns a Builder for the CandidateFilterOptions class
 	* @return
 	*/
@@ -216,6 +227,7 @@ public class CandidateFilterOptions {
 		private String			firstname;
 		private String 			surname;
 		private String 			email;
+		private Boolean			flaggedAsUnavailable	= null;
 		
 		/**
 		* Sets the name of the attribute to order on
@@ -398,6 +410,16 @@ public class CandidateFilterOptions {
 		*/
 		public CandidateFilterOptionsBuilder email(String email) {
 			this.email = email;
+			return this;
+		}
+
+		/**
+		* Sets whether to filter on Candidates that have been marked as being unavailable
+		* @param flaggedAsUnavailable - Whether to filter on flaggedAsUnavailable
+		* @return Builder
+		*/
+		public CandidateFilterOptionsBuilder flaggedAsUnavailable(Boolean flaggedAsUnavailable) {
+			this.flaggedAsUnavailable = flaggedAsUnavailable;
 			return this;
 		}
 		

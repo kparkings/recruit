@@ -388,3 +388,14 @@ databaseChangeLog:
                 type: boolean
                 constraints:
                   default: false
+  - changeSet:
+      id: addColumn-flagged_as_unavailable_update_existing
+      author: kevin
+      changes:
+        - update:
+            tableName: candidate
+            schemaName: candidate
+            columns:
+            - column:
+                name: flagged_as_unavailable
+                value: false

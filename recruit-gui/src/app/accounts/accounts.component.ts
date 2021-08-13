@@ -17,6 +17,7 @@ export class AccountsComponent implements OnInit {
 	currentTab:string 							= "recruiters";
 	showCandidatesTab:boolean					= false;
 	showRecruitersTab:boolean					= true;
+	showFlaggedAsUnavailableTab:boolean			= false;
 	createAccountDetailsAvailable:boolean 		= false;
 	recruiterUsername:string					= '';
 	recruiterPassword:string					= '';
@@ -44,13 +45,23 @@ export class AccountsComponent implements OnInit {
 			case "candidates":{
 				this.showCandidatesTab=true;
 				this.showRecruitersTab=false;
+				this.showFlaggedAsUnavailableTab=false;
 				break;
 			}
 			case "recruiters":{
 				this.showCandidatesTab=false;
 				this.showRecruitersTab=true;
+				this.showFlaggedAsUnavailableTab=false;
 				break;
 			}
+			case "flaggedAsUnavailable":{
+				this.showCandidatesTab=false;
+				this.showRecruitersTab=false;
+				this.showFlaggedAsUnavailableTab=true;
+				this.fetchFlaggedAsUnavailableCandidates();
+				break;
+			}
+			
 		}
 		
 	}
@@ -98,6 +109,21 @@ export class AccountsComponent implements OnInit {
 	}
 	
 	/**
+	* Builds a query parameter string for flaggedAsUnavailable Candidates
+	*/
+	private getCandidateFlaggedAsUnavailableFilterParamString():string{
+    	
+		const filterParams:string = 
+								'orderAttribute=candidateId'
+                                 + "&order=desc" 
+                                 + '&page=0'
+                                 + '&size=50'
+                                 + '&flaggedAsUnavailable=true';
+		return filterParams;
+	
+	}
+	
+	/**
 	* Filter param for firstname
 	*/
 	private getFirstnameParamString():string{
@@ -121,14 +147,11 @@ export class AccountsComponent implements OnInit {
 		return value  == '' ? '' : '&email='+value;
 	}
 	
-	/**
-	* Retrieves candidates from the backend
-	*/
-	public fetchCandidates(): void{
-    	
-    	this.candidates = new Array<Candidate>();
+	public fetchCandidatesByFilters(filterParams:string):void{
+		
+		this.candidates = new Array<Candidate>();
 
-    	this.candidateService.getCandidates(this.getCandidateFilterParamString()).subscribe( data => {
+    	this.candidateService.getCandidates(filterParams).subscribe( data => {
   
       		data.content.forEach((c:Candidate) => {
         
@@ -155,20 +178,60 @@ export class AccountsComponent implements OnInit {
 			}
     	})
 
+	} 
+	
+	
+	/**
+	* Retrieves candidates from the backend
+	*/
+	public fetchCandidates(): void{
+    	this.fetchCandidatesByFilters(this.getCandidateFilterParamString());
+	}
+	
+	/**
+	* Retrieves candidates from the backend
+	*/
+	public fetchFlaggedAsUnavailableCandidates(): void{
+    	this.fetchCandidatesByFilters(this.getCandidateFlaggedAsUnavailableFilterParamString());
 	}
 	
 	/**
 	* Disables the Candidate
 	*/
 	disableCandidate(candidateId:string):void{
-		this.candidateService.disableCandidate(candidateId);
+		this.candidateService.disableCandidate(candidateId).subscribe(data => {
+			this.fetchCandidates();	
+		});
+		
 	}
+
+	/**
+	* Disables flagged As Unavailable Candidate
+	*/
+	disableFlaggedAsUnavailableCandidate(candidateId:string):void{
+		this.candidateService.disableCandidate(candidateId).subscribe(data => {
+			this.fetchFlaggedAsUnavailableCandidates();	
+		});
+		
+	}	
+	
+	/**
+	* Removed the flag from flagged As Unavailable Candidate
+	*/
+	removeFlaggedAsUnavailableFlag(candidateId:string):void{
+		this.candidateService.removeMarkCandidateAsUnavailableFlag(candidateId).subscribe(data => {
+			this.fetchFlaggedAsUnavailableCandidates();	
+		});
+		
+	}	
+	
 	
 	/**
 	* Enables the Candidate
 	*/
 	enableCandidate(candidateId:string):void{
 		this.candidateService.enableCandidate(candidateId);
+		this.fetchCandidates();
 	}
 
 }
