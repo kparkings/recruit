@@ -110,6 +110,13 @@ export class Candidate {
 	}
 
 	getSkills():string{
-		return this.skills.join(', ');
+		
+		let skillString = this.skills.join(', ');
+		
+		if (skillString.indexOf(', ') != -1) {
+			skillString = skillString.replace(', ', '');
+		}
+		
+		return skillString;
 	}
 }
