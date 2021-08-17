@@ -399,3 +399,70 @@ databaseChangeLog:
             - column:
                 name: flagged_as_unavailable
                 value: false
+                
+  - changeSet:
+      id: pending_curriculum_tables
+      author: kparkings
+      changes:
+        - createTable:
+            tableName: pending_curriculum
+            schemaName: curriculum
+            columns:
+              - column:
+                  name: id
+                  type: number
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: file_type
+                  type: varchar
+                  constraints:
+                    nullable: false
+              - column:
+                  name: file_bytes
+                  type: bytea
+                  constraints:
+                    nullable: false
+  - changeSet:
+      id: pending_candidate
+      author: kparkings
+      changes:
+        - createTable:
+            tableName: pending_candidate
+            schemaName: candidate
+            columns:
+              - column:
+                  name: pending_candidate_id
+                  type: bigint
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: firstname
+                  type: varchar
+                  constraints:
+                    nullable: false
+              - column:
+                  name: surname
+                  type: varchar
+                  constraints:
+                    nullable: false
+              - column:
+                  name: email
+                  type: varchar
+                  constraints:
+                    nullable: true
+              - column:
+                  name: perm
+                  type: VARCHAR(7)
+                  constraints:
+                    nullable: false
+                    default: false
+              - column:
+                  name: freelance
+                  type: VARCHAR(7)
+                  constraints:
+                    nullable: false
+                    default: false
+              

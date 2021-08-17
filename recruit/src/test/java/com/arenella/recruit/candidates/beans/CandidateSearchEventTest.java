@@ -9,8 +9,6 @@ import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
 
-import com.arenella.recruit.candidates.beans.CandidateSearchEvent;
-import com.arenella.recruit.candidates.beans.Language;
 import com.arenella.recruit.candidates.enums.COUNTRY;
 import com.arenella.recruit.candidates.enums.FUNCTION;
 

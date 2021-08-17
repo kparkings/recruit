@@ -6,8 +6,6 @@ import org.junit.Test;
 
 import com.arenella.recruit.candidates.beans.Language.LANGUAGE;
 import com.arenella.recruit.candidates.beans.Language.LEVEL;
-import com.arenella.recruit.candidates.entities.CandidateEntity;
-import com.arenella.recruit.candidates.entities.LanguageEntity;
 
 /**
 * Unit tests for the LanguageEntity class

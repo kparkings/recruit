@@ -14,7 +14,5 @@ public class Recruiter {
 	private String surname;
 	private String email;
 	private LocalDate lastLogin;
-
-	
 	
 }

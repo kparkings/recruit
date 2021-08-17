@@ -11,7 +11,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import com.arenella.recruit.candidates.controllers.CandidateStatisticsController;
 import com.arenella.recruit.candidates.services.CandidateStatisticsService;
 
 /**
