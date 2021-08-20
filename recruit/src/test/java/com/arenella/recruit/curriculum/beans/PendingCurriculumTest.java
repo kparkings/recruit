@@ -3,6 +3,8 @@ package com.arenella.recruit.curriculum.beans;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.util.UUID;
+
 import org.junit.jupiter.api.Test;
 
 import com.arenella.recruit.curriculum.enums.FileType;
@@ -13,7 +15,7 @@ import com.arenella.recruit.curriculum.enums.FileType;
 */
 public class PendingCurriculumTest {
 
-	private static final String 		id 				= "100";
+	private static final UUID	 		id 				= UUID.fromString("123e4567-e89b-12d3-a456-426614174000");
 	private static final FileType 		fileType 		= FileType.doc;
 	private static final byte[] 		file 			= new byte[1];
 	

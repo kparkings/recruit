@@ -2,6 +2,8 @@ package com.arenella.recruit.curriculum.entities;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.UUID;
+
 import org.junit.jupiter.api.Test;
 
 import com.arenella.recruit.curriculum.beans.PendingCurriculum;
@@ -21,7 +23,7 @@ public class PendingCurriculumEntityTest {
 	@Test
 	public void testBuilder() throws Exception {
 		
-		final int 		curriculumId 	= 1;
+		final UUID 		curriculumId 	= UUID.fromString("123e4567-e89b-12d3-a456-426614174000");
 		final byte[] 	fileBytes 		= new byte[] {};
 		final FileType 	fileType 		= FileType.pdf;
 		
@@ -46,7 +48,7 @@ public class PendingCurriculumEntityTest {
 	@Test
 	public void testConvertFromEntity() throws Exception {
 		
-		final int 		curriculumId 	= 1;
+		final UUID 		curriculumId 	= UUID.fromString("123e4567-e89b-12d3-a456-426614174000");
 		final byte[] 	fileBytes 		= new byte[] {};
 		final FileType 	fileType 		= FileType.pdf;
 		
@@ -59,7 +61,7 @@ public class PendingCurriculumEntityTest {
 		
 		PendingCurriculum curriculum = PendingCurriculumEntity.convertFromEntity(entity);
 		
-		assertEquals(curriculumId, 	Long.valueOf(curriculum.getId().get()).longValue());
+		assertEquals(curriculumId, 	curriculum.getId().get());
 		assertEquals(fileBytes, 	curriculum.getFile());
 		assertEquals(fileType, 		curriculum.getFileType());
 		
@@ -73,7 +75,7 @@ public class PendingCurriculumEntityTest {
 	@Test
 	public void testConvertToEntity() throws Exception {
 		
-		final String	curriculumId 	= "1";
+		final UUID	curriculumId 	= UUID.fromString("123e4567-e89b-12d3-a456-426614174000");
 		final byte[] 	fileBytes 		= new byte[] {};
 		final FileType 	fileType 		= FileType.pdf;
 		
@@ -86,7 +88,7 @@ public class PendingCurriculumEntityTest {
 		
 		PendingCurriculumEntity entity = PendingCurriculumEntity.convertToEntity(curriculum);
 		
-		assertEquals(curriculumId, 	String.valueOf(entity.getCurriculumId()));
+		assertEquals(curriculumId, 	entity.getCurriculumId());
 		assertEquals(fileBytes, 	entity.getFile());
 		assertEquals(fileType, 		entity.getFileType());
 		

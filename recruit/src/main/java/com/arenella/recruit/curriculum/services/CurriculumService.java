@@ -3,6 +3,7 @@ package com.arenella.recruit.curriculum.services;
 import java.io.IOException;
 
 import com.arenella.recruit.curriculum.beans.Curriculum;
+import com.arenella.recruit.curriculum.beans.PendingCurriculum;
 import com.arenella.recruit.curriculum.controllers.CurriculumUpdloadDetails;
 import com.arenella.recruit.curriculum.enums.FileType;
 
@@ -17,7 +18,13 @@ public interface CurriculumService {
 	* @return Unique Id of the Curriculum
 	*/
 	public String persistCurriculum(Curriculum curriculum);
-
+	
+	/**
+	* Persists a PendingCurriculum
+	* @param pendingCurriculum - PendingCurriculum to persist
+	*/
+	public void persistPendingCurriculum(PendingCurriculum pendingCurriculum);
+	
 	/**
 	* Retrieves a Curriculum matching the ID
 	* @param curriculumId

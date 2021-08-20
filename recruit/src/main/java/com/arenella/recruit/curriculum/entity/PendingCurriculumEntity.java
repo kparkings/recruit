@@ -1,5 +1,7 @@
 package com.arenella.recruit.curriculum.entity;
 
+import java.util.UUID;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -22,7 +24,7 @@ public class PendingCurriculumEntity {
 
 	@Id
 	@Column(name="id")
-	private long 		curriculumId;
+	private UUID 		curriculumId;
 	
 	@Column(name="file_type")
 	@Enumerated(EnumType.STRING)
@@ -52,7 +54,7 @@ public class PendingCurriculumEntity {
 	* Returns unique Id of the Curriculum
 	* @return unique Id
 	*/
-	public long getCurriculumId() {
+	public UUID getCurriculumId() {
 		return curriculumId;
 	}
 	
@@ -87,7 +89,7 @@ public class PendingCurriculumEntity {
 	*/
 	public static class PendingCurriculumEntityBuilder{
 		
-		private long 		curriculumId;
+		private UUID 		curriculumId;
 		private FileType 	fileType;
 		private byte[] 		file;
 		
@@ -96,7 +98,7 @@ public class PendingCurriculumEntity {
 		* @param curriculumId - Unique Id of the Curriculum
 		* @return Builder
 		*/
-		public PendingCurriculumEntityBuilder curriculumId(long curriculumId) {
+		public PendingCurriculumEntityBuilder curriculumId(UUID curriculumId) {
 			this.curriculumId = curriculumId;
 			return this;
 		}
@@ -141,7 +143,7 @@ public class PendingCurriculumEntity {
 		
 		return PendingCurriculumEntity
 							.builder()
-								.curriculumId(Long.valueOf(curriculum.getId().get()))
+								.curriculumId(curriculum.getId().get())
 								.fileType(curriculum.getFileType())
 								.file(curriculum.getFile())
 							.build();
@@ -156,7 +158,7 @@ public class PendingCurriculumEntity {
 		
 		return PendingCurriculum
 						.builder()
-							.id(String.valueOf(curriculumEntity.getCurriculumId()))	
+							.id(curriculumEntity.getCurriculumId())	
 							.fileType(curriculumEntity.getFileType())
 							.file(curriculumEntity.getFile())
 						.build();

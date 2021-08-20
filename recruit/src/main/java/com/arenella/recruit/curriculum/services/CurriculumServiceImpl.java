@@ -11,13 +11,16 @@ import org.springframework.stereotype.Service;
 
 import com.arenella.recruit.curriculum.beans.Curriculum;
 import com.arenella.recruit.curriculum.beans.CurriculumDownloadedEvent;
+import com.arenella.recruit.curriculum.beans.PendingCurriculum;
 import com.arenella.recruit.curriculum.controllers.CurriculumUpdloadDetails;
 import com.arenella.recruit.curriculum.dao.CurriculumDao;
 import com.arenella.recruit.curriculum.dao.CurriculumDownloadedEventDao;
+import com.arenella.recruit.curriculum.dao.PendingCurriculumDao;
 import com.arenella.recruit.curriculum.dao.SkillsDao;
 import com.arenella.recruit.curriculum.utils.CurriculumDetailsExtractionFactory;
 import com.arenella.recruit.curriculum.entity.CurriculumDownloadedEventEntity;
 import com.arenella.recruit.curriculum.entity.CurriculumEntity;
+import com.arenella.recruit.curriculum.entity.PendingCurriculumEntity;
 import com.arenella.recruit.curriculum.enums.FileType;
 
 /**
@@ -29,6 +32,9 @@ public class CurriculumServiceImpl implements CurriculumService{
 
 	@Autowired
 	private CurriculumDao 					curriculumDao;
+	
+	@Autowired
+	private PendingCurriculumDao 			pendingCurriculumDao;
 	
 	@Autowired
 	private CurriculumDownloadedEventDao 	curriculumDownloadedEventDao;
@@ -49,6 +55,17 @@ public class CurriculumServiceImpl implements CurriculumService{
 		return curriculum.getId().get();
 	}
 
+	/**
+	* Refer to the CurriculumService interface for details
+	*/
+	public void persistPendingCurriculum(PendingCurriculum pendingCurriculum) {
+		
+		PendingCurriculumEntity entity = PendingCurriculumEntity.convertToEntity(pendingCurriculum);
+		
+		pendingCurriculumDao.save(entity);
+		
+	}
+	
 	/**
 	* Refer to the CurriculumService interface for details
 	*/

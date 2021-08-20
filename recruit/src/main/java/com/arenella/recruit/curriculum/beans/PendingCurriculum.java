@@ -1,6 +1,7 @@
 package com.arenella.recruit.curriculum.beans;
 
 import java.util.Optional;
+import java.util.UUID;
 
 import com.arenella.recruit.curriculum.enums.FileType;
 
@@ -11,7 +12,7 @@ import com.arenella.recruit.curriculum.enums.FileType;
 */
 public class PendingCurriculum {
 
-	private String 		id;
+	private UUID 		id;
 	private FileType 	fileType;
 	private byte[] 		file;
 	
@@ -30,7 +31,7 @@ public class PendingCurriculum {
 	* not yet persisted will not have an Id
 	* @return Unique identifier of the Curriculum
 	*/
-	public Optional<String> getId(){
+	public Optional<UUID> getId(){
 		return Optional.ofNullable(this.id);
 	}
 	
@@ -65,7 +66,7 @@ public class PendingCurriculum {
 	*/
 	public static class CurriculumAPIInboundBuilder {
 		
-		private String 		id;
+		private UUID 		id;
 		private FileType 	fileType;
 		private byte[] 		file;
 		
@@ -74,7 +75,7 @@ public class PendingCurriculum {
 		* @param id - Unique id of the curriculum
 		* @return Builder
 		*/
-		public CurriculumAPIInboundBuilder id(String id) {
+		public CurriculumAPIInboundBuilder id(UUID id) {
 			this.id = id;
 			return this;
 		}

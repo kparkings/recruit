@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,11 +15,14 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 
 import com.arenella.recruit.curriculum.beans.Curriculum;
+import com.arenella.recruit.curriculum.beans.PendingCurriculum;
 import com.arenella.recruit.curriculum.controllers.CurriculumUpdloadDetails;
 import com.arenella.recruit.curriculum.dao.CurriculumDao;
 import com.arenella.recruit.curriculum.dao.CurriculumDownloadedEventDao;
+import com.arenella.recruit.curriculum.dao.PendingCurriculumDao;
 import com.arenella.recruit.curriculum.entity.CurriculumDownloadedEventEntity;
 import com.arenella.recruit.curriculum.entity.CurriculumEntity;
+import com.arenella.recruit.curriculum.entity.PendingCurriculumEntity;
 import com.arenella.recruit.curriculum.enums.FileType;
 
 /**
@@ -34,6 +38,9 @@ public class CurriculumServiceImplTest {
 
 	@Mock
 	private 				CurriculumDao			 		mockCurriculumDao;
+
+	@Mock
+	private 				PendingCurriculumDao			mockPendingCurriculumDao;
 	
 	@Mock
 	private					CurriculumDownloadedEventDao	mockCurriculumDownloadedEventDao;
@@ -172,6 +179,38 @@ public class CurriculumServiceImplTest {
 		CurriculumUpdloadDetails extractedDetails = service.extractDetails(curriculumId, fileType, file);
 		
 		assertEquals(curriculumId, extractedDetails.getId());
+		
+	}
+	
+	/**
+	* Test persistence of PendingCurriclum 
+	* @throws Exception
+	*/
+	@Test
+	public void testPersistPendingCurriculum() throws Exception {
+		
+		ArgumentCaptor<PendingCurriculumEntity> pendingCurriculumCaptor = ArgumentCaptor.forClass(PendingCurriculumEntity.class);
+		
+		final UUID 		id 			= UUID.fromString("123e4567-e89b-12d3-a456-426614174000");
+		final FileType 	fileType 	= FileType.docx;
+		final byte[] 	file		= new byte[] {};
+		
+		PendingCurriculum curriculum = PendingCurriculum
+													.builder()
+														.id(id)
+														.fileType(fileType)
+														.file(file)
+													.build();
+		
+		Mockito.when(mockPendingCurriculumDao.save(pendingCurriculumCaptor.capture())).thenReturn(null);
+		
+		service.persistPendingCurriculum(curriculum);
+		
+		Mockito.verify(mockPendingCurriculumDao).save(Mockito.any(PendingCurriculumEntity.class));
+		
+		assertEquals(id, 		pendingCurriculumCaptor.getValue().getCurriculumId());
+		assertEquals(fileType, 	pendingCurriculumCaptor.getValue().getFileType());
+		assertEquals(file, 		pendingCurriculumCaptor.getValue().getFile());
 		
 	}
 
