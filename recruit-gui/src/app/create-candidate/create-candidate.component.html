@@ -92,6 +92,16 @@
 
 </div>
 
-        
+<ng-template #feedbackBox let-modal>
+	<div class="modal-header">
+		<h4 class="modal-title">&nbsp;</h4>
+   		<div class="filter-close-box" (click)="closeModal()">X</div>
+ 		</div>
+	<div class="feedbackBox; {{feedbackBoxClass}}">
+		<div class="modal-body">
+			<p class="modal-body-text">{{feedbackBoxText}}</p>
+		</div>       
+	</div>
+</ng-template> 
         
     

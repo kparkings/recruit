@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -22,9 +23,12 @@ import org.springframework.data.domain.Pageable;
 
 import com.arenella.recruit.candidates.beans.Candidate;
 import com.arenella.recruit.candidates.beans.CandidateFilterOptions;
+import com.arenella.recruit.candidates.beans.PendingCandidate;
 import com.arenella.recruit.candidates.controllers.CandidateController.CANDIDATE_UPDATE_ACTIONS;
 import com.arenella.recruit.candidates.dao.CandidateDao;
+import com.arenella.recruit.candidates.dao.PendingCandidateDao;
 import com.arenella.recruit.candidates.entities.CandidateEntity;
+import com.arenella.recruit.candidates.entities.PendingCandidateEntity;
 import com.arenella.recruit.candidates.services.CandidateServiceImpl;
 import com.arenella.recruit.candidates.services.CandidateStatisticsService;
 
@@ -37,6 +41,9 @@ public class CandidateServiceImplTest {
 
 	@Mock
 	private CandidateDao 				mockCandidateDao;
+	
+	@Mock
+	private PendingCandidateDao 		mockPendingCandidateDao;
 	
 	@Mock
 	private ExternalEventPublisher		mockExternalEventPublisher;
@@ -196,6 +203,58 @@ public class CandidateServiceImplTest {
 		Mockito.verify(this.mockCandidateDao).save(candidateEntity);
 		
 		assertTrue(captor.getValue().isFlaggedAsUnavailable());
+		
+	}
+	
+	/**
+	* Tests Exception is thrown if an attempt is made to persist 
+	* a PendingCandidate without specifying an Id
+	* @throws Exception
+	*/
+	@Test
+	public void testPersistPendingCandidate_noId() throws Exception {
+		
+		PendingCandidate pendingCandidate = PendingCandidate.builder().build();
+		
+		Assertions.assertThrows(IllegalArgumentException.class, () -> {
+			this.service.persistPendingCandidate(pendingCandidate);
+		});
+		
+	}
+	
+	/**
+	* Tests Exception is thrown if an attempt is made to persist 
+	* a PendingCandidate with an existing Id
+	* @throws Exception
+	*/
+	@Test
+	public void testPersistPendingCandidate_existingId() throws Exception {
+		
+		PendingCandidate pendingCandidate = PendingCandidate.builder().build();
+		
+		Assertions.assertThrows(IllegalArgumentException.class, () -> {
+			this.service.persistPendingCandidate(pendingCandidate);
+		});
+		
+	}
+	
+	/**
+	* Tests successful persisting of PendingCandidate
+	* @throws Exception
+	*/
+	@Test
+	public void testPersistPendingCandidate() throws Exception {
+		
+		PendingCandidate pendingCandidate = PendingCandidate
+													.builder()
+														.pendingCandidateId(UUID.randomUUID())
+													.build();
+		
+		Mockito.when(mockPendingCandidateDao.existsById(Mockito.any())).thenReturn(false);
+		
+		this.service.persistPendingCandidate(pendingCandidate);
+		
+		Mockito.verify(mockPendingCandidateDao).save(Mockito.any(PendingCandidateEntity.class));
 		
 	}
 	

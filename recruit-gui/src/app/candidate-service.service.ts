@@ -3,6 +3,7 @@ import { FormGroup }                              	from '@angular/forms';
 import { HttpClient, HttpResponse, HttpHeaders }  	from '@angular/common/http';
 import { Observable, throwError }                 	from 'rxjs';
 import { NewCandidate }                           	from './new-candidate/new-candidate';
+import { NewPendingCandidate }                      from './create-candidate/new-pending-candidate';
 import { Language}                                	from './new-candidate/language';
 import { CandidateFunction }                      	from './candidate-function';
 import { environment }								from './../environments/environment';
@@ -53,6 +54,31 @@ export class CandidateServiceService {
 			
 		return this.httpClient.put<any>(backendUrl,  '{}', this.httpOptions);
 	
+	}
+	
+	/**
+	* Sends a request to add a new PendingCandidate
+	* @param pendingCandidateId - Unique Id of the Candidate. Must be the same as the Curriculum
+	* @param firstname          - Candidates firstname
+	* @param surname			- Candudares surname
+	* @param email				- Candidates email address
+	* @param contract			- Whether or not the Candidate is interested in Contract positions
+	* @param perm				- Whether or not the Candidate is interested in Perm positions
+	*/
+	public addPendingCandidate(pendingCandidateId:string, firstname:string, surname:string, email:string, contract:boolean, perm:boolean): Observable<any>{
+		
+		const newPendingCandidate:NewPendingCandidate = new NewPendingCandidate();
+		
+		newPendingCandidate.pendingCandidateId 	= pendingCandidateId;
+		newPendingCandidate.firstname 			= firstname;
+		newPendingCandidate.surname 			= surname;
+		newPendingCandidate.email 				= email;
+		newPendingCandidate.freelance 			= contract;
+		newPendingCandidate.perm 				= perm;
+		
+		const backendUrl:string = environment.backendUrl +'pending-candidate';
+		
+		return this.httpClient.post<any>(backendUrl, JSON.stringify(newPendingCandidate), this.httpOptions);
 	}
 	
 	/**

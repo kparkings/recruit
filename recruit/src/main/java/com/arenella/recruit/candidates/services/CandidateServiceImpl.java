@@ -13,9 +13,12 @@ import org.springframework.stereotype.Service;
 import com.arenella.recruit.candidates.adapters.ExternalEventPublisher;
 import com.arenella.recruit.candidates.beans.Candidate;
 import com.arenella.recruit.candidates.beans.CandidateFilterOptions;
+import com.arenella.recruit.candidates.beans.PendingCandidate;
 import com.arenella.recruit.candidates.controllers.CandidateController.CANDIDATE_UPDATE_ACTIONS;
 import com.arenella.recruit.candidates.dao.CandidateDao;
+import com.arenella.recruit.candidates.dao.PendingCandidateDao;
 import com.arenella.recruit.candidates.entities.CandidateEntity;
+import com.arenella.recruit.candidates.entities.PendingCandidateEntity;
 
 /**
 * Provides services related to Candidates
@@ -26,7 +29,10 @@ public class CandidateServiceImpl implements CandidateService{
 	
 	@Autowired
 	private CandidateDao 				candidateDao;
-	
+
+	@Autowired
+	private PendingCandidateDao 		pendingCandidateDao;
+
 	@Autowired
 	private CandidateStatisticsService 	statisticsService;
 	
@@ -112,6 +118,24 @@ public class CandidateServiceImpl implements CandidateService{
 		candidate.setFlaggedAsUnavailable(available);
 		
 		this.candidateDao.save(candidate);
+		
+	}
+
+	/**
+	* Refer to the CandidateService Interface for Details
+	*/
+	@Override
+	public void persistPendingCandidate(PendingCandidate pendingCandidate) {
+		
+		if (pendingCandidate.getPendingCandidateId() == null) {
+			throw new IllegalArgumentException("Cannot create candidate with no Id ");
+		}
+		
+		if (this.pendingCandidateDao.existsById(pendingCandidate.getPendingCandidateId())) {
+			throw new IllegalArgumentException("Cannot create candidate with Id " + pendingCandidate.getPendingCandidateId());
+		}
+		
+		this.pendingCandidateDao.save(PendingCandidateEntity.convertToEntity(pendingCandidate));
 		
 	}
 	

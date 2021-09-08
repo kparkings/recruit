@@ -4,14 +4,10 @@ import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
 import com.arenella.recruit.candidates.beans.PendingCandidate;
-import com.arenella.recruit.candidates.enums.FREELANCE;
-import com.arenella.recruit.candidates.enums.PERM;
 
 /**
 * Represents a Candidate that has uploaded their details 
@@ -36,12 +32,10 @@ public class PendingCandidateEntity {
 	private String 		email;
 	
 	@Column(name="perm")
-	@Enumerated(EnumType.STRING)
-	private PERM 		perm;
+	private boolean 	perm;
 	
 	@Column(name="freelance")
-	@Enumerated(EnumType.STRING)
-	private FREELANCE 	freelance;
+	private boolean 	freelance;
 	
 	/**
 	* Constructor based upon a builder
@@ -103,7 +97,7 @@ public class PendingCandidateEntity {
 	* freelance projects
 	* @return Whether or not the Candidate is interested in freelance roles
 	*/
-	public FREELANCE isFreelance() {
+	public boolean isFreelance() {
 		return this.freelance;
 	}
 	
@@ -111,7 +105,7 @@ public class PendingCandidateEntity {
 	* Returns whether or not the Candidate is interested in permanent roles
 	* @return Whether or not the Candidate is interested in permanent roles
 	*/
-	public PERM isPerm() {
+	public boolean isPerm() {
 		return this.perm;
 	}
 	
@@ -133,8 +127,8 @@ public class PendingCandidateEntity {
 		private String 			firstname;
 		private String			surname;
 		private String 			email;
-		private PERM	 		perm;
-		private FREELANCE 		freelance;
+		private boolean	 		perm;
+		private boolean 		freelance;
 		
 		/**
 		* Sets the Unique Identifier of the Candidate
@@ -181,7 +175,7 @@ public class PendingCandidateEntity {
 		* @param perm - Whether candidate is looking for Perm roles
 		* @return Builder
 		*/
-		public PendingCandidateEntityBuilder perm(PERM perm) {
+		public PendingCandidateEntityBuilder perm(boolean perm) {
 			this.perm = perm;
 			return this;
 		}
@@ -191,7 +185,7 @@ public class PendingCandidateEntity {
 		* @param perm - Whether candidate is looking for freelance roles
 		* @return Builder
 		*/
-		public PendingCandidateEntityBuilder freelance(FREELANCE freelance) {
+		public PendingCandidateEntityBuilder freelance(boolean freelance) {
 			this.freelance = freelance;
 			return this;
 		}

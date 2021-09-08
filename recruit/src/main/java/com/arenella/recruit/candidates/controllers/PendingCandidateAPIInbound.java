@@ -1,14 +1,13 @@
-package com.arenella.recruit.candidates.beans;
+package com.arenella.recruit.candidates.controllers;
 
 import java.util.UUID;
 
-/**
-* Class represents a Candidate that has uploaded their details but not 
-* yet been processed into the system. A Candidate that 
-* can be place on a project
-* @author K Parkings
-*/
-public class PendingCandidate {
+import com.arenella.recruit.candidates.beans.PendingCandidate;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
+
+@JsonDeserialize(builder=PendingCandidateAPIInbound.PendingCandidateAPIInboundBuilder.class)
+public class PendingCandidateAPIInbound {
 
 	private UUID 			pendingCandidateId;
 	private String 			firstname;
@@ -21,7 +20,7 @@ public class PendingCandidate {
 	* Constructor based upon a builder
 	* @param builder = Contains initialization information
 	*/
-	public PendingCandidate(PendingCandidateBuilder builder) {
+	public PendingCandidateAPIInbound(PendingCandidateAPIInboundBuilder builder) {
 		
 		this.pendingCandidateId			= builder.pendingCandidateId;
 		this.firstname					= builder.firstname;
@@ -82,24 +81,25 @@ public class PendingCandidate {
 	}
 	
 	/**
-	* Builder for the PendingCandidate class
-	* @return A Builder for the PendingCandidate class
+	* Builder for the PendingCandidateAPIInbound class
+	* @return A Builder for the PendiPendingCandidateAPIInboundngCandidate class
 	*/
-	public static final PendingCandidateBuilder builder() {
-		return new PendingCandidateBuilder();
+	public static final PendingCandidateAPIInboundBuilder builder() {
+		return new PendingCandidateAPIInboundBuilder();
 	}
 	
 	/**
 	* Builder Class for the PendingCandidate Class
 	* @author K Parkings
 	*/
-	public static class PendingCandidateBuilder {
+	@JsonPOJOBuilder(buildMethodName="build", withPrefix="")
+	public static class PendingCandidateAPIInboundBuilder {
 		
 		private UUID 			pendingCandidateId;
 		private String 			firstname;
 		private String			surname;
 		private String 			email;
-		private boolean			perm;
+		private boolean 		perm;
 		private boolean 		freelance;
 		
 		/**
@@ -107,7 +107,7 @@ public class PendingCandidate {
 		* @param candidateId - Unique identifier of the Candidate
 		* @return Builder
 		*/
-		public PendingCandidateBuilder pendingCandidateId(UUID pendingCandidateId) {
+		public PendingCandidateAPIInboundBuilder pendingCandidateId(UUID pendingCandidateId) {
 			this.pendingCandidateId = pendingCandidateId;
 			return this;
 		}
@@ -117,7 +117,7 @@ public class PendingCandidate {
 		* @param firstname - Candidates first name
 		* @return Builder
 		*/
-		public PendingCandidateBuilder firstname(String firstname) {
+		public PendingCandidateAPIInboundBuilder firstname(String firstname) {
 			this.firstname = firstname;
 			return this;
 		}
@@ -127,7 +127,7 @@ public class PendingCandidate {
 		* @param surname - Candidates Surname
 		* @return Builder
 		*/
-		public PendingCandidateBuilder surname(String surname) {
+		public PendingCandidateAPIInboundBuilder surname(String surname) {
 			this.surname = surname;
 			return this;
 		}
@@ -137,7 +137,7 @@ public class PendingCandidate {
 		* @param email - Email address
 		* @return Builder
 		*/
-		public PendingCandidateBuilder email(String email) {
+		public PendingCandidateAPIInboundBuilder email(String email) {
 			this.email = email;
 			return this;
 		}
@@ -147,7 +147,7 @@ public class PendingCandidate {
 		* @param freelance - Whether or not the Candidate is interested in perm roles
 		* @return Builder
 		*/
-		public PendingCandidateBuilder perm(boolean perm) {
+		public PendingCandidateAPIInboundBuilder perm(boolean perm) {
 			this.perm = perm;
 			return this;
 		}
@@ -157,7 +157,7 @@ public class PendingCandidate {
 		* @param freelance - Whether or not the Candidate is interested in freelance roles
 		* @return Builder
 		*/
-		public PendingCandidateBuilder freelance(boolean freelance) {
+		public PendingCandidateAPIInboundBuilder freelance(boolean freelance) {
 			this.freelance = freelance;
 			return this;
 		}
@@ -167,9 +167,29 @@ public class PendingCandidate {
 		* values in the builder
 		* @return Initialized instance of PendingCandidate
 		*/
-		public PendingCandidate build() {
-			return new PendingCandidate(this);
+		public PendingCandidateAPIInbound build() {
+			return new PendingCandidateAPIInbound(this);
 		}
+	}
+	
+	/**
+	* Converts an incoming API representation of a PendingCanidate to the 
+	* Domain version
+	* @param candiateAPIInbound - API Incoming version of the Candidate
+	* @return Domain version of the Candidate
+	*/
+	public static PendingCandidate convertToPendingCandidate(PendingCandidateAPIInbound candiateAPIInbound) {
+		
+		return PendingCandidate
+				.builder()
+					.pendingCandidateId(candiateAPIInbound.getPendingCandidateId())
+					.firstname(candiateAPIInbound.getFirstname())
+					.surname(candiateAPIInbound.getSurname())
+					.email(candiateAPIInbound.getEmail())
+					.freelance(candiateAPIInbound.isFreelance())
+					.perm(candiateAPIInbound.isPerm())
+					.build();
+		
 	}
 	
 }

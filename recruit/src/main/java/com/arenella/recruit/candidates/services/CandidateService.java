@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 
 import com.arenella.recruit.candidates.beans.Candidate;
 import com.arenella.recruit.candidates.beans.CandidateFilterOptions;
+import com.arenella.recruit.candidates.beans.PendingCandidate;
 import com.arenella.recruit.candidates.controllers.CandidateController.CANDIDATE_UPDATE_ACTIONS;
 
 /**
@@ -50,5 +51,11 @@ public interface CandidateService {
 	* @return Candidates
 	*/
 	public Set<Candidate> getCandidates(CandidateFilterOptions filterOptions);
+
+	/**
+	* Adds a Pending Candidate to the System
+	* @param convertToPendingCandidate
+	*/
+	public void persistPendingCandidate(PendingCandidate pendingCandidate);
 	
 }

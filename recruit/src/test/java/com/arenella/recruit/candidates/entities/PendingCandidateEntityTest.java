@@ -7,8 +7,6 @@ import java.util.UUID;
 import org.junit.jupiter.api.Test;
 
 import com.arenella.recruit.candidates.beans.PendingCandidate;
-import com.arenella.recruit.candidates.enums.FREELANCE;
-import com.arenella.recruit.candidates.enums.PERM;
 
 /**
 * Unit tests for the PendingCandidateEntity class
@@ -20,8 +18,8 @@ public class PendingCandidateEntityTest {
 	private static final String 		firstname				= "Kevin";
 	private static final String 		surname					= "Parkings";
 	private static final String 		email					= "kparkings@gmail.com";
-	private static final FREELANCE 		freelance 				= FREELANCE.TRUE;
-	private static final PERM 			perm 					= PERM.TRUE;
+	private static final boolean 		freelance 				= true;
+	private static final boolean		perm 					= true;
 	
 	/**
 	* Tests that conversion returns an Entity representation of the 

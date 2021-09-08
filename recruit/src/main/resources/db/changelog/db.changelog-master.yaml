@@ -455,13 +455,13 @@ databaseChangeLog:
                     nullable: true
               - column:
                   name: perm
-                  type: VARCHAR(7)
+                  type: boolean
                   constraints:
                     nullable: false
                     default: false
               - column:
                   name: freelance
-                  type: VARCHAR(7)
+                  type: boolean
                   constraints:
                     nullable: false
                     default: false
