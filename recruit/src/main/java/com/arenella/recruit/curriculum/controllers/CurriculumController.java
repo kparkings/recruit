@@ -1,6 +1,7 @@
 package com.arenella.recruit.curriculum.controllers;
 
 import java.io.ByteArrayOutputStream;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.arenella.recruit.curriculum.beans.Curriculum;
+import com.arenella.recruit.curriculum.beans.PendingCurriculum;
 import com.arenella.recruit.curriculum.enums.FileType;
 import com.arenella.recruit.curriculum.services.CurriculumService;
 
@@ -73,5 +75,24 @@ public class CurriculumController {
 		return new ResponseEntity<>(new ByteArrayResource(stream.toByteArray()), header, HttpStatus.OK);
 		
 	}
+	
+	/**
+	* Uploads a Curriculum sent direct by a candidate. This is a Curriculum that needs to be 
+	* processed and accepted before it is available to the recruiters 
+	* @param curriculumFile - Candidates curriculum
+	* @return ResponseEntity
+	* @throws Exception
+	*/
+	@PostMapping(value="/pending-curriculum")
+	public ResponseEntity<UUID> uploadPendingCurriculum(@RequestParam("file") MultipartFile curriculumFile) throws Exception {
+		
+		String 			postFix						= curriculumFile.getOriginalFilename().substring(curriculumFile.getOriginalFilename().lastIndexOf('.')+1).toLowerCase();
+		UUID			curriculumId				= UUID.randomUUID();		
+		
+		this.curriculumService.persistPendingCurriculum(PendingCurriculum.builder().file(curriculumFile.getBytes()).fileType(FileType.valueOf(postFix)).id(curriculumId).build());
+		
+		return ResponseEntity.ok().body(curriculumId);
+		
+	}	
 	
 }

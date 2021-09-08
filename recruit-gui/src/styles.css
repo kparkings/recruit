@@ -29,6 +29,10 @@ body{
 	color:#F5F5F5;
 }
 
+.candidate-signup{
+	background:green;
+}
+
 .centerdiv{
     margin: 0 auto;
 }

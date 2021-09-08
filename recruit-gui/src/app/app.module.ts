@@ -15,8 +15,9 @@ import { NgbModule }					from '@ng-bootstrap/ng-bootstrap';
 import { MatIconModule }				from '@angular/material/icon';
 import { BrowserAnimationsModule }		from '@angular/platform-browser/animations';
 import { StatisticsComponent }			from './statistics/statistics.component';
-import { ChartsModule }				from 'ng2-charts';
-import { AccountsComponent } from './accounts/accounts.component';
+import { ChartsModule }					from 'ng2-charts';
+import { AccountsComponent } 			from './accounts/accounts.component';
+import { CreateCandidateComponent } 	from './create-candidate/create-candidate.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { AccountsComponent } from './accounts/accounts.component';
     LoginUserComponent,
     HomeComponent,
     StatisticsComponent,
-    AccountsComponent
+    AccountsComponent,
+    CreateCandidateComponent
   ],
   imports: [
     BrowserModule,

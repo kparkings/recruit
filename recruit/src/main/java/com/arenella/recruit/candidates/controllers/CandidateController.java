@@ -232,4 +232,15 @@ public class CandidateController {
 		
 	}
 	
+	/**
+	* Adds a new Candidate
+	* @param candidate - Contains candidate details
+	* @return id of the candidate
+	*/
+	//@PreAuthorize("hasRole('ROLE_ADMIN')")
+	//@PostMapping(path="pending-candidate", consumes="application/json", produces="application/json")
+	//public void addPendingCandidate(@RequestBody PendingCandidateAPIInbound candidate) {
+	//	candidateService.persistPendingCandidate(CandidateAPIInbound.convertToCandidate(candidate));
+	//}
+	
 }

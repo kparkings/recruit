@@ -71,7 +71,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements W
 	protected void configure(HttpSecurity http) throws Exception {
 		
 		http.csrf().disable();
-		//http.csrf().ignoringAntMatchers("/authenticate");
+		
 		http
 			.authorizeRequests()
 			
@@ -79,6 +79,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements W
 			.antMatchers("/candidate/stats/total-active").permitAll()
 			.antMatchers("/api/authenticate").permitAll() 
 			.antMatchers("/authenticate").permitAll() 
+			.antMatchers("/pending-curriculum").permitAll() 
 			.antMatchers(HttpMethod.OPTIONS,"/**").permitAll()
 			.anyRequest().authenticated().and()
 			.exceptionHandling().authenticationEntryPoint(authenticationEntryPoint)

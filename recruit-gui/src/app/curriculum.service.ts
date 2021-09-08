@@ -39,4 +39,18 @@ export class CurriculumService {
   
   }
 
+  /**
+  * Uploads a Pending Curriculum and returns details of the uploaded Curriculum 
+  */
+  public uploadPendingCurriculum(curriculum:File): Observable<any>{
+  
+  	var fd = new FormData();
+  	fd.append('file', curriculum);
+  
+  	const backendUrl:string = environment.backendUrl + 'pending-curriculum';
+  	
+    return this.httpClient.post<any>(backendUrl, fd, this.httpOptions);
+  
+  }
+  
 }
