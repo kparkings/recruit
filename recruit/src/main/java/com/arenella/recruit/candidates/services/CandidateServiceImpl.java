@@ -138,5 +138,15 @@ public class CandidateServiceImpl implements CandidateService{
 		this.pendingCandidateDao.save(PendingCandidateEntity.convertToEntity(pendingCandidate));
 		
 	}
+
+	/**
+	* Refer to the CandidateService Interface for Details
+	*/
+	@Override
+	public Set<PendingCandidate> getPendingCandidates() {
+		
+		return StreamSupport.stream(this.pendingCandidateDao.findAll().spliterator(), false)
+				.map(entity -> PendingCandidateEntity.convertFromEntity(entity)).collect(Collectors.toCollection(LinkedHashSet::new));
+	}
 	
 }

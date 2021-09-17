@@ -3,7 +3,10 @@ package com.arenella.recruit.candidates.controllers;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
@@ -24,7 +27,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 import com.arenella.recruit.candidates.beans.Candidate;
 import com.arenella.recruit.candidates.beans.CandidateFilterOptions;
+import com.arenella.recruit.candidates.beans.PendingCandidate;
 import com.arenella.recruit.candidates.controllers.CandidateController.CANDIDATE_UPDATE_ACTIONS;
+import com.arenella.recruit.candidates.entities.PendingCandidateEntity;
 import com.arenella.recruit.candidates.services.CandidateDownloadService;
 import com.arenella.recruit.candidates.services.CandidateService;
 
@@ -176,6 +181,47 @@ public class CandidateControllerTest {
 		Mockito.verify(this.mockCandidateService).flagCandidateAvailability(candidateId, flaggedAsUnavailable);
 		
 		assertEquals(HttpStatus.OK, response.getStatusCode());
+		
+	}
+	
+	/**
+	* Tests successful addition of a pending candidate 
+	* @throws Exception
+	*/
+	@Test
+	public void testAddPendingCandidate() throws Exception {
+		
+		Mockito.doNothing().when(mockCandidateService).persistPendingCandidate(Mockito.any(PendingCandidate.class));
+		
+		PendingCandidateAPIInbound pendingCandidate = PendingCandidateAPIInbound.builder().build();
+		
+		this.controller.addPendingCandidate(pendingCandidate);
+		
+		Mockito.verify(mockCandidateService).persistPendingCandidate(Mockito.any(PendingCandidate.class));
+	}
+
+	/**
+	* Tests retrieval of PendingCandidates
+	* @throws Exception
+	*/
+	@Test
+	public void testGetAllPendingCandidates() throws Exception {
+		
+		final String c1Id = "123e4567-e89b-12d3-a456-426614174000";
+		
+		Set<PendingCandidate> pendingCandidates = new HashSet<>();
+		
+		PendingCandidate c1 = PendingCandidate.builder().pendingCandidateId(UUID.fromString(c1Id)).build();
+		
+		pendingCandidates.add(c1);
+		
+		Mockito.when(mockCandidateService.getPendingCandidates()).thenReturn(pendingCandidates);
+		
+		ResponseEntity<Set<PendingCandidateAPIOutbound>> response = controller.getAllPendingCandidates();
+		
+		assertEquals(response.getStatusCode(), HttpStatus.OK);
+		
+		response.getBody().stream().filter(pc -> pc.getPendingCandidateId().toString().equals(c1Id)).findAny().orElseThrow();
 		
 	}
 	

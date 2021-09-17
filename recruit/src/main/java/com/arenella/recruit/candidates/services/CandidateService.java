@@ -57,5 +57,11 @@ public interface CandidateService {
 	* @param convertToPendingCandidate
 	*/
 	public void persistPendingCandidate(PendingCandidate pendingCandidate);
+
+	/**
+	* Return a Set of all PendingCandidats still to be processed
+	* @return
+	*/
+	public Set<PendingCandidate> getPendingCandidates();
 	
 }

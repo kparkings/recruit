@@ -1,7 +1,9 @@
 package com.arenella.recruit.candidates.controllers;
 
 import java.io.ByteArrayOutputStream;
+import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -240,6 +242,16 @@ public class CandidateController {
 	@PostMapping(path="pending-candidate", consumes="application/json", produces="application/json")
 	public void addPendingCandidate(@RequestBody PendingCandidateAPIInbound candidate) {
 		candidateService.persistPendingCandidate(PendingCandidateAPIInbound.convertToPendingCandidate(candidate));
+	}
+	
+	/**
+	* Returns a list of all PendingCandidates still to be processed 
+	* @return PendingCandidates
+	*/
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@GetMapping(path="pending-candidate", produces="application/json")
+	public ResponseEntity<Set<PendingCandidateAPIOutbound>> getAllPendingCandidates() {
+		return new ResponseEntity<>(candidateService.getPendingCandidates().stream().map(p -> PendingCandidateAPIOutbound.convertFromPendingCandidate(p)).collect(Collectors.toCollection(LinkedHashSet::new)), HttpStatus.OK);
 	}
 	
 }
