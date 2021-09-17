@@ -82,6 +82,17 @@ export class CandidateServiceService {
 	}
 	
 	/**
+	* Retrieves Pending candidates
+	*/
+	public fetchPendingCandidates():Observable<any>{
+		
+		const backendUrl:string = environment.backendUrl +'pending-candidate';
+		
+		return this.httpClient.get<any>(backendUrl, this.httpOptions);
+		
+	}
+	
+	/**
 	* Adds a new Candidate 
 	*/
 	public addCandidate(formBean:FormGroup): Observable<any>{

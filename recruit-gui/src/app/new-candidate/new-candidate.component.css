@@ -36,6 +36,20 @@
     height:350px;
 }
 
+.modal-title{
+	margin-left:20px;
+}
+
+
+.pendingCandidateBox-td{
+    font-size:12px;
+}
+
+.pendingCandidateBox-th{
+    font-size:12px;
+    font-weight:bold;
+}
+
 .modal-body{
     font-size: large;
     height:200px;

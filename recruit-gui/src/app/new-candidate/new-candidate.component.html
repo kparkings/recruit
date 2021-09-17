@@ -165,6 +165,7 @@
 </div>
 
 <ng-template #feedbackBox let-modal>
+
 	<div class="modal-header">
 		<h4 class="modal-title">&nbsp;</h4>
    		<div class="filter-close-box" (click)="closeModal()">X</div>
@@ -176,8 +177,40 @@
 	</div>
 </ng-template>
 
-
-
-        
-        
-    
+<ng-template #pendingCandidateBox let-modal>
+	
+	<div>
+		<div class="modal-header">
+		<h4 class="modal-title">Pending Candidates</h4>
+   		<div class="filter-close-box" (click)="closePendingCandidateModal()">X</div>
+ 	</div>
+	
+	<div class="modal-bod">
+	
+		<table class="table pendng-candidate-table" >
+			<thead>
+				<tr>
+					<th class="pendingCandidateBox-th">First Name</th>
+					<th class="pendingCandidateBox-th">Surname</th>
+					<th class="pendingCandidateBox-th">Email</th>
+					<th class="pendingCandidateBox-th">Options</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr *ngFor="let pendingCandidate of pendingCandidates">
+					<td class="pendingCandidateBox-td">{{pendingCandidate.firstname}}</td>
+					<td class="pendingCandidateBox-td">{{pendingCandidate.surname}}</td>
+					<td class="pendingCandidateBox-td">{{pendingCandidate.email}}</td>
+					<td class="pendingCandidateBox-td">
+						&nbsp;
+					</td>
+				</tr>
+			</tbody>
+		</table>
+			
+	</div> 
+	</div>
+	   
+	
+</ng-template>
+     

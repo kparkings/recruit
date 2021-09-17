@@ -57,7 +57,7 @@ public class SecRequestFilter extends OncePerRequestFilter {
 		/**
 		* We want to allow Candidates to upload their CVs before authentication
 		*/
-		if (request.getRequestURI().equals("/pending-curriculum") || request.getRequestURI().equals("/pending-candidate")) {
+		if (request.getRequestURI().equals("/pending-curriculum") || (request.getRequestURI().equals("/pending-candidate") && request.getMethod().equalsIgnoreCase("POST"))) {
 			filterChain.doFilter(request, response);
 			return;
 		}

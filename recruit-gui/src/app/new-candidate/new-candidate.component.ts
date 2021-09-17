@@ -6,6 +6,7 @@ import { CandidateFunction }							from '../candidate-function';
 import { NgbModal, NgbModalOptions}						from '@ng-bootstrap/ng-bootstrap';
 import { ViewChild }									from '@angular/core';
 import { Router}										from '@angular/router';
+import { PendingCandidate }								from './pending-candidate';
 
 @Component({
   selector: 'app-new-candidate',
@@ -15,79 +16,112 @@ import { Router}										from '@angular/router';
 export class NewCandidateComponent implements OnInit {
 
 @ViewChild('feedbackBox', { static: false }) private content:any;
+@ViewChild('pendingCandidateBox', { static: false }) private pendingCandidateBoxChild:any;
 
-   public functionTypes: Array<CandidateFunction> = new Array<CandidateFunction>();
+    public functionTypes:	 	Array<CandidateFunction> 	= new Array<CandidateFunction>();
+	public pendingCandidates: 	Array<PendingCandidate> 	= new Array<PendingCandidate>();
    
-   public formBean:FormGroup = new FormGroup({
+   	public formBean:FormGroup = new FormGroup({
      
-       candidateId:			new FormControl(''),
-       firstname:			new FormControl(),
-       surname:				new FormControl(),
-       email:				new FormControl(),
-       roleSought:			new FormControl(),
-       country:				new FormControl(),
-       city:				new FormControl(),
-       perm:				new FormControl(),
-       freelance:			new FormControl(),
-       dutch:				new FormControl(),
-       english:				new FormControl(),
-       french:				new FormControl(),
-       function:			new FormControl(),
-       yearsExperience:		new FormControl(),
-       skills:				new FormControl()
+		candidateId:			new FormControl(''),
+       	firstname:			new FormControl(),
+       	surname:				new FormControl(),
+       	email:				new FormControl(),
+       	roleSought:			new FormControl(),
+       	country:				new FormControl(),
+       	city:				new FormControl(),
+       	perm:				new FormControl(),
+       	freelance:			new FormControl(),
+       	dutch:				new FormControl(),
+       	english:				new FormControl(),
+       	french:				new FormControl(),
+       	function:			new FormControl(),
+       	yearsExperience:		new FormControl(),
+       	skills:				new FormControl()
 
-  });
+  	 });
 
-  /**
-  * Constructor
-  */
-  constructor(private curriculumService: CurriculumService , private candidateService: CandidateServiceService , private modalService: NgbModal, private router: Router) {
+	/**
+  	* Constructor
+  	*/
+  	constructor(private curriculumService: CurriculumService , private candidateService: CandidateServiceService , private modalService: NgbModal, private router: Router) {
     
-    this.candidateService.loadFunctionTypes().forEach(funcType => {
-      this.functionTypes.push(funcType);
-    });
+    	this.candidateService.loadFunctionTypes().forEach(funcType => {
+      		this.functionTypes.push(funcType);
+    	});
 
-  }
+		this.candidateService.fetchPendingCandidates().forEach(data => {
+			
+			let pendingCandidates: Array<PendingCandidate> = data;
+			
+			pendingCandidates.forEach(pc => {
+                    this.pendingCandidates.push(pc);
+                    console.log('ddd -> ' + JSON.stringify(pc));	
+            });
+			
+			if (this.isPendingCandidates()) {
+				this.openPendingCandidatesBox();
+			}
+		});
 
-  /**
-  *  Init 
-  */
-  ngOnInit(): void {
+  	}
 
-  }
+  	/**
+  	*  Init 
+  	*/
+  	ngOnInit(): void {
 
-  /**
-  * Registers a new Candidate with the backend
-  */
-  public addCandidate(): void {
-    this.candidateService.addCandidate(this.formBean).subscribe(d=>{
-      this.open('feedbackBox', "Success",  true)
-    });
-  };
+  	}
 
-  public feedbackBoxClass:string            = '';
-  public feedbackBoxTitle                   = '';
-  public feedbackBoxText:string             = '';
-
-
-  public open(content:any, msg:string, success:boolean):void {
+	/**
+	* Returns whether or not there are pending candidayes 
+	* waiting to be processed 
+	*/
+	public isPendingCandidates():boolean{
+		return this.pendingCandidates.length > 0;
+	}
+	
+	public openPendingCandidatesBox():void {
     
-    if (success) {
-      this.feedbackBoxTitle = 'Success';
-      this.feedbackBoxText = 'Candidate Added';
-      this.feedbackBoxClass = 'feedback-success';
-    } else {
-      this.feedbackBoxTitle = 'Failure';
-      this.feedbackBoxText = 'Unable to add Candidate';
-      this.feedbackBoxClass = 'feedback-failure';
-    }
+      	let options: NgbModalOptions = {
+     		centered: true
+   		};
 
-      let options: NgbModalOptions = {
-     centered: true
-   };
+  		this.modalService.open(this.pendingCandidateBoxChild, options);
+  	}
+	
 
-  this.modalService.open(this.content, options);
-  }
+	/**
+  	* Registers a new Candidate with the backend
+  	*/
+  	public addCandidate(): void {
+    	this.candidateService.addCandidate(this.formBean).subscribe(d=>{
+    	  this.open('feedbackBox', "Success",  true)
+    	});
+  	};
+
+  	public feedbackBoxClass:string            = '';
+  	public feedbackBoxTitle                   = '';
+  	public feedbackBoxText:string             = '';
+
+	public open(content:any, msg:string, success:boolean):void {
+    
+    	if (success) {
+    	  this.feedbackBoxTitle = 'Success';
+    	  this.feedbackBoxText = 'Candidate Added';
+    	  this.feedbackBoxClass = 'feedback-success';
+    	} else {
+    	  this.feedbackBoxTitle = 'Failure';
+    	  this.feedbackBoxText = 'Unable to add Candidate';
+    	  this.feedbackBoxClass = 'feedback-failure';
+    	}
+
+      	let options: NgbModalOptions = {
+     		centered: true
+   		};
+
+  		this.modalService.open(this.content, options);
+  	}
 
     /**
   *  Closes the confirm popup
@@ -95,6 +129,13 @@ export class NewCandidateComponent implements OnInit {
   public closeModal(): void {
     this.modalService.dismissAll();
     this.router.navigate(['view-candidates']);
+  }
+
+  /**
+  *  Closes the confirm popup
+  */
+  public closePendingCandidateModal(): void {
+    this.modalService.dismissAll();
   }
   
   private curriculumFile!:File;
