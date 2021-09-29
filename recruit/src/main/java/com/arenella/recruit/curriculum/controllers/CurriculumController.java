@@ -13,6 +13,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -94,5 +95,52 @@ public class CurriculumController {
 		return ResponseEntity.ok().body(curriculumId);
 		
 	}	
+	
+	/**
+	* Adds a Pending Curriculum as a standard Curriculum and deletes it from the PendingCurriculums
+	* @param pendingCurriculumId - PendingCurriculum to make active
+	* @return curriculumId
+	*/
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@PutMapping(value="/pending-curriculum/{pendingCurriculumId}")
+	public CurriculumUpdloadDetails makePendingCurriculumActive(@PathVariable("pendingCurriculumId") UUID pendingCurriculumId) throws Exception{
+		
+		PendingCurriculum 	pendingCurriculum 			= this.curriculumService.fetchPendingCurriculum(pendingCurriculumId);
+		long 				nextAvailableCurriculumId	= curriculumService.getNextCurriculumId();
+		
+		Curriculum curriculum = Curriculum
+									.builder()
+									.file(pendingCurriculum.getFile())
+									.fileType(pendingCurriculum.getFileType())
+									.id(String.valueOf(nextAvailableCurriculumId))
+									.build();
+		
+		this.curriculumService.deletePendingCurriculum(pendingCurriculumId);
+		
+		return curriculumService.extractDetails(curriculumService.persistCurriculum(curriculum), curriculum.getFileType(), curriculum.getFile());
+	}
+	
+	/**
+	* Downloads a PendingCurriculum
+	* @param pendingCurriculumId - Unique Id of the PendingCurriculum
+	* @return Bytes for pending Curriculum
+	* @throws Exception
+	*/
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@GetMapping(value="/pending-curriculum/{pendingCurriculumId}")
+	public ResponseEntity<ByteArrayResource> getCurriculum(@PathVariable("pendingCurriculumId")UUID pendingCurriculumId) throws Exception{
+		
+		PendingCurriculum 		pendingCurriculum 	= curriculumService.fetchPendingCurriculum(pendingCurriculumId);
+		ByteArrayOutputStream 	stream 				= new ByteArrayOutputStream(pendingCurriculum.getFile().length);
+		
+		stream.write(pendingCurriculum.getFile());
+		
+		HttpHeaders header = new HttpHeaders();
+		header.setContentType(new MediaType("application", "force-download"));
+		header.set(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=C"+pendingCurriculum.getId().get()+"." + pendingCurriculum.getFileType());
+		
+		return new ResponseEntity<>(new ByteArrayResource(stream.toByteArray()), header, HttpStatus.OK);
+		
+	} 
 	
 }

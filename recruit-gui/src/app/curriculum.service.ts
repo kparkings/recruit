@@ -52,5 +52,15 @@ export class CurriculumService {
     return this.httpClient.post<any>(backendUrl, fd, this.httpOptions);
   
   }
+
+	/**
+	* Sends request to make a Pending Curriculum active
+	*/
+	public makePendingCurriculumActive(pendingCurriculumId:string):Observable<any>{
+	
+		const backendUrl:string = environment.backendUrl + 'pending-curriculum/' +pendingCurriculumId;
+  	
+		return this.httpClient.put<any>(backendUrl, null, this.httpOptions);
+	}
   
 }

@@ -1,6 +1,7 @@
 package com.arenella.recruit.candidates.adapters;
 
 import java.util.Set;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -42,6 +43,13 @@ public class MonolithExternalEventPublisher implements ExternalEventPublisher{
 		}
 		
 		curriculumEventListener.listenForSearchedSkillsEvent(skills);
+	}
+	
+	/**
+	* Refer to ExternalEventPublisher for details 
+	*/
+	public void publishPendingCurriculumDeletedEvent(UUID pendingCurriculumId) {
+		curriculumEventListener.listenForPendingCurriculumDeletedEvent(pendingCurriculumId);
 	}
 
 }

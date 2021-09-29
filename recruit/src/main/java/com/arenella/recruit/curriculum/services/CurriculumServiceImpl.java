@@ -3,12 +3,14 @@ package com.arenella.recruit.curriculum.services;
 import java.io.IOException;
 import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.arenella.recruit.candidates.adapters.ExternalEventPublisher;
 import com.arenella.recruit.curriculum.beans.Curriculum;
 import com.arenella.recruit.curriculum.beans.CurriculumDownloadedEvent;
 import com.arenella.recruit.curriculum.beans.PendingCurriculum;
@@ -41,6 +43,9 @@ public class CurriculumServiceImpl implements CurriculumService{
 	
 	@Autowired
 	private SkillsDao						skillsDao;
+
+	@Autowired
+	private ExternalEventPublisher			externalEventPublisher;
 	
 	/**
 	* Refer to the CurriculumService interface for details
@@ -120,6 +125,29 @@ public class CurriculumServiceImpl implements CurriculumService{
 			return CurriculumUpdloadDetails.builder().id(curriculumId).build();
 		}
 				
+	}
+
+	/**
+	* Refer to the CurriculumService interface for details
+	*/
+	@Override
+	public PendingCurriculum fetchPendingCurriculum(UUID pendingCurriculumId) {
+		
+		if (!this.pendingCurriculumDao.existsById(pendingCurriculumId)) {
+			throw  new IllegalStateException("No matching pending curriculum for id: " + pendingCurriculumId.toString());
+		}
+		
+		return PendingCurriculumEntity.convertFromEntity(pendingCurriculumDao.findById(pendingCurriculumId).get());
+	
+	}
+
+	/**
+	* Refer to the CurriculumService interface for details
+	*/
+	@Override
+	public void deletePendingCurriculum(UUID pendingCurriculumId) {
+		this.pendingCurriculumDao.deleteById(pendingCurriculumId);
+		this.externalEventPublisher.publishPendingCurriculumDeletedEvent(pendingCurriculumId);
 	} 
 	
 

@@ -251,7 +251,10 @@ public class CandidateController {
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@GetMapping(path="pending-candidate", produces="application/json")
 	public ResponseEntity<Set<PendingCandidateAPIOutbound>> getAllPendingCandidates() {
-		return new ResponseEntity<>(candidateService.getPendingCandidates().stream().map(p -> PendingCandidateAPIOutbound.convertFromPendingCandidate(p)).collect(Collectors.toCollection(LinkedHashSet::new)), HttpStatus.OK);
+		
+		LinkedHashSet<PendingCandidateAPIOutbound> candidates = candidateService.getPendingCandidates().stream().map(p -> PendingCandidateAPIOutbound.convertFromPendingCandidate(p)).collect(Collectors.toCollection(LinkedHashSet::new));
+		
+		return new ResponseEntity<>(candidates, HttpStatus.OK);
 	}
 	
 }

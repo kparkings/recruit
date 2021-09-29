@@ -190,6 +190,7 @@
 		<table class="table pendng-candidate-table" >
 			<thead>
 				<tr>
+					<th class="pendingCandidateBox-th">&nbsp;</th>
 					<th class="pendingCandidateBox-th">First Name</th>
 					<th class="pendingCandidateBox-th">Surname</th>
 					<th class="pendingCandidateBox-th">Email</th>
@@ -197,10 +198,17 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr *ngFor="let pendingCandidate of pendingCandidates">
-					<td class="pendingCandidateBox-td">{{pendingCandidate.firstname}}</td>
-					<td class="pendingCandidateBox-td">{{pendingCandidate.surname}}</td>
-					<td class="pendingCandidateBox-td">{{pendingCandidate.email}}</td>
+				<tr class="pendingCandidateRow" *ngFor="let pendingCandidate of pendingCandidates">
+					<td>
+						<span class="material-icons">
+	      					<a class="currliculum-link" href="{{getPendingCurriculumDownloadUrl(pendingCandidate.pendingCandidateId)}}" >
+	      						insert_drive_file
+	      					</a>
+	      				</span>
+					</td>
+					<td class="pendingCandidateBox-td" (click)="loadPendingCandidate(pendingCandidate)">{{pendingCandidate.firstname}}</td>
+					<td class="pendingCandidateBox-td" (click)="loadPendingCandidate(pendingCandidate)">{{pendingCandidate.surname}}</td>
+					<td class="pendingCandidateBox-td" (click)="loadPendingCandidate(pendingCandidate)">{{pendingCandidate.email}}</td>
 					<td class="pendingCandidateBox-td">
 						&nbsp;
 					</td>

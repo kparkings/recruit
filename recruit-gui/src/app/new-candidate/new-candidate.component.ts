@@ -7,6 +7,7 @@ import { NgbModal, NgbModalOptions}						from '@ng-bootstrap/ng-bootstrap';
 import { ViewChild }									from '@angular/core';
 import { Router}										from '@angular/router';
 import { PendingCandidate }								from './pending-candidate';
+import { environment }									from '../../environments/environment';
 
 @Component({
   selector: 'app-new-candidate',
@@ -21,22 +22,26 @@ export class NewCandidateComponent implements OnInit {
     public functionTypes:	 	Array<CandidateFunction> 	= new Array<CandidateFunction>();
 	public pendingCandidates: 	Array<PendingCandidate> 	= new Array<PendingCandidate>();
    
-   	public formBean:FormGroup = new FormGroup({
+  	public selectOptionLangDutch:string = '';
+  	public selectOptionLangEnglish:string = '';
+  	public selectOptionLangFrench:string = '';
+
+	public formBean:FormGroup = new FormGroup({
      
-		candidateId:			new FormControl(''),
+		candidateId:		new FormControl(''),
        	firstname:			new FormControl(),
-       	surname:				new FormControl(),
+       	surname:			new FormControl(),
        	email:				new FormControl(),
        	roleSought:			new FormControl(),
-       	country:				new FormControl(),
+       	country:			new FormControl(),
        	city:				new FormControl(),
        	perm:				new FormControl(),
        	freelance:			new FormControl(),
        	dutch:				new FormControl(),
-       	english:				new FormControl(),
+       	english:			new FormControl(),
        	french:				new FormControl(),
        	function:			new FormControl(),
-       	yearsExperience:		new FormControl(),
+       	yearsExperience:	new FormControl(),
        	skills:				new FormControl()
 
   	 });
@@ -56,7 +61,6 @@ export class NewCandidateComponent implements OnInit {
 			
 			pendingCandidates.forEach(pc => {
                     this.pendingCandidates.push(pc);
-                    console.log('ddd -> ' + JSON.stringify(pc));	
             });
 			
 			if (this.isPendingCandidates()) {
@@ -157,11 +161,7 @@ export class NewCandidateComponent implements OnInit {
     	});
   		
   }
-  
-  public selectOptionLangDutch:string = '';
-  public selectOptionLangEnglish:string = '';
-  public selectOptionLangFrench:string = '';
- 
+   
   public isSelected(language:string):void{
       
       switch(language) {
@@ -206,4 +206,40 @@ export class NewCandidateComponent implements OnInit {
       }
       
   }
+	
+	/**
+	* Loads a PendingCandidates details intothe New candidate screen
+	*/
+	public loadPendingCandidate(pendingCandidate:PendingCandidate):void{
+		
+		this.curriculumService.makePendingCurriculumActive(pendingCandidate.pendingCandidateId).subscribe(candidate=>{
+      		this.formBean.get('candidateId')?.setValue(candidate.id);
+			this.formBean.get('firstname')?.setValue(pendingCandidate.firstname);
+			this.formBean.get('surname')?.setValue(pendingCandidate.surname);
+			this.formBean.get('email')?.setValue(pendingCandidate.email);
+			this.formBean.get('skills')?.setValue(candidate.skills.join(", "));
+			
+			if(pendingCandidate.perm) {
+				this.formBean.get('perm')?.setValue("TRUE");
+			} else {
+				this.formBean.get('perm')?.setValue("FALSE");
+			}
+			
+			if(pendingCandidate.freelance) {
+				this.formBean.get('freelance')?.setValue("TRUE");
+			} else {
+				this.formBean.get('freelance')?.setValue("FALSE");
+			}
+			this.closePendingCandidateModal();
+    	});
+		
+	}
+	
+	/**
+	* Returns URL to download pening curriculum
+	*/
+	public getPendingCurriculumDownloadUrl(pendingCandidateId:string):string{
+		return  environment.backendUrl + 'pending-curriculum/'+ pendingCandidateId;
+	}
+
 }

@@ -1,6 +1,7 @@
 package com.arenella.recruit.curriculum.services;
 
 import java.io.IOException;
+import java.util.UUID;
 
 import com.arenella.recruit.curriculum.beans.Curriculum;
 import com.arenella.recruit.curriculum.beans.PendingCurriculum;
@@ -51,6 +52,19 @@ public interface CurriculumService {
 	* @param  curriculumFileBytes	- bytes of the actual Curriculum file
 	* @Throws IOException
 	*/
-	CurriculumUpdloadDetails extractDetails(String curriculumId, FileType fileType, byte[] curriculumFileBytes) throws IOException;
+	public CurriculumUpdloadDetails extractDetails(String curriculumId, FileType fileType, byte[] curriculumFileBytes) throws IOException;
 	
+	/**
+	* Retrieves the PendingCurriculum 
+	* @param pendingCurriculumId - Unique Id of PendingCurriculum to fetch
+	* @return PendingCurriculum
+	*/
+	public PendingCurriculum fetchPendingCurriculum(UUID pendingCurriculumId);
+	
+	/**
+	* Deletes a Pending Curriculum
+	* @param pendingCurriculumId - Unique Id of the PendingCurriculum
+	*/
+	public void deletePendingCurriculum(UUID pendingCurriculumId);
+
 }

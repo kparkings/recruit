@@ -1,6 +1,7 @@
 package com.arenella.recruit.candidates.adapters;
 
 import java.util.Set;
+import java.util.UUID;
 
 /**
 * Defines functionality for publishing Events to external services 
@@ -14,5 +15,11 @@ public interface ExternalEventPublisher {
 	* @param skills - Skills used in Candidate Search
 	*/
 	public void publishSearchedSkillsEvent(Set<String> skills);
+	
+	/**
+	* Publishes an event when PendingCurriculum is deleted
+	* @param pendingCandidateId - Uniue Id of PendingCurriculum that was deleted
+	*/
+	public void publishPendingCurriculumDeletedEvent(UUID pendingCandidateId);
 	
 }
