@@ -1,5 +1,6 @@
 package com.arenella.recruit.curriculum.services;
 
+import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -14,6 +15,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 
+import com.arenella.recruit.candidates.adapters.ExternalEventPublisher;
 import com.arenella.recruit.curriculum.beans.Curriculum;
 import com.arenella.recruit.curriculum.beans.PendingCurriculum;
 import com.arenella.recruit.curriculum.controllers.CurriculumUpdloadDetails;
@@ -48,6 +50,8 @@ public class CurriculumServiceImplTest {
 	@Mock
 	private					Authentication					mockAuthentication;
 	
+	@Mock
+	private 				ExternalEventPublisher			mockExternalEventPublisher;
 	@InjectMocks
 	private static final 	CurriculumServiceImpl 	service 			= new CurriculumServiceImpl();
 	
@@ -211,6 +215,65 @@ public class CurriculumServiceImplTest {
 		assertEquals(id, 		pendingCurriculumCaptor.getValue().getCurriculumId());
 		assertEquals(fileType, 	pendingCurriculumCaptor.getValue().getFileType());
 		assertEquals(file, 		pendingCurriculumCaptor.getValue().getFile());
+		
+	}
+	
+	/**
+	* Tests exception is thrown if an attempt is made to fetch a non existing
+	* PendingCurriculum
+	* @throws Exception
+	*/
+	@Test
+	public void testFetchPendingCurriculum_unknownCurriculumId() throws Exception {
+		
+		assertThrows(IllegalArgumentException.class, () -> {
+	        service.fetchPendingCurriculum(UUID.randomUUID());
+	    });
+		
+	}
+	
+	/**
+	* Tests successful retrieval of PendingCurriculum
+	* @throws Exception
+	*/
+	@Test
+	public void testFetchPendingCurriculum_knownCurriculumId() throws Exception {
+		
+		UUID id = UUID.randomUUID();
+		
+		PendingCurriculumEntity entity = PendingCurriculumEntity
+														.builder()
+															.curriculumId(id)
+															.file(new byte[] {})
+															.fileType(FileType.doc)
+														.build();
+		
+		Mockito.when(mockPendingCurriculumDao.existsById(id)).thenReturn(true);
+		Mockito.when(mockPendingCurriculumDao.findById(id)).thenReturn(Optional.of(entity));
+		
+		PendingCurriculum pendingCurriculum = service.fetchPendingCurriculum(id);
+		
+		assertEquals(pendingCurriculum.getId().get(), entity.getCurriculumId());
+		assertEquals(pendingCurriculum.getFileType(), entity.getFileType());
+		
+	}
+	
+	/**
+	* Tests Curriculum is deleted and Event is published
+	* @throws Exception
+	*/
+	@Test
+	public void testDeletePendingCurriculum() throws Exception {
+		
+		UUID id = UUID.randomUUID();
+		
+		Mockito.doNothing().when(mockPendingCurriculumDao).deleteById(id);
+		Mockito.doNothing().when(mockExternalEventPublisher).publishPendingCurriculumDeletedEvent(id);
+		
+		service.deletePendingCurriculum(id);
+
+
+		Mockito.verify(mockExternalEventPublisher).publishPendingCurriculumDeletedEvent(id);
 		
 	}
 

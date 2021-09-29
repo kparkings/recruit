@@ -134,7 +134,7 @@ public class CurriculumServiceImpl implements CurriculumService{
 	public PendingCurriculum fetchPendingCurriculum(UUID pendingCurriculumId) {
 		
 		if (!this.pendingCurriculumDao.existsById(pendingCurriculumId)) {
-			throw  new IllegalStateException("No matching pending curriculum for id: " + pendingCurriculumId.toString());
+			throw  new IllegalArgumentException("No matching pending curriculum for id: " + pendingCurriculumId.toString());
 		}
 		
 		return PendingCurriculumEntity.convertFromEntity(pendingCurriculumDao.findById(pendingCurriculumId).get());

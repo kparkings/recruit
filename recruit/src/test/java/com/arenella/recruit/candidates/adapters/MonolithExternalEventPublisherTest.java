@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
@@ -85,4 +86,20 @@ public class MonolithExternalEventPublisherTest {
 		Mockito.verify(this.mockCurriculumEventListener, Mockito.never()).listenForSearchedSkillsEvent(Mockito.anySet());
 		
 	}
+
+	/**
+	* Tests listener is called when Event is published
+	* @throws Exception
+	*/
+	@Test
+	public void testPublishPendingCurriculumDeletedEvent() throws Exception {
+		
+		Mockito.doNothing().when(mockCurriculumEventListener).listenForPendingCurriculumDeletedEvent(Mockito.any());
+		
+		publisher.publishPendingCurriculumDeletedEvent(UUID.randomUUID());
+		
+		Mockito.verify(mockCurriculumEventListener).listenForPendingCurriculumDeletedEvent(Mockito.any());
+	
+	}
+
 }
