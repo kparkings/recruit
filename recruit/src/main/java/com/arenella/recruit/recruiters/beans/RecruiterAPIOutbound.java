@@ -1,16 +1,13 @@
-
 package com.arenella.recruit.recruiters.beans;
 
-import java.time.LocalDate;
+import com.arenella.recruit.recruiters.beans.Recruiter.language;
 
 /**
-* Class represents a Recruiter 
+* API Outbound representation of a Recruiter
 * @author K Parkings
 */
-public class Recruiter {
+public class RecruiterAPIOutbound {
 
-	public static enum language {ENGLISH, DUTCH, FRENCH}
-	
 	private String 		userId;
 	private String 		firstName;
 	private String 		surname;
@@ -18,13 +15,12 @@ public class Recruiter {
 	private String		companyName;
 	private boolean 	active			= true;
 	private language 	language;
-	private LocalDate	accountCreated;
 	
 	/**
 	* Constuctor based upon a builder
 	* @param builder - Contains initialization details
 	*/
-	public Recruiter(RecruiterBuilder builder) {
+	public RecruiterAPIOutbound(RecruiterAPIOutboundBuilder builder) {
 		
 		this.userId 			= builder.userId;
 		this.firstName 			= builder.firstName;
@@ -33,7 +29,6 @@ public class Recruiter {
 		this.companyName 		= builder.companyName;
 		this.active 			= builder.active;
 		this.language 			= builder.language;
-		this.accountCreated 	= builder.accountCreated;
 		
 	}
 	
@@ -96,26 +91,18 @@ public class Recruiter {
 	}
 
 	/**
-	* Returns the date the recruiters account was created
-	* @return
-	*/
-	public LocalDate getAccountCreated() {
-		return accountCreated;
-	}
-	
-	/**
 	* Returns a Builder for the Recruiter class
 	* @return Builder for the Recruiter class
 	*/
-	public static RecruiterBuilder builder() {
-		return new RecruiterBuilder();
+	public static RecruiterAPIOutboundBuilder builder() {
+		return new RecruiterAPIOutboundBuilder();
 	}
 	
 	/**
 	* Builder for the Recruiter class 
 	* @author K Parkings
 	*/
-	public static class RecruiterBuilder{
+	public static class RecruiterAPIOutboundBuilder{
 		
 		private String 		userId;
 		private String 		firstName;
@@ -124,14 +111,13 @@ public class Recruiter {
 		private String		companyName;
 		private boolean 	active			= true;
 		private language 	language;
-		private LocalDate	accountCreated;
 		
 		/**
 		* Sets the userId associated with the Recruiter
 		* @param userId - Unique userId for the Recruiter
 		* @return Builder
 		*/
-		public RecruiterBuilder userId(String userId) {
+		public RecruiterAPIOutboundBuilder userId(String userId) {
 			this.userId = userId;
 			return this;
 		}
@@ -141,7 +127,7 @@ public class Recruiter {
 		* @param firstName - Firstname of the Recruiter
 		* @return Builder
 		*/
-		public RecruiterBuilder firstName(String firstName) {
+		public RecruiterAPIOutboundBuilder firstName(String firstName) {
 			this.firstName = firstName;
 			return this;
 		}
@@ -151,7 +137,7 @@ public class Recruiter {
 		* @param surname - Surname of the Recruiter
 		* @return Builder
 		*/
-		public RecruiterBuilder surname(String surname) {
+		public RecruiterAPIOutboundBuilder surname(String surname) {
 			this.surname = surname;
 			return this;
 		}
@@ -161,7 +147,7 @@ public class Recruiter {
 		* @param email - Email address of the Recruiter
 		* @return Builder
 		*/
-		public RecruiterBuilder email(String email) {
+		public RecruiterAPIOutboundBuilder email(String email) {
 			this.email = email;
 			return this;
 		}
@@ -171,7 +157,7 @@ public class Recruiter {
 		* @param companyName - Name of the Company the Recruiter works for
 		* @return Builder
 		*/
-		public RecruiterBuilder companyName(String companyName) {
+		public RecruiterAPIOutboundBuilder companyName(String companyName) {
 			this.companyName = companyName;
 			return this;
 		}
@@ -181,7 +167,7 @@ public class Recruiter {
 		* @param active - Whether or not the account is active
 		* @return Builder
 		*/
-		public RecruiterBuilder isActive(boolean active) {
+		public RecruiterAPIOutboundBuilder isActive(boolean active) {
 			this.active = active;
 			return this;
 		}
@@ -191,18 +177,8 @@ public class Recruiter {
 		* @param language - Language spoken by the Recruiter
 		* @return Builder
 		*/
-		public RecruiterBuilder language(language language) {
+		public RecruiterAPIOutboundBuilder language(language language) {
 			this.language = language;
-			return this;
-		}
-		
-		/**
-		* Sets the Data the Recruiter was created
-		* @param accountCreated - Date account was created
-		* @return Builder
-		*/
-		public RecruiterBuilder accountCreated(LocalDate accountCreated) {
-			this.accountCreated = accountCreated;
 			return this;
 		}
 		
@@ -211,8 +187,8 @@ public class Recruiter {
 		* values in the builder
 		* @return Initalized instance of Recruiter
 		*/
-		public Recruiter build() {
-			return new Recruiter(this);
+		public RecruiterAPIOutbound build() {
+			return new RecruiterAPIOutbound(this);
 		}
 		
 	}

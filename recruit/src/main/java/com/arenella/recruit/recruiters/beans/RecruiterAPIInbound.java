@@ -1,39 +1,32 @@
-
 package com.arenella.recruit.recruiters.beans;
 
-import java.time.LocalDate;
+import com.arenella.recruit.recruiters.beans.Recruiter.language;
 
 /**
-* Class represents a Recruiter 
+* Inbound API representation of a Recruiter
 * @author K Parkings
 */
-public class Recruiter {
+public class RecruiterAPIInbound {
 
-	public static enum language {ENGLISH, DUTCH, FRENCH}
-	
 	private String 		userId;
 	private String 		firstName;
 	private String 		surname;
 	private String 		email;
 	private String		companyName;
-	private boolean 	active			= true;
 	private language 	language;
-	private LocalDate	accountCreated;
 	
 	/**
 	* Constuctor based upon a builder
 	* @param builder - Contains initialization details
 	*/
-	public Recruiter(RecruiterBuilder builder) {
+	public RecruiterAPIInbound(RecruiterAPIInboundBuilder builder) {
 		
 		this.userId 			= builder.userId;
 		this.firstName 			= builder.firstName;
 		this.surname 			= builder.surname;
 		this.email 				= builder.email;
 		this.companyName 		= builder.companyName;
-		this.active 			= builder.active;
 		this.language 			= builder.language;
-		this.accountCreated 	= builder.accountCreated;
 		
 	}
 	
@@ -79,15 +72,6 @@ public class Recruiter {
 	}
 	
 	/**
-	* Returns whether or not the Recruiter account is 
-	* active
-	* @return whether the account is active
-	*/
-	public boolean isAvtive(){
-		return active;
-	}
-	
-	/**
 	* Returns the language spoken by the Recruiter
 	* @return language spoken by the recruiter
 	*/
@@ -96,42 +80,32 @@ public class Recruiter {
 	}
 
 	/**
-	* Returns the date the recruiters account was created
-	* @return
-	*/
-	public LocalDate getAccountCreated() {
-		return accountCreated;
-	}
-	
-	/**
 	* Returns a Builder for the Recruiter class
 	* @return Builder for the Recruiter class
 	*/
-	public static RecruiterBuilder builder() {
-		return new RecruiterBuilder();
+	public static RecruiterAPIInboundBuilder builder() {
+		return new RecruiterAPIInboundBuilder();
 	}
 	
 	/**
 	* Builder for the Recruiter class 
 	* @author K Parkings
 	*/
-	public static class RecruiterBuilder{
+	public static class RecruiterAPIInboundBuilder{
 		
 		private String 		userId;
 		private String 		firstName;
 		private String 		surname;
 		private String 		email;
 		private String		companyName;
-		private boolean 	active			= true;
 		private language 	language;
-		private LocalDate	accountCreated;
 		
 		/**
 		* Sets the userId associated with the Recruiter
 		* @param userId - Unique userId for the Recruiter
 		* @return Builder
 		*/
-		public RecruiterBuilder userId(String userId) {
+		public RecruiterAPIInboundBuilder userId(String userId) {
 			this.userId = userId;
 			return this;
 		}
@@ -141,7 +115,7 @@ public class Recruiter {
 		* @param firstName - Firstname of the Recruiter
 		* @return Builder
 		*/
-		public RecruiterBuilder firstName(String firstName) {
+		public RecruiterAPIInboundBuilder firstName(String firstName) {
 			this.firstName = firstName;
 			return this;
 		}
@@ -151,7 +125,7 @@ public class Recruiter {
 		* @param surname - Surname of the Recruiter
 		* @return Builder
 		*/
-		public RecruiterBuilder surname(String surname) {
+		public RecruiterAPIInboundBuilder surname(String surname) {
 			this.surname = surname;
 			return this;
 		}
@@ -161,7 +135,7 @@ public class Recruiter {
 		* @param email - Email address of the Recruiter
 		* @return Builder
 		*/
-		public RecruiterBuilder email(String email) {
+		public RecruiterAPIInboundBuilder email(String email) {
 			this.email = email;
 			return this;
 		}
@@ -171,18 +145,8 @@ public class Recruiter {
 		* @param companyName - Name of the Company the Recruiter works for
 		* @return Builder
 		*/
-		public RecruiterBuilder companyName(String companyName) {
+		public RecruiterAPIInboundBuilder companyName(String companyName) {
 			this.companyName = companyName;
-			return this;
-		}
-		
-		/**
-		* Sets whether or not the account for the Recruiter is active
-		* @param active - Whether or not the account is active
-		* @return Builder
-		*/
-		public RecruiterBuilder isActive(boolean active) {
-			this.active = active;
 			return this;
 		}
 		
@@ -191,18 +155,8 @@ public class Recruiter {
 		* @param language - Language spoken by the Recruiter
 		* @return Builder
 		*/
-		public RecruiterBuilder language(language language) {
+		public RecruiterAPIInboundBuilder language(language language) {
 			this.language = language;
-			return this;
-		}
-		
-		/**
-		* Sets the Data the Recruiter was created
-		* @param accountCreated - Date account was created
-		* @return Builder
-		*/
-		public RecruiterBuilder accountCreated(LocalDate accountCreated) {
-			this.accountCreated = accountCreated;
 			return this;
 		}
 		
@@ -211,8 +165,8 @@ public class Recruiter {
 		* values in the builder
 		* @return Initalized instance of Recruiter
 		*/
-		public Recruiter build() {
-			return new Recruiter(this);
+		public RecruiterAPIInbound build() {
+			return new RecruiterAPIInbound(this);
 		}
 		
 	}
