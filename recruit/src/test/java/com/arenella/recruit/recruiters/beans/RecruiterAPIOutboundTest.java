@@ -32,7 +32,7 @@ public class RecruiterAPIOutboundTest {
 															.companyName(companyName)
 															.email(email)
 															.firstName(firstName)
-															.isActive(active)
+															.active(active)
 															.language(language)
 															.surname(surname)
 															.userId(userId)
@@ -41,7 +41,7 @@ public class RecruiterAPIOutboundTest {
 		assertEquals(recruiter.getCompanyName(), 	companyName);
 		assertEquals(recruiter.getEmail(), 			email);
 		assertEquals(recruiter.getFirstName(), 		firstName);
-		assertEquals(recruiter.isAvtive(), 			active);
+		assertEquals(recruiter.isActive(), 			active);
 		assertEquals(recruiter.getLanguage(), 		language);
 		assertEquals(recruiter.getSurname(), 		surname);
 		assertEquals(recruiter.getUserId(), 		userId);

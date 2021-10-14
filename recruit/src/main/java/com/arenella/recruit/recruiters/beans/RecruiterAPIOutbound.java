@@ -78,7 +78,7 @@ public class RecruiterAPIOutbound {
 	* active
 	* @return whether the account is active
 	*/
-	public boolean isAvtive(){
+	public boolean isActive(){
 		return active;
 	}
 	
@@ -167,7 +167,7 @@ public class RecruiterAPIOutbound {
 		* @param active - Whether or not the account is active
 		* @return Builder
 		*/
-		public RecruiterAPIOutboundBuilder isActive(boolean active) {
+		public RecruiterAPIOutboundBuilder active(boolean active) {
 			this.active = active;
 			return this;
 		}
@@ -191,6 +191,26 @@ public class RecruiterAPIOutbound {
 			return new RecruiterAPIOutbound(this);
 		}
 		
+	}
+	
+	/**
+	* Converts a Domain representation of a Recruiter to a 
+	* API Outbound representation
+	* @param recruiter - Domain representation to convert
+	* @return API Outbound version representation of the Recruiter
+	*/
+	public static RecruiterAPIOutbound convertFromDomain(Recruiter recruiter) {
+		
+		return RecruiterAPIOutbound
+								.builder()
+									.companyName(recruiter.getCompanyName())
+									.email(recruiter.getEmail())
+									.firstName(recruiter.getFirstName())
+									.active(recruiter.isActive())
+									.language(recruiter.getLanguage())
+									.surname(recruiter.getSurname())
+									.userId(recruiter.getUserId())
+								.build();
 	}
 	
 }

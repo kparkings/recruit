@@ -16,7 +16,7 @@ public class Recruiter {
 	private String 		surname;
 	private String 		email;
 	private String		companyName;
-	private boolean 	active			= true;
+	private boolean 	active;
 	private language 	language;
 	private LocalDate	accountCreated;
 	
@@ -83,7 +83,7 @@ public class Recruiter {
 	* active
 	* @return whether the account is active
 	*/
-	public boolean isAvtive(){
+	public boolean isActive(){
 		return active;
 	}
 	
@@ -112,6 +112,28 @@ public class Recruiter {
 	}
 	
 	/**
+	* Disables the Recruiters account 
+	*/
+	public void disableAccount() {
+		this.active = false;
+	}
+	
+	/**
+	* Activated the Recruiters account. If this is the 
+	* first time the account has been activated (I.e a new Recruiter) 
+	* it will also set the accountCreated to the current date
+	*/
+	public void activateAccount() {
+		
+		if (this.accountCreated == null) {
+			this.accountCreated = LocalDate.now();
+		}
+		
+		this.active = true;
+		
+	}
+	
+	/**
 	* Builder for the Recruiter class 
 	* @author K Parkings
 	*/
@@ -122,7 +144,7 @@ public class Recruiter {
 		private String 		surname;
 		private String 		email;
 		private String		companyName;
-		private boolean 	active			= true;
+		private boolean 	active;
 		private language 	language;
 		private LocalDate	accountCreated;
 		
@@ -132,7 +154,7 @@ public class Recruiter {
 		* @return Builder
 		*/
 		public RecruiterBuilder userId(String userId) {
-			this.userId = userId;
+			this.userId = userId.toLowerCase().trim();
 			return this;
 		}
 		
@@ -142,7 +164,7 @@ public class Recruiter {
 		* @return Builder
 		*/
 		public RecruiterBuilder firstName(String firstName) {
-			this.firstName = firstName;
+			this.firstName = firstName.toLowerCase().trim();
 			return this;
 		}
 		
@@ -152,7 +174,7 @@ public class Recruiter {
 		* @return Builder
 		*/
 		public RecruiterBuilder surname(String surname) {
-			this.surname = surname;
+			this.surname = surname.toLowerCase().trim();
 			return this;
 		}
 		
@@ -162,7 +184,7 @@ public class Recruiter {
 		* @return Builder
 		*/
 		public RecruiterBuilder email(String email) {
-			this.email = email;
+			this.email = email.toLowerCase().trim();
 			return this;
 		}
 		
@@ -172,7 +194,7 @@ public class Recruiter {
 		* @return Builder
 		*/
 		public RecruiterBuilder companyName(String companyName) {
-			this.companyName = companyName;
+			this.companyName = companyName.toLowerCase().trim();
 			return this;
 		}
 		
@@ -181,7 +203,7 @@ public class Recruiter {
 		* @param active - Whether or not the account is active
 		* @return Builder
 		*/
-		public RecruiterBuilder isActive(boolean active) {
+		public RecruiterBuilder active(boolean active) {
 			this.active = active;
 			return this;
 		}

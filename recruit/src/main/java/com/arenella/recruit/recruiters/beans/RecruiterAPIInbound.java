@@ -1,11 +1,14 @@
 package com.arenella.recruit.recruiters.beans;
 
 import com.arenella.recruit.recruiters.beans.Recruiter.language;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 
 /**
 * Inbound API representation of a Recruiter
 * @author K Parkings
 */
+@JsonDeserialize(builder=RecruiterAPIInbound.RecruiterAPIInboundBuilder.class)
 public class RecruiterAPIInbound {
 
 	private String 		userId;
@@ -91,6 +94,7 @@ public class RecruiterAPIInbound {
 	* Builder for the Recruiter class 
 	* @author K Parkings
 	*/
+	@JsonPOJOBuilder(buildMethodName="build", withPrefix="")
 	public static class RecruiterAPIInboundBuilder{
 		
 		private String 		userId;
@@ -169,6 +173,24 @@ public class RecruiterAPIInbound {
 			return new RecruiterAPIInbound(this);
 		}
 		
+	}
+	
+	/**
+	* Converts an Inbound API representation of a Recruiter to a
+	* Domain representation
+	* @param recruiter - API Inbound representation
+	* @return Domain representation
+	*/
+	public static Recruiter convertToDomin(RecruiterAPIInbound recruiter) {
+		return Recruiter
+				.builder()
+					.companyName(recruiter.getCompanyName())
+					.email(recruiter.getEmail())
+					.firstName(recruiter.getFirstName())
+					.language(recruiter.getLanguage())
+					.surname(recruiter.getSurname())
+					.userId(recruiter.userId)
+				.build();
 	}
 	
 }
