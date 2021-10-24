@@ -1,8 +1,10 @@
 import { Component, OnInit } 					from '@angular/core';
 import { FormGroup, FormControl }				from '@angular/forms';
 import { AccountsService }						from '../accounts.service';
+import { RecruiterService }						from '../recruiter.service';
 import { CandidateServiceService }				from '../candidate-service.service';
 import { Candidate }							from './candidate';
+import { Recruiter }							from './recruiter';
 import { environment }							from '../../environments/environment';
 import { Router}								from '@angular/router';
 
@@ -15,6 +17,7 @@ import { Router}								from '@angular/router';
 export class AccountsComponent implements OnInit {
 	
 	currentTab:string 							= "recruiters";
+	showRecruitersCreateTab:boolean				= false;
 	showCandidatesTab:boolean					= false;
 	showRecruitersTab:boolean					= true;
 	showFlaggedAsUnavailableTab:boolean			= false;
@@ -22,6 +25,8 @@ export class AccountsComponent implements OnInit {
 	recruiterUsername:string					= '';
 	recruiterPassword:string					= '';
 	candidates:Array<Candidate>					= new Array<Candidate>();
+	recruiters:Array<Recruiter>					= new Array<Recruiter>();
+	recruiterCount:number						= 0;
 	
 	public candidateFormGroup:FormGroup = new FormGroup({
 		firstname:	new FormControl(''),
@@ -29,12 +34,19 @@ export class AccountsComponent implements OnInit {
 		email:		new FormControl('')
 	});
 	
-	constructor(private accountsService: AccountsService, public candidateService:CandidateServiceService, private router: Router) { }
+	constructor(private recruiterService:RecruiterService, private accountsService: AccountsService, public candidateService:CandidateServiceService, private router: Router) {
+		this.fetchRecruiters();
+	 }
 
   	ngOnInit(): void {}
 
 	public createRecruiterAccountForm:FormGroup = new FormGroup({
     	proposedUserName:new FormControl(''),
+		firstName:new FormControl(''),
+		surname:new FormControl(''), 
+		email:new FormControl(''), 
+		companyName:new FormControl(''), 
+		language:new FormControl(''),
     });
 
 	public switchTab(tab:string){
@@ -42,19 +54,30 @@ export class AccountsComponent implements OnInit {
 		this.currentTab = tab;
 		
 		switch(tab){
+			case "recruitersCreate":{
+				this.showRecruitersCreateTab=true;
+				this.showCandidatesTab=false;
+				this.showRecruitersTab=false;
+				this.showFlaggedAsUnavailableTab=false;
+				break;
+			}
 			case "candidates":{
+				this.showRecruitersCreateTab=false;
 				this.showCandidatesTab=true;
 				this.showRecruitersTab=false;
 				this.showFlaggedAsUnavailableTab=false;
 				break;
 			}
 			case "recruiters":{
+				this.showRecruitersCreateTab=false;
 				this.showCandidatesTab=false;
 				this.showRecruitersTab=true;
 				this.showFlaggedAsUnavailableTab=false;
+				this.fetchRecruiters();
 				break;
 			}
 			case "flaggedAsUnavailable":{
+				this.showRecruitersCreateTab=false;
 				this.showCandidatesTab=false;
 				this.showRecruitersTab=false;
 				this.showFlaggedAsUnavailableTab=true;
@@ -87,6 +110,23 @@ export class AccountsComponent implements OnInit {
 			this.recruiterUsername					= data.username;
 			this.recruiterPassword					= data.password;      		
 			this.createAccountDetailsAvailable 		= true;
+			
+			let firstName:string 	= this.createRecruiterAccountForm.get('firstName')!.value;
+			let surname:string 		= this.createRecruiterAccountForm.get('surname')!.value;
+			let email:string 		= this.createRecruiterAccountForm.get('email')!.value;
+			let companyName:string 	= this.createRecruiterAccountForm.get('companyName')!.value;
+			let language:string 	= this.createRecruiterAccountForm.get('language')!.value;
+			
+			//TODO: Add validation so only valid Recruiters can be sent to backend
+			
+			this.recruiterService.registerRecruiter(this.recruiterUsername, firstName, surname, email, companyName, language).subscribe( data => {
+  				//TODO: update recruiters list      
+		
+				this.createRecruiterAccountForm.reset();
+		
+			}, err => {
+				console.log("Failed to add Recruiter " + err);
+	    	})
 			
 		});
 	}
@@ -179,7 +219,33 @@ export class AccountsComponent implements OnInit {
     	})
 
 	} 
-	
+
+	/**
+	* Retrieves candidates from the backend
+	*/
+	public fetchRecruiters(): void{
+		
+		this.recruiterCount 	= 0;
+		this.recruiters 		= new Array<Recruiter>();
+		
+    	this.recruiterService.getRecruiters().subscribe( data => {
+  
+				data.forEach((r:Recruiter) => {
+      				this.recruiters.push(r);
+					this.recruiterCount = this.recruiterCount +1;
+			});
+        
+		}, err => {
+			
+			if (err.status === 401 || err.status === 0) {
+				sessionStorage.removeItem('isAdmin');
+				sessionStorage.removeItem('isRecruter');
+				sessionStorage.removeItem('loggedIn');
+				sessionStorage.setItem('beforeAuthPage', 'view-candidates');
+				this.router.navigate(['login-user']);
+			}
+    	})
+	}	
 	
 	/**
 	* Retrieves candidates from the backend

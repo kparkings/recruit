@@ -7,9 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.arenella.recruit.recruiters.beans.RecruiterAPIInbound;
@@ -32,7 +34,7 @@ public class RecruiterController {
 	*/
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@PostMapping(value="/recruiter")
-	public ResponseEntity<Void> addRecruiter(RecruiterAPIInbound recruiter) {
+	public ResponseEntity<Void> addRecruiter(@RequestBody RecruiterAPIInbound recruiter) {
 		
 		recruiterService.addRecruiter(RecruiterAPIInbound.convertToDomin(recruiter));
 		
@@ -55,7 +57,7 @@ public class RecruiterController {
 	* @return
 	*/
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	@PostMapping(value="/recruiter")
+	@GetMapping(value="/recruiter")
 	public Set<RecruiterAPIOutbound> fetchRecruiters(){
 		return recruiterService.fetchRecruiters().stream().map(r -> RecruiterAPIOutbound.convertFromDomain(r)).collect(Collectors.toSet());
 	}

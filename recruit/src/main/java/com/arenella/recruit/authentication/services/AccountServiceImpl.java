@@ -82,7 +82,7 @@ public class AccountServiceImpl implements AccountService{
 		
 		final String 	code 		=	String.valueOf(x.nextInt()).substring(1,5);
 		
-		String passwordUnencoded = username + code + "!";
+		String passwordUnencoded = username + "!" + code;
 		
 		return passwordUnencoded;
 		

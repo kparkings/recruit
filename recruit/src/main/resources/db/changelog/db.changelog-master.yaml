@@ -465,4 +465,56 @@ databaseChangeLog:
                   constraints:
                     nullable: false
                     default: false
-              
+  - changeSet:
+      id: recruiter_relacement_version
+      author: kparkings
+      changes:
+      -  dropTable:  
+            cascadeConstraints:  true  
+            schemaName: recruiter  
+            tableName: recruiter
+      - createTable:
+            tableName: recruiter
+            schemaName: recruiter
+            columns:
+              - column:
+                  name: user_id
+                  type: varchar
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: firstname
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: surname
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: email
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: company_name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: active
+                  type: boolean
+                  constraints:
+                    nullable: false
+              - column:
+                  name: language_spoken
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: account_created
+                  type: timestamp
+                  constraints:
+                    nullable: false

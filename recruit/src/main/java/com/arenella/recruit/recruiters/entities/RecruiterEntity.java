@@ -4,7 +4,10 @@ import java.time.LocalDate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 import com.arenella.recruit.recruiters.beans.Recruiter;
 import com.arenella.recruit.recruiters.beans.Recruiter.language;
@@ -14,9 +17,16 @@ import com.arenella.recruit.recruiters.beans.Recruiter.language;
 * @author K Parkings
 */
 @Entity
+@Table(schema="recruiter", name="recruiter")
 public class RecruiterEntity {
 
+	/**
+	* For Hibernate 
+	*/
+	public RecruiterEntity() {}
+	
 	@Id
+	@Column(name="user_id")
 	private String 		userId;
 	
 	@Column(name="firstname")
@@ -35,6 +45,7 @@ public class RecruiterEntity {
 	private boolean 	active			= true;
 	
 	@Column(name="language_spoken")
+	@Enumerated(EnumType.STRING)
 	private language 	language;
 	
 	@Column(name="account_created")
