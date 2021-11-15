@@ -9,5 +9,5 @@ import org.springframework.data.repository.CrudRepository;
 * @author K Parkings
 */
 public interface ListingDao extends CrudRepository<ListingEntity, UUID>{
-
+	
 }

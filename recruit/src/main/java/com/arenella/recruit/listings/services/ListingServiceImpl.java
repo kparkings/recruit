@@ -5,6 +5,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.arenella.recruit.listings.beans.Listing;
@@ -28,9 +29,11 @@ public class ListingServiceImpl implements ListingService{
 	@Override
 	public UUID addListing(Listing listing) {
 		
-		ListingEntity entity = null; //TODO: Assign UUID to Entity before Save
+		ListingEntity entity = ListingEntity.builder().build(); //TODO: Assign UUID to Entity before Save
 		
 		this.listingDao.save(entity);
+		
+		//TODO: Post on LinkedIN
 		
 		return UUID.randomUUID(); //TODO: Return UUID from new Entity
 	}
@@ -40,12 +43,12 @@ public class ListingServiceImpl implements ListingService{
 	*/
 	@Override
 	public void updateListing(UUID listingId, Listing listing) {
-		//Check Listing exists
-		if (!this.listingDao.existsById(listingId)) {
-			//Exception
-		}
+		
+		ListingEntity 	entity 			= this.listingDao.findById(listingId).orElseThrow(() -> new IllegalArgumentException("Cannot update unknown listing: " + listingId));
+		String 			currentUser		= SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
 		
 		//Check Recruiter is owner of the Listing
+		
 	}
 
 	/**
@@ -54,9 +57,9 @@ public class ListingServiceImpl implements ListingService{
 	@Override
 	public void deleteListing(UUID listingId) {
 		
-		if (!this.listingDao.existsById(listingId)) {
-			//Exception
-		} 
+		ListingEntity 	entity 			= this.listingDao.findById(listingId).orElseThrow(() -> new IllegalArgumentException("Cannot delete unknown listing: " + listingId));
+		String 			currentUser		= SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+		
 		//Check Recruiter is owner of the Listing
 	}
 
