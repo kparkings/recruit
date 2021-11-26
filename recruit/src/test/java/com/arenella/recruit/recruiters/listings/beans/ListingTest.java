@@ -29,6 +29,9 @@ public class ListingTest {
 
 	private final UUID 				listingId			= UUID.randomUUID();
 	private final String			ownerId				= "kparking";
+	private final String			ownerName			= "Kevin Parkings";
+	private final String 			ownerCompany		= "Arenella BV";
+	private final String			ownerEmail			= "kparkings@gmail.com";
 	private final LocalDate 		created				= LocalDate.of(2021, 11, 24);
 	private final String 			title				= "aTitle";
 	private final String 			description			= "aDesc";
@@ -39,7 +42,11 @@ public class ListingTest {
 	private final Set<language> 	languages			= new LinkedHashSet<>();
 	private final float 			rate				= 115.0f;
 	private final currency			currency			= Listing.currency.EUR;
+	private final int				views				= 10;
 	
+	/**
+	* Sets up test environment 
+	*/
 	@BeforeEach
 	public void init() {
 		this.languages.add(language.DUTCH);
@@ -63,10 +70,14 @@ public class ListingTest {
 								.listingId(listingId)
 								.location(location)
 								.ownerId(ownerId)
+								.ownerName(ownerName)
+								.ownerCompany(ownerCompany)
+								.ownerEmail(ownerEmail)
 								.rate(rate)
 								.title(title)
 								.type(type)
 								.yearsExperience(yearsExperience)
+								.views(views)
 							.build();
 		
 		assertEquals(country, 			listing.getCountry());
@@ -80,6 +91,10 @@ public class ListingTest {
 		assertEquals(title,	 			listing.getTitle());
 		assertEquals(type, 				listing.getType());
 		assertEquals(yearsExperience, 	listing.getYearsExperience());
+		assertEquals(views, 			listing.getViews());
+		assertEquals(ownerName, 		listing.getOwnerName());
+		assertEquals(ownerCompany, 		listing.getOwnerCompany());
+		assertEquals(ownerEmail, 		listing.getOwnerEmail());
 		
 		assertTrue(listing.getLanguages().contains(Listing.language.DUTCH));
 		assertTrue(listing.getLanguages().contains(Listing.language.FRENCH));
@@ -112,12 +127,36 @@ public class ListingTest {
 		
 		assertNull(listing.getListingId());
 		assertNull(listing.getOwnerId());		
+		assertNull(listing.getCreated());
 		
-		listing.generateListingId();
+		listing.initializeAsNewListing();
 		listing.setOwnerId(ownerId);
 		
 		assertEquals(ownerId, 			listing.getOwnerId());
 		assertTrue(listing.getListingId() instanceof UUID);
+		assertTrue(listing.getCreated() instanceof LocalDate);
+		
+	}
+	
+	/**
+	* Tests that the number of views increase by 1 each time
+	* the method is called 
+	* @throws Exception
+	*/
+	@Test
+	public void testIncrementViews() throws Exception{
+		
+		Listing listing = Listing.builder().build();
+		
+		assertEquals(0, listing.getViews());
+		
+		listing.incrementViews();
+		
+		assertEquals(1, listing.getViews());
+		
+		listing.incrementViews();
+		
+		assertEquals(2, listing.getViews());
 		
 	}
 	

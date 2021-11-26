@@ -29,7 +29,7 @@ public class ListingServiceImpl implements ListingService{
 	@Override
 	public UUID addListing(Listing listing, boolean postToSocialMedia) {
 		
-		listing.generateListingId();
+		listing.initializeAsNewListing();
 		listing.setOwnerId(SecurityContextHolder.getContext().getAuthentication().getName());
 		
 		ListingEntity entity = ListingEntity.builder().build(); 

@@ -75,4 +75,13 @@ public class ListingController {
 		return ResponseEntity.status(HttpStatus.OK).body(Page.empty());
 	}
 	
+	/**
+	* Returns single Listing based upon the ListingId
+	* @return Listing associated with listingId
+	*/
+	@GetMapping(value="/listing/{listingId}")
+	public ResponseEntity<CandidateAPIOutbound> fetchListing(@PathVariable UUID listingId){
+		return ResponseEntity.status(HttpStatus.OK).body(null);
+	}
+	
 }

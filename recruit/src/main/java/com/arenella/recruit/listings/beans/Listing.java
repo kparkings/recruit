@@ -19,6 +19,9 @@ public class Listing {
 	
 	private UUID 				listingId;
 	private String				ownerId;
+	private String				ownerName;
+	private String 				ownerCompany;
+	private String				ownerEmail;
 	private LocalDate 			created;
 	private String 				title;
 	private String 				description;
@@ -29,7 +32,7 @@ public class Listing {
 	private Set<language> 		languages			= new LinkedHashSet<>();
 	private float 				rate;
 	private currency			currency;
-	//private int views;
+	private int 				views;
 	
 	/**
 	* Constructor based upon a builder
@@ -39,6 +42,9 @@ public class Listing {
 		
 		this.listingId 			= builder.listingId;
 		this.ownerId 			= builder.ownerId;
+		this.ownerName			= builder.ownerName;
+		this.ownerCompany		= builder.ownerCompany;
+		this.ownerEmail			= builder.ownerEmail;
 		this.created 			= builder.created;
 		this.title 				= builder.title;
 		this.description 		= builder.description;
@@ -48,6 +54,7 @@ public class Listing {
 		this.yearsExperience 	= builder.yearsExperience;
 		this.rate 				= builder.rate;
 		this.currency 			= builder.currency;
+		this.views				= builder.views;
 		
 		this.languages.addAll(builder.languages);
 		
@@ -67,6 +74,32 @@ public class Listing {
 	*/
 	public String getOwnerId() {
 		return this.ownerId;
+	}
+	
+	/**
+	* Returns the name of the owner of the Listing 
+	* @return Name of Owner of the Listing
+	*/
+	public String getOwnerName() {
+		return this.ownerName;
+	}
+	
+	/**
+	* Returns the Name of the company the 
+	* Owner of the Listing is working for
+	* @return Owners company
+	*/
+	public String getOwnerCompany() {
+		return this.ownerCompany;
+	}
+	
+	/**
+	* Returns the Email address to contact he Owner 
+	* about the Listing on
+	* @return Email address to contact the Owner of the Listing
+	*/
+	public String getOwnerEmail() {
+		return this.ownerEmail;
 	}
 	
 	/**
@@ -151,10 +184,20 @@ public class Listing {
 	}
 	
 	/**
-	* Generates a unique Id for the Listing
+	* Returns the number of times the Listing has been viewed
+	* @return number of times the Listing has been viewed
 	*/
-	public void generateListingId() {
-		this.listingId = UUID.randomUUID();
+	public int getViews() {
+		return this.views;
+	}
+	
+	/**
+	* Generates a unique Id for the Listing and sets
+	* the created data
+	*/
+	public void initializeAsNewListing() {
+		this.listingId 	= UUID.randomUUID();
+		this.created 	= LocalDate.now();
 	}
 	
 	/**
@@ -163,6 +206,14 @@ public class Listing {
 	*/
 	public void setOwnerId(String ownerId) {
 		this.ownerId = ownerId;
+	}
+	
+	/**
+	* Increased the number of Views the Listing has received
+	* by 1 
+	*/
+	public void incrementViews() {
+		this.views = this.views +1;
 	}
 	
 	/**
@@ -181,6 +232,9 @@ public class Listing {
 
 		private UUID 				listingId;
 		private String				ownerId;
+		private String				ownerName;
+		private String 				ownerCompany;
+		private String				ownerEmail;
 		private LocalDate 			created;
 		private String 				title;
 		private String 				description;
@@ -191,6 +245,7 @@ public class Listing {
 		private Set<language> 		languages			= new LinkedHashSet<>();
 		private float 				rate;
 		private currency			currency;
+		private int					views;
 		
 		/**
 		* Sets the Unique Identifier for the Listing
@@ -209,6 +264,38 @@ public class Listing {
 		*/
 		public ListingBuilder ownerId(String ownerId) {
 			this.ownerId = ownerId;
+			return this;
+		}
+		
+		/**
+		* Sets the name of the Owner of the Listing
+		* @param ownerName - Listing owners name
+		* @return Builder
+		*/
+		public ListingBuilder ownerName(String ownerName) {
+			this.ownerName = ownerName;
+			return this;
+		}
+		
+		/**
+		* Sets the name of the Company the Listing was created 
+		* on behalf of 
+		* @param ownerCompany - Company Owner of Listing works for
+		* @return Builder
+		*/
+		public ListingBuilder ownerCompany(String ownerCompany) {
+			this.ownerCompany = ownerCompany;
+			return this;
+		}
+		
+		/**
+		* Sets the email address to use to contact the Owner of the 
+		* Listing
+		* @param ownerEmail - Email address to contact the Owner
+		* @return Builder
+		*/
+		public ListingBuilder ownerEmail(String ownerEmail) {
+			this.ownerEmail = ownerEmail;
 			return this;
 		}
 		
@@ -311,6 +398,16 @@ public class Listing {
 		*/
 		public ListingBuilder currency(currency currency) {
 			this.currency = currency;
+			return this;
+		}
+		
+		/**
+		* Sets the number of times the Listing has been viewed
+		* @param views - Number of views the Listing has received
+		* @return Builder
+		*/
+		public ListingBuilder views(int views) {
+			this.views = views;
 			return this;
 		}
 		

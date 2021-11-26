@@ -21,6 +21,9 @@ import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 public class ListingAPIInbound {
 
 	private UUID 				listingId;
+	private String				ownerName;
+	private String 				ownerCompany;
+	private String				ownerEmail;
 	private String 				title;
 	private String 				description;
 	private listing_type 		type;
@@ -39,6 +42,9 @@ public class ListingAPIInbound {
 	public ListingAPIInbound(ListingAPIInboundBuilder builder) {
 		
 		this.listingId 			= builder.listingId;
+		this.ownerName			= builder.ownerName;
+		this.ownerCompany		= builder.ownerCompany;
+		this.ownerEmail			= builder.ownerEmail;
 		this.title 				= builder.title;
 		this.description 		= builder.description;
 		this.type 				= builder.type;
@@ -59,6 +65,32 @@ public class ListingAPIInbound {
 	*/
 	public UUID getListingId() {
 		return this.listingId;
+	}
+	
+	/**
+	* Returns the name of the owner of the Listing 
+	* @return Name of Owner of the Listing
+	*/
+	public String getOwnerName() {
+		return this.ownerName;
+	}
+	
+	/**
+	* Returns the Name of the company the 
+	* Owner of the Listing is working for
+	* @return Owners company
+	*/
+	public String getOwnerCompany() {
+		return this.ownerCompany;
+	}
+	
+	/**
+	* Returns the Email address to contact he Owner 
+	* about the Listing on
+	* @return Email address to contact the Owner of the Listing
+	*/
+	public String getOwnerEmail() {
+		return this.ownerEmail;
 	}
 	
 	/**
@@ -159,6 +191,9 @@ public class ListingAPIInbound {
 	public static class ListingAPIInboundBuilder{
 
 		private UUID 				listingId;
+		private String				ownerName;
+		private String 				ownerCompany;
+		private String				ownerEmail;
 		private String 				title;
 		private String 				description;
 		private listing_type 		type;
@@ -177,6 +212,38 @@ public class ListingAPIInbound {
 		*/
 		public ListingAPIInboundBuilder listingId(UUID listingId) {
 			this.listingId = listingId;
+			return this;
+		}
+		
+		/**
+		* Sets the name of the Owner of the Listing
+		* @param ownerName - Listing owners name
+		* @return Builder
+		*/
+		public ListingAPIInboundBuilder ownerName(String ownerName) {
+			this.ownerName = ownerName;
+			return this;
+		}
+		
+		/**
+		* Sets the name of the Company the Listing was created 
+		* on behalf of 
+		* @param ownerCompany - Company Owner of Listing works for
+		* @return Builder
+		*/
+		public ListingAPIInboundBuilder ownerCompany(String ownerCompany) {
+			this.ownerCompany = ownerCompany;
+			return this;
+		}
+		
+		/**
+		* Sets the email address to use to contact the Owner of the 
+		* Listing
+		* @param ownerEmail - Email address to contact the Owner
+		* @return Builder
+		*/
+		public ListingAPIInboundBuilder ownerEmail(String ownerEmail) {
+			this.ownerEmail = ownerEmail;
 			return this;
 		}
 		
@@ -312,6 +379,9 @@ public class ListingAPIInbound {
 					.title(inbound.getTitle())
 					.type(inbound.getType())
 					.yearsExperience(inbound.getYearsExperience())
+					.ownerName(inbound.getOwnerName())
+					.ownerCompany(inbound.getOwnerCompany())
+					.ownerEmail(inbound.getOwnerEmail())
 				.build();
 		
 	}

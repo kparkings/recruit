@@ -1,7 +1,6 @@
 package com.arenella.recruit.recruiters.listings.controllers;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.time.LocalDate;
@@ -11,21 +10,26 @@ import java.util.UUID;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.arenella.recruit.listings.beans.Listing;
 import com.arenella.recruit.listings.beans.Listing.country;
 import com.arenella.recruit.listings.beans.Listing.currency;
 import com.arenella.recruit.listings.beans.Listing.language;
 import com.arenella.recruit.listings.beans.Listing.listing_type;
-import com.arenella.recruit.listings.controllers.ListingAPIInbound;
+import com.arenella.recruit.listings.controllers.ListingAPIOutbound;
 
 /**
-* Unit tests for the ListingAPIInbound class
+* Unit tests for the ListingAPIOutbound class
 * @author K Parkings
 */
-public class ListingAPIInboundTest {
+@ExtendWith(MockitoExtension.class)
+public class ListingAPIOutboundTest {
 
 	private final UUID 				listingId			= UUID.randomUUID();
+	private final String			ownerId				= "kparking";
+	private final LocalDate 		created				= LocalDate.of(2021, 11, 24);
 	private final String 			title				= "aTitle";
 	private final String 			description			= "aDesc";
 	private final listing_type 		type		 		= listing_type.CONTRACT_ROLE;
@@ -35,6 +39,7 @@ public class ListingAPIInboundTest {
 	private final Set<language> 	languages			= new LinkedHashSet<>();
 	private final float 			rate				= 115.0f;
 	private final currency			currency			= Listing.currency.EUR;
+	private final int				views				= 10;
 	private final String			ownerName			= "Kevin Parkings";
 	private final String 			ownerCompany		= "Arenella BV";
 	private final String			ownerEmail			= "kparkings@gmail.com";
@@ -55,40 +60,44 @@ public class ListingAPIInboundTest {
 	@Test
 	public void testBuilder() throws Exception {
 		
-		ListingAPIInbound listing = ListingAPIInbound
-							.builder()
-								.country(country)
-								.currency(currency)
-								.description(description)
-								.languages(languages)
-								.listingId(listingId)
-								.location(location)
-								.rate(rate)
-								.title(title)
-								.type(type)
-								.yearsExperience(yearsExperience)
-								.postToSocialMedia(true)
-								.ownerName(ownerName)
-								.ownerCompany(ownerCompany)
-								.ownerEmail(ownerEmail)
-							.build();
+		ListingAPIOutbound listing = ListingAPIOutbound
+												.builder()
+													.country(country)
+													.created(created)
+													.currency(currency)
+													.description(description)
+													.languages(languages)
+													.listingId(listingId)
+													.location(location)
+													.ownerId(ownerId)
+													.ownerName(ownerName)
+													.ownerCompany(ownerCompany)
+													.ownerEmail(ownerEmail)
+													.rate(rate)
+													.title(title)
+													.type(type)
+													.yearsExperience(yearsExperience)
+													.views(views)
+												.build();
 		
 		assertEquals(country, 			listing.getCountry());
+		assertEquals(created, 			listing.getCreated());
 		assertEquals(currency, 			listing.getCurrency());
 		assertEquals(description, 		listing.getDescription());
 		assertEquals(listingId, 		listing.getListingId());
 		assertEquals(location, 			listing.getLocation());
+		assertEquals(ownerId, 			listing.getOwnerId());
 		assertEquals(rate, 				listing.getRate(), 0);
 		assertEquals(title,	 			listing.getTitle());
 		assertEquals(type, 				listing.getType());
 		assertEquals(yearsExperience, 	listing.getYearsExperience());
+		assertEquals(views, 			listing.getViews());
 		assertEquals(ownerName, 		listing.getOwnerName());
 		assertEquals(ownerCompany, 		listing.getOwnerCompany());
 		assertEquals(ownerEmail, 		listing.getOwnerEmail());
 		
 		assertTrue(listing.getLanguages().contains(Listing.language.DUTCH));
 		assertTrue(listing.getLanguages().contains(Listing.language.FRENCH));
-		assertTrue(listing.isPostToSocialMedia());
 		assertEquals(listing.getLanguages().size(), 2);
 		
 	}
@@ -101,60 +110,62 @@ public class ListingAPIInboundTest {
 	@Test
 	public void testBuilder_defaults() throws Exception {
 		
-		ListingAPIInbound listing = ListingAPIInbound.builder().build();
+		ListingAPIOutbound listing = ListingAPIOutbound.builder().build();
 		
 		assertTrue(listing.getLanguages().isEmpty());
-		
-		assertFalse(listing.isPostToSocialMedia());
 		
 	}
 	
 	/**
-	* Tests conversion from API Inbound version of Listing to Domain representaion
+	* Tests conversion from Domain version of Listing to API 
+	* Outbound representaion
 	* @throws Exception
 	*/
 	@Test
 	public void testConvertFromListing() throws Exception {
 	
-		ListingAPIInbound inbound = ListingAPIInbound
-												.builder()
-													.country(country)
-													.currency(currency)
-													.description(description)
-													.languages(languages)
-													.listingId(listingId)
-													.location(location)
-													.rate(rate)
-													.title(title)
-													.type(type)
-													.yearsExperience(yearsExperience)
-													.ownerName(ownerName)
-													.ownerCompany(ownerCompany)
-													.ownerEmail(ownerEmail)
-												.build();
+		Listing listing = Listing
+				.builder()
+					.country(country)
+					.created(created)
+					.currency(currency)
+					.description(description)
+					.languages(languages)
+					.listingId(listingId)
+					.location(location)
+					.ownerId(ownerId)
+					.ownerName(ownerName)
+					.ownerCompany(ownerCompany)
+					.ownerEmail(ownerEmail)
+					.rate(rate)
+					.title(title)
+					.type(type)
+					.yearsExperience(yearsExperience)
+					.views(views)
+				.build();
 		
-		Listing listing = ListingAPIInbound.convertToListing(inbound);
+		ListingAPIOutbound outbound = ListingAPIOutbound.convertFromListing(listing);
 		
-		assertEquals(country, 			listing.getCountry());
-		assertEquals(null,	 			listing.getCreated());
-		assertEquals(currency, 			listing.getCurrency());
-		assertEquals(description, 		listing.getDescription());
-		assertEquals(listingId, 		listing.getListingId());
-		assertEquals(location, 			listing.getLocation());
-		assertEquals(null,	 			listing.getOwnerId());
-		assertEquals(rate, 				listing.getRate(), 0);
-		assertEquals(title,	 			listing.getTitle());
-		assertEquals(type, 				listing.getType());
-		assertEquals(yearsExperience, 	listing.getYearsExperience());
-		assertEquals(0, 				listing.getViews());
-		assertEquals(ownerName, 		listing.getOwnerName());
-		assertEquals(ownerCompany, 		listing.getOwnerCompany());
-		assertEquals(ownerEmail, 		listing.getOwnerEmail());
+		assertEquals(country, 			outbound.getCountry());
+		assertEquals(created, 			outbound.getCreated());
+		assertEquals(currency, 			outbound.getCurrency());
+		assertEquals(description, 		outbound.getDescription());
+		assertEquals(listingId, 		outbound.getListingId());
+		assertEquals(location, 			outbound.getLocation());
+		assertEquals(ownerId, 			outbound.getOwnerId());
+		assertEquals(rate, 				outbound.getRate(), 0);
+		assertEquals(title,	 			outbound.getTitle());
+		assertEquals(type, 				outbound.getType());
+		assertEquals(yearsExperience, 	outbound.getYearsExperience());
+		assertEquals(views, 			outbound.getViews());
+		assertEquals(ownerName, 		outbound.getOwnerName());
+		assertEquals(ownerCompany, 		outbound.getOwnerCompany());
+		assertEquals(ownerEmail, 		outbound.getOwnerEmail());
 		
-		assertTrue(listing.getLanguages().contains(Listing.language.DUTCH));
-		assertTrue(listing.getLanguages().contains(Listing.language.FRENCH));
-		assertEquals(listing.getLanguages().size(), 2);
+		assertTrue(outbound.getLanguages().contains(Listing.language.DUTCH));
+		assertTrue(outbound.getLanguages().contains(Listing.language.FRENCH));
+		assertEquals(outbound.getLanguages().size(), 2);
 		
 	}
-	
+		
 }
