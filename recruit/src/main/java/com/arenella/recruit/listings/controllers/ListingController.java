@@ -40,7 +40,7 @@ public class ListingController {
 	@PreAuthorize("hasRole('ROLE_RECRUITER')")
 	@PostMapping(value="/listing/")
 	public ResponseEntity<UUID> addListing(@RequestBody ListingAPIInbound listing){
-		return ResponseEntity.status(HttpStatus.CREATED).body(service.addListing(null));
+		return ResponseEntity.status(HttpStatus.CREATED).body(service.addListing(ListingAPIInbound.convertToListing(listing), listing.isPostToSocialMedia()));
 	}
 	
 	/**

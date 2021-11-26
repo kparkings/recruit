@@ -16,10 +16,11 @@ public interface ListingService {
 
 	/**
 	* Adds a new Listing
-	* @param listing - Details of new Listing
+	* @param listing 			- Details of new Listing
+	* @param postToSocialMedia 	- Whether or not to post the Listing on Social Media
 	* @return Unique Id for new Listing
 	*/
-	public UUID addListing(Listing listing);
+	public UUID addListing(Listing listing, boolean postToSocialMedia);
 	
 	/**
 	* Updates an Existing Listing

@@ -29,6 +29,7 @@ public class Listing {
 	private Set<language> 		languages			= new LinkedHashSet<>();
 	private float 				rate;
 	private currency			currency;
+	//private int views;
 	
 	/**
 	* Constructor based upon a builder
@@ -147,6 +148,21 @@ public class Listing {
 	*/
 	public currency	getCurrency() {
 		return this.currency;
+	}
+	
+	/**
+	* Generates a unique Id for the Listing
+	*/
+	public void generateListingId() {
+		this.listingId = UUID.randomUUID();
+	}
+	
+	/**
+	* Sets the unique id of the owner of the Listing
+	* @param ownerId - Unique Id of the Owner
+	*/
+	public void setOwnerId(String ownerId) {
+		this.ownerId = ownerId;
 	}
 	
 	/**

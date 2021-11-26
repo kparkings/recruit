@@ -4,17 +4,21 @@ import java.util.Optional;
 import java.util.UUID;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.core.Authentication;
 
 import com.arenella.recruit.listings.beans.Listing;
 import com.arenella.recruit.listings.dao.ListingDao;
 import com.arenella.recruit.listings.dao.ListingEntity;
 import com.arenella.recruit.listings.services.ListingServiceImpl;
+
+import org.springframework.security.core.context.SecurityContextHolder;
 
 /**
 * Unit tests for the ListingService class
@@ -29,6 +33,20 @@ public class ListingServiceImplTest {
 	@Mock
 	private ListingDao 			mockListingDao;
 	
+	@Mock
+	private	Authentication		mockAuthentication;
+	
+	/**
+	* Sets up test environment
+	* @throws Exception
+	*/
+	@BeforeEach
+	public void init() throws Exception {
+	
+		SecurityContextHolder.getContext().setAuthentication(mockAuthentication);
+		
+	}
+	
 	/**
 	* Tests happy path for Listing creation
 	* @throws Exception
@@ -36,9 +54,9 @@ public class ListingServiceImplTest {
 	@Test
 	public void testAddListing() throws Exception {
 		
-		final Listing 			listing 		= null;
+		final Listing 			listing 		= Listing.builder().build();
 		
-		UUID listingId = service.addListing(listing);
+		UUID listingId = service.addListing(listing, true);
 		
 		if (!(listingId instanceof UUID)) {
 			throw new RuntimeException();

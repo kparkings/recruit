@@ -1,35 +1,30 @@
-package com.arenella.recruit.recruiters.listings.beans;
+package com.arenella.recruit.recruiters.listings.controllers;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import java.time.LocalDate;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.UUID;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.arenella.recruit.listings.beans.Listing;
 import com.arenella.recruit.listings.beans.Listing.country;
 import com.arenella.recruit.listings.beans.Listing.currency;
 import com.arenella.recruit.listings.beans.Listing.language;
 import com.arenella.recruit.listings.beans.Listing.listing_type;
+import com.arenella.recruit.listings.controllers.ListingAPIInbound;
 
 /**
-* Unit tests for the Listing class
+* Unit tests for the ListingAPIInbound class
 * @author K Parkings
 */
-@ExtendWith(MockitoExtension.class)
-public class ListingTest {
+public class ListingAPIInboundTest {
 
 	private final UUID 				listingId			= UUID.randomUUID();
-	private final String			ownerId				= "kparking";
-	private final LocalDate 		created				= LocalDate.of(2021, 11, 24);
 	private final String 			title				= "aTitle";
 	private final String 			description			= "aDesc";
 	private final listing_type 		type		 		= listing_type.CONTRACT_ROLE;
@@ -40,6 +35,9 @@ public class ListingTest {
 	private final float 			rate				= 115.0f;
 	private final currency			currency			= Listing.currency.EUR;
 	
+	/**
+	* Sets up test environment 
+	*/
 	@BeforeEach
 	public void init() {
 		this.languages.add(language.DUTCH);
@@ -53,29 +51,26 @@ public class ListingTest {
 	@Test
 	public void testBuilder() throws Exception {
 		
-		Listing listing = Listing
+		ListingAPIInbound listing = ListingAPIInbound
 							.builder()
 								.country(country)
-								.created(created)
 								.currency(currency)
 								.description(description)
 								.languages(languages)
 								.listingId(listingId)
 								.location(location)
-								.ownerId(ownerId)
 								.rate(rate)
 								.title(title)
 								.type(type)
 								.yearsExperience(yearsExperience)
+								.postToSocialMedia(true)
 							.build();
 		
 		assertEquals(country, 			listing.getCountry());
-		assertEquals(created, 			listing.getCreated());
 		assertEquals(currency, 			listing.getCurrency());
 		assertEquals(description, 		listing.getDescription());
 		assertEquals(listingId, 		listing.getListingId());
 		assertEquals(location, 			listing.getLocation());
-		assertEquals(ownerId, 			listing.getOwnerId());
 		assertEquals(rate, 				listing.getRate(), 0);
 		assertEquals(title,	 			listing.getTitle());
 		assertEquals(type, 				listing.getType());
@@ -83,6 +78,7 @@ public class ListingTest {
 		
 		assertTrue(listing.getLanguages().contains(Listing.language.DUTCH));
 		assertTrue(listing.getLanguages().contains(Listing.language.FRENCH));
+		assertTrue(listing.isPostToSocialMedia());
 		assertEquals(listing.getLanguages().size(), 2);
 		
 	}
@@ -95,29 +91,11 @@ public class ListingTest {
 	@Test
 	public void testBuilder_defaults() throws Exception {
 		
-		Listing listing = Listing.builder().build();
+		ListingAPIInbound listing = ListingAPIInbound.builder().build();
 		
 		assertTrue(listing.getLanguages().isEmpty());
 		
-	}
-	
-	/**
-	* Tests Setter methods set values correctly
-	* @throws Exception
-	*/
-	@Test
-	public void testSetters() throws Exception {
-		
-		Listing listing = Listing.builder().build();
-		
-		assertNull(listing.getListingId());
-		assertNull(listing.getOwnerId());		
-		
-		listing.generateListingId();
-		listing.setOwnerId(ownerId);
-		
-		assertEquals(ownerId, 			listing.getOwnerId());
-		assertTrue(listing.getListingId() instanceof UUID);
+		assertFalse(listing.isPostToSocialMedia());
 		
 	}
 	

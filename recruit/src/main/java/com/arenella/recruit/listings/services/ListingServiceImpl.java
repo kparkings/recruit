@@ -27,15 +27,20 @@ public class ListingServiceImpl implements ListingService{
 	* Refer to the Listing interface for details
 	*/
 	@Override
-	public UUID addListing(Listing listing) {
+	public UUID addListing(Listing listing, boolean postToSocialMedia) {
 		
-		ListingEntity entity = ListingEntity.builder().build(); //TODO: Assign UUID to Entity before Save
+		listing.generateListingId();
+		listing.setOwnerId(SecurityContextHolder.getContext().getAuthentication().getName());
+		
+		ListingEntity entity = ListingEntity.builder().build(); 
 		
 		this.listingDao.save(entity);
 		
-		//TODO: Post on LinkedIN
+		if (postToSocialMedia) {
+			//TODO: Post on LinkedIN 
+		}
 		
-		return UUID.randomUUID(); //TODO: Return UUID from new Entity
+		return listing.getListingId(); 
 	}
 
 	/**

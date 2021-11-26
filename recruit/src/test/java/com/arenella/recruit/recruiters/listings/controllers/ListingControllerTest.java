@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.UUID;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -14,6 +15,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import com.arenella.recruit.candidates.controllers.CandidateAPIOutbound;
 import com.arenella.recruit.listings.controllers.ListingAPIInbound;
@@ -28,13 +31,27 @@ import com.arenella.recruit.listings.services.ListingService;
 public class ListingControllerTest {
 	
 	@Mock
-	private Pageable 		mockPageable;
+	private Pageable 			mockPageable;
 	
 	@Mock
-	private ListingService 	mockListingService;
+	private ListingService 		mockListingService;
+	
+	@Mock
+	private	Authentication		mockAuthentication;
 	
 	@InjectMocks
-	private ListingController controller = new ListingController();
+	private ListingController 	controller 				= new ListingController();
+	
+	/**
+	* Sets up test environment
+	* @throws Exception
+	*/
+	@BeforeEach
+	public void init() throws Exception {
+	
+		SecurityContextHolder.getContext().setAuthentication(mockAuthentication);
+		
+	}
 	
 	/**
 	* Test successful addition of a new Listing
@@ -43,9 +60,9 @@ public class ListingControllerTest {
 	@Test
 	public void testAddListing() throws Exception{
 		
-		ListingAPIInbound 	listing 		= null;
+		ListingAPIInbound 	listing 		= ListingAPIInbound.builder().build();
 		
-		Mockito.when(mockListingService.addListing(Mockito.any())).thenReturn(UUID.randomUUID());
+		Mockito.when(mockListingService.addListing(Mockito.any(), Mockito.anyBoolean())).thenReturn(UUID.randomUUID());
 		
 		ResponseEntity<UUID> response = controller.addListing(listing);
 		
@@ -65,7 +82,7 @@ public class ListingControllerTest {
 	public void testUpdateListing() throws Exception{
 		
 		UUID				listingId		= UUID.randomUUID();
-		ListingAPIInbound 	listing 		= null;
+		ListingAPIInbound 	listing 		= ListingAPIInbound.builder().build();
 		
 		ResponseEntity<Void> response = controller.updateListing(listingId, listing);
 		
