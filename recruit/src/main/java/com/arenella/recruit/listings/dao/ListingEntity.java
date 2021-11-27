@@ -70,8 +70,13 @@ public class ListingEntity {
 	
 	@Column(name="languages")
 	@ElementCollection(targetClass=language.class)
-	@CollectionTable(schema="candidate", name="listing_language", joinColumns=@JoinColumn(name="listing_id"))
+	@CollectionTable(schema="listings", name="listing_language", joinColumns=@JoinColumn(name="listing_id"))
 	private Set<language> 		languages			= new LinkedHashSet<>();
+
+	@Column(name="skills")
+	@ElementCollection(targetClass=String.class)
+	@CollectionTable(schema="listings", name="listing_skill", joinColumns=@JoinColumn(name="listing_id"))
+	private Set<String> 		skills			= new LinkedHashSet<>();
 	
 	@Column(name="rate")
 	private float 				rate;
@@ -101,10 +106,15 @@ public class ListingEntity {
 		this.country 			= builder.country;
 		this.location 			= builder.location;
 		this.yearsExperience 	= builder.yearsExperience;
-		this.languages 			= builder.languages;
 		this.rate 				= builder.rate;
 		this.currency 			= builder.currency;
 		this.views 				= builder.views;
+		
+		this.languages.clear();
+		this.skills.clear();
+		
+		this.languages.addAll(builder.languages);
+		this.skills.addAll(builder.skills);
 		
 	}
 	
@@ -211,6 +221,15 @@ public class ListingEntity {
 	*/
 	public Set<language> getLanguages() {
 		return this.languages;
+	}
+	
+	/**
+	* Returns the requested skills for the 
+	* Listing
+	* @return requested skills
+	*/
+	public Set<String> getSkills() {
+		return this.skills;
 	}
 	
 	/**
@@ -343,6 +362,14 @@ public class ListingEntity {
 	}
 	
 	/**
+	* Sets the Skills requested for the Listing
+	* @param skills - Requested Skills
+	*/
+	public void setSkills(Set<String> skills) {
+		this.skills = skills;
+	}
+	
+	/**
 	* Sets the rate offered
 	* @return offered Rate
 	*/
@@ -393,6 +420,7 @@ public class ListingEntity {
 		private String 				location;
 		private int 				yearsExperience;
 		private Set<language> 		languages			= new LinkedHashSet<>();
+		private Set<String>			skills				= new LinkedHashSet<>();
 		private float 				rate;
 		private currency			currency;
 		private int 				views;
@@ -524,7 +552,19 @@ public class ListingEntity {
 		* @return Builder
 		*/
 		public ListingEntityBuilder languages(Set<language> languages){
-			this.languages = languages;
+			this.languages.clear();
+			this.languages.addAll(languages);
+			return this;
+		}
+		
+		/**
+		* Sets the Skills requested for the Listing
+		* @param skills - Skills requested
+		* @return Builder
+		*/
+		public ListingEntityBuilder skills(Set<String> skills) {
+			this.skills.clear();
+			this.skills.addAll(skills);
 			return this;
 		}
 		
@@ -588,13 +628,15 @@ public class ListingEntity {
 			entity.setRate(listing.getRate());
 			entity.setOwnerName(listing.getOwnerName());
 			entity.setOwnerId(listing.getOwnerId());
-			entity.setOwnerEmail(listing.getOwnerId());
+			entity.setOwnerEmail(listing.getOwnerEmail());
 			entity.setOwnerCompany(listing.getOwnerCompany());
 			entity.setLocation(listing.getLocation());
 			entity.setLanguages(listing.getLanguages());
+			entity.setSkills(listing.getSkills());
 			entity.setDescription(listing.getDescription());
 			entity.setCurrency(listing.getCurrency());
 			entity.setCountry(listing.getCountry());
+			entity.setCreated(listing.getCreated());
 			
 			return entity;
 		}
@@ -608,11 +650,12 @@ public class ListingEntity {
 						.rate(listing.getRate())
 						.ownerName(listing.getOwnerName())
 						.ownerId(listing.getOwnerId())
-						.ownerEmail(listing.getOwnerId())
+						.ownerEmail(listing.getOwnerEmail())
 						.ownerCompany(listing.getOwnerCompany())
 						.location(listing.getLocation())
 						.listingId(listing.getListingId())
 						.languages(listing.getLanguages())
+						.skills(listing.getSkills())
 						.description(listing.getDescription())
 						.currency(listing.getCurrency())
 						.created(listing.getCreated())
@@ -636,15 +679,17 @@ public class ListingEntity {
 					.rate(entity.getRate())
 					.ownerName(entity.getOwnerName())
 					.ownerId(entity.getOwnerId())
-					.ownerEmail(entity.getOwnerId())
+					.ownerEmail(entity.getOwnerEmail())
 					.ownerCompany(entity.getOwnerCompany())
 					.location(entity.getLocation())
 					.listingId(entity.getListingId())
 					.languages(entity.getLanguages())
+					.skills(entity.getSkills())
 					.description(entity.getDescription())
 					.currency(entity.getCurrency())
 					.created(entity.getCreated())
 					.country(entity.getCountry())
 				.build();
 	}
+	
 }

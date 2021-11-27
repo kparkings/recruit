@@ -27,22 +27,26 @@ import com.arenella.recruit.listings.controllers.ListingAPIOutbound;
 @ExtendWith(MockitoExtension.class)
 public class ListingAPIOutboundTest {
 
-	private final UUID 				listingId			= UUID.randomUUID();
-	private final String			ownerId				= "kparking";
-	private final LocalDate 		created				= LocalDate.of(2021, 11, 24);
-	private final String 			title				= "aTitle";
-	private final String 			description			= "aDesc";
-	private final listing_type 		type		 		= listing_type.CONTRACT_ROLE;
-	private final country 			country				= Listing.country.NETHERLANDS;
-	private final String 			location			= "Den Haag";
-	private final int 				yearsExperience		= 10;
-	private final Set<language> 	languages			= new LinkedHashSet<>();
-	private final float 			rate				= 115.0f;
-	private final currency			currency			= Listing.currency.EUR;
-	private final int				views				= 10;
-	private final String			ownerName			= "Kevin Parkings";
-	private final String 			ownerCompany		= "Arenella BV";
-	private final String			ownerEmail			= "kparkings@gmail.com";
+	private static final 	String 			SKILL_JAVA 			= "java";
+	private static final 	String 			SKILL_CSHARP 		= "c#";
+	
+	private final 			UUID 			listingId			= UUID.randomUUID();
+	private final 			String			ownerId				= "kparking";
+	private final 			LocalDate 		created				= LocalDate.of(2021, 11, 24);
+	private final 			String 			title				= "aTitle";
+	private final 			String 			description			= "aDesc";
+	private final 			listing_type 	type		 		= listing_type.CONTRACT_ROLE;
+	private final 			country 		country				= Listing.country.NETHERLANDS;
+	private final 			String 			location			= "Den Haag";
+	private final 			int 			yearsExperience		= 10;
+	private final 			Set<language> 	languages			= new LinkedHashSet<>();
+	private final 			Set<String>		skills			 	= Set.of(SKILL_JAVA, SKILL_CSHARP);
+	private final 			float 			rate				= 115.0f;
+	private final 			currency		currency			= Listing.currency.EUR;
+	private final 			int				views				= 10;
+	private final 			String			ownerName			= "Kevin Parkings";
+	private final 			String 			ownerCompany		= "Arenella BV";
+	private final 			String			ownerEmail			= "kparkings@gmail.com";
 	
 	/**
 	* Sets up test environment 
@@ -67,6 +71,7 @@ public class ListingAPIOutboundTest {
 													.currency(currency)
 													.description(description)
 													.languages(languages)
+													.skills(skills)
 													.listingId(listingId)
 													.location(location)
 													.ownerId(ownerId)
@@ -100,6 +105,10 @@ public class ListingAPIOutboundTest {
 		assertTrue(listing.getLanguages().contains(Listing.language.FRENCH));
 		assertEquals(listing.getLanguages().size(), 2);
 		
+		assertTrue(listing.getSkills().contains(SKILL_JAVA));
+		assertTrue(listing.getSkills().contains(SKILL_CSHARP));
+		assertEquals(listing.getSkills().size(), 2);
+		
 	}
 	
 	/**
@@ -113,12 +122,13 @@ public class ListingAPIOutboundTest {
 		ListingAPIOutbound listing = ListingAPIOutbound.builder().build();
 		
 		assertTrue(listing.getLanguages().isEmpty());
+		assertTrue(listing.getSkills().isEmpty());
 		
 	}
 	
 	/**
 	* Tests conversion from Domain version of Listing to API 
-	* Outbound representaion
+	* Outbound representation
 	* @throws Exception
 	*/
 	@Test
@@ -132,6 +142,7 @@ public class ListingAPIOutboundTest {
 					.description(description)
 					.languages(languages)
 					.listingId(listingId)
+					.skills(skills)
 					.location(location)
 					.ownerId(ownerId)
 					.ownerName(ownerName)
@@ -165,6 +176,10 @@ public class ListingAPIOutboundTest {
 		assertTrue(outbound.getLanguages().contains(Listing.language.DUTCH));
 		assertTrue(outbound.getLanguages().contains(Listing.language.FRENCH));
 		assertEquals(outbound.getLanguages().size(), 2);
+		
+		assertTrue(outbound.getSkills().contains(SKILL_JAVA));
+		assertTrue(outbound.getSkills().contains(SKILL_CSHARP));
+		assertEquals(outbound.getSkills().size(), 2);
 		
 	}
 		

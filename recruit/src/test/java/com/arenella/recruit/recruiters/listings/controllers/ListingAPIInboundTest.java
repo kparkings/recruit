@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import java.time.LocalDate;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -25,19 +24,23 @@ import com.arenella.recruit.listings.controllers.ListingAPIInbound;
 */
 public class ListingAPIInboundTest {
 
-	private final UUID 				listingId			= UUID.randomUUID();
-	private final String 			title				= "aTitle";
-	private final String 			description			= "aDesc";
-	private final listing_type 		type		 		= listing_type.CONTRACT_ROLE;
-	private final country 			country				= Listing.country.NETHERLANDS;
-	private final String 			location			= "Den Haag";
-	private final int 				yearsExperience		= 10;
-	private final Set<language> 	languages			= new LinkedHashSet<>();
-	private final float 			rate				= 115.0f;
-	private final currency			currency			= Listing.currency.EUR;
-	private final String			ownerName			= "Kevin Parkings";
-	private final String 			ownerCompany		= "Arenella BV";
-	private final String			ownerEmail			= "kparkings@gmail.com";
+	private static final 	String 			SKILL_JAVA 			= "java";
+	private static final 	String 			SKILL_CSHARP 		= "c#";
+	
+	private final 			UUID 			listingId			= UUID.randomUUID();
+	private final 			String 			title				= "aTitle";
+	private final 			String 			description			= "aDesc";
+	private final 			listing_type 	type		 		= listing_type.CONTRACT_ROLE;
+	private final 			country 		country				= Listing.country.NETHERLANDS;
+	private final 			String 			location			= "Den Haag";
+	private final 			int 			yearsExperience		= 10;
+	private final 			Set<language> 	languages			= new LinkedHashSet<>();
+	private final 			float 			rate				= 115.0f;
+	private final 			currency		currency			= Listing.currency.EUR;
+	private final 			String			ownerName			= "Kevin Parkings";
+	private final 			String 			ownerCompany		= "Arenella BV";
+	private final 			String			ownerEmail			= "kparkings@gmail.com";
+	private final 			Set<String>		skills			 	= Set.of(SKILL_JAVA, SKILL_CSHARP);
 	
 	/**
 	* Sets up test environment 
@@ -61,6 +64,7 @@ public class ListingAPIInboundTest {
 								.currency(currency)
 								.description(description)
 								.languages(languages)
+								.skills(skills)
 								.listingId(listingId)
 								.location(location)
 								.rate(rate)
@@ -88,9 +92,14 @@ public class ListingAPIInboundTest {
 		
 		assertTrue(listing.getLanguages().contains(Listing.language.DUTCH));
 		assertTrue(listing.getLanguages().contains(Listing.language.FRENCH));
-		assertTrue(listing.isPostToSocialMedia());
 		assertEquals(listing.getLanguages().size(), 2);
 		
+		assertTrue(listing.getSkills().contains(SKILL_JAVA));
+		assertTrue(listing.getSkills().contains(SKILL_CSHARP));
+		assertEquals(listing.getSkills().size(), 2);
+		
+		assertTrue(listing.isPostToSocialMedia());
+	
 	}
 	
 	/**
@@ -104,7 +113,8 @@ public class ListingAPIInboundTest {
 		ListingAPIInbound listing = ListingAPIInbound.builder().build();
 		
 		assertTrue(listing.getLanguages().isEmpty());
-		
+		assertTrue(listing.getSkills().isEmpty());
+			
 		assertFalse(listing.isPostToSocialMedia());
 		
 	}
@@ -122,6 +132,7 @@ public class ListingAPIInboundTest {
 													.currency(currency)
 													.description(description)
 													.languages(languages)
+													.skills(skills)
 													.listingId(listingId)
 													.location(location)
 													.rate(rate)
@@ -154,6 +165,10 @@ public class ListingAPIInboundTest {
 		assertTrue(listing.getLanguages().contains(Listing.language.DUTCH));
 		assertTrue(listing.getLanguages().contains(Listing.language.FRENCH));
 		assertEquals(listing.getLanguages().size(), 2);
+		
+		assertTrue(listing.getSkills().contains(SKILL_JAVA));
+		assertTrue(listing.getSkills().contains(SKILL_CSHARP));
+		assertEquals(listing.getSkills().size(), 2);
 		
 	}
 	

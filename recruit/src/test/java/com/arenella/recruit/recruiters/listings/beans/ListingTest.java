@@ -27,22 +27,26 @@ import com.arenella.recruit.listings.beans.Listing.listing_type;
 @ExtendWith(MockitoExtension.class)
 public class ListingTest {
 
-	private final UUID 				listingId			= UUID.randomUUID();
-	private final String			ownerId				= "kparking";
-	private final String			ownerName			= "Kevin Parkings";
-	private final String 			ownerCompany		= "Arenella BV";
-	private final String			ownerEmail			= "kparkings@gmail.com";
-	private final LocalDate 		created				= LocalDate.of(2021, 11, 24);
-	private final String 			title				= "aTitle";
-	private final String 			description			= "aDesc";
-	private final listing_type 		type		 		= listing_type.CONTRACT_ROLE;
-	private final country 			country				= Listing.country.NETHERLANDS;
-	private final String 			location			= "Den Haag";
-	private final int 				yearsExperience		= 10;
-	private final Set<language> 	languages			= new LinkedHashSet<>();
-	private final float 			rate				= 115.0f;
-	private final currency			currency			= Listing.currency.EUR;
-	private final int				views				= 10;
+	private static final 	String 			SKILL_JAVA 			= "java";
+	private static final 	String 			SKILL_CSHARP 		= "c#";
+	
+	private final 			UUID 			listingId			= UUID.randomUUID();
+	private final 			String			ownerId				= "kparking";
+	private final 			String			ownerName			= "Kevin Parkings";
+	private final 			String 			ownerCompany		= "Arenella BV";
+	private final 			String			ownerEmail			= "kparkings@gmail.com";
+	private final 			LocalDate 		created				= LocalDate.of(2021, 11, 24);
+	private final 			String 			title				= "aTitle";
+	private final 			String 			description			= "aDesc";
+	private final 			listing_type 	type		 		= listing_type.CONTRACT_ROLE;
+	private final 			country 		country				= Listing.country.NETHERLANDS;
+	private final 			String 			location			= "Den Haag";
+	private final 			int 			yearsExperience		= 10;
+	private final 			Set<language> 	languages			= new LinkedHashSet<>();
+	private final 			Set<String>		skills			 	= Set.of(SKILL_JAVA, SKILL_CSHARP);
+	private final 			float 			rate				= 115.0f;
+	private final 			currency		currency			= Listing.currency.EUR;
+	private final 			int				views				= 10;
 	
 	/**
 	* Sets up test environment 
@@ -67,6 +71,7 @@ public class ListingTest {
 								.currency(currency)
 								.description(description)
 								.languages(languages)
+								.skills(skills)
 								.listingId(listingId)
 								.location(location)
 								.ownerId(ownerId)
@@ -100,6 +105,10 @@ public class ListingTest {
 		assertTrue(listing.getLanguages().contains(Listing.language.FRENCH));
 		assertEquals(listing.getLanguages().size(), 2);
 		
+		assertTrue(listing.getSkills().contains(SKILL_JAVA));
+		assertTrue(listing.getSkills().contains(SKILL_CSHARP));
+		assertEquals(listing.getSkills().size(), 2);
+		
 	}
 	
 	/**
@@ -113,6 +122,7 @@ public class ListingTest {
 		Listing listing = Listing.builder().build();
 		
 		assertTrue(listing.getLanguages().isEmpty());
+		assertTrue(listing.getSkills().isEmpty());
 		
 	}
 	

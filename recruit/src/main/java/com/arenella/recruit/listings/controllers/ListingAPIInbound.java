@@ -31,6 +31,7 @@ public class ListingAPIInbound {
 	private String 				location;
 	private int 				yearsExperience;
 	private Set<language> 		languages			= new LinkedHashSet<>();
+	private Set<String>			skills				= new LinkedHashSet<>();
 	private float 				rate;
 	private currency			currency;
 	private boolean 			postToSocialMedia	= false;
@@ -56,6 +57,7 @@ public class ListingAPIInbound {
 		this.postToSocialMedia	= builder.postToSocialMedia;
 		
 		this.languages.addAll(builder.languages);
+		this.skills.addAll(builder.skills);
 		
 	}
 	
@@ -151,6 +153,15 @@ public class ListingAPIInbound {
 	}
 	
 	/**
+	* Returns the requested skills for the 
+	* Listing
+	* @return requested skills
+	*/
+	public Set<String> getSkills() {
+		return this.skills;
+	}
+	
+	/**
 	* Returns the rate being offered
 	* @return rate offered for the Listing
 	*/
@@ -201,6 +212,7 @@ public class ListingAPIInbound {
 		private String 				location;
 		private int 				yearsExperience;
 		private Set<language> 		languages			= new LinkedHashSet<>();
+		private Set<String>			skills				= new LinkedHashSet<>();
 		private float 				rate;
 		private currency			currency;
 		private boolean 			postToSocialMedia	= false;
@@ -316,7 +328,17 @@ public class ListingAPIInbound {
 			this.languages.clear();
 			this.languages.addAll(languages);
 			return this;
-			
+		}
+		
+		/**
+		* Sets the Skills requested for the Listing
+		* @param skills - Skills requested
+		* @return Builder
+		*/
+		public ListingAPIInboundBuilder skills(Set<String> skills) {
+			this.skills.clear();
+			this.skills.addAll(skills);
+			return this;
 		}
 		
 		/**
@@ -373,6 +395,7 @@ public class ListingAPIInbound {
 					.description(inbound.getDescription())
 					.languages(inbound.getLanguages())
 					.listingId(inbound.getListingId())
+					.skills(inbound.getSkills())
 					.location(inbound.getLocation())
 					.ownerId(null)
 					.rate(inbound.getRate())
