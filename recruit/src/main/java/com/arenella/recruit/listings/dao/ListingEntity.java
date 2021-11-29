@@ -68,12 +68,12 @@ public class ListingEntity {
 	@Column(name="years_experience")
 	private int 				yearsExperience;
 	
-	@Column(name="languages")
+	@Column(name="language")
 	@ElementCollection(targetClass=language.class)
 	@CollectionTable(schema="listings", name="listing_language", joinColumns=@JoinColumn(name="listing_id"))
 	private Set<language> 		languages			= new LinkedHashSet<>();
 
-	@Column(name="skills")
+	@Column(name="skill")
 	@ElementCollection(targetClass=String.class)
 	@CollectionTable(schema="listings", name="listing_skill", joinColumns=@JoinColumn(name="listing_id"))
 	private Set<String> 		skills			= new LinkedHashSet<>();
