@@ -549,6 +549,11 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
+                  name: owner_company
+                  type: varchar
+                  constraints:
+                    nullable: false
+              - column:
                   name: created
                   type: timestamp
                   constraints:

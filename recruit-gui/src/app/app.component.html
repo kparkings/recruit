@@ -5,7 +5,7 @@
 <nav class="navbar navbar-expand-lg xx">
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0 nav-secondary">
-        <li class="nav-item">
+        <li class="nav-item" *ngIf="!isAuthenticated()">
            <a  class="dropdown-item" routerLink="/">Home</a>
         </li>
         <li class="nav-item">
@@ -22,6 +22,12 @@
         </li>
 		<li class="nav-item" *ngIf="!isAuthenticated()">
            <a class="dropdown-item candidate-signup" routerLink="/create-candidate">Candidate Signup</a>
+        </li>
+		<li class="nav-item" *ngIf="isAuthenticated() && !isAuthenticatedAsAdmin()">
+           <a class="dropdown-item recruiter-account" routerLink="/recruiter-account">Manage Account</a>
+        </li>
+		<li class="nav-item" *ngIf="isAuthenticated() && !isAuthenticatedAsAdmin()">
+           <a class="dropdown-item recruiter-account" routerLink="/recruiter-listings">Manage Job Listings</a>
         </li>
       </ul>
   </div>

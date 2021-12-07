@@ -1,0 +1,174 @@
+<div class=".container m-2" >
+
+	<div style="margin-top:10px">
+		<!-- buttons -->
+		<div [ngSwitch]="activeView">
+		
+			<div  *ngSwitchCase="'list'">
+				<div>
+					<button (click)="showAdd()" class="btn btn-secondary btn-listing">Add Listing</button>
+				</div>
+			</div>
+			
+			<div  *ngSwitchCase="'add'">
+				<button (click)="showList()" class="btn btn-secondary btn-listing">Show Listings</button>
+				<button (click)="publishListing()" class="btn btn-secondary btn-listing">Publish</button>
+			</div>
+			
+			
+			
+		</div>
+		
+		<div class="center">
+	   		<div [ngSwitch]="activeView">
+				
+				<!-- List Listings -->
+				<div  *ngSwitchCase="'add'">
+				
+					<form [formGroup]="newListingFormBean">
+					
+						<div [ngSwitch]="activeSubView">
+						
+							<div  *ngSwitchCase="'step1'">
+								<h2>1 of 5: Job Info</h2>
+								
+								<span class="listing-nav" >Previous</span>
+								<span class="listing-nav" (click)="updateSubviewStep('step2')">Next</span>
+								
+								<div class="table listing-step-content">
+								
+									<table>
+										<tr>
+											<td>Title</td>
+											<td><input type="text" formControlName="title"></td>
+										</tr>
+										<tr>
+											<td>Type</td>
+											<td>
+												<select formControlName="type">
+													<option></option>
+													<option value="CONTRACT_ROLE">Contract</option>
+													<option value="PERM_ROME">Perm</option>
+													<option value="BOTH">Contract/Perm</option>
+												</select>
+											</td>
+										</tr>
+										<tr>
+											<td>Country</td>
+											<td>
+												<select formControlName="country">
+													<option></option>
+													<option value="NETHERLANDS">Netherlands</option>
+													<option value="BELGIUM">Belgium</option>
+													<option value="UK">UK</option>
+													<option value="IRELAND">Ireland</option>
+													<option value="EU_REMOTE">Remote EU</option>
+													<option value="WORLD_REMOTE">Remote World</option>
+												</select>
+											</td>
+										</tr>
+										<tr>
+											<td>Location</td>
+											<td><input type="text" formControlName="location"></td>
+										</tr>
+										<tr>
+											<td>Required Years Experience</td>
+											<td><input type="text" formControlName="experienceYears"></td>
+										</tr>
+										<tr>
+											<td>Rate</td>
+											<td>
+												
+												<input type="radio" name="rateCurrency" value="EUR" class="radio-button" formControlName="rateCurrency"><label class="radio-button_label">Eur</label>
+												<input type="radio" name="rateCurrency" value="GBP" class="radio-button" formControlName="rateCurrency"><label class="radio-button_label">GBP</label>
+												<br>
+												<input type="text" formControlName="rate">
+											</td>
+										</tr>
+									</table>
+									
+								</div>
+							</div>
+							
+							<div  *ngSwitchCase="'step2'">
+								<h2>2 of 5: Job Description</h2>
+								
+								<span class="listing-nav" (click)="updateSubviewStep('step1')">Previous</span>
+								<span class="listing-nav" (click)="updateSubviewStep('step3')">Next</span>
+								
+								<div class="table listing-step-content">
+									<table class="table">
+										<thead>
+											<tr>
+												<th>Description</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td>
+													<textarea class="text-area-listing" formControlName="description"></textarea>	
+												</td>	
+											</tr>
+										</tbody>
+									</table>
+								</div>
+								
+							</div>
+							
+							<div  *ngSwitchCase="'step3'">
+								<h3>3 of 5: Contact information</h3>
+								<span class="listing-nav" (click)="updateSubviewStep('step2')">Previous</span>
+								<span class="listing-nav" (click)="updateSubviewStep('step4')">Next</span>
+								<div class="table listing-step-content">
+									<table>
+										<tr>
+											<td>Contact Name</td>
+											<td><input type="text" formControlName="contactName"></td>
+										</tr>
+										<tr>
+											<td>Company Name</td>
+											<td><input type="text" formControlName="contactCompany"></td>
+										</tr>
+										<tr>
+											<td>Email address</td>
+											<td><input type="text" formControlName="contactEmail"></td>
+										</tr>
+									</table>
+									
+								</div>
+							</div>
+							
+							<div  *ngSwitchCase="'step4'">
+								<h2>4 of 5: Languages</h2>
+								<span class="listing-nav" (click)="updateSubviewStep('step3')">Previous</span>
+								<span class="listing-nav" (click)="updateSubviewStep('step5')">Next</span>
+								<div class="listing-step-content">
+									<div><input type="checkbox" name="language" value="Dutch" class="checkbox-ctrl" formControlName="langDutch"><label>Dutch</label></div>
+									<div><input type="checkbox" name="language" value="English" class="checkbox-ctrl" formControlName="langEnglish"><label>English</label></div>	
+									<div><input type="checkbox" name="language" value="French" class="checkbox-ctrl" formControlName="langFrench"><label>French</label></div>
+								</div>
+							</div>
+							
+							<div  *ngSwitchCase="'step5'">
+								<h2>5 of 5: Skills</h2>
+								<span class="listing-nav" (click)="updateSubviewStep('step4')">Previous</span>
+								<span class="listing-nav">Next</span>
+								<div class="listing-step-content">
+									<div>
+										<input type="text" formControlName="skill">
+										<button (click)="addSkill()">Add Skill</button>
+									</div>
+									<div class="selected-skills-filter">
+										<span *ngFor="let skill of skills" class="selected-skill" (click)="removeSkill(skill)">
+											{{skill}}
+										</span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>			
+		</div>
+	
+</div>

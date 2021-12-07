@@ -52,4 +52,15 @@ export class RecruiterService {
     	return this.httpClient.get<any>(backendUrl, this.httpOptions);
   	}
 
+  	/**
+  	* Returns a list of available Recruiters 
+  	*/
+  	public getOwnRecruiterAccount(): Observable<any>{
+      
+		const backendUrl:string = environment.backendUrl +'recruiter/me';
+  
+    	return this.httpClient.get<any>(backendUrl, this.httpOptions);
+  	}
+
+
 }

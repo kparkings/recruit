@@ -155,7 +155,6 @@ export class ViewCandidatesComponent implements OnInit {
   	}
   
   	public removeSkill(skill:string):void{
-		console.log('>>' + skill);
 		this.skillFilterSelections = this.skillFilterSelections.filter(s => s  !== skill);
 		this.updateFilters();
 	}

@@ -9,7 +9,6 @@ import { ViewCandidatesComponent }		from './view-candidates/view-candidates.comp
 import { LoginUserComponent }			from './login-user/login-user.component';
 import { AuthService }					from './auth.service';
 import { AuthGuardService }				from './auth-guard.service';
-//import { RouterModule}					from '@angular/router';
 import { HomeComponent }				from './home/home.component';
 import { NgbModule }					from '@ng-bootstrap/ng-bootstrap';
 import { MatIconModule }				from '@angular/material/icon';
@@ -18,6 +17,8 @@ import { StatisticsComponent }			from './statistics/statistics.component';
 import { ChartsModule }					from 'ng2-charts';
 import { AccountsComponent } 			from './accounts/accounts.component';
 import { CreateCandidateComponent } 	from './create-candidate/create-candidate.component';
+import { RecruiterAccountComponent } from './recruiter-account/recruiter-account.component';
+import { RecruiterListingsComponent } from './recruiter-listings/recruiter-listings.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,9 @@ import { CreateCandidateComponent } 	from './create-candidate/create-candidate.c
     HomeComponent,
     StatisticsComponent,
     AccountsComponent,
-    CreateCandidateComponent
+    CreateCandidateComponent,
+    RecruiterAccountComponent,
+    RecruiterListingsComponent
   ],
   imports: [
     BrowserModule,

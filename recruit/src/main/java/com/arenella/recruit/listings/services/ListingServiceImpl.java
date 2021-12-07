@@ -1,5 +1,6 @@
 package com.arenella.recruit.listings.services;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +33,7 @@ public class ListingServiceImpl implements ListingService{
 		listing.initializeAsNewListing();
 		listing.setOwnerId(SecurityContextHolder.getContext().getAuthentication().getName());
 		
-		ListingEntity entity = ListingEntity.builder().build(); 
+		ListingEntity entity = ListingEntity.convertToEntity(listing, Optional.empty()); 
 		
 		this.listingDao.save(entity);
 		

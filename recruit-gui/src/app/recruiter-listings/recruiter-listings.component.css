@@ -1,0 +1,76 @@
+.center {
+  margin: auto;
+  width: 50%;
+  padding: 10px;
+}
+
+.listing-nav{
+     cursor:pointer;
+     color:blue;
+     font-weight:bold;
+     margin-left:20px;
+     margin-right:20px;
+ }
+
+ .listing-nav-disabled{
+     color:grey;
+     font-weight:bold;
+     margin-left:20px;
+     margin-right:20px;
+ }
+ 
+ .listing-step-content{
+ 	margin-top:50px;
+ 	margin-left:50px;
+ }
+ 
+ .btn-listing{
+ 	margin-top:20px;
+	margin-right:10px;
+    min-width:100px;
+}
+
+.a-table-cell{
+	display:table-cell; 
+}
+
+.text-area-listing{
+	height:260px;
+	width:100%;
+}
+
+.checkbox-ctrl{
+		margin-right:5px;
+}
+
+.radio-button{
+	margin-right:5px;
+}
+
+.radio-button_label{
+	margin-right:10px;
+}
+
+ 
+ .selected-skills-filter{
+	min-height:100px;
+	margin-top:10px;	
+	display: inline-block; 
+ }
+ 
+ .selected-skill{
+ 	margin:2px;
+ 	padding:5px;
+ 	border-radius:5px;
+ 	background:grey;
+ 	display:inline-block;
+ }
+ 
+ .selected-skill:hover{
+ 	margin:2px;
+ 	padding:5px;
+ 	border-radius:5px;
+ 	background:red;
+ 	cursor:pointer;
+ 	display:inline-block;
+ }

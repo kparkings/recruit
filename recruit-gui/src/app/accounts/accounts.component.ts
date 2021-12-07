@@ -221,7 +221,7 @@ export class AccountsComponent implements OnInit {
 	} 
 
 	/**
-	* Retrieves candidates from the backend
+	* Retrieves recruiters from the backend
 	*/
 	public fetchRecruiters(): void{
 		

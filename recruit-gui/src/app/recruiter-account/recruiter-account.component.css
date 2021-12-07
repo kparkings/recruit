@@ -1,0 +1,19 @@
+.table-left-hdr {
+	font-weight: bold;
+	background:grey;
+	color:white;
+}
+
+.table-cell{
+	background:#E8E8E8;
+}
+
+.center {
+  margin: auto;
+  width: 50%;
+  padding: 10px;
+}
+
+.container-div{
+	margin:120px;
+}

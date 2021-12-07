@@ -81,4 +81,17 @@ public class RecruiterServiceImpl implements RecruiterService{
 		return RecruiterEntity.convertFromEntity(entity);
 	}
 
+	/**
+	* Refer to the RecruiterService for details
+	 * @throws IllegalAccessException 
+	*/
+	@Override
+	public Recruiter fetchRecruiterOwnAccount()  throws IllegalAccessException {
+		
+		String recruiterId = SecurityContextHolder.getContext().getAuthentication().getName();
+		
+		return fetchRecruiter(recruiterId);
+		
+	}
+
 }

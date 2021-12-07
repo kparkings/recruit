@@ -69,6 +69,7 @@ public class ListingEntity {
 	private int 				yearsExperience;
 	
 	@Column(name="language")
+	@Enumerated(EnumType.STRING)
 	@ElementCollection(targetClass=language.class)
 	@CollectionTable(schema="listings", name="listing_language", joinColumns=@JoinColumn(name="listing_id"))
 	private Set<language> 		languages			= new LinkedHashSet<>();
@@ -87,6 +88,13 @@ public class ListingEntity {
 	
 	@Column(name="views")
 	private int 				views;
+	
+	/**
+	* Default constructor 
+	*/
+	public ListingEntity() {
+		//required for Hibernate
+	}
 	
 	/**
 	* Constructor based upon a Builder

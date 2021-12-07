@@ -37,4 +37,11 @@ public interface RecruiterService {
 	*/
 	public Recruiter fetchRecruiter(String recruiterId) throws IllegalAccessException;
 	
+	/**
+	* Returns the Recruiter details for the currently logged in Recruiter
+	* @return Recruiter
+	* @throws IllegalAccessException
+	*/
+	public Recruiter fetchRecruiterOwnAccount()  throws IllegalAccessException;
+	
 }

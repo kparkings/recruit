@@ -54,7 +54,7 @@ public class RecruiterController {
 	
 	/**
 	* Returns a Collection of Recruiters
-	* @return
+	* @return recruiters
 	*/
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@GetMapping(value="/recruiter")
@@ -63,13 +63,23 @@ public class RecruiterController {
 	}
 	
 	/**
-	* Returns a Collection of Recruiters
-	* @return
+	* Returns a Recruiter matching the Id
+	* @return recruiter
 	*/
 	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('RECRUITER')")
-	@PostMapping(value="/recruiter/{id}")
+	@GetMapping(value="/recruiter/{id}")
 	public RecruiterAPIOutbound fetchRecruiter(@PathVariable("id") String recruiterId) throws IllegalAccessException{
 		return RecruiterAPIOutbound.convertFromDomain(recruiterService.fetchRecruiter(recruiterId));
+	}
+	
+	/**
+	* Returns the details of the currently logged in Recruiter
+	* @return recruiter
+	*/
+	@PreAuthorize("hasRole('RECRUITER')")
+	@GetMapping(value="/recruiter/me")
+	public RecruiterAPIOutbound fetchRecruiterOwnAccount() throws IllegalAccessException{
+		return RecruiterAPIOutbound.convertFromDomain(recruiterService.fetchRecruiterOwnAccount());
 	}
 	
 }
