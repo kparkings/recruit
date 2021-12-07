@@ -1,107 +1,110 @@
 <div>
-	<form [formGroup]="formBean">
+	<div class="centerdiv">
+		<div class="center-table">
+			<form [formGroup]="formBean">
 
-		<div class="row wholepagerow">
-			
-		</div>
-		<div class="wholepage">
-		
-			<div class="centerdiv" >
+				<div class="wholepageX">
 				
-				<div class="row wholepagerow">
-					<div class="col ">
+					<div class="centerdivX" >
 						
-						<div style="margin-top:50px;">
-								<p style="border-bottom:2px solid black;">Curriculum</p>
-								<input type="file" style="padding-right:45px" (change)="uploadCurriculumFile($event)">
-						</div>
-						
-						<div style="margin-top:50px;">
-							<div class="row rowadduser">
-								<div class="col">
-									<div class="hdr_label">First name</div>
-								</div>
-								<div><input type="text" class="inpt-tab-std" formControlName="firstname"/></div>
-							</div>
-							<div class="row rowadduser">
-								<div class="col">
-									<div class="hdr_label">Surname</div>
-								</div>
-								<div><input type="text" class="inpt-tab-std" formControlName="surname"/></div>
+						<div class="row wholepagerow">
+							<div class="col ">
 								
-							</div>
-							<div class="row rowadduser">
-								<div class="col">
-									<div class="hdr_label">Email</div>
+								<div style="margin-top:50px;">
+										<p style="border-bottom:2px solid black;">Curriculum</p>
+										<input type="file" style="padding-right:45px" (change)="uploadCurriculumFile($event)">
 								</div>
-								<div><input type="text" class="inpt-tab-std" formControlName="email"/></div>
 								
+								<div style="margin-top:50px;">
+									<div class="row rowadduserX">
+										<div class="col">
+											<div class="hdr_label">First name</div>
+										</div>
+										<div><input type="text" class="inpt-tab-std" formControlName="firstname"/></div>
+									</div>
+									<div class="row rowadduser">
+										<div class="col">
+											<div class="hdr_label">Surname</div>
+										</div>
+										<div><input type="text" class="inpt-tab-std" formControlName="surname"/></div>
+										
+									</div>
+									<div class="row rowadduser">
+										<div class="col">
+											<div class="hdr_label">Email</div>
+										</div>
+										<div><input type="text" class="inpt-tab-std" formControlName="email"/></div>
+										
+									</div>
+								</div>
+								
+								<div style="margin-top:50px;">
+									
+									<div class="row rowadduser">
+										<div class="col">
+											<div class="hdr_label">Contract</div>
+										</div>
+									
+										<div class="col">
+											<input type="checkbox" formControlName="contract"/>
+										</div>
+								
+									</div>
+								
+									<div class="row rowadduser">
+										<div class="col">
+											<div class="hdr_label">Perm</div>
+										</div>
+									
+										<div class="col">
+											<input type="checkbox" formControlName="perm"/>
+										</div>
+								
+									</div>
+								
+								
+								
+								</div>
+								
+								<div style="margin-top:50px;">
+									<p>
+									By uploading your CV and profile you are agreeing to allow your CV and details to be stored in the System and shared within the 
+									network of recruiters and clients. 
+									</p>
+									
+									<div class="col hdr_label" style="text-align:right; margin-right:260px;"><button (click)="addCandidate()" [disabled]="uploadButtonDisabled()">Save</button></div>
+								</div>
+							
 							</div>
+							
+							
+		
 						</div>
 						
-						<div style="margin-top:50px;">
-							
-							<div class="row rowadduser">
-								<div class="col">
-									<div class="hdr_label">Contract</div>
-								</div>
-							
-								<div class="col">
-									<input type="checkbox" formControlName="contract"/>
-								</div>
-						
-							</div>
-						
-							<div class="row rowadduser">
-								<div class="col">
-									<div class="hdr_label">Perm</div>
-								</div>
-							
-								<div class="col">
-									<input type="checkbox" formControlName="perm"/>
-								</div>
-						
-							</div>
-						
-						
-						
-						</div>
-						
-						<div style="margin-top:50px;">
-							<p>
-							By uploading your CV and profile you are agreeing to allow your CV and details to be stored in the System and shared within the 
-							network of recruiters and clients. 
-							</p>
-							
-							<div class="col hdr_label" style="text-align:right; margin-right:260px;"><button (click)="addCandidate()" [disabled]="uploadButtonDisabled()">Save</button></div>
-						</div>
-					
 					</div>
 					
+		
 					
-
 				</div>
-				
-			</div>
-			
+		
+			</form>
 
+
+			<ng-template #feedbackBox let-modal>
+				<div class="modal-header">
+					<h4 class="modal-title">&nbsp;</h4>
+			   		<div class="filter-close-box" (click)="closeModal()">X</div>
+			 		</div>
+				<div class="feedbackBox; {{feedbackBoxClass}}">
+					<div class="modal-body">
+						<p class="modal-body-text">{{feedbackBoxText}}</p>
+					</div>       
+				</div>
+			</ng-template> 
 			
 		</div>
-
-	</form>
-
-</div>
-
-<ng-template #feedbackBox let-modal>
-	<div class="modal-header">
-		<h4 class="modal-title">&nbsp;</h4>
-   		<div class="filter-close-box" (click)="closeModal()">X</div>
- 		</div>
-	<div class="feedbackBox; {{feedbackBoxClass}}">
-		<div class="modal-body">
-			<p class="modal-body-text">{{feedbackBoxText}}</p>
-		</div>       
 	</div>
-</ng-template> 
+</div>
+	
         
     

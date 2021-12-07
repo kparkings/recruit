@@ -1,6 +1,6 @@
 .wholepagerow {
     margin: 0 auto;
-    width: 500px;
+    width: 450px;
 }
 
 .feedback-failure{
@@ -66,4 +66,15 @@
      font-weight: bold;
     text-align: right;
         
+}
+
+.centerdiv{
+    margin: 0 auto;
+
+    width:90%;
+}
+
+.center-table{
+    margin:0 auto;
+    margin-top:25px;
 }

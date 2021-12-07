@@ -5,13 +5,6 @@
 	background: #181414;
 }
 
-.xx{
-	background:#303030;
-	height:50px;
-	color:red;
-}
-
-
 body{
 	background: #F5F5F5;
 }
@@ -21,8 +14,13 @@ body{
 }
 
 
+.li-arenella-nav{
+	float:left;
+	margin-right:5px;
+}
+
 .dropdown-item:hover{
-	background: #D3D3D3;
+	background: #D3D3D3;	
 }
 
 .nav-secondary{
@@ -92,6 +90,14 @@ body{
 	margin-left:10px;
 	margin-right:10px;
 	max-width: 500px;
+}
+
+.arenella-navbar{
+	list-style-type:none;
+	margin: 0;
+	padding: 10px;
+	overflow: hidden;
+	background-color:#303030;
 }
 
 

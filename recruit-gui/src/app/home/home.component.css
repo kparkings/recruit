@@ -1,10 +1,12 @@
 .centerdiv{
     margin: 0 auto;
+    padding-left:10px;
+    padding-right:10px;
+    width:90%;
 }
 
 .center-table{
     margin:0 auto;
-    width:1400px;
     margin-top:25px;
 }
 
