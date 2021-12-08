@@ -1,6 +1,8 @@
 import { Component, OnInit } 							from '@angular/core';
 import { FormGroup, FormControl }						from '@angular/forms';
 import { ListingService }								from '../listing.service';
+import { NgbModal, NgbModalOptions}						from '@ng-bootstrap/ng-bootstrap';
+import { ViewChild }									from '@angular/core';
 
 @Component({
   selector: 'app-recruiter-listings',
@@ -9,15 +11,22 @@ import { ListingService }								from '../listing.service';
 })
 export class RecruiterListingsComponent implements OnInit {
 
-  	constructor(private listingService:ListingService) { }
+	@ViewChild('feedbackBox', { static: false }) private content:any;
+
+  	constructor(private listingService:ListingService, private modalService: NgbModal) { }
 
   	ngOnInit(): void {
   	}
 
-	activeView:string					= 'list';
-	activeSubView:string				= 'none';
+	public activeView:string				= 'list';
+	public activeSubView:string				= 'none';
+	
+	public feedbackBoxClass:string          = '';
+  	public feedbackBoxTitle                 = '';
+  	public feedbackBoxText:string           = '';
+	public validationErrors:Array<string>	= new Array<string>();
 
-	public newListingFormBean:FormGroup = new FormGroup({
+	public newListingFormBean:FormGroup 	= new FormGroup({
      
 		title:				new FormControl(''),
 		type:				new FormControl(),
@@ -61,9 +70,39 @@ export class RecruiterListingsComponent implements OnInit {
 			
 		});
 		
-		this.skills = new Array<string>();
+		this.skills 			= new Array<string>();
+		this.validationErrors 	= new Array<string>();
 		
 	}
+	
+	/**
+	* Opens the specified Dialog box
+	*/
+	public open(content:any, msg:string, success:boolean):void {
+    
+	    if (success) {
+	      //Currently not used
+	    } else {
+	      this.feedbackBoxTitle = 'Validation errors';
+	      this.feedbackBoxClass = 'feedback-failure';
+	    }
+	
+	      let options: NgbModalOptions = {
+	    	 centered: true
+	   };
+	
+	  this.modalService.open(this.content, options);
+
+  }
+	
+	/**
+	*  Closes the confirm popup
+	*/
+	public closeModal(): void {
+		this.modalService.dismissAll();
+		this.validationErrors = new Array<string>();
+	}
+
 	
 	/**
 	* Adds the current skill in the newListingFormBean 
@@ -153,6 +192,8 @@ export class RecruiterListingsComponent implements OnInit {
 			languages.push('ENGLISH');
 		}
 		
+		this.validationErrors	= new Array<string>();
+		
 		this.listingService
 				.registerListing(ownerName, 
 								ownerCompany,
@@ -171,7 +212,18 @@ export class RecruiterListingsComponent implements OnInit {
 									this.reset();
 									this.showList();
 								}, err => {
-										console.log("Failed to add Recruiter " + err);
+									
+									if(err.status === 400) {
+										
+										let failedFields:Array<any> = err.error;
+										
+										failedFields.forEach(failedField => {
+											this.validationErrors.push(failedField.fieldMessageOrKey);
+										});
+										
+										this.open('feedbackBox', "Failure",  false);
+									}
+										
 								});
 	
 	}

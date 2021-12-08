@@ -1,7 +1,7 @@
 package com.arenella.recruit.listings.exceptions;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 /**
 * Exception class for validation Exceptions relating to Listings
@@ -11,15 +11,15 @@ public class ListingValidationException extends RuntimeException{
 
 	private static final long serialVersionUID = 1835770554635514392L;
 	
-	private Map<String,String> failedFields = new LinkedHashMap<>();
+	private Set<FailedField> failedFields = new LinkedHashSet<>();
 	
 	/**
 	* Constructor based upon a Builder
 	* @param builder - Contains the initialiaztion values
 	*/
 	public ListingValidationException(ListingValidationExceptionBuilder builder) {
-		this.failedFields = new LinkedHashMap<>();
-		this.failedFields.putAll(builder.failedFields);
+		this.failedFields = new LinkedHashSet<>();
+		this.failedFields.addAll(builder.failedFields);
 	}
 	
 	/**
@@ -34,7 +34,7 @@ public class ListingValidationException extends RuntimeException{
 	* Returns the failed fields
 	* @return failed fields
 	*/
-	public Map<String,String> getFailedFields(){
+	public Set<FailedField> getFailedFields(){
 		return this.failedFields;
 	}
 	
@@ -52,7 +52,7 @@ public class ListingValidationException extends RuntimeException{
 	*/
 	public static class ListingValidationExceptionBuilder{
 		
-		private Map<String,String> failedFields = new LinkedHashMap<>();
+		private Set<FailedField> failedFields = new LinkedHashSet<>();
 		
 		/**
 		* Adds details of the Field with the failed validation
@@ -61,7 +61,7 @@ public class ListingValidationException extends RuntimeException{
 		* @return Builder
 		*/
 		public ListingValidationExceptionBuilder addFailedValidationField(String fieldName, String keyOrMessage) {
-			failedFields.put(fieldName, keyOrMessage);
+			failedFields.add(new FailedField(fieldName, keyOrMessage));
 			return this;
 		}
 		
@@ -72,6 +72,44 @@ public class ListingValidationException extends RuntimeException{
 		public ListingValidationException build() {
 			return new ListingValidationException(this);
 		}
+		
+	}
+	
+	/**
+	* Represents a single Field validation failure
+	* @author K Parkings
+	*/
+	public static class FailedField{
+		
+		final String fieldName;
+		final String fieldMessageOrKey;
+		
+		/**
+		* Constructor
+		* @param fieldName			- Name of Field with validation error
+		* @param fieldMessageOrKey	- Message or Key description validation issue
+		*/
+		public FailedField(String fieldName, String fieldMessageOrKey) {
+			this.fieldName 			= fieldName;
+			this.fieldMessageOrKey 	= fieldMessageOrKey;
+		}
+		
+		/**
+		* Returns the Name of Field with validation error
+		* @return Name of Field with validation error
+		*/
+		public String getFieldName() {
+			return this.fieldName;
+		}
+		
+		/**
+		* Returns the Message or Key description validation issue
+		* @return Message or Key description validation issue
+		*/
+		public String getFieldMessageOrKey() {
+			return this.fieldMessageOrKey;
+		}
+
 		
 	}
 	

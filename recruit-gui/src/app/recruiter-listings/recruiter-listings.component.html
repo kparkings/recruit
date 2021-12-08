@@ -15,8 +15,6 @@
 				<button (click)="publishListing()" class="btn btn-secondary btn-listing">Publish</button>
 			</div>
 			
-			
-			
 		</div>
 		
 		<div class="center">
@@ -167,6 +165,21 @@
 							</div>
 						</div>
 					</form>
+					
+					<ng-template #feedbackBox let-modal>
+						<div class="modal-header">
+							<h4 class="modal-title">{{feedbackBoxTitle}}</h4>
+			   				<div class="filter-close-box" (click)="closeModal()">X</div>
+			 			</div>
+						<div class="feedbackBox; {{feedbackBoxClass}}">
+							<div class="modal-body">
+								<ul class='feedback-failure'>
+									<li *ngFor="let errMessage of validationErrors"> {{errMessage}} </li>
+								</ul><br>
+							</div>       
+						</div>
+					</ng-template> 
+			
 				</div>
 			</div>			
 		</div>

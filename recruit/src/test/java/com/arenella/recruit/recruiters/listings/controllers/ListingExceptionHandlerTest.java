@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Map;
+import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
@@ -11,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 
 import com.arenella.recruit.listings.controllers.ListingExceptionHandler;
 import com.arenella.recruit.listings.exceptions.ListingValidationException;
+import com.arenella.recruit.listings.exceptions.ListingValidationException.FailedField;
 
 /**
 * Unit tests for the ListingExceptionHandler class
@@ -39,13 +41,13 @@ public class ListingExceptionHandlerTest {
 																		.addFailedValidationField(field2, field2MessageOrKey)
 																	.build();
 		
-		ResponseEntity<Map<String,String>> response = handler.handleListingValidationException(exception);
+		ResponseEntity<Set<FailedField>> response = handler.handleListingValidationException(exception);
 		
 		assertEquals(response.getStatusCode(), HttpStatus.BAD_REQUEST);
-		assertTrue(response.getBody().containsKey(field1));
-		assertTrue(response.getBody().containsKey(field2));
-		assertEquals(response.getBody().get(field1), field1MessageOrKey);
-		assertEquals(response.getBody().get(field2), field2MessageOrKey);
+		assertTrue(exception.getFailedFields().stream().filter(f -> f.getFieldName().equals(field1)).findAny().isPresent());
+		assertTrue(exception.getFailedFields().stream().filter(f -> f.getFieldName().equals(field2)).findAny().isPresent());
+		assertEquals(exception.getFailedFields().stream().filter(f -> f.getFieldName().equals(field1)).findAny().get().getFieldMessageOrKey(), field1MessageOrKey);
+		assertEquals(exception.getFailedFields().stream().filter(f -> f.getFieldName().equals(field2)).findAny().get().getFieldMessageOrKey(), field2MessageOrKey);
 		
 		
 	}

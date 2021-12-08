@@ -91,11 +91,11 @@ public class ListingServiceImpl implements ListingService{
 		ListingValidationExceptionBuilder exception = ListingValidationException.builder();
 		
 		if (!StringUtils.hasText(listing.getOwnerName())) {
-			exception.addFailedValidationField("ownerName", "An name must be provided");
+			exception.addFailedValidationField("ownerName", "An Company name must be provided");
 		}
 		
 		if (!StringUtils.hasText(listing.getOwnerEmail())) {
-			exception.addFailedValidationField("ownerEmail", "An Email Address must be provided");
+			exception.addFailedValidationField("ownerEmail", "An Company Email Address must be provided");
 		}
 		
 		if (!StringUtils.hasText(listing.getOwnerCompany())) {
@@ -103,11 +103,11 @@ public class ListingServiceImpl implements ListingService{
 		}
 		
 		if (!StringUtils.hasText(listing.getTitle())) {
-			exception.addFailedValidationField("title", "A Title must be provided");
+			exception.addFailedValidationField("title", "A Listing Title must be provided");
 		}
 		
 		if (!StringUtils.hasText(listing.getDescription())) {
-			exception.addFailedValidationField("description", "A Description must be provided");
+			exception.addFailedValidationField("description", "A Listing Description must be provided");
 		}	
 		
 		ListingValidationException builtException = exception.build();

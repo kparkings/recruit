@@ -111,26 +111,30 @@ export class CreateCandidateComponent implements OnInit {
 		
 	}
 	
+	/**
+	* Opens the specified Dialog box
+	*/
 	public open(content:any, msg:string, success:boolean):void {
     
-    if (success) {
-      this.feedbackBoxTitle = 'Success';
-      this.feedbackBoxText = 'Your details have been successfully uploaded. They will now be reviewed and added to the system';
-      this.feedbackBoxClass = 'feedback-success';
-    } else {
-      this.feedbackBoxTitle = 'Failure';
-      this.feedbackBoxText = 'Unable to add Candidate';
-      this.feedbackBoxClass = 'feedback-failure';
-    }
+	    if (success) {
+	      this.feedbackBoxTitle = 'Success';
+	      this.feedbackBoxText = 'Your details have been successfully uploaded. They will now be reviewed and added to the system';
+	      this.feedbackBoxClass = 'feedback-success';
+	    } else {
+	      this.feedbackBoxTitle = 'Failure';
+	      this.feedbackBoxText = 'Unable to add Candidate';
+	      this.feedbackBoxClass = 'feedback-failure';
+	    }
+	
+	      let options: NgbModalOptions = {
+	    	 centered: true
+	   };
+	
+	  this.modalService.open(this.content, options);
 
-      let options: NgbModalOptions = {
-     centered: true
-   };
-
-  this.modalService.open(this.content, options);
   }
 
-    /**
+  /**
   *  Closes the confirm popup
   */
   public closeModal(): void {

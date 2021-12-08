@@ -26,18 +26,16 @@ public class ListingValidationExceptionTest {
 		final String field2 				= "f2";
 		final String field2MessageOrKey 	= "f2Key";
 		
-		
-		
 		ListingValidationException exception = ListingValidationException
 																	.builder()
 																		.addFailedValidationField(field1, field1MessageOrKey)
 																		.addFailedValidationField(field2, field2MessageOrKey)
 																	.build();
 		
-		assertTrue(exception.getFailedFields().containsKey(field1));
-		assertTrue(exception.getFailedFields().containsKey(field2));
-		assertEquals(exception.getFailedFields().get(field1), field1MessageOrKey);
-		assertEquals(exception.getFailedFields().get(field2), field2MessageOrKey);
+		assertTrue(exception.getFailedFields().stream().filter(f -> f.getFieldName().equals(field1)).findAny().isPresent());
+		assertTrue(exception.getFailedFields().stream().filter(f -> f.getFieldName().equals(field2)).findAny().isPresent());
+		assertEquals(exception.getFailedFields().stream().filter(f -> f.getFieldName().equals(field1)).findAny().get().getFieldMessageOrKey(), field1MessageOrKey);
+		assertEquals(exception.getFailedFields().stream().filter(f -> f.getFieldName().equals(field2)).findAny().get().getFieldMessageOrKey(), field2MessageOrKey);
 		
 	}
 	
