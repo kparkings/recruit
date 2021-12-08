@@ -14,11 +14,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.Authentication;
 
 import com.arenella.recruit.listings.beans.Listing;
-import com.arenella.recruit.listings.beans.Listing.country;
 import com.arenella.recruit.listings.dao.ListingDao;
 import com.arenella.recruit.listings.dao.ListingEntity;
 import com.arenella.recruit.listings.exceptions.ListingValidationException;
-import com.arenella.recruit.listings.exceptions.ListingValidationException.ListingValidationExceptionBuilder;
 import com.arenella.recruit.listings.services.ListingServiceImpl;
 
 import org.springframework.security.core.context.SecurityContextHolder;

@@ -1,7 +1,7 @@
 package com.arenella.recruit.candidates.enums;
 
 /**
-* Function performed by the Candidaye
+* Function performed by the Candidate
 * @author K Parkings
 */
 public enum FUNCTION {
@@ -20,6 +20,7 @@ public enum FUNCTION {
 	NETWORK_ADMINISTRATOR("Network Administrator"),
 	SOFTWARE_DEVELOPER("Software Developer"),
 	IT_SECURITY("IT Security"),
+	IT_RECRUITER("IT Recruiter"),
 	SOFTWARE_DEV_IN_TEST("Software Dev In Test");
 	
 	private String desc;
