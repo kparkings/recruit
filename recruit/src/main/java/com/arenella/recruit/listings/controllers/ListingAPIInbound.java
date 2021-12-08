@@ -388,6 +388,8 @@ public class ListingAPIInbound {
 	*/
 	public static Listing convertToListing(ListingAPIInbound inbound) {
 		
+		
+		
 		return Listing
 				.builder()
 					.country(inbound.getCountry())

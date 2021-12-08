@@ -14,8 +14,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.Authentication;
 
 import com.arenella.recruit.listings.beans.Listing;
+import com.arenella.recruit.listings.beans.Listing.country;
 import com.arenella.recruit.listings.dao.ListingDao;
 import com.arenella.recruit.listings.dao.ListingEntity;
+import com.arenella.recruit.listings.exceptions.ListingValidationException;
+import com.arenella.recruit.listings.exceptions.ListingValidationException.ListingValidationExceptionBuilder;
 import com.arenella.recruit.listings.services.ListingServiceImpl;
 
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -54,7 +57,14 @@ public class ListingServiceImplTest {
 	@Test
 	public void testAddListing() throws Exception {
 		
-		final Listing 			listing 		= Listing.builder().build();
+		final Listing 			listing 		= Listing
+													.builder()
+														.title("aTitle")
+														.description("aDesc")
+														.ownerName("anOwnerName")
+														.ownerEmail("anEmail")
+														.ownerCompany("aCompany")
+													.build();
 		
 		UUID listingId = service.addListing(listing, true);
 		
@@ -97,7 +107,177 @@ public class ListingServiceImplTest {
 		Assertions.assertThrows(IllegalArgumentException.class, () -> {
 			this.service.deleteListing(listingId);
 		});
+		 
+	}
+	
+	/**
+	* Tests Exception thrown if one of the mandatory fields 
+	* has no value provided
+	* @throws Exception
+	*/
+	@Test
+	public void testAddListingValidation_missingValue() throws Exception {
 		
+		Assertions.assertThrows(ListingValidationException.class, () -> {
+			
+			Listing 			listing 		= Listing
+					.builder()
+						.title(null)
+						.description("aDesc")
+						.ownerName("anOwnerName")
+						.ownerEmail("anEmail")
+						.ownerCompany("aCompany")
+					.build();
+
+			service.addListing(listing, true);
+
+			
+		});
+		
+
+		Assertions.assertThrows(ListingValidationException.class, () -> {
+			Listing 			listing 		= Listing
+					.builder()
+						.title("aTitle")
+						.description(null)
+						.ownerName("anOwnerName")
+						.ownerEmail("anEmail")
+						.ownerCompany("aCompany")
+					.build();
+
+			service.addListing(listing, true);
+
+		});
+
+		Assertions.assertThrows(ListingValidationException.class, () -> {
+			Listing 			listing 		= Listing
+					.builder()
+						.title("aTitle")
+						.description("aDesc")
+						.ownerName(null)
+						.ownerEmail("anEmail")
+						.ownerCompany("aCompany")
+					.build();
+
+			service.addListing(listing, true);
+
+		});
+		
+		Assertions.assertThrows(ListingValidationException.class, () -> {
+			
+			Listing 			listing 		= Listing
+					.builder()
+						.title("aTitle")
+						.description("aDesc")
+						.ownerName("anOwnerName")
+						.ownerEmail(null)
+						.ownerCompany("aCompany")
+					.build();
+
+			service.addListing(listing, true);
+
+		});
+
+		Assertions.assertThrows(ListingValidationException.class, () -> {
+			
+			Listing 			listing 		= Listing
+					.builder()
+						.title(null)
+						.description("aDesc")
+						.ownerName("anOwnerName")
+						.ownerEmail("anEmail")
+						.ownerCompany(null)
+					.build();
+
+			service.addListing(listing, true);
+			
+		});
+
+	}
+	
+	/**
+	* Tests Exception thrown if one of the mandatory fields 
+	* have empty values provided
+	* @throws Exception
+	*/
+	@Test
+	public void testAddListingValidation_emptyStringValue() throws Exception {
+
+		Assertions.assertThrows(ListingValidationException.class, () -> {
+			
+			Listing 			listing 		= Listing
+					.builder()
+						.title("  ")
+						.description("aDesc")
+						.ownerName("anOwnerName")
+						.ownerEmail("anEmail")
+						.ownerCompany("aCompany")
+					.build();
+
+			service.addListing(listing, true);
+
+			
+		});
+		
+
+		Assertions.assertThrows(ListingValidationException.class, () -> {
+			Listing 			listing 		= Listing
+					.builder()
+						.title("aTitle")
+						.description("  ")
+						.ownerName("anOwnerName")
+						.ownerEmail("anEmail")
+						.ownerCompany("aCompany")
+					.build();
+
+			service.addListing(listing, true);
+
+		});
+
+		Assertions.assertThrows(ListingValidationException.class, () -> {
+			Listing 			listing 		= Listing
+					.builder()
+						.title("aTitle")
+						.description("aDesc")
+						.ownerName("  ")
+						.ownerEmail("anEmail")
+						.ownerCompany("aCompany")
+					.build();
+
+			service.addListing(listing, true);
+
+		});
+		
+		Assertions.assertThrows(ListingValidationException.class, () -> {
+			
+			Listing 			listing 		= Listing
+					.builder()
+						.title("aTitle")
+						.description("aDesc")
+						.ownerName("anOwnerName")
+						.ownerEmail("  ")
+						.ownerCompany("aCompany")
+					.build();
+
+			service.addListing(listing, true);
+
+		});
+
+		Assertions.assertThrows(ListingValidationException.class, () -> {
+			
+			Listing 			listing 		= Listing
+					.builder()
+						.title(null)
+						.description("aDesc")
+						.ownerName("anOwnerName")
+						.ownerEmail("anEmail")
+						.ownerCompany("  ")
+					.build();
+
+			service.addListing(listing, true);
+			
+		});
+
 	}
 
 }
