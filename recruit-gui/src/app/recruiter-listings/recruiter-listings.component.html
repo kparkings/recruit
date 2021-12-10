@@ -66,7 +66,56 @@
 						<button (click)="showList()" class="btn btn-secondary btn-listing">Back</button>
 						<button (click)="showEditListing()" class="btn btn-secondary btn-listing">Edit</button>
 					</div>
-					SHOW LISTING HERE
+					
+					<div style="margin-top:20px;">
+					
+						<div class="listing-view-div">
+							<h1 class="listing-view-title">{{selectedListing.title}}</h1></div>
+						<div></div>
+						<div class="listing-view-div">
+							<span><b>{{getCountryCode(selectedListing.country)}}</b></span> : <span>{{selectedListing.location}}</span>
+						</div>
+						
+						<div class="listing-view-div">
+							<span><b>{{getContractType(selectedListing.type)}} | </b>{{selectedListing.currency}}</span> : <span>{{selectedListing.rate}}</span>
+						</div>
+						
+						<div class="listing-view-div">
+							<p>{{selectedListing.description}}</p>
+						</div>
+						
+						<h2 class="listing-view-title">Requirements</h2>
+						
+						<div class="listing-view-div"><b>Years Experience: </b>{{selectedListing.yearsExperience}}</div>	
+						
+						<h3  class="listing-view-title">Languages</h3>
+						<div class="listing-view-div">
+							<table>
+								<tr *ngFor="let language of selectedListing.languages">
+									<td>{{getLanguage(language)}}</td>
+								</tr>
+							</table>
+						</div>
+						
+						<h3  class="listing-view-title">Skills</h3>
+						<div class="listing-view-div">
+							<table>
+								<tr *ngFor="let skill of selectedListing.skills">
+									<td>{{skill}}</td>
+								</tr>
+							</table>
+						</div>
+						
+						<h2  class="listing-view-title">Contact Details</h2>
+						<div>
+							<div>{{selectedListing.ownerName}}</div>	
+							<div>{{selectedListing.ownerCompany}}</div>	
+							<div>{{selectedListing.ownerEmail}}</div>	
+						</div>
+						
+					</div>
+	
+				
 				</div>
 				
 				<!-- List Listings -->

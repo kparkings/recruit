@@ -180,6 +180,7 @@ export class RecruiterListingsComponent implements OnInit {
 	* Switches to Show Listing view
 	*/
 	public showListingDetails(selectedListing?:Listing):void{
+		
 		this.activeView 		= 'show';
 		this.activeSubView 		= 'none';
 		
@@ -212,7 +213,6 @@ export class RecruiterListingsComponent implements OnInit {
 		}
 		
 	}
-		
 		
 	/**
 	* Creates a new Listing. 
@@ -408,5 +408,29 @@ export class RecruiterListingsComponent implements OnInit {
 			}
 		}
 
-  	}		
+  	}	
+
+	/**
+	* Returns the Humand readable version of the Language
+	* @param country - Language to get the readable version for
+	*/
+	public getLanguage(lang:string):string{
+
+		switch(lang){
+			case "DUTCH":{
+				return "Dutch";
+			}
+			case "FRENCH":{
+				return "French";
+			}
+			case "ENGLISH":{
+				return "English";
+			}
+			default:{
+				return 'NA';
+			}
+		}
+
+  	}	
+	
 }

@@ -211,5 +211,14 @@
 	cursor:pointer;
 }
 
+.listing-view-title{
+	margin-top:20px;
+	color:#6A5ACD;
+}
+
+.listing-view-div{
+	margin-top:10px;
+}
+
 
  
