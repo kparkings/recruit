@@ -31,6 +31,7 @@ export class RecruiterListingsComponent implements OnInit {
 	public listings:Array<Listing>			= new Array<Listing>();
 	public activeView:string				= 'list';
 	public activeSubView:string				= 'none';
+	public selectedListing:Listing			= new Listing();
 	
 	public feedbackBoxClass:string          = '';
   	public feedbackBoxTitle                 = '';
@@ -158,21 +159,61 @@ export class RecruiterListingsComponent implements OnInit {
 	}
 	
 	/**
-	*
+	* Switches to Add Listing view
 	*/
 	public showAdd():void{
-		this.activeView = 'add';
-		this.activeSubView = 'step1';
+		this.activeView 		= 'add';
+		this.activeSubView 		= 'step1';
+		this.selectedListing	= new Listing();
 	}
 	
 	/**
-	*
+	* Switches to Add Listing view
 	*/
 	public showList():void{
-		this.activeView = 'list';
-		this.activeSubView = 'none';
+		this.activeView 		= 'list';
+		this.activeSubView 		= 'none';
+		this.selectedListing	= new Listing();
 	}
 	
+	/**
+	* Switches to Show Listing view
+	*/
+	public showListingDetails(selectedListing?:Listing):void{
+		this.activeView 		= 'show';
+		this.activeSubView 		= 'none';
+		
+		if (selectedListing) {
+			this.selectedListing	= selectedListing;	
+		}
+		
+	}
+		
+	/**
+	* Switches to Edit Listing view
+	*/
+	public showEditListing():void{
+		this.activeView 		= 'edit';
+		this.activeSubView 		= 'step1';
+		//Populate form with Listing
+	}
+	
+	/**
+	* Switches to Previous Show option
+	*/
+	public showPreviousShowOption():void{
+		
+		if (this.activeView === 'add') {
+			this.showList();
+		}
+		
+		if (this.activeView === 'edit') {
+			this.showListingDetails();
+		}
+		
+	}
+		
+		
 	/**
 	* Creates a new Listing. 
 	*/
@@ -313,5 +354,59 @@ export class RecruiterListingsComponent implements OnInit {
       		this.fetchListings();
     	}
   	}
-		
+
+	/**
+	* Returns the code identifying the country
+	* @param country - Country to get the country code for
+	*/
+	public getCountryCode(country:string):string{
+
+		switch(country){
+			case "NETHERLANDS":{
+				return "The Netherlands";
+			}
+			case "BELGIUM":{
+				return "Belgium";
+			}
+			case "UK":{
+				return "United Kingdom";
+			}
+			case "IRELAND":{
+				return "Ireland";
+			}
+			case "EU_REMOTE":{
+				return "Remote within EU";
+			}
+			case "UK":{
+				return "Remote within World";
+			}
+			default:{
+				return 'NA';
+			}
+		}
+
+  	}
+
+	/**
+	* Returns the code identifying the country
+	* @param country - Country to get the country code for
+	*/
+	public getContractType(type:string):string{
+
+		switch(type){
+			case "CONTRACT_ROLE":{
+				return "Contract";
+			}
+			case "PERM_ROLE":{
+				return "Permanent";
+			}
+			case "BOTH":{
+				return "Contract/Permanent";
+			}
+			default:{
+				return 'NA';
+			}
+		}
+
+  	}		
 }

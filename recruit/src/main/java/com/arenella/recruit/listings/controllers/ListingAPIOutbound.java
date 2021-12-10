@@ -1,6 +1,6 @@
 package com.arenella.recruit.listings.controllers;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -23,7 +23,7 @@ public class ListingAPIOutbound {
 	private String				ownerName;
 	private String 				ownerCompany;
 	private String				ownerEmail;
-	private LocalDate 			created;
+	private LocalDateTime		created;
 	private String 				title;
 	private String 				description;
 	private listing_type 		type;
@@ -109,7 +109,7 @@ public class ListingAPIOutbound {
 	* Returns the Date the Listing was posted
 	* @return Date Listing was posted
 	*/
-	public LocalDate getCreated() {
+	public LocalDateTime getCreated() {
 		return this.created;
 	}
 	
@@ -222,7 +222,7 @@ public class ListingAPIOutbound {
 		private String				ownerName;
 		private String 				ownerCompany;
 		private String				ownerEmail;
-		private LocalDate 			created;
+		private LocalDateTime		created;
 		private String 				title;
 		private String 				description;
 		private listing_type 		type;
@@ -293,7 +293,7 @@ public class ListingAPIOutbound {
 		* @param created - Date of creation 
 		* @return Builder
 		*/
-		public ListingAPIOutboundBuilder created(LocalDate created) {
+		public ListingAPIOutboundBuilder created(LocalDateTime created) {
 			this.created = created;
 			return this;
 		}

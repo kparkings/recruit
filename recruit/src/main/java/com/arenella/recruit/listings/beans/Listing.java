@@ -1,6 +1,6 @@
 package com.arenella.recruit.listings.beans;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -22,7 +22,7 @@ public class Listing {
 	private String				ownerName;
 	private String 				ownerCompany;
 	private String				ownerEmail;
-	private LocalDate 			created;
+	private LocalDateTime		created;
 	private String 				title;
 	private String 				description;
 	private listing_type 		type;
@@ -107,7 +107,7 @@ public class Listing {
 	* Returns the Date the Listing was posted
 	* @return Date Listing was posted
 	*/
-	public LocalDate getCreated() {
+	public LocalDateTime getCreated() {
 		return this.created;
 	}
 	
@@ -207,7 +207,7 @@ public class Listing {
 	*/
 	public void initializeAsNewListing() {
 		this.listingId 	= UUID.randomUUID();
-		this.created 	= LocalDate.now();
+		this.created 	= LocalDateTime.now();
 	}
 	
 	/**
@@ -245,7 +245,7 @@ public class Listing {
 		private String				ownerName;
 		private String 				ownerCompany;
 		private String				ownerEmail;
-		private LocalDate 			created;
+		private LocalDateTime		created;
 		private String 				title;
 		private String 				description;
 		private listing_type 		type;
@@ -315,7 +315,7 @@ public class Listing {
 		* @param created - Date of creation 
 		* @return Builder
 		*/
-		public ListingBuilder created(LocalDate created) {
+		public ListingBuilder created(LocalDateTime created) {
 			this.created = created;
 			return this;
 		}

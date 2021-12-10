@@ -3,7 +3,7 @@ package com.arenella.recruit.recruiters.listings.controllers;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -32,7 +32,7 @@ public class ListingAPIOutboundTest {
 	
 	private final 			UUID 			listingId			= UUID.randomUUID();
 	private final 			String			ownerId				= "kparking";
-	private final 			LocalDate 		created				= LocalDate.of(2021, 11, 24);
+	private final 			LocalDateTime	created				= LocalDateTime.of(2021, 11, 24, 10, 01, 01);
 	private final 			String 			title				= "aTitle";
 	private final 			String 			description			= "aDesc";
 	private final 			listing_type 	type		 		= listing_type.CONTRACT_ROLE;

@@ -1,6 +1,6 @@
 package com.arenella.recruit.listings.dao;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.LinkedHashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -46,7 +46,7 @@ public class ListingEntity {
 	private String				ownerEmail;
 	
 	@Column(name="created")
-	private LocalDate 			created;
+	private LocalDateTime		created;
 	
 	@Column(name="title")
 	private String 				title;
@@ -171,7 +171,7 @@ public class ListingEntity {
 	* Returns the creation date of the Listing
 	* @return Date the Listing was created
 	*/
-	public LocalDate getCreated() {
+	public LocalDateTime getCreated() {
 		return this.created;
 	}
 	
@@ -309,7 +309,7 @@ public class ListingEntity {
 	* Sets the creation date of the Listing
 	* @return Date the Listing was created
 	*/
-	public void setCreated(LocalDate created) {
+	public void setCreated(LocalDateTime created) {
 		this.created = created;
 	}
 	
@@ -420,7 +420,7 @@ public class ListingEntity {
 		private String				ownerName;
 		private String 				ownerCompany;
 		private String				ownerEmail;
-		private LocalDate 			created;
+		private LocalDateTime		created;
 		private String 				title;
 		private String 				description;
 		private listing_type 		type;
@@ -489,7 +489,7 @@ public class ListingEntity {
 		* @param created - Creation Date
 		* @return Builder
 		*/
-		public ListingEntityBuilder created(LocalDate created){
+		public ListingEntityBuilder created(LocalDateTime created){
 			this.created = created;
 			return this;
 		}

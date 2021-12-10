@@ -4,7 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -35,7 +35,7 @@ public class ListingTest {
 	private final 			String			ownerName			= "Kevin Parkings";
 	private final 			String 			ownerCompany		= "Arenella BV";
 	private final 			String			ownerEmail			= "kparkings@gmail.com";
-	private final 			LocalDate 		created				= LocalDate.of(2021, 11, 24);
+	private final 			LocalDateTime	created				= LocalDateTime.of(2021, 11, 24, 00 , 00 ,00);
 	private final 			String 			title				= "aTitle";
 	private final 			String 			description			= "aDesc";
 	private final 			listing_type 	type		 		= listing_type.CONTRACT_ROLE;
@@ -144,7 +144,7 @@ public class ListingTest {
 		
 		assertEquals(ownerId, 			listing.getOwnerId());
 		assertTrue(listing.getListingId() instanceof UUID);
-		assertTrue(listing.getCreated() instanceof LocalDate);
+		assertTrue(listing.getCreated() instanceof LocalDateTime);
 		
 	}
 	
