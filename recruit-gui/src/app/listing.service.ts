@@ -66,4 +66,14 @@ export class ListingService {
 	
 	}
 
+	/**
+	* Returns the listings ownerd by the Recruiter
+	*/	
+	public fetchRecruiterListings(recruiterId:string):Observable<any>{
+		
+		const backendUrl:string = environment.backendUrl +'listing/?'+recruiterId;
+		
+		return this.httpClient.get<any>(backendUrl, this.httpOptions);
+	}
+
 }

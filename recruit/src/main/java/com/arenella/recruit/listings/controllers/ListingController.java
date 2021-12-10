@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.arenella.recruit.candidates.controllers.CandidateAPIOutbound;
+import com.arenella.recruit.listings.beans.ListingFilter;
+import com.arenella.recruit.listings.beans.ListingFilter.ListingFilterBuilder;
 import com.arenella.recruit.listings.services.ListingService;
 
 /**
@@ -71,8 +74,18 @@ public class ListingController {
 	* @return All available listings
 	*/
 	@GetMapping(value="/listing")
-	public ResponseEntity<Page<CandidateAPIOutbound>> fetchListings(Pageable pageable, @RequestParam(required=false)String recruiterId){
-		return ResponseEntity.status(HttpStatus.OK).body(Page.empty());
+	public Page<ListingAPIOutbound> fetchListings(Pageable pageable, @RequestParam(required=false)String recruiterId){
+		
+		ListingFilterBuilder filterBuilder = ListingFilter.builder();
+		
+		if (StringUtils.hasText(recruiterId)) {
+			filterBuilder.ownerId(recruiterId);
+		}
+		
+		return service.fetchListings(filterBuilder.build(), pageable).map(listing -> ListingAPIOutbound.convertFromListing(listing));	
+		
+		
+		
 	}
 	
 	/**

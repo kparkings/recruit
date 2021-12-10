@@ -8,6 +8,11 @@
 				<div>
 					<button (click)="showAdd()" class="btn btn-secondary btn-listing">Add Listing</button>
 				</div>
+				
+				<div *ngFor="let listing of listings">
+					{{listing.listingId}}
+				</div>
+				
 			</div>
 			
 			<div  *ngSwitchCase="'add'">

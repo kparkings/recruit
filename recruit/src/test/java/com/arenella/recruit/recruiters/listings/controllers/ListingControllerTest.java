@@ -1,12 +1,14 @@
 package com.arenella.recruit.recruiters.listings.controllers;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.UUID;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -18,8 +20,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-import com.arenella.recruit.candidates.controllers.CandidateAPIOutbound;
+import com.arenella.recruit.listings.beans.ListingFilter;
 import com.arenella.recruit.listings.controllers.ListingAPIInbound;
+import com.arenella.recruit.listings.controllers.ListingAPIOutbound;
 import com.arenella.recruit.listings.controllers.ListingController;
 import com.arenella.recruit.listings.services.ListingService;
 
@@ -110,15 +113,17 @@ public class ListingControllerTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testFetchListing() throws Exception{
+	public void testFetchListing_noRecruiterId() throws Exception{
 		
-		ResponseEntity<Page<CandidateAPIOutbound>> response = controller.fetchListings(mockPageable, null);
+		ArgumentCaptor<ListingFilter> filterArgCapt = ArgumentCaptor.forClass(ListingFilter.class);
 		
-		if (!(response.getBody() instanceof Page)) {
-			throw new RuntimeException("Expected UUID");
-		}
+		Mockito.when(this.mockListingService.fetchListings(filterArgCapt.capture(), Mockito.any())).thenReturn(Page.empty());
 		
-		assertEquals(response.getStatusCode(), HttpStatus.OK);
+		Page<ListingAPIOutbound> response = controller.fetchListings(mockPageable, null);
+	
+		assertTrue(response instanceof Page);
+		
+		assertTrue(filterArgCapt.getValue().getOwnerId().isEmpty());
 		
 	}
 	
@@ -128,16 +133,18 @@ public class ListingControllerTest {
 	*/
 	@Test
 	public void testFetchListingWithRecruiterFilter() throws Exception{
+	
+		ArgumentCaptor<ListingFilter> filterArgCapt = ArgumentCaptor.forClass(ListingFilter.class);
+		
+		Mockito.when(this.mockListingService.fetchListings(filterArgCapt.capture(), Mockito.any())).thenReturn(Page.empty());
 		
 		final String recruiterId = "kparking";
 		
-		ResponseEntity<Page<CandidateAPIOutbound>> response = controller.fetchListings(mockPageable, recruiterId);
+		Page<ListingAPIOutbound> response = controller.fetchListings(mockPageable, recruiterId);
 		
-		if (!(response.getBody() instanceof Page)) {
-			throw new RuntimeException("Expected UUID");
-		}
+		assertTrue(response instanceof Page);
 		
-		assertEquals(response.getStatusCode(), HttpStatus.OK);
+		assertEquals(filterArgCapt.getValue().getOwnerId().get(), recruiterId);
 		
 	}
 		

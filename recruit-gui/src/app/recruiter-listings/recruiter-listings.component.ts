@@ -1,8 +1,10 @@
 import { Component, OnInit } 							from '@angular/core';
 import { FormGroup, FormControl }						from '@angular/forms';
 import { ListingService }								from '../listing.service';
+import { RecruiterService }								from '../recruiter.service';
 import { NgbModal, NgbModalOptions}						from '@ng-bootstrap/ng-bootstrap';
 import { ViewChild }									from '@angular/core';
+import { Listing}										from './listing';
 
 @Component({
   selector: 'app-recruiter-listings',
@@ -13,11 +15,20 @@ export class RecruiterListingsComponent implements OnInit {
 
 	@ViewChild('feedbackBox', { static: false }) private content:any;
 
-  	constructor(private listingService:ListingService, private modalService: NgbModal) { }
+  	constructor(private listingService:ListingService, private modalService: NgbModal, private recruiterService:RecruiterService) { }
 
-  	ngOnInit(): void {
+	private recruiterId:string = '';
+	
+	ngOnInit(): void {
+	
+		this.recruiterService.getOwnRecruiterAccount().subscribe(data => {
+			this.recruiterId = data.userId;
+			this.fetchListings();			
+		});
+	
   	}
 
+	public listings:Array<Listing>			= new Array<Listing>();
 	public activeView:string				= 'list';
 	public activeSubView:string				= 'none';
 	
@@ -210,6 +221,7 @@ export class RecruiterListingsComponent implements OnInit {
 								currency, 		
 								false).subscribe( data => {
 									this.reset();
+									this.fetchListings();
 									this.showList();
 								}, err => {
 									
@@ -226,6 +238,22 @@ export class RecruiterListingsComponent implements OnInit {
 										
 								});
 	
+	}
+	
+	/**
+	* Retrieves listings belonging to the Recruiter
+	*/
+	public fetchListings():void{
+		
+		this.listingService
+			.fetchRecruiterListings(this.recruiterId)
+				.subscribe(data => {
+					this.listings = data.content;
+				}, 
+				err => {
+					console.log("Error retrieving listings" + JSON.stringify(err));			
+				});
+		
 	}
 		
 }
