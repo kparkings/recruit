@@ -69,9 +69,9 @@ export class ListingService {
 	/**
 	* Returns the listings ownerd by the Recruiter
 	*/	
-	public fetchRecruiterListings(recruiterId:string):Observable<any>{
+	public fetchRecruiterListings(recruiterId:string, sortColumn:string, order:string, pageNum:number, pageSize:number):Observable<any>{
 		
-		const backendUrl:string = environment.backendUrl +'listing/?'+recruiterId;
+		const backendUrl:string = environment.backendUrl +'listing/?'+recruiterId +'&orderAttribute='+  sortColumn +  '&order=' + order + '&page=' + pageNum + '&size=' + pageSize;
 		
 		return this.httpClient.get<any>(backendUrl, this.httpOptions);
 	}

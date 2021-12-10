@@ -36,6 +36,11 @@ export class RecruiterListingsComponent implements OnInit {
   	public feedbackBoxTitle                 = '';
   	public feedbackBoxText:string           = '';
 	public validationErrors:Array<string>	= new Array<string>();
+	
+	private	pageSize:						number						= 8;
+  	public	totalPages:						number						= 0;
+  	public	currentPage:					number						= 0;
+  	
 
 	public newListingFormBean:FormGroup 	= new FormGroup({
      
@@ -244,16 +249,69 @@ export class RecruiterListingsComponent implements OnInit {
 	* Retrieves listings belonging to the Recruiter
 	*/
 	public fetchListings():void{
-		
+	
 		this.listingService
-			.fetchRecruiterListings(this.recruiterId)
+			.fetchRecruiterListings(this.recruiterId, 'created',"desc", this.currentPage, this.pageSize)
 				.subscribe(data => {
-					this.listings = data.content;
+					this.totalPages = data.totalPages;
+					this.listings 	= data.content;
 				}, 
 				err => {
 					console.log("Error retrieving listings" + JSON.stringify(err));			
 				});
 		
 	}
+	
+		/**
+	* Whether or not the previous page button 
+	* should be active
+	* */
+	public showNavPrev(): boolean{
+    
+		if (this.totalPages === -1) {
+      		return false;
+    	}
+
+    	return this.currentPage > 0;
+
+  	}
+
+	/**
+	* Whether or not the next page 
+	* button should be active
+	*/
+	public showNavNext():boolean{
+    
+    	if (this.totalPages === 0) {
+      		return false;
+    	}
+
+    	return this.currentPage < (this.totalPages -1);
+
+	}
+	
+		/**
+	* Fetches and displays the next page 
+	* of candidtes
+	*/
+	public nextPage(): void{
+
+    	if ((this.currentPage + 1) < this.totalPages) {
+      		this.currentPage = this.currentPage + 1;
+      		this.fetchListings();
+    	}
+    
+	}
+
+	/**
+	* Fetches and displays the previous page of Candidates
+	*/
+	public previousPage(): void{
+    
+		if ((this.currentPage) > 0) {
+      		this.currentPage = this.currentPage - 1;
+      		this.fetchListings();
+    	}
+  	}
 		
 }

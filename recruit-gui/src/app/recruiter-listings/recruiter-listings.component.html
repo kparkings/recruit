@@ -5,19 +5,65 @@
 		<div [ngSwitch]="activeView">
 		
 			<div  *ngSwitchCase="'list'">
-				<div>
-					<button (click)="showAdd()" class="btn btn-secondary btn-listing">Add Listing</button>
-				</div>
 				
-				<div *ngFor="let listing of listings">
-					{{listing.listingId}}
+				<div>
+					<!-- Action buttons -->
+					<div class="action-buttons">
+						<button (click)="showAdd()" class="btn btn-secondary btn-listing">Add Listing</button>
+					</div>
+			
+					<!-- Pagination -->
+					<div class="pagination-options">
+			           	<span [ngSwitch]="showNavPrev()">
+							<span *ngSwitchCase="true"  class="listing-nav" (click)="previousPage()"><<<<<</span>
+							<span *ngSwitchCase="false" class="listing-nav-disabled"><<<<<</span>
+						</span>
+						<span>{{currentPage+1}}</span>
+						<span [ngSwitch]="showNavNext()">
+							<span *ngSwitchCase="true"class="listing-nav" (click)="nextPage()">>>>>></span>
+							<span *ngSwitchCase="false"class="listing-nav-disabled">>>>>></span>
+						</span>
+					</div>
+				</div>
+			
+				<div>
+      
+					<table class="table listing-table">
+						<thead>
+				      		<tr>
+				      			<!-- Table Headers -->
+				      			<th class="bg-tab-hdr">Created</th>
+								<th class="bg-tab-hdr">Title</th>
+				                <th class="bg-tab-hdr">Type</th>
+				                <th class="bg-tab-hdr">Country</th>
+				               	<th class="bg-tab-hdr">Views</th>
+				      		</tr>
+				      	</thead>
+				      	<tbody>
+				      		<!-- Table row -->
+				      		<tr *ngFor="let listing of listings">
+				      			<td class="listing-tab-col">{{listing.created}}</td>
+				      			<td class="listing-tab-col">{{listing.title}}</td>
+				                <td class="listing-tab-col">{{listing.type}}</td>
+				                <td class="listing-tab-col">{{listing.country}}</td>
+				                <td class="listing-tab-col">{{listing.views}}</td>
+				      		</tr>	
+				      	</tbody>
+					</table>
 				</div>
 				
 			</div>
 			
 			<div  *ngSwitchCase="'add'">
-				<button (click)="showList()" class="btn btn-secondary btn-listing">Show Listings</button>
-				<button (click)="publishListing()" class="btn btn-secondary btn-listing">Publish</button>
+				
+				
+				<!-- Action buttons -->
+				<div class="action-buttons">
+					<button (click)="showList()" class="btn btn-secondary btn-listing">Show Listings</button>
+					<button (click)="publishListing()" class="btn btn-secondary btn-listing">Publish</button>
+				</div>
+				
+				
 			</div>
 			
 		</div>
