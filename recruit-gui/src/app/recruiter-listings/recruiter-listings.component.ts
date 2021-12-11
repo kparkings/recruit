@@ -16,12 +16,6 @@ export class RecruiterListingsComponent implements OnInit {
 	@ViewChild('feedbackBox', { static: false }) private content:any;
 
   	constructor(private listingService:ListingService, private modalService: NgbModal, private recruiterService:RecruiterService) { }
-
-	private recruiterId:string				= '';
-	private recruiterFirstName:string 		= '';
-	private recruiterSurname:string			= '';
-	private recruiterEmail:string 			= '';
-	private recruiterCompany:string			= '';
 	
 	ngOnInit(): void {
 	
@@ -36,20 +30,27 @@ export class RecruiterListingsComponent implements OnInit {
 	
   	}
 
-	public skills:Array<string> 			= new Array<string>();
-	public listings:Array<Listing>			= new Array<Listing>();
-	public activeView:string				= 'list';
-	public activeSubView:string				= 'none';
-	public selectedListing:Listing			= new Listing();
+	private  recruiterId:string					= '';
+	private  recruiterFirstName:string 			= '';
+	private  recruiterSurname:string			= '';
+	private  recruiterEmail:string 				= '';
+	private  recruiterCompany:string			= '';
 	
-	public feedbackBoxClass:string          = '';
-  	public feedbackBoxTitle                 = '';
-  	public feedbackBoxText:string           = '';
-	public validationErrors:Array<string>	= new Array<string>();
+	public skills:Array<string> 				= new Array<string>();
+	public listings:Array<Listing>				= new Array<Listing>();
+	public activeView:string					= 'list';
+	public activeSubView:string					= 'none';
+	public selectedListing:Listing				= new Listing();
 	
-	private	pageSize:						number						= 8;
-  	public	totalPages:						number						= 0;
-  	public	currentPage:					number						= 0;
+	public feedbackBoxClass:string          	= '';
+  	public feedbackBoxTitle                 	= '';
+  	public feedbackBoxText:string           	= '';
+	public validationErrors:Array<string>		= new Array<string>();
+	public enabldeDeleteOption:boolean			= false;
+	
+	private	pageSize:number						= 8;
+  	public	totalPages:number					= 0;
+  	public	currentPage:number					= 0;
   	
 
 	public newListingFormBean:FormGroup 	= new FormGroup({
@@ -94,8 +95,9 @@ export class RecruiterListingsComponent implements OnInit {
 			
 		});
 		
-		this.skills 			= new Array<string>();
-		this.validationErrors 	= new Array<string>();
+		this.skills 				= new Array<string>();
+		this.validationErrors 		= new Array<string>();
+		this.enabldeDeleteOption	= false;
 		
 	}
 	
@@ -169,9 +171,10 @@ export class RecruiterListingsComponent implements OnInit {
 	* Switches to Add Listing view
 	*/
 	public showAdd():void{
-		this.activeView 		= 'add';
-		this.activeSubView 		= 'step1';
-		this.selectedListing	= new Listing();
+		this.activeView 			= 'add';
+		this.activeSubView 			= 'step1';
+		this.selectedListing		= new Listing();
+		this.enabldeDeleteOption 	= false;
 		
 		/**	
 		* Default values
@@ -186,9 +189,10 @@ export class RecruiterListingsComponent implements OnInit {
 	* Switches to Add Listing view
 	*/
 	public showList():void{
-		this.activeView 		= 'list';
-		this.activeSubView 		= 'none';
-		this.selectedListing	= new Listing();
+		this.activeView 			= 'list';
+		this.activeSubView 			= 'none';
+		this.selectedListing		= new Listing();
+		this.enabldeDeleteOption 	= false;
 	}
 	
 	/**
@@ -196,8 +200,9 @@ export class RecruiterListingsComponent implements OnInit {
 	*/
 	public showListingDetails(selectedListing?:Listing):void{
 		
-		this.activeView 		= 'show';
-		this.activeSubView 		= 'none';
+		this.activeView 			= 'show';
+		this.activeSubView 			= 'none';
+		this.enabldeDeleteOption 	= false;
 		
 		if (selectedListing) {
 			this.selectedListing	= selectedListing;	
@@ -210,8 +215,9 @@ export class RecruiterListingsComponent implements OnInit {
 	*/
 	public showEditListing():void{
 		
-		this.activeView 		= 'edit';
-		this.activeSubView 		= 'step1';
+		this.activeView 			= 'edit';
+		this.activeSubView 			= 'step1';
+		this.enabldeDeleteOption 	= false;
 		
 		/**	
 		* Default values
@@ -291,7 +297,9 @@ export class RecruiterListingsComponent implements OnInit {
 		
 		this.validationErrors	= new Array<string>();
 		
-		this.listingService
+		if (this.selectedListing.listingId === '') {
+			
+			this.listingService
 				.registerListing(ownerName, 
 								ownerCompany,
 								ownerEmail,
@@ -323,6 +331,43 @@ export class RecruiterListingsComponent implements OnInit {
 									}
 										
 								});
+								
+		} else {
+			
+			this.listingService
+				.updateListing( this.selectedListing.listingId,
+								ownerName, 
+								ownerCompany,
+								ownerEmail,
+								title,
+								description,
+								type,	
+								country,	
+								location,	
+								yearsExperience,
+								languages,
+								this.skills,	
+								rate, 			
+								currency, 		
+								false).subscribe( data => {
+									this.reset();
+									this.fetchListings();
+									this.showList();
+								}, err => {
+									
+									if(err.status === 400) {
+										
+										let failedFields:Array<any> = err.error;
+										
+										failedFields.forEach(failedField => {
+											this.validationErrors.push(failedField.fieldMessageOrKey);
+										});
+										
+										this.open('feedbackBox', "Failure",  false);
+									}
+										
+								});
+		}
 	
 	}
 	
@@ -394,6 +439,29 @@ export class RecruiterListingsComponent implements OnInit {
       		this.fetchListings();
     	}
   	}
+
+	/**
+	* Shows the confirm button to confirm deletion of the 
+	* currently selected Listing
+	*/
+	public showConfirmDelete():void {
+		this.enabldeDeleteOption = true;
+	}
+	
+	/**
+	* Calls the service to delete the selected Listing
+	*/
+	public performmDelete():void {
+		this.enabldeDeleteOption = false;
+		//call service to perform delete
+		this.listingService.deleteRecruiterListing(this.selectedListing.listingId).subscribe(data => {
+				this.reset();
+				this.fetchListings();
+				this.showList();
+		},err => {
+			console.log('Unable to delete Lisring ' + JSON.stringify(err));
+		});
+	}
 
 	/**
 	* Returns the code identifying the country

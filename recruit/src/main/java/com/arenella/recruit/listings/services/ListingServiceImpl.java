@@ -6,6 +6,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -58,7 +59,15 @@ public class ListingServiceImpl implements ListingService{
 		ListingEntity 	entity 			= this.listingDao.findById(listingId).orElseThrow(() -> new IllegalArgumentException("Cannot update unknown listing: " + listingId));
 		String 			currentUser		= SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
 		
-		//Check Recruiter is owner of the Listing
+		this.performValidation(listing);
+		
+		if (!entity.getOwnerId().toString().equals(currentUser)) {
+			throw new AccessDeniedException("Not authroised to alter this Listing");
+		}
+		
+		ListingEntity entityUpdated = ListingEntity.convertToEntity(listing, Optional.of(entity)); 
+		
+		this.listingDao.save(entityUpdated);
 		
 	}
 
@@ -71,7 +80,11 @@ public class ListingServiceImpl implements ListingService{
 		ListingEntity 	entity 			= this.listingDao.findById(listingId).orElseThrow(() -> new IllegalArgumentException("Cannot delete unknown listing: " + listingId));
 		String 			currentUser		= SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
 		
-		//Check Recruiter is owner of the Listing
+		if (!entity.getOwnerId().toString().equals(currentUser)) {
+			throw new AccessDeniedException("Not authroised to alter this Listing");
+		}
+		
+		this.listingDao.delete(entity);
 	}
 
 	/**

@@ -635,7 +635,6 @@ public class ListingEntity {
 			entity.setTitle(listing.getTitle());
 			entity.setRate(listing.getRate());
 			entity.setOwnerName(listing.getOwnerName());
-			entity.setOwnerId(listing.getOwnerId());
 			entity.setOwnerEmail(listing.getOwnerEmail());
 			entity.setOwnerCompany(listing.getOwnerCompany());
 			entity.setLocation(listing.getLocation());
@@ -644,7 +643,6 @@ public class ListingEntity {
 			entity.setDescription(listing.getDescription());
 			entity.setCurrency(listing.getCurrency());
 			entity.setCountry(listing.getCountry());
-			entity.setCreated(listing.getCreated());
 			
 			return entity;
 		}

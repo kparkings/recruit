@@ -11,6 +11,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 
 import com.arenella.recruit.listings.beans.Listing;
@@ -90,9 +91,30 @@ public class ListingServiceImplTest {
 		});
 		
 	}
+	
+	/**
+	* Asserts Exception is thrown if the Listing being updated is not owned 
+	* by the user performing the update
+	* @throws Exception
+	*/
+	@Test
+	public void testUpdateListing_notOwnerOfListing() throws Exception{
+		
+		final UUID 				listingId 		= UUID.randomUUID();
+		final Listing			listing			= Listing.builder().ownerId("kevin").title("a").description("b").ownerCompany("c").ownerName("d").ownerEmail("e").build();
+		final ListingEntity 	existingEntity 	= ListingEntity.builder().ownerId("kevin").title("a").description("b").ownerCompany("c").ownerName("d").ownerEmail("e").build();
+		
+		Mockito.when(this.mockListingDao.findById(listingId)).thenReturn(Optional.of(existingEntity));
+		Mockito.when(mockAuthentication.getPrincipal()).thenReturn("notKevin");
+		
+		Assertions.assertThrows(AccessDeniedException.class, () -> {
+			this.service.updateListing(listingId, listing);
+		});
+		
+	}
 
 	/**
-	* Asserts Exception is thrown if the Listing being deleted does not exist
+	* Asserts Exception is thrown if the Listing being Updates does not exist
 	* @throws Exception
 	*/
 	@Test
@@ -106,6 +128,66 @@ public class ListingServiceImplTest {
 			this.service.deleteListing(listingId);
 		});
 		 
+	}
+
+	/**
+	* Asserts Exception is thrown if the Listing being Deleted is not owned 
+	* by the user performing the update
+	* @throws Exception
+	*/
+	@Test
+	public void testDeleteListing_notOwnerOfListing() throws Exception{
+		
+		final UUID 				listingId 		= UUID.randomUUID();
+		final ListingEntity 	existingEntity 	= ListingEntity.builder().ownerId("kevin").title("a").description("b").ownerCompany("c").ownerName("d").ownerEmail("e").build();
+		
+		Mockito.when(this.mockListingDao.findById(listingId)).thenReturn(Optional.of(existingEntity));
+		Mockito.when(mockAuthentication.getPrincipal()).thenReturn("notKevin");
+		
+		Assertions.assertThrows(AccessDeniedException.class, () -> {
+			this.service.deleteListing(listingId);
+		});
+		 
+	}
+	
+	/**
+	* Tests happy path
+	* @throws Exception
+	*/
+	@Test
+	public void testUpdateListing() throws Exception {
+		
+		final UUID 				listingId 		= UUID.randomUUID();
+		final String			ownerId			= "kevin";
+		final Listing			listing			= Listing.builder().ownerId("kevin").title("a").description("b").ownerCompany("c").ownerName("d").ownerEmail("e").build();
+		final ListingEntity 	existingEntity 	= ListingEntity.builder().ownerId(ownerId).title("a").description("b").ownerCompany("c").ownerName("d").ownerEmail("e").build();
+		
+		Mockito.when(this.mockListingDao.findById(listingId)).thenReturn(Optional.of(existingEntity));
+		Mockito.when(mockAuthentication.getPrincipal()).thenReturn(ownerId);
+		
+		this.service.updateListing(listingId, listing);
+		
+		Mockito.verify(this.mockListingDao).save(Mockito.any(ListingEntity.class));
+	}
+	
+	/**
+	* Tests happy path
+	* @throws Exception
+	*/
+	@Test
+	public void testDeleteListing() throws Exception {
+		
+		final UUID 				listingId 		= UUID.randomUUID();
+		final String			ownerId			= "kevin";
+		final ListingEntity 	existingEntity 	= ListingEntity.builder().ownerId(ownerId).title("a").description("b").ownerCompany("c").ownerName("d").ownerEmail("e").build();
+		
+		Mockito.when(this.mockListingDao.findById(listingId)).thenReturn(Optional.of(existingEntity));
+		Mockito.when(mockAuthentication.getPrincipal()).thenReturn(ownerId);
+		
+		this.service.deleteListing(listingId);
+		
+		Mockito.verify(this.mockListingDao).delete(existingEntity);
+		
 	}
 	
 	/**

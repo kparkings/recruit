@@ -65,6 +65,8 @@
 					<div class="action-buttons">
 						<button (click)="showList()" class="btn btn-secondary btn-listing">Back</button>
 						<button (click)="showEditListing()" class="btn btn-secondary btn-listing">Edit</button>
+						<button (click)="showConfirmDelete()" *ngIf="!enabldeDeleteOption" class="btn btn-secondary btn-listing">Delete</button>
+						<button (click)="performmDelete()" 	  *ngIf="enabldeDeleteOption"	class="btn btn-secondary btn-listing confirm-delete">Confirm</button>
 					</div>
 					
 					<div style="margin-top:20px;">

@@ -91,6 +91,8 @@ public class ListingControllerTest {
 		
 		assertEquals(response.getStatusCode(), HttpStatus.OK);
 		
+		Mockito.verify(mockListingService).updateListing(Mockito.eq(listingId), Mockito.any());
+		
 	}
 	
 	/**
@@ -105,6 +107,8 @@ public class ListingControllerTest {
 		ResponseEntity<Void> response = controller.deleteListing(listingId);
 		
 		assertEquals(response.getStatusCode(), HttpStatus.OK);
+		
+		Mockito.verify(mockListingService).deleteListing(Mockito.eq(listingId));
 		
 	}
 	

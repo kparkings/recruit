@@ -216,21 +216,21 @@ public class ListingEntityTest {
 
 			assertTrue(entity == existingEntity);
 			
-			assertEquals(country, 			entity.getCountry());
-			assertEquals(created, 			entity.getCreated());
-			assertEquals(currency, 			entity.getCurrency());
-			assertEquals(description, 		entity.getDescription());
-			assertEquals(listingId, 		entity.getListingId());
-			assertEquals(location, 			entity.getLocation());
-			assertEquals(ownerId, 			entity.getOwnerId());
-			assertEquals(rate, 				entity.getRate(), 0);
-			assertEquals(title,	 			entity.getTitle());
-			assertEquals(type, 				entity.getType());
-			assertEquals(yearsExperience, 	entity.getYearsExperience());
-			assertEquals(views, 			entity.getViews());
-			assertEquals(ownerName, 		entity.getOwnerName());
-			assertEquals(ownerCompany, 		entity.getOwnerCompany());
-			assertEquals(ownerEmail, 		entity.getOwnerEmail());
+			assertEquals(country, 						entity.getCountry());
+			assertEquals(existingEntity.getCreated(), 	entity.getCreated());
+			assertEquals(currency, 						entity.getCurrency());
+			assertEquals(description, 					entity.getDescription());
+			assertEquals(listingId, 					entity.getListingId());
+			assertEquals(location, 						entity.getLocation());
+			assertEquals(existingEntity.getOwnerId(), 	entity.getOwnerId());
+			assertEquals(rate, 							entity.getRate(), 0);
+			assertEquals(title,	 						entity.getTitle());
+			assertEquals(type, 							entity.getType());
+			assertEquals(yearsExperience, 				entity.getYearsExperience());
+			assertEquals(views, 						entity.getViews());
+			assertEquals(ownerName, 					entity.getOwnerName());
+			assertEquals(ownerCompany, 					entity.getOwnerCompany());
+			assertEquals(ownerEmail, 					entity.getOwnerEmail());
 			
 			assertTrue(entity.getLanguages().contains(Listing.language.DUTCH));
 			assertTrue(entity.getLanguages().contains(Listing.language.FRENCH));

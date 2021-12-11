@@ -54,7 +54,11 @@ public class ListingController {
 	@PreAuthorize("hasRole('ROLE_RECRUITER')")
 	@PutMapping(value="/listing/{listingId}")
 	public ResponseEntity<Void> updateListing(@PathVariable("listingId") UUID listingId, @RequestBody ListingAPIInbound listing){
+		
+		this.service.updateListing(listingId, ListingAPIInbound.convertToListing(listing));
+		
 		return ResponseEntity.status(HttpStatus.OK).build();
+		
 	}
 	
 	/**
@@ -65,6 +69,9 @@ public class ListingController {
 	@PreAuthorize("hasRole('ROLE_RECRUITER')")
 	@DeleteMapping(value="/listing/{listingId}")
 	public ResponseEntity<Void> deleteListing(@PathVariable("listingId") UUID listingId){
+		
+		this.service.deleteListing(listingId);
+		
 		return ResponseEntity.status(HttpStatus.OK).build();
 	}
 	
