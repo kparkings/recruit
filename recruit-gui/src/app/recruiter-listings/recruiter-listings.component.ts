@@ -17,17 +17,26 @@ export class RecruiterListingsComponent implements OnInit {
 
   	constructor(private listingService:ListingService, private modalService: NgbModal, private recruiterService:RecruiterService) { }
 
-	private recruiterId:string = '';
+	private recruiterId:string				= '';
+	private recruiterFirstName:string 		= '';
+	private recruiterSurname:string			= '';
+	private recruiterEmail:string 			= '';
+	private recruiterCompany:string			= '';
 	
 	ngOnInit(): void {
 	
 		this.recruiterService.getOwnRecruiterAccount().subscribe(data => {
-			this.recruiterId = data.userId;
+			this.recruiterId 					= data.userId;
+			this.recruiterFirstName				= data.firstName;
+			this.recruiterSurname				= data.surname;
+			this.recruiterEmail					= data.email;
+			this.recruiterCompany				= data.companyName;
 			this.fetchListings();			
 		});
 	
   	}
 
+	public skills:Array<string> 			= new Array<string>();
 	public listings:Array<Listing>			= new Array<Listing>();
 	public activeView:string				= 'list';
 	public activeSubView:string				= 'none';
@@ -62,8 +71,6 @@ export class RecruiterListingsComponent implements OnInit {
 		skill:				new FormControl()
 		
 	});
-	
-	public skills:Array<string> = new Array<string>();
 	
 	public reset():void{
 		
@@ -165,6 +172,14 @@ export class RecruiterListingsComponent implements OnInit {
 		this.activeView 		= 'add';
 		this.activeSubView 		= 'step1';
 		this.selectedListing	= new Listing();
+		
+		/**	
+		* Default values
+		*/
+		this.newListingFormBean.get("contactName")?.setValue(this.recruiterFirstName + ' ' + this.recruiterSurname);
+		this.newListingFormBean.get("contactEmail")?.setValue(this.recruiterEmail);
+		this.newListingFormBean.get("contactCompany")?.setValue(this.recruiterCompany);
+			
 	}
 	
 	/**
@@ -194,9 +209,34 @@ export class RecruiterListingsComponent implements OnInit {
 	* Switches to Edit Listing view
 	*/
 	public showEditListing():void{
+		
 		this.activeView 		= 'edit';
 		this.activeSubView 		= 'step1';
-		//Populate form with Listing
+		
+		/**	
+		* Default values
+		*/
+		this.newListingFormBean.get("contactName")?.setValue(this.selectedListing.ownerName);
+		this.newListingFormBean.get("contactEmail")?.setValue(this.selectedListing.ownerEmail);
+		this.newListingFormBean.get("contactCompany")?.setValue(this.selectedListing.ownerCompany);
+		
+		this.newListingFormBean.get("title")?.setValue(this.selectedListing.title);
+		this.newListingFormBean.get("type")?.setValue(this.selectedListing.type);
+       	this.newListingFormBean.get("country")?.setValue(this.selectedListing.country);
+		this.newListingFormBean.get("location")?.setValue(this.selectedListing.location);	
+		this.newListingFormBean.get("experienceYears")?.setValue(this.selectedListing.yearsExperience);
+		this.newListingFormBean.get("rate")?.setValue(this.selectedListing.rate);
+		this.newListingFormBean.get("rateCurrency")?.setValue(this.selectedListing.currency);
+		this.newListingFormBean.get("description")?.setValue(this.selectedListing.description);
+		
+		this.newListingFormBean.get("langDutch")?.setValue(this.selectedListing.languages.includes('DUTCH'));
+		this.newListingFormBean.get("langEnglish")?.setValue(this.selectedListing.languages.includes('ENGLISH'));
+		this.newListingFormBean.get("langFrench")?.setValue(this.selectedListing.languages.includes('FRENCH'));
+		
+		this.skills = this.selectedListing.skills;
+
+		this.newListingFormBean.get("skill")?.setValue('');
+	
 	}
 	
 	/**
