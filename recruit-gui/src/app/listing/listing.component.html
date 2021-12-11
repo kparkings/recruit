@@ -1,0 +1,119 @@
+<div class=".container m-2" >
+	<div>
+	    <div class="centerdiv">
+	        <div class="center-table">
+	        	<div [ngSwitch]="activeView">
+	        		
+	        		<!-- List View -->
+	        		<div  *ngSwitchCase="'list'">
+	        		
+	        			<div>
+					
+							<!-- Pagination -->
+							<div class="pagination-options">
+					           	<span [ngSwitch]="showNavPrev()">
+									<span *ngSwitchCase="true"  class="listing-nav" (click)="previousPage()"><<<<<</span>
+									<span *ngSwitchCase="false" class="listing-nav-disabled"><<<<<</span>
+								</span>
+								<span>{{currentPage+1}}</span>
+								<span [ngSwitch]="showNavNext()">
+									<span *ngSwitchCase="true"class="listing-nav" (click)="nextPage()">>>>>></span>
+									<span *ngSwitchCase="false"class="listing-nav-disabled">>>>>></span>
+								</span>
+							</div>
+						</div>
+					
+						<div>
+		      
+							<table class="table listing-table">
+								<thead>
+						      		<tr>
+						      			<!-- Table Headers -->
+						      			<th class="bg-tab-hdr">Created</th>
+										<th class="bg-tab-hdr">Title</th>
+						                <th class="bg-tab-hdr">Type</th>
+						                <th class="bg-tab-hdr">Country</th>
+						               	<th class="bg-tab-hdr">Views</th>
+						      		</tr>
+						      	</thead>
+						      	<tbody>
+						      		<!-- Table row -->
+						      		<tr class="listing-tab-row" *ngFor="let listing of listings" (click)="showListingDetails(listing)">
+						      			<td class="listing-tab-col">{{listing.created | date:'yyyy-MM-dd hh:mm'}}</td>
+						      			<td class="listing-tab-col">{{listing.title}}</td>
+						                <td class="listing-tab-col">{{getContractType(listing.type)}}</td>
+						                <td class="listing-tab-col">{{getCountryCode(listing.country)}}</td>
+						                <td class="listing-tab-col">{{listing.views}}</td>
+						      		</tr>	
+						      	</tbody>
+							</table>
+						</div>
+				
+	        		</div>
+	        		
+	        		<!-- Show Selected Listing View -->
+	        		<div class="center">
+	        			
+	        			<div  *ngSwitchCase="'show'">
+	        			
+		        			<!-- Action buttons -->
+							<div class="action-buttons">
+								<button (click)="showList()" class="btn btn-secondary btn-listing">Back</button>
+							</div>
+							
+							<div style="margin-top:20px;">
+							
+								<div class="listing-view-div">
+									<h1 class="listing-view-title">{{selectedListing.title}}</h1></div>
+								<div></div>
+								<div class="listing-view-div">
+									<span><b>{{getCountryCode(selectedListing.country)}}</b></span> : <span>{{selectedListing.location}}</span>
+								</div>
+								
+								<div class="listing-view-div">
+									<span><b>{{getContractType(selectedListing.type)}} | </b>{{selectedListing.currency}}</span> : <span>{{selectedListing.rate}}</span>
+								</div>
+								
+								<div class="listing-view-div">
+									<!--  <p>-->
+									<pre style="white-space:pre-line;font-family: Roboto, 'Helvetica Neue', sans-serif;">{{selectedListing.description}}</pre>
+									<!-- </p> -->
+								</div>
+								
+								<h2 class="listing-view-title">Requirements</h2>
+								
+								<div class="listing-view-div"><b>Years Experience: </b>{{selectedListing.yearsExperience}}</div>	
+								
+								<h3  class="listing-view-title">Languages</h3>
+								<div class="listing-view-div">
+									<table>
+										<tr *ngFor="let language of selectedListing.languages">
+											<td>{{getLanguage(language)}}</td>
+										</tr>
+									</table>
+								</div>
+								
+								<h3  class="listing-view-title">Skills</h3>
+								<div class="listing-view-div">
+									<table>
+										<tr *ngFor="let skill of selectedListing.skills">
+											<td>{{skill}}</td>
+										</tr>
+									</table>
+								</div>
+								
+								<h2  class="listing-view-title">Contact Details</h2>
+								<div>
+									<div>{{selectedListing.ownerName}}</div>	
+									<div>{{selectedListing.ownerCompany}}</div>	
+									<div>{{selectedListing.ownerEmail}}</div>	
+								</div>
+							</div>
+						</div>
+	        		</div>
+	        		
+	        	</div>
+	        </div>
+	    </div>
+	</div>
+</div>

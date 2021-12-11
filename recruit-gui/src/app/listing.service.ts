@@ -117,8 +117,18 @@ export class ListingService {
 		
 		return this.httpClient.get<any>(backendUrl, this.httpOptions);
 	}
-	
-		/**
+
+	/**
+	* Returns the listings owned by any recruiter
+	*/	
+	public fetchAllListings(sortColumn:string, order:string, pageNum:number, pageSize:number):Observable<any>{
+		
+		const backendUrl:string = environment.backendUrl +'listing/?orderAttribute='+  sortColumn +  '&order=' + order + '&page=' + pageNum + '&size=' + pageSize;
+		
+		return this.httpClient.get<any>(backendUrl, this.httpOptions);
+	}
+		
+	/**
 	* Returns the listings ownerd by the Recruiter
 	*/	
 	public deleteRecruiterListing(listingId:string):Observable<any>{

@@ -5,8 +5,9 @@ import { StatisticsComponent }							from './statistics/statistics.component';
 import { ViewCandidatesComponent }						from './view-candidates/view-candidates.component';
 import { LoginUserComponent }							from './login-user/login-user.component';
 import { AccountsComponent }							from './accounts/accounts.component';
+import { ListingComponent }								from './listing/listing.component';
 import { RecruiterAccountComponent }					from './recruiter-account/recruiter-account.component';
-import { RecruiterListingsComponent }							from './recruiter-listings/recruiter-listings.component';
+import { RecruiterListingsComponent }					from './recruiter-listings/recruiter-listings.component';
 import { HomeComponent }								from './home/home.component';
 import { CreateCandidateComponent }						from './create-candidate/create-candidate.component';
 import { AuthGuardService }								from './auth-guard.service';
@@ -23,6 +24,7 @@ const routes: Routes = [
 	{path: 'recruiter-listings', 	component: RecruiterListingsComponent, 		canActivate: [AuthGuardService]},
 	{path: 'login-user', 			component: LoginUserComponent},
 	{path: 'login-user', 			component: LoginUserComponent},
+	{path: 'listing', 				component: ListingComponent},
 	{path: 'create-candidate', 		component: CreateCandidateComponent}
 ];
 

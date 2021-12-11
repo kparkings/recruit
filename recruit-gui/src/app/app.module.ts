@@ -19,6 +19,7 @@ import { AccountsComponent } 			from './accounts/accounts.component';
 import { CreateCandidateComponent } 	from './create-candidate/create-candidate.component';
 import { RecruiterAccountComponent } from './recruiter-account/recruiter-account.component';
 import { RecruiterListingsComponent } from './recruiter-listings/recruiter-listings.component';
+import { ListingComponent } from './listing/listing.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { RecruiterListingsComponent } from './recruiter-listings/recruiter-listi
     AccountsComponent,
     CreateCandidateComponent,
     RecruiterAccountComponent,
-    RecruiterListingsComponent
+    RecruiterListingsComponent,
+    ListingComponent
   ],
   imports: [
     BrowserModule,
