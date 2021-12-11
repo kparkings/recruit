@@ -590,7 +590,7 @@ databaseChangeLog:
                     nullable: true
               - column:
                   name: rate
-                  type: float
+                  type: varchar
                   constraints:
                     nullable: true
               - column:

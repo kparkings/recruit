@@ -32,7 +32,7 @@ public class ListingAPIOutbound {
 	private int 				yearsExperience;
 	private Set<language> 		languages			= new LinkedHashSet<>();
 	private Set<String>			skills				= new LinkedHashSet<>();
-	private float 				rate;
+	private String 				rate;
 	private currency			currency;
 	private int 				views;
 	
@@ -183,7 +183,7 @@ public class ListingAPIOutbound {
 	* Returns the rate being offered
 	* @return rate offered for the Listing
 	*/
-	public float getRate() {
+	public String getRate() {
 		return this.rate;
 	}
 	
@@ -231,7 +231,7 @@ public class ListingAPIOutbound {
 		private int 				yearsExperience;
 		private Set<language> 		languages			= new LinkedHashSet<>();
 		private Set<String>			skills				= new LinkedHashSet<>();
-		private float 				rate;
+		private String 				rate;
 		private currency			currency;
 		private int					views;
 		
@@ -385,7 +385,7 @@ public class ListingAPIOutbound {
 		* @param rate - Rate offered for the Listing
 		* @return Builder
 		*/
-		public ListingAPIOutboundBuilder rate(float rate) {
+		public ListingAPIOutboundBuilder rate(String rate) {
 			this.rate = rate;
 			return this;
 		}

@@ -28,6 +28,8 @@ export class RecruiterListingsComponent implements OnInit {
 			this.fetchListings();			
 		});
 	
+		this.loadYearsExperienceValues();
+	
   	}
 
 	private  recruiterId:string					= '';
@@ -51,6 +53,7 @@ export class RecruiterListingsComponent implements OnInit {
 	private	pageSize:number						= 8;
   	public	totalPages:number					= 0;
   	public	currentPage:number					= 0;
+	public 	yearsExperienceValues:Array<number>	= new Array<number>();					
   	
 
 	public newListingFormBean:FormGroup 	= new FormGroup({
@@ -323,11 +326,15 @@ export class RecruiterListingsComponent implements OnInit {
 										
 										let failedFields:Array<any> = err.error;
 										
-										failedFields.forEach(failedField => {
-											this.validationErrors.push(failedField.fieldMessageOrKey);
-										});
+										if (typeof err.error[Symbol.iterator] === 'function') {
+											failedFields.forEach(failedField => {
+												this.validationErrors.push(failedField.fieldMessageOrKey);
+											});
+											this.open('feedbackBox', "Failure",  false);
+										} else {
+											console.log("Failed to Update Listing " + JSON.stringify(err.error));
+										}
 										
-										this.open('feedbackBox', "Failure",  false);
 									}
 										
 								});
@@ -359,11 +366,15 @@ export class RecruiterListingsComponent implements OnInit {
 										
 										let failedFields:Array<any> = err.error;
 										
-										failedFields.forEach(failedField => {
-											this.validationErrors.push(failedField.fieldMessageOrKey);
-										});
+										if (typeof err.error[Symbol.iterator] === 'function') {
+											failedFields.forEach(failedField => {
+												this.validationErrors.push(failedField.fieldMessageOrKey);
+											});
+											this.open('feedbackBox', "Failure",  false);
+										} else {
+											console.log("Failed to Update Listing " + JSON.stringify(err.error));
+										}
 										
-										this.open('feedbackBox', "Failure",  false);
 									}
 										
 								});
@@ -540,5 +551,14 @@ export class RecruiterListingsComponent implements OnInit {
 		}
 
   	}	
+
+	/**
+	* Provides options for number of years of experience
+	*/
+	private loadYearsExperienceValues(){
+		for (let count=0; count <= 100; count++) {
+			this.yearsExperienceValues.push(count);
+		}
+	}
 	
 }

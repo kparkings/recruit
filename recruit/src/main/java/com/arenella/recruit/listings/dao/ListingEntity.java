@@ -80,7 +80,7 @@ public class ListingEntity {
 	private Set<String> 		skills			= new LinkedHashSet<>();
 	
 	@Column(name="rate")
-	private float 				rate;
+	private String 				rate;
 	
 	@Column(name="currency")
 	@Enumerated(EnumType.STRING)
@@ -216,7 +216,7 @@ public class ListingEntity {
 	}
 	
 	/**
-	* Returns the number of years expereince required
+	* Returns the number of years experience required
 	* @return experience required
 	*/
 	public int getYearsExperience() {
@@ -224,8 +224,8 @@ public class ListingEntity {
 	}
 	
 	/**
-	* Returns the langauges requested for the Listing
-	* @return requested Langauges
+	* Returns the languages requested for the Listing
+	* @return requested Languages
 	*/
 	public Set<language> getLanguages() {
 		return this.languages;
@@ -244,7 +244,7 @@ public class ListingEntity {
 	* Returns the rate offered
 	* @return offered Rate
 	*/
-	public float getRate() {
+	public String getRate() {
 		return this.rate;
 	}
 	
@@ -381,7 +381,7 @@ public class ListingEntity {
 	* Sets the rate offered
 	* @return offered Rate
 	*/
-	public void setRate(float rate) {
+	public void setRate(String rate) {
 		this.rate = rate;
 	}
 	
@@ -429,7 +429,7 @@ public class ListingEntity {
 		private int 				yearsExperience;
 		private Set<language> 		languages			= new LinkedHashSet<>();
 		private Set<String>			skills				= new LinkedHashSet<>();
-		private float 				rate;
+		private String 				rate;
 		private currency			currency;
 		private int 				views;
 		
@@ -581,7 +581,7 @@ public class ListingEntity {
 		* @param rate - Rate offered for the Listing
 		* @return Builder
 		*/
-		public ListingEntityBuilder rate(float rate){
+		public ListingEntityBuilder rate(String rate){
 			this.rate = rate;
 			return this;
 		}

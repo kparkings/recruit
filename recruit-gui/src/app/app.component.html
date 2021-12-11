@@ -9,8 +9,11 @@
 		<li  class="li-arenella-nav" *ngIf="!isAuthenticated()">
            <a  class="dropdown-item" routerLink="/">Home</a>
         </li>
-        <li  class="li-arenella-nav">
-           <a  class="dropdown-item" routerLink="/view-candidates">View Candidates</a>
+        <li  class="li-arenella-nav" *ngIf="!isAuthenticated()">
+           <a  class="dropdown-item" routerLink="/view-candidates">Login</a>
+        </li>
+		<li  class="li-arenella-nav"  *ngIf="isAuthenticated()">	
+           <a  class="dropdown-item" routerLink="/view-candidates">Candidates</a>
         </li>
         <li  class="li-arenella-nav" *ngIf="isAuthenticatedAsAdmin()">
            <a  class="dropdown-item" routerLink="/statistics">Statistics</a>

@@ -1,5 +1,7 @@
 <div class=".container m-2" >
-
+<script>
+alert("script ran");
+</script>
 	<div style="margin-top:10px">
 		<!-- buttons -->
 		<div [ngSwitch]="activeView">
@@ -179,7 +181,12 @@
 										</tr>
 										<tr>
 											<td>Required Years Experience</td>
-											<td><input type="text" formControlName="experienceYears"></td>
+											<td>
+												
+												<select formControlName="experienceYears">
+													<option *ngFor="let yearVal of yearsExperienceValues" value="{{yearVal}}">{{yearVal}}</option>
+												</select>
+											</td>
 										</tr>
 										<tr>
 											<td>Rate</td>

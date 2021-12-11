@@ -44,7 +44,7 @@ public class ListingTest {
 	private final 			int 			yearsExperience		= 10;
 	private final 			Set<language> 	languages			= new LinkedHashSet<>();
 	private final 			Set<String>		skills			 	= Set.of(SKILL_JAVA, SKILL_CSHARP);
-	private final 			float 			rate				= 115.0f;
+	private final 			String 			rate				= "115.00";
 	private final 			currency		currency			= Listing.currency.EUR;
 	private final 			int				views				= 10;
 	
@@ -92,7 +92,7 @@ public class ListingTest {
 		assertEquals(listingId, 		listing.getListingId());
 		assertEquals(location, 			listing.getLocation());
 		assertEquals(ownerId, 			listing.getOwnerId());
-		assertEquals(rate, 				listing.getRate(), 0);
+		assertEquals(rate, 				listing.getRate());
 		assertEquals(title,	 			listing.getTitle());
 		assertEquals(type, 				listing.getType());
 		assertEquals(yearsExperience, 	listing.getYearsExperience());

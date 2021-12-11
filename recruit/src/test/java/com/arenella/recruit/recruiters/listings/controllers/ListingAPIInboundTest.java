@@ -35,7 +35,7 @@ public class ListingAPIInboundTest {
 	private final 			String 			location			= "Den Haag";
 	private final 			int 			yearsExperience		= 10;
 	private final 			Set<language> 	languages			= new LinkedHashSet<>();
-	private final 			float 			rate				= 115.0f;
+	private final 			String 			rate				= "115.00";
 	private final 			currency		currency			= Listing.currency.EUR;
 	private final 			String			ownerName			= "Kevin Parkings";
 	private final 			String 			ownerCompany		= "Arenella BV";
@@ -82,7 +82,7 @@ public class ListingAPIInboundTest {
 		assertEquals(description, 		listing.getDescription());
 		assertEquals(listingId, 		listing.getListingId());
 		assertEquals(location, 			listing.getLocation());
-		assertEquals(rate, 				listing.getRate(), 0);
+		assertEquals(rate, 				listing.getRate());
 		assertEquals(title,	 			listing.getTitle());
 		assertEquals(type, 				listing.getType());
 		assertEquals(yearsExperience, 	listing.getYearsExperience());
@@ -153,7 +153,7 @@ public class ListingAPIInboundTest {
 		assertEquals(listingId, 		listing.getListingId());
 		assertEquals(location, 			listing.getLocation());
 		assertEquals(null,	 			listing.getOwnerId());
-		assertEquals(rate, 				listing.getRate(), 0);
+		assertEquals(rate, 				listing.getRate());
 		assertEquals(title,	 			listing.getTitle());
 		assertEquals(type, 				listing.getType());
 		assertEquals(yearsExperience, 	listing.getYearsExperience());

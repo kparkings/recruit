@@ -93,6 +93,12 @@ public interface ListingDao extends CrudRepository<ListingEntity, UUID>, JpaSpec
 				predicates.add(criteriaBuilder.equal(countryExpression, this.filterOptions.getCountry().get()));
 			}
 			
+			/**
+			* Order results by Data Desc. 
+			* TODO:// Later provide more options to the user for sorting
+			*/
+			Expression<String> sortExpression 				= root.get("created");
+			query.orderBy(criteriaBuilder.desc(sortExpression));
 			
 			return criteriaBuilder.and(predicates.stream().toArray(n -> new Predicate[n]));
 		}
