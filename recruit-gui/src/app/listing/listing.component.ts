@@ -17,7 +17,7 @@ export class ListingComponent implements OnInit {
 
 	public activeView:string					= 'list';
 	
-	private	pageSize:number						= 8;
+	private	pageSize:number						= 15;
   	public	totalPages:number					= 0;
   	public	currentPage:number					= 0;
 
