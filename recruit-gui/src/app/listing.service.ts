@@ -123,7 +123,7 @@ export class ListingService {
 	*/	
 	public fetchAllListings(sortColumn:string, order:string, pageNum:number, pageSize:number):Observable<any>{
 		
-		const backendUrl:string = environment.backendUrl +'listing/?orderAttribute='+  sortColumn +  '&order=' + order + '&page=' + pageNum + '&size=' + pageSize;
+		const backendUrl:string = environment.backendUrl +'listing/public/?orderAttribute='+  sortColumn +  '&order=' + order + '&page=' + pageNum + '&size=' + pageSize;
 		
 		return this.httpClient.get<any>(backendUrl, this.httpOptions);
 	}
@@ -136,6 +136,17 @@ export class ListingService {
 		const backendUrl:string = environment.backendUrl +'listing/' + listingId;
 		
 		return this.httpClient.delete<any>(backendUrl, this.httpOptions);
+	}
+	
+	/**
+	* Registers an event showing that a Listing was viewed
+	*/
+	public registerListingViewedEvent(listingId:string):Observable<any>{
+		
+		const backendUrl:string = environment.backendUrl +'listing/public/viewedEvent/'+listingId;
+		
+		return this.httpClient.post<any>(backendUrl, null, this.httpOptions);
+				
 	}
 
 }

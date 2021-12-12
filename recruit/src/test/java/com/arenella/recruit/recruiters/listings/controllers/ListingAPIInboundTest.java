@@ -157,7 +157,7 @@ public class ListingAPIInboundTest {
 		assertEquals(title,	 			listing.getTitle());
 		assertEquals(type, 				listing.getType());
 		assertEquals(yearsExperience, 	listing.getYearsExperience());
-		assertEquals(0, 				listing.getViews());
+		assertEquals(0, 				listing.getViews().size());
 		assertEquals(ownerName, 		listing.getOwnerName());
 		assertEquals(ownerCompany, 		listing.getOwnerCompany());
 		assertEquals(ownerEmail, 		listing.getOwnerEmail());

@@ -18,9 +18,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.arenella.recruit.candidates.controllers.CandidateAPIOutbound;
+//import com.arenella.recruit.candidates.controllers.CandidateAPIOutbound;
 import com.arenella.recruit.listings.beans.ListingFilter;
 import com.arenella.recruit.listings.beans.ListingFilter.ListingFilterBuilder;
+import com.arenella.recruit.listings.beans.ListingViewedEvent;
 import com.arenella.recruit.listings.services.ListingService;
 
 /**
@@ -91,7 +92,19 @@ public class ListingController {
 		
 		return service.fetchListings(filterBuilder.build(), pageable).map(listing -> ListingAPIOutbound.convertFromListing(listing));	
 		
+	}
+	
+	/**
+	* Returns all Listings. Unprotected URL available to 
+	* unregistered users
+	* @return All available listings
+	*/
+	@GetMapping(value="/listing/public/")
+	public Page<ListingAPIOutbound> fetchListingsPubilc(Pageable pageable){
 		
+		ListingFilterBuilder filterBuilder = ListingFilter.builder();
+		
+		return service.fetchListings(filterBuilder.build(), pageable).map(listing -> ListingAPIOutbound.convertFromListing(listing));	
 		
 	}
 	
@@ -99,9 +112,22 @@ public class ListingController {
 	* Returns single Listing based upon the ListingId
 	* @return Listing associated with listingId
 	*/
-	@GetMapping(value="/listing/{listingId}")
-	public ResponseEntity<CandidateAPIOutbound> fetchListing(@PathVariable UUID listingId){
-		return ResponseEntity.status(HttpStatus.OK).body(null);
+	//@GetMapping(value="/listing/{listingId}")
+	//public ResponseEntity<CandidateAPIOutbound> fetchListing(@PathVariable UUID listingId){
+	//	return ResponseEntity.status(HttpStatus.OK).body(null);
+	//}
+	
+	/**
+	* Logs a viewed Listing event
+	* @param listingId
+	*/
+	@PostMapping(value="/listing/public/viewedEvent/{listingId}")
+	public ResponseEntity<Void> registerListingViewedEvent(@PathVariable UUID listingId) {
+		
+		this.service.registerListingViewedEvent(ListingViewedEvent.builder().listingId(listingId).build());
+		
+		return ResponseEntity.status(HttpStatus.OK).build();
+		
 	}
 	
 }

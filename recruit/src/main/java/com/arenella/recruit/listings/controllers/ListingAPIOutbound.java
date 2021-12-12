@@ -432,7 +432,7 @@ public class ListingAPIOutbound {
 								.builder()
 									.country(listing.getCountry())
 									.yearsExperience(listing.getYearsExperience())
-									.views(listing.getViews())
+									.views(listing.getViews().size())
 									.type(listing.getType())
 									.title(listing.getTitle())
 									.rate(listing.getRate())

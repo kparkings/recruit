@@ -19,6 +19,7 @@ import com.arenella.recruit.listings.beans.Listing.country;
 import com.arenella.recruit.listings.beans.Listing.currency;
 import com.arenella.recruit.listings.beans.Listing.language;
 import com.arenella.recruit.listings.beans.Listing.listing_type;
+import com.arenella.recruit.listings.beans.ListingViewedEvent;
 
 /**
 * Unit tests for the Listing class
@@ -30,23 +31,23 @@ public class ListingTest {
 	private static final 	String 			SKILL_JAVA 			= "java";
 	private static final 	String 			SKILL_CSHARP 		= "c#";
 	
-	private final 			UUID 			listingId			= UUID.randomUUID();
-	private final 			String			ownerId				= "kparking";
-	private final 			String			ownerName			= "Kevin Parkings";
-	private final 			String 			ownerCompany		= "Arenella BV";
-	private final 			String			ownerEmail			= "kparkings@gmail.com";
-	private final 			LocalDateTime	created				= LocalDateTime.of(2021, 11, 24, 00 , 00 ,00);
-	private final 			String 			title				= "aTitle";
-	private final 			String 			description			= "aDesc";
-	private final 			listing_type 	type		 		= listing_type.CONTRACT_ROLE;
-	private final 			country 		country				= Listing.country.NETHERLANDS;
-	private final 			String 			location			= "Den Haag";
-	private final 			int 			yearsExperience		= 10;
-	private final 			Set<language> 	languages			= new LinkedHashSet<>();
-	private final 			Set<String>		skills			 	= Set.of(SKILL_JAVA, SKILL_CSHARP);
-	private final 			String 			rate				= "115.00";
-	private final 			currency		currency			= Listing.currency.EUR;
-	private final 			int				views				= 10;
+	private final 			UUID 						listingId			= UUID.randomUUID();
+	private final 			String						ownerId				= "kparking";
+	private final 			String						ownerName			= "Kevin Parkings";
+	private final 			String 						ownerCompany		= "Arenella BV";
+	private final 			String						ownerEmail			= "kparkings@gmail.com";
+	private final 			LocalDateTime				created				= LocalDateTime.of(2021, 11, 24, 00 , 00 ,00);
+	private final 			String 						title				= "aTitle";
+	private final 			String 						description			= "aDesc";
+	private final 			listing_type 				type		 		= listing_type.CONTRACT_ROLE;
+	private final 			country 					country				= Listing.country.NETHERLANDS;
+	private final 			String 						location			= "Den Haag";
+	private final 			int 						yearsExperience		= 10;
+	private final 			Set<language> 				languages			= new LinkedHashSet<>();
+	private final 			Set<String>					skills			 	= Set.of(SKILL_JAVA, SKILL_CSHARP);
+	private final 			String 						rate				= "115.00";
+	private final 			currency					currency			= Listing.currency.EUR;
+	private final 			Set<ListingViewedEvent>		views				= Set.of(ListingViewedEvent.builder().build());
 	
 	/**
 	* Sets up test environment 
@@ -142,32 +143,10 @@ public class ListingTest {
 		listing.initializeAsNewListing();
 		listing.setOwnerId(ownerId);
 		
-		assertEquals(ownerId, 			listing.getOwnerId());
-		assertTrue(listing.getListingId() instanceof UUID);
-		assertTrue(listing.getCreated() instanceof LocalDateTime);
+		assertEquals(ownerId, 				listing.getOwnerId());
+		assertTrue(listing.getListingId() 	instanceof UUID);
+		assertTrue(listing.getCreated() 	instanceof LocalDateTime);
 		
 	}
-	
-	/**
-	* Tests that the number of views increase by 1 each time
-	* the method is called 
-	* @throws Exception
-	*/
-	@Test
-	public void testIncrementViews() throws Exception{
 		
-		Listing listing = Listing.builder().build();
-		
-		assertEquals(0, listing.getViews());
-		
-		listing.incrementViews();
-		
-		assertEquals(1, listing.getViews());
-		
-		listing.incrementViews();
-		
-		assertEquals(2, listing.getViews());
-		
-	}
-	
 }

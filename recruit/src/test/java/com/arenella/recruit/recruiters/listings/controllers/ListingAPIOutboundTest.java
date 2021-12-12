@@ -14,6 +14,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.arenella.recruit.listings.beans.Listing;
+import com.arenella.recruit.listings.beans.ListingViewedEvent;
 import com.arenella.recruit.listings.beans.Listing.country;
 import com.arenella.recruit.listings.beans.Listing.currency;
 import com.arenella.recruit.listings.beans.Listing.language;
@@ -30,23 +31,23 @@ public class ListingAPIOutboundTest {
 	private static final 	String 			SKILL_JAVA 			= "java";
 	private static final 	String 			SKILL_CSHARP 		= "c#";
 	
-	private final 			UUID 			listingId			= UUID.randomUUID();
-	private final 			String			ownerId				= "kparking";
-	private final 			LocalDateTime	created				= LocalDateTime.of(2021, 11, 24, 10, 01, 01);
-	private final 			String 			title				= "aTitle";
-	private final 			String 			description			= "aDesc";
-	private final 			listing_type 	type		 		= listing_type.CONTRACT_ROLE;
-	private final 			country 		country				= Listing.country.NETHERLANDS;
-	private final 			String 			location			= "Den Haag";
-	private final 			int 			yearsExperience		= 10;
-	private final 			Set<language> 	languages			= new LinkedHashSet<>();
-	private final 			Set<String>		skills			 	= Set.of(SKILL_JAVA, SKILL_CSHARP);
-	private final 			String 			rate				= "115.00";
-	private final 			currency		currency			= Listing.currency.EUR;
-	private final 			int				views				= 10;
-	private final 			String			ownerName			= "Kevin Parkings";
-	private final 			String 			ownerCompany		= "Arenella BV";
-	private final 			String			ownerEmail			= "kparkings@gmail.com";
+	private final 			UUID 						listingId			= UUID.randomUUID();
+	private final 			String						ownerId				= "kparking";
+	private final 			LocalDateTime				created				= LocalDateTime.of(2021, 11, 24, 10, 01, 01);
+	private final 			String 						title				= "aTitle";
+	private final 			String 						description			= "aDesc";
+	private final 			listing_type 				type		 		= listing_type.CONTRACT_ROLE;
+	private final 			country 					country				= Listing.country.NETHERLANDS;
+	private final 			String 						location			= "Den Haag";
+	private final 			int 						yearsExperience		= 10;
+	private final 			Set<language> 				languages			= new LinkedHashSet<>();
+	private final 			Set<String>					skills			 	= Set.of(SKILL_JAVA, SKILL_CSHARP);
+	private final 			String 						rate				= "115.00";
+	private final 			currency					currency			= Listing.currency.EUR;
+	private final 			Set<ListingViewedEvent>		views				= Set.of(ListingViewedEvent.builder().build());
+	private final 			String						ownerName			= "Kevin Parkings";
+	private final 			String 						ownerCompany		= "Arenella BV";
+	private final 			String						ownerEmail			= "kparkings@gmail.com";
 	
 	/**
 	* Sets up test environment 
@@ -82,7 +83,7 @@ public class ListingAPIOutboundTest {
 													.title(title)
 													.type(type)
 													.yearsExperience(yearsExperience)
-													.views(views)
+													.views(views.size())
 												.build();
 		
 		assertEquals(country, 			listing.getCountry());
@@ -96,7 +97,7 @@ public class ListingAPIOutboundTest {
 		assertEquals(title,	 			listing.getTitle());
 		assertEquals(type, 				listing.getType());
 		assertEquals(yearsExperience, 	listing.getYearsExperience());
-		assertEquals(views, 			listing.getViews());
+		assertEquals(views.size(), 		listing.getViews());
 		assertEquals(ownerName, 		listing.getOwnerName());
 		assertEquals(ownerCompany, 		listing.getOwnerCompany());
 		assertEquals(ownerEmail, 		listing.getOwnerEmail());
@@ -168,7 +169,7 @@ public class ListingAPIOutboundTest {
 		assertEquals(title,	 			outbound.getTitle());
 		assertEquals(type, 				outbound.getType());
 		assertEquals(yearsExperience, 	outbound.getYearsExperience());
-		assertEquals(views, 			outbound.getViews());
+		assertEquals(views.size(), 		outbound.getViews());
 		assertEquals(ownerName, 		outbound.getOwnerName());
 		assertEquals(ownerCompany, 		outbound.getOwnerCompany());
 		assertEquals(ownerEmail, 		outbound.getOwnerEmail());

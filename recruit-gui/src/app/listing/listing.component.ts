@@ -41,6 +41,7 @@ export class ListingComponent implements OnInit {
 		
 		if (selectedListing) {
 			this.selectedListing	= selectedListing;	
+			this.registerListingViewedEvent();
 		}
 		
 	}
@@ -62,7 +63,16 @@ export class ListingComponent implements OnInit {
 		
 	}
 	
-		/**
+	/**
+	* Registers that a Listing has been viewed
+	*/
+	private registerListingViewedEvent():void {
+		
+		this.listingService.registerListingViewedEvent(this.selectedListing.listingId).subscribe();
+		
+	}
+	
+	/**
 	* Whether or not the previous page button 
 	* should be active
 	* */

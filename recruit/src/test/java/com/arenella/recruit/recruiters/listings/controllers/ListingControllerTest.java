@@ -3,6 +3,7 @@ package com.arenella.recruit.recruiters.listings.controllers;
 import static org.junit.Assert.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -21,6 +22,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import com.arenella.recruit.listings.beans.ListingFilter;
+import com.arenella.recruit.listings.beans.ListingViewedEvent;
 import com.arenella.recruit.listings.controllers.ListingAPIInbound;
 import com.arenella.recruit.listings.controllers.ListingAPIOutbound;
 import com.arenella.recruit.listings.controllers.ListingController;
@@ -51,9 +53,7 @@ public class ListingControllerTest {
 	*/
 	@BeforeEach
 	public void init() throws Exception {
-	
 		SecurityContextHolder.getContext().setAuthentication(mockAuthentication);
-		
 	}
 	
 	/**
@@ -149,6 +149,29 @@ public class ListingControllerTest {
 		assertTrue(response instanceof Page);
 		
 		assertEquals(filterArgCapt.getValue().getOwnerId().get(), recruiterId);
+		
+	}
+	
+	/**
+	* Tests correct response returned when Event registered
+	* @throws Exception
+	*/
+	@Test
+	public void testRegisterListingViewedEvent()  throws Exception {
+
+		final UUID listingId	= UUID.randomUUID();
+		
+		ArgumentCaptor<ListingViewedEvent> captor = ArgumentCaptor.forClass(ListingViewedEvent.class);
+		
+		Mockito.doNothing().when(this.mockListingService).registerListingViewedEvent(captor.capture());
+		
+		controller.registerListingViewedEvent(listingId);
+		
+		Mockito.verify(this.mockListingService).registerListingViewedEvent(Mockito.any(ListingViewedEvent.class));
+	
+		assertTrue(captor.getValue().getEventId() instanceof UUID);
+		assertTrue(captor.getValue().getCreated() instanceof LocalDateTime);
+		assertEquals(listingId, captor.getValue().getListingId());
 		
 	}
 		

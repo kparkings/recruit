@@ -5,15 +5,19 @@ import java.util.LinkedHashSet;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
+import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.arenella.recruit.listings.beans.Listing;
@@ -86,14 +90,20 @@ public class ListingEntity {
 	@Enumerated(EnumType.STRING)
 	private currency			currency;
 	
-	@Column(name="views")
-	private int 				views;
+	
+	//@OneToMany(fetch = FetchType.EAGER, mappedBy = "listingId")
+	@OneToMany(mappedBy = "listingId", cascade = CascadeType.ALL, orphanRemoval=true)
+	private Set<ListingViewedEventEntity> 		views			= new LinkedHashSet<>();
 	
 	/**
 	* Default constructor 
 	*/
 	public ListingEntity() {
 		//required for Hibernate
+	}
+	
+	public void addView(ListingViewedEventEntity viewEntity) {
+		this.views.add(viewEntity);
 	}
 	
 	/**
@@ -257,10 +267,10 @@ public class ListingEntity {
 	}
 	
 	/**
-	* Returns number of times the Listing has been viewed
-	* @return number of views
+	* Returns Listing Views
+	* @return Views of the Listing
 	*/
-	public int getViews() {
+	public Set<ListingViewedEventEntity> getViews() {
 		return this.views;
 	}
 	
@@ -397,7 +407,7 @@ public class ListingEntity {
 	* Sets number of times the Listing has been viewed
 	* @return number of views
 	*/
-	public void setViews(int views) {
+	public void setViews(Set<ListingViewedEventEntity> views) {
 		this.views = views;
 	}
 	
@@ -415,23 +425,23 @@ public class ListingEntity {
 	*/
 	public static class ListingEntityBuilder{
 	
-		private UUID 				listingId;
-		private String				ownerId;
-		private String				ownerName;
-		private String 				ownerCompany;
-		private String				ownerEmail;
-		private LocalDateTime		created;
-		private String 				title;
-		private String 				description;
-		private listing_type 		type;
-		private country 			country;
-		private String 				location;
-		private int 				yearsExperience;
-		private Set<language> 		languages			= new LinkedHashSet<>();
-		private Set<String>			skills				= new LinkedHashSet<>();
-		private String 				rate;
-		private currency			currency;
-		private int 				views;
+		private UUID 							listingId;
+		private String							ownerId;
+		private String							ownerName;
+		private String 							ownerCompany;
+		private String							ownerEmail;
+		private LocalDateTime					created;
+		private String 							title;
+		private String 							description;
+		private listing_type 					type;
+		private country 						country;
+		private String 							location;
+		private int 							yearsExperience;
+		private Set<language> 					languages			= new LinkedHashSet<>();
+		private Set<String>						skills				= new LinkedHashSet<>();
+		private String 							rate;
+		private currency						currency;
+		private Set<ListingViewedEventEntity> 	views				= new LinkedHashSet<>();
 		
 		/**
 		* Sets the Unique identifier of the ListingEntity
@@ -601,7 +611,7 @@ public class ListingEntity {
 		* @param views - Listings of the View
 		* @return Builder
 		*/
-		public ListingEntityBuilder views(int views){
+		public ListingEntityBuilder views(Set<ListingViewedEventEntity> views){
 			this.views = views;
 			return this;
 		}
@@ -630,7 +640,6 @@ public class ListingEntity {
 			ListingEntity entity = entityListing.get();
 			
 			entity.setYearsExperience(listing.getYearsExperience());
-			entity.setViews(listing.getViews());
 			entity.setType(listing.getType());
 			entity.setTitle(listing.getTitle());
 			entity.setRate(listing.getRate());
@@ -644,13 +653,29 @@ public class ListingEntity {
 			entity.setCurrency(listing.getCurrency());
 			entity.setCountry(listing.getCountry());
 			
+			/**
+			* Views are events and therefore unmodifiable. We do however want to be able to add new 
+			* events 
+			*/
+			Set<ListingViewedEventEntity> views = new LinkedHashSet<>();
+			
+			views.addAll(entity.getViews());
+			
+			listing.getViews().stream().forEach(view -> {
+				if (entityListing.get().getViews().stream().filter(e -> e.getEventId() == view.getEventId()).findAny().isEmpty()) {
+					views.add(ListingViewedEventEntity.convertToEntity(view));
+				}
+			});
+			
+			entity.setViews(views);
+			
 			return entity;
 		}
 		
 		return ListingEntity
 					.builder()
 						.yearsExperience(listing.getYearsExperience())
-						.views(listing.getViews())
+						.views(listing.getViews().stream().map(e -> ListingViewedEventEntity.convertToEntity(e)).collect(Collectors.toSet()))
 						.type(listing.getType())
 						.title(listing.getTitle())
 						.rate(listing.getRate())
@@ -679,7 +704,7 @@ public class ListingEntity {
 		return Listing
 				.builder()
 					.yearsExperience(entity.getYearsExperience())
-					.views(entity.getViews())
+					.views(entity.getViews().stream().map(e -> ListingViewedEventEntity.convertFromEntity(e)).collect(Collectors.toSet()))
 					.type(entity.getType())
 					.title(entity.getTitle())
 					.rate(entity.getRate())

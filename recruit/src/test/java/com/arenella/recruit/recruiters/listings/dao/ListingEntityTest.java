@@ -19,7 +19,9 @@ import com.arenella.recruit.listings.beans.Listing.country;
 import com.arenella.recruit.listings.beans.Listing.currency;
 import com.arenella.recruit.listings.beans.Listing.language;
 import com.arenella.recruit.listings.beans.Listing.listing_type;
+import com.arenella.recruit.listings.beans.ListingViewedEvent;
 import com.arenella.recruit.listings.dao.ListingEntity;
+import com.arenella.recruit.listings.dao.ListingViewedEventEntity;
 
 /**
 * Unit tests for the ListingEntity class
@@ -31,23 +33,24 @@ public class ListingEntityTest {
 	private static final 	String 			SKILL_JAVA 			= "java";
 	private static final 	String 			SKILL_CSHARP 		= "c#";
 	
-	private final 			UUID 			listingId			= UUID.randomUUID();
-	private final 			String			ownerId				= "kparking";
-	private final 			String			ownerName			= "Kevin Parkings";
-	private final 			String 			ownerCompany		= "Arenella BV";
-	private final 			String			ownerEmail			= "kparkings@gmail.com";
-	private final 			LocalDateTime	created				= LocalDateTime.of(2021, 11, 24, 00, 10, 01);
-	private final 			String 			title				= "aTitle";
-	private final 			String 			description			= "aDesc";
-	private final 			listing_type 	type		 		= listing_type.CONTRACT_ROLE;
-	private final 			country 		country				= Listing.country.NETHERLANDS;
-	private final 			String 			location			= "Den Haag";
-	private final 			int 			yearsExperience		= 10;
-	private final 			Set<language> 	languages			= new LinkedHashSet<>();
-	private final 			Set<String>		skills			 	= Set.of(SKILL_JAVA, SKILL_CSHARP);
-	private final 			String 			rate				= "115.00";
-	private final 			currency		currency			= Listing.currency.EUR;
-	private final 			int				views				= 10;
+	private final 			UUID 							listingId			= UUID.randomUUID();
+	private final 			String							ownerId				= "kparking";
+	private final 			String							ownerName			= "Kevin Parkings";
+	private final 			String 							ownerCompany		= "Arenella BV";
+	private final 			String							ownerEmail			= "kparkings@gmail.com";
+	private final 			LocalDateTime					created				= LocalDateTime.of(2021, 11, 24, 00, 10, 01);
+	private final 			String 							title				= "aTitle";
+	private final 			String 							description			= "aDesc";
+	private final 			listing_type 					type		 		= listing_type.CONTRACT_ROLE;
+	private final 			country 						country				= Listing.country.NETHERLANDS;
+	private final 			String 							location			= "Den Haag";
+	private final 			int 							yearsExperience		= 10;
+	private final 			Set<language> 					languages			= new LinkedHashSet<>();
+	private final 			Set<String>						skills			 	= Set.of(SKILL_JAVA, SKILL_CSHARP);
+	private final 			String 							rate				= "115.00";
+	private final 			currency						currency			= Listing.currency.EUR;
+	private final 			Set<ListingViewedEventEntity>	entityViews			= Set.of(ListingViewedEventEntity.builder().build());
+	private final 			Set<ListingViewedEvent>			views				= Set.of(ListingViewedEvent.builder().build());
 	
 	/**
 	* Sets up test environment 
@@ -83,7 +86,7 @@ public class ListingEntityTest {
 											.title(title)
 											.type(type)
 											.yearsExperience(yearsExperience)
-											.views(views)
+											.views(entityViews)
 										.build();
 		
 		assertEquals(country, 			listing.getCountry());
@@ -97,7 +100,7 @@ public class ListingEntityTest {
 		assertEquals(title,	 			listing.getTitle());
 		assertEquals(type, 				listing.getType());
 		assertEquals(yearsExperience, 	listing.getYearsExperience());
-		assertEquals(views, 			listing.getViews());
+		assertEquals(views.size(), 		listing.getViews().size());
 		assertEquals(ownerName, 		listing.getOwnerName());
 		assertEquals(ownerCompany, 		listing.getOwnerCompany());
 		assertEquals(ownerEmail, 		listing.getOwnerEmail());
@@ -151,7 +154,7 @@ public class ListingEntityTest {
 					.title(title)
 					.type(type)
 					.yearsExperience(yearsExperience)
-					.views(views)
+					.views(entityViews)
 				.build();
 		
 		Listing listing = ListingEntity.convertFromEntity(listingEntity);
@@ -167,7 +170,7 @@ public class ListingEntityTest {
 		assertEquals(title,	 			listing.getTitle());
 		assertEquals(type, 				listing.getType());
 		assertEquals(yearsExperience, 	listing.getYearsExperience());
-		assertEquals(views, 			listing.getViews());
+		assertEquals(views.size(), 		listing.getViews().size());
 		assertEquals(ownerName, 		listing.getOwnerName());
 		assertEquals(ownerCompany, 		listing.getOwnerCompany());
 		assertEquals(ownerEmail, 		listing.getOwnerEmail());
@@ -227,7 +230,7 @@ public class ListingEntityTest {
 			assertEquals(title,	 						entity.getTitle());
 			assertEquals(type, 							entity.getType());
 			assertEquals(yearsExperience, 				entity.getYearsExperience());
-			assertEquals(views, 						entity.getViews());
+			assertEquals(views.size(),					entity.getViews().size());
 			assertEquals(ownerName, 					entity.getOwnerName());
 			assertEquals(ownerCompany, 					entity.getOwnerCompany());
 			assertEquals(ownerEmail, 					entity.getOwnerEmail());
@@ -240,6 +243,93 @@ public class ListingEntityTest {
 			assertTrue(entity.getSkills().contains(SKILL_CSHARP));
 			assertEquals(entity.getSkills().size(), 2);
 
+	}
+	
+	/**
+	* Tests conversion from Domain to Entity representation of the 
+	* Listing
+	* Tests:
+	* 	- Existing view events arent removed
+	* 	- Existing view events arent updated
+	* 	- New View events are added
+	* @throws Exception
+	*/
+	@Test
+	public void testConvertToEntity_existingEntityWithExistingViews() throws Exception {
+		
+		final LocalDateTime 	created 						= LocalDateTime.of(2021,12, 12, 01, 01, 01);
+		final LocalDateTime 	createdUpdate					= LocalDateTime.of(2022,12, 12, 01, 01, 01);
+		final UUID 				listingId						= UUID.randomUUID();
+		final UUID 				existingEntityViewId 			= UUID.randomUUID();
+		final UUID 				existingEntityViewIdUpdated 	= UUID.randomUUID();
+		final UUID 				removedEntityViewIdUpdated 		= UUID.randomUUID();
+		final UUID 				nonExistingEntityViewID 		= UUID.randomUUID();
+		
+		Set<ListingViewedEvent> 		views 		= Set.of(
+																ListingViewedEvent.builder().listingId(listingId).eventId(existingEntityViewIdUpdated).created(createdUpdate).build(),
+																ListingViewedEvent.builder().listingId(listingId).eventId(nonExistingEntityViewID).created(created).build());
+		
+		Set<ListingViewedEventEntity> entityViews = Set.of(
+																ListingViewedEventEntity.builder().listingId(listingId).eventId(existingEntityViewId).created(created).build(),
+																ListingViewedEventEntity.builder().listingId(listingId).eventId(existingEntityViewIdUpdated).created(created).build(),
+																ListingViewedEventEntity.builder().listingId(listingId).eventId(removedEntityViewIdUpdated).created(created).build());
+		
+		Listing listing = Listing
+				.builder()
+					.country(country)
+					.created(created)
+					.currency(currency)
+					.description(description)
+					.languages(languages)
+					.skills(skills)
+					.listingId(listingId)
+					.location(location)
+					.ownerId(ownerId)
+					.ownerName(ownerName)
+					.ownerCompany(ownerCompany)
+					.ownerEmail(ownerEmail)
+					.rate(rate)
+					.title(title)
+					.type(type)
+					.yearsExperience(yearsExperience)
+					.views(views)
+				.build();
+		
+			ListingEntity existingEntity	= ListingEntity.builder().listingId(listingId).views(entityViews).build();
+			ListingEntity entity 			= ListingEntity.convertToEntity(listing, Optional.of(existingEntity));
+
+			assertTrue(entity == existingEntity);
+			
+			assertEquals(country, 						entity.getCountry());
+			assertEquals(existingEntity.getCreated(), 	entity.getCreated());
+			assertEquals(currency, 						entity.getCurrency());
+			assertEquals(description, 					entity.getDescription());
+			assertEquals(listingId, 					entity.getListingId());
+			assertEquals(location, 						entity.getLocation());
+			assertEquals(existingEntity.getOwnerId(), 	entity.getOwnerId());
+			assertEquals(rate, 							entity.getRate());
+			assertEquals(title,	 						entity.getTitle());
+			assertEquals(type, 							entity.getType());
+			assertEquals(yearsExperience, 				entity.getYearsExperience());
+			assertEquals(4,								entity.getViews().size());		//3 existing in Entity that must not have changed and one new one
+			assertEquals(ownerName, 					entity.getOwnerName());
+			assertEquals(ownerCompany, 					entity.getOwnerCompany());
+			assertEquals(ownerEmail, 					entity.getOwnerEmail());
+			
+			assertTrue(entity.getLanguages().contains(Listing.language.DUTCH));
+			assertTrue(entity.getLanguages().contains(Listing.language.FRENCH));
+			assertEquals(entity.getLanguages().size(), 2);
+			
+			assertTrue(entity.getSkills().contains(SKILL_JAVA));
+			assertTrue(entity.getSkills().contains(SKILL_CSHARP));
+			assertEquals(entity.getSkills().size(), 2);
+			
+			Set<ListingViewedEventEntity> finalViews = entity.getViews();
+			
+			finalViews.forEach(v -> entityViews.contains(v));
+			finalViews.stream().filter(v -> v.getEventId() == nonExistingEntityViewID).findAny().orElseThrow(() -> new RuntimeException("Expected view event to have been added"));
+			finalViews.stream().filter(v -> v.getEventId() == existingEntityViewIdUpdated && v.getCreated() == created).findAny().orElseThrow(() -> new RuntimeException("Expected existing view event remain unchanged"));
+	
 	}
 	
 	/**
@@ -284,7 +374,7 @@ public class ListingEntityTest {
 			assertEquals(title,	 			entity.getTitle());
 			assertEquals(type, 				entity.getType());
 			assertEquals(yearsExperience, 	entity.getYearsExperience());
-			assertEquals(views, 			entity.getViews());
+			assertEquals(views.size(), 		entity.getViews().size());
 			assertEquals(ownerName, 		entity.getOwnerName());
 			assertEquals(ownerCompany, 		entity.getOwnerCompany());
 			assertEquals(ownerEmail, 		entity.getOwnerEmail());

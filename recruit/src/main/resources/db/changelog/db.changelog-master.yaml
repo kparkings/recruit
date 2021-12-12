@@ -635,3 +635,33 @@ databaseChangeLog:
                   type: varchar
                   constraints:
                     nullable: false
+  - changeSet:
+      id: listing_table_viewed_listing_event
+      author: kparkings
+      changes:
+        - createTable:                    
+            tableName: listing_viewed_event
+            schemaName: listings
+            columns:
+              - column:
+                  name: event_id
+                  type: UUID
+                  constraints:
+                    nullable: false                    
+                    primaryKey: true
+              - column:
+                  name: listing_id
+                  type: UUID
+                  constraints:
+                    nullable: false                    
+                    foreignKeyName: fk_listing_viewed_event_listing
+                    references: listings.listing(listing_id)
+              - column:
+                  name: created
+                  type: timestamp
+                  constraints:
+                    nullable: false                    
+        -  dropColumn:  
+             -  columnName: views 
+                schemaName:  listings  
+                tableName:  listing

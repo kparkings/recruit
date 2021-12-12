@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 
 import com.arenella.recruit.listings.beans.Listing;
 import com.arenella.recruit.listings.beans.ListingFilter;
+import com.arenella.recruit.listings.beans.ListingViewedEvent;
 
 /**
 * Defines services relating to Listings
@@ -41,4 +42,9 @@ public interface ListingService {
 	*/
 	public Page<Listing> fetchListings(ListingFilter filters, Pageable pageable);
 
+	/**
+	* Registers that a Listing was Viewed
+	* @param event - Contains details of the viewing of the Listing
+	*/
+	public void registerListingViewedEvent(ListingViewedEvent event);
 }

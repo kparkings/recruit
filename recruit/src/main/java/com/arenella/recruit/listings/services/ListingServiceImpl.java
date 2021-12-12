@@ -13,8 +13,10 @@ import org.springframework.util.StringUtils;
 
 import com.arenella.recruit.listings.beans.Listing;
 import com.arenella.recruit.listings.beans.ListingFilter;
+import com.arenella.recruit.listings.beans.ListingViewedEvent;
 import com.arenella.recruit.listings.dao.ListingDao;
 import com.arenella.recruit.listings.dao.ListingEntity;
+import com.arenella.recruit.listings.dao.ListingViewedEventEntity;
 import com.arenella.recruit.listings.exceptions.ListingValidationException;
 import com.arenella.recruit.listings.exceptions.ListingValidationException.ListingValidationExceptionBuilder;
 
@@ -128,6 +130,22 @@ public class ListingServiceImpl implements ListingService{
 		if (builtException.hasFailedFields()) {
 			throw builtException;
 		}
+		
+	}
+
+	/**
+	* Refer to the Listing interface for details
+	*/
+	@Override
+	public void registerListingViewedEvent(ListingViewedEvent event) {
+		
+		ListingEntity listingEntity = this.listingDao.findById(event.getListingId()).orElseThrow(() -> new IllegalArgumentException("Cannot update unknown listing: " + event.getListingId()));
+		
+		ListingViewedEventEntity viewEntity = ListingViewedEventEntity.convertToEntity(event);
+		
+		listingEntity.addView(viewEntity);
+		
+		this.listingDao.save(listingEntity);
 		
 	}
 	

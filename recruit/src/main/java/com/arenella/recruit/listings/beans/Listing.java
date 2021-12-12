@@ -17,23 +17,23 @@ public class Listing {
 	public static enum language 	{DUTCH, FRENCH, ENGLISH};
 	public static enum currency		{EUR, GBP};
 	
-	private UUID 				listingId;
-	private String				ownerId;
-	private String				ownerName;
-	private String 				ownerCompany;
-	private String				ownerEmail;
-	private LocalDateTime		created;
-	private String 				title;
-	private String 				description;
-	private listing_type 		type;
-	private country 			country;
-	private String 				location;
-	private int 				yearsExperience;
-	private Set<language> 		languages			= new LinkedHashSet<>();
-	private Set<String>			skills				= new LinkedHashSet<>();
-	private String 				rate;
-	private currency			currency;
-	private int 				views;
+	private UUID 						listingId;
+	private String						ownerId;
+	private String						ownerName;
+	private String 						ownerCompany;
+	private String						ownerEmail;
+	private LocalDateTime				created;
+	private String 						title;
+	private String 						description;
+	private listing_type 				type;
+	private country 					country;
+	private String 						location;
+	private int 						yearsExperience;
+	private Set<language> 				languages			= new LinkedHashSet<>();
+	private Set<String>					skills				= new LinkedHashSet<>();
+	private String 						rate;
+	private currency					currency;
+	private Set<ListingViewedEvent> 	views				= new LinkedHashSet<>();
 	
 	/**
 	* Constructor based upon a builder
@@ -194,10 +194,10 @@ public class Listing {
 	}
 	
 	/**
-	* Returns the number of times the Listing has been viewed
-	* @return number of times the Listing has been viewed
+	* Returns the views of the Listing
+	* @return Views of the Listing
 	*/
-	public int getViews() {
+	public Set<ListingViewedEvent> getViews() {
 		return this.views;
 	}
 	
@@ -219,14 +219,6 @@ public class Listing {
 	}
 	
 	/**
-	* Increased the number of Views the Listing has received
-	* by 1 
-	*/
-	public void incrementViews() {
-		this.views = this.views +1;
-	}
-	
-	/**
 	* Returns an instance of a Builder for the Listing class
 	* @return Builder
 	*/
@@ -240,23 +232,23 @@ public class Listing {
 	*/
 	public static class ListingBuilder{
 
-		private UUID 				listingId;
-		private String				ownerId;
-		private String				ownerName;
-		private String 				ownerCompany;
-		private String				ownerEmail;
-		private LocalDateTime		created;
-		private String 				title;
-		private String 				description;
-		private listing_type 		type;
-		private country 			country;
-		private String 				location;
-		private int 				yearsExperience;
-		private Set<language> 		languages			= new LinkedHashSet<>();
-		private Set<String>			skills				= new LinkedHashSet<>();
-		private String 				rate;
-		private currency			currency;
-		private int					views;
+		private UUID 						listingId;
+		private String						ownerId;
+		private String						ownerName;
+		private String 						ownerCompany;
+		private String						ownerEmail;
+		private LocalDateTime				created;
+		private String 						title;
+		private String 						description;
+		private listing_type 				type;
+		private country 					country;
+		private String 						location;
+		private int 						yearsExperience;
+		private Set<language> 				languages			= new LinkedHashSet<>();
+		private Set<String>					skills				= new LinkedHashSet<>();
+		private String 						rate;
+		private currency					currency;
+		private Set<ListingViewedEvent>		views				= new LinkedHashSet<>();
 		
 		/**
 		* Sets the Unique Identifier for the Listing
@@ -424,11 +416,11 @@ public class Listing {
 		}
 		
 		/**
-		* Sets the number of times the Listing has been viewed
-		* @param views - Number of views the Listing has received
+		* Sets the views for the Listing
+		* @param views - Views of the listing by users
 		* @return Builder
 		*/
-		public ListingBuilder views(int views) {
+		public ListingBuilder views(Set<ListingViewedEvent> views) {
 			this.views = views;
 			return this;
 		}
