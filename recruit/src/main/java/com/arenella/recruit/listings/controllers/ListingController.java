@@ -100,13 +100,13 @@ public class ListingController {
 	* @return All available listings
 	*/
 	@GetMapping(value="/listing/public/")
-	public Page<ListingAPIOutbound> fetchListingsPubilc(Pageable pageable){
+	public Page<ListingAPIOutboundPublic> fetchListingsPubilc(Pageable pageable){
 		
 		ListingFilterBuilder filterBuilder = ListingFilter.builder();
 		
 		//TODO: [KP] Make new outbound with only info (no views) relevant to the public jobboard view
 		
-		return service.fetchListings(filterBuilder.build(), pageable).map(listing -> ListingAPIOutbound.convertFromListing(listing));	
+		return service.fetchListings(filterBuilder.build(), pageable).map(listing -> ListingAPIOutboundPublic.convertFromListing(listing));	
 		
 	}
 	

@@ -25,6 +25,7 @@ import com.arenella.recruit.listings.beans.ListingFilter;
 import com.arenella.recruit.listings.beans.ListingViewedEvent;
 import com.arenella.recruit.listings.controllers.ListingAPIInbound;
 import com.arenella.recruit.listings.controllers.ListingAPIOutbound;
+import com.arenella.recruit.listings.controllers.ListingAPIOutboundPublic;
 import com.arenella.recruit.listings.controllers.ListingController;
 import com.arenella.recruit.listings.services.ListingService;
 
@@ -128,6 +129,23 @@ public class ListingControllerTest {
 		assertTrue(response instanceof Page);
 		
 		assertTrue(filterArgCapt.getValue().getOwnerId().isEmpty());
+		
+	}
+	
+	/**
+	* Tests fetch of Page of listings
+	* @throws Exception
+	*/
+	@Test
+	public void testFetchListingPublic() throws Exception{
+		
+		ArgumentCaptor<ListingFilter> filterArgCapt = ArgumentCaptor.forClass(ListingFilter.class);
+		
+		Mockito.when(this.mockListingService.fetchListings(filterArgCapt.capture(), Mockito.any())).thenReturn(Page.empty());
+		
+		Page<ListingAPIOutboundPublic> response = controller.fetchListingsPubilc(mockPageable);
+	
+		assertTrue(response instanceof Page);
 		
 	}
 	
