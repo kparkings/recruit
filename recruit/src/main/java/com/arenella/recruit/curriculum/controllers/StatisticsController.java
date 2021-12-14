@@ -42,8 +42,8 @@ public class StatisticsController {
 	* @return stats of daily downloads
 	*/
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	@GetMapping(value="/curriculum/stats/dailydownloads")
-	public ResponseEntity<CurriculumDownloadsStatistics> fetchDailyDownloadStats(){
+	@GetMapping(value="/curriculum/stats/downloads")
+	public ResponseEntity<CurriculumDownloadsStatistics> fetchDownloadStats(){
 		return ResponseEntity.ok(statisticsService.fetchCurriculumDownloadsStatistics());
 	}
 	

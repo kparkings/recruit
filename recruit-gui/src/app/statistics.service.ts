@@ -26,7 +26,7 @@ export class StatisticsService {
 	*/
 	public getCurriculumDownloadStatistics(): Observable<any>{
       
-		const backendUrl:string = environment.backendUrl +'curriculum/stats/dailydownloads';
+		const backendUrl:string = environment.backendUrl +'curriculum/stats/downloads';
   
 		return this.httpClient.get<any>(backendUrl, this.httpOptions);
 

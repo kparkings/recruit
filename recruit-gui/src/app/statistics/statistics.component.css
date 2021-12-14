@@ -10,3 +10,16 @@
 .statsChartTab{
 	cursor:pointer;
 }
+
+.chart-wrapper{
+	float:left;
+	width:40%;
+	min-width:400px;
+	margin:20px;
+}
+
+.action-buttons{
+	text-align:right;
+	margin-right:60px;
+	margin-top:30px;
+}

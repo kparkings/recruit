@@ -4,8 +4,11 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalField;
+import java.time.temporal.WeekFields;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
@@ -19,6 +22,7 @@ import com.arenella.recruit.curriculum.beans.CurriculumDownloadedEvent;
 public class CurriculumDownloadsStatistics {
 
 	private Map<String,Integer> 	dailyDownloads 				= new TreeMap<>();
+	private Map<String, Integer>	weeklyDownloads				= new TreeMap<>();
 	private Map<String, Integer> 	recruiterDownloads 			= new TreeMap<>();
 	private Map<String, Integer>	recruiterDownloadsDaily		= new TreeMap<>();
 	private Map<String, Integer>	recruiterDownloadsWeekly	= new TreeMap<>();
@@ -35,6 +39,7 @@ public class CurriculumDownloadsStatistics {
 			
 			this.processDailyDownloads(event);
 			this.processRecruiterDownloads(event);
+			this.processWeeklyDownloads(event);
 			
 		});
 	
@@ -79,6 +84,25 @@ public class CurriculumDownloadsStatistics {
 			dailyDownloads.put(date, dailyDownloads.get(date) + 1 );
 		} else {
 			dailyDownloads.put(date, 1);
+		}
+		
+	}
+	
+	private void processWeeklyDownloads(CurriculumDownloadedEvent event) {
+		
+		if (event.isAdminUser()) {
+			return;
+		}
+		
+		TemporalField 	weekOfYear = WeekFields.of(Locale.getDefault()).weekOfYear();
+		int 			weekNumber = event.getTimestamp().get(weekOfYear);
+		
+		String 			key = event.getTimestamp().getYear() + " - " + weekNumber;
+		
+		if (weeklyDownloads.containsKey(key)) {
+			weeklyDownloads.put(key, weeklyDownloads.get(key) + 1 );
+		} else {
+			weeklyDownloads.put(key, 1);
 		}
 		
 	}
@@ -134,6 +158,14 @@ public class CurriculumDownloadsStatistics {
 	*/
 	public Map<String,Integer> getDailyDownloads(){
 		return dailyDownloads;
+	}
+	
+	/**
+	* Returns the stats for downloads per week
+	* @return stats
+	*/
+	public Map<String,Integer> getWeeklyDownloads(){
+		return weeklyDownloads;
 	}
 	
 	/**

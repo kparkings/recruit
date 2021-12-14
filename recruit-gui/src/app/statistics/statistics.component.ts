@@ -20,47 +20,42 @@ export class StatisticsComponent implements OnInit {
 	recruiterDownloads:number[] 				= [];
 	recruiterDownloadsDaily:number[] 			= [];
 	recruiterDownloadsWeekly:number[] 			= [];
-	recruiterDownloadsMonthly:number[] 			= [];
-	recruiterDownloadsTotal:number[] 			= [];
 	
 	recruiterDownloadsCols:string[] 			= [];
 	recruiterDownloadsDailyCols:string[] 		= [];
 	recruiterDownloadsWeeklyCols:string[] 		= [];
-	recruiterDownloadsMonthlyCols:string[] 		= [];
-	recruiterDownloadsTotalCols:string[] 		= [];
-			
 			
 	/**
   	* Constructor
 	*/
 	constructor(public statisticsService:StatisticsService) {
 
+		this.fetchStatus();
+
+	}
+
+	ngOnInit(): void {
+	}
+	
+	public fetchStatus():void{
+		
 		this.statisticsService.getCurriculumDownloadStatistics().forEach(stat => {
 
-			let downloads:number[] 		= Object.values(stat.dailyDownloads);
-			let downloadDates:string[] 	= Object.keys(stat.dailyDownloads);
+			let downloads:number[] 		= Object.values(stat.weeklyDownloads);
+			let downloadDates:string[] 	= Object.keys(stat.weeklyDownloads);
 			
 			this.lineChartData = [{ data: downloads, label: 'Downloads' },];
 			this.lineChartLabels = downloadDates;
 			
-			
-			
-			
-			this.recruiterDownloads 				= Object.values(stat.recruiterDownloads);
 			this.recruiterDownloadsDaily 			= Object.values(stat.recruiterDownloadsDaily);
 			this.recruiterDownloadsWeekly 			= Object.values(stat.recruiterDownloadsWeekly);
-			this.recruiterDownloadsMonthly 			= Object.values(stat.recruiterDownloadsMonthly);
-			this.recruiterDownloadsTotal 			= Object.values(stat.recruiterDownloads);
-			
-			this.recruiterDownloadsCols 			= Object.keys(stat.recruiterDownloads);
+	
 			this.recruiterDownloadsDailyCols 		= Object.keys(stat.recruiterDownloadsDaily);
 			this.recruiterDownloadsWeeklyCols 		= Object.keys(stat.recruiterDownloadsWeekly);
-			this.recruiterDownloadsMonthlyCols 		= Object.keys(stat.recruiterDownloadsMonthly);
-			this.recruiterDownloadsTotalCols 		= Object.keys(stat.recruiterDownloads);
 			
-			this.recruiterDownloadsChartData = [{ data: this.recruiterDownloads, label: 'Downloads' }];
+			this.recruiterDownloadsChartData = [{ data: this.recruiterDownloadsDaily, label: 'Todays downloads' }];
 												
-			this.recruiterDownloadsChartLabels = this.recruiterDownloadsCols;
+			this.recruiterDownloadsChartLabels = this.recruiterDownloadsDailyCols;
 
     	});
 
@@ -74,11 +69,10 @@ export class StatisticsComponent implements OnInit {
 		
 			let stats:any[] = data;
 			
-			let functionStatCount:Array<number> 		= new Array<number>(); //Object.values(stat.recruiterDownloads);
-			let functionStatName:Array<string> 			= new Array<string>(); //'Object.keys(stat.recruiterDownloads);
+			let functionStatCount:Array<number> 		= new Array<number>(); 
+			let functionStatName:Array<string> 			= new Array<string>(); 
 				
 			stats.forEach(functonStat => {
-				//this.candidatesByFunction.set(functonStat.function, functonStat.availableCandidates);
 				
 				functionStatName.push(functonStat.function);
 				functionStatCount.push(functonStat.availableCandidates);
@@ -88,35 +82,21 @@ export class StatisticsComponent implements OnInit {
 			this.functionChartData = [{ data: functionStatCount, label: 'Function' },];
 			this.functionChartLabels = functionStatName;
 			
-			
     	});
 
-	}
-
-	ngOnInit(): void {
 	}
 	
 	public switchChartData(type:string):void{
 		
 		switch (type) {
 			case "day":{
-				this.recruiterDownloadsChartData = [{ data: this.recruiterDownloadsDaily, label: 'Today' }];
+				this.recruiterDownloadsChartData = [{ data: this.recruiterDownloadsDaily, label: 'Todays downloads' }];
 				this.recruiterDownloadsChartLabels = this.recruiterDownloadsDailyCols;
 				return;
 			}
 			case "week":{
-				this.recruiterDownloadsChartData = [{ data: this.recruiterDownloadsWeekly, label: 'This Week' }];
+				this.recruiterDownloadsChartData = [{ data: this.recruiterDownloadsWeekly, label: 'This Weeks downloads' }];
 				this.recruiterDownloadsChartLabels = this.recruiterDownloadsWeeklyCols;
-				return;
-			}
-			case "month":{
-				this.recruiterDownloadsChartData = [{ data: this.recruiterDownloadsMonthly, label: 'This Month' }];
-				this.recruiterDownloadsChartLabels = this.recruiterDownloadsMonthlyCols;
-				return;
-			}
-			case "total":{
-				this.recruiterDownloadsChartData = [{ data: this.recruiterDownloadsTotal, label: 'Total' }];
-				this.recruiterDownloadsChartLabels = this.recruiterDownloadsTotalCols;
 				return;
 			}
 		}
