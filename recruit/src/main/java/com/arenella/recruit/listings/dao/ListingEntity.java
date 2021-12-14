@@ -88,9 +88,7 @@ public class ListingEntity {
 	@Column(name="currency")
 	@Enumerated(EnumType.STRING)
 	private currency			currency;
-	
-	
-	//@OneToMany(fetch = FetchType.EAGER, mappedBy = "listingId")
+
 	@OneToMany(mappedBy = "listingId", cascade = CascadeType.ALL, orphanRemoval=true)
 	private Set<ListingViewedEventEntity> 		views			= new LinkedHashSet<>();
 	
@@ -407,7 +405,8 @@ public class ListingEntity {
 	* @return number of views
 	*/
 	public void setViews(Set<ListingViewedEventEntity> views) {
-		this.views = views;
+		this.views.clear();
+		this.views.addAll(views);
 	}
 	
 	/**
