@@ -104,20 +104,9 @@ public class ListingController {
 		
 		ListingFilterBuilder filterBuilder = ListingFilter.builder();
 		
-		//TODO: [KP] Make new outbound with only info (no views) relevant to the public jobboard view
-		
 		return service.fetchListings(filterBuilder.build(), pageable).map(listing -> ListingAPIOutboundPublic.convertFromListing(listing));	
 		
 	}
-	
-	/**
-	* Returns single Listing based upon the ListingId
-	* @return Listing associated with listingId
-	*/
-	//@GetMapping(value="/listing/{listingId}")
-	//public ResponseEntity<CandidateAPIOutbound> fetchListing(@PathVariable UUID listingId){
-	//	return ResponseEntity.status(HttpStatus.OK).body(null);
-	//}
 	
 	/**
 	* Logs a viewed Listing event

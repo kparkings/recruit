@@ -54,6 +54,15 @@ export class StatisticsService {
 
 	}
 	
-	
+	/**
+	* Returns status relating to Listings
+	*/
+	public getListingStats():Observable<any>{
+		
+		const backendUrl:string = environment.backendUrl +'listings/stats/';
+  
+		return this.httpClient.get<any>(backendUrl, this.httpOptions);
+		
+	}
 	
 }

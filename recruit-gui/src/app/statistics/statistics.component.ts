@@ -11,20 +11,28 @@ import { Color, Label } 						from 'ng2-charts';
 })
 export class StatisticsComponent implements OnInit {
 
-	totalNumberActiveCandidates:number 			= 0;
-	candidatesByFunction:Map<string,number> 	= new Map<string,number>();
-	currentTab:string 							= "downloads";
-	showStatsDownloads:boolean					=true;
-	showStatsAvailability:boolean				=false;
+	public totalNumberActiveCandidates:number 			= 0;
+	public candidatesByFunction:Map<string,number> 		= new Map<string,number>();
+	public currentTab:string 							= "downloads";
+	public showStatsDownloads:boolean					=true;
+	public showStatsAvailability:boolean				=false;
+	public showStatsListings:boolean					=false;
 
-	recruiterDownloads:number[] 				= [];
-	recruiterDownloadsDaily:number[] 			= [];
-	recruiterDownloadsWeekly:number[] 			= [];
+	public recruiterDownloads:number[] 					= [];
+	public recruiterDownloadsDaily:number[] 			= [];
+	public recruiterDownloadsWeekly:number[] 			= [];
+	//public listingViews:number[] 					= [];
 	
-	recruiterDownloadsCols:string[] 			= [];
-	recruiterDownloadsDailyCols:string[] 		= [];
-	recruiterDownloadsWeeklyCols:string[] 		= [];
+	public recruiterDownloadsCols:string[] 				= [];
+	public recruiterDownloadsDailyCols:string[] 		= [];
+	public recruiterDownloadsWeeklyCols:string[] 		= [];
+	//public listingviewsCols:string[] 				= [];
 			
+	public chartDownloadsTotal							= 0;		
+	
+	public listingViewsToday 							= 0;
+	public listingViewsThisWeek 						= 0;
+		
 	/**
   	* Constructor
 	*/
@@ -37,7 +45,25 @@ export class StatisticsComponent implements OnInit {
 	ngOnInit(): void {
 	}
 	
+	
 	public fetchStatus():void{
+		
+		this.statisticsService.getListingStats().subscribe(listingData => {
+					
+					console.log("Listing stats " + JSON.stringify(listingData));
+					this.listingViewsToday 		= listingData.viewsToday;
+					this.listingViewsThisWeek 	= listingData.viewsThisWeek;
+					
+					let listingChartViews:number[] 		= Object.values(listingData.viewsPerWeek);
+					let listingChartViewsKeys:string[] 	= Object.keys(listingData.viewsPerWeek);
+			
+					this.listingChartData = [{ data: listingChartViews, label: 'Downloads' },];
+					this.listingChartLabels = listingChartViewsKeys;
+			
+				}, 
+				err => {
+					console.log("Error retrieving listings stats" + JSON.stringify(err));			
+				});
 		
 		this.statisticsService.getCurriculumDownloadStatistics().forEach(stat => {
 
@@ -86,17 +112,23 @@ export class StatisticsComponent implements OnInit {
 
 	}
 	
+	/**
+	* Switches between the various datasets available for the chart
+	* @oaram: type - which data set to show 
+	*/
 	public switchChartData(type:string):void{
 		
 		switch (type) {
 			case "day":{
 				this.recruiterDownloadsChartData = [{ data: this.recruiterDownloadsDaily, label: 'Todays downloads' }];
 				this.recruiterDownloadsChartLabels = this.recruiterDownloadsDailyCols;
+				this.chartDownloadsTotal = this.recruiterDownloadsDaily.length;
 				return;
 			}
 			case "week":{
 				this.recruiterDownloadsChartData = [{ data: this.recruiterDownloadsWeekly, label: 'This Weeks downloads' }];
 				this.recruiterDownloadsChartLabels = this.recruiterDownloadsWeeklyCols;
+				this.chartDownloadsTotal = this.recruiterDownloadsWeekly.length;
 				return;
 			}
 		}
@@ -112,10 +144,19 @@ export class StatisticsComponent implements OnInit {
 			case "downloads":{
 				this.showStatsDownloads=true;
 				this.showStatsAvailability=false;
+				this.showStatsListings=false;
+				
+				break;
+			}
+			case "listings":{
+				this.showStatsDownloads=false;
+				this.showStatsAvailability=false;
+				this.showStatsListings=true;
 				break;
 			}
 			case "availability":{
 				this.showStatsDownloads=false;
+				this.showStatsListings=false;
 				this.showStatsAvailability=true;
 				break;
 			}
@@ -187,4 +228,25 @@ export class StatisticsComponent implements OnInit {
   	functionChartLegend = true;
   	functionChartPlugins = [];
   	functionChartType:ChartType = 'bar';
+
+	/**
+	* Listing Downloads
+	*/
+	listingChartData: 		ChartDataSets[] 	= [];
+	listingChartLabels: 	Label[] 			= [];
+
+  	listingChartOptions = {
+    	responsive: true,
+  	};
+
+  	listingChartColors: Color[] = [
+    	{
+      		borderColor: 'black',
+      		backgroundColor: 'rgba(0,0,0,0.28)',
+    	},
+  	];
+
+  	listingChartLegend = true;
+  	listingChartPlugins = [];
+  	listingChartType:ChartType = 'line';
 }

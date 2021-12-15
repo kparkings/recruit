@@ -1,82 +1,109 @@
 <div class=".container m-2">
 	<div>
 
-        			<!-- Action buttons -->
-			<div class="action-buttons">
-				<button class="btn btn-secondary btnRight" (click)="fetchStatus()" download>Refresh</button>
+		<!-- Action buttons -->
+		<div class="action-buttons">
+			<button class="btn btn-secondary btnRight" (click)="fetchStatus()" download>Refresh</button>
+		</div>
+			
+		<ul class="nav nav-tabs">
+		  <li class="nav-item">
+		    <span class="nav-link statsChartTab" (click)="switchTab('downloads')">Downloads</span>
+		  </li>
+		   <li class="nav-item statsChartTab">
+		    <span class="nav-link" (click)="switchTab('listings')">Listings</span>
+		  </li>
+		  <li class="nav-item statsChartTab">
+		    <span class="nav-link" (click)="switchTab('availability')">Availability</span>
+		  </li>
+		</ul>
+				
+		<!-- Downloads -->
+		<div *ngIf="showStatsDownloads">
+					
+			<div class="chart-wrapper">
+				<h3>Daily downloads</h3>
+   	 			<canvas baseChart 
+        				[datasets]="lineChartData" 
+        				[labels]="lineChartLabels" 
+        				[options]="lineChartOptions"
+        				[colors]="lineChartColors" 
+        				[legend]="lineChartLegend" 
+        				[chartType]="lineChartType" 
+       			 		[plugins]="lineChartPlugins">
+   				 </canvas>
 			</div>
+						
+			<div class="chart-wrapper">
+				<h3>Recruiter downloads: {{chartDownloadsTotal}}</h3>
+				<button (click)="switchChartData('week')">This week</button>
+				<button (click)="switchChartData('day')">Today</button>
+    			<canvas baseChart 
+        				[datasets]="recruiterDownloadsChartData" 
+        				[labels]="recruiterDownloadsChartLabels" 
+        				[options]="recruiterDownloadsChartOptions"
+        				[colors]="recruiterDownloadsChartColors" 
+        				[legend]="recruiterDownloadsChartLegend" 
+        				[chartType]="recruiterDownloadsChartType" 
+        				[plugins]="recruiterDownloadsChartPlugins">
+    			</canvas>
+			</div>
+		</div>
+		
+		<!-- Listings -->
+		<div *ngIf="showStatsListings">
 			
-				<ul class="nav nav-tabs">
-				  <li class="nav-item">
-				    <span class="nav-link statsChartTab" (click)="switchTab('downloads')">Downloads</span>
-				  </li>
-				  <li class="nav-item statsChartTab">
-				    <span class="nav-link" (click)="switchTab('availability')">Availability</span>
-				  </li>
-				</ul>
+			<div class="chart-wrapper">
+				<h5>Totals:</h5>
+				<table>
+					<tr>
+						<td>Listings viewed today</td>
+						<td>{{listingViewsToday}}</td>
+					</tr>
+					<tr>
+						<td>Listings viewed this week</td>
+						<td>{{listingViewsThisWeek}}</td>
+					</tr>
+				</table>
+			</div>
+			<div class="chart-wrapper">
+				<h5>Available by Function</h5>
+ 						<canvas baseChart 
+     						[datasets]="listingChartData" 
+     						[labels]="listingChartLabels" 
+     						[options]="listingChartOptions"
+     						[colors]="listingChartColors" 
+     						[legend]="listingChartLegend" 
+     						[chartType]="listingChartType" 
+     						[plugins]="listingChartPlugins">
+  					</canvas>
+			</div>			
+		</div>
 			
-				
-				<!-- Downloads -->
-				
-				<div *ngIf="showStatsDownloads">
-					
-								<div class="chart-wrapper">
-									<h3>Daily downloads</h3>
-					   	 			<canvas baseChart 
-					        				[datasets]="lineChartData" 
-					        				[labels]="lineChartLabels" 
-					        				[options]="lineChartOptions"
-					        				[colors]="lineChartColors" 
-					        				[legend]="lineChartLegend" 
-					        				[chartType]="lineChartType" 
-					       			 		[plugins]="lineChartPlugins">
-					   				 </canvas>
-								</div>
-							
-								<div class="chart-wrapper">
-									<h3>Recruiter downloads</h3>
-									<button (click)="switchChartData('week')">This week</button>
-									<button (click)="switchChartData('day')">Today</button>
-					    			<canvas baseChart 
-					        				[datasets]="recruiterDownloadsChartData" 
-					        				[labels]="recruiterDownloadsChartLabels" 
-					        				[options]="recruiterDownloadsChartOptions"
-					        				[colors]="recruiterDownloadsChartColors" 
-					        				[legend]="recruiterDownloadsChartLegend" 
-					        				[chartType]="recruiterDownloadsChartType" 
-					        				[plugins]="recruiterDownloadsChartPlugins">
-					    			</canvas>
-								</div>
-							
-			
-				</div>
-			
-				<!-- Availability -->
-				<div *ngIf="showStatsAvailability">
-					
-					<div class="chart-wrapper">
-						<h5>Totals:</h5>
-						<table>
-							<tr>
-								<td>Active Users</td>
-								<td>{{totalNumberActiveCandidates}}</td>
-							</tr>
-						</table>
-					</div>
-					<div class="chart-wrapper">
-						<h5>Available by Function</h5>
-	  						<canvas baseChart 
-	      						[datasets]="functionChartData" 
-	      						[labels]="functionChartLabels" 
-	      						[options]="functionChartOptions"
-	      						[colors]="functionChartColors" 
-	      						[legend]="functionChartLegend" 
-	      						[chartType]="functionChartType" 
-	      						[plugins]="functionChartPlugins">
-	   					</canvas>
-					</div>
-							
-				</div>	
+		<!-- Availability -->
+		<div *ngIf="showStatsAvailability">
+			<div class="chart-wrapper">
+				<h5>Totals:</h5>
+				<table>
+					<tr>
+						<td>Active Users</td>
+						<td>{{totalNumberActiveCandidates}}</td>
+					</tr>
+				</table>
+			</div>
+			<div class="chart-wrapper">
+				<h5>Available by Function</h5>
+ 						<canvas baseChart 
+     						[datasets]="functionChartData" 
+     						[labels]="functionChartLabels" 
+     						[options]="functionChartOptions"
+     						[colors]="functionChartColors" 
+     						[legend]="functionChartLegend" 
+     						[chartType]="functionChartType" 
+     						[plugins]="functionChartPlugins">
+  					</canvas>
+			</div>	
+		</div>	
 			      
-			</div>
-        </div>
+	</div>
+</div>
