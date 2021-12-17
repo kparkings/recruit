@@ -1,8 +1,8 @@
-<div class=".container m-2" >
-	<div>
-	        	<div class="center">
-				<form [formGroup]="formBean">
-	
+<div>
+    <div class="centerdiv">
+        <div class="center-table">
+        	<form [formGroup]="formBean">
+				<div class="wholepagerow">
 					<table>
 						<tr>
 							<td><span style="padding-right:20px;">Username</span></td>
@@ -17,10 +17,16 @@
 							<td><button class="loginbutton" (click)="login()">Login</button></td>
 						</tr>
 					</table>
-				</form>
 				</div>
-			</div>
-     	</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+
+
+
+
     
 <ng-template #feedbackBox let-modal>
 	<div class="modal-header">

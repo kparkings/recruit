@@ -1,79 +1,66 @@
 <div>
     <div class="centerdiv">
         <div class="center-table">
-        
         	<form [formGroup]="formBean">
-						
-						<div class="wholepagerow">
-							
-								<div class="div-spacing">
-										<p style="border-bottom:2px solid black;">Curriculum</p>
-										<input type="file" style="padding-right:45px" (change)="uploadCurriculumFile($event)">
-								</div>
-								
-								<div class="div-spacing">
-									<table>
-										<tr>
-											<td class="tb-lbl">First name</td>
-											<td><input type="text" class="inpt-tab-std" formControlName="firstname"/></td>
-										</tr>
-										<tr>
-											<td class="tb-lbl">Surname</td>
-											<td><input type="text" class="inpt-tab-std" formControlName="surname"/></td>
-										</tr>
-										<tr>
-											<td class="tb-lbl">Email</td>
-											<td><input type="text" class="inpt-tab-std" formControlName="email"/></td>
-										</tr>
-										
-									</table>
-								</div>
-								
-								<div class="div-spacing">
-								
-									<table>
-										<tr>
-											<td class="tb-lbl-checkbox">Contract</td>
-											<td><input type="checkbox" formControlName="contract"/></td>
-										</tr>
-										<tr>
-											<td class="tb-lbl-checkbox">Perm</td>
-											<td><input type="checkbox" formControlName="perm"/></td>
-										</tr>
-									</table>
-									
-								
-								</div>
-								
-								<div class="div-spacing">
-									<p>
-									By uploading your CV and profile you are agreeing to allow your CV and details to be stored in the System and shared within the 
-									network of recruiters and clients. 
-									</p>
-									
-									<div class="col hdr_label" style="text-align:right; margin-right:260px;"><button (click)="addCandidate()" [disabled]="uploadButtonDisabled()">Save</button></div>
-								</div>
-							
-							</div>
-		
-		
-			</form>
-			
-			<ng-template #feedbackBox let-modal>
-				<div class="modal-header">
-					<h4 class="modal-title">&nbsp;</h4>
-			   		<div class="filter-close-box" (click)="closeModal()">X</div>
-			 		</div>
-				<div class="feedbackBox; {{feedbackBoxClass}}">
-					<div class="modal-body">
-						<p class="modal-body-text">{{feedbackBoxText}}</p>
-					</div>       
+				<div class="wholepagerow">
+					<div class="div-spacing">
+						<p style="border-bottom:2px solid black;">Curriculum</p>
+						<input type="file" style="padding-right:45px" (change)="uploadCurriculumFile($event)">
+					</div>
+					<div class="div-spacing">
+						<table>
+							<tr>
+								<td class="tb-lbl">First name</td>
+								<td><input type="text" class="inpt-tab-std" formControlName="firstname"/></td>
+							</tr>
+							<tr>
+								<td class="tb-lbl">Surname</td>
+								<td><input type="text" class="inpt-tab-std" formControlName="surname"/></td>
+							</tr>
+							<tr>
+								<td class="tb-lbl">Email</td>
+								<td><input type="text" class="inpt-tab-std" formControlName="email"/></td>
+							</tr>
+						</table>
+					</div>
+					<div class="div-spacing">
+						<table>
+							<tr>
+								<td class="tb-lbl-checkbox">Contract</td>
+								<td><input type="checkbox" formControlName="contract"/></td>
+							</tr>
+							<tr>
+								<td class="tb-lbl-checkbox">Perm</td>
+								<td><input type="checkbox" formControlName="perm"/></td>
+							</tr>
+						</table>
+					</div>
+					<div class="div-spacing">
+						<p>
+						By uploading your CV and profile you are agreeing to allow your 
+						CV and details to be stored in the System and shared within the 
+						network of recruiters and clients. 
+						</p>
+						<div>
+							<button (click)="addCandidate()" [disabled]="uploadButtonDisabled()" style="margin-bottom:20px;">Save</button>
+						</div>
+					</div>
 				</div>
-			</ng-template>
-			
-        </div>
+			</form>
+		</div>
 	</div>
-</div>
+</div>   
 
-
-    
+<ng-template #feedbackBox let-modal>
+	<div class="modal-header">
+		<h4 class="modal-title">&nbsp;</h4>
+		<div class="filter-close-box" (click)="closeModal()">X</div>
+	</div>
+	<div class="feedbackBox; {{feedbackBoxClass}}">
+		<div class="modal-body">
+			<p class="modal-body-text">{{feedbackBoxText}}</p>
+		</div>       
+	</div>
+</ng-template>
+			
+         
