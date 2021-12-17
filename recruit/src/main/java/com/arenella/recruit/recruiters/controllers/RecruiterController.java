@@ -42,6 +42,24 @@ public class RecruiterController {
 	}
 	
 	/**
+	* Adds a new Recruiter
+	* @param recruiter
+	*/
+	//@PostMapping(value="/public/recruiter")
+	//public ResponseEntity<Void> requestRecruiterAccount(@RequestBody RecruiterAPIInbound recruiter) {
+		
+		//TODO: Enable url in seurity for non auth access 
+		
+		//TODO: Here we need to do the reverse of how an admin sets up an acount. That is first we create the recruiter. Then if the trial is accepted 
+		//		we create the User. That way only the admin user provides authenticated access to the recruiter. This we do by sending an event to the authentication service and 
+		//		expect an event to say account created. thereupon we enable the recruiter and provide the login details.
+		
+		//recruiterService.addRecruiter(RecruiterAPIInbound.convertToDomin(recruiter));
+		
+	//	return ResponseEntity.status(HttpStatus.CREATED).build();
+	//}
+	
+	/**
 	* Updates an existing recruiter
 	* @param recruiter
 	*/
