@@ -1,45 +1,27 @@
-<div>
-	<div class="centerdiv">
-		<div class="center-table">
+<div class=".container m-2" >
+	<div>
+	        	<div class="center">
+				<form [formGroup]="formBean">
+	
+					<table>
+						<tr>
+							<td><span style="padding-right:20px;">Username</span></td>
+							<td><input type="text" formControlName="username"/></td>
+						</tr>
+						<tr>
+							<td>Password</td>
+							<td><input style="margin-right:20px;" type="password" formControlName="password"/></td>
+						</tr>
+						<tr>
+							<td>&nbsp;</td>
+							<td><button class="loginbutton" (click)="login()">Login</button></td>
+						</tr>
+					</table>
+				</form>
+				</div>
+			</div>
+     	</div>
     
-    		<form [formGroup]="formBean">
-
-	<div class=".container m-2">
-
-        <div class="login-table">
-
-            <div class="row">
-
-                <div class="col leftcol">
-                    Username
-                </div>
-                <div class="col rightcol">
-                    <input type="text" formControlName="username"/>
-                </div>
-
-            </div>
-
-            <div class="row">
-
-                <div class="col leftcol">
-                    Password
-                </div>
-                <div class="col rightcol">
-                    <input type="password" formControlName="password"/>
-                </div>
-
-            </div>
-
-            <div>
-                <div class="row">
-                    <div class="col leftcol">&nbsp;</div>
-                    <div class="col right"><button class="loginbutton" (click)="login()">Login</button></div>
-                </div>
-            </div>
-        </div>
-    </div>
-</form>
-
 <ng-template #feedbackBox let-modal>
 	<div class="modal-header">
 		<h4 class="modal-title">&nbsp;</h4>
@@ -52,8 +34,5 @@
 	</div>
 </ng-template>
 
-     	</div>
-    </div>
-</div>
 
 

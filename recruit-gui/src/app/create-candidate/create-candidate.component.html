@@ -3,71 +3,49 @@
         <div class="center-table">
         
         	<form [formGroup]="formBean">
-
-				<div class="wholepageX">
-				
-					<div class="centerdivX" >
 						
-						<div class="row wholepagerow">
-							<div class="col ">
-								
-								<div style="margin-top:50px;">
+						<div class="wholepagerow">
+							
+								<div class="div-spacing">
 										<p style="border-bottom:2px solid black;">Curriculum</p>
 										<input type="file" style="padding-right:45px" (change)="uploadCurriculumFile($event)">
 								</div>
 								
-								<div style="margin-top:50px;">
-									<div class="row rowadduserX">
-										<div class="col">
-											<div class="hdr_label">First name</div>
-										</div>
-										<div><input type="text" class="inpt-tab-std" formControlName="firstname"/></div>
-									</div>
-									<div class="row rowadduser">
-										<div class="col">
-											<div class="hdr_label">Surname</div>
-										</div>
-										<div><input type="text" class="inpt-tab-std" formControlName="surname"/></div>
+								<div class="div-spacing">
+									<table>
+										<tr>
+											<td class="tb-lbl">First name</td>
+											<td><input type="text" class="inpt-tab-std" formControlName="firstname"/></td>
+										</tr>
+										<tr>
+											<td class="tb-lbl">Surname</td>
+											<td><input type="text" class="inpt-tab-std" formControlName="surname"/></td>
+										</tr>
+										<tr>
+											<td class="tb-lbl">Email</td>
+											<td><input type="text" class="inpt-tab-std" formControlName="email"/></td>
+										</tr>
 										
-									</div>
-									<div class="row rowadduser">
-										<div class="col">
-											<div class="hdr_label">Email</div>
-										</div>
-										<div><input type="text" class="inpt-tab-std" formControlName="email"/></div>
-										
-									</div>
+									</table>
 								</div>
 								
-								<div style="margin-top:50px;">
+								<div class="div-spacing">
+								
+									<table>
+										<tr>
+											<td class="tb-lbl-checkbox">Contract</td>
+											<td><input type="checkbox" formControlName="contract"/></td>
+										</tr>
+										<tr>
+											<td class="tb-lbl-checkbox">Perm</td>
+											<td><input type="checkbox" formControlName="perm"/></td>
+										</tr>
+									</table>
 									
-									<div class="row rowadduser">
-										<div class="col">
-											<div class="hdr_label">Contract</div>
-										</div>
-									
-										<div class="col">
-											<input type="checkbox" formControlName="contract"/>
-										</div>
-								
-									</div>
-								
-									<div class="row rowadduser">
-										<div class="col">
-											<div class="hdr_label">Perm</div>
-										</div>
-									
-										<div class="col">
-											<input type="checkbox" formControlName="perm"/>
-										</div>
-								
-									</div>
-								
-								
 								
 								</div>
 								
-								<div style="margin-top:50px;">
+								<div class="div-spacing">
 									<p>
 									By uploading your CV and profile you are agreeing to allow your CV and details to be stored in the System and shared within the 
 									network of recruiters and clients. 
@@ -77,16 +55,7 @@
 								</div>
 							
 							</div>
-							
-							
 		
-						</div>
-						
-					</div>
-					
-		
-					
-				</div>
 		
 			</form>
 			

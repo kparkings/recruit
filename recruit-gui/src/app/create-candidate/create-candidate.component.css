@@ -79,3 +79,19 @@
     margin:0 auto;
     margin-top:25px;
 }
+
+.tb-lbl{
+	padding-right:20px;
+}
+
+.tb-lbl-checkbox{
+	padding-right:40px;
+}
+
+.inpt-tab-std{
+	max-width:250px;
+}
+
+.div-spacing{
+	margin-top:40px;
+}

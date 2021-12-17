@@ -60,6 +60,7 @@ export class StatisticsComponent implements OnInit {
 					this.listingChartData = [{ data: listingChartViews, label: 'Downloads' },];
 					this.listingChartLabels = listingChartViewsKeys;
 			
+					
 				}, 
 				err => {
 					console.log("Error retrieving listings stats" + JSON.stringify(err));			
@@ -81,7 +82,8 @@ export class StatisticsComponent implements OnInit {
 			
 			this.recruiterDownloadsChartData = [{ data: this.recruiterDownloadsDaily, label: 'Todays downloads' }];
 												
-			this.recruiterDownloadsChartLabels = this.recruiterDownloadsDailyCols;
+			this.recruiterDownloadsChartLabels 		= this.recruiterDownloadsDailyCols;
+			this.chartDownloadsTotal 				= this.recruiterDownloadsDaily.length;
 
     	});
 
