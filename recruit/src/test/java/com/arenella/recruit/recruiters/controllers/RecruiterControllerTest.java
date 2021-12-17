@@ -12,11 +12,14 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import com.arenella.recruit.recruiters.beans.Recruiter;
 import com.arenella.recruit.recruiters.beans.Recruiter.language;
 import com.arenella.recruit.recruiters.beans.RecruiterAPIInbound;
 import com.arenella.recruit.recruiters.beans.RecruiterAPIOutbound;
+import com.arenella.recruit.recruiters.beans.RecruiterAccountRequestAPIInbound;
 import com.arenella.recruit.recruiters.services.RecruiterService;
 
 /**
@@ -178,6 +181,30 @@ public class RecruiterControllerTest {
 		assertEquals(surname.toLowerCase().trim(), 			outboundRecruiter.getSurname());
 		assertEquals(userId.toLowerCase().trim(), 			outboundRecruiter.getUserId());
 		assertEquals(active, 								outboundRecruiter.isActive());
+		
+	}
+	
+	/**
+	* Tests correct response is sent when request for Recruiter account is 
+	* sent by the Recruiter
+	* @throws Exception
+	*/
+	@Test
+	public void testRequestRecruiterAccount() throws Exception {
+
+		RecruiterAccountRequestAPIInbound request = RecruiterAccountRequestAPIInbound.builder()
+																						.companyName(companyName)
+																						.email(email)
+																						.firstName(firstname)
+																						.language(lang)
+																						.surname(surname)
+																					.build();
+		
+		//TODO: Test (ArgCapt) that request sent to service has all values but userId is empty once service call is done
+		
+		ResponseEntity<Void> response = this.recruiterController.requestRecruiterAccount(request);
+		
+		assertEquals(response.getStatusCode(), HttpStatus.CREATED);
 		
 	}
 

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.arenella.recruit.recruiters.beans.RecruiterAPIInbound;
 import com.arenella.recruit.recruiters.beans.RecruiterAPIOutbound;
+import com.arenella.recruit.recruiters.beans.RecruiterAccountRequestAPIInbound;
 import com.arenella.recruit.recruiters.services.RecruiterService;
 
 /**
@@ -45,8 +46,10 @@ public class RecruiterController {
 	* Adds a new Recruiter
 	* @param recruiter
 	*/
-	//@PostMapping(value="/public/recruiter")
-	//public ResponseEntity<Void> requestRecruiterAccount(@RequestBody RecruiterAPIInbound recruiter) {
+	@PostMapping(value="/public/recruiter")
+	public ResponseEntity<Void> requestRecruiterAccount(@RequestBody RecruiterAccountRequestAPIInbound recruiter) {
+		
+		//TODO: Create new version of RecruiterAPIInboundBuilder without UserId
 		
 		//TODO: Enable url in seurity for non auth access 
 		
@@ -54,10 +57,19 @@ public class RecruiterController {
 		//		we create the User. That way only the admin user provides authenticated access to the recruiter. This we do by sending an event to the authentication service and 
 		//		expect an event to say account created. thereupon we enable the recruiter and provide the login details.
 		
+		//TODO: Need to decide how to generate username so there are no conflicts with user in Authentication service as now we create the user before the 
+		//		recruiter and user will adapt if the username already exists
+		
+		//TODO: Need service call to create Recruiter but not activate. Instead must set the correct sttus
+		
+		//TODO: Script to migrate current recruiters to FIRST_GEN accounts
+		
+		//TODO: Once created GUI needs to show [Account created. Your request will be processed and your account details sent to your provided email address]
+		
 		//recruiterService.addRecruiter(RecruiterAPIInbound.convertToDomin(recruiter));
 		
-	//	return ResponseEntity.status(HttpStatus.CREATED).build();
-	//}
+		return ResponseEntity.status(HttpStatus.CREATED).build();
+	}
 	
 	/**
 	* Updates an existing recruiter
