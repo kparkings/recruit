@@ -1,13 +1,20 @@
 package com.arenella.recruit.recruiters.entities;
 
-import static org.junit.Assert.assertEquals;
-
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
 
 import com.arenella.recruit.recruiters.beans.Recruiter;
 import com.arenella.recruit.recruiters.beans.Recruiter.language;
+import com.arenella.recruit.recruiters.beans.RecruiterSubscription;
+import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_status;
+import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_type;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
 * Unit tests for the RecruiterEntity class
@@ -15,14 +22,21 @@ import com.arenella.recruit.recruiters.beans.Recruiter.language;
 */
 public class RecruiterEntityTest {
 
-	final String 		userId			= "kparkings";
-	final String 		firstName		= "kevin";
-	final String 		surname			= "parkings";
-	final String 		email			= "kparkings@gmail.com";
-	final String		companyName		= "arenella";
-	final boolean 		active			= false;
-	final language 		language		= Recruiter.language.DUTCH;
-	final LocalDate		accountCreated	= LocalDate.of(2021, 5, 1);
+	private static final String 				userId				= "kparkings";
+	private static final String 				firstName			= "kevin";
+	private static final String 				surname				= "parkings";
+	private static final String 				email				= "kparkings@gmail.com";
+	private static final String					companyName			= "arenella";
+	private static final boolean 				active				= false;
+	private static final language 				language			= Recruiter.language.DUTCH;
+	private static final LocalDate				accountCreated		= LocalDate.of(2021, 5, 1);
+	
+	private static final LocalDateTime 			created 			= LocalDateTime.of(2021, 12, 18, 10, 10);
+	private static final LocalDateTime 			activatedDate 		= LocalDateTime.of(2021, 12, 24, 10, 10);
+	private static final String					recruiterId			= "kparkings";
+	private static final UUID					subscriptionId		= UUID.randomUUID();
+	private static final subscription_status 	status 				= subscription_status.ACTIVE;
+	private static final subscription_type		type				= subscription_type.FIRST_GEN;
 	
 	/**
 	* Tests Builder and Getters
@@ -88,6 +102,16 @@ public class RecruiterEntityTest {
 	@Test
 	public void testConvertFromEntity() throws Exception {
 		
+		RecruiterSubscriptionEntity subscriptionEntity = RecruiterSubscriptionEntity
+				.builder()
+					.activateDate(activatedDate)
+					.created(created)
+					.recruiterId(recruiterId)
+					.subscriptionId(subscriptionId)
+					.status(status)
+					.type(type)
+				.build();
+		
 		RecruiterEntity entity = RecruiterEntity
 				.builder()
 					.accountCreated(accountCreated)
@@ -98,6 +122,7 @@ public class RecruiterEntityTest {
 					.language(language)
 					.surname(surname)
 					.userId(userId)
+					.subscriptions(Set.of(subscriptionEntity))
 				.build();
 		
 		Recruiter recruiter = RecruiterEntity.convertFromEntity(entity);
@@ -110,6 +135,15 @@ public class RecruiterEntityTest {
 		assertEquals(recruiter.getLanguage(), 			language);
 		assertEquals(recruiter.getSurname(), 			surname);
 		assertEquals(recruiter.getUserId(), 			userId);
+		
+		RecruiterSubscription subscription = recruiter.getSubscriptions().stream().findFirst().get();
+		
+		assertEquals(activatedDate, 									subscription.getActivatedDate());
+		assertEquals(created, 											subscription.getCreated());
+		assertEquals(recruiterId, 										subscription.getRecruiterId());
+		assertEquals(status, 											subscription.getStatus());
+		assertEquals(subscriptionId, 									subscription.getSubscriptionId());
+		assertEquals(RecruiterSubscription.subscription_type.FIRST_GEN, subscription.getType());
 
 	}
 
@@ -132,7 +166,7 @@ public class RecruiterEntityTest {
 									.userId(userId)
 								.build();
 						
-		RecruiterEntity entity = RecruiterEntity.convertToEntity(recruiter);
+		RecruiterEntity entity = RecruiterEntity.convertToEntity(recruiter, Optional.empty());
 
 		assertEquals(entity.getAccountCreated(), 	accountCreated);
 		assertEquals(entity.getCompanyName(), 		companyName);

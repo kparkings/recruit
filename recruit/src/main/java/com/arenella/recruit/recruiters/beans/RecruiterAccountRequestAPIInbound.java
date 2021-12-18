@@ -160,7 +160,7 @@ public class RecruiterAccountRequestAPIInbound {
 	* @param recruiter - API Inbound representation
 	* @return Domain representation
 	*/
-	public static Recruiter convertToDomin(RecruiterAPIInbound recruiter) {
+	public static Recruiter convertToDomin(RecruiterAccountRequestAPIInbound recruiter) {
 		return Recruiter
 				.builder()
 					.companyName(recruiter.getCompanyName())

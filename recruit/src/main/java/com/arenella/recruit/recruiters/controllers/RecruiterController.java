@@ -49,7 +49,8 @@ public class RecruiterController {
 	@PostMapping(value="/public/recruiter")
 	public ResponseEntity<Void> requestRecruiterAccount(@RequestBody RecruiterAccountRequestAPIInbound recruiter) {
 		
-		//TODO: Create new version of RecruiterAPIInboundBuilder without UserId
+		
+		recruiterService.addRecruiterAccountRequest(RecruiterAccountRequestAPIInbound.convertToDomin(recruiter));
 		
 		//TODO: Enable url in seurity for non auth access 
 		

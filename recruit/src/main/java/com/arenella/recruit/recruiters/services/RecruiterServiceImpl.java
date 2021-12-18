@@ -1,7 +1,9 @@
 package com.arenella.recruit.recruiters.services;
 
 import java.util.LinkedHashSet;
+import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -35,7 +37,7 @@ public class RecruiterServiceImpl implements RecruiterService{
 		
 		recruiter.activateAccount();
 		
-		this.recruiterDao.save(RecruiterEntity.convertToEntity(recruiter));
+		this.recruiterDao.save(RecruiterEntity.convertToEntity(recruiter, Optional.empty()));
 	}
 
 	/**
@@ -91,6 +93,22 @@ public class RecruiterServiceImpl implements RecruiterService{
 		String recruiterId = SecurityContextHolder.getContext().getAuthentication().getName();
 		
 		return fetchRecruiter(recruiterId);
+		
+	}
+
+	/**
+	* Refer to the RecruiterService for details
+	* @throws IllegalAccessException 
+	*/
+	@Override
+	public void addRecruiterAccountRequest(Recruiter recruiter) {
+		
+		UUID temporaryRecruiterId = UUID.randomUUID();
+		
+		recruiter.setUserId(temporaryRecruiterId.toString());
+		
+		this.recruiterDao.save(RecruiterEntity.convertToEntity(recruiter, Optional.empty()));
+		
 		
 	}
 

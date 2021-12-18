@@ -665,3 +665,46 @@ databaseChangeLog:
              -  columnName: views 
                 schemaName:  listings  
                 tableName:  listing
+                
+  - changeSet:
+      id: recruiter_subscription_tables
+      author: kparkings
+      changes:
+        - createTable:
+            tableName: recruiter_subscriptions
+            schemaName: recruiter
+            columns:
+              - column:
+                  name: subscription_id
+                  type: UUID
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: recruiter_id
+                  type: varchar
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_subscription_recruiter
+                    references: recruiter.recruiter(user_id)
+              - column:
+                  name: type
+                  type: varchar
+                  constraints:
+                    nullable: false
+              - column:
+                  name: status
+                  type: varchar
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created
+                  type: varchar
+                  constraints:
+                    nullable: false
+              - column:
+                  name: activated_date
+                  type: varchar
+                  constraints:
+                    nullable: true
+ 

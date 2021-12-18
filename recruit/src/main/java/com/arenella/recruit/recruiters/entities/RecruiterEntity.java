@@ -1,12 +1,18 @@
 package com.arenella.recruit.recruiters.entities;
 
 import java.time.LocalDate;
+import java.util.LinkedHashSet;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.arenella.recruit.recruiters.beans.Recruiter;
@@ -27,29 +33,32 @@ public class RecruiterEntity {
 	
 	@Id
 	@Column(name="user_id")
-	private String 		userId;
+	private String 								userId;
 	
 	@Column(name="firstname")
-	private String 		firstName;
+	private String 								firstName;
 	
 	@Column(name="surname")
-	private String 		surname;
+	private String 								surname;
 	
 	@Column(name="email")
-	private String 		email;
+	private String 								email;
 	
 	@Column(name="company_name")
-	private String		companyName;
+	private String								companyName;
 	
 	@Column(name="active")
-	private boolean 	active			= true;
+	private boolean 							active				= true;
 	
 	@Column(name="language_spoken")
 	@Enumerated(EnumType.STRING)
-	private language 	language;
+	private language 							language;
 	
 	@Column(name="account_created")
-	private LocalDate	accountCreated;
+	private LocalDate							accountCreated;
+	
+	@OneToMany(mappedBy = "recruiterId", cascade = CascadeType.ALL, orphanRemoval=true)
+	private Set<RecruiterSubscriptionEntity> 	subscriptions 		= new LinkedHashSet<>();
 	
 	/**
 	* Constructor based upon a Builder
@@ -65,6 +74,7 @@ public class RecruiterEntity {
 		this.active			= builder.active;
 		this.language 		= builder.language;
 		this.accountCreated = builder.accountCreated;
+		this.subscriptions  = builder.subscriptions;
 
 	}
 	
@@ -135,6 +145,14 @@ public class RecruiterEntity {
 	}
 	
 	/**
+	* Returns the Subscriptions associated with the Recruiter
+	* @return
+	*/
+	public Set<RecruiterSubscriptionEntity> getSubscriptions() {
+		return this.subscriptions;
+	}
+	
+	/**
 	* Returns a Builder for the RecruiterEntity class
 	* @return Builder for the RecruiterEntity class
 	*/
@@ -191,19 +209,29 @@ public class RecruiterEntity {
 	}
 
 	/**
+	* Sets the Subscriptions associated with the Recruiter
+	* @param subscriptions - Subscriptions associated with the Recruiter
+	*/
+	public void setSubscriptions(Set<RecruiterSubscriptionEntity> subscriptions) {
+		this.subscriptions.clear();
+		this.subscriptions.addAll(subscriptions);
+	}
+	
+	/**
 	* Builder for the RecruiterEntity class
 	* @author K Parkings
 	*/
 	public static class RecruiterEntityBuilder {
 		
-		private String 		userId;
-		private String 		firstName;
-		private String 		surname;
-		private String 		email;
-		private String		companyName;
-		private boolean 	active			= true;
-		private language 	language;
-		private LocalDate	accountCreated;
+		private String 								userId;
+		private String 								firstName;
+		private String 								surname;
+		private String 								email;
+		private String								companyName;
+		private boolean 							active				= true;
+		private language 							language;
+		private LocalDate							accountCreated;
+		private Set<RecruiterSubscriptionEntity> 	subscriptions 		= new LinkedHashSet<>();
 		
 		/**
 		* Sets the Recruiters unique iderId
@@ -277,11 +305,22 @@ public class RecruiterEntity {
 		
 		/**
 		* Sets the Date the Recrutier was added to the System
-		* @param accountCreated - Date Recruiter added to the Syste,
+		* @param accountCreated - Date Recruiter added to the System,
 		* @return Builder
 		*/
 		public RecruiterEntityBuilder accountCreated(LocalDate accountCreated) {
 			this.accountCreated = accountCreated;
+			return this;
+		}
+		
+		/**
+		* Sets the Subscriptions associated with the Recruiter
+		* @param subscriptions
+		* @return Builder
+		*/
+		public RecruiterEntityBuilder subscriptions(Set<RecruiterSubscriptionEntity> subscriptions) {
+			this.subscriptions.clear();
+			this.subscriptions.addAll(subscriptions);
 			return this;
 		}
 		
@@ -297,28 +336,62 @@ public class RecruiterEntity {
 	}
 	
 	/**
-	* 
-	* @param recruiter
-	* @return
+	* Converts the Domain representation of a Recruiter to the Entity representation
+	* @param recruiter 		- Recruiter to convert
+	* @param entity 		- If provided this existing entity will be updated instead of a new Instance being created 
+	* @return Entity representation
 	*/
-	public static RecruiterEntity convertToEntity(Recruiter recruiter) {
+	public static RecruiterEntity convertToEntity(Recruiter recruiter, Optional<RecruiterEntity> entity) {
+		
+		if (entity.isEmpty()) {
+			return RecruiterEntity
+							.builder()
+								.accountCreated(recruiter.getAccountCreated())
+								.active(recruiter.isActive())
+								.companyName(recruiter.getCompanyName())
+								.email(recruiter.getEmail())
+								.firstName(recruiter.getFirstName())
+								.language(recruiter.getLanguage())
+								.surname(recruiter.getSurname())
+								.userId(recruiter.getUserId())
+								.subscriptions(recruiter.getSubscriptions().stream().map(s -> RecruiterSubscriptionEntity.convertToEntity(s, Optional.empty())).collect(Collectors.toSet()))
+							.build();
+		}
+		
+		Set<RecruiterSubscriptionEntity> subscriptions = new LinkedHashSet<>();
+		
+		recruiter.getSubscriptions().stream().forEach(subscription -> {
+		
+			Optional<RecruiterSubscriptionEntity> subEntityOpt =  entity.get().getSubscriptions().stream().filter(s -> s.getSubscriptionId() == subscription.getSubscriptionId()).findAny();
+		
+			if (subEntityOpt.isEmpty()) {
+				subscriptions.add(RecruiterSubscriptionEntity.convertToEntity(subscription, Optional.empty()));
+			} else {
+				subscriptions.add(RecruiterSubscriptionEntity.convertToEntity(subscription, Optional.of(subEntityOpt.get())));
+			}
+			
+		});
+		
 		return RecruiterEntity
-						.builder()
-							.accountCreated(recruiter.getAccountCreated())
-							.active(recruiter.isActive())
-							.companyName(recruiter.getCompanyName())
-							.email(recruiter.getEmail())
-							.firstName(recruiter.getFirstName())
-							.language(recruiter.getLanguage())
-							.surname(recruiter.getSurname())
-							.userId(recruiter.getUserId())
-						.build();
+				.builder()
+					.accountCreated(recruiter.getAccountCreated())
+					.active(recruiter.isActive())
+					.companyName(recruiter.getCompanyName())
+					.email(recruiter.getEmail())
+					.firstName(recruiter.getFirstName())
+					.language(recruiter.getLanguage())
+					.surname(recruiter.getSurname())
+					.userId(recruiter.getUserId())
+					.subscriptions(subscriptions)
+				.build();
+		
+		
 	}
 	
 	/**
-	* 
-	* @param recruiter
-	* @return
+	* Converts the Entity representation of a Recruiter to the Domain representation
+	* @param recruiter - Recruiter to convert
+	* @return Doman representation
 	*/
 	public static Recruiter convertFromEntity(RecruiterEntity recruiterEntity) {
 		return Recruiter
@@ -331,6 +404,7 @@ public class RecruiterEntity {
 					.language(recruiterEntity.getLanguage())
 					.surname(recruiterEntity.getSurname())
 					.userId(recruiterEntity.getUserId())
+					.subscriptions(recruiterEntity.getSubscriptions().stream().map(s -> RecruiterSubscriptionEntity.convertFromEntity(s)).collect(Collectors.toSet()))
 				.build();
 	}
 	

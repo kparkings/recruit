@@ -43,5 +43,13 @@ public interface RecruiterService {
 	* @throws IllegalAccessException
 	*/
 	public Recruiter fetchRecruiterOwnAccount()  throws IllegalAccessException;
+
+	/**
+	* Creates a Recruiter account as a request on behalf of a Recruiter. This 
+	* differet from the standard addRecruiter method as it needs to be 
+	* confirmed and a user account created and userId assigned..
+	* @param convertToDomin
+	*/
+	public void addRecruiterAccountRequest(Recruiter convertToDomin);
 	
 }

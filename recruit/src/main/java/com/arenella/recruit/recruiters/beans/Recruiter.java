@@ -2,6 +2,8 @@
 package com.arenella.recruit.recruiters.beans;
 
 import java.time.LocalDate;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 /**
 * Class represents a Recruiter 
@@ -11,14 +13,15 @@ public class Recruiter {
 
 	public static enum language {ENGLISH, DUTCH, FRENCH}
 	
-	private String 		userId;
-	private String 		firstName;
-	private String 		surname;
-	private String 		email;
-	private String		companyName;
-	private boolean 	active;
-	private language 	language;
-	private LocalDate	accountCreated;
+	private String 						userId;
+	private String 						firstName;
+	private String 						surname;
+	private String 						email;
+	private String						companyName;
+	private boolean 					active;
+	private language 					language;
+	private LocalDate					accountCreated;
+	private Set<RecruiterSubscription> 	subscriptions 		= new LinkedHashSet<>();
 	
 	/**
 	* Constuctor based upon a builder
@@ -34,6 +37,8 @@ public class Recruiter {
 		this.active 			= builder.active;
 		this.language 			= builder.language;
 		this.accountCreated 	= builder.accountCreated;
+		
+		this.subscriptions.addAll(builder.subscriptions);
 		
 	}
 	
@@ -119,6 +124,22 @@ public class Recruiter {
 	}
 	
 	/**
+	* Sets the uniqueId of the User
+	* @param userId - Unique Id of the User
+	*/
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
+	
+	/**
+	* Returns the Subscriptions associated with the Recruiter
+	* @return Recruiters subscriptions
+	*/
+	public Set<RecruiterSubscription> getSubscriptions(){
+		return this.subscriptions;
+	}
+	
+	/**
 	* Activated the Recruiters account. If this is the 
 	* first time the account has been activated (I.e a new Recruiter) 
 	* it will also set the accountCreated to the current date
@@ -139,14 +160,15 @@ public class Recruiter {
 	*/
 	public static class RecruiterBuilder{
 		
-		private String 		userId;
-		private String 		firstName;
-		private String 		surname;
-		private String 		email;
-		private String		companyName;
-		private boolean 	active;
-		private language 	language;
-		private LocalDate	accountCreated;
+		private String 						userId;
+		private String 						firstName;
+		private String 						surname;
+		private String 						email;
+		private String						companyName;
+		private boolean 					active;
+		private language 					language;
+		private LocalDate					accountCreated;
+		private Set<RecruiterSubscription> 	subscriptions 		= new LinkedHashSet<>();
 		
 		/**
 		* Sets the userId associated with the Recruiter
@@ -225,6 +247,17 @@ public class Recruiter {
 		*/
 		public RecruiterBuilder accountCreated(LocalDate accountCreated) {
 			this.accountCreated = accountCreated;
+			return this;
+		}
+		
+		/**
+		* Sets the subscriptions associated with the Recruiter
+		* @param subscriptions - Recruiters subscriptions
+		* @return Builder
+		*/
+		public RecruiterBuilder subscriptions(Set<RecruiterSubscription> subscriptions) {
+			this.subscriptions.clear();
+			this.subscriptions.addAll(subscriptions);
 			return this;
 		}
 		
