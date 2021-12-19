@@ -204,7 +204,7 @@ public class RecruiterControllerTest {
 		
 		ResponseEntity<Void> response = this.recruiterController.requestRecruiterAccount(request);
 		
-		assertEquals(response.getStatusCode(), HttpStatus.CREATED);
+		assertEquals(response.getStatusCode(), HttpStatus.OK);
 		
 	}
 

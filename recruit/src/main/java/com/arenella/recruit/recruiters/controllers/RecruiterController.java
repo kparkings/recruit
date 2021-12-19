@@ -69,7 +69,7 @@ public class RecruiterController {
 		
 		//recruiterService.addRecruiter(RecruiterAPIInbound.convertToDomin(recruiter));
 		
-		return ResponseEntity.status(HttpStatus.CREATED).build();
+		return ResponseEntity.status(HttpStatus.OK).build();
 	}
 	
 	/**

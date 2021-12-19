@@ -1,5 +1,6 @@
 package com.arenella.recruit.recruiters.services;
 
+import java.time.LocalDateTime;
 import java.util.LinkedHashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -12,6 +13,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.arenella.recruit.recruiters.beans.Recruiter;
+import com.arenella.recruit.recruiters.beans.RecruiterSubscription;
+import com.arenella.recruit.recruiters.beans.YearlyRecruiterSubscription;
 import com.arenella.recruit.recruiters.dao.RecruiterDao;
 import com.arenella.recruit.recruiters.entities.RecruiterEntity;
 
@@ -106,6 +109,17 @@ public class RecruiterServiceImpl implements RecruiterService{
 		UUID temporaryRecruiterId = UUID.randomUUID();
 		
 		recruiter.setUserId(temporaryRecruiterId.toString());
+		
+		//TODO: Possible issue with later change in recruiterId due to foreign keys in DB
+		YearlyRecruiterSubscription subscription = YearlyRecruiterSubscription
+																		.builder()
+																			.created(LocalDateTime.now())
+																			.recruiterId(temporaryRecruiterId.toString())
+																			.status(RecruiterSubscription.subscription_status.AWAITING_CONFIRMATION)
+																			.subscriptionId(UUID.randomUUID())
+																		.build();
+		
+		recruiter.addInitialSubscription(subscription);
 		
 		this.recruiterDao.save(RecruiterEntity.convertToEntity(recruiter, Optional.empty()));
 		

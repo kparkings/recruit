@@ -140,6 +140,20 @@ public class Recruiter {
 	}
 	
 	/**
+	* Adds the initial subscription for the Recruiter account
+	* @param subscription - Initial Subscription for the Recruiter
+	*/
+	public void addInitialSubscription(RecruiterSubscription subscription) {
+		
+		if (!this.subscriptions.isEmpty()) {
+			throw new IllegalStateException("Cant add initial subscription if subscription already exists");
+		}
+		
+		this.subscriptions.add(subscription);
+		
+	}
+	
+	/**
 	* Activated the Recruiters account. If this is the 
 	* first time the account has been activated (I.e a new Recruiter) 
 	* it will also set the accountCreated to the current date
