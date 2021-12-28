@@ -74,7 +74,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements W
 		
 		http
 			.authorizeRequests()
-			
 			.antMatchers("/api/candidate/stats/total-active").permitAll()
 			.antMatchers("/candidate/stats/total-active").permitAll()
 			.antMatchers("/api/authenticate").permitAll() 
@@ -82,6 +81,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements W
 			.antMatchers("/pending-curriculum").permitAll()
 			.antMatchers("/pending-candidate").permitAll()
 			.antMatchers("/listing/public/**").permitAll()
+			.antMatchers("/public/recruiter").permitAll()
 			.antMatchers(HttpMethod.OPTIONS,"/**").permitAll()
 			.anyRequest().authenticated().and()
 			.exceptionHandling().authenticationEntryPoint(authenticationEntryPoint)

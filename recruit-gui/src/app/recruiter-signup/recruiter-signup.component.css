@@ -1,0 +1,42 @@
+.wholepagerow {
+    margin: 0 auto;
+    width:100%
+}
+
+.centerdiv{
+    margin: 0 auto;
+    padding-left:10px;
+    padding-right:10px;
+    width:90%;
+}
+
+.center-table{
+    margin:0 auto;
+    margin-top:25px;
+}
+
+.recruiter-signup-box-info {
+	float:left;
+	padding:5px;
+	max-width:40%;
+	min-width:40%;
+}
+
+.recruiter-signup-box {
+	float:left;
+	padding:5px;
+	margin-left:10%;
+	margin-right:20px;
+}
+
+.tb-lbl{
+	padding-right:20px;
+}
+
+.inpt-tab-std{
+	max-width:250px;
+}
+
+.highlight{
+	color:#6A5ACD;
+}

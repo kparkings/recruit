@@ -12,7 +12,7 @@ import { HomeComponent }								from './home/home.component';
 import { CreateCandidateComponent }						from './create-candidate/create-candidate.component';
 import { AuthGuardService }								from './auth-guard.service';
 import { AdminGuardGuard }								from './admin-guard.guard';
-
+import { RecruiterSignupComponent } 					from './recruiter-signup/recruiter-signup.component';
 
 const routes: Routes = [
 	{path: '', component: HomeComponent},
@@ -25,7 +25,8 @@ const routes: Routes = [
 	{path: 'login-user', 			component: LoginUserComponent},
 	{path: 'login-user', 			component: LoginUserComponent},
 	{path: 'listing', 				component: ListingComponent},
-	{path: 'create-candidate', 		component: CreateCandidateComponent}
+	{path: 'create-candidate', 		component: CreateCandidateComponent},
+	{path: 'recruiter-signup', 		component: RecruiterSignupComponent}
 ];
 
 @NgModule({

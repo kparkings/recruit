@@ -1,0 +1,76 @@
+<div>
+    <div class="centerdiv">
+        <div class="center-table">   
+        	<div class="wholepagerow"> 	
+				<div class="recruiter-signup-box-info">
+					<div>
+						<h1>Free trial</h1>
+						<p>
+						IT Recruiters are offered a free 30 day trial with full access to the system. 
+						Within this time you have full access the CV database and can post open roles on the IT job board.
+						<p>
+						<p>
+						After the trial period has expired you can take out a yearly subscription for continued access to the 
+						system.
+						</p>	
+					</div>
+					
+					<div>
+						<h1>Pricing</h1>
+						<p><b class="highlight">EUR 600</b> ex BTW per recruiter for an annual subscription</p>
+						<p>You have the option to start a subscription after the 30 days trial period has expired if you wish to continue to access the site.</p>
+						<p>IT recruiters will have full access to the site features including</p>
+						<ul>
+							<li>Unlimited Access to the IT Candidate CV database</li>
+							<li>Unlimited Postings on the IT Job board</li>
+						</ul>
+					</div>
+				</div>
+				
+				<div class="recruiter-signup-box">
+					<h1>30 Day free trial - Signup</h1>
+					<form [formGroup]="signupForm">
+						<table>
+							<tr>
+								<td class="tb-lbl">First name</td>
+								<td><input type="text" class="inpt-tab-std" formControlName="firstName"/></td>
+							</tr>
+							<tr>
+								<td class="tb-lbl">Surname</td>
+								<td><input type="text" class="inpt-tab-std" formControlName="surname"/></td>
+							</tr>
+							<tr>
+								<td class="tb-lbl">Email</td>
+								<td><input type="text" class="inpt-tab-std" formControlName="email"/></td>
+							</tr>
+							<tr>
+								<td>Company Name</td>
+								<td><input type="text" class="inpt-tab-std" formControlName="company"/></td>
+							</tr>
+							<tr>
+								<td>Preferred Language</td>
+								<td>
+									<select formControlName="preferredLanguage">
+										<option value="ENGLISH">English</option>
+										<option value="DUTCH">Dutch</option>
+										<option value="FRENCH">French</option>
+									</select>
+								</td>
+							</tr>
+							<tr>
+								<td></td>
+								<td>
+									<button (click)="startFreeTrial()" [disabled]="isFreeTrialButtonEnabled()" style="margin-top:10px;float:right;">Start free trial</button>
+								</td>
+							</tr>
+							
+						</table>
+						
+					</form>
+				</div>
+				
+			</div>
+		</div>
+			
+	</div>
+</div>

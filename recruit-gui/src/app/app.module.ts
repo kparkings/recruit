@@ -17,9 +17,10 @@ import { StatisticsComponent }			from './statistics/statistics.component';
 import { ChartsModule }					from 'ng2-charts';
 import { AccountsComponent } 			from './accounts/accounts.component';
 import { CreateCandidateComponent } 	from './create-candidate/create-candidate.component';
-import { RecruiterAccountComponent } from './recruiter-account/recruiter-account.component';
-import { RecruiterListingsComponent } from './recruiter-listings/recruiter-listings.component';
-import { ListingComponent } from './listing/listing.component';
+import { RecruiterAccountComponent } 	from './recruiter-account/recruiter-account.component';
+import { RecruiterListingsComponent } 	from './recruiter-listings/recruiter-listings.component';
+import { ListingComponent } 			from './listing/listing.component';
+import { RecruiterSignupComponent } 	from './recruiter-signup/recruiter-signup.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import { ListingComponent } from './listing/listing.component';
     CreateCandidateComponent,
     RecruiterAccountComponent,
     RecruiterListingsComponent,
-    ListingComponent
+    ListingComponent,
+    RecruiterSignupComponent
   ],
   imports: [
     BrowserModule,
