@@ -172,24 +172,4 @@ public class RecruiterSubscriptionEntityTest {
 		
 	}
 	
-	/**
-	* Tests conversion of Entity representation of RecruiterSubscription to 
-	* Domain representation [type == YEARLY_SUBSCRIPTION
-	* @throws Exception
-	*/
-	@Test
-	public void testConvertFromEntity_YEAR_SUBSCRPTION() throws Exception{
-		
-		assertThrows(IllegalArgumentException.class, () -> {
-			
-			RecruiterSubscriptionEntity entity = RecruiterSubscriptionEntity
-																	.builder()
-																		.type(RecruiterSubscription.subscription_type.YEAR_SUBSCRIPTION)
-																	.build();
-			
-			RecruiterSubscriptionEntity.convertFromEntity(entity);
-			
-		});
-	}
-	
 }

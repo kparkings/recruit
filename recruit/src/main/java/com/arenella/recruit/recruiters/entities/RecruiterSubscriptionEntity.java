@@ -13,6 +13,7 @@ import javax.persistence.Table;
 
 import com.arenella.recruit.recruiters.beans.FirstGenRecruiterSubscription;
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription;
+import com.arenella.recruit.recruiters.beans.YearlyRecruiterSubscription;
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_status;
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_type;
 
@@ -311,7 +312,15 @@ public class RecruiterSubscriptionEntity {
 											.build();
 			}
 			case YEAR_SUBSCRIPTION: {
-				throw new IllegalArgumentException("NEEDS TO BE IMPLEMENTED STILL: ");
+				return YearlyRecruiterSubscription
+											.builder()
+												.activateDate(entity.getActivatedDate())
+												.created(entity.getCreated())
+												.recruiterId(entity.getRecruiterId())
+												.status(entity.getStatus())
+												.subscriptionId(entity.getSubscriptionId())
+											.build();
+				
 			}
 			default: {
 				throw new IllegalArgumentException("Unknown type for recruiter subscription: " + entity.getType());

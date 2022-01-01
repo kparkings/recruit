@@ -2,6 +2,7 @@ import { Component, OnInit } 					from '@angular/core';
 import { Router}								from '@angular/router';
 import { RecruiterService }						from '../recruiter.service';
 import { Recruiter }							from './recruiter';
+import { Subscription }							from './Subscription';
 import { NgbModal}								from '@ng-bootstrap/ng-bootstrap';
 
 /**
@@ -28,8 +29,11 @@ export class RecruiterAccountComponent implements OnInit {
   	}
 
 	currentTab:string 					= "downloads";
-	showAccountTab:boolean				=true;
+	showAccountTab:boolean				= true;
 	recruiter:Recruiter					= new Recruiter();
+		
+	showAccountDetails:boolean			= true;
+	showSubscriptions:boolean			= false;
 		
 	/**
 	* Retrieves own recruiter account from the backend
@@ -52,6 +56,63 @@ export class RecruiterAccountComponent implements OnInit {
     	})
 	}
 	
+	/**
+	* Switches to the selected tab
+	*/
+	public switchTab(tab:string){
+		
+		this.currentTab = tab;
+		
+		switch(tab){
+			case "showAccountDetails":{
+				this.showAccountDetails=true;
+				this.showSubscriptions=false;
+				break;
+			}
+			case "showSubscriptions":{
+				this.showAccountDetails=false;
+				this.showSubscriptions=true;
+				break;
+			}
+		}
+		
+	}
 	
+	/**
+	* Returns whether or not the user has an active subscription.
+	*/
+	public hasActiveSubscription():boolean{
+		
+		let currentSubscription:boolean = false;
+		
+		this.recruiter.subscriptions.forEach( s => {
+			console.log("XX " + s.currentSubscription + ' --- ' + s.status);
+			if (s.currentSubscription) {
+				currentSubscription = true;
+			}
+			
+		});
+		
+		return currentSubscription;
+	}
+	
+	/**
+	* Returns whether or not the recruiter has an unpaid invoice
+	*/
+	public hasUnpaidSubscription():boolean{
+		
+		let status:string = '';
+		
+		this.recruiter.subscriptions.forEach( s => {
+			console.log("YY " + s.currentSubscription + ' --- ' + s.status);
+			if (s.currentSubscription) {
+				status = s.status;
+			}
+			
+		});
+		
+		return status === 'DISABLED_PENDING_PAYMENT';
+		
+	}
 	
 }

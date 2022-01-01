@@ -40,6 +40,7 @@ public class RecruiterSubscriptionAPIOutboundTest {
 				.status(status)
 				.subscriptionId(subscriptionId)
 				.type(type)
+				.currentSubscription(true)
 			.build();
 		
 		assertEquals(activatedDate, 	subscription.getActivatedDate());
@@ -69,6 +70,7 @@ public class RecruiterSubscriptionAPIOutboundTest {
 				.status(status)
 				.subscriptionId(subscriptionId)
 				.type(type)
+				.currentSubscription(false)
 			.build();
 		
 		assertEquals(activatedDate, 	subscription.getActivatedDate());

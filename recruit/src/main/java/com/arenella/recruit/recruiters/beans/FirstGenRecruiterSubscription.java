@@ -68,7 +68,8 @@ public class FirstGenRecruiterSubscription implements RecruiterSubscription{
 	*/
 	@Override
 	public boolean isCurrentSubscription() {
-		return this.getStatus() == subscription_status.ACTIVE;
+		boolean xx = this.getStatus() != subscription_status.SUBSCRIPTION_ENDED;
+		return this.getStatus() != subscription_status.SUBSCRIPTION_ENDED;
 	}
 
 	/**

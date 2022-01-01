@@ -31,7 +31,7 @@ public class RecruiterSubscriptionAPIOutbound implements RecruiterSubscription{
 		this.currentSubscription	= builder.currentSubscription;
 		this.type					= builder.type;
 		
-		this.currentSubscription = (this.status != null && this.status == subscription_status.ACTIVE);
+		//this.currentSubscription = (this.status != null && this.status == subscription_status.ACTIVE);
 		
 	}
 	
@@ -174,6 +174,16 @@ public class RecruiterSubscriptionAPIOutbound implements RecruiterSubscription{
 		}
 		
 		/**
+		* Sets whether or not the subscription is the current Subscription
+		* @param currentSubscrition -  whether or not the subscription is the current Subscription
+		* @return Builder
+		*/
+		public RecruiterSubscriptionAPIOutboundBuilder currentSubscription(boolean currentSubscription) {
+			this.currentSubscription = currentSubscription;
+			return this;
+		}
+		
+		/**
 		* Returns an initialzied instance of FirstGenRecruiterSubscription
 		* @return Initialzied instance of FirstGenRecruiterSubscription
 		*/
@@ -199,6 +209,7 @@ public class RecruiterSubscriptionAPIOutbound implements RecruiterSubscription{
 											.status(subscription.getStatus())
 											.subscriptionId(subscription.getSubscriptionId())
 											.type(subscription.getType())
+											.currentSubscription(subscription.isCurrentSubscription())
 										.build();
 		
 	}

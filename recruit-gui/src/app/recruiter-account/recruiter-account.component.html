@@ -1,6 +1,17 @@
 <div class=".container m-2" >
-
-	<div class="container-div">
+	
+	<!-- Nav options -->
+	<ul class="nav nav-tabs">
+	  <li class="nav-item">
+	    <span class="nav-link tabNav" (click)="switchTab('showAccountDetails')">Account Details</span>
+	  </li>
+	  <li class="nav-item">
+	    <span class="nav-link tabNav" (click)="switchTab('showSubscriptions')">Subscriptions</span>
+	  </li>
+	</ul>
+	
+	<!-- Account details -->
+	<div class="container-div" *ngIf="showAccountDetails">
 		
 		<table class="table center">
 			<tr>
@@ -29,5 +40,88 @@
 			</tr>
 		</table>
 	</div>
+	
+	<!-- Subscriptions -->
+	<div class="container-div container-div-high" *ngIf="showSubscriptions">
+		<h2>Your subscriptions</h2>
+		
+		<div *ngIf="!hasActiveSubscription()" class="no-sub-warn">
+			<b>Warning:</b> You currently have no active subscription. Please add a new Subscription to continue accessing the system
+		</div>
+		
+		<div *ngIf="hasUnpaidSubscription()" class="no-sub-warn">
+			<h2><b>Warning:</b> There is an outstanding invoice. Access to the system is temporarily suspended until the invoice has been paid. </h2>
+		</div>
+		
+		<div  *ngIf="hasActiveSubscription()">
+			<table class="table">
+				<thead>
+					<tr>
+						<th class="bg-tab-hdr">Subscription Id</th>
+						<th class="bg-tab-hdr">Type</th>
+						<th class="bg-tab-hdr">Created</th>
+						<th class="bg-tab-hdr">Activated / Activates</th>
+						<th class="bg-tab-hdr">Status</th>
+						<th class="bg-tab-hdr"></th>
+					</tr>
+				</thead>
+				<tr *ngFor="let subscription of recruiter.subscriptions">
+					<td class="subscription-tab-col">{{subscription.subscriptionId}}</td>
+					<td class="subscription-tab-col">{{subscription.type}}</td>
+					<td class="subscription-tab-col">{{subscription.created | date:'yyyy-MM-dd'}}</td>
+					<td class="subscription-tab-col">{{subscription.activatedDate | date:'yyyy-MM-dd'}}</td>
+					<td class="subscription-tab-col">{{subscription.status}}</td>
+					<td class="subscription-tab-col subscription-table-btn">
+						<button class="btn btn-secondary btn-subscriptionX" *ngIf="!hasUnpaidSubscription()">Cancel Subscription</button>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="subscriptions-options-div" *ngIf="!hasUnpaidSubscription()">
+			<h2>Add new Subscription</h2>
+			
+			<div>
+				
+				<table class="table subscription-options-table">
+					<thead>
+						<tr>
+							<th class="bg-tab-hdr">Subscription Type</th>
+							<th class="bg-tab-hdr">details</th>
+							<th class="bg-tab-hdr"></th>
+						</tr>
+					</thead>
+					<tr style="border-bottom:2px black solid">
+						<td><b>First Gen</b></td>
+						<td>
+							<ul>
+								<li>No fixed costs</li>
+								<li>550 EUR ex btw for each perm candidate that you place</li>
+								<li>1,50 EUR ex btw hourly margin for each freelance candidate you place</li>
+								<li>Invoices sent monthly. 30 day payment term</li>
+							</ul>
+						</td>
+						<td class="subscription-table-btn">
+							<button class="btn btn-secondary btn-subscription">Start Subscription</button>
+						</td>
+					</tr>
+					<tr>
+						<td><b>Yearly subscription</b></td>
+						<td>
+							<ul>
+								<li>Fixed cost of 600 EUR ex btw for 12 months access to the system</li>
+								<li>Unlimited CV downloads</li>
+								<li>Unlimited job listings</li>
+								<li>No additional costs for placed candidates</li>
+								<li>Invoices sent once per year. 30 day payment term</li>
+							</ul>
+						</td>
+						<td class="subscription-table-btn">
+							<button class="btn btn-secondary btn-subscription">Start Subscription</button>
+						</td>
+					</tr>
+				</table>
+		</div>
+	</div>
+	
 	
 </div>

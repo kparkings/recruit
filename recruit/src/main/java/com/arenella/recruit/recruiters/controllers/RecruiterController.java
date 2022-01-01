@@ -52,15 +52,6 @@ public class RecruiterController {
 		
 		recruiterService.addRecruiterAccountRequest(RecruiterAccountRequestAPIInbound.convertToDomin(recruiter));
 		
-		//TODO: Enable url in seurity for non auth access 
-		
-		//TODO: Here we need to do the reverse of how an admin sets up an acount. That is first we create the recruiter. Then if the trial is accepted 
-		//		we create the User. That way only the admin user provides authenticated access to the recruiter. This we do by sending an event to the authentication service and 
-		//		expect an event to say account created. thereupon we enable the recruiter and provide the login details.
-		
-		//TODO: Need to decide how to generate username so there are no conflicts with user in Authentication service as now we create the user before the 
-		//		recruiter and user will adapt if the username already exists
-		
 		//TODO: Need service call to create Recruiter but not activate. Instead must set the correct sttus
 		
 		//TODO: Script to migrate current recruiters to FIRST_GEN accounts
