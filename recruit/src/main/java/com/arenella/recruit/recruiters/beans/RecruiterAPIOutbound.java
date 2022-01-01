@@ -1,5 +1,9 @@
 package com.arenella.recruit.recruiters.beans;
 
+import java.util.LinkedHashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import com.arenella.recruit.recruiters.beans.Recruiter.language;
 
 /**
@@ -8,13 +12,14 @@ import com.arenella.recruit.recruiters.beans.Recruiter.language;
 */
 public class RecruiterAPIOutbound {
 
-	private String 		userId;
-	private String 		firstName;
-	private String 		surname;
-	private String 		email;
-	private String		companyName;
-	private boolean 	active			= true;
-	private language 	language;
+	private String 									userId;
+	private String 									firstName;
+	private String 									surname;
+	private String 									email;
+	private String									companyName;
+	private boolean 								active			= true;
+	private language 								language;
+	private Set<RecruiterSubscriptionAPIOutbound> 	subscriptions	= new LinkedHashSet<>();
 	
 	/**
 	* Constuctor based upon a builder
@@ -29,6 +34,9 @@ public class RecruiterAPIOutbound {
 		this.companyName 		= builder.companyName;
 		this.active 			= builder.active;
 		this.language 			= builder.language;
+		
+		this.subscriptions.clear();
+		this.subscriptions.addAll(builder.subscriptions);
 		
 	}
 	
@@ -89,6 +97,14 @@ public class RecruiterAPIOutbound {
 	public language getLanguage(){
 		return language;
 	}
+	
+	/**
+	* Returnss the subscriptions belonging to the recruiter
+	* @return Recruiters subscriptions
+	*/
+	public Set<RecruiterSubscriptionAPIOutbound> getSubscriptions() {
+		return this.subscriptions;
+	}
 
 	/**
 	* Returns a Builder for the Recruiter class
@@ -104,13 +120,14 @@ public class RecruiterAPIOutbound {
 	*/
 	public static class RecruiterAPIOutboundBuilder{
 		
-		private String 		userId;
-		private String 		firstName;
-		private String 		surname;
-		private String 		email;
-		private String		companyName;
-		private boolean 	active			= true;
-		private language 	language;
+		private String 									userId;
+		private String 									firstName;
+		private String 									surname;
+		private String 									email;
+		private String									companyName;
+		private boolean 								active			= true;
+		private language 								language;
+		private Set<RecruiterSubscriptionAPIOutbound> 	subscriptions	= new LinkedHashSet<>();
 		
 		/**
 		* Sets the userId associated with the Recruiter
@@ -183,6 +200,17 @@ public class RecruiterAPIOutbound {
 		}
 		
 		/**
+		* Sets the subscriptions associated with the Recruiter
+		* @param subscriptions - Recruiters subscriptions
+		* @return Builder
+		*/
+		public RecruiterAPIOutboundBuilder subscriptions(Set<RecruiterSubscriptionAPIOutbound> subscriptions) {
+			this.subscriptions.clear();
+			this.subscriptions.addAll(subscriptions);
+			return this;
+		}
+		
+		/**
 		* Returns an instance of Recruiter initialized with the 
 		* values in the builder
 		* @return Initalized instance of Recruiter
@@ -210,6 +238,7 @@ public class RecruiterAPIOutbound {
 									.language(recruiter.getLanguage())
 									.surname(recruiter.getSurname())
 									.userId(recruiter.getUserId())
+									.subscriptions(recruiter.getSubscriptions().stream().map(s -> RecruiterSubscriptionAPIOutbound.convertFromSubscription(s)).collect(Collectors.toCollection(LinkedHashSet::new)))
 								.build();
 	}
 	
