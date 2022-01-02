@@ -49,7 +49,7 @@
 					</td>
 					
 					<td>
-						<button (click)="createRecruiterAccount()">Create</button>
+						<button class="btn btn-secondary btn-action" (click)="createRecruiterAccount()">Create</button>
 					</td>
 				</tr>
 				<tr *ngIf="createAccountDetailsAvailable">
@@ -116,13 +116,13 @@
 				<input 	class="control-spacing" type="text" formControlName="surname"/>
 				<label 	class="control-spacing">email</label>
 				<input 	class="control-spacing" type="text" formControlName="email"/>
-				<button	class="control-spacing" (click)="fetchCandidates()">Filter</button>
+				<button	class="control-spacing btn btn-secondary btn-action" (click)="fetchCandidates()">Filter</button>
 			</span>
 			
 		</form>
 	
 		<!-- Candidates table -->  
-		<div>
+		<div style="margin-top: 5px;">
       
 			<table class="table candidate-table">
 				<thead>
@@ -145,10 +145,10 @@
 	            	    <td class="candidate-tab-col medicol">
 	            	    	<div [ngSwitch]="candidate.available">
 	                			<div  *ngSwitchCase="true">
-	                				<button	class="control-spacing" (click)="disableCandidate(candidate.candidateId)">Disable</button>
+	                				<button	class="control-spacing btn btn-secondary btn-action" (click)="disableCandidate(candidate.candidateId)">Disable</button>
 	                			</div>
 	                			<div  *ngSwitchCase="false">
-	                				<button	class="control-spacing" (click)="disableCandidate(candidate.candidateId)">Enable</button>
+	                				<button	class="control-spacing btn btn-secondary btn-action" (click)="disableCandidate(candidate.candidateId)">Enable</button>
 	                			</div>
 	                		</div>
 	                	</td>
@@ -181,8 +181,8 @@
 	                	<td class="candidate-tab-col medicol">{{candidate.surname}}</td>
 	                	<td class="candidate-tab-col medicol">{{candidate.email}}</td>
 	                	<td class="candidate-tab-col medicol">
-	                		<button	class="control-spacing" (click)="disableFlaggedAsUnavailableCandidate(candidate.candidateId)">Disable</button>
-	                		<button	class="control-spacing" (click)="removeFlaggedAsUnavailableFlag(candidate.candidateId)">Remove Flag</button>
+	                		<button	class="control-spacing btn btn-secondary btn-action" (click)="disableFlaggedAsUnavailableCandidate(candidate.candidateId)">Disable</button>
+	                		<button	class="control-spacing btn btn-secondary btn-action" (click)="removeFlaggedAsUnavailableFlag(candidate.candidateId)">Remove Flag</button>
 	                	</td>
 	      			</tr>	
 	      		</tbody>
@@ -219,7 +219,7 @@
 					<td>{{subscriptionAction.type}}</td>
 					<td>{{subscriptionAction.status}}</td>
 					<td>
-						<button class="btn btn-secondary btn-subscription-action" *ngFor="let action of subscriptionAction.actions">{{frmtSubscriptionAction(action)}}</button>
+						<button class="btn btn-secondary btn-action" *ngFor="let action of subscriptionAction.actions">{{frmtSubscriptionAction(action)}}</button>
 					</td>
 				</tr>
 			</tbody>
