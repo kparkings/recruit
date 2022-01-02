@@ -7,9 +7,16 @@
 }
 
 h3{
+	margin-top:5px;
 	margin-left:15px;
+	color:#6A5ACD;
 }
 
 .control-spacing{
 	margin-left:20px;
+}
+
+.btn-subscription-action{
+	margin-right:10px;
+    min-width:100px;
 }

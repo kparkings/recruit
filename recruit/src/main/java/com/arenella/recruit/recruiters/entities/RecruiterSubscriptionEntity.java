@@ -16,6 +16,7 @@ import com.arenella.recruit.recruiters.beans.RecruiterSubscription;
 import com.arenella.recruit.recruiters.beans.YearlyRecruiterSubscription;
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_status;
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_type;
+import com.arenella.recruit.recruiters.beans.TrialPeriodSubscription;
 
 /**
 * Entity Representation of a Recruiters Subscription
@@ -310,6 +311,17 @@ public class RecruiterSubscriptionEntity {
 												.status(entity.getStatus())
 												.subscriptionId(entity.getSubscriptionId())
 											.build();
+			}
+			case TRIAL_PERIOD: {
+				return TrialPeriodSubscription
+											.builder()
+												.activateDate(entity.getActivatedDate())
+												.created(entity.getCreated())
+												.recruiterId(entity.getRecruiterId())
+												.status(entity.getStatus())
+												.subscriptionId(entity.getSubscriptionId())
+											.build();
+				
 			}
 			case YEAR_SUBSCRIPTION: {
 				return YearlyRecruiterSubscription

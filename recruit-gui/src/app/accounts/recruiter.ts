@@ -1,3 +1,4 @@
+import { Subscription } from "./subscription";
 
 /**
 * Represnets a candidate
@@ -34,5 +35,11 @@ export class Recruiter {
 	* Primary language spoken by the Recruiter
 	*/
 	language:string 	= "";
+	
+		/**
+	* Subscriptions associated with the Recruiter
+	*/
+	subscriptions:Array<Subscription> = new Array<Subscription>();
+
 
 }

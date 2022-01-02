@@ -2,7 +2,7 @@ import { Component, OnInit } 					from '@angular/core';
 import { Router}								from '@angular/router';
 import { RecruiterService }						from '../recruiter.service';
 import { Recruiter }							from './recruiter';
-import { Subscription }							from './Subscription';
+import { Subscription }							from './subscription';
 import { NgbModal}								from '@ng-bootstrap/ng-bootstrap';
 
 /**

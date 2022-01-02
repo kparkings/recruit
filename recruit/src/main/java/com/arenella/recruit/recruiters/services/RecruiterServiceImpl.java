@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import com.arenella.recruit.recruiters.beans.Recruiter;
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription;
+import com.arenella.recruit.recruiters.beans.TrialPeriodSubscription;
 import com.arenella.recruit.recruiters.beans.YearlyRecruiterSubscription;
 import com.arenella.recruit.recruiters.dao.RecruiterDao;
 import com.arenella.recruit.recruiters.entities.RecruiterEntity;
@@ -126,15 +127,15 @@ public class RecruiterServiceImpl implements RecruiterService{
 			recruiter.setUserId(nextId);
 		}
 	
-		YearlyRecruiterSubscription subscription = YearlyRecruiterSubscription
-																		.builder()
-																			.created(LocalDateTime.now())
-																			.recruiterId(recruiter.getUserId())
-																			.status(RecruiterSubscription.subscription_status.AWAITING_CONFIRMATION)
-																			.subscriptionId(UUID.randomUUID())
-																		.build();
+		TrialPeriodSubscription subscription = TrialPeriodSubscription
+																.builder()
+																	.created(LocalDateTime.now())
+																	.recruiterId(recruiter.getUserId())
+																	.status(RecruiterSubscription.subscription_status.AWAITING_ACTIVATION)
+																	.subscriptionId(UUID.randomUUID())
+																.build();
 		
-		recruiter.addInitialSubscription(subscription);
+		recruiter.addInitialSubscription(subscription); //Change to 30 Day trial subscription
 		
 		this.recruiterDao.save(RecruiterEntity.convertToEntity(recruiter, Optional.empty()));
 		

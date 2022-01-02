@@ -42,6 +42,9 @@ public class UserDetailsServiceImpl implements UserDetailsService{
 											.map(r -> new SimpleGrantedAuthority("ROLE_".concat(r.toString().toUpperCase())))
 											.collect(Collectors.toList());
 		
+		//TODO: Need to check if recruiter has avtive subscription. Else only role will be ACCOUNT_DISABLED this will allow user to log in to select a subscription but nothing else.
+		// Need events from recruiter service to inform when a recruiter is active / disabled.
+		
 		return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(),roles);
 		 
 	}

@@ -1,4 +1,4 @@
-import { Subscription } from "./Subscription";
+import { Subscription } from "./subscription";
 
 /**
 * Represnets a candidate
@@ -36,6 +36,9 @@ export class Recruiter {
 	*/
 	language:string 	= "";
 	
+	/**
+	* Subscriptions associated with the Recruiter
+	*/
 	subscriptions:Array<Subscription> = new Array<Subscription>();
 
 }

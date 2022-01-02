@@ -104,4 +104,7 @@ public class RecruiterController {
 		return RecruiterAPIOutbound.convertFromDomain(recruiterService.fetchRecruiterOwnAccount());
 	}
 	
+	//Disable recruiter account 
+	//
+	
 }

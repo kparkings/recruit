@@ -5,9 +5,10 @@ import { RecruiterService }						from '../recruiter.service';
 import { CandidateServiceService }				from '../candidate-service.service';
 import { Candidate }							from './candidate';
 import { Recruiter }							from './recruiter';
+import { Subscription }							from './subscription';
+import { SubscriptionAction }					from './subscription-action';
 import { environment }							from '../../environments/environment';
 import { Router}								from '@angular/router';
-
 
 @Component({
   selector: 'app-accounts',
@@ -16,17 +17,19 @@ import { Router}								from '@angular/router';
 })
 export class AccountsComponent implements OnInit {
 	
-	currentTab:string 							= "recruiters";
-	showRecruitersCreateTab:boolean				= false;
-	showCandidatesTab:boolean					= false;
-	showRecruitersTab:boolean					= true;
-	showFlaggedAsUnavailableTab:boolean			= false;
-	createAccountDetailsAvailable:boolean 		= false;
-	recruiterUsername:string					= '';
-	recruiterPassword:string					= '';
-	candidates:Array<Candidate>					= new Array<Candidate>();
-	recruiters:Array<Recruiter>					= new Array<Recruiter>();
-	recruiterCount:number						= 0;
+	currentTab:string 												= "recruiters";
+	showRecruitersCreateTab:boolean									= false;
+	showCandidatesTab:boolean										= false;
+	showRecruitersTab:boolean										= true;
+	showFlaggedAsUnavailableTab:boolean								= false;
+	createAccountDetailsAvailable:boolean 							= false;
+	showSubscriptionActionsTab:boolean								= false;
+	recruiterUsername:string										= '';
+	recruiterPassword:string										= '';
+	candidates:Array<Candidate>										= new Array<Candidate>();
+	recruiters:Array<Recruiter>										= new Array<Recruiter>();
+	recruitersWithSubscriptionActions:Array<SubscriptionAction>		= new Array<SubscriptionAction>();
+	recruiterCount:number											= 0;
 	
 	public candidateFormGroup:FormGroup = new FormGroup({
 		firstname:	new FormControl(''),
@@ -59,6 +62,7 @@ export class AccountsComponent implements OnInit {
 				this.showCandidatesTab=false;
 				this.showRecruitersTab=false;
 				this.showFlaggedAsUnavailableTab=false;
+				this.showSubscriptionActionsTab=false;
 				break;
 			}
 			case "candidates":{
@@ -66,6 +70,7 @@ export class AccountsComponent implements OnInit {
 				this.showCandidatesTab=true;
 				this.showRecruitersTab=false;
 				this.showFlaggedAsUnavailableTab=false;
+				this.showSubscriptionActionsTab=false;
 				break;
 			}
 			case "recruiters":{
@@ -73,6 +78,7 @@ export class AccountsComponent implements OnInit {
 				this.showCandidatesTab=false;
 				this.showRecruitersTab=true;
 				this.showFlaggedAsUnavailableTab=false;
+				this.showSubscriptionActionsTab=false;
 				this.fetchRecruiters();
 				break;
 			}
@@ -81,7 +87,17 @@ export class AccountsComponent implements OnInit {
 				this.showCandidatesTab=false;
 				this.showRecruitersTab=false;
 				this.showFlaggedAsUnavailableTab=true;
+				this.showSubscriptionActionsTab=false;
 				this.fetchFlaggedAsUnavailableCandidates();
+				break;
+			}
+			case "subscriptionActions":{
+				this.showRecruitersCreateTab=false;
+				this.showCandidatesTab=false;
+				this.showRecruitersTab=false;
+				this.showFlaggedAsUnavailableTab=false;
+				this.showSubscriptionActionsTab=true;
+				this.fetchRecruiters();
 				break;
 			}
 			
@@ -219,6 +235,56 @@ export class AccountsComponent implements OnInit {
     	})
 
 	} 
+	
+	/**
+	* Determines which recruiters have a subscrition requiring an action
+	* and extracts them into the recruitersWithSubscriptionActions array
+	*/
+	public extractRecruitersWithSubscriptionActions():void{
+		
+		this.recruitersWithSubscriptionActions = new Array<SubscriptionAction>();
+		
+		this.recruiters.forEach((r:Recruiter) => {
+			r.subscriptions.forEach((s:Subscription) => {
+				if (s.currentSubscription && s.status === "AWAITING_ACTIVATION" && s.type === "TRIAL_PERIOD") {
+					
+					let sa:SubscriptionAction = new SubscriptionAction();
+					
+					sa.firstName 		= r.firstName;
+					sa.surname 			= r.surname;
+					sa.email 			= r.email;
+					sa.subscriptionId 	= s.subscriptionId;
+					sa.status 			= s.status;
+					sa.language 		= r.language;
+					sa.userId 			= r.userId;
+					sa.type 			= s.type;
+					sa.actions.push("ACTIVATE_SUBSCRIPTION");
+					sa.actions.push("REJECT_SUBSCRIPTION");
+					
+					this.recruitersWithSubscriptionActions.push(sa);
+				}
+			});
+		});
+	}
+	
+	/**
+	* Returns human readable version of Id
+	*/
+	public frmtSubscriptionAction(actionId:string):string{
+		
+		switch(actionId) {
+			case "ACTIVATE_SUBSCRIPTION": {
+				return "Activate";
+			}
+			case "REJECT_SUBSCRIPTION": {
+				return "Reject";
+			}
+			default:{
+				return actionId;
+			}
+		}
+		
+	}
 
 	/**
 	* Retrieves recruiters from the backend
@@ -233,7 +299,10 @@ export class AccountsComponent implements OnInit {
 				data.forEach((r:Recruiter) => {
       				this.recruiters.push(r);
 					this.recruiterCount = this.recruiterCount +1;
+										
 			});
+			
+			this.extractRecruitersWithSubscriptionActions();
         
 		}, err => {
 			
@@ -290,7 +359,6 @@ export class AccountsComponent implements OnInit {
 		});
 		
 	}	
-	
 	
 	/**
 	* Enables the Candidate

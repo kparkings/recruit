@@ -10,8 +10,8 @@ import java.util.UUID;
 */
 public interface RecruiterSubscription {
 
-	static enum subscription_type 	{FIRST_GEN, YEAR_SUBSCRIPTION}
-	static enum subscription_status {AWAITING_CONFIRMATION, ACTIVE, DISABLED_PENDING_PAYMENT, SUBSCRIPTION_ENDED, DISABLED}
+	static enum subscription_type 	{FIRST_GEN, TRIAL_PERIOD, YEAR_SUBSCRIPTION}
+	static enum subscription_status {AWAITING_ACTIVATION, ACTIVE, DISABLED_PENDING_PAYMENT, SUBSCRIPTION_ENDED}
 	
 	/**
 	* Returns the unique Id of the Subscription

@@ -13,6 +13,9 @@
 	  <li class="nav-item tabNav">
 	    <span class="nav-link" (click)="switchTab('flaggedAsUnavailable')">Flagged as unavailable</span>
 	  </li>
+	   <li class="nav-item tabNav">
+	    <span class="nav-link" (click)="switchTab('subscriptionActions')">Subscription actions</span>
+	  </li>
 	</ul>
 	
 	<!-- Recruiters-->
@@ -74,46 +77,32 @@
 	<!-- Recruiters-->
 	<div *ngIf="showRecruitersTab">
 		<h3>Recruiters: Total: {{recruiterCount}}</h3>
-		
-			<div>
-      
-		<table class="table candidate-table">
-			<thead>
-	      		<tr>
-	      			<!-- Table Headers -->
-	      			<th class="bg-tab-hdr">User Id</th>
-	      			<th class="bg-tab-hdr">Firstname</th>
-	                <th class="bg-tab-hdr">Surname</th>
-	                <th class="bg-tab-hdr">Email</th>
-	                <th class="bg-tab-hdr">Company</th>
-	                <th class="bg-tab-hdr">Actions</th>
-	      		</tr>
-	      	</thead>
-	      	<tbody>
-	      		<!-- Table row -->
-	      		<tr *ngFor="let recruiter of recruiters">
-	      			<td class="candidate-tab-col"><span class="candidate-id-prefix"></span>{{recruiter.userId}}</td>
-	                <td class="candidate-tab-col mini-col"> {{recruiter.firstName}}</td>
-	                <td class="candidate-tab-col medicol">{{recruiter.surname}}</td>
-	                <td class="candidate-tab-col medicol">{{recruiter.email}}</td>
-	                <td class="candidate-tab-col medicol">{{recruiter.companyName}}</td>
-	                <td class="candidate-tab-col medicol">
-	               <!--  
-	                	<div [ngSwitch]="recruiter.active">
-	                		<div  *ngSwitchCase="true">
-	                			<button	class="control-spacing" (click)="disableCandidate(recruiter.userId)">Disable</button>
-	                		</div>
-	                		<div  *ngSwitchCase="false">
-	                			<button	class="control-spacing" (click)="disableCandidate(recruiter.userId)">Enable</button>
-	                		</div>
-	                	</div>
-	               -->
-	                </td>
-	      		</tr>	
-	      	</tbody>
-		</table>
-	</div>
-	</div>
+		<div>
+      		<table class="table candidate-table">
+				<thead>
+	      			<tr>
+	      				<!-- Table Headers -->
+	      				<th class="bg-tab-hdr">User Id</th>
+	      				<th class="bg-tab-hdr">Firstname</th>
+	            	    <th class="bg-tab-hdr">Surname</th>
+	            	    <th class="bg-tab-hdr">Email</th>
+	                	<th class="bg-tab-hdr">Company</th>
+	                	<th class="bg-tab-hdr">Actions</th>
+	      			</tr>
+	      		</thead>
+	      		<tbody>
+	      			<!-- Table row -->
+	      			<tr *ngFor="let recruiter of recruiters">
+	      				<td class="candidate-tab-col"><span class="candidate-id-prefix"></span>{{recruiter.userId}}</td>
+	            	    <td class="candidate-tab-col mini-col"> {{recruiter.firstName}}</td>
+	            	    <td class="candidate-tab-col medicol">{{recruiter.surname}}</td>
+	            	    <td class="candidate-tab-col medicol">{{recruiter.email}}</td>
+	            	    <td class="candidate-tab-col medicol">{{recruiter.companyName}}</td>
+	            	    <td class="candidate-tab-col medicol"></td>
+	      			</tr>	
+	      		</tbody>
+			</table>
+		</div>
 	</div>
 		
 	<!-- Candidates-->
@@ -131,78 +120,110 @@
 			</span>
 			
 		</form>
+	
 		<!-- Candidates table -->  
-	<div>
+		<div>
       
-		<table class="table candidate-table">
-			<thead>
-	      		<tr>
-	      			<!-- Table Headers -->
-	      			<th class="bg-tab-hdr">CandidateId</th>
-	      			<th class="bg-tab-hdr">Firstname</th>
-	                <th class="bg-tab-hdr">Surname</th>
-	                <th class="bg-tab-hdr">Email</th>
-	                <th class="bg-tab-hdr">Actions</th>
-	              
-	      		</tr>
-	      	</thead>
-	      	<tbody>
-	      		<!-- Table row -->
-	      		<tr *ngFor="let candidate of candidates">
-	      			<td class="candidate-tab-col"><span class="candidate-id-prefix">C</span>{{candidate.candidateId}}</td>
-	                <td class="candidate-tab-col mini-col"> {{candidate.firstname}}</td>
-	                <td class="candidate-tab-col medicol">{{candidate.surname}}</td>
-	                <td class="candidate-tab-col medicol">{{candidate.email}}</td>
-	                <td class="candidate-tab-col medicol">
-	                	<div [ngSwitch]="candidate.available">
-	                		<div  *ngSwitchCase="true">
-	                			<button	class="control-spacing" (click)="disableCandidate(candidate.candidateId)">Disable</button>
+			<table class="table candidate-table">
+				<thead>
+	      			<tr>
+	      				<!-- Table Headers -->
+	      				<th class="bg-tab-hdr">CandidateId</th>
+	      				<th class="bg-tab-hdr">Firstname</th>
+	                	<th class="bg-tab-hdr">Surname</th>
+	                	<th class="bg-tab-hdr">Email</th>
+	                	<th class="bg-tab-hdr">Actions</th>
+	              </tr>
+	      		</thead>
+	      		<tbody>
+	      			<!-- Table row -->
+	      			<tr *ngFor="let candidate of candidates">
+	      				<td class="candidate-tab-col"><span class="candidate-id-prefix">C</span>{{candidate.candidateId}}</td>
+	            	    <td class="candidate-tab-col mini-col"> {{candidate.firstname}}</td>
+	            	    <td class="candidate-tab-col medicol">{{candidate.surname}}</td>
+	            	    <td class="candidate-tab-col medicol">{{candidate.email}}</td>
+	            	    <td class="candidate-tab-col medicol">
+	            	    	<div [ngSwitch]="candidate.available">
+	                			<div  *ngSwitchCase="true">
+	                				<button	class="control-spacing" (click)="disableCandidate(candidate.candidateId)">Disable</button>
+	                			</div>
+	                			<div  *ngSwitchCase="false">
+	                				<button	class="control-spacing" (click)="disableCandidate(candidate.candidateId)">Enable</button>
+	                			</div>
 	                		</div>
-	                		<div  *ngSwitchCase="false">
-	                			<button	class="control-spacing" (click)="disableCandidate(candidate.candidateId)">Enable</button>
-	                		</div>
-	                	</div>
-	                </td>
-	      		</tr>	
-	      	</tbody>
-		</table>
-	</div>
+	                	</td>
+	      			</tr>	
+	      		</tbody>
+			</table>
+		</div>
 	</div>
 	
 	<!-- Flagged as Unavailable-->
 	<div *ngIf="showFlaggedAsUnavailableTab">
 		<form [formGroup]="candidateFormGroup">
 			<h3>Flagged as Unavailable</h3>
-			
 			<table class="table candidate-table">
-			<thead>
-	      		<tr>
-	      			<!-- Table Headers -->
-	      			<th class="bg-tab-hdr">CandidateId</th>
-	      			<th class="bg-tab-hdr">Firstname</th>
-	                <th class="bg-tab-hdr">Surname</th>
-	                <th class="bg-tab-hdr">Email</th>
-	                <th class="bg-tab-hdr">Actions</th>
-	              
-	      		</tr>
-	      	</thead>
-	      	<tbody>
-	      		<!-- Table row -->
-	      		<tr *ngFor="let candidate of candidates">
-	      			<td class="candidate-tab-col"><span class="candidate-id-prefix">C</span>{{candidate.candidateId}}</td>
-	                <td class="candidate-tab-col mini-col"> {{candidate.firstname}}</td>
-	                <td class="candidate-tab-col medicol">{{candidate.surname}}</td>
-	                <td class="candidate-tab-col medicol">{{candidate.email}}</td>
-	                <td class="candidate-tab-col medicol">
-	                	<button	class="control-spacing" (click)="disableFlaggedAsUnavailableCandidate(candidate.candidateId)">Disable</button>
-	                	<button	class="control-spacing" (click)="removeFlaggedAsUnavailableFlag(candidate.candidateId)">Remove Flag</button>
-	                </td>
-	      		</tr>	
-	      	</tbody>
-		</table>
-			
+				<thead>
+	      			<tr>
+		      			<!-- Table Headers -->
+		      			<th class="bg-tab-hdr">CandidateId</th>
+		      			<th class="bg-tab-hdr">Firstname</th>
+		                <th class="bg-tab-hdr">Surname</th>
+		                <th class="bg-tab-hdr">Email</th>
+		                <th class="bg-tab-hdr">Actions</th>
+		        	</tr>
+	      		</thead>
+	      		<tbody>
+	      			<!-- Table row -->
+	      			<tr *ngFor="let candidate of candidates">
+	      				<td class="candidate-tab-col"><span class="candidate-id-prefix">C</span>{{candidate.candidateId}}</td>
+	                	<td class="candidate-tab-col mini-col"> {{candidate.firstname}}</td>
+	                	<td class="candidate-tab-col medicol">{{candidate.surname}}</td>
+	                	<td class="candidate-tab-col medicol">{{candidate.email}}</td>
+	                	<td class="candidate-tab-col medicol">
+	                		<button	class="control-spacing" (click)="disableFlaggedAsUnavailableCandidate(candidate.candidateId)">Disable</button>
+	                		<button	class="control-spacing" (click)="removeFlaggedAsUnavailableFlag(candidate.candidateId)">Remove Flag</button>
+	                	</td>
+	      			</tr>	
+	      		</tbody>
+			</table>
 		</form>
-		<!-- Candidates table -->  
+	</div>
+	
+	<!-- Subscriptions requiring actions -->
+	<div *ngIf="showSubscriptionActionsTab">
+		<div class="sub-title">
+			<h3>Subscription actions required</h3>
+		</div>
+		
+		<table class="table candidate-table">
+			<thead>
+				<tr>
+					<th>Recruiter Id</th>
+					<th>First Name</th>
+					<th>Surname</th>
+					<th>Email</th>
+					<th>Language</th>
+					<th>Type</th>
+					<th>Status</th>
+					<th>Actions</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr *ngFor="let subscriptionAction of recruitersWithSubscriptionActions">
+					<td>{{subscriptionAction.userId}}</td>
+					<td>{{subscriptionAction.firstName}}</td>
+					<td>{{subscriptionAction.surname}}</td>
+					<td>{{subscriptionAction.email}}</td>
+					<td>{{subscriptionAction.language}}</td>
+					<td>{{subscriptionAction.type}}</td>
+					<td>{{subscriptionAction.status}}</td>
+					<td>
+						<button class="btn btn-secondary btn-subscription-action" *ngFor="let action of subscriptionAction.actions">{{frmtSubscriptionAction(action)}}</button>
+					</td>
+				</tr>
+			</tbody>
+		</table>
 	<div>
 	
 </div>
