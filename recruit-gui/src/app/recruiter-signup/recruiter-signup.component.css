@@ -40,3 +40,64 @@
 .highlight{
 	color:#6A5ACD;
 }
+
+.feedback-failure{
+    background: #F0F0F0;
+    color: red;
+}
+
+.feedback-success{
+    background: #F0F0F0;
+}
+
+.modal-header{
+    background: #303030;
+    font-size: medium;
+    height: 50px;
+    text-align:center;
+    width:500px;
+    padding:0px;
+    margin:0px;
+    
+}
+
+.filter-close-box{
+     padding:10px;
+     cursor:pointer;
+     font-size:20px;
+     font-weight: bold;
+    text-align: right;
+        
+}
+
+.modal-header-text{
+    text-align:center;
+    color:#6f42c1;
+    margin-top:10px;
+    width:500px;
+    
+}
+
+.feedbackBox{
+    width:200px;
+    height:350px;
+}
+
+.modal-body{
+    font-size: large;
+    height:200px;
+    text-align: center;
+}
+
+.modal-body-text{
+    vertical-align: middle;
+    margin-top: 60px;
+    font-weight: bold;
+}
+
+ .modal-header{
+     background:#181414;
+     color:#6A5ACD;
+     font-weight:bold;
+ }
+

@@ -16,6 +16,10 @@ export class RecruiterSignupComponent implements OnInit {
 
 	@ViewChild('feedbackBox', { static: false }) private content:any;
 	
+	public feedbackBoxClass:string            = '';
+  	public feedbackBoxTitle                   = '';
+  	public feedbackBoxText:string             = '';
+
 	/**
 	* Constructor
 	*/
@@ -74,9 +78,51 @@ export class RecruiterSignupComponent implements OnInit {
 		let language:string  	= this.signupForm.get('preferredLanguage')?.value;
 		
 		this.recruiterService.registerForFreeTrial(firstName, surname, email, companyName, language).subscribe(data => {
-			console.log('RESPONSE -> ' + JSON.stringify(data));
+			
+			this.signupForm = new FormGroup({
+				firstName: 			new FormControl(''),
+				surname: 			new FormControl(''),
+				email: 				new FormControl(''),
+				company: 			new FormControl(''),
+				preferredLanguage: 	new FormControl('ENGLISH')
+			});
+	
+			this.open('feedbackBox', "Success",  true);
+		}, err => {
+			this.open('feedbackBox', "Failure",  false);
 		});
 		
 	}
+	
+	/**
+	* Opens the specified Dialog box
+	*/
+	public open(content:any, msg:string, success:boolean):void {
+    
+	    if (success) {
+	      this.feedbackBoxTitle = 'Success';
+	      this.feedbackBoxText = 'Your request has been submitted. Once accepted an email will be sent with your login details.';
+	      this.feedbackBoxClass = 'feedback-success';
+	    } else {
+	      this.feedbackBoxTitle = 'Failure';
+	      this.feedbackBoxText = 'Unfortunately there was a problem. Please email kparkings@gmail.com directly for your account';
+	      this.feedbackBoxClass = 'feedback-failure';
+	    }
+	
+	      let options: NgbModalOptions = {
+	    	 centered: true
+	   };
+	
+	  this.modalService.open(this.content, options);
+
+  }
+
+  /**
+  *  Closes the confirm popup
+  */
+  public closeModal(): void {
+    this.modalService.dismissAll();
+  }
+
 
 }
