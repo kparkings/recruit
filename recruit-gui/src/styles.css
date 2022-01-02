@@ -29,10 +29,14 @@ body{
 
 .candidate-signup{
 	background:green;
+	float:right;
+	margin-right:10px;
 }
 
 .recruiter-signup{
 	background:orange;
+	float:right;
+	margin-right:10px;
 }
 
 .centerdiv{

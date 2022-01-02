@@ -5,15 +5,14 @@
 <div>
 
 	<ul class="arenella-navbar">
-      
-		<li  class="li-arenella-nav" *ngIf="!isAuthenticated()">
-           <a  class="dropdown-item" routerLink="/">Home</a>
-        </li>
-		<li  class="li-arenella-nav" *ngIf="!isAuthenticated()">
+      <li  class="li-arenella-nav" *ngIf="!isAuthenticated()">
            <a  class="dropdown-item" routerLink="/listing">Job Board</a>
         </li>
         <li  class="li-arenella-nav" *ngIf="!isAuthenticated()">
            <a  class="dropdown-item" routerLink="/view-candidates">Login</a>
+        </li>
+		<li  class="li-arenella-nav" *ngIf="!isAuthenticated()">
+           <a  class="dropdown-item" routerLink="/about">About</a>
         </li>
 		<li  class="li-arenella-nav"  *ngIf="isAuthenticated()">	
            <a  class="dropdown-item" routerLink="/view-candidates">Candidates</a>
@@ -27,11 +26,11 @@
 		<li class="li-arenella-nav" *ngIf="isAuthenticatedAsAdmin()">
            <a  class="dropdown-item" routerLink="/accounts">Accounts</a>
         </li>
-		<li class="li-arenella-nav" *ngIf="!isAuthenticated()">
-           <a class="dropdown-item candidate-signup" routerLink="/create-candidate">Candidate Signup</a>
+		<li class="li-arenella-nav" *ngIf="!isAuthenticated()" class="candidate-signup">
+           <a class="dropdown-item" routerLink="/create-candidate">Candidate Signup</a>
         </li>
-		<li class="li-arenella-nav" *ngIf="!isAuthenticated()">
-           <a class="dropdown-item recruiter-signup" routerLink="/recruiter-signup">Recruiter Signup</a>
+		<li class="li-arenella-nav" *ngIf="!isAuthenticated()" class="recruiter-signup">
+           <a class="dropdown-item" routerLink="/recruiter-signup">Recruiter Signup</a>
         </li>
 		<li class="li-arenella-nav" *ngIf="isAuthenticated() && !isAuthenticatedAsAdmin()">
            <a class="dropdown-item recruiter-account" routerLink="/recruiter-account">Manage Account</a>

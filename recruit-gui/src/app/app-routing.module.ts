@@ -15,7 +15,8 @@ import { AdminGuardGuard }								from './admin-guard.guard';
 import { RecruiterSignupComponent } 					from './recruiter-signup/recruiter-signup.component';
 
 const routes: Routes = [
-	{path: '', component: HomeComponent},
+	{path: '', 						component: ListingComponent},
+	{path: 'about', 				component: HomeComponent},
 	{path: 'new-candidate', 		component: NewCandidateComponent, 			canActivate: [AuthGuardService, AdminGuardGuard]},
 	{path: 'view-candidates', 		component: ViewCandidatesComponent, 		canActivate: [AuthGuardService]},
 	{path: 'statistics', 			component: StatisticsComponent, 			canActivate: [AuthGuardService, AdminGuardGuard]},
