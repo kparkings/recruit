@@ -169,6 +169,10 @@ public class RecruiterServiceImpl implements RecruiterService{
 			throw new IllegalStateException("Max 1 subscription can be active at any one time. recruiter: " + recruiterId);
 		}
 		
+		RecruiterEntity entity = RecruiterEntity.convertToEntity(recruiter, this.recruiterDao.findById(recruiterId));
+		
+		this.recruiterDao.save(entity);
+		
 	}
 	
 	/**

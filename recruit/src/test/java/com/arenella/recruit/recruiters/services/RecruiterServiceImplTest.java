@@ -435,7 +435,7 @@ public class RecruiterServiceImplTest {
 	}
 	
 	/**
-	* Tests the happy path. Passes if no Exception thrown
+	* Tests the happy path
 	* @throws Exception
 	*/
 	@Test
@@ -458,6 +458,8 @@ public class RecruiterServiceImplTest {
 		Mockito.doNothing().when(mockRecruiterSubscriptionActionHandler).performAction(Mockito.any(), Mockito.any(), Mockito.any());
 		
 		this.service.performSubscriptionAction(recruiterId, subscriptionId1, action);
+		
+		Mockito.verify(this.mockDao).save(Mockito.any(RecruiterEntity.class));
 		
 	}
 	
