@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 
 import java.time.LocalDate;
 import java.util.Set;
+import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,6 +21,7 @@ import com.arenella.recruit.recruiters.beans.Recruiter.language;
 import com.arenella.recruit.recruiters.beans.RecruiterAPIInbound;
 import com.arenella.recruit.recruiters.beans.RecruiterAPIOutbound;
 import com.arenella.recruit.recruiters.beans.RecruiterAccountRequestAPIInbound;
+import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_action;
 import com.arenella.recruit.recruiters.services.RecruiterService;
 
 /**
@@ -206,6 +208,27 @@ public class RecruiterControllerTest {
 		
 		assertEquals(response.getStatusCode(), HttpStatus.OK);
 		
+	}
+	
+	/**
+	* Tests happy path of SubscriptonAction update
+	* @throws Exception
+	*/
+	@Test
+	public void testPerformSubscriptionAction() throws Exception {
+		
+		final String 				recruiterId 			= "kparkings";
+		final UUID 					subscriptionId 			= UUID.randomUUID();
+		final subscription_action 	action 					= subscription_action.ACTIVATE_SUBSCRIPTION; 	
+	
+		Mockito.doNothing().when(this.mockRecruiterService).performSubscriptionAction(recruiterId, subscriptionId, action);
+		
+		ResponseEntity<Void> response = this.recruiterController.performSubscriptionAction(recruiterId, subscriptionId, action);
+		
+		Mockito.verify(this.mockRecruiterService).performSubscriptionAction(recruiterId, subscriptionId, action);
+		
+		assertEquals(response.getStatusCode(), HttpStatus.OK);
+	
 	}
 
 }

@@ -3,6 +3,8 @@ package com.arenella.recruit.recruiters.beans;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import com.arenella.recruit.recruiters.utils.RecruiterSubscriptionActionHandler;
+
 /**
 * A FirstGen subscription is for Recruiters that signed up to the service before subscriptions
 * where introduced. These Recruiters have signed up on the basis that they will pay a set 
@@ -16,6 +18,7 @@ public class FirstGenRecruiterSubscription implements RecruiterSubscription{
 	private LocalDateTime 			created;
 	private LocalDateTime 			activatedDate;
 	private subscription_status		status;
+	private boolean					currentSubscription;
 	
 	/**
 	* Constructor based upon a Builder
@@ -23,11 +26,12 @@ public class FirstGenRecruiterSubscription implements RecruiterSubscription{
 	*/
 	public FirstGenRecruiterSubscription(FirstGenRecruiterSubscriptionBuilder builder) {
 	
-		this.subscriptionId 	= builder.subscriptionId;
-		this.created			= builder.created;
-		this.activatedDate		= builder.activatedDate;
-		this.recruiterId		= builder.recruiterId;
-		this.status				= builder.status;
+		this.subscriptionId 		= builder.subscriptionId;
+		this.created				= builder.created;
+		this.activatedDate			= builder.activatedDate;
+		this.recruiterId			= builder.recruiterId;
+		this.status					= builder.status;
+		this.currentSubscription 	= builder.currentSubscription;
 		
 	}
 	
@@ -68,8 +72,7 @@ public class FirstGenRecruiterSubscription implements RecruiterSubscription{
 	*/
 	@Override
 	public boolean isCurrentSubscription() {
-		boolean xx = this.getStatus() != subscription_status.SUBSCRIPTION_ENDED;
-		return this.getStatus() != subscription_status.SUBSCRIPTION_ENDED;
+		return this.currentSubscription;
 	}
 
 	/**
@@ -114,6 +117,7 @@ public class FirstGenRecruiterSubscription implements RecruiterSubscription{
 		private LocalDateTime 			created;
 		private LocalDateTime 			activatedDate;
 		private subscription_status		status;
+		private boolean					currentSubscription;
 		
 		/**
 		* Sets the Unique Id of the subscription
@@ -166,11 +170,51 @@ public class FirstGenRecruiterSubscription implements RecruiterSubscription{
 		}
 		
 		/**
+		* Sets whether or not the Subscription is the current subscription
+		* @param currentSubscription - Whether or not the subscription is the current subscription
+		* @return Builder
+		*/
+		public FirstGenRecruiterSubscriptionBuilder currentSubscription(boolean currentSubscription) {
+			this.currentSubscription = currentSubscription;
+			return this;
+		}
+		
+		/**
 		* Returns an initialzied instance of FirstGenRecruiterSubscription
 		* @return Initialzied instance of FirstGenRecruiterSubscription
 		*/
 		public FirstGenRecruiterSubscription build() {
 			return new FirstGenRecruiterSubscription(this);
+		}
+		
+	}
+	
+	/**
+	* Returns an ActionHandler for the Subscription
+	* @return
+	*/
+	public static ActionHandler getActionHandler() {
+		return new ActionHandler();
+	}
+	
+	/**
+	* ActionHandler for the subscription
+	* @author K Parkings
+	*/
+	public static class ActionHandler implements RecruiterSubscriptionActionHandler{
+
+		/**
+		* Refer to RecruiterSubscriptionActionHandler for details 
+		*/
+		@Override
+		public void performAction(Recruiter recruiter, RecruiterSubscription subscription,  subscription_action action) {
+			
+			switch(action) {
+				default:{
+					throw new IllegalArgumentException("Unknown action " + action + " for subscription type: " + subscription_type.FIRST_GEN);
+				}
+			}
+			
 		}
 		
 	}

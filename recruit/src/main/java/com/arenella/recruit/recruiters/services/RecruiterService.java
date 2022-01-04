@@ -1,8 +1,10 @@
 package com.arenella.recruit.recruiters.services;
 
 import java.util.Set;
+import java.util.UUID;
 
 import com.arenella.recruit.recruiters.beans.Recruiter;
+import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_action;
 
 /**
 * Defines functionality related to services for Recruiters
@@ -46,10 +48,18 @@ public interface RecruiterService {
 
 	/**
 	* Creates a Recruiter account as a request on behalf of a Recruiter. This 
-	* differet from the standard addRecruiter method as it needs to be 
+	* differs from the standard addRecruiter method as it needs to be 
 	* confirmed and a user account created and userId assigned..
 	* @param convertToDomin
 	*/
 	public void addRecruiterAccountRequest(Recruiter convertToDomin);
+
+	/**
+	* Performs an action on a Recruiters subscription
+	* @param recruiterId		- Unique Id of the Recruiter owning the Subscription
+	* @param subscriptionId		- Unique Id of the subscription to be amended
+	* @param action				- Action to perform on the Subscription
+	*/
+	public void performSubscriptionAction(String recruiterId, UUID subscriptionId, subscription_action action);
 	
 }

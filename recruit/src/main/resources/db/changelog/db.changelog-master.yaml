@@ -707,4 +707,16 @@ databaseChangeLog:
                   type: varchar
                   constraints:
                     nullable: true
- 
+  - changeSet:
+      id: addColumn-current_subscription
+      author: kevin
+      changes:
+        - addColumn:
+            tableName: recruiter_subscriptions
+            schemaName: recruiter
+            columns:
+            - column:
+                name: current_subscription
+                type: boolean
+                constraints:
+                  default: false

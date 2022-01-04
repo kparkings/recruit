@@ -98,6 +98,7 @@ public class RecruiterSubscriptionAPIOutboundTest {
 																				.recruiterId(recruiterId)
 																				.status(status)
 																				.subscriptionId(subscriptionId)
+																				.currentSubscription(true)
 																			.build();
 		
 		RecruiterSubscriptionAPIOutbound outbound = RecruiterSubscriptionAPIOutbound.convertFromSubscription(subscription);		

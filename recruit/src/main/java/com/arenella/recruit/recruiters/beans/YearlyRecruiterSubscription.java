@@ -3,6 +3,8 @@ package com.arenella.recruit.recruiters.beans;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import com.arenella.recruit.recruiters.utils.RecruiterSubscriptionActionHandler;
+
 /**
 * Represents a yearly subscription that a Recruiter can take out to 
 * access the system for a period of 12 months from the moment the subcription 
@@ -16,6 +18,7 @@ public class YearlyRecruiterSubscription implements RecruiterSubscription{
 	private LocalDateTime 			created;
 	private LocalDateTime 			activatedDate;
 	private subscription_status		status;
+	private boolean					currentSubscription;
 	
 	/**
 	* Constructor based upon a builder
@@ -23,11 +26,12 @@ public class YearlyRecruiterSubscription implements RecruiterSubscription{
 	*/
 	public YearlyRecruiterSubscription(YearlyRecruiterSubscriptionBuilder builder) {
 		
-		this.subscriptionId 	= builder.subscriptionId;
-		this.created			= builder.created;
-		this.activatedDate		= builder.activatedDate;
-		this.recruiterId		= builder.recruiterId;
-		this.status				= builder.status;
+		this.subscriptionId 		= builder.subscriptionId;
+		this.created				= builder.created;
+		this.activatedDate			= builder.activatedDate;
+		this.recruiterId			= builder.recruiterId;
+		this.status					= builder.status;
+		this.currentSubscription 	= builder.currentSubscription;
 		
 	}
 	
@@ -68,7 +72,7 @@ public class YearlyRecruiterSubscription implements RecruiterSubscription{
 	*/
 	@Override
 	public boolean isCurrentSubscription() {
-		return this.getStatus() != subscription_status.SUBSCRIPTION_ENDED;
+		return this.currentSubscription;
 	}
 
 	/**
@@ -106,6 +110,7 @@ public class YearlyRecruiterSubscription implements RecruiterSubscription{
 		private LocalDateTime 			created;
 		private LocalDateTime 			activatedDate;
 		private subscription_status		status;
+		private boolean					currentSubscription;
 		
 		/**
 		* Sets the Unique Id of the subscription
@@ -158,12 +163,52 @@ public class YearlyRecruiterSubscription implements RecruiterSubscription{
 		}
 		
 		/**
+		* Sets whether or not the Subscription is the current subscription
+		* @param currentSubscription - Whether or not the subscription is the current subscription
+		* @return Builder
+		*/
+		public YearlyRecruiterSubscriptionBuilder currentSubscription(boolean currentSubscription) {
+			this.currentSubscription = currentSubscription;
+			return this;
+		}
+		
+		/**
 		* Returns an initialized instance of YearlyRecruiterSubscription
 		* @return new instance of YearlyRecruiterSubscription
 		*/
 		public YearlyRecruiterSubscription build() {
 			return new YearlyRecruiterSubscription(this);
 		}
+	}
+	
+	/**
+	* Returns an ActionHandler for the Subscription
+	* @return
+	*/
+	public static ActionHandler getActionHandler() {
+		return new ActionHandler();
+	}
+	
+	/**
+	* ActionHandler for the subscription
+	* @author K Parkings
+	*/
+	public static class ActionHandler implements RecruiterSubscriptionActionHandler{
+
+		/**
+		* Refer to RecruiterSubscriptionActionHandler for details 
+		*/
+		@Override
+		public void performAction(Recruiter recruiter, RecruiterSubscription subscription,  subscription_action action) {
+
+			switch(action) {
+				default:{
+					throw new IllegalArgumentException("Unknown action " + action + " for subscription type: " + subscription_type.YEAR_SUBSCRIPTION);
+				}
+			}
+			
+		}
+		
 	}
 	
 }

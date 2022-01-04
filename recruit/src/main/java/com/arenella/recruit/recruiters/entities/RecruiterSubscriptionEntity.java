@@ -47,6 +47,9 @@ public class RecruiterSubscriptionEntity {
 	@Column(name="activated_date")
 	private LocalDateTime 			activatedDate;
 	
+	@Column(name="current_subscription")
+	private boolean					currentSubscription;
+	
 	/**
 	* Constructor for Hibernate 
 	*/
@@ -61,12 +64,13 @@ public class RecruiterSubscriptionEntity {
 	*/
 	public RecruiterSubscriptionEntity(RecruiterSubscriptionEntityBuilder builder) {
 	
-		this.subscriptionId 	= builder.subscriptionId;
-		this.created			= builder.created;
-		this.activatedDate		= builder.activatedDate;
-		this.recruiterId		= builder.recruiterId;
-		this.type				= builder.type;
-		this.status				= builder.status;
+		this.subscriptionId 		= builder.subscriptionId;
+		this.created				= builder.created;
+		this.activatedDate			= builder.activatedDate;
+		this.recruiterId			= builder.recruiterId;
+		this.type					= builder.type;
+		this.status					= builder.status;
+		this.currentSubscription 	= builder.currentSubscription;
 		
 	}
 	
@@ -120,6 +124,14 @@ public class RecruiterSubscriptionEntity {
 	}
 	
 	/**
+	* Returns whether or not the subscription is the current subscription
+	* @return
+	*/
+	public boolean isCurrentSubscription() {
+		return this.currentSubscription;
+	}
+	
+	/**
 	* Sets the unique id of the Subscription
 	* @param subscriptionId - Unique Id of the Subscription
 	*/
@@ -139,8 +151,16 @@ public class RecruiterSubscriptionEntity {
 	* Sets the type of the Subscription
 	* @param type - Subscription type
 	*/
-	public void seType(subscription_type type) {
+	public void setType(subscription_type type) {
 		this.type = type;
+	}
+	
+	/**
+	* Sets whether or the not Subscription is the current subscription
+	* @param currentSubscription - whether or not the Subscription is the current Subscription
+	*/
+	public void setCurrentSubscription(boolean currentSubscription) {
+		this.currentSubscription = currentSubscription;
 	}
 	
 	/**
@@ -187,6 +207,7 @@ public class RecruiterSubscriptionEntity {
 		private LocalDateTime 			activatedDate;
 		private subscription_status		status;
 		private subscription_type		type;
+		private boolean					currentSubscription;
 		
 		/**
 		* Sets the Unique Id of the subscription
@@ -249,6 +270,16 @@ public class RecruiterSubscriptionEntity {
 		}
 		
 		/**
+		* Sets whether or not the Subscription is the Recruiters current subscription 
+		* @param currentSubscription - whether or not the subscription is the current subscription
+		* @return Builder
+		*/
+		public RecruiterSubscriptionEntityBuilder currentSubscription(boolean currentSubscription) {
+			this.currentSubscription = currentSubscription;
+			return this;
+		}
+		
+		/**
 		* Returns an initialzied instance of FirstGenRecruiterSubscription
 		* @return Initialzied instance of FirstGenRecruiterSubscription
 		*/
@@ -277,6 +308,7 @@ public class RecruiterSubscriptionEntity {
 											.created(subscription.getCreated())
 											.subscriptionId(subscription.getSubscriptionId())
 											.type(subscription.getType())
+											.currentSubscription(subscription.isCurrentSubscription())
 										.build();
 			
 		}
@@ -288,7 +320,8 @@ public class RecruiterSubscriptionEntity {
 		entity.setRecruiterId(subscription.getRecruiterId());
 		entity.setStatus(subscription.getStatus());
 		entity.setSubscriptionId(subscription.getSubscriptionId());
-		entity.seType(subscription.getType());
+		entity.setType(subscription.getType());
+		entity.setCurrentSubscription(subscription.isCurrentSubscription());
 		
 		return entity;
 		
@@ -310,6 +343,7 @@ public class RecruiterSubscriptionEntity {
 												.recruiterId(entity.getRecruiterId())
 												.status(entity.getStatus())
 												.subscriptionId(entity.getSubscriptionId())
+												.currentSubscription(entity.isCurrentSubscription())
 											.build();
 			}
 			case TRIAL_PERIOD: {
@@ -320,6 +354,7 @@ public class RecruiterSubscriptionEntity {
 												.recruiterId(entity.getRecruiterId())
 												.status(entity.getStatus())
 												.subscriptionId(entity.getSubscriptionId())
+												.currentSubscription(entity.isCurrentSubscription())
 											.build();
 				
 			}
@@ -331,6 +366,7 @@ public class RecruiterSubscriptionEntity {
 												.recruiterId(entity.getRecruiterId())
 												.status(entity.getStatus())
 												.subscriptionId(entity.getSubscriptionId())
+												.currentSubscription(entity.isCurrentSubscription())
 											.build();
 				
 			}

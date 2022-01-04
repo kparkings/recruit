@@ -1,6 +1,7 @@
 package com.arenella.recruit.recruiters.controllers;
 
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,11 +13,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.arenella.recruit.recruiters.beans.RecruiterAPIInbound;
 import com.arenella.recruit.recruiters.beans.RecruiterAPIOutbound;
 import com.arenella.recruit.recruiters.beans.RecruiterAccountRequestAPIInbound;
+import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_action;
 import com.arenella.recruit.recruiters.services.RecruiterService;
 
 /**
@@ -104,7 +107,17 @@ public class RecruiterController {
 		return RecruiterAPIOutbound.convertFromDomain(recruiterService.fetchRecruiterOwnAccount());
 	}
 	
-	//Disable recruiter account 
-	//
+	/**
+	* Performs an action on a Recruiters subscription
+	* @param recruiterId		- Unique Id of the Recruiter owning the Subscription
+	* @param subscriptionId		- Unique Id of the subscription to be amended
+	* @param action				- Action to perform on the Subscription
+	*/
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@GetMapping(value="/recruiter/{recruiterId}/subscription/{subscriptionId}/")
+	public ResponseEntity<Void> performSubscriptionAction(@PathVariable("recruiterId") String recruiterId, @PathVariable("subscriptionId") UUID subscriptionId, @RequestParam("action") subscription_action action) {
+		this.recruiterService.performSubscriptionAction(recruiterId, subscriptionId, action);
+		return ResponseEntity.ok().build();
+	}
 	
 }

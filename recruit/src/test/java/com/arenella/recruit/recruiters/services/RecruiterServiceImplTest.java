@@ -10,6 +10,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,8 +26,12 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 import com.arenella.recruit.recruiters.beans.Recruiter;
 import com.arenella.recruit.recruiters.beans.Recruiter.language;
+import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_action;
+import com.arenella.recruit.recruiters.beans.TrialPeriodSubscription;
 import com.arenella.recruit.recruiters.dao.RecruiterDao;
 import com.arenella.recruit.recruiters.entities.RecruiterEntity;
+import com.arenella.recruit.recruiters.utils.RecruiterSubscriptionActionHandler;
+import com.arenella.recruit.recruiters.utils.RecruiterSubscriptionFactory;
 
 /**
 * Unit tests for the RecruiterService
@@ -36,10 +41,16 @@ import com.arenella.recruit.recruiters.entities.RecruiterEntity;
 public class RecruiterServiceImplTest {
 
 	@InjectMocks
-	private RecruiterService 	service 	= new RecruiterServiceImpl();
+	private RecruiterService 					service 	= new RecruiterServiceImpl();
 	
 	@Mock
-	private RecruiterDao 		mockDao;
+	private RecruiterDao 						mockDao;
+	
+	@Mock
+	private RecruiterSubscriptionFactory 		mockRecruiterSubscriptionFactory;
+	
+	@Mock
+	private RecruiterSubscriptionActionHandler 	mockRecruiterSubscriptionActionHandler;
 	
 	private static final String 			userId 					= "kparkings";
 	private static final LocalDate 			accountCreated 			= LocalDate.of(2021, 10, 13);
@@ -351,6 +362,102 @@ public class RecruiterServiceImplTest {
 		assertEquals(userId, 		recruiter.getUserId());
 		assertTrue(recruiter.isActive());
 		assertNotNull(recruiter.getAccountCreated());
+		
+	}
+	
+	/**
+	* Tests an Exception is thrown if the recruiter is unknown
+	* @throws Exception
+	*/
+	@Test
+	public void testPerformSubscriptionAction_unknownRecruiter() throws Exception {
+		
+		final String 				recruiterId 		= "kparkings";
+		final UUID 					subscriptionId 		= UUID.randomUUID();
+		final subscription_action 	action 				= subscription_action.ACTIVATE_SUBSCRIPTION;
+		
+		Mockito.when(this.mockDao.findRecruiterById(recruiterId)).thenReturn(Optional.empty());
+		
+		assertThrows(IllegalArgumentException.class, () -> {
+			this.service.performSubscriptionAction(recruiterId, subscriptionId, action);
+		});
+		
+	}
+	
+	/**
+	* Tests an Exception is thrown if the subscription is unknown
+	* @throws Exception
+	*/
+	@Test
+	public void testPerformSubscriptionAction_unknownSubscription() throws Exception {
+		
+		final String 				recruiterId 		= "kparkings";
+		final UUID 					subscriptionId 		= UUID.randomUUID();
+		final subscription_action 	action 				= subscription_action.ACTIVATE_SUBSCRIPTION;
+		final Recruiter				recruiter			= Recruiter.builder().build();
+		
+		Mockito.when(this.mockDao.findRecruiterById(recruiterId)).thenReturn(Optional.of(recruiter));
+		
+		assertThrows(IllegalArgumentException.class, () -> {
+			this.service.performSubscriptionAction(recruiterId, subscriptionId, action);
+		});
+		
+	}
+	
+	/**
+	* Tests an Exception is thrown if after the Action is performed the Recruiter has 
+	* more than one current subscription
+	* @throws Exception
+	*/
+	@Test
+	public void testPerformSubscriptionAction_multipleCurrentSubscriptions() throws Exception {
+		
+		final String 				recruiterId 		= "kparkings";
+		final UUID 					subscriptionId1 	= UUID.randomUUID();
+		final UUID 					subscriptionId2 	= UUID.randomUUID();
+		final subscription_action 	action 				= subscription_action.ACTIVATE_SUBSCRIPTION;
+		final Recruiter				recruiter			= Recruiter
+															.builder()
+																.subscriptions(Set.of(TrialPeriodSubscription.builder().subscriptionId(subscriptionId1).currentSubscription(true).build(),
+																					  TrialPeriodSubscription.builder().subscriptionId(subscriptionId2).currentSubscription(true).build()
+																				)
+																				)
+															.build();
+		
+		Mockito.when(this.mockDao.findRecruiterById(recruiterId)).thenReturn(Optional.of(recruiter));
+		Mockito.when(this.mockRecruiterSubscriptionFactory.getActionHandlerByType(Mockito.any())).thenReturn(mockRecruiterSubscriptionActionHandler);
+		Mockito.doNothing().when(mockRecruiterSubscriptionActionHandler).performAction(Mockito.any(), Mockito.any(), Mockito.any());
+		
+		assertThrows(IllegalStateException.class, () -> {
+			this.service.performSubscriptionAction(recruiterId, subscriptionId1, action);
+		});
+		
+	}
+	
+	/**
+	* Tests the happy path. Passes if no Exception thrown
+	* @throws Exception
+	*/
+	@Test
+	public void testPerformSubscriptionAction() throws Exception {
+		
+		final String 				recruiterId 		= "kparkings";
+		final UUID 					subscriptionId1 	= UUID.randomUUID();
+		final UUID 					subscriptionId2 	= UUID.randomUUID();
+		final subscription_action 	action 				= subscription_action.ACTIVATE_SUBSCRIPTION;
+		final Recruiter				recruiter			= Recruiter
+															.builder()
+																.subscriptions(Set.of(TrialPeriodSubscription.builder().subscriptionId(subscriptionId1).currentSubscription(true).build(),
+																					  TrialPeriodSubscription.builder().subscriptionId(subscriptionId2).currentSubscription(false).build()
+																				)
+																				)
+															.build();
+		
+		Mockito.when(this.mockDao.findRecruiterById(recruiterId)).thenReturn(Optional.of(recruiter));
+		Mockito.when(this.mockRecruiterSubscriptionFactory.getActionHandlerByType(Mockito.any())).thenReturn(mockRecruiterSubscriptionActionHandler);
+		Mockito.doNothing().when(mockRecruiterSubscriptionActionHandler).performAction(Mockito.any(), Mockito.any(), Mockito.any());
+		
+		this.service.performSubscriptionAction(recruiterId, subscriptionId1, action);
 		
 	}
 	

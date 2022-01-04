@@ -1,6 +1,7 @@
 package com.arenella.recruit.recruiters.beans;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -35,6 +36,7 @@ public class YearlyRecruiterSubscriptionTest {
 																				.recruiterId(recruiterId)
 																				.subscriptionId(subscriptionId)
 																				.status(status)
+																				.currentSubscription(true)
 																			.build();
 		
 		assertEquals(activatedDate, 											subscription.getActivatedDate());
@@ -43,6 +45,7 @@ public class YearlyRecruiterSubscriptionTest {
 		assertEquals(status, 													subscription.getStatus());
 		assertEquals(subscriptionId, 											subscription.getSubscriptionId());
 		assertEquals(RecruiterSubscription.subscription_type.YEAR_SUBSCRIPTION, subscription.getType());
+		assertTrue(subscription.isCurrentSubscription());
 		
 	}
 	

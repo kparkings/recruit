@@ -86,7 +86,7 @@ export class RecruiterAccountComponent implements OnInit {
 		let currentSubscription:boolean = false;
 		
 		this.recruiter.subscriptions.forEach( s => {
-			console.log("XX " + s.currentSubscription + ' --- ' + s.status);
+		
 			if (s.currentSubscription) {
 				currentSubscription = true;
 			}
@@ -104,7 +104,7 @@ export class RecruiterAccountComponent implements OnInit {
 		let status:string = '';
 		
 		this.recruiter.subscriptions.forEach( s => {
-			console.log("YY " + s.currentSubscription + ' --- ' + s.status);
+		
 			if (s.currentSubscription) {
 				status = s.status;
 			}

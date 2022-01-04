@@ -1,0 +1,41 @@
+package com.arenella.recruit.recruiters.utils;
+
+import org.springframework.stereotype.Component;
+
+import com.arenella.recruit.recruiters.beans.FirstGenRecruiterSubscription;
+import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_type;
+import com.arenella.recruit.recruiters.beans.TrialPeriodSubscription;
+import com.arenella.recruit.recruiters.beans.YearlyRecruiterSubscription;
+
+/**
+* Factory for retrieving a RecruiterSubscription 
+* based upon the type
+* @author K Parkings
+*/
+@Component
+public class RecruiterSubscriptionFactory {
+	
+	public RecruiterSubscriptionActionHandler getActionHandlerByType(subscription_type subscriptionType) {
+		
+		if (subscriptionType == null) {
+			throw new IllegalArgumentException("Unknown subscriptionType null");
+		}
+		
+		switch(subscriptionType) {
+			case FIRST_GEN:{
+				return FirstGenRecruiterSubscription.getActionHandler();
+			}
+			case TRIAL_PERIOD:{
+				return TrialPeriodSubscription.getActionHandler();
+			}
+			case YEAR_SUBSCRIPTION:{
+				return YearlyRecruiterSubscription.getActionHandler();
+			}
+			default:{
+				throw new IllegalArgumentException("Unknown subscriptionType: "  + subscriptionType);
+			}
+		}
+		
+	}
+	
+}

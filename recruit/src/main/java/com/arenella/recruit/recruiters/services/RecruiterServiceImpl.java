@@ -18,10 +18,12 @@ import org.springframework.stereotype.Service;
 
 import com.arenella.recruit.recruiters.beans.Recruiter;
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription;
+import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_action;
 import com.arenella.recruit.recruiters.beans.TrialPeriodSubscription;
-import com.arenella.recruit.recruiters.beans.YearlyRecruiterSubscription;
 import com.arenella.recruit.recruiters.dao.RecruiterDao;
 import com.arenella.recruit.recruiters.entities.RecruiterEntity;
+import com.arenella.recruit.recruiters.utils.RecruiterSubscriptionActionHandler;
+import com.arenella.recruit.recruiters.utils.RecruiterSubscriptionFactory;
 
 /**
 * Servcies relating to Recruiters
@@ -31,7 +33,10 @@ import com.arenella.recruit.recruiters.entities.RecruiterEntity;
 public class RecruiterServiceImpl implements RecruiterService{
 
 	@Autowired
-	private RecruiterDao recruiterDao;
+	private RecruiterDao 					recruiterDao;
+	
+	@Autowired
+	private RecruiterSubscriptionFactory 	recruiterSubscriptionFactory;
 	
 	/**
 	* Refer to the RecruiterService for details
@@ -133,11 +138,36 @@ public class RecruiterServiceImpl implements RecruiterService{
 																	.recruiterId(recruiter.getUserId())
 																	.status(RecruiterSubscription.subscription_status.AWAITING_ACTIVATION)
 																	.subscriptionId(UUID.randomUUID())
+																	.currentSubscription(true)
 																.build();
 		
 		recruiter.addInitialSubscription(subscription); //Change to 30 Day trial subscription
 		
 		this.recruiterDao.save(RecruiterEntity.convertToEntity(recruiter, Optional.empty()));
+		
+	}
+	
+	/**
+	* Refer to the RecruiterService for details
+	*/
+	@Override
+	public void performSubscriptionAction(String recruiterId, UUID subscriptionId, subscription_action action) {
+		
+		//1. Check recruiter exists
+		Recruiter recruiter = this.recruiterDao.findRecruiterById(recruiterId).orElseThrow(() -> new IllegalArgumentException("Unable to retrieve recruiter: " + recruiterId));;
+		
+		//2. Check subscription exists
+		RecruiterSubscription subscription = recruiter.getSubscriptions().stream().filter(sub -> sub.getSubscriptionId() == subscriptionId).findFirst().orElseThrow(() -> new IllegalArgumentException("Unknown Subscription: " + subscriptionId.toString()));
+		
+		//3. Pass to Subscription to validate and handle action
+		RecruiterSubscriptionActionHandler actionHandler = this.recruiterSubscriptionFactory.getActionHandlerByType(subscription.getType());
+		
+		actionHandler.performAction(recruiter, subscription, action);
+		
+		//4. Check that after action maximum 1 subscriptions is active
+		if (recruiter.getSubscriptions().stream().filter(s -> s.isCurrentSubscription()).count() > 1) {
+			throw new IllegalStateException("Max 1 subscription can be active at any one time. recruiter: " + recruiterId);
+		}
 		
 	}
 	
