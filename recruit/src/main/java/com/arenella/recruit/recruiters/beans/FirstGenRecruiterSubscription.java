@@ -210,6 +210,7 @@ public class FirstGenRecruiterSubscription implements RecruiterSubscription{
 		public void performAction(Recruiter recruiter, RecruiterSubscription subscription,  subscription_action action) {
 			
 			switch(action) {
+			
 				default:{
 					throw new IllegalArgumentException("Unknown action " + action + " for subscription type: " + subscription_type.FIRST_GEN);
 				}

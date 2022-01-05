@@ -2,10 +2,12 @@
 	font-weight: bold;
 	background: #6c757d;
 	color:white;
+	width:50%;
 }
 
 .table-cell{
 	background:#E8E8E8;
+	width:50%;
 }
 
 .center {

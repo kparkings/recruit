@@ -113,9 +113,9 @@ public class RecruiterController {
 	* @param subscriptionId		- Unique Id of the subscription to be amended
 	* @param action				- Action to perform on the Subscription
 	*/
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	@GetMapping(value="/recruiter/{recruiterId}/subscription/{subscriptionId}/")
-	public ResponseEntity<Void> performSubscriptionAction(@PathVariable("recruiterId") String recruiterId, @PathVariable("subscriptionId") UUID subscriptionId, @RequestParam("action") subscription_action action) {
+	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('RECRUITER')")
+	@PutMapping(value="/recruiter/{recruiterId}/subscription/{subscriptionId}/")
+	public ResponseEntity<Void> performSubscriptionAction(@PathVariable("recruiterId") String recruiterId, @PathVariable("subscriptionId") UUID subscriptionId, @RequestParam("action") subscription_action action)  throws IllegalAccessException{
 		this.recruiterService.performSubscriptionAction(recruiterId, subscriptionId, action);
 		return ResponseEntity.ok().build();
 	}

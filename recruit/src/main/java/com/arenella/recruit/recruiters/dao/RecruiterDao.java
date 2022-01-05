@@ -15,7 +15,7 @@ public interface RecruiterDao extends CrudRepository<RecruiterEntity, String>{
 
 	default Optional<Recruiter> findRecruiterById(String recruiterId) {
 		
-		Optional<RecruiterEntity> entityOpt = this.findById(recruiterId);
+		Optional<RecruiterEntity> entityOpt = this.findByUserIdIgnoreCase(recruiterId);
 		
 		if (entityOpt.isEmpty()) {
 			return Optional.empty();
@@ -25,4 +25,5 @@ public interface RecruiterDao extends CrudRepository<RecruiterEntity, String>{
 		
 	}
 	
+	Optional<RecruiterEntity> findByUserIdIgnoreCase(String userId);
 }

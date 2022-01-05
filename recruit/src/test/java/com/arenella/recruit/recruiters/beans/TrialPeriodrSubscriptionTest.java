@@ -1,6 +1,8 @@
 package com.arenella.recruit.recruiters.beans;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDateTime;
@@ -44,8 +46,61 @@ public class TrialPeriodrSubscriptionTest {
 		assertEquals(recruiterId, 												subscription.getRecruiterId());
 		assertEquals(status, 													subscription.getStatus());
 		assertEquals(subscriptionId, 											subscription.getSubscriptionId());
-		assertEquals(RecruiterSubscription.subscription_type.TRIAL_PERIOD, subscription.getType());
+		assertEquals(RecruiterSubscription.subscription_type.TRIAL_PERIOD, 		subscription.getType());
 		assertTrue(subscription.isCurrentSubscription());
+		
+	}
+	
+	/**
+	* Tests correct attributes are updated as part of activation
+	* @throws Exception
+	*/
+	@Test 
+	public void testActivateSubscription() throws Exception {
+		
+		TrialPeriodSubscription subscription = TrialPeriodSubscription.builder().build();
+		
+		assertEquals(subscription_status.AWAITING_ACTIVATION, subscription.getStatus());
+		assertNull(subscription.getActivatedDate());
+		
+		subscription.activateSubscription();
+		
+		assertTrue(subscription.getActivatedDate() instanceof LocalDateTime);
+		assertEquals(subscription_status.ACTIVE, subscription.getStatus());
+		
+	}
+	
+	/**
+	* Tests Exception thrown if previous activation has taken place
+	* @throws Exception
+	*/
+	@Test 
+	public void testActivateSubscription_previouslyActivated() throws Exception {
+		
+		TrialPeriodSubscription subscription = TrialPeriodSubscription.builder().build();
+		
+		subscription.endSubscription();
+		
+		assertThrows(IllegalStateException.class, () -> {
+			subscription.activateSubscription();
+		});
+		
+		assertEquals(subscription_status.SUBSCRIPTION_ENDED, subscription.getStatus());
+		
+	}
+	
+	/**
+	* Tests end subscription updates the correct attributes
+	* @throws Exception
+	*/
+	@Test
+	public void testEndSubscription() throws Exception {
+		
+		TrialPeriodSubscription subscription = TrialPeriodSubscription.builder().build();
+		
+		subscription.endSubscription();
+		
+		assertEquals(subscription_status.SUBSCRIPTION_ENDED, subscription.getStatus());
 		
 	}
 	

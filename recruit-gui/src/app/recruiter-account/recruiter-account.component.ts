@@ -4,6 +4,7 @@ import { RecruiterService }						from '../recruiter.service';
 import { Recruiter }							from './recruiter';
 import { Subscription }							from './subscription';
 import { NgbModal}								from '@ng-bootstrap/ng-bootstrap';
+import { SubscriptionAction }					from './subscription-action';
 
 /**
 * Component to allow the Recruiter to aministrate their 
@@ -34,6 +35,10 @@ export class RecruiterAccountComponent implements OnInit {
 		
 	showAccountDetails:boolean			= true;
 	showSubscriptions:boolean			= false;
+	
+	showSwitchToFirstGenSubscriptionConfirmButtons:boolean	= false;
+	showSwitchToYearlySubscriptionConfirmButtons:boolean	= false;
+	showCancelSubscriptionConfirmButtons:boolean 			= false;
 		
 	/**
 	* Retrieves own recruiter account from the backend
@@ -97,6 +102,24 @@ export class RecruiterAccountComponent implements OnInit {
 	}
 	
 	/**
+	* Returns active subscription type.
+	*/
+	public getCurrentSubscriptionType():string{
+		
+		let currentSubscriptionType:string = '';
+		
+		this.recruiter.subscriptions.forEach( s => {
+		
+			if (s.currentSubscription) {
+				currentSubscriptionType = s.type;
+			}
+			
+		});
+		
+		return currentSubscriptionType;
+	}
+	
+	/**
 	* Returns whether or not the recruiter has an unpaid invoice
 	*/
 	public hasUnpaidSubscription():boolean{
@@ -113,6 +136,100 @@ export class RecruiterAccountComponent implements OnInit {
 		
 		return status === 'DISABLED_PENDING_PAYMENT';
 		
+	}
+	
+	/**
+	* Whether or not the Recruiter has a FirstGen account. If so the Recruiter must be able 
+	* to reselect this option. We however dont want to present this option to second generation
+	* recruiters 
+	*/
+	public hasFirstGenSubscription():boolean{
+		
+		let isFirstGenRecruiter:boolean = false;
+		
+		this.recruiter.subscriptions.forEach( s => {
+		
+			if (s.type == 'FIRST_GEN') {
+				isFirstGenRecruiter = true;
+			}
+			
+		});
+		
+		return isFirstGenRecruiter;
+		
+	}
+	
+	/**
+ 	* Activates the switch to FirstGen subscription confirmation buttons
+	*/
+	public switchToFirstGenSubscription():void{
+		this.cancelAlterSubscriptionOptions();
+		this.showSwitchToFirstGenSubscriptionConfirmButtons = true;
+		this.showSwitchToYearlySubscriptionConfirmButtons	= false;
+	}
+	
+	/**
+ 	* Confirms the swithch to FirstGen subscription button
+	*/
+	public confirmSwitchToFirstGenSubscription():void{
+		this.cancelAlterSubscriptionOptions();
+	}
+	
+	/**
+ 	* Activates the switch to Yearly subscription confirmation buttons
+	*/
+	public switchToYearlySubscription():void{
+		this.cancelAlterSubscriptionOptions();
+		this.showSwitchToFirstGenSubscriptionConfirmButtons = false;
+		this.showSwitchToYearlySubscriptionConfirmButtons	= true;
+	}
+	
+	/**
+ 	* Confirms the swithch to Yearly subscription button
+	*/
+	public confirmSwitchToYearlySubscription():void{
+		this.cancelAlterSubscriptionOptions();
+	}
+	
+	/**
+ 	* Cancels the swithch to subscription buttons
+	*/
+	public cancelAlterSubscriptionOptions():void{
+		this.showSwitchToFirstGenSubscriptionConfirmButtons = false;
+		this.showSwitchToYearlySubscriptionConfirmButtons	= false;
+		this.showCancelSubscriptionConfirmButtons = false;
+	}
+	
+	/**
+	* Show confirm cancel current subscription options
+	*/
+	public cancelSubscription():void{
+		this.cancelAlterSubscriptionOptions();
+		this.showCancelSubscriptionConfirmButtons = true;
+	}
+
+
+	/**
+ 	* Cancels the swithch to subscription buttons
+	*/
+	public cancelCancelSubscription():void{
+		this.showCancelSubscriptionConfirmButtons = false;
+	}	
+	
+	/**
+ 	* Ends the subscription
+	*/
+	public confirmCancelSubscription(subscription:Subscription):void{
+		
+		this.showSwitchToFirstGenSubscriptionConfirmButtons = false;
+		this.showSwitchToYearlySubscriptionConfirmButtons	= false;
+		
+		this.recruiterService.performSubscriptionAction(this.recruiter.userId, subscription.subscriptionId, 'END_SUBSCRIPTION').subscribe(data => {
+			this.fetchRecruiterDetails();
+		}, 
+		err => {
+			console.log(JSON.stringify(err));		
+		});
 	}
 	
 }

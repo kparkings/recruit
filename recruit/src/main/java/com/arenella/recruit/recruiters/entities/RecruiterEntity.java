@@ -391,7 +391,7 @@ public class RecruiterEntity {
 	/**
 	* Converts the Entity representation of a Recruiter to the Domain representation
 	* @param recruiter - Recruiter to convert
-	* @return Doman representation
+	* @return Domain representation
 	*/
 	public static Recruiter convertFromEntity(RecruiterEntity recruiterEntity) {
 		return Recruiter

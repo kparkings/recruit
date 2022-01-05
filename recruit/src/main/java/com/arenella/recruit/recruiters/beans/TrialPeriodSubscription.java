@@ -16,7 +16,7 @@ public class TrialPeriodSubscription implements RecruiterSubscription{
 	private String 					recruiterId;
 	private LocalDateTime 			created;
 	private LocalDateTime 			activatedDate;
-	private subscription_status		status;
+	private subscription_status		status					= subscription_status.AWAITING_ACTIVATION;
 	private boolean					currentSubscription;
 	
 	/**
@@ -90,11 +90,23 @@ public class TrialPeriodSubscription implements RecruiterSubscription{
 	}
 	
 	/**
-	* Updates the status of the Subscription
-	* @param status - Status of the subscription
+	* Ends the Subscription
 	*/
-	public void setStatus(subscription_status status) {
-		this.status = status;
+	public void endSubscription() {
+		this.status = subscription_status.SUBSCRIPTION_ENDED;
+	}
+	
+	/**
+	* Activates the Subscription 
+	*/
+	public void activateSubscription() {
+		
+		if (this.status != null && this.status != subscription_status.AWAITING_ACTIVATION) {
+			throw new IllegalStateException("You cant activate a Subscription more than once");
+		}
+		
+		this.status 		= subscription_status.ACTIVE;
+		this.activatedDate 	= LocalDateTime.now();
 	}
 	
 	/**
@@ -123,7 +135,7 @@ public class TrialPeriodSubscription implements RecruiterSubscription{
 		private String 					recruiterId;
 		private LocalDateTime 			created;
 		private LocalDateTime 			activatedDate;
-		private subscription_status		status;
+		private subscription_status		status					= subscription_status.AWAITING_ACTIVATION;
 		private boolean					currentSubscription;
 		
 		/**
@@ -225,13 +237,14 @@ public class TrialPeriodSubscription implements RecruiterSubscription{
 				switch (action) {
 					case ACTIVATE_SUBSCRIPTION:{
 						
-						currentSubscription.setStatus(subscription_status.ACTIVE);
+						currentSubscription.activateSubscription();
 						currentSubscription.setCurrentSubscription(true);
 						recruiter.getSubscriptions().stream().map(s -> (TrialPeriodSubscription)s).collect(Collectors.toSet()).stream().forEach(s -> {
 						
 							if (s.getSubscriptionId() != subscription.getSubscriptionId()) {
 								s.setCurrentSubscription(false);
 							}
+							
 						});
 							
 						return;
@@ -239,7 +252,7 @@ public class TrialPeriodSubscription implements RecruiterSubscription{
 					case REJECT_SUBSCRIPTION:{
 						
 						if (subscription.getStatus() == subscription_status.AWAITING_ACTIVATION) {
-							currentSubscription.setStatus(subscription_status.SUBSCRIPTION_ENDED);
+							currentSubscription.endSubscription();
 							currentSubscription.setCurrentSubscription(false);
 						}
 						
@@ -258,7 +271,7 @@ public class TrialPeriodSubscription implements RecruiterSubscription{
 			if (currentSubscription.getStatus() == subscription_status.ACTIVE ) {
 				
 				if (action == subscription_action.END_SUBSCRIPTION) {
-					currentSubscription.setStatus(subscription_status.SUBSCRIPTION_ENDED);
+					currentSubscription.endSubscription();
 					currentSubscription.setCurrentSubscription(false);
 					return;
 				}

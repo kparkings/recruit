@@ -27,6 +27,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import com.arenella.recruit.recruiters.beans.Recruiter;
 import com.arenella.recruit.recruiters.beans.Recruiter.language;
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_action;
+import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_type;
 import com.arenella.recruit.recruiters.beans.TrialPeriodSubscription;
 import com.arenella.recruit.recruiters.dao.RecruiterDao;
 import com.arenella.recruit.recruiters.entities.RecruiterEntity;
@@ -73,6 +74,7 @@ public class RecruiterServiceImplTest {
 		
 		Mockito.when(this.mockDao.existsById(userId)).thenReturn(false);
 		Mockito.when(this.mockDao.save(argCaptEntity.capture())).thenReturn(null);
+		Mockito.when(this.mockRecruiterSubscriptionFactory.getActionHandlerByType(Mockito.any())).thenReturn(TrialPeriodSubscription.getActionHandler());
 	
 		Recruiter recruiter = Recruiter
 								.builder()
@@ -88,6 +90,9 @@ public class RecruiterServiceImplTest {
 		this.service.addRecruiter(recruiter);
 		
 		RecruiterEntity entity = argCaptEntity.getValue();
+		
+		assertEquals(1, entity.getSubscriptions().size());
+		assertEquals(subscription_type.TRIAL_PERIOD, entity.getSubscriptions().stream().findFirst().get().getType());
 		
 		assertEquals(companyName, 	entity.getCompanyName());
 		assertEquals(email, 		entity.getEmail());
@@ -270,7 +275,7 @@ public class RecruiterServiceImplTest {
 														.accountCreated(accountCreated)
 													.build();
 
-		Mockito.when(this.mockDao.findById(userId)).thenReturn(Optional.of(recruiterEntity));
+		Mockito.when(this.mockDao.findByUserIdIgnoreCase(userId)).thenReturn(Optional.of(recruiterEntity));
 		
 		Recruiter recruiter = this.service.fetchRecruiter(userId);
 		
@@ -350,7 +355,7 @@ public class RecruiterServiceImplTest {
 														.accountCreated(accountCreated)
 													.build();
 
-		Mockito.when(this.mockDao.findById(userId)).thenReturn(Optional.of(recruiterEntity));
+		Mockito.when(this.mockDao.findByUserIdIgnoreCase(userId)).thenReturn(Optional.of(recruiterEntity));
 		
 		Recruiter recruiter = this.service.fetchRecruiter(userId);
 		
@@ -398,6 +403,12 @@ public class RecruiterServiceImplTest {
 		
 		Mockito.when(this.mockDao.findRecruiterById(recruiterId)).thenReturn(Optional.of(recruiter));
 		
+		SecurityContextHolder.setContext(mockSecurityContext);
+		
+		Mockito.when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
+		Mockito.when(mockAuthentication.getAuthorities()).thenReturn(Set.of());
+		Mockito.when(mockAuthentication.getName()).thenReturn(recruiterId);
+		
 		assertThrows(IllegalArgumentException.class, () -> {
 			this.service.performSubscriptionAction(recruiterId, subscriptionId, action);
 		});
@@ -423,6 +434,12 @@ public class RecruiterServiceImplTest {
 																				)
 																				)
 															.build();
+		
+		SecurityContextHolder.setContext(mockSecurityContext);
+		
+		Mockito.when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
+		Mockito.when(mockAuthentication.getAuthorities()).thenReturn(Set.of());
+		Mockito.when(mockAuthentication.getName()).thenReturn(recruiterId);
 		
 		Mockito.when(this.mockDao.findRecruiterById(recruiterId)).thenReturn(Optional.of(recruiter));
 		Mockito.when(this.mockRecruiterSubscriptionFactory.getActionHandlerByType(Mockito.any())).thenReturn(mockRecruiterSubscriptionActionHandler);
@@ -453,6 +470,12 @@ public class RecruiterServiceImplTest {
 																				)
 															.build();
 		
+		SecurityContextHolder.setContext(mockSecurityContext);
+		
+		Mockito.when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
+		Mockito.when(mockAuthentication.getAuthorities()).thenReturn(Set.of());
+		Mockito.when(mockAuthentication.getName()).thenReturn(recruiterId);
+		
 		Mockito.when(this.mockDao.findRecruiterById(recruiterId)).thenReturn(Optional.of(recruiter));
 		Mockito.when(this.mockRecruiterSubscriptionFactory.getActionHandlerByType(Mockito.any())).thenReturn(mockRecruiterSubscriptionActionHandler);
 		Mockito.doNothing().when(mockRecruiterSubscriptionActionHandler).performAction(Mockito.any(), Mockito.any(), Mockito.any());
@@ -460,6 +483,68 @@ public class RecruiterServiceImplTest {
 		this.service.performSubscriptionAction(recruiterId, subscriptionId1, action);
 		
 		Mockito.verify(this.mockDao).save(Mockito.any(RecruiterEntity.class));
+		
+	}
+	
+	/**
+	* Test method can be called by admin users
+	* @throws Exception
+	*/
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@Test
+	public void testPerformSubscriptionAction_admin() throws Exception {
+		
+		final String 				recruiterId 		= "kparkings";
+		final UUID 					subscriptionId1 	= UUID.randomUUID();
+		final UUID 					subscriptionId2 	= UUID.randomUUID();
+		final subscription_action 	action 				= subscription_action.ACTIVATE_SUBSCRIPTION;
+		final Recruiter				recruiter			= Recruiter
+															.builder()
+																.subscriptions(Set.of(TrialPeriodSubscription.builder().subscriptionId(subscriptionId1).currentSubscription(true).build(),
+																					  TrialPeriodSubscription.builder().subscriptionId(subscriptionId2).currentSubscription(false).build()
+																				)
+																				)
+															.build();
+		
+		SecurityContextHolder.setContext(mockSecurityContext);
+		
+		Collection authorities = new HashSet<>();
+		authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+
+		Mockito.when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
+		Mockito.when(mockAuthentication.getAuthorities()).thenReturn(authorities);
+		Mockito.when(mockAuthentication.getName()).thenReturn(userId);
+		
+		Mockito.when(this.mockDao.findRecruiterById(recruiterId)).thenReturn(Optional.of(recruiter));
+		Mockito.when(this.mockRecruiterSubscriptionFactory.getActionHandlerByType(Mockito.any())).thenReturn(mockRecruiterSubscriptionActionHandler);
+		Mockito.doNothing().when(mockRecruiterSubscriptionActionHandler).performAction(Mockito.any(), Mockito.any(), Mockito.any());
+		
+		this.service.performSubscriptionAction(recruiterId, subscriptionId1, action);
+		
+		Mockito.verify(this.mockDao).save(Mockito.any(RecruiterEntity.class));
+		
+	}
+	
+	/**
+	* Test method can not by another recruiter where the user is not an admin user
+	* @throws Exception
+	*/
+	@Test
+	public void testPerformSubscriptionAction_unauthorisedUser() throws Exception {
+		
+		final String 				recruiterId 		= "kparkings";
+		final UUID 					subscriptionId1 	= UUID.randomUUID();
+		final subscription_action 	action 				= subscription_action.ACTIVATE_SUBSCRIPTION;
+		
+		SecurityContextHolder.setContext(mockSecurityContext);
+		
+		Mockito.when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
+		Mockito.when(mockAuthentication.getAuthorities()).thenReturn(Set.of());
+		Mockito.when(mockAuthentication.getName()).thenReturn("userAttemptingToChangeOtherUsersSubscription");
+		
+		assertThrows(IllegalAccessException.class, () -> {
+			this.service.performSubscriptionAction(recruiterId, subscriptionId1, action);
+		});
 		
 	}
 	

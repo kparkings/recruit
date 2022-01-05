@@ -48,6 +48,21 @@ public class RecruiterServiceImpl implements RecruiterService{
 			throw new IllegalArgumentException("Recruiter already exists");
 		}
 		
+		TrialPeriodSubscription subscription = TrialPeriodSubscription
+				.builder()
+					.created(LocalDateTime.now())
+					.recruiterId(recruiter.getUserId())
+					.status(RecruiterSubscription.subscription_status.AWAITING_ACTIVATION)
+					.subscriptionId(UUID.randomUUID())
+					.currentSubscription(true)
+				.build();
+
+		RecruiterSubscriptionActionHandler actionHandler = this.recruiterSubscriptionFactory.getActionHandlerByType(subscription.getType());
+		
+		actionHandler.performAction(recruiter, subscription, subscription_action.ACTIVATE_SUBSCRIPTION);
+		
+		recruiter.addInitialSubscription(subscription);
+		
 		recruiter.activateAccount();
 		
 		this.recruiterDao.save(RecruiterEntity.convertToEntity(recruiter, Optional.empty()));
@@ -86,13 +101,9 @@ public class RecruiterServiceImpl implements RecruiterService{
 	@Override
 	public Recruiter fetchRecruiter(String recruiterId) throws IllegalAccessException {
 		
-		boolean isAdminUser	= SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream().filter(role -> role.getAuthority().equals("ROLE_ADMIN")).findAny().isPresent();
+		performIsAdminOrRecruiterAccessingOwnAccountCheck(recruiterId);
 		
-		if (!isAdminUser && !recruiterId.equalsIgnoreCase(SecurityContextHolder.getContext().getAuthentication().getName())) {
-			throw new IllegalAccessException("A Recruiter can only view their own accout");
-		}
-		
-		RecruiterEntity entity =  this.recruiterDao.findById(recruiterId).orElseThrow(()-> new IllegalArgumentException("Unknown Recruiter"));
+		RecruiterEntity entity =  this.recruiterDao.findByUserIdIgnoreCase(recruiterId).orElseThrow(()-> new IllegalArgumentException("Unknown Recruiter"));
 		return RecruiterEntity.convertFromEntity(entity);
 	}
 
@@ -141,7 +152,7 @@ public class RecruiterServiceImpl implements RecruiterService{
 																	.currentSubscription(true)
 																.build();
 		
-		recruiter.addInitialSubscription(subscription); //Change to 30 Day trial subscription
+		recruiter.addInitialSubscription(subscription); 
 		
 		this.recruiterDao.save(RecruiterEntity.convertToEntity(recruiter, Optional.empty()));
 		
@@ -149,15 +160,19 @@ public class RecruiterServiceImpl implements RecruiterService{
 	
 	/**
 	* Refer to the RecruiterService for details
+	 * @throws IllegalAccessException 
 	*/
 	@Override
-	public void performSubscriptionAction(String recruiterId, UUID subscriptionId, subscription_action action) {
+	public void performSubscriptionAction(String recruiterId, UUID subscriptionId, subscription_action action) throws IllegalAccessException {
+		
+		//0
+		performIsAdminOrRecruiterAccessingOwnAccountCheck(recruiterId);
 		
 		//1. Check recruiter exists
 		Recruiter recruiter = this.recruiterDao.findRecruiterById(recruiterId).orElseThrow(() -> new IllegalArgumentException("Unable to retrieve recruiter: " + recruiterId));;
 		
 		//2. Check subscription exists
-		RecruiterSubscription subscription = recruiter.getSubscriptions().stream().filter(sub -> sub.getSubscriptionId() == subscriptionId).findFirst().orElseThrow(() -> new IllegalArgumentException("Unknown Subscription: " + subscriptionId.toString()));
+		RecruiterSubscription subscription = recruiter.getSubscriptions().stream().filter(sub -> sub.getSubscriptionId().equals(subscriptionId)).findFirst().orElseThrow(() -> new IllegalArgumentException("Unknown Subscription: " + subscriptionId.toString()));
 		
 		//3. Pass to Subscription to validate and handle action
 		RecruiterSubscriptionActionHandler actionHandler = this.recruiterSubscriptionFactory.getActionHandlerByType(subscription.getType());
@@ -197,7 +212,23 @@ public class RecruiterServiceImpl implements RecruiterService{
 		
 		userName = userName + weekNumber + recruiter.getSurname().substring(0,1).toUpperCase() + hours;
 		
-		return userName;
+		return userName.toLowerCase();
+		
+	}
+	
+	/**
+	* Checks that where an endpoint can be used by both Admin and Recuiter users Admin can access anything but 
+	* the Recruiters can only access their own information
+	* @param recruiterId
+	* @throws IllegalAccessException
+	*/
+	private void performIsAdminOrRecruiterAccessingOwnAccountCheck(String recruiterId) throws IllegalAccessException{
+		
+		boolean isAdminUser	= SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream().filter(role -> role.getAuthority().equals("ROLE_ADMIN")).findAny().isPresent();
+		
+		if (!isAdminUser && !recruiterId.equalsIgnoreCase(SecurityContextHolder.getContext().getAuthentication().getName())) {
+			throw new IllegalAccessException("A Recruiter can only view their own accout");
+		}
 		
 	}
 

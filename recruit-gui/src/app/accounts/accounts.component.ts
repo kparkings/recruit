@@ -367,5 +367,17 @@ export class AccountsComponent implements OnInit {
 		this.candidateService.enableCandidate(candidateId);
 		this.fetchCandidates();
 	}
+	
+	/**
+	* Update Recruiters subscription
+	*/
+	performAction(subscriptionAction:SubscriptionAction, action:string) {
+		this.recruiterService.performSubscriptionAction(subscriptionAction.userId, subscriptionAction.subscriptionId, action).subscribe(data => {
+			this.fetchRecruiters();
+		}, 
+		err => {
+			console.log(JSON.stringify(err));		
+		});
+	}
 
 }

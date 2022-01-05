@@ -219,7 +219,7 @@
 					<td>{{subscriptionAction.type}}</td>
 					<td>{{subscriptionAction.status}}</td>
 					<td>
-						<button class="btn btn-secondary btn-action" *ngFor="let action of subscriptionAction.actions">{{frmtSubscriptionAction(action)}}</button>
+						<button class="btn btn-secondary btn-action" *ngFor="let action of subscriptionAction.actions" (click)="performAction(subscriptionAction, action)">{{frmtSubscriptionAction(action)}}</button>
 					</td>
 				</tr>
 			</tbody>

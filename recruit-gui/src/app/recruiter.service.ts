@@ -80,6 +80,20 @@ export class RecruiterService {
 		return this.httpClient.post<any>(backendUrl, JSON.stringify(recruiter), this.httpOptions);
 		
 	}
+	
+	/**
+	* Sends a request to the backend to perform an action on a Recruiters subscription
+	* @param recruiterId 	- Unique Id of the recruiter whose Subscription is being updated
+	* @param subscriptionId - Unique Id of the subscription being updated
+	* @param action			- Action to be performed
+	*/
+	public performSubscriptionAction(recruiterId:string, subscriptionId:string, action:string):Observable<any>{
+		
+		const backendUrl:string = environment.backendUrl + 'recruiter/' + recruiterId + '/subscription/' + subscriptionId + '/?action=' + action;
+		
+		return this.httpClient.put<any>(backendUrl, null, this.httpOptions);
+		
+	}
 
 
 }

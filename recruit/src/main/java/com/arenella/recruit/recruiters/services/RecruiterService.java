@@ -59,7 +59,8 @@ public interface RecruiterService {
 	* @param recruiterId		- Unique Id of the Recruiter owning the Subscription
 	* @param subscriptionId		- Unique Id of the subscription to be amended
 	* @param action				- Action to perform on the Subscription
+	* @throws  IllegalAccessException
 	*/
-	public void performSubscriptionAction(String recruiterId, UUID subscriptionId, subscription_action action);
+	public void performSubscriptionAction(String recruiterId, UUID subscriptionId, subscription_action action)  throws IllegalAccessException;
 	
 }
