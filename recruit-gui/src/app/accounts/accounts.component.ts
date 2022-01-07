@@ -263,6 +263,25 @@ export class AccountsComponent implements OnInit {
 					
 					this.recruitersWithSubscriptionActions.push(sa);
 				}
+				
+				if (s.currentSubscription && s.status === "ACTIVE_PENDING_PAYMENT" && s.type === "YEAR_SUBSCRIPTION") {
+					
+					let sa:SubscriptionAction = new SubscriptionAction();
+					
+					sa.firstName 		= r.firstName;
+					sa.surname 			= r.surname;
+					sa.email 			= r.email;
+					sa.subscriptionId 	= s.subscriptionId;
+					sa.status 			= s.status;
+					sa.language 		= r.language;
+					sa.userId 			= r.userId;
+					sa.type 			= s.type;
+					sa.actions.push("ACTIVATE_SUBSCRIPTION");
+					sa.actions.push("DISABLED_PENDING_PAYMENT");
+					
+					this.recruitersWithSubscriptionActions.push(sa);
+				}
+				
 			});
 		});
 	}
@@ -278,6 +297,9 @@ export class AccountsComponent implements OnInit {
 			}
 			case "REJECT_SUBSCRIPTION": {
 				return "Reject";
+			}
+			case "DISABLED_PENDING_PAYMENT": {
+				return "Disable";
 			}
 			default:{
 				return actionId;

@@ -50,12 +50,14 @@
 	background:red; 
 	min-width:200px; 
 	margin-bottom:5px;
+	margin-left:5px;
 }
 
 .alter-subscription-btn-cancel{
 	background:green; 
 	min-width:200px; 
 	margin-bottom:5px;
+	margin-left:5px;
 }
 
 .subscription-tab-col{
