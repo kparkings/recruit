@@ -140,17 +140,11 @@ public class Recruiter {
 	}
 	
 	/**
-	* Adds the initial subscription for the Recruiter account
-	* @param subscription - Initial Subscription for the Recruiter
+	* Adds a subscription to the Recruiter account
+	* @param subscription - Subscription for the Recruiter
 	*/
-	public void addInitialSubscription(RecruiterSubscription subscription) {
-		
-		if (!this.subscriptions.isEmpty()) {
-			throw new IllegalStateException("Cant add initial subscription if subscription already exists");
-		}
-		
+	public void addSubscription(RecruiterSubscription subscription) {
 		this.subscriptions.add(subscription);
-		
 	}
 	
 	/**

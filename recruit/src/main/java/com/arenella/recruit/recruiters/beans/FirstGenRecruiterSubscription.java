@@ -95,7 +95,8 @@ public class FirstGenRecruiterSubscription implements RecruiterSubscription{
 	* Ends the subscription 
 	*/
 	public void endSubscription() {
-		this.status = subscription_status.SUBSCRIPTION_ENDED;
+		this.status				 = subscription_status.SUBSCRIPTION_ENDED;
+		this.currentSubscription = false;
 	}
 	
 	/**

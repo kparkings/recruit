@@ -36,7 +36,6 @@ export class RecruiterAccountComponent implements OnInit {
 	showAccountDetails:boolean			= true;
 	showSubscriptions:boolean			= false;
 	
-	showSwitchToFirstGenSubscriptionConfirmButtons:boolean	= false;
 	showSwitchToYearlySubscriptionConfirmButtons:boolean	= false;
 	showCancelSubscriptionConfirmButtons:boolean 			= false;
 		
@@ -159,28 +158,12 @@ export class RecruiterAccountComponent implements OnInit {
 		
 	}
 	
-	/**
- 	* Activates the switch to FirstGen subscription confirmation buttons
-	*/
-	public switchToFirstGenSubscription():void{
-		this.cancelAlterSubscriptionOptions();
-		this.showSwitchToFirstGenSubscriptionConfirmButtons = true;
-		this.showSwitchToYearlySubscriptionConfirmButtons	= false;
-	}
-	
-	/**
- 	* Confirms the swithch to FirstGen subscription button
-	*/
-	public confirmSwitchToFirstGenSubscription():void{
-		this.cancelAlterSubscriptionOptions();
-	}
 	
 	/**
  	* Activates the switch to Yearly subscription confirmation buttons
 	*/
 	public switchToYearlySubscription():void{
 		this.cancelAlterSubscriptionOptions();
-		this.showSwitchToFirstGenSubscriptionConfirmButtons = false;
 		this.showSwitchToYearlySubscriptionConfirmButtons	= true;
 	}
 	
@@ -189,13 +172,13 @@ export class RecruiterAccountComponent implements OnInit {
 	*/
 	public confirmSwitchToYearlySubscription():void{
 		this.cancelAlterSubscriptionOptions();
+		this.addAlternateSubscription("YEAR_SUBSCRIPTION");
 	}
 	
 	/**
  	* Cancels the swithch to subscription buttons
 	*/
 	public cancelAlterSubscriptionOptions():void{
-		this.showSwitchToFirstGenSubscriptionConfirmButtons = false;
 		this.showSwitchToYearlySubscriptionConfirmButtons	= false;
 		this.showCancelSubscriptionConfirmButtons = false;
 	}
@@ -221,10 +204,24 @@ export class RecruiterAccountComponent implements OnInit {
 	*/
 	public confirmCancelSubscription(subscription:Subscription):void{
 		
-		this.showSwitchToFirstGenSubscriptionConfirmButtons = false;
 		this.showSwitchToYearlySubscriptionConfirmButtons	= false;
 		
 		this.recruiterService.performSubscriptionAction(this.recruiter.userId, subscription.subscriptionId, 'END_SUBSCRIPTION').subscribe(data => {
+			this.fetchRecruiterDetails();
+		}, 
+		err => {
+			console.log(JSON.stringify(err));		
+		});
+	}
+	
+		/**
+ 	* Ends the subscription
+	*/
+	public addAlternateSubscription(subscriptionType:string):void{
+		
+		this.showSwitchToYearlySubscriptionConfirmButtons	= false;
+		
+		this.recruiterService.requestNewSubscription(this.recruiter.userId, subscriptionType).subscribe(data => {
 			this.fetchRecruiterDetails();
 		}, 
 		err => {

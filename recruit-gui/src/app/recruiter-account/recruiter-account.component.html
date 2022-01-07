@@ -72,15 +72,16 @@
 					<td class="subscription-tab-col">{{subscription.activatedDate | date:'yyyy-MM-dd'}}</td>
 					<td class="subscription-tab-col">{{subscription.status}}</td>
 						
-					<td class="subscription-tab-col subscription-table-btn" *ngIf="getCurrentSubscriptionType() === 'YEARLY_SUBSCRIPTION'">
-							<button class="btn btn-secondary" *ngIf="!hasUnpaidSubscription() && !showCancelSubscriptionConfirmButtons" style=" min-width:150px" 									(click)="cancelSubscription()">Cancel Subscription</button>
-							<button class="btn btn-secondary" *ngIf="!hasUnpaidSubscription() && showCancelSubscriptionConfirmButtons"  style="background:red; min-width:150px; margin-left:5px;" 	(click)="confirmCancelSubscription(subscription)">Confirm</button>
-							<button class="btn btn-secondary" *ngIf="!hasUnpaidSubscription() && showCancelSubscriptionConfirmButtons"  style="background:green; min-width:150px; margin-left:5px;" (click)="cancelCancelSubscription()">Cancel</button>
+					<td class="subscription-tab-col subscription-table-btn" *ngIf="subscription.type === 'YEAR_SUBSCRIPTION' && subscription.status != 'SUBSCRIPTION_ENDED'">
+							<button class="btn btn-secondary  alter-subscription-btn" 			*ngIf="!hasUnpaidSubscription() && !showCancelSubscriptionConfirmButtons" (click)="cancelSubscription()">Cancel Subscription</button>
+							<button class="btn btn-secondary  alter-subscription-btn-confirm" 	*ngIf="!hasUnpaidSubscription() && showCancelSubscriptionConfirmButtons"  (click)="confirmCancelSubscription(subscription)">Confirm</button>
+							<button class="btn btn-secondary  alter-subscription-btn-cancel" 	*ngIf="!hasUnpaidSubscription() && showCancelSubscriptionConfirmButtons"  (click)="cancelCancelSubscription()">Cancel</button>
 					</td>
 					
-					<td class="subscription-tab-col subscription-table-btn" *ngIf="getCurrentSubscriptionType() != 'YEARLY_SUBSCRIPTION'">
+					<td class="subscription-tab-col subscription-table-btn" *ngIf="subscription.type != 'YEAR_SUBSCRIPTION'">
 						<span style="width:200px">&nbsp;</span>
 					</td>
+					
 				</tr>
 			</table>
 		</div>
@@ -108,12 +109,7 @@
 							</ul>
 						</td>
 						
-						<td class="subscription-table-btn" *ngIf="getCurrentSubscriptionType() != 'FIRST_GEN'">
-							<div><button class="btn btn-secondary" *ngIf="!hasUnpaidSubscription() && !showSwitchToFirstGenSubscriptionConfirmButtons" style=" min-width:200px" 										(click)="switchToFirstGenSubscription()">Select this Subscription</button></div>
-							<div><button class="btn btn-secondary" *ngIf="!hasUnpaidSubscription() && showSwitchToFirstGenSubscriptionConfirmButtons"  style="background:red; min-width:200px; margin-bottom:5px;" 		(click)="confirmSwitchToFirstGenSubscription()">Confirm</button></div>
-							<div><button class="btn btn-secondary" *ngIf="!hasUnpaidSubscription() && showSwitchToFirstGenSubscriptionConfirmButtons"  style="background:green; min-width:200px; margin-bottom:5px;" 	(click)="cancelAlterSubscriptionOptions()">Cancel</button></div>
-						</td>
-						<td *ngIf="getCurrentSubscriptionType() === 'FIRST_GEN'"></td>
+						<td>&nbsp;</td>
 					</tr>
 					<tr style="border-bottom:2px black solid" *ngIf="!hasFirstGenSubscription()">
 						<td><b>Trial Period</b></td>
@@ -139,12 +135,12 @@
 								<li>Invoices sent once per year. 30 day payment term</li>
 							</ul>
 						</td>
-						<td class="subscription-table-btn" *ngIf="getCurrentSubscriptionType() != 'YEARLY_SUBSCRIPTION'">
-							<div><button class="btn btn-secondary" *ngIf="!hasUnpaidSubscription() && !showSwitchToYearlySubscriptionConfirmButtons" style=" min-width:200px" 										(click)="switchToYearlySubscription()">Select this Subscription</button></div>
-							<div><button class="btn btn-secondary" *ngIf="!hasUnpaidSubscription() && showSwitchToYearlySubscriptionConfirmButtons"  style="background:red; min-width:200px; margin-bottom:5px;" 	(click)="confirmSwitchToYearlySubscription()">Confirm</button></div>
-							<div><button class="btn btn-secondary" *ngIf="!hasUnpaidSubscription() && showSwitchToYearlySubscriptionConfirmButtons"  style="background:green; min-width:200px; margin-bottom:5px;" 	(click)="cancelAlterSubscriptionOptions()">Cancel</button></div>
+						<td class="subscription-table-btn" *ngIf="getCurrentSubscriptionType() != 'YEAR_SUBSCRIPTION'">
+							<div><button class="btn btn-secondary 	alter-subscription-btn" 			*ngIf="!hasUnpaidSubscription() && !showSwitchToYearlySubscriptionConfirmButtons"	(click)="switchToYearlySubscription()">Select this Subscription</button></div>
+							<div><button class="btn btn-secondary 	alter-subscription-btn-confirm" 	*ngIf="!hasUnpaidSubscription() && showSwitchToYearlySubscriptionConfirmButtons" 	(click)="confirmSwitchToYearlySubscription()">Confirm</button></div>
+							<div><button class="btn btn-secondary 	alter-subscription-btn-cancel" 		*ngIf="!hasUnpaidSubscription() && showSwitchToYearlySubscriptionConfirmButtons"	(click)="cancelAlterSubscriptionOptions()">Cancel</button></div>
 						</td>
-						<td *ngIf="getCurrentSubscriptionType() === 'YEARLY_SUBSCRIPTION'"></td>
+						<td *ngIf="getCurrentSubscriptionType() === 'YEAR_SUBSCRIPTION'"></td>
 					</tr>
 				</table>
 		</div>

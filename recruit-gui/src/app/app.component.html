@@ -5,7 +5,7 @@
 <div>
 
 	<ul class="arenella-navbar">
-      <li  class="li-arenella-nav" *ngIf="!isAuthenticated()">
+      <li  class="li-arenella-nav" *ngIf="!isAuthenticated()  || isAuthenticatedAsAdmin()">
            <a  class="dropdown-item" routerLink="/listing">Job Board</a>
         </li>
         <li  class="li-arenella-nav" *ngIf="!isAuthenticated()">

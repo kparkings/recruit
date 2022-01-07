@@ -20,6 +20,7 @@ import com.arenella.recruit.recruiters.beans.RecruiterAPIInbound;
 import com.arenella.recruit.recruiters.beans.RecruiterAPIOutbound;
 import com.arenella.recruit.recruiters.beans.RecruiterAccountRequestAPIInbound;
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_action;
+import com.arenella.recruit.recruiters.beans.SubscriptionAPIInbound;
 import com.arenella.recruit.recruiters.services.RecruiterService;
 
 /**
@@ -106,6 +107,19 @@ public class RecruiterController {
 	public RecruiterAPIOutbound fetchRecruiterOwnAccount() throws IllegalAccessException{
 		return RecruiterAPIOutbound.convertFromDomain(recruiterService.fetchRecruiterOwnAccount());
 	}
+	
+	/**
+	* Adds a new subscription for the Recruiter
+	* @param recruiterId		- Unique Id of the Recruiter owning the Subscription
+	* @param subscription		- Type of subscription requested
+	*/
+	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('RECRUITER')")
+	@PostMapping(value="/recruiter/{recruiterId}/subscription/")
+	public ResponseEntity<Void> addSubscription(@PathVariable("recruiterId") String recruiterId, @RequestBody SubscriptionAPIInbound subscription)  throws IllegalAccessException{
+		this.recruiterService.addSubscription(recruiterId, subscription.getType());
+		return ResponseEntity.ok().build();
+	}
+	
 	
 	/**
 	* Performs an action on a Recruiters subscription

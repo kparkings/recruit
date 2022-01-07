@@ -16,10 +16,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import com.arenella.recruit.recruiters.beans.FirstGenRecruiterSubscription;
 import com.arenella.recruit.recruiters.beans.Recruiter;
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription;
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_action;
+import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_status;
+import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_type;
 import com.arenella.recruit.recruiters.beans.TrialPeriodSubscription;
+import com.arenella.recruit.recruiters.beans.YearlyRecruiterSubscription;
 import com.arenella.recruit.recruiters.dao.RecruiterDao;
 import com.arenella.recruit.recruiters.entities.RecruiterEntity;
 import com.arenella.recruit.recruiters.utils.RecruiterSubscriptionActionHandler;
@@ -61,7 +65,7 @@ public class RecruiterServiceImpl implements RecruiterService{
 		
 		actionHandler.performAction(recruiter, subscription, subscription_action.ACTIVATE_SUBSCRIPTION);
 		
-		recruiter.addInitialSubscription(subscription);
+		recruiter.addSubscription(subscription);
 		
 		recruiter.activateAccount();
 		
@@ -152,7 +156,7 @@ public class RecruiterServiceImpl implements RecruiterService{
 																	.currentSubscription(true)
 																.build();
 		
-		recruiter.addInitialSubscription(subscription); 
+		recruiter.addSubscription(subscription); 
 		
 		this.recruiterDao.save(RecruiterEntity.convertToEntity(recruiter, Optional.empty()));
 		
@@ -160,7 +164,7 @@ public class RecruiterServiceImpl implements RecruiterService{
 	
 	/**
 	* Refer to the RecruiterService for details
-	 * @throws IllegalAccessException 
+	* @throws IllegalAccessException 
 	*/
 	@Override
 	public void performSubscriptionAction(String recruiterId, UUID subscriptionId, subscription_action action) throws IllegalAccessException {
@@ -187,6 +191,93 @@ public class RecruiterServiceImpl implements RecruiterService{
 		RecruiterEntity entity = RecruiterEntity.convertToEntity(recruiter, this.recruiterDao.findById(recruiterId));
 		
 		this.recruiterDao.save(entity);
+		
+	}
+	
+	/**
+	* Refer to the RecruiterService for details
+	* @throws IllegalAccessException 
+	*/
+	@Override
+	public void addSubscription(String recruiterId, subscription_type type) throws IllegalAccessException{
+		
+		this.performIsAdminOrRecruiterAccessingOwnAccountCheck(recruiterId);
+		
+		Recruiter recruiter = this.recruiterDao.findRecruiterById(recruiterId).orElseThrow(() -> new IllegalArgumentException("Unable to retrieve recruiter: " + recruiterId));
+		
+		/**
+		* Handle case YEAR_SUBSCRIPTION 
+		*/
+		if (type == subscription_type.YEAR_SUBSCRIPTION) {
+			switchToYearSubscription(recruiter);
+		}
+		
+		
+		
+	}
+	
+	/**
+	* Attemts to switch the Recruiters subscription to 
+	* a YEAR_SUBSCRIPTION
+	* @param recruiterId
+	* @param type
+	*/
+	private void switchToYearSubscription(Recruiter recruiter) {
+		
+		/**
+		* Ensure that at max only non ended YEAR_SUBSCRIPTION exists per recruiter 
+		*/
+		if (recruiter.getSubscriptions().stream().filter(s -> s.getType() == subscription_type.YEAR_SUBSCRIPTION && s.getStatus() != subscription_status.SUBSCRIPTION_ENDED).findAny().isPresent()) {
+			throw new IllegalStateException("Subscription already exists. Cannot add a second time.");
+		}
+		 
+		/**
+		* Can't have both FIRST_GEN_SUBSCRIPTION and YEAR_SUBSCRIPTION so end any currently open
+		* FirstGen subscriptions
+		*/
+		recruiter.getSubscriptions()
+								.stream()
+								.filter(s -> s.getType() == subscription_type.FIRST_GEN)
+								.collect(Collectors.toSet())
+								.stream().forEach(s -> {
+									((FirstGenRecruiterSubscription) s).endSubscription();
+								});
+		
+		/**
+		* If TRIAL_SUBSCRIPTION is not finished then make the start date of the subscription todays date plus the outstanding number 
+		* of days from the Trial subscription. Otherwise use todays date
+		*/
+		Optional<RecruiterSubscription> trialSubscriptionOpt = recruiter.getSubscriptions().stream().filter(s -> s.getType() == subscription_type.TRIAL_PERIOD && s.getStatus() != subscription_status.SUBSCRIPTION_ENDED).findFirst();
+		
+		LocalDateTime activationDate 	= LocalDateTime.now();
+		LocalDateTime createdDate		= activationDate;
+		
+		if (trialSubscriptionOpt.isPresent()) {
+			TrialPeriodSubscription subscription = (TrialPeriodSubscription)trialSubscriptionOpt.get();
+			subscription.endSubscription();
+			subscription.setCurrentSubscription(false);
+			
+			long secondsRemainingFromTrialPeriod = ChronoUnit.SECONDS.between(subscription.getActivatedDate(), LocalDateTime.now());
+			
+			activationDate = activationDate.plusSeconds(secondsRemainingFromTrialPeriod);
+			
+		}
+		
+		YearlyRecruiterSubscription yearlySubscription = YearlyRecruiterSubscription
+																			.builder()
+																				.activateDate(activationDate)
+																				.created(createdDate)
+																				.currentSubscription(true)
+																				.recruiterId(recruiter.getUserId())
+																				.status(subscription_status.ACTIVE_PENDING_PAYMENT)
+																				.subscriptionId(UUID.randomUUID())
+																			.build();
+														
+		recruiter.addSubscription(yearlySubscription);
+		
+		//TODO: 
+		
+		this.recruiterDao.save(RecruiterEntity.convertToEntity(recruiter, this.recruiterDao.findById(recruiter.getUserId())));
 		
 	}
 	

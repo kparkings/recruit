@@ -22,6 +22,8 @@ import com.arenella.recruit.recruiters.beans.RecruiterAPIInbound;
 import com.arenella.recruit.recruiters.beans.RecruiterAPIOutbound;
 import com.arenella.recruit.recruiters.beans.RecruiterAccountRequestAPIInbound;
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_action;
+import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_type;
+import com.arenella.recruit.recruiters.beans.SubscriptionAPIInbound;
 import com.arenella.recruit.recruiters.services.RecruiterService;
 
 /**
@@ -229,6 +231,26 @@ public class RecruiterControllerTest {
 		
 		assertEquals(response.getStatusCode(), HttpStatus.OK);
 	
+	}
+	
+	/**
+	* Tests happy path of add subscription
+	* @throws Exception
+	*/
+	@Test
+	public void testAddSubscription() throws Exception {
+		
+		final String 					recruiterId 	= "kparkings";
+		final SubscriptionAPIInbound 	type		 	= SubscriptionAPIInbound.builder().type(subscription_type.YEAR_SUBSCRIPTION).build();
+		
+		Mockito.doNothing().when(this.mockRecruiterService).addSubscription(recruiterId, type.getType());
+		
+		ResponseEntity<Void> response = this.recruiterController.addSubscription(recruiterId, type);
+		
+		Mockito.verify(this.mockRecruiterService).addSubscription(recruiterId, type.getType());
+		
+		assertEquals(response.getStatusCode(), HttpStatus.OK);
+		
 	}
 
 }

@@ -42,6 +42,22 @@
     min-width:50px;
 }
 
+.alter-subscription-btn{
+	min-width:200px;
+}
+
+.alter-subscription-btn-confirm{
+	background:red; 
+	min-width:200px; 
+	margin-bottom:5px;
+}
+
+.alter-subscription-btn-cancel{
+	background:green; 
+	min-width:200px; 
+	margin-bottom:5px;
+}
+
 .subscription-tab-col{
     border:1px black solid;
     background-color: #ffffff;

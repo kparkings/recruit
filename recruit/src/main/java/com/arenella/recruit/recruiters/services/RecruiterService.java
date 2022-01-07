@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import com.arenella.recruit.recruiters.beans.Recruiter;
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_action;
+import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_type;
 
 /**
 * Defines functionality related to services for Recruiters
@@ -62,5 +63,13 @@ public interface RecruiterService {
 	* @throws  IllegalAccessException
 	*/
 	public void performSubscriptionAction(String recruiterId, UUID subscriptionId, subscription_action action)  throws IllegalAccessException;
+
+	/**
+	* Adds / switches the Recruiters subscription type. 
+	* @param recruiterId - Unique identifier of the Recruiter the Subscription is for
+	* @param type 		 - type of the Subscription
+	* @throws  IllegalAccessException
+	*/
+	public void addSubscription(String recruiterId, subscription_type type)  throws IllegalAccessException;
 	
 }

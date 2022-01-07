@@ -5,7 +5,6 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.time.LocalDate;
 
@@ -120,7 +119,7 @@ public class RecruiterTest {
 	}
 	
 	/**
-	* Tests adding the initial subscription for the Recruiter 
+	* Tests adding a subscription for the Recruiter 
 	*/
 	@Test
 	public void testAddInitialSubscription() {
@@ -129,28 +128,10 @@ public class RecruiterTest {
 		
 		assertTrue(recruiter.getSubscriptions().isEmpty());
 		
-		recruiter.addInitialSubscription(FirstGenRecruiterSubscription.builder().build());
+		recruiter.addSubscription(FirstGenRecruiterSubscription.builder().build());
 		
 		assertFalse(recruiter.getSubscriptions().isEmpty());
 		
-	}
-	
-	/**
-	* Tests Exception thrown if an attempt is made to add an initial subscription to a Recruiter
-	* that already has at least one subscription
-	*/
-	@Test
-	public void testAddInitialSubscription_existingSubscription() {
-		
-		Recruiter recruiter = Recruiter.builder().build();
-		
-		assertTrue(recruiter.getSubscriptions().isEmpty());
-		
-		recruiter.addInitialSubscription(FirstGenRecruiterSubscription.builder().build());
-		
-		assertThrows(IllegalStateException.class, () -> {
-			recruiter.addInitialSubscription(FirstGenRecruiterSubscription.builder().build());
-		});
 	}
 	
 }

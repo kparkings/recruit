@@ -4,6 +4,7 @@ import { Observable }                 				from 'rxjs';
 import { environment }								from './../environments/environment';
 import { CreateRecruiter } 							from './accounts/create-recruiter';
 import { RecruiterSignup }							from './recruiter-signup/signup-recruiter';
+import { SubscriptionAPIInbound }					from './recruiter-account/subscription-api-inbound';
 
 @Injectable({
   providedIn: 'root'
@@ -94,6 +95,20 @@ export class RecruiterService {
 		return this.httpClient.put<any>(backendUrl, null, this.httpOptions);
 		
 	}
-
+	
+	/**
+	* Requests a new Subscription of the given type for the Recruiter
+	*/
+	public requestNewSubscription(recruiterId:string, type:string):Observable<any>{
+		
+		const backendUrl:string = environment.backendUrl +'recruiter/' + recruiterId + '/subscription/';
+		
+		let subscription:SubscriptionAPIInbound = new SubscriptionAPIInbound();
+		
+		subscription.type = type;
+		
+		return this.httpClient.post<any>(backendUrl, JSON.stringify(subscription), this.httpOptions);
+		
+	}
 
 }

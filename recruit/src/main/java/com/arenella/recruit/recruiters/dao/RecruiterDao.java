@@ -25,5 +25,11 @@ public interface RecruiterDao extends CrudRepository<RecruiterEntity, String>{
 		
 	}
 	
+	/**
+	* Attempts to find a Recruiter but its Id regardless of the case 
+	* used
+	* @param userId - Unique id of recruiter to search for
+	* @return If found the associated Recruiter
+	*/
 	Optional<RecruiterEntity> findByUserIdIgnoreCase(String userId);
 }
