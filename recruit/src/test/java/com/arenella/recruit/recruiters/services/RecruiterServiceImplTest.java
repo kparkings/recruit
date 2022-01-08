@@ -74,8 +74,18 @@ public class RecruiterServiceImplTest {
 	* Tests happy path for creating a new Recruiter account
 	* @throws Exception
 	*/
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Test
 	public void testAddRecruiter() throws Exception {
+		
+		SecurityContextHolder.setContext(mockSecurityContext);
+		
+		Collection authorities = new HashSet<>();
+		authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+
+		Mockito.when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
+		Mockito.when(mockAuthentication.getAuthorities()).thenReturn(authorities);
+		Mockito.when(mockAuthentication.getName()).thenReturn(userId);
 		
 		ArgumentCaptor<RecruiterEntity> argCaptEntity = ArgumentCaptor.forClass(RecruiterEntity.class);
 		
@@ -456,7 +466,7 @@ public class RecruiterServiceImplTest {
 		
 		Mockito.when(this.mockDao.findRecruiterById(recruiterId)).thenReturn(Optional.of(recruiter));
 		Mockito.when(this.mockRecruiterSubscriptionFactory.getActionHandlerByType(Mockito.any())).thenReturn(mockRecruiterSubscriptionActionHandler);
-		Mockito.doNothing().when(mockRecruiterSubscriptionActionHandler).performAction(Mockito.any(), Mockito.any(), Mockito.any());
+		Mockito.doNothing().when(mockRecruiterSubscriptionActionHandler).performAction(Mockito.any(), Mockito.any(), Mockito.any(), Mockito.any());
 		
 		assertThrows(IllegalStateException.class, () -> {
 			this.service.performSubscriptionAction(recruiterId, subscriptionId1, action);
@@ -491,7 +501,7 @@ public class RecruiterServiceImplTest {
 		
 		Mockito.when(this.mockDao.findRecruiterById(recruiterId)).thenReturn(Optional.of(recruiter));
 		Mockito.when(this.mockRecruiterSubscriptionFactory.getActionHandlerByType(Mockito.any())).thenReturn(mockRecruiterSubscriptionActionHandler);
-		Mockito.doNothing().when(mockRecruiterSubscriptionActionHandler).performAction(Mockito.any(), Mockito.any(), Mockito.any());
+		Mockito.doNothing().when(mockRecruiterSubscriptionActionHandler).performAction(Mockito.any(), Mockito.any(), Mockito.any(), Mockito.any());
 		
 		this.service.performSubscriptionAction(recruiterId, subscriptionId1, action);
 		
@@ -530,7 +540,7 @@ public class RecruiterServiceImplTest {
 		
 		Mockito.when(this.mockDao.findRecruiterById(recruiterId)).thenReturn(Optional.of(recruiter));
 		Mockito.when(this.mockRecruiterSubscriptionFactory.getActionHandlerByType(Mockito.any())).thenReturn(mockRecruiterSubscriptionActionHandler);
-		Mockito.doNothing().when(mockRecruiterSubscriptionActionHandler).performAction(Mockito.any(), Mockito.any(), Mockito.any());
+		Mockito.doNothing().when(mockRecruiterSubscriptionActionHandler).performAction(Mockito.any(), Mockito.any(), Mockito.any(), Mockito.any());
 		
 		this.service.performSubscriptionAction(recruiterId, subscriptionId1, action);
 		

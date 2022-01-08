@@ -65,7 +65,7 @@
 						<th class="bg-tab-hdr"></th>
 					</tr>
 				</thead>
-				<tr *ngFor="let subscription of recruiter.subscriptions">
+				<tr *ngFor="let subscription of getOrderedRecruiterSubscriptions()">
 					<td class="subscription-tab-col">{{subscription.subscriptionId}}</td>
 					<td class="subscription-tab-col">{{subscription.type}}</td>
 					<td class="subscription-tab-col">{{subscription.created | date:'yyyy-MM-dd'}}</td>
@@ -78,7 +78,7 @@
 							<button class="btn btn-secondary  alter-subscription-btn-cancel" 	*ngIf="!hasUnpaidSubscription() && showCancelSubscriptionConfirmButtons"  (click)="cancelCancelSubscription()">Cancel</button>
 					</td>
 					
-					<td class="subscription-tab-col subscription-table-btn" *ngIf="subscription.type != 'YEAR_SUBSCRIPTION'">
+					<td class="subscription-tab-col subscription-table-btn" *ngIf="subscription.type != 'YEAR_SUBSCRIPTION' || (subscription.type === 'YEAR_SUBSCRIPTION' && subscription.status === 'SUBSCRIPTION_ENDED')">
 						<span style="width:200px">&nbsp;</span>
 					</td>
 					

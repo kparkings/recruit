@@ -208,7 +208,7 @@ public class FirstGenRecruiterSubscription implements RecruiterSubscription{
 		* Refer to RecruiterSubscriptionActionHandler for details 
 		*/
 		@Override
-		public void performAction(Recruiter recruiter, RecruiterSubscription subscription,  subscription_action action) {
+		public void performAction(Recruiter recruiter, RecruiterSubscription subscription,  subscription_action action, Boolean isAdmin) {
 			
 			switch(action) {
 			

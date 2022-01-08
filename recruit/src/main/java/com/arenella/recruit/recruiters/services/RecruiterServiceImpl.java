@@ -44,9 +44,10 @@ public class RecruiterServiceImpl implements RecruiterService{
 	
 	/**
 	* Refer to the RecruiterService for details
+	* @throws IllegalAccessException 
 	*/
 	@Override
-	public void addRecruiter(Recruiter recruiter) {
+	public void addRecruiter(Recruiter recruiter) throws IllegalAccessException {
 		
 		if (this.recruiterDao.existsById(recruiter.getUserId())) {
 			throw new IllegalArgumentException("Recruiter already exists");
@@ -63,7 +64,7 @@ public class RecruiterServiceImpl implements RecruiterService{
 
 		RecruiterSubscriptionActionHandler actionHandler = this.recruiterSubscriptionFactory.getActionHandlerByType(subscription.getType());
 		
-		actionHandler.performAction(recruiter, subscription, subscription_action.ACTIVATE_SUBSCRIPTION);
+		actionHandler.performAction(recruiter, subscription, subscription_action.ACTIVATE_SUBSCRIPTION, isAdmin());
 		
 		recruiter.addSubscription(subscription);
 		
@@ -181,7 +182,7 @@ public class RecruiterServiceImpl implements RecruiterService{
 		//3. Pass to Subscription to validate and handle action
 		RecruiterSubscriptionActionHandler actionHandler = this.recruiterSubscriptionFactory.getActionHandlerByType(subscription.getType());
 		
-		actionHandler.performAction(recruiter, subscription, action);
+		actionHandler.performAction(recruiter, subscription, action, isAdmin());
 		
 		//4. Check that after action maximum 1 subscriptions is active
 		if (recruiter.getSubscriptions().stream().filter(s -> s.isCurrentSubscription()).count() > 1) {
@@ -315,11 +316,20 @@ public class RecruiterServiceImpl implements RecruiterService{
 	*/
 	private void performIsAdminOrRecruiterAccessingOwnAccountCheck(String recruiterId) throws IllegalAccessException{
 		
-		boolean isAdminUser	= SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream().filter(role -> role.getAuthority().equals("ROLE_ADMIN")).findAny().isPresent();
-		
-		if (!isAdminUser && !recruiterId.equalsIgnoreCase(SecurityContextHolder.getContext().getAuthentication().getName())) {
+		if (!isAdmin() && !recruiterId.equalsIgnoreCase(SecurityContextHolder.getContext().getAuthentication().getName())) {
 			throw new IllegalAccessException("A Recruiter can only view their own accout");
 		}
+		
+	}
+	
+	/**
+	* Whether or not the User is an Admin User
+	* @return Whether or not the current User is an Admin
+	*/
+	private boolean isAdmin() {
+		
+		return SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream().filter(role -> role.getAuthority().equals("ROLE_ADMIN")).findAny().isPresent();
+		
 		
 	}
 

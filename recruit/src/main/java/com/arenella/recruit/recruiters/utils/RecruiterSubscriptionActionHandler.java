@@ -17,7 +17,9 @@ public interface RecruiterSubscriptionActionHandler {
 	* @param recruiter		- Recruiter the Subscription belongs to 
 	* @param subscription 	- Subscription to perform the action on
 	* @param action 		- Action to perform
+	* @param isAdminUser	- Whether user is admin. Some actions are restricted to Admin users
+	* @throws IllegalAccessException
 	*/
-	public void performAction(Recruiter recruiter, RecruiterSubscription subscription, subscription_action action);
+	public void performAction(Recruiter recruiter, RecruiterSubscription subscription, subscription_action action, Boolean isAdminUser) throws IllegalAccessException;
 	
 }

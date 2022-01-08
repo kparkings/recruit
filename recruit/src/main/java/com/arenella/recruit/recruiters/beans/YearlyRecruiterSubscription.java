@@ -90,7 +90,30 @@ public class YearlyRecruiterSubscription implements RecruiterSubscription{
 	public subscription_status getStatus() {
 		return this.status;
 	}
+	
+	/**
+	* Activates the subscription
+	*/
+	public void activateSubscription() {
+		this.activatedDate 	= LocalDateTime.now();
+		this.status 		= subscription_status.ACTIVE;
+	}
+	
+	/**
+	* Disables the subscription due to unpaid invoice 
+	*/
+	public void disablePendingPayment() {
+		this.status 		= subscription_status.DISABLED_PENDING_PAYMENT;
+	}
 
+	/**
+	* Ends the current Subscription 
+	*/
+	public void endSubscription() {
+		this.currentSubscription = false;
+		this.status = subscription_status.SUBSCRIPTION_ENDED;
+	}
+	
 	/**
 	* Returns an instance of a builder for the YearlyRecruiterSubscription class
 	* @return Builder
@@ -199,9 +222,52 @@ public class YearlyRecruiterSubscription implements RecruiterSubscription{
 		* Refer to RecruiterSubscriptionActionHandler for details 
 		*/
 		@Override
-		public void performAction(Recruiter recruiter, RecruiterSubscription subscription,  subscription_action action) {
-
+		public void performAction(Recruiter recruiter, RecruiterSubscription subscription, subscription_action action, Boolean isAdminUser) throws IllegalAccessException{
+			
 			switch(action) {
+				case ACTIVATE_SUBSCRIPTION:{
+				
+					if (!isAdminUser) {
+						throw new IllegalAccessException("You are not authorized to carry out this action");
+					}
+					
+					if (subscription.getStatus() != subscription_status.ACTIVE_PENDING_PAYMENT && subscription.getStatus() != subscription_status.DISABLED_PENDING_PAYMENT) {
+						throw new IllegalStateException("Can only activate subscritions in state ACTIVE_PENDING_PAYMENT or DISABLED_PENDING_PAYMENT: " + subscription.getSubscriptionId());
+					}
+					
+					((YearlyRecruiterSubscription)subscription).activateSubscription();
+					
+					return;
+				}
+				case DISABLE_PENDING_PAYMENT: {
+					
+					if (!isAdminUser) {
+						throw new IllegalAccessException("You are not authorized to carry out this action");
+					}
+					
+					if (subscription.getStatus() != subscription_status.ACTIVE_PENDING_PAYMENT) {
+						throw new IllegalStateException("Can only activate subscritions in state ACTIVE_PENDING_PAYMENT: " + subscription.getSubscriptionId());
+					}
+					
+					((YearlyRecruiterSubscription)subscription).disablePendingPayment();
+					
+					return;
+				}
+				case END_SUBSCRIPTION: {
+					
+					if (!isAdminUser && subscription.getStatus() == subscription_status.DISABLED_PENDING_PAYMENT) {
+						throw new IllegalAccessException("You are not authorized to carry out this action");
+					}
+					
+					if (subscription.getStatus() == subscription_status.SUBSCRIPTION_ENDED) {
+						throw new IllegalStateException("Subscription is already ended. Cant end a second time: " + subscription.getSubscriptionId());
+					}
+					
+					((YearlyRecruiterSubscription)subscription).endSubscription();
+					
+					return;
+					
+				}
 				default:{
 					throw new IllegalArgumentException("Unknown action " + action + " for subscription type: " + subscription_type.YEAR_SUBSCRIPTION);
 				}

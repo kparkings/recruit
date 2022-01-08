@@ -16,8 +16,9 @@ public interface RecruiterService {
 	/**
 	* Adds a new Recruiter 
 	* @param recruiter - Recruiter to add
+	* @throw IllegalAccessException
 	*/
-	public void addRecruiter(Recruiter recruiter);
+	public void addRecruiter(Recruiter recruiter) throws IllegalAccessException;
 	
 	/**
 	* Updates an existing Recruiter 

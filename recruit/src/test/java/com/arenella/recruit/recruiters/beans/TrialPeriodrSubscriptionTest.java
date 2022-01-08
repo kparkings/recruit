@@ -1,6 +1,8 @@
 package com.arenella.recruit.recruiters.beans;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -10,6 +12,7 @@ import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
 
+import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_action;
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_status;
 
 /**
@@ -101,6 +104,99 @@ public class TrialPeriodrSubscriptionTest {
 		subscription.endSubscription();
 		
 		assertEquals(subscription_status.SUBSCRIPTION_ENDED, subscription.getStatus());
+		
+	}
+	
+	/**
+	* Tests non admin user cannot activate the subscription
+	* @throws Exception
+	*/
+	@Test
+	public void testActivateSubscription_nonAdmin() throws Exception {
+	
+		TrialPeriodSubscription subscription = TrialPeriodSubscription.builder().build();
+		
+		TrialPeriodSubscription.getActionHandler();
+		assertThrows(IllegalAccessException.class, () -> {
+			TrialPeriodSubscription.getActionHandler().performAction(null, subscription, subscription_action.ACTIVATE_SUBSCRIPTION, false);
+		});
+	
+	}
+	
+	/**
+	* Tests non admin user cannot reject the subscription
+	* @throws Exception
+	*/
+	@Test
+	public void testRejectSubscription_nonAdmin() throws Exception {
+		
+		TrialPeriodSubscription subscription = TrialPeriodSubscription.builder().build();
+		
+		TrialPeriodSubscription.getActionHandler();
+		assertThrows(IllegalAccessException.class, () -> {
+			TrialPeriodSubscription.getActionHandler().performAction(null, subscription, subscription_action.REJECT_SUBSCRIPTION, false);
+		});
+		
+	}
+	
+	/**
+	* Tests happy path
+	* @throws Exception
+	*/
+	@Test
+	public void testPerformAction_ActivateSubscription_nonAdmin() throws Exception {
+		
+		TrialPeriodSubscription subscription = TrialPeriodSubscription
+																.builder()
+																	.status(subscription_status.AWAITING_ACTIVATION)
+																	.currentSubscription(false)
+																.build();
+		
+		TrialPeriodSubscription.getActionHandler().performAction(null, subscription, subscription_action.ACTIVATE_SUBSCRIPTION, true);
+		
+		assertEquals(subscription_status.ACTIVE, subscription.getStatus());
+		assertTrue(subscription.isCurrentSubscription());
+		assertNotNull(subscription.getActivatedDate());
+		
+	}
+	
+	/**
+	* Tests happy path
+	* @throws Exception
+	*/
+	@Test
+	public void testPerformAction_RejectSubscription_nonAdmin() throws Exception {
+		
+		TrialPeriodSubscription subscription = TrialPeriodSubscription
+																.builder()
+																	.status(subscription_status.AWAITING_ACTIVATION)
+																	.currentSubscription(false)
+																.build();
+		
+		TrialPeriodSubscription.getActionHandler().performAction(null, subscription, subscription_action.REJECT_SUBSCRIPTION, true);
+		
+		assertEquals(subscription_status.SUBSCRIPTION_ENDED, subscription.getStatus());
+		assertFalse(subscription.isCurrentSubscription());
+		
+	}
+	
+	/**
+	* Tests happy path
+	* @throws Exception
+	*/
+	@Test
+	public void testPerformAction_endActiveSubscription_nonAdmin() throws Exception {
+		
+		TrialPeriodSubscription subscription = TrialPeriodSubscription
+																.builder()
+																	.status(subscription_status.ACTIVE)
+																	.currentSubscription(false)
+																.build();
+		
+		TrialPeriodSubscription.getActionHandler().performAction(null, subscription, subscription_action.END_SUBSCRIPTION, true);
+		
+		assertEquals(subscription_status.SUBSCRIPTION_ENDED, subscription.getStatus());
+		assertFalse(subscription.isCurrentSubscription());
 		
 	}
 	

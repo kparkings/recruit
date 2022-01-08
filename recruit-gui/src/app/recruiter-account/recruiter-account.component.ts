@@ -214,7 +214,7 @@ export class RecruiterAccountComponent implements OnInit {
 		});
 	}
 	
-		/**
+	/**
  	* Ends the subscription
 	*/
 	public addAlternateSubscription(subscriptionType:string):void{
@@ -227,6 +227,13 @@ export class RecruiterAccountComponent implements OnInit {
 		err => {
 			console.log(JSON.stringify(err));		
 		});
+	}
+	
+	/**
+	* Returns the Recruiters subscriptions in time desc order
+	*/
+	public getOrderedRecruiterSubscriptions():Array<Subscription>{
+		return  (this.recruiter.subscriptions.sort((a:Subscription,b:Subscription) => new Date(a.created).getTime() - new Date(b.created).getTime())).reverse();
 	}
 	
 }

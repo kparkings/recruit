@@ -38,9 +38,8 @@ public class TrialPeriodrSubscriptionActionHandlerTest {
 													.subscriptions(Set.of(subscription1, subscription2))
 													.build();
 		
-		handler.performAction(recruiter, subscription2, subscription_action.ACTIVATE_SUBSCRIPTION);
+		handler.performAction(recruiter, subscription2, subscription_action.ACTIVATE_SUBSCRIPTION, true);
 		
-		assertFalse(subscription1.isCurrentSubscription());
 		assertTrue(subscription2.isCurrentSubscription());
 		
 		assertEquals(subscription_status.ACTIVE, subscription2.getStatus());
@@ -65,7 +64,7 @@ public class TrialPeriodrSubscriptionActionHandlerTest {
 													.subscriptions(Set.of(subscription1, subscription2))
 													.build();
 		
-		handler.performAction(recruiter, subscription2, subscription_action.REJECT_SUBSCRIPTION);
+		handler.performAction(recruiter, subscription2, subscription_action.REJECT_SUBSCRIPTION, true);
 		
 		assertTrue(subscription1.isCurrentSubscription());
 		assertFalse(subscription2.isCurrentSubscription());
@@ -93,7 +92,7 @@ public class TrialPeriodrSubscriptionActionHandlerTest {
 													.build();
 	
 		Assertions.assertThrows(IllegalArgumentException.class, () -> {
-			handler.performAction(recruiter, subscription2, subscription_action.END_SUBSCRIPTION);
+			handler.performAction(recruiter, subscription2, subscription_action.END_SUBSCRIPTION, true);
 		});
 			
 	}
@@ -115,7 +114,7 @@ public class TrialPeriodrSubscriptionActionHandlerTest {
 													.subscriptions(Set.of(subscription2))
 													.build();
 		
-		handler.performAction(recruiter, subscription2, subscription_action.END_SUBSCRIPTION);
+		handler.performAction(recruiter, subscription2, subscription_action.END_SUBSCRIPTION, true);
 		
 		assertFalse(subscription2.isCurrentSubscription());
 		
@@ -141,7 +140,7 @@ public class TrialPeriodrSubscriptionActionHandlerTest {
 													.build();
 	
 		Assertions.assertThrows(IllegalArgumentException.class, () -> {
-			handler.performAction(recruiter, subscription1, subscription_action.ACTIVATE_SUBSCRIPTION);
+			handler.performAction(recruiter, subscription1, subscription_action.ACTIVATE_SUBSCRIPTION, true);
 		});
 			
 	}
@@ -164,7 +163,7 @@ public class TrialPeriodrSubscriptionActionHandlerTest {
 													.build();
 	
 		Assertions.assertThrows(IllegalArgumentException.class, () -> {
-			handler.performAction(recruiter, subscription1, subscription_action.ACTIVATE_SUBSCRIPTION);
+			handler.performAction(recruiter, subscription1, subscription_action.ACTIVATE_SUBSCRIPTION, true);
 		});
 			
 	}

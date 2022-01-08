@@ -2,8 +2,6 @@ package com.arenella.recruit.recruiters.beans;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
-import java.util.stream.Collectors;
-
 import com.arenella.recruit.recruiters.utils.RecruiterSubscriptionActionHandler;
 
 /**
@@ -105,8 +103,10 @@ public class TrialPeriodSubscription implements RecruiterSubscription{
 			throw new IllegalStateException("You cant activate a Subscription more than once");
 		}
 		
-		this.status 		= subscription_status.ACTIVE;
-		this.activatedDate 	= LocalDateTime.now();
+		this.currentSubscription	= true;
+		this.status 				= subscription_status.ACTIVE;
+		this.activatedDate 			= LocalDateTime.now();
+		
 	}
 	
 	/**
@@ -223,9 +223,10 @@ public class TrialPeriodSubscription implements RecruiterSubscription{
 
 		/**
 		* Refer to RecruiterSubscriptionActionHandler for details 
+		* @throws IllegalAccessException 
 		*/
 		@Override
-		public void performAction(Recruiter recruiter, RecruiterSubscription subscription,  subscription_action action) {
+		public void performAction(Recruiter recruiter, RecruiterSubscription subscription,  subscription_action action, Boolean isAdminUser) throws IllegalAccessException {
 
 			TrialPeriodSubscription currentSubscription = ((TrialPeriodSubscription)subscription);
 			
@@ -237,19 +238,28 @@ public class TrialPeriodSubscription implements RecruiterSubscription{
 				switch (action) {
 					case ACTIVATE_SUBSCRIPTION:{
 						
-						currentSubscription.activateSubscription();
-						currentSubscription.setCurrentSubscription(true);
-						recruiter.getSubscriptions().stream().map(s -> (TrialPeriodSubscription)s).collect(Collectors.toSet()).stream().forEach(s -> {
+						if (!isAdminUser) {
+							throw new IllegalAccessException("You are not authorized to carry out this action");
+						}
 						
-							if (s.getSubscriptionId() != subscription.getSubscriptionId()) {
-								s.setCurrentSubscription(false);
-							}
-							
-						});
+						currentSubscription.activateSubscription();
+						
+						//currentSubscription.setCurrentSubscription(true);
+						//recruiter.getSubscriptions().stream().map(s -> (TrialPeriodSubscription)s).collect(Collectors.toSet()).stream().forEach(s -> {
+						//
+						//	if (s.getSubscriptionId() != subscription.getSubscriptionId()) {
+						//		s.setCurrentSubscription(false);
+						//	}
+						//	
+						//});
 							
 						return;
 					}
 					case REJECT_SUBSCRIPTION:{
+						
+						if (!isAdminUser) {
+							throw new IllegalAccessException("You are not authorized to carry out this action");
+						}
 						
 						if (subscription.getStatus() == subscription_status.AWAITING_ACTIVATION) {
 							currentSubscription.endSubscription();

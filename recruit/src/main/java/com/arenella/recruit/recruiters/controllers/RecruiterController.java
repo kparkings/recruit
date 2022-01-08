@@ -36,10 +36,11 @@ public class RecruiterController {
 	/**
 	* Adds a new Recruiter
 	* @param recruiter
+	* @throws IllegalAccessException 
 	*/
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@PostMapping(value="/recruiter")
-	public ResponseEntity<Void> addRecruiter(@RequestBody RecruiterAPIInbound recruiter) {
+	public ResponseEntity<Void> addRecruiter(@RequestBody RecruiterAPIInbound recruiter) throws IllegalAccessException {
 		
 		recruiterService.addRecruiter(RecruiterAPIInbound.convertToDomin(recruiter));
 		

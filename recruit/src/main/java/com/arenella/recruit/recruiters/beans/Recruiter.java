@@ -24,7 +24,7 @@ public class Recruiter {
 	private Set<RecruiterSubscription> 	subscriptions 		= new LinkedHashSet<>();
 	
 	/**
-	* Constuctor based upon a builder
+	* Constructor based upon a builder
 	* @param builder - Contains initialization details
 	*/
 	public Recruiter(RecruiterBuilder builder) {

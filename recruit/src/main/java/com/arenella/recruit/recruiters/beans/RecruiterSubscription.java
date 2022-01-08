@@ -12,7 +12,7 @@ public interface RecruiterSubscription {
 
 	public static enum subscription_type 	{FIRST_GEN, TRIAL_PERIOD, YEAR_SUBSCRIPTION}
 	public static enum subscription_status 	{AWAITING_ACTIVATION, ACTIVE_PENDING_PAYMENT, ACTIVE, DISABLED_PENDING_PAYMENT, SUBSCRIPTION_ENDED}
-	public static enum subscription_action 	{ACTIVATE_SUBSCRIPTION, REJECT_SUBSCRIPTION, END_SUBSCRIPTION}
+	public static enum subscription_action 	{ACTIVATE_SUBSCRIPTION, REJECT_SUBSCRIPTION, DISABLE_PENDING_PAYMENT, END_SUBSCRIPTION}
 	
 	/**
 	* Returns the unique Id of the Subscription
