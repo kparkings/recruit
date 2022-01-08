@@ -1,5 +1,6 @@
 package com.arenella.recruit.recruiters.controllers;
 
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -21,6 +22,7 @@ import com.arenella.recruit.recruiters.beans.RecruiterAPIOutbound;
 import com.arenella.recruit.recruiters.beans.RecruiterAccountRequestAPIInbound;
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_action;
 import com.arenella.recruit.recruiters.beans.SubscriptionAPIInbound;
+import com.arenella.recruit.recruiters.beans.SubscriptionActionFeedback;
 import com.arenella.recruit.recruiters.services.RecruiterService;
 
 /**
@@ -54,16 +56,9 @@ public class RecruiterController {
 	@PostMapping(value="/public/recruiter")
 	public ResponseEntity<Void> requestRecruiterAccount(@RequestBody RecruiterAccountRequestAPIInbound recruiter) {
 		
-		
 		recruiterService.addRecruiterAccountRequest(RecruiterAccountRequestAPIInbound.convertToDomin(recruiter));
 		
-		//TODO: Need service call to create Recruiter but not activate. Instead must set the correct sttus
-		
-		//TODO: Script to migrate current recruiters to FIRST_GEN accounts
-		
-		//TODO: Once created GUI needs to show [Account created. Your request will be processed and your account details sent to your provided email address]
-		
-		//recruiterService.addRecruiter(RecruiterAPIInbound.convertToDomin(recruiter));
+		//TODO: Need service call to create Recruiter but not activate. Instead must set the correct status
 		
 		return ResponseEntity.status(HttpStatus.OK).build();
 	}
@@ -130,7 +125,7 @@ public class RecruiterController {
 	*/
 	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('RECRUITER')")
 	@PutMapping(value="/recruiter/{recruiterId}/subscription/{subscriptionId}/")
-	public ResponseEntity<Void> performSubscriptionAction(@PathVariable("recruiterId") String recruiterId, @PathVariable("subscriptionId") UUID subscriptionId, @RequestParam("action") subscription_action action)  throws IllegalAccessException{
+	public ResponseEntity<Optional<SubscriptionActionFeedback>> performSubscriptionAction(@PathVariable("recruiterId") String recruiterId, @PathVariable("subscriptionId") UUID subscriptionId, @RequestParam("action") subscription_action action)  throws IllegalAccessException{
 		this.recruiterService.performSubscriptionAction(recruiterId, subscriptionId, action);
 		return ResponseEntity.ok().build();
 	}

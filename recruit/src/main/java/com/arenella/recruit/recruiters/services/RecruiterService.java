@@ -1,9 +1,11 @@
 package com.arenella.recruit.recruiters.services;
 
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
 import com.arenella.recruit.recruiters.beans.Recruiter;
+import com.arenella.recruit.recruiters.beans.SubscriptionActionFeedback;
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_action;
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_type;
 
@@ -61,9 +63,10 @@ public interface RecruiterService {
 	* @param recruiterId		- Unique Id of the Recruiter owning the Subscription
 	* @param subscriptionId		- Unique Id of the subscription to be amended
 	* @param action				- Action to perform on the Subscription
+	* @returns Optional feedback specific to the Action performed
 	* @throws  IllegalAccessException
 	*/
-	public void performSubscriptionAction(String recruiterId, UUID subscriptionId, subscription_action action)  throws IllegalAccessException;
+	public Optional<SubscriptionActionFeedback> performSubscriptionAction(String recruiterId, UUID subscriptionId, subscription_action action)  throws IllegalAccessException;
 
 	/**
 	* Adds / switches the Recruiters subscription type. 

@@ -3,6 +3,7 @@ package com.arenella.recruit.recruiters.controllers;
 import static org.junit.Assert.assertEquals;
 
 import java.time.LocalDate;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
@@ -24,6 +25,7 @@ import com.arenella.recruit.recruiters.beans.RecruiterAccountRequestAPIInbound;
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_action;
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_type;
 import com.arenella.recruit.recruiters.beans.SubscriptionAPIInbound;
+import com.arenella.recruit.recruiters.beans.SubscriptionActionFeedback;
 import com.arenella.recruit.recruiters.services.RecruiterService;
 
 /**
@@ -223,9 +225,9 @@ public class RecruiterControllerTest {
 		final UUID 					subscriptionId 			= UUID.randomUUID();
 		final subscription_action 	action 					= subscription_action.ACTIVATE_SUBSCRIPTION; 	
 	
-		Mockito.doNothing().when(this.mockRecruiterService).performSubscriptionAction(recruiterId, subscriptionId, action);
+		Mockito.when(this.mockRecruiterService.performSubscriptionAction(recruiterId, subscriptionId, action)).thenReturn(Optional.empty());
 		
-		ResponseEntity<Void> response = this.recruiterController.performSubscriptionAction(recruiterId, subscriptionId, action);
+		ResponseEntity<Optional<SubscriptionActionFeedback>> response = this.recruiterController.performSubscriptionAction(recruiterId, subscriptionId, action);
 		
 		Mockito.verify(this.mockRecruiterService).performSubscriptionAction(recruiterId, subscriptionId, action);
 		

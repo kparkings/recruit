@@ -1,6 +1,7 @@
 package com.arenella.recruit.recruiters.beans;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.UUID;
 
 import com.arenella.recruit.recruiters.utils.RecruiterSubscriptionActionHandler;
@@ -208,7 +209,7 @@ public class FirstGenRecruiterSubscription implements RecruiterSubscription{
 		* Refer to RecruiterSubscriptionActionHandler for details 
 		*/
 		@Override
-		public void performAction(Recruiter recruiter, RecruiterSubscription subscription,  subscription_action action, Boolean isAdmin) {
+		public Optional<SubscriptionActionFeedback> performAction(Recruiter recruiter, RecruiterSubscription subscription,  subscription_action action, Boolean isAdmin) {
 			
 			switch(action) {
 			

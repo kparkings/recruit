@@ -22,6 +22,7 @@ import com.arenella.recruit.recruiters.beans.RecruiterSubscription;
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_action;
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_status;
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_type;
+import com.arenella.recruit.recruiters.beans.SubscriptionActionFeedback;
 import com.arenella.recruit.recruiters.beans.TrialPeriodSubscription;
 import com.arenella.recruit.recruiters.beans.YearlyRecruiterSubscription;
 import com.arenella.recruit.recruiters.dao.RecruiterDao;
@@ -168,7 +169,7 @@ public class RecruiterServiceImpl implements RecruiterService{
 	* @throws IllegalAccessException 
 	*/
 	@Override
-	public void performSubscriptionAction(String recruiterId, UUID subscriptionId, subscription_action action) throws IllegalAccessException {
+	public Optional<SubscriptionActionFeedback> performSubscriptionAction(String recruiterId, UUID subscriptionId, subscription_action action) throws IllegalAccessException {
 		
 		//0
 		performIsAdminOrRecruiterAccessingOwnAccountCheck(recruiterId);
@@ -182,7 +183,7 @@ public class RecruiterServiceImpl implements RecruiterService{
 		//3. Pass to Subscription to validate and handle action
 		RecruiterSubscriptionActionHandler actionHandler = this.recruiterSubscriptionFactory.getActionHandlerByType(subscription.getType());
 		
-		actionHandler.performAction(recruiter, subscription, action, isAdmin());
+		Optional<SubscriptionActionFeedback> feedback = actionHandler.performAction(recruiter, subscription, action, isAdmin());
 		
 		//4. Check that after action maximum 1 subscriptions is active
 		if (recruiter.getSubscriptions().stream().filter(s -> s.isCurrentSubscription()).count() > 1) {
@@ -193,6 +194,7 @@ public class RecruiterServiceImpl implements RecruiterService{
 		
 		this.recruiterDao.save(entity);
 		
+		return feedback;
 	}
 	
 	/**

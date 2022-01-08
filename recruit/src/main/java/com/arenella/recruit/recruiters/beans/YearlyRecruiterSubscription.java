@@ -1,6 +1,7 @@
 package com.arenella.recruit.recruiters.beans;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.UUID;
 
 import com.arenella.recruit.recruiters.utils.RecruiterSubscriptionActionHandler;
@@ -222,7 +223,7 @@ public class YearlyRecruiterSubscription implements RecruiterSubscription{
 		* Refer to RecruiterSubscriptionActionHandler for details 
 		*/
 		@Override
-		public void performAction(Recruiter recruiter, RecruiterSubscription subscription, subscription_action action, Boolean isAdminUser) throws IllegalAccessException{
+		public Optional<SubscriptionActionFeedback> performAction(Recruiter recruiter, RecruiterSubscription subscription, subscription_action action, Boolean isAdminUser) throws IllegalAccessException{
 			
 			switch(action) {
 				case ACTIVATE_SUBSCRIPTION:{
@@ -237,7 +238,7 @@ public class YearlyRecruiterSubscription implements RecruiterSubscription{
 					
 					((YearlyRecruiterSubscription)subscription).activateSubscription();
 					
-					return;
+					return Optional.empty();
 				}
 				case DISABLE_PENDING_PAYMENT: {
 					
@@ -251,7 +252,7 @@ public class YearlyRecruiterSubscription implements RecruiterSubscription{
 					
 					((YearlyRecruiterSubscription)subscription).disablePendingPayment();
 					
-					return;
+					return Optional.empty();
 				}
 				case END_SUBSCRIPTION: {
 					
@@ -265,7 +266,7 @@ public class YearlyRecruiterSubscription implements RecruiterSubscription{
 					
 					((YearlyRecruiterSubscription)subscription).endSubscription();
 					
-					return;
+					return Optional.empty();
 					
 				}
 				default:{

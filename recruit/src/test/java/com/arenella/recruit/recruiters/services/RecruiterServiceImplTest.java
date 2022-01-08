@@ -466,7 +466,7 @@ public class RecruiterServiceImplTest {
 		
 		Mockito.when(this.mockDao.findRecruiterById(recruiterId)).thenReturn(Optional.of(recruiter));
 		Mockito.when(this.mockRecruiterSubscriptionFactory.getActionHandlerByType(Mockito.any())).thenReturn(mockRecruiterSubscriptionActionHandler);
-		Mockito.doNothing().when(mockRecruiterSubscriptionActionHandler).performAction(Mockito.any(), Mockito.any(), Mockito.any(), Mockito.any());
+		Mockito.when(mockRecruiterSubscriptionActionHandler.performAction(Mockito.any(), Mockito.any(), Mockito.any(), Mockito.any())).thenReturn(Optional.empty());
 		
 		assertThrows(IllegalStateException.class, () -> {
 			this.service.performSubscriptionAction(recruiterId, subscriptionId1, action);
@@ -501,7 +501,7 @@ public class RecruiterServiceImplTest {
 		
 		Mockito.when(this.mockDao.findRecruiterById(recruiterId)).thenReturn(Optional.of(recruiter));
 		Mockito.when(this.mockRecruiterSubscriptionFactory.getActionHandlerByType(Mockito.any())).thenReturn(mockRecruiterSubscriptionActionHandler);
-		Mockito.doNothing().when(mockRecruiterSubscriptionActionHandler).performAction(Mockito.any(), Mockito.any(), Mockito.any(), Mockito.any());
+		Mockito.when(mockRecruiterSubscriptionActionHandler.performAction(Mockito.any(), Mockito.any(), Mockito.any(), Mockito.any())).thenReturn(Optional.empty());
 		
 		this.service.performSubscriptionAction(recruiterId, subscriptionId1, action);
 		
@@ -540,7 +540,7 @@ public class RecruiterServiceImplTest {
 		
 		Mockito.when(this.mockDao.findRecruiterById(recruiterId)).thenReturn(Optional.of(recruiter));
 		Mockito.when(this.mockRecruiterSubscriptionFactory.getActionHandlerByType(Mockito.any())).thenReturn(mockRecruiterSubscriptionActionHandler);
-		Mockito.doNothing().when(mockRecruiterSubscriptionActionHandler).performAction(Mockito.any(), Mockito.any(), Mockito.any(), Mockito.any());
+		Mockito.when(mockRecruiterSubscriptionActionHandler.performAction(Mockito.any(), Mockito.any(), Mockito.any(), Mockito.any())).thenReturn(Optional.empty());
 		
 		this.service.performSubscriptionAction(recruiterId, subscriptionId1, action);
 		

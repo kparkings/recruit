@@ -1,6 +1,7 @@
 package com.arenella.recruit.recruiters.beans;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.UUID;
 import com.arenella.recruit.recruiters.utils.RecruiterSubscriptionActionHandler;
 
@@ -226,7 +227,7 @@ public class TrialPeriodSubscription implements RecruiterSubscription{
 		* @throws IllegalAccessException 
 		*/
 		@Override
-		public void performAction(Recruiter recruiter, RecruiterSubscription subscription,  subscription_action action, Boolean isAdminUser) throws IllegalAccessException {
+		public Optional<SubscriptionActionFeedback> performAction(Recruiter recruiter, RecruiterSubscription subscription,  subscription_action action, Boolean isAdminUser) throws IllegalAccessException {
 
 			TrialPeriodSubscription currentSubscription = ((TrialPeriodSubscription)subscription);
 			
@@ -253,7 +254,7 @@ public class TrialPeriodSubscription implements RecruiterSubscription{
 						//	
 						//});
 							
-						return;
+						return Optional.empty();
 					}
 					case REJECT_SUBSCRIPTION:{
 						
@@ -266,7 +267,7 @@ public class TrialPeriodSubscription implements RecruiterSubscription{
 							currentSubscription.setCurrentSubscription(false);
 						}
 						
-						return;
+						return Optional.empty();
 					}
 					default:{}
 				}
@@ -283,7 +284,7 @@ public class TrialPeriodSubscription implements RecruiterSubscription{
 				if (action == subscription_action.END_SUBSCRIPTION) {
 					currentSubscription.endSubscription();
 					currentSubscription.setCurrentSubscription(false);
-					return;
+					return Optional.empty();
 				}
 			
 				throw new IllegalArgumentException("Unable to perform selected action " + action + " on subscription : " + subscription.getSubscriptionId());
