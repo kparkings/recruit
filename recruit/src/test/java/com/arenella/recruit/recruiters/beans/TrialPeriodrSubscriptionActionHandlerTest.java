@@ -9,17 +9,28 @@ import java.util.UUID;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.arenella.recruit.recruiters.adapters.RecruitersExternalEventPublisher;
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_action;
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_status;
-import com.arenella.recruit.recruiters.beans.TrialPeriodSubscription.ActionHandler;
 
 /**
 * Unit tests for the TrialPeriodSubscription ActionHandler class
 * @author K Parkings
 */
+@ExtendWith(MockitoExtension.class)
 public class TrialPeriodrSubscriptionActionHandlerTest {
 
+	@InjectMocks
+	TrialPeriodSubscriptionActionHandler 	handler;
+	
+	@Mock
+	RecruitersExternalEventPublisher 		mockExternEventPublisher;
+	
 	/**
 	* Tests handler for combination
 	* STATE: 	AWAITING_ACTIVATION
@@ -28,8 +39,6 @@ public class TrialPeriodrSubscriptionActionHandlerTest {
 	*/
 	@Test
 	public void testActionHandler_awaitingActivation_activateSubscription() throws Exception {
-		
-		ActionHandler handler = TrialPeriodSubscription.getActionHandler();
 		
 		RecruiterSubscription 	subscription1 	= TrialPeriodSubscription.builder().subscriptionId(UUID.randomUUID()).currentSubscription(true).build();
 		RecruiterSubscription 	subscription2 	= TrialPeriodSubscription.builder().subscriptionId(UUID.randomUUID()).currentSubscription(false).status(subscription_status.AWAITING_ACTIVATION).build();
@@ -54,8 +63,6 @@ public class TrialPeriodrSubscriptionActionHandlerTest {
 	*/
 	@Test
 	public void testActionHandler_awaitingActivation_rejectSubscription() throws Exception {
-		
-		ActionHandler handler = TrialPeriodSubscription.getActionHandler();
 		
 		RecruiterSubscription 	subscription1 	= TrialPeriodSubscription.builder().subscriptionId(UUID.randomUUID()).currentSubscription(true).build();
 		RecruiterSubscription 	subscription2 	= TrialPeriodSubscription.builder().subscriptionId(UUID.randomUUID()).currentSubscription(false).status(subscription_status.AWAITING_ACTIVATION).build();
@@ -82,8 +89,6 @@ public class TrialPeriodrSubscriptionActionHandlerTest {
 	@Test
 	public void testActionHandler_awaitingActivation_unsupportedAction() throws Exception {
 		
-		ActionHandler handler = TrialPeriodSubscription.getActionHandler();
-		
 		RecruiterSubscription 	subscription1 	= TrialPeriodSubscription.builder().subscriptionId(UUID.randomUUID()).currentSubscription(true).build();
 		RecruiterSubscription 	subscription2 	= TrialPeriodSubscription.builder().subscriptionId(UUID.randomUUID()).currentSubscription(false).status(subscription_status.AWAITING_ACTIVATION).build();
 		Recruiter 				recruiter 		= Recruiter
@@ -105,8 +110,6 @@ public class TrialPeriodrSubscriptionActionHandlerTest {
 	*/
 	@Test
 	public void testActionHandler_active_endSubscription() throws Exception {
-		
-		ActionHandler handler = TrialPeriodSubscription.getActionHandler();
 		
 		RecruiterSubscription 	subscription2 	= TrialPeriodSubscription.builder().subscriptionId(UUID.randomUUID()).currentSubscription(true).status(subscription_status.ACTIVE).build();
 		Recruiter 				recruiter 		= Recruiter
@@ -131,8 +134,6 @@ public class TrialPeriodrSubscriptionActionHandlerTest {
 	@Test
 	public void testActionHandler_active_unsupportedAction() throws Exception {
 		
-		ActionHandler handler = TrialPeriodSubscription.getActionHandler();
-		
 		RecruiterSubscription 	subscription1 	= TrialPeriodSubscription.builder().subscriptionId(UUID.randomUUID()).currentSubscription(true).status(subscription_status.ACTIVE).build();
 		Recruiter 				recruiter 		= Recruiter
 													.builder()
@@ -153,8 +154,6 @@ public class TrialPeriodrSubscriptionActionHandlerTest {
 	*/
 	@Test
 	public void testActionHandler_unsupported_state() throws Exception {
-		
-		ActionHandler handler = TrialPeriodSubscription.getActionHandler();
 		
 		RecruiterSubscription 	subscription1 	= TrialPeriodSubscription.builder().subscriptionId(UUID.randomUUID()).currentSubscription(true).status(subscription_status.DISABLED_PENDING_PAYMENT).build();
 		Recruiter 				recruiter 		= Recruiter

@@ -30,7 +30,7 @@ public class RecruitersMonolithExternalEventPublisher implements RecruitersExter
 	@Override
 	public void publishRecruiterAccountCreatedEvent(RecruiterCreatedEvent event) {
 		
-		authenticationExternalEventListener.listenForRecruiterCreatedEvent(null);
+		authenticationExternalEventListener.listenForRecruiterCreatedEvent(event);
 		
 	}
 

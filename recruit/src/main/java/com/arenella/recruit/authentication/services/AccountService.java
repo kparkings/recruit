@@ -16,4 +16,13 @@ public interface AccountService {
 	*/
 	public User createAccount(String proposedUsername, AccountType accountType);
 	
+	/**
+	* Creates a new account for a User where and encrypted password has already been 
+	* provided
+	* @param username			- Users id
+	* @param encryptedPassword  - Encrypted version of password for the User
+	* @return
+	*/
+	public void createAccount(String username, String encryptedPassword, AccountType accountType);
+	
 }

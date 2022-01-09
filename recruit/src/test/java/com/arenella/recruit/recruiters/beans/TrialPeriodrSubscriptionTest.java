@@ -11,7 +11,10 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+import org.springframework.test.util.ReflectionTestUtils;
 
+import com.arenella.recruit.recruiters.adapters.RecruitersExternalEventPublisher;
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_action;
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_status;
 
@@ -21,6 +24,8 @@ import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_
 */
 public class TrialPeriodrSubscriptionTest {
 
+	RecruitersExternalEventPublisher mockExternEventPublisher = Mockito.mock(RecruitersExternalEventPublisher.class);
+	
 	/**
 	* Tests creation via the Builder
 	* @throws Exception
@@ -116,9 +121,8 @@ public class TrialPeriodrSubscriptionTest {
 	
 		TrialPeriodSubscription subscription = TrialPeriodSubscription.builder().build();
 		
-		TrialPeriodSubscription.getActionHandler();
 		assertThrows(IllegalAccessException.class, () -> {
-			TrialPeriodSubscription.getActionHandler().performAction(null, subscription, subscription_action.ACTIVATE_SUBSCRIPTION, false);
+			new TrialPeriodSubscriptionActionHandler().performAction(null, subscription, subscription_action.ACTIVATE_SUBSCRIPTION, false);
 		});
 	
 	}
@@ -132,9 +136,8 @@ public class TrialPeriodrSubscriptionTest {
 		
 		TrialPeriodSubscription subscription = TrialPeriodSubscription.builder().build();
 		
-		TrialPeriodSubscription.getActionHandler();
 		assertThrows(IllegalAccessException.class, () -> {
-			TrialPeriodSubscription.getActionHandler().performAction(null, subscription, subscription_action.REJECT_SUBSCRIPTION, false);
+			new TrialPeriodSubscriptionActionHandler().performAction(null, subscription, subscription_action.REJECT_SUBSCRIPTION, false);
 		});
 		
 	}
@@ -152,7 +155,11 @@ public class TrialPeriodrSubscriptionTest {
 																	.currentSubscription(false)
 																.build();
 		
-		TrialPeriodSubscription.getActionHandler().performAction(null, subscription, subscription_action.ACTIVATE_SUBSCRIPTION, true);
+		TrialPeriodSubscriptionActionHandler actionHandler = new TrialPeriodSubscriptionActionHandler();
+		
+		ReflectionTestUtils.setField(actionHandler, "externEventPublisher", mockExternEventPublisher);
+		
+		actionHandler.performAction(Recruiter.builder().userId("kparkings").build(), subscription, subscription_action.ACTIVATE_SUBSCRIPTION, true);
 		
 		assertEquals(subscription_status.ACTIVE, subscription.getStatus());
 		assertTrue(subscription.isCurrentSubscription());
@@ -173,7 +180,7 @@ public class TrialPeriodrSubscriptionTest {
 																	.currentSubscription(false)
 																.build();
 		
-		TrialPeriodSubscription.getActionHandler().performAction(null, subscription, subscription_action.REJECT_SUBSCRIPTION, true);
+		new TrialPeriodSubscriptionActionHandler().performAction(null, subscription, subscription_action.REJECT_SUBSCRIPTION, true);
 		
 		assertEquals(subscription_status.SUBSCRIPTION_ENDED, subscription.getStatus());
 		assertFalse(subscription.isCurrentSubscription());
@@ -193,7 +200,7 @@ public class TrialPeriodrSubscriptionTest {
 																	.currentSubscription(false)
 																.build();
 		
-		TrialPeriodSubscription.getActionHandler().performAction(null, subscription, subscription_action.END_SUBSCRIPTION, true);
+		new TrialPeriodSubscriptionActionHandler().performAction(null, subscription, subscription_action.END_SUBSCRIPTION, true);
 		
 		assertEquals(subscription_status.SUBSCRIPTION_ENDED, subscription.getStatus());
 		assertFalse(subscription.isCurrentSubscription());

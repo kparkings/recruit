@@ -38,10 +38,10 @@ import com.arenella.recruit.recruiters.utils.RecruiterSubscriptionFactory;
 public class RecruiterServiceImpl implements RecruiterService{
 
 	@Autowired
-	private RecruiterDao 					recruiterDao;
+	private RecruiterDao 						recruiterDao;
 	
 	@Autowired
-	private RecruiterSubscriptionFactory 	recruiterSubscriptionFactory;
+	private RecruiterSubscriptionFactory 		recruiterSubscriptionFactory;
 	
 	/**
 	* Refer to the RecruiterService for details

@@ -4,23 +4,33 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.arenella.recruit.recruiters.beans.TrialPeriodSubscriptionActionHandler;
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_type;
 
 /**
 * Unit tests for the RecruiterSubscriptionFactory class
 * @author K Parkings
 */
+@ExtendWith(MockitoExtension.class)
 public class RecruiterSubscriptionFactoryTest {
-
+	
+	@InjectMocks
+	private RecruiterSubscriptionFactory factory = new RecruiterSubscriptionFactory();
+	
+	@Mock
+	private TrialPeriodSubscriptionActionHandler tiralPeriodctionHander;
+	
 	/**
 	* Tests exception thrown if type is null
 	* @throws Exception
 	*/
 	@Test
 	public void testNoTypeSpecified() throws Exception {
-		
-		RecruiterSubscriptionFactory factory = new RecruiterSubscriptionFactory();
 		
 		assertThrows(IllegalArgumentException.class, () -> {
 			factory.getActionHandlerByType(null);
@@ -34,8 +44,6 @@ public class RecruiterSubscriptionFactoryTest {
 	*/
 	@Test
 	public void testGetActionHandlers() throws Exception {
-		
-		RecruiterSubscriptionFactory factory = new RecruiterSubscriptionFactory();
 		
 		assertNotNull(factory.getActionHandlerByType(subscription_type.FIRST_GEN));
 		assertNotNull(factory.getActionHandlerByType(subscription_type.TRIAL_PERIOD));

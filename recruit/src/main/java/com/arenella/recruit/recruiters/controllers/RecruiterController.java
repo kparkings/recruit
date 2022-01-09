@@ -58,8 +58,6 @@ public class RecruiterController {
 		
 		recruiterService.addRecruiterAccountRequest(RecruiterAccountRequestAPIInbound.convertToDomin(recruiter));
 		
-		//TODO: Need service call to create Recruiter but not activate. Instead must set the correct status
-		
 		return ResponseEntity.status(HttpStatus.OK).build();
 	}
 	
@@ -126,8 +124,7 @@ public class RecruiterController {
 	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('RECRUITER')")
 	@PutMapping(value="/recruiter/{recruiterId}/subscription/{subscriptionId}/")
 	public ResponseEntity<Optional<SubscriptionActionFeedback>> performSubscriptionAction(@PathVariable("recruiterId") String recruiterId, @PathVariable("subscriptionId") UUID subscriptionId, @RequestParam("action") subscription_action action)  throws IllegalAccessException{
-		this.recruiterService.performSubscriptionAction(recruiterId, subscriptionId, action);
-		return ResponseEntity.ok().build();
+		return ResponseEntity.ok().body(this.recruiterService.performSubscriptionAction(recruiterId, subscriptionId, action));
 	}
 	
 }

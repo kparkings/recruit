@@ -411,8 +411,21 @@ export class AccountsComponent implements OnInit {
 	* Update Recruiters subscription
 	*/
 	performAction(subscriptionAction:SubscriptionAction, action:string) {
-		this.recruiterService.performSubscriptionAction(subscriptionAction.userId, subscriptionAction.subscriptionId, action).subscribe(data => {
+			
+			this.recruiterService.performSubscriptionAction(subscriptionAction.userId, subscriptionAction.subscriptionId, action).subscribe(data => {
+			
 			this.fetchRecruiters();
+			
+			/**
+			* IF action == 
+			*/
+			if (subscriptionAction.status === "AWAITING_ACTIVATION" && subscriptionAction.type === "TRIAL_PERIOD") {
+				//TODO: Show popup with new login details
+				console.log(JSON.stringify(data));
+				console.log("USER_ID: " + data.userId);
+				console.log("PASSWORD: " + data.password);
+			}
+			
 		}, 
 		err => {
 			console.log(JSON.stringify(err));		
