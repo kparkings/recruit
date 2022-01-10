@@ -9,6 +9,8 @@ import { Subscription }							from './subscription';
 import { SubscriptionAction }					from './subscription-action';
 import { environment }							from '../../environments/environment';
 import { Router}								from '@angular/router';
+import { NgbModal, NgbModalOptions}				from '@ng-bootstrap/ng-bootstrap';
+import { ViewChild }							from '@angular/core';
 
 @Component({
   selector: 'app-accounts',
@@ -16,6 +18,8 @@ import { Router}								from '@angular/router';
   styleUrls: ['./accounts.component.css']
 })
 export class AccountsComponent implements OnInit {
+	
+	@ViewChild('recruiterLoginDetails', { static: false }) private content:any;
 	
 	currentTab:string 												= "recruiters";
 	showRecruitersCreateTab:boolean									= false;
@@ -30,6 +34,8 @@ export class AccountsComponent implements OnInit {
 	recruiters:Array<Recruiter>										= new Array<Recruiter>();
 	recruitersWithSubscriptionActions:Array<SubscriptionAction>		= new Array<SubscriptionAction>();
 	recruiterCount:number											= 0;
+	activateRecruiterUserId:string									= '';
+	activateRecruiterUserPassword:string							= '';
 	
 	public candidateFormGroup:FormGroup = new FormGroup({
 		firstname:	new FormControl(''),
@@ -37,7 +43,7 @@ export class AccountsComponent implements OnInit {
 		email:		new FormControl('')
 	});
 	
-	constructor(private recruiterService:RecruiterService, private accountsService: AccountsService, public candidateService:CandidateServiceService, private router: Router) {
+	constructor(private recruiterService:RecruiterService, private accountsService: AccountsService, public candidateService:CandidateServiceService, private modalService: NgbModal, private router: Router) {
 		this.fetchRecruiters();
 	 }
 
@@ -412,6 +418,9 @@ export class AccountsComponent implements OnInit {
 	*/
 	performAction(subscriptionAction:SubscriptionAction, action:string) {
 			
+			this.activateRecruiterUserId		= ''; 
+			this.activateRecruiterUserPassword	= '';
+	
 			this.recruiterService.performSubscriptionAction(subscriptionAction.userId, subscriptionAction.subscriptionId, action).subscribe(data => {
 			
 			this.fetchRecruiters();
@@ -420,10 +429,10 @@ export class AccountsComponent implements OnInit {
 			* IF action == 
 			*/
 			if (subscriptionAction.status === "AWAITING_ACTIVATION" && subscriptionAction.type === "TRIAL_PERIOD") {
-				//TODO: Show popup with new login details
-				console.log(JSON.stringify(data));
-				console.log("USER_ID: " + data.userId);
-				console.log("PASSWORD: " + data.password);
+				
+				this.activateRecruiterUserId		= data.userId; 
+				this.activateRecruiterUserPassword	= data.password;
+				this.openModal();
 			}
 			
 		}, 
@@ -431,5 +440,26 @@ export class AccountsComponent implements OnInit {
 			console.log(JSON.stringify(err));		
 		});
 	}
+	
+	/**
+  	*  Closes the filter popup
+  	*/
+  	public closeModal(): void {
+		this.activateRecruiterUserId			= '';
+		this.activateRecruiterUserPassword		= '';
+    	this.modalService.dismissAll();
+  	}
+
+	/**
+	* Opens the feedback popup
+	*/
+	public openModal(): void {
+		
+    	let options: NgbModalOptions = {
+     		centered: true
+   		};
+
+  		this.modalService.open(this.content, options);
+  	};
 
 }

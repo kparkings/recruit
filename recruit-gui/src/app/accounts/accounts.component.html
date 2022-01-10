@@ -226,4 +226,29 @@
 		</table>
 	<div>
 	
+	<ng-template #recruiterLoginDetails let-modal>
+	
+		<!--  Options -->
+		<div class="modal-header">
+			<h4 class="modal-title">Actions</h4>
+			<div class="filter-close-box" (click)="closeModal()">X</div>
+		</div>
+		<div class="modal-body">
+			<!--  Specific Filters -->
+			<div>
+				<table>
+					<tr>
+						<td class="feedback-label">UserId</td>
+						<td>{{activateRecruiterUserId}}</td>
+					</tr>
+					<tr>
+						<td class="feedback-label">Password</td>
+						<td>{{activateRecruiterUserPassword}}</td>
+					</tr>
+				</table>
+			</div>
+		</div> 
+	</ng-template>
+	
+	
 </div>
