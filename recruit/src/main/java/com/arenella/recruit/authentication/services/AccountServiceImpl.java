@@ -1,6 +1,7 @@
 package com.arenella.recruit.authentication.services;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -51,6 +52,22 @@ public class AccountServiceImpl implements AccountService{
 			userName = proposedUsername + duplicated.getAndIncrement();
 			
 		}
+		
+	}
+	
+	/**
+	* Refer to AccountService for details 
+	*/
+	@Override
+	public void replaceRolesForUser(String userId, Set<USER_ROLE> roles) {
+		
+		Optional<User>  userOpt = this.userDao.fetchUser(userId);
+				
+		User user = userOpt.orElseThrow(() -> new IllegalArgumentException("Cannot Switch AccountType for User: " + userId));
+		
+		user.replaceRoles(roles);
+		
+		userDao.save(UserEntity.convertToEntity(user));
 		
 	}
 	

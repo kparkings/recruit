@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 import com.arenella.recruit.recruiters.beans.FirstGenRecruiterSubscription;
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_type;
 import com.arenella.recruit.recruiters.beans.TrialPeriodSubscriptionActionHandler;
-import com.arenella.recruit.recruiters.beans.YearlyRecruiterSubscription;
+import com.arenella.recruit.recruiters.beans.YearlySubscriptionActionHandler;
 
 /**
 * Factory for retrieving a RecruiterSubscription 
@@ -17,7 +17,10 @@ import com.arenella.recruit.recruiters.beans.YearlyRecruiterSubscription;
 public class RecruiterSubscriptionFactory {
 	
 	@Autowired
-	private TrialPeriodSubscriptionActionHandler trialPeriodActionHandler;
+	private TrialPeriodSubscriptionActionHandler 	trialPeriodActionHandler;
+	
+	@Autowired
+	private YearlySubscriptionActionHandler 		yearlySubscriptionActionHandler;
 	
 	/**
 	* Returns appropriate Action handler for the Subscription type
@@ -38,7 +41,7 @@ public class RecruiterSubscriptionFactory {
 				return trialPeriodActionHandler;
 			}
 			case YEAR_SUBSCRIPTION:{
-				return YearlyRecruiterSubscription.getActionHandler();
+				return yearlySubscriptionActionHandler;
 			}
 			default:{
 				throw new IllegalArgumentException("Unknown subscriptionType: "  + subscriptionType);

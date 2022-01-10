@@ -9,7 +9,7 @@ import java.util.Set;
 */
 public class User {
 
-	public static enum USER_ROLE{admin, recruiter}
+	public static enum USER_ROLE{admin, recruiter, recruiterNoSubscrition}
 	
 	private String			username;
 	private String			password;
@@ -61,6 +61,15 @@ public class User {
 	public Set<USER_ROLE> getRoles(){
 		return this.roles;
 	}
+	
+	/**
+	* Replaces existing roles with the new roles
+	* @param roles - Users roles
+	*/
+	public void replaceRoles(Set<USER_ROLE> roles) {
+		this.roles.clear();
+		this.roles.addAll(roles);
+	} 
 	
 	/**
 	* Returns an instance of a builder for the User class

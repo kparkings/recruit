@@ -2,7 +2,7 @@
 	
 	<!-- Nav options -->
 	<ul class="nav nav-tabs">
-	  <li class="nav-item">
+	  <li class="nav-item" *ngIf="!isRecruiterNoSubscription()">
 	    <span class="nav-link tabNav" (click)="switchTab('showAccountDetails')">Account Details</span>
 	  </li>
 	  <li class="nav-item">

@@ -26,7 +26,13 @@ export class RecruiterAccountComponent implements OnInit {
 	* Initializes the Component
 	*/
 	ngOnInit(): void {
+		
 		this.fetchRecruiterDetails();
+		
+		if (this.isRecruiterNoSubscription()) {
+			this.switchTab("showSubscriptions");
+		}
+		
   	}
 
 	currentTab:string 					= "downloads";
@@ -234,6 +240,14 @@ export class RecruiterAccountComponent implements OnInit {
 	*/
 	public getOrderedRecruiterSubscriptions():Array<Subscription>{
 		return  (this.recruiter.subscriptions.sort((a:Subscription,b:Subscription) => new Date(a.created).getTime() - new Date(b.created).getTime())).reverse();
+	}
+	
+	/**
+	* Whether or not the recruiter that has no open Subscriptiion
+	*/
+	public isRecruiterNoSubscription():boolean{
+		return true;
+		//return sessionStorage.getItem('isRecruiterNoSubscription') === 'true';
 	}
 	
 }

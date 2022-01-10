@@ -1,6 +1,9 @@
 package com.arenella.recruit.authentication.services;
 
+import java.util.Set;
+
 import com.arenella.recruit.authentication.beans.User;
+import com.arenella.recruit.authentication.beans.User.USER_ROLE;
 import com.arenella.recruit.authentication.enums.AccountType;
 
 /**
@@ -24,5 +27,12 @@ public interface AccountService {
 	* @return
 	*/
 	public void createAccount(String username, String encryptedPassword, AccountType accountType);
+	
+	/**
+	* Switches the type of Account a User is associated with.
+	* @param userId - Unique Id of the User 
+	* @param roles 	- Replacement roles for the uSer
+	*/
+	public void replaceRolesForUser(String userId, Set<USER_ROLE> roles);
 	
 }

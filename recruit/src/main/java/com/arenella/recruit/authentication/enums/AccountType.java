@@ -5,5 +5,5 @@ package com.arenella.recruit.authentication.enums;
 * @author K Parkings
 */
 public enum AccountType {
-	RECRUITER
+		RECRUITER
 }

@@ -10,6 +10,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.arenella.recruit.recruiters.beans.TrialPeriodSubscriptionActionHandler;
+import com.arenella.recruit.recruiters.beans.YearlySubscriptionActionHandler;
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_type;
 
 /**
@@ -23,7 +24,11 @@ public class RecruiterSubscriptionFactoryTest {
 	private RecruiterSubscriptionFactory factory = new RecruiterSubscriptionFactory();
 	
 	@Mock
-	private TrialPeriodSubscriptionActionHandler tiralPeriodctionHander;
+	private TrialPeriodSubscriptionActionHandler 	trialPeriodActionHander;
+	
+	@Mock
+	private YearlySubscriptionActionHandler 		yearlySubscriptionActionHander;
+	
 	
 	/**
 	* Tests exception thrown if type is null

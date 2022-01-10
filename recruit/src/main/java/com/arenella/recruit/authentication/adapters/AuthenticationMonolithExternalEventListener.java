@@ -1,9 +1,14 @@
 package com.arenella.recruit.authentication.adapters;
 
+import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.arenella.recruit.adapters.events.RecruiterCreatedEvent;
+import com.arenella.recruit.adapters.events.RecruiterHasOpenSubscriptionEvent;
+import com.arenella.recruit.adapters.events.RecruiterNoOpenSubscriptionEvent;
+import com.arenella.recruit.authentication.beans.User.USER_ROLE;
 import com.arenella.recruit.authentication.enums.AccountType;
 import com.arenella.recruit.authentication.services.AccountService;
 
@@ -25,6 +30,22 @@ public class AuthenticationMonolithExternalEventListener implements Authenticati
 	@Override
 	public void listenForRecruiterCreatedEvent(RecruiterCreatedEvent event) {
 		this.accountService.createAccount(event.getRecruiterId(), event.getEncryptedPassord(), AccountType.RECRUITER);
+	}
+
+	/**
+	* Refer to ExternalEventListener interface for details 
+	*/
+	@Override
+	public void listenForRecruiterNoOpenSubscriptionsEvent(RecruiterNoOpenSubscriptionEvent event) {
+		accountService.replaceRolesForUser(event.geRecruiterId(), Set.of(USER_ROLE.recruiterNoSubscrition));
+	}
+
+	/**
+	* Refer to ExternalEventListener interface for details 
+	*/
+	@Override
+	public void listenForRecruiterHasOpenSubscriptionEvent(RecruiterHasOpenSubscriptionEvent event) {
+		accountService.replaceRolesForUser(event.geRecruiterId(), Set.of(USER_ROLE.recruiter));
 	}
 
 }
