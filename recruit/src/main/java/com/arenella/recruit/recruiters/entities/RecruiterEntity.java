@@ -11,6 +11,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -57,7 +58,7 @@ public class RecruiterEntity {
 	@Column(name="account_created")
 	private LocalDate							accountCreated;
 	
-	@OneToMany(mappedBy = "recruiterId", cascade = CascadeType.ALL, orphanRemoval=true)
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "recruiterId", cascade = CascadeType.ALL, orphanRemoval=true)
 	private Set<RecruiterSubscriptionEntity> 	subscriptions 		= new LinkedHashSet<>();
 	
 	/**

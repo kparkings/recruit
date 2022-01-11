@@ -15,6 +15,8 @@ import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_type;
 import com.arenella.recruit.recruiters.beans.TrialPeriodSubscription;
 import com.arenella.recruit.recruiters.beans.YearlyRecruiterSubscription;
+import com.arenella.recruit.recruiters.dao.RecruiterDao;
+import com.arenella.recruit.recruiters.entities.RecruiterEntity;
 import com.arenella.recruit.recruiters.services.RecruiterService;
 
 /**
@@ -38,6 +40,9 @@ public class RecruiterSubscriptonScheduler {
 	@Autowired
 	private RecruiterSubscriptionFactory 	subscriptionFactory;
 	
+	@Autowired
+	private RecruiterDao					recruiterDao;
+	
 	private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
 	
 	/**
@@ -52,60 +57,70 @@ public class RecruiterSubscriptonScheduler {
 			@Override
 			public void run() {
 				
-				recruiterService.fetchRecruiters().stream().forEach(recruiter -> {
+				try {
 				
-					recruiter.getSubscriptions().stream().filter(a -> a.getStatus() == subscription_status.ACTIVE).collect(Collectors.toSet()).stream().forEach(subscription -> {
-						
-						
-						switch(subscription.getType()) {
-							case TRIAL_PERIOD: {
-								
-								/**
-								* Test if Trial has expired. If so end the subscripton
-								*/
-								if (TrialPeriodSubscription.isTrialPeriodExpired((TrialPeriodSubscription)subscription)) {
-									
-									RecruiterSubscriptionActionHandler actionHandler = subscriptionFactory.getActionHandlerByType(subscription_type.TRIAL_PERIOD);
-									
-									try {
-										actionHandler.performAction(recruiter, subscription, subscription_action.END_SUBSCRIPTION, true);
-									} catch (IllegalAccessException e) {
-										throw new RuntimeException(e);
-									}
-								}
-								
-								return;
-							}
-							case YEAR_SUBSCRIPTION: {
-								
-								/**
-								* If a year or year multiple has elapsed then sets the status to ACTIVE_PENDING_PAYMENT so the 
-								* Recruiter can be sent a new invoice
-								*/
-								if (YearlyRecruiterSubscription.hasYearElapsedSinceActivation((YearlyRecruiterSubscription) subscription)) {
-									
-									RecruiterSubscriptionActionHandler actionHandler = subscriptionFactory.getActionHandlerByType(subscription_type.YEAR_SUBSCRIPTION);
-									
-									try {
-										actionHandler.performAction(recruiter, subscription, subscription_action.END_SUBSCRIPTION, true);
-									} catch (IllegalAccessException e) {
-										throw new RuntimeException(e);
-									}
-									
-								}
-								
-								return;
-							}
-							default:{}
+						recruiterService.fetchRecruiters().stream().forEach(recruiter -> {
 							
-						}
-						
-					});
+							recruiter.getSubscriptions().stream().filter(a -> a.getStatus() == subscription_status.ACTIVE).collect(Collectors.toSet()).stream().forEach(subscription -> {
+								
+								
+								switch(subscription.getType()) {
+									case TRIAL_PERIOD: {
+										
+										/**
+										* Test if Trial has expired. If so end the subscription
+										*/
+										if (TrialPeriodSubscription.isTrialPeriodExpired((TrialPeriodSubscription)subscription)) {
+											
+											RecruiterSubscriptionActionHandler actionHandler = subscriptionFactory.getActionHandlerByType(subscription_type.TRIAL_PERIOD);
+											
+											try {
+												actionHandler.performAction(recruiter, subscription, subscription_action.END_SUBSCRIPTION, true);
+												
+												recruiterDao.save(RecruiterEntity.convertToEntity(recruiter, recruiterDao.findById(recruiter.getUserId())));
+												
+											} catch (IllegalAccessException e) {
+												throw new RuntimeException(e);
+											}
+										}
+										
+										return;
+									}
+									case YEAR_SUBSCRIPTION: {
+										
+										/**
+										* If a year or year multiple has elapsed then sets the status to ACTIVE_PENDING_PAYMENT so the 
+										* Recruiter can be sent a new invoice
+										*/
+										if (YearlyRecruiterSubscription.hasYearElapsedSinceActivation((YearlyRecruiterSubscription) subscription)) {
+											
+											RecruiterSubscriptionActionHandler actionHandler = subscriptionFactory.getActionHandlerByType(subscription_type.YEAR_SUBSCRIPTION);
+											
+											try {
+												actionHandler.performAction(recruiter, subscription, subscription_action.END_SUBSCRIPTION, true);
+												
+												recruiterDao.save(RecruiterEntity.convertToEntity(recruiter, recruiterDao.findById(recruiter.getUserId())));
+												
+											} catch (IllegalAccessException e) {
+												throw new RuntimeException(e);
+											}
+											
+										}
+										
+										return;
+									}
+									default:{}
+									
+								}
+								
+							});
+							
+						});
 					
-				});
-				
-				
-				System.out.println("Im a little sheduler I am!");
+				} catch(Exception e) {
+					e.printStackTrace();
+					System.out.println("Issue with the scheduler: " + e.getStackTrace().toString()); 
+				}
 				
 			}
 			

@@ -194,16 +194,24 @@ public class TrialPeriodrSubscriptionTest {
 	@Test
 	public void testPerformAction_endActiveSubscription_nonAdmin() throws Exception {
 		
+		Recruiter recruiter = Recruiter.builder().userId("kparkings").build();
+
 		TrialPeriodSubscription subscription = TrialPeriodSubscription
 																.builder()
 																	.status(subscription_status.ACTIVE)
 																	.currentSubscription(false)
 																.build();
 		
-		new TrialPeriodSubscriptionActionHandler().performAction(null, subscription, subscription_action.END_SUBSCRIPTION, true);
+		TrialPeriodSubscriptionActionHandler actionHandler = new TrialPeriodSubscriptionActionHandler();
+		
+		ReflectionTestUtils.setField(actionHandler, "externEventPublisher", mockExternEventPublisher);
+		
+		actionHandler.performAction(recruiter, subscription, subscription_action.END_SUBSCRIPTION, true);
 		
 		assertEquals(subscription_status.SUBSCRIPTION_ENDED, subscription.getStatus());
 		assertFalse(subscription.isCurrentSubscription());
+		
+		Mockito.verify(this.mockExternEventPublisher).publishRecruiterNoOpenSubscriptionsEvent(recruiter.getUserId());
 		
 	}
 	

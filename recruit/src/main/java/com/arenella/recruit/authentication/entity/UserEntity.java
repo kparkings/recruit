@@ -9,6 +9,7 @@ import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Table;
@@ -35,7 +36,7 @@ public class UserEntity {
 	private boolean 			enabled;
 	
 	@Enumerated(EnumType.STRING)
-	@ElementCollection(targetClass=USER_ROLE.class)
+	@ElementCollection(targetClass=USER_ROLE.class, fetch=FetchType.EAGER)
 	@CollectionTable(schema="users", name="user_roles", joinColumns=@JoinColumn(name="username"))
 	@Column(name="role")
 	private Set<USER_ROLE> 		roles		= new LinkedHashSet<>();

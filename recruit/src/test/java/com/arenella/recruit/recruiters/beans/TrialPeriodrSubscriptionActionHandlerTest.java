@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.arenella.recruit.recruiters.adapters.RecruitersExternalEventPublisher;
@@ -93,7 +94,7 @@ public class TrialPeriodrSubscriptionActionHandlerTest {
 		RecruiterSubscription 	subscription2 	= TrialPeriodSubscription.builder().subscriptionId(UUID.randomUUID()).currentSubscription(false).status(subscription_status.AWAITING_ACTIVATION).build();
 		Recruiter 				recruiter 		= Recruiter
 													.builder()
-													.subscriptions(Set.of(subscription1, subscription2))
+														.subscriptions(Set.of(subscription1, subscription2))
 													.build();
 	
 		Assertions.assertThrows(IllegalArgumentException.class, () -> {
@@ -114,7 +115,8 @@ public class TrialPeriodrSubscriptionActionHandlerTest {
 		RecruiterSubscription 	subscription2 	= TrialPeriodSubscription.builder().subscriptionId(UUID.randomUUID()).currentSubscription(true).status(subscription_status.ACTIVE).build();
 		Recruiter 				recruiter 		= Recruiter
 													.builder()
-													.subscriptions(Set.of(subscription2))
+														.subscriptions(Set.of(subscription2))
+														.userId("kparkings")
 													.build();
 		
 		handler.performAction(recruiter, subscription2, subscription_action.END_SUBSCRIPTION, true);
@@ -122,6 +124,8 @@ public class TrialPeriodrSubscriptionActionHandlerTest {
 		assertFalse(subscription2.isCurrentSubscription());
 		
 		assertEquals(subscription_status.SUBSCRIPTION_ENDED, subscription2.getStatus());
+		
+		Mockito.verify(mockExternEventPublisher).publishRecruiterNoOpenSubscriptionsEvent(recruiter.getUserId());
 		
 	}
 	

@@ -86,8 +86,12 @@ public class TrialPeriodSubscriptionActionHandler implements RecruiterSubscripti
 		if (currentSubscription.getStatus() == subscription_status.ACTIVE ) {
 			
 			if (action == subscription_action.END_SUBSCRIPTION) {
+				
 				currentSubscription.endSubscription();
 				currentSubscription.setCurrentSubscription(false);
+				
+				this.externEventPublisher.publishRecruiterNoOpenSubscriptionsEvent(recruiter.getUserId());
+				
 				return Optional.empty();
 			}
 		
