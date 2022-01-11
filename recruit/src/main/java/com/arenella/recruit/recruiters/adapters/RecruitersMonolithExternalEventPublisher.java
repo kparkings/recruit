@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.arenella.recruit.adapters.events.RecruiterCreatedEvent;
+import com.arenella.recruit.adapters.events.RecruiterHasOpenSubscriptionEvent;
+import com.arenella.recruit.adapters.events.RecruiterNoOpenSubscriptionEvent;
 import com.arenella.recruit.authentication.adapters.AuthenticationExternalEventListener;
 
 /**
@@ -29,9 +31,23 @@ public class RecruitersMonolithExternalEventPublisher implements RecruitersExter
 	*/
 	@Override
 	public void publishRecruiterAccountCreatedEvent(RecruiterCreatedEvent event) {
-		
-		authenticationExternalEventListener.listenForRecruiterCreatedEvent(event);
-		
+		this.authenticationExternalEventListener.listenForRecruiterCreatedEvent(event);
+	}
+
+	/**
+	* Refer to the ExternalEventPublisher interface for details 
+	*/
+	@Override
+	public void publishRecruiterNoOpenSubscriptionsEvent(String recruiterId) {
+		this.authenticationExternalEventListener.listenForRecruiterNoOpenSubscriptionsEvent(new RecruiterNoOpenSubscriptionEvent(recruiterId));
+	}
+
+	/**
+	* Refer to the ExternalEventPublisher interface for details 
+	*/
+	@Override
+	public void publishRecruiterHasOpenSubscriptionEvent(String recruiterId) {
+		this.authenticationExternalEventListener.listenForRecruiterHasOpenSubscriptionEvent(new RecruiterHasOpenSubscriptionEvent(recruiterId));
 	}
 
 }

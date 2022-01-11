@@ -14,5 +14,17 @@ public interface RecruitersExternalEventPublisher {
 	* @param event - Event advertising the fact a new User account for a recruiter was created
 	*/
 	public void publishRecruiterAccountCreatedEvent(RecruiterCreatedEvent event);
+
+	/**
+	* Publishes an event informing that a Recruiter has no open subscriptions
+	* @param recruiterId - Recruiter event relates to
+	*/
+	public void publishRecruiterNoOpenSubscriptionsEvent(String recruiterId);
+
+	/**
+	* Publishes an Event informing that a Recruiter has an Open subscription
+	* @param recruiterId - Recruiter event relates to
+	*/
+	public void publishRecruiterHasOpenSubscriptionEvent(String recruiterId);
 	
 }

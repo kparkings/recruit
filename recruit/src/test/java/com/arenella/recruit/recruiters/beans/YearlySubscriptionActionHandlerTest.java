@@ -9,7 +9,13 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.arenella.recruit.recruiters.adapters.RecruitersExternalEventPublisher;
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_action;
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_status;
 import com.arenella.recruit.recruiters.utils.RecruiterSubscriptionActionHandler;
@@ -18,8 +24,17 @@ import com.arenella.recruit.recruiters.utils.RecruiterSubscriptionActionHandler;
 * Unit tests for the YearlySubscriptionActionHandler class
 * @author K Parkings
 */
+@ExtendWith(MockitoExtension.class)
 public class YearlySubscriptionActionHandlerTest {
-
+	
+	@InjectMocks
+	private RecruiterSubscriptionActionHandler actionHandler = new YearlySubscriptionActionHandler();
+	
+	@Mock
+	private RecruitersExternalEventPublisher mockRecruitersExternalEventPublisher;
+	
+	private static final Recruiter recruiter = Recruiter.builder().userId("kparkings").build();
+	
 	/**
 	* Tests if a non admin user attempts to activate the subscription an exception
 	* is thrown
@@ -28,10 +43,8 @@ public class YearlySubscriptionActionHandlerTest {
 	@Test
 	public void testActionHAndler_activateSubscription_nonAdmin() throws Exception {
 		
-		RecruiterSubscriptionActionHandler actionHandler = new YearlySubscriptionActionHandler();
-		
 		assertThrows(IllegalAccessException.class, () -> {
-			actionHandler.performAction(null, null, subscription_action.ACTIVATE_SUBSCRIPTION, false);
+			actionHandler.performAction(recruiter, null, subscription_action.ACTIVATE_SUBSCRIPTION, false);
 		});
 		
 	}
@@ -44,10 +57,8 @@ public class YearlySubscriptionActionHandlerTest {
 	@Test
 	public void testActionHAndler_disableSubscription_nonAdmin() throws Exception {
 		
-		RecruiterSubscriptionActionHandler actionHandler = new YearlySubscriptionActionHandler();
-		
 		assertThrows(IllegalAccessException.class, () -> {
-			actionHandler.performAction(null, null, subscription_action.DISABLE_PENDING_PAYMENT, false);
+			actionHandler.performAction(recruiter, null, subscription_action.DISABLE_PENDING_PAYMENT, false);
 		});
 		
 	}
@@ -74,10 +85,8 @@ public class YearlySubscriptionActionHandlerTest {
 																			.currentSubscription(true)
 																		.build();
 		
-		RecruiterSubscriptionActionHandler actionHandler = new YearlySubscriptionActionHandler();
-		
 		assertThrows(IllegalStateException.class, () -> {
-			actionHandler.performAction(null, subscription, subscription_action.ACTIVATE_SUBSCRIPTION, true);
+			actionHandler.performAction(recruiter, subscription, subscription_action.ACTIVATE_SUBSCRIPTION, true);
 		});
 		
 	}
@@ -103,12 +112,12 @@ public class YearlySubscriptionActionHandlerTest {
 																			.currentSubscription(true)
 																		.build();
 		
-		RecruiterSubscriptionActionHandler actionHandler = new YearlySubscriptionActionHandler();
-		
-		actionHandler.performAction(null, subscription, subscription_action.ACTIVATE_SUBSCRIPTION, true);
+		actionHandler.performAction(recruiter, subscription, subscription_action.ACTIVATE_SUBSCRIPTION, true);
 		
 		assertNotNull(subscription.getActivatedDate());
 		assertEquals(subscription_status.ACTIVE, subscription.getStatus());
+		
+		Mockito.verify(this.mockRecruitersExternalEventPublisher).publishRecruiterHasOpenSubscriptionEvent(recruiter.getUserId());
 		
 	}
 
@@ -133,12 +142,12 @@ public class YearlySubscriptionActionHandlerTest {
 																			.currentSubscription(true)
 																		.build();
 		
-		RecruiterSubscriptionActionHandler actionHandler = new YearlySubscriptionActionHandler();
-		
-		actionHandler.performAction(null, subscription, subscription_action.ACTIVATE_SUBSCRIPTION, true);
+		actionHandler.performAction(recruiter, subscription, subscription_action.ACTIVATE_SUBSCRIPTION, true);
 		
 		assertNotNull(subscription.getActivatedDate());
 		assertEquals(subscription_status.ACTIVE, subscription.getStatus());
+		
+		Mockito.verify(this.mockRecruitersExternalEventPublisher).publishRecruiterHasOpenSubscriptionEvent(recruiter.getUserId());
 		
 	}
 	
@@ -164,10 +173,8 @@ public class YearlySubscriptionActionHandlerTest {
 																			.currentSubscription(true)
 																		.build();
 		
-		RecruiterSubscriptionActionHandler actionHandler = new YearlySubscriptionActionHandler();
-		
 		assertThrows(IllegalStateException.class, () -> {
-			actionHandler.performAction(null, subscription, subscription_action.DISABLE_PENDING_PAYMENT, true);
+			actionHandler.performAction(recruiter, subscription, subscription_action.DISABLE_PENDING_PAYMENT, true);
 		});
 		
 	}
@@ -193,11 +200,11 @@ public class YearlySubscriptionActionHandlerTest {
 																			.currentSubscription(true)
 																		.build();
 		
-		RecruiterSubscriptionActionHandler actionHandler = new YearlySubscriptionActionHandler();
-		
-		actionHandler.performAction(null, subscription, subscription_action.DISABLE_PENDING_PAYMENT, true);
+		actionHandler.performAction(recruiter, subscription, subscription_action.DISABLE_PENDING_PAYMENT, true);
 		
 		assertEquals(subscription_status.DISABLED_PENDING_PAYMENT, subscription.getStatus());
+		
+		Mockito.verify(this.mockRecruitersExternalEventPublisher).publishRecruiterNoOpenSubscriptionsEvent(recruiter.getUserId());
 		
 	}
 	
@@ -222,10 +229,8 @@ public class YearlySubscriptionActionHandlerTest {
 																			.currentSubscription(true)
 																		.build();
 		
-		RecruiterSubscriptionActionHandler actionHandler = new YearlySubscriptionActionHandler();
-		
 		assertThrows(IllegalAccessException.class, () -> {
-			actionHandler.performAction(null, subscription, subscription_action.END_SUBSCRIPTION, false);
+			actionHandler.performAction(recruiter, subscription, subscription_action.END_SUBSCRIPTION, false);
 		});
 		
 	}
@@ -251,10 +256,8 @@ public class YearlySubscriptionActionHandlerTest {
 																			.currentSubscription(true)
 																		.build();
 		
-		RecruiterSubscriptionActionHandler actionHandler = new YearlySubscriptionActionHandler();
-		
 		assertThrows(IllegalStateException.class, () -> {
-			actionHandler.performAction(null, subscription, subscription_action.END_SUBSCRIPTION, false);
+			actionHandler.performAction(recruiter, subscription, subscription_action.END_SUBSCRIPTION, false);
 		});
 		
 	}
@@ -280,12 +283,12 @@ public class YearlySubscriptionActionHandlerTest {
 																			.currentSubscription(true)
 																		.build();
 		
-		RecruiterSubscriptionActionHandler actionHandler = new YearlySubscriptionActionHandler();
-		
-		actionHandler.performAction(null, subscription, subscription_action.END_SUBSCRIPTION, true);
+		actionHandler.performAction(recruiter, subscription, subscription_action.END_SUBSCRIPTION, true);
 		
 		assertEquals(subscription_status.SUBSCRIPTION_ENDED, subscription.getStatus());
 		assertFalse(subscription.isCurrentSubscription());
+		
+		Mockito.verify(this.mockRecruitersExternalEventPublisher).publishRecruiterNoOpenSubscriptionsEvent(recruiter.getUserId());
 		
 	}
 	

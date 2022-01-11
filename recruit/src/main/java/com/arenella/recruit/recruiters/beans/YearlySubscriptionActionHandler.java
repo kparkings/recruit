@@ -40,6 +40,8 @@ public class YearlySubscriptionActionHandler implements RecruiterSubscriptionAct
 				
 				((YearlyRecruiterSubscription)subscription).activateSubscription();
 				
+				this.externEventPublisher.publishRecruiterHasOpenSubscriptionEvent(recruiter.getUserId());
+				
 				return Optional.empty();
 			}
 			case DISABLE_PENDING_PAYMENT: {
@@ -54,10 +56,7 @@ public class YearlySubscriptionActionHandler implements RecruiterSubscriptionAct
 				
 				((YearlyRecruiterSubscription)subscription).disablePendingPayment();
 				
-				//START
-				
-				//this.externEventPublisher
-				//END
+				this.externEventPublisher.publishRecruiterNoOpenSubscriptionsEvent(recruiter.getUserId());
 				
 				return Optional.empty();
 			}
@@ -72,6 +71,8 @@ public class YearlySubscriptionActionHandler implements RecruiterSubscriptionAct
 				}
 				
 				((YearlyRecruiterSubscription)subscription).endSubscription();
+				
+				this.externEventPublisher.publishRecruiterNoOpenSubscriptionsEvent(recruiter.getUserId());
 				
 				return Optional.empty();
 				

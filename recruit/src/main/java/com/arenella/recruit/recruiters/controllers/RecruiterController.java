@@ -96,7 +96,7 @@ public class RecruiterController {
 	* Returns the details of the currently logged in Recruiter
 	* @return recruiter
 	*/
-	@PreAuthorize("hasRole('RECRUITER')")
+	@PreAuthorize("hasRole('RECRUITER') OR hasRole('ROLE_RECRUITERNOSUBSCRITION')")
 	@GetMapping(value="/recruiter/me")
 	public RecruiterAPIOutbound fetchRecruiterOwnAccount() throws IllegalAccessException{
 		return RecruiterAPIOutbound.convertFromDomain(recruiterService.fetchRecruiterOwnAccount());
@@ -107,7 +107,7 @@ public class RecruiterController {
 	* @param recruiterId		- Unique Id of the Recruiter owning the Subscription
 	* @param subscription		- Type of subscription requested
 	*/
-	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('RECRUITER')")
+	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('RECRUITER')  OR hasRole('ROLE_RECRUITERNOSUBSCRITION')")
 	@PostMapping(value="/recruiter/{recruiterId}/subscription/")
 	public ResponseEntity<Void> addSubscription(@PathVariable("recruiterId") String recruiterId, @RequestBody SubscriptionAPIInbound subscription)  throws IllegalAccessException{
 		this.recruiterService.addSubscription(recruiterId, subscription.getType());

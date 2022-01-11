@@ -54,6 +54,12 @@ export class RecruiterAccountComponent implements OnInit {
   
       		this.recruiter = data;
 
+			if (!this.hasActiveSubscription()){
+				sessionStorage.setItem('isRecruiterNoSubscription',		'true');
+			} else {
+				sessionStorage.setItem('isRecruiterNoSubscription',		'false');
+			}
+				
 		}, err => {
 			
 			if (err.status === 401 || err.status === 0) {
@@ -129,18 +135,18 @@ export class RecruiterAccountComponent implements OnInit {
 	*/
 	public hasUnpaidSubscription():boolean{
 		
-		let status:string = '';
+		//let status:string = '';
+		let hasUnpaidSubscription:boolean = false;
 		
 		this.recruiter.subscriptions.forEach( s => {
 		
-			if (s.currentSubscription) {
-				status = s.status;
+			if(s.status === 'DISABLED_PENDING_PAYMENT') {
+				hasUnpaidSubscription =  true;
 			}
 			
 		});
 		
-		return status === 'DISABLED_PENDING_PAYMENT';
-		
+		return hasUnpaidSubscription;
 	}
 	
 	/**
@@ -246,8 +252,7 @@ export class RecruiterAccountComponent implements OnInit {
 	* Whether or not the recruiter that has no open Subscriptiion
 	*/
 	public isRecruiterNoSubscription():boolean{
-		return true;
-		//return sessionStorage.getItem('isRecruiterNoSubscription') === 'true';
+		return sessionStorage.getItem('isRecruiterNoSubscription') === 'true';
 	}
 	
 }

@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import com.arenella.recruit.recruiters.adapters.RecruitersExternalEventPublisher;
 import com.arenella.recruit.recruiters.beans.FirstGenRecruiterSubscription;
 import com.arenella.recruit.recruiters.beans.Recruiter;
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription;
@@ -42,6 +43,9 @@ public class RecruiterServiceImpl implements RecruiterService{
 	
 	@Autowired
 	private RecruiterSubscriptionFactory 		recruiterSubscriptionFactory;
+	
+	@Autowired
+	private RecruitersExternalEventPublisher 	externEventPublisher;
 	
 	/**
 	* Refer to the RecruiterService for details
@@ -215,8 +219,6 @@ public class RecruiterServiceImpl implements RecruiterService{
 			switchToYearSubscription(recruiter);
 		}
 		
-		
-		
 	}
 	
 	/**
@@ -278,9 +280,9 @@ public class RecruiterServiceImpl implements RecruiterService{
 														
 		recruiter.addSubscription(yearlySubscription);
 		
-		//TODO: 
-		
 		this.recruiterDao.save(RecruiterEntity.convertToEntity(recruiter, this.recruiterDao.findById(recruiter.getUserId())));
+		
+		this.externEventPublisher.publishRecruiterHasOpenSubscriptionEvent(recruiter.getUserId());
 		
 	}
 	

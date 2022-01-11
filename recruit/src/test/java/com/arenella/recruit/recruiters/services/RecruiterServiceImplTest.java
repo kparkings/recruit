@@ -674,6 +674,8 @@ public class RecruiterServiceImplTest {
 		
 		Mockito.verify(this.mockDao).save(Mockito.any());
 		
+		Mockito.verify(this.mockExternEventPublisher).publishRecruiterHasOpenSubscriptionEvent(recruiterId);
+		
 	}
 	
 	/**
@@ -717,6 +719,8 @@ public class RecruiterServiceImplTest {
 		RecruiterSubscriptionEntity subEntityExisting = savedEntity.getSubscriptions().stream().filter(se -> se.getSubscriptionId() == existingSubscriptionId).findFirst().get();
 		assertFalse(subEntityExisting.isCurrentSubscription());
 		assertEquals(subscription_status.SUBSCRIPTION_ENDED, subEntityExisting.getStatus());
+		
+		Mockito.verify(this.mockExternEventPublisher).publishRecruiterHasOpenSubscriptionEvent(recruiterId);
 		
 	}
 	
@@ -763,6 +767,8 @@ public class RecruiterServiceImplTest {
 		assertFalse(subEntityExisting.isCurrentSubscription());
 		assertEquals(subscription_status.SUBSCRIPTION_ENDED, subEntityExisting.getStatus());
 		
+		Mockito.verify(this.mockExternEventPublisher).publishRecruiterHasOpenSubscriptionEvent(recruiterId);
+		
 	}
 	
 	/**
@@ -800,6 +806,8 @@ public class RecruiterServiceImplTest {
 		RecruiterSubscriptionEntity subEntityExisting = savedEntity.getSubscriptions().stream().filter(se -> se.getSubscriptionId() == existingSubscriptionId).findFirst().get();
 		assertFalse(subEntityExisting.isCurrentSubscription());
 		assertEquals(subscription_status.SUBSCRIPTION_ENDED, subEntityExisting.getStatus());
+		
+		Mockito.verify(this.mockExternEventPublisher).publishRecruiterHasOpenSubscriptionEvent(recruiterId);
 		
 	}
 	
