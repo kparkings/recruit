@@ -207,95 +207,20 @@ public class TrialPeriodSubscription implements RecruiterSubscription{
 	}
 	
 	/**
-	* Returns an ActionHandler for the Subscription
+	* Performs check to determine whether the Subscription has expired. TrialPeriodSubscriptions
+	* expire automatically after 90 days.
+	* @param subscription - Subscription to check
 	* @return
 	*/
-	//public static ActionHandler getActionHandler() {
-	//	return new ActionHandler();
-	//}
-	
-	/**
-	* ActionHandler for the subscription
-	* @author K Parkings
-	*/
-	//public static class ActionHandler implements RecruiterSubscriptionActionHandler{
-
-	//	/**
-	//	* Refer to RecruiterSubscriptionActionHandler for details 
-	//	* @throws IllegalAccessException 
-	//	*/
-	//	@Override
-	//	public Optional<SubscriptionActionFeedback> performAction(Recruiter recruiter, RecruiterSubscription subscription,  subscription_action action, Boolean isAdminUser) throws IllegalAccessException {
-
-	//		TrialPeriodSubscription currentSubscription = ((TrialPeriodSubscription)subscription);
-			
-			/**
-			* Actions available for Status AWAITING_ACTIVATION
-			*/
-	//		if (currentSubscription.getStatus() == subscription_status.AWAITING_ACTIVATION ) {
-				
-	//			switch (action) {
-	//				case ACTIVATE_SUBSCRIPTION:{
-						
-	//					if (!isAdminUser) {
-	//						throw new IllegalAccessException("You are not authorized to carry out this action");
-	//					}
-						
-	//					currentSubscription.activateSubscription();
-						
-						//currentSubscription.setCurrentSubscription(true);
-						//recruiter.getSubscriptions().stream().map(s -> (TrialPeriodSubscription)s).collect(Collectors.toSet()).stream().forEach(s -> {
-						//
-						//	if (s.getSubscriptionId() != subscription.getSubscriptionId()) {
-						//		s.setCurrentSubscription(false);
-						//	}
-						//	
-						//});
-							
-	//					return Optional.empty();
-	//				}
-	//				case REJECT_SUBSCRIPTION:{
-	//					
-	//					if (!isAdminUser) {
-	//						throw new IllegalAccessException("You are not authorized to carry out this action");
-	//					}
-	//					
-	//					if (subscription.getStatus() == subscription_status.AWAITING_ACTIVATION) {
-	//						currentSubscription.endSubscription();
-	//						currentSubscription.setCurrentSubscription(false);
-	//					}
-	//					
-	//					return Optional.empty();
-	//				}
-	//				default:{}
-	//			}
-	//			
-	//			throw new IllegalArgumentException("Unable to perform selected action " + action + " on subscription : " + subscription.getSubscriptionId());
-	//			
-	//		} 
-			
-			/**
-			* Actions available for Statuses ACTIVE
-			*/
-	//		if (currentSubscription.getStatus() == subscription_status.ACTIVE ) {
-				
-	//			if (action == subscription_action.END_SUBSCRIPTION) {
-	//				currentSubscription.endSubscription();
-	//				currentSubscription.setCurrentSubscription(false);
-	//				return Optional.empty();
-	//			}
-			
-	//			throw new IllegalArgumentException("Unable to perform selected action " + action + " on subscription : " + subscription.getSubscriptionId());
-				
-	//		}
-			
-			/**
-			* Invalid combination of STATUS and ACTION 
-			*/
-	//		throw new IllegalArgumentException("Unable to perform selected action " + action + " on subscription : " + subscription.getSubscriptionId());
-			
-	//	}
+	public static boolean isTrialPeriodExpired(TrialPeriodSubscription subscription) {
 		
-	//}
+		final int lengthOfTrialPeriodInDays = 90;
+		
+		LocalDateTime 	now 		= LocalDateTime.now();
+		LocalDateTime 	expiryDate 	= subscription.getActivatedDate().plusDays(lengthOfTrialPeriodInDays);
+		
+		return expiryDate.isBefore(now);
+		
+	}
 	
 }

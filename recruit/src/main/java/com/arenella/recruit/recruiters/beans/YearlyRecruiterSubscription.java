@@ -5,7 +5,7 @@ import java.util.UUID;
 
 /**
 * Represents a yearly subscription that a Recruiter can take out to 
-* access the system for a period of 12 months from the moment the subcription 
+* access the system for a period of 12 months from the moment the subscription 
 * is activated.
 * @author K Parkings
 */
@@ -108,8 +108,18 @@ public class YearlyRecruiterSubscription implements RecruiterSubscription{
 	* Ends the current Subscription 
 	*/
 	public void endSubscription() {
-		this.currentSubscription = false;
-		this.status = subscription_status.SUBSCRIPTION_ENDED;
+		this.currentSubscription 	= false;
+		this.status 				= subscription_status.SUBSCRIPTION_ENDED;
+	}
+	
+	/**
+	* Renews the subscription. This involves setting the activation date 
+	* to a year from the previous activation and changing the status to 
+	* indicate that a new invoice for the new period needs to be sent 
+	*/
+	public void renewSubscription() {
+		this.status 		= subscription_status.ACTIVE_PENDING_PAYMENT;
+		this.activatedDate 	= this.activatedDate.plusYears(1);
 	}
 	
 	/**
@@ -202,4 +212,20 @@ public class YearlyRecruiterSubscription implements RecruiterSubscription{
 		}
 	}
 	
+	/**
+	* Returns true if a year has passed since the activation date. This signals the end of the 
+	* subscription period and that a new Invoice must be sent to the Recruiter
+	* @param subscription - Subscription to test
+	* @return whether a year has passed since the subscription was activated
+	*/
+	public static boolean hasYearElapsedSinceActivation(YearlyRecruiterSubscription subscription) {
+		
+		final int lengthOfSubcriptionPeriodInYears = 1;
+		
+		LocalDateTime 	now 		= LocalDateTime.now();
+		LocalDateTime 	expiryDate 	= subscription.getActivatedDate().plusYears(lengthOfSubcriptionPeriodInYears);
+		
+		return expiryDate.isBefore(now);
+		
+	}
 }

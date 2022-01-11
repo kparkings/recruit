@@ -77,6 +77,21 @@ public class YearlySubscriptionActionHandler implements RecruiterSubscriptionAct
 				return Optional.empty();
 				
 			}
+			case RENEW_SUBSCRIPTION: {
+				
+				if (!isAdminUser) {
+					throw new IllegalAccessException("You are not authorized to carry out this action");
+				}
+				
+				if (subscription.getStatus() != subscription_status.ACTIVE) {
+					throw new IllegalStateException("Subscription is already ended. Cant end a second time: " + subscription.getSubscriptionId());
+				}
+				
+				((YearlyRecruiterSubscription)subscription).renewSubscription();
+				
+				return Optional.empty();
+				
+			}
 			default:{
 				throw new IllegalArgumentException("Unknown action " + action + " for subscription type: " + subscription_type.YEAR_SUBSCRIPTION);
 			}

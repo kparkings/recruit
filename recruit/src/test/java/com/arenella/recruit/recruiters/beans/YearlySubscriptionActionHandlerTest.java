@@ -292,4 +292,89 @@ public class YearlySubscriptionActionHandlerTest {
 		
 	}
 	
+	/**
+	* Tests a non admin user cannot renew the Subscription. In reality this is the system via 
+	* the scheduler but could also be done manually by an admin user
+	* @throws Exception
+	*/
+	@Test
+	public void testActionHandler_renewSubscription_nonAdmin() throws Exception {
+		
+		final LocalDateTime 		created 			= LocalDateTime.of(2021, 12, 18, 10, 10);
+		final String				recruiterId			= "kparkings";
+		final UUID					subscriptionId		= UUID.randomUUID();
+		final subscription_status 	status 				= subscription_status.ACTIVE;
+		
+		YearlyRecruiterSubscription subscription = YearlyRecruiterSubscription
+																		.builder()
+																			.created(created)
+																			.recruiterId(recruiterId)
+																			.subscriptionId(subscriptionId)
+																			.status(status)
+																			.currentSubscription(true)
+																		.build();
+		
+		assertThrows(IllegalAccessException.class, () -> {
+			actionHandler.performAction(recruiter, subscription, subscription_action.RENEW_SUBSCRIPTION, false);
+		});
+		
+	}
+	
+	/**
+	* Test only an active subscription can be renewed
+	* @throws Exception
+	*/
+	@Test
+	public void testActionHandler_renewSubscription_notActive() throws Exception {
+		
+		final LocalDateTime 		created 			= LocalDateTime.of(2021, 12, 18, 10, 10);
+		final String				recruiterId			= "kparkings";
+		final UUID					subscriptionId		= UUID.randomUUID();
+		final subscription_status 	status 				= subscription_status.ACTIVE_PENDING_PAYMENT;
+		
+		YearlyRecruiterSubscription subscription = YearlyRecruiterSubscription
+																		.builder()
+																			.created(created)
+																			.recruiterId(recruiterId)
+																			.subscriptionId(subscriptionId)
+																			.status(status)
+																			.currentSubscription(true)
+																		.build();
+		
+		assertThrows(IllegalStateException.class, () -> {
+			actionHandler.performAction(recruiter, subscription, subscription_action.RENEW_SUBSCRIPTION, true);
+		});
+		
+	}
+	
+	/**
+	* Happy path
+	* @throws Exception
+	*/
+	@Test
+	public void testActionHandler_renewSubscription() throws Exception {
+		
+		final LocalDateTime 		created 			= LocalDateTime.of(2021, 12, 18, 10, 10);
+		final LocalDateTime 		activateDate		= LocalDateTime.of(2021, 12, 18, 10, 11);
+		final String				recruiterId			= "kparkings";
+		final UUID					subscriptionId		= UUID.randomUUID();
+		final subscription_status 	status 				= subscription_status.ACTIVE;
+		
+		YearlyRecruiterSubscription subscription = YearlyRecruiterSubscription
+																		.builder()
+																			.created(created)
+																			.recruiterId(recruiterId)
+																			.subscriptionId(subscriptionId)
+																			.status(status)
+																			.activateDate(activateDate)
+																			.currentSubscription(true)
+																		.build();
+		
+		actionHandler.performAction(recruiter, subscription, subscription_action.RENEW_SUBSCRIPTION, true);
+		
+		assertEquals(subscription_status.ACTIVE_PENDING_PAYMENT, 	subscription.getStatus());
+		assertEquals(activateDate.plusYears(1), 					subscription.getActivatedDate());
+		
+	}
+	
 }

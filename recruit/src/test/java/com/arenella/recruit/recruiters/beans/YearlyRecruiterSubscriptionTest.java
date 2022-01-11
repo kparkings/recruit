@@ -143,6 +143,49 @@ public class YearlyRecruiterSubscriptionTest {
 		
 	}
 	
+	/**
+	* Tests renewal of a Subscription. This occurs when the end of the 
+	* subscription period has arrived and a new payment is required
+	* @throws Exception
+	*/
+	@Test
+	public void testRenewSubscription() throws Exception {
+		
+		final LocalDateTime 		created 			= LocalDateTime.of(2021, 12, 18, 10, 10);
+		final String				recruiterId			= "kparkings";
+		final UUID					subscriptionId		= UUID.randomUUID();
+		final LocalDateTime			activationDate		= LocalDateTime.of(2021, 12, 18, 10, 10).minusYears(1);
+		final subscription_status 	status 				= subscription_status.ACTIVE;
+		
+		YearlyRecruiterSubscription subscription = YearlyRecruiterSubscription
+				.builder()
+					.created(created)
+					.recruiterId(recruiterId)
+					.subscriptionId(subscriptionId)
+					.status(status)
+					.activateDate(activationDate)
+					.currentSubscription(true)
+				.build();
+		
+		assertEquals(status, 			subscription.getStatus());
+		assertEquals(activationDate, 	subscription.getActivatedDate());
+		
+		subscription.renewSubscription();
+		
+		assertEquals(subscription_status.ACTIVE_PENDING_PAYMENT, 	subscription.getStatus());
+		assertEquals(activationDate.plusYears(1), 					subscription.getActivatedDate());
+		
+	}
+	
+	/**
+	* Tests check to see if a year has elapsed since the last activation date
+	*/
+	@Test
+	public void testHasYearElapsedSinceActivation() throws Exception {
 
+		assertTrue(YearlyRecruiterSubscription.hasYearElapsedSinceActivation(YearlyRecruiterSubscription.builder().activateDate(LocalDateTime.now().minusMonths(13)).build()));
+		assertFalse(YearlyRecruiterSubscription.hasYearElapsedSinceActivation(YearlyRecruiterSubscription.builder().activateDate(LocalDateTime.now().minusMonths(1)).build()));
+		
+	}
 	
 }
