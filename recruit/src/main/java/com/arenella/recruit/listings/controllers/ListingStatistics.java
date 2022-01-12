@@ -59,7 +59,7 @@ public class ListingStatistics {
 	
 		this.viewsPerWeek = this.viewsPerWeek.entrySet()
 				.stream()
-				.sorted(Map.Entry.<String, Long>comparingByValue())
+				.sorted(Map.Entry.<String, Long>comparingByKey())
 				.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
 					    (oldValue, newValue) -> oldValue, LinkedHashMap::new));
 		

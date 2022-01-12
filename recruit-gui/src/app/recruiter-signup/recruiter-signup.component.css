@@ -16,10 +16,11 @@
 }
 
 .recruiter-signup-box-info {
-	float:left;
+	float:right;
 	padding:5px;
 	max-width:40%;
 	min-width:40%;
+	margin-right:10%;
 }
 
 .recruiter-signup-box {

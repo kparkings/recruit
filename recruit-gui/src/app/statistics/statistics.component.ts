@@ -21,12 +21,10 @@ export class StatisticsComponent implements OnInit {
 	public recruiterDownloads:number[] 					= [];
 	public recruiterDownloadsDaily:number[] 			= [];
 	public recruiterDownloadsWeekly:number[] 			= [];
-	//public listingViews:number[] 					= [];
 	
 	public recruiterDownloadsCols:string[] 				= [];
 	public recruiterDownloadsDailyCols:string[] 		= [];
 	public recruiterDownloadsWeeklyCols:string[] 		= [];
-	//public listingviewsCols:string[] 				= [];
 			
 	public chartDownloadsTotal							= 0;		
 	
@@ -50,7 +48,6 @@ export class StatisticsComponent implements OnInit {
 		
 		this.statisticsService.getListingStats().subscribe(listingData => {
 					
-					console.log("Listing stats " + JSON.stringify(listingData));
 					this.listingViewsToday 		= listingData.viewsToday;
 					this.listingViewsThisWeek 	= listingData.viewsThisWeek;
 					
