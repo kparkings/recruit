@@ -9,6 +9,8 @@ import java.util.UUID;
 */
 public class TrialPeriodSubscription implements RecruiterSubscription{
 
+	public static final int trialPeriodInDays = 90;
+	
 	private UUID 					subscriptionId;
 	private String 					recruiterId;
 	private LocalDateTime 			created;

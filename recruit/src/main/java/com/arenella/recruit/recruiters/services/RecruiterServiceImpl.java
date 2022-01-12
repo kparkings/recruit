@@ -262,7 +262,7 @@ public class RecruiterServiceImpl implements RecruiterService{
 			subscription.endSubscription();
 			subscription.setCurrentSubscription(false);
 			
-			long secondsRemainingFromTrialPeriod = ChronoUnit.SECONDS.between(subscription.getActivatedDate(), LocalDateTime.now());
+			long secondsRemainingFromTrialPeriod = ChronoUnit.SECONDS.between(LocalDateTime.now(),subscription.getActivatedDate().plusDays(TrialPeriodSubscription.trialPeriodInDays));
 			
 			activationDate = activationDate.plusSeconds(secondsRemainingFromTrialPeriod);
 			

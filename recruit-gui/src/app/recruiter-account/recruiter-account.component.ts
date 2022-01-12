@@ -29,7 +29,9 @@ export class RecruiterAccountComponent implements OnInit {
 		
 		this.fetchRecruiterDetails();
 		
-		if (this.isRecruiterNoSubscription()) {
+		console.log("SSSS> " + this.hasUnpaidSubscription());
+		
+		if (this.isRecruiterNoSubscription() || this.hasUnpaidSubscription()) {
 			this.switchTab("showSubscriptions");
 		}
 		
@@ -58,6 +60,12 @@ export class RecruiterAccountComponent implements OnInit {
 				sessionStorage.setItem('isRecruiterNoSubscription',		'true');
 			} else {
 				sessionStorage.setItem('isRecruiterNoSubscription',		'false');
+			}
+			
+			if (this.hasUnpaidSubscription()){
+				sessionStorage.setItem('hasUnpaidSubscription',		'true');
+			} else {
+				sessionStorage.setItem('hasUnpaidSubscription',		'false');
 			}
 				
 		}, err => {
@@ -140,13 +148,14 @@ export class RecruiterAccountComponent implements OnInit {
 		
 		this.recruiter.subscriptions.forEach( s => {
 		
-			if(s.status === 'DISABLED_PENDING_PAYMENT') {
+			if (s.status === 'DISABLED_PENDING_PAYMENT') {
 				hasUnpaidSubscription =  true;
 			}
 			
 		});
 		
 		return hasUnpaidSubscription;
+		
 	}
 	
 	/**

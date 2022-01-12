@@ -12,7 +12,7 @@ export class AppComponent {
 
 	constructor(private router: Router){
 		
-		if(this.isRecruiterNoSubscription()) {
+		if (this.isRecruiterNoSubscription() || this.hasUnpaidSubscription()) {
 			this.router.navigate(['recruiter-account']);
 		}
 	}
@@ -36,6 +36,13 @@ export class AppComponent {
 	*/
 	public isRecruiterNoSubscription():boolean{
 		return sessionStorage.getItem('isRecruiterNoSubscription') === 'true';
+	}
+	
+	/**
+	* Whether or not the recruiter that has no open Subscriptiion
+	*/
+	public hasUnpaidSubscription():boolean{
+		return sessionStorage.getItem('hasUnpaidSubscription') === 'true';
 	}
 
 }
