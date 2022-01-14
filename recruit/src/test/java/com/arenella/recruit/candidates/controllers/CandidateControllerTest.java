@@ -1,7 +1,6 @@
 package com.arenella.recruit.candidates.controllers;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.HashSet;
 import java.util.List;
@@ -90,38 +89,6 @@ public class CandidateControllerTest {
 		filterCaptor.getValue().getFirstname().orElseThrow();
 		filterCaptor.getValue().getSurname().orElseThrow();
 		filterCaptor.getValue().getEmail().orElseThrow();
-		
-	}
-	
-	/**
-	* Tests non Admin users cant filter on reserver attributes
-	* @throws Exception
-	*/
-	@Test
-	public void testGetCandidate_non_Admin_reservedAttributes() throws Exception {
-		
-		final String firstname 		= "kevin";
-		final String surname 		= "parkings";
-		final String email 			= "kparkings@gmail.com";
-		
-		ArgumentCaptor<CandidateFilterOptions> filterCaptor = ArgumentCaptor.forClass(CandidateFilterOptions.class);
-		
-		List<GrantedAuthority> roles = List.of("ROLE_RECRUITER").stream().map(role -> new SimpleGrantedAuthority(role)).collect(Collectors.toList());
-		
-		UsernamePasswordAuthenticationToken  authToken = new UsernamePasswordAuthenticationToken("username", "", roles);
-		
-		SecurityContextHolder.getContext().setAuthentication(authToken);
-		
-		@SuppressWarnings("unchecked")
-		Page<Candidate> mockPage = Mockito.mock(Page.class);
-		
-		Mockito.when(mockCandidateService.getCandidates(filterCaptor.capture(), Mockito.any())).thenReturn(mockPage);
-		
-		controller.getCandidate(null, null, null, null, null, null, null, null, null, null, null, null, null, firstname, surname, email, null, null);
-		
-		assertTrue(filterCaptor.getValue().getFirstname().isEmpty());
-		assertTrue(filterCaptor.getValue().getSurname().isEmpty());
-		assertTrue(filterCaptor.getValue().getEmail().isEmpty());
 		
 	}
 	

@@ -139,6 +139,13 @@ public class ListingServiceImpl implements ListingService{
 	@Override
 	public void registerListingViewedEvent(ListingViewedEvent event) {
 		
+		/**
+		* We don't want to know if admin has been viewing the listings 
+		*/
+		if (isAdmin()) {
+			return;
+		}
+		
 		ListingEntity listingEntity = this.listingDao.findById(event.getListingId()).orElseThrow(() -> new IllegalArgumentException("Cannot update unknown listing: " + event.getListingId()));
 		
 		ListingViewedEventEntity viewEntity = ListingViewedEventEntity.convertToEntity(event);
@@ -146,6 +153,17 @@ public class ListingServiceImpl implements ListingService{
 		listingEntity.addView(viewEntity);
 		
 		this.listingDao.save(listingEntity);
+		
+	}
+	
+	/**
+	* Whether or not the User is an Admin User
+	* @return Whether or not the current User is an Admin
+	*/
+	private boolean isAdmin() {
+		
+		return SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream().filter(role -> role.getAuthority().equals("ROLE_ADMIN")).findAny().isPresent();
+		
 		
 	}
 	

@@ -5,6 +5,9 @@ import { RecruiterService }								from '../recruiter.service';
 import { NgbModal, NgbModalOptions}						from '@ng-bootstrap/ng-bootstrap';
 import { ViewChild }									from '@angular/core';
 import { Listing}										from './listing';
+import { Candidate}										from './candidate';
+import { CandidateServiceService }						from '../candidate-service.service';
+import { environment }									from '../../environments/environment';
 
 @Component({
   selector: 'app-recruiter-listings',
@@ -14,8 +17,9 @@ import { Listing}										from './listing';
 export class RecruiterListingsComponent implements OnInit {
 
 	@ViewChild('feedbackBox', { static: false }) private content:any;
+	//@ViewChild('recommendedCandidates', { static: false }) private recommendedCandidates:any;
 
-  	constructor(private listingService:ListingService, private modalService: NgbModal, private recruiterService:RecruiterService) { }
+  	constructor(private listingService:ListingService, private modalService: NgbModal, private recruiterService:RecruiterService, public candidateService:CandidateServiceService) { }
 	
 	ngOnInit(): void {
 	
@@ -53,10 +57,14 @@ export class RecruiterListingsComponent implements OnInit {
 	private	pageSize:number						= 8;
   	public	totalPages:number					= 0;
   	public	currentPage:number					= 0;
-	public 	yearsExperienceValues:Array<number>	= new Array<number>();					
+	public 	yearsExperienceValues:Array<number>	= new Array<number>();		
+	
+	public showSuggestedCandidate:boolean 		= false;
+	public suggestedCandidate:Candidate 		= new Candidate();
+	public listingForSuggestedCandidate:Listing = new Listing();			
   	
 
-	public newListingFormBean:FormGroup 	= new FormGroup({
+	public newListingFormBean:FormGroup 		= new FormGroup({
      
 		title:				new FormControl(''),
 		type:				new FormControl(),
@@ -116,11 +124,11 @@ export class RecruiterListingsComponent implements OnInit {
 	      this.feedbackBoxClass = 'feedback-failure';
 	    }
 	
-	      let options: NgbModalOptions = {
+	   let options: NgbModalOptions = {
 	    	 centered: true
 	   };
-	
-	  this.modalService.open(this.content, options);
+
+		this.modalService.open(this.content, options);
 
   }
 	
@@ -399,7 +407,7 @@ export class RecruiterListingsComponent implements OnInit {
 		
 	}
 	
-		/**
+	/**
 	* Whether or not the previous page button 
 	* should be active
 	* */
@@ -427,7 +435,7 @@ export class RecruiterListingsComponent implements OnInit {
 
 	}
 	
-		/**
+	/**
 	* Fetches and displays the next page 
 	* of candidtes
 	*/
@@ -559,6 +567,341 @@ export class RecruiterListingsComponent implements OnInit {
 		for (let count=0; count <= 100; count++) {
 			this.yearsExperienceValues.push(count);
 		}
+	}
+	
+	public candidates:					Array<Candidate>			= new Array<Candidate>();
+
+	/**
+	* Retrieves candidates from the backend
+	*/
+	public fetchCandidateRecommendations(listing:Listing): void{
+    
+    	this.candidates 						= new Array<Candidate>();
+		let allCandidates:Array<Candidate> 		= new Array<Candidate>();
+		let selectedCandidates:Array<Candidate> = new Array<Candidate>();
+
+    	this.candidateService.getCandidates(this.getCandidateFilterParamString(listing)).subscribe( data => {
+
+      		this.totalPages = data.totalPages;
+  
+      		data.content.forEach((c:Candidate) => {
+        
+        		const candidate:Candidate = new Candidate();
+
+      			candidate.candidateId				= c.candidateId;
+      			candidate.city						= c.city;
+      			candidate.country					= this.getCandidateCountryCode(c.country);
+      			candidate.freelance					= this.getFreeProjectTypeOption(c.freelance);
+      			candidate.roleSought				= c.roleSought;
+      			candidate.function					= c.function;
+      			candidate.perm						= this.getFreeProjectTypeOption(c.perm);
+      			candidate.yearsExperience			= c.yearsExperience;
+      			candidate.languages					= c.languages;
+      			candidate.skills					= c.skills;
+				candidate.flaggedAsUnavailable 		= c.flaggedAsUnavailable;
+				candidate.firstname					= c.firstname;
+				candidate.surname					= c.surname;
+				candidate.email						= c.email;
+				
+				allCandidates.push(candidate);
+				
+			});
+			
+			allCandidates.forEach(potentialCandidate => {
+				
+				let skillPerception:string = this.getSkillScoreInternal(listing, potentialCandidate);
+				
+				if (selectedCandidates.length <= 12) {
+					if (skillPerception === 'Perfect') {
+      					selectedCandidates.push(potentialCandidate);
+					}		
+				}
+			});	
+			
+			allCandidates.forEach(potentialCandidate => {
+				
+				let skillPerception:string = this.getSkillScoreInternal(listing, potentialCandidate);
+				
+				if (selectedCandidates.length <= 12) {
+					if (skillPerception === 'Good') {
+      					selectedCandidates.push(potentialCandidate);
+					}		
+				}
+			});		
+			
+			allCandidates.forEach(potentialCandidate => {
+				
+				let skillPerception:string = this.getSkillScoreInternal(listing, potentialCandidate);
+				
+				if (selectedCandidates.length <= 12) {
+					if (skillPerception === 'Average') {
+      					selectedCandidates.push(potentialCandidate);
+					}		
+				}
+			});			
+			
+		});
+
+		this.candidates = selectedCandidates;
+
+	}
+	
+	/**
+	* Returns the code identifying the country
+	* @param country - Country to get the country code for
+	*/
+	public getCandidateCountryCode(country:string):string{
+
+		switch(country){
+			case "NETHERLANDS":{
+				return "NL";
+			}
+			case "BELGIUM":{
+				return "BE";
+			}
+			case "UK":{
+				return "UK";
+			}
+		}
+
+     	return '';
+
+  	}
+
+	/**
+	* Converts freelance option to display format
+	*/
+	private getFreeProjectTypeOption(freelance: string): string{
+
+		switch (freelance){
+        	case  'TRUE': {return 'X';}
+        	case  'FALSE': {return '-';}
+        	case  'UNKNOWN': {return '?';}
+      	}
+
+      	return '..'+freelance;
+
+	}
+	
+	/**
+	* Builds a query parameter string with the selected filter options
+	*/
+	private getCandidateFilterParamString(listing:Listing):string{
+    	
+		const filterParams:string = 'orderAttribute=candidateId&order=desc'
+                                                         + '&page=0'
+                                                         + '&size=100'
+                                                         + this.getCountryFilterParamString(listing) 			
+                                                         + this.getContractTypeParamString(listing)				
+                                                         + this.getYearsExperienceFilterParamAsString(listing);
+                                                         			
+                                                       
+		return filterParams;
+	
+	}
+	
+	/**
+	* Adds filter string if country specifed in Listing
+	*/
+	public getCountryFilterParamString(listing:Listing):string{
+		
+		if (listing.country === ''){
+			return '';
+		}
+		
+		return '&countries=' + listing.country;
+	}
+	
+	/**
+	* Adds filter for perm positions if specified in the listing
+	*/
+	public getContractTypeParamString(listing:Listing):string{
+		
+		if (listing.type === 'CONTRACT_ROLE') {
+			return '&freelance=true';
+		}
+		
+		if (listing.type === 'PERM_ROLE') {
+			return '&perm=true';
+		}
+	
+      	return '';
+	}
+		
+	/**
+ 	* Adds filter for years expeprience  if specified in the listing
+	*/
+	public getYearsExperienceFilterParamAsString(listing:Listing):string{
+		
+		if (listing.yearsExperience === 0) {
+			return '';
+		}
+		
+		return '&yearsExperienceGtEq=' + listing.yearsExperience;
+	}
+
+	/**
+	* Shows list of candidates similar to job listing
+	*/
+	public showSuggestedCandidateListView():void{
+		this.showSuggestedCandidate = false;
+		this.suggestedCandidate = new Candidate();
+	}
+	
+	/**
+	* Shows Candidate details
+	*/
+	public showSuggestedCandidateView(candidate:Candidate):void{
+		
+		this.showSuggestedCandidate = true;
+		this.suggestedCandidate 	= candidate;
+	}
+	
+	/**
+	* Shows the user suggestions relating to their listing 
+	*/
+	public openSuggestions(popupRecommendations:any, listing:Listing):void{
+	
+		this.showSuggestedCandidate 		= false;
+		this.suggestedCandidate	 			= new Candidate();
+		this.listingForSuggestedCandidate 	= listing;
+		
+		this.fetchCandidateRecommendations(listing);
+	
+		let options: NgbModalOptions = {
+			centered: true
+		};
+		
+		this.modalService.open(popupRecommendations, options);
+
+	}
+	
+	/**
+	*  Returns the url to perform the download of the candidates CV
+	*/
+	public getCurriculumDownloadUrl(curriculumId:string){
+		return  environment.backendUrl + 'curriculum/'+ curriculumId;
+	}
+	
+	/**
+	* Overloaded method to get skill score
+	* called form html
+	*/
+	public getSkillScore():string{
+		
+		let listing:Listing 				= this.listingForSuggestedCandidate;
+		let candidate:Candidate 			= this.suggestedCandidate;
+		
+		return this.getSkillScoreInternal(listing, candidate);
+		
+	}
+	
+	/**
+	* Returns how good the match between the required skills in the listing
+	* compare to the skills spoken by the candidate
+	*/
+	private getSkillScoreInternal(listing:Listing, candidate:Candidate):string{
+		
+		let totalPossiblePoints:number 		= listing.skills.length;
+		let actualPoints					= 0;
+		
+		listing.skills.forEach(skill => {
+			if (candidate.skills.indexOf(skill) >= 0) {
+				actualPoints = actualPoints + 1;
+			}
+		});
+		
+		return this.percentionValue(totalPossiblePoints, actualPoints);
+		
+	}
+	
+	/**
+	* Returns how good the match between the required languages in the listing
+	* compare to the languages spoken by the candidate
+	*/
+	public getLanguageMatchScore():string{
+		
+		let listing:Listing 				= this.listingForSuggestedCandidate;
+		let candidate:Candidate 			= this.suggestedCandidate;
+		let totalPossiblePoints:number 		= 0;
+		let actualPoints					= 0;
+		
+		if (listing.languages.includes('DUTCH')) {
+			
+			totalPossiblePoints = totalPossiblePoints + 2;
+			
+			if (candidate.getDutch() === 'PROFICIENT') {
+				actualPoints = actualPoints + 2;
+			}
+				
+			if (candidate.getDutch() === 'BASIC') {
+				actualPoints = actualPoints + 1;
+			}
+			
+		}
+		
+		if (listing.languages.includes('ENGLISH')) {
+			
+			totalPossiblePoints = totalPossiblePoints + 2;
+			
+			if (candidate.getEnglish() === 'PROFICIENT') {
+				actualPoints = actualPoints + 2;
+			}
+				
+			if (candidate.getEnglish() === 'BASIC') {
+				actualPoints = actualPoints + 1;
+			}
+					
+		}
+		
+		if (listing.languages.includes('FRENCH')) {
+			
+			totalPossiblePoints = totalPossiblePoints + 2;
+			
+			if (candidate.getFrench() === 'PROFICIENT') {
+				actualPoints = actualPoints + 2;
+			}
+				
+			if (candidate.getFrench() === 'BASIC') {
+				actualPoints = actualPoints + 1;
+			}
+			
+		}
+		
+		return this.percentionValue(totalPossiblePoints, actualPoints);
+		
+	}
+	
+	/**
+	* Returns the perceptions of how well a requirement is met by the Candidate
+	* in realtions to a requirement in the Listing
+	*/
+	private percentionValue(totalPossiblePoints:number, actualPoints:number):string {
+	
+		if (totalPossiblePoints === 0) {
+			return 'N/A';	
+		}
+		
+		let per:number = (actualPoints / totalPossiblePoints) * 100;
+		
+		if (per === 100) {
+			return 'Perfect';
+		}
+		
+		if (per >= 75) {
+			return "Good";
+		}
+		
+		if (per >= 50) {
+			return "Average";
+		}
+		
+		if (per < 50) {
+			return "Bad";
+		}
+		
+		return '';
+			
 	}
 	
 }

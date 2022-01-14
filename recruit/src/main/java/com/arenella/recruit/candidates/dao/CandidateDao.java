@@ -97,11 +97,10 @@ public interface CandidateDao extends CrudRepository<CandidateEntity, Long>, Jpa
 				predicates.add(criteriaBuilder.like(upperExpression, this.filterOptions.getEmail().get().toUpperCase()));
 			}
 			
-			
 			if (!this.filterOptions.getSkills().isEmpty()) {
 				
 				Expression<Collection<String>> skillValues = root.get("skills");
-			
+				
 				this.filterOptions.getSkills().forEach(skill -> {
 					predicates.add(criteriaBuilder.isMember(skill.toLowerCase().trim(), skillValues));
 				});

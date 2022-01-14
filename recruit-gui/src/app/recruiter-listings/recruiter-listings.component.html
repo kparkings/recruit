@@ -32,6 +32,7 @@
 						<thead>
 				      		<tr>
 				      			<!-- Table Headers -->
+				      			<th class="bg-tab-hdr"></th>
 				      			<th class="bg-tab-hdr">Created</th>
 								<th class="bg-tab-hdr">Title</th>
 				                <th class="bg-tab-hdr">Type</th>
@@ -41,12 +42,17 @@
 				      	</thead>
 				      	<tbody>
 				      		<!-- Table row -->
-				      		<tr class="listing-tab-row" *ngFor="let listing of listings" (click)="showListingDetails(listing)">
-				      			<td class="listing-tab-col">{{listing.created | date:'yyyy-MM-dd hh:mm'}}</td>
-				      			<td class="listing-tab-col">{{listing.title}}</td>
-				                <td class="listing-tab-col">{{getContractType(listing.type)}}</td>
-				                <td class="listing-tab-col">{{getCountryCode(listing.country)}}</td>
-				                <td class="listing-tab-col">{{listing.views}}</td>
+				      		<tr class="listing-tab-row" *ngFor="let listing of listings" >
+				      			<td  class="listing-tab-col" (click)="openSuggestions(recommendedCandidates, listing)">
+				      				<span class="material-icons" style="font-size:14px;">
+	      								search
+	      							</span>
+				      			</td>
+				      			<td (click)="showListingDetails(listing)" class="listing-tab-col">{{listing.created | date:'yyyy-MM-dd hh:mm'}}</td>
+				      			<td (click)="showListingDetails(listing)" class="listing-tab-col">{{listing.title}}</td>
+				                <td (click)="showListingDetails(listing)" class="listing-tab-col">{{getContractType(listing.type)}}</td>
+				                <td (click)="showListingDetails(listing)" class="listing-tab-col">{{getCountryCode(listing.country)}}</td>
+				                <td (click)="showListingDetails(listing)" class="listing-tab-col">{{listing.views}}</td>
 				      		</tr>	
 				      	</tbody>
 					</table>
@@ -278,25 +284,86 @@
 							</div>
 						</div>
 					</form>
-					
-					<ng-template #feedbackBox let-modal>
-						<div class="modal-header">
-							<h4 class="modal-title">{{feedbackBoxTitle}}</h4>
-			   				<div class="filter-close-box" (click)="closeModal()">X</div>
-			 			</div>
-						<div class="feedbackBox; {{feedbackBoxClass}}">
-							<div class="modal-body">
-								<ul class='feedback-failure'>
-									<li *ngFor="let errMessage of validationErrors"> {{errMessage}} </li>
-								</ul><br>
-							</div>       
-						</div>
-					</ng-template> 
-			
 				</div>
 			</div>			
 		</div>
-		
-
 	
 </div>
+
+<ng-template #feedbackBox let-modal>
+	<div class="modal-header">
+		<h4 class="modal-title">{{feedbackBoxTitle}}</h4>
+ 				<div class="filter-close-box" (click)="closeModal()">X</div>
+		</div>
+		<div class="feedbackBox; {{feedbackBoxClass}}">
+		<div class="modal-body">
+			<ul class='feedback-failure'>
+				<li *ngFor="let errMessage of validationErrors"> {{errMessage}} </li>
+			</ul><br>
+		</div>       
+	</div>
+</ng-template> 
+
+<ng-template #recommendedCandidates let-modal>
+	
+	<div class="modal-header">
+		<h4 class="modal-title">Recommended Candidates</h4>
+ 		<div class="filter-close-box" (click)="closeModal()">X</div>
+	</div>
+	
+	<div class="modal-body-recommendations" *ngIf="!showSuggestedCandidate">
+		<div *ngFor="let candidate of candidates" class="recommendation" (click)="showSuggestedCandidateView(candidate)">
+			<span style="color:black;">C{{candidate.candidateId}}</span>
+		</div>
+
+	</div>   
+	
+	<div *ngIf="showSuggestedCandidate" style="padding:10px;">
+	
+		<h3>C{{suggestedCandidate.candidateId}} - {{suggestedCandidate.firstname}} {{suggestedCandidate.surname}}</h3>
+		<h4>{{suggestedCandidate.roleSought}}</h4>
+		
+		<div style="padding:10px;border-top:1px solid black;">
+			<table style="width:100%;">
+				<tr>
+					<td style="font-weight:bold">Location</td>
+					<td>{{suggestedCandidate.country}} - {{suggestedCandidate.city}}</td>
+				</tr>
+				<tr>
+					<td style="font-weight:bold">Years Experience</td>
+					<td>{{suggestedCandidate.yearsExperience}}</td>
+				</tr>
+				<tr>
+					<td style="font-weight:bold">email</td>
+					<td>{{suggestedCandidate.email}}</td>
+				</tr>
+				<tr>
+					<td style="font-weight:bold">Language Match</td>
+					<td style="border:1px black solid; background:white;padding:2px;margin:2px;">
+						<div class="perception{{getLanguageMatchScore()}}">&nbsp;</div>
+					</td>
+				</tr>
+				<tr>
+					<td style="font-weight:bold">Skill Match</td>
+					<td style="border:1px black solid; background:white;padding:2px;margin:2px;">
+						<div  class="perception{{getSkillScore()}}">&nbsp;</div>
+					</td>
+				</tr>
+				<tr>
+					<td style="font-weight:bold">Contract type Match</td>
+					<td>
+						Yes
+					</td>
+				</tr>
+			</table>
+		</div>
+	
+	    <div style="margin-right:20px;margin-top:10px;border-top:1px solid black;padding:10px;width:100%;text-align:right;">
+	    
+	    	<a class="currliculum-link" href="{{getCurriculumDownloadUrl(suggestedCandidate.candidateId)}}" >
+	    		<button class="btn btn-secondary btn-action" style="margin-right:10px;" >Download CV</button>
+	    	</a>
+	    	<button class="btn btn-secondary btn-action" (click)="showSuggestedCandidateListView()">back</button>
+	    </div>
+	</div>    
+</ng-template> 

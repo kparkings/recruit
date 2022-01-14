@@ -224,5 +224,66 @@
 	background:red;
 }
 
+.modal-body-recommendations{
+    font-size: large;
+    height:350px;
+    text-align: center;
+    padding-top:12px;
+    padding-left:11px;
+}
 
- 
+.recommendation-download{
+    font-size: large;
+    height:295px;
+    text-align: center;
+    padding-top:12px;
+    padding-left:11px;
+}
+
+.recommendation{
+	float:left;
+	margin-left:15px;
+	border:1px solid black;
+	padding:10px;
+	width:100px;
+	height:100px;
+	margin-bottom:10px;
+	cursor:pointer;
+}
+
+.recommendation:hover{
+	background:#E8E8E8;
+} 
+
+.recommendation-download{
+	text-align:center;
+	margin-top:10px;
+}
+
+a {
+    color: green;
+    text-decoration: none;
+    background-color: transparent;
+}
+
+
+.perceptionPerfect{
+	background:green;
+	width:100%;	
+}
+
+.perceptionGood{
+	background:green;
+	width:75%;
+}
+
+.perceptionAverage{
+	background:orange;
+	width:50%;
+}
+
+
+.perceptionBad{
+	background:red;
+	width:25%;
+}

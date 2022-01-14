@@ -109,7 +109,7 @@ export class RecruiterSignupComponent implements OnInit {
 	      this.feedbackBoxClass = 'feedback-failure';
 	    }
 	
-	      let options: NgbModalOptions = {
+	     let options: NgbModalOptions = {
 	    	 centered: true
 	   };
 	

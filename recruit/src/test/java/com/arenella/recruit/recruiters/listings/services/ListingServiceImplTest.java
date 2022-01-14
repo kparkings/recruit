@@ -1,5 +1,8 @@
 package com.arenella.recruit.recruiters.listings.services;
 
+import java.time.LocalDateTime;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -13,8 +16,10 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import com.arenella.recruit.listings.beans.Listing;
+import com.arenella.recruit.listings.beans.ListingViewedEvent;
 import com.arenella.recruit.listings.dao.ListingDao;
 import com.arenella.recruit.listings.dao.ListingEntity;
 import com.arenella.recruit.listings.exceptions.ListingValidationException;
@@ -296,9 +301,7 @@ public class ListingServiceImplTest {
 
 			service.addListing(listing, true);
 
-			
 		});
-		
 
 		Assertions.assertThrows(ListingValidationException.class, () -> {
 			Listing 			listing 		= Listing
@@ -358,6 +361,86 @@ public class ListingServiceImplTest {
 			
 		});
 
+	}
+	
+	/**
+	* Tests exception is thrown if attempt is made to log an event
+	* for viewing a Listing that does not exist
+	* @throws Exception
+	*/
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@Test
+	public void testRegisterListingViewedEvent_unknownListing() throws Exception {
+		
+		Collection authorities = new HashSet<>();
+		authorities.add(new SimpleGrantedAuthority("ROLE_RECRUITER"));
+
+		Mockito.when(mockAuthentication.getAuthorities()).thenReturn(authorities);
+		
+		final UUID eventId 		= UUID.randomUUID();
+		final UUID listingId 	= UUID.randomUUID();
+		final LocalDateTime created = LocalDateTime.of(2022, 1, 14, 10, 11, 12);
+		ListingViewedEvent event = ListingViewedEvent.builder().eventId(eventId).created(created).listingId(listingId).build();
+				
+		Mockito.when(this.mockListingDao.findById(event.getListingId())).thenReturn(Optional.empty());
+		
+		Assertions.assertThrows(IllegalArgumentException.class, () -> {
+			this.service.registerListingViewedEvent(event);
+		});
+		
+	}
+	
+	/**
+	* Tests logging of event to show Listing was viewed
+	* @throws Exception
+	*/
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@Test
+	public void testRegisterListingViewedEvent() throws Exception {
+		
+		Collection authorities = new HashSet<>();
+		authorities.add(new SimpleGrantedAuthority("ROLE_RECRUITER"));
+
+		Mockito.when(mockAuthentication.getAuthorities()).thenReturn(authorities);
+		
+		final UUID eventId 		= UUID.randomUUID();
+		final UUID listingId 	= UUID.randomUUID();
+		final LocalDateTime created = LocalDateTime.of(2022, 1, 14, 10, 11, 12);
+		
+		ListingViewedEvent 	event 		= ListingViewedEvent.builder().eventId(eventId).created(created).listingId(listingId).build();
+		ListingEntity 		eventEntity = ListingEntity.builder().created(created).listingId(listingId).build();
+				
+		Mockito.when(this.mockListingDao.findById(event.getListingId())).thenReturn(Optional.of(eventEntity));
+		
+		this.service.registerListingViewedEvent(event);
+		
+		Mockito.verify(this.mockListingDao, Mockito.times(1)).save(Mockito.any());
+		
+	}
+	
+	/**
+	* Tests if Admin user views event it is not logged
+	* @throws Exception
+	*/
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@Test
+	public void testRegisterListingViewedEvent_admin() throws Exception {
+		
+		Collection authorities = new HashSet<>();
+		authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+
+		Mockito.when(mockAuthentication.getAuthorities()).thenReturn(authorities);
+		
+		final UUID eventId 		= UUID.randomUUID();
+		final UUID listingId 	= UUID.randomUUID();
+		final LocalDateTime created = LocalDateTime.of(2022, 1, 14, 10, 11, 12);
+		
+		ListingViewedEvent 	event 		= ListingViewedEvent.builder().eventId(eventId).created(created).listingId(listingId).build();
+		
+		this.service.registerListingViewedEvent(event);
+		
+		Mockito.verify(this.mockListingDao, Mockito.times(0)).save(Mockito.any());
+		
 	}
 
 }
