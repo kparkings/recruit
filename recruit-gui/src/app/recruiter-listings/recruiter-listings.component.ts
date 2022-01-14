@@ -299,11 +299,11 @@ export class RecruiterListingsComponent implements OnInit {
 		}
 		
 		if (langEnglish === true) {
-			languages.push('FRENCH');
+			languages.push('ENGLISH');
 		}
 		
 		if (langFrench === true) {
-			languages.push('ENGLISH');
+			languages.push('FRENCH');
 		}
 		
 		this.validationErrors	= new Array<string>();
@@ -611,7 +611,7 @@ export class RecruiterListingsComponent implements OnInit {
 				
 				let skillPerception:string = this.getSkillScoreInternal(listing, potentialCandidate);
 				
-				if (selectedCandidates.length <= 12) {
+				if (selectedCandidates.length < 12) {
 					if (skillPerception === 'Perfect') {
       					selectedCandidates.push(potentialCandidate);
 					}		
@@ -622,7 +622,7 @@ export class RecruiterListingsComponent implements OnInit {
 				
 				let skillPerception:string = this.getSkillScoreInternal(listing, potentialCandidate);
 				
-				if (selectedCandidates.length <= 12) {
+				if (selectedCandidates.length < 12) {
 					if (skillPerception === 'Good') {
       					selectedCandidates.push(potentialCandidate);
 					}		
@@ -633,7 +633,7 @@ export class RecruiterListingsComponent implements OnInit {
 				
 				let skillPerception:string = this.getSkillScoreInternal(listing, potentialCandidate);
 				
-				if (selectedCandidates.length <= 12) {
+				if (selectedCandidates.length < 12) {
 					if (skillPerception === 'Average') {
       					selectedCandidates.push(potentialCandidate);
 					}		
