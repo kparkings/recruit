@@ -157,6 +157,30 @@ public class CandidateFilterOptions {
 	}
 	
 	/**
+	* Sets the level of Dutch to filter on
+	* @return Candidates level in Dutch
+	*/
+	public void setDutch(Language.LEVEL dutch){
+		this.dutch = dutch;
+	}
+	
+	/**
+	* Sets the level of English to filter on
+	* @return Candidate level in English
+	*/
+	public void setEnglish(Language.LEVEL english){
+		this.english = english;
+	}
+	
+	/**
+	* Sets the level of French to filter on
+	* @return Candidate level in French
+	*/
+	public void setFrench(Language.LEVEL french){
+		this.french = french;
+	}
+	
+	/**
 	* Returns the skills to filter on
 	* @return skills of the Candidate
 	*/

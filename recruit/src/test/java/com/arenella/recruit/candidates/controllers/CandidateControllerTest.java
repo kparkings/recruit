@@ -3,29 +3,24 @@ package com.arenella.recruit.candidates.controllers;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 
 import com.arenella.recruit.candidates.beans.Candidate;
-import com.arenella.recruit.candidates.beans.CandidateFilterOptions;
+import com.arenella.recruit.candidates.beans.CandidateSearchAccuracyWrapper;
 import com.arenella.recruit.candidates.beans.PendingCandidate;
 import com.arenella.recruit.candidates.controllers.CandidateController.CANDIDATE_UPDATE_ACTIONS;
 import com.arenella.recruit.candidates.services.CandidateDownloadService;
@@ -61,38 +56,6 @@ public class CandidateControllerTest {
 	}
 	
 	/**
-	* Tests Admin users can filter on reserver attributes
-	* @throws Exception
-	*/
-	@Test
-	public void testGetCandidate_isAdmin_reservedAttributes() throws Exception {
-		
-		final String firstname 		= "kevin";
-		final String surname 		= "parkings";
-		final String email 			= "kparkings@gmail.com";
-		
-		ArgumentCaptor<CandidateFilterOptions> filterCaptor = ArgumentCaptor.forClass(CandidateFilterOptions.class);
-		
-		List<GrantedAuthority> roles = List.of("ROLE_ADMIN").stream().map(role -> new SimpleGrantedAuthority(role)).collect(Collectors.toList());
-		
-		UsernamePasswordAuthenticationToken  authToken = new UsernamePasswordAuthenticationToken("username", "", roles);
-		
-		SecurityContextHolder.getContext().setAuthentication(authToken);
-		
-		@SuppressWarnings("unchecked")
-		Page<Candidate> mockPage = Mockito.mock(Page.class);
-		
-		Mockito.when(mockCandidateService.getCandidates(filterCaptor.capture(), Mockito.any())).thenReturn(mockPage);
-		
-		controller.getCandidate(null, null, null, null, null, null, null, null, null, null, null, null, null, firstname, surname, email, null, null);
-		
-		filterCaptor.getValue().getFirstname().orElseThrow();
-		filterCaptor.getValue().getSurname().orElseThrow();
-		filterCaptor.getValue().getEmail().orElseThrow();
-		
-	}
-	
-	/**
 	* Tests all candidates are returned
 	* @throws Exception
 	*/
@@ -102,12 +65,40 @@ public class CandidateControllerTest {
 	}
 	
 	/**
-	* Tests the requested Candiate is returned
+	* Tests retrieval of Paginated candidates
 	* @throws Exception
 	*/
 	@Test
 	public void testGetCandidate() throws Exception{
+	
+		Page<Candidate> candidatePage = Page.empty();
 		
+		Mockito.when(this.mockCandidateService.getCandidates(Mockito.any(), Mockito.any())).thenReturn(candidatePage);
+		
+		this.controller.getCandidate(null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,false,null);
+
+		Mockito.verify(this.mockCandidateService).getCandidates(Mockito.any(), Mockito.any());
+		
+	}
+	
+	/**
+	* Tests retrieval of candidate suggestions
+	* @throws Exception
+	*/
+	@Test
+	public void testGetCandidate_suggestions() throws Exception{
+		
+		Page<CandidateSearchAccuracyWrapper> candidatePage = Page.empty();
+		
+		Mockito.when(this.mockCandidateService.getCandidateSuggestions(Mockito.any(), Mockito.any())).thenReturn(candidatePage);
+		
+		PageRequest mockPageRequest = Mockito.mock(PageRequest.class);
+		Mockito.when(mockPageRequest.getPageSize()).thenReturn(1);
+		
+		this.controller.getCandidate(null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,true,mockPageRequest);
+		
+		Mockito.verify(this.mockCandidateService).getCandidateSuggestions(Mockito.any(), Mockito.any());
+	
 	}
 	
 	/**

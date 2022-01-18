@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 
 import com.arenella.recruit.candidates.beans.Candidate;
 import com.arenella.recruit.candidates.beans.CandidateFilterOptions;
+import com.arenella.recruit.candidates.beans.CandidateSearchAccuracyWrapper;
 import com.arenella.recruit.candidates.beans.PendingCandidate;
 import com.arenella.recruit.candidates.controllers.CandidateController.CANDIDATE_UPDATE_ACTIONS;
 
@@ -44,6 +45,15 @@ public interface CandidateService {
 	* @return Candidates
 	*/
 	public Page<Candidate> getCandidates(CandidateFilterOptions filterOptions, Pageable pageable);
+	
+	/**
+	* Retrieves a list of Candidates
+	* @param filterOptions  - filters to apply to the results
+	* @param maxSuggestions - maximum number of suggestions to return
+	* @return Candidates
+	*/
+	public Page<CandidateSearchAccuracyWrapper> getCandidateSuggestions(CandidateFilterOptions filterOptions, Integer maxSuggestions);
+	
 	
 	/**
 	* Retrieves a list of Candidates

@@ -36,35 +36,35 @@ export class RecruiterListingsComponent implements OnInit {
 	
   	}
 
-	private  recruiterId:string					= '';
-	private  recruiterFirstName:string 			= '';
-	private  recruiterSurname:string			= '';
-	private  recruiterEmail:string 				= '';
-	private  recruiterCompany:string			= '';
+	private  recruiterId:string							= '';
+	private  recruiterFirstName:string 					= '';
+	private  recruiterSurname:string					= '';
+	private  recruiterEmail:string 						= '';
+	private  recruiterCompany:string					= '';
 	
-	public skills:Array<string> 				= new Array<string>();
-	public listings:Array<Listing>				= new Array<Listing>();
-	public activeView:string					= 'list';
-	public activeSubView:string					= 'none';
-	public selectedListing:Listing				= new Listing();
+	public skills:Array<string> 						= new Array<string>();
+	public listings:Array<Listing>						= new Array<Listing>();
+	public activeView:string							= 'list';
+	public activeSubView:string							= 'none';
+	public selectedListing:Listing						= new Listing();
 	
-	public feedbackBoxClass:string          	= '';
-  	public feedbackBoxTitle                 	= '';
-  	public feedbackBoxText:string           	= '';
-	public validationErrors:Array<string>		= new Array<string>();
-	public enabldeDeleteOption:boolean			= false;
+	public feedbackBoxClass:string          			= '';
+  	public feedbackBoxTitle                 			= '';
+  	public feedbackBoxText:string           			= '';
+	public validationErrors:Array<string>				= new Array<string>();
+	public enabldeDeleteOption:boolean					= false;
 	
-	private	pageSize:number						= 8;
-  	public	totalPages:number					= 0;
-  	public	currentPage:number					= 0;
-	public 	yearsExperienceValues:Array<number>	= new Array<number>();		
+	private	pageSize:number								= 8;
+  	public	totalPages:number							= 0;
+  	public	currentPage:number							= 0;
+	public 	yearsExperienceValues:Array<number>			= new Array<number>();		
 	
-	public showSuggestedCandidate:boolean 		= false;
-	public suggestedCandidate:Candidate 		= new Candidate();
-	public listingForSuggestedCandidate:Listing = new Listing();			
+	public showSuggestedCandidate:boolean 				= false;
+	public suggestedCandidate:Candidate			 		= new Candidate();
+	public listingForSuggestedCandidate:Listing 		= new Listing();			
   	
 
-	public newListingFormBean:FormGroup 		= new FormGroup({
+	public newListingFormBean:FormGroup 				= new FormGroup({
      
 		title:				new FormControl(''),
 		type:				new FormControl(),
@@ -577,72 +577,90 @@ export class RecruiterListingsComponent implements OnInit {
 	public fetchCandidateRecommendations(listing:Listing): void{
     
     	this.candidates 						= new Array<Candidate>();
-		let allCandidates:Array<Candidate> 		= new Array<Candidate>();
-		let selectedCandidates:Array<Candidate> = new Array<Candidate>();
+		//let allCandidates:Array<CandidateSuggestion> 		= new Array<Candidate>();
+		//let selectedCandidates:Array<Candidate> = new Array<Candidate>();
 
     	this.candidateService.getCandidates(this.getCandidateFilterParamString(listing)).subscribe( data => {
 
       		this.totalPages = data.totalPages;
   
+
+				
+				
       		data.content.forEach((c:Candidate) => {
         
+				console.log('C ===> ' + JSON.stringify(c));
+
         		const candidate:Candidate = new Candidate();
 
-      			candidate.candidateId				= c.candidateId;
-      			candidate.city						= c.city;
-      			candidate.country					= this.getCandidateCountryCode(c.country);
-      			candidate.freelance					= this.getFreeProjectTypeOption(c.freelance);
-      			candidate.roleSought				= c.roleSought;
-      			candidate.function					= c.function;
-      			candidate.perm						= this.getFreeProjectTypeOption(c.perm);
-      			candidate.yearsExperience			= c.yearsExperience;
-      			candidate.languages					= c.languages;
-      			candidate.skills					= c.skills;
-				candidate.flaggedAsUnavailable 		= c.flaggedAsUnavailable;
-				candidate.firstname					= c.firstname;
-				candidate.surname					= c.surname;
-				candidate.email						= c.email;
+      			candidate.candidateId			= c.candidateId;
+      			candidate.city					= c.city;
+      			candidate.country				= this.getCandidateCountryCode(c.country);
+      			candidate.freelance				= this.getFreeProjectTypeOption(c.freelance);
+      			candidate.roleSought			= c.roleSought;
+      			candidate.function				= c.function;
+      			candidate.perm					= this.getFreeProjectTypeOption(c.perm);
+      			candidate.yearsExperience		= c.yearsExperience;
+      			candidate.languages				= c.languages;
+      			candidate.skills				= c.skills;
+				candidate.flaggedAsUnavailable 	= c.flaggedAsUnavailable;
+				candidate.firstname				= c.firstname;
+				candidate.surname				= c.surname;
+				candidate.email					= c.email;
+				candidate.accuracyLanguages		= c.accuracyLanguages;
+				candidate.accuracySkills		= c.accuracySkills
 				
-				allCandidates.push(candidate);
+				this.candidates.push(candidate);
 				
 			});
 			
-			allCandidates.forEach(potentialCandidate => {
+			//allCandidates.forEach(potentialCandidate => {
 				
-				let skillPerception:string = this.getSkillScoreInternal(listing, potentialCandidate);
+			//	let skillPerception:string = this.getSkillScoreInternal(listing, potentialCandidate);
 				
-				if (selectedCandidates.length < 12) {
-					if (skillPerception === 'Perfect') {
-      					selectedCandidates.push(potentialCandidate);
-					}		
-				}
-			});	
+			//	if (selectedCandidates.length < 12) {
+			//		if (skillPerception === 'Perfect') {
+      		//			selectedCandidates.push(potentialCandidate);
+			//		}		
+			//	}
+			//});	
 			
-			allCandidates.forEach(potentialCandidate => {
+			//allCandidates.forEach(potentialCandidate => {
 				
-				let skillPerception:string = this.getSkillScoreInternal(listing, potentialCandidate);
+			//	let skillPerception:string = this.getSkillScoreInternal(listing, potentialCandidate);
 				
-				if (selectedCandidates.length < 12) {
-					if (skillPerception === 'Good') {
-      					selectedCandidates.push(potentialCandidate);
-					}		
-				}
-			});		
+			//	if (selectedCandidates.length < 12) {
+			//		if (skillPerception === 'Good') {
+      		//			selectedCandidates.push(potentialCandidate);
+			//		}		
+			//	}
+			//});		
 			
-			allCandidates.forEach(potentialCandidate => {
+			//allCandidates.forEach(potentialCandidate => {
 				
-				let skillPerception:string = this.getSkillScoreInternal(listing, potentialCandidate);
+			//	let skillPerception:string = this.getSkillScoreInternal(listing, potentialCandidate);
 				
-				if (selectedCandidates.length < 12) {
-					if (skillPerception === 'Average') {
-      					selectedCandidates.push(potentialCandidate);
-					}		
-				}
-			});			
+			//	if (selectedCandidates.length < 12) {
+			//		if (skillPerception === 'Average') {
+      		//			selectedCandidates.push(potentialCandidate);
+			//		}		
+			//	}
+			//});	
+			
+			//allCandidates.forEach(potentialCandidate => {
+				
+			//	let skillPerception:string = this.getSkillScoreInternal(listing, potentialCandidate);
+				
+			//	if (selectedCandidates.length < 12) {
+			//		if (skillPerception === 'Bad') {
+      		//			selectedCandidates.push(potentialCandidate);
+			//		}		
+			//	}
+			//});			
 			
 		});
 
-		this.candidates = selectedCandidates;
+		//this.candidates = selectedCandidates;
 
 	}
 	
@@ -690,16 +708,55 @@ export class RecruiterListingsComponent implements OnInit {
     	
 		const filterParams:string = 'orderAttribute=candidateId&order=desc'
                                                          + '&page=0'
-                                                         + '&size=100'
+                                                         + '&size=12'
+														 + '&useSuggestions=true'
                                                          + this.getCountryFilterParamString(listing) 			
                                                          + this.getContractTypeParamString(listing)				
-                                                         + this.getYearsExperienceFilterParamAsString(listing);
-                                                         			
-                                                       
+                                                         + this.getYearsExperienceFilterParamAsString(listing)
+														 + this.getSkillsParamString(listing)
+														 + this.getLanguagesParamString(listing);
+					                                   
 		return filterParams;
 	
 	}
 	
+	private getSkillsParamString(listing:Listing):string{
+      
+		if (listing.skills.length > 0) {
+
+			let rawSkills:string = listing.skills.toString();
+			let encodedSkills:string = '&skills='+encodeURIComponent(rawSkills);
+			
+			return encodedSkills; 
+      	}
+
+      return '';
+ 
+	}
+	
+	/**
+  	* Creates a query param string with the filter options to apply to the dutch languge filter
+  	*/
+	private getLanguagesParamString(listing:Listing):string{
+  
+		let paramString:string = '';
+		
+		if (listing.languages.indexOf('DUTCH')  >= 0 ) {
+			paramString = paramString +  '&dutch=' + 'PROFICIENT';
+		}
+		
+		if (listing.languages.indexOf('FRENCH')  >= 0 ) {
+			paramString = paramString +  '&french=' + 'PROFICIENT';
+		}
+		
+		if (listing.languages.indexOf('ENGLISH')  >= 0 ) {
+			paramString = paramString +  '&english=' + 'PROFICIENT';
+		}  
+		
+		return paramString;
+  
+	}
+  
 	/**
 	* Adds filter string if country specifed in Listing
 	*/
@@ -787,121 +844,121 @@ export class RecruiterListingsComponent implements OnInit {
 	* Overloaded method to get skill score
 	* called form html
 	*/
-	public getSkillScore():string{
+	//public getSkillScore():string{
 		
-		let listing:Listing 				= this.listingForSuggestedCandidate;
-		let candidate:Candidate 			= this.suggestedCandidate;
+	//	let listing:Listing 				= this.listingForSuggestedCandidate;
+	//	let candidate:Candidate 			= this.suggestedCandidate;
 		
-		return this.getSkillScoreInternal(listing, candidate);
+	//	return this.getSkillScoreInternal(listing, candidate);
 		
-	}
+	//}
 	
 	/**
 	* Returns how good the match between the required skills in the listing
 	* compare to the skills spoken by the candidate
 	*/
-	private getSkillScoreInternal(listing:Listing, candidate:Candidate):string{
+	//private getSkillScoreInternal(listing:Listing, candidate:Candidate):string{
 		
-		let totalPossiblePoints:number 		= listing.skills.length;
-		let actualPoints					= 0;
+	//	let totalPossiblePoints:number 		= listing.skills.length;
+	//	let actualPoints					= 0;
 		
-		listing.skills.forEach(skill => {
-			if (candidate.skills.indexOf(skill) >= 0) {
-				actualPoints = actualPoints + 1;
-			}
-		});
+	//	listing.skills.forEach(skill => {
+	//		if (candidate.skills.indexOf(skill) >= 0) {
+	//			actualPoints = actualPoints + 1;
+	//		}
+	//	});
 		
-		return this.percentionValue(totalPossiblePoints, actualPoints);
+	//	return this.percentionValue(totalPossiblePoints, actualPoints);
 		
-	}
+	//}
 	
 	/**
 	* Returns how good the match between the required languages in the listing
 	* compare to the languages spoken by the candidate
 	*/
-	public getLanguageMatchScore():string{
+	//public getLanguageMatchScore():string{
 		
-		let listing:Listing 				= this.listingForSuggestedCandidate;
-		let candidate:Candidate 			= this.suggestedCandidate;
-		let totalPossiblePoints:number 		= 0;
-		let actualPoints					= 0;
+	//	let listing:Listing 				= this.listingForSuggestedCandidate;
+	//	let candidate:Candidate 			= this.suggestedCandidate;
+	//	let totalPossiblePoints:number 		= 0;
+	//	let actualPoints					= 0;
 		
-		if (listing.languages.includes('DUTCH')) {
+	//	if (listing.languages.includes('DUTCH')) {
 			
-			totalPossiblePoints = totalPossiblePoints + 2;
+	//		totalPossiblePoints = totalPossiblePoints + 2;
 			
-			if (candidate.getDutch() === 'PROFICIENT') {
-				actualPoints = actualPoints + 2;
-			}
+	//		if (candidate.getDutch() === 'PROFICIENT') {
+	//			actualPoints = actualPoints + 2;
+	//		}
 				
-			if (candidate.getDutch() === 'BASIC') {
-				actualPoints = actualPoints + 1;
-			}
+	//		if (candidate.getDutch() === 'BASIC') {
+	//			actualPoints = actualPoints + 1;
+	//		}
 			
-		}
+	//	}
 		
-		if (listing.languages.includes('ENGLISH')) {
+	//	if (listing.languages.includes('ENGLISH')) {
 			
-			totalPossiblePoints = totalPossiblePoints + 2;
+	//		totalPossiblePoints = totalPossiblePoints + 2;
 			
-			if (candidate.getEnglish() === 'PROFICIENT') {
-				actualPoints = actualPoints + 2;
-			}
+	//		if (candidate.getEnglish() === 'PROFICIENT') {
+	//			actualPoints = actualPoints + 2;
+	//		}
 				
-			if (candidate.getEnglish() === 'BASIC') {
-				actualPoints = actualPoints + 1;
-			}
-					
-		}
+	//		if (candidate.getEnglish() === 'BASIC') {
+	//			actualPoints = actualPoints + 1;
+	//		}
+	//				
+	//	}
 		
-		if (listing.languages.includes('FRENCH')) {
+	//	if (listing.languages.includes('FRENCH')) {
+	//		
+	//		totalPossiblePoints = totalPossiblePoints + 2;
 			
-			totalPossiblePoints = totalPossiblePoints + 2;
-			
-			if (candidate.getFrench() === 'PROFICIENT') {
-				actualPoints = actualPoints + 2;
-			}
+	//		if (candidate.getFrench() === 'PROFICIENT') {
+	//			actualPoints = actualPoints + 2;
+	//		}
 				
-			if (candidate.getFrench() === 'BASIC') {
-				actualPoints = actualPoints + 1;
-			}
+	//		if (candidate.getFrench() === 'BASIC') {
+	//			actualPoints = actualPoints + 1;
+	//		}
 			
-		}
+	//	}
 		
-		return this.percentionValue(totalPossiblePoints, actualPoints);
+	//	return this.percentionValue(totalPossiblePoints, actualPoints);
 		
-	}
+	//}
 	
 	/**
 	* Returns the perceptions of how well a requirement is met by the Candidate
 	* in realtions to a requirement in the Listing
 	*/
-	private percentionValue(totalPossiblePoints:number, actualPoints:number):string {
+	//private percentionValue(totalPossiblePoints:number, actualPoints:number):string {
 	
-		if (totalPossiblePoints === 0) {
-			return 'N/A';	
-		}
+	//	if (totalPossiblePoints === 0) {
+	//		return 'N/A';	
+	//	}
 		
-		let per:number = (actualPoints / totalPossiblePoints) * 100;
+	//	let per:number = (actualPoints / totalPossiblePoints) * 100;
 		
-		if (per === 100) {
-			return 'Perfect';
-		}
+	//	if (per === 100) {
+	//		return 'Perfect';
+	//	}
 		
-		if (per >= 75) {
-			return "Good";
-		}
+	//	if (per >= 75) {
+	//		return "Good";
+	//	}
 		
-		if (per >= 50) {
-			return "Average";
-		}
+	//	if (per >= 50) {
+	//		return "Average";
+	//	}
+	//	
+	//	if (per < 50) {
+	//		return "Bad";
+	//	}
 		
-		if (per < 50) {
-			return "Bad";
-		}
-		
-		return '';
+	//	return '';
 			
-	}
+	//}
 	
 }

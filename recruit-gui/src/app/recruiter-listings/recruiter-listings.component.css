@@ -266,24 +266,28 @@ a {
     background-color: transparent;
 }
 
-
-.perceptionPerfect{
+.perception-perfect{
 	background:green;
 	width:100%;	
 }
 
-.perceptionGood{
+.perception-excellent{
+	background:green;
+	width:90%;
+}
+
+.perception-good{
 	background:green;
 	width:75%;
 }
 
-.perceptionAverage{
+
+.perception-average{
 	background:orange;
-	width:50%;
+	width:60%;
 }
 
-
-.perceptionBad{
+.perception-poor{
 	background:red;
-	width:25%;
+	width:50%;
 }

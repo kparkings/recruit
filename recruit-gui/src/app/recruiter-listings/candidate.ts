@@ -75,48 +75,58 @@ export class Candidate {
 	* Languages the candidate speaks
 	*/
 	languages: 			Array<Language> 	= new Array<Language>();
+	
+	/**
+	* How accurate the Candidates languages are in relation to the Listings language requirements
+	*/
+	accuracyLanguages:string 				= 'poor';
+	
+	/**
+	* How accurate the Candidates Skills are in relation to the Listings Skills requirements
+	*/
+	accuracySkills:string 					= 'poor';
 				
-	getDutch():string{
+	//getDutch():string{
 
-		const language:Language = this.languages.filter(l => l.language === 'DUTCH')[0];
+	//	const language:Language = this.languages.filter(l => l.language === 'DUTCH')[0];
 		
-		if (language) {
-			return language.level;
-		}
+	//	if (language) {
+	//		return language.level;
+	//	}
 
-		return '-';
+	//	return '-';
 		
-	}
+	//}
 
-	getEnglish():string{
+	//getEnglish():string{
 		
-		const language:Language = this.languages.filter(l => l.language === 'ENGLISH')[0];
+	//	const language:Language = this.languages.filter(l => l.language === 'ENGLISH')[0];
 		
-		if (language) {
-			return language.level;
-		}
+	//	if (language) {
+	//		return language.level;
+	//	}
 
-		return '-';
-	}
+	//	return '-';
+	//}
 
-	getFrench():string{
-				const language:Language = this.languages.filter(l => l.language === 'FRENCH')[0];
+	//getFrench():string{
+	//			const language:Language = this.languages.filter(l => l.language === 'FRENCH')[0];
 		
-		if (language) {
-			return language.level;
-		}
+	//	if (language) {
+	//		return language.level;
+	//	}
 
-		return '-';
-	}
+	//	return '-';
+	//}
 
-	getSkills():string{
+	//getSkills():string{
 		
-		let skillString = this.skills.join(', ');
+	//	let skillString = this.skills.join(', ');
 		
-		if (skillString.indexOf(', ') != -1) {
-			skillString = skillString.replace(', ', '');
-		}
+	//	if (skillString.indexOf(', ') != -1) {
+	//		skillString = skillString.replace(', ', '');
+	//	}
 		
-		return skillString;
-	}
+	//	return skillString;
+	//}
 }

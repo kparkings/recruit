@@ -334,19 +334,15 @@
 					<td>{{suggestedCandidate.yearsExperience}}</td>
 				</tr>
 				<tr>
-					<td style="font-weight:bold">email</td>
-					<td>{{suggestedCandidate.email}}</td>
-				</tr>
-				<tr>
 					<td style="font-weight:bold">Language Match</td>
 					<td style="border:1px black solid; background:white;padding:2px;margin:2px;">
-						<div class="perception{{getLanguageMatchScore()}}">&nbsp;</div>
+						<div class="perception-{{suggestedCandidate.accuracyLanguages}}">&nbsp;</div>
 					</td>
 				</tr>
 				<tr>
 					<td style="font-weight:bold">Skill Match</td>
 					<td style="border:1px black solid; background:white;padding:2px;margin:2px;">
-						<div  class="perception{{getSkillScore()}}">&nbsp;</div>
+						<div  class="perception-{{suggestedCandidate.accuracySkills}}">&nbsp;</div>
 					</td>
 				</tr>
 				<tr>

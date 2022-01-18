@@ -24,7 +24,7 @@ import com.arenella.recruit.candidates.beans.Candidate;
 import com.arenella.recruit.candidates.beans.Language;
 import com.arenella.recruit.candidates.beans.Language.LANGUAGE;
 import com.arenella.recruit.candidates.beans.Language.LEVEL;
-import com.arenella.recruit.candidates.controllers.CandidateAPIOutbound;
+import com.arenella.recruit.candidates.controllers.CandidateStandardAPIOutbound;
 import com.arenella.recruit.candidates.enums.COUNTRY;
 import com.arenella.recruit.candidates.enums.FREELANCE;
 import com.arenella.recruit.candidates.enums.PERM;
@@ -48,7 +48,7 @@ public class CandidateDownloadServiceImpl implements CandidateDownloadService{
 		sheet.createFreezePane(0, 2);
 		sheet.addMergedRegion(new CellRangeAddress(0,0,0,10));
 		
-		Set<CandidateAPIOutbound> candidatesForOutput = candidates.stream().map(candidate -> CandidateAPIOutbound.convertFromCandidate(candidate)).collect(Collectors.toCollection(LinkedHashSet::new));
+		Set<CandidateStandardAPIOutbound> candidatesForOutput = candidates.stream().map(candidate -> CandidateStandardAPIOutbound.convertFromCandidate(candidate)).collect(Collectors.toCollection(LinkedHashSet::new));
 		
 		this.createHeader(workbook, sheet);
 		

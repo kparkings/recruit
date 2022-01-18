@@ -142,6 +142,7 @@ public class ListingServiceImpl implements ListingService{
 		/**
 		* We don't want to know if admin has been viewing the listings 
 		*/
+		//TODO: BUG: This doesnt work because in WebSecurityConfig we return before the ROLE is assigend and the role for the user including Admin is ANONYMOUS_USER
 		if (isAdmin()) {
 			return;
 		}
