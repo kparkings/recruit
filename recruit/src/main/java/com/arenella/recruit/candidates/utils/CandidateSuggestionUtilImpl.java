@@ -89,7 +89,9 @@ public class CandidateSuggestionUtilImpl implements CandidateSuggestionUtil{
 			return 0;
 		}
 		
-		return points.get() / totalPossibleLanguagePoints * 100;
+		Float perc = ((float)points.get()  /  totalPossibleLanguagePoints) * 100; 
+		
+		return perc.intValue();
 		
 	}
 	
@@ -169,7 +171,7 @@ public class CandidateSuggestionUtilImpl implements CandidateSuggestionUtil{
 	
 	/**
 	* Extracts the Language required
-	* @param filterOptions - requirments
+	* @param filterOptions - requirements
 	* @return languages required
 	*/
 	private Set<Language> extractLanguageRequirements(CandidateFilterOptions filterOptions) {
@@ -209,7 +211,6 @@ public class CandidateSuggestionUtilImpl implements CandidateSuggestionUtil{
 		
 		return false;
 		
-		//return this.getAccuracyOfSkillsMatch(candidate, filterOptions.getSkills()) == 100 && this.getAccuracyOfLanguageMatch(candidate, extractLanguageRequirements(filterOptions)) == 100;
 	}
 
 	/**
