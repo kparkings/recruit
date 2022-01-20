@@ -21,6 +21,8 @@ import com.arenella.recruit.candidates.beans.Language.LEVEL;
 @Component
 public class CandidateSuggestionUtilImpl implements CandidateSuggestionUtil{
 
+	public static final int POINTS_FOR_PROFICIENT 	= 2;
+	public static final int POINTS_FOR_BASIC 		= 1;
 	/**
 	* Returns the percentage of matching skills between those asked and 
 	* those the Candidate has
@@ -69,13 +71,8 @@ public class CandidateSuggestionUtilImpl implements CandidateSuggestionUtil{
 	*/
 	private int getAccuracyOfLanguageMatch(CandidateSearchAccuracyWrapper candidate, Set<Language> languages) {
 		
-		int totalPossibleLanguagePoints = 0 ;
-		
-		int points = 0;
-		
-		boolean requiresDutch 	= languages.stream().filter(lang -> lang.getLanguage() == LANGUAGE.DUTCH).findAny().isPresent();
-		boolean requiresEnglish = languages.stream().filter(lang -> lang.getLanguage() == LANGUAGE.ENGLISH).findAny().isPresent();
-		boolean requiresFrench 	= languages.stream().filter(lang -> lang.getLanguage() == LANGUAGE.FRENCH).findAny().isPresent();
+		int 			totalPossibleLanguagePoints = getMaxAvailableLanguagePoints(languages);
+		AtomicInteger 	points 						= new AtomicInteger(0);
 		
 		/**
 		* If no languages required then it is always a perfect math 
@@ -84,145 +81,89 @@ public class CandidateSuggestionUtilImpl implements CandidateSuggestionUtil{
 			return 100;
 		}
 		
-		if (requiresDutch) {
-			
-			Language.LEVEL requiredLevel 	=  languages.stream().filter(lang -> lang.getLanguage() == LANGUAGE.DUTCH).findAny().get().getLevel();
-			
-			if (requiredLevel == Language.LEVEL.PROFICIENT) {
-				totalPossibleLanguagePoints = totalPossibleLanguagePoints + 2; 
-			} 
-			
-			if (requiredLevel == Language.LEVEL.BASIC) {
-				totalPossibleLanguagePoints = totalPossibleLanguagePoints + 1; 
-			}
-			
-			if (!candidate.get().getLanguages().stream().filter(lang -> lang.getLanguage() == LANGUAGE.DUTCH && lang.getLevel() == Language.LEVEL.PROFICIENT).findAny().isEmpty()) {
-				
-				Language.LEVEL candidateLevel 	=  candidate.get().getLanguages().stream().filter(lang -> lang.getLanguage() == LANGUAGE.DUTCH).findAny().get().getLevel();
-				
-				if (requiredLevel == Language.LEVEL.PROFICIENT) {
-					
-					if (candidateLevel == LEVEL.PROFICIENT) {
-						points = points + 2;
-					}
-					
-					if (candidateLevel == LEVEL.BASIC) {
-						points = points + 1;
-					}
-					
-				}
-				
-				if (requiredLevel == Language.LEVEL.BASIC) {
-					
-					if (candidateLevel == LEVEL.PROFICIENT) {
-						points = points + 2;
-					}
-					
-					if (candidateLevel == LEVEL.BASIC) {
-						points = points + 2;
-					}
-					
-				}
-				
-			}
-			
-		}
+		languages.stream().forEach(language -> {
+			points.addAndGet(getCandidateLanguagePoints(language.getLanguage(), language.getLevel(), candidate));
+		});
 		
-		if (requiresEnglish) {
-			
-			Language.LEVEL requiredLevel 	=  languages.stream().filter(lang -> lang.getLanguage() == LANGUAGE.ENGLISH).findAny().get().getLevel();
-			
-			if (requiredLevel == Language.LEVEL.PROFICIENT) {
-				totalPossibleLanguagePoints = totalPossibleLanguagePoints + 2; 
-			} 
-			
-			if (requiredLevel == Language.LEVEL.BASIC) {
-				totalPossibleLanguagePoints = totalPossibleLanguagePoints + 1; 
-			}
-			
-			if (!candidate.get().getLanguages().stream().filter(lang -> lang.getLanguage() == LANGUAGE.ENGLISH && lang.getLevel() == Language.LEVEL.PROFICIENT).findAny().isEmpty()) {
-				
-				Language.LEVEL candidateLevel 	=  candidate.get().getLanguages().stream().filter(lang -> lang.getLanguage() == LANGUAGE.ENGLISH).findAny().get().getLevel();
-				
-				if (requiredLevel == Language.LEVEL.PROFICIENT) {
-					
-					if (candidateLevel == LEVEL.PROFICIENT) {
-						points = points + 2;
-					}
-					
-					if (candidateLevel == LEVEL.BASIC) {
-						points = points + 1;
-					}
-					
-				}
-				
-				if (requiredLevel == Language.LEVEL.BASIC) {
-					
-					if (candidateLevel == LEVEL.PROFICIENT) {
-						points = points + 2;
-					}
-					
-					if (candidateLevel == LEVEL.BASIC) {
-						points = points + 2;
-					}
-					
-				}
-				
-			}
-			
-		}
-
-		if (requiresFrench) {
-			
-			Language.LEVEL requiredLevel 	=  languages.stream().filter(lang -> lang.getLanguage() == LANGUAGE.FRENCH).findAny().get().getLevel();
-			
-			if (requiredLevel == Language.LEVEL.PROFICIENT) {
-				totalPossibleLanguagePoints = totalPossibleLanguagePoints + 2; 
-			} 
-			
-			if (requiredLevel == Language.LEVEL.BASIC) {
-				totalPossibleLanguagePoints = totalPossibleLanguagePoints + 1; 
-			}
-			
-			if (!candidate.get().getLanguages().stream().filter(lang -> lang.getLanguage() == LANGUAGE.FRENCH && lang.getLevel() == Language.LEVEL.PROFICIENT).findAny().isEmpty()) {
-				
-				Language.LEVEL candidateLevel 	=  candidate.get().getLanguages().stream().filter(lang -> lang.getLanguage() == LANGUAGE.FRENCH).findAny().get().getLevel();
-				
-				if (requiredLevel == Language.LEVEL.PROFICIENT) {
-					
-					if (candidateLevel == LEVEL.PROFICIENT) {
-						points = points + 2;
-					}
-					
-					if (candidateLevel == LEVEL.BASIC) {
-						points = points + 1;
-					}
-					
-				}
-				
-				if (requiredLevel == Language.LEVEL.BASIC) {
-					
-					if (candidateLevel == LEVEL.PROFICIENT) {
-						points = points + 2;
-					}
-					
-					if (candidateLevel == LEVEL.BASIC) {
-						points = points + 2;
-					}
-					
-				}
-				
-			}
-			
-			
-		}
-		
-		if (points == 0) {
-			System.out.println("LANGUAGE PERC =====> XXXXX ");
+		if (points.get() == 0) {
 			return 0;
 		}
-		System.out.println("LANGUAGE PERC =====> " + (points / totalPossibleLanguagePoints * 100));
-		return points / totalPossibleLanguagePoints * 100;
+		
+		return points.get() / totalPossibleLanguagePoints * 100;
+		
+	}
+	
+	/**
+	* Examines the languages required by from the Candidate and determines 
+	* a score that each Candidate can be measured against
+	* @param languages - Required languages
+	* @return Max obtainable score that a Candidate can reach in relation to languages
+	*/
+	private int getMaxAvailableLanguagePoints(Set<Language> languages) {
+
+		AtomicInteger totalPossibleLanguagePoints = new AtomicInteger(0);
+		
+		languages.stream().forEach(language -> {
+			switch(language.getLevel()) {
+				case BASIC:{
+					totalPossibleLanguagePoints.addAndGet(POINTS_FOR_BASIC);
+				}
+				case PROFICIENT:{
+					totalPossibleLanguagePoints.addAndGet(POINTS_FOR_PROFICIENT);
+				}
+				default:{
+					
+				}
+			}
+		});
+			
+		return totalPossibleLanguagePoints.get();
+		
+	}
+	
+	/**
+	* Returns the number of points the Candidate scored for their Languages in relation to 
+	* those required 
+	* @param language			- The language the Candidate will be checked for
+	* @param levelRequired		- The level the Candidate will be checked for
+	* @param candidate			- Contains information about the Candidates language knowledge
+	* @return Number of points the Candidate scores in relation to requirements 
+	*/
+	private int getCandidateLanguagePoints(LANGUAGE language, Language.LEVEL levelRequired, CandidateSearchAccuracyWrapper candidate) {
+		
+		AtomicInteger points = new AtomicInteger(0);
+		
+		if (!candidate.get().getLanguages().stream().filter(lang -> lang.getLanguage() == language && lang.getLevel() == levelRequired).findAny().isEmpty()) {
+			
+			Language.LEVEL candidateLevel 	=  candidate.get().getLanguages().stream().filter(lang -> lang.getLanguage() == language).findAny().get().getLevel();
+			
+			if (levelRequired == Language.LEVEL.PROFICIENT) {
+				
+				if (candidateLevel == LEVEL.PROFICIENT) {
+					points.addAndGet(POINTS_FOR_PROFICIENT);
+				}
+				
+				if (candidateLevel == LEVEL.BASIC) {
+					points.addAndGet(POINTS_FOR_BASIC);
+				}
+				
+			}
+			
+			if (levelRequired == Language.LEVEL.BASIC) {
+				
+				if (candidateLevel == LEVEL.PROFICIENT) {
+					points.addAndGet(POINTS_FOR_PROFICIENT);
+				}
+				
+				if (candidateLevel == LEVEL.BASIC) {
+					points.addAndGet(POINTS_FOR_PROFICIENT);
+				}
+				
+			}
+			
+		}
+		
+		return points.get();
 		
 	}
 	
@@ -280,7 +221,7 @@ public class CandidateSuggestionUtilImpl implements CandidateSuggestionUtil{
 		int skillsAccuracy 		= this.getAccuracyOfSkillsMatch(candidate, filterOptions.getSkills());
 		int languageAccuracy 	= this.getAccuracyOfLanguageMatch(candidate, extractLanguageRequirements(filterOptions)) ;
 		
-		if (skillsAccuracy >= 85 && languageAccuracy >= 85) {
+		if (skillsAccuracy >= 85 && languageAccuracy >= 60) {
 			candidate.setAccuracySkills(convertPercentAccuracy(skillsAccuracy));
 			candidate.setAccuracyLanguages(convertPercentAccuracy(languageAccuracy));
 			return true;
@@ -298,7 +239,7 @@ public class CandidateSuggestionUtilImpl implements CandidateSuggestionUtil{
 		int skillsAccuracy 		= this.getAccuracyOfSkillsMatch(candidate, filterOptions.getSkills());
 		int languageAccuracy 	= this.getAccuracyOfLanguageMatch(candidate, extractLanguageRequirements(filterOptions)) ;
 		
-		if (skillsAccuracy >= 70 && languageAccuracy >= 70) {
+		if (skillsAccuracy >= 70 && languageAccuracy >= 60) {
 			candidate.setAccuracySkills(convertPercentAccuracy(skillsAccuracy));
 			candidate.setAccuracyLanguages(convertPercentAccuracy(languageAccuracy));
 			return true;
@@ -316,7 +257,7 @@ public class CandidateSuggestionUtilImpl implements CandidateSuggestionUtil{
 		int skillsAccuracy 		= this.getAccuracyOfSkillsMatch(candidate, filterOptions.getSkills());
 		int languageAccuracy 	= this.getAccuracyOfLanguageMatch(candidate, extractLanguageRequirements(filterOptions)) ;
 		
-		if (skillsAccuracy >= 50 && languageAccuracy >= 50) {
+		if (skillsAccuracy >= 50 && languageAccuracy >= 30) {
 			candidate.setAccuracySkills(convertPercentAccuracy(skillsAccuracy));
 			candidate.setAccuracyLanguages(convertPercentAccuracy(languageAccuracy));
 			return true;
@@ -334,7 +275,7 @@ public class CandidateSuggestionUtilImpl implements CandidateSuggestionUtil{
 		int skillsAccuracy 		= this.getAccuracyOfSkillsMatch(candidate, filterOptions.getSkills());
 		int languageAccuracy 	= this.getAccuracyOfLanguageMatch(candidate, extractLanguageRequirements(filterOptions)) ;
 		
-		if (skillsAccuracy >= 25 && languageAccuracy >= 25) {
+		if (skillsAccuracy >= 25 && languageAccuracy >= 30) {
 			candidate.setAccuracySkills(convertPercentAccuracy(skillsAccuracy));
 			candidate.setAccuracyLanguages(convertPercentAccuracy(languageAccuracy));
 			return true;

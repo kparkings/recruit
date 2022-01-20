@@ -19,7 +19,6 @@ import com.arenella.recruit.candidates.adapters.ExternalEventPublisher;
 import com.arenella.recruit.candidates.beans.Candidate;
 import com.arenella.recruit.candidates.beans.CandidateFilterOptions;
 import com.arenella.recruit.candidates.beans.CandidateSearchAccuracyWrapper;
-import com.arenella.recruit.candidates.beans.Language.LEVEL;
 import com.arenella.recruit.candidates.beans.PendingCandidate;
 import com.arenella.recruit.candidates.controllers.CandidateController.CANDIDATE_UPDATE_ACTIONS;
 import com.arenella.recruit.candidates.dao.CandidateDao;
@@ -169,154 +168,98 @@ public class CandidateServiceImpl implements CandidateService{
 	@Override
 	public Page<CandidateSearchAccuracyWrapper> getCandidateSuggestions(CandidateFilterOptions filterOptions, Integer maxSuggestions) {
 		
-		final Set<CandidateSearchAccuracyWrapper> 	suggestions 	= new LinkedHashSet<>();
-		//final Set<String> 							skills 			= new HashSet<>();
+		final Set<CandidateSearchAccuracyWrapper> 	suggestions 		= new LinkedHashSet<>();
 		
+		int 										pageCounter 		= 0;
+		Set<String> 								suggestionIds 		= new HashSet<>();
+		AtomicReference<suggestion_accuracy> 		accuracy 			=  new AtomicReference<>(suggestion_accuracy.perfect);
+		Pageable 									pageable 			= PageRequest.of(0,100);
 		
-		//skills.addAll(filterOptions.getSkills());
-		
-		
-		
-		Pageable pageable = PageRequest.of(0,100);
-		
-		//START
-		
-		
-		
-		
-		//if (filterOptions.getDutch().isPresent()) {
-		//	filterOptions.setDutch(LEVEL.BASIC);
-		//}
-		
-		//if (filterOptions.getEnglish().isPresent()) {
-		//	filterOptions.setEnglish(LEVEL.BASIC);
-		//}
-		
-		//if (filterOptions.getFrench().isPresent()) {
-		//	filterOptions.setFrench(LEVEL.BASIC);
-		//}
-		
-		
-		CandidateFilterOptions suggestionFilterOptions = CandidateFilterOptions
-																		.builder()
-																			.dutch(filterOptions.getDutch().isPresent() 		? filterOptions.getDutch().get() 	: null)
-																			.english(filterOptions.getEnglish().isPresent() 	? filterOptions.getEnglish().get() 	: null)
-																			.french(filterOptions.getFrench().isPresent() 		? filterOptions.getFrench().get() 	: null)
-																			.skills(filterOptions.getSkills())
-																		.build();
-		
+		CandidateFilterOptions 						suggestionFilterOptions = CandidateFilterOptions
+																							.builder()
+																								.dutch(filterOptions.getDutch().isPresent() 		? filterOptions.getDutch().get() 	: null)
+																								.english(filterOptions.getEnglish().isPresent() 	? filterOptions.getEnglish().get() 	: null)
+																								.french(filterOptions.getFrench().isPresent() 		? filterOptions.getFrench().get() 	: null)
+																								.skills(filterOptions.getSkills())
+																							.build();
+							
 		filterOptions.getSkills().clear();
-		
-		//END
-		
-		int pageCounter = 0;
-		Set<String> suggestionIds = new HashSet<>();
-		
-		AtomicReference<suggestion_accuracy> accuracy =  new AtomicReference<>(suggestion_accuracy.perfect);
 		
 		while (true) {
 			
 			Page<Candidate> candidates = candidateDao.findAll(filterOptions, pageable).map(candidate -> CandidateEntity.convertFromEntity(candidate));
-			System.out.println("Fetching page " + pageCounter);
+		
 			candidates.getContent().stream().filter(c -> !suggestionIds.contains(c.getCandidateId())).forEach(candidate -> {
 		
-				CandidateSearchAccuracyWrapper wrappedCandidate = new CandidateSearchAccuracyWrapper(candidate);
-			
-			//	System.out.println("Processing candidate");
+				CandidateSearchAccuracyWrapper 	wrappedCandidate 	= new CandidateSearchAccuracyWrapper(candidate);
+				boolean 						isMatch 			= false;
 				
 				switch(accuracy.get()) {
 					case perfect:{
-						if (suggestionUtil.isPerfectMatch(wrappedCandidate, suggestionFilterOptions)) {
-							suggestions.add(wrappedCandidate);
-							suggestionIds.add(candidate.getCandidateId());
-						}
+						isMatch = suggestionUtil.isPerfectMatch(wrappedCandidate, suggestionFilterOptions);
 						break;
 					}
 					case excellent:{
-						if (suggestionUtil.isExcellentMatch(wrappedCandidate, suggestionFilterOptions)) {
-							suggestions.add(wrappedCandidate);
-							suggestionIds.add(candidate.getCandidateId());
-						}
+						isMatch = suggestionUtil.isExcellentMatch(wrappedCandidate, suggestionFilterOptions);
 						break;
 					}
 					case good:{
-						if (suggestionUtil.isGoodMatch(wrappedCandidate, suggestionFilterOptions)) {
-							suggestions.add(wrappedCandidate);
-							suggestionIds.add(candidate.getCandidateId());
-						}
+						isMatch = suggestionUtil.isGoodMatch(wrappedCandidate, suggestionFilterOptions);
 						break;
 					}
 					case average:{
-						if (suggestionUtil.isAverageMatch(wrappedCandidate, suggestionFilterOptions)) {
-							suggestions.add(wrappedCandidate);
-							suggestionIds.add(candidate.getCandidateId());
-						}
+						isMatch = suggestionUtil.isAverageMatch(wrappedCandidate, suggestionFilterOptions);
 						break;
 					}
 					case poor:{
-						if (suggestionUtil.isPoorMatch(wrappedCandidate, suggestionFilterOptions)) {
-							suggestions.add(wrappedCandidate);
-							suggestionIds.add(candidate.getCandidateId());
-						}
+						isMatch = suggestionUtil.isPoorMatch(wrappedCandidate, suggestionFilterOptions);
 						break;
 					}
 				}
-				
-			//	return;
+			
+				if (isMatch) {
+					suggestions.add(wrappedCandidate);
+					suggestionIds.add(candidate.getCandidateId());
+				}
 				
 			});
-			
-			System.out.println("Finished Page TP  = " +  candidates.getTotalPages() + " currentPage = " + pageCounter + " suggestions = " + suggestions.size());
 			
 			pageCounter = pageCounter + 1;
 			
 			if (suggestions.size() >= maxSuggestions) {
-				System.out.println("Found enough - quitting");
 				return new PageImpl<CandidateSearchAccuracyWrapper>(suggestions.stream().limit(maxSuggestions).collect(Collectors.toCollection(LinkedList::new)));
 			} else if (!(candidates.getTotalPages() >= pageCounter)) {
 				
-				System.out.println("Still looking");
-					switch(accuracy.get()) {
-						case perfect:{
-							System.out.println("-->Done with perfect");
-							accuracy.set(suggestion_accuracy.excellent);
-							pageCounter = 0;
-							pageable = PageRequest.of(pageCounter,100);
-							break;
-						}
-						case excellent:{
-							System.out.println("-->Done with excellent");
-							accuracy.set(suggestion_accuracy.good);
-							pageCounter = 0;
-							pageable = PageRequest.of(pageCounter,100);
-							break;
-						}
-						case good:{
-							System.out.println("-->Done with good");
-							accuracy.set(suggestion_accuracy.average);
-							pageCounter = 0;
-							pageable = PageRequest.of(pageCounter,100);
-							break;
-						}
-						case average:{
-							System.out.println("-->Done with everage");
-							accuracy.set(suggestion_accuracy.poor);
-							pageCounter = 0;
-							pageable = PageRequest.of(pageCounter,100);
-							break;
-						}
-						case poor:{
-							System.out.println("-->Done with [poor");
-							return new PageImpl<CandidateSearchAccuracyWrapper>(suggestions.stream().limit(maxSuggestions).collect(Collectors.toCollection(LinkedList::new)));
-						}
+				switch(accuracy.get()) {
+					case perfect:{
+						accuracy.set(suggestion_accuracy.excellent);
+						break;
+					}
+					case excellent:{
+						accuracy.set(suggestion_accuracy.good);
+						break;
+					}
+					case good:{
+						accuracy.set(suggestion_accuracy.average);
+						break;
+					}
+					case average:{
+						accuracy.set(suggestion_accuracy.poor);
+						break;
+					}
+					case poor:{
+						return new PageImpl<CandidateSearchAccuracyWrapper>(suggestions.stream().limit(maxSuggestions).collect(Collectors.toCollection(LinkedList::new)));
+					}
+					
 				} 
+				
+				pageCounter = 0;
+				pageable = PageRequest.of(pageCounter,100);
 					
 			}
 			
 			
 		}
-		
-		//return new PageImpl<CandidateSearchAccuracyWrapper>(suggestions.stream().limit(maxSuggestions).collect(Collectors.toCollection(LinkedList::new)));
 
 	}
 	
