@@ -657,6 +657,7 @@ export class RecruiterListingsComponent implements OnInit {
                                                          + '&page=0'
                                                          + '&size=12'
 														 + '&useSuggestions=true'
+														 + this.getFunctionTypeFromTitle(listing)
                                                          + this.getCountryFilterParamString(listing) 			
                                                          + this.getContractTypeParamString(listing)				
                                                          + this.getYearsExperienceFilterParamAsString(listing)
@@ -666,6 +667,444 @@ export class RecruiterListingsComponent implements OnInit {
 		return filterParams;
 	
 	}
+	
+	//START - Move to separate service or class
+	
+	public addFunctionTypeIfJavaDev(title:string):string{
+		
+		let keywords:Array<string> = new Array<string>();
+		
+		keywords.push("java");
+		keywords.push("j2ee");
+		
+		let match:boolean = false;
+		
+		keywords.forEach(kw => {
+			if (title.indexOf(kw) > -1) {
+				match = true;
+			}
+		});
+		
+		if (match) {
+			
+			return 'JAVA_DEV';
+		} else {
+			return '';	
+		}	
+	}
+
+	public addFunctionTypeIfCSHARPDev(title:string):string{
+		
+		let keywords:Array<string> = new Array<string>();
+		
+		keywords.push("c#");
+		keywords.push(".net");
+		keywords.push("dotnet");
+		keywords.push("wpf");
+		keywords.push("asp");
+		keywords.push("vb.net");
+		keywords.push("csharp");
+		keywords.push("asp.net");
+		
+		let match:boolean = false;
+		
+		keywords.forEach(kw => {
+			if (title.indexOf(kw) > -1) {
+				match = true;
+			}
+		});
+		
+		if (match) {
+			return 'CSHARP_DEV';
+		} else {
+			return '';	
+		}	
+	}
+	
+	
+	
+	public addFunctionTypeIfSupport(title:string):string{
+		
+		let keywords:Array<string> = new Array<string>();
+		
+		keywords.push("support");
+		keywords.push("helpdesk");
+		keywords.push("service desk");
+		
+		let match:boolean = false;
+		
+		keywords.forEach(kw => {
+			if (title.indexOf(kw) > -1) {
+				match = true;
+			}
+		});
+		
+		if (match) {
+			return 'SUPPORT';
+		} else {
+			return '';	
+		}	
+	}
+	
+	
+	private addFunctionTypeIfBusinessAnalayst(title:string):string{
+		
+		let keywords:Array<string> = new Array<string>();
+		
+		keywords.push("buisiness analyst");
+		keywords.push("ba");
+		
+		let match:boolean = false;
+		
+		keywords.forEach(kw => {
+			if (title.indexOf(kw) > -1) {
+				match = true;
+			}
+		});
+		
+		if (match) {
+			return 'BA';
+		} else {
+			return '';	
+		}
+				
+	}
+	private addFunctionTypeIfUiUx(title:string):string{
+		
+		let keywords:Array<string> = new Array<string>();
+		
+		keywords.push("ui\\ux");
+		keywords.push("designer");
+		keywords.push("ui");
+		keywords.push("ux");
+		
+		let match:boolean = false;
+		
+		keywords.forEach(kw => {
+			if (title.indexOf(kw) > -1) {
+				match = true;
+			}
+		});
+		
+		if (match) {
+			return 'UI_UX';
+		} else {
+			return '';	
+		}
+				
+	} 
+	
+	private addFunctionTypeIfProjectManager(title:string):string{
+		
+		let keywords:Array<string> = new Array<string>();
+		
+		keywords.push("manager");
+		keywords.push("product owner");
+		
+		let match:boolean = false;
+		
+		keywords.forEach(kw => {
+			if (title.indexOf(kw) > -1) {
+				match = true;
+			}
+		});
+		
+		if (match) {
+			return 'PROJECT_MANAGER';
+		} else {
+			return '';	
+		}
+				
+	} 
+	
+	private addFunctionTypeIfArchitect(title:string):string{ 
+		
+		let keywords:Array<string> = new Array<string>();
+		
+		keywords.push("architect");
+		keywords.push("solutions");
+		keywords.push("enterprise");
+		
+		let match:boolean = false;
+		
+		keywords.forEach(kw => {
+			if (title.indexOf(kw) > -1) {
+				match = true;
+			}
+		});
+		
+		if (match) {
+			return 'ARCHITECT';
+		} else {
+			return '';	
+		}
+				
+	} 
+	
+	private addFunctionTypeIfTester(title:string):string{
+		
+		let keywords:Array<string> = new Array<string>();
+		
+		keywords.push("tester");
+		keywords.push("qa");
+		keywords.push("automation");
+		keywords.push("manual");
+		keywords.push("quality");
+		keywords.push("assurance");
+		
+		let match:boolean = false;
+		
+		keywords.forEach(kw => {
+			if (title.indexOf(kw) > -1) {
+				match = true;
+			}
+		});
+		
+		if (match) {
+			return 'TESTER';
+		} else {
+			return '';	
+		}
+				
+	}  
+	
+	private addFunctionTypeIfWebDeveloper(title:string):string{
+		
+		let keywords:Array<string> = new Array<string>();
+		
+		keywords.push("web developer");
+		keywords.push("front end");
+		keywords.push("front-end");
+		keywords.push("javascript");
+		keywords.push("js");
+		keywords.push("vue");
+		keywords.push("vuejs");
+		keywords.push("vue.js");
+		keywords.push("react");
+		keywords.push("node");
+		keywords.push("node.js");
+		
+		let match:boolean = false;
+		
+		keywords.forEach(kw => {
+			if (title.indexOf(kw) > -1) {
+				match = true;
+			}
+		});
+		
+		if (match) {
+			return 'WEB_DEV';
+		} else {
+			return '';	
+		}
+				
+	} 
+	
+	private addFunctionTypeIfScrumMaster(title:string):string{
+		
+		let keywords:Array<string> = new Array<string>();
+		
+		keywords.push("scrum");
+		keywords.push("master");
+		
+		let match:boolean = false;
+		
+		keywords.forEach(kw => {
+			if (title.indexOf(kw) > -1) {
+				match = true;
+			}
+		});
+		
+		if (match) {
+			return 'SCRUM_MASTER';
+		} else {
+			return '';	
+		}
+				
+	} 
+	private addFunctionTypeIfDataScientist(title:string):string{
+		
+		let keywords:Array<string> = new Array<string>();
+		
+		keywords.push("data");
+		keywords.push("data analyst");
+		keywords.push("data scientist");
+		
+		let match:boolean = false;
+		
+		keywords.forEach(kw => {
+			if (title.indexOf(kw) > -1) {
+				match = true;
+			}
+		});
+		
+		if (match) {
+			return 'DATA_SCIENTIST';
+		} else {
+			return '';	
+		}
+				
+	} 
+	
+	private addFunctionTypeIfNetworkAdmin(title:string):string{
+		
+		let keywords:Array<string> = new Array<string>();
+		
+		keywords.push("devops");
+		keywords.push("network");
+		keywords.push("admin");
+		keywords.push("administrator");
+		keywords.push("ops");
+		keywords.push("operations");
+		
+		let match:boolean = false;
+		
+		keywords.forEach(kw => {
+			if (title.indexOf(kw) > -1) {
+				match = true;
+			}
+		});
+		
+		if (match) {
+			return 'NETWORK_ADMINISTRATOR';
+		} else {
+			return '';	
+		}
+				
+	} 
+	
+	private addFunctionTypeIfSoftwareDeveloper(title:string):string{
+		
+		let keywords:Array<string> = new Array<string>();
+		
+		keywords.push("php");
+		keywords.push("software engineer");
+		keywords.push("software developer");
+		
+		let match:boolean = false;
+		
+		keywords.forEach(kw => {
+			if (title.indexOf(kw) > -1) {
+				match = true;
+			}
+		});
+		
+		if (match) {
+			return 'SOFTWARE_DEVELOPER';
+		} else {
+			return '';	
+		}
+				
+	} 
+	
+	private addFunctionTypeIfSecurity(title:string):string{
+		
+		let keywords:Array<string> = new Array<string>();
+		
+		keywords.push("security");
+		keywords.push("cyber");
+		keywords.push("owasp");
+		keywords.push("owasp");
+		
+		let match:boolean = false;
+		
+		keywords.forEach(kw => {
+			if (title.indexOf(kw) > -1) {
+				match = true;
+			}
+		});
+		
+		if (match) {
+			return 'IT_SECURITY';
+		} else {
+			return '';	
+		}
+				
+	} 
+	
+	
+	private addFunctionTypeIfRecruiter(title:string):string{
+		
+		let keywords:Array<string> = new Array<string>();
+		
+		keywords.push("recruiter");
+		keywords.push("account manager");
+		
+		let match:boolean = false;
+		
+		keywords.forEach(kw => {
+			if (title.indexOf(kw) > -1) {
+				match = true;
+			}
+		});
+		
+		if (match) {
+			return 'IT_RECRUITER';
+		} else {
+			return '';	
+		}
+				
+	} 
+	private addFunctionTypeIfSDET(title:string):string{
+		
+		let keywords:Array<string> = new Array<string>();
+		
+		keywords.push("sdet");
+		keywords.push("developer in test");
+		keywords.push("qa");
+		keywords.push("automation tester");
+		
+		let match:boolean = false;
+		
+		keywords.forEach(kw => {
+			if (title.indexOf(kw) > -1) {
+				match = true;
+			}
+		});
+		
+		if (match) {
+			return 'SOFTWARE_DEV_IN_TEST';
+		} else {
+			return '';	
+		}
+				
+	} 
+	
+	
+	private getFunctionTypeFromTitle(listing:Listing):string{
+		
+		let functionTypes:Array<string> = new Array<string>();
+		
+		let title:string = listing.title.toLowerCase();
+		
+		functionTypes.push(this.addFunctionTypeIfJavaDev(title));
+		functionTypes.push(this.addFunctionTypeIfCSHARPDev(title));
+		functionTypes.push(this.addFunctionTypeIfSupport(title));
+		functionTypes.push(this.addFunctionTypeIfBusinessAnalayst(title));
+		functionTypes.push(this.addFunctionTypeIfUiUx(title));
+		functionTypes.push(this.addFunctionTypeIfProjectManager(title)); 
+		functionTypes.push(this.addFunctionTypeIfArchitect(title)); 
+		functionTypes.push(this.addFunctionTypeIfTester(title)); 
+		functionTypes.push(this.addFunctionTypeIfWebDeveloper(title));
+		functionTypes.push(this.addFunctionTypeIfScrumMaster(title));
+		functionTypes.push(this.addFunctionTypeIfDataScientist(title));
+		functionTypes.push(this.addFunctionTypeIfNetworkAdmin(title));
+		functionTypes.push(this.addFunctionTypeIfSoftwareDeveloper(title));
+		functionTypes.push(this.addFunctionTypeIfSecurity(title));
+		functionTypes.push(this.addFunctionTypeIfRecruiter(title));
+		functionTypes.push(this.addFunctionTypeIfSDET(title));
+		
+		functionTypes = functionTypes.filter(f => f !== '');
+		
+		if (functionTypes.length > 0) {
+			return '&functions=' + encodeURIComponent(functionTypes.toString());
+		} 
+		
+		return '';
+	}
+	
+	
+	//END
 	
 	private getSkillsParamString(listing:Listing):string{
       
