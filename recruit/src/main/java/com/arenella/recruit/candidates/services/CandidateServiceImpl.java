@@ -175,6 +175,8 @@ public class CandidateServiceImpl implements CandidateService{
 		AtomicReference<suggestion_accuracy> 		accuracy 			=  new AtomicReference<>(suggestion_accuracy.perfect);
 		Pageable 									pageable 			= PageRequest.of(0,100);
 		
+		
+		
 		CandidateFilterOptions 						suggestionFilterOptions = CandidateFilterOptions
 																							.builder()
 																								.dutch(filterOptions.getDutch().isPresent() 		? filterOptions.getDutch().get() 	: null)
@@ -184,6 +186,9 @@ public class CandidateServiceImpl implements CandidateService{
 																							.build();
 							
 		filterOptions.getSkills().clear();
+		filterOptions.setDutch(null);
+		filterOptions.setEnglish(null);
+		filterOptions.setFrench(null);
 		
 		while (true) {
 			
