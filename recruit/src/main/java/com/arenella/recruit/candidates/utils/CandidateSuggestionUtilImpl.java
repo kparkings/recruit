@@ -23,6 +23,13 @@ public class CandidateSuggestionUtilImpl implements CandidateSuggestionUtil{
 
 	public static final int POINTS_FOR_PROFICIENT 	= 2;
 	public static final int POINTS_FOR_BASIC 		= 1;
+	
+	public static final int THRESHOLD_PERFECT 		= 100;
+	public static final int THRESHOLD_EXCELLENT 	= 85;
+	public static final int THRESHOLD_GOOD 			= 70;
+	public static final int THRESHOLD_AVERAGE 		= 50;
+	public static final int THRESHOLD_POOR 			= 25;
+	
 	/**
 	* Returns the percentage of matching skills between those asked and 
 	* those the Candidate has
@@ -203,7 +210,7 @@ public class CandidateSuggestionUtilImpl implements CandidateSuggestionUtil{
 		int skillsAccuracy 		= this.getAccuracyOfSkillsMatch(candidate, filterOptions.getSkills());
 		int languageAccuracy 	= this.getAccuracyOfLanguageMatch(candidate, extractLanguageRequirements(filterOptions)) ;
 		
-		if (skillsAccuracy == 100 && languageAccuracy == 100) {
+		if (skillsAccuracy == THRESHOLD_PERFECT && languageAccuracy == 100) {
 			candidate.setAccuracySkills(convertPercentAccuracy(skillsAccuracy));
 			candidate.setAccuracyLanguages(convertPercentAccuracy(languageAccuracy));
 			return true;
@@ -222,7 +229,7 @@ public class CandidateSuggestionUtilImpl implements CandidateSuggestionUtil{
 		int skillsAccuracy 		= this.getAccuracyOfSkillsMatch(candidate, filterOptions.getSkills());
 		int languageAccuracy 	= this.getAccuracyOfLanguageMatch(candidate, extractLanguageRequirements(filterOptions)) ;
 		
-		if (skillsAccuracy >= 85 && languageAccuracy >= 60) {
+		if (skillsAccuracy >= THRESHOLD_EXCELLENT && languageAccuracy >= 60) {
 			candidate.setAccuracySkills(convertPercentAccuracy(skillsAccuracy));
 			candidate.setAccuracyLanguages(convertPercentAccuracy(languageAccuracy));
 			return true;
@@ -240,7 +247,7 @@ public class CandidateSuggestionUtilImpl implements CandidateSuggestionUtil{
 		int skillsAccuracy 		= this.getAccuracyOfSkillsMatch(candidate, filterOptions.getSkills());
 		int languageAccuracy 	= this.getAccuracyOfLanguageMatch(candidate, extractLanguageRequirements(filterOptions)) ;
 		
-		if (skillsAccuracy >= 70 && languageAccuracy >= 60) {
+		if (skillsAccuracy >= THRESHOLD_GOOD && languageAccuracy >= 60) {
 			candidate.setAccuracySkills(convertPercentAccuracy(skillsAccuracy));
 			candidate.setAccuracyLanguages(convertPercentAccuracy(languageAccuracy));
 			return true;
@@ -258,7 +265,7 @@ public class CandidateSuggestionUtilImpl implements CandidateSuggestionUtil{
 		int skillsAccuracy 		= this.getAccuracyOfSkillsMatch(candidate, filterOptions.getSkills());
 		int languageAccuracy 	= this.getAccuracyOfLanguageMatch(candidate, extractLanguageRequirements(filterOptions)) ;
 		
-		if (skillsAccuracy >= 50 && languageAccuracy >= 30) {
+		if (skillsAccuracy >= THRESHOLD_AVERAGE && languageAccuracy >= 30) {
 			candidate.setAccuracySkills(convertPercentAccuracy(skillsAccuracy));
 			candidate.setAccuracyLanguages(convertPercentAccuracy(languageAccuracy));
 			return true;
@@ -276,7 +283,7 @@ public class CandidateSuggestionUtilImpl implements CandidateSuggestionUtil{
 		int skillsAccuracy 		= this.getAccuracyOfSkillsMatch(candidate, filterOptions.getSkills());
 		int languageAccuracy 	= this.getAccuracyOfLanguageMatch(candidate, extractLanguageRequirements(filterOptions)) ;
 		
-		if (skillsAccuracy >= 25 && languageAccuracy >= 30) {
+		if (skillsAccuracy >= THRESHOLD_POOR && languageAccuracy >= 30) {
 			candidate.setAccuracySkills(convertPercentAccuracy(skillsAccuracy));
 			candidate.setAccuracyLanguages(convertPercentAccuracy(languageAccuracy));
 			return true;
@@ -292,23 +299,23 @@ public class CandidateSuggestionUtilImpl implements CandidateSuggestionUtil{
 	*/
 	private suggestion_accuracy convertPercentAccuracy(int score) {
 		
-		if (score == 100) {
+		if (score == THRESHOLD_PERFECT) {
 			return suggestion_accuracy.perfect;
 		}
 		
-		if (score >= 85) {
+		if (score >= THRESHOLD_EXCELLENT) {
 			return suggestion_accuracy.excellent;
 		}
 		
-		if (score >= 70) {
+		if (score >= THRESHOLD_GOOD) {
 			return suggestion_accuracy.good;
 		}
 		
-		if (score >= 50) {
+		if (score >= THRESHOLD_AVERAGE) {
 			return suggestion_accuracy.average;
 		}
 		
-		if (score >= 25) {
+		if (score >= THRESHOLD_POOR) {
 			return suggestion_accuracy.poor;
 		}
 		

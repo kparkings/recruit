@@ -577,19 +577,12 @@ export class RecruiterListingsComponent implements OnInit {
 	public fetchCandidateRecommendations(listing:Listing): void{
     
     	this.candidates 						= new Array<Candidate>();
-		//let allCandidates:Array<CandidateSuggestion> 		= new Array<Candidate>();
-		//let selectedCandidates:Array<Candidate> = new Array<Candidate>();
 
     	this.candidateService.getCandidates(this.getCandidateFilterParamString(listing)).subscribe( data => {
 
       		this.totalPages = data.totalPages;
-  
-
-				
-				
+		
       		data.content.forEach((c:Candidate) => {
-        
-				console.log('C ===> ' + JSON.stringify(c));
 
         		const candidate:Candidate = new Candidate();
 
@@ -614,53 +607,7 @@ export class RecruiterListingsComponent implements OnInit {
 				
 			});
 			
-			//allCandidates.forEach(potentialCandidate => {
-				
-			//	let skillPerception:string = this.getSkillScoreInternal(listing, potentialCandidate);
-				
-			//	if (selectedCandidates.length < 12) {
-			//		if (skillPerception === 'Perfect') {
-      		//			selectedCandidates.push(potentialCandidate);
-			//		}		
-			//	}
-			//});	
-			
-			//allCandidates.forEach(potentialCandidate => {
-				
-			//	let skillPerception:string = this.getSkillScoreInternal(listing, potentialCandidate);
-				
-			//	if (selectedCandidates.length < 12) {
-			//		if (skillPerception === 'Good') {
-      		//			selectedCandidates.push(potentialCandidate);
-			//		}		
-			//	}
-			//});		
-			
-			//allCandidates.forEach(potentialCandidate => {
-				
-			//	let skillPerception:string = this.getSkillScoreInternal(listing, potentialCandidate);
-				
-			//	if (selectedCandidates.length < 12) {
-			//		if (skillPerception === 'Average') {
-      		//			selectedCandidates.push(potentialCandidate);
-			//		}		
-			//	}
-			//});	
-			
-			//allCandidates.forEach(potentialCandidate => {
-				
-			//	let skillPerception:string = this.getSkillScoreInternal(listing, potentialCandidate);
-				
-			//	if (selectedCandidates.length < 12) {
-			//		if (skillPerception === 'Bad') {
-      		//			selectedCandidates.push(potentialCandidate);
-			//		}		
-			//	}
-			//});			
-			
 		});
-
-		//this.candidates = selectedCandidates;
 
 	}
 	
@@ -839,126 +786,5 @@ export class RecruiterListingsComponent implements OnInit {
 	public getCurriculumDownloadUrl(curriculumId:string){
 		return  environment.backendUrl + 'curriculum/'+ curriculumId;
 	}
-	
-	/**
-	* Overloaded method to get skill score
-	* called form html
-	*/
-	//public getSkillScore():string{
-		
-	//	let listing:Listing 				= this.listingForSuggestedCandidate;
-	//	let candidate:Candidate 			= this.suggestedCandidate;
-		
-	//	return this.getSkillScoreInternal(listing, candidate);
-		
-	//}
-	
-	/**
-	* Returns how good the match between the required skills in the listing
-	* compare to the skills spoken by the candidate
-	*/
-	//private getSkillScoreInternal(listing:Listing, candidate:Candidate):string{
-		
-	//	let totalPossiblePoints:number 		= listing.skills.length;
-	//	let actualPoints					= 0;
-		
-	//	listing.skills.forEach(skill => {
-	//		if (candidate.skills.indexOf(skill) >= 0) {
-	//			actualPoints = actualPoints + 1;
-	//		}
-	//	});
-		
-	//	return this.percentionValue(totalPossiblePoints, actualPoints);
-		
-	//}
-	
-	/**
-	* Returns how good the match between the required languages in the listing
-	* compare to the languages spoken by the candidate
-	*/
-	//public getLanguageMatchScore():string{
-		
-	//	let listing:Listing 				= this.listingForSuggestedCandidate;
-	//	let candidate:Candidate 			= this.suggestedCandidate;
-	//	let totalPossiblePoints:number 		= 0;
-	//	let actualPoints					= 0;
-		
-	//	if (listing.languages.includes('DUTCH')) {
-			
-	//		totalPossiblePoints = totalPossiblePoints + 2;
-			
-	//		if (candidate.getDutch() === 'PROFICIENT') {
-	//			actualPoints = actualPoints + 2;
-	//		}
-				
-	//		if (candidate.getDutch() === 'BASIC') {
-	//			actualPoints = actualPoints + 1;
-	//		}
-			
-	//	}
-		
-	//	if (listing.languages.includes('ENGLISH')) {
-			
-	//		totalPossiblePoints = totalPossiblePoints + 2;
-			
-	//		if (candidate.getEnglish() === 'PROFICIENT') {
-	//			actualPoints = actualPoints + 2;
-	//		}
-				
-	//		if (candidate.getEnglish() === 'BASIC') {
-	//			actualPoints = actualPoints + 1;
-	//		}
-	//				
-	//	}
-		
-	//	if (listing.languages.includes('FRENCH')) {
-	//		
-	//		totalPossiblePoints = totalPossiblePoints + 2;
-			
-	//		if (candidate.getFrench() === 'PROFICIENT') {
-	//			actualPoints = actualPoints + 2;
-	//		}
-				
-	//		if (candidate.getFrench() === 'BASIC') {
-	//			actualPoints = actualPoints + 1;
-	//		}
-			
-	//	}
-		
-	//	return this.percentionValue(totalPossiblePoints, actualPoints);
-		
-	//}
-	
-	/**
-	* Returns the perceptions of how well a requirement is met by the Candidate
-	* in realtions to a requirement in the Listing
-	*/
-	//private percentionValue(totalPossiblePoints:number, actualPoints:number):string {
-	
-	//	if (totalPossiblePoints === 0) {
-	//		return 'N/A';	
-	//	}
-		
-	//	let per:number = (actualPoints / totalPossiblePoints) * 100;
-		
-	//	if (per === 100) {
-	//		return 'Perfect';
-	//	}
-		
-	//	if (per >= 75) {
-	//		return "Good";
-	//	}
-		
-	//	if (per >= 50) {
-	//		return "Average";
-	//	}
-	//	
-	//	if (per < 50) {
-	//		return "Bad";
-	//	}
-		
-	//	return '';
-			
-	//}
 	
 }

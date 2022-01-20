@@ -175,8 +175,10 @@ public class CandidateServiceImpl implements CandidateService{
 		AtomicReference<suggestion_accuracy> 		accuracy 			=  new AtomicReference<>(suggestion_accuracy.perfect);
 		Pageable 									pageable 			= PageRequest.of(0,100);
 		
-		
-		
+		//1. Need to examine title and try to determine type of candudate 
+		//	 - example. Senior Java Developer = JAVA_DEV  :: React + Developer 
+		//2. Need to add synonims to core tech 
+		//   - example. js = Javascript spring = springboot, spring mvc, vue = vueJs, react = reactJS
 		CandidateFilterOptions 						suggestionFilterOptions = CandidateFilterOptions
 																							.builder()
 																								.dutch(filterOptions.getDutch().isPresent() 		? filterOptions.getDutch().get() 	: null)
