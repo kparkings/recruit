@@ -27,6 +27,7 @@ import com.arenella.recruit.candidates.entities.CandidateEntity;
 import com.arenella.recruit.candidates.entities.PendingCandidateEntity;
 import com.arenella.recruit.candidates.utils.CandidateSuggestionUtil;
 import com.arenella.recruit.candidates.utils.CandidateSuggestionUtil.suggestion_accuracy;
+import com.arenella.recruit.candidates.utils.SkillsSynonymsUtil;
 
 /**
 * Provides services related to Candidates
@@ -49,6 +50,9 @@ public class CandidateServiceImpl implements CandidateService{
 	
 	@Autowired
 	private CandidateSuggestionUtil		suggestionUtil;
+	
+	@Autowired
+	private SkillsSynonymsUtil			skillsSynonymsUtil;
 	
 	/**
 	* Refer to the CandidateService Interface for Details
@@ -175,10 +179,6 @@ public class CandidateServiceImpl implements CandidateService{
 		AtomicReference<suggestion_accuracy> 		accuracy 			=  new AtomicReference<>(suggestion_accuracy.perfect);
 		Pageable 									pageable 			= PageRequest.of(0,100);
 		
-		//1. Need to examine title and try to determine type of candudate 
-		//	 - example. Senior Java Developer = JAVA_DEV  :: React + Developer 
-		//2. Need to add synonims to core tech 
-		//   - example. js = Javascript spring = springboot, spring mvc, vue = vueJs, react = reactJS
 		CandidateFilterOptions 						suggestionFilterOptions = CandidateFilterOptions
 																							.builder()
 																								.dutch(filterOptions.getDutch().isPresent() 		? filterOptions.getDutch().get() 	: null)
@@ -198,6 +198,8 @@ public class CandidateServiceImpl implements CandidateService{
 		
 			candidates.getContent().stream().filter(c -> !suggestionIds.contains(c.getCandidateId())).forEach(candidate -> {
 		
+				candidate.getSkills().addAll(this.skillsSynonymsUtil.addtSynonymsForSkills(candidate.getSkills()));
+				
 				CandidateSearchAccuracyWrapper 	wrappedCandidate 	= new CandidateSearchAccuracyWrapper(candidate);
 				boolean 						isMatch 			= false;
 				

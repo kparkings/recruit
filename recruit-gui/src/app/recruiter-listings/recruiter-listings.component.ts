@@ -883,6 +883,8 @@ export class RecruiterListingsComponent implements OnInit {
 		keywords.push("react");
 		keywords.push("node");
 		keywords.push("node.js");
+		keywords.push("php");
+		keywords.push("wordpress");
 		
 		let match:boolean = false;
 		
@@ -929,6 +931,9 @@ export class RecruiterListingsComponent implements OnInit {
 		keywords.push("data");
 		keywords.push("data analyst");
 		keywords.push("data scientist");
+		keywords.push("bi");
+		keywords.push("business intelligence");
+		keywords.push("python");
 		
 		let match:boolean = false;
 		
@@ -978,6 +983,8 @@ export class RecruiterListingsComponent implements OnInit {
 		let keywords:Array<string> = new Array<string>();
 		
 		keywords.push("php");
+		keywords.push("python");
+		keywords.push("wordpress");
 		keywords.push("software engineer");
 		keywords.push("software developer");
 		
@@ -1224,6 +1231,14 @@ export class RecruiterListingsComponent implements OnInit {
 	*/
 	public getCurriculumDownloadUrl(curriculumId:string){
 		return  environment.backendUrl + 'curriculum/'+ curriculumId;
+	}
+	
+		/**
+	* Flags a Candidate as being potentially unavailable
+	*/
+	public markCandidateAsUnavailable():void {
+		this.candidateService.markCandidateAsUnavailable(this.suggestedCandidate.candidateId).subscribe(data => {});
+		this.suggestedCandidate.flaggedAsUnavailable = true;
 	}
 	
 }
