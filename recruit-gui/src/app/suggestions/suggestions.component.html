@@ -1,0 +1,81 @@
+<div class=".container m-2">
+
+	<!-- Search Bar -->
+	<div class="suggestions-search-div">
+		<input type="text" value="Java Developer" class="suggestion-search-bar"><button class="btn btn-secondary btn-action">Search</button>
+	</div>
+	
+	<!-- Filter Options -->
+	<div class="left-menu">
+		<h5>Filter Options</h5>
+		<div class="filter-options-group">
+			<span class="country-selected-true">
+				<span class="flag-icon flag-icon-nl flag-icon-med"></span>
+			</span>
+			<span class="country-selected-true">
+				<span class="flag-icon flag-icon-be flag-icon-med"></span>
+			</span>
+			<span class="country-selected-true">
+				<span class="flag-icon flag-icon-gb flag-icon-med"></span>
+			</span>
+		</div>
+		<div class="filter-options-group">
+			<h5>Contract type</h5>
+			<select>
+				<option>Both</option>
+				<option>Contract</option>
+				<option>Permanent</option>
+			</select>
+		</div>
+		<div class="filter-options-group">
+			<h5>Languages</h5>
+			<div>
+				<input type="checkbox">Dutch
+				<input type="checkbox">French
+				<input type="checkbox">English
+			</div>
+		</div>
+		<div class="filter-options-group">
+			<h5>Years experience</h5>
+			<div>
+				Min:
+				<select>
+					<option>0</option>
+					<option>1</option>
+					<option>2</option>
+				</select>
+				Max:
+				<select>
+					<option></option>
+					<option>1</option>
+					<option>2</option>
+				</select>
+			</div>
+		</div>
+		<div class="filter-options-group">
+			<h5>Skills</h5>
+			<div>
+				<input type="text"><button>Add</button>
+			</div>
+		</div>
+	</div>
+
+	<!-- Suggestion Results -->
+	<div *ngIf="true" class="suggestion-results">
+		results
+	</div>
+	
+	<!-- Suggestion Profile -->
+	<div *ngIf="false" class="suggestion-results">
+		Candidate auto profile
+		 - Name
+		 - CV download
+		 - Not available flag
+		 - Matched skills listed
+		 - Country
+		 - Job title
+		 - Years experience
+		 - Languages spoken
+	</div>
+
+</div>

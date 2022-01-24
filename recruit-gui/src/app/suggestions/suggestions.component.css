@@ -1,0 +1,62 @@
+.left-menu{
+	float:left;
+	margin:20px;
+	background:#E8E8E8;
+	min-height:70vh;
+	min-width:300px;
+	border:5px solid #6c757d;
+	border-radius:25px;
+	padding:10px;
+}
+
+.suggestion-results{
+	float:left;
+	min-height:70vh;
+	padding:10px;
+	margin-top:20px;
+}
+
+.left-menu h3, h5{
+	margin-top:10px;
+	text-align:center;
+}
+
+.filter-options-group{
+	text-align:center;
+}
+
+.country-selected-true{
+	opacity:1;
+}
+
+.country-selected-false{
+	opacity:0.25;
+}
+
+.flag-icon-med{
+	width:30px;
+	height:30px;
+	margin:10px;	
+	cursor:pointer;
+}
+
+.suggestions-search-div{
+	margin-top:20px;
+	text-align:right;
+}
+
+.suggestions-search-div input{
+	width:80%;
+	
+}
+
+.btn-action{
+	margin-left:10px;
+    min-width:100px;
+}
+
+.suggestion-search-bar{
+	height:50px;
+	padding:5px;
+	padding-left:10px;
+}

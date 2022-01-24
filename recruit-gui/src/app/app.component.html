@@ -17,6 +17,9 @@
 		<li  class="li-arenella-nav"  *ngIf="isAuthenticated() && !isRecruiterNoSubscription() && !hasUnpaidSubscription()">	
            <a  class="dropdown-item" routerLink="/view-candidates">Candidates</a>
         </li>
+		<li  class="li-arenella-nav"  *ngIf="isAuthenticated() && !isRecruiterNoSubscription() && !hasUnpaidSubscription()">	
+           <a  class="dropdown-item" routerLink="/suggestions">Suggestions</a>
+        </li>
         <li  class="li-arenella-nav" *ngIf="isAuthenticatedAsAdmin()">
            <a  class="dropdown-item" routerLink="/statistics">Statistics</a>
         </li>

@@ -21,6 +21,7 @@ import { RecruiterAccountComponent } 	from './recruiter-account/recruiter-accoun
 import { RecruiterListingsComponent } 	from './recruiter-listings/recruiter-listings.component';
 import { ListingComponent } 			from './listing/listing.component';
 import { RecruiterSignupComponent } 	from './recruiter-signup/recruiter-signup.component';
+import { SuggestionsComponent } 		from './suggestions/suggestions.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,8 @@ import { RecruiterSignupComponent } 	from './recruiter-signup/recruiter-signup.c
     RecruiterAccountComponent,
     RecruiterListingsComponent,
     ListingComponent,
-    RecruiterSignupComponent
+    RecruiterSignupComponent,
+    SuggestionsComponent
   ],
   imports: [
     BrowserModule,

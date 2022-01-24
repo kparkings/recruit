@@ -28,6 +28,7 @@
     "bootstrap": "^4.6.0",
     "chart.js": "^2.9.4",
     "file-saver": "^2.0.5",
+    "flag-icon-css": "^4.1.7",
     "font-awesome": "^4.7.0",
     "jquery": "^3.6.0",
     "material-ui-flags": "^1.2.4",
