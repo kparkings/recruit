@@ -50,11 +50,11 @@
 					<div>
 						Min:
 						<select class="min-max" formControlName="minYearsExperience">
-							<option *ngFor="let opt of minMaxOptions" value="opt">{{opt}}</option>
+							<option *ngFor="let opt of minMaxOptions" value="{{opt}}">{{opt}}</option>
 						</select>
 						Max:
 						<select class="min-max" formControlName="maxYearsExperience">
-							<option *ngFor="let opt of minMaxOptions" value="opt">{{opt}}</option>
+							<option *ngFor="let opt of minMaxOptions" value="{{opt}}">{{opt}}</option>
 						</select>
 					</div>
 				</div>
@@ -65,7 +65,7 @@
 						<input type="text" formControlName="skill"><button (click)="addSkill()" class="btn btn-secondary add-skill-btn">Add</button>
 					</div>
 					<div class="skill-filters">
-						<div class="selected-skill" style="float:left" *ngFor="let skill of skillFilters">{{skill}}</div>
+						<div class="selected-skill" style="float:left" *ngFor="let skill of skillFilters" (click)="removeSkill(skill)">{{skill}}</div>
 					</div>
 				</div>
 			
@@ -78,7 +78,20 @@
 	
 	
 		<div class="suggestion-icon" *ngFor="let suggestion of suggestions">
-			{{suggestion.roleSought}}
+		
+			<div class="suggestion-icon-header">
+				C{{suggestion.candidateId}}
+			</div>
+		
+			<div class="suggestion-icon-body">
+				<div>
+					{{suggestion.firstname}} {{suggestion.surname}}
+				</div>
+			
+				<div>
+					{{suggestion.roleSought}}
+				</div>
+			</div>
 		</div>
 	</div>
 	

@@ -12,13 +12,49 @@ import { Observable, throwError }                 		from 'rxjs';
 })
 export class SuggestionsService {
 
+	private keywordsCSharpDev:Array<string> 			= new Array<string>("c#",".net","dotnet","wpf","asp","vb.net","csharp","asp.net");
+	private keywordsSupport:Array<string> 				= new Array<string>("support","helpdesk","service desk");
+	private keywordsBusinessAnalyst:Array<string> 		= new Array<string>("buisiness analyst","ba");
+	private keywordsUiUx:Array<string> 					= new Array<string>("ui\\ux","designer","ui","ux");
+	private keywordsProjectManager:Array<string> 		= new Array<string>("manager","product owner");
+	private keywordsArchitect:Array<string> 			= new Array<string>("architect","solutions","enterprise");
+	private keywordsTester:Array<string> 				= new Array<string>("tester","qa","automation","manual","quality","assurance");
+	private keywordsWebDeveloper:Array<string> 			= new Array<string>("web developer","front end","front-end","javascript","js","vue","vuejs","vue.js","react","node","node.js","php","wordpress");
+	private keywordsScrumMaster:Array<string> 			= new Array<string>("scrum","master");
+	private keywordsDataScientist:Array<string> 		= new Array<string>("data", "data analyst","data scientist","bi","business intelligence","python");
+	private keywordsNetworkAdmin:Array<string> 			= new Array<string>("devops","network","admin","administrator","ops","operations");
+	private keywordsSoftwareDeveloper:Array<string> 	= new Array<string>("php","python","wordpress","software engineer","software developer","golang", "c", "c++","vb", "go", "cobol","pl-sql","t-sql", "r", "groovy", "sql");
+	private keywordsItSecurity:Array<string> 			= new Array<string>("security","cyber","malware","owasp");
+	private keywordsItRecruiter:Array<string> 			= new Array<string>("recruiter","account manager");
+	private keywordsSdet:Array<string> 					= new Array<string>("sdet","developer in test","qa","automation tester");
+	private keywordsJava:Array<string> 					= new Array<string>("java","j2ee");
+
+	private allKeywords:Array<string>					= new Array<string>();
+
 	/**
 	* Constructor 
 	*/
 	constructor(private candidateService:CandidateServiceService) {
 		
+		this.keywordsCSharpDev.forEach(itm => this.allKeywords.push(itm));
+		this.keywordsSupport.forEach(itm => this.allKeywords.push(itm));
+		this.keywordsBusinessAnalyst.forEach(itm => this.allKeywords.push(itm));
+		this.keywordsUiUx.forEach(itm => this.allKeywords.push(itm));
+		this.keywordsProjectManager.forEach(itm => this.allKeywords.push(itm));
+		this.keywordsArchitect.forEach(itm => this.allKeywords.push(itm));
+		this.keywordsTester.forEach(itm => this.allKeywords.push(itm));
+		this.keywordsWebDeveloper.forEach(itm => this.allKeywords.push(itm));
+		this.keywordsScrumMaster.forEach(itm => this.allKeywords.push(itm));
+		this.keywordsDataScientist.forEach(itm => this.allKeywords.push(itm));
+		this.keywordsNetworkAdmin.forEach(itm => this.allKeywords.push(itm));
+		this.keywordsSoftwareDeveloper.forEach(itm => this.allKeywords.push(itm));
+		this.keywordsItSecurity.forEach(itm => this.allKeywords.push(itm));
+		this.keywordsItRecruiter.forEach(itm => this.allKeywords.push(itm));
+		this.keywordsSdet.forEach(itm => this.allKeywords.push(itm));
+		this.keywordsJava.forEach(itm => this.allKeywords.push(itm));
+		
 	}
-
+	
 	/**
 	* Returns the Suggestons based upon the filter criteria 
 	*/
@@ -32,6 +68,21 @@ export class SuggestionsService {
 							languages:Array<string>, 
 							skills:Array<string>): Observable<any>{
 								
+		let augmentedSkillsList:Array<string> = new Array<string>();
+		
+		skills.forEach(skill => augmentedSkillsList.push(skill));
+		
+		title.split(" ").forEach(skill => {
+			
+			let skillFormatted:string = skill.toLocaleLowerCase();
+		
+			skillFormatted = skillFormatted.trim();
+			
+			if (this.allKeywords.indexOf(skillFormatted) >-1 && augmentedSkillsList.indexOf(skillFormatted) == -1) {
+				augmentedSkillsList.push(skillFormatted);
+			}
+		});
+		
 		return this.candidateService.getCandidates(this.getCandidateFilterParamString(	maxNumberOfSuggestions, 
 																						title, 
 																						countries, 
@@ -40,7 +91,7 @@ export class SuggestionsService {
 																						experienceMin, 
 																						experienceMax, 
 																						languages, 
-																						skills));
+																						augmentedSkillsList));
 		
 	}
 	
@@ -91,15 +142,17 @@ export class SuggestionsService {
 	*/
 	public getContractTypeParamString(contract:boolean, perm:boolean):string{
 		
+		let paramString:string = '';
+		
 		if (contract) {
-			return '&freelance=true';
+			paramString = '&freelance=true';
 		}
 		
 		if (perm) {
-			return '&perm=true';
+			paramString = paramString + '&perm=true';
 		}
 	
-      	return '';
+      	return paramString;
 	}
 	
 	private getSkillsParamString(skills:Array<string>):string{
@@ -189,19 +242,12 @@ export class SuggestionsService {
 		
 		return '';
 	}
-	
-	//START - Move to separate service or class
-	
+
 	public addFunctionTypeIfJavaDev(title:string):string{
-		
-		let keywords:Array<string> = new Array<string>();
-		
-		keywords.push("java");
-		keywords.push("j2ee");
 		
 		let match:boolean = false;
 		
-		keywords.forEach(kw => {
+		this.keywordsJava.forEach(kw => {
 			if (title.indexOf(kw) > -1) {
 				match = true;
 			}
@@ -214,23 +260,13 @@ export class SuggestionsService {
 			return '';	
 		}	
 	}
+	
 
 	public addFunctionTypeIfCSHARPDev(title:string):string{
 		
-		let keywords:Array<string> = new Array<string>();
-		
-		keywords.push("c#");
-		keywords.push(".net");
-		keywords.push("dotnet");
-		keywords.push("wpf");
-		keywords.push("asp");
-		keywords.push("vb.net");
-		keywords.push("csharp");
-		keywords.push("asp.net");
-		
 		let match:boolean = false;
 		
-		keywords.forEach(kw => {
+		this.keywordsCSharpDev.forEach(kw => {
 			if (title.indexOf(kw) > -1) {
 				match = true;
 			}
@@ -243,19 +279,11 @@ export class SuggestionsService {
 		}	
 	}
 	
-	
-	
 	public addFunctionTypeIfSupport(title:string):string{
-		
-		let keywords:Array<string> = new Array<string>();
-		
-		keywords.push("support");
-		keywords.push("helpdesk");
-		keywords.push("service desk");
 		
 		let match:boolean = false;
 		
-		keywords.forEach(kw => {
+		this.keywordsSupport.forEach(kw => {
 			if (title.indexOf(kw) > -1) {
 				match = true;
 			}
@@ -271,14 +299,9 @@ export class SuggestionsService {
 	
 	private addFunctionTypeIfBusinessAnalayst(title:string):string{
 		
-		let keywords:Array<string> = new Array<string>();
-		
-		keywords.push("buisiness analyst");
-		keywords.push("ba");
-		
 		let match:boolean = false;
 		
-		keywords.forEach(kw => {
+		this.keywordsBusinessAnalyst.forEach(kw => {
 			if (title.indexOf(kw) > -1) {
 				match = true;
 			}
@@ -291,18 +314,12 @@ export class SuggestionsService {
 		}
 				
 	}
+	
 	private addFunctionTypeIfUiUx(title:string):string{
-		
-		let keywords:Array<string> = new Array<string>();
-		
-		keywords.push("ui\\ux");
-		keywords.push("designer");
-		keywords.push("ui");
-		keywords.push("ux");
 		
 		let match:boolean = false;
 		
-		keywords.forEach(kw => {
+		this.keywordsUiUx.forEach(kw => {
 			if (title.indexOf(kw) > -1) {
 				match = true;
 			}
@@ -318,14 +335,9 @@ export class SuggestionsService {
 	
 	private addFunctionTypeIfProjectManager(title:string):string{
 		
-		let keywords:Array<string> = new Array<string>();
-		
-		keywords.push("manager");
-		keywords.push("product owner");
-		
 		let match:boolean = false;
 		
-		keywords.forEach(kw => {
+		this.keywordsProjectManager.forEach(kw => {
 			if (title.indexOf(kw) > -1) {
 				match = true;
 			}
@@ -341,15 +353,9 @@ export class SuggestionsService {
 	
 	private addFunctionTypeIfArchitect(title:string):string{ 
 		
-		let keywords:Array<string> = new Array<string>();
-		
-		keywords.push("architect");
-		keywords.push("solutions");
-		keywords.push("enterprise");
-		
 		let match:boolean = false;
 		
-		keywords.forEach(kw => {
+		this.keywordsArchitect.forEach(kw => {
 			if (title.indexOf(kw) > -1) {
 				match = true;
 			}
@@ -363,20 +369,13 @@ export class SuggestionsService {
 				
 	} 
 	
+	
+	
 	private addFunctionTypeIfTester(title:string):string{
-		
-		let keywords:Array<string> = new Array<string>();
-		
-		keywords.push("tester");
-		keywords.push("qa");
-		keywords.push("automation");
-		keywords.push("manual");
-		keywords.push("quality");
-		keywords.push("assurance");
 		
 		let match:boolean = false;
 		
-		keywords.forEach(kw => {
+		this.keywordsTester.forEach(kw => {
 			if (title.indexOf(kw) > -1) {
 				match = true;
 			}
@@ -392,25 +391,9 @@ export class SuggestionsService {
 	
 	private addFunctionTypeIfWebDeveloper(title:string):string{
 		
-		let keywords:Array<string> = new Array<string>();
-		
-		keywords.push("web developer");
-		keywords.push("front end");
-		keywords.push("front-end");
-		keywords.push("javascript");
-		keywords.push("js");
-		keywords.push("vue");
-		keywords.push("vuejs");
-		keywords.push("vue.js");
-		keywords.push("react");
-		keywords.push("node");
-		keywords.push("node.js");
-		keywords.push("php");
-		keywords.push("wordpress");
-		
 		let match:boolean = false;
 		
-		keywords.forEach(kw => {
+		this.keywordsWebDeveloper.forEach(kw => {
 			if (title.indexOf(kw) > -1) {
 				match = true;
 			}
@@ -426,14 +409,9 @@ export class SuggestionsService {
 	
 	private addFunctionTypeIfScrumMaster(title:string):string{
 		
-		let keywords:Array<string> = new Array<string>();
-		
-		keywords.push("scrum");
-		keywords.push("master");
-		
 		let match:boolean = false;
 		
-		keywords.forEach(kw => {
+		this.keywordsScrumMaster.forEach(kw => {
 			if (title.indexOf(kw) > -1) {
 				match = true;
 			}
@@ -446,20 +424,12 @@ export class SuggestionsService {
 		}
 				
 	} 
+	
 	private addFunctionTypeIfDataScientist(title:string):string{
-		
-		let keywords:Array<string> = new Array<string>();
-		
-		keywords.push("data");
-		keywords.push("data analyst");
-		keywords.push("data scientist");
-		keywords.push("bi");
-		keywords.push("business intelligence");
-		keywords.push("python");
 		
 		let match:boolean = false;
 		
-		keywords.forEach(kw => {
+		this.keywordsDataScientist.forEach(kw => {
 			if (title.indexOf(kw) > -1) {
 				match = true;
 			}
@@ -475,18 +445,9 @@ export class SuggestionsService {
 	
 	private addFunctionTypeIfNetworkAdmin(title:string):string{
 		
-		let keywords:Array<string> = new Array<string>();
-		
-		keywords.push("devops");
-		keywords.push("network");
-		keywords.push("admin");
-		keywords.push("administrator");
-		keywords.push("ops");
-		keywords.push("operations");
-		
 		let match:boolean = false;
 		
-		keywords.forEach(kw => {
+		this.keywordsNetworkAdmin.forEach(kw => {
 			if (title.indexOf(kw) > -1) {
 				match = true;
 			}
@@ -502,17 +463,9 @@ export class SuggestionsService {
 	
 	private addFunctionTypeIfSoftwareDeveloper(title:string):string{
 		
-		let keywords:Array<string> = new Array<string>();
-		
-		keywords.push("php");
-		keywords.push("python");
-		keywords.push("wordpress");
-		keywords.push("software engineer");
-		keywords.push("software developer");
-		
 		let match:boolean = false;
 		
-		keywords.forEach(kw => {
+		this.keywordsSoftwareDeveloper.forEach(kw => {
 			if (title.indexOf(kw) > -1) {
 				match = true;
 			}
@@ -528,16 +481,9 @@ export class SuggestionsService {
 	
 	private addFunctionTypeIfSecurity(title:string):string{
 		
-		let keywords:Array<string> = new Array<string>();
-		
-		keywords.push("security");
-		keywords.push("cyber");
-		keywords.push("owasp");
-		keywords.push("owasp");
-		
 		let match:boolean = false;
 		
-		keywords.forEach(kw => {
+		this.keywordsItSecurity.forEach(kw => {
 			if (title.indexOf(kw) > -1) {
 				match = true;
 			}
@@ -551,17 +497,11 @@ export class SuggestionsService {
 				
 	} 
 	
-	
 	private addFunctionTypeIfRecruiter(title:string):string{
-		
-		let keywords:Array<string> = new Array<string>();
-		
-		keywords.push("recruiter");
-		keywords.push("account manager");
 		
 		let match:boolean = false;
 		
-		keywords.forEach(kw => {
+		this.keywordsItRecruiter.forEach(kw => {
 			if (title.indexOf(kw) > -1) {
 				match = true;
 			}
@@ -574,18 +514,12 @@ export class SuggestionsService {
 		}
 				
 	} 
+	
 	private addFunctionTypeIfSDET(title:string):string{
-		
-		let keywords:Array<string> = new Array<string>();
-		
-		keywords.push("sdet");
-		keywords.push("developer in test");
-		keywords.push("qa");
-		keywords.push("automation tester");
 		
 		let match:boolean = false;
 		
-		keywords.forEach(kw => {
+		this.keywordsSdet.forEach(kw => {
 			if (title.indexOf(kw) > -1) {
 				match = true;
 			}

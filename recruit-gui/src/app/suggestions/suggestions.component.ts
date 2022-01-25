@@ -133,7 +133,6 @@ export class SuggestionsComponent implements OnInit {
 													this.suggestions.push(s);	
 												});
 												 
-												console.log("READY WITH SUGGESTIONS --> " + JSON.stringify(data));
 											});
 	}
 	
@@ -172,6 +171,20 @@ export class SuggestionsComponent implements OnInit {
 		
 		this.suggestionFilterForm.get('skill')?.setValue('');
 		
+	}
+	
+	/**
+	* Removes a skill and calls for new suggestions
+	*/
+	public removeSkill(skill:string):void{
+		
+		skill = skill.trim();
+		skill = skill.toLocaleLowerCase();
+		
+		this.skillFilters = this.skillFilters.filter(s => s  !== skill);
+		
+		this.getSuggestions();	
+	
 	}
 
 }

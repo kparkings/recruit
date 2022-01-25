@@ -104,15 +104,28 @@
 
 .search-label{
 	font-weight:bold;
-	fon-size:20px;
+	font-size:20px;
 	margin-right:10px;
 }
 
 .suggestion-icon{
 	float:left;
-	border:2px solid grey; 
-	padding:10px; 
+	background:#E8E8E8;
 	margin:10px;
 	width:200px;
 	height:150px;
+}
+
+.suggestion-icon-body{
+	text-align:center;
+	margin-top:20px;
+}
+
+.suggestion-icon-header{
+	background:#6c757d;
+	margin:0px;
+	font-weight:bold;
+	font-size:16px;
+	width:100%;
+	padding:5px;
 }
