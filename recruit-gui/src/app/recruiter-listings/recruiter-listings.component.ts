@@ -7,6 +7,7 @@ import { ViewChild }									from '@angular/core';
 import { Listing}										from './listing';
 import { Candidate}										from './candidate';
 import { CandidateServiceService }						from '../candidate-service.service';
+import { SuggestionsService }							from '../suggestions.service';
 import { environment }									from '../../environments/environment';
 
 @Component({
@@ -17,9 +18,14 @@ import { environment }									from '../../environments/environment';
 export class RecruiterListingsComponent implements OnInit {
 
 	@ViewChild('feedbackBox', { static: false }) private content:any;
-	//@ViewChild('recommendedCandidates', { static: false }) private recommendedCandidates:any;
 
-  	constructor(private listingService:ListingService, private modalService: NgbModal, private recruiterService:RecruiterService, public candidateService:CandidateServiceService) { }
+  	constructor(private listingService:ListingService, 
+				private modalService: NgbModal, 
+				private recruiterService:RecruiterService, 
+				public candidateService:CandidateServiceService,
+				public suggestionsService:SuggestionsService) {
+					
+	}
 	
 	ngOnInit(): void {
 	

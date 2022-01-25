@@ -1,6 +1,9 @@
 import { Component, OnInit } 					from '@angular/core';
 import { FormGroup, FormControl }				from '@angular/forms';
 import { CandidateServiceService }				from '../candidate-service.service';
+import { SuggestionsService }					from '../suggestions.service';
+import { Candidate}										from './candidate';
+
 /**
 * Component to suggest suitable Candidates based upon a 
 * Recruiters search
@@ -12,15 +15,17 @@ import { CandidateServiceService }				from '../candidate-service.service';
 })
 export class SuggestionsComponent implements OnInit {
 
+	public suggestions:Array<Candidate>  = new Array<Candidate>();
+
 	public suggestionFilterForm:FormGroup 	= new FormGroup({
 		searchPhrase:			new FormControl(''),
 		nlResults: 				new FormControl(true),
 		beResults: 				new FormControl(true),
 		ukResults: 				new FormControl(true),
 		contractType: 			new FormControl('Both'),
-		dutchLanguage: 			new FormControl(true),
-		englishLanguage: 		new FormControl(true),
-		frenchLanguage:			new FormControl(true),
+		dutchLanguage: 			new FormControl(false),
+		englishLanguage: 		new FormControl(false),
+		frenchLanguage:			new FormControl(false),
 		minYearsExperience: 	new FormControl(''),
 		maxYearsExperience: 	new FormControl(''),
 		skill: 					new FormControl(''),
@@ -33,7 +38,7 @@ export class SuggestionsComponent implements OnInit {
 	* Constructor
 	* @param candidateService - Services relating to Candidates
 	*/
-	constructor(public candidateService:CandidateServiceService) { }
+	constructor(public candidateService:CandidateServiceService, public suggestionsService:SuggestionsService) { }
 
 	/**
 	* Initializes Component`
@@ -51,6 +56,85 @@ export class SuggestionsComponent implements OnInit {
 	*/
 	private getSuggestions():void{
 		
+		const maxSuggestions:number 		= 15;
+		
+		let countries:Array<string> 		= new Array<string>();
+		let skills:Array<string> 			= this.skillFilters;
+		let languages:Array<string> 		= new Array<string>();
+		
+		let title:string 					= this.suggestionFilterForm.get('searchPhrase')?.value;
+		let contract:boolean 				= true;
+		let perm:boolean 					= true;
+		let minExperience:string 			= this.suggestionFilterForm.get('minYearsExperience')?.value;
+		let maxExperience:string 			= this.suggestionFilterForm.get('maxYearsExperience')?.value;
+		
+		/**
+		* Add any country filters 	
+		*/
+		if (this.suggestionFilterForm.get('nlResults')?.value) {
+			countries.push("NETHERLANDS");
+		}
+		
+		if (this.suggestionFilterForm.get('beResults')?.value) {
+			countries.push("BELGIUM");
+		}
+		
+		if (this.suggestionFilterForm.get('ukResults')?.value) {
+			countries.push("UK");
+		}
+
+		/**
+		* Add any language filters 	
+		*/
+		if (this.suggestionFilterForm.get('dutchLanguage')?.value) {
+			languages.push("DUTCH");
+		}
+		
+		if (this.suggestionFilterForm.get('frenchLanguage')?.value) {
+			languages.push("FRENCH");
+		}
+		
+		if (this.suggestionFilterForm.get('englishLanguage')?.value) {
+			languages.push("ENGLISH");
+		}
+				
+		/**
+		* Ccontract type filters
+		*/
+		if (this.suggestionFilterForm.get('contractType')?.value === 'BOTH'){
+			perm 		= true;
+			contract 	= true;
+		}
+		
+		if (this.suggestionFilterForm.get('contractType')?.value === 'CONTRACT'){
+			perm 		= false;
+			contract 	= true;
+		}
+		
+		if (this.suggestionFilterForm.get('contractType')?.value === 'PERM'){
+			perm 		= true;
+			contract 	= false;
+		}
+		
+		this.suggestionsService.getSuggestons(	maxSuggestions,
+												title,
+												countries,
+												contract,
+												perm,
+												minExperience,
+												maxExperience,
+												languages,
+												skills,
+											).subscribe(data => {
+												
+												this.suggestions =  new Array<Candidate>();
+												
+												data.content.forEach((s:Candidate) => {
+													this.suggestions.push(s);	
+												});
+												 
+												console.log("READY WITH SUGGESTIONS --> " + JSON.stringify(data));
+											});
 	}
 	
 	/**

@@ -4,7 +4,7 @@
 
 		<!-- Search Bar -->
 		<div class="suggestions-search-div">
-			<input type="text" value="Java Developer" class="suggestion-search-bar" formControlName="searchPhrase"><button class="btn btn-secondary btn-action">Search</button>
+			<label class="search-label">Search:</label><input type="text" value="Java Developer" class="suggestion-search-bar" formControlName="searchPhrase">
 		</div>
 		
 		<!-- Filter Options -->
@@ -25,9 +25,9 @@
 				<div class="filter-options-group">
 					<h5>Contract type</h5>
 					<select formControlName="contractType">
-						<option>Both</option>
-						<option>Contract</option>
-						<option>Permanent</option>
+						<option value="BOTH">Both</option>
+						<option value="CONTRACT">Contract</option>
+						<option value="PERM">Permanent</option>
 					</select>
 				</div>
 				<div class="filter-options-group">
@@ -74,8 +74,12 @@
 	</form>
 
 	<!-- Suggestion Results -->
-	<div *ngIf="true" class="suggestion-results">
-		results
+	<div *ngIf="true" class="suggestion-results" style="max-width:75%;">
+	
+	
+		<div class="suggestion-icon" *ngFor="let suggestion of suggestions">
+			{{suggestion.roleSought}}
+		</div>
 	</div>
 	
 	<!-- Suggestion Profile -->
