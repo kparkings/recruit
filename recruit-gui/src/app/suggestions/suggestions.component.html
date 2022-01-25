@@ -1,64 +1,77 @@
 <div class=".container m-2">
 
-	<!-- Search Bar -->
-	<div class="suggestions-search-div">
-		<input type="text" value="Java Developer" class="suggestion-search-bar"><button class="btn btn-secondary btn-action">Search</button>
-	</div>
-	
-	<!-- Filter Options -->
-	<div class="left-menu">
-		<h5>Filter Options</h5>
-		<div class="filter-options-group">
-			<span class="country-selected-true">
-				<span class="flag-icon flag-icon-nl flag-icon-med"></span>
-			</span>
-			<span class="country-selected-true">
-				<span class="flag-icon flag-icon-be flag-icon-med"></span>
-			</span>
-			<span class="country-selected-true">
-				<span class="flag-icon flag-icon-gb flag-icon-med"></span>
-			</span>
+	<form [formGroup]="suggestionFilterForm">
+
+		<!-- Search Bar -->
+		<div class="suggestions-search-div">
+			<input type="text" value="Java Developer" class="suggestion-search-bar" formControlName="searchPhrase"><button class="btn btn-secondary btn-action">Search</button>
 		</div>
-		<div class="filter-options-group">
-			<h5>Contract type</h5>
-			<select>
-				<option>Both</option>
-				<option>Contract</option>
-				<option>Permanent</option>
-			</select>
+		
+		<!-- Filter Options -->
+		<div class="left-menu">
+			
+			<h5>Filter Options</h5>
+				<div class="filter-options-group">
+					<span class="country-selected-{{includeResultsForCountry('nl')}}" (click)="toggleCountrySelection('nl')">
+						<span class="flag-icon flag-icon-nl flag-icon-med"></span>
+					</span>
+					<span class="country-selected-{{includeResultsForCountry('be')}}" (click)="toggleCountrySelection('be')">
+						<span class="flag-icon flag-icon-be flag-icon-med"></span>
+					</span>
+					<span class="country-selected-{{includeResultsForCountry('uk')}}" (click)="toggleCountrySelection('uk')">
+						<span class="flag-icon flag-icon-gb flag-icon-med"></span>
+					</span>
+				</div>
+				<div class="filter-options-group">
+					<h5>Contract type</h5>
+					<select formControlName="contractType">
+						<option>Both</option>
+						<option>Contract</option>
+						<option>Permanent</option>
+					</select>
+				</div>
+				<div class="filter-options-group">
+					<h5>Languages</h5>
+					<div  style="text-align:center;width:100%">
+						<div style="text-align:left;padding-left:100px;">
+							<input type="checkbox" formControlName="dutchLanguage" class="lang-checkbox">Dutch
+						</div>
+						<div style="text-align:left;padding-left:100px;">
+							<input type="checkbox" formControlName="frenchLanguage" class="lang-checkbox">French
+						</div>
+						<div style="text-align:left;padding-left:100px">
+							<input type="checkbox" formControlName="englishLanguage" class="lang-checkbox">English
+						</div>
+					</div>
+				
+				</div>
+				<div class="filter-options-group">
+					<h5>Years experience</h5>
+					<div>
+						Min:
+						<select class="min-max" formControlName="minYearsExperience">
+							<option *ngFor="let opt of minMaxOptions" value="opt">{{opt}}</option>
+						</select>
+						Max:
+						<select class="min-max" formControlName="maxYearsExperience">
+							<option *ngFor="let opt of minMaxOptions" value="opt">{{opt}}</option>
+						</select>
+					</div>
+				</div>
+			
+				<div class="filter-options-group skills-filter-options-group">
+					<h5>Skills</h5>
+					<div>
+						<input type="text" formControlName="skill"><button (click)="addSkill()" class="btn btn-secondary add-skill-btn">Add</button>
+					</div>
+					<div class="skill-filters">
+						<div class="selected-skill" style="float:left" *ngFor="let skill of skillFilters">{{skill}}</div>
+					</div>
+				</div>
+			
 		</div>
-		<div class="filter-options-group">
-			<h5>Languages</h5>
-			<div>
-				<input type="checkbox">Dutch
-				<input type="checkbox">French
-				<input type="checkbox">English
-			</div>
-		</div>
-		<div class="filter-options-group">
-			<h5>Years experience</h5>
-			<div>
-				Min:
-				<select>
-					<option>0</option>
-					<option>1</option>
-					<option>2</option>
-				</select>
-				Max:
-				<select>
-					<option></option>
-					<option>1</option>
-					<option>2</option>
-				</select>
-			</div>
-		</div>
-		<div class="filter-options-group">
-			<h5>Skills</h5>
-			<div>
-				<input type="text"><button>Add</button>
-			</div>
-		</div>
-	</div>
+
+	</form>
 
 	<!-- Suggestion Results -->
 	<div *ngIf="true" class="suggestion-results">

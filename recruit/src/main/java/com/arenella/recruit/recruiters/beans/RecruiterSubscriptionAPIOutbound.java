@@ -31,8 +31,6 @@ public class RecruiterSubscriptionAPIOutbound implements RecruiterSubscription{
 		this.currentSubscription	= builder.currentSubscription;
 		this.type					= builder.type;
 		
-		//this.currentSubscription = (this.status != null && this.status == subscription_status.ACTIVE);
-		
 	}
 	
 	/**
