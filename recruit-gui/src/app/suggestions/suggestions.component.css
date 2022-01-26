@@ -132,3 +132,98 @@
 	padding:5px;
 	color:white;
 }
+
+.suggestion-summary-infobox{
+	background:#E8E8E8;
+	margin:10px;
+	width:250px;
+}
+
+.suggestion-summary-infobox-header{
+	margin:0px;
+	width:100%;
+	padding:5px;
+	color:#6A5ACD;
+	font-weight:bold;
+}
+
+.suggestion-summary-infobox-body{
+	text-align:center;
+	margin-top:20px;
+	padding:5px;
+}
+
+
+
+.suggestion-flag-country{
+	height:20px;
+	width:50px;
+	padding-left:0px;
+	margin-left:0px;
+	background-position:0%;
+}
+
+.suggestion-location{
+	margin-top:20px;
+}
+
+.suggestion-title{
+	background:#E8E8E8;
+	width:100%;
+	font-size:24px;
+	padding:5px;
+}
+
+.skill-match{
+	margin:2px;
+ 	padding:5px;
+ 	border-radius:5px;
+ 	background:green;
+ 	display:inline-block;	
+}
+
+.skill-no-match{
+	margin:2px;
+ 	padding:5px;
+ 	border-radius:5px;
+ 	background:grey;
+ 	display:inline-block;
+}
+
+.suggestion-perception-perfect{
+	background:green;
+	width:100%;	
+	height:10px;
+}
+
+.suggestion-perception-excellent{
+	background:green;
+	width:90%;
+	height:10px;
+}
+
+.suggestion-perception-good{
+	background:green;
+	width:75%;
+	height:10px;
+}
+
+.suggestion-perception-average{
+	background:orange;
+	width:60%;
+	height:10px;
+}
+
+.suggestion-perception-poor{
+	background:red;
+	width:25%;
+	height:10px;
+}
+
+.candidate-suggestion-table-hdr {
+	font-weight:bold;
+}
+
+.suggestion-role-header{
+	margin-bottom:20px;
+}

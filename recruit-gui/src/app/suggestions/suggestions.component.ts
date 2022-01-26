@@ -2,7 +2,9 @@ import { Component, OnInit } 					from '@angular/core';
 import { FormGroup, FormControl }				from '@angular/forms';
 import { CandidateServiceService }				from '../candidate-service.service';
 import { SuggestionsService }					from '../suggestions.service';
-import { Candidate}										from './candidate';
+import { Candidate}								from './candidate';
+import { environment }							from '../../environments/environment';
+import { Clipboard } from '@angular/cdk/clipboard';
 
 /**
 * Component to suggest suitable Candidates based upon a 
@@ -31,14 +33,18 @@ export class SuggestionsComponent implements OnInit {
 		skill: 					new FormControl(''),
 	});
 	
+	public currentView:string 				= 'suggestion-results';
 	public skillFilters:Array<string>		= new Array<string>();
-	
 	public minMaxOptions:Array<string> 		= new Array<string>('','1','2','4','8','16','32');
+	public suggestedCandidate:Candidate		= new Candidate();
+	
 	/**
 	* Constructor
 	* @param candidateService - Services relating to Candidates
 	*/
-	constructor(public candidateService:CandidateServiceService, public suggestionsService:SuggestionsService) { }
+	constructor(public candidateService:CandidateServiceService, public suggestionsService:SuggestionsService, private clipboard: Clipboard) { 
+		this.getSuggestions();	
+	}
 
 	/**
 	* Initializes Component`
@@ -185,6 +191,109 @@ export class SuggestionsComponent implements OnInit {
 		
 		this.getSuggestions();	
 	
+	}
+
+	/**
+	* Shows the Suggesion result view
+	*/
+	public showSuggestionsResults():void{
+		this.currentView = 'suggestion-results';
+		this.suggestedCandidate = new Candidate();
+	}
+
+	/**
+	* Shows the Suggesion result view
+	*/
+	public showSuggestedCandidateOverview(candidateSuggestion:Candidate):void{
+		this.currentView = 'suggested-canidate-overview';
+		this.suggestedCandidate = candidateSuggestion;
+	}
+	
+	/**
+	* Flags a Candidate as being potentially unavailable
+	*/
+	public markCandidateAsUnavailable():void {
+		this.candidateService.markCandidateAsUnavailable(this.suggestedCandidate.candidateId).subscribe(data => {});
+		this.suggestedCandidate.flaggedAsUnavailable = true;
+	}
+	
+	/**
+	*  Returns the url to perform the download of the candidates CV
+	*/
+	public getCurriculumDownloadUrl(curriculumId:string){
+		return  environment.backendUrl + 'curriculum/'+ curriculumId;
+	}
+	
+	public contractType():string{
+		
+		if (this.suggestedCandidate.freelance === 'TRUE' && this.suggestedCandidate.perm === 'TRUE') {
+			return'Contract / Pern ';
+		}
+		
+		if (this.suggestedCandidate.perm === 'TRUE') {
+			return'Pern ';
+		}
+		
+		if (this.suggestedCandidate.freelance === 'TRUE') {
+			return'Contract ';
+		}
+		
+		return '';
+		
+		
+	}
+	
+	/**
+	* Returns the Humand readable version of the Language
+	* @param country - Language to get the readable version for
+	*/
+	public getLanguage(lang:string):string{
+
+		switch(lang){
+			case "DUTCH":{
+				return "Dutch";
+			}
+			case "FRENCH":{
+				return "French";
+			}
+			case "ENGLISH":{
+				return "English";
+			}
+			default:{
+				return 'NA';
+			}
+		}
+
+  	}	
+
+	/**
+	* Copies the email address of the suggested candidate to 
+	* the clipboard
+	*/
+	public copyEmailToClipboard():void {
+		
+		//Generate event to log in backend that Candidate was contacted
+		this.clipboard.copy(this.suggestedCandidate.email);
+	}
+	
+	public hasRequiredSkill(skill:string):string {
+		
+		let formattedSkill:string = skill.trim().toLowerCase();
+		
+		let match:boolean = false;
+		this.suggestedCandidate.skills.forEach(skill => {
+			if(skill === formattedSkill) {
+				 match = true;
+			}	else {
+				console.log('not match on ' + skill);
+			}
+		})
+		
+		if (match) {
+			return 'skill-match';
+		}
+		
+		return 'skill-no-match';
 	}
 
 }

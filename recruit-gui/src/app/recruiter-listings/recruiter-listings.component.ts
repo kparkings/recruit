@@ -1239,7 +1239,7 @@ export class RecruiterListingsComponent implements OnInit {
 		return  environment.backendUrl + 'curriculum/'+ curriculumId;
 	}
 	
-		/**
+	/**
 	* Flags a Candidate as being potentially unavailable
 	*/
 	public markCandidateAsUnavailable():void {
