@@ -30,4 +30,10 @@ public interface CandidateStatisticsService {
 	*/
 	public void logCandidateSearchEvent(CandidateFilterOptions filterOptions);
 	
+	/**
+	* Logs a request by a Recruiter for a Candidates email address
+	* @param candidateId - Id of candidate whose email was requested
+	*/
+	public void logEventEmailRequested(long candidateId);
+	
 }

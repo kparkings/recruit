@@ -272,8 +272,9 @@ export class SuggestionsComponent implements OnInit {
 	*/
 	public copyEmailToClipboard():void {
 		
-		//Generate event to log in backend that Candidate was contacted
 		this.clipboard.copy(this.suggestedCandidate.email);
+		this.candidateService.logRecruiterRequestedCandidateEmailEvent(this.suggestedCandidate.candidateId).subscribe();
+		
 	}
 	
 	public hasRequiredSkill(skill:string):string {

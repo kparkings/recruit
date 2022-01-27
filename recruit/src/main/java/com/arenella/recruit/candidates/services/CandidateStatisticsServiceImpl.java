@@ -1,5 +1,6 @@
 package com.arenella.recruit.candidates.services;
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -16,6 +17,7 @@ import com.arenella.recruit.candidates.beans.CandidateRoleStats;
 import com.arenella.recruit.candidates.beans.CandidateSearchEvent;
 import com.arenella.recruit.candidates.dao.CandidateDao;
 import com.arenella.recruit.candidates.dao.CandidateSearchStatisticsDao;
+import com.arenella.recruit.candidates.dao.CandidateStatsEmailRequestedsDao;
 import com.arenella.recruit.candidates.entities.CandidateRoleStatsView;
 import com.arenella.recruit.candidates.entities.CandidateSearchEventEntity;
 import com.arenella.recruit.candidates.enums.COUNTRY;
@@ -33,6 +35,9 @@ public class CandidateStatisticsServiceImpl implements CandidateStatisticsServic
 	
 	@Autowired
 	private CandidateSearchStatisticsDao 	statisticsDao;
+	
+	@Autowired
+	private CandidateStatsEmailRequestedsDao emailStatsRequestDao;
 	
 	/**
 	* Refer to StatisticsService for details 
@@ -89,6 +94,26 @@ public class CandidateStatisticsServiceImpl implements CandidateStatisticsServic
 		}
 			
 		statisticsDao.saveAll(events.stream().map(e -> CandidateSearchEventEntity.toEntity(e)).collect(Collectors.toSet()));
+		
+	}
+	
+	/**
+	* Refer to StatisticsService for details 
+	*/
+	@Override
+	public void logEventEmailRequested(long candidateId) {
+
+		String	recruiterId	= SecurityContextHolder.getContext().getAuthentication().getName();
+		boolean isAdminUser	= SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream().filter(role -> role.getAuthority().equals("ROLE_ADMIN")).findAny().isPresent();
+		
+		/**
+		* We don't want to log these events for Admin users
+		*/
+		if (isAdminUser) {
+			return;
+		}
+		
+		this.emailStatsRequestDao.persistEmailRequestedEvent(UUID.randomUUID(), LocalDateTime.now(), recruiterId, candidateId);
 		
 	}
 	
@@ -317,6 +342,5 @@ public class CandidateStatisticsServiceImpl implements CandidateStatisticsServic
 							.build();
 		
 	}
-	
 
 }

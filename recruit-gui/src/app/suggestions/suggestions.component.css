@@ -149,7 +149,7 @@
 
 .suggestion-summary-infobox-body{
 	text-align:center;
-	margin-top:20px;
+	margin-top:10px;
 	padding:5px;
 }
 
@@ -226,4 +226,22 @@
 
 .suggestion-role-header{
 	margin-bottom:20px;
+}
+
+.available-check-icon{
+	color:green;
+	font-weight:bold;
+	font-size:16px;
+}
+
+.lang-proficient-check-icon{
+	color:green;
+	font-weight:bold;
+	font-size:16px;
+}
+
+.lang-basic-check-icon{
+	color:orange;
+	font-weight:bold;
+	font-size:16px;
 }

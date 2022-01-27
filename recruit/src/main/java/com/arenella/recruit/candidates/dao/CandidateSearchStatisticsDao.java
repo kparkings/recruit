@@ -11,7 +11,5 @@ import com.arenella.recruit.candidates.entities.CandidateSearchEventEntity;
 * @author K Parkings
 */
 public interface CandidateSearchStatisticsDao extends CrudRepository<CandidateSearchEventEntity, UUID>{
-
-
 	
 }

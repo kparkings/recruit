@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.arenella.recruit.candidates.services.CandidateStatisticsService;
@@ -52,11 +54,36 @@ public class CandidateStatisticsController {
 	/**
 	* Returns a breakdown of the number of available candidates
 	* per Function
-	* @return
+	* @return Stats about available Candidates by role
 	*/
 	@GetMapping(path="candidate/stat/function-count")
 	public ResponseEntity<List<CandidateRoleStatsAPIOutbound>> fetchCandidateRoleStats(){
 		return ResponseEntity.ok(candidateStatisticsService.fetchCandidateRoleStats().stream().map(stat -> CandidateRoleStatsAPIOutbound.convertFromDomain(stat)).collect(Collectors.toCollection(LinkedList::new)));
+	}
+	
+	/**
+	* Logs that a request was made to view a Candidates email address
+	* @param candidateId - Id of candidate whose email address was requested
+	* @return ResponseEntity
+	*/
+	@PostMapping(path="candidate/stat/email-request")
+	public ResponseEntity<Void> logEventEmailRequestedEvent(@RequestBody() long candidateId) {
+		this.candidateStatisticsService.logEventEmailRequested(candidateId);
+		return ResponseEntity.ok().build();
+	}
+	
+	/**
+	* Returns stats relating to email addresses requested by
+	* individual recruiters
+	* @return
+	*/
+	@GetMapping(path="candidate/stat/email-request")
+	public ResponseEntity<?> fetchEmailRequestStatus(){
+		
+		//1. Today - requests per recruiter
+		//2. by week total email requests
+		
+		return null;
 	}
 	
 }

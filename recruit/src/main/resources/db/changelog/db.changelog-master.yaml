@@ -720,3 +720,33 @@ databaseChangeLog:
                 type: boolean
                 constraints:
                   default: false
+  - changeSet:
+      id: add_tbl_event_candidate_email_request
+      author: kparkings
+      changes:
+        - createTable:
+            tableName: event_candidate_email_request
+            schemaName: candidate
+            columns:
+              - column:
+                  name: event_id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: created
+                  type: timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: recruiter_id
+                  type: varchar
+                  constraints:
+                    nullable: false
+              - column:
+                  name: candidate_id
+                  type: bigint
+                  constraints:
+                    nullable: true
+              

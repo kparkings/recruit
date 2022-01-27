@@ -107,7 +107,14 @@
 				<table class="table" style="text-align:left;">
 					<tr *ngFor="let language of suggestedCandidate.languages">
 						<td>{{getLanguage(language.language)}}</td>
-						<td>{{language.level}}</td>
+						<td>
+							<span *ngIf="language.level == 'PROFICIENT'" class="material-icons lang-proficient-check-icon">
+		      					check
+		      				</span>
+	      					<span *ngIf="language.level == 'BASIC'" class="material-icons  lang-basic-check-icon">
+		      					check
+		      				</span>
+	      				</td>
 					</tr>
 				</table>
 			</div>
@@ -202,11 +209,20 @@
 					</tr>
 					<tr>
 						<td class="candidate-suggestion-table-hdr">Contract roles</td>
-						<td>{{suggestedCandidate.freelance}}</td>
+						<td>
+							<span *ngIf="suggestedCandidate.freelance == 'TRUE'" class="material-icons available-check-icon">
+	      						check
+	      					</span>
+						</td>
+						
 					</tr>
 					<tr>
 						<td class="candidate-suggestion-table-hdr">Perm roles</td>
-						<td>{{suggestedCandidate.perm}}</td>
+						<td>
+							<span *ngIf="suggestedCandidate.perm == 'TRUE'" class="material-icons available-check-icon">
+		      					check
+		      				</span>
+	      				</td>
 					</tr>
 				</table>
 			</div>

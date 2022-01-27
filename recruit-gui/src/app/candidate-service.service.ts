@@ -80,6 +80,17 @@ export class CandidateServiceService {
 		
 		return this.httpClient.post<any>(backendUrl, JSON.stringify(newPendingCandidate), this.httpOptions);
 	}
+
+	/**
+	* Logs an event of a Recruiter requesting the email address of a Candidate
+	*/	
+	public logRecruiterRequestedCandidateEmailEvent(candidateId:string): Observable<any>{
+		
+		const backendUrl:string = environment.backendUrl +'candidate/stat/email-request';
+		console.log('BOOP');
+		return this.httpClient.post<any>(backendUrl, candidateId, this.httpOptions);
+		
+	}
 	
 	/**
 	* Retrieves Pending candidates
