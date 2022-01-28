@@ -65,4 +65,15 @@ export class StatisticsService {
 		
 	}
 	
+	/**
+	* Returns stats relating to email requests
+	*/
+	public getEmailRequestStats():Observable<any>{
+		
+		const backendUrl:string = environment.backendUrl +'candidate/stat/email-request';
+  
+		return this.httpClient.get<any>(backendUrl, this.httpOptions);
+		
+	}
+	
 }

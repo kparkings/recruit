@@ -22,6 +22,7 @@ import com.arenella.recruit.candidates.entities.CandidateRoleStatsView;
 import com.arenella.recruit.candidates.entities.CandidateSearchEventEntity;
 import com.arenella.recruit.candidates.enums.COUNTRY;
 import com.arenella.recruit.candidates.enums.FUNCTION;
+import com.arenella.recruit.curriculum.beans.CandidateEmailRequestEvent;
 
 /**
 * Services for retrieving statistics relating to Candidates
@@ -115,6 +116,14 @@ public class CandidateStatisticsServiceImpl implements CandidateStatisticsServic
 		
 		this.emailStatsRequestDao.persistEmailRequestedEvent(UUID.randomUUID(), LocalDateTime.now(), recruiterId, candidateId);
 		
+	}
+	
+	/**
+	* Refer to StatisticsService for details 
+	*/
+	@Override
+	public Set<CandidateEmailRequestEvent> fetchEmailRequestEvents(){
+		return this.emailStatsRequestDao.findAllCandidateEmailRequestEvents();
 	}
 	
 	/**

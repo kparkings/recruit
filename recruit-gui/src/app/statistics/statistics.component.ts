@@ -17,6 +17,7 @@ export class StatisticsComponent implements OnInit {
 	public showStatsDownloads:boolean					=true;
 	public showStatsAvailability:boolean				=false;
 	public showStatsListings:boolean					=false;
+	public showStatsEmailRequests:boolean				=false;
 
 	public recruiterDownloads:number[] 					= [];
 	public recruiterDownloadsDaily:number[] 			= [];
@@ -30,6 +31,20 @@ export class StatisticsComponent implements OnInit {
 	
 	public listingViewsToday 							= 0;
 	public listingViewsThisWeek 						= 0;
+	
+	public emailRequestViewsToday 						= 0;
+	public emailRequestViewsThisWeek 					= 0;
+		
+		
+	public recruiterEmailRequests:number[] 					= [];
+	public recruiterEmailRequestsDaily:number[] 			= [];
+	public recruiterEmailRequestsWeekly:number[] 			= [];
+	
+	public recruiterEmailRequestsCols:string[] 				= [];
+	public recruiterEmailRequestsDailyCols:string[] 		= [];
+	public recruiterEmailRequestsWeeklyCols:string[] 		= [];	
+		
+	public chartEmailRequestsTotal						= 0;
 		
 	/**
   	* Constructor
@@ -37,6 +52,7 @@ export class StatisticsComponent implements OnInit {
 	constructor(public statisticsService:StatisticsService) {
 
 		this.fetchStatus();
+		this.getEmailRequestStats();
 
 	}
 
@@ -111,6 +127,32 @@ export class StatisticsComponent implements OnInit {
 
 	}
 	
+	public getEmailRequestStats():void{
+		
+		this.statisticsService.getEmailRequestStats().subscribe(emailRequestData => {
+			
+			let downloads:number[] 		= Object.values(emailRequestData.weeklyRequests);
+			let downloadDates:string[] 	= Object.keys(emailRequestData.weeklyRequests);
+			
+			this.emailRequestChartData = [{ data: downloads, label: 'Downloads' },];
+			this.emailRequestChartLabels = downloadDates;
+			
+			this.recruiterEmailRequestsDaily 		= Object.values(emailRequestData.recruiterRequestsDaily);
+			this.recruiterEmailRequestsWeekly 		= Object.values(emailRequestData.recruiterRequestsWeekly);
+	
+			this.recruiterEmailRequestsDailyCols 		= Object.keys(emailRequestData.recruiterRequestsDaily);
+			this.recruiterEmailRequestsWeeklyCols 		= Object.keys(emailRequestData.recruiterRequestsWeekly);
+			
+			this.emailRequestRecruiterChartData = [{ data: this.recruiterEmailRequestsDaily, label: 'Todays downloads' }];
+												
+			this.emailRequestRecruiterChartLabels 	= this.recruiterEmailRequestsDailyCols;
+			this.chartDownloadsTotal 				= this.recruiterEmailRequestsDailyCols.length;
+		
+			
+		});
+		
+	}
+	
 	/**
 	* Switches between the various datasets available for the chart
 	* @oaram: type - which data set to show 
@@ -132,6 +174,28 @@ export class StatisticsComponent implements OnInit {
 			}
 		}
 	}
+	
+		/**
+	* Switches between the various datasets available for the chart
+	* @oaram: type - which data set to show 
+	*/
+	public switchChartDataEmailRequests(type:string):void{
+		
+		switch (type) {
+			case "day":{
+				this.emailRequestRecruiterChartData = [{ data: this.recruiterEmailRequestsDaily, label: 'Todays downloads' }];
+				this.emailRequestRecruiterChartLabels = this.recruiterEmailRequestsCols;
+				this.chartEmailRequestsTotal = this.recruiterEmailRequestsDaily.length;
+				return;
+			}
+			case "week":{
+				this.emailRequestRecruiterChartData = [{ data: this.recruiterEmailRequestsWeekly, label: 'This Weeks downloads' }];
+				this.emailRequestRecruiterChartLabels = this.recruiterEmailRequestsWeeklyCols;
+				this.chartEmailRequestsTotal = this.recruiterEmailRequestsWeekly.length;
+				return;
+			}
+		}
+	}
 
 	/**
 	* Switches between tabs in the gui
@@ -144,6 +208,7 @@ export class StatisticsComponent implements OnInit {
 				this.showStatsDownloads=true;
 				this.showStatsAvailability=false;
 				this.showStatsListings=false;
+				this.showStatsEmailRequests=false;
 				
 				break;
 			}
@@ -151,16 +216,24 @@ export class StatisticsComponent implements OnInit {
 				this.showStatsDownloads=false;
 				this.showStatsAvailability=false;
 				this.showStatsListings=true;
+				this.showStatsEmailRequests=false;
 				break;
 			}
 			case "availability":{
 				this.showStatsDownloads=false;
 				this.showStatsListings=false;
 				this.showStatsAvailability=true;
+				this.showStatsEmailRequests=false;
+				break;
+			}
+			case "email":{
+				this.showStatsDownloads=false;
+				this.showStatsListings=false;
+				this.showStatsAvailability=false;
+				this.showStatsEmailRequests=true;
 				break;
 			}
 		}
-		
 		
 	}
 
@@ -248,4 +321,66 @@ export class StatisticsComponent implements OnInit {
   	listingChartLegend = true;
   	listingChartPlugins = [];
   	listingChartType:ChartType = 'line';
+
+
+
+
+
+
+
+
+
+
+
+	/**
+	* recruiter Email Requests
+	*/
+	emailRequestChartData: 		ChartDataSets[] 	= [];
+	emailRequestChartLabels: 		Label[] 			= [];
+
+  	emailRequestChartOptions = {
+    	responsive: true,
+  	};
+
+  	emailRequestChartColors: Color[] = [
+    	{
+      		borderColor: 'black',
+      		backgroundColor: 'rgba(0,0,0,0.28)',
+    	},
+  	];
+
+  	emailRequestChartLegend = true;
+  	emailRequestChartPlugins = [];
+  	emailRequestChartType:ChartType = 'line';
+ 
+
+	/**
+	* Daily Email Requests
+	*/
+	emailRequestRecruiterChartData: 		ChartDataSets[] 	= [];
+	emailRequestRecruiterChartLabels: 	Label[] 			= [];
+
+  	emailRequestRecruiterChartOptions = {
+    	responsive: true,
+  	};
+
+  	emailRequestRecruiterChartColors: Color[] = [
+    	{
+      		borderColor: 'black',
+      		backgroundColor: 'rgba(0,0,0,0.28)',
+    	},
+  	];
+
+  	emailRequestRecruiterChartLegend = true;
+  	emailRequestRecruiterChartPlugins = [];
+  	emailRequestRecruiterChartType:ChartType = 'bar';
+
+
+
+
+
+
+
+
+
 }

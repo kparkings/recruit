@@ -7,9 +7,12 @@ import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
 
-import com.arenella.recruit.candidates.entities.CandidateEmailRequestEventEntity;
 import com.arenella.recruit.curriculum.beans.CandidateEmailRequestEvent;
 
+/**
+* Unit tests for the CandidateEmailRequestEvent class
+* @author K Parkings
+*/
 public class CandidateEmailRequestEventTest {
 
 	private static final UUID 				eventId 		= UUID.randomUUID();

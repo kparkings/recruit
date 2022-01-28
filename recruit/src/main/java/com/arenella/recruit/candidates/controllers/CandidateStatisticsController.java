@@ -7,7 +7,6 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,23 +18,23 @@ import com.arenella.recruit.candidates.services.CandidateStatisticsService;
 * Provides statistics relating to Candidates
 * @author K Parkings
 */
-@CrossOrigin(origins = {	"https://api-arenella-ict.wosah.nl/authenticate"	
-		,	"https://arenella-ict.wosah.nl"
-		, 	"http://arenella-ict.wosah.nl"
-		,	"https://arenella-ict.wosah.nl/"
-		, 	"http://arenella-ict.wosah.nl/"
-		,  	"http://api-arenella-ict.wosah.nl/"
-		, 	"https://api-arenella-ict.wosah.nl/"
-		, 	"http://api-arenella-ict.wosah.nl"
-		, 	"https://api-arenella-ict.wosah.nl"
-		,	"http://api.arenella-ict.com/"
-		, 	"htts://api.arenella-ict.com/"
-		, 	"http://127.0.0.1:4200"
-		, 	"http://127.0.0.1:8080"
-		, 	"http://127.0.0.1:9090"
-		,	"https://www.arenella-ict.com"
-		, 	"https://www.arenella-ict.com:4200"
-		, 	"https://www.arenella-ict.com:8080"}, allowedHeaders = "*")
+//@CrossOrigin(origins = {	"https://api-arenella-ict.wosah.nl/authenticate"	
+//		,	"https://arenella-ict.wosah.nl"
+//		, 	"http://arenella-ict.wosah.nl"
+//		,	"https://arenella-ict.wosah.nl/"
+//		, 	"http://arenella-ict.wosah.nl/"
+//		,  	"http://api-arenella-ict.wosah.nl/"
+//		, 	"https://api-arenella-ict.wosah.nl/"
+//		, 	"http://api-arenella-ict.wosah.nl"
+//		, 	"https://api-arenella-ict.wosah.nl"
+//		,	"http://api.arenella-ict.com/"
+//		, 	"htts://api.arenella-ict.com/"
+//		, 	"http://127.0.0.1:4200"
+//		, 	"http://127.0.0.1:8080"
+//		, 	"http://127.0.0.1:9090"
+//		,	"https://www.arenella-ict.com"
+//		, 	"https://www.arenella-ict.com:4200"
+//		, 	"https://www.arenella-ict.com:8080"}, allowedHeaders = "*")
 @RestController
 public class CandidateStatisticsController {
 
@@ -80,12 +79,10 @@ public class CandidateStatisticsController {
 	* @return
 	*/
 	@GetMapping(path="candidate/stat/email-request")
-	public ResponseEntity<?> fetchEmailRequestStatus(){
+	public ResponseEntity<EmailRequestsStatisticsAPIOutbound> fetchEmailRequestStatus(){
 		
-		//1. Today - requests per recruiter
-		//2. by week total email requests
+		return ResponseEntity.ok(new EmailRequestsStatisticsAPIOutbound(this.candidateStatisticsService.fetchEmailRequestEvents()));
 		
-		return null;
 	}
 	
 }

@@ -1,9 +1,11 @@
 package com.arenella.recruit.candidates.services;
 
 import java.util.List;
+import java.util.Set;
 
 import com.arenella.recruit.candidates.beans.CandidateFilterOptions;
 import com.arenella.recruit.candidates.beans.CandidateRoleStats;
+import com.arenella.recruit.curriculum.beans.CandidateEmailRequestEvent;
 
 /**
 * Defines services relating to Candidate statistics
@@ -35,5 +37,11 @@ public interface CandidateStatisticsService {
 	* @param candidateId - Id of candidate whose email was requested
 	*/
 	public void logEventEmailRequested(long candidateId);
+	
+	/**
+	* Retrieves all Email request events
+	* @return
+	*/
+	public Set<CandidateEmailRequestEvent> fetchEmailRequestEvents();
 	
 }
