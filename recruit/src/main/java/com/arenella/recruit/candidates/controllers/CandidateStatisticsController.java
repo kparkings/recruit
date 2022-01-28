@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -66,6 +67,7 @@ public class CandidateStatisticsController {
 	* @param candidateId - Id of candidate whose email address was requested
 	* @return ResponseEntity
 	*/
+	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_RECRUITER')")
 	@PostMapping(path="candidate/stat/email-request")
 	public ResponseEntity<Void> logEventEmailRequestedEvent(@RequestBody() long candidateId) {
 		this.candidateStatisticsService.logEventEmailRequested(candidateId);

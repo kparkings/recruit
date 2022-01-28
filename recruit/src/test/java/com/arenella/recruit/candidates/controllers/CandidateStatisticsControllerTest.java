@@ -44,4 +44,21 @@ public class CandidateStatisticsControllerTest {
 		
 	}
 	
+	/**
+	* Tests logging of email requested event
+	* @throws Exception
+	*/
+	//@Test
+	//public void testLogEventEmailRequestedEvent() throws Exception{
+		
+	//	Mockito.doNothing().when(this.mockCandidateStatisticsService).logEventEmailRequested(Mockito.anyLong());
+		
+	//	ResponseEntity<Void> response = controller.logEventEmailRequestedEvent(1L);
+		
+	//	Mockito.verify(mockCandidateStatisticsService).logEventEmailRequested(Mockito.anyLong());
+		
+	//	assertEquals(HttpStatus.OK, response.getStatusCode());
+		
+	//}
+	
 }
