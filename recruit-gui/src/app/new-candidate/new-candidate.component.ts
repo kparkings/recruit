@@ -3,7 +3,7 @@ import { FormGroup, FormControl }						from '@angular/forms';
 import { CandidateServiceService }						from '../candidate-service.service';
 import { CurriculumService }							from '../curriculum.service';
 import { CandidateFunction }							from '../candidate-function';
-import { NgbModal, NgbModalOptions}						from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbModalOptions}						from '@ng-bootstrap/ng-bootstrap'
 import { ViewChild }									from '@angular/core';
 import { Router}										from '@angular/router';
 import { PendingCandidate }								from './pending-candidate';

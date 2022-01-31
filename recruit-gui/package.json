@@ -33,6 +33,7 @@
     "jquery": "^3.6.0",
     "material-ui-flags": "^1.2.4",
     "ng2-charts": "^2.2.3",
+    "ngx-cookie": "^5.0.2",
     "popper.js": "^1.16.1",
     "rxjs": "~6.6.0",
     "tslib": "^2.0.0",

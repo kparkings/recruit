@@ -22,7 +22,7 @@ import { RecruiterListingsComponent } 	from './recruiter-listings/recruiter-list
 import { ListingComponent } 			from './listing/listing.component';
 import { RecruiterSignupComponent } 	from './recruiter-signup/recruiter-signup.component';
 import { SuggestionsComponent } 		from './suggestions/suggestions.component';
-
+import { CookieModule } from 'ngx-cookie';
 @NgModule({
   declarations: [
     AppComponent,
@@ -47,7 +47,8 @@ import { SuggestionsComponent } 		from './suggestions/suggestions.component';
     NgbModule,
     MatIconModule,
     BrowserAnimationsModule,
-	ChartsModule
+	ChartsModule,
+	CookieModule.forRoot()
   ],
   providers: [AuthGuardService, AuthService],
   bootstrap: [AppComponent]
