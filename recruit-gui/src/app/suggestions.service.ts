@@ -18,7 +18,7 @@ export class SuggestionsService {
 	private keywordsUiUx:Array<string> 					= new Array<string>("ui\\ux","designer","ui","ux");
 	private keywordsProjectManager:Array<string> 		= new Array<string>("manager","product owner");
 	private keywordsArchitect:Array<string> 			= new Array<string>("architect","solutions","enterprise");
-	private keywordsTester:Array<string> 				= new Array<string>("tester","qa","automation","manual","quality","assurance");
+	private keywordsTester:Array<string> 				= new Array<string>("tester","test", "qa","automation","manual","quality","assurance");
 	private keywordsWebDeveloper:Array<string> 			= new Array<string>("web developer","front end","front-end","javascript","js","vue","vuejs","vue.js","react","node","node.js","php","wordpress");
 	private keywordsScrumMaster:Array<string> 			= new Array<string>("scrum","master");
 	private keywordsDataScientist:Array<string> 		= new Array<string>("data", "data analyst","data scientist","bi","business intelligence","python");
@@ -26,7 +26,7 @@ export class SuggestionsService {
 	private keywordsSoftwareDeveloper:Array<string> 	= new Array<string>("php","python","wordpress","software engineer","software developer","golang", "c", "c++","vb", "go", "cobol","pl-sql","t-sql", "r", "groovy", "sql");
 	private keywordsItSecurity:Array<string> 			= new Array<string>("security","cyber","malware","owasp");
 	private keywordsItRecruiter:Array<string> 			= new Array<string>("recruiter","account manager");
-	private keywordsSdet:Array<string> 					= new Array<string>("sdet","developer in test","qa","automation tester");
+	private keywordsSdet:Array<string> 					= new Array<string>("tester","test", "sdet","developer in test","qa","automation tester");
 	private keywordsJava:Array<string> 					= new Array<string>("java","j2ee");
 
 	private allKeywords:Array<string>					= new Array<string>();

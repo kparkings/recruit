@@ -48,28 +48,29 @@
 
 <router-outlet></router-outlet>
 
-<div *ngIf="!termsAndConditionsAccepted" class="footer terms-and-conditions-box">
-	<div style="height:50px;background:#E8E8E8">Cookie and Privacy <span syle="float:right;margin-right:10px;"><button (click)="acceptTandCs()">Accept Terms and Conditions</button></span></div>
+<div *ngIf="!termsAndConditionsAccepted" class="terms-and-conditions-box">
+
+	<div class="cookie-policy-hdr"><span class="cookie-policy-title">Cookies and Privacy</span> <span class="cookie-policy-btn"><button (click)="acceptTandCs()">Accept Terms and Conditions</button></span></div>
 	
-	<div style="overflow-y:scroll; height:150px;margin:10px;">
+	<div class="cookie-policy-text">
 		<h5>Cookies</h5>
 		<p>Cookies are used for security and to gain the site visitors consent to the terms and conditions. We use cookies for no other purpose</p>
-		<h5>Data Retention Site Visitors</h5>
+		<h5>Data retention Site Visitors</h5>
 		<p>The site visitor is not tracked by the application and we do not collect statistics for site visitors.</p>
-		<h5>Recruiters</h5>
+		<h5>Data use Recruiters</h5>
 		<p>
 		We store information about the Recruiters required to identify and contact them. Information about the actions the recruiter performs may be stored to provide insight relating to the 
 		individual recruiters use of the site and to help improve the site. The Recruiters information will not be shared with third parties without their explicit consent. 
 		</p>
-		<h5>Candidates</h5>
+		<h5>Data use Candidates</h5>
 		<p>
 		Candidates are only added into the system with their consent or via the consent of the company that employs them. The Candidates informaion is available internally in the system and 
-		can be downloaded by the Recruiters in order to contact them about potentially interesting roles. 
+		can also be downloaded by the Recruiters in order to contact them about potentially interesting roles. Candidates CVs can also be downloaded by the Recruiters.
 		</p>
 		<h5>Recruiter site use</h5>
 		<p>
 		By accepting these Terms and Conditions the recruiter agrees that the use of the site and data accessed via the site are entirely at their own risk. The Recruiter agrees that the Arenella BV is 
-		in no way responsible for any negative consequences on them or their company from the use of this site or the data contained therin.
+		in no way responsible for any negative consequences on them or their company from the use of this site or the data or files contained therin.
 		</p>
 		<p>
 		By accepting these terms and conditions the recruiter agrees that the use of the Candidate data is limited to the sole use of contacting the Candidates about potentially relevant jobs 
@@ -77,21 +78,21 @@
 		system for longer than necessary to complete the recruitment process for the Candidate they are trying to place.
 		</p>
 		<h5>Candidate site use</h5>
-		<p>By uploading the CV or providing it to the site the Candidate has aggreed for their CV and contact information to be shared with the network of Recruiters that are already and will 
+		<p>By uploading the CV or providing it to the site the Candidate has aggreed for their CV and information to be shared with the network of Recruiters that are already and will 
 		subsequently make use of the website. A Recruiter is any person or conpany with an account on the website that it looking for Candidates to place in a new role. 
-		The Candidate agrees that the Recruiters can access all their information contained within the site in order to contact them with potentially relevant job openings
+		The Candidate agrees that the Recruiters can access all their information contained within the site in order to contact them with potentially relevant job openings. Information will be 
+		extracted from within the CV and stored seperately in the site. This information may be made accessible to the Recruiters.
 		</p>
-		<h5>Data Retentions</h5>
-				
+		<h5>Data Retention Recruiters</h5>
+		<p>
+		Recruiters information will be stored in the System for the duration of their subscriptions. After which their data will either be removed or identifiable references to the Recruiter will be 
+		replaced. This update will be periodic but the we will make best endevours to make these updates as quickly as possible.
+		</p>
+		<h5>Data Retention Candidates</h5>
+		<p>
+		Candidates information will be stored for a maximum of two years before their consent is requested again. The candidate can request as any point to have their data removed from the site. When 
+		a Candidate requests their data be removed all identifiable references to the Candidate will either be removed or replaced. This update will be periodic but the we will make best endevours to make these updates as quickly as possible.
+		</p>
 	</div>
 	
-	
 </div>
-
-
-
-<!--
-<nav class="footer">
- <p>Email: kparkings@gmail.com</p>
-</nav>
--->

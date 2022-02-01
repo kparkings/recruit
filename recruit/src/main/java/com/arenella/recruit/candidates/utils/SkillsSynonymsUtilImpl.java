@@ -27,6 +27,21 @@ public class SkillsSynonymsUtilImpl implements SkillsSynonymsUtil{
 		originalSkills.stream().forEach(skill -> {
 			
 			switch(skill) {
+				case "qa":{
+					synonyms.add("tester");
+					synonyms.add("test analyst");
+					break;
+				}
+				case "test analyst":{
+					synonyms.add("qa");
+					synonyms.add("tester");
+					break;
+				}
+				case "tester":{
+					synonyms.add("qa");
+					synonyms.add("test analyst");
+					break;
+				}
 				case "js":{
 					synonyms.add("javascript");
 					break;

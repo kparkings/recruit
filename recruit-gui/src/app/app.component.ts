@@ -10,7 +10,7 @@ import { NgbModal, NgbModalOptions}						from '@ng-bootstrap/ng-bootstrap'
 }) 
 export class AppComponent {
 
-	private readonly termsAndConditionsCookieVersion:string = '4';
+	private readonly termsAndConditionsCookieVersion:string = '1';
 
   	title = 'Arenella-ICT - IT Candidates for Recruiters';
 
