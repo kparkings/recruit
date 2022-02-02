@@ -66,5 +66,11 @@ public interface CurriculumService {
 	* @param pendingCurriculumId - Unique Id of the PendingCurriculum
 	*/
 	public void deletePendingCurriculum(UUID pendingCurriculumId);
+	
+	/**
+	* Deletes a Curriculum
+	* @param curriculumId - Id of curriculum to delete
+	*/
+	public void deleteCurriculum(long curriculumId);
 
 }

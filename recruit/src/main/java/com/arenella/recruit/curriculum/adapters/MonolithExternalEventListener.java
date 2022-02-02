@@ -7,9 +7,11 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.arenella.recruit.adapters.events.CandidateNoLongerAvailableEvent;
 import com.arenella.recruit.candidates.dao.PendingCandidateDao;
 import com.arenella.recruit.curriculum.dao.SkillsDao;
 import com.arenella.recruit.curriculum.entity.SkillEntity;
+import com.arenella.recruit.curriculum.services.CurriculumService;
 
 /**
 * Implementation of ExternalEventListener optimised to 
@@ -25,6 +27,9 @@ public class MonolithExternalEventListener implements ExternalEventListener{
 	
 	@Autowired
 	private PendingCandidateDao pendingCandidateDao;
+	
+	@Autowired
+	private CurriculumService 	curriculumService;
 	
 	/**
 	* Refer to the ExternalEventListener for details 
@@ -59,6 +64,14 @@ public class MonolithExternalEventListener implements ExternalEventListener{
 		
 		return skill;
 		
+	}
+
+	/**
+	* Refer to the ExternalEventListener for details 
+	*/
+	@Override
+	public void listenForCandidateNoLongerAvailableEvent(CandidateNoLongerAvailableEvent event) {
+		this.curriculumService.deleteCurriculum(event.getCandidateId());
 	}
 
 }

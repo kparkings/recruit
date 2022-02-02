@@ -3,6 +3,8 @@ package com.arenella.recruit.curriculum.adapters;
 import java.util.Set;
 import java.util.UUID;
 
+import com.arenella.recruit.adapters.events.CandidateNoLongerAvailableEvent;
+
 /**
 * Defines functionality for listening to Events from external Services
 * @author K Parkings
@@ -21,5 +23,12 @@ public interface ExternalEventListener {
 	* @param pendingCandidateId - Id of Deleted PendingCurriculum
 	*/
 	public void listenForPendingCurriculumDeletedEvent(UUID pendingCandidateId);
+	
+	/**
+	* Listens for an event informing that a Candidate is no longer 
+	* available in the system 
+	* @param event - Event to listen for
+	*/
+	public void listenForCandidateNoLongerAvailableEvent(CandidateNoLongerAvailableEvent event);
 	
 }

@@ -148,6 +148,14 @@ public class CurriculumServiceImpl implements CurriculumService{
 	public void deletePendingCurriculum(UUID pendingCurriculumId) {
 		this.pendingCurriculumDao.deleteById(pendingCurriculumId);
 		this.externalEventPublisher.publishPendingCurriculumDeletedEvent(pendingCurriculumId);
+	}
+
+	/**
+	* Refer to the CurriculumService interface for details
+	*/
+	@Override
+	public void deleteCurriculum(long curriculumId) {
+		this.curriculumDao.deleteById(curriculumId);
 	} 
 	
 

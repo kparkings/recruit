@@ -19,6 +19,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import com.arenella.recruit.adapters.events.CandidateNoLongerAvailableEvent;
 import com.arenella.recruit.curriculum.adapters.ExternalEventListener;
 
 /**
@@ -102,4 +103,22 @@ public class MonolithExternalEventPublisherTest {
 	
 	}
 
+	/**
+	* Tests listener is called when Event is published
+	* @throws Exception
+	*/
+	@Test
+	public void testPublishCandidateNoLongerAvailableEvent() throws Exception {
+		
+		final long candidateId = 123L;
+		
+		CandidateNoLongerAvailableEvent event = new CandidateNoLongerAvailableEvent(candidateId);
+		
+		Mockito.doNothing().when(this.mockCurriculumEventListener).listenForCandidateNoLongerAvailableEvent(Mockito.any());
+		
+		publisher.publishCandidateNoLongerAvailableEvent(event);
+		
+		Mockito.verify(this.mockCurriculumEventListener).listenForCandidateNoLongerAvailableEvent(event);
+		
+	}
 }

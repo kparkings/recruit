@@ -10,8 +10,10 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.arenella.recruit.adapters.events.CandidateNoLongerAvailableEvent;
 import com.arenella.recruit.curriculum.dao.SkillsDao;
 import com.arenella.recruit.curriculum.entity.SkillEntity;
+import com.arenella.recruit.curriculum.services.CurriculumService;
 
 /**
 * Unit tests for the MonolithExternalEventListener class
@@ -21,7 +23,10 @@ import com.arenella.recruit.curriculum.entity.SkillEntity;
 public class MonolithExternalEventListenerTest {
 
 	@Mock
-	private SkillsDao 						mockSkillsDao;;
+	private SkillsDao 						mockSkillsDao;
+	
+	@Mock
+	private CurriculumService 				mockCurriculumService;
 	
 	@InjectMocks
 	private MonolithExternalEventListener 	listener = new MonolithExternalEventListener();
@@ -48,6 +53,23 @@ public class MonolithExternalEventListenerTest {
 		
 		skillsCaptor.getValue().stream().filter(s -> s.getSkill().equals(skill1Processed)).findAny().get();
 		skillsCaptor.getValue().stream().filter(s -> s.getSkill().equals(skill2Processed)).findAny().get();
+		
+	}
+	
+	/**
+	* Test handling of listenForCandidateNoLongerAvailableEvent 
+	* @throws Exception
+	*/
+	@Test
+	public void testListenForCandidateNoLongerAvailableEvent() throws Exception {
+		
+		final long candidateId = 123L;
+		
+		CandidateNoLongerAvailableEvent event = new CandidateNoLongerAvailableEvent(candidateId);
+		
+		this.listener.listenForCandidateNoLongerAvailableEvent(event);
+		
+		Mockito.verify(mockCurriculumService).deleteCurriculum(candidateId);
 		
 	}
 	

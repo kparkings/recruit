@@ -3,6 +3,7 @@ package com.arenella.recruit.candidates.entities;
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 import java.time.LocalDate;
 import java.util.LinkedHashSet;
@@ -168,10 +169,17 @@ public class CandidateEntityTest {
 		candidate.setAvailable(true);
 		
 		assertTrue(candidate.isAvailable());
+		assertNotEquals(CandidateEntity.ANONYMOUS_DATA, candidate.getFirstname());
+		assertNotEquals(CandidateEntity.ANONYMOUS_DATA, candidate.getSurname());
+		assertNotEquals(CandidateEntity.ANONYMOUS_DATA, candidate.getEmail());
 		
 		candidate.setAvailable(false);
 		
 		assertFalse(candidate.isAvailable());
+		assertEquals(CandidateEntity.ANONYMOUS_DATA, candidate.getFirstname());
+		assertEquals(CandidateEntity.ANONYMOUS_DATA, candidate.getSurname());
+		assertEquals(CandidateEntity.ANONYMOUS_DATA, candidate.getEmail());
+		
 		
 		assertFalse(candidate.isFlaggedAsUnavailable());
 		

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import com.arenella.recruit.adapters.events.CandidateNoLongerAvailableEvent;
 import com.arenella.recruit.curriculum.adapters.ExternalEventListener;
 
 /**
@@ -50,6 +51,15 @@ public class MonolithExternalEventPublisher implements ExternalEventPublisher{
 	*/
 	public void publishPendingCurriculumDeletedEvent(UUID pendingCurriculumId) {
 		curriculumEventListener.listenForPendingCurriculumDeletedEvent(pendingCurriculumId);
+	}
+
+	/**
+	* Refer to ExternalEventPublisher for details 
+	*/
+	@Override
+	public void publishCandidateNoLongerAvailableEvent(CandidateNoLongerAvailableEvent event) {
+		curriculumEventListener.listenForCandidateNoLongerAvailableEvent(event);
+		
 	}
 
 }

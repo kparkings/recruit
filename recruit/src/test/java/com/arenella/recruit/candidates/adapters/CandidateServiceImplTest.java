@@ -86,6 +86,7 @@ public class CandidateServiceImplTest {
 		this.service.updateCandidate("1", CANDIDATE_UPDATE_ACTIONS.enable);
 		
 		Mockito.verify(mockCandidateDao).save(candidate);
+		Mockito.verify(this.mockExternalEventPublisher, Mockito.never()).publishCandidateNoLongerAvailableEvent(Mockito.any());
 		
 		assertTrue(captor.getValue().isAvailable());
 		
@@ -99,7 +100,7 @@ public class CandidateServiceImplTest {
 	public void testUpdateCandidate_disable() throws Exception {
 		
 		ArgumentCaptor<CandidateEntity> 	captor 		= ArgumentCaptor.forClass(CandidateEntity.class);
-		CandidateEntity 					candidate 	= CandidateEntity.builder().available(true).build();
+		CandidateEntity 					candidate 	= CandidateEntity.builder().candidateId("123").available(true).build();
 		
 		Mockito.when(mockCandidateDao.findById(1L)).thenReturn(Optional.of(candidate));
 		Mockito.when(mockCandidateDao.save(captor.capture())).thenReturn(candidate);
@@ -107,6 +108,7 @@ public class CandidateServiceImplTest {
 		this.service.updateCandidate("1", CANDIDATE_UPDATE_ACTIONS.disable);
 		
 		Mockito.verify(mockCandidateDao).save(candidate);
+		Mockito.verify(this.mockExternalEventPublisher).publishCandidateNoLongerAvailableEvent(Mockito.any());
 		
 		assertFalse(captor.getValue().isAvailable());
 		

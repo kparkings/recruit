@@ -34,6 +34,8 @@ import com.arenella.recruit.candidates.enums.PERM;
 @Table(schema="candidate", name="candidate")
 public class CandidateEntity {
 
+	public static final String ANONYMOUS_DATA = "unknown"; 
+	
 	@Id
 	@Column(name="candidate_id")
 	private Long		candidateId;
@@ -273,7 +275,15 @@ public class CandidateEntity {
 	* @param available - Whether or not the Candidate is available
 	*/
 	public void setAvailable(boolean available) {
+		
 		this.available = available;
+		
+		if (!available) {
+			this.firstname 	= ANONYMOUS_DATA;
+			this.surname 	= ANONYMOUS_DATA;
+			this.email 		= ANONYMOUS_DATA;
+		}
+		
 	}
 	
 	/**

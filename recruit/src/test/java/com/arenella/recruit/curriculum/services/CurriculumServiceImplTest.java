@@ -276,5 +276,20 @@ public class CurriculumServiceImplTest {
 		Mockito.verify(mockExternalEventPublisher).publishPendingCurriculumDeletedEvent(id);
 		
 	}
-
+	
+	/**
+	* Tests deletion of a Curriculum
+	* @throws Exception
+	*/
+	@Test
+	public void testDeleteCurriculum() throws Exception {
+		
+		final long curriculumId = 123L;
+		
+		service.deleteCurriculum(curriculumId);
+		
+		Mockito.verify(this.mockCurriculumDao).deleteById(curriculumId);
+		
+	}
+	
 }
