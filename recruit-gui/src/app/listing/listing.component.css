@@ -124,3 +124,36 @@
 .listing-view-div{
 	margin-top:10px;
 }
+
+
+
+
+
+
+
+
+.listing{
+	/*border:5px solid #6c757d;*/
+	background:#e8e8e8;
+	width:90%;
+	margin:10px;
+	padding:10px;
+	border-radius:25px 25px 25px 25px;
+	float:left;
+	min-height: inherit;
+	height:100%;
+	cursor:pointer;
+}
+
+.listing-country{
+	margin-right:20px;
+	margin-left:10px;
+}
+
+.listing-table-td{
+	text-align:left;
+}
+
+.listing-table-td-date{
+	text-align:center;
+}

@@ -23,32 +23,33 @@
 							</div>
 						</div>
 					
+						<!-- Listings Table -->
+						
 						<div>
-		      
-							<table class="table listing-table">
-								<thead>
-						      		<tr>
-						      			<!-- Table Headers -->
-						      			<th class="bg-tab-hdr">Created</th>
-										<th class="bg-tab-hdr">Title</th>
-						                <th class="bg-tab-hdr">Type</th>
-						                <th class="bg-tab-hdr">Country</th>
-						      		</tr>
-						      	</thead>
-						      	<tbody>
-						      		<!-- Table row -->
-						      		<tr class="listing-tab-row" *ngFor="let listing of listings" (click)="showListingDetails(listing)">
-						      			<td class="listing-tab-col">{{listing.created | date:'yyyy-MM-dd hh:mm'}}</td>
-						      			<td class="listing-tab-col">{{listing.title}}</td>
-						                <td class="listing-tab-col">{{getContractType(listing.type)}}</td>
-						                <td class="listing-tab-col">{{getCountryCode(listing.country)}}</td>
-						      		</tr>	
-						      	</tbody>
-							</table>
+							
+							<div *ngFor="let listing of listings" class="listing" (click)="showListingDetails(listing)">
+							
+								<table >
+									<tr>
+										<td class="listing-table-td"  width="5%" >
+											<span *ngIf="listing.country === 'NETHERLANDS'"  	class="flag-icon flag-icon-nl suggestion-flag-country listing-country"></span>
+											<span *ngIf="listing.country === 'BELGIUM'"			class="flag-icon flag-icon-be suggestion-flag-country listing-country"></span>
+											<span *ngIf="listing.country === 'UK'"				class="flag-icon flag-icon-gb suggestion-flag-country listing-country"></span>
+											<span *ngIf="listing.country === 'IRELAND'"			class="flag-icon flag-icon-ie suggestion-flag-country listing-country"></span>
+											<span *ngIf="listing.country === 'EU_REMOTE'"		class="flag-icon flag-icon-eu suggestion-flag-country listing-country"></span>
+											<span *ngIf="listing.country === 'WORLD_REMOTE'"	class="flag-icon flag-icon-xx suggestion-flag-country listing-country"></span>		
+										</td>
+										<td class="listing-table-td-date" 	width="15%" ><b>{{listing.created | date:'MMM-dd'}}</b></td>
+										<td class="listing-table-td-date" 	width="15%" ><b>{{getContractType(listing.type)}}</b></td>
+										<td class="listing-table-td" 		width="60%" >{{listing.title}}</td>
+									</tr>
+								</table>
+								
+							</div>
+						
 						</div>
-				
-	        		</div>
-	        		
+						</div>
+					
 	        		<!-- Show Selected Listing View -->
 	        		<div class="center">
 	        			
