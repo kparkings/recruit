@@ -28,6 +28,7 @@ const routes: Routes = [
 	{path: 'login-user', 			component: LoginUserComponent},
 	{path: 'login-user', 			component: LoginUserComponent},
 	{path: 'listing/:id',		 	component: ListingComponent},
+	{path: 'listing',		 		component: ListingComponent},
 	{path: 'create-candidate', 		component: CreateCandidateComponent},
 	{path: 'recruiter-signup', 		component: RecruiterSignupComponent}
 ];
