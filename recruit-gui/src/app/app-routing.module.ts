@@ -27,7 +27,7 @@ const routes: Routes = [
 	{path: 'recruiter-listings', 	component: RecruiterListingsComponent, 		canActivate: [AuthGuardService]},
 	{path: 'login-user', 			component: LoginUserComponent},
 	{path: 'login-user', 			component: LoginUserComponent},
-	{path: 'listing', 				component: ListingComponent},
+	{path: 'listing/:id',		 	component: ListingComponent},
 	{path: 'create-candidate', 		component: CreateCandidateComponent},
 	{path: 'recruiter-signup', 		component: RecruiterSignupComponent}
 ];

@@ -1,6 +1,7 @@
 import { Component, OnInit } 							from '@angular/core';
 import { ListingService }								from '../listing.service';
 import { Listing}										from './listing';
+import { ActivatedRoute } 								from '@angular/router';
 
 @Component({
   selector: 'app-listing',
@@ -9,10 +10,20 @@ import { Listing}										from './listing';
 })
 export class ListingComponent implements OnInit {
 
-  	constructor(private listingService:ListingService) { }
+  	constructor(private listingService:ListingService, private _Activatedroute:ActivatedRoute) { }
 
   	ngOnInit(): void {
-		this.fetchListings();	
+		
+		var id = this._Activatedroute.snapshot.paramMap.get("id");
+		
+		if (id ) {
+			this.fetchListings(id);
+		} else {
+			this.fetchListings("");
+		}
+		
+			
+		
   	}
 
 	public activeView:string					= 'list';
@@ -49,13 +60,30 @@ export class ListingComponent implements OnInit {
 	/**
 	* Retrieves listings belonging to the Recruiter
 	*/
-	public fetchListings():void{
+	public fetchListings(id:string):void{
 	
 		this.listingService
 			.fetchAllListings('created',"desc", this.currentPage, this.pageSize)
 				.subscribe(data => {
 					this.totalPages = data.totalPages;
 					this.listings 	= data.content;
+					
+					
+					if (id !== "") {
+		
+						var results: Array<Listing> = this.listings.filter(listing => listing.listingId === id);
+		
+						if (results.length > -1) {
+							let listing: Listing = results[0];
+				
+							console.log("id = " + id)
+							console.log("listing = " + JSON.stringify(listing))
+							this.showListingDetails(listing)
+				
+						}
+		
+					}
+					
 				}, 
 				err => {
 					console.log("Error retrieving listings for all recruiters" + JSON.stringify(err));			
@@ -108,7 +136,7 @@ export class ListingComponent implements OnInit {
 
     	if ((this.currentPage + 1) < this.totalPages) {
       		this.currentPage = this.currentPage + 1;
-      		this.fetchListings();
+      		this.fetchListings("");
     	}
     
 	}
@@ -120,7 +148,7 @@ export class ListingComponent implements OnInit {
     
 		if ((this.currentPage) > 0) {
       		this.currentPage = this.currentPage - 1;
-      		this.fetchListings();
+      		this.fetchListings("");
     	}
   	}
 
