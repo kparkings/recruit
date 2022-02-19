@@ -320,7 +320,7 @@ public class CandidateFilterOptions {
 		* @return Builder
 		*/
 		public CandidateFilterOptionsBuilder freelance(Boolean freelance) {
-			this.freelance = freelance == null ? true : freelance;
+			this.freelance = freelance == null ? false : freelance;
 			return this;
 		}
 		
@@ -330,7 +330,7 @@ public class CandidateFilterOptions {
 		* @return Builder
 		*/
 		public CandidateFilterOptionsBuilder perm(Boolean perm) {
-			this.perm = perm == null ? true : perm;
+			this.perm = perm == null ? false : perm;
 			return this;
 		}
 		

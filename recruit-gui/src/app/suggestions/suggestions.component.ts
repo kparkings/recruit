@@ -108,18 +108,18 @@ export class SuggestionsComponent implements OnInit {
 		* Ccontract type filters
 		*/
 		if (this.suggestionFilterForm.get('contractType')?.value === 'BOTH'){
-			perm 		= true;
-			contract 	= true;
+			//perm 		= false;
+			//contract 	= false;
 		}
 		
 		if (this.suggestionFilterForm.get('contractType')?.value === 'CONTRACT'){
-			perm 		= false;
-			contract 	= true;
+			perm 		= true;
+			contract 	= false;
 		}
 		
 		if (this.suggestionFilterForm.get('contractType')?.value === 'PERM'){
-			perm 		= true;
-			contract 	= false;
+			perm 		= false;
+			contract 	= true;
 		}
 		
 		this.suggestionsService.getSuggestons(	maxSuggestions,
