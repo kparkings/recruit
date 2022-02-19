@@ -10,7 +10,7 @@ import { NgbModal, NgbModalOptions}						from '@ng-bootstrap/ng-bootstrap'
 }) 
 export class AppComponent {
 
-	private readonly termsAndConditionsCookieVersion:string = '1';
+	private readonly termsAndConditionsCookieVersion:string = '2';
 
   	title = 'Arenella-ICT - IT Candidates for Recruiters';
 
@@ -43,7 +43,12 @@ export class AppComponent {
 	* agreed to the terms and consitions of the site
 	*/
 	public acceptTandCs():void{
-		this.cookieService.put(this.getTandCsCookieName(),"Accepted");
+		
+		let date:Date = new Date();
+		date.setFullYear(date.getFullYear() + 1);
+		
+		this.cookieService.put(this.getTandCsCookieName(),"Accepted",{expires: date});
+		
 		this.termsAndConditionsAccepted = true;
 	}
 	

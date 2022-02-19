@@ -115,7 +115,11 @@ public class CurriculumDetailsExtractionFactory {
 		
 		soughtSkills.stream().forEach(soughtSkill -> {
 			
-			if (baseText.contains(soughtSkill.trim())) {
+			String skillPatternSpace 	= soughtSkill.trim() + " ";
+			String skillPatternPeriod 	= soughtSkill.trim() + ".";
+			String skillPatternNewLine 	= soughtSkill.trim() + "\n";
+			
+			if (baseText.contains(skillPatternSpace) || baseText.contains(skillPatternPeriod) || baseText.contains(skillPatternNewLine)) {
 				skills.add(soughtSkill);
 			}
 			

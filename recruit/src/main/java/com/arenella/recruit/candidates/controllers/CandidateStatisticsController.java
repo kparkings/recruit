@@ -18,23 +18,6 @@ import com.arenella.recruit.candidates.services.CandidateStatisticsService;
 * Provides statistics relating to Candidates
 * @author K Parkings
 */
-//@CrossOrigin(origins = {	"https://api-arenella-ict.wosah.nl/authenticate"	
-//		,	"https://arenella-ict.wosah.nl"
-//		, 	"http://arenella-ict.wosah.nl"
-//		,	"https://arenella-ict.wosah.nl/"
-//		, 	"http://arenella-ict.wosah.nl/"
-//		,  	"http://api-arenella-ict.wosah.nl/"
-//		, 	"https://api-arenella-ict.wosah.nl/"
-//		, 	"http://api-arenella-ict.wosah.nl"
-//		, 	"https://api-arenella-ict.wosah.nl"
-//		,	"http://api.arenella-ict.com/"
-//		, 	"htts://api.arenella-ict.com/"
-//		, 	"http://127.0.0.1:4200"
-//		, 	"http://127.0.0.1:8080"
-//		, 	"http://127.0.0.1:9090"
-//		,	"https://www.arenella-ict.com"
-//		, 	"https://www.arenella-ict.com:4200"
-//		, 	"https://www.arenella-ict.com:8080"}, allowedHeaders = "*")
 @RestController
 public class CandidateStatisticsController {
 
