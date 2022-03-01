@@ -97,7 +97,7 @@ public class CurriculumDownloadsStatistics {
 		TemporalField 	weekOfYear = WeekFields.of(Locale.getDefault()).weekOfYear();
 		int 			weekNumber = event.getTimestamp().get(weekOfYear);
 		
-		String 			key = event.getTimestamp().getYear() + " - " + weekNumber;
+		String 			key = event.getTimestamp().getYear() + " - " +  String.format("%02d", weekNumber);
 		
 		if (weeklyDownloads.containsKey(key)) {
 			weeklyDownloads.put(key, weeklyDownloads.get(key) + 1 );
@@ -185,7 +185,7 @@ public class CurriculumDownloadsStatistics {
 	}
 	
 	/**
-	* Downloads per recruiter current day
+	* Downloads per recruiter current week
 	* @return stats
 	*/
 	public Map<String, Integer> getRecruiterDownloadsWeekly() {
@@ -193,7 +193,7 @@ public class CurriculumDownloadsStatistics {
 	}
 	
 	/**
-	* Downloads per recruiter current day
+	* Downloads per recruiter current Month
 	* @return stats
 	*/
 	public Map<String, Integer> getRecruiterDownloadsMonthly() {
