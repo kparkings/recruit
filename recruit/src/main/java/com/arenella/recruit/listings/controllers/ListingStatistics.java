@@ -65,7 +65,7 @@ public class ListingStatistics {
 		
 		TemporalField 	weekOfYear = WeekFields.of(Locale.getDefault()).weekOfYear();
 		int 			weekNumber = LocalDate.now().get(weekOfYear);
-		String 			key = LocalDate.now().getYear() + " - " + weekNumber;
+		String 			key = LocalDate.now().getYear() + " - " + String.format("%02d", weekNumber);;
 		
 		if (this.viewsPerWeek.containsKey(key)) {
 			this.viewsThisWeek = this.viewsPerWeek.get(key);
@@ -82,7 +82,7 @@ public class ListingStatistics {
 		TemporalField 	weekOfYear = WeekFields.of(Locale.getDefault()).weekOfYear();
 		int 			weekNumber = event.getCreated().get(weekOfYear);
 		
-		String 			key = event.getCreated().getYear() + " - " + weekNumber;
+		String 			key = event.getCreated().getYear() + " - " + String.format("%02d", weekNumber);;
 		
 		if (viewsPerWeek.containsKey(key)) {
 			viewsPerWeek.put(key, viewsPerWeek.get(key) + 1 );
