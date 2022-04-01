@@ -1,167 +1,97 @@
 <div class=".container m-2">
 
-	<form [formGroup]="suggestionFilterForm">
+	<form [formGroup]="suggestionFilterForm" *ngIf="currentView === 'suggestion-results'">
 
 		<!-- Search Bar -->
 		<div class="suggestions-search-div">
-			<label class="search-label">Search:</label><input type="text" value="Java Developer" class="suggestion-search-bar" formControlName="searchPhrase">
+			<label class="search-label">Search Job Title:</label><input type="text" value="Java Developer" class="suggestion-search-bar" formControlName="searchPhrase">
 		</div>
 		
-		
+
 		<div class="left-menu" *ngIf="currentView === 'suggestion-results'">
 			
-			<h5>Filter Options</h5>
-				<div class="filter-options-group">
-					<span class="country-selected-{{includeResultsForCountry('nl')}}" (click)="toggleCountrySelection('nl')">
-						<span class="flag-icon flag-icon-nl flag-icon-med"></span>
-					</span>
-					<span class="country-selected-{{includeResultsForCountry('be')}}" (click)="toggleCountrySelection('be')">
-						<span class="flag-icon flag-icon-be flag-icon-med"></span>
-					</span>
-					<span class="country-selected-{{includeResultsForCountry('uk')}}" (click)="toggleCountrySelection('uk')">
-						<span class="flag-icon flag-icon-gb flag-icon-med"></span>
-					</span>
+			<div class="filter-options-group">
+				<span class="country-selected-{{includeResultsForCountry('nl')}}" (click)="toggleCountrySelection('nl')">
+					<span class="flag-icon flag-icon-nl flag-icon-med"></span>
+				</span>
+				<span class="country-selected-{{includeResultsForCountry('be')}}" (click)="toggleCountrySelection('be')">
+					<span class="flag-icon flag-icon-be flag-icon-med"></span>
+				</span>
+				<span class="country-selected-{{includeResultsForCountry('uk')}}" (click)="toggleCountrySelection('uk')">
+					<span class="flag-icon flag-icon-gb flag-icon-med"></span>
+				</span>
+			</div>
+			<div class="filter-options-group">
+				<b class="filter-options-group-contents">Contract type: </b>
+				<select style="margin-left:10px;" formControlName="contractType">
+					<option value="BOTH">Both (Includes unknown)</option>
+					<option value="CONTRACT">Contract</option>
+					<option value="PERM">Permanent</option>
+				</select>
+			</div>
+			<div class="filter-options-group">
+				<div class="filter-options-group-contents">
+					<b class="filter-options-group-contents" style="margin-left:10px;">Languages: </b>
+					<ul class="filter-options-group-contents">
+						<li><input type="checkbox" formControlName="dutchLanguage" class="lang-checkbox">Dutch</li>
+						<li><input type="checkbox" formControlName="frenchLanguage" class="lang-checkbox">French</li>
+						<li><input type="checkbox" formControlName="englishLanguage" class="lang-checkbox">English</li>
+					</ul>
 				</div>
-				<div class="filter-options-group">
-					<h5>Contract type</h5>
-					<select formControlName="contractType">
-						<option value="BOTH">Both (Includes unknown)</option>
-						<option value="CONTRACT">Contract</option>
-						<option value="PERM">Permanent</option>
+			</div>
+			<div clvass="filter-options-group">
+				<div class="filter-options-group-contents"> 
+					<b>Years experience: </b>
+					<span style="margin-left:10px;">Min:</span>
+					<select class="min-max" formControlName="minYearsExperience">
+						<option *ngFor="let opt of minMaxOptions" value="{{opt}}">{{opt}}</option>
+					</select>
+					<span>Max:</span>
+					<select class="min-max" formControlName="maxYearsExperience">
+						<option *ngFor="let opt of minMaxOptions" value="{{opt}}">{{opt}}</option>
 					</select>
 				</div>
-				<div class="filter-options-group">
-					<h5>Languages</h5>
-					<div  style="text-align:center;width:100%">
-						<div style="text-align:left;padding-left:100px;">
-							<input type="checkbox" formControlName="dutchLanguage" class="lang-checkbox">Dutch
-						</div>
-						<div style="text-align:left;padding-left:100px;">
-							<input type="checkbox" formControlName="frenchLanguage" class="lang-checkbox">French
-						</div>
-						<div style="text-align:left;padding-left:100px">
-							<input type="checkbox" formControlName="englishLanguage" class="lang-checkbox">English
-						</div>
-					</div>
-				
-				</div>
-				<div class="filter-options-group">
-					<h5>Years experience</h5>
-					<div>
-						Min:
-						<select class="min-max" formControlName="minYearsExperience">
-							<option *ngFor="let opt of minMaxOptions" value="{{opt}}">{{opt}}</option>
-						</select>
-						Max:
-						<select class="min-max" formControlName="maxYearsExperience">
-							<option *ngFor="let opt of minMaxOptions" value="{{opt}}">{{opt}}</option>
-						</select>
-					</div>
-				</div>
+			</div>
 			
-				<div class="filter-options-group skills-filter-options-group">
-					<h5>Skills</h5>
-					<div>
-						<input type="text" formControlName="skill"><button (click)="addSkill()" class="btn btn-secondary add-skill-btn">Add</button>
-					</div>
+			<div style="clear: both;"></div>
+		
+			<div class="filter-options-group">
+				<div class="filter-options-group-contents">
+					<b>Skills</b>
+						<input type="text" style="margin-left:10px;" formControlName="skill"><button (click)="addSkill()" class="btn btn-secondary add-skill-btn">Add</button>
+				</div>
+				<div class="filter-options-group-contents">
 					<div class="skill-filters">
-						<div class="selected-skill" style="float:left" *ngFor="let skill of skillFilters" (click)="removeSkill(skill)">{{skill}}</div>
+						<div class="selected-skill" *ngFor="let skill of skillFilters" (click)="removeSkill(skill)">{{skill}}</div>
 					</div>
 				</div>
-			
-		</div>
-
+			</div>
+		</div>	
 	</form>
 	
-	
-
 	<!-- Suggestion Results -->
-	<div *ngIf="currentView === 'suggestion-results'" class="suggestion-results" style="max-width:75%;">
-	
+	<div *ngIf="currentView === 'suggestion-results'" class="suggestion-results" style="max-width:95%;clear: both;">
 	
 		<div class="suggestion-icon" *ngFor="let suggestion of suggestions" (click)="showSuggestedCandidateOverview(suggestion)">
-		
+			
 			<div class="suggestion-icon-header">
 				C{{suggestion.candidateId}}
 			</div>
-		
 			<div class="suggestion-icon-body">
 				<div>
 					{{suggestion.firstname}} {{suggestion.surname}}
 				</div>
-			
 				<div>
 					{{suggestion.roleSought}}
 				</div>
 			</div>
+			
 		</div>
 	</div>
 
 	<!-- Suggestion Profile -->
-	<div class="left-menu" *ngIf="currentView !== 'suggestion-results'">
-		<div class="suggestion-summary-infobox">
-			<div class="suggestion-summary-infobox-header">
-				<h3 >Languages</h3>
-			</div>
-			<div class="suggestion-summary-infobox-body">
-				<table class="table" style="text-align:left;">
-					<tr *ngFor="let language of suggestedCandidate.languages">
-						<td>{{getLanguage(language.language)}}</td>
-						<td>
-							<span *ngIf="language.level == 'PROFICIENT'" class="material-icons lang-proficient-check-icon">
-		      					check
-		      				</span>
-	      					<span *ngIf="language.level == 'BASIC'" class="material-icons  lang-basic-check-icon">
-		      					check
-		      				</span>
-	      				</td>
-					</tr>
-				</table>
-			</div>
-		</div>
-		<div class="suggestion-summary-infobox">
-			<div class="suggestion-summary-infobox-header">
-				<h3>Match Accuracy</h3>
-			</div>
-			<div  class="suggestion-summary-infobox-body">
-			
-				<div>
-					<div>
-						<div style="text-align:left">Skills</div>
-						<div class="suggestion-perception-{{suggestedCandidate.accuracySkills}}"></div>
-					
-					</div>
-					
-					<div>
-						<div style="text-align:left">Languages</div>
-						<div class="suggestion-perception-{{suggestedCandidate.accuracyLanguages}}"></div>
-					
-					</div>
-					
-				</div>
-			
-			</div>
-		</div>
-		<div class="suggestion-summary-infobox">
-			<div class="suggestion-summary-infobox-header">
-				<h3>Matching Skills</h3>
-			</div>
-			<div class="suggestion-summary-infobox-body">
-				<div>
-					<div style="float:center" *ngFor="let skill of skillFilters" class="{{hasRequiredSkill(skill)}}">
-						{{skill}}
-					</div>
-				</div>
-				<div>&nbsp;</div>
-			</div>
-		</div>
-		
-	</div>
-	
-	
-	<div *ngIf="currentView === 'suggested-canidate-overview'" class="suggestion-results" style="width:50%;">
-
-		<div style="text-align:right;margin-bottom:50px;">
+	<div style="margin-top:30px;" *ngIf="currentView !== 'suggestion-results'">
+		<div style="text-align:right;margin-right:50px;">
 			<button *ngIf="!suggestedCandidate.flaggedAsUnavailable" class="btn btn-secondary btn-action" (click)="markCandidateAsUnavailable()" style="margin-right:10px;" title="If the candidtae is no longer available use this button to let us know and we will remove them form the system.">Flag as unavailable</button>
 			<button *ngIf="suggestedCandidate.flaggedAsUnavailable" disabled class="btn btn-secondary btn-action" style="margin-right:10px;background:red;">Flagged as unavailable</button>
 	    	
@@ -171,7 +101,9 @@
 			
 			<button class="btn btn-secondary btn-action" (click)="copyEmailToClipboard()">Copy Email to Clipboard</button>
 			<button class="btn btn-secondary btn-action" (click)="showSuggestionsResults()">back</button>
-		 </div>
+		</div>
+	</div>
+	<div *ngIf="currentView === 'suggested-canidate-overview'" class="suggestion-results" style="width:90%;">
 		 		
 		<div>
 		
@@ -188,58 +120,87 @@
 						<td>{{suggestedCandidate.firstname}} {{suggestedCandidate.surname}}</td>
 					</tr>
 					<tr>
-						<td class="candidate-suggestion-table-hdr">Country</td>
+						<td class="candidate-suggestion-table-hdr">Location</td>
 						<td *ngIf="suggestedCandidate.country === 'NETHERLANDS'">
 							<span class="flag-icon flag-icon-nl suggestion-flag-country"></span>
+							{{suggestedCandidate.city}}
 						</td>
 						<td *ngIf="suggestedCandidate.country === 'BELGIUM'">
 							<span class="flag-icon flag-icon-be  suggestion-flag-country"></span>
+							{{suggestedCandidate.city}}
 						</td>
 						<td *ngIf="suggestedCandidate.country === 'UK'">
 							<span class="flag-icon flag-icon-gb  suggestion-flag-country"></span>
+							{{suggestedCandidate.city}}
 						</td>
-					</tr>
-					<tr>
-						<td class="candidate-suggestion-table-hdr">City</td>
-						<td>{{suggestedCandidate.city}}</td>
+						
 					</tr>
 					<tr>
 						<td class="candidate-suggestion-table-hdr">Years Experience</td>
 						<td>{{suggestedCandidate.yearsExperience}}</td>
 					</tr>
 					<tr>
-						<td class="candidate-suggestion-table-hdr">Contract roles</td>
+						<td class="candidate-suggestion-table-hdr">Contract Type</td>
 						<td>
-							<span *ngIf="suggestedCandidate.freelance == 'TRUE'" class="material-icons available-check-icon">
-	      						check
-	      					</span>
+							<div class="suggestion-summary-infobox-body">
+								
+								<span>Contract</span>
+								<span class="skill-level">
+									<span *ngIf="suggestedCandidate.freelance == 'TRUE'" class="material-icons available-check-icon">
+			      						check
+			      					</span>
+			      				</span>
+			      				
+			      				<span>Permanent</span>
+			      				<span class="skill-level">
+			      					<span *ngIf="suggestedCandidate.perm == 'TRUE'" class="material-icons available-check-icon">
+				      					check
+				      				</span>
+			      				</span>
+			      				
+		      				</div>
 						</td>
 						
 					</tr>
 					<tr>
-						<td class="candidate-suggestion-table-hdr">Perm roles</td>
+						<td class="candidate-suggestion-table-hdr">Languages</td>
 						<td>
-							<span *ngIf="suggestedCandidate.perm == 'TRUE'" class="material-icons available-check-icon">
-		      					check
-		      				</span>
-	      				</td>
+							<div  class="suggestion-summary-infobox-body" *ngFor="let language of suggestedCandidate.languages">
+								<span>{{getLanguage(language.language)}}</span>
+								<span class="language-level">
+									<span *ngIf="language.level == 'PROFICIENT'" class="material-icons lang-proficient-check-icon">
+      									check
+      								</span>
+     								<span *ngIf="language.level == 'BASIC'" class="material-icons  lang-basic-check-icon">
+      									check
+      								</span>
+     							</span>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td class="candidate-suggestion-table-hdr">Skill Accuracy</td>
+						<td>
+							<div class="suggestion-perception-{{suggestedCandidate.accuracySkills}}"></div>
+						</td>
+					</tr>
+					<tr>
+						<td class="candidate-suggestion-table-hdr">Language Accuracy</td>
+						<td>
+							<div class="suggestion-perception-{{suggestedCandidate.accuracyLanguages}}"></div>
+						</td>
+					</tr>
+					<tr>
+						<td class="candidate-suggestion-table-hdr">Matching Skills</td>
+						<td>
+							<div style="float:center" *ngFor="let skill of skillFilters" class="{{hasRequiredSkill(skill)}}">
+								{{skill}}
+							</div>
+						</td>
 					</tr>
 				</table>
 			</div>
-			
-				
+							
 		</div>
-		
-		
-		
-		
-		<!-- Suggested Candidaye Stats -->
-		
-
-		
-			
-		
-		
-
 	</div>
 </div>

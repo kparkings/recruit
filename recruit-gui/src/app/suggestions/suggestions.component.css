@@ -1,20 +1,14 @@
 .left-menu{
-	float:left;
+	/*float:left;*/
 	margin:10px;
-	background:#E8E8E8;
-	min-height:72vh;
-	min-width:300px;
-	border:5px solid #6c757d;
-	border-radius:25px;
 	padding:10px;
 	font-size:14px;
 }
 
 .suggestion-results{
 	float:left;
-	min-height:70vh;
 	padding:10px;
-	margin-top:20px;
+	margin-top:10px;
 }
 
 .left-menu h3, h5{
@@ -23,8 +17,24 @@
 }
 
 .filter-options-group{
-	text-align:center;
+	float:left;
 	margin-bottom:10px;
+}
+
+.filter-options-group-contents{
+	float:left;
+	margin-left:20px;
+}
+
+.filter-options-group ul{
+	list-style-type: none;
+	text-align:left;
+	padding:0px;
+	margin:0px;
+}
+
+.filter-options-group ul li{
+	display: inline
 }
 
 .country-selected-true{
@@ -39,17 +49,16 @@
 	width:30px;
 	height:30px;
 	margin:10px;	
+	margin-top:0px;
 	cursor:pointer;
 }
 
 .suggestions-search-div{
 	margin-top:20px;
-	text-align:right;
 }
 
 .suggestions-search-div input{
-	width:80%;
-	
+	width:80%;	
 }
 
 .btn-action{
@@ -80,20 +89,19 @@
  	display:inline-block;
  }
  
-.skills-filter-options-group{
-	max-width:250px;
- }
- 
  .skill-filters{
- 	margin-top:10px;
+ 	min-height:40px;
  }
  
  .min-max{
  	width:60px;
+ 	margin-left:10px;
+ 	margin-right:10px;
  }
  
  .lang-checkbox{
-	 margin-right:2px;
+	 margin-right:5px;
+	 margin-left:5px;
  }
 
 .add-skill-btn{
@@ -139,7 +147,6 @@
 	margin:10px;
 	margin-top:0px;
 	margin-bottom:0px;
-	width:250px;
 }
 
 .suggestion-summary-infobox-header{
@@ -152,11 +159,20 @@
 
 .suggestion-summary-infobox-body{
 	text-align:center;
-	margin-top:10px;
+	margin-top:0px;
 	padding:5px;
+	color:black;
+	float:left;
 }
 
+.language-level{
+	margin-left:10px;
+}
 
+.skill-level{
+	margin-left:10px;
+	margin-right:10px;
+}
 
 .suggestion-flag-country{
 	height:20px;
@@ -223,12 +239,19 @@
 	height:10px;
 }
 
+.candidate-suggestion-table > .table th, .table td {
+    padding: 0.5rem;
+    vertical-align: top;
+    border-top: 1px solid #dee2e6;
+}
+
+
 .candidate-suggestion-table-hdr {
 	font-weight:bold;
 }
 
 .suggestion-role-header{
-	margin-bottom:20px;
+	margin-bottom:10px;
 }
 
 .available-check-icon{
