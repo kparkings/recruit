@@ -2,75 +2,84 @@
 
 	<form [formGroup]="suggestionFilterForm" *ngIf="currentView === 'suggestion-results'">
 
-		<!-- Search Bar -->
-		<div class="suggestions-search-div">
-			<label class="search-label">Search Job Title:</label><input type="text" value="Java Developer" class="suggestion-search-bar" formControlName="searchPhrase">
+		<div class="left-menu" *ngIf="currentView === 'suggestion-results'">		
+			<table style="width:100%;">
+				<tr>
+					<td class="sugg-srch-hdr">Job Title</td>
+					<td class="sugg-srch-bdy">
+						<input type="text" value="Java Developer" class="sugg-srch-job-title" formControlName="searchPhrase">
+					</td>
+				</tr>
+				<tr>
+					<td class="sugg-srch-hdr">Country</td>
+					<td class="sugg-srch-bdy">
+						<span class="country-selected-{{includeResultsForCountry('nl')}}" (click)="toggleCountrySelection('nl')">
+							<span class="flag-icon flag-icon-nl flag-icon-med"></span>
+						</span>
+						<span class="country-selected-{{includeResultsForCountry('be')}}" (click)="toggleCountrySelection('be')">
+							<span class="flag-icon flag-icon-be flag-icon-med"></span>
+						</span>
+						<span class="country-selected-{{includeResultsForCountry('uk')}}" (click)="toggleCountrySelection('uk')">
+							<span class="flag-icon flag-icon-gb flag-icon-med"></span>
+						</span>
+					</td>
+				</tr>
+				<tr>
+					<td class="sugg-srch-hdr">Contract Type</td>
+					<td class="sugg-srch-bdy">
+						<select formControlName="contractType">
+						<option value="BOTH">Both (Includes unknown)</option>
+						<option value="CONTRACT">Contract</option>
+						<option value="PERM">Permanent</option>
+					</select>
+					</td>
+				</tr>
+				<tr>
+					<td class="sugg-srch-hdr">Languages</td>
+					<td class="sugg-srch-bdy">
+						<ul class="sugg-srch-ctry-ul">
+							<li class="sugg-srch-ctry-chkbox"><input type="checkbox" formControlName="dutchLanguage" class="lang-checkbox">Dutch</li>
+							<li class="sugg-srch-ctry-chkbox"><input type="checkbox" formControlName="frenchLanguage" class="lang-checkbox">French</li>
+							<li class="sugg-srch-ctry-chkbox"><input type="checkbox" formControlName="englishLanguage" class="lang-checkbox">English</li>
+						</ul>					
+					</td>
+				</tr>
+				<tr>
+					<td class="sugg-srch-hdr">Years Experience</td>
+					<td class="sugg-srch-bdy">
+						<div style="margin-top:10px;">
+							<span>Min:</span>
+							<select class="min-max" formControlName="minYearsExperience">
+								<option *ngFor="let opt of minMaxOptions" value="{{opt}}">{{opt}}</option>
+							</select>
+							<span>Max:</span>
+							<select class="min-max" formControlName="maxYearsExperience">
+								<option *ngFor="let opt of minMaxOptions" value="{{opt}}">{{opt}}</option>
+							</select>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td class="sugg-srch-hdr">
+						<b>Skills</b>
+					</td>
+					<td class="sugg-srch-bdy">
+						<input type="text" formControlName="skill"><button (click)="addSkill()" class="btn btn-secondary add-skill-btn">Add</button>
+					</td>
+				</tr>		
+				<tr>
+					<td colspan="2">
+						<div style="min-height:35px;">
+							<div class="selected-skill" *ngFor="let skill of skillFilters" (click)="removeSkill(skill)">{{skill}}</div>
+						</div>
+					</td>
+				</tr>
+			</table>
 		</div>
-		
-
-		<div class="left-menu" *ngIf="currentView === 'suggestion-results'">
-			
-			<div class="filter-options-group">
-				<span class="country-selected-{{includeResultsForCountry('nl')}}" (click)="toggleCountrySelection('nl')">
-					<span class="flag-icon flag-icon-nl flag-icon-med"></span>
-				</span>
-				<span class="country-selected-{{includeResultsForCountry('be')}}" (click)="toggleCountrySelection('be')">
-					<span class="flag-icon flag-icon-be flag-icon-med"></span>
-				</span>
-				<span class="country-selected-{{includeResultsForCountry('uk')}}" (click)="toggleCountrySelection('uk')">
-					<span class="flag-icon flag-icon-gb flag-icon-med"></span>
-				</span>
-			</div>
-			<div class="filter-options-group">
-				<b class="filter-options-group-contents">Contract type: </b>
-				<select style="margin-left:10px;" formControlName="contractType">
-					<option value="BOTH">Both (Includes unknown)</option>
-					<option value="CONTRACT">Contract</option>
-					<option value="PERM">Permanent</option>
-				</select>
-			</div>
-			<div class="filter-options-group">
-				<div class="filter-options-group-contents">
-					<b class="filter-options-group-contents" style="margin-left:10px;">Languages: </b>
-					<ul class="filter-options-group-contents">
-						<li><input type="checkbox" formControlName="dutchLanguage" class="lang-checkbox">Dutch</li>
-						<li><input type="checkbox" formControlName="frenchLanguage" class="lang-checkbox">French</li>
-						<li><input type="checkbox" formControlName="englishLanguage" class="lang-checkbox">English</li>
-					</ul>
-				</div>
-			</div>
-			<div clvass="filter-options-group">
-				<div class="filter-options-group-contents"> 
-					<b>Years experience: </b>
-					<span style="margin-left:10px;">Min:</span>
-					<select class="min-max" formControlName="minYearsExperience">
-						<option *ngFor="let opt of minMaxOptions" value="{{opt}}">{{opt}}</option>
-					</select>
-					<span>Max:</span>
-					<select class="min-max" formControlName="maxYearsExperience">
-						<option *ngFor="let opt of minMaxOptions" value="{{opt}}">{{opt}}</option>
-					</select>
-				</div>
-			</div>
-			
-			<div style="clear: both;"></div>
-		
-			<div class="filter-options-group">
-				<div class="filter-options-group-contents">
-					<b>Skills</b>
-						<input type="text" style="margin-left:10px;" formControlName="skill"><button (click)="addSkill()" class="btn btn-secondary add-skill-btn">Add</button>
-				</div>
-				<div class="filter-options-group-contents">
-					<div class="skill-filters">
-						<div class="selected-skill" *ngFor="let skill of skillFilters" (click)="removeSkill(skill)">{{skill}}</div>
-					</div>
-				</div>
-			</div>
-		</div>	
 	</form>
 	
 	<!-- Suggestion Results -->
-	<div *ngIf="currentView === 'suggestion-results'" class="suggestion-results" style="max-width:95%;clear: both;">
+	<div *ngIf="currentView === 'suggestion-results'" class="suggestion-results" style="max-width:95%">
 	
 		<div class="suggestion-icon" *ngFor="let suggestion of suggestions" (click)="showSuggestedCandidateOverview(suggestion)">
 			
@@ -90,7 +99,7 @@
 	</div>
 
 	<!-- Suggestion Profile -->
-	<div style="margin-top:30px;" *ngIf="currentView !== 'suggestion-results'">
+	<div style="margin-top:10px;" *ngIf="currentView !== 'suggestion-results'">
 		<div style="text-align:right;margin-right:50px;">
 			<button *ngIf="!suggestedCandidate.flaggedAsUnavailable" class="btn btn-secondary btn-action" (click)="markCandidateAsUnavailable()" style="margin-right:10px;" title="If the candidtae is no longer available use this button to let us know and we will remove them form the system.">Flag as unavailable</button>
 			<button *ngIf="suggestedCandidate.flaggedAsUnavailable" disabled class="btn btn-secondary btn-action" style="margin-right:10px;background:red;">Flagged as unavailable</button>

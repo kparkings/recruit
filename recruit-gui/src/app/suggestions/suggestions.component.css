@@ -2,13 +2,39 @@
 	/*float:left;*/
 	margin:10px;
 	padding:10px;
+	margin-bottom:0px;
 	font-size:14px;
+}
+
+.sugg-srch-hdr{
+	width:120px;
+	font-weight:bold;
+}
+
+.sugg-srch-bdy{
+	margin-top:10px;
+}
+
+.sugg-srch-job-title{
+	width:50%;
+	font-weight:bold;
+}
+
+.sugg-srch-ctry-ul{
+	margin:0;
+	padding:0;
+	margin-top:10px;
+}
+
+.sugg-srch-ctry-chkbox{
+	display:inline;
+	margin:0;
+	padding:0;
 }
 
 .suggestion-results{
 	float:left;
 	padding:10px;
-	margin-top:10px;
 }
 
 .left-menu h3, h5{
@@ -19,11 +45,19 @@
 .filter-options-group{
 	float:left;
 	margin-bottom:10px;
+
 }
 
 .filter-options-group-contents{
 	float:left;
-	margin-left:20px;
+	margin-right:10px;
+	
+}
+
+.filter-options-group-contents b {
+	float:left;
+	margin-right:10px;
+	width:100px;
 }
 
 .filter-options-group ul{
@@ -50,6 +84,7 @@
 	height:30px;
 	margin:10px;	
 	margin-top:0px;
+	margin-left:0px;
 	cursor:pointer;
 }
 
@@ -64,10 +99,11 @@
 .btn-action{
 	margin-left:10px;
     min-width:100px;
+    margin-top:5px;
 }
 
 .suggestion-search-bar{
-	height:50px;
+	height:25px;
 	padding:5px;
 	padding-left:10px;
 }
@@ -102,10 +138,12 @@
  .lang-checkbox{
 	 margin-right:5px;
 	 margin-left:5px;
+	 margin-top:5px;
  }
 
 .add-skill-btn{
 	width:50px;
+	margin-top:5px;
 	margin-left:5px;
 	padding-left:5px;
 	padding-right:5px;
@@ -121,8 +159,9 @@
 	float:left;
 	background:#E8E8E8;
 	margin:10px;
-	width:200px;
-	height:150px;
+	
+	width:190px;
+	height:140px;
 	cursor:pointer;
 }
 
@@ -240,7 +279,7 @@
 }
 
 .candidate-suggestion-table > .table th, .table td {
-    padding: 0.5rem;
+    padding: 0.75rem;
     vertical-align: top;
     border-top: 1px solid #dee2e6;
 }
