@@ -18,16 +18,16 @@ export class SuggestionsService {
 	private keywordsUiUx:Array<string> 					= new Array<string>("ui\\ux","designer","ui","ux");
 	private keywordsProjectManager:Array<string> 		= new Array<string>("manager","product owner");
 	private keywordsArchitect:Array<string> 			= new Array<string>("architect","solutions","enterprise");
-	private keywordsTester:Array<string> 				= new Array<string>("tester","test", "qa","automation","manual","quality","assurance");
-	private keywordsWebDeveloper:Array<string> 			= new Array<string>("web developer","front end","front-end","javascript","js","vue","vuejs","vue.js","react","node","node.js","php","wordpress");
+	private keywordsTester:Array<string> 				= new Array<string>("tester","test", "qa","automation","manual","quality","assurance", "selenium", "cucumber","testing","robot");
+	private keywordsWebDeveloper:Array<string> 			= new Array<string>("web developer","front end","front-end","js","vue","vuejs","vue.js","react","node","node.js","php","wordpress");
 	private keywordsScrumMaster:Array<string> 			= new Array<string>("scrum","master");
 	private keywordsDataScientist:Array<string> 		= new Array<string>("data", "data analyst","data scientist","bi","business intelligence","python");
-	private keywordsNetworkAdmin:Array<string> 			= new Array<string>("devops","network","admin","administrator","ops","operations");
-	private keywordsSoftwareDeveloper:Array<string> 	= new Array<string>("php","python","wordpress","software engineer","software developer","golang", "c", "c++","vb", "go", "cobol","pl-sql","t-sql", "r", "groovy", "sql");
-	private keywordsItSecurity:Array<string> 			= new Array<string>("security","cyber","malware","owasp");
+	private keywordsNetworkAdmin:Array<string> 			= new Array<string>("devops","network","admin","administrator","ops","operations", "cisco", "cloud", "windows", "ansible", "kubernetes", "salesforce","docker", "citrix", "servicenow", "tibco", "warehouse", "terraform", "dns", "o365", "ServiceNow", "VMWARE", "scripting", "firewall", "wireshark", "azure");
+	private keywordsSoftwareDeveloper:Array<string> 	= new Array<string>("php","python","wordpress","software engineer","software developer","golang", "c", "c++","vb", "go", "cobol","pl-sql","t-sql", "r", "groovy", "sql", "swift", "python", "ios", "scala", "microservices", "oracle", "react", "redux", "android", "sql", "node", "plsql", "go", "c++", "golang", "vue", "bdd", "laravel", "dba", "kotlin", "node.js", "ios", "ruby", "embedded", "oauth", "liferay");
+	private keywordsItSecurity:Array<string> 			= new Array<string>("security","cyber","malware","owasp", "pen");
 	private keywordsItRecruiter:Array<string> 			= new Array<string>("recruiter","account manager");
-	private keywordsSdet:Array<string> 					= new Array<string>("tester","test", "sdet","developer in test","qa","automation tester");
-	private keywordsJava:Array<string> 					= new Array<string>("java","j2ee");
+	private keywordsSdet:Array<string> 					= new Array<string>("tester","test", "sdet","developer in test","qa","automation tester", "selenium", "cucumber","testing");
+	private keywordsJava:Array<string> 					= new Array<string>("java","j2ee","java8","spring");
 
 	private allKeywords:Array<string>					= new Array<string>();
 
@@ -248,7 +248,7 @@ export class SuggestionsService {
 		let match:boolean = false;
 		
 		this.keywordsJava.forEach(kw => {
-			if (title.indexOf(kw) > -1) {
+			if (title.toLowerCase().indexOf(kw) > -1) {
 				match = true;
 			}
 		});
@@ -267,7 +267,7 @@ export class SuggestionsService {
 		let match:boolean = false;
 		
 		this.keywordsCSharpDev.forEach(kw => {
-			if (title.indexOf(kw) > -1) {
+			if (title.toLowerCase().indexOf(kw) > -1) {
 				match = true;
 			}
 		});
@@ -284,7 +284,7 @@ export class SuggestionsService {
 		let match:boolean = false;
 		
 		this.keywordsSupport.forEach(kw => {
-			if (title.indexOf(kw) > -1) {
+			if (title.toLowerCase().indexOf(kw) > -1) {
 				match = true;
 			}
 		});
@@ -302,7 +302,7 @@ export class SuggestionsService {
 		let match:boolean = false;
 		
 		this.keywordsBusinessAnalyst.forEach(kw => {
-			if (title.indexOf(kw) > -1) {
+			if (title.toLowerCase().indexOf(kw) > -1) {
 				match = true;
 			}
 		});
@@ -320,7 +320,7 @@ export class SuggestionsService {
 		let match:boolean = false;
 		
 		this.keywordsUiUx.forEach(kw => {
-			if (title.indexOf(kw) > -1) {
+			if (title.toLowerCase().indexOf(kw) > -1) {
 				match = true;
 			}
 		});
@@ -338,7 +338,7 @@ export class SuggestionsService {
 		let match:boolean = false;
 		
 		this.keywordsProjectManager.forEach(kw => {
-			if (title.indexOf(kw) > -1) {
+			if (title.toLowerCase().indexOf(kw) > -1) {
 				match = true;
 			}
 		});
@@ -356,7 +356,7 @@ export class SuggestionsService {
 		let match:boolean = false;
 		
 		this.keywordsArchitect.forEach(kw => {
-			if (title.indexOf(kw) > -1) {
+			if (title.toLowerCase().indexOf(kw) > -1) {
 				match = true;
 			}
 		});
@@ -376,7 +376,7 @@ export class SuggestionsService {
 		let match:boolean = false;
 		
 		this.keywordsTester.forEach(kw => {
-			if (title.indexOf(kw) > -1) {
+			if (title.toLowerCase().indexOf(kw) > -1) {
 				match = true;
 			}
 		});
@@ -394,7 +394,7 @@ export class SuggestionsService {
 		let match:boolean = false;
 		
 		this.keywordsWebDeveloper.forEach(kw => {
-			if (title.indexOf(kw) > -1) {
+			if (title.toLowerCase().indexOf(kw) > -1) {
 				match = true;
 			}
 		});
@@ -412,7 +412,7 @@ export class SuggestionsService {
 		let match:boolean = false;
 		
 		this.keywordsScrumMaster.forEach(kw => {
-			if (title.indexOf(kw) > -1) {
+			if (title.toLowerCase().indexOf(kw) > -1) {
 				match = true;
 			}
 		});
@@ -430,7 +430,7 @@ export class SuggestionsService {
 		let match:boolean = false;
 		
 		this.keywordsDataScientist.forEach(kw => {
-			if (title.indexOf(kw) > -1) {
+			if (title.toLowerCase().indexOf(kw) > -1) {
 				match = true;
 			}
 		});
@@ -448,7 +448,7 @@ export class SuggestionsService {
 		let match:boolean = false;
 		
 		this.keywordsNetworkAdmin.forEach(kw => {
-			if (title.indexOf(kw) > -1) {
+			if (title.toLowerCase().indexOf(kw) > -1) {
 				match = true;
 			}
 		});
@@ -466,7 +466,7 @@ export class SuggestionsService {
 		let match:boolean = false;
 		
 		this.keywordsSoftwareDeveloper.forEach(kw => {
-			if (title.indexOf(kw) > -1) {
+			if (title.toLowerCase().indexOf(kw) > -1) {
 				match = true;
 			}
 		});
@@ -484,7 +484,7 @@ export class SuggestionsService {
 		let match:boolean = false;
 		
 		this.keywordsItSecurity.forEach(kw => {
-			if (title.indexOf(kw) > -1) {
+			if (title.toLowerCase().indexOf(kw) > -1) {
 				match = true;
 			}
 		});
@@ -502,7 +502,7 @@ export class SuggestionsService {
 		let match:boolean = false;
 		
 		this.keywordsItRecruiter.forEach(kw => {
-			if (title.indexOf(kw) > -1) {
+			if (title.toLowerCase().indexOf(kw) > -1) {
 				match = true;
 			}
 		});
@@ -520,7 +520,7 @@ export class SuggestionsService {
 		let match:boolean = false;
 		
 		this.keywordsSdet.forEach(kw => {
-			if (title.indexOf(kw) > -1) {
+			if (title.toLowerCase().indexOf(kw) > -1) {
 				match = true;
 			}
 		});

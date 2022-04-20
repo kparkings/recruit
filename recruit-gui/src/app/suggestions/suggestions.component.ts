@@ -62,7 +62,7 @@ export class SuggestionsComponent implements OnInit {
 	*/
 	private getSuggestions():void{
 		
-		const maxSuggestions:number 		= 12;
+		const maxSuggestions:number 		= 14;
 		
 		let countries:Array<string> 		= new Array<string>();
 		let skills:Array<string> 			= this.skillFilters;

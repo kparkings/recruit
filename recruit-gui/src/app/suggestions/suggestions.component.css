@@ -158,17 +158,16 @@
 .suggestion-icon{
 	float:left;
 	background:#E8E8E8;
-	margin:10px;
-	
-	width:190px;
-	height:140px;
+	margin:5px;
+	width:170px;
+	height:120px;
 	cursor:pointer;
 }
 
 .suggestion-icon-body{
 	text-align:center;
-	margin-top:20px;
-	font-size:14px;
+	margin-top:10px;
+	font-size:12px;
 }
 
 .suggestion-icon-header{
