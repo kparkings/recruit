@@ -37,6 +37,14 @@ public class SkillsSynonymsUtilImpl implements SkillsSynonymsUtil{
 					synonyms.add("tester");
 					break;
 				}
+				case "ba":{
+					synonyms.add("business analyst");
+					break;
+				}
+				case "business analyst":{
+					synonyms.add("ba");
+					break;
+				}
 				case "tester":{
 					synonyms.add("qa");
 					synonyms.add("test analyst");

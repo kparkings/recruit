@@ -14,9 +14,9 @@ export class SuggestionsService {
 
 	private keywordsCSharpDev:Array<string> 			= new Array<string>("c#",".net","dotnet","wpf","asp","vb.net","csharp","asp.net");
 	private keywordsSupport:Array<string> 				= new Array<string>("support","helpdesk","service desk");
-	private keywordsBusinessAnalyst:Array<string> 		= new Array<string>("buisiness analyst","ba");
+	private keywordsBusinessAnalyst:Array<string> 		= new Array<string>("business analyst","ba");
 	private keywordsUiUx:Array<string> 					= new Array<string>("ui\\ux","designer","ui","ux");
-	private keywordsProjectManager:Array<string> 		= new Array<string>("manager","product owner");
+	private keywordsProjectManager:Array<string> 		= new Array<string>("manager","product owner", "project manager", "pm");
 	private keywordsArchitect:Array<string> 			= new Array<string>("architect","solutions","enterprise");
 	private keywordsTester:Array<string> 				= new Array<string>("tester","test", "qa","automation","manual","quality","assurance", "selenium", "cucumber","testing","robot");
 	private keywordsWebDeveloper:Array<string> 			= new Array<string>("web developer","front end","front-end","js","vue","vuejs","vue.js","react","node","node.js","php","wordpress");
