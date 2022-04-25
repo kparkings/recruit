@@ -79,7 +79,7 @@
 	</form>
 	
 	<!-- Suggestion Results -->
-	<div *ngIf="currentView === 'suggestion-results'" class="suggestion-results" style="max-width:95%">
+	<div *ngIf="currentView === 'suggestion-results'" class="suggestion-results">
 	
 		<div class="suggestion-icon" *ngFor="let suggestion of suggestions" (click)="showSuggestedCandidateOverview(suggestion)">
 			
