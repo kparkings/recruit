@@ -1,5 +1,6 @@
 package com.arenella.recruit.candidates.beans;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -91,6 +92,58 @@ public class CandidateTest {
 		
 		assertTrue(candidate.getSkills().contains(skill));
 		candidate.getLanguages().stream().filter(l -> l.getLanguage() == language.getLanguage()).findAny().orElseThrow();
+		
+	}
+	
+	/**
+	* Tests correct values are made anonymous if the Candidate is 
+	* no longer available. We want to see their info in the Status but 
+	* we no longer need to know who they are
+	* @throws Exception
+	*/
+	@Test
+	public void testNoLongerAvailable() throws Exception {
+		
+		final String firstName 	= "Kevin";
+		final String surname 	= "Parkings";
+		final String email 		= "kparkings@gmail.com";
+		
+		Candidate candidate = Candidate
+				.builder()
+					.available(true)
+					.firstname(firstName)
+					.surname(surname)
+					.email(email)
+				.build();
+		
+		assertTrue(candidate.isAvailable());
+		assertEquals(candidate.getFirstname(), firstName);
+		assertEquals(candidate.getSurname(), surname);
+		assertEquals(candidate.getEmail(), email);
+		
+		candidate.noLongerAvailable();
+		
+		assertFalse(candidate.isAvailable());
+		assertEquals(candidate.getFirstname(), 	Candidate.ANONYMOUS_USER_ATTR_VALUE);
+		assertEquals(candidate.getSurname(), 	Candidate.ANONYMOUS_USER_ATTR_VALUE);
+		assertEquals(candidate.getEmail(), 		Candidate.ANONYMOUS_USER_ATTR_VALUE);
+		
+	}
+	
+	/**
+	* Tests case where Candidate is made available to search on
+	* @throws Exception
+	*/
+	@Test
+	public void testMakeAvailable() throws Exception{
+		
+		Candidate candidate = Candidate.builder().build();
+				
+		assertFalse(candidate.isAvailable());
+	
+		candidate.makeAvailable();
+	
+		assertTrue(candidate.isAvailable());
 		
 	}
 	

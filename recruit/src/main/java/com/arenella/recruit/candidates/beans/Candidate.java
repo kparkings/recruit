@@ -16,6 +16,8 @@ import com.arenella.recruit.candidates.enums.PERM;
 */
 public class Candidate {
 
+	public static final String ANONYMOUS_USER_ATTR_VALUE = "unknown";
+			
 	private String 			candidateId;
 	private String 			firstname;
 	private String 			surname;
@@ -201,6 +203,24 @@ public class Candidate {
 	*/
 	public Set<Language> getLanguages(){
 		return this.languages;
+	}
+	
+	/**
+	* Manke the Candidates details anonymous and mark the candidate 
+	* as no longer being available
+	*/
+	public void noLongerAvailable() {
+		this.available 		= false;
+		this.email 			= ANONYMOUS_USER_ATTR_VALUE;
+		this.firstname 		= ANONYMOUS_USER_ATTR_VALUE;
+		this.surname 		= ANONYMOUS_USER_ATTR_VALUE;
+	}
+	
+	/**
+	* Makes the candidate available for be searched on 
+	*/
+	public void makeAvailable() {
+		this.available = true;
 	}
 	
 	/**

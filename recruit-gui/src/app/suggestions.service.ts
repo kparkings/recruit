@@ -61,8 +61,8 @@ export class SuggestionsService {
 	public getSuggestons(	maxNumberOfSuggestions:number, 
 							title:string, 
 							countries:Array<string>, 
-							contract:boolean, 
-							perm:boolean, 
+							contract:string, 
+							perm:string, 
 							experienceMin:string, 
 							experienceMax:string, 
 							languages:Array<string>, 
@@ -101,8 +101,8 @@ export class SuggestionsService {
 	private getCandidateFilterParamString(	maxNumberOfSuggestions:number, 
 											title:string, 
 											countries:Array<string>, 
-											contract:boolean, 
-											perm:boolean, 
+											contract:string, 
+											perm:string, 
 											experienceMin:string, 
 											experienceMax:string,
 											languages:Array<string>, 
@@ -140,15 +140,15 @@ export class SuggestionsService {
 	/**
 	* Adds filter for perm positions if specified in the listing
 	*/
-	public getContractTypeParamString(contract:boolean, perm:boolean):string{
+	public getContractTypeParamString(contract:string, perm:string):string{
 		
 		let paramString:string = '';
 		
-		if (contract) {
+		if (contract !== "") {
 			paramString = '&freelance=true';
 		}
 		
-		if (perm) {
+		if (perm !== "") {
 			paramString = paramString + '&perm=true';
 		}
 	

@@ -103,16 +103,16 @@ public class CandidateServiceImpl implements CandidateService{
 	@Override
 	public void updateCandidate(String candidateId, CANDIDATE_UPDATE_ACTIONS updateAction) {
 		
-		CandidateEntity candidate = this.candidateDao.findById(Long.valueOf(candidateId)).orElseThrow(() -> new RuntimeException("Cannot perform update on unknown Candidate: " + candidateId));
+		Candidate candidate = this.candidateDao.findCandidateById(Long.valueOf(candidateId)).orElseThrow(() -> new RuntimeException("Cannot perform update on unknown Candidate: " + candidateId));
 		
 		switch (updateAction) {
 			case enable: {
-				candidate.setAvailable(true);
+				candidate.makeAvailable();
 				break;
 			}
 			case disable: {
-				candidate.setAvailable(false);
-				this.externalEventPublisher.publishCandidateNoLongerAvailableEvent(new CandidateNoLongerAvailableEvent(candidate.getCandidateId()));
+				candidate.noLongerAvailable();
+				this.externalEventPublisher.publishCandidateNoLongerAvailableEvent(new CandidateNoLongerAvailableEvent(Long.valueOf(candidate.getCandidateId())));
 				break;
 			}
 			default: {
@@ -120,7 +120,7 @@ public class CandidateServiceImpl implements CandidateService{
 			}
 		}
 		
-		this.candidateDao.save(candidate);
+		this.candidateDao.saveCandidate(candidate);
 		
 	}
 

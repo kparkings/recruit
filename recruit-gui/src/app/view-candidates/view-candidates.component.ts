@@ -360,11 +360,23 @@ export class ViewCandidatesComponent implements OnInit {
 	*/
 	private getPermFilterParamString(): string{
   
-		if (this.permFilterForm.get('include')?.value !== 'true') {
-			return '&perm=true';
+		if (this.permFilterForm.get('include')?.value == 'true') {
+			return "&perm=true";
 		}
 
-      	return '&perm=false';
+      	return '';
+	}
+	
+	/**
+	* Creates a query param string with the filter options to apply to the perm
+	*/
+	private getFreelanceFilterParamString(): string{
+  
+		if (this.freelanceFilterForm.get('include')?.value == 'true') {
+			return "&freelance=true";
+		}
+
+		return '';
 	}
   
 	private getYearsExperienceFilterParamAsString(): string{
@@ -394,17 +406,6 @@ export class ViewCandidatesComponent implements OnInit {
       
 	}
 
-    /**
-	* Creates a query param string with the filter options to apply to the perm
-	*/
-	private getFreelanceFilterParamString(): string{
-  
-		if (this.freelanceFilterForm.get('include')?.value !== 'true') {
-			return '&freelance=true';
-		}
-
-		return '&freelance=false';
-	}
 
 	/**
 	* Creates a query param string with the filter options to apply to the candidate
@@ -679,7 +680,7 @@ export class ViewCandidatesComponent implements OnInit {
 
 		const permVal: any = this.permFilterForm.get('include')?.value;
 
-		if (permVal !== 'false') {
+		if (permVal == 'true') {
       		return 'filterSelected';
     	}
     	
@@ -695,7 +696,7 @@ export class ViewCandidatesComponent implements OnInit {
 
 		const freelanceVal: any = this.freelanceFilterForm.get('include')?.value;
 
-      	if (freelanceVal !== 'false') {
+      	if (freelanceVal == 'true') {
         	return 'filterSelected';
       	}
 
@@ -785,11 +786,11 @@ export class ViewCandidatesComponent implements OnInit {
     });
 
     this.permFilterForm = new FormGroup({
-      include:  new FormControl('false')
+      include:  new FormControl('')
     });
 
     this.freelanceFilterForm = new FormGroup({
-      include:  new FormControl('false')
+      include:  new FormControl('')
     });
     
     this.yearsExperienceFilterForm = new FormGroup({

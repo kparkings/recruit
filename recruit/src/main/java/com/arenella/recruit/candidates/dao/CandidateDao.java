@@ -3,6 +3,7 @@ package com.arenella.recruit.candidates.dao;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -19,6 +20,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
+import com.arenella.recruit.candidates.beans.Candidate;
 import com.arenella.recruit.candidates.beans.CandidateFilterOptions;
 import com.arenella.recruit.candidates.beans.Language.LANGUAGE;
 import com.arenella.recruit.candidates.entities.CandidateEntity;
@@ -41,6 +43,27 @@ public interface CandidateDao extends CrudRepository<CandidateEntity, Long>, Jpa
 	*/
 	public default Page<CandidateEntity> findAll(CandidateFilterOptions filterOptions, Pageable pageable) {
 		return this.findAll(new FilterSpecification(filterOptions), pageable);
+	}
+	
+	/**
+	* If Candidate found return candidate. Otherwise empty
+	* @param candidateId - Id to search for
+	* @return Candidate matching id
+	*/
+	public default Optional<Candidate> findCandidateById(long candidateId){
+		
+		Optional<CandidateEntity> entity = this.findById(candidateId);
+		
+		if (entity.isEmpty()) {
+			return Optional.empty();
+		}
+		
+		return Optional.of(CandidateEntity.convertFromEntity(entity.get()));
+		
+	}
+	
+	public default void saveCandidate(Candidate candidate) {
+		this.save(CandidateEntity.convertToEntity(candidate));
 	}
 	
 	/**
@@ -146,16 +169,16 @@ public interface CandidateDao extends CrudRepository<CandidateEntity, Long>, Jpa
 			
 			
 			if (!this.filterOptions.isFlaggedAsUnavailable().isEmpty()) {
-				Predicate isFlaggedAsUnavailableFltr 						= root.get("flaggedAsUnavailable").in(true);
-				predicates.add(isFlaggedAsUnavailableFltr);
-				
+				//Predicate isFlaggedAsUnavailableFltr 						= root.get("flaggedAsUnavailable").in(true);
+				//predicates.add(isFlaggedAsUnavailableFltr);
+				Expression<Boolean> flaggedAsUnavailableExpression 	= root.get("flaggedAsUnavailable");
+				predicates.add(criteriaBuilder.equal(flaggedAsUnavailableExpression, true));
 			}
 			
 			
 			if (!this.filterOptions.getCountries().isEmpty()) {
 				Predicate countriesFltr 						= root.get("country").in(filterOptions.getCountries());
 				predicates.add(countriesFltr);
-				
 			}
 			
 			if (!this.filterOptions.getFunctions().isEmpty()) {
@@ -163,12 +186,12 @@ public interface CandidateDao extends CrudRepository<CandidateEntity, Long>, Jpa
 				predicates.add(functionsFltr);
 			}
 			
-			if (!this.filterOptions.isFreelance()) {
+			if (!this.filterOptions.isFreelance().isEmpty() && this.filterOptions.isFreelance().get()) {
 				Expression<String> freelanceExpression 			= root.get("freelance");
 				predicates.add(criteriaBuilder.equal(freelanceExpression, 	FREELANCE.TRUE));
 			}
 			
-			if (!this.filterOptions.isPerm()) {
+			if (!this.filterOptions.isPerm().isEmpty() && this.filterOptions.isPerm().get()) {
 				Expression<String> permExpression 				= root.get("perm");
 				predicates.add(criteriaBuilder.equal(permExpression, 		PERM.TRUE));
 			}
@@ -194,7 +217,6 @@ public interface CandidateDao extends CrudRepository<CandidateEntity, Long>, Jpa
 				}
 				
 			} else {
-				
 				query.orderBy(criteriaBuilder.desc(sortExpression));
 			}
 			

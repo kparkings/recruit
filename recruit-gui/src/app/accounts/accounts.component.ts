@@ -179,8 +179,10 @@ export class AccountsComponent implements OnInit {
 								'orderAttribute=candidateId'
                                  + "&order=desc" 
                                  + '&page=0'
-                                 + '&size=50'
+                                 + '&size=5000'
+								 + '&available=true'
                                  + '&flaggedAsUnavailable=true';
+
 		return filterParams;
 	
 	}

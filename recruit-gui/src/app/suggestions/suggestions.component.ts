@@ -69,8 +69,8 @@ export class SuggestionsComponent implements OnInit {
 		let languages:Array<string> 		= new Array<string>();
 		
 		let title:string 					= this.suggestionFilterForm.get('searchPhrase')?.value;
-		let contract:boolean 				= true;
-		let perm:boolean 					= true;
+		let contract:string 				= "";
+		let perm:string 					= "";
 		let minExperience:string 			= this.suggestionFilterForm.get('minYearsExperience')?.value;
 		let maxExperience:string 			= this.suggestionFilterForm.get('maxYearsExperience')?.value;
 		
@@ -113,13 +113,12 @@ export class SuggestionsComponent implements OnInit {
 		}
 		
 		if (this.suggestionFilterForm.get('contractType')?.value === 'CONTRACT'){
-			perm 		= true;
-			contract 	= false;
+			contract 	= "true";
 		}
 		
 		if (this.suggestionFilterForm.get('contractType')?.value === 'PERM'){
-			perm 		= false;
-			contract 	= true;
+			perm 		= "true";
+			
 		}
 		
 		this.suggestionsService.getSuggestons(	maxSuggestions,

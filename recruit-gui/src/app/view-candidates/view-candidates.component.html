@@ -204,16 +204,16 @@
 					<div  *ngSwitchCase="'perm'">
 						<div class="row">
 							<div class="col">
-								<label class="modal-label">Include non Perm candidates</label>
+								<label class="modal-label">Must be Perm</label>
 							</div>
 							<div class="col">
 								<form [formGroup]="permFilterForm">
 									<div>
-										<input class="filtercheckbox" type="radio" value="false" formControlName="include" (change)="updateFilters()">
+										<input class="filtercheckbox" type="radio" value="true" formControlName="include" (change)="updateFilters()">
 										<label>Yes</label>
 									</div>
 									<div>
-										<input class="filtercheckbox" type="radio" value="true"   formControlName="include" (change)="updateFilters()">
+										<input class="filtercheckbox" type="radio" value="false"   formControlName="include" (change)="updateFilters()">
 										<label>No</label>
 									</div>
 								</form>
@@ -225,16 +225,16 @@
 					<div  *ngSwitchCase="'freelance'">
 						<div class="row">
 							<div class="col">
-								<label class="modal-label">Include non freelance candidates</label>
+								<label class="modal-label">Must be freelance</label>
 							</div>
 							<div class="col">
 								<form [formGroup]="freelanceFilterForm">
 									<div>
-										<input class="filtercheckbox" type="radio" value="false" formControlName="include" (change)="updateFilters()">
+										<input class="filtercheckbox" type="radio" value="true" formControlName="include" (change)="updateFilters()">
 										<label>Yes</label>
 									</div>
 									<div>
-										<input class="filtercheckbox" type="radio" value="true"  formControlName="include" (change)="updateFilters()">
+										<input class="filtercheckbox" type="radio" value="false"  formControlName="include" (change)="updateFilters()">
 										<label>No</label>
 									</div>
 								</form>

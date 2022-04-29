@@ -62,7 +62,7 @@ public class CandidateServiceImplTest {
 	@Test
 	public void testUpdateCandidate_unknownCandidate() throws Exception {
 		
-		Mockito.when(mockCandidateDao.findById(1L)).thenReturn(Optional.empty());
+		Mockito.when(mockCandidateDao.findCandidateById(0)).thenReturn(Optional.empty());
 		
 		Assertions.assertThrows(RuntimeException.class , () -> {
 			service.updateCandidate("1", CANDIDATE_UPDATE_ACTIONS.disable);
@@ -77,15 +77,14 @@ public class CandidateServiceImplTest {
 	@Test
 	public void testUpdateCandidate_enable() throws Exception {
 		
-		ArgumentCaptor<CandidateEntity> 	captor 		= ArgumentCaptor.forClass(CandidateEntity.class);
-		CandidateEntity 					candidate 	= CandidateEntity.builder().available(false).build();
+		ArgumentCaptor<Candidate> 	captor 		= ArgumentCaptor.forClass(Candidate.class);
+		Candidate 					candidate 	= Candidate.builder().available(false).build();
 		
-		Mockito.when(mockCandidateDao.findById(1L)).thenReturn(Optional.of(candidate));
-		Mockito.when(mockCandidateDao.save(captor.capture())).thenReturn(candidate);
+		Mockito.when(mockCandidateDao.findCandidateById(1L)).thenReturn(Optional.of(candidate));
 		
 		this.service.updateCandidate("1", CANDIDATE_UPDATE_ACTIONS.enable);
 		
-		Mockito.verify(mockCandidateDao).save(candidate);
+		Mockito.verify(mockCandidateDao).saveCandidate(captor.capture());
 		Mockito.verify(this.mockExternalEventPublisher, Mockito.never()).publishCandidateNoLongerAvailableEvent(Mockito.any());
 		
 		assertTrue(captor.getValue().isAvailable());
@@ -99,15 +98,14 @@ public class CandidateServiceImplTest {
 	@Test
 	public void testUpdateCandidate_disable() throws Exception {
 		
-		ArgumentCaptor<CandidateEntity> 	captor 		= ArgumentCaptor.forClass(CandidateEntity.class);
-		CandidateEntity 					candidate 	= CandidateEntity.builder().candidateId("123").available(true).build();
+		ArgumentCaptor<Candidate> 	captor 		= ArgumentCaptor.forClass(Candidate.class);
+		Candidate 					candidate 	= Candidate.builder().candidateId("123").available(true).build();
 		
-		Mockito.when(mockCandidateDao.findById(1L)).thenReturn(Optional.of(candidate));
-		Mockito.when(mockCandidateDao.save(captor.capture())).thenReturn(candidate);
+		Mockito.when(mockCandidateDao.findCandidateById(1L)).thenReturn(Optional.of(candidate));
 		
 		this.service.updateCandidate("1", CANDIDATE_UPDATE_ACTIONS.disable);
 		
-		Mockito.verify(mockCandidateDao).save(candidate);
+		Mockito.verify(mockCandidateDao).saveCandidate(captor.capture());
 		Mockito.verify(this.mockExternalEventPublisher).publishCandidateNoLongerAvailableEvent(Mockito.any());
 		
 		assertFalse(captor.getValue().isAvailable());

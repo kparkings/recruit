@@ -15,23 +15,23 @@ import com.arenella.recruit.candidates.enums.RESULT_ORDER;
 */
 public class CandidateFilterOptions {
 
-	private String 			orderAttribute;
-	private RESULT_ORDER	order;
-	private Set<String> 	candidateIds			= new HashSet<>();
-	private Set<COUNTRY> 	countries				= new HashSet<>();
-	private Set<FUNCTION> 	functions				= new HashSet<>();
-	private boolean 		freelance				= true;
-	private boolean 		perm					= true;
-	private int 			yearsExperienceGtEq;
-	private int				yearsExperienceLtEq;
-	private Language.LEVEL 	dutch;
-	private Language.LEVEL 	english;
-	private Language.LEVEL 	french;
-	private Set<String>		skills					= new HashSet<>();
-	private String			firstname;
-	private String 			surname;
-	private String 			email;
-	private Boolean			flaggedAsUnavailable 	= false;
+	private String 				orderAttribute;
+	private RESULT_ORDER		order;
+	private Set<String> 		candidateIds			= new HashSet<>();
+	private Set<COUNTRY> 		countries				= new HashSet<>();
+	private Set<FUNCTION> 		functions				= new HashSet<>();
+	private Optional<Boolean> 	freelance				= Optional.empty();
+	private Optional<Boolean> 	perm					= Optional.empty();
+	private int 				yearsExperienceGtEq;
+	private int					yearsExperienceLtEq;
+	private Language.LEVEL 		dutch;
+	private Language.LEVEL 		english;
+	private Language.LEVEL 		french;
+	private Set<String>			skills					= new HashSet<>();
+	private String				firstname;
+	private String 				surname;
+	private String 				email;
+	private Boolean				flaggedAsUnavailable 	= false;
 	
 	/**
 	* Builder for the  
@@ -103,7 +103,7 @@ public class CandidateFilterOptions {
 	* Returns whether or not to filter on freelance roles
 	* @return to include freelance candidates or not
 	*/
-	public boolean isFreelance() {
+	public Optional<Boolean> isFreelance() {
 		return this.freelance;
 	}
 	
@@ -111,7 +111,7 @@ public class CandidateFilterOptions {
 	* Returns whether or not to filter on perm candidates
 	* @return to include perm candidates or not
 	*/
-	public boolean isPerm() {
+	public Optional<Boolean> isPerm() {
 		return this.perm;
 	}
 	
@@ -235,23 +235,23 @@ public class CandidateFilterOptions {
 	*/
 	public static class CandidateFilterOptionsBuilder {
 		
-		private String 			orderAttribute;
-		private RESULT_ORDER	order;
-		private Set<String> 	candidateIds			= new HashSet<>();
-		private Set<COUNTRY> 	countries				= new HashSet<>();
-		private Set<FUNCTION> 	functions				= new HashSet<>();
-		private boolean 		freelance				= true;
-		private boolean 		perm					= true;
-		private int 			yearsExperienceGtEq;
-		private int				yearsExperienceLtEq;
-		private Language.LEVEL 	dutch;
-		private Language.LEVEL 	english;
-		private Language.LEVEL 	french;
-		private Set<String>		skills					= new HashSet<>();
-		private String			firstname;
-		private String 			surname;
-		private String 			email;
-		private Boolean			flaggedAsUnavailable	= null;
+		private String 				orderAttribute;
+		private RESULT_ORDER		order;
+		private Set<String> 		candidateIds			= new HashSet<>();
+		private Set<COUNTRY> 		countries				= new HashSet<>();
+		private Set<FUNCTION> 		functions				= new HashSet<>();
+		private Optional<Boolean> 	freelance				= Optional.empty();
+		private Optional<Boolean> 	perm					= Optional.empty();
+		private int 				yearsExperienceGtEq;
+		private int					yearsExperienceLtEq;
+		private Language.LEVEL 		dutch;
+		private Language.LEVEL 		english;
+		private Language.LEVEL 		french;
+		private Set<String>			skills					= new HashSet<>();
+		private String				firstname;
+		private String 				surname;
+		private String 				email;
+		private Boolean				flaggedAsUnavailable	= null;
 		
 		/**
 		* Sets the name of the attribute to order on
@@ -320,7 +320,7 @@ public class CandidateFilterOptions {
 		* @return Builder
 		*/
 		public CandidateFilterOptionsBuilder freelance(Boolean freelance) {
-			this.freelance = freelance == null ? false : freelance;
+			this.freelance = Optional.ofNullable(freelance); // == null ? false : freelance;
 			return this;
 		}
 		
@@ -330,7 +330,7 @@ public class CandidateFilterOptions {
 		* @return Builder
 		*/
 		public CandidateFilterOptionsBuilder perm(Boolean perm) {
-			this.perm = perm == null ? false : perm;
+			this.perm = Optional.ofNullable(perm); // == null ? false : perm;
 			return this;
 		}
 		
