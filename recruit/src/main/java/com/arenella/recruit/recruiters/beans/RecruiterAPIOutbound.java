@@ -5,6 +5,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.arenella.recruit.recruiters.beans.Recruiter.language;
+import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_status;
 
 /**
 * API Outbound representation of a Recruiter
@@ -17,9 +18,10 @@ public class RecruiterAPIOutbound {
 	private String 									surname;
 	private String 									email;
 	private String									companyName;
-	private boolean 								active			= true;
+	private boolean 								active					= true;
 	private language 								language;
-	private Set<RecruiterSubscriptionAPIOutbound> 	subscriptions	= new LinkedHashSet<>();
+	private Set<RecruiterSubscriptionAPIOutbound> 	subscriptions			= new LinkedHashSet<>();
+	private boolean 								hasActiveSubscription 	= false;
 	
 	/**
 	* Constuctor based upon a builder
@@ -37,6 +39,14 @@ public class RecruiterAPIOutbound {
 		
 		this.subscriptions.clear();
 		this.subscriptions.addAll(builder.subscriptions);
+		
+		this.hasActiveSubscription = this.subscriptions
+			.stream()
+			.filter(s -> s.isCurrentSubscription() 
+						&& s.getStatus() != subscription_status.DISABLED_PENDING_PAYMENT 
+						&& 	s.getStatus() != subscription_status.SUBSCRIPTION_ENDED 
+						&& 	s.getStatus() != subscription_status.AWAITING_ACTIVATION)
+			.count() > 0;
 		
 	}
 	
@@ -104,6 +114,17 @@ public class RecruiterAPIOutbound {
 	*/
 	public Set<RecruiterSubscriptionAPIOutbound> getSubscriptions() {
 		return this.subscriptions;
+	}
+	
+	/**
+	* Whether a recruiter has an active subscription. This will be false if 
+	* the in one of the two situations
+	* - Their subscription has been cancelled
+	* - Their subscription has ended and not been renewed
+	* @return
+	*/
+	public boolean getHasActiveSubscription() {
+		return this.hasActiveSubscription;
 	}
 
 	/**

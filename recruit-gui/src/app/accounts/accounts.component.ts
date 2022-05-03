@@ -281,6 +281,7 @@ export class AccountsComponent implements OnInit {
     	this.recruiterService.getRecruiters().subscribe( data => {
   
 				data.forEach((r:Recruiter) => {
+					console.log(JSON.stringify(r));
       				this.recruiters.push(r);
 					this.recruiterCount = this.recruiterCount +1;
 										

@@ -36,10 +36,16 @@ export class Recruiter {
 	*/
 	language:string 	= "";
 	
-		/**
+	/**
 	* Subscriptions associated with the Recruiter
 	*/
 	subscriptions:Array<Subscription> = new Array<Subscription>();
+	
+	/**
+	* Whether or not the Recruiter currently has an active subscription allowing them
+	* access to the sites features
+	*/
+	hasActiveSubscription:boolean = false;
 
 
 }

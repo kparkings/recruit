@@ -65,7 +65,11 @@ public class RecruiterController {
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@GetMapping(value="/recruiter")
 	public Set<RecruiterAPIOutbound> fetchRecruiters(){
-		return recruiterService.fetchRecruiters().stream().map(r -> RecruiterAPIOutbound.convertFromDomain(r)).collect(Collectors.toSet());
+		return recruiterService
+				.fetchRecruiters()
+				.stream()
+				.map(r -> RecruiterAPIOutbound.convertFromDomain(r))
+				.collect(Collectors.toSet());
 	}
 	
 	/**
