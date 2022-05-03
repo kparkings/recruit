@@ -2,7 +2,6 @@ import { Injectable }								from '@angular/core';
 import { HttpClient, HttpHeaders }  				from '@angular/common/http';
 import { Observable }                 				from 'rxjs';
 import { environment }								from './../environments/environment';
-import { CreateRecruiter } 							from './accounts/create-recruiter';
 import { RecruiterSignup }							from './recruiter-signup/signup-recruiter';
 import { SubscriptionAPIInbound }					from './recruiter-account/subscription-api-inbound';
 
@@ -22,26 +21,6 @@ export class RecruiterService {
 	};
 
 	headers = { 'content-type': 'application/json'};
-	  
-	/**
-	* Registers the Recruiter with the backend
-	*/
-	public registerRecruiter(username:string, firstName:string, surname:string, email:string, companyName:string, language:string):Observable<any>{
-		
-		const backendUrl:string = environment.backendUrl +'recruiter';
-		
-		let recruiter:CreateRecruiter = new CreateRecruiter();
-		
-		recruiter.userId 		= username;
-		recruiter.firstName 	= firstName;
-		recruiter.surname 		= surname;
-		recruiter.email 		= email;
-		recruiter.companyName 	= companyName;
-		recruiter.language 		= language;
-		
-		return this.httpClient.post<any>(backendUrl, JSON.stringify(recruiter), this.httpOptions);
-	
-	}
 	
   	/**
   	* Returns a list of available Recruiters 

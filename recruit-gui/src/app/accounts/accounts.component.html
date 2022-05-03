@@ -2,9 +2,6 @@
 
 	<ul class="nav nav-tabs">
 	  <li class="nav-item">
-	    <span class="nav-link tabNav" (click)="switchTab('recruitersCreate')">Create Recruiter</span>
-	  </li>
-	  <li class="nav-item">
 	    <span class="nav-link tabNav" (click)="switchTab('recruiters')">Recruiters</span>
 	  </li>
 	  <li class="nav-item tabNav">
@@ -18,62 +15,6 @@
 	  </li>
 	</ul>
 	
-	<!-- Recruiters-->
-	<div *ngIf="showRecruitersCreateTab">
-		<h3>Create Account</h3>
-		<form [formGroup]="createRecruiterAccountForm">
-			<table class="table candidate-table">
-				<thead>
-					<tr>
-						<th><label>Username</label></th>
-						<th><label>Name</label></th>
-						<th><label>Surname</label></th>
-						<th><label>Email</label></th>
-						<th><label>Company</label></th>
-						<th><label>Language</label></th>
-						<th><label>Actions</label></th>
-					</tr>
-				</thead>
-				<tr>
-					<td><input type="input" formControlName="proposedUserName"/></td>
-					<td><input type="input" formControlName="firstName"/></td>
-					<td><input type="input" formControlName="surname"/></td>
-					<td><input type="input" formControlName="email"/></td>
-					<td><input type="input" formControlName="companyName"/></td>
-					<td>
-						<select formControlName="language">
-							<option value="ENGLISH">English</option>
-							<option value="DUTCH">Dutch</option>
-							<option value="FRENCH">French</option>
-						</select>
-					</td>
-					
-					<td>
-						<button class="btn btn-secondary btn-action" (click)="createRecruiterAccount()">Create</button>
-					</td>
-				</tr>
-				<tr *ngIf="createAccountDetailsAvailable">
-					<td>
-						Username
-					</td>
-					<td>
-						{{recruiterUsername}}
-					</td>
-				</tr>
-				<tr *ngIf="createAccountDetailsAvailable">
-					<td>
-						Password
-					</td>
-					<td>
-						{{recruiterPassword}}
-					</td>
-				</tr>
-				
-			</table>
-		</form>
-		
-	</div>
-
 	<!-- Recruiters-->
 	<div *ngIf="showRecruitersTab">
 		<h3>Recruiters: Total: {{recruiterCount}}</h3>

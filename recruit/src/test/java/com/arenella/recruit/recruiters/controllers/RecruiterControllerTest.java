@@ -51,42 +51,6 @@ public class RecruiterControllerTest {
 	final boolean		active				= true;
 	
 	/**
-	* Tests successful creation of a Recruiter
-	* @throws Exception
-	*/
-	@Test
-	public void testAddRecruiter() throws Exception{
-
-		ArgumentCaptor<Recruiter> recruiterArg = ArgumentCaptor.forClass(Recruiter.class);
-		
-		RecruiterAPIInbound recruiter = RecruiterAPIInbound
-													.builder()
-														.companyName(companyName)
-														.email(email)
-														.firstName(firstname)
-														.language(lang)
-														.surname(surname)
-														.userId(userId)
-													.build();
-		
-		Mockito.doNothing().when(mockRecruiterService).addRecruiter(recruiterArg.capture());
-		
-		recruiterController.addRecruiter(recruiter);
-		
-		Mockito.verify(this.mockRecruiterService).addRecruiter(Mockito.any(Recruiter.class));
-		
-		Recruiter recruiterDomain = recruiterArg.getValue();
-		
-		assertEquals(companyName.toLowerCase().trim(), 	recruiterDomain.getCompanyName());
-		assertEquals(email.toLowerCase().trim(), 		recruiterDomain.getEmail());
-		assertEquals(firstname.toLowerCase().trim(), 	recruiterDomain.getFirstName());
-		assertEquals(lang, 								recruiterDomain.getLanguage());
-		assertEquals(surname.toLowerCase().trim(), 		recruiterDomain.getSurname());
-		assertEquals(userId.toLowerCase().trim(), 		recruiterDomain.getUserId());
-		
-	}
-	
-	/**
 	* Tests successful update of existing Recruiter
 	* @throws Exception
 	*/

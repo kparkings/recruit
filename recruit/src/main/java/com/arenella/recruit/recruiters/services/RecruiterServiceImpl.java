@@ -49,37 +49,6 @@ public class RecruiterServiceImpl implements RecruiterService{
 	
 	/**
 	* Refer to the RecruiterService for details
-	* @throws IllegalAccessException 
-	*/
-	@Override
-	public void addRecruiter(Recruiter recruiter) throws IllegalAccessException {
-		
-		if (this.recruiterDao.existsById(recruiter.getUserId())) {
-			throw new IllegalArgumentException("Recruiter already exists");
-		}
-		
-		TrialPeriodSubscription subscription = TrialPeriodSubscription
-				.builder()
-					.created(LocalDateTime.now())
-					.recruiterId(recruiter.getUserId())
-					.status(RecruiterSubscription.subscription_status.AWAITING_ACTIVATION)
-					.subscriptionId(UUID.randomUUID())
-					.currentSubscription(true)
-				.build();
-
-		RecruiterSubscriptionActionHandler actionHandler = this.recruiterSubscriptionFactory.getActionHandlerByType(subscription.getType());
-		
-		actionHandler.performAction(recruiter, subscription, subscription_action.ACTIVATE_SUBSCRIPTION, isAdmin());
-		
-		recruiter.addSubscription(subscription);
-		
-		recruiter.activateAccount();
-		
-		this.recruiterDao.save(RecruiterEntity.convertToEntity(recruiter, Optional.empty()));
-	}
-
-	/**
-	* Refer to the RecruiterService for details
 	*/
 	@Override
 	public void updateRecruiter(Recruiter recruiter) {

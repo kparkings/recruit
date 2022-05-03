@@ -38,20 +38,6 @@ public class RecruiterController {
 	/**
 	* Adds a new Recruiter
 	* @param recruiter
-	* @throws IllegalAccessException 
-	*/
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	@PostMapping(value="/recruiter")
-	public ResponseEntity<Void> addRecruiter(@RequestBody RecruiterAPIInbound recruiter) throws IllegalAccessException {
-		
-		recruiterService.addRecruiter(RecruiterAPIInbound.convertToDomin(recruiter));
-		
-		return ResponseEntity.status(HttpStatus.CREATED).build();
-	}
-	
-	/**
-	* Adds a new Recruiter
-	* @param recruiter
 	*/
 	@PostMapping(value="/public/recruiter")
 	public ResponseEntity<Void> requestRecruiterAccount(@RequestBody RecruiterAccountRequestAPIInbound recruiter) {

@@ -1,6 +1,5 @@
 import { Component, OnInit } 					from '@angular/core';
 import { FormGroup, FormControl }				from '@angular/forms';
-import { AccountsService }						from '../accounts.service';
 import { RecruiterService }						from '../recruiter.service';
 import { CandidateServiceService }				from '../candidate-service.service';
 import { Candidate }							from './candidate';
@@ -22,7 +21,6 @@ export class AccountsComponent implements OnInit {
 	@ViewChild('recruiterLoginDetails', { static: false }) private content:any;
 	
 	currentTab:string 												= "recruiters";
-	showRecruitersCreateTab:boolean									= false;
 	showCandidatesTab:boolean										= false;
 	showRecruitersTab:boolean										= true;
 	showFlaggedAsUnavailableTab:boolean								= false;
@@ -43,36 +41,19 @@ export class AccountsComponent implements OnInit {
 		email:		new FormControl('')
 	});
 	
-	constructor(private recruiterService:RecruiterService, private accountsService: AccountsService, public candidateService:CandidateServiceService, private modalService: NgbModal, private router: Router) {
+	constructor(private recruiterService:RecruiterService, public candidateService:CandidateServiceService, private modalService: NgbModal, private router: Router) {
 		this.fetchRecruiters();
 	 }
 
   	ngOnInit(): void {}
-
-	public createRecruiterAccountForm:FormGroup = new FormGroup({
-    	proposedUserName:new FormControl(''),
-		firstName:new FormControl(''),
-		surname:new FormControl(''), 
-		email:new FormControl(''), 
-		companyName:new FormControl(''), 
-		language:new FormControl(''),
-    });
 
 	public switchTab(tab:string){
 		
 		this.currentTab = tab;
 		
 		switch(tab){
-			case "recruitersCreate":{
-				this.showRecruitersCreateTab=true;
-				this.showCandidatesTab=false;
-				this.showRecruitersTab=false;
-				this.showFlaggedAsUnavailableTab=false;
-				this.showSubscriptionActionsTab=false;
-				break;
-			}
+			
 			case "candidates":{
-				this.showRecruitersCreateTab=false;
 				this.showCandidatesTab=true;
 				this.showRecruitersTab=false;
 				this.showFlaggedAsUnavailableTab=false;
@@ -80,7 +61,6 @@ export class AccountsComponent implements OnInit {
 				break;
 			}
 			case "recruiters":{
-				this.showRecruitersCreateTab=false;
 				this.showCandidatesTab=false;
 				this.showRecruitersTab=true;
 				this.showFlaggedAsUnavailableTab=false;
@@ -89,7 +69,6 @@ export class AccountsComponent implements OnInit {
 				break;
 			}
 			case "flaggedAsUnavailable":{
-				this.showRecruitersCreateTab=false;
 				this.showCandidatesTab=false;
 				this.showRecruitersTab=false;
 				this.showFlaggedAsUnavailableTab=true;
@@ -98,7 +77,6 @@ export class AccountsComponent implements OnInit {
 				break;
 			}
 			case "subscriptionActions":{
-				this.showRecruitersCreateTab=false;
 				this.showCandidatesTab=false;
 				this.showRecruitersTab=false;
 				this.showFlaggedAsUnavailableTab=false;
@@ -111,47 +89,6 @@ export class AccountsComponent implements OnInit {
 		
 	}
 	
-	/**
-	* Creates a new Recruiter account. The preferedUser name will be used 
-	* if available. If not a similar usename will be returned
-	*/
-	public createRecruiterAccount():void{
-		
-		this.recruiterUsername					= '';
-		this.recruiterPassword					= '';      		
-		this.createAccountDetailsAvailable 		= false;
-			
-		let proposedUsername:string = this.createRecruiterAccountForm.get('proposedUserName')!.value;
-		 
-		if (proposedUsername.length <= 4){
-			return;
-		}
-		
-		this.accountsService.addCandidate(proposedUsername).forEach(data => {
-
-			this.recruiterUsername					= data.username;
-			this.recruiterPassword					= data.password;      		
-			this.createAccountDetailsAvailable 		= true;
-			
-			let firstName:string 	= this.createRecruiterAccountForm.get('firstName')!.value;
-			let surname:string 		= this.createRecruiterAccountForm.get('surname')!.value;
-			let email:string 		= this.createRecruiterAccountForm.get('email')!.value;
-			let companyName:string 	= this.createRecruiterAccountForm.get('companyName')!.value;
-			let language:string 	= this.createRecruiterAccountForm.get('language')!.value;
-			
-			//TODO: Add validation so only valid Recruiters can be sent to backend
-			
-			this.recruiterService.registerRecruiter(this.recruiterUsername, firstName, surname, email, companyName, language).subscribe( data => {
-  				//TODO: update recruiters list      
-		
-				this.createRecruiterAccountForm.reset();
-		
-			}, err => {
-				console.log("Failed to add Recruiter " + err);
-	    	})
-			
-		});
-	}
 	
 	/**
 	* Builds a query parameter string with the selected filter options
