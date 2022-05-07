@@ -34,6 +34,16 @@ export class AccountsComponent implements OnInit {
 	recruiterCount:number											= 0;
 	activateRecruiterUserId:string									= '';
 	activateRecruiterUserPassword:string							= '';
+	expiredSubscriptionRecruiters:Array<Recruiter>					= Array<Recruiter>();
+	trialPeriodRecruiters:Array<Recruiter>							= Array<Recruiter>();
+	activePaidSubscription:Array<Recruiter>							= Array<Recruiter>();
+	firstGenActiveSubscription:Array<Recruiter>						= Array<Recruiter>();
+	
+	showExpiredSubscriptionRecruiters:boolean 						= true;
+	showTrialPeriodRecruiters:boolean								= true;
+	showActivePaidSubscription:boolean								= true;
+	showFirstGenActiveSubscription:boolean							= true;
+	
 	
 	public candidateFormGroup:FormGroup = new FormGroup({
 		firstname:	new FormControl(''),
@@ -281,8 +291,8 @@ export class AccountsComponent implements OnInit {
     	this.recruiterService.getRecruiters().subscribe( data => {
   
 				data.forEach((r:Recruiter) => {
-					console.log(JSON.stringify(r));
-      				this.recruiters.push(r);
+					this.recruiters.push(r);
+					this.addRecruiterToSubscriptionBucker(r);
 					this.recruiterCount = this.recruiterCount +1;
 										
 			});
@@ -300,6 +310,68 @@ export class AccountsComponent implements OnInit {
 			}
     	})
 	}	
+	
+	private addRecruiterToSubscriptionBucker(recruiter:Recruiter):void{
+		
+		let activeSubscription = recruiter.subscriptions.filter(s => s.currentSubscription == true)[0];
+		
+		if (!activeSubscription) {
+			this.expiredSubscriptionRecruiters.push(recruiter);
+			return;
+		}
+		
+		if (activeSubscription.type == 'FIRST_GEN') {
+			this.firstGenActiveSubscription.push(recruiter);
+			return;
+		}
+		
+		if (activeSubscription.type == 'TRIAL_PERIOD') {
+			this.trialPeriodRecruiters.push(recruiter);
+			return;
+		}
+		
+		if (	activeSubscription.status == 'AWAITING_ACTIVATION'
+			|| 	activeSubscription.status == 'ACTIVE_PENDING_PAYMENT'
+			|| 	activeSubscription.status == 'ACTIVE'){
+			this.activePaidSubscription.push(recruiter);
+			return;
+		}
+		
+		if (	activeSubscription.status == 'DISABLED_PENDING_PAYMENT'
+			|| 	activeSubscription.status == 'SUBSCRIPTION_ENDED'){
+			this.expiredSubscriptionRecruiters.push(recruiter);
+			return;
+		}
+		 
+	}
+	
+	/**
+	* Toggles whether recruiters with expired subscriptions are shown
+	*/
+	toggleShowExpiredSubscriptionRecruiters():void{
+		this.showExpiredSubscriptionRecruiters = !this.showExpiredSubscriptionRecruiters;
+	}
+	
+	/**
+	* Toggles whether recruiters with Trial subscriptions are shown
+	*/
+	toggleShowTrialPeriodRecruiters():void{
+		this.showTrialPeriodRecruiters = !this.showTrialPeriodRecruiters;
+	}
+	
+	/**
+	* Toggles whether recruiters with active paid subscriptions are shown
+	*/
+	toggleShowActivePaidSubscription():void{
+		this.showActivePaidSubscription = !this.showActivePaidSubscription;
+	}
+	
+	/**
+	* Toggles whether recruiters with First-gen subscriptions are shown
+	*/
+	toggleShowFirstGenActiveSubscription():void{
+		this.showFirstGenActiveSubscription = !this.showFirstGenActiveSubscription;
+	}							
 	
 	/**
 	* Retrieves candidates from the backend

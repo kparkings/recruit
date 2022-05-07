@@ -38,3 +38,21 @@ h3{
     font-size:12px;
     font-weight:bold;
 }
+
+.recruiter-firstgen{
+	color:brown;
+}
+
+.recruiter-active-subscription{
+	color:green;
+}
+
+.recruiter-expired-subscription{
+	color:red;
+}
+
+.recruiter-trial-subscription{
+	color:blue;
+}
+
+
