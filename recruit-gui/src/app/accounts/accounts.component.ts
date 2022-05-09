@@ -285,8 +285,12 @@ export class AccountsComponent implements OnInit {
 	*/
 	public fetchRecruiters(): void{
 		
-		this.recruiterCount 	= 0;
-		this.recruiters 		= new Array<Recruiter>();
+		this.recruiterCount 					= 0;
+		this.recruiters 						= new Array<Recruiter>();
+		this.expiredSubscriptionRecruiters		= new Array<Recruiter>();
+		this.trialPeriodRecruiters				= new Array<Recruiter>();
+		this.activePaidSubscription 			= new Array<Recruiter>();
+		this.firstGenActiveSubscription			= new Array<Recruiter>();
 		
     	this.recruiterService.getRecruiters().subscribe( data => {
   
@@ -311,6 +315,11 @@ export class AccountsComponent implements OnInit {
     	})
 	}	
 	
+	/**
+	* Examins the Recruiters current subscription and assigns them to 
+	* a corresponding bucket
+	* recruiter - Recruiter to be added to the appropriate Subscrition bucket
+	*/
 	private addRecruiterToSubscriptionBucker(recruiter:Recruiter):void{
 		
 		let activeSubscription = recruiter.subscriptions.filter(s => s.currentSubscription == true)[0];
@@ -371,7 +380,16 @@ export class AccountsComponent implements OnInit {
 	*/
 	toggleShowFirstGenActiveSubscription():void{
 		this.showFirstGenActiveSubscription = !this.showFirstGenActiveSubscription;
-	}							
+	}		
+	
+	public getTotalActiveRecruiters():number{
+		
+		if (this.recruiterCount == 0) {
+			return 0;
+		}
+		
+		return this.recruiterCount - this.expiredSubscriptionRecruiters.length
+	}					
 	
 	/**
 	* Retrieves candidates from the backend
