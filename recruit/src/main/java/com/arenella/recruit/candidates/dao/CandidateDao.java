@@ -1,5 +1,6 @@
 package com.arenella.recruit.candidates.dao;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -204,6 +205,12 @@ public interface CandidateDao extends CrudRepository<CandidateEntity, Long>, Jpa
 			if (this.filterOptions.getYearsExperienceLtEq() > 0 ) {
 				Expression<Integer> yearsExperienceExpression 	= root.get("yearsExperience");
 				predicates.add(criteriaBuilder.lessThanOrEqualTo(yearsExperienceExpression, this.filterOptions.getYearsExperienceLtEq()));
+			}
+			
+			if (this.filterOptions.getDaysSinceLastAvailabilityCheck().isPresent()) {
+				Expression<LocalDate>  daysSinceLastAvailabilityCheck	= root.get("lastAvailabilityCheck");
+				LocalDate cutOff = LocalDate.now().minusDays(this.filterOptions.getDaysSinceLastAvailabilityCheck().get());
+				predicates.add(criteriaBuilder.lessThanOrEqualTo(daysSinceLastAvailabilityCheck, cutOff));
 			}
 			
 			Expression<String> sortExpression 				= root.get("candidateId");

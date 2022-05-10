@@ -1,7 +1,6 @@
 package com.arenella.recruit.authentication.services;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -20,7 +19,6 @@ import com.arenella.recruit.authentication.beans.User;
 import com.arenella.recruit.authentication.beans.User.USER_ROLE;
 import com.arenella.recruit.authentication.dao.UserDao;
 import com.arenella.recruit.authentication.entity.UserEntity;
-import com.arenella.recruit.authentication.enums.AccountType;
 
 /**
 * Unit tests for the AccountServiceImpl class

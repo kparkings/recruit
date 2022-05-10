@@ -17,21 +17,22 @@ public class CandidateFilterOptions {
 
 	private String 				orderAttribute;
 	private RESULT_ORDER		order;
-	private Set<String> 		candidateIds			= new HashSet<>();
-	private Set<COUNTRY> 		countries				= new HashSet<>();
-	private Set<FUNCTION> 		functions				= new HashSet<>();
-	private Optional<Boolean> 	freelance				= Optional.empty();
-	private Optional<Boolean> 	perm					= Optional.empty();
+	private Set<String> 		candidateIds						= new HashSet<>();
+	private Set<COUNTRY> 		countries							= new HashSet<>();
+	private Set<FUNCTION> 		functions							= new HashSet<>();
+	private Optional<Boolean> 	freelance							= Optional.empty();
+	private Optional<Boolean> 	perm								= Optional.empty();
 	private int 				yearsExperienceGtEq;
 	private int					yearsExperienceLtEq;
 	private Language.LEVEL 		dutch;
 	private Language.LEVEL 		english;
 	private Language.LEVEL 		french;
-	private Set<String>			skills					= new HashSet<>();
+	private Set<String>			skills								= new HashSet<>();
 	private String				firstname;
 	private String 				surname;
 	private String 				email;
-	private Boolean				flaggedAsUnavailable 	= false;
+	private Boolean				flaggedAsUnavailable 				= false;
+	private Integer				daysSinceLastAvailabilityCheck;
 	
 	/**
 	* Builder for the  
@@ -56,6 +57,7 @@ public class CandidateFilterOptions {
 		this.surname						= builder.surname;
 		this.email							= builder.email;
 		this.flaggedAsUnavailable			= builder.flaggedAsUnavailable;
+		this.daysSinceLastAvailabilityCheck	= builder.daysSinceLastAvailabilityCheck;
 		
 	}
 	
@@ -222,6 +224,15 @@ public class CandidateFilterOptions {
 	}
 	
 	/**
+	* Returns whether to filter on Candidates that have not had their 
+	* availability checked since a certain number of days
+	* @return daysSinceLastAvailabilityCheck to filter on
+	*/
+	public Optional<Integer> getDaysSinceLastAvailabilityCheck(){
+		return Optional.ofNullable(this.daysSinceLastAvailabilityCheck);
+	}
+	
+	/**
 	* Returns a Builder for the CandidateFilterOptions class
 	* @return
 	*/
@@ -237,21 +248,22 @@ public class CandidateFilterOptions {
 		
 		private String 				orderAttribute;
 		private RESULT_ORDER		order;
-		private Set<String> 		candidateIds			= new HashSet<>();
-		private Set<COUNTRY> 		countries				= new HashSet<>();
-		private Set<FUNCTION> 		functions				= new HashSet<>();
-		private Optional<Boolean> 	freelance				= Optional.empty();
-		private Optional<Boolean> 	perm					= Optional.empty();
+		private Set<String> 		candidateIds						= new HashSet<>();
+		private Set<COUNTRY> 		countries							= new HashSet<>();
+		private Set<FUNCTION> 		functions							= new HashSet<>();
+		private Optional<Boolean> 	freelance							= Optional.empty();
+		private Optional<Boolean> 	perm								= Optional.empty();
 		private int 				yearsExperienceGtEq;
 		private int					yearsExperienceLtEq;
 		private Language.LEVEL 		dutch;
 		private Language.LEVEL 		english;
 		private Language.LEVEL 		french;
-		private Set<String>			skills					= new HashSet<>();
+		private Set<String>			skills								= new HashSet<>();
 		private String				firstname;
 		private String 				surname;
 		private String 				email;
-		private Boolean				flaggedAsUnavailable	= null;
+		private Boolean				flaggedAsUnavailable				= null;
+		private Integer				daysSinceLastAvailabilityCheck; 
 		
 		/**
 		* Sets the name of the attribute to order on
@@ -444,6 +456,17 @@ public class CandidateFilterOptions {
 		*/
 		public CandidateFilterOptionsBuilder flaggedAsUnavailable(Boolean flaggedAsUnavailable) {
 			this.flaggedAsUnavailable = flaggedAsUnavailable;
+			return this;
+		}
+		
+		/**
+		* Sets whether to filter on Candidates that have not had their availability checked since
+		* a given number of days
+		* @param daysSinceLastAvailabilityCheck - Days since Candidates availability was last checked
+		* @return Builder
+		*/
+		public CandidateFilterOptionsBuilder daysSinceLastAvailabilityCheck(Integer daysSinceLastAvailabilityCheck) {
+			this.daysSinceLastAvailabilityCheck = daysSinceLastAvailabilityCheck;
 			return this;
 		}
 		
