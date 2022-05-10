@@ -207,6 +207,41 @@ public class CandidateServiceImplTest {
 	}
 	
 	/**
+	* Tests Exception thrown if Candidate does not exist
+	* @throws Exception
+	*/
+	@Test
+	public void testUpdateCandidatesLastAvailabilityCheck_unknownCandidate() throws Exception{
+		
+		Mockito.when(this.mockCandidateDao.findById(Mockito.anyLong())).thenReturn(Optional.empty());
+		
+		Assertions.assertThrows(IllegalArgumentException.class, () -> {
+			this.service.updateCandidatesLastAvailabilityCheck(4L);
+		});
+		
+	}
+	
+	/**
+	* Test setting of flaggedAsUnavailable attribute
+	* @throws Exception
+	*/
+	@Test
+	public void testUpdateCandidatesLastAvailabilityCheck() throws Exception{
+		
+		ArgumentCaptor<CandidateEntity> captor = ArgumentCaptor.forClass(CandidateEntity.class);
+		CandidateEntity candidateEntity = CandidateEntity.builder().build();
+		
+		Mockito.when(this.mockCandidateDao.findById(Mockito.anyLong())).thenReturn(Optional.of(candidateEntity));
+		Mockito.when(this.mockCandidateDao.save(captor.capture())).thenReturn(null);
+		
+		this.service.updateCandidatesLastAvailabilityCheck(4L);
+		
+		Mockito.verify(this.mockCandidateDao).save(candidateEntity);
+		
+	}
+
+	
+	/**
 	* Tests Exception is thrown if an attempt is made to persist 
 	* a PendingCandidate without specifying an Id
 	* @throws Exception

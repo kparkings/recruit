@@ -296,6 +296,13 @@ public class CandidateEntity {
 	}
 	
 	/**
+	* Updates the last time the Candidate had their availability checked
+	*/
+	public void setCandidateAvailabilityChecked() {
+		this.lastAvailabilityCheck = LocalDate.now();
+	}
+	
+	/**
 	* Returns a Builder for the CandidateEntity class
 	* @return Builder for the CandidateEntity class
 	*/

@@ -3,6 +3,7 @@ import { FormGroup }                              	from '@angular/forms';
 import { HttpClient, HttpResponse, HttpHeaders }  	from '@angular/common/http';
 import { Observable, throwError }                 	from 'rxjs';
 import { NewCandidate }                           	from './new-candidate/new-candidate';
+import { Candidate }                           		from './candidate';
 import { NewPendingCandidate }                      from './create-candidate/new-pending-candidate';
 import { Language}                                	from './new-candidate/language';
 import { CandidateFunction }                      	from './candidate-function';
@@ -213,6 +214,30 @@ export class CandidateServiceService {
 	
 		return this.httpClient.put<any>(backendUrl, "{}", this.httpOptions);
 	
+	}
+	
+	/**
+	* Returns Candidates that are due to have their availability checked
+	*/
+	public fetchCandidatesDueForAvailabilityCheck(): Observable<any>{
+		
+		const backendUrl:string = environment.backendUrl +'candidate?daysSinceLastAvailabilityCheck=14&orderAttribute=candidateId&order=desc&page=0&size=1000';
+  
+    	return this.httpClient.get<any>(backendUrl, this.httpOptions);
+
+	}
+	
+	
+	/**
+	* Sends a request to mark the Candidate as having been checked and found to still be 
+	* available
+	*/
+	public markCandidateAsAvailable(candidateId:string): Observable<any> {
+		
+		const backendUrl:string = environment.backendUrl +'candidate/'+candidateId+'/updateCandidatesLastAvailabilityCheck';
+	
+		return this.httpClient.put<any>(backendUrl, "{}", this.httpOptions);
+		
 	}
 	
 }

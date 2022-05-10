@@ -141,6 +141,25 @@ public class CandidateControllerTest {
 	}
 	
 	/**
+	* Happy path test for updateCandidatesLastAvailabilityCheck
+	* @throws Exception
+	*/
+	@Test
+	public void testUpdateCandidatesLastAvailabilityCheck() throws Exception {
+		
+		final long		candidateId	 			= 100L;
+		
+		Mockito.doNothing().when(this.mockCandidateService).updateCandidatesLastAvailabilityCheck(candidateId);
+		
+		ResponseEntity<Void> response = controller.updateCandidatesLastAvailabilityCheck("{}",candidateId);
+		
+		Mockito.verify(this.mockCandidateService).updateCandidatesLastAvailabilityCheck(candidateId);
+		
+		assertEquals(HttpStatus.OK, response.getStatusCode());
+		
+	}
+	
+	/**
 	* Tests successful addition of a pending candidate 
 	* @throws Exception
 	*/

@@ -24,8 +24,9 @@ export class AccountsComponent implements OnInit {
 	showCandidatesTab:boolean										= false;
 	showRecruitersTab:boolean										= true;
 	showFlaggedAsUnavailableTab:boolean								= false;
-	createAccountDetailsAvailable:boolean 							= false;
 	showSubscriptionActionsTab:boolean								= false;
+	showAvailabilityCheckTab:boolean								= false;
+	createAccountDetailsAvailable:boolean 							= false;
 	recruiterUsername:string										= '';
 	recruiterPassword:string										= '';
 	candidates:Array<Candidate>										= new Array<Candidate>();
@@ -38,6 +39,7 @@ export class AccountsComponent implements OnInit {
 	trialPeriodRecruiters:Array<Recruiter>							= Array<Recruiter>();
 	activePaidSubscription:Array<Recruiter>							= Array<Recruiter>();
 	firstGenActiveSubscription:Array<Recruiter>						= Array<Recruiter>();
+	candidatesToCheckForAvailability:Array<Candidate>				= Array<Candidate>();
 	
 	showExpiredSubscriptionRecruiters:boolean 						= true;
 	showTrialPeriodRecruiters:boolean								= true;
@@ -64,41 +66,51 @@ export class AccountsComponent implements OnInit {
 		switch(tab){
 			
 			case "candidates":{
-				this.showCandidatesTab=true;
-				this.showRecruitersTab=false;
-				this.showFlaggedAsUnavailableTab=false;
-				this.showSubscriptionActionsTab=false;
+				this.showCandidatesTab				= true;
+				this.showRecruitersTab				= false;
+				this.showFlaggedAsUnavailableTab	= false;
+				this.showSubscriptionActionsTab		= false;
+				this.showAvailabilityCheckTab		= false;
 				break;
 			}
 			case "recruiters":{
-				this.showCandidatesTab=false;
-				this.showRecruitersTab=true;
-				this.showFlaggedAsUnavailableTab=false;
-				this.showSubscriptionActionsTab=false;
+				this.showCandidatesTab				= false;
+				this.showRecruitersTab				= true;
+				this.showFlaggedAsUnavailableTab	= false;
+				this.showSubscriptionActionsTab		= false;
+				this.showAvailabilityCheckTab		= false;
 				this.fetchRecruiters();
 				break;
 			}
 			case "flaggedAsUnavailable":{
-				this.showCandidatesTab=false;
-				this.showRecruitersTab=false;
-				this.showFlaggedAsUnavailableTab=true;
-				this.showSubscriptionActionsTab=false;
+				this.showCandidatesTab				= false;
+				this.showRecruitersTab				= false;
+				this.showFlaggedAsUnavailableTab	= true;
+				this.showSubscriptionActionsTab		= false;
+				this.showAvailabilityCheckTab		= false;
 				this.fetchFlaggedAsUnavailableCandidates();
 				break;
 			}
 			case "subscriptionActions":{
-				this.showCandidatesTab=false;
-				this.showRecruitersTab=false;
-				this.showFlaggedAsUnavailableTab=false;
-				this.showSubscriptionActionsTab=true;
+				this.showCandidatesTab				= false;
+				this.showRecruitersTab				= false;
+				this.showFlaggedAsUnavailableTab	= false;
+				this.showSubscriptionActionsTab		= true;
+				this.showAvailabilityCheckTab		= false;
 				this.fetchRecruiters();
 				break;
 			}
-			
+			case "availabilityChecks":{
+				this.showCandidatesTab				= false;
+				this.showRecruitersTab				= false;
+				this.showFlaggedAsUnavailableTab	= false;
+				this.showSubscriptionActionsTab		= false;
+				this.showAvailabilityCheckTab		= true;
+				this.fetchCandidatesDueForAvailabilityCheck();
+				break;
+			}			
 		}
-		
 	}
-	
 	
 	/**
 	* Builds a query parameter string with the selected filter options
@@ -426,6 +438,16 @@ export class AccountsComponent implements OnInit {
 	}	
 	
 	/**
+	* Disables flagged As Unavailable Candidate
+	*/
+	disableNoLongerAvailableFlaggedAsUnavailableCandidate(candidateId:string):void{
+		this.candidateService.disableCandidate(candidateId).subscribe(data => {
+			this.fetchCandidatesDueForAvailabilityCheck();	
+		});
+		
+	}
+	
+	/**
 	* Removed the flag from flagged As Unavailable Candidate
 	*/
 	removeFlaggedAsUnavailableFlag(candidateId:string):void{
@@ -441,6 +463,36 @@ export class AccountsComponent implements OnInit {
 	enableCandidate(candidateId:string):void{
 		this.candidateService.enableCandidate(candidateId);
 		this.fetchCandidates();
+	}
+	
+	/**
+	* Retrieves all the candidates that are due to have their availability checked
+	*/
+	fetchCandidatesDueForAvailabilityCheck():void{
+		
+		this.candidatesToCheckForAvailability = new Array<Candidate>();
+		
+		 this.candidateService.fetchCandidatesDueForAvailabilityCheck().subscribe(data => {
+		
+			console.log(JSON.stringify(data));
+			
+			this.candidatesToCheckForAvailability = <Array<Candidate>> data.content;
+			
+		}, 
+		err => {
+			console.log(JSON.stringify(err));		
+		});
+	}
+	
+	/**
+	* Marks a Candidate as having their availability checked and still 
+	* being available 
+	*/
+	markCandidateAsAvailable(candidateId:string):void{
+		this.candidateService.markCandidateAsAvailable(candidateId).subscribe(data => {
+			this.fetchCandidatesDueForAvailabilityCheck();	
+		});
+		
 	}
 	
 	/**

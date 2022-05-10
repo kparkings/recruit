@@ -85,48 +85,10 @@ export class Candidate {
 	* How accurate the Candidates Skills are in relation to the Listings Skills requirements
 	*/
 	accuracySkills:string 					= 'poor';
-				
-	//getDutch():string{
-
-	//	const language:Language = this.languages.filter(l => l.language === 'DUTCH')[0];
-		
-	//	if (language) {
-	//		return language.level;
-	//	}
-
-	//	return '-';
-		
-	//}
-
-	//getEnglish():string{
-		
-	//	const language:Language = this.languages.filter(l => l.language === 'ENGLISH')[0];
-		
-	//	if (language) {
-	//		return language.level;
-	//	}
-
-	//	return '-';
-	//}
-
-	//getFrench():string{
-	//			const language:Language = this.languages.filter(l => l.language === 'FRENCH')[0];
-		
-	//	if (language) {
-	//		return language.level;
-	//	}
-
-	//	return '-';
-	//}
-
-	//getSkills():string{
-		
-	//	let skillString = this.skills.join(', ');
-		
-	//	if (skillString.indexOf(', ') != -1) {
-	//		skillString = skillString.replace(', ', '');
-	//	}
-		
-	//	return skillString;
-	//}
+	
+	/**
+	* Whether the Candidates is aviable for work
+	*/
+	available:boolean						= true;
+	
 }

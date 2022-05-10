@@ -74,4 +74,10 @@ public interface CandidateService {
 	*/
 	public Set<PendingCandidate> getPendingCandidates();
 	
+	/**
+	* Updates a when candidates availability was last checked 
+	* @param canidateId - Id of the Candidate to update
+	*/
+	public void updateCandidatesLastAvailabilityCheck(long candidateId);
+	
 }

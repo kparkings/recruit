@@ -80,6 +80,20 @@ public class CandidateController {
 	}
 	
 	/**
+	* Endpoint marks a Candidate as being available. In this case we 
+	* can update the data that their availability next needs to be checked
+	* @return ResponseEntity
+	*/
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@PutMapping(path="candidate/{candidateId}/updateCandidatesLastAvailabilityCheck")
+	public ResponseEntity<Void> updateCandidatesLastAvailabilityCheck(@RequestBody String fakeBody, @PathVariable("candidateId") long candidateId){
+		
+			this.candidateService.updateCandidatesLastAvailabilityCheck(candidateId);
+		
+			return ResponseEntity.ok().build();
+	}
+	
+	/**
 	* Fetches Candidates
 	* @param orderAttribute			- Optional attribute to order the results on
 	* @param order					- Optional direction of ordering
@@ -139,6 +153,7 @@ public class CandidateController {
 																		.firstname(firstname)
 																		.surname(surname)
 																		.email(email)
+																		.daysSinceLastAvailabilityCheck(daysSinceLastAvailabilityCheck)
 																	.build();
 		
 		if (useSuggestions != null && useSuggestions) {

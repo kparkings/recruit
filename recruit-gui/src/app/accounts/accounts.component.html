@@ -8,6 +8,9 @@
 	    <span class="nav-link" (click)="switchTab('candidates')">Candidates</span>
 	  </li>
 	  <li class="nav-item tabNav">
+	    <span class="nav-link" (click)="switchTab('availabilityChecks')">Availability Checks</span>
+	  </li>
+	  <li class="nav-item tabNav">
 	    <span class="nav-link" (click)="switchTab('flaggedAsUnavailable')">Flagged as unavailable</span>
 	  </li>
 	   <li class="nav-item tabNav">
@@ -112,6 +115,41 @@
 			</table>	
 		</div>
 	</div>
+	
+	<!--  -->
+	<div *ngIf="showAvailabilityCheckTab">
+		<table class="table candidate-table">
+			<thead>
+	      		<tr>
+	      			<th class="bg-tab-hdr">CandidateId</th>
+	      			<th class="bg-tab-hdr">Candidate Name</th>
+	      			<th class="bg-tab-hdr">Location</th>
+	      			<th class="bg-tab-hdr">Function</th>
+	                <th class="bg-tab-hdr">Actions</th>
+	             </tr>
+	      	</thead>
+	      	<tbody>
+	      		<tr *ngFor="let candidate of candidatesToCheckForAvailability">
+	      			<td>
+	      				{{candidate.candidateId}}
+	      			</td>
+	      			<td>
+	      				{{candidate.firstname}} {{candidate.surname}}
+	      			</td>
+	      			<td>
+	      				{{candidate.country}} {{candidate.city}}
+	      			</td>
+	      			<td>
+	      				{{candidate.roleSought}}
+	      			</td>
+	      			<td>
+	      				<button	class="control-spacing btn btn-secondary btn-action" (click)="markCandidateAsAvailable(candidate.candidateId)">Available</button>
+	      				<button	class="control-spacing btn btn-secondary btn-action" (click)="disableNoLongerAvailableFlaggedAsUnavailableCandidate(candidate.candidateId)">Disable</button>
+	      			</td>
+	      		</tr>
+	      	</tbody>
+		</table>
+	</div>
 		
 	<!-- Candidates-->
 	<div *ngIf="showCandidatesTab">
@@ -164,6 +202,7 @@
 	      		</tbody>
 			</table>
 		</div>
+		
 	</div>
 	
 	<!-- Flagged as Unavailable-->

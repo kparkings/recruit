@@ -25,6 +25,21 @@ export class Candidate {
 	*/
 	email: 				string 			= '';
 	
+		/**
+	* Country where the candidate is located 
+	*/
+	country: 			string 			= '';
+	
+	/**
+	* City where the Candidate is located
+	*/
+	city: 				string 			= '';
+	
+	/**
+	* Role sought by Candidates
+	*/
+	roleSought: 		string 			= '';
+	
 	/**
 	* Whether the Candidates is aviable for work
 	*/

@@ -63,11 +63,8 @@ public class CandidateServiceImpl implements CandidateService{
 		
 		CandidateEntity entity = CandidateEntity.convertToEntity(candidate);
 		
-		try {
 		candidateDao.save(entity);
-		}catch(Exception e) {
-			e.printStackTrace();
-		}
+		
 	}
 
 	/**
@@ -272,6 +269,20 @@ public class CandidateServiceImpl implements CandidateService{
 			
 		}
 
+	}
+
+	/**
+	* Refer to the CandidateService for details 
+	*/
+	@Override
+	public void updateCandidatesLastAvailabilityCheck(long candidateId) {
+		
+		CandidateEntity candidate = this.candidateDao.findById(candidateId).orElseThrow(() -> new IllegalArgumentException("Unknown candidate Id " + candidateId));
+		
+		candidate.setCandidateAvailabilityChecked();
+		
+		this.candidateDao.save(candidate);
+		
 	}
 	
 }
