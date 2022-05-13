@@ -1,25 +1,23 @@
 <div>
     <div class="centerdiv">
-        <div class="center-table">
-        	<form [formGroup]="formBean">
-				<div class="wholepagerow">
-					<table>
-						<tr>
-							<td><span style="padding-right:20px;">Username</span></td>
-							<td><input class="inpt-tab-std" type="text" formControlName="username"/></td>
-						</tr>
-						<tr>
-							<td>Password</td>
-							<td><input class="inpt-tab-std" style="margin-right:20px;" type="password" formControlName="password"/></td>
-						</tr>
-						<tr>
-							<td>&nbsp;</td>
-							<td><button class="loginbutton" (click)="login()">Login</button></td>
-						</tr>
-					</table>
-				</div>
-			</form>
-		</div>
+       	<form [formGroup]="formBean">
+			<div class="wholepagerow">
+				<table>
+					<tr>
+						<td><span style="padding-right:20px;">Username</span></td>
+						<td><input class="inpt-tab-std" type="text" formControlName="username"/></td>
+					</tr>
+					<tr>
+						<td>Password</td>
+						<td><input class="inpt-tab-std" type="password" formControlName="password"/></td>
+					</tr>
+					<tr>
+						<td>&nbsp;</td>
+						<td><button class="loginbutton" (click)="login()">Login</button></td>
+					</tr>
+				</table>
+			</div>
+		</form>
 	</div>
 </div>
 

@@ -30,12 +30,18 @@ body{
 .candidate-signup{
 	background:green;
 	float:right;
+	margin-top:3px;
+	width:190px;
+	text-align:center;
 	margin-right:10px;
 }
 
 .recruiter-signup{
 	background:orange;
 	float:right;
+	margin-top:3px;
+	width:190px;
+	text-align:center;
 	margin-right:10px;
 }
 

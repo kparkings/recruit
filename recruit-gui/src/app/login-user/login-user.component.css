@@ -62,7 +62,7 @@ input{
      cursor:pointer;
      font-size:20px;
      font-weight: bold;
-    	text-align: right;  
+    text-align: right;  
 }
 
 .wholepagerow {
@@ -72,13 +72,8 @@ input{
 
 .centerdiv{
     margin: 0 auto;
-    padding-left:10px;
+    padding-left:20px;
     padding-right:10px;
-    width:90%;
-}
-
-.center-table{
-    margin:0 auto;
     margin-top:50px;
 }
 
@@ -90,5 +85,5 @@ input{
 }
 
 .inpt-tab-std{
-	max-width:250px;
+	max-width:220px;
 }
