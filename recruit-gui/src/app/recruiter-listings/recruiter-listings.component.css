@@ -1,6 +1,6 @@
 .center {
   margin: auto;
-  width: 50%;
+  width: 90%;
   padding: 10px;
 }
 
@@ -20,14 +20,14 @@
  }
  
  .listing-step-content{
- 	margin-top:50px;
- 	margin-left:50px;
+ 	width:90%;
  }
  
  .btn-listing{
  	margin-top:20px;
 	margin-right:10px;
-    min-width:100px;
+	margin-bottom:20px;
+    min-width:85px;
 }
 
 .a-table-cell{
@@ -149,6 +149,7 @@
 .listing-table{
 	margin-top:20px;
 	vertical-align:middle;
+	width:100%;
 }
 
 .listing-tab-col{
@@ -175,14 +176,6 @@
 
 .action-buttons{
 	text-align:right;
-	margin-right:40px;
-}
-
-.btnRight{
-	margin-top:20px;
-    margin-bottom:20px;
-    margin-right:20px;
-    min-width:100px;
 }
 
 .pagination-options{
@@ -290,4 +283,16 @@ a {
 .perception-poor{
 	background:red;
 	width:25%;
+}
+
+.suggestion-buttons{
+	margin-top:20px;
+	padding-top:5px;
+	border-top:1px solid black;
+	width:100%;
+	text-align:right;
+}
+
+.suggestion-button{
+	margin-right:5px;
 }

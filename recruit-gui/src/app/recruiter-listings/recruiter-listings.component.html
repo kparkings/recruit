@@ -26,7 +26,7 @@
 					</div>
 				</div>
 			
-				<div>
+				<div class="listings">
       
 					<table class="table listing-table">
 						<thead>
@@ -35,8 +35,6 @@
 				      			<th class="bg-tab-hdr"></th>
 				      			<th class="bg-tab-hdr">Created</th>
 								<th class="bg-tab-hdr">Title</th>
-				                <th class="bg-tab-hdr">Type</th>
-				                <th class="bg-tab-hdr">Country</th>
 				               	<th class="bg-tab-hdr">Views</th>
 				      		</tr>
 				      	</thead>
@@ -50,8 +48,6 @@
 				      			</td>
 				      			<td (click)="showListingDetails(listing)" class="listing-tab-col">{{listing.created | date:'yyyy-MM-dd hh:mm'}}</td>
 				      			<td (click)="showListingDetails(listing)" class="listing-tab-col">{{listing.title}}</td>
-				                <td (click)="showListingDetails(listing)" class="listing-tab-col">{{getContractType(listing.type)}}</td>
-				                <td (click)="showListingDetails(listing)" class="listing-tab-col">{{getCountryCode(listing.country)}}</td>
 				                <td (click)="showListingDetails(listing)" class="listing-tab-col">{{listing.views}}</td>
 				      		</tr>	
 				      	</tbody>
@@ -313,7 +309,7 @@
 	
 	<div class="modal-body-recommendations" *ngIf="!showSuggestedCandidate">
 		<div *ngFor="let candidate of candidates" class="recommendation" (click)="showSuggestedCandidateView(candidate)">
-			<span style="color:black;">C{{candidate.candidateId}}</span>
+			<span style="color:black;">{{candidate.firstname}} {{candidate.surname}}</span>
 		</div>
 
 	</div>   
@@ -354,15 +350,11 @@
 			</table>
 		</div>
 	
-	    <div style="margin-right:20px;margin-top:10px;border-top:1px solid black;padding:10px;width:100%;text-align:right;">
-	    
-	    	<button *ngIf="!suggestedCandidate.flaggedAsUnavailable" class="btn btn-secondary btn-action" (click)="markCandidateAsUnavailable()" style="margin-right:10px;" title="If the candidtae is no longer available use this button to let us know and we will remove them form the system.">Flag as unavailable</button>
-	    	<button *ngIf="suggestedCandidate.flaggedAsUnavailable" disabled class="btn btn-secondary btn-action" style="margin-right:10px;background:red;">Flaged as unavailable</button>
-	    	
+	    <div class="suggestion-buttons">
 	    	<a class="currliculum-link" href="{{getCurriculumDownloadUrl(suggestedCandidate.candidateId)}}" >
-	    		<button class="btn btn-secondary btn-action" style="margin-right:10px;" >Download CV</button>
+	    		<button class="btn btn-secondary btn-action suggestion-button">Download CV</button>
 	    	</a>
-	    	<button class="btn btn-secondary btn-action" (click)="showSuggestedCandidateListView()">back</button>
+	    	<button class="btn btn-secondary btn-action suggestion-button" (click)="showSuggestedCandidateListView()">back</button>
 	    </div>
 	</div>    
 </ng-template> 

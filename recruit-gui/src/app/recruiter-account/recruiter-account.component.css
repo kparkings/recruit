@@ -2,18 +2,17 @@
 	font-weight: bold;
 	background: #6c757d;
 	color:white;
-	width:50%;
+	max-width:100px;
 }
 
 .table-cell{
 	background:#E8E8E8;
-	width:50%;
 }
 
 .center {
   margin: auto;
-  width: 50%;
-  padding: 10px;
+  width: 95%;
+  padding: 5%;
 }
 
 .container-div{
