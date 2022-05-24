@@ -1,5 +1,6 @@
 package com.arenella.recruit.listings.controllers;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.arenella.recruit.listings.beans.Listing.listing_type;
 //import com.arenella.recruit.candidates.controllers.CandidateAPIOutbound;
 import com.arenella.recruit.listings.beans.ListingFilter;
 import com.arenella.recruit.listings.beans.ListingFilter.ListingFilterBuilder;
@@ -100,9 +102,14 @@ public class ListingController {
 	* @return All available listings
 	*/
 	@GetMapping(value="/listing/public/")
-	public Page<ListingAPIOutboundPublic> fetchListingsPubilc(Pageable pageable){
+	public Page<ListingAPIOutboundPublic> fetchListingsPubilc(	@RequestParam(required = false) listing_type listingType, 
+																Pageable pageable){
 		
 		ListingFilterBuilder filterBuilder = ListingFilter.builder();
+		
+		if (Optional.ofNullable(listingType).isPresent()) {
+			filterBuilder.type(listingType);
+		}
 		
 		return service.fetchListings(filterBuilder.build(), pageable).map(listing -> ListingAPIOutboundPublic.convertFromListing(listing));	
 		

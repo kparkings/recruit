@@ -16,6 +16,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.CrudRepository;
 
+import com.arenella.recruit.listings.beans.Listing.listing_type;
 import com.arenella.recruit.listings.beans.ListingFilter;
 
 /**
@@ -82,7 +83,15 @@ public interface ListingDao extends CrudRepository<ListingEntity, UUID>, JpaSpec
 			*/
 			if (this.filterOptions.getType().isPresent()) {
 				Expression<String> typeExpression = root.get("type");
-				predicates.add(criteriaBuilder.equal(typeExpression, this.filterOptions.getType().get()));
+				
+				if (this.filterOptions.getType().get() == listing_type.CONTRACT_ROLE) {
+					predicates.add(criteriaBuilder.notEqual(typeExpression, listing_type.PERM_ROLE));
+				}
+				
+				if (this.filterOptions.getType().get() == listing_type.PERM_ROLE) {
+					predicates.add(criteriaBuilder.notEqual(typeExpression, listing_type.CONTRACT_ROLE));
+				}
+			
 			}
 			
 			/**

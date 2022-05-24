@@ -121,9 +121,9 @@ export class ListingService {
 	/**
 	* Returns the listings owned by any recruiter
 	*/	
-	public fetchAllListings(sortColumn:string, order:string, pageNum:number, pageSize:number):Observable<any>{
+	public fetchAllListings(sortColumn:string, order:string, pageNum:number, pageSize:number, filterString:string):Observable<any>{
 		
-		const backendUrl:string = environment.backendUrl +'listing/public/?orderAttribute='+  sortColumn +  '&order=' + order + '&page=' + pageNum + '&size=' + pageSize;
+		const backendUrl:string = environment.backendUrl +'listing/public/?orderAttribute='+  sortColumn +  '&order=' + order + '&page=' + pageNum + '&size=' + pageSize + filterString;
 		
 		return this.httpClient.get<any>(backendUrl, this.httpOptions);
 	}

@@ -34,6 +34,7 @@ export class ListingComponent implements OnInit {
 
 	public listings:Array<Listing>				= new Array<Listing>();
 	public selectedListing:Listing				= new Listing();
+	public contractTypeFilter					= '';
 
 	/**
 	* Switches to Add Listing view
@@ -58,12 +59,31 @@ export class ListingComponent implements OnInit {
 	}
 	
 	/**
+	* Generated the filter sring to filter results by. Can be empty
+	* String if no filters required
+	*/
+	private generateFilterString(): string{
+		
+		let filterString: string = "";
+		
+		if (this.contractTypeFilter != "") {
+			filterString = filterString + '&listingType=' + this.contractTypeFilter;
+		}
+		
+		return filterString;
+	}
+	
+	/**
 	* Retrieves listings belonging to the Recruiter
 	*/
 	public fetchListings(id:string):void{
 	
+		this.listings			= new Array<Listing>();
+		this.selectedListing	= new Listing();
+		
+	
 		this.listingService
-			.fetchAllListings('created',"desc", this.currentPage, this.pageSize)
+			.fetchAllListings('created',"desc", this.currentPage, this.pageSize, this.generateFilterString())
 				.subscribe(data => {
 					this.totalPages = data.totalPages;
 					this.listings 	= data.content;
@@ -229,5 +249,44 @@ export class ListingComponent implements OnInit {
 		}
 
   	}	
+
+	/**
+	* Sets which contract type filters have been selected
+	*/
+	public updateContractTypeFilter(contractType:string){
+		
+		switch(contractType){
+			case "Contract": {
+				this.currentPage		= 0;
+				this.contractTypeFilter = "CONTRACT_ROLE"
+				this.fetchListings("");
+				return;
+			}
+			case "Perm": {
+				this.currentPage		= 0;
+				this.contractTypeFilter = "PERM_ROLE"
+				this.fetchListings("");
+				return;
+			}
+			default: {
+				this.currentPage		= 0;
+				this.contractTypeFilter = ""
+				this.fetchListings("");
+				return;
+			}
+		}	
+	}
+	
+	/**
+	* Returns the appropriate css class to indicate if the filter 
+	* is selected or not
+	*/
+	public getFilterTypeClass(contractType: string):string {
+		if (this.contractTypeFilter === contractType) {
+			return "active-contract-type-filter";
+		}
+		
+		return "inactive-contract-type-filter";
+	}
 
 }

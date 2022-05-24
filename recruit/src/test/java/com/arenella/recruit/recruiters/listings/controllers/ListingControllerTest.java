@@ -143,7 +143,7 @@ public class ListingControllerTest {
 		
 		Mockito.when(this.mockListingService.fetchListings(filterArgCapt.capture(), Mockito.any())).thenReturn(Page.empty());
 		
-		Page<ListingAPIOutboundPublic> response = controller.fetchListingsPubilc(mockPageable);
+		Page<ListingAPIOutboundPublic> response = controller.fetchListingsPubilc(null, mockPageable);
 	
 		assertTrue(response instanceof Page);
 		

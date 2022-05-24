@@ -125,13 +125,6 @@
 	margin-top:10px;
 }
 
-
-
-
-
-
-
-
 .listing{
 	/*border:5px solid #6c757d;*/
 	background:#e8e8e8;
@@ -156,4 +149,34 @@
 
 .listing-table-td-date{
 	text-align:center;
+}
+
+.contract-type-filter li{
+	display: inline-block;
+	text-decoration:none;
+	margin-right:10px;	  
+}
+
+.active-contract-type-filter{
+	height: 20px;
+  	width: 20px;
+  	background-color: #6f42c1;
+ 	border-radius: 50%;
+ 	display: inline-block;	
+ 	margin-right:5px;
+ 	margin-top:8px;
+}
+
+.inactive-contract-type-filter{
+	height: 20px;
+  	width: 20px;
+  	background-color: grey;
+ 	border-radius: 50%;
+ 	display: inline-block;
+ 	margin-right:5px;
+ 	margin-top:8px;
+}
+
+.listing-title{
+	font-weight:bold;
 }
