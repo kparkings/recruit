@@ -21,6 +21,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import com.arenella.recruit.listings.beans.Listing.listing_type;
 import com.arenella.recruit.listings.beans.ListingFilter;
 import com.arenella.recruit.listings.beans.ListingViewedEvent;
 import com.arenella.recruit.listings.controllers.ListingAPIInbound;
@@ -146,6 +147,28 @@ public class ListingControllerTest {
 		Page<ListingAPIOutboundPublic> response = controller.fetchListingsPubilc(null, mockPageable);
 	
 		assertTrue(response instanceof Page);
+		
+	}
+	
+	/**
+	* Tests fetch of Page of listings when Contract type has been specified 
+	* to filter on
+	* @throws Exception
+	*/
+	@Test
+	public void testFetchListingPublic_withContractTypeFilter() throws Exception{
+		
+		final listing_type listingType = listing_type.CONTRACT_ROLE;
+		
+		ArgumentCaptor<ListingFilter> 	filterArgCapt = ArgumentCaptor.forClass(ListingFilter.class);
+		
+		Mockito.when(this.mockListingService.fetchListings(filterArgCapt.capture(), Mockito.any())).thenReturn(Page.empty());
+		
+		Page<ListingAPIOutboundPublic> response = controller.fetchListingsPubilc(listingType, mockPageable);
+	
+		assertTrue(response instanceof Page);
+		
+		assertEquals(filterArgCapt.getValue().getType().get(), listingType);
 		
 	}
 	

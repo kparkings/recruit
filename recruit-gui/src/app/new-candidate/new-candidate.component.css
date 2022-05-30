@@ -82,19 +82,32 @@
         
 }
 
-.wholepagerow {
-    margin: 0 auto;
-    width: 1040px;
+.new-candidate-inpt-lbl{
+	width:200px;
+	margin-top:2px;
+}
+.new-candidate-inpt{
+	width:300px;
+	margin-top:2px;
+}
+.new-candidate-group{
+	float:left;
+	margin-left:40px;
+	min-width:40%;
 }
 
-.centerdiv{
-    margin: 0 auto;
-    padding-left:10px;
-    padding-right:10px;
-    width:90%;
+.new-candidate-skills {
+    width:160%;
+    height: 130px;
+    text-align: top;
+    margin-bottom: 20px;
 }
 
-.center-table{
-    margin:0 auto;
-    margin-top:50px;
+.new-camdidate-bg-tab-hdr{
+	width:90%;
+	color: #000000;
+    border-bottom: 2px solid black;
+    font-weight: bold;
+    padding: 10px;
+    margin-bottom: 10px;
 }
