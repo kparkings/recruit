@@ -3,6 +3,7 @@ package com.arenella.recruit.recruiters.beans;
 
 import java.time.LocalDate;
 import java.util.LinkedHashSet;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -21,7 +22,8 @@ public class Recruiter {
 	private boolean 					active;
 	private language 					language;
 	private LocalDate					accountCreated;
-	private Set<RecruiterSubscription> 	subscriptions 		= new LinkedHashSet<>();
+	private Set<RecruiterSubscription> 	subscriptions 				= new LinkedHashSet<>();
+	private boolean						visibleToOtherRecruiters 	= false;
 	
 	/**
 	* Constructor based upon a builder
@@ -29,14 +31,15 @@ public class Recruiter {
 	*/
 	public Recruiter(RecruiterBuilder builder) {
 		
-		this.userId 			= builder.userId;
-		this.firstName 			= builder.firstName;
-		this.surname 			= builder.surname;
-		this.email 				= builder.email;
-		this.companyName 		= builder.companyName;
-		this.active 			= builder.active;
-		this.language 			= builder.language;
-		this.accountCreated 	= builder.accountCreated;
+		this.userId 					= builder.userId;
+		this.firstName 					= builder.firstName;
+		this.surname 					= builder.surname;
+		this.email 						= builder.email;
+		this.companyName 				= builder.companyName;
+		this.active 					= builder.active;
+		this.language 					= builder.language;
+		this.accountCreated 			= builder.accountCreated;
+		this.visibleToOtherRecruiters 	= builder.visibleToOtherRecruiters;
 		
 		this.subscriptions.addAll(builder.subscriptions);
 		
@@ -109,6 +112,14 @@ public class Recruiter {
 	}
 	
 	/**
+	* Returns whether or not the Recruiter is visible to other recruiters
+	* @return
+	*/
+	public boolean isVisibleToOtherRecruiters() {
+		return Optional.ofNullable(this.visibleToOtherRecruiters).isEmpty() ? false : this.visibleToOtherRecruiters;
+	}
+	
+	/**
 	* Returns a Builder for the Recruiter class
 	* @return Builder for the Recruiter class
 	*/
@@ -129,6 +140,14 @@ public class Recruiter {
 	*/
 	public void setUserId(String userId) {
 		this.userId = userId;
+	}
+	
+	/**
+	* Sets whether or not the Recruiter is visible to other Recruiters
+	* @param visibleToOtherRecruiters - Whether or not the Recruiter is visible to other Recruiters
+	*/
+	public void setVisibleToOtherRecruiters(boolean visibleToOtherRecruiters) {
+		this.visibleToOtherRecruiters = visibleToOtherRecruiters;
 	}
 	
 	/**
@@ -176,7 +195,8 @@ public class Recruiter {
 		private boolean 					active;
 		private language 					language;
 		private LocalDate					accountCreated;
-		private Set<RecruiterSubscription> 	subscriptions 		= new LinkedHashSet<>();
+		private Set<RecruiterSubscription> 	subscriptions 				= new LinkedHashSet<>();
+		private boolean						visibleToOtherRecruiters 	= false;
 		
 		/**
 		* Sets the userId associated with the Recruiter
@@ -266,6 +286,16 @@ public class Recruiter {
 		public RecruiterBuilder subscriptions(Set<RecruiterSubscription> subscriptions) {
 			this.subscriptions.clear();
 			this.subscriptions.addAll(subscriptions);
+			return this;
+		}
+		
+		/**
+		* Sets whether or not the Recruiters is visible in the System to other Recruiters
+		* @param visibleToOtherRecruiters - whether or not the Recruiters is visible in the System to other Recruiters
+		* @return Builder
+		*/
+		public RecruiterBuilder visibleToOtherRecruiters(Boolean visibleToOtherRecruiters) {
+			this.visibleToOtherRecruiters = visibleToOtherRecruiters;
 			return this;
 		}
 		

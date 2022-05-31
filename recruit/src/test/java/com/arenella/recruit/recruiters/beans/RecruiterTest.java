@@ -25,14 +25,15 @@ public class RecruiterTest {
 	@Test
 	public void testBuilder() throws Exception {
 		
-		final String 		userId			= "kparkings";
-		final String 		firstName		= "kevin";
-		final String 		surname			= "parkings";
-		final String 		email			= "kparkings@gmail.com";
-		final String		companyName		= "arenella";
-		final boolean 		active			= false;
-		final language 		language		= Recruiter.language.DUTCH;
-		final LocalDate		accountCreated	= LocalDate.of(2021, 5, 1);
+		final String 		userId						= "kparkings";
+		final String 		firstName					= "kevin";
+		final String 		surname						= "parkings";
+		final String 		email						= "kparkings@gmail.com";
+		final String		companyName					= "arenella";
+		final boolean 		active						= false;
+		final language 		language					= Recruiter.language.DUTCH;
+		final LocalDate		accountCreated				= LocalDate.of(2021, 5, 1);
+		final boolean		visibleToOtherRecruiters 	= true;
 		
 		Recruiter recruiter = Recruiter
 								.builder()
@@ -44,6 +45,7 @@ public class RecruiterTest {
 									.language(language)
 									.surname(" "+ surname.toUpperCase() + " ")
 									.userId(" "+ userId.toUpperCase() + " ")
+									.visibleToOtherRecruiters(visibleToOtherRecruiters)
 								.build();
 		
 		assertEquals(recruiter.getAccountCreated(), accountCreated);
@@ -54,7 +56,7 @@ public class RecruiterTest {
 		assertEquals(recruiter.getLanguage(), 		language);
 		assertEquals(recruiter.getSurname(), 		surname);
 		assertEquals(recruiter.getUserId(), 		userId);
-		
+		assertTrue(recruiter.isVisibleToOtherRecruiters());
 	}
 	
 	/**
@@ -73,6 +75,8 @@ public class RecruiterTest {
 		
 		assertTrue(recruiter.isActive());
 		assertNotNull(recruiter.getAccountCreated());
+		
+		assertFalse(recruiter.isVisibleToOtherRecruiters());
 		
 	}
 	
@@ -131,6 +135,28 @@ public class RecruiterTest {
 		recruiter.addSubscription(FirstGenRecruiterSubscription.builder().build());
 		
 		assertFalse(recruiter.getSubscriptions().isEmpty());
+		
+	}
+	
+	/**
+	* Tests that it is posible to update whether a recruiters is visible
+	* to other recruiters or not
+	* @throws Exception
+	*/
+	@Test
+	public void testUpdateIsVisibleToOtherRecruiters() throws Exception {
+		
+		Recruiter recruiter = Recruiter.builder().build();
+		
+		assertFalse(recruiter.isVisibleToOtherRecruiters());
+		
+		recruiter.setVisibleToOtherRecruiters(true);
+		
+		assertTrue(recruiter.isVisibleToOtherRecruiters());
+		
+		recruiter.setVisibleToOtherRecruiters(false);
+		
+		assertFalse(recruiter.isVisibleToOtherRecruiters());
 		
 	}
 	
