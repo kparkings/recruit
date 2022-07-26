@@ -181,7 +181,7 @@ public class RecruiterAPIInbound {
 	* @param recruiter - API Inbound representation
 	* @return Domain representation
 	*/
-	public static Recruiter convertToDomin(RecruiterAPIInbound recruiter) {
+	public static Recruiter convertToDomain(RecruiterAPIInbound recruiter) {
 		return Recruiter
 				.builder()
 					.companyName(recruiter.getCompanyName())

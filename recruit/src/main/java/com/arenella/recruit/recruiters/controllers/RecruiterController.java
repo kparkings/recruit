@@ -54,7 +54,7 @@ public class RecruiterController {
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@PutMapping(value="/recruiter")
 	public ResponseEntity<Void> updateRecruiter(RecruiterAPIInbound recruiter) {
-		recruiterService.updateRecruiter(RecruiterAPIInbound.convertToDomin(recruiter));
+		recruiterService.updateRecruiter(RecruiterAPIInbound.convertToDomain(recruiter));
 		return ResponseEntity.ok().build();
 	}
 	

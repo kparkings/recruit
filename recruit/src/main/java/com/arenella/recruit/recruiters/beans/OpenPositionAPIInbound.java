@@ -3,6 +3,8 @@ package com.arenella.recruit.recruiters.beans;
 import java.time.LocalDate;
 import java.util.UUID;
 
+import com.arenella.recruit.recruiters.beans.OpenPosition.ContractType;
+import com.arenella.recruit.recruiters.beans.OpenPosition.Country;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 
@@ -289,7 +291,27 @@ public class OpenPositionAPIInbound {
 		
 	}
 	
-	public enum Country {NETHERLANDS, BELGIUM, UK, IRL, EUROPE, WORLD}
-	public enum ContractType {CONTRACT, PERM, BOTH}
+	/**
+	* Converts an Inbound API representation of an OpenPosition to a
+	* Domain representation
+	* @param openPositionAPIInbound - API Inbound representation
+	* @return Domain representation
+	*/
+	public static OpenPosition convertToDomain(OpenPositionAPIInbound openPositionAPIInbound) {
+		return OpenPosition
+				.builder()
+					.comments(openPositionAPIInbound.getComments())
+					.contractType(openPositionAPIInbound.getContractType())
+					.country(openPositionAPIInbound.getCountry())
+					.description(openPositionAPIInbound.getDescription())
+					.id(openPositionAPIInbound.getId())
+					.location(openPositionAPIInbound.getLocation())
+					.positionClosingDate(openPositionAPIInbound.getPositionClosingDate())
+					.positionTitle(openPositionAPIInbound.getPositionTitle())
+					.recruiterId(openPositionAPIInbound.getRecruiterId())
+					.renumeration(openPositionAPIInbound.getRenumeration())
+					.startDate(openPositionAPIInbound.getStartDate())
+				.build();
+	}
 	
 }

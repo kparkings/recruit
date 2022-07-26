@@ -8,6 +8,8 @@ import java.util.UUID;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,8 +17,10 @@ import org.springframework.http.ResponseEntity;
 import com.arenella.recruit.recruiters.beans.BlacklistedRecruiterAPIOutbound;
 import com.arenella.recruit.recruiters.beans.OfferedCandidateAPIInbound;
 import com.arenella.recruit.recruiters.beans.OfferedCandidateAPIOutbound;
+import com.arenella.recruit.recruiters.beans.OpenPosition;
 import com.arenella.recruit.recruiters.beans.OpenPositionAPIInbound;
 import com.arenella.recruit.recruiters.beans.OpenPositionAPIOutbound;
+import com.arenella.recruit.recruiters.services.SupplyAndDemandService;
 
 /**
 * Unit tests for testing the SupplyAndDemandController API
@@ -26,7 +30,10 @@ import com.arenella.recruit.recruiters.beans.OpenPositionAPIOutbound;
 public class SupplyAndDemandControllerTest {
 
 	@InjectMocks
-	private SupplyAndDemandController controller = new SupplyAndDemandController();
+	private SupplyAndDemandController 	controller 					= new SupplyAndDemandController();
+	
+	@Mock
+	private SupplyAndDemandService		supplyAndDemandService;
 	
 	/**
 	* Test Success
@@ -35,6 +42,9 @@ public class SupplyAndDemandControllerTest {
 	@Test
 	public void testAddOpenPosition() throws Exception{
 		ResponseEntity<Void> response = controller.addOpenPosition(OpenPositionAPIInbound.builder().build());
+		
+		Mockito.verify(supplyAndDemandService).addOpenPosition(Mockito.any(OpenPosition.class));
+		
 		assertEquals(response.getStatusCode(), HttpStatus.CREATED);
 	}
 	

@@ -3,6 +3,7 @@ package com.arenella.recruit.recruiters.controllers;
 import java.util.Set;
 import java.util.UUID;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -18,6 +19,7 @@ import com.arenella.recruit.recruiters.beans.OfferedCandidateAPIInbound;
 import com.arenella.recruit.recruiters.beans.OfferedCandidateAPIOutbound;
 import com.arenella.recruit.recruiters.beans.OpenPositionAPIInbound;
 import com.arenella.recruit.recruiters.beans.OpenPositionAPIOutbound;
+import com.arenella.recruit.recruiters.services.SupplyAndDemandService;
 
 /**
 * API for recruiters to Offer Candidates and Advertise open positions 
@@ -28,6 +30,9 @@ import com.arenella.recruit.recruiters.beans.OpenPositionAPIOutbound;
 @RestController
 public class SupplyAndDemandController {
 
+	@Autowired
+	private SupplyAndDemandService supplyAndDemandService;
+	
 	/**
 	* Allows Recruiter to publish an open position they are looking to fill
 	* @param openPosition - Open position to be filled
@@ -36,6 +41,9 @@ public class SupplyAndDemandController {
 	@PostMapping(value="/v1/open-position")
 	@PreAuthorize("hasRole('ROLE_RECRUITER')")
 	public ResponseEntity<Void> addOpenPosition(OpenPositionAPIInbound openPosition) {
+		
+		supplyAndDemandService.addOpenPosition(OpenPositionAPIInbound.convertToDomain(openPosition));
+		
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 	};
 	

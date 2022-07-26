@@ -1,6 +1,8 @@
 package com.arenella.recruit.recruiters.beans;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.time.LocalDate;
 import java.util.UUID;
@@ -11,10 +13,10 @@ import com.arenella.recruit.recruiters.beans.OpenPosition.ContractType;
 import com.arenella.recruit.recruiters.beans.OpenPosition.Country;
 
 /**
-* Unit tests for the OpenPositionAPIInbound class
+* Unit tests for the OpenPosition class
 * @author K Parkings
 */
-public class OpenPositionAPIInboundTest {
+public class OpenPositionTest {
 
 	private UUID 			id						= UUID.randomUUID();
 	private String 			recruiterId				= "recruier1Id";
@@ -35,7 +37,7 @@ public class OpenPositionAPIInboundTest {
 	@Test
 	public void testBuilder() throws Exception {
 		
-		OpenPositionAPIInbound position = OpenPositionAPIInbound
+		OpenPosition position = OpenPosition
 				.builder()
 					.comments(comments)
 					.contractType(contractType)
@@ -63,43 +65,25 @@ public class OpenPositionAPIInboundTest {
 		assertEquals(position.getStartDate(), 				startDate);
 		
 	}
-
+	
 	/**
-	* Tests the conversion of OpenPosition incomming API 
-	* representation to the Domain representation
+	* Test that OpenPosition can be initialized as a new Object. 
 	* @throws Exception
 	*/
 	@Test
-	public void testConvertToDomain() throws Exception{
+	public void testInitializeAsNewObject() throws Exception{
 		
-		OpenPositionAPIInbound position = OpenPositionAPIInbound
+	OpenPosition position = OpenPosition
 				.builder()
-					.comments(comments)
-					.contractType(contractType)
-					.country(country)
-					.description(description)
-					.id(id)
-					.location(location)
-					.positionClosingDate(positionClosingDate)
-					.positionTitle(positionTitle)
-					.recruiterId(recruiterId)
-					.renumeration(renumeration)
-					.startDate(startDate)
 				.build();
 		
-		OpenPosition openPosition = OpenPositionAPIInbound.convertToDomain(position);
+		assertNull(position.getId());
+		assertNull(position.getRecruiterId());
 		
-		assertEquals(openPosition.getComments(), 				comments);
-		assertEquals(openPosition.getContractType(), 			contractType);
-		assertEquals(openPosition.getCountry(), 				country);
-		assertEquals(openPosition.getDescription(), 			description);
-		assertEquals(openPosition.getId(), 						id);
-		assertEquals(openPosition.getLocation(), 				location);
-		assertEquals(openPosition.getPositionClosingDate(), 	positionClosingDate);
-		assertEquals(openPosition.getPositionTitle(), 			positionTitle);
-		assertEquals(openPosition.getRecruiterId(), 			recruiterId);
-		assertEquals(openPosition.getRenumeration(), 			renumeration);
-		assertEquals(openPosition.getStartDate(), 				startDate);
+		position.initializeAsNewObject(recruiterId);
+		
+		assertTrue(position.getId() instanceof UUID);
+		assertEquals(position.getRecruiterId(), recruiterId);
 		
 	}
 	

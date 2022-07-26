@@ -1,21 +1,24 @@
-package com.arenella.recruit.recruiters.beans;
+package com.arenella.recruit.recruiters.entities;
 
 import java.time.LocalDate;
+import java.util.Optional;
 import java.util.UUID;
 
+import javax.persistence.Entity;
+
+import com.arenella.recruit.recruiters.beans.OpenPosition;
 import com.arenella.recruit.recruiters.beans.OpenPosition.ContractType;
 import com.arenella.recruit.recruiters.beans.OpenPosition.Country;
 
 /**
-* Represents an Open Position that needs to be filled and 
-* is being offered to other Recruiters
+* Entity representation of an Open Position
 * @author K Parkings
 */
-public class OpenPositionAPIOutbound {
+@Entity
+public class OpenPositionEntity {
 
 	private UUID 						id;
-	private String 						recruiterName;
-	private String 						recruiterCompanyName;
+	private String 						recruiterId;
 	private String 						positionTitle;
 	private Country	 					country;
 	private String						location;
@@ -25,16 +28,16 @@ public class OpenPositionAPIOutbound {
 	private LocalDate 					positionClosingDate;
 	private String 						description;
 	private String 						comments;
+	private LocalDate					created;
 	
 	/**
 	* Constructor based upon a Builder
 	* @param builder - Contains initialization values
 	*/
-	private OpenPositionAPIOutbound(OpenPositionAPIOutboundBuilder builder) {
+	private OpenPositionEntity(OpenPositionEntityBuilder builder) {
 		
 		this.id 							= builder.id;
-		this.recruiterName					= builder.recruiterName;
-		this.recruiterCompanyName			= builder.recruiterCompanyName;
+		this.recruiterId					= builder.recruiterId;
 		this.positionTitle 					= builder.positionTitle;
 		this.country 						= builder.country;
 		this.location 						= builder.location;
@@ -44,6 +47,11 @@ public class OpenPositionAPIOutbound {
 		this.positionClosingDate 			= builder.positionClosingDate;
 		this.description 					= builder.description;
 		this.comments 						= builder.comments;
+		this.created						= builder.created;
+		
+		if (Optional.ofNullable(created).isEmpty()) {
+			this.created = LocalDate.now();
+		}
 		
 	}
 	
@@ -56,21 +64,12 @@ public class OpenPositionAPIOutbound {
 	}
 	
 	/**
-	* Returns the name Id of the Recruiter who owns the 
+	* Returns the unique Id of the Recruiter who owns the 
 	* Open Position
-	* @return Unique recruiterName
+	* @return Unique Id
 	*/
-	public String getRecruiterName(){
-		return this.recruiterName;
-	}
-	
-	/**
-	* Returns the name of the Company of the Recruiter who owns the 
-	* Open Position
-	* @return Unique companyName
-	*/
-	public String getRecruiterCompanyName(){
-		return this.recruiterCompanyName;
+	public String getRecruiterId(){
+		return this.recruiterId;
 	}
 	
 	/**
@@ -148,61 +147,70 @@ public class OpenPositionAPIOutbound {
 	}
 	
 	/**
+	* Returns the date the OpenPosition was created
+	* @return When OpenPosition was created
+	*/
+	public LocalDate getCreated() {
+		return this.created;
+	}
+	
+	/**
+	* Sets the unique Id of the Object to a 
+	* random UUID to make it a new OpenPosition and 
+	* sets the id of the recruiter that owns the OpenPosition
+	* @param recruiterId - id of the recruiter that owns the OpenPosition
+	*/
+	public void initializeAsNewObject(String recruiterId) {
+		this.id 			= UUID.randomUUID();
+		this.recruiterId 	= recruiterId;
+	}
+	
+	/**
 	* Returns a Builder for the Class
 	* @return Builder for the Class
 	*/
-	public static OpenPositionAPIOutboundBuilder builder() {
-		return new OpenPositionAPIOutboundBuilder();
+	public static OpenPositionEntityBuilder builder() {
+		return new OpenPositionEntityBuilder();
 	} 
 	
 	/**
-	* Builder for the OpenPositionAPIOutbound class
+	* Builder for theOpenPositionEntity class
 	* @author K Parkings
 	*/
-	public static class OpenPositionAPIOutboundBuilder{
+	public static class OpenPositionEntityBuilder{
 		
 		private UUID 						id;
-		private String 						recruiterName;
-		private String 						recruiterCompanyName;
+		private String 						recruiterId;
 		private String 						positionTitle;
 		private Country	 					country;
 		private String						location;
 		private ContractType 				contractType;
-		private String	 					renumeration;
+		private String 						renumeration;
 		private LocalDate 					startDate;
 		private LocalDate 					positionClosingDate;
 		private String 						description;
 		private String 						comments;
+		private LocalDate					created;
+		
 		
 		/**
 		* Sets the Unique Identifier for the Open Position
 		* @param id - UniqueId of the Open Position
 		* @return Builder
 		*/
-		public OpenPositionAPIOutboundBuilder id(UUID id){
+		public OpenPositionEntityBuilder id(UUID id){
 			this.id = id;
 			return this;
 		}
 		
 		/**
-		* Sets the name of the Recruiter who owns the 
+		* Sets the unique Id of the Recruiter who owns the 
 		* Open Position
-		* @param recruiterName - Name of the owning Recruiter
+		* @param recruiterId - Unique Id of the owning Recruiter
 		* @return Builder
 		*/
-		public OpenPositionAPIOutboundBuilder recruiterName(String recruiterName){
-			this.recruiterName = recruiterName;
-			return this;
-		}
-		
-		/**
-		* Sets the name of the Company of the Recruiter who owns the 
-		* Open Position
-		* @param recruiterCompanyName - Name of the Recruiters Company
-		* @return Builder
-		*/
-		public OpenPositionAPIOutboundBuilder recruiterCompanyName(String recruiterCompanyName){
-			this.recruiterCompanyName = recruiterCompanyName;
+		public OpenPositionEntityBuilder recruiterId(String recruiterId){
+			this.recruiterId = recruiterId;
 			return this;
 		}
 		
@@ -211,7 +219,7 @@ public class OpenPositionAPIOutbound {
 		* @param positionTitle - Title for the Open Position
 		* @return Builder
 		*/
-		public OpenPositionAPIOutboundBuilder positionTitle(String positionTitle){
+		public OpenPositionEntityBuilder positionTitle(String positionTitle){
 			this.positionTitle = positionTitle;
 			return this;
 		}
@@ -221,7 +229,7 @@ public class OpenPositionAPIOutbound {
 		* @param country - Country where the Position is located
 		* @return Builder
 		*/
-		public OpenPositionAPIOutboundBuilder country(Country country){
+		public OpenPositionEntityBuilder country(Country country){
 			this.country = country;
 			return this;
 		}
@@ -231,7 +239,7 @@ public class OpenPositionAPIOutbound {
 		* @param location - Location of the Position
 		* @return Builder
 		*/
-		public OpenPositionAPIOutboundBuilder location(String location){
+		public OpenPositionEntityBuilder location(String location){
 			this.location = location;
 			return this;
 		}
@@ -241,7 +249,7 @@ public class OpenPositionAPIOutbound {
 		* @param renumeration - Renumeration offered for the Position
 		* @return Builder
 		*/
-		public OpenPositionAPIOutboundBuilder renumeration(String renumeration){
+		public OpenPositionEntityBuilder renumeration(String renumeration){
 			this.renumeration = renumeration;
 			return this;
 		}
@@ -251,7 +259,7 @@ public class OpenPositionAPIOutbound {
 		* @param contractType - Type of the Contract
 		* @return Builder
 		*/
-		public OpenPositionAPIOutboundBuilder contractType(ContractType contractType){
+		public OpenPositionEntityBuilder contractType(ContractType contractType){
 			this.contractType = contractType;
 			return this;
 		}
@@ -261,7 +269,7 @@ public class OpenPositionAPIOutbound {
 		* @param startDate - When the Open Position starts
 		* @return Builder
 		*/
-		public OpenPositionAPIOutboundBuilder startDate(LocalDate startDate){
+		public OpenPositionEntityBuilder startDate(LocalDate startDate){
 			this.startDate = startDate;
 			return this;
 		}
@@ -272,7 +280,7 @@ public class OpenPositionAPIOutbound {
 		* @param positionClosingDate - Position closing date
 		* @return Builder
 		*/
-		public OpenPositionAPIOutboundBuilder positionClosingDate(LocalDate positionClosingDate){
+		public OpenPositionEntityBuilder positionClosingDate(LocalDate positionClosingDate){
 			this.positionClosingDate = positionClosingDate;
 			return this;
 		}
@@ -282,7 +290,7 @@ public class OpenPositionAPIOutbound {
 		* @param description - description of the Open Position
 		* @return Builder
 		*/
-		public OpenPositionAPIOutboundBuilder description(String description){
+		public OpenPositionEntityBuilder description(String description){
 			this.description = description;
 			return this;
 		}
@@ -293,20 +301,74 @@ public class OpenPositionAPIOutbound {
 		* @param comments - comments relating to Position
 		* @return Builder
 		*/
-		public OpenPositionAPIOutboundBuilder comments(String comments){
+		public OpenPositionEntityBuilder comments(String comments){
 			this.comments = comments;
+			return this;
+		}
+
+		/**
+		* Sets when the OpenPosition was created
+		* @param created - Data the OpenPosition was created
+		* @return Builder
+		*/
+		public OpenPositionEntityBuilder created(LocalDate created){
+			this.created = created;
 			return this;
 		}
 		
 		/**
-		* Returns an instance of OpenPositionAPIOutbound initalized with 
+		* Returns an instance of OpenPositionEntityBuilder initalized with 
 		* the values in the Builder
-		* @return Initialzied instance of OpenPositionAPIOutbound
+		* @return Builder
 		*/
-		public OpenPositionAPIOutbound build() {
-			return new OpenPositionAPIOutbound(this);
+		public OpenPositionEntity build() {
+			return new OpenPositionEntity(this);
 		}
 		
+	}
+	
+	/**
+	* Converts from Entity representation to Domain representation
+	* @param entity - Entity representation
+	* @return Domain representation
+	*/
+	public static OpenPosition convertFromEntity(OpenPositionEntity entity) {
+		return OpenPosition
+					.builder()
+						.comments(entity.getComments())
+						.contractType(entity.getContractType())
+						.country(entity.getCountry())
+						.description(entity.getDescription())
+						.id(entity.getId())
+						.location(entity.getLocation())
+						.positionClosingDate(entity.getPositionClosingDate())
+						.positionTitle(entity.getPositionTitle())
+						.recruiterId(entity.getRecruiterId())
+						.renumeration(entity.getRenumeration())
+						.startDate(entity.getStartDate())
+					.build();
+	}
+	
+	/**
+	* Converts from Domain representation to Entity representation
+	* @param openPosition - Domain representation
+	* @return Entity representation
+	*/
+	public static OpenPositionEntity convertToEntity(OpenPosition openPosition) {
+		return OpenPositionEntity
+							.builder()
+								.comments(openPosition.getComments())
+								.contractType(openPosition.getContractType())
+								.country(openPosition.getCountry())
+								.description(openPosition.getDescription())
+								.id(openPosition.getId())
+								.location(openPosition.getLocation())
+								.positionClosingDate(openPosition.getPositionClosingDate())
+								.positionTitle(openPosition.getPositionTitle())
+								.recruiterId(openPosition.getRecruiterId())
+								.renumeration(openPosition.getRenumeration())
+								.startDate(openPosition.getStartDate())
+							.build();
 	}
 	
 }

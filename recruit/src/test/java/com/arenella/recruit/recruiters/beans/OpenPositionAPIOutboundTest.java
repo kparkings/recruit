@@ -11,13 +11,14 @@ import com.arenella.recruit.recruiters.beans.OpenPosition.ContractType;
 import com.arenella.recruit.recruiters.beans.OpenPosition.Country;
 
 /**
-* Unit tests for the OpenPositionAPIInbound class
+* Unit tests for the OpenPositionAPIOutbound class
 * @author K Parkings
 */
-public class OpenPositionAPIInboundTest {
+public class OpenPositionAPIOutboundTest {
 
 	private UUID 			id						= UUID.randomUUID();
-	private String 			recruiterId				= "recruier1Id";
+	private String 			recruiterName			= "Kevin Parkings";
+	private String 			recruiterCompanyName	= "Arenella BV";
 	private String 			positionTitle			= "Java Developer";
 	private Country	 		country					= Country.EUROPE;
 	private String			location				= "Remote in Europe";
@@ -35,7 +36,7 @@ public class OpenPositionAPIInboundTest {
 	@Test
 	public void testBuilder() throws Exception {
 		
-		OpenPositionAPIInbound position = OpenPositionAPIInbound
+		OpenPositionAPIOutbound position = OpenPositionAPIOutbound
 				.builder()
 					.comments(comments)
 					.contractType(contractType)
@@ -45,7 +46,8 @@ public class OpenPositionAPIInboundTest {
 					.location(location)
 					.positionClosingDate(positionClosingDate)
 					.positionTitle(positionTitle)
-					.recruiterId(recruiterId)
+					.recruiterName(recruiterName)
+					.recruiterCompanyName(recruiterCompanyName)
 					.renumeration(renumeration)
 					.startDate(startDate)
 				.build();
@@ -58,49 +60,10 @@ public class OpenPositionAPIInboundTest {
 		assertEquals(position.getLocation(), 				location);
 		assertEquals(position.getPositionClosingDate(), 	positionClosingDate);
 		assertEquals(position.getPositionTitle(), 			positionTitle);
-		assertEquals(position.getRecruiterId(), 			recruiterId);
+		assertEquals(position.getRecruiterName(), 			recruiterName);
+		assertEquals(position.getRecruiterCompanyName(), 	recruiterCompanyName);
 		assertEquals(position.getRenumeration(), 			renumeration);
 		assertEquals(position.getStartDate(), 				startDate);
 		
 	}
-
-	/**
-	* Tests the conversion of OpenPosition incomming API 
-	* representation to the Domain representation
-	* @throws Exception
-	*/
-	@Test
-	public void testConvertToDomain() throws Exception{
-		
-		OpenPositionAPIInbound position = OpenPositionAPIInbound
-				.builder()
-					.comments(comments)
-					.contractType(contractType)
-					.country(country)
-					.description(description)
-					.id(id)
-					.location(location)
-					.positionClosingDate(positionClosingDate)
-					.positionTitle(positionTitle)
-					.recruiterId(recruiterId)
-					.renumeration(renumeration)
-					.startDate(startDate)
-				.build();
-		
-		OpenPosition openPosition = OpenPositionAPIInbound.convertToDomain(position);
-		
-		assertEquals(openPosition.getComments(), 				comments);
-		assertEquals(openPosition.getContractType(), 			contractType);
-		assertEquals(openPosition.getCountry(), 				country);
-		assertEquals(openPosition.getDescription(), 			description);
-		assertEquals(openPosition.getId(), 						id);
-		assertEquals(openPosition.getLocation(), 				location);
-		assertEquals(openPosition.getPositionClosingDate(), 	positionClosingDate);
-		assertEquals(openPosition.getPositionTitle(), 			positionTitle);
-		assertEquals(openPosition.getRecruiterId(), 			recruiterId);
-		assertEquals(openPosition.getRenumeration(), 			renumeration);
-		assertEquals(openPosition.getStartDate(), 				startDate);
-		
-	}
-	
 }

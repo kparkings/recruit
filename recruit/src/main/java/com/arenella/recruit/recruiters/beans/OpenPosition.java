@@ -3,19 +3,18 @@ package com.arenella.recruit.recruiters.beans;
 import java.time.LocalDate;
 import java.util.UUID;
 
-import com.arenella.recruit.recruiters.beans.OpenPosition.ContractType;
-import com.arenella.recruit.recruiters.beans.OpenPosition.Country;
-
 /**
-* Represents an Open Position that needs to be filled and 
-* is being offered to other Recruiters
+* Class represents an Open Position that the Recruiter needs to fill 
+* and is willing to work with other Recruiters to fill it.
 * @author K Parkings
 */
-public class OpenPositionAPIOutbound {
+public class OpenPosition {
 
+	public enum Country 				{NETHERLANDS, BELGIUM, UK, IRL, EUROPE, WORLD}
+	public enum ContractType 			{CONTRACT, PERM, BOTH}
+	
 	private UUID 						id;
-	private String 						recruiterName;
-	private String 						recruiterCompanyName;
+	private String 						recruiterId;
 	private String 						positionTitle;
 	private Country	 					country;
 	private String						location;
@@ -30,11 +29,10 @@ public class OpenPositionAPIOutbound {
 	* Constructor based upon a Builder
 	* @param builder - Contains initialization values
 	*/
-	private OpenPositionAPIOutbound(OpenPositionAPIOutboundBuilder builder) {
+	private OpenPosition(OpenPositionBuilder builder) {
 		
 		this.id 							= builder.id;
-		this.recruiterName					= builder.recruiterName;
-		this.recruiterCompanyName			= builder.recruiterCompanyName;
+		this.recruiterId					= builder.recruiterId;
 		this.positionTitle 					= builder.positionTitle;
 		this.country 						= builder.country;
 		this.location 						= builder.location;
@@ -56,21 +54,12 @@ public class OpenPositionAPIOutbound {
 	}
 	
 	/**
-	* Returns the name Id of the Recruiter who owns the 
+	* Returns the unique Id of the Recruiter who owns the 
 	* Open Position
-	* @return Unique recruiterName
+	* @return Unique Id
 	*/
-	public String getRecruiterName(){
-		return this.recruiterName;
-	}
-	
-	/**
-	* Returns the name of the Company of the Recruiter who owns the 
-	* Open Position
-	* @return Unique companyName
-	*/
-	public String getRecruiterCompanyName(){
-		return this.recruiterCompanyName;
+	public String getRecruiterId(){
+		return this.recruiterId;
 	}
 	
 	/**
@@ -148,27 +137,37 @@ public class OpenPositionAPIOutbound {
 	}
 	
 	/**
+	* Sets the unique Id of the Object to a 
+	* random UUID to make it a new OpenPosition and 
+	* sets the id of the recruiter that owns the OpenPosition
+	* @param recruiterId - id of the recruiter that owns the OpenPosition
+	*/
+	public void initializeAsNewObject(String recruiterId) {
+		this.id 			= UUID.randomUUID();
+		this.recruiterId 	= recruiterId;
+	}
+	
+	/**
 	* Returns a Builder for the Class
 	* @return Builder for the Class
 	*/
-	public static OpenPositionAPIOutboundBuilder builder() {
-		return new OpenPositionAPIOutboundBuilder();
+	public static OpenPositionBuilder builder() {
+		return new OpenPositionBuilder();
 	} 
 	
 	/**
-	* Builder for the OpenPositionAPIOutbound class
+	* Builder for the OpenPositionAPIInbound class
 	* @author K Parkings
 	*/
-	public static class OpenPositionAPIOutboundBuilder{
+	public static class OpenPositionBuilder{
 		
 		private UUID 						id;
-		private String 						recruiterName;
-		private String 						recruiterCompanyName;
+		private String 						recruiterId;
 		private String 						positionTitle;
 		private Country	 					country;
 		private String						location;
 		private ContractType 				contractType;
-		private String	 					renumeration;
+		private String 						renumeration;
 		private LocalDate 					startDate;
 		private LocalDate 					positionClosingDate;
 		private String 						description;
@@ -179,30 +178,19 @@ public class OpenPositionAPIOutbound {
 		* @param id - UniqueId of the Open Position
 		* @return Builder
 		*/
-		public OpenPositionAPIOutboundBuilder id(UUID id){
+		public OpenPositionBuilder id(UUID id){
 			this.id = id;
 			return this;
 		}
 		
 		/**
-		* Sets the name of the Recruiter who owns the 
+		* Sets the unique Id of the Recruiter who owns the 
 		* Open Position
-		* @param recruiterName - Name of the owning Recruiter
+		* @param recruiterId - Unique Id of the owning Recruiter
 		* @return Builder
 		*/
-		public OpenPositionAPIOutboundBuilder recruiterName(String recruiterName){
-			this.recruiterName = recruiterName;
-			return this;
-		}
-		
-		/**
-		* Sets the name of the Company of the Recruiter who owns the 
-		* Open Position
-		* @param recruiterCompanyName - Name of the Recruiters Company
-		* @return Builder
-		*/
-		public OpenPositionAPIOutboundBuilder recruiterCompanyName(String recruiterCompanyName){
-			this.recruiterCompanyName = recruiterCompanyName;
+		public OpenPositionBuilder recruiterId(String recruiterId){
+			this.recruiterId = recruiterId;
 			return this;
 		}
 		
@@ -211,7 +199,7 @@ public class OpenPositionAPIOutbound {
 		* @param positionTitle - Title for the Open Position
 		* @return Builder
 		*/
-		public OpenPositionAPIOutboundBuilder positionTitle(String positionTitle){
+		public OpenPositionBuilder positionTitle(String positionTitle){
 			this.positionTitle = positionTitle;
 			return this;
 		}
@@ -221,7 +209,7 @@ public class OpenPositionAPIOutbound {
 		* @param country - Country where the Position is located
 		* @return Builder
 		*/
-		public OpenPositionAPIOutboundBuilder country(Country country){
+		public OpenPositionBuilder country(Country country){
 			this.country = country;
 			return this;
 		}
@@ -231,7 +219,7 @@ public class OpenPositionAPIOutbound {
 		* @param location - Location of the Position
 		* @return Builder
 		*/
-		public OpenPositionAPIOutboundBuilder location(String location){
+		public OpenPositionBuilder location(String location){
 			this.location = location;
 			return this;
 		}
@@ -241,7 +229,7 @@ public class OpenPositionAPIOutbound {
 		* @param renumeration - Renumeration offered for the Position
 		* @return Builder
 		*/
-		public OpenPositionAPIOutboundBuilder renumeration(String renumeration){
+		public OpenPositionBuilder renumeration(String renumeration){
 			this.renumeration = renumeration;
 			return this;
 		}
@@ -251,7 +239,7 @@ public class OpenPositionAPIOutbound {
 		* @param contractType - Type of the Contract
 		* @return Builder
 		*/
-		public OpenPositionAPIOutboundBuilder contractType(ContractType contractType){
+		public OpenPositionBuilder contractType(ContractType contractType){
 			this.contractType = contractType;
 			return this;
 		}
@@ -261,7 +249,7 @@ public class OpenPositionAPIOutbound {
 		* @param startDate - When the Open Position starts
 		* @return Builder
 		*/
-		public OpenPositionAPIOutboundBuilder startDate(LocalDate startDate){
+		public OpenPositionBuilder startDate(LocalDate startDate){
 			this.startDate = startDate;
 			return this;
 		}
@@ -272,7 +260,7 @@ public class OpenPositionAPIOutbound {
 		* @param positionClosingDate - Position closing date
 		* @return Builder
 		*/
-		public OpenPositionAPIOutboundBuilder positionClosingDate(LocalDate positionClosingDate){
+		public OpenPositionBuilder positionClosingDate(LocalDate positionClosingDate){
 			this.positionClosingDate = positionClosingDate;
 			return this;
 		}
@@ -282,7 +270,7 @@ public class OpenPositionAPIOutbound {
 		* @param description - description of the Open Position
 		* @return Builder
 		*/
-		public OpenPositionAPIOutboundBuilder description(String description){
+		public OpenPositionBuilder description(String description){
 			this.description = description;
 			return this;
 		}
@@ -293,18 +281,18 @@ public class OpenPositionAPIOutbound {
 		* @param comments - comments relating to Position
 		* @return Builder
 		*/
-		public OpenPositionAPIOutboundBuilder comments(String comments){
+		public OpenPositionBuilder comments(String comments){
 			this.comments = comments;
 			return this;
 		}
 		
 		/**
-		* Returns an instance of OpenPositionAPIOutbound initalized with 
+		* Returns an instance of OpenPositionAPIInbound initalized with 
 		* the values in the Builder
-		* @return Initialzied instance of OpenPositionAPIOutbound
+		* @return Builder
 		*/
-		public OpenPositionAPIOutbound build() {
-			return new OpenPositionAPIOutbound(this);
+		public OpenPosition build() {
+			return new OpenPosition(this);
 		}
 		
 	}
