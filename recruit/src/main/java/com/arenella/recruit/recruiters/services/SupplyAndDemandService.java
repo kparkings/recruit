@@ -1,5 +1,7 @@
 package com.arenella.recruit.recruiters.services;
 
+import java.util.UUID;
+
 import com.arenella.recruit.recruiters.beans.OpenPosition;
 
 /**
@@ -15,4 +17,10 @@ public interface SupplyAndDemandService {
 	*/
 	public void addOpenPosition(OpenPosition openPosition);
 	
+	/**
+	* Deletes an Open Position
+	* @param openPositionId - Unique Id of the Open Position to delete
+	* @throws IllegalAccessException 
+	*/
+	public void deleteOpenPosition(UUID openPositionId) throws IllegalAccessException;
 }

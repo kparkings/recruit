@@ -54,9 +54,14 @@ public class SupplyAndDemandControllerTest {
 	*/
 	@Test
 	public void testDeleteOpenPosition() throws Exception{
+		
 		ResponseEntity<Void> response = controller.deleteOpenPosition(UUID.randomUUID());
+		
+		Mockito.verify(supplyAndDemandService).deleteOpenPosition(Mockito.any(UUID.class));
+		
 		assertEquals(response.getStatusCode(), HttpStatus.OK);
 	};
+	
 	
 	/**
 	* Test Success

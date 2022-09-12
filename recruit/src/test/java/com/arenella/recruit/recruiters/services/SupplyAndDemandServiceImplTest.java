@@ -2,6 +2,9 @@ package com.arenella.recruit.recruiters.services;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.util.UUID;
+
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,7 +16,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-import com.arenella.recruit.curriculum.entity.CurriculumEntity;
 import com.arenella.recruit.recruiters.beans.OpenPosition;
 import com.arenella.recruit.recruiters.dao.SupplyAndDemanDao;
 
@@ -63,6 +65,56 @@ public class SupplyAndDemandServiceImplTest {
 		Mockito.verify(mockSupplyAndDemandDao).persistOpenPositiion(captor.capture());
 		
 		assertEquals(RECRUITER_ID, captor.getValue().getRecruiterId());
+		
+	}
+	
+	/**
+	* Happy path for deleting an OpenPosition
+	* @throws Exception
+	*/
+	@Test
+	public void testDeleteOpenPosition() throws Exception{
+		
+		UUID 			openPositionId 	= UUID.randomUUID();
+		OpenPosition 	openPosition 	= OpenPosition.builder().recruiterId(RECRUITER_ID).build();
+		
+		Mockito.when(this.mockSupplyAndDemandDao.findByOpenPositionId(openPositionId)).thenReturn(openPosition);
+		
+		service.deleteOpenPosition(openPositionId);
+		
+	}
+	
+	/**
+	* Failure path where OpenPosition does not exist
+	* @throws Exception
+	*/
+	@Test
+	public void testDeleteOpenPosition_unknownOpenPosition() throws Exception{
+		
+		UUID 			openPositionId 	= UUID.randomUUID();
+		
+		Assertions.assertThrows(RuntimeException.class, () -> {
+			service.deleteOpenPosition(openPositionId);
+		});
+		
+	}
+	
+	/**
+	* Failure position where an attempt is made to delete another users 
+	* OpenPosition
+	* @throws Exception
+	*/
+	@Test
+	public void testDeleteOpenPosition_wrongUser() throws Exception{
+		
+		UUID 			openPositionId 	= UUID.randomUUID();
+		OpenPosition 	openPosition 	= OpenPosition.builder().recruiterId("AnotherRecruitersId").build();
+		
+		Mockito.when(this.mockSupplyAndDemandDao.findByOpenPositionId(openPositionId)).thenReturn(openPosition);
+		
+		Assertions.assertThrows(IllegalAccessException.class, () -> {
+			service.deleteOpenPosition(openPositionId);
+		});
 		
 	}
 	

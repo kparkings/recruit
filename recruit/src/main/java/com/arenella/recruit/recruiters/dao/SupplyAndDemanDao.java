@@ -22,4 +22,12 @@ public interface SupplyAndDemanDao extends CrudRepository<OpenPositionEntity, UU
 		this.save(OpenPositionEntity.convertToEntity(openPosition));
 	}
 	
+	default OpenPosition findByOpenPositionId(UUID openPositionId) {
+		
+		OpenPositionEntity entity = this.findById(openPositionId).orElseThrow(() -> new RuntimeException("Unknown Open Position"));
+		
+		return OpenPositionEntity.convertFromEntity(entity);
+		
+	}
+	
 }

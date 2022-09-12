@@ -1,5 +1,7 @@
 package com.arenella.recruit.recruiters.services;
 
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -23,15 +25,31 @@ public class SupplyAndDemandServiceImpl implements SupplyAndDemandService{
 	@Override
 	public void addOpenPosition(OpenPosition openPosition) {
 		
-		String recruiterId = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
-		
-		openPosition.initializeAsNewObject(recruiterId);
+		openPosition.initializeAsNewObject(getAuthenticatedRecruiterId());
 		
 		dao.persistOpenPositiion(openPosition);
 		
-		
 	}
 
+	/**
+	* Refer to the SupplyAndDemandService interface for details 
+	*/
+	public void deleteOpenPosition(UUID openPositionId) throws IllegalAccessException{
+		
+		OpenPosition openPosition = dao.findByOpenPositionId(openPositionId);
+		
+		if (!getAuthenticatedRecruiterId().equals(openPosition.getRecruiterId())) {
+			throw new IllegalAccessException();
+		}
+		
+		dao.deleteById(openPositionId);
+		
+	}
+	
+	private String getAuthenticatedRecruiterId() {
+		return SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+	}
+	
 	
 	
 }

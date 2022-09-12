@@ -51,10 +51,14 @@ public class SupplyAndDemandController {
 	* Allows Recruiter to delete an Open Position they previously published
 	* @param openPositionId - Unique Id of OpenPosition to be deleted
 	* @return Status Code
+	 * @throws IllegalAccessException 
 	*/
 	@DeleteMapping(value="/v1/open-position/{id}")
 	@PreAuthorize("hasRole('ROLE_RECRUITER')")
-	public ResponseEntity<Void> deleteOpenPosition(@PathVariable("id") UUID openPositionId){
+	public ResponseEntity<Void> deleteOpenPosition(@PathVariable("id") UUID openPositionId) throws IllegalAccessException{
+		
+		supplyAndDemandService.deleteOpenPosition(openPositionId);
+		
 		return ResponseEntity.ok().build();
 	};
 	
