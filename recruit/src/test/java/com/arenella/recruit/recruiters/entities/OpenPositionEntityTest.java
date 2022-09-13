@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.time.LocalDate;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
@@ -115,25 +116,98 @@ public class OpenPositionEntityTest {
 					.startDate(startDate)
 				.build();
 		
-		OpenPositionEntity entity = OpenPositionEntity.convertToEntity(position);
+		OpenPositionEntity entity = OpenPositionEntity.convertToEntity(position, Optional.empty());
 		
 		assertEquals(entity.getComments(), 				comments);
 		assertEquals(entity.getContractType(), 			contractType);
 		assertEquals(entity.getCountry(), 				country);
 		assertEquals(entity.getDescription(), 			description);
-		assertEquals(entity.getId(), 						id);
+		assertEquals(entity.getId(), 					id);
 		assertEquals(entity.getLocation(), 				location);
 		assertEquals(entity.getPositionClosingDate(), 	positionClosingDate);
-		assertEquals(entity.getPositionTitle(), 			positionTitle);
+		assertEquals(entity.getPositionTitle(), 		positionTitle);
 		assertEquals(entity.getRecruiterId(), 			recruiterId);
 		assertEquals(entity.getRenumeration(), 			renumeration);
-		assertEquals(entity.getStartDate(), 				startDate);
+		assertEquals(entity.getStartDate(), 			startDate);
 		
 		assertNotNull(entity.getCreated());
 		assertTrue(entity.getCreated() instanceof LocalDate);
 		
 	}
 	
+	/**
+	* Tests conversion from Domain to Entity representation when the conversion 
+	* involves the update of an existing Entity
+	* @throws Exception
+	*/
+	@Test
+	public void testConvertToEntity_updateExistingEntity() throws Exception{
+		
+		final UUID 			idOrig						= UUID.randomUUID();
+		final String 		recruiterIdOrig				= "recruier1IdUpdt";
+		final String 		positionTitleOrig			= "Java DeveloperUpdt";
+		final Country	 	countryOrig					= Country.IRL;
+		final String		locationOrig				= "Remote in EuropeUpdt";
+		final ContractType 	contractTypeOrig			= ContractType.PERM;
+		final String	 	renumerationOrig			= "500 euros per dayUpdt";
+		final LocalDate 	startDateOrig				= LocalDate.of(2022, 6, 28);
+		final LocalDate 	positionClosingDateOrig		= LocalDate.of(2022, 7, 14);;
+		final String 		descriptionOrig			 	= "Some long descriptive textUpdt";
+		final String 		commentsOrig				= "Some comments fromt he RecruiterUpdt";
+		
+		OpenPosition position = OpenPosition
+				.builder()
+					.comments(comments)
+					.contractType(contractType)
+					.country(country)
+					.description(description)
+					.id(id)
+					.location(location)
+					.positionClosingDate(positionClosingDate)
+					.positionTitle(positionTitle)
+					.recruiterId(recruiterId)
+					.renumeration(renumeration)
+					.startDate(startDate)
+				.build();
+		
+		OpenPositionEntity positionEntity = OpenPositionEntity
+				.builder()
+					.comments(commentsOrig)
+					.contractType(contractTypeOrig)
+					.country(countryOrig)
+					.description(descriptionOrig)
+					.id(idOrig)
+					.location(locationOrig)
+					.positionClosingDate(positionClosingDateOrig)
+					.positionTitle(positionTitleOrig)
+					.recruiterId(recruiterIdOrig)
+					.renumeration(renumerationOrig)
+					.startDate(startDateOrig)
+				.build();
+		
+		final LocalDate createdOrig = positionEntity.getCreated();
+		
+		OpenPositionEntity entity = OpenPositionEntity.convertToEntity(position, Optional.of(positionEntity));
+		
+		assertEquals(entity.getId(), 					idOrig);
+		assertEquals(entity.getRecruiterId(), 			recruiterIdOrig);
+		assertEquals(entity.getCreated(), 				createdOrig);
+
+		assertEquals(entity.getComments(), 				comments);
+		assertEquals(entity.getContractType(), 			contractType);
+		assertEquals(entity.getCountry(), 				country);
+		assertEquals(entity.getDescription(), 			description);
+		
+		assertEquals(entity.getLocation(), 				location);
+		assertEquals(entity.getPositionClosingDate(), 	positionClosingDate);
+		assertEquals(entity.getPositionTitle(), 		positionTitle);
+		assertEquals(entity.getRenumeration(), 			renumeration);
+		assertEquals(entity.getStartDate(), 			startDate);
+		
+		assertNotNull(entity.getCreated());
+		assertTrue(entity.getCreated() instanceof LocalDate);
+		
+	}
 	/**
 	* Tests conversion from Entity to Domain representation
 	* @throws Exception

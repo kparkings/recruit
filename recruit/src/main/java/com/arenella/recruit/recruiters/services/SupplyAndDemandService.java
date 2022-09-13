@@ -23,4 +23,12 @@ public interface SupplyAndDemandService {
 	* @throws IllegalAccessException 
 	*/
 	public void deleteOpenPosition(UUID openPositionId) throws IllegalAccessException;
+	
+	/**
+	* Updates an existing OpenPosition
+	* @param UUID 			- OpenPosition id 
+	* @param openPosition 	- OpenPosition to be updated
+	* @throws IllegalAccessException
+	*/
+	public void updateOpenPosition(UUID OpenPositionId, OpenPosition openPosition) throws IllegalAccessException;
 }

@@ -118,4 +118,31 @@ public class SupplyAndDemandServiceImplTest {
 		
 	}
 	
+	@Test
+	public void testUpdateOpenPosition() throws Exception{
+		
+		UUID 			openPositionId 	= UUID.randomUUID();
+		OpenPosition 	openPosition 	= OpenPosition.builder().recruiterId(RECRUITER_ID).build();
+		
+		Mockito.when(this.mockSupplyAndDemandDao.findByOpenPositionId(openPositionId)).thenReturn(openPosition);
+		
+		service.updateOpenPosition(openPositionId, openPosition);
+		
+		Mockito.verify(this.mockSupplyAndDemandDao).updateExistingOpenPosition(openPositionId, openPosition);
+	}
+	
+	@Test
+	public void testUpdateOpenPosition_wrongUser() throws Exception{
+		
+		UUID 			openPositionId 	= UUID.randomUUID();
+		OpenPosition 	openPosition 	= OpenPosition.builder().recruiterId("AnotherRecruitersId").build();
+		
+		Mockito.when(this.mockSupplyAndDemandDao.findByOpenPositionId(openPositionId)).thenReturn(openPosition);
+		
+		Assertions.assertThrows(IllegalAccessException.class, () -> {
+			service.updateOpenPosition(openPositionId, openPosition);
+		});
+		
+	}
+	
 }

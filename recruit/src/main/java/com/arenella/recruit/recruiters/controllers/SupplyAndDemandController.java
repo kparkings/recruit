@@ -45,7 +45,7 @@ public class SupplyAndDemandController {
 		supplyAndDemandService.addOpenPosition(OpenPositionAPIInbound.convertToDomain(openPosition));
 		
 		return ResponseEntity.status(HttpStatus.CREATED).build();
-	};
+	}
 	
 	/**
 	* Allows Recruiter to delete an Open Position they previously published
@@ -60,17 +60,21 @@ public class SupplyAndDemandController {
 		supplyAndDemandService.deleteOpenPosition(openPositionId);
 		
 		return ResponseEntity.ok().build();
-	};
+	}
 	
 	/**
 	* Updates an Open position published by the Recruiter
 	* @param openPositionId - Unique identifier of the Open position to update
 	* @param openPosition	- Details of the Open Position being updated
 	* @return Status Code
+	* @throws IllegalAccessException 
 	*/
 	@PutMapping(value="/v1/open-position/{id}")
 	@PreAuthorize("hasRole('ROLE_RECRUITER')")
-	public ResponseEntity<Void> updateOpenPosition(@PathVariable("id") UUID openPositionId, OpenPositionAPIInbound openPosition){
+	public ResponseEntity<Void> updateOpenPosition(@PathVariable("id") UUID openPositionId, OpenPositionAPIInbound openPosition) throws IllegalAccessException{
+		
+		supplyAndDemandService.updateOpenPosition(openPositionId, OpenPositionAPIInbound.convertToDomain(openPosition));
+		
 		return ResponseEntity.ok().build();
 	};
 	

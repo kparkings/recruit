@@ -1,7 +1,6 @@
 package com.arenella.recruit.recruiters.beans;
 
 import java.time.LocalDate;
-import java.util.UUID;
 
 import com.arenella.recruit.recruiters.beans.OpenPosition.ContractType;
 import com.arenella.recruit.recruiters.beans.OpenPosition.Country;
@@ -17,7 +16,6 @@ import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 @JsonDeserialize(builder=OpenPositionAPIInbound.OpenPositionAPIInboundBuilder.class)
 public class OpenPositionAPIInbound {
 	
-	private UUID 						id;
 	private String 						recruiterId;
 	private String 						positionTitle;
 	private Country	 					country;
@@ -35,7 +33,6 @@ public class OpenPositionAPIInbound {
 	*/
 	private OpenPositionAPIInbound(OpenPositionAPIInboundBuilder builder) {
 		
-		this.id 							= builder.id;
 		this.recruiterId					= builder.recruiterId;
 		this.positionTitle 					= builder.positionTitle;
 		this.country 						= builder.country;
@@ -47,14 +44,6 @@ public class OpenPositionAPIInbound {
 		this.description 					= builder.description;
 		this.comments 						= builder.comments;
 		
-	}
-	
-	/**
-	* Returns the Unique Identifier for the Open Position
-	* @return Unique Id
-	*/
-	public UUID getId(){
-		return this.id;
 	}
 	
 	/**
@@ -155,7 +144,6 @@ public class OpenPositionAPIInbound {
 	@JsonPOJOBuilder(buildMethodName="build", withPrefix="")
 	public static class OpenPositionAPIInboundBuilder{
 		
-		private UUID 						id;
 		private String 						recruiterId;
 		private String 						positionTitle;
 		private Country	 					country;
@@ -172,10 +160,10 @@ public class OpenPositionAPIInbound {
 		* @param id - UniqueId of the Open Position
 		* @return Builder
 		*/
-		public OpenPositionAPIInboundBuilder id(UUID id){
-			this.id = id;
-			return this;
-		}
+		//public OpenPositionAPIInboundBuilder id(UUID id){
+		//	this.id = id;
+		//	return this;
+		//}
 		
 		/**
 		* Sets the unique Id of the Recruiter who owns the 
@@ -304,7 +292,6 @@ public class OpenPositionAPIInbound {
 					.contractType(openPositionAPIInbound.getContractType())
 					.country(openPositionAPIInbound.getCountry())
 					.description(openPositionAPIInbound.getDescription())
-					.id(openPositionAPIInbound.getId())
 					.location(openPositionAPIInbound.getLocation())
 					.positionClosingDate(openPositionAPIInbound.getPositionClosingDate())
 					.positionTitle(openPositionAPIInbound.getPositionTitle())

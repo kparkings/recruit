@@ -192,7 +192,6 @@ public class OpenPositionEntity {
 		private String 						comments;
 		private LocalDate					created;
 		
-		
 		/**
 		* Sets the Unique Identifier for the Open Position
 		* @param id - UniqueId of the Open Position
@@ -351,10 +350,29 @@ public class OpenPositionEntity {
 	
 	/**
 	* Converts from Domain representation to Entity representation
-	* @param openPosition - Domain representation
-	* @return Entity representation
+	* @param 	openPosition - Domain representation
+	* @param	original 	 - Existing entity to be updated	
+	* @return 	Entity representation
 	*/
-	public static OpenPositionEntity convertToEntity(OpenPosition openPosition) {
+	public static OpenPositionEntity convertToEntity(OpenPosition openPosition, Optional<OpenPositionEntity> original) {
+		
+		if (original.isPresent()) {
+			
+			OpenPositionEntity originalEntity = original.get();
+			
+			originalEntity.positionTitle		= openPosition.getPositionTitle();
+			originalEntity.country 				= openPosition.getCountry();
+			originalEntity.location 			= openPosition.getLocation();
+			originalEntity.contractType 		= openPosition.getContractType();
+			originalEntity.renumeration 		= openPosition.getRenumeration();
+			originalEntity.startDate 			= openPosition.getStartDate();
+			originalEntity.positionClosingDate 	= openPosition.getPositionClosingDate();
+			originalEntity.description 			= openPosition.getDescription();
+			originalEntity.comments 			= openPosition.getComments();
+			
+			return originalEntity; 
+		}
+		
 		return OpenPositionEntity
 							.builder()
 								.comments(openPosition.getComments())

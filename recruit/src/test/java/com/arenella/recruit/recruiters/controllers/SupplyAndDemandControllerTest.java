@@ -71,6 +71,7 @@ public class SupplyAndDemandControllerTest {
 	public void testUpdateOpenPosition() throws Exception{
 		ResponseEntity<Void> response = controller.updateOpenPosition(UUID.randomUUID(), OpenPositionAPIInbound.builder().build());
 		assertEquals(response.getStatusCode(), HttpStatus.OK);
+		Mockito.verify(supplyAndDemandService).updateOpenPosition(Mockito.any(UUID.class), Mockito.any(OpenPosition.class));
 	};
 	
 	/**

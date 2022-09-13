@@ -1,6 +1,7 @@
 package com.arenella.recruit.recruiters.beans;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.time.LocalDate;
 import java.util.UUID;
@@ -16,7 +17,6 @@ import com.arenella.recruit.recruiters.beans.OpenPosition.Country;
 */
 public class OpenPositionAPIInboundTest {
 
-	private UUID 			id						= UUID.randomUUID();
 	private String 			recruiterId				= "recruier1Id";
 	private String 			positionTitle			= "Java Developer";
 	private Country	 		country					= Country.EUROPE;
@@ -41,7 +41,6 @@ public class OpenPositionAPIInboundTest {
 					.contractType(contractType)
 					.country(country)
 					.description(description)
-					.id(id)
 					.location(location)
 					.positionClosingDate(positionClosingDate)
 					.positionTitle(positionTitle)
@@ -54,7 +53,6 @@ public class OpenPositionAPIInboundTest {
 		assertEquals(position.getContractType(), 			contractType);
 		assertEquals(position.getCountry(), 				country);
 		assertEquals(position.getDescription(), 			description);
-		assertEquals(position.getId(), 						id);
 		assertEquals(position.getLocation(), 				location);
 		assertEquals(position.getPositionClosingDate(), 	positionClosingDate);
 		assertEquals(position.getPositionTitle(), 			positionTitle);
@@ -65,7 +63,7 @@ public class OpenPositionAPIInboundTest {
 	}
 
 	/**
-	* Tests the conversion of OpenPosition incomming API 
+	* Tests the conversion of OpenPosition incoming API 
 	* representation to the Domain representation
 	* @throws Exception
 	*/
@@ -78,7 +76,6 @@ public class OpenPositionAPIInboundTest {
 					.contractType(contractType)
 					.country(country)
 					.description(description)
-					.id(id)
 					.location(location)
 					.positionClosingDate(positionClosingDate)
 					.positionTitle(positionTitle)
@@ -93,7 +90,6 @@ public class OpenPositionAPIInboundTest {
 		assertEquals(openPosition.getContractType(), 			contractType);
 		assertEquals(openPosition.getCountry(), 				country);
 		assertEquals(openPosition.getDescription(), 			description);
-		assertEquals(openPosition.getId(), 						id);
 		assertEquals(openPosition.getLocation(), 				location);
 		assertEquals(openPosition.getPositionClosingDate(), 	positionClosingDate);
 		assertEquals(openPosition.getPositionTitle(), 			positionTitle);
@@ -101,6 +97,7 @@ public class OpenPositionAPIInboundTest {
 		assertEquals(openPosition.getRenumeration(), 			renumeration);
 		assertEquals(openPosition.getStartDate(), 				startDate);
 		
+		assertNull(openPosition.getId());
 	}
 	
 }

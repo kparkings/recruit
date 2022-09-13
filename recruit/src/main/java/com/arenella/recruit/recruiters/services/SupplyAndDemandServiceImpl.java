@@ -34,7 +34,35 @@ public class SupplyAndDemandServiceImpl implements SupplyAndDemandService{
 	/**
 	* Refer to the SupplyAndDemandService interface for details 
 	*/
+	@Override
 	public void deleteOpenPosition(UUID openPositionId) throws IllegalAccessException{
+		
+		validateAuthenticationForUser(openPositionId);
+		
+		dao.deleteById(openPositionId);
+		
+	}
+	
+	/**
+	* Refer to the SupplyAndDemandService interface for details 
+	*/
+	@Override
+	public void updateOpenPosition(UUID openPositionId, OpenPosition openPosition) throws IllegalAccessException {
+		
+		validateAuthenticationForUser(openPositionId);
+	
+		dao.updateExistingOpenPosition(openPositionId, openPosition);
+		
+	}
+	
+	/**
+	* Performs authentication validation to ensure a User can only update their 
+	* own OpenPositions
+	* @param openPositionId - OpenPoistion the user wants to update
+	* @return If user has rights to the OpenPosition the existing OpenPosition
+	* @throws IllegalAccessException
+	*/
+	private OpenPosition validateAuthenticationForUser(UUID openPositionId) throws IllegalAccessException{
 		
 		OpenPosition openPosition = dao.findByOpenPositionId(openPositionId);
 		
@@ -42,14 +70,12 @@ public class SupplyAndDemandServiceImpl implements SupplyAndDemandService{
 			throw new IllegalAccessException();
 		}
 		
-		dao.deleteById(openPositionId);
+		return openPosition;
 		
 	}
 	
 	private String getAuthenticatedRecruiterId() {
 		return SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
 	}
-	
-	
 	
 }
