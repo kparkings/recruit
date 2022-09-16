@@ -3,12 +3,10 @@ package com.arenella.recruit.recruiters.beans;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
-import com.arenella.recruit.recruiters.beans.OfferedCandidate.DAYS_ON_SITE;
-import com.arenella.recruit.recruiters.beans.OfferedCandidate.LANGUAGES;
 import com.arenella.recruit.recruiters.beans.OpenPosition.ContractType;
 import com.arenella.recruit.recruiters.beans.OpenPosition.Country;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 
 /**
@@ -17,9 +15,12 @@ import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 * is being offered to other Recruiters
 * @author K Parkings
 */
-@JsonDeserialize(builder=OfferedCandidateAPIInbound.OfferedCandidateAPIInboundBuilder.class)
-public class OfferedCandidateAPIInbound {
+public class OfferedCandidate {
+
+	public static enum LANGUAGES {DUTCH, ENGLISH, FRENCH}
+	public static enum DAYS_ON_SITE {ZERO, ONE,TWO,THREE,FOUR,FIVE}
 	
+	private UUID 						id;
 	private String 						recruiterId;
 	private String 						candidateRoleTitle;
 	private Country	 					country;
@@ -33,13 +34,15 @@ public class OfferedCandidateAPIInbound {
 	private String 						description;
 	private Set<LANGUAGES>				spokenLanguages			= new HashSet<>();
 	private String 						comments;
+	private LocalDate					created;
 	
 	/**
 	* Constructor based upon a Builder
 	* @param builder - Contains initialization values
 	*/
-	private OfferedCandidateAPIInbound(OfferedCandidateAPIInboundBuilder builder) {
+	private OfferedCandidate(OfferedCandidateAPIInboundBuilder builder) {
 		
+		this.id 					= builder.id;
 		this.recruiterId 			= builder.recruiterId; //?? include contact details or via internal messages
 		this.candidateRoleTitle 	= builder.candidateRoleTitle;
 		this.country 				= builder.country;
@@ -53,7 +56,16 @@ public class OfferedCandidateAPIInbound {
 		this.description 			= builder.description;
 		this.spokenLanguages 		= builder.spokenLanguages;
 		this.comments 				= builder.comments;
+		this.created				= builder.created;
 		
+	}
+	
+	/**
+	* Returns the unique Id of the offered candidate
+	* @return Uinque identifier for the Candidate
+	*/
+	public UUID getid(){
+		return this.id;
 	}
 	
 	/**
@@ -162,6 +174,14 @@ public class OfferedCandidateAPIInbound {
 	}
 	
 	/**
+	* Returns the date the OfferedCandidate was created
+	* @return when the Offered Candiate was created
+	*/
+	public LocalDate getCreated() {
+		return this.created;
+	}
+	
+	/**
 	* Returns a Builder for the Class
 	* @return Builder for the Class
 	*/
@@ -176,6 +196,7 @@ public class OfferedCandidateAPIInbound {
 	@JsonPOJOBuilder(buildMethodName="build", withPrefix="")
 	public static class OfferedCandidateAPIInboundBuilder{
 		
+		private UUID 						id;
 		private String 						recruiterId;
 		private String 						candidateRoleTitle;
 		private Country	 					country;
@@ -189,6 +210,19 @@ public class OfferedCandidateAPIInbound {
 		private String 						description;
 		private Set<LANGUAGES>				spokenLanguages			= new HashSet<>();
 		private String 						comments;
+		private LocalDate					created;
+		
+		/**
+		* Sets the unique Id of the offered Candidate
+		* @param id - Unique Id of the offered Candidate
+		* @return Builder
+		*/
+		public OfferedCandidateAPIInboundBuilder id(UUID id) {
+			
+			this.id = id;
+			
+			return this;
+		}
 		
 		/**
 		* Sets the Unique Id of the Recruiter offering the Candidate
@@ -322,7 +356,19 @@ public class OfferedCandidateAPIInbound {
 			
 			return this;
 		}
-		
+
+		/**
+		* Sets the Date the OfferedCandidate was created
+		* @param created - When the Offered Candidate was created
+		* @return Builder
+		*/
+		public OfferedCandidateAPIInboundBuilder created(LocalDate created) {
+			
+			this.created = created;
+			
+			return this;
+		}
+
 		/**
 		* Sets languages spoken by the offered Candidate
 		* @param spokenLanguages - Languages spoken by the Candidate
@@ -353,8 +399,8 @@ public class OfferedCandidateAPIInbound {
 		* the values in the Builder
 		* @return Initialzied instance of OfferedCandidateAPIInbound
 		*/
-		public OfferedCandidateAPIInbound build() {
-			return new OfferedCandidateAPIInbound(this);
+		public OfferedCandidate build() {
+			return new OfferedCandidate(this);
 		}
 		
 	}
