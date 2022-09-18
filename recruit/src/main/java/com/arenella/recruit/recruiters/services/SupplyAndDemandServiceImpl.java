@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import com.arenella.recruit.recruiters.beans.OfferedCandidate;
 import com.arenella.recruit.recruiters.beans.OpenPosition;
 import com.arenella.recruit.recruiters.dao.SupplyAndDemanDao;
 
@@ -56,6 +57,18 @@ public class SupplyAndDemandServiceImpl implements SupplyAndDemandService{
 	}
 	
 	/**
+	* Refer to the SupplyAndDemandService interface for details 
+	*/
+	@Override
+	public void addOfferedCandidate(OfferedCandidate offeredCandidate) {
+		
+		offeredCandidate.initializeAsNewObject(getAuthenticatedRecruiterId());
+		
+		dao.persistOfferedCandidate(offeredCandidate);
+		
+	}
+	
+	/**
 	* Performs authentication validation to ensure a User can only update their 
 	* own OpenPositions
 	* @param openPositionId - OpenPoistion the user wants to update
@@ -74,6 +87,10 @@ public class SupplyAndDemandServiceImpl implements SupplyAndDemandService{
 		
 	}
 	
+	/**
+	* Retrieves the Id of the current Recruiter
+	* @return
+	*/
 	private String getAuthenticatedRecruiterId() {
 		return SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
 	}

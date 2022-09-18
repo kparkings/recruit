@@ -16,6 +16,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import com.arenella.recruit.recruiters.beans.OfferedCandidate;
 import com.arenella.recruit.recruiters.beans.OpenPosition;
 import com.arenella.recruit.recruiters.dao.SupplyAndDemanDao;
 
@@ -142,6 +143,25 @@ public class SupplyAndDemandServiceImplTest {
 		Assertions.assertThrows(IllegalAccessException.class, () -> {
 			service.updateOpenPosition(openPositionId, openPosition);
 		});
+		
+	}
+	
+	/**
+	* Tests persisting of an OfferedCandidate
+	* @throws Exception
+	*/
+	@Test
+	public void testAddOfferedCandidate() throws Exception{
+		
+		ArgumentCaptor<OfferedCandidate> captor = ArgumentCaptor.forClass(OfferedCandidate.class);
+		
+		OfferedCandidate offeredCandidate = OfferedCandidate.builder().build();
+		
+		service.addOfferedCandidate(offeredCandidate);
+		
+		Mockito.verify(mockSupplyAndDemandDao).persistOfferedCandidate(captor.capture());
+		
+		assertEquals(RECRUITER_ID, captor.getValue().getRecruiterId());
 		
 	}
 	

@@ -2,6 +2,7 @@ package com.arenella.recruit.recruiters.beans;
 
 import java.time.LocalDate;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
@@ -61,6 +62,20 @@ public class OfferedCandidate {
 	}
 	
 	/**
+	* 
+	* @param authenticatedRecruiterId
+	*/
+	public void initializeAsNewObject(String authenticatedRecruiterId) {
+		
+		if (Optional.ofNullable(this.id).isPresent()) {
+			throw new IllegalStateException("Can't Initialize an existing Offered Candidate");
+		}
+		
+		this.id = UUID.randomUUID();
+		this.recruiterId = authenticatedRecruiterId;	
+	}
+	
+	/**
 	* Returns the unique Id of the offered candidate
 	* @return Uinque identifier for the Candidate
 	*/
@@ -72,7 +87,7 @@ public class OfferedCandidate {
 	* Returns the unique Identifier of the Recruiter offering the Candidate
 	* @return Unique Id of the Recruiter
 	*/
-	public String getrecruiterId(){
+	public String getRecruiterId(){
 		return this.recruiterId;
 	}
 	
@@ -404,4 +419,5 @@ public class OfferedCandidate {
 		}
 		
 	}
+
 }

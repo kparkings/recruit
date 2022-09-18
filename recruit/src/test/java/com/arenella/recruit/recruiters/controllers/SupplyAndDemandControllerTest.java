@@ -41,6 +41,7 @@ public class SupplyAndDemandControllerTest {
 	*/
 	@Test
 	public void testAddOpenPosition() throws Exception{
+		
 		ResponseEntity<Void> response = controller.addOpenPosition(OpenPositionAPIInbound.builder().build());
 		
 		Mockito.verify(supplyAndDemandService).addOpenPosition(Mockito.any(OpenPosition.class));

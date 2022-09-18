@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import org.springframework.data.repository.CrudRepository;
 
+import com.arenella.recruit.recruiters.beans.OfferedCandidate;
 import com.arenella.recruit.recruiters.beans.OpenPosition;
 import com.arenella.recruit.recruiters.entities.OpenPositionEntity;
 
@@ -48,6 +49,14 @@ public interface SupplyAndDemanDao extends CrudRepository<OpenPositionEntity, UU
 		
 		this.save(updatedEntity);
 		
+	}
+
+	/**
+	* Persists an OfferedCandidate
+	* @param offeredCandidate - OfferedCandidate to be persisted
+	*/
+	default void persistOfferedCandidate(OfferedCandidate offeredCandidate) {
+		//this.save(OfferedCandidateEntity.convertToEntity(offeredCandidate));
 	}
 	
 }

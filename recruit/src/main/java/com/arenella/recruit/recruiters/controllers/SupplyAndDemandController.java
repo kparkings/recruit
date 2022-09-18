@@ -86,6 +86,9 @@ public class SupplyAndDemandController {
 	@PostMapping(value="/v1/offered-candidate")
 	@PreAuthorize("hasRole('ROLE_RECRUITER')")
 	public ResponseEntity<Void> addOfferedCandidate(OfferedCandidateAPIInbound offeredCandidate){
+		
+		supplyAndDemandService.addOfferedCandidate(OfferedCandidateAPIInbound.convertToDomain(offeredCandidate));
+		
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 	};
 	

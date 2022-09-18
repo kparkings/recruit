@@ -358,4 +358,32 @@ public class OfferedCandidateAPIInbound {
 		}
 		
 	}
+
+	/**
+	* Converts the Incoming API version of the OfferedCandidate to a Domain version
+	* @param offeredCandidate
+	* @return
+	*/
+	public static OfferedCandidate convertToDomain(OfferedCandidateAPIInbound offeredCandidate) {
+		
+		return OfferedCandidate
+				.builder()
+					.availableFromDate(offeredCandidate.getavailableFromDate())
+					.candidateRoleTitle(offeredCandidate.getcandidateRoleTitle())
+					.comments(offeredCandidate.getcomments())
+					.contractType(offeredCandidate.getcontractType())
+					.coreSkills(offeredCandidate.getcoreSkills())
+					.country(offeredCandidate.getcountry())
+					.daysOnSite(offeredCandidate.getDaysOnSite())
+					.description(offeredCandidate.getdescription())
+					//.id(offeredCandidate.getId)
+					.location(offeredCandidate.getlocation())
+					.recruiterId(offeredCandidate.getrecruiterId())
+					.renumeration(offeredCandidate.getrenumeration())
+					.spokenLanguages(offeredCandidate.getspokenLanguages())
+					.yearsExperience(offeredCandidate.getyearsExperience())
+				.build();
+	
+	}
+
 }

@@ -2,6 +2,7 @@ package com.arenella.recruit.recruiters.services;
 
 import java.util.UUID;
 
+import com.arenella.recruit.recruiters.beans.OfferedCandidate;
 import com.arenella.recruit.recruiters.beans.OpenPosition;
 
 /**
@@ -31,4 +32,10 @@ public interface SupplyAndDemandService {
 	* @throws IllegalAccessException
 	*/
 	public void updateOpenPosition(UUID OpenPositionId, OpenPosition openPosition) throws IllegalAccessException;
+	
+	/**
+	* Adds a new OfferedCandidate
+	* @param offeredCandidate - Details of the Candidate being offered
+	*/
+	public void addOfferedCandidate(OfferedCandidate offeredCandidate);
 }
