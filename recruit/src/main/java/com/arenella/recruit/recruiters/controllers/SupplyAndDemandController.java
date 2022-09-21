@@ -76,7 +76,7 @@ public class SupplyAndDemandController {
 		supplyAndDemandService.updateOpenPosition(openPositionId, OpenPositionAPIInbound.convertToDomain(openPosition));
 		
 		return ResponseEntity.ok().build();
-	};
+	}
 	
 	/**
 	* Allows the Recruiter to Offer a new Candidate to other Recruiters
@@ -90,7 +90,7 @@ public class SupplyAndDemandController {
 		supplyAndDemandService.addOfferedCandidate(OfferedCandidateAPIInbound.convertToDomain(offeredCandidate));
 		
 		return ResponseEntity.status(HttpStatus.CREATED).build();
-	};
+	}
 	
 	/**
 	* Allows Recruiter to remove a previously offered Candidate
@@ -99,21 +99,28 @@ public class SupplyAndDemandController {
 	*/
 	@DeleteMapping(value="/v1/offered-candidate/{id}")
 	@PreAuthorize("hasRole('ROLE_RECRUITER')")
-	public ResponseEntity<Void> deleteOfferedCandidate(@PathVariable("id") UUID offeredCandidateId){
+	public ResponseEntity<Void> deleteOfferedCandidate(@PathVariable("id") UUID offeredCandidateId) throws IllegalAccessException{
+		
+		supplyAndDemandService.deleteOfferedCandidate(offeredCandidateId);
+		
 		return ResponseEntity.ok().build();
-	};
+	}
 	
 	/**
 	* Updates an Offered Candidate published by the Recruiter
 	* @param offeredCandidateId - Unique Id of Offered Candidate to be updated
 	* @param offeredCandidate	- Updated version of Offered Candidate
 	* @return Status Code
+	* @throws IllegalAccessException 
 	*/
 	@PutMapping(value="/v1/offered-candidate/{id}")
 	@PreAuthorize("hasRole('ROLE_RECRUITER')")
-	public ResponseEntity<Void> updateOfferedCandidate(@PathVariable("id") UUID offeredCandidateId, OfferedCandidateAPIInbound offeredCandidate){
+	public ResponseEntity<Void> updateOfferedCandidate(@PathVariable("id") UUID offeredCandidateId, OfferedCandidateAPIInbound offeredCandidate) throws IllegalAccessException{
+		
+		this.supplyAndDemandService.updateOfferedCandidate(offeredCandidateId, OfferedCandidateAPIInbound.convertToDomain(offeredCandidate));
+		
 		return ResponseEntity.ok().build();
-	};
+	}
 	
 	/**
 	* Allows Recruiter to add a Recruiter to their blacklist so that their Offered Candidates and Open
@@ -125,7 +132,7 @@ public class SupplyAndDemandController {
 	@PreAuthorize("hasRole('ROLE_RECRUITER')")
 	public ResponseEntity<Void> addRecruiterToGlobalBlacklist(@PathVariable("id") String userId){
 		return ResponseEntity.ok().build();
-	};
+	}
 	
 	/**
 	* Allows Recruiter to remove a Recruiter to their blacklist so that their Offered Candidates and Open
@@ -137,7 +144,7 @@ public class SupplyAndDemandController {
 	@PreAuthorize("hasRole('ROLE_RECRUITER')")
 	public ResponseEntity<Void> deleteRecruiterFromGlobalBlacklist(@PathVariable("id") String userId){
 		return ResponseEntity.ok().build();
-	};
+	}
 	
 	/**
 	* Returns all Recruiters on the Recruiters Blacklist
@@ -158,7 +165,7 @@ public class SupplyAndDemandController {
 	@PreAuthorize("hasRole('ROLE_RECRUITER')")
 	public ResponseEntity<Set<OfferedCandidateAPIOutbound>> fetchOfferedCandidates(){
 		return ResponseEntity.ok().body(Set.of());
-	};
+	}
 	
 	/**
 	* Returns all Open Positions from recruiters
@@ -168,7 +175,7 @@ public class SupplyAndDemandController {
 	@PreAuthorize("hasRole('ROLE_RECRUITER')")
 	public ResponseEntity<Set<OpenPositionAPIOutbound>> fetchOpenPositions(){
 		return ResponseEntity.ok().body(Set.of());
-	};
+	}
 	
 	/**
 	* Returns all Candidates offered by a specific Recruiter
@@ -179,7 +186,7 @@ public class SupplyAndDemandController {
 	@PreAuthorize("hasRole('ROLE_RECRUITER')")
 	public ResponseEntity<Set<OfferedCandidateAPIOutbound>> fetchOfferedCandidates(@PathVariable("id") String recruiterId){
 		return ResponseEntity.ok().body(Set.of());
-	};
+	}
 	
 	/**
 	* Returns all Positions advertised by a specific Recruiter
@@ -190,6 +197,6 @@ public class SupplyAndDemandController {
 	@PreAuthorize("hasRole('ROLE_RECRUITER')")
 	public ResponseEntity<Set<OpenPositionAPIOutbound>> fetchOpenPositions(@PathVariable("id") String recruiterId){
 		return ResponseEntity.ok().body(Set.of());
-	};
+	}
 	
 }

@@ -6,7 +6,7 @@ import java.util.Set;
 import java.util.UUID;
 
 import com.arenella.recruit.recruiters.beans.OfferedCandidate.DAYS_ON_SITE;
-import com.arenella.recruit.recruiters.beans.OfferedCandidate.LANGUAGES;
+import com.arenella.recruit.recruiters.beans.OfferedCandidate.LANGUAGE;
 import com.arenella.recruit.recruiters.beans.OpenPosition.ContractType;
 import com.arenella.recruit.recruiters.beans.OpenPosition.Country;
 
@@ -29,7 +29,7 @@ public class OfferedCandidateAPIOutbound {
 	private Set<String>					coreSkills				= new HashSet<>();
 	private int							yearsExperience;
 	private String 						description;
-	private Set<LANGUAGES>				spokenLanguages			= new HashSet<>();
+	private Set<LANGUAGE>				spokenLanguages			= new HashSet<>();
 	private String 						comments;
 	private LocalDate					created;
 	
@@ -158,7 +158,7 @@ public class OfferedCandidateAPIOutbound {
 	* Returns the languages spoken by the Candidate
 	* @return candidate spoken languages
 	*/
-	public Set<LANGUAGES> getSpokenLanguages(){
+	public Set<LANGUAGE> getSpokenLanguages(){
 		return this.spokenLanguages;
 	}
 	
@@ -204,7 +204,7 @@ public class OfferedCandidateAPIOutbound {
 		private Set<String>					coreSkills				= new HashSet<>();
 		private int							yearsExperience;
 		private String 						description;
-		private Set<LANGUAGES>				spokenLanguages			= new HashSet<>();
+		private Set<LANGUAGE>				spokenLanguages			= new HashSet<>();
 		private String 						comments;
 		private LocalDate					created;
 		
@@ -370,7 +370,7 @@ public class OfferedCandidateAPIOutbound {
 		* @param spokenLanguages - Languages spoken by the Candidate
 		* @return Builder
 		*/
-		public OfferedCandidateAPIOutboundBuilder spokenLanguages(Set<LANGUAGES>spokenLanguages) {
+		public OfferedCandidateAPIOutboundBuilder spokenLanguages(Set<LANGUAGE>spokenLanguages) {
 			
 			this.spokenLanguages.clear();
 			this.spokenLanguages.addAll(spokenLanguages);

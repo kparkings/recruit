@@ -5,7 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.arenella.recruit.recruiters.beans.OfferedCandidate.DAYS_ON_SITE;
-import com.arenella.recruit.recruiters.beans.OfferedCandidate.LANGUAGES;
+import com.arenella.recruit.recruiters.beans.OfferedCandidate.LANGUAGE;
 import com.arenella.recruit.recruiters.beans.OpenPosition.ContractType;
 import com.arenella.recruit.recruiters.beans.OpenPosition.Country;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -31,7 +31,7 @@ public class OfferedCandidateAPIInbound {
 	private Set<String>					coreSkills				= new HashSet<>();
 	private int							yearsExperience;
 	private String 						description;
-	private Set<LANGUAGES>				spokenLanguages			= new HashSet<>();
+	private Set<LANGUAGE>				spokenLanguages			= new HashSet<>();
 	private String 						comments;
 	
 	/**
@@ -149,7 +149,7 @@ public class OfferedCandidateAPIInbound {
 	* Returns the languages spoken by the Candidate
 	* @return candidate spoken languages
 	*/
-	public Set<LANGUAGES> getspokenLanguages(){
+	public Set<LANGUAGE> getspokenLanguages(){
 		return this.spokenLanguages;
 	}
 	
@@ -187,7 +187,7 @@ public class OfferedCandidateAPIInbound {
 		private Set<String>					coreSkills				= new HashSet<>();
 		private int							yearsExperience;
 		private String 						description;
-		private Set<LANGUAGES>				spokenLanguages			= new HashSet<>();
+		private Set<LANGUAGE>				spokenLanguages			= new HashSet<>();
 		private String 						comments;
 		
 		/**
@@ -328,7 +328,7 @@ public class OfferedCandidateAPIInbound {
 		* @param spokenLanguages - Languages spoken by the Candidate
 		* @return Builder
 		*/
-		public OfferedCandidateAPIInboundBuilder spokenLanguages(Set<LANGUAGES>spokenLanguages) {
+		public OfferedCandidateAPIInboundBuilder spokenLanguages(Set<LANGUAGE>spokenLanguages) {
 			
 			this.spokenLanguages.clear();
 			this.spokenLanguages.addAll(spokenLanguages);

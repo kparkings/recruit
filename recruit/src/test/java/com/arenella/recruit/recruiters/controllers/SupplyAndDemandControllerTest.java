@@ -15,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import com.arenella.recruit.recruiters.beans.BlacklistedRecruiterAPIOutbound;
+import com.arenella.recruit.recruiters.beans.OfferedCandidate;
 import com.arenella.recruit.recruiters.beans.OfferedCandidateAPIInbound;
 import com.arenella.recruit.recruiters.beans.OfferedCandidateAPIOutbound;
 import com.arenella.recruit.recruiters.beans.OpenPosition;
@@ -61,7 +62,7 @@ public class SupplyAndDemandControllerTest {
 		Mockito.verify(supplyAndDemandService).deleteOpenPosition(Mockito.any(UUID.class));
 		
 		assertEquals(response.getStatusCode(), HttpStatus.OK);
-	};
+	}
 	
 	
 	/**
@@ -73,7 +74,7 @@ public class SupplyAndDemandControllerTest {
 		ResponseEntity<Void> response = controller.updateOpenPosition(UUID.randomUUID(), OpenPositionAPIInbound.builder().build());
 		assertEquals(response.getStatusCode(), HttpStatus.OK);
 		Mockito.verify(supplyAndDemandService).updateOpenPosition(Mockito.any(UUID.class), Mockito.any(OpenPosition.class));
-	};
+	}
 	
 	/**
 	* Test Success
@@ -83,7 +84,7 @@ public class SupplyAndDemandControllerTest {
 	public void testAddOfferedCandidate() throws Exception{
 		ResponseEntity<Void> response = controller.addOfferedCandidate(OfferedCandidateAPIInbound.builder().build());
 		assertEquals(response.getStatusCode(), HttpStatus.CREATED);
-	};
+	}
 	
 	/**
 	* Test Success
@@ -93,7 +94,7 @@ public class SupplyAndDemandControllerTest {
 	public void testDeleteOfferedCandidate() throws Exception{
 		ResponseEntity<Void> response = controller.deleteOfferedCandidate(UUID.randomUUID());
 		assertEquals(response.getStatusCode(), HttpStatus.OK);
-	};
+	}
 	
 	/**
 	* Test Success
@@ -101,9 +102,12 @@ public class SupplyAndDemandControllerTest {
 	*/
 	@Test
 	public void testUpdateOfferedCandidate() throws Exception{
+		
 		ResponseEntity<Void> response = controller.updateOfferedCandidate(UUID.randomUUID(), OfferedCandidateAPIInbound.builder().build());
 		assertEquals(response.getStatusCode(), HttpStatus.OK);
-	};
+		Mockito.verify(supplyAndDemandService).updateOfferedCandidate(Mockito.any(UUID.class), Mockito.any(OfferedCandidate.class));
+		
+	}
 	
 	/**
 	* Test Success
@@ -113,7 +117,7 @@ public class SupplyAndDemandControllerTest {
 	public void testAddRecruiterToGlobalBlacklist() throws Exception{
 		ResponseEntity<Void> response = controller.addRecruiterToGlobalBlacklist("recruiter1Id");
 		assertEquals(response.getStatusCode(), HttpStatus.OK);
-	};
+	}
 	
 	/**
 	* Test Success
@@ -123,7 +127,7 @@ public class SupplyAndDemandControllerTest {
 	public void testDeleteRecruiterFromGlobalBlacklist() throws Exception{
 		ResponseEntity<Void> response = controller.deleteRecruiterFromGlobalBlacklist("recruiter1Id");
 		assertEquals(response.getStatusCode(), HttpStatus.OK);
-	};
+	}
 	
 	/**
 	* Test Success
@@ -143,7 +147,7 @@ public class SupplyAndDemandControllerTest {
 	public void testFetchOfferedCandidates() throws Exception{
 		ResponseEntity<Set<OfferedCandidateAPIOutbound>> response = controller.fetchOfferedCandidates();
 		assertEquals(response.getStatusCode(), HttpStatus.OK);
-	};
+	}
 	
 	/**
 	* Test Success
@@ -153,7 +157,7 @@ public class SupplyAndDemandControllerTest {
 	public void testFetchAdvertisedPositions() throws Exception{
 		ResponseEntity<Set<OpenPositionAPIOutbound>> response = controller.fetchOpenPositions();
 		assertEquals(response.getStatusCode(), HttpStatus.OK);
-	};
+	}
 	
 	/**
 	* Test Success
@@ -163,7 +167,7 @@ public class SupplyAndDemandControllerTest {
 	public void testFetchOfferedCandidates_forRecruiter() throws Exception{
 		ResponseEntity<Set<OfferedCandidateAPIOutbound>> response = controller.fetchOfferedCandidates("recruiter1Id");
 		assertEquals(response.getStatusCode(), HttpStatus.OK);
-	};
+	}
 	
 	/**
 	* Test Success
@@ -173,6 +177,6 @@ public class SupplyAndDemandControllerTest {
 	public void testFetchAdvertisedPositions_forRecruiter() throws Exception{
 		ResponseEntity<Set<OpenPositionAPIOutbound>> response = controller.fetchOpenPositions("recruiter1Id");
 		assertEquals(response.getStatusCode(), HttpStatus.OK);
-	};
+	}
 	
 }

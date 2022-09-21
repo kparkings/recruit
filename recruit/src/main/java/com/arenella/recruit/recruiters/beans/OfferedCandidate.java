@@ -18,7 +18,7 @@ import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 */
 public class OfferedCandidate {
 
-	public static enum LANGUAGES {DUTCH, ENGLISH, FRENCH}
+	public static enum LANGUAGE {DUTCH, ENGLISH, FRENCH}
 	public static enum DAYS_ON_SITE {ZERO, ONE,TWO,THREE,FOUR,FIVE}
 	
 	private UUID 						id;
@@ -33,7 +33,7 @@ public class OfferedCandidate {
 	private Set<String>					coreSkills				= new HashSet<>();
 	private int							yearsExperience;
 	private String 						description;
-	private Set<LANGUAGES>				spokenLanguages			= new HashSet<>();
+	private Set<LANGUAGE>				spokenLanguages			= new HashSet<>();
 	private String 						comments;
 	private LocalDate					created;
 	
@@ -176,7 +176,7 @@ public class OfferedCandidate {
 	* Returns the languages spoken by the Candidate
 	* @return candidate spoken languages
 	*/
-	public Set<LANGUAGES> getspokenLanguages(){
+	public Set<LANGUAGE> getspokenLanguages(){
 		return this.spokenLanguages;
 	}
 	
@@ -223,7 +223,7 @@ public class OfferedCandidate {
 		private Set<String>					coreSkills				= new HashSet<>();
 		private int							yearsExperience;
 		private String 						description;
-		private Set<LANGUAGES>				spokenLanguages			= new HashSet<>();
+		private Set<LANGUAGE>				spokenLanguages			= new HashSet<>();
 		private String 						comments;
 		private LocalDate					created;
 		
@@ -389,7 +389,7 @@ public class OfferedCandidate {
 		* @param spokenLanguages - Languages spoken by the Candidate
 		* @return Builder
 		*/
-		public OfferedCandidateAPIInboundBuilder spokenLanguages(Set<LANGUAGES>spokenLanguages) {
+		public OfferedCandidateAPIInboundBuilder spokenLanguages(Set<LANGUAGE>spokenLanguages) {
 			
 			this.spokenLanguages.clear();
 			this.spokenLanguages.addAll(spokenLanguages);

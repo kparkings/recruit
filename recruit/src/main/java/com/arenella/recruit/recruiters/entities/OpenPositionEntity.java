@@ -5,6 +5,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import javax.persistence.Entity;
+import javax.persistence.Table;
 
 import com.arenella.recruit.recruiters.beans.OpenPosition;
 import com.arenella.recruit.recruiters.beans.OpenPosition.ContractType;
@@ -15,6 +16,7 @@ import com.arenella.recruit.recruiters.beans.OpenPosition.Country;
 * @author K Parkings
 */
 @Entity
+@Table(name="open_positions")
 public class OpenPositionEntity {
 
 	private UUID 						id;

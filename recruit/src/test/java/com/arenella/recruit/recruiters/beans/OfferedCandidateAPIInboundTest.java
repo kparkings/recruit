@@ -9,7 +9,7 @@ import java.util.Set;
 import org.junit.jupiter.api.Test;
 
 import com.arenella.recruit.recruiters.beans.OfferedCandidate.DAYS_ON_SITE;
-import com.arenella.recruit.recruiters.beans.OfferedCandidate.LANGUAGES;
+import com.arenella.recruit.recruiters.beans.OfferedCandidate.LANGUAGE;
 import com.arenella.recruit.recruiters.beans.OpenPosition.ContractType;
 import com.arenella.recruit.recruiters.beans.OpenPosition.Country;
 
@@ -30,7 +30,7 @@ public class OfferedCandidateAPIInboundTest {
 	private static final Set<String>	CORE_SKILLS				= Set.of("Java","Spring","Hibernate","Angular");
 	private static final int			YEARS_EXPERIENCE 		= 20;
 	private static final String 		DESCRIPTION 			= "Java Dev with Angular Experience";
-	private static final Set<LANGUAGES>	SPOKEN_LANGUAGES		= Set.of(LANGUAGES.DUTCH, LANGUAGES.FRENCH);
+	private static final Set<LANGUAGE>	SPOKEN_LANGUAGES		= Set.of(LANGUAGE.DUTCH, LANGUAGE.FRENCH);
 	private static final String 		COMMENTS 				= "Candiadte preferes 32 hours per week over 4 days";
 	
 	/**

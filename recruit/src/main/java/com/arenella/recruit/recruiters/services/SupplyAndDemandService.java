@@ -38,4 +38,20 @@ public interface SupplyAndDemandService {
 	* @param offeredCandidate - Details of the Candidate being offered
 	*/
 	public void addOfferedCandidate(OfferedCandidate offeredCandidate);
+
+	/**
+	* Deletes an existing offeredCandidateId
+	* @param offeredCandidateId - Unique Id of the candidate to delete
+	* @throws IllegalAccessException 
+	*/
+	public void deleteOfferedCandidate(UUID offeredCandidateId) throws IllegalAccessException;
+
+	/**
+	* Updates an existing OfferedCandidate
+	* @param offeredCandidateId			- Unique Id of the OfferedCandidate
+	* @param offeredCandidate			- OfferedCandidate to update
+	* @throws IllegalAccessException
+	*/
+	public void updateOfferedCandidate(UUID offeredCandidateId, OfferedCandidate offeredCandidate) throws IllegalAccessException;
+	
 }

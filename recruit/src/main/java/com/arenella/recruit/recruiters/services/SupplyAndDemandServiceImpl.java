@@ -8,7 +8,8 @@ import org.springframework.stereotype.Service;
 
 import com.arenella.recruit.recruiters.beans.OfferedCandidate;
 import com.arenella.recruit.recruiters.beans.OpenPosition;
-import com.arenella.recruit.recruiters.dao.SupplyAndDemanDao;
+import com.arenella.recruit.recruiters.dao.OfferedCandidateDao;
+import com.arenella.recruit.recruiters.dao.OpenPositionDao;
 
 /**
 * Services for Supply and Demand
@@ -18,7 +19,10 @@ import com.arenella.recruit.recruiters.dao.SupplyAndDemanDao;
 public class SupplyAndDemandServiceImpl implements SupplyAndDemandService{
 
 	@Autowired
-	private SupplyAndDemanDao dao;
+	private OpenPositionDao 	openPositionDao;
+	
+	@Autowired
+	private OfferedCandidateDao offeredCandidateDao;
 	
 	/**
 	* Refer to the SupplyAndDemandService interface for details 
@@ -28,7 +32,7 @@ public class SupplyAndDemandServiceImpl implements SupplyAndDemandService{
 		
 		openPosition.initializeAsNewObject(getAuthenticatedRecruiterId());
 		
-		dao.persistOpenPositiion(openPosition);
+		openPositionDao.persistOpenPositiion(openPosition);
 		
 	}
 
@@ -38,9 +42,9 @@ public class SupplyAndDemandServiceImpl implements SupplyAndDemandService{
 	@Override
 	public void deleteOpenPosition(UUID openPositionId) throws IllegalAccessException{
 		
-		validateAuthenticationForUser(openPositionId);
+		validateAuthenticationForUserForOpenPosition(openPositionId);
 		
-		dao.deleteById(openPositionId);
+		openPositionDao.deleteById(openPositionId);
 		
 	}
 	
@@ -50,9 +54,9 @@ public class SupplyAndDemandServiceImpl implements SupplyAndDemandService{
 	@Override
 	public void updateOpenPosition(UUID openPositionId, OpenPosition openPosition) throws IllegalAccessException {
 		
-		validateAuthenticationForUser(openPositionId);
+		validateAuthenticationForUserForOpenPosition(openPositionId);
 	
-		dao.updateExistingOpenPosition(openPositionId, openPosition);
+		openPositionDao.updateExistingOpenPosition(openPositionId, openPosition);
 		
 	}
 	
@@ -64,7 +68,31 @@ public class SupplyAndDemandServiceImpl implements SupplyAndDemandService{
 		
 		offeredCandidate.initializeAsNewObject(getAuthenticatedRecruiterId());
 		
-		dao.persistOfferedCandidate(offeredCandidate);
+		offeredCandidateDao.persistOfferedCandidate(offeredCandidate);
+		
+	}
+	
+	/**
+	* Refer to the SupplyAndDemandService interface for details 
+	*/
+	@Override
+	public void updateOfferedCandidate(UUID offeredCandidateId, OfferedCandidate offeredCandidate) throws IllegalAccessException {
+		
+		validateAuthenticationForUserForOfferedCandidate(offeredCandidateId);
+	
+		offeredCandidateDao.updateExistingOfferedCandidate(offeredCandidateId, offeredCandidate);
+		
+	}
+	
+	/**
+	* Refer to the SupplyAndDemandService interface for details 
+	*/
+	@Override
+	public void deleteOfferedCandidate(UUID offeredCandidateId) throws IllegalAccessException{
+		
+		validateAuthenticationForUserForOfferedCandidate(offeredCandidateId);
+		
+		offeredCandidateDao.deleteById(offeredCandidateId);
 		
 	}
 	
@@ -75,9 +103,28 @@ public class SupplyAndDemandServiceImpl implements SupplyAndDemandService{
 	* @return If user has rights to the OpenPosition the existing OpenPosition
 	* @throws IllegalAccessException
 	*/
-	private OpenPosition validateAuthenticationForUser(UUID openPositionId) throws IllegalAccessException{
+	private OfferedCandidate validateAuthenticationForUserForOfferedCandidate(UUID offeredCandidateId) throws IllegalAccessException{
 		
-		OpenPosition openPosition = dao.findByOpenPositionId(openPositionId);
+		OfferedCandidate offeredCandidate = offeredCandidateDao.findByOfferedCandidateId(offeredCandidateId);
+		
+		if (!getAuthenticatedRecruiterId().equals(offeredCandidate.getRecruiterId())) {
+			throw new IllegalAccessException();
+		}
+		
+		return offeredCandidate;
+		
+	}
+	
+	/**
+	* Performs authentication validation to ensure a User can only update their 
+	* own OpenPositions
+	* @param openPositionId - OpenPoistion the user wants to update
+	* @return If user has rights to the OpenPosition the existing OpenPosition
+	* @throws IllegalAccessException
+	*/
+	private OpenPosition validateAuthenticationForUserForOpenPosition(UUID openPositionId) throws IllegalAccessException{
+		
+		OpenPosition openPosition = openPositionDao.findByOpenPositionId(openPositionId);
 		
 		if (!getAuthenticatedRecruiterId().equals(openPosition.getRecruiterId())) {
 			throw new IllegalAccessException();
