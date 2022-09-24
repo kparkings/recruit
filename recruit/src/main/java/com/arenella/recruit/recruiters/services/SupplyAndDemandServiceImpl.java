@@ -1,5 +1,6 @@
 package com.arenella.recruit.recruiters.services;
 
+import java.util.Set;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,9 +8,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.arenella.recruit.recruiters.beans.OfferedCandidate;
+import com.arenella.recruit.recruiters.beans.OfferedCandidateAPIOutbound.RecruiterDetails;
 import com.arenella.recruit.recruiters.beans.OpenPosition;
 import com.arenella.recruit.recruiters.dao.OfferedCandidateDao;
 import com.arenella.recruit.recruiters.dao.OpenPositionDao;
+import com.arenella.recruit.recruiters.dao.RecruiterDao;
 
 /**
 * Services for Supply and Demand
@@ -23,6 +26,9 @@ public class SupplyAndDemandServiceImpl implements SupplyAndDemandService{
 	
 	@Autowired
 	private OfferedCandidateDao offeredCandidateDao;
+	
+	@Autowired
+	private RecruiterDao		recruiterDao;
 	
 	/**
 	* Refer to the SupplyAndDemandService interface for details 
@@ -95,6 +101,24 @@ public class SupplyAndDemandServiceImpl implements SupplyAndDemandService{
 		offeredCandidateDao.deleteById(offeredCandidateId);
 		
 	}
+
+	/**
+	* Refer to the SupplyAndDemandService interface for details 
+	* @return
+	*/
+	@Override
+	public Set<OfferedCandidate> fetchOfferedCandidates() {
+		return offeredCandidateDao.findAllOfferedCandidates();
+	}
+	
+	/**
+	* Refer to the SupplyAndDemandService interface for details 
+	* @return
+	*/
+	@Override
+	public RecruiterDetails fetchRecruiterDetails(String recruiterId) {
+		return recruiterDao.findRecruiterDetailsById(recruiterId);
+	}
 	
 	/**
 	* Performs authentication validation to ensure a User can only update their 
@@ -136,10 +160,10 @@ public class SupplyAndDemandServiceImpl implements SupplyAndDemandService{
 	
 	/**
 	* Retrieves the Id of the current Recruiter
-	* @return
+	* @return id from security context
 	*/
 	private String getAuthenticatedRecruiterId() {
 		return SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
 	}
-	
+
 }

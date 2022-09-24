@@ -1,8 +1,10 @@
 package com.arenella.recruit.recruiters.services;
 
+import java.util.Set;
 import java.util.UUID;
 
 import com.arenella.recruit.recruiters.beans.OfferedCandidate;
+import com.arenella.recruit.recruiters.beans.OfferedCandidateAPIOutbound.RecruiterDetails;
 import com.arenella.recruit.recruiters.beans.OpenPosition;
 
 /**
@@ -53,5 +55,18 @@ public interface SupplyAndDemandService {
 	* @throws IllegalAccessException
 	*/
 	public void updateOfferedCandidate(UUID offeredCandidateId, OfferedCandidate offeredCandidate) throws IllegalAccessException;
+
+	/**
+	* Returns available OfferedCandidates
+	* @return offeredCandidates
+	*/
+	public Set<OfferedCandidate> fetchOfferedCandidates();
+	
+	/**
+	* Returns details of a Recruiter based upon their unique identifier
+	* @param recruiterId - Unique identifier of the recruiter
+	* @return Details of the Recruiter
+	 */
+	public RecruiterDetails fetchRecruiterDetails(String recruiterId);
 	
 }

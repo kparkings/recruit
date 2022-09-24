@@ -176,8 +176,8 @@ public class OfferedCandidateEntity {
 	}
 	
 	/**
-	* 
-	* @return
+	* Returns the Date the OfferedCandidate was added to the system
+	* @return Creation date of the OfferedCandidate
 	*/
 	public LocalDate getCreated(){
 		return this.created;
@@ -421,7 +421,7 @@ public class OfferedCandidateEntity {
 						.created(candidate.getCreated())
 						.daysOnSite(candidate.getDaysOnSite())
 						.description(candidate.getdescription())
-						.id(candidate.getid())
+						.id(candidate.getId())
 						.location(candidate.getlocation())
 						.recruiterId(candidate.getRecruiterId())
 						.renumeration(candidate.getrenumeration())

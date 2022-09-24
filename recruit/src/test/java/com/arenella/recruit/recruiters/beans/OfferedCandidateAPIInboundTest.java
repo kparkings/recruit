@@ -112,7 +112,7 @@ public class OfferedCandidateAPIInboundTest {
 		assertEquals(SPOKEN_LANGUAGES,		domain.getspokenLanguages());
 		assertEquals(COMMENTS,				domain.getcomments());
 		
-		assertNull(domain.getid());
+		assertNull(domain.getId());
 		assertNull(domain.getCreated());
 		
 	}

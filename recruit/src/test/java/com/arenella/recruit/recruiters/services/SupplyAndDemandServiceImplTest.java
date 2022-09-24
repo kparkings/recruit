@@ -2,6 +2,8 @@ package com.arenella.recruit.recruiters.services;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.time.LocalDate;
+import java.util.Set;
 import java.util.UUID;
 
 import org.junit.jupiter.api.Assertions;
@@ -50,7 +52,7 @@ public class SupplyAndDemandServiceImplTest {
 	public void init() throws Exception {
 	
 		SecurityContextHolder.getContext().setAuthentication(mockAuthentication);
-		Mockito.when(mockAuthentication.getPrincipal()).thenReturn(RECRUITER_ID);
+		
 		
 	}
 	
@@ -60,6 +62,8 @@ public class SupplyAndDemandServiceImplTest {
 	*/
 	@Test
 	public void testAddOpenPosition() throws Exception{
+		
+		Mockito.when(mockAuthentication.getPrincipal()).thenReturn(RECRUITER_ID);
 		
 		ArgumentCaptor<OpenPosition> captor = ArgumentCaptor.forClass(OpenPosition.class);
 		
@@ -79,6 +83,8 @@ public class SupplyAndDemandServiceImplTest {
 	*/
 	@Test
 	public void testDeleteOpenPosition() throws Exception{
+		
+		Mockito.when(mockAuthentication.getPrincipal()).thenReturn(RECRUITER_ID);
 		
 		UUID 			openPositionId 	= UUID.randomUUID();
 		OpenPosition 	openPosition 	= OpenPosition.builder().recruiterId(RECRUITER_ID).build();
@@ -112,6 +118,8 @@ public class SupplyAndDemandServiceImplTest {
 	@Test
 	public void testDeleteOpenPosition_wrongUser() throws Exception{
 		
+		Mockito.when(mockAuthentication.getPrincipal()).thenReturn(RECRUITER_ID);
+		
 		UUID 			openPositionId 	= UUID.randomUUID();
 		OpenPosition 	openPosition 	= OpenPosition.builder().recruiterId("AnotherRecruitersId").build();
 		
@@ -126,6 +134,8 @@ public class SupplyAndDemandServiceImplTest {
 	@Test
 	public void testUpdateOpenPosition() throws Exception{
 		
+		Mockito.when(mockAuthentication.getPrincipal()).thenReturn(RECRUITER_ID);
+		
 		UUID 			openPositionId 	= UUID.randomUUID();
 		OpenPosition 	openPosition 	= OpenPosition.builder().recruiterId(RECRUITER_ID).build();
 		
@@ -138,6 +148,8 @@ public class SupplyAndDemandServiceImplTest {
 	
 	@Test
 	public void testUpdateOpenPosition_wrongUser() throws Exception{
+		
+		Mockito.when(mockAuthentication.getPrincipal()).thenReturn(RECRUITER_ID);
 		
 		UUID 			openPositionId 	= UUID.randomUUID();
 		OpenPosition 	openPosition 	= OpenPosition.builder().recruiterId("AnotherRecruitersId").build();
@@ -157,6 +169,8 @@ public class SupplyAndDemandServiceImplTest {
 	@Test
 	public void testAddOfferedCandidate() throws Exception{
 		
+		Mockito.when(mockAuthentication.getPrincipal()).thenReturn(RECRUITER_ID);
+		
 		ArgumentCaptor<OfferedCandidate> captor = ArgumentCaptor.forClass(OfferedCandidate.class);
 		
 		OfferedCandidate offeredCandidate = OfferedCandidate.builder().build();
@@ -175,6 +189,8 @@ public class SupplyAndDemandServiceImplTest {
 	*/
 	@Test
 	public void testDeleteOfferedCandidate() throws Exception{
+		
+		Mockito.when(mockAuthentication.getPrincipal()).thenReturn(RECRUITER_ID);
 		
 		UUID 				offeredCandidateId 		= UUID.randomUUID();
 		OfferedCandidate 	offeredCandidate 		= OfferedCandidate.builder().recruiterId(RECRUITER_ID).build();
@@ -207,6 +223,8 @@ public class SupplyAndDemandServiceImplTest {
 	*/
 	@Test
 	public void testDeleteOfferedCandidate_wrongUser() throws Exception{
+
+		Mockito.when(mockAuthentication.getPrincipal()).thenReturn(RECRUITER_ID);
 		
 		UUID 				offeredCandidateId 	= UUID.randomUUID();
 		OfferedCandidate 	offeredCandidate 	= OfferedCandidate.builder().recruiterId("AnotherRecruitersId").build();
@@ -216,6 +234,35 @@ public class SupplyAndDemandServiceImplTest {
 		Assertions.assertThrows(IllegalAccessException.class, () -> {
 			service.deleteOfferedCandidate(offeredCandidateId);
 		});
+		
+	}
+	
+	/**
+	* Tests retrieval of OfferedCandidates
+	* @throws Exception
+	*/
+	@Test
+	public void testFetchOfferedCandidates() throws Exception{
+		
+		final UUID id1 = UUID.randomUUID();
+		final UUID id2 = UUID.randomUUID();
+		final UUID id3 = UUID.randomUUID();
+		
+		final LocalDate created1 = LocalDate.of(2001, 1, 1);
+		final LocalDate created2 = LocalDate.of(2003, 1, 1);
+		final LocalDate created3 = LocalDate.of(2002, 1, 1);
+		
+		OfferedCandidate c1 = OfferedCandidate.builder().id(id1).created(created1).build();
+		OfferedCandidate c2 = OfferedCandidate.builder().id(id2).created(created2).build();
+		OfferedCandidate c3 = OfferedCandidate.builder().id(id3).created(created3).build();
+		
+		Mockito.when(this.mockOfferedCandidateDao.findAllOfferedCandidates()).thenReturn(Set.of(c1,c2,c3));
+		
+		Set<OfferedCandidate> candidates = this.service.fetchOfferedCandidates();
+		
+		candidates.stream().filter(c -> c.getId()== id1).findAny().orElseThrow();
+		candidates.stream().filter(c -> c.getId()== id2).findAny().orElseThrow();
+		candidates.stream().filter(c -> c.getId()== id3).findAny().orElseThrow();
 		
 	}
 	

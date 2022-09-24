@@ -63,7 +63,7 @@ public class OfferedCandidateTest {
 				.yearsExperience(YEARS_EXPERIENCE)
 				.build();
 		
-		assertEquals(ID, 					candidate.getid());
+		assertEquals(ID, 					candidate.getId());
 		assertEquals(RECRUITER_ID, 			candidate.getRecruiterId());
 		assertEquals(CANDIDATE_ROLE_TITLE, 	candidate.getcandidateRoleTitle());
 		assertEquals(COUNTRY, 				candidate.getcountry());
@@ -106,12 +106,12 @@ public class OfferedCandidateTest {
 	
 		OfferedCandidate candidate = OfferedCandidate.builder().build();
 		
-		assertNull(candidate.getid());
+		assertNull(candidate.getId());
 		assertNull(candidate.getRecruiterId());
 		
 		candidate.initializeAsNewObject(RECRUITER_ID);
 		
-		assertNotNull(candidate.getid());
+		assertNotNull(candidate.getId());
 		assertEquals(RECRUITER_ID, 			candidate.getRecruiterId());
 		
 		

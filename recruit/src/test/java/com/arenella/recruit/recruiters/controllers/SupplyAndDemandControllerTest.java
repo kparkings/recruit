@@ -2,6 +2,7 @@ package com.arenella.recruit.recruiters.controllers;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.time.LocalDate;
 import java.util.Set;
 import java.util.UUID;
 
@@ -144,16 +145,6 @@ public class SupplyAndDemandControllerTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testFetchOfferedCandidates() throws Exception{
-		ResponseEntity<Set<OfferedCandidateAPIOutbound>> response = controller.fetchOfferedCandidates();
-		assertEquals(response.getStatusCode(), HttpStatus.OK);
-	}
-	
-	/**
-	* Test Success
-	* @throws Exception
-	*/
-	@Test
 	public void testFetchAdvertisedPositions() throws Exception{
 		ResponseEntity<Set<OpenPositionAPIOutbound>> response = controller.fetchOpenPositions();
 		assertEquals(response.getStatusCode(), HttpStatus.OK);
@@ -177,6 +168,37 @@ public class SupplyAndDemandControllerTest {
 	public void testFetchAdvertisedPositions_forRecruiter() throws Exception{
 		ResponseEntity<Set<OpenPositionAPIOutbound>> response = controller.fetchOpenPositions("recruiter1Id");
 		assertEquals(response.getStatusCode(), HttpStatus.OK);
+	}
+	
+	/**
+	* Tests retrieval of OfferedCandidates
+	* @throws Exception
+	*/
+	@Test
+	public void testFetchOfferedCandidates() throws Exception{
+		
+		final UUID id1 = UUID.randomUUID();
+		final UUID id2 = UUID.randomUUID();
+		final UUID id3 = UUID.randomUUID();
+		
+		final LocalDate created1 = LocalDate.of(2001, 1, 1);
+		final LocalDate created2 = LocalDate.of(2003, 1, 1);
+		final LocalDate created3 = LocalDate.of(2002, 1, 1);
+		
+		OfferedCandidate c1 = OfferedCandidate.builder().id(id1).created(created1).build();
+		OfferedCandidate c2 = OfferedCandidate.builder().id(id2).created(created2).build();
+		OfferedCandidate c3 = OfferedCandidate.builder().id(id3).created(created3).build();
+		
+		Mockito.when(this.supplyAndDemandService.fetchOfferedCandidates()).thenReturn(Set.of(c1,c2,c3));
+		
+		ResponseEntity<Set<OfferedCandidateAPIOutbound>> response = controller.fetchOfferedCandidates();
+		
+		response.getBody().stream().filter(c -> c.getId()== id1).findAny().orElseThrow();
+		response.getBody().stream().filter(c -> c.getId()== id2).findAny().orElseThrow();
+		response.getBody().stream().filter(c -> c.getId()== id3).findAny().orElseThrow();
+		
+		assertEquals(response.getStatusCode(), HttpStatus.OK);
+		
 	}
 	
 }

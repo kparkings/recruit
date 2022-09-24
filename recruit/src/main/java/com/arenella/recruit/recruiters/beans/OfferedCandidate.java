@@ -79,7 +79,7 @@ public class OfferedCandidate {
 	* Returns the unique Id of the offered candidate
 	* @return Uinque identifier for the Candidate
 	*/
-	public UUID getid(){
+	public UUID getId(){
 		return this.id;
 	}
 	

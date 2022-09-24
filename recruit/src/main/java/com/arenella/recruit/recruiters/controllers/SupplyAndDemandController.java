@@ -1,7 +1,9 @@
 package com.arenella.recruit.recruiters.controllers;
 
+import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -164,7 +166,12 @@ public class SupplyAndDemandController {
 	@GetMapping(value="/v1/offered-candidate")
 	@PreAuthorize("hasRole('ROLE_RECRUITER')")
 	public ResponseEntity<Set<OfferedCandidateAPIOutbound>> fetchOfferedCandidates(){
-		return ResponseEntity.ok().body(Set.of());
+		return ResponseEntity
+				.ok()
+				.body(this.supplyAndDemandService.fetchOfferedCandidates()
+						.stream()
+						.map(c -> OfferedCandidateAPIOutbound.convertFromDomain(c, this.supplyAndDemandService.fetchRecruiterDetails(c.getRecruiterId())))
+						.collect(Collectors.toCollection(LinkedHashSet::new)));
 	}
 	
 	/**

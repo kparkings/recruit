@@ -1,7 +1,12 @@
 package com.arenella.recruit.recruiters.dao;
 
+import java.util.Comparator;
+import java.util.LinkedHashSet;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import org.springframework.data.repository.CrudRepository;
 
@@ -43,6 +48,20 @@ public interface OfferedCandidateDao extends CrudRepository<OfferedCandidateEnti
 		OfferedCandidateEntity updatedEntity 	= OfferedCandidateEntity.convertToEntity(offeredCandidate, Optional.of(originalEntity));
 		
 		this.save(updatedEntity);
+	}
+
+	/**
+	* Retrieves the OfferedCandidates
+	* @return OfferedCandidates
+	*/
+	default Set<OfferedCandidate> findAllOfferedCandidates(){
+		Set<OfferedCandidate> a =  StreamSupport
+			.stream(this.findAll().spliterator(), false)
+			.sorted(Comparator.comparing(OfferedCandidateEntity::getCreated).reversed())
+			.map(entity -> OfferedCandidateEntity.convertFromEntity(entity))
+			.collect(Collectors.toCollection(LinkedHashSet::new));
+		
+		return a;
 	}
 	
 }

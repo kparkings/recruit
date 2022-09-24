@@ -225,7 +225,7 @@ public class OfferedCandidateAPIOutbound {
 		* @param recruiter - Details of Recruiter
 		* @return Builder
 		*/
-		public OfferedCandidateAPIOutboundBuilder recruiterId(RecruiterDetails recruiter) {
+		public OfferedCandidateAPIOutboundBuilder recruiter(RecruiterDetails recruiter) {
 			
 			this.recruiter = recruiter;
 			
@@ -440,7 +440,7 @@ public class OfferedCandidateAPIOutbound {
 		}
 		
 		/**
-		* Return the name of the Company the reruiter is 
+		* Return the name of the Company the recruiter is 
 		* working for
 		* @return Company Name
 		*/
@@ -448,6 +448,27 @@ public class OfferedCandidateAPIOutbound {
 			return this.companyName;
 		}
 		
+	}
+
+	public static OfferedCandidateAPIOutbound convertFromDomain(OfferedCandidate offeredCandidate, RecruiterDetails recruiter) {
+		return OfferedCandidateAPIOutbound
+				.builder()
+					.id(offeredCandidate.getId())
+					.recruiter(recruiter)
+					.candidateRoleTitle(offeredCandidate.getcandidateRoleTitle())
+					.country(offeredCandidate.getcountry())
+					.location(offeredCandidate.getlocation())
+					.contractType(offeredCandidate.getcontractType())
+					.daysOnSite(offeredCandidate.getDaysOnSite())
+					.renumeration(offeredCandidate.getrenumeration())
+					.availableFromDate(offeredCandidate.getavailableFromDate())
+					.coreSkills(offeredCandidate.getcoreSkills())			
+					.yearsExperience(offeredCandidate.getyearsExperience())
+					.description(offeredCandidate.getdescription())
+					.spokenLanguages(offeredCandidate.getspokenLanguages())			
+					.comments(offeredCandidate.getcomments())
+					.created(offeredCandidate.getCreated())
+				.build();
 	}
 	
 }

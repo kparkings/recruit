@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import org.springframework.data.repository.CrudRepository;
 
+import com.arenella.recruit.recruiters.beans.OfferedCandidateAPIOutbound.RecruiterDetails;
 import com.arenella.recruit.recruiters.beans.Recruiter;
 import com.arenella.recruit.recruiters.entities.RecruiterEntity;
 
@@ -32,4 +33,17 @@ public interface RecruiterDao extends CrudRepository<RecruiterEntity, String>{
 	* @return If found the associated Recruiter
 	*/
 	Optional<RecruiterEntity> findByUserIdIgnoreCase(String userId);
+
+	/**
+	* Retrieves Recruiter details based upon the id of the Recruiter
+	* @param recruiterId - Unique identifier of the Recruiter
+	* @return recruiter Details
+	*/
+	default RecruiterDetails findRecruiterDetailsById(String recruiterId) {
+	
+		RecruiterEntity entity = this.findById(recruiterId).orElseThrow(()-> new RuntimeException("Unknown Recruiter " + recruiterId));
+	
+		return new RecruiterDetails(entity.getUserId(), entity.getFirstName() + " " + entity.getSurname(), entity.getCompanyName());
+		
+	}
 }

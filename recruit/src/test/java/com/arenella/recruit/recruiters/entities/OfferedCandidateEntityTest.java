@@ -110,7 +110,7 @@ public class OfferedCandidateEntityTest {
 		
 		OfferedCandidateEntity.convertToEntity(candidate, Optional.empty());
 		
-		assertEquals(ID, 					candidate.getid());
+		assertEquals(ID, 					candidate.getId());
 		assertEquals(RECRUITER_ID, 			candidate.getRecruiterId());
 		assertEquals(CANDIDATE_ROLE_TITLE, 	candidate.getcandidateRoleTitle());
 		assertEquals(COUNTRY, 				candidate.getcountry());
@@ -215,7 +215,7 @@ public class OfferedCandidateEntityTest {
 		
 		OfferedCandidate domain = OfferedCandidateEntity.convertFromEntity(entity); 
 		
-		assertEquals(ID, 					domain.getid());
+		assertEquals(ID, 					domain.getId());
 		assertEquals(RECRUITER_ID, 			domain.getRecruiterId());
 		assertEquals(CANDIDATE_ROLE_TITLE, 	domain.getcandidateRoleTitle());
 		assertEquals(COUNTRY, 				domain.getcountry());
