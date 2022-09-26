@@ -6,7 +6,15 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
+import javax.persistence.CollectionTable;
+import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.Table;
 
 import com.arenella.recruit.recruiters.beans.OfferedCandidate;
@@ -20,23 +28,60 @@ import com.arenella.recruit.recruiters.beans.OpenPosition.Country;
 * @author K Parkings
 */
 @Entity
-@Table(name="offered_candidates")
+@Table(schema="recruiter", name="offered_candidates")
 public class OfferedCandidateEntity {
 
+	@Id
+	@Column(name="id")
 	private UUID 						id;
+	
+	@Column(name="recruiter_id")
 	private String 						recruiterId;
+	
+	@Column(name="candidate_role_title")
 	private String 						candidateRoleTitle;
+	
+	@Column(name="country")
 	private Country	 					country;
+	
+	@Column(name="location")
 	private String						location;
+	
+	@Column(name="contract_type")
+	@Enumerated(EnumType.STRING)
 	private ContractType 				contractType;
+	
+	@Column(name="id")
+	@Enumerated(EnumType.STRING)
 	private DAYS_ON_SITE				daysOnSite;
+	
+	@Column(name="renumeration")
 	private String	 					renumeration;
+	
+	@Column(name="available_from_date")
 	private LocalDate 					availableFromDate;
+	
+	@Enumerated(EnumType.STRING)
+	@ElementCollection(targetClass=String.class, fetch=FetchType.EAGER)
+	@CollectionTable(schema="recruiters", name="offered_candidate_skills", joinColumns=@JoinColumn(name="offered_candidate_id"))
 	private Set<String>					coreSkills				= new HashSet<>();
+	
+	@Column(name="years_experience")
 	private int							yearsExperience;
+	
+	@Column(name="description")
 	private String 						description;
+	
+	@Enumerated(EnumType.STRING)
+	@ElementCollection(targetClass=LANGUAGE.class, fetch=FetchType.EAGER)
+	@CollectionTable(schema="recruiters", name="offered_candidate_languages", joinColumns=@JoinColumn(name="offered_candidate_id"))
+	//@Column(name="role")
 	private Set<LANGUAGE>				spokenLanguages			= new HashSet<>();
+	
+	@Column(name="comments")
 	private String 						comments;
+	
+	@Column(name="created")
 	private LocalDate					created;
 	
 	/**

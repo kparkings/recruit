@@ -4,7 +4,11 @@ import java.time.LocalDate;
 import java.util.Optional;
 import java.util.UUID;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.Id;
 import javax.persistence.Table;
 
 import com.arenella.recruit.recruiters.beans.OpenPosition;
@@ -16,20 +20,45 @@ import com.arenella.recruit.recruiters.beans.OpenPosition.Country;
 * @author K Parkings
 */
 @Entity
-@Table(name="open_positions")
+@Table(schema="recruiter", name="open_positions")
 public class OpenPositionEntity {
 
+	@Id
+	@Column(name="id")
 	private UUID 						id;
+	
+	@Column(name="recruiter_id")
 	private String 						recruiterId;
+	
+	@Column(name="position_title")
 	private String 						positionTitle;
+	
+	@Column(name="country")
+	@Enumerated(EnumType.STRING)
 	private Country	 					country;
+	
+	@Column(name="location")
 	private String						location;
+	
+	@Column(name="contract_type")
 	private ContractType 				contractType;
+	
+	@Column(name="renumeration")
 	private String	 					renumeration;
+	
+	@Column(name="start_date")
 	private LocalDate 					startDate;
+	
+	@Column(name="position_closing_date")
 	private LocalDate 					positionClosingDate;
+	
+	@Column(name="description")
 	private String 						description;
+	
+	@Column(name="comments")
 	private String 						comments;
+	
+	@Column(name="created")
 	private LocalDate					created;
 	
 	/**
