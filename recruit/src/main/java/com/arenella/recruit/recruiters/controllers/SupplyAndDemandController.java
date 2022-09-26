@@ -181,7 +181,12 @@ public class SupplyAndDemandController {
 	@GetMapping(value="/v1/open-position")
 	@PreAuthorize("hasRole('ROLE_RECRUITER')")
 	public ResponseEntity<Set<OpenPositionAPIOutbound>> fetchOpenPositions(){
-		return ResponseEntity.ok().body(Set.of());
+		return ResponseEntity
+				.ok()
+				.body(this.supplyAndDemandService.fetchOpenPositions()
+						.stream()
+						.map(c -> OpenPositionAPIOutbound.convertFromDomain(c, this.supplyAndDemandService.fetchRecruiterDetails(c.getRecruiterId())))
+						.collect(Collectors.toCollection(LinkedHashSet::new)));
 	}
 	
 	/**

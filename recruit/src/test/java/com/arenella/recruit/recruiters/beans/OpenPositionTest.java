@@ -29,6 +29,7 @@ public class OpenPositionTest {
 	private LocalDate 		positionClosingDate		= LocalDate.of(2022, 6, 14);;
 	private String 			description			 	= "Some long descriptive text";
 	private String 			comments				= "Some comments fromt he Recruiter";
+	private LocalDate		created					= LocalDate.of(2022, 9, 26);
 	
 	/**
 	* Tests creation via Builder
@@ -50,6 +51,7 @@ public class OpenPositionTest {
 					.recruiterId(recruiterId)
 					.renumeration(renumeration)
 					.startDate(startDate)
+					.created(created)
 				.build();
 		
 		assertEquals(position.getComments(), 				comments);
@@ -63,6 +65,7 @@ public class OpenPositionTest {
 		assertEquals(position.getRecruiterId(), 			recruiterId);
 		assertEquals(position.getRenumeration(), 			renumeration);
 		assertEquals(position.getStartDate(), 				startDate);
+		assertEquals(position.getCreated(), 				created);
 		
 	}
 	

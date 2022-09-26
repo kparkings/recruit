@@ -24,6 +24,7 @@ public class OpenPosition {
 	private LocalDate 					positionClosingDate;
 	private String 						description;
 	private String 						comments;
+	private LocalDate 					created;
 	
 	/**
 	* Constructor based upon a Builder
@@ -42,7 +43,7 @@ public class OpenPosition {
 		this.positionClosingDate 			= builder.positionClosingDate;
 		this.description 					= builder.description;
 		this.comments 						= builder.comments;
-		
+		this.created						= builder.created;
 	}
 	
 	/**
@@ -137,6 +138,14 @@ public class OpenPosition {
 	}
 	
 	/**
+	* Returns the Date the OpenPosition was created
+	* @return Creation Date
+	*/
+	public LocalDate getCreated() {
+		return this.created;
+	}
+	
+	/**
 	* Sets the unique Id of the Object to a 
 	* random UUID to make it a new OpenPosition and 
 	* sets the id of the recruiter that owns the OpenPosition
@@ -172,6 +181,7 @@ public class OpenPosition {
 		private LocalDate 					positionClosingDate;
 		private String 						description;
 		private String 						comments;
+		private LocalDate					created;
 		
 		/**
 		* Sets the Unique Identifier for the Open Position
@@ -283,6 +293,16 @@ public class OpenPosition {
 		*/
 		public OpenPositionBuilder comments(String comments){
 			this.comments = comments;
+			return this;
+		}
+		
+		/**
+		* Sets the Date the Entity was created
+		* @param created - Creation date of the Entity
+		* @return Builder
+		*/
+		public OpenPositionBuilder created(LocalDate created){
+			this.created = created;
 			return this;
 		}
 		

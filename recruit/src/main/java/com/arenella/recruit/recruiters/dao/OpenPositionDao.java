@@ -1,7 +1,12 @@
 package com.arenella.recruit.recruiters.dao;
 
+import java.util.Comparator;
+import java.util.LinkedHashSet;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import org.springframework.data.repository.CrudRepository;
 
@@ -9,7 +14,7 @@ import com.arenella.recruit.recruiters.beans.OpenPosition;
 import com.arenella.recruit.recruiters.entities.OpenPositionEntity;
 
 /**
-* Defines behaviour relating to Suppy and Demand Entities at the 
+* Defines behavior relating to Supply and Demand Entities at the 
 * Persistence level
 * @author K Parkings
 */
@@ -48,6 +53,18 @@ public interface OpenPositionDao extends CrudRepository<OpenPositionEntity, UUID
 		
 		this.save(updatedEntity);
 		
+	}
+
+	/**
+	* Returns all available OpenPositions
+	* @return Open Positions
+	*/
+	default Set<OpenPosition> findAllOpenPositions(){
+		return StreamSupport
+			.stream(this.findAll().spliterator(), false)
+			.sorted(Comparator.comparing(OpenPositionEntity::getCreated).reversed())
+			.map(e -> OpenPositionEntity.convertFromEntity(e))
+			.collect(Collectors.toCollection(LinkedHashSet::new));
 	}
 
 }

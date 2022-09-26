@@ -7,6 +7,7 @@ import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
 
+import com.arenella.recruit.recruiters.beans.OfferedCandidateAPIOutbound.RecruiterDetails;
 import com.arenella.recruit.recruiters.beans.OpenPosition.ContractType;
 import com.arenella.recruit.recruiters.beans.OpenPosition.Country;
 
@@ -16,18 +17,20 @@ import com.arenella.recruit.recruiters.beans.OpenPosition.Country;
 */
 public class OpenPositionAPIOutboundTest {
 
-	private UUID 			id						= UUID.randomUUID();
-	private String 			recruiterName			= "Kevin Parkings";
-	private String 			recruiterCompanyName	= "Arenella BV";
-	private String 			positionTitle			= "Java Developer";
-	private Country	 		country					= Country.EUROPE;
-	private String			location				= "Remote in Europe";
-	private ContractType 	contractType			= ContractType.CONTRACT;
-	private String	 		renumeration			= "500 euros per day";
-	private LocalDate 		startDate				= LocalDate.of(2022, 5, 31);
-	private LocalDate 		positionClosingDate		= LocalDate.of(2022, 6, 14);;
-	private String 			description			 	= "Some long descriptive text";
-	private String 			comments				= "Some comments fromt he Recruiter";
+	private UUID 				id						= UUID.randomUUID();
+	private String				recruiterId			 	= "kadawdk";
+	private String 				recruiterName			= "Kevin Parkings";
+	private String 				recruiterCompanyName	= "Arenella BV";
+	private String 				positionTitle			= "Java Developer";
+	private Country	 			country					= Country.EUROPE;
+	private String				location				= "Remote in Europe";
+	private ContractType 		contractType			= ContractType.CONTRACT;
+	private String	 			renumeration			= "500 euros per day";
+	private LocalDate 			startDate				= LocalDate.of(2022, 5, 31);
+	private LocalDate 			positionClosingDate		= LocalDate.of(2022, 6, 14);;
+	private String 				description			 	= "Some long descriptive text";
+	private String 				comments				= "Some comments fromt he Recruiter";
+	private RecruiterDetails 	recruiter				= new RecruiterDetails(recruiterId, recruiterName, recruiterCompanyName);
 	
 	/**
 	* Tests creation via Builder
@@ -46,24 +49,24 @@ public class OpenPositionAPIOutboundTest {
 					.location(location)
 					.positionClosingDate(positionClosingDate)
 					.positionTitle(positionTitle)
-					.recruiterName(recruiterName)
-					.recruiterCompanyName(recruiterCompanyName)
+					.recruiter(recruiter)
 					.renumeration(renumeration)
 					.startDate(startDate)
 				.build();
 		
-		assertEquals(position.getComments(), 				comments);
-		assertEquals(position.getContractType(), 			contractType);
-		assertEquals(position.getCountry(), 				country);
-		assertEquals(position.getDescription(), 			description);
-		assertEquals(position.getId(), 						id);
-		assertEquals(position.getLocation(), 				location);
-		assertEquals(position.getPositionClosingDate(), 	positionClosingDate);
-		assertEquals(position.getPositionTitle(), 			positionTitle);
-		assertEquals(position.getRecruiterName(), 			recruiterName);
-		assertEquals(position.getRecruiterCompanyName(), 	recruiterCompanyName);
-		assertEquals(position.getRenumeration(), 			renumeration);
-		assertEquals(position.getStartDate(), 				startDate);
+		assertEquals(position.getComments(), 						comments);
+		assertEquals(position.getContractType(), 					contractType);
+		assertEquals(position.getCountry(), 						country);
+		assertEquals(position.getDescription(), 					description);
+		assertEquals(position.getId(), 								id);
+		assertEquals(position.getLocation(), 						location);
+		assertEquals(position.getPositionClosingDate(), 			positionClosingDate);
+		assertEquals(position.getPositionTitle(), 					positionTitle);
+		assertEquals(position.getRecruiter().getRecruiterId(), 		recruiterId);
+		assertEquals(position.getRecruiter().getRecruiterName(), 	recruiterName);
+		assertEquals(position.getRecruiter().getCompanyName(), 		recruiterCompanyName);
+		assertEquals(position.getRenumeration(), 					renumeration);
+		assertEquals(position.getStartDate(), 						startDate);
 		
 	}
 }

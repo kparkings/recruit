@@ -119,6 +119,15 @@ public class SupplyAndDemandServiceImpl implements SupplyAndDemandService{
 	public RecruiterDetails fetchRecruiterDetails(String recruiterId) {
 		return recruiterDao.findRecruiterDetailsById(recruiterId);
 	}
+
+	/**
+	* Refer to the SupplyAndDemandService interface for details 
+	* @return
+	*/
+	@Override
+	public Set<OpenPosition> fetchOpenPositions() {
+		return openPositionDao.findAllOpenPositions();
+	}
 	
 	/**
 	* Performs authentication validation to ensure a User can only update their 

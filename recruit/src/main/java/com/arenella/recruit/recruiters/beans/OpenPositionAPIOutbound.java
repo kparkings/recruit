@@ -3,6 +3,7 @@ package com.arenella.recruit.recruiters.beans;
 import java.time.LocalDate;
 import java.util.UUID;
 
+import com.arenella.recruit.recruiters.beans.OfferedCandidateAPIOutbound.RecruiterDetails;
 import com.arenella.recruit.recruiters.beans.OpenPosition.ContractType;
 import com.arenella.recruit.recruiters.beans.OpenPosition.Country;
 
@@ -14,8 +15,7 @@ import com.arenella.recruit.recruiters.beans.OpenPosition.Country;
 public class OpenPositionAPIOutbound {
 
 	private UUID 						id;
-	private String 						recruiterName;
-	private String 						recruiterCompanyName;
+	private RecruiterDetails 			recruiter;
 	private String 						positionTitle;
 	private Country	 					country;
 	private String						location;
@@ -33,8 +33,7 @@ public class OpenPositionAPIOutbound {
 	private OpenPositionAPIOutbound(OpenPositionAPIOutboundBuilder builder) {
 		
 		this.id 							= builder.id;
-		this.recruiterName					= builder.recruiterName;
-		this.recruiterCompanyName			= builder.recruiterCompanyName;
+		this.recruiter						= builder.recruiter;
 		this.positionTitle 					= builder.positionTitle;
 		this.country 						= builder.country;
 		this.location 						= builder.location;
@@ -56,21 +55,12 @@ public class OpenPositionAPIOutbound {
 	}
 	
 	/**
-	* Returns the name Id of the Recruiter who owns the 
+	* Returns details of the Recruiter who owns the 
 	* Open Position
 	* @return Unique recruiterName
 	*/
-	public String getRecruiterName(){
-		return this.recruiterName;
-	}
-	
-	/**
-	* Returns the name of the Company of the Recruiter who owns the 
-	* Open Position
-	* @return Unique companyName
-	*/
-	public String getRecruiterCompanyName(){
-		return this.recruiterCompanyName;
+	public RecruiterDetails getRecruiter(){
+		return this.recruiter;
 	}
 	
 	/**
@@ -162,8 +152,7 @@ public class OpenPositionAPIOutbound {
 	public static class OpenPositionAPIOutboundBuilder{
 		
 		private UUID 						id;
-		private String 						recruiterName;
-		private String 						recruiterCompanyName;
+		private RecruiterDetails			recruiter;
 		private String 						positionTitle;
 		private Country	 					country;
 		private String						location;
@@ -185,24 +174,13 @@ public class OpenPositionAPIOutbound {
 		}
 		
 		/**
-		* Sets the name of the Recruiter who owns the 
+		* Sets details of the Recruiter who owns the 
 		* Open Position
-		* @param recruiterName - Name of the owning Recruiter
+		* @param recruiter - Recruiter's details
 		* @return Builder
 		*/
-		public OpenPositionAPIOutboundBuilder recruiterName(String recruiterName){
-			this.recruiterName = recruiterName;
-			return this;
-		}
-		
-		/**
-		* Sets the name of the Company of the Recruiter who owns the 
-		* Open Position
-		* @param recruiterCompanyName - Name of the Recruiters Company
-		* @return Builder
-		*/
-		public OpenPositionAPIOutboundBuilder recruiterCompanyName(String recruiterCompanyName){
-			this.recruiterCompanyName = recruiterCompanyName;
+		public OpenPositionAPIOutboundBuilder recruiter(RecruiterDetails recruiter){
+			this.recruiter = recruiter;
 			return this;
 		}
 		
@@ -307,6 +285,29 @@ public class OpenPositionAPIOutbound {
 			return new OpenPositionAPIOutbound(this);
 		}
 		
+	}
+
+	/**
+	* Converts from Domain to API Outbound representation of an OpenPosition
+	* @param openPosition - Domain representation
+	* @param recruiter - Recruiter who is owner of the Open Position
+	* @return API Outbound representation
+	*/
+	public static OpenPositionAPIOutbound convertFromDomain(OpenPosition openPosition, RecruiterDetails recruiter) {
+		return OpenPositionAPIOutbound
+				.builder()
+					.comments(openPosition.getComments())
+					.contractType(openPosition.getContractType())
+					.country(openPosition.getCountry())
+					.description(openPosition.getDescription())
+					.id(openPosition.getId())
+					.location(openPosition.getLocation())
+					.positionClosingDate(openPosition.getPositionClosingDate())
+					.positionTitle(openPosition.getPositionTitle())
+					.recruiter(recruiter)
+					.renumeration(openPosition.getRenumeration())
+					.startDate(openPosition.getStartDate())
+				.build();
 	}
 	
 }

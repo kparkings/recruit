@@ -68,5 +68,11 @@ public interface SupplyAndDemandService {
 	* @return Details of the Recruiter
 	 */
 	public RecruiterDetails fetchRecruiterDetails(String recruiterId);
+
+	/**
+	* Returns available OpenPositions
+	* @return OpenPositions 
+	*/
+	public Set<OpenPosition> fetchOpenPositions();
 	
 }
