@@ -74,5 +74,18 @@ public interface SupplyAndDemandService {
 	* @return OpenPositions 
 	*/
 	public Set<OpenPosition> fetchOpenPositions();
+
+	/**
+	* Returns openPositions belonging to a specific Recruiter
+	* @param recruiterId - unique id of the Recruiter
+	* @return OpenPositions
+	*/
+	public Set<OpenPosition> fetchOpenPositions(String recruiterId);
+
+	/**
+	* Returns OfferedCandidates for a specificRecruiter
+	* @param recruiterId - Unique Id of the Recruiter
+	*/
+	public Set<OfferedCandidate> fetchOfferedCandidates(String recruiterId);
 	
 }

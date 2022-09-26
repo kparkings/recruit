@@ -264,6 +264,35 @@ public class SupplyAndDemandServiceImplTest {
 	}
 	
 	/**
+	* Tests retrieval of OfferedCandidates for a specific Recruiter
+	* @throws Exception
+	*/
+	@Test
+	public void testFetchOfferedCandidatesByRecruiterId() throws Exception{
+		
+		final UUID id1 = UUID.randomUUID();
+		final UUID id2 = UUID.randomUUID();
+		final UUID id3 = UUID.randomUUID();
+		
+		final LocalDate created1 = LocalDate.of(2001, 1, 1);
+		final LocalDate created2 = LocalDate.of(2003, 1, 1);
+		final LocalDate created3 = LocalDate.of(2002, 1, 1);
+		
+		OfferedCandidate c1 = OfferedCandidate.builder().id(id1).created(created1).build();
+		OfferedCandidate c2 = OfferedCandidate.builder().id(id2).created(created2).build();
+		OfferedCandidate c3 = OfferedCandidate.builder().id(id3).created(created3).build();
+		
+		Mockito.when(this.mockOfferedCandidateDao.findAllOfferedCandidatesByRecruiterId(RECRUITER_ID)).thenReturn(Set.of(c1,c2,c3));
+		
+		Set<OfferedCandidate> candidates = this.service.fetchOfferedCandidates(RECRUITER_ID);
+		
+		candidates.stream().filter(c -> c.getId()== id1).findAny().orElseThrow();
+		candidates.stream().filter(c -> c.getId()== id2).findAny().orElseThrow();
+		candidates.stream().filter(c -> c.getId()== id3).findAny().orElseThrow();
+		
+	}
+	
+	/**
 	* Tests retrieval of OpenPositions
 	* @throws Exception
 	*/
@@ -285,6 +314,35 @@ public class SupplyAndDemandServiceImplTest {
 		Mockito.when(this.mockOpenPositionDao.findAllOpenPositions()).thenReturn(Set.of(c1,c2,c3));
 		
 		Set<OpenPosition> openPositions = this.service.fetchOpenPositions();
+		
+		openPositions.stream().filter(c -> c.getId()== id1).findAny().orElseThrow();
+		openPositions.stream().filter(c -> c.getId()== id2).findAny().orElseThrow();
+		openPositions.stream().filter(c -> c.getId()== id3).findAny().orElseThrow();
+		
+	}
+	
+	/**
+	* Tests retrieval of OpenPositions for a specific Recruiter
+	* @throws Exception
+	*/
+	@Test
+	public void testFetchOpenPositionsByRecruiter() throws Exception{
+		
+		final UUID id1 = UUID.randomUUID();
+		final UUID id2 = UUID.randomUUID();
+		final UUID id3 = UUID.randomUUID();
+		
+		final LocalDate created1 = LocalDate.of(2001, 1, 1);
+		final LocalDate created2 = LocalDate.of(2003, 1, 1);
+		final LocalDate created3 = LocalDate.of(2002, 1, 1);
+		
+		OpenPosition c1 = OpenPosition.builder().id(id1).created(created1).build();
+		OpenPosition c2 = OpenPosition.builder().id(id2).created(created2).build();
+		OpenPosition c3 = OpenPosition.builder().id(id3).created(created3).build();
+		
+		Mockito.when(this.mockOpenPositionDao.findAllOpenPositionsByRecruiterId(RECRUITER_ID)).thenReturn(Set.of(c1,c2,c3));
+		
+		Set<OpenPosition> openPositions = this.service.fetchOpenPositions(RECRUITER_ID);
 		
 		openPositions.stream().filter(c -> c.getId()== id1).findAny().orElseThrow();
 		openPositions.stream().filter(c -> c.getId()== id2).findAny().orElseThrow();

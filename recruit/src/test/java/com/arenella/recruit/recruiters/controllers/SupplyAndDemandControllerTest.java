@@ -146,19 +146,31 @@ public class SupplyAndDemandControllerTest {
 	*/
 	@Test
 	public void testFetchAdvertisedPositions() throws Exception{
+		
+		final UUID id1 = UUID.randomUUID();
+		final UUID id2 = UUID.randomUUID();
+		final UUID id3 = UUID.randomUUID();
+		
+		final LocalDate created1 = LocalDate.of(2001, 1, 1);
+		final LocalDate created2 = LocalDate.of(2003, 1, 1);
+		final LocalDate created3 = LocalDate.of(2002, 1, 1);
+		
+		OpenPosition c1 = OpenPosition.builder().id(id1).created(created1).build();
+		OpenPosition c2 = OpenPosition.builder().id(id2).created(created2).build();
+		OpenPosition c3 = OpenPosition.builder().id(id3).created(created3).build();
+		
+		Mockito.when(this.supplyAndDemandService.fetchOpenPositions()).thenReturn(Set.of(c1,c2,c3));
+		
 		ResponseEntity<Set<OpenPositionAPIOutbound>> response = controller.fetchOpenPositions();
+		
+		response.getBody().stream().filter(c -> c.getId()== id1).findAny().orElseThrow();
+		response.getBody().stream().filter(c -> c.getId()== id2).findAny().orElseThrow();
+		response.getBody().stream().filter(c -> c.getId()== id3).findAny().orElseThrow();
+		
 		assertEquals(response.getStatusCode(), HttpStatus.OK);
+		
 	}
 	
-	/**
-	* Test Success
-	* @throws Exception
-	*/
-	@Test
-	public void testFetchOfferedCandidates_forRecruiter() throws Exception{
-		ResponseEntity<Set<OfferedCandidateAPIOutbound>> response = controller.fetchOfferedCandidates("recruiter1Id");
-		assertEquals(response.getStatusCode(), HttpStatus.OK);
-	}
 	
 	/**
 	* Test Success
@@ -166,8 +178,29 @@ public class SupplyAndDemandControllerTest {
 	*/
 	@Test
 	public void testFetchAdvertisedPositions_forRecruiter() throws Exception{
-		ResponseEntity<Set<OpenPositionAPIOutbound>> response = controller.fetchOpenPositions("recruiter1Id");
+		
+		final UUID id1 = UUID.randomUUID();
+		final UUID id2 = UUID.randomUUID();
+		final UUID id3 = UUID.randomUUID();
+		
+		final LocalDate created1 = LocalDate.of(2001, 1, 1);
+		final LocalDate created2 = LocalDate.of(2003, 1, 1);
+		final LocalDate created3 = LocalDate.of(2002, 1, 1);
+		
+		OpenPosition c1 = OpenPosition.builder().id(id1).created(created1).build();
+		OpenPosition c2 = OpenPosition.builder().id(id2).created(created2).build();
+		OpenPosition c3 = OpenPosition.builder().id(id3).created(created3).build();
+		
+		Mockito.when(this.supplyAndDemandService.fetchOpenPositions(Mockito.anyString())).thenReturn(Set.of(c1,c2,c3));
+		
+		ResponseEntity<Set<OpenPositionAPIOutbound>> response = controller.fetchOpenPositions("aRecruiterId");
+		
+		response.getBody().stream().filter(c -> c.getId()== id1).findAny().orElseThrow();
+		response.getBody().stream().filter(c -> c.getId()== id2).findAny().orElseThrow();
+		response.getBody().stream().filter(c -> c.getId()== id3).findAny().orElseThrow();
+		
 		assertEquals(response.getStatusCode(), HttpStatus.OK);
+		
 	}
 	
 	/**
@@ -192,6 +225,37 @@ public class SupplyAndDemandControllerTest {
 		Mockito.when(this.supplyAndDemandService.fetchOfferedCandidates()).thenReturn(Set.of(c1,c2,c3));
 		
 		ResponseEntity<Set<OfferedCandidateAPIOutbound>> response = controller.fetchOfferedCandidates();
+		
+		response.getBody().stream().filter(c -> c.getId()== id1).findAny().orElseThrow();
+		response.getBody().stream().filter(c -> c.getId()== id2).findAny().orElseThrow();
+		response.getBody().stream().filter(c -> c.getId()== id3).findAny().orElseThrow();
+		
+		assertEquals(response.getStatusCode(), HttpStatus.OK);
+		
+	}
+	
+	/**
+	* Tests retrieval of OfferedCandidates
+	* @throws Exception
+	*/
+	@Test
+	public void testFetchOfferedCandidatesForRecruiter() throws Exception{
+		
+		final UUID id1 = UUID.randomUUID();
+		final UUID id2 = UUID.randomUUID();
+		final UUID id3 = UUID.randomUUID();
+		
+		final LocalDate created1 = LocalDate.of(2001, 1, 1);
+		final LocalDate created2 = LocalDate.of(2003, 1, 1);
+		final LocalDate created3 = LocalDate.of(2002, 1, 1);
+		
+		OfferedCandidate c1 = OfferedCandidate.builder().id(id1).created(created1).build();
+		OfferedCandidate c2 = OfferedCandidate.builder().id(id2).created(created2).build();
+		OfferedCandidate c3 = OfferedCandidate.builder().id(id3).created(created3).build();
+		
+		Mockito.when(this.supplyAndDemandService.fetchOfferedCandidates(Mockito.anyString())).thenReturn(Set.of(c1,c2,c3));
+		
+		ResponseEntity<Set<OfferedCandidateAPIOutbound>> response = controller.fetchOfferedCandidates("aRecruiterId");
 		
 		response.getBody().stream().filter(c -> c.getId()== id1).findAny().orElseThrow();
 		response.getBody().stream().filter(c -> c.getId()== id2).findAny().orElseThrow();

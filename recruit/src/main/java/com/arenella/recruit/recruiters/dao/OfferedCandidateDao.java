@@ -8,7 +8,9 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 
 import com.arenella.recruit.recruiters.beans.OfferedCandidate;
 import com.arenella.recruit.recruiters.entities.OfferedCandidateEntity;
@@ -63,5 +65,26 @@ public interface OfferedCandidateDao extends CrudRepository<OfferedCandidateEnti
 		
 		return a;
 	}
+	
+	/**
+	* Retrieves the OfferedCandidates for a specific Recruiter
+	* @return OfferedCandidates
+	*/
+	default Set<OfferedCandidate> findAllOfferedCandidatesByRecruiterId(String recruiterId){
+		Set<OfferedCandidate> a =  StreamSupport
+			.stream(this.findAllByRecruiterId(recruiterId).spliterator(), false)
+			.sorted(Comparator.comparing(OfferedCandidateEntity::getCreated).reversed())
+			.map(entity -> OfferedCandidateEntity.convertFromEntity(entity))
+			.collect(Collectors.toCollection(LinkedHashSet::new));
+		
+		return a;
+	}
+	
+	/**
+	* Returns all available OfferedCandidates for a specific recruiter
+	* @return OfferedCandidates for Recruiter
+	*/
+	@Query("Select op FROM OfferedCandidate where op.recruiterId = :id")
+	Set<OfferedCandidateEntity> findAllByRecruiterId(@Param("id") String recruiterId);
 	
 }

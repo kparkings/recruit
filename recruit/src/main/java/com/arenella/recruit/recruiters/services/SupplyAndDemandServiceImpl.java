@@ -104,12 +104,20 @@ public class SupplyAndDemandServiceImpl implements SupplyAndDemandService{
 
 	/**
 	* Refer to the SupplyAndDemandService interface for details 
-	* @return
 	*/
 	@Override
 	public Set<OfferedCandidate> fetchOfferedCandidates() {
 		return offeredCandidateDao.findAllOfferedCandidates();
 	}
+	
+	/**
+	* Refer to the SupplyAndDemandService interface for details 
+	*/
+	@Override
+	public Set<OfferedCandidate> fetchOfferedCandidates(String recruiterId) {
+		return offeredCandidateDao.findAllOfferedCandidatesByRecruiterId(recruiterId);
+	}
+	
 	
 	/**
 	* Refer to the SupplyAndDemandService interface for details 
@@ -127,6 +135,15 @@ public class SupplyAndDemandServiceImpl implements SupplyAndDemandService{
 	@Override
 	public Set<OpenPosition> fetchOpenPositions() {
 		return openPositionDao.findAllOpenPositions();
+	}
+
+	/**
+	* Refer to the SupplyAndDemandService interface for details 
+	* @return
+	*/
+	@Override
+	public Set<OpenPosition> fetchOpenPositions(String recruiterId) {
+		return openPositionDao.findAllOpenPositionsByRecruiterId(recruiterId);
 	}
 	
 	/**

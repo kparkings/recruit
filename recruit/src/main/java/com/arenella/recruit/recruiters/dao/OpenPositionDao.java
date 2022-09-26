@@ -8,7 +8,9 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 
 import com.arenella.recruit.recruiters.beans.OpenPosition;
 import com.arenella.recruit.recruiters.entities.OpenPositionEntity;
@@ -66,5 +68,24 @@ public interface OpenPositionDao extends CrudRepository<OpenPositionEntity, UUID
 			.map(e -> OpenPositionEntity.convertFromEntity(e))
 			.collect(Collectors.toCollection(LinkedHashSet::new));
 	}
+
+	/**
+	* Returns all available OpenPositions for a specific recruiter
+	* @return Open Positions for Recruiter
+	*/
+	default Set<OpenPosition> findAllOpenPositionsByRecruiterId(String recruiterId) {
+		return StreamSupport
+				.stream(this.findAllByRecruiterId(recruiterId).spliterator(), false)
+				.sorted(Comparator.comparing(OpenPositionEntity::getCreated).reversed())
+				.map(e -> OpenPositionEntity.convertFromEntity(e))
+				.collect(Collectors.toCollection(LinkedHashSet::new));
+	}
+	
+	/**
+	* Returns all available OpenPositions for a specific recruiter
+	* @return Open Positions for Recruiter
+	*/
+	@Query("Select op FROM OpenPosition where op.recruiterId = :id")
+	Set<OpenPositionEntity> findAllByRecruiterId(@Param("id") String recruiterId);
 
 }

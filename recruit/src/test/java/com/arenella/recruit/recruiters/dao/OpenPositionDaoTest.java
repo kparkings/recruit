@@ -99,6 +99,16 @@ public class OpenPositionDaoTest {
 			
 			return Set.of(c1,c2,c3);
 		}
+
+		@Override
+		public Set<OpenPositionEntity> findAllByRecruiterId(String recruiterId) {
+			
+			OpenPositionEntity c1 = OpenPositionEntity.builder().id(id1).created(created1).build();
+			OpenPositionEntity c2 = OpenPositionEntity.builder().id(id2).created(created2).build();
+			OpenPositionEntity c3 = OpenPositionEntity.builder().id(id3).created(created3).build();
+			
+			return Set.of(c1,c2,c3);
+		}
 	};
 	
 	/**
@@ -109,6 +119,21 @@ public class OpenPositionDaoTest {
 	public void testFetchOOpenPositions() throws Exception{
 		
 		Set<OpenPosition> openPositions = this.dao.findAllOpenPositions();
+		
+		assertEquals(id2, (((OpenPosition)openPositions.toArray()[0]).getId()));
+		assertEquals(id3, (((OpenPosition)openPositions.toArray()[1]).getId()));
+		assertEquals(id1, (((OpenPosition)openPositions.toArray()[2]).getId()));
+		
+	}
+
+	/**
+	* Tests retrieval of OpenPositions by Recruiter Id
+	* @throws Exception
+	*/
+	@Test
+	public void testFetchOOpenPositionsByRecruiterId() throws Exception{
+		
+		Set<OpenPosition> openPositions = this.dao.findAllOpenPositionsByRecruiterId("aRecruiterId");
 		
 		assertEquals(id2, (((OpenPosition)openPositions.toArray()[0]).getId()));
 		assertEquals(id3, (((OpenPosition)openPositions.toArray()[1]).getId()));

@@ -197,7 +197,12 @@ public class SupplyAndDemandController {
 	@GetMapping(value="/v1/offered-candidate/{rectuiterId}/{id}")
 	@PreAuthorize("hasRole('ROLE_RECRUITER')")
 	public ResponseEntity<Set<OfferedCandidateAPIOutbound>> fetchOfferedCandidates(@PathVariable("id") String recruiterId){
-		return ResponseEntity.ok().body(Set.of());
+		return ResponseEntity
+				.ok()
+				.body(this.supplyAndDemandService.fetchOfferedCandidates(recruiterId)
+						.stream()
+						.map(c -> OfferedCandidateAPIOutbound.convertFromDomain(c, this.supplyAndDemandService.fetchRecruiterDetails(c.getRecruiterId())))
+						.collect(Collectors.toCollection(LinkedHashSet::new)));
 	}
 	
 	/**
@@ -208,7 +213,13 @@ public class SupplyAndDemandController {
 	@GetMapping(value="/v1/open-position/{rectuiterId}/{id}")
 	@PreAuthorize("hasRole('ROLE_RECRUITER')")
 	public ResponseEntity<Set<OpenPositionAPIOutbound>> fetchOpenPositions(@PathVariable("id") String recruiterId){
-		return ResponseEntity.ok().body(Set.of());
+		return ResponseEntity
+				.ok()
+				.body(this.supplyAndDemandService.fetchOpenPositions(recruiterId)
+						.stream()
+						.map(c -> OpenPositionAPIOutbound.convertFromDomain(c, this.supplyAndDemandService.fetchRecruiterDetails(c.getRecruiterId())))
+						.collect(Collectors.toCollection(LinkedHashSet::new)));
 	}
+	
 	
 }
