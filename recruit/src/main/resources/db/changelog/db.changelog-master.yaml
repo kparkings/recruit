@@ -749,4 +749,193 @@ databaseChangeLog:
                   type: bigint
                   constraints:
                     nullable: true
-              
+  - changeSet:
+      id: add_tbl_supply_and_demand
+      author: kparkings
+      changes:
+        - createTable:
+            tableName: offered_candidates
+            schemaName: recruiter
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: recruiter_id
+                  type: varchar
+                  constraints:
+                    foreignKeyName: fk_offered_candidate_recruiter_id
+                    references: recruiter.recruiter(user_id)
+                    nullable: false
+              - column:
+                  name: candidate_role_title
+                  type: varchar
+                  constraints:
+                    nullable: false
+              - column:
+                  name: country
+                  type: varchar
+                  constraints:
+                    nullable: true
+              - column:
+                  name: location
+                  type: varchar
+                  constraints:
+                    nullable: true
+              - column:
+                  name: contract_type
+                  type: varchar
+                  constraints:
+                    nullable: true
+              - column:
+                  name: days_on_site
+                  type: varchar
+                  constraints:
+                    nullable: true
+              - column:
+                  name: renumeration
+                  type: varchar
+                  constraints:
+                    nullable: true
+              - column:
+                  name: available_from_date
+                  type: timestamp
+                  constraints:
+                    nullable: true
+              - column:
+                  name: years_experience
+                  type: smallint
+                  constraints:
+                    nullable: true
+              - column:
+                  name: description
+                  type: varchar
+                  constraints:
+                    nullable: true
+              - column:
+                  name: comments
+                  type: varchar
+                  constraints:
+                    nullable: true
+              - column:
+                  name: created
+                  type: timestamp
+                  constraints:
+                    nullable: false             
+        - createTable:
+            tableName: offered_candidate_languages
+            schemaName: recruiter
+            columns:
+              - column:
+                  name: offered_candidate_id
+                  type: uuid
+                  constraints:
+                    nullable: false
+              - column:
+                  name: language
+                  type: varchar
+                  constraints:
+                    nullable: false
+        - addPrimaryKey:  
+            columnNames:  offered_candidate_id, language  
+            constraintName:  pk_offered_candidate_language  
+            tableName:  offered_candidate_languages  
+            schemaName: recruiter
+        - createTable:
+            tableName: offered_candidate_skills
+            schemaName: recruiter
+            columns:
+              - column:
+                  name: offered_candidate_id
+                  type: uuid
+                  constraints:
+                    nullable: false
+              - column:
+                  name: skill
+                  type: varchar
+                  constraints:
+                    nullable: false
+        - addPrimaryKey:  
+            columnNames:  offered_candidate_id, skill  
+            constraintName:  pk_offered_candidate_skill  
+            tableName:  offered_candidate_skills  
+            schemaName: recruiter
+  - changeSet:
+      id: add_tbl_supply_and_demand_opn_pos
+      author: kparkings
+      changes:
+        - createTable:
+            tableName: open_positions
+            schemaName: recruiter
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: recruiter_id
+                  type: varchar
+                  constraints:
+                    foreignKeyName: fk_open_position_recruiter_id
+                    references: recruiter.recruiter(user_id)
+                    nullable: false
+              - column:
+                  name: position_title
+                  type: varchar
+                  constraints:
+                    nullable: false
+              - column:
+                  name: country
+                  type: varchar
+                  constraints:
+                    nullable: true
+              - column:
+                  name: location
+                  type: varchar
+                  constraints:
+                    nullable: true
+              - column:
+                  name: contract_type
+                  type: varchar
+                  constraints:
+                    nullable: true
+              - column:
+                  name: renumeration
+                  type: varchar
+                  constraints:
+                    nullable: true
+              - column:
+                  name: start_date
+                  type: timestamp
+                  constraints:
+                    nullable: true
+              - column:
+                  name: position_closing_date
+                  type: timestamp
+                  constraints:
+                    nullable: true
+              - column:
+                  name: years_experience
+                  type: smallint
+                  constraints:
+                    nullable: true
+              - column:
+                  name: description
+                  type: varchar
+                  constraints:
+                    nullable: true
+              - column:
+                  name: comments
+                  type: varchar
+                  constraints:
+                    nullable: true
+              - column:
+                  name: created
+                  type: timestamp
+                  constraints:
+                    nullable: false              

@@ -85,7 +85,7 @@ public interface OpenPositionDao extends CrudRepository<OpenPositionEntity, UUID
 	* Returns all available OpenPositions for a specific recruiter
 	* @return Open Positions for Recruiter
 	*/
-	@Query("Select op FROM OpenPosition where op.recruiterId = :id")
+	@Query("FROM OpenPositionEntity where recruiterId = :id")
 	Set<OpenPositionEntity> findAllByRecruiterId(@Param("id") String recruiterId);
 
 }

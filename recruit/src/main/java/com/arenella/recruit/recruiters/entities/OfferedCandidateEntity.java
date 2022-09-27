@@ -51,7 +51,7 @@ public class OfferedCandidateEntity {
 	@Enumerated(EnumType.STRING)
 	private ContractType 				contractType;
 	
-	@Column(name="id")
+	@Column(name="days_on_site")
 	@Enumerated(EnumType.STRING)
 	private DAYS_ON_SITE				daysOnSite;
 	
@@ -61,7 +61,6 @@ public class OfferedCandidateEntity {
 	@Column(name="available_from_date")
 	private LocalDate 					availableFromDate;
 	
-	@Enumerated(EnumType.STRING)
 	@ElementCollection(targetClass=String.class, fetch=FetchType.EAGER)
 	@CollectionTable(schema="recruiters", name="offered_candidate_skills", joinColumns=@JoinColumn(name="offered_candidate_id"))
 	private Set<String>					coreSkills				= new HashSet<>();

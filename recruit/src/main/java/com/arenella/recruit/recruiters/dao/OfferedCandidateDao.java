@@ -84,7 +84,7 @@ public interface OfferedCandidateDao extends CrudRepository<OfferedCandidateEnti
 	* Returns all available OfferedCandidates for a specific recruiter
 	* @return OfferedCandidates for Recruiter
 	*/
-	@Query("Select op FROM OfferedCandidate where op.recruiterId = :id")
+	@Query("FROM OfferedCandidateEntity where recruiterId = :id")
 	Set<OfferedCandidateEntity> findAllByRecruiterId(@Param("id") String recruiterId);
 	
 }
