@@ -1,0 +1,30 @@
+.tabNav{
+	cursor:pointer;
+}
+
+.container-div{
+	margin:20px;
+}
+
+.marketplace-table{
+	margin-top:20px;
+	margin-bottom:20px;	
+}
+
+.bg-tab-hdr{
+	border:1px black solid;
+	background: #6c757d;
+    color: #ffffff;
+    font-size: x-small;
+    white-space:nowrap;
+    padding:5px;
+    margin:5px;
+    text-align:center;
+    padding-left:5px;
+    padding-right:5px;
+    min-width:50px;
+}
+
+.action-buttons{
+	text-align:right;
+}

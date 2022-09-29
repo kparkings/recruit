@@ -23,6 +23,7 @@ import { ListingComponent } 			from './listing/listing.component';
 import { RecruiterSignupComponent } 	from './recruiter-signup/recruiter-signup.component';
 import { SuggestionsComponent } 		from './suggestions/suggestions.component';
 import { CookieModule } from 'ngx-cookie';
+import { RecruiterMarketplaceComponent } from './recruiter-marketplace/recruiter-marketplace.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -37,7 +38,8 @@ import { CookieModule } from 'ngx-cookie';
     RecruiterListingsComponent,
     ListingComponent,
     RecruiterSignupComponent,
-    SuggestionsComponent
+    SuggestionsComponent,
+    RecruiterMarketplaceComponent
   ],
   imports: [
     BrowserModule,

@@ -41,6 +41,9 @@
 		<li class="li-arenella-nav" *ngIf="isAuthenticated() && !isAuthenticatedAsAdmin() && !isRecruiterNoSubscription() && !hasUnpaidSubscription()">
            <a class="dropdown-item recruiter-account" routerLink="/recruiter-listings">Manage Job Listings</a>
         </li>
+		<li class="li-arenella-nav" *ngIf="isAuthenticated() && !isAuthenticatedAsAdmin() && !isRecruiterNoSubscription() && !hasUnpaidSubscription()">
+           <a class="dropdown-item recruiter-account" routerLink="/recruiter-marketplace">Marketplace</a>
+        </li>
 
       </ul>
 

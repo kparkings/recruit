@@ -1,0 +1,95 @@
+<div class=".container m-2">
+	
+	<!-- Nav options -->
+	<ul class="nav nav-tabs">
+	  <li class="nav-item">
+	    <span class="nav-link tabNav" (click)="switchTab('showSupply')">Offer Candidates</span>
+	  </li>
+	  <li class="nav-item">
+	    <span class="nav-link tabNav" (click)="switchTab('showDemand')">Request Candidates</span>
+	  </li>
+	</ul>
+	
+	<div class="container-div">
+	
+		<!-- Supply -->
+		<div *ngIf="showSupply">
+			<p>
+			Do you have candidates that you cannot currently place? Would you like to make these candidates available
+			to other recruiters for a rate set by you? If so this feature is for you. Add your available candidates and 
+			allow other recruiters to contact you with available projects.  
+			</p>
+			
+			<div class="action-buttons">
+				<button class="btn btn-secondary  alter-subscription-btn">Offer new Candidate</button>
+			</div>
+			<!-- List of offered Candidates -->
+			<div>
+				<table class="table marketplace-table">
+					<thead>
+						<tr>
+							<th class="bg-tab-hdr">Created</th>
+							<th class="bg-tab-hdr">Role</th>
+							<th class="bg-tab-hdr">Country</th>
+							<th class="bg-tab-hdr">Location</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+					</tbody>	
+				</table>
+			</div>
+			<!-- Offer Candidate -->
+			<div>
+			
+			</div>
+		</div>
+		
+		<!-- Demand  -->
+		<div *ngIf="showDemand">
+			<p>
+			Do you have a position that you currently cannot fill? Would you like other Recruiters to be able to contact you 
+			with their available candidates in order to help you will the position. If so this feature is for you. Add detials 
+			of the position you are trying to fill and allow other Recruiters to contact you with suitable candidates.  
+			</p>
+			<div class="action-buttons">
+				<button class="btn btn-secondary  alter-subscription-btn">Request new Candidate</button>
+			</div>
+			<!-- List of Requested Candidates -->
+			<div>
+			
+			</div>
+			<!-- Request Candidate -->
+			<div>
+				<table class="table marketplace-table">
+					<thead>
+						<tr>
+							<th class="bg-tab-hdr">Created</th>
+							<th class="bg-tab-hdr">Position</th>
+							<th class="bg-tab-hdr">Country</th>
+							<th class="bg-tab-hdr">Location</th>
+							<th class="bg-tab-hdr">Start Date</th>
+							<th class="bg-tab-hdr">Closing Date</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+					</tbody>	
+				</table>
+			</div>
+		</div>
+		
+	</div>
+</div>
