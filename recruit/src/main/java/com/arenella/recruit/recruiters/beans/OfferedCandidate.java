@@ -71,8 +71,10 @@ public class OfferedCandidate {
 			throw new IllegalStateException("Can't Initialize an existing Offered Candidate");
 		}
 		
-		this.id = UUID.randomUUID();
-		this.recruiterId = authenticatedRecruiterId;	
+		this.id 			= UUID.randomUUID();
+		this.recruiterId 	= authenticatedRecruiterId;	
+		this.created 		= LocalDate.now();
+	
 	}
 	
 	/**

@@ -62,7 +62,8 @@ public class OfferedCandidateEntity {
 	private LocalDate 					availableFromDate;
 	
 	@ElementCollection(targetClass=String.class, fetch=FetchType.EAGER)
-	@CollectionTable(schema="recruiters", name="offered_candidate_skills", joinColumns=@JoinColumn(name="offered_candidate_id"))
+	@CollectionTable(schema="recruiter", name="offered_candidate_skills", joinColumns=@JoinColumn(name="offered_candidate_id"))
+	@Column(name = "skill")
 	private Set<String>					coreSkills				= new HashSet<>();
 	
 	@Column(name="years_experience")
@@ -73,8 +74,8 @@ public class OfferedCandidateEntity {
 	
 	@Enumerated(EnumType.STRING)
 	@ElementCollection(targetClass=LANGUAGE.class, fetch=FetchType.EAGER)
-	@CollectionTable(schema="recruiters", name="offered_candidate_languages", joinColumns=@JoinColumn(name="offered_candidate_id"))
-	//@Column(name="role")
+	@CollectionTable(schema="recruiter", name="offered_candidate_languages", joinColumns=@JoinColumn(name="offered_candidate_id"))
+	@Column(name="language")
 	private Set<LANGUAGE>				spokenLanguages			= new HashSet<>();
 	
 	@Column(name="comments")
@@ -83,6 +84,12 @@ public class OfferedCandidateEntity {
 	@Column(name="created")
 	private LocalDate					created;
 	
+	/**
+	* Default Constructor
+	*/
+	public OfferedCandidateEntity() {
+		
+	}
 	/**
 	* Constructor based upon a builder 
 	* @param builder - Contains initialization values

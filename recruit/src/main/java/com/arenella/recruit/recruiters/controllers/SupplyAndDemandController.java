@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.arenella.recruit.recruiters.beans.BlacklistedRecruiterAPIOutbound;
@@ -85,9 +86,9 @@ public class SupplyAndDemandController {
 	* @param offeredCandidate - OfferedCandidate details
 	* @return Status Code
 	*/
-	@PostMapping(value="/v1/offered-candidate")
+	@PostMapping(path="/v1/offered-candidate", consumes="application/json", produces="application/json")
 	@PreAuthorize("hasRole('ROLE_RECRUITER')")
-	public ResponseEntity<Void> addOfferedCandidate(OfferedCandidateAPIInbound offeredCandidate){
+	public ResponseEntity<Void> addOfferedCandidate(@RequestBody OfferedCandidateAPIInbound offeredCandidate){
 		
 		supplyAndDemandService.addOfferedCandidate(OfferedCandidateAPIInbound.convertToDomain(offeredCandidate));
 		

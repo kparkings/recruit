@@ -21,7 +21,7 @@
 			</p>
 			
 			<div class="action-buttons">
-				<button class="btn btn-secondary  alter-subscription-btn">Offer new Candidate</button>
+				<button class="btn btn-secondary  alter-subscription-btn" (click)="switchTab('addSupply')">Offer new Candidate</button>
 			</div>
 			<!-- List of offered Candidates -->
 			<div>
@@ -44,13 +44,127 @@
 					</tbody>	
 				</table>
 			</div>
-			<!-- Offer Candidate -->
-			<div>
-			
+		</div>
+		<!-- Add Supply -->
+		<div *ngIf="addSupply">
+			<h3>Add details of Candidate to make available to other recruiters</h3>
+			<div class="action-buttons">
+				<button class="btn btn-secondary  alter-subscription-btn" (click)="publishOfferedCandidate()">Publish</button>
 			</div>
+			<form [formGroup]="offeredCandidateFormBean">
+				<table class="table marketplace-table">
+					<tr>
+						<td>Candidates Function</td>
+						<td>
+							<input formControlName="candidateRoleTitle" type="text"/>
+						</td>	
+					</tr>
+					<tr>
+						<td>Country</td>
+						<td>
+							<select formControlName="country">
+								<option></option>
+								<option value="BELGIUM">Belgium</option>
+								<option value="IRL">Ireland</option>
+								<option value="NETHERLANDS">Netherlands</option>
+								<option value="UK">UK</option>
+								<option value="EUROPE">EU</option>
+								<option value="WORLD">World</option>
+							</select>
+						</td>	
+					</tr>
+					<tr>
+						<td>Location</td>
+						<td>
+							<input  formControlName="location" type="text"/>
+						</td>	
+					</tr>
+					<tr>
+						<td>Contract Type</td>
+						<td>
+							<select  formControlName="contractType">
+								<option></option>
+								<option value="CONTRACT">Contract</option>
+								<option value="PERM">Perm</option>
+								<option value="BOTH">Both</option>
+							</select>
+						</td>	
+					</tr>
+					<tr>
+						<td>Max Days On Site (per Week)</td>
+						<td>
+							<select  formControlName="daysOnSite">
+								<option></option>
+								<option value="ZERO">Fully Remote</option>
+								<option value="ONE">1</option>
+								<option value="TWO">2</option>
+								<option value="THREE">3</option>
+								<option value="FOUR">4</option>
+								<option value="FIVE">5</option>
+							</select>
+						</td>	
+					</tr>
+					<tr>
+						<td>Renumeration</td>
+						<td>
+							<input  formControlName="renumeration" type="text"/>
+						</td>	
+					</tr>
+					<tr>
+						<td>Available From</td>
+						<td>
+						<input  formControlName="availableFromDate" type="date"/>
+						</td>	
+					</tr>
+					<tr>
+						<td>
+							Skills
+						</td>
+						<td class="sugg-srch-bdy">
+							<input type="text" formControlName="skill"><button (click)="addOfferedCandidateSkill()" class="btn btn-secondary add-skill-btn">Add</button>
+							<div style="min-height:35px;">
+								<div class="selected-skill" *ngFor="let skill of coreSkills" (click)="removeOfferedCandidateSkill(skill)">{{skill}}</div>
+							</div>
+						</td>	
+					</tr>
+					<tr>
+						<td>Years Experience</td>
+						<td>
+							<input  formControlName="yearsExperience" type="text"/>
+						</td>	
+					</tr>
+					<tr>
+						<td>Description</td>
+						<td>
+							<input  formControlName="description" type="text"/>
+						</td>	
+					</tr>
+					<tr>
+						<td>Spoken Languages</td>
+						<td>
+							<select formControlName="language">
+								<option></option>
+								<option value="DUTCH">Dutch</option>
+								<option value="ENGLISH">English</option>
+								<option value="FRENCH">French</option>
+							</select>
+							<button (click)="addOfferedCandidateLanguage()" class="btn btn-secondary add-skill-btn">Add</button>
+							<div style="min-height:35px;">
+								<div class="selected-skill" *ngFor="let language of spokenLanguages" (click)="removeOfferedCandidateLanguage(language)">{{language}}</div>
+							</div>
+						</td>	
+					</tr>
+					<tr>
+						<td>Comments</td>
+						<td>
+							<textarea formControlName="comments"></textarea>
+						</td>	
+					</tr>
+				</table>
+			</form>
 		</div>
 		
-		<!-- Demand  -->
+		<!-- Show Demand  -->
 		<div *ngIf="showDemand">
 			<p>
 			Do you have a position that you currently cannot fill? Would you like other Recruiters to be able to contact you 
@@ -58,7 +172,7 @@
 			of the position you are trying to fill and allow other Recruiters to contact you with suitable candidates.  
 			</p>
 			<div class="action-buttons">
-				<button class="btn btn-secondary  alter-subscription-btn">Request new Candidate</button>
+				<button class="btn btn-secondary  alter-subscription-btn" (click)="switchTab('addDemand')">Request new Candidate</button>
 			</div>
 			<!-- List of Requested Candidates -->
 			<div>
@@ -90,6 +204,31 @@
 				</table>
 			</div>
 		</div>
-		
+		<!-- Add Demand  -->
+		<div *ngIf="addDemand">
+			<h3>Add details of position you wish to fill via other recruiters</h3>
+			<form>
+				<table>
+					<tr>
+						<td></td>
+						<td></td>	
+					</tr>
+				</table>
+			</form>
+		</div>
 	</div>
 </div>
+
+<ng-template #feedbackBox let-modal>
+	<div class="modal-header">
+		<h4 class="modal-title">{{feedbackBoxTitle}}</h4>
+ 				<div class="filter-close-box" (click)="closeModal()">X</div>
+		</div>
+		<div class="feedbackBox; {{feedbackBoxClass}}">
+		<div class="modal-body">
+			<ul class='feedback-failure'>
+				<li *ngFor="let errMessage of validationErrors"> {{errMessage}} </li>
+			</ul><br>
+		</div>       
+	</div>
+</ng-template> 

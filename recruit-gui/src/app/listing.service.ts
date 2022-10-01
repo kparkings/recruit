@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders }  				from '@angular/common/http';
 import { Observable }                 				from 'rxjs';
 import { environment }								from './../environments/environment';
 import { NewListingRequest } 						from './recruiter-listings/new-listing-request';
+
 /**
 * Service relating to the management of listings
 */

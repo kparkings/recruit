@@ -113,8 +113,8 @@ public class OfferedCandidateTest {
 		
 		assertNotNull(candidate.getId());
 		assertEquals(RECRUITER_ID, 			candidate.getRecruiterId());
-		
-		
+		assertNotNull(candidate.getCreated());
+			
 	}
 	
 }
