@@ -29,12 +29,26 @@
 	text-align:right;
 }
 
-.add-skill-btn{
-	width:50px;
+.action-btn{
+	width:200px;
 	margin-top:5px;
 	margin-left:5px;
 	padding-left:5px;
 	padding-right:5px;
+} 
+
+.small-action-btn{
+	width:100px;
+	margin-top:5px;
+	margin-left:5px;
+	padding-left:5px;
+	padding-right:5px;
+	margin-bottom:5px;
+	float:right;
+}
+
+.small-action-btn-confirm-del{
+	background:red;
 } 
 
 .selected-skill{
@@ -53,3 +67,8 @@
  	cursor:pointer;
  	display:inline-block;
  }
+ 
+ .add-skill-btn{
+ 	margin-left:5px;
+ }
+ 

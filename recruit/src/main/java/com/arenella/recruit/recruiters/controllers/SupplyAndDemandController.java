@@ -23,6 +23,7 @@ import com.arenella.recruit.recruiters.beans.OfferedCandidateAPIOutbound;
 import com.arenella.recruit.recruiters.beans.OpenPositionAPIInbound;
 import com.arenella.recruit.recruiters.beans.OpenPositionAPIOutbound;
 import com.arenella.recruit.recruiters.services.SupplyAndDemandService;
+import com.arenella.recruit.recruiters.utils.OfferedCandidateValidator;
 
 /**
 * API for recruiters to Offer Candidates and Advertise open positions 
@@ -89,6 +90,8 @@ public class SupplyAndDemandController {
 	@PostMapping(path="/v1/offered-candidate", consumes="application/json", produces="application/json")
 	@PreAuthorize("hasRole('ROLE_RECRUITER')")
 	public ResponseEntity<Void> addOfferedCandidate(@RequestBody OfferedCandidateAPIInbound offeredCandidate){
+		
+		OfferedCandidateValidator.validate(offeredCandidate);
 		
 		supplyAndDemandService.addOfferedCandidate(OfferedCandidateAPIInbound.convertToDomain(offeredCandidate));
 		
@@ -164,7 +167,7 @@ public class SupplyAndDemandController {
 	* Returns all Candidates offered by Recruiters
 	* @return - Offered Candidates
 	*/
-	@GetMapping(value="/v1/offered-candidate")
+	@GetMapping(value="/v1/offered-candidate/")
 	@PreAuthorize("hasRole('ROLE_RECRUITER')")
 	public ResponseEntity<Set<OfferedCandidateAPIOutbound>> fetchOfferedCandidates(){
 		return ResponseEntity
@@ -195,7 +198,7 @@ public class SupplyAndDemandController {
 	* @param recruiterId - Unique id of the Recruiter
 	* @return Candidates offered by the Recruiter
 	*/
-	@GetMapping(value="/v1/offered-candidate/{rectuiterId}/{id}")
+	@GetMapping(value="/v1/offered-candidate/rectuiter/{id}")
 	@PreAuthorize("hasRole('ROLE_RECRUITER')")
 	public ResponseEntity<Set<OfferedCandidateAPIOutbound>> fetchOfferedCandidates(@PathVariable("id") String recruiterId){
 		return ResponseEntity

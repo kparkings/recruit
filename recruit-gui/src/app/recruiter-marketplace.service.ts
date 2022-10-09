@@ -3,6 +3,7 @@ import { HttpClient, HttpResponse, HttpHeaders }  	from '@angular/common/http';
 import { Observable, throwError }                 	from 'rxjs';
 import { environment }								from './../environments/environment';
 import { NewOfferedCandidate } 						from './recruiter-marketplace/new-offered-candidate';
+import { OfferedCandidate } 						from './recruiter-marketplace/offered-candidate';
 
 @Injectable({
   providedIn: 'root'
@@ -21,6 +22,37 @@ export class RecruiterMarketplaceService {
 
 	headers = { 'content-type': 'application/json'};
 	
+	/**
+	* Fetches Candidates being offered by Recruiters
+	*/
+	public fetchOfferedCandidates(): Observable<Array<OfferedCandidate>>{
+		
+		const backendUrl:string = environment.backendUrl +'v1/offered-candidate/';
+		
+		return this.httpClient.get<any>(backendUrl, this.httpOptions);
+	}
+	
+	/**
+	* Fetches Candidates being offered by Recruiters
+	*/
+	//TODO: Why not get this from SC and if not make sure check done on BE for correct Recruiter
+	public fetchRecruitersOwnOfferedCandidates(recruiterId:string): Observable<Array<OfferedCandidate>>{
+		
+		const backendUrl:string = environment.backendUrl +'v1/offered-candidate/rectuiter/'+recruiterId;
+		
+		return this.httpClient.get<any>(backendUrl, this.httpOptions);
+	}
+
+	/**
+	* Deletes a Candidate being offered by Recruiters
+	*/
+	public deleteRecruitersOwnOfferedCandidates(candidateId:string): Observable<Array<OfferedCandidate>>{
+		
+		const backendUrl:string = environment.backendUrl +'v1/offered-candidate/'+candidateId;
+		
+		return this.httpClient.delete<any>(backendUrl, this.httpOptions);
+	}
+		
 	/**
 	* Registers a Listing with the backend
 	*/
@@ -51,15 +83,8 @@ export class RecruiterMarketplaceService {
 		offeredCandidate.yearsExperience 		= yearsExperience;	
 		offeredCandidate.description 			= description;
 		offeredCandidate.comments 				= comments; 			
-		offeredCandidate.spokenLanguages 				= languages;
-		offeredCandidate.coreSkills 				= skills;
-		
-		console.log("Sending Offered Candiadte");
-		console.log("Y1" + offeredCandidate.candidateRoleTitle);
-		console.log("Y2" + offeredCandidate.country);
-		console.log("Y3" + offeredCandidate.location);
-		console.log("Y4" + offeredCandidate.spokenLanguages);
-		console.log("Y5" + offeredCandidate.coreSkills);
+		offeredCandidate.spokenLanguages 		= languages;
+		offeredCandidate.coreSkills 			= skills;
 		
 		return this.httpClient.post<any>(backendUrl, JSON.stringify(offeredCandidate), this.httpOptions);
 	
