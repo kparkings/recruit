@@ -32,6 +32,7 @@ export class RecruiterMarketplaceComponent implements OnInit {
 	addSupply:boolean						= false;
 	editSupply:boolean						= false;
 	addDemand:Boolean						= false;
+	showSupplyDetails:boolean				= false;
 	
 	/**
 	* Validation 
@@ -63,7 +64,7 @@ export class RecruiterMarketplaceComponent implements OnInit {
 	/**
 	* Edit Offered Candidate 
 	*/	
-	private activeCandidate:OfferedCandidate = new OfferedCandidate();
+	public activeCandidate:OfferedCandidate = new OfferedCandidate();
 		
 	public confirmDeleteCandidate:string = '';
 	
@@ -74,12 +75,21 @@ export class RecruiterMarketplaceComponent implements OnInit {
 	public applyDeleteMyCandidate(candidateId:string):void{
 		this.confirmDeleteCandidate = '';
 		this.marketplaceService.deleteRecruitersOwnOfferedCandidates(candidateId).subscribe(data => {
-			if (this.showJustMyCandidatesActive){
-				this.showJustMyCandidates();
-			} else {
-				this.fetchOfferedCandidates();
-			}
+			//if (this.showJustMyCandidatesActive){
+			//	this.showJustMyCandidates();
+			//} else {
+			//	this.fetchOfferedCandidates();
+			//}
+			this.refreshCandidateList();
 		});
+	}
+	
+	public refreshCandidateList(){
+		if (this.showJustMyCandidatesActive){
+			this.showJustMyCandidates();
+		} else {
+			this.fetchOfferedCandidates();
+		}
 	}
 	
 	public editMyCandidate(candidateId:string):void{
@@ -159,6 +169,14 @@ export class RecruiterMarketplaceComponent implements OnInit {
 			this.spokenLanguages 	= candidate.spokenLanguages;
 		
 	}
+	
+	/**
+	* Shows details of selected Offered Candidate
+	*/
+	public viewCandidate(candidate:OfferedCandidate){
+		this.activeCandidate = candidate;
+		this.switchTab('showSupplyDetails');
+	}
 
 	/**
 	* Returns the previous OfferedCandidate list (all/own candidate)
@@ -166,13 +184,6 @@ export class RecruiterMarketplaceComponent implements OnInit {
 	public showOfferedCandidates(){
 		this.switchTab("showSupply")
 		this.resetOfferedCandidatesForm();
-	}
-
-	/**
-	* Performs Update of existing OfferedCandidate
-	*/	
-	public updateOfferedCandidate():void{
-		
 	}
 	
 	/**
@@ -186,44 +197,57 @@ export class RecruiterMarketplaceComponent implements OnInit {
 		
 		switch(tab){
 			case "showSupply":{
-				this.showSupply	=true;
-				this.showDemand	=false;
-				this.addSupply	= false;
-				this.addDemand	= false;
-				this.editSupply = false;
+				this.showSupply			= true;
+				this.showDemand			= false;
+				this.addSupply			= false;
+				this.addDemand			= false;
+				this.editSupply 		= false;
+				this.showSupplyDetails 	= false;
 				break;
 			}
 			case "showDemand":{
-				this.showSupply=false;
-				this.showDemand=true;
-				this.addSupply	= false;
-				this.addDemand	= false;
-				this.editSupply = false;
+				this.showSupply			= false;
+				this.showDemand			= true;
+				this.addSupply			= false;
+				this.addDemand			= false;
+				this.editSupply 		= false;
+				this.showSupplyDetails	= false;
 				break;
 			}
 			case "addSupply":{
-				this.showSupply	=	false;
-				this.showDemand	=	false; 
-				this.addSupply	= 	true;
-				this.addDemand	= 	false;
-				this.editSupply = false;
+				this.showSupply			= false;
+				this.showDemand			= false; 
+				this.addSupply			= true;
+				this.addDemand			= false;
+				this.editSupply 		= false;
+				this.showSupplyDetails 	= false;
 				break;
 			}
 			case "editSupply":{
-				this.showSupply	=	false;
-				this.showDemand	=	false; 
-				this.addSupply	= 	false;
-				this.addDemand	= 	false;
-				this.editSupply = 	true;
+				this.showSupply			= false;
+				this.showDemand			= false; 
+				this.addSupply			= false;
+				this.addDemand			= false;
+				this.editSupply 		= true;
+				this.showSupplyDetails 	= false;
 				break;
 			}
-			
 			case "addDemand":{
-				this.showSupply		= false;
-				this.showDemand		= false;
-				this.addSupply		= false;
-				this.addDemand		= true;
-				this.editSupply = false;
+				this.showSupply			= false;
+				this.showDemand			= false;
+				this.addSupply			= false;
+				this.addDemand			= true;
+				this.editSupply 		= false;
+				this.showSupplyDetails 	= false;
+				break;
+			}
+			case "showSupplyDetails":{
+				this.showSupply			= false;
+				this.showDemand			= false;
+				this.addSupply			= false;
+				this.addDemand			= false;
+				this.editSupply 		= false;
+				this.showSupplyDetails 	= true;
 				break;
 			}
 		}
@@ -278,7 +302,7 @@ export class RecruiterMarketplaceComponent implements OnInit {
 	* Opens the specified Dialog box
 	*/
 	public open(content:any, msg:string, success:boolean):void {
-    console.log("OPEN CALLED")
+		
 	    if (success) {
 	      //Currently not used
 	    } else {
@@ -346,85 +370,81 @@ export class RecruiterMarketplaceComponent implements OnInit {
 		
 		this.validationErrors			= new Array<string>();
 		
-		this.marketplaceService.registerOfferedCandidate(
-			candidateRoleTitle,
-			country,
-			location,
-			contractType,
-			daysOnSite,
-			renumeration,
-			availableFromDate,
-			yearsExperience,
-			description,
-			comments,
-			languages,
-			skills
-		).subscribe( data => {
-			//						this.fetchListings();
-									this.resetOfferedCandidatesForm();
-									this.switchTab('showSupply');
-								}, err => {
-									console.log(err);
-									if(err.status === 400) {
-										
-										let failedFields:Array<any> = err.error;
-										
-										if (typeof err.error[Symbol.iterator] === 'function') {
-											failedFields.forEach(failedField => {
-												this.validationErrors.push(failedField.issue);
-											});
-											this.open('feedbackBox', "Failure",  false);
-										} else {
-											console.log("Failed to Update Listing " + JSON.stringify(err.error));
-										}
-										
-									}
-										
-								});
-								
-		//} else {
+		if (this.addSupply) {
+			this.marketplaceService.registerOfferedCandidate(
+				candidateRoleTitle,
+				country,
+				location,
+				contractType,
+				daysOnSite,
+				renumeration,
+				availableFromDate,
+				yearsExperience,
+				description,
+				comments,
+				languages,
+				skills
+			).subscribe( data => {
+				this.resetOfferedCandidatesForm();
+				this.switchTab('showSupply');
+				this.refreshCandidateList();
+			}, err => {
+				console.log(err);
+				if (err.status === 400) {
+											
+					let failedFields:Array<any> = err.error;
+											
+					if (typeof err.error[Symbol.iterator] === 'function') {
+						failedFields.forEach(failedField => {
+							this.validationErrors.push(failedField.issue);
+						});
+						this.open('feedbackBox', "Failure",  false);
+					} else {
+						console.log("Failed to persist new OfferedCandidate " + JSON.stringify(err.error));
+					}
+				}
+											
+			});
+						
+		} else {
 			
-			//this.listingService
-			//		.updateListing( this.selectedListing.listingId,
-			//					ownerName, 
-			//					ownerCompany,
-			//					ownerEmail,
-			//					title,
-			//					description,
-			//					type,	
-			//					country,	
-			//					location,	
-			//					yearsExperience,
-			//					languages,
-			//					this.skills,	
-			//					rate, 			
-			//					currency, 		
-			//					false).subscribe( data => {
-			//						this.reset();
-			//						this.fetchListings();
-			//						this.showList();
-			//					}, err => {
-			//						
-			//						if(err.status === 400) {
-			//							
-			//							let failedFields:Array<any> = err.error;
-			//							
-			//							if (typeof err.error[Symbol.iterator] === 'function') {
-			//								failedFields.forEach(failedField => {
-			//									this.validationErrors.push(failedField.fieldMessageOrKey);
-			//								});
-			//								this.open('feedbackBox', "Failure",  false);
-			//							} else {
-			//								console.log("Failed to Update Listing " + JSON.stringify(err.error));
-			//							}
-			//							
-			//						}
-			//							
-			//					});
-		//}
+			this.marketplaceService.updateOfferedCandidate(
+				this.activeCandidate.id,
+				candidateRoleTitle,
+				country,
+				location,
+				contractType,
+				daysOnSite,
+				renumeration,
+				availableFromDate,
+				yearsExperience,
+				description,
+				comments,
+				languages,
+				skills
+			).subscribe( data => {
+				this.resetOfferedCandidatesForm();
+				this.switchTab('showSupply');
+				this.refreshCandidateList();
+			}, err => {
+				console.log(err);
+				if (err.status === 400) {
+											
+					let failedFields:Array<any> = err.error;
+											
+					if (typeof err.error[Symbol.iterator] === 'function') {
+						failedFields.forEach(failedField => {
+							this.validationErrors.push(failedField.issue);
+						});
+						this.open('feedbackBox', "Failure",  false);
+					} else {
+						console.log("Failed to update OfferedCandidate " + JSON.stringify(err.error));
+					}
+				}
+											
+			});
+		}
 	
-	//}
-		
 	}
 
 }

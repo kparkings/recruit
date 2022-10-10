@@ -121,7 +121,7 @@ public class SupplyAndDemandController {
 	*/
 	@PutMapping(value="/v1/offered-candidate/{id}")
 	@PreAuthorize("hasRole('ROLE_RECRUITER')")
-	public ResponseEntity<Void> updateOfferedCandidate(@PathVariable("id") UUID offeredCandidateId, OfferedCandidateAPIInbound offeredCandidate) throws IllegalAccessException{
+	public ResponseEntity<Void> updateOfferedCandidate(@PathVariable("id") UUID offeredCandidateId, @RequestBody OfferedCandidateAPIInbound offeredCandidate) throws IllegalAccessException{
 		
 		this.supplyAndDemandService.updateOfferedCandidate(offeredCandidateId, OfferedCandidateAPIInbound.convertToDomain(offeredCandidate));
 		

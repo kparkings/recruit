@@ -36,20 +36,23 @@
 							<th class="bg-tab-hdr">Country</th>
 							<th class="bg-tab-hdr">Location</th>
 							<th class="bg-tab-hdr">Contract Type</th>
-							<th class="bg-tab-hdr" *ngIf="showJustMyCandidatesActive">Actions</th>
+							<th class="bg-tab-hdr">Actions</th>
 						</tr>
 					</thead>
 					<tbody>
 						<tr *ngFor="let candidate of offeredCandidates">
-							<td (click)="editOfferedCandidate(candidate)">{{candidate.created}}</td>
-							<td (click)="editOfferedCandidate(candidate)">{{candidate.candidateRoleTitle}}</td>
-							<td (click)="editOfferedCandidate(candidate)">{{candidate.country}}</td>
-							<td (click)="editOfferedCandidate(candidate)">{{candidate.location}}</td>
-							<td (click)="editOfferedCandidate(candidate)">{{candidate.contractType}}</td>
+							<td>{{candidate.created}}</td>
+							<td>{{candidate.candidateRoleTitle}}</td>
+							<td>{{candidate.country}}</td>
+							<td>{{candidate.location}}</td>
+							<td>{{candidate.contractType}}</td>
 							<td *ngIf="showJustMyCandidatesActive">
-								<button class="btn btn-secondary small-action-btn" (click)="editMyCandidate(candidate.id)">Edit</button>
+								<button class="btn btn-secondary small-action-btn" (click)="editOfferedCandidate(candidate)">Edit</button>
 								<button class="btn btn-secondary small-action-btn" *ngIf="confirmDeleteCandidate != candidate.id"  (click)="deleteMyCandidate(candidate.id)">Delete</button>
 								<button class="btn btn-secondary small-action-btn small-action-btn-confirm-del" *ngIf="confirmDeleteCandidate === candidate.id" (click)="applyDeleteMyCandidate(candidate.id)">Confirm</button>
+							</td>
+							<td *ngIf="!showJustMyCandidatesActive">
+								<button class="btn btn-secondary small-action-btn" (click)="viewCandidate(candidate)">View</button>
 							</td>
 						</tr>
 					</tbody>	
@@ -180,7 +183,7 @@
 		<div *ngIf="editSupply">
 			<h3>Update Candidate</h3>
 			<div class="action-buttons">
-				<button class="btn btn-secondary  small-action-btn" (click)="updateOfferedCandidate()">Publish</button>
+				<button class="btn btn-secondary  small-action-btn" (click)="publishOfferedCandidate()">Update</button>
 				<button class="btn btn-secondary  small-action-btn" (click)="showOfferedCandidates()">Back</button>
 			</div>
 			<form [formGroup]="offeredCandidateFormBean">
@@ -294,6 +297,85 @@
 					</tr>
 				</table>
 			</form>
+		</div>
+		
+		<!-- Show Supply Details -->
+		<div *ngIf="showSupplyDetails">
+			<div class="action-buttons">
+				<button class="btn btn-secondary  small-action-btn">Contact</button>
+				<button class="btn btn-secondary  small-action-btn" (click)="showOfferedCandidates()">Back</button>
+			</div>
+			<div>
+				<div>
+					<h3>{{activeCandidate.created}}: <span class="candidate-title">{{activeCandidate.candidateRoleTitle}}</span></h3>
+				</div>
+				<div class="candidate-view-div-standard">
+					<h3>Offered By</h3>
+					<table>
+						<tr>
+							<td class="table-hdr-td">Company</td>
+							<td>{{activeCandidate.recruiter.companyName}}</td>
+						</tr>
+						<tr>
+							<td class="table-hdr-td">Recruiter</td>
+							<td>{{activeCandidate.recruiter.recruiterName}}</td>
+						</tr>
+					</table>
+				</div>
+				<div class="candidate-view-div-standard">
+					<h3>Location</h3>
+					<table>
+						<tr>
+							<td class="table-hdr-td">Country</td>
+							<td>{{activeCandidate.country}}</td>
+						</tr>
+						<tr>
+							<td class="table-hdr-td">Location</td>
+							<td>{{activeCandidate.location}}</td>
+						</tr>
+					</table>
+				</div>
+				<div class="candidate-view-div-standard">
+					<h3>Years Experience</h3>
+					{{activeCandidate.yearsExperience}}
+				</div>
+				<div class="candidate-view-div-standard">
+					<h3>Skills</h3>
+					<span class="static-item" *ngFor="let lang of activeCandidate.coreSkills">{{lang}}</span>
+				</div>
+				<div class="candidate-view-div-standard">
+					<h3>Languages</h3>
+					<span class="static-item" *ngFor="let lang of activeCandidate.spokenLanguages">{{lang}}</span>
+					
+				</div>
+				<div class="candidate-view-div-standard">
+					<h3>Renumeration</h3>
+					<table>
+						<tr>
+							<td class="table-hdr-td">Contract Type</td>
+							<td>{{activeCandidate.contractType}}</td>
+						</tr>
+						<tr>
+							<td class="table-hdr-td">Days On Site</td>
+							<td>{{activeCandidate.daysOnSite}}</td>
+						</tr>
+						<tr>
+							<td class="table-hdr-td">Renumeration</td>
+							<td>{{activeCandidate.renumeration}}</td>
+						</tr>
+					</table>
+				</div>
+				<div class="candidate-view-div">
+					<h3>Description</h3>
+					<p>{{activeCandidate.description}}</p>
+				</div>
+				
+				<div class="candidate-view-div">
+					<h3>Recruiter Comments</h3>
+					<p>{{activeCandidate.comments}}</p>
+				</div>
+				<div class="candidate-view-div-footer"></div>
+			</div>
 		</div>
 		
 		<!-- Show Demand  -->
