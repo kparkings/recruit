@@ -87,6 +87,13 @@ public class OpenPositionEntity {
 	}
 	
 	/**
+	* Default constructor
+	*/
+	public OpenPositionEntity() {
+		//jackson
+	}
+	
+	/**
 	* Returns the Unique Identifier for the Open Position
 	* @return Unique Id
 	*/
@@ -376,6 +383,7 @@ public class OpenPositionEntity {
 						.recruiterId(entity.getRecruiterId())
 						.renumeration(entity.getRenumeration())
 						.startDate(entity.getStartDate())
+						.created(entity.getCreated())
 					.build();
 	}
 	

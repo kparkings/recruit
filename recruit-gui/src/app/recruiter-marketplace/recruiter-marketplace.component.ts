@@ -5,6 +5,7 @@ import { ViewChild }									from '@angular/core';
 import { RecruiterMarketplaceService }					from '../recruiter-marketplace.service';
 import { RecruiterService }								from '../recruiter.service';
 import { OfferedCandidate }								from './offered-candidate';
+import { OpenPosition }									from './open-position';
 
 @Component({
   selector: 'app-recruiter-marketplace',
@@ -23,6 +24,7 @@ export class RecruiterMarketplaceComponent implements OnInit {
 	ngOnInit(): void {
 		
 		this.fetchOfferedCandidates();
+		this.fetchOpenPositions();
 		
  	}
 
@@ -31,8 +33,10 @@ export class RecruiterMarketplaceComponent implements OnInit {
 	showDemand:boolean						= false;
 	addSupply:boolean						= false;
 	editSupply:boolean						= false;
+	editDemand:boolean						= false;
 	addDemand:Boolean						= false;
 	showSupplyDetails:boolean				= false;
+	showDemandDetails:boolean				= false;
 	
 	/**
 	* Validation 
@@ -49,6 +53,12 @@ export class RecruiterMarketplaceComponent implements OnInit {
 	public showJustMyCandidatesActive:boolean			= false;
 
 	/**
+	* OpenPositions - List 
+	*/
+	public openPositions:Array<OpenPosition> 			= new Array<OpenPosition>();
+	public showJustMyOpenPositionsActive:boolean		= false;
+
+	/**
 	* Fetches only candidates offered by the current Recruiter 
 	*/		
 	public showJustMyCandidates(){
@@ -61,6 +71,42 @@ export class RecruiterMarketplaceComponent implements OnInit {
 		});	
 	}
 
+	/**
+	* Fetches only candidates offered by the current Recruiter 
+	*/		
+	public showJustMyOpenPositions(){
+		this.openPositions = new Array<OpenPosition>();
+		this.showJustMyOpenPositionsActive = true;
+		this.recruiterService.getOwnRecruiterAccount().subscribe(data => {
+			this.marketplaceService.fetchRecruitersOwnOpenPositions(data.userId).subscribe(data => {
+				this.openPositions = data;
+			});	
+		});	
+	}
+	
+	/**
+	* Edit Open Position 
+	*/	
+	public activeOpenPosition:OpenPosition = new OpenPosition();
+		
+	public confirmDeleteOpenPosition:string = '';
+	
+	public deleteMyOpenPosition(openPositionId:string):void{
+		this.confirmDeleteOpenPosition = openPositionId;
+	}
+	
+	public applyDeleteMyOpenPosition(openPositionId:string):void{		
+		this.confirmDeleteOpenPosition = '';
+		this.marketplaceService.deleteRecruitersOwnOpenPositions(openPositionId).subscribe(data => {
+			//if (this.showJustMyCandidatesActive){
+			//	this.showJustMyCandidates();
+			//} else {
+			//	this.fetchOfferedCandidates();
+			//}
+			this.refreshOpenPositionList();
+		});
+	}
+		
 	/**
 	* Edit Offered Candidate 
 	*/	
@@ -91,7 +137,15 @@ export class RecruiterMarketplaceComponent implements OnInit {
 			this.fetchOfferedCandidates();
 		}
 	}
-	
+
+	public refreshOpenPositionList(){
+		if (this.showJustMyOpenPositionsActive){
+			this.showJustMyOpenPositions();
+		} else {
+			this.fetchOpenPositions();
+		}
+	}
+		
 	public editMyCandidate(candidateId:string):void{
 		this.confirmDeleteCandidate = '';
 	}
@@ -117,6 +171,43 @@ export class RecruiterMarketplaceComponent implements OnInit {
 		language:				new FormControl(),
 		
 	});
+	
+	/**
+	* RequestedCandidate - Add details 
+	*/
+	requestedCandidateCoreSkills:Array<string>				= new Array<string>();
+	requestedCandidateSpokenLanguages:Array<string>			= new Array<string>();
+	
+	public requestedCandidateFormBean:FormGroup = new FormGroup({
+    	positionTitle:			new FormControl(''),
+		country:				new FormControl(),
+       	location:				new FormControl(),
+		contractType:			new FormControl(),	
+		renumeration:			new FormControl(),
+		startDate:				new FormControl(),
+		positionClosingDate:	new FormControl(),
+		description:			new FormControl(),
+		comments:				new FormControl(),
+	});
+	
+	/**
+	* Resets the OfferedCandudates FormBean
+	*/
+	private resetOpenPositionsForm(){
+			this.requestedCandidateFormBean = new FormGroup({
+	     	positionTitle:			new FormControl(''),
+			country:				new FormControl(),
+       		location:				new FormControl(),
+			contractType:			new FormControl(),	
+			renumeration:			new FormControl(),
+			startDate:				new FormControl(),
+			positionClosingDate:	new FormControl(),
+			description:			new FormControl(),
+			comments:				new FormControl(),
+		});
+		this.requestedCandidateSpokenLanguages 	= new Array<string>();
+		this.requestedCandidateCoreSkills 		= new Array<string>();
+	}
 	
 	/**
 	* Resets the OfferedCandudates FormBean
@@ -169,13 +260,44 @@ export class RecruiterMarketplaceComponent implements OnInit {
 			this.spokenLanguages 	= candidate.spokenLanguages;
 		
 	}
-	
+
+	/**
+	* Populates the OfferedCandidate form with details of the 
+	* selected OfferedCandidate in order to edit the OfferedCandidates
+	* details
+	*/
+	public editOpenPosition(openPosition:OpenPosition){
+		
+		this.switchTab('editDemand');
+		this.activeOpenPosition = openPosition;
+		
+		this.requestedCandidateFormBean = new FormGroup({
+	     	positionTitle:			new FormControl(openPosition.positionTitle),
+			country:				new FormControl(openPosition.country),
+	       	location:				new FormControl(openPosition.location),
+			contractType:			new FormControl(openPosition.contractType),	
+			renumeration:			new FormControl(openPosition.renumeration),
+			startDate:				new FormControl(openPosition.startDate),
+			positionClosingDate:	new FormControl(openPosition.positionClosingDate),
+			description:			new FormControl(openPosition.description),
+			comments:				new FormControl(openPosition.comments),
+			});
+	}
+		
 	/**
 	* Shows details of selected Offered Candidate
 	*/
 	public viewCandidate(candidate:OfferedCandidate){
 		this.activeCandidate = candidate;
 		this.switchTab('showSupplyDetails');
+	}
+	
+	/**
+	* Shows details of selected Offered Candidate
+	*/
+	public viewOpenPosition(openPosition:OpenPosition){
+		this.activeOpenPosition = openPosition;
+		this.switchTab('showDemandDetails');
 	}
 
 	/**
@@ -184,6 +306,14 @@ export class RecruiterMarketplaceComponent implements OnInit {
 	public showOfferedCandidates(){
 		this.switchTab("showSupply")
 		this.resetOfferedCandidatesForm();
+	}
+	
+	/**
+	* Returns the previous OpenPositions list (all/own candidate)
+	*/		
+	public showOpenPositions(){
+		this.switchTab("showDemand")
+		this.resetOpenPositionsForm();
 	}
 	
 	/**
@@ -202,7 +332,9 @@ export class RecruiterMarketplaceComponent implements OnInit {
 				this.addSupply			= false;
 				this.addDemand			= false;
 				this.editSupply 		= false;
+				this.editDemand			= false;
 				this.showSupplyDetails 	= false;
+				this.showDemandDetails 	= false;
 				break;
 			}
 			case "showDemand":{
@@ -211,7 +343,9 @@ export class RecruiterMarketplaceComponent implements OnInit {
 				this.addSupply			= false;
 				this.addDemand			= false;
 				this.editSupply 		= false;
+				this.editDemand			= false;
 				this.showSupplyDetails	= false;
+				this.showDemandDetails 	= false;
 				break;
 			}
 			case "addSupply":{
@@ -220,7 +354,9 @@ export class RecruiterMarketplaceComponent implements OnInit {
 				this.addSupply			= true;
 				this.addDemand			= false;
 				this.editSupply 		= false;
+				this.editDemand			= false;
 				this.showSupplyDetails 	= false;
+				this.showDemandDetails 	= false;
 				break;
 			}
 			case "editSupply":{
@@ -229,7 +365,9 @@ export class RecruiterMarketplaceComponent implements OnInit {
 				this.addSupply			= false;
 				this.addDemand			= false;
 				this.editSupply 		= true;
+				this.editDemand			= false;
 				this.showSupplyDetails 	= false;
+				this.showDemandDetails 	= false;
 				break;
 			}
 			case "addDemand":{
@@ -238,7 +376,9 @@ export class RecruiterMarketplaceComponent implements OnInit {
 				this.addSupply			= false;
 				this.addDemand			= true;
 				this.editSupply 		= false;
+				this.editDemand			= false;
 				this.showSupplyDetails 	= false;
+				this.showDemandDetails 	= false;
 				break;
 			}
 			case "showSupplyDetails":{
@@ -247,7 +387,31 @@ export class RecruiterMarketplaceComponent implements OnInit {
 				this.addSupply			= false;
 				this.addDemand			= false;
 				this.editSupply 		= false;
+				this.editDemand			= false;
 				this.showSupplyDetails 	= true;
+				this.showDemandDetails 	= false;
+				break;
+			}
+			case "showDemandDetails":{
+				this.showSupply			= false;
+				this.showDemand			= false;
+				this.addSupply			= false;
+				this.addDemand			= false;
+				this.editSupply 		= false;
+				this.editDemand			= false;
+				this.showSupplyDetails 	= false;
+				this.showDemandDetails 	= true;
+				break;
+			}
+			case "editDemand":{
+				this.showSupply			= false;
+				this.showDemand			= false;
+				this.addSupply			= false;
+				this.addDemand			= false;
+				this.editSupply 		= false;
+				this.editDemand			= true;
+				this.showSupplyDetails 	= false;
+				this.showDemandDetails 	= false;
 				break;
 			}
 		}
@@ -347,6 +511,112 @@ export class RecruiterMarketplaceComponent implements OnInit {
 		this.marketplaceService.fetchOfferedCandidates().subscribe(data => {
 			this.offeredCandidates = data;
 		});
+	}
+
+	/**
+	* Fetches available Open Positions
+	*/	
+	public fetchOpenPositions():void{
+		this.openPositions 					= new Array<OpenPosition>();
+		this.showJustMyOpenPositionsActive 	= false;
+		this.marketplaceService.fetchOpenPositions().subscribe(data => {
+			this.openPositions = data;
+		});
+	}
+	
+	/**
+	* Persists and Published the OfferedCandidate	
+	*/
+	public publishOpenPosition():void{
+
+		let positionTitle:string 		= this.requestedCandidateFormBean.get('positionTitle')?.value; 
+		let country:string 				= this.requestedCandidateFormBean.get('country')?.value;
+		let location:string 			= this.requestedCandidateFormBean.get('location')?.value;
+		let contractType:string 		= this.requestedCandidateFormBean.get('contractType')?.value;
+		let renumeration:string 		= this.requestedCandidateFormBean.get('renumeration')?.value;
+		let startDate:Date 				= this.requestedCandidateFormBean.get('startDate')?.value;
+		let positionClosingDate:Date 	= this.requestedCandidateFormBean.get('positionClosingDate')?.value;	
+		let description:string 			= this.requestedCandidateFormBean.get('description')?.value;
+		let comments:string 			= this.requestedCandidateFormBean.get('comments')?.value; 			
+		
+		let languages:Array<string> 	= this.requestedCandidateSpokenLanguages;
+		let skills:Array<string> 		= this.requestedCandidateCoreSkills;
+		
+		this.validationErrors			= new Array<string>();
+		
+		if (this.addDemand) {
+			this.marketplaceService.registerOpenPosition(
+				positionTitle,
+				country,
+				location,
+				contractType,
+				renumeration,
+				startDate,
+				positionClosingDate,
+				description,
+				comments,
+				languages,
+				skills
+			).subscribe( data => {
+				this.resetOpenPositionsForm();
+				this.switchTab('showDemand');
+				this.refreshOpenPositionList();
+			}, err => {
+				console.log(err);
+				if (err.status === 400) {
+											
+					let failedFields:Array<any> = err.error;
+											
+					if (typeof err.error[Symbol.iterator] === 'function') {
+						failedFields.forEach(failedField => {
+							this.validationErrors.push(failedField.issue);
+						});
+						this.open('feedbackBox', "Failure",  false);
+					} else {
+						console.log("Failed to persist new Open Position " + JSON.stringify(err.error));
+					}
+				}
+											
+			});
+						
+		} else {
+			
+			this.marketplaceService.updateOpenPosition(
+				this.activeOpenPosition.id,
+				positionTitle,
+				country,
+				location,
+				contractType,
+				renumeration,
+				startDate,
+				positionClosingDate,
+				description,
+				comments,
+				languages,
+				skills
+			).subscribe( data => {
+				this.resetOpenPositionsForm();
+				this.switchTab('showDemand');
+				this.refreshOpenPositionList();
+			}, err => {
+				console.log(err);
+				if (err.status === 400) {
+											
+					let failedFields:Array<any> = err.error;
+											
+					if (typeof err.error[Symbol.iterator] === 'function') {
+						failedFields.forEach(failedField => {
+							this.validationErrors.push(failedField.issue);
+						});
+						this.open('feedbackBox', "Failure",  false);
+					} else {
+						console.log("Failed to update Open Position " + JSON.stringify(err.error));
+					}
+				}
+											
+			});
+		}
+	
 	}
 	
 	/**

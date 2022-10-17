@@ -44,7 +44,7 @@ public class SupplyAndDemandController {
 	*/
 	@PostMapping(value="/v1/open-position")
 	@PreAuthorize("hasRole('ROLE_RECRUITER')")
-	public ResponseEntity<Void> addOpenPosition(OpenPositionAPIInbound openPosition) {
+	public ResponseEntity<Void> addOpenPosition(@RequestBody OpenPositionAPIInbound openPosition) {
 		
 		supplyAndDemandService.addOpenPosition(OpenPositionAPIInbound.convertToDomain(openPosition));
 		
@@ -75,7 +75,7 @@ public class SupplyAndDemandController {
 	*/
 	@PutMapping(value="/v1/open-position/{id}")
 	@PreAuthorize("hasRole('ROLE_RECRUITER')")
-	public ResponseEntity<Void> updateOpenPosition(@PathVariable("id") UUID openPositionId, OpenPositionAPIInbound openPosition) throws IllegalAccessException{
+	public ResponseEntity<Void> updateOpenPosition(@PathVariable("id") UUID openPositionId, @RequestBody OpenPositionAPIInbound openPosition) throws IllegalAccessException{
 		
 		supplyAndDemandService.updateOpenPosition(openPositionId, OpenPositionAPIInbound.convertToDomain(openPosition));
 		

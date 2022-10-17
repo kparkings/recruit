@@ -57,13 +57,11 @@ public interface OfferedCandidateDao extends CrudRepository<OfferedCandidateEnti
 	* @return OfferedCandidates
 	*/
 	default Set<OfferedCandidate> findAllOfferedCandidates(){
-		Set<OfferedCandidate> a =  StreamSupport
+		return  StreamSupport
 			.stream(this.findAll().spliterator(), false)
 			.sorted(Comparator.comparing(OfferedCandidateEntity::getCreated).reversed())
 			.map(entity -> OfferedCandidateEntity.convertFromEntity(entity))
 			.collect(Collectors.toCollection(LinkedHashSet::new));
-		
-		return a;
 	}
 	
 	/**
@@ -71,13 +69,11 @@ public interface OfferedCandidateDao extends CrudRepository<OfferedCandidateEnti
 	* @return OfferedCandidates
 	*/
 	default Set<OfferedCandidate> findAllOfferedCandidatesByRecruiterId(String recruiterId){
-		Set<OfferedCandidate> a =  StreamSupport
+		return StreamSupport
 			.stream(this.findAllByRecruiterId(recruiterId).spliterator(), false)
 			.sorted(Comparator.comparing(OfferedCandidateEntity::getCreated).reversed())
 			.map(entity -> OfferedCandidateEntity.convertFromEntity(entity))
 			.collect(Collectors.toCollection(LinkedHashSet::new));
-		
-		return a;
 	}
 	
 	/**

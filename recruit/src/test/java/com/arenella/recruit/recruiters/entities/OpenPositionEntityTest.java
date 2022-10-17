@@ -208,6 +208,7 @@ public class OpenPositionEntityTest {
 		assertTrue(entity.getCreated() instanceof LocalDate);
 		
 	}
+	
 	/**
 	* Tests conversion from Entity to Domain representation
 	* @throws Exception
@@ -244,6 +245,7 @@ public class OpenPositionEntityTest {
 		assertEquals(position.getRecruiterId(), 			recruiterId);
 		assertEquals(position.getRenumeration(), 			renumeration);
 		assertEquals(position.getStartDate(), 				startDate);
+		assertEquals(position.getCreated(), 				created);
 		
 	}
 	

@@ -4,6 +4,8 @@ import { Observable, throwError }                 	from 'rxjs';
 import { environment }								from './../environments/environment';
 import { NewOfferedCandidate } 						from './recruiter-marketplace/new-offered-candidate';
 import { OfferedCandidate } 						from './recruiter-marketplace/offered-candidate';
+import { NewOpenPosition } 							from './recruiter-marketplace/new-open-position';
+import { OpenPosition } 							from './recruiter-marketplace/open-position';
 
 @Injectable({
   providedIn: 'root'
@@ -31,7 +33,17 @@ export class RecruiterMarketplaceService {
 		
 		return this.httpClient.get<any>(backendUrl, this.httpOptions);
 	}
-	
+
+	/**
+	* Fetches OpenPositions being offered by Recruiters
+	*/
+	public fetchOpenPositions(): Observable<Array<OpenPosition>>{
+		
+		const backendUrl:string = environment.backendUrl +'v1/open-position/';
+		
+		return this.httpClient.get<any>(backendUrl, this.httpOptions);
+	}
+		
 	/**
 	* Fetches Candidates being offered by Recruiters
 	*/
@@ -42,6 +54,18 @@ export class RecruiterMarketplaceService {
 		
 		return this.httpClient.get<any>(backendUrl, this.httpOptions);
 	}
+	
+	/**
+	* Fetches Candidates being offered by Recruiters
+	*/
+	//TODO: Why not get this from SC and if not make sure check done on BE for correct Recruiter
+	public fetchRecruitersOwnOpenPositions(recruiterId:string): Observable<Array<OpenPosition>>{
+		
+		const backendUrl:string = environment.backendUrl +'v1/open-position/rectuiter/'+recruiterId;
+		
+		return this.httpClient.get<any>(backendUrl, this.httpOptions);
+	}
+	
 
 	/**
 	* Deletes a Candidate being offered by Recruiters
@@ -49,6 +73,16 @@ export class RecruiterMarketplaceService {
 	public deleteRecruitersOwnOfferedCandidates(candidateId:string): Observable<Array<OfferedCandidate>>{
 		
 		const backendUrl:string = environment.backendUrl +'v1/offered-candidate/'+candidateId;
+		
+		return this.httpClient.delete<any>(backendUrl, this.httpOptions);
+	}
+	
+	/**
+	* Deletes an Open Position being offered by Recruiters
+	*/
+	public deleteRecruitersOwnOpenPositions(openPositionId:string): Observable<Array<OpenPosition>>{
+		
+		const backendUrl:string = environment.backendUrl +'v1/open-position/'+openPositionId;
 		
 		return this.httpClient.delete<any>(backendUrl, this.httpOptions);
 	}
@@ -127,4 +161,78 @@ export class RecruiterMarketplaceService {
 		return this.httpClient.put<any>(backendUrl, JSON.stringify(offeredCandidate), this.httpOptions);
 	
 	}
+	
+	/**
+	* Registers an Open Position with the backend
+	*/
+	public registerOpenPosition(positionTitle:string,
+								country:string,
+								location:string,
+								contractType:string,
+								renumeration:string,
+								startDate:Date,
+								positionClosingDate:Date,
+								description:string,
+								comments:string,
+								languages:Array<string>,
+								skills:Array<string>):Observable<any>{
+		
+		const backendUrl:string = environment.backendUrl +'v1/open-position/';
+		
+		let openPosition:NewOpenPosition = new NewOpenPosition();
+		
+		openPosition.positionTitle 			= positionTitle; 
+		openPosition.country 				= country;
+		openPosition.location 				= location;
+		openPosition.contractType 			= contractType;
+		openPosition.renumeration 			= renumeration;
+		openPosition.startDate 				= startDate;	
+		openPosition.positionClosingDate 	= positionClosingDate;	
+		openPosition.description 			= description;
+		openPosition.comments 				= comments; 			
+		openPosition.spokenLanguages 		= languages;
+		openPosition.coreSkills 			= skills;
+		
+		return this.httpClient.post<any>(backendUrl, JSON.stringify(openPosition), this.httpOptions);
+	
+	}
+	
+	/**
+	* Updates an existing open position with the backend
+	*/
+	public updateOpenPosition(
+				openPositionId:string,
+				positionTitle:string,
+				country:string,
+				location:string,
+				contractType:string,
+				renumeration:string,
+				startDate:Date,
+				positionClosingDate:Date,
+				description:string,
+				comments:string,
+				languages:Array<string>,
+				skills:Array<string>
+			):Observable<any>{
+		
+		const backendUrl:string = environment.backendUrl +'v1/open-position/'+openPositionId;
+		
+		let openPosition:NewOpenPosition = new NewOpenPosition();
+		
+		openPosition.positionTitle 			= positionTitle; 
+		openPosition.country 				= country;
+		openPosition.location 				= location;
+		openPosition.contractType 			= contractType;
+		openPosition.renumeration 			= renumeration;
+		openPosition.startDate 				= startDate;	
+		openPosition.positionClosingDate 	= positionClosingDate;	
+		openPosition.description 			= description;
+		openPosition.comments 				= comments; 			
+		openPosition.spokenLanguages 		= languages;
+		openPosition.coreSkills 			= skills;
+		
+		return this.httpClient.put<any>(backendUrl, JSON.stringify(openPosition), this.httpOptions);
+	
+	}
+	
 }

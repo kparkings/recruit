@@ -25,6 +25,7 @@ public class OpenPositionAPIOutbound {
 	private LocalDate 					positionClosingDate;
 	private String 						description;
 	private String 						comments;
+	private LocalDate					created;
 	
 	/**
 	* Constructor based upon a Builder
@@ -43,6 +44,7 @@ public class OpenPositionAPIOutbound {
 		this.positionClosingDate 			= builder.positionClosingDate;
 		this.description 					= builder.description;
 		this.comments 						= builder.comments;
+		this.created						= builder.created;
 		
 	}
 	
@@ -138,6 +140,14 @@ public class OpenPositionAPIOutbound {
 	}
 	
 	/**
+	* Returns the date the Open Position was created
+	* @return creation date of the Open Position
+	*/
+	public LocalDate getCreated(){
+		return this.created;
+	}
+	
+	/**
 	* Returns a Builder for the Class
 	* @return Builder for the Class
 	*/
@@ -162,6 +172,7 @@ public class OpenPositionAPIOutbound {
 		private LocalDate 					positionClosingDate;
 		private String 						description;
 		private String 						comments;
+		private LocalDate					created;
 		
 		/**
 		* Sets the Unique Identifier for the Open Position
@@ -277,6 +288,16 @@ public class OpenPositionAPIOutbound {
 		}
 		
 		/**
+		* Sets the Date the Open Position was created
+		* @param created - When the Open Position was created
+		* @return Builder
+		*/
+		public OpenPositionAPIOutboundBuilder created(LocalDate created){
+			this.created = created;
+			return this;
+		}
+		
+		/**
 		* Returns an instance of OpenPositionAPIOutbound initalized with 
 		* the values in the Builder
 		* @return Initialzied instance of OpenPositionAPIOutbound
@@ -307,6 +328,7 @@ public class OpenPositionAPIOutbound {
 					.recruiter(recruiter)
 					.renumeration(openPosition.getRenumeration())
 					.startDate(openPosition.getStartDate())
+					.created(openPosition.getCreated())
 				.build();
 	}
 	

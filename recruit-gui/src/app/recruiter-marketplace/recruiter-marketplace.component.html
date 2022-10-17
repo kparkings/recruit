@@ -3,10 +3,12 @@
 	<!-- Nav options -->
 	<ul class="nav nav-tabs">
 	  <li class="nav-item">
-	    <span class="nav-link tabNav" (click)="switchTab('showSupply')">Offer Candidates</span>
+	    <span class="nav-link tabNav tabNavActive" *ngIf="showSupply"  (click)="switchTab('showSupply')">Offered Candidates</span>
+	    <span class="nav-link tabNav" *ngIf="!showSupply" (click)="switchTab('showSupply')">Offered Candidates</span>
 	  </li>
 	  <li class="nav-item">
-	    <span class="nav-link tabNav" (click)="switchTab('showDemand')">Request Candidates</span>
+	    <span class="nav-link tabNav tabNavActive" *ngIf="showDemand" (click)="switchTab('showDemand')">Requested Candidates</span>
+	    <span class="nav-link tabNav" *ngIf="!showDemand" (click)="switchTab('showDemand')">Requested Candidates</span>
 	  </li>
 	</ul>
 	
@@ -382,11 +384,13 @@
 		<div *ngIf="showDemand">
 			<p>
 			Do you have a position that you currently cannot fill? Would you like other Recruiters to be able to contact you 
-			with their available candidates in order to help you will the position. If so this feature is for you. Add detials 
+			with their available candidates in order to help you will the position. If so this feature is for you. Add details 
 			of the position you are trying to fill and allow other Recruiters to contact you with suitable candidates.  
 			</p>
 			<div class="action-buttons">
-				<button class="btn btn-secondary  alter-subscription-btn" (click)="switchTab('addDemand')">Request new Candidate</button>
+				<button class="btn btn-secondary action-btn" (click)="showJustMyOpenPositions()" 	*ngIf="!showJustMyOpenPositionsActive">Just My Candidates</button>
+				<button class="btn btn-secondary action-btn" (click)="fetchOpenPositions()" 		*ngIf="showJustMyOpenPositionsActive">All Requested Candidates</button>
+				<button class="btn btn-secondary action-btn" (click)="switchTab('addDemand')">Request new Candidate</button>
 			</div>
 			<!-- List of Requested Candidates -->
 			<div>
@@ -403,17 +407,27 @@
 							<th class="bg-tab-hdr">Location</th>
 							<th class="bg-tab-hdr">Start Date</th>
 							<th class="bg-tab-hdr">Closing Date</th>
+							<th class="bg-tab-hdr">Actions</th>
 						</tr>
 					</thead>
 					<tbody>
-						<tr>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
+						<tr  *ngFor="let openPosition of openPositions">
+							<td>{{openPosition.created}}</td>
+							<td>{{openPosition.positionTitle}}</td>
+							<td>{{openPosition.country}}</td>
+							<td>{{openPosition.location}}</td>
+							<td>{{openPosition.startDate}}</td>
+							<td>{{openPosition.positionClosingDate}}</td>
+							<td *ngIf="showJustMyOpenPositionsActive">
+								<button class="btn btn-secondary small-action-btn" (click)="editOpenPosition(openPosition)">Edit</button>
+								<button class="btn btn-secondary small-action-btn" *ngIf="confirmDeleteOpenPosition != openPosition.id"  (click)="deleteMyOpenPosition(openPosition.id)">Delete</button>
+								<button class="btn btn-secondary small-action-btn small-action-btn-confirm-del" *ngIf="confirmDeleteOpenPosition === openPosition.id" (click)="applyDeleteMyOpenPosition(openPosition.id)">Confirm</button>
+							</td>
+							<td *ngIf="!showJustMyOpenPositionsActive">
+								<button class="btn btn-secondary small-action-btn" (click)="viewOpenPosition(openPosition)">View</button>
+							</td>
 						</tr>
+						
 					</tbody>	
 				</table>
 			</div>
@@ -421,16 +435,239 @@
 		<!-- Add Demand  -->
 		<div *ngIf="addDemand">
 			<h3>Add details of position you wish to fill via other recruiters</h3>
-			<form>
-				<table>
+			<div class="action-buttons">
+				<button class="btn btn-secondary  small-action-btn" (click)="publishOpenPosition()">Publish</button>
+				<button class="btn btn-secondary  small-action-btn" (click)="showOpenPositions()">Back</button>
+			</div>
+			<form [formGroup]="requestedCandidateFormBean">
+				<table class="table marketplace-table">
 					<tr>
-						<td></td>
-						<td></td>	
+						<td>Candidates Function</td>
+						<td>
+							<input formControlName="positionTitle" type="text"/>
+						</td>	
+					</tr>
+					<tr>
+						<td>Country</td>
+						<td>
+							<select formControlName="country">
+								<option></option>
+								<option value="BELGIUM">Belgium</option>
+								<option value="IRL">Ireland</option>
+								<option value="NETHERLANDS">Netherlands</option>
+								<option value="UK">UK</option>
+								<option value="EUROPE">EU</option>
+								<option value="WORLD">World</option>
+							</select>
+						</td>	
+					</tr>
+					<tr>
+						<td>Location</td>
+						<td>
+							<input formControlName="location" type="text"/>
+						</td>	
+					</tr>
+					<tr>
+						<td>Contract Type</td>
+						<td>
+							<select  formControlName="contractType">
+								<option></option>
+								<option value="CONTRACT">Contract</option>
+								<option value="PERM">Perm</option>
+								<option value="BOTH">Both</option>
+							</select>
+						</td>	
+					</tr>
+					<tr>
+						<td>Renumeration</td>
+						<td>
+							<input formControlName="renumeration" type="text"/>
+						</td>	
+					</tr>
+					<tr>
+						<td>Start Date</td>
+						<td>
+							<input formControlName="startDate" type="date"/>
+						</td>	
+					</tr>
+					<tr>
+						<td>Position Closing Date</td>
+						<td>
+							<input formControlName="positionClosingDate" type="date"/>
+						</td>	
+					</tr>
+					<tr>
+						<td>Description</td>
+						<td>
+							<textarea formControlName="description"></textarea>
+						</td>	
+					</tr>
+					<tr>
+						<td>Comments</td>
+						<td>
+							<textarea formControlName="comments"></textarea>
+						</td>	
 					</tr>
 				</table>
 			</form>
 		</div>
 	</div>
+	
+	<!-- Edit Demand  -->
+	<div *ngIf="editDemand">
+		<h3>Update Requested Candidate</h3>
+		<div class="action-buttons">
+			<button class="btn btn-secondary  small-action-btn" (click)="publishOpenPosition()">Update</button>
+			<button class="btn btn-secondary  small-action-btn" (click)="showOpenPositions()">Back</button>
+		</div>
+		<form [formGroup]="requestedCandidateFormBean">
+		<table class="table marketplace-table">
+			<tr>
+				<td>Candidates Function</td>
+				<td>
+					<input formControlName="positionTitle" type="text"/>
+					</td>	
+				</tr>
+				<tr>
+					<td>Country</td>
+					<td>
+						<select formControlName="country">
+							<option></option>
+							<option value="BELGIUM">Belgium</option>
+							<option value="IRL">Ireland</option>
+							<option value="NETHERLANDS">Netherlands</option>
+							<option value="UK">UK</option>
+							<option value="EUROPE">EU</option>
+							<option value="WORLD">World</option>
+						</select>
+					</td>	
+				</tr>
+				<tr>
+					<td>Location</td>
+					<td>
+						<input formControlName="location" type="text"/>
+					</td>	
+				</tr>
+				<tr>
+					<td>Contract Type</td>
+					<td>
+						<select  formControlName="contractType">
+							<option></option>
+							<option value="CONTRACT">Contract</option>
+							<option value="PERM">Perm</option>
+							<option value="BOTH">Both</option>
+						</select>
+					</td>	
+				</tr>
+				<tr>
+					<td>Renumeration</td>
+					<td>
+						<input formControlName="renumeration" type="text"/>
+					</td>	
+				</tr>
+				<tr>
+					<td>Start Date</td>
+					<td>
+						<input formControlName="startDate" type="date"/>
+					</td>	
+				</tr>
+				<tr>
+					<td>Position Closing Date</td>
+					<td>
+						<input formControlName="positionClosingDate" type="date"/>
+					</td>	
+				</tr>
+				<tr>
+					<td>Description</td>
+					<td>
+						<textarea formControlName="description"></textarea>
+					</td>	
+				</tr>
+				<tr>
+					<td>Comments</td>
+					<td>
+						<textarea formControlName="comments"></textarea>
+					</td>	
+				</tr>
+			</table>
+		</form>
+		
+	</div>
+	<!-- Open Position Details -->
+	<div *ngIf="showDemandDetails">
+			<div class="action-buttons">
+				<button class="btn btn-secondary  small-action-btn">Contact</button>
+				<button class="btn btn-secondary  small-action-btn" (click)="showOpenPositions()">Back</button>
+			</div>
+			<div>
+				<div>
+					<h3>{{activeOpenPosition.created}}: <span class="candidate-title">{{activeOpenPosition.positionTitle}}</span></h3>
+				</div>
+				<div class="open-position-view-div-standard">
+					<h3>Requested By</h3>
+					<table>
+						<tr>
+							<td class="table-hdr-td">Company</td>
+							<td>{{activeOpenPosition.recruiter.companyName}}</td>
+						</tr>
+						<tr>
+							<td class="table-hdr-td">Recruiter</td>
+							<td>{{activeOpenPosition.recruiter.recruiterName}}</td>
+						</tr>
+					</table>
+				</div>
+				<div class="open-position-view-div-standard">
+					<h3>Location</h3>
+					<table>
+						<tr>
+							<td class="table-hdr-td">Country</td>
+							<td>{{activeOpenPosition.country}}</td>
+						</tr>
+						<tr>
+							<td class="table-hdr-td">Location</td>
+							<td>{{activeOpenPosition.location}}</td>
+						</tr>
+					</table>
+				</div>
+				<div class="open-position-view-div-standard">
+					<h3>Renumeration</h3>
+					<table>
+						<tr>
+							<td class="table-hdr-td">Contract Type</td>
+							<td>{{activeOpenPosition.contractType}}</td>
+						</tr>
+						<tr>
+							<td class="table-hdr-td">Renumeration</td>
+							<td>{{activeOpenPosition.renumeration}}</td>
+						</tr>
+						<tr>
+							<td class="table-hdr-td">Start Date</td>
+							<td>{{activeOpenPosition.startDate}}</td>
+						</tr>
+					</table>
+				</div>
+				<div class="open-position-view-div-standard">
+					<h3>Submission Details</h3>
+					<p>All applications must be submitted before this date.</p>
+					<table>
+						<tr>
+							<td class="table-hdr-td">Position closes</td>
+							<td>{{activeOpenPosition.positionClosingDate}}</td>
+						</tr>
+					</table>
+				</div>
+				<div class="candidate-view-div">
+					<h3>Description</h3>
+					<p>{{activeOpenPosition.description}}</p>
+				</div>
+				
+				<div class="candidate-view-div">
+					<h3>Recruiter Comments</h3>
+					<p>{{activeOpenPosition.comments}}</p>
+				</div>
+				<div class="candidate-view-div-footer"></div>
+			</div>
+		</div>
 </div>
 
 <ng-template #feedbackBox let-modal>
