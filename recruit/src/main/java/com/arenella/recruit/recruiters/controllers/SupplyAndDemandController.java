@@ -43,7 +43,7 @@ public class SupplyAndDemandController {
 	* @return Status code
 	*/
 	@PostMapping(value="/v1/open-position")
-	@PreAuthorize("hasRole('ROLE_RECRUITER')")
+	@PreAuthorize("hasRole('ROLE_RECRUITER') or hasRole('ROLE_ADMIN')")
 	public ResponseEntity<Void> addOpenPosition(@RequestBody OpenPositionAPIInbound openPosition) {
 		
 		supplyAndDemandService.addOpenPosition(OpenPositionAPIInbound.convertToDomain(openPosition));
@@ -58,7 +58,7 @@ public class SupplyAndDemandController {
 	 * @throws IllegalAccessException 
 	*/
 	@DeleteMapping(value="/v1/open-position/{id}")
-	@PreAuthorize("hasRole('ROLE_RECRUITER')")
+	@PreAuthorize("hasRole('ROLE_RECRUITER') or hasRole('ROLE_ADMIN')")
 	public ResponseEntity<Void> deleteOpenPosition(@PathVariable("id") UUID openPositionId) throws IllegalAccessException{
 		
 		supplyAndDemandService.deleteOpenPosition(openPositionId);
@@ -74,7 +74,7 @@ public class SupplyAndDemandController {
 	* @throws IllegalAccessException 
 	*/
 	@PutMapping(value="/v1/open-position/{id}")
-	@PreAuthorize("hasRole('ROLE_RECRUITER')")
+	@PreAuthorize("hasRole('ROLE_RECRUITER') or hasRole('ROLE_ADMIN')")
 	public ResponseEntity<Void> updateOpenPosition(@PathVariable("id") UUID openPositionId, @RequestBody OpenPositionAPIInbound openPosition) throws IllegalAccessException{
 		
 		supplyAndDemandService.updateOpenPosition(openPositionId, OpenPositionAPIInbound.convertToDomain(openPosition));
@@ -88,7 +88,7 @@ public class SupplyAndDemandController {
 	* @return Status Code
 	*/
 	@PostMapping(path="/v1/offered-candidate", consumes="application/json", produces="application/json")
-	@PreAuthorize("hasRole('ROLE_RECRUITER')")
+	@PreAuthorize("hasRole('ROLE_RECRUITER') or hasRole('ROLE_ADMIN')")
 	public ResponseEntity<Void> addOfferedCandidate(@RequestBody OfferedCandidateAPIInbound offeredCandidate){
 		
 		OfferedCandidateValidator.validate(offeredCandidate);
@@ -104,7 +104,7 @@ public class SupplyAndDemandController {
 	* @return Status Code
 	*/
 	@DeleteMapping(value="/v1/offered-candidate/{id}")
-	@PreAuthorize("hasRole('ROLE_RECRUITER')")
+	@PreAuthorize("hasRole('ROLE_RECRUITER') or hasRole('ROLE_ADMIN')")
 	public ResponseEntity<Void> deleteOfferedCandidate(@PathVariable("id") UUID offeredCandidateId) throws IllegalAccessException{
 		
 		supplyAndDemandService.deleteOfferedCandidate(offeredCandidateId);
@@ -120,7 +120,7 @@ public class SupplyAndDemandController {
 	* @throws IllegalAccessException 
 	*/
 	@PutMapping(value="/v1/offered-candidate/{id}")
-	@PreAuthorize("hasRole('ROLE_RECRUITER')")
+	@PreAuthorize("hasRole('ROLE_RECRUITER') or hasRole('ROLE_ADMIN')")
 	public ResponseEntity<Void> updateOfferedCandidate(@PathVariable("id") UUID offeredCandidateId, @RequestBody OfferedCandidateAPIInbound offeredCandidate) throws IllegalAccessException{
 		
 		this.supplyAndDemandService.updateOfferedCandidate(offeredCandidateId, OfferedCandidateAPIInbound.convertToDomain(offeredCandidate));
@@ -135,7 +135,7 @@ public class SupplyAndDemandController {
 	* @return Status Code
 	*/
 	@PutMapping(value="/v1/supply-demand-blacklist/{id}")
-	@PreAuthorize("hasRole('ROLE_RECRUITER')")
+	@PreAuthorize("hasRole('ROLE_RECRUITER') or hasRole('ROLE_ADMIN')")
 	public ResponseEntity<Void> addRecruiterToGlobalBlacklist(@PathVariable("id") String userId){
 		return ResponseEntity.ok().build();
 	}
@@ -147,7 +147,7 @@ public class SupplyAndDemandController {
 	* @return Status Code
 	*/
 	@DeleteMapping(value="/v1/supply-demand-blacklist/{id}")
-	@PreAuthorize("hasRole('ROLE_RECRUITER')")
+	@PreAuthorize("hasRole('ROLE_RECRUITER') or hasRole('ROLE_ADMIN')")
 	public ResponseEntity<Void> deleteRecruiterFromGlobalBlacklist(@PathVariable("id") String userId){
 		return ResponseEntity.ok().build();
 	}
@@ -158,7 +158,7 @@ public class SupplyAndDemandController {
 	* @return All recruiters on the Recruiters Blacklist
 	*/
 	@GetMapping(value="/v1/supply-demand-blacklist/{id}")
-	@PreAuthorize("hasRole('ROLE_RECRUITER')")
+	@PreAuthorize("hasRole('ROLE_RECRUITER') or hasRole('ROLE_ADMIN')")
 	public ResponseEntity<Set<BlacklistedRecruiterAPIOutbound>> fetchBlacklistForRecruiter(@PathVariable("id") String recruiterId) {
 		return ResponseEntity.ok().body(Set.of());
 	}
@@ -168,7 +168,7 @@ public class SupplyAndDemandController {
 	* @return - Offered Candidates
 	*/
 	@GetMapping(value="/v1/offered-candidate/")
-	@PreAuthorize("hasRole('ROLE_RECRUITER')")
+	@PreAuthorize("hasRole('ROLE_RECRUITER') or hasRole('ROLE_ADMIN')")
 	public ResponseEntity<Set<OfferedCandidateAPIOutbound>> fetchOfferedCandidates(){
 		return ResponseEntity
 				.ok()
@@ -183,7 +183,7 @@ public class SupplyAndDemandController {
 	* @return - Open positions posted by Recruiters
 	*/
 	@GetMapping(value="/v1/open-position")
-	@PreAuthorize("hasRole('ROLE_RECRUITER')")
+	@PreAuthorize("hasRole('ROLE_RECRUITER') or hasRole('ROLE_ADMIN')")
 	public ResponseEntity<Set<OpenPositionAPIOutbound>> fetchOpenPositions(){
 		return ResponseEntity
 				.ok()
@@ -199,7 +199,7 @@ public class SupplyAndDemandController {
 	* @return Candidates offered by the Recruiter
 	*/
 	@GetMapping(value="/v1/offered-candidate/rectuiter/{id}")
-	@PreAuthorize("hasRole('ROLE_RECRUITER')")
+	@PreAuthorize("hasRole('ROLE_RECRUITER') or hasRole('ROLE_ADMIN')")
 	public ResponseEntity<Set<OfferedCandidateAPIOutbound>> fetchOfferedCandidates(@PathVariable("id") String recruiterId){
 		return ResponseEntity
 				.ok()
@@ -215,7 +215,7 @@ public class SupplyAndDemandController {
 	* @return Open Positions posted by the Recruiter
 	*/
 	@GetMapping(value="/v1/open-position/{rectuiterId}/{id}")
-	@PreAuthorize("hasRole('ROLE_RECRUITER')")
+	@PreAuthorize("hasRole('ROLE_RECRUITER') or hasRole('ROLE_ADMIN')")
 	public ResponseEntity<Set<OpenPositionAPIOutbound>> fetchOpenPositions(@PathVariable("id") String recruiterId){
 		return ResponseEntity
 				.ok()
