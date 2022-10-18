@@ -4,18 +4,18 @@ import java.util.LinkedHashSet;
 import java.util.Optional;
 import java.util.Set;
 
-import com.arenella.recruit.recruiters.beans.OfferedCandidateAPIInbound;
+import com.arenella.recruit.recruiters.beans.OpenPositionAPIInbound;
 
 /**
 * Validator for OfferedCandidates
 * @author K Parkings
 */
-public class OfferedCandidateValidator {
+public class OpenPositionValidator {
 
-	public static int 		CANDIDATE_ROLE_MAX_LENGTH 		= 150;
-	public static String 	ATTR_CANDODIDATE_FUNC 			= "Candidates Function";
-	public static String 	MISSING_CANDIDATE_FUNCTION 		= "You must provide the Candidates Function";
-	public static String 	EMPTY_CANDIDATE_FUNCTION 		= "Candidate Function must not exceed";
+	public static int 		OPEN_POSITION_TITLE_MAX_LENGTH 		= 150;
+	public static String 	ATTR_POSITION_TITLE 				= "Position Title";
+	public static String 	MISSING_POSITION_TITLE	 			= "You must provide the Candidates Function";
+	public static String 	POSITION_TITLE_GT_MAX	 			= "Position title must not exceed ";
 	
 	public static int 		RENUMERATION_MAX_LENGTH 			= 150;
 	public static String 	ATTR_RENUMERATION 					= "Renumeration";
@@ -26,26 +26,26 @@ public class OfferedCandidateValidator {
 	public static String 	LOCATION_GT_MAX	 					= "Location must not exceed ";
 	
 	/**
-	* Performs validation of an Offered Candidate
+	* Performs validation of an OpenPosition
 	* @param candidate - To be validated
 	*/
-	public static void validate(OfferedCandidateAPIInbound candidate) {
+	public static void validate(OpenPositionAPIInbound openPosition) {
 		
 		AttributesValidationException exception = new AttributesValidationException();
 		
-		if (Optional.ofNullable(candidate.getCandidateRoleTitle()).isEmpty() || candidate.getCandidateRoleTitle().isBlank()) {
-			exception.addError(ATTR_CANDODIDATE_FUNC, MISSING_CANDIDATE_FUNCTION);
+		if (Optional.ofNullable(openPosition.getPositionTitle()).isEmpty() || openPosition.getPositionTitle().isBlank()) {
+			exception.addError(ATTR_POSITION_TITLE, MISSING_POSITION_TITLE);
 		}
 		
-		if (Optional.ofNullable(candidate.getCandidateRoleTitle()).isPresent() && candidate.getCandidateRoleTitle().length() > CANDIDATE_ROLE_MAX_LENGTH) {
-			exception.addError(ATTR_CANDODIDATE_FUNC, EMPTY_CANDIDATE_FUNCTION + CANDIDATE_ROLE_MAX_LENGTH);
+		if (Optional.ofNullable(openPosition.getPositionTitle()).isPresent() && openPosition.getPositionTitle().length() > OPEN_POSITION_TITLE_MAX_LENGTH) {
+			exception.addError(ATTR_POSITION_TITLE, POSITION_TITLE_GT_MAX + OPEN_POSITION_TITLE_MAX_LENGTH);
 		}
 		
-		if (Optional.ofNullable(candidate.getRenumeration()).isPresent() && candidate.getRenumeration().length() > RENUMERATION_MAX_LENGTH) {
+		if (Optional.ofNullable(openPosition.getRenumeration()).isPresent() && openPosition.getRenumeration().length() > RENUMERATION_MAX_LENGTH) {
 			exception.addError(ATTR_RENUMERATION, RENUMERATION_GT_MAX + RENUMERATION_MAX_LENGTH);
 		}
 		
-		if (Optional.ofNullable(candidate.getLocation()).isPresent() && candidate.getLocation().length() > LOCATION_MAX_LENGTH) {
+		if (Optional.ofNullable(openPosition.getLocation()).isPresent() && openPosition.getLocation().length() > LOCATION_MAX_LENGTH) {
 			exception.addError(ATTR_LOCATION, LOCATION_GT_MAX + LOCATION_MAX_LENGTH);
 		}
 		

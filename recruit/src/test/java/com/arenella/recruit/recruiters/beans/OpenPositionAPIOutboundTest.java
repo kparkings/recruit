@@ -21,6 +21,7 @@ public class OpenPositionAPIOutboundTest {
 	private String				recruiterId			 	= "kadawdk";
 	private String 				recruiterName			= "Kevin Parkings";
 	private String 				recruiterCompanyName	= "Arenella BV";
+	private String 				recruiterEmail			= "kparkings@gmail.com";
 	private String 				positionTitle			= "Java Developer";
 	private Country	 			country					= Country.EUROPE;
 	private String				location				= "Remote in Europe";
@@ -30,7 +31,7 @@ public class OpenPositionAPIOutboundTest {
 	private LocalDate 			positionClosingDate		= LocalDate.of(2022, 6, 14);;
 	private String 				description			 	= "Some long descriptive text";
 	private String 				comments				= "Some comments fromt he Recruiter";
-	private RecruiterDetails 	recruiter				= new RecruiterDetails(recruiterId, recruiterName, recruiterCompanyName);
+	private RecruiterDetails 	recruiter				= new RecruiterDetails(recruiterId, recruiterName, recruiterCompanyName, recruiterEmail);
 	private LocalDate 			created					= LocalDate.of(2022, 6, 14);;
 	
 	/**
@@ -67,6 +68,7 @@ public class OpenPositionAPIOutboundTest {
 		assertEquals(position.getRecruiter().getRecruiterId(), 		recruiterId);
 		assertEquals(position.getRecruiter().getRecruiterName(), 	recruiterName);
 		assertEquals(position.getRecruiter().getCompanyName(), 		recruiterCompanyName);
+		assertEquals(position.getRecruiter().getRecruiterEmail(), 	recruiterEmail);
 		assertEquals(position.getRenumeration(), 					renumeration);
 		assertEquals(position.getStartDate(), 						startDate);
 		assertEquals(position.getCreated(), 						created);

@@ -24,6 +24,7 @@ import com.arenella.recruit.recruiters.beans.OpenPositionAPIInbound;
 import com.arenella.recruit.recruiters.beans.OpenPositionAPIOutbound;
 import com.arenella.recruit.recruiters.services.SupplyAndDemandService;
 import com.arenella.recruit.recruiters.utils.OfferedCandidateValidator;
+import com.arenella.recruit.recruiters.utils.OpenPositionValidator;
 
 /**
 * API for recruiters to Offer Candidates and Advertise open positions 
@@ -45,6 +46,8 @@ public class SupplyAndDemandController {
 	@PostMapping(value="/v1/open-position")
 	@PreAuthorize("hasRole('ROLE_RECRUITER') or hasRole('ROLE_ADMIN')")
 	public ResponseEntity<Void> addOpenPosition(@RequestBody OpenPositionAPIInbound openPosition) {
+		
+		OpenPositionValidator.validate(openPosition);
 		
 		supplyAndDemandService.addOpenPosition(OpenPositionAPIInbound.convertToDomain(openPosition));
 		
@@ -76,6 +79,8 @@ public class SupplyAndDemandController {
 	@PutMapping(value="/v1/open-position/{id}")
 	@PreAuthorize("hasRole('ROLE_RECRUITER') or hasRole('ROLE_ADMIN')")
 	public ResponseEntity<Void> updateOpenPosition(@PathVariable("id") UUID openPositionId, @RequestBody OpenPositionAPIInbound openPosition) throws IllegalAccessException{
+		
+		OpenPositionValidator.validate(openPosition);
 		
 		supplyAndDemandService.updateOpenPosition(openPositionId, OpenPositionAPIInbound.convertToDomain(openPosition));
 		
@@ -122,6 +127,8 @@ public class SupplyAndDemandController {
 	@PutMapping(value="/v1/offered-candidate/{id}")
 	@PreAuthorize("hasRole('ROLE_RECRUITER') or hasRole('ROLE_ADMIN')")
 	public ResponseEntity<Void> updateOfferedCandidate(@PathVariable("id") UUID offeredCandidateId, @RequestBody OfferedCandidateAPIInbound offeredCandidate) throws IllegalAccessException{
+		
+		OfferedCandidateValidator.validate(offeredCandidate);
 		
 		this.supplyAndDemandService.updateOfferedCandidate(offeredCandidateId, OfferedCandidateAPIInbound.convertToDomain(offeredCandidate));
 		

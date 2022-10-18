@@ -44,7 +44,7 @@ public class SupplyAndDemandControllerTest {
 	@Test
 	public void testAddOpenPosition() throws Exception{
 		
-		ResponseEntity<Void> response = controller.addOpenPosition(OpenPositionAPIInbound.builder().build());
+		ResponseEntity<Void> response = controller.addOpenPosition(OpenPositionAPIInbound.builder().positionTitle("Java Dev").build());
 		
 		Mockito.verify(supplyAndDemandService).addOpenPosition(Mockito.any(OpenPosition.class));
 		
@@ -72,7 +72,7 @@ public class SupplyAndDemandControllerTest {
 	*/
 	@Test
 	public void testUpdateOpenPosition() throws Exception{
-		ResponseEntity<Void> response = controller.updateOpenPosition(UUID.randomUUID(), OpenPositionAPIInbound.builder().build());
+		ResponseEntity<Void> response = controller.updateOpenPosition(UUID.randomUUID(), OpenPositionAPIInbound.builder().positionTitle("Java Dev").build());
 		assertEquals(response.getStatusCode(), HttpStatus.OK);
 		Mockito.verify(supplyAndDemandService).updateOpenPosition(Mockito.any(UUID.class), Mockito.any(OpenPosition.class));
 	}
@@ -83,7 +83,7 @@ public class SupplyAndDemandControllerTest {
 	*/
 	@Test
 	public void testAddOfferedCandidate() throws Exception{
-		ResponseEntity<Void> response = controller.addOfferedCandidate(OfferedCandidateAPIInbound.builder().build());
+		ResponseEntity<Void> response = controller.addOfferedCandidate(OfferedCandidateAPIInbound.builder().candidateRoleTitle("Java Dev").build());
 		assertEquals(response.getStatusCode(), HttpStatus.CREATED);
 	}
 	
@@ -104,7 +104,7 @@ public class SupplyAndDemandControllerTest {
 	@Test
 	public void testUpdateOfferedCandidate() throws Exception{
 		
-		ResponseEntity<Void> response = controller.updateOfferedCandidate(UUID.randomUUID(), OfferedCandidateAPIInbound.builder().build());
+		ResponseEntity<Void> response = controller.updateOfferedCandidate(UUID.randomUUID(), OfferedCandidateAPIInbound.builder().candidateRoleTitle("Java Dev").build());
 		assertEquals(response.getStatusCode(), HttpStatus.OK);
 		Mockito.verify(supplyAndDemandService).updateOfferedCandidate(Mockito.any(UUID.class), Mockito.any(OfferedCandidate.class));
 		

@@ -25,7 +25,7 @@
 			<div class="action-buttons">
 				<button class="btn btn-secondary action-btn" (click)="showJustMyCandidates()" 	*ngIf="!showJustMyCandidatesActive">Just My Candidate</button>
 				<button class="btn btn-secondary action-btn" (click)="fetchOfferedCandidates()" *ngIf="showJustMyCandidatesActive">All Candidates</button>
-				<button class="btn btn-secondary action-btn" (click)="switchTab('addSupply')">Offer new Candidate</button>
+				<button class="btn btn-secondary action-btn" (click)="switchTab('addSupply')" 	*ngIf="!isAuthenticatedAsAdmin()">Offer new Candidate</button>
 			
 			</div>
 			<!-- List of offered Candidates -->
@@ -43,15 +43,18 @@
 					</thead>
 					<tbody>
 						<tr *ngFor="let candidate of offeredCandidates">
-							<td>{{candidate.created}}</td>
-							<td>{{candidate.candidateRoleTitle}}</td>
-							<td>{{candidate.country}}</td>
-							<td>{{candidate.location}}</td>
-							<td>{{candidate.contractType}}</td>
+							<td class="table-bdy-td">{{candidate.created}}</td>
+							<td class="table-bdy-td">{{candidate.candidateRoleTitle}}</td>
+							<td class="table-bdy-td">{{candidate.country}}</td>
+							<td class="table-bdy-td">{{candidate.location}}</td>
+							<td class="table-bdy-td">{{candidate.contractType}}</td>
 							<td *ngIf="showJustMyCandidatesActive">
-								<button class="btn btn-secondary small-action-btn" (click)="editOfferedCandidate(candidate)">Edit</button>
-								<button class="btn btn-secondary small-action-btn" *ngIf="confirmDeleteCandidate != candidate.id"  (click)="deleteMyCandidate(candidate.id)">Delete</button>
-								<button class="btn btn-secondary small-action-btn small-action-btn-confirm-del" *ngIf="confirmDeleteCandidate === candidate.id" (click)="applyDeleteMyCandidate(candidate.id)">Confirm</button>
+								<div *ngIf="!isAuthenticatedAsAdmin()">
+									<button class="btn btn-secondary small-action-btn" (click)="viewCandidate(candidate)">View</button>
+									<button class="btn btn-secondary small-action-btn" (click)="editOfferedCandidate(candidate)">Edit</button>
+									<button class="btn btn-secondary small-action-btn" *ngIf="confirmDeleteCandidate != candidate.id"  (click)="deleteMyCandidate(candidate.id)">Delete</button>
+									<button class="btn btn-secondary small-action-btn small-action-btn-confirm-del" *ngIf="confirmDeleteCandidate === candidate.id" (click)="applyDeleteMyCandidate(candidate.id)">Confirm</button>
+								</div>
 							</td>
 							<td *ngIf="!showJustMyCandidatesActive">
 								<button class="btn btn-secondary small-action-btn" (click)="viewCandidate(candidate)">View</button>
@@ -138,7 +141,7 @@
 							Skills
 						</td>
 						<td class="sugg-srch-bdy">
-							<input type="text" formControlName="skill"><button (click)="addOfferedCandidateSkill()" class="btn btn-secondary add-skill-btn">Add</button>
+							<input type="text" formControlName="skill"><button (click)="addOfferedCandidateSkill()" class="btn btn-secondary add-skill-btn" *ngIf="!isAuthenticatedAsAdmin()">Add</button>
 							<div style="min-height:35px;">
 								<div class="selected-skill" *ngFor="let skill of coreSkills" (click)="removeOfferedCandidateSkill(skill)">{{skill}}</div>
 							</div>
@@ -304,7 +307,6 @@
 		<!-- Show Supply Details -->
 		<div *ngIf="showSupplyDetails">
 			<div class="action-buttons">
-				<button class="btn btn-secondary  small-action-btn">Contact</button>
 				<button class="btn btn-secondary  small-action-btn" (click)="showOfferedCandidates()">Back</button>
 			</div>
 			<div>
@@ -316,11 +318,15 @@
 					<table>
 						<tr>
 							<td class="table-hdr-td">Company</td>
-							<td>{{activeCandidate.recruiter.companyName}}</td>
+							<td class="table-bdy-td">{{activeCandidate.recruiter.companyName}}</td>
 						</tr>
 						<tr>
 							<td class="table-hdr-td">Recruiter</td>
-							<td>{{activeCandidate.recruiter.recruiterName}}</td>
+							<td class="table-bdy-td">{{activeCandidate.recruiter.recruiterName}}</td>
+						</tr>
+						<tr>
+							<td class="table-hdr-td">Email</td>
+							<td class="table-bdy-td">{{activeCandidate.recruiter.recruiterEmail}}</td>
 						</tr>
 					</table>
 				</div>
@@ -329,11 +335,11 @@
 					<table>
 						<tr>
 							<td class="table-hdr-td">Country</td>
-							<td>{{activeCandidate.country}}</td>
+							<td class="table-bdy-td">{{activeCandidate.country}}</td>
 						</tr>
 						<tr>
 							<td class="table-hdr-td">Location</td>
-							<td>{{activeCandidate.location}}</td>
+							<td class="table-bdy-td">{{activeCandidate.location}}</td>
 						</tr>
 					</table>
 				</div>
@@ -355,15 +361,15 @@
 					<table>
 						<tr>
 							<td class="table-hdr-td">Contract Type</td>
-							<td>{{activeCandidate.contractType}}</td>
+							<td class="table-bdy-td">{{activeCandidate.contractType}}</td>
 						</tr>
 						<tr>
 							<td class="table-hdr-td">Days On Site</td>
-							<td>{{activeCandidate.daysOnSite}}</td>
+							<td class="table-bdy-td">{{activeCandidate.daysOnSite}}</td>
 						</tr>
 						<tr>
 							<td class="table-hdr-td">Renumeration</td>
-							<td>{{activeCandidate.renumeration}}</td>
+							<td class="table-bdy-td">{{activeCandidate.renumeration}}</td>
 						</tr>
 					</table>
 				</div>
@@ -390,7 +396,7 @@
 			<div class="action-buttons">
 				<button class="btn btn-secondary action-btn" (click)="showJustMyOpenPositions()" 	*ngIf="!showJustMyOpenPositionsActive">Just My Candidates</button>
 				<button class="btn btn-secondary action-btn" (click)="fetchOpenPositions()" 		*ngIf="showJustMyOpenPositionsActive">All Requested Candidates</button>
-				<button class="btn btn-secondary action-btn" (click)="switchTab('addDemand')">Request new Candidate</button>
+				<button class="btn btn-secondary action-btn" (click)="switchTab('addDemand')" *ngIf="!isAuthenticatedAsAdmin()">Request new Candidate</button>
 			</div>
 			<!-- List of Requested Candidates -->
 			<div>
@@ -412,16 +418,19 @@
 					</thead>
 					<tbody>
 						<tr  *ngFor="let openPosition of openPositions">
-							<td>{{openPosition.created}}</td>
-							<td>{{openPosition.positionTitle}}</td>
-							<td>{{openPosition.country}}</td>
-							<td>{{openPosition.location}}</td>
-							<td>{{openPosition.startDate}}</td>
-							<td>{{openPosition.positionClosingDate}}</td>
+							<td class="table-bdy-td">{{openPosition.created}}</td>
+							<td class="table-bdy-td">{{openPosition.positionTitle}}</td>
+							<td class="table-bdy-td">{{openPosition.country}}</td>
+							<td class="table-bdy-td">{{openPosition.location}}</td>
+							<td class="table-bdy-td">{{openPosition.startDate}}</td>
+							<td class="table-bdy-td">{{openPosition.positionClosingDate}}</td>
 							<td *ngIf="showJustMyOpenPositionsActive">
-								<button class="btn btn-secondary small-action-btn" (click)="editOpenPosition(openPosition)">Edit</button>
-								<button class="btn btn-secondary small-action-btn" *ngIf="confirmDeleteOpenPosition != openPosition.id"  (click)="deleteMyOpenPosition(openPosition.id)">Delete</button>
-								<button class="btn btn-secondary small-action-btn small-action-btn-confirm-del" *ngIf="confirmDeleteOpenPosition === openPosition.id" (click)="applyDeleteMyOpenPosition(openPosition.id)">Confirm</button>
+								<div *ngIf="!isAuthenticatedAsAdmin()">
+									<button class="btn btn-secondary small-action-btn" (click)="viewOpenPosition(openPosition)">View</button>
+									<button class="btn btn-secondary small-action-btn" (click)="editOpenPosition(openPosition)">Edit</button>
+									<button class="btn btn-secondary small-action-btn" *ngIf="confirmDeleteOpenPosition != openPosition.id"  (click)="deleteMyOpenPosition(openPosition.id)">Delete</button>
+									<button class="btn btn-secondary small-action-btn small-action-btn-confirm-del" *ngIf="confirmDeleteOpenPosition === openPosition.id" (click)="applyDeleteMyOpenPosition(openPosition.id)">Confirm</button>
+								</div>
 							</td>
 							<td *ngIf="!showJustMyOpenPositionsActive">
 								<button class="btn btn-secondary small-action-btn" (click)="viewOpenPosition(openPosition)">View</button>
@@ -442,7 +451,7 @@
 			<form [formGroup]="requestedCandidateFormBean">
 				<table class="table marketplace-table">
 					<tr>
-						<td>Candidates Function</td>
+						<td>Position Title</td>
 						<td>
 							<input formControlName="positionTitle" type="text"/>
 						</td>	
@@ -523,7 +532,7 @@
 		<form [formGroup]="requestedCandidateFormBean">
 		<table class="table marketplace-table">
 			<tr>
-				<td>Candidates Function</td>
+				<td>Position Title</td>
 				<td>
 					<input formControlName="positionTitle" type="text"/>
 					</td>	
@@ -596,7 +605,6 @@
 	<!-- Open Position Details -->
 	<div *ngIf="showDemandDetails">
 			<div class="action-buttons">
-				<button class="btn btn-secondary  small-action-btn">Contact</button>
 				<button class="btn btn-secondary  small-action-btn" (click)="showOpenPositions()">Back</button>
 			</div>
 			<div>
@@ -608,11 +616,15 @@
 					<table>
 						<tr>
 							<td class="table-hdr-td">Company</td>
-							<td>{{activeOpenPosition.recruiter.companyName}}</td>
+							<td class="table-bdy-td">{{activeOpenPosition.recruiter.companyName}}</td>
 						</tr>
 						<tr>
 							<td class="table-hdr-td">Recruiter</td>
-							<td>{{activeOpenPosition.recruiter.recruiterName}}</td>
+							<td class="table-bdy-td">{{activeOpenPosition.recruiter.recruiterName}}</td>
+						</tr>
+						<tr>
+							<td class="table-hdr-td">Email</td>
+							<td class="table-bdy-td">{{activeCandidate.recruiter.recruiterEmail}}</td>
 						</tr>
 					</table>
 				</div>
@@ -621,11 +633,11 @@
 					<table>
 						<tr>
 							<td class="table-hdr-td">Country</td>
-							<td>{{activeOpenPosition.country}}</td>
+							<td class="table-bdy-td">{{activeOpenPosition.country}}</td>
 						</tr>
 						<tr>
 							<td class="table-hdr-td">Location</td>
-							<td>{{activeOpenPosition.location}}</td>
+							<td class="table-bdy-td">{{activeOpenPosition.location}}</td>
 						</tr>
 					</table>
 				</div>
@@ -634,15 +646,15 @@
 					<table>
 						<tr>
 							<td class="table-hdr-td">Contract Type</td>
-							<td>{{activeOpenPosition.contractType}}</td>
+							<td class="table-bdy-td">{{activeOpenPosition.contractType}}</td>
 						</tr>
 						<tr>
 							<td class="table-hdr-td">Renumeration</td>
-							<td>{{activeOpenPosition.renumeration}}</td>
+							<td class="table-bdy-td">{{activeOpenPosition.renumeration}}</td>
 						</tr>
 						<tr>
 							<td class="table-hdr-td">Start Date</td>
-							<td>{{activeOpenPosition.startDate}}</td>
+							<td class="table-bdy-td">{{activeOpenPosition.startDate}}</td>
 						</tr>
 					</table>
 				</div>
@@ -652,7 +664,7 @@
 					<table>
 						<tr>
 							<td class="table-hdr-td">Position closes</td>
-							<td>{{activeOpenPosition.positionClosingDate}}</td>
+							<td class="table-bdy-td">{{activeOpenPosition.positionClosingDate}}</td>
 						</tr>
 					</table>
 				</div>

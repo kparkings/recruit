@@ -410,17 +410,20 @@ public class OfferedCandidateAPIOutbound {
 		private final String recruiterId;
 		private final String recruiterName;
 		private final String companyName;
+		private final String email;
 		
 		/**
 		* Constructor
 		* @param recruiterId	- Unique id of the Recruiter
 		* @param recruiterName	- Name of the Recruiter
 		* @param companyName	- Name of the Company Recruiter works for
+		* @param email			- Email of the Recruiter
 		*/
-		public RecruiterDetails(String recruiterId, String recruiterName, String companyName) {
+		public RecruiterDetails(String recruiterId, String recruiterName, String companyName, String email) {
 			this.recruiterId 	= recruiterId;
 			this.recruiterName 	= recruiterName;
 			this.companyName 	= companyName;
+			this.email			= email;
 		}
 		
 		/**
@@ -446,6 +449,14 @@ public class OfferedCandidateAPIOutbound {
 		*/
 		public String getCompanyName() {
 			return this.companyName;
+		}
+		
+		/**
+		* Returns the Email of the Recruiter
+		* @return Recruiters Email
+		*/
+		public String getRecruiterEmail() {
+			return this.email;
 		}
 		
 	}

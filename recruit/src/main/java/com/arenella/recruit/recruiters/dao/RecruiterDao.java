@@ -43,7 +43,7 @@ public interface RecruiterDao extends CrudRepository<RecruiterEntity, String>{
 	
 		RecruiterEntity entity = this.findById(recruiterId).orElseThrow(()-> new RuntimeException("Unknown Recruiter " + recruiterId));
 	
-		return new RecruiterDetails(entity.getUserId(), entity.getFirstName() + " " + entity.getSurname(), entity.getCompanyName());
+		return new RecruiterDetails(entity.getUserId(), entity.getFirstName() + " " + entity.getSurname(), entity.getCompanyName(), entity.getEmail());
 		
 	}
 }

@@ -419,6 +419,13 @@ export class RecruiterMarketplaceComponent implements OnInit {
 	}
 	
 	/**
+  	* Whether or not the user has authenticated as an Admin user 
+  	*/
+  	public isAuthenticatedAsAdmin():boolean {
+    	return sessionStorage.getItem('isAdmin') === 'true';
+  	}
+	
+	/**
 	* Adds a skill posessed by the offered candidate 
 	*/
 	public addOfferedCandidateSkill():void{

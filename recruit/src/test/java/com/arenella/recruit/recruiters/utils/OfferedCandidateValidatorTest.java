@@ -56,6 +56,36 @@ public class OfferedCandidateValidatorTest {
 	}
 	
 	/**
+	* Tests Exception thrown when an Renumeration is over 150 chars
+	*/
+	@Test
+	public void testValidate_tooLongRenumeration() {
+		
+		OfferedCandidateAPIInbound candidate = OfferedCandidateAPIInbound.builder().renumeration("12345678901254A12345678901254A12345678901254A12345678901254A12345678901254A12345678901254A12345678901254A12345678901254A12345678901254A12345678901254AB").build(); 
+		
+		assertThrows(AttributesValidationException.class, () ->{
+			OfferedCandidateValidator.validate(candidate);
+		});
+		
+		
+	}
+	
+	/**
+	* Tests Exception thrown when a Location is over 150 chars
+	*/
+	@Test
+	public void testValidate_tooLongLocation() {
+		
+		OfferedCandidateAPIInbound candidate = OfferedCandidateAPIInbound.builder().location("12345678901254A12345678901254A12345678901254A12345678901254A12345678901254A12345678901254A12345678901254A12345678901254A12345678901254A12345678901254AB").build(); 
+		
+		assertThrows(AttributesValidationException.class, () ->{
+			OfferedCandidateValidator.validate(candidate);
+		});
+		
+		
+	}
+	
+	/**
 	* Tests Exception thrown when candidateRoleTitle is not provided
 	*/
 	@Test

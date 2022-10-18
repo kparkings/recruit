@@ -123,8 +123,13 @@
  .table-hdr-td{
  	font-weight:bold;
  	margin-right:15px;
- }
+}
  
+.table-bdy-td{
+	word-wrap:break-word;
+	max-width:250px;
+}
+
 textarea {
     width:50%;
     height:200px;

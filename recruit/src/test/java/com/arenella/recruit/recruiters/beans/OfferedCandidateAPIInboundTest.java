@@ -56,19 +56,19 @@ public class OfferedCandidateAPIInboundTest {
 				.yearsExperience(YEARS_EXPERIENCE)
 				.build();
 		
-		assertEquals(RECRUITER_ID, 			candidate.getrecruiterId());
-		assertEquals(CANDIDATE_ROLE_TITLE, 	candidate.getcandidateRoleTitle());
-		assertEquals(COUNTRY, 				candidate.getcountry());
-		assertEquals(LOCATION, 				candidate.getlocation());
-		assertEquals(CONTRACT_TYPE,			candidate.getcontractType());
+		assertEquals(RECRUITER_ID, 			candidate.getRecruiterId());
+		assertEquals(CANDIDATE_ROLE_TITLE, 	candidate.getCandidateRoleTitle());
+		assertEquals(COUNTRY, 				candidate.getCountry());
+		assertEquals(LOCATION, 				candidate.getLocation());
+		assertEquals(CONTRACT_TYPE,			candidate.getContractType());
 		assertEquals(DAYS_ON_SITE_VAL, 		candidate.getDaysOnSite());
-		assertEquals(RENUMERATION,			candidate.getrenumeration());
-		assertEquals(AVAILABLE_FROM,		candidate.getavailableFromDate());
-		assertEquals(CORE_SKILLS,			candidate.getcoreSkills());
-		assertEquals(YEARS_EXPERIENCE,		candidate.getyearsExperience());
-		assertEquals(DESCRIPTION,			candidate.getdescription());
-		assertEquals(SPOKEN_LANGUAGES,		candidate.getspokenLanguages());
-		assertEquals(COMMENTS,				candidate.getcomments());
+		assertEquals(RENUMERATION,			candidate.getRenumeration());
+		assertEquals(AVAILABLE_FROM,		candidate.getAvailableFromDate());
+		assertEquals(CORE_SKILLS,			candidate.getCoreSkills());
+		assertEquals(YEARS_EXPERIENCE,		candidate.getYearsExperience());
+		assertEquals(DESCRIPTION,			candidate.getDescription());
+		assertEquals(SPOKEN_LANGUAGES,		candidate.getSpokenLanguages());
+		assertEquals(COMMENTS,				candidate.getComments());
 		
 	}
 	

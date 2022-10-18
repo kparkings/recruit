@@ -60,7 +60,7 @@ public class OfferedCandidateAPIInbound {
 	* Returns the unique Identifier of the Recruiter offering the Candidate
 	* @return Unique Id of the Recruiter
 	*/
-	public String getrecruiterId(){
+	public String getRecruiterId(){
 		return this.recruiterId;
 	}
 	
@@ -68,7 +68,7 @@ public class OfferedCandidateAPIInbound {
 	* Returns the Job title of the offered Candidate
 	* @return Role Candidate can perform
 	*/
-	public String getcandidateRoleTitle(){
+	public String getCandidateRoleTitle(){
 		return this.candidateRoleTitle;
 	}
 	
@@ -76,7 +76,7 @@ public class OfferedCandidateAPIInbound {
 	* Returns the Country the Candidate is available to work in
 	* @return Country - Country where the Candidate is available to work
 	*/
-	public Country getcountry(){
+	public Country getCountry(){
 		return this.country;
 	}
 	
@@ -85,7 +85,7 @@ public class OfferedCandidateAPIInbound {
 	* for work
 	* @return Location where the Candidate can work
 	*/
-	public String getlocation(){
+	public String getLocation(){
 		return this.location;
 	}
 	
@@ -93,7 +93,7 @@ public class OfferedCandidateAPIInbound {
 	* Return the type of Contract the Candidate is looking for
 	* @return Type of Contract being sought
 	*/
-	public ContractType getcontractType(){
+	public ContractType getContractType(){
 		return this.contractType;
 	}
 	
@@ -109,15 +109,15 @@ public class OfferedCandidateAPIInbound {
 	* Returns the renumeration requested for the Candidate.
 	* @return renumeration requested for the candidate
 	*/
-	public String getrenumeration(){
+	public String getRenumeration(){
 		return this.renumeration;
 	}
 	
 	/**
-	* Returns when the Candidate is avaialble to start a new role
+	* Returns when the Candidate is available to start a new role
 	* @return First availability of the Candidate
 	*/
-	public LocalDate getavailableFromDate(){
+	public LocalDate getAvailableFromDate(){
 		return this.availableFromDate;
 	}
 	
@@ -125,7 +125,7 @@ public class OfferedCandidateAPIInbound {
 	* Returns the core skills posessed by the Canddate
 	* @return Candidates core skills
 	*/
-	public Set<String> getcoreSkills(){
+	public Set<String> getCoreSkills(){
 		return this.coreSkills;
 	}
 	
@@ -133,7 +133,7 @@ public class OfferedCandidateAPIInbound {
 	* Returns the number of years experience the Candidate has
 	* @return years experience
 	*/
-	public int getyearsExperience(){
+	public int getYearsExperience(){
 		return this.yearsExperience;
 	}
 	
@@ -141,7 +141,7 @@ public class OfferedCandidateAPIInbound {
 	* Returns a short description of the Candidate being offered
 	* @return description of the Candidate
 	*/
-	public String getdescription(){
+	public String getDescription(){
 		return this.description;
 	}
 	
@@ -149,7 +149,7 @@ public class OfferedCandidateAPIInbound {
 	* Returns the languages spoken by the Candidate
 	* @return candidate spoken languages
 	*/
-	public Set<LANGUAGE> getspokenLanguages(){
+	public Set<LANGUAGE> getSpokenLanguages(){
 		return this.spokenLanguages;
 	}
 	
@@ -157,7 +157,7 @@ public class OfferedCandidateAPIInbound {
 	* Returns additional comments from the recruiter offering the Candidate
 	* @return additional comments from the Recruiter
 	*/
-	public String getcomments(){
+	public String getComments(){
 		return this.comments;
 	}
 	
@@ -368,20 +368,19 @@ public class OfferedCandidateAPIInbound {
 		
 		return OfferedCandidate
 				.builder()
-					.availableFromDate(offeredCandidate.getavailableFromDate())
-					.candidateRoleTitle(offeredCandidate.getcandidateRoleTitle())
-					.comments(offeredCandidate.getcomments())
-					.contractType(offeredCandidate.getcontractType())
-					.coreSkills(offeredCandidate.getcoreSkills())
-					.country(offeredCandidate.getcountry())
+					.availableFromDate(offeredCandidate.getAvailableFromDate())
+					.candidateRoleTitle(offeredCandidate.getCandidateRoleTitle())
+					.comments(offeredCandidate.getComments())
+					.contractType(offeredCandidate.getContractType())
+					.coreSkills(offeredCandidate.getCoreSkills())
+					.country(offeredCandidate.getCountry())
 					.daysOnSite(offeredCandidate.getDaysOnSite())
-					.description(offeredCandidate.getdescription())
-					//.id(offeredCandidate.getId)
-					.location(offeredCandidate.getlocation())
-					.recruiterId(offeredCandidate.getrecruiterId())
-					.renumeration(offeredCandidate.getrenumeration())
-					.spokenLanguages(offeredCandidate.getspokenLanguages())
-					.yearsExperience(offeredCandidate.getyearsExperience())
+					.description(offeredCandidate.getDescription())
+					.location(offeredCandidate.getLocation())
+					.recruiterId(offeredCandidate.getRecruiterId())
+					.renumeration(offeredCandidate.getRenumeration())
+					.spokenLanguages(offeredCandidate.getSpokenLanguages())
+					.yearsExperience(offeredCandidate.getYearsExperience())
 				.build();
 	
 	}
