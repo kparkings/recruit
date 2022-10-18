@@ -35,19 +35,22 @@
 								</ul>
 							</div>
 							
-							<div *ngFor="let listing of listings" class="listing" (click)="showListingDetails(listing)">
+							<div *ngFor="let listing of listings" class="listing">
 							
 								<table >
 									<tr>
 										<td class="listing-table-td">
-											<span title="{{listing.listingId}}" *ngIf="listing.country === 'NETHERLANDS'"  	class="flag-icon flag-icon-nl suggestion-flag-country listing-country"></span>
-											<span title="{{listing.listingId}}" *ngIf="listing.country === 'BELGIUM'"		class="flag-icon flag-icon-be suggestion-flag-country listing-country"></span>
-											<span title="{{listing.listingId}}" *ngIf="listing.country === 'UK'"			class="flag-icon flag-icon-gb suggestion-flag-country listing-country"></span>
-											<span title="{{listing.listingId}}" *ngIf="listing.country === 'IRELAND'"		class="flag-icon flag-icon-ie suggestion-flag-country listing-country"></span>
-											<span title="{{listing.listingId}}" *ngIf="listing.country === 'EU_REMOTE'"		class="flag-icon flag-icon-eu suggestion-flag-country listing-country"></span>
-											<span title="{{listing.listingId}}" *ngIf="listing.country === 'WORLD_REMOTE'"	class="flag-icon flag-icon-xx suggestion-flag-country listing-country"></span>	
+										
+											<a href="{{getExternalUrl(listing.listingId)}}" class="hide-url">
+												<span  title="{{listing.listingId}}" *ngIf="listing.country === 'NETHERLANDS'"  	class="flag-icon flag-icon-nl suggestion-flag-country listing-country"></span>
+												<span title="{{listing.listingId}}" *ngIf="listing.country === 'BELGIUM'"		class="flag-icon flag-icon-be suggestion-flag-country listing-country"></span>
+												<span title="{{listing.listingId}}" *ngIf="listing.country === 'UK'"			class="flag-icon flag-icon-gb suggestion-flag-country listing-country"></span>
+												<span title="{{listing.listingId}}" *ngIf="listing.country === 'IRELAND'"		class="flag-icon flag-icon-ie suggestion-flag-country listing-country"></span>
+												<span title="{{listing.listingId}}" *ngIf="listing.country === 'EU_REMOTE'"		class="flag-icon flag-icon-eu suggestion-flag-country listing-country"></span>
+												<span title="{{listing.listingId}}" *ngIf="listing.country === 'WORLD_REMOTE'"	class="flag-icon flag-icon-xx suggestion-flag-country listing-country"></span>	
+											</a>
 										</td>
-										<td class="listing-table-td listing-title">{{listing.title}}</td>
+										<td (click)="showListingDetails(listing)" class="listing-table-td listing-title">{{listing.title}}</td>
 									</tr>
 								</table>
 								

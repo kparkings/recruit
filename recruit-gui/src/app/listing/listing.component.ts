@@ -288,5 +288,9 @@ export class ListingComponent implements OnInit {
 		
 		return "inactive-contract-type-filter";
 	}
+	
+	public getExternalUrl(id:string):string{
+		return window.location.href + "/" + id;
+	}
 
 }

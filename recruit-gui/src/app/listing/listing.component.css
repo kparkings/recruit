@@ -180,3 +180,7 @@
 .listing-title{
 	font-weight:bold;
 }
+
+.hide-url{
+	cursor:default;
+}
