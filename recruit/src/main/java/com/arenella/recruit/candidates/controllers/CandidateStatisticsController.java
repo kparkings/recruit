@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -66,6 +67,27 @@ public class CandidateStatisticsController {
 		
 		return ResponseEntity.ok(new EmailRequestsStatisticsAPIOutbound(this.candidateStatisticsService.fetchEmailRequestEvents()));
 		
+	}
+	
+	/**
+	* Returns statistics for new Candidates. New candidates refer to Candidates added since
+	* the endpoint was last called
+	* @return statistics for new candidates
+	*/
+	@PreAuthorize("hasRole('ROLE_ADMIN'")
+	@GetMapping(path="candidate/stat/new-addtions", produces="application/json")
+	public ResponseEntity<NewCandidatesAPIOutbound> fetchNewCandidates(){
+		return new ResponseEntity<>(null, HttpStatus.OK);
+	}
+	
+	/**
+	* Returns a summary of new candidates since the last time the endpoint was called.
+	* @return summary statistics for new candidates
+	*/
+	@PreAuthorize("hasRole('ROLE_ADMIN'")
+	@GetMapping(path="candidate/stat/new-candidate-summary", produces="application/json")
+	public ResponseEntity<NewCandidateSummaryAPIOutbound> fetchNewCandidatesBreakdown(){
+		return new ResponseEntity<>(null, HttpStatus.OK);
 	}
 	
 }

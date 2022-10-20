@@ -45,6 +45,40 @@ public class CandidateStatisticsControllerTest {
 	}
 	
 	/**
+	* Tests return of total active users
+	* @throws Exception
+	*/
+	@Test
+	public void testFetchNewCandidates() throws Exception{
+		
+		//Mockito.when(mockCandidateStatisticsService.fetchNumberOfAvailableCandidates()).thenReturn(numberOfAvailableCandidates);
+		
+		ResponseEntity<NewCandidatesAPIOutbound> response = controller.fetchNewCandidates();
+		
+		assertEquals(HttpStatus.OK, 				response.getStatusCode());
+		//assertEquals(numberOfAvailableCandidates, 	response.getBody());
+		
+	}
+	
+	/**
+	* Tests return of total active users
+	* @throws Exception
+	*/
+	@Test
+	public void testFetchNewCandidatesBreakdown() throws Exception{
+		
+		//final Long numberOfAvailableCandidates = 88L;
+		
+		//Mockito.when(mockCandidateStatisticsService.fetchNumberOfAvailableCandidates()).thenReturn(numberOfAvailableCandidates);
+		
+		ResponseEntity<NewCandidateSummaryAPIOutbound> response = controller.fetchNewCandidatesBreakdown();
+		
+		assertEquals(HttpStatus.OK, 				response.getStatusCode());
+		//assertEquals(numberOfAvailableCandidates, 	response.getBody());
+		
+	}
+	
+	/**
 	* Tests logging of email requested event
 	* @throws Exception
 	*/
