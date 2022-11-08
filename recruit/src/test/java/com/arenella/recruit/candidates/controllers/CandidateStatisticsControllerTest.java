@@ -2,6 +2,9 @@ package com.arenella.recruit.candidates.controllers;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.time.LocalDate;
+import java.util.Set;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -11,7 +14,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import com.arenella.recruit.candidates.beans.Candidate;
+import com.arenella.recruit.candidates.enums.FUNCTION;
 import com.arenella.recruit.candidates.services.CandidateStatisticsService;
+import com.arenella.recruit.candidates.services.CandidateStatisticsService.NEW_STATS_TYPE;
 
 /**
 * Unit tests for the CandidateStatisticsController class
@@ -51,12 +57,17 @@ public class CandidateStatisticsControllerTest {
 	@Test
 	public void testFetchNewCandidates() throws Exception{
 		
-		//Mockito.when(mockCandidateStatisticsService.fetchNumberOfAvailableCandidates()).thenReturn(numberOfAvailableCandidates);
+		final String 		ROLE_SOUGHT 	= "Java Developer";
+		final LocalDate		newSinceDate	= LocalDate.of(2022, 11, 5);
+		final Candidate 	candidate 		= Candidate.builder().roleSought(ROLE_SOUGHT).build();
+			
+		Mockito.when(mockCandidateStatisticsService.fetchNewCandidates(newSinceDate)).thenReturn(Set.of(candidate));
+		Mockito.when(mockCandidateStatisticsService.getLastRunDateNewCandidateStats(NEW_STATS_TYPE.NEW_CANDIDATES)).thenReturn(newSinceDate);
 		
 		ResponseEntity<NewCandidatesAPIOutbound> response = controller.fetchNewCandidates();
 		
 		assertEquals(HttpStatus.OK, 				response.getStatusCode());
-		//assertEquals(numberOfAvailableCandidates, 	response.getBody());
+		assertEquals(ROLE_SOUGHT, 	response.getBody().getCandidateSummary().stream().findFirst().get().getFunctionDesc());
 		
 	}
 	
@@ -67,14 +78,18 @@ public class CandidateStatisticsControllerTest {
 	@Test
 	public void testFetchNewCandidatesBreakdown() throws Exception{
 		
-		//final Long numberOfAvailableCandidates = 88L;
-		
-		//Mockito.when(mockCandidateStatisticsService.fetchNumberOfAvailableCandidates()).thenReturn(numberOfAvailableCandidates);
+		final FUNCTION 		ROLE_SOUGHT 	= FUNCTION.JAVA_DEV;
+		final LocalDate		newSinceDate	= LocalDate.of(2022, 11, 5);
+		final Candidate 	candidate 		= Candidate.builder().function(ROLE_SOUGHT).build();
+			
+		Mockito.when(mockCandidateStatisticsService.fetchNewCandidates(newSinceDate)).thenReturn(Set.of(candidate));
+		Mockito.when(mockCandidateStatisticsService.getLastRunDateNewCandidateStats(NEW_STATS_TYPE.NEW_CANDIDATE_BREAKDOWN)).thenReturn(newSinceDate);
 		
 		ResponseEntity<NewCandidateSummaryAPIOutbound> response = controller.fetchNewCandidatesBreakdown();
 		
-		assertEquals(HttpStatus.OK, 				response.getStatusCode());
-		//assertEquals(numberOfAvailableCandidates, 	response.getBody());
+		assertEquals(HttpStatus.OK, response.getStatusCode());
+		assertEquals(ROLE_SOUGHT, 	response.getBody().getCandidatesSummary().stream().findFirst().get().getFunctionType());
+		
 		
 	}
 	

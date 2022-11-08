@@ -2,7 +2,7 @@
 	margin-left:20px;
 	margin-right:20px;
 	vertical-align:middle;
-	    margin:0 auto;
+	margin:0 auto;
     width:98%;
     margin-top:25px;
 }
@@ -23,3 +23,12 @@
 	margin-right:60px;
 	margin-top:30px;
 }
+
+.btnRight{
+	margin-right:10px;
+}
+
+.new-candidate-table-td{
+	padding-right:10px;
+}
+

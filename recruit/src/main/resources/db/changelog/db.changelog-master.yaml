@@ -938,4 +938,23 @@ databaseChangeLog:
                   name: created
                   type: timestamp
                   constraints:
-                    nullable: false              
+                    nullable: false
+  - changeSet:
+      id: new_candidate_stats_table
+      author: kparkings
+      changes:
+        - createTable:                    
+            tableName: new_candidate_stats
+            schemaName: candidate
+            columns:
+              - column:
+                  name: type
+                  type: varchar
+                  constraints:
+                    nullable: false                    
+                    primaryKey: true
+              - column:
+                  name: last_requested
+                  type: timestamp
+                  constraints:
+                    nullable: false

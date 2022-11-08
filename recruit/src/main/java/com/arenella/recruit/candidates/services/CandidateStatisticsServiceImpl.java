@@ -1,5 +1,6 @@
 package com.arenella.recruit.candidates.services;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -12,14 +13,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import com.arenella.recruit.candidates.beans.Candidate;
 import com.arenella.recruit.candidates.beans.CandidateFilterOptions;
 import com.arenella.recruit.candidates.beans.CandidateRoleStats;
 import com.arenella.recruit.candidates.beans.CandidateSearchEvent;
 import com.arenella.recruit.candidates.dao.CandidateDao;
 import com.arenella.recruit.candidates.dao.CandidateSearchStatisticsDao;
 import com.arenella.recruit.candidates.dao.CandidateStatsEmailRequestedsDao;
+import com.arenella.recruit.candidates.dao.NewCandidateStatsTypeDao;
 import com.arenella.recruit.candidates.entities.CandidateRoleStatsView;
 import com.arenella.recruit.candidates.entities.CandidateSearchEventEntity;
+import com.arenella.recruit.candidates.entities.NewCandidateStatsEntity;
 import com.arenella.recruit.candidates.enums.COUNTRY;
 import com.arenella.recruit.candidates.enums.FUNCTION;
 import com.arenella.recruit.curriculum.beans.CandidateEmailRequestEvent;
@@ -32,13 +36,16 @@ import com.arenella.recruit.curriculum.beans.CandidateEmailRequestEvent;
 public class CandidateStatisticsServiceImpl implements CandidateStatisticsService{
 
 	@Autowired
-	private CandidateDao 					candidateDao;
+	private CandidateDao 						candidateDao;
 	
 	@Autowired
-	private CandidateSearchStatisticsDao 	statisticsDao;
+	private CandidateSearchStatisticsDao 		statisticsDao;
 	
 	@Autowired
-	private CandidateStatsEmailRequestedsDao emailStatsRequestDao;
+	private CandidateStatsEmailRequestedsDao 	emailStatsRequestDao;
+	
+	@Autowired
+	private NewCandidateStatsTypeDao			newCandidateStatsTypeDao;
 	
 	/**
 	* Refer to StatisticsService for details 
@@ -124,6 +131,22 @@ public class CandidateStatisticsServiceImpl implements CandidateStatisticsServic
 	@Override
 	public Set<CandidateEmailRequestEvent> fetchEmailRequestEvents(){
 		return this.emailStatsRequestDao.findAllCandidateEmailRequestEvents();
+	}
+
+	/**
+	* Refer to StatisticsService for details 
+	*/
+	@Override
+	public Set<Candidate> fetchNewCandidates(LocalDate since) {
+		return this.candidateDao.findNewSinceLastDate(since);
+	}
+
+	/**
+	* Refer to StatisticsService for details 
+	*/
+	@Override
+	public LocalDate getLastRunDateNewCandidateStats(NEW_STATS_TYPE statsType) {
+		return this.newCandidateStatsTypeDao.fetchAndSetLastRequested(statsType);
 	}
 	
 	/**

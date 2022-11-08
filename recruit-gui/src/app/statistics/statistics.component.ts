@@ -1,8 +1,9 @@
-import { Component, OnInit } 					from '@angular/core';
-//import { CandidateServiceService }				from '../candidate-service.service';
-import { StatisticsService } 					from '../statistics.service';
+import { Component, OnInit } 								from '@angular/core';
+import { StatisticsService } 								from '../statistics.service';
 import { ChartDataSets, ChartOptions, ChartType } 			from 'chart.js';
-import { Color, Label } 						from 'ng2-charts';
+import { Color, Label } 									from 'ng2-charts';
+import { NewCandidate, 	   NewCandidateSummaryItem } 		from '../new-candidate';
+import { NewCandidateStat, NewCandidateStatItem } 			from '../new-candidate-stat';
 
 @Component({
   selector: 'app-statistics',
@@ -14,10 +15,11 @@ export class StatisticsComponent implements OnInit {
 	public totalNumberActiveCandidates:number 			= 0;
 	public candidatesByFunction:Map<string,number> 		= new Map<string,number>();
 	public currentTab:string 							= "downloads";
-	public showStatsDownloads:boolean					=true;
-	public showStatsAvailability:boolean				=false;
-	public showStatsListings:boolean					=false;
-	public showStatsEmailRequests:boolean				=false;
+	public showStatsDownloads:boolean					= true;
+	public showStatsAvailability:boolean				= false;
+	public showStatsListings:boolean					= false;
+	public showStatsEmailRequests:boolean				= false;
+	public showNewCandidates:boolean					= false;
 
 	public recruiterDownloads:number[] 					= [];
 	public recruiterDownloadsDaily:number[] 			= [];
@@ -44,7 +46,10 @@ export class StatisticsComponent implements OnInit {
 	public recruiterEmailRequestsDailyCols:string[] 		= [];
 	public recruiterEmailRequestsWeeklyCols:string[] 		= [];	
 		
-	public chartEmailRequestsTotal						= 0;
+	public chartEmailRequestsTotal							= 0;
+	
+	public showNewCandidateStatsDiv:boolean 				= false;
+	public showNewCandidatesDiv:boolean 					= false;
 		
 	/**
   	* Constructor
@@ -53,6 +58,9 @@ export class StatisticsComponent implements OnInit {
 
 		this.fetchStatus();
 		this.getEmailRequestStats();
+		
+		this.showNewCandidateStatsDiv 				= false;
+		this.showNewCandidatesDiv 					= false;
 
 	}
 
@@ -209,7 +217,7 @@ export class StatisticsComponent implements OnInit {
 				this.showStatsAvailability=false;
 				this.showStatsListings=false;
 				this.showStatsEmailRequests=false;
-				
+				this.showNewCandidates=false;
 				break;
 			}
 			case "listings":{
@@ -217,6 +225,7 @@ export class StatisticsComponent implements OnInit {
 				this.showStatsAvailability=false;
 				this.showStatsListings=true;
 				this.showStatsEmailRequests=false;
+				this.showNewCandidates=false;
 				break;
 			}
 			case "availability":{
@@ -224,6 +233,7 @@ export class StatisticsComponent implements OnInit {
 				this.showStatsListings=false;
 				this.showStatsAvailability=true;
 				this.showStatsEmailRequests=false;
+				this.showNewCandidates=false;
 				break;
 			}
 			case "email":{
@@ -231,6 +241,15 @@ export class StatisticsComponent implements OnInit {
 				this.showStatsListings=false;
 				this.showStatsAvailability=false;
 				this.showStatsEmailRequests=true;
+				this.showNewCandidates=false;
+				break;
+			}
+			case "newCandidateStats":{
+				this.showStatsDownloads=false;
+				this.showStatsListings=false;
+				this.showStatsAvailability=false;
+				this.showStatsEmailRequests=false;
+				this.showNewCandidates=true;
 				break;
 			}
 		}
@@ -323,20 +342,11 @@ export class StatisticsComponent implements OnInit {
   	listingChartType:ChartType = 'line';
 
 
-
-
-
-
-
-
-
-
-
 	/**
 	* recruiter Email Requests
 	*/
 	emailRequestChartData: 		ChartDataSets[] 	= [];
-	emailRequestChartLabels: 		Label[] 			= [];
+	emailRequestChartLabels: 	Label[] 			= [];
 
   	emailRequestChartOptions = {
     	responsive: true,
@@ -357,7 +367,7 @@ export class StatisticsComponent implements OnInit {
 	/**
 	* Daily Email Requests
 	*/
-	emailRequestRecruiterChartData: 		ChartDataSets[] 	= [];
+	emailRequestRecruiterChartData: 	ChartDataSets[] 	= [];
 	emailRequestRecruiterChartLabels: 	Label[] 			= [];
 
   	emailRequestRecruiterChartOptions = {
@@ -376,11 +386,49 @@ export class StatisticsComponent implements OnInit {
   	emailRequestRecruiterChartType:ChartType = 'bar';
 
 
+	public newCandidates:Array<NewCandidateSummaryItem>  	= new Array<NewCandidateSummaryItem>();
+	public newCandidateStats:Array<NewCandidateStatItem>  	= new Array<NewCandidateStatItem>();
+	
+	/**
+	* Loads list of new Candidates
+	*/
+	public loadNewCandidates():void{
+		this.statisticsService.getNewCandidatesList().subscribe(c => {
+			this.newCandidates 				= c.candidateSummary;
+			this.showNewCandidatesDiv 		= true;
+			this.showNewCandidateStatsDiv	= false;
+		});
+	}
 
+	/**
+	* Loads statistics for new Candidates
+	*/
+	public loadNewCandidateStats():void{
+		this.statisticsService.getNewCandidatesSummary().subscribe(s => {
+			this.newCandidateStats 			= s.candidatesSummary;
+			this.showNewCandidatesDiv 		= false;
+			this.showNewCandidateStatsDiv 	= true;
+		});
+	}
 
-
-
-
-
+	public countryToCode(country:string):string{
+		
+		switch(country){
+			case 'NETHERLANDS':{
+				return 'NL';
+			}
+			case 'BELGIUM':{
+				return 'NL';
+			}
+			case 'UK':{
+				return 'UK/IRL';
+			}
+			default:{
+				return country;
+			}
+			
+		}
+		
+	}
 
 }

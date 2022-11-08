@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -20,6 +22,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 
 import com.arenella.recruit.candidates.beans.Candidate;
 import com.arenella.recruit.candidates.beans.CandidateFilterOptions;
@@ -247,8 +250,20 @@ public interface CandidateDao extends CrudRepository<CandidateEntity, Long>, Jpa
 	* per function
 	* @return candidate function stats
 	*/
-	//@Query("Select c.function as function, count(c.function) as functionCount from CandidateEntity as c where c.available = true group by c.function order by c.function")
 	@Query("Select new com.arenella.recruit.candidates.entities.CandidateRoleStatsView(c.function, count(c.function) ) from CandidateEntity c where c.available = true group by c.function order by c.function")
 	public List<CandidateRoleStatsView> getCandidateRoleStats();
+
+	@Query("from CandidateEntity c where c.available = true and c.registerd > :#{#since} order by c.registerd")
+	public Set<CandidateEntity> findNewSinceLastDateRaw(@Param(value = "since") LocalDate since);
+	
+	/**
+	* Returns all the new candidates registered after a given date
+	* @param since - data after which candidates must have been registered
+	* @return New candidates
+	*/
+	public default Set<Candidate> findNewSinceLastDate(LocalDate since){
+		return this.findNewSinceLastDateRaw(since).stream().map(CandidateEntity::convertFromEntity).collect(Collectors.toSet());
+	}
+	
 		
 }

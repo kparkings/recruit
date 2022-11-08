@@ -2,8 +2,10 @@ package com.arenella.recruit.candidates.adapters;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,9 +18,12 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import com.arenella.recruit.candidates.beans.Candidate;
 import com.arenella.recruit.candidates.dao.CandidateDao;
 import com.arenella.recruit.candidates.dao.CandidateStatsEmailRequestedsDao;
+import com.arenella.recruit.candidates.dao.NewCandidateStatsTypeDao;
 import com.arenella.recruit.candidates.services.CandidateStatisticsServiceImpl;
+import com.arenella.recruit.candidates.services.CandidateStatisticsService.NEW_STATS_TYPE;
 
 /**
 * Unit tests for the CandidateStatisticsServiceImpl class
@@ -35,6 +40,9 @@ public class CandidateStatisticsServiceImplTest {
 	
 	@Mock
 	private CandidateStatsEmailRequestedsDao 	emailStatsRequestDao;
+	
+	@Mock
+	private NewCandidateStatsTypeDao			mockNewCandidateStatsTypeDao;
 	
 	@InjectMocks
 	private CandidateStatisticsServiceImpl 	service	= new CandidateStatisticsServiceImpl();
@@ -110,6 +118,40 @@ public class CandidateStatisticsServiceImplTest {
 		Mockito.verify(this.emailStatsRequestDao).persistEmailRequestedEvent(Mockito.any(),Mockito.any(), Mockito.eq(userId),Mockito.eq(candidateId));
 		
 		SecurityContextHolder.clearContext();
+		
+	}
+	
+	/**
+	* Tests retrieval of new Candidates
+	* @throws Exception
+	*/
+	@Test
+	public void testFetchNewCandidates() throws Exception{
+		
+		final Candidate candidate = Candidate.builder().build();
+		
+		Mockito.when(this.mockCandidateDao.findNewSinceLastDate(Mockito.any(LocalDate.class))).thenReturn(Set.of(candidate));
+		
+		Set<Candidate> candidates =  this.service.fetchNewCandidates(LocalDate.of(2022, 11, 5));
+		
+		assertEquals(candidate, candidates.stream().findFirst().get());
+		
+	}
+	
+	/**
+	* Tests retrieval of last date run for new Candidate stat type
+	* @throws Exception
+	*/
+	@Test
+	public void testGetLastRunDateNewCandidateStats() throws Exception {
+		
+		final LocalDate since = LocalDate.of(2022, 11, 5);
+		
+		Mockito.when(this.mockNewCandidateStatsTypeDao.fetchAndSetLastRequested(NEW_STATS_TYPE.NEW_CANDIDATE_BREAKDOWN)).thenReturn(since);
+		
+		LocalDate lastRunDate = this.service.getLastRunDateNewCandidateStats(NEW_STATS_TYPE.NEW_CANDIDATE_BREAKDOWN);
+		
+		assertEquals(since, lastRunDate);
 		
 	}
 	

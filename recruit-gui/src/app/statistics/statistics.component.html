@@ -19,6 +19,9 @@
 		  <li class="nav-item statsChartTab">
 		    <span class="nav-link" (click)="switchTab('availability')">Availability</span>
 		  </li>
+		  <li class="nav-item statsChartTab">
+		    <span class="nav-link" (click)="switchTab('newCandidateStats')">New Candidate Stats</span>
+		  </li>
 		</ul>
 				
 		<!-- Downloads -->
@@ -139,6 +142,35 @@
   					</canvas>
 			</div>	
 		</div>	
-			      
+		
+		<!-- New Candidate Stats -->
+		<div *ngIf="showNewCandidates" class="stats-table">
+			<div class="action-buttons">
+				<button class="btn btn-secondary btnRight" (click)="loadNewCandidates()" 		download>Show New Candidates</button>
+				<button class="btn btn-secondary btnRight" (click)="loadNewCandidateStats()" 	download>Show New Candidate Stats</button>
+			</div>	
+			<div *ngIf="showNewCandidatesDiv">
+				<p>
+					New Candidates available
+				</p>
+				<br/>
+				<ul *ngFor="let candidate of newCandidates">
+					<li>{{countryToCode(candidate.country)}} - EXP: {{candidate.yearsExperience}} Years - {{candidate.functionDesc}}</li>	
+				</ul>
+				<br/>
+				<p>
+					https://www.arenella-ict.com
+				</p>
+			</div>
+			<div *ngIf="showNewCandidateStatsDiv" class="stats-table">
+				<p>The following new candidates have been added:</p>
+				<table>
+				<tr *ngFor="let candidateStat of newCandidateStats">
+					<td class="new-candidate-table-td">{{candidateStat.count}}</td>  <td class="new-candidate-table-td">x</td> <td class="new-candidate-table-td">{{candidateStat.functionType}}</td>
+				</tr>
+				</table>
+				
+			</div>
+		</div>	  
 	</div>
 </div>

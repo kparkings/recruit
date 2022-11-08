@@ -1,5 +1,6 @@
 package com.arenella.recruit.candidates.controllers;
 
+import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -13,7 +14,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.arenella.recruit.candidates.controllers.NewCandidateSummaryAPIOutbound.NewCandidateSummaryAPIOutboundBuilder;
+import com.arenella.recruit.candidates.controllers.NewCandidatesAPIOutbound.NewCandidatesAPIOutboundBuilder;
 import com.arenella.recruit.candidates.services.CandidateStatisticsService;
+import com.arenella.recruit.candidates.services.CandidateStatisticsService.NEW_STATS_TYPE;
 
 /**
 * Provides statistics relating to Candidates
@@ -21,7 +25,7 @@ import com.arenella.recruit.candidates.services.CandidateStatisticsService;
 */
 @RestController
 public class CandidateStatisticsController {
-
+	
 	@Autowired
 	private CandidateStatisticsService candidateStatisticsService;
 	
@@ -63,10 +67,8 @@ public class CandidateStatisticsController {
 	* @return
 	*/
 	@GetMapping(path="candidate/stat/email-request")
-	public ResponseEntity<EmailRequestsStatisticsAPIOutbound> fetchEmailRequestStatus(){
-		
-		return ResponseEntity.ok(new EmailRequestsStatisticsAPIOutbound(this.candidateStatisticsService.fetchEmailRequestEvents()));
-		
+	public ResponseEntity<EmailRequestsStatisticsAPIOutbound> fetchEmailRequestStatus(){		
+		return ResponseEntity.ok(new EmailRequestsStatisticsAPIOutbound(this.candidateStatisticsService.fetchEmailRequestEvents()));	
 	}
 	
 	/**
@@ -74,20 +76,32 @@ public class CandidateStatisticsController {
 	* the endpoint was last called
 	* @return statistics for new candidates
 	*/
-	@PreAuthorize("hasRole('ROLE_ADMIN'")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@GetMapping(path="candidate/stat/new-addtions", produces="application/json")
 	public ResponseEntity<NewCandidatesAPIOutbound> fetchNewCandidates(){
-		return new ResponseEntity<>(null, HttpStatus.OK);
+		
+		LocalDate 						lastRunDate = this.candidateStatisticsService.getLastRunDateNewCandidateStats(NEW_STATS_TYPE.NEW_CANDIDATES);
+		NewCandidatesAPIOutboundBuilder builder 	= NewCandidatesAPIOutbound.builder();
+		
+		this.candidateStatisticsService.fetchNewCandidates(lastRunDate).forEach(c -> builder.addCandidate(c));
+		
+		return new ResponseEntity<>(builder.build(), HttpStatus.OK);
 	}
 	
 	/**
 	* Returns a summary of new candidates since the last time the endpoint was called.
 	* @return summary statistics for new candidates
 	*/
-	@PreAuthorize("hasRole('ROLE_ADMIN'")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@GetMapping(path="candidate/stat/new-candidate-summary", produces="application/json")
 	public ResponseEntity<NewCandidateSummaryAPIOutbound> fetchNewCandidatesBreakdown(){
-		return new ResponseEntity<>(null, HttpStatus.OK);
+		
+		LocalDate 								lastRunDate = this.candidateStatisticsService.getLastRunDateNewCandidateStats(NEW_STATS_TYPE.NEW_CANDIDATE_BREAKDOWN);
+		NewCandidateSummaryAPIOutboundBuilder 	builder 	= NewCandidateSummaryAPIOutbound.builder();
+		
+		this.candidateStatisticsService.fetchNewCandidates(lastRunDate).forEach(c -> builder.addCandidate(c));
+		
+		return new ResponseEntity<>(builder.build(), HttpStatus.OK);
 	}
 	
 }

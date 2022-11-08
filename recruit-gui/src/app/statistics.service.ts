@@ -76,4 +76,26 @@ export class StatisticsService {
 		
 	}
 	
+	/**
+	* Returns a summary of new Candidates
+	*/
+	public getNewCandidatesSummary():Observable<any>{
+		
+		const backendUrl:string = environment.backendUrl +'candidate/stat/new-candidate-summary';
+  
+		return this.httpClient.get<any>(backendUrl, this.httpOptions);
+		
+	}
+	
+	/**
+	* Returns a summary of new Candidates
+	*/
+	public getNewCandidatesList():Observable<any>{
+		
+		const backendUrl:string = environment.backendUrl +'candidate/stat/new-addtions';
+  
+		return this.httpClient.get<any>(backendUrl, this.httpOptions);
+		
+	}
+	
 }
