@@ -4,6 +4,7 @@
 		<div class="action-buttons">
 			<button class="btn btn-secondary btnRight" (click)="resetFilters()" download>Reset</button>
 			<a class="btn btn-secondary btnRight" href="{{getCandidateDownloadUrl()}}" download>Download</a>
+			<button class="btn btn-secondary btnRight" (click)="openPublicityDialog(publicityModal)" download>Copy as Message</button>
 		</div>
 
 		<!-- Pagination -->
@@ -363,6 +364,67 @@
 		</div> 
 	</ng-template>
 	
+	<!-- publicity -->
+	<ng-template #publicityModal let-modal>
+	
+		<!--  Options -->
+		<div class="modal-header">
+			<h4 class="modal-title">Publicity</h4>
+			<div class="filter-close-box" (click)="closeModal()">X</div>
+		</div>
+		<div class="modal-body">
+			<div>
+				<button class="btn btn-secondary btnRight" (click)="showPublicityLang('EN')" download>English</button>
+				<button class="btn btn-secondary btnRight" (click)="showPublicityLang('NL')" download>Dutch</button>
+			</div>
+			<!--  Specific Filters -->
+			<div *ngIf="publicityEN">
+				Hi<br><br>
+				I have several matching candidates available via <br><br>
+				https://www.arenella-ict.com <br><br>
+				including<br><br>
+				<div *ngFor="let c of candidateCandidateList">
+					{{c.country + ' - Exp: ' + c.yearsExperience + ' years - ' + c.roleSought}};
+				</div>
+				<br>
+				Arenella-ICT is a portal for IT recruiters to find immediately available candidates and is free to try for 90 days. The trial stops automatically.<br><br>
+				You can:<br><br>
+				<ul>
+					<li> - Download CVs including contact details direct from the site </li>
+					<li> - Contact the candidates directly and set up a contract direct with the candidate ( no middlemen) </li>
+					<li> - Post on the job board to attract new candidates </li>
+					<li> - Collaborate with other recruiters via the Marketplace to fill open position or offer available candidates </li>
+				</ul>
+				<br>
+				Kind regards<br><br>
+				Kevin
+			</div>
+			
+			<div *ngIf="publicityNL">
+				Beste<br><br>
+				Ik heb meerder toegepast kandidaten beschikbaar via <br><br>
+				https://www.arenella-ict.com <br><br>
+				inclusief<br><br>
+				<div *ngFor="let c of candidateCandidateList">
+					{{c.country + ' - Erv: ' + c.yearsExperience + ' jaar - ' + c.roleSought}};
+				</div>
+				<br>
+				Arenella-ICT is een portal voor ICT recruiters om per direct beschikbaar kandidaten te vinden en is 90 dagen gratis. Het trial stopt vanzelf na de 90 dagen.<br><br>
+				u kunt:<br><br>
+				<ul>
+					<li> - CVs downloaden direct van het website inclusief de contact gegevens van de kandidaten </li>
+					<li> - Neem contact op direct met de kandidaten. Jij kan ook een contract met hen opzetten zonder tussenpartij </li>
+					<li> - Post op de Jobboard om nieuw kandidaten te vinden </li>
+					<li> - Samenwerken met andere ICT recruiters via de 'Marketplace' om open opdrachten te vullen</li>
+				</ul>
+				<br>
+				Met vriendelijke groeten<br><br>
+				Kevin
+			</div>
+			
+		</div> 
+	</ng-template>
+	
 	<!-- Info -->
 	<ng-template #infomodal let-modal>
 	
@@ -416,6 +478,7 @@
 			<div class="filter-close-box" (click)="closeModal()">X</div>
 		</div>
 		<div class="modal-body">
+			
 			<!--  Specific Filters -->
 			<div>
 				<div  *ngIf="selectedCandidate.flaggedAsUnavailable">
@@ -432,4 +495,5 @@
 		</div> 
 	</ng-template>
 	
+
 </div>

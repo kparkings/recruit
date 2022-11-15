@@ -534,6 +534,41 @@ export class ViewCandidatesComponent implements OnInit {
 
   	}
 
+	public candidateCandidateList:Array<Candidate> = new Array<Candidate>();
+	public publicityEN:boolean = true;
+	public publicityNL:boolean = false;
+
+
+	/**
+	* Switches the language of the publicity message
+	* @param lang - language to show the publicity in
+	*/
+	public showPublicityLang(lang:string):void{
+		
+		if (lang == 'EN') {
+			this.publicityEN = true;
+			this.publicityNL = false;
+			return;
+		}
+		
+		if (lang == 'NL') {
+			this.publicityEN = false;
+			this.publicityNL = true;
+			return;
+		}
+		
+	}
+
+	public openPublicityDialog(content: any) {
+		
+		this.candidateCandidateList = this.candidates;
+		
+		this.candidateCandidateList = this.candidateCandidateList.splice(0,Math.min(this.candidateCandidateList.length, 10));
+		
+		
+    	this.modalService.open(content, { centered: true });
+  	}
+
 	/**
   	*  Closes the filter popup
   	*/
@@ -833,5 +868,5 @@ export class ViewCandidatesComponent implements OnInit {
 		this.candidateService.markCandidateAsUnavailable(this.selectedCandidate.candidateId).subscribe(data => {});
 		this.selectedCandidate.flaggedAsUnavailable = true;
 	}
-
+	
 }
