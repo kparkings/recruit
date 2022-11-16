@@ -538,6 +538,12 @@ export class ViewCandidatesComponent implements OnInit {
 	public publicityEN:boolean = true;
 	public publicityNL:boolean = false;
 
+	/**
+  	* Whether or not the user has authenticated as an Admin user 
+  	*/
+  	public isAuthenticatedAsAdmin():boolean {
+    	return sessionStorage.getItem('isAdmin') === 'true';
+  	}
 
 	/**
 	* Switches the language of the publicity message

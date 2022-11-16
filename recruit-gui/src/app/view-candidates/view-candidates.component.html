@@ -4,7 +4,7 @@
 		<div class="action-buttons">
 			<button class="btn btn-secondary btnRight" (click)="resetFilters()" download>Reset</button>
 			<a class="btn btn-secondary btnRight" href="{{getCandidateDownloadUrl()}}" download>Download</a>
-			<button class="btn btn-secondary btnRight" (click)="openPublicityDialog(publicityModal)" download>Copy as Message</button>
+			<button *ngIf="isAuthenticatedAsAdmin()" class="btn btn-secondary btnRight" (click)="openPublicityDialog(publicityModal)" download>Copy as Message</button>
 		</div>
 
 		<!-- Pagination -->
