@@ -23,7 +23,6 @@ import com.arenella.recruit.candidates.dao.CandidateStatsEmailRequestedsDao;
 import com.arenella.recruit.candidates.dao.NewCandidateStatsTypeDao;
 import com.arenella.recruit.candidates.entities.CandidateRoleStatsView;
 import com.arenella.recruit.candidates.entities.CandidateSearchEventEntity;
-import com.arenella.recruit.candidates.entities.NewCandidateStatsEntity;
 import com.arenella.recruit.candidates.enums.COUNTRY;
 import com.arenella.recruit.candidates.enums.FUNCTION;
 import com.arenella.recruit.curriculum.beans.CandidateEmailRequestEvent;

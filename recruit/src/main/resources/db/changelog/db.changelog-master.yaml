@@ -958,3 +958,130 @@ databaseChangeLog:
                   type: timestamp
                   constraints:
                     nullable: false
+  - changeSet:
+      id: add_tbl_email
+      author: kparkings
+      changes:
+        - createTable:
+            tableName: email
+            schemaName: email
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: title
+                  type: varchar
+              - column:
+                  name: email_type
+                  type: varchar
+                  constraints:
+                    nullable: false
+              - column:
+                  name: country
+                  type: varchar
+                  constraints:
+                    nullable: true
+              - column:
+                  name: created
+                  type: timestamp
+                  constraints:
+                    nullable: true
+              - column:
+                  name: scheduled_to_be_sent_after
+                  type: timestamp
+                  constraints:
+                    nullable: true
+              - column:
+                  name: sent
+                  type: timestamp
+                  constraints:
+                    nullable: true
+              - column:
+                  name: body
+                  type: varchar
+                  constraints:
+                    nullable: true
+              - column:
+                  name: status
+                  type: varchar
+                  constraints:
+                    nullable: true
+              - column:
+                  name: sender_id
+                  type: varchar
+                  constraints:
+                    nullable: true
+  - changeSet:
+      id: add_email_recipient_table
+      author: kparkings
+      changes:
+        - createTable:                    
+            tableName: email_recipient
+            schemaName: email
+            columns:
+              - column:
+                  name: id
+                  type: varchar
+                  constraints:
+                    nullable: false                    
+                    primaryKey: true
+              - column:
+                  name: recipient_type
+                  type: varchar
+                  constraints:
+                    nullable: false                    
+              - column:
+                  name: email_id
+                  type: uuid
+                  constraints:
+                    nullable: false
+              - column:
+                  name: email_address
+                  type: varchar
+                  constraints:
+                    nullable: false
+  - changeSet:
+      id: add_email_sender_table
+      author: kparkings
+      changes:
+        - createTable:                    
+            tableName: email_sender
+            schemaName: email
+            columns:
+              - column:
+                  name: id
+                  type: varchar
+                  constraints:
+                    nullable: false                    
+                    primaryKey: true
+              - column:
+                  name: sender_type
+                  type: varchar
+                  constraints:
+                    nullable: false                    
+              - column:
+                  name: email_id
+                  type: uuid
+                  constraints:
+                    nullable: false
+              - column:
+                  name: email_address
+                  type: varchar
+                  constraints:
+                    nullable: false
+  - changeSet:
+      id: email_recipient_fk
+      author: kparkings
+      changes:
+        - addForeignKeyConstraint:  
+            constraintName: fk_email_recipient
+            baseColumnNames: email_id
+            baseTableName: email_recipient
+            baseTableSchemaName: email
+            referencedTableName: email
+            referencedTableSchemaName: email
+            referencedColumnNames: id
