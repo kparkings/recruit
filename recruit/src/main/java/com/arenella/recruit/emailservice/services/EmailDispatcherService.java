@@ -1,9 +1,7 @@
 package com.arenella.recruit.emailservice.services;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+
 import java.util.UUID;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -18,14 +16,8 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
 
-import com.arenella.recruit.emailservice.adapters.RequestSendEmailEvent;
+import com.arenella.recruit.emailservice.adapters.RequestSendEmailCommand;
 import com.arenella.recruit.emailservice.beans.Email;
-import com.arenella.recruit.emailservice.beans.Email.EmailTopic;
-import com.arenella.recruit.emailservice.beans.Email.EmailType;
-import com.arenella.recruit.emailservice.beans.Email.Recipient;
-import com.arenella.recruit.emailservice.beans.Email.Recipient.RecipientType;
-import com.arenella.recruit.emailservice.beans.Email.Sender;
-import com.arenella.recruit.emailservice.beans.Email.Sender.SenderType;
 import com.arenella.recruit.emailservice.beans.Email.Status;
 import com.arenella.recruit.emailservice.dao.EmailServiceDao;
 
@@ -37,53 +29,30 @@ import com.arenella.recruit.emailservice.dao.EmailServiceDao;
 public class EmailDispatcherService {
 	
 	@Autowired
-	private JavaMailSender sender;
+	private JavaMailSender 					sender;
 	
 	@Autowired
-	private EmailServiceDao emailDao;
+	private EmailServiceDao 				emailDao;
 	
 	@Autowired
-	private EmailTemplateFactory templateFacotry;
+	private EmailTemplateFactory 			templateFacotry;
 	
-	private static final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(5);
+	private final ScheduledExecutorService 	scheduler 			= Executors.newScheduledThreadPool(5);
 	
 	/**
-	* Loads any pending emails. Required for application restarts to no emails
+	* Loads any pending emails. Required for application restarts to no email's
 	* are lost
 	*/
+	//TODO: [KP] In the situation where multiple instances of the service are started
+	//           this will lead to the email's being sent multiple times. This will need 
+	//			 to be resolved if the monolith is split into microservices.
 	@PostConstruct
 	public void init() {
 		
 		this.emailDao.fetchEmailsByStatus(Status.TO_OUTBOX).stream().forEach(email -> {
 			this.dispatchEmail(email, this.emailDao);
 		});
-		
-		//WART START
-		Recipient<UUID> recipient1 	= new Recipient<>(UUID.randomUUID(), RecipientType.RECRUITER, 	"kparkings@gmail.com");
-		Recipient<UUID> recipient2	= new Recipient<>(UUID.randomUUID(), RecipientType.RECRUITER, 	"kevin_parkings@hotmail.com");
-		Sender<UUID> 	sender 		= new Sender<>(UUID.randomUUID(), 	 SenderType.SYSTEM, 		"kparkings@gmail.com");
-		
-		Map<String,Object> model = new HashMap<>();
 
-		//TODO: This needs to be passed from the event
-		model.put("user", "Kevin Parkings");
-		
-		
-		//TODO: Event needs to send model
-		
-		RequestSendEmailEvent event = RequestSendEmailEvent
-				.builder()
-					.emailType(EmailType.EXTERN)
-					.recipients(Set.of(recipient1, recipient2))
-					.sender(sender)
-					.title("Arenella Test email")
-					.topic(EmailTopic.ACCOUNT_CREATED)
-					.model(model)
-				.build();
-		
-		this.handleSendEmailEvent(event);		
-		
-		//WART END
 	}
 	
 	/**
@@ -109,27 +78,28 @@ public class EmailDispatcherService {
 			}
 		};
 		
-		scheduler.schedule(task, 0, TimeUnit.MINUTES);
+		scheduler.schedule(task, 0L, TimeUnit.MINUTES);
 		
 	}
 	
 	/**
 	* Event handler for RequestSendEmailEvent
-	* @param event - contains details of email to be sent
+	* @param command - contains details of email to be sent
 	*/
-	public void handleSendEmailEvent(RequestSendEmailEvent event){
+	public void handleSendEmailCommand(RequestSendEmailCommand command){
 		
 		Email email = Email
 				.builder()
-					.body(this.templateFacotry.fetchTemplate(event))
+					.body(this.templateFacotry.fetchTemplate(command))
 					.created(LocalDateTime.now())
-					.emailType(event.getEmailType())
+					.emailType(command.getEmailType())
 					.id(UUID.randomUUID())
-					.recipients(event.getRecipients())
+					.recipients(command.getRecipients())
 					.scheduledToBeSentAfter(LocalDateTime.now().minusDays(1))
-					.sender(event.getSender())
+					.sender(command.getSender())
 					.status(Status.TO_OUTBOX)
-					.title(event.getTitle())
+					.title(command.getTitle())
+					.persistable(command.isPersistable())
 				.build();
 		
 		this.emailDao.saveEmail(email);
@@ -157,7 +127,6 @@ public class EmailDispatcherService {
 				.stream()
 				.map(r -> r.getEmailAddress())
 				.toArray(String[]::new);
-		
 		
 		mimeMessage.setContent(email.getBody(), "text/html");
 		helper.setFrom(email.getSender().getEmail());

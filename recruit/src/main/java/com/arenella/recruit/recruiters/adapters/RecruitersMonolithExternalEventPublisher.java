@@ -7,6 +7,8 @@ import com.arenella.recruit.adapters.events.RecruiterCreatedEvent;
 import com.arenella.recruit.adapters.events.RecruiterHasOpenSubscriptionEvent;
 import com.arenella.recruit.adapters.events.RecruiterNoOpenSubscriptionEvent;
 import com.arenella.recruit.authentication.adapters.AuthenticationExternalEventListener;
+import com.arenella.recruit.emailservice.adapters.EmailServiceExternalEventListener;
+import com.arenella.recruit.emailservice.adapters.RequestSendEmailCommand;
 
 /**
 * An implementation of ExternalEventPublisher optimised to work when the 
@@ -25,6 +27,9 @@ public class RecruitersMonolithExternalEventPublisher implements RecruitersExter
 
 	@Autowired
 	private AuthenticationExternalEventListener authenticationExternalEventListener;
+	
+	@Autowired
+	private EmailServiceExternalEventListener emailServiceExternalEventListener;
 	
 	/**
 	* Refer to the ExternalEventPublisher interface for details 
@@ -48,6 +53,14 @@ public class RecruitersMonolithExternalEventPublisher implements RecruitersExter
 	@Override
 	public void publishRecruiterHasOpenSubscriptionEvent(String recruiterId) {
 		this.authenticationExternalEventListener.listenForRecruiterHasOpenSubscriptionEvent(new RecruiterHasOpenSubscriptionEvent(recruiterId));
+	}
+
+	/**
+	* Refer to the ExternalEventPublisher interface for details 
+	*/
+	@Override
+	public void publishSendEmailCommand(RequestSendEmailCommand command) {
+		this.emailServiceExternalEventListener.listenForSendEmailCommand(command);
 	}
 
 }

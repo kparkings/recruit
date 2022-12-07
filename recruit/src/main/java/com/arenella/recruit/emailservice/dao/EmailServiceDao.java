@@ -27,7 +27,9 @@ public interface EmailServiceDao extends CrudRepository<EmailEntity, UUID> {
 	* @param email - Email to persist
 	*/
 	default void saveEmail(Email email) {
-		this.save(EmailEntity.convertToEntity(email));
+		if (email.isPersistable()) {
+			this.save(EmailEntity.convertToEntity(email));
+		}
 	}
 	
 	/**

@@ -25,6 +25,7 @@ public class Email {
 	private Set<Recipient<?>> 	recipients					= new LinkedHashSet<>(); 
 	private String 				body;
 	private Status 				status						= Status.DRAFT;
+	private boolean				persistable					= false;
 		
 	/**
 	* Returns the unique Id of the email
@@ -108,6 +109,14 @@ public class Email {
 	}
 	
 	/**
+	* Whether or not the Email can be persisted to the DB
+	* @return Whether or not the Email can be peristed to the DB
+	*/
+	public boolean isPersistable() {
+		return this.persistable;
+	}
+	
+	/**
 	* Marks an Email as having been sent to 
 	* an external email address
 	*/
@@ -137,6 +146,7 @@ public class Email {
 		this.recipients 			= builder.recipients;
 		this.body 					= builder.body;
 		this.status 				= builder.status;
+		this.persistable			= builder.persistable;
 	}
 	
 	/**
@@ -162,7 +172,8 @@ public class Email {
 		private LocalDateTime 		sent;
 		private Set<Recipient<?>> 	recipients					= new LinkedHashSet<>(); 
 		private String 				body;
-		private Status 				status						= Status.DRAFT;;
+		private Status 				status						= Status.DRAFT;
+		private boolean				persistable					= false;
 		
 		/**
 		* Sets the unique Id of the email
@@ -266,7 +277,16 @@ public class Email {
 			return this;
 		}
 		
-		
+		/**
+		* Sets whether or not the Email can be persisted to DB. Should not
+		* be persisted in sensitive details are in the body
+		* @param persistable - Whether to persist email : default false
+		* @return Builder
+		*/
+		public EmailBuilder persistable(boolean persistable) {
+			this.persistable = persistable;
+			return this;
+		}
 		
 		/**
 		* Returns an initialized Email object

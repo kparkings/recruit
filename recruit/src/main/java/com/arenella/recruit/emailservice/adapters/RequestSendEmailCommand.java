@@ -16,7 +16,7 @@ import com.arenella.recruit.emailservice.beans.Email.Sender;
 */
 //TODO: [KP] For now Classes are in shared folder. In MS implementation these will be Json String and 
 //			 the class definitions can be declared in each service
-public class RequestSendEmailEvent {
+public class RequestSendEmailCommand {
 
 	private String 				title;
 	private EmailType 			emailType;
@@ -25,6 +25,7 @@ public class RequestSendEmailEvent {
 	
 	private EmailTopic 			topic;
 	private Map<String,Object>	model						= new HashMap<>();
+	private boolean				persistable					= false;
 	
 	/**
 	* Returns the title for the Email
@@ -76,31 +77,42 @@ public class RequestSendEmailEvent {
 	}
 	
 	/**
+	* Returns whether the email should be persisted to the DB
+	* - True  - If service is stopped email will not be lost but data stored in email body in DB
+	* - False - If service is stopped email is lost bug no senstive data in email stored in DB 
+	* @return
+	*/
+	public boolean isPersistable() {
+		return this.persistable;
+	}
+	
+	/**
 	* Constructor based upon a Builder
 	* @param builder
 	*/
-	public RequestSendEmailEvent(RequestSendEmailEventBuilder builder) {
-		this.title 		= builder.title;
-		this.emailType 	= builder.emailType;
-		this.sender 	= builder.sender;
-		this.recipients = builder.recipients;
-		this.topic		= builder.topic;
-		this.model		= builder.model;
+	public RequestSendEmailCommand(RequestSendEmailCommandBuilder builder) {
+		this.title 			= builder.title;
+		this.emailType 		= builder.emailType;
+		this.sender 		= builder.sender;
+		this.recipients 	= builder.recipients;
+		this.topic			= builder.topic;
+		this.model			= builder.model;
+		this.persistable	= builder.persistable;
 	}
 	
 	/**
 	* Returns a builder for the RequestSendEmailEvent class
 	* @return Builder
 	*/
-	public static RequestSendEmailEventBuilder builder() {
-		return new RequestSendEmailEventBuilder();
+	public static RequestSendEmailCommandBuilder builder() {
+		return new RequestSendEmailCommandBuilder();
 	}
 	
 	/**
 	* Builder for the RequestSendEmailEvent class
 	* @author K Parkings
 	*/
-	public static class RequestSendEmailEventBuilder{
+	public static class RequestSendEmailCommandBuilder{
 		
 		private String 				title;
 		private EmailType 			emailType;
@@ -108,13 +120,14 @@ public class RequestSendEmailEvent {
 		private Set<Recipient<?>> 	recipients					= new LinkedHashSet<>(); 
 		private EmailTopic 			topic;
 		private Map<String,Object>	model						= new HashMap<>();
+		private boolean				persistable					= false;
 		
 		/**
 		* Sets the Title of the Email
 		* @param title - Title of the Email
 		* @return Builder
 		*/
-		public RequestSendEmailEventBuilder title(String title) {
+		public RequestSendEmailCommandBuilder title(String title) {
 			this.title = title;
 			return this;
 		}
@@ -124,7 +137,7 @@ public class RequestSendEmailEvent {
 		* @param emailType - Type of the Email
 		* @return Builder
 		*/
-		public RequestSendEmailEventBuilder emailType(EmailType emailType) {
+		public RequestSendEmailCommandBuilder emailType(EmailType emailType) {
 			this.emailType = emailType;
 			return this;
 		}
@@ -134,7 +147,7 @@ public class RequestSendEmailEvent {
 		* @param sender - Sender
 		* @return Builder
 		*/
-		public RequestSendEmailEventBuilder sender(Sender<?> sender) {
+		public RequestSendEmailCommandBuilder sender(Sender<?> sender) {
 			this.sender = sender;
 			return this;
 		}
@@ -144,17 +157,17 @@ public class RequestSendEmailEvent {
 		* @param recipient - Recipients
 		* @return Builder
 		*/
-		public RequestSendEmailEventBuilder recipients(Set<Recipient<?>> recipient) {
+		public RequestSendEmailCommandBuilder recipients(Set<Recipient<?>> recipient) {
 			this.recipients = recipient;
 			return this;
 		}
 		
 		/**
-		* Sets the topic of the Email (Determines templace to use)
+		* Sets the topic of the Email (Determines template to use)
 		* @param topic - Email topic
 		* @return Builder
 		*/
-		public RequestSendEmailEventBuilder topic(EmailTopic topic) {
+		public RequestSendEmailCommandBuilder topic(EmailTopic topic) {
 			this.topic = topic;
 			return this;
 		}
@@ -164,17 +177,29 @@ public class RequestSendEmailEvent {
 		* @param model - Data for constructing the email
 		* @return Builder
 		*/
-		public RequestSendEmailEventBuilder model(Map<String,Object> model) {
+		public RequestSendEmailCommandBuilder model(Map<String,Object> model) {
 			this.model = model;
 			return this;
 		}
 		
 		/**
-		* Returns a new initialized RequestSendEmailEvent 
-		* @return Event
+		* Sets whether or not the email can be persisted in case the service is 
+		* stopped so that is can be sent once the service is restarted
+		* Warning: Persisting of sensitive data is security risk. Only set true if no sensitive data in Email
+		* @param persistable - Whether or not the email can be persisted
+		* @return Builder
 		*/
-		public RequestSendEmailEvent build() {
-			return new RequestSendEmailEvent(this);
+		public RequestSendEmailCommandBuilder persistable(boolean persistable) {
+			this.persistable = persistable;
+			return this;
+		}
+		
+		/**
+		* Returns a new initialized RequestSendEmailCommand 
+		* @return command
+		*/
+		public RequestSendEmailCommand build() {
+			return new RequestSendEmailCommand(this);
 		}
 		
 	}

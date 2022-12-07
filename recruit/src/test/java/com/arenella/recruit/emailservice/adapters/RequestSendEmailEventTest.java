@@ -1,5 +1,7 @@
 package com.arenella.recruit.emailservice.adapters;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.HashMap;
@@ -39,7 +41,7 @@ public class RequestSendEmailEventTest {
 	@Test
 	public void testBuilder() throws Exception{
 		
-		RequestSendEmailEvent event = RequestSendEmailEvent
+		RequestSendEmailCommand command = RequestSendEmailCommand
 				.builder()
 					.emailType(this.emailType)
 					.recipients(this.recipients)
@@ -47,19 +49,36 @@ public class RequestSendEmailEventTest {
 					.title(this.title)
 					.topic(topic)
 					.model(model)
+					.persistable(true)
 				.build();
 		
-		assertEquals(title, 					event.getTitle());
-		assertEquals(emailType, 				event.getEmailType());
-		assertEquals(sender, 					event.getSender());
-		assertEquals(topic, 					event.getTopic());
-		assertEquals(model, 					event.getModel());
+		assertEquals(title, 					command.getTitle());
+		assertEquals(emailType, 				command.getEmailType());
+		assertEquals(sender, 					command.getSender());
+		assertEquals(topic, 					command.getTopic());
+		assertEquals(model, 					command.getModel());
+		assertTrue(command.isPersistable()); 
 		
-		UUID 	recipient1Id = (UUID) 	event.getRecipients().stream().filter(r -> r.getRecipientType() == RecipientType.RECRUITER).findFirst().get().getId();
-		String 	recipient2Id = (String) event.getRecipients().stream().filter(r -> r.getRecipientType() == RecipientType.SYSTEM).findFirst().get().getId();
+		UUID 	recipient1Id = (UUID) 	command.getRecipients().stream().filter(r -> r.getRecipientType() == RecipientType.RECRUITER).findFirst().get().getId();
+		String 	recipient2Id = (String) command.getRecipients().stream().filter(r -> r.getRecipientType() == RecipientType.SYSTEM).findFirst().get().getId();
 		
 		assertEquals(recip1Id, recipient1Id);
 		assertEquals(recip2Id, recipient2Id);
+		
+	}
+	
+	/**
+	* Tests by Default false so sensitive data not persisted by accident
+	* @throws Exception
+	*/
+	@Test
+	public void testDefaultIsPersistable() throws Exception{
+		
+		RequestSendEmailCommand command = RequestSendEmailCommand
+				.builder()
+				.build();
+		
+		assertFalse(command.isPersistable()); 
 		
 	}
 	

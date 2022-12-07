@@ -8,8 +8,8 @@ public interface EmailServiceExternalEventListener {
 
 	/**
 	* Listens for events requesting an email is sent
-	* @param event - RecruiterCreatedEvent
+	* @param command - Command to request sending of email
 	*/
-	public void listenForEmailEvent(RequestSendEmailEvent event);
+	public void listenForSendEmailCommand(RequestSendEmailCommand command);
 	
 }

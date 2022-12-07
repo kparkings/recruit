@@ -1,13 +1,23 @@
 package com.arenella.recruit.recruiters.beans;
 
+import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
+import java.util.Set;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import com.arenella.recruit.adapters.events.RecruiterCreatedEvent;
+import com.arenella.recruit.emailservice.adapters.RequestSendEmailCommand;
+import com.arenella.recruit.emailservice.beans.Email.EmailTopic;
+import com.arenella.recruit.emailservice.beans.Email.EmailType;
+import com.arenella.recruit.emailservice.beans.Email.Recipient;
+import com.arenella.recruit.emailservice.beans.Email.Sender;
+import com.arenella.recruit.emailservice.beans.Email.Recipient.RecipientType;
+import com.arenella.recruit.emailservice.beans.Email.Sender.SenderType;
 import com.arenella.recruit.recruiters.adapters.RecruitersExternalEventPublisher;
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_action;
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_status;
@@ -28,7 +38,7 @@ public class TrialPeriodSubscriptionActionHandler implements RecruiterSubscripti
 	* @throws IllegalAccessException 
 	*/
 	@Override
-	public Optional<SubscriptionActionFeedback> performAction(Recruiter recruiter, RecruiterSubscription subscription,  subscription_action action, Boolean isAdminUser) throws IllegalAccessException {
+	public Optional<SubscriptionActionFeedback> performAction(Recruiter recruiter, RecruiterSubscription subscription, subscription_action action, Boolean isAdminUser) throws IllegalAccessException {
 
 		TrialPeriodSubscription currentSubscription = ((TrialPeriodSubscription)subscription);
 		
@@ -47,8 +57,8 @@ public class TrialPeriodSubscriptionActionHandler implements RecruiterSubscripti
 					currentSubscription.activateSubscription();
 					
 					
-					String password = this.generatePassword(recruiter.getUserId());
-					String encryptedPassword = this.encryptPassword(password);
+					String password 			= this.generatePassword(recruiter.getUserId());
+					String encryptedPassword 	= this.encryptPassword(password);
 					
 					externEventPublisher
 						.publishRecruiterAccountCreatedEvent(RecruiterCreatedEvent
@@ -56,6 +66,19 @@ public class TrialPeriodSubscriptionActionHandler implements RecruiterSubscripti
 																				.recruiterId(recruiter.getUserId())
 																				.encryptedPassword(encryptedPassword)
 																				.build());
+
+					RequestSendEmailCommand command = RequestSendEmailCommand
+							.builder()
+								.emailType(EmailType.EXTERN)
+								.recipients(Set.of(new Recipient<String>(recruiter.getUserId(), RecipientType.RECRUITER, recruiter.getEmail())))
+								.sender(new Sender<>(UUID.randomUUID(), SenderType.SYSTEM, "kparkings@gmail.com"))
+								.title("Arenella-ICT - 90 Day Free Trial")
+								.topic(EmailTopic.ACCOUNT_CREATED)
+								.model(Map.of("firstname",recruiter.getFirstName(),"userid",recruiter.getUserId(),"password",password))
+								.persistable(false)
+							.build();
+					
+					this.externEventPublisher.publishSendEmailCommand(command);
 
 					return Optional.of(new AccountActivatedFeedback(recruiter.getUserId(), password));
 					
@@ -163,7 +186,7 @@ public class TrialPeriodSubscriptionActionHandler implements RecruiterSubscripti
 		}
 		
 		/**
-		* Returns the Password of the Recruite r
+		* Returns the Password of the Recruiter
 		* @return returns plain text password for the Recruiter
 		*/
 		public String getPassword() {

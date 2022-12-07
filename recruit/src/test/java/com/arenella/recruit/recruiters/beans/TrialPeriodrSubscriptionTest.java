@@ -159,7 +159,7 @@ public class TrialPeriodrSubscriptionTest {
 		
 		ReflectionTestUtils.setField(actionHandler, "externEventPublisher", mockExternEventPublisher);
 		
-		actionHandler.performAction(Recruiter.builder().userId("kparkings").build(), subscription, subscription_action.ACTIVATE_SUBSCRIPTION, true);
+		actionHandler.performAction(Recruiter.builder().userId("kparkings").firstName("").build(), subscription, subscription_action.ACTIVATE_SUBSCRIPTION, true);
 		
 		assertEquals(subscription_status.ACTIVE, subscription.getStatus());
 		assertTrue(subscription.isCurrentSubscription());

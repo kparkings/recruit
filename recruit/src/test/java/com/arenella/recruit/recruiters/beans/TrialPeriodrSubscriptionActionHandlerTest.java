@@ -45,6 +45,9 @@ public class TrialPeriodrSubscriptionActionHandlerTest {
 		RecruiterSubscription 	subscription2 	= TrialPeriodSubscription.builder().subscriptionId(UUID.randomUUID()).currentSubscription(false).status(subscription_status.AWAITING_ACTIVATION).build();
 		Recruiter 				recruiter 		= Recruiter
 													.builder()
+													.email("kparkings@gmail.com")
+													.firstName("kevin")
+													.userId("kparkings")
 													.subscriptions(Set.of(subscription1, subscription2))
 													.build();
 		
@@ -53,6 +56,8 @@ public class TrialPeriodrSubscriptionActionHandlerTest {
 		assertTrue(subscription2.isCurrentSubscription());
 		
 		assertEquals(subscription_status.ACTIVE, subscription2.getStatus());
+		
+		Mockito.verify(this.mockExternEventPublisher).publishSendEmailCommand(Mockito.any());
 		
 	}
 	

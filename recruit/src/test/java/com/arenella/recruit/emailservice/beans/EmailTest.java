@@ -1,6 +1,8 @@
 package com.arenella.recruit.emailservice.beans;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDateTime;
 import java.util.Set;
@@ -123,6 +125,32 @@ public class EmailTest {
 		
 		assertEquals(Status.FAILURE, email.getStatus());
 		
+		
+	}
+	
+	/**
+	* Tests setting of persistable. Must be false by default to 
+	* prevent sensitive data being stored in the DB
+	* @throws Exception
+	*/
+	@Test
+	public void testIsPersistable() throws Exception{
+		
+		Email email = Email
+				.builder()
+				.build();
+		
+		/**
+		* Default must be false 
+		*/
+		assertFalse(email.isPersistable());
+		
+		email = Email
+				.builder()
+					.persistable(true)
+				.build();
+		
+		assertTrue(email.isPersistable());
 		
 	}
 	
