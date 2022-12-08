@@ -98,11 +98,6 @@ export class RecruiterMarketplaceComponent implements OnInit {
 	public applyDeleteMyOpenPosition(openPositionId:string):void{		
 		this.confirmDeleteOpenPosition = '';
 		this.marketplaceService.deleteRecruitersOwnOpenPositions(openPositionId).subscribe(data => {
-			//if (this.showJustMyCandidatesActive){
-			//	this.showJustMyCandidates();
-			//} else {
-			//	this.fetchOfferedCandidates();
-			//}
 			this.refreshOpenPositionList();
 		});
 	}
@@ -121,11 +116,6 @@ export class RecruiterMarketplaceComponent implements OnInit {
 	public applyDeleteMyCandidate(candidateId:string):void{
 		this.confirmDeleteCandidate = '';
 		this.marketplaceService.deleteRecruitersOwnOfferedCandidates(candidateId).subscribe(data => {
-			//if (this.showJustMyCandidatesActive){
-			//	this.showJustMyCandidates();
-			//} else {
-			//	this.fetchOfferedCandidates();
-			//}
 			this.refreshCandidateList();
 		});
 	}
@@ -290,6 +280,7 @@ export class RecruiterMarketplaceComponent implements OnInit {
 	public viewCandidate(candidate:OfferedCandidate){
 		this.activeCandidate = candidate;
 		this.switchTab('showSupplyDetails');
+		this.marketplaceService.registerOfferedCandidateViewedEvent(candidate.id).subscribe( data => {});
 	}
 	
 	/**
@@ -298,6 +289,7 @@ export class RecruiterMarketplaceComponent implements OnInit {
 	public viewOpenPosition(openPosition:OpenPosition){
 		this.activeOpenPosition = openPosition;
 		this.switchTab('showDemandDetails');
+		this.marketplaceService.registerOpenPositionViewedEvent(openPosition.id).subscribe( data => {});
 	}
 
 	/**

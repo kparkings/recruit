@@ -1085,3 +1085,32 @@ databaseChangeLog:
             referencedTableName: email
             referencedTableSchemaName: email
             referencedColumnNames: id
+  - changeSet:
+      id: create_event_supply_or_demand_viewed
+      author: kparkings
+      changes:
+        - createTable:                    
+            tableName: event_supply_or_demand_viewed
+            schemaName: recruiter
+            columns:
+              - column:
+                  name: id
+                  type: UUID
+                  constraints:
+                    nullable: false                    
+                    primaryKey: true
+              - column:
+                  name: recruiter_id
+                  type: varchar
+                  constraints:
+                    nullable: false                    
+              - column:
+                  name: type
+                  type: varchar
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created
+                  type: timestamp
+                  constraints:
+                    nullable: false

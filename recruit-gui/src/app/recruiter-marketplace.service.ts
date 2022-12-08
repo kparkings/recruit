@@ -235,4 +235,26 @@ export class RecruiterMarketplaceService {
 	
 	}
 	
+	/**
+	* Registers an event indicating an Open Position was viewed
+	*/
+	public registerOpenPositionViewedEvent(id:string):Observable<any>{
+		
+		const backendUrl:string = environment.backendUrl +'v1/open-position/viewed/'+id;
+		
+		return this.httpClient.post<any>(backendUrl, null, this.httpOptions);
+	
+	}
+	
+	/**
+	* Registers an event indicating an Offered Candidate was viewed
+	*/
+	public registerOfferedCandidateViewedEvent(id:string):Observable<any>{
+		
+		const backendUrl:string = environment.backendUrl +'v1/offered-candidate/viewed/'+id;
+		
+		return this.httpClient.post<any>(backendUrl, null, this.httpOptions);
+	
+	}
+	
 }

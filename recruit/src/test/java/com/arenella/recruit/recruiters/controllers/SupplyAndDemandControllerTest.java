@@ -265,4 +265,36 @@ public class SupplyAndDemandControllerTest {
 		
 	}
 	
+	/**
+	* Tests if request is received event is passed to service and correct 
+	* status code returned
+	* @throws Exception
+	*/
+	@Test
+	public void testRegisterOpenPositionViewedEvent() throws Exception {
+		
+		ResponseEntity<Void> response = this.controller.registerOpenPositionViewedEvent(UUID.randomUUID());
+		
+		assertEquals(HttpStatus.CREATED, response.getStatusCode());
+		
+		Mockito.verify(this.supplyAndDemandService).registerOpenPositionViewedEvent(Mockito.any(UUID.class));
+	
+	}
+	
+	/**
+	* Tests if request is received event is passed to service and correct 
+	* status code returned
+	* @throws Exception
+	*/
+	@Test
+	public void testRegisterOfferedCandidateViewedEvent() throws Exception {
+		
+		ResponseEntity<Void> response = this.controller.registerOfferedCandidateViewedEvent(UUID.randomUUID());
+		
+		assertEquals(HttpStatus.CREATED, response.getStatusCode());
+		
+		Mockito.verify(this.supplyAndDemandService).registerOfferedCandidateViewedEvent(Mockito.any(UUID.class));
+	
+	}
+	
 }

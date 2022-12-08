@@ -88,4 +88,16 @@ public interface SupplyAndDemandService {
 	*/
 	public Set<OfferedCandidate> fetchOfferedCandidates(String recruiterId);
 	
+	/**
+	* Logs an event stating that an open position was viewed
+	* @param id - Unique id of the Open Position viewed
+	*/
+	public void registerOpenPositionViewedEvent(UUID id);
+	
+	/**
+	* Logs an event stating that an offered candidate was viewed
+	* @param id - Unique id of the Offered Candidate viewed
+	*/
+	public void registerOfferedCandidateViewedEvent(UUID id);
+	
 }

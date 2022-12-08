@@ -1,5 +1,6 @@
 package com.arenella.recruit.recruiters.services;
 
+import java.time.LocalDateTime;
 import java.util.Set;
 import java.util.UUID;
 
@@ -10,9 +11,12 @@ import org.springframework.stereotype.Service;
 import com.arenella.recruit.recruiters.beans.OfferedCandidate;
 import com.arenella.recruit.recruiters.beans.OfferedCandidateAPIOutbound.RecruiterDetails;
 import com.arenella.recruit.recruiters.beans.OpenPosition;
+import com.arenella.recruit.recruiters.beans.SupplyAndDemandEvent;
+import com.arenella.recruit.recruiters.beans.SupplyAndDemandEvent.EventType;
 import com.arenella.recruit.recruiters.dao.OfferedCandidateDao;
 import com.arenella.recruit.recruiters.dao.OpenPositionDao;
 import com.arenella.recruit.recruiters.dao.RecruiterDao;
+import com.arenella.recruit.recruiters.dao.SupplyAndDemandEventDao;
 
 /**
 * Services for Supply and Demand
@@ -22,13 +26,16 @@ import com.arenella.recruit.recruiters.dao.RecruiterDao;
 public class SupplyAndDemandServiceImpl implements SupplyAndDemandService{
 
 	@Autowired
-	private OpenPositionDao 	openPositionDao;
+	private OpenPositionDao 			openPositionDao;
 	
 	@Autowired
-	private OfferedCandidateDao offeredCandidateDao;
+	private OfferedCandidateDao 		offeredCandidateDao;
 	
 	@Autowired
-	private RecruiterDao		recruiterDao;
+	private RecruiterDao				recruiterDao;
+	
+	@Autowired
+	private SupplyAndDemandEventDao		supplyAndDemandEventDao;
 	
 	/**
 	* Refer to the SupplyAndDemandService interface for details 
@@ -147,6 +154,90 @@ public class SupplyAndDemandServiceImpl implements SupplyAndDemandService{
 	}
 	
 	/**
+	* Logs an event stating that an open position was viewed
+	* @param id - Unique id of the Open Position viewed
+	*/
+	@Override
+	public void registerOpenPositionViewedEvent(UUID id) {
+		
+		if (this.isLoggedInUserAdmin()) {
+			return;
+		}
+	
+		if (this.isOwnerOfOpenPosition(id)) {
+			return;
+		}
+		
+		this.supplyAndDemandEventDao
+			.persistEvent(SupplyAndDemandEvent
+					.builder()
+						.created(LocalDateTime.now())
+						.eventId(UUID.randomUUID())
+						.recruiterId(getAuthenticatedRecruiterId())
+						.type(EventType.OPEN_POSITION)
+					.build());
+		
+	}
+	
+	/**
+	* Logs an event stating that an offered candidate was viewed
+	* @param id - Unique id of the Offered Candidate viewed
+	*/
+	@Override
+	public void registerOfferedCandidateViewedEvent(UUID id) {
+	
+		if (this.isLoggedInUserAdmin()) {
+			return;
+		}
+	
+		if (this.isOwnerOfOfferedCandidate(id)) {
+			return;
+		}
+		
+		this.supplyAndDemandEventDao
+			.persistEvent(SupplyAndDemandEvent
+				.builder()
+					.created(LocalDateTime.now())
+					.eventId(UUID.randomUUID())
+					.recruiterId(getAuthenticatedRecruiterId())
+					.type(EventType.OFFERED_CANDIDATE)
+				.build());
+	
+	}
+	
+	/**
+	* Returns whether the OfferedCandidate is owned by the current logged in User
+	* @param offeredCandidateId - Unique id of the Offered Candidate
+	* @return Whether the current user is the owner
+	*/
+	private boolean isOwnerOfOfferedCandidate(UUID offeredCandidateId) {
+		
+		OfferedCandidate offeredCandidate = offeredCandidateDao.findByOfferedCandidateId(offeredCandidateId);
+		
+		if (!getAuthenticatedRecruiterId().equals(offeredCandidate.getRecruiterId())) {
+			return false;
+		}
+		
+		return true;
+	}
+	
+	/**
+	* Returns whether the OpenPosition is owned by the current logged in User
+	* @param openPositionId - Unique id of the Open Position
+	* @return Whether the current user is the owner
+	*/
+	private boolean isOwnerOfOpenPosition(UUID openPositionId) {
+		
+		OpenPosition openPosition = openPositionDao.findByOpenPositionId(openPositionId);
+		
+		if (!getAuthenticatedRecruiterId().equals(openPosition.getRecruiterId())) {
+			return false;
+		}
+		
+		return true;
+	}
+	
+	/**
 	* Performs authentication validation to ensure a User can only update their 
 	* own OpenPositions
 	* @param openPositionId - OpenPoistion the user wants to update
@@ -192,4 +283,12 @@ public class SupplyAndDemandServiceImpl implements SupplyAndDemandService{
 		return SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
 	}
 
+	/**
+	* Returns whether or not the currently authenticated User is an Admin User
+	* @return Whether or not the currently authenticated User is an Admin User
+	*/
+	private boolean isLoggedInUserAdmin() {
+		return SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream().filter(role -> role.getAuthority().equals("ROLE_ADMIN")).findAny().isPresent();
+	}
+	
 }

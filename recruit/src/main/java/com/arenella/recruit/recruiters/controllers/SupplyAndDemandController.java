@@ -232,5 +232,31 @@ public class SupplyAndDemandController {
 						.collect(Collectors.toCollection(LinkedHashSet::new)));
 	}
 	
+	/**
+	* Logs that a Recruiter has viewed an Open Position
+	* @return ResponseEntity
+	*/
+	@PostMapping("/v1/open-position/viewed/{id}")
+	@PreAuthorize("hasRole('ROLE_RECRUITER') or hasRole('ROLE_ADMIN')")
+	public ResponseEntity<Void> registerOpenPositionViewedEvent(@PathVariable("id") UUID id) {
+		
+		this.supplyAndDemandService.registerOpenPositionViewedEvent(id);
+		
+		return ResponseEntity.status(HttpStatus.CREATED).build();
+	}
+	
+	/**
+	* Logs that a Recruiter has viewed an offered candidate
+	* @return ResponseEntity
+	*/
+	@PostMapping("/v1/offered-candidate/viewed/{id}")
+	@PreAuthorize("hasRole('ROLE_RECRUITER') or hasRole('ROLE_ADMIN')")
+	public ResponseEntity<Void> registerOfferedCandidateViewedEvent(@PathVariable("id") UUID id) {
+		
+		this.supplyAndDemandService.registerOfferedCandidateViewedEvent(id);
+		
+		return ResponseEntity.status(HttpStatus.CREATED).build();
+	}
+	
 	
 }
