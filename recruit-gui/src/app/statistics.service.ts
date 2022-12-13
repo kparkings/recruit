@@ -3,6 +3,7 @@ import { FormGroup }                              	from '@angular/forms';
 import { HttpClient, HttpResponse, HttpHeaders }  	from '@angular/common/http';
 import { Observable, throwError }                 	from 'rxjs';
 import { environment }								from './../environments/environment';
+import { MarketplaceRecruiterViewStatResponse }		from './statistics/marketplace-recruiter-view-stat';
 
 @Injectable({
   providedIn: 'root'
@@ -98,4 +99,25 @@ export class StatisticsService {
 		
 	}
 	
+	/**
+	* Returns stats relating to Views of Offered Candidates in the Marketplace
+	*/
+	public getMarketPlaceOfferedCandidateViewStats():Observable<MarketplaceRecruiterViewStatResponse>{
+		
+		const backendUrl:string = environment.backendUrl +'v1/offered-candidate/stats/week/';
+  
+		return this.httpClient.get<any>(backendUrl, this.httpOptions);
+		
+	}
+	
+	/**
+	* Returns stats relating to Views of Requested Candidates in the Marketplace
+	*/
+	public getMarketPlaceRequestedCandidateViewStats():Observable<MarketplaceRecruiterViewStatResponse>{
+		
+		const backendUrl:string = environment.backendUrl +'v1/open-position/stats/week/';
+  
+		return this.httpClient.get<any>(backendUrl, this.httpOptions);
+		
+	}
 }

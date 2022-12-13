@@ -6,6 +6,7 @@ import java.util.UUID;
 import com.arenella.recruit.recruiters.beans.OfferedCandidate;
 import com.arenella.recruit.recruiters.beans.OfferedCandidateAPIOutbound.RecruiterDetails;
 import com.arenella.recruit.recruiters.beans.OpenPosition;
+import com.arenella.recruit.recruiters.beans.SupplyAndDemandEvent;
 
 /**
 * Defines Services relating to SupplyAndDomand
@@ -99,5 +100,19 @@ public interface SupplyAndDemandService {
 	* @param id - Unique id of the Offered Candidate viewed
 	*/
 	public void registerOfferedCandidateViewedEvent(UUID id);
+
+	/**
+	* Fetches Status relating to views of Open 
+	* Positions by recruiters
+	* @return Stats
+	*/
+	public Set<SupplyAndDemandEvent> fetchOpenPositionViewStats();
+
+	/**
+	* Fetches Status relating to views of Offered 
+	* Candidates by recruiters
+	* @return Stats
+	*/
+	public Set<SupplyAndDemandEvent> fetchOfferedCandidateViewStats();
 	
 }

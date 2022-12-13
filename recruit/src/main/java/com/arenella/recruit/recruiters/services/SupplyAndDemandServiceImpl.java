@@ -206,6 +206,22 @@ public class SupplyAndDemandServiceImpl implements SupplyAndDemandService{
 	}
 	
 	/**
+	* Refer to the SupplyAndDemandService interface for details 
+	*/
+	@Override
+	public Set<SupplyAndDemandEvent> fetchOpenPositionViewStats() {
+		return this.supplyAndDemandEventDao.fetchThisWeeksEvents(LocalDateTime.now().minusWeeks(1), EventType.OPEN_POSITION);		
+	}
+
+	/**
+	* Refer to the SupplyAndDemandService interface for details 
+	*/
+	@Override
+	public Set<SupplyAndDemandEvent> fetchOfferedCandidateViewStats() {
+		return this.supplyAndDemandEventDao.fetchThisWeeksEvents(LocalDateTime.now().minusWeeks(1), EventType.OFFERED_CANDIDATE);
+	}
+	
+	/**
 	* Returns whether the OfferedCandidate is owned by the current logged in User
 	* @param offeredCandidateId - Unique id of the Offered Candidate
 	* @return Whether the current user is the owner

@@ -80,7 +80,7 @@ public class TrialPeriodSubscriptionActionHandler implements RecruiterSubscripti
 					
 					this.externEventPublisher.publishSendEmailCommand(command);
 
-					return Optional.of(new AccountActivatedFeedback(recruiter.getUserId(), password));
+					return Optional.empty();
 					
 				}
 				case REJECT_SUBSCRIPTION:{
@@ -162,37 +162,37 @@ public class TrialPeriodSubscriptionActionHandler implements RecruiterSubscripti
 	* account has been activated by an Admin user
 	* @author K Parkings
 	*/
-	public static class AccountActivatedFeedback implements SubscriptionActionFeedback{
+	//public static class AccountActivatedFeedback implements SubscriptionActionFeedback{
 		
-		private final String userId;
-		private final String password;
+	//	private final String userId;
+	//	private final String password;
 		
 		/**
 		* Constructor
 		* @param userId				- Username for the Recruiter
 		* @param encryptedPassword	- Plain text password for the Recruiter
 		*/
-		public AccountActivatedFeedback(String userId, String password) {
-			this.userId 	= userId;
-			this.password 	= password;
-		}
+	//	public AccountActivatedFeedback(String userId, String password) {
+	//		this.userId 	= userId;
+	//		this.password 	= password;
+	//	}
 		
 		/**
 		* Returns the Recruiters userId
 		* @return - Recruiters userId
 		*/
-		public String getUserId() {
-			return this.userId;
-		}
+	//	public String getUserId() {
+	//		return this.userId;
+	//	}
 		
 		/**
 		* Returns the Password of the Recruiter
 		* @return returns plain text password for the Recruiter
 		*/
-		public String getPassword() {
-			return password;
-		}
+	//	public String getPassword() {
+	//		return password;
+	//	}
 		
-	}
+	//}
 	
 }

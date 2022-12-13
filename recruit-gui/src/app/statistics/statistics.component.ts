@@ -20,6 +20,7 @@ export class StatisticsComponent implements OnInit {
 	public showStatsListings:boolean					= false;
 	public showStatsEmailRequests:boolean				= false;
 	public showNewCandidates:boolean					= false;
+	public showMarketplaceStats:boolean					= false;
 
 	public recruiterDownloads:number[] 					= [];
 	public recruiterDownloadsDaily:number[] 			= [];
@@ -50,6 +51,48 @@ export class StatisticsComponent implements OnInit {
 	
 	public showNewCandidateStatsDiv:boolean 				= false;
 	public showNewCandidatesDiv:boolean 					= false;
+	
+	/**
+	* Marketplace Stats
+	*/
+	
+	public offeredCandidateViewsTotal:number							= 0;
+	public requestedCandidateViewsTotal:number							= 0;
+	public offeredCandidateViewsTotalDaily:number						= 0;		
+	public requestedCandidateViewsTotalDaily:number						= 0;	
+	public offeredCandidateViewsTotalWeekly:number						= 0;		
+	public requestedCandidateViewsTotalWeekly:number					= 0;	
+	
+	public marketPlaceEventsChartDataOffered:ChartDataSets[] 			= [];
+	public marketPlaceEventsChartDataRequested:ChartDataSets[] 			= [];
+	public marketPlaceEventsChartLabelsOffered:Label[] 					= [];
+	public marketPlaceEventsChartLabelsRequested:Label[] 				= [];
+	
+	public marketPlaceEventsChartDataOfferedDaily:ChartDataSets[] 		= [];
+	public marketPlaceEventsChartLabelsOfferedDaily:Label[] 			= [];
+	public marketPlaceEventsChartDataRequestedDaily:ChartDataSets[] 	= [];
+	public marketPlaceEventsChartLabelsRequestedDaily:Label[] 			= [];
+
+	public marketPlaceEventsChartDataOfferedWeekly:ChartDataSets[] 		= [];
+	public marketPlaceEventsChartLabelsOfferedWeekly:Label[] 			= [];
+	public marketPlaceEventsChartDataRequestedWeekly:ChartDataSets[] 	= [];
+	public marketPlaceEventsChartLabelsRequestedWeekly:Label[] 			= [];
+
+  	public marketPlaceEventsChartOptions = {
+    	responsive: true,
+  	};
+
+  	public marketPlaceEventsChartColors: Color[] 			= [
+    	{
+      		borderColor: 'black',
+      		backgroundColor: 'rgba(0,0,0,0.28)',
+    	},
+  	];
+
+  	public marketPlaceEventsChartLegend 					= true;
+  	public marketPlaceEventsChartPlugins 					= [];
+  	public marketPlaceEventsChartType:ChartType 			= 'bar';	
+	
 		
 	/**
   	* Constructor
@@ -58,6 +101,7 @@ export class StatisticsComponent implements OnInit {
 
 		this.fetchStatus();
 		this.getEmailRequestStats();
+		this.fetchMarketplaceStats();
 		
 		this.showNewCandidateStatsDiv 				= false;
 		this.showNewCandidatesDiv 					= false;
@@ -65,6 +109,140 @@ export class StatisticsComponent implements OnInit {
 	}
 
 	ngOnInit(): void {
+	}
+	
+	/**
+	* Switches between the Daily and Weeklt for Offered Candidates
+	* @oaram: type - which data set to show 
+	*/
+	public switchMarketplaceOfferedCandidatesChartData(type:string):void{
+		
+		switch (type) {
+			case "day":{
+				this.marketPlaceEventsChartDataOffered 		= this.marketPlaceEventsChartDataOfferedDaily;
+				this.marketPlaceEventsChartLabelsOffered 	= this.marketPlaceEventsChartLabelsOfferedDaily;
+				this.offeredCandidateViewsTotal 			= this.offeredCandidateViewsTotalDaily;
+				return;
+			}
+			case "week":{
+				this.marketPlaceEventsChartDataOffered 		= this.marketPlaceEventsChartDataOfferedWeekly;
+				this.marketPlaceEventsChartLabelsOffered 	= this.marketPlaceEventsChartLabelsOfferedWeekly;
+				this.offeredCandidateViewsTotal 			= this.offeredCandidateViewsTotalWeekly;
+				return;
+			}
+		}
+	}
+	
+	/**
+	* Switches between the Daily and Weeklt for Requested Candidates
+	* @oaram: type - which data set to show 
+	*/
+	public switchMarketplaceRequestedCandidatesChartData(type:string):void{
+		
+		switch (type) {
+			case "day":{
+				this.marketPlaceEventsChartDataRequested 	= this.marketPlaceEventsChartDataRequestedDaily;
+				this.marketPlaceEventsChartLabelsRequested 	= this.marketPlaceEventsChartLabelsRequestedDaily;
+				this.requestedCandidateViewsTotal 			= this.requestedCandidateViewsTotalDaily;
+				return;
+			}
+			case "week":{
+				this.marketPlaceEventsChartDataRequested 	= this.marketPlaceEventsChartDataRequestedWeekly;
+				this.marketPlaceEventsChartLabelsRequested 	= this.marketPlaceEventsChartLabelsRequestedWeekly;
+				this.requestedCandidateViewsTotal 			= this.requestedCandidateViewsTotalWeekly;
+				return;
+			}
+		}
+	}
+	
+	public fetchMarketplaceStats():void{
+		
+		this.offeredCandidateViewsTotal							= 0;
+		this.requestedCandidateViewsTotal						= 0;
+		this.offeredCandidateViewsTotalDaily					= 0;		
+		this.requestedCandidateViewsTotalDaily					= 0;	
+		this.offeredCandidateViewsTotalWeekly					= 0;		
+		this.requestedCandidateViewsTotalWeekly					= 0;	
+	
+		this.marketPlaceEventsChartDataOffered 					= [];
+		this.marketPlaceEventsChartDataRequested 				= [];
+		this.marketPlaceEventsChartDataOfferedDaily 			= [];
+		this.marketPlaceEventsChartLabelsOfferedDaily 			= [];
+		this.marketPlaceEventsChartDataRequestedDaily 			= [];
+		this.marketPlaceEventsChartLabelsRequestedDaily 		= [];
+		this.marketPlaceEventsChartLabelsOffered 				= [];
+		this.marketPlaceEventsChartLabelsRequested 				= [];
+		this.marketPlaceEventsChartDataOfferedWeekly 			= [];
+		this.marketPlaceEventsChartLabelsOfferedWeekly 			= [];
+		this.marketPlaceEventsChartDataRequestedWeekly 			= [];
+		this.marketPlaceEventsChartLabelsRequestedWeekly 		= [];
+	
+		this.statisticsService.getMarketPlaceOfferedCandidateViewStats().subscribe(mpStats => {
+		
+        	let viewsByRecruiterDaily:number[] 		= new Array<number>();
+			let viewsByRecruiterWeekly:number[] 	= new Array<number>();
+			let recruiterIds:string[] 				= new Array<string>();			
+    	
+			mpStats.stats.forEach(recruiterStat => {
+				
+				viewsByRecruiterDaily.push(recruiterStat.viewsToday);
+				viewsByRecruiterWeekly.push(recruiterStat.viewsThisWeek);
+				recruiterIds.push(recruiterStat.recruiterId);
+				
+				this.offeredCandidateViewsTotalDaily  = this.offeredCandidateViewsTotalDaily + recruiterStat.viewsToday;
+				this.offeredCandidateViewsTotalWeekly = this.offeredCandidateViewsTotalWeekly + recruiterStat.viewsThisWeek;
+				
+			});
+		
+			this.marketPlaceEventsChartDataOfferedDaily = [{ data: viewsByRecruiterDaily, label: 'Views By Recruiter' },];
+			this.marketPlaceEventsChartLabelsOfferedDaily = recruiterIds;
+			
+			this.marketPlaceEventsChartDataOfferedWeekly = [{ data: viewsByRecruiterWeekly, label: 'Views By Recruiter' },];
+			this.marketPlaceEventsChartLabelsOfferedWeekly = recruiterIds;	
+			
+			this.switchMarketplaceOfferedCandidatesChartData('week');
+			
+					
+		}, 
+		err => {
+			console.log("Error retrieving listings stats" + JSON.stringify(err));			
+		});
+		
+		this.statisticsService.getMarketPlaceRequestedCandidateViewStats().subscribe(mpStats => {
+					
+			let viewsByRecruiterDaily:number[] 		= new Array<number>();
+			let viewsByRecruiterWeekly:number[] 	= new Array<number>();
+			let recruiterIds:string[] 				= new Array<string>();			
+
+			mpStats.stats.forEach(recruiterStat => {
+				
+				viewsByRecruiterDaily.push(recruiterStat.viewsToday);
+				viewsByRecruiterWeekly.push(recruiterStat.viewsThisWeek);
+				recruiterIds.push(recruiterStat.recruiterId);
+				
+				this.requestedCandidateViewsTotalDaily  = this.requestedCandidateViewsTotalDaily + recruiterStat.viewsToday;
+				this.requestedCandidateViewsTotalWeekly = this.requestedCandidateViewsTotalWeekly + recruiterStat.viewsThisWeek;
+				
+			});
+		
+			this.marketPlaceEventsChartDataRequestedDaily = [{ data: viewsByRecruiterDaily, label: 'Views By Recruiter' },];
+			this.marketPlaceEventsChartLabelsRequestedDaily = recruiterIds;
+			
+			this.marketPlaceEventsChartDataRequestedWeekly = [{ data: viewsByRecruiterWeekly, label: 'Views By Recruiter' },];
+			this.marketPlaceEventsChartLabelsRequestedWeekly = recruiterIds;	
+			
+			this.switchMarketplaceRequestedCandidatesChartData('week');
+					
+		}, 
+		err => {
+			console.log("Error retrieving listings stats" + JSON.stringify(err));			
+		});
+		
+	}
+	
+	public refreshData():void{
+		this.fetchStatus();
+		this.fetchMarketplaceStats();
 	}
 	
 	
@@ -183,7 +361,7 @@ export class StatisticsComponent implements OnInit {
 		}
 	}
 	
-		/**
+	/**
 	* Switches between the various datasets available for the chart
 	* @oaram: type - which data set to show 
 	*/
@@ -218,6 +396,7 @@ export class StatisticsComponent implements OnInit {
 				this.showStatsListings=false;
 				this.showStatsEmailRequests=false;
 				this.showNewCandidates=false;
+				this.showMarketplaceStats=false;
 				break;
 			}
 			case "listings":{
@@ -226,6 +405,7 @@ export class StatisticsComponent implements OnInit {
 				this.showStatsListings=true;
 				this.showStatsEmailRequests=false;
 				this.showNewCandidates=false;
+				this.showMarketplaceStats=false;
 				break;
 			}
 			case "availability":{
@@ -234,6 +414,7 @@ export class StatisticsComponent implements OnInit {
 				this.showStatsAvailability=true;
 				this.showStatsEmailRequests=false;
 				this.showNewCandidates=false;
+				this.showMarketplaceStats=false;
 				break;
 			}
 			case "email":{
@@ -242,6 +423,7 @@ export class StatisticsComponent implements OnInit {
 				this.showStatsAvailability=false;
 				this.showStatsEmailRequests=true;
 				this.showNewCandidates=false;
+				this.showMarketplaceStats=false;
 				break;
 			}
 			case "newCandidateStats":{
@@ -250,6 +432,16 @@ export class StatisticsComponent implements OnInit {
 				this.showStatsAvailability=false;
 				this.showStatsEmailRequests=false;
 				this.showNewCandidates=true;
+				this.showMarketplaceStats=false;
+				break;
+			}
+			case "marketplace":{
+				this.showStatsDownloads=false;
+				this.showStatsListings=false;
+				this.showStatsAvailability=false;
+				this.showStatsEmailRequests=false;
+				this.showNewCandidates=false;
+				this.showMarketplaceStats=true;
 				break;
 			}
 		}

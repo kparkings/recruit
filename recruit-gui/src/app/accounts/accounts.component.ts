@@ -499,23 +499,10 @@ export class AccountsComponent implements OnInit {
 	* Update Recruiters subscription
 	*/
 	performAction(subscriptionAction:SubscriptionAction, action:string) {
-			
-			this.activateRecruiterUserId		= ''; 
-			this.activateRecruiterUserPassword	= '';
 	
 			this.recruiterService.performSubscriptionAction(subscriptionAction.userId, subscriptionAction.subscriptionId, action).subscribe(data => {
 			
 			this.fetchRecruiters();
-			
-			/**
-			* IF action == 
-			*/
-			if (subscriptionAction.status === "AWAITING_ACTIVATION" && subscriptionAction.type === "TRIAL_PERIOD") {
-				
-				this.activateRecruiterUserId		= data.userId; 
-				this.activateRecruiterUserPassword	= data.password;
-				this.openModal();
-			}
 			
 		}, 
 		err => {
