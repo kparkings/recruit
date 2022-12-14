@@ -30,4 +30,10 @@ public interface ExternalEventPublisher {
 	*/
 	public void publishCandidateNoLongerAvailableEvent(CandidateNoLongerAvailableEvent event);
 	
+	/**
+	* Publishes an event informing that a new Candidate has been added
+	* @param event - Details of new Candidate
+	*/
+	public void publishCandidateCreatedEvent(CandidateCreatedEvent event);
+	
 }

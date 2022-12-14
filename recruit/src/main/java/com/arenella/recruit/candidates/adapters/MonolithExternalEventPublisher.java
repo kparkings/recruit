@@ -62,4 +62,14 @@ public class MonolithExternalEventPublisher implements ExternalEventPublisher{
 		
 	}
 
+	/**
+	* Refer to ExternalEventPublisher for details 
+	*/
+	@Override
+	public void publishCandidateCreatedEvent(CandidateCreatedEvent event) {
+		
+		//TODO: [KP] When its built pass event to test against Alerts for Matching candidates.
+		
+	}
+
 }

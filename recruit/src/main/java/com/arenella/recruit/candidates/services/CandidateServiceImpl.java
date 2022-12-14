@@ -16,6 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.arenella.recruit.adapters.events.CandidateNoLongerAvailableEvent;
+import com.arenella.recruit.candidates.adapters.CandidateCreatedEvent;
 import com.arenella.recruit.candidates.adapters.ExternalEventPublisher;
 import com.arenella.recruit.candidates.beans.Candidate;
 import com.arenella.recruit.candidates.beans.CandidateFilterOptions;
@@ -63,8 +64,14 @@ public class CandidateServiceImpl implements CandidateService{
 		
 		CandidateEntity entity = CandidateEntity.convertToEntity(candidate);
 		
-		candidateDao.save(entity);
+		long candidateId = candidateDao.save(entity).getCandidateId();
 		
+		this.externalEventPublisher
+			.publishCandidateCreatedEvent(CandidateCreatedEvent
+					.builder()
+						.candidateId(String.valueOf(candidateId))
+						.candidate(candidate)
+					.build());		
 	}
 
 	/**
