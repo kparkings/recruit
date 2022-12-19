@@ -8,6 +8,7 @@ import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
 
+import com.arenella.recruit.candidates.beans.CandidateSearchAlert;
 import com.arenella.recruit.candidates.beans.Language;
 import com.arenella.recruit.candidates.enums.COUNTRY;
 import com.arenella.recruit.candidates.enums.FUNCTION;
@@ -31,6 +32,8 @@ public class CandidateSearchAlertAPIOutboundTest {
 	private static final Language.LEVEL 	FRENCH 			= Language.LEVEL.UNKNOWN;
 	private static final String				SKILL_JAVA	  	= "java";
 	private static final Set<String>		SKILLS 			= Set.of(SKILL_JAVA);
+	private static final String 			RECRUITER_ID 	= "kparkings";
+	
 	
 	/**
 	* Tests construction via the Builder
@@ -69,6 +72,49 @@ public class CandidateSearchAlertAPIOutboundTest {
 		alert.getSkills().stream().filter(s -> s.equals(SKILL_JAVA)).findAny().orElseThrow();
 		alert.getCountries().stream().filter(c -> c == COUNTRY.BELGIUM).findAny().orElseThrow();
 		alert.getFunctions().stream().filter(f -> f == FUNCTION.ARCHITECT).findAny().orElseThrow();
+	}
+	
+	/**
+	* Test conversion from Domain representation to API Outbound
+	* @throws Exception
+	*/
+	@Test
+	public void testConvertFromDomain() throws Exception{
+		
+		CandidateSearchAlert alert = 
+				CandidateSearchAlert
+					.builder()
+						.alertId(ALERT_ID)
+						.alertName(ALERT_NAME)
+						.countries(COUNTRIES)
+						.dutch(DUTCH)
+						.english(ENGLISH)
+						.french(FRENCH)
+						.freelance(FREELANCE)
+						.functions(FUNCTIONS)
+						.perm(PERM)
+						.recruiterId(RECRUITER_ID)
+						.skills(SKILLS)
+						.yearsExperienceGtEq(YEARS_EXP_GTE)
+						.yearsExperienceLtEq(YEARS_EXP_LTE)
+					.build();
+	
+		CandidateSearchAlertAPIOutbound apiOutbound = CandidateSearchAlertAPIOutbound.convertFromDomain(alert);
+		
+		assertEquals(ALERT_ID, 			apiOutbound.getAlertId());
+		assertEquals(ALERT_NAME, 		apiOutbound.getAlertName());
+		assertEquals(DUTCH, 			apiOutbound.getDutch());
+		assertEquals(ENGLISH, 			apiOutbound.getEnglish());
+		assertEquals(FRENCH, 			apiOutbound.getFrench());
+		assertEquals(FREELANCE.get(), 	apiOutbound.getFreelance().get());
+		assertEquals(PERM.get(), 		apiOutbound.getPerm().get());
+		assertEquals(YEARS_EXP_GTE, 	apiOutbound.getYearsExperienceGtEq());
+		assertEquals(YEARS_EXP_LTE, 	apiOutbound.getyearsExperienceLtEq());
+		
+		apiOutbound.getSkills().stream().filter(s -> s.equals(SKILL_JAVA)).findAny().orElseThrow();
+		apiOutbound.getCountries().stream().filter(c -> c == COUNTRY.BELGIUM).findAny().orElseThrow();
+		apiOutbound.getFunctions().stream().filter(f -> f == FUNCTION.ARCHITECT).findAny().orElseThrow();
+		
 	}
 	
 }

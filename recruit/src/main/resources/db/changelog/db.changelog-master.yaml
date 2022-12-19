@@ -1114,3 +1114,131 @@ databaseChangeLog:
                   type: timestamp
                   constraints:
                     nullable: false
+  - changeSet:
+      id: create_candidate_search_alerts
+      author: kparkings
+      changes:
+        - createTable:                    
+            tableName: candidate_search_alert
+            schemaName: candidate
+            columns:
+              - column:
+                  name: id
+                  type: UUID
+                  constraints:
+                    nullable: false                    
+                    primaryKey: true
+              - column:
+                  name: recruiter_id
+                  type: VARCHAR
+                  constraints:
+                    nullable: false
+              - column:
+                  name: alert_name
+                  type: VARCHAR
+                  constraints:
+                    nullable: false
+              - column:
+                  name: freelance
+                  type: VARCHAR
+                  constraints:
+                    nullable: true
+              - column:
+                  name: perm
+                  type: VARCHAR
+                  constraints:
+                    nullable: true
+              - column:
+                  name: years_exp_gte
+                  type: tinyint
+                  constraints:
+                    nullable: true
+              - column:
+                  name: years_exp_lte
+                  type: tinyint
+                  constraints:
+                    nullable: true
+              - column:
+                  name: dutch
+                  type: VARCHAR
+                  constraints:
+                    nullable: true
+              - column:
+                  name: english
+                  type: VARCHAR
+                  constraints:
+                    nullable: true
+              - column:
+                  name: french
+                  type: VARCHAR
+                  constraints:
+                    nullable: true   
+        - createTable:                    
+            tableName: candidate_search_alert_skill
+            schemaName: candidate
+            columns:
+              - column:
+                  name: alert_id
+                  type: UUID
+                  constraints:
+                    nullable: false                    
+                    primaryKey: true
+              - column:
+                  name: skill
+                  type: VARCHAR
+                  constraints:
+                    nullable: false     
+        - createTable:                    
+            tableName: candidate_search_alert_country
+            schemaName: candidate
+            columns:
+              - column:
+                  name: alert_id
+                  type: UUID
+                  constraints:
+                    nullable: false                    
+                    primaryKey: true
+              - column:
+                  name: country
+                  type: VARCHAR
+                  constraints:
+                    nullable: false 
+        - createTable:                    
+            tableName: candidate_search_alert_function
+            schemaName: candidate
+            columns:
+              - column:
+                  name: alert_id
+                  type: UUID
+                  constraints:
+                    nullable: false                    
+                    primaryKey: true
+              - column:
+                  name: function
+                  type: VARCHAR
+                  constraints:
+                    nullable: false       
+        - addForeignKeyConstraint:  
+            constraintName: fk_func_cand_srch_alert
+            baseColumnNames: alert_id
+            baseTableName: candidate_search_alert_function
+            baseTableSchemaName: candidate
+            referencedTableName: candidate_search_alert
+            referencedTableSchemaName: candidate
+            referencedColumnNames: id                              
+        - addForeignKeyConstraint:  
+            constraintName: fk_country_cand_srch_alert
+            baseColumnNames: alert_id
+            baseTableName: candidate_search_alert_country
+            baseTableSchemaName: candidate
+            referencedTableName: candidate_search_alert
+            referencedTableSchemaName: candidate
+            referencedColumnNames: id  
+        - addForeignKeyConstraint:  
+            constraintName: fk_skill_cand_srch_alert
+            baseColumnNames: alert_id
+            baseTableName: candidate_search_alert_skill
+            baseTableSchemaName: candidate
+            referencedTableName: candidate_search_alert
+            referencedTableSchemaName: candidate
+            referencedColumnNames: id         

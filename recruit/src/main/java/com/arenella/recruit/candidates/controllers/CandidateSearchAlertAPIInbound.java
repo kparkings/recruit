@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
+import com.arenella.recruit.candidates.beans.CandidateSearchAlert;
 import com.arenella.recruit.candidates.beans.Language;
 import com.arenella.recruit.candidates.enums.COUNTRY;
 import com.arenella.recruit.candidates.enums.FUNCTION;
@@ -293,6 +294,28 @@ public class CandidateSearchAlertAPIInbound {
 			return new CandidateSearchAlertAPIInbound(this);
 		}
 		
+	}
+	
+	/**
+	* Converts API Inbound representation to domain representation. 
+	* @param inbound
+	* @return
+	*/
+	public static CandidateSearchAlert convertToDomain(CandidateSearchAlertAPIInbound inbound) {
+		return CandidateSearchAlert
+				.builder()
+					.alertName(inbound.getAlertName())
+					.countries(inbound.getCountries())
+					.dutch(inbound.getDutch())
+					.english(inbound.getEnglish())
+					.french(inbound.getFrench())
+					.freelance(inbound.getFreelance())
+					.functions(inbound.getFunctions())
+					.perm(inbound.getPerm())
+					.skills(inbound.getSkills())
+					.yearsExperienceGtEq(inbound.getYearsExperienceGtEq())
+					.yearsExperienceLtEq(inbound.getyearsExperienceLtEq())					
+				.build(); 
 	}
 	
 }
