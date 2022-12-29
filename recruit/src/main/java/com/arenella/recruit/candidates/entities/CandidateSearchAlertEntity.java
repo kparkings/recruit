@@ -36,7 +36,7 @@ public class CandidateSearchAlertEntity {
 	@Column(name="recruiter_id")
 	private String 				recruiterId;
 	
-	@Column(name="altert_name")
+	@Column(name="alert_name")
 	private String 				alertName;
 	
 	@Column(name="freelance")
@@ -71,13 +71,13 @@ public class CandidateSearchAlertEntity {
 	@Enumerated(EnumType.STRING)
 	@ElementCollection(targetClass=COUNTRY.class, fetch=FetchType.EAGER)
 	@CollectionTable(schema="candidate", name="candidate_search_alert_country", joinColumns=@JoinColumn(name="alert_id"))
-	@Column(name="role")
+	@Column(name="country")
 	private Set<COUNTRY> 		countries							= new HashSet<>();
 	
 	@Enumerated(EnumType.STRING)
 	@ElementCollection(targetClass=FUNCTION.class, fetch=FetchType.EAGER)
 	@CollectionTable(schema="candidate", name="candidate_search_alert_function", joinColumns=@JoinColumn(name="alert_id"))
-	@Column(name="role")
+	@Column(name="function")
 	private Set<FUNCTION> 		functions							= new HashSet<>();
 	
 	/**
@@ -154,7 +154,7 @@ public class CandidateSearchAlertEntity {
 	* @return whether to include freelance candidates
 	*/
 	public Optional<Boolean> getFreelance() {
-		return Optional.of(this.freelance);
+		return Optional.ofNullable(this.freelance);
 	}
 	
 	/**
@@ -162,7 +162,7 @@ public class CandidateSearchAlertEntity {
 	* @return whether to include perm candidates
 	*/
 	public Optional<Boolean> getPerm() {
-		return Optional.of(this.perm);
+		return Optional.ofNullable(this.perm);
 	}
 	
 	/**

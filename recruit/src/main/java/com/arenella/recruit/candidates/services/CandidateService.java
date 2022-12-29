@@ -1,6 +1,7 @@
 package com.arenella.recruit.candidates.services;
 
 import java.util.Set;
+import java.util.UUID;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -8,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import com.arenella.recruit.candidates.beans.Candidate;
 import com.arenella.recruit.candidates.beans.CandidateFilterOptions;
 import com.arenella.recruit.candidates.beans.CandidateSearchAccuracyWrapper;
+import com.arenella.recruit.candidates.beans.CandidateSearchAlert;
 import com.arenella.recruit.candidates.beans.PendingCandidate;
 import com.arenella.recruit.candidates.controllers.CandidateController.CANDIDATE_UPDATE_ACTIONS;
 
@@ -79,5 +81,24 @@ public interface CandidateService {
 	* @param canidateId - Id of the Candidate to update
 	*/
 	public void updateCandidatesLastAvailabilityCheck(long candidateId);
+
+	/**
+	* Saves a new Candidate Search Alert
+	* @param alert - Domain representation of an Alert
+	*/
+	public void addSearchAlert(CandidateSearchAlert alert);
+
+	/**
+	* Returns the Alerts for the currently logged in User
+	* @return Alerts
+	*/
+	public Set<CandidateSearchAlert> getAlertsForCurrentUser();
+
+	/**
+	* Deletes SearchAlert providing the Alert belongs to the Authenticated
+	* User
+	* @param id - Unique Id of the SearchAlert
+	*/
+	public void deleteSearchAlert(UUID id);
 	
 }

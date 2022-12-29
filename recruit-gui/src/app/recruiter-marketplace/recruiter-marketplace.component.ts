@@ -696,7 +696,7 @@ export class RecruiterMarketplaceComponent implements OnInit {
 				this.switchTab('showSupply');
 				this.refreshCandidateList();
 			}, err => {
-				console.log(err);
+				
 				if (err.status === 400) {
 											
 					let failedFields:Array<any> = err.error;

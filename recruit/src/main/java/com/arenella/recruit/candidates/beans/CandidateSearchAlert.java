@@ -53,6 +53,24 @@ public class CandidateSearchAlert {
 	}
 	
 	/**
+	* Initializes a new Action 
+	* @param recruiterId - Owner of the Alert
+	*/
+	public void initAsNewAlert(String recruiterId) {
+		
+		if (this.recruiterId != null) {
+			throw new IllegalStateException();
+		}
+		
+		if (this.alertId != null) {
+			throw new IllegalStateException();
+		}
+		
+		this.recruiterId 	= recruiterId;
+		this.alertId 		= UUID.randomUUID();
+	}
+	
+	/**
 	* Returns the unique id of the Alert
 	* @return id of the Alert
 	*/

@@ -3,8 +3,13 @@ import { FormGroup, FormControl }				from '@angular/forms';
 import { CandidateServiceService }				from '../candidate-service.service';
 import { SuggestionsService }					from '../suggestions.service';
 import { Candidate}								from './candidate';
+import { SuggestionParams}						from './suggestion-param-generator';
 import { environment }							from '../../environments/environment';
-import { Clipboard } from '@angular/cdk/clipboard';
+import { Clipboard } 							from '@angular/cdk/clipboard';
+import { NgbModal, NgbModalOptions }			from '@ng-bootstrap/ng-bootstrap';
+import { ViewChild }							from '@angular/core';
+import { CandidateSearchAlert }					from './candidate-search-alert';
+import { CandidateFunction }					from '../candidate-function';
 
 /**
 * Component to suggest suitable Candidates based upon a 
@@ -16,6 +21,12 @@ import { Clipboard } from '@angular/cdk/clipboard';
   styleUrls: ['./suggestions.component.css']
 })
 export class SuggestionsComponent implements OnInit {
+
+	@ViewChild('feedbackBox', { static: false }) private content:any;
+
+	public createAlertForm:FormGroup = new FormGroup({
+		alertName:			new FormControl(''),
+	});
 
 	public suggestions:Array<Candidate>  = new Array<Candidate>();
 
@@ -38,11 +49,15 @@ export class SuggestionsComponent implements OnInit {
 	public minMaxOptions:Array<string> 		= new Array<string>('','1','2','4','8','16','32');
 	public suggestedCandidate:Candidate		= new Candidate();
 	
+	public showSaveAlertBoxFailure:boolean  = false;
+	public showSaveAlertBoxSuccess:boolean  = false;
+	public showSaveAlertBox:boolean 		= false;
+	
 	/**
 	* Constructor
 	* @param candidateService - Services relating to Candidates
 	*/
-	constructor(public candidateService:CandidateServiceService, public suggestionsService:SuggestionsService, private clipboard: Clipboard) { 
+	constructor(public candidateService:CandidateServiceService, public suggestionsService:SuggestionsService, private clipboard: Clipboard, private modalService: NgbModal) { 
 		this.getSuggestions();	
 	}
 
@@ -64,72 +79,17 @@ export class SuggestionsComponent implements OnInit {
 		
 		const maxSuggestions:number 		= 18;
 		
-		let countries:Array<string> 		= new Array<string>();
-		let skills:Array<string> 			= this.skillFilters;
-		let languages:Array<string> 		= new Array<string>();
-		
-		let title:string 					= this.suggestionFilterForm.get('searchPhrase')?.value;
-		let contract:string 				= "";
-		let perm:string 					= "";
-		let minExperience:string 			= this.suggestionFilterForm.get('minYearsExperience')?.value;
-		let maxExperience:string 			= this.suggestionFilterForm.get('maxYearsExperience')?.value;
-		
-		/**
-		* Add any country filters 	
-		*/
-		if (this.suggestionFilterForm.get('nlResults')?.value) {
-			countries.push("NETHERLANDS");
-		}
-		
-		if (this.suggestionFilterForm.get('beResults')?.value) {
-			countries.push("BELGIUM");
-		}
-		
-		if (this.suggestionFilterForm.get('ukResults')?.value) {
-			countries.push("UK");
-		}
-
-		/**
-		* Add any language filters 	
-		*/
-		if (this.suggestionFilterForm.get('dutchLanguage')?.value) {
-			languages.push("DUTCH");
-		}
-		
-		if (this.suggestionFilterForm.get('frenchLanguage')?.value) {
-			languages.push("FRENCH");
-		}
-		
-		if (this.suggestionFilterForm.get('englishLanguage')?.value) {
-			languages.push("ENGLISH");
-		}
-				
-		/**
-		* Ccontract type filters
-		*/
-		if (this.suggestionFilterForm.get('contractType')?.value === 'BOTH'){
-			//perm 		= false;
-			//contract 	= false;
-		}
-		
-		if (this.suggestionFilterForm.get('contractType')?.value === 'CONTRACT'){
-			contract 	= "true";
-		}
-		
-		if (this.suggestionFilterForm.get('contractType')?.value === 'PERM'){
-			perm 		= "true";
-			
-		}
+		let params:SuggestionParams = new SuggestionParams(this.suggestionFilterForm, this.skillFilters, new Array<string>());
 		
 		this.suggestionsService.getSuggestons(	maxSuggestions,
-												title,
-												countries,
-												contract,
-												perm,
-												minExperience,
-												maxExperience,
-												languages,
-												skills,
+												params.getTitle(),
+												params.getCountries(),
+												params.getContract(),
+												params.getPerm(),
+												params.getMinExperience(),
+												params.getMaxExperience(),
+												params.getLanguages(),
+												params.getSkills(),
 											).subscribe(data => {
 												
 												this.suggestions =  new Array<Candidate>();
@@ -139,6 +99,7 @@ export class SuggestionsComponent implements OnInit {
 												});
 												 
 											});
+											
 	}
 	
 	/**
@@ -295,5 +256,81 @@ export class SuggestionsComponent implements OnInit {
 		
 		return 'skill-no-match';
 	}
+	
+	/**
+ 	* Saves the alert
+	*/
+	public saveAlert():void{
+		
+		this.showSaveAlertBox 			= true;
+		this.showSaveAlertBoxSuccess 	= false;
+		this.showSaveAlertBoxFailure 	= false;
+		
+		let params:SuggestionParams 	= new SuggestionParams(this.suggestionFilterForm, this.skillFilters, new Array<string>());
+		let alert:CandidateSearchAlert 	= new CandidateSearchAlert();
+		
+		alert.alertName 			= this.createAlertForm.get(('alertName'))?.value;
+		alert.countries 			= params.getCountries();
+		alert.dutch 				= params.getDutchLevel();
+		alert.english 				= params.getEnglishLevel();
+		alert.freelance 			= params.getContract();
+		alert.french 				= params.getFrenchLevel();
+		alert.perm 					= params.getPerm();
+		alert.skills 				= params.getSkills();
+		alert.yearsExperienceLtEq 	= params.getMinExperience();
+		alert.yearsExperienceGtEq 	= params.getMaxExperience();
+		
+		this.candidateService.createCandidateSearchAlert(alert).subscribe(data => {
+			
+			this.showSaveAlertBox 			= false;
+			this.showSaveAlertBoxSuccess 	= true;
+			this.showSaveAlertBoxFailure 	= false;
+			
+			this.createAlertForm = new FormGroup({
+				alertName:			new FormControl(''),
+			});
+			
+		}, err => {
+			this.showSaveAlertBox 		= false;
+		this.showSaveAlertBoxSuccess 	= false;
+		this.showSaveAlertBoxFailure 	= true;
+		});
+		
+	}
+	
+	/**
+	* Displays dialog to create an alert for the current search critera
+	*/
+	public showCreateAlertDialog():void{
+		
+		this.showSaveAlertBox 			= true;
+		this.showSaveAlertBoxSuccess 	= false;
+		this.showSaveAlertBoxFailure 	= false;
+		
+		this.open('feedbackBox', '', true);
+	}
+
+	/**
+	*  Closes the confirm popup
+	*/
+	public closeModal(): void {
+		
+		this.showSaveAlertBox 			= false;
+		this.showSaveAlertBoxSuccess 	= false;
+		this.showSaveAlertBoxFailure 	= false;
+		
+		this.modalService.dismissAll();
+	}
+	
+	public open(content:any, msg:string, success:boolean):void {
+		
+	
+	   let options: NgbModalOptions = {
+	    	 centered: true
+	   };
+
+		this.modalService.open(this.content, options);
+
+  	}
 
 }

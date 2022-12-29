@@ -6,6 +6,8 @@ import { NgbModal}								from '@ng-bootstrap/ng-bootstrap';
 import { FormGroup, FormControl }				from '@angular/forms';
 import { environment }							from '../../environments/environment';
 import { Router}								from '@angular/router';
+import { SuggestionParams}						from '../suggestions/suggestion-param-generator';
+import { CandidateSearchAlert }					from '../suggestions/candidate-search-alert';
 
 @Component({
   selector: 'app-view-candidates',
@@ -18,7 +20,15 @@ export class ViewCandidatesComponent implements OnInit {
   	public candidates:					Array<Candidate>			= new Array<Candidate>();
   	public yearsExperienceOptions:		Array<number>				= new Array<number>();
 	public selectedCandidateSkills:		string						= "";
+	
+	public showSaveAlertBoxFailure:		boolean  					= false;
+	public showSaveAlertBoxSuccess:		boolean  					= false;
+	public showSaveAlertBox:			boolean 					= false;
 
+	public createAlertForm:FormGroup = new FormGroup({
+		alertName:			new FormControl(''),
+	});
+	
   	/**
   	* Filters
   	*/
@@ -406,12 +416,7 @@ export class ViewCandidatesComponent implements OnInit {
       
 	}
 
-
-	/**
-	* Creates a query param string with the filter options to apply to the candidate
-	* search
-	*/
-	private getCountryFilterParamString(): string{
+	private getSelectedCountry():Array<string>{
 
 		const countries: Array<string> = new Array<string>();
 
@@ -427,6 +432,17 @@ export class ViewCandidatesComponent implements OnInit {
       		countries.push('UK');
     	}
 
+    	return countries;
+  	}
+
+	/**
+	* Creates a query param string with the filter options to apply to the candidate
+	* search
+	*/
+	private getCountryFilterParamString(): string{
+
+		const countries: Array<string> = this.getSelectedCountry();
+
     	if (countries.length === 0) {
       		return '';
     	}
@@ -434,12 +450,8 @@ export class ViewCandidatesComponent implements OnInit {
     	return '&countries=' + countries.toString();
   	}
 
-	/**
-  	* Creates a query param string with the filter options to apply to the candidate
-  	* search
-  	*/
-	private getFunctionTypeFilterParamString(): string{
-
+	private getSelectedFunctionTypes():Array<string>{
+		
 		const functionTypes: Array<string> = new Array<string>();
 
 		Object.keys(this.functionTypeFilterForm.controls).forEach(key => {
@@ -451,6 +463,17 @@ export class ViewCandidatesComponent implements OnInit {
 			} 
      
 		});
+		
+		return functionTypes;
+	}
+
+	/**
+  	* Creates a query param string with the filter options to apply to the candidate
+  	* search
+  	*/
+	private getFunctionTypeFilterParamString(): string{
+
+		const functionTypes: Array<string> = this.getSelectedFunctionTypes();
 
 		if (functionTypes.length === 0) {
 			return '';
@@ -579,7 +602,12 @@ export class ViewCandidatesComponent implements OnInit {
   	*  Closes the filter popup
   	*/
   	public closeModal(): void {
-    	this.modalService.dismissAll();
+	
+		this.showSaveAlertBox 			= false;
+		this.showSaveAlertBoxSuccess 	= false;
+		this.showSaveAlertBoxFailure 	= false;
+    	
+this.modalService.dismissAll();
   	}
 
   /**
@@ -875,4 +903,86 @@ export class ViewCandidatesComponent implements OnInit {
 		this.selectedCandidate.flaggedAsUnavailable = true;
 	}
 	
+		/**
+	* Displays dialog to create an alert for the current search critera
+	*/
+	public showCreateAlertDialog(content: any):void{
+		
+		this.showSaveAlertBox 			= true;
+		this.showSaveAlertBoxSuccess 	= false;
+		this.showSaveAlertBoxFailure 	= false;
+		
+		this.modalService.open(content, { centered: true });
+	}
+	
+	/**
+ 	* Saves the alert
+	*/
+	public saveAlert():void{
+		
+		this.showSaveAlertBox 			= true;
+		this.showSaveAlertBoxSuccess 	= false;
+		this.showSaveAlertBoxFailure 	= false;
+		
+		//START
+		
+		let isFreelance:boolean = this.freelanceFilterForm.get('include')?.value == 'true';
+		let isPerm:boolean = this.permFilterForm.get('include')?.value == 'true';
+		let contractType:string = 'BOTH';
+		
+		
+		if (!isFreelance && isPerm) {
+			contractType="PERM";
+		}
+		
+		if (isFreelance && !isPerm) {
+			contractType="CONTRACT";
+		}
+		
+		let suggestionFilterForm:FormGroup 	= new FormGroup({
+			searchPhrase:			new FormControl(''),
+			nlResults: 				new FormControl(this.countryFilterForm.get('NETHERLANDS')?.value),
+			beResults: 				new FormControl(this.countryFilterForm.get('BELGIUM')?.value),
+			ukResults: 				new FormControl(this.countryFilterForm.get('UK')?.value),
+			contractType: 			new FormControl(contractType),
+			dutchLanguage: 			new FormControl(this.dutchFilterForm.get("level")),
+			englishLanguage: 		new FormControl(this.englishFilterForm.get("level")),
+			frenchLanguage:			new FormControl(this.frenchFilterForm.get("level")),
+			minYearsExperience: 	new FormControl(this.yearsExperienceFilterForm.get('yearsExperienceGtEq')?.value),
+			maxYearsExperience: 	new FormControl(this.yearsExperienceFilterForm.get('yearsExperienceLeEq')?.value),
+		});
+		
+		let params:SuggestionParams 	= new SuggestionParams(suggestionFilterForm, this.skillFilterSelections, this.getSelectedFunctionTypes());
+		let alert:CandidateSearchAlert 	= new CandidateSearchAlert();
+		
+		alert.alertName 			= this.createAlertForm.get(('alertName'))?.value;
+		alert.countries 			= params.getCountries();
+		alert.dutch 				= params.getDutchLevel();
+		alert.english 				= params.getEnglishLevel();
+		alert.freelance 			= params.getContract();
+		alert.french 				= params.getFrenchLevel();
+		alert.perm 					= params.getPerm();
+		alert.skills 				= params.getSkills();
+		alert.yearsExperienceLtEq 	= params.getMinExperience();
+		alert.yearsExperienceGtEq 	= params.getMaxExperience();
+		alert.functions				= params.getFunctionTYpes();
+		
+		this.candidateService.createCandidateSearchAlert(alert).subscribe(data => {
+			
+			this.createAlertForm = new FormGroup({
+				alertName:			new FormControl(''),
+			});
+			
+			this.showSaveAlertBox 			= false;
+			this.showSaveAlertBoxSuccess 	= true;
+			this.showSaveAlertBoxFailure 	= false;
+			
+		}, err => {
+			this.showSaveAlertBox 		= false;
+		this.showSaveAlertBoxSuccess 	= false;
+		this.showSaveAlertBoxFailure 	= true;
+		});
+		
+	}
+		
 }

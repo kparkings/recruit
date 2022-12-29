@@ -20,6 +20,7 @@ import org.springframework.security.core.Authentication;
 
 import com.arenella.recruit.candidates.beans.Candidate;
 import com.arenella.recruit.candidates.beans.CandidateSearchAccuracyWrapper;
+import com.arenella.recruit.candidates.beans.CandidateSearchAlert;
 import com.arenella.recruit.candidates.beans.PendingCandidate;
 import com.arenella.recruit.candidates.controllers.CandidateController.CANDIDATE_UPDATE_ACTIONS;
 import com.arenella.recruit.candidates.services.CandidateDownloadService;
@@ -197,6 +198,39 @@ public class CandidateControllerTest {
 		assertEquals(response.getStatusCode(), HttpStatus.OK);
 		
 		response.getBody().stream().filter(pc -> pc.getPendingCandidateId().toString().equals(c1Id)).findAny().orElseThrow();
+		
+	}
+	
+	/**
+	* Tests fetch of Alerts for Recruiter
+	* @throws Exception
+	*/
+	@Test
+	public void testGetRecruiterAlerts() throws Exception{
+		
+		Mockito.when(this.mockCandidateService.getAlertsForCurrentUser()).thenReturn(Set.of(
+			CandidateSearchAlert.builder().build(),
+			CandidateSearchAlert.builder().build(),
+			CandidateSearchAlert.builder().build()
+		));
+		
+		ResponseEntity<Set<CandidateSearchAlertAPIOutbound>> response = this.controller.getRecruiterAlerts();
+		
+		assertEquals(HttpStatus.OK, response.getStatusCode());
+		assertEquals(3, response.getBody().size());
+		
+	}
+	
+	/**
+	* Test deletion of SearchAlert
+	* @throws Exception
+	*/
+	@Test
+	public void testDeleteSearchAlert() throws Exception{
+		
+		ResponseEntity<Void> response = this.controller.deleteSearchAlert(UUID.randomUUID());
+		
+		assertEquals(HttpStatus.OK, response.getStatusCode());
 		
 	}
 	

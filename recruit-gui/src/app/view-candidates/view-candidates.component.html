@@ -5,6 +5,7 @@
 			<button class="btn btn-secondary btnRight" (click)="resetFilters()" download>Reset</button>
 			<a class="btn btn-secondary btnRight" href="{{getCandidateDownloadUrl()}}" download>Download</a>
 			<button *ngIf="isAuthenticatedAsAdmin()" class="btn btn-secondary btnRight" (click)="openPublicityDialog(publicityModal)" download>Copy as Message</button>
+			<button class="btn btn-secondary btnRight" (click)="showCreateAlertDialog(feedbackBox)" download>Create Alert</button>
 		</div>
 
 		<!-- Pagination -->
@@ -494,6 +495,31 @@
 			</div>
 		</div> 
 	</ng-template>
+	
+	<ng-template #feedbackBox let-modal>
+	<div class="modal-header">
+		<h4 class="modal-title">Create Email Alert</h4>
+ 		<div class="filter-close-box" (click)="closeModal()">X</div>
+	</div>
+	<div class="feedbackBox;">
+		<form [formGroup]="createAlertForm">
+			<div class="modal-body" *ngIf="showSaveAlertBox">
+				<p>Each time a Candidate matching the current filters is uploaded you will
+				receive an alert by email</p>
+				Alert Name: <input type="text" formControlName="alertName">
+				<br/><br/>
+				<button class="btn btn-secondary" (click)="saveAlert()" download>Save</button>
+			</div>       
+			<div class="modal-body" *ngIf="showSaveAlertBoxSuccess">
+				<p>Your Candidate Search Alert was created successfully. You will now receive alerts when matching candidates are uploaded.</p>
+				<p>You can manage alerts in the 'Manage Search Alerts' screen.</p>
+			</div>
+			<div class="modal-body" *ngIf="showSaveAlertBoxFailure">
+				<p>Unfortunately it was not possible to create your Candidate Search Alert at this time.</p>
+			</div>
+		</form>
+	</div>
+</ng-template>
 	
 
 </div>

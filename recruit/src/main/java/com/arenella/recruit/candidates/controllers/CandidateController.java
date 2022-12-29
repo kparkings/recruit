@@ -3,6 +3,7 @@ package com.arenella.recruit.candidates.controllers;
 import java.io.ByteArrayOutputStream;
 import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -15,7 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -71,6 +72,7 @@ public class CandidateController {
 	* Endpoint marks a Candidate as no possibly being no longer available. 
 	* @return ResponseEntity
 	*/
+	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('RECRUITER')")
 	@PutMapping(path="candidate/{candidateId}/flaggedAsUnavailable/{flaggedAsUnavailable}/")
 	public ResponseEntity<Void> updateCandidateflaggedAsUnavailable(@RequestBody String fakeBody, @PathVariable("candidateId") long candidateId, @PathVariable("flaggedAsUnavailable") boolean flaggedAsUnavailable){
 		
@@ -111,6 +113,7 @@ public class CandidateController {
 	* @param useSuggestions			- If false returns pages results. If true returns x best match suggestions
 	* @return Page of results
 	*/
+	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('RECRUITER')")
 	@GetMapping(path="candidate")
 	public Page<CandidateAPIOutbound> getCandidate( @RequestParam("orderAttribute") 	String 				orderAttribute,
 													@RequestParam("order") 				RESULT_ORDER		order,
@@ -180,6 +183,7 @@ public class CandidateController {
 	* @param skills					- Optional Skills to filter on
 	* @return Xls download of candidates
 	*/
+	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('RECRUITER')")
 	@GetMapping(path="candidate/download")
 	public ResponseEntity<ByteArrayResource> downloadCandidates(@RequestParam("orderAttribute") 	String 				orderAttribute,
 																@RequestParam("order") 				RESULT_ORDER		order,
@@ -247,6 +251,45 @@ public class CandidateController {
 		LinkedHashSet<PendingCandidateAPIOutbound> candidates = candidateService.getPendingCandidates().stream().map(p -> PendingCandidateAPIOutbound.convertFromPendingCandidate(p)).collect(Collectors.toCollection(LinkedHashSet::new));
 		
 		return new ResponseEntity<>(candidates, HttpStatus.OK);
+	}
+	
+	/**
+	* Adds a new Candidate Search Alert
+	* @param alert
+	* @return
+	*/
+	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('RECRUITER')")
+	@PostMapping(path="candidate/alert")
+	public ResponseEntity<Void> addSearchAlert(@RequestBody CandidateSearchAlertAPIInbound alert){
+		this.candidateService.addSearchAlert(CandidateSearchAlertAPIInbound.convertToDomain(alert));
+		return ResponseEntity.ok().build();
+	}
+	
+	/**
+	* Deletes a Candidate Search Alert
+	* @param id
+	* @return
+	*/
+	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('RECRUITER')")
+	@DeleteMapping(path="candidate/alert/{id}")
+	public ResponseEntity<Void> deleteSearchAlert(@PathVariable UUID id){
+		this.candidateService.deleteSearchAlert(id);
+		return ResponseEntity.ok().build();
+	}
+	
+	/**
+	* Returns Alerts for currently logged in Recruiter
+	* @return Alerts for Recruiter
+	*/
+	@PreAuthorize("hasRole('RECRUITER')")
+	@GetMapping(path="candidate/alert")
+	public ResponseEntity<Set<CandidateSearchAlertAPIOutbound>> getRecruiterAlerts(){
+		return ResponseEntity.ok(candidateService
+				.getAlertsForCurrentUser()
+				.stream()
+				.map(a -> CandidateSearchAlertAPIOutbound.convertFromDomain(a))
+				.collect(Collectors.toCollection(LinkedHashSet::new))
+				);
 	}
 	
 }

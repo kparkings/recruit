@@ -3,7 +3,9 @@ package com.arenella.recruit.candidates.services;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
+import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -13,6 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.arenella.recruit.adapters.events.CandidateNoLongerAvailableEvent;
@@ -21,6 +24,7 @@ import com.arenella.recruit.candidates.adapters.ExternalEventPublisher;
 import com.arenella.recruit.candidates.beans.Candidate;
 import com.arenella.recruit.candidates.beans.CandidateFilterOptions;
 import com.arenella.recruit.candidates.beans.CandidateSearchAccuracyWrapper;
+import com.arenella.recruit.candidates.beans.CandidateSearchAlert;
 import com.arenella.recruit.candidates.beans.PendingCandidate;
 import com.arenella.recruit.candidates.controllers.CandidateController.CANDIDATE_UPDATE_ACTIONS;
 import com.arenella.recruit.candidates.dao.CandidateDao;
@@ -30,6 +34,7 @@ import com.arenella.recruit.candidates.entities.PendingCandidateEntity;
 import com.arenella.recruit.candidates.utils.CandidateSuggestionUtil;
 import com.arenella.recruit.candidates.utils.CandidateSuggestionUtil.suggestion_accuracy;
 import com.arenella.recruit.candidates.utils.SkillsSynonymsUtil;
+import com.arenella.recruit.candidates.dao.CandidateSearchAlertDao;
 
 /**
 * Provides services related to Candidates
@@ -55,6 +60,9 @@ public class CandidateServiceImpl implements CandidateService{
 	
 	@Autowired
 	private SkillsSynonymsUtil			skillsSynonymsUtil;
+	
+	@Autowired
+	private CandidateSearchAlertDao		skillAlertDao;
 	
 	/**
 	* Refer to the CandidateService Interface for Details
@@ -290,6 +298,52 @@ public class CandidateServiceImpl implements CandidateService{
 		
 		this.candidateDao.save(candidate);
 		
+	}
+
+	/**
+	* Refer to the CandidateService for details 
+	*/
+	@Override
+	public void addSearchAlert(CandidateSearchAlert alert) {
+		
+		alert.initAsNewAlert(this.getAuthenticatedRecruiterId());
+		
+		this.skillAlertDao.saveAlert(alert);
+		
+	}
+	
+	/**
+	* Refer to the CandidateService for details 
+	*/
+	@Override
+	public void deleteSearchAlert(UUID id) {
+		
+		Optional<CandidateSearchAlert> alertOpt = this.skillAlertDao.getchAlertById(id);
+		
+		CandidateSearchAlert alert = alertOpt.orElseThrow(() -> new IllegalArgumentException("Unknown SearchAlert Id " + id));
+		
+		if (!this.getAuthenticatedRecruiterId().equals(alert.getRecruiterId())) {
+			throw new IllegalArgumentException("Unable to delete SearchAlert");
+		}
+		
+		this.skillAlertDao.deleteById(id);
+		
+	}
+
+	/**
+	* Refer to the CandidateService for details 
+	*/
+	@Override
+	public Set<CandidateSearchAlert> getAlertsForCurrentUser() {
+		return this.skillAlertDao.fetchAlertsByRecruiterId(getAuthenticatedRecruiterId());
+	}
+	
+	/**
+	* Retrieves the Id of the current Recruiter
+	* @return id from security context
+	*/
+	private String getAuthenticatedRecruiterId() {
+		return SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
 	}
 	
 }

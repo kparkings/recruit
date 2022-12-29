@@ -1,0 +1,33 @@
+<div class=".container m-2">
+
+<div class="container-div">
+	
+	<div *ngIf="!hasAlerts()">
+		<h1>Search Alerts</h1>
+		<p>You currently have no Alert's. Alerts allow you to receive a notification via email whenever a Candidate is added to the system that meets one of your pre-defined searches</p>
+		<p>To add a Search Alert perform a Search in either the Candidates or Suggestions screen and click on 'Create Alert'</p>
+	</div>
+	
+	<div *ngIf="hasAlerts()">
+		<table class="table alerts-table">
+			<thead>
+				<tr>
+					<th class="bg-tab-hdr">Alert Name</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr *ngFor="let alert of alerts">
+					<td class="table-bdy-td">
+						{{alert.alertName}}
+						<div style="float:right;">
+							<button class="btn btn-secondary small-action-btn" *ngIf="alertToDeleteId != alert"  (click)="deleteAlert(alert)">Delete</button>
+							<button class="btn btn-secondary small-action-btn small-action-btn-confirm-del" *ngIf="alertToDeleteId === alert" (click)="confirmDeleteAlert()">Confirm</button>
+							<button class="btn btn-secondary small-action-btn" *ngIf="alertToDeleteId === alert" (click)="cancelDeleteAlert()">Cancel</button>
+						</div>
+					<td>						
+				</tr>
+			</tbody>	
+		</table>
+	</div>
+
+</div>

@@ -8,6 +8,8 @@ import { NewPendingCandidate }                      from './create-candidate/new
 import { Language}                                	from './new-candidate/language';
 import { CandidateFunction }                      	from './candidate-function';
 import { environment }								from './../environments/environment';
+import { SearchAlert }		 	                    from './recruiter-alerts/search-alert';
+import { CandidateSearchAlert }                     from './suggestions/candidate-search-alert';
 
 /**
 * Services for new Candidates
@@ -240,4 +242,39 @@ export class CandidateServiceService {
 		
 	}
 	
+	/**
+	* Sends a request to mark the Candidate as having been checked and found to still be 
+	* available
+	*/
+	public createCandidateSearchAlert(alert:CandidateSearchAlert): Observable<any> {
+		
+		const backendUrl:string = environment.backendUrl +'candidate/alert';
+	
+		return this.httpClient.post<any>(backendUrl, JSON.stringify(alert), this.httpOptions);
+		
+	}
+	
+	/**
+	* Sends a request to mark the Candidate as having been checked and found to still be 
+	* available
+	*/
+	public deleteCandidateSearchAlert(alert:SearchAlert): Observable<any> {
+		
+		const backendUrl:string = environment.backendUrl +'candidate/alert/' + alert.alertId;
+	
+		return this.httpClient.delete<any>(backendUrl, this.httpOptions);
+		
+	}
+
+	/**
+	* Returns Alerts for authenticated Recruiter
+	*/
+	public fetchCandidateSearchAlerts(): Observable<Array<SearchAlert>>{
+		
+		const backendUrl:string = environment.backendUrl +'candidate/alert';
+  
+    	return this.httpClient.get<any>(backendUrl, this.httpOptions);
+
+	}
+
 }

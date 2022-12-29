@@ -1182,7 +1182,6 @@ databaseChangeLog:
                   type: UUID
                   constraints:
                     nullable: false                    
-                    primaryKey: true
               - column:
                   name: skill
                   type: VARCHAR
@@ -1196,8 +1195,7 @@ databaseChangeLog:
                   name: alert_id
                   type: UUID
                   constraints:
-                    nullable: false                    
-                    primaryKey: true
+                    nullable: false 
               - column:
                   name: country
                   type: VARCHAR
@@ -1211,13 +1209,27 @@ databaseChangeLog:
                   name: alert_id
                   type: UUID
                   constraints:
-                    nullable: false                    
-                    primaryKey: true
+                    nullable: false
               - column:
                   name: function
                   type: VARCHAR
                   constraints:
-                    nullable: false       
+                    nullable: false     
+        - addPrimaryKey:  
+            columnNames:  alert_id, skill  
+            constraintName:  pk_candidate_alert_skill  
+            tableName:  candidate_search_alert_skill  
+            schemaName: candidate
+        - addPrimaryKey:  
+            columnNames:  alert_id, country  
+            constraintName:  pk_candidate_alert_country  
+            tableName:  candidate_search_alert_country  
+            schemaName: candidate  
+        - addPrimaryKey:  
+            columnNames:  alert_id, function  
+            constraintName:  pk_candidate_alert_function  
+            tableName:  candidate_search_alert_function  
+            schemaName: candidate
         - addForeignKeyConstraint:  
             constraintName: fk_func_cand_srch_alert
             baseColumnNames: alert_id

@@ -1,6 +1,9 @@
 package com.arenella.recruit.candidates.beans;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Optional;
 import java.util.Set;
@@ -71,6 +74,31 @@ public class CandidateSearchAlertTest {
 		alert.getSkills().stream().filter(s -> s.equals(SKILL_JAVA)).findAny().orElseThrow();
 		alert.getCountries().stream().filter(c -> c == COUNTRY.BELGIUM).findAny().orElseThrow();
 		alert.getFunctions().stream().filter(f -> f == FUNCTION.ARCHITECT).findAny().orElseThrow();
+	}
+	
+	/**
+	* Tests initialization of new Alert
+	* @throws Exception
+	*/
+	@Test
+	public void testInitAsNewAlert() throws Exception{
+		
+		CandidateSearchAlert alert = 
+				CandidateSearchAlert
+					.builder().build();
+		
+		assertNull(alert.getAlertId());
+		assertNull(alert.getRecruiterId());
+		
+		alert.initAsNewAlert(RECRUITER_ID);
+		
+		assertNotNull(alert.getAlertId());
+		assertEquals(RECRUITER_ID, alert.getRecruiterId());
+		
+		assertThrows(IllegalStateException.class, () -> {
+			alert.initAsNewAlert(RECRUITER_ID);
+		});
+		
 	}
 	
 }

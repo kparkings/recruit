@@ -2,6 +2,8 @@ package com.arenella.recruit.candidates.adapters;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
@@ -10,6 +12,7 @@ import java.util.Set;
 import java.util.UUID;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -20,12 +23,17 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import com.arenella.recruit.candidates.beans.Candidate;
 import com.arenella.recruit.candidates.beans.CandidateFilterOptions;
+import com.arenella.recruit.candidates.beans.CandidateSearchAlert;
 import com.arenella.recruit.candidates.beans.PendingCandidate;
 import com.arenella.recruit.candidates.controllers.CandidateController.CANDIDATE_UPDATE_ACTIONS;
 import com.arenella.recruit.candidates.dao.CandidateDao;
+import com.arenella.recruit.candidates.dao.CandidateSearchAlertDao;
 import com.arenella.recruit.candidates.dao.PendingCandidateDao;
 import com.arenella.recruit.candidates.entities.CandidateEntity;
 import com.arenella.recruit.candidates.entities.PendingCandidateEntity;
@@ -51,8 +59,23 @@ public class CandidateServiceImplTest {
 	@Mock
 	private CandidateStatisticsService 	mockStatisticsService;
 	
+	@Mock
+	private CandidateSearchAlertDao		mockSkillAlertDao;
+	
+	@Mock
+	private SecurityContext				mockSecurityContext;
+	
+	@Mock
+	private Authentication				mockAuthentication;
+	
 	@InjectMocks
 	private CandidateServiceImpl 		service 					= new CandidateServiceImpl();
+	
+	@BeforeEach
+	public void init() throws Exception{
+		SecurityContextHolder.setContext(mockSecurityContext);
+		
+	}
 	
 	/**
 	* Tests Exception is thrown if attempt is made to 
@@ -290,6 +313,113 @@ public class CandidateServiceImplTest {
 		this.service.persistPendingCandidate(pendingCandidate);
 		
 		Mockito.verify(mockPendingCandidateDao).save(Mockito.any(PendingCandidateEntity.class));
+		
+	}
+	
+	/**
+	* Tests persisting of Alert
+	* @throws Exception
+	*/
+	@Test
+	public void testAddSearchAlert() throws Exception{
+		
+		Mockito.when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
+		
+		Mockito.when(mockAuthentication.getPrincipal()).thenReturn("reruiter1");
+
+		CandidateSearchAlert alert = CandidateSearchAlert.builder().build();
+		
+		this.service.addSearchAlert(alert);
+		
+		assertNotNull(alert.getAlertId());
+		
+		Mockito.verify(this.mockSkillAlertDao).saveAlert(alert);
+		
+	}
+	
+	/**
+	* Tests retrieval of Alerts for current Recruiter
+	* @throws Exception
+	*/
+	@Test
+	public void testGetAlertsForCurrentUser() throws Exception{
+		
+		final String recruiterId = "reruiter1";
+		
+		Mockito.when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
+		
+		Mockito.when(mockAuthentication.getPrincipal()).thenReturn(recruiterId);
+		
+		Mockito.when(this.mockSkillAlertDao
+				.fetchAlertsByRecruiterId(Mockito.anyString()))
+				.thenReturn(Set.of(CandidateSearchAlert.builder().build(),
+						CandidateSearchAlert.builder().build()));
+		
+		Set<CandidateSearchAlert> alerts = this.service.getAlertsForCurrentUser();
+		
+		assertEquals(2, alerts.size());
+		
+		Mockito.verify(this.mockSkillAlertDao).fetchAlertsByRecruiterId(recruiterId);
+		
+	}
+	
+	/**
+	* Tests attempt made to delete unknown Alert
+	* @throws Exception
+	*/
+	@Test
+	public void testDeleteCandidateSearchAlert_unknownId() throws Exception{
+		
+		UUID id = UUID.randomUUID();
+		
+		Mockito.when(this.mockSkillAlertDao.getchAlertById(id)).thenReturn(Optional.empty());
+		
+		assertThrows(IllegalArgumentException.class, () -> {
+			this.service.deleteSearchAlert(id);
+		});
+		
+	}
+	
+	/**
+	* Tests if User is owner of Alert the Alert is Deleted
+	* @throws Exception
+	*/
+	@Test
+	public void testDeleteCandidateSearchAlert_owner() throws Exception{
+		
+		Mockito.when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
+		
+		Mockito.when(mockAuthentication.getPrincipal()).thenReturn("reruiter1");
+		
+		UUID id = UUID.randomUUID();
+		
+		Mockito.when(this.mockSkillAlertDao.getchAlertById(id)).thenReturn(Optional.of(CandidateSearchAlert.builder().recruiterId("reruiter1").build()));
+		
+		this.service.deleteSearchAlert(id);
+		
+		Mockito.verify(this.mockSkillAlertDao).deleteById(id);
+		
+	}
+	
+	/**
+	* Tests if User is not the owner of Alert the Alert is not Deleted
+	* @throws Exception
+	*/
+	@Test
+	public void testDeleteCandidateSearchAlert_isNotOwner() throws Exception{
+		
+		Mockito.when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
+		
+		Mockito.when(mockAuthentication.getPrincipal()).thenReturn("reruiter1");
+		
+		UUID id = UUID.randomUUID();
+		
+		Mockito.when(this.mockSkillAlertDao.getchAlertById(id)).thenReturn(Optional.of(CandidateSearchAlert.builder().recruiterId("r1").build()));
+		
+		assertThrows(IllegalArgumentException.class, () -> {
+			this.service.deleteSearchAlert(id);
+			
+		});
 		
 	}
 	
