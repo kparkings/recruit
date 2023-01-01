@@ -1253,4 +1253,43 @@ databaseChangeLog:
             baseTableSchemaName: candidate
             referencedTableName: candidate_search_alert
             referencedTableSchemaName: candidate
-            referencedColumnNames: id         
+            referencedColumnNames: id      
+  - changeSet:
+      id: candidate_alert_match
+      author: kparkings
+      changes:
+        - createTable:
+            tableName: candidate_search_alert_match
+            schemaName: candidate
+            columns:
+              - column:
+                  name: id
+                  type: UUID
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: recruiter_id
+                  type: varchar
+                  constraints:
+                    nullable: false
+              - column:
+                  name: candidate_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: alert_name
+                  type: varchar
+                  constraints:
+                    nullable: false
+              - column:
+                  name: role_sought
+                  type: varchar
+                  constraints:
+                    nullable: false   
+              - column:
+                  name: accuracy
+                  type: varchar
+                  constraints:
+                    nullable: false 

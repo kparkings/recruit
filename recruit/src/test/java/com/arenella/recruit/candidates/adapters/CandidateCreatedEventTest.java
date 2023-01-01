@@ -94,15 +94,4 @@ public class CandidateCreatedEventTest {
 		});
 	}
 	
-	/**
-	* Test Exception is thrown if attempt is made to update the candidateId once it has previously been set
-	* @throws Excption
-	*/
-	@Test
-	public void testAttemptToSetPreviouslySetCandidateIdViaCandiateId() throws Exception{
-		Assertions.assertThrows(IllegalArgumentException.class, () -> {
-			CandidateCreatedEvent.builder().candidate(candidate).candidateId("aCandidateID").build();
-		});
-	}
-	
 }

@@ -4,6 +4,7 @@ import java.util.Set;
 import java.util.UUID;
 
 import com.arenella.recruit.adapters.events.CandidateNoLongerAvailableEvent;
+import com.arenella.recruit.candidates.adapters.CandidateCreatedEvent;
 
 /**
 * Defines functionality for listening to Events from external Services
@@ -30,5 +31,11 @@ public interface ExternalEventListener {
 	* @param event - Event to listen for
 	*/
 	public void listenForCandidateNoLongerAvailableEvent(CandidateNoLongerAvailableEvent event);
+
+	/**
+	* Listens for an event informing that a Candidate has been created
+	* @param event - Event to listen for
+	*/
+	void listenForCandidateCreatedEvent(CandidateCreatedEvent event);
 	
 }

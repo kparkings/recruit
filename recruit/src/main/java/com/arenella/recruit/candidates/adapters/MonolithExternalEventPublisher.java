@@ -26,7 +26,7 @@ import com.arenella.recruit.curriculum.adapters.ExternalEventListener;
 public class MonolithExternalEventPublisher implements ExternalEventPublisher{
 
 	@Autowired
-	private ExternalEventListener curriculumEventListener;
+	private ExternalEventListener 	eventListener;
 	
 	/**
 	* Refer to ExternalEventPublisher for details 
@@ -43,14 +43,14 @@ public class MonolithExternalEventPublisher implements ExternalEventPublisher{
 			return;
 		}
 		
-		curriculumEventListener.listenForSearchedSkillsEvent(skills);
+		eventListener.listenForSearchedSkillsEvent(skills);
 	}
 	
 	/**
 	* Refer to ExternalEventPublisher for details 
 	*/
 	public void publishPendingCurriculumDeletedEvent(UUID pendingCurriculumId) {
-		curriculumEventListener.listenForPendingCurriculumDeletedEvent(pendingCurriculumId);
+		eventListener.listenForPendingCurriculumDeletedEvent(pendingCurriculumId);
 	}
 
 	/**
@@ -58,7 +58,7 @@ public class MonolithExternalEventPublisher implements ExternalEventPublisher{
 	*/
 	@Override
 	public void publishCandidateNoLongerAvailableEvent(CandidateNoLongerAvailableEvent event) {
-		curriculumEventListener.listenForCandidateNoLongerAvailableEvent(event);
+		eventListener.listenForCandidateNoLongerAvailableEvent(event);
 		
 	}
 
@@ -67,9 +67,7 @@ public class MonolithExternalEventPublisher implements ExternalEventPublisher{
 	*/
 	@Override
 	public void publishCandidateCreatedEvent(CandidateCreatedEvent event) {
-		
-		//TODO: [KP] When its built pass event to test against Alerts for Matching candidates.
-		
+		eventListener.listenForCandidateCreatedEvent(event);
 	}
 
 }

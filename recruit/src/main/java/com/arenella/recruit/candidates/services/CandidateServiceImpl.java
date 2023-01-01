@@ -77,8 +77,8 @@ public class CandidateServiceImpl implements CandidateService{
 		this.externalEventPublisher
 			.publishCandidateCreatedEvent(CandidateCreatedEvent
 					.builder()
-						.candidateId(String.valueOf(candidateId))
 						.candidate(candidate)
+						.candidateId(String.valueOf(candidateId))
 					.build());		
 	}
 
@@ -177,8 +177,53 @@ public class CandidateServiceImpl implements CandidateService{
 		return StreamSupport.stream(this.pendingCandidateDao.findAll().spliterator(), false)
 				.map(entity -> PendingCandidateEntity.convertFromEntity(entity)).collect(Collectors.toCollection(LinkedHashSet::new));
 	}
-
 	
+	/**
+	* Refer to the CandidateService Interface for Details
+	*/
+	@Override
+	public suggestion_accuracy doTestCandidateAlert(long candidateId, CandidateFilterOptions filterOptions) {
+		
+		CandidateFilterOptions suggestionFilterOptions = CandidateFilterOptions
+				.builder()
+					.dutch(filterOptions.getDutch().isPresent() 		? filterOptions.getDutch().get() 	: null)
+					.english(filterOptions.getEnglish().isPresent() 	? filterOptions.getEnglish().get() 	: null)
+					.french(filterOptions.getFrench().isPresent() 		? filterOptions.getFrench().get() 	: null)
+					.skills(filterOptions.getSkills())
+				.build();
+
+		filterOptions.getSkills().clear();
+		filterOptions.setDutch(null);
+		filterOptions.setEnglish(null);
+		filterOptions.setFrench(null);
+		
+		Set<Candidate> results = this.candidateDao.findCandidates(filterOptions);
+		
+		if (results.isEmpty()) {
+			return suggestion_accuracy.poor;
+		}
+		
+		Candidate candidate = results.stream().findFirst().get();
+		
+		candidate.getSkills().addAll(this.skillsSynonymsUtil.addtSynonymsForSkills(candidate.getSkills()));
+		
+		CandidateSearchAccuracyWrapper 	wrappedCandidate 	= new CandidateSearchAccuracyWrapper(candidate);
+		
+		if (suggestionUtil.isPerfectMatch(wrappedCandidate, suggestionFilterOptions)) {
+			return suggestion_accuracy.perfect;
+		}
+		
+		if (suggestionUtil.isExcellentMatch(wrappedCandidate, suggestionFilterOptions)) {
+			return suggestion_accuracy.excellent;
+		}
+		
+		if (suggestionUtil.isGoodMatch(wrappedCandidate, suggestionFilterOptions)) {
+			return suggestion_accuracy.good;
+		}
+		
+		return suggestion_accuracy.poor;
+		
+	}
 	
 	/**
 	* Refer to the CandidateService Interface for Details
@@ -207,9 +252,9 @@ public class CandidateServiceImpl implements CandidateService{
 		filterOptions.setFrench(null);
 		
 		while (true) {
-			
-			Page<Candidate> candidates = candidateDao.findAll(filterOptions, pageable).map(candidate -> CandidateEntity.convertFromEntity(candidate));
 		
+			Page<Candidate> candidates = candidateDao.findAll(filterOptions, pageable).map(candidate -> CandidateEntity.convertFromEntity(candidate));
+			
 			candidates.getContent().stream().filter(c -> !suggestionIds.contains(c.getCandidateId())).forEach(candidate -> {
 		
 				candidate.getSkills().addAll(this.skillsSynonymsUtil.addtSynonymsForSkills(candidate.getSkills()));

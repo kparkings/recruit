@@ -13,6 +13,7 @@ import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
@@ -86,12 +87,12 @@ public class CandidateEntity {
 	@Column(name="last_availability_check")
 	private LocalDate 	lastAvailabilityCheck;
 	
-	@ElementCollection(targetClass=String.class)
+	@ElementCollection(targetClass=String.class, fetch=FetchType.EAGER)
 	@CollectionTable(schema="candidate", name="candidate_skill", joinColumns=@JoinColumn(name="candidate_id"))
 	@Column(name="skill")
 	private Set<String> 			skills						= new LinkedHashSet<>();
 	
-	@OneToMany(mappedBy = "id.candidateId", cascade = CascadeType.ALL, orphanRemoval=true)
+	@OneToMany(mappedBy = "id.candidateId", cascade = CascadeType.ALL, orphanRemoval=true, fetch=FetchType.EAGER)
 	private Set<LanguageEntity> 	languages					= new LinkedHashSet<>();
 	
 	/**

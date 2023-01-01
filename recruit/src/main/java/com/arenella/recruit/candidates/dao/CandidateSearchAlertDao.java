@@ -5,6 +5,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -34,11 +35,21 @@ public interface CandidateSearchAlertDao extends CrudRepository<CandidateSearchA
 	
 	/**
 	* Returns alerts for a specific recruiter
-	* @return
+	* @return All alerts for a specific recruiter
 	*/
 	public default Set<CandidateSearchAlert> fetchAlertsByRecruiterId(String recruiterId){
 		return fetchAlertEntitiesByRecruiterId(recruiterId)
 				.stream()
+				.map(ae -> CandidateSearchAlertEntity.convertFromEntity(ae))
+				.collect(Collectors.toCollection(LinkedHashSet::new));
+	}
+	
+	/**
+	* Returns all alerts [ NOTE: Need to page is this becomes popular to avoid speed/memory issues)
+	* @return All alerts
+	*/
+	public default Set<CandidateSearchAlert> fetchAlerts(){
+		return StreamSupport.stream(this.findAll().spliterator(), false)
 				.map(ae -> CandidateSearchAlertEntity.convertFromEntity(ae))
 				.collect(Collectors.toCollection(LinkedHashSet::new));
 	}

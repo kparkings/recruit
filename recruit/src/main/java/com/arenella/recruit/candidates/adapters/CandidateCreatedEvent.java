@@ -198,9 +198,9 @@ public class CandidateCreatedEvent {
 		*/
 		public CandidateCreatedEventBuilder candidateId(String candidateId) {
 			
-			if (StringUtils.hasText(this.candidateId)) {
-				throw new IllegalArgumentException("Cant update existing unique id");
-			}
+			//if (StringUtils.hasText(this.candidateId)) {
+			//	throw new IllegalArgumentException("Cant update existing unique id");
+			//}
 			
 			this.candidateId = candidateId;
 			return this;

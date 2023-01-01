@@ -3,10 +3,12 @@ package com.arenella.recruit.candidates.dao;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -77,6 +79,10 @@ public interface CandidateDao extends CrudRepository<CandidateEntity, Long>, Jpa
 	*/
 	public default Iterable<CandidateEntity> findAll(CandidateFilterOptions filterOptions) {
 		return this.findAll(new FilterSpecification(filterOptions));
+	}
+	
+	public default Set<Candidate> findCandidates(CandidateFilterOptions filterOptions){
+		return StreamSupport.stream(this.findAll(filterOptions).spliterator(), false).map(e -> CandidateEntity.convertFromEntity(e)).collect(Collectors.toCollection(LinkedHashSet::new));
 	}
 			
 	/**

@@ -29,7 +29,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 import com.arenella.recruit.candidates.beans.Candidate;
 import com.arenella.recruit.candidates.beans.CandidateFilterOptions;
+import com.arenella.recruit.candidates.beans.CandidateSearchAccuracyWrapper;
 import com.arenella.recruit.candidates.beans.CandidateSearchAlert;
+import com.arenella.recruit.candidates.beans.Language.LEVEL;
 import com.arenella.recruit.candidates.beans.PendingCandidate;
 import com.arenella.recruit.candidates.controllers.CandidateController.CANDIDATE_UPDATE_ACTIONS;
 import com.arenella.recruit.candidates.dao.CandidateDao;
@@ -39,6 +41,9 @@ import com.arenella.recruit.candidates.entities.CandidateEntity;
 import com.arenella.recruit.candidates.entities.PendingCandidateEntity;
 import com.arenella.recruit.candidates.services.CandidateServiceImpl;
 import com.arenella.recruit.candidates.services.CandidateStatisticsService;
+import com.arenella.recruit.candidates.utils.CandidateSuggestionUtil;
+import com.arenella.recruit.candidates.utils.SkillsSynonymsUtil;
+import com.arenella.recruit.candidates.utils.CandidateSuggestionUtil.suggestion_accuracy;
 
 /**
 * Unit tests for the CandidateServiceImpl class
@@ -67,6 +72,12 @@ public class CandidateServiceImplTest {
 	
 	@Mock
 	private Authentication				mockAuthentication;
+	
+	@Mock
+	private CandidateSuggestionUtil		mockSuggestionUtil;
+	
+	@Mock
+	private SkillsSynonymsUtil			mockSkillsSynonymsUtil;	
 	
 	@InjectMocks
 	private CandidateServiceImpl 		service 					= new CandidateServiceImpl();
@@ -423,4 +434,129 @@ public class CandidateServiceImplTest {
 		
 	}
 	
+	/**
+	* Tests poor rating is returned if no Candidate was found
+	* @throws Exception
+	*/
+	@Test
+	public void testDoTestCandidateAlert_noMatchingCandidate() throws Exception{
+		
+		final long candidateId = 404;
+		
+		CandidateFilterOptions filterOptions = 
+				CandidateFilterOptions
+					.builder()
+						.skills(Set.of("JAVA"))
+						.dutch(LEVEL.PROFICIENT)
+						.french(LEVEL.PROFICIENT)
+						.english(LEVEL.PROFICIENT)
+					.build();
+		
+		ArgumentCaptor<CandidateFilterOptions> filterArgCaptor = ArgumentCaptor.forClass(CandidateFilterOptions.class);
+		
+		Mockito.when(this.mockCandidateDao.findCandidates(filterArgCaptor.capture())).thenReturn(Set.of());
+		
+		suggestion_accuracy accuracy = this.service.doTestCandidateAlert(candidateId, filterOptions);
+		
+		assertEquals(suggestion_accuracy.poor, accuracy);
+		
+		CandidateFilterOptions  captorResult = filterArgCaptor.getValue();
+		
+		assertTrue(captorResult.getSkills().isEmpty());
+		assertTrue(captorResult.getDutch().isEmpty());
+		assertTrue(captorResult.getEnglish().isEmpty());
+		assertTrue(captorResult.getFrench().isEmpty());
+		
+	}
+
+	/**
+	* Tests rating is returned if Candidate was found
+	* @throws Exception
+	*/
+	@Test
+	public void testDoTestCandidateAlert_MatchingCandidate() throws Exception{
+		
+		final long candidateId = 404;
+		
+		CandidateFilterOptions filterOptions = 
+				CandidateFilterOptions
+					.builder()
+						.skills(Set.of("JAVA"))
+						.dutch(LEVEL.PROFICIENT)
+						.french(LEVEL.PROFICIENT)
+						.english(LEVEL.PROFICIENT)
+					.build();
+		
+		ArgumentCaptor<CandidateFilterOptions> filterArgCaptor = ArgumentCaptor.forClass(CandidateFilterOptions.class);
+		
+		Mockito
+			.when(this.mockCandidateDao.findCandidates(filterArgCaptor.capture()))
+			.thenReturn(Set.of(Candidate.builder().candidateId(String.valueOf(candidateId)).build()));
+		
+		Mockito
+			.when(this.mockSuggestionUtil.isPerfectMatch(Mockito.any(CandidateSearchAccuracyWrapper.class), filterArgCaptor.capture()))
+			.thenReturn(true);
+		
+		Mockito
+			.when(this.mockSkillsSynonymsUtil.addtSynonymsForSkills(Mockito.anySet()))
+			.thenReturn(Set.of());
+		
+		suggestion_accuracy accuracy = this.service.doTestCandidateAlert(candidateId, filterOptions);
+		
+		assertEquals(suggestion_accuracy.perfect, accuracy);
+		
+		CandidateFilterOptions  captorResult = filterArgCaptor.getValue();
+		
+		assertFalse(captorResult.getSkills().isEmpty());
+		assertFalse(captorResult.getDutch().isEmpty());
+		assertFalse(captorResult.getEnglish().isEmpty());
+		assertFalse(captorResult.getFrench().isEmpty());
+		
+	}
+	
+	/**
+	* Tests poor rating is returned if Candidate was found but the accuracy was less than
+	* good.
+	* @throws Exception
+	*/
+	@Test
+	public void testDoTestCandidateAlert_MatchingCandidate_no_positive_accuracy() throws Exception{
+		
+		final long candidateId = 404;
+		
+		CandidateFilterOptions filterOptions = 
+				CandidateFilterOptions
+					.builder()
+						.skills(Set.of("JAVA"))
+						.dutch(LEVEL.PROFICIENT)
+						.french(LEVEL.PROFICIENT)
+						.english(LEVEL.PROFICIENT)
+					.build();
+		
+		Mockito
+			.when(this.mockCandidateDao.findCandidates(Mockito.any()))
+			.thenReturn(Set.of(Candidate.builder().candidateId(String.valueOf(candidateId)).build()));
+		
+		Mockito
+			.when(this.mockSuggestionUtil.isPerfectMatch(Mockito.any(CandidateSearchAccuracyWrapper.class), Mockito.any()))
+			.thenReturn(false);
+		
+		Mockito
+		.when(this.mockSuggestionUtil.isExcellentMatch(Mockito.any(CandidateSearchAccuracyWrapper.class), Mockito.any()))
+		.thenReturn(false);
+	
+		Mockito
+		.when(this.mockSuggestionUtil.isGoodMatch(Mockito.any(CandidateSearchAccuracyWrapper.class), Mockito.any()))
+		.thenReturn(false);
+	
+		Mockito
+			.when(this.mockSkillsSynonymsUtil.addtSynonymsForSkills(Mockito.anySet()))
+			.thenReturn(Set.of());
+		
+		suggestion_accuracy accuracy = this.service.doTestCandidateAlert(candidateId, filterOptions);
+		
+		assertEquals(suggestion_accuracy.poor, accuracy);
+		
+		
+	}
 }

@@ -12,6 +12,7 @@ import com.arenella.recruit.candidates.beans.CandidateSearchAccuracyWrapper;
 import com.arenella.recruit.candidates.beans.CandidateSearchAlert;
 import com.arenella.recruit.candidates.beans.PendingCandidate;
 import com.arenella.recruit.candidates.controllers.CandidateController.CANDIDATE_UPDATE_ACTIONS;
+import com.arenella.recruit.candidates.utils.CandidateSuggestionUtil.suggestion_accuracy;
 
 /**
 * Defines services available for interacting with Candidates
@@ -100,5 +101,10 @@ public interface CandidateService {
 	* @param id - Unique Id of the SearchAlert
 	*/
 	public void deleteSearchAlert(UUID id);
+
+	/**
+	* Performs Test of candidate against filter options for accuracy
+	*/
+	public suggestion_accuracy doTestCandidateAlert(long candidateId, CandidateFilterOptions filterOptions);
 	
 }

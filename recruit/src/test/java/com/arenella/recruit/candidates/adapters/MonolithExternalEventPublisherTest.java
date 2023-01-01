@@ -121,4 +121,21 @@ public class MonolithExternalEventPublisherTest {
 		Mockito.verify(this.mockCurriculumEventListener).listenForCandidateNoLongerAvailableEvent(event);
 		
 	}
+	
+	/**
+	* Tests listener is called when Event is published
+	* @throws Exception
+	*/
+	@Test
+	public void testPublishCandidateCreatedEvent() throws Exception{
+		
+		CandidateCreatedEvent event = CandidateCreatedEvent.builder().build();
+		
+		Mockito.doNothing().when(this.mockCurriculumEventListener).listenForCandidateCreatedEvent(Mockito.any());
+		
+		publisher.publishCandidateCreatedEvent(event);
+		
+		Mockito.verify(this.mockCurriculumEventListener).listenForCandidateCreatedEvent(event);
+		
+	}
 }

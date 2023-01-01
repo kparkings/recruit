@@ -8,7 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.arenella.recruit.adapters.events.CandidateNoLongerAvailableEvent;
+import com.arenella.recruit.candidates.adapters.CandidateCreatedEvent;
 import com.arenella.recruit.candidates.dao.PendingCandidateDao;
+import com.arenella.recruit.candidates.services.AlertTestUtil;
 import com.arenella.recruit.curriculum.dao.SkillsDao;
 import com.arenella.recruit.curriculum.entity.SkillEntity;
 import com.arenella.recruit.curriculum.services.CurriculumService;
@@ -31,6 +33,9 @@ public class MonolithExternalEventListener implements ExternalEventListener{
 	@Autowired
 	private CurriculumService 	curriculumService;
 	
+	@Autowired
+	private AlertTestUtil		alertTestUtil;
+	
 	/**
 	* Refer to the ExternalEventListener for details 
 	*/
@@ -50,13 +55,22 @@ public class MonolithExternalEventListener implements ExternalEventListener{
 	}
 	
 	/**
+	* Refer to the ExternalEventListener for details 
+	*/
+	//TODO: [KP] Need to convert to Event instead of UUID
+	@Override
+	public void listenForCandidateCreatedEvent(CandidateCreatedEvent event) {
+		this.alertTestUtil.testAgainstCandidateSearchAlerts(event);
+	}
+	
+	/**
 	* Performs pre-processing of skill to ensure the skill
-	* is represented correctly in the system reardless of 
+	* is represented correctly in the system regardless of 
 	* case and whitespace
 	* @param skill - raw skill value
 	* @return PreProcessed skill
 	*/
-	//TODO: [KP] This is duplicate logic. Should be done via shared preprocessing object
+	//TODO: [KP] This is duplicate logic. Should be done via shared pre-processing object
 	private static String preprocessSkill(String skill) {
 		
 		skill = skill.toLowerCase();
