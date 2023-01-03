@@ -37,6 +37,7 @@ public class RecruitersMonolithExternalEventPublisher implements RecruitersExter
 	@Override
 	public void publishRecruiterAccountCreatedEvent(RecruiterCreatedEvent event) {
 		this.authenticationExternalEventListener.listenForRecruiterCreatedEvent(event);
+		this.emailServiceExternalEventListener.listenForRecruiterCreatedEvent(event);
 	}
 
 	/**

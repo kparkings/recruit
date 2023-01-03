@@ -13,9 +13,9 @@ import org.junit.jupiter.api.Test;
 
 import com.arenella.recruit.emailservice.beans.Email.EmailTopic;
 import com.arenella.recruit.emailservice.beans.Email.EmailType;
-import com.arenella.recruit.emailservice.beans.Email.Recipient;
+import com.arenella.recruit.emailservice.beans.Email.EmailRecipient;
 import com.arenella.recruit.emailservice.beans.Email.Sender;
-import com.arenella.recruit.emailservice.beans.Email.Recipient.RecipientType;
+import com.arenella.recruit.emailservice.beans.Email.EmailRecipient.RecipientType;
 import com.arenella.recruit.emailservice.beans.Email.Sender.SenderType;
 
 /**
@@ -24,15 +24,15 @@ import com.arenella.recruit.emailservice.beans.Email.Sender.SenderType;
 */
 public class RequestSendEmailEventTest {
 
-	final private UUID 					recip1Id 					= UUID.randomUUID();
-	final private String 				recip2Id 					= "anId";
-	final private String 				title						= "aTitle";
-	final private EmailType 			emailType					= EmailType.EXTERN;
-	final private Sender<?> 			sender						= new Sender<UUID>(UUID.randomUUID(), SenderType.SYSTEM, "norepy@renella-ict.com"); 
-	final private Set<Recipient<?>> 	recipients					= Set.of(new Recipient<UUID>(recip1Id, RecipientType.RECRUITER, "norepy@renella-ict.com"),
-																	 new Recipient<String>(recip2Id, RecipientType.SYSTEM, "norepy@renella-ict.com"));
-	final private EmailTopic			topic						= EmailTopic.ACCOUNT_CREATED;
-	final private Map<String,Object>	model						= new HashMap<>();
+	final private UUID 						recip1Id 					= UUID.randomUUID();
+	final private String 					recip2Id 					= "anId";
+	final private String 					title						= "aTitle";
+	final private EmailType 				emailType					= EmailType.EXTERN;
+	final private Sender<?> 				sender						= new Sender<UUID>(UUID.randomUUID(), SenderType.SYSTEM, "norepy@renella-ict.com"); 
+	final private Set<EmailRecipient<?>> 	recipients					= Set.of(new EmailRecipient<UUID>(recip1Id, RecipientType.RECRUITER, "norepy@renella-ict.com"),
+																	 	new EmailRecipient<String>(recip2Id, RecipientType.SYSTEM, "norepy@renella-ict.com"));
+	final private EmailTopic				topic						= EmailTopic.ACCOUNT_CREATED;
+	final private Map<String,Object>		model						= new HashMap<>();
 	
 	/**
 	* Tests construction via the Builder

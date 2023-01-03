@@ -65,7 +65,7 @@ public class EmailEntity {
 	private SenderEntity 			sender; 
 	
 	@OneToMany(mappedBy = "emailId", cascade = CascadeType.ALL, orphanRemoval=true, fetch=FetchType.EAGER)
-	private Set<RecipientEntity> 	recipients					= new LinkedHashSet<>(); 
+	private Set<EmailRecipientEntity> 	recipients					= new LinkedHashSet<>(); 
 	
 	/**
 	* Returns the unique Id of the email
@@ -128,7 +128,7 @@ public class EmailEntity {
 	* Returns the Recipients that are to receive the Email
 	* @return Recipients of the Email
 	*/
-	public Set<RecipientEntity> getRecipients(){
+	public Set<EmailRecipientEntity> getRecipients(){
 		return this.recipients;
 	} 
 	
@@ -186,16 +186,16 @@ public class EmailEntity {
 	*/
 	public static class EmailEntityBuilder{
 	
-		private UUID 					id;
-		private String 					title;
-		private EmailType 				emailType;
-		private SenderEntity 			sender; 
-		private LocalDateTime 			created;
-		private LocalDateTime 			scheduledToBeSentAfter;
-		private LocalDateTime 			sent;
-		private Set<RecipientEntity> 	recipients					= new LinkedHashSet<>(); 
-		private String 					body;
-		private Status 					status;
+		private UUID 						id;
+		private String 						title;
+		private EmailType 					emailType;
+		private SenderEntity 				sender; 
+		private LocalDateTime 				created;
+		private LocalDateTime 				scheduledToBeSentAfter;
+		private LocalDateTime 				sent;
+		private Set<EmailRecipientEntity> 	recipients					= new LinkedHashSet<>(); 
+		private String 						body;
+		private Status 						status;
 		
 		/**
 		* Sets the unique Id of the email
@@ -273,7 +273,7 @@ public class EmailEntity {
 		* @param recipients - Email recipients
 		* @return Builder
 		*/
-		public EmailEntityBuilder recipients(Set<RecipientEntity> recipients) {
+		public EmailEntityBuilder recipients(Set<EmailRecipientEntity> recipients) {
 			this.recipients.clear();
 			this.recipients.addAll(recipients);
 			return this;
@@ -322,7 +322,7 @@ public class EmailEntity {
 					.created(email.getCreated())
 					.emailType(email.getEmailType())
 					.id(email.getId())
-					.recipients(email.getRecipients().stream().map(r -> RecipientEntity.convertToEntity(r, email)).collect(Collectors.toSet()))
+					.recipients(email.getRecipients().stream().map(r -> EmailRecipientEntity.convertToEntity(r, email)).collect(Collectors.toSet()))
 					.scheduledToBeSentAfter(email.getScheduledToBeSentAfter())
 					.sender(SenderEntity.convertToEntity(email.getSender(), email))
 					.sent(email.getSent())
@@ -345,7 +345,7 @@ public class EmailEntity {
 					.created(entity.getCreated())
 					.emailType(entity.getEmailType())
 					.id(entity.getId())
-					.recipients(entity.getRecipients().stream().map(r -> RecipientEntity.convertFromEntity(r)).collect(Collectors.toSet()))
+					.recipients(entity.getRecipients().stream().map(r -> EmailRecipientEntity.convertFromEntity(r)).collect(Collectors.toSet()))
 					.scheduledToBeSentAfter(entity.getScheduledToBeSentAfter())
 					.sender(SenderEntity.convertFromEntity(entity.getSender())) //TODO: T saved to DB String returned
 					.sent(entity.getSent())

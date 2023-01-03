@@ -10,7 +10,6 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import com.arenella.recruit.candidates.beans.CandidateSearchAlertMatch;
-import com.arenella.recruit.candidates.beans.CandidateSearchAlertMatch.CandidateSearchAlertMatchBuilder;
 import com.arenella.recruit.candidates.utils.CandidateSuggestionUtil.suggestion_accuracy;
 
 /**

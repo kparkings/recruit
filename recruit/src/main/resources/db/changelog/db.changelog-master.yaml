@@ -1293,3 +1293,33 @@ databaseChangeLog:
                   type: varchar
                   constraints:
                     nullable: false 
+  - changeSet:
+      id: emailservice_recipiant
+      author: kparkings
+      changes:
+        - createTable:
+            tableName: recipient
+            schemaName: email
+            columns:
+              - column:
+                  name: recipient_type
+                  type: varchar
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: recipient_id
+                  type: varchar
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: first_name
+                  type: varchar
+                  constraints:
+                    nullable: false
+              - column:
+                  name: email
+                  type: varchar
+                  constraints:
+                    nullable: false

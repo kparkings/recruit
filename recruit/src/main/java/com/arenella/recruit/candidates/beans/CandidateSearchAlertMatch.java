@@ -13,6 +13,7 @@ public class CandidateSearchAlertMatch {
 
 	private UUID 					id;
 	private String 					recruiterId;
+	private UUID					alertId;
 	private String 					alertName;
 	private Long 					candidateId;
 	private String					roleSought;
@@ -25,6 +26,7 @@ public class CandidateSearchAlertMatch {
 	public CandidateSearchAlertMatch(CandidateSearchAlertMatchBuilder builder) {
 		this.id				= builder.id;
 		this.recruiterId	= builder.recruiterId;
+		this.alertId		= builder.alertId;
 		this.alertName		= builder.alertName;
 		this.candidateId	= builder.candidateId;
 		this.roleSought		= builder.roleSought;
@@ -53,6 +55,14 @@ public class CandidateSearchAlertMatch {
 	*/
 	public String  getAlertName() {
 		return this.alertName;
+	}
+	
+	/**
+	* Returns the id of the Alert
+	* @return Alert id
+	*/
+	public UUID  getAlertId() {
+		return this.alertId;
 	}
 	
 	/**
@@ -95,6 +105,7 @@ public class CandidateSearchAlertMatch {
 	
 		private UUID 					id;
 		private String 					recruiterId;
+		private UUID					alertId;
 		private String 					alertName;
 		private Long 					candidateId;
 		private String					roleSought;
@@ -117,6 +128,16 @@ public class CandidateSearchAlertMatch {
 		*/
 		public CandidateSearchAlertMatchBuilder recruiterId(String recruiterId) {
 			this.recruiterId = recruiterId;
+			return this;
+		}
+		
+		/**
+		* Sets the id of the Alert
+		* @param alertId - Unique id of the Alert
+		* @return Builder
+		*/
+		public CandidateSearchAlertMatchBuilder alertId(UUID alertId) {
+			this.alertId = alertId;
 			return this;
 		}
 		

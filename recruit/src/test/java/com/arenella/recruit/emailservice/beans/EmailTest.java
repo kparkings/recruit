@@ -11,8 +11,8 @@ import java.util.UUID;
 import org.junit.jupiter.api.Test;
 
 import com.arenella.recruit.emailservice.beans.Email.EmailType;
-import com.arenella.recruit.emailservice.beans.Email.Recipient;
-import com.arenella.recruit.emailservice.beans.Email.Recipient.RecipientType;
+import com.arenella.recruit.emailservice.beans.Email.EmailRecipient;
+import com.arenella.recruit.emailservice.beans.Email.EmailRecipient.RecipientType;
 import com.arenella.recruit.emailservice.beans.Email.Sender;
 import com.arenella.recruit.emailservice.beans.Email.Sender.SenderType;
 import com.arenella.recruit.emailservice.beans.Email.Status;
@@ -36,8 +36,8 @@ public class EmailTest {
 	final private LocalDateTime 		sent						= LocalDateTime.of(2022,11,17, 19,11,20);;
 	final private String 				body						= "aBody";
 	final private Status 				status						= Status.DRAFT;
-	final private Set<Recipient<?>> 	recipients					= Set.of(new Recipient<UUID>(recip1Id, RecipientType.RECRUITER, recip1Address),
-																	 new Recipient<String>(recip2Id, RecipientType.SYSTEM, recip2Address));
+	final private Set<EmailRecipient<?>> 	recipients					= Set.of(new EmailRecipient<UUID>(recip1Id, RecipientType.RECRUITER, recip1Address),
+																	 new EmailRecipient<String>(recip2Id, RecipientType.SYSTEM, recip2Address));
 	
 	/**
 	* Tests construction via Builder

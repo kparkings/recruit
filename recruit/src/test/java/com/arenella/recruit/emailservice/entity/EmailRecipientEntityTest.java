@@ -7,14 +7,14 @@ import java.util.UUID;
 import org.junit.jupiter.api.Test;
 
 import com.arenella.recruit.emailservice.beans.Email;
-import com.arenella.recruit.emailservice.beans.Email.Recipient;
-import com.arenella.recruit.emailservice.beans.Email.Recipient.RecipientType;
+import com.arenella.recruit.emailservice.beans.Email.EmailRecipient;
+import com.arenella.recruit.emailservice.beans.Email.EmailRecipient.RecipientType;
 
 /**
 * Unit tests for the RecipientEntity class
 * @author K Parkings
 */
-public class RecipientEntityTest {
+public class EmailRecipientEntityTest {
 
 	private static final String 		emailAddress 	= "kparkings@gmail.com";
 	private static final String 		id				= "anId";
@@ -28,8 +28,8 @@ public class RecipientEntityTest {
 	@Test
 	public void testBuilder() throws Exception {
 		
-		RecipientEntity entity = 
-				RecipientEntity
+		EmailRecipientEntity entity = 
+				EmailRecipientEntity
 					.builder()
 						.emailAddress(emailAddress)
 						.emailId(emailId)
@@ -51,8 +51,8 @@ public class RecipientEntityTest {
 	@Test
 	public void testConvertFromEntity() throws Exception{
 		
-		RecipientEntity entity = 
-				RecipientEntity
+		EmailRecipientEntity entity = 
+				EmailRecipientEntity
 					.builder()
 						.emailAddress(emailAddress)
 						.emailId(emailId)
@@ -61,7 +61,7 @@ public class RecipientEntityTest {
 					.build();
 		
 		@SuppressWarnings("unchecked")
-		Recipient<String> recipient = (Recipient<String>)RecipientEntity.convertFromEntity(entity);
+		EmailRecipient<String> recipient = (EmailRecipient<String>)EmailRecipientEntity.convertFromEntity(entity);
 		
 		assertEquals(emailAddress, 	recipient.getEmailAddress());
 		assertEquals(id, 			recipient.getId());
@@ -76,10 +76,10 @@ public class RecipientEntityTest {
 	@Test
 	public void testConvertToEntity() throws Exception{
 		
-		final Recipient<String> 	recipient 	= new Recipient<>(id, type, emailAddress); 
-		final Email 				email 		= Email.builder().id(UUID.randomUUID()).build();
+		final EmailRecipient<String> 	recipient 	= new EmailRecipient<>(id, type, emailAddress); 
+		final Email 					email 		= Email.builder().id(UUID.randomUUID()).build();
 		
-		RecipientEntity entity = RecipientEntity.convertToEntity(recipient, email);
+		EmailRecipientEntity 			entity 		= EmailRecipientEntity.convertToEntity(recipient, email);
 		
 		assertEquals(emailAddress, 		entity.getEmailAddress());
 		assertEquals(id, 				entity.getId());

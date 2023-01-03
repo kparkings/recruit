@@ -16,7 +16,7 @@ import com.arenella.recruit.curriculum.entity.SkillEntity;
 import com.arenella.recruit.curriculum.services.CurriculumService;
 
 /**
-* Implementation of ExternalEventListener optimised to 
+* Implementation of ExternalEventListener optimized to 
 * work for when the services are physically located in 
 * the same Monolith.
 * @author K Parkings

@@ -37,5 +37,6 @@ public interface ExternalEventListener {
 	* @param event - Event to listen for
 	*/
 	void listenForCandidateCreatedEvent(CandidateCreatedEvent event);
+
 	
 }

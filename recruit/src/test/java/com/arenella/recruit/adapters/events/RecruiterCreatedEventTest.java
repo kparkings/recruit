@@ -18,12 +18,21 @@ public class RecruiterCreatedEventTest {
 		
 		final String recruiterId 		= "kparkings";
 		final String encryptedPassword 	= "3sefes##@@1!f";
+		final String email				= "kparkings@gmail.com";
+		final String firstName			= "Kevin";
 		
-		RecruiterCreatedEvent event = RecruiterCreatedEvent.builder().recruiterId(recruiterId).encryptedPassword(encryptedPassword).build();
+		RecruiterCreatedEvent event = RecruiterCreatedEvent
+				.builder()
+					.recruiterId(recruiterId)
+					.encryptedPassword(encryptedPassword)
+					.email(email)
+					.firstName(firstName)
+				.build();
 		
 		assertEquals(recruiterId, 		event.getRecruiterId());
 		assertEquals(encryptedPassword, event.getEncryptedPassord());
-		
+		assertEquals(email, 			event.getEmail());
+		assertEquals(firstName, 		event.getFirstName());
 	}
 	
 }

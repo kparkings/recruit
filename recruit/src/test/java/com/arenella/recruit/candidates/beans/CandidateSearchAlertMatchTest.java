@@ -21,6 +21,7 @@ public class CandidateSearchAlertMatchTest {
 	@Test
 	public void testBuilder() throws Exception{
 		
+		final UUID					alertId			= UUID.randomUUID();
 		final String 				alertName 		= "alertName";
 		final Long 					candidateId 	= 1L;
 		final UUID 					matchId 		= UUID.randomUUID();
@@ -31,6 +32,7 @@ public class CandidateSearchAlertMatchTest {
 		CandidateSearchAlertMatch match 
 			= CandidateSearchAlertMatch
 				.builder()
+					.alertId(alertId)
 					.alertName(alertName)
 					.candidateId(candidateId)
 					.id(matchId)
@@ -39,6 +41,7 @@ public class CandidateSearchAlertMatchTest {
 					.accuracy(accuracy)
 				.build();
 		
+		assertEquals(alertId, 		match.getAlertId());
 		assertEquals(alertName, 	match.getAlertName());
 		assertEquals(candidateId, 	match.getCandidateId());
 		assertEquals(matchId, 		match.getId());

@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import com.arenella.recruit.emailservice.beans.Email.EmailTopic;
 import com.arenella.recruit.emailservice.beans.Email.EmailType;
-import com.arenella.recruit.emailservice.beans.Email.Recipient;
+import com.arenella.recruit.emailservice.beans.Email.EmailRecipient;
 import com.arenella.recruit.emailservice.beans.Email.Sender;
 import com.arenella.recruit.emailservice.beans.Email.Sender.SenderType;
 
@@ -27,13 +27,13 @@ public class RequestSendEmailCommandTest {
 	@Test
 	public void testConstructionViaBuilder() throws Exception{
 		
-		final EmailType 			emailType 	= EmailType.EXTERN;
-		final Map<String,Object> 	model 		= Map.of();
-		final boolean 				persistable = true;
-		final Set<Recipient<?>> 	recipients 	= new HashSet<>();
-		final Sender<String> 		sender 		= new Sender<>("id", SenderType.SYSTEM,"kparkings@gmail.com");
-		final String 				title 		= "aTitle";
-		final EmailTopic 			topic 		= EmailTopic.ACCOUNT_CREATED;
+		final EmailType 				emailType 	= EmailType.EXTERN;
+		final Map<String,Object> 		model 		= Map.of();
+		final boolean 					persistable = true;
+		final Set<EmailRecipient<?>> 	recipients 	= new HashSet<>();
+		final Sender<String> 			sender 		= new Sender<>("id", SenderType.SYSTEM,"kparkings@gmail.com");
+		final String 					title 		= "aTitle";
+		final EmailTopic 				topic 		= EmailTopic.ACCOUNT_CREATED;
 		
 		RequestSendEmailCommand command = 
 				RequestSendEmailCommand

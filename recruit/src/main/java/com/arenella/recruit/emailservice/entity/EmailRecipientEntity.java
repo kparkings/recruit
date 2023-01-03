@@ -10,12 +10,12 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import com.arenella.recruit.emailservice.beans.Email;
-import com.arenella.recruit.emailservice.beans.Email.Recipient;
-import com.arenella.recruit.emailservice.beans.Email.Recipient.RecipientType;
+import com.arenella.recruit.emailservice.beans.Email.EmailRecipient;
+import com.arenella.recruit.emailservice.beans.Email.EmailRecipient.RecipientType;
 
 @Entity
 @Table(schema="email", name="email_recipient")
-public class RecipientEntity {
+public class EmailRecipientEntity {
 
 	@Id
 	@Column(name="id")
@@ -34,13 +34,13 @@ public class RecipientEntity {
 	/**
 	* Constructor 
 	*/
-	public RecipientEntity() {}
+	public EmailRecipientEntity() {}
 	
 	/**
 	* Constructor based upon a builder
 	* @param builder - Contains initialization values
 	*/
-	public RecipientEntity(RecipientEntityBuilder builder) {
+	public EmailRecipientEntity(EmailRecipientEntityBuilder builder) {
 		this.id 			= builder.id;
 		this.emailId 		= builder.emailId;
 		this.recipientType 	= builder.recipientType;
@@ -67,15 +67,15 @@ public class RecipientEntity {
 	* Returns a builder for the RecipientBuilder class
 	* @return Builder
 	*/
-	public static RecipientEntityBuilder builder() {
-		return new RecipientEntityBuilder();
+	public static EmailRecipientEntityBuilder builder() {
+		return new EmailRecipientEntityBuilder();
 	}
 	
 	/**
-	* Builder class for RecipientEntity
+	* Builder class for EmailRecipientEntity
 	* @author K Parkings
 	*/
-	public static class RecipientEntityBuilder{
+	public static class EmailRecipientEntityBuilder{
 		
 		private String 			id;
 		private UUID 			emailId;
@@ -87,7 +87,7 @@ public class RecipientEntity {
 		* @param id - Unique Id of the Recipient
 		* @return Builder
 		*/
-		public RecipientEntityBuilder id(String id) {
+		public EmailRecipientEntityBuilder id(String id) {
 			this.id = id;
 			return this;
 		}
@@ -97,7 +97,7 @@ public class RecipientEntity {
 		* @param emailId - Unique Id of the Email
 		* @return Builder
 		*/
-		public RecipientEntityBuilder emailId(UUID emailId) {
+		public EmailRecipientEntityBuilder emailId(UUID emailId) {
 			this.emailId = emailId;
 			return this;
 		}
@@ -107,7 +107,7 @@ public class RecipientEntity {
 		* @param recipientType - Type of the Recipient
 		* @return Builder
 		*/
-		public RecipientEntityBuilder recipientType(RecipientType recipientType) {
+		public EmailRecipientEntityBuilder recipientType(RecipientType recipientType) {
 			this.recipientType = recipientType;
 			return this;
 		}
@@ -117,7 +117,7 @@ public class RecipientEntity {
 		* @param email - Email
 		* @return Builder
 		*/
-		public RecipientEntityBuilder emailAddress(String emailAddress) {
+		public EmailRecipientEntityBuilder emailAddress(String emailAddress) {
 			this.emailAddress = emailAddress;
 			return this;
 		}
@@ -126,8 +126,8 @@ public class RecipientEntity {
 		* Returns an initialized RecipientEntity
 		* @return Initialized RecipientEntity
 		*/
-		public RecipientEntity build() {
-			return new RecipientEntity(this);
+		public EmailRecipientEntity build() {
+			return new EmailRecipientEntity(this);
 		}
 	}
 	
@@ -137,8 +137,8 @@ public class RecipientEntity {
 	* @param recipient - Domain representation
 	* @return Entity representation
 	*/
-	public static RecipientEntity convertToEntity(Recipient<?> recipient, Email email) {	
-		return RecipientEntity
+	public static EmailRecipientEntity convertToEntity(EmailRecipient<?> recipient, Email email) {	
+		return EmailRecipientEntity
 				.builder()
 					.id(String.valueOf(recipient.getId()))
 					.recipientType(recipient.getRecipientType())
@@ -147,8 +147,8 @@ public class RecipientEntity {
 				.build();
 	}
 	
-	public static Recipient<?> convertFromEntity(RecipientEntity entity) {
-		return new Recipient<String>(entity.getId(), entity.getRecipientType(), entity.getEmailAddress());
+	public static EmailRecipient<?> convertFromEntity(EmailRecipientEntity entity) {
+		return new EmailRecipient<String>(entity.getId(), entity.getRecipientType(), entity.getEmailAddress());
 	}
 	
 }

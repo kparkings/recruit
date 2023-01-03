@@ -10,10 +10,10 @@ import org.junit.jupiter.api.Test;
 
 import com.arenella.recruit.emailservice.beans.Email;
 import com.arenella.recruit.emailservice.beans.Email.EmailType;
-import com.arenella.recruit.emailservice.beans.Email.Recipient;
+import com.arenella.recruit.emailservice.beans.Email.EmailRecipient;
 import com.arenella.recruit.emailservice.beans.Email.Sender;
 import com.arenella.recruit.emailservice.beans.Email.Status;
-import com.arenella.recruit.emailservice.beans.Email.Recipient.RecipientType;
+import com.arenella.recruit.emailservice.beans.Email.EmailRecipient.RecipientType;
 import com.arenella.recruit.emailservice.beans.Email.Sender.SenderType;
 
 /**
@@ -36,10 +36,10 @@ public class EmailEntityTest {
 	final private LocalDateTime 		sent						= LocalDateTime.of(2022,11,17, 19,11,20);;
 	final private String 				body						= "aBody";
 	final private Status 				status						= Status.DRAFT;
-	final private Set<RecipientEntity> 	recipients					= Set.of(RecipientEntity.builder().id(recip1Id.toString()).recipientType(RecipientType.RECRUITER).emailAddress(recip1Address).emailId(id).build(),
-																	 RecipientEntity.builder().id(recip2Id.toString()).recipientType(RecipientType.SYSTEM).emailAddress(recip2Address).emailId(id).build());
-	final private Set<Recipient<?>> 	recipientsDomain			= Set.of(new Recipient<UUID>(recip1Id, RecipientType.RECRUITER, recip1Address),
-			 new Recipient<String>(recip2Id, RecipientType.SYSTEM, recip2Address));
+	final private Set<EmailRecipientEntity> 	recipients			= Set.of(EmailRecipientEntity.builder().id(recip1Id.toString()).recipientType(RecipientType.RECRUITER).emailAddress(recip1Address).emailId(id).build(),
+																	 		EmailRecipientEntity.builder().id(recip2Id.toString()).recipientType(RecipientType.SYSTEM).emailAddress(recip2Address).emailId(id).build());
+	final private Set<EmailRecipient<?>> 	recipientsDomain			= Set.of(new EmailRecipient<UUID>(recip1Id, RecipientType.RECRUITER, recip1Address),
+			 new EmailRecipient<String>(recip2Id, RecipientType.SYSTEM, recip2Address));
 	
 	/**
 	* Tests construction via Builder

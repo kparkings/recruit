@@ -20,7 +20,7 @@ public interface ExternalEventPublisher {
 	
 	/**
 	* Publishes an event when PendingCurriculum is deleted
-	* @param pendingCandidateId - Uniue Id of PendingCurriculum that was deleted
+	* @param pendingCandidateId - Unique Id of PendingCurriculum that was deleted
 	*/
 	public void publishPendingCurriculumDeletedEvent(UUID pendingCandidateId);
 	
@@ -35,5 +35,12 @@ public interface ExternalEventPublisher {
 	* @param event - Details of new Candidate
 	*/
 	public void publishCandidateCreatedEvent(CandidateCreatedEvent event);
+	
+	/**
+	* Publishes command requesting email is sent to recruiter with details of 
+	* todays Candidate alert matches
+	* @param command - Contains details of Alert matches for a specific Recruiter
+	*/
+	public void publishRequestSendAlertDailySummaryEmailCommand(RequestSendAlertDailySummaryEmailCommand command);
 	
 }

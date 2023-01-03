@@ -11,21 +11,21 @@ import java.util.UUID;
 */
 public class Email {
 
-	public static enum EmailTopic 	{FORGOTTEN_PWD, ACCOUNT_CREATED, WEEKLY_UPDATE};
+	public static enum EmailTopic 	{FORGOTTEN_PWD, ACCOUNT_CREATED, WEEKLY_UPDATE, ALERT_MATCHES};
 	public static enum EmailType 	{INTERN, EXTERN, SYSTEM_INTERN, SYSTEM_EXTERN};
 	public static enum Status 		{DRAFT, TO_OUTBOX, SENT_INTERN, SENT_EXTERN, FAILURE};
 	
-	private UUID 				id;
-	private String 				title;
-	private EmailType 			emailType;
-	private Sender<?> 			sender; 
-	private LocalDateTime 		created;
-	private LocalDateTime 		scheduledToBeSentAfter;
-	private LocalDateTime 		sent;
-	private Set<Recipient<?>> 	recipients					= new LinkedHashSet<>(); 
-	private String 				body;
-	private Status 				status						= Status.DRAFT;
-	private boolean				persistable					= false;
+	private UUID 					id;
+	private String 					title;
+	private EmailType 				emailType;
+	private Sender<?> 				sender; 
+	private LocalDateTime 			created;
+	private LocalDateTime 			scheduledToBeSentAfter;
+	private LocalDateTime 			sent;
+	private Set<EmailRecipient<?>> 	recipients					= new LinkedHashSet<>(); 
+	private String 					body;
+	private Status 					status						= Status.DRAFT;
+	private boolean					persistable					= false;
 		
 	/**
 	* Returns the unique Id of the email
@@ -88,7 +88,7 @@ public class Email {
 	* Returns the Recipients that are to receive the Email
 	* @return Recipients of the Email
 	*/
-	public Set<Recipient<?>> getRecipients(){
+	public Set<EmailRecipient<?>> getRecipients(){
 		return this.recipients;
 	} 
 	
@@ -163,17 +163,17 @@ public class Email {
 	*/
 	public static class EmailBuilder{
 	
-		private UUID 				id;
-		private String 				title;
-		private EmailType 			emailType;
-		private Sender<?> 			sender; 
-		private LocalDateTime 		created;
-		private LocalDateTime 		scheduledToBeSentAfter;
-		private LocalDateTime 		sent;
-		private Set<Recipient<?>> 	recipients					= new LinkedHashSet<>(); 
-		private String 				body;
-		private Status 				status						= Status.DRAFT;
-		private boolean				persistable					= false;
+		private UUID 					id;
+		private String 					title;
+		private EmailType 				emailType;
+		private Sender<?> 				sender; 
+		private LocalDateTime 			created;
+		private LocalDateTime 			scheduledToBeSentAfter;
+		private LocalDateTime 			sent;
+		private Set<EmailRecipient<?>> 	recipients					= new LinkedHashSet<>(); 
+		private String 					body;
+		private Status 					status						= Status.DRAFT;
+		private boolean					persistable					= false;
 		
 		/**
 		* Sets the unique Id of the email
@@ -251,7 +251,7 @@ public class Email {
 		* @param recipients - Email recipients
 		* @return Builder
 		*/
-		public EmailBuilder recipients(Set<Recipient<?>> recipients) {
+		public EmailBuilder recipients(Set<EmailRecipient<?>> recipients) {
 			this.recipients.clear();
 			this.recipients.addAll(recipients);
 			return this;
@@ -356,7 +356,7 @@ public class Email {
 	* @param <T> Type of the object used to for the Id of the 
 	* 			 specific Recipient type	
 	*/
-	public static class Recipient<T>{
+	public static class EmailRecipient<T>{
 		
 		public static enum RecipientType {SYSTEM, RECRUITER};
 		
@@ -370,7 +370,7 @@ public class Email {
 		* @param recipientType	- Type of the Recipient
 		* @param emailAddress	- Recipients Email address
 		*/
-		public Recipient(T id, RecipientType recipientType, String emailAddress) {
+		public EmailRecipient(T id, RecipientType recipientType, String emailAddress) {
 			this.id  			= id;
 			this.recipientType 	= recipientType;
 			this.emailAddress 	= emailAddress;

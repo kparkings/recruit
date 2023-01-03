@@ -37,6 +37,9 @@ public class EmailTemplateFactory {
 			case WEEKLY_UPDATE:{
 				return "";
 			}
+			case ALERT_MATCHES:{
+				return loadTemplate("alert-matches.ftlh", sendEmailCommand.getModel());
+			}
 			default:{
 				return "Could not process template";
 			}

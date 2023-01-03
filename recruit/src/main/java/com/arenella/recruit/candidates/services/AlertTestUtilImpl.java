@@ -4,11 +4,16 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
+import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.arenella.recruit.candidates.adapters.CandidateCreatedEvent;
+import com.arenella.recruit.candidates.adapters.ExternalEventPublisher;
+import com.arenella.recruit.candidates.adapters.RequestSendAlertDailySummaryEmailCommand;
 import com.arenella.recruit.candidates.beans.CandidateFilterOptions;
 import com.arenella.recruit.candidates.beans.CandidateSearchAlert;
 import com.arenella.recruit.candidates.beans.CandidateSearchAlertMatch;
@@ -25,7 +30,8 @@ import com.arenella.recruit.candidates.utils.CandidateSuggestionUtil.suggestion_
 @Service
 public class AlertTestUtilImpl implements AlertTestUtil{
 
-	private final ScheduledExecutorService 		scheduler = Executors.newScheduledThreadPool(5);
+	private final ScheduledExecutorService 		scheduler 			= Executors.newScheduledThreadPool(5);
+	private final ScheduledExecutorService		endOfDayScheduler 	= Executors.newScheduledThreadPool(1);
 	
 	@Autowired
 	private CandidateSearchAlertDao 			alertDao;
@@ -35,6 +41,47 @@ public class AlertTestUtilImpl implements AlertTestUtil{
 	
 	@Autowired
 	private CandidateSearchAlertMatchDao		matchDao;
+	
+	@Autowired
+	private ExternalEventPublisher				commandPublisher;
+	
+	@PostConstruct
+	public void init() {
+		
+		endOfDayScheduler.schedule(new Runnable() {
+
+			@Override
+			public void run() {
+				
+				matchDao.getRecruitersWithMatches().stream().forEach(recruiterId ->{
+					
+					Set<CandidateSearchAlertMatch> matches = matchDao.getMatchesForRecruiters(recruiterId);
+					
+					constructAndSendDailyMatchSummaryEmail(matches);
+					
+					matches.stream().forEach(match -> {
+						matchDao.deleteById(match.getId());
+					});
+					
+				});
+				
+			}
+			
+		}, 1, TimeUnit.DAYS);
+	}
+	
+	/**
+	* Creates and Sends an Event to trigger the sending of the email to the recruiter with 
+	* a summary of the days matching candidates
+	* @param matches
+	*/
+	private void constructAndSendDailyMatchSummaryEmail(Set<CandidateSearchAlertMatch> matches) {
+		
+		RequestSendAlertDailySummaryEmailCommand command = new RequestSendAlertDailySummaryEmailCommand("recruiterEmail@FromWhere??", matches);
+		
+		commandPublisher.publishRequestSendAlertDailySummaryEmailCommand(command);
+		
+	}
 	
 	/**
 	* Refer to the AlertTestUtil interface for details 
