@@ -72,7 +72,7 @@ public class TrialPeriodSubscriptionActionHandler implements RecruiterSubscripti
 					RequestSendEmailCommand command = RequestSendEmailCommand
 							.builder()
 								.emailType(EmailType.EXTERN)
-								.recipients(Set.of(new EmailRecipient<String>(recruiter.getUserId(), RecipientType.RECRUITER, recruiter.getEmail())))
+								.recipients(Set.of(new EmailRecipient<String>(recruiter.getUserId(), RecipientType.RECRUITER)))
 								.sender(new Sender<>(UUID.randomUUID(), SenderType.SYSTEM, "kparkings@gmail.com"))
 								.title("Arenella-ICT - 90 Day Free Trial")
 								.topic(EmailTopic.ACCOUNT_CREATED)

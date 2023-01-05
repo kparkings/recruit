@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 import java.util.Set;
 import java.util.UUID;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import com.arenella.recruit.emailservice.beans.Email.EmailType;
@@ -23,21 +24,35 @@ import com.arenella.recruit.emailservice.beans.Email.Status;
 */
 public class EmailTest {
 
-	final private String				recip1Address				= "norepy1@renella-ict.com";
-	final private String				recip2Address				= "norepy2@renella-ict.com";
-	final private UUID 					recip1Id 					= UUID.randomUUID();
-	final private String 				recip2Id 					= "anId";
-	final private UUID 					id							= UUID.randomUUID();
-	final private String 				title						= "aTitle";
-	final private EmailType 			emailType					= EmailType.EXTERN;
-	final private Sender<?> 			sender						= new Sender<UUID>(UUID.randomUUID(), SenderType.SYSTEM, "norepy@renella-ict.com"); 
-	final private LocalDateTime 		created						= LocalDateTime.of(2022,11,17, 19,11,00);
-	final private LocalDateTime 		scheduledToBeSentAfter		= LocalDateTime.of(2022,11,17, 19,11,10);;
-	final private LocalDateTime 		sent						= LocalDateTime.of(2022,11,17, 19,11,20);;
-	final private String 				body						= "aBody";
-	final private Status 				status						= Status.DRAFT;
-	final private Set<EmailRecipient<?>> 	recipients					= Set.of(new EmailRecipient<UUID>(recip1Id, RecipientType.RECRUITER, recip1Address),
-																	 new EmailRecipient<String>(recip2Id, RecipientType.SYSTEM, recip2Address));
+	final private String					recip1Address				= "norepy1@renella-ict.com";
+	final private String					recip2Address				= "norepy2@renella-ict.com";
+	final private UUID 						recip1Id 					= UUID.randomUUID();
+	final private String 					recip2Id 					= "anId";
+	final private UUID 						id							= UUID.randomUUID();
+	final private String 					title						= "aTitle";
+	final private EmailType 				emailType					= EmailType.EXTERN;
+	final private String					firstNameRecip1				= "Kevin1";
+	final private String					firstNameRecip2				= "Kevin2";
+	final private Sender<?> 				sender						= new Sender<UUID>(UUID.randomUUID(), SenderType.SYSTEM, "norepy@renella-ict.com"); 
+	final private LocalDateTime 			created						= LocalDateTime.of(2022,11,17, 19,11,00);
+	final private LocalDateTime 			scheduledToBeSentAfter		= LocalDateTime.of(2022,11,17, 19,11,10);;
+	final private LocalDateTime 			sent						= LocalDateTime.of(2022,11,17, 19,11,20);;
+	final private String 					body						= "aBody";
+	final private Status 					status						= Status.DRAFT;
+	final private EmailRecipient<UUID>		emailRecip1					= new EmailRecipient<UUID>(recip1Id, RecipientType.RECRUITER);
+	final private EmailRecipient<String>	emailRecip2					= new EmailRecipient<String>(recip2Id, RecipientType.SYSTEM);
+	final private Set<EmailRecipient<?>> 	recipients					= Set.of(emailRecip1,emailRecip2);
+	
+	/**
+	* Sets up test env
+	*/
+	@BeforeEach
+	public void init() {
+		emailRecip1.setEmail(recip1Address);
+		emailRecip1.setFirstName(firstNameRecip1);
+		emailRecip2.setEmail(recip2Address);
+		emailRecip2.setFirstName(firstNameRecip2);
+	}
 	
 	/**
 	* Tests construction via Builder
@@ -86,6 +101,12 @@ public class EmailTest {
 		
 		assertEquals(recip1Address, recipient1Address);
 		assertEquals(recip2Address, recipient2Address);
+		
+		String 	recipient1FirstName = (String) email.getRecipients().stream().filter(r -> r.getRecipientType() == RecipientType.RECRUITER).findFirst().get().getFirstName();
+		String 	recipient2FirstName = (String) email.getRecipients().stream().filter(r -> r.getRecipientType() == RecipientType.SYSTEM).findFirst().get().getFirstName();
+		
+		assertEquals(firstNameRecip1, recipient1FirstName);
+		assertEquals(firstNameRecip2, recipient2FirstName);
 		
 	}
 	

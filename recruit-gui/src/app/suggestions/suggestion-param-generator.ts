@@ -37,9 +37,6 @@ export class SuggestionParams{
 		/**
 		* Add any country filters 	
 		*/
-		console.log('--> NL : ' + suggestionFilterForm.get('nlResults')?.value);
-		console.log('--> BE : ' + suggestionFilterForm.get('beResults')?.value);
-		console.log('--> UK : ' + suggestionFilterForm.get('ukResults')?.value);
 		
 		if (suggestionFilterForm.get('nlResults')?.value) {
 			this.countries.push("NETHERLANDS");

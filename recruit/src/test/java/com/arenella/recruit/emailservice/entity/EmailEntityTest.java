@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import java.util.Set;
 import java.util.UUID;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import com.arenella.recruit.emailservice.beans.Email;
@@ -22,25 +23,39 @@ import com.arenella.recruit.emailservice.beans.Email.Sender.SenderType;
 */
 public class EmailEntityTest {
 
-	final private String				recip1Address				= "norepy1@renella-ict.com";
-	final private String				recip2Address				= "norepy2@renella-ict.com";
-	final private UUID 					recip1Id 					= UUID.randomUUID();
-	final private String 				recip2Id 					= "anId";
-	final private UUID 					id							= UUID.randomUUID();
-	final private String 				title						= "aTitle";
-	final private EmailType 			emailType					= EmailType.EXTERN;
-	final private SenderEntity 			sender						= SenderEntity.builder().id(UUID.randomUUID().toString()).senderType(SenderType.SYSTEM).emailAddress("norepy@renella-ict.com").emailId(id).build(); 
-	final private Sender<?> 			senderDomain				= new Sender<UUID>(UUID.randomUUID(), SenderType.SYSTEM, "norepy@renella-ict.com"); 
-	final private LocalDateTime 		created						= LocalDateTime.of(2022,11,17, 19,11,00);
-	final private LocalDateTime 		scheduledToBeSentAfter		= LocalDateTime.of(2022,11,17, 19,11,10);;
-	final private LocalDateTime 		sent						= LocalDateTime.of(2022,11,17, 19,11,20);;
-	final private String 				body						= "aBody";
-	final private Status 				status						= Status.DRAFT;
-	final private Set<EmailRecipientEntity> 	recipients			= Set.of(EmailRecipientEntity.builder().id(recip1Id.toString()).recipientType(RecipientType.RECRUITER).emailAddress(recip1Address).emailId(id).build(),
-																	 		EmailRecipientEntity.builder().id(recip2Id.toString()).recipientType(RecipientType.SYSTEM).emailAddress(recip2Address).emailId(id).build());
-	final private Set<EmailRecipient<?>> 	recipientsDomain			= Set.of(new EmailRecipient<UUID>(recip1Id, RecipientType.RECRUITER, recip1Address),
-			 new EmailRecipient<String>(recip2Id, RecipientType.SYSTEM, recip2Address));
+	final private String						recip1Address				= "norepy1@renella-ict.com";
+	final private String						recip2Address				= "norepy2@renella-ict.com";
+	final private UUID 							recip1Id 					= UUID.randomUUID();
+	final private String 						recip2Id 					= "anId";
+	final private UUID 							id							= UUID.randomUUID();
+	final private String 						title						= "aTitle";
+	final private EmailType 					emailType					= EmailType.EXTERN;
+	final private String						firstNameRecip1				= "Kevin1";
+	final private String						firstNameRecip2				= "Kevin2";
+	final private SenderEntity 					sender						= SenderEntity.builder().id(UUID.randomUUID().toString()).senderType(SenderType.SYSTEM).emailAddress("norepy@renella-ict.com").emailId(id).build(); 
+	final private Sender<?> 					senderDomain				= new Sender<UUID>(UUID.randomUUID(), SenderType.SYSTEM, "norepy@renella-ict.com"); 
+	final private LocalDateTime 				created						= LocalDateTime.of(2022,11,17, 19,11,00);
+	final private LocalDateTime 				scheduledToBeSentAfter		= LocalDateTime.of(2022,11,17, 19,11,10);;
+	final private LocalDateTime 				sent						= LocalDateTime.of(2022,11,17, 19,11,20);;
+	final private String 						body						= "aBody";
+	final private Status 						status						= Status.DRAFT;
+	final private EmailRecipient<UUID>			emailRecip1					= new EmailRecipient<UUID>(recip1Id, RecipientType.RECRUITER);
+	final private EmailRecipient<String>		emailRecip2					= new EmailRecipient<String>(recip2Id, RecipientType.SYSTEM);
+	final private Set<EmailRecipientEntity> 	recipients					= Set.of(EmailRecipientEntity.builder().id(recip1Id.toString()).recipientType(RecipientType.RECRUITER).emailAddress(recip1Address).firstName(firstNameRecip1).emailId(id).build(),
+																	 			EmailRecipientEntity.builder().id(recip2Id.toString()).recipientType(RecipientType.SYSTEM).emailAddress(recip2Address).firstName(firstNameRecip2).emailId(id).build());
+	final private Set<EmailRecipient<?>> 		recipientsDomain			= Set.of(emailRecip1,emailRecip2);
 	
+	/**
+	* Sets up test environment 
+	*/
+	@BeforeEach
+	public void init() {
+		emailRecip1.setEmail(recip1Address);
+		emailRecip1.setFirstName(firstNameRecip1);
+		emailRecip2.setEmail(recip2Address);
+		emailRecip2.setFirstName(firstNameRecip2);
+	}
+			 
 	/**
 	* Tests construction via Builder
 	* @throws Exception
@@ -87,6 +102,12 @@ public class EmailEntityTest {
 		
 		assertEquals(recip1Address, recipient1Address);
 		assertEquals(recip2Address, recipient2Address);
+		
+		String 	recipient1FirstName = (String) email.getRecipients().stream().filter(r -> r.getRecipientType() == RecipientType.RECRUITER).findFirst().get().getFirstName();
+		String 	recipient2FirstName = (String) email.getRecipients().stream().filter(r -> r.getRecipientType() == RecipientType.SYSTEM).findFirst().get().getFirstName();
+		
+		assertEquals(firstNameRecip1, recipient1FirstName);
+		assertEquals(firstNameRecip2, recipient2FirstName);
 		
 	}
 	
@@ -138,6 +159,12 @@ public class EmailEntityTest {
 		assertEquals(recip1Address, recipient1Address);
 		assertEquals(recip2Address, recipient2Address);
 		
+		String 	recipient1FirstName = (String) email.getRecipients().stream().filter(r -> r.getRecipientType() == RecipientType.RECRUITER).findFirst().get().getFirstName();
+		String 	recipient2FirstName = (String) email.getRecipients().stream().filter(r -> r.getRecipientType() == RecipientType.SYSTEM).findFirst().get().getFirstName();
+		
+		assertEquals(firstNameRecip1, recipient1FirstName);
+		assertEquals(firstNameRecip2, recipient2FirstName);
+		
 	}
 	
 	/**
@@ -187,6 +214,12 @@ public class EmailEntityTest {
 		
 		assertEquals(recip1Address, recipient1Address);
 		assertEquals(recip2Address, recipient2Address);
+		
+		String 	recipient1FirstName = (String) email.getRecipients().stream().filter(r -> r.getRecipientType() == RecipientType.RECRUITER).findFirst().get().getFirstName();
+		String 	recipient2FirstName = (String) email.getRecipients().stream().filter(r -> r.getRecipientType() == RecipientType.SYSTEM).findFirst().get().getFirstName();
+		
+		assertEquals(firstNameRecip1, recipient1FirstName);
+		assertEquals(firstNameRecip2, recipient2FirstName);
 		
 	}
 }

@@ -28,7 +28,7 @@ public class RequestSendAlertDailySummaryEmailCommandTest {
 		
 		final UUID 		alertId1 		= UUID.randomUUID();
 		final UUID 		alertId2 		= UUID.randomUUID();
-		final String 	recruiterEmail 	= "kparkings@gmail.com";
+		final String 	recruiterId 	= "kpoo1";
 		
 		final suggestion_accuracy m1Accuracy = suggestion_accuracy.perfect;
 		final suggestion_accuracy m2Accuracy = suggestion_accuracy.excellent;
@@ -55,9 +55,9 @@ public class RequestSendAlertDailySummaryEmailCommandTest {
 				CandidateSearchAlertMatch.builder().id(UUID.randomUUID()).alertId(alertId1).accuracy(m2Accuracy).alertName(alert1Name).candidateId(m2CanidateId).roleSought(m2Role).build()
 				);
 		
-		RequestSendAlertDailySummaryEmailCommand command = new RequestSendAlertDailySummaryEmailCommand(recruiterEmail, matches);
+		RequestSendAlertDailySummaryEmailCommand command = new RequestSendAlertDailySummaryEmailCommand(recruiterId, matches);
 	
-		assertEquals(recruiterEmail, command.getRecruiterEmailAddress());
+		assertEquals(recruiterId, command.getRecruiterId());
 				
 		Map<String, Set<AlertSummary>> summaries = command.getMatchesByAlert();
 		
@@ -77,7 +77,15 @@ public class RequestSendAlertDailySummaryEmailCommandTest {
 		assertEquals(m3Role, match3.getRoleSought());
 		assertEquals(m4Role, match4.getRoleSought());
 		
+		assertEquals(alert1Name, match1.getAlertName());
+		assertEquals(alert1Name, match2.getAlertName());
+		assertEquals(alert2Name, match3.getAlertName());
+		assertEquals(alert2Name, match4.getAlertName());
 		
+		assertEquals(m1Accuracy, match1.getAccuracy());
+		assertEquals(m2Accuracy, match2.getAccuracy());
+		assertEquals(m3Accuracy, match3.getAccuracy());
+		assertEquals(m4Accuracy, match4.getAccuracy());
 	}
 	
 }

@@ -20,7 +20,10 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import com.arenella.recruit.adapters.events.CandidateNoLongerAvailableEvent;
+import com.arenella.recruit.candidates.beans.CandidateSearchAlertMatch;
 import com.arenella.recruit.curriculum.adapters.ExternalEventListener;
+import com.arenella.recruit.emailservice.adapters.EmailServiceExternalEventListener;
+import com.arenella.recruit.emailservice.adapters.RequestSendEmailCommand;
 
 /**
 * Unit tests for the MonolithExternalEventPublisher class
@@ -30,10 +33,13 @@ import com.arenella.recruit.curriculum.adapters.ExternalEventListener;
 public class MonolithExternalEventPublisherTest {
 	
 	@Mock
-	private ExternalEventListener 			mockCurriculumEventListener;
+	private ExternalEventListener 				mockCurriculumEventListener;
 
+	@Mock
+	private EmailServiceExternalEventListener 	mockEmailServiceListener;
+	
 	@InjectMocks
-	private MonolithExternalEventPublisher 	publisher;
+	private MonolithExternalEventPublisher 		publisher;
 	
 	/**
 	* Tests publishing of Event representing searched skills 
@@ -138,4 +144,25 @@ public class MonolithExternalEventPublisherTest {
 		Mockito.verify(this.mockCurriculumEventListener).listenForCandidateCreatedEvent(event);
 		
 	}
+	
+	/**
+	* Tests sending of event to send daily summary alerts to a
+	* recruiters whose Candidate Search Alert(s) have generated Matches
+	* @throws Exception
+	*/
+	@Test
+	public void testPublishRequestSendAlertDailySummaryEmailCommand() throws Exception{
+		
+		final String 							recruiterId 	= "recruiter21";
+		final Set<CandidateSearchAlertMatch> 	matches 		= Set.of(CandidateSearchAlertMatch.builder().alertId(UUID.randomUUID()).build()
+																		,CandidateSearchAlertMatch.builder().alertId(UUID.randomUUID()).build());
+		
+		RequestSendAlertDailySummaryEmailCommand command = new RequestSendAlertDailySummaryEmailCommand(recruiterId, matches);
+		
+		publisher.publishRequestSendAlertDailySummaryEmailCommand(command);
+		
+		Mockito.verify(this.mockEmailServiceListener).listenForSendEmailCommand(Mockito.any(RequestSendEmailCommand.class));
+		
+	}
+	
 }

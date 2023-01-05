@@ -28,6 +28,9 @@ public class EmailRecipientEntity {
 	@Column(name="recipient_type")
 	private RecipientType 		recipientType;
 	
+	@Column(name="first_name")
+	private String 				firstName;
+	
 	@Column(name="email_address")
 	private String 				emailAddress;
 	
@@ -44,6 +47,7 @@ public class EmailRecipientEntity {
 		this.id 			= builder.id;
 		this.emailId 		= builder.emailId;
 		this.recipientType 	= builder.recipientType;
+		this.firstName		= builder.firstName;
 		this.emailAddress 	= builder.emailAddress;
 	}
 	
@@ -63,6 +67,10 @@ public class EmailRecipientEntity {
 		return this.emailAddress;
 	}
 	
+	public String getFirstName() {
+		return this.firstName;
+	}
+	
 	/**
 	* Returns a builder for the RecipientBuilder class
 	* @return Builder
@@ -80,6 +88,7 @@ public class EmailRecipientEntity {
 		private String 			id;
 		private UUID 			emailId;
 		private RecipientType 	recipientType;
+		private String 			firstName;
 		private String 			emailAddress;
 		
 		/**
@@ -113,6 +122,17 @@ public class EmailRecipientEntity {
 		}
 		
 		/**
+		* Sets the first name of the Recipient
+		* @param firstName - First name of the Recipient
+		* @return Builder
+		*/
+		public EmailRecipientEntityBuilder firstName(String firstName) {
+			this.firstName = firstName;
+			return this;
+		}
+		
+		
+		/**
 		* Sets the body of the Email
 		* @param email - Email
 		* @return Builder
@@ -144,11 +164,18 @@ public class EmailRecipientEntity {
 					.recipientType(recipient.getRecipientType())
 					.emailAddress(recipient.getEmailAddress())
 					.emailId(email.getId())
+					.firstName(recipient.getFirstName())
 				.build();
 	}
 	
 	public static EmailRecipient<?> convertFromEntity(EmailRecipientEntity entity) {
-		return new EmailRecipient<String>(entity.getId(), entity.getRecipientType(), entity.getEmailAddress());
+		
+		EmailRecipient<?> recipient =  new EmailRecipient<String>(entity.getId(), entity.getRecipientType());
+		
+		recipient.setEmail(entity.getEmailAddress());
+		recipient.setFirstName(entity.getFirstName());
+		
+		return recipient;
 	}
 	
 }

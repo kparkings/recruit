@@ -7,9 +7,9 @@ export class CandidateSearchAlert{
 	public perm:string 					= '';
 	public yearsExperienceGtEq:string 	= '';
 	public yearsExperienceLtEq:string 	= '';
-	public dutch:string 				= "UNKNOWN";
-	public english:string 				= "UNKNOWN";
-	public french:string 				= "UNKNOWN";
+	public dutch?:string;
+	public english?:string;
+	public french?:string;
 	public skills:Array<string> 		= new Array<string>();
 
 	public constructor(){}

@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
-import com.arenella.recruit.emailservice.beans.Recipient.RECIPIENT_TYPE;
+import com.arenella.recruit.emailservice.beans.Email.EmailRecipient.RecipientType;
 
 /**
 * Unit tests for the Recipient class
@@ -13,7 +13,7 @@ import com.arenella.recruit.emailservice.beans.Recipient.RECIPIENT_TYPE;
 public class RecipientTest {
 
 	final String 			id				= "rec1";
-	final RECIPIENT_TYPE 	recipientType	= RECIPIENT_TYPE.RECRUITER;
+	final RecipientType 	recipientType	= RecipientType.RECRUITER;
 	final String 			firstName		= "Kevin";
 	final String 			email			= "kparkings@gmail.com";
 	

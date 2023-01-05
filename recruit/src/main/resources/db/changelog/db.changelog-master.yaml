@@ -1323,3 +1323,29 @@ databaseChangeLog:
                   type: varchar
                   constraints:
                     nullable: false
+  - changeSet:
+      id: addColumn-firstname_to_email_recipient
+      author: kevin
+      changes:
+        - addColumn:
+            tableName: email_recipient
+            schemaName: email
+            columns:
+            - column:
+                name: first_name
+                type: varchar
+                constraints:
+                  nullable: true
+  - changeSet:
+      id: candidate_alert_match_add_alert_id_col
+      author: kparkings
+      changes:
+        - addColumn:
+            tableName: candidate_search_alert_match
+            schemaName: candidate
+            columns:
+              - column:
+                  name: alert_id
+                  type: UUID
+                  constraints:
+                    nullable: false

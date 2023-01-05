@@ -19,6 +19,7 @@ public class EmailRecipientEntityTest {
 	private static final String 		emailAddress 	= "kparkings@gmail.com";
 	private static final String 		id				= "anId";
 	private static final UUID			emailId			= UUID.randomUUID();
+	private static final String			firstName		= "Kevin";
 	private static final RecipientType 	type			= RecipientType.SYSTEM;
 	
 	/**
@@ -35,12 +36,14 @@ public class EmailRecipientEntityTest {
 						.emailId(emailId)
 						.id(id)
 						.recipientType(type)
+						.firstName(firstName)
 					.build();
 		
 		assertEquals(emailAddress, 	entity.getEmailAddress());
 		assertEquals(id, 			entity.getId());
 		assertEquals(emailId, 		entity.getEmailId());
 		assertEquals(type, 			entity.getRecipientType());
+		assertEquals(firstName, 	entity.getFirstName());
 		
 	}
 	
@@ -58,6 +61,7 @@ public class EmailRecipientEntityTest {
 						.emailId(emailId)
 						.id(id)
 						.recipientType(type)
+						.firstName(firstName)
 					.build();
 		
 		@SuppressWarnings("unchecked")
@@ -66,7 +70,7 @@ public class EmailRecipientEntityTest {
 		assertEquals(emailAddress, 	recipient.getEmailAddress());
 		assertEquals(id, 			recipient.getId());
 		assertEquals(type, 			recipient.getRecipientType());
-		
+		assertEquals(firstName, 	recipient.getFirstName());
 	}
 	
 	/**
@@ -76,8 +80,11 @@ public class EmailRecipientEntityTest {
 	@Test
 	public void testConvertToEntity() throws Exception{
 		
-		final EmailRecipient<String> 	recipient 	= new EmailRecipient<>(id, type, emailAddress); 
+		final EmailRecipient<String> 	recipient 	= new EmailRecipient<>(id, type); 
 		final Email 					email 		= Email.builder().id(UUID.randomUUID()).build();
+		
+		recipient.setEmail(emailAddress);
+		recipient.setFirstName(firstName);
 		
 		EmailRecipientEntity 			entity 		= EmailRecipientEntity.convertToEntity(recipient, email);
 		
@@ -85,6 +92,8 @@ public class EmailRecipientEntityTest {
 		assertEquals(id, 				entity.getId());
 		assertEquals(type, 				entity.getRecipientType());
 		assertEquals(email.getId(), 	entity.getEmailId());
+		assertEquals(firstName, 		entity.getFirstName());
+		
 	}
 	
 }

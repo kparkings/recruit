@@ -4,8 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
+import com.arenella.recruit.emailservice.beans.Email.EmailRecipient.RecipientType;
 import com.arenella.recruit.emailservice.beans.Recipient;
-import com.arenella.recruit.emailservice.beans.Recipient.RECIPIENT_TYPE;
 import com.arenella.recruit.emailservice.entities.RecipientEntity;
 import com.arenella.recruit.emailservice.entities.RecipientEntityPK;
 
@@ -15,7 +15,7 @@ import com.arenella.recruit.emailservice.entities.RecipientEntityPK;
 */
 public class RecipientEntityTest {
 
-	private final RECIPIENT_TYPE 	type 			= RECIPIENT_TYPE.RECRUITER;
+	private final RecipientType 	type 			= RecipientType.RECRUITER;
 	private final String 			recipientId 	= "1234";
 	private final String 			email 			= "kparkings@gmail.com";
 	private final String 			firstName 		= "Kevin";

@@ -945,16 +945,16 @@ this.modalService.dismissAll();
 			beResults: 				new FormControl(this.countryFilterForm.get('BELGIUM')?.value),
 			ukResults: 				new FormControl(this.countryFilterForm.get('UK')?.value),
 			contractType: 			new FormControl(contractType),
-			dutchLanguage: 			new FormControl(this.dutchFilterForm.get("level")),
-			englishLanguage: 		new FormControl(this.englishFilterForm.get("level")),
-			frenchLanguage:			new FormControl(this.frenchFilterForm.get("level")),
+			dutchLanguage: 			new FormControl(this.dutchFilterForm.get("level")?.value),
+			englishLanguage: 		new FormControl(this.englishFilterForm.get("level"))?.value,
+			frenchLanguage:			new FormControl(this.frenchFilterForm.get("level"))?.value,
 			minYearsExperience: 	new FormControl(this.yearsExperienceFilterForm.get('yearsExperienceGtEq')?.value),
 			maxYearsExperience: 	new FormControl(this.yearsExperienceFilterForm.get('yearsExperienceLeEq')?.value),
 		});
-		
+		console.log("DUTCH LEVEL = " + this.dutchFilterForm.get("level"));
 		let params:SuggestionParams 	= new SuggestionParams(suggestionFilterForm, this.skillFilterSelections, this.getSelectedFunctionTypes());
 		let alert:CandidateSearchAlert 	= new CandidateSearchAlert();
-		
+		console.log("DUTCH LEVEL = " + params.getDutchLevel());
 		alert.alertName 			= this.createAlertForm.get(('alertName'))?.value;
 		alert.countries 			= params.getCountries();
 		alert.dutch 				= params.getDutchLevel();

@@ -6,7 +6,7 @@ import javax.persistence.Embeddable;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 
-import com.arenella.recruit.emailservice.beans.Recipient.RECIPIENT_TYPE;
+import com.arenella.recruit.emailservice.beans.Email.EmailRecipient.RecipientType;
 
 /**
 * Primary Key definition for RecipentEntity
@@ -18,7 +18,7 @@ public class RecipientEntityPK implements Serializable{
 	private static final long serialVersionUID = -4177140334471310817L;
 
 	@Enumerated(EnumType.STRING)
-	private RECIPIENT_TYPE 	recipientType;
+	private RecipientType 	recipientType;
 	private String			recipientId;
 	
 	/**
@@ -33,7 +33,7 @@ public class RecipientEntityPK implements Serializable{
 	* @param recipeintType - Type of Recipient
 	* @param recipeintId   - Unique ID of recipient in scope of RecipientType
 	*/
-	public RecipientEntityPK(RECIPIENT_TYPE recipientType, String recipientId) {
+	public RecipientEntityPK(RecipientType recipientType, String recipientId) {
 		this.recipientType 	= recipientType;
 		this.recipientId 	= recipientId;
 	}
@@ -42,7 +42,7 @@ public class RecipientEntityPK implements Serializable{
 	* Returns Unique ID of recipient in scope of RecipientType
 	* @return Unique ID of recipient in scope of RecipientType
 	*/
-	public RECIPIENT_TYPE getRecipientType() {
+	public RecipientType getRecipientType() {
 		return this.recipientType;
 	}
 	

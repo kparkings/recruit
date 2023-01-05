@@ -25,6 +25,9 @@ public class CandidateSearchAlertMatchEntity {
 	@Column(name="id")
 	private UUID 					id;
 	
+	@Column(name="alertId")
+	private UUID					alertId;
+	
 	@Column(name="recruiter_id")
 	private String 					recruiterId;
 	
@@ -55,6 +58,7 @@ public class CandidateSearchAlertMatchEntity {
 	public CandidateSearchAlertMatchEntity(CandidateSearchAlertMatchEntityBuilder builder) {
 		this.id				= builder.id;
 		this.recruiterId	= builder.recruiterId;
+		this.alertId		= builder.alertId;
 		this.alertName		= builder.alertName;
 		this.candidateId	= builder.candidateId;
 		this.roleSought		= builder.roleSought;
@@ -75,6 +79,15 @@ public class CandidateSearchAlertMatchEntity {
 	*/
 	public String getRecruiterId() {
 		return this.recruiterId;
+	}
+	
+	/**
+	* Returns the Unique Id of the Alert that
+	* produced the Match
+	* @return id of the Alert
+	*/
+	public UUID getAlertId() {
+		return this.alertId;
 	}
 	
 	/**
@@ -125,6 +138,7 @@ public class CandidateSearchAlertMatchEntity {
 	
 		private UUID 					id;
 		private String 					recruiterId;
+		private UUID					alertId;
 		private String 					alertName;
 		private Long 					candidateId;
 		private String					roleSought;
@@ -147,6 +161,16 @@ public class CandidateSearchAlertMatchEntity {
 		*/
 		public CandidateSearchAlertMatchEntityBuilder recruiterId(String recruiterId) {
 			this.recruiterId = recruiterId;
+			return this;
+		}
+		
+		/**
+		* Sets the id of the Alert that generated the Match
+		* @param alertId - unique if of the Alert
+		* @return Builder
+		*/
+		public CandidateSearchAlertMatchEntityBuilder alertId(UUID alertId) {
+			this.alertId = alertId;
 			return this;
 		}
 		
@@ -215,6 +239,7 @@ public class CandidateSearchAlertMatchEntity {
 					.recruiterId(entity.getRecruiterId())
 					.roleSought(entity.getRoleSought())
 					.accuracy(entity.getAccuracy())
+					.alertId(entity.getAlertId()) //Need to add alertId to table and pass it in here. Als
 				.build();
 	}
 	
@@ -232,6 +257,7 @@ public class CandidateSearchAlertMatchEntity {
 					.recruiterId(match.getRecruiterId())
 					.roleSought(match.getRoleSought())
 					.accuracy(match.getAccuracy())
+					.alertId(match.getAlertId())
 				.build();
 	}
 	

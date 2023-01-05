@@ -23,7 +23,7 @@ import com.arenella.recruit.candidates.dao.CandidateSearchAlertMatchDao;
 import com.arenella.recruit.candidates.utils.CandidateSuggestionUtil.suggestion_accuracy;
 
 /**
-* Util for performing tests of CandidateSearchEvents against 
+* Utility for performing tests of CandidateSearchEvents against 
 * newly uploaded Candidates
 * @author K Parkings
 */
@@ -45,29 +45,38 @@ public class AlertTestUtilImpl implements AlertTestUtil{
 	@Autowired
 	private ExternalEventPublisher				commandPublisher;
 	
+	/**
+	* Kicks off the Scheduler to package Matches 
+	*/
 	@PostConstruct
 	public void init() {
 		
-		endOfDayScheduler.schedule(new Runnable() {
+		endOfDayScheduler.scheduleAtFixedRate(new Runnable() {
 
 			@Override
 			public void run() {
 				
-				matchDao.getRecruitersWithMatches().stream().forEach(recruiterId ->{
+				try {
+					matchDao.getRecruitersWithMatches().stream().forEach(recruiterId ->{
 					
-					Set<CandidateSearchAlertMatch> matches = matchDao.getMatchesForRecruiters(recruiterId);
+						Set<CandidateSearchAlertMatch> matches = matchDao.getMatchesForRecruiters(recruiterId);
+						
+						constructAndSendDailyMatchSummaryEmail(recruiterId, matches);
+						
+						matches.stream().forEach(match -> { 
+							matchDao.deleteById(match.getId());
+						});
+						
+						});
 					
-					constructAndSendDailyMatchSummaryEmail(matches);
-					
-					matches.stream().forEach(match -> {
-						matchDao.deleteById(match.getId());
-					});
-					
-				});
+				}catch(Exception e) {
+					e.printStackTrace();
+				}
 				
 			}
 			
-		}, 1, TimeUnit.DAYS);
+		}, 1, 1, TimeUnit.DAYS);
+		
 	}
 	
 	/**
@@ -75,9 +84,9 @@ public class AlertTestUtilImpl implements AlertTestUtil{
 	* a summary of the days matching candidates
 	* @param matches
 	*/
-	private void constructAndSendDailyMatchSummaryEmail(Set<CandidateSearchAlertMatch> matches) {
+	private void constructAndSendDailyMatchSummaryEmail(String recruiterId, Set<CandidateSearchAlertMatch> matches) {
 		
-		RequestSendAlertDailySummaryEmailCommand command = new RequestSendAlertDailySummaryEmailCommand("recruiterEmail@FromWhere??", matches);
+		RequestSendAlertDailySummaryEmailCommand command = new RequestSendAlertDailySummaryEmailCommand(recruiterId, matches);
 		
 		commandPublisher.publishRequestSendAlertDailySummaryEmailCommand(command);
 		
@@ -106,25 +115,24 @@ public class AlertTestUtilImpl implements AlertTestUtil{
 			@Override
 			public void run() {
 				
-				CandidateFilterOptions filterOptions = 
-						CandidateFilterOptions
-							.builder()
-								.candidateIds(Set.of(event.getCandidateId()))
-								.countries(alert.getCountries())
-								.dutch(alert.getDutch()		== LEVEL.UNKNOWN ? null : alert.getDutch())
-								.english(alert.getEnglish()	== LEVEL.UNKNOWN ? null : alert.getEnglish())
-								.french(alert.getFrench()	== LEVEL.UNKNOWN ? null : alert.getFrench())
-								.freelance(alert.getFreelance().isEmpty() ? null : alert.getFreelance().get())
-								.functions(alert.getFunctions())
-								.perm(alert.getPerm().isEmpty() ? null : alert.getPerm().get())
-								.skills(alert.getSkills())
-								.yearsExperienceGtEq(alert.getYearsExperienceGtEq())
-								.yearsExperienceLtEq(alert.getyearsExperienceLtEq())
-							.build();
-				
-				suggestion_accuracy accuracy = null;
-				
 				try {
+					CandidateFilterOptions filterOptions = 
+							CandidateFilterOptions
+								.builder()
+									.candidateIds(Set.of(event.getCandidateId()))
+									.countries(alert.getCountries())
+									.dutch(alert.getDutch()		== LEVEL.UNKNOWN ? null : alert.getDutch())
+									.english(alert.getEnglish()	== LEVEL.UNKNOWN ? null : alert.getEnglish())
+									.french(alert.getFrench()	== LEVEL.UNKNOWN ? null : alert.getFrench())
+									.freelance(alert.getFreelance().isEmpty() ? null : alert.getFreelance().get())
+									.functions(alert.getFunctions())
+									.perm(alert.getPerm().isEmpty() ? null : alert.getPerm().get())
+									.skills(alert.getSkills())
+									.yearsExperienceGtEq(alert.getYearsExperienceGtEq())
+									.yearsExperienceLtEq(alert.getyearsExperienceLtEq())
+								.build();
+					
+					suggestion_accuracy accuracy = null;
 					
 					accuracy = candidateService.doTestCandidateAlert(Long.valueOf(event.getCandidateId()), filterOptions);
 				
@@ -137,6 +145,7 @@ public class AlertTestUtilImpl implements AlertTestUtil{
 									.recruiterId(alert.getRecruiterId())
 									.roleSought(event.getRoleSought())
 									.accuracy(accuracy)
+									.alertId(alert.getAlertId())
 								.build());
 					}
 					

@@ -1,15 +1,15 @@
 package com.arenella.recruit.emailservice.beans;
 
+import com.arenella.recruit.emailservice.beans.Email.EmailRecipient.RecipientType;
+
 /**
 * Class represnets an Email recipient
 * @author K Parkings
 */
 public class Recipient {
 
-	public static enum RECIPIENT_TYPE {RECRUITER}
-	
 	final String 			id;
-	final RECIPIENT_TYPE 	recipientType;
+	final RecipientType 	recipientType;
 	final String 			firstName;
 	final String 			email;
 	
@@ -20,7 +20,7 @@ public class Recipient {
 	* @param firstName		- firstName of the Recipient
 	* @param email			- Email address of the Recipient
 	*/
-	public Recipient(String id, RECIPIENT_TYPE recipientType, String firstName, String email) {
+	public Recipient(String id, RecipientType recipientType, String firstName, String email) {
 		this.id 			= id;
 		this.recipientType 	= recipientType;
 		this.firstName 		= firstName;
@@ -41,7 +41,7 @@ public class Recipient {
 	* with id value
 	* @return id of the recipient
 	*/
-	public RECIPIENT_TYPE getRecipientType() {
+	public RecipientType getRecipientType() {
 		return this.recipientType;
 	}
 	

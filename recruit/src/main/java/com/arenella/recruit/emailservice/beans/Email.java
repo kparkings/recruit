@@ -362,18 +362,33 @@ public class Email {
 		
 		private final T 				id;
 		private final RecipientType 	recipientType;
-		private final String 			emailAddress;
+		private String 			firstName;
+		private String 			emailAddress;
 	
 		/**
 		* Constructor
 		* @param id				- Unique id of the Recipient
 		* @param recipientType	- Type of the Recipient
-		* @param emailAddress	- Recipients Email address
 		*/
-		public EmailRecipient(T id, RecipientType recipientType, String emailAddress) {
+		public EmailRecipient(T id, RecipientType recipientType) {
 			this.id  			= id;
 			this.recipientType 	= recipientType;
-			this.emailAddress 	= emailAddress;
+		}
+		
+		/**
+		* Sets the first name of the recipient
+		* @param firstName - first name of the Recipient
+		*/
+		public void setFirstName(String firstName) {
+			this.firstName = firstName;
+		}
+		
+		/**
+		* Sets the emailAddress of the Recipient
+		* @param emailAddress - Recipients email address
+		*/
+		public void setEmail(String emailAddress) {
+			this.emailAddress = emailAddress;
 		}
 		
 		/**
@@ -390,6 +405,14 @@ public class Email {
 		*/
 		public RecipientType getRecipientType() {
 			return this.recipientType;
+		}
+
+		/**
+		* Returns the firstName of the Recipient
+		* @return first name of the Recipient
+		*/
+		public String getFirstName() {
+			return this.firstName;
 		}
 		
 		/**

@@ -13,6 +13,8 @@ import com.arenella.recruit.adapters.events.CandidateNoLongerAvailableEvent;
 import com.arenella.recruit.curriculum.adapters.ExternalEventListener;
 import com.arenella.recruit.emailservice.adapters.EmailServiceExternalEventListener;
 import com.arenella.recruit.emailservice.adapters.RequestSendEmailCommand;
+import com.arenella.recruit.emailservice.beans.Email.EmailRecipient;
+import com.arenella.recruit.emailservice.beans.Email.EmailRecipient.RecipientType;
 import com.arenella.recruit.emailservice.beans.Email.EmailTopic;
 import com.arenella.recruit.emailservice.beans.Email.EmailType;
 import com.arenella.recruit.emailservice.beans.Email.Sender;
@@ -87,11 +89,15 @@ public class MonolithExternalEventPublisher implements ExternalEventPublisher{
 	@Override
 	public void publishRequestSendAlertDailySummaryEmailCommand(RequestSendAlertDailySummaryEmailCommand command) {
 		
-		Map<String,Object> model = new HashMap<>();
+		Map<String,Object> alerts = new HashMap<>();
 		
 		command.getMatchesByAlert().keySet().stream().forEach(key -> {
-			model.put(key, command.getMatchesByAlert().get(key));
+			alerts.put(key, command.getMatchesByAlert().get(key));
 		});
+	
+		Map<String, Object> model = new HashMap<>();
+		model.put("alerts", alerts);
+		model.put("recipientName", command.getRecruiterId());
 		
 		RequestSendEmailCommand c = 
 				RequestSendEmailCommand
@@ -99,7 +105,7 @@ public class MonolithExternalEventPublisher implements ExternalEventPublisher{
 						.emailType(EmailType.EXTERN)
 						.model(model)
 						.persistable(false)
-					//	.recipients(Set.of(new Recipient<String>(recruiter.getUserId(), RecipientType.RECRUITER, recruiter.getEmail())))
+						.recipients(Set.of(new EmailRecipient<String>(command.getRecruiterId(), RecipientType.RECRUITER)))
 						.sender(new Sender<>(UUID.randomUUID(), SenderType.SYSTEM, "kparkings@gmail.com"))
 						.title("Arenella-ICT - New Matching Candidates")
 						.topic(EmailTopic.ALERT_MATCHES)

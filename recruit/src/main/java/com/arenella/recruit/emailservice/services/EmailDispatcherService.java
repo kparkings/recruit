@@ -1,7 +1,9 @@
 package com.arenella.recruit.emailservice.services;
 
 import java.time.LocalDateTime;
-
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -18,8 +20,11 @@ import org.springframework.stereotype.Component;
 
 import com.arenella.recruit.emailservice.adapters.RequestSendEmailCommand;
 import com.arenella.recruit.emailservice.beans.Email;
+import com.arenella.recruit.emailservice.beans.Email.EmailRecipient;
 import com.arenella.recruit.emailservice.beans.Email.Status;
+import com.arenella.recruit.emailservice.beans.Recipient;
 import com.arenella.recruit.emailservice.dao.EmailServiceDao;
+import com.arenella.recruit.emailservice.dao.RecipientDao;
 
 /**
 * Component responsible for sending Email
@@ -33,6 +38,9 @@ public class EmailDispatcherService {
 	
 	@Autowired
 	private EmailServiceDao 				emailDao;
+	
+	@Autowired
+	private RecipientDao					recipientDao;
 	
 	@Autowired
 	private EmailTemplateFactory 			templateFacotry;
@@ -87,6 +95,26 @@ public class EmailDispatcherService {
 	* @param command - contains details of email to be sent
 	*/
 	public void handleSendEmailCommand(RequestSendEmailCommand command){
+		try {
+		Set<EmailRecipient<?>> recipients = new HashSet<>();
+		
+		recipients.addAll(command.getRecipients());
+		
+		recipients.stream().forEach(r -> {
+			
+			Optional<Recipient> recipientOpt = this.recipientDao.getByIdAndType(r.getRecipientType(), String.valueOf(r.getId()));
+			
+			//Ugly but just to see if there is an issue until I have time to design proper error handling
+			if (recipientOpt.isEmpty()) {
+				r.setEmail("kparkings@gmail.com");
+				r.setFirstName("Failed for " + r.getId() + " " + r.getId());
+			} else {
+				r.setEmail(recipientOpt.get().getEmail());
+				r.setFirstName(recipientOpt.get().getFirstName());
+			}
+			
+		});
+		
 		
 		Email email = Email
 				.builder()
@@ -94,7 +122,7 @@ public class EmailDispatcherService {
 					.created(LocalDateTime.now())
 					.emailType(command.getEmailType())
 					.id(UUID.randomUUID())
-					.recipients(command.getRecipients())
+					.recipients(recipients)
 					.scheduledToBeSentAfter(LocalDateTime.now().minusDays(1))
 					.sender(command.getSender())
 					.status(Status.TO_OUTBOX)
@@ -105,6 +133,9 @@ public class EmailDispatcherService {
 		this.emailDao.saveEmail(email);
 		
 		dispatchEmail(email, this.emailDao);
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
 		
 	}
 	

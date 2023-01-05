@@ -65,7 +65,7 @@ public class CandidateSearchAlert {
 		if (this.alertId != null) {
 			throw new IllegalStateException();
 		}
-		
+			
 		this.recruiterId 	= recruiterId;
 		this.alertId 		= UUID.randomUUID();
 	}

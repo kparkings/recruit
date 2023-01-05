@@ -22,15 +22,15 @@ import com.arenella.recruit.emailservice.beans.Email.Sender.SenderType;
 * Unit tests for the RequestSendEmailEvent class
 * @author K Parkings
 */
-public class RequestSendEmailEventTest {
+public class RequestSendCommandEventTest {
 
 	final private UUID 						recip1Id 					= UUID.randomUUID();
 	final private String 					recip2Id 					= "anId";
 	final private String 					title						= "aTitle";
 	final private EmailType 				emailType					= EmailType.EXTERN;
 	final private Sender<?> 				sender						= new Sender<UUID>(UUID.randomUUID(), SenderType.SYSTEM, "norepy@renella-ict.com"); 
-	final private Set<EmailRecipient<?>> 	recipients					= Set.of(new EmailRecipient<UUID>(recip1Id, RecipientType.RECRUITER, "norepy@renella-ict.com"),
-																	 	new EmailRecipient<String>(recip2Id, RecipientType.SYSTEM, "norepy@renella-ict.com"));
+	final private Set<EmailRecipient<?>> 	recipients					= Set.of(new EmailRecipient<UUID>(recip1Id, RecipientType.RECRUITER),
+																	 	new EmailRecipient<String>(recip2Id, RecipientType.SYSTEM));
 	final private EmailTopic				topic						= EmailTopic.ACCOUNT_CREATED;
 	final private Map<String,Object>		model						= new HashMap<>();
 	

@@ -15,17 +15,17 @@ import com.arenella.recruit.candidates.utils.CandidateSuggestionUtil.suggestion_
 */
 public class RequestSendAlertDailySummaryEmailCommand {
 
-	private String 							recruiterEmailAddress;
+	private String 							recruiterId;
 	private Map<String, Set<AlertSummary>> 	matchesByAlert 			= new LinkedHashMap<>();
 	
 	/**
 	* Constructor - Separates matches into summary per Alert
-	* @param recruiterEmailAddress 	- Email address of the recruiter owning the Alerts that produced the matches
-	* @param matches 				- Details of Matches between Alert and Candidate 
+	* @param recruiterId 	- Unique id of the recruiter owning the Alerts that produced the matches
+	* @param matches 		- Details of Matches between Alert and Candidate 
 	*/
-	public RequestSendAlertDailySummaryEmailCommand(String recruiterEmailAddress, Set<CandidateSearchAlertMatch> matches) {
+	public RequestSendAlertDailySummaryEmailCommand(String recruiterId, Set<CandidateSearchAlertMatch> matches) {
 		
-		this.recruiterEmailAddress = recruiterEmailAddress;
+		this.recruiterId = recruiterId;
 		matches.stream().forEach(match -> {
 			
 			if (!matchesByAlert.containsKey(match.getAlertId().toString())){
@@ -47,11 +47,11 @@ public class RequestSendAlertDailySummaryEmailCommand {
 	}
 	
 	/**
-	* Returns the email address of the recruiter that owns the Alerts
+	* Returns the id of the recruiter that owns the Alerts
 	* @return
 	*/
-	public String getRecruiterEmailAddress() {
-		return this.recruiterEmailAddress;
+	public String getRecruiterId() {
+		return this.recruiterId;
 	}
 	
 	/**

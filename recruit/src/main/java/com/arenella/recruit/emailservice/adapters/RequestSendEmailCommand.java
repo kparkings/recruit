@@ -18,14 +18,14 @@ import com.arenella.recruit.emailservice.beans.Email.Sender;
 //			 the class definitions can be declared in each service
 public class RequestSendEmailCommand {
 
-	private String 				title;
-	private EmailType 			emailType;
-	private Sender<?> 			sender; 
+	private String 					title;
+	private EmailType 				emailType;
+	private Sender<?> 				sender; 
 	private Set<EmailRecipient<?>> 	recipients					= new LinkedHashSet<>(); 
 	
-	private EmailTopic 			topic;
-	private Map<String,Object>	model						= new HashMap<>();
-	private boolean				persistable					= false;
+	private EmailTopic 				topic;
+	private Map<String,Object>		model						= new HashMap<>();
+	private boolean					persistable					= false;
 	
 	/**
 	* Returns the title for the Email
