@@ -210,7 +210,7 @@ export class SuggestionsService {
 		return paramStr;
 	}
 	
-	private getFunctionTypeFromTitle(title:string):string{
+	public getFunctionTypeFromTitleText(title:string):Array<string>{
 		
 		let functionTypes:Array<string> = new Array<string>();
 		
@@ -235,6 +235,36 @@ export class SuggestionsService {
 		functionTypes.push(this.addFunctionTypeIfSDET(title));
 		
 		functionTypes = functionTypes.filter(f => f !== '');
+		
+		return functionTypes;
+	}
+	
+	private getFunctionTypeFromTitle(title:string):string{
+		
+		let functionTypes:Array<string> = this.getFunctionTypeFromTitleText(title);
+		//let functionTypes:Array<string> = new Array<string>();
+		
+		//let titleFormatted:string = title.toLowerCase();
+		//titleFormatted = titleFormatted.trim();
+		
+		//functionTypes.push(this.addFunctionTypeIfJavaDev(title));
+		//functionTypes.push(this.addFunctionTypeIfCSHARPDev(title));
+		//functionTypes.push(this.addFunctionTypeIfSupport(title));
+		//functionTypes.push(this.addFunctionTypeIfBusinessAnalayst(title));
+		//functionTypes.push(this.addFunctionTypeIfUiUx(title));
+		//functionTypes.push(this.addFunctionTypeIfProjectManager(title)); 
+		//functionTypes.push(this.addFunctionTypeIfArchitect(title)); 
+		//functionTypes.push(this.addFunctionTypeIfTester(title)); 
+		//functionTypes.push(this.addFunctionTypeIfWebDeveloper(title));
+		//functionTypes.push(this.addFunctionTypeIfScrumMaster(title));
+		//functionTypes.push(this.addFunctionTypeIfDataScientist(title));
+		//functionTypes.push(this.addFunctionTypeIfNetworkAdmin(title));
+		//functionTypes.push(this.addFunctionTypeIfSoftwareDeveloper(title));
+		//functionTypes.push(this.addFunctionTypeIfSecurity(title));
+		//functionTypes.push(this.addFunctionTypeIfRecruiter(title));
+		//functionTypes.push(this.addFunctionTypeIfSDET(title));
+		
+		//functionTypes = functionTypes.filter(f => f !== '');
 		
 		if (functionTypes.length > 0) {
 			return '&functions=' + encodeURIComponent(functionTypes.toString());

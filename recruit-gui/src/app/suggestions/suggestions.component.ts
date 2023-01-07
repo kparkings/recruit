@@ -269,6 +269,7 @@ export class SuggestionsComponent implements OnInit {
 		let params:SuggestionParams 	= new SuggestionParams(this.suggestionFilterForm, this.skillFilters, new Array<string>());
 		let alert:CandidateSearchAlert 	= new CandidateSearchAlert();
 		
+		alert.functions			 	= this.suggestionsService.getFunctionTypeFromTitleText(params.getTitle());
 		alert.alertName 			= this.createAlertForm.get(('alertName'))?.value;
 		alert.countries 			= params.getCountries();
 		alert.dutch 				= params.getDutchLevel();
