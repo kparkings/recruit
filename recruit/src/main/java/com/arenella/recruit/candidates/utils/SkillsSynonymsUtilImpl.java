@@ -13,6 +13,39 @@ import org.springframework.stereotype.Component;
 @Component
 public class SkillsSynonymsUtilImpl implements SkillsSynonymsUtil{
 
+	private static final Set<String> TESTER 				= Set.of("qa", "tester", "test analyst"); 
+	private static final Set<String> BUSINESS_ANALYST 		= Set.of("ba", "business analyst");
+	private static final Set<String> JAVASCRIPT				= Set.of("js", "Javascript");
+	private static final Set<String> CSS					= Set.of("css", "style sheets", "cascading style sheets");
+	private static final Set<String> NODE					= Set.of("node", "node.js", "nodejs");
+	private static final Set<String> NEXT					= Set.of("next", "next.js", "nextjs");
+	private static final Set<String> VUE					= Set.of("vue", "vue.js", "vuejs");
+	private static final Set<String> REACT					= Set.of("react", "react.js", "reactjs");
+	private static final Set<String> CSHARP					= Set.of("C#", "csharp");
+	private static final Set<String> DOTNET_CORE			= Set.of("dotnet", ".net", "dot net");
+	private static final Set<String> ADO_DOTNET				= Set.of("ado", "ado.net", "ado .net");
+	private static final Set<String> VB_DOTNET				= Set.of("vb", "vb.net", "vb .net");
+	private static final Set<String> ASP_DOTNET				= Set.of("asp", "asp.net", "asp .net");
+	private static final Set<String> FRONT_END				= Set.of("frontend", "front end", "fe", "front-end");
+	private static final Set<String> BACK_END				= Set.of("backend", "back end", "be", "back-end");
+	private static final Set<String> SPRING_CORE			= Set.of("spring", "spring core", "springcore", "spring-core");
+	private static final Set<String> SPRING_BOOT			= Set.of("springboot", "spring boot", "spring-boot");
+	private static final Set<String> SPRING_DATA			= Set.of("springdata", "spring data", "spring-data");
+	private static final Set<String> SPRING_TEST			= Set.of("springtest", "spring test", "spring-test");
+	private static final Set<String> SPRING_MVC				= Set.of("springmvc", "spring mvc", "spring-mvc");
+	
+	//sql server
+	//Project management : project manager
+	//Rest | soap : web services
+	//technical suppoer : tech support
+	//acceptance testing : uat
+	//pl/sql : pl-sql oracle sql
+	//selenium : selinium web driver
+	//ms sql server: ms sqlserver
+	//rest apis: rest apis
+	//microservices: micro services
+
+	
 	/**
 	* Refer to the SkillsSynonymsUtil interface for details 
 	*/
@@ -27,160 +60,119 @@ public class SkillsSynonymsUtilImpl implements SkillsSynonymsUtil{
 		originalSkills.stream().forEach(skill -> {
 			
 			switch(skill) {
-				case "qa":{
-					synonyms.add("tester");
-					synonyms.add("test analyst");
-					break;
-				}
-				case "test analyst":{
-					synonyms.add("qa");
-					synonyms.add("tester");
-					break;
-				}
-				case "ba":{
-					synonyms.add("business analyst");
-					break;
-				}
-				case "business analyst":{
-					synonyms.add("ba");
-					break;
-				}
+				case "qa":
+				case "automation tester":
+				case "manual tester":
+				case "test analyst":
 				case "tester":{
-					synonyms.add("qa");
-					synonyms.add("test analyst");
+					synonyms.addAll(TESTER);
 					break;
 				}
-				case "js":{
-					synonyms.add("javascript");
+				case "ba":
+				case "business analyst":{
+					synonyms.addAll(BUSINESS_ANALYST);
 					break;
 				}
+				case "js":
 				case "javascript":{
-					synonyms.add("js");
+					synonyms.addAll(JAVASCRIPT);
 					break;
 				} 
-				case "css":{
-					synonyms.add("cascading style sheets");
-					break;
-				}
+				case "css":
 				case "cascading style sheets":{
-					synonyms.add("css");
+					synonyms.addAll(CSS);
 					break;
 				}
-				case "node":{
-					synonyms.add("nodejs");
-					synonyms.add("node.js");
+				case ".net":
+				case "dot net":
+				case "dotnemt":{
+					synonyms.addAll(DOTNET_CORE);
 					break;
 				}
-				case "nodejs":{
-					synonyms.add("node");
-					synonyms.add("node.js");
+				case "ado .net":
+				case "ado.net":{
+					synonyms.addAll(DOTNET_CORE);
+					synonyms.addAll(ADO_DOTNET);
 					break;
 				}
+				case "vb .net":
+				case "vb.net":{
+					synonyms.addAll(DOTNET_CORE);
+					synonyms.addAll(VB_DOTNET);
+					break;
+				}
+				case "asp.net mvc":
+				case "asp .net":
+				case "asp.net":{
+					synonyms.addAll(DOTNET_CORE);
+					synonyms.addAll(ASP_DOTNET);
+					break;
+				}
+				case "node":
+				case "nodejs":
 				case "node.js":{
-					synonyms.add("node");
-					synonyms.add("nodejs");
+					synonyms.addAll(NODE);
 					break;
 				}
-				case "vue":{
-					synonyms.add("vuejs");
-					synonyms.add("vue.js");
+				case "next":
+				case "extjs":
+				case "next.js":{
+					synonyms.addAll(NEXT);
 					break;
 				}
-				case "vuejs":{
-					synonyms.add("vue");
-					synonyms.add("vue.js");
-					break;
-				}
+				case "vue":
+				case "vuejs":
 				case "vue.js":{
-					synonyms.add("vue");
-					synonyms.add("vuejs");
+					synonyms.addAll(VUE);
 					break;
 				}
-				case "react":{
-					synonyms.add("reactjs");
-					synonyms.add("react.js");
-					break;
-				}
-				case "reactjs":{
-					synonyms.add("react");
-					synonyms.add("react.js");
-					break;
-				}
+				case "react":
+				case "reactjs":
 				case "react.js":{
-					synonyms.add("react");
-					synonyms.add("reactjs");
+					synonyms.addAll(REACT);
 					break;
 				}
-				case "c#":{
-					synonyms.add("csharp");
-					break;
-				}
+				case "c#":
 				case "csharp":{
-					synonyms.add("c#");
+					synonyms.addAll(CSHARP);
 					break;
 				}
-				case "front-end":{
-					synonyms.add("fe");
-					synonyms.add("frontend");
-					break;
-				}
-				case "frontend":{
-					synonyms.add("fe");
-					synonyms.add("front-end");
-					break;
-				}
+				case "front-end":
+				case "frontend":
 				case "fe":{
-					synonyms.add("front-end");
-					synonyms.add("frontend");
+					synonyms.addAll(FRONT_END);
 					break;
 				}
-				case "back-end":{
-					synonyms.add("be");
-					synonyms.add("backend");
-					break;
-				}
-				case "backend":{
-					synonyms.add("be");
-					synonyms.add("back-end");
-					break;
-				}
+				case "back-end":
+				case "backend":
 				case "be":{
-					synonyms.add("back-end");
-					synonyms.add("backend");
+					synonyms.addAll(BACK_END);
 					break;
 				}
-				case "spring core":{
-					synonyms.add("spring");
-					synonyms.add("springcore");
-					break;
-				}
-				case "springcore":{
-					synonyms.add("spring");
-					synonyms.add("spring core");
-					break;
-				}
+				case "spring core":
+				case "springcore":
 				case "spring":{
-					synonyms.add("spring core");
-					synonyms.add("spring");
-					synonyms.add("springcore");
+					synonyms.addAll(SPRING_CORE);
 					break;
 				}
-				case "springdata":
-				case "springtest":
-				case "springmvc":
+				case "springdata":{
+					synonyms.addAll(SPRING_CORE);
+					synonyms.addAll(SPRING_DATA);
+					break;
+				}
+				case "springtest":{
+					synonyms.addAll(SPRING_CORE);
+					synonyms.addAll(SPRING_TEST);
+					break;
+				}
+				case "springmvc":{
+					synonyms.addAll(SPRING_CORE);
+					synonyms.addAll(SPRING_MVC);
+					break;
+				}
 				case "springboot":{
-					synonyms.add("spring");
-					synonyms.add("spring core");
-					synonyms.add("springcore");
-					break;
-				}
-				case "spring data":
-				case "spring test":
-				case "spring mvc":
-				case "spring boot":{
-					synonyms.add("spring");
-					synonyms.add("spring core");
-					synonyms.add("springcore");
+					synonyms.addAll(SPRING_CORE);
+					synonyms.addAll(SPRING_BOOT);
 					break;
 				}
 			}

@@ -6,6 +6,7 @@
 	    <meta http-equiv="X-UA-Compatible" content="ie=edge">
 	    <title>Arenella-ICT</title>
 	    <#include "/styles.css">
+	    <#setting number_format="computer">
 	</head>
 	<body>
 		<div style="margin-top: 10px">Dear ${recipientName}</div>
@@ -26,7 +27,7 @@
 	  				<#list alert as match>
 		    			<tr>
 		  					<td>${match.alertName}</td>
-		  					<td class="td-centered">${match.candidateId}</td>
+		  					<td class="td-centered">${''+match.candidateId}</td>
 		  					<td>${match.roleSought}</td>
 		  					<td class="td-centered">${match.accuracy}</td>
 		  				</tr>
