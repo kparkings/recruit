@@ -290,7 +290,16 @@ export class ListingComponent implements OnInit {
 	}
 	
 	public getExternalUrl(id:string):string{
-		return window.location.href + "/" + id;
+		
+		let externalUrl = '';
+		
+		if (window.location.href.indexOf('listing') < 0){
+			externalUrl = window.location.href + 'listing/' +  id;
+		} else {
+			externalUrl = window.location.href + id;
+		}
+		
+		return externalUrl;
 	}
 
 }

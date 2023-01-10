@@ -15,13 +15,13 @@ public class SkillsSynonymsUtilImpl implements SkillsSynonymsUtil{
 
 	private static final Set<String> TESTER 				= Set.of("qa", "tester", "test analyst"); 
 	private static final Set<String> BUSINESS_ANALYST 		= Set.of("ba", "business analyst");
-	private static final Set<String> JAVASCRIPT				= Set.of("js", "Javascript");
+	private static final Set<String> JAVASCRIPT				= Set.of("js", "javascript");
 	private static final Set<String> CSS					= Set.of("css", "style sheets", "cascading style sheets");
 	private static final Set<String> NODE					= Set.of("node", "node.js", "nodejs");
 	private static final Set<String> NEXT					= Set.of("next", "next.js", "nextjs");
 	private static final Set<String> VUE					= Set.of("vue", "vue.js", "vuejs");
 	private static final Set<String> REACT					= Set.of("react", "react.js", "reactjs");
-	private static final Set<String> CSHARP					= Set.of("C#", "csharp");
+	private static final Set<String> CSHARP					= Set.of("c#", "csharp");
 	private static final Set<String> DOTNET_CORE			= Set.of("dotnet", ".net", "dot net");
 	private static final Set<String> ADO_DOTNET				= Set.of("ado", "ado.net", "ado .net");
 	private static final Set<String> VB_DOTNET				= Set.of("vb", "vb.net", "vb .net");
@@ -155,21 +155,29 @@ public class SkillsSynonymsUtilImpl implements SkillsSynonymsUtil{
 					synonyms.addAll(SPRING_CORE);
 					break;
 				}
+				case "spring-data":
+				case "spring data":
 				case "springdata":{
 					synonyms.addAll(SPRING_CORE);
 					synonyms.addAll(SPRING_DATA);
 					break;
 				}
+				case "spring-test":
+				case "spring test":
 				case "springtest":{
 					synonyms.addAll(SPRING_CORE);
 					synonyms.addAll(SPRING_TEST);
 					break;
 				}
+				case "spring-mvc":
+				case "spring mvc":
 				case "springmvc":{
 					synonyms.addAll(SPRING_CORE);
 					synonyms.addAll(SPRING_MVC);
 					break;
 				}
+				case "spring-boot":
+				case "spring boot":
 				case "springboot":{
 					synonyms.addAll(SPRING_CORE);
 					synonyms.addAll(SPRING_BOOT);

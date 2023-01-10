@@ -95,21 +95,17 @@ public class SkillsSynonymsUtilImplTest {
 		assertTrue(util.addtSynonymsForSkills(Set.of("springboot")).contains("spring core"));
 		assertTrue(util.addtSynonymsForSkills(Set.of("springboot")).contains("springcore"));
 		
-		assertTrue(util.addtSynonymsForSkills(Set.of("spring data")).contains("spring"));
-		assertTrue(util.addtSynonymsForSkills(Set.of("spring data")).contains("spring core"));
-		assertTrue(util.addtSynonymsForSkills(Set.of("spring data")).contains("springcore"));
+		assertTrue(util.addtSynonymsForSkills(Set.of("spring data")).contains("springdata"));
+		assertTrue(util.addtSynonymsForSkills(Set.of("spring data")).contains("spring-data"));
 		
-		assertTrue(util.addtSynonymsForSkills(Set.of("spring test")).contains("spring"));
-		assertTrue(util.addtSynonymsForSkills(Set.of("spring test")).contains("spring core"));
-		assertTrue(util.addtSynonymsForSkills(Set.of("spring test")).contains("springcore"));
+		assertTrue(util.addtSynonymsForSkills(Set.of("spring test")).contains("springtest"));
+		assertTrue(util.addtSynonymsForSkills(Set.of("spring test")).contains("spring-test"));
 		
-		assertTrue(util.addtSynonymsForSkills(Set.of("spring mvc")).contains("spring"));
-		assertTrue(util.addtSynonymsForSkills(Set.of("spring mvc")).contains("spring core"));
-		assertTrue(util.addtSynonymsForSkills(Set.of("spring mvc")).contains("springcore"));
+		assertTrue(util.addtSynonymsForSkills(Set.of("spring mvc")).contains("springmvc"));
+		assertTrue(util.addtSynonymsForSkills(Set.of("spring mvc")).contains("spring-mvc"));
 		
-		assertTrue(util.addtSynonymsForSkills(Set.of("spring boot")).contains("spring"));
-		assertTrue(util.addtSynonymsForSkills(Set.of("spring boot")).contains("spring core"));
-		assertTrue(util.addtSynonymsForSkills(Set.of("spring boot")).contains("springcore"));
+		assertTrue(util.addtSynonymsForSkills(Set.of("spring boot")).contains("springboot"));
+		assertTrue(util.addtSynonymsForSkills(Set.of("spring boot")).contains("spring-boot"));
 		
 	}
 	
