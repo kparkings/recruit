@@ -95,6 +95,14 @@ public class UserEntity {
 	}
 	
 	/**
+	* Updates the users password
+	* @param password - Password of the User
+	*/
+	public void setPassword(String password) {
+		this.password = password;
+	}
+	
+	/**
 	* Returns a builder for the UserEntity class
 	* @return Builder
 	*/

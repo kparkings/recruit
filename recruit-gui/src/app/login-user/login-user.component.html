@@ -1,5 +1,5 @@
 <div>
-    <div class="centerdiv">
+    <div class="centerdiv" *ngIf="!showForgottenPassword">
        	<form [formGroup]="formBean">
 			<div class="wholepagerow">
 				<table>
@@ -15,16 +15,40 @@
 						<td>&nbsp;</td>
 						<td><button class="loginbutton" (click)="login()">Login</button></td>
 					</tr>
+					<tr>
+						<td></td>
+						<td class="forgotten-password-link" (click)="toggleForgottenPassword(true)">Forgotten Password?</td>
+					</tr>
+				</table>
+			</div>
+		</form>
+	</div>
+	<div class="centerdiv" *ngIf="showForgottenPassword">
+       	<form [formGroup]="formBeanForgottenPassword">
+			<div class="wholepagerow">
+				<table>
+					<tr>
+						<td colspan="2">
+							<p>Please enter your email and click on 'Reset Password' and a new username and passsword will be emailed to you shortly</p>
+						</td>
+					</tr>
+					<tr>
+						<td>Email:</td>
+						<td><input class="inpt-tab-std" type="text" formControlName="email"/></td>
+					</tr>
+					
+					<tr>
+						<td colspan="2">
+							<button class="loginbutton forgotten-password-button" (click)="resetPassword()">Reset Password</button>
+							<button class="loginbutton forgotten-password-button" (click)="cancelResetPassword()">Cancel</button>
+						</td>
+					</tr>
+					
 				</table>
 			</div>
 		</form>
 	</div>
 </div>
-
-
-
-
-
     
 <ng-template #feedbackBox let-modal>
 	<div class="modal-header">
@@ -38,5 +62,16 @@
 	</div>
 </ng-template>
 
+<ng-template #resetPasswordDialog let-modal>
+	<div class="modal-header">
+		<h4 class="modal-title">&nbsp;</h4>
+   		<div class="filter-close-box" (click)="closeModal()">X</div>
+ 	</div>
+	<div class="feedbackBox">
+		<div class="modal-body">
+			Email Sent
+		</div>       
+	</div>
+</ng-template>
 
 

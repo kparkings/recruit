@@ -16,17 +16,17 @@ import com.arenella.recruit.authentication.beans.User.USER_ROLE;
 */
 public class UserTest {
 
+	private static final String 			username 	= "aUser";
+	private static final String 			password 	= "aPassword";
+	private static final boolean 			enabled 	= true;
+	private static final Set<USER_ROLE> 	roles 	= new LinkedHashSet<>();
+	
 	/**
 	* Test User is created with the values set in the Builder
 	* @throws Exception
 	*/
 	@Test
 	public void testBuilder() throws Exception{
-		
-		final String 			username 	= "aUser";
-		final String 			password 	= "aPassword";
-		final boolean 			enabled 	= true;
-		final Set<USER_ROLE> 	roles 	= new LinkedHashSet<>();
 		
 		roles.add(USER_ROLE.admin);
 		
@@ -64,6 +64,31 @@ public class UserTest {
 		assertTrue(user.getRoles().size() == 1);
 	
 		assertEquals(USER_ROLE.recruiter, user.getRoles().stream().findFirst().get());
+		
+	}
+	
+	/**
+	* Tests the Update of a the Password
+	* @throws Exception
+	*/
+	@Test
+	public void testUpdatePassword() throws Exception{
+		
+		final String newPassword = "newPass1";
+		
+		User user = User
+				.builder()
+					.username(username)
+					.password(password)
+					.enabled(enabled)
+					.roles(roles)
+					.build();
+		
+		assertEquals(password, user.getPassword());
+		
+		user.setPassword(newPassword);
+		
+		assertEquals(newPassword, user.getPassword());
 		
 	}
 	

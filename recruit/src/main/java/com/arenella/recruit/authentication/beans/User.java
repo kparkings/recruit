@@ -72,6 +72,14 @@ public class User {
 	} 
 	
 	/**
+	* Updates the users password
+	* @param password - Password of the User
+	*/
+	public void setPassword(String password) {
+		this.password = password;
+	}
+	
+	/**
 	* Returns an instance of a builder for the User class
 	* @return Builder for the User class
 	*/

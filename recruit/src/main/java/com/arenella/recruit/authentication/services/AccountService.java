@@ -35,4 +35,11 @@ public interface AccountService {
 	*/
 	public void replaceRolesForUser(String userId, Set<USER_ROLE> roles);
 	
+	/**
+	* Updates User's Password
+	* @param userId 	 - Unique id of the User
+	* @param password	 - Password of the Recruiter
+	*/
+	public void updateUserPassword(String user, String password);
+	
 }

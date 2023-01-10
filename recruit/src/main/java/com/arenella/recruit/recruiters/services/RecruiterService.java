@@ -68,5 +68,11 @@ public interface RecruiterService {
 	* @throws  IllegalAccessException
 	*/
 	public void addSubscription(String recruiterId, subscription_type type)  throws IllegalAccessException;
+
+	/**
+	* Resets the users password and emails them the new password
+	* @param emailAddress - Email address of recruiter
+	*/
+	public void resetPassword(String emailAddress);
 	
 }

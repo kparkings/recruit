@@ -218,5 +218,24 @@ public class RecruiterControllerTest {
 		assertEquals(response.getStatusCode(), HttpStatus.OK);
 		
 	}
+	
+	/**
+	* Tests email reset request
+	* @throws Exception
+	*/
+	@Test
+	public void testResetPassword() throws Exception{
+		
+		final String email = "kparkings";
+		
+		Mockito.doNothing().when(this.mockRecruiterService).resetPassword(Mockito.anyString());
+		
+		ResponseEntity<Void> response = this.recruiterController.resetPassword(email);
+		
+		Mockito.verify(this.mockRecruiterService).resetPassword(Mockito.eq(email));
+		
+		assertEquals(response.getStatusCode(), HttpStatus.OK);
+		
+	}
 
 }

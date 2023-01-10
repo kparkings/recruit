@@ -89,5 +89,17 @@ export class RecruiterService {
 		return this.httpClient.post<any>(backendUrl, JSON.stringify(subscription), this.httpOptions);
 		
 	}
+	
+	/**
+    * Sends request to reset users password. Email will be sent if user exists 
+    * @param email - Email address of the User
+    */
+	public resetPassword(email:string): Observable<void>{
+
+        const backendUrl:string     = environment.backendUrl + 'recruiter/reset-password/'+email;
+  
+        return this.httpClient.put<any>(backendUrl, {}, this.httpOptions);
+
+    }
 
 }

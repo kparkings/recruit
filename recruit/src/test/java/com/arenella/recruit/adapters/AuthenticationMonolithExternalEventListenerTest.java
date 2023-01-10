@@ -17,6 +17,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.arenella.recruit.adapters.events.RecruiterCreatedEvent;
 import com.arenella.recruit.adapters.events.RecruiterHasOpenSubscriptionEvent;
 import com.arenella.recruit.adapters.events.RecruiterNoOpenSubscriptionEvent;
+import com.arenella.recruit.adapters.events.RecruiterPasswordUpdatedEvent;
 import com.arenella.recruit.authentication.adapters.AuthenticationMonolithExternalEventListener;
 import com.arenella.recruit.authentication.beans.User.USER_ROLE;
 import com.arenella.recruit.authentication.enums.AccountType;
@@ -99,6 +100,26 @@ public class AuthenticationMonolithExternalEventListenerTest {
 		
 		assertTrue(roles.size() == 1);
 		assertEquals(USER_ROLE.recruiter, roles.stream().findFirst().get());
+		
+	}
+
+	/**
+	* Tests correct action is carried out when a RecruiterPasswordUpdatedEvent is received
+	* @throws Exception
+	*/
+	@Test
+	public void testListenForRecruiterPasswordUpdatedEvent() throws Exception{
+		
+		final String userId 	= "kparkings";
+		final String password 		= "sklf@@9";
+		
+		Mockito.doNothing().when(this.mockAccountService).updateUserPassword(userId, password);
+		
+		RecruiterPasswordUpdatedEvent event = new RecruiterPasswordUpdatedEvent(userId, password);
+		
+		this.eventListener.listenForRecruiterPasswordUpdatedEvent(event);
+		
+		Mockito.verify(this.mockAccountService).updateUserPassword(userId, password);
 		
 	}
 	

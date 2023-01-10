@@ -40,6 +40,9 @@ public class EmailTemplateFactory {
 			case ALERT_MATCHES:{
 				return loadTemplate("alert-matches.ftlh", sendEmailCommand.getModel());
 			}
+			case PASSWORD_RESET:{
+				return loadTemplate("password-reset.ftlh", sendEmailCommand.getModel());
+			}
 			default:{
 				return "Could not process template";
 			}

@@ -1,6 +1,8 @@
 package com.arenella.recruit.recruiters.dao;
 
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.data.repository.CrudRepository;
 
@@ -27,12 +29,19 @@ public interface RecruiterDao extends CrudRepository<RecruiterEntity, String>{
 	}
 	
 	/**
-	* Attempts to find a Recruiter but its Id regardless of the case 
+	* Attempts to find a Recruiter by its Id regardless of the case 
 	* used
 	* @param userId - Unique id of recruiter to search for
 	* @return If found the associated Recruiter
 	*/
 	Optional<RecruiterEntity> findByUserIdIgnoreCase(String userId);
+	
+	/**
+	* Attempts to find a Recruiter by its email address
+	* @param email - email of the recruiter
+	* @return If found the associated Recruiter
+	*/
+	Set<RecruiterEntity> findByEmail(String email);
 
 	/**
 	* Retrieves Recruiter details based upon the id of the Recruiter
@@ -46,4 +55,16 @@ public interface RecruiterDao extends CrudRepository<RecruiterEntity, String>{
 		return new RecruiterDetails(entity.getUserId(), entity.getFirstName() + " " + entity.getSurname(), entity.getCompanyName(), entity.getEmail());
 		
 	}
+	
+	/**
+	* Retrieves recruiters with a matching email address
+	* @param email - email address of the user
+	* @return Recruiters
+	*/
+	default Set<Recruiter> findRecruitersByEmail(String email){
+		return this.findByEmail(email).stream().map(e -> RecruiterEntity.convertFromEntity(e)).collect(Collectors.toSet());
+	}
+	
+	
+	
 }

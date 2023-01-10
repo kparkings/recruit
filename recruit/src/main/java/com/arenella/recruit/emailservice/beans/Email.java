@@ -11,7 +11,7 @@ import java.util.UUID;
 */
 public class Email {
 
-	public static enum EmailTopic 	{FORGOTTEN_PWD, ACCOUNT_CREATED, WEEKLY_UPDATE, ALERT_MATCHES};
+	public static enum EmailTopic 	{FORGOTTEN_PWD, ACCOUNT_CREATED, WEEKLY_UPDATE, ALERT_MATCHES, PASSWORD_RESET};
 	public static enum EmailType 	{INTERN, EXTERN, SYSTEM_INTERN, SYSTEM_EXTERN};
 	public static enum Status 		{DRAFT, TO_OUTBOX, SENT_INTERN, SENT_EXTERN, FAILURE};
 	

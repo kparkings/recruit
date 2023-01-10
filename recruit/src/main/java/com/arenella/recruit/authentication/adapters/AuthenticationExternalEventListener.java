@@ -3,6 +3,7 @@ package com.arenella.recruit.authentication.adapters;
 import com.arenella.recruit.adapters.events.RecruiterCreatedEvent;
 import com.arenella.recruit.adapters.events.RecruiterHasOpenSubscriptionEvent;
 import com.arenella.recruit.adapters.events.RecruiterNoOpenSubscriptionEvent;
+import com.arenella.recruit.adapters.events.RecruiterPasswordUpdatedEvent;
 
 /**
 * Defines functionality for listening to Events from external Services
@@ -27,5 +28,11 @@ public interface AuthenticationExternalEventListener {
 	* an open Subscription
 	*/
 	public void listenForRecruiterHasOpenSubscriptionEvent(RecruiterHasOpenSubscriptionEvent event);
+
+	/**
+	* Listens for Event informing that a Recruiters Password has been updated
+	* @param event
+	*/
+	public void listenForRecruiterPasswordUpdatedEvent(RecruiterPasswordUpdatedEvent event);
 	
 }

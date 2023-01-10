@@ -6,7 +6,7 @@ import static org.junit.Assert.assertTrue;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.arenella.recruit.authentication.beans.User;
 import com.arenella.recruit.authentication.beans.User.USER_ROLE;
@@ -101,6 +101,31 @@ public class UserEntityTest {
 		assertEquals(user.isEnabled(), enabled);
 		
 		assertTrue(user.getRoles().contains(USER_ROLE.admin));
+		
+	}
+	
+	/**
+	* Tests the Update of a the Password
+	* @throws Exception
+	*/
+	@Test
+	public void testUpdatePassword() throws Exception{
+		
+		final String newPassword = "newPass1";
+		
+		UserEntity entity = UserEntity
+				.builder()
+					.username(username)
+					.password(password)
+					.enabled(enabled)
+					.roles(roles)
+					.build();
+		
+		assertEquals(password, entity.getPassword());
+		
+		entity.setPassword(newPassword);
+		
+		assertEquals(newPassword, entity.getPassword());
 		
 	}
 	

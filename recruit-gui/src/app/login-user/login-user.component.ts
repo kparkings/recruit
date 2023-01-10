@@ -1,6 +1,7 @@
 import { Component, OnInit }									from '@angular/core';
 import { ReactiveFormsModule, FormGroup, FormControl }			from '@angular/forms';
 import { AuthService }                                          from '../auth.service';
+import { RecruiterService }                                     from '../recruiter.service';
 import { Router}                                                from '@angular/router';
 import {TemplateRef, ViewChild,ElementRef, AfterViewInit  }		from '@angular/core';
 import {NgbModal, NgbModalOptions, ModalDismissReasons}			from '@ng-bootstrap/ng-bootstrap';
@@ -16,7 +17,14 @@ import {NgbModal, NgbModalOptions, ModalDismissReasons}			from '@ng-bootstrap/ng
 export class LoginUserComponent implements OnInit {
 	
 	@ViewChild('feedbackBox', { static: false }) private content:any;
-
+	@ViewChild('resetPasswordDialog', { static: false }) private resetDialog:any;
+	
+	public showForgottenPassword:boolean = false;
+	
+	public formBeanForgottenPassword:FormGroup = new FormGroup({
+		email: new FormControl(),
+	});
+	
    	public formBean:FormGroup = new FormGroup({
 		username: new FormControl(),
 		password: new FormControl()
@@ -27,7 +35,7 @@ export class LoginUserComponent implements OnInit {
    * @param authService - Services for authenticating users
    * @param router      - Angular router
    */
-  constructor(private authService: AuthService, private modalService: NgbModal, private router: Router) { }
+  constructor(private recruiterService:RecruiterService, private authService: AuthService, private modalService: NgbModal, private router: Router) { }
 
   /**
   * Performs initialization
@@ -73,7 +81,7 @@ export class LoginUserComponent implements OnInit {
 	    
 			}, err => {
 				if (err.status === 401) {
-					this.open('feedbackBox');
+					this.open(this.content);
 			}
 		});
 
@@ -85,7 +93,7 @@ export class LoginUserComponent implements OnInit {
      centered: true
    	};
 
-  	this.modalService.open(this.content, options);
+  	this.modalService.open(content, options);
   }
 
   /**
@@ -95,4 +103,51 @@ export class LoginUserComponent implements OnInit {
     this.modalService.dismissAll();
   }
 
+	/**
+	* Shows/Hides forgotten password screen
+	* @param show - Whether or not to show the forgotten passworkd screen
+	*/
+  	public toggleForgottenPassword(show:boolean):void{
+		this.showForgottenPassword = show;
+	}
+	
+	/**
+	* Sends request to email user new login details
+	*/
+	public resetPassword():void{
+	
+		let email = this.formBeanForgottenPassword.get("email")?.value;
+		
+		this.recruiterService.resetPassword(email).subscribe(data => {
+			
+			this.formBeanForgottenPassword = new FormGroup({
+				email: new FormControl()
+			});
+		
+			this.showForgottenPassword = false;
+		
+			this.open(this.resetDialog);
+			
+		},
+		err => {
+			console.log('Error resetting password');
+			this.showForgottenPassword = false;
+		});
+		
+	}
+
+	/**
+	* Cleans out the reset password details and returns to the 
+	* login screen
+	*/
+	public cancelResetPassword():void{
+		
+		this.formBeanForgottenPassword = new FormGroup({
+			email: new FormControl()
+		});
+		
+		this.showForgottenPassword = false;
+	
+	}
+	
 }

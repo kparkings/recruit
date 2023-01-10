@@ -87,3 +87,21 @@ input{
 .inpt-tab-std{
 	max-width:220px;
 }
+
+.forgotten-password-link{
+	color:blue;
+	cursor:pointer;
+	text-align:right;
+	padding-top:20px;
+}
+
+.forgotten-password-link:hover{
+	color:darkblue;
+	cursor:pointer;
+	text-align:right;
+	padding-top:20px;
+}
+
+.forgotten-password-button{
+	width:150px;
+}

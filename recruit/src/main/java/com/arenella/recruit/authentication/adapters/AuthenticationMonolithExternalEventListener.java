@@ -8,12 +8,14 @@ import org.springframework.stereotype.Service;
 import com.arenella.recruit.adapters.events.RecruiterCreatedEvent;
 import com.arenella.recruit.adapters.events.RecruiterHasOpenSubscriptionEvent;
 import com.arenella.recruit.adapters.events.RecruiterNoOpenSubscriptionEvent;
+import com.arenella.recruit.adapters.events.RecruiterPasswordUpdatedEvent;
+import com.arenella.recruit.authentication.beans.User;
 import com.arenella.recruit.authentication.beans.User.USER_ROLE;
 import com.arenella.recruit.authentication.enums.AccountType;
 import com.arenella.recruit.authentication.services.AccountService;
 
 /**
-* Implementation of ExternalEventListener optimised to 
+* Implementation of ExternalEventListener optimized to 
 * work for when the services are physically located in 
 * the same Monolith.
 * @author K Parkings
@@ -46,6 +48,14 @@ public class AuthenticationMonolithExternalEventListener implements Authenticati
 	@Override
 	public void listenForRecruiterHasOpenSubscriptionEvent(RecruiterHasOpenSubscriptionEvent event) {
 		accountService.replaceRolesForUser(event.geRecruiterId(), Set.of(USER_ROLE.recruiter));
+	}
+
+	/**
+	* Refer to ExternalEventListener interface for details 
+	*/
+	@Override
+	public void listenForRecruiterPasswordUpdatedEvent(RecruiterPasswordUpdatedEvent event) {
+		this.accountService.updateUserPassword(event.getRecruiterId(), event.getNewPassword());
 	}
 
 }

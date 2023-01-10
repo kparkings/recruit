@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.util.Optional;
 import java.util.Set;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -77,6 +78,48 @@ public class AccountServiceImplTest {
 		assertEquals(userId, userEntity.getUsername());
 		assertEquals(recruiterNoSubscriptionRole, userEntity.getRoles().stream().findFirst().get());
 		assertTrue(userEntity.getRoles().size() == 1);
+		
+	}
+	
+	/**
+	* Test exception thrown if User can not be found
+	* @throws Exception
+	*/
+	@Test
+	public void testUpdateUserPassword_unknownUser() throws Exception{
+		
+		final String userId 	= "kparkings";
+		final String password 	= "dad##@&!3";
+		
+		Mockito.when(this.mockUserDao.fetchUser(userId)).thenReturn(Optional.empty());
+		
+		Assertions.assertThrows(IllegalArgumentException.class, () -> {
+			this.service.updateUserPassword(userId, password);
+		});
+		
+	}
+	
+	/**
+	* Test exception thrown if User can not be found
+	* @throws Exception
+	*/
+	@Test
+	public void testUpdateUserPassword() throws Exception{
+		
+		final String	userId 		= "kparkings";
+		final String 	password 	= "dad##@&!3";
+		final User		user		= User.builder().username(userId).password("oldPassword").build();
+		
+		ArgumentCaptor<User> userArgCapt = ArgumentCaptor.forClass(User.class);
+		
+		Mockito.when(this.mockUserDao.fetchUser(userId)).thenReturn(Optional.of(user));
+		Mockito.doNothing().when(this.mockUserDao).updateUser(userArgCapt.capture());
+		
+		this.service.updateUserPassword(userId, password);
+		
+		Mockito.verify(this.mockUserDao).updateUser(user);
+		
+		assertEquals(password, userArgCapt.getValue().getPassword());
 		
 	}
 	

@@ -24,9 +24,9 @@ constructor(private httpClient: HttpClient) { }
 
     /**
     * Authenticates a User with the System 
-    ** @param username - name user is attempting to log in with
+    * @param username - name user is attempting to log in with
     * @param password - password user is attempting to log in with
-     */
+    */
     public authenticate(username: string, password: string): Observable<any>{
 
         const authDetails: any       = {'username':username, 'password': password};

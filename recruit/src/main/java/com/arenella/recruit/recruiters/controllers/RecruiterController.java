@@ -117,4 +117,16 @@ public class RecruiterController {
 		return ResponseEntity.ok().body(this.recruiterService.performSubscriptionAction(recruiterId, subscriptionId, action));
 	}
 	
+	/**
+	* Endpoint to handle the password reset of an existing user
+	* @param emailAddress - Users email address
+	*/
+	@PutMapping(path="recruiter/reset-password/{email}", consumes="application/json", produces="application/json")
+	public ResponseEntity<Void> resetPassword(@PathVariable("email") String emailAddress) {
+		
+		this.recruiterService.resetPassword(emailAddress);
+		
+		return ResponseEntity.ok().build();
+	}
+	
 }

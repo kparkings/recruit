@@ -1,11 +1,9 @@
 package com.arenella.recruit.recruiters.services;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.time.temporal.WeekFields;
 import java.util.LinkedHashSet;
-import java.util.Locale;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -16,6 +14,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import com.arenella.recruit.adapters.events.RecruiterPasswordUpdatedEvent;
+import com.arenella.recruit.emailservice.adapters.RequestSendEmailCommand;
+import com.arenella.recruit.emailservice.beans.Email.EmailRecipient;
+import com.arenella.recruit.emailservice.beans.Email.EmailTopic;
+import com.arenella.recruit.emailservice.beans.Email.EmailType;
+import com.arenella.recruit.emailservice.beans.Email.Sender;
+import com.arenella.recruit.emailservice.beans.Email.EmailRecipient.RecipientType;
+import com.arenella.recruit.emailservice.beans.Email.Sender.SenderType;
 import com.arenella.recruit.recruiters.adapters.RecruitersExternalEventPublisher;
 import com.arenella.recruit.recruiters.beans.FirstGenRecruiterSubscription;
 import com.arenella.recruit.recruiters.beans.Recruiter;
@@ -28,6 +34,7 @@ import com.arenella.recruit.recruiters.beans.TrialPeriodSubscription;
 import com.arenella.recruit.recruiters.beans.YearlyRecruiterSubscription;
 import com.arenella.recruit.recruiters.dao.RecruiterDao;
 import com.arenella.recruit.recruiters.entities.RecruiterEntity;
+import com.arenella.recruit.recruiters.utils.PasswordUtil;
 import com.arenella.recruit.recruiters.utils.RecruiterSubscriptionActionHandler;
 import com.arenella.recruit.recruiters.utils.RecruiterSubscriptionFactory;
 
@@ -109,7 +116,7 @@ public class RecruiterServiceImpl implements RecruiterService{
 		//TODO: Do something to stop DOS attaches by sending multiple
 		//      requests with same account details.
 		
-		String temporaryRecruiterId = generateUsername(recruiter);
+		String temporaryRecruiterId = PasswordUtil.generateUsername(recruiter);
 		
 		recruiter.setUserId(temporaryRecruiterId.toString());
 		recruiter.activateAccount();
@@ -191,6 +198,44 @@ public class RecruiterServiceImpl implements RecruiterService{
 	}
 	
 	/**
+	* Refer to the RecruiterService for details
+	* @throws IllegalAccessException 
+	*/
+	@Override
+	public void resetPassword(String emailAddress) {
+		
+		Set<Recruiter> recruiters = this.recruiterDao.findRecruitersByEmail(emailAddress);
+		
+		/**
+		* Can only reset if exactly one recruiter with the email address 
+		*/
+		if (recruiters.size() != 1) {
+			throw new IllegalArgumentException("Cannot reset password");
+		}
+		
+		Recruiter recruiter = recruiters.stream().findFirst().get();
+		
+		String rawPassword = PasswordUtil.generatePassword(recruiter.getUserId());
+		String encPassword = PasswordUtil.encryptPassword(rawPassword);
+		
+		this.externEventPublisher.publishRecruiterPasswordUpdated(new RecruiterPasswordUpdatedEvent(recruiter.getUserId(), encPassword));
+		
+		RequestSendEmailCommand command = RequestSendEmailCommand
+				.builder()
+					.emailType(EmailType.EXTERN)
+					.recipients(Set.of(new EmailRecipient<String>(recruiter.getUserId(), RecipientType.RECRUITER)))
+					.sender(new Sender<>(UUID.randomUUID(), SenderType.SYSTEM, "kparkings@gmail.com"))
+					.title("Arenella-ICT - Password Reset")
+					.topic(EmailTopic.PASSWORD_RESET)
+					.model(Map.of("userId", recruiter.getUserId(), "firstname",recruiter.getFirstName(),"password",rawPassword))
+					.persistable(false)
+				.build();
+		
+		this.externEventPublisher.publishSendEmailCommand(command);
+		
+	}
+	
+	/**
 	* Attemts to switch the Recruiters subscription to 
 	* a YEAR_SUBSCRIPTION
 	* @param recruiterId
@@ -255,31 +300,7 @@ public class RecruiterServiceImpl implements RecruiterService{
 		
 	}
 	
-	/**
-	* Generates a username for the recruiter
-	* @param recruiter - Contains information about the recruiter
-	* @return username for the recruiter
-	*/
-	private String generateUsername(Recruiter recruiter) {
-		
-		LocalDateTime 	startOfyear 	= LocalDateTime.of(LocalDateTime.now().getYear(), 1,1,0,0);
-		long 			hours 			= ChronoUnit.HOURS.between(startOfyear, LocalDateTime.now());
-		WeekFields 		weekFields 		= WeekFields.of(Locale.getDefault());
-		int 			weekNumber 		= LocalDate.now().get(weekFields.weekOfYear());
-		
-		String userName = "";
-		
-		if (recruiter.getFirstName().length() > 5) {
-			userName = recruiter.getFirstName().substring(0,5);
-		} else {
-			userName = recruiter.getFirstName();
-		}
-		
-		userName = userName + weekNumber + recruiter.getSurname().substring(0,1).toUpperCase() + hours;
-		
-		return userName.toLowerCase();
-		
-	}
+	
 	
 	/**
 	* Checks that where an endpoint can be used by both Admin and Recuiter users Admin can access anything but 
