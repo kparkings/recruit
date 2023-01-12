@@ -4,6 +4,8 @@ import { Observable }                 				from 'rxjs';
 import { environment }								from './../environments/environment';
 import { RecruiterSignup }							from './recruiter-signup/signup-recruiter';
 import { SubscriptionAPIInbound }					from './recruiter-account/subscription-api-inbound';
+import { RecruiterUpdateRequest }					from './recruiter-account/recruiter-update-request';
+
 
 @Injectable({
   providedIn: 'root'
@@ -99,6 +101,14 @@ export class RecruiterService {
         const backendUrl:string     = environment.backendUrl + 'recruiter/reset-password/'+email;
   
         return this.httpClient.put<any>(backendUrl, {}, this.httpOptions);
+
+    }
+
+	public updateRecruiter(recruiter:RecruiterUpdateRequest): Observable<void>{
+
+        const backendUrl:string     = environment.backendUrl + 'recruiter';
+  
+        return this.httpClient.put<any>(backendUrl, recruiter, this.httpOptions);
 
     }
 

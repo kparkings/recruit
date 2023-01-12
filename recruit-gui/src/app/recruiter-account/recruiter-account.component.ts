@@ -5,6 +5,8 @@ import { Recruiter }							from './recruiter';
 import { Subscription }							from './subscription';
 import { NgbModal}								from '@ng-bootstrap/ng-bootstrap';
 import { SubscriptionAction }					from './subscription-action';
+import { FormGroup, FormControl }				from '@angular/forms';
+import {RecruiterUpdateRequest }				from './recruiter-update-request';
 
 /**
 * Component to allow the Recruiter to aministrate their 
@@ -29,23 +31,35 @@ export class RecruiterAccountComponent implements OnInit {
 		
 		this.fetchRecruiterDetails();
 		
-		console.log("SSSS> " + this.hasUnpaidSubscription());
-		
 		if (this.isRecruiterNoSubscription() || this.hasUnpaidSubscription()) {
 			this.switchTab("showSubscriptions");
 		}
 		
   	}
 
-	currentTab:string 					= "downloads";
-	showAccountTab:boolean				= true;
-	recruiter:Recruiter					= new Recruiter();
+	currentTab:string 										= "downloads";
+	showAccountTab:boolean									= true;
+	recruiter:Recruiter										= new Recruiter();
 		
-	showAccountDetails:boolean			= true;
-	showSubscriptions:boolean			= false;
+	showAccountDetails:boolean								= true;
+	showSubscriptions:boolean								= false;
 	
 	showSwitchToYearlySubscriptionConfirmButtons:boolean	= false;
 	showCancelSubscriptionConfirmButtons:boolean 			= false;
+	
+	public isInEditMode:boolean 							= false;
+	
+	public editAccountDetailsFor:FormGroup = new FormGroup({
+		
+	});
+	
+	public accoundDetailsForm:FormGroup = new FormGroup({
+		firstName:				new FormControl(''),
+		surname:				new FormControl(''),
+		companyName:			new FormControl(''),
+		email:					new FormControl(''),
+		language:				new FormControl(''),
+	});
 		
 	/**
 	* Retrieves own recruiter account from the backend
@@ -67,6 +81,14 @@ export class RecruiterAccountComponent implements OnInit {
 			} else {
 				sessionStorage.setItem('hasUnpaidSubscription',		'false');
 			}
+			
+			this.accoundDetailsForm = new FormGroup({
+				firstName:				new FormControl(this.recruiter.firstName),
+				surname:				new FormControl(this.recruiter.surname),
+				companyName:			new FormControl(this.recruiter.companyName),
+				email:					new FormControl(this.recruiter.email),
+				language:				new FormControl(this.recruiter.language),
+			});
 				
 		}, err => {
 			
@@ -262,6 +284,46 @@ export class RecruiterAccountComponent implements OnInit {
 	*/
 	public isRecruiterNoSubscription():boolean{
 		return sessionStorage.getItem('isRecruiterNoSubscription') === 'true';
+	}
+	
+	/**
+	* Switches to edit mode to update details of the Recruiter
+	*/
+	public switchToEditMode():void{
+		this.isInEditMode = true;
+	}
+	
+	/**
+	* Switches out of edit mode replaces any unsaved changes
+	*/
+	public cancelEditMode():void{
+		this.fetchRecruiterDetails();
+		this.isInEditMode = false;
+	}
+	
+	/**
+	* Persists any unsaved changes
+	*/
+	public persistAccountDetails():void{
+		
+		let recruiter:RecruiterUpdateRequest = new RecruiterUpdateRequest();
+		
+		const firstName:string = String(this.accoundDetailsForm.get('firstName')); 
+		
+		recruiter.userId 		= this.recruiter.userId;
+		recruiter.firstName 	= String(this.accoundDetailsForm.get('firstName')?.value);
+		recruiter.surname 		= String(this.accoundDetailsForm.get('surname')?.value);
+		recruiter.email 		= String(this.accoundDetailsForm.get('email')?.value);
+		recruiter.companyName 	= String(this.accoundDetailsForm.get('companyName')?.value);
+		recruiter.language 		= String(this.accoundDetailsForm.get('language')?.value);
+		
+		this.recruiterService.updateRecruiter(recruiter).subscribe(data => {
+			this.cancelEditMode();
+		}, 
+		err => {
+			console.log(JSON.stringify(err));		
+		});
+	
 	}
 	
 }

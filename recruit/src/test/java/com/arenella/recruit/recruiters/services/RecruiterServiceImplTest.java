@@ -30,6 +30,7 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import com.arenella.recruit.adapters.events.RecruiterPasswordUpdatedEvent;
+import com.arenella.recruit.adapters.events.RecruiterUpdatedEvent;
 import com.arenella.recruit.emailservice.adapters.RequestSendEmailCommand;
 import com.arenella.recruit.emailservice.beans.Email.EmailTopic;
 import com.arenella.recruit.recruiters.adapters.RecruitersExternalEventPublisher;
@@ -80,7 +81,23 @@ public class RecruiterServiceImplTest {
 	private static final Authentication 	mockAuthentication 		= Mockito.mock(Authentication.class);
 	
 	/**
-	* Tests happy path for updating an exsiting Recruiter
+	* Sets up security context to make user Admin
+	*/
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	private void setupSecurityContextForAdmin() {
+		SecurityContextHolder.setContext(mockSecurityContext);
+		
+		Collection authorities = new HashSet<>();
+		authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+
+		Mockito.when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
+		Mockito.when(mockAuthentication.getAuthorities()).thenReturn(authorities);
+		Mockito.when(mockAuthentication.getName()).thenReturn(userId);
+
+	}
+	
+	/**
+	* Tests happy path for updating an existing Recruiter
 	* @throws Exception
 	*/
 	@Test
@@ -92,7 +109,10 @@ public class RecruiterServiceImplTest {
 		final language 	langUpdt 				= language.FRENCH;
 		final String 	surnameUpdt 			= "parkingsnew";
 		
-		ArgumentCaptor<RecruiterEntity> argCaptEntity = ArgumentCaptor.forClass(RecruiterEntity.class);
+		this.setupSecurityContextForAdmin();
+		
+		ArgumentCaptor<RecruiterEntity>			argCaptEntity 			= ArgumentCaptor.forClass(RecruiterEntity.class);
+		ArgumentCaptor<RecruiterUpdatedEvent>	argRecruiterUpdtEvent 	= ArgumentCaptor.forClass(RecruiterUpdatedEvent.class);
 		
 		RecruiterEntity recruiterEntity = RecruiterEntity
 											.builder()
@@ -108,6 +128,7 @@ public class RecruiterServiceImplTest {
 									
 		Mockito.when(this.mockDao.findById(userId)).thenReturn(Optional.of(recruiterEntity));
 		Mockito.when(this.mockDao.save(argCaptEntity.capture())).thenReturn(null);
+		Mockito.doNothing().when(this.mockExternEventPublisher).publishRecruiterAccountUpdatedEvent(argRecruiterUpdtEvent.capture());
 		
 		Recruiter recruiter = Recruiter
 								.builder()
@@ -135,6 +156,128 @@ public class RecruiterServiceImplTest {
 		
 		Mockito.verify(this.mockDao).save(recruiterEntity);
 		
+		assertEquals(emailUpdt, argRecruiterUpdtEvent.getValue().getEmail());
+		
+	}
+	
+	/**
+	* Tests if an exception occurred on the DB transaction commit that a compensation
+	* event is sent to revert the changes that would have been sent when the original
+	* update event was sent
+	* @throws Exception
+	*/
+	@Test
+	public void testUpdateRecruiter_compensationEvent() throws Exception{
+		
+		final String 	companyNameUpdt 		= "arenella-ictnew";
+		final String 	emailUpdt 				= "kparkings@gmail.comnew";
+		final String 	firstnameUpdt 			= "kevinnew";
+		final language 	langUpdt 				= language.FRENCH;
+		final String 	surnameUpdt 			= "parkingsnew";
+		
+		this.setupSecurityContextForAdmin();
+		
+		ArgumentCaptor<RecruiterEntity>			argCaptEntity 			= ArgumentCaptor.forClass(RecruiterEntity.class);
+		ArgumentCaptor<RecruiterUpdatedEvent>	argRecruiterUpdtEvent 	= ArgumentCaptor.forClass(RecruiterUpdatedEvent.class);
+		
+		RecruiterEntity recruiterEntity = RecruiterEntity
+											.builder()
+												.active(true)
+												.companyName(companyName)
+												.email(email)
+												.firstName(firstname)
+												.language(lang)
+												.surname(surname)
+												.userId(userId)
+												.accountCreated(accountCreated)
+											.build();
+									
+		Mockito.when(this.mockDao.findById(userId)).thenReturn(Optional.of(recruiterEntity));
+		
+		Mockito.when(this.mockDao.save(argCaptEntity.capture())).thenThrow(new RuntimeException());
+		
+		Mockito.doNothing().when(this.mockExternEventPublisher).publishRecruiterAccountUpdatedEvent(argRecruiterUpdtEvent.capture());
+		
+		Recruiter recruiter = Recruiter
+								.builder()
+									.active(false)
+									.companyName(companyNameUpdt)
+									.email(emailUpdt)
+									.firstName(firstnameUpdt)
+									.language(langUpdt)
+									.surname(surnameUpdt)
+									.userId(userId)
+								.build();
+		
+		this.service.updateRecruiter(recruiter);
+		
+		RecruiterEntity entity = argCaptEntity.getValue();
+		
+		assertEquals(companyNameUpdt, 	entity.getCompanyName());
+		assertEquals(emailUpdt, 		entity.getEmail());
+		assertEquals(firstnameUpdt, 	entity.getFirstName());
+		assertEquals(langUpdt, 			entity.getLanguage());
+		assertEquals(surnameUpdt, 		entity.getSurname());
+		assertEquals(userId, 			entity.getUserId());
+		assertTrue(entity.isActive());
+		assertNotNull(entity.getAccountCreated());
+		
+		Mockito.verify(this.mockDao).save(recruiterEntity);
+		
+		assertEquals(email, argRecruiterUpdtEvent.getValue().getEmail());
+		
+	}
+	
+	/**
+	* Tests that if the logged in user is not the owner of the Recuiter 
+	* being updated and is not an Admin user an exception will be thrown
+	* @throws Exception
+	*/
+	@Test
+	public void testUpdateRecruiter_notAdminOrOwnRecruiter() throws Exception{
+		
+		final String 	companyNameUpdt 		= "arenella-ictnew";
+		final String 	emailUpdt 				= "kparkings@gmail.comnew";
+		final String 	firstnameUpdt 			= "kevinnew";
+		final language 	langUpdt 				= language.FRENCH;
+		final String 	surnameUpdt 			= "parkingsnew";
+		
+		SecurityContextHolder.setContext(mockSecurityContext);
+		
+		Mockito.when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
+		Mockito.when(mockAuthentication.getAuthorities()).thenReturn(Set.of());
+		Mockito.when(mockAuthentication.getName()).thenReturn("NotOwnUser");
+		
+		RecruiterEntity recruiterEntity = RecruiterEntity
+											.builder()
+												.active(true)
+												.companyName(companyName)
+												.email(email)
+												.firstName(firstname)
+												.language(lang)
+												.surname(surname)
+												.userId(userId)
+												.accountCreated(accountCreated)
+											.build();
+									
+		Mockito.when(this.mockDao.findById(userId)).thenReturn(Optional.of(recruiterEntity));
+		
+		Recruiter recruiter = Recruiter
+								.builder()
+									.active(false)
+									.companyName(companyNameUpdt)
+									.email(emailUpdt)
+									.firstName(firstnameUpdt)
+									.language(langUpdt)
+									.surname(surnameUpdt)
+									.userId(userId)
+								.build();
+		
+		
+		Assertions.assertThrows(IllegalAccessException.class, ()->{
+			this.service.updateRecruiter(recruiter);
+		});
+			
 	}
 	
 	/**
@@ -143,6 +286,8 @@ public class RecruiterServiceImplTest {
 	*/
 	@Test
 	public void testUpdateRecruiter_unknownRecruiter() throws Exception {
+		
+		this.setupSecurityContextForAdmin();
 		
 		Recruiter recruiter = Recruiter
 								.builder()

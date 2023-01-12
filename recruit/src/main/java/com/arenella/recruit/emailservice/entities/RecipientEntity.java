@@ -66,6 +66,22 @@ public class RecipientEntity {
 	}
 	
 	/**
+	* Sets the Recipients First name
+	* @param firstName - First name of the Recipient
+	*/
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+	
+	/**
+	* Sets the Recipients email
+	* @param email - email of the Recipient
+	*/
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	/**
 	* Returns a Builder for the class
 	* @return Builder
 	*/

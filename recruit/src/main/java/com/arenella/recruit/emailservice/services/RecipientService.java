@@ -12,5 +12,10 @@ public interface RecipientService {
 	* Adds a new Recipient
 	*/
 	public void addRecipient(Recipient recipient);
+
+	/**
+	* refer to the RecipientService for details
+	*/
+	void updateRecipient(Recipient recipient);
 	
 }

@@ -2,6 +2,7 @@ package com.arenella.recruit.recruiters.adapters;
 
 import com.arenella.recruit.adapters.events.RecruiterCreatedEvent;
 import com.arenella.recruit.adapters.events.RecruiterPasswordUpdatedEvent;
+import com.arenella.recruit.adapters.events.RecruiterUpdatedEvent;
 import com.arenella.recruit.emailservice.adapters.RequestSendEmailCommand;
 
 /**
@@ -40,5 +41,11 @@ public interface RecruitersExternalEventPublisher {
 	* @param event - Event informing that a Recruiters password has been updates
 	*/
 	public void publishRecruiterPasswordUpdated(RecruiterPasswordUpdatedEvent event);
+
+	/**
+	* Publishes an event information that a Recruiters details have been updated
+	* @param event - Event information that a Recruiters details have been updated
+	*/
+	public void publishRecruiterAccountUpdatedEvent(RecruiterUpdatedEvent event);
 	
 }

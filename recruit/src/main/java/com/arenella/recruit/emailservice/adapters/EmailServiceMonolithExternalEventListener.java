@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.arenella.recruit.adapters.events.RecruiterCreatedEvent;
+import com.arenella.recruit.adapters.events.RecruiterUpdatedEvent;
 import com.arenella.recruit.emailservice.beans.Email.EmailRecipient.RecipientType;
 import com.arenella.recruit.emailservice.beans.Recipient;
 import com.arenella.recruit.emailservice.services.EmailDispatcherService;
@@ -39,6 +40,15 @@ public class EmailServiceMonolithExternalEventListener implements EmailServiceEx
 	@Override
 	public void listenForRecruiterCreatedEvent(RecruiterCreatedEvent event) {
 		this.recipientService.addRecipient(new Recipient(event.getRecruiterId(), RecipientType.RECRUITER, event.getFirstName(), event.getEmail()));
+	}
+
+	/**
+	* Refer to EmailServiceExternalEventListener interface for details 
+	*/
+	@Override
+	public void listenForRecruiterUpdatedEvent(RecruiterUpdatedEvent event) {
+		this.recipientService.updateRecipient(new Recipient(event.getRecruiterId(), RecipientType.RECRUITER, event.getFirstName(), event.getEmail()));
+		
 	}
 
 }

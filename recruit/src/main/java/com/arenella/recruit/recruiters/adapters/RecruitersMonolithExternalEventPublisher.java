@@ -7,6 +7,7 @@ import com.arenella.recruit.adapters.events.RecruiterCreatedEvent;
 import com.arenella.recruit.adapters.events.RecruiterHasOpenSubscriptionEvent;
 import com.arenella.recruit.adapters.events.RecruiterNoOpenSubscriptionEvent;
 import com.arenella.recruit.adapters.events.RecruiterPasswordUpdatedEvent;
+import com.arenella.recruit.adapters.events.RecruiterUpdatedEvent;
 import com.arenella.recruit.authentication.adapters.AuthenticationExternalEventListener;
 import com.arenella.recruit.emailservice.adapters.EmailServiceExternalEventListener;
 import com.arenella.recruit.emailservice.adapters.RequestSendEmailCommand;
@@ -71,6 +72,15 @@ public class RecruitersMonolithExternalEventPublisher implements RecruitersExter
 	@Override
 	public void publishRecruiterPasswordUpdated(RecruiterPasswordUpdatedEvent event) {
 		this.authenticationExternalEventListener.listenForRecruiterPasswordUpdatedEvent(event);
+		
+	}
+
+	/**
+	* Refer to the ExternalEventPublisher interface for details 
+	*/
+	@Override
+	public void publishRecruiterAccountUpdatedEvent(RecruiterUpdatedEvent event) {
+		this.emailServiceExternalEventListener.listenForRecruiterUpdatedEvent(event);
 		
 	}
 

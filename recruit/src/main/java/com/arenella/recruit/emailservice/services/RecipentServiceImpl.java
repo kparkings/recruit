@@ -24,5 +24,14 @@ public class RecipentServiceImpl implements RecipientService{
 		this.recipientDao.addRecipient(recipient);
 		
 	}
+	
+	/**
+	* refer to the RecipientService for details
+	*/
+	@Override
+	public void updateRecipient(Recipient recipient) {
+		this.recipientDao.updateRecipient(recipient);
+		
+	}
 
 }

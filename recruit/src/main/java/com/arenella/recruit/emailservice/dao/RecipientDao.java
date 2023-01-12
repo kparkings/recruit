@@ -47,5 +47,26 @@ public interface RecipientDao extends CrudRepository<RecipientEntity, RecipientE
 		return recipientOpt.map(f -> RecipientEntity.convertFromEntity(f));
 		
 	}
+
+	/**
+	* If Recipient exists updates it to new values
+	* @param recipient - contains new Recipient values
+	*/
+	default void updateRecipient(Recipient recipient) {
+		
+		RecipientEntity entity = getEntityByIdAndType(recipient.getRecipientType(), recipient.getId());
+		
+		if (entity == null) {
+			return;
+		}
+		
+		entity.setEmail(recipient.getEmail());
+		entity.setFirstName(recipient.getFirstName());
+		
+		this.save(entity);
+		
+		
+		
+	}
 	
 }

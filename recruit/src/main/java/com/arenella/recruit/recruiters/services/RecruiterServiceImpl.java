@@ -15,6 +15,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.arenella.recruit.adapters.events.RecruiterPasswordUpdatedEvent;
+import com.arenella.recruit.adapters.events.RecruiterUpdatedEvent;
 import com.arenella.recruit.emailservice.adapters.RequestSendEmailCommand;
 import com.arenella.recruit.emailservice.beans.Email.EmailRecipient;
 import com.arenella.recruit.emailservice.beans.Email.EmailTopic;
@@ -56,20 +57,58 @@ public class RecruiterServiceImpl implements RecruiterService{
 	
 	/**
 	* Refer to the RecruiterService for details
+	* @throws IllegalAccessException 
 	*/
 	@Override
-	public void updateRecruiter(Recruiter recruiter) {
+	public void updateRecruiter(Recruiter recruiter) throws IllegalAccessException {
 		
-		RecruiterEntity entity = this.recruiterDao.findById(recruiter.getUserId()).orElseThrow(() -> new IllegalArgumentException("Recruiter doesnt exists"));
+		//TODO: [KP] This should be the Domain version and construction of entity should take place in the DAO
+		RecruiterEntity 	entity 		= this.recruiterDao.findById(recruiter.getUserId()).orElseThrow(() -> new IllegalArgumentException("Recruiter doesnt exists"));
+		Recruiter 			original 	= RecruiterEntity.convertFromEntity(entity);
 		
-		entity.setCompanyName(recruiter.getCompanyName());
-		entity.setEmail(recruiter.getEmail());
-		entity.setFirstName(recruiter.getFirstName());
-		entity.setLanguage(recruiter.getLanguage());
-		entity.setSurname(recruiter.getSurname());
+		performIsAdminOrRecruiterAccessingOwnAccountCheck(recruiter.getUserId());
 		
-		this.recruiterDao.save(entity);
+		RecruiterUpdatedEvent event = RecruiterUpdatedEvent
+				.builder()
+					.companyName(recruiter.getCompanyName())
+					.email(recruiter.getEmail())
+					.firstName(recruiter.getFirstName())
+					.language(recruiter.getLanguage())
+					.recruiterId(recruiter.getUserId())
+					.surname(recruiter.getSurname())
+				.build();
+				
+		this.externEventPublisher.publishRecruiterAccountUpdatedEvent(event);
 		
+		try {
+		
+			entity.setCompanyName(recruiter.getCompanyName());
+			entity.setEmail(recruiter.getEmail());
+			entity.setFirstName(recruiter.getFirstName());
+			entity.setLanguage(recruiter.getLanguage());
+			entity.setSurname(recruiter.getSurname());
+		
+			this.recruiterDao.save(entity);
+			
+			this.externEventPublisher.publishRecruiterAccountUpdatedEvent(event);
+		
+		}catch(Exception e) {
+			
+			/**
+			* If when the transaction is closed an exception occurs the event would already have been sent.
+			* In this case we send a compensating event to revert the users details back to their original state 		
+			*/
+			this.externEventPublisher.publishRecruiterAccountUpdatedEvent( RecruiterUpdatedEvent
+					.builder()
+					.companyName(original.getCompanyName())
+					.email(original.getEmail())
+					.firstName(original.getFirstName())
+					.language(original.getLanguage())
+					.recruiterId(original.getUserId())
+					.surname(original.getSurname())
+				.build());
+			
+		}
 	}
 
 	/**

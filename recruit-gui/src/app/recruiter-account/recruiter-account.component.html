@@ -12,33 +12,66 @@
 	
 	<!-- Account details -->
 	<div class="container-div" *ngIf="showAccountDetails">
+
+		<div class="action-buttons">
+			<button class="btn btn-secondary btnRight" (click)="switchToEditMode()" *ngIf="!isInEditMode">Edit Details</button>
+			<button class="btn btn-secondary btnRight" (click)="cancelEditMode()"	*ngIf="isInEditMode">Cancel</button>
+		</div>
 		
-		<table class="table center">
-			<tr>
-				<td class="table-left-hdr" >UserId</td>
-				<td class="table-cell">{{recruiter.userId}}</td>
-			</tr>
-			<tr>
-				<td class="table-left-hdr">First Name</td>
-				<td class="table-cell">{{recruiter.firstName}}</td>
-			</tr>
-			<tr>
-				<td class="table-left-hdr">Surname</td>
-				<td class="table-cell">{{recruiter.surname}}</td>
-			</tr>
-			<tr>
-				<td class="table-left-hdr">Company Name</td>
-				<td class="table-cell">{{recruiter.companyName}}</td>
-			</tr>
-			<tr>
-				<td class="table-left-hdr">Email Address</td>
-				<td class="table-cell">{{recruiter.email}}</td>
-			</tr>
-			<tr>
-				<td class="table-left-hdr">Preferred Language</td>
-				<td class="table-cell">{{recruiter.language}}</td>
-			</tr>
-		</table>
+		<div id="account-details-input">
+			<form [formGroup]="accoundDetailsForm">
+				<table class="table center">
+					<tr>
+						<td class="table-left-hdr" ><label>UserId</label></td>
+						<td class="table-cell">{{recruiter.userId}}</td>
+					</tr>
+					<tr>
+						<td class="table-left-hdr">First Name</td>
+						<td class="table-cell" *ngIf="!isInEditMode"><label>{{recruiter.firstName}}</label></td>
+						<td class="table-cell" *ngIf="isInEditMode">
+							<input type="text" formControlName="firstName"/> 
+						</td>
+					</tr>
+					<tr>
+						<td class="table-left-hdr">Surname</td>
+						<td class="table-cell" *ngIf="!isInEditMode"><label>{{recruiter.surname}}</label></td>
+						<td class="table-cell" *ngIf="isInEditMode">
+							<input type="text" formControlName="surname"/> 
+						</td>
+					</tr>
+					<tr>
+						<td class="table-left-hdr">Company Name</td>
+						<td class="table-cell label" *ngIf="!isInEditMode"><label>{{recruiter.companyName}}</label></td>
+						<td class="table-cell" *ngIf="isInEditMode">
+							<input type="text" formControlName="companyName"/> 
+						</td>
+					</tr>
+					<tr>
+						<td class="table-left-hdr">Email Address</td>
+						<td class="table-cell label" *ngIf="!isInEditMode"><label>{{recruiter.email}}</label></td>
+						<td class="table-cell" *ngIf="isInEditMode">
+							<input type="text" formControlName="email"/> 
+						</td>
+					</tr>
+					<tr>
+						<td class="table-left-hdr">Preferred Language</td>
+						<td class="table-cell" *ngIf="!isInEditMode"><label>{{recruiter.language}}</label></td>
+						<td class="table-cell" *ngIf="isInEditMode">
+						 	<select  formControlName="language">
+								<option value="ENGLISH" >English</option>
+								<option value="DUTCH"	>Dutch</option>
+								<option value="FRENCH"	>French</option>
+							</select>
+						</td>
+					</tr>
+				</table>
+				
+				<div class="action-buttons">
+					<button class="btn btn-secondary btnRight" (click)="persistAccountDetails()" *ngIf="isInEditMode">Save Changes</button>
+				</div>
+			
+			</form>
+		</div>
 	</div>
 	
 	<!-- Subscriptions -->

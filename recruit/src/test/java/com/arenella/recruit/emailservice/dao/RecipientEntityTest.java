@@ -81,6 +81,36 @@ public class RecipientEntityTest {
 		assertEquals(firstName, 	recipient.getFirstName());
 		assertEquals(email, 		recipient.getEmail());
 		
+	}
+	
+	/**
+	* Tests conversion from Entity to Domain representation
+	* @throws Exception
+	*/
+	@Test
+	public void convertFromEntity_updateMethods() throws Exception{
+		
+		final String updtFirstName 	= "updtFirstName";
+		final String updtEmail 		= "updtEmail";
+		
+		RecipientEntity entity = 
+				RecipientEntity
+					.builder()
+						.email(email)
+						.firstName(firstName)
+						.id(new RecipientEntityPK(type, recipientId))
+					.build();
+		
+		assertEquals(recipientId, 	entity.getId().getRecipientId());
+		assertEquals(firstName, 	entity.getFirstName());
+		assertEquals(email, 		entity.getEmail());
+		
+		entity.setEmail(updtEmail);
+		entity.setFirstName(updtFirstName);
+		
+		assertEquals(recipientId, 	entity.getId().getRecipientId());
+		assertEquals(updtFirstName, entity.getFirstName());
+		assertEquals(updtEmail, 	entity.getEmail());
 		
 	}
 	
