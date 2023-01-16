@@ -191,3 +191,8 @@
 .modal-body{
 	min-height:150px;
 }
+
+.info-text{
+	color:blue;
+	font-style:italic;
+}

@@ -168,6 +168,10 @@
 										<input class="filtercheckbox" type="checkbox" name="countries" value="UK" formControlName="UK" (change)="updateFilters()">
 										<label>UK</label>
 									</div>
+									<div>
+										<input class="filtercheckbox" type="checkbox" name="countries" value="UK" formControlName="REPUBLIC_OF_IRELAND" (change)="updateFilters()">
+										<label>Republic of Ireland</label>
+									</div>
 								</div>
 							</div>
 						</form>
@@ -506,6 +510,7 @@
 			<div class="modal-body" *ngIf="showSaveAlertBox">
 				<p>Each time a Candidate matching the current filters is uploaded you will
 				receive an alert by email</p>
+				<p class="info-text">Please add required filters before creating your alert</p>
 				Alert Name: <input type="text" formControlName="alertName">
 				<br/><br/>
 				<button class="btn btn-secondary" (click)="saveAlert()" download>Save</button>

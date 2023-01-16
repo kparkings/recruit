@@ -613,7 +613,10 @@ export class StatisticsComponent implements OnInit {
 				return 'NL';
 			}
 			case 'UK':{
-				return 'UK/IRL';
+				return 'UK';
+			}
+			case 'REPUBLIC_OF_IRELAND':{
+				return 'IE';
 			}
 			default:{
 				return country;

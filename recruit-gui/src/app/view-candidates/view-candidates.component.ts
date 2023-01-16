@@ -139,9 +139,10 @@ export class ViewCandidatesComponent implements OnInit {
 
 	public countryFilterForm:FormGroup = new FormGroup({
      
-    	NETHERLANDS:  new FormControl(''),
-    	BELGIUM:      new FormControl(''),
-    	UK:           new FormControl('')
+    	NETHERLANDS:  					new FormControl(''),
+    	BELGIUM:      					new FormControl(''),
+    	UK:           					new FormControl(''),
+    	REPUBLIC_OF_IRELAND:           new FormControl(''),
    
 	});
 
@@ -432,6 +433,10 @@ export class ViewCandidatesComponent implements OnInit {
       		countries.push('UK');
     	}
 
+	if (this.countryFilterForm.get('REPUBLIC_OF_IRELAND')?.value === true) {
+      		countries.push('REPUBLIC_OF_IRELAND');
+    	}
+    	
     	return countries;
   	}
 
@@ -512,6 +517,9 @@ export class ViewCandidatesComponent implements OnInit {
 			}
 			case "UK":{
 				return "UK";
+			}
+			case "REPUBLIC_OF_IRELAND":{
+				return "IE";
 			}
 		}
 
@@ -848,9 +856,10 @@ this.modalService.dismissAll();
 
     this.countryFilterForm = new FormGroup({
      
-      NETHERLANDS:  new FormControl(''),
-      BELGIUM:      new FormControl(''),
-      UK:           new FormControl('')
+      NETHERLANDS:  		new FormControl(''),
+      BELGIUM:      		new FormControl(''),
+      UK:           		new FormControl(''),
+      REPUBLIC_OF_IRELAND:	new FormControl('')
    
     });
 
@@ -944,6 +953,7 @@ this.modalService.dismissAll();
 			nlResults: 				new FormControl(this.countryFilterForm.get('NETHERLANDS')?.value),
 			beResults: 				new FormControl(this.countryFilterForm.get('BELGIUM')?.value),
 			ukResults: 				new FormControl(this.countryFilterForm.get('UK')?.value),
+			ieResults: 				new FormControl(this.countryFilterForm.get('REPUBLIC_OF_IRELAND')?.value),
 			contractType: 			new FormControl(contractType),
 			dutchLanguage: 			new FormControl(this.dutchFilterForm.get("level")?.value),
 			englishLanguage: 		new FormControl(this.englishFilterForm.get("level"))?.value,

@@ -261,11 +261,12 @@ public class CandidateDownloadServiceImpl implements CandidateDownloadService{
 	private String getHumanReadableCountry(COUNTRY country) {
 		
 		switch (country) {
-			case NETHERLANDS:	{ return "NL";}
-			case UK:		 	{ return "UK";}
-			case BELGIUM:		{ return "BE";}
-			case EUROPE:		{ return "EU";}
-			default: 			{return "NA";}
+			case NETHERLANDS:			{ return "NL";}
+			case UK:		 			{ return "UK";}
+			case BELGIUM:				{ return "BE";}
+			case EUROPE:				{ return "EU";}
+			case REPUBLIC_OF_IRELAND:	{ return "IE";}
+			default: 					{return "NA";}
 		}
 		
 	}

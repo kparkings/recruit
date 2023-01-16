@@ -1,9 +1,11 @@
 <div class=".container m-2">
 
 	<!-- Action buttons -->
+	<!--  
 	<div *ngIf="currentView === 'suggestion-results'">
 		<button class="btn btn-secondary btnRight" (click)="showCreateAlertDialog()" download>Create Alert</button>
 	 </div>
+	 -->
 
 	<div>	
 		<form [formGroup]="suggestionFilterForm" *ngIf="currentView === 'suggestion-results'">
@@ -30,6 +32,9 @@
 							</span>
 							<span class="country-selected-{{includeResultsForCountry('uk')}}" (click)="toggleCountrySelection('uk')">
 								<span class="flag-icon flag-icon-gb flag-icon-med"></span>
+							</span>
+							<span class="country-selected-{{includeResultsForCountry('ie')}}" (click)="toggleCountrySelection('ie')">
+								<span class="flag-icon flag-icon-ie flag-icon-med"></span>
 							</span>
 						</td>
 					</tr>
@@ -152,6 +157,10 @@
 						</td>
 						<td *ngIf="suggestedCandidate.country === 'UK'">
 							<span class="flag-icon flag-icon-gb  suggestion-flag-country"></span>
+							{{suggestedCandidate.city}}
+						</td>
+						<td *ngIf="suggestedCandidate.country === 'REPUBLIC_OF_IRELAND'">
+							<span class="flag-icon flag-icon-ie  suggestion-flag-country"></span>
 							{{suggestedCandidate.city}}
 						</td>
 						

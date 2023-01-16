@@ -35,6 +35,7 @@ export class SuggestionsComponent implements OnInit {
 		nlResults: 				new FormControl(true),
 		beResults: 				new FormControl(true),
 		ukResults: 				new FormControl(true),
+		ieResults: 				new FormControl(true),
 		contractType: 			new FormControl('Both'),
 		dutchLanguage: 			new FormControl(false),
 		englishLanguage: 		new FormControl(false),

@@ -190,7 +190,13 @@ export class NewCandidateComponent implements OnInit {
               this.formBean.get('english')!.setValue('YES');
               this.formBean.get('french')!.setValue('NO');
               break;
-          } 
+          }
+		case 'REPUBLIC_OF_IRELAND':{
+              this.formBean.get('dutch')!.setValue('NO');
+              this.formBean.get('english')!.setValue('YES');
+              this.formBean.get('french')!.setValue('NO');
+              break;
+          }  
           case 'NETHERLANDS':{
               this.formBean.get('dutch')!.setValue('NO');
               this.formBean.get('english')!.setValue('YES');

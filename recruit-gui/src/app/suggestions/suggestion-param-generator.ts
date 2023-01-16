@@ -50,6 +50,10 @@ export class SuggestionParams{
 			this.countries.push("UK");
 		}
 
+	if (suggestionFilterForm.get('ieResults')?.value) {
+			this.countries.push("REPUBLIC_OF_IRELAND");
+		}
+		
 		/**
 		* Add any language filters 	
 		*/
