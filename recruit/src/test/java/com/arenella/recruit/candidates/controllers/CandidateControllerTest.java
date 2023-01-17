@@ -23,7 +23,7 @@ import com.arenella.recruit.candidates.beans.CandidateSearchAccuracyWrapper;
 import com.arenella.recruit.candidates.beans.CandidateSearchAlert;
 import com.arenella.recruit.candidates.beans.PendingCandidate;
 import com.arenella.recruit.candidates.controllers.CandidateController.CANDIDATE_UPDATE_ACTIONS;
-import com.arenella.recruit.candidates.services.CandidateDownloadService;
+
 import com.arenella.recruit.candidates.services.CandidateService;
 
 /**
@@ -35,9 +35,6 @@ public class CandidateControllerTest {
 	
 	@Mock
 	private CandidateService			mockCandidateService;
-	
-	@Mock
-	private CandidateDownloadService 	mockCandidateDownloadService;
 	
 	@Mock
 	private Authentication 				mockAuthentication;

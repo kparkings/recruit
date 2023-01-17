@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -75,6 +76,16 @@ public class CurriculumController {
 		
 		return new ResponseEntity<>(new ByteArrayResource(stream.toByteArray()), header, HttpStatus.OK);
 		
+	}
+	
+	//TODO: [KP] If conversion is slow it may be worth converting on upload and just retrieving the bytes from the DB. THerefore for doc/docx there would be 2 cvs ( word + pdf)
+	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_RECRUITER')")
+	@GetMapping(
+			  value = "/curriculum-test/{curriculumId}.pdf",
+			  produces = MediaType.APPLICATION_PDF_VALUE
+			)
+	public @ResponseBody byte[] getCurriculumAsPDF(@PathVariable("curriculumId")String curriculumId) throws Exception{
+		return this.curriculumService.getCurriculamAsPdfBytes(curriculumId);
 	}
 	
 	/**

@@ -1,5 +1,7 @@
 package com.arenella.recruit.curriculum.services;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Optional;
 import java.util.Set;
@@ -7,6 +9,9 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+import org.apache.poi.xwpf.converter.pdf.PdfConverter;
+import org.apache.poi.xwpf.converter.pdf.PdfOptions;
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -156,7 +161,37 @@ public class CurriculumServiceImpl implements CurriculumService{
 	@Override
 	public void deleteCurriculum(long curriculumId) {
 		this.curriculumDao.deleteById(curriculumId);
+	}
+
+	/**
+	* Refer to the CurriculumService interface for details
+	*/
+	@Override
+	public byte[] getCurriculamAsPdfBytes(String curriculumId) throws IOException {
+		
+		Curriculum 				curriculum 		= this.fetchCurriculum(curriculumId);
+		byte[] 					fileBytes 		= null;
+		ByteArrayOutputStream 	stream;
+		
+		if (curriculum.getFileType() != FileType.pdf) {
+		
+			stream = new ByteArrayOutputStream();
+			
+			XWPFDocument document = new XWPFDocument(new ByteArrayInputStream(curriculum.getFile()));
+				
+			PdfOptions options = PdfOptions.create();
+		
+			PdfConverter.getInstance().convert(document, stream, options);
+			
+		} else {
+			fileBytes 	= curriculum.getFile();
+			stream 		= new ByteArrayOutputStream(fileBytes.length);
+			stream.write(fileBytes);
+		}
+		
+		this.logCurriculumDownloadedEvent(curriculumId);
+		
+		return stream.toByteArray();
 	} 
 	
-
 }

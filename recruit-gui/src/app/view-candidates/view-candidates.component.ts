@@ -487,13 +487,6 @@ export class ViewCandidatesComponent implements OnInit {
 		return '&functions=' + functionTypes.toString();
 
 	}
-
-	/**
-	*  Returns the url to perform the download of the filterable candidate list
-	*/
-	public getCandidateDownloadUrl(){
-		return  environment.backendUrl + 'candidate/download?'+ this.getCandidateFilterParamString();
-	}
   
 	/**
 	*  Returns the url to perform the download of the candidates CV

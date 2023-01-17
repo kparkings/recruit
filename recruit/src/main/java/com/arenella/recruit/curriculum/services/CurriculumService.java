@@ -73,4 +73,13 @@ public interface CurriculumService {
 	*/
 	public void deleteCurriculum(long curriculumId);
 
+	/**
+	* Returns the curriculum matching the curriculumId as the bytes for a PDF file. For
+	* CVs in docx format these will first be converted to PDF
+	* @param curriculumId - Unique Id of the curriculum to return
+	* @return bytes for pdf representation of curriculum
+	* @throws IOException 
+	*/
+	public byte[] getCurriculamAsPdfBytes(String curriculumId) throws IOException;
+
 }

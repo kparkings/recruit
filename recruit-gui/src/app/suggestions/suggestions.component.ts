@@ -1,4 +1,4 @@
-import { Component, OnInit } 					from '@angular/core';
+import { Component, OnInit, SecurityContext } 					from '@angular/core';
 import { FormGroup, FormControl }				from '@angular/forms';
 import { CandidateServiceService }				from '../candidate-service.service';
 import { SuggestionsService }					from '../suggestions.service';
@@ -10,6 +10,7 @@ import { NgbModal, NgbModalOptions }			from '@ng-bootstrap/ng-bootstrap';
 import { ViewChild }							from '@angular/core';
 import { CandidateSearchAlert }					from './candidate-search-alert';
 import { CandidateFunction }					from '../candidate-function';
+import { DomSanitizer, SafeResourceUrl, SafeUrl } from '@angular/platform-browser';
 
 /**
 * Component to suggest suitable Candidates based upon a 
@@ -54,24 +55,41 @@ export class SuggestionsComponent implements OnInit {
 	public showSaveAlertBoxSuccess:boolean  = false;
 	public showSaveAlertBox:boolean 		= false;
 	
+	public dangerousUrl = 'http://127.0.0.1:8080/curriculum-test/1623.pdf';
+	public trustedResourceUrl : SafeResourceUrl;
+	
 	/**
 	* Constructor
 	* @param candidateService - Services relating to Candidates
 	*/
-	constructor(public candidateService:CandidateServiceService, public suggestionsService:SuggestionsService, private clipboard: Clipboard, private modalService: NgbModal) { 
+	constructor(public candidateService:CandidateServiceService, public suggestionsService:SuggestionsService, private clipboard: Clipboard, private modalService: NgbModal, private sanitizer: DomSanitizer) { 
 		this.getSuggestions();	
+	 	this.trustedResourceUrl = this.sanitizer.bypassSecurityTrustResourceUrl('');
+		//this.updateUrl();
 	}
-
+	
+	public showCVInline(candidateId:string):void{
+		
+		let baseUrl = 'http://127.0.0.1:8080/curriculum-test/';
+		
+		this.trustedResourceUrl = this.sanitizer.bypassSecurityTrustResourceUrl(baseUrl + candidateId + '.pdf');
+		
+	}
+	
 	/**
 	* Initializes Component`
 	*/
 	ngOnInit(): void {
+		
+		//this.getCurriculumDownloadUrlForInline('1623');
 		
 		this.suggestionFilterForm.valueChanges.subscribe(value => {
 			this.getSuggestions();	
 		});
 		
 	}
+	
+	
 	
 	/**
 	* Sends request for Suggestions to the backend API
@@ -163,6 +181,14 @@ export class SuggestionsComponent implements OnInit {
 	}
 
 	/**
+	* Shows the inline CV view
+	*/
+	public showInlineCVView():void{
+		this.currentView = 'inline-cv';
+		this.showCVInline(this.suggestedCandidate.candidateId);
+	}
+
+	/**
 	* Shows the Suggesion result view
 	*/
 	public showSuggestedCandidateOverview(candidateSuggestion:Candidate):void{
@@ -184,6 +210,41 @@ export class SuggestionsComponent implements OnInit {
 	public getCurriculumDownloadUrl(curriculumId:string){
 		return  environment.backendUrl + 'curriculum/'+ curriculumId;
 	}
+	
+	
+	
+	safeUrl:any;
+	public filename:string = '';
+	
+	/**
+	*  Returns the url to perform the download of the candidates CV
+	*/
+	//public getCurriculumDownloadUrlForInline(curriculumId:string):void{
+		
+	//	let unsafeUrl:string = environment.backendUrl + 'curriculum-test/'+ curriculumId+'.pdf'; 
+		
+		
+	//	this.safeUrl = this.sanitizer.bypassSecurityTrustHtml(unsafeUrl);
+		
+	//	this.filename = `${this.safeUrl}`;
+		
+	//	//return this.sanitizer.bypassSecurityTrustResourceUrl(unsafeUrl);
+		
+	//}
+	
+		/**
+  	* Whether or not the user has authenticated as an Admin user 
+  	*/
+  	public isAuthenticatedAsAdmin():boolean {
+    	return sessionStorage.getItem('isAdmin') === 'true';
+  	}
+
+
+
+
+
+
+
 	
 	public contractType():string{
 		

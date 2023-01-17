@@ -63,4 +63,25 @@ public class CurriculumControllerTest {
 		
 	}
 	
+	/**
+	* Test calling of endpoint to get bytes for PDF version of 
+	* curriculum
+	* @throws Exception
+	*/
+	@Test
+	public void testGetCurriculumAsPDF() throws Exception {
+		
+		final String 	curriculumId 	= "1";
+		final byte[] 	pdfBytes 		=  new byte[]{};
+		
+		ArgumentCaptor<String> argCaptId = ArgumentCaptor.forClass(String.class);
+		
+		Mockito.when(this.mockCurriculumService.getCurriculamAsPdfBytes(argCaptId.capture())).thenReturn(pdfBytes);
+		byte[] response = this.curriculumController.getCurriculumAsPDF(curriculumId);
+		
+		assertEquals(pdfBytes, response);
+		assertEquals(curriculumId, argCaptId.getValue());
+		
+	}
+	
 }
