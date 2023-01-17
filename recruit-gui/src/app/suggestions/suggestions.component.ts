@@ -2,6 +2,7 @@ import { Component, OnInit, SecurityContext } 					from '@angular/core';
 import { FormGroup, FormControl }				from '@angular/forms';
 import { CandidateServiceService }				from '../candidate-service.service';
 import { SuggestionsService }					from '../suggestions.service';
+import { CurriculumService }					from '../curriculum.service';
 import { Candidate}								from './candidate';
 import { SuggestionParams}						from './suggestion-param-generator';
 import { environment }							from '../../environments/environment';
@@ -62,17 +63,24 @@ export class SuggestionsComponent implements OnInit {
 	* Constructor
 	* @param candidateService - Services relating to Candidates
 	*/
-	constructor(public candidateService:CandidateServiceService, public suggestionsService:SuggestionsService, private clipboard: Clipboard, private modalService: NgbModal, private sanitizer: DomSanitizer) { 
+	constructor(public candidateService:CandidateServiceService, 
+				public suggestionsService:SuggestionsService, 
+				private clipboard: Clipboard, 
+				private modalService: NgbModal, 
+				private sanitizer: DomSanitizer,
+				private curriculumService: CurriculumService) { 
+					
 		this.getSuggestions();	
 	 	this.trustedResourceUrl = this.sanitizer.bypassSecurityTrustResourceUrl('');
-		//this.updateUrl();
+		
 	}
 	
 	public showCVInline(candidateId:string):void{
 		
-		let baseUrl = 'http://127.0.0.1:8080/curriculum-test/';
+		let url = this.curriculumService.getCurriculumUrlForInlinePdf(candidateId); 'http://127.0.0.1:8080/curriculum-test/';
 		
-		this.trustedResourceUrl = this.sanitizer.bypassSecurityTrustResourceUrl(baseUrl + candidateId + '.pdf');
+		
+		this.trustedResourceUrl = this.sanitizer.bypassSecurityTrustResourceUrl(url);
 		
 	}
 	

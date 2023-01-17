@@ -72,8 +72,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements W
 		
 		http.csrf().disable();
 		
-		http.headers().frameOptions().sameOrigin();
-		//http.headers().frameOptions().disable();
+		http.headers().frameOptions().disable();
 		
 		http
 			.authorizeRequests()
