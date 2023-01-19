@@ -295,17 +295,6 @@ export class SuggestionsComponent implements OnInit {
 		}
 
   	}	
-
-	/**
-	* Copies the email address of the suggested candidate to 
-	* the clipboard
-	*/
-	public copyEmailToClipboard():void {
-		
-		this.clipboard.copy(this.suggestedCandidate.email);
-		this.candidateService.logRecruiterRequestedCandidateEmailEvent(this.suggestedCandidate.candidateId).subscribe();
-		
-	}
 	
 	public hasRequiredSkill(skill:string):string {
 		

@@ -1,7 +1,6 @@
 package com.arenella.recruit.candidates.services;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -19,13 +18,11 @@ import com.arenella.recruit.candidates.beans.CandidateRoleStats;
 import com.arenella.recruit.candidates.beans.CandidateSearchEvent;
 import com.arenella.recruit.candidates.dao.CandidateDao;
 import com.arenella.recruit.candidates.dao.CandidateSearchStatisticsDao;
-import com.arenella.recruit.candidates.dao.CandidateStatsEmailRequestedsDao;
 import com.arenella.recruit.candidates.dao.NewCandidateStatsTypeDao;
 import com.arenella.recruit.candidates.entities.CandidateRoleStatsView;
 import com.arenella.recruit.candidates.entities.CandidateSearchEventEntity;
 import com.arenella.recruit.candidates.enums.COUNTRY;
 import com.arenella.recruit.candidates.enums.FUNCTION;
-import com.arenella.recruit.curriculum.beans.CandidateEmailRequestEvent;
 
 /**
 * Services for retrieving statistics relating to Candidates
@@ -39,9 +36,6 @@ public class CandidateStatisticsServiceImpl implements CandidateStatisticsServic
 	
 	@Autowired
 	private CandidateSearchStatisticsDao 		statisticsDao;
-	
-	@Autowired
-	private CandidateStatsEmailRequestedsDao 	emailStatsRequestDao;
 	
 	@Autowired
 	private NewCandidateStatsTypeDao			newCandidateStatsTypeDao;
@@ -104,34 +98,6 @@ public class CandidateStatisticsServiceImpl implements CandidateStatisticsServic
 		
 	}
 	
-	/**
-	* Refer to StatisticsService for details 
-	*/
-	@Override
-	public void logEventEmailRequested(long candidateId) {
-
-		String	recruiterId	= SecurityContextHolder.getContext().getAuthentication().getName();
-		boolean isAdminUser	= SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream().filter(role -> role.getAuthority().equals("ROLE_ADMIN")).findAny().isPresent();
-		
-		/**
-		* We don't want to log these events for Admin users
-		*/
-		if (isAdminUser) {
-			return;
-		}
-		
-		this.emailStatsRequestDao.persistEmailRequestedEvent(UUID.randomUUID(), LocalDateTime.now(), recruiterId, candidateId);
-		
-	}
-	
-	/**
-	* Refer to StatisticsService for details 
-	*/
-	@Override
-	public Set<CandidateEmailRequestEvent> fetchEmailRequestEvents(){
-		return this.emailStatsRequestDao.findAllCandidateEmailRequestEvents();
-	}
-
 	/**
 	* Refer to StatisticsService for details 
 	*/

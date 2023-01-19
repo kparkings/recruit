@@ -1349,3 +1349,12 @@ databaseChangeLog:
                   type: UUID
                   constraints:
                     nullable: false
+  - changeSet:
+      id: drop_copied_email_evt_table
+      author: kparkings
+      changes:
+      -  dropTable:  
+            cascadeConstraints:  true  
+            schemaName: candidate  
+            tableName: event_candidate_email_request
+            

@@ -49,9 +49,7 @@ public class ListingServiceImplTest {
 	*/
 	@BeforeEach
 	public void init() throws Exception {
-	
 		SecurityContextHolder.getContext().setAuthentication(mockAuthentication);
-		
 	}
 	
 	/**

@@ -7,7 +7,6 @@ import java.util.Set;
 import com.arenella.recruit.candidates.beans.Candidate;
 import com.arenella.recruit.candidates.beans.CandidateFilterOptions;
 import com.arenella.recruit.candidates.beans.CandidateRoleStats;
-import com.arenella.recruit.curriculum.beans.CandidateEmailRequestEvent;
 
 /**
 * Defines services relating to Candidate statistics
@@ -35,18 +34,6 @@ public interface CandidateStatisticsService {
 	* @param filterOptions - Contains details of the Search
 	*/
 	public void logCandidateSearchEvent(CandidateFilterOptions filterOptions);
-	
-	/**
-	* Logs a request by a Recruiter for a Candidates email address
-	* @param candidateId - Id of candidate whose email was requested
-	*/
-	public void logEventEmailRequested(long candidateId);
-	
-	/**
-	* Retrieves all Email request events
-	* @return
-	*/
-	public Set<CandidateEmailRequestEvent> fetchEmailRequestEvents();
 	
 	/**
 	* Fetches Candidates added since the last time the method was called

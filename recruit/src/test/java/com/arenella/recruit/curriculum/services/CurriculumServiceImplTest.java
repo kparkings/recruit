@@ -52,6 +52,7 @@ public class CurriculumServiceImplTest {
 	
 	@Mock
 	private 				ExternalEventPublisher			mockExternalEventPublisher;
+	
 	@InjectMocks
 	private static final 	CurriculumServiceImpl 	service 			= new CurriculumServiceImpl();
 	

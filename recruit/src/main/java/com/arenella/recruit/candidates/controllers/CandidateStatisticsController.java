@@ -10,8 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.arenella.recruit.candidates.controllers.NewCandidateSummaryAPIOutbound.NewCandidateSummaryAPIOutboundBuilder;
@@ -47,28 +45,6 @@ public class CandidateStatisticsController {
 	@GetMapping(path="candidate/stat/function-count")
 	public ResponseEntity<List<CandidateRoleStatsAPIOutbound>> fetchCandidateRoleStats(){
 		return ResponseEntity.ok(candidateStatisticsService.fetchCandidateRoleStats().stream().map(stat -> CandidateRoleStatsAPIOutbound.convertFromDomain(stat)).collect(Collectors.toCollection(LinkedList::new)));
-	}
-	
-	/**
-	* Logs that a request was made to view a Candidates email address
-	* @param candidateId - Id of candidate whose email address was requested
-	* @return ResponseEntity
-	*/
-	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_RECRUITER')")
-	@PostMapping(path="candidate/stat/email-request")
-	public ResponseEntity<Void> logEventEmailRequestedEvent(@RequestBody() long candidateId) {
-		this.candidateStatisticsService.logEventEmailRequested(candidateId);
-		return ResponseEntity.ok().build();
-	}
-	
-	/**
-	* Returns stats relating to email addresses requested by
-	* individual recruiters
-	* @return
-	*/
-	@GetMapping(path="candidate/stat/email-request")
-	public ResponseEntity<EmailRequestsStatisticsAPIOutbound> fetchEmailRequestStatus(){		
-		return ResponseEntity.ok(new EmailRequestsStatisticsAPIOutbound(this.candidateStatisticsService.fetchEmailRequestEvents()));	
 	}
 	
 	/**
