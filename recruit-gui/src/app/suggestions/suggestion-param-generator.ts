@@ -143,7 +143,7 @@ export class SuggestionParams{
 	* Returns max number of years to filter on
 	*/
 	public getMaxExperience():string {
-		return this.minExperience
+		return this.maxExperience
 	}
 	
 	/**

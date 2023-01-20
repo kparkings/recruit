@@ -88,16 +88,10 @@ export class SuggestionsComponent implements OnInit {
 	* Initializes Component`
 	*/
 	ngOnInit(): void {
-		
-		//this.getCurriculumDownloadUrlForInline('1623');
-		
 		this.suggestionFilterForm.valueChanges.subscribe(value => {
 			this.getSuggestions();	
 		});
-		
 	}
-	
-	
 	
 	/**
 	* Sends request for Suggestions to the backend API
@@ -219,40 +213,15 @@ export class SuggestionsComponent implements OnInit {
 		return  environment.backendUrl + 'curriculum/'+ curriculumId;
 	}
 	
-	
-	
 	safeUrl:any;
 	public filename:string = '';
 	
 	/**
-	*  Returns the url to perform the download of the candidates CV
-	*/
-	//public getCurriculumDownloadUrlForInline(curriculumId:string):void{
-		
-	//	let unsafeUrl:string = environment.backendUrl + 'curriculum-test/'+ curriculumId+'.pdf'; 
-		
-		
-	//	this.safeUrl = this.sanitizer.bypassSecurityTrustHtml(unsafeUrl);
-		
-	//	this.filename = `${this.safeUrl}`;
-		
-	//	//return this.sanitizer.bypassSecurityTrustResourceUrl(unsafeUrl);
-		
-	//}
-	
-		/**
   	* Whether or not the user has authenticated as an Admin user 
   	*/
   	public isAuthenticatedAsAdmin():boolean {
     	return sessionStorage.getItem('isAdmin') === 'true';
   	}
-
-
-
-
-
-
-
 	
 	public contractType():string{
 		
