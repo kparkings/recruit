@@ -11,7 +11,7 @@
 		<form [formGroup]="suggestionFilterForm" *ngIf="currentView === 'suggestion-results'">
 	
 			<div class="left-menu" *ngIf="currentView === 'suggestion-results'">		
-				<table style="width:100%;">
+				<table style="width:80%;">
 					<tr>
 						<td class="sugg-srch-hdr">Job Title</td>
 						<td class="sugg-srch-bdy">
@@ -23,26 +23,26 @@
 					
 					<tr>
 						<td class="sugg-srch-hdr">Country</td>
-						<td class="sugg-srch-bdy">
-							<span class="country-selected-{{includeResultsForCountry('nl')}}" (click)="toggleCountrySelection('nl')">
+						<td class="sugg-srch-bdy country-filters">
+							<span class="country-filter country-selected-{{includeResultsForCountry('nl')}}" (click)="toggleCountrySelection('nl')">
 								<span class="flag-icon flag-icon-nl flag-icon-med"></span>
 							</span>
-							<span class="country-selected-{{includeResultsForCountry('be')}}" (click)="toggleCountrySelection('be')">
+							<span class="country-filter country-selected-{{includeResultsForCountry('be')}}" (click)="toggleCountrySelection('be')">
 								<span class="flag-icon flag-icon-be flag-icon-med"></span>
 							</span>
-							<span class="country-selected-{{includeResultsForCountry('uk')}}" (click)="toggleCountrySelection('uk')">
+							<span class="country-filter country-selected-{{includeResultsForCountry('uk')}}" (click)="toggleCountrySelection('uk')">
 								<span class="flag-icon flag-icon-gb flag-icon-med"></span>
 							</span>
-							<span class="country-selected-{{includeResultsForCountry('ie')}}" (click)="toggleCountrySelection('ie')">
+							<span class="country-filter country-selected-{{includeResultsForCountry('ie')}}" (click)="toggleCountrySelection('ie')">
 								<span class="flag-icon flag-icon-ie flag-icon-med"></span>
 							</span>
 						</td>
 					</tr>
 					
 					<tr>
-						<td class="sugg-srch-hdr">Contract Type</td>
+						<td class="sugg-srch-hdr">Contract</td>
 						<td class="sugg-srch-bdy">
-							<select formControlName="contractType">
+							<select class="contract-type" formControlName="contractType">
 							<option value="BOTH">Both (Includes unknown)</option>
 							<option value="CONTRACT">Contract</option>
 							<option value="PERM">Permanent</option>
@@ -61,15 +61,14 @@
 					</tr>
 					
 					<tr>
-						<td class="sugg-srch-hdr">Years Experience</td>
+						<td class="sugg-srch-hdr">Years Exp</td>
 						<td class="sugg-srch-bdy">
 							<div style="margin-top:10px;">
-								<span>Min:</span>
-								<select class="min-max" formControlName="minYearsExperience">
+								<select class="min" formControlName="minYearsExperience">
 									<option *ngFor="let opt of minMaxOptions" value="{{opt}}">{{opt}}</option>
 								</select>
-								<span>Max:</span>
-								<select class="min-max" formControlName="maxYearsExperience">
+								<span> <B>TO</B> </span>
+								<select class="max" formControlName="maxYearsExperience">
 									<option *ngFor="let opt of minMaxOptions" value="{{opt}}">{{opt}}</option>
 								</select>
 							</div>
@@ -79,7 +78,7 @@
 					<tr>
 						<td class="sugg-srch-hdr">Skills</td>
 						<td class="sugg-srch-bdy">
-							<input type="text" formControlName="skill"><button (click)="addSkill()" class="btn btn-secondary add-skill-btn">Add</button>
+							<input class="skill-field" type="text" formControlName="skill"><button (click)="addSkill()" class="btnX btn-secondary add-skill-btn">Add</button>
 						</td>
 					</tr>
 					<tr>
