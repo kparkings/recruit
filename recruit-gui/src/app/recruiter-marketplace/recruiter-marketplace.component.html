@@ -23,9 +23,9 @@
 			</p>
 			
 			<div class="action-buttons">
-				<button class="btn btn-secondary action-btn" (click)="showJustMyCandidates()" 	*ngIf="!showJustMyCandidatesActive">Just My Candidate</button>
+				<button class="btn btn-secondary action-btn" (click)="showJustMyCandidates()" 	*ngIf="!showJustMyCandidatesActive">My Candidate</button>
 				<button class="btn btn-secondary action-btn" (click)="fetchOfferedCandidates()" *ngIf="showJustMyCandidatesActive">All Candidates</button>
-				<button class="btn btn-secondary action-btn" (click)="switchTab('addSupply')" 	*ngIf="!isAuthenticatedAsAdmin()">Offer new Candidate</button>
+				<button class="btn btn-secondary action-btn" (click)="switchTab('addSupply')" 	*ngIf="!isAuthenticatedAsAdmin()">Offer Candidate</button>
 			
 			</div>
 			<!-- List of offered Candidates -->
@@ -35,29 +35,30 @@
 						<tr>
 							<th class="bg-tab-hdr">Created</th>
 							<th class="bg-tab-hdr">Role</th>
-							<th class="bg-tab-hdr">Country</th>
-							<th class="bg-tab-hdr">Location</th>
-							<th class="bg-tab-hdr">Contract Type</th>
-							<th class="bg-tab-hdr">Actions</th>
+							<th class="bg-tab-hdr" *ngIf="!showJustMyCandidatesActive">Country</th>
+							<th class="bg-tab-hdr" *ngIf="!showJustMyCandidatesActive">Contract Type</th>
+							<th class="bg-tab-hdr" *ngIf="showJustMyCandidatesActive">Actions</th>
 						</tr>
 					</thead>
 					<tbody>
-						<tr *ngFor="let candidate of offeredCandidates">
-							<td class="table-bdy-td">{{candidate.created}}</td>
-							<td class="table-bdy-td">{{candidate.candidateRoleTitle}}</td>
-							<td class="table-bdy-td">{{candidate.country}}</td>
-							<td class="table-bdy-td">{{candidate.location}}</td>
-							<td class="table-bdy-td">{{candidate.contractType}}</td>
+						<tr *ngFor="let candidate of offeredCandidates" class="as-link">
+							<td class="table-bdy-td" (click)="viewCandidate(candidate)">{{candidate.created}}</td>
+							<td class="table-bdy-td" (click)="viewCandidate(candidate)">{{candidate.candidateRoleTitle}}</td>
+							<td class="table-bdy-td" (click)="viewCandidate(candidate)" align="center" *ngIf="!showJustMyCandidatesActive">
+								<span title="{{candidate.country}}" *ngIf="candidate.country === 'NETHERLANDS'"  	class="flag-icon flag-icon-nl"></span>
+								<span title="{{candidate.country}}" *ngIf="candidate.country === 'BELGIUM'"			class="flag-icon flag-icon-be"></span>
+								<span title="{{candidate.country}}" *ngIf="candidate.country === 'UK'"				class="flag-icon flag-icon-gb"></span>
+								<span title="{{candidate.country}}" *ngIf="candidate.country === 'IRL'"				class="flag-icon flag-icon-ie"></span>
+								<span title="{{candidate.country}}" *ngIf="candidate.country === 'EU_REMOTE'"		class="flag-icon flag-icon-eu"></span>
+								<span title="{{candidate.country}}" *ngIf="candidate.country === 'WORLD_REMOTE'"	class="flag-icon flag-icon-xx"></span>
+							</td>
+							<td class="table-bdy-td" (click)="viewCandidate(candidate)" *ngIf="!showJustMyCandidatesActive">{{candidate.contractType}}</td>
 							<td *ngIf="showJustMyCandidatesActive">
 								<div *ngIf="!isAuthenticatedAsAdmin()">
-									<button class="btn btn-secondary small-action-btn" (click)="viewCandidate(candidate)">View</button>
 									<button class="btn btn-secondary small-action-btn" (click)="editOfferedCandidate(candidate)">Edit</button>
 									<button class="btn btn-secondary small-action-btn" *ngIf="confirmDeleteCandidate != candidate.id"  (click)="deleteMyCandidate(candidate.id)">Delete</button>
 									<button class="btn btn-secondary small-action-btn small-action-btn-confirm-del" *ngIf="confirmDeleteCandidate === candidate.id" (click)="applyDeleteMyCandidate(candidate.id)">Confirm</button>
 								</div>
-							</td>
-							<td *ngIf="!showJustMyCandidatesActive">
-								<button class="btn btn-secondary small-action-btn" (click)="viewCandidate(candidate)">View</button>
 							</td>
 						</tr>
 					</tbody>	
@@ -394,9 +395,9 @@
 			of the position you are trying to fill and allow other Recruiters to contact you with suitable candidates.  
 			</p>
 			<div class="action-buttons">
-				<button class="btn btn-secondary action-btn" (click)="showJustMyOpenPositions()" 	*ngIf="!showJustMyOpenPositionsActive">Just My Candidates</button>
-				<button class="btn btn-secondary action-btn" (click)="fetchOpenPositions()" 		*ngIf="showJustMyOpenPositionsActive">All Requested Candidates</button>
-				<button class="btn btn-secondary action-btn" (click)="switchTab('addDemand')" *ngIf="!isAuthenticatedAsAdmin()">Request new Candidate</button>
+				<button class="btn btn-secondary action-btn" (click)="showJustMyOpenPositions()" 	*ngIf="!showJustMyOpenPositionsActive">My Candidates</button>
+				<button class="btn btn-secondary action-btn" (click)="fetchOpenPositions()" 		*ngIf="showJustMyOpenPositionsActive">All Candidates</button>
+				<button class="btn btn-secondary action-btn" (click)="switchTab('addDemand')" *ngIf="!isAuthenticatedAsAdmin()">Request Candidate</button>
 			</div>
 			<!-- List of Requested Candidates -->
 			<div>
@@ -409,31 +410,31 @@
 						<tr>
 							<th class="bg-tab-hdr">Created</th>
 							<th class="bg-tab-hdr">Position</th>
-							<th class="bg-tab-hdr">Country</th>
-							<th class="bg-tab-hdr">Location</th>
-							<th class="bg-tab-hdr">Start Date</th>
-							<th class="bg-tab-hdr">Closing Date</th>
-							<th class="bg-tab-hdr">Actions</th>
+							<th class="bg-tab-hdr" *ngIf="!showJustMyOpenPositionsActive">Country</th>
+							<th class="bg-tab-hdr" *ngIf="!showJustMyOpenPositionsActive">Closing Date</th>
+							<th class="bg-tab-hdr" *ngIf="showJustMyOpenPositionsActive">Actions</th>
 						</tr>
 					</thead>
 					<tbody>
-						<tr  *ngFor="let openPosition of openPositions">
-							<td class="table-bdy-td">{{openPosition.created}}</td>
-							<td class="table-bdy-td">{{openPosition.positionTitle}}</td>
-							<td class="table-bdy-td">{{openPosition.country}}</td>
-							<td class="table-bdy-td">{{openPosition.location}}</td>
-							<td class="table-bdy-td">{{openPosition.startDate}}</td>
-							<td class="table-bdy-td">{{openPosition.positionClosingDate}}</td>
+						<tr  *ngFor="let openPosition of openPositions" class="as-link">
+							<td class="table-bdy-td td-date" (click)="viewOpenPosition(openPosition)">{{openPosition.created}}</td>
+							<td class="table-bdy-td" 		 (click)="viewOpenPosition(openPosition)">{{openPosition.positionTitle}}</td>
+							<td class="table-bdy-td" 		 (click)="viewOpenPosition(openPosition)"align="center" *ngIf="!showJustMyOpenPositionsActive">
+								<span title="{{openPosition.country}}" *ngIf="openPosition.country === 'NETHERLANDS'"  	class="flag-icon flag-icon-nl"></span>
+								<span title="{{openPosition.country}}" *ngIf="openPosition.country === 'BELGIUM'"		class="flag-icon flag-icon-be"></span>
+								<span title="{{openPosition.country}}" *ngIf="openPosition.country === 'UK'"			class="flag-icon flag-icon-gb"></span>
+								<span title="{{openPosition.country}}" *ngIf="openPosition.country === 'IRL'"			class="flag-icon flag-icon-ie"></span>
+								<span title="{{openPosition.country}}" *ngIf="openPosition.country === 'EU_REMOTE'"		class="flag-icon flag-icon-eu"></span>
+								<span title="{{openPosition.country}}" *ngIf="openPosition.country === 'WORLD_REMOTE'"	class="flag-icon flag-icon-xx"></span>
+							
+							</td>
+							<td class="table-bdy-td td-date" (click)="viewOpenPosition(openPosition)" *ngIf="!showJustMyOpenPositionsActive">{{openPosition.positionClosingDate}}</td>
 							<td *ngIf="showJustMyOpenPositionsActive">
 								<div *ngIf="!isAuthenticatedAsAdmin()">
-									<button class="btn btn-secondary small-action-btn" (click)="viewOpenPosition(openPosition)">View</button>
 									<button class="btn btn-secondary small-action-btn" (click)="editOpenPosition(openPosition)">Edit</button>
 									<button class="btn btn-secondary small-action-btn" *ngIf="confirmDeleteOpenPosition != openPosition.id"  (click)="deleteMyOpenPosition(openPosition.id)">Delete</button>
 									<button class="btn btn-secondary small-action-btn small-action-btn-confirm-del" *ngIf="confirmDeleteOpenPosition === openPosition.id" (click)="applyDeleteMyOpenPosition(openPosition.id)">Confirm</button>
 								</div>
-							</td>
-							<td *ngIf="!showJustMyOpenPositionsActive">
-								<button class="btn btn-secondary small-action-btn" (click)="viewOpenPosition(openPosition)">View</button>
 							</td>
 						</tr>
 						

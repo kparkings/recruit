@@ -30,10 +30,10 @@
 }
 
 .action-btn{
-	width:200px;
+	width:150px;
 	margin-top:5px;
 	margin-left:5px;
-	padding-left:5px;
+	padding-left:0px;
 	padding-right:5px;
 } 
 
@@ -82,28 +82,31 @@
  
  .candidate-title{
  	color:#6f42c1;
+ 	word-wrap:break-word;
  }
  
  .candidate-view-div-standard{
  	float:left;
  	margin-left:10px;
+ 	margin-right:20px;
  	margin-top:10px;
  	margin-bottom:20px;
  	border: 1px solid black;
- 	width:400px;
+ 	width:340px;
  	height:200px;
- 	padding:50px;
+ 	padding:40px;
  }
  
  .open-position-view-div-standard{
  	float:left;
  	margin-left:10px;
- 	margin-top:10px;
+ 	margin-top:20px;
  	margin-bottom:20px;
  	border: 1px solid black;
- 	width:500px;
- 	height:200px;
- 	padding:50px;
+ 	width:340px;
+ 	min-width:45%;
+ 	height:220px;
+ 	padding:40px;
  }
  
  .candidate-view-div{
@@ -112,12 +115,17 @@
  	margin-bottom:20px;
  	border: 1px solid black;
  	padding:10px;
- 	min-width:400px;
+ 	width:90%;
+ 	padding:40px;
+ 	min-width:340px;
  	
  }
  
  .candidate-view-div-footer{
  	min-height:20px;
+ 	width:90%;
+ 	padding:40px;
+	min-width:340px;
  }
  
  .table-hdr-td{
@@ -127,14 +135,22 @@
  
 .table-bdy-td{
 	word-wrap:break-word;
-	max-width:250px;
+	max-width:100px;
 }
 
 textarea {
-    width:50%;
+    width:100%;
     height:200px;
 }
 
 .tabNavActive{
 	color:#6f42c1;
+}
+
+td{
+	font-size:14px;
+}
+
+.as-link{
+	cursor:pointer;	
 }
