@@ -107,23 +107,26 @@
 	
 	
 	<div *ngIf="currentView === 'suggestion-results'" class="suggestion-results">
-	
-		<div class="suggestion-icon" *ngFor="let suggestion of suggestions" (click)="showSuggestedCandidateOverview(suggestion)">
+		
+		<div class="suggestion-result-icons">
 			
-			<div class="suggestion-icon-header">
-				C{{suggestion.candidateId}}
-			</div>
-			<div title="Accuracy Skills" class="suggestion-perception-result-{{suggestion.accuracySkills}}"></div>
-			<div title="Accuracy Languages" class="suggestion-perception-result-{{suggestion.accuracyLanguages}}"></div>
-			<div class="suggestion-icon-body">
-				<div>
-					{{suggestion.firstname}} {{suggestion.surname}}
+			<div class="suggestion-icon" *ngFor="let suggestion of suggestions" (click)="showSuggestedCandidateOverview(suggestion)">
+				
+				<div class="suggestion-icon-header">
+					C{{suggestion.candidateId}}
 				</div>
-				<div>
-					{{suggestion.roleSought}}
+				<div title="Accuracy Skills" class="suggestion-perception-result-{{suggestion.accuracySkills}}"></div>
+				<div title="Accuracy Languages" class="suggestion-perception-result-{{suggestion.accuracyLanguages}}"></div>
+				<div class="suggestion-icon-body">
+					<div>
+						{{suggestion.firstname}} {{suggestion.surname}}
+					</div>
+					<div>
+						{{suggestion.roleSought}}
+					</div>
 				</div>
+				
 			</div>
-			
 		</div>
 	</div>
 
