@@ -5,20 +5,39 @@
 <div>
 
 	<ul class="arenella-navbar">
-      <li  class="li-arenella-nav" *ngIf="!isAuthenticated()  || isAuthenticatedAsAdmin()">
+      
+		<!-- Pre Authentication -->
+		<li  class="li-arenella-nav-pre-login" *ngIf="!isAuthenticated()">
            <a  class="dropdown-item" routerLink="/listing">Job Board</a>
         </li>
-        <li  class="li-arenella-nav" *ngIf="!isAuthenticated()">
-           <a  class="dropdown-item" routerLink="/suggestions">Login</a>
-        </li>
-		<li  class="li-arenella-nav" *ngIf="!isAuthenticated()">
+		<li  class="li-arenella-nav-pre-login" *ngIf="!isAuthenticated()">
            <a  class="dropdown-item" routerLink="/about">About</a>
+        </li>
+		<li  class="li-arenella-nav-pre-login" *ngIf="!isAuthenticated()">
+           <a  class="dropdown-item" routerLink="/suggestions">Login</a>
+        </li> 
+		<li class="li-arenella-nav-pre-login li-arenella-nav-pre-signup signup-candidate" *ngIf="!isAuthenticated()">
+           	<a class="dropdown-item" routerLink="/create-candidate">Candidate Signup</a>
+ 	    </li>
+		<li class="li-arenella-nav-pre-login li-arenella-nav-pre-signup signup-recruiter" *ngIf="!isAuthenticated()">
+    		<a class="dropdown-item" routerLink="/recruiter-signup">Recruiter Signup</a>
+        </li>
+
+		<!-- Post Authentication -->
+		<li  class="li-arenella-nav" *ngIf="isAuthenticated()">
+           <a  class="dropdown-item" routerLink="/listing">Job Board</a>
+        </li>
+        <li class="li-arenella-nav" *ngIf="isAuthenticated() && !isAuthenticatedAsAdmin() && !isRecruiterNoSubscription() && !hasUnpaidSubscription()">
+           <a class="dropdown-item recruiter-account" routerLink="/recruiter-listings">Listings</a>
         </li>
 		<li  class="li-arenella-nav"  *ngIf="isAuthenticated() && !isRecruiterNoSubscription() && !hasUnpaidSubscription()">	
            <a  class="dropdown-item" routerLink="/view-candidates">Candidates</a>
         </li>
 		<li  class="li-arenella-nav"  *ngIf="isAuthenticated() && !isRecruiterNoSubscription() && !hasUnpaidSubscription()">	
            <a  class="dropdown-item" routerLink="/suggestions">Suggestions</a>
+        </li>
+		<li class="li-arenella-nav" *ngIf="isAuthenticated() && !isAuthenticatedAsAdmin() && !isRecruiterNoSubscription() && !hasUnpaidSubscription()">
+           <a class="dropdown-item recruiter-account" routerLink="/recruiter-alerts">Alerts</a>
         </li>
 		<li class="li-arenella-nav" *ngIf="isAuthenticated() && !isRecruiterNoSubscription() && !hasUnpaidSubscription()">
            <a class="dropdown-item recruiter-account" routerLink="/recruiter-marketplace">Marketplace</a>
@@ -27,27 +46,13 @@
            <a  class="dropdown-item" routerLink="/statistics">Statistics</a>
         </li>
  		<li  class="li-arenella-nav" *ngIf="isAuthenticatedAsAdmin()">
-           <a  class="dropdown-item" routerLink="/new-candidate">New Candidate</a>
+           <a  class="dropdown-item" routerLink="/new-candidate">New</a>
         </li>
 		<li class="li-arenella-nav" *ngIf="isAuthenticatedAsAdmin()">
            <a  class="dropdown-item" routerLink="/accounts">Accounts</a>
         </li>
-		
-		<li class="li-arenella-nav" *ngIf="!isAuthenticated()" class="candidate-signup">
-           	<a class="dropdown-item" style="float:right;" routerLink="/create-candidate">Candidate Signup</a>
- 	    </li>
-		<li class="li-arenella-nav" *ngIf="!isAuthenticated()" class="recruiter-signup">
-    		<a class="dropdown-item" style="float:right;" routerLink="/recruiter-signup">Recruiter Signup</a>
-        </li>
-
 		<li class="li-arenella-nav" *ngIf="isAuthenticated() && !isAuthenticatedAsAdmin()">
-           <a class="dropdown-item recruiter-account" routerLink="/recruiter-account">Manage Account</a>
-        </li>
-		<li class="li-arenella-nav" *ngIf="isAuthenticated() && !isAuthenticatedAsAdmin() && !isRecruiterNoSubscription() && !hasUnpaidSubscription()">
-           <a class="dropdown-item recruiter-account" routerLink="/recruiter-listings">Manage Job Listings</a>
-        </li>
-		<li class="li-arenella-nav" *ngIf="isAuthenticated() && !isAuthenticatedAsAdmin() && !isRecruiterNoSubscription() && !hasUnpaidSubscription()">
-           <a class="dropdown-item recruiter-account" routerLink="/recruiter-alerts">Manage Search Alerts</a>
+           <a class="dropdown-item recruiter-account" routerLink="/recruiter-account">Account</a>
         </li>
       </ul>
 

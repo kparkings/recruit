@@ -42,7 +42,33 @@
 
 .li-arenella-nav{
 	margin-bottom:5px;
-	min-width:160px;
+	min-width:140px;
 	text-align:center;
 	border-right: solid 1px grey;
+}
+
+.li-arenella-nav-pre-login{
+	margin-bottom:5px;
+	float:left;
+	min-width:105px;
+	border-right: solid 1px grey;
+	text-align:center;
+	border-right: none;
+}
+
+.li-arenella-nav-pre-signup{
+	background:orange;
+	width:190px;
+	text-align:center;
+	margin-left:10px;
+	margin-right:10px;
+	float:right;
+}
+
+.signup-recruiter{
+	background:orange;
+}
+
+.signup-candidate{
+	background:green;
 }
