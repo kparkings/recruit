@@ -32,12 +32,14 @@
 		<li class="li-arenella-nav" *ngIf="isAuthenticatedAsAdmin()">
            <a  class="dropdown-item" routerLink="/accounts">Accounts</a>
         </li>
+		
 		<li class="li-arenella-nav" *ngIf="!isAuthenticated()" class="candidate-signup">
-           <a class="dropdown-item" routerLink="/create-candidate">Candidate Signup</a>
-        </li>
+           	<a class="dropdown-item" style="float:right;" routerLink="/create-candidate">Candidate Signup</a>
+ 	    </li>
 		<li class="li-arenella-nav" *ngIf="!isAuthenticated()" class="recruiter-signup">
-           <a class="dropdown-item" routerLink="/recruiter-signup">Recruiter Signup</a>
+    		<a class="dropdown-item" style="float:right;" routerLink="/recruiter-signup">Recruiter Signup</a>
         </li>
+
 		<li class="li-arenella-nav" *ngIf="isAuthenticated() && !isAuthenticatedAsAdmin()">
            <a class="dropdown-item recruiter-account" routerLink="/recruiter-account">Manage Account</a>
         </li>

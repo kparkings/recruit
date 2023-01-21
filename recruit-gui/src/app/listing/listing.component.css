@@ -94,7 +94,7 @@
 	margin-top:20px;
 	margin-bottom:10px;
 	text-align:right;
-	margin-right:95px;
+	width:90%;
 }
  
 .listing-nav{
@@ -102,14 +102,14 @@
 	color:blue;
 	font-weight:bold;
 	margin-left:20px;
-	margin-right:20px;
+	
 }
 
 .listing-nav-disabled{
 	color:grey;
     font-weight:bold;
     margin-left:20px;
-    margin-right:20px;
+    
 }
  
 .listing-tab-row:hover{

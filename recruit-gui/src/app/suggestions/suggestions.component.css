@@ -1,5 +1,4 @@
 .left-menu{
-	/*float:left;*/
 	margin:10px;
 	padding:10px;
 	margin-bottom:0px;
@@ -42,35 +41,6 @@
 	text-align:center;
 }
 
-.filter-options-group{
-	float:left;
-	margin-bottom:10px;
-
-}
-
-.filter-options-group-contents{
-	float:left;
-	margin-right:10px;
-	
-}
-
-.filter-options-group-contents b {
-	float:left;
-	margin-right:10px;
-	width:100px;
-}
-
-.filter-options-group ul{
-	list-style-type: none;
-	text-align:left;
-	padding:0px;
-	margin:0px;
-}
-
-.filter-options-group ul li{
-	display: inline
-}
-
 .country-selected-true{
 	opacity:1;
 }
@@ -78,6 +48,7 @@
 .country-selected-false{
 	opacity:0.25;
 }
+
 
 .flag-icon-med{
 	width:30px;
@@ -88,14 +59,6 @@
 	cursor:pointer;
 }
 
-.suggestions-search-div{
-	margin-top:20px;
-}
-
-.suggestions-search-div input{
-	width:80%;	
-}
-
 .suggestion-buttons{
 	float:right;
 }
@@ -104,41 +67,31 @@
 .btn-action{
 	margin-top:5px;
 	margin-right:10px;
-    min-width:150px
-}
-
-.suggestion-search-bar{
-	height:25px;
-	padding:5px;
-	padding-left:10px;
+	min-width:150px
 }
 
 .selected-skill{
 	margin:2px;
- 	padding:5px;
- 	border-radius:5px;
- 	background:grey;
- 	display:inline-block;
- }
+	padding:5px;
+	border-radius:5px;
+	background:grey;
+	display:inline-block;
+}
  
 .selected-skill:hover{
- 	margin:2px;
- 	padding:5px;
- 	border-radius:5px;
- 	background:red;
- 	cursor:pointer;
- 	display:inline-block;
- }
- 
- .skill-filters{
- 	min-height:40px;
- }
- 
- .lang-checkbox{
-	 margin-right:5px;
-	 margin-left:5px;
-	 margin-top:5px;
- }
+	margin:2px;
+	padding:5px;
+	border-radius:5px;
+	background:red;
+	cursor:pointer;
+	display:inline-block;
+}
+
+.lang-checkbox{
+	margin-right:5px;
+	margin-left:5px;
+	margin-top:5px;
+}
 
 .add-skill-btn{
 	width:50px;
@@ -147,12 +100,6 @@
 	padding-left:4px;
 	padding-right:4px;
 } 
-
-.search-label{
-	font-weight:bold;
-	font-size:20px;
-	margin-right:10px;
-}
 
 .suggestion-icon{
 	float:left;
@@ -186,14 +133,6 @@
 	margin-bottom:0px;
 }
 
-.suggestion-summary-infobox-header{
-	margin:0px;
-	width:100%;
-	padding:5px;
-	color:#6A5ACD;
-	font-weight:bold;
-}
-
 .suggestion-summary-infobox-body{
 	text-align:center;
 	margin-top:0px;
@@ -219,31 +158,21 @@
 	background-position:0%;
 }
 
-.suggestion-location{
-	margin-top:20px;
-}
-
-.suggestion-title{
-	background:#E8E8E8;
-	width:100%;
-	font-size:24px;
-	padding:5px;
-}
-
 .skill-match{
 	margin:2px;
- 	padding:5px;
- 	border-radius:5px;
- 	background:green;
- 	display:inline-block;	
+	padding:5px;
+	border-radius:5px;
+	background:green;
+	display:inline-block;	
 }
+
 
 .skill-no-match{
 	margin:2px;
- 	padding:5px;
- 	border-radius:5px;
- 	background:grey;
- 	display:inline-block;
+	padding:5px;
+	border-radius:5px;
+	background:grey;
+	display:inline-block;
 }
 
 .suggestion-perception-perfect{
@@ -316,9 +245,9 @@
 }
 
 .candidate-suggestion-table > .table th, .table td {
-    padding: 0.75rem;
-    vertical-align: top;
-    border-top: 1px solid #dee2e6;
+	padding: 0.75rem;
+	vertical-align: top;
+	border-top: 1px solid #dee2e6;
 }
 
 
@@ -348,17 +277,12 @@
 	font-size:16px;
 }
 
-.action-buttons{
-	text-align:right;
-	margin-right:40px;
-}
-
 .btnRight{
 	margin-top:10px;
-    margin-bottom:0px;
-    margin-right:20px;
-    min-width:100px;
-    float:right;
+	margin-bottom:0px;
+	margin-right:20px;
+	min-width:100px;
+	float:right;
 }
 
 .modal-title{
@@ -366,30 +290,29 @@
 }
 
 .modal-body{
-    font-size: large;
-    height:200px;
-    text-align: center;
+	font-size: large;
+	height:200px;
+	text-align: center;
 }
 
 .modal-body-text{
-    vertical-align: middle;
-    margin-top: 60px;
-    font-weight: bold;
+	vertical-align: middle;
+	margin-top: 60px;
+	font-weight: bold;
 }
 
- .modal-header{
-     background:#181414;
-     color:#6A5ACD;
-     font-weight:bold;
- }
+.modal-header{
+	background:#181414;
+	color:#6A5ACD;
+	font-weight:bold;
+}
 
- .filter-close-box{
-     padding:10px;
-     cursor:pointer;
-     font-size:20px;
-     font-weight: bold;
-    text-align: right;
-        
+.filter-close-box{
+	padding:10px;
+	cursor:pointer;
+	font-size:20px;
+	font-weight: bold;
+	text-align: right;        
 }
 
 .cv-inline{

@@ -67,7 +67,7 @@ input{
 
 .wholepagerow {
     margin: 0 auto;
-    width: 400px;
+    width: 320px;
 }
 
 .centerdiv{
@@ -103,5 +103,5 @@ input{
 }
 
 .forgotten-password-button{
-	width:150px;
+	width:135px;
 }

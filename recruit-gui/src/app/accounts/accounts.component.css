@@ -1,5 +1,7 @@
 .tabNav{
 	cursor:pointer;
+	width:160px;
+	text-align:center;
 }
 
 h3{
