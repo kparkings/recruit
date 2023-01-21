@@ -13,18 +13,20 @@
 			<thead>
 				<tr>
 					<th class="bg-tab-hdr">Alert Name</th>
+					<th class="bg-tab-hdr"></th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr *ngFor="let alert of alerts">
-					<td class="table-bdy-td">
-						{{alert.alertName}}
-						<div style="float:right;">
+					<td>{{alert.alertName}}</td>
+					<td>
+						<div style="float:right;width:170px">
 							<button class="btn btn-secondary small-action-btn" *ngIf="alertToDeleteId != alert"  (click)="deleteAlert(alert)">Delete</button>
 							<button class="btn btn-secondary small-action-btn small-action-btn-confirm-del" *ngIf="alertToDeleteId === alert" (click)="confirmDeleteAlert()">Confirm</button>
 							<button class="btn btn-secondary small-action-btn" *ngIf="alertToDeleteId === alert" (click)="cancelDeleteAlert()">Cancel</button>
 						</div>
-					<td>						
+					</td>
+											
 				</tr>
 			</tbody>	
 		</table>

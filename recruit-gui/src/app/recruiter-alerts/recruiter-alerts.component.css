@@ -7,9 +7,20 @@
 	margin-bottom:20px;	
 }
 
+.alerts-table td{
+	word-wrap:break-word;
+	margin-top:20px;
+	margin-bottom:20px;
+}
+
 .table-bdy-td{
 	word-wrap:break-word;
-	max-width:250px;
+}
+
+
+.Xsmall-action-btn{
+	width:100px;
+	float:right;
 }
 
 .small-action-btn-confirm-del{
