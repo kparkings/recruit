@@ -115,11 +115,17 @@ public class CurriculumDetailsExtractionFactory {
 		
 		soughtSkills.stream().forEach(soughtSkill -> {
 			
-			String skillPatternSpace 	= soughtSkill.trim() + " ";
-			String skillPatternPeriod 	= soughtSkill.trim() + ".";
-			String skillPatternNewLine 	= soughtSkill.trim() + "\n";
+			String skillPatternSpace 		= soughtSkill.trim() + " ";
+			String skillPatternPeriod 		= soughtSkill.trim() + ".";
+			String skillPatternNewLine 		= soughtSkill.trim() + "\n";
+			String skillPatternComma 		= soughtSkill.trim() + ",";
+			String skillPatternSemiColom 	= soughtSkill.trim() + ";";
 			
-			if (baseText.contains(skillPatternSpace) || baseText.contains(skillPatternPeriod) || baseText.contains(skillPatternNewLine)) {
+			if (baseText.contains(skillPatternSpace) 
+					|| baseText.contains(skillPatternPeriod) 
+					|| baseText.contains(skillPatternNewLine)
+					|| baseText.contains(skillPatternComma)
+					|| baseText.contains(skillPatternSemiColom)){
 				skills.add(soughtSkill);
 			}
 			
