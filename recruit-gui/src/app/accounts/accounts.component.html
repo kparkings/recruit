@@ -62,13 +62,11 @@
 				<thead>
 	      			<tr>
 	      				<!-- Table Headers -->
-	      				<th class="bg-tab-hdr">User Id</th>
-	      				<th class="bg-tab-hdr">Firstname</th>
-	            	    <th class="bg-tab-hdr">Surname</th>
+	      				<th class="bg-tab-hdr">Id</th>
+	      				<th class="bg-tab-hdr">Name</th>
 	            	    <th class="bg-tab-hdr">Email</th>
 	                	<th class="bg-tab-hdr">Company</th>
-	                	<th class="bg-tab-hdr">Actions</th>
-	                	<th class="bt-tab-hdr">Active Subscription</th>
+	                	<th class="bt-tab-hdr">Active</th>
 	      			</tr>
 	      	</thead>
 	      	<tbody>
@@ -76,39 +74,31 @@
 	      			
 	      			
 	      			<tr *ngFor="let recruiter of activePaidSubscription" class="recruiter-active-subscription">
-	      				<td *ngIf="showActivePaidSubscription" class="candidate-tab-col"><span class="candidate-id-prefix"></span>{{recruiter.userId}}</td>
-	            	    <td *ngIf="showActivePaidSubscription" class="candidate-tab-col mini-col"> {{recruiter.firstName}}</td>
-	            	    <td *ngIf="showActivePaidSubscription" class="candidate-tab-col medicol">{{recruiter.surname}}</td>
+	      				<td *ngIf="showActivePaidSubscription" class="candidate-tab-col medicol"><span class="candidate-id-prefix"></span>{{recruiter.userId}}</td>
+	            	    <td *ngIf="showActivePaidSubscription" class="candidate-tab-col medicol"> {{recruiter.firstName}} {{recruiter.surname}}</td>
 	            	    <td *ngIf="showActivePaidSubscription" class="candidate-tab-col medicol">{{recruiter.email}}</td>
 	            	    <td *ngIf="showActivePaidSubscription" class="candidate-tab-col medicol">{{recruiter.companyName}}</td>
-	            	    <td *ngIf="showActivePaidSubscription" class="candidate-tab-col medicol"></td>
 	            	    <td *ngIf="showActivePaidSubscription" class="candidate-tab-col medicol">{{recruiter.hasActiveSubscription}}</td>
 	      			</tr>
 	      			<tr *ngFor="let recruiter of expiredSubscriptionRecruiters" class="recruiter-expired-subscription">
-	      				<td *ngIf="showExpiredSubscriptionRecruiters" class="candidate-tab-col"><span class="candidate-id-prefix"></span>{{recruiter.userId}}</td>
-	            	    <td *ngIf="showExpiredSubscriptionRecruiters" class="candidate-tab-col mini-col"> {{recruiter.firstName}}</td>
-	            	    <td *ngIf="showExpiredSubscriptionRecruiters" class="candidate-tab-col medicol">{{recruiter.surname}}</td>
+	      				<td *ngIf="showExpiredSubscriptionRecruiters" class="candidate-tab-col medicol"><span class="candidate-id-prefix"></span>{{recruiter.userId}}</td>
+	            	    <td *ngIf="showExpiredSubscriptionRecruiters" class="candidate-tab-col medicol"> {{recruiter.firstName}} {{recruiter.surname}}</td>
 	            	    <td *ngIf="showExpiredSubscriptionRecruiters" class="candidate-tab-col medicol">{{recruiter.email}}</td>
 	            	    <td *ngIf="showExpiredSubscriptionRecruiters" class="candidate-tab-col medicol">{{recruiter.companyName}}</td>
-	            	    <td *ngIf="showExpiredSubscriptionRecruiters" class="candidate-tab-col medicol"></td>
 	            	    <td *ngIf="showExpiredSubscriptionRecruiters" class="candidate-tab-col medicol">{{recruiter.hasActiveSubscription}}</td>
 	      			</tr>	
 	      			<tr *ngFor="let recruiter of trialPeriodRecruiters" class="recruiter-trial-subscription">
-	      				<td *ngIf="showTrialPeriodRecruiters" class="candidate-tab-col"><span class="candidate-id-prefix"></span>{{recruiter.userId}}</td>
-	            	    <td *ngIf="showTrialPeriodRecruiters" class="candidate-tab-col mini-col"> {{recruiter.firstName}}</td>
-	            	    <td *ngIf="showTrialPeriodRecruiters" class="candidate-tab-col medicol">{{recruiter.surname}}</td>
+	      				<td *ngIf="showTrialPeriodRecruiters" class="candidate-tab-col medicol"><span class="candidate-id-prefix"></span>{{recruiter.userId}}</td>
+	            	    <td *ngIf="showTrialPeriodRecruiters" class="candidate-tab-col medicol"> {{recruiter.firstName}} {{recruiter.surname}}</td>
 	            	    <td *ngIf="showTrialPeriodRecruiters" class="candidate-tab-col medicol">{{recruiter.email}}</td>
 	            	    <td *ngIf="showTrialPeriodRecruiters" class="candidate-tab-col medicol">{{recruiter.companyName}}</td>
-	            	    <td *ngIf="showTrialPeriodRecruiters" class="candidate-tab-col medicol"></td>
 	            	    <td *ngIf="showTrialPeriodRecruiters" class="candidate-tab-col medicol">{{recruiter.hasActiveSubscription}}</td>
 	      			</tr>	
 	      			<tr *ngFor="let recruiter of firstGenActiveSubscription" class="recruiter-firstgen" >
-	      				<td *ngIf="showFirstGenActiveSubscription" class="candidate-tab-col"><span class="candidate-id-prefix"></span>{{recruiter.userId}}</td>
-	            	    <td *ngIf="showFirstGenActiveSubscription" class="candidate-tab-col mini-col"> {{recruiter.firstName}}</td>
-	            	    <td *ngIf="showFirstGenActiveSubscription" class="candidate-tab-col medicol">{{recruiter.surname}}</td>
+	      				<td *ngIf="showFirstGenActiveSubscription" class="candidate-tab-col medicol"><span class="candidate-id-prefix"></span>{{recruiter.userId}}</td>
+	            	    <td *ngIf="showFirstGenActiveSubscription" class="candidate-tab-col medicol"> {{recruiter.firstName}} {{recruiter.surname}}</td>
 	            	    <td *ngIf="showFirstGenActiveSubscription" class="candidate-tab-col medicol">{{recruiter.email}}</td>
 	            	    <td *ngIf="showFirstGenActiveSubscription" class="candidate-tab-col medicol">{{recruiter.companyName}}</td>
-	            	    <td *ngIf="showFirstGenActiveSubscription" class="candidate-tab-col medicol"></td>
 	            	    <td *ngIf="showFirstGenActiveSubscription" class="candidate-tab-col medicol">{{recruiter.hasActiveSubscription}}</td>
 	      			</tr>	
 	      		</tbody>
@@ -121,28 +111,28 @@
 		<table class="table candidate-table">
 			<thead>
 	      		<tr>
-	      			<th class="bg-tab-hdr">CandidateId</th>
-	      			<th class="bg-tab-hdr">Candidate Name</th>
-	      			<th class="bg-tab-hdr">Location</th>
-	      			<th class="bg-tab-hdr">Function</th>
+	      			<th class="bg-tab-hdr">Id</th>
+	      			<th class="bg-tab-hdr">Name</th>
+	      			<th class="bg-tab-hdr">Pos</th>
+	      			<th class="bg-tab-hdr">Role</th>
 	                <th class="bg-tab-hdr">Actions</th>
 	             </tr>
 	      	</thead>
 	      	<tbody>
 	      		<tr *ngFor="let candidate of candidatesToCheckForAvailability">
-	      			<td>
+	      			<td class="medicol">
 	      				{{candidate.candidateId}}
 	      			</td>
-	      			<td>
+	      			<td class="medicol">
 	      				{{candidate.firstname}} {{candidate.surname}}
 	      			</td>
-	      			<td>
+	      			<td class="medicol">
 	      				{{candidate.country}} {{candidate.city}}
 	      			</td>
-	      			<td>
+	      			<td class="medicol">
 	      				{{candidate.roleSought}}
 	      			</td>
-	      			<td>
+	      			<td class="medicol">
 	      				<button	class="control-spacing btn btn-secondary btn-action" (click)="markCandidateAsAvailable(candidate.candidateId)">Available</button>
 	      				<button	class="control-spacing btn btn-secondary btn-action" (click)="disableNoLongerAvailableFlaggedAsUnavailableCandidate(candidate.candidateId)">Disable</button>
 	      			</td>
@@ -155,15 +145,20 @@
 	<div *ngIf="showCandidatesTab">
 		<form [formGroup]="candidateFormGroup">
 			<h3>Candidates</h3>
-			<span>
-				<label 	class="control-spacing">Firstname</label>
-				<input 	class="control-spacing" type="text" formControlName="firstname"/>
-				<label 	class="control-spacing">Surname</label>
-				<input 	class="control-spacing" type="text" formControlName="surname"/>
-				<label 	class="control-spacing">email</label>
-				<input 	class="control-spacing" type="text" formControlName="email"/>
+			
+			<div style="float:left">
+				<label 	class="control-spacing candidate-lblX">Name</label>
+				<input 	class="control-spacing candidate-input" type="text" formControlName="firstname"/>
+			</div>
+			<div style="float:left">
+				<label 	class="control-spacing candidate-lblX">Surname</label>
+				<input 	class="control-spacing candidate-input" type="text" formControlName="surname"/>
+			</div>
+			<div style="float:left">
+					<label 	class="control-spacing candidate-lblX">email</label>
+				<input 	class="control-spacing candidate-input" type="text" formControlName="email"/>
 				<button	class="control-spacing btn btn-secondary btn-action" (click)="fetchCandidates()">Filter</button>
-			</span>
+			</div>
 			
 		</form>
 	
@@ -174,10 +169,8 @@
 				<thead>
 	      			<tr>
 	      				<!-- Table Headers -->
-	      				<th class="bg-tab-hdr">CandidateId</th>
-	      				<th class="bg-tab-hdr">Firstname</th>
-	                	<th class="bg-tab-hdr">Surname</th>
-	                	<th class="bg-tab-hdr">Email</th>
+	      				<th class="bg-tab-hdr">Id</th>
+	      				<th class="bg-tab-hdr">Name</th>
 	                	<th class="bg-tab-hdr">Actions</th>
 	              </tr>
 	      		</thead>
@@ -185,8 +178,7 @@
 	      			<!-- Table row -->
 	      			<tr *ngFor="let candidate of candidates">
 	      				<td class="candidate-tab-col"><span class="candidate-id-prefix">C</span>{{candidate.candidateId}}</td>
-	            	    <td class="candidate-tab-col mini-col"> {{candidate.firstname}}</td>
-	            	    <td class="candidate-tab-col medicol">{{candidate.surname}}</td>
+	            	    <td class="candidate-tab-col medicol"> {{candidate.firstname}} {{candidate.surname}}</td>
 	            	    <td class="candidate-tab-col medicol">{{candidate.email}}</td>
 	            	    <td class="candidate-tab-col medicol">
 	            	    	<div [ngSwitch]="candidate.available">
@@ -213,9 +205,8 @@
 				<thead>
 	      			<tr>
 		      			<!-- Table Headers -->
-		      			<th class="bg-tab-hdr">CandidateId</th>
-		      			<th class="bg-tab-hdr">Firstname</th>
-		                <th class="bg-tab-hdr">Surname</th>
+		      			<th class="bg-tab-hdr">Id</th>
+		      			<th class="bg-tab-hdr">Name</th>
 		                <th class="bg-tab-hdr">Email</th>
 		                <th class="bg-tab-hdr">Actions</th>
 		        	</tr>
@@ -224,12 +215,11 @@
 	      			<!-- Table row -->
 	      			<tr *ngFor="let candidate of candidates">
 	      				<td class="candidate-tab-col"><span class="candidate-id-prefix">C</span>{{candidate.candidateId}}</td>
-	                	<td class="candidate-tab-col mini-col"> {{candidate.firstname}}</td>
-	                	<td class="candidate-tab-col medicol">{{candidate.surname}}</td>
+	                	<td class="candidate-tab-col medicol"> {{candidate.firstname}} {{candidate.surname}}</td>
 	                	<td class="candidate-tab-col medicol">{{candidate.email}}</td>
 	                	<td class="candidate-tab-col medicol">
 	                		<button	class="control-spacing btn btn-secondary btn-action" (click)="disableFlaggedAsUnavailableCandidate(candidate.candidateId)">Disable</button>
-	                		<button	class="control-spacing btn btn-secondary btn-action" (click)="removeFlaggedAsUnavailableFlag(candidate.candidateId)">Remove Flag</button>
+	                		<button	class="control-spacing btn btn-secondary btn-action" (click)="removeFlaggedAsUnavailableFlag(candidate.candidateId)">Dismiss</button>
 	                	</td>
 	      			</tr>	
 	      		</tbody>
@@ -246,25 +236,23 @@
 		<table class="table candidate-table">
 			<thead>
 				<tr>
-					<th>Recruiter Id</th>
-					<th>First Name</th>
-					<th>Surname</th>
-					<th>Email</th>
-					<th>Language</th>
-					<th>Type</th>
-					<th>Status</th>
-					<th>Actions</th>
+					<th class="medicol">Id</th>
+					<th class="medicol">Name</th>
+					<th class="medicol">Email</th>
+					<th class="medicol">Lang</th>
+					<th class="medicol">Type</th>
+					<th class="medicol">Status</th>
+					<th class="medicol">Actions</th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr *ngFor="let subscriptionAction of recruitersWithSubscriptionActions">
-					<td>{{subscriptionAction.userId}}</td>
-					<td>{{subscriptionAction.firstName}}</td>
-					<td>{{subscriptionAction.surname}}</td>
-					<td>{{subscriptionAction.email}}</td>
-					<td>{{subscriptionAction.language}}</td>
-					<td>{{subscriptionAction.type}}</td>
-					<td>{{subscriptionAction.status}}</td>
+					<td class="medicol">{{subscriptionAction.userId}}</td>
+					<td class="medicol">{{subscriptionAction.firstName}} {{subscriptionAction.surname}}</td>
+					<td class="medicol">{{subscriptionAction.email}}</td>
+					<td class="medicol">{{subscriptionAction.language}}</td>
+					<td class="medicol">{{subscriptionAction.type}}</td>
+					<td class="medicol">{{subscriptionAction.status}}</td>
 					<td>
 						<button class="btn btn-secondary btn-action" *ngFor="let action of subscriptionAction.actions" (click)="performAction(subscriptionAction, action)">{{frmtSubscriptionAction(action)}}</button>
 					</td>
