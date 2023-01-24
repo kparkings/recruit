@@ -147,8 +147,8 @@
 		<!-- New Candidate Stats -->
 		<div *ngIf="showNewCandidates" class="stats-table">
 			<div class="action-buttons">
-				<button class="btn btn-secondary btnRight" (click)="loadNewCandidates()" 		download>Show New Candidates</button>
-				<button class="btn btn-secondary btnRight" (click)="loadNewCandidateStats()" 	download>Show New Candidate Stats</button>
+				<button class="btn btn-secondary btnRight stat-btn" (click)="loadNewCandidates()" 		download>Show New Candidates</button>
+				<button class="btn btn-secondary btnRight stat-btn" (click)="loadNewCandidateStats()" 	download>Show New Candidate Stats</button>
 			</div>	
 			<div *ngIf="showNewCandidatesDiv">
 				<p>
@@ -161,6 +161,10 @@
 				<br/>
 				<p>
 					https://www.arenella-ict.com
+				</p>
+				<p>
+					#available #looking #lookingforwork #itcandidates #ictkandidaten #candidate #kandidaat
+					#itjobboard #ictojobboard #beschikbaar #it #ict #opentowork #seeking 
 				</p>
 			</div>
 			<div *ngIf="showNewCandidateStatsDiv" class="stats-table">
