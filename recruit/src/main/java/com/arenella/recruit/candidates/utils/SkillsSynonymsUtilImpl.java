@@ -33,19 +33,18 @@ public class SkillsSynonymsUtilImpl implements SkillsSynonymsUtil{
 	private static final Set<String> SPRING_DATA			= Set.of("springdata", "spring data", "spring-data");
 	private static final Set<String> SPRING_TEST			= Set.of("springtest", "spring test", "spring-test");
 	private static final Set<String> SPRING_MVC				= Set.of("springmvc", "spring mvc", "spring-mvc");
-	
-	//sql server
-	//Project management : project manager
-	//Rest | soap : web services
-	//technical suppoer : tech support
-	//acceptance testing : uat
-	//pl/sql : pl-sql oracle sql
-	//selenium : selinium web driver
-	//ms sql server: ms sqlserver
-	//rest apis: rest apis
-	//microservices: micro services
-
-	
+	private static final Set<String> IT_RECRUITER			= Set.of("recruiter", "it recruiter", "it recruitment");
+	private static final Set<String> MICROSERVICES			= Set.of("microservices", "micro services", "microservice", "micro service");
+	private static final Set<String> SELENIUM				= Set.of("selenium", "selinium web driver");
+	private static final Set<String> UAT					= Set.of("uat", "user acceptance testing", "acceptance testing");
+	private static final Set<String> TECH_SUPPORT			= Set.of("tech support", "technical support");
+	private static final Set<String> REST					= Set.of("rest", "rest api","rest apis","rest api's", "rest webservices","restful web services", "webservices");
+	private static final Set<String> SOAP					= Set.of("soap", "soap web services", "webservices");
+	private static final Set<String> WEB_SERVICES			= Set.of("webservicesp", "web services");
+	private static final Set<String> PROJECT_MANAGEMENT		= Set.of("project manager", "project management");
+	private static final Set<String> PL_SQL					= Set.of("plsql", "pl-sql", "oracle sql");
+	private static final Set<String> MS_SQL_SERVER			= Set.of("ms sql server", "sql server", "microsoft sql server");
+		
 	/**
 	* Refer to the SkillsSynonymsUtil interface for details 
 	*/
@@ -60,6 +59,61 @@ public class SkillsSynonymsUtilImpl implements SkillsSynonymsUtil{
 		originalSkills.stream().forEach(skill -> {
 			
 			switch(skill) {
+				case "ms sql server":
+				case "sql server":
+				case "microsoft sql server":{
+					synonyms.addAll(MS_SQL_SERVER);
+				}
+				case "plsql":
+				case "pl-sql":
+				case "oracle sql":{
+					synonyms.addAll(PL_SQL);
+				}
+				case "project manager":
+				case "project management":{
+					synonyms.addAll(PROJECT_MANAGEMENT);
+				}
+				case "webservice":
+				case "webservices":{
+					synonyms.addAll(WEB_SERVICES);
+				}
+				case "rest":
+				case "rest api":
+				case "rest apis":
+				case "rest api's":
+				case "rest webservices":
+				case "restful web services":{
+					synonyms.addAll(REST);
+				}
+				case "soap":
+				case "soap web services":{
+					synonyms.addAll(SOAP);
+				}
+				case "tech support":
+				case "technical support":{
+					synonyms.addAll(TECH_SUPPORT);
+				}
+				case "uat":
+				case "acceptance testing":
+				case "user acceptance testing":{
+					synonyms.addAll(UAT);
+				}
+				case "selenium":
+				case "selenium web driver":{
+					synonyms.addAll(SELENIUM);
+				}
+				case "microservices":
+				case "micro service":
+				case "micro services":
+				case "microservice":{
+					synonyms.addAll(MICROSERVICES);
+				}
+				case "recruiter":
+				case "it recruitment":
+				case "it recruiter":{
+					synonyms.addAll(IT_RECRUITER);
+					break;
+				}
 				case "qa":
 				case "automation tester":
 				case "manual tester":
