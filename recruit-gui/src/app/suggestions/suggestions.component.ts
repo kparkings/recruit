@@ -88,7 +88,7 @@ export class SuggestionsComponent implements OnInit {
 	* Initializes Component`
 	*/
 	ngOnInit(): void {
-		this.suggestionFilterForm.valueChanges.subscribe(value => {
+		this.suggestionFilterForm.get('searchPhrase')?.valueChanges.subscribe(value => {
 			this.getSuggestions();	
 		});
 	}
@@ -157,6 +157,8 @@ export class SuggestionsComponent implements OnInit {
 		}
 		
 		this.suggestionFilterForm.get('skill')?.setValue('');
+		
+		this.getSuggestions();
 		
 	}
 	
@@ -306,8 +308,13 @@ export class SuggestionsComponent implements OnInit {
 		alert.french 				= params.getFrenchLevel();
 		alert.perm 					= params.getPerm();
 		alert.skills 				= params.getSkills();
+		
 		alert.yearsExperienceLtEq 	= params.getMinExperience();
 		alert.yearsExperienceGtEq 	= params.getMaxExperience();
+		
+		this.suggestionsService.extractSkillsFromSearchPhrase(params.getTitle()).forEach(s => {
+			alert.skills.push(s);
+		})
 		
 		this.candidateService.createCandidateSearchAlert(alert).subscribe(data => {
 			
@@ -321,8 +328,8 @@ export class SuggestionsComponent implements OnInit {
 			
 		}, err => {
 			this.showSaveAlertBox 		= false;
-		this.showSaveAlertBoxSuccess 	= false;
-		this.showSaveAlertBoxFailure 	= true;
+			this.showSaveAlertBoxSuccess 	= false;
+			this.showSaveAlertBoxFailure 	= true;
 		});
 		
 	}

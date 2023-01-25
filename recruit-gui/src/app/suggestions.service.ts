@@ -68,20 +68,22 @@ export class SuggestionsService {
 							languages:Array<string>, 
 							skills:Array<string>): Observable<any>{
 								
-		let augmentedSkillsList:Array<string> = new Array<string>();
+		//let augmentedSkillsList:Array<string> = new Array<string>();
 		
-		skills.forEach(skill => augmentedSkillsList.push(skill));
+		//skills.forEach(skill => augmentedSkillsList.push(skill));
 		
-		title.split(" ").forEach(skill => {
+		//title.split(" ").forEach(skill => {
 			
-			let skillFormatted:string = skill.toLocaleLowerCase();
+		//	let skillFormatted:string = skill.toLocaleLowerCase();
 		
-			skillFormatted = skillFormatted.trim();
+		//	skillFormatted = skillFormatted.trim();
 			
-			if (this.allKeywords.indexOf(skillFormatted) >-1 && augmentedSkillsList.indexOf(skillFormatted) == -1) {
-				augmentedSkillsList.push(skillFormatted);
-			}
-		});
+		//	if (this.allKeywords.indexOf(skillFormatted) >-1 && augmentedSkillsList.indexOf(skillFormatted) == -1) {
+		//		augmentedSkillsList.push(skillFormatted);
+		//	}
+		//});
+		
+		let augmentedSkillsList:Array<string> = this.extractSkillsFromSearchPhrase(title);
 		
 		return this.candidateService.getCandidates(this.getCandidateFilterParamString(	maxNumberOfSuggestions, 
 																						title, 
@@ -94,6 +96,25 @@ export class SuggestionsService {
 																						augmentedSkillsList));
 		
 	}
+	
+	public extractSkillsFromSearchPhrase(searchPhrase:string):Array<string>{
+		
+		let augmentedSkillsList:Array<string> = new Array<string>();
+		
+		searchPhrase.split(" ").forEach(skill => {
+			
+			let skillFormatted:string = skill.toLocaleLowerCase();
+		
+			skillFormatted = skillFormatted.trim();
+			
+			if (this.allKeywords.indexOf(skillFormatted) >-1 && augmentedSkillsList.indexOf(skillFormatted) == -1) {
+				augmentedSkillsList.push(skillFormatted);
+			}
+		});
+		
+		return augmentedSkillsList;
+		
+	} 
 	
 	/**
 	* Builds a query parameter string with the selected filter options

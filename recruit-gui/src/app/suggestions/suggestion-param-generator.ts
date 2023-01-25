@@ -29,11 +29,12 @@ export class SuggestionParams{
 	*/
 	public constructor(suggestionFilterForm:FormGroup, skillFilters:Array<string>, functionTypes:Array<string>){
 		
-		this.skills 		= skillFilters;
+		this.skills 		= skillFilters.concat();
 		this.functionTypes	= functionTypes;
 		this.title  		= suggestionFilterForm.get('searchPhrase')?.value;
 		this.minExperience 	= suggestionFilterForm.get('minYearsExperience')?.value;
 		this.maxExperience 	= suggestionFilterForm.get('maxYearsExperience')?.value;
+		
 		/**
 		* Add any country filters 	
 		*/
