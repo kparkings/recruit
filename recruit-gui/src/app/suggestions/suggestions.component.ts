@@ -1,5 +1,5 @@
 import { Component, OnInit, SecurityContext } 					from '@angular/core';
-import { FormGroup, FormControl }				from '@angular/forms';
+import { UntypedFormGroup, UntypedFormControl }				from '@angular/forms';
 import { CandidateServiceService }				from '../candidate-service.service';
 import { SuggestionsService }					from '../suggestions.service';
 import { CurriculumService }					from '../curriculum.service';
@@ -26,25 +26,25 @@ export class SuggestionsComponent implements OnInit {
 
 	@ViewChild('feedbackBox', { static: false }) private content:any;
 
-	public createAlertForm:FormGroup = new FormGroup({
-		alertName:			new FormControl(''),
+	public createAlertForm:UntypedFormGroup = new UntypedFormGroup({
+		alertName:			new UntypedFormControl(''),
 	});
 
 	public suggestions:Array<Candidate>  = new Array<Candidate>();
 
-	public suggestionFilterForm:FormGroup 	= new FormGroup({
-		searchPhrase:			new FormControl(''),
-		nlResults: 				new FormControl(true),
-		beResults: 				new FormControl(true),
-		ukResults: 				new FormControl(true),
-		ieResults: 				new FormControl(true),
-		contractType: 			new FormControl('Both'),
-		dutchLanguage: 			new FormControl(false),
-		englishLanguage: 		new FormControl(false),
-		frenchLanguage:			new FormControl(false),
-		minYearsExperience: 	new FormControl(''),
-		maxYearsExperience: 	new FormControl(''),
-		skill: 					new FormControl(''),
+	public suggestionFilterForm:UntypedFormGroup 	= new UntypedFormGroup({
+		searchPhrase:			new UntypedFormControl(''),
+		nlResults: 				new UntypedFormControl(true),
+		beResults: 				new UntypedFormControl(true),
+		ukResults: 				new UntypedFormControl(true),
+		ieResults: 				new UntypedFormControl(true),
+		contractType: 			new UntypedFormControl('Both'),
+		dutchLanguage: 			new UntypedFormControl(false),
+		englishLanguage: 		new UntypedFormControl(false),
+		frenchLanguage:			new UntypedFormControl(false),
+		minYearsExperience: 	new UntypedFormControl(''),
+		maxYearsExperience: 	new UntypedFormControl(''),
+		skill: 					new UntypedFormControl(''),
 	});
 	
 	public currentView:string 				= 'suggestion-results';
@@ -322,8 +322,8 @@ export class SuggestionsComponent implements OnInit {
 			this.showSaveAlertBoxSuccess 	= true;
 			this.showSaveAlertBoxFailure 	= false;
 			
-			this.createAlertForm = new FormGroup({
-				alertName:			new FormControl(''),
+			this.createAlertForm = new UntypedFormGroup({
+				alertName:			new UntypedFormControl(''),
 			});
 			
 		}, err => {

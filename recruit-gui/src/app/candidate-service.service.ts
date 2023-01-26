@@ -1,5 +1,5 @@
 import { Injectable }                             	from '@angular/core';
-import { FormGroup }                              	from '@angular/forms';
+import { UntypedFormGroup }                              	from '@angular/forms';
 import { HttpClient, HttpResponse, HttpHeaders }  	from '@angular/common/http';
 import { Observable, throwError }                 	from 'rxjs';
 import { NewCandidate }                           	from './new-candidate/new-candidate';
@@ -98,7 +98,7 @@ export class CandidateServiceService {
 	/**
 	* Adds a new Candidate 
 	*/
-	public addCandidate(formBean:FormGroup): Observable<any>{
+	public addCandidate(formBean:UntypedFormGroup): Observable<any>{
 	
 		const newCandidate:NewCandidate = new NewCandidate();
 	

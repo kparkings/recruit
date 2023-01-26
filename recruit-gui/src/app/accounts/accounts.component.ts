@@ -1,5 +1,5 @@
 import { Component, OnInit } 					from '@angular/core';
-import { FormGroup, FormControl }				from '@angular/forms';
+import { UntypedFormGroup, UntypedFormControl }				from '@angular/forms';
 import { RecruiterService }						from '../recruiter.service';
 import { CandidateServiceService }				from '../candidate-service.service';
 import { Candidate }							from './candidate';
@@ -47,10 +47,10 @@ export class AccountsComponent implements OnInit {
 	showFirstGenActiveSubscription:boolean							= true;
 	
 	
-	public candidateFormGroup:FormGroup = new FormGroup({
-		firstname:	new FormControl(''),
-		surname: 	new FormControl(''),
-		email:		new FormControl('')
+	public candidateFormGroup:UntypedFormGroup = new UntypedFormGroup({
+		firstname:	new UntypedFormControl(''),
+		surname: 	new UntypedFormControl(''),
+		email:		new UntypedFormControl('')
 	});
 	
 	constructor(private recruiterService:RecruiterService, public candidateService:CandidateServiceService, private modalService: NgbModal, private router: Router) {

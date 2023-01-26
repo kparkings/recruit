@@ -5,7 +5,7 @@ import { Recruiter }							from './recruiter';
 import { Subscription }							from './subscription';
 import { NgbModal}								from '@ng-bootstrap/ng-bootstrap';
 import { SubscriptionAction }					from './subscription-action';
-import { FormGroup, FormControl }				from '@angular/forms';
+import { UntypedFormGroup, UntypedFormControl }				from '@angular/forms';
 import {RecruiterUpdateRequest }				from './recruiter-update-request';
 
 /**
@@ -49,16 +49,16 @@ export class RecruiterAccountComponent implements OnInit {
 	
 	public isInEditMode:boolean 							= false;
 	
-	public editAccountDetailsFor:FormGroup = new FormGroup({
+	public editAccountDetailsFor:UntypedFormGroup = new UntypedFormGroup({
 		
 	});
 	
-	public accoundDetailsForm:FormGroup = new FormGroup({
-		firstName:				new FormControl(''),
-		surname:				new FormControl(''),
-		companyName:			new FormControl(''),
-		email:					new FormControl(''),
-		language:				new FormControl(''),
+	public accoundDetailsForm:UntypedFormGroup = new UntypedFormGroup({
+		firstName:				new UntypedFormControl(''),
+		surname:				new UntypedFormControl(''),
+		companyName:			new UntypedFormControl(''),
+		email:					new UntypedFormControl(''),
+		language:				new UntypedFormControl(''),
 	});
 		
 	/**
@@ -82,12 +82,12 @@ export class RecruiterAccountComponent implements OnInit {
 				sessionStorage.setItem('hasUnpaidSubscription',		'false');
 			}
 			
-			this.accoundDetailsForm = new FormGroup({
-				firstName:				new FormControl(this.recruiter.firstName),
-				surname:				new FormControl(this.recruiter.surname),
-				companyName:			new FormControl(this.recruiter.companyName),
-				email:					new FormControl(this.recruiter.email),
-				language:				new FormControl(this.recruiter.language),
+			this.accoundDetailsForm = new UntypedFormGroup({
+				firstName:				new UntypedFormControl(this.recruiter.firstName),
+				surname:				new UntypedFormControl(this.recruiter.surname),
+				companyName:			new UntypedFormControl(this.recruiter.companyName),
+				email:					new UntypedFormControl(this.recruiter.email),
+				language:				new UntypedFormControl(this.recruiter.language),
 			});
 				
 		}, err => {

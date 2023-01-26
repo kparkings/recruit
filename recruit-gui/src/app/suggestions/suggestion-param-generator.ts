@@ -1,4 +1,4 @@
-import { FormGroup }				from '@angular/forms';
+import { UntypedFormGroup }				from '@angular/forms';
 import { CandidateFunction }		from '../candidate-function';
 
 /**
@@ -27,7 +27,7 @@ export class SuggestionParams{
 	* @param skillFilters			- contains raw skill filter info 
 	* @param functionTypes			- contains raw function types info
 	*/
-	public constructor(suggestionFilterForm:FormGroup, skillFilters:Array<string>, functionTypes:Array<string>){
+	public constructor(suggestionFilterForm:UntypedFormGroup, skillFilters:Array<string>, functionTypes:Array<string>){
 		
 		this.skills 		= skillFilters.concat();
 		this.functionTypes	= functionTypes;

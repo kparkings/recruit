@@ -1,5 +1,5 @@
 import { Component, OnInit } 							from '@angular/core';
-import { FormGroup, FormControl }						from '@angular/forms';
+import { UntypedFormGroup, UntypedFormControl }						from '@angular/forms';
 import { ListingService }								from '../listing.service';
 import { RecruiterService }								from '../recruiter.service';
 import { NgbModal, NgbModalOptions}						from '@ng-bootstrap/ng-bootstrap';
@@ -70,45 +70,45 @@ export class RecruiterListingsComponent implements OnInit {
 	public listingForSuggestedCandidate:Listing 		= new Listing();			
   	
 
-	public newListingFormBean:FormGroup 				= new FormGroup({
+	public newListingFormBean:UntypedFormGroup 				= new UntypedFormGroup({
      
-		title:				new FormControl(''),
-		type:				new FormControl(),
-       	country:			new FormControl(),
-		location:			new FormControl(),	
-		experienceYears:	new FormControl(),
-		rate:				new FormControl(),
-		rateCurrency:		new FormControl(),
-		description:		new FormControl(),
-		contactName:		new FormControl(),
-		contactCompany:		new FormControl(),
-		contactEmail:		new FormControl(),
-		langDutch:			new FormControl(),
-		langEnglish:		new FormControl(),
-		langFrench:			new FormControl(),
-		skill:				new FormControl()
+		title:				new UntypedFormControl(''),
+		type:				new UntypedFormControl(),
+       	country:			new UntypedFormControl(),
+		location:			new UntypedFormControl(),	
+		experienceYears:	new UntypedFormControl(),
+		rate:				new UntypedFormControl(),
+		rateCurrency:		new UntypedFormControl(),
+		description:		new UntypedFormControl(),
+		contactName:		new UntypedFormControl(),
+		contactCompany:		new UntypedFormControl(),
+		contactEmail:		new UntypedFormControl(),
+		langDutch:			new UntypedFormControl(),
+		langEnglish:		new UntypedFormControl(),
+		langFrench:			new UntypedFormControl(),
+		skill:				new UntypedFormControl()
 		
 	});
 	
 	public reset():void{
 		
-		this.newListingFormBean  = new FormGroup({
+		this.newListingFormBean  = new UntypedFormGroup({
      
-			title:				new FormControl(''),
-			type:				new FormControl(),
-	       	country:			new FormControl(),
-			location:			new FormControl(),	
-			experienceYears:	new FormControl(),
-			rate:				new FormControl(),
-			rateCurrency:		new FormControl(),
-			description:		new FormControl(),
-			contactName:		new FormControl(),
-			contactCompany:		new FormControl(),
-			contactEmail:		new FormControl(),
-			langDutch:			new FormControl(),
-			langEnglish:		new FormControl(),
-			langFrench:			new FormControl(),
-			skill:				new FormControl()
+			title:				new UntypedFormControl(''),
+			type:				new UntypedFormControl(),
+	       	country:			new UntypedFormControl(),
+			location:			new UntypedFormControl(),	
+			experienceYears:	new UntypedFormControl(),
+			rate:				new UntypedFormControl(),
+			rateCurrency:		new UntypedFormControl(),
+			description:		new UntypedFormControl(),
+			contactName:		new UntypedFormControl(),
+			contactCompany:		new UntypedFormControl(),
+			contactEmail:		new UntypedFormControl(),
+			langDutch:			new UntypedFormControl(),
+			langEnglish:		new UntypedFormControl(),
+			langFrench:			new UntypedFormControl(),
+			skill:				new UntypedFormControl()
 			
 		});
 		

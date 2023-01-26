@@ -1,5 +1,5 @@
 import { Component, OnInit }									from '@angular/core';
-import { ReactiveFormsModule, FormGroup, FormControl }			from '@angular/forms';
+import { ReactiveFormsModule, UntypedFormGroup, UntypedFormControl }			from '@angular/forms';
 import { AuthService }                                          from '../auth.service';
 import { RecruiterService }                                     from '../recruiter.service';
 import { Router}                                                from '@angular/router';
@@ -21,13 +21,13 @@ export class LoginUserComponent implements OnInit {
 	
 	public showForgottenPassword:boolean = false;
 	
-	public formBeanForgottenPassword:FormGroup = new FormGroup({
-		email: new FormControl(),
+	public formBeanForgottenPassword:UntypedFormGroup = new UntypedFormGroup({
+		email: new UntypedFormControl(),
 	});
 	
-   	public formBean:FormGroup = new FormGroup({
-		username: new FormControl(),
-		password: new FormControl()
+   	public formBean:UntypedFormGroup = new UntypedFormGroup({
+		username: new UntypedFormControl(),
+		password: new UntypedFormControl()
 	});
 
    /**
@@ -120,8 +120,8 @@ export class LoginUserComponent implements OnInit {
 		
 		this.recruiterService.resetPassword(email).subscribe(data => {
 			
-			this.formBeanForgottenPassword = new FormGroup({
-				email: new FormControl()
+			this.formBeanForgottenPassword = new UntypedFormGroup({
+				email: new UntypedFormControl()
 			});
 		
 			this.showForgottenPassword = false;
@@ -142,8 +142,8 @@ export class LoginUserComponent implements OnInit {
 	*/
 	public cancelResetPassword():void{
 		
-		this.formBeanForgottenPassword = new FormGroup({
-			email: new FormControl()
+		this.formBeanForgottenPassword = new UntypedFormGroup({
+			email: new UntypedFormControl()
 		});
 		
 		this.showForgottenPassword = false;

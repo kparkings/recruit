@@ -1,5 +1,5 @@
 import { Component, OnInit }							from '@angular/core';
-import { FormGroup, FormControl }						from '@angular/forms';
+import { UntypedFormGroup, UntypedFormControl }						from '@angular/forms';
 import { CandidateServiceService }						from '../candidate-service.service';
 import { CurriculumService }							from '../curriculum.service';
 import { CandidateFunction }							from '../candidate-function';
@@ -26,23 +26,23 @@ export class NewCandidateComponent implements OnInit {
   	public selectOptionLangEnglish:string = '';
   	public selectOptionLangFrench:string = '';
 
-	public formBean:FormGroup = new FormGroup({
+	public formBean:UntypedFormGroup = new UntypedFormGroup({
      
-		candidateId:		new FormControl(''),
-       	firstname:			new FormControl(),
-       	surname:			new FormControl(),
-       	email:				new FormControl(),
-       	roleSought:			new FormControl(),
-       	country:			new FormControl(),
-       	city:				new FormControl(),
-       	perm:				new FormControl(),
-       	freelance:			new FormControl(),
-       	dutch:				new FormControl(),
-       	english:			new FormControl(),
-       	french:				new FormControl(),
-       	function:			new FormControl(),
-       	yearsExperience:	new FormControl(),
-       	skills:				new FormControl()
+		candidateId:		new UntypedFormControl(''),
+       	firstname:			new UntypedFormControl(),
+       	surname:			new UntypedFormControl(),
+       	email:				new UntypedFormControl(),
+       	roleSought:			new UntypedFormControl(),
+       	country:			new UntypedFormControl(),
+       	city:				new UntypedFormControl(),
+       	perm:				new UntypedFormControl(),
+       	freelance:			new UntypedFormControl(),
+       	dutch:				new UntypedFormControl(),
+       	english:			new UntypedFormControl(),
+       	french:				new UntypedFormControl(),
+       	function:			new UntypedFormControl(),
+       	yearsExperience:	new UntypedFormControl(),
+       	skills:				new UntypedFormControl()
 
   	 });
 

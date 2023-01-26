@@ -1,6 +1,6 @@
 import { Component, OnInit } 							from '@angular/core';
 import { NgbModal, NgbModalOptions}						from '@ng-bootstrap/ng-bootstrap';
-import { FormGroup, FormControl }						from '@angular/forms';
+import { UntypedFormGroup, UntypedFormControl }						from '@angular/forms';
 import { RecruiterService }								from '../recruiter.service';
 import { ViewChild }									from '@angular/core';
 
@@ -34,12 +34,12 @@ export class RecruiterSignupComponent implements OnInit {
 	/**
 	* Backing bean for the recruiter signip form
 	*/
-	public signupForm:FormGroup = new FormGroup({
-		firstName: 			new FormControl(''),
-		surname: 			new FormControl(''),
-		email: 				new FormControl(''),
-		company: 			new FormControl(''),
-		preferredLanguage: 	new FormControl('ENGLISH')
+	public signupForm:UntypedFormGroup = new UntypedFormGroup({
+		firstName: 			new UntypedFormControl(''),
+		surname: 			new UntypedFormControl(''),
+		email: 				new UntypedFormControl(''),
+		company: 			new UntypedFormControl(''),
+		preferredLanguage: 	new UntypedFormControl('ENGLISH')
 	});
 	
 	/**
@@ -79,12 +79,12 @@ export class RecruiterSignupComponent implements OnInit {
 		
 		this.recruiterService.registerForFreeTrial(firstName, surname, email, companyName, language).subscribe(data => {
 			
-			this.signupForm = new FormGroup({
-				firstName: 			new FormControl(''),
-				surname: 			new FormControl(''),
-				email: 				new FormControl(''),
-				company: 			new FormControl(''),
-				preferredLanguage: 	new FormControl('ENGLISH')
+			this.signupForm = new UntypedFormGroup({
+				firstName: 			new UntypedFormControl(''),
+				surname: 			new UntypedFormControl(''),
+				email: 				new UntypedFormControl(''),
+				company: 			new UntypedFormControl(''),
+				preferredLanguage: 	new UntypedFormControl('ENGLISH')
 			});
 	
 			this.open('feedbackBox', "Success",  true);

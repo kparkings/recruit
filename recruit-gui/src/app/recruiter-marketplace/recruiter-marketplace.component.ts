@@ -1,5 +1,5 @@
 import { Component, OnInit } 							from '@angular/core';
-import { FormGroup, FormControl }						from '@angular/forms';
+import { UntypedFormGroup, UntypedFormControl }						from '@angular/forms';
 import { NgbModal, NgbModalOptions}						from '@ng-bootstrap/ng-bootstrap';
 import { ViewChild }									from '@angular/core';
 import { RecruiterMarketplaceService }					from '../recruiter-marketplace.service';
@@ -146,19 +146,19 @@ export class RecruiterMarketplaceComponent implements OnInit {
 	coreSkills:Array<string>				= new Array<string>();
 	spokenLanguages:Array<string>			= new Array<string>();
 	
-	public offeredCandidateFormBean:FormGroup = new FormGroup({
-     	candidateRoleTitle:		new FormControl(''),
-		country:				new FormControl(),
-       	location:				new FormControl(),
-		contractType:			new FormControl(),	
-		daysOnSite:				new FormControl(),
-		renumeration:			new FormControl(),
-		availableFromDate:		new FormControl(),
-		yearsExperience:		new FormControl(),
-		description:			new FormControl(),
-		comments:				new FormControl(),
-		skill:					new FormControl(),
-		language:				new FormControl(),
+	public offeredCandidateFormBean:UntypedFormGroup = new UntypedFormGroup({
+     	candidateRoleTitle:		new UntypedFormControl(''),
+		country:				new UntypedFormControl(),
+       	location:				new UntypedFormControl(),
+		contractType:			new UntypedFormControl(),	
+		daysOnSite:				new UntypedFormControl(),
+		renumeration:			new UntypedFormControl(),
+		availableFromDate:		new UntypedFormControl(),
+		yearsExperience:		new UntypedFormControl(),
+		description:			new UntypedFormControl(),
+		comments:				new UntypedFormControl(),
+		skill:					new UntypedFormControl(),
+		language:				new UntypedFormControl(),
 		
 	});
 	
@@ -168,32 +168,32 @@ export class RecruiterMarketplaceComponent implements OnInit {
 	requestedCandidateCoreSkills:Array<string>				= new Array<string>();
 	requestedCandidateSpokenLanguages:Array<string>			= new Array<string>();
 	
-	public requestedCandidateFormBean:FormGroup = new FormGroup({
-    	positionTitle:			new FormControl(''),
-		country:				new FormControl(),
-       	location:				new FormControl(),
-		contractType:			new FormControl(),	
-		renumeration:			new FormControl(),
-		startDate:				new FormControl(),
-		positionClosingDate:	new FormControl(),
-		description:			new FormControl(),
-		comments:				new FormControl(),
+	public requestedCandidateFormBean:UntypedFormGroup = new UntypedFormGroup({
+    	positionTitle:			new UntypedFormControl(''),
+		country:				new UntypedFormControl(),
+       	location:				new UntypedFormControl(),
+		contractType:			new UntypedFormControl(),	
+		renumeration:			new UntypedFormControl(),
+		startDate:				new UntypedFormControl(),
+		positionClosingDate:	new UntypedFormControl(),
+		description:			new UntypedFormControl(),
+		comments:				new UntypedFormControl(),
 	});
 	
 	/**
 	* Resets the OfferedCandudates FormBean
 	*/
 	private resetOpenPositionsForm(){
-			this.requestedCandidateFormBean = new FormGroup({
-	     	positionTitle:			new FormControl(''),
-			country:				new FormControl(),
-       		location:				new FormControl(),
-			contractType:			new FormControl(),	
-			renumeration:			new FormControl(),
-			startDate:				new FormControl(),
-			positionClosingDate:	new FormControl(),
-			description:			new FormControl(),
-			comments:				new FormControl(),
+			this.requestedCandidateFormBean = new UntypedFormGroup({
+	     	positionTitle:			new UntypedFormControl(''),
+			country:				new UntypedFormControl(),
+       		location:				new UntypedFormControl(),
+			contractType:			new UntypedFormControl(),	
+			renumeration:			new UntypedFormControl(),
+			startDate:				new UntypedFormControl(),
+			positionClosingDate:	new UntypedFormControl(),
+			description:			new UntypedFormControl(),
+			comments:				new UntypedFormControl(),
 		});
 		this.requestedCandidateSpokenLanguages 	= new Array<string>();
 		this.requestedCandidateCoreSkills 		= new Array<string>();
@@ -203,19 +203,19 @@ export class RecruiterMarketplaceComponent implements OnInit {
 	* Resets the OfferedCandudates FormBean
 	*/
 	private resetOfferedCandidatesForm(){
-			this.offeredCandidateFormBean = new FormGroup({
-	     	candidateRoleTitle:		new FormControl(''),
-			country:				new FormControl(),
-	       	location:				new FormControl(),
-			contractType:			new FormControl(),	
-			daysOnSite:				new FormControl(),
-			renumeration:			new FormControl(),
-			availableFromDate:		new FormControl(),
-			yearsExperience:		new FormControl(),
-			description:			new FormControl(),
-			comments:				new FormControl(),
-			skill:					new FormControl(),
-			language:				new FormControl(),
+			this.offeredCandidateFormBean = new UntypedFormGroup({
+	     	candidateRoleTitle:		new UntypedFormControl(''),
+			country:				new UntypedFormControl(),
+	       	location:				new UntypedFormControl(),
+			contractType:			new UntypedFormControl(),	
+			daysOnSite:				new UntypedFormControl(),
+			renumeration:			new UntypedFormControl(),
+			availableFromDate:		new UntypedFormControl(),
+			yearsExperience:		new UntypedFormControl(),
+			description:			new UntypedFormControl(),
+			comments:				new UntypedFormControl(),
+			skill:					new UntypedFormControl(),
+			language:				new UntypedFormControl(),
 			
 		});
 		this.spokenLanguages 	= new Array<string>();
@@ -232,19 +232,19 @@ export class RecruiterMarketplaceComponent implements OnInit {
 		this.switchTab('editSupply');
 		this.activeCandidate = candidate;
 		
-		this.offeredCandidateFormBean = new FormGroup({
-	     	candidateRoleTitle:		new FormControl(candidate.candidateRoleTitle),
-			country:				new FormControl(candidate.country),
-	       	location:				new FormControl(candidate.location),
-			contractType:			new FormControl(candidate.contractType),	
-			daysOnSite:				new FormControl(candidate.daysOnSite),
-			renumeration:			new FormControl(candidate.renumeration),
-			availableFromDate:		new FormControl(candidate.availableFromDate),
-			yearsExperience:		new FormControl(candidate.yearsExperience),
-			description:			new FormControl(candidate.description),
-			comments:				new FormControl(candidate.comments),
-			skill:					new FormControl(),
-			language:				new FormControl()});
+		this.offeredCandidateFormBean = new UntypedFormGroup({
+	     	candidateRoleTitle:		new UntypedFormControl(candidate.candidateRoleTitle),
+			country:				new UntypedFormControl(candidate.country),
+	       	location:				new UntypedFormControl(candidate.location),
+			contractType:			new UntypedFormControl(candidate.contractType),	
+			daysOnSite:				new UntypedFormControl(candidate.daysOnSite),
+			renumeration:			new UntypedFormControl(candidate.renumeration),
+			availableFromDate:		new UntypedFormControl(candidate.availableFromDate),
+			yearsExperience:		new UntypedFormControl(candidate.yearsExperience),
+			description:			new UntypedFormControl(candidate.description),
+			comments:				new UntypedFormControl(candidate.comments),
+			skill:					new UntypedFormControl(),
+			language:				new UntypedFormControl()});
 			
 			this.coreSkills 		= candidate.coreSkills;
 			this.spokenLanguages 	= candidate.spokenLanguages;
@@ -261,16 +261,16 @@ export class RecruiterMarketplaceComponent implements OnInit {
 		this.switchTab('editDemand');
 		this.activeOpenPosition = openPosition;
 		
-		this.requestedCandidateFormBean = new FormGroup({
-	     	positionTitle:			new FormControl(openPosition.positionTitle),
-			country:				new FormControl(openPosition.country),
-	       	location:				new FormControl(openPosition.location),
-			contractType:			new FormControl(openPosition.contractType),	
-			renumeration:			new FormControl(openPosition.renumeration),
-			startDate:				new FormControl(openPosition.startDate),
-			positionClosingDate:	new FormControl(openPosition.positionClosingDate),
-			description:			new FormControl(openPosition.description),
-			comments:				new FormControl(openPosition.comments),
+		this.requestedCandidateFormBean = new UntypedFormGroup({
+	     	positionTitle:			new UntypedFormControl(openPosition.positionTitle),
+			country:				new UntypedFormControl(openPosition.country),
+	       	location:				new UntypedFormControl(openPosition.location),
+			contractType:			new UntypedFormControl(openPosition.contractType),	
+			renumeration:			new UntypedFormControl(openPosition.renumeration),
+			startDate:				new UntypedFormControl(openPosition.startDate),
+			positionClosingDate:	new UntypedFormControl(openPosition.positionClosingDate),
+			description:			new UntypedFormControl(openPosition.description),
+			comments:				new UntypedFormControl(openPosition.comments),
 			});
 	}
 		

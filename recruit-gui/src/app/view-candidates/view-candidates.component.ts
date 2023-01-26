@@ -3,7 +3,7 @@ import { CandidateServiceService }				from '../candidate-service.service';
 import { Candidate }							from './candidate';
 import { CandidateFunction }					from '../candidate-function';
 import { NgbModal}								from '@ng-bootstrap/ng-bootstrap';
-import { FormGroup, FormControl }				from '@angular/forms';
+import { UntypedFormGroup, UntypedFormControl }				from '@angular/forms';
 import { environment }							from '../../environments/environment';
 import { Router}								from '@angular/router';
 import { SuggestionParams}						from '../suggestions/suggestion-param-generator';
@@ -25,8 +25,8 @@ export class ViewCandidatesComponent implements OnInit {
 	public showSaveAlertBoxSuccess:		boolean  					= false;
 	public showSaveAlertBox:			boolean 					= false;
 
-	public createAlertForm:FormGroup = new FormGroup({
-		alertName:			new FormControl(''),
+	public createAlertForm:UntypedFormGroup = new UntypedFormGroup({
+		alertName:			new UntypedFormControl(''),
 	});
 	
   	/**
@@ -63,7 +63,7 @@ export class ViewCandidatesComponent implements OnInit {
 		this.candidateService.loadFunctionTypes().forEach(funcType => {
 
 			this.functionTypes.push(funcType);
-			this.functionTypeFilterForm.addControl(funcType.id, new FormControl(''));
+			this.functionTypeFilterForm.addControl(funcType.id, new UntypedFormControl(''));
 
 			if (counter < 8) {
         		this.functionOptionsPage1.push(funcType);
@@ -137,23 +137,23 @@ export class ViewCandidatesComponent implements OnInit {
 
 	}
 
-	public countryFilterForm:FormGroup = new FormGroup({
+	public countryFilterForm:UntypedFormGroup = new UntypedFormGroup({
      
-    	NETHERLANDS:  					new FormControl(''),
-    	BELGIUM:      					new FormControl(''),
-    	UK:           					new FormControl(''),
-    	REPUBLIC_OF_IRELAND:           new FormControl(''),
+    	NETHERLANDS:  					new UntypedFormControl(''),
+    	BELGIUM:      					new UntypedFormControl(''),
+    	UK:           					new UntypedFormControl(''),
+    	REPUBLIC_OF_IRELAND:           new UntypedFormControl(''),
    
 	});
 
-	public functionTypeFilterForm: FormGroup = new FormGroup({
+	public functionTypeFilterForm: UntypedFormGroup = new UntypedFormGroup({
     	//Set dynamically
 	});
 
 	public  skillFilterSelections:Array<string> = new Array<string>();
 
-  	public skillFilterForm: FormGroup = new FormGroup({
-		skill:  new FormControl(''),
+  	public skillFilterForm: UntypedFormGroup = new UntypedFormGroup({
+		skill:  new UntypedFormControl(''),
 	});
   
 	/**
@@ -170,29 +170,29 @@ export class ViewCandidatesComponent implements OnInit {
 		this.updateFilters();
 	}
   
-	public freelanceFilterForm: FormGroup = new FormGroup({
-		include:  new FormControl('false'),
+	public freelanceFilterForm: UntypedFormGroup = new UntypedFormGroup({
+		include:  new UntypedFormControl('false'),
 	});
 
-	public permFilterForm: FormGroup = new FormGroup({
-		include:  new FormControl('false'),
+	public permFilterForm: UntypedFormGroup = new UntypedFormGroup({
+		include:  new UntypedFormControl('false'),
 	});
   
-	public dutchFilterForm: FormGroup = new FormGroup({
-		level: new FormControl(''),
+	public dutchFilterForm: UntypedFormGroup = new UntypedFormGroup({
+		level: new UntypedFormControl(''),
 	});
   
-	public frenchFilterForm: FormGroup = new FormGroup({
-		level:  new FormControl(''),
+	public frenchFilterForm: UntypedFormGroup = new UntypedFormGroup({
+		level:  new UntypedFormControl(''),
 	});
   
-	public englishFilterForm: FormGroup = new FormGroup({
-		level:  new FormControl(''),
+	public englishFilterForm: UntypedFormGroup = new UntypedFormGroup({
+		level:  new UntypedFormControl(''),
 	});
   
-	public yearsExperienceFilterForm:FormGroup = new FormGroup({
-		yearsExperienceGtEq: new FormControl(''),
-		yearsExperienceLtEq: new FormControl('')
+	public yearsExperienceFilterForm:UntypedFormGroup = new UntypedFormGroup({
+		yearsExperienceGtEq: new UntypedFormControl(''),
+		yearsExperienceLtEq: new UntypedFormControl('')
 	});
 	
 	/**
@@ -847,48 +847,48 @@ this.modalService.dismissAll();
     this.countryFiltBE                = false;
     this.countryFiltUK                = false;
 
-    this.countryFilterForm = new FormGroup({
+    this.countryFilterForm = new UntypedFormGroup({
      
-      NETHERLANDS:  		new FormControl(''),
-      BELGIUM:      		new FormControl(''),
-      UK:           		new FormControl(''),
-      REPUBLIC_OF_IRELAND:	new FormControl('')
+      NETHERLANDS:  		new UntypedFormControl(''),
+      BELGIUM:      		new UntypedFormControl(''),
+      UK:           		new UntypedFormControl(''),
+      REPUBLIC_OF_IRELAND:	new UntypedFormControl('')
    
     });
 
-    this.permFilterForm = new FormGroup({
-      include:  new FormControl('')
+    this.permFilterForm = new UntypedFormGroup({
+      include:  new UntypedFormControl('')
     });
 
-    this.freelanceFilterForm = new FormGroup({
-      include:  new FormControl('')
+    this.freelanceFilterForm = new UntypedFormGroup({
+      include:  new UntypedFormControl('')
     });
     
-    this.yearsExperienceFilterForm = new FormGroup({
-        yearsExperienceGtEq: new FormControl(''),
-        yearsExperienceLtEq: new FormControl('')
+    this.yearsExperienceFilterForm = new UntypedFormGroup({
+        yearsExperienceGtEq: new UntypedFormControl(''),
+        yearsExperienceLtEq: new UntypedFormControl('')
     });
 
-    this.functionTypeFilterForm = new FormGroup({});
+    this.functionTypeFilterForm = new UntypedFormGroup({});
 
     this.functionTypes.forEach(funcType => {
-      this.functionTypeFilterForm.addControl(funcType.id,new FormControl(''));
+      this.functionTypeFilterForm.addControl(funcType.id,new UntypedFormControl(''));
     });
     
-    this.dutchFilterForm = new FormGroup({
-        level: new FormControl(''),
+    this.dutchFilterForm = new UntypedFormGroup({
+        level: new UntypedFormControl(''),
       });
     
-    this.frenchFilterForm = new FormGroup({
-        level:  new FormControl(''),
+    this.frenchFilterForm = new UntypedFormGroup({
+        level:  new UntypedFormControl(''),
       });
     
-    this.englishFilterForm = new FormGroup({
-        level:  new FormControl(''),
+    this.englishFilterForm = new UntypedFormGroup({
+        level:  new UntypedFormControl(''),
       });
     
-    this.skillFilterForm = new FormGroup({
-        skill:  new FormControl(''),
+    this.skillFilterForm = new UntypedFormGroup({
+        skill:  new UntypedFormControl(''),
       });
     
     this.skillFilterSelections = new Array<string>();
@@ -941,18 +941,18 @@ this.modalService.dismissAll();
 			contractType="CONTRACT";
 		}
 		
-		let suggestionFilterForm:FormGroup 	= new FormGroup({
-			searchPhrase:			new FormControl(''),
-			nlResults: 				new FormControl(this.countryFilterForm.get('NETHERLANDS')?.value),
-			beResults: 				new FormControl(this.countryFilterForm.get('BELGIUM')?.value),
-			ukResults: 				new FormControl(this.countryFilterForm.get('UK')?.value),
-			ieResults: 				new FormControl(this.countryFilterForm.get('REPUBLIC_OF_IRELAND')?.value),
-			contractType: 			new FormControl(contractType),
-			dutchLanguage: 			new FormControl(this.dutchFilterForm.get("level")?.value),
-			englishLanguage: 		new FormControl(this.englishFilterForm.get("level"))?.value,
-			frenchLanguage:			new FormControl(this.frenchFilterForm.get("level"))?.value,
-			minYearsExperience: 	new FormControl(this.yearsExperienceFilterForm.get('yearsExperienceGtEq')?.value),
-			maxYearsExperience: 	new FormControl(this.yearsExperienceFilterForm.get('yearsExperienceLeEq')?.value),
+		let suggestionFilterForm:UntypedFormGroup 	= new UntypedFormGroup({
+			searchPhrase:			new UntypedFormControl(''),
+			nlResults: 				new UntypedFormControl(this.countryFilterForm.get('NETHERLANDS')?.value),
+			beResults: 				new UntypedFormControl(this.countryFilterForm.get('BELGIUM')?.value),
+			ukResults: 				new UntypedFormControl(this.countryFilterForm.get('UK')?.value),
+			ieResults: 				new UntypedFormControl(this.countryFilterForm.get('REPUBLIC_OF_IRELAND')?.value),
+			contractType: 			new UntypedFormControl(contractType),
+			dutchLanguage: 			new UntypedFormControl(this.dutchFilterForm.get("level")?.value),
+			englishLanguage: 		new UntypedFormControl(this.englishFilterForm.get("level"))?.value,
+			frenchLanguage:			new UntypedFormControl(this.frenchFilterForm.get("level"))?.value,
+			minYearsExperience: 	new UntypedFormControl(this.yearsExperienceFilterForm.get('yearsExperienceGtEq')?.value),
+			maxYearsExperience: 	new UntypedFormControl(this.yearsExperienceFilterForm.get('yearsExperienceLeEq')?.value),
 		});
 		console.log("DUTCH LEVEL = " + this.dutchFilterForm.get("level"));
 		let params:SuggestionParams 	= new SuggestionParams(suggestionFilterForm, this.skillFilterSelections, this.getSelectedFunctionTypes());
@@ -972,8 +972,8 @@ this.modalService.dismissAll();
 		
 		this.candidateService.createCandidateSearchAlert(alert).subscribe(data => {
 			
-			this.createAlertForm = new FormGroup({
-				alertName:			new FormControl(''),
+			this.createAlertForm = new UntypedFormGroup({
+				alertName:			new UntypedFormControl(''),
 			});
 			
 			this.showSaveAlertBox 			= false;

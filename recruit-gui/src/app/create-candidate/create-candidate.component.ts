@@ -1,5 +1,5 @@
 import { Component, OnInit } 							from '@angular/core';
-import { FormGroup, FormControl }						from '@angular/forms';
+import { UntypedFormGroup, UntypedFormControl }						from '@angular/forms';
 import { CurriculumService }							from '../curriculum.service';
 import { CandidateServiceService }						from '../candidate-service.service';
 import { NgbModal, NgbModalOptions}						from '@ng-bootstrap/ng-bootstrap';
@@ -26,13 +26,13 @@ export class CreateCandidateComponent implements OnInit {
   	public feedbackBoxTitle                   = '';
   	public feedbackBoxText:string             = '';
 
-	public formBean:FormGroup = new FormGroup({
+	public formBean:UntypedFormGroup = new UntypedFormGroup({
      
-		surname:		new FormControl(''),
-		firstname:		new FormControl(''),
-		email:			new FormControl(''),
-		contract:		new FormControl(''),
-		perm:			new FormControl(''),
+		surname:		new UntypedFormControl(''),
+		firstname:		new UntypedFormControl(''),
+		email:			new UntypedFormControl(''),
+		contract:		new UntypedFormControl(''),
+		perm:			new UntypedFormControl(''),
 	});
 	
   	private curriculumFile!:File;
