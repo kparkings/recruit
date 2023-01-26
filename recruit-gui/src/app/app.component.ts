@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
-import { Router}								from '@angular/router';
-import { CookieService } from 'ngx-cookie';
-import { NgbModal, NgbModalOptions}						from '@ng-bootstrap/ng-bootstrap'
+import { Component } 						from '@angular/core';
+import { Router}							from '@angular/router';
+import { CookieService } 					from 'ngx-cookie';
+import { NgbModal, NgbModalOptions}			from '@ng-bootstrap/ng-bootstrap'
+import { DeviceDetectorService } 			from 'ngx-device-detector';
 
 @Component({
   selector: 'app-root',
@@ -16,7 +17,11 @@ export class AppComponent {
 
 	public termsAndConditionsAccepted:boolean = false;
 
-	constructor(private router: Router, private cookieService: CookieService, private modalService: NgbModal){
+	public isMobile:boolean = false;
+	
+	constructor(private router: Router, private cookieService: CookieService, private modalService: NgbModal, private deviceDetector: DeviceDetectorService){
+		
+		this.isMobile = deviceDetector.isMobile();
 		
 		if (this.isRecruiterNoSubscription() || this.hasUnpaidSubscription()) {
 			this.router.navigate(['recruiter-account']);

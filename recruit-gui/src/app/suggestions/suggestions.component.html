@@ -99,7 +99,9 @@
 			<button class="btn btn-secondary btn-action" (click)="showSuggestedCandidateOverview(suggestedCandidate)">back</button>
 		</div>
 		
-		<object id="content"  class="cv-inline" [attr.data]="trustedResourceUrl" width="95%" height="500px"></object>
+		<object id="content"  class="cv-inline" [attr.data]="trustedResourceUrl" width="95%" height="500px">
+			
+		</object>
 	
 	</div>
 	
@@ -136,7 +138,7 @@
 	    	<a class="currliculum-link" href="{{getCurriculumDownloadUrl(suggestedCandidate.candidateId)}}" >
 				<button class="btn btn-secondary btn-action">Download CV</button>
 			</a>
-			<button class="btn btn-secondary btn-action" (click)="showInlineCVView()">Display CV</button>
+			<button class="btn btn-secondary btn-action" (click)="showInlineCVView()" *ngIf="!isMobile">Display CV</button>
 			<button class="btn btn-secondary btn-action" (click)="showSuggestionsResults()">back</button>
 		</div>
 	</div>

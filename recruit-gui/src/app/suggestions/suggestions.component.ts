@@ -1,17 +1,18 @@
-import { Component, OnInit, SecurityContext } 					from '@angular/core';
-import { UntypedFormGroup, UntypedFormControl }				from '@angular/forms';
-import { CandidateServiceService }				from '../candidate-service.service';
-import { SuggestionsService }					from '../suggestions.service';
-import { CurriculumService }					from '../curriculum.service';
-import { Candidate}								from './candidate';
-import { SuggestionParams}						from './suggestion-param-generator';
-import { environment }							from '../../environments/environment';
-import { Clipboard } 							from '@angular/cdk/clipboard';
-import { NgbModal, NgbModalOptions }			from '@ng-bootstrap/ng-bootstrap';
-import { ViewChild }							from '@angular/core';
-import { CandidateSearchAlert }					from './candidate-search-alert';
-import { CandidateFunction }					from '../candidate-function';
-import { DomSanitizer, SafeResourceUrl, SafeUrl } from '@angular/platform-browser';
+import { Component, OnInit, SecurityContext } 		from '@angular/core';
+import { UntypedFormGroup, UntypedFormControl }		from '@angular/forms';
+import { CandidateServiceService }					from '../candidate-service.service';
+import { SuggestionsService }						from '../suggestions.service';
+import { CurriculumService }						from '../curriculum.service';
+import { Candidate}									from './candidate';
+import { SuggestionParams}							from './suggestion-param-generator';
+import { environment }								from '../../environments/environment';
+import { Clipboard } 								from '@angular/cdk/clipboard';
+import { NgbModal, NgbModalOptions }				from '@ng-bootstrap/ng-bootstrap';
+import { ViewChild }								from '@angular/core';
+import { CandidateSearchAlert }						from './candidate-search-alert';
+import { CandidateFunction }						from '../candidate-function';
+import { DomSanitizer, SafeResourceUrl, SafeUrl } 	from '@angular/platform-browser';
+import { DeviceDetectorService } 					from 'ngx-device-detector';
 
 /**
 * Component to suggest suitable Candidates based upon a 
@@ -59,6 +60,8 @@ export class SuggestionsComponent implements OnInit {
 	public dangerousUrl = 'http://127.0.0.1:8080/curriculum-test/1623.pdf';
 	public trustedResourceUrl : SafeResourceUrl;
 	
+	public isMobile:boolean = false;
+	
 	/**
 	* Constructor
 	* @param candidateService - Services relating to Candidates
@@ -68,11 +71,12 @@ export class SuggestionsComponent implements OnInit {
 				private clipboard: Clipboard, 
 				private modalService: NgbModal, 
 				private sanitizer: DomSanitizer,
-				private curriculumService: CurriculumService) { 
+				private curriculumService: CurriculumService,
+				private deviceDetector: DeviceDetectorService) { 
 					
 		this.getSuggestions();	
 	 	this.trustedResourceUrl = this.sanitizer.bypassSecurityTrustResourceUrl('');
-		
+		this.isMobile = deviceDetector.isMobile();
 	}
 	
 	public showCVInline(candidateId:string):void{

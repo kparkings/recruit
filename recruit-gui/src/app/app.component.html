@@ -30,7 +30,7 @@
         <li class="li-arenella-nav" *ngIf="isAuthenticated() && !isAuthenticatedAsAdmin() && !isRecruiterNoSubscription() && !hasUnpaidSubscription()">
            <a class="dropdown-item recruiter-account" routerLink="/recruiter-listings">Listings</a>
         </li>
-		<li  class="li-arenella-nav"  *ngIf="isAuthenticated() && !isRecruiterNoSubscription() && !hasUnpaidSubscription()">	
+		<li  class="li-arenella-nav"  *ngIf="isAuthenticated() && !isRecruiterNoSubscription() && !hasUnpaidSubscription() &&!isMobile">	
            <a  class="dropdown-item" routerLink="/view-candidates">Candidates</a>
         </li>
 		<li  class="li-arenella-nav"  *ngIf="isAuthenticated() && !isRecruiterNoSubscription() && !hasUnpaidSubscription()">	
