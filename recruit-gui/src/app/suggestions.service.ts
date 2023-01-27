@@ -85,6 +85,10 @@ export class SuggestionsService {
 		
 		let augmentedSkillsList:Array<string> = this.extractSkillsFromSearchPhrase(title);
 		
+		skills.forEach(a => {
+			augmentedSkillsList.push(a);	
+		});
+		
 		return this.candidateService.getCandidates(this.getCandidateFilterParamString(	maxNumberOfSuggestions, 
 																						title, 
 																						countries, 

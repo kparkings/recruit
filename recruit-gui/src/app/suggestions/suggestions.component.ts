@@ -92,7 +92,7 @@ export class SuggestionsComponent implements OnInit {
 	* Initializes Component`
 	*/
 	ngOnInit(): void {
-		this.suggestionFilterForm.get('searchPhrase')?.valueChanges.subscribe(value => {
+		this.suggestionFilterForm.valueChanges.subscribe(value => {
 			this.getSuggestions();	
 		});
 	}
@@ -160,9 +160,9 @@ export class SuggestionsComponent implements OnInit {
 			this.skillFilters.push(skillFormatted);	
 		}
 		
-		this.suggestionFilterForm.get('skill')?.setValue('');
-		
 		this.getSuggestions();
+		
+		this.suggestionFilterForm.get('skill')?.setValue('');
 		
 	}
 	
