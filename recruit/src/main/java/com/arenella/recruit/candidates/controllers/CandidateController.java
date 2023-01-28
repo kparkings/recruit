@@ -26,10 +26,10 @@ import com.arenella.recruit.candidates.beans.CandidateExtractedFilters;
 import com.arenella.recruit.candidates.beans.CandidateFilterOptions;
 import com.arenella.recruit.candidates.beans.Language;
 import com.arenella.recruit.candidates.enums.COUNTRY;
-import com.arenella.recruit.candidates.enums.FREELANCE;
 import com.arenella.recruit.candidates.enums.FUNCTION;
 import com.arenella.recruit.candidates.enums.RESULT_ORDER;
 import com.arenella.recruit.candidates.services.CandidateService;
+import com.arenella.recruit.curriculum.enums.FileType;
 
 /**
 * REST API for working with Candidates
@@ -236,33 +236,9 @@ public class CandidateController {
 		
 		String postFix = document.getOriginalFilename().substring(document.getOriginalFilename().lastIndexOf('.')+1).toLowerCase();
 		
-		//TODO: [KP] 1. Define ExtractedFilter object to contain filter values to return to the FE
-		//TODO: [KP] 2. Need to retrieve all known skills - Also need to see why duplicates are being added in DB and stop/correct that
-		//TODO: [KP] 3. Parse the tokens in the files. Check each skill against contents. Where match add to ExtractedFilters
-		//TODO: [KP] 4. Parse the tokens for each synonym and where match add them to the ExtractedFilterObject
-		//TODO: [KP] 5. Parse skills in ExtractedFilter for each synonmy group. Where 1 is found remove all other skills in the same synonmy group from extracted filter
-		//TODO: [KP] 6. Parse for keyswords Senior / Medior / Junior if found set expereince to [0,2],[3,4],[5]
-		//TODO: [KP] 7. Parse for English, Dutch, Engels, French, Francais, Frans and if found set languages
-		//TODO: [KP] 7. Parse for perm permantent vast vaste freelance contract set contract type
+		CandidateExtractedFilters extractedFilters = this.candidateService.extractFiltersFromDocument(FileType.valueOf(postFix),document.getBytes());
 		
-		//TODO: [KP] 9. How to set function type??? Think list of popular job titles and synonyms.
-					//	- Java Developer / Java Software Engineer, Java Engineer, Java Software Ontwikkelaar, Java Ontwikkelaar, Fullstack Java, Java Backend Developer
-		System.out.println("Uploaded: " + document.getName());
-		
-		CandidateExtractedFilters filters = CandidateExtractedFilters
-				.builder()
-					.belgium(true)
-					.experienceGTE("2")
-					.french(true)
-					.jobTitle("java developer")
-					.skills(Set.of("java","spring","kakfa","wpf"))
-					.freelance(FREELANCE.TRUE)
-				.build();
-		
-		//TO start with just try and return FunctionType and Job title. When that is working add other filters. ?? extract title and/or job title
-		return ResponseEntity.ok(filters);
-		
-		
+		return ResponseEntity.ok(extractedFilters);
 		
 	}
 	

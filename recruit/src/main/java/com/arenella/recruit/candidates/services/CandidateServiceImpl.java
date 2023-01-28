@@ -23,6 +23,7 @@ import com.arenella.recruit.adapters.events.CandidateNoLongerAvailableEvent;
 import com.arenella.recruit.candidates.adapters.CandidateCreatedEvent;
 import com.arenella.recruit.candidates.adapters.ExternalEventPublisher;
 import com.arenella.recruit.candidates.beans.Candidate;
+import com.arenella.recruit.candidates.beans.CandidateExtractedFilters;
 import com.arenella.recruit.candidates.beans.CandidateFilterOptions;
 import com.arenella.recruit.candidates.beans.CandidateSearchAccuracyWrapper;
 import com.arenella.recruit.candidates.beans.CandidateSearchAlert;
@@ -34,6 +35,7 @@ import com.arenella.recruit.candidates.entities.CandidateEntity;
 import com.arenella.recruit.candidates.entities.PendingCandidateEntity;
 import com.arenella.recruit.candidates.utils.CandidateSuggestionUtil;
 import com.arenella.recruit.candidates.utils.CandidateSuggestionUtil.suggestion_accuracy;
+import com.arenella.recruit.candidates.utils.DocumentFilterExtractionFactory;
 import com.arenella.recruit.candidates.utils.SkillsSynonymsUtil;
 import com.arenella.recruit.curriculum.enums.FileType;
 import com.arenella.recruit.candidates.dao.CandidateSearchAlertDao;
@@ -397,18 +399,12 @@ public class CandidateServiceImpl implements CandidateService{
 	* Refer to the CandidateService for details 
 	*/
 	@Override
-	public void extractFiltersFromDocument(FileType fileType, byte[] fileBytes) throws IOException {
-		
+	public CandidateExtractedFilters extractFiltersFromDocument(FileType fileType, byte[] fileBytes) throws IOException {
 		try {
-			
-			Set<String> skills = new HashSet<>();
-			
-			// CurriculumDetailsExtractionFactory.getInstance(fileType).extract(skills, curriculumId, curriculumFileBytes);
-				
+			return DocumentFilterExtractionFactory.getInstance(fileType).extract(fileBytes);
 		}catch(Exception e) {
-			//return CurriculumUpdloadDetails.builder().id(curriculumId).build();
+			throw new RuntimeException("Unable to process job specification file");
 		}
-		
 	}
 	
 }

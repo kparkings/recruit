@@ -3,22 +3,18 @@ package com.arenella.recruit.candidates.services;
 import java.io.IOException;
 import java.util.Set;
 import java.util.UUID;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import com.arenella.recruit.candidates.beans.Candidate;
+import com.arenella.recruit.candidates.beans.CandidateExtractedFilters;
 import com.arenella.recruit.candidates.beans.CandidateFilterOptions;
 import com.arenella.recruit.candidates.beans.CandidateSearchAccuracyWrapper;
 import com.arenella.recruit.candidates.beans.CandidateSearchAlert;
 import com.arenella.recruit.candidates.beans.PendingCandidate;
 import com.arenella.recruit.candidates.controllers.CandidateController.CANDIDATE_UPDATE_ACTIONS;
 import com.arenella.recruit.candidates.utils.CandidateSuggestionUtil.suggestion_accuracy;
-import com.arenella.recruit.curriculum.controllers.CurriculumUpdloadDetails;
 import com.arenella.recruit.curriculum.enums.FileType;
-import com.arenella.recruit.curriculum.utils.CurriculumDetailsExtractionFactory;
 
 /**
 * Defines services available for interacting with Candidates
@@ -117,7 +113,8 @@ public interface CandidateService {
 	* Extracts Candidate search filters from a document
 	* @param fileType 	- .pdf or .doc
 	* @param fileBytes 	- Bytes of actual document
+	* @return extracted filters
 	*/
-	public void extractFiltersFromDocument(FileType fileType, byte[] fileBytes) throws IOException;
+	public CandidateExtractedFilters extractFiltersFromDocument(FileType fileType, byte[] fileBytes) throws IOException;
 	
 }

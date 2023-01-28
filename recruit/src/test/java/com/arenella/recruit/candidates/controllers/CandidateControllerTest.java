@@ -28,6 +28,7 @@ import com.arenella.recruit.candidates.beans.PendingCandidate;
 import com.arenella.recruit.candidates.controllers.CandidateController.CANDIDATE_UPDATE_ACTIONS;
 
 import com.arenella.recruit.candidates.services.CandidateService;
+import com.arenella.recruit.curriculum.enums.FileType;
 
 /**
 * Unit tests for the CandidateController class
@@ -238,17 +239,20 @@ public class CandidateControllerTest {
 	}
 	
 	/**
-	* Test extraction of search filters endpoint
+	* Test extraction of search filters end point
 	* @throws Exception
 	*/
 	@Test
 	public void testExtractSearchFiltersFromDocument() throws Exception{
 		
 		Mockito.when(this.mockMultipartFile.getOriginalFilename()).thenReturn("jobSpec.doc");
+		Mockito.when(this.mockMultipartFile.getBytes()).thenReturn(new byte[2]);
+		Mockito.when(this.mockCandidateService.extractFiltersFromDocument(FileType.doc, this.mockMultipartFile.getBytes())).thenReturn(CandidateExtractedFilters.builder().build());
 		
 		ResponseEntity<CandidateExtractedFilters> response = this.controller.extractSearchFiltersFromDocument(mockMultipartFile);
 		
 		assertEquals(HttpStatus.OK, response.getStatusCode());
+		
 		assertTrue(response.getBody() instanceof CandidateExtractedFilters);
 		
 	}
