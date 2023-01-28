@@ -1,5 +1,6 @@
 package com.arenella.recruit.candidates.services;
 
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
@@ -34,6 +35,7 @@ import com.arenella.recruit.candidates.entities.PendingCandidateEntity;
 import com.arenella.recruit.candidates.utils.CandidateSuggestionUtil;
 import com.arenella.recruit.candidates.utils.CandidateSuggestionUtil.suggestion_accuracy;
 import com.arenella.recruit.candidates.utils.SkillsSynonymsUtil;
+import com.arenella.recruit.curriculum.enums.FileType;
 import com.arenella.recruit.candidates.dao.CandidateSearchAlertDao;
 
 /**
@@ -389,6 +391,24 @@ public class CandidateServiceImpl implements CandidateService{
 	*/
 	private String getAuthenticatedRecruiterId() {
 		return SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+	}
+
+	/**
+	* Refer to the CandidateService for details 
+	*/
+	@Override
+	public void extractFiltersFromDocument(FileType fileType, byte[] fileBytes) throws IOException {
+		
+		try {
+			
+			Set<String> skills = new HashSet<>();
+			
+			// CurriculumDetailsExtractionFactory.getInstance(fileType).extract(skills, curriculumId, curriculumFileBytes);
+				
+		}catch(Exception e) {
+			//return CurriculumUpdloadDetails.builder().id(curriculumId).build();
+		}
+		
 	}
 	
 }

@@ -1,5 +1,5 @@
 import { Component, OnInit, SecurityContext } 		from '@angular/core';
-import { UntypedFormGroup, UntypedFormControl }		from '@angular/forms';
+import { UntypedFormGroup, UntypedFormControl,FormGroup, FormControl }		from '@angular/forms';
 import { CandidateServiceService }					from '../candidate-service.service';
 import { SuggestionsService }						from '../suggestions.service';
 import { CurriculumService }						from '../curriculum.service';
@@ -13,6 +13,7 @@ import { CandidateSearchAlert }						from './candidate-search-alert';
 import { CandidateFunction }						from '../candidate-function';
 import { DomSanitizer, SafeResourceUrl, SafeUrl } 	from '@angular/platform-browser';
 import { DeviceDetectorService } 					from 'ngx-device-detector';
+import { Router}									from '@angular/router';
 
 /**
 * Component to suggest suitable Candidates based upon a 
@@ -25,11 +26,38 @@ import { DeviceDetectorService } 					from 'ngx-device-detector';
 })
 export class SuggestionsComponent implements OnInit {
 
-	@ViewChild('feedbackBox', { static: false }) private content:any;
-
 	public createAlertForm:UntypedFormGroup = new UntypedFormGroup({
 		alertName:			new UntypedFormControl(''),
 	});
+
+	private jobSpecFile!:File;
+  
+  	public setJobSepecFile(event:any):void{
+  
+  		if (event.target.files.length <= 0) {
+  			return;
+  		}
+  	
+  		this.jobSpecFile = event.target.files[0];
+  		
+  	}
+
+	/**
+ 	* Extracts filters from job specification file
+	*/	
+
+  	public extractFiltersFromJobSpec():void{
+  		
+  		this.candidateService.extractFiltersFromDocument(this.jobSpecFile).subscribe(data=>{
+  					//TODO: Set Filters
+					this.closeModal();
+					this.getSuggestions();
+		},(failure =>{
+			this.showFilterByJonSpecFailure 	= true;
+			this.showFilterByJobSpec 			= false;
+		}));
+  		
+  	}
 
 	public suggestions:Array<Candidate>  = new Array<Candidate>();
 
@@ -57,6 +85,10 @@ export class SuggestionsComponent implements OnInit {
 	public showSaveAlertBoxSuccess:boolean  = false;
 	public showSaveAlertBox:boolean 		= false;
 	
+	public showFilterByJonSpecFailure:boolean  	= false;
+	public showFilterByJobSpec:boolean 				= false;
+	
+	
 	public dangerousUrl = 'http://127.0.0.1:8080/curriculum-test/1623.pdf';
 	public trustedResourceUrl : SafeResourceUrl;
 	
@@ -67,12 +99,13 @@ export class SuggestionsComponent implements OnInit {
 	* @param candidateService - Services relating to Candidates
 	*/
 	constructor(public candidateService:CandidateServiceService, 
-				public suggestionsService:SuggestionsService, 
-				private clipboard: Clipboard, 
-				private modalService: NgbModal, 
-				private sanitizer: DomSanitizer,
-				private curriculumService: CurriculumService,
-				private deviceDetector: DeviceDetectorService) { 
+				public suggestionsService:	SuggestionsService, 
+				private clipboard: 			Clipboard, 
+				private modalService: 		NgbModal, 
+				private sanitizer: 			DomSanitizer,
+				private curriculumService: 	CurriculumService,
+				private deviceDetector: 	DeviceDetectorService,
+				private router:				Router) { 
 					
 		this.getSuggestions();	
 	 	this.trustedResourceUrl = this.sanitizer.bypassSecurityTrustResourceUrl('');
@@ -97,33 +130,58 @@ export class SuggestionsComponent implements OnInit {
 		});
 	}
 	
+	
+	public performFilterExtraction(event:any):void{
+  
+  		if (event.target.files.length <= 0) {
+  			return;
+  		}
+  	
+		this.candidateService.extractFiltersFromDocument(event.target.files[0]).subscribe(data => {
+		
+			this.getSuggestions();
+			this.closeModal();	
+		});
+		
+  	}
+
 	/**
 	* Sends request for Suggestions to the backend API
 	*/
 	private getSuggestions():void{
 		
-		const maxSuggestions:number 		= 18;
+		const maxSuggestions:number 		= 56;
 		
 		let params:SuggestionParams = new SuggestionParams(this.suggestionFilterForm, this.skillFilters, new Array<string>());
 		
-		this.suggestionsService.getSuggestons(	maxSuggestions,
-												params.getTitle(),
-												params.getCountries(),
-												params.getContract(),
-												params.getPerm(),
-												params.getMinExperience(),
-												params.getMaxExperience(),
-												params.getLanguages(),
-												params.getSkills(),
-											).subscribe(data => {
+		this.suggestionsService.getSuggestons(	
+									maxSuggestions,
+									params.getTitle(),
+									params.getCountries(),
+									params.getContract(),
+									params.getPerm(),
+									params.getMinExperience(),
+									params.getMaxExperience(),
+									params.getLanguages(),
+									params.getSkills()
+									).subscribe(data => {
 												
-												this.suggestions =  new Array<Candidate>();
+										this.suggestions =  new Array<Candidate>();
 												
-												data.content.forEach((s:Candidate) => {
-													this.suggestions.push(s);	
-												});
+										data.content.forEach((s:Candidate) => {
+											this.suggestions.push(s);	
+										});
 												 
-											});
+									}, err => {
+			
+										if (err.status === 401 || err.status === 0) {
+											sessionStorage.removeItem('isAdmin');
+											sessionStorage.removeItem('isRecruter');
+											sessionStorage.removeItem('loggedIn');
+											sessionStorage.setItem('beforeAuthPage', 'view-candidates');
+											this.router.navigate(['login-user']);
+										}
+    								});
 											
 	}
 	
@@ -341,23 +399,37 @@ export class SuggestionsComponent implements OnInit {
 	/**
 	* Displays dialog to create an alert for the current search critera
 	*/
-	public showCreateAlertDialog():void{
+	public showCreateAlertDialog(content:any):void{
 		
 		this.showSaveAlertBox 			= true;
 		this.showSaveAlertBoxSuccess 	= false;
 		this.showSaveAlertBoxFailure 	= false;
 		
-		this.open('feedbackBox', '', true);
+		this.open(content, '', true);
 	}
-
+	
+	/**
+	* Displays dialog to create an alert for the current search critera
+	*/
+	public showFilterByJobSpecDialog(content:any):void{
+		
+		this.showFilterByJonSpecFailure  	= false;
+		this.showFilterByJobSpec 			= true;
+	
+		this.open(content, '', true);
+			
+	}
+	
 	/**
 	*  Closes the confirm popup
 	*/
 	public closeModal(): void {
 		
-		this.showSaveAlertBox 			= false;
-		this.showSaveAlertBoxSuccess 	= false;
-		this.showSaveAlertBoxFailure 	= false;
+		this.showSaveAlertBox 				= false;
+		this.showSaveAlertBoxSuccess 		= false;
+		this.showSaveAlertBoxFailure 		= false;
+		this.showFilterByJonSpecFailure  	= false;
+		this.showFilterByJobSpec 			= true;
 		
 		this.modalService.dismissAll();
 	}
@@ -369,7 +441,7 @@ export class SuggestionsComponent implements OnInit {
 	    	 centered: true
 	   };
 
-		this.modalService.open(this.content, options);
+		this.modalService.open(content, options);
 
   	}
 

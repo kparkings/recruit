@@ -4,6 +4,7 @@ import { ChartDataSets, ChartOptions, ChartType } 			from 'chart.js';
 import { Color, Label } 									from 'ng2-charts';
 import { NewCandidate, 	   NewCandidateSummaryItem } 		from '../new-candidate';
 import { NewCandidateStat, NewCandidateStatItem } 			from '../new-candidate-stat';
+import { Router}											from '@angular/router';
 
 @Component({
   selector: 'app-statistics',
@@ -34,20 +35,6 @@ export class StatisticsComponent implements OnInit {
 	
 	public listingViewsToday 							= 0;
 	public listingViewsThisWeek 						= 0;
-	
-	//public emailRequestViewsToday 						= 0;
-	//public emailRequestViewsThisWeek 					= 0;
-		
-		
-	//public recruiterEmailRequests:number[] 					= [];
-	//public recruiterEmailRequestsDaily:number[] 			= [];
-	//public recruiterEmailRequestsWeekly:number[] 			= [];
-	
-	//public recruiterEmailRequestsCols:string[] 				= [];
-	//public recruiterEmailRequestsDailyCols:string[] 		= [];
-	//public recruiterEmailRequestsWeeklyCols:string[] 		= [];	
-		
-	//public chartEmailRequestsTotal							= 0;
 	
 	public showNewCandidateStatsDiv:boolean 				= false;
 	public showNewCandidatesDiv:boolean 					= false;
@@ -97,7 +84,7 @@ export class StatisticsComponent implements OnInit {
 	/**
   	* Constructor
 	*/
-	constructor(public statisticsService:StatisticsService) {
+	constructor(public statisticsService:StatisticsService, private router:Router) {
 
 		this.fetchStatus();
 		//this.getEmailRequestStats();
@@ -260,10 +247,15 @@ export class StatisticsComponent implements OnInit {
 					this.listingChartLabels = listingChartViewsKeys;
 			
 					
-				}, 
-				err => {
-					console.log("Error retrieving listings stats" + JSON.stringify(err));			
-				});
+				}, err => {
+			if (err.status === 401 || err.status === 0) {
+				sessionStorage.removeItem('isAdmin');
+				sessionStorage.removeItem('isRecruter');
+				sessionStorage.removeItem('loggedIn');
+				sessionStorage.setItem('beforeAuthPage', 'view-candidates');
+				this.router.navigate(['login-user']);
+			}
+    	});
 		
 		this.statisticsService.getCurriculumDownloadStatistics().forEach(stat => {
 

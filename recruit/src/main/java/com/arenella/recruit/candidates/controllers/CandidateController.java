@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -19,7 +20,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.arenella.recruit.candidates.beans.CandidateExtractedFilters;
 import com.arenella.recruit.candidates.beans.CandidateFilterOptions;
 import com.arenella.recruit.candidates.beans.Language;
 import com.arenella.recruit.candidates.enums.COUNTRY;
@@ -217,6 +220,39 @@ public class CandidateController {
 				.map(a -> CandidateSearchAlertAPIOutbound.convertFromDomain(a))
 				.collect(Collectors.toCollection(LinkedHashSet::new))
 				);
+	}
+	
+	/**
+	* Processes a file and returns potential candidate filters based upon the contents of the
+	* file. The purpose is to parse a job specification and return the filter values to 
+	* allow the FE to make a request for candidates matching the job spec
+	* @param document - Contains data to extract filter values from
+	* @throws Exception
+	*/
+	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('ROLE_RECRUITER')")
+	@PostMapping(value="/extract-filters",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	public ResponseEntity<CandidateExtractedFilters> extractSearchFiltersFromDocument(@RequestParam("file") MultipartFile document) throws Exception{
+		
+		String postFix = document.getOriginalFilename().substring(document.getOriginalFilename().lastIndexOf('.')+1).toLowerCase();
+		
+		//TODO: [KP] 1. Define ExtractedFilter object to contain filter values to return to the FE
+		//TODO: [KP] 2. Need to retrieve all known skills - Also need to see why duplicates are being added in DB and stop/correct that
+		//TODO: [KP] 3. Parse the tokens in the files. Check each skill against contents. Where match add to ExtractedFilters
+		//TODO: [KP] 4. Parse the tokens for each synonym and where match add them to the ExtractedFilterObject
+		//TODO: [KP] 5. Parse skills in ExtractedFilter for each synonmy group. Where 1 is found remove all other skills in the same synonmy group from extracted filter
+		//TODO: [KP] 6. Parse for keyswords Senior / Medior / Junior if found set expereince to [0,2],[3,4],[5]
+		//TODO: [KP] 7. Parse for English, Dutch, Engels, French, Francais, Frans and if found set languages
+		//TODO: [KP] 7. Parse for perm permantent vast vaste freelance contract set contract type
+		
+		//TODO: [KP] 9. How to set function type??? Think list of popular job titles and synonyms.
+					//	- Java Developer / Java Software Engineer, Java Engineer, Java Software Ontwikkelaar, Java Ontwikkelaar, Fullstack Java, Java Backend Developer
+		System.out.println("Uploaded: " + document.getName());
+		
+		//TO start with just try and return FunctionType and Job title. When that is working add other filters. ?? extract title and/or job title
+		return ResponseEntity.ok(CandidateExtractedFilters.builder().build());
+		
+		
+		
 	}
 	
 }

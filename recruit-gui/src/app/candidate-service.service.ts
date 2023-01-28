@@ -26,7 +26,11 @@ export class CandidateServiceService {
       headers: new HttpHeaders({ 'Content-Type': 'application/json' }), withCredentials: true
     };
 
-  	headers = { 'content-type': 'application/json'};
+	httpOptionsFileUpload = {
+      headers: new HttpHeaders({ }), withCredentials: true
+    };
+
+  	//headers = { 'content-type': 'application/json'};
 
   	/**
   	* Returns a list of available Candidates 
@@ -265,5 +269,19 @@ export class CandidateServiceService {
     	return this.httpClient.get<any>(backendUrl, this.httpOptions);
 
 	}
+	
+	/**
+  	* Uploads a Job description so that its search filters can be extracted 
+  	*/
+  	public extractFiltersFromDocument(jobSpecification:File): Observable<any>{
+  
+  		var fd = new FormData();
+  		fd.append('file', jobSpecification);
+  
+  		const backendUrl:string = environment.backendUrl + 'extract-filters';
+  	
+    	return this.httpClient.post<any>(backendUrl, fd, this.httpOptionsFileUpload);
+  
+  	}
 
 }

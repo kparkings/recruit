@@ -1,6 +1,7 @@
 package com.arenella.recruit.candidates.controllers;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -17,8 +18,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.arenella.recruit.candidates.beans.Candidate;
+import com.arenella.recruit.candidates.beans.CandidateExtractedFilters;
 import com.arenella.recruit.candidates.beans.CandidateSearchAccuracyWrapper;
 import com.arenella.recruit.candidates.beans.CandidateSearchAlert;
 import com.arenella.recruit.candidates.beans.PendingCandidate;
@@ -38,6 +41,9 @@ public class CandidateControllerTest {
 	
 	@Mock
 	private Authentication 				mockAuthentication;
+	
+	@Mock
+	private MultipartFile				mockMultipartFile;
 	
 	@InjectMocks
 	private CandidateController 		controller;
@@ -228,6 +234,22 @@ public class CandidateControllerTest {
 		ResponseEntity<Void> response = this.controller.deleteSearchAlert(UUID.randomUUID());
 		
 		assertEquals(HttpStatus.OK, response.getStatusCode());
+		
+	}
+	
+	/**
+	* Test extraction of search filters endpoint
+	* @throws Exception
+	*/
+	@Test
+	public void testExtractSearchFiltersFromDocument() throws Exception{
+		
+		Mockito.when(this.mockMultipartFile.getOriginalFilename()).thenReturn("jobSpec.doc");
+		
+		ResponseEntity<CandidateExtractedFilters> response = this.controller.extractSearchFiltersFromDocument(mockMultipartFile);
+		
+		assertEquals(HttpStatus.OK, response.getStatusCode());
+		assertTrue(response.getBody() instanceof CandidateExtractedFilters);
 		
 	}
 	

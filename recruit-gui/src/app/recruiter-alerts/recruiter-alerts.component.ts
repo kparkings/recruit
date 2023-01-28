@@ -1,7 +1,7 @@
 import { Component, OnInit } 					from '@angular/core';
 import { SearchAlert} 							from './search-alert';
 import { CandidateServiceService }				from '../candidate-service.service';
-
+import { Router}								from '@angular/router';
 
 @Component({
   selector: 'app-recruiter-alerts',
@@ -13,7 +13,7 @@ export class RecruiterAlertsComponent implements OnInit {
 	public alerts:Array<SearchAlert> 	= new Array<SearchAlert>();
 	public alertToDeleteId:SearchAlert 	= new SearchAlert('','',new Array<string>(),new Array<string>(), 0, 0,'','','',new Array<string>(),'','');
 
-  	constructor(public candidateService:CandidateServiceService) {
+  	constructor(public candidateService:CandidateServiceService, private router:Router) {
 		this.fetchAlerts();	
  	}
 
@@ -28,7 +28,16 @@ export class RecruiterAlertsComponent implements OnInit {
 		this.candidateService.fetchCandidateSearchAlerts().subscribe(data => {
 			
 			this.alerts = data;		
-		});
+		}, err => {
+			
+			if (err.status === 401 || err.status === 0) {
+				sessionStorage.removeItem('isAdmin');
+				sessionStorage.removeItem('isRecruter');
+				sessionStorage.removeItem('loggedIn');
+				sessionStorage.setItem('beforeAuthPage', 'view-candidates');
+				this.router.navigate(['login-user']);
+			}
+    	});
 		
 	}
 

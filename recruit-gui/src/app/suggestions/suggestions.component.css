@@ -98,13 +98,13 @@
 
 .suggestion-results{
 	width:100%;
+	margin-bottom:100px;
 }
 
 .suggestion-result-icons{
 	width:99%;
 	margin:0 auto;
 	padding-left:6px;
-	
 }
 
 .suggestion-icon{
@@ -353,4 +353,11 @@
 .info-text{
 	color:blue;
 	font-style:italic;
+}
+
+.main-btns{
+	width:155px;
+	margin-right:10px;
+	margin-bottom:10px;
+	margin-top:5px;
 }

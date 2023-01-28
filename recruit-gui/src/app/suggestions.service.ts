@@ -67,21 +67,6 @@ export class SuggestionsService {
 							experienceMax:string, 
 							languages:Array<string>, 
 							skills:Array<string>): Observable<any>{
-								
-		//let augmentedSkillsList:Array<string> = new Array<string>();
-		
-		//skills.forEach(skill => augmentedSkillsList.push(skill));
-		
-		//title.split(" ").forEach(skill => {
-			
-		//	let skillFormatted:string = skill.toLocaleLowerCase();
-		
-		//	skillFormatted = skillFormatted.trim();
-			
-		//	if (this.allKeywords.indexOf(skillFormatted) >-1 && augmentedSkillsList.indexOf(skillFormatted) == -1) {
-		//		augmentedSkillsList.push(skillFormatted);
-		//	}
-		//});
 		
 		let augmentedSkillsList:Array<string> = this.extractSkillsFromSearchPhrase(title);
 		
@@ -267,29 +252,6 @@ export class SuggestionsService {
 	private getFunctionTypeFromTitle(title:string):string{
 		
 		let functionTypes:Array<string> = this.getFunctionTypeFromTitleText(title);
-		//let functionTypes:Array<string> = new Array<string>();
-		
-		//let titleFormatted:string = title.toLowerCase();
-		//titleFormatted = titleFormatted.trim();
-		
-		//functionTypes.push(this.addFunctionTypeIfJavaDev(title));
-		//functionTypes.push(this.addFunctionTypeIfCSHARPDev(title));
-		//functionTypes.push(this.addFunctionTypeIfSupport(title));
-		//functionTypes.push(this.addFunctionTypeIfBusinessAnalayst(title));
-		//functionTypes.push(this.addFunctionTypeIfUiUx(title));
-		//functionTypes.push(this.addFunctionTypeIfProjectManager(title)); 
-		//functionTypes.push(this.addFunctionTypeIfArchitect(title)); 
-		//functionTypes.push(this.addFunctionTypeIfTester(title)); 
-		//functionTypes.push(this.addFunctionTypeIfWebDeveloper(title));
-		//functionTypes.push(this.addFunctionTypeIfScrumMaster(title));
-		//functionTypes.push(this.addFunctionTypeIfDataScientist(title));
-		//functionTypes.push(this.addFunctionTypeIfNetworkAdmin(title));
-		//functionTypes.push(this.addFunctionTypeIfSoftwareDeveloper(title));
-		//functionTypes.push(this.addFunctionTypeIfSecurity(title));
-		//functionTypes.push(this.addFunctionTypeIfRecruiter(title));
-		//functionTypes.push(this.addFunctionTypeIfSDET(title));
-		
-		//functionTypes = functionTypes.filter(f => f !== '');
 		
 		if (functionTypes.length > 0) {
 			return '&functions=' + encodeURIComponent(functionTypes.toString());
@@ -587,5 +549,6 @@ export class SuggestionsService {
 		}
 				
 	} 
+	
 }
 

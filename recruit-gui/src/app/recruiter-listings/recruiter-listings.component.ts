@@ -9,6 +9,7 @@ import { Candidate}										from './candidate';
 import { CandidateServiceService }						from '../candidate-service.service';
 import { SuggestionsService }							from '../suggestions.service';
 import { environment }									from '../../environments/environment';
+import { Router}										from '@angular/router';
 
 @Component({
   selector: 'app-recruiter-listings',
@@ -19,11 +20,12 @@ export class RecruiterListingsComponent implements OnInit {
 
 	@ViewChild('feedbackBox', { static: false }) private content:any;
 
-  	constructor(private listingService:ListingService, 
-				private modalService: NgbModal, 
-				private recruiterService:RecruiterService, 
-				public candidateService:CandidateServiceService,
-				public suggestionsService:SuggestionsService) {
+  	constructor(private listingService:			ListingService, 
+				private modalService: 			NgbModal, 
+				private recruiterService:		RecruiterService, 
+				public 	candidateService:		CandidateServiceService,
+				public 	suggestionsService:		SuggestionsService,
+				public 	router:					Router) {
 					
 	}
 	
@@ -36,7 +38,15 @@ export class RecruiterListingsComponent implements OnInit {
 			this.recruiterEmail					= data.email;
 			this.recruiterCompany				= data.companyName;
 			this.fetchListings();			
-		});
+		}, err => {
+			if (err.status === 401 || err.status === 0) {
+				sessionStorage.removeItem('isAdmin');
+				sessionStorage.removeItem('isRecruter');
+				sessionStorage.removeItem('loggedIn');
+				sessionStorage.setItem('beforeAuthPage', 'view-candidates');
+				this.router.navigate(['login-user']);
+			}
+    	});
 	
 		this.loadYearsExperienceValues();
 	

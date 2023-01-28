@@ -2,7 +2,8 @@
 
 	<!-- Action buttons -->
 	<div *ngIf="currentView === 'suggestion-results'">
-		<button class="btn btn-secondary btnRight" (click)="showCreateAlertDialog()" download>Create Alert</button>
+		<button class="btn btn-secondary btnRight main-btns" (click)="showFilterByJobSpecDialog(specUploadBox)" download>Filter by Job Spec</button>
+		<button class="btn btn-secondary btnRight main-btns" (click)="showCreateAlertDialog(feedbackBox)" download>Create Email Alert</button>
 	 </div>
 	
 	<div>	
@@ -92,7 +93,7 @@
 		</form>
 	</div>
 	
-	<!-- Suggestion Results -->
+	<!-- Inline CV -->
 	<div *ngIf="currentView === 'inline-cv'">
 	
 		<div style="text-align:right;margin-right:50px;">
@@ -105,7 +106,7 @@
 	
 	</div>
 	
-	
+	<!-- Suggestion Results -->
 	<div *ngIf="currentView === 'suggestion-results'" class="suggestion-results">
 		
 		<div class="suggestion-result-icons">
@@ -127,7 +128,9 @@
 				</div>
 				
 			</div>
+				
 		</div>
+		<div style="height:20px;width:300px;">&nbsp;</div>
 	</div>
 
 	<!-- Suggestion Profile -->
@@ -248,6 +251,24 @@
 	</div>
 </div>
 
+<ng-template #specUploadBox let-modal>
+	<div class="modal-header">
+		<h4 class="modal-title">Extract Filters from Job Specification</h4>
+ 		<div class="filter-close-box" (click)="closeModal()">X</div>
+	</div>
+	<div class="feedbackBox;">
+		<div class="modal-body" *ngIf="showFilterByJobSpec">
+			<input type="file" (change)="setJobSepecFile($event)">
+			<br><br>
+				<button class="btn btn-secondary" (click)="extractFiltersFromJobSpec()">Perform Extraction</button>
+			<br><br>
+		</div>
+		<div class="modal-body" *ngIf="showFilterByJonSpecFailure">
+			<p>Unfortunately it was not possible to extract filters from this file.</p>
+		</div>
+	</div>
+</ng-template> 
+
 <ng-template #feedbackBox let-modal>
 	<div class="modal-header">
 		<h4 class="modal-title">Create Email Alert</h4>
@@ -270,4 +291,4 @@
 			</div>
 		</form>
 	</div>
-</ng-template> 
+</ng-template>

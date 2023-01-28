@@ -152,8 +152,6 @@ export class NewCandidateComponent implements OnInit {
   	
   		this.curriculumFile = event.target.files[0];
   
-  		console.log("file = " + this.curriculumFile);
-  		
   		this.curriculumService.uploadCurriculum(this.curriculumFile).subscribe(data=>{
       		this.formBean.get('candidateId')?.setValue(data.id);
 			this.formBean.get('email')?.setValue(data.emailAddress);

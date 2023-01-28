@@ -6,6 +6,7 @@ import { RecruiterMarketplaceService }					from '../recruiter-marketplace.servic
 import { RecruiterService }								from '../recruiter.service';
 import { OfferedCandidate }								from './offered-candidate';
 import { OpenPosition }									from './open-position';
+import { Router}										from '@angular/router';
 
 @Component({
   selector: 'app-recruiter-marketplace',
@@ -16,7 +17,10 @@ export class RecruiterMarketplaceComponent implements OnInit {
 
 	@ViewChild('feedbackBox', { static: false }) private content:any;
 
-  	constructor(private modalService: NgbModal, private marketplaceService: RecruiterMarketplaceService, private recruiterService:RecruiterService) { }
+  	constructor(private modalService: 		NgbModal, 
+				private marketplaceService: RecruiterMarketplaceService, 
+				private recruiterService:	RecruiterService,
+				private router:				Router) { }
 
 	/**
 	* Sets up initial component
@@ -509,7 +513,15 @@ export class RecruiterMarketplaceComponent implements OnInit {
 		this.showJustMyCandidatesActive = false;
 		this.marketplaceService.fetchOfferedCandidates().subscribe(data => {
 			this.offeredCandidates = data;
-		});
+		}, err => {
+			if (err.status === 401 || err.status === 0) {
+				sessionStorage.removeItem('isAdmin');
+				sessionStorage.removeItem('isRecruter');
+				sessionStorage.removeItem('loggedIn');
+				sessionStorage.setItem('beforeAuthPage', 'view-candidates');
+				this.router.navigate(['login-user']);
+			}
+    	});
 	}
 
 	/**
