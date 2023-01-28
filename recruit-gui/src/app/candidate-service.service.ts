@@ -10,6 +10,8 @@ import { CandidateFunction }                      	from './candidate-function';
 import { environment }								from './../environments/environment';
 import { SearchAlert }		 	                    from './recruiter-alerts/search-alert';
 import { CandidateSearchAlert }                     from './suggestions/candidate-search-alert';
+import { ExtractedFilters }                     	from './suggestions/extracted-filters';
+
 
 /**
 * Services for new Candidates
@@ -273,7 +275,7 @@ export class CandidateServiceService {
 	/**
   	* Uploads a Job description so that its search filters can be extracted 
   	*/
-  	public extractFiltersFromDocument(jobSpecification:File): Observable<any>{
+  	public extractFiltersFromDocument(jobSpecification:File): Observable<ExtractedFilters>{
   
   		var fd = new FormData();
   		fd.append('file', jobSpecification);

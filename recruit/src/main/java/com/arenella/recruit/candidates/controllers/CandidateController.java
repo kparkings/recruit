@@ -26,6 +26,7 @@ import com.arenella.recruit.candidates.beans.CandidateExtractedFilters;
 import com.arenella.recruit.candidates.beans.CandidateFilterOptions;
 import com.arenella.recruit.candidates.beans.Language;
 import com.arenella.recruit.candidates.enums.COUNTRY;
+import com.arenella.recruit.candidates.enums.FREELANCE;
 import com.arenella.recruit.candidates.enums.FUNCTION;
 import com.arenella.recruit.candidates.enums.RESULT_ORDER;
 import com.arenella.recruit.candidates.services.CandidateService;
@@ -248,8 +249,18 @@ public class CandidateController {
 					//	- Java Developer / Java Software Engineer, Java Engineer, Java Software Ontwikkelaar, Java Ontwikkelaar, Fullstack Java, Java Backend Developer
 		System.out.println("Uploaded: " + document.getName());
 		
+		CandidateExtractedFilters filters = CandidateExtractedFilters
+				.builder()
+					.belgium(true)
+					.experienceGTE("2")
+					.french(true)
+					.jobTitle("java developer")
+					.skills(Set.of("java","spring","kakfa","wpf"))
+					.freelance(FREELANCE.TRUE)
+				.build();
+		
 		//TO start with just try and return FunctionType and Job title. When that is working add other filters. ?? extract title and/or job title
-		return ResponseEntity.ok(CandidateExtractedFilters.builder().build());
+		return ResponseEntity.ok(filters);
 		
 		
 		

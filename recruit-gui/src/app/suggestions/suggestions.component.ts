@@ -48,10 +48,77 @@ export class SuggestionsComponent implements OnInit {
 
   	public extractFiltersFromJobSpec():void{
   		
-  		this.candidateService.extractFiltersFromDocument(this.jobSpecFile).subscribe(data=>{
-  					//TODO: Set Filters
-					this.closeModal();
-					this.getSuggestions();
+  		this.candidateService.extractFiltersFromDocument(this.jobSpecFile).subscribe(extractedFilters=>{
+  				
+			this.resetSearchFilters();
+			
+			console.log(JSON.stringify(extractedFilters));
+			
+			this.skillFilters = extractedFilters.skills;
+			
+			if (extractedFilters.jobTitle != ''){
+				this.suggestionFilterForm.get('searchPhrase')?.setValue(extractedFilters.jobTitle);	
+			}
+		
+			if(extractedFilters.netherlands || extractedFilters.belgium || extractedFilters.uk || extractedFilters.ireland){
+				this.suggestionFilterForm.get('nlResults')?.setValue(false);
+				this.suggestionFilterForm.get('beResults')?.setValue(false);
+				this.suggestionFilterForm.get('ukResults')?.setValue(false);
+				this.suggestionFilterForm.get('ieResults')?.setValue(false);
+			
+				if (extractedFilters.netherlands)  {
+					this.suggestionFilterForm.get('nlResults')?.setValue(extractedFilters.netherlands);
+				}
+				
+				if (extractedFilters.belgium) {
+					this.suggestionFilterForm.get('beResults')?.setValue(extractedFilters.belgium);
+				}
+				
+				if (extractedFilters.uk) {
+					this.suggestionFilterForm.get('ukResults')?.setValue(extractedFilters.uk);
+				}
+				
+				if (extractedFilters.ireland) {
+					this.suggestionFilterForm.get('ieResults')?.setValue(extractedFilters.ireland);
+				}	
+			}	
+			
+			
+			if (extractedFilters.perm != 'TRUE' && extractedFilters.freelance != 'TRUE') {
+				this.suggestionFilterForm.get('contractType')?.setValue("BOTH");
+			} else if (extractedFilters.perm != 'TRUE'){
+				this.suggestionFilterForm.get('contractType')?.setValue("CONTRACT");
+			} else if (extractedFilters.freelance != 'TRUE'){
+				this.suggestionFilterForm.get('contractType')?.setValue("PERM");
+			}
+		
+			if (extractedFilters.dutch) {
+				this.suggestionFilterForm.get('dutchLanguage')?.setValue(extractedFilters.dutch);
+			}
+		
+			if (extractedFilters.english) {
+				this.suggestionFilterForm.get('englishLanguage')?.setValue(extractedFilters.english);
+			}
+		
+			if (extractedFilters.french) {
+				this.suggestionFilterForm.get('frenchLanguage')?.setValue(extractedFilters.french);
+			}
+			
+			if (extractedFilters.experienceGTE != '') {
+				if (this.minMaxOptions.indexOf(extractedFilters.experienceGTE) != -1){
+					this.suggestionFilterForm.get('minYearsExperience')?.setValue(extractedFilters.experienceGTE);	
+				}	
+			}
+			
+			if (extractedFilters.experienceLTE != '') {
+				if (this.minMaxOptions.indexOf(extractedFilters.experienceLTE) != -1){
+					this.suggestionFilterForm.get('maxYearsExperience')?.setValue(extractedFilters.experienceLTE);	
+				}
+			}
+			
+			this.closeModal();
+			this.getSuggestions();
+		
 		},(failure =>{
 			this.showFilterByJonSpecFailure 	= true;
 			this.showFilterByJobSpec 			= false;
@@ -75,6 +142,26 @@ export class SuggestionsComponent implements OnInit {
 		maxYearsExperience: 	new UntypedFormControl(''),
 		skill: 					new UntypedFormControl(''),
 	});
+	
+	/**
+	* Resets the filters
+	*/
+	private resetSearchFilters():void{
+		this.suggestionFilterForm = new UntypedFormGroup({
+			searchPhrase:			new UntypedFormControl(''),
+			nlResults: 				new UntypedFormControl(true),
+			beResults: 				new UntypedFormControl(true),
+			ukResults: 				new UntypedFormControl(true),
+			ieResults: 				new UntypedFormControl(true),
+			contractType: 			new UntypedFormControl('Both'),
+			dutchLanguage: 			new UntypedFormControl(false),
+			englishLanguage: 		new UntypedFormControl(false),
+			frenchLanguage:			new UntypedFormControl(false),
+			minYearsExperience: 	new UntypedFormControl(''),
+			maxYearsExperience: 	new UntypedFormControl(''),
+			skill: 					new UntypedFormControl(''),
+		});
+	}
 	
 	public currentView:string 				= 'suggestion-results';
 	public skillFilters:Array<string>		= new Array<string>();
