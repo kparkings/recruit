@@ -26,7 +26,7 @@ public class SkillExtractor implements JobSpecifcationFilterExtractor{
 		
 		Set<String> extractedSkills = new HashSet<>();
 		
-		skillsDao.getSkills().forEach(skill -> {
+		skillsDao.getSkills().stream().filter(s -> !s.equals("")).forEach(skill -> {
 					
 			String skillPatternSpace 		= skill.trim() + " ";
 			String skillPatternPeriod 		= skill.trim() + ".";

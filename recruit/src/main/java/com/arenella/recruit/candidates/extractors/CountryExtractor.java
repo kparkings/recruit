@@ -18,14 +18,14 @@ public class CountryExtractor implements JobSpecifcationFilterExtractor{
 	*/
 	public void extractFilters(String documentText, CandidateExtractedFiltersBuilder filterBuilder) {
 	
-			Set<String> nl = Set.of("netherlands","nederland", "amsterdam", "utrecht", "rotterdam", "randstad", "Amstelveen", "woerden", "Amersfoort", "soest", "den haag", "the hague", "Overijssel", "gelderland", "almere", "eindhoven", "Enschede", "limburg", "flevoland", "alkmaar");
+			Set<String> nl = Set.of("netherlands","nederland", "amsterdam", "apeldoorn", "utrecht", "rotterdam", "randstad", "Amstelveen", "woerden", "Amersfoort", "soest", "den haag", "the hague", "Overijssel", "gelderland", "almere", "eindhoven", "Enschede", "limburg", "flevoland", "alkmaar");
 			Set<String> ie = Set.of("ireland", "dublin", "galway", "letterkenny", "limerick", "kildare");
 			Set<String> be = Set.of("belgium", "brussels", "antwerp", "antwerpen", "flemish", "flams", "wallon", "Mechelen", "Liege", "gent", "Charleoi", "Meeuwen","Kortrijk", "gand", "Namur");
 			
 			boolean includeNL = nl.stream().filter(place -> documentText.contains(place)).count() > 0;
 			boolean includeIE = ie.stream().filter(place -> documentText.contains(place)).count() > 0;
 			boolean includeBE = be.stream().filter(place -> documentText.contains(place)).count() > 0;
-			boolean includeUK = DocumentFilterExtractionUtil.uk.stream().filter(place -> documentText.contains(place)).count() > 0;
+			boolean includeUK = DocumentFilterExtractionUtil.uk.stream().filter(place -> documentText.contains(place+" ") || documentText.contains(place+".")).count() > 0;
 		
 			if (!includeNL && !includeIE && !includeBE && !includeUK) {
 				return;
