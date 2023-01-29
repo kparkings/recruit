@@ -50,9 +50,7 @@ export class SuggestionsComponent implements OnInit {
   		
   		this.candidateService.extractFiltersFromDocument(this.jobSpecFile).subscribe(extractedFilters=>{
   				
-			this.resetSearchFilters();
-			
-			console.log(JSON.stringify(extractedFilters));
+			this.resetSearchFilters(false);
 			
 			this.skillFilters = extractedFilters.skills;
 			
@@ -60,7 +58,7 @@ export class SuggestionsComponent implements OnInit {
 				this.suggestionFilterForm.get('searchPhrase')?.setValue(extractedFilters.jobTitle);	
 			}
 		
-			if(extractedFilters.netherlands || extractedFilters.belgium || extractedFilters.uk || extractedFilters.ireland){
+			if (extractedFilters.netherlands || extractedFilters.belgium || extractedFilters.uk || extractedFilters.ireland){
 				this.suggestionFilterForm.get('nlResults')?.setValue(false);
 				this.suggestionFilterForm.get('beResults')?.setValue(false);
 				this.suggestionFilterForm.get('ukResults')?.setValue(false);
@@ -83,8 +81,9 @@ export class SuggestionsComponent implements OnInit {
 				}	
 			}	
 			
-			
 			if (extractedFilters.perm != 'TRUE' && extractedFilters.freelance != 'TRUE') {
+				this.suggestionFilterForm.get('contractType')?.setValue("BOTH");
+			} else if (extractedFilters.perm == 'TRUE' && extractedFilters.freelance == 'TRUE') {
 				this.suggestionFilterForm.get('contractType')?.setValue("BOTH");
 			} else if (extractedFilters.perm != 'TRUE'){
 				this.suggestionFilterForm.get('contractType')?.setValue("CONTRACT");
@@ -117,11 +116,19 @@ export class SuggestionsComponent implements OnInit {
 			}
 			
 			this.closeModal();
+			
+			this.suggestionFilterForm.valueChanges.subscribe(value => {
+				this.getSuggestions();	
+			});
+			
 			this.getSuggestions();
 		
 		},(failure =>{
 			this.showFilterByJonSpecFailure 	= true;
 			this.showFilterByJobSpec 			= false;
+			this.suggestionFilterForm.valueChanges.subscribe(value => {
+				this.getSuggestions();	
+			});
 		}));
   		
   	}
@@ -146,7 +153,7 @@ export class SuggestionsComponent implements OnInit {
 	/**
 	* Resets the filters
 	*/
-	private resetSearchFilters():void{
+	private resetSearchFilters(attachValueChangeListener:boolean):void{
 		this.suggestionFilterForm = new UntypedFormGroup({
 			searchPhrase:			new UntypedFormControl(''),
 			nlResults: 				new UntypedFormControl(true),
@@ -161,6 +168,13 @@ export class SuggestionsComponent implements OnInit {
 			maxYearsExperience: 	new UntypedFormControl(''),
 			skill: 					new UntypedFormControl(''),
 		});
+		
+		if (attachValueChangeListener) {
+			this.suggestionFilterForm.valueChanges.subscribe(value => {
+				this.getSuggestions();	
+			});
+		}
+		
 	}
 	
 	public currentView:string 				= 'suggestion-results';
@@ -422,10 +436,8 @@ export class SuggestionsComponent implements OnInit {
 		
 		let match:boolean = false;
 		this.suggestedCandidate.skills.forEach(skill => {
-			if(skill === formattedSkill) {
+			if (skill === formattedSkill) {
 				 match = true;
-			}	else {
-				console.log('not match on ' + skill);
 			}
 		})
 		

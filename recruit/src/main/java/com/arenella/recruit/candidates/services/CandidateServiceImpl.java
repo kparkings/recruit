@@ -33,9 +33,9 @@ import com.arenella.recruit.candidates.dao.CandidateDao;
 import com.arenella.recruit.candidates.dao.PendingCandidateDao;
 import com.arenella.recruit.candidates.entities.CandidateEntity;
 import com.arenella.recruit.candidates.entities.PendingCandidateEntity;
+import com.arenella.recruit.candidates.extractors.DocumentFilterExtractionUtil;
 import com.arenella.recruit.candidates.utils.CandidateSuggestionUtil;
 import com.arenella.recruit.candidates.utils.CandidateSuggestionUtil.suggestion_accuracy;
-import com.arenella.recruit.candidates.utils.DocumentFilterExtractionFactory;
 import com.arenella.recruit.candidates.utils.SkillsSynonymsUtil;
 import com.arenella.recruit.curriculum.enums.FileType;
 import com.arenella.recruit.candidates.dao.CandidateSearchAlertDao;
@@ -48,25 +48,28 @@ import com.arenella.recruit.candidates.dao.CandidateSearchAlertDao;
 public class CandidateServiceImpl implements CandidateService{
 	
 	@Autowired
-	private CandidateDao 				candidateDao;
+	private CandidateDao 					candidateDao;
 
 	@Autowired
-	private PendingCandidateDao 		pendingCandidateDao;
+	private PendingCandidateDao 			pendingCandidateDao;
 
 	@Autowired
-	private CandidateStatisticsService 	statisticsService;
+	private CandidateStatisticsService 		statisticsService;
 	
 	@Autowired
-	private ExternalEventPublisher		externalEventPublisher;
+	private ExternalEventPublisher			externalEventPublisher;
 	
 	@Autowired
-	private CandidateSuggestionUtil		suggestionUtil;
+	private CandidateSuggestionUtil			suggestionUtil;
 	
 	@Autowired
-	private SkillsSynonymsUtil			skillsSynonymsUtil;
+	private SkillsSynonymsUtil				skillsSynonymsUtil;
 	
 	@Autowired
-	private CandidateSearchAlertDao		skillAlertDao;
+	private CandidateSearchAlertDao			skillAlertDao;
+	
+	@Autowired
+	private DocumentFilterExtractionUtil	documentFilterExtractionUtil;
 	
 	/**
 	* Refer to the CandidateService Interface for Details
@@ -401,7 +404,7 @@ public class CandidateServiceImpl implements CandidateService{
 	@Override
 	public CandidateExtractedFilters extractFiltersFromDocument(FileType fileType, byte[] fileBytes) throws IOException {
 		try {
-			return DocumentFilterExtractionFactory.getInstance(fileType).extract(fileBytes);
+			return documentFilterExtractionUtil.extractFilters(fileType, fileBytes);
 		}catch(Exception e) {
 			throw new RuntimeException("Unable to process job specification file");
 		}

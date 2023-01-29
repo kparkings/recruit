@@ -2,7 +2,7 @@
 
 	<!-- Action buttons -->
 	<div *ngIf="currentView === 'suggestion-results'">
-		<button class="btn btn-secondary btnRight main-btns" (click)="showFilterByJobSpecDialog(specUploadBox)" download>Filter by Job Spec</button>
+		<button class="btn btn-secondary btnRight main-btns" (click)="showFilterByJobSpecDialog(specUploadBox)"  *ngIf="isAuthenticatedAsAdmin()" download>Filter by Job Spec</button>
 		<button class="btn btn-secondary btnRight main-btns" (click)="showCreateAlertDialog(feedbackBox)" download>Create Email Alert</button>
 	 </div>
 	

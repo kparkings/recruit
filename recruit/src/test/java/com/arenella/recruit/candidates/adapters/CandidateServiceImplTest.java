@@ -557,6 +557,19 @@ public class CandidateServiceImplTest {
 		
 		assertEquals(suggestion_accuracy.poor, accuracy);
 		
+	}
+	
+	/**
+	* Test exception thrown if filters could not be extracted
+	* @throws Exception
+	*/
+	@Test
+	public void testExtractFiltersFromDocument_failure() throws Exception{
+		
+		Assertions.assertThrows(RuntimeException.class, () ->{
+			this.service.extractFiltersFromDocument(null, null);
+		});
 		
 	}
+	
 }
