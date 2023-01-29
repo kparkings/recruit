@@ -28,11 +28,11 @@ public class SkillExtractor implements JobSpecifcationFilterExtractor{
 		
 		skillsDao.getSkills().stream().filter(s -> !s.equals("")).forEach(skill -> {
 					
-			String skillPatternSpace 		= skill.trim() + " ";
-			String skillPatternPeriod 		= skill.trim() + ".";
-			String skillPatternNewLine 		= skill.trim() + "\n";
-			String skillPatternComma 		= skill.trim() + ",";
-			String skillPatternSemiColom 	= skill.trim() + ";";
+			String skillPatternSpace 		= " " + skill.trim() + " ";
+			String skillPatternPeriod 		= " " + skill.trim() + ".";
+			String skillPatternNewLine 		= " " + skill.trim() + "\n";
+			String skillPatternComma 		= " " + skill.trim() + ",";
+			String skillPatternSemiColom 	= " " + skill.trim() + ";";
 					
 			if (documentText.contains(skillPatternSpace) 
 				|| documentText.contains(skillPatternPeriod) 
