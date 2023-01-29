@@ -27,7 +27,7 @@ public class LanguageExtractor implements JobSpecifcationFilterExtractor{
 			boolean includeFR = french.stream().filter(place -> documentText.contains(place)).count() > 0;
 			
 			if(!includeEN) {
-				includeEN = DocumentFilterExtractionUtil.uk.stream().filter(place -> documentText.contains(place + " ") || documentText.contains(place + ".")).count() > 0;
+				includeEN = DocumentFilterExtractionUtil.uk.stream().filter(place -> documentText.contains(" "+place + " ") || documentText.contains(" "+place + ".")).count() > 0;
 			}
 			
 			

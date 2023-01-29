@@ -25,7 +25,7 @@ public class CountryExtractor implements JobSpecifcationFilterExtractor{
 			boolean includeNL = nl.stream().filter(place -> documentText.contains(place)).count() > 0;
 			boolean includeIE = ie.stream().filter(place -> documentText.contains(place)).count() > 0;
 			boolean includeBE = be.stream().filter(place -> documentText.contains(place)).count() > 0;
-			boolean includeUK = DocumentFilterExtractionUtil.uk.stream().filter(place -> documentText.contains(place+" ") || documentText.contains(place+".")).count() > 0;
+			boolean includeUK = DocumentFilterExtractionUtil.uk.stream().filter(place -> documentText.contains(" "+place+" ") || documentText.contains(" "+place+".")).count() > 0;
 		
 			if (!includeNL && !includeIE && !includeBE && !includeUK) {
 				return;
