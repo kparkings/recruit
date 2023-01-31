@@ -6,7 +6,6 @@ import java.util.Set;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.arenella.recruit.adapters.events.CandidateNoLongerAvailableEvent;
@@ -45,17 +44,7 @@ public class MonolithExternalEventPublisher implements ExternalEventPublisher{
 	* Refer to ExternalEventPublisher for details 
 	*/
 	@Override
-	public void publishSearchedSkillsEvent(Set<String> skills) {
-		
-		boolean isAdminUser	= SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream().filter(role -> role.getAuthority().equals("ROLE_ADMIN")).findAny().isPresent();
-		
-		/**
-		* We don't want to log these events for Admin users
-		*/
-		if (isAdminUser) {
-			return;
-		}
-		
+	public void publishSearchedSkillsEvent(Set<String> skills) {		
 		eventListener.listenForSearchedSkillsEvent(skills);
 	}
 	

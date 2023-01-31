@@ -247,7 +247,7 @@ public class CandidateSuggestionUtilImpl implements CandidateSuggestionUtil{
 		int skillsAccuracy 		= this.getAccuracyOfSkillsMatch(candidate, filterOptions.getSkills());
 		int languageAccuracy 	= this.getAccuracyOfLanguageMatch(candidate, extractLanguageRequirements(filterOptions)) ;
 		
-		if (skillsAccuracy >= THRESHOLD_GOOD && languageAccuracy >= 60) {
+		if (skillsAccuracy >= THRESHOLD_GOOD && languageAccuracy >= 50) {
 			candidate.setAccuracySkills(convertPercentAccuracy(skillsAccuracy));
 			candidate.setAccuracyLanguages(convertPercentAccuracy(languageAccuracy));
 			return true;
@@ -265,7 +265,7 @@ public class CandidateSuggestionUtilImpl implements CandidateSuggestionUtil{
 		int skillsAccuracy 		= this.getAccuracyOfSkillsMatch(candidate, filterOptions.getSkills());
 		int languageAccuracy 	= this.getAccuracyOfLanguageMatch(candidate, extractLanguageRequirements(filterOptions)) ;
 		
-		if (skillsAccuracy >= THRESHOLD_AVERAGE && languageAccuracy >= 30) {
+		if (skillsAccuracy >= THRESHOLD_AVERAGE && languageAccuracy >= 40) {
 			candidate.setAccuracySkills(convertPercentAccuracy(skillsAccuracy));
 			candidate.setAccuracyLanguages(convertPercentAccuracy(languageAccuracy));
 			return true;

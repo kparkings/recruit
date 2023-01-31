@@ -58,7 +58,6 @@ public class MonolithExternalEventPublisherTest {
 		
 		SecurityContextHolder.getContext().setAuthentication(authToken);
 		
-		
 		@SuppressWarnings("unchecked")
 		ArgumentCaptor<Set<String>> skillsCaptor = ArgumentCaptor.forClass(Set.class);
 		
@@ -90,7 +89,7 @@ public class MonolithExternalEventPublisherTest {
 	
 		publisher.publishSearchedSkillsEvent(Set.of(skill1,skill2));
 		
-		Mockito.verify(this.mockCurriculumEventListener, Mockito.never()).listenForSearchedSkillsEvent(Mockito.anySet());
+		Mockito.verify(this.mockCurriculumEventListener, Mockito.times(1)).listenForSearchedSkillsEvent(Mockito.anySet());
 		
 	}
 

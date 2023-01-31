@@ -23,7 +23,7 @@ import com.arenella.recruit.curriculum.controllers.CurriculumUpdloadDetails;
 import com.arenella.recruit.curriculum.dao.CurriculumDao;
 import com.arenella.recruit.curriculum.dao.CurriculumDownloadedEventDao;
 import com.arenella.recruit.curriculum.dao.PendingCurriculumDao;
-import com.arenella.recruit.curriculum.dao.SkillsDao;
+import com.arenella.recruit.curriculum.dao.CurriculumSkillsDao;
 import com.arenella.recruit.curriculum.utils.CurriculumDetailsExtractionFactory;
 import com.arenella.recruit.curriculum.entity.CurriculumDownloadedEventEntity;
 import com.arenella.recruit.curriculum.entity.CurriculumEntity;
@@ -47,7 +47,7 @@ public class CurriculumServiceImpl implements CurriculumService{
 	private CurriculumDownloadedEventDao 	curriculumDownloadedEventDao;
 	
 	@Autowired
-	private SkillsDao						skillsDao;
+	private CurriculumSkillsDao				skillsDao;
 
 	@Autowired
 	private ExternalEventPublisher			externalEventPublisher;

@@ -1,8 +1,8 @@
 package com.arenella.recruit.curriculum.adapters;
 
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,8 +11,7 @@ import com.arenella.recruit.adapters.events.CandidateNoLongerAvailableEvent;
 import com.arenella.recruit.candidates.adapters.CandidateCreatedEvent;
 import com.arenella.recruit.candidates.dao.PendingCandidateDao;
 import com.arenella.recruit.candidates.services.AlertTestUtil;
-import com.arenella.recruit.curriculum.dao.SkillsDao;
-import com.arenella.recruit.curriculum.entity.SkillEntity;
+import com.arenella.recruit.curriculum.dao.CurriculumSkillsDao;
 import com.arenella.recruit.curriculum.services.CurriculumService;
 
 /**
@@ -25,16 +24,16 @@ import com.arenella.recruit.curriculum.services.CurriculumService;
 public class MonolithExternalEventListener implements ExternalEventListener{
 
 	@Autowired
-	private SkillsDao 			skillsDao;
+	private CurriculumSkillsDao 	skillsDao;
 	
 	@Autowired
-	private PendingCandidateDao pendingCandidateDao;
+	private PendingCandidateDao 	pendingCandidateDao;
 	
 	@Autowired
-	private CurriculumService 	curriculumService;
+	private CurriculumService 		curriculumService;
 	
 	@Autowired
-	private AlertTestUtil		alertTestUtil;
+	private AlertTestUtil			alertTestUtil;
 	
 	/**
 	* Refer to the ExternalEventListener for details 
@@ -42,7 +41,29 @@ public class MonolithExternalEventListener implements ExternalEventListener{
 	//TODO: [KP] Need to convert to Event instead of Set
 	@Override
 	public void listenForSearchedSkillsEvent(Set<String> skills) {
-		skillsDao.saveAll(skills.stream().map(skill -> new SkillEntity(preprocessSkill(skill))).collect(Collectors.toSet()));
+		extractAndPersistNewSkills(skills);
+	}
+	
+	/**
+	* Adds any new skills searched on to the DB
+	* @param skills - Skills from current search
+	*/
+	//TODO:[KP] Move to service
+	private void extractAndPersistNewSkills(Set<String> skills){
+	
+		Set<String> newSkills = new HashSet<>();
+		
+		skills.stream().map(skill -> preprocessSkill(skill)).forEach(skill -> {
+			
+			if(!this.skillsDao.existsById(skill)) {
+				newSkills.add(skill);
+			}
+		});
+		
+		if (!newSkills.isEmpty()) {
+			this.skillsDao.persistSkills(newSkills);
+		}
+		
 	}
 
 	/**

@@ -18,15 +18,15 @@ public class LanguageExtractor implements JobSpecifcationFilterExtractor{
 	*/
 	public void extractFilters(String documentText, CandidateExtractedFiltersBuilder filterBuilder) {
 	
-			Set<String> english = Set.of("english", "engels", "anglais");
-			Set<String> dutch = Set.of("dutch", "nederlands");
-			Set<String> french = Set.of("french", "francais");
+			Set<String> english 	= Set.of("english", "engels", "anglais");
+			Set<String> dutch 		= Set.of("dutch", "nederlands", "néerlandais", "neerlandais");
+			Set<String> french 		= Set.of("french", "francais", "français");
 			
-			boolean includeEN = english.stream().filter(place -> documentText.contains(place)).count() > 0;
-			boolean includeNL = dutch.stream().filter(place -> documentText.contains(place)).count() > 0;
-			boolean includeFR = french.stream().filter(place -> documentText.contains(place)).count() > 0;
+			boolean includeEN = english.stream().filter(place -> documentText.contains(place)).count() 	> 0;
+			boolean includeNL = dutch.stream().filter(place -> documentText.contains(place)).count() 	> 0;
+			boolean includeFR = french.stream().filter(place -> documentText.contains(place)).count() 	> 0;
 			
-			if(!includeEN) {
+			if (!includeEN) {
 				includeEN = DocumentFilterExtractionUtil.uk.stream().filter(place -> documentText.contains(" "+place + " ") || documentText.contains(" "+place + ".")).count() > 0;
 			}
 			

@@ -65,7 +65,7 @@ public interface CandidateService {
 	* @param filterOptions - filters to apply to the results
 	* @return Candidates
 	*/
-	public Set<Candidate> getCandidates(CandidateFilterOptions filterOptions);
+	//public Set<Candidate> getCandidates(CandidateFilterOptions filterOptions);
 
 	/**
 	* Adds a Pending Candidate to the System

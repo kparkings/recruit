@@ -37,8 +37,9 @@ import com.arenella.recruit.candidates.extractors.DocumentFilterExtractionUtil;
 import com.arenella.recruit.candidates.utils.CandidateSuggestionUtil;
 import com.arenella.recruit.candidates.utils.CandidateSuggestionUtil.suggestion_accuracy;
 import com.arenella.recruit.candidates.utils.SkillsSynonymsUtil;
-import com.arenella.recruit.curriculum.enums.FileType;
+import com.arenella.recruit.curriculum.enums.FileType;				//TODO: [KP] Why are we referencing other service
 import com.arenella.recruit.candidates.dao.CandidateSearchAlertDao;
+import com.arenella.recruit.candidates.dao.CandidateSkillsDao;
 
 /**
 * Provides services related to Candidates
@@ -71,6 +72,9 @@ public class CandidateServiceImpl implements CandidateService{
 	@Autowired
 	private DocumentFilterExtractionUtil	documentFilterExtractionUtil;
 	
+	@Autowired
+	private CandidateSkillsDao				skillDao;
+	
 	/**
 	* Refer to the CandidateService Interface for Details
 	*/
@@ -88,33 +92,21 @@ public class CandidateServiceImpl implements CandidateService{
 						.candidateId(String.valueOf(candidateId))
 					.build());		
 	}
-
-	/**
-	* Refer to the CandidateService Interface for Details
-	*/
-	@Override
-	public Page<Candidate> getCandidates(CandidateFilterOptions filterOptions, Pageable pageable) {
-		
-		this.statisticsService.logCandidateSearchEvent(filterOptions);
-		
-		this.externalEventPublisher.publishSearchedSkillsEvent(filterOptions.getSkills());
-		
-		return candidateDao.findAll(filterOptions, pageable).map(candidate -> CandidateEntity.convertFromEntity(candidate));
-	}
+	
 	
 	/**
 	* Refer to the CandidateService Interface for Details
 	*/
-	@Override
-	public Set<Candidate> getCandidates(CandidateFilterOptions filterOptions) {
+	//@Override
+	//public Set<Candidate> getCandidates(CandidateFilterOptions filterOptions) {
 		
-		this.statisticsService.logCandidateSearchEvent(filterOptions);
+	//	this.statisticsService.logCandidateSearchEvent(filterOptions);
 		
-		this.externalEventPublisher.publishSearchedSkillsEvent(filterOptions.getSkills());
+	//	this.externalEventPublisher.publishSearchedSkillsEvent(filterOptions.getSkills());
 		
-		return StreamSupport.stream(candidateDao.findAll(filterOptions).spliterator(), false)
-								.map(candidate -> CandidateEntity.convertFromEntity(candidate)).collect(Collectors.toCollection(LinkedHashSet::new));
-	}
+	//	return StreamSupport.stream(candidateDao.findAll(filterOptions).spliterator(), false)
+	//							.map(candidate -> CandidateEntity.convertFromEntity(candidate)).collect(Collectors.toCollection(LinkedHashSet::new));
+	//}
 
 	/**
 	* Refer to the CandidateService Interface for Details
@@ -233,6 +225,58 @@ public class CandidateServiceImpl implements CandidateService{
 	}
 	
 	/**
+	* Adds any new skills searched on to the DB
+	* @param skills - Skills from current search
+	*/
+	private void extractAndPersistNewSkills(Set<String> skills){
+	
+		Set<String> newSkills = new HashSet<>();
+		
+		skills.stream().map(skill -> preprocessSkill(skill)).forEach(skill -> {		
+			if( !this.skillDao.existsById(skill)) {
+				newSkills.add(skill);
+			}
+		});
+		
+		if (!newSkills.isEmpty()) {
+			this.skillDao.persistSkills(newSkills);
+		}	
+		
+	}
+	
+	/**
+	* Performs pre-processing of skill to ensure the skill
+	* is represented correctly in the system regardless of 
+	* case and whitespace
+	* @param skill - raw skill value
+	* @return PreProcessed skill
+	*/
+	//TODO: [KP] This is duplicate logic. Should be done via shared pre-processing object
+	private static String preprocessSkill(String skill) {
+		
+		skill = skill.toLowerCase();
+		skill = skill.trim();
+		
+		return skill;
+		
+	}
+	
+	/**
+	* Refer to the CandidateService Interface for Details
+	*/
+	@Override
+	public Page<Candidate> getCandidates(CandidateFilterOptions filterOptions, Pageable pageable) {
+		
+		this.statisticsService.logCandidateSearchEvent(filterOptions);
+		
+		extractAndPersistNewSkills(filterOptions.getSkills());
+		
+		this.externalEventPublisher.publishSearchedSkillsEvent(filterOptions.getSkills());
+		
+		return candidateDao.findAll(filterOptions, pageable).map(candidate -> CandidateEntity.convertFromEntity(candidate));
+	}
+	
+	/**
 	* Refer to the CandidateService Interface for Details
 	*/
 	@Override
@@ -245,6 +289,9 @@ public class CandidateServiceImpl implements CandidateService{
 		AtomicReference<suggestion_accuracy> 		accuracy 			=  new AtomicReference<>(suggestion_accuracy.perfect);
 		Pageable 									pageable 			= PageRequest.of(0,100);
 		
+		this.externalEventPublisher.publishSearchedSkillsEvent(filterOptions.getSkills());
+		extractAndPersistNewSkills(filterOptions.getSkills());
+		
 		CandidateFilterOptions 						suggestionFilterOptions = CandidateFilterOptions
 																							.builder()
 																								.dutch(filterOptions.getDutch().isPresent() 		? filterOptions.getDutch().get() 	: null)
@@ -252,7 +299,9 @@ public class CandidateServiceImpl implements CandidateService{
 																								.french(filterOptions.getFrench().isPresent() 		? filterOptions.getFrench().get() 	: null)
 																								.skills(filterOptions.getSkills())
 																							.build();
-							
+		
+		this.statisticsService.logCandidateSearchEvent(filterOptions);
+		
 		filterOptions.getSkills().clear();
 		filterOptions.setDutch(null);
 		filterOptions.setEnglish(null);

@@ -21,7 +21,7 @@ import com.arenella.recruit.candidates.beans.CandidateExtractedFilters.Candidate
 @Component
 public class JobTitleExtractor implements JobSpecifcationFilterExtractor{
 	
-	final static JobType java 				= new JobType(JobType.Type.java, 				Set.of("java developer", "java software engineer", "java engineer", "java software ontwikkelaar", "java ontwikkelaar", "fullstack java", "java backend developer"));
+	final static JobType java 				= new JobType(JobType.Type.java, 				Set.of("engineerr (java","developer (java","java developer", "java software engineer", "java engineer", "java software ontwikkelaar", "java ontwikkelaar", "fullstack java", "java backend developer"));
 	final static JobType csharp 			= new JobType(JobType.Type.csharp, 				Set.of("c# developer", "c# software engineer", "c# engineer", "c# software ontwikkelaar", "c# ontwikkelaar", "fullstack c#", "c# backend developer"));
 	final static JobType ba 				= new JobType(JobType.Type.ba, 					Set.of("business analyst","business analist"));
 	final static JobType qa 				= new JobType(JobType.Type.qa, 					Set.of("testautomation specialist", "qa engineer","test engineer", "test automation engineer", "test specialist", "test analyst", "performance tester", "automation tester", "qa tester", "software tester", "penetration tester", "software testers", "test lead"));
