@@ -61,12 +61,25 @@ public class SkillExtractor implements JobSpecifcationFilterExtractor{
 		
 	}
 	
+	/**
+	 * Synonyms
+	 * 	- Tester
+	 * 		- API [API TESTING]
+	 * 		- QA	[QUALITY ASSURANCE]
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 */
+	
 	private void removeBlacklistedItems(Set<String> extractedSkills, CandidateExtractedFiltersBuilder filterBuilder) {
 		
-		Set<String> blacklist 				= Set.of("test","testing","delivery","transformation", "it", "back", "informatica","capital","people","idea","auto","ideal", "development", "express", "front", "native","data");
+		Set<String> blacklist 				= Set.of("qa","test","testing","delivery","transformation", "it", "back", "informatica","capital","people","idea","auto","ideal", "development", "express", "front", "native","data");
 		Set<String> blackListNonRecruiter 	= Set.of("tech recruiter", "it recruiter", "recruitment consultant", "technical recruiter");
 		Set<String> blackDevelopers 		= Set.of("research","hosting","requirements","test","sales","backlog");
-		Set<String> blackTesters 			= Set.of("software");
+		Set<String> blackTesters 			= Set.of("software","documentation");
 		
 		extractedSkills.removeAll(blacklist);
 		

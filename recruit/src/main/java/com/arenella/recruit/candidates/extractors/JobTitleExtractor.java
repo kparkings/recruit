@@ -24,7 +24,7 @@ public class JobTitleExtractor implements JobSpecifcationFilterExtractor{
 	final static JobType java 				= new JobType(JobType.Type.java, 				Set.of("engineerr (java","developer (java","java developer", "java software engineer", "java engineer", "java software ontwikkelaar", "java ontwikkelaar", "fullstack java", "java backend developer"));
 	final static JobType csharp 			= new JobType(JobType.Type.csharp, 				Set.of("c# developer", "c# software engineer", "c# engineer", "c# software ontwikkelaar", "c# ontwikkelaar", "fullstack c#", "c# backend developer"));
 	final static JobType ba 				= new JobType(JobType.Type.ba, 					Set.of("business analyst","business analist"));
-	final static JobType qa 				= new JobType(JobType.Type.qa, 					Set.of("testautomation specialist", "qa engineer","test engineer", "test automation engineer", "test specialist", "test analyst", "performance tester", "automation tester", "qa tester", "software tester", "penetration tester", "software testers", "test lead"));
+	final static JobType qa 				= new JobType(JobType.Type.qa, 					Set.of("quality assurance","testautomation specialist", "qa engineer","test engineer", "test automation engineer", "test specialist", "test analyst", "performance tester", "automation tester", "qa tester", "software tester", "penetration tester", "software testers", "test lead"));
 	final static JobType itSupport			= new JobType(JobType.Type.itSupport, 			Set.of("support engineer", "support developer", "support analyst", "tech support", "service agent", "support manager", "1st line support", "2nd line support", "3rd line support", "support specialist", "support technician"));
 	final static JobType uiux				= new JobType(JobType.Type.uiux, 				Set.of("ui/ux designer", "ui designer", "ui engineer", "product designer"));
 	final static JobType projectManager		= new JobType(JobType.Type.projectManager, 		Set.of("project manager", "program manager", "it manager", "procurement manager", "control manager", "operations manager", "ops manager", "head of it", "infrastructure manager", "infra manager", "development manager", "engineering manager", "security manager", "services manager", "delivery manager", "service manager", "asset manager"));
@@ -83,9 +83,8 @@ public class JobTitleExtractor implements JobSpecifcationFilterExtractor{
 		
 		jobs.stream().forEach(jobType -> {
 			jobType.getTitles().stream().forEach(title -> {
-				
 				if (documentText.contains(title)) {
-					scored.get(jobType.getType()).incrementAndGet();
+					scored.get(jobType.getType()).addAndGet(getNumOccurrencesOfMatchingTitle(documentText, title));
 				}
 			});
 		});
@@ -103,6 +102,19 @@ public class JobTitleExtractor implements JobSpecifcationFilterExtractor{
 		
 		filterBuilder.jobTitle(type.role);
 		
+	}
+	
+	private int getNumOccurrencesOfMatchingTitle(String documentText, String title) {
+		
+		int 	count 	= 0;
+		String 	tmp 	= new String(documentText);
+		
+		while(tmp.contains(title)) {
+			tmp 	= tmp.replaceFirst(title, "");
+			count 	= count +1;
+		}
+		
+		return count;
 	}
 	
 }
