@@ -11,14 +11,22 @@ import com.arenella.recruit.candidates.beans.CandidateExtractedFilters.Candidate
 @Component
 public class SeniorityExtractor implements JobSpecifcationFilterExtractor{
 	
+	public static final String JUNIOR_EDGE_MIN = "";
+	public static final String JUNIOR_EDGE_MAX = "3";
+	public static final String MEDIOR_EDGE_MIN = "3";
+	public static final String MEDIOR_EDGE_MAX = "5";
+	public static final String SENIOR_EDGE_MIN = "5";
+	public static final String SENIOR_EDGE_MAX = "";
+	
 	/**
 	* Refer to JobSpecifcationFilterExtractor interface for details
 	*/
 	public void extractFilters(String documentText, CandidateExtractedFiltersBuilder filterBuilder) {
 		
-		boolean senior = documentText.contains("senior");
+		boolean senior = documentText.contains("senior") || documentText.contains("expérimenté");
 		boolean medior = documentText.contains("medior");
 		boolean junior = documentText.contains("junior") || documentText.contains("entry level") || documentText.contains("graduate");
+		
 		
 		if (!senior && !medior && !junior) {
 			return;
@@ -28,36 +36,41 @@ public class SeniorityExtractor implements JobSpecifcationFilterExtractor{
 			return;
 		}
 		
-		if (medior && junior) {
-			filterBuilder.experienceGTE("0");
-			filterBuilder.experienceLTE("4");
+		if (junior && medior) {
+			filterBuilder.experienceGTE(JUNIOR_EDGE_MIN);
+			filterBuilder.experienceLTE(MEDIOR_EDGE_MAX);
 			return;
 		}
 		
 		if (medior && senior) {
-			filterBuilder.experienceGTE("4");
-			filterBuilder.experienceLTE("8");
+			filterBuilder.experienceGTE(MEDIOR_EDGE_MIN);
+			filterBuilder.experienceLTE(SENIOR_EDGE_MAX);
 			return;
 		}
 		
-		if (senior && !medior && !junior) {
-			filterBuilder.experienceGTE("8");
-			filterBuilder.experienceLTE("");
-			return;
-		}
-		
-		if (medior && !senior && !junior) {
-			filterBuilder.experienceGTE("4");
-			filterBuilder.experienceLTE("8");
+		if (junior && senior) {
+			filterBuilder.experienceGTE(JUNIOR_EDGE_MIN);
+			filterBuilder.experienceLTE(SENIOR_EDGE_MAX);
 			return;
 		}
 		
 		if (junior && !senior && !medior) {
-			filterBuilder.experienceGTE("");
-			filterBuilder.experienceLTE("2");
+			filterBuilder.experienceGTE(JUNIOR_EDGE_MIN);
+			filterBuilder.experienceLTE(JUNIOR_EDGE_MAX);
 			return;
 		}
 		
+		if (medior && !senior && !junior) {
+			filterBuilder.experienceGTE(MEDIOR_EDGE_MIN);
+			filterBuilder.experienceLTE(MEDIOR_EDGE_MAX);
+			return;
+		}
+		
+		if (senior && !medior && !junior) {
+			filterBuilder.experienceGTE(SENIOR_EDGE_MIN);
+			filterBuilder.experienceLTE(SENIOR_EDGE_MAX);
+			return;
+		}
 	}
 	
 }

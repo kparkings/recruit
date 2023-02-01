@@ -179,7 +179,7 @@ export class SuggestionsComponent implements OnInit {
 	
 	public currentView:string 				= 'suggestion-results';
 	public skillFilters:Array<string>		= new Array<string>();
-	public minMaxOptions:Array<string> 		= new Array<string>('','1','2','4','8','16','32');
+	public minMaxOptions:Array<string> 		= new Array<string>('','1','2','3','4','5','8','10','15','20','25','30');
 	public suggestedCandidate:Candidate		= new Candidate();
 	
 	public showSaveAlertBoxFailure:boolean  = false;

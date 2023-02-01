@@ -31,7 +31,7 @@ public class SkillExtractor implements JobSpecifcationFilterExtractor{
 		
 		return sanitizedDocumentText;
 	}
-	
+
 	/**
 	* Refer to JobSpecifcationFilterExtractor interface for details
 	*/
@@ -39,33 +39,142 @@ public class SkillExtractor implements JobSpecifcationFilterExtractor{
 		
 		Set<String> extractedSkills = new HashSet<>();
 		
-		Set<String> blacklist = Set.of("it", "back", "informatica","capital","people","idea","auto","ideal", "development");
-		
 		//TODO: Need to add synonyms reducer. This will find the most popular synonym and use that instead of other synonyms
 		//		example core java / java = java
 		//		
 		
-		//TODO: Blacklist per type. If we determine jobTitle we can strip out keywords that are not relevant to the individual roles
-		//switch(filterBuilder.build().getJobTitle()) {}
-		
 		String sanitizedDocumentText = sanitizeDocumentText(documentText);
 		
-		//TODO: [KP] Cannot use this skills. Need event to make copy in candidate schema when search is made ( happens already ?? to populate curriculum skills so just add to table in correct schema)
 		skillsDao.getSkills().stream().filter(s -> !s.equals("")).forEach(skill -> {
 					
 			String skillPatternSpace 		= " " + skill.trim() + " ";
 			
 			if (sanitizedDocumentText.contains(skillPatternSpace)){
-				
-				if (!blacklist.contains(skill)) {
-					extractedSkills.add(skill);
-				}
-				
+				extractedSkills.add(skill);
 			}
 					
 		});
 		
+		removeBlacklistedItems(extractedSkills, filterBuilder);
+		
 		filterBuilder.skills(extractedSkills);
+		
+	}
+	
+	private void removeBlacklistedItems(Set<String> extractedSkills, CandidateExtractedFiltersBuilder filterBuilder) {
+		
+		Set<String> blacklist 				= Set.of("test","testing","delivery","transformation", "it", "back", "informatica","capital","people","idea","auto","ideal", "development", "express", "front", "native","data");
+		Set<String> blackListNonRecruiter 	= Set.of("tech recruiter", "it recruiter", "recruitment consultant", "technical recruiter");
+		Set<String> blackDevelopers 		= Set.of("research","hosting","requirements","test","sales","backlog");
+		Set<String> blackTesters 			= Set.of("software");
+		
+		extractedSkills.removeAll(blacklist);
+		
+		final String jobTitle = filterBuilder.build().getJobTitle();
+		
+		/**
+		* No Job title can't apply role specific blacklists
+		*/
+		if ("".equals(jobTitle)) {
+			return;
+		}
+		
+		Set<String> jobTypeBlacklist = new HashSet<>();
+		
+		switch(JobType.getByRole(filterBuilder.build().getJobTitle())) {
+			case java: {
+				jobTypeBlacklist.addAll(Set.of("hardware", "project manager"));
+				jobTypeBlacklist.addAll(blackDevelopers);
+				jobTypeBlacklist.addAll(blackListNonRecruiter);
+				break ;
+			} 
+			case csharp: {
+				jobTypeBlacklist.addAll(Set.of());
+				jobTypeBlacklist.addAll(blackDevelopers);
+				jobTypeBlacklist.addAll(blackListNonRecruiter);
+				break;
+			} 
+			case ba: {
+				jobTypeBlacklist.addAll(Set.of());
+				jobTypeBlacklist.addAll(blackListNonRecruiter);
+				break;
+			}
+			case qa: {
+				jobTypeBlacklist.addAll(Set.of());
+				jobTypeBlacklist.addAll(blackTesters);
+				jobTypeBlacklist.addAll(blackListNonRecruiter);
+				break;
+			}
+			case itSupport: {
+				jobTypeBlacklist.addAll(Set.of());
+				jobTypeBlacklist.addAll(blackListNonRecruiter);
+				break;
+			}
+			case uiux: {
+				jobTypeBlacklist.addAll(Set.of());
+				jobTypeBlacklist.addAll(blackListNonRecruiter);
+				break;
+			}
+			case projectManager: {
+				jobTypeBlacklist.addAll(Set.of());
+				jobTypeBlacklist.addAll(blackListNonRecruiter);
+				break;
+			}
+			case architect: {
+				jobTypeBlacklist.addAll(Set.of());
+				jobTypeBlacklist.addAll(blackListNonRecruiter);
+				break;
+			}
+			case webDeveloper: {
+				jobTypeBlacklist.addAll(Set.of());
+				jobTypeBlacklist.addAll(blackDevelopers);
+				jobTypeBlacklist.addAll(blackListNonRecruiter);
+				break;
+			}
+			case scrumMaster: {
+				jobTypeBlacklist.addAll(Set.of());
+				jobTypeBlacklist.addAll(blackListNonRecruiter);
+				break;
+			}
+			case dataScientist: {
+				jobTypeBlacklist.addAll(Set.of());
+				jobTypeBlacklist.addAll(blackListNonRecruiter);
+				break;
+			}
+			case networkAdmin: {
+				jobTypeBlacklist.addAll(Set.of());
+				jobTypeBlacklist.addAll(blackListNonRecruiter);
+				break;
+			}
+			case softwareDeveloper: {
+				jobTypeBlacklist.addAll(Set.of());
+				jobTypeBlacklist.addAll(blackDevelopers);
+				jobTypeBlacklist.addAll(blackListNonRecruiter);
+				break;
+			}
+			case itSecurity: {
+				jobTypeBlacklist.addAll(Set.of());
+				jobTypeBlacklist.addAll(blackListNonRecruiter);
+				break;
+			}		
+			case itRecruiter: {
+				jobTypeBlacklist.addAll(Set.of());
+				break;
+			}
+			case sdet: {
+				jobTypeBlacklist.addAll(Set.of());
+				jobTypeBlacklist.addAll(blackTesters);
+				jobTypeBlacklist.addAll(blackListNonRecruiter);
+				
+				break;
+			}
+			default:{
+				throw new RuntimeException("SkillExtractor not configred for " + JobType.Type.valueOf(filterBuilder.build().getJobTitle()));
+			}
+			
+		}
+		
+		extractedSkills.removeAll(jobTypeBlacklist);
 		
 	}
 }

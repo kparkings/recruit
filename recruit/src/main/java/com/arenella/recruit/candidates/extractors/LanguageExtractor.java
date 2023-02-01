@@ -13,18 +13,20 @@ import com.arenella.recruit.candidates.beans.CandidateExtractedFilters.Candidate
 @Component
 public class LanguageExtractor implements JobSpecifcationFilterExtractor{
 	
+	public static final Set<String> ENGLISH 	= Set.of("english", "engels", "anglais");
+	public static final Set<String> DUTCH 		= Set.of("dutch", "nederlands", "néerlandais", "neerlandais");
+	public static final Set<String> FRENCH 		= Set.of("french", "francais", "français");
+	
 	/**
 	* Refer to JobSpecifcationFilterExtractor interface for details
 	*/
 	public void extractFilters(String documentText, CandidateExtractedFiltersBuilder filterBuilder) {
 	
-			Set<String> english 	= Set.of("english", "engels", "anglais");
-			Set<String> dutch 		= Set.of("dutch", "nederlands", "néerlandais", "neerlandais");
-			Set<String> french 		= Set.of("french", "francais", "français");
 			
-			boolean includeEN = english.stream().filter(place -> documentText.contains(place)).count() 	> 0;
-			boolean includeNL = dutch.stream().filter(place -> documentText.contains(place)).count() 	> 0;
-			boolean includeFR = french.stream().filter(place -> documentText.contains(place)).count() 	> 0;
+			
+			boolean includeEN = ENGLISH.stream().filter(place -> documentText.contains(place)).count() 	> 0;
+			boolean includeNL = DUTCH.stream().filter(place -> documentText.contains(place)).count() 	> 0;
+			boolean includeFR = FRENCH.stream().filter(place -> documentText.contains(place)).count() 	> 0;
 			
 			if (!includeEN) {
 				includeEN = DocumentFilterExtractionUtil.uk.stream().filter(place -> documentText.contains(" "+place + " ") || documentText.contains(" "+place + ".")).count() > 0;
