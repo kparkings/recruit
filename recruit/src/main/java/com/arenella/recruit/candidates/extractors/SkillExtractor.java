@@ -96,7 +96,7 @@ public class SkillExtractor implements JobSpecifcationFilterExtractor{
 		
 		switch(JobType.getByRole(filterBuilder.build().getJobTitle())) {
 			case java: {
-				jobTypeBlacklist.addAll(Set.of("hardware", "project manager"));
+				jobTypeBlacklist.addAll(Set.of("hardware", "project manager", "java developer", "backend"));
 				jobTypeBlacklist.addAll(blackDevelopers);
 				jobTypeBlacklist.addAll(blackListNonRecruiter);
 				break ;
