@@ -127,7 +127,11 @@
 	      				{{candidate.firstname}} {{candidate.surname}}
 	      			</td>
 	      			<td class="medicol">
-	      				{{candidate.country}} {{candidate.city}}
+	      				<span *ngIf="candidate.country === 'NETHERLANDS'" class="flag-icon flag-icon-nl suggestion-flag-country"></span>
+						<span *ngIf="candidate.country === 'BELGIUM'" class="flag-icon flag-icon-be  suggestion-flag-country"></span>
+						<span *ngIf="candidate.country === 'UK'" class="flag-icon flag-icon-gb  suggestion-flag-country"></span>
+						<span *ngIf="candidate.country === 'REPUBLIC_OF_IRELAND'" class="flag-icon flag-icon-ie  suggestion-flag-country"></span>
+						{{candidate.country}} {{candidate.city}}
 	      			</td>
 	      			<td class="medicol">
 	      				{{candidate.roleSought}}

@@ -153,6 +153,13 @@ export class SuggestionsComponent implements OnInit {
 	/**
 	* Resets the filters
 	*/
+	public doReset():void{
+		this.resetSearchFilters(true);
+	}	
+	
+	/**
+	* Resets the filters
+	*/
 	private resetSearchFilters(attachValueChangeListener:boolean):void{
 		this.suggestionFilterForm = new UntypedFormGroup({
 			searchPhrase:			new UntypedFormControl(''),
@@ -169,11 +176,14 @@ export class SuggestionsComponent implements OnInit {
 			skill: 					new UntypedFormControl(''),
 		});
 		
+		this.skillFilters = new Array<string>();
+		
 		if (attachValueChangeListener) {
 			this.suggestionFilterForm.valueChanges.subscribe(value => {
-				this.getSuggestions();	
 			});
 		}
+		
+		this.getSuggestions();
 		
 	}
 	

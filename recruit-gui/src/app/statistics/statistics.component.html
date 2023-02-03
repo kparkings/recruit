@@ -28,32 +28,34 @@
 		<!-- Downloads -->
 		<div *ngIf="showStatsDownloads">
 					
-			<div class="chart-wrapper">
-				<h3>Daily downloads</h3>
-   	 			<canvas baseChart 
-        				[datasets]="lineChartData" 
-        				[labels]="lineChartLabels" 
-        				[options]="lineChartOptions"
-        				[colors]="lineChartColors" 
-        				[legend]="lineChartLegend" 
-        				[chartType]="lineChartType" 
-       			 		[plugins]="lineChartPlugins">
-   				 </canvas>
-			</div>
-						
-			<div class="chart-wrapper">
-				<h3>Recruiter downloads: {{chartDownloadsTotal}}</h3>
-				<button (click)="switchChartData('week')">This week</button>
-				<button (click)="switchChartData('day')">Today</button>
-    			<canvas baseChart 
-        				[datasets]="recruiterDownloadsChartData" 
-        				[labels]="recruiterDownloadsChartLabels" 
-        				[options]="recruiterDownloadsChartOptions"
-        				[colors]="recruiterDownloadsChartColors" 
-        				[legend]="recruiterDownloadsChartLegend" 
-        				[chartType]="recruiterDownloadsChartType" 
-        				[plugins]="recruiterDownloadsChartPlugins">
-    			</canvas>
+			<div class="chart-wrapper-page">		
+				<div class="chart-wrapper">
+					<h3>Daily downloads</h3>
+	   	 			<canvas baseChart 
+	        				[datasets]="lineChartData" 
+	        				[labels]="lineChartLabels" 
+	        				[options]="lineChartOptions"
+	        				[colors]="lineChartColors" 
+	        				[legend]="lineChartLegend" 
+	        				[chartType]="lineChartType" 
+	       			 		[plugins]="lineChartPlugins">
+	   				 </canvas>
+				</div>
+							
+				<div class="chart-wrapper">
+					<h3>Recruiter downloads: {{chartDownloadsTotal}}</h3>
+					<button (click)="switchChartData('week')">This week</button>
+					<button (click)="switchChartData('day')">Today</button>
+	    			<canvas baseChart 
+	        				[datasets]="recruiterDownloadsChartData" 
+	        				[labels]="recruiterDownloadsChartLabels" 
+	        				[options]="recruiterDownloadsChartOptions"
+	        				[colors]="recruiterDownloadsChartColors" 
+	        				[legend]="recruiterDownloadsChartLegend" 
+	        				[chartType]="recruiterDownloadsChartType" 
+	        				[plugins]="recruiterDownloadsChartPlugins">
+	    			</canvas>
+				</div>
 			</div>
 		</div>
 		

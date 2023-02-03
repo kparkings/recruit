@@ -11,10 +11,13 @@
 	cursor:pointer;
 }
 
+chart-wrapper-page{
+	width:90%;
+}
 .chart-wrapper{
 	float:left;
-	width:40%;
-	min-width:400px;
+	/*width:45%;*/
+	min-width:45%;
 	margin:20px;
 }
 
