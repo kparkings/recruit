@@ -155,6 +155,7 @@ export class SuggestionsComponent implements OnInit {
 	*/
 	public doReset():void{
 		this.resetSearchFilters(true);
+		this.getSuggestions();
 	}	
 	
 	/**
@@ -180,10 +181,9 @@ export class SuggestionsComponent implements OnInit {
 		
 		if (attachValueChangeListener) {
 			this.suggestionFilterForm.valueChanges.subscribe(value => {
+				this.getSuggestions();	
 			});
 		}
-		
-		this.getSuggestions();
 		
 	}
 	
