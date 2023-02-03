@@ -22,8 +22,6 @@ public class LanguageExtractor implements JobSpecifcationFilterExtractor{
 	*/
 	public void extractFilters(String documentText, CandidateExtractedFiltersBuilder filterBuilder) {
 	
-			
-			
 			boolean includeEN = ENGLISH.stream().filter(place -> documentText.contains(place)).count() 	> 0;
 			boolean includeNL = DUTCH.stream().filter(place -> documentText.contains(place)).count() 	> 0;
 			boolean includeFR = FRENCH.stream().filter(place -> documentText.contains(place)).count() 	> 0;

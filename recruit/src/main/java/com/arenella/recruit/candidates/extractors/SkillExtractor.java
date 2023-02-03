@@ -67,18 +67,20 @@ public class SkillExtractor implements JobSpecifcationFilterExtractor{
 	 * 		- API [API TESTING]
 	 * 		- QA	[QUALITY ASSURANCE]
 	 * 
-	 * 
+	 * 	- Htmll + html5
 	 * 
 	 * 
 	 * 
 	 * 
 	 */
 	
+	//TODO: [KP] Software developer not being filtered out for C#
+	
 	private void removeBlacklistedItems(Set<String> extractedSkills, CandidateExtractedFiltersBuilder filterBuilder) {
 		
-		Set<String> blacklist 				= Set.of("qa","test","testing","delivery","transformation", "it", "back", "informatica","capital","people","idea","auto","ideal", "development", "express", "front", "native","data");
-		Set<String> blackListNonRecruiter 	= Set.of("tech recruiter", "it recruiter", "recruitment consultant", "technical recruiter");
-		Set<String> blackDevelopers 		= Set.of("research","hosting","requirements","test","sales","backlog");
+		Set<String> blacklist 				= Set.of("insight","team player","dynamics", "teamplayer", "elk","net","teams", "na","core java", "11","qa","test","testing","delivery","transformation", "it", "back", "informatica","capital","people","idea","auto","ideal", "development", "express", "front", "native","data");
+		Set<String> blackListNonRecruiter 	= Set.of("recruiter","tech recruiter", "it recruiter", "recruitment consultant", "technical recruiter");
+		Set<String> blackDevelopers 		= Set.of("software","project manager","budget","administration","software development", "research","hosting","requirements","test","sales","backlog");
 		Set<String> blackTesters 			= Set.of("software","documentation");
 		
 		extractedSkills.removeAll(blacklist);
@@ -96,7 +98,7 @@ public class SkillExtractor implements JobSpecifcationFilterExtractor{
 		
 		switch(JobType.getByRole(filterBuilder.build().getJobTitle())) {
 			case java: {
-				jobTypeBlacklist.addAll(Set.of("hardware", "project manager", "java developer", "backend"));
+				jobTypeBlacklist.addAll(Set.of("hardware", "backend", "engineer (java","developer (java","java developer", "java software engineer", "java engineer", "java software ontwikkelaar", "java ontwikkelaar", "fullstack java", "java backend developer"));
 				jobTypeBlacklist.addAll(blackDevelopers);
 				jobTypeBlacklist.addAll(blackListNonRecruiter);
 				break ;

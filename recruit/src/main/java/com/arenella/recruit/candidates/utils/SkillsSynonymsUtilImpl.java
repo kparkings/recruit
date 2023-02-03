@@ -15,36 +15,127 @@ public class SkillsSynonymsUtilImpl implements SkillsSynonymsUtil{
 
 	private static final Set<String> TESTER 				= Set.of("qa", "tester", "test analyst"); 
 	private static final Set<String> BUSINESS_ANALYST 		= Set.of("ba", "business analyst");
-	private static final Set<String> JAVASCRIPT				= Set.of("js", "javascript");
-	private static final Set<String> CSS					= Set.of("css", "style sheets", "cascading style sheets");
+	private static final Set<String> JAVASCRIPT				= Set.of("js", "javascript", "java script", "java-script");
+	private static final Set<String> CSS					= Set.of("css", "style sheets", "cascading style sheets","css3","css 3");
 	private static final Set<String> NODE					= Set.of("node", "node.js", "nodejs");
 	private static final Set<String> NEXT					= Set.of("next", "next.js", "nextjs");
 	private static final Set<String> VUE					= Set.of("vue", "vue.js", "vuejs");
-	private static final Set<String> REACT					= Set.of("react", "react.js", "reactjs");
+	private static final Set<String> REACT					= Set.of("react", "react.js", "reactjs", "react js", "react native");
 	private static final Set<String> CSHARP					= Set.of("c#", "csharp");
 	private static final Set<String> DOTNET_CORE			= Set.of("dotnet", ".net", "dot net");
 	private static final Set<String> ADO_DOTNET				= Set.of("ado", "ado.net", "ado .net");
 	private static final Set<String> VB_DOTNET				= Set.of("vb", "vb.net", "vb .net");
-	private static final Set<String> ASP_DOTNET				= Set.of("asp", "asp.net", "asp .net");
-	private static final Set<String> FRONT_END				= Set.of("frontend", "front end", "fe", "front-end");
-	private static final Set<String> BACK_END				= Set.of("backend", "back end", "be", "back-end");
+	private static final Set<String> ASP_DOTNET				= Set.of("asp", "asp.net", "asp .net","asp.net mvc","asp.net mvc core");
+	private static final Set<String> FRONT_END				= Set.of("frontend", "front end", "fe", "front-end", "front end development", "frontend development");
+	private static final Set<String> BACK_END				= Set.of("backend", "back end", "be", "back-end", "backend development", "bac kend development");
 	private static final Set<String> SPRING_CORE			= Set.of("spring", "spring core", "springcore", "spring-core");
 	private static final Set<String> SPRING_BOOT			= Set.of("springboot", "spring boot", "spring-boot");
 	private static final Set<String> SPRING_DATA			= Set.of("springdata", "spring data", "spring-data");
 	private static final Set<String> SPRING_TEST			= Set.of("springtest", "spring test", "spring-test");
 	private static final Set<String> SPRING_MVC				= Set.of("springmvc", "spring mvc", "spring-mvc");
 	private static final Set<String> IT_RECRUITER			= Set.of("recruiter", "it recruiter", "it recruitment");
-	private static final Set<String> MICROSERVICES			= Set.of("microservices", "micro services", "microservice", "micro service");
-	private static final Set<String> SELENIUM				= Set.of("selenium", "selinium web driver");
+	private static final Set<String> MICROSERVICES			= Set.of("microservices", "micro services", "microservice", "micro service", "microservice architecture");
+	private static final Set<String> SELENIUM				= Set.of("selenium", "selinium web driver","selinium webdriver");
 	private static final Set<String> UAT					= Set.of("uat", "user acceptance testing", "acceptance testing");
 	private static final Set<String> TECH_SUPPORT			= Set.of("tech support", "technical support");
 	private static final Set<String> REST					= Set.of("rest", "rest api","rest apis","rest api's", "rest webservices","restful web services", "webservices");
 	private static final Set<String> SOAP					= Set.of("soap", "soap web services", "webservices");
-	private static final Set<String> WEB_SERVICES			= Set.of("webservicesp", "web services");
-	private static final Set<String> PROJECT_MANAGEMENT		= Set.of("project manager", "project management");
-	private static final Set<String> PL_SQL					= Set.of("plsql", "pl-sql", "oracle sql");
-	private static final Set<String> MS_SQL_SERVER			= Set.of("ms sql server", "sql server", "microsoft sql server");
-		
+	private static final Set<String> WEB_SERVICES			= Set.of("webservice", "web services", "webservices", "web service");
+	private static final Set<String> PROJECT_MANAGEMENT		= Set.of("project manager", "project management", "projectmanager");
+	private static final Set<String> PL_SQL					= Set.of("plsql", "pl-sql", "pl/sql", "oracle sql");
+	private static final Set<String> HTML					= Set.of("html", "html4", "html5");
+	private static final Set<String> CICD					= Set.of("ci", "cd", "ci/cd", "ci-cd", "ci cd", "cicd", "ci / cd");
+	private static final Set<String> SCRUMMASTER			= Set.of("scrummaster", "scrum master");
+	private static final Set<String> DEVOPS					= Set.of("devops", "dev ops", "dev-ops");
+	private static final Set<String> ROBOT_FRAMEWORK		= Set.of("robotframework", "robot framework");
+	private static final Set<String> ACTIVE_DIRECTORY		= Set.of("active directory", "activedirectory");
+	private static final Set<String> ACTIVE_MQ				= Set.of("active mq", "activemq");
+	private static final Set<String> ADMINISTRATION			= Set.of("administration", "administrator");
+	private static final Set<String> ALGORITHMS				= Set.of("algorithm", "algorithms");
+	private static final Set<String> ANGULAR				= Set.of("angular", "angularjs", "angular.js","angular js");
+	private static final Set<String> KAFKA					= Set.of("kafka", "apache kafka");
+	private static final Set<String> API					= Set.of("api", "apis");
+	private static final Set<String> AUTOMATION_TESTING		= Set.of("automated testing", "automation testing", "test automation", "test automation engineer", "test automation specialist");
+	private static final Set<String> BANKING				= Set.of("bank", "banking");
+	private static final Set<String> BIT_BUCKET				= Set.of("bit bucket", "bitbucket");
+	private static final Set<String> JAVA					= Set.of("java", "core java");
+	private static final Set<String> DATA_ANALYSIS			= Set.of("data analysis", "data analyst", "data analytics");
+	private static final Set<String> DATA_BRICKS			= Set.of("databricks", "data bricks");
+	private static final Set<String> DATA_CENTER			= Set.of("datacenter", "data center");
+	private static final Set<String> DATA_MANAGEMENT		= Set.of("data management", "data governance");
+	private static final Set<String> DATA_MINING			= Set.of("data mining", "data scraping");
+	private static final Set<String> DEFECT_LOGGING			= Set.of("defect loging", "defect tracking");
+	private static final Set<String> DYNAMO					= Set.of("dynamo", "dynamo db");
+	private static final Set<String> ECMA					= Set.of("ecma", "ecma script");
+	private static final Set<String> ELASTIC				= Set.of("elastic", "elasticsearch");
+	private static final Set<String> EMBEDDED				= Set.of("embedded", "embedded software");
+	private static final Set<String> ENTITY_FRAMEWORK		= Set.of("entity framework", "entity-framework");
+	private static final Set<String> EXCHANGE				= Set.of("exchange", "excahnge server");
+	private static final Set<String> EXPRESS				= Set.of("express", "expressjs");
+	private static final Set<String> FIREWALL				= Set.of("firewalls", "firewall");
+	private static final Set<String> FULLSTACK				= Set.of("full stack", "fullstack");
+	private static final Set<String> FUNCTIONAL_TESTING		= Set.of("functional test", "functional testing");
+	private static final Set<String> GATSBY					= Set.of("gatsby", "gatsbyjs");
+	private static final Set<String> GHERKIN				= Set.of("gherkin/cucumber", "gherkin");
+	private static final Set<String> GIT					= Set.of("git", "git and github","github");
+	private static final Set<String> HYPER_V				= Set.of("hyper-v", "hyper v", "hypervisors");
+	private static final Set<String> IOS_DEV				= Set.of("ios", "ios dev", "ios developer");
+	private static final Set<String> ISTQB					= Set.of("istqb", "istqb certified tester");
+	private static final Set<String> ITIL					= Set.of("itil", "itilv3");
+	private static final Set<String> JASPER					= Set.of("jasper reports", "jasperreport");
+	private static final Set<String> JAVA_EIGHT				= Set.of("java 8", "java8", "java");
+	private static final Set<String> JAVA_EE				= Set.of("java ee", "j2ee","jee", "java");
+	private static final Set<String> JPA					= Set.of("jpa", "jpa/hibernate");
+	private static final Set<String> JUNIPER				= Set.of("juniper", "juniper network", "juniper switches");
+	private static final Set<String> JUPYTER				= Set.of("jupyter", "jupyter notebook", "jupyter notebooks");
+	private static final Set<String> LOAD_TESTING			= Set.of("load runner", "load testing");
+	private static final Set<String> MANUAL_TESTER			= Set.of("manual test", "manual tester", "manual testing");
+	private static final Set<String> MATERIAL_UI			= Set.of("material-ui", "material ui");
+	private static final Set<String> POWER_BI				= Set.of("microsoft powerbi", "powerbi");
+	private static final Set<String> MONGO					= Set.of("mongo", "mongodb");
+	private static final Set<String> NETWORK_ADMIN			= Set.of("network admin", "network administration","network configuration");
+	private static final Set<String> OBJECTIVE_C			= Set.of("objective", "objective-c","objectivec");
+	private static final Set<String> OPERATIONS				= Set.of("ops", "operations","operations management");
+	private static final Set<String> PALOALTO				= Set.of("paloalto", "palo alto","palo alto networks");
+	private static final Set<String> PEGA					= Set.of("pega", "pegasystems");
+	private static final Set<String> PEN_TESTER				= Set.of("penetration", "pen tester", "pen testing");
+	private static final Set<String> POSTGRES				= Set.of("postgres", "postgressql");
+	private static final Set<String> POWERSHELL				= Set.of("powershell", "powershell scripting");
+	private static final Set<String> PRINCE2				= Set.of("prince 2", "prince2");
+	private static final Set<String> PROMETHEUS				= Set.of("prometheus", "prometheus.io");
+	private static final Set<String> QLIKSENSE				= Set.of("qliksense", "qlik sense");
+	private static final Set<String> QUALITY_CENTER			= Set.of("quality center", "qualitycenter");
+	private static final Set<String> RABBIT_MQ				= Set.of("rabbit mq", "rabbitmq");
+	private static final Set<String> REDUX					= Set.of("redux", "redux.js");
+	private static final Set<String> REGRESSION_TESTER		= Set.of("regression", "regression testing");
+	private static final Set<String> REQUIREMENTS_ANALYSIS	= Set.of("requirements", "requirements analysis");
+	private static final Set<String> RESPONSIVE_DESIGN		= Set.of("responsive design", "responsive web design");
+	private static final Set<String> RESTASSURED			= Set.of("restassured", "rest assured");
+	private static final Set<String> ROUTERS				= Set.of("routers", "routing and switching");
+	private static final Set<String> SANITY_TESTING			= Set.of("sanity", "sanity testing");
+	private static final Set<String> SERVICE_NOW			= Set.of("servicenow", "service now");
+	private static final Set<String> SERVLETS				= Set.of("servlet", "servlets");
+	private static final Set<String> SHELL_PROGRAMING		= Set.of("shell programing", "shell scripting");
+	private static final Set<String> SIXSIGMA				= Set.of("sixsigma", "six sigma");
+	private static final Set<String> SDET					= Set.of("sdet", "software developer in test", "software engineer in test");
+	private static final Set<String> SONAR					= Set.of("sonar", "sonarqube");
+	private static final Set<String> SPLUNK					= Set.of("splunk", "splunk enterprise");
+	private static final Set<String> SQLSERVER				= Set.of("sqlserver", "sql server", "ms sql server", "ms sqlserver", "microsoft sql server", "microsoft sqlserver");
+	private static final Set<String> SSL					= Set.of("ssl", "ssl certificates");
+	private static final Set<String> STAKEHOLDER_MGMT		= Set.of("stakeholder engagement", "stakeholder management", "stakeholder meetings");
+	private static final Set<String> SWITCHES				= Set.of("switches", "switching");
+	private static final Set<String> SYSTEM_DESIGN			= Set.of("system design", "systemdesign");
+	private static final Set<String> TAILWIND				= Set.of("tailwind", "tailwind css");
+	private static final Set<String> TEAMLEAD				= Set.of("team lead", "team management", "teamlead", "teammanager");
+	private static final Set<String> TEST_MANAGER			= Set.of("test manager", "test management");
+	private static final Set<String> TEST_RAIL				= Set.of("testrail", "test rail");
+	private static final Set<String> VIRTUAL_BOX			= Set.of("virtual box", "virtualbox");
+	private static final Set<String> WCF					= Set.of("wcf", "wcf service");
+	private static final Set<String> WEB_API				= Set.of("web api", "webapi");
+	private static final Set<String> WEB_DEVELOPMENT		= Set.of("webdevelopment", "web developer", "webdeveloper", "web development");
+	private static final Set<String> WINDOWS_SERVER			= Set.of("windows server", "windows servers");
+	private static final Set<String> WINFORMS				= Set.of("winforms", "winform application");
+	
 	/**
 	* Refer to the SkillsSynonymsUtil interface for details 
 	*/
@@ -59,21 +150,428 @@ public class SkillsSynonymsUtilImpl implements SkillsSynonymsUtil{
 		originalSkills.stream().forEach(skill -> {
 			
 			switch(skill) {
-				case "ms sql server":
+				case "robotframework":
+				case "robot framework":{
+					synonyms.addAll(ROBOT_FRAMEWORK);
+				}
+				case "winforms":
+				case "winform application":{
+					synonyms.addAll(WINFORMS);
+				}
+				case "windows server":
+				case "windows servers":{
+					synonyms.addAll(WINDOWS_SERVER);
+				}
+				case "webdevelopment":
+				case "web developer":
+				case "webdeveloper":
+				case "web development":{
+					synonyms.addAll(WEB_DEVELOPMENT);
+				}
+				case "webapi":
+				case "web api":{
+					synonyms.addAll(WEB_API);
+				}
+				case "wcf":
+				case "wcf service":{
+					synonyms.addAll(WCF);
+				}
+				case "virtual box":
+				case "virtualbox":{
+					synonyms.addAll(VIRTUAL_BOX);
+				}
+				case "testrail":
+				case "test rail":{
+					synonyms.addAll(TEST_RAIL);
+				}
+				case "test manager":
+				case "test management":{
+					synonyms.addAll(TEST_MANAGER);
+				}
+				case "team lead":
+				case "team management":
+				case "teamlead":
+				case "teammanager":{
+					synonyms.addAll(TEAMLEAD);
+				}
+				case "tailwind":
+				case "tailwind css":{
+					synonyms.addAll(TAILWIND);
+				}
+				case "system design":
+				case "systemdesign":{
+					synonyms.addAll(SYSTEM_DESIGN);
+				}
+				case "switches":
+				case "switching":{
+					synonyms.addAll(SWITCHES);
+				}
+				case "stakeholder engagement":
+				case "stakeholder management":
+				case "stakeholder meetings":{
+					synonyms.addAll(STAKEHOLDER_MGMT);
+				}
+				case "ssl":
+				case "ssl certificates":{
+					synonyms.addAll(SSL);
+				}
+				case "sqlserver":
 				case "sql server":
-				case "microsoft sql server":{
-					synonyms.addAll(MS_SQL_SERVER);
+				case "ms sql server":
+				case "ms sqlserver":
+				case "microsoft sql server":
+				case "microsoft sqlserver":{
+					synonyms.addAll(SQLSERVER);
+				}
+				case "splunk":
+				case "splunk enterprise":{
+					synonyms.addAll(SPLUNK);
+				}
+				case "sonar":
+				case "sonarqube":{
+					synonyms.addAll(SONAR);
+				}
+				case "sixsigma":
+				case "six sigma":{
+					synonyms.addAll(SIXSIGMA);
+				}
+				case "sdet":
+				case "software developer in test":
+				case "software engineer in test":{
+					synonyms.addAll(SDET);
+					synonyms.addAll(TESTER);
+				}
+				case "shell programing":
+				case "shell scripting":{
+					synonyms.addAll(SHELL_PROGRAMING);
+				}
+				case "servlet":
+				case "servlets":{
+					synonyms.addAll(SERVLETS);
+				}
+				case "servicenow":
+				case "service now":{
+					synonyms.addAll(SERVICE_NOW);
+				}
+				case "sanity":
+				case "sanity testing":{
+					synonyms.addAll(SANITY_TESTING);
+					synonyms.addAll(TESTER);
+				}
+				case "routers":
+				case "routers and switching":{
+					synonyms.addAll(ROUTERS);
+				}
+				case "restassured":
+				case "rest assured":{
+					synonyms.addAll(RESTASSURED);
+				}
+				case "responsive design":
+				case "responsive web design":{
+					synonyms.addAll(RESPONSIVE_DESIGN);
+				}
+				case "requirements":
+				case "requirements analysis":{
+					synonyms.addAll(REQUIREMENTS_ANALYSIS);
+				}
+				case "redux":
+				case "redux.js":{
+					synonyms.addAll(REDUX);
+				}
+				case "regression":
+				case "regression tester":{
+					synonyms.addAll(REGRESSION_TESTER);
+					synonyms.addAll(TESTER);
+				}
+				case "rabbit mq":
+				case "rabbitmq":{
+					synonyms.addAll(RABBIT_MQ);
+				}
+				case "quality center":
+				case "qualitycenter":{
+					synonyms.addAll(QUALITY_CENTER);
+				}
+				case "prometheus":
+				case "prometheus.io":{
+					synonyms.addAll(PROMETHEUS);
+				}
+				case "qliksense":
+				case "qlik sense":{
+					synonyms.addAll(QLIKSENSE);
+				}
+				case "prince2":
+				case "prince 2":{
+					synonyms.addAll(PRINCE2);
+				}
+				case "postgres":
+				case "postgressql":{
+					synonyms.addAll(POSTGRES);
+				}
+				case "powershell":
+				case "powershell scripting":{
+					synonyms.addAll(POWERSHELL);
+				}
+				case "pega":
+				case "pega systems":{
+					synonyms.addAll(PEGA);
+				}
+				case "penetration":
+				case "pen tester":
+				case "pen testing":{
+					synonyms.addAll(TESTER);
+					synonyms.addAll(PEN_TESTER);
+				}
+				case "palo":
+				case "palo alto":
+				case "palo alto networks":{
+					synonyms.addAll(PALOALTO);
+				}
+				case "network admin":
+				case "network administration":
+				case "network configuration":{
+					synonyms.addAll(NETWORK_ADMIN);
+				}
+				case "ops":
+				case "operations":
+				case "operations management":{
+					synonyms.addAll(OPERATIONS);
+				}
+				case "objective":
+				case "objective-c":
+				case "objective c":{
+					synonyms.addAll(OBJECTIVE_C);
+				}
+				case "mongo":
+				case "mongodb":{
+					synonyms.addAll(MONGO);
+				}
+				case "microsoft powerbi":
+				case "powerbi":{
+					synonyms.addAll(POWER_BI);
+				}
+				case "material-ui":
+				case "material ui":{
+					synonyms.addAll(MATERIAL_UI);
+				}
+				case "manual test":
+				case "manual tester":
+				case "manual testing":{
+					synonyms.addAll(TESTER);
+					synonyms.addAll(MANUAL_TESTER);
+				}
+				case "load runner":
+				case "load testing":{
+					synonyms.addAll(LOAD_TESTING);
+				}
+				case "juniper":
+				case "juniper network":
+				case "juniper switches":{
+					synonyms.addAll(JUNIPER);
+				}
+				case "jupyter":
+				case "jupyter notebook":
+				case "jupyter notebooks":{
+					synonyms.addAll(JUPYTER);
+				}
+				case "jpa":
+				case "jpa/hibernate":{
+					synonyms.addAll(JPA);
+				}
+				case "data management":
+				case "data governance":{
+					synonyms.addAll(DATA_MANAGEMENT);
+				}
+				case "java ee":
+				case "j2ee":
+				case "jee":{
+					synonyms.addAll(JAVA_EE);
+				}
+				case "java8":
+				case "java 8":{
+					synonyms.addAll(JAVA_EIGHT);
+				}
+				case "jasper reports":
+				case "jasperreport":{
+					synonyms.addAll(JASPER);
+				}
+				case "itil":
+				case "itilv3":{
+					synonyms.addAll(ITIL);
+				}
+				case "istqb":
+				case "istqb certified tester":{
+					synonyms.addAll(ISTQB);
+				}
+				case "hyper-v":
+				case "hyper visors":
+				case "hyper v":{
+					synonyms.addAll(HYPER_V);
+				}
+				case "ios":
+				case "ios developer":
+				case "ios dev":{
+					synonyms.addAll(IOS_DEV);
+				}
+				case "git ":
+				case "git and github":
+				case "github":{
+					synonyms.addAll(GIT);
+				}
+				case "gherkin/cucumber":
+				case "gherkin":{
+					synonyms.addAll(GHERKIN);
+				}
+				case "gatsby":
+				case "gatsbyjs":{
+					synonyms.addAll(GATSBY);
+				}
+				case "functional test":
+				case "functional testing":{
+					synonyms.addAll(FUNCTIONAL_TESTING);
+				}
+				case "fullstack":
+				case "full stack":{
+					synonyms.addAll(FULLSTACK);
+				}
+				case "firewall":
+				case "firewalls":{
+					synonyms.addAll(FIREWALL);
+				}
+				case "express":
+				case "expressjs":{
+					synonyms.addAll(EXPRESS);
+				}
+				case "exchange":
+				case "exchange server":{
+					synonyms.addAll(EXCHANGE);
+				}
+				case "entity framework":
+				case "entity-framework":{
+					synonyms.addAll(ENTITY_FRAMEWORK);
+				}
+				case "embedded":
+				case "embedded software":{
+					synonyms.addAll(EMBEDDED);
+				}
+				case "elastic":
+				case "elasticsearch":{
+					synonyms.addAll(ELASTIC);
+				}
+				case "ecma":
+				case "ecma script":{
+					synonyms.addAll(ECMA);
+				}
+				case "dynamo":
+				case "dynamo db":{
+					synonyms.addAll(DYNAMO);
+				}
+				case "defect logging":
+				case "defect tracking":{
+					synonyms.addAll(DEFECT_LOGGING);
+				}
+				case "data mining":
+				case "data scraping":{
+					synonyms.addAll(DATA_MINING);
+				}
+				case "data center":
+				case "datacenter":{
+					synonyms.addAll(DATA_CENTER);
+				}
+				case "databricks":
+				case "data bricks":{
+					synonyms.addAll(DATA_BRICKS);
+				}
+				case "data analysis":
+				case "data analyst":
+				case "data analytics":{
+					synonyms.addAll(DATA_ANALYSIS);
+				}
+				case "activedirectory":
+				case "active directory":{
+					synonyms.addAll(ACTIVE_DIRECTORY);
+				}
+				case "java":
+				case "core java":{
+					synonyms.addAll(JAVA);
+				}
+				case "bitbucket":
+				case "bit bucket":{
+					synonyms.addAll(BIT_BUCKET);
+				}
+				case "bank":
+				case "banking":{
+					synonyms.addAll(BANKING);
+				}
+				case "test automation":
+				case "test automation engineer":
+				case "test automation specialist":
+				case "automated testing":
+				case "automation testing":{
+					synonyms.addAll(AUTOMATION_TESTING);
+				}
+				case "api":
+				case "apis":{
+					synonyms.addAll(API);
+				}
+				case "kafka":
+				case "apache kafka":{
+					synonyms.addAll(KAFKA);
+				}
+				case "administration":
+				case "administrator":{
+					synonyms.addAll(ADMINISTRATION);
+				}
+				case "algorithm":
+				case "algorithms":{
+					synonyms.addAll(ALGORITHMS);
+				}
+				case "activemq":
+				case "active mq":{
+					synonyms.addAll(ACTIVE_MQ);
+				}
+				case "devops":
+				case "dev-ops":
+				case "dev ops":{
+					synonyms.addAll(DEVOPS);
+				}
+				case "scrum master":
+				case "scrummaster":{
+					synonyms.addAll(SCRUMMASTER);
+				}
+				case "angular":
+				case "angularjs":
+				case "angular.js":
+				case "angular js":{
+					synonyms.addAll(ANGULAR);
+				}
+				case "ci":
+				case "cd":
+				case "ci/cd":
+				case "ci-cd":
+				case "ci cd":
+				case "cicd":
+				case "ci / cd":{
+					synonyms.addAll(CICD);
+				}
+				case "html":
+				case "html4":
+				case "html5":{
+					synonyms.addAll(HTML);
 				}
 				case "plsql":
 				case "pl-sql":
+				case "pl/sql":
 				case "oracle sql":{
 					synonyms.addAll(PL_SQL);
 				}
 				case "project manager":
+				case "projectmanager":
 				case "project management":{
 					synonyms.addAll(PROJECT_MANAGEMENT);
 				}
 				case "webservice":
+				case "web service":
+				case "web services":
 				case "webservices":{
 					synonyms.addAll(WEB_SERVICES);
 				}
@@ -99,12 +597,14 @@ public class SkillsSynonymsUtilImpl implements SkillsSynonymsUtil{
 					synonyms.addAll(UAT);
 				}
 				case "selenium":
+				case "selenium webdriver":
 				case "selenium web driver":{
 					synonyms.addAll(SELENIUM);
 				}
 				case "microservices":
 				case "micro service":
 				case "micro services":
+				case "microservice architecture":
 				case "microservice":{
 					synonyms.addAll(MICROSERVICES);
 				}
@@ -116,7 +616,6 @@ public class SkillsSynonymsUtilImpl implements SkillsSynonymsUtil{
 				}
 				case "qa":
 				case "automation tester":
-				case "manual tester":
 				case "test analyst":
 				case "tester":{
 					synonyms.addAll(TESTER);
@@ -128,18 +627,22 @@ public class SkillsSynonymsUtilImpl implements SkillsSynonymsUtil{
 					break;
 				}
 				case "js":
+				case "java script":
+				case "java-script":
 				case "javascript":{
 					synonyms.addAll(JAVASCRIPT);
 					break;
 				} 
 				case "css":
+				case "css3":
+				case "css 3":
 				case "cascading style sheets":{
 					synonyms.addAll(CSS);
 					break;
 				}
 				case ".net":
 				case "dot net":
-				case "dotnemt":{
+				case "dotnet":{
 					synonyms.addAll(DOTNET_CORE);
 					break;
 				}
@@ -149,13 +652,16 @@ public class SkillsSynonymsUtilImpl implements SkillsSynonymsUtil{
 					synonyms.addAll(ADO_DOTNET);
 					break;
 				}
+				case "vb":
 				case "vb .net":
 				case "vb.net":{
 					synonyms.addAll(DOTNET_CORE);
 					synonyms.addAll(VB_DOTNET);
 					break;
 				}
+				case "asp":
 				case "asp.net mvc":
+				case "asp.net mvc core":
 				case "asp .net":
 				case "asp.net":{
 					synonyms.addAll(DOTNET_CORE);
@@ -181,6 +687,8 @@ public class SkillsSynonymsUtilImpl implements SkillsSynonymsUtil{
 					break;
 				}
 				case "react":
+				case "react js":
+				case "react native":
 				case "reactjs":
 				case "react.js":{
 					synonyms.addAll(REACT);
@@ -192,12 +700,16 @@ public class SkillsSynonymsUtilImpl implements SkillsSynonymsUtil{
 					break;
 				}
 				case "front-end":
+				case "front end development":
+				case "frontend development":
 				case "frontend":
 				case "fe":{
 					synonyms.addAll(FRONT_END);
 					break;
 				}
 				case "back-end":
+				case "back end development":
+				case "backend development":
 				case "backend":
 				case "be":{
 					synonyms.addAll(BACK_END);

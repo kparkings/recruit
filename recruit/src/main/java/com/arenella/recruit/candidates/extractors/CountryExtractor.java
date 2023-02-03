@@ -18,7 +18,7 @@ public class CountryExtractor implements JobSpecifcationFilterExtractor{
 	*/
 	public void extractFilters(String documentText, CandidateExtractedFiltersBuilder filterBuilder) {
 	
-			Set<String> nl = Set.of("netherlands","nederland", "amsterdam", "apeldoorn", "utrecht", "rotterdam", "randstad", "Amstelveen", "woerden", "Amersfoort", "soest", "den haag", "the hague", "Overijssel", "gelderland", "almere", "eindhoven", "Enschede", "limburg", "flevoland", "alkmaar");
+			Set<String> nl = Set.of("zwolle","netherlands","nederland", "amsterdam", "apeldoorn", "utrecht", "rotterdam", "randstad", "amstelveen", "woerden", "amersfoort", "soest", "den haag", "the hague", "overijssel", "gelderland", "almere", "eindhoven", "enschede", "limburg", "flevoland", "alkmaar");
 			Set<String> ie = Set.of("ireland", "dublin", "galway", "letterkenny", "limerick", "kildare");
 			Set<String> be = Set.of("belgium", "brussels", "leuven","mechelen", "bruxelles", "gand", "courtrai", "antwerp", "antwerpen", "flemish", "flams", "wallon", "Mechelen", "Liege", "gent", "Charleoi", "Meeuwen","Kortrijk", "Namur");
 			
