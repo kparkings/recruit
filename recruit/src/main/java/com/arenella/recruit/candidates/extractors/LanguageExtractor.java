@@ -14,8 +14,8 @@ import com.arenella.recruit.candidates.beans.CandidateExtractedFilters.Candidate
 public class LanguageExtractor implements JobSpecifcationFilterExtractor{
 	
 	public static final Set<String> ENGLISH 	= Set.of("english", "engels", "anglais");
-	public static final Set<String> DUTCH 		= Set.of("dutch", "nederlands", "néerlandais", "neerlandais");
-	public static final Set<String> FRENCH 		= Set.of("french", "francais", "français");
+	public static final Set<String> DUTCH 		= Set.of("dutch", "nederlands", "néerlandais", "neerlandais","nederlandse");
+	public static final Set<String> FRENCH 		= Set.of("french", "francais", "français","franse");
 	
 	/**
 	* Refer to JobSpecifcationFilterExtractor interface for details
