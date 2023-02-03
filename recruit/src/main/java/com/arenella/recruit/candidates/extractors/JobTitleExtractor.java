@@ -2,6 +2,7 @@ package com.arenella.recruit.candidates.extractors;
 
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
@@ -21,15 +22,15 @@ import com.arenella.recruit.candidates.beans.CandidateExtractedFilters.Candidate
 @Component
 public class JobTitleExtractor implements JobSpecifcationFilterExtractor{
 	
-	final static JobType java 				= new JobType(JobType.Type.java, 				Set.of("engineer (java","developer (java","java developer", "java software engineer", "java engineer", "java software ontwikkelaar", "java ontwikkelaar", "fullstack java", "java backend developer"));
-	final static JobType csharp 			= new JobType(JobType.Type.csharp, 				Set.of(".net software engineer", "c# developer", "c# software engineer", "c# engineer", "c# software ontwikkelaar", "c# ontwikkelaar", "fullstack c#", "c# backend developer"));
+	final static JobType java 				= new JobType(JobType.Type.java, 				Set.of("ontwikkelen van java", "programmeren van java", "engineer (java","developer (java","java developer", "java software engineer", "java engineer", "java software ontwikkelaar", "java ontwikkelaar", "fullstack java", "java backend developer"));
+	final static JobType csharp 			= new JobType(JobType.Type.csharp, 				Set.of("c#.net", ".net software engineer", "c# developer", "c# software engineer", "c# engineer", "c# software ontwikkelaar", "c# ontwikkelaar", "fullstack c#", "c# backend developer"));
 	final static JobType ba 				= new JobType(JobType.Type.ba, 					Set.of("business analyst","business analist"));
 	final static JobType qa 				= new JobType(JobType.Type.qa, 					Set.of("quality assurance","testautomation specialist", "qa engineer","test engineer", "test automation engineer", "test specialist", "test analyst", "performance tester", "automation tester", "qa tester", "software tester", "penetration tester", "software testers", "test lead"));
-	final static JobType itSupport			= new JobType(JobType.Type.itSupport, 			Set.of("support engineer", "support developer", "support analyst", "tech support", "service agent", "support manager", "1st line support", "2nd line support", "3rd line support", "support specialist", "support technician"));
+	final static JobType itSupport			= new JobType(JobType.Type.itSupport, 			Set.of("it support", "helpdesk support", "support engineer", "support developer", "support analyst", "tech support", "service agent", "support manager", "1st line support", "2nd line support", "3rd line support", "support specialist", "support technician"));
 	final static JobType uiux				= new JobType(JobType.Type.uiux, 				Set.of("ui/ux designer", "ui designer", "ui engineer", "product designer"));
 	final static JobType projectManager		= new JobType(JobType.Type.projectManager, 		Set.of("project manager", "program manager", "it manager", "procurement manager", "control manager", "operations manager", "ops manager", "head of it", "infrastructure manager", "infra manager", "development manager", "engineering manager", "security manager", "services manager", "delivery manager", "service manager", "asset manager"));
 	final static JobType architect			= new JobType(JobType.Type.architect, 			Set.of("solution architect", "solutions architect", "enterprise architect", "application architect", "infrastructure architect", "security architect", "domain architect", "service now architect", "system architect", "systems architect"));
-	final static JobType webDeveloper		= new JobType(JobType.Type.webDeveloper, 		Set.of("web developer","front end developer", "frontend developer"));
+	final static JobType webDeveloper		= new JobType(JobType.Type.webDeveloper, 		Set.of("web developer","front end developer", "frontend developer", "front-end developer", "web ontwikkelaar", "FE developer", "front-end ontwikkelaar"));
 	final static JobType scrumMaster		= new JobType(JobType.Type.scrumMaster, 		Set.of("scrum master","scrummaster"));
 	final static JobType dataScientist		= new JobType(JobType.Type.dataScientist, 		Set.of("data scientist", "data analyst", "data science"));
 	final static JobType networkAdmin		= new JobType(JobType.Type.networkAdmin, 		Set.of("linux systems engineer", "aws devops", "cloud devops", "azure devops", "platform engineer", "cloud engineer", "devops engineer","dev-ops engineer", "network admin", "network administrator", "network engineer", "network specialist", "system admin", "system administrator"));
@@ -93,6 +94,10 @@ public class JobTitleExtractor implements JobSpecifcationFilterExtractor{
 		
 		JobType.Type type = Collections.max(scored.entrySet(), Map.Entry.comparingByValue(comparator)).getKey();
 		
+		if (type == JobType.Type.softwareDeveloper) {
+			type = applySoftwareDeveloperWeighting(scored, filterBuilder, comparator);
+		}
+		
 		/**
 		* If no matched don't provide job title filter 
 		*/
@@ -101,6 +106,33 @@ public class JobTitleExtractor implements JobSpecifcationFilterExtractor{
 		}
 		
 		filterBuilder.jobTitle(type.role);
+		
+	}
+	
+	/**
+	* For when a job spec is identified as a Software Developer we want to try and narrow down 
+	* to the type of developer. In this case the job spec contains more matches for software developer 
+	* keywords that the specific development type but we then take the most mentioned specific 
+	* developer type and use that. If no specific type can be identified we revert to the more 
+	* general software developer type
+	*/
+	private JobType.Type applySoftwareDeveloperWeighting(Map<JobType.Type, AtomicInteger> scored, CandidateExtractedFiltersBuilder filterBuilder, Comparator<AtomicInteger> comparator) {
+		
+		Map<JobType.Type, AtomicInteger> weighted = new HashMap<>(scored); 
+		
+		weighted.remove(JobType.Type.softwareDeveloper);
+		
+		JobType.Type type = Collections.max(weighted.entrySet(), Map.Entry.comparingByValue(comparator)).getKey();
+		
+		switch(type) {
+			case csharp:
+			case java:{
+				return type;
+			}
+			default:{
+				return JobType.Type.softwareDeveloper;
+			}
+		}
 		
 	}
 	

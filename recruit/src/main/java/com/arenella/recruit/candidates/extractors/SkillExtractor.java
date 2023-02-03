@@ -47,7 +47,7 @@ public class SkillExtractor implements JobSpecifcationFilterExtractor{
 		
 		skillsDao.getSkills().stream().filter(s -> !s.equals("")).forEach(skill -> {
 					
-			String skillPatternSpace 		= " " + skill.trim() + " ";
+			String skillPatternSpace = " " + skill.trim() + " ";
 			
 			if (sanitizedDocumentText.contains(skillPatternSpace)){
 				extractedSkills.add(skill);
@@ -121,7 +121,7 @@ public class SkillExtractor implements JobSpecifcationFilterExtractor{
 				break;
 			}
 			case itSupport: {
-				jobTypeBlacklist.addAll(Set.of());
+				jobTypeBlacklist.addAll(Set.of("budget"));
 				jobTypeBlacklist.addAll(blackListNonRecruiter);
 				break;
 			}
