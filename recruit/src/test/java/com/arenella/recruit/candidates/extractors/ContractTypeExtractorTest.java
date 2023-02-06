@@ -26,7 +26,7 @@ public class ContractTypeExtractorTest {
 		CandidateExtractedFiltersBuilder 	filterBuilder 	= CandidateExtractedFilters.builder();
 		ContractTypeExtractor 				extractor 		= new ContractTypeExtractor();
 		
-		extractor.extractFilters("contract permanent", filterBuilder);
+		extractor.extractFilters("freelance permanent", filterBuilder);
 		
 		assertNull(filterBuilder.build().getPerm());
 		assertNull(filterBuilder.build().getFreelance());

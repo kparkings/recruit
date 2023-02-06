@@ -93,21 +93,6 @@ public class CandidateServiceImpl implements CandidateService{
 					.build());		
 	}
 	
-	
-	/**
-	* Refer to the CandidateService Interface for Details
-	*/
-	//@Override
-	//public Set<Candidate> getCandidates(CandidateFilterOptions filterOptions) {
-		
-	//	this.statisticsService.logCandidateSearchEvent(filterOptions);
-		
-	//	this.externalEventPublisher.publishSearchedSkillsEvent(filterOptions.getSkills());
-		
-	//	return StreamSupport.stream(candidateDao.findAll(filterOptions).spliterator(), false)
-	//							.map(candidate -> CandidateEntity.convertFromEntity(candidate)).collect(Collectors.toCollection(LinkedHashSet::new));
-	//}
-
 	/**
 	* Refer to the CandidateService Interface for Details
 	*/

@@ -153,67 +153,82 @@ public class SkillsSynonymsUtilImpl implements SkillsSynonymsUtil{
 				case "robotframework":
 				case "robot framework":{
 					synonyms.addAll(ROBOT_FRAMEWORK);
+					break;
 				}
 				case "winforms":
 				case "winform application":{
 					synonyms.addAll(WINFORMS);
+					break;
 				}
 				case "windows server":
 				case "windows servers":{
 					synonyms.addAll(WINDOWS_SERVER);
+					break;
 				}
 				case "webdevelopment":
 				case "web developer":
 				case "webdeveloper":
 				case "web development":{
 					synonyms.addAll(WEB_DEVELOPMENT);
+					break;
 				}
 				case "webapi":
 				case "web api":{
 					synonyms.addAll(WEB_API);
+					break;
 				}
 				case "wcf":
 				case "wcf service":{
 					synonyms.addAll(WCF);
+					break;
 				}
 				case "virtual box":
 				case "virtualbox":{
 					synonyms.addAll(VIRTUAL_BOX);
+					break;
 				}
 				case "testrail":
 				case "test rail":{
 					synonyms.addAll(TEST_RAIL);
+					break;
 				}
 				case "test manager":
 				case "test management":{
 					synonyms.addAll(TEST_MANAGER);
+					break;
 				}
 				case "team lead":
 				case "team management":
 				case "teamlead":
 				case "teammanager":{
 					synonyms.addAll(TEAMLEAD);
+					break;
 				}
 				case "tailwind":
 				case "tailwind css":{
 					synonyms.addAll(TAILWIND);
+					break;
 				}
 				case "system design":
 				case "systemdesign":{
 					synonyms.addAll(SYSTEM_DESIGN);
+					break;
 				}
 				case "switches":
 				case "switching":{
 					synonyms.addAll(SWITCHES);
+					break;
 				}
 				case "stakeholder engagement":
 				case "stakeholder management":
 				case "stakeholder meetings":{
 					synonyms.addAll(STAKEHOLDER_MGMT);
+					break;
 				}
 				case "ssl":
 				case "ssl certificates":{
 					synonyms.addAll(SSL);
+					break;
 				}
 				case "sqlserver":
 				case "sql server":
@@ -222,285 +237,351 @@ public class SkillsSynonymsUtilImpl implements SkillsSynonymsUtil{
 				case "microsoft sql server":
 				case "microsoft sqlserver":{
 					synonyms.addAll(SQLSERVER);
+					break;
 				}
 				case "splunk":
 				case "splunk enterprise":{
 					synonyms.addAll(SPLUNK);
+					break;
 				}
 				case "sonar":
 				case "sonarqube":{
 					synonyms.addAll(SONAR);
+					break;
 				}
 				case "sixsigma":
 				case "six sigma":{
 					synonyms.addAll(SIXSIGMA);
+					break;
 				}
 				case "sdet":
 				case "software developer in test":
 				case "software engineer in test":{
 					synonyms.addAll(SDET);
 					synonyms.addAll(TESTER);
+					break;
 				}
 				case "shell programing":
 				case "shell scripting":{
 					synonyms.addAll(SHELL_PROGRAMING);
+					break;
 				}
 				case "servlet":
 				case "servlets":{
 					synonyms.addAll(SERVLETS);
+					break;
 				}
 				case "servicenow":
 				case "service now":{
 					synonyms.addAll(SERVICE_NOW);
+					break;
 				}
 				case "sanity":
 				case "sanity testing":{
 					synonyms.addAll(SANITY_TESTING);
 					synonyms.addAll(TESTER);
+					break;
 				}
 				case "routers":
 				case "routers and switching":{
 					synonyms.addAll(ROUTERS);
+					break;
 				}
 				case "restassured":
 				case "rest assured":{
 					synonyms.addAll(RESTASSURED);
+					break;
 				}
 				case "responsive design":
 				case "responsive web design":{
 					synonyms.addAll(RESPONSIVE_DESIGN);
+					break;
 				}
 				case "requirements":
 				case "requirements analysis":{
 					synonyms.addAll(REQUIREMENTS_ANALYSIS);
+					break;
 				}
 				case "redux":
 				case "redux.js":{
 					synonyms.addAll(REDUX);
+					break;
 				}
 				case "regression":
 				case "regression tester":{
 					synonyms.addAll(REGRESSION_TESTER);
 					synonyms.addAll(TESTER);
+					break;
 				}
 				case "rabbit mq":
 				case "rabbitmq":{
 					synonyms.addAll(RABBIT_MQ);
+					break;
 				}
 				case "quality center":
 				case "qualitycenter":{
 					synonyms.addAll(QUALITY_CENTER);
+					break;
 				}
 				case "prometheus":
 				case "prometheus.io":{
 					synonyms.addAll(PROMETHEUS);
+					break;
 				}
 				case "qliksense":
 				case "qlik sense":{
 					synonyms.addAll(QLIKSENSE);
+					break;
 				}
 				case "prince2":
 				case "prince 2":{
 					synonyms.addAll(PRINCE2);
+					break;
 				}
 				case "postgres":
 				case "postgressql":{
 					synonyms.addAll(POSTGRES);
+					break;
 				}
 				case "powershell":
 				case "powershell scripting":{
 					synonyms.addAll(POWERSHELL);
+					break;
 				}
 				case "pega":
 				case "pega systems":{
 					synonyms.addAll(PEGA);
+					break;
 				}
 				case "penetration":
 				case "pen tester":
 				case "pen testing":{
 					synonyms.addAll(TESTER);
 					synonyms.addAll(PEN_TESTER);
+					break;
 				}
 				case "palo":
 				case "palo alto":
 				case "palo alto networks":{
 					synonyms.addAll(PALOALTO);
+					break;
 				}
 				case "network admin":
 				case "network administration":
 				case "network configuration":{
 					synonyms.addAll(NETWORK_ADMIN);
+					break;
 				}
 				case "ops":
 				case "operations":
 				case "operations management":{
 					synonyms.addAll(OPERATIONS);
+					break;
 				}
 				case "objective":
 				case "objective-c":
 				case "objective c":{
 					synonyms.addAll(OBJECTIVE_C);
+					break;
 				}
 				case "mongo":
 				case "mongodb":{
 					synonyms.addAll(MONGO);
+					break;
 				}
 				case "microsoft powerbi":
 				case "powerbi":{
 					synonyms.addAll(POWER_BI);
+					break;
 				}
 				case "material-ui":
 				case "material ui":{
 					synonyms.addAll(MATERIAL_UI);
+					break;
 				}
 				case "manual test":
 				case "manual tester":
 				case "manual testing":{
 					synonyms.addAll(TESTER);
 					synonyms.addAll(MANUAL_TESTER);
+					break;
 				}
 				case "load runner":
 				case "load testing":{
 					synonyms.addAll(LOAD_TESTING);
+					break;
 				}
 				case "juniper":
 				case "juniper network":
 				case "juniper switches":{
 					synonyms.addAll(JUNIPER);
+					break;
 				}
 				case "jupyter":
 				case "jupyter notebook":
 				case "jupyter notebooks":{
 					synonyms.addAll(JUPYTER);
+					break;
 				}
 				case "jpa":
 				case "jpa/hibernate":{
 					synonyms.addAll(JPA);
+					break;
 				}
 				case "data management":
 				case "data governance":{
 					synonyms.addAll(DATA_MANAGEMENT);
+					break;
 				}
 				case "java ee":
 				case "j2ee":
 				case "jee":{
 					synonyms.addAll(JAVA_EE);
+					break;
 				}
 				case "java8":
 				case "java 8":{
 					synonyms.addAll(JAVA_EIGHT);
+					break;
 				}
 				case "jasper reports":
 				case "jasperreport":{
 					synonyms.addAll(JASPER);
+					break;
 				}
 				case "itil":
 				case "itilv3":{
 					synonyms.addAll(ITIL);
+					break;
 				}
 				case "istqb":
 				case "istqb certified tester":{
 					synonyms.addAll(ISTQB);
+					break;
 				}
 				case "hyper-v":
 				case "hyper visors":
 				case "hyper v":{
 					synonyms.addAll(HYPER_V);
+					break;
 				}
 				case "ios":
 				case "ios developer":
 				case "ios dev":{
 					synonyms.addAll(IOS_DEV);
+					break;
 				}
 				case "git ":
 				case "git and github":
 				case "github":{
 					synonyms.addAll(GIT);
+					break;
 				}
 				case "gherkin/cucumber":
 				case "gherkin":{
 					synonyms.addAll(GHERKIN);
+					break;
 				}
 				case "gatsby":
 				case "gatsbyjs":{
 					synonyms.addAll(GATSBY);
+					break;
 				}
 				case "functional test":
 				case "functional testing":{
 					synonyms.addAll(FUNCTIONAL_TESTING);
+					break;
 				}
 				case "fullstack":
 				case "full stack":{
 					synonyms.addAll(FULLSTACK);
+					break;
 				}
 				case "firewall":
 				case "firewalls":{
 					synonyms.addAll(FIREWALL);
+					break;
 				}
 				case "express":
 				case "expressjs":{
 					synonyms.addAll(EXPRESS);
+					break;
 				}
 				case "exchange":
 				case "exchange server":{
 					synonyms.addAll(EXCHANGE);
+					break;
 				}
 				case "entity framework":
 				case "entity-framework":{
 					synonyms.addAll(ENTITY_FRAMEWORK);
+					break;
 				}
 				case "embedded":
 				case "embedded software":{
 					synonyms.addAll(EMBEDDED);
+					break;
 				}
 				case "elastic":
 				case "elasticsearch":{
 					synonyms.addAll(ELASTIC);
+					break;
 				}
 				case "ecma":
 				case "ecma script":{
 					synonyms.addAll(ECMA);
+					break;
 				}
 				case "dynamo":
 				case "dynamo db":{
 					synonyms.addAll(DYNAMO);
+					break;
 				}
 				case "defect logging":
 				case "defect tracking":{
 					synonyms.addAll(DEFECT_LOGGING);
+					break;
 				}
 				case "data mining":
 				case "data scraping":{
 					synonyms.addAll(DATA_MINING);
+					break;
 				}
 				case "data center":
 				case "datacenter":{
 					synonyms.addAll(DATA_CENTER);
+					break;
 				}
 				case "databricks":
 				case "data bricks":{
 					synonyms.addAll(DATA_BRICKS);
+					break;
 				}
 				case "data analysis":
 				case "data analyst":
 				case "data analytics":{
 					synonyms.addAll(DATA_ANALYSIS);
+					break;
 				}
 				case "activedirectory":
 				case "active directory":{
 					synonyms.addAll(ACTIVE_DIRECTORY);
+					break;
 				}
 				case "java":
 				case "core java":{
 					synonyms.addAll(JAVA);
+					break;
 				}
 				case "bitbucket":
 				case "bit bucket":{
 					synonyms.addAll(BIT_BUCKET);
+					break;
 				}
 				case "bank":
 				case "banking":{
 					synonyms.addAll(BANKING);
+					break;
 				}
 				case "test automation":
 				case "test automation engineer":
@@ -508,41 +589,50 @@ public class SkillsSynonymsUtilImpl implements SkillsSynonymsUtil{
 				case "automated testing":
 				case "automation testing":{
 					synonyms.addAll(AUTOMATION_TESTING);
+					break;
 				}
 				case "api":
 				case "apis":{
 					synonyms.addAll(API);
+					break;
 				}
 				case "kafka":
 				case "apache kafka":{
 					synonyms.addAll(KAFKA);
+					break;
 				}
 				case "administration":
 				case "administrator":{
 					synonyms.addAll(ADMINISTRATION);
+					break;
 				}
 				case "algorithm":
 				case "algorithms":{
 					synonyms.addAll(ALGORITHMS);
+					break;
 				}
 				case "activemq":
 				case "active mq":{
 					synonyms.addAll(ACTIVE_MQ);
+					break;
 				}
 				case "devops":
 				case "dev-ops":
 				case "dev ops":{
 					synonyms.addAll(DEVOPS);
+					break;
 				}
 				case "scrum master":
 				case "scrummaster":{
 					synonyms.addAll(SCRUMMASTER);
+					break;
 				}
 				case "angular":
 				case "angularjs":
 				case "angular.js":
 				case "angular js":{
 					synonyms.addAll(ANGULAR);
+					break;
 				}
 				case "ci":
 				case "cd":
@@ -552,28 +642,33 @@ public class SkillsSynonymsUtilImpl implements SkillsSynonymsUtil{
 				case "cicd":
 				case "ci / cd":{
 					synonyms.addAll(CICD);
+					break;
 				}
 				case "html":
 				case "html4":
 				case "html5":{
 					synonyms.addAll(HTML);
+					break;
 				}
 				case "plsql":
 				case "pl-sql":
 				case "pl/sql":
 				case "oracle sql":{
 					synonyms.addAll(PL_SQL);
+					break;
 				}
 				case "project manager":
 				case "projectmanager":
 				case "project management":{
 					synonyms.addAll(PROJECT_MANAGEMENT);
+					break;
 				}
 				case "webservice":
 				case "web service":
 				case "web services":
 				case "webservices":{
 					synonyms.addAll(WEB_SERVICES);
+					break;
 				}
 				case "rest":
 				case "rest api":
@@ -582,24 +677,29 @@ public class SkillsSynonymsUtilImpl implements SkillsSynonymsUtil{
 				case "rest webservices":
 				case "restful web services":{
 					synonyms.addAll(REST);
+					break;
 				}
 				case "soap":
 				case "soap web services":{
 					synonyms.addAll(SOAP);
+					break;
 				}
 				case "tech support":
 				case "technical support":{
 					synonyms.addAll(TECH_SUPPORT);
+					break;
 				}
 				case "uat":
 				case "acceptance testing":
 				case "user acceptance testing":{
 					synonyms.addAll(UAT);
+					break;
 				}
 				case "selenium":
 				case "selenium webdriver":
 				case "selenium web driver":{
 					synonyms.addAll(SELENIUM);
+					break;
 				}
 				case "microservices":
 				case "micro service":
@@ -607,6 +707,7 @@ public class SkillsSynonymsUtilImpl implements SkillsSynonymsUtil{
 				case "microservice architecture":
 				case "microservice":{
 					synonyms.addAll(MICROSERVICES);
+					break;
 				}
 				case "recruiter":
 				case "it recruitment":
