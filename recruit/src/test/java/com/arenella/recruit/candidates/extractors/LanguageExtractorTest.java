@@ -179,4 +179,30 @@ public class LanguageExtractorTest {
 		
 	}
 	
+	/**
+	* If Country has previously been identified as the UK makes assumption that 
+	* English language is a requirement
+	* @throws Exception
+	*/
+	@Test
+	public void testIfCountryEnglandIncludEnglishLang() throws Exception{
+		
+		CandidateExtractedFiltersBuilder filterBuilder = CandidateExtractedFilters.builder();
+		
+		filterBuilder.uk(false);
+		
+		LanguageExtractor extractor = new LanguageExtractor();
+		
+		extractor.extractFilters("", filterBuilder);
+		
+		assertFalse(filterBuilder.build().getEnglish());
+		
+		filterBuilder.uk(true);
+		
+		extractor.extractFilters("", filterBuilder);
+		
+		assertTrue(filterBuilder.build().getEnglish());
+		
+	}
+	
 }

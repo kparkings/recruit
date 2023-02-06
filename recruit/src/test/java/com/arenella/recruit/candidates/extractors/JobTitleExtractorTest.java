@@ -76,4 +76,21 @@ public class JobTitleExtractorTest {
 		
 	}
 	
+	/**
+	* Tests that if two or more job types have an equal weighting for score that 
+	* preference is given to non it recruiter roles
+	* @throws Exception
+	*/
+	@Test
+	public void testGiveWeightToNonITRecruiterJobType() throws Exception {
+		
+		final CandidateExtractedFiltersBuilder 	filterBuilder 	= CandidateExtractedFilters.builder();
+		final JobTitleExtractor 				extractor 		= new JobTitleExtractor();
+		
+		extractor.extractFilters(" java developer it recruiter", filterBuilder);
+		
+		assertEquals("Java Developer",filterBuilder.build().getJobTitle());
+		
+	}
+	
 }

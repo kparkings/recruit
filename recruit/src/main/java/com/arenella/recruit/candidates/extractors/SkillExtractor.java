@@ -28,6 +28,7 @@ public class SkillExtractor implements JobSpecifcationFilterExtractor{
 		sanitizedDocumentText = sanitizedDocumentText.replaceAll("/", " ");
 		sanitizedDocumentText = sanitizedDocumentText.replaceAll("-", " ");
 		sanitizedDocumentText = sanitizedDocumentText.replaceAll("\\n", " ");
+		sanitizedDocumentText = sanitizedDocumentText.replaceAll(" ", " ");
 		
 		return sanitizedDocumentText;
 	}

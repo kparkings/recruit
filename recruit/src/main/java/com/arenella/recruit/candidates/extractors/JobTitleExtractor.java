@@ -6,12 +6,15 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Component;
 
 import com.arenella.recruit.candidates.beans.CandidateExtractedFilters.CandidateExtractedFiltersBuilder;
+import com.arenella.recruit.candidates.extractors.JobType.Type;
 
 /**
 * Class to extract Job Title from Document. Will take into account all the keywords in the
@@ -32,11 +35,11 @@ public class JobTitleExtractor implements JobSpecifcationFilterExtractor{
 	final static JobType architect			= new JobType(JobType.Type.architect, 			Set.of("solution architect", "solutions architect", "enterprise architect", "application architect", "infrastructure architect", "security architect", "domain architect", "service now architect", "system architect", "systems architect"));
 	final static JobType webDeveloper		= new JobType(JobType.Type.webDeveloper, 		Set.of("web developer","front end developer", "frontend developer", "front-end developer", "web ontwikkelaar", "FE developer", "front-end ontwikkelaar"));
 	final static JobType scrumMaster		= new JobType(JobType.Type.scrumMaster, 		Set.of("scrum master","scrummaster"));
-	final static JobType dataScientist		= new JobType(JobType.Type.dataScientist, 		Set.of("data scientist", "data analyst", "data science"));
+	final static JobType dataScientist		= new JobType(JobType.Type.dataScientist, 		Set.of("data engineer","data scientist", "data analyst", "data science"));
 	final static JobType networkAdmin		= new JobType(JobType.Type.networkAdmin, 		Set.of("linux systems engineer", "aws devops", "cloud devops", "azure devops", "platform engineer", "cloud engineer", "devops engineer","dev-ops engineer", "network admin", "network administrator", "network engineer", "network specialist", "system admin", "system administrator"));
 	final static JobType softwareDeveloper	= new JobType(JobType.Type.softwareDeveloper, 	Set.of("php developer", "software ontwikkelaar", "php ontwikkelaar", "software developer", "software engineer", "software engineers", "application engineer", "application developer"));
 	final static JobType itSecurity			= new JobType(JobType.Type.itSecurity, 			Set.of("security engineer", "ethical hacker", "security officer", "security consultant", "security specialist", "security engineering", "security lead", "cyber consultant", "security advisor", "security manager", "security operations"));
-	final static JobType itRecruiter		= new JobType(JobType.Type.itRecruiter, 		Set.of("tech recruiter", "it recruiter", "recruitment consultant", "technical recruiter"));
+	final static JobType itRecruiter		= new JobType(JobType.Type.itRecruiter, 		Set.of("it-recruitment","recruitment specialist", "recruitmentcampagne","tech recruiter", "it recruiter", "recruitment consultant", "technical recruiter","recruiter"));
 	final static JobType sdet 				= new JobType(JobType.Type.sdet, 				Set.of("engineer in test", "developer in test", "sdet"));
 	
 	/**
@@ -103,6 +106,21 @@ public class JobTitleExtractor implements JobSpecifcationFilterExtractor{
 		*/
 		if (scored.values().stream().filter(v -> v.get() > 0).findAny().isEmpty()) {
 			return;
+		}
+		
+		/**
+		* As recruiters mention their own job title in spec's if there is a tie and 
+		* it is between IT recruiter and another give preference to other job type 
+		*/
+		if (type == JobType.Type.itRecruiter) {
+			Set<Entry<Type, AtomicInteger>> 	nextBest 		= scored.entrySet().stream().filter(es -> es.getKey() != JobType.Type.itRecruiter).collect(Collectors.toSet());
+			JobType.Type 						nextBestType 	= Collections.max(nextBest, Map.Entry.comparingByValue(comparator)).getKey();
+			
+			if (scored.get(type).get() == scored.get(nextBestType).get()) {
+				type = nextBestType;
+			}
+			
+			
 		}
 		
 		filterBuilder.jobTitle(type.role);
