@@ -17,6 +17,7 @@ public class CandidateFilterOptions {
 
 	private String 				orderAttribute;
 	private RESULT_ORDER		order;
+	private String				searchText							= "";
 	private Set<String> 		candidateIds						= new HashSet<>();
 	private Set<COUNTRY> 		countries							= new HashSet<>();
 	private Set<FUNCTION> 		functions							= new HashSet<>();
@@ -58,6 +59,7 @@ public class CandidateFilterOptions {
 		this.email							= builder.email;
 		this.flaggedAsUnavailable			= builder.flaggedAsUnavailable;
 		this.daysSinceLastAvailabilityCheck	= builder.daysSinceLastAvailabilityCheck;
+		this.searchText						= builder.searchText;
 		
 	}
 	
@@ -215,6 +217,14 @@ public class CandidateFilterOptions {
 	}
 	
 	/**
+	* Returns the search text to filter on
+	* @return a search term to filter on
+	*/
+	public String getSearchText() {
+		return this.searchText;
+	}
+	
+	/**
 	* Returns whether to filter on Candidates that 
 	* have been flagged as Unavailable
 	* @return flagged as unavailable
@@ -230,6 +240,15 @@ public class CandidateFilterOptions {
 	*/
 	public Optional<Integer> getDaysSinceLastAvailabilityCheck(){
 		return Optional.ofNullable(this.daysSinceLastAvailabilityCheck);
+	}
+	
+	/**
+	* Replaces existing functions
+	* @param functions - Functions to filter on
+	*/
+	public void setFunctions(Set<FUNCTION> functions) {
+		this.functions.clear();
+		this.functions.addAll(functions);
 	}
 	
 	/**
@@ -264,6 +283,7 @@ public class CandidateFilterOptions {
 		private String 				email;
 		private Boolean				flaggedAsUnavailable				= null;
 		private Integer				daysSinceLastAvailabilityCheck; 
+		private String 				searchText							= "";
 		
 		/**
 		* Sets the name of the attribute to order on
@@ -446,6 +466,16 @@ public class CandidateFilterOptions {
 		*/
 		public CandidateFilterOptionsBuilder email(String email) {
 			this.email = email;
+			return this;
+		}
+		
+		/**
+		* Sets a search term to filter on
+		* @param searchText - a search term to filter on
+		* @return Builder
+		*/
+		public CandidateFilterOptionsBuilder searchText(String searchText) {
+			this.searchText = searchText;
 			return this;
 		}
 

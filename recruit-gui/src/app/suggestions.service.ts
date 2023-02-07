@@ -21,7 +21,7 @@ export class SuggestionsService {
 	private keywordsTester:Array<string> 				= new Array<string>("tester","test", "qa","automation","manual","quality","assurance", "selenium", "cucumber","testing","robot");
 	private keywordsWebDeveloper:Array<string> 			= new Array<string>("web developer","front end","front-end","js","vue","vuejs","vue.js","react","node","node.js","php","wordpress");
 	private keywordsScrumMaster:Array<string> 			= new Array<string>("scrum","master");
-	private keywordsDataScientist:Array<string> 		= new Array<string>("data", "data analyst","data scientist","bi","business intelligence","python");
+	private keywordsDataScientist:Array<string> 		= new Array<string>("data analyst","bi","business intelligence","python");
 	private keywordsNetworkAdmin:Array<string> 			= new Array<string>("devops","network","admin","administrator","ops","operations", "cisco", "cloud", "windows", "ansible", "kubernetes", "salesforce","docker", "citrix", "servicenow", "tibco", "warehouse", "terraform", "dns", "o365", "ServiceNow", "VMWARE", "scripting", "firewall", "wireshark", "azure");
 	private keywordsSoftwareDeveloper:Array<string> 	= new Array<string>("php","python","wordpress","software engineer","software developer","golang", "c", "c++","vb", "go", "cobol","pl-sql","t-sql", "r", "groovy", "sql", "swift", "python", "ios", "scala", "microservices", "oracle", "react", "redux", "android", "sql", "node", "plsql", "go", "c++", "golang", "vue", "bdd", "laravel", "dba", "kotlin", "node.js", "ios", "ruby", "embedded", "oauth", "liferay");	
 	private keywordsItSecurity:Array<string> 			= new Array<string>("security","cyber","malware","owasp", "pen");
@@ -35,7 +35,7 @@ export class SuggestionsService {
 	* Constructor 
 	*/
 	constructor(private candidateService:CandidateServiceService) {
-		
+
 		this.keywordsCSharpDev.forEach(itm => this.allKeywords.push(itm));
 		this.keywordsSupport.forEach(itm => this.allKeywords.push(itm));
 		this.keywordsBusinessAnalyst.forEach(itm => this.allKeywords.push(itm));
@@ -52,7 +52,7 @@ export class SuggestionsService {
 		this.keywordsItRecruiter.forEach(itm => this.allKeywords.push(itm));
 		this.keywordsSdet.forEach(itm => this.allKeywords.push(itm));
 		this.keywordsJava.forEach(itm => this.allKeywords.push(itm));
-		
+
 	}
 	
 	/**
@@ -124,7 +124,8 @@ export class SuggestionsService {
                                                          + '&page=0'
                                                          + '&size=' + maxNumberOfSuggestions
 														 + '&useSuggestions=true'
-														 + this.getFunctionTypeFromTitle(title)
+														 + '&searchText=' + encodeURIComponent(title)
+														 //+ this.getFunctionTypeFromTitle(title)
                                                          + this.getCountryFilterParamString(countries) 			
                                                          + this.getContractTypeParamString(contract, perm)				
                                                          + this.getYearsExperienceFilterParamAsString(experienceMin, experienceMax)

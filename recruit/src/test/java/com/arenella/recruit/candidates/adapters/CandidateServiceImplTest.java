@@ -42,6 +42,7 @@ import com.arenella.recruit.candidates.entities.CandidateEntity;
 import com.arenella.recruit.candidates.entities.PendingCandidateEntity;
 import com.arenella.recruit.candidates.services.CandidateServiceImpl;
 import com.arenella.recruit.candidates.services.CandidateStatisticsService;
+import com.arenella.recruit.candidates.utils.CandidateFunctionExtractor;
 import com.arenella.recruit.candidates.utils.CandidateSuggestionUtil;
 import com.arenella.recruit.candidates.utils.SkillsSynonymsUtil;
 import com.arenella.recruit.candidates.utils.CandidateSuggestionUtil.suggestion_accuracy;
@@ -82,6 +83,9 @@ public class CandidateServiceImplTest {
 	
 	@Mock
 	private CandidateSkillsDao			mockSkillDao;
+	
+	@Mock
+	private CandidateFunctionExtractor	mockCandidateFunctionExtractor;
 	
 	@InjectMocks
 	private CandidateServiceImpl 		service 					= new CandidateServiceImpl();

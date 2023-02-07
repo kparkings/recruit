@@ -79,7 +79,7 @@ public class CandidateControllerTest {
 		
 		Mockito.when(this.mockCandidateService.getCandidates(Mockito.any(), Mockito.any())).thenReturn(candidatePage);
 		
-		this.controller.getCandidate(null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,false,null, null);
+		this.controller.getCandidate(null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,false,null, null, null);
 
 		Mockito.verify(this.mockCandidateService).getCandidates(Mockito.any(), Mockito.any());
 		
@@ -99,7 +99,7 @@ public class CandidateControllerTest {
 		PageRequest mockPageRequest = Mockito.mock(PageRequest.class);
 		Mockito.when(mockPageRequest.getPageSize()).thenReturn(1);
 		
-		this.controller.getCandidate(null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,true,null, mockPageRequest);
+		this.controller.getCandidate(null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,true,null,null, mockPageRequest);
 		
 		Mockito.verify(this.mockCandidateService).getCandidateSuggestions(Mockito.any(), Mockito.any());
 	

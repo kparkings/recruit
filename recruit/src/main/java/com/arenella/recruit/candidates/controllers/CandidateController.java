@@ -129,6 +129,7 @@ public class CandidateController {
 													@RequestParam(required = false) 	Boolean				flaggedAsUnavailable,
 													@RequestParam(required = false)		Boolean				useSuggestions,
 													@RequestParam(required = false)		Integer				daysSinceLastAvailabilityCheck,
+													@RequestParam(required = false)		String				searchText,
 													Pageable pageable
 												 	) {
 		
@@ -152,6 +153,7 @@ public class CandidateController {
 																		.surname(surname)
 																		.email(email)
 																		.daysSinceLastAvailabilityCheck(daysSinceLastAvailabilityCheck)
+																		.searchText(searchText)
 																	.build();
 		
 		if (useSuggestions != null && useSuggestions) {

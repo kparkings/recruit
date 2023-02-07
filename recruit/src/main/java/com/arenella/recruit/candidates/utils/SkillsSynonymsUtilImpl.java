@@ -59,7 +59,7 @@ public class SkillsSynonymsUtilImpl implements SkillsSynonymsUtil{
 	private static final Set<String> BANKING				= Set.of("bank", "banking");
 	private static final Set<String> BIT_BUCKET				= Set.of("bit bucket", "bitbucket");
 	private static final Set<String> JAVA					= Set.of("java", "core java");
-	private static final Set<String> DATA_ANALYSIS			= Set.of("data analysis", "data analyst", "data analytics");
+	private static final Set<String> DATA_ANALYSIS			= Set.of("data scientist", "data analysis", "data analyst", "data analytics");
 	private static final Set<String> DATA_BRICKS			= Set.of("databricks", "data bricks");
 	private static final Set<String> DATA_CENTER			= Set.of("datacenter", "data center");
 	private static final Set<String> DATA_MANAGEMENT		= Set.of("data management", "data governance");

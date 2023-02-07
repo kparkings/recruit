@@ -33,6 +33,7 @@ import com.arenella.recruit.candidates.dao.CandidateDao;
 import com.arenella.recruit.candidates.dao.PendingCandidateDao;
 import com.arenella.recruit.candidates.entities.CandidateEntity;
 import com.arenella.recruit.candidates.entities.PendingCandidateEntity;
+import com.arenella.recruit.candidates.enums.FUNCTION;
 import com.arenella.recruit.candidates.extractors.DocumentFilterExtractionUtil;
 import com.arenella.recruit.candidates.utils.CandidateSuggestionUtil;
 import com.arenella.recruit.candidates.utils.CandidateSuggestionUtil.suggestion_accuracy;
@@ -40,6 +41,8 @@ import com.arenella.recruit.candidates.utils.SkillsSynonymsUtil;
 import com.arenella.recruit.curriculum.enums.FileType;				//TODO: [KP] Why are we referencing other service
 import com.arenella.recruit.candidates.dao.CandidateSearchAlertDao;
 import com.arenella.recruit.candidates.dao.CandidateSkillsDao;
+
+import com.arenella.recruit.candidates.utils.CandidateFunctionExtractor;
 
 /**
 * Provides services related to Candidates
@@ -74,6 +77,9 @@ public class CandidateServiceImpl implements CandidateService{
 	
 	@Autowired
 	private CandidateSkillsDao				skillDao;
+	
+	@Autowired
+	private CandidateFunctionExtractor		candidateFunctionExtractor;
 	
 	/**
 	* Refer to the CandidateService Interface for Details
@@ -274,17 +280,27 @@ public class CandidateServiceImpl implements CandidateService{
 		AtomicReference<suggestion_accuracy> 		accuracy 			=  new AtomicReference<>(suggestion_accuracy.perfect);
 		Pageable 									pageable 			= PageRequest.of(0,100);
 		
+		//TODO: [KP] Need to add skills for things like React, Vue where the FUNCTION alone is not sufficient
+		//TODO: [KP] Alerts also need to work with searchText not function and we then need to remove alert from Candidates page
+		//TODO: [KP] Need to augment skill list with keywords found in search text
+		//TODO: [KP] Once we have set this up to also work with search text not generated from extract spec remove if and only set functions by searchText
+		//TODO: [KP] Cant remove because of candidate page filters !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
+		if (!filterOptions.getSearchText().isEmpty()) {
+			Set<FUNCTION> functionToFilterOn = this.candidateFunctionExtractor.extractFunctions(filterOptions.getSearchText());
+			filterOptions.setFunctions(functionToFilterOn);
+		}
 		this.externalEventPublisher.publishSearchedSkillsEvent(filterOptions.getSkills());
+		
 		extractAndPersistNewSkills(filterOptions.getSkills());
 		
-		CandidateFilterOptions 						suggestionFilterOptions = CandidateFilterOptions
-																							.builder()
-																								.dutch(filterOptions.getDutch().isPresent() 		? filterOptions.getDutch().get() 	: null)
-																								.english(filterOptions.getEnglish().isPresent() 	? filterOptions.getEnglish().get() 	: null)
-																								.french(filterOptions.getFrench().isPresent() 		? filterOptions.getFrench().get() 	: null)
-																								.skills(filterOptions.getSkills())
-																							.build();
-		
+		CandidateFilterOptions suggestionFilterOptions = CandidateFilterOptions
+																		.builder()
+																			.dutch(filterOptions.getDutch().isPresent() 		? filterOptions.getDutch().get() 	: null)
+																			.english(filterOptions.getEnglish().isPresent() 	? filterOptions.getEnglish().get() 	: null)
+																			.french(filterOptions.getFrench().isPresent() 		? filterOptions.getFrench().get() 	: null)
+																			.skills(filterOptions.getSkills())
+																		.build();
+
 		this.statisticsService.logCandidateSearchEvent(filterOptions);
 		
 		filterOptions.getSkills().clear();

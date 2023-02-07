@@ -1,6 +1,8 @@
 package com.arenella.recruit.candidates.beans;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -43,6 +45,7 @@ public class CandidateFilterOptionsTest {
 		String					email							= "email";
 		Boolean					flaggedAsUnavailable			= true;	
 		Integer					daysSinceLastAvailabilityCheck 	= 14;
+		String					searchText						= "Java Developer";
 		
 		candidateIds.add(candidateId);
 		skills.add(skill);
@@ -69,6 +72,7 @@ public class CandidateFilterOptionsTest {
 													.email(email)
 													.flaggedAsUnavailable(flaggedAsUnavailable)
 													.daysSinceLastAvailabilityCheck(daysSinceLastAvailabilityCheck)
+													.searchText(searchText)
 													.build();
 		
 		assertEquals(filters.getCandidateIds().stream().findAny().get(), 	candidateId);
@@ -85,8 +89,31 @@ public class CandidateFilterOptionsTest {
 		assertEquals(firstname, 											filters.getFirstname().get());
 		assertEquals(surname, 												filters.getSurname().get());
 		assertEquals(email, 												filters.getEmail().get());
+		assertEquals(searchText,											filters.getSearchText());
 		assertEquals(flaggedAsUnavailable, 									filters.isFlaggedAsUnavailable().get());
 		assertEquals(daysSinceLastAvailabilityCheck, 						filters.getDaysSinceLastAvailabilityCheck().get());
+		
+	}
+	
+	/**
+	* Tests setter replaces existing FUNCTION's
+	* @throws Exception
+	*/
+	@Test
+	public void testSetFunctions() throws Exception{
+		
+		Set<FUNCTION> originalFunctions 	= Set.of(FUNCTION.ARCHITECT);
+		Set<FUNCTION> newFunctions 			= Set.of(FUNCTION.JAVA_DEV);
+		
+		CandidateFilterOptions filters = CandidateFilterOptions.builder().functions(originalFunctions).build();
+		
+		assertTrue(filters.getFunctions().contains(FUNCTION.ARCHITECT));
+		assertFalse(filters.getFunctions().contains(FUNCTION.JAVA_DEV));
+		
+		filters.setFunctions(newFunctions);
+		
+		assertFalse(filters.getFunctions().contains(FUNCTION.ARCHITECT));
+		assertTrue(filters.getFunctions().contains(FUNCTION.JAVA_DEV));
 		
 	}
 	

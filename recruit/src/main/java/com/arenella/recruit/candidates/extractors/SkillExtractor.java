@@ -79,7 +79,7 @@ public class SkillExtractor implements JobSpecifcationFilterExtractor{
 	
 	private void removeBlacklistedItems(Set<String> extractedSkills, CandidateExtractedFiltersBuilder filterBuilder) {
 		
-		Set<String> blacklist 				= Set.of("applicatie","insight","team player","dynamics", "teamplayer", "elk","net","teams", "na","core java", "11","qa","test","testing","delivery","transformation", "it", "back", "informatica","capital","people","idea","auto","ideal", "development", "express", "front", "native","data");
+		Set<String> blacklist 				= Set.of("e","r","c","applicatie","insight","team player","dynamics", "teamplayer", "elk","net","teams", "na","core java", "11","qa","test","testing","delivery","transformation", "it", "back", "informatica","capital","people","idea","auto","ideal", "development", "express", "front", "native","data");
 		Set<String> blackListNonRecruiter 	= Set.of("recruiter","tech recruiter", "it recruiter", "recruitment consultant", "technical recruiter");
 		Set<String> blackDevelopers 		= Set.of("software","project manager","budget","administration","software development", "research","hosting","requirements","test","sales","backlog");
 		Set<String> blackTesters 			= Set.of("software","documentation");
@@ -111,7 +111,7 @@ public class SkillExtractor implements JobSpecifcationFilterExtractor{
 				break;
 			} 
 			case ba: {
-				jobTypeBlacklist.addAll(Set.of());
+				jobTypeBlacklist.addAll(Set.of("data", "analyst", "scientist", "business analyst", "ba"));
 				jobTypeBlacklist.addAll(blackListNonRecruiter);
 				break;
 			}
