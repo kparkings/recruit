@@ -23,6 +23,9 @@ public class SeniorityExtractor implements JobSpecifcationFilterExtractor{
 	*/
 	public void extractFilters(String documentText, CandidateExtractedFiltersBuilder filterBuilder) {
 		
+		//6 jaar ervaring - Add these checking for all common levels also in english and french
+		
+		
 		boolean senior = documentText.contains("senior") || documentText.contains("expérimenté");
 		boolean medior = documentText.contains("medior");
 		boolean junior = documentText.contains("junior") || documentText.contains("entry level") || documentText.contains("graduate");

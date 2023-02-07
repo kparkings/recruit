@@ -34,7 +34,7 @@ public class DocumentFilterExtractionUtil {
 	@Autowired
 	private ContractTypeExtractor 	contractTypeExtractor;
 	
-	public static Set<String> uk = Set.of(" uk ", "uk.","uk\\t", "inside ir35", "milton keynes", "england", "midlands", "derby", "wales", "scotland", "edinburgh","glasgow", "london", "liverpool", "manchester", "oxford", "glousester", "surrey", "Buckinghamshire", "Berkshire", "hounslow", "Milton Keynes", "edgware", "Leicester", "bracknell", "barking", "Colchester", "cardiff", "Brentford", "Stoke-on-Trent", "maidenhead", "guildford", "reading", "leeds");
+	public static Set<String> uk = Set.of("bristol","gbp","stockport","£"," uk ", "uk.","uk\\t", "inside ir35", "milton keynes", "england", "midlands", "derby", "wales", "scotland", "edinburgh","glasgow", "london", "liverpool", "manchester", "oxford", "glousester", "surrey", "Buckinghamshire", "Berkshire", "hounslow", "Milton Keynes", "edgware", "Leicester", "bracknell", "barking", "Colchester", "cardiff", "Brentford", "Stoke-on-Trent", "maidenhead", "guildford", "reading", "leeds");
 	
 	public CandidateExtractedFilters extractFilters(FileType fileType, byte[] fileBytes) throws Exception{
 
