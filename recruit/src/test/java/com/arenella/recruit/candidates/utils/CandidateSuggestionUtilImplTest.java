@@ -153,7 +153,7 @@ public class CandidateSuggestionUtilImplTest {
 	@Test
 	public void testIsExcellentMatch_not_perfectMatch() throws Exception{
 		
-		Candidate 				candidate 	= Candidate.builder().skills(Set.of("1","2","3","4","5","6","7","8")).build();
+		Candidate 				candidate 	= Candidate.builder().skills(Set.of("1","2","3","4","5","6","7")).build();
 		CandidateFilterOptions 	filters 	= CandidateFilterOptions.builder().skills(Set.of("1","2","3","4","5","6","7","8","9","10")).build();
 		
 		assertFalse(util.isExcellentMatch(new CandidateSearchAccuracyWrapper(candidate), filters));
@@ -222,7 +222,7 @@ public class CandidateSuggestionUtilImplTest {
 	@Test
 	public void testIsGoodMatch_not_perfectMatch() throws Exception{
 		
-		Candidate 				candidate 	= Candidate.builder().skills(Set.of("1","2","3","4","5","6")).build();
+		Candidate 				candidate 	= Candidate.builder().skills(Set.of("1","2","3","4")).build();
 		CandidateFilterOptions 	filters 	= CandidateFilterOptions.builder().skills(Set.of("1","2","3","4","5","6","7","8","9","10")).build();
 		
 		assertFalse(util.isGoodMatch(new CandidateSearchAccuracyWrapper(candidate), filters));
@@ -291,7 +291,7 @@ public class CandidateSuggestionUtilImplTest {
 	@Test
 	public void testIsAverageMatch_not_perfectMatch() throws Exception{
 		
-		Candidate 				candidate 	= Candidate.builder().skills(Set.of("1","2","3","4")).build();
+		Candidate 				candidate 	= Candidate.builder().skills(Set.of("1","2","3")).build();
 		CandidateFilterOptions 	filters 	= CandidateFilterOptions.builder().skills(Set.of("1","2","3","4","5","6","7","8","9","10")).build();
 		
 		assertFalse(util.isAverageMatch(new CandidateSearchAccuracyWrapper(candidate), filters));

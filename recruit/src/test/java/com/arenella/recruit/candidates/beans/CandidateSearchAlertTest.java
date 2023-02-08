@@ -101,4 +101,54 @@ public class CandidateSearchAlertTest {
 		
 	}
 	
+	/**
+	* Tests using the setter will override 
+	* existing functions
+	* @throws Exception
+	*/
+	@Test
+	public void testOverrideFunctions() throws Exception{
+		
+		CandidateSearchAlert alert = 
+				CandidateSearchAlert
+					.builder()
+					.functions(Set.of(FUNCTION.BA))
+					.build();
+		
+		assertEquals(1, alert.getFunctions().size());
+		assertEquals(FUNCTION.BA, alert.getFunctions().stream().findAny().get());
+	
+		alert.setFunctions(Set.of(FUNCTION.CSHARP_DEV));
+	
+		assertEquals(1, alert.getFunctions().size());
+		assertEquals(FUNCTION.CSHARP_DEV, alert.getFunctions().stream().findAny().get());
+	
+	}
+	
+	/**
+	* Test overriding of existing skills
+	* @throws Exception
+	*/
+	@Test
+	public void testUpdateSkills() throws Exception{
+		
+		final String java 	= "java";
+		final String tester = "tester";
+		
+		CandidateSearchAlert alert = 
+				CandidateSearchAlert
+					.builder()
+					.skills(Set.of(java))
+					.build();
+		
+		assertEquals(1, alert.getSkills().size());
+		assertEquals(java, alert.getSkills().stream().findAny().get());
+	
+		alert.setSkills(Set.of(tester));
+	
+		assertEquals(1, alert.getSkills().size());
+		assertEquals(tester, alert.getSkills().stream().findAny().get());
+		
+	}
+	
 }

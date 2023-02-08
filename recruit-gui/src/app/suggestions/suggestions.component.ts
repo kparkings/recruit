@@ -289,7 +289,7 @@ export class SuggestionsComponent implements OnInit {
 											sessionStorage.removeItem('isAdmin');
 											sessionStorage.removeItem('isRecruter');
 											sessionStorage.removeItem('loggedIn');
-											sessionStorage.setItem('beforeAuthPage', 'view-candidates');
+											sessionStorage.setItem('beforeAuthPage', 'suggestions');
 											this.router.navigate(['login-user']);
 										}
     								});
@@ -470,7 +470,6 @@ export class SuggestionsComponent implements OnInit {
 		let params:SuggestionParams 	= new SuggestionParams(this.suggestionFilterForm, this.skillFilters, new Array<string>());
 		let alert:CandidateSearchAlert 	= new CandidateSearchAlert();
 		
-		alert.functions			 	= this.suggestionsService.getFunctionTypeFromTitleText(params.getTitle());
 		alert.alertName 			= this.createAlertForm.get(('alertName'))?.value;
 		alert.countries 			= params.getCountries();
 		alert.dutch 				= params.getDutchLevel();
@@ -479,13 +478,14 @@ export class SuggestionsComponent implements OnInit {
 		alert.french 				= params.getFrenchLevel();
 		alert.perm 					= params.getPerm();
 		alert.skills 				= params.getSkills();
+		alert.searchText			= params.getTitle();
 		
 		alert.yearsExperienceLtEq 	= params.getMinExperience();
 		alert.yearsExperienceGtEq 	= params.getMaxExperience();
 		
-		this.suggestionsService.extractSkillsFromSearchPhrase(params.getTitle()).forEach(s => {
-			alert.skills.push(s);
-		})
+		//this.suggestionsService.extractSkillsFromSearchPhrase(params.getTitle()).forEach(s => {
+		//	alert.skills.push(s);
+		//})
 		
 		this.candidateService.createCandidateSearchAlert(alert).subscribe(data => {
 			

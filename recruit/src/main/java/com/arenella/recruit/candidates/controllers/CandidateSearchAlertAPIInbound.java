@@ -19,6 +19,7 @@ import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 public class CandidateSearchAlertAPIInbound {
 
 	private String 				alertName;
+	private String				searchText							= "";
 	private Set<COUNTRY> 		countries							= new HashSet<>();
 	private Set<FUNCTION> 		functions							= new HashSet<>();
 	private Optional<Boolean> 	freelance							= Optional.empty();
@@ -44,6 +45,7 @@ public class CandidateSearchAlertAPIInbound {
 	public CandidateSearchAlertAPIInbound(CandidateSearchAlertAPIInboundBuilder builder) {
 		
 		this.alertName 				= builder.alertName;
+		this.searchText				= builder.searchText;
 		this.countries 				= builder.countries;
 		this.functions 				= builder.functions;
 		this.freelance 				= builder.freelance;
@@ -146,6 +148,13 @@ public class CandidateSearchAlertAPIInbound {
 	}
 	
 	/**
+	* Returns the Search text to filter Alerts on 
+	*/
+	public String getSearchText() {
+		return this.searchText;
+	}
+	
+	/**
 	* Returns a Builder for the CandidateSearchAlert class
 	* @return Builder
 	*/
@@ -161,6 +170,7 @@ public class CandidateSearchAlertAPIInbound {
 	public static class CandidateSearchAlertAPIInboundBuilder{
 		
 		private String 				alertName;
+		private String				searchText							= "";
 		private Set<COUNTRY> 		countries							= new HashSet<>();
 		private Set<FUNCTION> 		functions							= new HashSet<>();
 		private Optional<Boolean> 	freelance							= Optional.empty();
@@ -179,6 +189,16 @@ public class CandidateSearchAlertAPIInbound {
 		*/
 		public CandidateSearchAlertAPIInboundBuilder alertName(String alertName) {
 			this.alertName = alertName;
+			return this;
+		}
+		
+		/**
+		* Sets the searchText the Alert
+		* @param searchText - Display name of the alert
+		* @return Builder
+		*/
+		public CandidateSearchAlertAPIInboundBuilder searchText(String searchText) {
+			this.searchText = searchText;
 			return this;
 		}
 		

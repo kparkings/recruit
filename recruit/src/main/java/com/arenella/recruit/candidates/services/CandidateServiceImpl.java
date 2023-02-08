@@ -406,9 +406,14 @@ public class CandidateServiceImpl implements CandidateService{
 	* Refer to the CandidateService for details 
 	*/
 	@Override
-	public void addSearchAlert(CandidateSearchAlert alert) {
+	public void addSearchAlert(CandidateSearchAlert alert, String searchText) {
 		
 		alert.initAsNewAlert(this.getAuthenticatedRecruiterId());
+		
+		if (!searchText.isBlank()) {
+			Set<FUNCTION> functionToFilterOn = this.candidateFunctionExtractor.extractFunctions(searchText);
+			alert.setFunctions(functionToFilterOn);
+		}
 		
 		this.skillAlertDao.saveAlert(alert);
 		

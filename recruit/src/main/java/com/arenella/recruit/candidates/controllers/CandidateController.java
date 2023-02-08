@@ -194,7 +194,7 @@ public class CandidateController {
 	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('RECRUITER')")
 	@PostMapping(path="candidate/alert")
 	public ResponseEntity<Void> addSearchAlert(@RequestBody CandidateSearchAlertAPIInbound alert){
-		this.candidateService.addSearchAlert(CandidateSearchAlertAPIInbound.convertToDomain(alert));
+		this.candidateService.addSearchAlert(CandidateSearchAlertAPIInbound.convertToDomain(alert), alert.getSearchText());
 		return ResponseEntity.ok().build();
 	}
 	

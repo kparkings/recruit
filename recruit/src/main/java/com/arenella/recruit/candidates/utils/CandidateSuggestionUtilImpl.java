@@ -25,9 +25,9 @@ public class CandidateSuggestionUtilImpl implements CandidateSuggestionUtil{
 	public static final int POINTS_FOR_BASIC 		= 1;
 	
 	public static final int THRESHOLD_PERFECT 		= 100;
-	public static final int THRESHOLD_EXCELLENT 	= 85;
-	public static final int THRESHOLD_GOOD 			= 70;
-	public static final int THRESHOLD_AVERAGE 		= 50;
+	public static final int THRESHOLD_EXCELLENT 	= 75;
+	public static final int THRESHOLD_GOOD 			= 50;
+	public static final int THRESHOLD_AVERAGE 		= 40;
 	public static final int THRESHOLD_POOR 			= 25;
 	
 	/**

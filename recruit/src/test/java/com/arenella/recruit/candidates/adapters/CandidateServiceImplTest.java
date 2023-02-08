@@ -19,6 +19,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -26,6 +27,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import com.arenella.recruit.candidates.beans.Candidate;
 import com.arenella.recruit.candidates.beans.CandidateFilterOptions;
@@ -40,9 +42,10 @@ import com.arenella.recruit.candidates.dao.CandidateSkillsDao;
 import com.arenella.recruit.candidates.dao.PendingCandidateDao;
 import com.arenella.recruit.candidates.entities.CandidateEntity;
 import com.arenella.recruit.candidates.entities.PendingCandidateEntity;
+import com.arenella.recruit.candidates.enums.FUNCTION;
 import com.arenella.recruit.candidates.services.CandidateServiceImpl;
 import com.arenella.recruit.candidates.services.CandidateStatisticsService;
-import com.arenella.recruit.candidates.utils.CandidateFunctionExtractor;
+import com.arenella.recruit.candidates.utils.CandidateFunctionExtractorImpl;
 import com.arenella.recruit.candidates.utils.CandidateSuggestionUtil;
 import com.arenella.recruit.candidates.utils.SkillsSynonymsUtil;
 import com.arenella.recruit.candidates.utils.CandidateSuggestionUtil.suggestion_accuracy;
@@ -55,40 +58,40 @@ import com.arenella.recruit.candidates.utils.CandidateSuggestionUtil.suggestion_
 public class CandidateServiceImplTest {
 
 	@Mock
-	private CandidateDao 				mockCandidateDao;
+	private CandidateDao 					mockCandidateDao;
 	
 	@Mock
-	private PendingCandidateDao 		mockPendingCandidateDao;
+	private PendingCandidateDao 			mockPendingCandidateDao;
 	
 	@Mock
-	private ExternalEventPublisher		mockExternalEventPublisher;
+	private ExternalEventPublisher			mockExternalEventPublisher;
 	
 	@Mock
-	private CandidateStatisticsService 	mockStatisticsService;
+	private CandidateStatisticsService 		mockStatisticsService;
 	
 	@Mock
-	private CandidateSearchAlertDao		mockSkillAlertDao;
+	private CandidateSearchAlertDao			mockSkillAlertDao;
 	
 	@Mock
-	private SecurityContext				mockSecurityContext;
+	private SecurityContext					mockSecurityContext;
 	
 	@Mock
-	private Authentication				mockAuthentication;
+	private Authentication					mockAuthentication;
 	
 	@Mock
-	private CandidateSuggestionUtil		mockSuggestionUtil;
+	private CandidateSuggestionUtil			mockSuggestionUtil;
 	
 	@Mock
-	private SkillsSynonymsUtil			mockSkillsSynonymsUtil;	
+	private SkillsSynonymsUtil				mockSkillsSynonymsUtil;	
 	
 	@Mock
-	private CandidateSkillsDao			mockSkillDao;
+	private CandidateSkillsDao				mockSkillDao;
 	
-	@Mock
-	private CandidateFunctionExtractor	mockCandidateFunctionExtractor;
+	@Spy
+	private CandidateFunctionExtractorImpl	mockCandidateFunctionExtractor;
 	
 	@InjectMocks
-	private CandidateServiceImpl 		service 					= new CandidateServiceImpl();
+	private CandidateServiceImpl 			service 					= new CandidateServiceImpl();
 	
 	@BeforeEach
 	public void init() throws Exception{
@@ -343,17 +346,59 @@ public class CandidateServiceImplTest {
 	@Test
 	public void testAddSearchAlert() throws Exception{
 		
+		ReflectionTestUtils.invokeMethod(mockCandidateFunctionExtractor, "init");
+		
+		ArgumentCaptor<CandidateSearchAlert> argCapt = ArgumentCaptor.forClass(CandidateSearchAlert.class);
+		
 		Mockito.when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
 		
 		Mockito.when(mockAuthentication.getPrincipal()).thenReturn("reruiter1");
 
-		CandidateSearchAlert alert = CandidateSearchAlert.builder().build();
+		Mockito.doNothing().when(this.mockSkillAlertDao).saveAlert(argCapt.capture());
 		
-		this.service.addSearchAlert(alert);
+		CandidateSearchAlert alert = CandidateSearchAlert.builder().functions(Set.of(FUNCTION.IT_RECRUITER)).build();
+		
+		this.service.addSearchAlert(alert, "");
 		
 		assertNotNull(alert.getAlertId());
 		
 		Mockito.verify(this.mockSkillAlertDao).saveAlert(alert);
+		
+		assertEquals(1, argCapt.getValue().getFunctions().size());
+		assertTrue(argCapt.getValue().getFunctions().contains(FUNCTION.IT_RECRUITER));
+		
+	}
+
+	/**
+	* Tests persisting of Alert when searchText is available. In this case FUNCTIONS 
+	* must be defined from the searchText and override any existing defined FUNCTIONS
+	* @throws Exception
+	*/
+	@Test
+	public void testAddSearchAlert_hasSearchText() throws Exception{
+		
+		ReflectionTestUtils.invokeMethod(mockCandidateFunctionExtractor, "init");
+		
+		ArgumentCaptor<CandidateSearchAlert> argCapt = ArgumentCaptor.forClass(CandidateSearchAlert.class);
+		
+		Mockito.when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
+		Mockito.when(mockAuthentication.getPrincipal()).thenReturn("reruiter1");
+		Mockito.doNothing().when(this.mockSkillAlertDao).saveAlert(argCapt.capture());
+				
+		CandidateSearchAlert alert = 
+				CandidateSearchAlert
+				.builder()
+					.functions(Set.of(FUNCTION.ARCHITECT))
+				.build();
+		
+		this.service.addSearchAlert(alert, "java developer");
+		
+		assertNotNull(alert.getAlertId());
+		
+		Mockito.verify(this.mockSkillAlertDao).saveAlert(alert);
+		
+		assertEquals(1, argCapt.getValue().getFunctions().size());
+		assertTrue(argCapt.getValue().getFunctions().contains(FUNCTION.JAVA_DEV));
 		
 	}
 	

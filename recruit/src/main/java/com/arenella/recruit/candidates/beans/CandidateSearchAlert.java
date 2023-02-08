@@ -71,6 +71,16 @@ public class CandidateSearchAlert {
 	}
 	
 	/**
+	* Replaces any existing Functions with new 
+	* set of Functions
+	* @param functions - Functions to filter on
+	*/
+	public void setFunctions(Set<FUNCTION> functions) {
+		this.functions.clear();
+		this.functions.addAll(functions);
+	}
+	
+	/**
 	* Returns the unique id of the Alert
 	* @return id of the Alert
 	*/
@@ -172,6 +182,16 @@ public class CandidateSearchAlert {
 	*/
 	public Set<String> getSkills() {
 		return this.skills;
+	}
+	
+	/**
+	* Replaces any existing skills with an updated
+	* skill list
+	* @param skills
+	*/
+	public void setSkills(Set<String> skills) {
+		this.skills.clear();
+		this.skills.addAll(skills);
 	}
 	
 	/**

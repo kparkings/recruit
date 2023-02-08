@@ -12,47 +12,10 @@ import { Observable, throwError }                 		from 'rxjs';
 })
 export class SuggestionsService {
 
-	private keywordsCSharpDev:Array<string> 			= new Array<string>("c#",".net","dotnet","wpf","asp","vb.net","csharp","asp.net");
-	private keywordsSupport:Array<string> 				= new Array<string>("support","helpdesk","service desk");
-	private keywordsBusinessAnalyst:Array<string> 		= new Array<string>("business analyst","ba");
-	private keywordsUiUx:Array<string> 					= new Array<string>("ui\\ux","designer","ui","ux");
-	private keywordsProjectManager:Array<string> 		= new Array<string>("manager","product owner", "project manager", "pm");
-	private keywordsArchitect:Array<string> 			= new Array<string>("architect","solutions","enterprise");
-	private keywordsTester:Array<string> 				= new Array<string>("tester","test", "qa","automation","manual","quality","assurance", "selenium", "cucumber","testing","robot");
-	private keywordsWebDeveloper:Array<string> 			= new Array<string>("web developer","front end","front-end","js","vue","vuejs","vue.js","react","node","node.js","php","wordpress");
-	private keywordsScrumMaster:Array<string> 			= new Array<string>("scrum","master");
-	private keywordsDataScientist:Array<string> 		= new Array<string>("data analyst","bi","business intelligence","python");
-	private keywordsNetworkAdmin:Array<string> 			= new Array<string>("devops","network","admin","administrator","ops","operations", "cisco", "cloud", "windows", "ansible", "kubernetes", "salesforce","docker", "citrix", "servicenow", "tibco", "warehouse", "terraform", "dns", "o365", "ServiceNow", "VMWARE", "scripting", "firewall", "wireshark", "azure");
-	private keywordsSoftwareDeveloper:Array<string> 	= new Array<string>("php","python","wordpress","software engineer","software developer","golang", "c", "c++","vb", "go", "cobol","pl-sql","t-sql", "r", "groovy", "sql", "swift", "python", "ios", "scala", "microservices", "oracle", "react", "redux", "android", "sql", "node", "plsql", "go", "c++", "golang", "vue", "bdd", "laravel", "dba", "kotlin", "node.js", "ios", "ruby", "embedded", "oauth", "liferay");	
-	private keywordsItSecurity:Array<string> 			= new Array<string>("security","cyber","malware","owasp", "pen");
-	private keywordsItRecruiter:Array<string> 			= new Array<string>("recruiter","account manager");
-	private keywordsSdet:Array<string> 					= new Array<string>("tester","test", "sdet","developer in test","qa","automation tester", "selenium", "cucumber","testing");
-	private keywordsJava:Array<string> 					= new Array<string>("java","j2ee","java8","spring");
-
-	private allKeywords:Array<string>					= new Array<string>();
-
 	/**
 	* Constructor 
 	*/
 	constructor(private candidateService:CandidateServiceService) {
-
-		this.keywordsCSharpDev.forEach(itm => this.allKeywords.push(itm));
-		this.keywordsSupport.forEach(itm => this.allKeywords.push(itm));
-		this.keywordsBusinessAnalyst.forEach(itm => this.allKeywords.push(itm));
-		this.keywordsUiUx.forEach(itm => this.allKeywords.push(itm));
-		this.keywordsProjectManager.forEach(itm => this.allKeywords.push(itm));
-		this.keywordsArchitect.forEach(itm => this.allKeywords.push(itm));
-		this.keywordsTester.forEach(itm => this.allKeywords.push(itm));
-		this.keywordsWebDeveloper.forEach(itm => this.allKeywords.push(itm));
-		this.keywordsScrumMaster.forEach(itm => this.allKeywords.push(itm));
-		this.keywordsDataScientist.forEach(itm => this.allKeywords.push(itm));
-		this.keywordsNetworkAdmin.forEach(itm => this.allKeywords.push(itm));
-		this.keywordsSoftwareDeveloper.forEach(itm => this.allKeywords.push(itm));
-		this.keywordsItSecurity.forEach(itm => this.allKeywords.push(itm));
-		this.keywordsItRecruiter.forEach(itm => this.allKeywords.push(itm));
-		this.keywordsSdet.forEach(itm => this.allKeywords.push(itm));
-		this.keywordsJava.forEach(itm => this.allKeywords.push(itm));
-
 	}
 	
 	/**
@@ -68,12 +31,6 @@ export class SuggestionsService {
 							languages:Array<string>, 
 							skills:Array<string>): Observable<any>{
 		
-		let augmentedSkillsList:Array<string> = this.extractSkillsFromSearchPhrase(title);
-		
-		skills.forEach(a => {
-			augmentedSkillsList.push(a);	
-		});
-		
 		return this.candidateService.getCandidates(this.getCandidateFilterParamString(	maxNumberOfSuggestions, 
 																						title, 
 																						countries, 
@@ -82,28 +39,9 @@ export class SuggestionsService {
 																						experienceMin, 
 																						experienceMax, 
 																						languages, 
-																						augmentedSkillsList));
+																						skills));
 		
 	}
-	
-	public extractSkillsFromSearchPhrase(searchPhrase:string):Array<string>{
-		
-		let augmentedSkillsList:Array<string> = new Array<string>();
-		
-		searchPhrase.split(" ").forEach(skill => {
-			
-			let skillFormatted:string = skill.toLocaleLowerCase();
-		
-			skillFormatted = skillFormatted.trim();
-			
-			if (this.allKeywords.indexOf(skillFormatted) >-1 && augmentedSkillsList.indexOf(skillFormatted) == -1) {
-				augmentedSkillsList.push(skillFormatted);
-			}
-		});
-		
-		return augmentedSkillsList;
-		
-	} 
 	
 	/**
 	* Builds a query parameter string with the selected filter options
@@ -117,16 +55,13 @@ export class SuggestionsService {
 											experienceMax:string,
 											languages:Array<string>, 
 											skills:Array<string> ):string{
-    	
-		
 
 		const filterParams:string = 'orderAttribute=candidateId&order=desc'
                                                          + '&page=0'
                                                          + '&size=' + maxNumberOfSuggestions
 														 + '&useSuggestions=true'
 														 + '&searchText=' + encodeURIComponent(title)
-														 //+ this.getFunctionTypeFromTitle(title)
-                                                         + this.getCountryFilterParamString(countries) 			
+														 + this.getCountryFilterParamString(countries) 			
                                                          + this.getContractTypeParamString(contract, perm)				
                                                          + this.getYearsExperienceFilterParamAsString(experienceMin, experienceMax)
 														 + this.getSkillsParamString(skills)
@@ -136,7 +71,7 @@ export class SuggestionsService {
 	
 	}
 	
-		/**
+	/**
 	* Adds filter string if country specifed in Listing
 	*/
 	public getCountryFilterParamString(countries:Array<string>):string{
@@ -221,335 +156,4 @@ export class SuggestionsService {
 		return paramStr;
 	}
 	
-	public getFunctionTypeFromTitleText(title:string):Array<string>{
-		
-		let functionTypes:Array<string> = new Array<string>();
-		
-		let titleFormatted:string = title.toLowerCase();
-		titleFormatted = titleFormatted.trim();
-		
-		functionTypes.push(this.addFunctionTypeIfJavaDev(title));
-		functionTypes.push(this.addFunctionTypeIfCSHARPDev(title));
-		functionTypes.push(this.addFunctionTypeIfSupport(title));
-		functionTypes.push(this.addFunctionTypeIfBusinessAnalayst(title));
-		functionTypes.push(this.addFunctionTypeIfUiUx(title));
-		functionTypes.push(this.addFunctionTypeIfProjectManager(title)); 
-		functionTypes.push(this.addFunctionTypeIfArchitect(title)); 
-		functionTypes.push(this.addFunctionTypeIfTester(title)); 
-		functionTypes.push(this.addFunctionTypeIfWebDeveloper(title));
-		functionTypes.push(this.addFunctionTypeIfScrumMaster(title));
-		functionTypes.push(this.addFunctionTypeIfDataScientist(title));
-		functionTypes.push(this.addFunctionTypeIfNetworkAdmin(title));
-		functionTypes.push(this.addFunctionTypeIfSoftwareDeveloper(title));
-		functionTypes.push(this.addFunctionTypeIfSecurity(title));
-		functionTypes.push(this.addFunctionTypeIfRecruiter(title));
-		functionTypes.push(this.addFunctionTypeIfSDET(title));
-		
-		functionTypes = functionTypes.filter(f => f !== '');
-		
-		return functionTypes;
-	}
-	
-	private getFunctionTypeFromTitle(title:string):string{
-		
-		let functionTypes:Array<string> = this.getFunctionTypeFromTitleText(title);
-		
-		if (functionTypes.length > 0) {
-			return '&functions=' + encodeURIComponent(functionTypes.toString());
-		} 
-		
-		return '';
-	}
-
-	public addFunctionTypeIfJavaDev(title:string):string{
-		
-		let match:boolean = false;
-		
-		this.keywordsJava.forEach(kw => {
-			if (title.toLowerCase().indexOf(kw) > -1) {
-				match = true;
-			}
-		});
-		
-		if (match) {
-			
-			return 'JAVA_DEV';
-		} else {
-			return '';	
-		}	
-	}
-	
-
-	public addFunctionTypeIfCSHARPDev(title:string):string{
-		
-		let match:boolean = false;
-		
-		this.keywordsCSharpDev.forEach(kw => {
-			if (title.toLowerCase().indexOf(kw) > -1) {
-				match = true;
-			}
-		});
-		
-		if (match) {
-			return 'CSHARP_DEV';
-		} else {
-			return '';	
-		}	
-	}
-	
-	public addFunctionTypeIfSupport(title:string):string{
-		
-		let match:boolean = false;
-		
-		this.keywordsSupport.forEach(kw => {
-			if (title.toLowerCase().indexOf(kw) > -1) {
-				match = true;
-			}
-		});
-		
-		if (match) {
-			return 'SUPPORT';
-		} else {
-			return '';	
-		}	
-	}
-	
-	
-	private addFunctionTypeIfBusinessAnalayst(title:string):string{
-		
-		let match:boolean = false;
-		
-		this.keywordsBusinessAnalyst.forEach(kw => {
-			if (title.toLowerCase().indexOf(kw) > -1) {
-				match = true;
-			}
-		});
-		
-		if (match) {
-			return 'BA';
-		} else {
-			return '';	
-		}
-				
-	}
-	
-	private addFunctionTypeIfUiUx(title:string):string{
-		
-		let match:boolean = false;
-		
-		this.keywordsUiUx.forEach(kw => {
-			if (title.toLowerCase().indexOf(kw) > -1) {
-				match = true;
-			}
-		});
-		
-		if (match) {
-			return 'UI_UX';
-		} else {
-			return '';	
-		}
-				
-	} 
-	
-	private addFunctionTypeIfProjectManager(title:string):string{
-		
-		let match:boolean = false;
-		
-		this.keywordsProjectManager.forEach(kw => {
-			if (title.toLowerCase().indexOf(kw) > -1) {
-				match = true;
-			}
-		});
-		
-		if (match) {
-			return 'PROJECT_MANAGER';
-		} else {
-			return '';	
-		}
-				
-	} 
-	
-	private addFunctionTypeIfArchitect(title:string):string{ 
-		
-		let match:boolean = false;
-		
-		this.keywordsArchitect.forEach(kw => {
-			if (title.toLowerCase().indexOf(kw) > -1) {
-				match = true;
-			}
-		});
-		
-		if (match) {
-			return 'ARCHITECT';
-		} else {
-			return '';	
-		}
-				
-	} 
-	
-	
-	
-	private addFunctionTypeIfTester(title:string):string{
-		
-		let match:boolean = false;
-		
-		this.keywordsTester.forEach(kw => {
-			if (title.toLowerCase().indexOf(kw) > -1) {
-				match = true;
-			}
-		});
-		
-		if (match) {
-			return 'TESTER';
-		} else {
-			return '';	
-		}
-				
-	}  
-	
-	private addFunctionTypeIfWebDeveloper(title:string):string{
-		
-		let match:boolean = false;
-		
-		this.keywordsWebDeveloper.forEach(kw => {
-			if (title.toLowerCase().indexOf(kw) > -1) {
-				match = true;
-			}
-		});
-		
-		if (match) {
-			return 'WEB_DEV';
-		} else {
-			return '';	
-		}
-				
-	} 
-	
-	private addFunctionTypeIfScrumMaster(title:string):string{
-		
-		let match:boolean = false;
-		
-		this.keywordsScrumMaster.forEach(kw => {
-			if (title.toLowerCase().indexOf(kw) > -1) {
-				match = true;
-			}
-		});
-		
-		if (match) {
-			return 'SCRUM_MASTER';
-		} else {
-			return '';	
-		}
-				
-	} 
-	
-	private addFunctionTypeIfDataScientist(title:string):string{
-		
-		let match:boolean = false;
-		
-		this.keywordsDataScientist.forEach(kw => {
-			if (title.toLowerCase().indexOf(kw) > -1) {
-				match = true;
-			}
-		});
-		
-		if (match) {
-			return 'DATA_SCIENTIST';
-		} else {
-			return '';	
-		}
-				
-	} 
-	
-	private addFunctionTypeIfNetworkAdmin(title:string):string{
-		
-		let match:boolean = false;
-		
-		this.keywordsNetworkAdmin.forEach(kw => {
-			if (title.toLowerCase().indexOf(kw) > -1) {
-				match = true;
-			}
-		});
-		
-		if (match) {
-			return 'NETWORK_ADMINISTRATOR';
-		} else {
-			return '';	
-		}
-				
-	} 
-	
-	private addFunctionTypeIfSoftwareDeveloper(title:string):string{
-		
-		let match:boolean = false;
-		
-		this.keywordsSoftwareDeveloper.forEach(kw => {
-			if (title.toLowerCase().indexOf(kw) > -1) {
-				match = true;
-			}
-		});
-		
-		if (match) {
-			return 'SOFTWARE_DEVELOPER';
-		} else {
-			return '';	
-		}
-				
-	} 
-	
-	private addFunctionTypeIfSecurity(title:string):string{
-		
-		let match:boolean = false;
-		
-		this.keywordsItSecurity.forEach(kw => {
-			if (title.toLowerCase().indexOf(kw) > -1) {
-				match = true;
-			}
-		});
-		
-		if (match) {
-			return 'IT_SECURITY';
-		} else {
-			return '';	
-		}
-				
-	} 
-	
-	private addFunctionTypeIfRecruiter(title:string):string{
-		
-		let match:boolean = false;
-		
-		this.keywordsItRecruiter.forEach(kw => {
-			if (title.toLowerCase().indexOf(kw) > -1) {
-				match = true;
-			}
-		});
-		
-		if (match) {
-			return 'IT_RECRUITER';
-		} else {
-			return '';	
-		}
-				
-	} 
-	
-	private addFunctionTypeIfSDET(title:string):string{
-		
-		let match:boolean = false;
-		
-		this.keywordsSdet.forEach(kw => {
-			if (title.toLowerCase().indexOf(kw) > -1) {
-				match = true;
-			}
-		});
-		
-		if (match) {
-			return 'SOFTWARE_DEV_IN_TEST';
-		} else {
-			return '';	
-		}
-				
-	} 
-	
 }
-

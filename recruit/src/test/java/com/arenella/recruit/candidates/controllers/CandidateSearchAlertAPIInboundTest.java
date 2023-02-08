@@ -31,6 +31,7 @@ public class CandidateSearchAlertAPIInboundTest {
 	private static final Language.LEVEL 	FRENCH 			= Language.LEVEL.UNKNOWN;
 	private static final String				SKILL_JAVA	  	= "java";
 	private static final Set<String>		SKILLS 			= Set.of(SKILL_JAVA);
+	private static final String				SEARCH_TEXT		= "Java Developer";
 	
 	/**
 	* Tests construction via the Builder
@@ -43,6 +44,7 @@ public class CandidateSearchAlertAPIInboundTest {
 				CandidateSearchAlertAPIInbound
 					.builder()
 						.alertName(ALERT_NAME)
+						.searchText(SEARCH_TEXT)
 						.countries(COUNTRIES)
 						.dutch(DUTCH)
 						.english(ENGLISH)
@@ -56,6 +58,7 @@ public class CandidateSearchAlertAPIInboundTest {
 					.build();
 	
 		assertEquals(ALERT_NAME, 		alert.getAlertName());
+		assertEquals(SEARCH_TEXT, 		alert.getSearchText());
 		assertEquals(DUTCH, 			alert.getDutch());
 		assertEquals(ENGLISH, 			alert.getEnglish());
 		assertEquals(FRENCH, 			alert.getFrench());

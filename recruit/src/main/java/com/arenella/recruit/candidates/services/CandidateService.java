@@ -87,9 +87,10 @@ public interface CandidateService {
 
 	/**
 	* Saves a new Candidate Search Alert
-	* @param alert - Domain representation of an Alert
+	* @param alert 		- Domain representation of an Alert
+	* @param searchText - Search text to filter on
 	*/
-	public void addSearchAlert(CandidateSearchAlert alert);
+	public void addSearchAlert(CandidateSearchAlert alert, String searchText);
 
 	/**
 	* Returns the Alerts for the currently logged in User
