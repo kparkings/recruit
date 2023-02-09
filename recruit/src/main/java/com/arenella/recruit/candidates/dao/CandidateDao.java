@@ -45,7 +45,7 @@ public interface CandidateDao extends CrudRepository<CandidateEntity, Long>, Jpa
 	/**
 	* Returns all Candidates matching the filter options
 	* @param filterOptions - options to filter Candidates on
-	* @return Candidates matching the fitler options
+	* @return Candidates matching the filter options
 	*/
 	public default Page<CandidateEntity> findAll(CandidateFilterOptions filterOptions, Pageable pageable) {
 		return this.findAll(new FilterSpecification(filterOptions), pageable);

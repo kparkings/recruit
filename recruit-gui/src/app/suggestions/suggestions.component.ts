@@ -261,7 +261,7 @@ export class SuggestionsComponent implements OnInit {
 	*/
 	private getSuggestions():void{
 		
-		const maxSuggestions:number 		= 56;
+		const maxSuggestions:number 		= 112;
 		
 		let params:SuggestionParams = new SuggestionParams(this.suggestionFilterForm, this.skillFilters, new Array<string>());
 		

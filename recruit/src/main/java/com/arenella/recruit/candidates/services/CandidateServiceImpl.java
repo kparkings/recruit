@@ -348,12 +348,12 @@ public class CandidateServiceImpl implements CandidateService{
 				}
 				
 			});
-			
-			pageCounter = pageCounter + 1;
-			
+		
 			if (suggestions.size() >= maxSuggestions) {
 				return new PageImpl<CandidateSearchAccuracyWrapper>(suggestions.stream().limit(maxSuggestions).collect(Collectors.toCollection(LinkedList::new)));
 			} else if (!(candidates.getTotalPages() >= pageCounter)) {
+			
+				pageCounter = -1;
 				
 				switch(accuracy.get()) {
 					case perfect:{
@@ -377,13 +377,11 @@ public class CandidateServiceImpl implements CandidateService{
 					}
 					
 				} 
-				
-				pageCounter = 0;
-				pageable = PageRequest.of(pageCounter,100);
 					
 			}
 			
-			
+			pageCounter = pageCounter + 1;
+			pageable 	= PageRequest.of(pageCounter,100);
 		}
 
 	}
