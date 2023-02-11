@@ -27,6 +27,9 @@ import { Router}									from '@angular/router';
 })
 export class SuggestionsComponent implements OnInit {
 
+
+	public savedCandidates:Array<SavedCandidate> = new Array<SavedCandidate>();
+
 	public createAlertForm:UntypedFormGroup = new UntypedFormGroup({
 		alertName:			new UntypedFormControl(''),
 	});
@@ -240,6 +243,28 @@ export class SuggestionsComponent implements OnInit {
 		this.suggestionFilterForm.valueChanges.subscribe(value => {
 			this.getSuggestions();	
 		});
+		
+		this.candidateService.fetchSavedCandidates().subscribe(response => {
+			this.savedCandidates = response;
+		})
+		
+		
+	}
+	
+	/**
+	* Whether the candidate is a Saved Candidate
+	*/
+	public isSavedCandidate(candidate:Candidate):boolean{
+		
+		let chk:boolean = false;
+		
+		this.savedCandidates.forEach(sc => {
+			if(""+sc.candidateId === ""+candidate.candidateId) {
+				chk = true;
+			}
+		});
+		
+		return chk;
 	}
 	
 	
@@ -349,18 +374,16 @@ export class SuggestionsComponent implements OnInit {
 		this.getSuggestions();	
 	
 	}
-
-	public savedCandidates:Array<SavedCandidate> = new Array<SavedCandidate>();
 	
 	/**
-	* Shows the Suggesion result view
+	* Shows the Saved Candidates view
 	*/
 	public showSavedCandidates():void{
 		this.currentView 	= 'saved-candidates';
 		this.lastView 		= 'saved-candidates';
 		this.candidateService.fetchSavedCandidates().subscribe(response => {
 			this.savedCandidates = response;
-		})
+		});
 	}
 	
 	/**
@@ -407,14 +430,20 @@ export class SuggestionsComponent implements OnInit {
 		
 		savedCandidate.candidateId = Number(suggestedCandidate.candidateId);
 		
-		this.candidateService.addSavedCandidate(savedCandidate).subscribe(response => {});
+		this.candidateService.addSavedCandidate(savedCandidate).subscribe(response => {
+			this.candidateService.fetchSavedCandidates().subscribe(response => {
+				this.savedCandidates = response;
+			})
+		});
 	}
 	
 	/**
 	* Marks Candidate as no longer being being remembered
 	*/
-	public forgetCandidate(suggestedCandidate:Candidate):void{
-		//TODO:
+	public forgetCandidate(savedCandidate:Candidate):void{
+		this.candidateService.deleteSavedCandidate(Number(savedCandidate.candidateId)).subscribe(response => {
+			this.showSavedCandidates();
+		});
 	}
 	
 	/**
@@ -433,25 +462,6 @@ export class SuggestionsComponent implements OnInit {
   	public isAuthenticatedAsAdmin():boolean {
     	return sessionStorage.getItem('isAdmin') === 'true';
   	}
-	
-	public contractType():string{
-		
-		if (this.suggestedCandidate.freelance === 'TRUE' && this.suggestedCandidate.perm === 'TRUE') {
-			return'Contract / Pern ';
-		}
-		
-		if (this.suggestedCandidate.perm === 'TRUE') {
-			return'Pern ';
-		}
-		
-		if (this.suggestedCandidate.freelance === 'TRUE') {
-			return'Contract ';
-		}
-		
-		return '';
-		
-		
-	}
 	
 	/**
 	* Returns the Humand readable version of the Language
@@ -518,10 +528,6 @@ export class SuggestionsComponent implements OnInit {
 		
 		alert.yearsExperienceLtEq 	= params.getMinExperience();
 		alert.yearsExperienceGtEq 	= params.getMaxExperience();
-		
-		//this.suggestionsService.extractSkillsFromSearchPhrase(params.getTitle()).forEach(s => {
-		//	alert.skills.push(s);
-		//})
 		
 		this.candidateService.createCandidateSearchAlert(alert).subscribe(data => {
 			

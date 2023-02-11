@@ -1,6 +1,7 @@
 package com.arenella.recruit.candidates.services;
 
 import java.io.IOException;
+import java.security.Principal;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -503,6 +504,20 @@ public class CandidateServiceImpl implements CandidateService{
 		});
 		
 		return candidates;
+	}
+
+	/**
+	* Refer to the CandidateService for details 
+	*/
+	@Override
+	public void removeSavedCandidate(long candidateId, Principal principal) {
+		
+		if (!savedCandidateDao.exists(principal.getName(), candidateId)) {
+			throw new IllegalArgumentException("Candidate already exists");
+		}
+		
+		this.savedCandidateDao.delete(principal.getName(), candidateId);
+		
 	}
 	
 }

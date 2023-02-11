@@ -1,6 +1,7 @@
 package com.arenella.recruit.candidates.services;
 
 import java.io.IOException;
+import java.security.Principal;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -131,5 +132,12 @@ public interface CandidateService {
 	* @return SavedCandidates
 	*/
 	public Map<SavedCandidate, Candidate> fetchSavedCandidatesForUser();
+
+	/**
+	* Removes a Saved candidate for the authenticated user
+	* @param candidateId - Id of candidate to remove from Users saved candidates
+	* @param principal   - Auth for current user
+	*/
+	public void removeSavedCandidate(long candidateId, Principal principal);
 	
 }

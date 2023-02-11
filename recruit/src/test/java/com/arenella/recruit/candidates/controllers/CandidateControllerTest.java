@@ -277,7 +277,7 @@ public class CandidateControllerTest {
 	@Test
 	public void testRemoveSavedCandidates() throws Exception{
 		
-		ResponseEntity<Void> response = this.controller.removeSavedCandidate(123);
+		ResponseEntity<Void> response = this.controller.removeSavedCandidate(123, mockPrincipal);
 	
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 	

@@ -50,6 +50,22 @@ public interface SavedCandidateDao extends CrudRepository<SavedCandidateEntity, 
 	}
 	
 	/**
+	* Delete Saved canidate by Id
+	* @param userId			- Id of user
+	* @param candidateId	- id of candidate to be removed
+	*/
+	public default void delete(String userId, long candidateId) {
+		
+		SavedCandidateEntityId id = new SavedCandidateEntityId();
+		
+		id.setCandidateId(candidateId);
+		id.setUserId(userId);
+		
+		this.deleteById(id);
+		
+	}
+
+	/**
 	* Persists a SavedCandidate 
 	*/
 	public default void persistSavedCandidate(SavedCandidate savedCandidate) {

@@ -2,7 +2,6 @@ package com.arenella.recruit.candidates.controllers;
 
 import java.security.Principal;
 import java.util.LinkedHashSet;
-import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -24,7 +23,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.arenella.recruit.candidates.beans.Candidate;
 import com.arenella.recruit.candidates.beans.CandidateExtractedFilters;
 import com.arenella.recruit.candidates.beans.CandidateFilterOptions;
 import com.arenella.recruit.candidates.beans.CandidateSearchAccuracyWrapper;
@@ -288,7 +286,10 @@ public class CandidateController {
 	*/
 	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('ROLE_RECRUITER')")
 	@DeleteMapping(value="saved-candidate/{candidateId}")
-	public ResponseEntity<Void> removeSavedCandidate(@RequestParam long candidateId) {
+	public ResponseEntity<Void> removeSavedCandidate(@PathVariable long candidateId, Principal principal) {
+		
+		this.candidateService.removeSavedCandidate(candidateId, principal);
+		
 		return ResponseEntity.status(HttpStatus.OK).build();
 	}
 	

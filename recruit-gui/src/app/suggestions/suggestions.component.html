@@ -19,7 +19,7 @@
 			
 			<div class="suggestion-icon" *ngFor="let savedCandidate of savedCandidates" (click)="showSuggestedCandidateOverview(savedCandidate.candidate)">
 				
-				<div class="suggestion-icon-header">
+				<div class="saved-candidate-icon-header">
 					C{{savedCandidate.candidateId}}
 				</div>
 				<div title="Accuracy Skills" class="suggestion-perception-result-{{savedCandidate.candidate.accuracySkills}}"></div>
@@ -173,8 +173,9 @@
 				<button class="btn btn-secondary btn-action">Download CV</button>
 			</a>
 			<button class="btn btn-secondary btn-action" (click)="showInlineCVView()" 						*ngIf="!isMobile">Display CV</button>
-			<button class="btn btn-secondary btn-action" (click)="forgetCandidate(suggestedCandidate)" 	*ngIf="lastView === 'saved-candidates'" title="removed candidate from your list of selected candidates">Remove Candidate</button>
-			<button class="btn btn-secondary btn-action" (click)="rememberCandidate(suggestedCandidate)" 	*ngIf="lastView != 'saved-candidates'" title="Add candidate to your list of selected candidates">Save Candidate</button>
+			<button class="btn btn-secondary btn-action" (click)="forgetCandidate(suggestedCandidate)" 		*ngIf="lastView === 'saved-candidates'" title="removed candidate from your list of selected candidates">Remove Candidate</button>
+			<button class="btn btn-secondary btn-action" (click)="rememberCandidate(suggestedCandidate)" 	*ngIf="lastView != 'saved-candidates' && !isSavedCandidate(suggestedCandidate)" title="Add candidate to your list of selected candidates">Save Candidate</button>
+			<button class="btn btn-secondary btn-action" (click)="rememberCandidate(suggestedCandidate)" 	*ngIf="lastView != 'saved-candidates' && isSavedCandidate(suggestedCandidate)" title="Add candidate to your list of selected candidates" disabled>Save Candidate</button>
 			<button class="btn btn-secondary btn-action" (click)="showSuggestionsResults()" 				*ngIf="lastView != 'saved-candidates'">back</button>
 			<button class="btn btn-secondary btn-action" (click)="showSavedCandidates()" 					*ngIf="lastView === 'saved-candidates'">back</button>
 		</div>
