@@ -11,7 +11,7 @@ import { environment }								from './../environments/environment';
 import { SearchAlert }		 	                    from './recruiter-alerts/search-alert';
 import { CandidateSearchAlert }                     from './suggestions/candidate-search-alert';
 import { ExtractedFilters }                     	from './suggestions/extracted-filters';
-
+import { SavedCandidate }		 	                from './suggestions/saved-candidate';
 
 /**
 * Services for new Candidates
@@ -286,4 +286,48 @@ export class CandidateServiceService {
   
   	}
 
+	/**
+	* Adds a Saved Candidate for a User
+	*/
+	public addSavedCandidate(savedCandidate:SavedCandidate): Observable<void>{
+		
+		const backendUrl:string = environment.backendUrl +'saved-candidate';
+	
+		return this.httpClient.post<any>(backendUrl, JSON.stringify(savedCandidate), this.httpOptions);
+
+	}
+
+	/**
+	* Updates an existing  Saved Candidate for a User
+	*/
+	public updateSavedCandidate(savedCandidate:SavedCandidate): Observable<void>{
+		
+		const backendUrl:string = environment.backendUrl +'saved-candidate';
+	
+		return this.httpClient.put<any>(backendUrl, JSON.stringify(savedCandidate), this.httpOptions);
+
+	}
+
+	/**
+	* Updates an existing  Saved Candidate for a User
+	*/
+	public fetchSavedCandidates(): Observable<Array<SavedCandidate>>{
+		
+		const backendUrl:string = environment.backendUrl +'saved-candidate';
+	
+		return this.httpClient.get<any>(backendUrl, this.httpOptions);
+
+	}
+
+	/**
+	* Updates an existing  Saved Candidate for a User
+	*/
+	public deleteSavedCandidate(candidateId:number): Observable<void>{
+		
+		const backendUrl:string = environment.backendUrl +'saved-candidate/' + candidateId;
+	
+		return this.httpClient.delete<any>(backendUrl, this.httpOptions);
+
+	}
+			
 }

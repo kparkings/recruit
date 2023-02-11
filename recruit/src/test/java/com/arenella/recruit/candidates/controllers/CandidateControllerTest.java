@@ -3,6 +3,7 @@ package com.arenella.recruit.candidates.controllers;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.security.Principal;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -45,6 +46,9 @@ public class CandidateControllerTest {
 	
 	@Mock
 	private MultipartFile				mockMultipartFile;
+	
+	@Mock
+	private Principal					mockPrincipal;
 	
 	@InjectMocks
 	private CandidateController 		controller;
@@ -254,6 +258,55 @@ public class CandidateControllerTest {
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		
 		assertTrue(response.getBody() instanceof CandidateExtractedFilters);
+		
+	}
+	
+	/**
+	* Tests request for saved candidates are returned
+	* @throws Exception
+	*/
+	@Test
+	public void testFetchSavedCandidates() throws Exception{
+		
+	}
+	
+	/**
+	* Tests sending of request to remove saved candidate
+	* @throws Exception
+	*/
+	@Test
+	public void testRemoveSavedCandidates() throws Exception{
+		
+		ResponseEntity<Void> response = this.controller.removeSavedCandidate(123);
+	
+		assertEquals(HttpStatus.OK, response.getStatusCode());
+	
+	}
+	
+	/**
+	* Tests request to update existing saved candidate
+	* @throws Exception
+	*/
+	@Test
+	public void testUpdateSavedCandidates() throws Exception{
+	
+		ResponseEntity<Void> response = this.controller.updateSavedCandidate(SavedCandidateAPIInbound.builder().build());
+		
+		assertEquals(HttpStatus.OK, response.getStatusCode());
+		
+	}
+	
+	/**
+	* Tests request to add a saved candidate for a User
+	* @throws Exception
+	*/
+	@Test
+	public void testAddSavedCandidates() throws Exception{
+		
+		ResponseEntity<Void> response = this.controller.addSavedCandidate(SavedCandidateAPIInbound.builder().build(), mockPrincipal);
+		
+		assertEquals(HttpStatus.CREATED, response.getStatusCode());
+		
 		
 	}
 	

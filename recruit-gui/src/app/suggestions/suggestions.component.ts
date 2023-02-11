@@ -4,6 +4,7 @@ import { CandidateServiceService }					from '../candidate-service.service';
 import { SuggestionsService }						from '../suggestions.service';
 import { CurriculumService }						from '../curriculum.service';
 import { Candidate}									from './candidate';
+import { SavedCandidate}							from './saved-candidate';
 import { SuggestionParams}							from './suggestion-param-generator';
 import { environment }								from '../../environments/environment';
 import { Clipboard } 								from '@angular/cdk/clipboard';
@@ -349,12 +350,17 @@ export class SuggestionsComponent implements OnInit {
 	
 	}
 
+	public savedCandidates:Array<SavedCandidate> = new Array<SavedCandidate>();
+	
 	/**
 	* Shows the Suggesion result view
 	*/
 	public showSavedCandidates():void{
 		this.currentView 	= 'saved-candidates';
 		this.lastView 		= 'saved-candidates';
+		this.candidateService.fetchSavedCandidates().subscribe(response => {
+			this.savedCandidates = response;
+		})
 	}
 	
 	/**
@@ -396,7 +402,12 @@ export class SuggestionsComponent implements OnInit {
 	* Marks Candidate as being remembered
 	*/
 	public rememberCandidate(suggestedCandidate:Candidate):void{
-		//TODO:
+		
+		const savedCandidate:SavedCandidate = new SavedCandidate();
+		
+		savedCandidate.candidateId = Number(suggestedCandidate.candidateId);
+		
+		this.candidateService.addSavedCandidate(savedCandidate).subscribe(response => {});
 	}
 	
 	/**

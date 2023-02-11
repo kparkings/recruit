@@ -1372,3 +1372,31 @@ databaseChangeLog:
                   constraints:
                     primaryKey: true
                     nullable: false
+  - changeSet:
+      id: create_saved+candidate_table
+      author: kparkings
+      changes:
+        - createTable:
+            tableName: saved_candidates
+            schemaName: candidate
+            columns:
+              - column:
+                  name: user_id
+                  type: varchar(36)
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: candidate_id
+                  type: bigint
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+                    foreignKeyName: fk_saved_candidate_candidate
+                    references: candidate.candidate(candidate_id)
+              - column:
+                  name: notes
+                  type: varchar()
+                  constraints:
+                    primaryKey: false
+                    nullable: true

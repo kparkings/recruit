@@ -1,6 +1,8 @@
 package com.arenella.recruit.candidates.controllers;
 
+import java.security.Principal;
 import java.util.LinkedHashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -22,8 +24,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.arenella.recruit.candidates.beans.Candidate;
 import com.arenella.recruit.candidates.beans.CandidateExtractedFilters;
 import com.arenella.recruit.candidates.beans.CandidateFilterOptions;
+import com.arenella.recruit.candidates.beans.CandidateSearchAccuracyWrapper;
 import com.arenella.recruit.candidates.beans.Language;
 import com.arenella.recruit.candidates.enums.COUNTRY;
 import com.arenella.recruit.candidates.enums.FUNCTION;
@@ -242,6 +246,61 @@ public class CandidateController {
 		
 		return ResponseEntity.ok(extractedFilters);
 		
+	}
+	
+	/**
+	* Adds a Candidate to the Users list of saved Candidates
+	* @param savedCandidate - Candidate to add to the Users saved candidate list
+	* @return ResponseEntity
+	*/
+	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('ROLE_RECRUITER')")
+	@PostMapping(value="saved-candidate")
+	public ResponseEntity<Void> addSavedCandidate(@RequestBody SavedCandidateAPIInbound savedCandidate, Principal principal) {
+		
+		this.candidateService.addSavedCanidate(SavedCandidateAPIInbound.convertToDomain(savedCandidate, principal.getName()));
+		
+		return ResponseEntity.status(HttpStatus.CREATED).build();
+	}
+	
+	/**
+	* Returns a list of candidates previously saved by the current User
+	* @param userId - Unique id of the User
+	* @return Saved candidates for the User
+	*/
+	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('ROLE_RECRUITER')")
+	@GetMapping(value="saved-candidate")
+	public ResponseEntity<Set<SavedCandidateAPIOutbound>> fetchSavedCandidates() {
+		
+		Set<SavedCandidateAPIOutbound> candidates = new LinkedHashSet<>();
+			
+		this.candidateService.fetchSavedCandidatesForUser().entrySet().forEach(es -> {
+			candidates.add(SavedCandidateAPIOutbound.convertFromDomain(es.getKey(), new CandidateSearchAccuracyWrapper(es.getValue())));
+		});
+		
+		return ResponseEntity.status(HttpStatus.OK).body(candidates);
+	}
+	
+	/**
+	* Deletes a Saved Candidate from the users saved Candidates
+	* @param userId			- Unique id of the User
+	* @param candidateId	- Unique id of the Candidate
+	* @return ResponseEntity
+	*/
+	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('ROLE_RECRUITER')")
+	@DeleteMapping(value="saved-candidate/{candidateId}")
+	public ResponseEntity<Void> removeSavedCandidate(@RequestParam long candidateId) {
+		return ResponseEntity.status(HttpStatus.OK).build();
+	}
+	
+	/**
+	* Updates the Users saved Candidate
+	* @param savedCandidate - Latest version of the Saved Candidate
+	* @return ResponseEntity 
+	*/ 
+	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('ROLE_RECRUITER')")
+	@PutMapping(value="saved-candidate")
+	public ResponseEntity<Void> updateSavedCandidate(@RequestBody SavedCandidateAPIInbound savedCandidate) {
+		return ResponseEntity.status(HttpStatus.OK).build();
 	}
 	
 }

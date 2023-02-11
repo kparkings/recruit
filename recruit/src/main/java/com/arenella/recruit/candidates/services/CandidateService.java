@@ -1,6 +1,7 @@
 package com.arenella.recruit.candidates.services;
 
 import java.io.IOException;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import org.springframework.data.domain.Page;
@@ -13,6 +14,7 @@ import com.arenella.recruit.candidates.beans.CandidateSearchAccuracyWrapper;
 import com.arenella.recruit.candidates.beans.CandidateSearchAlert;
 import com.arenella.recruit.candidates.beans.PendingCandidate;
 import com.arenella.recruit.candidates.controllers.CandidateController.CANDIDATE_UPDATE_ACTIONS;
+import com.arenella.recruit.candidates.controllers.SavedCandidate;
 import com.arenella.recruit.candidates.utils.CandidateSuggestionUtil.suggestion_accuracy;
 import com.arenella.recruit.curriculum.enums.FileType;
 
@@ -117,5 +119,17 @@ public interface CandidateService {
 	* @return extracted filters
 	*/
 	public CandidateExtractedFilters extractFiltersFromDocument(FileType fileType, byte[] fileBytes) throws IOException;
+
+	/**
+	* Persists a new Saved Candidate 
+	* @param convertToDomain
+	*/
+	public void addSavedCanidate(SavedCandidate savedCandidate);
+	
+	/**
+	* Fetches all the SaveCandidates belonging to the authenticated User
+	* @return SavedCandidates
+	*/
+	public Map<SavedCandidate, Candidate> fetchSavedCandidatesForUser();
 	
 }

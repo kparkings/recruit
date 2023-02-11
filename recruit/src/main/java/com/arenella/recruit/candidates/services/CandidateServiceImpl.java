@@ -2,8 +2,10 @@ package com.arenella.recruit.candidates.services;
 
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -29,6 +31,7 @@ import com.arenella.recruit.candidates.beans.CandidateSearchAccuracyWrapper;
 import com.arenella.recruit.candidates.beans.CandidateSearchAlert;
 import com.arenella.recruit.candidates.beans.PendingCandidate;
 import com.arenella.recruit.candidates.controllers.CandidateController.CANDIDATE_UPDATE_ACTIONS;
+import com.arenella.recruit.candidates.controllers.SavedCandidate;
 import com.arenella.recruit.candidates.dao.CandidateDao;
 import com.arenella.recruit.candidates.dao.PendingCandidateDao;
 import com.arenella.recruit.candidates.entities.CandidateEntity;
@@ -41,6 +44,7 @@ import com.arenella.recruit.candidates.utils.SkillsSynonymsUtil;
 import com.arenella.recruit.curriculum.enums.FileType;				//TODO: [KP] Why are we referencing other service
 import com.arenella.recruit.candidates.dao.CandidateSearchAlertDao;
 import com.arenella.recruit.candidates.dao.CandidateSkillsDao;
+import com.arenella.recruit.candidates.dao.SavedCandidateDao;
 
 import com.arenella.recruit.candidates.utils.CandidateFunctionExtractor;
 
@@ -80,6 +84,9 @@ public class CandidateServiceImpl implements CandidateService{
 	
 	@Autowired
 	private CandidateFunctionExtractor		candidateFunctionExtractor;
+	
+	@Autowired
+	private SavedCandidateDao				savedCandidateDao;
 	
 	/**
 	* Refer to the CandidateService Interface for Details
@@ -461,6 +468,41 @@ public class CandidateServiceImpl implements CandidateService{
 		}catch(Exception e) {
 			throw new RuntimeException("Unable to process job specification file");
 		}
+	}
+
+	/**
+	* Refer to the CandidateService for details 
+	*/
+	@Override
+	public void addSavedCanidate(SavedCandidate savedCandidate) {
+		
+		if (savedCandidateDao.exists(savedCandidate.getUserId(), savedCandidate.getCandidateId())) {
+			throw new IllegalArgumentException("Candidate already exists");
+		}
+		
+		this.savedCandidateDao.persistSavedCandidate(savedCandidate);
+		
+	}
+
+	/**
+	* Refer to the CandidateService for details 
+	*/
+	@Override
+	public Map<SavedCandidate, Candidate> fetchSavedCandidatesForUser() {
+		
+		Map<SavedCandidate, Candidate> candidates = new LinkedHashMap<>();
+		
+		this.savedCandidateDao.fetchSavedCandidatesByUserId(getAuthenticatedRecruiterId()).stream().forEach(c -> {
+			
+			if (this.candidateDao.existsById(c.getCandidateId())) {
+			
+				candidates.put(c, candidateDao.findCandidateById(c.getCandidateId()).get());
+				
+			}
+			
+		});
+		
+		return candidates;
 	}
 	
 }
