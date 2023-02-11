@@ -5,7 +5,39 @@
 		<button class="btn btn-secondary btnRight main-btns" (click)="doReset()">Reset</button>
 		<button class="btn btn-secondary btnRight main-btns" (click)="showFilterByJobSpecDialog(specUploadBox)" download>Filter by Job Spec</button>
 		<button class="btn btn-secondary btnRight main-btns" (click)="showCreateAlertDialog(feedbackBox)" download>Create Email Alert</button>
+		<button class="btn btn-secondary btnRight main-btns" (click)="showSavedCandidates()" download>Your Candidates</button>
 	 </div>
+	 
+	
+	<div *ngIf="currentView === 'saved-candidates'" class="suggestion-results">
+		
+		<div style="text-align:right;margin-right:50px;">
+			<button class="btn btn-secondary btn-action" (click)="showSuggestionsResults()">back</button>
+		</div>
+	 
+		<div class="suggestion-result-icons" style="margin-top:50px">
+			
+			<div class="suggestion-icon" *ngFor="let suggestion of suggestions" (click)="showSuggestedCandidateOverview(suggestion)">
+				
+				<div class="suggestion-icon-header">
+					C{{suggestion.candidateId}}
+				</div>
+				<div title="Accuracy Skills" class="suggestion-perception-result-{{suggestion.accuracySkills}}"></div>
+				<div title="Accuracy Languages" class="suggestion-perception-result-{{suggestion.accuracyLanguages}}"></div>
+				<div class="suggestion-icon-body">
+					<div>
+						{{suggestion.firstname}} {{suggestion.surname}}
+					</div>
+					<div>
+						{{suggestion.roleSought}}
+					</div>
+				</div>
+				
+			</div>
+				
+		</div>
+		<div style="height:20px;width:300px;">&nbsp;</div>
+	</div>
 	
 	<div>	
 		<form [formGroup]="suggestionFilterForm" *ngIf="currentView === 'suggestion-results'">
@@ -135,17 +167,15 @@
 	</div>
 
 	<!-- Suggestion Profile -->
-	<div style="margin-top:10px;" *ngIf="currentView !== 'suggestion-results' && currentView !== 'inline-cv'">
+	<div style="margin-top:10px;" *ngIf="currentView !== 'suggestion-results' && currentView !== 'inline-cv' && currentView !== 'saved-candidates'">
 		<div class="suggestion-buttons">
-			<!--  
-			<button *ngIf="!suggestedCandidate.flaggedAsUnavailable" class="btn btn-secondary btn-action" (click)="markCandidateAsUnavailable()" title="If the candidtae is no longer available use this button to let us know and we will remove them form the system.">Flag unavailable</button>
-			<button *ngIf="suggestedCandidate.flaggedAsUnavailable" disabled class="btn btn-secondary btn-action" style="margin-right:10px;background:red;">Flagged unavailable</button>
-	    	-->
-	    	<a class="currliculum-link" href="{{getCurriculumDownloadUrl(suggestedCandidate.candidateId)}}" >
+			<a class="currliculum-link" href="{{getCurriculumDownloadUrl(suggestedCandidate.candidateId)}}" >
 				<button class="btn btn-secondary btn-action">Download CV</button>
 			</a>
-			<button class="btn btn-secondary btn-action" (click)="showInlineCVView()" *ngIf="!isMobile">Display CV</button>
-			<button class="btn btn-secondary btn-action" (click)="showSuggestionsResults()">back</button>
+			<button class="btn btn-secondary btn-action" (click)="showInlineCVView()" 						*ngIf="!isMobile">Display CV</button>
+			<button class="btn btn-secondary btn-action" (click)="rememberCandidate(suggestedCandidate)" 	*ngIf="lastView != 'saved-candidates'" alt="Add candidate to your list of selected candidates">Save Candidate</button>
+			<button class="btn btn-secondary btn-action" (click)="showSuggestionsResults()" 				*ngIf="lastView != 'saved-candidates'">back</button>
+			<button class="btn btn-secondary btn-action" (click)="showSavedCandidates()" 					*ngIf="lastView === 'saved-candidates'">back</button>
 		</div>
 	</div>
 	<div *ngIf="currentView === 'suggested-canidate-overview'" class="suggestion-results" style="width:90%;">

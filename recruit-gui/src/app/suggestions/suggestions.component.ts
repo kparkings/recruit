@@ -352,9 +352,18 @@ export class SuggestionsComponent implements OnInit {
 	/**
 	* Shows the Suggesion result view
 	*/
+	public showSavedCandidates():void{
+		this.currentView 	= 'saved-candidates';
+		this.lastView 		= 'saved-candidates';
+	}
+	
+	/**
+	* Shows the Suggesion result view
+	*/
 	public showSuggestionsResults():void{
-		this.currentView = 'suggestion-results';
-		this.suggestedCandidate = new Candidate();
+		this.currentView 		= 'suggestion-results';
+		this.suggestedCandidate = new Candidate();	
+		this.lastView 			= '';
 	}
 
 	/**
@@ -369,8 +378,8 @@ export class SuggestionsComponent implements OnInit {
 	* Shows the Suggesion result view
 	*/
 	public showSuggestedCandidateOverview(candidateSuggestion:Candidate):void{
-		this.currentView = 'suggested-canidate-overview';
-		this.suggestedCandidate = candidateSuggestion;
+		this.currentView 			= 'suggested-canidate-overview';
+		this.suggestedCandidate 	= candidateSuggestion;
 	}
 	
 	/**
@@ -379,6 +388,22 @@ export class SuggestionsComponent implements OnInit {
 	public markCandidateAsUnavailable():void {
 		this.candidateService.markCandidateAsUnavailable(this.suggestedCandidate.candidateId).subscribe(data => {});
 		this.suggestedCandidate.flaggedAsUnavailable = true;
+	}
+	
+	public lastView:string = '';
+	
+	/**
+	* Marks Candidate as being remembered
+	*/
+	public rememberCandidate(suggestedCandidate:Candidate):void{
+		//TODO:
+	}
+	
+	/**
+	* Marks Candidate as no longer being being remembered
+	*/
+	public forgetCandidate(suggestedCandidate:Candidate):void{
+		//TODO:
 	}
 	
 	/**
