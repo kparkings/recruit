@@ -718,8 +718,8 @@ public class CandidateServiceImplTest {
 		
 		Mockito.when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
 		Mockito.when(mockAuthentication.getPrincipal()).thenReturn(userId);
-		Mockito.when(this.mockCandidateDao.findCandidateById(candidate1)).thenReturn(Optional.of(Candidate.builder().candidateId(String.valueOf(candidate1)).build()));
-		Mockito.when(this.mockCandidateDao.findCandidateById(candidate2)).thenReturn(Optional.of(Candidate.builder().candidateId(String.valueOf(candidate2)).build()));
+		Mockito.when(this.mockCandidateDao.findCandidateById(candidate1)).thenReturn(Optional.of(Candidate.builder().available(true).candidateId(String.valueOf(candidate1)).build()));
+		Mockito.when(this.mockCandidateDao.findCandidateById(candidate2)).thenReturn(Optional.of(Candidate.builder().available(true).candidateId(String.valueOf(candidate2)).build()));
 		Mockito.when(this.mockCandidateDao.existsById(Mockito.anyLong())).thenReturn(true);
 		Mockito.when(this.mockSavedCandidateDao.fetchSavedCandidatesByUserId(Mockito.anyString())).thenReturn(savedCandidates);
 		
