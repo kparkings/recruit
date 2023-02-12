@@ -50,6 +50,19 @@ export class SuggestionsComponent implements OnInit {
   		
   	}
 
+	public isNoLongerAvailable():boolean{
+		
+		if (this.currentSavedCandidate.userId === '') {
+			return false;
+		}
+		
+		return this.currentSavedCandidate.candidate.candidateId === ' Removed';;
+	}
+	
+	public isNoLongerAvailableSC(savedCandidate:SavedCandidate):boolean{
+		return savedCandidate.candidate.candidateId === ' Removed';
+	}
+
 	/**
  	* Extracts filters from job specification file
 	*/	
@@ -407,12 +420,21 @@ export class SuggestionsComponent implements OnInit {
 		this.showCVInline(this.suggestedCandidate.candidateId);
 	}
 
+
+	
 	/**
 	* Shows the Suggesion result view
 	*/
 	public showSuggestedCandidateOverview(candidateSuggestion:Candidate):void{
 		this.currentView 			= 'suggested-canidate-overview';
 		this.suggestedCandidate 	= candidateSuggestion;
+		
+	}
+	
+	public showSuggestedCandidateOverviewSavedCandidate(savedCandidate:SavedCandidate){
+		this.currentView 			= 'suggested-canidate-overview';
+		this.suggestedCandidate 	= savedCandidate.candidate;
+		this.currentSavedCandidate	= savedCandidate;
 	}
 	
 	/**
@@ -444,8 +466,8 @@ export class SuggestionsComponent implements OnInit {
 	/**
 	* Marks Candidate as no longer being being remembered
 	*/
-	public forgetCandidate(savedCandidate:Candidate):void{
-		this.candidateService.deleteSavedCandidate(Number(savedCandidate.candidateId)).subscribe(response => {
+	public forgetCandidate():void{
+		this.candidateService.deleteSavedCandidate(Number(this.currentSavedCandidate.candidateId)).subscribe(response => {
 			this.showSavedCandidates();
 		});
 	}
@@ -584,7 +606,10 @@ export class SuggestionsComponent implements OnInit {
 	public showNotesDialog(content:any, candidate:Candidate):void{
 		
 		this.updatedSavedCandidate = false;
-		this.currentSavedCandidate = new SavedCandidate()
+		
+		if (!this.isNoLongerAvailable()){
+			this.currentSavedCandidate = new SavedCandidate()
+		}
 		
 		this.savedCandidates.forEach(sc => {
 			if(""+sc.candidateId === ""+candidate.candidateId) {

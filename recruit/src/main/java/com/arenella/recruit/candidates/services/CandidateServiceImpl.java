@@ -497,7 +497,17 @@ public class CandidateServiceImpl implements CandidateService{
 			
 			if (this.candidateDao.existsById(c.getCandidateId())) {
 			
-				candidates.put(c, candidateDao.findCandidateById(c.getCandidateId()).get());
+				Candidate candidate = candidateDao.findCandidateById(c.getCandidateId()).get();
+				
+				if (candidate.isAvailable()) {
+					candidates.put(c, candidate);
+				} else {
+					candidates.put(c, Candidate
+							.builder()
+								.candidateId(" Removed")
+								.firstname("Candidate No Longer Available")
+							.build());
+				}
 				
 			}
 			

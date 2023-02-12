@@ -5,7 +5,7 @@
 		<button class="btn btn-secondary btnRight main-btns" (click)="doReset()">Reset</button>
 		<button class="btn btn-secondary btnRight main-btns" (click)="showFilterByJobSpecDialog(specUploadBox)" download>Filter by Job Spec</button>
 		<button class="btn btn-secondary btnRight main-btns" (click)="showCreateAlertDialog(feedbackBox)" download>Create Email Alert</button>
-		<button class="btn btn-secondary btnRight main-btns" (click)="showSavedCandidates()" download>Your Candidates</button>
+		<button class="btn btn-secondary btnRight main-btns" (click)="showSavedCandidates()" download>My Candidates</button>
 	 </div>
 	 
 	
@@ -17,10 +17,12 @@
 	 
 		<div class="suggestion-result-icons" style="margin-top:50px">
 			
-			<div class="suggestion-icon" *ngFor="let savedCandidate of savedCandidates" (click)="showSuggestedCandidateOverview(savedCandidate.candidate)">
-				
-				<div class="saved-candidate-icon-header">
-					C{{savedCandidate.candidateId}}
+			<div class="suggestion-icon" *ngFor="let savedCandidate of savedCandidates" (click)="showSuggestedCandidateOverviewSavedCandidate(savedCandidate)">
+				<div class="saved-candidate-icon-header" *ngIf="!isNoLongerAvailableSC(savedCandidate)">
+					C{{savedCandidate.candidate.candidateId}}
+				</div>
+				<div class="saved-candidate-icon-header" *ngIf="isNoLongerAvailableSC(savedCandidate)">
+					{{savedCandidate.candidate.candidateId}}
 				</div>
 				<div title="Accuracy Skills" class="suggestion-perception-result-{{savedCandidate.candidate.accuracySkills}}"></div>
 				<div title="Accuracy Languages" class="suggestion-perception-result-{{savedCandidate.candidate.accuracyLanguages}}"></div>
@@ -175,14 +177,15 @@
 	<!-- Suggestion Profile -->
 	<div style="margin-top:10px;" *ngIf="currentView !== 'suggestion-results' && currentView !== 'inline-cv' && currentView !== 'saved-candidates'">
 		<div class="suggestion-buttons">
-			<a class="currliculum-link" href="{{getCurriculumDownloadUrl(suggestedCandidate.candidateId)}}" >
+			<a class="currliculum-link" href="{{getCurriculumDownloadUrl(suggestedCandidate.candidateId)}}" *ngIf="lastView != 'saved-candidates' || (lastView == 'saved-candidates' && !isNoLongerAvailable())">
 				<button class="btn btn-secondary btn-action">Download CV</button>
 			</a>
-			<button class="btn btn-secondary btn-action" (click)="showInlineCVView()" 							*ngIf="!isMobile">Display CV</button>
+			<button class="btn btn-secondary btn-action" (click)="showInlineCVView()" 							*ngIf="!isMobile && (lastView != 'saved-candidates' || (lastView == 'saved-candidates' && !isNoLongerAvailable()))">Display CV</button>
+			
 			<button class="btn btn-secondary btn-action" (click)="showNotesDialog(notesBox,suggestedCandidate)" *ngIf="lastView === 'saved-candidates'">Notes</button>
-			<button class="btn btn-secondary btn-action" (click)="forgetCandidate(suggestedCandidate)" 			*ngIf="lastView === 'saved-candidates'" title="removed candidate from your list of selected candidates">Remove Candidate</button>
-			<button class="btn btn-secondary btn-action" (click)="rememberCandidate(suggestedCandidate)" 		*ngIf="lastView != 'saved-candidates' && !isSavedCandidate(suggestedCandidate)" title="Add candidate to your list of selected candidates">Save Candidate</button>
-			<button class="btn btn-secondary btn-action" (click)="rememberCandidate(suggestedCandidate)" 		*ngIf="lastView != 'saved-candidates' && isSavedCandidate(suggestedCandidate)" title="Add candidate to your list of selected candidates" disabled>Save Candidate</button>
+			<button class="btn btn-secondary btn-action" (click)="forgetCandidate()" 							*ngIf="lastView === 'saved-candidates'" title="removed candidate from your list of saved candidates">Remove Candidate</button>
+			<button class="btn btn-secondary btn-action" (click)="rememberCandidate(suggestedCandidate)" 		*ngIf="lastView != 'saved-candidates' && !isSavedCandidate(suggestedCandidate)" title="Add candidate to your list of saved candidates">Save Candidate</button>
+			<button class="btn btn-secondary btn-action" (click)="rememberCandidate(suggestedCandidate)" 		*ngIf="lastView != 'saved-candidates' && isSavedCandidate(suggestedCandidate)" title="Add candidate to your list of saved candidates" disabled>Save Candidate</button>
 			<button class="btn btn-secondary btn-action" (click)="showSuggestionsResults()" 					*ngIf="lastView != 'saved-candidates'">back</button>
 			<button class="btn btn-secondary btn-action" (click)="showSavedCandidates()" 						*ngIf="lastView === 'saved-candidates'">back</button>
 		</div>
@@ -196,7 +199,7 @@
 			<div>
 				<table class="table candidate-suggestion-table">
 					<tr>
-						<td class="candidate-suggestion-table-hdr">Canidate Number</td>
+						<td class="candidate-suggestion-table-hdr">Candidate Number</td>
 						<td>{{suggestedCandidate.candidateId}}</td>
 					</tr>
 					<tr>
@@ -339,7 +342,7 @@
 
 <ng-template #notesBox let-modal>
 	<div class="modal-header">
-		<h4 class="modal-title">Notes for Candidate {{currentSavedCandidate.candidateId}}</h4>
+		<h4 class="modal-title">Notes for Candidate</h4>
  		<div class="filter-close-box" (click)="closeModal()">X</div>
 	</div>
 	<div class="feedbackBox;">
@@ -347,7 +350,7 @@
 			<div class="modal-body" *ngIf="!updatedSavedCandidate">
 				<textarea class="notes-textarea" formControlName="notes"></textarea>
 				<br/>
-				<button class="btn btn-secondary" (click)="updateSavedCandidate()" download>Save</button>
+				<button class="btn btn-secondary" (click)="updateSavedCandidate()" *ngIf="!isNoLongerAvailable()" download>Save</button>
 			</div>
 			<div class="modal-body" *ngIf="updatedSavedCandidate">
 				<h1>Updated</h1>
