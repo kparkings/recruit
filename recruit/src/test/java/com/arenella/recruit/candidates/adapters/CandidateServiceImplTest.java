@@ -6,7 +6,9 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -36,10 +38,12 @@ import com.arenella.recruit.candidates.beans.CandidateSearchAlert;
 import com.arenella.recruit.candidates.beans.Language.LEVEL;
 import com.arenella.recruit.candidates.beans.PendingCandidate;
 import com.arenella.recruit.candidates.controllers.CandidateController.CANDIDATE_UPDATE_ACTIONS;
+import com.arenella.recruit.candidates.controllers.SavedCandidate;
 import com.arenella.recruit.candidates.dao.CandidateDao;
 import com.arenella.recruit.candidates.dao.CandidateSearchAlertDao;
 import com.arenella.recruit.candidates.dao.CandidateSkillsDao;
 import com.arenella.recruit.candidates.dao.PendingCandidateDao;
+import com.arenella.recruit.candidates.dao.SavedCandidateDao;
 import com.arenella.recruit.candidates.entities.CandidateEntity;
 import com.arenella.recruit.candidates.entities.PendingCandidateEntity;
 import com.arenella.recruit.candidates.enums.FUNCTION;
@@ -86,6 +90,9 @@ public class CandidateServiceImplTest {
 	
 	@Mock
 	private CandidateSkillsDao				mockSkillDao;
+	
+	@Mock
+	private SavedCandidateDao				mockSavedCandidateDao;
 	
 	@Spy
 	private CandidateFunctionExtractorImpl	mockCandidateFunctionExtractor;
@@ -662,8 +669,170 @@ public class CandidateServiceImplTest {
 		
 	}
 	
+	/**
+	* Tests exception is thrown in the Candidate being added was 
+	* previously added
+	* @throws Exception
+	*/
+	@Test
+	public void testAddSavedCanidate_already_exists() throws Exception{
+		
+		Mockito.when(this.mockSavedCandidateDao.exists(Mockito.anyString(), Mockito.anyLong())).thenReturn(true);
+		
+		Assertions.assertThrows(IllegalArgumentException.class, () -> {
+			this.service.addSavedCanidate(SavedCandidate.builder().candidateId(1001).userId("kparkings").build());
+		});
+		
+	}
 	
+	/**
+	* Tests happy path
+	* @throws Exception
+	*/
+	@Test
+	public void testAddSavedCanidate() throws Exception{
+		
+		Mockito.when(this.mockSavedCandidateDao.exists(Mockito.anyString(), Mockito.anyLong())).thenReturn(false);
+		
+		this.service.addSavedCanidate(SavedCandidate.builder().candidateId(1001).userId("kparkings").build());
+		
+		Mockito.verify(this.mockSavedCandidateDao).persistSavedCandidate(Mockito.any(SavedCandidate.class));
+		
+	}
 	
+	/**
+	* Tests Fetch of SavedCandidates
+	* @throws Exception
+	*/
+	@Test
+	public void testFetchSavedCandidatesForUser() throws Exception{
+		
+		final String 	userId 		= "kparkings";
+		final long 		candidate1 	= 1001;
+		final long 		candidate2 	= 1007;
+		
+		Set<SavedCandidate> savedCandidates = new HashSet<>();
+		
+		savedCandidates.add(SavedCandidate.builder().candidateId(1001).userId(userId).build());
+		savedCandidates.add(SavedCandidate.builder().candidateId(1007).userId(userId).build());
+		
+		Mockito.when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
+		Mockito.when(mockAuthentication.getPrincipal()).thenReturn(userId);
+		Mockito.when(this.mockCandidateDao.findCandidateById(candidate1)).thenReturn(Optional.of(Candidate.builder().candidateId(String.valueOf(candidate1)).build()));
+		Mockito.when(this.mockCandidateDao.findCandidateById(candidate2)).thenReturn(Optional.of(Candidate.builder().candidateId(String.valueOf(candidate2)).build()));
+		Mockito.when(this.mockCandidateDao.existsById(Mockito.anyLong())).thenReturn(true);
+		Mockito.when(this.mockSavedCandidateDao.fetchSavedCandidatesByUserId(Mockito.anyString())).thenReturn(savedCandidates);
+		
+		Map<SavedCandidate, Candidate> result = this.service.fetchSavedCandidatesForUser();
+		
+		SavedCandidate sc1 = result.keySet().stream().filter(c -> c.getCandidateId() == candidate1).findAny().orElseThrow();
+		SavedCandidate sc2 = result.keySet().stream().filter(c -> c.getCandidateId() == candidate2).findAny().orElseThrow();
+		
+		assertEquals(String.valueOf(candidate1), result.get(sc1).getCandidateId());
+		assertEquals(String.valueOf(candidate2), result.get(sc2).getCandidateId());
+		
+	}
+	
+	/**
+	* Tests Fetch of SavedCandidates
+	* @throws Exception
+	*/
+	@Test
+	public void testFetchSavedCandidatesForUser_missingCandidate() throws Exception{
+		
+		final String 	userId 		= "kparkings";
+		final long 		candidate1 	= 1001;
+		final long 		candidate2 	= 1007;
+		
+		Set<SavedCandidate> savedCandidates = new HashSet<>();
+		
+		savedCandidates.add(SavedCandidate.builder().candidateId(1001).userId(userId).build());
+		savedCandidates.add(SavedCandidate.builder().candidateId(1007).userId(userId).build());
+		
+		Mockito.when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
+		Mockito.when(mockAuthentication.getPrincipal()).thenReturn(userId);
+		Mockito.when(this.mockCandidateDao.findCandidateById(candidate1)).thenReturn(Optional.of(Candidate.builder().candidateId(String.valueOf(candidate1)).build()));
+		Mockito.when(this.mockCandidateDao.existsById(Mockito.anyLong())).thenReturn(true).thenReturn(false);
+		Mockito.when(this.mockSavedCandidateDao.fetchSavedCandidatesByUserId(Mockito.anyString())).thenReturn(savedCandidates);
+		
+		Map<SavedCandidate, Candidate> result = this.service.fetchSavedCandidatesForUser();
+		
+		result.keySet().stream().filter(c -> c.getCandidateId() == candidate1).findAny().orElseThrow();
+		
+		assertTrue(result.keySet().stream().filter(c -> c.getCandidateId() == candidate2).findAny().isEmpty());
+		
+	}
 
+	/**
+	* Test case that attempt is made to remove a SavedCandidate that 
+	* does not exist
+	* @throws Exception
+	*/
+	@Test
+	public void testRemoveSavedCanidate_doesnt_exist() throws Exception{
+		
+		final long savedCandidate1 	= 1001;
+		
+		Mockito.when(this.mockSavedCandidateDao.exists(Mockito.anyString(), Mockito.anyLong())).thenReturn(false);
+		Mockito.when(mockAuthentication.getName()).thenReturn("kparkings");
+		
+		Assertions.assertThrows(IllegalArgumentException.class, () -> {
+			this.service.removeSavedCandidate(savedCandidate1, mockAuthentication);
+		});
+		
+	}
+	
+	/**
+	* Tests the happy path
+	* @throws Exception
+	*/
+	@Test
+	public void testRemoveSavedCanidate() throws Exception{
+		
+		final long savedCandidate1 	= 1001;
+		
+		Mockito.when(this.mockSavedCandidateDao.exists(Mockito.anyString(), Mockito.anyLong())).thenReturn(true);
+		Mockito.when(mockAuthentication.getName()).thenReturn("kparkings");
+		
+		this.service.removeSavedCandidate(savedCandidate1, mockAuthentication);
+		
+		Mockito.verify(this.mockSavedCandidateDao).delete(Mockito.anyString(), Mockito.anyLong());
+		
+	}
+	
+	/**
+	* Tests exception thrown if attempt is made to update a SavedCandidate 
+	* that does not exist
+	* @throws Exception
+	*/
+	@Test
+	public void testUpdateSavedCanidate_doesnt_exist() throws Exception{
+		
+		final long savedCandidate1 	= 1001;
+		
+		Mockito.when(this.mockSavedCandidateDao.exists(Mockito.anyString(), Mockito.anyLong())).thenReturn(false);
+		
+		Assertions.assertThrows(IllegalArgumentException.class, () -> {
+			this.service.updateSavedCandidate(SavedCandidate.builder().userId("kparkings").candidateId(savedCandidate1).build());
+		});
+		
+	}
+	
+	/**
+	* Tests happy path
+	* @throws Exception
+	*/
+	@Test
+	public void testUpdateSavedCanidate() throws Exception{
+		
+		final long savedCandidate1 	= 1001;
+		
+		Mockito.when(this.mockSavedCandidateDao.exists(Mockito.anyString(), Mockito.anyLong())).thenReturn(true);
+		
+		this.service.updateSavedCandidate(SavedCandidate.builder().userId("kparkings").candidateId(savedCandidate1).build());
+		
+		Mockito.verify(this.mockSavedCandidateDao).updateSavedCandidate(Mockito.any(SavedCandidate.class));
+		
+	}
 	
 }

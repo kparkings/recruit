@@ -33,7 +33,11 @@ export class SuggestionsComponent implements OnInit {
 	public createAlertForm:UntypedFormGroup = new UntypedFormGroup({
 		alertName:			new UntypedFormControl(''),
 	});
-
+	
+	public savedCandidateNotesForm:UntypedFormGroup = new UntypedFormGroup({
+		notes:			new UntypedFormControl(''),
+	});
+	
 	private jobSpecFile!:File;
   
   	public setJobSepecFile(event:any):void{
@@ -570,6 +574,46 @@ export class SuggestionsComponent implements OnInit {
 		this.open(content, '', true);
 			
 	}
+	
+	
+	public currentSavedCandidate:SavedCandidate = new SavedCandidate();
+	
+	/**
+	* Displays dialog to edit notes for a SavedCandidate
+	*/
+	public showNotesDialog(content:any, candidate:Candidate):void{
+		
+		this.updatedSavedCandidate = false;
+		this.currentSavedCandidate = new SavedCandidate()
+		
+		this.savedCandidates.forEach(sc => {
+			if(""+sc.candidateId === ""+candidate.candidateId) {
+				this.currentSavedCandidate = sc;
+			}
+		});
+		
+		this.savedCandidateNotesForm = new UntypedFormGroup({
+			notes:			new UntypedFormControl(this.currentSavedCandidate.notes)
+		});
+	
+		this.open(content, '', true);
+	}
+	
+	public updatedSavedCandidate:boolean = false; 
+	
+	/**
+	* Updates the current Saved Candidate
+	*/
+	public updateSavedCandidate():void{
+		this.updatedSavedCandidate = false;
+		this.currentSavedCandidate.notes = this.savedCandidateNotesForm.get('notes')?.value;
+		this.candidateService.updateSavedCandidate(this.currentSavedCandidate).subscribe(response =>{
+			this.candidateService.fetchSavedCandidates().subscribe(response => {
+				this.savedCandidates = response;
+				this.updatedSavedCandidate = true;
+			});
+		});
+	} 
 	
 	/**
 	*  Closes the confirm popup

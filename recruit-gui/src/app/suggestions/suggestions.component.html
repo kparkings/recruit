@@ -146,8 +146,14 @@
 			
 			<div class="suggestion-icon" *ngFor="let suggestion of suggestions" (click)="showSuggestedCandidateOverview(suggestion)">
 				
-				<div class="suggestion-icon-header">
+				
+				<div>
+					<div *ngIf="!isSavedCandidate(suggestion)" class="suggestion-icon-header">	
 					C{{suggestion.candidateId}}
+					</div>
+					<div *ngIf="isSavedCandidate(suggestion)" class="suggestion-icon-header suggestion-icon-header-saved">	
+					C{{suggestion.candidateId}}
+					</div>
 				</div>
 				<div title="Accuracy Skills" class="suggestion-perception-result-{{suggestion.accuracySkills}}"></div>
 				<div title="Accuracy Languages" class="suggestion-perception-result-{{suggestion.accuracyLanguages}}"></div>
@@ -172,12 +178,13 @@
 			<a class="currliculum-link" href="{{getCurriculumDownloadUrl(suggestedCandidate.candidateId)}}" >
 				<button class="btn btn-secondary btn-action">Download CV</button>
 			</a>
-			<button class="btn btn-secondary btn-action" (click)="showInlineCVView()" 						*ngIf="!isMobile">Display CV</button>
-			<button class="btn btn-secondary btn-action" (click)="forgetCandidate(suggestedCandidate)" 		*ngIf="lastView === 'saved-candidates'" title="removed candidate from your list of selected candidates">Remove Candidate</button>
-			<button class="btn btn-secondary btn-action" (click)="rememberCandidate(suggestedCandidate)" 	*ngIf="lastView != 'saved-candidates' && !isSavedCandidate(suggestedCandidate)" title="Add candidate to your list of selected candidates">Save Candidate</button>
-			<button class="btn btn-secondary btn-action" (click)="rememberCandidate(suggestedCandidate)" 	*ngIf="lastView != 'saved-candidates' && isSavedCandidate(suggestedCandidate)" title="Add candidate to your list of selected candidates" disabled>Save Candidate</button>
-			<button class="btn btn-secondary btn-action" (click)="showSuggestionsResults()" 				*ngIf="lastView != 'saved-candidates'">back</button>
-			<button class="btn btn-secondary btn-action" (click)="showSavedCandidates()" 					*ngIf="lastView === 'saved-candidates'">back</button>
+			<button class="btn btn-secondary btn-action" (click)="showInlineCVView()" 							*ngIf="!isMobile">Display CV</button>
+			<button class="btn btn-secondary btn-action" (click)="showNotesDialog(notesBox,suggestedCandidate)" *ngIf="lastView === 'saved-candidates'">Notes</button>
+			<button class="btn btn-secondary btn-action" (click)="forgetCandidate(suggestedCandidate)" 			*ngIf="lastView === 'saved-candidates'" title="removed candidate from your list of selected candidates">Remove Candidate</button>
+			<button class="btn btn-secondary btn-action" (click)="rememberCandidate(suggestedCandidate)" 		*ngIf="lastView != 'saved-candidates' && !isSavedCandidate(suggestedCandidate)" title="Add candidate to your list of selected candidates">Save Candidate</button>
+			<button class="btn btn-secondary btn-action" (click)="rememberCandidate(suggestedCandidate)" 		*ngIf="lastView != 'saved-candidates' && isSavedCandidate(suggestedCandidate)" title="Add candidate to your list of selected candidates" disabled>Save Candidate</button>
+			<button class="btn btn-secondary btn-action" (click)="showSuggestionsResults()" 					*ngIf="lastView != 'saved-candidates'">back</button>
+			<button class="btn btn-secondary btn-action" (click)="showSavedCandidates()" 						*ngIf="lastView === 'saved-candidates'">back</button>
 		</div>
 	</div>
 	<div *ngIf="currentView === 'suggested-canidate-overview'" class="suggestion-results" style="width:90%;">
@@ -326,6 +333,25 @@
 			<div class="modal-body" *ngIf="showSaveAlertBoxFailure">
 				<p>Unfortunately it was not possible to create your Candidate Search Alert at this time.</p>
 			</div>
+		</form>
+	</div>
+</ng-template>
+
+<ng-template #notesBox let-modal>
+	<div class="modal-header">
+		<h4 class="modal-title">Notes for Candidate {{currentSavedCandidate.candidateId}}</h4>
+ 		<div class="filter-close-box" (click)="closeModal()">X</div>
+	</div>
+	<div class="feedbackBox;">
+		<form [formGroup]="savedCandidateNotesForm">
+			<div class="modal-body" *ngIf="!updatedSavedCandidate">
+				<textarea class="notes-textarea" formControlName="notes"></textarea>
+				<br/>
+				<button class="btn btn-secondary" (click)="updateSavedCandidate()" download>Save</button>
+			</div>
+			<div class="modal-body" *ngIf="updatedSavedCandidate">
+				<h1>Updated</h1>
+			</div>              
 		</form>
 	</div>
 </ng-template>

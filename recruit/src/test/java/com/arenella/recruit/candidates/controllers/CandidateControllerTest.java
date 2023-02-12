@@ -290,7 +290,7 @@ public class CandidateControllerTest {
 	@Test
 	public void testUpdateSavedCandidates() throws Exception{
 	
-		ResponseEntity<Void> response = this.controller.updateSavedCandidate(SavedCandidateAPIInbound.builder().build());
+		ResponseEntity<Void> response = this.controller.updateSavedCandidate(SavedCandidateAPIInbound.builder().build(), this.mockPrincipal);
 		
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		

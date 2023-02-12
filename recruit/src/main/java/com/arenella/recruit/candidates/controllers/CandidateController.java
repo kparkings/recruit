@@ -300,7 +300,10 @@ public class CandidateController {
 	*/ 
 	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('ROLE_RECRUITER')")
 	@PutMapping(value="saved-candidate")
-	public ResponseEntity<Void> updateSavedCandidate(@RequestBody SavedCandidateAPIInbound savedCandidate) {
+	public ResponseEntity<Void> updateSavedCandidate(@RequestBody SavedCandidateAPIInbound savedCandidate, Principal principal) {
+		
+		this.candidateService.updateSavedCandidate(SavedCandidateAPIInbound.convertToDomain(savedCandidate, principal.getName()));
+		
 		return ResponseEntity.status(HttpStatus.OK).build();
 	}
 	

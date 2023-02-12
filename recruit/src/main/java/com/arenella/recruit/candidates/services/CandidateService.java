@@ -139,5 +139,11 @@ public interface CandidateService {
 	* @param principal   - Auth for current user
 	*/
 	public void removeSavedCandidate(long candidateId, Principal principal);
+
+	/**
+	* Updates an existing SavedCandidate
+	* @param savedCandidate - new version of existing SavedCandidate 
+	*/
+	public void updateSavedCandidate(SavedCandidate savedCandidate);
 	
 }

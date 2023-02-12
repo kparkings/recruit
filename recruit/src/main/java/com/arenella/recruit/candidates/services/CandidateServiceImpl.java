@@ -513,11 +513,24 @@ public class CandidateServiceImpl implements CandidateService{
 	public void removeSavedCandidate(long candidateId, Principal principal) {
 		
 		if (!savedCandidateDao.exists(principal.getName(), candidateId)) {
-			throw new IllegalArgumentException("Candidate already exists");
+			throw new IllegalArgumentException("Unknown Saved Candidate");
 		}
 		
 		this.savedCandidateDao.delete(principal.getName(), candidateId);
 		
+	}
+
+	/**
+	* Refer to the CandidateService for details 
+	*/
+	@Override
+	public void updateSavedCandidate(SavedCandidate savedCandidate) {
+	
+		if (!savedCandidateDao.exists(savedCandidate.getUserId(), savedCandidate.getCandidateId())) {
+			throw new IllegalArgumentException("Unknown Saved Candidate");
+		}
+		
+		this.savedCandidateDao.updateSavedCandidate(savedCandidate);
 	}
 	
 }

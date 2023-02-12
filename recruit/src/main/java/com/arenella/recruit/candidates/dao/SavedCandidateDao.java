@@ -73,5 +73,12 @@ public interface SavedCandidateDao extends CrudRepository<SavedCandidateEntity, 
 		this.save(SavedCandidateEntity.convertToEntity(savedCandidate));
 		
 	}
+
+	/**
+	* Updates a SavedCandidate 
+	*/
+	public default void updateSavedCandidate(SavedCandidate savedCandidate) {
+		this.save(SavedCandidateEntity.convertToEntity(savedCandidate));
+	}
 	
 }

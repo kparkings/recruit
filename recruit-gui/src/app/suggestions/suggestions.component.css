@@ -134,6 +134,17 @@
 	color:white;
 }
 
+.suggestion-icon-header:before{
+	content: ' ';
+	padding-left:20px;
+}
+.suggestion-icon-header-saved:before{
+	color:yellow;
+	content: '* ';
+	font-size:18px;
+	padding-left:10px;
+}
+
 .suggestion-summary-infobox{
 	background:#E8E8E8;
 	margin:10px;
@@ -263,6 +274,11 @@
 	font-weight:bold;
 }
 
+.candidate-suggestion-table-hdr-saved {
+	font-weight:bold;
+	background:red;
+}
+
 .suggestion-role-header{
 	margin-bottom:10px;
 }
@@ -370,4 +386,11 @@
 	width:100%;
 	padding:5px;
 	color:white;
+	padding-left:20px;
+}
+
+.notes-textarea{
+	width:95%;
+	overflow: auto;
+	min-height:130px;
 }
