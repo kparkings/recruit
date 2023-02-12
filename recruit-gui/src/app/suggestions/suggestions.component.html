@@ -11,9 +11,11 @@
 	
 	<div *ngIf="currentView === 'saved-candidates'" class="suggestion-results">
 		
-		<div style="text-align:right;margin-right:50px;">
-			<button class="btn btn-secondary btn-action" (click)="showSuggestionsResults()">back</button>
+		<div>
+			<button class="btn btn-secondary btnRight main-btns" (click)="showSuggestionsResults()">Back</button>
 		</div>
+		
+		<br>
 	 
 		<div class="suggestion-result-icons" style="margin-top:50px">
 			
@@ -177,17 +179,22 @@
 	<!-- Suggestion Profile -->
 	<div style="margin-top:10px;" *ngIf="currentView !== 'suggestion-results' && currentView !== 'inline-cv' && currentView !== 'saved-candidates'">
 		<div class="suggestion-buttons">
-			<a class="currliculum-link" href="{{getCurriculumDownloadUrl(suggestedCandidate.candidateId)}}" *ngIf="lastView != 'saved-candidates' || (lastView == 'saved-candidates' && !isNoLongerAvailable())">
-				<button class="btn btn-secondary btn-action">Download CV</button>
-			</a>
-			<button class="btn btn-secondary btn-action" (click)="showInlineCVView()" 							*ngIf="!isMobile && (lastView != 'saved-candidates' || (lastView == 'saved-candidates' && !isNoLongerAvailable()))">Display CV</button>
 			
-			<button class="btn btn-secondary btn-action" (click)="showNotesDialog(notesBox,suggestedCandidate)" *ngIf="lastView === 'saved-candidates'">Notes</button>
-			<button class="btn btn-secondary btn-action" (click)="forgetCandidate()" 							*ngIf="lastView === 'saved-candidates'" title="removed candidate from your list of saved candidates">Remove Candidate</button>
-			<button class="btn btn-secondary btn-action" (click)="rememberCandidate(suggestedCandidate)" 		*ngIf="lastView != 'saved-candidates' && !isSavedCandidate(suggestedCandidate)" title="Add candidate to your list of saved candidates">Save Candidate</button>
-			<button class="btn btn-secondary btn-action" (click)="rememberCandidate(suggestedCandidate)" 		*ngIf="lastView != 'saved-candidates' && isSavedCandidate(suggestedCandidate)" title="Add candidate to your list of saved candidates" disabled>Save Candidate</button>
-			<button class="btn btn-secondary btn-action" (click)="showSuggestionsResults()" 					*ngIf="lastView != 'saved-candidates'">back</button>
-			<button class="btn btn-secondary btn-action" (click)="showSavedCandidates()" 						*ngIf="lastView === 'saved-candidates'">back</button>
+			
+			<button class="btn btn-secondary btnRight main-btns" (click)="showSuggestionsResults()" 					*ngIf="lastView != 'saved-candidates'">back</button>
+			<button class="btn btn-secondary btnRight main-btns" (click)="showSavedCandidates()" 						*ngIf="lastView === 'saved-candidates'">back</button>
+			<button class="btn btn-secondary btnRight main-btns" (click)="rememberCandidate(suggestedCandidate)" 		*ngIf="lastView != 'saved-candidates' && !isSavedCandidate(suggestedCandidate)" title="Add candidate to your list of saved candidates">Save Candidate</button>
+			<button class="btn btn-secondary btnRight main-btns" (click)="rememberCandidate(suggestedCandidate)" 		*ngIf="lastView != 'saved-candidates' && isSavedCandidate(suggestedCandidate)" title="Add candidate to your list of saved candidates" disabled>Save Candidate</button>
+			<button class="btn btn-secondary btnRight main-btns" (click)="forgetCandidate()" 							*ngIf="lastView === 'saved-candidates'" title="removed candidate from your list of saved candidates">Unsave Candidate</button>
+			<button class="btn btn-secondary btnRight main-btns" (click)="showNotesDialog(notesBox,suggestedCandidate)" *ngIf="lastView === 'saved-candidates'">Notes</button>
+			
+			<a class="currliculum-link" href="{{getCurriculumDownloadUrl(suggestedCandidate.candidateId)}}" *ngIf="lastView != 'saved-candidates' || (lastView == 'saved-candidates' && !isNoLongerAvailable())">
+				<button class="btn btn-secondary btnRight main-btns">Download CV</button>
+			</a>
+			
+			<button class="btn btn-secondary btnRight main-btns" (click)="showInlineCVView()" 							*ngIf="!isMobile && (lastView != 'saved-candidates' || (lastView == 'saved-candidates' && !isNoLongerAvailable()))">Display CV</button>
+			
+			
 		</div>
 	</div>
 	<div *ngIf="currentView === 'suggested-canidate-overview'" class="suggestion-results" style="width:90%;">
