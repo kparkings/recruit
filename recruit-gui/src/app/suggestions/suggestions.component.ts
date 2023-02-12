@@ -23,7 +23,7 @@ import { Router}									from '@angular/router';
 @Component({
   selector: 'app-suggestions',
   templateUrl: './suggestions.component.html',
-  styleUrls: ['./suggestions.component.css']
+  styleUrls: ['./suggestions.component.css','./suggestions.component.two.css']
 })
 export class SuggestionsComponent implements OnInit {
 
