@@ -752,7 +752,8 @@ public class CandidateServiceImplTest {
 		Mockito.when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
 		Mockito.when(mockAuthentication.getPrincipal()).thenReturn(userId);
 		Mockito.when(this.mockCandidateDao.findCandidateById(candidate1)).thenReturn(Optional.of(Candidate.builder().candidateId(String.valueOf(candidate1)).build()));
-		Mockito.when(this.mockCandidateDao.existsById(Mockito.anyLong())).thenReturn(true).thenReturn(false);
+		Mockito.when(this.mockCandidateDao.existsById(candidate1)).thenReturn(true);
+		Mockito.when(this.mockCandidateDao.existsById(candidate2)).thenReturn(false);
 		Mockito.when(this.mockSavedCandidateDao.fetchSavedCandidatesByUserId(Mockito.anyString())).thenReturn(savedCandidates);
 		
 		Map<SavedCandidate, Candidate> result = this.service.fetchSavedCandidatesForUser();
