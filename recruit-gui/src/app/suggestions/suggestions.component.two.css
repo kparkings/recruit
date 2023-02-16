@@ -192,3 +192,9 @@
 	overflow: auto;
 	min-height:130px;
 }
+
+.publicity-suggestions{
+	text-align:left;
+	font-size:16px;
+	overflow: auto;
+}

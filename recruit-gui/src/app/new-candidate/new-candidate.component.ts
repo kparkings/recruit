@@ -132,7 +132,7 @@ export class NewCandidateComponent implements OnInit {
   */
   public closeModal(): void {
     this.modalService.dismissAll();
-    this.router.navigate(['view-candidates']);
+    this.router.navigate(['suggestions']);
   }
 
   /**

@@ -665,4 +665,42 @@ export class SuggestionsComponent implements OnInit {
 
   	}
 
+	public publicitySuggestions:Array<Candidate>  = new Array<Candidate>();
+	
+	public openPublicityDialog(content: any) {
+		
+		this.publicitySuggestions = this.suggestions.slice();
+		
+		
+		this.publicitySuggestions = this.publicitySuggestions.splice(0,Math.min(this.publicitySuggestions.length, 10));
+		
+		
+    	this.modalService.open(content, { centered: true });
+  	}
+
+	/**
+	* Returns the code identifying the country
+	* @param country - Country to get the country code for
+	*/
+	public getCountryCode(country:string):string{
+
+		switch(country){
+			case "NETHERLANDS":{
+				return "NL";
+			}
+			case "BELGIUM":{
+				return "BE";
+			}
+			case "UK":{
+				return "UK";
+			}
+			case "REPUBLIC_OF_IRELAND":{
+				return "IE";
+			}
+		}
+
+     	return 'NA';
+
+  	}
+
 }

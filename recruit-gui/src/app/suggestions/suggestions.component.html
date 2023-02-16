@@ -3,6 +3,7 @@
 	<!-- Action buttons -->
 	<div *ngIf="currentView === 'suggestion-results'">
 		<button class="btn btn-secondary btnRight main-btns" (click)="doReset()">Reset</button>
+		<button class="btn btn-secondary btnRight main-btns" (click)="openPublicityDialog(publicityModal)" *ngIf="isAuthenticatedAsAdmin()" download>Copy</button>
 		<button class="btn btn-secondary btnRight main-btns" (click)="showFilterByJobSpecDialog(specUploadBox)" download>Filter by Job Spec</button>
 		<button class="btn btn-secondary btnRight main-btns" (click)="showCreateAlertDialog(feedbackBox)" download>Create Email Alert</button>
 		<button class="btn btn-secondary btnRight main-btns" (click)="showSavedCandidates()" download>My Candidates</button>
@@ -11,7 +12,7 @@
 	
 	<div *ngIf="currentView === 'saved-candidates'" class="suggestion-results">
 		
-		<div>
+		<div style="margin-top:10px;">
 			<button class="btn btn-secondary btnRight main-btns" (click)="showSuggestionsResults()">Back</button>
 		</div>
 		
@@ -134,7 +135,7 @@
 	<div *ngIf="currentView === 'inline-cv'">
 	
 		<div style="text-align:right;margin-right:50px;">
-			<button class="btn btn-secondary btn-action" (click)="showSuggestedCandidateOverview(suggestedCandidate)">back</button>
+			<button class="btn btn-secondary btn-action" (click)="showSuggestedCandidateOverview(suggestedCandidate)">Back</button>
 		</div>
 		
 		<object id="content"  class="cv-inline" [attr.data]="trustedResourceUrl" width="95%" height="500px">
@@ -149,8 +150,6 @@
 		<div class="suggestion-result-icons">
 			
 			<div class="suggestion-icon" *ngFor="let suggestion of suggestions" (click)="showSuggestedCandidateOverview(suggestion)">
-				
-				
 				<div>
 					<div *ngIf="!isSavedCandidate(suggestion)" class="suggestion-icon-header">	
 					C{{suggestion.candidateId}}
@@ -181,8 +180,8 @@
 		<div class="suggestion-buttons">
 			
 			
-			<button class="btn btn-secondary btnRight main-btns" (click)="showSuggestionsResults()" 					*ngIf="lastView != 'saved-candidates'">back</button>
-			<button class="btn btn-secondary btnRight main-btns" (click)="showSavedCandidates()" 						*ngIf="lastView === 'saved-candidates'">back</button>
+			<button class="btn btn-secondary btnRight main-btns" (click)="showSuggestionsResults()" 					*ngIf="lastView != 'saved-candidates'">Back</button>
+			<button class="btn btn-secondary btnRight main-btns" (click)="showSavedCandidates()" 						*ngIf="lastView === 'saved-candidates'">Back</button>
 			<button class="btn btn-secondary btnRight main-btns" (click)="rememberCandidate(suggestedCandidate)" 		*ngIf="lastView != 'saved-candidates' && !isSavedCandidate(suggestedCandidate)" title="Add candidate to your list of saved candidates">Save Candidate</button>
 			<button class="btn btn-secondary btnRight main-btns" (click)="rememberCandidate(suggestedCandidate)" 		*ngIf="lastView != 'saved-candidates' && isSavedCandidate(suggestedCandidate)" title="Add candidate to your list of saved candidates" disabled>Save Candidate</button>
 			<button class="btn btn-secondary btnRight main-btns" (click)="forgetCandidate()" 							*ngIf="lastView === 'saved-candidates'" title="removed candidate from your list of saved candidates">Unsave Candidate</button>
@@ -365,3 +364,20 @@
 		</form>
 	</div>
 </ng-template>
+
+<!-- publicity -->
+	<ng-template #publicityModal let-modal>
+	
+		<!--  Options -->
+		<div class="modal-header">
+			<h4 class="modal-title">Publicity</h4>
+			<div class="filter-close-box" (click)="closeModal()">X</div>
+		</div>
+		<div class="modal-body publicity-suggestions">
+			<table>
+				<div *ngFor="let c of publicitySuggestions">
+					{{getCountryCode(c.country) + ' - Exp: ' + c.yearsExperience + ' years - ' + c.roleSought}}
+				</div>
+			</table>
+		</div> 
+	</ng-template>

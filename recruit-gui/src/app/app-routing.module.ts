@@ -2,7 +2,6 @@ import { NgModule }										from '@angular/core';
 import { RouterModule, Routes, CanActivate }			from '@angular/router';
 import { NewCandidateComponent }						from './new-candidate/new-candidate.component';
 import { StatisticsComponent }							from './statistics/statistics.component';
-import { ViewCandidatesComponent }						from './view-candidates/view-candidates.component';
 import { SuggestionsComponent }							from './suggestions/suggestions.component';
 import { LoginUserComponent }							from './login-user/login-user.component';
 import { AccountsComponent }							from './accounts/accounts.component';
@@ -21,7 +20,6 @@ const routes: Routes = [
 	{path: '', 						component: ListingComponent},
 	{path: 'about', 				component: HomeComponent},
 	{path: 'new-candidate', 		component: NewCandidateComponent, 			canActivate: [AuthGuardService, AdminGuardGuard]},
-	{path: 'view-candidates', 		component: ViewCandidatesComponent, 		canActivate: [AuthGuardService]},
 	{path: 'suggestions',	 		component: SuggestionsComponent, 			canActivate: [AuthGuardService]},
 	{path: 'statistics', 			component: StatisticsComponent, 			canActivate: [AuthGuardService, AdminGuardGuard]},
 	{path: 'accounts', 				component: AccountsComponent, 				canActivate: [AuthGuardService, AdminGuardGuard]},

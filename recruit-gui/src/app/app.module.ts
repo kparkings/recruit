@@ -5,7 +5,6 @@ import { AppRoutingModule }					from './app-routing.module';
 import { AppComponent }						from './app.component';
 import { NewCandidateComponent }			from './new-candidate/new-candidate.component';
 import { HttpClientModule }					from '@angular/common/http';
-import { ViewCandidatesComponent }			from './view-candidates/view-candidates.component';
 import { LoginUserComponent }				from './login-user/login-user.component';
 import { AuthService }						from './auth.service';
 import { AuthGuardService }					from './auth-guard.service';
@@ -30,7 +29,6 @@ import { RecruiterAlertsComponent } 		from './recruiter-alerts/recruiter-alerts.
   declarations: [
     AppComponent,
     NewCandidateComponent,
-    ViewCandidatesComponent,
     LoginUserComponent,
     HomeComponent,
     StatisticsComponent,
