@@ -56,6 +56,11 @@
 	border-right: none;
 }
 
+.li-arenella-nav-pre-login-std{
+	min-width:85px;
+	max-width:80px;
+}
+
 .li-arenella-nav-pre-signup{
 	background:orange;
 	width:190px;
