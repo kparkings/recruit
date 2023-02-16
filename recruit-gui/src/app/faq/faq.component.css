@@ -1,0 +1,21 @@
+centerdiv{
+    margin: 0 auto;
+    padding-left:10px;
+    padding-right:10px;
+    width:90%;
+}
+
+.center-table{
+    margin:0 auto;
+    margin-top:25px;
+}
+
+.faqs{
+	margin-top:20px;
+	margin-left:90px;
+	margin-right:100px;
+}
+
+.faq h3{
+	color:#6A5ACD;
+}

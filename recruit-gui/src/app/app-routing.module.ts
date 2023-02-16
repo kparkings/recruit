@@ -9,6 +9,7 @@ import { ListingComponent }								from './listing/listing.component';
 import { RecruiterAccountComponent }					from './recruiter-account/recruiter-account.component';
 import { RecruiterListingsComponent }					from './recruiter-listings/recruiter-listings.component';
 import { HomeComponent }								from './home/home.component';
+import { FaqComponent }									from './faq/faq.component';
 import { CreateCandidateComponent }						from './create-candidate/create-candidate.component';
 import { AuthGuardService }								from './auth-guard.service';
 import { AdminGuardGuard }								from './admin-guard.guard';
@@ -19,6 +20,7 @@ import { RecruiterAlertsComponent } 					from './recruiter-alerts/recruiter-aler
 const routes: Routes = [
 	{path: '', 						component: ListingComponent},
 	{path: 'about', 				component: HomeComponent},
+	{path: 'faq', 					component: FaqComponent},
 	{path: 'new-candidate', 		component: NewCandidateComponent, 			canActivate: [AuthGuardService, AdminGuardGuard]},
 	{path: 'suggestions',	 		component: SuggestionsComponent, 			canActivate: [AuthGuardService]},
 	{path: 'statistics', 			component: StatisticsComponent, 			canActivate: [AuthGuardService, AdminGuardGuard]},
