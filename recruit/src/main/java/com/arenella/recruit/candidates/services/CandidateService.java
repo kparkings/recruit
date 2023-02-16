@@ -6,7 +6,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 
 import com.arenella.recruit.candidates.beans.Candidate;
 import com.arenella.recruit.candidates.beans.CandidateExtractedFilters;
@@ -46,13 +45,6 @@ public interface CandidateService {
 	* @param available 		- Whether or not the candidate is available
 	*/
 	public void flagCandidateAvailability(long candidateId, boolean available);
-	
-	/**
-	* Retrieves a list of Candidates
-	* @param filterOptions  - filters to apply to the results
-	* @return Candidates
-	*/
-	public Page<Candidate> getCandidates(CandidateFilterOptions filterOptions, Pageable pageable);
 	
 	/**
 	* Retrieves a list of Candidates

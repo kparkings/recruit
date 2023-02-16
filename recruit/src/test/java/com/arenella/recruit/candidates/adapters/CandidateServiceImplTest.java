@@ -7,7 +7,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -23,9 +22,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -163,66 +159,7 @@ public class CandidateServiceImplTest {
 		assertFalse(captor.getValue().isAvailable());
 		
 	}
-	
-	/**
-	* Tests retrieval of Candidates
-	* @throws Exception
-	*/
-	@Test
-	public void testGetCandidates_pagination() throws Exception {
 		
-		final String candidateId 	= "101";
-		final String skill1			= "skillOne";
-		final String skill2			= "skillTwo";
-		
-		@SuppressWarnings("unchecked")
-		ArgumentCaptor<Set<String>> 	skillsArgumentCaptor 	= ArgumentCaptor.forClass(Set.class);
-		CandidateEntity 				candidateEntity 		= CandidateEntity.builder().candidateId(candidateId).build();
-		
-		Mockito.when(this.mockCandidateDao.findAll(Mockito.any(CandidateFilterOptions.class), Mockito.any(Pageable.class))).thenReturn(new PageImpl<>(List.of(candidateEntity)));
-		Mockito.doNothing().when(this.mockExternalEventPublisher).publishSearchedSkillsEvent(skillsArgumentCaptor.capture());
-		Mockito.doNothing().when(this.mockStatisticsService).logCandidateSearchEvent(Mockito.any(CandidateFilterOptions.class));
-		
-		Page<Candidate> candidates = this.service.getCandidates(CandidateFilterOptions.builder().skills(Set.of(skill1, skill2)).build(), Pageable.unpaged());
-		
-		Mockito.verify(this.mockStatisticsService).logCandidateSearchEvent(Mockito.any(CandidateFilterOptions.class));
-		Mockito.verify(this.mockExternalEventPublisher).publishSearchedSkillsEvent(Mockito.anySet());
-		
-		assertEquals(candidateId, candidates.get().findFirst().get().getCandidateId());
-		assertTrue(skillsArgumentCaptor.getValue().contains(skill1));
-		assertTrue(skillsArgumentCaptor.getValue().contains(skill2));
-		
-	}
-
-	/**
-	* Tests retrieval of Candidates
-	* @throws Exception
-	*/
-	//@Test
-	//public void testGetCandidates() throws Exception {
-		
-	//	final String candidateId 	= "101";
-	//	final String skill1			= "skillOne";
-	//	final String skill2			= "skillTwo";
-		
-	//	@SuppressWarnings("unchecked")
-	//	ArgumentCaptor<Set<String>> 	skillsArgumentCaptor 	= ArgumentCaptor.forClass(Set.class);
-	//	CandidateEntity 				candidateEntity 		= CandidateEntity.builder().candidateId(candidateId).build();
-		
-	//	Mockito.when(this.mockCandidateDao.findAll(Mockito.any(CandidateFilterOptions.class))).thenReturn(List.of(candidateEntity));
-	//	Mockito.doNothing().when(this.mockExternalEventPublisher).publishSearchedSkillsEvent(skillsArgumentCaptor.capture());
-	//	Mockito.doNothing().when(this.mockStatisticsService).logCandidateSearchEvent(Mockito.any(CandidateFilterOptions.class));
-		
-	//	Set<Candidate> candidates = this.service.getCandidates(CandidateFilterOptions.builder().skills(Set.of(skill1, skill2)).build());
-		
-	//	Mockito.verify(this.mockStatisticsService).logCandidateSearchEvent(Mockito.any(CandidateFilterOptions.class));
-		
-	//	assertEquals(candidateId, candidates.stream().findFirst().get().getCandidateId());
-	//	assertTrue(skillsArgumentCaptor.getValue().contains(skill1));
-	//	assertTrue(skillsArgumentCaptor.getValue().contains(skill2));
-		
-	//}
-	
 	/**
 	* Tests Exception thrown if Candidate does not exist
 	* @throws Exception
@@ -630,42 +567,6 @@ public class CandidateServiceImplTest {
 		Assertions.assertThrows(RuntimeException.class, () ->{
 			this.service.extractFiltersFromDocument(null, null);
 		});
-		
-	}
-	
-	/**
-	* Tests retrieval of Candidates
-	* @throws Exception
-	*/
-	@Test
-	public void testListenForSearchedSkillsEvent() throws Exception {
-		
-		final String candidateId 	= "101";
-		final String skill1			= "skillOne";
-		final String skill2			= "skillTwo";
-		
-		@SuppressWarnings("unchecked")
-		ArgumentCaptor<Set<String>> 	skillsArgumentCaptor 	= ArgumentCaptor.forClass(Set.class);
-		@SuppressWarnings("unchecked")
-		ArgumentCaptor<Set<String>> 	skillsCaptor = ArgumentCaptor.forClass(Set.class);
-		
-		CandidateEntity 				candidateEntity 		= CandidateEntity.builder().candidateId(candidateId).build();
-		
-		Mockito.when(this.mockCandidateDao.findAll(Mockito.any(CandidateFilterOptions.class), Mockito.any(Pageable.class))).thenReturn(new PageImpl<>(List.of(candidateEntity)));
-		Mockito.doNothing().when(this.mockExternalEventPublisher).publishSearchedSkillsEvent(skillsArgumentCaptor.capture());
-		Mockito.doNothing().when(this.mockStatisticsService).logCandidateSearchEvent(Mockito.any(CandidateFilterOptions.class));
-		Mockito.doNothing().when(this.mockSkillDao).persistSkills(skillsCaptor.capture());
-		
-		Page<Candidate> candidates = this.service.getCandidates(CandidateFilterOptions.builder().skills(Set.of(skill1, skill2)).build(), Pageable.unpaged());
-		
-		Mockito.verify(this.mockStatisticsService).logCandidateSearchEvent(Mockito.any(CandidateFilterOptions.class));
-		
-		assertEquals(candidateId, candidates.get().findFirst().get().getCandidateId());
-		assertTrue(skillsArgumentCaptor.getValue().contains(skill1));
-		assertTrue(skillsArgumentCaptor.getValue().contains(skill2));
-		
-		skillsCaptor.getValue().stream().filter(s -> s.equals(skill1.toLowerCase())).findAny().get();
-		skillsCaptor.getValue().stream().filter(s -> s.equals(skill2.toLowerCase())).findAny().get();
 		
 	}
 	

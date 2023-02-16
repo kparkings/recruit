@@ -672,7 +672,6 @@ export class RecruiterListingsComponent implements OnInit {
 		const filterParams:string = 'orderAttribute=candidateId&order=desc'
                                                          + '&page=0'
                                                          + '&size=12'
-														 + '&useSuggestions=true'
 														 + this.getFunctionTypeFromTitle(listing)
                                                          + this.getCountryFilterParamString(listing) 			
                                                          + this.getContractTypeParamString(listing)				

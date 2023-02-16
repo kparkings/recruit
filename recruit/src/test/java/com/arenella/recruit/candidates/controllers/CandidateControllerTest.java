@@ -21,7 +21,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.arenella.recruit.candidates.beans.Candidate;
 import com.arenella.recruit.candidates.beans.CandidateExtractedFilters;
 import com.arenella.recruit.candidates.beans.CandidateSearchAccuracyWrapper;
 import com.arenella.recruit.candidates.beans.CandidateSearchAlert;
@@ -73,23 +72,6 @@ public class CandidateControllerTest {
 	}
 	
 	/**
-	* Tests retrieval of Paginated candidates
-	* @throws Exception
-	*/
-	@Test
-	public void testGetCandidate() throws Exception{
-	
-		Page<Candidate> candidatePage = Page.empty();
-		
-		Mockito.when(this.mockCandidateService.getCandidates(Mockito.any(), Mockito.any())).thenReturn(candidatePage);
-		
-		this.controller.getCandidate(null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,false,null, null, null);
-
-		Mockito.verify(this.mockCandidateService).getCandidates(Mockito.any(), Mockito.any());
-		
-	}
-	
-	/**
 	* Tests retrieval of candidate suggestions
 	* @throws Exception
 	*/
@@ -103,7 +85,7 @@ public class CandidateControllerTest {
 		PageRequest mockPageRequest = Mockito.mock(PageRequest.class);
 		Mockito.when(mockPageRequest.getPageSize()).thenReturn(1);
 		
-		this.controller.getCandidate(null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,true,null,null, mockPageRequest);
+		this.controller.getCandidate(null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,true,null,null, mockPageRequest);
 		
 		Mockito.verify(this.mockCandidateService).getCandidateSuggestions(Mockito.any(), Mockito.any());
 	

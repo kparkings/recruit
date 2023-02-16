@@ -264,21 +264,6 @@ public class CandidateServiceImpl implements CandidateService{
 	* Refer to the CandidateService Interface for Details
 	*/
 	@Override
-	public Page<Candidate> getCandidates(CandidateFilterOptions filterOptions, Pageable pageable) {
-		
-		this.statisticsService.logCandidateSearchEvent(filterOptions);
-		
-		extractAndPersistNewSkills(filterOptions.getSkills());
-		
-		this.externalEventPublisher.publishSearchedSkillsEvent(filterOptions.getSkills());
-		
-		return candidateDao.findAll(filterOptions, pageable).map(candidate -> CandidateEntity.convertFromEntity(candidate));
-	}
-	
-	/**
-	* Refer to the CandidateService Interface for Details
-	*/
-	@Override
 	public Page<CandidateSearchAccuracyWrapper> getCandidateSuggestions(CandidateFilterOptions filterOptions, Integer maxSuggestions) {
 		
 		final Set<CandidateSearchAccuracyWrapper> 	suggestions 		= new LinkedHashSet<>();

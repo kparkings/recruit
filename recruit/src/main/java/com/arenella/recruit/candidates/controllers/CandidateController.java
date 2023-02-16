@@ -107,7 +107,6 @@ public class CandidateController {
 	* @param english				- Optional English language proficiency value to filter on
 	* @param french					- Optional French language proficiency value to filter on
 	* @param skills					- Optional Skills to filter on
-	* @param useSuggestions			- If false returns pages results. If true returns x best match suggestions
 	* @return Page of results
 	*/
 	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('RECRUITER')")
@@ -129,7 +128,6 @@ public class CandidateController {
 													@RequestParam(required = false) 	String				surname,
 													@RequestParam(required = false) 	String				email,
 													@RequestParam(required = false) 	Boolean				flaggedAsUnavailable,
-													@RequestParam(required = false)		Boolean				useSuggestions,
 													@RequestParam(required = false)		Integer				daysSinceLastAvailabilityCheck,
 													@RequestParam(required = false)		String				searchText,
 													Pageable pageable
@@ -158,11 +156,8 @@ public class CandidateController {
 																		.searchText(searchText)
 																	.build();
 		
-		if (useSuggestions != null && useSuggestions) {
-			return candidateService.getCandidateSuggestions(filterOptions, pageable.getPageSize()).map(candidate -> CandidateSuggestionAPIOutbound.convertFromCandidate(candidate));
-		} else {
-			return candidateService.getCandidates(filterOptions, pageable).map(candidate -> CandidateStandardAPIOutbound.convertFromCandidate(candidate));
-		}
+		return candidateService.getCandidateSuggestions(filterOptions, pageable.getPageSize()).map(candidate -> CandidateSuggestionAPIOutbound.convertFromCandidate(candidate));
+		
 	}
 	
 	/**
