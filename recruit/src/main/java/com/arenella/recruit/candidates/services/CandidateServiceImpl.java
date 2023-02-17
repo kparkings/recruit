@@ -21,6 +21,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import com.arenella.recruit.adapters.events.CandidateNoLongerAvailableEvent;
 import com.arenella.recruit.candidates.adapters.CandidateCreatedEvent;
@@ -278,7 +279,7 @@ public class CandidateServiceImpl implements CandidateService{
 		//TODO: [KP] Need to augment skill list with keywords found in search text
 		//TODO: [KP] Once we have set this up to also work with search text not generated from extract spec remove if and only set functions by searchText
 		//TODO: [KP] Cant remove because of candidate page filters !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
-		if (!filterOptions.getSearchText().isEmpty()) {
+		if (StringUtils.hasText(filterOptions.getSearchText())) {
 			Set<FUNCTION> functionToFilterOn = this.candidateFunctionExtractor.extractFunctions(filterOptions.getSearchText());
 			filterOptions.setFunctions(functionToFilterOn);
 		}

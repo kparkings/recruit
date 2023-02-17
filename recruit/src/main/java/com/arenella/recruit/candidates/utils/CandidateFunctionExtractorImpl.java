@@ -8,6 +8,7 @@ import java.util.Set;
 import javax.annotation.PostConstruct;
 
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import com.arenella.recruit.candidates.enums.FUNCTION;
 
@@ -51,6 +52,9 @@ public class CandidateFunctionExtractorImpl implements CandidateFunctionExtracto
 		
 		Set<FUNCTION> identifiedFunctions = new HashSet<>();
 		
+		if (!StringUtils.hasText(searchText)) {
+			return Set.of();
+		}
 		final String sanitizedSearchText = searchText.toLowerCase();
 		
 		all.keySet().forEach(function -> {
