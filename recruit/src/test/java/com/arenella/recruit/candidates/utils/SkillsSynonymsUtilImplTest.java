@@ -2,6 +2,7 @@ package com.arenella.recruit.candidates.utils;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import org.junit.jupiter.api.Test;
@@ -13,99 +14,112 @@ import org.junit.jupiter.api.Test;
 public class SkillsSynonymsUtilImplTest {
 
 	/**
+	* Runs an individual test case
+	* @param testcase - case to test
+	*/
+	private void run(String expected, Set<String> testcase) {
+		
+		SkillsSynonymsUtilImpl util = new SkillsSynonymsUtilImpl();
+		
+		Set<String> extracted = new HashSet<>();
+		
+		util.addSynonymsForSkills(extracted, testcase);
+		
+		assertTrue(extracted.contains(expected));
+	}
+	
+	/**
 	* Test synonyms are added
 	* @throws Exception
 	*/
 	@Test
 	public void testAddtSynonymsForSkills() throws Exception {
 		
-		SkillsSynonymsUtilImpl util = new SkillsSynonymsUtilImpl();
-
 		//JS
-		assertTrue(util.addtSynonymsForSkills(Set.of("js")).contains("javascript"));
-		assertTrue(util.addtSynonymsForSkills(Set.of("javascript")).contains("js"));
-		
+		run("javascript", 				Set.of("js"));
+		run("js", 						Set.of("javascript"));
 		//CSS
-		assertTrue(util.addtSynonymsForSkills(Set.of("cascading style sheets")).contains("css"));
-		assertTrue(util.addtSynonymsForSkills(Set.of("css")).contains("cascading style sheets"));
+		run("css", 						Set.of("cascading style sheets"));
+		run("cascading style sheets", 	Set.of("css"));
 		
 		//Node
-		assertTrue(util.addtSynonymsForSkills(Set.of("node")).contains("nodejs"));
-		assertTrue(util.addtSynonymsForSkills(Set.of("node")).contains("node.js"));
-		assertTrue(util.addtSynonymsForSkills(Set.of("nodejs")).contains("node"));
-		assertTrue(util.addtSynonymsForSkills(Set.of("nodejs")).contains("node.js"));
-		assertTrue(util.addtSynonymsForSkills(Set.of("node.js")).contains("node"));
-		assertTrue(util.addtSynonymsForSkills(Set.of("node.js")).contains("nodejs"));
-	
+		run("node", 					Set.of("nodejs"));
+		run("node", 					Set.of("node.js"));
+		run("nodejs", 					Set.of("node"));
+		run("nodejs", 					Set.of("node.js"));
+		run("node.js", 					Set.of("node"));
+		run("node.js", 					Set.of("nodejs"));
+		
 		//Vue
-		assertTrue(util.addtSynonymsForSkills(Set.of("vue")).contains("vuejs"));
-		assertTrue(util.addtSynonymsForSkills(Set.of("vue")).contains("vue.js"));
-		assertTrue(util.addtSynonymsForSkills(Set.of("vuejs")).contains("vue"));
-		assertTrue(util.addtSynonymsForSkills(Set.of("vuejs")).contains("vue.js"));
-		assertTrue(util.addtSynonymsForSkills(Set.of("vue.js")).contains("vue"));
-		assertTrue(util.addtSynonymsForSkills(Set.of("vue.js")).contains("vuejs"));
-	
+		run("vue", 						Set.of("vuejs"));
+		run("vue", 						Set.of("vue.js"));
+		run("vuejs", 					Set.of("vue"));
+		run("vuejs", 					Set.of("vue.js"));
+		run("vue.js", 					Set.of("vue"));
+		run("vue.js", 					Set.of("vuejs"));
+		
 		//React
-		assertTrue(util.addtSynonymsForSkills(Set.of("react")).contains("reactjs"));
-		assertTrue(util.addtSynonymsForSkills(Set.of("react")).contains("react.js"));
-		assertTrue(util.addtSynonymsForSkills(Set.of("reactjs")).contains("react"));
-		assertTrue(util.addtSynonymsForSkills(Set.of("reactjs")).contains("react.js"));
-		assertTrue(util.addtSynonymsForSkills(Set.of("react.js")).contains("react"));
-		assertTrue(util.addtSynonymsForSkills(Set.of("react.js")).contains("reactjs"));
+		run("react", 					Set.of("reactjs"));
+		run("react", 					Set.of("react.js"));
+		run("reactjs", 					Set.of("react"));
+		run("reactjs", 					Set.of("react.js"));
+		run("react.js", 				Set.of("react"));
+		run("react.js", 				Set.of("reactjs"));
 	
 		//C#
-		assertTrue(util.addtSynonymsForSkills(Set.of("c#")).contains("csharp"));
-		assertTrue(util.addtSynonymsForSkills(Set.of("csharp")).contains("c#"));
-		
+		run("c#", 						Set.of("csharp"));
+		run("csharp", 					Set.of("c#"));
+	
 		//Front end
-		assertTrue(util.addtSynonymsForSkills(Set.of("fe")).contains("frontend"));
-		assertTrue(util.addtSynonymsForSkills(Set.of("fe")).contains("front-end"));
-		assertTrue(util.addtSynonymsForSkills(Set.of("frontend")).contains("fe"));
-		assertTrue(util.addtSynonymsForSkills(Set.of("frontend")).contains("front-end"));
-		assertTrue(util.addtSynonymsForSkills(Set.of("front-end")).contains("fe"));
-		assertTrue(util.addtSynonymsForSkills(Set.of("front-end")).contains("frontend"));
+		run("fe", 						Set.of("frontend"));
+		run("fe", 						Set.of("frontend"));
+		run("frontend", 				Set.of("fe"));
+		run("frontend", 				Set.of("front-end"));
+		run("front-end", 				Set.of("fe"));
+		run("front-end", 				Set.of("frontend"));
+		
 		
 		//Back end
-		assertTrue(util.addtSynonymsForSkills(Set.of("be")).contains("backend"));
-		assertTrue(util.addtSynonymsForSkills(Set.of("be")).contains("back-end"));
-		assertTrue(util.addtSynonymsForSkills(Set.of("backend")).contains("be"));
-		assertTrue(util.addtSynonymsForSkills(Set.of("backend")).contains("back-end"));
-		assertTrue(util.addtSynonymsForSkills(Set.of("back-end")).contains("be"));
-		assertTrue(util.addtSynonymsForSkills(Set.of("back-end")).contains("backend"));
+		run("be", 						Set.of("backend"));
+		run("be", 						Set.of("backend"));
+		run("backend", 					Set.of("be"));
+		run("backend", 					Set.of("back-end"));
+		run("back-end", 				Set.of("be"));
+		run("back-end", 				Set.of("backend"));
 		
 		//Spring
-		assertTrue(util.addtSynonymsForSkills(Set.of("spring core")).contains("spring"));
-		assertTrue(util.addtSynonymsForSkills(Set.of("springcore")).contains("spring"));
-		assertTrue(util.addtSynonymsForSkills(Set.of("spring")).contains("spring core"));
-		assertTrue(util.addtSynonymsForSkills(Set.of("spring")).contains("springcore"));
+		run("spring core", 				Set.of("spring"));
+		run("springcore", 				Set.of("spring"));
+		run("spring", 					Set.of("spring core"));
+		run("spring", 					Set.of("springcore"));
 		
-		assertTrue(util.addtSynonymsForSkills(Set.of("springdata")).contains("spring"));
-		assertTrue(util.addtSynonymsForSkills(Set.of("springdata")).contains("spring core"));
-		assertTrue(util.addtSynonymsForSkills(Set.of("springdata")).contains("springcore"));
+		run("spring", 					Set.of("springdata"));
+		run("spring core", 				Set.of("springdata"));
+		run("springcore", 				Set.of("springdata"));
 		
-		assertTrue(util.addtSynonymsForSkills(Set.of("springtest")).contains("spring"));
-		assertTrue(util.addtSynonymsForSkills(Set.of("springtest")).contains("spring core"));
-		assertTrue(util.addtSynonymsForSkills(Set.of("springtest")).contains("springcore"));
+		run("spring", 					Set.of("springtest"));
+		run("spring core", 				Set.of("springtest"));
+		run("springcore", 				Set.of("springtest"));
 		
-		assertTrue(util.addtSynonymsForSkills(Set.of("springmvc")).contains("spring"));
-		assertTrue(util.addtSynonymsForSkills(Set.of("springmvc")).contains("spring core"));
-		assertTrue(util.addtSynonymsForSkills(Set.of("springmvc")).contains("springcore"));
+		run("spring", 					Set.of("springmvc"));
+		run("spring core", 				Set.of("springmvc"));
+		run("springcore", 				Set.of("springmvc"));
 		
-		assertTrue(util.addtSynonymsForSkills(Set.of("springboot")).contains("spring"));
-		assertTrue(util.addtSynonymsForSkills(Set.of("springboot")).contains("spring core"));
-		assertTrue(util.addtSynonymsForSkills(Set.of("springboot")).contains("springcore"));
+		run("spring", 					Set.of("springboot"));
+		run("spring core", 				Set.of("springboot"));
+		run("springcore", 				Set.of("springboot"));
 		
-		assertTrue(util.addtSynonymsForSkills(Set.of("spring data")).contains("springdata"));
-		assertTrue(util.addtSynonymsForSkills(Set.of("spring data")).contains("spring-data"));
+		run("spring data", 				Set.of("springdata"));
+		run("spring data", 				Set.of("spring-data"));
 		
-		assertTrue(util.addtSynonymsForSkills(Set.of("spring test")).contains("springtest"));
-		assertTrue(util.addtSynonymsForSkills(Set.of("spring test")).contains("spring-test"));
+		run("spring test", 				Set.of("springtest"));
+		run("spring test", 				Set.of("spring-test"));
 		
-		assertTrue(util.addtSynonymsForSkills(Set.of("spring mvc")).contains("springmvc"));
-		assertTrue(util.addtSynonymsForSkills(Set.of("spring mvc")).contains("spring-mvc"));
+		run("spring mvc", 				Set.of("springmvc"));
+		run("spring mvc", 				Set.of("spring-mvc"));
 		
-		assertTrue(util.addtSynonymsForSkills(Set.of("spring boot")).contains("springboot"));
-		assertTrue(util.addtSynonymsForSkills(Set.of("spring boot")).contains("spring-boot"));
+		run("spring boot", 				Set.of("springboot"));
+		run("spring boot", 				Set.of("spring-boot"));
 		
 	}
 	

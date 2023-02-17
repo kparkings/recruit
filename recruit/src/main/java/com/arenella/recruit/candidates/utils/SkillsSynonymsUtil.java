@@ -12,11 +12,11 @@ import java.util.Set;
 public interface SkillsSynonymsUtil {
 
 	/**
-	* Adds all known synonyms for each skill to the incommming
+	* Adds all known synonyms for each skill to the incoming
 	* skills Set 
 	* @param skills - Skills to add synonyms for
 	* @return synonyms
 	*/
-	public Set<String> addtSynonymsForSkills(Set<String> skills);
+	public void addSynonymsForSkills(Set<String> extractedSkills, Set<String> skills);
 	
 }

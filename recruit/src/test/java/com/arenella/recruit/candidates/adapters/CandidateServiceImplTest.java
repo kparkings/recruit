@@ -496,8 +496,7 @@ public class CandidateServiceImplTest {
 			.thenReturn(true);
 		
 		Mockito
-			.when(this.mockSkillsSynonymsUtil.addtSynonymsForSkills(Mockito.anySet()))
-			.thenReturn(Set.of());
+			.doNothing().when(this.mockSkillsSynonymsUtil).addSynonymsForSkills(Mockito.anySet(), Mockito.anySet());
 		
 		suggestion_accuracy accuracy = this.service.doTestCandidateAlert(candidateId, filterOptions);
 		
@@ -548,8 +547,7 @@ public class CandidateServiceImplTest {
 		.thenReturn(false);
 	
 		Mockito
-			.when(this.mockSkillsSynonymsUtil.addtSynonymsForSkills(Mockito.anySet()))
-			.thenReturn(Set.of());
+			.doNothing().when(this.mockSkillsSynonymsUtil).addSynonymsForSkills(Mockito.anySet(), Mockito.anySet());
 		
 		suggestion_accuracy accuracy = this.service.doTestCandidateAlert(candidateId, filterOptions);
 		
