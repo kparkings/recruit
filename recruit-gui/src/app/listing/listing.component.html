@@ -7,6 +7,10 @@
 	        		<!-- List View -->
 	        		<div  *ngSwitchCase="'list'">
 	        		
+		        		<div class="action-buttons" *ngIf="isAuthenticated()">
+							<button class="btn btn-secondary btn-listing" routerLink="/recruiter-listings">Manage Your Posts</button>
+						</div>
+	        		
 	        			<div>
 					
 							<!-- Pagination -->
@@ -37,7 +41,7 @@
 							
 							<div *ngFor="let listing of listings" class="listing">
 							
-								<table >
+								<table>
 									<tr>
 										<td class="listing-table-td">
 										

@@ -1,6 +1,6 @@
 .center {
   margin: auto;
-  width: 50%;
+  width: 90%;
   padding: 10px;
 }
 
@@ -26,8 +26,7 @@
  
  .btn-listing{
  	margin-top:20px;
-	margin-right:10px;
-    min-width:100px;
+	min-width:150px;
 }
 
 .a-table-cell{
@@ -179,6 +178,10 @@
 
 .listing-title{
 	font-weight:bold;
+	width:100%;
+	padding-top:0px;
+	padding-bottom:0px;
+	
 }
 
 .hide-url{
