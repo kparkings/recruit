@@ -28,7 +28,7 @@ public class SeniorityExtractor implements JobSpecifcationFilterExtractor{
 		
 		boolean senior = documentText.contains("senior") || documentText.contains("expérimenté");
 		boolean medior = documentText.contains("medior");
-		boolean junior = documentText.contains("junior") || documentText.contains("entry level") || documentText.contains("graduate");
+		boolean junior = documentText.contains("junior") || documentText.contains("entry level") || documentText.contains("graduate ");
 		
 		
 		if (!senior && !medior && !junior) {

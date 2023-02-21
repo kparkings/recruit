@@ -21,6 +21,7 @@ public class SkillsSynonymsUtilImpl implements SkillsSynonymsUtil{
 		SkillSynonym	TESTER 			= new SkillSynonym("TESTER", Set.of("qa", "tester", "test analyst"));
 		SkillSynonym	DOTNET_CORE 	= new SkillSynonym("DOTNET_CORE", Set.of("dotnet", ".net", "dot net")); 
 		SkillSynonym	SPRING_CORE 	= new SkillSynonym("SPRING_CORE", Set.of("spring", "spring core", "springcore", "spring-core"));
+		SkillSynonym	UNIT_TESTING 	= new SkillSynonym("UNIT_TESTING", Set.of("unit testing", "unit tests"));
 		
 		synonyms.add(TESTER); 
 		synonyms.add(DOTNET_CORE);
@@ -147,6 +148,9 @@ public class SkillsSynonymsUtilImpl implements SkillsSynonymsUtil{
 		synonyms.add(new SkillSynonym("WEB_DEVELOPMENT", Set.of("webdevelopment", "web developer", "webdeveloper", "web development")));
 		synonyms.add(new SkillSynonym("WINDOWS_SERVER", Set.of("windows server", "windows servers")));
 		synonyms.add(new SkillSynonym("WINFORMS", Set.of("winforms", "winform application")));
+		synonyms.add(new SkillSynonym("JUNIT", Set.of("junit"), UNIT_TESTING));
+		synonyms.add(new SkillSynonym("MOCKITO", Set.of("mockito"), UNIT_TESTING));
+		
 		
 	}
 	

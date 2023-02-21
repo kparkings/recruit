@@ -309,4 +309,11 @@ export class ListingComponent implements OnInit {
     	return sessionStorage.getItem('loggedIn') === 'true';
   	}
 
+  	/**
+  	* Whether or not the user has authenticated as an Admin user 
+  	*/
+  	public isAuthenticatedAsAdmin():boolean {
+    	return sessionStorage.getItem('isAdmin') === 'true';
+  	}
+
 }
