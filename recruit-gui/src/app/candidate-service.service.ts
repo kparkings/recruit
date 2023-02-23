@@ -32,8 +32,6 @@ export class CandidateServiceService {
       headers: new HttpHeaders({ }), withCredentials: true
     };
 
-  	//headers = { 'content-type': 'application/json'};
-
   	/**
   	* Returns a list of available Candidates 
   	*/

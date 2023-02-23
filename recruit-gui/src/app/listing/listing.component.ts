@@ -1,7 +1,10 @@
 import { Component, OnInit } 							from '@angular/core';
 import { ListingService }								from '../listing.service';
+import { EmailService, EmailRequest }					from '../email.service';
 import { Listing}										from './listing';
 import { ActivatedRoute } 								from '@angular/router';
+import { UntypedFormGroup, UntypedFormControl }			from '@angular/forms';
+import { NgbModal, NgbModalOptions }					from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-listing',
@@ -10,7 +13,7 @@ import { ActivatedRoute } 								from '@angular/router';
 })
 export class ListingComponent implements OnInit {
 
-  	constructor(private listingService:ListingService, private _Activatedroute:ActivatedRoute) { }
+  	constructor(private listingService:ListingService, private emailService:EmailService, private _Activatedroute:ActivatedRoute, private modalService:NgbModal, ) { }
 
   	ngOnInit(): void {
 		
@@ -21,8 +24,6 @@ export class ListingComponent implements OnInit {
 		} else {
 			this.fetchListings("");
 		}
-		
-			
 		
   	}
 
@@ -36,6 +37,98 @@ export class ListingComponent implements OnInit {
 	public selectedListing:Listing				= new Listing();
 	public contractTypeFilter					= '';
 
+  	private curriculumFile!:File| any;
+	
+	/**
+	* Uploads the file for the Curriculum and stored 
+	* it ready to be sent to the backend
+	*/
+  	public uploadCurriculumFile(event:any):void{
+  
+  		if (event.target.files.length <= 0) {
+  			return;
+  		}
+  	
+  		this.curriculumFile = event.target.files[0];
+  		
+	}
+	
+	showSendAlertBoxSuccess:boolean 		= false;
+	showSendAlertBoxFailure:boolean 		= false;
+	
+	
+	public emailRequestFormBean:UntypedFormGroup = new UntypedFormGroup({
+     	email:		new UntypedFormControl(),
+		name:		new UntypedFormControl(),
+		message:	new UntypedFormControl(),
+	});
+	
+	/**
+	* Resets the form 
+	*/
+	private resetEmailRequestForm():void{
+		this.emailRequestFormBean = new UntypedFormGroup({
+     		email:		new UntypedFormControl(),
+			name:		new UntypedFormControl(),
+			message:	new UntypedFormControl(),
+		});
+		
+		this.showSendAlertBoxSuccess 		= false;
+		this.showSendAlertBoxFailure 		= false;
+	
+	}
+	
+	/**
+	* Send an email request 
+	*/
+	public sendEmailRequest(content:any):void{
+		
+		let emailRequest:EmailRequest = new EmailRequest();
+		
+		emailRequest.attachment 	= this.curriculumFile;
+		emailRequest.message 		= this.emailRequestFormBean.get('message')?.value; 
+		emailRequest.senderEmail 	= this.emailRequestFormBean.get('email')?.value; 
+		emailRequest.senderName 	= this.emailRequestFormBean.get('name')?.value; 
+		
+		this.emailService.sendEmail(emailRequest, this.selectedListing.listingId).subscribe(response =>{
+			this.resetEmailRequestForm();
+			this.curriculumFile = null;
+			this.showSendAlertBoxSuccess 		= true;
+			this.showSendAlertBoxFailure 		= false;
+			this.open(content);
+	    },err => {
+			this.showSendAlertBoxSuccess 		= false;
+			this.showSendAlertBoxFailure 		= true;
+			this.open(content);
+		});
+
+	}
+	
+	/**
+	* Whether or not to enable send email button. If missing 
+	* info button must be disbled. 
+	*/
+	public enableSendEmail():boolean{
+		
+		if (!this.emailRequestFormBean.get('message')) {
+			return false;
+		}
+		
+		if (!this.emailRequestFormBean.get('email')) {
+			return false;
+		}
+		
+		if (!this.emailRequestFormBean.get('name')) {
+			return false;
+		}
+		
+		if (!this.curriculumFile) {
+			return false;
+		}
+		
+		return true;
+	}
+		
 	/**
 	* Switches to Add Listing view
 	*/
@@ -314,6 +407,28 @@ export class ListingComponent implements OnInit {
   	*/
   	public isAuthenticatedAsAdmin():boolean {
     	return sessionStorage.getItem('isAdmin') === 'true';
+  	}
+
+	/**
+	*  Closes the confirm popup
+	*/
+	public closeModal(): void {
+		
+		this.showSendAlertBoxSuccess 		= false;
+		this.showSendAlertBoxFailure 		= false;
+		
+		this.modalService.dismissAll();
+	}
+	
+	public open(content:any):void {
+		
+	
+	   let options: NgbModalOptions = {
+	    	 centered: true
+	   };
+
+		this.modalService.open(content, options);
+
   	}
 
 }

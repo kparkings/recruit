@@ -114,11 +114,28 @@
 									</table>
 								</div>
 								
-								<h2  class="listing-view-title">Contact Details</h2>
+								<h2  class="listing-view-title">Contact Recruiter</h2>
 								<div>
-									<div>{{selectedListing.ownerName}}</div>	
-									<div>{{selectedListing.ownerCompany}}</div>	
-									<div>{{selectedListing.ownerEmail}}</div>	
+									<form [formGroup]="emailRequestFormBean">
+										<textarea class="contact-recruiter-textarea" formControlName="message"></textarea>
+										<div class="div-spacing">
+											<p class="email-label">Curriculum</p>
+											<input class="email-input" type="file" (change)="uploadCurriculumFile($event)"> 
+											<div>.doc, .docx, .pdf - up to 1MB</div>
+										</div>
+										<div>
+											<p class="email-label">Your Name:</p>
+											<input class="email-input" type="email" formControlName="name">
+										</div>
+										<div>
+											<p class="email-label">Your Email:</p>
+											<input class="email-input" type="email" formControlName="email">
+										</div>
+										<div class="action-buttons">
+											<button class="btn btn-secondary btn-listing btnRight" (click)="sendEmailRequest(feedbackBox)" *ngIf="enableSendEmail()">Send</button>
+											<button class="btn btn-secondary btn-listing btnRight" disabled *ngIf="!enableSendEmail()">Send</button>
+										</div>
+									</form>
 								</div>
 							</div>
 						</div>
@@ -129,3 +146,19 @@
 	    </div>
 	</div>
 </div>
+
+<!-- Feedback Box -->
+<ng-template #feedbackBox let-modal>
+	<div class="modal-header">
+		<h4 class="modal-title">Create Email Alert</h4>
+ 		<div class="filter-close-box" (click)="closeModal()">X</div>
+	</div>
+	<div class="feedbackBox;">
+		<div class="modal-body" *ngIf="showSendAlertBoxSuccess">
+			<p>The message has been sent to the recruiter managing this role. They will get back to you shortly.</p>
+		</div>
+		<div class="modal-body" *ngIf="showSendAlertBoxFailure">
+			<p>Unfortunately it was not possible to send the Email at this time.</p>
+		</div>
+	</div>
+</ng-template>

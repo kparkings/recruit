@@ -20,6 +20,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.arenella.recruit.listings.beans.Listing.listing_type;
 import com.arenella.recruit.listings.beans.ListingFilter;
@@ -213,6 +214,25 @@ public class ListingControllerTest {
 		assertTrue(captor.getValue().getEventId() instanceof UUID);
 		assertTrue(captor.getValue().getCreated() instanceof LocalDateTime);
 		assertEquals(listingId, captor.getValue().getListingId());
+		
+	}
+	
+	/**
+	* Test sending of request for contact to Owner of the Listing
+	* @throws Exception
+	*/
+	@Test
+	public void testSendContactRequestToListingOwner()  throws Exception {
+		
+		final UUID				listingId		= UUID.randomUUID();
+		final MultipartFile 	attachment		= Mockito.mock(MultipartFile.class);
+		final String 			senderName		= "Kevin Parkings";
+		final String 			senderEmail	= "kparkings@gmail.com";
+		final String 			message			= "some message";
+		
+		ResponseEntity<Void> response = this.controller.sendContactRequestToListingOwner(listingId, senderName, senderEmail, message, attachment);
+		
+		assertEquals(HttpStatus.OK, response.getStatusCode());
 		
 	}
 		

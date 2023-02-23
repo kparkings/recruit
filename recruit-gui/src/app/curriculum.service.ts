@@ -1,7 +1,7 @@
-import { Injectable }                                                           from '@angular/core';
-import { Observable }                 	                                    from 'rxjs';
+import { Injectable }                                                   from '@angular/core';
+import { Observable }                 	                                from 'rxjs';
 import { HttpClient, HttpHeaders }  	                                from '@angular/common/http';
-import { environment } 								                        from './../environments/environment';
+import { environment } 								                    from './../environments/environment';
 
 /**
 * Service for interacting with Curriculums 
@@ -10,8 +10,6 @@ import { environment } 								                        from './../environments/e
   providedIn: 'root'
 })
 export class CurriculumService {
-    
-    
 
 	/**
     * Constructor

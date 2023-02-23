@@ -3,10 +3,13 @@ package com.arenella.recruit.listings.controllers;
 import java.util.Optional;
 import java.util.UUID;
 
+import javax.websocket.server.PathParam;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.StringUtils;
@@ -17,10 +20,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.arenella.recruit.listings.beans.Listing.listing_type;
-//import com.arenella.recruit.candidates.controllers.CandidateAPIOutbound;
+
 import com.arenella.recruit.listings.beans.ListingFilter;
 import com.arenella.recruit.listings.beans.ListingFilter.ListingFilterBuilder;
 import com.arenella.recruit.listings.beans.ListingViewedEvent;
@@ -125,6 +130,17 @@ public class ListingController {
 		this.service.registerListingViewedEvent(ListingViewedEvent.builder().listingId(listingId).build());
 		
 		return ResponseEntity.status(HttpStatus.OK).build();
+		
+	}
+	
+	/**
+	* Posts a response from a Candidate to the Listing
+	* @return ResponeEntity
+	*/
+	@PostMapping(value="/listing/public/{listingId}/contact-recruiter",consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+	public ResponseEntity<Void> sendContactRequestToListingOwner(@PathVariable("listingId") UUID listingId, @RequestPart("senderName")String senderName, @RequestPart("senderEmail")String senderEmail, @RequestPart("message")String message, @RequestPart("attachment") MultipartFile file){
+		
+		return ResponseEntity.ok().build();	
 		
 	}
 	

@@ -366,18 +366,18 @@
 </ng-template>
 
 <!-- publicity -->
-	<ng-template #publicityModal let-modal>
-	
-		<!--  Options -->
-		<div class="modal-header">
-			<h4 class="modal-title">Publicity</h4>
-			<div class="filter-close-box" (click)="closeModal()">X</div>
-		</div>
-		<div class="modal-body publicity-suggestions">
-			<table>
-				<div *ngFor="let c of publicitySuggestions">
-					{{getCountryCode(c.country) + ' - Exp: ' + c.yearsExperience + ' years - ' + c.roleSought}}
-				</div>
-			</table>
-		</div> 
-	</ng-template>
+<ng-template #publicityModal let-modal>
+
+	<!--  Options -->
+	<div class="modal-header">
+		<h4 class="modal-title">Publicity</h4>
+		<div class="filter-close-box" (click)="closeModal()">X</div>
+	</div>
+	<div class="modal-body publicity-suggestions">
+		<table>
+			<div *ngFor="let c of publicitySuggestions">
+				{{getCountryCode(c.country) + ' - Exp: ' + c.yearsExperience + ' years - ' + c.roleSought}}
+			</div>
+		</table>
+	</div> 
+</ng-template>
