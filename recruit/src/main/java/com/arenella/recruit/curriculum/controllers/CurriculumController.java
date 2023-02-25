@@ -22,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.arenella.recruit.curriculum.beans.Curriculum;
 import com.arenella.recruit.curriculum.beans.PendingCurriculum;
 import com.arenella.recruit.curriculum.enums.FileType;
+import com.arenella.recruit.curriculum.services.CurriculumFileSecurityParser;
 import com.arenella.recruit.curriculum.services.CurriculumService;
 
 /**
@@ -34,6 +35,9 @@ public class CurriculumController {
 	@Autowired
 	private CurriculumService curriculumService;
 	
+	@Autowired
+	private CurriculumFileSecurityParser fileSecurityParser;
+	
 	/**
 	* EndPoint for uploading a Curriculum
 	* @param curriculum		- MultiPart representation of file
@@ -43,6 +47,10 @@ public class CurriculumController {
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@PostMapping(value="/curriculum",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public CurriculumUpdloadDetails uploadCurriculum(@RequestParam("file") MultipartFile curriculumFile) throws Exception{
+		
+		if (!fileSecurityParser.isSafe(curriculumFile)) {
+			throw new RuntimeException("Unacceptable File");
+		}
 		
 		String 			postFix						= curriculumFile.getOriginalFilename().substring(curriculumFile.getOriginalFilename().lastIndexOf('.')+1).toLowerCase();
 		long 			nextAvailableCurriculumId	= curriculumService.getNextCurriculumId();
@@ -97,6 +105,10 @@ public class CurriculumController {
 	*/
 	@PostMapping(value="/pending-curriculum")
 	public ResponseEntity<UUID> uploadPendingCurriculum(@RequestParam("file") MultipartFile curriculumFile) throws Exception {
+		
+		if (!fileSecurityParser.isSafe(curriculumFile)) {
+			throw new RuntimeException("Unacceptable File");
+		}
 		
 		String 			postFix						= curriculumFile.getOriginalFilename().substring(curriculumFile.getOriginalFilename().lastIndexOf('.')+1).toLowerCase();
 		UUID			curriculumId				= UUID.randomUUID();		

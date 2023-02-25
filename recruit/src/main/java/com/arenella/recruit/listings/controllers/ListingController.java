@@ -3,8 +3,6 @@ package com.arenella.recruit.listings.controllers;
 import java.util.Optional;
 import java.util.UUID;
 
-import javax.websocket.server.PathParam;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -139,6 +137,15 @@ public class ListingController {
 	*/
 	@PostMapping(value="/listing/public/{listingId}/contact-recruiter",consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
 	public ResponseEntity<Void> sendContactRequestToListingOwner(@PathVariable("listingId") UUID listingId, @RequestPart("senderName")String senderName, @RequestPart("senderEmail")String senderEmail, @RequestPart("message")String message, @RequestPart("attachment") MultipartFile file){
+		
+		this.service.sendContactRequestToListingOwner(ListingContactRequest
+				.builder()
+					.listingId(listingId)
+					.attachment(file)
+					.message(message)
+					.senderEmail(senderEmail)
+					.senderName(senderName)
+				.build());
 		
 		return ResponseEntity.ok().build();	
 		

@@ -1,5 +1,6 @@
 package com.arenella.recruit.emailservice.services;
 
+import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ScheduledExecutorService;
 
@@ -16,9 +17,12 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 import com.arenella.recruit.emailservice.adapters.RequestSendEmailCommand;
 import com.arenella.recruit.emailservice.beans.Email;
+import com.arenella.recruit.emailservice.beans.Email.EmailRecipient.RecipientType;
 import com.arenella.recruit.emailservice.beans.Email.EmailTopic;
 import com.arenella.recruit.emailservice.beans.Email.Status;
+import com.arenella.recruit.emailservice.beans.Recipient;
 import com.arenella.recruit.emailservice.dao.EmailServiceDao;
+import com.arenella.recruit.emailservice.dao.RecipientDao;
 
 /**
 * Unit tests for the EmailDispatcherService class
@@ -38,6 +42,9 @@ public class EmailDispatcherServiceTest {
 	
 	@Mock
 	private ScheduledExecutorService 	schedulerMock;
+	
+	@Mock
+	private RecipientDao				mockRecipientDao;
 	
 	@Spy
 	private EmailTemplateFactory 		templateFacotry 	= new EmailTemplateFactory();
@@ -77,12 +84,18 @@ public class EmailDispatcherServiceTest {
 	* Test command is converted to Email and Email is persisted
 	* @throws Exception
 	*/
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Test
 	public void testHandleSendEmailCommand() throws Exception{
 		
-		this.service.handleSendEmailCommand(RequestSendEmailCommand.builder().topic(EmailTopic.ACCOUNT_CREATED).build());
+		Email.EmailRecipient<?> recipient1 = new Email.EmailRecipient("one", RecipientType.RECRUITER);
+		Email.EmailRecipient<?> recipient2 = new Email.EmailRecipient("two", RecipientType.RECRUITER);
 		
-		Mockito.verify(this.emailDaoMock).saveEmail(Mockito.any(Email.class));
+		Mockito.when(this.mockRecipientDao.getByIdAndType(Mockito.any(), Mockito.any())).thenReturn(Optional.of(new Recipient("", RecipientType.RECRUITER, "", "")));
+		
+		this.service.handleSendEmailCommand(RequestSendEmailCommand.builder().recipients(Set.of(recipient1, recipient2)).topic(EmailTopic.ACCOUNT_CREATED).build());
+		
+		Mockito.verify(this.emailDaoMock, Mockito.times(2)).saveEmail(Mockito.any(Email.class));
 		
 	}
 	

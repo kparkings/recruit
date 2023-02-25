@@ -1,5 +1,6 @@
 package com.arenella.recruit.listings.services;
 
+import java.io.IOException;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -11,14 +12,18 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import com.arenella.recruit.candidates.adapters.ExternalEventPublisher;
+import com.arenella.recruit.candidates.adapters.RequestListingContactEmailCommand;
 import com.arenella.recruit.listings.beans.Listing;
 import com.arenella.recruit.listings.beans.ListingFilter;
 import com.arenella.recruit.listings.beans.ListingViewedEvent;
+import com.arenella.recruit.listings.controllers.ListingContactRequest;
 import com.arenella.recruit.listings.dao.ListingDao;
 import com.arenella.recruit.listings.dao.ListingEntity;
 import com.arenella.recruit.listings.dao.ListingViewedEventEntity;
 import com.arenella.recruit.listings.exceptions.ListingValidationException;
 import com.arenella.recruit.listings.exceptions.ListingValidationException.ListingValidationExceptionBuilder;
+import com.arenella.recruit.listings.services.FileSecurityParser.FileType;
 
 /**
 * Services for working with Listings
@@ -28,7 +33,13 @@ import com.arenella.recruit.listings.exceptions.ListingValidationException.Listi
 public class ListingServiceImpl implements ListingService{
 
 	@Autowired
-	private ListingDao listingDao;
+	private ListingDao 				listingDao;
+	
+	@Autowired
+	private FileSecurityParser 		fileSecurityParser;
+	
+	@Autowired
+	private ExternalEventPublisher	externalEventPublisher;
 	
 	/**
 	* Refer to the Listing interface for details
@@ -155,6 +166,39 @@ public class ListingServiceImpl implements ListingService{
 		
 		this.listingDao.save(listingEntity);
 		
+	}
+
+	/**
+	* Refer to the Listing interface for details
+	*/
+	@Override
+	public void sendContactRequestToListingOwner(ListingContactRequest contactRequest) {
+		
+		if (!fileSecurityParser.isSafe(contactRequest.getAttachment())) {
+			throw new RuntimeException("Invalid file type detected"); 
+		}
+		
+		Listing listing = this.listingDao.findListingById(contactRequest.getListingId()).orElseThrow(() -> new RuntimeException("Unknown Listing"));
+		
+		FileType fileType = fileSecurityParser.getFileType(contactRequest.getAttachment());
+		
+		try {
+			
+			externalEventPublisher
+				.publicRequestSendListingContactEmailCommand(RequestListingContactEmailCommand
+						.builder()
+							.file(contactRequest.getAttachment().getBytes())
+							.fileType(fileType.toString())
+							.listingName(listing.getTitle())
+							.message(contactRequest.getMessage())
+							.recruiterId(listing.getOwnerId())
+							.senderEmail(contactRequest.getSenderEmail())
+							.senderName(contactRequest.getSenderName())
+						.build());
+		
+		}catch(IOException e) {
+			throw new RuntimeException("Unable to send request"); 
+		}
 	}
 	
 	/**

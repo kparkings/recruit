@@ -2,6 +2,7 @@ package com.arenella.recruit.listings.dao;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -16,6 +17,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.CrudRepository;
 
+import com.arenella.recruit.listings.beans.Listing;
 import com.arenella.recruit.listings.beans.Listing.listing_type;
 import com.arenella.recruit.listings.beans.ListingFilter;
 
@@ -33,6 +35,22 @@ public interface ListingDao extends CrudRepository<ListingEntity, UUID>, JpaSpec
 	*/
 	public default Page<ListingEntity> findAll(ListingFilter filterOptions, Pageable pageable) {
 		return this.findAll(new FilterSpecification(filterOptions), pageable);
+	}
+	
+	/**
+	* Returns listing matching listingId if present
+	* @param listingId - Unique id of the Listing
+	*/
+	public default Optional<Listing> findListingById(UUID listingId) {
+		
+		Optional<ListingEntity> entity =  this.findById(listingId);
+		
+		if (entity.isEmpty()) {
+			return Optional.empty();
+		}
+		
+		return entity.stream().map(e -> ListingEntity.convertFromEntity(e)).findAny();
+		
 	}
 	
 	/**

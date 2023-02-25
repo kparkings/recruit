@@ -104,4 +104,57 @@ public class MonolithExternalEventPublisher implements ExternalEventPublisher{
 		
 	}
 
+	/**
+	* Refer to ExternalEventPublisher for details 
+	*/
+	@Override
+	public void publicRequestSendListingContactEmailCommand(RequestListingContactEmailCommand command) {
+	
+		//TODO: [KP] Need to send two emails. 	1. exten to inform Recruiter of new messat
+		//										2. interne with actual message and attachements
+	
+		Map<String, Object> modelExt = new HashMap<>();
+		modelExt.put("listingName", 	command.getListingName());
+		modelExt.put("senderName", 		command.getSenderName());
+		modelExt.put("recipientId", 	command.getRecruiterId());
+		
+		Map<String, Object> modelInt = new HashMap<>();
+		modelInt.put("file", 			command.getFile());
+		modelInt.put("fileType", 		command.getFileType());
+		modelInt.put("listingName", 	command.getListingName());
+		modelInt.put("message", 		command.getMessage());
+		modelInt.put("senderEmail", 	command.getSenderEmail());
+		modelInt.put("senderName", 		command.getSenderName());
+		modelInt.put("recipientId", 	command.getRecruiterId());
+		
+		RequestSendEmailCommand cInt = 
+				RequestSendEmailCommand
+					.builder()
+						.emailType(EmailType.INTERN)
+						.model(modelInt)
+						.persistable(true)
+						.recipients(Set.of(new EmailRecipient<String>(command.getRecruiterId(), RecipientType.RECRUITER)))
+						.sender(new Sender<>(UUID.randomUUID(), SenderType.SYSTEM, "kparkings@gmail.com"))
+						.title("Arenella-ICT - Reaction To Job Posting")
+						.topic(EmailTopic.LISTING_RECRUITER_CONTACT_REQUEST)
+					.build();
+		
+		this.emailServiceListener.listenForSendEmailCommand(cInt);
+		
+		RequestSendEmailCommand cExt = 
+				RequestSendEmailCommand
+					.builder()
+						.emailType(EmailType.EXTERN)
+						.model(modelExt)
+						.persistable(false)
+						.recipients(Set.of(new EmailRecipient<String>(command.getRecruiterId(), RecipientType.RECRUITER)))
+						.sender(new Sender<>(UUID.randomUUID(), SenderType.SYSTEM, "kparkings@gmail.com"))
+						.title("Arenella-ICT - Reaction To Job Posting")
+						.topic(EmailTopic.LISTING_RECRUITER_CONTACT_REQUEST)
+					.build();
+		
+		this.emailServiceListener.listenForSendEmailCommand(cExt);
+		
+	}
+
 }

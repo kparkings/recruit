@@ -2,6 +2,7 @@ package com.arenella.recruit.curriculum.controllers;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.UUID;
 
@@ -18,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.arenella.recruit.curriculum.beans.PendingCurriculum;
 import com.arenella.recruit.curriculum.enums.FileType;
+import com.arenella.recruit.curriculum.services.CurriculumFileSecurityParser;
 import com.arenella.recruit.curriculum.services.CurriculumService;
 
 /**
@@ -28,13 +30,17 @@ import com.arenella.recruit.curriculum.services.CurriculumService;
 public class CurriculumControllerTest {
 
 	@InjectMocks
-	private CurriculumController 	curriculumController		= new CurriculumController();
+	private CurriculumController 			curriculumController		= new CurriculumController();
 	
 	@Mock
-	private CurriculumService 		mockCurriculumService;
+	private CurriculumService 				mockCurriculumService;
 	
 	@Mock
-	private MultipartFile			mockMultipartFile;
+	private MultipartFile					mockMultipartFile;
+	
+	@Mock
+	private CurriculumFileSecurityParser	mockFileSecurityParser;
+	
 	
 	/**
 	* Tests happy path
@@ -47,6 +53,8 @@ public class CurriculumControllerTest {
 		final String originalFileName		= "cv.PDF";
 		
 		ArgumentCaptor<PendingCurriculum> captor = ArgumentCaptor.forClass(PendingCurriculum.class);
+		
+		Mockito.when(this.mockFileSecurityParser.isSafe(Mockito.any())).thenReturn(true);
 		
 		Mockito.when(mockMultipartFile.getBytes()).thenReturn(curriculumBytes);
 		Mockito.when(mockMultipartFile.getOriginalFilename()).thenReturn(originalFileName);
@@ -61,6 +69,36 @@ public class CurriculumControllerTest {
 		assertEquals(FileType.pdf, captor.getValue().getFileType());
 		assertEquals(curriculumBytes, captor.getValue().getFile());
 		
+	}
+	
+	/**
+	* Tests case that file is deemed unsafe to upload
+	* @throws Exception
+	*/
+	@Test
+	public void testUploadPendingCurriculum_unsafe_file() throws Exception {
+		
+		Mockito.when(this.mockFileSecurityParser.isSafe(Mockito.any())).thenReturn(false);
+		
+		assertThrows(RuntimeException.class, () -> {
+			curriculumController.uploadPendingCurriculum(mockMultipartFile);
+		
+		});
+	}
+	
+	/**
+	* Tests case that file is deemed unsafe to upload
+	* @throws Exception
+	*/
+	@Test
+	public void testUploadCurriculum_unsafe_file() throws Exception {
+		
+		Mockito.when(this.mockFileSecurityParser.isSafe(Mockito.any())).thenReturn(false);
+		
+		assertThrows(RuntimeException.class, () -> {
+			curriculumController.uploadCurriculum(mockMultipartFile);
+		
+		});
 	}
 	
 	/**

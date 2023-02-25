@@ -1,5 +1,7 @@
 package com.arenella.recruit.recruiters.listings.services;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.HashSet;
@@ -10,6 +12,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -18,14 +21,20 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
+import com.arenella.recruit.candidates.adapters.ExternalEventPublisher;
+import com.arenella.recruit.candidates.adapters.RequestListingContactEmailCommand;
 import com.arenella.recruit.listings.beans.Listing;
 import com.arenella.recruit.listings.beans.ListingViewedEvent;
+import com.arenella.recruit.listings.controllers.ListingContactRequest;
 import com.arenella.recruit.listings.dao.ListingDao;
 import com.arenella.recruit.listings.dao.ListingEntity;
 import com.arenella.recruit.listings.exceptions.ListingValidationException;
+import com.arenella.recruit.listings.services.FileSecurityParser;
+import com.arenella.recruit.listings.services.FileSecurityParser.FileType;
 import com.arenella.recruit.listings.services.ListingServiceImpl;
 
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
 * Unit tests for the ListingService class
@@ -38,10 +47,16 @@ public class ListingServiceImplTest {
 	private ListingServiceImpl 	service = new ListingServiceImpl();
 	
 	@Mock
-	private ListingDao 			mockListingDao;
+	private ListingDao 				mockListingDao;
 	
 	@Mock
-	private	Authentication		mockAuthentication;
+	private	Authentication			mockAuthentication;
+	
+	@Mock
+	private FileSecurityParser 		mockFileSecurityParser;
+	
+	@Mock
+	private ExternalEventPublisher 	mockExternalEventPublisher;
 	
 	/**
 	* Sets up test environment
@@ -440,5 +455,85 @@ public class ListingServiceImplTest {
 		Mockito.verify(this.mockListingDao, Mockito.times(0)).save(Mockito.any());
 		
 	}
+	
+	/**
+	* Tests if a file is considered unsage that an exception is thrown
+	* @throws Exception
+	*/
+	@Test
+	public void testSendContactRequestToListingOwner_unsafeFile() throws Exception{
+		
+		Mockito.when(this.mockFileSecurityParser.isSafe(Mockito.any())).thenReturn(false);
+		
+		Assertions.assertThrows(RuntimeException.class, () -> {
+			this.service.sendContactRequestToListingOwner(ListingContactRequest.builder().build());
+		});
+		
+	}
 
+	/**
+	* Tests if Listing is not found exception is thrown
+	* @throws Exception
+	*/
+	@Test
+	public void testSendContactRequestToListingOwner_unknownListing() throws Exception{
+		
+		Mockito.when(this.mockFileSecurityParser.isSafe(Mockito.any())).thenReturn(true);
+		Mockito.when(this.mockListingDao.findListingById(Mockito.any(UUID.class))).thenReturn(Optional.empty());
+		
+		Assertions.assertThrows(RuntimeException.class, () -> {
+			this.service.sendContactRequestToListingOwner(ListingContactRequest.builder().build());
+		});
+		
+	}
+	
+	/**
+	* Tests generation and sending of contact event for the owner of the Listing
+	* @throws Exception
+	*/
+	@Test
+	public void testSendContactRequestToListingOwner_success() throws Exception{
+		
+		final UUID				listingId		= UUID.randomUUID();
+		final String 			title 			= "Java Developer";
+		final String 			ownerId			= "kparkings001";
+		final MultipartFile 	attachment 		= Mockito.mock(MultipartFile.class);
+		final String			message			= "dear recruiter blah blah";
+		final String 			senderName		= "Kevin Parkings";
+		final String			senderEmail		= "kparkings@gmail.com";
+		final byte[]			attachmentBytes	= new byte[] {1,22,3};
+		final FileType			fileType		= FileType.doc;
+		
+		ArgumentCaptor<RequestListingContactEmailCommand> capt = ArgumentCaptor.forClass(RequestListingContactEmailCommand.class);
+		
+		final Listing listing = Listing.builder().title(title).ownerId(ownerId).build();
+		
+		Mockito.when(this.mockFileSecurityParser.isSafe(Mockito.any())).thenReturn(true);
+		Mockito.when(this.mockListingDao.findListingById(Mockito.any(UUID.class))).thenReturn(Optional.of(listing));
+		Mockito.when(this.mockFileSecurityParser.getFileType(Mockito.any())).thenReturn(fileType);
+		Mockito.when(attachment.getBytes()).thenReturn(attachmentBytes);
+		
+		Mockito.doNothing().when(this.mockExternalEventPublisher).publicRequestSendListingContactEmailCommand(capt.capture());
+		
+		ListingContactRequest contactRequest = 
+				ListingContactRequest
+					.builder()
+						.attachment(attachment)
+						.listingId(listingId)
+						.message(message)
+						.senderEmail(senderEmail)
+						.senderName(senderName)						
+					.build();
+		
+		this.service.sendContactRequestToListingOwner(contactRequest);
+		
+		assertEquals(attachmentBytes, 		capt.getValue().getFile());
+		assertEquals(fileType.toString(), 	capt.getValue().getFileType());
+		assertEquals(title, 				capt.getValue().getListingName());
+		assertEquals(message, 				capt.getValue().getMessage());
+		assertEquals(ownerId, 				capt.getValue().getRecruiterId());
+		assertEquals(senderEmail, 			capt.getValue().getSenderEmail());
+		assertEquals(senderName, 			capt.getValue().getSenderName());
+		
+	}
 }

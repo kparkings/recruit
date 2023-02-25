@@ -28,6 +28,7 @@ import com.arenella.recruit.listings.beans.ListingViewedEvent;
 import com.arenella.recruit.listings.controllers.ListingAPIInbound;
 import com.arenella.recruit.listings.controllers.ListingAPIOutbound;
 import com.arenella.recruit.listings.controllers.ListingAPIOutboundPublic;
+import com.arenella.recruit.listings.controllers.ListingContactRequest;
 import com.arenella.recruit.listings.controllers.ListingController;
 import com.arenella.recruit.listings.services.ListingService;
 
@@ -227,12 +228,24 @@ public class ListingControllerTest {
 		final UUID				listingId		= UUID.randomUUID();
 		final MultipartFile 	attachment		= Mockito.mock(MultipartFile.class);
 		final String 			senderName		= "Kevin Parkings";
-		final String 			senderEmail	= "kparkings@gmail.com";
+		final String 			senderEmail		= "kparkings@gmail.com";
 		final String 			message			= "some message";
+		
+		ArgumentCaptor<ListingContactRequest> argCaptContactRequest = ArgumentCaptor.forClass(ListingContactRequest.class);
+		
+		Mockito.doNothing().when(this.mockListingService).sendContactRequestToListingOwner(argCaptContactRequest.capture());
 		
 		ResponseEntity<Void> response = this.controller.sendContactRequestToListingOwner(listingId, senderName, senderEmail, message, attachment);
 		
+		Mockito.verify(this.mockListingService).sendContactRequestToListingOwner(Mockito.any(ListingContactRequest.class));
+		
 		assertEquals(HttpStatus.OK, response.getStatusCode());
+		
+		assertEquals(listingId, 	argCaptContactRequest.getValue().getListingId());
+		assertEquals(attachment, 	argCaptContactRequest.getValue().getAttachment());
+		assertEquals(senderName, 	argCaptContactRequest.getValue().getSenderName());
+		assertEquals(senderEmail, 	argCaptContactRequest.getValue().getSenderEmail());
+		assertEquals(message, 		argCaptContactRequest.getValue().getMessage());
 		
 	}
 		

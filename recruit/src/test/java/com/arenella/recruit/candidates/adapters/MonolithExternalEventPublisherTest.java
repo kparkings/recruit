@@ -18,12 +18,16 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.arenella.recruit.adapters.events.CandidateNoLongerAvailableEvent;
 import com.arenella.recruit.candidates.beans.CandidateSearchAlertMatch;
 import com.arenella.recruit.curriculum.adapters.ExternalEventListener;
 import com.arenella.recruit.emailservice.adapters.EmailServiceExternalEventListener;
 import com.arenella.recruit.emailservice.adapters.RequestSendEmailCommand;
+import com.arenella.recruit.emailservice.beans.Email.EmailType;
+import com.arenella.recruit.listings.controllers.ListingContactRequest;
+import com.arenella.recruit.listings.services.FileSecurityParser.FileType;
 
 /**
 * Unit tests for the MonolithExternalEventPublisher class
@@ -161,6 +165,45 @@ public class MonolithExternalEventPublisherTest {
 		publisher.publishRequestSendAlertDailySummaryEmailCommand(command);
 		
 		Mockito.verify(this.mockEmailServiceListener).listenForSendEmailCommand(Mockito.any(RequestSendEmailCommand.class));
+		
+	}
+	
+	/**
+	* Tests both and External and Internal command are sent 
+	*/
+	@Test
+	public void testPublicRequestSendListingContactEmailCommand() throws Exception{
+		
+		final String 			title 			= "Java Developer";
+		final String 			ownerId			= "kparkings001";
+		final String			message			= "dear recruiter blah blah";
+		final String 			senderName		= "Kevin Parkings";
+		final String			senderEmail		= "kparkings@gmail.com";
+		final byte[]			attachmentBytes	= new byte[] {1,22,3};
+		final FileType			fileType		= FileType.doc;
+		
+		ArgumentCaptor<RequestSendEmailCommand> capt = ArgumentCaptor.forClass(RequestSendEmailCommand.class);
+		
+		RequestListingContactEmailCommand command = 
+				RequestListingContactEmailCommand
+					.builder()
+						.file(attachmentBytes)
+						.fileType(fileType.toString())
+						.listingName(title)
+						.message(message)
+						.recruiterId(ownerId)
+						.senderEmail(senderEmail)
+						.senderName(senderName)
+					.build();
+		
+		Mockito.doNothing().when(this.mockEmailServiceListener).listenForSendEmailCommand(capt.capture());
+		
+		this.publisher.publicRequestSendListingContactEmailCommand(command);
+		
+		Mockito.verify(this.mockEmailServiceListener, Mockito.times(2)).listenForSendEmailCommand(Mockito.any(RequestSendEmailCommand.class));
+		
+		capt.getAllValues().stream().filter(e -> e.getEmailType() == EmailType.INTERN).findAny().orElseThrow();
+		capt.getAllValues().stream().filter(e -> e.getEmailType() == EmailType.EXTERN).findAny().orElseThrow();
 		
 	}
 	

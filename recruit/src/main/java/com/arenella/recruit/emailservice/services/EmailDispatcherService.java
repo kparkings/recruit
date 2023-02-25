@@ -21,6 +21,7 @@ import org.springframework.stereotype.Component;
 import com.arenella.recruit.emailservice.adapters.RequestSendEmailCommand;
 import com.arenella.recruit.emailservice.beans.Email;
 import com.arenella.recruit.emailservice.beans.Email.EmailRecipient;
+import com.arenella.recruit.emailservice.beans.Email.EmailType;
 import com.arenella.recruit.emailservice.beans.Email.Status;
 import com.arenella.recruit.emailservice.beans.Recipient;
 import com.arenella.recruit.emailservice.dao.EmailServiceDao;
@@ -96,43 +97,47 @@ public class EmailDispatcherService {
 	*/
 	public void handleSendEmailCommand(RequestSendEmailCommand command){
 		try {
-		Set<EmailRecipient<?>> recipients = new HashSet<>();
-		
-		recipients.addAll(command.getRecipients());
-		
-		recipients.stream().forEach(r -> {
+			Set<EmailRecipient<?>> recipients = new HashSet<>();
 			
-			Optional<Recipient> recipientOpt = this.recipientDao.getByIdAndType(r.getRecipientType(), String.valueOf(r.getId()));
+			recipients.addAll(command.getRecipients());
 			
-			//Ugly but just to see if there is an issue until I have time to design proper error handling
-			if (recipientOpt.isEmpty()) {
-				r.setEmail("kparkings@gmail.com");
-				r.setFirstName("Failed for " + r.getId() + " " + r.getId());
-			} else {
-				r.setEmail(recipientOpt.get().getEmail());
-				r.setFirstName(recipientOpt.get().getFirstName());
-			}
-			
-		});
+			recipients.stream().forEach(r -> {
+				
+				Optional<Recipient> recipientOpt = this.recipientDao.getByIdAndType(r.getRecipientType(), String.valueOf(r.getId()));
+				
+				//Ugly but just to see if there is an issue until I have time to design proper error handling
+				if (recipientOpt.isEmpty()) {
+					r.setEmail("kparkings@gmail.com");
+					r.setFirstName("Failed for " + r.getId() + " " + r.getId());
+					command.getModel().put("recipientName", "na");
+				} else {
+					r.setEmail(recipientOpt.get().getEmail());
+					r.setFirstName(recipientOpt.get().getFirstName());
+					command.getModel().put("recipientName", recipientOpt.get().getFirstName());
+				}
 		
+				Email email = Email
+						.builder()
+							.body(this.templateFacotry.fetchTemplate(command))
+							.created(LocalDateTime.now())
+							.emailType(command.getEmailType())
+							.id(UUID.randomUUID())
+							.recipients(recipients)
+							.scheduledToBeSentAfter(LocalDateTime.now().minusDays(1))
+							.sender(command.getSender())
+							.status(Status.TO_OUTBOX)
+							.title(command.getTitle())
+							.persistable(command.isPersistable())
+						.build();
+				
+				this.emailDao.saveEmail(email);
+				
+				if (command.getEmailType() == EmailType.EXTERN || command.getEmailType() == EmailType.SYSTEM_EXTERN) {
+					dispatchEmail(email, this.emailDao);
+				}
+				
+			});
 		
-		Email email = Email
-				.builder()
-					.body(this.templateFacotry.fetchTemplate(command))
-					.created(LocalDateTime.now())
-					.emailType(command.getEmailType())
-					.id(UUID.randomUUID())
-					.recipients(recipients)
-					.scheduledToBeSentAfter(LocalDateTime.now().minusDays(1))
-					.sender(command.getSender())
-					.status(Status.TO_OUTBOX)
-					.title(command.getTitle())
-					.persistable(command.isPersistable())
-				.build();
-		
-		this.emailDao.saveEmail(email);
-		
-		dispatchEmail(email, this.emailDao);
 		}catch(Exception e) {
 			e.printStackTrace();
 		}

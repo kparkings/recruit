@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import com.arenella.recruit.listings.beans.Listing;
 import com.arenella.recruit.listings.beans.ListingFilter;
 import com.arenella.recruit.listings.beans.ListingViewedEvent;
+import com.arenella.recruit.listings.controllers.ListingContactRequest;
 
 /**
 * Defines services relating to Listings
@@ -47,4 +48,10 @@ public interface ListingService {
 	* @param event - Contains details of the viewing of the Listing
 	*/
 	public void registerListingViewedEvent(ListingViewedEvent event);
+
+	/**
+	* Sends a Contact request for a Listing to the owner of the Listing
+	* @param contactRequest - Details of contactRequest to be Sent
+	*/
+	public void sendContactRequestToListingOwner(ListingContactRequest contactRequest);
 }

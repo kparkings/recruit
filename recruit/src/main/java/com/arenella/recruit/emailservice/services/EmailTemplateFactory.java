@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.arenella.recruit.emailservice.adapters.RequestSendEmailCommand;
+import com.arenella.recruit.emailservice.beans.Email.EmailType;
 
 import freemarker.template.Configuration;
 
@@ -42,6 +43,17 @@ public class EmailTemplateFactory {
 			}
 			case PASSWORD_RESET:{
 				return loadTemplate("password-reset.ftlh", sendEmailCommand.getModel());
+			}
+			case LISTING_RECRUITER_CONTACT_REQUEST:{
+				
+				if (sendEmailCommand.getEmailType() == EmailType.INTERN) {
+					return loadTemplate("listing-contact-intern.ftlh", sendEmailCommand.getModel());
+				}
+				
+				if (sendEmailCommand.getEmailType() == EmailType.EXTERN) {
+					return loadTemplate("listing-contact-extern.ftlh", sendEmailCommand.getModel());
+				}
+				
 			}
 			default:{
 				return "Could not process template";

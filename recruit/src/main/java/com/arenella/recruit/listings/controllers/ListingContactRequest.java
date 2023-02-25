@@ -1,5 +1,7 @@
 package com.arenella.recruit.listings.controllers;
 
+import java.util.UUID;
+
 import org.springframework.web.multipart.MultipartFile;
 
 /**
@@ -9,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 */
 public class ListingContactRequest {
 
+	private UUID			listingId;
 	private MultipartFile 	attachment;
 	private String 			senderName;
 	private String 			senderEmail;
@@ -19,6 +22,7 @@ public class ListingContactRequest {
 	* @param builder - Contains initialization values
 	*/
 	public ListingContactRequest(ListingContactRequestBuilder builder) {
+		this.listingId		= builder.listingId;
 		this.attachment		= builder.attachment;
 		this.senderName 	= builder.senderName;
 		this.senderEmail 	= builder.senderEmail;
@@ -29,7 +33,15 @@ public class ListingContactRequest {
 	* Return the attachment
 	* @return attachment
 	*/
-	public MultipartFile getAttachement() {
+	public UUID getListingId() {
+		return this.listingId;
+	}
+	
+	/**
+	* Return the attachment
+	* @return attachment
+	*/
+	public MultipartFile getAttachment() {
 		return this.attachment;
 	}
 	
@@ -71,10 +83,21 @@ public class ListingContactRequest {
 	*/
 	public static class ListingContactRequestBuilder{
 		
+		private UUID			listingId;
 		private MultipartFile	attachment;
 		private String 			senderName;
 		private String 			senderEmail;
 		private String 			message;
+		
+		/**
+		* Sets the unique identifier of the Listing
+		* @param listingId - id of the Listing
+		* @return Builder
+		*/
+		public ListingContactRequestBuilder listingId(UUID listingId) {
+			this.listingId = listingId;
+			return this;
+		}
 		
 		/**
 		* Sets the attachment to send to Listing owner
