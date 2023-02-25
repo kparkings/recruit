@@ -22,10 +22,10 @@ public class RequestSendEmailCommand {
 	private EmailType 				emailType;
 	private Sender<?> 				sender; 
 	private Set<EmailRecipient<?>> 	recipients					= new LinkedHashSet<>(); 
-	
 	private EmailTopic 				topic;
 	private Map<String,Object>		model						= new HashMap<>();
 	private boolean					persistable					= false;
+	private Set<Attachment>	attachments					= new LinkedHashSet<>();
 	
 	/**
 	* Returns the title for the Email
@@ -77,6 +77,14 @@ public class RequestSendEmailCommand {
 	}
 	
 	/**
+	* Returns the emails attachments
+	* @return attachments
+	*/
+	public Set<Attachment> getAttachments(){
+		return this.attachments;
+	}
+	
+	/**
 	* Returns whether the email should be persisted to the DB
 	* - True  - If service is stopped email will not be lost but data stored in email body in DB
 	* - False - If service is stopped email is lost bug no senstive data in email stored in DB 
@@ -98,6 +106,7 @@ public class RequestSendEmailCommand {
 		this.topic			= builder.topic;
 		this.model			= builder.model;
 		this.persistable	= builder.persistable;
+		this.attachments	= builder.attachments;
 	}
 	
 	/**
@@ -121,6 +130,7 @@ public class RequestSendEmailCommand {
 		private EmailTopic 				topic;
 		private Map<String,Object>		model						= new HashMap<>();
 		private boolean					persistable					= false;
+		private Set<Attachment>			attachments					= new LinkedHashSet<>();
 		
 		/**
 		* Sets the Title of the Email
@@ -195,6 +205,16 @@ public class RequestSendEmailCommand {
 		}
 		
 		/**
+		* Sets the attachments associated with the Email
+		* @return Builder
+		*/
+		public RequestSendEmailCommandBuilder attachments(Set<Attachment> attachments) {
+			this.attachments.clear();
+			this.attachments.addAll(attachments);
+			return this;
+		}
+		
+		/**
 		* Returns a new initialized RequestSendEmailCommand 
 		* @return command
 		*/
@@ -202,6 +222,42 @@ public class RequestSendEmailCommand {
 			return new RequestSendEmailCommand(this);
 		}
 		
+	}
+	
+	/**
+	* Individual Attachment for an Email
+	* @author K Parkings
+	*/
+	public static class Attachment{
+	
+		private final String 	fileType;
+		private final byte[]	fileBytes;
+		
+		/**
+		* Constructor
+		* @param fileType	- Type of file
+		* @param fileBytes	- file as byte array
+		*/
+		public Attachment(String fileType, byte[] fileBytes) {
+			this.fileType 	= fileType;
+			this.fileBytes 	= fileBytes;
+		}
+		
+		/**
+		* Returns the type of the attachment
+		* @return file type
+		*/
+		public String getFileType() {
+			return this.fileType;
+		}
+		
+		/**
+		* Returns the attachment file as bytes
+		* @return attachment as bytes
+		*/
+		public byte[] getFileBytes() {
+			return this.fileBytes;
+		}
 	}
 	
 }

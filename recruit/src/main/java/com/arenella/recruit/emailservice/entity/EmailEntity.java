@@ -67,6 +67,9 @@ public class EmailEntity {
 	@OneToMany(mappedBy = "emailId", cascade = CascadeType.ALL, orphanRemoval=true, fetch=FetchType.EAGER)
 	private Set<EmailRecipientEntity> 	recipients					= new LinkedHashSet<>(); 
 	
+	@OneToMany(mappedBy = "emailId", cascade = CascadeType.ALL, orphanRemoval=true, fetch=FetchType.EAGER)
+	private Set<EmailAttachmentEntity> 	attachments					= new LinkedHashSet<>(); 
+	
 	/**
 	* Returns the unique Id of the email
 	* @return email id
@@ -149,6 +152,15 @@ public class EmailEntity {
 	}
 	
 	/**
+	* Returns the attachments associated
+	* with the email
+	* @return attachments
+	*/
+	public Set<EmailAttachmentEntity> getAttachments(){
+		return this.attachments;
+	}
+	
+	/**
 	* Constructor 
 	*/
 	public EmailEntity() {
@@ -170,6 +182,7 @@ public class EmailEntity {
 		this.recipients 			= builder.recipients;
 		this.body 					= builder.body;
 		this.status 				= builder.status;
+		this.attachments			= builder.attachments;
 	}
 	
 	/**
@@ -196,6 +209,7 @@ public class EmailEntity {
 		private Set<EmailRecipientEntity> 	recipients					= new LinkedHashSet<>(); 
 		private String 						body;
 		private Status 						status;
+		private Set<EmailAttachmentEntity> 	attachments					= new LinkedHashSet<>(); 
 		
 		/**
 		* Sets the unique Id of the email
@@ -300,6 +314,16 @@ public class EmailEntity {
 		}
 		
 		/**
+		* Sets the attachments associated with the Entity
+		* @param attachments - attachments
+		* @return Builder
+		*/
+		public EmailEntityBuilder attachments(Set<EmailAttachmentEntity> attachments) {
+			this.attachments = attachments;
+			return this;
+		}
+		
+		/**
 		* Returns an initialized Email object
 		* @return Initialized Email object
 		*/
@@ -328,6 +352,7 @@ public class EmailEntity {
 					.sent(email.getSent())
 					.status(email.getStatus())
 					.title(email.getTitle())
+					.attachments(email.getAttachments().stream().map(a -> EmailAttachmentEntity.convertFromDomain(a)).collect(Collectors.toCollection(LinkedHashSet::new)))
 				.build();
 		
 	}
@@ -351,6 +376,7 @@ public class EmailEntity {
 					.sent(entity.getSent())
 					.status(entity.getStatus())
 					.title(entity.getTitle())
+					.attachments(entity.getAttachments().stream().map(a -> EmailAttachmentEntity.convertToDomain(a)).collect(Collectors.toCollection(LinkedHashSet::new)))
 				.build();
 	}
 	

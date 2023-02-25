@@ -43,10 +43,4 @@ public interface ExternalEventPublisher {
 	*/
 	public void publishRequestSendAlertDailySummaryEmailCommand(RequestSendAlertDailySummaryEmailCommand command);
 	
-	/**
-	* Requests an email is sent to the recruiter who owns the listing 
-	* @param command - Command containing details for email
-	*/
-	public void publicRequestSendListingContactEmailCommand(RequestListingContactEmailCommand command);
-	
 }

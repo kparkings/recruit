@@ -42,6 +42,7 @@ public class EmailTest {
 	final private EmailRecipient<UUID>		emailRecip1					= new EmailRecipient<UUID>(recip1Id, RecipientType.RECRUITER);
 	final private EmailRecipient<String>	emailRecip2					= new EmailRecipient<String>(recip2Id, RecipientType.SYSTEM);
 	final private Set<EmailRecipient<?>> 	recipients					= Set.of(emailRecip1,emailRecip2);
+	final private Set<EmailAttachment>		attachments					= Set.of(EmailAttachment.builder().build());
 	
 	/**
 	* Sets up test env
@@ -73,7 +74,7 @@ public class EmailTest {
 					.sent(this.sent)
 					.status(this.status)
 					.title(this.title)
-					
+					.attachments(attachments)
 				.build();
 		
 		assertEquals(id, 						email.getId());
@@ -107,6 +108,8 @@ public class EmailTest {
 		
 		assertEquals(firstNameRecip1, recipient1FirstName);
 		assertEquals(firstNameRecip2, recipient2FirstName);
+		
+		assertEquals(attachments, email.getAttachments());
 		
 	}
 	

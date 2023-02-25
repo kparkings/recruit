@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import com.arenella.recruit.emailservice.beans.Email.EmailTopic;
 import com.arenella.recruit.emailservice.beans.Email.EmailType;
+import com.arenella.recruit.emailservice.adapters.RequestSendEmailCommand.Attachment;
 import com.arenella.recruit.emailservice.beans.Email.EmailRecipient;
 import com.arenella.recruit.emailservice.beans.Email.Sender;
 import com.arenella.recruit.emailservice.beans.Email.Sender.SenderType;
@@ -34,6 +35,7 @@ public class RequestSendEmailCommandTest {
 		final Sender<String> 			sender 		= new Sender<>("id", SenderType.SYSTEM,"kparkings@gmail.com");
 		final String 					title 		= "aTitle";
 		final EmailTopic 				topic 		= EmailTopic.ACCOUNT_CREATED;
+		final Set<Attachment>			attachments = Set.of(new Attachment("doc", new byte[] {2}));
 		
 		RequestSendEmailCommand command = 
 				RequestSendEmailCommand
@@ -45,6 +47,7 @@ public class RequestSendEmailCommandTest {
 						.sender(sender)
 						.title(title)
 						.topic(topic)
+						.attachments(attachments)
 					.build();
 		
 		assertEquals(emailType, 	command.getEmailType());
@@ -54,7 +57,7 @@ public class RequestSendEmailCommandTest {
 		assertEquals(sender, 		command.getSender());
 		assertEquals(title, 		command.getTitle());
 		assertEquals(topic, 		command.getTopic());
-		
+		assertEquals(attachments, 	command.getAttachments());
 	}
 	
 }

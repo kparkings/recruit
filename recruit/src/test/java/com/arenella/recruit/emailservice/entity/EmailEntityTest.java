@@ -1,6 +1,7 @@
 package com.arenella.recruit.emailservice.entity;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDateTime;
 import java.util.Set;
@@ -10,6 +11,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import com.arenella.recruit.emailservice.beans.Email;
+import com.arenella.recruit.emailservice.beans.EmailAttachment;
+import com.arenella.recruit.emailservice.beans.EmailAttachment.FileType;
 import com.arenella.recruit.emailservice.beans.Email.EmailType;
 import com.arenella.recruit.emailservice.beans.Email.EmailRecipient;
 import com.arenella.recruit.emailservice.beans.Email.Sender;
@@ -44,6 +47,14 @@ public class EmailEntityTest {
 	final private Set<EmailRecipientEntity> 	recipients					= Set.of(EmailRecipientEntity.builder().id(recip1Id.toString()).recipientType(RecipientType.RECRUITER).emailAddress(recip1Address).firstName(firstNameRecip1).emailId(id).build(),
 																	 			EmailRecipientEntity.builder().id(recip2Id.toString()).recipientType(RecipientType.SYSTEM).emailAddress(recip2Address).firstName(firstNameRecip2).emailId(id).build());
 	final private Set<EmailRecipient<?>> 		recipientsDomain			= Set.of(emailRecip1,emailRecip2);
+	final private EmailAttachmentEntity			attachment1					= EmailAttachmentEntity.builder().attachmentId(UUID.randomUUID()).emailId(UUID.randomUUID()).fileBytes(new byte[] {1}).fileType(FileType.doc).build();
+	final private EmailAttachmentEntity			attachment2					= EmailAttachmentEntity.builder().attachmentId(UUID.randomUUID()).emailId(UUID.randomUUID()).fileBytes(new byte[] {2}).fileType(FileType.pdf).build();
+	final private Set<EmailAttachmentEntity>	attachments					= Set.of(attachment1, attachment2);
+	
+	final private EmailAttachment				attachment1Domain			= EmailAttachment.builder().attachmentId(UUID.randomUUID()).emailId(UUID.randomUUID()).fileBytes(new byte[] {1}).fileType(FileType.doc).build();
+	final private EmailAttachment				attachment2Domain			= EmailAttachment.builder().attachmentId(UUID.randomUUID()).emailId(UUID.randomUUID()).fileBytes(new byte[] {2}).fileType(FileType.pdf).build();
+	final private Set<EmailAttachment>			attachmentsDomain			= Set.of(attachment1Domain, attachment2Domain);
+	
 	
 	/**
 	* Sets up test environment 
@@ -75,6 +86,7 @@ public class EmailEntityTest {
 					.sent(this.sent)
 					.status(this.status)
 					.title(this.title)
+					.attachments(attachments)
 				.build();
 		
 		assertEquals(id, 						email.getId());
@@ -109,6 +121,9 @@ public class EmailEntityTest {
 		assertEquals(firstNameRecip1, recipient1FirstName);
 		assertEquals(firstNameRecip2, recipient2FirstName);
 		
+		assertTrue(email.getAttachments().contains(attachment1));
+		assertTrue(email.getAttachments().contains(attachment2));
+		
 	}
 	
 	/**
@@ -130,6 +145,7 @@ public class EmailEntityTest {
 					.sent(this.sent)
 					.status(this.status)
 					.title(this.title)
+					.attachments(attachmentsDomain)
 				.build();
 		
 		EmailEntity entity = EmailEntity.convertToEntity(email);
@@ -165,6 +181,20 @@ public class EmailEntityTest {
 		assertEquals(firstNameRecip1, recipient1FirstName);
 		assertEquals(firstNameRecip2, recipient2FirstName);
 		
+		entity.getAttachments().stream().filter(a -> 
+				a.getAttachmentId() == attachment1Domain.getAttachmentId() 
+			&&  a.getEmailId()		== attachment1Domain.getEmailId()
+			&&  a.getFileBytes()	== attachment1Domain.getFileBytes()
+			&&  a.getFileType()		== attachment1Domain.getFileType()
+			).findAny().orElseThrow();
+		
+		entity.getAttachments().stream().filter(a -> 
+				a.getAttachmentId() == attachment2Domain.getAttachmentId() 
+			&&  a.getEmailId()		== attachment2Domain.getEmailId()
+			&&  a.getFileBytes()	== attachment2Domain.getFileBytes()
+			&&  a.getFileType()		== attachment2Domain.getFileType()
+			).findAny().orElseThrow();
+		
 	}
 	
 	/**
@@ -186,6 +216,7 @@ public class EmailEntityTest {
 					.sent(this.sent)
 					.status(this.status)
 					.title(this.title)
+					.attachments(attachments)
 				.build();
 		
 		Email email = EmailEntity.convertFromEntity(entity);
@@ -221,5 +252,19 @@ public class EmailEntityTest {
 		assertEquals(firstNameRecip1, recipient1FirstName);
 		assertEquals(firstNameRecip2, recipient2FirstName);
 		
+		entity.getAttachments().stream().filter(a -> 
+			a.getAttachmentId() == attachment1.getAttachmentId() 
+		&&  a.getEmailId()		== attachment1.getEmailId()
+		&&  a.getFileBytes()	== attachment1.getFileBytes()
+		&&  a.getFileType()		== attachment1.getFileType()
+		).findAny().orElseThrow();
+	
+		entity.getAttachments().stream().filter(a -> 
+				a.getAttachmentId() == attachment2.getAttachmentId() 
+			&&  a.getEmailId()		== attachment2.getEmailId()
+			&&  a.getFileBytes()	== attachment2.getFileBytes()
+			&&  a.getFileType()		== attachment2.getFileType()
+			).findAny().orElseThrow();
+
 	}
 }

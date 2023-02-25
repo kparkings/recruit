@@ -26,6 +26,7 @@ public class Email {
 	private String 					body;
 	private Status 					status						= Status.DRAFT;
 	private boolean					persistable					= false;
+	private Set<EmailAttachment>	attachments					= new LinkedHashSet<>();
 		
 	/**
 	* Returns the unique Id of the email
@@ -109,8 +110,16 @@ public class Email {
 	}
 	
 	/**
+	* Returns the attachments associated with the Email
+	* @return attachments
+	*/
+	public Set<EmailAttachment> getAttachments(){
+		return this.attachments;
+	}
+	
+	/**
 	* Whether or not the Email can be persisted to the DB
-	* @return Whether or not the Email can be peristed to the DB
+	* @return Whether or not the Email can be persisted to the DB
 	*/
 	public boolean isPersistable() {
 		return this.persistable;
@@ -147,6 +156,7 @@ public class Email {
 		this.body 					= builder.body;
 		this.status 				= builder.status;
 		this.persistable			= builder.persistable;
+		this.attachments			= builder.attachments;
 	}
 	
 	/**
@@ -174,7 +184,7 @@ public class Email {
 		private String 					body;
 		private Status 					status						= Status.DRAFT;
 		private boolean					persistable					= false;
-		
+		private Set<EmailAttachment>	attachments					= new LinkedHashSet<>();
 		/**
 		* Sets the unique Id of the email
 		* @param id - Sets the unique ID of the email
@@ -285,6 +295,16 @@ public class Email {
 		*/
 		public EmailBuilder persistable(boolean persistable) {
 			this.persistable = persistable;
+			return this;
+		}
+		
+		/**
+		* Sets the attachments associated with the Email
+		* @param attachements - attachments
+		* @return Builder
+		*/
+		public EmailBuilder attachments(Set<EmailAttachment> attachments) {
+			this.attachments = attachments;
 			return this;
 		}
 		

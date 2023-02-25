@@ -8,6 +8,7 @@ import java.util.UUID;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 import javax.mail.MessagingException;
@@ -23,6 +24,8 @@ import com.arenella.recruit.emailservice.beans.Email;
 import com.arenella.recruit.emailservice.beans.Email.EmailRecipient;
 import com.arenella.recruit.emailservice.beans.Email.EmailType;
 import com.arenella.recruit.emailservice.beans.Email.Status;
+import com.arenella.recruit.emailservice.beans.EmailAttachment;
+import com.arenella.recruit.emailservice.beans.EmailAttachment.FileType;
 import com.arenella.recruit.emailservice.beans.Recipient;
 import com.arenella.recruit.emailservice.dao.EmailServiceDao;
 import com.arenella.recruit.emailservice.dao.RecipientDao;
@@ -116,18 +119,21 @@ public class EmailDispatcherService {
 					command.getModel().put("recipientName", recipientOpt.get().getFirstName());
 				}
 		
+				UUID emailId = UUID.randomUUID();
+				
 				Email email = Email
 						.builder()
 							.body(this.templateFacotry.fetchTemplate(command))
 							.created(LocalDateTime.now())
 							.emailType(command.getEmailType())
-							.id(UUID.randomUUID())
+							.id(emailId)
 							.recipients(recipients)
 							.scheduledToBeSentAfter(LocalDateTime.now().minusDays(1))
 							.sender(command.getSender())
 							.status(Status.TO_OUTBOX)
 							.title(command.getTitle())
 							.persistable(command.isPersistable())
+							.attachments(convertAttachments(command, emailId))
 						.build();
 				
 				this.emailDao.saveEmail(email);
@@ -141,6 +147,24 @@ public class EmailDispatcherService {
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
+		
+	}
+	
+	/**
+	* Generated Attachments from the Command
+	* @param command - Contains details of Attachments
+	* @return EmailAttachment representation 
+	*/
+	private Set<EmailAttachment> convertAttachments(RequestSendEmailCommand command, UUID emailId){
+		
+		return command.getAttachments().stream().map(a -> 
+			EmailAttachment
+				.builder()
+					.attachmentId(UUID.randomUUID())
+					.emailId(emailId)
+					.fileBytes(a.getFileBytes())
+					.fileType(FileType.valueOf(a.getFileType()))
+				.build()).collect(Collectors.toCollection(HashSet::new));
 		
 	}
 	

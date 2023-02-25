@@ -1,4 +1,4 @@
-package com.arenella.recruit.candidates.adapters;
+package com.arenella.recruit.listings.adapters;
 
 /**
 * Command to send a request for an email to be sent

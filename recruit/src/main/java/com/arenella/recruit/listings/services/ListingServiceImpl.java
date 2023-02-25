@@ -12,8 +12,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import com.arenella.recruit.candidates.adapters.ExternalEventPublisher;
-import com.arenella.recruit.candidates.adapters.RequestListingContactEmailCommand;
+import com.arenella.recruit.listings.adapters.ExternalEventPublisher;
+import com.arenella.recruit.listings.adapters.RequestListingContactEmailCommand;
 import com.arenella.recruit.listings.beans.Listing;
 import com.arenella.recruit.listings.beans.ListingFilter;
 import com.arenella.recruit.listings.beans.ListingViewedEvent;

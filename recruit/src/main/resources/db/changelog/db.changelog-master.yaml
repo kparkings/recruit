@@ -1400,3 +1400,37 @@ databaseChangeLog:
                   constraints:
                     primaryKey: false
                     nullable: true
+  - changeSet:
+      id: create_email_attachment_table
+      author: kparkings
+      changes:
+        - createTable:
+            tableName: email_attachment
+            schemaName: email
+            columns:
+              - column:
+                  name: attachment_id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: email_id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+                    foreignKeyName: fk_email_email_attachment
+                    references: email.email(id)
+              - column:
+                  name: file_type
+                  type: varchar()
+                  constraints:
+                    primaryKey: false
+                    nullable: false
+              - column:
+                  name: file_bytes
+                  type: bytea
+                  constraints:
+                    primaryKey: false
+                    nullable: false

@@ -21,8 +21,8 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
-import com.arenella.recruit.candidates.adapters.ExternalEventPublisher;
-import com.arenella.recruit.candidates.adapters.RequestListingContactEmailCommand;
+import com.arenella.recruit.listings.adapters.ExternalEventPublisher;
+import com.arenella.recruit.listings.adapters.RequestListingContactEmailCommand;
 import com.arenella.recruit.listings.beans.Listing;
 import com.arenella.recruit.listings.beans.ListingViewedEvent;
 import com.arenella.recruit.listings.controllers.ListingContactRequest;
