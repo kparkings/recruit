@@ -1,7 +1,9 @@
 package com.arenella.recruit.emailservice.services;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -20,15 +22,15 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
 
 import com.arenella.recruit.emailservice.adapters.RequestSendEmailCommand;
+import com.arenella.recruit.emailservice.beans.Contact;
 import com.arenella.recruit.emailservice.beans.Email;
 import com.arenella.recruit.emailservice.beans.Email.EmailRecipient;
 import com.arenella.recruit.emailservice.beans.Email.EmailType;
 import com.arenella.recruit.emailservice.beans.Email.Status;
 import com.arenella.recruit.emailservice.beans.EmailAttachment;
 import com.arenella.recruit.emailservice.beans.EmailAttachment.FileType;
-import com.arenella.recruit.emailservice.beans.Recipient;
+import com.arenella.recruit.emailservice.dao.ContactDao;
 import com.arenella.recruit.emailservice.dao.EmailServiceDao;
-import com.arenella.recruit.emailservice.dao.RecipientDao;
 
 /**
 * Component responsible for sending Email
@@ -44,7 +46,7 @@ public class EmailDispatcherService {
 	private EmailServiceDao 				emailDao;
 	
 	@Autowired
-	private RecipientDao					recipientDao;
+	private ContactDao						contactDao;
 	
 	@Autowired
 	private EmailTemplateFactory 			templateFacotry;
@@ -106,7 +108,8 @@ public class EmailDispatcherService {
 			
 			recipients.stream().forEach(r -> {
 				
-				Optional<Recipient> recipientOpt = this.recipientDao.getByIdAndType(r.getRecipientType(), String.valueOf(r.getId()));
+				Optional<Contact> 	recipientOpt 	= this.contactDao.getByIdAndType(r.getRecipientType(), String.valueOf(r.getId()));
+				Map<String, Object> model 			= new HashMap<>(command.getModel());
 				
 				//Ugly but just to see if there is an issue until I have time to design proper error handling
 				if (recipientOpt.isEmpty()) {
@@ -116,14 +119,16 @@ public class EmailDispatcherService {
 				} else {
 					r.setEmail(recipientOpt.get().getEmail());
 					r.setFirstName(recipientOpt.get().getFirstName());
-					command.getModel().put("recipientName", recipientOpt.get().getFirstName());
+					
+					model.put("recipientName", recipientOpt.get().getFirstName());
+				
 				}
 		
 				UUID emailId = UUID.randomUUID();
 				
 				Email email = Email
 						.builder()
-							.body(this.templateFacotry.fetchTemplate(command))
+							.body(this.templateFacotry.fetchTemplate(command, model))
 							.created(LocalDateTime.now())
 							.emailType(command.getEmailType())
 							.id(emailId)
@@ -162,6 +167,7 @@ public class EmailDispatcherService {
 				.builder()
 					.attachmentId(UUID.randomUUID())
 					.emailId(emailId)
+					.name(a.getName())
 					.fileBytes(a.getFileBytes())
 					.fileType(FileType.valueOf(a.getFileType()))
 				.build()).collect(Collectors.toCollection(HashSet::new));

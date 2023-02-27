@@ -16,13 +16,13 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import com.arenella.recruit.emailservice.adapters.RequestSendEmailCommand;
+import com.arenella.recruit.emailservice.beans.Contact;
 import com.arenella.recruit.emailservice.beans.Email;
-import com.arenella.recruit.emailservice.beans.Email.EmailRecipient.RecipientType;
+import com.arenella.recruit.emailservice.beans.Email.EmailRecipient.ContactType;
 import com.arenella.recruit.emailservice.beans.Email.EmailTopic;
 import com.arenella.recruit.emailservice.beans.Email.Status;
-import com.arenella.recruit.emailservice.beans.Recipient;
+import com.arenella.recruit.emailservice.dao.ContactDao;
 import com.arenella.recruit.emailservice.dao.EmailServiceDao;
-import com.arenella.recruit.emailservice.dao.RecipientDao;
 
 /**
 * Unit tests for the EmailDispatcherService class
@@ -44,7 +44,7 @@ public class EmailDispatcherServiceTest {
 	private ScheduledExecutorService 	schedulerMock;
 	
 	@Mock
-	private RecipientDao				mockRecipientDao;
+	private ContactDao					mockContactDao;
 	
 	@Spy
 	private EmailTemplateFactory 		templateFacotry 	= new EmailTemplateFactory();
@@ -88,10 +88,10 @@ public class EmailDispatcherServiceTest {
 	@Test
 	public void testHandleSendEmailCommand() throws Exception{
 		
-		Email.EmailRecipient<?> recipient1 = new Email.EmailRecipient("one", RecipientType.RECRUITER);
-		Email.EmailRecipient<?> recipient2 = new Email.EmailRecipient("two", RecipientType.RECRUITER);
+		Email.EmailRecipient<?> recipient1 = new Email.EmailRecipient("one", ContactType.RECRUITER);
+		Email.EmailRecipient<?> recipient2 = new Email.EmailRecipient("two", ContactType.RECRUITER);
 		
-		Mockito.when(this.mockRecipientDao.getByIdAndType(Mockito.any(), Mockito.any())).thenReturn(Optional.of(new Recipient("", RecipientType.RECRUITER, "", "")));
+		Mockito.when(this.mockContactDao.getByIdAndType(Mockito.any(), Mockito.any())).thenReturn(Optional.of(new Contact("", ContactType.RECRUITER, "", "")));
 		
 		this.service.handleSendEmailCommand(RequestSendEmailCommand.builder().recipients(Set.of(recipient1, recipient2)).topic(EmailTopic.ACCOUNT_CREATED).build());
 		

@@ -12,6 +12,7 @@ public class EmailAttachment {
 	
 	private UUID 		attachmentId;
 	private UUID 		emailId;
+	private String		name;
 	private FileType 	fileType;
 	private byte[] 		fileBytes;
 	
@@ -22,6 +23,7 @@ public class EmailAttachment {
 	public EmailAttachment(EmailAttachmentBuilder builder) {
 		this.attachmentId 	= builder.attachmentId;
 		this.emailId 		= builder.emailId;
+		this.name			= builder.name;
 		this.fileType 		= builder.fileType;
 		this.fileBytes 		= builder.fileBytes;
 	}
@@ -43,6 +45,13 @@ public class EmailAttachment {
 		return this.emailId;
 	}
 	
+	/**
+	* Returns the name of the Attachment
+	* @return Name of the Attachment
+	*/
+	public String getName() {
+		return this.name;
+	}
 	/**
 	* Returns the type of file of the attachment
 	* @return fileType
@@ -76,6 +85,7 @@ public class EmailAttachment {
 		
 		public  UUID 		attachmentId;
 		private UUID 		emailId;
+		private String		name;
 		private FileType 	fileType;
 		private byte[] 		fileBytes;
 		
@@ -97,6 +107,16 @@ public class EmailAttachment {
 		*/
 		public EmailAttachmentBuilder emailId(UUID emailId) {
 			this.emailId = emailId;
+			return this;
+		}
+		
+		/**
+		* Sets the name of the Attachment
+		* @param name - name of the Attachment
+		* @return Builder
+		*/
+		public EmailAttachmentBuilder name(String name) {
+			this.name = name;
 			return this;
 		}
 		

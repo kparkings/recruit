@@ -45,5 +45,9 @@ public interface EmailServiceDao extends CrudRepository<EmailEntity, UUID> {
 	
 	@Query("FROM EmailEntity where status = :status ")
 	Set<EmailEntity> findEmailEntitiessByStatus(@Param("status") Status status);
+//@Query("from User u left join u.items i where i.deleted = false or i.deleted is null")
+	   
+	@Query("FROM EmailEntity e left join e.recipients r where r.id = :recipientId")
+	Set<Email> fetchEmailsByRecipientId(@Param("recipientId") String recipientId);
 	
 }

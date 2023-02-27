@@ -1405,7 +1405,7 @@ databaseChangeLog:
       author: kparkings
       changes:
         - createTable:
-            tableName: email_attachment
+            tableName: email_attachments
             schemaName: email
             columns:
               - column:
@@ -1423,6 +1423,12 @@ databaseChangeLog:
                     foreignKeyName: fk_email_email_attachment
                     references: email.email(id)
               - column:
+                  name: name
+                  type: varchar
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
                   name: file_type
                   type: varchar()
                   constraints:
@@ -1434,3 +1440,40 @@ databaseChangeLog:
                   constraints:
                     primaryKey: false
                     nullable: false
+  - changeSet:
+      id: addColumn-viewed_to_email_recipient
+      author: kevin
+      changes:
+        - addColumn:
+            tableName: email_recipient
+            schemaName: email
+            columns:
+            - column:
+                name: viewed
+                type: boolean
+                constraints:
+                  default: false
+  - changeSet:
+      id: rename-recipients-to-contacts
+      author: kevin
+      changes:
+        - renameTable:
+            oldTableName: recipient
+            newTableName: contact
+            schemaName: email
+  - changeSet:
+      id: recipient-contact-col-rename
+      author: kevin
+      changes:
+        - renameColumn:  
+            columnDataType: varchar  
+            newColumnName: contact_type  
+            oldColumnName: recipient_type  
+            schemaName: email  
+            tableName: contact
+        - renameColumn:  
+            columnDataType: varchar  
+            newColumnName: contact_id  
+            oldColumnName: recipient_id  
+            schemaName: email  
+            tableName: contact

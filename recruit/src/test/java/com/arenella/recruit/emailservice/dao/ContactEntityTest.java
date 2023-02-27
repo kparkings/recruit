@@ -4,19 +4,19 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
-import com.arenella.recruit.emailservice.beans.Email.EmailRecipient.RecipientType;
-import com.arenella.recruit.emailservice.beans.Recipient;
-import com.arenella.recruit.emailservice.entities.RecipientEntity;
-import com.arenella.recruit.emailservice.entities.RecipientEntityPK;
+import com.arenella.recruit.emailservice.beans.Contact;
+import com.arenella.recruit.emailservice.beans.Email.EmailRecipient.ContactType;
+import com.arenella.recruit.emailservice.entities.ContactEntity;
+import com.arenella.recruit.emailservice.entities.ContactEntityPK;
 
 /**
-* Unit tests for the RecipientEntity class
+* Unit tests for the ContactEntity class
 * @author K Parkings
 */
-public class RecipientEntityTest {
+public class ContactEntityTest {
 
-	private final RecipientType 	type 			= RecipientType.RECRUITER;
-	private final String 			recipientId 	= "1234";
+	private final ContactType 		type 			= ContactType.RECRUITER;
+	private final String 			contactId 		= "1234";
 	private final String 			email 			= "kparkings@gmail.com";
 	private final String 			firstName 		= "Kevin";
 	
@@ -27,16 +27,16 @@ public class RecipientEntityTest {
 	@Test
 	public void testBuilder() throws Exception{
 		
-		RecipientEntity entity = 
-				RecipientEntity
+		ContactEntity entity = 
+				ContactEntity
 					.builder()
 						.email(email)
 						.firstName(firstName)
-						.id(new RecipientEntityPK(type, recipientId))
+						.id(new ContactEntityPK(type, contactId))
 					.build();
 		
-		assertEquals(type, 			entity.getId().getRecipientType());
-		assertEquals(recipientId, 	entity.getId().getRecipientId());
+		assertEquals(type, 			entity.getId().getContactType());
+		assertEquals(contactId, 	entity.getId().getContactId());
 		assertEquals(firstName, 	entity.getFirstName());
 		assertEquals(email, 		entity.getEmail());
 		
@@ -49,11 +49,11 @@ public class RecipientEntityTest {
 	@Test
 	public void convertToEntity() throws Exception{
 		
-		Recipient 		recipient 	= new Recipient(recipientId, type, firstName, email);
-		RecipientEntity entity 		= RecipientEntity.convertToEntity(recipient);
+		Contact 		contact 	= new Contact(contactId, type, firstName, email);
+		ContactEntity 	entity 		= ContactEntity.convertToEntity(contact);
 	
-		assertEquals(type, 			entity.getId().getRecipientType());
-		assertEquals(recipientId, 	entity.getId().getRecipientId());
+		assertEquals(type, 			entity.getId().getContactType());
+		assertEquals(contactId, 	entity.getId().getContactId());
 		assertEquals(firstName, 	entity.getFirstName());
 		assertEquals(email, 		entity.getEmail());
 		
@@ -66,20 +66,20 @@ public class RecipientEntityTest {
 	@Test
 	public void convertFromEntity() throws Exception{
 		
-		RecipientEntity entity = 
-				RecipientEntity
+		ContactEntity entity = 
+				ContactEntity
 					.builder()
 						.email(email)
 						.firstName(firstName)
-						.id(new RecipientEntityPK(type, recipientId))
+						.id(new ContactEntityPK(type, contactId))
 					.build();
 		
-		Recipient recipient = RecipientEntity.convertFromEntity(entity);
+		Contact contact = ContactEntity.convertFromEntity(entity);
 		
-		assertEquals(type, 			recipient.getRecipientType());
-		assertEquals(recipientId, 	recipient.getId());
-		assertEquals(firstName, 	recipient.getFirstName());
-		assertEquals(email, 		recipient.getEmail());
+		assertEquals(type, 			contact.getContactType());
+		assertEquals(contactId, 	contact.getId());
+		assertEquals(firstName, 	contact.getFirstName());
+		assertEquals(email, 		contact.getEmail());
 		
 	}
 	
@@ -93,22 +93,22 @@ public class RecipientEntityTest {
 		final String updtFirstName 	= "updtFirstName";
 		final String updtEmail 		= "updtEmail";
 		
-		RecipientEntity entity = 
-				RecipientEntity
+		ContactEntity entity = 
+				ContactEntity
 					.builder()
 						.email(email)
 						.firstName(firstName)
-						.id(new RecipientEntityPK(type, recipientId))
+						.id(new ContactEntityPK(type, contactId))
 					.build();
 		
-		assertEquals(recipientId, 	entity.getId().getRecipientId());
+		assertEquals(contactId, 	entity.getId().getContactId());
 		assertEquals(firstName, 	entity.getFirstName());
 		assertEquals(email, 		entity.getEmail());
 		
 		entity.setEmail(updtEmail);
 		entity.setFirstName(updtFirstName);
 		
-		assertEquals(recipientId, 	entity.getId().getRecipientId());
+		assertEquals(contactId, 	entity.getId().getContactId());
 		assertEquals(updtFirstName, entity.getFirstName());
 		assertEquals(updtEmail, 	entity.getEmail());
 		

@@ -1,10 +1,15 @@
 package com.arenella.recruit.emailservice.controllers;
 
 import java.security.Principal;
+import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.arenella.recruit.emailservice.services.EmailService;
 
 /**
 * REST API for working with Emails
@@ -13,12 +18,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class EmailController {
 
+	@Autowired
+	private EmailService emailService;
+	
 	/**
 	* Returns the users email's
-	* @return Emails for the authenticated User
+	* @return Email's for the authenticated User
 	*/
-	public Set<EmailAPIOutbound> getEmailsForUser(){
-		return null;
+	public Set<EmailAPIOutbound> getEmailsForUser(Principal principal){
+		return this.emailService.fetchEmailsByRecipientId(principal.getName()).stream().map(e -> EmailAPIOutbound.convertFromDomain(e)).collect(Collectors.toCollection(LinkedHashSet::new));
 	}
 	
 	/**

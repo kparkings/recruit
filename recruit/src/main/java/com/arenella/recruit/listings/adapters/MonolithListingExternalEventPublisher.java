@@ -15,7 +15,7 @@ import com.arenella.recruit.emailservice.beans.Email.EmailRecipient;
 import com.arenella.recruit.emailservice.beans.Email.EmailTopic;
 import com.arenella.recruit.emailservice.beans.Email.EmailType;
 import com.arenella.recruit.emailservice.beans.Email.Sender;
-import com.arenella.recruit.emailservice.beans.Email.EmailRecipient.RecipientType;
+import com.arenella.recruit.emailservice.beans.Email.EmailRecipient.ContactType;
 import com.arenella.recruit.emailservice.beans.Email.Sender.SenderType;
 
 /**
@@ -65,11 +65,11 @@ public class MonolithListingExternalEventPublisher implements ExternalEventPubli
 						.emailType(EmailType.INTERN)
 						.model(modelInt)
 						.persistable(true)
-						.recipients(Set.of(new EmailRecipient<String>(command.getRecruiterId(), RecipientType.RECRUITER)))
+						.recipients(Set.of(new EmailRecipient<String>(command.getRecruiterId(), ContactType.RECRUITER)))
 						.sender(new Sender<>(UUID.randomUUID(), SenderType.SYSTEM, "kparkings@gmail.com"))
 						.title("Arenella-ICT - Reaction To Job Posting")
 						.topic(EmailTopic.LISTING_RECRUITER_CONTACT_REQUEST)
-						.attachments(Set.of(new Attachment(command.getFileType(), command.getFile())))
+						.attachments(Set.of(new Attachment(command.getFileType(), "candidates-cv", command.getFile())))
 					.build();
 		
 		this.emailServiceListener.listenForSendEmailCommand(cInt);
@@ -80,7 +80,7 @@ public class MonolithListingExternalEventPublisher implements ExternalEventPubli
 						.emailType(EmailType.EXTERN)
 						.model(modelExt)
 						.persistable(false)
-						.recipients(Set.of(new EmailRecipient<String>(command.getRecruiterId(), RecipientType.RECRUITER)))
+						.recipients(Set.of(new EmailRecipient<String>(command.getRecruiterId(), ContactType.RECRUITER)))
 						.sender(new Sender<>(UUID.randomUUID(), SenderType.SYSTEM, "kparkings@gmail.com"))
 						.title("Arenella-ICT - Reaction To Job Posting")
 						.topic(EmailTopic.LISTING_RECRUITER_CONTACT_REQUEST)

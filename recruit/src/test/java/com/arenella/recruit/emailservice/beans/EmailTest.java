@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test;
 
 import com.arenella.recruit.emailservice.beans.Email.EmailType;
 import com.arenella.recruit.emailservice.beans.Email.EmailRecipient;
-import com.arenella.recruit.emailservice.beans.Email.EmailRecipient.RecipientType;
+import com.arenella.recruit.emailservice.beans.Email.EmailRecipient.ContactType;
 import com.arenella.recruit.emailservice.beans.Email.Sender;
 import com.arenella.recruit.emailservice.beans.Email.Sender.SenderType;
 import com.arenella.recruit.emailservice.beans.Email.Status;
@@ -39,8 +39,8 @@ public class EmailTest {
 	final private LocalDateTime 			sent						= LocalDateTime.of(2022,11,17, 19,11,20);;
 	final private String 					body						= "aBody";
 	final private Status 					status						= Status.DRAFT;
-	final private EmailRecipient<UUID>		emailRecip1					= new EmailRecipient<UUID>(recip1Id, RecipientType.RECRUITER);
-	final private EmailRecipient<String>	emailRecip2					= new EmailRecipient<String>(recip2Id, RecipientType.SYSTEM);
+	final private EmailRecipient<UUID>		emailRecip1					= new EmailRecipient<UUID>(recip1Id, ContactType.RECRUITER);
+	final private EmailRecipient<String>	emailRecip2					= new EmailRecipient<String>(recip2Id, ContactType.SYSTEM);
 	final private Set<EmailRecipient<?>> 	recipients					= Set.of(emailRecip1,emailRecip2);
 	final private Set<EmailAttachment>		attachments					= Set.of(EmailAttachment.builder().build());
 	
@@ -91,20 +91,20 @@ public class EmailTest {
 		assertEquals(sender.getEmail(), 		email.getSender().getEmail());
 		assertEquals(sender.getSenderType(), 	email.getSender().getSenderType());
 		
-		UUID 	recipient1Id = (UUID) 	email.getRecipients().stream().filter(r -> r.getRecipientType() == RecipientType.RECRUITER).findFirst().get().getId();
-		String 	recipient2Id = (String) email.getRecipients().stream().filter(r -> r.getRecipientType() == RecipientType.SYSTEM).findFirst().get().getId();
+		UUID 	recipient1Id = (UUID) 	email.getRecipients().stream().filter(r -> r.getRecipientType() == ContactType.RECRUITER).findFirst().get().getId();
+		String 	recipient2Id = (String) email.getRecipients().stream().filter(r -> r.getRecipientType() == ContactType.SYSTEM).findFirst().get().getId();
 		
 		assertEquals(recip1Id, recipient1Id);
 		assertEquals(recip2Id, recipient2Id);
 		
-		String 	recipient1Address = (String) email.getRecipients().stream().filter(r -> r.getRecipientType() == RecipientType.RECRUITER).findFirst().get().getEmailAddress();
-		String 	recipient2Address = (String) email.getRecipients().stream().filter(r -> r.getRecipientType() == RecipientType.SYSTEM).findFirst().get().getEmailAddress();
+		String 	recipient1Address = (String) email.getRecipients().stream().filter(r -> r.getRecipientType() == ContactType.RECRUITER).findFirst().get().getEmailAddress();
+		String 	recipient2Address = (String) email.getRecipients().stream().filter(r -> r.getRecipientType() == ContactType.SYSTEM).findFirst().get().getEmailAddress();
 		
 		assertEquals(recip1Address, recipient1Address);
 		assertEquals(recip2Address, recipient2Address);
 		
-		String 	recipient1FirstName = (String) email.getRecipients().stream().filter(r -> r.getRecipientType() == RecipientType.RECRUITER).findFirst().get().getFirstName();
-		String 	recipient2FirstName = (String) email.getRecipients().stream().filter(r -> r.getRecipientType() == RecipientType.SYSTEM).findFirst().get().getFirstName();
+		String 	recipient1FirstName = (String) email.getRecipients().stream().filter(r -> r.getRecipientType() == ContactType.RECRUITER).findFirst().get().getFirstName();
+		String 	recipient2FirstName = (String) email.getRecipients().stream().filter(r -> r.getRecipientType() == ContactType.SYSTEM).findFirst().get().getFirstName();
 		
 		assertEquals(firstNameRecip1, recipient1FirstName);
 		assertEquals(firstNameRecip2, recipient2FirstName);

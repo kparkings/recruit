@@ -14,7 +14,7 @@ import com.arenella.recruit.emailservice.beans.Email.EmailTopic;
 import com.arenella.recruit.emailservice.beans.Email.EmailType;
 import com.arenella.recruit.emailservice.beans.Email.EmailRecipient;
 import com.arenella.recruit.emailservice.beans.Email.Sender;
-import com.arenella.recruit.emailservice.beans.Email.EmailRecipient.RecipientType;
+import com.arenella.recruit.emailservice.beans.Email.EmailRecipient.ContactType;
 import com.arenella.recruit.emailservice.beans.Email.Sender.SenderType;
 import com.arenella.recruit.recruiters.adapters.RecruitersExternalEventPublisher;
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_action;
@@ -71,7 +71,7 @@ public class TrialPeriodSubscriptionActionHandler implements RecruiterSubscripti
 					RequestSendEmailCommand command = RequestSendEmailCommand
 							.builder()
 								.emailType(EmailType.EXTERN)
-								.recipients(Set.of(new EmailRecipient<String>(recruiter.getUserId(), RecipientType.RECRUITER)))
+								.recipients(Set.of(new EmailRecipient<String>(recruiter.getUserId(), ContactType.RECRUITER)))
 								.sender(new Sender<>(UUID.randomUUID(), SenderType.SYSTEM, "kparkings@gmail.com"))
 								.title("Arenella-ICT - 90 Day Free Trial")
 								.topic(EmailTopic.ACCOUNT_CREATED)

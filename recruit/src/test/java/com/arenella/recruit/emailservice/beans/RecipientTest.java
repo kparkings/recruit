@@ -4,16 +4,16 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
-import com.arenella.recruit.emailservice.beans.Email.EmailRecipient.RecipientType;
+import com.arenella.recruit.emailservice.beans.Email.EmailRecipient.ContactType;
 
 /**
-* Unit tests for the Recipient class
+* Unit tests for the Contact class
 * @author K Parkings
 */
 public class RecipientTest {
 
 	final String 			id				= "rec1";
-	final RecipientType 	recipientType	= RecipientType.RECRUITER;
+	final ContactType 		contactType		= ContactType.RECRUITER;
 	final String 			firstName		= "Kevin";
 	final String 			email			= "kparkings@gmail.com";
 	
@@ -23,11 +23,11 @@ public class RecipientTest {
 	@Test
 	public void testConstructor() throws Exception {
 		
-		Recipient recipient = new Recipient(id, recipientType, firstName, email);
+		Contact contact = new Contact(id, contactType, firstName, email);
 		
-		assertEquals(id,			recipient.getId());
-		assertEquals(recipientType,	recipient.getRecipientType());
-		assertEquals(firstName,		recipient.getFirstName());
-		assertEquals(email,			recipient.getEmail());
+		assertEquals(id,			contact.getId());
+		assertEquals(contactType,	contact.getContactType());
+		assertEquals(firstName,		contact.getFirstName());
+		assertEquals(email,			contact.getEmail());
 	}
 }

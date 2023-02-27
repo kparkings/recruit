@@ -1,5 +1,7 @@
 package com.arenella.recruit.emailservice.services;
 
+import java.util.Map;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -36,7 +38,7 @@ public class EmailTemplateFactoryTest {
 		
 		Mockito.when(this.freemarkerTemplateConfigMock.getTemplate(Mockito.eq("new-recruiter-signup.ftlh"))).thenReturn(templateMock);
 		
-		factory.fetchTemplate(command);
+		factory.fetchTemplate(command, Map.of());
 		
 		Mockito.verify(this.freemarkerTemplateConfigMock).getTemplate(Mockito.eq("new-recruiter-signup.ftlh"));
 		

@@ -35,7 +35,7 @@ public class RequestSendEmailCommandTest {
 		final Sender<String> 			sender 		= new Sender<>("id", SenderType.SYSTEM,"kparkings@gmail.com");
 		final String 					title 		= "aTitle";
 		final EmailTopic 				topic 		= EmailTopic.ACCOUNT_CREATED;
-		final Set<Attachment>			attachments = Set.of(new Attachment("doc", new byte[] {2}));
+		final Set<Attachment>			attachments = Set.of(new Attachment("doc", "aCV", new byte[] {2}));
 		
 		RequestSendEmailCommand command = 
 				RequestSendEmailCommand

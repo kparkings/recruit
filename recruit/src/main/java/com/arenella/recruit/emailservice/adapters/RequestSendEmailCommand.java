@@ -25,7 +25,7 @@ public class RequestSendEmailCommand {
 	private EmailTopic 				topic;
 	private Map<String,Object>		model						= new HashMap<>();
 	private boolean					persistable					= false;
-	private Set<Attachment>	attachments					= new LinkedHashSet<>();
+	private Set<Attachment>			attachments					= new LinkedHashSet<>();
 	
 	/**
 	* Returns the title for the Email
@@ -231,6 +231,7 @@ public class RequestSendEmailCommand {
 	public static class Attachment{
 	
 		private final String 	fileType;
+		private final String	name;
 		private final byte[]	fileBytes;
 		
 		/**
@@ -238,8 +239,9 @@ public class RequestSendEmailCommand {
 		* @param fileType	- Type of file
 		* @param fileBytes	- file as byte array
 		*/
-		public Attachment(String fileType, byte[] fileBytes) {
+		public Attachment(String fileType, String name, byte[] fileBytes) {
 			this.fileType 	= fileType;
+			this.name		= name;
 			this.fileBytes 	= fileBytes;
 		}
 		
@@ -251,6 +253,13 @@ public class RequestSendEmailCommand {
 			return this.fileType;
 		}
 		
+		/**
+		* Returns the name of the Attachment
+		* @return name of the Attachment
+		*/
+		public String getName() {
+			return this.name;
+		}
 		/**
 		* Returns the attachment file as bytes
 		* @return attachment as bytes

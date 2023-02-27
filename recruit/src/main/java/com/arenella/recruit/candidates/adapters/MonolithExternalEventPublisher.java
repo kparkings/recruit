@@ -13,12 +13,11 @@ import com.arenella.recruit.curriculum.adapters.ExternalEventListener;
 import com.arenella.recruit.emailservice.adapters.EmailServiceExternalEventListener;
 import com.arenella.recruit.emailservice.adapters.RequestSendEmailCommand;
 import com.arenella.recruit.emailservice.beans.Email.EmailRecipient;
-import com.arenella.recruit.emailservice.beans.Email.EmailRecipient.RecipientType;
+import com.arenella.recruit.emailservice.beans.Email.EmailRecipient.ContactType;
 import com.arenella.recruit.emailservice.beans.Email.EmailTopic;
 import com.arenella.recruit.emailservice.beans.Email.EmailType;
 import com.arenella.recruit.emailservice.beans.Email.Sender;
 import com.arenella.recruit.emailservice.beans.Email.Sender.SenderType;
-import com.arenella.recruit.emailservice.beans.EmailAttachment;
 
 /**
 * An implementation of ExternalEventPublisher optimised to work when the 
@@ -95,7 +94,7 @@ public class MonolithExternalEventPublisher implements ExternalEventPublisher{
 						.emailType(EmailType.EXTERN)
 						.model(model)
 						.persistable(false)
-						.recipients(Set.of(new EmailRecipient<String>(command.getRecruiterId(), RecipientType.RECRUITER)))
+						.recipients(Set.of(new EmailRecipient<String>(command.getRecruiterId(), ContactType.RECRUITER)))
 						.sender(new Sender<>(UUID.randomUUID(), SenderType.SYSTEM, "kparkings@gmail.com"))
 						.title("Arenella-ICT - New Matching Candidates")
 						.topic(EmailTopic.ALERT_MATCHES)

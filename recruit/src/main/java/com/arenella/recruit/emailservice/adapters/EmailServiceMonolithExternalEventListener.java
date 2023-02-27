@@ -5,11 +5,10 @@ import org.springframework.stereotype.Service;
 
 import com.arenella.recruit.adapters.events.RecruiterCreatedEvent;
 import com.arenella.recruit.adapters.events.RecruiterUpdatedEvent;
-import com.arenella.recruit.emailservice.beans.Email.EmailRecipient.RecipientType;
-import com.arenella.recruit.emailservice.beans.Recipient;
+import com.arenella.recruit.emailservice.beans.Contact;
+import com.arenella.recruit.emailservice.beans.Email.EmailRecipient.ContactType;
+import com.arenella.recruit.emailservice.services.ContactService;
 import com.arenella.recruit.emailservice.services.EmailDispatcherService;
-import com.arenella.recruit.emailservice.services.RecipientService;
-
 
 /**
 * Implementation of EmailServiceExternalEventListener optimized to 
@@ -24,7 +23,7 @@ public class EmailServiceMonolithExternalEventListener implements EmailServiceEx
 	private EmailDispatcherService 	emailService;
 	
 	@Autowired
-	private RecipientService		recipientService;
+	private ContactService			contactService;
 	
 	/**
 	* Refer to EmailServiceExternalEventListener interface for details 
@@ -39,7 +38,7 @@ public class EmailServiceMonolithExternalEventListener implements EmailServiceEx
 	*/
 	@Override
 	public void listenForRecruiterCreatedEvent(RecruiterCreatedEvent event) {
-		this.recipientService.addRecipient(new Recipient(event.getRecruiterId(), RecipientType.RECRUITER, event.getFirstName(), event.getEmail()));
+		this.contactService.addContact(new Contact(event.getRecruiterId(), ContactType.RECRUITER, event.getFirstName(), event.getEmail()));
 	}
 
 	/**
@@ -47,8 +46,7 @@ public class EmailServiceMonolithExternalEventListener implements EmailServiceEx
 	*/
 	@Override
 	public void listenForRecruiterUpdatedEvent(RecruiterUpdatedEvent event) {
-		this.recipientService.updateRecipient(new Recipient(event.getRecruiterId(), RecipientType.RECRUITER, event.getFirstName(), event.getEmail()));
-		
+		this.contactService.updateContact(new Contact(event.getRecruiterId(), ContactType.RECRUITER, event.getFirstName(), event.getEmail()));
 	}
 
 }

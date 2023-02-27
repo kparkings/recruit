@@ -24,6 +24,7 @@ public class EmailAttachmentEntityTest {
 		
 		final UUID 		attachmentId 	= UUID.randomUUID();
 		final UUID 		emailId 		= UUID.randomUUID();
+		final String 	name			= "cv";
 		final FileType 	fileType 		= FileType.odt;
 		final byte[] 	fileBytes 		= new byte[] {1,66,4};
 		
@@ -32,15 +33,16 @@ public class EmailAttachmentEntityTest {
 					.builder()
 						.attachmentId(attachmentId)
 						.emailId(emailId)
+						.name(name)
 						.fileBytes(fileBytes)
 						.fileType(fileType)
 					.build();
 		
 		assertEquals(attachmentId, 	attachment.getAttachmentId());
 		assertEquals(emailId, 		attachment.getEmailId());
+		assertEquals(name, 			attachment.getName());
 		assertEquals(fileType, 		attachment.getFileType());
 		assertEquals(fileBytes, 	attachment.getFileBytes());
-				
 		
 	}
 	
@@ -54,6 +56,7 @@ public class EmailAttachmentEntityTest {
 		
 		final UUID 		attachmentId 	= UUID.randomUUID();
 		final UUID 		emailId 		= UUID.randomUUID();
+		final String 	name			= "cv";
 		final FileType 	fileType 		= FileType.odt;
 		final byte[] 	fileBytes 		= new byte[] {1,66,4};
 		
@@ -62,6 +65,7 @@ public class EmailAttachmentEntityTest {
 					.builder()
 						.attachmentId(attachmentId)
 						.emailId(emailId)
+						.name(name)
 						.fileBytes(fileBytes)
 						.fileType(fileType)
 					.build();
@@ -70,6 +74,7 @@ public class EmailAttachmentEntityTest {
 		
 		assertEquals(attachmentId, 	attachment.getAttachmentId());
 		assertEquals(emailId, 		attachment.getEmailId());
+		assertEquals(name, 			attachment.getName());
 		assertEquals(fileType, 		attachment.getFileType());
 		assertEquals(fileBytes, 	attachment.getFileBytes());
 		

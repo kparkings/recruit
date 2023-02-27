@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import com.arenella.recruit.emailservice.beans.Email;
 import com.arenella.recruit.emailservice.beans.Email.EmailRecipient;
-import com.arenella.recruit.emailservice.beans.Email.EmailRecipient.RecipientType;
+import com.arenella.recruit.emailservice.beans.Email.EmailRecipient.ContactType;
 
 /**
 * Unit tests for the RecipientEntity class
@@ -20,7 +20,7 @@ public class EmailRecipientEntityTest {
 	private static final String 		id				= "anId";
 	private static final UUID			emailId			= UUID.randomUUID();
 	private static final String			firstName		= "Kevin";
-	private static final RecipientType 	type			= RecipientType.SYSTEM;
+	private static final ContactType 	type			= ContactType.SYSTEM;
 	
 	/**
 	* Test construction via a Builder

@@ -70,7 +70,7 @@ public class Email {
 	
 	/**
 	* Returns the earliest time the Email can be sent to the 
-	* Recpient(s)
+	* Recipient(s)
 	* @return earliest moment the Email can be sent
 	*/
 	public LocalDateTime getScheduledToBeSentAfter(){
@@ -238,7 +238,7 @@ public class Email {
 		/**
 		* Sets when the Email is scheduled to run at the earliest. There is no guarantee
 		* when the email will be send but it will not be before this time
-		* @param scheduledToBeSentAfter - Time from which email can be sent to recipent(s)
+		* @param scheduledToBeSentAfter - Time from which email can be sent to recipient(s)
 		* @return Builder
 		*/
 		public EmailBuilder scheduledToBeSentAfter(LocalDateTime scheduledToBeSentAfter) {
@@ -257,7 +257,7 @@ public class Email {
 		}
 		
 		/**
-		* Sets the Entities representing the recripients of the Email
+		* Sets the Entities representing the recipients of the Email
 		* @param recipients - Email recipients
 		* @return Builder
 		*/
@@ -378,21 +378,22 @@ public class Email {
 	*/
 	public static class EmailRecipient<T>{
 		
-		public static enum RecipientType {SYSTEM, RECRUITER};
+		public static enum ContactType {SYSTEM, RECRUITER};
 		
 		private final T 				id;
-		private final RecipientType 	recipientType;
-		private String 			firstName;
-		private String 			emailAddress;
+		private final ContactType 		contactType;
+		private String 					firstName;
+		private String 					emailAddress;
+		private boolean					viewed			= false;
 	
 		/**
 		* Constructor
-		* @param id				- Unique id of the Recipient
-		* @param recipientType	- Type of the Recipient
+		* @param id				- Unique id of the Contact
+		* @param contactType	- Type of the Contact
 		*/
-		public EmailRecipient(T id, RecipientType recipientType) {
+		public EmailRecipient(T id, ContactType contactType) {
 			this.id  			= id;
-			this.recipientType 	= recipientType;
+			this.contactType 	= contactType;
 		}
 		
 		/**
@@ -412,6 +413,15 @@ public class Email {
 		}
 		
 		/**
+		* Sets whether or not the email has been viewed by
+		* the recipient
+		* @param viewed - if email has been viewed
+		*/
+		public void setViewed(boolean viewed) {
+			this.viewed = viewed;
+		}
+		
+		/**
 		* Returns the unique Identifier of the Recipient
 		* @return Id of the Sender
 		*/
@@ -423,8 +433,8 @@ public class Email {
 		* Returns the type of the Recipient
 		* @return Recipient type
 		*/
-		public RecipientType getRecipientType() {
-			return this.recipientType;
+		public ContactType getRecipientType() {
+			return this.contactType;
 		}
 
 		/**
@@ -441,6 +451,14 @@ public class Email {
 		*/
 		public String getEmailAddress() {
 			return this.emailAddress;
+		}
+		
+		/**
+		* Returns whether the recipient has viewed the email
+		* @return whether the recipient has viewed the email
+		*/
+		public boolean isViewed() {
+			return viewed;
 		}
 		
 	}

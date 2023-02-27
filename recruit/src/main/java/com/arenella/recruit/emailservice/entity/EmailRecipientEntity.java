@@ -11,7 +11,7 @@ import javax.persistence.Table;
 
 import com.arenella.recruit.emailservice.beans.Email;
 import com.arenella.recruit.emailservice.beans.Email.EmailRecipient;
-import com.arenella.recruit.emailservice.beans.Email.EmailRecipient.RecipientType;
+import com.arenella.recruit.emailservice.beans.Email.EmailRecipient.ContactType;
 
 @Entity
 @Table(schema="email", name="email_recipient")
@@ -26,13 +26,16 @@ public class EmailRecipientEntity {
 	
 	@Enumerated(EnumType.STRING)
 	@Column(name="recipient_type")
-	private RecipientType 		recipientType;
+	private ContactType 		recipientType;
 	
 	@Column(name="first_name")
 	private String 				firstName;
 	
 	@Column(name="email_address")
 	private String 				emailAddress;
+	
+	@Column(name="viewed")
+	private boolean				viewed;
 	
 	/**
 	* Constructor 
@@ -49,6 +52,7 @@ public class EmailRecipientEntity {
 		this.recipientType 	= builder.recipientType;
 		this.firstName		= builder.firstName;
 		this.emailAddress 	= builder.emailAddress;
+		this.viewed			= builder.viewed;
 	}
 	
 	public String getId() {
@@ -59,7 +63,7 @@ public class EmailRecipientEntity {
 		return this.emailId;
 	}
 	
-	public RecipientType getRecipientType() {
+	public ContactType getRecipientType() {
 		return this.recipientType;
 	}
 	
@@ -69,6 +73,15 @@ public class EmailRecipientEntity {
 	
 	public String getFirstName() {
 		return this.firstName;
+	}
+	
+	/**
+	* Returns whether the recipient has viewed 
+	* the email
+	* @return if email has been viewed
+	*/
+	public boolean isViewed() {
+		return this.viewed;
 	}
 	
 	/**
@@ -87,9 +100,10 @@ public class EmailRecipientEntity {
 		
 		private String 			id;
 		private UUID 			emailId;
-		private RecipientType 	recipientType;
+		private ContactType 	recipientType;
 		private String 			firstName;
 		private String 			emailAddress;
+		private boolean			viewed;
 		
 		/**
 		* Sets the unique Id of the Recipient
@@ -116,7 +130,7 @@ public class EmailRecipientEntity {
 		* @param recipientType - Type of the Recipient
 		* @return Builder
 		*/
-		public EmailRecipientEntityBuilder recipientType(RecipientType recipientType) {
+		public EmailRecipientEntityBuilder recipientType(ContactType recipientType) {
 			this.recipientType = recipientType;
 			return this;
 		}
@@ -143,6 +157,16 @@ public class EmailRecipientEntity {
 		}
 		
 		/**
+		* Sets whether or not the recipient has viewed the email
+		* @param viewed - Whether the email has been viewed by the recipient
+		* @return Builder
+		*/
+		public EmailRecipientEntityBuilder viewed(boolean viewed) {
+			this.viewed = viewed;
+			return this;
+		}
+		
+		/**
 		* Returns an initialized RecipientEntity
 		* @return Initialized RecipientEntity
 		*/
@@ -165,15 +189,22 @@ public class EmailRecipientEntity {
 					.emailAddress(recipient.getEmailAddress())
 					.emailId(email.getId())
 					.firstName(recipient.getFirstName())
+					.viewed(recipient.isViewed())
 				.build();
 	}
 	
+	/**
+	* Converts from Entity to Domain representation 
+	* @param entity - To convert
+	* @return converted
+	*/
 	public static EmailRecipient<?> convertFromEntity(EmailRecipientEntity entity) {
 		
 		EmailRecipient<?> recipient =  new EmailRecipient<String>(entity.getId(), entity.getRecipientType());
 		
 		recipient.setEmail(entity.getEmailAddress());
 		recipient.setFirstName(entity.getFirstName());
+		recipient.setViewed(entity.isViewed());
 		
 		return recipient;
 	}

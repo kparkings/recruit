@@ -5,18 +5,18 @@ import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
-import com.arenella.recruit.emailservice.beans.Recipient;
+import com.arenella.recruit.emailservice.beans.Contact;
 
 /**
 * Entity representation of Recipient
 * @author K Parkings
 */
 @Entity
-@Table(schema="email", name="recipient")
-public class RecipientEntity {
+@Table(schema="email", name="contact")
+public class ContactEntity {
 
 	@EmbeddedId
-	private RecipientEntityPK id;
+	private ContactEntityPK id;
 	
 	@Column(name="first_name")
 	private String firstName;
@@ -27,7 +27,7 @@ public class RecipientEntity {
 	/**
 	* Default Constructor 
 	*/
-	public RecipientEntity() {
+	public ContactEntity() {
 		//Hibernate
 	}
 	
@@ -35,7 +35,7 @@ public class RecipientEntity {
 	* Constructor based upon a Builder
 	* @param builder - contains initialization values
 	*/
-	public RecipientEntity(RecipientEntityBuilder builder) {
+	public ContactEntity(ContactEntityBuilder builder) {
 		this.id 		= builder.id;
 		this.firstName 	= builder.firstName;
 		this.email 		= builder.email;
@@ -45,7 +45,7 @@ public class RecipientEntity {
 	* Returns the unique id of the Recipient
 	* @return id of the Recipient
 	*/
-	public RecipientEntityPK getId(){
+	public ContactEntityPK getId(){
 		return this.id;
 	}
 	
@@ -85,17 +85,17 @@ public class RecipientEntity {
 	* Returns a Builder for the class
 	* @return Builder
 	*/
-	public static RecipientEntityBuilder builder() {
-		return new RecipientEntityBuilder();
+	public static ContactEntityBuilder builder() {
+		return new ContactEntityBuilder();
 	}
 	
 	/**
 	* Builder for the class
 	* @author K Parkings
 	*/
-	public static class RecipientEntityBuilder{
+	public static class ContactEntityBuilder{
 		
-		private RecipientEntityPK id;
+		private ContactEntityPK id;
 		private String firstName;
 		private String email;
 		
@@ -104,7 +104,7 @@ public class RecipientEntity {
 		* @param id - id of the Recipient
 		* @return Builder
 		*/
-		public RecipientEntityBuilder id(RecipientEntityPK id) {
+		public ContactEntityBuilder id(ContactEntityPK id) {
 			this.id = id;
 			return this;
 		}
@@ -114,7 +114,7 @@ public class RecipientEntity {
 		* @param firstName - name of the Recipient
 		* @return Builder
 		*/
-		public RecipientEntityBuilder firstName(String firstName) {
+		public ContactEntityBuilder firstName(String firstName) {
 			this.firstName = firstName;
 			return this;
 		}
@@ -124,7 +124,7 @@ public class RecipientEntity {
 		* @param email - Email address of the Recipient
 		* @return Builder
 		*/
-		public RecipientEntityBuilder email(String email) {
+		public ContactEntityBuilder email(String email) {
 			this.email = email;
 			return this;
 		}
@@ -134,22 +134,22 @@ public class RecipientEntity {
 		* populated with the Builder values
 		* @return Entity
 		*/
-		public RecipientEntity build() {
-			return new RecipientEntity(this);
+		public ContactEntity build() {
+			return new ContactEntity(this);
 		}
 	}
 	
 	/**
 	* Converts from Domain to Entity representation
-	* @param recipient - Domain representation
+	* @param contact - Domain representation
 	* @return Entity representation
 	*/
-	public static RecipientEntity convertToEntity(Recipient recipient) {
-		return RecipientEntity
+	public static ContactEntity convertToEntity(Contact contact) {
+		return ContactEntity
 				.builder()
-					.email(recipient.getEmail())
-					.firstName(recipient.getFirstName())
-					.id(new RecipientEntityPK(recipient.getRecipientType(), recipient.getId()))
+					.email(contact.getEmail())
+					.firstName(contact.getFirstName())
+					.id(new ContactEntityPK(contact.getContactType(), contact.getId()))
 				.build();
 	}
 	
@@ -158,8 +158,8 @@ public class RecipientEntity {
 	* @param entity - Entity representation
 	* @return Domain representation
 	*/
-	public static Recipient convertFromEntity(RecipientEntity entity) {
-		return new Recipient(entity.getId().getRecipientId(), entity.getId().getRecipientType(), entity.getFirstName(), entity.getEmail());
+	public static Contact convertFromEntity(ContactEntity entity) {
+		return new Contact(entity.getId().getContactId(), entity.getId().getContactType(), entity.getFirstName(), entity.getEmail());
 	}
 	
 }

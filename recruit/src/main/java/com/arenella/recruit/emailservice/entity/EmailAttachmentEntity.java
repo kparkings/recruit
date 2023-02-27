@@ -17,7 +17,7 @@ import com.arenella.recruit.emailservice.beans.EmailAttachment.FileType;
 * @author K Parkings
 */
 @Entity
-@Table(schema="email", name="email_attachment")
+@Table(schema="email", name="email_attachments")
 public class EmailAttachmentEntity {
 
 	@Id
@@ -26,6 +26,9 @@ public class EmailAttachmentEntity {
 	
 	@Column(name="email_id")
 	private UUID emailId;
+	
+	@Column(name="name")
+	private String name;
 	
 	@Column(name="file_type")
 	@Enumerated(EnumType.STRING)
@@ -48,6 +51,7 @@ public class EmailAttachmentEntity {
 	public EmailAttachmentEntity(EmailAttachmentEntityBuilder builder) {
 		this.attachmentId 	= builder.attachmentId;
 		this.emailId 		= builder.emailId;
+		this.name			= builder.name;
 		this.fileType 		= builder.fileType;
 		this.fileBytes 		= builder.fileBytes;
 	}
@@ -67,6 +71,14 @@ public class EmailAttachmentEntity {
 	*/
 	public UUID getEmailId() {
 		return this.emailId;
+	}
+	
+	/**
+	* Returns the name of the Attachment 
+	* @return
+	*/
+	public String getName() {
+		return this.name;
 	}
 	
 	/**
@@ -102,6 +114,7 @@ public class EmailAttachmentEntity {
 		
 		public  UUID 		attachmentId;
 		private UUID 		emailId;
+		private String		name;
 		private FileType 	fileType;
 		private byte[] 		fileBytes;
 		
@@ -123,6 +136,16 @@ public class EmailAttachmentEntity {
 		*/
 		public EmailAttachmentEntityBuilder emailId(UUID emailId) {
 			this.emailId = emailId;
+			return this;
+		}
+		
+		/**
+		* Sets the name of the Attachment
+		* @param name - attachment name
+		* @return Builder
+		*/
+		public EmailAttachmentEntityBuilder name(String name) {
+			this.name = name;
 			return this;
 		}
 		
@@ -167,6 +190,7 @@ public class EmailAttachmentEntity {
 				.builder()
 					.attachmentId(attachment.getAttachmentId())
 					.emailId(attachment.getEmailId())
+					.name(attachment.getName())
 					.fileBytes(attachment.getFileBytes())
 					.fileType(attachment.getFileType())
 				.build();
@@ -183,6 +207,7 @@ public class EmailAttachmentEntity {
 				.builder()
 					.attachmentId(entity.getAttachmentId())
 					.emailId(entity.getEmailId())
+					.name(entity.getName())
 					.fileBytes(entity.getFileBytes())
 					.fileType(entity.getFileType())
 				.build();
