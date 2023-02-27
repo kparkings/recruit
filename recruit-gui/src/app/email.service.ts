@@ -44,6 +44,14 @@ export class EmailService {
 				
 	}
 	
+	public fetchEmails():Observable<any>{
+		
+		const backendUrl:string = environment.backendUrl +'email';
+  
+    	return this.httpClient.get<any>(backendUrl, this.httpOptions);
+		
+		
+	}
 	
 
 }

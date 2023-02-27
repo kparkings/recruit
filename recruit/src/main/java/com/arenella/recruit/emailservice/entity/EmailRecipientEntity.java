@@ -145,7 +145,6 @@ public class EmailRecipientEntity {
 			return this;
 		}
 		
-		
 		/**
 		* Sets the body of the Email
 		* @param email - Email

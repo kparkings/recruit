@@ -7,6 +7,8 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.arenella.recruit.emailservice.services.EmailService;
@@ -25,7 +27,10 @@ public class EmailController {
 	* Returns the users email's
 	* @return Email's for the authenticated User
 	*/
+	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('RECRUITER')")
+	@GetMapping(path="email", produces="application/json")
 	public Set<EmailAPIOutbound> getEmailsForUser(Principal principal){
+		//return this.emailService.fetchEmailsByRecipientId("recruiter22").stream().map(e -> EmailAPIOutbound.convertFromDomain(e)).collect(Collectors.toCollection(LinkedHashSet::new));
 		return this.emailService.fetchEmailsByRecipientId(principal.getName()).stream().map(e -> EmailAPIOutbound.convertFromDomain(e)).collect(Collectors.toCollection(LinkedHashSet::new));
 	}
 	

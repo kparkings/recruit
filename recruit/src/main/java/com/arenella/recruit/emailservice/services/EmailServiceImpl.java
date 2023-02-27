@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.arenella.recruit.emailservice.beans.Email;
+import com.arenella.recruit.emailservice.beans.Email.EmailRecipient.ContactType;
 import com.arenella.recruit.emailservice.dao.EmailServiceDao;
 
 /**
@@ -23,10 +24,7 @@ public class EmailServiceImpl implements EmailService{
 	*/
 	@Override
 	public Set<Email> fetchEmailsByRecipientId(String recipientId) {
-		return emailServiceDao.fetchEmailsByRecipientId(recipientId);
-		
-		
-		
+		return emailServiceDao.fetchEmailsByRecipientId(recipientId, ContactType.RECRUITER);		
 	}
 
 }

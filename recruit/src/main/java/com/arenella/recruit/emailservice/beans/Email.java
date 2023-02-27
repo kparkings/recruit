@@ -2,6 +2,7 @@ package com.arenella.recruit.emailservice.beans;
 
 import java.time.LocalDateTime;
 import java.util.LinkedHashSet;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
@@ -436,7 +437,7 @@ public class Email {
 		public ContactType getRecipientType() {
 			return this.contactType;
 		}
-
+		
 		/**
 		* Returns the firstName of the Recipient
 		* @return first name of the Recipient

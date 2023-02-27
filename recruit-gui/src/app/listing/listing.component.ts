@@ -431,4 +431,10 @@ export class ListingComponent implements OnInit {
 
   	}
 
+	public boopwart():void {
+		this.emailService.fetchEmails().subscribe(data => {
+			console.log(JSON.stringify(data));
+		});
+	}
+
 }

@@ -1,5 +1,6 @@
 package com.arenella.recruit.emailservice.dao;
 
+import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -8,6 +9,7 @@ import java.util.stream.StreamSupport;
 import org.springframework.stereotype.Repository;
 
 import com.arenella.recruit.emailservice.beans.Email;
+import com.arenella.recruit.emailservice.beans.Email.EmailRecipient.ContactType;
 import com.arenella.recruit.emailservice.beans.Email.Status;
 import com.arenella.recruit.emailservice.entity.EmailEntity;
 
@@ -45,9 +47,17 @@ public interface EmailServiceDao extends CrudRepository<EmailEntity, UUID> {
 	
 	@Query("FROM EmailEntity where status = :status ")
 	Set<EmailEntity> findEmailEntitiessByStatus(@Param("status") Status status);
-//@Query("from User u left join u.items i where i.deleted = false or i.deleted is null")
 	   
-	@Query("FROM EmailEntity e left join e.recipients r where r.id = :recipientId")
-	Set<Email> fetchEmailsByRecipientId(@Param("recipientId") String recipientId);
+	@Query("FROM EmailEntity e left join e.recipients r where r.id = :recipientId and r.recipientType = :contactType")
+	Set<EmailEntity> fetchEmailEntitiesByRecipientId(@Param("recipientId") String recipientId, @Param("contactType") ContactType contactType);
 	
+	/**
+	* Returns email's sent to a specific user
+	* @param recipientId - Id of the recipient
+	* @param contactType - type of recipient
+	* @return recipients email's
+	*/
+	default Set<Email> fetchEmailsByRecipientId(@Param("recipientId") String recipientId, @Param("contactType") ContactType contactType){
+		return this.fetchEmailEntitiesByRecipientId(recipientId, contactType).stream().map(e -> EmailEntity.convertFromEntity(e)).collect(Collectors.toCollection(LinkedHashSet::new));
+	}
 }
