@@ -18,6 +18,7 @@ public class SenderEntityTest {
 
 	private static final String emailAddress 	= "kparkings@gmail.com";
 	private static final String id				= "anId";
+	private static final String contactId		= "na";
 	private static final UUID	emailId			= UUID.randomUUID();
 	private static final SenderType type		= SenderType.SYSTEM;
 	
@@ -34,13 +35,15 @@ public class SenderEntityTest {
 						.emailAddress(emailAddress)
 						.emailId(emailId)
 						.id(id)
-						.senderType(type)
+						.contactType(type)
+						.contactId(contactId)
 					.build();
 		
 		assertEquals(emailAddress, 	entity.getEmailAddress());
 		assertEquals(id, 			entity.getId());
 		assertEquals(emailId, 		entity.getEmailId());
-		assertEquals(type, 			entity.getSenderType());
+		assertEquals(type, 			entity.getContactType());
+		assertEquals(contactId, 	entity.getContactId());
 		
 	}
 	
@@ -57,14 +60,16 @@ public class SenderEntityTest {
 						.emailAddress(emailAddress)
 						.emailId(emailId)
 						.id(id)
-						.senderType(type)
+						.contactType(type)
+						.contactId(contactId)
 					.build();
 		
 		Sender<String> sender = SenderEntity.convertFromEntity(entity);
 		
 		assertEquals(emailAddress, 	sender.getEmail());
 		assertEquals(id, 			sender.getId());
-		assertEquals(type, 			sender.getSenderType());
+		assertEquals(type, 			sender.getContactType());
+		assertEquals(contactId, 	sender.getContactId());
 		
 	}
 	
@@ -75,14 +80,15 @@ public class SenderEntityTest {
 	@Test
 	public void testConvertToEntity() throws Exception{
 		
-		final Sender<String> 	sender 	= new Sender<>(id, type, emailAddress); 
+		final Sender<String> 	sender 	= new Sender<>(id, contactId, type, emailAddress); 
 		final Email 			email 	= Email.builder().id(UUID.randomUUID()).build();
 		
 		SenderEntity entity = SenderEntity.convertToEntity(sender, email);
 		
 		assertEquals(emailAddress, 		entity.getEmailAddress());
 		assertEquals(id, 				entity.getId());
-		assertEquals(type, 				entity.getSenderType());
+		assertEquals(type, 				entity.getContactType());
+		assertEquals(contactId, 		entity.getContactId());
 		assertEquals(email.getId(), 	entity.getEmailId());
 	}
 	

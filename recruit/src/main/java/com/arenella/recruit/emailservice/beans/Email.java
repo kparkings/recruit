@@ -2,7 +2,6 @@ package com.arenella.recruit.emailservice.beans;
 
 import java.time.LocalDateTime;
 import java.util.LinkedHashSet;
-import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
@@ -16,18 +15,18 @@ public class Email {
 	public static enum EmailType 	{INTERN, EXTERN, SYSTEM_INTERN, SYSTEM_EXTERN};
 	public static enum Status 		{DRAFT, TO_OUTBOX, SENT_INTERN, SENT_EXTERN, FAILURE};
 	
-	private UUID 					id;
-	private String 					title;
-	private EmailType 				emailType;
-	private Sender<?> 				sender; 
-	private LocalDateTime 			created;
-	private LocalDateTime 			scheduledToBeSentAfter;
-	private LocalDateTime 			sent;
-	private Set<EmailRecipient<?>> 	recipients					= new LinkedHashSet<>(); 
-	private String 					body;
-	private Status 					status						= Status.DRAFT;
-	private boolean					persistable					= false;
-	private Set<EmailAttachment>	attachments					= new LinkedHashSet<>();
+	private UUID 						id;
+	private String 						title;
+	private EmailType 					emailType;
+	private Sender<?> 					sender; 
+	private LocalDateTime 				created;
+	private LocalDateTime 				scheduledToBeSentAfter;
+	private LocalDateTime 				sent;
+	private Set<EmailRecipient<UUID>> 	recipients					= new LinkedHashSet<>(); 
+	private String 						body;
+	private Status 						status						= Status.DRAFT;
+	private boolean						persistable					= false;
+	private Set<EmailAttachment>		attachments					= new LinkedHashSet<>();
 		
 	/**
 	* Returns the unique Id of the email
@@ -90,7 +89,7 @@ public class Email {
 	* Returns the Recipients that are to receive the Email
 	* @return Recipients of the Email
 	*/
-	public Set<EmailRecipient<?>> getRecipients(){
+	public Set<EmailRecipient<UUID>> getRecipients(){
 		return this.recipients;
 	} 
 	
@@ -174,18 +173,18 @@ public class Email {
 	*/
 	public static class EmailBuilder{
 	
-		private UUID 					id;
-		private String 					title;
-		private EmailType 				emailType;
-		private Sender<?> 				sender; 
-		private LocalDateTime 			created;
-		private LocalDateTime 			scheduledToBeSentAfter;
-		private LocalDateTime 			sent;
-		private Set<EmailRecipient<?>> 	recipients					= new LinkedHashSet<>(); 
-		private String 					body;
-		private Status 					status						= Status.DRAFT;
-		private boolean					persistable					= false;
-		private Set<EmailAttachment>	attachments					= new LinkedHashSet<>();
+		private UUID 						id;
+		private String 						title;
+		private EmailType 					emailType;
+		private Sender<?> 					sender; 
+		private LocalDateTime 				created;
+		private LocalDateTime 				scheduledToBeSentAfter;
+		private LocalDateTime 				sent;
+		private Set<EmailRecipient<UUID>> 	recipients					= new LinkedHashSet<>(); 
+		private String 						body;
+		private Status 						status						= Status.DRAFT;
+		private boolean						persistable					= false;
+		private Set<EmailAttachment>		attachments					= new LinkedHashSet<>();
 		/**
 		* Sets the unique Id of the email
 		* @param id - Sets the unique ID of the email
@@ -262,7 +261,7 @@ public class Email {
 		* @param recipients - Email recipients
 		* @return Builder
 		*/
-		public EmailBuilder recipients(Set<EmailRecipient<?>> recipients) {
+		public EmailBuilder recipients(Set<EmailRecipient<UUID>> recipients) {
 			this.recipients.clear();
 			this.recipients.addAll(recipients);
 			return this;
@@ -327,21 +326,24 @@ public class Email {
 	*/
 	public static class Sender<T>{
 		
-		public static enum SenderType {SYSTEM, RECRUITER};
+		public static enum SenderType {SYSTEM, RECRUITER, UNREGISTERED_USER};
 		
 		private final T				id;
-		private final SenderType 	senderType;
+		private final SenderType 	contactType;
+		private final String		contactId;
 		private final String 		email;
 		
 		/**
 		* Constructor
 		* @param id				- Unique Id of the Sender
-		* @param senderType		- Type of the Sender
+		* @param contactType	- Type of the Sender
+		* @param contactType	
 		* @param email			- Senders Email Address
 		*/
-		public Sender(T id, SenderType senderType, String email) {
+		public Sender(T id, String contactId, SenderType contactType, String email) {
 			this.id 			= id;
-			this.senderType 	= senderType;
+			this.contactType 	= contactType;
+			this.contactId		= contactId;
 			this.email 			= email;
 		}
 		
@@ -357,8 +359,16 @@ public class Email {
 		* Returns the type of the Sender
 		* @return Senders type
 		*/
-		public SenderType getSenderType() {
-			return this.senderType;
+		public SenderType getContactType() {
+			return this.contactType;
+		}
+		
+		/**
+		* Returns the id of the Contact that sent the email
+		* @return contact Id of the Sender
+		*/
+		public String getContactId() {
+			return this.contactId;
 		}
 		
 		/**
@@ -383,6 +393,7 @@ public class Email {
 		
 		private final T 				id;
 		private final ContactType 		contactType;
+		private final String			contactId;
 		private String 					firstName;
 		private String 					emailAddress;
 		private boolean					viewed			= false;
@@ -392,8 +403,9 @@ public class Email {
 		* @param id				- Unique id of the Contact
 		* @param contactType	- Type of the Contact
 		*/
-		public EmailRecipient(T id, ContactType contactType) {
+		public EmailRecipient(T id, String contactId, ContactType contactType) {
 			this.id  			= id;
+			this.contactId		= contactId;
 			this.contactType 	= contactType;
 		}
 		
@@ -434,8 +446,16 @@ public class Email {
 		* Returns the type of the Recipient
 		* @return Recipient type
 		*/
-		public ContactType getRecipientType() {
+		public ContactType getContactType() {
 			return this.contactType;
+		}
+		
+		/**
+		* Returns the id of the Contact
+		* @return id of the contact
+		*/
+		public String getContactId() {
+			return this.contactId;
 		}
 		
 		/**

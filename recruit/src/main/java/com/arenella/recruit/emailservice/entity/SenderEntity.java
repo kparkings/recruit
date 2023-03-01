@@ -25,8 +25,11 @@ public class SenderEntity {
 	private UUID 				emailId;
 	
 	@Enumerated(EnumType.STRING)
-	@Column(name="sender_type")
-	private SenderType 			senderType;
+	@Column(name="contact_type")
+	private SenderType 			contactType;
+	
+	@Column(name="contact_id")
+	private String				contactId;
 	
 	@Column(name="email_address")
 	private String 				emailAddress;
@@ -45,7 +48,8 @@ public class SenderEntity {
 	public SenderEntity(SenderEntityBuilder builder) {
 		this.id 			= builder.id;
 		this.emailId 		= builder.emailId;
-		this.senderType 	= builder.senderType;
+		this.contactType 	= builder.contactType;
+		this.contactId 		= builder.contactId;
 		this.emailAddress 	= builder.emailAddress;
 	}
 	
@@ -69,9 +73,18 @@ public class SenderEntity {
 	* Returns the type of the Sender
 	* @return Senders type
 	*/
-	public SenderType getSenderType() {
-		return this.senderType;
+	public SenderType getContactType() {
+		return this.contactType;
 	}
+	
+	/**
+	* Returns the contact Id of the Sender
+	* @return id of the Sender
+	*/
+	public String getContactId() {
+		return this.contactId;
+	}
+	
 	
 	/**
 	* Returns the email address of the Sender
@@ -97,7 +110,8 @@ public class SenderEntity {
 		
 		private String 			id;
 		private UUID 			emailId;
-		private SenderType 		senderType;
+		private SenderType 		contactType;
+		private String			contactId;
 		private String 			emailAddress;
 		
 		/**
@@ -125,8 +139,18 @@ public class SenderEntity {
 		* @param senderType - Senders type
 		* @return Builder
 		*/
-		public SenderEntityBuilder senderType(SenderType senderType) {
-			this.senderType = senderType;
+		public SenderEntityBuilder contactType(SenderType contactType) {
+			this.contactType = contactType;
+			return this;
+		}
+		
+		/**
+		* Sets the Id of the Contact sending the Email
+		* @param contactId - contact Id of the Sender
+		* @return Builder
+		*/
+		public SenderEntityBuilder contactId(String contactId) {
+			this.contactId = contactId;
 			return this;
 		}
 		
@@ -161,7 +185,8 @@ public class SenderEntity {
 					.emailAddress(sender.getEmail())
 					.emailId(email.getId())
 					.id(String.valueOf(sender.getId()))
-					.senderType(sender.getSenderType())
+					.contactType(sender.getContactType())
+					.contactId(sender.getContactId())
 				.build();
 	}
 	
@@ -171,7 +196,7 @@ public class SenderEntity {
 	* @return Domain representation
 	*/
 	public static Sender<String> convertFromEntity(SenderEntity sender) {
-		return new Sender<String>(sender.getId().toString(), sender.getSenderType(), sender.getEmailAddress());
+		return new Sender<String>(sender.getId().toString(),sender.getContactId(), sender.getContactType(), sender.getEmailAddress());
 	}
 	
 }

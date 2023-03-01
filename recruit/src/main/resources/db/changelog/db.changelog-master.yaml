@@ -1477,3 +1477,37 @@ databaseChangeLog:
             oldColumnName: recipient_id  
             schemaName: email  
             tableName: contact
+  - changeSet:
+      id: recipient-sender
+      author: kevin
+      changes:
+        - renameColumn:  
+            columnDataType: varchar  
+            newColumnName: contact_type  
+            oldColumnName: recipient_type  
+            schemaName: email  
+            tableName: email_recipient
+        - renameColumn:  
+            columnDataType: varchar  
+            newColumnName: contact_type  
+            oldColumnName: sender_type  
+            schemaName: email  
+            tableName: email_sender
+        - addColumn:
+            tableName: email_recipient
+            schemaName: email
+            columns:
+            - column:
+                name: contact_id
+                type: varchar
+                constraints:
+                  nullable: true
+        - addColumn:
+            tableName: email_sender
+            schemaName: email
+            columns:
+            - column:
+                name: contact_id
+                type: varchar
+                constraints:
+                  nullable: true

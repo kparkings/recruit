@@ -2,6 +2,7 @@ package com.arenella.recruit.emailservice.services;
 
 import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.ScheduledExecutorService;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -88,8 +89,8 @@ public class EmailDispatcherServiceTest {
 	@Test
 	public void testHandleSendEmailCommand() throws Exception{
 		
-		Email.EmailRecipient<?> recipient1 = new Email.EmailRecipient("one", ContactType.RECRUITER);
-		Email.EmailRecipient<?> recipient2 = new Email.EmailRecipient("two", ContactType.RECRUITER);
+		Email.EmailRecipient<UUID> recipient1 = new Email.EmailRecipient("one", "rec1", ContactType.RECRUITER);
+		Email.EmailRecipient<UUID> recipient2 = new Email.EmailRecipient("two", "rec2", ContactType.RECRUITER);
 		
 		Mockito.when(this.mockContactDao.getByIdAndType(Mockito.any(), Mockito.any())).thenReturn(Optional.of(new Contact("", ContactType.RECRUITER, "", "")));
 		

@@ -25,6 +25,7 @@ import { CookieModule } 					from 'ngx-cookie';
 import { RecruiterMarketplaceComponent } 	from './recruiter-marketplace/recruiter-marketplace.component';
 import { RecruiterAlertsComponent } 		from './recruiter-alerts/recruiter-alerts.component';
 import { FaqComponent } 					from './faq/faq.component';
+import { EmailComponent } from './email/email.component';
 
 @NgModule({
   declarations: [
@@ -42,7 +43,8 @@ import { FaqComponent } 					from './faq/faq.component';
     SuggestionsComponent,
     RecruiterMarketplaceComponent,
     RecruiterAlertsComponent,
-    FaqComponent
+    FaqComponent,
+    EmailComponent
   ],
   imports: [
     BrowserModule,

@@ -292,7 +292,7 @@ public class EmailAPIOutbound {
 	* @return converted
 	*/
 	private static SenderAPIOutbound convertFromDomain(Sender<?> sender) {
-		return new SenderAPIOutbound(sender.getId().toString(), sender.getSenderType(), "?? Name ??");
+		return new SenderAPIOutbound(sender.getId().toString(), sender.getContactType(), sender.getContactId());
 	}
 	
 	/**

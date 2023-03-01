@@ -54,6 +54,9 @@
 		<li class="li-arenella-nav" *ngIf="isAuthenticated() && !isAuthenticatedAsAdmin()">
            <a class="dropdown-item recruiter-account" routerLink="/recruiter-account">Account</a>
         </li>
+		<li  class="li-arenella-nav" *ngIf="isAuthenticated()">
+           <a  class="dropdown-item" routerLink="/email">Emails</a>
+        </li>
       </ul>
 
 </div>

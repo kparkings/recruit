@@ -25,12 +25,12 @@ import com.arenella.recruit.emailservice.beans.Email.Sender.SenderType;
 public class RequestSendCommandEventTest {
 
 	final private UUID 						recip1Id 					= UUID.randomUUID();
-	final private String 					recip2Id 					= "anId";
+	final private UUID 						recip2Id 					= UUID.randomUUID();
 	final private String 					title						= "aTitle";
 	final private EmailType 				emailType					= EmailType.EXTERN;
-	final private Sender<?> 				sender						= new Sender<UUID>(UUID.randomUUID(), SenderType.SYSTEM, "norepy@renella-ict.com"); 
-	final private Set<EmailRecipient<?>> 	recipients					= Set.of(new EmailRecipient<UUID>(recip1Id, ContactType.RECRUITER),
-																	 	new EmailRecipient<String>(recip2Id, ContactType.SYSTEM));
+	final private Sender<?> 				sender						= new Sender<UUID>(UUID.randomUUID(), "", SenderType.SYSTEM, "norepy@renella-ict.com"); 
+	final private Set<EmailRecipient<UUID>> recipients					= Set.of(new EmailRecipient<UUID>(recip1Id, "rec1", ContactType.RECRUITER),
+																	 	new EmailRecipient<UUID>(recip2Id, "rec2", ContactType.SYSTEM));
 	final private EmailTopic				topic						= EmailTopic.ACCOUNT_CREATED;
 	final private Map<String,Object>		model						= new HashMap<>();
 	
@@ -59,8 +59,8 @@ public class RequestSendCommandEventTest {
 		assertEquals(model, 					command.getModel());
 		assertTrue(command.isPersistable()); 
 		
-		UUID 	recipient1Id = (UUID) 	command.getRecipients().stream().filter(r -> r.getRecipientType() == ContactType.RECRUITER).findFirst().get().getId();
-		String 	recipient2Id = (String) command.getRecipients().stream().filter(r -> r.getRecipientType() == ContactType.SYSTEM).findFirst().get().getId();
+		UUID 	recipient1Id = (UUID) 	command.getRecipients().stream().filter(r -> r.getContactType() == ContactType.RECRUITER).findFirst().get().getId();
+		UUID 	recipient2Id = (UUID) command.getRecipients().stream().filter(r -> r.getContactType() == ContactType.SYSTEM).findFirst().get().getId();
 		
 		assertEquals(recip1Id, recipient1Id);
 		assertEquals(recip2Id, recipient2Id);

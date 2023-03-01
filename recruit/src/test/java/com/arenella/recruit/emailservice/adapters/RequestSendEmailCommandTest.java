@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
 
@@ -31,8 +32,8 @@ public class RequestSendEmailCommandTest {
 		final EmailType 				emailType 	= EmailType.EXTERN;
 		final Map<String,Object> 		model 		= Map.of();
 		final boolean 					persistable = true;
-		final Set<EmailRecipient<?>> 	recipients 	= new HashSet<>();
-		final Sender<String> 			sender 		= new Sender<>("id", SenderType.SYSTEM,"kparkings@gmail.com");
+		final Set<EmailRecipient<UUID>> recipients 	= new HashSet<>();
+		final Sender<String> 			sender 		= new Sender<>("id", "", SenderType.SYSTEM,"kparkings@gmail.com");
 		final String 					title 		= "aTitle";
 		final EmailTopic 				topic 		= EmailTopic.ACCOUNT_CREATED;
 		final Set<Attachment>			attachments = Set.of(new Attachment("doc", "aCV", new byte[] {2}));

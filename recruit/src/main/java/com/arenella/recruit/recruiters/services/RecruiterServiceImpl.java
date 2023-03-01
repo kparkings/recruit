@@ -262,8 +262,8 @@ public class RecruiterServiceImpl implements RecruiterService{
 		RequestSendEmailCommand command = RequestSendEmailCommand
 				.builder()
 					.emailType(EmailType.EXTERN)
-					.recipients(Set.of(new EmailRecipient<String>(recruiter.getUserId(), ContactType.RECRUITER)))
-					.sender(new Sender<>(UUID.randomUUID(), SenderType.SYSTEM, "kparkings@gmail.com"))
+					.recipients(Set.of(new EmailRecipient<UUID>(UUID.randomUUID(),recruiter.getUserId(), ContactType.RECRUITER)))
+					.sender(new Sender<>(UUID.randomUUID(), "", SenderType.SYSTEM, "kparkings@gmail.com"))
 					.title("Arenella-ICT - Password Reset")
 					.topic(EmailTopic.PASSWORD_RESET)
 					.model(Map.of("userId", recruiter.getUserId(), "firstname",recruiter.getFirstName(),"password",rawPassword))

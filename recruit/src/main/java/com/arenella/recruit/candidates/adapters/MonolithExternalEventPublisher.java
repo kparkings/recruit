@@ -94,8 +94,8 @@ public class MonolithExternalEventPublisher implements ExternalEventPublisher{
 						.emailType(EmailType.EXTERN)
 						.model(model)
 						.persistable(false)
-						.recipients(Set.of(new EmailRecipient<String>(command.getRecruiterId(), ContactType.RECRUITER)))
-						.sender(new Sender<>(UUID.randomUUID(), SenderType.SYSTEM, "kparkings@gmail.com"))
+						.recipients(Set.of(new EmailRecipient<UUID>(UUID.randomUUID(), command.getRecruiterId(), ContactType.RECRUITER)))
+						.sender(new Sender<>(UUID.randomUUID(), "", SenderType.SYSTEM, "kparkings@gmail.com"))
 						.title("Arenella-ICT - New Matching Candidates")
 						.topic(EmailTopic.ALERT_MATCHES)
 					.build();

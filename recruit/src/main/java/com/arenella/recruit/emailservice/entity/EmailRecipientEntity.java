@@ -25,8 +25,11 @@ public class EmailRecipientEntity {
 	private UUID 				emailId;
 	
 	@Enumerated(EnumType.STRING)
-	@Column(name="recipient_type")
-	private ContactType 		recipientType;
+	@Column(name="contact_type")
+	private ContactType 		contactType;
+	
+	@Column(name="contact_id")
+	private String 				contactId;
 	
 	@Column(name="first_name")
 	private String 				firstName;
@@ -47,24 +50,29 @@ public class EmailRecipientEntity {
 	* @param builder - Contains initialization values
 	*/
 	public EmailRecipientEntity(EmailRecipientEntityBuilder builder) {
-		this.id 			= builder.id;
+		this.id 			= builder.id.toString();
 		this.emailId 		= builder.emailId;
-		this.recipientType 	= builder.recipientType;
+		this.contactType 	= builder.contactType;
+		this.contactId		= builder.contactId;
 		this.firstName		= builder.firstName;
 		this.emailAddress 	= builder.emailAddress;
 		this.viewed			= builder.viewed;
 	}
 	
-	public String getId() {
-		return this.id;
+	public UUID getId() {
+		return UUID.fromString(this.id);
 	}
 	
 	public UUID getEmailId() {
 		return this.emailId;
 	}
 	
-	public ContactType getRecipientType() {
-		return this.recipientType;
+	public ContactType getContactType() {
+		return this.contactType;
+	}
+	
+	public String getContactId() {
+		return this.contactId;
 	}
 	
 	public String getEmailAddress() {
@@ -98,9 +106,10 @@ public class EmailRecipientEntity {
 	*/
 	public static class EmailRecipientEntityBuilder{
 		
-		private String 			id;
+		private UUID 			id;
 		private UUID 			emailId;
-		private ContactType 	recipientType;
+		private ContactType 	contactType;
+		private String 			contactId;
 		private String 			firstName;
 		private String 			emailAddress;
 		private boolean			viewed;
@@ -110,7 +119,7 @@ public class EmailRecipientEntity {
 		* @param id - Unique Id of the Recipient
 		* @return Builder
 		*/
-		public EmailRecipientEntityBuilder id(String id) {
+		public EmailRecipientEntityBuilder id(UUID id) {
 			this.id = id;
 			return this;
 		}
@@ -130,8 +139,18 @@ public class EmailRecipientEntity {
 		* @param recipientType - Type of the Recipient
 		* @return Builder
 		*/
-		public EmailRecipientEntityBuilder recipientType(ContactType recipientType) {
-			this.recipientType = recipientType;
+		public EmailRecipientEntityBuilder contactType(ContactType contactType) {
+			this.contactType = contactType;
+			return this;
+		}
+		
+		/**
+		* Sets the id of the recipient
+		* @param contactId - contact id of the recipient
+		* @return Builder
+		*/
+		public EmailRecipientEntityBuilder contactId(String contactId) {
+			this.contactId = contactId;
 			return this;
 		}
 		
@@ -180,11 +199,12 @@ public class EmailRecipientEntity {
 	* @param recipient - Domain representation
 	* @return Entity representation
 	*/
-	public static EmailRecipientEntity convertToEntity(EmailRecipient<?> recipient, Email email) {	
+	public static EmailRecipientEntity convertToEntity(EmailRecipient<UUID> recipient, Email email) {	
 		return EmailRecipientEntity
 				.builder()
-					.id(String.valueOf(recipient.getId()))
-					.recipientType(recipient.getRecipientType())
+					.id(recipient.getId())
+					.contactId(recipient.getContactId())
+					.contactType(recipient.getContactType())
 					.emailAddress(recipient.getEmailAddress())
 					.emailId(email.getId())
 					.firstName(recipient.getFirstName())
@@ -197,9 +217,9 @@ public class EmailRecipientEntity {
 	* @param entity - To convert
 	* @return converted
 	*/
-	public static EmailRecipient<?> convertFromEntity(EmailRecipientEntity entity) {
+	public static EmailRecipient<UUID> convertFromEntity(EmailRecipientEntity entity) {
 		
-		EmailRecipient<?> recipient =  new EmailRecipient<String>(entity.getId(), entity.getRecipientType());
+		EmailRecipient<UUID> recipient =  new EmailRecipient<UUID>(entity.getId(), entity.getContactId(), entity.getContactType());
 		
 		recipient.setEmail(entity.getEmailAddress());
 		recipient.setFirstName(entity.getFirstName());

@@ -102,20 +102,20 @@ public class EmailDispatcherService {
 	*/
 	public void handleSendEmailCommand(RequestSendEmailCommand command){
 		try {
-			Set<EmailRecipient<?>> recipients = new HashSet<>();
+			Set<EmailRecipient<UUID>> recipients = new HashSet<>();
 			
 			recipients.addAll(command.getRecipients());
 			
 			recipients.stream().forEach(r -> {
 				
-				Optional<Contact> 	recipientOpt 	= this.contactDao.getByIdAndType(r.getRecipientType(), String.valueOf(r.getId()));
+				Optional<Contact> 	recipientOpt 	= this.contactDao.getByIdAndType(r.getContactType(), r.getContactId());
 				Map<String, Object> model 			= new HashMap<>(command.getModel());
 				
 				//Ugly but just to see if there is an issue until I have time to design proper error handling
 				if (recipientOpt.isEmpty()) {
 					r.setEmail("kparkings@gmail.com");
 					r.setFirstName("Failed for " + r.getId() + " " + r.getId());
-					command.getModel().put("recipientName", "na");
+					model.put("recipientName", "na");
 				} else {
 					r.setEmail(recipientOpt.get().getEmail());
 					r.setFirstName(recipientOpt.get().getFirstName());

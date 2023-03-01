@@ -65,9 +65,9 @@ public class MonolithListingExternalEventPublisher implements ExternalEventPubli
 						.emailType(EmailType.INTERN)
 						.model(modelInt)
 						.persistable(true)
-						.recipients(Set.of(new EmailRecipient<String>(command.getRecruiterId(), ContactType.RECRUITER)))
-						.sender(new Sender<>(UUID.randomUUID(), SenderType.SYSTEM, "kparkings@gmail.com"))
-						.title("Arenella-ICT - Reaction To Job Posting")
+						.recipients(Set.of(new EmailRecipient<UUID>(UUID.randomUUID(), command.getRecruiterId(), ContactType.RECRUITER)))
+						.sender(new Sender<>(UUID.randomUUID(), command.getSenderName(), SenderType.UNREGISTERED_USER, command.getSenderEmail()))
+						.title("Reaction To Job Posting " + command.getListingName())
 						.topic(EmailTopic.LISTING_RECRUITER_CONTACT_REQUEST)
 						.attachments(Set.of(new Attachment(command.getFileType(), "candidates-cv", command.getFile())))
 					.build();
@@ -80,8 +80,8 @@ public class MonolithListingExternalEventPublisher implements ExternalEventPubli
 						.emailType(EmailType.EXTERN)
 						.model(modelExt)
 						.persistable(false)
-						.recipients(Set.of(new EmailRecipient<String>(command.getRecruiterId(), ContactType.RECRUITER)))
-						.sender(new Sender<>(UUID.randomUUID(), SenderType.SYSTEM, "kparkings@gmail.com"))
+						.recipients(Set.of(new EmailRecipient<UUID>(UUID.randomUUID(), command.getRecruiterId(), ContactType.RECRUITER)))
+						.sender(new Sender<>(UUID.randomUUID(), "", SenderType.SYSTEM, "kparkings@gmail.com"))
 						.title("Arenella-ICT - Reaction To Job Posting")
 						.topic(EmailTopic.LISTING_RECRUITER_CONTACT_REQUEST)
 					.build();

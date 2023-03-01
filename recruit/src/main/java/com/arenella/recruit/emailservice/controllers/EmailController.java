@@ -30,7 +30,6 @@ public class EmailController {
 	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('RECRUITER')")
 	@GetMapping(path="email", produces="application/json")
 	public Set<EmailAPIOutbound> getEmailsForUser(Principal principal){
-		//return this.emailService.fetchEmailsByRecipientId("recruiter22").stream().map(e -> EmailAPIOutbound.convertFromDomain(e)).collect(Collectors.toCollection(LinkedHashSet::new));
 		return this.emailService.fetchEmailsByRecipientId(principal.getName()).stream().map(e -> EmailAPIOutbound.convertFromDomain(e)).collect(Collectors.toCollection(LinkedHashSet::new));
 	}
 	

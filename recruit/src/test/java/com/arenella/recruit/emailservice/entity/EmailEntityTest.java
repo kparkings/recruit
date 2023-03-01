@@ -29,24 +29,24 @@ public class EmailEntityTest {
 	final private String						recip1Address				= "norepy1@renella-ict.com";
 	final private String						recip2Address				= "norepy2@renella-ict.com";
 	final private UUID 							recip1Id 					= UUID.randomUUID();
-	final private String 						recip2Id 					= "anId";
+	final private UUID	 						recip2Id 					= UUID.randomUUID();
 	final private UUID 							id							= UUID.randomUUID();
 	final private String 						title						= "aTitle";
 	final private EmailType 					emailType					= EmailType.EXTERN;
 	final private String						firstNameRecip1				= "Kevin1";
 	final private String						firstNameRecip2				= "Kevin2";
-	final private SenderEntity 					sender						= SenderEntity.builder().id(UUID.randomUUID().toString()).senderType(SenderType.SYSTEM).emailAddress("norepy@renella-ict.com").emailId(id).build(); 
-	final private Sender<?> 					senderDomain				= new Sender<UUID>(UUID.randomUUID(), SenderType.SYSTEM, "norepy@renella-ict.com"); 
+	final private SenderEntity 					sender						= SenderEntity.builder().id(UUID.randomUUID().toString()).contactType(SenderType.SYSTEM).emailAddress("norepy@renella-ict.com").emailId(id).build(); 
+	final private Sender<?> 					senderDomain				= new Sender<UUID>(UUID.randomUUID(), "", SenderType.SYSTEM, "norepy@renella-ict.com"); 
 	final private LocalDateTime 				created						= LocalDateTime.of(2022,11,17, 19,11,00);
 	final private LocalDateTime 				scheduledToBeSentAfter		= LocalDateTime.of(2022,11,17, 19,11,10);;
 	final private LocalDateTime 				sent						= LocalDateTime.of(2022,11,17, 19,11,20);;
 	final private String 						body						= "aBody";
 	final private Status 						status						= Status.DRAFT;
-	final private EmailRecipient<UUID>			emailRecip1					= new EmailRecipient<UUID>(recip1Id, ContactType.RECRUITER);
-	final private EmailRecipient<String>		emailRecip2					= new EmailRecipient<String>(recip2Id, ContactType.SYSTEM);
-	final private Set<EmailRecipientEntity> 	recipients					= Set.of(EmailRecipientEntity.builder().id(recip1Id.toString()).recipientType(ContactType.RECRUITER).emailAddress(recip1Address).firstName(firstNameRecip1).emailId(id).build(),
-																	 			EmailRecipientEntity.builder().id(recip2Id.toString()).recipientType(ContactType.SYSTEM).emailAddress(recip2Address).firstName(firstNameRecip2).emailId(id).build());
-	final private Set<EmailRecipient<?>> 		recipientsDomain			= Set.of(emailRecip1,emailRecip2);
+	final private EmailRecipient<UUID>			emailRecip1					= new EmailRecipient<UUID>(recip1Id, "rec1", ContactType.RECRUITER);
+	final private EmailRecipient<UUID>			emailRecip2					= new EmailRecipient<UUID>(recip2Id, "rec2", ContactType.SYSTEM);
+	final private Set<EmailRecipientEntity> 	recipients					= Set.of(EmailRecipientEntity.builder().id(recip1Id).contactType(ContactType.RECRUITER).emailAddress(recip1Address).firstName(firstNameRecip1).emailId(id).build(),
+																	 			EmailRecipientEntity.builder().id(recip2Id).contactType(ContactType.SYSTEM).emailAddress(recip2Address).firstName(firstNameRecip2).emailId(id).build());
+	final private Set<EmailRecipient<UUID>> 	recipientsDomain			= Set.of(emailRecip1,emailRecip2);
 	final private EmailAttachmentEntity			attachment1					= EmailAttachmentEntity.builder().attachmentId(UUID.randomUUID()).emailId(UUID.randomUUID()).fileBytes(new byte[] {1}).fileType(FileType.doc).build();
 	final private EmailAttachmentEntity			attachment2					= EmailAttachmentEntity.builder().attachmentId(UUID.randomUUID()).emailId(UUID.randomUUID()).fileBytes(new byte[] {2}).fileType(FileType.pdf).build();
 	final private Set<EmailAttachmentEntity>	attachments					= Set.of(attachment1, attachment2);
@@ -101,22 +101,22 @@ public class EmailEntityTest {
 		
 		assertEquals(sender.getId(), 			email.getSender().getId());
 		assertEquals(sender.getEmailAddress(), 	email.getSender().getEmailAddress());
-		assertEquals(sender.getSenderType(), 	email.getSender().getSenderType());
+		assertEquals(sender.getContactType(), 	email.getSender().getContactType());
 		
-		String 	recipient1Id = (String) email.getRecipients().stream().filter(r -> r.getRecipientType() == ContactType.RECRUITER).findFirst().get().getId();
-		String 	recipient2Id = (String) email.getRecipients().stream().filter(r -> r.getRecipientType() == ContactType.SYSTEM).findFirst().get().getId();
+		UUID 	recipient1Id = (UUID) email.getRecipients().stream().filter(r -> r.getContactType() == ContactType.RECRUITER).findFirst().get().getId();
+		UUID 	recipient2Id = (UUID) email.getRecipients().stream().filter(r -> r.getContactType() == ContactType.SYSTEM).findFirst().get().getId();
 		
-		assertEquals(recip1Id.toString(), recipient1Id);
-		assertEquals(recip2Id.toString(), recipient2Id);
+		assertEquals(recip1Id, recipient1Id);
+		assertEquals(recip2Id, recipient2Id);
 		
-		String 	recipient1Address = (String) email.getRecipients().stream().filter(r -> r.getRecipientType() == ContactType.RECRUITER).findFirst().get().getEmailAddress();
-		String 	recipient2Address = (String) email.getRecipients().stream().filter(r -> r.getRecipientType() == ContactType.SYSTEM).findFirst().get().getEmailAddress();
+		String 	recipient1Address = (String) email.getRecipients().stream().filter(r -> r.getContactType() == ContactType.RECRUITER).findFirst().get().getEmailAddress();
+		String 	recipient2Address = (String) email.getRecipients().stream().filter(r -> r.getContactType() == ContactType.SYSTEM).findFirst().get().getEmailAddress();
 		
 		assertEquals(recip1Address, recipient1Address);
 		assertEquals(recip2Address, recipient2Address);
 		
-		String 	recipient1FirstName = (String) email.getRecipients().stream().filter(r -> r.getRecipientType() == ContactType.RECRUITER).findFirst().get().getFirstName();
-		String 	recipient2FirstName = (String) email.getRecipients().stream().filter(r -> r.getRecipientType() == ContactType.SYSTEM).findFirst().get().getFirstName();
+		String 	recipient1FirstName = (String) email.getRecipients().stream().filter(r -> r.getContactType() == ContactType.RECRUITER).findFirst().get().getFirstName();
+		String 	recipient2FirstName = (String) email.getRecipients().stream().filter(r -> r.getContactType() == ContactType.SYSTEM).findFirst().get().getFirstName();
 		
 		assertEquals(firstNameRecip1, recipient1FirstName);
 		assertEquals(firstNameRecip2, recipient2FirstName);
@@ -161,22 +161,22 @@ public class EmailEntityTest {
 		
 		assertEquals(senderDomain.getId().toString(), 	entity.getSender().getId());
 		assertEquals(senderDomain.getEmail(), 			entity.getSender().getEmailAddress());
-		assertEquals(senderDomain.getSenderType(), 		entity.getSender().getSenderType());
+		assertEquals(senderDomain.getContactType(), 	entity.getSender().getContactType());
 		
-		String 	recipient1Id = (String) entity.getRecipients().stream().filter(r -> r.getRecipientType() == ContactType.RECRUITER).findFirst().get().getId();
-		String 	recipient2Id = (String) entity.getRecipients().stream().filter(r -> r.getRecipientType() == ContactType.SYSTEM).findFirst().get().getId();
+		UUID 	recipient1Id = (UUID) entity.getRecipients().stream().filter(r -> r.getContactType() == ContactType.RECRUITER).findFirst().get().getId();
+		UUID 	recipient2Id = (UUID) entity.getRecipients().stream().filter(r -> r.getContactType() == ContactType.SYSTEM).findFirst().get().getId();
 		
-		assertEquals(recip1Id.toString(), recipient1Id);
-		assertEquals(recip2Id.toString(), recipient2Id);
+		assertEquals(recip1Id, recipient1Id);
+		assertEquals(recip2Id, recipient2Id);
 		
-		String 	recipient1Address = (String) entity.getRecipients().stream().filter(r -> r.getRecipientType() == ContactType.RECRUITER).findFirst().get().getEmailAddress();
-		String 	recipient2Address = (String) entity.getRecipients().stream().filter(r -> r.getRecipientType() == ContactType.SYSTEM).findFirst().get().getEmailAddress();
+		String 	recipient1Address = (String) entity.getRecipients().stream().filter(r -> r.getContactType() == ContactType.RECRUITER).findFirst().get().getEmailAddress();
+		String 	recipient2Address = (String) entity.getRecipients().stream().filter(r -> r.getContactType() == ContactType.SYSTEM).findFirst().get().getEmailAddress();
 		
 		assertEquals(recip1Address, recipient1Address);
 		assertEquals(recip2Address, recipient2Address);
 		
-		String 	recipient1FirstName = (String) email.getRecipients().stream().filter(r -> r.getRecipientType() == ContactType.RECRUITER).findFirst().get().getFirstName();
-		String 	recipient2FirstName = (String) email.getRecipients().stream().filter(r -> r.getRecipientType() == ContactType.SYSTEM).findFirst().get().getFirstName();
+		String 	recipient1FirstName = (String) email.getRecipients().stream().filter(r -> r.getContactType() == ContactType.RECRUITER).findFirst().get().getFirstName();
+		String 	recipient2FirstName = (String) email.getRecipients().stream().filter(r -> r.getContactType() == ContactType.SYSTEM).findFirst().get().getFirstName();
 		
 		assertEquals(firstNameRecip1, recipient1FirstName);
 		assertEquals(firstNameRecip2, recipient2FirstName);
@@ -232,22 +232,22 @@ public class EmailEntityTest {
 		
 		assertEquals(sender.getId().toString(), 	email.getSender().getId().toString());
 		assertEquals(sender.getEmailAddress(), 		email.getSender().getEmail());
-		assertEquals(sender.getSenderType(), 		email.getSender().getSenderType());
+		assertEquals(sender.getContactType(), 		email.getSender().getContactType());
 		
-		String 	recipient1Id = (String) email.getRecipients().stream().filter(r -> r.getRecipientType() == ContactType.RECRUITER).findFirst().get().getId();
-		String 	recipient2Id = (String) email.getRecipients().stream().filter(r -> r.getRecipientType() == ContactType.SYSTEM).findFirst().get().getId();
+		UUID 	recipient1Id = (UUID) email.getRecipients().stream().filter(r -> r.getContactType() == ContactType.RECRUITER).findFirst().get().getId();
+		UUID 	recipient2Id = (UUID) email.getRecipients().stream().filter(r -> r.getContactType() == ContactType.SYSTEM).findFirst().get().getId();
 		
-		assertEquals(recip1Id.toString(), recipient1Id);
-		assertEquals(recip2Id.toString(), recipient2Id);
+		assertEquals(recip1Id, recipient1Id);
+		assertEquals(recip2Id, recipient2Id);
 		
-		String 	recipient1Address = (String) email.getRecipients().stream().filter(r -> r.getRecipientType() == ContactType.RECRUITER).findFirst().get().getEmailAddress();
-		String 	recipient2Address = (String) email.getRecipients().stream().filter(r -> r.getRecipientType() == ContactType.SYSTEM).findFirst().get().getEmailAddress();
+		String 	recipient1Address = (String) email.getRecipients().stream().filter(r -> r.getContactType() == ContactType.RECRUITER).findFirst().get().getEmailAddress();
+		String 	recipient2Address = (String) email.getRecipients().stream().filter(r -> r.getContactType() == ContactType.SYSTEM).findFirst().get().getEmailAddress();
 		
 		assertEquals(recip1Address, recipient1Address);
 		assertEquals(recip2Address, recipient2Address);
 		
-		String 	recipient1FirstName = (String) email.getRecipients().stream().filter(r -> r.getRecipientType() == ContactType.RECRUITER).findFirst().get().getFirstName();
-		String 	recipient2FirstName = (String) email.getRecipients().stream().filter(r -> r.getRecipientType() == ContactType.SYSTEM).findFirst().get().getFirstName();
+		String 	recipient1FirstName = (String) email.getRecipients().stream().filter(r -> r.getContactType() == ContactType.RECRUITER).findFirst().get().getFirstName();
+		String 	recipient2FirstName = (String) email.getRecipients().stream().filter(r -> r.getContactType() == ContactType.SYSTEM).findFirst().get().getFirstName();
 		
 		assertEquals(firstNameRecip1, recipient1FirstName);
 		assertEquals(firstNameRecip2, recipient2FirstName);

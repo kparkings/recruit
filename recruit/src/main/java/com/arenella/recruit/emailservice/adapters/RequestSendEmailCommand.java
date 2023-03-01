@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
 import com.arenella.recruit.emailservice.beans.Email.EmailTopic;
 import com.arenella.recruit.emailservice.beans.Email.EmailType;
@@ -18,14 +19,14 @@ import com.arenella.recruit.emailservice.beans.Email.Sender;
 //			 the class definitions can be declared in each service
 public class RequestSendEmailCommand {
 
-	private String 					title;
-	private EmailType 				emailType;
-	private Sender<?> 				sender; 
-	private Set<EmailRecipient<?>> 	recipients					= new LinkedHashSet<>(); 
-	private EmailTopic 				topic;
-	private Map<String,Object>		model						= new HashMap<>();
-	private boolean					persistable					= false;
-	private Set<Attachment>			attachments					= new LinkedHashSet<>();
+	private String 						title;
+	private EmailType 					emailType;
+	private Sender<?> 					sender; 
+	private Set<EmailRecipient<UUID>> 	recipients					= new LinkedHashSet<>(); 
+	private EmailTopic 					topic;
+	private Map<String,Object>			model						= new HashMap<>();
+	private boolean						persistable					= false;
+	private Set<Attachment>				attachments					= new LinkedHashSet<>();
 	
 	/**
 	* Returns the title for the Email
@@ -55,7 +56,7 @@ public class RequestSendEmailCommand {
 	* Returns details of the Recipient(s) of the Email
 	* @return Recipients
 	*/
-	public Set<EmailRecipient<?>> getRecipients(){
+	public Set<EmailRecipient<UUID>> getRecipients(){
 		return this.recipients;
 	}
 	
@@ -123,14 +124,14 @@ public class RequestSendEmailCommand {
 	*/
 	public static class RequestSendEmailCommandBuilder{
 		
-		private String 					title;
-		private EmailType 				emailType;
-		private Sender<?> 				sender; 
-		private Set<EmailRecipient<?>> 	recipients					= new LinkedHashSet<>(); 
-		private EmailTopic 				topic;
-		private Map<String,Object>		model						= new HashMap<>();
-		private boolean					persistable					= false;
-		private Set<Attachment>			attachments					= new LinkedHashSet<>();
+		private String 						title;
+		private EmailType 					emailType;
+		private Sender<?> 					sender; 
+		private Set<EmailRecipient<UUID>> 	recipients					= new LinkedHashSet<>(); 
+		private EmailTopic 					topic;
+		private Map<String,Object>			model						= new HashMap<>();
+		private boolean						persistable					= false;
+		private Set<Attachment>				attachments					= new LinkedHashSet<>();
 		
 		/**
 		* Sets the Title of the Email
@@ -167,7 +168,7 @@ public class RequestSendEmailCommand {
 		* @param recipient - Recipients
 		* @return Builder
 		*/
-		public RequestSendEmailCommandBuilder recipients(Set<EmailRecipient<?>> recipient) {
+		public RequestSendEmailCommandBuilder recipients(Set<EmailRecipient<UUID>> recipient) {
 			this.recipients = recipient;
 			return this;
 		}

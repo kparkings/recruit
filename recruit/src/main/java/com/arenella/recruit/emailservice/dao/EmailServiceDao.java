@@ -1,5 +1,6 @@
 package com.arenella.recruit.emailservice.dao;
 
+import java.util.Comparator;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -48,7 +49,7 @@ public interface EmailServiceDao extends CrudRepository<EmailEntity, UUID> {
 	@Query("FROM EmailEntity where status = :status ")
 	Set<EmailEntity> findEmailEntitiessByStatus(@Param("status") Status status);
 	   
-	@Query("FROM EmailEntity e left join e.recipients r where r.id = :recipientId and r.recipientType = :contactType")
+	@Query("FROM EmailEntity e left join e.recipients r where r.contactId = :recipientId and r.contactType = :contactType")
 	Set<EmailEntity> fetchEmailEntitiesByRecipientId(@Param("recipientId") String recipientId, @Param("contactType") ContactType contactType);
 	
 	/**
@@ -58,6 +59,10 @@ public interface EmailServiceDao extends CrudRepository<EmailEntity, UUID> {
 	* @return recipients email's
 	*/
 	default Set<Email> fetchEmailsByRecipientId(@Param("recipientId") String recipientId, @Param("contactType") ContactType contactType){
-		return this.fetchEmailEntitiesByRecipientId(recipientId, contactType).stream().map(e -> EmailEntity.convertFromEntity(e)).collect(Collectors.toCollection(LinkedHashSet::new));
+		return this.fetchEmailEntitiesByRecipientId(recipientId, contactType)
+				.stream()
+				.map(e -> EmailEntity.convertFromEntity(e))
+				.sorted(Comparator.comparing(Email::getCreated).reversed())
+				.collect(Collectors.toCollection(LinkedHashSet::new));
 	}
 }

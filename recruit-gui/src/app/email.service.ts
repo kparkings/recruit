@@ -2,6 +2,7 @@ import { Injectable } 								from '@angular/core';
 import { HttpClient, HttpHeaders }  				from '@angular/common/http';
 import { Observable }                 				from 'rxjs';
 import { environment } 								from './../environments/environment';
+import { Email } 									from './email/email';
 
 /**
 * Service for sending emails
@@ -44,7 +45,10 @@ export class EmailService {
 				
 	}
 	
-	public fetchEmails():Observable<any>{
+	/**
+	* Retrieves Emails sent to the Authenticated User
+	*/
+	public fetchEmails():Observable<Array<Email>>{
 		
 		const backendUrl:string = environment.backendUrl +'email';
   
