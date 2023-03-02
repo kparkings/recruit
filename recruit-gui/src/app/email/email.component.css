@@ -100,7 +100,9 @@ tr:nth-child(even){
 .left-div-header{
 	float:left;
 	margin-left:20px;
-	max-width:65%;
+	max-width:50%;
+	word-break: break-word;
+	line-break: anywhere;
 }
 
 .right-div-header{

@@ -57,6 +57,17 @@ export class EmailService {
 		
 	}
 	
+	/**
+	* Retrieves Emails sent to the Authenticated User
+	*/
+	public fetchAttachmentFile(emailId:string, attachmentId:string):Observable<any>{
+		
+		const backendUrl:string = environment.backendUrl +'email/' + emailId + "/attachment/" + attachmentId  ;
+  
+    	return this.httpClient.get<any>(backendUrl, this.httpOptions);
+		
+		
+	}
 
 }
 

@@ -210,17 +210,20 @@ public class EmailAPIOutbound {
 		private final String 		id;
 		private final SenderType 	senderType;
 		private final String 		senderName;
+		private final String		email;
 		
 		/**
 		* Constructor
 		* @param id			- Id of the Sender
 		* @param senderType	- Type of the Sender
 		* @param senderName	- Name of the Sender
+		* @param email		- External Email of Sender
 		*/
-		public SenderAPIOutbound(String id, SenderType senderType, String senderName) {
+		public SenderAPIOutbound(String id, SenderType senderType, String senderName, String email) {
 			this.id = id;
 			this.senderType = senderType;
 			this.senderName = senderName;
+			this.email		= email;
 		}
 		
 		/**
@@ -237,6 +240,14 @@ public class EmailAPIOutbound {
 		*/
 		public String getSenderName() {
 			return this.senderName;
+		}
+		
+		/**
+		* Returns the Senders external Email address
+		* @return external email address
+		*/
+		public String getEmail() {
+			return this.email;
 		}
 		
 		/**
@@ -292,7 +303,7 @@ public class EmailAPIOutbound {
 	* @return converted
 	*/
 	private static SenderAPIOutbound convertFromDomain(Sender<?> sender) {
-		return new SenderAPIOutbound(sender.getId().toString(), sender.getContactType(), sender.getContactId());
+		return new SenderAPIOutbound(sender.getId().toString(), sender.getContactType(), sender.getContactId(), sender.getEmail());
 	}
 	
 	/**

@@ -30,7 +30,7 @@
 		<div >
 			<div class="email-title">{{currentEmail.title}}</div>
 			<div class="email-header">
-				<div class="left-div-header">{{currentEmail.sender.senderName}}</div>
+				<div class="left-div-header">{{currentEmail.sender.senderName}} : {{currentEmail.sender.email}}</div>
 				<div class="right-div-header">
 					{{currentEmail.created | date: 'dd MMMM yyyy'}}
 					<br>
@@ -40,7 +40,9 @@
 			<div class="attachments">
 				<span class="attachment-title">Attachments:</span>
 				<span *ngFor="let attachment of currentEmail.attachments">
-					<span class="attachment">{{attachment.name}}</span>
+					<a href="{{getAttachmentUrl(attachment, currentEmail)}}">
+						<span class="attachment">{{attachment.name}}</span>
+					</a>
 				</span>
 			</div>
 			<div class="email-body">

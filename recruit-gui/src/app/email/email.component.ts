@@ -1,6 +1,8 @@
 import { Component } 			from '@angular/core';
 import { EmailService} 			from '../email.service';
 import { Email} 				from './email';
+import { EmailAttachment} 		from './email-attachment';
+import { environment }			from '../../environments/environment';
 
 /**
 * Internal Email client
@@ -63,6 +65,13 @@ export class EmailComponent {
 		}, err => {
 			console.log(err);
 		});
+	}
+	
+	/**
+	*  Returns the url to perform the download of the candidates CV
+	*/
+	public getAttachmentUrl(attachment:EmailAttachment, email:Email){
+		return  environment.backendUrl + "email/" + email.id + "/attachment/" + attachment.id;
 	}
 
 

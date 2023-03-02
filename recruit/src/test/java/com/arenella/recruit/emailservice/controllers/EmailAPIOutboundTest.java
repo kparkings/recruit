@@ -28,7 +28,7 @@ public class EmailAPIOutboundTest {
 		
 		final UUID 								id				= UUID.randomUUID();
 		final String 							title			= "title";
-		final SenderAPIOutbound 				sender			= new SenderAPIOutbound("recruiter1", SenderType.RECRUITER, "Kevin ");	 
+		final SenderAPIOutbound 				sender			= new SenderAPIOutbound("recruiter1", SenderType.RECRUITER, "Kevin ", "sender@mail.com");	 
 		final LocalDateTime 					created			= LocalDateTime.of(2023, 02, 26, 16, 23, 00);
 		final String 							body		 	= "body";
 		final Set<EmailAttachmentAPIOutbound>	attachments		= new LinkedHashSet<>();

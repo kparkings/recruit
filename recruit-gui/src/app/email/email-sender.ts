@@ -5,4 +5,5 @@ export class Sender{
 	public id:string 							= '';
 	public senderType:string 					= '';
 	public senderName:string 					= '';
+	public email:string							= '';
 }
