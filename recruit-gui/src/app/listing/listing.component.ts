@@ -122,9 +122,9 @@ export class ListingComponent implements OnInit {
 			return false;
 		}
 		
-		if (!this.curriculumFile) {
-			return false;
-		}
+		//if (!this.curriculumFile) {
+		//	return false;
+		//}
 		
 		return true;
 	}

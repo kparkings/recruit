@@ -1,7 +1,7 @@
-<div class=".container m-2" >
-	<div>
-	    <div class="centerdiv">
-	        <div class="center-table">
+<div class=".containerX m-2X page">
+	<div class='content-divX'>
+	    <div class="centerdivX">
+	        <div class="center-tableX">
 	        	<div [ngSwitch]="activeView">
 	        		
 	        		<!-- List View -->
@@ -28,7 +28,6 @@
 						</div>
 					
 						<!-- Listings Table -->
-						
 						<div>
 							
 							<div>
@@ -64,7 +63,7 @@
 						</div>
 					
 	        		<!-- Show Selected Listing View -->
-	        		<div class="center">
+	        		<div class="listing-view">
 	        			
 	        			<div  *ngSwitchCase="'show'">
 	        			
@@ -117,12 +116,6 @@
 								<h2  class="listing-view-title">Contact Recruiter</h2>
 								<div>
 									<form [formGroup]="emailRequestFormBean">
-										<textarea class="contact-recruiter-textarea" formControlName="message"></textarea>
-										<div class="div-spacing">
-											<p class="email-label">Curriculum</p>
-											<input class="email-input" type="file" (change)="uploadCurriculumFile($event)"> 
-											<div>.doc, .docx, .pdf - up to 1MB</div>
-										</div>
 										<div>
 											<p class="email-label">Your Name:</p>
 											<input class="email-input" type="email" formControlName="name">
@@ -130,6 +123,12 @@
 										<div>
 											<p class="email-label">Your Email:</p>
 											<input class="email-input" type="email" formControlName="email">
+										</div>
+										<textarea class="contact-recruiter-textarea" formControlName="message"></textarea>
+										<div class="div-spacing">
+											<p class="email-label">Curriculum</p>
+											<input class="email-input" type="file" (change)="uploadCurriculumFile($event)"> 
+											<div>.doc, .docx, .pdf - up to 1MB</div>
 										</div>
 										<div class="action-buttons">
 											<button class="btn btn-secondary btn-listing btnRight" (click)="sendEmailRequest(feedbackBox)" *ngIf="enableSendEmail()">Send</button>

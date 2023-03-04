@@ -6,7 +6,8 @@
 		<button class="btn btn-secondary btnRight main-btns" (click)="openPublicityDialog(publicityModal)" *ngIf="isAuthenticatedAsAdmin()" download>Copy</button>
 		<button class="btn btn-secondary btnRight main-btns" (click)="showFilterByJobSpecDialog(specUploadBox)" download>Filter by Job Spec</button>
 		<button class="btn btn-secondary btnRight main-btns" (click)="showCreateAlertDialog(feedbackBox)" download>Create Email Alert</button>
-		<button class="btn btn-secondary btnRight main-btns" (click)="showSavedCandidates()" download>My Candidates</button>
+		<button class="btn btn-secondary btnRight main-btns" routerLink="/recruiter-alerts" download>Manage Alerts</button>
+        <button class="btn btn-secondary btnRight main-btns" (click)="showSavedCandidates()" download>My Candidates</button>
 	 </div>
 	 
 	
@@ -196,7 +197,7 @@
 			
 		</div>
 	</div>
-	<div *ngIf="currentView === 'suggested-canidate-overview'" class="suggestion-results" style="width:90%;">
+	<div *ngIf="currentView === 'suggested-canidate-overview'" class="suggestion-results" style="width:90%;margin-left:30px;margin-right:30px;">
 		 		
 		<div>
 		

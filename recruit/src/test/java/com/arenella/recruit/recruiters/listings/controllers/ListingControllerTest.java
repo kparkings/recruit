@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -235,7 +236,7 @@ public class ListingControllerTest {
 		
 		Mockito.doNothing().when(this.mockListingService).sendContactRequestToListingOwner(argCaptContactRequest.capture());
 		
-		ResponseEntity<Void> response = this.controller.sendContactRequestToListingOwner(listingId, senderName, senderEmail, message, attachment);
+		ResponseEntity<Void> response = this.controller.sendContactRequestToListingOwner(listingId, senderName, senderEmail, message, Optional.of(attachment));
 		
 		Mockito.verify(this.mockListingService).sendContactRequestToListingOwner(Mockito.any(ListingContactRequest.class));
 		

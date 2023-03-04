@@ -31,7 +31,6 @@ export class EmailComponent {
 		this.currentView	= "view-read";
 		this.currentEmail 	= email;
 		this.markAsRead();
-		console.log(this.currentEmail.body);
 	}
 	
 	/**
@@ -46,14 +45,18 @@ export class EmailComponent {
 	* Sends request to mark Email as Unread
 	*/
 	public markAsUnread():void{
-		
+		this.emailService.setReadStatus(this.currentEmail.id, false).subscribe(response => {
+			this.fetchEmails();
+		});
 	}
 	
 	/**
 	* Sends request to mark Email as Read
 	*/
 	public markAsRead():void{
-		
+		this.emailService.setReadStatus(this.currentEmail.id, true).subscribe(response => {
+			this.fetchEmails();
+		});
 	}
 
 	/**
@@ -61,7 +64,13 @@ export class EmailComponent {
 	*/
 	private fetchEmails():void{
 		this.emailService.fetchEmails().subscribe(emails => {
+			
 			this.emails = emails;	
+			
+			if(this.currentEmail.id != ''){
+				this.currentEmail = this.emails.filter(e => e.id == this.currentEmail.id)[0];
+			}
+			
 		}, err => {
 			console.log(err);
 		});

@@ -457,16 +457,17 @@ public class ListingServiceImplTest {
 	}
 	
 	/**
-	* Tests if a file is considered unsage that an exception is thrown
+	* Tests if a file is considered unsafe that an exception is thrown
 	* @throws Exception
 	*/
 	@Test
 	public void testSendContactRequestToListingOwner_unsafeFile() throws Exception{
 		
 		Mockito.when(this.mockFileSecurityParser.isSafe(Mockito.any())).thenReturn(false);
+		MultipartFile mockMultipartFile = Mockito.mock(MultipartFile.class);
 		
 		Assertions.assertThrows(RuntimeException.class, () -> {
-			this.service.sendContactRequestToListingOwner(ListingContactRequest.builder().build());
+			this.service.sendContactRequestToListingOwner(ListingContactRequest.builder().attachment(mockMultipartFile).build());
 		});
 		
 	}

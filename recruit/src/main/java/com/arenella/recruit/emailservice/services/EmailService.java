@@ -26,5 +26,13 @@ public interface EmailService {
 	* @return Attachment
 	*/
 	public EmailAttachment fetchAttachment(UUID emailId, UUID attachmentId, String recipientId);
+
+	/**
+	* Updates the read status of an Email
+	* @param emailId - Unique id of the email
+	* @param read	 - read status to update email to
+	* @param authorizedUsersId - id of currently authorized user
+	*/
+	public void setEmailReadStatus(UUID emailId, boolean read, String authorizedUsersId);
 	
 }

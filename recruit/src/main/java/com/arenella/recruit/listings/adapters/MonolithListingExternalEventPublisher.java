@@ -69,7 +69,7 @@ public class MonolithListingExternalEventPublisher implements ExternalEventPubli
 						.sender(new Sender<>(UUID.randomUUID(), command.getSenderName(), SenderType.UNREGISTERED_USER, command.getSenderEmail()))
 						.title("Reaction To Job Posting " + command.getListingName())
 						.topic(EmailTopic.LISTING_RECRUITER_CONTACT_REQUEST)
-						.attachments(Set.of(new Attachment(command.getFileType(), "candidates-cv", command.getFile())))
+						.attachments(this.buildAttachment(command))
 					.build();
 		
 		this.emailServiceListener.listenForSendEmailCommand(cInt);
@@ -87,6 +87,22 @@ public class MonolithListingExternalEventPublisher implements ExternalEventPubli
 					.build();
 		
 		this.emailServiceListener.listenForSendEmailCommand(cExt);
+		
+	}
+	
+	/**
+	* Constructs the Attachment
+	* @param command - contains the info about possible attachment
+	* @return Attachments
+	*/
+	//TODO: [KP] Need to update this when/if multiple attachments possible
+	private Set<Attachment> buildAttachment(RequestListingContactEmailCommand command){
+		
+		if (command.getFile() == null) {
+			return Set.of();
+		}
+		
+		return Set.of(new Attachment(command.getFileType(), "candidates-cv", command.getFile()));
 		
 	}
 

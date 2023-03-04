@@ -68,6 +68,18 @@ export class EmailService {
 		
 		
 	}
+	
+	/**
+	* Updates read status for the email for the current user. User determines via JWT on 
+	* the backend
+	*/
+	public setReadStatus(emailId:string, read:boolean):Observable<any>{
+		
+		const backendUrl:string = environment.backendUrl + 'email/' + emailId + "/" + (read ? "read" : "unread");
+  
+		return this.httpClient.put<any>(backendUrl, {}, this.httpOptions);
+		
+	}
 
 }
 

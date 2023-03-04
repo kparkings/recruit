@@ -1,7 +1,11 @@
-.center {
+.steps {
   margin: auto;
   width: 90%;
   padding: 10px;
+}
+
+.center {
+	margin-top:15px;
 }
 
 .listing-nav{
@@ -24,8 +28,7 @@
  }
  
  .btn-listing{
- 	margin-top:20px;
-	margin-right:10px;
+ 	margin-right:10px;
 	margin-bottom:20px;
     min-width:85px;
 }

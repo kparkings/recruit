@@ -1,14 +1,15 @@
-<div class=".container m-2" >
+<div class=".containerX m-2X" >
 
-	<div style="margin-top:10px">
+	<div style="margin-left:30px; margin-right:30px;">
 		<!-- buttons -->
-		<div [ngSwitch]="activeView">
+		<div [ngSwitch]="activeView" class="center">
 		
 			<div  *ngSwitchCase="'list'">
 				
 				<div>
 					<!-- Action buttons -->
 					<div class="action-buttons">
+						<button class="btn btn-secondary btn-listing" routerLink="/listing">Back</button>
 						<button (click)="showAdd()" class="btn btn-secondary btn-listing">Add Job</button>
 					</div>
 			
@@ -139,7 +140,7 @@
 				
 					<form [formGroup]="newListingFormBean">
 					
-						<div [ngSwitch]="activeSubView">
+						<div [ngSwitch]="activeSubView" class="steps">
 						
 							<div  *ngSwitchCase="'step1'">
 								<h2>1 of 5: Job Info</h2>

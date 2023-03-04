@@ -14,6 +14,7 @@ import org.springframework.util.StringUtils;
 
 import com.arenella.recruit.listings.adapters.ExternalEventPublisher;
 import com.arenella.recruit.listings.adapters.RequestListingContactEmailCommand;
+import com.arenella.recruit.listings.adapters.RequestListingContactEmailCommand.RequestListingContactEmailCommandBuilder;
 import com.arenella.recruit.listings.beans.Listing;
 import com.arenella.recruit.listings.beans.ListingFilter;
 import com.arenella.recruit.listings.beans.ListingViewedEvent;
@@ -174,27 +175,34 @@ public class ListingServiceImpl implements ListingService{
 	@Override
 	public void sendContactRequestToListingOwner(ListingContactRequest contactRequest) {
 		
-		if (!fileSecurityParser.isSafe(contactRequest.getAttachment())) {
+		if (contactRequest.getAttachment() != null && !fileSecurityParser.isSafe(contactRequest.getAttachment())) {
 			throw new RuntimeException("Invalid file type detected"); 
 		}
 		
 		Listing listing = this.listingDao.findListingById(contactRequest.getListingId()).orElseThrow(() -> new RuntimeException("Unknown Listing"));
 		
-		FileType fileType = fileSecurityParser.getFileType(contactRequest.getAttachment());
-		
 		try {
 			
+			RequestListingContactEmailCommandBuilder builder = RequestListingContactEmailCommand.builder();
+			
+			builder
+				.listingName(listing.getTitle())
+				.message(contactRequest.getMessage())
+				.recruiterId(listing.getOwnerId())
+				.senderEmail(contactRequest.getSenderEmail())
+				.senderName(contactRequest.getSenderName());
+			
+			if (contactRequest.getAttachment() != null) {
+				
+				FileType fileType = fileSecurityParser.getFileType(contactRequest.getAttachment());
+				
+				builder
+					.file(contactRequest.getAttachment().getBytes())
+					.fileType(fileType.toString());
+			}
+			
 			externalEventPublisher
-				.publicRequestSendListingContactEmailCommand(RequestListingContactEmailCommand
-						.builder()
-							.file(contactRequest.getAttachment().getBytes())
-							.fileType(fileType.toString())
-							.listingName(listing.getTitle())
-							.message(contactRequest.getMessage())
-							.recruiterId(listing.getOwnerId())
-							.senderEmail(contactRequest.getSenderEmail())
-							.senderName(contactRequest.getSenderName())
-						.build());
+				.publicRequestSendListingContactEmailCommand(builder.build());
 		
 		}catch(IOException e) {
 			throw new RuntimeException("Unable to send request"); 

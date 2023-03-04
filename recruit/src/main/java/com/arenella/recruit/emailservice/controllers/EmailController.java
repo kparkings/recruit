@@ -17,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.arenella.recruit.emailservice.beans.EmailAttachment;
@@ -38,32 +39,34 @@ public class EmailController {
 	*/
 	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('RECRUITER')")
 	@GetMapping(path="email", produces="application/json")
-	public Set<EmailAPIOutbound> getEmailsForUser(Principal principal){
-		return this.emailService.fetchEmailsByRecipientId(principal.getName()).stream().map(e -> EmailAPIOutbound.convertFromDomain(e)).collect(Collectors.toCollection(LinkedHashSet::new));
+	public ResponseEntity<Set<EmailAPIOutbound>> getEmailsForUser(Principal principal){
+	
+		Set<EmailAPIOutbound> emails =  this.emailService.fetchEmailsByRecipientId(principal.getName()).stream().map(e -> EmailAPIOutbound.convertFromDomain(e)).collect(Collectors.toCollection(LinkedHashSet::new));
+	
+		return new ResponseEntity<>(emails, HttpStatus.OK);
+		
 	}
 	
 	/**
-	* Returns an attachment
-	* @param attachmntId - Id of attachment to return
-	* @return attachment
-	 * @throws IOException 
+	* 
+	* @param emailId		- Unique id of the email the attachment belongs to
+	* @param attachmentId	- Unique id of the attachment
+	* @param principal		- Authenticated User
+	* @return Attachment 
+	* @throws IOException
 	*/
 	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_RECRUITER')")
-	@GetMapping(
-			  value = "/email/{emailId}/attachment/{attachmentId}",
-			  produces = MediaType.APPLICATION_PDF_VALUE
-			)
+	@GetMapping(value = "/email/{emailId}/attachment/{attachmentId}", produces = MediaType.APPLICATION_PDF_VALUE)
 	public ResponseEntity<ByteArrayResource> getEmailAttachment(@PathVariable("emailId")UUID emailId, @PathVariable("attachmentId") UUID attachmentId, Principal principal) throws IOException {
 		
-		EmailAttachment attachment = this.emailService.fetchAttachment(emailId, attachmentId, principal.getName());
-		
+		EmailAttachment 		attachment 	= this.emailService.fetchAttachment(emailId, attachmentId, principal.getName());
 		ByteArrayOutputStream 	stream 		= new ByteArrayOutputStream(attachment.getFileBytes().length);
+		HttpHeaders 			header 		= new HttpHeaders();
 		
-		stream.write(attachment.getFileBytes());
-		
-		HttpHeaders header = new HttpHeaders();
 		header.setContentType(new MediaType("application", "force-download"));
 		header.set(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename="+attachment.getName()+"." + attachment.getFileType());
+		
+		stream.write(attachment.getFileBytes());
 		
 		return new ResponseEntity<>(new ByteArrayResource(stream.toByteArray()), header, HttpStatus.OK);
 	
@@ -73,16 +76,20 @@ public class EmailController {
 	* Marks an email as having been read by the use
 	* @param emailId - id of the Email
 	*/
-	public void markAsRead(UUID emailId) {
-		
+	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_RECRUITER')")
+	@PutMapping(value="/email/{emailId}/read", produces="application/json")
+	public void markAsRead(@PathVariable("emailId") UUID emailId, Principal principal) {
+		this.emailService.setEmailReadStatus(emailId, true, principal.getName());
 	}
 	
 	/**
-	* Marks and email as not having been read 
+	* Marks an email as not having been read 
 	* @param emailId
 	*/
-	public void markAsUndread(UUID emailId) {
-		
+	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_RECRUITER')")
+	@PutMapping(value="/email/{emailId}/unread", produces="application/json")
+	public void markAsUndread(@PathVariable("emailId") UUID emailId, Principal principal) {
+		this.emailService.setEmailReadStatus(emailId, false, principal.getName());
 	}
 	
 	/**

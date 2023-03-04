@@ -135,7 +135,7 @@ public class EmailDispatcherService {
 							.recipients(recipients)
 							.scheduledToBeSentAfter(LocalDateTime.now().minusDays(1))
 							.sender(command.getSender())
-							.status(Status.TO_OUTBOX)
+							.status(calculateStatus(command.getEmailType()))
 							.title(command.getTitle())
 							.persistable(command.isPersistable())
 							.attachments(convertAttachments(command, emailId))
@@ -202,4 +202,21 @@ public class EmailDispatcherService {
 		sender.send(mimeMessage);
 	}
 	
+	/**
+	* Generates an appropriate status for the new email based upon
+	* the type of email
+	* @param type - Type of email being send
+	* @return Initial status to assign the type of email
+	*/
+	private static final Status calculateStatus(EmailType type) {
+		switch(type) {
+			case INTERN:
+			case SYSTEM_INTERN:{
+				return Status.SENT_INTERN;
+			}
+			default:{
+				return Status.TO_OUTBOX;
+			}
+		} 
+	}
 }

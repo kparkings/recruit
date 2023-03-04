@@ -1,11 +1,12 @@
-<div class=".container m-2 page">
+<div class=".container m-2X pageX">
 	<div class='content-div'>
 		<div class="email-buttons">
 			<div class="action-buttons" *ngIf="currentView == 'view-inbox'">
 				
 			</div>
 			<div class="action-buttons" *ngIf="currentView == 'view-read'">
-				<button class="btn btn-secondary action-btn" (click)="markAsUnread()">Mark Unread</button>
+				<button class="btn btn-secondary action-btn" (click)="markAsUnread()" 	*ngIf="currentEmail.viewed">Mark Unread</button>
+				<button class="btn btn-secondary action-btn"  							*ngIf="!currentEmail.viewed" disabled>Mark Unread</button>
 				<button class="btn btn-secondary action-btn" (click)="viewInbox()">Back</button>
 			</div>
 		</div>
@@ -18,7 +19,7 @@
 						<th>Sent</th>
 					</tr>
 				</thead>
-				<tr *ngFor="let email of emails" (click)="viewEmail(email)">
+				<tr class="email_viewed_{{email.viewed}}" *ngFor="let email of emails" (click)="viewEmail(email)">
 					<td>{{email.sender.senderName}}</td>
 					<td>{{email.title}}</td>
 					<td>{{email.created | date: 'dd MMM'}}</td>

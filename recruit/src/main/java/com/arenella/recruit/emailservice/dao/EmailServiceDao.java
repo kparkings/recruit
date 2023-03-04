@@ -90,4 +90,22 @@ public interface EmailServiceDao extends CrudRepository<EmailEntity, UUID> {
 		return results.stream().findFirst().get().getAttachments().stream().filter(a -> a.getAttachmentId().toString().equals(attachmentId.toString())).findAny().map(a -> EmailAttachmentEntity.convertToDomain(a));
 	
 	};
+	
+	/**
+	* If it exists returns the email with given id
+	* @param emailId - Unique id of the Email
+	* @return Email
+	*/
+	default Optional<Email> fetchEmailById(UUID emailId){
+		
+		if (!this.existsById(emailId)) {
+			return Optional.empty();
+		}
+		
+		EmailEntity entity =  this.findById(emailId).get();
+		
+		return Optional.of(EmailEntity.convertFromEntity(entity));
+		
+	}
+	
 }
