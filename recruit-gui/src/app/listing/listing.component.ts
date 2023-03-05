@@ -209,8 +209,9 @@ export class ListingComponent implements OnInit {
 	*/
 	private registerListingViewedEvent():void {
 		
-		this.listingService.registerListingViewedEvent(this.selectedListing.listingId).subscribe();
-		
+		if (!this.isAuthenticatedAsAdmin()) {
+			this.listingService.registerListingViewedEvent(this.selectedListing.listingId).subscribe();
+		}
 	}
 	
 	/**

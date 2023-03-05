@@ -83,5 +83,11 @@ export class EmailComponent {
 		return  environment.backendUrl + "email/" + email.id + "/attachment/" + attachment.id;
 	}
 
+	/**
+	*  Returns whether or not the User has at least one email
+	*/
+	public hasEmails():boolean{
+		return this.emails.length >= 1;
+	}
 
 }

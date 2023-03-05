@@ -19,7 +19,7 @@
 		<p><b>${listingName}</b></p>
 		<p>You can view the message and download and view any attachments from your personal Arenella-ICT inbox</p>
 		<P>
-			<a href="https://www.arenella-ict.com">https://www.arenella-ict.com</a>
+			<a href="https://www.arenella-ict.com/email/">https://www.arenella-ict.com</a>
 		</P>
 		
 		<div> 

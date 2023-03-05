@@ -140,3 +140,7 @@ tr:nth-child(even){
 .email_viewed_false{
 	font-weight:bold;
 }
+
+.no-emails{
+	text-align:center;
+}
