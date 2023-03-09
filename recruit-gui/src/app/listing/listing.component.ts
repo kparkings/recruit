@@ -47,7 +47,7 @@ export class ListingComponent implements OnInit {
 
 	public activeView:string					= 'list';
 	
-	private	pageSize:number						= 8;
+	private	pageSize:number						= 20;
   	public	totalPages:number					= 0;
   	public	currentPage:number					= 0;
 
@@ -488,8 +488,7 @@ export class ListingComponent implements OnInit {
 		let yPos = window.pageYOffset;
 
 		if (yPos > this.pageYPos) {
-			console.log('XXpageYPos' + this.pageYPos);
-			this.pageYPos = yPos + 500; 
+			this.pageYPos = yPos + (this.isMobile ? 50 : 500); 
 			this.currentPage = this.currentPage + 1;
 			this.fetchListingsFull("", false);
 			
