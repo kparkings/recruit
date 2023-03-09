@@ -3,6 +3,7 @@ package com.arenella.recruit.listings.beans;
 import java.util.Optional;
 import java.util.UUID;
 
+import com.arenella.recruit.listings.beans.Listing.LISTING_AGE;
 import com.arenella.recruit.listings.beans.Listing.country;
 import com.arenella.recruit.listings.beans.Listing.listing_type;
 
@@ -16,6 +17,7 @@ public class ListingFilter {
 	private String				ownerId;
 	private listing_type 		type;
 	private country 			country;
+	private LISTING_AGE			listingAge;
 	
 	/**
 	* Constructor Based upon a Builder
@@ -26,6 +28,7 @@ public class ListingFilter {
 		this.ownerId 		= builder.ownerId;
 		this.type 			= builder.type;
 		this.country 		= builder.country;
+		this.listingAge		= builder.listingAge;
 	}
 	
 	/**
@@ -61,6 +64,14 @@ public class ListingFilter {
 	}
 	
 	/**
+	* Returns the age to filter on
+	* @return period the listig was posted in
+	*/
+	public Optional<LISTING_AGE> getListingAge(){
+		return Optional.ofNullable(this.listingAge);
+	}
+	
+	/**
 	* Returns a Builder for the ListingFilter class
 	* @return
 	*/
@@ -78,6 +89,7 @@ public class ListingFilter {
 		private String				ownerId;
 		private listing_type 		type;
 		private country 			country;
+		private LISTING_AGE			listingAge;
 		
 		/**
 		* Unique listingId to filter on
@@ -120,9 +132,19 @@ public class ListingFilter {
 		}
 		
 		/**
+		* Sets the period the listing was posted in to filter on
+		* @param listingAge - when the listing was posted
+		* @return Builder
+		*/
+		public ListingFilterBuilder listingAge(LISTING_AGE listingAge) {
+			this.listingAge = listingAge;
+			return this;
+		}
+		
+		/**
 		* Returns an instance of ListingFilter initialized
 		* with the values in the Builder
-		* @return initailized instance of ListingFilter
+		* @return initialized instance of ListingFilter
 		*/
 		public ListingFilter build() {
 			return new ListingFilter(this);

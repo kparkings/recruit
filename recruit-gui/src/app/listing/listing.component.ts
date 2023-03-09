@@ -1,10 +1,14 @@
 import { Component, OnInit } 							from '@angular/core';
+import { DatePipe} 										from '@angular/common';
 import { ListingService }								from '../listing.service';
 import { EmailService, EmailRequest }					from '../email.service';
 import { Listing}										from './listing';
 import { ActivatedRoute } 								from '@angular/router';
 import { UntypedFormGroup, UntypedFormControl }			from '@angular/forms';
 import { NgbModal, NgbModalOptions }					from '@ng-bootstrap/ng-bootstrap';
+import { HostListener,Directive,HostBinding,Input} from '@angular/core';
+import { fromEvent } from "rxjs";
+import { DeviceDetectorService } 					from 'ngx-device-detector';
 
 @Component({
   selector: 'app-listing',
@@ -13,7 +17,21 @@ import { NgbModal, NgbModalOptions }					from '@ng-bootstrap/ng-bootstrap';
 })
 export class ListingComponent implements OnInit {
 
-  	constructor(private listingService:ListingService, private emailService:EmailService, private _Activatedroute:ActivatedRoute, private modalService:NgbModal, ) { }
+  	constructor(private listingService:ListingService, 
+				private emailService:EmailService, 
+				private _Activatedroute:ActivatedRoute, 
+				private modalService:NgbModal, 
+				private deviceDetector:DeviceDetectorService) { 
+	
+		this.isMobile = deviceDetector.isMobile();
+		
+		if (this.isMobile) {
+			this.displayFilters = false;
+		} else {
+			this.displayFilters = true;
+		}
+	
+	}
 
   	ngOnInit(): void {
 		
@@ -36,8 +54,13 @@ export class ListingComponent implements OnInit {
 	public listings:Array<Listing>				= new Array<Listing>();
 	public selectedListing:Listing				= new Listing();
 	public contractTypeFilter					= '';
+	public ageFilter							= 'ALL';
 
   	private curriculumFile!:File| any;
+
+	public displayFilters:boolean				= true;
+	
+	public isMobile:boolean = false;
 	
 	/**
 	* Uploads the file for the Curriculum and stored 
@@ -75,6 +98,14 @@ export class ListingComponent implements OnInit {
 		
 		this.showSendAlertBoxSuccess 		= false;
 		this.showSendAlertBoxFailure 		= false;
+	
+	}
+	
+	/**
+	* Toggles Filters
+	*/
+	public toggleFilters():void{
+		this.displayFilters = !this.displayFilters;
 	
 	}
 	
@@ -122,10 +153,6 @@ export class ListingComponent implements OnInit {
 			return false;
 		}
 		
-		//if (!this.curriculumFile) {
-		//	return false;
-		//}
-		
 		return true;
 	}
 		
@@ -147,6 +174,14 @@ export class ListingComponent implements OnInit {
 		if (selectedListing) {
 			this.selectedListing	= selectedListing;	
 			this.registerListingViewedEvent();
+			
+			window.scroll({ 
+      			top: 0, 
+      			left: 0, 
+      			behavior: 'auto' 
+    		});
+
+
 		}
 		
 	}
@@ -163,24 +198,38 @@ export class ListingComponent implements OnInit {
 			filterString = filterString + '&listingType=' + this.contractTypeFilter;
 		}
 		
+		if (this.ageFilter != "ALL") {
+			filterString = filterString + '&listingAge=' + this.ageFilter;
+		}
+		
 		return filterString;
 	}
 	
 	/**
-	* Retrieves listings belonging to the Recruiter
+	* Overloaded version
 	*/
 	public fetchListings(id:string):void{
+		this.fetchListingsFull(id, false);
+	}
+	/**
+	* Retrieves listings belonging to the Recruiter
+	*/
+	public fetchListingsFull(id:string, resetSelectedListing:boolean):void{
 	
-		this.listings			= new Array<Listing>();
-		this.selectedListing	= new Listing();
+		if (resetSelectedListing) {
+			this.selectedListing	= new Listing();
+		}
 		
-	
 		this.listingService
 			.fetchAllListings('created',"desc", this.currentPage, this.pageSize, this.generateFilterString())
 				.subscribe(data => {
 					this.totalPages = data.totalPages;
-					this.listings 	= data.content;
 					
+					let lis:Array<Listing> = data.content;
+					
+					lis.forEach(l =>{
+						this.listings.push(l);	
+					});
 					
 					if (id !== "") {
 		
@@ -189,8 +238,6 @@ export class ListingComponent implements OnInit {
 						if (results.length > -1) {
 							let listing: Listing = results[0];
 				
-							console.log("id = " + id)
-							console.log("listing = " + JSON.stringify(listing))
 							this.showListingDetails(listing)
 				
 						}
@@ -213,58 +260,6 @@ export class ListingComponent implements OnInit {
 			this.listingService.registerListingViewedEvent(this.selectedListing.listingId).subscribe();
 		}
 	}
-	
-	/**
-	* Whether or not the previous page button 
-	* should be active
-	* */
-	public showNavPrev(): boolean{
-    
-		if (this.totalPages === -1) {
-      		return false;
-    	}
-
-    	return this.currentPage > 0;
-
-  	}
-
-	/**
-	* Whether or not the next page 
-	* button should be active
-	*/
-	public showNavNext():boolean{
-    
-    	if (this.totalPages === 0) {
-      		return false;
-    	}
-
-    	return this.currentPage < (this.totalPages -1);
-
-	}
-	
-		/**
-	* Fetches and displays the next page 
-	* of candidtes
-	*/
-	public nextPage(): void{
-
-    	if ((this.currentPage + 1) < this.totalPages) {
-      		this.currentPage = this.currentPage + 1;
-      		this.fetchListings("");
-    	}
-    
-	}
-
-	/**
-	* Fetches and displays the previous page of Candidates
-	*/
-	public previousPage(): void{
-    
-		if ((this.currentPage) > 0) {
-      		this.currentPage = this.currentPage - 1;
-      		this.fetchListings("");
-    	}
-  	}
 
 	/**
 	* Returns the code identifying the country
@@ -349,6 +344,10 @@ export class ListingComponent implements OnInit {
 	*/
 	public updateContractTypeFilter(contractType:string){
 		
+		this.listings			= new Array<Listing>();
+		this.pageYPos = 0;
+		
+		
 		switch(contractType){
 			case "Contract": {
 				this.currentPage		= 0;
@@ -377,10 +376,60 @@ export class ListingComponent implements OnInit {
 	*/
 	public getFilterTypeClass(contractType: string):string {
 		if (this.contractTypeFilter === contractType) {
-			return "active-contract-type-filter";
+			return "active-filter";
 		}
 		
-		return "inactive-contract-type-filter";
+		return "inactive-filter";
+	}
+	
+	/**
+	* Sets which post age filter have been selected
+	*/
+	public updatePostAgeFilter(contractType:string){
+		
+		this.listings			= new Array<Listing>();
+		this.pageYPos = 0;
+		
+		switch(contractType){
+			
+			case "TODAY": {
+				this.currentPage		= 0;
+				this.ageFilter = "TODAY"
+				this.fetchListings("");
+				return;
+			}
+			case "THIS_WEEK": {
+				this.currentPage		= 0;
+				this.ageFilter = "THIS_WEEK"
+				this.fetchListings("");
+				return;
+			}
+			case "THIS_MONTH": {
+				this.currentPage		= 0;
+				this.ageFilter = "THIS_MONTH";
+				this.fetchListings("");
+				return;
+			}
+			default: {
+				this.currentPage		= 0;
+				this.ageFilter = "ALL";
+				this.fetchListings("");
+				return;
+			}
+		}	
+	}
+	
+	/**
+	* Returns the appropriate css class to indicate if the filter 
+	* is selected or not
+	*/
+	public getPostAgeClass(option: string):string {
+		
+		if (this.ageFilter === option) {
+			return "active-filter";
+		}
+		
+		return "inactive-filter";
 	}
 	
 	public getExternalUrl(id:string):string{
@@ -431,11 +480,23 @@ export class ListingComponent implements OnInit {
 		this.modalService.open(content, options);
 
   	}
+	
+	private pageYPos = 0;
+	
+	@HostListener('window:scroll', ['$event']) onWindowScroll(e:any) {
+   	 
+		let yPos = window.pageYOffset;
 
-	public boopwart():void {
-		this.emailService.fetchEmails().subscribe(data => {
-			console.log(JSON.stringify(data));
-		});
-	}
+		if (yPos > this.pageYPos) {
+			console.log('XXpageYPos' + this.pageYPos);
+			this.pageYPos = yPos + 500; 
+			this.currentPage = this.currentPage + 1;
+			this.fetchListingsFull("", false);
+			
+		}
+
+  }
+
+  
 
 }

@@ -1,5 +1,7 @@
 package com.arenella.recruit.listings.dao;
 
+import java.time.DayOfWeek;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -18,6 +20,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.CrudRepository;
 
 import com.arenella.recruit.listings.beans.Listing;
+import com.arenella.recruit.listings.beans.Listing.LISTING_AGE;
 import com.arenella.recruit.listings.beans.Listing.listing_type;
 import com.arenella.recruit.listings.beans.ListingFilter;
 
@@ -110,6 +113,37 @@ public interface ListingDao extends CrudRepository<ListingEntity, UUID>, JpaSpec
 					predicates.add(criteriaBuilder.notEqual(typeExpression, listing_type.CONTRACT_ROLE));
 				}
 			
+			}
+			
+			/**
+			* Apply type filter if value present 
+			*/
+			if (this.filterOptions.getListingAge().isPresent()) {
+				
+				Expression<LocalDateTime> typeExpression = root.get("created");
+				
+				LocalDateTime todayStart 		= LocalDateTime.now().withHour(0).withMinute(0).withSecond(0).withSecond(0);
+				LocalDateTime todayEnd 			= LocalDateTime.now().withHour(23).withMinute(59).withSecond(59).withSecond(0);
+				
+				LocalDateTime thisWeekStart 	= todayStart.with(DayOfWeek.MONDAY);
+				LocalDateTime thisWeekEnd 		= todayEnd.with(DayOfWeek.SUNDAY);
+				
+				LocalDateTime thisMonthStart 	= todayStart.withDayOfMonth(1);
+				LocalDateTime thisMonthEnd 		= todayStart.withDayOfMonth(31);
+				
+				
+				if (this.filterOptions.getListingAge().get() == LISTING_AGE.TODAY){
+					predicates.add(criteriaBuilder.between(typeExpression, todayStart, todayEnd));
+				}
+				
+				if (this.filterOptions.getListingAge().get() == LISTING_AGE.THIS_WEEK){
+					predicates.add(criteriaBuilder.between(typeExpression, thisWeekStart, thisWeekEnd));
+				}
+
+				if (this.filterOptions.getListingAge().get() == LISTING_AGE.THIS_MONTH){
+					predicates.add(criteriaBuilder.between(typeExpression, thisMonthStart, thisMonthEnd));
+				}
+				
 			}
 			
 			/**

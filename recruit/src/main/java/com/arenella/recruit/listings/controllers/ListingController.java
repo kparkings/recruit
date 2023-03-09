@@ -10,7 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,10 +21,10 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.arenella.recruit.listings.beans.Listing.LISTING_AGE;
 import com.arenella.recruit.listings.beans.Listing.listing_type;
 
 import com.arenella.recruit.listings.beans.ListingFilter;
-import com.arenella.recruit.listings.beans.ListingFilter.ListingFilterBuilder;
 import com.arenella.recruit.listings.beans.ListingViewedEvent;
 import com.arenella.recruit.listings.controllers.ListingContactRequest.ListingContactRequestBuilder;
 import com.arenella.recruit.listings.services.ListingService;
@@ -88,15 +87,24 @@ public class ListingController {
 	* @return All available listings
 	*/
 	@GetMapping(value="/listing")
-	public Page<ListingAPIOutbound> fetchListings(Pageable pageable, @RequestParam(required=false)String recruiterId){
+	public Page<ListingAPIOutbound> fetchListings(	@RequestParam(required=false)String recruiterId, 
+													@RequestParam(required=false)LISTING_AGE listingAge,
+													Pageable pageable){
 		
-		ListingFilterBuilder filterBuilder = ListingFilter.builder();
+		//ListingFilterBuilder filterBuilder = ListingFilter.builder();
 		
-		if (StringUtils.hasText(recruiterId)) {
-			filterBuilder.ownerId(recruiterId);
-		}
+		//if (StringUtils.hasText(recruiterId)) {
+		//	filterBuilder.ownerId(recruiterId);
+		//}
 		
-		return service.fetchListings(filterBuilder.build(), pageable).map(listing -> ListingAPIOutbound.convertFromListing(listing));	
+		ListingFilter filters = 
+				ListingFilter
+				.builder()
+					.ownerId(recruiterId)
+					.listingAge(listingAge)
+				.build();
+		
+		return service.fetchListings(filters, pageable).map(listing -> ListingAPIOutbound.convertFromListing(listing));	
 		
 	}
 	
@@ -107,15 +115,21 @@ public class ListingController {
 	*/
 	@GetMapping(value="/listing/public/")
 	public Page<ListingAPIOutboundPublic> fetchListingsPubilc(	@RequestParam(required = false) listing_type listingType, 
+			 													@RequestParam(required=false)LISTING_AGE listingAge,
 																Pageable pageable){
 		
-		ListingFilterBuilder filterBuilder = ListingFilter.builder();
+		ListingFilter filters = 
+				ListingFilter
+				.builder()
+					.type(listingType)
+					.listingAge(listingAge)
+				.build();
 		
-		if (Optional.ofNullable(listingType).isPresent()) {
-			filterBuilder.type(listingType);
-		}
+		//if (Optional.ofNullable(listingType).isPresent()) {
+		//	filterBuilder.type(listingType);
+		//}
 		
-		return service.fetchListings(filterBuilder.build(), pageable).map(listing -> ListingAPIOutboundPublic.convertFromListing(listing));	
+		return service.fetchListings(filters, pageable).map(listing -> ListingAPIOutboundPublic.convertFromListing(listing));	
 		
 	}
 	

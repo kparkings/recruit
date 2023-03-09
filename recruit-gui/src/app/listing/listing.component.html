@@ -11,32 +11,43 @@
 							<button class="btn btn-secondary btn-listing" routerLink="/recruiter-listings">Manage Your Posts</button>
 						</div>
 	        		
-	        			<div>
-					
-							<!-- Pagination -->
-							<div class="pagination-options">
-					           	<span [ngSwitch]="showNavPrev()">
-									<span *ngSwitchCase="true"  class="listing-nav" (click)="previousPage()"><<<<<</span>
-									<span *ngSwitchCase="false" class="listing-nav-disabled"><<<<<</span>
-								</span>
-								<span>{{currentPage+1}}</span>
-								<span [ngSwitch]="showNavNext()">
-									<span *ngSwitchCase="true"class="listing-nav" (click)="nextPage()">>>>>></span>
-									<span *ngSwitchCase="false"class="listing-nav-disabled">>>>>></span>
-								</span>
-							</div>
-						</div>
-					
 						<!-- Listings Table -->
 						<div>
-							
-							<div>
-								<ul class="contract-type-filter">
-									<li><span class="{{getFilterTypeClass('CONTRACT_ROLE')}}" 	(click)="updateContractTypeFilter('Contract')"></span>Contract</li>
-									<li><span class="{{getFilterTypeClass('PERM_ROLE')}}" 	 	(click)="updateContractTypeFilter('Perm')"></span>Perm</li>
-									<li><span class="{{getFilterTypeClass('')}}" 		 		(click)="updateContractTypeFilter('')"></span>Both</li>
-								</ul>
+						
+							<div class="filters">
+								<div class="filters-title" *ngIf="displayFilters">Filters:<span style="float:right; margin-right:20px;cursor:pointer" (click)="toggleFilters()"> Hide </span></div>
+								<div class="filters-title" *ngIf="!displayFilters">Filters:<span style="float:right; margin-right:20px;cursor:pointer" (click)="toggleFilters()"> Show </span></div>
+								<table *ngIf="displayFilters">
+									<tr>
+										<th>Contract Type</th>
+										<td>
+											<div>
+												<ul class="contract-type-filter">
+													<li><span class="{{getFilterTypeClass('')}}" 		 		(click)="updateContractTypeFilter('')"></span>Both</li>
+													<li><span class="{{getFilterTypeClass('CONTRACT_ROLE')}}" 	(click)="updateContractTypeFilter('Contract')"></span>Contract</li>
+													<li><span class="{{getFilterTypeClass('PERM_ROLE')}}" 	 	(click)="updateContractTypeFilter('Perm')"></span>Perm</li>
+												</ul>
+											</div>
+										</td>
+									</tr>
+									<tr>
+										<th>Age of Post</th>
+										<td>
+											<div>
+												<ul class="contract-type-filter">
+													<li><span class="{{getPostAgeClass('ALL')}}"	 	 	(click)="updatePostAgeFilter('ALL')"></span>All</li>
+													<li><span class="{{getPostAgeClass('TODAY')}}" 	 		(click)="updatePostAgeFilter('TODAY')"></span>Today</li>
+													<li><span class="{{getPostAgeClass('THIS_WEEK')}}" 		(click)="updatePostAgeFilter('THIS_WEEK')"></span>This Week</li>
+													<li><span class="{{getPostAgeClass('THIS_MONTH')}}" 	(click)="updatePostAgeFilter('THIS_MONTH')"></span>This Month</li>
+												</ul>
+											</div>
+										</td>
+									</tr>
+								</table>
 							</div>
+							
+							
+							
 							
 							<div *ngFor="let listing of listings" class="listing">
 							
@@ -60,6 +71,7 @@
 							</div>
 						
 						</div>
+						<br><br>
 						</div>
 					
 	        		<!-- Show Selected Listing View -->
@@ -113,7 +125,7 @@
 									</table>
 								</div>
 								
-								<h2  class="listing-view-title">Contact Recruiter</h2>
+								<h2  class="listing-view-title">Contact Recruiter: <span>{{selectedListing.ownerName}} from {{selectedListing.ownerCompany}}</span></h2>
 								<div>
 									<form [formGroup]="emailRequestFormBean">
 										<div>

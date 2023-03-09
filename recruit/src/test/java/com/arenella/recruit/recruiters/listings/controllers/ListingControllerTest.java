@@ -24,6 +24,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.arenella.recruit.listings.beans.Listing.LISTING_AGE;
 import com.arenella.recruit.listings.beans.Listing.listing_type;
 import com.arenella.recruit.listings.beans.ListingFilter;
 import com.arenella.recruit.listings.beans.ListingViewedEvent;
@@ -129,7 +130,7 @@ public class ListingControllerTest {
 		
 		Mockito.when(this.mockListingService.fetchListings(filterArgCapt.capture(), Mockito.any())).thenReturn(Page.empty());
 		
-		Page<ListingAPIOutbound> response = controller.fetchListings(mockPageable, null);
+		Page<ListingAPIOutbound> response = controller.fetchListings(null, LISTING_AGE.ALL, mockPageable);
 	
 		assertTrue(response instanceof Page);
 		
@@ -148,7 +149,7 @@ public class ListingControllerTest {
 		
 		Mockito.when(this.mockListingService.fetchListings(filterArgCapt.capture(), Mockito.any())).thenReturn(Page.empty());
 		
-		Page<ListingAPIOutboundPublic> response = controller.fetchListingsPubilc(null, mockPageable);
+		Page<ListingAPIOutboundPublic> response = controller.fetchListingsPubilc(null, LISTING_AGE.ALL, mockPageable);
 	
 		assertTrue(response instanceof Page);
 		
@@ -168,7 +169,7 @@ public class ListingControllerTest {
 		
 		Mockito.when(this.mockListingService.fetchListings(filterArgCapt.capture(), Mockito.any())).thenReturn(Page.empty());
 		
-		Page<ListingAPIOutboundPublic> response = controller.fetchListingsPubilc(listingType, mockPageable);
+		Page<ListingAPIOutboundPublic> response = controller.fetchListingsPubilc(listingType, LISTING_AGE.ALL, mockPageable);
 	
 		assertTrue(response instanceof Page);
 		
@@ -189,7 +190,7 @@ public class ListingControllerTest {
 		
 		final String recruiterId = "kparking";
 		
-		Page<ListingAPIOutbound> response = controller.fetchListings(mockPageable, recruiterId);
+		Page<ListingAPIOutbound> response = controller.fetchListings(recruiterId, LISTING_AGE.ALL, mockPageable);
 		
 		assertTrue(response instanceof Page);
 		

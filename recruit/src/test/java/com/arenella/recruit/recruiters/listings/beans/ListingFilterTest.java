@@ -7,6 +7,7 @@ import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
 
+import com.arenella.recruit.listings.beans.Listing.LISTING_AGE;
 import com.arenella.recruit.listings.beans.Listing.country;
 import com.arenella.recruit.listings.beans.Listing.listing_type;
 import com.arenella.recruit.listings.beans.ListingFilter;
@@ -28,6 +29,7 @@ public class ListingFilterTest {
 		final String			ownerId			= "abc123";
 		final listing_type 		type			= listing_type.CONTRACT_ROLE;
 		final country 			countryVal		= country.BELGIUM;
+		final LISTING_AGE		listingAge		= LISTING_AGE.THIS_WEEK;
 		
 		ListingFilter filter = ListingFilter
 									.builder()
@@ -35,12 +37,14 @@ public class ListingFilterTest {
 										.ownerId(ownerId)
 										.type(type)
 										.country(countryVal)
+										.listingAge(listingAge)
 									.build();
 		
-		assertEquals(filter.getListingId().get(), listingId);
-		assertEquals(filter.getOwnerId().get(), ownerId);
-		assertEquals(filter.getType().get(), type);
-		assertEquals(filter.getCountry().get(), countryVal);
+		assertEquals(filter.getListingId().get(), 	listingId);
+		assertEquals(filter.getOwnerId().get(), 	ownerId);
+		assertEquals(filter.getType().get(), 		type);
+		assertEquals(filter.getCountry().get(), 	countryVal);
+		assertEquals(filter.getListingAge().get(), 	listingAge);
 		
 	}
 
@@ -59,7 +63,7 @@ public class ListingFilterTest {
 		assertFalse(filter.getOwnerId().isPresent());
 		assertFalse(filter.getType().isPresent());
 		assertFalse(filter.getCountry().isPresent());
-		
+		assertFalse(filter.getListingAge().isPresent());
 	}
 	
 }

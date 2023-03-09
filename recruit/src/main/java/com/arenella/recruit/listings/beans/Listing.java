@@ -13,6 +13,7 @@ import java.util.UUID;
 public class Listing {
 
 	public static enum listing_type {CONTRACT_ROLE, PERM_ROLE, BOTH};
+	public static enum LISTING_AGE	{TODAY, THIS_WEEK, THIS_MONTH, ALL};
 	public static enum country 		{NETHERLANDS, BELGIUM, UK, IRELAND, EU_REMOTE, WORLD_REMOTE};
 	public static enum language 	{DUTCH, FRENCH, ENGLISH};
 	public static enum currency		{EUR, GBP};
