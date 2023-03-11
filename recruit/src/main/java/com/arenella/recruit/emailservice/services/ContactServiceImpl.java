@@ -1,5 +1,7 @@
 package com.arenella.recruit.emailservice.services;
 
+import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,6 +34,14 @@ public class ContactServiceImpl implements ContactService{
 	public void updateContact(Contact contact) {
 		this.contactDao.updateContact(contact);
 		
+	}
+
+	/**
+	* refer to the ContactService for details
+	*/
+	@Override
+	public Set<Contact> fetchContacts(Set<String> contactIds) {
+		return this.contactDao.fetchContacts(contactIds);
 	}
 
 }

@@ -1,5 +1,7 @@
 package com.arenella.recruit.emailservice.services;
 
+import java.util.Set;
+
 import com.arenella.recruit.emailservice.beans.Contact;
 
 /**
@@ -14,8 +16,15 @@ public interface ContactService {
 	public void addContact(Contact contact);
 
 	/**
-	* refer to the ContactService for details
+	* Updates a Contact
 	*/
 	void updateContact(Contact contact);
+
+	/**
+	* Fetches contacts with matching contactIds
+	* @param contactIds - Id's to filter on
+	* @return Contacts
+	*/
+	public Set<Contact> fetchContacts(Set<String> contactIds);
 	
 }

@@ -23,6 +23,7 @@ import com.arenella.recruit.emailservice.beans.Email.EmailRecipient.ContactType;
 import com.arenella.recruit.emailservice.beans.EmailAttachment;
 import com.arenella.recruit.emailservice.beans.EmailAttachment.FileType;
 import com.arenella.recruit.emailservice.beans.Email.Sender.SenderType;
+import com.arenella.recruit.emailservice.services.ContactService;
 import com.arenella.recruit.emailservice.services.EmailService;
 
 import org.springframework.core.io.ByteArrayResource;
@@ -73,6 +74,9 @@ public class EmailControllerTest {
 	
 	@Mock
 	private Principal			mockPrincipal;
+	
+	@Mock
+	private ContactService		mockContactService;
 	
 	@InjectMocks
 	private EmailController 	emailController;

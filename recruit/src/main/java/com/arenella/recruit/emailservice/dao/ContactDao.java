@@ -1,6 +1,8 @@
 package com.arenella.recruit.emailservice.dao;
 
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -29,6 +31,9 @@ public interface ContactDao extends CrudRepository<ContactEntity, ContactEntityP
 
 	@Query("from ContactEntity e where e.id.contactType = :contactType and e.id.contactId = :contactId")
 	public ContactEntity getEntityByIdAndType(ContactType contactType, String contactId);
+	
+	@Query("from ContactEntity e where e.id.contactType = :contactType and e.id.contactId in :contactId")
+	public Set<ContactEntity> getEntitiesByIdAndType(ContactType contactType, Set<String> contactId);
 	
 	/**
 	* Retrieves a matching Contact where one exists
@@ -66,6 +71,15 @@ public interface ContactDao extends CrudRepository<ContactEntity, ContactEntityP
 		
 		this.save(entity);
 		
+	}
+
+	/**
+	* Returns Recruiter Contacts matching the contactIds
+	* @param contactIds - Id's to filter on
+	* @return matching Contacts
+	*/
+	default public Set<Contact> fetchContacts(Set<String> contactIds){
+		return this.getEntitiesByIdAndType(ContactType.RECRUITER, contactIds).stream().map(c -> ContactEntity.convertFromEntity(c)).collect(Collectors.toSet());
 	}
 	
 }

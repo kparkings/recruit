@@ -2,11 +2,14 @@ package com.arenella.recruit.emailservice.controllers;
 
 import java.time.LocalDateTime;
 import java.util.LinkedHashSet;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import com.arenella.recruit.emailservice.beans.Contact;
 import com.arenella.recruit.emailservice.beans.Email;
+import com.arenella.recruit.emailservice.beans.Email.EmailRecipient.ContactType;
 import com.arenella.recruit.emailservice.beans.Email.Sender;
 import com.arenella.recruit.emailservice.beans.Email.Sender.SenderType;
 import com.arenella.recruit.emailservice.beans.EmailAttachment;
@@ -310,8 +313,14 @@ public class EmailAPIOutbound {
 	* @param sender - To convert
 	* @return converted
 	*/
-	private static SenderAPIOutbound convertFromDomain(Sender<?> sender) {
-		return new SenderAPIOutbound(sender.getId().toString(), sender.getContactType(), sender.getContactId(), sender.getEmail());
+	private static SenderAPIOutbound convertFromDomain(Sender<?> sender, Set<Contact> contacts) {
+		
+		Optional<Contact> contact = contacts.stream().filter(c -> c.getId().equals(sender.getContactId()) && c.getContactType() == ContactType.RECRUITER).findAny();
+		
+		return new SenderAPIOutbound(sender.getId().toString()
+				, sender.getContactType()
+				, contact.isPresent() ? contact.get().getFirstName() + " " + contact.get().getSurname() : sender.getContactId()
+				, sender.getEmail());
 	}
 	
 	/**
@@ -329,14 +338,14 @@ public class EmailAPIOutbound {
 	* @param email - To convert
 	* @return converted
 	*/
-	public static EmailAPIOutbound convertFromDomain(Email email) {
+	public static EmailAPIOutbound convertFromDomain(Email email, Set<Contact> contacts) {
 		return EmailAPIOutbound
 				.builder()
 					.attachments(email.getAttachments().stream().map(a -> convertFromDomain(a)).collect(Collectors.toCollection(LinkedHashSet::new)))
 					.body(email.getBody())
 					.created(email.getCreated())
 					.id(email.getId())
-					.sender(convertFromDomain(email.getSender())) //?? How to get sender name
+					.sender(convertFromDomain(email.getSender(), contacts)) //?? How to get sender name
 					.title(email.getTitle())
 					.viewed(email.getRecipients().stream().findFirst().get().isViewed()) //Will only work if we only return single recipient
 				.build();

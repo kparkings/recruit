@@ -20,7 +20,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.arenella.recruit.emailservice.beans.Contact;
+import com.arenella.recruit.emailservice.beans.Email;
 import com.arenella.recruit.emailservice.beans.EmailAttachment;
+import com.arenella.recruit.emailservice.beans.Email.Sender.SenderType;
+import com.arenella.recruit.emailservice.services.ContactService;
 import com.arenella.recruit.emailservice.services.EmailService;
 
 /**
@@ -33,6 +37,9 @@ public class EmailController {
 	@Autowired
 	private EmailService emailService;
 	
+	@Autowired
+	private ContactService	contactService;
+	
 	/**
 	* Returns the users email's
 	* @return Email's for the authenticated User
@@ -41,9 +48,13 @@ public class EmailController {
 	@GetMapping(path="email", produces="application/json")
 	public ResponseEntity<Set<EmailAPIOutbound>> getEmailsForUser(Principal principal){
 	
-		Set<EmailAPIOutbound> emails =  this.emailService.fetchEmailsByRecipientId(principal.getName()).stream().map(e -> EmailAPIOutbound.convertFromDomain(e)).collect(Collectors.toCollection(LinkedHashSet::new));
+		Set<Email> 		emails 		= this.emailService.fetchEmailsByRecipientId(principal.getName());
+		Set<String> 	contactIds 	= emails.stream().filter(e -> e.getSender().getContactType() == SenderType.RECRUITER).map(e -> e.getSender().getContactId()).collect(Collectors.toSet());
+		Set<Contact> 	contacts 	= this.contactService.fetchContacts(contactIds);
+		
+		Set<EmailAPIOutbound> emailsAPIOutbound =  this.emailService.fetchEmailsByRecipientId(principal.getName()).stream().map(e -> EmailAPIOutbound.convertFromDomain(e, contacts)).collect(Collectors.toCollection(LinkedHashSet::new));
 	
-		return new ResponseEntity<>(emails, HttpStatus.OK);
+		return new ResponseEntity<>(emailsAPIOutbound, HttpStatus.OK);
 		
 	}
 	
