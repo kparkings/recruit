@@ -3,6 +3,8 @@ import { HttpClient, HttpHeaders }  				from '@angular/common/http';
 import { Observable }                 				from 'rxjs';
 import { environment } 								from './../environments/environment';
 import { Email } 									from './email/email';
+import { OpenPosition } 							from './recruiter-marketplace/open-position';
+import { OfferedCandidate } 						from './recruiter-marketplace/offered-candidate';
 
 /**
 * Service for sending emails
@@ -42,6 +44,36 @@ export class EmailService {
 		const backendUrl:string = environment.backendUrl +'listing/public/'+listingId+'/contact-recruiter';
 		
 		return this.httpClient.post<any>(backendUrl, fd, {headers: new HttpHeaders({ }), withCredentials: true});
+				
+	}
+	
+	/**
+	* Sends Email to owner of Open Position on the Marketplace
+	*/
+	public sendMarketplaceContactRequestOpenPositionEmail(emailRequest:EmailRequest, openPosition:OpenPosition):Observable<any>{
+	
+		var fd = new FormData();
+  		
+		fd.append("message",		emailRequest.message);
+
+		const backendUrl:string = environment.backendUrl +'v1/open-position/'+openPosition.id+'/_message';
+		
+		return this.httpClient.put<any>(backendUrl, fd, {headers: new HttpHeaders({ }), withCredentials: true});
+				
+	}
+	
+	/**
+	* Sends Email to owner of Open Position on the Marketplace
+	*/
+	public sendMarketplaceContactRequestOfferedCandidateEmail(emailRequest:EmailRequest, offeredCandidate:OfferedCandidate):Observable<any>{
+	
+		var fd = new FormData();
+  	
+		fd.append("message",		emailRequest.message);
+
+		const backendUrl:string = environment.backendUrl +'v1/offered-candidate/'+offeredCandidate.id+'/_message';
+		
+		return this.httpClient.put<any>(backendUrl, fd, {headers: new HttpHeaders({ }), withCredentials: true});
 				
 	}
 	

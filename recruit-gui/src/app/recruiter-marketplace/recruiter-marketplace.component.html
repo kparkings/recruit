@@ -26,7 +26,6 @@
 				<button class="btn btn-secondary action-btn" (click)="showJustMyCandidates()" 	*ngIf="!showJustMyCandidatesActive">My Candidate</button>
 				<button class="btn btn-secondary action-btn" (click)="fetchOfferedCandidates()" *ngIf="showJustMyCandidatesActive">All Candidates</button>
 				<button class="btn btn-secondary action-btn" (click)="switchTab('addSupply')" 	*ngIf="!isAuthenticatedAsAdmin()">Offer Candidate</button>
-			
 			</div>
 			<!-- List of offered Candidates -->
 			<div>
@@ -309,12 +308,13 @@
 		<div *ngIf="showSupplyDetails">
 			<div class="action-buttons">
 				<button class="btn btn-secondary  small-action-btn" (click)="showOfferedCandidates()">Back</button>
+				<button class="btn btn-secondary  small-action-btn" (click)="contactRecruiter(contactBox)">Contact</button>
 			</div>
-			<div>
-				<div>
+			<div style='clear:both'>
+				<div style="margin-left:10px;margin-bottom:20px;">
 					<h3>{{activeCandidate.created}}: <span class="candidate-title">{{activeCandidate.candidateRoleTitle}}</span></h3>
 				</div>
-				<div class="candidate-view-div-standard">
+				<div class="open-position-view-div-standard">
 					<h3>Offered By</h3>
 					<table>
 						<tr>
@@ -325,13 +325,9 @@
 							<td class="table-hdr-td">Recruiter</td>
 							<td class="table-bdy-td">{{activeCandidate.recruiter.recruiterName}}</td>
 						</tr>
-						<tr>
-							<td class="table-hdr-td">Email</td>
-							<td class="table-bdy-td">{{activeCandidate.recruiter.recruiterEmail}}</td>
-						</tr>
 					</table>
 				</div>
-				<div class="candidate-view-div-standard">
+				<div class="open-position-view-div-standard">
 					<h3>Location</h3>
 					<table>
 						<tr>
@@ -344,20 +340,23 @@
 						</tr>
 					</table>
 				</div>
-				<div class="candidate-view-div-standard">
+				<div class="open-position-view-div-standard">
 					<h3>Years Experience</h3>
-					{{activeCandidate.yearsExperience}}
+					<p>{{activeCandidate.yearsExperience}}</p>
 				</div>
-				<div class="candidate-view-div-standard">
+				<div class="open-position-view-div-standard">
 					<h3>Skills</h3>
-					<span class="static-item" *ngFor="let lang of activeCandidate.coreSkills">{{lang}}</span>
+					<div style="padding:10px;">
+						<span class="static-item" *ngFor="let lang of activeCandidate.coreSkills">{{lang}}</span>
+					</div>
 				</div>
-				<div class="candidate-view-div-standard">
+				<div class="open-position-view-div-standard">
 					<h3>Languages</h3>
-					<span class="static-item" *ngFor="let lang of activeCandidate.spokenLanguages">{{lang}}</span>
-					
+					<div style="padding:10px;">
+						<span class="static-item" *ngFor="let lang of activeCandidate.spokenLanguages">{{lang}}</span>
+					</div>
 				</div>
-				<div class="candidate-view-div-standard">
+				<div class="open-position-view-div-standard">
 					<h3>Renumeration</h3>
 					<table>
 						<tr>
@@ -607,9 +606,10 @@
 	<div *ngIf="showDemandDetails">
 			<div class="action-buttons">
 				<button class="btn btn-secondary  small-action-btn" (click)="showOpenPositions()">Back</button>
+				<button class="btn btn-secondary  small-action-btn" (click)="contactRecruiter(contactBox)">Contact</button>
 			</div>
-			<div>
-				<div>
+			<div style='clear:both'>
+				<div style="margin-left:10px;margin-bottom:20px;">
 					<h3>{{activeOpenPosition.created}}: <span class="candidate-title">{{activeOpenPosition.positionTitle}}</span></h3>
 				</div>
 				<div class="open-position-view-div-standard">
@@ -623,10 +623,7 @@
 							<td class="table-hdr-td">Recruiter</td>
 							<td class="table-bdy-td">{{activeOpenPosition.recruiter.recruiterName}}</td>
 						</tr>
-						<tr>
-							<td class="table-hdr-td">Email</td>
-							<td class="table-bdy-td">{{activeCandidate.recruiter.recruiterEmail}}</td>
-						</tr>
+
 					</table>
 				</div>
 				<div class="open-position-view-div-standard">
@@ -694,5 +691,25 @@
 				<li *ngFor="let errMessage of validationErrors"> {{errMessage}} </li>
 			</ul><br>
 		</div>       
+	</div>
+</ng-template> 
+
+<ng-template #contactBox let-modal>
+	<div class="modal-header">
+		<h4 class="modal-title">Send Message To Recruiter</h4>
+ 		<div class="filter-close-box" (click)="closeModal()">X</div>
+	</div>
+	<div class="modal-body" *ngIf="contactRecruiterView === 'message'">
+		<form [formGroup]="sendMessageGroup">
+			<textarea formControlName="message"></textarea>
+			<button class="btn btn-secondary action-btn btn-right" (click)="sendMessageToRecruiter()" 	*ngIf="!showJustMyCandidatesActive">Send</button>
+		</form>	
+	</div>
+	<div class="modal-body message-send-success" *ngIf="contactRecruiterView === 'success'">
+			<p>Message Sent Successfully</p>
+			<p>You can view a copy of your message and any replies in your inbox</p>
+	</div>
+	<div class="modal-body" *ngIf="contactRecruiterView === 'failure'">
+			<p class="message-send-failure">Failed to Send Message</p>
 	</div>
 </ng-template> 

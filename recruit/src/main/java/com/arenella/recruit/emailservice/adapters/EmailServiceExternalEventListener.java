@@ -26,5 +26,5 @@ public interface EmailServiceExternalEventListener {
 	* @param event - Recruiter update
 	*/
 	public void listenForRecruiterUpdatedEvent(RecruiterUpdatedEvent event);
-	
+
 }

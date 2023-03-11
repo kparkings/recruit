@@ -10,6 +10,7 @@ public class RecruiterCreatedEvent {
 	private String encryptedPassword;
 	private String email;
 	private String firstName;
+	private String surname;
 	
 	/**
 	* Constructor based upon a Builder
@@ -21,6 +22,7 @@ public class RecruiterCreatedEvent {
 		this.encryptedPassword 	= builder.encryptedPassword;
 		this.email				= builder.email;
 		this.firstName			= builder.firstName;
+		this.surname			= builder.surname;
 	}
 	
 	/**
@@ -56,6 +58,14 @@ public class RecruiterCreatedEvent {
 	}
 	
 	/**
+	* Returns the surname of the Recruiter
+	* @return surname of the Recruiter
+	*/
+	public String getSurname() {
+		return this.surname;
+	}
+	
+	/**
 	* Returns an instance of a Builder for the RecruiterCreatedEvent class
 	* @return Builder for the Class
 	*/
@@ -73,6 +83,7 @@ public class RecruiterCreatedEvent {
 		private String encryptedPassword;
 		private String email;
 		private String firstName;
+		private String surname;
 		
 		/**
 		* Sets the unique Id of the Recruiter which has been created
@@ -101,6 +112,16 @@ public class RecruiterCreatedEvent {
 		*/
 		public RecruiterCreatedEventBuilder firstName(String firstName) {
 			this.firstName = firstName;
+			return this;
+		}
+		
+		/**
+		* Sets the surname of the Recruiter
+		* @param surname - Recruiters surname
+		* @return Builder
+		*/
+		public RecruiterCreatedEventBuilder surname(String surname) {
+			this.surname = surname;
 			return this;
 		}
 		

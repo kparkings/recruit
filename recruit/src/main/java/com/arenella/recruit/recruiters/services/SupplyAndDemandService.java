@@ -114,5 +114,21 @@ public interface SupplyAndDemandService {
 	* @return Stats
 	*/
 	public Set<SupplyAndDemandEvent> fetchOfferedCandidateViewStats();
+
+	/**
+	* Sends email to Owner of an offered candidate
+	* @param offeredCandidateId 	- Id of the offered candidate
+	* @param message 				- message to be sent to the owner 
+	* @param authenticatedUserId	- userId of currently authenticated user
+	*/
+	public void sendOfferedCandidateContactEmail(UUID offeredCandidateId, String message, String authenticatedUserId);
+	
+	/**
+	* 
+	* @param openPositionId			- Id of the open position
+	* @param message				- message to be sent to the owner
+	* @param authenticatedUserId	- userId of currently authenticated user	
+	*/
+	public void sendOpenPositionContactEmail(UUID openPositionId, String message, String authenticatedUserId);
 	
 }

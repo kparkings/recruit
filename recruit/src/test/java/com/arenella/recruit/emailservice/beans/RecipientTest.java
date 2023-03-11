@@ -15,6 +15,7 @@ public class RecipientTest {
 	final String 			id				= "rec1";
 	final ContactType 		contactType		= ContactType.RECRUITER;
 	final String 			firstName		= "Kevin";
+	final String 			surname			= "Parkings";
 	final String 			email			= "kparkings@gmail.com";
 	
 	/**
@@ -23,11 +24,12 @@ public class RecipientTest {
 	@Test
 	public void testConstructor() throws Exception {
 		
-		Contact contact = new Contact(id, contactType, firstName, email);
+		Contact contact = new Contact(id, contactType, firstName, surname, email);
 		
 		assertEquals(id,			contact.getId());
 		assertEquals(contactType,	contact.getContactType());
 		assertEquals(firstName,		contact.getFirstName());
+		assertEquals(surname,		contact.getSurname());
 		assertEquals(email,			contact.getEmail());
 	}
 }

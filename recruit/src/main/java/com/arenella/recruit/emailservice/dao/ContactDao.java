@@ -62,10 +62,9 @@ public interface ContactDao extends CrudRepository<ContactEntity, ContactEntityP
 		
 		entity.setEmail(contact.getEmail());
 		entity.setFirstName(contact.getFirstName());
+		entity.setSurname(contact.getSurname());
 		
 		this.save(entity);
-		
-		
 		
 	}
 	

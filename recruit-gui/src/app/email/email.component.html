@@ -35,7 +35,8 @@
 		<div >
 			<div class="email-title">{{currentEmail.title}}</div>
 			<div class="email-header">
-				<div class="left-div-header">{{currentEmail.sender.senderName}} : {{currentEmail.sender.email}}</div>
+				<div class="left-div-header" *ngIf="currentEmail.sender.senderType === 'RECRUITER'">{{currentEmail.sender.senderName}}</div>
+				<div class="left-div-header" *ngIf="currentEmail.sender.senderType != 'RECRUITER'">{{currentEmail.sender.senderName}} : {{currentEmail.sender.email}}</div>
 				<div class="right-div-header">
 					{{currentEmail.created | date: 'dd MMMM yyyy'}}
 					<br>

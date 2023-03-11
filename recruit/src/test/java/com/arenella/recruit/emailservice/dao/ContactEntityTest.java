@@ -19,6 +19,7 @@ public class ContactEntityTest {
 	private final String 			contactId 		= "1234";
 	private final String 			email 			= "kparkings@gmail.com";
 	private final String 			firstName 		= "Kevin";
+	private final String 			surname 		= "Parkings";
 	
 	/**
 	* Tests construction via the Builder
@@ -32,12 +33,14 @@ public class ContactEntityTest {
 					.builder()
 						.email(email)
 						.firstName(firstName)
+						.surname(surname)
 						.id(new ContactEntityPK(type, contactId))
 					.build();
 		
 		assertEquals(type, 			entity.getId().getContactType());
 		assertEquals(contactId, 	entity.getId().getContactId());
 		assertEquals(firstName, 	entity.getFirstName());
+		assertEquals(surname, 		entity.getSurname());
 		assertEquals(email, 		entity.getEmail());
 		
 	}
@@ -49,12 +52,13 @@ public class ContactEntityTest {
 	@Test
 	public void convertToEntity() throws Exception{
 		
-		Contact 		contact 	= new Contact(contactId, type, firstName, email);
+		Contact 		contact 	= new Contact(contactId, type, firstName, surname, email);
 		ContactEntity 	entity 		= ContactEntity.convertToEntity(contact);
 	
 		assertEquals(type, 			entity.getId().getContactType());
 		assertEquals(contactId, 	entity.getId().getContactId());
 		assertEquals(firstName, 	entity.getFirstName());
+		assertEquals(surname, 		entity.getSurname());
 		assertEquals(email, 		entity.getEmail());
 		
 	}
@@ -71,6 +75,7 @@ public class ContactEntityTest {
 					.builder()
 						.email(email)
 						.firstName(firstName)
+						.surname(surname)
 						.id(new ContactEntityPK(type, contactId))
 					.build();
 		
@@ -79,6 +84,7 @@ public class ContactEntityTest {
 		assertEquals(type, 			contact.getContactType());
 		assertEquals(contactId, 	contact.getId());
 		assertEquals(firstName, 	contact.getFirstName());
+		assertEquals(surname, 		contact.getSurname());
 		assertEquals(email, 		contact.getEmail());
 		
 	}
@@ -91,6 +97,7 @@ public class ContactEntityTest {
 	public void convertFromEntity_updateMethods() throws Exception{
 		
 		final String updtFirstName 	= "updtFirstName";
+		final String updtSurname 	= "updtSurname";
 		final String updtEmail 		= "updtEmail";
 		
 		ContactEntity entity = 
@@ -98,18 +105,22 @@ public class ContactEntityTest {
 					.builder()
 						.email(email)
 						.firstName(firstName)
+						.surname(surname)
 						.id(new ContactEntityPK(type, contactId))
 					.build();
 		
 		assertEquals(contactId, 	entity.getId().getContactId());
 		assertEquals(firstName, 	entity.getFirstName());
+		assertEquals(surname, 		entity.getSurname());
 		assertEquals(email, 		entity.getEmail());
 		
 		entity.setEmail(updtEmail);
 		entity.setFirstName(updtFirstName);
+		entity.setSurname(updtSurname);
 		
 		assertEquals(contactId, 	entity.getId().getContactId());
 		assertEquals(updtFirstName, entity.getFirstName());
+		assertEquals(updtSurname, 	entity.getSurname());
 		assertEquals(updtEmail, 	entity.getEmail());
 		
 	}

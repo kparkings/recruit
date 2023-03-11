@@ -44,6 +44,24 @@ public class EmailTemplateFactory {
 			case PASSWORD_RESET:{
 				return loadTemplate("password-reset.ftlh", model);
 			}
+			case OPEN_POSITION_CONTACT_REQUEST:{
+				if (sendEmailCommand.getEmailType() == EmailType.INTERN) {
+					return loadTemplate("open-position-contact-request-intern.ftlh", model);
+				}
+				
+				if (sendEmailCommand.getEmailType() == EmailType.EXTERN) {
+					return loadTemplate("open-position-contact-request-extern.ftlh", model);
+				}
+			}
+			case OFFERED_CANDIDATE_CONTACT_REQUEST:{
+				if (sendEmailCommand.getEmailType() == EmailType.INTERN) {
+					return loadTemplate("offered-candidate-contact-request-intern.ftlh", model);
+				}
+				
+				if (sendEmailCommand.getEmailType() == EmailType.EXTERN) {
+					return loadTemplate("offered-candidate-contact-request-extern.ftlh", model);
+				}
+			}
 			case LISTING_RECRUITER_CONTACT_REQUEST:{
 				
 				if (sendEmailCommand.getEmailType() == EmailType.INTERN) {

@@ -8,6 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import com.arenella.recruit.adapters.events.OfferedCandidateContactRequestEvent;
+import com.arenella.recruit.adapters.events.OpenPositionContactRequestEvent;
+import com.arenella.recruit.recruiters.adapters.RecruitersExternalEventPublisher;
 import com.arenella.recruit.recruiters.beans.OfferedCandidate;
 import com.arenella.recruit.recruiters.beans.OfferedCandidateAPIOutbound.RecruiterDetails;
 import com.arenella.recruit.recruiters.beans.OpenPosition;
@@ -26,16 +29,19 @@ import com.arenella.recruit.recruiters.dao.SupplyAndDemandEventDao;
 public class SupplyAndDemandServiceImpl implements SupplyAndDemandService{
 
 	@Autowired
-	private OpenPositionDao 			openPositionDao;
+	private OpenPositionDao 					openPositionDao;
 	
 	@Autowired
-	private OfferedCandidateDao 		offeredCandidateDao;
+	private OfferedCandidateDao 				offeredCandidateDao;
 	
 	@Autowired
-	private RecruiterDao				recruiterDao;
+	private RecruiterDao						recruiterDao;
 	
 	@Autowired
-	private SupplyAndDemandEventDao		supplyAndDemandEventDao;
+	private SupplyAndDemandEventDao				supplyAndDemandEventDao;
+	
+	@Autowired
+	private RecruitersExternalEventPublisher	eventPublisher;
 	
 	/**
 	* Refer to the SupplyAndDemandService interface for details 
@@ -219,6 +225,54 @@ public class SupplyAndDemandServiceImpl implements SupplyAndDemandService{
 	@Override
 	public Set<SupplyAndDemandEvent> fetchOfferedCandidateViewStats() {
 		return this.supplyAndDemandEventDao.fetchThisWeeksEvents(LocalDateTime.now().minusWeeks(1), EventType.OFFERED_CANDIDATE);
+	}
+	
+	/**
+	* Refer to the SupplyAndDemandService interface for details 
+	*/
+	@Override
+	public void sendOfferedCandidateContactEmail(UUID offeredCandidateId, String message, String authenticatedUserId) {
+		
+		if (!this.offeredCandidateDao.existsById(offeredCandidateId)) {
+			throw new RuntimeException("Unknown Offered Candidate");
+		}
+		
+		OfferedCandidate offeredCandidate = this.offeredCandidateDao.findByOfferedCandidateId(offeredCandidateId);
+		
+		this.eventPublisher
+			.publishOffereedCandidateRequestEvent(OfferedCandidateContactRequestEvent
+					.builder()
+						.message(message)
+						.recipientId(offeredCandidate.getRecruiterId())
+						.senderId(authenticatedUserId)
+						.offeredCandidateId(offeredCandidateId)
+						.offeredCandidateTitle(offeredCandidate.getcandidateRoleTitle())
+					.build());
+		
+	}
+
+	/**
+	* Refer to the SupplyAndDemandService interface for details 
+	*/
+	@Override
+	public void sendOpenPositionContactEmail(UUID openPositionId, String message, String authenticatedUserId) {
+		
+		if (!this.openPositionDao.existsById(openPositionId)) {
+			throw new RuntimeException("Unknown Open Position");
+		}
+		
+		OpenPosition openPosition = this.openPositionDao.findByOpenPositionId(openPositionId);
+		
+		this.eventPublisher
+			.publishOpenPositionContactRequestEvent(OpenPositionContactRequestEvent
+					.builder()
+						.message(message)
+						.recipientId(openPosition.getRecruiterId())
+						.senderId(authenticatedUserId)
+						.openPositionId(openPositionId)
+						.openPositionTitle(openPosition.getPositionTitle())
+					.build());
+		
 	}
 	
 	/**

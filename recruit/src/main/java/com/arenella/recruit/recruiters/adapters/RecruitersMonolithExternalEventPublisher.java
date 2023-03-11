@@ -1,8 +1,15 @@
 package com.arenella.recruit.recruiters.adapters;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.arenella.recruit.adapters.events.OfferedCandidateContactRequestEvent;
+import com.arenella.recruit.adapters.events.OpenPositionContactRequestEvent;
 import com.arenella.recruit.adapters.events.RecruiterCreatedEvent;
 import com.arenella.recruit.adapters.events.RecruiterHasOpenSubscriptionEvent;
 import com.arenella.recruit.adapters.events.RecruiterNoOpenSubscriptionEvent;
@@ -11,6 +18,12 @@ import com.arenella.recruit.adapters.events.RecruiterUpdatedEvent;
 import com.arenella.recruit.authentication.adapters.AuthenticationExternalEventListener;
 import com.arenella.recruit.emailservice.adapters.EmailServiceExternalEventListener;
 import com.arenella.recruit.emailservice.adapters.RequestSendEmailCommand;
+import com.arenella.recruit.emailservice.beans.Email.EmailRecipient;
+import com.arenella.recruit.emailservice.beans.Email.EmailTopic;
+import com.arenella.recruit.emailservice.beans.Email.EmailType;
+import com.arenella.recruit.emailservice.beans.Email.Sender;
+import com.arenella.recruit.emailservice.beans.Email.EmailRecipient.ContactType;
+import com.arenella.recruit.emailservice.beans.Email.Sender.SenderType;
 
 /**
 * An implementation of ExternalEventPublisher optimised to work when the 
@@ -81,6 +94,93 @@ public class RecruitersMonolithExternalEventPublisher implements RecruitersExter
 	@Override
 	public void publishRecruiterAccountUpdatedEvent(RecruiterUpdatedEvent event) {
 		this.emailServiceExternalEventListener.listenForRecruiterUpdatedEvent(event);
+	}
+
+	/**
+	* Refer to the ExternalEventPublisher interface for details 
+	*/
+	@Override
+	public void publishOpenPositionContactRequestEvent(OpenPositionContactRequestEvent event) {
+		
+		Map<String, Object> modelExt = new HashMap<>();
+		modelExt.put("message", 		event.getMessage()); 
+		modelExt.put("openPositionTitle", event.getOpenPositionTitle()); 
+		
+		Map<String, Object> modelInt = new HashMap<>();
+		modelInt.put("message", 	event.getMessage());
+		modelExt.put("openPositionTitle", event.getOpenPositionTitle());
+		
+		RequestSendEmailCommand cInt = 
+				RequestSendEmailCommand
+					.builder()
+						.emailType(EmailType.INTERN)
+						.model(modelInt)
+						.persistable(true)
+						.recipients(Set.of(new EmailRecipient<UUID>(UUID.randomUUID(), event.getRecipientId(), ContactType.RECRUITER)))
+						.sender(new Sender<>(UUID.randomUUID(), event.getSenderId(), SenderType.RECRUITER, "get in email service"))
+						.title("Reaction To Requested Candidate on Marketplace " + event.getOpenPositionTitle())
+						.topic(EmailTopic.OPEN_POSITION_CONTACT_REQUEST)
+					.build();
+		
+		this.emailServiceExternalEventListener.listenForSendEmailCommand(cInt);
+		
+		RequestSendEmailCommand cExt = 
+				RequestSendEmailCommand
+					.builder()
+						.emailType(EmailType.EXTERN)
+						.model(modelExt)
+						.persistable(false)
+						.recipients(Set.of(new EmailRecipient<UUID>(UUID.randomUUID(), event.getRecipientId(), ContactType.RECRUITER)))
+						.sender(new Sender<>(UUID.randomUUID(), "", SenderType.SYSTEM, "kparkings@gmail.com"))
+						.title("Arenella-ICT - Reaction To Requested Candidate on Marketplace")
+						.topic(EmailTopic.OPEN_POSITION_CONTACT_REQUEST)
+					.build();
+		
+		this.emailServiceExternalEventListener.listenForSendEmailCommand(cExt);
+		
+	}
+
+	/**
+	* Refer to the ExternalEventPublisher interface for details 
+	*/
+	@Override
+	public void publishOffereedCandidateRequestEvent(OfferedCandidateContactRequestEvent event) {
+		
+		Map<String, Object> modelExt = new HashMap<>();
+		modelExt.put("message", event.getMessage()); 
+		modelExt.put("offeredCandidateTitle", event.getOfferedCandidateTitle()); 
+		
+		Map<String, Object> modelInt = new HashMap<>();
+		modelInt.put("message", event.getMessage());
+		modelInt.put("offeredCandidateTitle", event.getOfferedCandidateTitle());
+		
+		RequestSendEmailCommand cInt = 
+				RequestSendEmailCommand
+					.builder()
+						.emailType(EmailType.INTERN)
+						.model(modelInt)
+						.persistable(true)
+						.recipients(Set.of(new EmailRecipient<UUID>(UUID.randomUUID(), event.getRecipientId(), ContactType.RECRUITER)))
+						.sender(new Sender<>(UUID.randomUUID(), event.getSenderId(), SenderType.RECRUITER, "get in email service"))
+						.title("Reaction To Requested Candidate on Marketplace " + event.getOfferedCandidateTitle())
+						.topic(EmailTopic.OFFERED_CANDIDATE_CONTACT_REQUEST)
+					.build();
+		
+		this.emailServiceExternalEventListener.listenForSendEmailCommand(cInt);
+		
+		RequestSendEmailCommand cExt = 
+				RequestSendEmailCommand
+					.builder()
+						.emailType(EmailType.EXTERN)
+						.model(modelExt)
+						.persistable(false)
+						.recipients(Set.of(new EmailRecipient<UUID>(UUID.randomUUID(), event.getRecipientId(), ContactType.RECRUITER)))
+						.sender(new Sender<>(UUID.randomUUID(), "", SenderType.SYSTEM, "kparkings@gmail.com"))
+						.title("Arenella-ICT - Reaction To Offered Candidate on Marketplace")
+						.topic(EmailTopic.OFFERED_CANDIDATE_CONTACT_REQUEST)
+					.build();
+		
+		this.emailServiceExternalEventListener.listenForSendEmailCommand(cExt);
 		
 	}
 

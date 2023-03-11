@@ -4,6 +4,7 @@ import { NgbModal, NgbModalOptions}						from '@ng-bootstrap/ng-bootstrap';
 import { ViewChild }									from '@angular/core';
 import { RecruiterMarketplaceService }					from '../recruiter-marketplace.service';
 import { RecruiterService }								from '../recruiter.service';
+import { EmailService, EmailRequest }					from '../email.service';
 import { OfferedCandidate }								from './offered-candidate';
 import { OpenPosition }									from './open-position';
 import { Router}										from '@angular/router';
@@ -20,6 +21,7 @@ export class RecruiterMarketplaceComponent implements OnInit {
   	constructor(private modalService: 		NgbModal, 
 				private marketplaceService: RecruiterMarketplaceService, 
 				private recruiterService:	RecruiterService,
+				private emailService:		EmailService,
 				private router:				Router) { }
 
 	/**
@@ -164,6 +166,14 @@ export class RecruiterMarketplaceComponent implements OnInit {
 		skill:					new UntypedFormControl(),
 		language:				new UntypedFormControl(),
 		
+	});
+	
+	/**
+	* Forms group for sending a message to a Recruiter relating to a
+	* specific post on the jobboard 
+	*/
+	public sendMessageGroup:UntypedFormGroup = new UntypedFormGroup({
+		message:				new UntypedFormControl('')
 	});
 	
 	/**
@@ -726,6 +736,55 @@ export class RecruiterMarketplaceComponent implements OnInit {
 			});
 		}
 	
+	}
+	
+	public contactRecruiterView:string = 'message';
+	
+	/**
+	* Opend dialog to contact recuiter posting	
+	*/
+	public contactRecruiter(contactBox:any):void{
+		
+		this.contactRecruiterView = 'message';
+		let options: NgbModalOptions = {
+	    	 centered: true
+	   };
+
+		this.modalService.open(contactBox, options);
+	
+	}
+	
+	/**
+	* Opend dialog to contact recuiter posting	
+	*/
+	public sendMessageToRecruiter():void{
+		
+		let emailRequest:EmailRequest = new EmailRequest();
+		
+		emailRequest.message = this.sendMessageGroup.get('message')?.value;;
+		
+		if (this.showSupplyDetails) {
+			this.emailService.sendMarketplaceContactRequestOfferedCandidateEmail(emailRequest, this.activeCandidate).subscribe(body => {
+				this.contactRecruiterView = 'success';
+				this.sendMessageGroup = new UntypedFormGroup({
+					message: new UntypedFormControl('')
+				});
+			}, err => {
+				this.contactRecruiterView = 'failure';
+			});
+		}
+		
+		if (this.showDemandDetails) {
+			this.emailService.sendMarketplaceContactRequestOpenPositionEmail(emailRequest, this.activeOpenPosition).subscribe(body => {
+				this.contactRecruiterView = 'success';
+				this.sendMessageGroup = new UntypedFormGroup({
+					message: new UntypedFormControl('')
+				});
+			}, err => {
+				this.contactRecruiterView = 'failure';
+			});
+		}
+		
 	}
 
 }

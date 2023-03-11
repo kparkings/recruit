@@ -1,5 +1,6 @@
 package com.arenella.recruit.recruiters.controllers;
 
+import java.security.Principal;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.arenella.recruit.recruiters.beans.BlacklistedRecruiterAPIOutbound;
@@ -258,5 +260,29 @@ public class SupplyAndDemandController {
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
 	
+	/**
+	* Logs that a Recruiter has viewed an offered candidate
+	* @return ResponseEntity
+	*/
+	@PutMapping("/v1/offered-candidate/{id}/_message")
+	@PreAuthorize("hasRole('ROLE_RECRUITER') or hasRole('ROLE_ADMIN')")
+	public ResponseEntity<Void> contactRecruiterForOfferedCandidate(@PathVariable("id") UUID offeredCandidateId, @RequestPart("message") String message, Principal principal) {
+		
+		this.supplyAndDemandService.sendOfferedCandidateContactEmail(offeredCandidateId, message, principal.getName());
+		
+		return ResponseEntity.status(HttpStatus.OK).build();
+	}
 	
+	/**
+	* Logs that a Recruiter has viewed an offered candidate
+	* @return ResponseEntity
+	*/
+	@PutMapping("/v1/open-position/{id}/_message")
+	@PreAuthorize("hasRole('ROLE_RECRUITER') or hasRole('ROLE_ADMIN')")
+	public ResponseEntity<Void> contactRecruiterForOpenPosition(@PathVariable("id") UUID openPositionId, @RequestPart("message") String message, Principal principal) {
+		
+		this.supplyAndDemandService.sendOpenPositionContactEmail(openPositionId, message, principal.getName());
+		
+		return ResponseEntity.status(HttpStatus.OK).build();
+	}
 }

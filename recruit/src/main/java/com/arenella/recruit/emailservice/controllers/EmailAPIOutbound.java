@@ -251,6 +251,14 @@ public class EmailAPIOutbound {
 		}
 		
 		/**
+		* Returns the type of User that is sending the email
+		* @return tye of Sender
+		*/
+		public SenderType getSenderType() {
+			return this.senderType;
+		}
+		
+		/**
 		* Returns whether or not the Sender is the System
 		* @return if sender is System
 		*/

@@ -2,6 +2,7 @@ package com.arenella.recruit.recruiters.controllers;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.security.Principal;
 import java.time.LocalDate;
 import java.util.Set;
 import java.util.UUID;
@@ -36,6 +37,9 @@ public class SupplyAndDemandControllerTest {
 	
 	@Mock
 	private SupplyAndDemandService		supplyAndDemandService;
+	
+	@Mock
+	private Principal					mockPrincipal;
 	
 	/**
 	* Test Success
@@ -295,6 +299,34 @@ public class SupplyAndDemandControllerTest {
 		
 		Mockito.verify(this.supplyAndDemandService).registerOfferedCandidateViewedEvent(Mockito.any(UUID.class));
 	
+	}
+
+	/**
+	* Test end point for sending contact info to recruiter relating to an 
+	* Offered candidate
+	* @throws Exception
+	*/
+	@Test
+	public void testContactRecruiterForOfferedCandidate() throws Exception{
+		
+		ResponseEntity<Void> response = this.controller.contactRecruiterForOfferedCandidate(UUID.randomUUID(), "message", mockPrincipal);
+		
+		assertEquals(HttpStatus.OK,response.getStatusCode());
+		
+	}
+	
+	/**
+	* Test end point for sending contact info to recruiter relating to an 
+	* Open Position
+	* @throws Exception
+	*/
+	@Test
+	public void testContactRecruiterForOpenPosition() throws Exception{
+		
+		ResponseEntity<Void> response = this.controller.contactRecruiterForOpenPosition(UUID.randomUUID(), "message", mockPrincipal);
+		
+		assertEquals(HttpStatus.OK,response.getStatusCode());
+		
 	}
 	
 }

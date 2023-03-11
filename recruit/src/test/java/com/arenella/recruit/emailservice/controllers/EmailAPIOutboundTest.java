@@ -45,13 +45,14 @@ public class EmailAPIOutboundTest {
 					.viewed(viewed)
 				.build();
 		
-		assertEquals(id, 			email.getId());
-		assertEquals(title, 		email.getTitle());
-		assertEquals(sender, 		email.getSender());
-		assertEquals(created, 		email.getCreated());
-		assertEquals(body, 			email.getBody());
-		assertEquals(attachments, 	email.getAttachments());
-		assertEquals(viewed, 		email.isViewed());
+		assertEquals(id, 					email.getId());
+		assertEquals(title, 				email.getTitle());
+		assertEquals(sender, 				email.getSender());
+		assertEquals(created, 				email.getCreated());
+		assertEquals(body, 					email.getBody());
+		assertEquals(attachments, 			email.getAttachments());
+		assertEquals(viewed, 				email.isViewed());
+		assertEquals(SenderType.RECRUITER, 	email.getSender().getSenderType());
 		
 	}
 	

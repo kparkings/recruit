@@ -11,6 +11,7 @@ public class Contact {
 	final String 			id;
 	final ContactType 		contactType;
 	final String 			firstName;
+	final String			surname;
 	final String 			email;
 	
 	/**
@@ -20,10 +21,11 @@ public class Contact {
 	* @param firstName		- firstName of the Contact
 	* @param email			- Email address of the Contact
 	*/
-	public Contact(String id, ContactType contactType, String firstName, String email) {
+	public Contact(String id, ContactType contactType, String firstName, String surname, String email) {
 		this.id 			= id;
 		this.contactType 	= contactType;
 		this.firstName 		= firstName;
+		this.surname		= surname;
 		this.email 			= email;
 	}
 	
@@ -46,11 +48,19 @@ public class Contact {
 	}
 	
 	/**
-	* Returns the firstName of the Recipient
-	* @return firstName of the Recipient
+	* Returns the firstName of the Contact
+	* @return firstName of the Contact
 	*/
 	public String getFirstName() {
 		return this.firstName;
+	}
+	
+	/**
+	* Returns the surname of the Contact
+	* @return firstName of the Contact
+	*/
+	public String getSurname() {
+		return this.surname;
 	}
 	
 	/**

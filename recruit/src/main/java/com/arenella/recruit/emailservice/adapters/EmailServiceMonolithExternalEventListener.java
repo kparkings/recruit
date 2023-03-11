@@ -38,7 +38,7 @@ public class EmailServiceMonolithExternalEventListener implements EmailServiceEx
 	*/
 	@Override
 	public void listenForRecruiterCreatedEvent(RecruiterCreatedEvent event) {
-		this.contactService.addContact(new Contact(event.getRecruiterId(), ContactType.RECRUITER, event.getFirstName(), event.getEmail()));
+		this.contactService.addContact(new Contact(event.getRecruiterId(), ContactType.RECRUITER, event.getFirstName(), event.getSurname(), event.getEmail()));
 	}
 
 	/**
@@ -46,7 +46,7 @@ public class EmailServiceMonolithExternalEventListener implements EmailServiceEx
 	*/
 	@Override
 	public void listenForRecruiterUpdatedEvent(RecruiterUpdatedEvent event) {
-		this.contactService.updateContact(new Contact(event.getRecruiterId(), ContactType.RECRUITER, event.getFirstName(), event.getEmail()));
+		this.contactService.updateContact(new Contact(event.getRecruiterId(), ContactType.RECRUITER, event.getFirstName(), event.getSurname(), event.getEmail()));
 	}
 
 }

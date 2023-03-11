@@ -1511,3 +1511,15 @@ databaseChangeLog:
                 type: varchar
                 constraints:
                   nullable: true
+  - changeSet:
+      id: addColumn-surname-for-contact
+      author: kevin
+      changes:
+        - addColumn:
+            tableName: contact
+            schemaName: email
+            columns:
+            - column:
+                name: surname
+                type: varchar
+                

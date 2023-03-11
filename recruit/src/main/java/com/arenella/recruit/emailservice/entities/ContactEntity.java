@@ -8,7 +8,7 @@ import javax.persistence.Table;
 import com.arenella.recruit.emailservice.beans.Contact;
 
 /**
-* Entity representation of Recipient
+* Entity representation of Contact
 * @author K Parkings
 */
 @Entity
@@ -20,6 +20,9 @@ public class ContactEntity {
 	
 	@Column(name="first_name")
 	private String firstName;
+	
+	@Column(name="surname")
+	private String surname;
 	
 	@Column(name="email")
 	private String email;
@@ -38,11 +41,12 @@ public class ContactEntity {
 	public ContactEntity(ContactEntityBuilder builder) {
 		this.id 		= builder.id;
 		this.firstName 	= builder.firstName;
+		this.surname	= builder.surname;
 		this.email 		= builder.email;
 	}	
 	
 	/**
-	* Returns the unique id of the Recipient
+	* Returns the unique id of the Contact
 	* @return id of the Recipient
 	*/
 	public ContactEntityPK getId(){
@@ -50,27 +54,43 @@ public class ContactEntity {
 	}
 	
 	/**
-	* Returns the firstName of the Recipient
-	* @return name of the Recipient
+	* Returns the firstName of the Contact
+	* @return name of the Contact
 	*/
 	public String getFirstName() {
 		return this.firstName;
 	}
 	
 	/**
-	* Returns the email address of the Recipient
-	* @return email of the Recipient
+	* Returns the firstName of the Contact
+	* @return name of the Contact
+	*/
+	public String getSurname() {
+		return this.surname;
+	}
+	
+	/**
+	* Returns the email address of the Contact
+	* @return email of the Contact
 	*/
 	public String getEmail() {
 		return this.email;
 	}
 	
 	/**
-	* Sets the Recipients First name
-	* @param firstName - First name of the Recipient
+	* Sets the Contact's First name
+	* @param firstName - First name of the Contact
 	*/
 	public void setFirstName(String firstName) {
 		this.firstName = firstName;
+	}
+	
+	/**
+	* Sets the Contact's surname
+	* @param surname - Surname of the Contact
+	*/
+	public void setSurname(String surname) {
+		this.surname = surname;
 	}
 	
 	/**
@@ -97,11 +117,12 @@ public class ContactEntity {
 		
 		private ContactEntityPK id;
 		private String firstName;
+		private String surname;
 		private String email;
 		
 		/**
-		* Sets the unique id of the Recipient
-		* @param id - id of the Recipient
+		* Sets the unique id of the Contact
+		* @param id - id of the Contact
 		* @return Builder
 		*/
 		public ContactEntityBuilder id(ContactEntityPK id) {
@@ -110,8 +131,8 @@ public class ContactEntity {
 		}
 		
 		/**
-		* Sets the firstName of the Recipient
-		* @param firstName - name of the Recipient
+		* Sets the firstName of the Contact
+		* @param firstName - name of the Contact
 		* @return Builder
 		*/
 		public ContactEntityBuilder firstName(String firstName) {
@@ -120,8 +141,18 @@ public class ContactEntity {
 		}
 		
 		/**
-		* Sets the email address of the Recipient
-		* @param email - Email address of the Recipient
+		* Sets the firstName of the Contact
+		* @param firstName - name of the Contact
+		* @return Builder
+		*/
+		public ContactEntityBuilder surname(String surname) {
+			this.surname = surname;
+			return this;
+		}
+		
+		/**
+		* Sets the email address of the Contact
+		* @param email - Email address of the Contact
 		* @return Builder
 		*/
 		public ContactEntityBuilder email(String email) {
@@ -149,6 +180,7 @@ public class ContactEntity {
 				.builder()
 					.email(contact.getEmail())
 					.firstName(contact.getFirstName())
+					.surname(contact.getSurname())
 					.id(new ContactEntityPK(contact.getContactType(), contact.getId()))
 				.build();
 	}
@@ -159,7 +191,7 @@ public class ContactEntity {
 	* @return Domain representation
 	*/
 	public static Contact convertFromEntity(ContactEntity entity) {
-		return new Contact(entity.getId().getContactId(), entity.getId().getContactType(), entity.getFirstName(), entity.getEmail());
+		return new Contact(entity.getId().getContactId(), entity.getId().getContactType(), entity.getFirstName(), entity.getSurname(), entity.getEmail());
 	}
 	
 }

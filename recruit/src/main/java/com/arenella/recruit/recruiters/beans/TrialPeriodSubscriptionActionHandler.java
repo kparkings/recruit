@@ -66,6 +66,7 @@ public class TrialPeriodSubscriptionActionHandler implements RecruiterSubscripti
 																				.encryptedPassword(encryptedPassword)
 																				.email(recruiter.getEmail())
 																				.firstName(recruiter.getFirstName())
+																				.surname(recruiter.getSurname())
 																				.build());
 
 					RequestSendEmailCommand command = RequestSendEmailCommand
