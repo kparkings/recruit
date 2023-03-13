@@ -113,6 +113,22 @@ export class EmailService {
 		
 	}
 
+	/**
+	* Updates read status for the email for the current user. User determines via JWT on 
+	* the backend
+	*/
+	public sendReply(emailId:string, replyMessage:string):Observable<any>{
+		
+		const backendUrl:string = environment.backendUrl + 'email/' + emailId + "/reply";
+  
+		var fd = new FormData();
+  	
+		fd.append("message",		replyMessage);
+		
+		return this.httpClient.put<any>(backendUrl, fd, {headers: new HttpHeaders({ }), withCredentials: true});
+		
+	}
+	
 }
 
 /**

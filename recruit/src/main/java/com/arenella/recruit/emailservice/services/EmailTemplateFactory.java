@@ -44,6 +44,9 @@ public class EmailTemplateFactory {
 			case PASSWORD_RESET:{
 				return loadTemplate("password-reset.ftlh", model);
 			}
+			case REC_TO_REC_EMAIL_REPLY_NOTICICATION:{
+				return loadTemplate("rec-to-rec-reply-notification.ftlh", model);
+			}
 			case OPEN_POSITION_CONTACT_REQUEST:{
 				if (sendEmailCommand.getEmailType() == EmailType.INTERN) {
 					return loadTemplate("open-position-contact-request-intern.ftlh", model);

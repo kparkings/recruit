@@ -1,7 +1,9 @@
 package com.arenella.recruit.emailservice.services;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -10,11 +12,14 @@ import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.arenella.recruit.emailservice.adapters.RequestSendEmailCommand;
+import com.arenella.recruit.emailservice.beans.Contact;
 import com.arenella.recruit.emailservice.beans.Email;
 import com.arenella.recruit.emailservice.beans.EmailAttachment;
 import com.arenella.recruit.emailservice.beans.Email.EmailRecipient;
@@ -24,6 +29,7 @@ import com.arenella.recruit.emailservice.beans.Email.Status;
 import com.arenella.recruit.emailservice.beans.Email.EmailRecipient.ContactType;
 import com.arenella.recruit.emailservice.beans.Email.Sender.SenderType;
 import com.arenella.recruit.emailservice.beans.EmailAttachment.FileType;
+import com.arenella.recruit.emailservice.dao.ContactDao;
 import com.arenella.recruit.emailservice.dao.EmailServiceDao;
 
 /**
@@ -65,10 +71,16 @@ public class EmailServiceImplTest {
 			.build();
 	
 	@Mock
-	private EmailServiceDao 	mockEmailServiceDao;
+	private EmailServiceDao 		mockEmailServiceDao;
+	
+	@Mock
+	private ContactDao 				mockContactDao;
+	
+	@Mock
+	private EmailDispatcherService 	emailDispatchedService;
 	
 	@InjectMocks
-	private EmailServiceImpl 	service 				= new EmailServiceImpl();
+	private EmailServiceImpl 		service 					= new EmailServiceImpl();
 	
 	/**
 	* Tests retrieval of recipients Email's
@@ -124,6 +136,128 @@ public class EmailServiceImplTest {
 				.fetchAttachment(ID, ATTACHMENT_ID, RECIPIENT_CONTACT_ID)).thenReturn(Optional.of(EMAIL_ATTACHMENT));
 	
 		assertEquals(EMAIL_ATTACHMENT, this.service.fetchAttachment(ID, ATTACHMENT_ID, RECIPIENT_CONTACT_ID));		
+	}
+	
+	/**
+	* Tests Exception is thrown if the Email to be replied to does 
+	* not exists
+	* @throws Exception
+	*/
+	@Test
+	public void testHandleReply_unknownEmail() throws Exception{
+		
+		final UUID 		emailId 				= UUID.randomUUID();
+		final String 	message 				= "replyTest";
+		final String 	authenticatedUserId 	= "kparkings";
+		
+		Mockito.when(this.mockEmailServiceDao.fetchEmailById(emailId)).thenReturn(Optional.empty());
+		
+		assertThrows(RuntimeException.class, () -> {
+			this.service.handleReply(emailId, message, authenticatedUserId);
+		});
+		
+	}
+	
+	/**
+	* Tests Exception is thrown if the authenticated User has no related Contact object
+	* @throws Exception
+	*/
+	@Test
+	public void testHandleReply_no_contact_for_authenticated_user() throws Exception{
+		
+		final UUID 		emailId 				= UUID.randomUUID();
+		final String 	message 				= "replyTest";
+		final String 	authenticatedUserId 	= "kparkings";
+		final Email		email					= Email.builder().build();
+		
+		Mockito.when(this.mockEmailServiceDao.fetchEmailById(emailId)).thenReturn(Optional.of(email));
+		Mockito.when(this.mockContactDao.getByIdAndType(ContactType.RECRUITER, authenticatedUserId)).thenReturn(Optional.empty());
+		
+		assertThrows(RuntimeException.class, () -> {
+			this.service.handleReply(emailId, message, authenticatedUserId);
+		});
+		
+	}
+	
+	/**
+	* If this is the first reply to the Sender the Original Sender also needs to become a 
+	* recipient of the email. This tests the Sender is added to the Recipient set
+	* @throws Exception
+	*/
+	@Test
+	public void testHandleReply_sender_already_recipient() throws Exception{
+		
+		final UUID 					emailId 				= UUID.randomUUID();
+		final String 				message 				= "replyTest";
+		final String 				authenticatedUserId 	= "kparkings";
+		final String 				emailBody				= "Oringal Body";
+		final String 				emailTitle				= "aTitle";
+		final Sender<UUID>			emailSender				= new Sender<>(UUID.randomUUID(), "boop", SenderType.RECRUITER, "kparkings@hotmail.com");
+		final EmailRecipient<UUID> 	recipient				= new  EmailRecipient<>(UUID.randomUUID(), "recruiter22", ContactType.RECRUITER);
+		final EmailRecipient<UUID> 	senderAsRecipient		= new  EmailRecipient<>(emailSender.getId(), "kparkings", ContactType.RECRUITER);
+		final Email					email					= Email.builder().body(emailBody).title(emailTitle).sender(emailSender).recipients(Set.of(recipient, senderAsRecipient)).build();
+		final String				contactId				= "kparkings";
+		final String 				contactFirstName		= "kevin";
+		final String 				contactSurname			= "Parkings";
+		final String				contactEmail			= "kparkings@gmail.com";
+		final Contact				contact					= new Contact(contactId, ContactType.RECRUITER, contactFirstName, contactSurname, contactEmail);
+		
+		ArgumentCaptor<Email> argCapt = ArgumentCaptor.forClass(Email.class);
+		
+		Mockito.when(this.mockEmailServiceDao.fetchEmailById(emailId)).thenReturn(Optional.of(email));
+		Mockito.when(this.mockContactDao.getByIdAndType(ContactType.RECRUITER, authenticatedUserId)).thenReturn(Optional.of(contact));
+		Mockito.doNothing().when(this.mockEmailServiceDao).saveEmail(argCapt.capture());
+		Mockito.doNothing().when(this.emailDispatchedService).handleSendEmailCommand(Mockito.any(RequestSendEmailCommand.class));
+		
+		this.service.handleReply(emailId, message, authenticatedUserId);
+		
+		Mockito.verify(this.emailDispatchedService, Mockito.times(2)).handleSendEmailCommand(Mockito.any(RequestSendEmailCommand.class));
+		
+		Set<EmailRecipient<UUID>> recipients = argCapt.getValue().getRecipients();
+		
+		assertFalse(recipients.stream().filter(r -> r.getContactId().equals("recruiter22")).findFirst().get().isViewed());
+		assertTrue(recipients.stream().filter(r -> r.getContactId().equals("kparkings")).findFirst().get().isViewed());
+		
+	}
+	
+	/**
+	* If this is the first time a reply has been made to the original sender the original sender also 
+	* needs to become a recipient
+	* @throws Exception
+	*/
+	@Test
+	public void testHandleReply_sender_not_already_recipient() throws Exception{
+		
+		final UUID 					emailId 				= UUID.randomUUID();
+		final String 				message 				= "replyTest";
+		final String 				authenticatedUserId 	= "kparkings";
+		final String 				emailBody				= "Oringal Body";
+		final String 				emailTitle				= "aTitle";
+		final Sender<UUID>			emailSender				= new Sender<>(UUID.randomUUID(), "kparkings", SenderType.RECRUITER, "kparkings@hotmail.com");
+		final EmailRecipient<UUID> 	recipient				= new  EmailRecipient<>(UUID.randomUUID(), "recruiter22", ContactType.RECRUITER);
+		final Email					email					= Email.builder().body(emailBody).title(emailTitle).sender(emailSender).recipients(Set.of(recipient)).build();
+		final String				contactId				= "kparkings";
+		final String 				contactFirstName		= "kevin";
+		final String 				contactSurname			= "Parkings";
+		final String				contactEmail			= "kparkings@gmail.com";
+		final Contact				contact					= new Contact(contactId, ContactType.RECRUITER, contactFirstName, contactSurname, contactEmail);
+		
+		ArgumentCaptor<Email> argCapt = ArgumentCaptor.forClass(Email.class);
+		
+		Mockito.when(this.mockEmailServiceDao.fetchEmailById(emailId)).thenReturn(Optional.of(email));
+		Mockito.when(this.mockContactDao.getByIdAndType(ContactType.RECRUITER, authenticatedUserId)).thenReturn(Optional.of(contact));
+		Mockito.doNothing().when(this.mockEmailServiceDao).saveEmail(argCapt.capture());
+		Mockito.doNothing().when(this.emailDispatchedService).handleSendEmailCommand(Mockito.any(RequestSendEmailCommand.class));
+		
+		this.service.handleReply(emailId, message, authenticatedUserId);
+		
+		Mockito.verify(this.emailDispatchedService, Mockito.times(1)).handleSendEmailCommand(Mockito.any(RequestSendEmailCommand.class));
+		
+		Set<EmailRecipient<UUID>> recipients = argCapt.getValue().getRecipients();
+		
+		assertFalse(recipients.stream().filter(r -> r.getContactId().equals("recruiter22")).findFirst().get().isViewed());
+		assertTrue(recipients.stream().filter(r -> r.getContactId().equals("kparkings")).findFirst().get().isViewed());
+		
 	}
 	
 }

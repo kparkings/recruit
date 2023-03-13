@@ -296,7 +296,7 @@ public class CandidateServiceImplTest {
 		
 		Mockito.when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
 		
-		Mockito.when(mockAuthentication.getPrincipal()).thenReturn("reruiter1");
+		Mockito.when(mockAuthentication.getPrincipal()).thenReturn("recruiter1");
 
 		Mockito.doNothing().when(this.mockSkillAlertDao).saveAlert(argCapt.capture());
 		
@@ -326,7 +326,7 @@ public class CandidateServiceImplTest {
 		ArgumentCaptor<CandidateSearchAlert> argCapt = ArgumentCaptor.forClass(CandidateSearchAlert.class);
 		
 		Mockito.when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
-		Mockito.when(mockAuthentication.getPrincipal()).thenReturn("reruiter1");
+		Mockito.when(mockAuthentication.getPrincipal()).thenReturn("recruiter1");
 		Mockito.doNothing().when(this.mockSkillAlertDao).saveAlert(argCapt.capture());
 				
 		CandidateSearchAlert alert = 
@@ -353,7 +353,7 @@ public class CandidateServiceImplTest {
 	@Test
 	public void testGetAlertsForCurrentUser() throws Exception{
 		
-		final String recruiterId = "reruiter1";
+		final String recruiterId = "recruiter1";
 		
 		Mockito.when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
 		
@@ -398,11 +398,11 @@ public class CandidateServiceImplTest {
 		
 		Mockito.when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
 		
-		Mockito.when(mockAuthentication.getPrincipal()).thenReturn("reruiter1");
+		Mockito.when(mockAuthentication.getPrincipal()).thenReturn("recruiter1");
 		
 		UUID id = UUID.randomUUID();
 		
-		Mockito.when(this.mockSkillAlertDao.getchAlertById(id)).thenReturn(Optional.of(CandidateSearchAlert.builder().recruiterId("reruiter1").build()));
+		Mockito.when(this.mockSkillAlertDao.getchAlertById(id)).thenReturn(Optional.of(CandidateSearchAlert.builder().recruiterId("recruiter1").build()));
 		
 		this.service.deleteSearchAlert(id);
 		
@@ -419,7 +419,7 @@ public class CandidateServiceImplTest {
 		
 		Mockito.when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
 		
-		Mockito.when(mockAuthentication.getPrincipal()).thenReturn("reruiter1");
+		Mockito.when(mockAuthentication.getPrincipal()).thenReturn("recruiter1");
 		
 		UUID id = UUID.randomUUID();
 		

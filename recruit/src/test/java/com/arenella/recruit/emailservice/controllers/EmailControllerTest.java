@@ -182,4 +182,21 @@ public class EmailControllerTest {
 		
 	}
 	
+	/**
+	* Tests end point for replying to a message 
+	*/
+	@Test
+	public void testReplyToEmail() {
+		
+		final UUID 				emailId 		= UUID.randomUUID();
+		final String 			replyMessage 	= "response to original email";
+		
+		ResponseEntity<Void> 	response 		= this.emailController.replyToEmail(emailId, replyMessage, mockPrincipal);
+		
+		Mockito.verify(this.mockEmailService).handleReply(emailId, replyMessage, mockPrincipal.getName());
+		
+		assertEquals(HttpStatus.OK, response.getStatusCode());
+		
+	}
+	
 }

@@ -18,6 +18,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.arenella.recruit.emailservice.beans.Contact;
@@ -35,7 +36,7 @@ import com.arenella.recruit.emailservice.services.EmailService;
 public class EmailController {
 
 	@Autowired
-	private EmailService emailService;
+	private EmailService 	emailService;
 	
 	@Autowired
 	private ContactService	contactService;
@@ -108,7 +109,23 @@ public class EmailController {
 	* @param emailId - id of the email to delete
 	*/
 	public void deleteEmail(UUID emailId) {
+
+	}
+	
+	/**
+	* Replies to an Existing email
+	* @param emailId	- Id of Email to reply to
+	* @param message	- Reply message
+	* @param principal	- Authorized User
+	* @return ResponseEntity
+	*/
+	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_RECRUITER')")
+	@PutMapping(value="/email/{emailId}/reply")
+	public ResponseEntity<Void> replyToEmail(@PathVariable("emailId") UUID emailId, @RequestPart("message") String message,  Principal principal){
 		
+		this.emailService.handleReply(emailId, message, principal.getName());
+		
+		return ResponseEntity.ok().build();
 	}
 	
 }

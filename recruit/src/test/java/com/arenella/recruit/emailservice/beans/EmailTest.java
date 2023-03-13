@@ -137,6 +137,54 @@ public class EmailTest {
 	}
 	
 	/**
+	* Tests updating of the body of the Email
+	* @throws Exception
+	*/
+	@Test
+	public void testSetBody() throws Exception{
+		
+		final String body 			= "Some text";
+		final String updatedBody 	= "Some new text";
+		
+		Email email = Email
+				.builder()
+				.body(body)
+				.build();
+		
+		assertEquals(body, email.getBody());
+		
+		email.setBody(updatedBody);;
+		
+		assertEquals(updatedBody, email.getBody());
+		
+	}
+	
+	/**
+	* Tests updating of Email Recipients
+	* @throws Exception
+	*/
+	@Test
+	public void testSetRecipients() throws Exception{
+		
+		final EmailRecipient<UUID> 		recipient1 	= new EmailRecipient<>(UUID.randomUUID(), "", ContactType.RECRUITER);
+		final EmailRecipient<UUID> 		recipient2 	= new EmailRecipient<>(UUID.randomUUID(), "", ContactType.RECRUITER);
+		final Set<EmailRecipient<UUID>> original 	= Set.of(recipient1);
+		final Set<EmailRecipient<UUID>> updates 	= Set.of(recipient2);
+		
+		Email email = Email
+				.builder()
+				.recipients(original)
+				.build();
+		
+		assertEquals(recipient1, email.getRecipients().stream().findFirst().get());
+		
+		email.setRecipients(updates);
+		
+		assertEquals(recipient2, email.getRecipients().stream().findFirst().get());
+		
+	}
+	
+	/**
 	* Tests updating of the state to FAILURE
 	* @throws Exception
 	*/

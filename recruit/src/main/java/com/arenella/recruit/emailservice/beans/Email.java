@@ -19,7 +19,8 @@ public class Email {
 		PASSWORD_RESET, 
 		LISTING_RECRUITER_CONTACT_REQUEST, 
 		OPEN_POSITION_CONTACT_REQUEST, 
-		OFFERED_CANDIDATE_CONTACT_REQUEST};
+		OFFERED_CANDIDATE_CONTACT_REQUEST,
+		REC_TO_REC_EMAIL_REPLY_NOTICICATION};
 		
 	public static enum EmailType 	{INTERN, EXTERN, SYSTEM_INTERN, SYSTEM_EXTERN};
 	public static enum Status 		{DRAFT, TO_OUTBOX, SENT_INTERN, SENT_EXTERN, FAILURE};
@@ -147,6 +148,24 @@ public class Email {
 	*/
 	public void markSentFailure() {
 		this.status = Status.FAILURE;
+	}
+	
+	/**
+	* Sets the Body text of the email
+	* @param body - Email Body
+	*/
+	public void setBody(String body) {
+		this.body = body;
+	}
+	
+	/**
+	* Replaces recipients
+	* @param recipients
+	*/
+	public void setRecipients(Set<EmailRecipient<UUID>> recipients) {
+		this.recipients.clear();
+		this.recipients.addAll(recipients);
+		
 	}
 	
 	/**

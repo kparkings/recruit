@@ -5,8 +5,9 @@
 				
 			</div>
 			<div class="action-buttons" *ngIf="currentView == 'view-read'">
-				<button class="btn btn-secondary action-btn" (click)="markAsUnread()" 	*ngIf="currentEmail.viewed">Mark Unread</button>
-				<button class="btn btn-secondary action-btn"  							*ngIf="!currentEmail.viewed" disabled>Mark Unread</button>
+				<button class="btn btn-secondary action-btn" (click)="composeReply(replyBox)"	*ngIf="currentEmail.sender.senderType === 'RECRUITER'">Reply</button>
+				<button class="btn btn-secondary action-btn" (click)="markAsUnread()" 			*ngIf="currentEmail.viewed">Mark Unread</button>
+				<button class="btn btn-secondary action-btn"  									*ngIf="!currentEmail.viewed" disabled>Mark Unread</button>
 				<button class="btn btn-secondary action-btn" (click)="viewInbox()">Back</button>
 			</div>
 		</div>
@@ -64,3 +65,25 @@
 	<div class="page-footer">
 	</div>
 </div>
+
+<!-- Reply Box -->
+<ng-template #replyBox let-modal>
+	<div class="modal-header">
+		<h4 class="modal-title">Send Reply To Email</h4>
+ 		<div class="filter-close-box" (click)="closeModal()">X</div>
+	</div>
+	<div class="feedbackBox;">
+		<div class="modal-body" *ngIf="replyState === 'compose'">
+			<form [formGroup]="replyFormGroup">
+				<textarea formControlName="message"></textarea>
+			</form>
+			<button class="btn btn-secondary action-btn" (click)="sendReply()">Send</button>
+		</div>
+		<div class="modal-body modal-feedback" *ngIf="replyState === 'success'">
+			<p>The reply has been sent.</p>
+		</div>
+		<div class="modal-body modal-feedback" *ngIf="replyState === 'failure'">
+			<p>Unfortunately it was not possible to send the reply at this time.</p>
+		</div>
+	</div>
+</ng-template>

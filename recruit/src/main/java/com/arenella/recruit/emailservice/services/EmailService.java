@@ -35,4 +35,12 @@ public interface EmailService {
 	*/
 	public void setEmailReadStatus(UUID emailId, boolean read, String authorizedUsersId);
 	
+	/**
+	* Handles the sending of a Reply to an existing message
+	* @param emailId				- Id of email the reply is for
+	* @param message				- The reply message text
+	* @param authenticatedUserId	- id of currently authenticated User
+	*/
+	public void handleReply(UUID emailId, String message, String authenticatedUserId);
+
 }

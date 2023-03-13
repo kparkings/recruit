@@ -87,7 +87,9 @@ public class EmailDispatcherService {
 					email.markSentFailure();
 				}
 				
-				emailDao.saveEmail(email);
+				if (email.isPersistable()) {
+					emailDao.saveEmail(email);
+				}
 				
 			}
 		};
@@ -141,7 +143,9 @@ public class EmailDispatcherService {
 							.attachments(convertAttachments(command, emailId))
 						.build();
 				
-				this.emailDao.saveEmail(email);
+				if (email.isPersistable()) {
+					this.emailDao.saveEmail(email);
+				}
 				
 				if (command.getEmailType() == EmailType.EXTERN || command.getEmailType() == EmailType.SYSTEM_EXTERN) {
 					dispatchEmail(email, this.emailDao);
