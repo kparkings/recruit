@@ -786,5 +786,22 @@ export class RecruiterMarketplaceComponent implements OnInit {
 		}
 		
 	}
+	
+	/**
+	* Returns whtehr the candidate being offered is owned by the
+	* logged in user	
+	*/
+	public isMyCandidate():boolean{
+		return this.activeCandidate.recruiter.recruiterId === sessionStorage.getItem("userId");
+	}
+	
+	/**
+	* Returns whtehr the open Position being offered is owned by the
+	* logged in user	
+	*/
+	public isMyOpenPosition():boolean{
+		return this.activeOpenPosition.recruiter.recruiterId === sessionStorage.getItem("userId");
+	
+	}
 
 }

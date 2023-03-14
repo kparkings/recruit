@@ -15,12 +15,16 @@
 			<table class="table marketplace-table tab-nav" *ngIf="currentView == 'view-inbox'">
 				<thead>
 					<tr>
+						<th>id</th>
+						<th>viewed</th>
 						<th>From</th>
 						<th>Subject</th>
 						<th>Sent</th>
 					</tr>
 				</thead>
 				<tr class="email_viewed_{{email.viewed}}" *ngFor="let email of emails" (click)="viewEmail(email)">
+					<td>{{email.id}}</td>
+					<td>{{email.viewed}}</td>
 					<td>{{email.sender.senderName}}</td>
 					<td>{{email.title}}</td>
 					<td>{{email.created | date: 'dd MMM'}}</td>

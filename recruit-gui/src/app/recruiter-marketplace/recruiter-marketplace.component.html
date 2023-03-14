@@ -23,9 +23,9 @@
 			</p>
 			
 			<div class="action-buttons">
-				<button class="btn btn-secondary action-btn" (click)="showJustMyCandidates()" 	*ngIf="!showJustMyCandidatesActive">My Candidate</button>
-				<button class="btn btn-secondary action-btn" (click)="fetchOfferedCandidates()" *ngIf="showJustMyCandidatesActive">All Candidates</button>
-				<button class="btn btn-secondary action-btn" (click)="switchTab('addSupply')" 	*ngIf="!isAuthenticatedAsAdmin()">Offer Candidate</button>
+				<button class="btn btn-secondary action-btn" 					(click)="showJustMyCandidates()" 	*ngIf="!showJustMyCandidatesActive">My Candidate</button>
+				<button class="btn btn-secondary action-btn" 					(click)="fetchOfferedCandidates()" *ngIf="showJustMyCandidatesActive">All Candidates</button>
+				<button class="btn btn-secondary action-btn  main-action_btn" 	(click)="switchTab('addSupply')" 	*ngIf="!isAuthenticatedAsAdmin()">Offer Candidate</button>
 			</div>
 			<!-- List of offered Candidates -->
 			<div>
@@ -308,7 +308,8 @@
 		<div *ngIf="showSupplyDetails">
 			<div class="action-buttons">
 				<button class="btn btn-secondary  small-action-btn" (click)="showOfferedCandidates()">Back</button>
-				<button class="btn btn-secondary  small-action-btn" (click)="contactRecruiter(contactBox)">Contact</button>
+				<button class="btn btn-secondary  small-action-btn" (click)="contactRecruiter(contactBox)" *ngIf="isMyCandidate()" disabled>Contact</button>
+				<button class="btn btn-secondary  small-action-btn" (click)="contactRecruiter(contactBox)" *ngIf="!isMyCandidate()">Contact</button>
 			</div>
 			<div style='clear:both'>
 				<div style="margin-left:10px;margin-bottom:20px;">
@@ -394,9 +395,9 @@
 			of the position you are trying to fill and allow other Recruiters to contact you with suitable candidates.  
 			</p>
 			<div class="action-buttons">
-				<button class="btn btn-secondary action-btn" (click)="showJustMyOpenPositions()" 	*ngIf="!showJustMyOpenPositionsActive">My Candidates</button>
-				<button class="btn btn-secondary action-btn" (click)="fetchOpenPositions()" 		*ngIf="showJustMyOpenPositionsActive">All Candidates</button>
-				<button class="btn btn-secondary action-btn" (click)="switchTab('addDemand')" *ngIf="!isAuthenticatedAsAdmin()">Request Candidate</button>
+				<button class="btn btn-secondary action-btn" 					(click)="showJustMyOpenPositions()" 	*ngIf="!showJustMyOpenPositionsActive">My Candidates</button>
+				<button class="btn btn-secondary action-btn" 					(click)="fetchOpenPositions()" 		*ngIf="showJustMyOpenPositionsActive">All Candidates</button>
+				<button class="btn btn-secondary action-btn main-action_btn" 	(click)="switchTab('addDemand')" *ngIf="!isAuthenticatedAsAdmin()">Request Candidate</button>
 			</div>
 			<!-- List of Requested Candidates -->
 			<div>
@@ -606,7 +607,8 @@
 	<div *ngIf="showDemandDetails">
 			<div class="action-buttons">
 				<button class="btn btn-secondary  small-action-btn" (click)="showOpenPositions()">Back</button>
-				<button class="btn btn-secondary  small-action-btn" (click)="contactRecruiter(contactBox)">Contact</button>
+				<button class="btn btn-secondary  small-action-btn" (click)="contactRecruiter(contactBox)" *ngIf="isMyOpenPosition()" disabled>Contact</button>
+				<button class="btn btn-secondary  small-action-btn" (click)="contactRecruiter(contactBox)" *ngIf="!isMyOpenPosition()">Contact</button>
 			</div>
 			<div style='clear:both'>
 				<div style="margin-left:10px;margin-bottom:20px;">

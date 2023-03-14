@@ -28,15 +28,11 @@ import com.arenella.recruit.emailservice.controllers.EmailAPIOutbound.SenderAPIO
 */
 public class EmailAPIOutboundTest {
 
-	//final private String					recip1Address				= "norepy1@renella-ict.com";
-	//final private String					recip2Address				= "norepy2@renella-ict.com";
 	final private UUID 						recip1Id 					= UUID.randomUUID();
 	final private UUID 						recip2Id 					= UUID.randomUUID();
 	final private UUID 						id							= UUID.randomUUID();
 	final private String 					title						= "aTitle";
 	final private EmailType 				emailType					= EmailType.EXTERN;
-	//final private String					firstNameRecip1				= "Kevin1";
-	//final private String					firstNameRecip2				= "Kevin2";
 	final private String					senderContactId				= "scid1";
 	final private String					senderFirstName				= "Kevin";
 	final private String					senderSurname				= "Parkings";
@@ -116,7 +112,7 @@ public class EmailAPIOutboundTest {
 		
 		Set<Contact> contacts = Set.of(new Contact(senderContactId, ContactType.RECRUITER, senderFirstName, senderSurname, ""));
 		
-		EmailAPIOutbound out = EmailAPIOutbound.convertFromDomain(email, contacts);
+		EmailAPIOutbound out = EmailAPIOutbound.convertFromDomain(email, contacts, contactId1);
 		
 		assertEquals(id, 					out.getId());
 		assertEquals(title, 				out.getTitle());
@@ -152,7 +148,7 @@ public class EmailAPIOutboundTest {
 		
 		Set<Contact> contacts = Set.of();
 		
-		EmailAPIOutbound out = EmailAPIOutbound.convertFromDomain(email, contacts);
+		EmailAPIOutbound out = EmailAPIOutbound.convertFromDomain(email, contacts, contactId1);
 		
 		assertEquals(id, 					out.getId());
 		assertEquals(title, 				out.getTitle());

@@ -53,7 +53,7 @@ public class EmailController {
 		Set<String> 	contactIds 	= emails.stream().filter(e -> e.getSender().getContactType() == SenderType.RECRUITER).map(e -> e.getSender().getContactId()).collect(Collectors.toSet());
 		Set<Contact> 	contacts 	= this.contactService.fetchContacts(contactIds);
 		
-		Set<EmailAPIOutbound> emailsAPIOutbound =  this.emailService.fetchEmailsByRecipientId(principal.getName()).stream().map(e -> EmailAPIOutbound.convertFromDomain(e, contacts)).collect(Collectors.toCollection(LinkedHashSet::new));
+		Set<EmailAPIOutbound> emailsAPIOutbound =  this.emailService.fetchEmailsByRecipientId(principal.getName()).stream().map(e -> EmailAPIOutbound.convertFromDomain(e, contacts, principal.getName())).collect(Collectors.toCollection(LinkedHashSet::new));
 	
 		return new ResponseEntity<>(emailsAPIOutbound, HttpStatus.OK);
 		

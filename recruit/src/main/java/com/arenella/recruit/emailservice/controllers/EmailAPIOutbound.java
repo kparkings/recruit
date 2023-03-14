@@ -338,7 +338,7 @@ public class EmailAPIOutbound {
 	* @param email - To convert
 	* @return converted
 	*/
-	public static EmailAPIOutbound convertFromDomain(Email email, Set<Contact> contacts) {
+	public static EmailAPIOutbound convertFromDomain(Email email, Set<Contact> contacts, String authorizedUserId) {
 		return EmailAPIOutbound
 				.builder()
 					.attachments(email.getAttachments().stream().map(a -> convertFromDomain(a)).collect(Collectors.toCollection(LinkedHashSet::new)))
@@ -347,7 +347,7 @@ public class EmailAPIOutbound {
 					.id(email.getId())
 					.sender(convertFromDomain(email.getSender(), contacts)) //?? How to get sender name
 					.title(email.getTitle())
-					.viewed(email.getRecipients().stream().findFirst().get().isViewed()) //Will only work if we only return single recipient
+					.viewed(email.getRecipients().stream().filter(r -> r.getContactId().equals(authorizedUserId)).findFirst().get().isViewed()) //Will only work if we only return single recipient
 				.build();
 	}
 }

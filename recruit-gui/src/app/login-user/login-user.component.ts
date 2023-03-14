@@ -73,6 +73,8 @@ export class LoginUserComponent implements OnInit {
 	      
 			sessionStorage.setItem('loggedIn',      					'true');
 	      
+			sessionStorage.setItem("userId", 							this.formBean.get('username')?.value);
+
 			const beforeAuthPage: any = sessionStorage.getItem('beforeAuthPage');
 	    
 			sessionStorage.setItem('beforeAuthPage', beforeAuthPage);
