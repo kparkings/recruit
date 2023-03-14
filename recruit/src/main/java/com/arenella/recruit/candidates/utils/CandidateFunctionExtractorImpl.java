@@ -26,11 +26,11 @@ public class CandidateFunctionExtractorImpl implements CandidateFunctionExtracto
 	*/
 	@PostConstruct
 	public void init() {
-		all.put(FUNCTION.CSHARP_DEV, 				(Set<String>)Set.of("c# developer","c#",".net","dotnet","wpf","asp","vb.net","csharp","asp.net"));
+		all.put(FUNCTION.CSHARP_DEV, 				(Set<String>)Set.of("c# developer","c# ",".net","dotnet","wpf","asp","vb.net","csharp","asp.net"));
 		all.put(FUNCTION.SUPPORT, 					(Set<String>)Set.of("it support analyst","support","helpdesk","service desk"));
 		all.put(FUNCTION.BA, 						(Set<String>)Set.of("business analyst","ba"));
 		all.put(FUNCTION.UI_UX, 					(Set<String>) Set.of("ui/ux designer","ui\\ux","designer","ui","ux"));
-		all.put(FUNCTION.PROJECT_MANAGER, 			(Set<String>)Set.of("project manager","manager","product owner", "pm"));
+		all.put(FUNCTION.PROJECT_MANAGER, 			(Set<String>)Set.of("project manager","manager","product owner", "pm", "it project manager", "pmo"));
 		all.put(FUNCTION.ARCHITECT, 				(Set<String>)Set.of("architect","solutions","enterprise"));
 		all.put(FUNCTION.TESTER, 					(Set<String>)Set.of("test analyst","tester","test", "qa","automation","manual","quality","assurance", "selenium", "cucumber","testing","robot"));
 		all.put(FUNCTION.WEB_DEV, 					(Set<String>)Set.of("web developer","front end","front-end","js","vue","vuejs","vue.js","react","node","node.js","php","wordpress"));
@@ -55,10 +55,18 @@ public class CandidateFunctionExtractorImpl implements CandidateFunctionExtracto
 		if (!StringUtils.hasText(searchText)) {
 			return Set.of();
 		}
+		
+		/**
+		* Means user doesn't have to add a trailing space to trigger match 
+		*/
+		searchText = searchText + " ";
+		
 		final String sanitizedSearchText = searchText.toLowerCase();
 		
+		
+		
 		all.keySet().forEach(function -> {
-			if (all.get(function).stream().filter(value -> sanitizedSearchText.contains(value)).count() > 0) {
+			if (all.get(function).stream().filter(value -> sanitizedSearchText.contains(value + " ")).count() > 0) {
 				identifiedFunctions.add(function);
 			}
 		});

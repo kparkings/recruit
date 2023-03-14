@@ -272,7 +272,7 @@ public class CandidateServiceImpl implements CandidateService{
 		
 		int 										pageCounter 		= 0;
 		Set<String> 								suggestionIds 		= new HashSet<>();
-		AtomicReference<suggestion_accuracy> 		accuracy 			=  new AtomicReference<>(suggestion_accuracy.perfect);
+		AtomicReference<suggestion_accuracy> 		accuracy 			= new AtomicReference<>(suggestion_accuracy.perfect);
 		Pageable 									pageable 			= PageRequest.of(0,100);
 		
 		//TODO: [KP] Need to add skills for things like React, Vue where the FUNCTION alone is not sufficient

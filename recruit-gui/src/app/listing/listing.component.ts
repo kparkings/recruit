@@ -27,6 +27,7 @@ export class ListingComponent implements OnInit {
 		
 		if (this.isMobile) {
 			this.displayFilters = false;
+			this.mobileListingclass = 'mobile-listing-layout';
 		} else {
 			this.displayFilters = true;
 		}
@@ -61,6 +62,7 @@ export class ListingComponent implements OnInit {
 	public displayFilters:boolean				= true;
 	
 	public isMobile:boolean = false;
+	public mobileListingclass:string 			= '';
 	
 	/**
 	* Uploads the file for the Curriculum and stored 
