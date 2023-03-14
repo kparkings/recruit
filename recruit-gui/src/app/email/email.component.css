@@ -16,12 +16,15 @@
 	min-height:75px;
 }
 
+.email-table{
+	width:100%;
+}
+
 th{
 	border: 1px black solid;
     background: #6c757d;
     color: #ffffff;
     font-size: x-small;
-    white-space: nowrap;
     padding: 5px;
     margin: 5px;
     text-align: center;
@@ -33,13 +36,13 @@ th{
 td{
 	border: 1px black solid;
     font-size: x-small;
-    white-space: nowrap;
     padding: 5px;
     margin: 5px;
     text-align: center;
     padding-left: 5px;
     padding-right: 5px;
     min-width: 50px;
+    word-wrap: break-word;
 }
 
 tr:nth-child(odd){
