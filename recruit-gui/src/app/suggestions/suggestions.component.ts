@@ -15,6 +15,7 @@ import { CandidateFunction }						from '../candidate-function';
 import { DomSanitizer, SafeResourceUrl, SafeUrl } 	from '@angular/platform-browser';
 import { DeviceDetectorService } 					from 'ngx-device-detector';
 import { Router}									from '@angular/router';
+import { debounceTime } 							from "rxjs/operators";
 
 /**
 * Component to suggest suitable Candidates based upon a 
@@ -171,6 +172,8 @@ export class SuggestionsComponent implements OnInit {
 		skill: 					new UntypedFormControl(''),
 	});
 	
+	
+	
 	/**
 	* Resets the filters
 	*/
@@ -242,6 +245,7 @@ export class SuggestionsComponent implements OnInit {
 		this.getSuggestions();	
 	 	this.trustedResourceUrl = this.sanitizer.bypassSecurityTrustResourceUrl('');
 		this.isMobile = deviceDetector.isMobile();
+		
 	}
 	
 	public showCVInline(candidateId:string):void{
@@ -257,8 +261,9 @@ export class SuggestionsComponent implements OnInit {
 	* Initializes Component`
 	*/
 	ngOnInit(): void {
-		this.suggestionFilterForm.valueChanges.subscribe(value => {
-			this.getSuggestions();	
+		
+		this.suggestionFilterForm.valueChanges.pipe(debounceTime(50)).subscribe(res => {
+			this.getSuggestions();
 		});
 		
 		this.candidateService.fetchSavedCandidates().subscribe(response => {
