@@ -262,7 +262,7 @@ export class SuggestionsComponent implements OnInit {
 	*/
 	ngOnInit(): void {
 		
-		this.suggestionFilterForm.valueChanges.pipe(debounceTime(50)).subscribe(res => {
+		this.suggestionFilterForm.valueChanges.pipe(debounceTime(500)).subscribe(res => {
 			this.getSuggestions();
 		});
 		
