@@ -199,6 +199,30 @@ public class RecruiterProfile {
 	}
 	
 	/**
+	* Sets the recruiters first name
+	* @param recruiterFirstName - first name
+	*/
+	public void setRecruiterFirstName(String recruiterFirstName) {
+		this.recruiterFirstName = recruiterFirstName;
+	}
+	
+	/**
+	* Sets the recruiters Surname
+	* @param recruiterSurname surname
+	*/
+	public void setRecruiterSurname(String recruiterSurname) {
+		this.recruiterSurname = recruiterSurname;
+	}
+	
+	/**
+	* Sets the company name
+	* @param companyName - Company recruiter works for
+	*/
+	public void setCompanyName(String companyName) {
+		this.companyName = companyName;
+	}
+	
+	/**
 	* Returns a Builder for the class
 	* @return Builder for the class
 	*/

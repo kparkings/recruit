@@ -7,10 +7,14 @@ import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Table;
 
+import com.arenella.recruit.recruiters.beans.Recruiter;
+import com.arenella.recruit.recruiters.beans.RecruiterProfile;
 import com.arenella.recruit.recruiters.beans.RecruiterProfile.CONTRACT_TYPE;
 import com.arenella.recruit.recruiters.beans.RecruiterProfile.COUNTRY;
 import com.arenella.recruit.recruiters.beans.RecruiterProfile.LANGUAGE;
@@ -56,31 +60,37 @@ public class RecruiterProfileEntity {
 	private String				introduction;
 	
 	@Column(name="recruiter_type")
+	@Enumerated(EnumType.STRING)
 	private REC_TYPE	 		recruiterType;
 	
-	@Column(name="recruits_in")
-	@ElementCollection(targetClass=String.class)
-	@CollectionTable(schema="recruiter", name="recruiter_profile_country", joinColumns=@JoinColumn(name="listing_id"))
+	@Column(name="country", nullable=false)
+	@Enumerated(EnumType.STRING)
+	@ElementCollection(targetClass=COUNTRY.class)
+	@CollectionTable(schema="recruiter", name="recruiter_profile_country", joinColumns=@JoinColumn(name="recruiter_id"))
 	private Set<COUNTRY> 		recruitsIn				= new LinkedHashSet<>();
 	
-	@Column(name="languages_spoken")
-	@ElementCollection(targetClass=String.class)
-	@CollectionTable(schema="recruiter", name="recruiter_profile_language", joinColumns=@JoinColumn(name="listing_id"))
+	@Column(name="language", nullable=false)
+	@Enumerated(EnumType.STRING)
+	@ElementCollection(targetClass=LANGUAGE.class)
+	@CollectionTable(schema="recruiter", name="recruiter_profile_language", joinColumns=@JoinColumn(name="recruiter_id"))
 	private Set<LANGUAGE>		languagesSpoken			= new LinkedHashSet<>();
 	
-	@Column(name="sectors")
-	@ElementCollection(targetClass=String.class)
-	@CollectionTable(schema="recruiter", name="recruiter_profile_sector", joinColumns=@JoinColumn(name="listing_id"))
+	@Column(name="sector", nullable=false)
+	@Enumerated(EnumType.STRING)
+	@ElementCollection(targetClass=SECTOR.class)
+	@CollectionTable(schema="recruiter", name="recruiter_profile_sector", joinColumns=@JoinColumn(name="recruiter_id"))
 	private Set<SECTOR>			sectors					= new LinkedHashSet<>();
 	
-	@Column(name="core_tech")
-	@ElementCollection(targetClass=String.class)
-	@CollectionTable(schema="recruiter", name="recruiter_profile_tech", joinColumns=@JoinColumn(name="listing_id"))
+	@Column(name="tech", nullable=false)
+	@Enumerated(EnumType.STRING)
+	@ElementCollection(targetClass=TECH.class)
+	@CollectionTable(schema="recruiter", name="recruiter_profile_tech", joinColumns=@JoinColumn(name="recruiter_id"))
 	private Set<TECH>			coreTech				= new LinkedHashSet<>();
 	
-	@Column(name="recruits_contract_types")
-	@ElementCollection(targetClass=String.class)
-	@CollectionTable(schema="recruiter", name="recruiter_profile_contract_type", joinColumns=@JoinColumn(name="listing_id"))
+	@Column(name="contract_type", nullable=false)
+	@Enumerated(EnumType.STRING)
+	@ElementCollection(targetClass=CONTRACT_TYPE.class)
+	@CollectionTable(schema="recruiter", name="recruiter_profile_contract_type", joinColumns=@JoinColumn(name="recruiter_id"))
 	private Set<CONTRACT_TYPE> 	recruitsContractTypes	= new LinkedHashSet<>();
 	
 	/**
@@ -429,6 +439,70 @@ public class RecruiterProfileEntity {
 		}
 		 		
 	
+	}
+	
+	/**
+	* Converts from Domain to Entity representation
+	* @param recruiterProfile - representation to convert
+	* @return converted representation
+	*/
+	public static RecruiterProfileEntity convertToEntity(RecruiterProfile recruiterProfile) {
+		return RecruiterProfileEntity
+				.builder()
+					.coreTech(recruiterProfile.getCoreTech())
+					.introduction(recruiterProfile.getIntroduction())
+					.jobTitle(recruiterProfile.getJobTitle())
+					.languagesSpoken(recruiterProfile.getLanguagesSpoken())
+					.photoBytes(recruiterProfile.getProfilePhoto().getImageBytes())
+					.photoFormat(recruiterProfile.getProfilePhoto().getFormat())
+					.recruiterId(recruiterProfile.getRecruiterId())
+					.recruiterType(recruiterProfile.getRecruiterType())
+					.recruitsContractTypes(recruiterProfile.getRecruitsContractTypes())
+					.recruitsIn(recruiterProfile.getRecruitsIn())
+					.sectors(recruiterProfile.getSectors())
+					.visibleToCandidates(recruiterProfile.isVisibleToCandidates())
+					.visibleToPublic(recruiterProfile.isVisibleToPublic())
+					.visibleToRecruiters(recruiterProfile.isVisibleToRecruiters())
+					.yearsExperience(recruiterProfile.getYearsExperience())
+				.build();
+	}
+	
+	/**
+	* Overloads for if Recruiter not available. Sets only recruiterId 
+	* @param recruiterProfileEntity - representation to convert
+	* @return Domain representation
+	*/
+	public static RecruiterProfile convertFromEntity(RecruiterProfileEntity recruiterProfileEntity) {
+		
+		return RecruiterProfileEntity.convertFromEntity(recruiterProfileEntity, Recruiter.builder().userId(recruiterProfileEntity.recruiterId).build());
+	}
+	
+	/**
+	* Converts from Entity to Domain representation
+	* @param recruiterProfileEntity - representation to convert
+	* @return Domain representation
+	*/
+	public static RecruiterProfile convertFromEntity(RecruiterProfileEntity recruiterProfileEntity, Recruiter recruiter) {
+		return RecruiterProfile
+				.builder()
+					.companyName(recruiter.getCompanyName())
+					.recruiterSurname(recruiter.getSurname())
+					.recruiterFirstName(recruiter.getFirstName())
+					.coreTech(recruiterProfileEntity.getCoreTech())
+					.introduction(recruiterProfileEntity.getIntroduction())
+					.jobTitle(recruiterProfileEntity.getJobTitle())
+					.languagesSpoken(recruiterProfileEntity.getLanguagesSpoken())
+					.profilePhoto(new RecruiterProfile.Photo(recruiterProfileEntity.photoBytes,recruiterProfileEntity.getPhotoFormat()))
+					.recruiterId(recruiterProfileEntity.getRecruiterId())
+					.recruiterType(recruiterProfileEntity.getRecruiterType())
+					.recruitsContractTypes(recruiterProfileEntity.getRecruitsContractTypes())
+					.recruitsIn(recruiterProfileEntity.getRecruitsIn())
+					.sectors(recruiterProfileEntity.getSectors())
+					.visibleToCandidates(recruiterProfileEntity.isVisibleToCandidates())
+					.visibleToPublic(recruiterProfileEntity.isVisibleToPublic())
+					.visibleToRecruiters(recruiterProfileEntity.isVisibleToRecruiters())
+					.yearsExperience(recruiterProfileEntity.getYearsExperience())
+				.build();
 	}
 	
 }

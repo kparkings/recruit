@@ -99,4 +99,26 @@ public class RecruiterProfileTest {
 		
 	}
 	
+	/**
+	* Tests Setters
+	* @throws Exception
+	*/
+	@Test
+	public void testSetters() throws Exception{
+		
+		RecruiterProfile profile = 
+				RecruiterProfile
+					.builder()
+					.build();
+		
+		profile.setCompanyName(COMPANY_NAME);
+		profile.setRecruiterFirstName(FIRST_NAME);
+		profile.setRecruiterSurname(SURNAME);
+		
+		assertEquals(COMPANY_NAME, 			profile.getCompanyName());
+		assertEquals(FIRST_NAME, 			profile.getRecruiterFirstName());
+		assertEquals(SURNAME, 				profile.getRecruiterSurname());
+		
+	}
+	
 }

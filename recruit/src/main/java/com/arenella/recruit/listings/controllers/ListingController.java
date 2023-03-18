@@ -90,13 +90,7 @@ public class ListingController {
 	public Page<ListingAPIOutbound> fetchListings(	@RequestParam(required=false)String recruiterId, 
 													@RequestParam(required=false)LISTING_AGE listingAge,
 													Pageable pageable){
-		
-		//ListingFilterBuilder filterBuilder = ListingFilter.builder();
-		
-		//if (StringUtils.hasText(recruiterId)) {
-		//	filterBuilder.ownerId(recruiterId);
-		//}
-		
+
 		ListingFilter filters = 
 				ListingFilter
 				.builder()
@@ -124,11 +118,7 @@ public class ListingController {
 					.type(listingType)
 					.listingAge(listingAge)
 				.build();
-		
-		//if (Optional.ofNullable(listingType).isPresent()) {
-		//	filterBuilder.type(listingType);
-		//}
-		
+
 		return service.fetchListings(filters, pageable).map(listing -> ListingAPIOutboundPublic.convertFromListing(listing));	
 		
 	}

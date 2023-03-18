@@ -3,7 +3,6 @@ package com.arenella.recruit.recruiters.beans;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import com.arenella.recruit.candidates.controllers.CandidateSearchAlertAPIInbound;
 import com.arenella.recruit.recruiters.beans.RecruiterProfile.CONTRACT_TYPE;
 import com.arenella.recruit.recruiters.beans.RecruiterProfile.COUNTRY;
 import com.arenella.recruit.recruiters.beans.RecruiterProfile.LANGUAGE;
@@ -24,7 +23,7 @@ public class RecruiterProfileAPIInbound {
 
 	private Set<COUNTRY> 		recruitsIn				= new LinkedHashSet<>();
 	private Set<LANGUAGE>		languagesSpoken			= new LinkedHashSet<>();;
-	private PhotoAPIInbound	profilePhoto;
+	private PhotoAPIInbound		profilePhoto;
 	private boolean 			visibleToRecruiters;
 	private boolean 			visibleToCandidates;
 	private boolean 			visibleToPublic;

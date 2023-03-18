@@ -1522,4 +1522,155 @@ databaseChangeLog:
             - column:
                 name: surname
                 type: varchar
-                
+  - changeSet:
+      id: create_recruiter_profile_table
+      author: kparkings
+      changes:
+        - createTable:
+            tableName: recruiter_profiles 
+            schemaName: recruiter
+            columns:
+              - column:
+                  name: recruiter_id
+                  type: varchar
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: photo_bytesf
+                  type: bytea
+                  constraints:
+                    nullable: true
+              - column:
+                  name: photo_format
+                  type: varchar
+                  constraints:
+                    nullable: true
+              - column:
+                  name: visible_to_recruiters
+                  type: boolean
+                  constraints:
+                    nullable: false
+                    default: false
+              - column:
+                  name: visible_to_candidates
+                  type: boolean
+                  constraints:
+                    nullable: false
+                    default: false
+              - column:
+                  name: visible_to_public
+                  type: boolean
+                  constraints:
+                    nullable: false
+                    default: false
+              - column:
+                  name: job_title
+                  type: boolean
+                  constraints:
+                    nullable: true
+              - column:
+                  name: years_experience
+                  type: tinyint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: introduction
+                  type: varchar
+                  constraints:
+                    nullable: true
+              - column:
+                  name: recruiter_type
+                  type: varchar
+                  constraints:
+                    nullable: true
+        - createTable:
+            tableName: recruiter_profile_country
+            schemaName: recruiter
+            columns:
+              - column:
+                  name: recruiter_id
+                  type: varchar
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+                    foreignKeyName: fk_country_recruiter_profile
+                    references: recruiter.recruiter_profiles(recruiter_id)
+              - column:
+                  name: country
+                  type: varchar
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+        - createTable:
+            tableName: recruiter_profile_language
+            schemaName: recruiter
+            columns:
+              - column:
+                  name: recruiter_id
+                  type: varchar
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+                    foreignKeyName: fk_language_recruiter_profile
+                    references: recruiter.recruiter_profiles(recruiter_id)
+              - column:
+                  name: language
+                  type: varchar
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+        - createTable:
+            tableName: recruiter_profile_sector
+            schemaName: recruiter
+            columns:
+              - column:
+                  name: recruiter_id
+                  type: varchar
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+                    foreignKeyName: fk_sector_recruiter_profile
+                    references: recruiter.recruiter_profiles(recruiter_id)
+              - column:
+                  name: sector
+                  type: varchar
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+        - createTable:
+            tableName: recruiter_profile_tech
+            schemaName: recruiter
+            columns:
+              - column:
+                  name: recruiter_id
+                  type: varchar
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+                    foreignKeyName: fk_tech_recruiter_profile
+                    references: recruiter.recruiter_profiles(recruiter_id)
+              - column:
+                  name: tech
+                  type: varchar
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+        - createTable:
+            tableName: recruiter_profile_contract_type
+            schemaName: recruiter
+            columns:
+              - column:
+                  name: recruiter_id
+                  type: varchar
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+                    foreignKeyName: fk_contract_type_recruiter_profile
+                    references: recruiter.recruiter_profiles(recruiter_id)
+              - column:
+                  name: contract_type
+                  type: varchar
+                  constraints:
+                    primaryKey: true
+                    nullable: false
