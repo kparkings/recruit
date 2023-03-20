@@ -1,7 +1,6 @@
 package com.arenella.recruit.recruiters.entities;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Set;
@@ -100,22 +99,15 @@ public class RecruiterProfileEntityTest {
 	@Test
 	public void testConvertToEntity() throws Exception{
 		
-		final String companyName 	= "arenella ict";
-		final String firstname 		= "kevin";
-		final String surname 		= "parkings";
-		
 		RecruiterProfile profile = 
 				RecruiterProfile
 					.builder()
-						.companyName(companyName)
 						.coreTech(CORE_TECH)
 						.introduction(INTRODUCTION)
 						.jobTitle(JOB_TITLE)
 						.languagesSpoken(LANGUAGES_SPOKEN)
 						.profilePhoto(PROFILE_PHOTO)
-						.recruiterFirstName(firstname)
 						.recruiterId(RECRUITER_ID)
-						.recruiterSurname(surname)
 						.recruiterType(RECRUITER_TYPE)
 						.recruitsContractTypes(RECRUITER_CONTRACT_TYPES)
 						.recruitsIn(RECRUITS_IN)
@@ -194,8 +186,8 @@ public class RecruiterProfileEntityTest {
 		
 		assertEquals(INTRODUCTION, 			profile.getIntroduction());
 		assertEquals(JOB_TITLE, 			profile.getJobTitle());
-		assertEquals(FILE_BYTES, 			profile.getProfilePhoto().getImageBytes());
-		assertEquals(PHOTO_FORMAT.jpeg, 	profile.getProfilePhoto().getFormat());
+		assertEquals(FILE_BYTES, 			profile.getProfilePhoto().get().getImageBytes());
+		assertEquals(PHOTO_FORMAT.jpeg, 	profile.getProfilePhoto().get().getFormat());
 		assertEquals(RECRUITER_ID, 			profile.getRecruiterId());
 		assertEquals(RECRUITER_TYPE, 		profile.getRecruiterType());
 		assertEquals(VISIBLE_TO_CANDIDATES, profile.isVisibleToCandidates());
@@ -203,10 +195,6 @@ public class RecruiterProfileEntityTest {
 		assertEquals(VISIBLE_TO_RECRUITERS, profile.isVisibleToRecruiters());
 		assertEquals(YEARS_EXPERIENCE, 		profile.getYearsExperience());
 		assertEquals(YEARS_EXPERIENCE, 		profile.getYearsExperience());
-		
-		assertEquals(companyName, 			profile.getCompanyName());
-		assertEquals(firstname, 			profile.getRecruiterFirstName());
-		assertEquals(surname, 				profile.getRecruiterSurname());
 		
 		assertTrue(profile.getCoreTech().contains(TECH.JAVA));
 		assertTrue(profile.getLanguagesSpoken().contains(LANGUAGE.ENGLISH));
@@ -250,8 +238,8 @@ public class RecruiterProfileEntityTest {
 		
 		assertEquals(INTRODUCTION, 			profile.getIntroduction());
 		assertEquals(JOB_TITLE, 			profile.getJobTitle());
-		assertEquals(FILE_BYTES, 			profile.getProfilePhoto().getImageBytes());
-		assertEquals(PHOTO_FORMAT.jpeg, 	profile.getProfilePhoto().getFormat());
+		assertEquals(FILE_BYTES, 			profile.getProfilePhoto().get().getImageBytes());
+		assertEquals(PHOTO_FORMAT.jpeg, 	profile.getProfilePhoto().get().getFormat());
 		assertEquals(RECRUITER_ID, 			profile.getRecruiterId());
 		assertEquals(RECRUITER_TYPE, 		profile.getRecruiterType());
 		assertEquals(VISIBLE_TO_CANDIDATES, profile.isVisibleToCandidates());
@@ -259,10 +247,6 @@ public class RecruiterProfileEntityTest {
 		assertEquals(VISIBLE_TO_RECRUITERS, profile.isVisibleToRecruiters());
 		assertEquals(YEARS_EXPERIENCE, 		profile.getYearsExperience());
 		assertEquals(YEARS_EXPERIENCE, 		profile.getYearsExperience());
-		
-		assertNull(profile.getCompanyName());
-		assertNull(profile.getRecruiterFirstName());
-		assertNull(profile.getRecruiterSurname());
 		
 		assertTrue(profile.getCoreTech().contains(TECH.JAVA));
 		assertTrue(profile.getLanguagesSpoken().contains(LANGUAGE.ENGLISH));

@@ -1,6 +1,7 @@
 package com.arenella.recruit.recruiters.beans;
 
 import java.util.LinkedHashSet;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -18,15 +19,12 @@ public class RecruiterProfile {
 	public static enum REC_TYPE			{INDEPENDENT, COMMERCIAL}
 	
 	private String 				recruiterId;
-	private String				recruiterFirstName;
-	private String 				recruiterSurname;
 	private Set<COUNTRY> 		recruitsIn				= new LinkedHashSet<>();
 	private Set<LANGUAGE>		languagesSpoken			= new LinkedHashSet<>();;
 	private Photo				profilePhoto;
 	private boolean 			visibleToRecruiters;
 	private boolean 			visibleToCandidates;
 	private boolean 			visibleToPublic;
-	private String				companyName;
 	private String				jobTitle;
 	private int					yearsExperience;
 	private String				introduction;
@@ -42,15 +40,12 @@ public class RecruiterProfile {
 	public RecruiterProfile(RecruiterProfileBuilder builder) {
 		
 		this.recruiterId 				= builder.recruiterId;
-		this.recruiterFirstName 		= builder.recruiterFirstName;
-		this.recruiterSurname 			= builder.recruiterSurname;
 		this.recruitsIn 				= builder.recruitsIn;
 		this.languagesSpoken 			= builder.languagesSpoken;
 		this.profilePhoto 				= builder.profilePhoto;
 		this.visibleToRecruiters 		= builder.visibleToRecruiters;
 		this.visibleToCandidates 		= builder.visibleToCandidates;
 		this.visibleToPublic 			= builder.visibleToPublic;
-		this.companyName 				= builder.companyName;
 		this.jobTitle 					= builder.jobTitle;
 		this.yearsExperience 			= builder.yearsExperience;
 		this.introduction 				= builder.introduction;
@@ -67,22 +62,6 @@ public class RecruiterProfile {
 	*/
 	public String getRecruiterId() {
 		return this.recruiterId;
-	}
-	
-	/**
-	* Returns the first name of the Recruiter
-	* @return first name
-	*/
-	public String getRecruiterFirstName() {
-		return this.recruiterFirstName;
-	}
-	
-	/**
-	* Returns the surname of the recruiter
-	* @return surname
-	*/
-	public String getRecruiterSurname() {
-		return this.recruiterSurname;
 	}
 	
 	/**
@@ -105,8 +84,8 @@ public class RecruiterProfile {
 	* Returns the Recruiters photo
 	* @return photo of the recruiter
 	*/
-	public Photo getProfilePhoto() {
-		return this.profilePhoto;
+	public Optional<Photo> getProfilePhoto() {
+		return Optional.ofNullable(this.profilePhoto);
 	}
 	
 	/**
@@ -131,14 +110,6 @@ public class RecruiterProfile {
 	*/
 	public boolean isVisibleToPublic() {
 		return this.visibleToPublic;
-	}
-	
-	/**
-	* Returns the name of the Recruiters company
-	* @return name of the company
-	*/
-	public String getCompanyName() {
-		return this.companyName;
 	}
 	
 	/**
@@ -199,27 +170,11 @@ public class RecruiterProfile {
 	}
 	
 	/**
-	* Sets the recruiters first name
-	* @param recruiterFirstName - first name
+	* Sets the Profile Photo
+	* @param profilePhoto - Sets the Profile Photo
 	*/
-	public void setRecruiterFirstName(String recruiterFirstName) {
-		this.recruiterFirstName = recruiterFirstName;
-	}
-	
-	/**
-	* Sets the recruiters Surname
-	* @param recruiterSurname surname
-	*/
-	public void setRecruiterSurname(String recruiterSurname) {
-		this.recruiterSurname = recruiterSurname;
-	}
-	
-	/**
-	* Sets the company name
-	* @param companyName - Company recruiter works for
-	*/
-	public void setCompanyName(String companyName) {
-		this.companyName = companyName;
+	public void setProfilePhoto(Photo profilePhoto) {
+		this.profilePhoto = profilePhoto;
 	}
 	
 	/**
@@ -237,15 +192,12 @@ public class RecruiterProfile {
 	public static class RecruiterProfileBuilder{
 		
 		private String 				recruiterId;
-		private String				recruiterFirstName;
-		private String 				recruiterSurname;
 		private Set<COUNTRY> 		recruitsIn				= new LinkedHashSet<>();;
 		private Set<LANGUAGE>		languagesSpoken			= new LinkedHashSet<>();;
 		private Photo				profilePhoto;
 		private boolean 			visibleToRecruiters;
 		private boolean 			visibleToCandidates;
 		private boolean 			visibleToPublic;
-		private String				companyName;
 		private String				jobTitle;
 		private int					yearsExperience;
 		private String				introduction;
@@ -263,27 +215,7 @@ public class RecruiterProfile {
 			this.recruiterId = recruiterId;
 			return this;
 		}
-		
-		/**
-		* Sets the first name of the recruiter
-		* @param recruiterFirstName - first name
-		* @return Builder
-		*/
-		public RecruiterProfileBuilder recruiterFirstName(String recruiterFirstName) {
-			this.recruiterFirstName = recruiterFirstName;
-			return this;
-		}
-		
-		/**
-		* Sets the Surname of the recruiter
-		* @param recruiterSurname - surname
-		* @return Builder
-		*/
-		public RecruiterProfileBuilder recruiterSurname(String recruiterSurname) {
-			this.recruiterSurname = recruiterSurname;
-			return this;
-		}
-		
+	
 		/**
 		* Sets the Countries the recruiter recruits candidates in
 		* @param recruitsIn - all countries the recruiter recruits for
@@ -343,16 +275,6 @@ public class RecruiterProfile {
 		*/
 		public RecruiterProfileBuilder visibleToPublic(boolean visibleToPublic) {
 			this.visibleToPublic = visibleToPublic;
-			return this;
-		}
-		
-		/**
-		* Sets the name of the Recruiters company
-		* @param companyName - name of company
-		* @return Builder
-		*/
-		public RecruiterProfileBuilder companyName(String companyName) {
-			this.companyName = companyName;
 			return this;
 		}
 		
@@ -447,7 +369,7 @@ public class RecruiterProfile {
 	*/
 	public static class Photo{
 		
-		public static enum PHOTO_FORMAT {jpeg, jpg, gif}
+		public static enum PHOTO_FORMAT {jpeg, png}
 		
 		private final byte[] 		imageBytes;
 		private final PHOTO_FORMAT 	format;

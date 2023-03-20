@@ -3,6 +3,7 @@ package com.arenella.recruit.recruiters.beans;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.Optional;
 import java.util.Set;
 
 import org.junit.jupiter.api.Test;
@@ -95,8 +96,6 @@ public class RecruiterProfileAPIInboundTest {
 		
 		final PhotoAPIInbound photo = new PhotoAPIInbound(FILE_BYTES, PHOTO_FORMAT.jpeg);
 		
-		final Recruiter recruiter = Recruiter.builder().companyName("Arenella BV").firstName("Kevin").surname("Parkings").userId("kparkings").build();
-		
 		RecruiterProfileAPIInbound profile = 
 				RecruiterProfileAPIInbound
 					.builder()
@@ -137,7 +136,7 @@ public class RecruiterProfileAPIInboundTest {
 		assertTrue(profile.getSectors().contains(SECTOR.FINTECH));
 		assertTrue(profile.getSectors().contains(SECTOR.CYBER_INTEL));
 		
-		RecruiterProfile domain = RecruiterProfileAPIInbound.convertToDomain(profile, recruiter); 
+		RecruiterProfile domain = RecruiterProfileAPIInbound.convertToDomain(profile, Optional.of(new PhotoAPIInbound(FILE_BYTES, PHOTO_FORMAT.jpeg)), "kparkings"); 
 		
 		assertEquals(INTRODUCTION, 			domain.getIntroduction());
 		assertEquals(JOB_TITLE, 			domain.getJobTitle());
@@ -146,12 +145,12 @@ public class RecruiterProfileAPIInboundTest {
 		assertEquals(VISIBLE_TO_PUBLIC, 	domain.isVisibleToPublic());
 		assertEquals(VISIBLE_TO_RECRUITERS, domain.isVisibleToRecruiters());
 		assertEquals(YEARS_EXPERIENCE, 		domain.getYearsExperience());
-		assertEquals(FILE_BYTES, 			domain.getProfilePhoto().getImageBytes());
-		assertEquals(PHOTO_FORMAT.jpeg, 	domain.getProfilePhoto().getFormat());
+		assertEquals(FILE_BYTES, 			domain.getProfilePhoto().get().getImageBytes());
+		assertEquals(PHOTO_FORMAT.jpeg, 	domain.getProfilePhoto().get().getFormat());
 		assertEquals(YEARS_EXPERIENCE, 		domain.getYearsExperience());
 		
-		assertEquals(photo.getImageBytes(), domain.getProfilePhoto().getImageBytes());
-		assertEquals(photo.getFormat(), 	domain.getProfilePhoto().getFormat());
+		assertEquals(photo.getImageBytes(), domain.getProfilePhoto().get().getImageBytes());
+		assertEquals(photo.getFormat(), 	domain.getProfilePhoto().get().getFormat());
 		
 		assertTrue(domain.getCoreTech().contains(TECH.JAVA));
 		assertTrue(domain.getLanguagesSpoken().contains(LANGUAGE.ENGLISH));
@@ -161,12 +160,7 @@ public class RecruiterProfileAPIInboundTest {
 		assertTrue(domain.getRecruitsIn().contains(COUNTRY.IRELAND));
 		assertTrue(domain.getSectors().contains(SECTOR.FINTECH));
 		assertTrue(domain.getSectors().contains(SECTOR.CYBER_INTEL));
-		
-		assertEquals(recruiter.getCompanyName(), 	domain.getCompanyName());
-		assertEquals(recruiter.getFirstName(), 		domain.getRecruiterFirstName());
-		assertEquals(recruiter.getUserId(), 		domain.getRecruiterId());
-		assertEquals(recruiter.getSurname(),		domain.getRecruiterSurname());
-		
+
 	}
 	
 }

@@ -1,6 +1,7 @@
 package com.arenella.recruit.recruiters.beans;
 
 import java.util.LinkedHashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import com.arenella.recruit.recruiters.beans.RecruiterProfile.CONTRACT_TYPE;
@@ -391,18 +392,15 @@ public class RecruiterProfileAPIInbound {
 	* @param profile - Domain representation
 	* @return APIOutbound representation
 	*/
-	public static RecruiterProfile convertToDomain(RecruiterProfileAPIInbound profile, Recruiter recruiter) {
+	public static RecruiterProfile convertToDomain(RecruiterProfileAPIInbound profile, Optional<PhotoAPIInbound> photo, String recruiterId) {
 		return RecruiterProfile
 					.builder()
-						.companyName(recruiter.getCompanyName())
-						.recruiterFirstName(recruiter.getFirstName())
-						.recruiterId(recruiter.getUserId())
-						.recruiterSurname(recruiter.getSurname())
+						.recruiterId(recruiterId)
 						.coreTech(profile.getCoreTech())
 						.introduction(profile.getIntroduction())
 						.jobTitle(profile.getJobTitle())
 						.languagesSpoken(profile.getLanguagesSpoken())
-						.profilePhoto(PhotoAPIInbound.convertToDomain(profile.getProfilePhoto()))
+						.profilePhoto(photo.isPresent() ? PhotoAPIInbound.convertToDomain(photo.get()) : null)
 						.recruiterType(profile.getRecruiterType())
 						.recruitsContractTypes(profile.getRecruitsContractTypes())
 						.recruitsIn(profile.getRecruitsIn())

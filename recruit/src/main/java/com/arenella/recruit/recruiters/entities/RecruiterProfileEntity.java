@@ -453,8 +453,8 @@ public class RecruiterProfileEntity {
 					.introduction(recruiterProfile.getIntroduction())
 					.jobTitle(recruiterProfile.getJobTitle())
 					.languagesSpoken(recruiterProfile.getLanguagesSpoken())
-					.photoBytes(recruiterProfile.getProfilePhoto().getImageBytes())
-					.photoFormat(recruiterProfile.getProfilePhoto().getFormat())
+					.photoBytes(recruiterProfile.getProfilePhoto().get().getImageBytes())
+					.photoFormat(recruiterProfile.getProfilePhoto().get().getFormat())
 					.recruiterId(recruiterProfile.getRecruiterId())
 					.recruiterType(recruiterProfile.getRecruiterType())
 					.recruitsContractTypes(recruiterProfile.getRecruitsContractTypes())
@@ -485,9 +485,6 @@ public class RecruiterProfileEntity {
 	public static RecruiterProfile convertFromEntity(RecruiterProfileEntity recruiterProfileEntity, Recruiter recruiter) {
 		return RecruiterProfile
 				.builder()
-					.companyName(recruiter.getCompanyName())
-					.recruiterSurname(recruiter.getSurname())
-					.recruiterFirstName(recruiter.getFirstName())
 					.coreTech(recruiterProfileEntity.getCoreTech())
 					.introduction(recruiterProfileEntity.getIntroduction())
 					.jobTitle(recruiterProfileEntity.getJobTitle())

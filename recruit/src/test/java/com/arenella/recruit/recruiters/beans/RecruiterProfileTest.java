@@ -23,8 +23,6 @@ import com.arenella.recruit.recruiters.beans.RecruiterProfile.TECH;
 public class RecruiterProfileTest {
 
 	private static final String 			RECRUITER_ID				= "kparkingS";
-	private static final String				FIRST_NAME 					= "Kevin";
-	private static final String 			SURNAME						= "Parkings";
 	private static final Set<COUNTRY> 		RECRUITS_IN 				= Set.of(COUNTRY.BELGIUM, COUNTRY.IRELAND);
 	private static final Set<LANGUAGE>		LANGUAGES_SPOKEN 			= Set.of(LANGUAGE.ENGLISH);
 	private static final byte[]				FILE_BYTES					= new byte[] {1,22};					
@@ -32,7 +30,6 @@ public class RecruiterProfileTest {
 	private static final boolean 			VISIBLE_TO_RECRUITERS 		= true;
 	private static final boolean 			VISIBLE_TO_CANDIDATES 		= true;
 	private static final boolean 			VISIBLE_TO_PUBLIC 			= true;
-	private static final String				COMPANY_NAME 				= "Arenella BV";
 	private static final String				JOB_TITLE 					="Java Recruiter";
 	private static final int				YEARS_EXPERIENCE 			= 2;
 	private static final String				INTRODUCTION 				= "I am not really a recruiter";
@@ -51,15 +48,12 @@ public class RecruiterProfileTest {
 		RecruiterProfile profile = 
 				RecruiterProfile
 					.builder()
-						.companyName(COMPANY_NAME)
 						.coreTech(CORE_TECH)
 						.introduction(INTRODUCTION)
 						.jobTitle(JOB_TITLE)
 						.languagesSpoken(LANGUAGES_SPOKEN)
 						.profilePhoto(PROFILE_PHOTO)
-						.recruiterFirstName(FIRST_NAME)
 						.recruiterId(RECRUITER_ID)
-						.recruiterSurname(SURNAME)
 						.recruiterType(RECRUITER_TYPE)
 						.recruitsContractTypes(RECRUITER_CONTRACT_TYPES)
 						.recruitsIn(RECRUITS_IN)
@@ -70,21 +64,17 @@ public class RecruiterProfileTest {
 						.yearsExperience(YEARS_EXPERIENCE)
 					.build();
 		
-
-		assertEquals(COMPANY_NAME, 			profile.getCompanyName());
 		assertEquals(INTRODUCTION, 			profile.getIntroduction());
 		assertEquals(JOB_TITLE, 			profile.getJobTitle());
-		assertEquals(PROFILE_PHOTO, 		profile.getProfilePhoto());
-		assertEquals(FIRST_NAME, 			profile.getRecruiterFirstName());
+		assertEquals(PROFILE_PHOTO, 		profile.getProfilePhoto().get());
 		assertEquals(RECRUITER_ID, 			profile.getRecruiterId());
-		assertEquals(SURNAME, 				profile.getRecruiterSurname());
 		assertEquals(RECRUITER_TYPE, 		profile.getRecruiterType());
 		assertEquals(VISIBLE_TO_CANDIDATES, profile.isVisibleToCandidates());
 		assertEquals(VISIBLE_TO_PUBLIC, 	profile.isVisibleToPublic());
 		assertEquals(VISIBLE_TO_RECRUITERS, profile.isVisibleToRecruiters());
 		assertEquals(YEARS_EXPERIENCE, 		profile.getYearsExperience());
-		assertEquals(FILE_BYTES, 			profile.getProfilePhoto().getImageBytes());
-		assertEquals(PHOTO_FORMAT.jpeg, 	profile.getProfilePhoto().getFormat());
+		assertEquals(FILE_BYTES, 			profile.getProfilePhoto().get().getImageBytes());
+		assertEquals(PHOTO_FORMAT.jpeg, 	profile.getProfilePhoto().get().getFormat());
 		assertEquals(YEARS_EXPERIENCE, 		profile.getYearsExperience());
 		
 		assertTrue(profile.getCoreTech().contains(TECH.JAVA));
@@ -110,14 +100,12 @@ public class RecruiterProfileTest {
 				RecruiterProfile
 					.builder()
 					.build();
+	
+		Photo profilePhoto = new Photo(new byte[] {}, PHOTO_FORMAT.jpeg);
 		
-		profile.setCompanyName(COMPANY_NAME);
-		profile.setRecruiterFirstName(FIRST_NAME);
-		profile.setRecruiterSurname(SURNAME);
+		profile.setProfilePhoto(profilePhoto);
 		
-		assertEquals(COMPANY_NAME, 			profile.getCompanyName());
-		assertEquals(FIRST_NAME, 			profile.getRecruiterFirstName());
-		assertEquals(SURNAME, 				profile.getRecruiterSurname());
+		assertEquals(profilePhoto, profile.getProfilePhoto().get());
 		
 	}
 	

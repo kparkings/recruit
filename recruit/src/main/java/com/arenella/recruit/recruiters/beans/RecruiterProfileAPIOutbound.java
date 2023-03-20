@@ -471,18 +471,18 @@ public class RecruiterProfileAPIOutbound {
 	* @param profile - Domain representation
 	* @return APIOutbound representation
 	*/
-	public static RecruiterProfileAPIOutbound convertFromDomain(RecruiterProfile profile) {
+	public static RecruiterProfileAPIOutbound convertFromDomain(RecruiterProfile profile, Recruiter recruiter) {
 		return RecruiterProfileAPIOutbound
 					.builder()
-						.companyName(profile.getCompanyName())
+						.companyName(recruiter.getCompanyName())
 						.coreTech(profile.getCoreTech())
 						.introduction(profile.getIntroduction())
 						.jobTitle(profile.getJobTitle())
 						.languagesSpoken(profile.getLanguagesSpoken())
-						.profilePhoto(PhotoAPIOutbound.convertFromDomain(profile.getProfilePhoto()))
-						.recruiterFirstName(profile.getRecruiterFirstName())
+						.profilePhoto(PhotoAPIOutbound.convertFromDomain(profile.getProfilePhoto().get()))
+						.recruiterFirstName(recruiter.getFirstName())
 						.recruiterId(profile.getRecruiterId())
-						.recruiterSurname(profile.getRecruiterSurname())
+						.recruiterSurname(recruiter.getSurname())
 						.recruiterType(profile.getRecruiterType())
 						.recruitsContractTypes(profile.getRecruitsContractTypes())
 						.recruitsIn(profile.getRecruitsIn())
