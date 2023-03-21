@@ -1,8 +1,10 @@
 package com.arenella.recruit.recruiters.controllers;
 
 import java.security.Principal;
+import java.util.LinkedHashSet;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,7 +21,10 @@ import org.springframework.web.multipart.MultipartFile;
 import com.arenella.recruit.recruiters.beans.RecruiterProfileAPIInbound;
 import com.arenella.recruit.recruiters.beans.RecruiterProfileAPIInbound.PhotoAPIInbound;
 import com.arenella.recruit.recruiters.beans.RecruiterProfileAPIOutbound;
+import com.arenella.recruit.recruiters.beans.RecruiterProfileFilter;
+import com.arenella.recruit.recruiters.beans.RecruiterProfileFilter.RecruiterProfileFilterBuilder;
 import com.arenella.recruit.recruiters.services.RecruiterProfileService;
+import com.arenella.recruit.recruiters.services.RecruiterService;
 import com.arenella.recruit.recruiters.beans.Recruiter;
 import com.arenella.recruit.recruiters.beans.RecruiterProfile;
 import com.arenella.recruit.recruiters.beans.RecruiterProfile.CONTRACT_TYPE;
@@ -36,10 +41,13 @@ import com.arenella.recruit.recruiters.beans.RecruiterProfile.Photo.PHOTO_FORMAT
 @RestController
 public class RecruiterProfileController {
 
-	public static enum VISIBILITY_TYPE {PUBLIC, CANDIATES, RECRUITERS}
+	public static enum VISIBILITY_TYPE {PUBLIC, CANDIDATES, RECRUITERS}
 	
 	@Autowired
 	private RecruiterProfileService rpService;
+	
+	@Autowired
+	private RecruiterService		recruiterService;
 	
 	/**
 	* Creates a new Recruiter profile
@@ -79,11 +87,12 @@ public class RecruiterProfileController {
 	*/
 	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('RECRUITER')")
 	@GetMapping(path="recruiter-profile")
-	public ResponseEntity<RecruiterProfileAPIOutbound> fetchRecruiterProfile(Principal authenticatedUser) {
+	public ResponseEntity<RecruiterProfileAPIOutbound> fetchRecruiterProfile(Principal authenticatedUser) throws IllegalAccessException{
 		
-		RecruiterProfile profile = this.rpService.fetchRecruiterProfile(authenticatedUser.getName());
+		RecruiterProfile 	profile 	= this.rpService.fetchRecruiterProfile(authenticatedUser.getName());
+		Recruiter 			recruiter 	= this.recruiterService.fetchRecruiterOwnAccount();
 		
-		return ResponseEntity.ok().body(RecruiterProfileAPIOutbound.convertFromDomain(profile, Recruiter.builder().build()));
+		return ResponseEntity.ok().body(RecruiterProfileAPIOutbound.convertFromDomain(profile, recruiter));
 	}
 	
 	/**
@@ -98,12 +107,62 @@ public class RecruiterProfileController {
 	public ResponseEntity<Set<RecruiterProfileAPIOutbound>> fetchRecruiterProfiles(	@RequestParam(required = false) Set<COUNTRY> 		recruitsIn,
 																					@RequestParam(required = false) Set<TECH>			coreTech,
 																					@RequestParam(required = false) Set<CONTRACT_TYPE> 	recruitsContractTypes,
-																					@RequestParam(required = true)  VISIBILITY_TYPE 	visibilityTYpe) {
+																					@RequestParam(required = true)  VISIBILITY_TYPE 	visibilityType) {
 		
-		Set<RecruiterProfile> profiles = this.rpService.fetchRecruiterProfiles(null);
+		RecruiterProfileFilterBuilder filters = RecruiterProfileFilter.builder();
+		
+		if (Optional.ofNullable(recruitsIn).isPresent()  && !recruitsIn.isEmpty()) {
+			filters.recruitsIn(recruitsIn);
+		}
+		
+		if (Optional.ofNullable(coreTech).isPresent() && !coreTech.isEmpty()) {
+			filters.coreTech(coreTech);
+		}
+		
+		if (Optional.ofNullable(recruitsContractTypes).isPresent() && !recruitsContractTypes.isEmpty()) {
+			filters.recruitsContractTypes(recruitsContractTypes);
+		}
+		
+		switch(visibilityType) {
+			case PUBLIC:{
+				filters.visibleToPublic(true);
+				break;
+			}
+			case CANDIDATES:{
+				filters.visibleToCandidates(true);
+				break;
+			}
+			case RECRUITERS:{
+				filters.visibleToRecruiters(true);
+				break;
+			}
+			default:{
+				throw new IllegalStateException("Unsupported Visibility Type");
+			}
+		}	
+		
+		/**
+		* TODO: [KP] Will need to re-think this if there are large numbers of Recuiter's but for now 
+		* 			 this will work well enough to launch the feature
+		*/
+		Set<Recruiter> recruiters = this.recruiterService.fetchRecruiters();
 		
 		
-		return ResponseEntity.ok().build();
+		Set<RecruiterProfile> 				profiles = this.rpService.fetchRecruiterProfiles(filters.build());
+		Set<RecruiterProfileAPIOutbound> 	outbound = profiles.stream().map(p -> RecruiterProfileAPIOutbound.convertFromDomain(p, getAssociatedRecruiter(recruiters, p.getRecruiterId()))).collect(Collectors.toCollection(LinkedHashSet::new));
+		
+		return ResponseEntity.ok().body(outbound);
+	}
+	
+	/**
+	* Will attempt to find the corresponding Recruiter for the profile but if it cannot 
+	* will provide a default recruiter
+	* @param recruiters		- all available recruiters
+	* @param recruiterId	- unique id of the recruiter
+	* @return
+	*/
+	private Recruiter getAssociatedRecruiter(Set<Recruiter> recruiters, String recruiterId) {
+		return recruiters.stream().filter(r -> r.getUserId().equals(recruiterId)).findFirst().orElse(Recruiter.builder().companyName("n\\a").surname("n\\a").firstName("n\\a").build());
 	}
 	
 }
