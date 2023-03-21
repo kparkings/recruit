@@ -1,7 +1,9 @@
 package com.arenella.recruit.recruiters.services;
 
+import java.util.Optional;
 import java.util.Set;
 
+import com.arenella.recruit.recruiters.beans.Recruiter;
 import com.arenella.recruit.recruiters.beans.RecruiterProfile;
 import com.arenella.recruit.recruiters.beans.RecruiterProfileFilter;
 
@@ -25,10 +27,10 @@ public interface RecruiterProfileService {
 	
 	/***
 	* Returns RecruiterProfile matching the id
-	* @param recruiterProfileId - Unique id of recruiter profile to return
+	* @param recruiter - Recruiter the profile belongs to
 	* @return Recruiter Profile
 	*/
-	public RecruiterProfile fetchRecruiterProfile(String recruiterProfileId);
+	public Optional<RecruiterProfile> fetchRecruiterProfile(Recruiter recruiter);
 	
 	/**
 	* Returns Recruiter Profiles matching the filters

@@ -1,0 +1,113 @@
+<div class=".container">
+	<div class='content-div'>
+		<div class="recruiter-profile-buttons">
+			<div class="action-buttons">
+				<button class="btn btn-secondary action-btn  main-action_btn"  *ngIf="isOwnAccountExists()  && currentView != 'view-edit'" 		(click)="showViewCreate()">Edit Profile</button>
+				<button class="btn btn-secondary action-btn  main-action_btn"  *ngIf="!isOwnAccountExists() && currentView != 'view-create'" 	(click)="showViewCreate()">Create Profile</button>
+				<button class="btn btn-secondary action-btn" 				   *ngIf="currentView != 'view-main'" 								(click)="showViewMain()">Back</button>
+				
+			</div>
+		</div>
+		
+		<div *ngIf="currentView === 'view-main'">
+		
+		</div>
+		
+		<div *ngIf="currentView === 'view-create'" id="view-create-table">
+		
+			<table>
+				<tr>
+					<th>Job Title</th>
+					<td>
+						<input type="text">
+					</td>
+				</tr>
+				<tr>
+					<th>Recruitment Type</th>
+					<td>
+						<select>
+							<option></option>
+							<option *ngFor="let opt of getRecruitmentTypeOptions()" name="opt[0]">{{opt[1]}}</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th>Years Experience</th>
+					<td>
+						<input type="text">
+					</td>
+				</tr>
+				<tr>
+					<th>Recruits In</th>
+					<td>
+						<select>
+							<option></option>
+							<option *ngFor="let opt of getCountryOptions()" name="opt[0]">{{opt[1]}}</option>
+						</select></td>
+				</tr>
+				<tr>
+					<th>Introduction</th>
+					<td>
+						<textarea></textarea>
+					</td>
+				</tr>
+				<tr>
+					<th>Languages Spoken</th>
+					<td>
+						<select>
+							<option></option>
+							<option *ngFor="let opt of getLanguageOptions()" name="opt[0]">{{opt[1]}}</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th>Sectors</th>
+					<td>
+						<select>
+							<option></option>
+							<option *ngFor="let opt of getSectorOptions()" name="opt[0]">{{opt[1]}}</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th>Core Technologies</th>
+					<td>
+						<select>
+							<option></option>
+							<option *ngFor="let opt of getTechOptions()" name="opt[0]">{{opt[1]}}</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th>Contract Types</th>
+					<td>
+						<select>
+							<option></option>
+							<option *ngFor="let opt of getContractTypeOptions()" name="opt[0]">{{opt[1]}}</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th>Visible To Recruiters</th>
+					<td>
+						<input type="checkbox"/>
+					</td>
+				</tr>
+				<tr>
+					<th>Visible To Candidates</th>
+					<td>
+						<input type="checkbox"/>
+					</td>
+				</tr>
+				<tr>
+					<th>Visible To Public</th>
+					<td>
+						<input type="checkbox"/>
+					</td>
+				</tr>
+			</table>
+			
+		</div>
+		
+	</div>
+</div>

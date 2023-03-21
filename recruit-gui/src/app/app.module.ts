@@ -26,6 +26,7 @@ import { RecruiterMarketplaceComponent } 	from './recruiter-marketplace/recruite
 import { RecruiterAlertsComponent } 		from './recruiter-alerts/recruiter-alerts.component';
 import { FaqComponent } 					from './faq/faq.component';
 import { EmailComponent } from './email/email.component';
+import { RecruiterProfileComponent } from './recruiter-profile/recruiter-profile.component';
 
 @NgModule({
   declarations: [
@@ -44,7 +45,8 @@ import { EmailComponent } from './email/email.component';
     RecruiterMarketplaceComponent,
     RecruiterAlertsComponent,
     FaqComponent,
-    EmailComponent
+    EmailComponent,
+    RecruiterProfileComponent
   ],
   imports: [
     BrowserModule,

@@ -1,10 +1,12 @@
 package com.arenella.recruit.recruiters.services;
 
+import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.arenella.recruit.recruiters.beans.Recruiter;
 import com.arenella.recruit.recruiters.beans.RecruiterProfile;
 import com.arenella.recruit.recruiters.beans.RecruiterProfile.Photo;
 import com.arenella.recruit.recruiters.beans.RecruiterProfileFilter;
@@ -87,9 +89,8 @@ public class RecruiterProfileServiceImpl implements RecruiterProfileService{
 	* Refer to the RecruiterProfileService interface for details 
 	*/
 	@Override
-	public RecruiterProfile fetchRecruiterProfile(String recruiterProfileId) {
-		// TODO Auto-generated method stub
-		return null;
+	public Optional<RecruiterProfile> fetchRecruiterProfile(Recruiter recruiter) {
+		return this.recruiterProfileDao.fetchRecruiterProfileById(recruiter);
 	}
 
 	/**
@@ -97,8 +98,7 @@ public class RecruiterProfileServiceImpl implements RecruiterProfileService{
 	*/
 	@Override
 	public Set<RecruiterProfile> fetchRecruiterProfiles(RecruiterProfileFilter filters) {
-		// TODO Auto-generated method stub
-		return null;
+		return this.fetchRecruiterProfiles(filters);
 	}
 
 }

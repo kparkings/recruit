@@ -1,6 +1,7 @@
 package com.arenella.recruit.recruiters.controllers;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.security.Principal;
@@ -133,13 +134,33 @@ public class RecruiterProfileControllerTest {
 						.yearsExperience(YEARS_EXPERIENCE)
 					.build();
 		
-		Mockito.when(this.mockPrincipal.getName()).thenReturn("kparkings");
-		Mockito.when(this.mockRPService.fetchRecruiterProfile(Mockito.anyString())).thenReturn(profile);
+		Mockito.when(this.mockRPService.fetchRecruiterProfile(Mockito.any())).thenReturn(Optional.of(profile));
 		Mockito.when(this.mockRecruiterService.fetchRecruiterOwnAccount()).thenReturn(recruiter);
 		
-		ResponseEntity<RecruiterProfileAPIOutbound> response = controller.fetchRecruiterProfile(mockPrincipal);
+		ResponseEntity<Optional<RecruiterProfileAPIOutbound>> response = controller.fetchRecruiterProfile(mockPrincipal);
 		
 		assertEquals(HttpStatus.OK, response.getStatusCode());
+		assertTrue(response.getBody().isPresent());
+		
+	}
+	
+	/**
+	* Test fetching of authenticated users Recruiter Profile where the profile
+	* does not exist
+	* @throws Exception
+	*/
+	@Test
+	public void testFetchRecruiterProfile_profile_doesnt_exist() throws Exception{
+		
+		Recruiter recruiter = Recruiter.builder().companyName("arenella bv").firstName("kevin").surname("parkings").build();
+	
+		Mockito.when(this.mockRPService.fetchRecruiterProfile(Mockito.any())).thenReturn(Optional.empty());
+		Mockito.when(this.mockRecruiterService.fetchRecruiterOwnAccount()).thenReturn(recruiter);
+		
+		ResponseEntity<Optional<RecruiterProfileAPIOutbound>> response = controller.fetchRecruiterProfile(mockPrincipal);
+		
+		assertEquals(HttpStatus.OK, response.getStatusCode());
+		assertNull(response.getBody());
 		
 	}
 	

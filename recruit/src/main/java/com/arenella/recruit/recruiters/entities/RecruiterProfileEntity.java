@@ -28,7 +28,7 @@ import com.arenella.recruit.recruiters.beans.RecruiterProfile.TECH;
 * @author K Parkings
 */
 @Entity
-@Table(schema="recuiter", name="recruiter_profiles")
+@Table(schema="recruiter", name="recruiter_profiles")
 public class RecruiterProfileEntity {
 
 	@Id

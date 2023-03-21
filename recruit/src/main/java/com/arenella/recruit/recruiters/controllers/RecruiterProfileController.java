@@ -56,7 +56,7 @@ public class RecruiterProfileController {
 	*/
 	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('RECRUITER')")
 	@PostMapping(path="recruiter-profile")
-	public ResponseEntity<Void> addRecruiterProfile(@RequestPart("profile") RecruiterProfileAPIInbound profile, @RequestPart("attachment") Optional<MultipartFile> file, Principal authenticatedUser) throws Exception{
+	public ResponseEntity<Void> addRecruiterProfile(@RequestPart("profile") RecruiterProfileAPIInbound profile, @RequestPart("file") Optional<MultipartFile> file, Principal authenticatedUser) throws Exception{
 		
 		Optional<PhotoAPIInbound> photo = file.isEmpty() ? Optional.empty() : Optional.of(new PhotoAPIInbound(file.get().getBytes(), PHOTO_FORMAT.jpeg));
 		
@@ -72,7 +72,7 @@ public class RecruiterProfileController {
 	*/
 	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('RECRUITER')")
 	@PutMapping(path="recruiter-profile")
-	public ResponseEntity<Void> updateRecruiterProfile(@RequestPart("profile") RecruiterProfileAPIInbound profile, @RequestPart("attachment") Optional<MultipartFile> file, Principal authenticatedUser) throws Exception{
+	public ResponseEntity<Void> updateRecruiterProfile(@RequestPart("profile") RecruiterProfileAPIInbound profile, @RequestPart("file") Optional<MultipartFile> file, Principal authenticatedUser) throws Exception{
 		
 		Optional<PhotoAPIInbound> photo = file.isEmpty() ? Optional.empty() : Optional.of(new PhotoAPIInbound(file.get().getBytes(), PHOTO_FORMAT.jpeg));
 		
@@ -86,13 +86,17 @@ public class RecruiterProfileController {
 	* @return Recruiter profile
 	*/
 	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('RECRUITER')")
-	@GetMapping(path="recruiter-profile")
-	public ResponseEntity<RecruiterProfileAPIOutbound> fetchRecruiterProfile(Principal authenticatedUser) throws IllegalAccessException{
+	@GetMapping(path="recruiter-profile/own")
+	public ResponseEntity<Optional<RecruiterProfileAPIOutbound>> fetchRecruiterProfile(Principal authenticatedUser) throws IllegalAccessException{
 		
-		RecruiterProfile 	profile 	= this.rpService.fetchRecruiterProfile(authenticatedUser.getName());
-		Recruiter 			recruiter 	= this.recruiterService.fetchRecruiterOwnAccount();
+		Recruiter 					recruiter 	= this.recruiterService.fetchRecruiterOwnAccount();
+		Optional<RecruiterProfile> 	profile 	= this.rpService.fetchRecruiterProfile(recruiter);
 		
-		return ResponseEntity.ok().body(RecruiterProfileAPIOutbound.convertFromDomain(profile, recruiter));
+		if (profile.isEmpty()) {
+			return ResponseEntity.ok().build();
+		}
+		
+		return ResponseEntity.ok().body(Optional.of(RecruiterProfileAPIOutbound.convertFromDomain(profile.get(), recruiter)));
 	}
 	
 	/**

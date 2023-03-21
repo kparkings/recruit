@@ -1,5 +1,5 @@
 import { Injectable }                             	from '@angular/core';
-import { UntypedFormGroup }                              	from '@angular/forms';
+import { UntypedFormGroup }                         from '@angular/forms';
 import { HttpClient, HttpResponse, HttpHeaders }  	from '@angular/common/http';
 import { Observable, throwError }                 	from 'rxjs';
 import { NewCandidate }                           	from './new-candidate/new-candidate';
