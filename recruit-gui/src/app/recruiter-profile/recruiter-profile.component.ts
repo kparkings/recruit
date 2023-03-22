@@ -1,7 +1,8 @@
-import { Component } 							from '@angular/core';
-import { RecruiterProfile } 					from './recruiter-profile';
-import { RecruiterProfileService} 				from '../recruiter-profile.service';
-
+import { Component } 								from '@angular/core';
+import { RecruiterProfile } 						from './recruiter-profile';
+import { RecruiterProfileService} 					from '../recruiter-profile.service';
+import { AddRecruiterProfileRequest }				from './add-recruiter-profile'
+import { UntypedFormGroup, UntypedFormControl }		from '@angular/forms';
 /**
 * Component for working with Recruiter Profiles
 */
@@ -14,6 +15,8 @@ export class RecruiterProfileComponent {
 
 	public recruiterProfile?:RecruiterProfile;
 	public currentView = 'view-main'; 
+	private imageFile!:File| any;
+
 
 	/**
 	* Constructor
@@ -23,6 +26,128 @@ export class RecruiterProfileComponent {
 			JSON.stringify(response);
 		})
 	}
+	
+	/**
+	* Form to add new Profile
+	*/
+	public newProfileFormBean:UntypedFormGroup = new UntypedFormGroup({
+		recruitsIn: 				new UntypedFormControl(),
+		languagesSpoken: 			new UntypedFormControl(),
+		visibleToRecruiters: 		new UntypedFormControl(false),
+		visibleToCandidates: 		new UntypedFormControl(false),
+		visibleToPublic: 			new UntypedFormControl(false),
+		jobTitle: 					new UntypedFormControl(),
+		yearsExperience: 			new UntypedFormControl(),
+		introduction: 				new UntypedFormControl(),
+		sectorItem: 				new UntypedFormControl(),
+		coreTechItem:	 			new UntypedFormControl(),
+		contractTypeItem: 			new UntypedFormControl(),
+		recruiterType: 				new UntypedFormControl(),     	
+	});
+	
+	public recruitsIn:Array<[string,string]> 				= new Array<[string,string]>();
+	public languagesSpoken:Array<[string,string]> 			= new Array<[string,string]>();
+	public sectors:Array<[string,string]> 					= new Array<[string,string]>();
+	public coreTech:Array<[string,string]>		 			= new Array<[string,string]>();
+	public contractTypes:Array<[string,string]> 			= new Array<[string,string]>();
+
+	/**
+	* Adds item to contractType
+	*/
+	public addContractTypeItem():void{
+		
+		let item = this.newProfileFormBean.get('contractTypeItem')?.value;
+		
+		if (this.contractTypes.indexOf(item) === -1) {
+			this.contractTypes.push(item);
+		}
+	}
+	
+	/**
+	* Removes Item From ContractTypes
+	*/
+	public removeContractTypeItem(item:[string,string]):void{
+		this.contractTypes = this.contractTypes.filter(i => i !== item);
+	}	
+	
+	/**
+	* Adds item to coreTech
+	*/
+	public addCoreTechItem():void{
+		
+		let item = this.newProfileFormBean.get('coreTechItem')?.value;
+		
+		if (this.coreTech.indexOf(item) === -1) {
+			this.coreTech.push(item);
+		}
+	}
+	
+	/**
+	* Removes Item From CoreTech
+	*/
+	public removeCoreTechItem(item:[string,string]):void{
+		this.coreTech = this.coreTech.filter(i => i !== item);
+	}	
+	
+	/**
+	* Adds item to Sectors
+	*/
+	public addSectorItem():void{
+		
+		let item = this.newProfileFormBean.get('sectorItem')?.value;
+		
+		if (this.sectors.indexOf(item) === -1) {
+			this.sectors.push(item);
+		}
+	}
+	
+	/**
+	* RemovesItemFromRecruitsIn
+	*/
+	public removeSectorItem(item:[string,string]):void{
+		this.sectors = this.sectors.filter(i => i !== item);
+	}	
+	
+	/**
+	* Adds item to RecruitsIn
+	*/
+	public addRecruitsInItem():void{
+		
+		let item = this.newProfileFormBean.get('recruitsIn')?.value;
+		
+		if (this.recruitsIn.indexOf(item) === -1) {
+			this.recruitsIn.push(item);
+		}
+	}
+	
+	/**
+	* RemovesItemFromRecruitsIn
+	*/
+	public removeRecruitsInItem(item:[string,string]):void{
+		this.recruitsIn = this.recruitsIn.filter(i => i !== item);
+	}
+	
+	/**
+	* Adds item to RecruitsIn
+	*/
+	public addLanguageSpokenItem():void{
+		
+		let item = this.newProfileFormBean.get('languagesSpoken')?.value;
+		
+		if (this.languagesSpoken.indexOf(item) === -1) {
+			this.languagesSpoken.push(item);
+		}
+	}
+	
+	/**
+	* RemovesItemFromRecruitsIn
+	*/
+	public removeLanguageSpokenItem(item:[string,string]):void{
+		this.languagesSpoken = this.languagesSpoken.filter(i => i !== item);
+	}
+	
+	
+	
 	
 	/**
 	* Whether a recruiter has already added their own profile
@@ -151,6 +276,45 @@ export class RecruiterProfileComponent {
 		
 		return options;
 		
+	}
+	
+	/**
+	* Uploads the file for the Profile Image and stored 
+	* it ready to be sent to the backend
+	*/
+  	public uploadProfileImage(event:any):void{
+  
+  		if (event.target.files.length <= 0) {
+  			return;
+  		}
+  	
+  		this.uploadProfileImage = event.target.files[0];
+  		
+	}
+	
+	/**
+	* 
+	*/
+	public createNewProfile():void{
+		
+		let recruiterProfile:AddRecruiterProfileRequest = new AddRecruiterProfileRequest();
+		
+		recruiterProfile.recruitsIn 			= this.recruitsIn.map(i => i[0]);
+		recruiterProfile.languagesSpoken 		= this.languagesSpoken.map(i => i[0]);
+		recruiterProfile.visibleToRecruiters 	= this.newProfileFormBean.get('visibleToRecruiters')?.value;
+		recruiterProfile.visibleToCandidates 	= this.newProfileFormBean.get('visibleToCandidates')?.value;
+		recruiterProfile.visibleToPublic 		= this.newProfileFormBean.get('visibleToPublic')?.value;
+		recruiterProfile.jobTitle 				= this.newProfileFormBean.get('jobTitle')?.value;
+		recruiterProfile.yearsExperience 		= this.newProfileFormBean.get('yearsExperience')?.value;
+		recruiterProfile.introduction 			= this.newProfileFormBean.get('introduction')?.value;
+		recruiterProfile.sectors 				= this.sectors.map(i => i[0]);
+		recruiterProfile.coreTech 				= this.coreTech.map(i => i[0]);
+		recruiterProfile.recruitsContractTypes 	= this.contractTypes.map(i => i[0]);
+		recruiterProfile.recruiterType 			= this.newProfileFormBean.get('introduction')?.value[0];
+		
+		this.recruierProfileService.addProfile(recruiterProfile, this.imageFile).subscribe(response => {
+			
+		});
 	}
 	
 }

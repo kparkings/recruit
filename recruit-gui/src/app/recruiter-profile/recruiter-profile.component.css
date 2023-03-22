@@ -39,6 +39,9 @@ input{
 	min-width:50%;
 }
 
+input[type=checkbox]{
+	min-width:0%;
+}
 textarea{
 	min-width:50%;
 	height:200px;
@@ -48,8 +51,32 @@ table tr th{
 	width:200px;
 	padding-right:0px;
 	padding-bottom:10px;
+	vertical-align:top;
 }
 
 #view-create-table{
 	padding-bottom:50px;
+}
+
+.selected-items{	
+	display: inline-block;
+	margin-top:5px;
+	min-height:25px; 
+}
+ 
+.selected-item{
+ 	margin:2px;
+ 	padding:5px;
+ 	border-radius:5px;
+ 	background:grey;
+ 	display:inline-block;
+}
+ 
+.selected-item:hover{
+ 	margin:2px;
+ 	padding:5px;
+ 	border-radius:5px;
+ 	background:red;
+ 	cursor:pointer;
+ 	display:inline-block;
 }

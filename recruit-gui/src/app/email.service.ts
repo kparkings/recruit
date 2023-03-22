@@ -29,11 +29,8 @@ export class EmailService {
 	*/
 	public sendEmail(emailRequest:EmailRequest, listingId:string):Observable<any>{
 	
-		//TODO: 1. On Server side APIInbound object for ApplyForPositionAPIInput
-		//TODO: 2. Change this to send bean instead of tst
 	
 		let attachment:File = emailRequest.attachment;
-		let test:string = emailRequest.message;
 		
 		var fd = new FormData();
   		fd.append('attachment', 	attachment);

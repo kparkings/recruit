@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -55,8 +56,10 @@ public class RecruiterProfileController {
 	* @param authenticatedUser  - authenticated User
 	*/
 	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('RECRUITER')")
-	@PostMapping(path="recruiter-profile")
+	@PostMapping(path="recruiter-profile",consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
 	public ResponseEntity<Void> addRecruiterProfile(@RequestPart("profile") RecruiterProfileAPIInbound profile, @RequestPart("file") Optional<MultipartFile> file, Principal authenticatedUser) throws Exception{
+		
+		//TODO: [KP] May not be working because RequestPart is object and not form data [k=String]
 		
 		Optional<PhotoAPIInbound> photo = file.isEmpty() ? Optional.empty() : Optional.of(new PhotoAPIInbound(file.get().getBytes(), PHOTO_FORMAT.jpeg));
 		
@@ -71,7 +74,7 @@ public class RecruiterProfileController {
 	* @param authenticatedUser
 	*/
 	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('RECRUITER')")
-	@PutMapping(path="recruiter-profile")
+	@PutMapping(path="recruiter-profile",consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
 	public ResponseEntity<Void> updateRecruiterProfile(@RequestPart("profile") RecruiterProfileAPIInbound profile, @RequestPart("file") Optional<MultipartFile> file, Principal authenticatedUser) throws Exception{
 		
 		Optional<PhotoAPIInbound> photo = file.isEmpty() ? Optional.empty() : Optional.of(new PhotoAPIInbound(file.get().getBytes(), PHOTO_FORMAT.jpeg));

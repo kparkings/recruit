@@ -14,99 +14,140 @@
 		</div>
 		
 		<div *ngIf="currentView === 'view-create'" id="view-create-table">
-		
-			<table>
-				<tr>
-					<th>Job Title</th>
-					<td>
-						<input type="text">
-					</td>
-				</tr>
-				<tr>
-					<th>Recruitment Type</th>
-					<td>
-						<select>
-							<option></option>
-							<option *ngFor="let opt of getRecruitmentTypeOptions()" name="opt[0]">{{opt[1]}}</option>
-						</select>
-					</td>
-				</tr>
-				<tr>
-					<th>Years Experience</th>
-					<td>
-						<input type="text">
-					</td>
-				</tr>
-				<tr>
-					<th>Recruits In</th>
-					<td>
-						<select>
-							<option></option>
-							<option *ngFor="let opt of getCountryOptions()" name="opt[0]">{{opt[1]}}</option>
-						</select></td>
-				</tr>
-				<tr>
-					<th>Introduction</th>
-					<td>
-						<textarea></textarea>
-					</td>
-				</tr>
-				<tr>
-					<th>Languages Spoken</th>
-					<td>
-						<select>
-							<option></option>
-							<option *ngFor="let opt of getLanguageOptions()" name="opt[0]">{{opt[1]}}</option>
-						</select>
-					</td>
-				</tr>
-				<tr>
-					<th>Sectors</th>
-					<td>
-						<select>
-							<option></option>
-							<option *ngFor="let opt of getSectorOptions()" name="opt[0]">{{opt[1]}}</option>
-						</select>
-					</td>
-				</tr>
-				<tr>
-					<th>Core Technologies</th>
-					<td>
-						<select>
-							<option></option>
-							<option *ngFor="let opt of getTechOptions()" name="opt[0]">{{opt[1]}}</option>
-						</select>
-					</td>
-				</tr>
-				<tr>
-					<th>Contract Types</th>
-					<td>
-						<select>
-							<option></option>
-							<option *ngFor="let opt of getContractTypeOptions()" name="opt[0]">{{opt[1]}}</option>
-						</select>
-					</td>
-				</tr>
-				<tr>
-					<th>Visible To Recruiters</th>
-					<td>
-						<input type="checkbox"/>
-					</td>
-				</tr>
-				<tr>
-					<th>Visible To Candidates</th>
-					<td>
-						<input type="checkbox"/>
-					</td>
-				</tr>
-				<tr>
-					<th>Visible To Public</th>
-					<td>
-						<input type="checkbox"/>
-					</td>
-				</tr>
-			</table>
-			
+			<form [formGroup]="newProfileFormBean">
+				<table>
+					<tr>
+						<th>Profile Image</th>
+						<td>
+							<input type="file" accept="image/jpeg,image/png" (change)="uploadProfileImage($event)">
+						</td>
+					</tr>
+					<tr>
+						<th>Job Title</th>
+						<td>
+							<input type="text" formControlName="jobTitle">
+						</td>
+					</tr>
+					<tr>
+						<th>Recruitment Type</th>
+						<td>
+							<select formControlName="recruiterType">
+								<option></option>
+								<option *ngFor="let opt of getRecruitmentTypeOptions()" name="opt">{{opt[1]}}</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<th>Years Experience</th>
+						<td>
+							<input type="text" formControlName="yearsExperience">
+						</td>
+					</tr>
+					<tr>
+						<th>Recruits In</th>
+						<td>
+							<select formControlName="recruitsIn" (change)="addRecruitsInItem()">
+								<option></option>
+								<option *ngFor="let opt of getCountryOptions()" name="opt">{{opt[1]}}</option>
+							</select>
+							<br>
+							<div class="selected-items">
+								<span *ngFor="let item of recruitsIn" (click)="removeRecruitsInItem(item)" class="selected-item">
+									{{item}}
+								</span>
+							</div>
+						</td>
+							
+					</tr>
+					<tr>
+						<th>Introduction</th>
+						<td>
+							<textarea formControlName="introduction"></textarea>
+						</td>
+					</tr>
+					<tr>
+						<th>Languages Spoken</th>
+						<td>
+							<select formControlName="languagesSpoken" (change)="addLanguageSpokenItem()">
+								<option></option>
+								<option *ngFor="let opt of getLanguageOptions()" name="opt[0]">{{opt[1]}}</option>
+							</select>
+							<br>
+							<div class="selected-items">
+								<span *ngFor="let item of languagesSpoken" (click)="removeLanguageSpokenItem(item)" class="selected-item">
+									{{item}}
+								</span>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<th>Sectors</th>
+						<td>
+							<select formControlName="sectorItem" (change)="addSectorItem()">
+								<option></option>
+								<option *ngFor="let opt of getSectorOptions()" name="opt[0]">{{opt[1]}}</option>
+							</select>
+							<br>
+							<div class="selected-items">
+								<span *ngFor="let item of sectors" (click)="removeSectorItem(item)" class="selected-item">
+									{{item}}
+								</span>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<th>Core Technologies</th>
+						<td>
+							<select formControlName="coreTechItem" (change)="addCoreTechItem()">
+								<option></option>
+								<option *ngFor="let opt of getTechOptions()" name="opt[0]">{{opt[1]}}</option>
+							</select>
+							<br>
+							<div class="selected-items">
+								<span *ngFor="let item of coreTech" (click)="removeCoreTechItem(item)" class="selected-item">
+									{{item}}
+								</span>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<th>Contract Types</th>
+						<td>
+							<select  formControlName="contractTypeItem" (change)="addContractTypeItem()">
+								<option></option>
+								<option *ngFor="let opt of getContractTypeOptions()" name="opt[0]">{{opt[1]}}</option>
+							</select>
+							<br>
+							<div class="selected-items">
+								<span *ngFor="let item of contractTypes" (click)="removeContractTypeItem(item)" class="selected-item">
+									{{item}}
+								</span>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<th>Visible To Recruiters</th>
+						<td>
+							<input type="checkbox" formControlName="visibleToRecruiters"/>
+						</td>
+					</tr>
+					<tr>
+						<th>Visible To Candidates</th>
+						<td>
+							<input type="checkbox" formControlName="visibleToCandidates"/>
+						</td>
+					</tr>
+					<tr>
+						<th>Visible To Public</th>
+						<td>
+							<input type="checkbox" formControlName="visibleToPublic"/>
+						</td>
+					</tr>
+				</table>
+			</form>
+		</div>
+		<div class="action-buttons" style="padding-bottom:50px;">
+			<button class="btn btn-secondary action-btn" *ngIf="currentView === 'view-create'" (click)="createNewProfile()">Save</button>		
 		</div>
 		
 	</div>

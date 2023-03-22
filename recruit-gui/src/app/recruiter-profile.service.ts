@@ -25,7 +25,7 @@ export class RecruiterProfileService {
   
 		var fd = new FormData();
 		fd.append('file', profileImage);
-  		fd.append("profile", JSON.stringify(request));
+  		fd.append("profile", new Blob([JSON.stringify(request)], { type: 'application/json' }));
 		
 		return this.httpClient.post<any>(backendUrl, fd, {headers: new HttpHeaders({ }), withCredentials: true});
 		

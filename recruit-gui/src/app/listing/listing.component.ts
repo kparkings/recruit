@@ -1,14 +1,12 @@
 import { Component, OnInit } 							from '@angular/core';
-import { DatePipe} 										from '@angular/common';
 import { ListingService }								from '../listing.service';
 import { EmailService, EmailRequest }					from '../email.service';
 import { Listing}										from './listing';
 import { ActivatedRoute } 								from '@angular/router';
 import { UntypedFormGroup, UntypedFormControl }			from '@angular/forms';
 import { NgbModal, NgbModalOptions }					from '@ng-bootstrap/ng-bootstrap';
-import { HostListener,Directive,HostBinding,Input} from '@angular/core';
-import { fromEvent } from "rxjs";
-import { DeviceDetectorService } 					from 'ngx-device-detector';
+import { HostListener,Directive,HostBinding,Input}		from '@angular/core';
+import { DeviceDetectorService } 						from 'ngx-device-detector';
 
 @Component({
   selector: 'app-listing',
