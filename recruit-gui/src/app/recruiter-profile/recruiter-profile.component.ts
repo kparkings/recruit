@@ -3,6 +3,8 @@ import { RecruiterProfile } 						from './recruiter-profile';
 import { RecruiterProfileService} 					from '../recruiter-profile.service';
 import { AddRecruiterProfileRequest }				from './add-recruiter-profile'
 import { UntypedFormGroup, UntypedFormControl }		from '@angular/forms';
+import { TupleStrValueByPos }						from './tuple-string-pos-pipe';
+
 /**
 * Component for working with Recruiter Profiles
 */
@@ -113,7 +115,7 @@ export class RecruiterProfileComponent {
 	*/
 	public addRecruitsInItem():void{
 		
-		let item = this.newProfileFormBean.get('recruitsIn')?.value;
+		let item = this.newProfileFormBean.get('recruitsIn')?.value
 		
 		if (this.recruitsIn.indexOf(item) === -1) {
 			this.recruitsIn.push(item);
@@ -284,11 +286,15 @@ export class RecruiterProfileComponent {
 	*/
   	public uploadProfileImage(event:any):void{
   
+	console.log("====>> 1");
+
   		if (event.target.files.length <= 0) {
-  			return;
+  			console.log("====>> 2");
+			return;
   		}
   	
-  		this.uploadProfileImage = event.target.files[0];
+		console.log("====>> 3");
+  		this.imageFile = event.target.files[0];
   		
 	}
 	
@@ -299,18 +305,23 @@ export class RecruiterProfileComponent {
 		
 		let recruiterProfile:AddRecruiterProfileRequest = new AddRecruiterProfileRequest();
 		
-		recruiterProfile.recruitsIn 			= this.recruitsIn.map(i => i[0]);
-		recruiterProfile.languagesSpoken 		= this.languagesSpoken.map(i => i[0]);
+		
+		let tupplePipe:TupleStrValueByPos = new TupleStrValueByPos();
+		
+		recruiterProfile.recruitsIn 			= this.recruitsIn.map(i => tupplePipe.transform(i,true));
+		recruiterProfile.languagesSpoken 		= this.languagesSpoken.map(i => tupplePipe.transform(i,true));
 		recruiterProfile.visibleToRecruiters 	= this.newProfileFormBean.get('visibleToRecruiters')?.value;
 		recruiterProfile.visibleToCandidates 	= this.newProfileFormBean.get('visibleToCandidates')?.value;
 		recruiterProfile.visibleToPublic 		= this.newProfileFormBean.get('visibleToPublic')?.value;
 		recruiterProfile.jobTitle 				= this.newProfileFormBean.get('jobTitle')?.value;
 		recruiterProfile.yearsExperience 		= this.newProfileFormBean.get('yearsExperience')?.value;
 		recruiterProfile.introduction 			= this.newProfileFormBean.get('introduction')?.value;
-		recruiterProfile.sectors 				= this.sectors.map(i => i[0]);
-		recruiterProfile.coreTech 				= this.coreTech.map(i => i[0]);
-		recruiterProfile.recruitsContractTypes 	= this.contractTypes.map(i => i[0]);
-		recruiterProfile.recruiterType 			= this.newProfileFormBean.get('introduction')?.value[0];
+		recruiterProfile.sectors 				= this.sectors.map(i => tupplePipe.transform(i,true));
+		recruiterProfile.coreTech 				= this.coreTech.map(i => tupplePipe.transform(i,true));
+		recruiterProfile.recruitsContractTypes 	= this.contractTypes.map(i => tupplePipe.transform(i,true));
+		recruiterProfile.recruiterType 			= tupplePipe.transform(this.newProfileFormBean.get('recruiterType')?.value,true);
+		
+		console.log('------> ' + this.imageFile);
 		
 		this.recruierProfileService.addProfile(recruiterProfile, this.imageFile).subscribe(response => {
 			

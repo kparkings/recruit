@@ -22,7 +22,7 @@ export class RecruiterProfileService {
 	public addProfile(request:AddRecruiterProfileRequest, profileImage:File):Observable<any>{
 		
 		const backendUrl:string = environment.backendUrl + 'recruiter-profile';
-  
+
 		var fd = new FormData();
 		fd.append('file', profileImage);
   		fd.append("profile", new Blob([JSON.stringify(request)], { type: 'application/json' }));

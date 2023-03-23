@@ -25,8 +25,10 @@ import { CookieModule } 					from 'ngx-cookie';
 import { RecruiterMarketplaceComponent } 	from './recruiter-marketplace/recruiter-marketplace.component';
 import { RecruiterAlertsComponent } 		from './recruiter-alerts/recruiter-alerts.component';
 import { FaqComponent } 					from './faq/faq.component';
-import { EmailComponent } from './email/email.component';
-import { RecruiterProfileComponent } from './recruiter-profile/recruiter-profile.component';
+import { EmailComponent } 					from './email/email.component';
+import { RecruiterProfileComponent } 		from './recruiter-profile/recruiter-profile.component';
+import { TupleStrValueByPos }				from './recruiter-profile/tuple-string-pos-pipe';
+
 
 @NgModule({
   declarations: [
@@ -46,7 +48,8 @@ import { RecruiterProfileComponent } from './recruiter-profile/recruiter-profile
     RecruiterAlertsComponent,
     FaqComponent,
     EmailComponent,
-    RecruiterProfileComponent
+    RecruiterProfileComponent,
+	TupleStrValueByPos
   ],
   imports: [
     BrowserModule,

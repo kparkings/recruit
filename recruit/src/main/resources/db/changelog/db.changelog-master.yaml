@@ -1537,7 +1537,7 @@ databaseChangeLog:
                     primaryKey: true
                     nullable: false
               - column:
-                  name: photo_bytesf
+                  name: photo_bytes
                   type: bytea
                   constraints:
                     nullable: true
@@ -1566,7 +1566,7 @@ databaseChangeLog:
                     default: false
               - column:
                   name: job_title
-                  type: boolean
+                  type: varchar
                   constraints:
                     nullable: true
               - column:
