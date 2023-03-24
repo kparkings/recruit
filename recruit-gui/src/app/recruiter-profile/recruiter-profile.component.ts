@@ -1,5 +1,5 @@
 import { Component } 								from '@angular/core';
-import { RecruiterProfile } 						from './recruiter-profile';
+import { PhotoAPIOutbound, RecruiterProfile } 						from './recruiter-profile';
 import { RecruiterProfileService} 					from '../recruiter-profile.service';
 import { AddRecruiterProfileRequest }				from './add-recruiter-profile'
 import { UntypedFormGroup, UntypedFormControl }		from '@angular/forms';
@@ -39,12 +39,12 @@ export class RecruiterProfileComponent {
 		visibleToCandidates: 		new UntypedFormControl(false),
 		visibleToPublic: 			new UntypedFormControl(false),
 		jobTitle: 					new UntypedFormControl(),
-		yearsExperience: 			new UntypedFormControl(),
+		yearsExperience: 			new UntypedFormControl(0),
 		introduction: 				new UntypedFormControl(),
 		sectorItem: 				new UntypedFormControl(),
 		coreTechItem:	 			new UntypedFormControl(),
 		contractTypeItem: 			new UntypedFormControl(),
-		recruiterType: 				new UntypedFormControl(),     	
+		recruiterType: 				new UntypedFormControl('INDEPENDENT'),     	
 	});
 	
 	public recruitsIn:Array<[string,string]> 				= new Array<[string,string]>();
@@ -198,7 +198,6 @@ export class RecruiterProfileComponent {
 		
 		let options:Array<string> = new Array<string>();
 		
-		options.push('');
 		options.push('INDEPENDENT');
 		options.push('COMMERCIAL');
 		
@@ -327,8 +326,14 @@ export class RecruiterProfileComponent {
   		}
   	
 		this.imageFile = event.target.files[0];
+		
+		if (this.recruiterProfile && this.recruiterProfile!.profilePhoto){
+			this.recruiterProfile.profilePhoto = new PhotoAPIOutbound();	
+  		}
   		
 	}
+	
+	public validationErrors:Array<[string,string]> = new Array<[string,string]>();
 	
 	/**
 	* 
@@ -356,20 +361,27 @@ export class RecruiterProfileComponent {
 		} else {
 			this.createNewProfile(recruiterProfile);
 		}
+	
 		
 	}
 	
 	public updateProfile(recruiterProfile:AddRecruiterProfileRequest):void{
 		
 		this.recruierProfileService.updateProfile(recruiterProfile, this.imageFile).subscribe(response => {
-			
+			this.recruierProfileService.fetchOwnRecruiterProfile().subscribe( response => {
+				this.recruiterProfile = response;
+				this.showViewMain();
+			});
 		});
 	}
 	
 	public createNewProfile(recruiterProfile:AddRecruiterProfileRequest):void{
 		
 		this.recruierProfileService.addProfile(recruiterProfile, this.imageFile).subscribe(response => {
-			
+			this.recruierProfileService.fetchOwnRecruiterProfile().subscribe( response => {
+				this.recruiterProfile = response;
+				this.showViewMain();
+			});
 		});
 	}
 	

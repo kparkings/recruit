@@ -80,3 +80,11 @@ table tr th{
  	cursor:pointer;
  	display:inline-block;
 }
+
+.profile-photo{
+	display:block;
+	margin-top:10px;
+	margin-bottom:5px;
+	width:100px;
+	height:120px;
+}

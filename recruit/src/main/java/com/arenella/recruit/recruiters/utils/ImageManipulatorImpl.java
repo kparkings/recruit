@@ -1,6 +1,5 @@
 package com.arenella.recruit.recruiters.utils;
 
-import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -10,6 +9,8 @@ import javax.imageio.ImageIO;
 import org.springframework.stereotype.Component;
 
 import com.arenella.recruit.recruiters.beans.RecruiterProfile.Photo.PHOTO_FORMAT;
+
+import net.coobird.thumbnailator.Thumbnails;
 
 /**
 * Util's for manipulating Images
@@ -28,12 +29,10 @@ public class ImageManipulatorImpl implements ImageManipulator{
 		
 		try {
 			
-			BufferedImage image = ImageIO.read(new ByteArrayInputStream(fileBytes));
-			Graphics2D graphics = image.createGraphics();
-			graphics.drawImage(image, 0, 0, 100, 200, null);
-			graphics.dispose();
+			BufferedImage inputImage 	= ImageIO.read(new ByteArrayInputStream(fileBytes));
+			BufferedImage outputImage 	= Thumbnails.of(inputImage).size(300, 350).asBufferedImage();	
 		
-			ImageIO.write(image, format.toString() , baos);
+			ImageIO.write(outputImage, format.toString() , baos);
 		
 		}catch(Exception e) {
 			return fileBytes;

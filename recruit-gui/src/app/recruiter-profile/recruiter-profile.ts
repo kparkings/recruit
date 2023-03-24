@@ -8,7 +8,7 @@ export class RecruiterProfile{
 	public recruiterSurname:string 				='';
 	public recruitsIn:Array<string> 			= new Array<string>();
 	public languagesSpoken:Array<string>	 	= new Array<string>();
-	public profilePhoto?:PhotoAPIOutbound;
+	public profilePhoto?:PhotoAPIOutbound		= new PhotoAPIOutbound();
 	public visibleToRecruiters?:boolean;
 	public visibleToCandidates?:boolean;
 	public visibleToPublic?:boolean;

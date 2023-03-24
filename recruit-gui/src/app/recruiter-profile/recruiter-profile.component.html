@@ -20,6 +20,8 @@
 						<th>Profile Image</th>
 						<td>
 							<input type="file" accept="image/jpeg,image/png" (change)="uploadProfileImage($event)">
+							<img class="profile-photo" *ngIf="recruiterProfile?.profilePhoto?.imageBytes" id='base64image'                 
+   									src='data:image/jpeg;base64, {{recruiterProfile?.profilePhoto?.imageBytes}}' />
 						</td>
 					</tr>
 					<tr>
@@ -39,7 +41,7 @@
 					<tr>
 						<th>Years Experience</th>
 						<td>
-							<input type="text" formControlName="yearsExperience">
+							<input type="number" formControlName="yearsExperience">
 						</td>
 					</tr>
 					<tr>
