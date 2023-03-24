@@ -2,7 +2,7 @@
 	<div class='content-div'>
 		<div class="recruiter-profile-buttons">
 			<div class="action-buttons">
-				<button class="btn btn-secondary action-btn  main-action_btn"  *ngIf="isOwnAccountExists()  && currentView != 'view-edit'" 		(click)="showViewCreate()">Edit Profile</button>
+				<button class="btn btn-secondary action-btn  main-action_btn"  *ngIf="isOwnAccountExists()  && currentView != 'view-create'" 	(click)="showViewCreate()">Edit Profile</button>
 				<button class="btn btn-secondary action-btn  main-action_btn"  *ngIf="!isOwnAccountExists() && currentView != 'view-create'" 	(click)="showViewCreate()">Create Profile</button>
 				<button class="btn btn-secondary action-btn" 				   *ngIf="currentView != 'view-main'" 								(click)="showViewMain()">Back</button>
 				
@@ -32,8 +32,7 @@
 						<th>Recruitment Type</th>
 						<td>
 							<select formControlName="recruiterType">
-								<option></option>
-								<option *ngFor="let opt of getRecruitmentTypeOptions()" value="{{opt}}">{{opt[1]}}</option>
+								<option *ngFor="let opt of getRecruitmentTypeOptions()" value="{{opt}}">{{getUserReadableVal(opt)}}</option>
 							</select>
 						</td>
 					</tr>
@@ -47,7 +46,6 @@
 						<th>Recruits In</th>
 						<td>
 							<select formControlName="recruitsIn" (change)="addRecruitsInItem()">
-								<option></option>
 								<option *ngFor="let opt of getCountryOptions()"	value="{{opt}}">{{opt[1]}}</option>
 							</select>
 							<br>
@@ -69,7 +67,6 @@
 						<th>Languages Spoken</th>
 						<td>
 							<select formControlName="languagesSpoken" (change)="addLanguageSpokenItem()">
-								<option></option>
 								<option *ngFor="let opt of getLanguageOptions()" value="{{opt}}">{{opt[1]}}</option>
 							</select>
 							<br>
@@ -84,7 +81,6 @@
 						<th>Sectors</th>
 						<td>
 							<select formControlName="sectorItem" (change)="addSectorItem()">
-								<option></option>
 								<option *ngFor="let opt of getSectorOptions()" value="{{opt}}">{{opt[1]}}</option>
 							</select>
 							<br>
@@ -99,7 +95,6 @@
 						<th>Core Technologies</th>
 						<td>
 							<select formControlName="coreTechItem" (change)="addCoreTechItem()">
-								<option></option>
 								<option *ngFor="let opt of getTechOptions()" value="{{opt}}">{{opt[1]}}</option>
 							</select>
 							<br>
@@ -114,7 +109,6 @@
 						<th>Contract Types</th>
 						<td>
 							<select  formControlName="contractTypeItem" (change)="addContractTypeItem()">
-								<option></option>
 								<option *ngFor="let opt of getContractTypeOptions()" value="{{opt}}">{{opt[1]}}</option>
 							</select>
 							<br>
@@ -147,7 +141,7 @@
 			</form>
 		</div>
 		<div class="action-buttons" style="padding-bottom:50px;">
-			<button class="btn btn-secondary action-btn" *ngIf="currentView === 'view-create'" (click)="createNewProfile()">Save</button>		
+			<button class="btn btn-secondary action-btn" *ngIf="currentView === 'view-create'" (click)="saveProfile()">Save</button>		
 		</div>
 		
 	</div>

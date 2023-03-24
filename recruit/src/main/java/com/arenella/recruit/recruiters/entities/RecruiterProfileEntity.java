@@ -39,6 +39,7 @@ public class RecruiterProfileEntity {
 	private byte[]				photoBytes;
 	
 	@Column(name="photo_format")
+	@Enumerated(EnumType.STRING)
 	private PHOTO_FORMAT		photoFormat;
 	
 	@Column(name="visible_to_recruiters")

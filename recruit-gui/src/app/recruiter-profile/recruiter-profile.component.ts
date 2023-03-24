@@ -25,7 +25,7 @@ export class RecruiterProfileComponent {
 	*/
 	constructor(private recruierProfileService:RecruiterProfileService){
 		this.recruierProfileService.fetchOwnRecruiterProfile().subscribe( response => {
-			JSON.stringify(response);
+			this.recruiterProfile = response;
 		})
 	}
 	
@@ -52,6 +52,7 @@ export class RecruiterProfileComponent {
 	public sectors:Array<[string,string]> 					= new Array<[string,string]>();
 	public coreTech:Array<[string,string]>		 			= new Array<[string,string]>();
 	public contractTypes:Array<[string,string]> 			= new Array<[string,string]>();
+
 
 	/**
 	* Adds item to contractType
@@ -148,9 +149,6 @@ export class RecruiterProfileComponent {
 		this.languagesSpoken = this.languagesSpoken.filter(i => i !== item);
 	}
 	
-	
-	
-	
 	/**
 	* Whether a recruiter has already added their own profile
 	*/
@@ -163,6 +161,27 @@ export class RecruiterProfileComponent {
 	*/
 	public showViewCreate():void{
 		this.currentView = 'view-create';
+		
+		if (this.recruiterProfile){
+			
+			this.newProfileFormBean.get('recruitsIn')?.setValue(this.recruiterProfile.recruitsIn);
+			
+			this.newProfileFormBean.get('visibleToRecruiters')?.setValue(this.recruiterProfile.visibleToRecruiters);
+			this.newProfileFormBean.get('visibleToCandidates')?.setValue(this.recruiterProfile.visibleToCandidates);
+			this.newProfileFormBean.get('visibleToPublic')?.setValue(this.recruiterProfile.visibleToPublic);
+			this.newProfileFormBean.get('jobTitle')?.setValue(this.recruiterProfile.jobTitle);
+			this.newProfileFormBean.get('yearsExperience')?.setValue(this.recruiterProfile.yearsExperience);
+			this.newProfileFormBean.get('introduction')?.setValue(this.recruiterProfile.introduction);
+			this.newProfileFormBean.get('recruiterType')?.setValue(this.recruiterProfile.recruiterType);     	
+		
+			this.languagesSpoken 	= this.getLanguageOptions().filter(i => this.recruiterProfile?.languagesSpoken.includes(i[0]));
+			this.recruitsIn 		= this.getCountryOptions().filter(i => this.recruiterProfile?.recruitsIn.includes(i[0]));
+			this.sectors 			= this.getSectorOptions().filter(i => this.recruiterProfile?.sectors.includes(i[0]));
+			this.coreTech 			= this.getTechOptions().filter(i => this.recruiterProfile?.coreTech.includes(i[0]));
+			this.contractTypes 		= this.getContractTypeOptions().filter(i => this.recruiterProfile?.recruitsContractTypes.includes(i[0]));
+				
+		}
+		
 	}
 	
 	/**
@@ -175,15 +194,27 @@ export class RecruiterProfileComponent {
 	/**
 	* Recruiter type options
 	*/
-	public getRecruitmentTypeOptions():Array<[string,string]>{
+	public getRecruitmentTypeOptions():Array<string>{
 		
-		let options:Array<[string,string]> = new Array<[string,string]>();
+		let options:Array<string> = new Array<string>();
 		
-		options.push(['INDEPENDENT', 	'Independent']);
-		options.push(['COMMERCIAL', 	'Commercial']);
+		options.push('');
+		options.push('INDEPENDENT');
+		options.push('COMMERCIAL');
 		
 		return options;
 		
+	}
+	
+	public getUserReadableVal(key:string):string{
+		
+		let firstChar:string = key.substring(0,1);
+		let remainder:string = key.substring(1);
+		
+		remainder = remainder.toLocaleLowerCase();
+		  
+		
+		return (firstChar + remainder);
 	}
 
 	/**
@@ -193,6 +224,7 @@ export class RecruiterProfileComponent {
 		
 		let options:Array<[string,string]> = new Array<[string,string]>();
 		
+		options.push(['',		 		'']);
 		options.push(['BELGIUM', 		'Belgium']);
 		options.push(['EUROPE', 		'Europe']);
 		options.push(['IRELAND', 		'Ireland']);
@@ -211,6 +243,7 @@ export class RecruiterProfileComponent {
 		
 		let options:Array<[string,string]> = new Array<[string,string]>();
 		
+		options.push(['',		 		'']);
 		options.push(['DUTCH', 			'Dutch']);
 		options.push(['ENGLISH', 		'English']);
 		options.push(['FRENCH', 		'French']);
@@ -226,6 +259,7 @@ export class RecruiterProfileComponent {
 		
 		let options:Array<[string,string]> = new Array<[string,string]>();
 		
+		options.push(['',		 			'']);
 		options.push(['AUTOMOBILES', 		'Automotive']);
 		options.push(['CYBER_INTEL', 		'Cyber Intelligence']);
 		options.push(['EU_INSTITUTIONS', 	'EU Institutions']);
@@ -246,6 +280,7 @@ export class RecruiterProfileComponent {
 		
 		let options:Array<[string,string]> = new Array<[string,string]>();
 		
+		options.push(['',		 			'']);
 		options.push(['ARCHITECT', 			'Architect']);
 		options.push(['BI', 				'Business Intelligence']);
 		options.push(['BUSINESS_ANALYSTS', 	'Business Analyst\'s']);
@@ -273,6 +308,7 @@ export class RecruiterProfileComponent {
 		
 		let options:Array<[string,string]> = new Array<[string,string]>();
 		
+		options.push(['',		 	'']);
 		options.push(['FREELANCE', 	'Freelance / Contract']);
 		options.push(['PERM', 		'Permanent / Payroll']);
 		
@@ -286,27 +322,21 @@ export class RecruiterProfileComponent {
 	*/
   	public uploadProfileImage(event:any):void{
   
-	console.log("====>> 1");
-
-  		if (event.target.files.length <= 0) {
-  			console.log("====>> 2");
-			return;
+	 	if (event.target.files.length <= 0) {
+  			return;
   		}
   	
-		console.log("====>> 3");
-  		this.imageFile = event.target.files[0];
+		this.imageFile = event.target.files[0];
   		
 	}
 	
 	/**
 	* 
 	*/
-	public createNewProfile():void{
+	public saveProfile():void{
 		
 		let recruiterProfile:AddRecruiterProfileRequest = new AddRecruiterProfileRequest();
-		
-		
-		let tupplePipe:TupleStrValueByPos = new TupleStrValueByPos();
+		let tupplePipe:TupleStrValueByPos 				= new TupleStrValueByPos();
 		
 		recruiterProfile.recruitsIn 			= this.recruitsIn.map(i => tupplePipe.transform(i,true));
 		recruiterProfile.languagesSpoken 		= this.languagesSpoken.map(i => tupplePipe.transform(i,true));
@@ -319,9 +349,24 @@ export class RecruiterProfileComponent {
 		recruiterProfile.sectors 				= this.sectors.map(i => tupplePipe.transform(i,true));
 		recruiterProfile.coreTech 				= this.coreTech.map(i => tupplePipe.transform(i,true));
 		recruiterProfile.recruitsContractTypes 	= this.contractTypes.map(i => tupplePipe.transform(i,true));
-		recruiterProfile.recruiterType 			= tupplePipe.transform(this.newProfileFormBean.get('recruiterType')?.value,true);
+		recruiterProfile.recruiterType 			= this.newProfileFormBean.get('recruiterType')?.value;
 		
-		console.log('------> ' + this.imageFile);
+		if (this.recruiterProfile){
+			this.updateProfile(recruiterProfile);
+		} else {
+			this.createNewProfile(recruiterProfile);
+		}
+		
+	}
+	
+	public updateProfile(recruiterProfile:AddRecruiterProfileRequest):void{
+		
+		this.recruierProfileService.updateProfile(recruiterProfile, this.imageFile).subscribe(response => {
+			
+		});
+	}
+	
+	public createNewProfile(recruiterProfile:AddRecruiterProfileRequest):void{
 		
 		this.recruierProfileService.addProfile(recruiterProfile, this.imageFile).subscribe(response => {
 			

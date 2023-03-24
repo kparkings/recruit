@@ -136,6 +136,7 @@ public class RecruiterProfileControllerTest {
 		
 		Mockito.when(this.mockRPService.fetchRecruiterProfile(Mockito.any())).thenReturn(Optional.of(profile));
 		Mockito.when(this.mockRecruiterService.fetchRecruiterOwnAccount()).thenReturn(recruiter);
+		Mockito.when(this.mockPrincipal.getName()).thenReturn("notAdmin");
 		
 		ResponseEntity<Optional<RecruiterProfileAPIOutbound>> response = controller.fetchRecruiterProfile(mockPrincipal);
 		
@@ -156,6 +157,7 @@ public class RecruiterProfileControllerTest {
 	
 		Mockito.when(this.mockRPService.fetchRecruiterProfile(Mockito.any())).thenReturn(Optional.empty());
 		Mockito.when(this.mockRecruiterService.fetchRecruiterOwnAccount()).thenReturn(recruiter);
+		Mockito.when(this.mockPrincipal.getName()).thenReturn("notAdmin");
 		
 		ResponseEntity<Optional<RecruiterProfileAPIOutbound>> response = controller.fetchRecruiterProfile(mockPrincipal);
 		

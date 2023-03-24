@@ -92,12 +92,27 @@ public class RecruiterProfileController {
 	@GetMapping(path="recruiter-profile/own")
 	public ResponseEntity<Optional<RecruiterProfileAPIOutbound>> fetchRecruiterProfile(Principal authenticatedUser) throws IllegalAccessException{
 		
-		Recruiter 					recruiter 	= this.recruiterService.fetchRecruiterOwnAccount();
+		Recruiter 					recruiter;
+		
+		/**
+		* [KP]  I know its ugly but for the admin user there is no recruiter object and 
+		* 		this means I can concentrate on the real functionality until I have time 
+		* 		to do something prettier
+		*/
+		if (authenticatedUser.getName().equals("kparkings")) {
+			recruiter = Recruiter.builder().userId(authenticatedUser.getName()).companyName("Arenella BV").firstName("kevin").surname("parkings").build();
+		} else {
+			recruiter = this.recruiterService.fetchRecruiterOwnAccount();
+		}
+		
 		Optional<RecruiterProfile> 	profile 	= this.rpService.fetchRecruiterProfile(recruiter);
 		
 		if (profile.isEmpty()) {
 			return ResponseEntity.ok().build();
 		}
+		
+		
+		//END
 		
 		return ResponseEntity.ok().body(Optional.of(RecruiterProfileAPIOutbound.convertFromDomain(profile.get(), recruiter)));
 	}
