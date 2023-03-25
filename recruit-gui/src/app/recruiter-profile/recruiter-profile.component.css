@@ -85,6 +85,58 @@ table tr th{
 	display:block;
 	margin-top:10px;
 	margin-bottom:5px;
+	width:110px;
+	height:120px;
+}
+
+.profile-overwiew{
+	width:450px;
+	max-width:90%;
+	min-height:200px;
+	border:2px solid grey;
+	padding:10px;
+	float:left;
+	margin-left:20px;
+	cursor:pointer;
+	margin-bottom:10px;
+	border-radius: 20px 20px 20px 20px;
+	background:#e8e8e8;
+}
+
+.overview{
+	border-bottom:1px solid black;
+	margin:5px;
+}
+
+.profile-photo-overview{
+	display:block;
 	width:100px;
 	height:120px;
+	float:left;
+	border-radius: 15px;
+	
+}
+
+.profile-photo-name{
+	font-weight:bold;
+	float:left;
+	margin-left:10px;
+}
+
+.profile-recruits-in{
+	clear:both;
+	padding-top:10px;	
+}
+
+.profile-country-flag{
+	margin-left:5px;
+	width:40px;
+	height:30px;
+}
+
+.flag-icon-we{
+	background:black;
+	width:33px;;
+	height:33px;
+	border-radius: 50%;
 }

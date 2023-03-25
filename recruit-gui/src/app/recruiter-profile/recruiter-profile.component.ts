@@ -16,10 +16,10 @@ import { TupleStrValueByPos }						from './tuple-string-pos-pipe';
 export class RecruiterProfileComponent {
 
 	public recruiterProfile?:RecruiterProfile;
+	public recruiterProfiles:Array<RecruiterProfile> = new Array<RecruiterProfile>();
 	public currentView = 'view-main'; 
 	private imageFile!:File| any;
-
-
+	
 	/**
 	* Constructor
 	*/
@@ -27,6 +27,17 @@ export class RecruiterProfileComponent {
 		this.recruierProfileService.fetchOwnRecruiterProfile().subscribe( response => {
 			this.recruiterProfile = response;
 		})
+		
+		this.loadRecuiterProfiles();
+	}
+	
+	/**
+	* Fetched recruiter profiles from backend
+	*/
+	private loadRecuiterProfiles():void{
+		this.recruierProfileService.fetchRecruiterProfiles('RECRUITERS').subscribe( profiles => {
+			this.recruiterProfiles = profiles;
+		});
 	}
 	
 	/**
@@ -315,6 +326,37 @@ export class RecruiterProfileComponent {
 		
 	}
 	
+		/**
+	* Returns the code identifying the country
+	* @param country - Country to get the country code for
+	*/
+	public getCountryFlagClass(country:string):string{
+		switch(country){
+			case "NETHERLANDS":{
+				return "nl";
+			}
+			case "BELGIUM":{
+				return "be";
+			}
+			case "UK":{
+				return "gb";
+			}
+			case "IRELAND":{
+				return "ie";
+			}
+			case "EUROPE":{
+				return "eu";
+			}
+			case "WORLD":{
+				return "we";
+			}
+			default:{
+				return 'NA';
+			}
+		}
+
+  	}
+	
 	/**
 	* Uploads the file for the Profile Image and stored 
 	* it ready to be sent to the backend
@@ -365,11 +407,13 @@ export class RecruiterProfileComponent {
 		
 	}
 	
+	
 	public updateProfile(recruiterProfile:AddRecruiterProfileRequest):void{
 		
 		this.recruierProfileService.updateProfile(recruiterProfile, this.imageFile).subscribe(response => {
 			this.recruierProfileService.fetchOwnRecruiterProfile().subscribe( response => {
 				this.recruiterProfile = response;
+				this.loadRecuiterProfiles();
 				this.showViewMain();
 			});
 		});
@@ -380,6 +424,7 @@ export class RecruiterProfileComponent {
 		this.recruierProfileService.addProfile(recruiterProfile, this.imageFile).subscribe(response => {
 			this.recruierProfileService.fetchOwnRecruiterProfile().subscribe( response => {
 				this.recruiterProfile = response;
+				this.loadRecuiterProfiles();
 				this.showViewMain();
 			});
 		});

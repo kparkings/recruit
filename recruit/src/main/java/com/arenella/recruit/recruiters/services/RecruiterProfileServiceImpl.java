@@ -10,6 +10,7 @@ import com.arenella.recruit.recruiters.beans.Recruiter;
 import com.arenella.recruit.recruiters.beans.RecruiterProfile;
 import com.arenella.recruit.recruiters.beans.RecruiterProfile.Photo;
 import com.arenella.recruit.recruiters.beans.RecruiterProfileFilter;
+import com.arenella.recruit.recruiters.dao.RecruiterDao;
 import com.arenella.recruit.recruiters.dao.RecruiterProfileDao;
 import com.arenella.recruit.recruiters.utils.ImageManipulator;
 
@@ -28,6 +29,9 @@ public class RecruiterProfileServiceImpl implements RecruiterProfileService{
 	
 	@Autowired
 	private ImageManipulator		imageManipulator;
+	
+	@Autowired
+	private RecruiterDao			recruiterDao;
 	
 	/**
 	* Refer to the RecruiterProfileService interface for details 
@@ -79,7 +83,27 @@ public class RecruiterProfileServiceImpl implements RecruiterProfileService{
 			
 			recruiterProfile.setProfilePhoto(photo);
 			
-		}  
+		} else {
+			
+			Recruiter 			recruiter;
+			
+			/**
+			* [KP]  I know its ugly but for the admin user there is no recruiter object and 
+			* 		this means I can concentrate on the real functionality until I have time 
+			* 		to do something prettier
+			*/
+			if (recruiterProfile.getRecruiterId().equals("kparkings")) {
+				recruiter = Recruiter.builder().userId("kparkings").companyName("Arenella BV").firstName("kevin").surname("parkings").build();
+			} else {
+				recruiter = this.recruiterDao.findRecruiterById(recruiterProfile.getRecruiterId()).get();
+			}
+			
+			RecruiterProfile 	existing 	= this.recruiterProfileDao.fetchRecruiterProfileById(recruiter).get();
+			
+			if (existing.getProfilePhoto().isPresent()) {
+				recruiterProfile.setProfilePhoto(existing.getProfilePhoto().get());
+			}
+		}
 		
 		this.recruiterProfileDao.saveRecruiterProfile(recruiterProfile);
 		
@@ -98,7 +122,7 @@ public class RecruiterProfileServiceImpl implements RecruiterProfileService{
 	*/
 	@Override
 	public Set<RecruiterProfile> fetchRecruiterProfiles(RecruiterProfileFilter filters) {
-		return this.fetchRecruiterProfiles(filters);
+		return this.recruiterProfileDao.fetchByFilters(filters);
 	}
 
 }

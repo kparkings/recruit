@@ -60,9 +60,9 @@ export class RecruiterProfileService {
 	/**
 	* Returns Alerts for authenticated Recruiter
 	*/
-	public fetchRecruiterProfiles(): Observable<Array<RecruiterProfile>>{
+	public fetchRecruiterProfiles(type:string): Observable<Array<RecruiterProfile>>{
 		
-		const backendUrl:string = environment.backendUrl +'recruiter-profile';
+		const backendUrl:string = environment.backendUrl +'recruiter-profile?visibilityType=' + type;
   
     	return this.httpClient.get<any>(backendUrl, this.httpOptions);
 

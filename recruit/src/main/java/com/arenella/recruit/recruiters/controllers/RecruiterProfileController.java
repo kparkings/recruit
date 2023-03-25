@@ -59,8 +59,6 @@ public class RecruiterProfileController {
 	@PostMapping(path="recruiter-profile",consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
 	public ResponseEntity<Void> addRecruiterProfile(@RequestPart("profile") RecruiterProfileAPIInbound profile, @RequestPart("file") Optional<MultipartFile> file, Principal authenticatedUser) throws Exception{
 		
-		//TODO: [KP] May not be working because RequestPart is object and not form data [k=String]
-		
 		Optional<PhotoAPIInbound> photo = file.isEmpty() ? Optional.empty() : Optional.of(new PhotoAPIInbound(file.get().getBytes(), PHOTO_FORMAT.jpeg));
 		
 		this.rpService.addRecruiterProfile(RecruiterProfileAPIInbound.convertToDomain(profile, photo, authenticatedUser.getName()));
@@ -129,7 +127,8 @@ public class RecruiterProfileController {
 	public ResponseEntity<Set<RecruiterProfileAPIOutbound>> fetchRecruiterProfiles(	@RequestParam(required = false) Set<COUNTRY> 		recruitsIn,
 																					@RequestParam(required = false) Set<TECH>			coreTech,
 																					@RequestParam(required = false) Set<CONTRACT_TYPE> 	recruitsContractTypes,
-																					@RequestParam(required = true)  VISIBILITY_TYPE 	visibilityType) {
+																					@RequestParam(required = true)  VISIBILITY_TYPE 	visibilityType,
+																					Principal authenticatedUser) {
 		
 		RecruiterProfileFilterBuilder filters = RecruiterProfileFilter.builder();
 		
@@ -167,7 +166,15 @@ public class RecruiterProfileController {
 		* TODO: [KP] Will need to re-think this if there are large numbers of Recuiter's but for now 
 		* 			 this will work well enough to launch the feature
 		*/
-		Set<Recruiter> recruiters = this.recruiterService.fetchRecruiters();
+		Set<Recruiter> recruiters = new LinkedHashSet<>();
+		recruiters.addAll(this.recruiterService.fetchRecruiters());
+		
+		/**
+		* [KP]  I know its ugly but for the admin user there is no recruiter object and 
+		* 		this means I can concentrate on the real functionality until I have time 
+		* 		to do something prettier
+		*/
+		//recruiters.add(Recruiter.builder().userId("kparkings").companyName("Arenella BV").firstName("kevin").surname("parkings").build());
 		
 		
 		Set<RecruiterProfile> 				profiles = this.rpService.fetchRecruiterProfiles(filters.build());

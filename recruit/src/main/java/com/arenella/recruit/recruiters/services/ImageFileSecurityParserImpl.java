@@ -33,8 +33,7 @@ public class ImageFileSecurityParserImpl implements ImageFileSecurityParser{
 		    MediaType 	mediaType 	= detector.detect(new ByteArrayInputStream(file), metadata);
 		    
 			switch (mediaType.toString()) {
-				case "image/jpeg":
-				case "image/png":{
+				case "image/jpeg":{
 					return true;
 				}
 				

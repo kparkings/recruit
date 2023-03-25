@@ -221,7 +221,7 @@ public class RecruiterProfileControllerTest {
 		Mockito.when(this.mockRPService.fetchRecruiterProfiles(filterCapt.capture())).thenReturn(Set.of(rp1,rp2));
 		Mockito.when(this.mockRecruiterService.fetchRecruiters()).thenReturn(Set.of(recruiter1, recruiter2));
 		
-		ResponseEntity<Set<RecruiterProfileAPIOutbound>> response = controller.fetchRecruiterProfiles(Set.of(COUNTRY.BELGIUM), Set.of(TECH.ARCHITECT), Set.of(CONTRACT_TYPE.FREELANCE), VISIBILITY_TYPE.CANDIDATES);
+		ResponseEntity<Set<RecruiterProfileAPIOutbound>> response = controller.fetchRecruiterProfiles(Set.of(COUNTRY.BELGIUM), Set.of(TECH.ARCHITECT), Set.of(CONTRACT_TYPE.FREELANCE), VISIBILITY_TYPE.CANDIDATES, this.mockPrincipal);
 		
 		RecruiterProfileFilter filters = filterCapt.getValue();
 		

@@ -10,7 +10,22 @@
 		</div>
 		
 		<div *ngIf="currentView === 'view-main'">
-		
+			<div class="profile-overwiew" *ngFor="let profile of recruiterProfiles">
+				<div>
+					<img class="profile-photo-overview" *ngIf="profile?.profilePhoto?.imageBytes" id='base64image' src='data:image/jpeg;base64, {{profile?.profilePhoto?.imageBytes}}' />
+					<span class="profile-photo-name">
+						<h3>{{profile.recruiterFirstName}} {{profile.recruiterSurname}}</h3>
+						{{profile.jobTitle}}
+						<br>
+						{{profile.companyName}}				
+					</span>	
+				</div>
+				<div class="profile-recruits-in">
+					<span *ngFor="let country of profile.recruitsIn">
+						<span class="flag-icon flag-icon-{{getCountryFlagClass(country)}} profile-country-flag"></span>
+					</span>
+				</div>
+			</div>
 		</div>
 		
 		<div *ngIf="currentView === 'view-create'" id="view-create-table">
@@ -21,7 +36,7 @@
 						<td>
 							<input type="file" accept="image/jpeg,image/png" (change)="uploadProfileImage($event)">
 							<img class="profile-photo" *ngIf="recruiterProfile?.profilePhoto?.imageBytes" id='base64image'                 
-   									src='data:image/jpeg;base64, {{recruiterProfile?.profilePhoto?.imageBytes}}' />
+   									src='data:image/jpeg;base64, {{recruiterProfile?.profilePhoto?.imageBytes}}'/>
 						</td>
 					</tr>
 					<tr>
