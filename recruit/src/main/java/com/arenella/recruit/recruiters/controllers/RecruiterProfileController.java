@@ -174,7 +174,7 @@ public class RecruiterProfileController {
 		* 		this means I can concentrate on the real functionality until I have time 
 		* 		to do something prettier
 		*/
-		//recruiters.add(Recruiter.builder().userId("kparkings").companyName("Arenella BV").firstName("kevin").surname("parkings").build());
+		recruiters.add(Recruiter.builder().userId("kparkings").companyName("Arenella BV").firstName("kevin").surname("parkings").build());
 		
 		
 		Set<RecruiterProfile> 				profiles = this.rpService.fetchRecruiterProfiles(filters.build());

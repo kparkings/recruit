@@ -17,6 +17,7 @@ export class RecruiterProfileComponent {
 
 	public recruiterProfile?:RecruiterProfile;
 	public recruiterProfiles:Array<RecruiterProfile> = new Array<RecruiterProfile>();
+	public selectedRecruiterProfile:RecruiterProfile = new RecruiterProfile();
 	public currentView = 'view-main'; 
 	private imageFile!:File| any;
 	
@@ -171,6 +172,7 @@ export class RecruiterProfileComponent {
 	* Switches to view to add own profile
 	*/
 	public showViewCreate():void{
+		
 		this.currentView = 'view-create';
 		
 		if (this.recruiterProfile){
@@ -193,6 +195,13 @@ export class RecruiterProfileComponent {
 				
 		}
 		
+	}
+	
+	public showViewDetails(recruiterProfile:RecruiterProfile):void{
+		
+		this.currentView = 'view-details';
+		
+		this.selectedRecruiterProfile = recruiterProfile;
 	}
 	
 	/**
@@ -375,10 +384,8 @@ export class RecruiterProfileComponent {
   		
 	}
 	
-	public validationErrors:Array<[string,string]> = new Array<[string,string]>();
-	
 	/**
-	* 
+	* Saves / Updates own Profile
 	*/
 	public saveProfile():void{
 		
@@ -404,9 +411,7 @@ export class RecruiterProfileComponent {
 			this.createNewProfile(recruiterProfile);
 		}
 	
-		
 	}
-	
 	
 	public updateProfile(recruiterProfile:AddRecruiterProfileRequest):void{
 		

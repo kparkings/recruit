@@ -28,6 +28,7 @@ import { FaqComponent } 					from './faq/faq.component';
 import { EmailComponent } 					from './email/email.component';
 import { RecruiterProfileComponent } 		from './recruiter-profile/recruiter-profile.component';
 import { TupleStrValueByPos }				from './recruiter-profile/tuple-string-pos-pipe';
+import { EnumToHumanReadableValue }				from './recruiter-profile/enum-to-hr-pipe';
 
 
 @NgModule({
@@ -49,7 +50,8 @@ import { TupleStrValueByPos }				from './recruiter-profile/tuple-string-pos-pipe
     FaqComponent,
     EmailComponent,
     RecruiterProfileComponent,
-	TupleStrValueByPos
+	TupleStrValueByPos,
+	EnumToHumanReadableValue
   ],
   imports: [
     BrowserModule,

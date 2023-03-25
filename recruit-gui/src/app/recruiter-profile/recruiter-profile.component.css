@@ -114,7 +114,15 @@ table tr th{
 	height:120px;
 	float:left;
 	border-radius: 15px;
-	
+}
+
+.profile-photo-details{
+	display:block;
+	width:300px;
+	height:294px;
+	float:left;
+	margin-right:20px;
+	margin-bottom:20px;
 }
 
 .profile-photo-name{
@@ -140,3 +148,22 @@ table tr th{
 	height:33px;
 	border-radius: 50%;
 }
+
+.details-left{
+	float:left;
+	margin-bottom:50px;
+}
+
+.details-left-collections{
+	min-width:300px;
+	margin-bottom:20px;
+}
+
+.details-left-collections ul{
+	list-style-type:none;
+}
+.details-left-collections h5{
+	background:#e8e8e8;
+	padding:2px;
+}
+

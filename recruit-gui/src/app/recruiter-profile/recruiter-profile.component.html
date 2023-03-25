@@ -2,22 +2,21 @@
 	<div class='content-div'>
 		<div class="recruiter-profile-buttons">
 			<div class="action-buttons">
-				<button class="btn btn-secondary action-btn  main-action_btn"  *ngIf="isOwnAccountExists()  && currentView != 'view-create'" 	(click)="showViewCreate()">Edit Profile</button>
-				<button class="btn btn-secondary action-btn  main-action_btn"  *ngIf="!isOwnAccountExists() && currentView != 'view-create'" 	(click)="showViewCreate()">Create Profile</button>
-				<button class="btn btn-secondary action-btn" 				   *ngIf="currentView != 'view-main'" 								(click)="showViewMain()">Back</button>
-				
+				<button class="btn btn-secondary action-btn  main-action_btn"  *ngIf="isOwnAccountExists()  && currentView != 'view-create' && currentView != 'view-details'" 	(click)="showViewCreate()">Edit Profile</button>
+				<button class="btn btn-secondary action-btn  main-action_btn"  *ngIf="!isOwnAccountExists() && currentView != 'view-create' && currentView != 'view-details'" 	(click)="showViewCreate()">Create Profile</button>
+				<button class="btn btn-secondary action-btn" 				   *ngIf="currentView != 'view-main'" 																(click)="showViewMain()">Back</button>
 			</div>
 		</div>
 		
 		<div *ngIf="currentView === 'view-main'">
-			<div class="profile-overwiew" *ngFor="let profile of recruiterProfiles">
+			<div class="profile-overwiew" *ngFor="let profile of recruiterProfiles" (click)="showViewDetails(profile)">
 				<div>
 					<img class="profile-photo-overview" *ngIf="profile?.profilePhoto?.imageBytes" id='base64image' src='data:image/jpeg;base64, {{profile?.profilePhoto?.imageBytes}}' />
 					<span class="profile-photo-name">
-						<h3>{{profile.recruiterFirstName}} {{profile.recruiterSurname}}</h3>
-						{{profile.jobTitle}}
+						<h3>{{profile.recruiterFirstName | enumToHumanReadableValue}} {{profile.recruiterSurname | enumToHumanReadableValue}}</h3>
+						{{profile.jobTitle | enumToHumanReadableValue}}
 						<br>
-						{{profile.companyName}}				
+						{{profile.companyName | enumToHumanReadableValue}}				
 					</span>	
 				</div>
 				<div class="profile-recruits-in">
@@ -26,6 +25,95 @@
 					</span>
 				</div>
 			</div>
+		</div>
+		
+		<div *ngIf="currentView === 'view-details'">
+		
+		
+			
+		
+		
+			<div  class="details-left">
+				<img class="profile-photo-details" *ngIf="selectedRecruiterProfile?.profilePhoto?.imageBytes" id='base64image' src='data:image/jpeg;base64, {{selectedRecruiterProfile?.profilePhoto?.imageBytes}}' />
+				<br>
+				<table>
+					<tr>
+						<th>Company</th>
+						<td>{{selectedRecruiterProfile.companyName | enumToHumanReadableValue}}</td>
+					</tr>
+					<tr>
+						<th>Type</th>
+						<td>{{selectedRecruiterProfile.recruiterType | enumToHumanReadableValue}}</td>
+					</tr>
+					<tr>
+						<th>Years Exp</th>
+						<td>{{selectedRecruiterProfile.yearsExperience}}</td>
+					</tr>
+				</table>
+				
+				<br>
+				<button class="btn btn-secondary action-btn main-action_btn" style="width:300px;maring-bottom:10px;" (click)="showViewMain()">Contact</button>
+			</div>	
+				
+			<div class="details-left" style="max-width:75%;min-width:300px;">
+				<div style="float:center">
+					
+					<h1>{{selectedRecruiterProfile.recruiterFirstName | enumToHumanReadableValue}} {{selectedRecruiterProfile.recruiterSurname | enumToHumanReadableValue}}</h1>
+					<br>
+					<p>{{selectedRecruiterProfile.introduction}}</p>
+				</div>
+				
+				<div>
+					<div  class="details-left-collections">
+				<h5>Recruits In</h5>
+				<ul>
+					<li *ngFor="let country of selectedRecruiterProfile.recruitsIn">
+						<span class="flag-icon flag-icon-{{getCountryFlagClass(country)}} profile-country-flag"></span>
+					</li>
+				</ul>
+			</div>
+			
+			<div  class="details-left-collections">
+				<h5>Languages Spoken</h5>
+				<ul>
+					<li *ngFor="let language of selectedRecruiterProfile.languagesSpoken">
+						{{language | enumToHumanReadableValue}}
+					</li>
+				</ul>
+			</div>
+			
+			<div  class="details-left-collections">
+				<h5>Sectors Active In</h5>
+				<ul>
+					<li *ngFor="let sector of selectedRecruiterProfile.sectors">
+						{{sector | enumToHumanReadableValue}}
+					</li>
+				</ul>
+			</div>
+			
+			<div  class="details-left-collections">
+				<h5>Recruits For The Following Markets</h5>
+				<ul>
+				<li *ngFor="let tech of selectedRecruiterProfile.coreTech">
+					{{tech | enumToHumanReadableValue}}
+				</li>
+				</ul>
+			</div>
+			
+			<div  class="details-left-collections">
+				<h5>Recruits For The Following Contract Types</h5>
+				<ul>
+				<li *ngFor="let contractType of selectedRecruiterProfile.recruitsContractTypes">
+					{{contractType | enumToHumanReadableValue}}
+				</li>
+				</ul>
+			</div>
+				</div>
+			</div>
+	
+			<div class="action-buttons" style="padding-bottom:50px;">
+			</div>
+		
 		</div>
 		
 		<div *ngIf="currentView === 'view-create'" id="view-create-table">
