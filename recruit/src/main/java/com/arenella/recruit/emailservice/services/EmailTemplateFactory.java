@@ -76,6 +76,15 @@ public class EmailTemplateFactory {
 				}
 				
 			}
+			case REC_TO_REC_CONTACT_REQUEST:{
+				if (sendEmailCommand.getEmailType() == EmailType.INTERN) {
+					return loadTemplate("rec-to-rec-contact-request-intern.ftlh", model);
+				}
+				
+				if (sendEmailCommand.getEmailType() == EmailType.EXTERN) {
+					return loadTemplate("rec-to-rec-contact-request-extern.ftlh", model);
+				}
+			}
 			default:{
 				return "Could not process template";
 			}

@@ -6,6 +6,8 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.arenella.recruit.adapters.events.RecruiterContactRequestEvent;
+import com.arenella.recruit.recruiters.adapters.RecruitersExternalEventPublisher;
 import com.arenella.recruit.recruiters.beans.Recruiter;
 import com.arenella.recruit.recruiters.beans.RecruiterProfile;
 import com.arenella.recruit.recruiters.beans.RecruiterProfile.Photo;
@@ -22,16 +24,19 @@ import com.arenella.recruit.recruiters.utils.ImageManipulator;
 public class RecruiterProfileServiceImpl implements RecruiterProfileService{
 
 	@Autowired
-	private ImageFileSecurityParser imageFileSecruityParser;
+	private ImageFileSecurityParser 			imageFileSecruityParser;
 	
 	@Autowired
-	private RecruiterProfileDao 	recruiterProfileDao;
+	private RecruiterProfileDao 				recruiterProfileDao;
 	
 	@Autowired
-	private ImageManipulator		imageManipulator;
+	private ImageManipulator					imageManipulator;
 	
 	@Autowired
-	private RecruiterDao			recruiterDao;
+	private RecruiterDao						recruiterDao;
+	
+	@Autowired
+	private RecruitersExternalEventPublisher	eventPublisher;
 	
 	/**
 	* Refer to the RecruiterProfileService interface for details 
@@ -123,6 +128,17 @@ public class RecruiterProfileServiceImpl implements RecruiterProfileService{
 	@Override
 	public Set<RecruiterProfile> fetchRecruiterProfiles(RecruiterProfileFilter filters) {
 		return this.recruiterProfileDao.fetchByFilters(filters);
+	}
+
+	/**
+	* Refer to the RecruiterProfileService interface for details 
+	*/
+	@Override
+	public void sendEmailToRecruiter(String message, String recruiterId, String title, String authorizedUserId) {
+		
+		this.eventPublisher
+			.publishRecruiterContactRequestEvent(new RecruiterContactRequestEvent(authorizedUserId, recruiterId, title, message));
+		
 	}
 
 }

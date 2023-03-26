@@ -12,6 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -49,6 +50,19 @@ public class RecruiterProfileController {
 	
 	@Autowired
 	private RecruiterService		recruiterService;
+
+	/**
+	* Sends email to recruiter
+	* @return ResponseEntity
+	*/
+	@PutMapping("/v1/recruiter-profile/{id}/_message")
+	@PreAuthorize("hasRole('ROLE_RECRUITER') or hasRole('ROLE_ADMIN')")
+	public ResponseEntity<Void> contactRecruiterForOpenPosition(@PathVariable("id") String recruiterId, @RequestPart("title") String title, @RequestPart("message") String message, Principal principal) {
+		
+		this.rpService.sendEmailToRecruiter(message, recruiterId, title, principal.getName());
+		
+		return ResponseEntity.status(HttpStatus.OK).build();
+	}
 	
 	/**
 	* Creates a new Recruiter profile

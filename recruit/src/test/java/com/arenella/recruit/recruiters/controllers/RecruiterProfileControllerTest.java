@@ -236,4 +236,19 @@ public class RecruiterProfileControllerTest {
 		
 	}
 	
+	/**
+	* Test sending of contact request email
+	* @throws Exception
+	*/
+	@Test
+	public void testContactRecruiterForOpenPosition() throws Exception{
+		
+		final String message = "aMessage";
+
+		ResponseEntity<Void> response = this.controller.contactRecruiterForOpenPosition(RECRUITER_ID, JOB_TITLE, message, mockPrincipal);
+		
+		assertEquals(HttpStatus.OK, response.getStatusCode());
+		
+	}
+	
 }

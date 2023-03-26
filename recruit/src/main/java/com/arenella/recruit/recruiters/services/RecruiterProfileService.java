@@ -38,4 +38,14 @@ public interface RecruiterProfileService {
 	* @return matching Recruiter Profiles
 	*/
 	public Set<RecruiterProfile> fetchRecruiterProfiles(RecruiterProfileFilter filters);
+
+	/**
+	* Sends an email from the authorized user to the recruiter
+	* @param message		- Message to send
+	* @param title			- title of the messsage
+	* @param recruiterId	- Id of recipient recruiter
+	* @param name			- Id of sender recruiter
+	*/
+	public void sendEmailToRecruiter(String message, String title, String recruiterId, String authorizedUserId);
+	
 }

@@ -75,6 +75,22 @@ export class EmailService {
 	}
 	
 	/**
+	* Sends Email to owner of Open Position on the Marketplace
+	*/
+	public sendRecruiterContactEmail(emailRequest:EmailRequest, recruiterId:string):Observable<any>{
+	
+		var fd = new FormData();
+  	
+		fd.append("message",	emailRequest.message);
+		fd.append("title",		emailRequest.title);
+
+		const backendUrl:string = environment.backendUrl +'v1/recruiter-profile/'+recruiterId+'/_message';
+		
+		return this.httpClient.put<any>(backendUrl, fd, {headers: new HttpHeaders({ }), withCredentials: true});
+				
+	}
+	
+	/**
 	* Retrieves Emails sent to the Authenticated User
 	*/
 	public fetchEmails():Observable<Array<Email>>{
@@ -134,6 +150,7 @@ export class EmailService {
 export class EmailRequest{
 	public senderName!:string;
 	public senderEmail!:string;
+	public title!:string;
 	public message!:string;
 	public attachment!:File;
 }

@@ -1,9 +1,11 @@
 import { Component } 								from '@angular/core';
-import { PhotoAPIOutbound, RecruiterProfile } 						from './recruiter-profile';
+import { PhotoAPIOutbound, RecruiterProfile } 		from './recruiter-profile';
 import { RecruiterProfileService} 					from '../recruiter-profile.service';
 import { AddRecruiterProfileRequest }				from './add-recruiter-profile'
 import { UntypedFormGroup, UntypedFormControl }		from '@angular/forms';
 import { TupleStrValueByPos }						from './tuple-string-pos-pipe';
+import { EmailService, EmailRequest }				from '../email.service';
+import { NgbModal, NgbModalOptions}					from '@ng-bootstrap/ng-bootstrap';
 
 /**
 * Component for working with Recruiter Profiles
@@ -24,7 +26,7 @@ export class RecruiterProfileComponent {
 	/**
 	* Constructor
 	*/
-	constructor(private recruierProfileService:RecruiterProfileService){
+	constructor(private recruierProfileService:RecruiterProfileService, private emailService:EmailService, private modalService:NgbModal){
 		this.recruierProfileService.fetchOwnRecruiterProfile().subscribe( response => {
 			this.recruiterProfile = response;
 		})
@@ -433,6 +435,61 @@ export class RecruiterProfileComponent {
 				this.showViewMain();
 			});
 		});
+	}
+	
+	public contactRecruiterView:string = 'message';
+	
+	/**
+	*  Closes the confirm popup
+	*/
+	public closeModal(): void {
+		this.modalService.dismissAll();
+	}
+	
+	/**
+	* Opend dialog to contact recuiter posting	
+	*/
+	public contactRecruiter(contactBox:any):void{
+		
+		this.contactRecruiterView = 'message';
+		let options: NgbModalOptions = {
+	    	 centered: true
+	   };
+
+		this.modalService.open(contactBox, options);
+	
+	}
+	
+	/**
+	* Forms group for sending a message to a Recruiter relating to a
+	* specific post on the jobboard 
+	*/
+	public sendMessageGroup:UntypedFormGroup = new UntypedFormGroup({
+		message:				new UntypedFormControl(''),
+		title:				new UntypedFormControl('')
+	});
+	
+	/**
+	* Opend dialog to contact recuiter posting	
+	*/
+	public sendMessageToRecruiter():void{
+		
+		let emailRequest:EmailRequest = new EmailRequest();
+		
+		emailRequest.title = this.sendMessageGroup.get('title')?.value;;
+		emailRequest.message = this.sendMessageGroup.get('message')?.value;;
+		
+		this.emailService.sendRecruiterContactEmail(emailRequest, this.selectedRecruiterProfile.recruiterId).subscribe(body => {
+			this.contactRecruiterView = 'success';
+			this.sendMessageGroup = new UntypedFormGroup({
+				message: new UntypedFormControl(''),
+				title: new UntypedFormControl(''),
+			});
+		}, err => {
+			this.contactRecruiterView = 'failure';
+		});
+		
+		
 	}
 	
 }
