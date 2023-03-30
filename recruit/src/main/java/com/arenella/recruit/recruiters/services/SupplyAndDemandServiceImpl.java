@@ -130,7 +130,14 @@ public class SupplyAndDemandServiceImpl implements SupplyAndDemandService{
 	public Set<OfferedCandidate> fetchOfferedCandidates(String recruiterId) {
 		return offeredCandidateDao.findAllOfferedCandidatesByRecruiterId(recruiterId);
 	}
-	
+
+	/**
+	* Refer to the SupplyAndDemandService interface for details 
+	*/
+	@Override
+	public Set<UUID> fetchViewedEventsByRecruiter(EventType type, String recruiterId){
+		return this.supplyAndDemandEventDao.fetchEventsForRecruiter(type, recruiterId);
+	}
 	
 	/**
 	* Refer to the SupplyAndDemandService interface for details 

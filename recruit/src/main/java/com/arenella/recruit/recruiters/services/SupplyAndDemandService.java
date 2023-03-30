@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import com.arenella.recruit.recruiters.beans.OfferedCandidate;
 import com.arenella.recruit.recruiters.beans.OfferedCandidateAPIOutbound.RecruiterDetails;
+import com.arenella.recruit.recruiters.beans.SupplyAndDemandEvent.EventType;
 import com.arenella.recruit.recruiters.beans.OpenPosition;
 import com.arenella.recruit.recruiters.beans.SupplyAndDemandEvent;
 
@@ -130,5 +131,14 @@ public interface SupplyAndDemandService {
 	* @param authenticatedUserId	- userId of currently authenticated user	
 	*/
 	public void sendOpenPositionContactEmail(UUID openPositionId, String message, String authenticatedUserId);
+	
+	/**
+	* Returns all the viewed events for the recruiter. That is the id's of the posts on 
+	* the Market place that the recruiter has viewed
+	* @param type			- Type of Event
+	* @param recruiterId	- Id of the Recruiter
+	* @return -Posts viewed
+	*/
+	public Set<UUID> fetchViewedEventsByRecruiter(EventType type, String recruiterId);
 	
 }

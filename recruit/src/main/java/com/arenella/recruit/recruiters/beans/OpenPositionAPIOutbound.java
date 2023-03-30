@@ -1,6 +1,7 @@
 package com.arenella.recruit.recruiters.beans;
 
 import java.time.LocalDate;
+import java.util.Set;
 import java.util.UUID;
 
 import com.arenella.recruit.recruiters.beans.OfferedCandidateAPIOutbound.RecruiterDetails;
@@ -26,6 +27,7 @@ public class OpenPositionAPIOutbound {
 	private String 						description;
 	private String 						comments;
 	private LocalDate					created;
+	private boolean						viewed;
 	
 	/**
 	* Constructor based upon a Builder
@@ -45,7 +47,8 @@ public class OpenPositionAPIOutbound {
 		this.description 					= builder.description;
 		this.comments 						= builder.comments;
 		this.created						= builder.created;
-		
+		this.viewed							= builder.viewed;
+
 	}
 	
 	/**
@@ -148,6 +151,15 @@ public class OpenPositionAPIOutbound {
 	}
 	
 	/**
+	* Returns whether or not the post have been viewed
+	* by the authenticated user
+	* @return whether the post has been viewed
+	*/
+	public boolean isViewed() {
+		return this.viewed;
+	}
+	
+	/**
 	* Returns a Builder for the Class
 	* @return Builder for the Class
 	*/
@@ -173,6 +185,7 @@ public class OpenPositionAPIOutbound {
 		private String 						description;
 		private String 						comments;
 		private LocalDate					created;
+		private boolean						viewed;
 		
 		/**
 		* Sets the Unique Identifier for the Open Position
@@ -298,6 +311,17 @@ public class OpenPositionAPIOutbound {
 		}
 		
 		/**
+		* Sets whether or not the post has been viewed by the 
+		* authenticated user or not
+		* @param viewed - whether or not the post has been viewed by the  authenticated user or not
+		* @return Builder
+		*/
+		public OpenPositionAPIOutboundBuilder viewed(boolean viewed){
+			this.viewed = viewed;
+			return this;
+		}
+		
+		/**
 		* Returns an instance of OpenPositionAPIOutbound initalized with 
 		* the values in the Builder
 		* @return Initialzied instance of OpenPositionAPIOutbound
@@ -310,11 +334,12 @@ public class OpenPositionAPIOutbound {
 
 	/**
 	* Converts from Domain to API Outbound representation of an OpenPosition
-	* @param openPosition - Domain representation
-	* @param recruiter - Recruiter who is owner of the Open Position
+	* @param openPosition 	- Domain representation
+	* @param recruiter 		- Recruiter who is owner of the Open Position
+	* @param viewedPosts 	- ids of posts viewed by authenticated User
 	* @return API Outbound representation
 	*/
-	public static OpenPositionAPIOutbound convertFromDomain(OpenPosition openPosition, RecruiterDetails recruiter) {
+	public static OpenPositionAPIOutbound convertFromDomain(OpenPosition openPosition, RecruiterDetails recruiter, Set<UUID> viewedPosts) {
 		return OpenPositionAPIOutbound
 				.builder()
 					.comments(openPosition.getComments())
@@ -329,6 +354,7 @@ public class OpenPositionAPIOutbound {
 					.renumeration(openPosition.getRenumeration())
 					.startDate(openPosition.getStartDate())
 					.created(openPosition.getCreated())
+					.viewed(viewedPosts.contains(openPosition.getId()))
 				.build();
 	}
 	

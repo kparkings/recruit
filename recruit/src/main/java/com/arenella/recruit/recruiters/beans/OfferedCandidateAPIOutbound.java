@@ -32,6 +32,7 @@ public class OfferedCandidateAPIOutbound {
 	private Set<LANGUAGE>				spokenLanguages			= new HashSet<>();
 	private String 						comments;
 	private LocalDate					created;
+	private boolean						viewed;
 	
 	/**
 	* Constructor based upon a Builder
@@ -54,6 +55,7 @@ public class OfferedCandidateAPIOutbound {
 		this.spokenLanguages 		= builder.spokenLanguages;
 		this.comments 				= builder.comments;
 		this.created				= builder.created;
+		this.viewed					= builder.viewed;
 		
 	}
 	
@@ -123,7 +125,7 @@ public class OfferedCandidateAPIOutbound {
 	}
 	
 	/**
-	* Returns when the Candidate is avaialble to start a new role
+	* Returns when the Candidate is available to start a new role
 	* @return First availability of the Candidate
 	*/
 	public LocalDate getAvailableFromDate(){
@@ -131,7 +133,7 @@ public class OfferedCandidateAPIOutbound {
 	}
 	
 	/**
-	* Returns the core skills posessed by the Canddate
+	* Returns the core skills possessed by the Candidate
 	* @return Candidates core skills
 	*/
 	public Set<String> getCoreSkills(){
@@ -179,6 +181,14 @@ public class OfferedCandidateAPIOutbound {
 	}
 	
 	/**
+	* Returns whether or not the post have been viewed by the Recruiter
+	* @return  whether or not the post have been viewed by the Recruiter
+	*/
+	public boolean isViewed() {
+		return this.viewed;
+	}
+	
+	/**
 	* Returns a Builder for the Class
 	* @return Builder for the Class
 	*/
@@ -207,6 +217,7 @@ public class OfferedCandidateAPIOutbound {
 		private Set<LANGUAGE>				spokenLanguages			= new HashSet<>();
 		private String 						comments;
 		private LocalDate					created;
+		private boolean						viewed;
 		
 		/**
 		* Sets the unique Id of the offered Candidate
@@ -391,7 +402,19 @@ public class OfferedCandidateAPIOutbound {
 		}
 		
 		/**
-		* Returns an instance of OfferedCandidateAPIOutbound initalized with 
+		* Sets whether or not the Post has been viewed by the User
+		* @param viewed - Whether the post has been viewed by the USer
+		* @return Builder
+		*/
+		public OfferedCandidateAPIOutboundBuilder viewed(boolean viewed) {
+			
+			this.viewed = viewed;
+			
+			return this;
+		}
+		
+		/**
+		* Returns an instance of OfferedCandidateAPIOutbound initialized with 
 		* the values in the Builder
 		* @return Initialized instance of OfferedCandidateAPIOutbound
 		*/
@@ -461,7 +484,14 @@ public class OfferedCandidateAPIOutbound {
 		
 	}
 
-	public static OfferedCandidateAPIOutbound convertFromDomain(OfferedCandidate offeredCandidate, RecruiterDetails recruiter) {
+	/**
+	* Converts from Domain representation to API Outbound
+	* @param offeredCandidate	 - Candidate Being Offered
+	* @param recruiter			 - Recruiter offering the Candidate
+	* @param viewedPosts		 - Authenticated users viewing history
+	* @return API Outbound represenation
+	*/
+	public static OfferedCandidateAPIOutbound convertFromDomain(OfferedCandidate offeredCandidate, RecruiterDetails recruiter, Set<UUID> viewedPosts) {
 		return OfferedCandidateAPIOutbound
 				.builder()
 					.id(offeredCandidate.getId())
@@ -479,6 +509,7 @@ public class OfferedCandidateAPIOutbound {
 					.spokenLanguages(offeredCandidate.getspokenLanguages())			
 					.comments(offeredCandidate.getcomments())
 					.created(offeredCandidate.getCreated())
+					.viewed(viewedPosts.contains(offeredCandidate.getId()))
 				.build();
 	}
 	

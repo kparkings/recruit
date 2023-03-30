@@ -1,6 +1,7 @@
 package com.arenella.recruit.recruiters.beans;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDate;
 import java.util.UUID;
@@ -32,7 +33,7 @@ public class OpenPositionAPIOutboundTest {
 	private String 				description			 	= "Some long descriptive text";
 	private String 				comments				= "Some comments fromt he Recruiter";
 	private RecruiterDetails 	recruiter				= new RecruiterDetails(recruiterId, recruiterName, recruiterCompanyName, recruiterEmail);
-	private LocalDate 			created					= LocalDate.of(2022, 6, 14);;
+	private LocalDate 			created					= LocalDate.of(2022, 6, 14);
 	
 	/**
 	* Tests creation via Builder
@@ -55,6 +56,7 @@ public class OpenPositionAPIOutboundTest {
 					.renumeration(renumeration)
 					.startDate(startDate)
 					.created(created)
+					.viewed(true)
 				.build();
 		
 		assertEquals(position.getComments(), 						comments);
@@ -72,6 +74,7 @@ public class OpenPositionAPIOutboundTest {
 		assertEquals(position.getRenumeration(), 					renumeration);
 		assertEquals(position.getStartDate(), 						startDate);
 		assertEquals(position.getCreated(), 						created);
+		assertTrue(position.isViewed());
 		
 	}
 }

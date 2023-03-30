@@ -32,6 +32,16 @@ public interface SupplyAndDemandEventDao extends CrudRepository<SupplyAndDemandE
 	}
 	
 	/**
+	* Returns the id's of viewed events for the Recruiter. That is the MP posts they 
+	* have viewed
+	* @param type 			- Type of Event
+	* @param recruiterId 	- Unique Id of the Recruiter
+	* @return Id's of events of type specified viewed by the Recruiter
+	*/
+	@Query("from SupplyAndDemandEventEntity where type = :type and recruiterId = :recruiterId")
+	public Set<UUID> fetchEventsForRecruiter(EventType type, String recruiterId);
+	
+	/**
 	* Returns entities representation of Events  
 	* @param after 	- Date >= which the event must have been created
 	* @param type	- Type of Event  

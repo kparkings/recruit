@@ -24,6 +24,7 @@ import com.arenella.recruit.recruiters.beans.OfferedCandidateAPIInbound;
 import com.arenella.recruit.recruiters.beans.OfferedCandidateAPIOutbound;
 import com.arenella.recruit.recruiters.beans.OpenPositionAPIInbound;
 import com.arenella.recruit.recruiters.beans.OpenPositionAPIOutbound;
+import com.arenella.recruit.recruiters.beans.SupplyAndDemandEvent.EventType;
 import com.arenella.recruit.recruiters.services.SupplyAndDemandService;
 import com.arenella.recruit.recruiters.utils.OfferedCandidateValidator;
 import com.arenella.recruit.recruiters.utils.OpenPositionValidator;
@@ -178,12 +179,15 @@ public class SupplyAndDemandController {
 	*/
 	@GetMapping(value="/v1/offered-candidate/")
 	@PreAuthorize("hasRole('ROLE_RECRUITER') or hasRole('ROLE_ADMIN')")
-	public ResponseEntity<Set<OfferedCandidateAPIOutbound>> fetchOfferedCandidates(){
+	public ResponseEntity<Set<OfferedCandidateAPIOutbound>> fetchOfferedCandidates(Principal principal){
+		
+		Set<UUID> viewedPosts = this.supplyAndDemandService.fetchViewedEventsByRecruiter(EventType.OFFERED_CANDIDATE, principal.getName());
+		
 		return ResponseEntity
 				.ok()
 				.body(this.supplyAndDemandService.fetchOfferedCandidates()
 						.stream()
-						.map(c -> OfferedCandidateAPIOutbound.convertFromDomain(c, this.supplyAndDemandService.fetchRecruiterDetails(c.getRecruiterId())))
+						.map(c -> OfferedCandidateAPIOutbound.convertFromDomain(c, this.supplyAndDemandService.fetchRecruiterDetails(c.getRecruiterId()), viewedPosts))
 						.collect(Collectors.toCollection(LinkedHashSet::new)));
 	}
 	
@@ -193,12 +197,15 @@ public class SupplyAndDemandController {
 	*/
 	@GetMapping(value="/v1/open-position")
 	@PreAuthorize("hasRole('ROLE_RECRUITER') or hasRole('ROLE_ADMIN')")
-	public ResponseEntity<Set<OpenPositionAPIOutbound>> fetchOpenPositions(){
+	public ResponseEntity<Set<OpenPositionAPIOutbound>> fetchOpenPositions(Principal principal){
+		
+		Set<UUID> viewedPosts = this.supplyAndDemandService.fetchViewedEventsByRecruiter(EventType.OPEN_POSITION, principal.getName());
+		
 		return ResponseEntity
 				.ok()
 				.body(this.supplyAndDemandService.fetchOpenPositions()
 						.stream()
-						.map(c -> OpenPositionAPIOutbound.convertFromDomain(c, this.supplyAndDemandService.fetchRecruiterDetails(c.getRecruiterId())))
+						.map(c -> OpenPositionAPIOutbound.convertFromDomain(c, this.supplyAndDemandService.fetchRecruiterDetails(c.getRecruiterId()), viewedPosts))
 						.collect(Collectors.toCollection(LinkedHashSet::new)));
 	}
 	
@@ -209,12 +216,13 @@ public class SupplyAndDemandController {
 	*/
 	@GetMapping(value="/v1/offered-candidate/rectuiter/{id}")
 	@PreAuthorize("hasRole('ROLE_RECRUITER') or hasRole('ROLE_ADMIN')")
-	public ResponseEntity<Set<OfferedCandidateAPIOutbound>> fetchOfferedCandidates(@PathVariable("id") String recruiterId){
+	public ResponseEntity<Set<OfferedCandidateAPIOutbound>> fetchOfferedCandidates(@PathVariable("id") String recruiterId, Principal principal){
+		Set<UUID> viewedPosts = this.supplyAndDemandService.fetchViewedEventsByRecruiter(EventType.OFFERED_CANDIDATE, principal.getName());
 		return ResponseEntity
 				.ok()
 				.body(this.supplyAndDemandService.fetchOfferedCandidates(recruiterId)
 						.stream()
-						.map(c -> OfferedCandidateAPIOutbound.convertFromDomain(c, this.supplyAndDemandService.fetchRecruiterDetails(c.getRecruiterId())))
+						.map(c -> OfferedCandidateAPIOutbound.convertFromDomain(c, this.supplyAndDemandService.fetchRecruiterDetails(c.getRecruiterId()),viewedPosts))
 						.collect(Collectors.toCollection(LinkedHashSet::new)));
 	}
 	
@@ -225,12 +233,15 @@ public class SupplyAndDemandController {
 	*/
 	@GetMapping(value="/v1/open-position/{rectuiterId}/{id}")
 	@PreAuthorize("hasRole('ROLE_RECRUITER') or hasRole('ROLE_ADMIN')")
-	public ResponseEntity<Set<OpenPositionAPIOutbound>> fetchOpenPositions(@PathVariable("id") String recruiterId){
+	public ResponseEntity<Set<OpenPositionAPIOutbound>> fetchOpenPositions(@PathVariable("id") String recruiterId, Principal principal){
+		
+		Set<UUID> viewedPosts = this.supplyAndDemandService.fetchViewedEventsByRecruiter(EventType.OPEN_POSITION, principal.getName());
+		
 		return ResponseEntity
 				.ok()
 				.body(this.supplyAndDemandService.fetchOpenPositions(recruiterId)
 						.stream()
-						.map(c -> OpenPositionAPIOutbound.convertFromDomain(c, this.supplyAndDemandService.fetchRecruiterDetails(c.getRecruiterId())))
+						.map(c -> OpenPositionAPIOutbound.convertFromDomain(c, this.supplyAndDemandService.fetchRecruiterDetails(c.getRecruiterId()), viewedPosts))
 						.collect(Collectors.toCollection(LinkedHashSet::new)));
 	}
 	

@@ -2,6 +2,7 @@ package com.arenella.recruit.recruiters.services;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDate;
 import java.util.Set;
@@ -25,8 +26,10 @@ import com.arenella.recruit.adapters.events.OpenPositionContactRequestEvent;
 import com.arenella.recruit.recruiters.adapters.RecruitersExternalEventPublisher;
 import com.arenella.recruit.recruiters.beans.OfferedCandidate;
 import com.arenella.recruit.recruiters.beans.OpenPosition;
+import com.arenella.recruit.recruiters.beans.SupplyAndDemandEvent.EventType;
 import com.arenella.recruit.recruiters.dao.OfferedCandidateDao;
 import com.arenella.recruit.recruiters.dao.OpenPositionDao;
+import com.arenella.recruit.recruiters.dao.SupplyAndDemandEventDao;
 
 /**
 * Unit tests for the SupplyAndDemandServiceImpl class
@@ -51,6 +54,9 @@ public class SupplyAndDemandServiceImplTest {
 	
 	@Mock
 	private RecruitersExternalEventPublisher	mockEventPublisher;
+	
+	@Mock
+	private SupplyAndDemandEventDao			 	mockSupplyAndDemandEventDao;
 	
 	/**
 	* Sets up test environment
@@ -473,6 +479,26 @@ public class SupplyAndDemandServiceImplTest {
 		assertEquals(openPositionTitle, 	event.getOpenPositionTitle());
 		assertEquals(recruiterId, 			event.getRecipientId());
 		assertEquals(authenticatedUserId, 	event.getSenderId());
+		
+	}
+	
+	/**
+	* Tests fetching a USers events
+	* @throws Exception
+	*/
+	@Test
+	public void testFetchViewedEventsByRecruiter() throws Exception{
+		
+		final String 	recruiterId 	= "kparkings";
+		final UUID		id1 			= UUID.randomUUID();
+		final UUID		id2 			= UUID.randomUUID();
+		
+		Mockito.when(this.mockSupplyAndDemandEventDao.fetchEventsForRecruiter(EventType.OFFERED_CANDIDATE, recruiterId)).thenReturn(Set.of(id1, id2));
+		
+		Set<UUID> ids = this.service.fetchViewedEventsByRecruiter(EventType.OFFERED_CANDIDATE, recruiterId);
+		
+		assertTrue(ids.contains(id1));
+		assertTrue(ids.contains(id2));
 		
 	}
 	

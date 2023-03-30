@@ -23,6 +23,7 @@ import com.arenella.recruit.recruiters.beans.OfferedCandidateAPIOutbound;
 import com.arenella.recruit.recruiters.beans.OpenPosition;
 import com.arenella.recruit.recruiters.beans.OpenPositionAPIInbound;
 import com.arenella.recruit.recruiters.beans.OpenPositionAPIOutbound;
+import com.arenella.recruit.recruiters.dao.SupplyAndDemandEventDao;
 import com.arenella.recruit.recruiters.services.SupplyAndDemandService;
 
 /**
@@ -40,6 +41,9 @@ public class SupplyAndDemandControllerTest {
 	
 	@Mock
 	private Principal					mockPrincipal;
+	
+	@Mock
+	private SupplyAndDemandEventDao		mockSupplyAndDemandEventDao;
 	
 	/**
 	* Test Success
@@ -165,7 +169,7 @@ public class SupplyAndDemandControllerTest {
 		
 		Mockito.when(this.supplyAndDemandService.fetchOpenPositions()).thenReturn(Set.of(c1,c2,c3));
 		
-		ResponseEntity<Set<OpenPositionAPIOutbound>> response = controller.fetchOpenPositions();
+		ResponseEntity<Set<OpenPositionAPIOutbound>> response = controller.fetchOpenPositions(this.mockPrincipal);
 		
 		response.getBody().stream().filter(c -> c.getId()== id1).findAny().orElseThrow();
 		response.getBody().stream().filter(c -> c.getId()== id2).findAny().orElseThrow();
@@ -197,7 +201,7 @@ public class SupplyAndDemandControllerTest {
 		
 		Mockito.when(this.supplyAndDemandService.fetchOpenPositions(Mockito.anyString())).thenReturn(Set.of(c1,c2,c3));
 		
-		ResponseEntity<Set<OpenPositionAPIOutbound>> response = controller.fetchOpenPositions("aRecruiterId");
+		ResponseEntity<Set<OpenPositionAPIOutbound>> response = controller.fetchOpenPositions("aRecruiterId", this.mockPrincipal);
 		
 		response.getBody().stream().filter(c -> c.getId()== id1).findAny().orElseThrow();
 		response.getBody().stream().filter(c -> c.getId()== id2).findAny().orElseThrow();
@@ -228,7 +232,9 @@ public class SupplyAndDemandControllerTest {
 		
 		Mockito.when(this.supplyAndDemandService.fetchOfferedCandidates()).thenReturn(Set.of(c1,c2,c3));
 		
-		ResponseEntity<Set<OfferedCandidateAPIOutbound>> response = controller.fetchOfferedCandidates();
+		Mockito.when(mockPrincipal.getName()).thenReturn("kparkings");
+		
+		ResponseEntity<Set<OfferedCandidateAPIOutbound>> response = controller.fetchOfferedCandidates(mockPrincipal);
 		
 		response.getBody().stream().filter(c -> c.getId()== id1).findAny().orElseThrow();
 		response.getBody().stream().filter(c -> c.getId()== id2).findAny().orElseThrow();
@@ -259,7 +265,7 @@ public class SupplyAndDemandControllerTest {
 		
 		Mockito.when(this.supplyAndDemandService.fetchOfferedCandidates(Mockito.anyString())).thenReturn(Set.of(c1,c2,c3));
 		
-		ResponseEntity<Set<OfferedCandidateAPIOutbound>> response = controller.fetchOfferedCandidates("aRecruiterId");
+		ResponseEntity<Set<OfferedCandidateAPIOutbound>> response = controller.fetchOfferedCandidates("aRecruiterId", this.mockPrincipal);
 		
 		response.getBody().stream().filter(c -> c.getId()== id1).findAny().orElseThrow();
 		response.getBody().stream().filter(c -> c.getId()== id2).findAny().orElseThrow();
