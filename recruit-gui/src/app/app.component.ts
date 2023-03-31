@@ -3,6 +3,7 @@ import { Router}							from '@angular/router';
 import { CookieService } 					from 'ngx-cookie';
 import { NgbModal, NgbModalOptions}			from '@ng-bootstrap/ng-bootstrap'
 import { DeviceDetectorService } 			from 'ngx-device-detector';
+import { RecruiterMarketplaceService }		from './recruiter-marketplace.service';
 
 @Component({
   selector: 'app-root',
@@ -19,7 +20,16 @@ export class AppComponent {
 
 	public isMobile:boolean = false;
 	
-	constructor(private router: Router, private cookieService: CookieService, private modalService: NgbModal, private deviceDetector: DeviceDetectorService){
+	public unseenMpPosts:number = 0;
+	
+	/**
+	* Constructor
+	*/
+	constructor(private router: 			Router, 
+				private cookieService: 		CookieService, 
+				private modalService: 		NgbModal, 
+				private deviceDetector: 	DeviceDetectorService,
+				private mpService:			RecruiterMarketplaceService){
 		
 		this.isMobile = deviceDetector.isMobile();
 		
@@ -30,6 +40,10 @@ export class AppComponent {
 		if (cookieService.get(this.getTandCsCookieName())) {
 			this.termsAndConditionsAccepted = true;
 		}
+		
+		this.mpService.fetchUnseenMPPosts().subscribe(val => {
+			this.unseenMpPosts = val;
+		});
 		
 	}
 	

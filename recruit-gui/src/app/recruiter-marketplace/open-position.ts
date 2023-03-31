@@ -18,4 +18,5 @@ export class OpenPosition{
 	public description:string 				= '';
 	public comments:string 					= '';
 	public created:Date						= new Date();
+	public viewed:boolean					= false;
 }

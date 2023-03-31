@@ -18,11 +18,26 @@ export class RecruiterMarketplaceComponent implements OnInit {
 
 	@ViewChild('feedbackBox', { static: false }) private content:any;
 
+	public unseenOfferedCandidates:number = 0;
+	public unseenOpenPositions:number = 0;
+
   	constructor(private modalService: 		NgbModal, 
 				private marketplaceService: RecruiterMarketplaceService, 
 				private recruiterService:	RecruiterService,
 				private emailService:		EmailService,
-				private router:				Router) { }
+				private router:				Router) {
+					
+					this.marketplaceService.fetchUnseenOfferedCandidates().subscribe(val => {
+						this.unseenOfferedCandidates = val;
+						this.fetchOfferedCandidates();
+					});
+					
+					this.marketplaceService.fetchUnseenOpenPositions().subscribe(val => {
+						this.unseenOpenPositions = val;
+						this.fetchOpenPositions();
+					});
+					
+				 }
 
 	/**
 	* Sets up initial component
@@ -294,7 +309,9 @@ export class RecruiterMarketplaceComponent implements OnInit {
 	public viewCandidate(candidate:OfferedCandidate){
 		this.activeCandidate = candidate;
 		this.switchTab('showSupplyDetails');
-		this.marketplaceService.registerOfferedCandidateViewedEvent(candidate.id).subscribe( data => {});
+		this.marketplaceService.registerOfferedCandidateViewedEvent(candidate.id).subscribe( data => {
+			this.marketplaceService.updateUnseenMpPosts();
+		});
 	}
 	
 	/**
@@ -303,7 +320,9 @@ export class RecruiterMarketplaceComponent implements OnInit {
 	public viewOpenPosition(openPosition:OpenPosition){
 		this.activeOpenPosition = openPosition;
 		this.switchTab('showDemandDetails');
-		this.marketplaceService.registerOpenPositionViewedEvent(openPosition.id).subscribe( data => {});
+		this.marketplaceService.registerOpenPositionViewedEvent(openPosition.id).subscribe( data => {
+			this.marketplaceService.updateUnseenMpPosts();
+		});
 	}
 
 	/**
@@ -802,6 +821,20 @@ export class RecruiterMarketplaceComponent implements OnInit {
 	public isMyOpenPosition():boolean{
 		return this.activeOpenPosition.recruiter.recruiterId === sessionStorage.getItem("userId");
 	
+	}
+	
+	/**
+	* Returns whehter or not the open position is the users own open position	
+	*/
+	public isNotMineOP(openPosition:OpenPosition):boolean{
+		return !(sessionStorage.getItem("userId")+'' == openPosition.recruiter.recruiterId);
+	}
+	
+	/**
+	* Returns whehter or not the offered Candidate is the users own offered candidate	
+	*/
+	public isNotMineOC(offeredCandidate:OfferedCandidate):boolean{
+		return !(sessionStorage.getItem("userId")+'' == offeredCandidate.recruiter.recruiterId);
 	}
 
 }

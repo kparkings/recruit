@@ -55,7 +55,6 @@ public class TrialPeriodSubscriptionActionHandler implements RecruiterSubscripti
 					
 					currentSubscription.activateSubscription();
 					
-					
 					String password 			= PasswordUtil.generatePassword(recruiter.getUserId());
 					String encryptedPassword 	= PasswordUtil.encryptPassword(password);
 					

@@ -20,5 +20,5 @@ export class OfferedCandidate{
 	public spokenLanguages:Array<string>	= new Array<string>();
 	public comments:string 					= '';
 	public created:Date 					= new Date();
-	
+	public viewed:boolean					= false;
 }

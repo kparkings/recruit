@@ -19,8 +19,20 @@ body{
 	margin-right:5px;
 }
 
+.dropdown-item{
+	color:#ffffff;
+	padding-left:10px;
+	padding-right:10px;
+	min-width:160px;
+}
+
+.dropdown-item-preauth{
+	min-width:80px;
+}
+
 .dropdown-item:hover{
 	background: #D3D3D3;	
+
 }
 
 .nav-secondary{
@@ -59,10 +71,6 @@ body{
 	width:350px;
 }
 
-.dropdown-item{
-	color:#ffffff;
-}
-
 .skills{
 	width:470px;
 	height:130px;
@@ -90,3 +98,11 @@ body{
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.unseen-posts{
+	border-radius:10%;
+	background:blue;
+	color:white;
+	padding:5px;
+	margin-right:10px;
+}

@@ -3,12 +3,16 @@
 	<!-- Nav options -->
 	<ul class="nav nav-tabs">
 	  <li class="nav-item">
-	    <span class="nav-link tabNav tabNavActive" *ngIf="showSupply"  (click)="switchTab('showSupply')">Offered Candidates</span>
-	    <span class="nav-link tabNav" *ngIf="!showSupply" (click)="switchTab('showSupply')">Offered Candidates</span>
+	    <span class="nav-link tabNav tabNavActive" *ngIf="showSupply  && unseenOfferedCandidates >  0"  (click)="switchTab('showSupply')"><span class="unseen-posts">{{unseenOfferedCandidates}}</span>Offered Candidates</span>
+	    <span class="nav-link tabNav tabNavActive" *ngIf="showSupply  && unseenOfferedCandidates <=  0"  (click)="switchTab('showSupply')"><span style="margin-left:20px;">&nbsp;</span>Offered Candidates</span>
+	    <span class="nav-link tabNav" *ngIf="!showSupply  && unseenOfferedCandidates >  0" (click)="switchTab('showSupply')"><span class="unseen-posts">{{unseenOfferedCandidates}}</span>Offered Candidates</span>
+	    <span class="nav-link tabNav" *ngIf="!showSupply   && unseenOfferedCandidates <=  0" (click)="switchTab('showSupply')"><span style="margin-left:20px;">&nbsp;</span>Offered Candidates</span>
 	  </li>
 	  <li class="nav-item">
-	    <span class="nav-link tabNav tabNavActive" *ngIf="showDemand" (click)="switchTab('showDemand')">Requested Candidates</span>
-	    <span class="nav-link tabNav" *ngIf="!showDemand" (click)="switchTab('showDemand')">Requested Candidates</span>
+	    <span class="nav-link tabNav tabNavActive" *ngIf="showDemand  && unseenOpenPositions > 0" (click)="switchTab('showDemand')"><span class="unseen-posts">{{unseenOpenPositions}}</span>Requested Candidates</span>
+	    <span class="nav-link tabNav tabNavActive" *ngIf="showDemand  && unseenOpenPositions <= 0" (click)="switchTab('showDemand')"><span style="margin-left:20px;">&nbsp;</span>Requested Candidates</span>
+	    <span class="nav-link tabNav" *ngIf="!showDemand && unseenOpenPositions > 0" (click)="switchTab('showDemand')"><span class="unseen-posts">{{unseenOpenPositions}}</span>Requested Candidates</span>
+	    <span class="nav-link tabNav" *ngIf="!showDemand   && unseenOpenPositions <= 0" (click)="switchTab('showDemand')"><span style="margin-left:20px;">&nbsp;</span>Requested Candidates</span>
 	  </li>
 	</ul>
 	
@@ -41,8 +45,10 @@
 					</thead>
 					<tbody>
 						<tr *ngFor="let candidate of offeredCandidates" class="as-link">
-							<td class="table-bdy-td" (click)="viewCandidate(candidate)">{{candidate.created}}</td>
-							<td class="table-bdy-td" (click)="viewCandidate(candidate)">{{candidate.candidateRoleTitle}}</td>
+							<td class="table-bdy-td" *ngIf="candidate.viewed || !isNotMineOC(candidate)" (click)="viewCandidate(candidate)">{{candidate.created}}</td>
+							<td class="table-bdy-td" *ngIf="!candidate.viewed && isNotMineOC(candidate)" (click)="viewCandidate(candidate)"><b>{{candidate.created}}</b></td>
+							<td class="table-bdy-td" *ngIf="candidate.viewed || !isNotMineOC(candidate)" (click)="viewCandidate(candidate)">{{candidate.candidateRoleTitle}}</td>
+							<td class="table-bdy-td" *ngIf="!candidate.viewed && isNotMineOC(candidate)" (click)="viewCandidate(candidate)"><b>{{candidate.candidateRoleTitle}}</b></td>
 							<td class="table-bdy-td" (click)="viewCandidate(candidate)" align="center" *ngIf="!showJustMyCandidatesActive">
 								<span title="{{candidate.country}}" *ngIf="candidate.country === 'NETHERLANDS'"  	class="flag-icon flag-icon-nl"></span>
 								<span title="{{candidate.country}}" *ngIf="candidate.country === 'BELGIUM'"			class="flag-icon flag-icon-be"></span>
@@ -51,7 +57,9 @@
 								<span title="{{candidate.country}}" *ngIf="candidate.country === 'EU_REMOTE'"		class="flag-icon flag-icon-eu"></span>
 								<span title="{{candidate.country}}" *ngIf="candidate.country === 'WORLD_REMOTE'"	class="flag-icon flag-icon-xx"></span>
 							</td>
-							<td class="table-bdy-td" (click)="viewCandidate(candidate)" *ngIf="!showJustMyCandidatesActive">{{candidate.contractType}}</td>
+							<td class="table-bdy-td" (click)="viewCandidate(candidate)" *ngIf="!showJustMyCandidatesActive && (candidate.viewed || !isNotMineOC(candidate))">{{candidate.contractType}}</td>
+							<td class="table-bdy-td" (click)="viewCandidate(candidate)" *ngIf="!showJustMyCandidatesActive && !candidate.viewed && isNotMineOC(candidate)"><b>{{candidate.contractType}}</b></td>
+							
 							<td *ngIf="showJustMyCandidatesActive">
 								<div *ngIf="!isAuthenticatedAsAdmin()">
 									<button class="btn btn-secondary small-action-btn" (click)="editOfferedCandidate(candidate)">Edit</button>
@@ -417,8 +425,12 @@
 					</thead>
 					<tbody>
 						<tr  *ngFor="let openPosition of openPositions" class="as-link">
-							<td class="table-bdy-td td-date" (click)="viewOpenPosition(openPosition)">{{openPosition.created}}</td>
-							<td class="table-bdy-td" 		 (click)="viewOpenPosition(openPosition)">{{openPosition.positionTitle}}</td>
+							<td class="table-bdy-td td-date" *ngIf="openPosition.viewed || !isNotMineOP(openPosition)" 	(click)="viewOpenPosition(openPosition)">{{openPosition.created}}</td>
+							<td class="table-bdy-td td-date" *ngIf="!openPosition.viewed && isNotMineOP(openPosition)" 	(click)="viewOpenPosition(openPosition)"><b>{{openPosition.created}}</b></td>
+
+							<td class="table-bdy-td" 		 *ngIf="openPosition.viewed || !isNotMineOP(openPosition)"	(click)="viewOpenPosition(openPosition)">{{openPosition.positionTitle}}</td>
+							<td class="table-bdy-td" 		 *ngIf="!openPosition.viewed && isNotMineOP(openPosition)"	(click)="viewOpenPosition(openPosition)"><b>{{openPosition.positionTitle}}</b></td>
+														
 							<td class="table-bdy-td" 		 (click)="viewOpenPosition(openPosition)"align="center" *ngIf="!showJustMyOpenPositionsActive">
 								<span title="{{openPosition.country}}" *ngIf="openPosition.country === 'NETHERLANDS'"  	class="flag-icon flag-icon-nl"></span>
 								<span title="{{openPosition.country}}" *ngIf="openPosition.country === 'BELGIUM'"		class="flag-icon flag-icon-be"></span>
@@ -428,7 +440,8 @@
 								<span title="{{openPosition.country}}" *ngIf="openPosition.country === 'WORLD_REMOTE'"	class="flag-icon flag-icon-xx"></span>
 							
 							</td>
-							<td class="table-bdy-td td-date" (click)="viewOpenPosition(openPosition)" *ngIf="!showJustMyOpenPositionsActive">{{openPosition.positionClosingDate}}</td>
+							<td class="table-bdy-td td-date" (click)="viewOpenPosition(openPosition)" *ngIf="!showJustMyOpenPositionsActive && (openPosition.viewed || !isNotMineOP(openPosition))">{{openPosition.positionClosingDate}}</td>
+							<td class="table-bdy-td td-date" (click)="viewOpenPosition(openPosition)" *ngIf="!showJustMyOpenPositionsActive && !openPosition.viewed && isNotMineOP(openPosition)"><b>{{openPosition.positionClosingDate}}</b></td>
 							<td *ngIf="showJustMyOpenPositionsActive">
 								<div *ngIf="!isAuthenticatedAsAdmin()">
 									<button class="btn btn-secondary small-action-btn" (click)="editOpenPosition(openPosition)">Edit</button>

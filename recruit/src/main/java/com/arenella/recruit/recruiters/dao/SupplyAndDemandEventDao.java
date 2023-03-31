@@ -31,6 +31,9 @@ public interface SupplyAndDemandEventDao extends CrudRepository<SupplyAndDemandE
 		
 	}
 	
+	@Query("from SupplyAndDemandEventEntity where type = :type and recruiterId = :recruiterId")
+	public Set<SupplyAndDemandEventEntity> fetchEventsForRecruiterInt(EventType type, String recruiterId);
+	
 	/**
 	* Returns the id's of viewed events for the Recruiter. That is the MP posts they 
 	* have viewed
@@ -38,8 +41,9 @@ public interface SupplyAndDemandEventDao extends CrudRepository<SupplyAndDemandE
 	* @param recruiterId 	- Unique Id of the Recruiter
 	* @return Id's of events of type specified viewed by the Recruiter
 	*/
-	@Query("from SupplyAndDemandEventEntity where type = :type and recruiterId = :recruiterId")
-	public Set<UUID> fetchEventsForRecruiter(EventType type, String recruiterId);
+	default Set<UUID> fetchEventsForRecruiter(EventType type, String recruiterId){
+		return this.fetchEventsForRecruiterInt(type, recruiterId).stream().map(e -> e.getEventId()).collect(Collectors.toSet());
+	}
 	
 	/**
 	* Returns entities representation of Events  

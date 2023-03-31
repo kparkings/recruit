@@ -172,10 +172,6 @@ public class SupplyAndDemandServiceImpl implements SupplyAndDemandService{
 	*/
 	@Override
 	public void registerOpenPositionViewedEvent(UUID id) {
-		
-		if (this.isLoggedInUserAdmin()) {
-			return;
-		}
 	
 		if (this.isOwnerOfOpenPosition(id)) {
 			return;
@@ -185,7 +181,7 @@ public class SupplyAndDemandServiceImpl implements SupplyAndDemandService{
 			.persistEvent(SupplyAndDemandEvent
 					.builder()
 						.created(LocalDateTime.now())
-						.eventId(UUID.randomUUID())
+						.eventId(id)
 						.recruiterId(getAuthenticatedRecruiterId())
 						.type(EventType.OPEN_POSITION)
 					.build());
@@ -199,10 +195,6 @@ public class SupplyAndDemandServiceImpl implements SupplyAndDemandService{
 	@Override
 	public void registerOfferedCandidateViewedEvent(UUID id) {
 	
-		if (this.isLoggedInUserAdmin()) {
-			return;
-		}
-	
 		if (this.isOwnerOfOfferedCandidate(id)) {
 			return;
 		}
@@ -211,7 +203,7 @@ public class SupplyAndDemandServiceImpl implements SupplyAndDemandService{
 			.persistEvent(SupplyAndDemandEvent
 				.builder()
 					.created(LocalDateTime.now())
-					.eventId(UUID.randomUUID())
+					.eventId(id)
 					.recruiterId(getAuthenticatedRecruiterId())
 					.type(EventType.OFFERED_CANDIDATE)
 				.build());
@@ -358,14 +350,6 @@ public class SupplyAndDemandServiceImpl implements SupplyAndDemandService{
 	*/
 	private String getAuthenticatedRecruiterId() {
 		return SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
-	}
-
-	/**
-	* Returns whether or not the currently authenticated User is an Admin User
-	* @return Whether or not the currently authenticated User is an Admin User
-	*/
-	private boolean isLoggedInUserAdmin() {
-		return SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream().filter(role -> role.getAuthority().equals("ROLE_ADMIN")).findAny().isPresent();
 	}
 	
 }

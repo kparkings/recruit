@@ -57,8 +57,13 @@
 }
 
 .li-arenella-nav-pre-login-std{
-	min-width:85px;
-	max-width:80px;
+	min-width:80px;
+	max-width:85px;
+}
+
+.li-arenella-nav-pre-login-std:hover{
+	min-width:80px;
+	max-width:85px;
 }
 
 .li-arenella-nav-pre-signup{

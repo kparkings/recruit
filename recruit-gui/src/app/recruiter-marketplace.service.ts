@@ -1,6 +1,6 @@
 import { Injectable }                             	from '@angular/core';
 import { HttpClient, HttpResponse, HttpHeaders }  	from '@angular/common/http';
-import { Observable, throwError }                 	from 'rxjs';
+import { Observable, BehaviorSubject  }                 	from 'rxjs';
 import { environment }								from './../environments/environment';
 import { NewOfferedCandidate } 						from './recruiter-marketplace/new-offered-candidate';
 import { OfferedCandidate } 						from './recruiter-marketplace/offered-candidate';
@@ -12,11 +12,73 @@ import { OpenPosition } 							from './recruiter-marketplace/open-position';
 })
 export class RecruiterMarketplaceService {
 
+	public unseenMpPosts 					= new BehaviorSubject<number>(0);
+	public unseenMpPostsOfferedCandidates 	= new BehaviorSubject<number>(0);
+	public unseenMpPostsOpenPositions 		= new BehaviorSubject<number>(0);
+	
+	/**
+	* Refreshed MP data
+	*/
+	public updateUnseenMpPosts():void{
+		this.fetchMPPosts();
+	}
+
+	/**
+	* Fetches the total number of posts not yet viewed
+	* by the user
+	*/
+	public fetchUnseenMPPosts():Observable<number>{
+		return this.unseenMpPosts;
+	}
+	
+	/**
+	* Fetches the total number of offered candidate posts not yet viewed
+	* by the user
+	*/
+	public fetchUnseenOfferedCandidates():Observable<number>{
+		return this.unseenMpPostsOfferedCandidates;
+	}
+	
+	/**
+	* Fetches the total number of open position posts not yet viewed
+	* by the user
+	*/
+	public fetchUnseenOpenPositions():Observable<number>{
+		return this.unseenMpPostsOpenPositions;
+	}
+	
+	/**
+	* Fetchs MP post info
+	*/
+	private fetchMPPosts():void{
+		
+		let recruiterId:string = sessionStorage.getItem("userId")+'';
+		
+		this.unseenMpPosts.next(0);
+		this.unseenMpPostsOfferedCandidates.next(0);
+		this.unseenMpPostsOpenPositions.next(0);
+		
+		this.fetchOfferedCandidates().subscribe(candidates => {
+			this.unseenMpPosts.next(this.unseenMpPosts.getValue() + candidates.filter( c => !c.viewed && c.recruiter.recruiterId != recruiterId).length);
+			this.unseenMpPostsOfferedCandidates.next(candidates.filter( c => !c.viewed && c.recruiter.recruiterId != recruiterId).length);
+			
+		});
+		
+		this.fetchOpenPositions().subscribe(positions => {
+			this.unseenMpPosts.next(this.unseenMpPosts.getValue() + positions.filter( p => !p.viewed && p.recruiter.recruiterId != recruiterId).length);
+			this.unseenMpPostsOpenPositions.next(positions.filter( p => !p.viewed && p.recruiter.recruiterId != recruiterId).length);
+			
+		});
+		
+	}
+
 	/**
 	* Constructor
 	* @param httpClient - for sending httpRequests to backend
 	*/
-	constructor(private httpClient: HttpClient) { }
+	constructor(private httpClient: HttpClient) { 
+		this.fetchMPPosts();
+	}
 
 	httpOptions = {
 		headers: new HttpHeaders({ 'Content-Type': 'application/json' }), withCredentials: true
