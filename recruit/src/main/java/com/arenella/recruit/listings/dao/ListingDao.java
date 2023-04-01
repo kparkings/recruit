@@ -1,6 +1,5 @@
 package com.arenella.recruit.listings.dao;
 
-import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -122,14 +121,14 @@ public interface ListingDao extends CrudRepository<ListingEntity, UUID>, JpaSpec
 				
 				Expression<LocalDateTime> typeExpression = root.get("created");
 				
-				LocalDateTime todayStart 		= LocalDateTime.now().withHour(0).withMinute(0).withSecond(0).withSecond(0);
-				LocalDateTime todayEnd 			= LocalDateTime.now().withHour(23).withMinute(59).withSecond(59).withSecond(0);
+				LocalDateTime todayStart 		= LocalDateTime.now().minusHours(24);
+				LocalDateTime todayEnd 			= LocalDateTime.now();
 				
-				LocalDateTime thisWeekStart 	= todayStart.with(DayOfWeek.MONDAY);
-				LocalDateTime thisWeekEnd 		= todayEnd.with(DayOfWeek.SUNDAY);
+				LocalDateTime thisWeekStart 	= todayStart.minusDays(7);
+				LocalDateTime thisWeekEnd 		= todayEnd;
 				
-				LocalDateTime thisMonthStart 	= todayStart.withDayOfMonth(1);
-				LocalDateTime thisMonthEnd 		= todayStart.withDayOfMonth(31);
+				LocalDateTime thisMonthStart 	= todayStart.minusDays(31);
+				LocalDateTime thisMonthEnd 		= todayEnd;
 				
 				
 				if (this.filterOptions.getListingAge().get() == LISTING_AGE.TODAY){

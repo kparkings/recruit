@@ -4,6 +4,7 @@ import { CookieService } 					from 'ngx-cookie';
 import { NgbModal, NgbModalOptions}			from '@ng-bootstrap/ng-bootstrap'
 import { DeviceDetectorService } 			from 'ngx-device-detector';
 import { RecruiterMarketplaceService }		from './recruiter-marketplace.service';
+import { EmailService }						from './email.service';
 
 @Component({
   selector: 'app-root',
@@ -21,6 +22,7 @@ export class AppComponent {
 	public isMobile:boolean = false;
 	
 	public unseenMpPosts:number = 0;
+	public unseenEmails:number 	= 0;
 	
 	/**
 	* Constructor
@@ -29,7 +31,8 @@ export class AppComponent {
 				private cookieService: 		CookieService, 
 				private modalService: 		NgbModal, 
 				private deviceDetector: 	DeviceDetectorService,
-				private mpService:			RecruiterMarketplaceService){
+				private mpService:			RecruiterMarketplaceService,
+				private emailService:		EmailService){
 		
 		this.isMobile = deviceDetector.isMobile();
 		
@@ -43,6 +46,10 @@ export class AppComponent {
 		
 		this.mpService.fetchUnseenMPPosts().subscribe(val => {
 			this.unseenMpPosts = val;
+		});
+		
+		this.emailService.fetchUnseenEmailsCount().subscribe(val => {
+			this.unseenEmails = val;
 		});
 		
 	}

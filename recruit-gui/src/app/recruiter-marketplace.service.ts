@@ -1,6 +1,6 @@
 import { Injectable }                             	from '@angular/core';
 import { HttpClient, HttpResponse, HttpHeaders }  	from '@angular/common/http';
-import { Observable, BehaviorSubject  }                 	from 'rxjs';
+import { Observable, BehaviorSubject  }             from 'rxjs';
 import { environment }								from './../environments/environment';
 import { NewOfferedCandidate } 						from './recruiter-marketplace/new-offered-candidate';
 import { OfferedCandidate } 						from './recruiter-marketplace/offered-candidate';

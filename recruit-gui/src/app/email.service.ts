@@ -1,6 +1,6 @@
 import { Injectable } 								from '@angular/core';
 import { HttpClient, HttpHeaders }  				from '@angular/common/http';
-import { Observable }                 				from 'rxjs';
+import { Observable, BehaviorSubject  }             from 'rxjs';
 import { environment } 								from './../environments/environment';
 import { Email } 									from './email/email';
 import { OpenPosition } 							from './recruiter-marketplace/open-position';
@@ -14,11 +14,31 @@ import { OfferedCandidate } 						from './recruiter-marketplace/offered-candidat
 })
 export class EmailService {
 
+	public unseenEmails = new BehaviorSubject(0);
+	
+	/**
+	* Updates the unseenEmails count
+	*/
+	public updateUnseenEmails():void{
+		this.fetchEmails().subscribe(emails => {
+			this.unseenEmails.next(emails.filter(a => a.viewed == false).length);
+		});
+	}
+	
+	/**
+	* Returns number of unseen email as observable
+	*/
+	public fetchUnseenEmailsCount():Observable<number>{
+		return this.unseenEmails;
+	}
+
 	/**
  	* Constructor
 	* @param httpClient - for sending httpRequests to backend
 	*/
-	constructor(private httpClient: HttpClient) {}
+	constructor(private httpClient: HttpClient) {
+		this.updateUnseenEmails();
+	}
 
 	httpOptions = {
 		headers: new HttpHeaders({ 'Content-Type': 'application/json' }), withCredentials: true

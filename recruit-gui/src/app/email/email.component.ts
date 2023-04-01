@@ -58,6 +58,7 @@ export class EmailComponent {
 	public markAsUnread():void{
 		this.emailService.setReadStatus(this.currentEmail.id, false).subscribe(response => {
 			this.fetchEmails();
+			this.emailService.updateUnseenEmails();
 		});
 	}
 	
@@ -67,6 +68,7 @@ export class EmailComponent {
 	public markAsRead():void{
 		this.emailService.setReadStatus(this.currentEmail.id, true).subscribe(response => {
 			this.fetchEmails();
+			this.emailService.updateUnseenEmails();
 		});
 	}
 
