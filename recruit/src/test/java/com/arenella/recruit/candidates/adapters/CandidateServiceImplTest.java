@@ -34,6 +34,7 @@ import com.arenella.recruit.candidates.beans.CandidateSearchAlert;
 import com.arenella.recruit.candidates.beans.Language.LEVEL;
 import com.arenella.recruit.candidates.beans.PendingCandidate;
 import com.arenella.recruit.candidates.controllers.CandidateController.CANDIDATE_UPDATE_ACTIONS;
+import com.arenella.recruit.candidates.controllers.CandidateValidationException;
 import com.arenella.recruit.candidates.controllers.SavedCandidate;
 import com.arenella.recruit.candidates.dao.CandidateDao;
 import com.arenella.recruit.candidates.dao.CandidateSearchAlertDao;
@@ -96,9 +97,39 @@ public class CandidateServiceImplTest {
 	@InjectMocks
 	private CandidateServiceImpl 			service 					= new CandidateServiceImpl();
 	
+	/**
+	* Sets up test environment 
+	*/
 	@BeforeEach
 	public void init() throws Exception{
 		SecurityContextHolder.setContext(mockSecurityContext);
+	}
+	
+	/**
+	* Tests exception is thrown if Email already used for the Candidate 
+	*/
+	@Test
+	public void testPersistCandidate_emailAlreadyExists() {
+		
+		Mockito.when(this.mockCandidateDao.emailInUse(Mockito.anyString())).thenReturn(true);
+		
+		assertThrows(CandidateValidationException.class, () -> {
+			this.service.persistCandidate(Candidate.builder().email("kparkings@gmail.com").build());
+		});
+		
+	}
+	
+	/**
+	* Tests exception is thrown if Email already used for the Pending Candidate 
+	*/
+	@Test
+	public void testPersistPendingCandidate_emailAlreadyExists() {
+		
+		Mockito.when(this.mockPendingCandidateDao.emailInUse(Mockito.anyString())).thenReturn(true);
+		
+		assertThrows(CandidateValidationException.class, () -> {
+			this.service.persistPendingCandidate(PendingCandidate.builder().email("kparkings@gmail.com").build());
+		});
 		
 	}
 	

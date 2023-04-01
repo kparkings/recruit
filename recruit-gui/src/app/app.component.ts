@@ -1,10 +1,13 @@
-import { Component } 						from '@angular/core';
+import { Component, ViewChild }				from '@angular/core';
 import { Router}							from '@angular/router';
 import { CookieService } 					from 'ngx-cookie';
 import { NgbModal, NgbModalOptions}			from '@ng-bootstrap/ng-bootstrap'
 import { DeviceDetectorService } 			from 'ngx-device-detector';
 import { RecruiterMarketplaceService }		from './recruiter-marketplace.service';
 import { EmailService }						from './email.service';
+import { PopupsService }					from './popups.service';
+import { Observable, Observer }             from 'rxjs';
+import {ElementRef} from '@angular/core';
 
 @Component({
   selector: 'app-root',
@@ -13,6 +16,8 @@ import { EmailService }						from './email.service';
 }) 
 export class AppComponent {
 
+	@ViewChild('validationExBox', { static: false }) private content:any;
+	
 	private readonly termsAndConditionsCookieVersion:string = '2';
 
   	title = 'Arenella-ICT - IT Candidates for Recruiters';
@@ -24,6 +29,8 @@ export class AppComponent {
 	public unseenMpPosts:number = 0;
 	public unseenEmails:number 	= 0;
 	
+	public validationExceptions:Array<string> = new Array<string>();
+	
 	/**
 	* Constructor
 	*/
@@ -32,7 +39,8 @@ export class AppComponent {
 				private modalService: 		NgbModal, 
 				private deviceDetector: 	DeviceDetectorService,
 				private mpService:			RecruiterMarketplaceService,
-				private emailService:		EmailService){
+				private emailService:		EmailService,
+				public  popupsService:		PopupsService){
 		
 		this.isMobile = deviceDetector.isMobile();
 		
@@ -52,6 +60,15 @@ export class AppComponent {
 			this.unseenEmails = val;
 		});
 		
+		this.popupsService.fetchValidationErrors().subscribe(val => {
+			console.log("V Udates");
+			
+			this.validationExceptions = val;
+			
+			if (this.validationExceptions.length > 0) {
+				this.popupsService.openModal(this.content);
+			}
+		});
 	}
 	
 	/**

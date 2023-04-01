@@ -42,6 +42,18 @@ import com.arenella.recruit.candidates.enums.RESULT_ORDER;
 */
 public interface CandidateDao extends CrudRepository<CandidateEntity, Long>, JpaSpecificationExecutor<CandidateEntity> {
 
+	@Query("from CandidateEntity where email = :emailId")
+	public Set<CandidateEntity> fetchByEmail(String emailId);
+	
+	/**
+	* Returns whether or not Email is already used for the Candidate
+	* @param email - email address to filter on
+	* @return If Email already used for the Candidate
+	*/
+	default boolean emailInUse(String email) {
+		return !this.fetchByEmail(email).isEmpty();
+	}
+	
 	/**
 	* Returns all Candidates matching the filter options
 	* @param filterOptions - options to filter Candidates on

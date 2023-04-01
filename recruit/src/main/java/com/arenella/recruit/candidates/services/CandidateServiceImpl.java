@@ -33,6 +33,7 @@ import com.arenella.recruit.candidates.beans.CandidateSearchAccuracyWrapper;
 import com.arenella.recruit.candidates.beans.CandidateSearchAlert;
 import com.arenella.recruit.candidates.beans.PendingCandidate;
 import com.arenella.recruit.candidates.controllers.CandidateController.CANDIDATE_UPDATE_ACTIONS;
+import com.arenella.recruit.candidates.controllers.CandidateValidationException;
 import com.arenella.recruit.candidates.controllers.SavedCandidate;
 import com.arenella.recruit.candidates.dao.CandidateDao;
 import com.arenella.recruit.candidates.dao.PendingCandidateDao;
@@ -96,6 +97,10 @@ public class CandidateServiceImpl implements CandidateService{
 	@Override
 	public void persistCandidate(Candidate candidate) {
 		
+		if (this.candidateDao.emailInUse(candidate.getEmail())) {
+			throw new CandidateValidationException("Canidate with this Email alredy exists.");
+		}
+		
 		CandidateEntity entity = CandidateEntity.convertToEntity(candidate);
 		
 		long candidateId = candidateDao.save(entity).getCandidateId();
@@ -155,6 +160,10 @@ public class CandidateServiceImpl implements CandidateService{
 	@Override
 	public void persistPendingCandidate(PendingCandidate pendingCandidate) {
 		
+		if (this.pendingCandidateDao.emailInUse(pendingCandidate.getEmail())) {
+			throw new CandidateValidationException("Canidate with this Email alredy exists.");
+		}
+
 		if (pendingCandidate.getPendingCandidateId() == null) {
 			throw new IllegalArgumentException("Cannot create candidate with no Id ");
 		}

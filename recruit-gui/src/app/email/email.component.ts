@@ -31,7 +31,7 @@ export class EmailComponent {
 	/**
 	* Constrcutor
 	*/
-	constructor(private emailService:EmailService, private modalService:NgbModal, ){
+	constructor(private emailService:EmailService, private modalService:NgbModal){
 		this.fetchEmails();
 	}
 	

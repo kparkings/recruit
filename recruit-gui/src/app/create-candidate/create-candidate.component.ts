@@ -4,7 +4,7 @@ import { CurriculumService }							from '../curriculum.service';
 import { CandidateServiceService }						from '../candidate-service.service';
 import { NgbModal, NgbModalOptions}						from '@ng-bootstrap/ng-bootstrap';
 import { ViewChild }									from '@angular/core';
-
+import { PopupsService }								from '../popups.service';
 /**
 * Component for Candidates to present their own Curriculum and Profile.
 */
@@ -17,7 +17,12 @@ export class CreateCandidateComponent implements OnInit {
 
 	@ViewChild('feedbackBox', { static: false }) private content:any;
 
-  	constructor(private curriculumService: CurriculumService, private candidateService: CandidateServiceService, private modalService: NgbModal) { }
+  	constructor(private curriculumService: CurriculumService, 
+				private candidateService: CandidateServiceService,
+				private popupsService: PopupsService, 
+				private modalService: NgbModal) {
+					
+				 }
 
  	ngOnInit(): void {
   	}
@@ -105,9 +110,23 @@ export class CreateCandidateComponent implements OnInit {
 			
 				this.open('feedbackBox', "Success",  true);
 				
-			});
+			}, 
+		err => {
 			
-    	});
+			if (err.status == 406) {
+				let exceptions:Array<string> = new Array<string>();
+				exceptions.push(err.error);
+				this.popupsService.setValidationErrors(exceptions)
+			}
+			
+		});
+			
+    	}, 
+		err => {
+			let exceptions:Array<string> = new Array<string>();
+			exceptions.push("CV must be Word or PDF and less than 1MB");
+			this.popupsService.setValidationErrors(exceptions)
+		});
 		
 	}
 	

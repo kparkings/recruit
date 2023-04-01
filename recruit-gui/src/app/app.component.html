@@ -110,3 +110,18 @@
 	</div>
 	
 </div>
+
+<!-- Reply Box -->
+<ng-template #validationExBox let-modal>
+	<div class="modal-header">
+		<h4 class="modal-title">Validation Errors</h4>
+ 		<div class="filter-close-box" (click)="popupsService.closeModal()">X</div>
+	</div>
+	<div class="feedbackBox">
+	
+		<p>Unfortunately it was not possible to perform the actions because:</p>
+		<ul>
+			<li *ngFor="let msg of validationExceptions">{{msg}}</li>
+		</ul>
+	</div>
+</ng-template>
