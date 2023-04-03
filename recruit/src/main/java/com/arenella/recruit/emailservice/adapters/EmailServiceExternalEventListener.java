@@ -1,5 +1,7 @@
 package com.arenella.recruit.emailservice.adapters;
 
+import com.arenella.recruit.adapters.events.CandidateAccountCreatedEvent;
+import com.arenella.recruit.adapters.events.CandidateUpdatedEvent;
 import com.arenella.recruit.adapters.events.RecruiterCreatedEvent;
 import com.arenella.recruit.adapters.events.RecruiterUpdatedEvent;
 
@@ -26,5 +28,17 @@ public interface EmailServiceExternalEventListener {
 	* @param event - Recruiter update
 	*/
 	public void listenForRecruiterUpdatedEvent(RecruiterUpdatedEvent event);
+
+	/**
+	* Listens for events for the creation of a new Candidate
+	* @param event - Candidate created
+	*/
+	public void listenForCandidateCreatedEvent(CandidateAccountCreatedEvent event);
+
+	/**
+	* Listens for events for the updating of an existing Candidate
+	* @param event - Candidate update
+	*/
+	public void listenForCandidateUpdatedEvent(CandidateUpdatedEvent event);
 
 }

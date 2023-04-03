@@ -14,6 +14,8 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.arenella.recruit.adapters.events.CandidateAccountCreatedEvent;
+import com.arenella.recruit.adapters.events.CandidatePasswordUpdatedEvent;
 import com.arenella.recruit.adapters.events.RecruiterCreatedEvent;
 import com.arenella.recruit.adapters.events.RecruiterHasOpenSubscriptionEvent;
 import com.arenella.recruit.adapters.events.RecruiterNoOpenSubscriptionEvent;
@@ -120,6 +122,36 @@ public class AuthenticationMonolithExternalEventListenerTest {
 		this.eventListener.listenForRecruiterPasswordUpdatedEvent(event);
 		
 		Mockito.verify(this.mockAccountService).updateUserPassword(userId, password);
+		
+	}
+	
+	/**
+	* Tests listening of CandidateAccountCreatedEvent
+	* @throws Exception
+	*/
+	@Test
+	public void testListenForCandidateAccountCreatedEvent() throws Exception{
+		
+		CandidateAccountCreatedEvent event = new CandidateAccountCreatedEvent("can1","@@3##d31@");
+		
+		this.eventListener.listenForCandidateAccountCreatedEvent(event);
+		
+		Mockito.verify(this.mockAccountService).createAccount(event.getCandidateId(), event.getEncryptedPassword(), AccountType.CANDIDATE);
+		
+	}
+	
+	/**
+	* Tests listening of CandidatePasswordUpdatedEvent
+	* @throws Exception
+	*/
+	@Test
+	public void testListenForCandidatePasswordUpdatedEvent() throws Exception{
+		
+		CandidatePasswordUpdatedEvent event = new CandidatePasswordUpdatedEvent("can1", "33344!!F$%");
+		
+		this.eventListener.listenForCandidatePasswordUpdatedEvent(event);
+		
+		Mockito.verify(this.mockAccountService).updateUserPassword(event.getCandidateId(), event.getNewPassword());
 		
 	}
 	

@@ -3,6 +3,8 @@ package com.arenella.recruit.emailservice.adapters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.arenella.recruit.adapters.events.CandidateAccountCreatedEvent;
+import com.arenella.recruit.adapters.events.CandidateUpdatedEvent;
 import com.arenella.recruit.adapters.events.RecruiterCreatedEvent;
 import com.arenella.recruit.adapters.events.RecruiterUpdatedEvent;
 import com.arenella.recruit.emailservice.beans.Contact;
@@ -47,6 +49,24 @@ public class EmailServiceMonolithExternalEventListener implements EmailServiceEx
 	@Override
 	public void listenForRecruiterUpdatedEvent(RecruiterUpdatedEvent event) {
 		this.contactService.updateContact(new Contact(event.getRecruiterId(), ContactType.RECRUITER, event.getFirstName(), event.getSurname(), event.getEmail()));
+	}
+
+	/**
+	* Refer to EmailServiceExternalEventListener interface for details 
+	*/
+	@Override
+	public void listenForCandidateCreatedEvent(CandidateAccountCreatedEvent event) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/**
+	* Refer to EmailServiceExternalEventListener interface for details 
+	*/
+	@Override
+	public void listenForCandidateUpdatedEvent(CandidateUpdatedEvent event) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

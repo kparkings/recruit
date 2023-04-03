@@ -211,9 +211,9 @@ public class Candidate {
 	*/
 	public void noLongerAvailable() {
 		this.available 		= false;
-		this.email 			= ANONYMOUS_USER_ATTR_VALUE;
-		this.firstname 		= ANONYMOUS_USER_ATTR_VALUE;
-		this.surname 		= ANONYMOUS_USER_ATTR_VALUE;
+		//this.email 			= ANONYMOUS_USER_ATTR_VALUE;
+		//this.firstname 		= ANONYMOUS_USER_ATTR_VALUE;
+		//this.surname 		= ANONYMOUS_USER_ATTR_VALUE;
 	}
 	
 	/**

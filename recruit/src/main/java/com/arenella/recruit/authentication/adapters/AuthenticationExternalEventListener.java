@@ -1,5 +1,7 @@
 package com.arenella.recruit.authentication.adapters;
 
+import com.arenella.recruit.adapters.events.CandidateAccountCreatedEvent;
+import com.arenella.recruit.adapters.events.CandidatePasswordUpdatedEvent;
 import com.arenella.recruit.adapters.events.RecruiterCreatedEvent;
 import com.arenella.recruit.adapters.events.RecruiterHasOpenSubscriptionEvent;
 import com.arenella.recruit.adapters.events.RecruiterNoOpenSubscriptionEvent;
@@ -18,6 +20,12 @@ public interface AuthenticationExternalEventListener {
 	public void listenForRecruiterCreatedEvent(RecruiterCreatedEvent event);
 	
 	/**
+	* Listens for events relating to the creation of a Candidate
+	* @param event - CandidateCreatedEvent
+	*/
+	public void listenForCandidateAccountCreatedEvent(CandidateAccountCreatedEvent event);
+	
+	/**
 	* Listens for event informing that a Recruiter has no 
 	* Open subscriptions
 	*/
@@ -34,5 +42,11 @@ public interface AuthenticationExternalEventListener {
 	* @param event
 	*/
 	public void listenForRecruiterPasswordUpdatedEvent(RecruiterPasswordUpdatedEvent event);
-	
+
+	/**
+	* Listens for Event informing that a Recruiters Password has been updated
+	* @param event
+	*/
+	public void listenForCandidatePasswordUpdatedEvent(CandidatePasswordUpdatedEvent event);
+
 }

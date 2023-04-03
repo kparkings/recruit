@@ -124,9 +124,6 @@ public class CandidateTest {
 		candidate.noLongerAvailable();
 		
 		assertFalse(candidate.isAvailable());
-		assertEquals(candidate.getFirstname(), 	Candidate.ANONYMOUS_USER_ATTR_VALUE);
-		assertEquals(candidate.getSurname(), 	Candidate.ANONYMOUS_USER_ATTR_VALUE);
-		assertEquals(candidate.getEmail(), 		Candidate.ANONYMOUS_USER_ATTR_VALUE);
 		
 	}
 	
