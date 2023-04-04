@@ -108,6 +108,9 @@ public class AccountServiceImpl implements AccountService{
 			case RECRUITER: {
 				return Set.of(USER_ROLE.recruiter);
 			}
+			case CANDIDATE: {
+				return Set.of(USER_ROLE.candidate);
+			}
 			default: {return new HashSet<>();}
 		} 
 		

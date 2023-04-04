@@ -29,6 +29,9 @@ public class CandidateCreatedEvent {
 	private int				yearsExperience;
 	private Set<String> 	skills						= new LinkedHashSet<>();
 	private Set<Language> 	languages					= new LinkedHashSet<>();
+	private String			firstname;
+	private String 			surname;
+	private String			email;
 	
 	/**
 	* Constructor based upon Builder
@@ -46,6 +49,9 @@ public class CandidateCreatedEvent {
 		this.yearsExperience 	= builder.yearsExperience;
 		this.skills 			= builder.skills;
 		this.languages 			= builder.languages;
+		this.firstname			= builder.firstname;
+		this.surname			= builder.surname;
+		this.email				= builder.email;
 		
 	}
 	
@@ -130,6 +136,30 @@ public class CandidateCreatedEvent {
 	}
 	
 	/**
+	* Returns the candidates first name
+	* @return first name
+	*/
+	public String getFirstname() {
+		return this.firstname;
+	}
+	
+	/**
+	* Returns the candidates surname
+	* @return surname
+	*/
+	public String getSurname() {
+		return this.surname;
+	}
+	
+	/**
+	* Returns candidates email address
+	* @return email address
+	*/
+	public String getEmail() {
+		return this.email;
+	}
+	
+	/**
 	* Returns a Builder for the CandidateCreatedEvent class
 	* @return Builder for the CandidateCreatedEvent class
 	*/
@@ -153,6 +183,9 @@ public class CandidateCreatedEvent {
 		private int				yearsExperience;
 		private Set<String> 	skills						= new LinkedHashSet<>();
 		private Set<Language> 	languages					= new LinkedHashSet<>();
+		private String			firstname;
+		private String 			surname;
+		private String			email;
 		
 		/**
 		* Initializes the builder with values in the Candidate
@@ -180,6 +213,10 @@ public class CandidateCreatedEvent {
 			this.skills.addAll(candidate.getSkills());
 			this.languages.addAll(candidate.getLanguages());
 			
+			this.firstname 			= candidate.getFirstname();
+			this.surname 			= candidate.getSurname();
+			this.email 				= candidate.getEmail();
+			
 			return this;
 		}
 		
@@ -197,11 +234,6 @@ public class CandidateCreatedEvent {
 		* @return Builder
 		*/
 		public CandidateCreatedEventBuilder candidateId(String candidateId) {
-			
-			//if (StringUtils.hasText(this.candidateId)) {
-			//	throw new IllegalArgumentException("Cant update existing unique id");
-			//}
-			
 			this.candidateId = candidateId;
 			return this;
 		}

@@ -117,12 +117,25 @@ export class AppComponent {
   	}
 
 	/**
+	* Whether or not User is a Recruiter
+	*/
+	public isRecruiter():boolean{
+		return sessionStorage.getItem('isRecruiter') === 'true';
+	}
+	
+	/**
+	* Whether or not the Use is a Candidate
+	*/
+	public isCandidate():boolean{
+		return sessionStorage.getItem('isCandidate') === 'true';
+	}
+	
+	/**
 	* Whether or not the recruiter that has no open Subscriptiion
 	*/
 	public isRecruiterNoSubscription():boolean{
 		return sessionStorage.getItem('isRecruiterNoSubscription') === 'true';
 	}
-	
 	/**
 	* Whether or not the recruiter that has no open Subscriptiion
 	*/

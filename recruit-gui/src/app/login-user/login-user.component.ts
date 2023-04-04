@@ -70,24 +70,37 @@ export class LoginUserComponent implements OnInit {
 			} else {
 				sessionStorage.setItem('isRecruiter',      				'false');
 			}
+			
+			if (roles.includes('ROLE_CANDIDATE')) {
+				sessionStorage.setItem('isCandidate',     	 			'true');
+			} else {
+				sessionStorage.setItem('isCandidate',      				'false');
+			}
 	      
 			sessionStorage.setItem('loggedIn',      					'true');
 	      
 			sessionStorage.setItem("userId", 							this.formBean.get('username')?.value);
 
-			const beforeAuthPage: any = sessionStorage.getItem('beforeAuthPage');
-	    
-			sessionStorage.setItem('beforeAuthPage', beforeAuthPage);
-	    
-			this.router.navigate([beforeAuthPage]);
-	    
-			}, err => {
-				if (err.status === 401) {
-					this.open(this.content);
-			}
-		});
 
-	}
+			const beforeAuthPage: any = sessionStorage.getItem('beforeAuthPage');
+
+			if (roles.includes('ROLE_CANDIDATE') && beforeAuthPage == 'suggestions') {
+				sessionStorage.setItem('beforeAuthPage', 'email');
+	    		this.router.navigate([beforeAuthPage]);
+	    	} else {
+	 
+				sessionStorage.setItem('beforeAuthPage', beforeAuthPage);
+	    
+				this.router.navigate([beforeAuthPage]);
+	    	}
+
+		}, err => {
+			if (err.status === 401) {
+				this.open(this.content);
+		}
+	});
+
+  }
 
   public open(content:any):void {
 

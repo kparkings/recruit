@@ -8,7 +8,11 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.arenella.recruit.adapters.events.CandidateAccountCreatedEvent;
 import com.arenella.recruit.adapters.events.CandidateNoLongerAvailableEvent;
+import com.arenella.recruit.adapters.events.CandidatePasswordUpdatedEvent;
+import com.arenella.recruit.adapters.events.CandidateUpdatedEvent;
+import com.arenella.recruit.authentication.adapters.AuthenticationExternalEventListener;
 import com.arenella.recruit.curriculum.adapters.ExternalEventListener;
 import com.arenella.recruit.emailservice.adapters.EmailServiceExternalEventListener;
 import com.arenella.recruit.emailservice.adapters.RequestSendEmailCommand;
@@ -38,7 +42,10 @@ public class MonolithExternalEventPublisher implements ExternalEventPublisher{
 	private ExternalEventListener 				eventListener;
 	
 	@Autowired
-	private EmailServiceExternalEventListener 	emailServiceListener;
+	private AuthenticationExternalEventListener authenticationExternalEventListener;
+	
+	@Autowired
+	private EmailServiceExternalEventListener emailServiceExternalEventListener;
 	
 	/**
 	* Refer to ExternalEventPublisher for details 
@@ -69,7 +76,8 @@ public class MonolithExternalEventPublisher implements ExternalEventPublisher{
 	*/
 	@Override
 	public void publishCandidateCreatedEvent(CandidateCreatedEvent event) {
-		eventListener.listenForCandidateCreatedEvent(event);
+		this.eventListener.listenForCandidateCreatedEvent(event);
+		this.emailServiceExternalEventListener.listenForCandidateCreatedEvent(event);
 	}
 
 	/**
@@ -100,7 +108,40 @@ public class MonolithExternalEventPublisher implements ExternalEventPublisher{
 						.topic(EmailTopic.ALERT_MATCHES)
 					.build();
 		
-		this.emailServiceListener.listenForSendEmailCommand(c);
+		this.emailServiceExternalEventListener.listenForSendEmailCommand(c);
+		
+	}
+
+	/**
+	* Refer to ExternalEventPublisher for details 
+	*/
+	@Override
+	public void publishCandidateAccountCreatedEvent(CandidateAccountCreatedEvent event) {
+		authenticationExternalEventListener.listenForCandidateAccountCreatedEvent(event);
+	}
+	
+	/**
+	* Refer to the ExternalEventPublisher interface for details 
+	*/
+	@Override
+	public void publishCandidatePasswordUpdated(CandidatePasswordUpdatedEvent event) {
+		this.authenticationExternalEventListener.listenForCandidatePasswordUpdatedEvent(event);
+	}
+
+	/**
+	* Refer to the ExternalEventPublisher interface for details 
+	*/
+	@Override
+	public void publishCandidateAccountUpdatedEvent(CandidateUpdatedEvent event) {
+		this.emailServiceExternalEventListener.listenForCandidateUpdatedEvent(event);
+	}
+
+	/**
+	* Refer to the ExternalEventPublisher interface for details 
+	*/
+	@Override
+	public void publishSendEmailCommand(RequestSendEmailCommand command) {
+		this.emailServiceExternalEventListener.listenForSendEmailCommand(command);
 		
 	}
 

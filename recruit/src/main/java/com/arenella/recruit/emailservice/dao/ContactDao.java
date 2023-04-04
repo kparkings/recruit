@@ -32,8 +32,8 @@ public interface ContactDao extends CrudRepository<ContactEntity, ContactEntityP
 	@Query("from ContactEntity e where e.id.contactType = :contactType and e.id.contactId = :contactId")
 	public ContactEntity getEntityByIdAndType(ContactType contactType, String contactId);
 	
-	@Query("from ContactEntity e where e.id.contactType = :contactType and e.id.contactId in :contactId")
-	public Set<ContactEntity> getEntitiesByIdAndType(ContactType contactType, Set<String> contactId);
+	@Query("from ContactEntity e where e.id.contactType in (:contactType) and e.id.contactId in :contactId")
+	public Set<ContactEntity> getEntitiesByIdAndType(Set<ContactType> contactType, Set<String> contactId);
 	
 	/**
 	* Retrieves a matching Contact where one exists
@@ -79,7 +79,7 @@ public interface ContactDao extends CrudRepository<ContactEntity, ContactEntityP
 	* @return matching Contacts
 	*/
 	default public Set<Contact> fetchContacts(Set<String> contactIds){
-		return this.getEntitiesByIdAndType(ContactType.RECRUITER, contactIds).stream().map(c -> ContactEntity.convertFromEntity(c)).collect(Collectors.toSet());
+		return this.getEntitiesByIdAndType(Set.of(ContactType.RECRUITER,ContactType.CANDIDATE), contactIds).stream().map(c -> ContactEntity.convertFromEntity(c)).collect(Collectors.toSet());
 	}
 	
 }

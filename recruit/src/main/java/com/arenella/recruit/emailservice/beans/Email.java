@@ -14,6 +14,7 @@ public class Email {
 	public static enum EmailTopic {
 		FORGOTTEN_PWD, 
 		ACCOUNT_CREATED, 
+		CANDIDATE_ACCOUNT_CREATED,
 		WEEKLY_UPDATE, 
 		ALERT_MATCHES, 
 		PASSWORD_RESET, 
@@ -355,7 +356,7 @@ public class Email {
 	*/
 	public static class Sender<T>{
 		
-		public static enum SenderType {SYSTEM, RECRUITER, UNREGISTERED_USER};
+		public static enum SenderType {SYSTEM, RECRUITER, UNREGISTERED_USER, CANDIDATE};
 		
 		private final T				id;
 		private final SenderType 	contactType;
@@ -418,7 +419,7 @@ public class Email {
 	*/
 	public static class EmailRecipient<T>{
 		
-		public static enum ContactType {SYSTEM, RECRUITER};
+		public static enum ContactType {SYSTEM, RECRUITER, CANDIDATE};
 		
 		private final T 				id;
 		private final ContactType 		contactType;

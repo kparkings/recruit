@@ -27,6 +27,7 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.util.ReflectionTestUtils;
 
+import com.arenella.recruit.adapters.events.CandidateAccountCreatedEvent;
 import com.arenella.recruit.candidates.beans.Candidate;
 import com.arenella.recruit.candidates.beans.CandidateFilterOptions;
 import com.arenella.recruit.candidates.beans.CandidateSearchAccuracyWrapper;
@@ -49,6 +50,7 @@ import com.arenella.recruit.candidates.services.CandidateStatisticsService;
 import com.arenella.recruit.candidates.utils.CandidateFunctionExtractorImpl;
 import com.arenella.recruit.candidates.utils.CandidateSuggestionUtil;
 import com.arenella.recruit.candidates.utils.SkillsSynonymsUtil;
+import com.arenella.recruit.emailservice.adapters.RequestSendEmailCommand;
 import com.arenella.recruit.candidates.utils.CandidateSuggestionUtil.suggestion_accuracy;
 
 /**
@@ -120,7 +122,24 @@ public class CandidateServiceImplTest {
 	}
 	
 	/**
-	* Tests exception is thrown if Email already used for the Pending Candidate 
+	* Tests exception is thrown if Email not used for the Pending Candidate 
+	*/
+	@Test
+	public void testPersistCandidate() {
+		
+		Mockito.when(this.mockCandidateDao.emailInUse(Mockito.anyString())).thenReturn(false);
+		Mockito.when(this.mockCandidateDao.save(Mockito.any())).thenReturn(CandidateEntity.builder().candidateId("1000").build());
+		
+		this.service.persistCandidate(Candidate.builder().candidateId("1000").email("kparkings@gmail.com").firstname("kevin").build());
+		
+		Mockito.verify(this.mockExternalEventPublisher).publishCandidateAccountCreatedEvent(Mockito.any(CandidateAccountCreatedEvent.class));
+		Mockito.verify(this.mockExternalEventPublisher).publishSendEmailCommand(Mockito.any(RequestSendEmailCommand.class));
+		Mockito.verify(this.mockExternalEventPublisher).publishCandidateCreatedEvent(Mockito.any(CandidateCreatedEvent.class));
+		
+	}
+	
+	/**
+	* Tests exception is thrown if Email not used for the Pending Candidate 
 	*/
 	@Test
 	public void testPersistPendingCandidate_emailAlreadyExists() {

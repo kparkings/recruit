@@ -496,6 +496,12 @@ export class ListingComponent implements OnInit {
 
   }
 
+	/**
+	* Whether or not the Use is a Candidate
+	*/
+	public isCandidate():boolean{
+		return sessionStorage.getItem('isCandidate') === 'true';
+	}
   
 
 }

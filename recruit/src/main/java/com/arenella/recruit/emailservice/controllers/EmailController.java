@@ -45,12 +45,12 @@ public class EmailController {
 	* Returns the users email's
 	* @return Email's for the authenticated User
 	*/
-	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('RECRUITER')")
+	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('RECRUITER') OR hasRole('CANDIDATE')")
 	@GetMapping(path="email", produces="application/json")
 	public ResponseEntity<Set<EmailAPIOutbound>> getEmailsForUser(Principal principal){
 	
 		Set<Email> 		emails 		= this.emailService.fetchEmailsByRecipientId(principal.getName());
-		Set<String> 	contactIds 	= emails.stream().filter(e -> e.getSender().getContactType() == SenderType.RECRUITER).map(e -> e.getSender().getContactId()).collect(Collectors.toSet());
+		Set<String> 	contactIds 	= emails.stream().filter(e -> e.getSender().getContactType() == SenderType.RECRUITER || e.getSender().getContactType() == SenderType.CANDIDATE).map(e -> e.getSender().getContactId()).collect(Collectors.toSet());
 		Set<Contact> 	contacts 	= this.contactService.fetchContacts(contactIds);
 		
 		Set<EmailAPIOutbound> emailsAPIOutbound =  this.emailService.fetchEmailsByRecipientId(principal.getName()).stream().map(e -> EmailAPIOutbound.convertFromDomain(e, contacts, principal.getName())).collect(Collectors.toCollection(LinkedHashSet::new));
@@ -67,7 +67,7 @@ public class EmailController {
 	* @return Attachment 
 	* @throws IOException
 	*/
-	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_RECRUITER')")
+	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_RECRUITER') OR hasRole('CANDIDATE')")
 	@GetMapping(value = "/email/{emailId}/attachment/{attachmentId}", produces = MediaType.APPLICATION_PDF_VALUE)
 	public ResponseEntity<ByteArrayResource> getEmailAttachment(@PathVariable("emailId")UUID emailId, @PathVariable("attachmentId") UUID attachmentId, Principal principal) throws IOException {
 		
@@ -88,7 +88,7 @@ public class EmailController {
 	* Marks an email as having been read by the use
 	* @param emailId - id of the Email
 	*/
-	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_RECRUITER')")
+	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_RECRUITER') OR hasRole('CANDIDATE')")
 	@PutMapping(value="/email/{emailId}/read", produces="application/json")
 	public void markAsRead(@PathVariable("emailId") UUID emailId, Principal principal) {
 		this.emailService.setEmailReadStatus(emailId, true, principal.getName());
@@ -98,7 +98,7 @@ public class EmailController {
 	* Marks an email as not having been read 
 	* @param emailId
 	*/
-	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_RECRUITER')")
+	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_RECRUITER') OR hasRole('CANDIDATE')")
 	@PutMapping(value="/email/{emailId}/unread", produces="application/json")
 	public void markAsUndread(@PathVariable("emailId") UUID emailId, Principal principal) {
 		this.emailService.setEmailReadStatus(emailId, false, principal.getName());
@@ -119,7 +119,7 @@ public class EmailController {
 	* @param principal	- Authorized User
 	* @return ResponseEntity
 	*/
-	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_RECRUITER')")
+	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_RECRUITER') OR hasRole('CANDIDATE')")
 	@PutMapping(value="/email/{emailId}/reply")
 	public ResponseEntity<Void> replyToEmail(@PathVariable("emailId") UUID emailId, @RequestPart("message") String message,  Principal principal){
 		

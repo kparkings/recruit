@@ -9,7 +9,7 @@ import java.util.Set;
 */
 public class User {
 
-	public static enum USER_ROLE{admin, recruiter, recruiterNoSubscrition}
+	public static enum USER_ROLE{admin, recruiter, candidate, recruiterNoSubscrition}
 	
 	private String			username;
 	private String			password;

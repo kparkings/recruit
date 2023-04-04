@@ -30,10 +30,10 @@
 		<li  class="li-arenella-nav" *ngIf="isAuthenticated()">
            <a  class="dropdown-item" routerLink="/listing">Job Board</a>
         </li>
-        <li  class="li-arenella-nav"  *ngIf="isAuthenticated() && !isRecruiterNoSubscription() && !hasUnpaidSubscription()">	
+        <li  class="li-arenella-nav"  *ngIf="isAuthenticated() && !isRecruiterNoSubscription() && !hasUnpaidSubscription() && !isCandidate()">	
            <a  class="dropdown-item" routerLink="/suggestions">Suggestions</a>
         </li>
-		<li class="li-arenella-nav" *ngIf="isAuthenticated() && !isRecruiterNoSubscription() && !hasUnpaidSubscription()">
+		<li class="li-arenella-nav" *ngIf="isAuthenticated() && !isRecruiterNoSubscription() && !hasUnpaidSubscription() && !isCandidate()">
         	<a *ngIf="unseenMpPosts > 0" 	class="dropdown-item" routerLink="/recruiter-marketplace"><span class="unseen-posts">{{unseenMpPosts}}</span>Marketplace</a>
 			<a *ngIf="unseenMpPosts <= 0" 	class="dropdown-item" routerLink="/recruiter-marketplace">Marketplace</a>
         </li>
@@ -47,13 +47,13 @@
         	<a *ngIf="unseenEmails > 0" 	class="dropdown-item" routerLink="/email"><span class="unseen-posts">{{unseenEmails}}</span>Emails</a>
 			<a *ngIf="unseenEmails <= 0"	class="dropdown-item" routerLink="/email">Emails</a>
         </li>
-		<li  class="li-arenella-nav" *ngIf="isAuthenticated()">
+		<li  class="li-arenella-nav" *ngIf="isAuthenticated() && !isCandidate()">
            <a  class="dropdown-item" routerLink="/recruiter-profile">Community</a>
         </li>
-		<li class="li-arenella-nav" *ngIf="isAuthenticatedAsAdmin()">
+		<li class="li-arenella-nav" *ngIf="isAuthenticatedAsAdmin() && !isCandidate()">
            <a  class="dropdown-item" routerLink="/accounts">Accounts</a>
         </li>
-		<li class="li-arenella-nav" *ngIf="isAuthenticated() && !isAuthenticatedAsAdmin()">
+		<li class="li-arenella-nav" *ngIf="isAuthenticated() && !isAuthenticatedAsAdmin() && !isCandidate()">
            <a class="dropdown-item recruiter-account" routerLink="/recruiter-account">Account</a>
         </li>		
       </ul>

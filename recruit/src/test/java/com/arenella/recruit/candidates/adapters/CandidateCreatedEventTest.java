@@ -25,6 +25,8 @@ import com.arenella.recruit.candidates.enums.PERM;
 public class CandidateCreatedEventTest {
 
 	private static final String 		candidateId 			= "Candidate1";
+	private static final String 		firstname 				= "kevin";
+	private static final String 		surname 				= "parkings";
 	private static final FUNCTION		function				= FUNCTION.JAVA_DEV;
 	private static final COUNTRY 		country 				= COUNTRY.NETHERLANDS;
 	private static final String 		city 					= "Den Haag";
@@ -58,6 +60,8 @@ public class CandidateCreatedEventTest {
 																			.yearsExperience(yearsExperience)
 																			.skills(skills)
 																			.languages(languages)
+																			.firstname(firstname)
+																			.surname(surname)
 																			.build();
 																
 	/**
@@ -77,7 +81,9 @@ public class CandidateCreatedEventTest {
 		assertEquals(perm, 				event.isPerm());
 		assertEquals(freelance, 		event.isFreelance());
 		assertEquals(yearsExperience, 	event.getYearsExperience());
-		
+		assertEquals(firstname, 		event.getFirstname());
+		assertEquals(surname, 			event.getSurname());
+		assertEquals(email, 			event.getEmail());
 		assertTrue(event.getSkills().contains(skill));
 		event.getLanguages().stream().filter(l -> l.getLanguage() == language.getLanguage()).findAny().orElseThrow();
 		

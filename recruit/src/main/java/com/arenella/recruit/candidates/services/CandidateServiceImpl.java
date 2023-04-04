@@ -23,6 +23,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import com.arenella.recruit.adapters.events.CandidateAccountCreatedEvent;
 import com.arenella.recruit.adapters.events.CandidateNoLongerAvailableEvent;
 import com.arenella.recruit.candidates.adapters.CandidateCreatedEvent;
 import com.arenella.recruit.candidates.adapters.ExternalEventPublisher;
@@ -45,6 +46,14 @@ import com.arenella.recruit.candidates.utils.CandidateSuggestionUtil;
 import com.arenella.recruit.candidates.utils.CandidateSuggestionUtil.suggestion_accuracy;
 import com.arenella.recruit.candidates.utils.SkillsSynonymsUtil;
 import com.arenella.recruit.curriculum.enums.FileType;				//TODO: [KP] Why are we referencing other service
+import com.arenella.recruit.emailservice.adapters.RequestSendEmailCommand;
+import com.arenella.recruit.emailservice.beans.Email.EmailRecipient;
+import com.arenella.recruit.emailservice.beans.Email.EmailTopic;
+import com.arenella.recruit.emailservice.beans.Email.EmailType;
+import com.arenella.recruit.emailservice.beans.Email.Sender;
+import com.arenella.recruit.emailservice.beans.Email.EmailRecipient.ContactType;
+import com.arenella.recruit.emailservice.beans.Email.Sender.SenderType;
+import com.arenella.recruit.candidates.utils.PasswordUtil;
 import com.arenella.recruit.candidates.dao.CandidateSearchAlertDao;
 import com.arenella.recruit.candidates.dao.CandidateSkillsDao;
 import com.arenella.recruit.candidates.dao.SavedCandidateDao;
@@ -104,6 +113,26 @@ public class CandidateServiceImpl implements CandidateService{
 		CandidateEntity entity = CandidateEntity.convertToEntity(candidate);
 		
 		long candidateId = candidateDao.save(entity).getCandidateId();
+		
+		String userId 				= PasswordUtil.generateUsername(candidate);
+		String password 			= PasswordUtil.generatePassword();
+		String encryptedPassword 	= PasswordUtil.encryptPassword(password);
+		
+		this.externalEventPublisher
+			.publishCandidateAccountCreatedEvent(new CandidateAccountCreatedEvent(userId, encryptedPassword));
+
+		RequestSendEmailCommand command = RequestSendEmailCommand
+				.builder()
+					.emailType(EmailType.EXTERN)
+					.recipients(Set.of(new EmailRecipient<UUID>(UUID.randomUUID(),candidate.getCandidateId(), ContactType.CANDIDATE)))
+					.sender(new Sender<>(UUID.randomUUID(), "", SenderType.SYSTEM, "kparkings@gmail.com"))
+					.title("Arenella-ICT - Account created")
+					.topic(EmailTopic.CANDIDATE_ACCOUNT_CREATED)
+					.model(Map.of("firstname",candidate.getFirstname(),"userid",userId,"password",password))
+					.persistable(false)
+				.build();
+		
+		this.externalEventPublisher.publishSendEmailCommand(command);
 		
 		this.externalEventPublisher
 			.publishCandidateCreatedEvent(CandidateCreatedEvent
@@ -213,7 +242,6 @@ public class CandidateServiceImpl implements CandidateService{
 		
 		Candidate candidate = results.stream().findFirst().get();
 		
-		//candidate.getSkills().addAll(this.skillsSynonymsUtil.addtSynonymsForSkills(candidate.getSkills()));
 		this.skillsSynonymsUtil.addSynonymsForSkills(candidate.getSkills(), candidate.getSkills());
 		
 		CandidateSearchAccuracyWrapper 	wrappedCandidate 	= new CandidateSearchAccuracyWrapper(candidate);

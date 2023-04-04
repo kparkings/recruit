@@ -85,6 +85,9 @@ public class EmailTemplateFactory {
 					return loadTemplate("rec-to-rec-contact-request-extern.ftlh", model);
 				}
 			}
+			case CANDIDATE_ACCOUNT_CREATED:{
+				return loadTemplate("new-candidate-signup.ftlh", model);
+			}
 			default:{
 				return "Could not process template";
 			}
