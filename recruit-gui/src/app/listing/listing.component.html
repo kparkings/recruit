@@ -123,7 +123,7 @@
 								</div>
 								
 								<h2  class="listing-view-title">Contact Recruiter: <span>{{selectedListing.ownerName}} from {{selectedListing.ownerCompany}}</span></h2>
-								<div>
+								<div *ngIf="!isCandidate()">
 									<form [formGroup]="emailRequestFormBean">
 										<div>
 											<p class="email-label">Your Name:</p>
@@ -133,11 +133,33 @@
 											<p class="email-label">Your Email:</p>
 											<input class="email-input" type="email" formControlName="email">
 										</div>
+										<p class="email-label">Curriculum</p>
 										<textarea class="contact-recruiter-textarea" formControlName="message"></textarea>
 										<div class="div-spacing">
 											<p class="email-label">Curriculum</p>
 											<input class="email-input" type="file" (change)="uploadCurriculumFile($event)"> 
-											<div>.doc, .docx, .pdf - up to 1MB</div>
+											<div style="margin-top:10px">.doc, .docx, .pdf - up to 1MB</div>
+										</div>
+										<div class="action-buttons">
+											<button class="btn btn-secondary btn-listing btnRight" (click)="sendEmailRequest(feedbackBox)" *ngIf="enableSendEmail()">Send</button>
+											<button class="btn btn-secondary btn-listing btnRight" disabled *ngIf="!enableSendEmail()">Send</button>
+										</div>
+									</form>
+								</div>
+								<div *ngIf="isCandidate()">
+									<form [formGroup]="emailRequestFormBean">
+										<p class="email-label">Message</p>
+										<textarea class="contact-recruiter-textarea" formControlName="message"></textarea>
+										<div class="div-spacing">
+											<p class="email-label">Curriculum</p>
+											<br>
+											<input type="checkbox" formControlName="useStoredCV"><span> Use stored CV</span>
+											<br><br>
+											<p>Or</p>
+											<input class="email-input" name="selected-file" type="file" (change)="uploadCurriculumFile($event)"> 
+											
+											<div style="margin-top:10px">.doc, .docx, .pdf - up to 1MB</div>
+											
 										</div>
 										<div class="action-buttons">
 											<button class="btn btn-secondary btn-listing btnRight" (click)="sendEmailRequest(feedbackBox)" *ngIf="enableSendEmail()">Send</button>

@@ -3,9 +3,9 @@ import { ListingService }								from '../listing.service';
 import { EmailService, EmailRequest }					from '../email.service';
 import { Listing}										from './listing';
 import { ActivatedRoute } 								from '@angular/router';
-import { UntypedFormGroup, UntypedFormControl }			from '@angular/forms';
+import { UntypedFormGroup, UntypedFormControl,  }		from '@angular/forms';
 import { NgbModal, NgbModalOptions }					from '@ng-bootstrap/ng-bootstrap';
-import { HostListener,Directive,HostBinding,Input}		from '@angular/core';
+import { HostListener}									from '@angular/core';
 import { DeviceDetectorService } 						from 'ngx-device-detector';
 
 @Component({
@@ -29,9 +29,15 @@ export class ListingComponent implements OnInit {
 		} else {
 			this.displayFilters = true;
 		}
+		
+		this.emailRequestFormBean?.get('useStoredCV')?.valueChanges.subscribe(val => {
+			if (val == true){
+				this.fileSelectEvent.target.value = null;
+			}
+		});
 	
 	}
-
+	
   	ngOnInit(): void {
 		
 		var id = this._Activatedroute.snapshot.paramMap.get("id");
@@ -62,6 +68,8 @@ export class ListingComponent implements OnInit {
 	public isMobile:boolean = false;
 	public mobileListingclass:string 			= '';
 	
+	public fileSelectEvent:any;
+	
 	/**
 	* Uploads the file for the Curriculum and stored 
 	* it ready to be sent to the backend
@@ -73,7 +81,8 @@ export class ListingComponent implements OnInit {
   		}
   	
   		this.curriculumFile = event.target.files[0];
-  		
+		this.emailRequestFormBean.controls['useStoredCV'].setValue(false);
+  		this.fileSelectEvent = event;
 	}
 	
 	showSendAlertBoxSuccess:boolean 		= false;
@@ -81,9 +90,10 @@ export class ListingComponent implements OnInit {
 	
 	
 	public emailRequestFormBean:UntypedFormGroup = new UntypedFormGroup({
-     	email:		new UntypedFormControl(),
-		name:		new UntypedFormControl(),
-		message:	new UntypedFormControl(),
+     	email:			new UntypedFormControl(),
+		name:			new UntypedFormControl(),
+		message:		new UntypedFormControl(),
+		useStoredCV:	new UntypedFormControl(true),
 	});
 	
 	/**
@@ -94,6 +104,7 @@ export class ListingComponent implements OnInit {
      		email:		new UntypedFormControl(),
 			name:		new UntypedFormControl(),
 			message:	new UntypedFormControl(),
+			useStoredCV:	new UntypedFormControl(true),
 		});
 		
 		this.showSendAlertBoxSuccess 		= false;
@@ -141,15 +152,19 @@ export class ListingComponent implements OnInit {
 	*/
 	public enableSendEmail():boolean{
 		
-		if (!this.emailRequestFormBean.get('message')) {
+		if(this.isCandidate() && this.emailRequestFormBean.get('message')?.value) {
+			return true;
+		}
+		
+		if (!this.emailRequestFormBean.get('message')?.value) {
 			return false;
 		}
 		
-		if (!this.emailRequestFormBean.get('email')) {
+		if (!this.emailRequestFormBean.get('email')?.value) {
 			return false;
 		}
 		
-		if (!this.emailRequestFormBean.get('name')) {
+		if (!this.emailRequestFormBean.get('name')?.value) {
 			return false;
 		}
 		
