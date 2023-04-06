@@ -3,6 +3,7 @@ package com.arenella.recruit.recruiters.listings.controllers;
 import static org.junit.Assert.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
@@ -28,6 +29,7 @@ import com.arenella.recruit.listings.beans.Listing.LISTING_AGE;
 import com.arenella.recruit.listings.beans.Listing.listing_type;
 import com.arenella.recruit.listings.beans.ListingFilter;
 import com.arenella.recruit.listings.beans.ListingViewedEvent;
+import com.arenella.recruit.listings.controllers.CandidateListingContactRequest;
 import com.arenella.recruit.listings.controllers.ListingAPIInbound;
 import com.arenella.recruit.listings.controllers.ListingAPIOutbound;
 import com.arenella.recruit.listings.controllers.ListingAPIOutboundPublic;
@@ -50,6 +52,9 @@ public class ListingControllerTest {
 	
 	@Mock
 	private	Authentication		mockAuthentication;
+	
+	@Mock
+	private Principal			mockPrincipal;
 	
 	@InjectMocks
 	private ListingController 	controller 				= new ListingController();
@@ -249,6 +254,36 @@ public class ListingControllerTest {
 		assertEquals(attachment, 	argCaptContactRequest.getValue().getAttachment());
 		assertEquals(senderName, 	argCaptContactRequest.getValue().getSenderName());
 		assertEquals(senderEmail, 	argCaptContactRequest.getValue().getSenderEmail());
+		assertEquals(message, 		argCaptContactRequest.getValue().getMessage());
+		
+	}
+	
+	/**
+	* Test sending of request for contact from Candidate to Owner of the Listing
+	* @throws Exception
+	*/
+	@Test
+	public void testSndContactRequestToListingOwnerFromCandidate() throws Exception{
+		
+		final UUID				listingId		= UUID.randomUUID();
+		final MultipartFile 	attachment		= Mockito.mock(MultipartFile.class);
+		final String 			candidateId		= "Kevin Parkings";
+		final String 			message			= "some message";
+		
+		ArgumentCaptor<CandidateListingContactRequest> argCaptContactRequest = ArgumentCaptor.forClass(CandidateListingContactRequest.class);
+		
+		Mockito.when(this.mockPrincipal.getName()).thenReturn(candidateId);
+		Mockito.doNothing().when(this.mockListingService).sendContactRequestFomCandidateToListingOwner(argCaptContactRequest.capture());
+		
+		ResponseEntity<Void> response = this.controller.sendContactRequestToListingOwnerFromCandidate(listingId, message, Optional.of(attachment), this.mockPrincipal);
+		
+		Mockito.verify(this.mockListingService).sendContactRequestFomCandidateToListingOwner(Mockito.any(CandidateListingContactRequest.class));
+		
+		assertEquals(HttpStatus.OK, response.getStatusCode());
+		
+		assertEquals(listingId, 	argCaptContactRequest.getValue().getListingId());
+		assertEquals(attachment, 	argCaptContactRequest.getValue().getAttachment().get());
+		assertEquals(candidateId, 	argCaptContactRequest.getValue().getCandidateId());
 		assertEquals(message, 		argCaptContactRequest.getValue().getMessage());
 		
 	}

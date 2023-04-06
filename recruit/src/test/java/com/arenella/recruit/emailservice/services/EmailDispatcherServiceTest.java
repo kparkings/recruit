@@ -25,6 +25,8 @@ import com.arenella.recruit.emailservice.beans.Email;
 import com.arenella.recruit.emailservice.beans.Email.EmailRecipient.ContactType;
 import com.arenella.recruit.emailservice.beans.Email.EmailTopic;
 import com.arenella.recruit.emailservice.beans.Email.EmailType;
+import com.arenella.recruit.emailservice.beans.Email.Sender;
+import com.arenella.recruit.emailservice.beans.Email.Sender.SenderType;
 import com.arenella.recruit.emailservice.beans.Email.Status;
 import com.arenella.recruit.emailservice.dao.ContactDao;
 import com.arenella.recruit.emailservice.dao.EmailServiceDao;
@@ -50,6 +52,9 @@ public class EmailDispatcherServiceTest {
 	
 	@Mock
 	private ContactDao					mockContactDao;
+	
+	@Mock
+	private Sender<?>					mockSender;
 	
 	@Spy
 	private EmailTemplateFactory 		templateFacotry 	= new EmailTemplateFactory();
@@ -98,7 +103,7 @@ public class EmailDispatcherServiceTest {
 		
 		Mockito.when(this.mockContactDao.getByIdAndType(Mockito.any(), Mockito.any())).thenReturn(Optional.of(new Contact("", ContactType.RECRUITER, "", "", "")));
 		
-		this.service.handleSendEmailCommand(RequestSendEmailCommand.builder().emailType(EmailType.SYSTEM_EXTERN).recipients(Set.of(recipient1, recipient2)).topic(EmailTopic.ACCOUNT_CREATED).persistable(true).build());
+		this.service.handleSendEmailCommand(RequestSendEmailCommand.builder().sender(mockSender).emailType(EmailType.SYSTEM_EXTERN).recipients(Set.of(recipient1, recipient2)).topic(EmailTopic.ACCOUNT_CREATED).persistable(true).build());
 		
 		Mockito.verify(this.emailDaoMock, Mockito.times(2)).saveEmail(Mockito.any(Email.class));
 		
@@ -117,7 +122,7 @@ public class EmailDispatcherServiceTest {
 		
 		Mockito.when(this.mockContactDao.getByIdAndType(Mockito.any(), Mockito.any())).thenReturn(Optional.of(new Contact("", ContactType.RECRUITER, "", "", "")));
 		
-		this.service.handleSendEmailCommand(RequestSendEmailCommand.builder().emailType(EmailType.SYSTEM_INTERN).recipients(Set.of(recipient1, recipient2)).topic(EmailTopic.ACCOUNT_CREATED).persistable(true).build());
+		this.service.handleSendEmailCommand(RequestSendEmailCommand.builder().sender(mockSender).emailType(EmailType.SYSTEM_INTERN).recipients(Set.of(recipient1, recipient2)).topic(EmailTopic.ACCOUNT_CREATED).persistable(true).build());
 		
 		Mockito.verify(this.emailDaoMock, Mockito.times(2)).saveEmail(Mockito.any(Email.class));
 		
@@ -134,9 +139,10 @@ public class EmailDispatcherServiceTest {
 		Email.EmailRecipient<UUID> recipient1 = new Email.EmailRecipient("one", "rec1", ContactType.RECRUITER);
 		Email.EmailRecipient<UUID> recipient2 = new Email.EmailRecipient("two", "rec2", ContactType.RECRUITER);
 		
+		Mockito.when(this.mockContactDao.getByIdAndType(Mockito.any(), Mockito.any())).thenReturn(Optional.empty());
 		Mockito.when(this.mockContactDao.getByIdAndType(Mockito.any(), Mockito.any())).thenReturn(Optional.of(new Contact("", ContactType.RECRUITER, "", "", "")));
 		
-		this.service.handleSendEmailCommand(RequestSendEmailCommand.builder().emailType(EmailType.EXTERN).recipients(Set.of(recipient1, recipient2)).topic(EmailTopic.ACCOUNT_CREATED).persistable(true).build());
+		this.service.handleSendEmailCommand(RequestSendEmailCommand.builder().sender(mockSender).emailType(EmailType.EXTERN).recipients(Set.of(recipient1, recipient2)).topic(EmailTopic.ACCOUNT_CREATED).persistable(true).build());
 		
 		Mockito.verify(this.emailDaoMock, Mockito.times(2)).saveEmail(Mockito.any(Email.class));
 		
@@ -155,7 +161,7 @@ public class EmailDispatcherServiceTest {
 		
 		Mockito.when(this.mockContactDao.getByIdAndType(Mockito.any(), Mockito.any())).thenReturn(Optional.of(new Contact("", ContactType.RECRUITER, "", "", "")));
 		
-		this.service.handleSendEmailCommand(RequestSendEmailCommand.builder().emailType(EmailType.EXTERN).recipients(Set.of(recipient1, recipient2)).topic(EmailTopic.ACCOUNT_CREATED).persistable(false).build());
+		this.service.handleSendEmailCommand(RequestSendEmailCommand.builder().sender(mockSender).emailType(EmailType.EXTERN).recipients(Set.of(recipient1, recipient2)).topic(EmailTopic.ACCOUNT_CREATED).persistable(false).build());
 		
 		Mockito.verify(this.emailDaoMock, Mockito.times(0)).saveEmail(Mockito.any(Email.class));
 		
@@ -174,7 +180,7 @@ public class EmailDispatcherServiceTest {
 		
 		Mockito.when(this.mockContactDao.getByIdAndType(Mockito.any(), Mockito.any())).thenReturn(Optional.of(new Contact("", ContactType.RECRUITER, "", "", "")));
 		
-		this.service.handleSendEmailCommand(RequestSendEmailCommand.builder().emailType(EmailType.INTERN).recipients(Set.of(recipient1, recipient2)).topic(EmailTopic.ACCOUNT_CREATED).persistable(true).build());
+		this.service.handleSendEmailCommand(RequestSendEmailCommand.builder().sender(mockSender).emailType(EmailType.INTERN).recipients(Set.of(recipient1, recipient2)).topic(EmailTopic.ACCOUNT_CREATED).persistable(true).build());
 		
 		Mockito.verify(this.emailDaoMock, Mockito.times(2)).saveEmail(Mockito.any(Email.class));
 		
@@ -195,7 +201,7 @@ public class EmailDispatcherServiceTest {
 		Mockito.when(this.mockContactDao.getByIdAndType(Mockito.any(), Mockito.any())).thenReturn(Optional.of(new Contact("", ContactType.RECRUITER, "", "", "")));
 		Mockito.doNothing().when(this.emailDaoMock).saveEmail(emailAc.capture());
 		
-		this.service.handleSendEmailCommand(RequestSendEmailCommand.builder().emailType(EmailType.EXTERN).recipients(Set.of(recipient1)).topic(EmailTopic.ACCOUNT_CREATED).persistable(true).build());
+		this.service.handleSendEmailCommand(RequestSendEmailCommand.builder().sender(mockSender).emailType(EmailType.EXTERN).recipients(Set.of(recipient1)).topic(EmailTopic.ACCOUNT_CREATED).persistable(true).build());
 		
 		assertEquals(Status.TO_OUTBOX, emailAc.getValue().getStatus());
 		
@@ -216,7 +222,7 @@ public class EmailDispatcherServiceTest {
 		Mockito.when(this.mockContactDao.getByIdAndType(Mockito.any(), Mockito.any())).thenReturn(Optional.of(new Contact("", ContactType.RECRUITER, "", "", "")));
 		Mockito.doNothing().when(this.emailDaoMock).saveEmail(emailAc.capture());
 		
-		this.service.handleSendEmailCommand(RequestSendEmailCommand.builder().emailType(EmailType.EXTERN).recipients(Set.of(recipient1)).topic(EmailTopic.ACCOUNT_CREATED).persistable(true).build());
+		this.service.handleSendEmailCommand(RequestSendEmailCommand.builder().sender(mockSender).emailType(EmailType.EXTERN).recipients(Set.of(recipient1)).topic(EmailTopic.ACCOUNT_CREATED).persistable(true).build());
 		
 		assertEquals(Status.TO_OUTBOX, emailAc.getValue().getStatus());
 		
@@ -237,7 +243,7 @@ public class EmailDispatcherServiceTest {
 		Mockito.when(this.mockContactDao.getByIdAndType(Mockito.any(), Mockito.any())).thenReturn(Optional.of(new Contact("", ContactType.RECRUITER, "", "", "")));
 		Mockito.doNothing().when(this.emailDaoMock).saveEmail(emailAc.capture());
 		
-		this.service.handleSendEmailCommand(RequestSendEmailCommand.builder().emailType(EmailType.SYSTEM_INTERN).recipients(Set.of(recipient1)).topic(EmailTopic.ACCOUNT_CREATED).persistable(true).build());
+		this.service.handleSendEmailCommand(RequestSendEmailCommand.builder().sender(mockSender).emailType(EmailType.SYSTEM_INTERN).recipients(Set.of(recipient1)).topic(EmailTopic.ACCOUNT_CREATED).persistable(true).build());
 		
 		assertEquals(Status.SENT_INTERN, emailAc.getValue().getStatus());
 		
@@ -258,9 +264,42 @@ public class EmailDispatcherServiceTest {
 		Mockito.when(this.mockContactDao.getByIdAndType(Mockito.any(), Mockito.any())).thenReturn(Optional.of(new Contact("", ContactType.RECRUITER, "", "", "")));
 		Mockito.doNothing().when(this.emailDaoMock).saveEmail(emailAc.capture());
 		
-		this.service.handleSendEmailCommand(RequestSendEmailCommand.builder().emailType(EmailType.INTERN).recipients(Set.of(recipient1)).topic(EmailTopic.ACCOUNT_CREATED).persistable(true).build());
+		this.service.handleSendEmailCommand(RequestSendEmailCommand.builder().sender(mockSender).emailType(EmailType.INTERN).recipients(Set.of(recipient1)).topic(EmailTopic.ACCOUNT_CREATED).persistable(true).build());
 		
 		assertEquals(Status.SENT_INTERN, emailAc.getValue().getStatus());
+		
+	}
+	
+	/**
+	* Test status for internal email from Candidate
+	* @throws Exception
+	*/
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@Test
+	public void testHandleSendEmailCommand_CandidateRequest_intern() throws Exception{
+		
+		final String id 		= "id1";
+		final String firstname 	= "fn";
+		final String surname 	= "sn";
+		final String email 		= "email";
+		
+		//this.templateFacotry.fetchTemplate(command, model)
+		
+		ArgumentCaptor<Email> emailAc = ArgumentCaptor.forClass(Email.class);
+		
+		Email.EmailRecipient<UUID> recipient1 = new Email.EmailRecipient("two", "rec2", ContactType.RECRUITER);
+		
+		Mockito.when(this.mockSender.getContactType()).thenReturn(SenderType.CANDIDATE);
+		Mockito.when(this.mockContactDao.getByIdAndType(Mockito.any(), Mockito.any())).thenReturn(Optional.of(new Contact(id, ContactType.CANDIDATE, firstname, surname, email)));
+		Mockito.when(this.mockContactDao.getByIdAndType(Mockito.any(), Mockito.any())).thenReturn(Optional.of(new Contact("", ContactType.RECRUITER, "", "", "")));
+		Mockito.doNothing().when(this.emailDaoMock).saveEmail(emailAc.capture());
+		
+		this.service.handleSendEmailCommand(RequestSendEmailCommand.builder().sender(mockSender).emailType(EmailType.INTERN).recipients(Set.of(recipient1)).topic(EmailTopic.ACCOUNT_CREATED).persistable(true).build());
+		
+		assertEquals(Status.SENT_INTERN, emailAc.getValue().getStatus());
+		
+		
+		
 		
 	}
 	

@@ -11,13 +11,17 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.arenella.recruit.listings.adapters.CandidateRequestListingContactEmailCommand;
+import com.arenella.recruit.listings.adapters.CandidateRequestListingContactEmailCommand.CandidateRequestListingContactEmailCommandBuilder;
 import com.arenella.recruit.listings.adapters.ExternalEventPublisher;
 import com.arenella.recruit.listings.adapters.RequestListingContactEmailCommand;
 import com.arenella.recruit.listings.adapters.RequestListingContactEmailCommand.RequestListingContactEmailCommandBuilder;
 import com.arenella.recruit.listings.beans.Listing;
 import com.arenella.recruit.listings.beans.ListingFilter;
 import com.arenella.recruit.listings.beans.ListingViewedEvent;
+import com.arenella.recruit.listings.controllers.CandidateListingContactRequest;
 import com.arenella.recruit.listings.controllers.ListingContactRequest;
 import com.arenella.recruit.listings.dao.ListingDao;
 import com.arenella.recruit.listings.dao.ListingEntity;
@@ -175,9 +179,7 @@ public class ListingServiceImpl implements ListingService{
 	@Override
 	public void sendContactRequestToListingOwner(ListingContactRequest contactRequest) {
 		
-		if (contactRequest.getAttachment() != null && !fileSecurityParser.isSafe(contactRequest.getAttachment())) {
-			throw new RuntimeException("Invalid file type detected"); 
-		}
+		performFileSafetyCheck(contactRequest.getAttachment());
 		
 		Listing listing = this.listingDao.findListingById(contactRequest.getListingId()).orElseThrow(() -> new RuntimeException("Unknown Listing"));
 		
@@ -207,6 +209,58 @@ public class ListingServiceImpl implements ListingService{
 		}catch(IOException e) {
 			throw new RuntimeException("Unable to send request"); 
 		}
+	}
+	
+	/**
+	* Refer to the Listing interface for details
+	*/
+	@Override
+	public void sendContactRequestFomCandidateToListingOwner(CandidateListingContactRequest contactRequest) {
+		
+		if (contactRequest.getAttachment().isPresent()) {
+			performFileSafetyCheck(contactRequest.getAttachment().get());
+		}
+		
+		Listing listing = this.listingDao.findListingById(contactRequest.getListingId()).orElseThrow(() -> new RuntimeException("Unknown Listing"));
+		
+		try {
+			
+			CandidateRequestListingContactEmailCommandBuilder builder = CandidateRequestListingContactEmailCommand.builder();
+			
+			builder
+				.listingName(listing.getTitle())
+				.message(contactRequest.getMessage())
+				.recruiterId(listing.getOwnerId())
+				.candidateId(contactRequest.getCandidateId());
+			
+			if (contactRequest.getAttachment().isPresent()) {
+				
+				FileType fileType = fileSecurityParser.getFileType(contactRequest.getAttachment().get());
+				
+				builder
+					.file(contactRequest.getAttachment().get().getBytes())
+					.fileType(fileType.toString());
+			}
+			
+			externalEventPublisher
+				.publicRequestSendListingContactEmailCommand(builder.build());
+		
+		} catch(IOException e) {
+			throw new RuntimeException("Unable to send request"); 
+		}
+		
+	}
+	
+	/**
+	* Checks safety of File
+	* @param attachment
+	*/
+	private void performFileSafetyCheck(MultipartFile attachment) {
+		
+		if (attachment != null && !fileSecurityParser.isSafe(attachment)) {
+			throw new RuntimeException("Invalid file type detected"); 
+		}
+		
 	}
 	
 	/**

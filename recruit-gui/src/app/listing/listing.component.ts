@@ -121,7 +121,7 @@ export class ListingComponent implements OnInit {
 		emailRequest.senderEmail 	= this.emailRequestFormBean.get('email')?.value; 
 		emailRequest.senderName 	= this.emailRequestFormBean.get('name')?.value; 
 		
-		this.emailService.sendEmail(emailRequest, this.selectedListing.listingId).subscribe(response =>{
+		this.emailService.sendEmail(emailRequest, this.selectedListing.listingId, this.isCandidate()).subscribe(response =>{
 			this.resetEmailRequestForm();
 			this.curriculumFile = null;
 			this.showSendAlertBoxSuccess 		= true;

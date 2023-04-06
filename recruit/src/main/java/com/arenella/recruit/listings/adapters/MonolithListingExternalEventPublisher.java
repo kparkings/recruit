@@ -40,10 +40,55 @@ public class MonolithListingExternalEventPublisher implements ExternalEventPubli
 	* Refer to ExternalEventPublisher for details 
 	*/
 	@Override
-	public void publicRequestSendListingContactEmailCommand(RequestListingContactEmailCommand command) {
+	public void publicRequestSendListingContactEmailCommand(CandidateRequestListingContactEmailCommand command) {
+		
+		Map<String, Object> modelExt = new HashMap<>();
+		modelExt.put("listingName", 	command.getListingName());
+		modelExt.put("recipientId", 	command.getRecruiterId());
+		
+		Map<String, Object> modelInt = new HashMap<>();
+		modelInt.put("file", 			command.getFile());
+		modelInt.put("fileType", 		command.getFileType());
+		modelInt.put("listingName", 	command.getListingName());
+		modelInt.put("message", 		command.getMessage());
+		modelInt.put("recipientId", 	command.getRecruiterId());
+		
+		RequestSendEmailCommand cInt = 
+				RequestSendEmailCommand
+					.builder()
+						.emailType(EmailType.INTERN)
+						.model(modelInt)
+						.persistable(true)
+						.recipients(Set.of(new EmailRecipient<UUID>(UUID.randomUUID(), command.getRecruiterId(), ContactType.RECRUITER)))
+						.sender(new Sender<>(command.getCandidateId(), "", SenderType.CANDIDATE, ""))
+						.title("Reaction To Job Posting " + command.getListingName())
+						.topic(EmailTopic.LISTING_RECRUITER_CONTACT_REQUEST)
+						.attachments(this.buildAttachment(command.getFileType(), command.getFile()))
+					.build();
+		
+		this.emailServiceListener.listenForSendEmailCommand(cInt);
+		
+		RequestSendEmailCommand cExt = 
+				RequestSendEmailCommand
+					.builder()
+						.emailType(EmailType.EXTERN)
+						.model(modelExt)
+						.persistable(false)
+						.recipients(Set.of(new EmailRecipient<UUID>(UUID.randomUUID(), command.getRecruiterId(), ContactType.RECRUITER)))
+						.sender(new Sender<>(UUID.randomUUID(), "", SenderType.SYSTEM, "kparkings@gmail.com"))
+						.title("Arenella-ICT - Reaction To Job Posting")
+						.topic(EmailTopic.LISTING_RECRUITER_CONTACT_REQUEST)
+					.build();
+		
+		this.emailServiceListener.listenForSendEmailCommand(cExt);
+		
+	}
 	
-		//TODO: [KP] Need to send two emails. 	1. exten to inform Recruiter of new messat
-		//										2. interne with actual message and attachements
+	/**
+	* Refer to ExternalEventPublisher for details 
+	*/
+	@Override
+	public void publicRequestSendListingContactEmailCommand(RequestListingContactEmailCommand command) {
 	
 		Map<String, Object> modelExt = new HashMap<>();
 		modelExt.put("listingName", 	command.getListingName());
@@ -69,7 +114,7 @@ public class MonolithListingExternalEventPublisher implements ExternalEventPubli
 						.sender(new Sender<>(UUID.randomUUID(), command.getSenderName(), SenderType.UNREGISTERED_USER, command.getSenderEmail()))
 						.title("Reaction To Job Posting " + command.getListingName())
 						.topic(EmailTopic.LISTING_RECRUITER_CONTACT_REQUEST)
-						.attachments(this.buildAttachment(command))
+						.attachments(this.buildAttachment(command.getFileType(), command.getFile()))
 					.build();
 		
 		this.emailServiceListener.listenForSendEmailCommand(cInt);
@@ -96,13 +141,13 @@ public class MonolithListingExternalEventPublisher implements ExternalEventPubli
 	* @return Attachments
 	*/
 	//TODO: [KP] Need to update this when/if multiple attachments possible
-	private Set<Attachment> buildAttachment(RequestListingContactEmailCommand command){
+	private Set<Attachment> buildAttachment(String fileType, byte[] file){
 		
-		if (command.getFile() == null) {
+		if (file == null) {
 			return Set.of();
 		}
 		
-		return Set.of(new Attachment(command.getFileType(), "candidates-cv", command.getFile()));
+		return Set.of(new Attachment(fileType, "candidates-cv", file));
 		
 	}
 

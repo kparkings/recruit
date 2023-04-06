@@ -27,6 +27,7 @@ import com.arenella.recruit.listings.beans.Listing.listing_type;
 
 import com.arenella.recruit.listings.beans.ListingFilter;
 import com.arenella.recruit.listings.beans.ListingViewedEvent;
+import com.arenella.recruit.listings.controllers.CandidateListingContactRequest.CandidateListingContactRequestBuilder;
 import com.arenella.recruit.listings.controllers.ListingContactRequest.ListingContactRequestBuilder;
 import com.arenella.recruit.listings.services.ListingService;
 
@@ -174,19 +175,18 @@ public class ListingController {
 	@PostMapping(value="/listing/{listingId}/candidate-contact-recruiter",consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
 	public ResponseEntity<Void> sendContactRequestToListingOwnerFromCandidate(@PathVariable("listingId") UUID listingId, @RequestPart("message")String message, @RequestPart("attachment") Optional<MultipartFile> file, Principal principal){
 		
-		ListingContactRequestBuilder builder = ListingContactRequest.builder();
+		CandidateListingContactRequestBuilder builder = CandidateListingContactRequest.builder();
 		
-		//builder
-		//	.listingId(listingId)
-		//	.message(message)
-		//	.senderEmail(senderEmail)
-		//	.senderName(senderName);
+		builder
+			.listingId(listingId)
+			.candidateId(principal.getName())
+			.message(message);
 		
 			if (file.isPresent()) {
 				builder.attachment(file.get());
 			}
 		
-		this.service.sendContactRequestToListingOwner(builder.build());
+		this.service.sendContactRequestFomCandidateToListingOwner(builder.build());
 		
 		return ResponseEntity.ok().build();	
 		

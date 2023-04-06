@@ -25,7 +25,10 @@ import com.arenella.recruit.emailservice.adapters.RequestSendEmailCommand;
 import com.arenella.recruit.emailservice.beans.Contact;
 import com.arenella.recruit.emailservice.beans.Email;
 import com.arenella.recruit.emailservice.beans.Email.EmailRecipient;
+import com.arenella.recruit.emailservice.beans.Email.EmailRecipient.ContactType;
 import com.arenella.recruit.emailservice.beans.Email.EmailType;
+import com.arenella.recruit.emailservice.beans.Email.Sender;
+import com.arenella.recruit.emailservice.beans.Email.Sender.SenderType;
 import com.arenella.recruit.emailservice.beans.Email.Status;
 import com.arenella.recruit.emailservice.beans.EmailAttachment;
 import com.arenella.recruit.emailservice.beans.EmailAttachment.FileType;
@@ -104,14 +107,36 @@ public class EmailDispatcherService {
 	*/
 	public void handleSendEmailCommand(RequestSendEmailCommand command){
 		try {
+			
 			Set<EmailRecipient<UUID>> recipients = new HashSet<>();
 			
 			recipients.addAll(command.getRecipients());
 			
+			Sender<?> 			sender 		= command.getSender();
+			Map<String, Object> modelMap 	= command.getModel();
+			
+			if (sender.getContactType() == SenderType.CANDIDATE) {
+				Optional<Contact> contact = this.contactDao.getByIdAndType(ContactType.CANDIDATE, command.getSender().getContactId());
+				
+				if (contact.isPresent()) {
+					sender = new Sender<>(contact.get().getId(), "", SenderType.UNREGISTERED_USER, contact.get().getEmail());
+					modelMap = new HashMap<>(modelMap);
+					modelMap.put("senderEmail", 		contact.get().getEmail());
+					modelMap.put("senderName", 			contact.get().getFirstName());
+					modelMap.put("senderSurname", 		contact.get().getSurname());
+					modelMap.put("senderCandidateId", 	contact.get().getId());
+				}
+				
+			}
+			
+			final Sender<?> 			finalizedSender = sender;
+			final Map<String, Object> 	finalizedModel 	= modelMap;
+			
+			
 			recipients.stream().forEach(r -> {
 				
 				Optional<Contact> 	recipientOpt 	= this.contactDao.getByIdAndType(r.getContactType(), r.getContactId());
-				Map<String, Object> model 			= new HashMap<>(command.getModel());
+				Map<String, Object> model 			= new HashMap<>(finalizedModel);
 				
 				//Ugly but just to see if there is an issue until I have time to design proper error handling
 				if (recipientOpt.isEmpty()) {
@@ -136,7 +161,7 @@ public class EmailDispatcherService {
 							.id(emailId)
 							.recipients(recipients)
 							.scheduledToBeSentAfter(LocalDateTime.now().minusDays(1))
-							.sender(command.getSender())
+							.sender(finalizedSender)
 							.status(calculateStatus(command.getEmailType()))
 							.title(command.getTitle())
 							.persistable(command.isPersistable())

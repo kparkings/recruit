@@ -47,7 +47,7 @@ export class EmailService {
 	/**
 	* Registers an event showing that a Listing was viewed
 	*/
-	public sendEmail(emailRequest:EmailRequest, listingId:string):Observable<any>{
+	public sendEmail(emailRequest:EmailRequest, listingId:string, isCandidate:boolean):Observable<any>{
 	
 	
 		let attachment:File = emailRequest.attachment;
@@ -58,7 +58,13 @@ export class EmailService {
 		fd.append("senderEmail",	emailRequest.senderEmail);
 		fd.append("message",		emailRequest.message);
 
-		const backendUrl:string = environment.backendUrl +'listing/public/'+listingId+'/contact-recruiter';
+		let backendUrl:string = '';
+		
+		if (!isCandidate) {
+			backendUrl = environment.backendUrl +'listing/public/'+listingId+'/contact-recruiter';
+		} else {
+			backendUrl = environment.backendUrl +'listing/'+listingId+'/candidate-contact-recruiter';
+		}
 		
 		return this.httpClient.post<any>(backendUrl, fd, {headers: new HttpHeaders({ }), withCredentials: true});
 				

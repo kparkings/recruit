@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import com.arenella.recruit.listings.beans.Listing;
 import com.arenella.recruit.listings.beans.ListingFilter;
 import com.arenella.recruit.listings.beans.ListingViewedEvent;
+import com.arenella.recruit.listings.controllers.CandidateListingContactRequest;
 import com.arenella.recruit.listings.controllers.ListingContactRequest;
 
 /**
@@ -54,4 +55,10 @@ public interface ListingService {
 	* @param contactRequest - Details of contactRequest to be Sent
 	*/
 	public void sendContactRequestToListingOwner(ListingContactRequest contactRequest);
+
+	/**
+	* Sends a Contact request for a Listing from an existing Candidate to the owner of the Listing
+	* @param contactRequest - Details of contactRequest to be Sent
+	*/
+	public void sendContactRequestFomCandidateToListingOwner(CandidateListingContactRequest contactRequest);
 }
