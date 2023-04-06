@@ -152,10 +152,13 @@
 										<textarea class="contact-recruiter-textarea" formControlName="message"></textarea>
 										<div class="div-spacing">
 											<p class="email-label">Curriculum</p>
-											<br>
-											<input type="checkbox" formControlName="useStoredCV"><span> Use stored CV</span>
-											<br><br>
-											<p>Or</p>
+											<div *ngIf="!curriculumFile">
+												<br>
+												<input type="checkbox" disabled="disabled" checked><span> Use stored CV</span>
+												<br><br>
+												<p>Or</p>
+											
+											</div>
 											<input class="email-input" name="selected-file" type="file" (change)="uploadCurriculumFile($event)"> 
 											
 											<div style="margin-top:10px">.doc, .docx, .pdf - up to 1MB</div>

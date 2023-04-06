@@ -29,12 +29,6 @@ export class ListingComponent implements OnInit {
 		} else {
 			this.displayFilters = true;
 		}
-		
-		this.emailRequestFormBean?.get('useStoredCV')?.valueChanges.subscribe(val => {
-			if (val == true){
-				this.fileSelectEvent.target.value = null;
-			}
-		});
 	
 	}
 	
@@ -61,14 +55,12 @@ export class ListingComponent implements OnInit {
 	public contractTypeFilter					= '';
 	public ageFilter							= 'ALL';
 
-  	private curriculumFile!:File| any;
+  	public curriculumFile!:File| any;
 
 	public displayFilters:boolean				= true;
 	
 	public isMobile:boolean = false;
 	public mobileListingclass:string 			= '';
-	
-	public fileSelectEvent:any;
 	
 	/**
 	* Uploads the file for the Curriculum and stored 
@@ -81,8 +73,7 @@ export class ListingComponent implements OnInit {
   		}
   	
   		this.curriculumFile = event.target.files[0];
-		this.emailRequestFormBean.controls['useStoredCV'].setValue(false);
-  		this.fileSelectEvent = event;
+		
 	}
 	
 	showSendAlertBoxSuccess:boolean 		= false;
@@ -93,7 +84,6 @@ export class ListingComponent implements OnInit {
      	email:			new UntypedFormControl(),
 		name:			new UntypedFormControl(),
 		message:		new UntypedFormControl(),
-		useStoredCV:	new UntypedFormControl(true),
 	});
 	
 	/**
@@ -101,10 +91,9 @@ export class ListingComponent implements OnInit {
 	*/
 	private resetEmailRequestForm():void{
 		this.emailRequestFormBean = new UntypedFormGroup({
-     		email:		new UntypedFormControl(),
-			name:		new UntypedFormControl(),
-			message:	new UntypedFormControl(),
-			useStoredCV:	new UntypedFormControl(true),
+     		email:			new UntypedFormControl(),
+			name:			new UntypedFormControl(),
+			message:		new UntypedFormControl(),
 		});
 		
 		this.showSendAlertBoxSuccess 		= false;

@@ -1,5 +1,6 @@
 package com.arenella.recruit.listings.controllers;
 
+import java.security.Principal;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -150,6 +151,36 @@ public class ListingController {
 			.message(message)
 			.senderEmail(senderEmail)
 			.senderName(senderName);
+		
+			if (file.isPresent()) {
+				builder.attachment(file.get());
+			}
+		
+		this.service.sendContactRequestToListingOwner(builder.build());
+		
+		return ResponseEntity.ok().build();	
+		
+	}
+	
+	/**
+	* Allows an Authenticated Candidate to send a message to the Recruiter owning the Listing
+	* @param listingId 	- Id of the listing
+	* @param message	- Message to be sent
+	* @param file		- Optional file containing CV. If no CV send will use candidates default
+	* @param principal	- Authenticated Candidate User
+	* @return ResponseEntity
+	*/
+	@PreAuthorize("hasRole('ROLE_CANDIDATE')")
+	@PostMapping(value="/listing/{listingId}/candidate-contact-recruiter",consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+	public ResponseEntity<Void> sendContactRequestToListingOwnerFromCandidate(@PathVariable("listingId") UUID listingId, @RequestPart("message")String message, @RequestPart("attachment") Optional<MultipartFile> file, Principal principal){
+		
+		ListingContactRequestBuilder builder = ListingContactRequest.builder();
+		
+		//builder
+		//	.listingId(listingId)
+		//	.message(message)
+		//	.senderEmail(senderEmail)
+		//	.senderName(senderName);
 		
 			if (file.isPresent()) {
 				builder.attachment(file.get());

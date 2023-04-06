@@ -14,6 +14,7 @@ public class RequestListingContactEmailCommand {
 	private String		message;
 	private byte[]		file;
 	private String		fileType;
+	private boolean		useStoredCV;
 	
 	/**
 	* Constructor based upon a Builder
