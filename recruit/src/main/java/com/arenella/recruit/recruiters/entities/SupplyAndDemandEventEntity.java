@@ -4,10 +4,10 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.Id;
 import javax.persistence.Table;
 
 import com.arenella.recruit.recruiters.beans.SupplyAndDemandEvent;
@@ -15,14 +15,10 @@ import com.arenella.recruit.recruiters.beans.SupplyAndDemandEvent.EventType;
 
 @Entity
 @Table(schema="recruiter", name="event_supply_or_demand_viewed")
-public class SupplyAndDemandEventEntity {
+public class SupplyAndDemandEventEntity{
 
-	@Id
-	@Column(name="id")
-	private UUID 			eventId;
-	
-	@Column(name="recruiter_id")
-	private String 			recruiterId;
+	@EmbeddedId
+	private SupplyAndDemandEventEntityPK id;
 	
 	@Column(name="type")
 	@Enumerated(EnumType.STRING)
@@ -43,27 +39,17 @@ public class SupplyAndDemandEventEntity {
 	* @param builder - contains initialization values
 	*/
 	public SupplyAndDemandEventEntity(SupplyAndDemandEventEntityBuilder builder) {
-		this.eventId 		= builder.eventId;
-		this.recruiterId 	= builder.recruiterId;
+		this.id = new SupplyAndDemandEventEntityPK(builder.eventId, builder.recruiterId);
 		this.type 			= builder.type;
 		this.created 		= builder.created;
 	}
 	
 	/**
-	* Returns the unique Id of the Event
-	* @return unique Id of the Event
+	* Returns the unique id of the Contact
+	* @return id of the Recipient
 	*/
-	public UUID getEventId() {
-		return this.eventId;
-	}
-	
-	/**
-	* Returns the unique Id of the Recruiter who performed
-	* the view action
-	* @return unique id of the Recruiter
-	*/
-	public String getRecruiterId() {
-		return this.recruiterId;
+	public SupplyAndDemandEventEntityPK getId(){
+		return this.id;
 	}
 	
 	/**
@@ -175,8 +161,8 @@ public class SupplyAndDemandEventEntity {
 		return SupplyAndDemandEvent
 				.builder()
 					.created(entity.getCreated())
-					.eventId(entity.getEventId())
-					.recruiterId(entity.getRecruiterId())
+					.eventId(entity.id.getEventId())
+					.recruiterId(entity.id.getRecruiterId())
 					.type(entity.getType())
 				.build();
 	}

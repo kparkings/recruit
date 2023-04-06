@@ -38,8 +38,8 @@ public class SupplyAndDemandEventEntityTest {
 				.build();
 		
 		assertEquals(created, 		entity.getCreated());
-		assertEquals(id, 			entity.getEventId());
-		assertEquals(recruiterId, 	entity.getRecruiterId());
+		assertEquals(id, 			entity.getId().getEventId());
+		assertEquals(recruiterId, 	entity.getId().getRecruiterId());
 		assertEquals(type, 			entity.getType());
 		
 	}
@@ -88,8 +88,8 @@ public class SupplyAndDemandEventEntityTest {
 		SupplyAndDemandEventEntity entity = SupplyAndDemandEventEntity.convertToEntity(event);
 		
 		assertEquals(created, 		entity.getCreated());
-		assertEquals(id, 			entity.getEventId());
-		assertEquals(recruiterId, 	entity.getRecruiterId());
+		assertEquals(id, 			entity.getId().getEventId());
+		assertEquals(recruiterId, 	entity.getId().getRecruiterId());
 		assertEquals(type, 			entity.getType());
 		
 	}
