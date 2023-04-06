@@ -5,7 +5,7 @@
 				
 			</div>
 			<div class="action-buttons" *ngIf="currentView == 'view-read'">
-				<button class="btn btn-secondary action-btn" (click)="composeReply(replyBox)"	*ngIf="currentEmail.sender.senderType === 'RECRUITER'">Reply</button>
+				<button class="btn btn-secondary action-btn" (click)="composeReply(replyBox)"	*ngIf="currentEmail.sender.senderType === 'RECRUITER' || currentEmail.sender.senderType === 'CANDIDATE'">Reply</button>
 				<button class="btn btn-secondary action-btn" (click)="markAsUnread()" 			*ngIf="currentEmail.viewed">Mark Unread</button>
 				<button class="btn btn-secondary action-btn"  									*ngIf="!currentEmail.viewed" disabled>Mark Unread</button>
 				<button class="btn btn-secondary action-btn" (click)="viewInbox()">Back</button>
@@ -37,7 +37,7 @@
 		<div >
 			<div class="email-title">{{currentEmail.title}}</div>
 			<div class="email-header">
-				<div class="left-div-header" *ngIf="currentEmail.sender.senderType === 'RECRUITER'">{{currentEmail.sender.senderName}}</div>
+				<div class="left-div-header" *ngIf="currentEmail.sender.senderType === 'RECRUITER' || currentEmail.sender.senderType === 'CANDIDATE'">{{currentEmail.sender.senderName}}</div>
 				<div class="left-div-header" *ngIf="currentEmail.sender.senderType != 'RECRUITER'">{{currentEmail.sender.senderName}} : {{currentEmail.sender.email}}</div>
 				<div class="right-div-header">
 					{{currentEmail.created | date: 'dd MMMM yyyy'}}

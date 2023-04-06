@@ -315,7 +315,7 @@ public class EmailAPIOutbound {
 	*/
 	private static SenderAPIOutbound convertFromDomain(Sender<?> sender, Set<Contact> contacts) {
 		
-		Optional<Contact> contact = contacts.stream().filter(c -> c.getId().equals(sender.getContactId()) && c.getContactType() == ContactType.RECRUITER).findAny();
+		Optional<Contact> contact = contacts.stream().filter(c -> c.getId().equals(sender.getContactId())).findAny();
 		
 		return new SenderAPIOutbound(sender.getId().toString()
 				, sender.getContactType()

@@ -46,7 +46,7 @@ public class EmailServiceImpl implements EmailService{
 	*/
 	@Override
 	public Set<Email> fetchEmailsByRecipientId(String recipientId) {
-		return emailServiceDao.fetchEmailsByRecipientId(recipientId, ContactType.RECRUITER);		
+		return emailServiceDao.fetchEmailsByRecipientId(recipientId);		
 	}
 
 	/**
@@ -83,7 +83,7 @@ public class EmailServiceImpl implements EmailService{
 		
 		Optional<Email> 	emailOpt 	= this.emailServiceDao.fetchEmailById(emailId);
 		Email 				email 		= emailOpt.orElseThrow(() -> new RuntimeException("Unknown Email"));
-		Contact 			contact 	= this.contactDao.getByIdAndType(ContactType.RECRUITER, authenticatedUserId).orElseThrow(() -> new RuntimeException("Unknown Contact"));
+		Contact 			contact 	= this.contactDao.getById(authenticatedUserId).orElseThrow(() -> new RuntimeException("Unknown Contact"));
 		StringBuilder 		body 		= new StringBuilder();
 	
 		body
@@ -108,7 +108,9 @@ public class EmailServiceImpl implements EmailService{
 		*/
 		if (recipients.stream().filter(r -> r.getContactId().equals(email.getSender().getContactId())).findAny().isEmpty()) {
 			
-			EmailRecipient<UUID> recipient = new  EmailRecipient<>(UUID.randomUUID(), email.getSender().getContactId(), ContactType.RECRUITER);
+			SenderType senderType = email.getSender().getContactType();
+			
+			EmailRecipient<UUID> recipient = new  EmailRecipient<>(UUID.randomUUID(), email.getSender().getContactId(), ContactType.valueOf(senderType.toString()));
 
 			recipient.setEmail(email.getSender().getEmail());
 			

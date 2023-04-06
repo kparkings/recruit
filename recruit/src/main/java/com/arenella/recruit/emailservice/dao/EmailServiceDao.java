@@ -11,7 +11,6 @@ import java.util.stream.StreamSupport;
 import org.springframework.stereotype.Repository;
 
 import com.arenella.recruit.emailservice.beans.Email;
-import com.arenella.recruit.emailservice.beans.Email.EmailRecipient.ContactType;
 import com.arenella.recruit.emailservice.beans.Email.Status;
 import com.arenella.recruit.emailservice.beans.EmailAttachment;
 import com.arenella.recruit.emailservice.entity.EmailAttachmentEntity;
@@ -50,8 +49,8 @@ public interface EmailServiceDao extends CrudRepository<EmailEntity, UUID> {
 	@Query("FROM EmailEntity where status = :status ")
 	Set<EmailEntity> findEmailEntitiessByStatus(@Param("status") Status status);
 	   
-	@Query("FROM EmailEntity e left join e.recipients r where r.contactId = :recipientId and r.contactType = :contactType")
-	Set<EmailEntity> fetchEmailEntitiesByRecipientId(@Param("recipientId") String recipientId, @Param("contactType") ContactType contactType);
+	@Query("FROM EmailEntity e left join e.recipients r where r.contactId = :recipientId")
+	Set<EmailEntity> fetchEmailEntitiesByRecipientId(@Param("recipientId") String recipientId);
 	
 	@Query("FROM EmailEntity e left join e.recipients r left join e.attachments a where r.contactId = :recipientId and e.id = :emailId and a.id = :attachmentId " )
 	Set<EmailEntity> fetchAttachment(@Param("recipientId") String recipientId, @Param("emailId") UUID emailId, @Param("attachmentId") UUID attachmentId);
@@ -63,8 +62,8 @@ public interface EmailServiceDao extends CrudRepository<EmailEntity, UUID> {
 	* @param contactType - type of recipient
 	* @return recipients email's
 	*/
-	default Set<Email> fetchEmailsByRecipientId(@Param("recipientId") String recipientId, @Param("contactType") ContactType contactType){
-		return this.fetchEmailEntitiesByRecipientId(recipientId, contactType)
+	default Set<Email> fetchEmailsByRecipientId(@Param("recipientId") String recipientId){
+		return this.fetchEmailEntitiesByRecipientId(recipientId)
 				.stream()
 				.map(e -> EmailEntity.convertFromEntity(e))
 				.sorted(Comparator.comparing(Email::getCreated).reversed())

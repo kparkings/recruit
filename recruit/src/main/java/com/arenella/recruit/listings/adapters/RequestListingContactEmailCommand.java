@@ -14,7 +14,6 @@ public class RequestListingContactEmailCommand {
 	private String		message;
 	private byte[]		file;
 	private String		fileType;
-	private boolean		useStoredCV;
 	
 	/**
 	* Constructor based upon a Builder
@@ -176,7 +175,7 @@ public class RequestListingContactEmailCommand {
 		
 		/**
 		* Sets the file type of the attachment
-		* @param fileType - type of the attachement
+		* @param fileType - type of the attachment
 		* @return Builder
 		*/
 		public RequestListingContactEmailCommandBuilder fileType(String fileType) {

@@ -60,7 +60,7 @@ public class MonolithListingExternalEventPublisher implements ExternalEventPubli
 						.model(modelInt)
 						.persistable(true)
 						.recipients(Set.of(new EmailRecipient<UUID>(UUID.randomUUID(), command.getRecruiterId(), ContactType.RECRUITER)))
-						.sender(new Sender<>(command.getCandidateId(), "", SenderType.CANDIDATE, ""))
+						.sender(new Sender<>(UUID.randomUUID(), command.getCandidateId(), SenderType.CANDIDATE, "get in email service"))
 						.title("Reaction To Job Posting " + command.getListingName())
 						.topic(EmailTopic.LISTING_RECRUITER_CONTACT_REQUEST)
 						.attachments(this.buildAttachment(command.getFileType(), command.getFile()))

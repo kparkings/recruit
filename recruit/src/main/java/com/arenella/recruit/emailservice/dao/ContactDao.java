@@ -29,8 +29,8 @@ public interface ContactDao extends CrudRepository<ContactEntity, ContactEntityP
 		this.save(ContactEntity.convertToEntity(contact));
 	}
 
-	@Query("from ContactEntity e where e.id.contactType = :contactType and e.id.contactId = :contactId")
-	public ContactEntity getEntityByIdAndType(ContactType contactType, String contactId);
+	@Query("from ContactEntity e where  e.id.contactId = :contactId")
+	public ContactEntity getEntityById(String contactId);
 	
 	@Query("from ContactEntity e where e.id.contactType in (:contactType) and e.id.contactId in :contactId")
 	public Set<ContactEntity> getEntitiesByIdAndType(Set<ContactType> contactType, Set<String> contactId);
@@ -41,9 +41,9 @@ public interface ContactDao extends CrudRepository<ContactEntity, ContactEntityP
 	* @param contactId 		- Id of the Contact
 	* @return Where available Contact
 	*/
-	default Optional<Contact> getByIdAndType(ContactType contactType, String contactId){
+	default Optional<Contact> getById(String contactId){
 		
-		Optional<ContactEntity> contactOpt =  Optional.ofNullable(this.getEntityByIdAndType(contactType, contactId));
+		Optional<ContactEntity> contactOpt =  Optional.ofNullable(this.getEntityById(contactId));
 		
 		if (contactOpt.isEmpty()) {
 			return Optional.empty();
@@ -59,7 +59,7 @@ public interface ContactDao extends CrudRepository<ContactEntity, ContactEntityP
 	*/
 	default void updateContact(Contact contact) {
 		
-		ContactEntity entity = getEntityByIdAndType(contact.getContactType(), contact.getId());
+		ContactEntity entity = getEntityById(contact.getId());
 		
 		if (entity == null) {
 			return;

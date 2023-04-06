@@ -101,7 +101,7 @@ public class EmailDispatcherServiceTest {
 		Email.EmailRecipient<UUID> recipient1 = new Email.EmailRecipient("one", "rec1", ContactType.RECRUITER);
 		Email.EmailRecipient<UUID> recipient2 = new Email.EmailRecipient("two", "rec2", ContactType.RECRUITER);
 		
-		Mockito.when(this.mockContactDao.getByIdAndType(Mockito.any(), Mockito.any())).thenReturn(Optional.of(new Contact("", ContactType.RECRUITER, "", "", "")));
+		Mockito.when(this.mockContactDao.getById(Mockito.any())).thenReturn(Optional.of(new Contact("", ContactType.RECRUITER, "", "", "")));
 		
 		this.service.handleSendEmailCommand(RequestSendEmailCommand.builder().sender(mockSender).emailType(EmailType.SYSTEM_EXTERN).recipients(Set.of(recipient1, recipient2)).topic(EmailTopic.ACCOUNT_CREATED).persistable(true).build());
 		
@@ -120,7 +120,7 @@ public class EmailDispatcherServiceTest {
 		Email.EmailRecipient<UUID> recipient1 = new Email.EmailRecipient("one", "rec1", ContactType.RECRUITER);
 		Email.EmailRecipient<UUID> recipient2 = new Email.EmailRecipient("two", "rec2", ContactType.RECRUITER);
 		
-		Mockito.when(this.mockContactDao.getByIdAndType(Mockito.any(), Mockito.any())).thenReturn(Optional.of(new Contact("", ContactType.RECRUITER, "", "", "")));
+		Mockito.when(this.mockContactDao.getById(Mockito.any())).thenReturn(Optional.of(new Contact("", ContactType.RECRUITER, "", "", "")));
 		
 		this.service.handleSendEmailCommand(RequestSendEmailCommand.builder().sender(mockSender).emailType(EmailType.SYSTEM_INTERN).recipients(Set.of(recipient1, recipient2)).topic(EmailTopic.ACCOUNT_CREATED).persistable(true).build());
 		
@@ -139,8 +139,8 @@ public class EmailDispatcherServiceTest {
 		Email.EmailRecipient<UUID> recipient1 = new Email.EmailRecipient("one", "rec1", ContactType.RECRUITER);
 		Email.EmailRecipient<UUID> recipient2 = new Email.EmailRecipient("two", "rec2", ContactType.RECRUITER);
 		
-		Mockito.when(this.mockContactDao.getByIdAndType(Mockito.any(), Mockito.any())).thenReturn(Optional.empty());
-		Mockito.when(this.mockContactDao.getByIdAndType(Mockito.any(), Mockito.any())).thenReturn(Optional.of(new Contact("", ContactType.RECRUITER, "", "", "")));
+		Mockito.when(this.mockContactDao.getById(Mockito.any())).thenReturn(Optional.empty());
+		Mockito.when(this.mockContactDao.getById(Mockito.any())).thenReturn(Optional.of(new Contact("", ContactType.RECRUITER, "", "", "")));
 		
 		this.service.handleSendEmailCommand(RequestSendEmailCommand.builder().sender(mockSender).emailType(EmailType.EXTERN).recipients(Set.of(recipient1, recipient2)).topic(EmailTopic.ACCOUNT_CREATED).persistable(true).build());
 		
@@ -159,7 +159,7 @@ public class EmailDispatcherServiceTest {
 		Email.EmailRecipient<UUID> recipient1 = new Email.EmailRecipient("one", "rec1", ContactType.RECRUITER);
 		Email.EmailRecipient<UUID> recipient2 = new Email.EmailRecipient("two", "rec2", ContactType.RECRUITER);
 		
-		Mockito.when(this.mockContactDao.getByIdAndType(Mockito.any(), Mockito.any())).thenReturn(Optional.of(new Contact("", ContactType.RECRUITER, "", "", "")));
+		Mockito.when(this.mockContactDao.getById(Mockito.any())).thenReturn(Optional.of(new Contact("", ContactType.RECRUITER, "", "", "")));
 		
 		this.service.handleSendEmailCommand(RequestSendEmailCommand.builder().sender(mockSender).emailType(EmailType.EXTERN).recipients(Set.of(recipient1, recipient2)).topic(EmailTopic.ACCOUNT_CREATED).persistable(false).build());
 		
@@ -178,7 +178,7 @@ public class EmailDispatcherServiceTest {
 		Email.EmailRecipient<UUID> recipient1 = new Email.EmailRecipient("one", "rec1", ContactType.RECRUITER);
 		Email.EmailRecipient<UUID> recipient2 = new Email.EmailRecipient("two", "rec2", ContactType.RECRUITER);
 		
-		Mockito.when(this.mockContactDao.getByIdAndType(Mockito.any(), Mockito.any())).thenReturn(Optional.of(new Contact("", ContactType.RECRUITER, "", "", "")));
+		Mockito.when(this.mockContactDao.getById(Mockito.any())).thenReturn(Optional.of(new Contact("", ContactType.RECRUITER, "", "", "")));
 		
 		this.service.handleSendEmailCommand(RequestSendEmailCommand.builder().sender(mockSender).emailType(EmailType.INTERN).recipients(Set.of(recipient1, recipient2)).topic(EmailTopic.ACCOUNT_CREATED).persistable(true).build());
 		
@@ -198,7 +198,7 @@ public class EmailDispatcherServiceTest {
 		
 		Email.EmailRecipient<UUID> recipient1 = new Email.EmailRecipient("two", "rec2", ContactType.RECRUITER);
 		
-		Mockito.when(this.mockContactDao.getByIdAndType(Mockito.any(), Mockito.any())).thenReturn(Optional.of(new Contact("", ContactType.RECRUITER, "", "", "")));
+		Mockito.when(this.mockContactDao.getById(Mockito.any())).thenReturn(Optional.of(new Contact("", ContactType.RECRUITER, "", "", "")));
 		Mockito.doNothing().when(this.emailDaoMock).saveEmail(emailAc.capture());
 		
 		this.service.handleSendEmailCommand(RequestSendEmailCommand.builder().sender(mockSender).emailType(EmailType.EXTERN).recipients(Set.of(recipient1)).topic(EmailTopic.ACCOUNT_CREATED).persistable(true).build());
@@ -219,7 +219,7 @@ public class EmailDispatcherServiceTest {
 		
 		Email.EmailRecipient<UUID> recipient1 = new Email.EmailRecipient("two", "rec2", ContactType.RECRUITER);
 		
-		Mockito.when(this.mockContactDao.getByIdAndType(Mockito.any(), Mockito.any())).thenReturn(Optional.of(new Contact("", ContactType.RECRUITER, "", "", "")));
+		Mockito.when(this.mockContactDao.getById(Mockito.any())).thenReturn(Optional.of(new Contact("", ContactType.RECRUITER, "", "", "")));
 		Mockito.doNothing().when(this.emailDaoMock).saveEmail(emailAc.capture());
 		
 		this.service.handleSendEmailCommand(RequestSendEmailCommand.builder().sender(mockSender).emailType(EmailType.EXTERN).recipients(Set.of(recipient1)).topic(EmailTopic.ACCOUNT_CREATED).persistable(true).build());
@@ -240,7 +240,7 @@ public class EmailDispatcherServiceTest {
 		
 		Email.EmailRecipient<UUID> recipient1 = new Email.EmailRecipient("two", "rec2", ContactType.RECRUITER);
 		
-		Mockito.when(this.mockContactDao.getByIdAndType(Mockito.any(), Mockito.any())).thenReturn(Optional.of(new Contact("", ContactType.RECRUITER, "", "", "")));
+		Mockito.when(this.mockContactDao.getById(Mockito.any())).thenReturn(Optional.of(new Contact("", ContactType.RECRUITER, "", "", "")));
 		Mockito.doNothing().when(this.emailDaoMock).saveEmail(emailAc.capture());
 		
 		this.service.handleSendEmailCommand(RequestSendEmailCommand.builder().sender(mockSender).emailType(EmailType.SYSTEM_INTERN).recipients(Set.of(recipient1)).topic(EmailTopic.ACCOUNT_CREATED).persistable(true).build());
@@ -261,7 +261,7 @@ public class EmailDispatcherServiceTest {
 		
 		Email.EmailRecipient<UUID> recipient1 = new Email.EmailRecipient("two", "rec2", ContactType.RECRUITER);
 		
-		Mockito.when(this.mockContactDao.getByIdAndType(Mockito.any(), Mockito.any())).thenReturn(Optional.of(new Contact("", ContactType.RECRUITER, "", "", "")));
+		Mockito.when(this.mockContactDao.getById(Mockito.any())).thenReturn(Optional.of(new Contact("", ContactType.RECRUITER, "", "", "")));
 		Mockito.doNothing().when(this.emailDaoMock).saveEmail(emailAc.capture());
 		
 		this.service.handleSendEmailCommand(RequestSendEmailCommand.builder().sender(mockSender).emailType(EmailType.INTERN).recipients(Set.of(recipient1)).topic(EmailTopic.ACCOUNT_CREATED).persistable(true).build());
@@ -283,23 +283,18 @@ public class EmailDispatcherServiceTest {
 		final String surname 	= "sn";
 		final String email 		= "email";
 		
-		//this.templateFacotry.fetchTemplate(command, model)
-		
 		ArgumentCaptor<Email> emailAc = ArgumentCaptor.forClass(Email.class);
 		
 		Email.EmailRecipient<UUID> recipient1 = new Email.EmailRecipient("two", "rec2", ContactType.RECRUITER);
 		
 		Mockito.when(this.mockSender.getContactType()).thenReturn(SenderType.CANDIDATE);
-		Mockito.when(this.mockContactDao.getByIdAndType(Mockito.any(), Mockito.any())).thenReturn(Optional.of(new Contact(id, ContactType.CANDIDATE, firstname, surname, email)));
-		Mockito.when(this.mockContactDao.getByIdAndType(Mockito.any(), Mockito.any())).thenReturn(Optional.of(new Contact("", ContactType.RECRUITER, "", "", "")));
+		Mockito.when(this.mockContactDao.getById(Mockito.any())).thenReturn(Optional.of(new Contact(id, ContactType.CANDIDATE, firstname, surname, email)));
+		Mockito.when(this.mockContactDao.getById(Mockito.any())).thenReturn(Optional.of(new Contact("", ContactType.RECRUITER, "", "", "")));
 		Mockito.doNothing().when(this.emailDaoMock).saveEmail(emailAc.capture());
 		
 		this.service.handleSendEmailCommand(RequestSendEmailCommand.builder().sender(mockSender).emailType(EmailType.INTERN).recipients(Set.of(recipient1)).topic(EmailTopic.ACCOUNT_CREATED).persistable(true).build());
 		
 		assertEquals(Status.SENT_INTERN, emailAc.getValue().getStatus());
-		
-		
-		
 		
 	}
 	

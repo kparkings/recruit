@@ -114,12 +114,11 @@ public class CandidateServiceImpl implements CandidateService{
 		
 		long candidateId = candidateDao.save(entity).getCandidateId();
 		
-		String userId 				= PasswordUtil.generateUsername(candidate);
 		String password 			= PasswordUtil.generatePassword();
 		String encryptedPassword 	= PasswordUtil.encryptPassword(password);
 		
 		this.externalEventPublisher
-			.publishCandidateAccountCreatedEvent(new CandidateAccountCreatedEvent(userId, encryptedPassword));
+			.publishCandidateAccountCreatedEvent(new CandidateAccountCreatedEvent(candidate.getCandidateId(), encryptedPassword));
 
 		RequestSendEmailCommand command = RequestSendEmailCommand
 				.builder()
@@ -128,7 +127,7 @@ public class CandidateServiceImpl implements CandidateService{
 					.sender(new Sender<>(UUID.randomUUID(), "", SenderType.SYSTEM, "kparkings@gmail.com"))
 					.title("Arenella-ICT - Account created")
 					.topic(EmailTopic.CANDIDATE_ACCOUNT_CREATED)
-					.model(Map.of("firstname",candidate.getFirstname(),"userid",userId,"password",password))
+					.model(Map.of("firstname",candidate.getFirstname(),"userid",candidate.getCandidateId(),"password",password))
 					.persistable(false)
 				.build();
 		

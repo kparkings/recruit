@@ -179,7 +179,7 @@ public class ListingController {
 		
 		builder
 			.listingId(listingId)
-			.candidateId(principal.getName())
+			.candidateId(principal.getName()) 
 			.message(message);
 		
 			if (file.isPresent()) {

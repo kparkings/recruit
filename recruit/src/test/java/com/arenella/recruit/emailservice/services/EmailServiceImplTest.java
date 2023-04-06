@@ -89,7 +89,7 @@ public class EmailServiceImplTest {
 	@Test
 	public void testFetchEmailsByRecipientId() throws Exception{
 	
-		Mockito.when(this.mockEmailServiceDao.fetchEmailsByRecipientId(RECIPIENT_CONTACT_ID, ContactType.RECRUITER)).thenReturn(Set.of(Email
+		Mockito.when(this.mockEmailServiceDao.fetchEmailsByRecipientId(RECIPIENT_CONTACT_ID)).thenReturn(Set.of(Email
 				.builder()
 				.body(BODY)
 				.created(CREATED)
@@ -171,7 +171,7 @@ public class EmailServiceImplTest {
 		final Email		email					= Email.builder().build();
 		
 		Mockito.when(this.mockEmailServiceDao.fetchEmailById(emailId)).thenReturn(Optional.of(email));
-		Mockito.when(this.mockContactDao.getByIdAndType(ContactType.RECRUITER, authenticatedUserId)).thenReturn(Optional.empty());
+		Mockito.when(this.mockContactDao.getById(authenticatedUserId)).thenReturn(Optional.empty());
 		
 		assertThrows(RuntimeException.class, () -> {
 			this.service.handleReply(emailId, message, authenticatedUserId);
@@ -205,7 +205,7 @@ public class EmailServiceImplTest {
 		ArgumentCaptor<Email> argCapt = ArgumentCaptor.forClass(Email.class);
 		
 		Mockito.when(this.mockEmailServiceDao.fetchEmailById(emailId)).thenReturn(Optional.of(email));
-		Mockito.when(this.mockContactDao.getByIdAndType(ContactType.RECRUITER, authenticatedUserId)).thenReturn(Optional.of(contact));
+		Mockito.when(this.mockContactDao.getById(authenticatedUserId)).thenReturn(Optional.of(contact));
 		Mockito.doNothing().when(this.mockEmailServiceDao).saveEmail(argCapt.capture());
 		Mockito.doNothing().when(this.emailDispatchedService).handleSendEmailCommand(Mockito.any(RequestSendEmailCommand.class));
 		
@@ -245,7 +245,7 @@ public class EmailServiceImplTest {
 		ArgumentCaptor<Email> argCapt = ArgumentCaptor.forClass(Email.class);
 		
 		Mockito.when(this.mockEmailServiceDao.fetchEmailById(emailId)).thenReturn(Optional.of(email));
-		Mockito.when(this.mockContactDao.getByIdAndType(ContactType.RECRUITER, authenticatedUserId)).thenReturn(Optional.of(contact));
+		Mockito.when(this.mockContactDao.getById(authenticatedUserId)).thenReturn(Optional.of(contact));
 		Mockito.doNothing().when(this.mockEmailServiceDao).saveEmail(argCapt.capture());
 		Mockito.doNothing().when(this.emailDispatchedService).handleSendEmailCommand(Mockito.any(RequestSendEmailCommand.class));
 		
