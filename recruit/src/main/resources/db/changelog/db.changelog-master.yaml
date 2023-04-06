@@ -1674,3 +1674,15 @@ databaseChangeLog:
                   constraints:
                     primaryKey: true
                     nullable: false
+  - changeSet:
+      id: alter_pk_for_event_supply_or_demand_viewed
+      author: kevin
+      changes:
+        - dropPrimaryKey:
+            tableName: event_supply_or_demand_viewed
+            schemaName: recruiter
+            dropIndex: true                    
+        - addPrimaryKey:
+            tableName: event_supply_or_demand_viewed
+            schemaName: recruiter
+            columnNames: id, recruiter_id

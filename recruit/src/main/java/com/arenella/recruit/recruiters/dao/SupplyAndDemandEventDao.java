@@ -31,7 +31,7 @@ public interface SupplyAndDemandEventDao extends CrudRepository<SupplyAndDemandE
 		
 	}
 	
-	@Query("from SupplyAndDemandEventEntity where type = :type and recruiterId = :recruiterId")
+	@Query("from SupplyAndDemandEventEntity where type = :type and id.recruiterId = :recruiterId")
 	public Set<SupplyAndDemandEventEntity> fetchEventsForRecruiterInt(EventType type, String recruiterId);
 	
 	/**
@@ -42,7 +42,7 @@ public interface SupplyAndDemandEventDao extends CrudRepository<SupplyAndDemandE
 	* @return Id's of events of type specified viewed by the Recruiter
 	*/
 	default Set<UUID> fetchEventsForRecruiter(EventType type, String recruiterId){
-		return this.fetchEventsForRecruiterInt(type, recruiterId).stream().map(e -> e.getEventId()).collect(Collectors.toSet());
+		return this.fetchEventsForRecruiterInt(type, recruiterId).stream().map(e -> e.getId().getEventId()).collect(Collectors.toSet());
 	}
 	
 	/**
