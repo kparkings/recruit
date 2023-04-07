@@ -18,9 +18,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.arenella.recruit.candidates.beans.Candidate;
 import com.arenella.recruit.candidates.beans.CandidateExtractedFilters;
 import com.arenella.recruit.candidates.beans.CandidateSearchAccuracyWrapper;
 import com.arenella.recruit.candidates.beans.CandidateSearchAlert;
@@ -38,19 +40,22 @@ import com.arenella.recruit.curriculum.enums.FileType;
 public class CandidateControllerTest {
 	
 	@Mock
-	private CandidateService			mockCandidateService;
+	private CandidateService					mockCandidateService;
 	
 	@Mock
-	private Authentication 				mockAuthentication;
+	private Authentication 						mockAuthentication;
 	
 	@Mock
-	private MultipartFile				mockMultipartFile;
+	private MultipartFile						mockMultipartFile;
 	
 	@Mock
-	private Principal					mockPrincipal;
+	private Principal							mockPrincipal;
+	
+	@Mock
+	private UsernamePasswordAuthenticationToken mockUsernamePasswordAuthenticationToken;
 	
 	@InjectMocks
-	private CandidateController 		controller;
+	private CandidateController 				controller;
 	
 	/**
 	* Tests Incoming Candidate is converted to Domain Candidate
@@ -289,6 +294,27 @@ public class CandidateControllerTest {
 		
 		assertEquals(HttpStatus.CREATED, response.getStatusCode());
 		
+		
+	}
+	
+	/**
+	* Tests request to fetch a specific User
+	* @throws Exception
+	*/
+	@Test
+	public void testFetchCandidate() throws Exception{
+		
+		final String 	candidateId = "1234";
+		final Candidate candidate = Candidate.builder().build();
+		
+		Mockito.when(this.mockCandidateService.fetchCandidate(Mockito.anyString(), Mockito.anyString(), Mockito.anyCollection())).thenReturn(candidate);
+		Mockito.when(this.mockUsernamePasswordAuthenticationToken.getAuthorities()).thenReturn(Set.of());
+		Mockito.when(this.mockUsernamePasswordAuthenticationToken.getName()).thenReturn(candidateId);
+		
+		ResponseEntity<CandidateFullProfileAPIOutbound> response = this.controller.fetchCandidate(candidateId, mockUsernamePasswordAuthenticationToken);
+		
+		assertEquals(HttpStatus.OK, response.getStatusCode());
+		assertTrue(response.getBody() instanceof CandidateFullProfileAPIOutbound);
 		
 	}
 	

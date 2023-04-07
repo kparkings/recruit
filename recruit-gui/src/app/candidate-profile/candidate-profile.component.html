@@ -1,0 +1,189 @@
+<div class=".container">
+	<div class='content-div'>
+		<div class="recruiter-profile-buttons">
+			<div class="action-buttons">
+			<!--  
+				<button class="btn btn-secondary action-btn  main-action_btn"  *ngIf="isOwnAccountExists()  && currentView != 'view-create' && currentView != 'view-details'" 	(click)="showViewCreate()">Edit Profile</button>
+				<button class="btn btn-secondary action-btn  main-action_btn"  *ngIf="!isOwnAccountExists() && currentView != 'view-create' && currentView != 'view-details'" 	(click)="showViewCreate()">Create Profile</button>
+				<button class="btn btn-secondary action-btn" 				   *ngIf="currentView != 'view-main'" 																(click)="showViewMain()">Back</button>
+			-->
+			</div>
+		</div>
+		
+		<!-- View of Profile -->
+		<div *ngIf="currentView === 'view-details'">
+		
+			<div  class="details-left">
+				<!--  
+				<img class="profile-photo-details" *ngIf="selectedCandidateProfile?.profilePhoto?.imageBytes" id='base64image' src='data:image/jpeg;base64, {{selectedCandidateProfile?.profilePhoto?.imageBytes}}' />
+				-->
+				<br>
+				<table>
+					<tr>
+						<th>Company</th>
+						<td></td>
+					</tr>
+					<tr>
+						<th>Type</th>
+						<td></td>
+					</tr>
+					<tr>
+						<th>Years Exp</th>
+						<td></td>
+					</tr>
+				</table>
+				<br>
+				<button class="btn btn-secondary action-btn main-action_btn" style="width:300px;margin-bottom:10px;" (click)="contactCandidate(contactBox)">Contact</button>
+			</div>	
+				
+			<div class="details-left" style="max-width:75%;min-width:300px;">
+				<div style="float:center">
+					<h1>{{selectedCandidateProfile.firstname | enumToHumanReadableValue}} {{selectedCandidateProfile.surname | enumToHumanReadableValue}}</h1>
+					<br>
+					<pre style="white-space:pre-line;font-family: Roboto, 'Helvetica Neue', sans-serif;">{{selectedCandidateProfile.introduction}}</pre>
+					
+				</div>
+			
+				<div class="action-buttons" style="padding-bottom:50px;"></div>
+			</div>
+		</div>
+		
+		<!-- Candidate Edit View -->
+		<div *ngIf="currentView === 'view-edit'" id="view-create-table">
+			<form [formGroup]="candidateProfileFormBean">
+				<table>
+					<tr>
+						<th>Profile Image</th>
+						<td>
+							<input type="file" accept="image/jpeg,image/png" (change)="uploadProfileImage($event)">
+							<!-- 
+							<img class="profile-photo" *ngIf="candidateProfile?.profilePhoto?.imageBytes" id='base64image'                 
+   									src='data:image/jpeg;base64, {{candidateProfile?.profilePhoto?.imageBytes}}'/>
+   							 -->
+						</td>
+					</tr>
+					<tr>
+						<th>First Name</th>
+						<td>
+							<input type="text" formControlName="firstname" value="aaa">
+						</td>
+					</tr> 
+					<tr>
+						<th>Surname</th>
+						<td>
+							<input type="text" formControlName="surname">
+						</td>
+					</tr>
+					<tr>
+						<th>Email</th>
+						<td>
+							<input type="text" formControlName="email">
+						</td>
+					</tr>
+					<tr>
+						<th>Introduction</th>
+						<td>
+							<textarea formControlName="introduction"></textarea>
+						</td>
+					</tr>
+					<tr>
+						<th>Role sought</th>
+						<td>
+							<input type="text" formControlName="roleSought">
+						</td>
+					</tr>
+					<tr>
+						<th>Function</th>
+						<td>
+							<select formControlName="function">
+								<option></option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<th>Function</th>
+						<td>
+							<select formControlName="languages">
+								<option></option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<th>Country</th>
+						<td>
+							<select formControlName="country">
+								<option></option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<th>City</th>
+						<td>
+							<input type="text" formControlName="city">
+						</td>
+					</tr>
+					<tr>
+						<th>Perm</th>
+						<td>
+							<select formControlName="perm">
+								<option></option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<th>Freelance</th>
+						<td>
+							<select formControlName="freelance">
+								<option></option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<th>Years Experience</th>
+						<td>
+							<select formControlName="yearsExperience">
+								<option></option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<th>Available</th>
+						<td>
+							<select formControlName="available">
+								<option></option>
+							</select>
+						</td>
+					</tr>
+				</table>
+			</form>
+		</div>
+		<div class="action-buttons" style="padding-bottom:50px;">
+			<button class="btn btn-secondary action-btn" *ngIf="currentView === 'view-edit'" (click)="saveProfile()">Save</button>		
+		</div>
+		
+	</div>
+</div>
+
+<ng-template #contactBox let-modal>
+	<div class="modal-header">
+		<h4 class="modal-title">Send Message To Candidate</h4>
+ 		<div class="filter-close-box" (click)="closeModal()">X</div>
+	</div>
+	<div class="modal-body" *ngIf="contactCandidateView === 'message'">
+		<form [formGroup]="sendMessageGroup">
+			<div style="float:left;margin:0px; margin-bottom:10px;">
+				<b>Title:</b><input type="text" style="margin-left:10px;width:300px;" formControlName="title"/>
+				<br>
+			</div>
+			<textarea formControlName="message"></textarea>
+			<button class="btn btn-secondary action-btn btn-right" (click)="sendMessageToCandidate()">Send</button>
+		</form>	
+	</div>
+	<div class="modal-body message-send-success" *ngIf="contactCandidateView === 'success'">
+			<p>Message Sent Successfully</p>
+			<p>You can view a copy of your message and any replies in your inbox</p>
+	</div>
+	<div class="modal-body" *ngIf="contactCandidateView === 'failure'">
+			<p class="message-send-failure">Failed to Send Message</p>
+	</div>
+</ng-template> 

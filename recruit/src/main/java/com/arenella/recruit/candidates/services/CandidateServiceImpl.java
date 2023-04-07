@@ -2,6 +2,7 @@ package com.arenella.recruit.candidates.services;
 
 import java.io.IOException;
 import java.security.Principal;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -19,6 +20,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -565,6 +567,31 @@ public class CandidateServiceImpl implements CandidateService{
 		}
 		
 		this.savedCandidateDao.updateSavedCandidate(savedCandidate);
+	}
+
+	/**
+	* Refer to the CandidateService for details 
+	*/
+	@Override
+	public Candidate fetchCandidate(String candidateId, String authernticatedUserId, Collection<GrantedAuthority> authorities) {
+		
+		boolean isAdmin 	= authorities.stream().filter(a -> a.getAuthority().equals("ROLE_ADMIN")).findAny().isPresent();		
+		boolean isCandidate = authorities.stream().filter(a -> a.getAuthority().equals("ROLE_CANDIDATE")).findAny().isPresent();
+		boolean isRecruiter = authorities.stream().filter(a -> a.getAuthority().equals("ROLE_RECRUITER")).findAny().isPresent();
+		
+		if (isCandidate &&  (!isAdmin || !isRecruiter)) {
+			if(!candidateId.equals(authernticatedUserId)) {
+				throw new IllegalArgumentException("Candidates can only view their own Profiles.");
+			}
+		}
+		
+		Optional<Candidate> candidate = this.candidateDao.findCandidateById(Long.valueOf(candidateId));
+		
+		if (candidate.isEmpty()) {
+			throw new IllegalArgumentException("Unknown Candidate.");
+		}
+		
+		return candidate.get();
 	}
 	
 }

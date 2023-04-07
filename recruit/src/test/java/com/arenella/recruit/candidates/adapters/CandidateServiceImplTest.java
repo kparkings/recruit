@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Optional;
@@ -23,6 +24,7 @@ import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -61,43 +63,43 @@ import com.arenella.recruit.candidates.utils.CandidateSuggestionUtil.suggestion_
 public class CandidateServiceImplTest {
 
 	@Mock
-	private CandidateDao 					mockCandidateDao;
+	private CandidateDao 							mockCandidateDao;
 	
 	@Mock
-	private PendingCandidateDao 			mockPendingCandidateDao;
+	private PendingCandidateDao 					mockPendingCandidateDao;
 	
 	@Mock
-	private ExternalEventPublisher			mockExternalEventPublisher;
+	private ExternalEventPublisher					mockExternalEventPublisher;
 	
 	@Mock
-	private CandidateStatisticsService 		mockStatisticsService;
+	private CandidateStatisticsService 				mockStatisticsService;
 	
 	@Mock
-	private CandidateSearchAlertDao			mockSkillAlertDao;
+	private CandidateSearchAlertDao					mockSkillAlertDao;
 	
 	@Mock
-	private SecurityContext					mockSecurityContext;
+	private SecurityContext							mockSecurityContext;
 	
 	@Mock
-	private Authentication					mockAuthentication;
+	private Authentication							mockAuthentication;
+		
+	@Mock
+	private CandidateSuggestionUtil					mockSuggestionUtil;
 	
 	@Mock
-	private CandidateSuggestionUtil			mockSuggestionUtil;
+	private SkillsSynonymsUtil						mockSkillsSynonymsUtil;	
 	
 	@Mock
-	private SkillsSynonymsUtil				mockSkillsSynonymsUtil;	
+	private CandidateSkillsDao						mockSkillDao;
 	
 	@Mock
-	private CandidateSkillsDao				mockSkillDao;
-	
-	@Mock
-	private SavedCandidateDao				mockSavedCandidateDao;
+	private SavedCandidateDao						mockSavedCandidateDao;
 	
 	@Spy
-	private CandidateFunctionExtractorImpl	mockCandidateFunctionExtractor;
+	private CandidateFunctionExtractorImpl			mockCandidateFunctionExtractor;
 	
 	@InjectMocks
-	private CandidateServiceImpl 			service 					= new CandidateServiceImpl();
+	private CandidateServiceImpl 					service 					= new CandidateServiceImpl();
 	
 	/**
 	* Sets up test environment 
@@ -782,6 +784,103 @@ public class CandidateServiceImplTest {
 		this.service.updateSavedCandidate(SavedCandidate.builder().userId("kparkings").candidateId(savedCandidate1).build());
 		
 		Mockito.verify(this.mockSavedCandidateDao).updateSavedCandidate(Mockito.any(SavedCandidate.class));
+		
+	}
+	
+	/**
+	* Tests Exception is thrown if User is a Candidate trying to view another 
+	* Candidates profile
+	* @throws Exception
+	*/
+	@Test
+	public void testFetchCandidate_candidate_other_candidate() throws Exception{
+		
+		GrantedAuthority 				mockGA = Mockito.mock(GrantedAuthority.class);
+		Collection<GrantedAuthority> 	authorities = Set.of(mockGA);
+		
+		Mockito.when(mockGA.getAuthority()).thenReturn("ROLE_CANDIDATE");
+		
+		Assertions.assertThrows(IllegalArgumentException.class, () -> {
+			this.service.fetchCandidate("1960", "1961", authorities);
+		});
+		
+	}
+	
+	/**
+	* Tests Exception is thrown if Candidate not found
+	* @throws Exception
+	*/
+	@Test
+	public void testFetchCandidate_candidate_own_candidate_not_found() throws Exception{
+		
+		GrantedAuthority 				mockGA = Mockito.mock(GrantedAuthority.class);
+		Collection<GrantedAuthority> 	authorities = Set.of(mockGA);
+		
+		Mockito.when(mockGA.getAuthority()).thenReturn("ROLE_CANDIDATE");
+		Mockito.when(this.mockCandidateDao.findCandidateById(Mockito.anyLong())).thenReturn(Optional.empty());
+		
+		Assertions.assertThrows(IllegalArgumentException.class, () -> {
+			this.service.fetchCandidate("1961", "1961", authorities);
+		});
+		
+		Mockito.verify(this.mockCandidateDao).findCandidateById(Mockito.anyLong());
+		
+	}
+
+	/**
+	* Tests happy path for Candidate requesting own Candidate profile
+	* @throws Exception
+	*/
+	@Test
+	public void testFetchCandidate_candidate_own_candidate_found() throws Exception{
+		
+		GrantedAuthority 				mockGA = Mockito.mock(GrantedAuthority.class);
+		Collection<GrantedAuthority> 	authorities = Set.of(mockGA);
+		
+		Mockito.when(mockGA.getAuthority()).thenReturn("ROLE_CANDIDATE");
+		Mockito.when(this.mockCandidateDao.findCandidateById(Mockito.anyLong())).thenReturn(Optional.of(Candidate.builder().build()));
+		
+		Candidate candidate = this.service.fetchCandidate("1961", "1961", authorities);
+		
+		assertNotNull(candidate);
+		
+	}
+	
+	/**
+	* Tests happy path for Admin requesting a Candidate profile
+	* @throws Exception
+	*/
+	@Test
+	public void testFetchCandidate_admin_candidate_found() throws Exception{
+		
+		GrantedAuthority 				mockGA = Mockito.mock(GrantedAuthority.class);
+		Collection<GrantedAuthority> 	authorities = Set.of(mockGA);
+		
+		Mockito.when(mockGA.getAuthority()).thenReturn("ROLE_ADMIN");
+		Mockito.when(this.mockCandidateDao.findCandidateById(Mockito.anyLong())).thenReturn(Optional.of(Candidate.builder().build()));
+		
+		Candidate candidate = this.service.fetchCandidate("1961", "1961", authorities);
+		
+		assertNotNull(candidate);
+		
+	}
+	
+	/**
+	* Tests happy path for Recruiter requesting a Candidate profile
+	* @throws Exception
+	*/
+	@Test
+	public void testFetchCandidate_recruiter_candidate_found() throws Exception{
+		
+		GrantedAuthority 				mockGA = Mockito.mock(GrantedAuthority.class);
+		Collection<GrantedAuthority> 	authorities = Set.of(mockGA);
+		
+		Mockito.when(mockGA.getAuthority()).thenReturn("ROLE_RECRUITER");
+		Mockito.when(this.mockCandidateDao.findCandidateById(Mockito.anyLong())).thenReturn(Optional.of(Candidate.builder().build()));
+		
+		Candidate candidate = this.service.fetchCandidate("1961", "1961", authorities);
+		
+		assertNotNull(candidate);
 		
 	}
 	

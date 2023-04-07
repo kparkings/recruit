@@ -9,7 +9,6 @@ import java.util.stream.Collectors;
 
 import com.arenella.recruit.emailservice.beans.Contact;
 import com.arenella.recruit.emailservice.beans.Email;
-import com.arenella.recruit.emailservice.beans.Email.EmailRecipient.ContactType;
 import com.arenella.recruit.emailservice.beans.Email.Sender;
 import com.arenella.recruit.emailservice.beans.Email.Sender.SenderType;
 import com.arenella.recruit.emailservice.beans.EmailAttachment;

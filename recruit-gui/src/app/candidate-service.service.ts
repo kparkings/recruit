@@ -12,6 +12,8 @@ import { SearchAlert }		 	                    from './recruiter-alerts/search-al
 import { CandidateSearchAlert }                     from './suggestions/candidate-search-alert';
 import { ExtractedFilters }                     	from './suggestions/extracted-filters';
 import { SavedCandidate }		 	                from './suggestions/saved-candidate';
+import { CandidateProfile }							from './candidate-profile/candidate-profile';
+
 
 /**
 * Services for new Candidates
@@ -38,6 +40,16 @@ export class CandidateServiceService {
   	public getCandidates(filterParams:string): Observable<any>{
       
 		const backendUrl:string = environment.backendUrl +'candidate?'+filterParams;
+  
+    	return this.httpClient.get<any>(backendUrl, this.httpOptions);
+  	}
+
+	/**
+  	* Returns a Candidate by its Id 
+  	*/
+  	public getCandidateById(candidateId:string): Observable<CandidateProfile>{
+      
+		const backendUrl:string = environment.backendUrl +'candidate/'+candidateId;
   
     	return this.httpClient.get<any>(backendUrl, this.httpOptions);
   	}

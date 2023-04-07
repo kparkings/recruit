@@ -47,6 +47,9 @@
         	<a *ngIf="unseenEmails > 0" 	class="dropdown-item" routerLink="/email"><span class="unseen-posts">{{unseenEmails}}</span>Emails</a>
 			<a *ngIf="unseenEmails <= 0"	class="dropdown-item" routerLink="/email">Emails</a>
         </li>
+		<li  class="li-arenella-nav"  *ngIf="isCandidate()">	
+           <a  class="dropdown-item" routerLink="/candidate-profile">Profile</a>
+        </li>
 		<li  class="li-arenella-nav" *ngIf="isAuthenticated() && !isCandidate()">
            <a  class="dropdown-item" routerLink="/recruiter-profile">Community</a>
         </li>

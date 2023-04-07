@@ -2,10 +2,12 @@ package com.arenella.recruit.candidates.services;
 
 import java.io.IOException;
 import java.security.Principal;
+import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import org.springframework.data.domain.Page;
+import org.springframework.security.core.GrantedAuthority;
 
 import com.arenella.recruit.candidates.beans.Candidate;
 import com.arenella.recruit.candidates.beans.CandidateExtractedFilters;
@@ -137,5 +139,14 @@ public interface CandidateService {
 	* @param savedCandidate - new version of existing SavedCandidate 
 	*/
 	public void updateSavedCandidate(SavedCandidate savedCandidate);
+
+	/**
+	* Fetches the candidate with the given Id 
+	* @param candidateId			- id of the Candidate to fetch 
+	* @param authenticatedUserId 	- Id of the Authenticated User
+	* @param authorities			- Authorities of the Authenticated User
+	* @return
+	*/
+	public Candidate fetchCandidate(String candidateId, String authernticatedUserId, Collection<GrantedAuthority> authorities);
 	
 }
