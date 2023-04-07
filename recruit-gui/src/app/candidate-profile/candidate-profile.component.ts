@@ -7,6 +7,7 @@ import { UntypedFormGroup, UntypedFormControl }		from '@angular/forms';
 import { TupleStrValueByPos }						from './tuple-string-pos-pipe';
 import { EmailService, EmailRequest }				from '../email.service';
 import { NgbModal, NgbModalOptions}					from '@ng-bootstrap/ng-bootstrap';
+import { CandidateFunction }						from '../candidate-function';
 
 @Component({
   selector: 'app-candidate-profile',
@@ -19,12 +20,16 @@ export class CandidateProfileComponent {
 	public selectedCandidateProfile:CandidateProfile = new CandidateProfile();
 	public currentView = 'view-main'; 
 	private imageFile!:File| any;
-	
+	public functionTypes:	 	Array<CandidateFunction> 	= new Array<CandidateFunction>();
 	/**
 	* Constructor
 	*/
 	constructor(private candidateService:CandidateServiceService, private emailService:EmailService, private modalService:NgbModal){
 		
+		this.candidateService.loadFunctionTypes().forEach(funcType => {
+      		this.functionTypes.push(funcType);
+    	});
+
 		if(this.isCandidate()){
 			this.candidateService.getCandidateById(this.getOwnUserId()).subscribe( response => {
 				this.candidateProfile = response;
@@ -44,7 +49,9 @@ export class CandidateProfileComponent {
 					yearsExperience: 			new UntypedFormControl(this.candidateProfile.yearsExperience),
 					available: 					new UntypedFormControl(this.candidateProfile.available),
 					lastAvailabilityCheck: 		new UntypedFormControl(new Date()),
-					languages: 					new UntypedFormControl(''),
+					english: 					new UntypedFormControl(),
+					dutch: 						new UntypedFormControl(),
+					french: 					new UntypedFormControl(),
 				});
 				
 				this.currentView = 'view-edit';
@@ -79,7 +86,9 @@ export class CandidateProfileComponent {
 		yearsExperience: 			new UntypedFormControl(2),
 		available: 					new UntypedFormControl(true),
 		lastAvailabilityCheck: 		new UntypedFormControl(new Date()),
-		languages: 					new UntypedFormControl(),
+		english: 					new UntypedFormControl(),
+		dutch: 						new UntypedFormControl(),
+		french: 					new UntypedFormControl(),
 	});
 	
 	public recruitsIn:Array<[string,string]> 				= new Array<[string,string]>();

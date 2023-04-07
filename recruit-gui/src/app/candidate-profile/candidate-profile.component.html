@@ -97,14 +97,37 @@
 						<td>
 							<select formControlName="function">
 								<option></option>
+								<option *ngFor="let f of functionTypes" [ngValue]="f.id">{{f.desc}}</option>
 							</select>
 						</td>
 					</tr>
 					<tr>
-						<th>Function</th>
+						<th>English</th>
 						<td>
-							<select formControlName="languages">
-								<option></option>
+							<select class="new-candidate-inpt" formControlName="english">
+								<option value="NO">No</option>
+								<option value="YES">Yes</option>
+								<option value="BASIC">Basic</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<th>Dutch</th>
+						<td>
+							<select class="new-candidate-inpt" formControlName="dutch">
+								<option value="NO">No</option>
+								<option value="YES">Yes</option>
+								<option value="BASIC">Basic</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<th>French</th>
+						<td>
+							<select class="new-candidate-inpt" formControlName="french">
+								<option value="NO">No</option>
+								<option value="YES">Yes</option>
+								<option value="BASIC">Basic</option>
 							</select>
 						</td>
 					</tr>
@@ -112,7 +135,10 @@
 						<th>Country</th>
 						<td>
 							<select formControlName="country">
-								<option></option>
+								<option value="NETHERLANDS">Netherlands</option>
+								<option value="BELGIUM">Belgium</option>
+								<option value="UK">UK</option>
+								<option value="REPUBLIC_OF_IRELAND">ROI</option>
 							</select>
 						</td>
 					</tr>
@@ -124,33 +150,32 @@
 					</tr>
 					<tr>
 						<th>Perm</th>
-						<td>
-							<select formControlName="perm">
-								<option></option>
-							</select>
-						</td>
+						<select class="new-candidate-inpt" formControlName="perm">
+							<option value="FALSE">No</option>
+							<option value="TRUE">Yes</option>
+							<option value="UNKNOWN">Unknown</option>
+						</select>
 					</tr>
 					<tr>
 						<th>Freelance</th>
-						<td>
-							<select formControlName="freelance">
-								<option></option>
-							</select>
-						</td>
+						<select class="new-candidate-inpt" formControlName="freelance">
+							<option value="FALSE">No</option>
+							<option value="TRUE">Yes</option>
+							<option value="UNKNOWN">Unknown</option>
+						</select>
 					</tr>
 					<tr>
 						<th>Years Experience</th>
 						<td>
-							<select formControlName="yearsExperience">
-								<option></option>
-							</select>
+							<input type="number" formControlName="yearsExperience">
 						</td>
 					</tr>
 					<tr>
 						<th>Available</th>
 						<td>
 							<select formControlName="available">
-								<option></option>
+								<option value="TRUE">Yes</option>
+								<option value="FALSE">No</option>
 							</select>
 						</td>
 					</tr>
