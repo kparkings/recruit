@@ -13,7 +13,7 @@ import { CandidateSearchAlert }                     	from './suggestions/candida
 import { ExtractedFilters }                     		from './suggestions/extracted-filters';
 import { SavedCandidate }		 	                	from './suggestions/saved-candidate';
 import { CandidateProfile }								from './candidate-profile/candidate-profile';
-import { UpdateCandidateProfileRequest, LanguageOption}	from './candidate-profile/update-candidate-profile-req';
+import { UpdateCandidateProfileRequest}					from './candidate-profile/update-candidate-profile-req';
 
 /**
 * Services for new Candidates
@@ -67,13 +67,18 @@ export class CandidateServiceService {
 	/**
 	* Update a Candidate profile 
 	*/
-	public updateCandidate(candidateId:string, candidate: UpdateCandidateProfileRequest):Observable<any> {
+	public updateCandidate(candidateId:string, candidate: UpdateCandidateProfileRequest, profileImage:File):Observable<any> {
 	
 		const backendUrl:string = environment.backendUrl +'candidate/'+candidateId + '/profile';
-			
-		return this.httpClient.put<any>(backendUrl, JSON.stringify(candidate),  this.httpOptions);
+		
+		var fd = new FormData();
+		fd.append('file', profileImage);
+  		fd.append("profile", new Blob([JSON.stringify(candidate)], { type: 'application/json' }));
+	
+		return this.httpClient.put<any>(backendUrl, fd, {headers: new HttpHeaders({ }), withCredentials: true});
+		
 	}
-	 
+
 	/**
 	* Disables a Candidate  
 	*/

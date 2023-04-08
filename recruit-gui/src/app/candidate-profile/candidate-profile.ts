@@ -5,6 +5,7 @@ export class CandidateProfile{
 	
 	public profilePhoto:PhotoAPIOutbound	= new PhotoAPIOutbound();
 	public introduction:string				= '';
+	public rate:Rate						= new Rate();
 	public email:string						= '';
 	public candidateId:string 				= '';
 	public function:string 					= '';
@@ -38,4 +39,10 @@ export class Language {
 export class PhotoAPIOutbound {
 	public imageBytes?:any;
 	public format:string = '';
+}
+
+export class Rate{
+	public currency:string 	= '';
+	public period:string 	= '';
+	public value:string 	= ''; 
 }

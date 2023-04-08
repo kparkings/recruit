@@ -1,14 +1,14 @@
-import { Component } 										from '@angular/core';
-import { PhotoAPIOutbound, CandidateProfile, Language } 	from './candidate-profile';
-import { CandidateProfileService} 							from '../candidate-profile-service.service';
-import { CandidateServiceService} 							from '../candidate-service.service';
-import { AddCandidateProfileRequest }						from './add-candidate-profile'
-import { UntypedFormGroup, UntypedFormControl }				from '@angular/forms';
-import { TupleStrValueByPos }								from './tuple-string-pos-pipe';
-import { EmailService, EmailRequest }						from '../email.service';
-import { NgbModal, NgbModalOptions}							from '@ng-bootstrap/ng-bootstrap';
-import { CandidateFunction }								from '../candidate-function';
-import { UpdateCandidateProfileRequest, LanguageOption}		from './update-candidate-profile-req';
+import { Component } 											from '@angular/core';
+import { PhotoAPIOutbound, CandidateProfile, Language, Rate } 	from './candidate-profile';
+import { CandidateProfileService} 								from '../candidate-profile-service.service';
+import { CandidateServiceService} 								from '../candidate-service.service';
+import { AddCandidateProfileRequest }							from './add-candidate-profile'
+import { UntypedFormGroup, UntypedFormControl }					from '@angular/forms';
+import { TupleStrValueByPos }									from './tuple-string-pos-pipe';
+import { EmailService, EmailRequest }							from '../email.service';
+import { NgbModal, NgbModalOptions}								from '@ng-bootstrap/ng-bootstrap';
+import { CandidateFunction }									from '../candidate-function';
+import { UpdateCandidateProfileRequest}							from './update-candidate-profile-req';
 
 @Component({
   selector: 'app-candidate-profile',
@@ -51,6 +51,16 @@ export class CandidateProfileComponent {
 					lvlFrench 	= candidate.languages.filter(l => l.language === 'FRENCH')[0].level;
 				}
 			
+				let rateCurrency:string 	= '';
+				let ratePeriod:string 		= '';
+				let rateValue:String 		= '0';
+				
+				if (this.candidateProfile.rate) {
+					rateCurrency	= this.candidateProfile.rate.currency;
+					ratePeriod 		= this.candidateProfile.rate.period;
+					rateValue		= this.candidateProfile.rate.value;
+				}
+			
 				this.candidateProfileFormBean = new UntypedFormGroup({
 					introduction: 				new UntypedFormControl(this.candidateProfile.introduction),
 					candidateId: 				new UntypedFormControl(this.candidateProfile.candidateId),
@@ -67,7 +77,10 @@ export class CandidateProfileComponent {
 					available: 					new UntypedFormControl(this.candidateProfile.available),
 					english: 					new UntypedFormControl(lvlEnglish),
 					dutch: 						new UntypedFormControl(lvlDutch),
-					french: 					new UntypedFormControl(lvlFrench)
+					french: 					new UntypedFormControl(lvlFrench),
+					rateCurrency:				new UntypedFormControl(rateCurrency),
+					ratePeriod:					new UntypedFormControl(ratePeriod),
+					rateValue:					new UntypedFormControl(rateValue),
 				});
 				
 				this.currentView = 'view-edit';
@@ -75,37 +88,37 @@ export class CandidateProfileComponent {
 		}
 	}
 	
-	/**
-	* Fetched recruiter profiles from backend
-	*/
-	//private loadRecuiterProfiles():void{
-	//	this.recruierProfileService.fetchRecruiterProfiles('RECRUITERS').subscribe( profiles => {
-	//		this.recruiterProfiles = profiles;
-	//	});
-	//}
+	
 	
 	/**
 	* Form to add new Profile
 	*/
 	public candidateProfileFormBean:UntypedFormGroup = new UntypedFormGroup({
-		introduction: 				new UntypedFormControl('Boop de boop'),
-		candidateId: 				new UntypedFormControl(1234),
-		firstname: 					new UntypedFormControl('Kevin'),
-		surname: 					new UntypedFormControl('Parkings'),
+		introduction: 				new UntypedFormControl(''),
+		candidateId: 				new UntypedFormControl(0),
+		firstname: 					new UntypedFormControl(''),
+		surname: 					new UntypedFormControl(''),
 		email: 						new UntypedFormControl(),
 		function: 					new UntypedFormControl(),
-		roleSought: 				new UntypedFormControl('Java Developer'),
-		country: 					new UntypedFormControl('1'),
-		city: 						new UntypedFormControl('2'),
-		perm: 						new UntypedFormControl('2'),
+		roleSought: 				new UntypedFormControl(''),
+		country: 					new UntypedFormControl(''),
+		city: 						new UntypedFormControl(''),
+		perm: 						new UntypedFormControl(''),
 		freelance: 					new UntypedFormControl('2'),
-		yearsExperience: 			new UntypedFormControl(2),
+		yearsExperience: 			new UntypedFormControl(0),
 		available: 					new UntypedFormControl(true),
 		lastAvailabilityCheck: 		new UntypedFormControl(new Date()),
 		english: 					new UntypedFormControl(),
 		dutch: 						new UntypedFormControl(),
 		french: 					new UntypedFormControl(),
+		rateCurrency:				new UntypedFormControl(),
+		ratePeriod:					new UntypedFormControl(),
+		rateValue:					new UntypedFormControl(),
 	});
+	
+	public introduction:string 			= '';
+	public photo:PhotoAPIOutbound 		= new PhotoAPIOutbound();
+	public rate:Rate 					= new Rate();
 	
 	public recruitsIn:Array<[string,string]> 				= new Array<[string,string]>();
 	public languagesSpoken:Array<[string,string]> 			= new Array<[string,string]>();
@@ -118,22 +131,35 @@ export class CandidateProfileComponent {
 	*/
 	public updateCandidate():void{
 		
-		let english:LanguageOption = new LanguageOption();
+		let english:Language = new Language();
 		english.language = "ENGLISH";
 		english.level = this.candidateProfileFormBean.get('english')?.value;
 		
-		let dutch:LanguageOption = new LanguageOption();
+		let dutch:Language = new Language();
 		dutch.language = "DUTCH";
 		dutch.level = this.candidateProfileFormBean.get('dutch')?.value;
 		
-		let french:LanguageOption = new LanguageOption();
+		let french:Language = new Language();
 		french.language = "FRENCH";
 		french.level = this.candidateProfileFormBean.get('french')?.value;
 		
-		let languages:Array<LanguageOption> = new Array<LanguageOption>();
+		let languages:Array<Language> = new Array<Language>();
 		languages.push(english);
 		languages.push(dutch);
 		languages.push(french);
+		
+		let rateCurrency:string 	= this.candidateProfileFormBean.get('rateCurrency')?.value;
+		let ratePeriod:string 		= this.candidateProfileFormBean.get('ratePeriod')?.value;
+		let rateValue:string 		= this.candidateProfileFormBean.get('rateValue')?.value;
+		
+		let rate:Rate = new Rate();
+		rate.currency = rateCurrency;
+		rate.period = ratePeriod;
+		rate.value =  rateValue;
+		
+		if (rate.currency == '' || rate.period == '' || rate.value == '') {
+			rate = new Rate();
+		}
 		
 		let updateRequest:UpdateCandidateProfileRequest = new UpdateCandidateProfileRequest();
 		
@@ -149,8 +175,9 @@ export class CandidateProfileComponent {
 		updateRequest.yearsExperience 	= this.candidateProfileFormBean.get('yearsExperience')?.value;;
 		updateRequest.available 		= this.candidateProfileFormBean.get('available')?.value;
 		updateRequest.languages 		= languages;
+		updateRequest.rate				= rate;
 		
-		this.candidateService.updateCandidate(this.getOwnUserId(), updateRequest).subscribe(res => {
+		this.candidateService.updateCandidate(this.getOwnUserId(), updateRequest, this.imageFile).subscribe(res => {
 			
 		}, err => {
 			console.log("Failed to update Candidate");

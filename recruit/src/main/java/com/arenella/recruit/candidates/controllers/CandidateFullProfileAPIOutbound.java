@@ -2,9 +2,12 @@ package com.arenella.recruit.candidates.controllers;
 
 import java.time.LocalDate;
 import java.util.LinkedHashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import com.arenella.recruit.candidates.beans.Candidate;
+import com.arenella.recruit.candidates.beans.Candidate.Photo;
+import com.arenella.recruit.candidates.beans.Candidate.Photo.PHOTO_FORMAT;
 import com.arenella.recruit.candidates.beans.Language;
 import com.arenella.recruit.candidates.enums.COUNTRY;
 import com.arenella.recruit.candidates.enums.FREELANCE;
@@ -31,6 +34,9 @@ public class CandidateFullProfileAPIOutbound implements CandidateAPIOutbound{
 	private Set<Language> 			languages					= new LinkedHashSet<>();
 	private String					firstname;
 	private String					surname;
+	private RateAPIOutbound			rate;
+	private PhotoAPIOutbound		photo;
+	private String					introduction;
 	
 	/**
 	* Constructor based upon a builder
@@ -50,6 +56,9 @@ public class CandidateFullProfileAPIOutbound implements CandidateAPIOutbound{
 		this.lastAvailabilityCheck 		= builder.lastAvailabilityCheck;
 		this.firstname					= builder.firstname;
 		this.surname					= builder.surname;
+		this.rate						= builder.rate;
+		this.photo						= builder.photo;
+		this.introduction				= builder.introduction;
 		
 		this.skills.addAll(builder.skills);
 		this.languages.addAll(builder.languages);
@@ -172,6 +181,30 @@ public class CandidateFullProfileAPIOutbound implements CandidateAPIOutbound{
 	}
 	
 	/**
+	* Returns the Rate charged by the Candidate
+	* @return Rate charged by the Candidate
+	*/
+	public Optional<RateAPIOutbound> getRate(){
+		return Optional.ofNullable(this.rate);
+	}
+	
+	/**
+	* If available returns the Candidates profile Photo
+	* @return Profile Photo
+	*/
+	public Optional<PhotoAPIOutbound> getPhoto(){
+		return Optional.ofNullable(this.photo);
+	}
+	
+	/**
+	* Returns the Candidates introduction about themselves
+	* @return Candidate introduction
+	*/
+	public String getIntroduction() {
+		return this.introduction;
+	}
+	
+	/**
 	* Builder for the  class
 	* @return A Builder for the  class
 	*/
@@ -199,6 +232,9 @@ public class CandidateFullProfileAPIOutbound implements CandidateAPIOutbound{
 		private Set<Language> 			languages					= new LinkedHashSet<>();
 		private String					firstname;
 		private String					surname;
+		private RateAPIOutbound			rate;
+		private PhotoAPIOutbound		photo;
+		private String					introduction;
 		
 		/**
 		* Sets the candidates Unique identifier in the System
@@ -344,6 +380,36 @@ public class CandidateFullProfileAPIOutbound implements CandidateAPIOutbound{
 		}
 		
 		/**
+		* Sets the Rate charged by the candidate
+		* @param rate - Rate charged by the Candidate
+		* @return Builder
+		*/
+		public CandidateFullProfileAPIOutboundBuilder rate(RateAPIOutbound rate) {
+			this.rate = rate;
+			return this;
+		}
+		
+		/**
+		* Sets the Photo
+		* @param photo - Profile photo
+		* @return Builder
+		*/
+		public CandidateFullProfileAPIOutboundBuilder photo(PhotoAPIOutbound photo) {
+			this.photo = photo;
+			return this;
+		}
+		
+		/**
+		* Sets the Candidates introduction about themselves
+		* @param introduction - intro
+		* @return Builder
+		*/
+		public CandidateFullProfileAPIOutboundBuilder introduction(String introduction) {
+			this.introduction = introduction;
+			return this;
+		}
+		
+		/**
 		* Returns an instance of Candidate initialized with the 
 		* values in the builder
 		* @return Initialized instance of Candidate
@@ -377,7 +443,62 @@ public class CandidateFullProfileAPIOutbound implements CandidateAPIOutbound{
 					.lastAvailabilityCheck(candidate.getLastAvailabilityCheckOn())
 					.firstname(candidate.getFirstname())
 					.surname(candidate.getSurname())
+					.rate(RateAPIOutbound.convertFromDomain(candidate.getRate()))
+					.photo(PhotoAPIOutbound.convertFromDomain(candidate.getPhoto()))
+					.introduction(candidate.getIntroduction())
 				.build();
+		
+	}
+	
+	/**
+	* Class represents a Photo
+	* @author K Parkings
+	*/
+	public static class PhotoAPIOutbound{
+		
+		private final byte[] 		imageBytes;
+		private final PHOTO_FORMAT 	format;
+	
+		/**
+		* Class represents an uploaded Photo
+		* @param imageBytes - bytes of actual file
+		* @param format		- format of photo file
+		*/
+		public PhotoAPIOutbound(byte[] imageBytes, PHOTO_FORMAT format) {
+			this.imageBytes 	= imageBytes;
+			this.format 		= format;
+		}
+		
+		/**
+		* Returns the bytes of the file
+		* @return file bytes
+		*/
+		public byte[] getImageBytes() {
+			return this.imageBytes;
+		}
+		
+		/**
+		* Returns the file format
+		* @return format of the file
+		*/
+		public PHOTO_FORMAT getFormat() {
+			return this.format;
+		}
+	
+		/**
+		* Converts the Domain representation of the Profile to the 
+		* APIOutbound representation
+		* @param profile - Domain representation
+		* @return APIOutbound representation
+		*/
+		public static PhotoAPIOutbound convertFromDomain(Optional<Photo> photo) {
+			
+			if (photo.isEmpty()) {
+				return null;
+			}
+			
+			return new PhotoAPIOutbound(photo.get().getImageBytes(), photo.get().getFormat());
+		}
 		
 	}
 	

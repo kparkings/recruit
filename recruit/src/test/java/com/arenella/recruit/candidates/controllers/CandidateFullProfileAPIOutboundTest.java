@@ -10,6 +10,9 @@ import java.util.Set;
 import org.junit.jupiter.api.Test;
 
 import com.arenella.recruit.candidates.beans.Candidate;
+import com.arenella.recruit.candidates.beans.Candidate.Rate;
+import com.arenella.recruit.candidates.beans.Candidate.Rate.CURRENCY;
+import com.arenella.recruit.candidates.beans.Candidate.Rate.PERIOD;
 import com.arenella.recruit.candidates.beans.Language;
 import com.arenella.recruit.candidates.beans.Language.LANGUAGE;
 import com.arenella.recruit.candidates.beans.Language.LEVEL;
@@ -24,22 +27,24 @@ import com.arenella.recruit.candidates.enums.PERM;
 */
 public class CandidateFullProfileAPIOutboundTest {
 
-	private static final String 		CANDIDATE_ID 			= "Candidate1";
-	private static final FUNCTION		FUNCTIONVAL				= FUNCTION.JAVA_DEV;
-	private static final COUNTRY 		COUNTRYVAL 				= COUNTRY.NETHERLANDS;
-	private static final String 		CITY 					= "Den Haag";
-	private static final boolean 		AVAILABLE 				= true;
-	private static final FREELANCE 		FREELANCEVAL 			= FREELANCE.TRUE;
-	private static final PERM	 		PERMVAL 				= PERM.TRUE;
-	private static final LocalDate 		LAST_AVAILABILITY_CHECK = LocalDate.of(1980, 12, 3);
-	private static final int 			YEARS_EXPERIENCE 		= 21;
-	private static final Set<String>	SKILLS					= new LinkedHashSet<>();
-	private static final Set<Language>	LANGUAGES				= new LinkedHashSet<>();
-	private static final String			SKILL					= "Java";
-	private static final Language		LANGUAGEVAL				= Language.builder().language(LANGUAGE.DUTCH).level(LEVEL.PROFICIENT).build();
-	private static final String			ROLE_SOUGHT				= "Java Dev";
-	private static final String			FIRST_NAME				= "Kevin";
-	private static final String			SURNAME					= "Parkings";
+	private static final String 			CANDIDATE_ID 			= "Candidate1";
+	private static final FUNCTION			FUNCTIONVAL				= FUNCTION.JAVA_DEV;
+	private static final COUNTRY 			COUNTRYVAL 				= COUNTRY.NETHERLANDS;
+	private static final String 			CITY 					= "Den Haag";
+	private static final boolean 			AVAILABLE 				= true;
+	private static final FREELANCE 			FREELANCEVAL 			= FREELANCE.TRUE;
+	private static final PERM	 			PERMVAL 				= PERM.TRUE;
+	private static final LocalDate 			LAST_AVAILABILITY_CHECK = LocalDate.of(1980, 12, 3);
+	private static final int 				YEARS_EXPERIENCE 		= 21;
+	private static final Set<String>		SKILLS					= new LinkedHashSet<>();
+	private static final Set<Language>		LANGUAGES				= new LinkedHashSet<>();
+	private static final String				SKILL					= "Java";
+	private static final Language			LANGUAGEVAL				= Language.builder().language(LANGUAGE.DUTCH).level(LEVEL.PROFICIENT).build();
+	private static final String				ROLE_SOUGHT				= "Java Dev";
+	private static final String				FIRST_NAME				= "Kevin";
+	private static final String				SURNAME					= "Parkings";
+	private static final Rate				RATE					= new Rate(CURRENCY.EUR, PERIOD.HOUR, 100);
+	private static final RateAPIOutbound	RATE_API_OUTBOUND		= new RateAPIOutbound(CURRENCY.EUR, PERIOD.HOUR, 100);
 	
 	/**
 	* Sets up test environment 
@@ -73,20 +78,24 @@ public class CandidateFullProfileAPIOutboundTest {
 							.roleSought(ROLE_SOUGHT)
 							.firstname(FIRST_NAME)
 							.surname(SURNAME)
+							.rate(RATE_API_OUTBOUND)
 							.build();
 		
-		assertEquals(CANDIDATE_ID, 				candidate.getCandidateId());
-		assertEquals(FUNCTIONVAL,				candidate.getFunction());
-		assertEquals(COUNTRYVAL, 				candidate.getCountry());
-		assertEquals(CITY, 						candidate.getCity());
-		assertEquals(AVAILABLE, 				candidate.isAvailable());
-		assertEquals(FREELANCEVAL, 				candidate.getFreelance());
-		assertEquals(PERMVAL, 					candidate.getPerm());
-		assertEquals(LAST_AVAILABILITY_CHECK, 	candidate.getLastAvailabilityCheckOn());
-		assertEquals(YEARS_EXPERIENCE, 			candidate.getYearsExperience());
-		assertEquals(ROLE_SOUGHT, 				candidate.getRoleSought());
-		assertEquals(FIRST_NAME,	 			candidate.getFirstname());
-		assertEquals(SURNAME, 					candidate.getSurname());
+		assertEquals(CANDIDATE_ID, 						candidate.getCandidateId());
+		assertEquals(FUNCTIONVAL,						candidate.getFunction());
+		assertEquals(COUNTRYVAL, 						candidate.getCountry());
+		assertEquals(CITY, 								candidate.getCity());
+		assertEquals(AVAILABLE, 						candidate.isAvailable());
+		assertEquals(FREELANCEVAL, 						candidate.getFreelance());
+		assertEquals(PERMVAL, 							candidate.getPerm());
+		assertEquals(LAST_AVAILABILITY_CHECK, 			candidate.getLastAvailabilityCheckOn());
+		assertEquals(YEARS_EXPERIENCE, 					candidate.getYearsExperience());
+		assertEquals(ROLE_SOUGHT, 						candidate.getRoleSought());
+		assertEquals(FIRST_NAME,	 					candidate.getFirstname());
+		assertEquals(SURNAME, 							candidate.getSurname());
+		assertEquals(RATE.getCurrency(), 				candidate.getRate().get().getCurrency());
+		assertEquals(RATE.getPeriod(), 					candidate.getRate().get().getPeriod());
+		assertEquals(RATE.getValue(), 					candidate.getRate().get().getValue());
 		
 		assertTrue(candidate.getSkills().contains(SKILL));
 		candidate.getLanguages().stream().filter(l -> l.getLanguage() == LANGUAGEVAL.getLanguage()).findAny().orElseThrow();
@@ -115,6 +124,7 @@ public class CandidateFullProfileAPIOutboundTest {
 							.roleSought(ROLE_SOUGHT)
 							.firstname(FIRST_NAME)
 							.surname(SURNAME)
+							.rate(RATE)
 							.build();
 		
 		assertEquals(CANDIDATE_ID, 				candidate.getCandidateId());
@@ -147,6 +157,10 @@ public class CandidateFullProfileAPIOutboundTest {
 		assertEquals(ROLE_SOUGHT, 				candidateProfile.getRoleSought());
 		assertEquals(FIRST_NAME,	 			candidateProfile.getFirstname());
 		assertEquals(SURNAME, 					candidateProfile.getSurname());
+		
+		assertEquals(RATE.getCurrency(), 		candidateProfile.getRate().get().getCurrency());
+		assertEquals(RATE.getPeriod(), 			candidateProfile.getRate().get().getPeriod());
+		assertEquals(RATE.getValue(), 			candidateProfile.getRate().get().getValue());
 		
 	}
 	

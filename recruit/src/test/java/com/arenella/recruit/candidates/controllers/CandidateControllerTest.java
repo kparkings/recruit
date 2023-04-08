@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.security.Principal;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
@@ -329,13 +330,15 @@ public class CandidateControllerTest {
 	
 		final String candidateId = "1234";
 		
+		MultipartFile mockPhoto = Mockito.mock(MultipartFile.class);
+		
 		ArgumentCaptor<CandidateUpdateRequest> candidateArgCapt = ArgumentCaptor.forClass(CandidateUpdateRequest.class);
 		
 		CandidateUpdateRequestAPIInbound request = CandidateUpdateRequestAPIInbound.builder().build();
 		
 		Mockito.doNothing().when(this.mockCandidateService).updateCandidateProfile(candidateArgCapt.capture());
 		
-		ResponseEntity<Void> response = this.controller.updateCandidateProfile(request, candidateId, mockPrincipal);
+		ResponseEntity<Void> response = this.controller.updateCandidateProfile(request, Optional.of(mockPhoto), candidateId, mockPrincipal);
 		
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		

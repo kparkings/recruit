@@ -10,6 +10,11 @@ import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 
+import com.arenella.recruit.candidates.beans.Candidate.Photo;
+import com.arenella.recruit.candidates.beans.Candidate.Photo.PHOTO_FORMAT;
+import com.arenella.recruit.candidates.beans.Candidate.Rate;
+import com.arenella.recruit.candidates.beans.Candidate.Rate.CURRENCY;
+import com.arenella.recruit.candidates.beans.Candidate.Rate.PERIOD;
 import com.arenella.recruit.candidates.beans.Language.LANGUAGE;
 import com.arenella.recruit.candidates.beans.Language.LEVEL;
 import com.arenella.recruit.candidates.enums.COUNTRY;
@@ -40,6 +45,9 @@ public class CandidateTest {
 	private static final Set<Language>	languages				= new LinkedHashSet<>();
 	private static final String			skill					= "Java";
 	private static final Language		language				= Language.builder().language(LANGUAGE.DUTCH).level(LEVEL.PROFICIENT).build();
+	private static final Rate			rate					= new Rate(CURRENCY.EUR, PERIOD.HOUR, 11.34f);
+	private static final String			introduction			= "Candiates own intro";
+	private static final Photo			profilePhoto			= new Photo(new byte[] {}, PHOTO_FORMAT.jpeg);
 	
 	/**
 	* Sets up test environment 
@@ -74,21 +82,30 @@ public class CandidateTest {
 							.yearsExperience(yearsExperience)
 							.skills(skills)
 							.languages(languages)
+							.rate(rate)
+							.introduction(introduction)
+							.photo(profilePhoto)
 							.build();
 		
-		assertEquals(candidate.getCandidateId(), 				candidateId);
-		assertEquals(candidate.getFunction(), 					function);
-		assertEquals(candidate.getCountry(), 					country);
-		assertEquals(candidate.getCity(), 						city);
-		assertEquals(candidate.getEmail(), 						email);
-		assertEquals(candidate.getRoleSought(), 				roleSought);
-		assertEquals(candidate.isAvailable(), 					available);
-		assertEquals(candidate.isFlaggedAsUnavailable(), 		flaggedAsUnavailable);
-		assertEquals(candidate.isFreelance(), 					freelance);
-		assertEquals(candidate.isPerm(), 						perm);
-		assertEquals(candidate.getLastAvailabilityCheckOn(), 	lastAvailabilityCheck);
-		assertEquals(candidate.getRegisteredOn(), 				registerd);
-		assertEquals(candidate.getYearsExperience(), 			yearsExperience);
+		assertEquals(candidateId, 			candidate.getCandidateId());
+		assertEquals(function, 				candidate.getFunction());
+		assertEquals(country, 				candidate.getCountry());
+		assertEquals(city, 					candidate.getCity());
+		assertEquals(email, 				candidate.getEmail());
+		assertEquals(roleSought, 			candidate.getRoleSought());
+		assertEquals(available, 			candidate.isAvailable());
+		assertEquals(flaggedAsUnavailable, 	candidate.isFlaggedAsUnavailable());
+		assertEquals(freelance, 			candidate.isFreelance());
+		assertEquals(perm, 					candidate.isPerm());
+		assertEquals(lastAvailabilityCheck, candidate.getLastAvailabilityCheckOn());
+		assertEquals(registerd, 			candidate.getRegisteredOn());
+		assertEquals(yearsExperience, 		candidate.getYearsExperience());
+		assertEquals(profilePhoto, 			candidate.getPhoto().get());
+		
+		assertEquals(introduction, 			candidate.getIntroduction());
+		assertEquals(rate.getCurrency(), 	candidate.getRate().get().getCurrency());
+		assertEquals(rate.getPeriod(), 		candidate.getRate().get().getPeriod());
+		assertEquals(rate.getValue(), 		candidate.getRate().get().getValue());
 		
 		assertTrue(candidate.getSkills().contains(skill));
 		candidate.getLanguages().stream().filter(l -> l.getLanguage() == language.getLanguage()).findAny().orElseThrow();

@@ -2,6 +2,7 @@ package com.arenella.recruit.candidates.beans;
 
 import java.time.LocalDate;
 import java.util.LinkedHashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import com.arenella.recruit.candidates.enums.COUNTRY;
@@ -35,6 +36,9 @@ public class Candidate {
 	private LocalDate 		lastAvailabilityCheck		= LocalDate.now();	
 	private Set<String> 	skills						= new LinkedHashSet<>();
 	private Set<Language> 	languages					= new LinkedHashSet<>();
+	private Rate			rate;
+	private String			introduction;
+	private Photo			photo;
 	
 	/**
 	* Constructor based upon a builder
@@ -57,7 +61,10 @@ public class Candidate {
 		this.flaggedAsUnavailable		= builder.flaggedAsUnavailable;
 		this.registerd 					= builder.registerd;
 		this.lastAvailabilityCheck 		= builder.lastAvailabilityCheck;
-	
+		this.rate 						= builder.rate;
+		this.introduction				= builder.introduction;
+		this.photo						= builder.photo;
+		
 		this.skills.addAll(builder.skills);
 		this.languages.addAll(builder.languages);
 	
@@ -206,14 +213,36 @@ public class Candidate {
 	}
 	
 	/**
+	* Returns Candidates introduction about themselves
+	* @return candidate introduction
+	*/
+	public String getIntroduction() {
+		return this.introduction;
+	}
+	
+	/**
+	* If available returns information about the rate 
+	* charges by the Candidate for their work
+	* @return rate information
+	*/
+	public Optional<Rate> getRate(){
+		return Optional.ofNullable(this.rate);
+	}
+	
+	/**
+	* If available returns a photo of the Candidate
+	* @return Profile Photo
+	*/
+	public Optional<Photo> getPhoto(){
+		return Optional.ofNullable(this.photo);
+	}
+	
+	/**
 	* Manke the Candidates details anonymous and mark the candidate 
 	* as no longer being available
 	*/
 	public void noLongerAvailable() {
 		this.available 		= false;
-		//this.email 			= ANONYMOUS_USER_ATTR_VALUE;
-		//this.firstname 		= ANONYMOUS_USER_ATTR_VALUE;
-		//this.surname 		= ANONYMOUS_USER_ATTR_VALUE;
 	}
 	
 	/**
@@ -254,6 +283,9 @@ public class Candidate {
 		private LocalDate 		lastAvailabilityCheck		= LocalDate.now();;
 		private Set<String> 	skills						= new LinkedHashSet<>();
 		private Set<Language> 	languages					= new LinkedHashSet<>();
+		private Rate			rate;
+		private String			introduction;
+		private Photo			photo;
 		
 		/**
 		* Sets the candidates Unique identifier in the System
@@ -396,6 +428,36 @@ public class Candidate {
 		}
 		
 		/**
+		* Sets the candidates introduction about themselves
+		* @param introduction - introduction
+		* @return Builder
+		*/
+		public CandidateBuilder introduction(String introduction) {
+			this.introduction = introduction;
+			return this;
+		}
+		
+		/**
+		* Sets Rate charged by the Candidate
+		* @param rate - Rate charged by the Candidate
+		* @return Builder
+		*/
+		public CandidateBuilder rate(Rate rate) {
+			this.rate = rate;
+			return this;
+		}
+		
+		/**
+		* Sets Profile Photo for the Candidate
+		* @param photo - Photo of the Candidate
+		* @return Builde
+		*/
+		public CandidateBuilder photo(Photo photo) {
+			this.photo = photo;
+			return this;
+		}
+		
+		/**
 		* Sets the Date of the last time the Candidates availability 
 		* was checked
 		* @param lastAvailabilityCheck - Date of last availability check
@@ -436,6 +498,98 @@ public class Candidate {
 		public Candidate build() {
 			return new Candidate(this);
 		}
+	}
+	
+	/**
+	* Class represents a Rate charged by the Candidate
+	* for their work
+	* @author K Parkings
+	*/
+	public static class Rate{
+		
+		public static enum CURRENCY{EUR,GBP}
+		public static enum PERIOD{HOUR,DAY,YEAR}
+		
+		private final CURRENCY 	currency;
+		private final PERIOD 	period;
+		private final float 	value;
+
+		/**
+		* Constructor
+		* @param currency - Currency being charged
+		* @param period   - Unit of charging
+		* @param value	  - amount charged per unit
+		*/
+		public Rate(CURRENCY currency, PERIOD period, float value) {
+			this.currency 	= currency;
+			this.period 	= period;
+			this.value 		= value;
+		}
+		
+		/**
+		* Return the currency being charged
+		* @return currency
+		*/
+		public CURRENCY getCurrency() {
+			return this.currency;
+		}
+		
+		/**
+		* Returns the unit of charging
+		* @return period
+		*/
+		public PERIOD getPeriod() {
+			return this.period;
+		}
+		
+		/**
+		* Returns amount charged per unit 
+		* of charging
+		* @return value
+		*/
+		public float getValue() {
+			return this.value;
+		}
+
+	}
+	
+	/**
+	* Class represents a Photo
+	* @author K Parkings
+	*/
+	public static class Photo{
+		
+		public static enum PHOTO_FORMAT {jpeg, png}
+		
+		private final byte[] 		imageBytes;
+		private final PHOTO_FORMAT 	format;
+	
+		/**
+		* Class represents an uploaded Photo
+		* @param imageBytes - bytes of actual file
+		* @param format		- format of photo file
+		*/
+		public Photo(byte[] imageBytes, PHOTO_FORMAT format) {
+			this.imageBytes 	= imageBytes;
+			this.format 		= format;
+		}
+		
+		/**
+		* Returns the bytes of the file
+		* @return file bytes
+		*/
+		public byte[] getImageBytes() {
+			return this.imageBytes;
+		}
+		
+		/**
+		* Returns the file format
+		* @return format of the file
+		*/
+		public PHOTO_FORMAT getFormat() {
+			return this.format;
+		}
+		
 	}
 	
 }

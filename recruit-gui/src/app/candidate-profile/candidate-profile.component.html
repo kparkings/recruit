@@ -14,9 +14,7 @@
 		<div *ngIf="currentView === 'view-details'">
 		
 			<div  class="details-left">
-				<!--  
 				<img class="profile-photo-details" *ngIf="selectedCandidateProfile?.profilePhoto?.imageBytes" id='base64image' src='data:image/jpeg;base64, {{selectedCandidateProfile?.profilePhoto?.imageBytes}}' />
-				-->
 				<br>
 				<table>
 					<tr>
@@ -168,6 +166,33 @@
 						<th>Years Experience</th>
 						<td>
 							<input type="number" formControlName="yearsExperience">
+						</td>
+					</tr>
+					<tr>
+						<th>Rate Currency</th>
+						<td>
+							<select class="new-candidate-inpt" formControlName="rateCurrency">
+								<option value=""></option>
+								<option value="EUR">Euros</option>
+								<option value="GBP">Pounds Sterling</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<th>Rate Period</th>
+						<td>
+							<select class="new-candidate-inpt" formControlName="ratePeriod">
+								<option value=""></option>
+								<option value="HOUR">Per hour</option>
+								<option value="DAY">Per Day</option>
+								<option value="YEAR">Per Year</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<th>Rate Amount</th>
+						<td>
+							<input type="number" formControlName="rateValue">
 						</td>
 					</tr>
 					<tr>
