@@ -28,6 +28,7 @@ import com.arenella.recruit.candidates.beans.Candidate;
 import com.arenella.recruit.candidates.beans.CandidateExtractedFilters;
 import com.arenella.recruit.candidates.beans.CandidateFilterOptions;
 import com.arenella.recruit.candidates.beans.CandidateSearchAccuracyWrapper;
+import com.arenella.recruit.candidates.beans.CandidateUpdateRequest;
 import com.arenella.recruit.candidates.beans.Language;
 import com.arenella.recruit.candidates.enums.COUNTRY;
 import com.arenella.recruit.candidates.enums.FUNCTION;
@@ -65,6 +66,18 @@ public class CandidateController {
 		this.candidateService.updateCandidate(candidateId, action);
 		
 		return ResponseEntity.ok().build();
+	}
+	
+	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('ROLE_CANDIDATE')")
+	@PutMapping(path="candidate/{candidateId}/profile")
+	public ResponseEntity<Void> updateCandidateProfile(@RequestBody CandidateUpdateRequestAPIInbound updateRequest, @PathVariable("candidateId") String candidateId, Principal principal) {
+		
+		CandidateUpdateRequest candidateUpdateRequest = CandidateUpdateRequestAPIInbound.convertToDomain(candidateId, updateRequest);
+		
+		this.candidateService.updateCandidateProfile(candidateUpdateRequest);
+		
+		return ResponseEntity.ok().build();
+	
 	}
 	
 	/**

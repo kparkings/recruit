@@ -1,13 +1,14 @@
-import { Component } 								from '@angular/core';
-import { PhotoAPIOutbound, CandidateProfile } 		from './candidate-profile';
-import { CandidateProfileService} 					from '../candidate-profile-service.service';
-import { CandidateServiceService} 					from '../candidate-service.service';
-import { AddCandidateProfileRequest }				from './add-candidate-profile'
-import { UntypedFormGroup, UntypedFormControl }		from '@angular/forms';
-import { TupleStrValueByPos }						from './tuple-string-pos-pipe';
-import { EmailService, EmailRequest }				from '../email.service';
-import { NgbModal, NgbModalOptions}					from '@ng-bootstrap/ng-bootstrap';
-import { CandidateFunction }						from '../candidate-function';
+import { Component } 										from '@angular/core';
+import { PhotoAPIOutbound, CandidateProfile, Language } 	from './candidate-profile';
+import { CandidateProfileService} 							from '../candidate-profile-service.service';
+import { CandidateServiceService} 							from '../candidate-service.service';
+import { AddCandidateProfileRequest }						from './add-candidate-profile'
+import { UntypedFormGroup, UntypedFormControl }				from '@angular/forms';
+import { TupleStrValueByPos }								from './tuple-string-pos-pipe';
+import { EmailService, EmailRequest }						from '../email.service';
+import { NgbModal, NgbModalOptions}							from '@ng-bootstrap/ng-bootstrap';
+import { CandidateFunction }								from '../candidate-function';
+import { UpdateCandidateProfileRequest, LanguageOption}		from './update-candidate-profile-req';
 
 @Component({
   selector: 'app-candidate-profile',
@@ -21,6 +22,7 @@ export class CandidateProfileComponent {
 	public currentView = 'view-main'; 
 	private imageFile!:File| any;
 	public functionTypes:	 	Array<CandidateFunction> 	= new Array<CandidateFunction>();
+	
 	/**
 	* Constructor
 	*/
@@ -31,15 +33,30 @@ export class CandidateProfileComponent {
     	});
 
 		if(this.isCandidate()){
-			this.candidateService.getCandidateById(this.getOwnUserId()).subscribe( response => {
-				this.candidateProfile = response;
+			this.candidateService.getCandidateById(this.getOwnUserId()).subscribe( candidate => {
+				this.candidateProfile = candidate;
 				
+				let lvlEnglish 	= 'UNKNOWN';
+				let lvlDutch 	= 'UNKNOWN';
+				let lvlFrench 	= 'UNKNOWN';
+				
+				if(candidate.languages.filter(l => l.language === 'ENGLISH').length === 1){
+					lvlEnglish 	= candidate.languages.filter(l => l.language === 'ENGLISH')[0].level;
+				}
+				
+				if(candidate.languages.filter(l => l.language === 'DUTCH').length === 1){
+					lvlDutch 	= candidate.languages.filter(l => l.language === 'DUTCH')[0].level;
+				}
+				if(candidate.languages.filter(l => l.language === 'FRENCH').length === 1){
+					lvlFrench 	= candidate.languages.filter(l => l.language === 'FRENCH')[0].level;
+				}
+			
 				this.candidateProfileFormBean = new UntypedFormGroup({
-					introduction: 				new UntypedFormControl('Boop de boop'),
+					introduction: 				new UntypedFormControl(this.candidateProfile.introduction),
 					candidateId: 				new UntypedFormControl(this.candidateProfile.candidateId),
 					firstname: 					new UntypedFormControl(this.candidateProfile.firstname),
 					surname: 					new UntypedFormControl(this.candidateProfile.surname),
-					email: 						new UntypedFormControl('na'),
+					email: 						new UntypedFormControl(this.candidateProfile.email),
 					function: 					new UntypedFormControl(this.candidateProfile.function),
 					roleSought: 				new UntypedFormControl(this.candidateProfile.roleSought),
 					country: 					new UntypedFormControl(this.candidateProfile.country),
@@ -48,10 +65,9 @@ export class CandidateProfileComponent {
 					freelance: 					new UntypedFormControl(this.candidateProfile.freelance),
 					yearsExperience: 			new UntypedFormControl(this.candidateProfile.yearsExperience),
 					available: 					new UntypedFormControl(this.candidateProfile.available),
-					lastAvailabilityCheck: 		new UntypedFormControl(new Date()),
-					english: 					new UntypedFormControl(),
-					dutch: 						new UntypedFormControl(),
-					french: 					new UntypedFormControl(),
+					english: 					new UntypedFormControl(lvlEnglish),
+					dutch: 						new UntypedFormControl(lvlDutch),
+					french: 					new UntypedFormControl(lvlFrench)
 				});
 				
 				this.currentView = 'view-edit';
@@ -97,6 +113,50 @@ export class CandidateProfileComponent {
 	public coreTech:Array<[string,string]>		 			= new Array<[string,string]>();
 	public contractTypes:Array<[string,string]> 			= new Array<[string,string]>();
 
+	/**
+	* Sends request to update the Candidate
+	*/
+	public updateCandidate():void{
+		
+		let english:LanguageOption = new LanguageOption();
+		english.language = "ENGLISH";
+		english.level = this.candidateProfileFormBean.get('english')?.value;
+		
+		let dutch:LanguageOption = new LanguageOption();
+		dutch.language = "DUTCH";
+		dutch.level = this.candidateProfileFormBean.get('dutch')?.value;
+		
+		let french:LanguageOption = new LanguageOption();
+		french.language = "FRENCH";
+		french.level = this.candidateProfileFormBean.get('french')?.value;
+		
+		let languages:Array<LanguageOption> = new Array<LanguageOption>();
+		languages.push(english);
+		languages.push(dutch);
+		languages.push(french);
+		
+		let updateRequest:UpdateCandidateProfileRequest = new UpdateCandidateProfileRequest();
+		
+		updateRequest.firstname 		= this.candidateProfileFormBean.get('firstname')?.value;;
+		updateRequest.surname 			= this.candidateProfileFormBean.get('surname')?.value;;
+		updateRequest.email 			= this.candidateProfileFormBean.get('email')?.value;;
+		updateRequest.roleSought 		= this.candidateProfileFormBean.get('roleSought')?.value;;
+		updateRequest.function 			= this.candidateProfileFormBean.get('function')?.value;;
+		updateRequest.country 			= this.candidateProfileFormBean.get('country')?.value;;
+		updateRequest.city 				= this.candidateProfileFormBean.get('city')?.value;;
+		updateRequest.perm 				= this.candidateProfileFormBean.get('perm')?.value;;
+		updateRequest.freelance 		= this.candidateProfileFormBean.get('freelance')?.value;;
+		updateRequest.yearsExperience 	= this.candidateProfileFormBean.get('yearsExperience')?.value;;
+		updateRequest.available 		= this.candidateProfileFormBean.get('available')?.value;
+		updateRequest.languages 		= languages;
+		
+		this.candidateService.updateCandidate(this.getOwnUserId(), updateRequest).subscribe(res => {
+			
+		}, err => {
+			console.log("Failed to update Candidate");
+		});
+		
+	}
 
 	/**
 	* Adds item to contractType

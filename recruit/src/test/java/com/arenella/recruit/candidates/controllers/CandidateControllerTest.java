@@ -10,6 +10,7 @@ import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -26,6 +27,7 @@ import com.arenella.recruit.candidates.beans.Candidate;
 import com.arenella.recruit.candidates.beans.CandidateExtractedFilters;
 import com.arenella.recruit.candidates.beans.CandidateSearchAccuracyWrapper;
 import com.arenella.recruit.candidates.beans.CandidateSearchAlert;
+import com.arenella.recruit.candidates.beans.CandidateUpdateRequest;
 import com.arenella.recruit.candidates.beans.PendingCandidate;
 import com.arenella.recruit.candidates.controllers.CandidateController.CANDIDATE_UPDATE_ACTIONS;
 
@@ -315,6 +317,29 @@ public class CandidateControllerTest {
 		
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		assertTrue(response.getBody() instanceof CandidateFullProfileAPIOutbound);
+		
+	}
+	
+	/**
+	* Test request to update Candidates profile
+	* @throws Exception
+	*/
+	@Test
+	public void testUpdateCandidateProfile() throws Exception{
+	
+		final String candidateId = "1234";
+		
+		ArgumentCaptor<CandidateUpdateRequest> candidateArgCapt = ArgumentCaptor.forClass(CandidateUpdateRequest.class);
+		
+		CandidateUpdateRequestAPIInbound request = CandidateUpdateRequestAPIInbound.builder().build();
+		
+		Mockito.doNothing().when(this.mockCandidateService).updateCandidateProfile(candidateArgCapt.capture());
+		
+		ResponseEntity<Void> response = this.controller.updateCandidateProfile(request, candidateId, mockPrincipal);
+		
+		assertEquals(HttpStatus.OK, response.getStatusCode());
+		
+		assertEquals(candidateId, candidateArgCapt.getValue().getCandidateId());
 		
 	}
 	

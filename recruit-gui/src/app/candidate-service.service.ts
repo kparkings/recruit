@@ -1,19 +1,19 @@
-import { Injectable }                             	from '@angular/core';
-import { UntypedFormGroup }                         from '@angular/forms';
-import { HttpClient, HttpResponse, HttpHeaders }  	from '@angular/common/http';
-import { Observable, throwError }                 	from 'rxjs';
-import { NewCandidate }                           	from './new-candidate/new-candidate';
-import { Candidate }                           		from './candidate';
-import { NewPendingCandidate }                      from './create-candidate/new-pending-candidate';
-import { Language}                                	from './new-candidate/language';
-import { CandidateFunction }                      	from './candidate-function';
-import { environment }								from './../environments/environment';
-import { SearchAlert }		 	                    from './recruiter-alerts/search-alert';
-import { CandidateSearchAlert }                     from './suggestions/candidate-search-alert';
-import { ExtractedFilters }                     	from './suggestions/extracted-filters';
-import { SavedCandidate }		 	                from './suggestions/saved-candidate';
-import { CandidateProfile }							from './candidate-profile/candidate-profile';
-
+import { Injectable }                             		from '@angular/core';
+import { UntypedFormGroup }                         	from '@angular/forms';
+import { HttpClient, HttpResponse, HttpHeaders }  		from '@angular/common/http';
+import { Observable, throwError }                 		from 'rxjs';
+import { NewCandidate }                           		from './new-candidate/new-candidate';
+import { Candidate }                           			from './candidate';
+import { NewPendingCandidate }                      	from './create-candidate/new-pending-candidate';
+import { Language}                                		from './new-candidate/language';
+import { CandidateFunction }                      		from './candidate-function';
+import { environment }									from './../environments/environment';
+import { SearchAlert }		 	                    	from './recruiter-alerts/search-alert';
+import { CandidateSearchAlert }                     	from './suggestions/candidate-search-alert';
+import { ExtractedFilters }                     		from './suggestions/extracted-filters';
+import { SavedCandidate }		 	                	from './suggestions/saved-candidate';
+import { CandidateProfile }								from './candidate-profile/candidate-profile';
+import { UpdateCandidateProfileRequest, LanguageOption}	from './candidate-profile/update-candidate-profile-req';
 
 /**
 * Services for new Candidates
@@ -63,7 +63,17 @@ export class CandidateServiceService {
 			
 		this.httpClient.put<any>(backendUrl, '{}',  this.httpOptions).subscribe(data => console.log('XXXXXXXXXXXXXXXY'));
 	}
-	  
+	 
+	/**
+	* Update a Candidate profile 
+	*/
+	public updateCandidate(candidateId:string, candidate: UpdateCandidateProfileRequest):Observable<any> {
+	
+		const backendUrl:string = environment.backendUrl +'candidate/'+candidateId + '/profile';
+			
+		return this.httpClient.put<any>(backendUrl, JSON.stringify(candidate),  this.httpOptions);
+	}
+	 
 	/**
 	* Disables a Candidate  
 	*/

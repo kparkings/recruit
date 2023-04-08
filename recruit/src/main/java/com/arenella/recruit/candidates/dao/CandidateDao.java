@@ -45,6 +45,9 @@ public interface CandidateDao extends CrudRepository<CandidateEntity, Long>, Jpa
 	@Query("from CandidateEntity where email = :emailId")
 	public Set<CandidateEntity> fetchByEmail(String emailId);
 	
+	@Query("from CandidateEntity where email = :emailId and candidateId != :candidateId")
+	public Set<CandidateEntity> fetchByEmail(String emailId, long candidateId);
+	
 	/**
 	* Returns whether or not Email is already used for the Candidate
 	* @param email - email address to filter on
@@ -52,6 +55,15 @@ public interface CandidateDao extends CrudRepository<CandidateEntity, Long>, Jpa
 	*/
 	default boolean emailInUse(String email) {
 		return !this.fetchByEmail(email).isEmpty();
+	}
+	
+	/**
+	* Returns whether or not Email is already used by another Candidate
+	* @param email - email address to filter on
+	* @return If Email already used for another Candidate
+	*/
+	default boolean emailInUseByOtherUser(String email, long userId) {
+		return !this.fetchByEmail(email, userId).isEmpty();
 	}
 	
 	/**

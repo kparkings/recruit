@@ -105,8 +105,8 @@
 						<th>English</th>
 						<td>
 							<select class="new-candidate-inpt" formControlName="english">
-								<option value="NO">No</option>
-								<option value="YES">Yes</option>
+								<option value="UNKNOWN">No</option>
+								<option value="PROFICIENT">Yes</option>
 								<option value="BASIC">Basic</option>
 							</select>
 						</td>
@@ -115,8 +115,8 @@
 						<th>Dutch</th>
 						<td>
 							<select class="new-candidate-inpt" formControlName="dutch">
-								<option value="NO">No</option>
-								<option value="YES">Yes</option>
+								<option value="UNKNOWN">No</option>
+								<option value="PROFICIENT">Yes</option>
 								<option value="BASIC">Basic</option>
 							</select>
 						</td>
@@ -125,8 +125,8 @@
 						<th>French</th>
 						<td>
 							<select class="new-candidate-inpt" formControlName="french">
-								<option value="NO">No</option>
-								<option value="YES">Yes</option>
+								<option value="UNKNOWN">No</option>
+								<option value="PROFICIENT">Yes</option>
 								<option value="BASIC">Basic</option>
 							</select>
 						</td>
@@ -174,8 +174,8 @@
 						<th>Available</th>
 						<td>
 							<select formControlName="available">
-								<option value="TRUE">Yes</option>
-								<option value="FALSE">No</option>
+								<option value="true">Yes</option>
+								<option value="false">No</option>
 							</select>
 						</td>
 					</tr>
@@ -183,7 +183,7 @@
 			</form>
 		</div>
 		<div class="action-buttons" style="padding-bottom:50px;">
-			<button class="btn btn-secondary action-btn" *ngIf="currentView === 'view-edit'" (click)="saveProfile()">Save</button>		
+			<button class="btn btn-secondary action-btn" *ngIf="currentView === 'view-edit'" (click)="updateCandidate()">Save</button>		
 		</div>
 		
 	</div>

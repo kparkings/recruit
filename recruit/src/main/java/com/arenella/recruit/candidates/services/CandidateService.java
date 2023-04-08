@@ -14,6 +14,7 @@ import com.arenella.recruit.candidates.beans.CandidateExtractedFilters;
 import com.arenella.recruit.candidates.beans.CandidateFilterOptions;
 import com.arenella.recruit.candidates.beans.CandidateSearchAccuracyWrapper;
 import com.arenella.recruit.candidates.beans.CandidateSearchAlert;
+import com.arenella.recruit.candidates.beans.CandidateUpdateRequest;
 import com.arenella.recruit.candidates.beans.PendingCandidate;
 import com.arenella.recruit.candidates.controllers.CandidateController.CANDIDATE_UPDATE_ACTIONS;
 import com.arenella.recruit.candidates.controllers.SavedCandidate;
@@ -148,5 +149,11 @@ public interface CandidateService {
 	* @return
 	*/
 	public Candidate fetchCandidate(String candidateId, String authernticatedUserId, Collection<GrantedAuthority> authorities);
+
+	/**
+	* Updates details of a Candidates profile
+	* @param candidateUpdateRequest - Contains details of updates Candidate properties
+	*/
+	public void updateCandidateProfile(CandidateUpdateRequest candidateUpdateRequest);
 	
 }

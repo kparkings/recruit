@@ -1,13 +1,15 @@
 package com.arenella.recruit.candidates.adapters;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -25,6 +27,7 @@ import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -34,6 +37,9 @@ import com.arenella.recruit.candidates.beans.Candidate;
 import com.arenella.recruit.candidates.beans.CandidateFilterOptions;
 import com.arenella.recruit.candidates.beans.CandidateSearchAccuracyWrapper;
 import com.arenella.recruit.candidates.beans.CandidateSearchAlert;
+import com.arenella.recruit.candidates.beans.CandidateUpdateRequest;
+import com.arenella.recruit.candidates.beans.Language;
+import com.arenella.recruit.candidates.beans.Language.LANGUAGE;
 import com.arenella.recruit.candidates.beans.Language.LEVEL;
 import com.arenella.recruit.candidates.beans.PendingCandidate;
 import com.arenella.recruit.candidates.controllers.CandidateController.CANDIDATE_UPDATE_ACTIONS;
@@ -46,7 +52,10 @@ import com.arenella.recruit.candidates.dao.PendingCandidateDao;
 import com.arenella.recruit.candidates.dao.SavedCandidateDao;
 import com.arenella.recruit.candidates.entities.CandidateEntity;
 import com.arenella.recruit.candidates.entities.PendingCandidateEntity;
+import com.arenella.recruit.candidates.enums.COUNTRY;
+import com.arenella.recruit.candidates.enums.FREELANCE;
 import com.arenella.recruit.candidates.enums.FUNCTION;
+import com.arenella.recruit.candidates.enums.PERM;
 import com.arenella.recruit.candidates.services.CandidateServiceImpl;
 import com.arenella.recruit.candidates.services.CandidateStatisticsService;
 import com.arenella.recruit.candidates.utils.CandidateFunctionExtractorImpl;
@@ -881,6 +890,213 @@ public class CandidateServiceImplTest {
 		Candidate candidate = this.service.fetchCandidate("1961", "1961", authorities);
 		
 		assertNotNull(candidate);
+		
+	}
+	
+	/**
+	* Test candidate cannot update another canidates profile
+	* @throws Exception
+	*/
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@Test
+	public void testUpdateCandidateProfile_other_candidate() throws Exception{
+		
+		Collection authorities = new HashSet<>();
+		authorities.add(new SimpleGrantedAuthority("ROLE_CANDIDATE"));
+
+		Mockito.when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
+		Mockito.when(mockAuthentication.getAuthorities()).thenReturn(authorities);
+		Mockito.when(mockAuthentication.getPrincipal()).thenReturn("222");
+		
+		assertThrows(IllegalArgumentException.class, () -> {
+			this.service.updateCandidateProfile(CandidateUpdateRequest.builder().candidateId("111").build());
+		});
+		
+	}
+	
+	/**
+	* Test can only update if candidate or recruiter
+	* @throws Exception
+	*/
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@Test
+	public void testUpdateCandidateProfile_non_candidate_or_recruiter() throws Exception{
+		
+		Collection authorities = new HashSet<>();
+		authorities.add(new SimpleGrantedAuthority("ROLE_RECRUITER"));
+
+		Mockito.when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
+		Mockito.when(mockAuthentication.getAuthorities()).thenReturn(authorities);
+		Mockito.when(mockAuthentication.getPrincipal()).thenReturn("222");
+		
+		assertThrows(IllegalArgumentException.class, () -> {
+			this.service.updateCandidateProfile(CandidateUpdateRequest.builder().candidateId("222").build());
+		});
+		
+	}
+
+	/**
+	* Tests case the candidate does not exist
+	* @throws Exception
+	*/
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@Test
+	public void testUpdateCandidateProfile_unknown_candidate() throws Exception{
+		
+		Collection authorities = new HashSet<>();
+		authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+
+		Mockito.when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
+		Mockito.when(mockAuthentication.getAuthorities()).thenReturn(authorities);
+		Mockito.when(mockAuthentication.getPrincipal()).thenReturn("222");
+		Mockito.when(this.mockCandidateDao.findCandidateById(Mockito.anyLong())).thenReturn(Optional.empty());
+		
+		assertThrows(IllegalArgumentException.class, () -> {
+			this.service.updateCandidateProfile(CandidateUpdateRequest.builder().candidateId("222").build());
+		});
+		
+	}
+	
+	/**
+	* Test that it is not possible to update the email to an emal already being used
+	* by another candidate
+	* @throws Exception
+	*/
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@Test
+	public void testUpdateCandidateProfile_update_email_to_already_in_use_email() throws Exception{
+		
+		Collection authorities = new HashSet<>();
+		authorities.add(new SimpleGrantedAuthority("ROLE_CANDIDATE"));
+
+		Mockito.when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
+		Mockito.when(mockAuthentication.getAuthorities()).thenReturn(authorities);
+		Mockito.when(mockAuthentication.getPrincipal()).thenReturn("222");
+		Mockito.when(this.mockCandidateDao.findCandidateById(Mockito.anyLong())).thenReturn(Optional.of(Candidate.builder().build()));
+		Mockito.when(this.mockCandidateDao.emailInUseByOtherUser(Mockito.anyString(), Mockito.anyLong())).thenReturn(true);
+		
+		assertThrows(IllegalStateException.class, () -> {
+			this.service.updateCandidateProfile(CandidateUpdateRequest.builder().email("k@1.nl").candidateId("222").build());
+		});
+		
+	}
+	
+	/**
+	* Test happy path for the updating of an existing Candidate
+	* @throws Exception
+	*/
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@Test
+	public void testUpdateCandidateProfile() throws Exception{
+		
+		final String 		candidateId 			= "123";
+		final FUNCTION		function				= FUNCTION.JAVA_DEV;
+		final COUNTRY 		country 				= COUNTRY.NETHERLANDS;
+		final String 		city 					= "Den Haag";
+		final String 		email					= "kparkings@gmail.com";
+		final String 		roleSought				= "Senior java Dev";
+		final boolean 		available 				= true;
+		final boolean 		flaggedAsUnavailable	= true;
+		final FREELANCE 	freelance 				= FREELANCE.TRUE;
+		final PERM 			perm 					= PERM.TRUE;
+		final LocalDate 	lastAvailabilityCheck 	= LocalDate.of(1980, 12, 3);
+		final LocalDate 	registerd 				= LocalDate.of(2021, 02, 20);
+		final int 			yearsExperience 		= 21;
+		final Set<String>	skills					= new LinkedHashSet<>();
+		final Set<Language>	languages				= new LinkedHashSet<>();
+		final String		skill					= "Java";
+		final Language		language				= Language.builder().language(LANGUAGE.DUTCH).level(LEVEL.PROFICIENT).build();
+		
+		final FUNCTION		functionUpdt				= FUNCTION.CSHARP_DEV;
+		final COUNTRY 		countryUpdt 				= COUNTRY.BELGIUM;
+		final String 		cityUpdt 					= "Brussels";
+		final String 		emailUpdt					= "kparkings@gmail.nl";
+		final String 		roleSoughtUpdt				= "Senior C# Dev";
+		final boolean 		availableUpdt 				= false;
+		final FREELANCE 	freelanceUpdt 				= FREELANCE.FALSE;
+		final PERM 			permUpdt 					= PERM.FALSE;
+		final int 			yearsExperienceUpdt 		= 22;
+		final Set<Language>	languagesUpdt				= new LinkedHashSet<>();
+		final Language		languageUpdt				= Language.builder().language(LANGUAGE.FRENCH).level(LEVEL.BASIC).build();
+		
+		languages.add(language);
+		languagesUpdt.add(languageUpdt);
+		
+		skills.add(skill);
+		
+		Candidate original = Candidate
+				.builder()
+					.available(available)
+					.candidateId(candidateId)
+					.city(city)
+					.country(country)
+					.email(email)
+					.firstname(skill)
+					.flaggedAsUnavailable(flaggedAsUnavailable)
+					.freelance(freelance)
+					.function(function)
+					.languages(languages)
+					.lastAvailabilityCheck(lastAvailabilityCheck)
+					.perm(perm)
+					.registerd(registerd)
+					.roleSought(roleSought)
+					.skills(skills)
+					.surname(skill)
+					.yearsExperience(yearsExperience)
+				.build();
+		
+		ArgumentCaptor<Candidate> candidateArgCapt = ArgumentCaptor.forClass(Candidate.class);
+		
+		CandidateUpdateRequest update = CandidateUpdateRequest
+				.builder()
+					.available(availableUpdt)
+					.candidateId(candidateId)
+					.city(cityUpdt)
+					.country(countryUpdt)
+					.email(emailUpdt)
+					.firstname(roleSoughtUpdt)
+					.freelance(freelanceUpdt)
+					.function(functionUpdt)
+					.languages(languagesUpdt)
+					.perm(permUpdt)
+					.roleSought(roleSoughtUpdt)
+					.surname(roleSoughtUpdt)
+					.yearsExperience(yearsExperienceUpdt)
+				.build();
+		
+		Collection authorities = new HashSet<>();
+		authorities.add(new SimpleGrantedAuthority("ROLE_CANDIDATE"));
+
+		Mockito.when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
+		Mockito.when(mockAuthentication.getAuthorities()).thenReturn(authorities);
+		Mockito.when(mockAuthentication.getPrincipal()).thenReturn(candidateId);
+		Mockito.when(this.mockCandidateDao.findCandidateById(Mockito.anyLong())).thenReturn(Optional.of(original));
+		Mockito.when(this.mockCandidateDao.emailInUseByOtherUser(Mockito.anyString(), Mockito.anyLong())).thenReturn(false);
+		
+		Mockito.doNothing().when(this.mockCandidateDao).saveCandidate(candidateArgCapt.capture());
+		
+		this.service.updateCandidateProfile(update);
+		
+		Candidate persisted = candidateArgCapt.getValue();
+		
+		assertEquals(candidateId, 			persisted.getCandidateId());
+		assertEquals(functionUpdt, 			persisted.getFunction());
+		assertEquals(countryUpdt, 			persisted.getCountry());
+		assertEquals(cityUpdt, 				persisted.getCity());
+		assertEquals(emailUpdt, 			persisted.getEmail());
+		assertEquals(roleSoughtUpdt, 		persisted.getRoleSought());
+		assertEquals(availableUpdt, 		persisted.isAvailable());
+		assertEquals(flaggedAsUnavailable, 	persisted.isFlaggedAsUnavailable());
+		assertEquals(freelanceUpdt, 		persisted.isFreelance());
+		assertEquals(permUpdt, 				persisted.isPerm());
+		assertEquals(lastAvailabilityCheck, persisted.getLastAvailabilityCheckOn());
+		assertEquals(registerd, 			persisted.getRegisteredOn());
+		assertEquals(yearsExperienceUpdt, 	persisted.getYearsExperience());
+		
+		assertTrue(persisted.getSkills().contains(skill));
+		persisted.getLanguages().stream().filter(l -> l.getLanguage() == languageUpdt.getLanguage()).findAny().orElseThrow();
+		
+		
 		
 	}
 	

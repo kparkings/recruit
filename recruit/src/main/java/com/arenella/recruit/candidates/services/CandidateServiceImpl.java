@@ -34,6 +34,7 @@ import com.arenella.recruit.candidates.beans.CandidateExtractedFilters;
 import com.arenella.recruit.candidates.beans.CandidateFilterOptions;
 import com.arenella.recruit.candidates.beans.CandidateSearchAccuracyWrapper;
 import com.arenella.recruit.candidates.beans.CandidateSearchAlert;
+import com.arenella.recruit.candidates.beans.CandidateUpdateRequest;
 import com.arenella.recruit.candidates.beans.PendingCandidate;
 import com.arenella.recruit.candidates.controllers.CandidateController.CANDIDATE_UPDATE_ACTIONS;
 import com.arenella.recruit.candidates.controllers.CandidateValidationException;
@@ -440,7 +441,7 @@ public class CandidateServiceImpl implements CandidateService{
 	@Override
 	public void addSearchAlert(CandidateSearchAlert alert, String searchText) {
 		
-		alert.initAsNewAlert(this.getAuthenticatedRecruiterId());
+		alert.initAsNewAlert(this.getAuthenticatedUserId());
 		
 		if (!searchText.isBlank()) {
 			Set<FUNCTION> functionToFilterOn = this.candidateFunctionExtractor.extractFunctions(searchText);
@@ -461,7 +462,7 @@ public class CandidateServiceImpl implements CandidateService{
 		
 		CandidateSearchAlert alert = alertOpt.orElseThrow(() -> new IllegalArgumentException("Unknown SearchAlert Id " + id));
 		
-		if (!this.getAuthenticatedRecruiterId().equals(alert.getRecruiterId())) {
+		if (!this.getAuthenticatedUserId().equals(alert.getRecruiterId())) {
 			throw new IllegalArgumentException("Unable to delete SearchAlert");
 		}
 		
@@ -474,14 +475,14 @@ public class CandidateServiceImpl implements CandidateService{
 	*/
 	@Override
 	public Set<CandidateSearchAlert> getAlertsForCurrentUser() {
-		return this.skillAlertDao.fetchAlertsByRecruiterId(getAuthenticatedRecruiterId());
+		return this.skillAlertDao.fetchAlertsByRecruiterId(getAuthenticatedUserId());
 	}
 	
 	/**
 	* Retrieves the Id of the current Recruiter
 	* @return id from security context
 	*/
-	private String getAuthenticatedRecruiterId() {
+	private String getAuthenticatedUserId() {
 		return SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
 	}
 
@@ -519,7 +520,7 @@ public class CandidateServiceImpl implements CandidateService{
 		
 		Map<SavedCandidate, Candidate> candidates = new LinkedHashMap<>();
 		
-		this.savedCandidateDao.fetchSavedCandidatesByUserId(getAuthenticatedRecruiterId()).stream().forEach(c -> {
+		this.savedCandidateDao.fetchSavedCandidatesByUserId(getAuthenticatedUserId()).stream().forEach(c -> {
 			
 			if (this.candidateDao.existsById(c.getCandidateId())) {
 			
@@ -592,6 +593,73 @@ public class CandidateServiceImpl implements CandidateService{
 		}
 		
 		return candidate.get();
+	}
+
+	/**
+	* Refer to the CandidateService for details 
+	*/
+	@Override
+	public void updateCandidateProfile(CandidateUpdateRequest candidate) {
+		
+		final String 	userId 			= this.getAuthenticatedUserId();
+		final boolean 	isAdmin			= checkHasRole("ROLE_ADMIN");
+		final boolean 	isCandidate		= checkHasRole("ROLE_CANDIDATE");
+			
+		if (isCandidate && !candidate.getCandidateId().equals(userId)) {
+			throw new IllegalArgumentException("Cannot update another Candidates Profile");
+		}
+		
+		if (!isAdmin && !isCandidate) {
+			throw new IllegalArgumentException("You are not authorized to update Candidate profiles");
+		}
+		
+		Candidate existingCandidate = this.candidateDao.findCandidateById(Long.valueOf(candidate.getCandidateId())).orElseThrow(() -> new IllegalArgumentException("Cannot update Unknown Candidate"));
+		
+		//TODO: Check Email not in use for other Candidate than this candidate
+		
+		if (this.candidateDao.emailInUseByOtherUser(candidate.getEmail(), Long.valueOf(candidate.getCandidateId()))) {
+			throw new IllegalStateException("Cannot update. Email address alread in use by anothe user");
+		}
+		
+		Candidate updatedCandidate = Candidate
+				.builder()
+					.available(candidate.isAvailable())
+					.candidateId(existingCandidate.getCandidateId())
+					.city(candidate.getCity())
+					.country(candidate.getCountry())
+					.email(candidate.getEmail())
+					.firstname(candidate.getFirstname())
+					.flaggedAsUnavailable(existingCandidate.isFlaggedAsUnavailable())
+					.freelance(candidate.isFreelance())
+					.function(candidate.getFunction())
+					.languages(candidate.getLanguages())
+					.lastAvailabilityCheck(existingCandidate.getLastAvailabilityCheckOn())
+					.perm(candidate.isPerm())
+					.registerd(existingCandidate.getRegisteredOn())
+					.roleSought(candidate.getRoleSought())
+					.skills(existingCandidate.getSkills())
+					.surname(candidate.getSurname())
+					.yearsExperience(candidate.getYearsExperience())
+				.build();
+		
+		this.candidateDao.saveCandidate(updatedCandidate);
+		
+		
+		
+		//TODO: If availability changed send event
+		//TODO: Check is own Candidate or Admin
+				
+		
+	}
+	
+	/**
+	* Checks if the currently authenticated user has 
+	* a specific role
+	* @param roleToCheck - Role to check
+	* @return whether or not the user has the role
+	*/
+	private boolean checkHasRole(String roleToCheck) {
+		return SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream().filter(role -> role.getAuthority().equals(roleToCheck)).findAny().isPresent();
 	}
 	
 }

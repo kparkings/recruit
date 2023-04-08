@@ -5,6 +5,7 @@ export class CandidateProfile{
 	
 	public profilePhoto:PhotoAPIOutbound	= new PhotoAPIOutbound();
 	public introduction:string				= '';
+	public email:string						= '';
 	public candidateId:string 				= '';
 	public function:string 					= '';
 	public roleSought:string 				= '';
@@ -16,10 +17,19 @@ export class CandidateProfile{
 	public available:boolean 				= false;
 	public lastAvailabilityCheck:Date 		= new Date();
 	public skills:Array<string> 			= new Array<string>();
-	public languages:Array<string> 			= new Array<string>();
+	public languages:Array<Language> 		= new Array<Language>();
 	public firstname:string 				= '';
 	public surname:string 					= '';
 
+}
+
+/**
+* Class represents a Candidates proficiency 
+* in a Language
+*/
+export class Language {
+	public language:string 	= '';
+	public level:string 	= '';
 }
 
 /**
