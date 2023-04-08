@@ -1,5 +1,6 @@
 package com.arenella.recruit.candidates.controllers;
 
+import java.io.IOException;
 import java.security.Principal;
 import java.util.LinkedHashSet;
 import java.util.Optional;
@@ -77,12 +78,13 @@ public class CandidateController {
 	* @param candidateId	- Id of candidate to update
 	* @param principal		- Authorized used
 	* @return ResponseEntity
+	 * @throws IOException 
 	*/
 	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('ROLE_CANDIDATE')")
 	@PutMapping(path="candidate/{candidateId}/profile",consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-	public ResponseEntity<Void> updateCandidateProfile(@RequestPart("profile") CandidateUpdateRequestAPIInbound updateRequest, @RequestPart("file") Optional<MultipartFile> file, @PathVariable("candidateId") String candidateId, Principal principal) {
+	public ResponseEntity<Void> updateCandidateProfile(@RequestPart("profile") CandidateUpdateRequestAPIInbound updateRequest, @RequestPart("file") Optional<MultipartFile> file, @PathVariable("candidateId") String candidateId, Principal principal) throws IOException {
 		
-		CandidateUpdateRequest candidateUpdateRequest = CandidateUpdateRequestAPIInbound.convertToDomain(candidateId, updateRequest);
+		CandidateUpdateRequest candidateUpdateRequest = CandidateUpdateRequestAPIInbound.convertToDomain(candidateId, updateRequest, file);
 		
 		this.candidateService.updateCandidateProfile(candidateUpdateRequest);
 		

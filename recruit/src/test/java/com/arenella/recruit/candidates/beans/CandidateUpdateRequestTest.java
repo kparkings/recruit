@@ -7,6 +7,9 @@ import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 
+import com.arenella.recruit.candidates.beans.Candidate.Rate;
+import com.arenella.recruit.candidates.beans.Candidate.Rate.CURRENCY;
+import com.arenella.recruit.candidates.beans.Candidate.Rate.PERIOD;
 import com.arenella.recruit.candidates.beans.Language.LANGUAGE;
 import com.arenella.recruit.candidates.beans.Language.LEVEL;
 import com.arenella.recruit.candidates.enums.COUNTRY;
@@ -34,6 +37,9 @@ public class CandidateUpdateRequestTest {
 	private static final Set<Language>	languages				= new LinkedHashSet<>();
 	private static final String			skill					= "Java";
 	private static final Language		language				= Language.builder().language(LANGUAGE.DUTCH).level(LEVEL.PROFICIENT).build();
+	private static final Rate			rate					= new Rate(CURRENCY.EUR, PERIOD.DAY, 1);
+	private static final String			introduction			= "into";
+	private static final byte[]			photoBytes				= new byte[] {};
 	
 	/**
 	* Sets up test environment 
@@ -64,6 +70,9 @@ public class CandidateUpdateRequestTest {
 							.perm(perm)
 							.yearsExperience(yearsExperience)
 							.languages(languages)
+							.rate(rate)
+							.photoBytes(photoBytes)
+							.introduction(introduction)
 							.build();
 		
 		assertEquals(candidateId, 		candidate.getCandidateId());
@@ -76,7 +85,9 @@ public class CandidateUpdateRequestTest {
 		assertEquals(freelance, 		candidate.isFreelance());
 		assertEquals(perm, 				candidate.isPerm());
 		assertEquals(yearsExperience, 	candidate.getYearsExperience());
-		
+		assertEquals(rate, 				candidate.getRate().get());
+		assertEquals(photoBytes, 		candidate.getPhotoBytes().get());
+		assertEquals(introduction, 		candidate.getIntroduction());
 		candidate.getLanguages().stream().filter(l -> l.getLanguage() == language.getLanguage()).findAny().orElseThrow();
 		
 	}

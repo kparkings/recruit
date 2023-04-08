@@ -1,8 +1,10 @@
 package com.arenella.recruit.candidates.beans;
 
 import java.util.LinkedHashSet;
+import java.util.Optional;
 import java.util.Set;
 
+import com.arenella.recruit.candidates.beans.Candidate.Rate;
 import com.arenella.recruit.candidates.enums.COUNTRY;
 import com.arenella.recruit.candidates.enums.FREELANCE;
 import com.arenella.recruit.candidates.enums.FUNCTION;
@@ -27,6 +29,9 @@ public class CandidateUpdateRequest {
 	private int				yearsExperience;
 	private boolean 		available;
 	private Set<Language> 	languages					= new LinkedHashSet<>();
+	private Rate			rate;
+	private String			introduction;
+	private byte[]			photoBytes;
 	
 	/**
 	* Constructor based upon a builder
@@ -46,6 +51,9 @@ public class CandidateUpdateRequest {
 		this.freelance 					= builder.freelance;
 		this.yearsExperience 			= builder.yearsExperience;
 		this.available 					= builder.available;
+		this.rate						= builder.rate;
+		this.introduction				= builder.introduction;
+		this.photoBytes					= builder.photoBytes;
 		this.languages.addAll(builder.languages);
 	
 	}
@@ -159,6 +167,31 @@ public class CandidateUpdateRequest {
 	}
 	
 	/**
+	* Returns the Candidates introduction about themselves
+	* @return Introduction
+	*/
+	public String getIntroduction() {
+		return this.introduction;
+	}
+	
+	/**
+	* If available returns info about the Candidates Rate
+	* @return Rate information
+	*/
+	public Optional<Rate> getRate(){
+		return Optional.ofNullable(this.rate);
+	}
+	
+	/**
+	* If available Returns the Profile Photo for
+	* the Candidate
+	* @return
+	*/
+	public Optional<byte[]> getPhotoBytes(){
+		return Optional.ofNullable(this.photoBytes);
+	}
+	
+	/**
 	* Builder for the Candidate class
 	* @return A Builder for the Candidate class
 	*/
@@ -185,6 +218,9 @@ public class CandidateUpdateRequest {
 		private int				yearsExperience;
 		private boolean 		available;
 		private Set<Language> 	languages					= new LinkedHashSet<>();
+		private Rate			rate;
+		private String			introduction;
+		private byte[]			photoBytes;
 		
 		/**
 		* Sets the candidates Unique identifier in the System
@@ -314,6 +350,36 @@ public class CandidateUpdateRequest {
 		public CandidateUpdateRequestBuilder languages(Set<Language> languages) {
 			this.languages.clear();
 			this.languages.addAll(languages);
+			return this;
+		}
+		
+		/**
+		* Sets info about Candidates Rate
+		* @param rate - Rate info
+		* @return Builder
+		*/
+		public CandidateUpdateRequestBuilder rate(Rate rate) {
+			this.rate = rate;
+			return this;
+		}
+		
+		/**
+		* Sets the Candidates introduction about themselves
+		* @param introduction - Candidate introduction
+		* @return Builder
+		*/
+		public CandidateUpdateRequestBuilder introduction(String introduction) {
+			this.introduction = introduction;
+			return this;
+		}
+		
+		/**
+		* Sets the Candidates profile Photo
+		* @param photo - Candidates photo
+		* @return Builder
+		*/
+		public CandidateUpdateRequestBuilder photoBytes(byte[] photoBytes) {
+			this.photoBytes = photoBytes;
 			return this;
 		}
 		

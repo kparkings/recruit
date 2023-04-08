@@ -36,6 +36,8 @@ import com.arenella.recruit.candidates.beans.CandidateSearchAccuracyWrapper;
 import com.arenella.recruit.candidates.beans.CandidateSearchAlert;
 import com.arenella.recruit.candidates.beans.CandidateUpdateRequest;
 import com.arenella.recruit.candidates.beans.PendingCandidate;
+import com.arenella.recruit.candidates.beans.Candidate.Photo;
+import com.arenella.recruit.candidates.beans.Candidate.Photo.PHOTO_FORMAT;
 import com.arenella.recruit.candidates.controllers.CandidateController.CANDIDATE_UPDATE_ACTIONS;
 import com.arenella.recruit.candidates.controllers.CandidateValidationException;
 import com.arenella.recruit.candidates.controllers.SavedCandidate;
@@ -56,12 +58,15 @@ import com.arenella.recruit.emailservice.beans.Email.EmailType;
 import com.arenella.recruit.emailservice.beans.Email.Sender;
 import com.arenella.recruit.emailservice.beans.Email.EmailRecipient.ContactType;
 import com.arenella.recruit.emailservice.beans.Email.Sender.SenderType;
+
 import com.arenella.recruit.candidates.utils.PasswordUtil;
 import com.arenella.recruit.candidates.dao.CandidateSearchAlertDao;
 import com.arenella.recruit.candidates.dao.CandidateSkillsDao;
 import com.arenella.recruit.candidates.dao.SavedCandidateDao;
 
 import com.arenella.recruit.candidates.utils.CandidateFunctionExtractor;
+import com.arenella.recruit.candidates.utils.CandidateImageFileSecurityParser;
+import com.arenella.recruit.candidates.utils.CandidateImageManipulator;
 
 /**
 * Provides services related to Candidates
@@ -102,6 +107,12 @@ public class CandidateServiceImpl implements CandidateService{
 	
 	@Autowired
 	private SavedCandidateDao				savedCandidateDao;
+	
+	@Autowired
+	private CandidateImageFileSecurityParser			imageFileSecurityParser;
+	
+	@Autowired
+	private CandidateImageManipulator			imageManipulator;
 	
 	/**
 	* Refer to the CandidateService Interface for Details
@@ -615,10 +626,25 @@ public class CandidateServiceImpl implements CandidateService{
 		
 		Candidate existingCandidate = this.candidateDao.findCandidateById(Long.valueOf(candidate.getCandidateId())).orElseThrow(() -> new IllegalArgumentException("Cannot update Unknown Candidate"));
 		
-		//TODO: Check Email not in use for other Candidate than this candidate
-		
 		if (this.candidateDao.emailInUseByOtherUser(candidate.getEmail(), Long.valueOf(candidate.getCandidateId()))) {
 			throw new IllegalStateException("Cannot update. Email address alread in use by anothe user");
+		}
+		
+		//TODO: IF photo already exists and not specifically removed dont remote ( check what you did for recruiter profile )
+		Photo photo = null;
+		
+		if (candidate.getPhotoBytes().isPresent()) {
+			
+			if (!imageFileSecurityParser.isSafe(candidate.getPhotoBytes().get())) {
+				throw new RuntimeException("Invalid file type detected"); 
+			}
+		
+			byte[] photoBytes = this.imageManipulator.toProfileImage(candidate.getPhotoBytes().get(), PHOTO_FORMAT.jpeg);
+					
+			photo = new Photo(photoBytes, PHOTO_FORMAT.jpeg);
+			
+			
+			
 		}
 		
 		Candidate updatedCandidate = Candidate
@@ -640,6 +666,7 @@ public class CandidateServiceImpl implements CandidateService{
 					.skills(existingCandidate.getSkills())
 					.surname(candidate.getSurname())
 					.yearsExperience(candidate.getYearsExperience())
+					.photo(photo)
 				.build();
 		
 		this.candidateDao.saveCandidate(updatedCandidate);

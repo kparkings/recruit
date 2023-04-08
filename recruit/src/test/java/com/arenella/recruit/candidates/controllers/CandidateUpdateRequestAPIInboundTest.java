@@ -3,6 +3,7 @@ package com.arenella.recruit.candidates.controllers;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.LinkedHashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import org.junit.jupiter.api.Test;
@@ -101,7 +102,7 @@ public class CandidateUpdateRequestAPIInboundTest {
 					.languages(languages)
 					.build();
 		
-		CandidateUpdateRequest domain = CandidateUpdateRequestAPIInbound.convertToDomain(candidateId, candidateAPIInboumd);
+		CandidateUpdateRequest domain = CandidateUpdateRequestAPIInbound.convertToDomain(candidateId, candidateAPIInboumd, Optional.empty());
 
 		assertEquals(candidateId,		domain.getCandidateId());
 		assertEquals(function, 			domain.getFunction());

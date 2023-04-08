@@ -1,8 +1,14 @@
 package com.arenella.recruit.candidates.controllers;
 
+import java.io.IOException;
 import java.util.LinkedHashSet;
+import java.util.Optional;
 import java.util.Set;
 
+import org.springframework.web.multipart.MultipartFile;
+
+import com.arenella.recruit.candidates.beans.Candidate.Rate.CURRENCY;
+import com.arenella.recruit.candidates.beans.Candidate.Rate.PERIOD;
 import com.arenella.recruit.candidates.beans.CandidateUpdateRequest;
 import com.arenella.recruit.candidates.beans.Language;
 import com.arenella.recruit.candidates.enums.COUNTRY;
@@ -31,6 +37,8 @@ public class CandidateUpdateRequestAPIInbound {
 	private int				yearsExperience;
 	private boolean 		available;
 	private Set<Language> 	languages					= new LinkedHashSet<>();
+	private Rate			rate;
+	private String			introduction;
 	
 	/**
 	* Constructor based upon a builder
@@ -49,6 +57,9 @@ public class CandidateUpdateRequestAPIInbound {
 		this.freelance 					= builder.freelance;
 		this.yearsExperience 			= builder.yearsExperience;
 		this.available 					= builder.available;
+		this.rate						= builder.rate;
+		this.introduction				= builder.introduction;
+		
 		this.languages.addAll(builder.languages);
 	
 	}
@@ -154,6 +165,22 @@ public class CandidateUpdateRequestAPIInbound {
 	}
 	
 	/**
+	* Returns the Rate charged by the Candidate
+	* @return Rate charged by the candidate
+	*/
+	public Optional<Rate> getRate() {
+		return Optional.ofNullable(this.rate);
+	}
+	
+	/**
+	* Returns the Candidates introduction about themselves
+	* @return Candidate introduction
+	*/
+	public String getIntroduction() {
+		return this.introduction;
+	}
+	
+	/**
 	* Builder for the Candidate class
 	* @return A Builder for the Candidate class
 	*/
@@ -180,7 +207,9 @@ public class CandidateUpdateRequestAPIInbound {
 		private int				yearsExperience;
 		private boolean 		available;
 		private Set<Language> 	languages					= new LinkedHashSet<>();
-				
+		private Rate			rate;
+		private String			introduction;
+		
 		/**
 		* Sets the First name of the Candidate
 		* @param firstname - Candidates first name
@@ -303,6 +332,26 @@ public class CandidateUpdateRequestAPIInbound {
 		}
 		
 		/**
+		* Sets the Rate charged by the Candidate
+		* @param rate - Rate information
+		* @return Builder
+		*/
+		public CandidateUpdateRequestAPIInboundBuilder getRate(Rate rate) {
+			this.rate = rate;
+			return this;
+		}
+		
+		/**
+		* Sets the Candidates introduction about themselves
+		* @param introduction - Introduction
+		* @return Builder
+		*/
+		public CandidateUpdateRequestAPIInboundBuilder introduction(String introduction) {
+			this.introduction = introduction;
+			return this;
+		}
+		
+		/**
 		* Returns an instance of Candidate initialized with the 
 		* values in the builder
 		* @return Initialized instance of Candidate
@@ -317,10 +366,20 @@ public class CandidateUpdateRequestAPIInbound {
 	* @param candidateId	- Unique id of the Candidate
 	* @param updateRequest	- To concert
 	* @return Converted
+	 * @throws IOException 
 	*/
-	public static  CandidateUpdateRequest convertToDomain(String candidateId, CandidateUpdateRequestAPIInbound updateRequest) {
-		// TODO Auto-generated method stub
-		//New fields: rate, currently period, file type, fle bytes, introduction
+	public static  CandidateUpdateRequest convertToDomain(String candidateId, CandidateUpdateRequestAPIInbound updateRequest, Optional<MultipartFile> profileImage) throws IOException {
+		
+		com.arenella.recruit.candidates.beans.Candidate.Rate rate = null;
+		
+		if (updateRequest.getRate().isPresent()) {
+		
+			rate = new com.arenella.recruit.candidates.beans.Candidate.Rate(
+					updateRequest.getRate().get().getCurrency(),
+					updateRequest.getRate().get().getPeriod(),
+					updateRequest.getRate().get().getValue());
+			
+		}
 		
 		return CandidateUpdateRequest
 					.builder()
@@ -337,7 +396,60 @@ public class CandidateUpdateRequestAPIInbound {
 						.roleSought(updateRequest.roleSought)
 						.surname(updateRequest.getSurname())
 						.yearsExperience(updateRequest.getYearsExperience())
+						.introduction(updateRequest.getIntroduction())
+						.rate(rate)
+						.photoBytes(profileImage.isEmpty() ? null : profileImage.get().getBytes())
 					.build();
 	}
+	
+	/**
+	* Class represents a Rate charged by the Candidate
+	* for their work
+	* @author K Parkings
+	*/
+	public static class Rate{
+		
+		private final CURRENCY 	currency;
+		private final PERIOD 	period;
+		private final float 	value;
 
+		/**
+		* Constructor
+		* @param currency - Currency being charged
+		* @param period   - Unit of charging
+		* @param value	  - amount charged per unit
+		*/
+		public Rate(CURRENCY currency, PERIOD period, float value) {
+			this.currency 	= currency;
+			this.period 	= period;
+			this.value 		= value;
+		}
+		
+		/**
+		* Return the currency being charged
+		* @return currency
+		*/
+		public CURRENCY getCurrency() {
+			return this.currency;
+		}
+		
+		/**
+		* Returns the unit of charging
+		* @return period
+		*/
+		public PERIOD getPeriod() {
+			return this.period;
+		}
+		
+		/**
+		* Returns amount charged per unit 
+		* of charging
+		* @return value
+		*/
+		public float getValue() {
+			return this.value;
+		}
+
+	}
+	
 }
