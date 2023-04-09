@@ -97,9 +97,11 @@ public class CandidateEntity {
 	@Column(name="introduction")
 	private String introduction;
 	
+	@Enumerated(EnumType.STRING)
 	@Column(name="rate_currency")
-    private CURRENCY rateCurrency;
+	private CURRENCY rateCurrency;
 	
+	@Enumerated(EnumType.STRING)
     @Column(name="rate_period")
     private PERIOD ratePeriod;
     
@@ -722,7 +724,7 @@ public class CandidateEntity {
 			rate = new Rate(candidateEntity.getRateCurrency(), candidateEntity.getRatePeriod(), candidateEntity.getRateValue());
 		}
 		
-		if (candidateEntity.getPhotoBytes().length > 0 && candidateEntity.getPhotoFormat() != null) {
+		if (candidateEntity.getPhotoBytes() != null && candidateEntity.getPhotoFormat() != null) {
 			photo = new Photo(candidateEntity.getPhotoBytes(), candidateEntity.getPhotoFormat());
 		}
 		

@@ -45,6 +45,7 @@ public class CandidateFullProfileAPIOutboundTest {
 	private static final String				SURNAME					= "Parkings";
 	private static final Rate				RATE					= new Rate(CURRENCY.EUR, PERIOD.HOUR, 100);
 	private static final RateAPIOutbound	RATE_API_OUTBOUND		= new RateAPIOutbound(CURRENCY.EUR, PERIOD.HOUR, 100);
+	private static final String				EMAIL				 	= "kparkings@gmail.com";
 	
 	/**
 	* Sets up test environment 
@@ -79,6 +80,7 @@ public class CandidateFullProfileAPIOutboundTest {
 							.firstname(FIRST_NAME)
 							.surname(SURNAME)
 							.rate(RATE_API_OUTBOUND)
+							.email(EMAIL)
 							.build();
 		
 		assertEquals(CANDIDATE_ID, 						candidate.getCandidateId());
@@ -96,6 +98,7 @@ public class CandidateFullProfileAPIOutboundTest {
 		assertEquals(RATE.getCurrency(), 				candidate.getRate().get().getCurrency());
 		assertEquals(RATE.getPeriod(), 					candidate.getRate().get().getPeriod());
 		assertEquals(RATE.getValue(), 					candidate.getRate().get().getValue());
+		assertEquals(EMAIL, 							candidate.getEmail());
 		
 		assertTrue(candidate.getSkills().contains(SKILL));
 		candidate.getLanguages().stream().filter(l -> l.getLanguage() == LANGUAGEVAL.getLanguage()).findAny().orElseThrow();
@@ -125,6 +128,7 @@ public class CandidateFullProfileAPIOutboundTest {
 							.firstname(FIRST_NAME)
 							.surname(SURNAME)
 							.rate(RATE)
+							.email(EMAIL)
 							.build();
 		
 		assertEquals(CANDIDATE_ID, 				candidate.getCandidateId());
@@ -138,6 +142,7 @@ public class CandidateFullProfileAPIOutboundTest {
 		assertEquals(YEARS_EXPERIENCE, 			candidate.getYearsExperience());
 		assertEquals(ROLE_SOUGHT, 				candidate.getRoleSought());
 		assertEquals(FIRST_NAME,	 			candidate.getFirstname());
+		assertEquals(SURNAME, 					candidate.getSurname());
 		assertEquals(SURNAME, 					candidate.getSurname());
 		
 		assertTrue(candidate.getSkills().contains(SKILL));
@@ -157,7 +162,7 @@ public class CandidateFullProfileAPIOutboundTest {
 		assertEquals(ROLE_SOUGHT, 				candidateProfile.getRoleSought());
 		assertEquals(FIRST_NAME,	 			candidateProfile.getFirstname());
 		assertEquals(SURNAME, 					candidateProfile.getSurname());
-		
+		assertEquals(SURNAME, 					candidateProfile.getSurname());
 		assertEquals(RATE.getCurrency(), 		candidateProfile.getRate().get().getCurrency());
 		assertEquals(RATE.getPeriod(), 			candidateProfile.getRate().get().getPeriod());
 		assertEquals(RATE.getValue(), 			candidateProfile.getRate().get().getValue());

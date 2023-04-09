@@ -68,7 +68,7 @@ export class CandidateServiceService {
 	* Update a Candidate profile 
 	*/
 	public updateCandidate(candidateId:string, candidate: UpdateCandidateProfileRequest, profileImage:File):Observable<any> {
-	
+	console.log(JSON.stringify(candidate));
 		const backendUrl:string = environment.backendUrl +'candidate/'+candidateId + '/profile';
 		
 		var fd = new FormData();

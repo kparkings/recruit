@@ -2,44 +2,96 @@
 	<div class='content-div'>
 		<div class="recruiter-profile-buttons">
 			<div class="action-buttons">
-			<!--  
-				<button class="btn btn-secondary action-btn  main-action_btn"  *ngIf="isOwnAccountExists()  && currentView != 'view-create' && currentView != 'view-details'" 	(click)="showViewCreate()">Edit Profile</button>
-				<button class="btn btn-secondary action-btn  main-action_btn"  *ngIf="!isOwnAccountExists() && currentView != 'view-create' && currentView != 'view-details'" 	(click)="showViewCreate()">Create Profile</button>
-				<button class="btn btn-secondary action-btn" 				   *ngIf="currentView != 'view-main'" 																(click)="showViewMain()">Back</button>
-			-->
+				<button class="btn btn-secondary action-btn"  *ngIf="currentView == 'view-edit'" (click)="showViewMain()">Back</button>
+				<button class="btn btn-secondary action-btn"  *ngIf="currentView == 'view-edit'">Delete Profile</button>
+				<button class="btn btn-secondary action-btn"  *ngIf="currentView == 'view-main'" 	(click)="showViewEdit()">Edit Profile</button>
+				<button class="btn btn-secondary action-btn main-action_btn" *ngIf="currentView === 'view-edit'" (click)="updateCandidate()">Save</button>	
 			</div>
 		</div>
 		
 		<!-- View of Profile -->
-		<div *ngIf="currentView === 'view-details'">
+		<div *ngIf="currentView === 'view-main'">
 		
 			<div  class="details-left">
-				<img class="profile-photo-details" *ngIf="selectedCandidateProfile?.profilePhoto?.imageBytes" id='base64image' src='data:image/jpeg;base64, {{selectedCandidateProfile?.profilePhoto?.imageBytes}}' />
-				<br>
-				<table>
-					<tr>
-						<th>Company</th>
-						<td></td>
-					</tr>
-					<tr>
-						<th>Type</th>
-						<td></td>
-					</tr>
-					<tr>
-						<th>Years Exp</th>
-						<td></td>
-					</tr>
-				</table>
+			
+				<img class="profile-photo-details" *ngIf="candidateProfile?.photo?.imageBytes" id='base64image' src='data:image/jpeg;base64, {{candidateProfile?.photo?.imageBytes}}' />
 				<br>
 				<button class="btn btn-secondary action-btn main-action_btn" style="width:300px;margin-bottom:10px;" (click)="contactCandidate(contactBox)">Contact</button>
+				<br>
+				<div>
+					<h3>{{candidateProfile.firstname | enumToHumanReadableValue}} {{candidateProfile.surname | enumToHumanReadableValue}}</h3>
+				</div>
+				<div>
+					<h3>Location</h3>
+					<table>
+						<tr>
+							<th>Country</th>
+							<td>{{candidateProfile.country | enumToHumanReadableValue}}</td>
+						</tr>
+						<tr>
+							<th>City</th>
+							<td>{{candidateProfile.city | enumToHumanReadableValue}}</td>
+						</tr>
+					</table>
+				</div>
+				<!-- 
+				<div>
+					<h3>Languages</h3>
+					<table>
+						<tr>
+							<th>Dutch</th>
+							<td>{{candidateProfile.dutch | enumToHumanReadableValue}}</td>
+						</tr>
+						<tr>
+							<th>English</th>
+							<td>{{candidateProfile.english | enumToHumanReadableValue}}</td>
+						</tr>
+						<tr>
+							<th>French</th>
+							<td>{{candidateProfile.french | enumToHumanReadableValue}}</td>
+						</tr>
+					</table>
+				</div>
+				 -->
+				<div>
+					<h3>Contract Types</h3>
+					<table>
+						<tr>
+							<th>Freelance/Contract</th>
+							<td>{{candidateProfile.freelance | enumToHumanReadableValue}}</td>
+						</tr>
+						<tr>
+							<th>Permanent</th>
+							<td>{{candidateProfile.perm | enumToHumanReadableValue}}</td>
+						</tr>
+					</table>
+				</div>
+				<div *ngIf="candidateProfile.rate">
+					<h3>Rate</h3>
+					<p>{{candidateProfile.rate.currency | enumToHumanReadableValue}}: {{candidateProfile.rate.value}} per {{candidateProfile.rate.period | enumToHumanReadableValue}}</p>
+				</div>
+				<div>
+					<h3>Years Experience</h3>
+					<p>{{candidateProfile.yearsExperience}}
+				</div>
+				<br>
+				
 			</div>	
 				
 			<div class="details-left" style="max-width:75%;min-width:300px;">
 				<div style="float:center">
-					<h1>{{selectedCandidateProfile.firstname | enumToHumanReadableValue}} {{selectedCandidateProfile.surname | enumToHumanReadableValue}}</h1>
-					<br>
-					<pre style="white-space:pre-line;font-family: Roboto, 'Helvetica Neue', sans-serif;">{{selectedCandidateProfile.introduction}}</pre>
+					<h1 style="background:#6A5ACD; width:100%;margin-bottom:10px;padding:20px;">{{candidateProfile.roleSought}}</h1>
 					
+					<!-- 
+					<pre>
+					{{candidateProfile.firstname}} is a {{candidateProfile.roleSought}} with {{candidateProfile.yearsExperience}} years experience 
+					who is based in {{candidateProfile.country}}.
+					
+					</pre>
+					 -->
+					<div style="width:100%;margin-bottom:10px;padding:20px;">
+						<pre style="white-space:pre-line;font-family: Roboto, 'Helvetica Neue', sans-serif;">{{candidateProfile.introduction}}</pre>
+					</div>
 				</div>
 			
 				<div class="action-buttons" style="padding-bottom:50px;"></div>
@@ -195,22 +247,9 @@
 							<input type="number" formControlName="rateValue">
 						</td>
 					</tr>
-					<tr>
-						<th>Available</th>
-						<td>
-							<select formControlName="available">
-								<option value="true">Yes</option>
-								<option value="false">No</option>
-							</select>
-						</td>
-					</tr>
 				</table>
 			</form>
 		</div>
-		<div class="action-buttons" style="padding-bottom:50px;">
-			<button class="btn btn-secondary action-btn" *ngIf="currentView === 'view-edit'" (click)="updateCandidate()">Save</button>		
-		</div>
-		
 	</div>
 </div>
 

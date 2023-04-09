@@ -3,7 +3,7 @@
 */
 export class CandidateProfile{
 	
-	public profilePhoto:PhotoAPIOutbound	= new PhotoAPIOutbound();
+	public photo:PhotoAPIOutbound			= new PhotoAPIOutbound();
 	public introduction:string				= '';
 	public rate:Rate						= new Rate();
 	public email:string						= '';

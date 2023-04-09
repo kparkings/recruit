@@ -315,7 +315,7 @@ public class CandidateUpdateRequestAPIInbound {
 		* @param rate - Rate information
 		* @return Builder
 		*/
-		public CandidateUpdateRequestAPIInboundBuilder getRate(Rate rate) {
+		public CandidateUpdateRequestAPIInboundBuilder rate(Rate rate) {
 			this.rate = rate;
 			return this;
 		}

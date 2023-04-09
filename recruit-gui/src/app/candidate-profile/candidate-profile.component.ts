@@ -16,7 +16,7 @@ import { UpdateCandidateProfileRequest}							from './update-candidate-profile-r
   styleUrls: ['./candidate-profile.component.css']
 })
 export class CandidateProfileComponent {
-	public candidateProfile?:CandidateProfile;
+	public candidateProfile:CandidateProfile = new CandidateProfile();
 	public candiadteProfiles:Array<CandidateProfile> = new Array<CandidateProfile>();
 	public selectedCandidateProfile:CandidateProfile = new CandidateProfile();
 	public currentView = 'view-main'; 
@@ -33,8 +33,18 @@ export class CandidateProfileComponent {
     	});
 
 		if(this.isCandidate()){
-			this.candidateService.getCandidateById(this.getOwnUserId()).subscribe( candidate => {
+			this.fetchCandidate();
+		}
+	}
+	
+	/**
+	* Fetches Candidate
+	*/
+	public fetchCandidate():void{
+		this.candidateService.getCandidateById(this.getOwnUserId()).subscribe( candidate => {
 				this.candidateProfile = candidate;
+				
+				console.log(JSON.stringify(this.candidateProfile));
 				
 				let lvlEnglish 	= 'UNKNOWN';
 				let lvlDutch 	= 'UNKNOWN';
@@ -60,7 +70,7 @@ export class CandidateProfileComponent {
 					ratePeriod 		= this.candidateProfile.rate.period;
 					rateValue		= this.candidateProfile.rate.value;
 				}
-			
+				
 				this.candidateProfileFormBean = new UntypedFormGroup({
 					introduction: 				new UntypedFormControl(this.candidateProfile.introduction),
 					candidateId: 				new UntypedFormControl(this.candidateProfile.candidateId),
@@ -83,11 +93,9 @@ export class CandidateProfileComponent {
 					rateValue:					new UntypedFormControl(rateValue),
 				});
 				
-				this.currentView = 'view-edit';
-			})
-		}
+				this.currentView = 'view-main';
+			});
 	}
-	
 	
 	
 	/**
@@ -176,9 +184,11 @@ export class CandidateProfileComponent {
 		updateRequest.available 		= this.candidateProfileFormBean.get('available')?.value;
 		updateRequest.languages 		= languages;
 		updateRequest.rate				= rate;
+		updateRequest.introduction		= this.candidateProfileFormBean.get('introduction')?.value;
 		
 		this.candidateService.updateCandidate(this.getOwnUserId(), updateRequest, this.imageFile).subscribe(res => {
-			
+			this.fetchCandidate();
+			this.showViewMain();
 		}, err => {
 			console.log("Failed to update Candidate");
 		});
@@ -291,36 +301,11 @@ export class CandidateProfileComponent {
 	* Switches to view to add own profile
 	*/
 	public showViewEdit():void{
-		
 		this.currentView = 'view-edit';
-		
-		if (this.candidateProfile){
-			
-			//this.newProfileFormBean.get('recruitsIn')?.setValue(this.recruiterProfile.recruitsIn);
-			
-			//this.newProfileFormBean.get('visibleToRecruiters')?.setValue(this.recruiterProfile.visibleToRecruiters);
-			//this.newProfileFormBean.get('visibleToCandidates')?.setValue(this.recruiterProfile.visibleToCandidates);
-			//this.newProfileFormBean.get('visibleToPublic')?.setValue(this.recruiterProfile.visibleToPublic);
-			//this.newProfileFormBean.get('jobTitle')?.setValue(this.recruiterProfile.jobTitle);
-			//this.newProfileFormBean.get('yearsExperience')?.setValue(this.recruiterProfile.yearsExperience);
-			//this.newProfileFormBean.get('introduction')?.setValue(this.recruiterProfile.introduction);
-			//this.newProfileFormBean.get('recruiterType')?.setValue(this.recruiterProfile.recruiterType);     	
-		
-			//this.languagesSpoken 	= this.getLanguageOptions().filter(i => this.recruiterProfile?.languagesSpoken.includes(i[0]));
-			//this.recruitsIn 		= this.getCountryOptions().filter(i => this.recruiterProfile?.recruitsIn.includes(i[0]));
-			//this.sectors 			= this.getSectorOptions().filter(i => this.recruiterProfile?.sectors.includes(i[0]));
-			//this.coreTech 			= this.getTechOptions().filter(i => this.recruiterProfile?.coreTech.includes(i[0]));
-			//this.contractTypes 		= this.getContractTypeOptions().filter(i => this.recruiterProfile?.recruitsContractTypes.includes(i[0]));
-				
-		}
-		
 	}
 	
-	public showViewDetails(candidateProfile:CandidateProfile):void{
-		
-		this.currentView = 'view-details';
-		
-		this.selectedCandidateProfile = candidateProfile;
+	public showViewMain():void{
+		this.currentView = 'view-main';
 	}
 	
 	/**
@@ -497,8 +482,8 @@ export class CandidateProfileComponent {
   	
 		this.imageFile = event.target.files[0];
 		
-		if (this.candidateProfile && this.candidateProfile!.profilePhoto){
-			this.candidateProfile.profilePhoto = new PhotoAPIOutbound();	
+		if (this.candidateProfile && this.candidateProfile!.photo){
+			this.candidateProfile.photo = new PhotoAPIOutbound();	
   		}
   		
 	}

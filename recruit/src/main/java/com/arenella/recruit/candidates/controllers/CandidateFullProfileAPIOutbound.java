@@ -37,6 +37,7 @@ public class CandidateFullProfileAPIOutbound implements CandidateAPIOutbound{
 	private RateAPIOutbound			rate;
 	private PhotoAPIOutbound		photo;
 	private String					introduction;
+	private String					email;
 	
 	/**
 	* Constructor based upon a builder
@@ -59,6 +60,7 @@ public class CandidateFullProfileAPIOutbound implements CandidateAPIOutbound{
 		this.rate						= builder.rate;
 		this.photo						= builder.photo;
 		this.introduction				= builder.introduction;
+		this.email					 	= builder.email;
 		
 		this.skills.addAll(builder.skills);
 		this.languages.addAll(builder.languages);
@@ -205,6 +207,14 @@ public class CandidateFullProfileAPIOutbound implements CandidateAPIOutbound{
 	}
 	
 	/**
+	* Candidates Email address
+	* @return
+	*/
+	public String getEmail() {
+		return this.email;
+	}
+	
+	/**
 	* Builder for the  class
 	* @return A Builder for the  class
 	*/
@@ -235,6 +245,7 @@ public class CandidateFullProfileAPIOutbound implements CandidateAPIOutbound{
 		private RateAPIOutbound			rate;
 		private PhotoAPIOutbound		photo;
 		private String					introduction;
+		private String					email;
 		
 		/**
 		* Sets the candidates Unique identifier in the System
@@ -380,6 +391,16 @@ public class CandidateFullProfileAPIOutbound implements CandidateAPIOutbound{
 		}
 		
 		/**
+		* Sets candidates Email address
+		* @param email - email address
+		* @return Builder
+		*/
+		public CandidateFullProfileAPIOutboundBuilder email(String email) {
+			this.email = email;
+			return this;
+		}
+		
+		/**
 		* Sets the Rate charged by the candidate
 		* @param rate - Rate charged by the Candidate
 		* @return Builder
@@ -446,6 +467,7 @@ public class CandidateFullProfileAPIOutbound implements CandidateAPIOutbound{
 					.rate(RateAPIOutbound.convertFromDomain(candidate.getRate()))
 					.photo(PhotoAPIOutbound.convertFromDomain(candidate.getPhoto()))
 					.introduction(candidate.getIntroduction())
+					.email(candidate.getEmail())
 				.build();
 		
 	}

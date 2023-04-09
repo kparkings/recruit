@@ -1707,10 +1707,11 @@ databaseChangeLog:
                 name: rate_value
                 type: numeric
                 constraints:
-                  default: 0
+                  default: 0.0
             - column:
                 name: photo_format
                 type: varchar
             - column:
                 name: photo_bytes
                 type: bytea
+                
