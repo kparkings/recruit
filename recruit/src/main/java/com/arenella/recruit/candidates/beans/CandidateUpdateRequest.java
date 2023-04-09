@@ -27,7 +27,6 @@ public class CandidateUpdateRequest {
 	private PERM 			perm;
 	private FREELANCE 		freelance;
 	private int				yearsExperience;
-	private boolean 		available;
 	private Set<Language> 	languages					= new LinkedHashSet<>();
 	private Rate			rate;
 	private String			introduction;
@@ -50,7 +49,6 @@ public class CandidateUpdateRequest {
 		this.perm 						= builder.perm;
 		this.freelance 					= builder.freelance;
 		this.yearsExperience 			= builder.yearsExperience;
-		this.available 					= builder.available;
 		this.rate						= builder.rate;
 		this.introduction				= builder.introduction;
 		this.photoBytes					= builder.photoBytes;
@@ -151,14 +149,6 @@ public class CandidateUpdateRequest {
 	}
 	
 	/**
-	* Returns whether the Candidate is currently available for work
-	* @return Whether the Candidate is available for work
-	*/
-	public boolean isAvailable() {
-		return this.available;
-	}
-	
-	/**
 	* Returns the languages spoken by the Candidate
 	* @return Languages the candidate can speak
 	*/
@@ -216,7 +206,6 @@ public class CandidateUpdateRequest {
 		private PERM 			perm;
 		private FREELANCE 		freelance;
 		private int				yearsExperience;
-		private boolean 		available;
 		private Set<Language> 	languages					= new LinkedHashSet<>();
 		private Rate			rate;
 		private String			introduction;
@@ -329,16 +318,6 @@ public class CandidateUpdateRequest {
 		*/
 		public CandidateUpdateRequestBuilder yearsExperience(int yearsExperience) {
 			this.yearsExperience = yearsExperience;
-			return this;
-		}
-		
-		/**
-		* Sets whether or not the Candidate is currently available
-		* @param available - whether or not the Candidate is currently looking for work
-		* @return Builder
-		*/
-		public CandidateUpdateRequestBuilder available(boolean available) {
-			this.available = available;
 			return this;
 		}
 		

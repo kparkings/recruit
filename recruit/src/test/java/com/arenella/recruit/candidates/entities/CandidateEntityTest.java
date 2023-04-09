@@ -12,6 +12,11 @@ import java.util.Set;
 import org.junit.jupiter.api.Test;
 
 import com.arenella.recruit.candidates.beans.Candidate;
+import com.arenella.recruit.candidates.beans.Candidate.Photo;
+import com.arenella.recruit.candidates.beans.Candidate.Photo.PHOTO_FORMAT;
+import com.arenella.recruit.candidates.beans.Candidate.Rate;
+import com.arenella.recruit.candidates.beans.Candidate.Rate.CURRENCY;
+import com.arenella.recruit.candidates.beans.Candidate.Rate.PERIOD;
 import com.arenella.recruit.candidates.beans.Language;
 import com.arenella.recruit.candidates.beans.Language.LANGUAGE;
 import com.arenella.recruit.candidates.beans.Language.LEVEL;
@@ -45,6 +50,13 @@ public class CandidateEntityTest {
 	private static final Set<Language>	languages				= new LinkedHashSet<>();
 	private static final String			skill					= "Java";
 	private static final Language		language				= Language.builder().language(LANGUAGE.DUTCH).level(LEVEL.BASIC).build();
+	private static final String			introduction			= "intro";
+	private static final CURRENCY		rateCurrency			= CURRENCY.EUR;
+	private static final PERIOD			ratePeriod				= PERIOD.DAY;
+	private static final float			rateValue				= 1f;
+	private static final byte[]			photoBytes			 	= new byte[] {1,2,3};
+	private static final PHOTO_FORMAT	photoFormat				= PHOTO_FORMAT.jpeg;
+	
 	
 	/**
 	* Sets up test environment 
@@ -81,6 +93,9 @@ public class CandidateEntityTest {
 					.lastAvailabilityCheck(lastAvailabilityCheck)
 					.registerd(registerd)
 					.yearsExperience(yearsExperience)
+					.introduction(introduction)
+					.rate(new Rate(rateCurrency, ratePeriod, rateValue))
+					.photo(new Photo(photoBytes, photoFormat))
 					.build();
 		
 		CandidateEntity candidateEntity = CandidateEntity.convertToEntity(candidate);
@@ -100,7 +115,13 @@ public class CandidateEntityTest {
 		assertEquals(candidateEntity.getLastAvailabilityCheckOn(), 	lastAvailabilityCheck);
 		assertEquals(candidateEntity.getRegisteredOn(), 			registerd);
 		assertEquals(candidateEntity.getYearsExperience(), 			yearsExperience);
-
+		assertEquals(candidateEntity.getIntroduction(), 			introduction);
+		assertEquals(candidateEntity.getRateCurrency(), 			rateCurrency);
+		assertEquals(candidateEntity.getRatePeriod(), 				ratePeriod);
+		assertEquals(candidateEntity.getRateValue(), 				rateValue);
+		assertEquals(candidateEntity.getPhotoBytes(), 				photoBytes);
+		assertEquals(candidateEntity.getPhotoFormat(), 				photoFormat);
+		
 	}
 	
 	/**
@@ -130,7 +151,13 @@ public class CandidateEntityTest {
 					.yearsExperience(yearsExperience)
 					.skills(skills)
 					.languages(languages)
-					.build();
+					.introduction(introduction)
+					.rateCurrency(rateCurrency)
+					.ratePeriod(ratePeriod)
+					.rateValue(rateValue)
+					.photoBytes(photoBytes)
+					.photoFormat(photoFormat)
+				.build();
 		
 		Candidate candidate = CandidateEntity.convertFromEntity(candidateEntity);
 
@@ -149,6 +176,14 @@ public class CandidateEntityTest {
 		assertEquals(candidate.getLastAvailabilityCheckOn(), 	lastAvailabilityCheck);
 		assertEquals(candidate.getRegisteredOn(), 				registerd);
 		assertEquals(candidate.getYearsExperience(), 			yearsExperience);
+		
+		assertEquals(candidate.getIntroduction(), 				introduction);
+		assertEquals(candidate.getRate().get().getCurrency(), 	rateCurrency);
+		assertEquals(candidate.getRate().get().getPeriod(), 	ratePeriod);
+		assertEquals(candidate.getRate().get().getValue(), 		rateValue);
+		assertEquals(candidate.getPhoto().get().getImageBytes(),photoBytes);
+		assertEquals(candidate.getPhoto().get().getFormat(), 	photoFormat);
+		
 		
 		assertTrue(candidate.getSkills().contains(skill));
 		assertEquals(candidate.getLanguages().stream().findFirst().get().getLanguage(), language.getLanguage());

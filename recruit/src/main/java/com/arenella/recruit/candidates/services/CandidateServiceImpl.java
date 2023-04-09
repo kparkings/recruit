@@ -38,6 +38,7 @@ import com.arenella.recruit.candidates.beans.CandidateUpdateRequest;
 import com.arenella.recruit.candidates.beans.PendingCandidate;
 import com.arenella.recruit.candidates.beans.Candidate.Photo;
 import com.arenella.recruit.candidates.beans.Candidate.Photo.PHOTO_FORMAT;
+import com.arenella.recruit.candidates.beans.Candidate.Rate;
 import com.arenella.recruit.candidates.controllers.CandidateController.CANDIDATE_UPDATE_ACTIONS;
 import com.arenella.recruit.candidates.controllers.CandidateValidationException;
 import com.arenella.recruit.candidates.controllers.SavedCandidate;
@@ -631,7 +632,12 @@ public class CandidateServiceImpl implements CandidateService{
 		}
 		
 		//TODO: IF photo already exists and not specifically removed dont remote ( check what you did for recruiter profile )
-		Photo photo = null;
+		Photo	photo 	= null;
+		Rate 	rate 	= null;
+		
+		if (candidate.getRate().isPresent()) {
+			rate = candidate.getRate().get();
+		}
 		
 		if (candidate.getPhotoBytes().isPresent()) {
 			
@@ -643,13 +649,12 @@ public class CandidateServiceImpl implements CandidateService{
 					
 			photo = new Photo(photoBytes, PHOTO_FORMAT.jpeg);
 			
-			
-			
+		} else if (existingCandidate.getPhoto().isPresent()){
+			photo = existingCandidate.getPhoto().get();
 		}
 		
 		Candidate updatedCandidate = Candidate
 				.builder()
-					.available(candidate.isAvailable())
 					.candidateId(existingCandidate.getCandidateId())
 					.city(candidate.getCity())
 					.country(candidate.getCountry())
@@ -667,6 +672,9 @@ public class CandidateServiceImpl implements CandidateService{
 					.surname(candidate.getSurname())
 					.yearsExperience(candidate.getYearsExperience())
 					.photo(photo)
+					.rate(rate)
+					.introduction(candidate.getIntroduction())
+					.available(existingCandidate.isAvailable())
 				.build();
 		
 		this.candidateDao.saveCandidate(updatedCandidate);
@@ -674,8 +682,6 @@ public class CandidateServiceImpl implements CandidateService{
 		
 		
 		//TODO: If availability changed send event
-		//TODO: Check is own Candidate or Admin
-				
 		
 	}
 	

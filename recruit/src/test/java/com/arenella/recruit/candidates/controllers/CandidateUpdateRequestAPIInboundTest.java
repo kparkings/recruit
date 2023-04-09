@@ -29,7 +29,6 @@ public class CandidateUpdateRequestAPIInboundTest {
 	private static final String 		city 					= "Den Haag";
 	private static final String 		email					= "kparkings@gmail.com";
 	private static final String 		roleSought				= "Senior java Dev";
-	private static final boolean 		available 				= true;
 	private static final FREELANCE 		freelance 				= FREELANCE.TRUE;
 	private static final PERM 			perm 					= PERM.TRUE;
 	private static final int 			yearsExperience 		= 21;
@@ -61,7 +60,6 @@ public class CandidateUpdateRequestAPIInboundTest {
 							.city(city)
 							.email(email)
 							.roleSought(roleSought)
-							.available(available)
 							.freelance(freelance)
 							.perm(perm)
 							.yearsExperience(yearsExperience)
@@ -73,7 +71,6 @@ public class CandidateUpdateRequestAPIInboundTest {
 		assertEquals(city, 				candidate.getCity());
 		assertEquals(email, 			candidate.getEmail());
 		assertEquals(roleSought, 		candidate.getRoleSought());
-		assertEquals(available, 		candidate.isAvailable());
 		assertEquals(freelance, 		candidate.isFreelance());
 		assertEquals(perm, 				candidate.isPerm());
 		assertEquals(yearsExperience, 	candidate.getYearsExperience());
@@ -95,7 +92,6 @@ public class CandidateUpdateRequestAPIInboundTest {
 					.city(city)
 					.email(email)
 					.roleSought(roleSought)
-					.available(available)
 					.freelance(freelance)
 					.perm(perm)
 					.yearsExperience(yearsExperience)
@@ -110,7 +106,6 @@ public class CandidateUpdateRequestAPIInboundTest {
 		assertEquals(city, 				domain.getCity());
 		assertEquals(email, 			domain.getEmail());
 		assertEquals(roleSought, 		domain.getRoleSought());
-		assertEquals(available, 		domain.isAvailable());
 		assertEquals(freelance, 		domain.isFreelance());
 		assertEquals(perm, 				domain.isPerm());
 		assertEquals(yearsExperience, 	domain.getYearsExperience());

@@ -29,7 +29,6 @@ public class CandidateUpdateRequestTest {
 	private static final String 		city 					= "Den Haag";
 	private static final String 		email					= "kparkings@gmail.com";
 	private static final String 		roleSought				= "Senior java Dev";
-	private static final boolean 		available 				= true;
 	private static final FREELANCE 		freelance 				= FREELANCE.TRUE;
 	private static final PERM 			perm 					= PERM.TRUE;
 	private static final int 			yearsExperience 		= 21;
@@ -65,7 +64,6 @@ public class CandidateUpdateRequestTest {
 							.city(city)
 							.email(email)
 							.roleSought(roleSought)
-							.available(available)
 							.freelance(freelance)
 							.perm(perm)
 							.yearsExperience(yearsExperience)
@@ -81,7 +79,6 @@ public class CandidateUpdateRequestTest {
 		assertEquals(city, 				candidate.getCity());
 		assertEquals(email, 			candidate.getEmail());
 		assertEquals(roleSought, 		candidate.getRoleSought());
-		assertEquals(available, 		candidate.isAvailable());
 		assertEquals(freelance, 		candidate.isFreelance());
 		assertEquals(perm, 				candidate.isPerm());
 		assertEquals(yearsExperience, 	candidate.getYearsExperience());

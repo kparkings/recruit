@@ -35,7 +35,6 @@ public class CandidateUpdateRequestAPIInbound {
 	private PERM 			perm;
 	private FREELANCE 		freelance;
 	private int				yearsExperience;
-	private boolean 		available;
 	private Set<Language> 	languages					= new LinkedHashSet<>();
 	private Rate			rate;
 	private String			introduction;
@@ -56,7 +55,6 @@ public class CandidateUpdateRequestAPIInbound {
 		this.perm 						= builder.perm;
 		this.freelance 					= builder.freelance;
 		this.yearsExperience 			= builder.yearsExperience;
-		this.available 					= builder.available;
 		this.rate						= builder.rate;
 		this.introduction				= builder.introduction;
 		
@@ -149,14 +147,6 @@ public class CandidateUpdateRequestAPIInbound {
 	}
 	
 	/**
-	* Returns whether the Candidate is currently available for work
-	* @return Whether the Candidate is available for work
-	*/
-	public boolean isAvailable() {
-		return this.available;
-	}
-	
-	/**
 	* Returns the languages spoken by the Candidate
 	* @return Languages the candidate can speak
 	*/
@@ -205,7 +195,6 @@ public class CandidateUpdateRequestAPIInbound {
 		private PERM 			perm;
 		private FREELANCE 		freelance;
 		private int				yearsExperience;
-		private boolean 		available;
 		private Set<Language> 	languages					= new LinkedHashSet<>();
 		private Rate			rate;
 		private String			introduction;
@@ -311,16 +300,6 @@ public class CandidateUpdateRequestAPIInbound {
 		}
 		
 		/**
-		* Sets whether or not the Candidate is currently available
-		* @param available - whether or not the Candidate is currently looking for work
-		* @return Builder
-		*/
-		public CandidateUpdateRequestAPIInboundBuilder available(boolean available) {
-			this.available = available;
-			return this;
-		}
-		
-		/**
 		* Sets the languages spoken by the Candidate
 		* @param languages - Languages spoken by the Candidate
 		* @return Builder
@@ -384,7 +363,6 @@ public class CandidateUpdateRequestAPIInbound {
 		return CandidateUpdateRequest
 					.builder()
 						.candidateId(candidateId)
-						.available(updateRequest.isAvailable())
 						.city(updateRequest.getCity())
 						.country(updateRequest.getCountry())
 						.email(updateRequest.getEmail())

@@ -141,7 +141,12 @@ public class CandidateServiceImplTest {
 		Mockito.when(this.mockCandidateDao.emailInUse(Mockito.anyString())).thenReturn(false);
 		Mockito.when(this.mockCandidateDao.save(Mockito.any())).thenReturn(CandidateEntity.builder().candidateId("1000").build());
 		
-		this.service.persistCandidate(Candidate.builder().candidateId("1000").email("kparkings@gmail.com").firstname("kevin").build());
+		this.service.persistCandidate(Candidate
+				.builder()
+					.candidateId("1000")
+					.email("kparkings@gmail.com")
+					.firstname("kevin")
+				.build());
 		
 		Mockito.verify(this.mockExternalEventPublisher).publishCandidateAccountCreatedEvent(Mockito.any(CandidateAccountCreatedEvent.class));
 		Mockito.verify(this.mockExternalEventPublisher).publishSendEmailCommand(Mockito.any(RequestSendEmailCommand.class));
@@ -1012,7 +1017,6 @@ public class CandidateServiceImplTest {
 		final String 		cityUpdt 					= "Brussels";
 		final String 		emailUpdt					= "kparkings@gmail.nl";
 		final String 		roleSoughtUpdt				= "Senior C# Dev";
-		final boolean 		availableUpdt 				= false;
 		final FREELANCE 	freelanceUpdt 				= FREELANCE.FALSE;
 		final PERM 			permUpdt 					= PERM.FALSE;
 		final int 			yearsExperienceUpdt 		= 22;
@@ -1049,7 +1053,6 @@ public class CandidateServiceImplTest {
 		
 		CandidateUpdateRequest update = CandidateUpdateRequest
 				.builder()
-					.available(availableUpdt)
 					.candidateId(candidateId)
 					.city(cityUpdt)
 					.country(countryUpdt)
@@ -1085,7 +1088,7 @@ public class CandidateServiceImplTest {
 		assertEquals(cityUpdt, 				persisted.getCity());
 		assertEquals(emailUpdt, 			persisted.getEmail());
 		assertEquals(roleSoughtUpdt, 		persisted.getRoleSought());
-		assertEquals(availableUpdt, 		persisted.isAvailable());
+		assertEquals(available, 			persisted.isAvailable());
 		assertEquals(flaggedAsUnavailable, 	persisted.isFlaggedAsUnavailable());
 		assertEquals(freelanceUpdt, 		persisted.isFreelance());
 		assertEquals(permUpdt, 				persisted.isPerm());
@@ -1095,8 +1098,6 @@ public class CandidateServiceImplTest {
 		
 		assertTrue(persisted.getSkills().contains(skill));
 		persisted.getLanguages().stream().filter(l -> l.getLanguage() == languageUpdt.getLanguage()).findAny().orElseThrow();
-		
-		
 		
 	}
 	

@@ -3,6 +3,7 @@ package com.arenella.recruit.candidates.entities;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -20,11 +21,17 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.arenella.recruit.candidates.beans.Candidate;
+import com.arenella.recruit.candidates.beans.Candidate.Photo;
+import com.arenella.recruit.candidates.beans.Candidate.Photo.PHOTO_FORMAT;
+import com.arenella.recruit.candidates.beans.Candidate.Rate;
+import com.arenella.recruit.candidates.beans.Candidate.Rate.CURRENCY;
+import com.arenella.recruit.candidates.beans.Candidate.Rate.PERIOD;
 import com.arenella.recruit.candidates.beans.Language;
 import com.arenella.recruit.candidates.enums.COUNTRY;
 import com.arenella.recruit.candidates.enums.FREELANCE;
 import com.arenella.recruit.candidates.enums.FUNCTION;
 import com.arenella.recruit.candidates.enums.PERM;
+import com.sun.jdi.connect.Connector.BooleanArgument;
 
 /**
 * Entity representation of a Candidate. A Candidate is 
@@ -87,6 +94,25 @@ public class CandidateEntity {
 	@Column(name="last_availability_check")
 	private LocalDate 	lastAvailabilityCheck;
 	
+	@Column(name="introduction")
+	private String introduction;
+	
+	@Column(name="rate_currency")
+    private CURRENCY rateCurrency;
+	
+    @Column(name="rate_period")
+    private PERIOD ratePeriod;
+    
+    @Column(name="rate_value")
+    private float rateValue;      
+    
+    @Enumerated(EnumType.STRING)
+    @Column(name="photo_format")
+    private PHOTO_FORMAT photoFormat;      
+    
+    @Column(name="photo_bytes")
+    private byte[] photoBytes;
+       
 	@ElementCollection(targetClass=String.class, fetch=FetchType.EAGER)
 	@CollectionTable(schema="candidate", name="candidate_skill", joinColumns=@JoinColumn(name="candidate_id"))
 	@Column(name="skill")
@@ -116,6 +142,12 @@ public class CandidateEntity {
 		this.registerd 					= builder.registerd;
 		this.lastAvailabilityCheck 		= builder.lastAvailabilityCheck;
 		this.flaggedAsUnavailable		= builder.flaggedAsUnavailable;
+		this.introduction				= builder.introduction;
+		this.rateCurrency				= builder.rateCurrency;
+		this.ratePeriod					= builder.ratePeriod;
+		this.rateValue					= builder.rateValue;      
+		this.photoFormat				= builder.photoFormat;      
+		this.photoBytes					= builder.photoBytes;
 		
 		this.skills.addAll(builder.skills);
 		this.languages.addAll(builder.languages.stream().map(lang -> LanguageEntity.builder().candidate(this).language(lang.getLanguage()).level(lang.getLevel()).build()).collect(Collectors.toSet()));
@@ -304,6 +336,57 @@ public class CandidateEntity {
 	}
 	
 	/**
+	* Returns the Candidates introduction about themselves
+	* @return intro
+	*/
+	public String getIntroduction() {
+		return this.introduction;
+	}
+	
+	/**
+	* Returns the Currency the Candidate 
+	* charges in
+	* @return currency
+	*/
+	public CURRENCY getRateCurrency() {
+		return this.rateCurrency;
+	}
+	
+	/**
+	* Returns the period the Candidate 
+	* charges in
+	* @return Period
+	*/
+	public PERIOD getRatePeriod() {
+		return this.ratePeriod;
+	}
+	
+	/**
+	* Returns the value per period
+	* the Candidate charges
+	* @return value
+	*/
+	public float getRateValue() {
+		return this.rateValue;
+	}
+	
+	/**
+	* Returns the format of the photo
+	* @return file format
+	*/
+	public PHOTO_FORMAT getPhotoFormat() {
+		return this.photoFormat;
+	}
+	
+	/**
+	* Returns the bytes for the image file
+	* @return bytes
+	*/
+	public byte[] getPhotoBytes() {
+		return this.photoBytes;
+	}
+	
+	/**
 	* Returns a Builder for the CandidateEntity class
 	* @return Builder for the CandidateEntity class
 	*/
@@ -332,6 +415,12 @@ public class CandidateEntity {
 		private LocalDate 		registerd					= LocalDate.now();				//Set app to work with UAT
 		private LocalDate 		lastAvailabilityCheck		= LocalDate.now();
 		private boolean			flaggedAsUnavailable;
+		private String 			introduction;
+		private CURRENCY 		rateCurrency;
+		private PERIOD 			ratePeriod;
+		private float 			rateValue;      
+		private PHOTO_FORMAT 	photoFormat;      
+		private byte[] 			photoBytes;
 		
 		private Set<String> 	skills						= new LinkedHashSet<>();
 		private Set<Language> 	languages					= new LinkedHashSet<>();
@@ -478,6 +567,66 @@ public class CandidateEntity {
 		}
 		
 		/**
+		* Sets the Candidates introduction about themselves
+		* @param introduction - Candiadate's introduction
+		* @return Builder
+		*/
+		public CandidateEntityBuilder introduction(String introduction) {
+			this.introduction = introduction;
+			return this;
+		}
+		
+		/**
+		* Sets the Currency the Candidate charges in
+		* @param rateCurrency - Currency
+		* @return Builder
+		*/
+		public CandidateEntityBuilder rateCurrency(CURRENCY rateCurrency) {
+			this.rateCurrency = rateCurrency;
+			return this;
+		}
+		
+		/**
+		* Sets the unit the Rate is in
+		* @param ratePeriod - Unit of the Rate
+		* @return Builder
+		*/
+		public CandidateEntityBuilder ratePeriod(PERIOD ratePeriod) {
+			this.ratePeriod = ratePeriod;
+			return this;
+		}
+		
+		/**
+		* Sets the amount the Candidate charges per period
+		* @param rateValue - amount per period
+		* @return Builder
+		*/
+		public CandidateEntityBuilder rateValue(float rateValue) {
+			this.rateValue = rateValue;
+			return this;
+		}
+		
+		/**
+		* Sets the format of the Candidates Profile Photo
+		* @param photoFormat - file format
+		* @return Builder
+		*/
+		public CandidateEntityBuilder photoFormat(PHOTO_FORMAT photoFormat) {
+			this.photoFormat = photoFormat;
+			return this;
+		}
+		
+		/**
+		* Sets the bytes of the Candidates profile photo
+		* @param photoBytes - bytes of image
+		* @return Builder
+		*/
+		public CandidateEntityBuilder photoBytes(byte[] photoBytes) {
+			this.photoBytes = photoBytes;
+			return this;
+		}
+		
+		/**
 		* Sets the Date of the last check performed to check if the Candidate is still
 		* available
 		* @param lastAvailabilityCheck - Date of last availability check performed
@@ -548,7 +697,13 @@ public class CandidateEntity {
 						.yearsExperience(candidate.getYearsExperience())
 						.skills(candidate.getSkills().stream().map(skill -> skill.trim()).map(skill ->skill.toLowerCase()).collect(Collectors.toSet()))
 						.languages(candidate.getLanguages())
-						.build();
+						.introduction(candidate.getIntroduction())
+						.rateCurrency(candidate.getRate().isEmpty() ? null 	: candidate.getRate().get().getCurrency())
+						.ratePeriod(candidate.getRate().isEmpty() 	? null 	: candidate.getRate().get().getPeriod())
+						.rateValue(candidate.getRate().isEmpty() 	? 0 	: candidate.getRate().get().getValue())
+						.photoFormat(candidate.getPhoto().isEmpty() ? null 	: candidate.getPhoto().get().getFormat())
+						.photoBytes(candidate.getPhoto().isEmpty() 	? null 	: candidate.getPhoto().get().getImageBytes())
+					.build();
 		
 	}
 
@@ -559,6 +714,17 @@ public class CandidateEntity {
 	* @return Domain representation of a Candidate object
 	*/
 	public static Candidate convertFromEntity(CandidateEntity candidateEntity) {
+		
+		Rate 	rate 	= null;
+		Photo 	photo 	= null;
+		
+		if (candidateEntity.rateCurrency != null && candidateEntity.ratePeriod != null) {
+			rate = new Rate(candidateEntity.getRateCurrency(), candidateEntity.getRatePeriod(), candidateEntity.getRateValue());
+		}
+		
+		if (candidateEntity.getPhotoBytes().length > 0 && candidateEntity.getPhotoFormat() != null) {
+			photo = new Photo(candidateEntity.getPhotoBytes(), candidateEntity.getPhotoFormat());
+		}
 		
 		return Candidate
 					.builder()
@@ -578,6 +744,9 @@ public class CandidateEntity {
 						.registerd(candidateEntity.getRegisteredOn())
 						.yearsExperience(candidateEntity.getYearsExperience())
 						.skills(candidateEntity.getSkills())
+						.introduction(candidateEntity.getIntroduction())
+						.rate(rate)
+						.photo(photo)
 						.languages(candidateEntity.getLanguages().stream().map(lang -> Language.builder().language(lang.getLanguage()).level(lang.getLevel()).build()).collect(Collectors.toCollection(HashSet::new)))
 						.build();
 		
