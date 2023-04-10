@@ -202,8 +202,8 @@
 		<div  class="details-left">
 			<img class="profile-photo-details" *ngIf="candidateProfile?.photo?.imageBytes" id='base64image' src='data:image/jpeg;base64, {{candidateProfile?.photo?.imageBytes}}' />
 			<br>
-			<br>
-			<button class="btn btn-secondary action-btn main-action_btn" style="width:300px;margin-bottom:10px;" (click)="contactCandidate(contactBox)">Contact</button>
+			<br *ngIf="candidateProfile.introduction.length != 0">
+			<button class="btn btn-secondary action-btn main-action_btn main-btns" *ngIf="candidateProfile.introduction.length != 0" style="width:300px;margin-bottom:10px;" (click)="contactCandidate(contactBox)">Contact</button>
 			<br>
 			<div>
 				<h3>Location</h3>

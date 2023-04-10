@@ -135,6 +135,13 @@ public class CandidateServiceImpl implements CandidateService{
 		this.externalEventPublisher
 			.publishCandidateAccountCreatedEvent(new CandidateAccountCreatedEvent(candidate.getCandidateId(), encryptedPassword));
 
+		this.externalEventPublisher
+		.publishCandidateCreatedEvent(CandidateCreatedEvent
+				.builder()
+					.candidate(candidate)
+					.candidateId(String.valueOf(candidateId))
+				.build());
+		
 		RequestSendEmailCommand command = RequestSendEmailCommand
 				.builder()
 					.emailType(EmailType.EXTERN)
@@ -148,12 +155,7 @@ public class CandidateServiceImpl implements CandidateService{
 		
 		this.externalEventPublisher.publishSendEmailCommand(command);
 		
-		this.externalEventPublisher
-			.publishCandidateCreatedEvent(CandidateCreatedEvent
-					.builder()
-						.candidate(candidate)
-						.candidateId(String.valueOf(candidateId))
-					.build());		
+				
 	}
 	
 	/**
