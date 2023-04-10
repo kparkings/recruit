@@ -8,8 +8,8 @@
 		<button class="btn btn-secondary btnRight main-btns" (click)="showCreateAlertDialog(feedbackBox)" download>Create Email Alert</button>
 		<button class="btn btn-secondary btnRight main-btns" routerLink="/recruiter-alerts" download>Manage Alerts</button>
         <button class="btn btn-secondary btnRight main-btns" (click)="showSavedCandidates()" download>My Candidates</button>
+        <button class="btn btn-secondary btnRight main-btns" (click)="showCandidateProfile()" download>Profile</button>
 	 </div>
-	 
 	
 	<div *ngIf="currentView === 'saved-candidates'" class="suggestion-results">
 		
@@ -197,11 +197,95 @@
 			
 		</div>
 	</div>
-	<div *ngIf="currentView === 'suggested-canidate-overview'" class="suggestion-results" style="width:90%;margin-left:30px;margin-right:30px;">
-		 		
-		<div>
-		
-			<h1 class="suggestion-role-header">{{suggestedCandidate.roleSought}}</h1>
+	
+	<div *ngIf="currentView === 'suggested-canidate-overview'" class="suggestion-results" style="width:90%;margin-left:30px;border:1px solid white;">
+		<div  class="details-left">
+			<img class="profile-photo-details" *ngIf="candidateProfile?.photo?.imageBytes" id='base64image' src='data:image/jpeg;base64, {{candidateProfile?.photo?.imageBytes}}' />
+			<br>
+			<br>
+			<button class="btn btn-secondary action-btn main-action_btn" style="width:300px;margin-bottom:10px;" (click)="contactCandidate(contactBox)">Contact</button>
+			<br>
+			<div>
+				<h3>Location</h3>
+			</div>
+			<div class="left-info-box">
+				<table>
+					<tr>
+						<th>Country</th>
+						<td *ngIf="suggestedCandidate.country === 'NETHERLANDS'">
+							<span class="flag-icon flag-icon-nl suggestion-flag-country"></span>
+						</td>
+						<td *ngIf="suggestedCandidate.country === 'BELGIUM'">
+							<span class="flag-icon flag-icon-be  suggestion-flag-country"></span>
+						</td>
+						<td *ngIf="suggestedCandidate.country === 'UK'">
+							<span class="flag-icon flag-icon-gb  suggestion-flag-country"></span>
+						</td>
+						<td *ngIf="suggestedCandidate.country === 'REPUBLIC_OF_IRELAND'">
+							<span class="flag-icon flag-icon-ie  suggestion-flag-country"></span>
+						</td>
+					</tr>
+					<tr>
+						<th>City</th>
+						<td>{{candidateProfile.city | enumToHumanReadableValue}}</td>
+					</tr>
+				</table>
+			</div>
+			<div>
+				<h3>Languages</h3>
+			</div>
+			<div class="left-info-box">
+				<table>
+					<tr *ngFor="let language of suggestedCandidate.languages">
+						<th>{{getLanguage(language.language)}}</th>
+						<td *ngIf="language.level == 'PROFICIENT'" class="material-icons lang-proficient-check-icon">
+							check
+						</td>
+						<td *ngIf="language.level == 'BASIC'" class="material-icons  lang-basic-check-icon">
+							check
+						</td>		
+					</tr>
+				</table>
+				
+			</div>
+			<div>
+				<h3>Contract Types</h3>
+			</div>
+			<div class="left-info-box">
+				<table>
+					<tr>
+						<th>Contract</th>
+						<td *ngIf="suggestedCandidate.freelance == 'TRUE'" class="material-icons available-check-icon">
+							check
+						</td>
+					</tr>
+					<tr>
+						<th>Permanent</th>
+						<td *ngIf="suggestedCandidate.perm == 'TRUE'" class="material-icons available-check-icon">
+							check
+						</td>
+					</tr>
+				</table>
+			</div>
+			<div *ngIf="candidateProfile.rate.value != '0'">
+				<h3>Rate</h3>
+			</div>
+			<div class="left-info-box" *ngIf="candidateProfile.rate">
+				<p>{{candidateProfile.rate.currency | enumToHumanReadableValue}}: {{candidateProfile.rate.value}} per {{candidateProfile.rate.period | enumToHumanReadableValue}}</p>
+			</div>
+			<div>
+				<h3>Years Experience</h3>
+			</div>
+			<div  class="left-info-box">
+				<p>{{candidateProfile.yearsExperience}}
+			</div>
+			
+		</div>	
+				
+		<div class="details-right" >
+			<div style="width:100%">
+				<h1>{{suggestedCandidate.roleSought}}</h1>
+			</div>
 			
 			<div>
 				<table class="table candidate-suggestion-table">
@@ -212,69 +296,6 @@
 					<tr>
 						<td class="candidate-suggestion-table-hdr">Name</td>
 						<td>{{suggestedCandidate.firstname}} {{suggestedCandidate.surname}}</td>
-					</tr>
-					<tr>
-						<td class="candidate-suggestion-table-hdr">Location</td>
-						<td *ngIf="suggestedCandidate.country === 'NETHERLANDS'">
-							<span class="flag-icon flag-icon-nl suggestion-flag-country"></span>
-							{{suggestedCandidate.city}}
-						</td>
-						<td *ngIf="suggestedCandidate.country === 'BELGIUM'">
-							<span class="flag-icon flag-icon-be  suggestion-flag-country"></span>
-							{{suggestedCandidate.city}}
-						</td>
-						<td *ngIf="suggestedCandidate.country === 'UK'">
-							<span class="flag-icon flag-icon-gb  suggestion-flag-country"></span>
-							{{suggestedCandidate.city}}
-						</td>
-						<td *ngIf="suggestedCandidate.country === 'REPUBLIC_OF_IRELAND'">
-							<span class="flag-icon flag-icon-ie  suggestion-flag-country"></span>
-							{{suggestedCandidate.city}}
-						</td>
-						
-					</tr>
-					<tr>
-						<td class="candidate-suggestion-table-hdr">Years Experience</td>
-						<td>{{suggestedCandidate.yearsExperience}}</td>
-					</tr>
-					<tr>
-						<td class="candidate-suggestion-table-hdr">Contract Type</td>
-						<td>
-							<div class="suggestion-summary-infobox-body">
-								
-								<span>Contract</span>
-								<span class="skill-level">
-									<span *ngIf="suggestedCandidate.freelance == 'TRUE'" class="material-icons available-check-icon">
-			      						check
-			      					</span>
-			      				</span>
-			      				
-			      				<span>Permanent</span>
-			      				<span class="skill-level">
-			      					<span *ngIf="suggestedCandidate.perm == 'TRUE'" class="material-icons available-check-icon">
-				      					check
-				      				</span>
-			      				</span>
-			      				
-		      				</div>
-						</td>
-						
-					</tr>
-					<tr>
-						<td class="candidate-suggestion-table-hdr">Languages</td>
-						<td>
-							<div  class="suggestion-summary-infobox-body" *ngFor="let language of suggestedCandidate.languages">
-								<span>{{getLanguage(language.language)}}</span>
-								<span class="language-level">
-									<span *ngIf="language.level == 'PROFICIENT'" class="material-icons lang-proficient-check-icon">
-      									check
-      								</span>
-     								<span *ngIf="language.level == 'BASIC'" class="material-icons  lang-basic-check-icon">
-      									check
-      								</span>
-     							</span>
-							</div>
-						</td>
 					</tr>
 					<tr>
 						<td class="candidate-suggestion-table-hdr">Skill Accuracy</td>
@@ -300,6 +321,16 @@
 			</div>
 							
 		</div>
+		
+		<div class="details-right" *ngIf="candidateProfile.introduction.length != 0">
+			<div style="width:100%">
+				<h1 style="background:#e8e8e8">Candidate Introduction</h1>
+			</div>
+			<div style="width:100%;">
+				<pre style="white-space:pre-line;font-family: Roboto, 'Helvetica Neue', sans-serif;">{{candidateProfile.introduction}}</pre>
+			</div>
+		</div>
+		<div class="action-buttons" style="padding-bottom:50px;"></div>	
 	</div>
 </div>
 
@@ -382,3 +413,28 @@
 		</table>
 	</div> 
 </ng-template>
+
+<!-- Candidte contact -->
+<ng-template #contactBox let-modal>
+	<div class="modal-header">
+		<h4 class="modal-title">Send Message To Candidate</h4>
+ 		<div class="filter-close-box" (click)="closeModalContact()">X</div>
+	</div>
+	<div class="modal-body" *ngIf="contactCandidateView === 'message'">
+		<form [formGroup]="sendMessageGroup">
+			<div style="float:left;margin:0px; margin-bottom:10px;">
+				<b>Title:</b><input type="text" style="margin-left:10px;width:300px;" formControlName="title"/>
+				<br>
+			</div>
+			<textarea formControlName="message"></textarea>
+			<button class="btn btn-secondary action-btn btn-right" (click)="sendMessageToCandidate()">Send</button>
+		</form>	
+	</div>
+	<div class="modal-body message-send-success" *ngIf="contactCandidateView === 'success'">
+			<p>Message Sent Successfully</p>
+			<p>You can view a copy of your message and any replies in your inbox</p>
+	</div>
+	<div class="modal-body" *ngIf="contactCandidateView === 'failure'">
+			<p class="message-send-failure">Failed to Send Message</p>
+	</div>
+</ng-template> 

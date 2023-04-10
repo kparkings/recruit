@@ -193,8 +193,187 @@
 	min-height:130px;
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+.details-left{
+	float:left;
+}
+
+.details-left-collections{
+	min-width:300px;
+	margin-bottom:20px;
+}
+
+.details-left-collections ul{
+	list-style-type:none;
+}
+.details-left-collections h5{
+	background:#e8e8e8;
+	padding:2px;
+}
+
+.modal-title{
+	margin-left:20px;
+}
+
+.modal-body{
+	font-size: large;
+	height:345px;
+	text-align: center;
+}
+
+.modal-header{
+	background:#181414;
+	color:#6A5ACD;
+	font-weight:bold;
+}
+
+.filter-close-box{
+	padding:10px;
+	cursor:pointer;
+	font-size:20px;
+	font-weight: bold;
+	text-align: right;        
+}
+
+.message-send-failure{
+	margin-top:100px;
+	font-weight:bold;
+}
+
+.message-send-success{
+	margin-top:100px;
+	font-weight:bold;
+}
+
+textarea {
+    width:100%;
+    height:200px;
+}
+
+.details-left h3{
+	color:#6A5ACD;
+	background:white;
+	border-bottom:2px black solid;
+}
+
+.left-info-box{
+	width:100%;
+	background:#e8e8e8;
+	padding:10px;
+	margin-bottom:20px;
+}
+
+.details-left p{
+	color:black;
+	font-weight:bold;
+}
+
 .publicity-suggestions{
 	text-align:left;
 	font-size:16px;
 	overflow: auto;
+}
+
+.details-left{
+	float:left;
+	margin-bottom:50px;
+}
+
+.details-left-collections{
+	min-width:300px;
+	margin-bottom:20px;
+}
+
+.details-left-collections ul{
+	list-style-type:none;
+}
+.details-left-collections h5{
+	background:#e8e8e8;
+	padding:2px;
+}
+
+.modal-title{
+	margin-left:20px;
+}
+
+.modal-body{
+	font-size: large;
+	height:345px;
+	text-align: center;
+}
+
+.modal-header{
+	background:#181414;
+	color:#6A5ACD;
+	font-weight:bold;
+}
+
+.filter-close-box{
+	padding:10px;
+	cursor:pointer;
+	font-size:20px;
+	font-weight: bold;
+	text-align: right;        
+}
+
+.message-send-failure{
+	margin-top:100px;
+	font-weight:bold;
+}
+
+.message-send-success{
+	margin-top:100px;
+	font-weight:bold;
+}
+
+textarea {
+    width:100%;
+    height:200px;
+}
+
+.details-left h3{
+	color:#6A5ACD;
+	background:white;
+	border-bottom:2px black solid;
+}
+
+.left-info-box{
+	width:100%;
+	background:#e8e8e8;
+	padding:10px;
+	margin-bottom:20px;
+}
+
+.left-info-box th{
+	width:100px;
+}
+
+.details-left p{
+	color:black;
+	font-weight:bold;
+}
+
+.details-right{
+	margin-left:20px;
+	float:left;
+	width:75%;
+}
+
+.details-right h1{
+	background:#6A5ACD; 
+	width:100%;
+	margin-bottom:10px;
+	padding:20px;
+	margin-left:0px;
 }

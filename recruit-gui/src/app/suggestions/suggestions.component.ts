@@ -1,21 +1,21 @@
-import { Component, OnInit, SecurityContext } 		from '@angular/core';
-import { UntypedFormGroup, UntypedFormControl,FormGroup, FormControl }		from '@angular/forms';
-import { CandidateServiceService }					from '../candidate-service.service';
-import { SuggestionsService }						from '../suggestions.service';
-import { CurriculumService }						from '../curriculum.service';
-import { Candidate}									from './candidate';
-import { SavedCandidate}							from './saved-candidate';
-import { SuggestionParams}							from './suggestion-param-generator';
-import { environment }								from '../../environments/environment';
-import { Clipboard } 								from '@angular/cdk/clipboard';
-import { NgbModal, NgbModalOptions }				from '@ng-bootstrap/ng-bootstrap';
-import { ViewChild }								from '@angular/core';
-import { CandidateSearchAlert }						from './candidate-search-alert';
-import { CandidateFunction }						from '../candidate-function';
-import { DomSanitizer, SafeResourceUrl, SafeUrl } 	from '@angular/platform-browser';
-import { DeviceDetectorService } 					from 'ngx-device-detector';
-import { Router}									from '@angular/router';
-import { debounceTime } 							from "rxjs/operators";
+import { Component, OnInit } 												from '@angular/core';
+import { UntypedFormGroup, UntypedFormControl }								from '@angular/forms';
+import { CandidateServiceService }											from '../candidate-service.service';
+import { SuggestionsService }												from '../suggestions.service';
+import { CurriculumService }												from '../curriculum.service';
+import { Candidate}															from './candidate';
+import { SavedCandidate}													from './saved-candidate';
+import { SuggestionParams}													from './suggestion-param-generator';
+import { environment }														from '../../environments/environment';
+import { Clipboard } 														from '@angular/cdk/clipboard';
+import { NgbModal, NgbModalOptions }										from '@ng-bootstrap/ng-bootstrap';
+import { CandidateSearchAlert }												from './candidate-search-alert';
+import { DomSanitizer, SafeResourceUrl } 									from '@angular/platform-browser';
+import { DeviceDetectorService } 											from 'ngx-device-detector';
+import { Router}															from '@angular/router';
+import { debounceTime } 													from "rxjs/operators";
+import { PhotoAPIOutbound, CandidateProfile, Language, Rate } 				from '../candidate-profile/candidate-profile';
+import { EmailService, EmailRequest }										from '../email.service';
 
 /**
 * Component to suggest suitable Candidates based upon a 
@@ -28,7 +28,7 @@ import { debounceTime } 							from "rxjs/operators";
 })
 export class SuggestionsComponent implements OnInit {
 
-
+	public candidateProfile:CandidateProfile = new CandidateProfile();
 	public savedCandidates:Array<SavedCandidate> = new Array<SavedCandidate>();
 
 	public createAlertForm:UntypedFormGroup = new UntypedFormGroup({
@@ -62,6 +62,13 @@ export class SuggestionsComponent implements OnInit {
 	
 	public isNoLongerAvailableSC(savedCandidate:SavedCandidate):boolean{
 		return savedCandidate.candidate.candidateId === ' Removed';
+	}
+	
+	/**
+	* Navigates to current Candidates profile page
+	*/
+	showCandidateProfile():void{
+		
 	}
 
 	/**
@@ -240,7 +247,8 @@ export class SuggestionsComponent implements OnInit {
 				private sanitizer: 			DomSanitizer,
 				private curriculumService: 	CurriculumService,
 				private deviceDetector: 	DeviceDetectorService,
-				private router:				Router) { 
+				private router:				Router,
+				private emailService:		EmailService) { 
 					
 		this.getSuggestions();	
 	 	this.trustedResourceUrl = this.sanitizer.bypassSecurityTrustResourceUrl('');
@@ -433,13 +441,14 @@ export class SuggestionsComponent implements OnInit {
 	public showSuggestedCandidateOverview(candidateSuggestion:Candidate):void{
 		this.currentView 			= 'suggested-canidate-overview';
 		this.suggestedCandidate 	= candidateSuggestion;
-		
+		this.fetchCandidateProfile(candidateSuggestion.candidateId);
 	}
 	
 	public showSuggestedCandidateOverviewSavedCandidate(savedCandidate:SavedCandidate){
 		this.currentView 			= 'suggested-canidate-overview';
 		this.suggestedCandidate 	= savedCandidate.candidate;
 		this.currentSavedCandidate	= savedCandidate;
+		this.fetchCandidateProfile(savedCandidate.candidate.candidateId);
 	}
 	
 	/**
@@ -707,5 +716,91 @@ export class SuggestionsComponent implements OnInit {
      	return 'NA';
 
   	}
+
+	/**
+	* Fetches Candidate
+	*/
+	public fetchCandidateProfile(candidateId:string):void{
+		this.candidateProfile = new CandidateProfile();
+		this.candidateService.getCandidateById(candidateId).subscribe( candidate => {
+				this.candidateProfile = candidate;
+				this.currentView = 'suggested-canidate-overview';
+		
+			}, err => {
+				if (err.status === 401 || err.status === 0) {
+					sessionStorage.removeItem('isAdmin');
+					sessionStorage.removeItem('isRecruter');
+					sessionStorage.removeItem('loggedIn');
+					sessionStorage.setItem('beforeAuthPage', 'view-candidates');
+					this.router.navigate(['login-user']);
+			}
+			});
+	}
+	
+	public contactCandidateView:string = 'message';
+	
+	/**
+	*Extract the level of proficiency in a language of the Candidate
+	*/
+	public getLanguageLevel(language:string):string{
+		if(!this.candidateProfile?.languages.filter(l => l.language == language)[0]) {
+			return '';
+		} else {
+			return this.candidateProfile?.languages.filter(l => l.language == language)[0].level;
+		}
+	}
+	
+	/**
+	*  Closes the confirm popup
+	*/
+	public closeModalContact(): void {
+		this.modalService.dismissAll();
+	}
+	
+	/**
+	* Opend dialog to contact recuiter posting	
+	*/
+	public contactCandidate(contactBox:any):void{
+		
+		this.contactCandidateView = 'message';
+		let options: NgbModalOptions = {
+	    	 centered: true
+	   };
+
+		this.modalService.open(contactBox, options);
+	
+	}
+	
+	/**
+	* Forms group for sending a message to a Recruiter relating to a
+	* specific post on the jobboard 
+	*/
+	public sendMessageGroup:UntypedFormGroup = new UntypedFormGroup({
+		message:				new UntypedFormControl(''),
+		title:				new UntypedFormControl('')
+	});
+	
+	/**
+	* Opend dialog to contact recuiter posting	
+	*/
+	public sendMessageToCandidate():void{
+		
+		let emailRequest:EmailRequest = new EmailRequest();
+		
+		emailRequest.title = this.sendMessageGroup.get('title')?.value;;
+		emailRequest.message = this.sendMessageGroup.get('message')?.value;;
+		
+		this.emailService.sendRecruiterContactEmail(emailRequest,this.candidateProfile.candidateId).subscribe(body => {
+			this.contactCandidateView = 'success';
+			this.sendMessageGroup = new UntypedFormGroup({
+				message: new UntypedFormControl(''),
+				title: new UntypedFormControl(''),
+			});
+		}, err => {
+			this.contactCandidateView = 'failure';
+		});
+		
+		
+	}
 
 }

@@ -16,13 +16,17 @@
 			
 				<img class="profile-photo-details" *ngIf="candidateProfile?.photo?.imageBytes" id='base64image' src='data:image/jpeg;base64, {{candidateProfile?.photo?.imageBytes}}' />
 				<br>
+				<div>
+					<h3 style="border:none;">{{candidateProfile.firstname | enumToHumanReadableValue}} {{candidateProfile.surname | enumToHumanReadableValue}}</h3>
+				</div>
+				<!-- 
 				<button class="btn btn-secondary action-btn main-action_btn" style="width:300px;margin-bottom:10px;" (click)="contactCandidate(contactBox)">Contact</button>
+				 -->
 				<br>
 				<div>
-					<h3>{{candidateProfile.firstname | enumToHumanReadableValue}} {{candidateProfile.surname | enumToHumanReadableValue}}</h3>
-				</div>
-				<div>
 					<h3>Location</h3>
+				</div>
+				<div class="left-info-box">
 					<table>
 						<tr>
 							<th>Country</th>
@@ -34,27 +38,30 @@
 						</tr>
 					</table>
 				</div>
-				<!-- 
 				<div>
 					<h3>Languages</h3>
+				</div>
+				<div class="left-info-box">
 					<table>
 						<tr>
 							<th>Dutch</th>
-							<td>{{candidateProfile.dutch | enumToHumanReadableValue}}</td>
+							<td>{{getLanguageLevel('DUTCH') | enumToHumanReadableValue}}</td>
 						</tr>
 						<tr>
 							<th>English</th>
-							<td>{{candidateProfile.english | enumToHumanReadableValue}}</td>
+							<td>{{getLanguageLevel('ENGLISH') | enumToHumanReadableValue}}</td>
 						</tr>
 						<tr>
 							<th>French</th>
-							<td>{{candidateProfile.french | enumToHumanReadableValue}}</td>
+							<td>{{getLanguageLevel('FRENCH') | enumToHumanReadableValue}}</td>
 						</tr>
 					</table>
 				</div>
-				 -->
 				<div>
 					<h3>Contract Types</h3>
+				</div>
+				<div class="left-info-box">
+					
 					<table>
 						<tr>
 							<th>Freelance/Contract</th>
@@ -68,19 +75,23 @@
 				</div>
 				<div *ngIf="candidateProfile.rate">
 					<h3>Rate</h3>
+				</div>
+				<div class="left-info-box" *ngIf="candidateProfile.rate">
 					<p>{{candidateProfile.rate.currency | enumToHumanReadableValue}}: {{candidateProfile.rate.value}} per {{candidateProfile.rate.period | enumToHumanReadableValue}}</p>
 				</div>
 				<div>
 					<h3>Years Experience</h3>
+				</div>
+				<div  class="left-info-box">
 					<p>{{candidateProfile.yearsExperience}}
 				</div>
 				<br>
 				
 			</div>	
 				
-			<div class="details-left" style="max-width:75%;min-width:300px;">
+			<div class="details-right" style="max-width:75%;min-width:300px;">
 				<div style="float:center">
-					<h1 style="background:#6A5ACD; width:100%;margin-bottom:10px;padding:20px;">{{candidateProfile.roleSought}}</h1>
+					<h1>{{candidateProfile.roleSought}}</h1>
 					
 					<!-- 
 					<pre>
