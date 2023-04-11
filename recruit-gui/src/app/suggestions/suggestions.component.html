@@ -202,11 +202,12 @@
 		<div  class="details-left">
 		
 			<img class="profile-photo-details" *ngIf="candidateProfile?.photo?.imageBytes" id='base64image' src='data:image/jpeg;base64, {{candidateProfile?.photo?.imageBytes}}' />
-			<div *ngIf="!candidateProfile?.photo?.imageBytes && !isMobile" class="profile-photo-details">
+			<div *ngIf="!candidateProfile?.photo?.imageBytes && !isMobile" class="profile-photo-details material-icons person ">
+				<span style="font-size:300px;color:green;">person</span>
 			</div>
 			<br>
 			<br *ngIf="candidateProfile.introduction.length != 0">
-			<button class="btn btn-secondary action-btn main-action_btn main-btns" *ngIf="candidateProfile.introduction.length != 0" style="width:300px;margin-bottom:10px;" (click)="contactCandidate(contactBox)">Contact</button>
+			<button class="btn btn-secondary action-btn main-action_btn main-btns main-btn" *ngIf="candidateProfile.introduction.length != 0" style="width:300px;margin-bottom:10px;background:green;" (click)="contactCandidate(contactBox)">Contact</button>
 			<br>
 			<div>
 				<h3>Location</h3>
