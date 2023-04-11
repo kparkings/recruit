@@ -261,12 +261,6 @@ textarea {
     height:200px;
 }
 
-.details-left h3{
-	color:#6A5ACD;
-	background:white;
-	border-bottom:2px black solid;
-}
-
 .left-info-box{
 	width:100%;
 	background:#e8e8e8;
@@ -287,7 +281,6 @@ textarea {
 
 .details-left{
 	float:left;
-	margin-bottom:50px;
 }
 
 .details-left-collections{
@@ -344,15 +337,16 @@ textarea {
 
 .details-left h3{
 	color:#6A5ACD;
-	background:white;
 	border-bottom:2px black solid;
+	width:300px;
 }
 
 .left-info-box{
-	width:100%;
-	background:#e8e8e8;
+	width:300px;
 	padding:10px;
 	margin-bottom:20px;
+	min-width:300px;
+	margin-right:10px;
 }
 
 .left-info-box th{
@@ -365,15 +359,24 @@ textarea {
 }
 
 .details-right{
-	margin-left:20px;
+	margin-left:0px;
 	float:left;
 	width:75%;
+	min-width:300px;
+	padding:0px;
+	margin-left:0px;
 }
 
 .details-right h1{
 	background:#6A5ACD; 
 	width:100%;
 	margin-bottom:10px;
-	padding:20px;
 	margin-left:0px;
+	padding:10px;	
+}
+
+.profile-photo-details{
+	width:300px;
+	height:320px;
+	border:2px solid lightgrey;
 }

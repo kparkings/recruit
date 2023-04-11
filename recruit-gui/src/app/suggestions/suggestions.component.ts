@@ -29,6 +29,7 @@ import { EmailService, EmailRequest }										from '../email.service';
 export class SuggestionsComponent implements OnInit {
 
 	public candidateProfile:CandidateProfile = new CandidateProfile();
+	
 	public savedCandidates:Array<SavedCandidate> = new Array<SavedCandidate>();
 
 	public createAlertForm:UntypedFormGroup = new UntypedFormGroup({
@@ -725,7 +726,7 @@ export class SuggestionsComponent implements OnInit {
 		this.candidateService.getCandidateById(candidateId).subscribe( candidate => {
 				this.candidateProfile = candidate;
 				this.currentView = 'suggested-canidate-overview';
-		
+				
 			}, err => {
 				if (err.status === 401 || err.status === 0) {
 					sessionStorage.removeItem('isAdmin');

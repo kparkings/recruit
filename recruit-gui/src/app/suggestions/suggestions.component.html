@@ -200,7 +200,10 @@
 	
 	<div *ngIf="currentView === 'suggested-canidate-overview'" class="suggestion-results" style="width:90%;margin-left:30px;border:1px solid white;">
 		<div  class="details-left">
+		
 			<img class="profile-photo-details" *ngIf="candidateProfile?.photo?.imageBytes" id='base64image' src='data:image/jpeg;base64, {{candidateProfile?.photo?.imageBytes}}' />
+			<div *ngIf="!candidateProfile?.photo?.imageBytes && !isMobile" class="profile-photo-details">
+			</div>
 			<br>
 			<br *ngIf="candidateProfile.introduction.length != 0">
 			<button class="btn btn-secondary action-btn main-action_btn main-btns" *ngIf="candidateProfile.introduction.length != 0" style="width:300px;margin-bottom:10px;" (click)="contactCandidate(contactBox)">Contact</button>
@@ -227,7 +230,7 @@
 					</tr>
 					<tr>
 						<th>City</th>
-						<td>{{candidateProfile.city | enumToHumanReadableValue}}</td>
+						<td>{{suggestedCandidate.city | enumToHumanReadableValue}}</td>
 					</tr>
 				</table>
 			</div>
@@ -267,17 +270,17 @@
 					</tr>
 				</table>
 			</div>
-			<div *ngIf="candidateProfile.rate.value != '0'">
+			<div *ngIf="candidateProfile.rate.value != '0' && candidateProfile.rate.value != ''">
 				<h3>Rate</h3>
 			</div>
-			<div class="left-info-box" *ngIf="candidateProfile.rate">
+			<div class="left-info-box" *ngIf="candidateProfile.rate.value != '0' && candidateProfile.rate.value != ''">
 				<p>{{candidateProfile.rate.currency | enumToHumanReadableValue}}: {{candidateProfile.rate.value}} per {{candidateProfile.rate.period | enumToHumanReadableValue}}</p>
 			</div>
 			<div>
 				<h3>Years Experience</h3>
 			</div>
 			<div  class="left-info-box">
-				<p>{{candidateProfile.yearsExperience}}
+				<p>{{suggestedCandidate.yearsExperience}}
 			</div>
 			
 		</div>	
@@ -319,18 +322,29 @@
 					</tr>
 				</table>
 			</div>
-							
+			<div *ngIf="candidateProfile.introduction.length != 0">
+				<div>
+					<h1 style="background:#e8e8e8">Candidate Introduction</h1>
+				</div>
+				<div style="width:100%;">
+					<pre style="white-space:pre-line;font-family: Roboto, 'Helvetica Neue', sans-serif;">{{candidateProfile.introduction}}</pre>
+				</div>
+			</div>		
+			<div *ngIf="candidateProfile && candidateProfile.introduction.length == 0">
+				<div>
+					<h1 style="background:#e8e8e8">Candidate Introduction</h1>
+				</div>
+				<div style="width:100%;">
+					<div style="white-space:pre-line;font-family: Roboto, 'Helvetica Neue', sans-serif;">
+					I would like to introduce myself. My name is {{this.suggestedCandidate.firstname}} 
+					and I have {{this.suggestedCandidate.yearsExperience}} years experience. I am currently looking for a new role.
+					
+					I am based in {{this.suggestedCandidate.country | enumToHumanReadableValue}} 
+					</div>
+				</div>
+			</div>					
 		</div>
-		
-		<div class="details-right" *ngIf="candidateProfile.introduction.length != 0">
-			<div style="width:100%">
-				<h1 style="background:#e8e8e8">Candidate Introduction</h1>
-			</div>
-			<div style="width:100%;">
-				<pre style="white-space:pre-line;font-family: Roboto, 'Helvetica Neue', sans-serif;">{{candidateProfile.introduction}}</pre>
-			</div>
-		</div>
-		<div class="action-buttons" style="padding-bottom:50px;"></div>	
+			
 	</div>
 </div>
 
