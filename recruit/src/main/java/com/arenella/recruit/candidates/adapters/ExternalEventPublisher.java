@@ -4,6 +4,7 @@ import java.util.Set;
 import java.util.UUID;
 
 import com.arenella.recruit.adapters.events.CandidateAccountCreatedEvent;
+import com.arenella.recruit.adapters.events.CandidateDeletedEvent;
 import com.arenella.recruit.adapters.events.CandidateNoLongerAvailableEvent;
 import com.arenella.recruit.adapters.events.CandidatePasswordUpdatedEvent;
 import com.arenella.recruit.adapters.events.CandidateUpdatedEvent;
@@ -71,5 +72,11 @@ public interface ExternalEventPublisher {
 	* @param command - Contains details of email to be sent
 	*/
 	public void publishSendEmailCommand(RequestSendEmailCommand command);
+
+	/**
+	* Publishes an Event informing that a Candidate has been deleted
+	* @param candidateDeletedEvent
+	*/
+	public void publishCandidateDeletedEvent(CandidateDeletedEvent candidateDeletedEvent);
 	
 }

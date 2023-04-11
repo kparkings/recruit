@@ -26,7 +26,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import com.arenella.recruit.adapters.events.CandidateAccountCreatedEvent;
+import com.arenella.recruit.adapters.events.CandidateDeletedEvent;
 import com.arenella.recruit.adapters.events.CandidateNoLongerAvailableEvent;
+import com.arenella.recruit.adapters.events.CandidateUpdatedEvent;
 import com.arenella.recruit.candidates.adapters.CandidateCreatedEvent;
 import com.arenella.recruit.candidates.adapters.ExternalEventPublisher;
 import com.arenella.recruit.candidates.beans.Candidate;
@@ -680,10 +682,7 @@ public class CandidateServiceImpl implements CandidateService{
 				.build();
 		
 		this.candidateDao.saveCandidate(updatedCandidate);
-		
-		
-		
-		//TODO: If availability changed send event
+		this.externalEventPublisher.publishCandidateAccountUpdatedEvent(new CandidateUpdatedEvent(candidate.getCandidateId(), candidate.getFirstname(), candidate.getSurname(), candidate.getEmail()));
 		
 	}
 	
@@ -695,6 +694,22 @@ public class CandidateServiceImpl implements CandidateService{
 	*/
 	private boolean checkHasRole(String roleToCheck) {
 		return SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream().filter(role -> role.getAuthority().equals(roleToCheck)).findAny().isPresent();
+	}
+
+	@Override
+	public void deleteCandidate(String candidateId) {
+		
+		if (checkHasRole("ROLE_CANDIDATE") && !this.getAuthenticatedUserId().equals(candidateId)) {
+			throw new IllegalStateException("You cannot delete another Candidate from the System");
+		}
+		
+		this.candidateDao.findCandidateById(Long.valueOf(candidateId)).orElseThrow(() -> new IllegalArgumentException("Cannot delete a non existent Candidate"));
+		
+		candidateDao.deleteById(Long.valueOf(candidateId));
+		
+		this.savedCandidateDao.deleteByCandidateId(Long.valueOf(candidateId));
+		this.externalEventPublisher.publishCandidateDeletedEvent(new CandidateDeletedEvent(candidateId));
+		
 	}
 	
 }

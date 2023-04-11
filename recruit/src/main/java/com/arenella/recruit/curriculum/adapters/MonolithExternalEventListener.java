@@ -7,6 +7,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.arenella.recruit.adapters.events.CandidateDeletedEvent;
 import com.arenella.recruit.adapters.events.CandidateNoLongerAvailableEvent;
 import com.arenella.recruit.candidates.adapters.CandidateCreatedEvent;
 import com.arenella.recruit.candidates.dao.PendingCandidateDao;
@@ -21,7 +22,7 @@ import com.arenella.recruit.curriculum.services.CurriculumService;
 * @author K Parkings
 */
 @Service
-public class MonolithExternalEventListener implements ExternalEventListener{
+public class MonolithExternalEventListener implements CurriculumExternalEventListener{
 
 	@Autowired
 	private CurriculumSkillsDao 	skillsDao;
@@ -107,6 +108,14 @@ public class MonolithExternalEventListener implements ExternalEventListener{
 	@Override
 	public void listenForCandidateNoLongerAvailableEvent(CandidateNoLongerAvailableEvent event) {
 		this.curriculumService.deleteCurriculum(event.getCandidateId());
+	}
+
+	/**
+	* Refer to the ExternalEventListener for details 
+	*/
+	@Override
+	public void listenForCandidteDeletedEvent(CandidateDeletedEvent candidateDeletedEvent) {
+		this.curriculumService.deleteCurriculum(Long.valueOf(candidateDeletedEvent.getCandidateId()));
 	}
 
 }

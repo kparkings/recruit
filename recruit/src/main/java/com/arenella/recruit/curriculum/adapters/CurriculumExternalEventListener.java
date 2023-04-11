@@ -3,6 +3,7 @@ package com.arenella.recruit.curriculum.adapters;
 import java.util.Set;
 import java.util.UUID;
 
+import com.arenella.recruit.adapters.events.CandidateDeletedEvent;
 import com.arenella.recruit.adapters.events.CandidateNoLongerAvailableEvent;
 import com.arenella.recruit.candidates.adapters.CandidateCreatedEvent;
 
@@ -10,7 +11,7 @@ import com.arenella.recruit.candidates.adapters.CandidateCreatedEvent;
 * Defines functionality for listening to Events from external Services
 * @author K Parkings
 */
-public interface ExternalEventListener {
+public interface CurriculumExternalEventListener {
 
 	/**
 	* Listens for Events containing information relating to Skills 
@@ -37,6 +38,12 @@ public interface ExternalEventListener {
 	* @param event - Event to listen for
 	*/
 	void listenForCandidateCreatedEvent(CandidateCreatedEvent event);
+
+	/**
+	* Listens for an event informing that a Candidate has been deleted
+	* @param candidateDeletedEvent - Event to listen for
+	*/
+	public void listenForCandidteDeletedEvent(CandidateDeletedEvent candidateDeletedEvent);
 
 	
 }

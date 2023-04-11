@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.arenella.recruit.adapters.events.CandidateAccountCreatedEvent;
+import com.arenella.recruit.adapters.events.CandidateDeletedEvent;
 import com.arenella.recruit.adapters.events.CandidatePasswordUpdatedEvent;
 import com.arenella.recruit.adapters.events.RecruiterCreatedEvent;
 import com.arenella.recruit.adapters.events.RecruiterHasOpenSubscriptionEvent;
@@ -73,6 +74,15 @@ public class AuthenticationMonolithExternalEventListener implements Authenticati
 	@Override
 	public void listenForCandidatePasswordUpdatedEvent(CandidatePasswordUpdatedEvent event) {
 		this.accountService.updateUserPassword(event.getCandidateId(), event.getNewPassword());
+	}
+
+	/**
+	* Refer to ExternalEventListener interface for details 
+	*/
+	@Override
+	public void listenForCandidteDeletedEvent(CandidateDeletedEvent candidateDeletedEvent) {
+		this.accountService.deleteAccount(candidateDeletedEvent.getCandidateId());
+		
 	}
 
 }

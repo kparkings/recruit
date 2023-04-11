@@ -60,6 +60,17 @@ public class CandidateController {
 		candidateService.persistCandidate(CandidateAPIInbound.convertToCandidate(candidate));
 	}
 	
+	/**
+	* Deletes a Candidate account from the System
+	* @author K Parkings
+	*/
+	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_CANDIDATE')")
+	@DeleteMapping(path="candidate/{candidateId}", consumes="application/json", produces="application/json")
+	public ResponseEntity<Void> deleteCandidate(@PathVariable("candidateId") String candidateId) {
+		candidateService.deleteCandidate(candidateId);
+		return ResponseEntity.ok().build();
+	}
+	
 	public static enum CANDIDATE_UPDATE_ACTIONS {enable, disable}
 	
 	@PreAuthorize("hasRole('ROLE_ADMIN')")

@@ -3,7 +3,6 @@ package com.arenella.recruit.candidates.entities;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -31,7 +30,6 @@ import com.arenella.recruit.candidates.enums.COUNTRY;
 import com.arenella.recruit.candidates.enums.FREELANCE;
 import com.arenella.recruit.candidates.enums.FUNCTION;
 import com.arenella.recruit.candidates.enums.PERM;
-import com.sun.jdi.connect.Connector.BooleanArgument;
 
 /**
 * Entity representation of a Candidate. A Candidate is 

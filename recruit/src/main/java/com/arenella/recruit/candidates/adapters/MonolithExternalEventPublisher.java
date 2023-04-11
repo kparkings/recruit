@@ -9,11 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.arenella.recruit.adapters.events.CandidateAccountCreatedEvent;
+import com.arenella.recruit.adapters.events.CandidateDeletedEvent;
 import com.arenella.recruit.adapters.events.CandidateNoLongerAvailableEvent;
 import com.arenella.recruit.adapters.events.CandidatePasswordUpdatedEvent;
 import com.arenella.recruit.adapters.events.CandidateUpdatedEvent;
 import com.arenella.recruit.authentication.adapters.AuthenticationExternalEventListener;
-import com.arenella.recruit.curriculum.adapters.ExternalEventListener;
+import com.arenella.recruit.curriculum.adapters.CurriculumExternalEventListener;
 import com.arenella.recruit.emailservice.adapters.EmailServiceExternalEventListener;
 import com.arenella.recruit.emailservice.adapters.RequestSendEmailCommand;
 import com.arenella.recruit.emailservice.beans.Email.EmailRecipient;
@@ -39,27 +40,27 @@ import com.arenella.recruit.emailservice.beans.Email.Sender.SenderType;
 public class MonolithExternalEventPublisher implements ExternalEventPublisher{
 
 	@Autowired
-	private ExternalEventListener 				eventListener;
+	private CurriculumExternalEventListener 		curriculumExternalEventListener;
 	
 	@Autowired
-	private AuthenticationExternalEventListener authenticationExternalEventListener;
+	private AuthenticationExternalEventListener 	authenticationExternalEventListener;
 	
 	@Autowired
-	private EmailServiceExternalEventListener emailServiceExternalEventListener;
+	private EmailServiceExternalEventListener 		emailServiceExternalEventListener;
 	
 	/**
 	* Refer to ExternalEventPublisher for details 
 	*/
 	@Override
 	public void publishSearchedSkillsEvent(Set<String> skills) {		
-		eventListener.listenForSearchedSkillsEvent(skills);
+		curriculumExternalEventListener.listenForSearchedSkillsEvent(skills);
 	}
 	
 	/**
 	* Refer to ExternalEventPublisher for details 
 	*/
 	public void publishPendingCurriculumDeletedEvent(UUID pendingCurriculumId) {
-		eventListener.listenForPendingCurriculumDeletedEvent(pendingCurriculumId);
+		curriculumExternalEventListener.listenForPendingCurriculumDeletedEvent(pendingCurriculumId);
 	}
 
 	/**
@@ -67,7 +68,7 @@ public class MonolithExternalEventPublisher implements ExternalEventPublisher{
 	*/
 	@Override
 	public void publishCandidateNoLongerAvailableEvent(CandidateNoLongerAvailableEvent event) {
-		eventListener.listenForCandidateNoLongerAvailableEvent(event);
+		curriculumExternalEventListener.listenForCandidateNoLongerAvailableEvent(event);
 		
 	}
 
@@ -76,7 +77,7 @@ public class MonolithExternalEventPublisher implements ExternalEventPublisher{
 	*/
 	@Override
 	public void publishCandidateCreatedEvent(CandidateCreatedEvent event) {
-		this.eventListener.listenForCandidateCreatedEvent(event);
+		this.curriculumExternalEventListener.listenForCandidateCreatedEvent(event);
 		this.emailServiceExternalEventListener.listenForCandidateCreatedEvent(event);
 	}
 
@@ -142,6 +143,17 @@ public class MonolithExternalEventPublisher implements ExternalEventPublisher{
 	@Override
 	public void publishSendEmailCommand(RequestSendEmailCommand command) {
 		this.emailServiceExternalEventListener.listenForSendEmailCommand(command);
+		
+	}
+	
+	/**
+	* Refer to the ExternalEventPublisher interface for details 
+	*/
+	@Override
+	public void publishCandidateDeletedEvent(CandidateDeletedEvent candidateDeletedEvent) {
+		this.emailServiceExternalEventListener.listenForCandidteDeletedEvent(candidateDeletedEvent);
+		this.curriculumExternalEventListener.listenForCandidteDeletedEvent(candidateDeletedEvent);
+		this.authenticationExternalEventListener.listenForCandidteDeletedEvent(candidateDeletedEvent);
 		
 	}
 

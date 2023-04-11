@@ -21,7 +21,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 import com.arenella.recruit.adapters.events.CandidateNoLongerAvailableEvent;
 import com.arenella.recruit.candidates.beans.CandidateSearchAlertMatch;
-import com.arenella.recruit.curriculum.adapters.ExternalEventListener;
+import com.arenella.recruit.curriculum.adapters.CurriculumExternalEventListener;
 import com.arenella.recruit.emailservice.adapters.EmailServiceExternalEventListener;
 import com.arenella.recruit.emailservice.adapters.RequestSendEmailCommand;
 
@@ -33,7 +33,7 @@ import com.arenella.recruit.emailservice.adapters.RequestSendEmailCommand;
 public class MonolithExternalEventPublisherTest {
 	
 	@Mock
-	private ExternalEventListener 				mockCurriculumEventListener;
+	private CurriculumExternalEventListener 	mockCurriculumEventListener;
 
 	@Mock
 	private EmailServiceExternalEventListener 	mockEmailServiceListener;

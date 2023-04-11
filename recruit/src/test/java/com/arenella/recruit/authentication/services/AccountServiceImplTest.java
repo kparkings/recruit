@@ -123,4 +123,19 @@ public class AccountServiceImplTest {
 		
 	}
 	
+	/**
+	* Tests deletion of a User account
+	* @throws Exception
+	*/
+	@Test
+	public void testDeleteAccount() throws Exception{
+		
+		final String userId = "11";
+		
+		this.service.deleteAccount(userId);
+		
+		Mockito.verify(this.mockUserDao).deleteById(userId);
+		
+	}
+	
 }

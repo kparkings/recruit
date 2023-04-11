@@ -33,6 +33,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import com.arenella.recruit.adapters.events.CandidateAccountCreatedEvent;
+import com.arenella.recruit.adapters.events.CandidateDeletedEvent;
+import com.arenella.recruit.adapters.events.CandidateUpdatedEvent;
 import com.arenella.recruit.candidates.beans.Candidate;
 import com.arenella.recruit.candidates.beans.CandidateFilterOptions;
 import com.arenella.recruit.candidates.beans.CandidateSearchAccuracyWrapper;
@@ -1011,6 +1013,8 @@ public class CandidateServiceImplTest {
 		final Set<Language>	languages				= new LinkedHashSet<>();
 		final String		skill					= "Java";
 		final Language		language				= Language.builder().language(LANGUAGE.DUTCH).level(LEVEL.PROFICIENT).build();
+		final String		firstName				= "kevin";
+		final String 		surname					= "parkings";
 		
 		final FUNCTION		functionUpdt				= FUNCTION.CSHARP_DEV;
 		final COUNTRY 		countryUpdt 				= COUNTRY.BELGIUM;
@@ -1022,6 +1026,10 @@ public class CandidateServiceImplTest {
 		final int 			yearsExperienceUpdt 		= 22;
 		final Set<Language>	languagesUpdt				= new LinkedHashSet<>();
 		final Language		languageUpdt				= Language.builder().language(LANGUAGE.FRENCH).level(LEVEL.BASIC).build();
+		final String		firstNameUpdt				= "kevin1";
+		final String 		surnameUpdt					= "parkings1";
+		
+		ArgumentCaptor<CandidateUpdatedEvent> caEventArgCapt = ArgumentCaptor.forClass(CandidateUpdatedEvent.class);
 		
 		languages.add(language);
 		languagesUpdt.add(languageUpdt);
@@ -1035,7 +1043,7 @@ public class CandidateServiceImplTest {
 					.city(city)
 					.country(country)
 					.email(email)
-					.firstname(skill)
+					.firstname(firstName)
 					.flaggedAsUnavailable(flaggedAsUnavailable)
 					.freelance(freelance)
 					.function(function)
@@ -1045,7 +1053,7 @@ public class CandidateServiceImplTest {
 					.registerd(registerd)
 					.roleSought(roleSought)
 					.skills(skills)
-					.surname(skill)
+					.surname(surname)
 					.yearsExperience(yearsExperience)
 				.build();
 		
@@ -1057,13 +1065,13 @@ public class CandidateServiceImplTest {
 					.city(cityUpdt)
 					.country(countryUpdt)
 					.email(emailUpdt)
-					.firstname(roleSoughtUpdt)
+					.firstname(firstNameUpdt)
 					.freelance(freelanceUpdt)
 					.function(functionUpdt)
 					.languages(languagesUpdt)
 					.perm(permUpdt)
 					.roleSought(roleSoughtUpdt)
-					.surname(roleSoughtUpdt)
+					.surname(surnameUpdt)
 					.yearsExperience(yearsExperienceUpdt)
 				.build();
 		
@@ -1075,6 +1083,7 @@ public class CandidateServiceImplTest {
 		Mockito.when(mockAuthentication.getPrincipal()).thenReturn(candidateId);
 		Mockito.when(this.mockCandidateDao.findCandidateById(Mockito.anyLong())).thenReturn(Optional.of(original));
 		Mockito.when(this.mockCandidateDao.emailInUseByOtherUser(Mockito.anyString(), Mockito.anyLong())).thenReturn(false);
+		Mockito.doNothing().when(this.mockExternalEventPublisher).publishCandidateAccountUpdatedEvent(caEventArgCapt.capture());
 		
 		Mockito.doNothing().when(this.mockCandidateDao).saveCandidate(candidateArgCapt.capture());
 		
@@ -1098,6 +1107,115 @@ public class CandidateServiceImplTest {
 		
 		assertTrue(persisted.getSkills().contains(skill));
 		persisted.getLanguages().stream().filter(l -> l.getLanguage() == languageUpdt.getLanguage()).findAny().orElseThrow();
+		
+		Mockito.verify(this.mockExternalEventPublisher).publishCandidateAccountUpdatedEvent(Mockito.any(CandidateUpdatedEvent.class));
+		
+		assertEquals(candidateId, 			persisted.getCandidateId());
+		assertEquals(firstNameUpdt, 		persisted.getFirstname());
+		assertEquals(surnameUpdt, 			persisted.getSurname());
+		assertEquals(emailUpdt, 			persisted.getEmail());
+		
+	}
+	
+	/**
+	* Tests deletion of Candidate by another Candidate results in Exception
+	* @throws Exception
+	*/
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@Test
+	public void testDeleteProfile_canidate_deleting_other_candidate() throws Exception{
+		
+		final String candidateId = "1234";
+		
+		Collection authorities = new HashSet<>();
+		authorities.add(new SimpleGrantedAuthority("ROLE_CANDIDATE"));
+
+		Mockito.when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
+		Mockito.when(mockAuthentication.getAuthorities()).thenReturn(authorities);
+		Mockito.when(mockAuthentication.getPrincipal()).thenReturn("8888");
+
+		assertThrows(IllegalStateException.class, () -> {
+			this.service.deleteCandidate(candidateId);
+		});
+		
+	}
+	
+	/**
+	* Tests deletion of Candidate that does not exist results in Exception
+	* @throws Exception
+	*/
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@Test
+	public void testDeleteProfile_canidate_doesnt_exist() throws Exception{
+		
+		final String candidateId = "1234";
+		
+		Collection authorities = new HashSet<>();
+		authorities.add(new SimpleGrantedAuthority("ROLE_CANDIDATE"));
+
+		Mockito.when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
+		Mockito.when(mockAuthentication.getAuthorities()).thenReturn(authorities);
+		Mockito.when(mockAuthentication.getPrincipal()).thenReturn(candidateId);
+
+		Mockito.when(this.mockCandidateDao.findCandidateById(Mockito.anyLong())).thenReturn(Optional.empty());
+		
+		assertThrows(IllegalArgumentException.class, () -> {
+			this.service.deleteCandidate(candidateId);
+		});
+		
+	}
+	
+	/**
+	* Tests deletion of Candidate by itself
+	* @throws Exception
+	*/
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@Test
+	public void testDeleteProfile_happy_path_candidate() throws Exception{
+		
+		final String candidateId = "1234";
+		
+		Collection authorities = new HashSet<>();
+		authorities.add(new SimpleGrantedAuthority("ROLE_CANDIDATE"));
+
+		Mockito.when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
+		Mockito.when(mockAuthentication.getAuthorities()).thenReturn(authorities);
+		Mockito.when(mockAuthentication.getPrincipal()).thenReturn(candidateId);
+
+		Mockito.when(this.mockCandidateDao.findCandidateById(Mockito.anyLong())).thenReturn(Optional.of(Candidate.builder().build()));
+		
+		this.service.deleteCandidate(candidateId);
+		
+		Mockito.verify(this.mockCandidateDao).deleteById(Long.valueOf(candidateId));
+		Mockito.verify(this.mockSavedCandidateDao).deleteByCandidateId(Long.valueOf(candidateId));
+		Mockito.verify(this.mockExternalEventPublisher).publishCandidateDeletedEvent(Mockito.any(CandidateDeletedEvent.class));
+	
+	}
+	
+	/**
+	* Tests deletion of Candidate by Administrator
+	* @throws Exception
+	*/
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@Test
+	public void testDeleteProfile_happy_path_admin() throws Exception{
+		
+		final String candidateId = "1234";
+		
+		Collection authorities = new HashSet<>();
+		authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+
+		Mockito.when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
+		Mockito.when(mockAuthentication.getAuthorities()).thenReturn(authorities);
+
+		Mockito.when(this.mockCandidateDao.findCandidateById(Mockito.anyLong())).thenReturn(Optional.of(Candidate.builder().build()));
+		
+		this.service.deleteCandidate(candidateId);
+		
+		Mockito.verify(this.mockCandidateDao).deleteById(Long.valueOf(candidateId));
+		Mockito.verify(this.mockSavedCandidateDao).deleteByCandidateId(Long.valueOf(candidateId));
+		Mockito.verify(this.mockExternalEventPublisher).publishCandidateDeletedEvent(Mockito.any(CandidateDeletedEvent.class));
+		
 		
 	}
 	

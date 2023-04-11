@@ -13,6 +13,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.arenella.recruit.adapters.events.CandidateDeletedEvent;
 import com.arenella.recruit.adapters.events.CandidateNoLongerAvailableEvent;
 import com.arenella.recruit.curriculum.dao.CurriculumSkillsDao;
 import com.arenella.recruit.curriculum.services.CurriculumService;
@@ -127,6 +128,22 @@ public class MonolithExternalEventListenerTest {
 		
 		Mockito.verify(this.mockSkillsDao, Mockito.never()).persistSkills(Mockito.anySet());
 		
+	}
+	
+	/**
+	* Test Curriculum is removed if Candidate is Deletes
+	* @throws Exception
+	*/
+	@Test
+	public void testListenForCandidteDeletedEvent() throws Exception {
+		
+		final String candidateId = "1222";
+		
+		CandidateDeletedEvent event = new CandidateDeletedEvent(candidateId);
+		
+		this.listener.listenForCandidteDeletedEvent(event);
+		
+		Mockito.verify(this.mockCurriculumService).deleteCurriculum(Long.valueOf(candidateId));
 		
 	}
 	

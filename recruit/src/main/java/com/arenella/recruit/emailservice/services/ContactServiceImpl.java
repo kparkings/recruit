@@ -6,7 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.arenella.recruit.emailservice.beans.Contact;
+import com.arenella.recruit.emailservice.beans.Email.EmailRecipient.ContactType;
 import com.arenella.recruit.emailservice.dao.ContactDao;
+import com.arenella.recruit.emailservice.entities.ContactEntityPK;
 
 /**
 * Services for interacting with Email Contact's
@@ -42,6 +44,14 @@ public class ContactServiceImpl implements ContactService{
 	@Override
 	public Set<Contact> fetchContacts(Set<String> contactIds) {
 		return this.contactDao.fetchContacts(contactIds);
+	}
+
+	/**
+	* refer to the ContactService for details
+	*/
+	@Override
+	public void deleteContact(ContactType contactType, String contactId) {
+		this.contactDao.deleteById(new ContactEntityPK(contactType, contactId));
 	}
 
 }

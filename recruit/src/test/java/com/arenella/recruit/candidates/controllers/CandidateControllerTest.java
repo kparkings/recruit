@@ -346,4 +346,18 @@ public class CandidateControllerTest {
 		
 	}
 	
+	/**
+	* Tests handling of request to delete a Candidate
+	* @throws Exception
+	*/
+	@Test
+	public void testCandidate() throws Exception{
+			
+		final String candidateId = "1234";
+		
+		ResponseEntity<Void> response = this.controller.deleteCandidate(candidateId);
+		
+		assertEquals(HttpStatus.OK, response.getStatusCode());
+	}
+	
 }

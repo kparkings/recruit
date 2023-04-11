@@ -155,5 +155,11 @@ public interface CandidateService {
 	* @param candidateUpdateRequest - Contains details of updates Candidate properties
 	*/
 	public void updateCandidateProfile(CandidateUpdateRequest candidateUpdateRequest);
+
+	/**
+	* Fully deletes Candidate from the System
+	* @param candidateId - id of Candidate to delete
+	*/
+	public void deleteCandidate(String candidateId);
 	
 }

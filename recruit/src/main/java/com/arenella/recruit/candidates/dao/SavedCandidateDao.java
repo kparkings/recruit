@@ -20,6 +20,10 @@ public interface SavedCandidateDao extends CrudRepository<SavedCandidateEntity, 
 	@Query("FROM SavedCandidateEntity WHERE id.userId = :userId")
 	Set<SavedCandidateEntity> fetchByUserId(String userId);
 	
+	@Query("FROM SavedCandidateEntity WHERE id.candidateId = :candidateId")
+	Set<SavedCandidateEntity> fetchByCandidateId(long userId);
+	
+	
 	/**
 	* Returns the SavedCandidates for a User
 	* @param userId - Unique Id of the User
@@ -79,6 +83,14 @@ public interface SavedCandidateDao extends CrudRepository<SavedCandidateEntity, 
 	*/
 	public default void updateSavedCandidate(SavedCandidate savedCandidate) {
 		this.save(SavedCandidateEntity.convertToEntity(savedCandidate));
+	}
+	
+	/**
+	* Deletes all the SavedCandidates associated with a specific Candidate
+	* @param candidateId - id of candidate
+	*/
+	public default void deleteByCandidateId(long candidateId) {
+		this.deleteAll(fetchByCandidateId(candidateId));
 	}
 	
 }

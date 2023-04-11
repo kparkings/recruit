@@ -41,5 +41,11 @@ public interface AccountService {
 	* @param password	 - Password of the Recruiter
 	*/
 	public void updateUserPassword(String user, String password);
+
+	/**
+	* Deletes a Users account
+	* @param userId - Unique id of the User
+	*/
+	public void deleteAccount(String userId);
 	
 }

@@ -8,7 +8,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.arenella.recruit.curriculum.adapters.ExternalEventListener;
+import com.arenella.recruit.curriculum.adapters.CurriculumExternalEventListener;
 import com.arenella.recruit.emailservice.adapters.EmailServiceExternalEventListener;
 import com.arenella.recruit.emailservice.adapters.RequestSendEmailCommand;
 import com.arenella.recruit.emailservice.beans.Email.EmailType;
@@ -22,10 +22,10 @@ import com.arenella.recruit.listings.services.FileSecurityParser.FileType;
 public class MonolithListingExternalEventPublisherTest{
 
 	@Mock
-	private ExternalEventListener 				mockCurriculumEventListener;
+	private CurriculumExternalEventListener 			mockCurriculumEventListener;
 
 	@Mock
-	private EmailServiceExternalEventListener 	mockEmailServiceListener;
+	private EmailServiceExternalEventListener 			mockEmailServiceListener;
 	
 	@InjectMocks
 	private MonolithListingExternalEventPublisher 		publisher;

@@ -3,6 +3,7 @@ package com.arenella.recruit.emailservice.services;
 import java.util.Set;
 
 import com.arenella.recruit.emailservice.beans.Contact;
+import com.arenella.recruit.emailservice.beans.Email.EmailRecipient.ContactType;
 
 /**
 * Defines Services for Email Contact
@@ -26,5 +27,12 @@ public interface ContactService {
 	* @return Contacts
 	*/
 	public Set<Contact> fetchContacts(Set<String> contactIds);
+
+	/**
+	* Deletes a Contact based upon their Id
+	* @param contactType - type of contact
+	* @param candidateId - id of contact to delete
+	*/
+	public void deleteContact(ContactType contactType, String contactId);
 	
 }
