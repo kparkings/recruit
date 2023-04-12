@@ -79,3 +79,11 @@ h3{
 	margin-left:0px;
 	background-position:0%;
 }
+
+.available{
+	color:darkgreen;	
+}
+
+.unavailable{
+	color:red;	
+}

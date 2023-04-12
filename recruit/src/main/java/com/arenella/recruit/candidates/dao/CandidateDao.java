@@ -197,9 +197,13 @@ public interface CandidateDao extends CrudRepository<CandidateEntity, Long>, Jpa
 				predicates.add(candidateIdFltr);
 			}
 			
-			//TODO: [KP] need to add filter to show/hide inactive users
-			Predicate isActiveFltr 						= root.get("available").in(true);
-			predicates.add(isActiveFltr);
+			if (this.filterOptions.isAvailable().isEmpty()) {
+				Predicate isActiveFltr 						= root.get("available").in(true);
+				predicates.add(isActiveFltr);
+			} else {
+				Predicate isActiveFltr 						= root.get("available").in(filterOptions.isAvailable().get().booleanValue());
+				predicates.add(isActiveFltr);
+			}
 			
 			
 			if (!this.filterOptions.isFlaggedAsUnavailable().isEmpty()) {

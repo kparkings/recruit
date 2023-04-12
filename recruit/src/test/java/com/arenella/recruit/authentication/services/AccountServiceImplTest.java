@@ -131,10 +131,29 @@ public class AccountServiceImplTest {
 	public void testDeleteAccount() throws Exception{
 		
 		final String userId = "11";
+	
+		Mockito.when(this.mockUserDao.existsById(userId)).thenReturn(true);
 		
 		this.service.deleteAccount(userId);
 		
 		Mockito.verify(this.mockUserDao).deleteById(userId);
+		
+	}
+	
+	/**
+	* Tests deletion of a User account that doesn't exist
+	* @throws Exception
+	*/
+	@Test
+	public void testDeleteAccount_non_existent() throws Exception{
+		
+		final String userId = "11";
+	
+		Mockito.when(this.mockUserDao.existsById(userId)).thenReturn(false);
+		
+		this.service.deleteAccount(userId);
+		
+		Mockito.verify(this.mockUserDao, Mockito.never()).deleteById(userId);
 		
 	}
 	

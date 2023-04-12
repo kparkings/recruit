@@ -287,9 +287,28 @@ public class CurriculumServiceImplTest {
 		
 		final long curriculumId = 123L;
 		
+		Mockito.when(this.mockCurriculumDao.existsById(curriculumId)).thenReturn(true);
+		
 		service.deleteCurriculum(curriculumId);
 		
 		Mockito.verify(this.mockCurriculumDao).deleteById(curriculumId);
+		
+	}
+	
+	/**
+	* Tests deletion of a non existent Curriculum
+	* @throws Exception
+	*/
+	@Test
+	public void testDeleteCurriculum_non_existen_curriculum() throws Exception {
+		
+		final long curriculumId = 123L;
+		
+		Mockito.when(this.mockCurriculumDao.existsById(curriculumId)).thenReturn(false);
+		
+		service.deleteCurriculum(curriculumId);
+		
+		Mockito.verify(this.mockCurriculumDao, Mockito.never()).deleteById(curriculumId);
 		
 	}
 	

@@ -108,7 +108,7 @@
 	
 	<!--  -->
 	<div *ngIf="showAvailabilityCheckTab">
-		<table class="table candidate-table">
+		<table class="table candidate-table availability">
 			<thead>
 	      		<tr>
 	      			<th class="bg-tab-hdr">Id</th>
@@ -120,17 +120,20 @@
 	      	</thead>
 	      	<tbody>
 	      		<tr *ngFor="let candidate of candidatesToCheckForAvailability">
-	      			<td class="medicol">
+	      			<td class="medicol available" *ngIf="candidate.available === true">
+	      				<span>{{candidate.candidateId}}</span>
+	      			</td>
+	      			<td class="medicol unavailable" *ngIf="candidate.available === false">
 	      				{{candidate.candidateId}}
 	      			</td>
 	      			<td class="medicol">
 	      				{{candidate.firstname}} {{candidate.surname}}
 	      			</td>
 	      			<td class="medicol">
-	      				<span *ngIf="candidate.country === 'NETHERLANDS'" class="flag-icon flag-icon-nl suggestion-flag-country"></span>
-						<span *ngIf="candidate.country === 'BELGIUM'" class="flag-icon flag-icon-be  suggestion-flag-country"></span>
-						<span *ngIf="candidate.country === 'UK'" class="flag-icon flag-icon-gb  suggestion-flag-country"></span>
-						<span *ngIf="candidate.country === 'REPUBLIC_OF_IRELAND'" class="flag-icon flag-icon-ie  suggestion-flag-country"></span>
+	      				<span *ngIf="candidate.country === 'NETHERLANDS'" 			class="flag-icon flag-icon-nl suggestion-flag-country"></span>
+						<span *ngIf="candidate.country === 'BELGIUM'" 				class="flag-icon flag-icon-be  suggestion-flag-country"></span>
+						<span *ngIf="candidate.country === 'UK'" 					class="flag-icon flag-icon-gb  suggestion-flag-country"></span>
+						<span *ngIf="candidate.country === 'REPUBLIC_OF_IRELAND'" 	class="flag-icon flag-icon-ie  suggestion-flag-country"></span>
 						{{candidate.city}}
 	      			</td>
 	      			<td class="medicol">
@@ -191,6 +194,10 @@
 	                			</div>
 	                			<div  *ngSwitchCase="false">
 	                				<button	class="control-spacing btn btn-secondary btn-action" (click)="disableCandidate(candidate.candidateId)">Enable</button>
+	                			</div>
+	                			<div>
+	                				<button	class="control-spacing btn btn-secondary btn-action" *ngIf="candidateToDelete == '' || candidateToDelete != candidate.candidateId" (click)="deleteCandidate(candidate.candidateId)">Delete</button>
+	                				<button	class="control-spacing btn btn-secondary btn-action" *ngIf="candidateToDelete == candidate.candidateId" (click)="confirmDeleteCandidate()" style="background:red">Confirm</button>
 	                			</div>
 	                		</div>
 	                	</td>

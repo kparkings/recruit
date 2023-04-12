@@ -58,6 +58,7 @@ public class ContactServiceImplTest {
 		
 		ArgumentCaptor<ContactEntityPK> argPK = ArgumentCaptor.forClass(ContactEntityPK.class);
 		
+		Mockito.when(this.mockContactDao.existsById(Mockito.any())).thenReturn(true);
 		Mockito.doNothing().when(this.mockContactDao).deleteById(argPK.capture());
 		
 		this.service.deleteContact(ContactType.CANDIDATE, contactId);
@@ -66,6 +67,23 @@ public class ContactServiceImplTest {
 		
 		assertEquals(ContactType.CANDIDATE, argPK.getValue().getContactType());
 		assertEquals(contactId, argPK.getValue().getContactId());
+		
+	}
+	
+	/**
+	* Tests deletion of Contact where no contact exists
+	* @throws Exception
+	*/
+	@Test
+	public void testDeleteContact_doesntExist() throws Exception{
+		
+		final String contactId = "1234";
+		
+		Mockito.when(this.mockContactDao.existsById(Mockito.any())).thenReturn(false);
+		
+		this.service.deleteContact(ContactType.CANDIDATE, contactId);
+		
+		Mockito.verify(this.mockContactDao, Mockito.never()).deleteById(Mockito.any());
 		
 	}
 	

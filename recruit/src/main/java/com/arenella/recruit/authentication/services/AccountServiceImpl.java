@@ -102,7 +102,9 @@ public class AccountServiceImpl implements AccountService{
 	*/
 	@Override
 	public void deleteAccount(String userId) {
-		this.userDao.deleteById(userId);
+		if (this.userDao.existsById(userId)) {
+			this.userDao.deleteById(userId);
+		}
 	}
 	
 	/**

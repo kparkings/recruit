@@ -57,8 +57,6 @@ export class CandidateProfileComponent {
 		this.candidateService.getCandidateById(this.getOwnUserId()).subscribe( candidate => {
 				this.candidateProfile = candidate;
 				
-				console.log(JSON.stringify(this.candidateProfile));
-				
 				let lvlEnglish 	= 'UNKNOWN';
 				let lvlDutch 	= 'UNKNOWN';
 				let lvlFrench 	= 'UNKNOWN';

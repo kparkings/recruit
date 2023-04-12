@@ -174,7 +174,7 @@ export class AccountsComponent implements OnInit {
 		
 		this.candidates = new Array<Candidate>();
 
-    	this.candidateService.getCandidates(filterParams).subscribe( data => {
+    	this.candidateService.getCandidates(filterParams+ "&available=true").subscribe( data => {
   
       		data.content.forEach((c:Candidate) => {
         
@@ -188,6 +188,29 @@ export class AccountsComponent implements OnInit {
 				
       			this.candidates.push(candidate);
 
+				/**
+				* Quick and dirty as this is only a temp feature until the anonymized accounts
+				* are removed
+				*/
+				this.candidateService.getCandidates(filterParams + "&available=false").subscribe( data => {
+  			
+		      		data.content.forEach((c:Candidate) => {
+		        
+		        		const candidate:Candidate = new Candidate();
+		
+		      			candidate.candidateId		= c.candidateId;
+		  				candidate.firstname			= c.firstname;
+						candidate.surname			= c.surname;
+						candidate.email				= c.email;
+						candidate.available			= c.available;
+						
+		      			this.candidates.push(candidate);
+		
+					});
+				
+				});
+				
+	        
 			});
         
 		}, err => {
@@ -473,10 +496,13 @@ export class AccountsComponent implements OnInit {
 		this.candidatesToCheckForAvailability = new Array<Candidate>();
 		
 		 this.candidateService.fetchCandidatesDueForAvailabilityCheck().subscribe(data => {
-		
-			console.log(JSON.stringify(data));
 			
-			this.candidatesToCheckForAvailability = <Array<Candidate>> data.content;
+			this.candidatesToCheckForAvailability = data.content;
+			
+			this.candidateService.fetchUnavailableCandidatesDueForAvailabilityCheck().subscribe(candidateData => {
+				let candidates  = <Array<Candidate>> candidateData.content;
+				candidates.forEach(c => this.candidatesToCheckForAvailability.push(c));
+			});
 			
 		}, 
 		err => {
@@ -530,5 +556,25 @@ export class AccountsComponent implements OnInit {
 
   		this.modalService.open(this.content, options);
   	};
+
+
+	public candidateToDelete:string = '';
+
+	/**
+	* Prepares candidate to be deleted and asks for confirmation
+	*/
+	public deleteCandidate(candidateId:string):void{
+		this.candidateToDelete = candidateId;
+	}
+	
+	/**
+	* Confirms delete and sends request to Backend
+	*/
+	public confirmDeleteCandidate():void{
+		this.candidateService.deleteCandidate(this.candidateToDelete).subscribe(res => {
+			this.fetchCandidatesByFilters(this.getCandidateFilterParamString());
+			this.candidateToDelete = '';
+		});
+	}	
 
 }

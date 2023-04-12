@@ -160,7 +160,9 @@ public class CurriculumServiceImpl implements CurriculumService{
 	*/
 	@Override
 	public void deleteCurriculum(long curriculumId) {
-		this.curriculumDao.deleteById(curriculumId);
+		if (this.curriculumDao.existsById(curriculumId)) {
+			this.curriculumDao.deleteById(curriculumId);
+		}
 	}
 
 	/**

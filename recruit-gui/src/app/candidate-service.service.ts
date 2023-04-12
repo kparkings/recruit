@@ -243,7 +243,18 @@ export class CandidateServiceService {
 	*/
 	public fetchCandidatesDueForAvailabilityCheck(): Observable<any>{
 		
-		const backendUrl:string = environment.backendUrl +'candidate?daysSinceLastAvailabilityCheck=14&orderAttribute=candidateId&order=desc&page=0&size=1000';
+		const backendUrl:string = environment.backendUrl +'candidate?daysSinceLastAvailabilityCheck=14&orderAttribute=candidateId&order=desc&page=0&size=1000&available=true';
+  
+    	return this.httpClient.get<any>(backendUrl, this.httpOptions);
+
+	}
+	
+	/**
+	* Returns Candidates that have been marked as unavailable but are due to have their availability checked
+	*/
+	public fetchUnavailableCandidatesDueForAvailabilityCheck(): Observable<any>{
+		
+		const backendUrl:string = environment.backendUrl +'candidate?daysSinceLastAvailabilityCheck=30&orderAttribute=candidateId&order=desc&page=0&size=1000&available=false';
   
     	return this.httpClient.get<any>(backendUrl, this.httpOptions);
 

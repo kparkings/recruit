@@ -23,6 +23,7 @@ public class CandidateFilterOptions {
 	private Set<FUNCTION> 		functions							= new HashSet<>();
 	private Optional<Boolean> 	freelance							= Optional.empty();
 	private Optional<Boolean> 	perm								= Optional.empty();
+	private Boolean			 	available							= null;
 	private int 				yearsExperienceGtEq;
 	private int					yearsExperienceLtEq;
 	private Language.LEVEL 		dutch;
@@ -60,6 +61,7 @@ public class CandidateFilterOptions {
 		this.flaggedAsUnavailable			= builder.flaggedAsUnavailable;
 		this.daysSinceLastAvailabilityCheck	= builder.daysSinceLastAvailabilityCheck;
 		this.searchText						= builder.searchText;
+		this.available 					 	= builder.available;
 		
 	}
 	
@@ -234,6 +236,14 @@ public class CandidateFilterOptions {
 	}
 	
 	/**
+	* Returns whether to filter on the Candidates availability flag
+	* @return availability
+	*/
+	public Optional<Boolean> isAvailable(){
+		return Optional.ofNullable(this.available);
+	}
+	
+	/**
 	* Returns whether to filter on Candidates that have not had their 
 	* availability checked since a certain number of days
 	* @return daysSinceLastAvailabilityCheck to filter on
@@ -282,6 +292,7 @@ public class CandidateFilterOptions {
 		private String 				surname;
 		private String 				email;
 		private Boolean				flaggedAsUnavailable				= null;
+		private Boolean			 	available							= null;
 		private Integer				daysSinceLastAvailabilityCheck; 
 		private String 				searchText							= "";
 		
@@ -486,6 +497,17 @@ public class CandidateFilterOptions {
 		*/
 		public CandidateFilterOptionsBuilder flaggedAsUnavailable(Boolean flaggedAsUnavailable) {
 			this.flaggedAsUnavailable = flaggedAsUnavailable;
+			return this;
+		}
+		
+		/**
+		* Sets whether to filer on the whether a Candidate has been marked as available/unavailable
+		* By default only available candidates will be returned
+		* @param available - Filter on availability
+		* @return Builder
+		*/
+		public CandidateFilterOptionsBuilder available(Boolean available) {
+			this.available = available;
 			return this;
 		}
 		

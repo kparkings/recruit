@@ -51,7 +51,9 @@ public class ContactServiceImpl implements ContactService{
 	*/
 	@Override
 	public void deleteContact(ContactType contactType, String contactId) {
-		this.contactDao.deleteById(new ContactEntityPK(contactType, contactId));
+		if (contactDao.existsById(new ContactEntityPK(contactType, contactId))) {
+			this.contactDao.deleteById(new ContactEntityPK(contactType, contactId));
+		}
 	}
 
 }

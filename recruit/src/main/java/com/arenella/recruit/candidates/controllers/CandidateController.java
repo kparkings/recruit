@@ -185,6 +185,7 @@ public class CandidateController {
 													@RequestParam(required = false) 	Boolean				flaggedAsUnavailable,
 													@RequestParam(required = false)		Integer				daysSinceLastAvailabilityCheck,
 													@RequestParam(required = false)		String				searchText,
+													@RequestParam(required = false)		Boolean				available,
 													Pageable pageable
 												 	) {
 		
@@ -209,6 +210,7 @@ public class CandidateController {
 																		.email(email)
 																		.daysSinceLastAvailabilityCheck(daysSinceLastAvailabilityCheck)
 																		.searchText(searchText)
+																		.available(available)
 																	.build();
 		
 		return candidateService.getCandidateSuggestions(filterOptions, pageable.getPageSize()).map(candidate -> CandidateSuggestionAPIOutbound.convertFromCandidate(candidate));
