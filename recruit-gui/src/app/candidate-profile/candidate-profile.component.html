@@ -2,10 +2,10 @@
 	<div class='content-div'>
 		<div class="recruiter-profile-buttons">
 			<div class="action-buttons">
-				<button class="btn btn-secondary action-btn"  *ngIf="currentView == 'view-edit'" (click)="showViewMain()">Back</button>
-				<button class="btn btn-secondary action-btn"  *ngIf="currentView == 'view-edit'">Delete Profile</button>
-				<button class="btn btn-secondary action-btn"  *ngIf="currentView == 'view-main'" 	(click)="showViewEdit()">Edit Profile</button>
-				<button class="btn btn-secondary action-btn main-action_btn" *ngIf="currentView === 'view-edit'" (click)="updateCandidate()">Save</button>	
+				<button class="btn btn-secondary action-btn"  					*ngIf="currentView == 'view-edit'" 	(click)="showViewMain()">Back</button>
+				<button class="btn btn-secondary action-btn" 					*ngIf="currentView == 'view-edit'" 	(click)="contactCandidate(deleteProfileBox)">Delete Profile</button>
+				<button class="btn btn-secondary action-btn" 		 			*ngIf="currentView == 'view-main'" 	(click)="showViewEdit()">Edit Profile</button>
+				<button class="btn btn-secondary action-btn main-action_btn" 	*ngIf="currentView == 'view-edit'"  (click)="updateCandidate()">Save</button>	
 			</div>
 		</div>
 		
@@ -285,5 +285,26 @@
 	</div>
 	<div class="modal-body" *ngIf="contactCandidateView === 'failure'">
 			<p class="message-send-failure">Failed to Send Message</p>
+	</div>
+</ng-template> 
+
+<ng-template #deleteProfileBox let-modal>
+	<div class="modal-header">
+		<h4 class="modal-title">Confirm Profile Deletion</h4>
+ 		<div class="filter-close-box" (click)="closeModal()">X</div>
+	</div>
+	<div class="modal-body" *ngIf="profileDeletionView === 'home'">
+		<p>Please confirm deletion of your profile and account. Once deleted all your information will be permanently removed 
+		from the system</p>
+		<div>
+			<button class="btn btn-secondary action-btn"  *ngIf="currentView == 'view-edit'" 							(click)="closeModal()">Cancel</button>
+			<button class="btn btn-secondary action-btn"  *ngIf="currentView == 'view-edit'" style="background:red;"	(click)="confirmDeleteProfile()">Delete</button>
+		</div>
+	</div>
+	<div class="modal-body" *ngIf="profileDeletionView === 'failure'">
+		<p class="message-send-failure">
+		Something went wrong. Please email kparkings@gmail.com and I will remove your profile manually. My appologie's for the inconvenience
+		</p>
+		
 	</div>
 </ng-template> 

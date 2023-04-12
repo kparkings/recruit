@@ -20,7 +20,7 @@ public interface SavedCandidateDao extends CrudRepository<SavedCandidateEntity, 
 	@Query("FROM SavedCandidateEntity WHERE id.userId = :userId")
 	Set<SavedCandidateEntity> fetchByUserId(String userId);
 	
-	@Query("FROM SavedCandidateEntity WHERE id.candidateId = :candidateId")
+	@Query("FROM SavedCandidateEntity WHERE id.candidateId = :userId")
 	Set<SavedCandidateEntity> fetchByCandidateId(long userId);
 	
 	

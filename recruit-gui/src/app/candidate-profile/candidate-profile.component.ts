@@ -272,7 +272,28 @@ export class CandidateProfileComponent {
 	*  Closes the confirm popup
 	*/
 	public closeModal(): void {
+		this.profileDeletionView = 'home';
 		this.modalService.dismissAll();
+	}
+	
+	public profileDeletionView:string = 'home';
+	
+	/**
+	* Deletes Candidates Profile
+	*/
+	confirmDeleteProfile():void{
+		this.candidateService.deleteCandidate(this.candidateProfile.candidateId).subscribe(res => {
+			
+			sessionStorage.setItem('isRecruiterNoSubscription',		'');
+			sessionStorage.setItem('beforeAuthPage', 				'');
+			sessionStorage.setItem('isCandidate',     	 			'');
+			sessionStorage.setItem('loggedIn',      				'');
+	    	sessionStorage.setItem("userId", 						'');
+			this.closeModal();
+			this.router.navigate(['/']);
+		}, err=> {
+			this.profileDeletionView = 'failure';
+		});
 	}
 	
 	/**

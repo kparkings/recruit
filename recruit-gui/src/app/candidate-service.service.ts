@@ -345,11 +345,22 @@ export class CandidateServiceService {
 	}
 
 	/**
-	* Updates an existing  Saved Candidate for a User
+	* Deletes an existing  Saved Candidate for a User
 	*/
 	public deleteSavedCandidate(candidateId:number): Observable<void>{
 		
 		const backendUrl:string = environment.backendUrl +'saved-candidate/' + candidateId;
+	
+		return this.httpClient.delete<any>(backendUrl, this.httpOptions);
+
+	}
+	
+	/**
+	* Deletes an existing Candidate for a User
+	*/
+	public deleteCandidate(candidateId:string): Observable<void>{
+		
+		const backendUrl:string = environment.backendUrl +'candidate/' + candidateId;
 	
 		return this.httpClient.delete<any>(backendUrl, this.httpOptions);
 

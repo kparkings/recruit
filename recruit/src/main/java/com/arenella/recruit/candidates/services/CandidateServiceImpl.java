@@ -705,9 +705,9 @@ public class CandidateServiceImpl implements CandidateService{
 		
 		this.candidateDao.findCandidateById(Long.valueOf(candidateId)).orElseThrow(() -> new IllegalArgumentException("Cannot delete a non existent Candidate"));
 		
-		candidateDao.deleteById(Long.valueOf(candidateId));
-		
 		this.savedCandidateDao.deleteByCandidateId(Long.valueOf(candidateId));
+		this.candidateDao.deleteById(Long.valueOf(candidateId));
+		
 		this.externalEventPublisher.publishCandidateDeletedEvent(new CandidateDeletedEvent(candidateId));
 		
 	}
