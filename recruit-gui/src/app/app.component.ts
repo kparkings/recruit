@@ -18,7 +18,7 @@ export class AppComponent {
 
 	@ViewChild('validationExBox', { static: false }) private content:any;
 	
-	private readonly termsAndConditionsCookieVersion:string = '2';
+	private readonly termsAndConditionsCookieVersion:string = '3';
 
   	title = 'Arenella-ICT - IT Candidates for Recruiters';
 
