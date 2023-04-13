@@ -271,10 +271,10 @@
 					</tr>
 				</table>
 			</div>
-			<div *ngIf="candidateProfile.rate.value != '0' && candidateProfile.rate.value != ''">
+			<div *ngIf="candidateProfile.rate && candidateProfile.rate.value != '0' && candidateProfile.rate.value != ''">
 				<h3>Rate</h3>
 			</div>
-			<div class="left-info-box" *ngIf="candidateProfile.rate.value != '0' && candidateProfile.rate.value != ''">
+			<div class="left-info-box" *ngIf="candidateProfile.rate && candidateProfile.rate.value != '0' && candidateProfile.rate.value != ''">
 				<p>{{candidateProfile.rate.currency | enumToHumanReadableValue}}: {{candidateProfile.rate.value}} per {{candidateProfile.rate.period | enumToHumanReadableValue}}</p>
 			</div>
 			<div>
@@ -323,7 +323,7 @@
 					</tr>
 				</table>
 			</div>
-			<div *ngIf="candidateProfile.introduction.length != 0">
+			<div *ngIf="candidateProfile.introduction && candidateProfile.introduction.length != 0">
 				<div>
 					<h1 style="background:#e8e8e8">Candidate Introduction</h1>
 				</div>
@@ -331,7 +331,7 @@
 					<pre style="white-space:pre-line;font-family: Roboto, 'Helvetica Neue', sans-serif;">{{candidateProfile.introduction}}</pre>
 				</div>
 			</div>		
-			<div *ngIf="candidateProfile && candidateProfile.introduction.length == 0">
+			<div *ngIf="candidateProfile.introduction && candidateProfile.introduction.length == 0">
 				<div>
 					<h1 style="background:#e8e8e8">Candidate Introduction</h1>
 				</div>
@@ -428,7 +428,6 @@
 		</table>
 	</div> 
 </ng-template>
-
 <!-- Candidte contact -->
 <ng-template #contactBox let-modal>
 	<div class="modal-header">
