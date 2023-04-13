@@ -237,7 +237,7 @@ public class CandidateEntityTest {
 		
 		final LocalDate pastDate = LocalDate.of(2000, 10, 5);
 		
-		CandidateEntity candidate = CandidateEntity.builder().lastAvailabilityCheck(pastDate).build();
+		CandidateEntity candidate = CandidateEntity.builder().available(false).lastAvailabilityCheck(pastDate).build();
 		
 		assertEquals(candidate.getLastAvailabilityCheckOn(), pastDate);
 		
@@ -246,6 +246,7 @@ public class CandidateEntityTest {
 		assertNotEquals(candidate.getLastAvailabilityCheckOn(), pastDate);
 		
 		assertTrue(candidate.getLastAvailabilityCheckOn() instanceof LocalDate);
+		assertTrue(candidate.isAvailable());
 		
 	}
 	

@@ -242,7 +242,8 @@ public class Candidate {
 	* as no longer being available
 	*/
 	public void noLongerAvailable() {
-		this.available 		= false;
+		this.available 				= false;
+		this.lastAvailabilityCheck 	= LocalDate.now();
 	}
 	
 	/**

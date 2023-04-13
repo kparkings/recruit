@@ -10,9 +10,11 @@
 	  <li class="nav-item tabNav">
 	    <span class="nav-link" (click)="switchTab('availabilityChecks')">Availability</span>
 	  </li>
+	  <!--  
 	  <li class="nav-item tabNav">
 	    <span class="nav-link" (click)="switchTab('flaggedAsUnavailable')">Flagged</span>
 	  </li>
+	  -->
 	   <li class="nav-item tabNav">
 	    <span class="nav-link" (click)="switchTab('subscriptionActions')">Subscription</span>
 	  </li>
@@ -192,9 +194,6 @@
 	                			<div  *ngSwitchCase="true">
 	                				<button	class="control-spacing btn btn-secondary btn-action" (click)="disableCandidate(candidate.candidateId)">Disable</button>
 	                			</div>
-	                			<div  *ngSwitchCase="false">
-	                				<button	class="control-spacing btn btn-secondary btn-action" (click)="disableCandidate(candidate.candidateId)">Enable</button>
-	                			</div>
 	                			<div>
 	                				<button	class="control-spacing btn btn-secondary btn-action" *ngIf="candidateToDelete == '' || candidateToDelete != candidate.candidateId" (click)="deleteCandidate(candidate.candidateId)">Delete</button>
 	                				<button	class="control-spacing btn btn-secondary btn-action" *ngIf="candidateToDelete == candidate.candidateId" (click)="confirmDeleteCandidate()" style="background:red">Confirm</button>
@@ -209,13 +208,14 @@
 	</div>
 	
 	<!-- Flagged as Unavailable-->
+	<!-- 
+	//TODO: [KP] This is no longer used since candidate screen was removed. Can delete all associated code
 	<div *ngIf="showFlaggedAsUnavailableTab">
 		<form [formGroup]="candidateFormGroup">
 			<h3>Flagged as Unavailable</h3>
 			<table class="table candidate-table">
 				<thead>
 	      			<tr>
-		      			<!-- Table Headers -->
 		      			<th class="bg-tab-hdr">Id</th>
 		      			<th class="bg-tab-hdr">Name</th>
 		                <th class="bg-tab-hdr">Email</th>
@@ -223,7 +223,6 @@
 		        	</tr>
 	      		</thead>
 	      		<tbody>
-	      			<!-- Table row -->
 	      			<tr *ngFor="let candidate of candidates">
 	      				<td class="candidate-tab-col"><span class="candidate-id-prefix">C</span>{{candidate.candidateId}}</td>
 	                	<td class="candidate-tab-col medicol"> {{candidate.firstname}} {{candidate.surname}}</td>
@@ -237,7 +236,8 @@
 			</table>
 		</form>
 	</div>
-	
+	 -->
+	 
 	<!-- Subscriptions requiring actions -->
 	<div *ngIf="showSubscriptionActionsTab">
 		<div class="sub-title">

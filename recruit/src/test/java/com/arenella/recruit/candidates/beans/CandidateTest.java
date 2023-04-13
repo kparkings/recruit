@@ -3,6 +3,7 @@ package com.arenella.recruit.candidates.beans;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 import java.time.LocalDate;
 import java.util.LinkedHashSet;
@@ -121,9 +122,10 @@ public class CandidateTest {
 	@Test
 	public void testNoLongerAvailable() throws Exception {
 		
-		final String firstName 	= "Kevin";
-		final String surname 	= "Parkings";
-		final String email 		= "kparkings@gmail.com";
+		final String 	firstName 	= "Kevin";
+		final String 	surname 	= "Parkings";
+		final String 	email 		= "kparkings@gmail.com";
+		final LocalDate	lastAvailabilityCheck = LocalDate.of(2000, 01, 01);
 		
 		Candidate candidate = Candidate
 				.builder()
@@ -131,17 +133,20 @@ public class CandidateTest {
 					.firstname(firstName)
 					.surname(surname)
 					.email(email)
+					.lastAvailabilityCheck(lastAvailabilityCheck)
 				.build();
 		
 		assertTrue(candidate.isAvailable());
-		assertEquals(candidate.getFirstname(), firstName);
-		assertEquals(candidate.getSurname(), surname);
-		assertEquals(candidate.getEmail(), email);
+		
+		assertEquals(firstName, 			candidate.getFirstname(), firstName);
+		assertEquals(surname,	 			candidate.getSurname(), surname);
+		assertEquals(email, 				candidate.getEmail(), email);
+		assertEquals(lastAvailabilityCheck, candidate.getLastAvailabilityCheckOn());
 		
 		candidate.noLongerAvailable();
 		
 		assertFalse(candidate.isAvailable());
-		
+		assertNotEquals(lastAvailabilityCheck, candidate.getLastAvailabilityCheckOn());
 	}
 	
 	/**

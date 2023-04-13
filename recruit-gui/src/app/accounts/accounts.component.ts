@@ -170,7 +170,7 @@ export class AccountsComponent implements OnInit {
 		return value  == '' ? '' : '&email='+value;
 	}
 	
-	public fetchCandidatesByFilters(filterParams:string):void{
+	public fetchCandidatesByFilters(filterParams:string, includeUnavailable:boolean):void{
 		
 		this.candidates = new Array<Candidate>();
 
@@ -187,13 +187,16 @@ export class AccountsComponent implements OnInit {
 				candidate.available			= c.available;
 				
       			this.candidates.push(candidate);
+	        
+			});
 
+			if (includeUnavailable) {
 				/**
 				* Quick and dirty as this is only a temp feature until the anonymized accounts
 				* are removed
 				*/
 				this.candidateService.getCandidates(filterParams + "&available=false").subscribe( data => {
-  			
+			
 		      		data.content.forEach((c:Candidate) => {
 		        
 		        		const candidate:Candidate = new Candidate();
@@ -209,10 +212,7 @@ export class AccountsComponent implements OnInit {
 					});
 				
 				});
-				
-	        
-			});
-        
+			}        
 		}, err => {
 			
 			if (err.status === 401 || err.status === 0) {
@@ -430,14 +430,14 @@ export class AccountsComponent implements OnInit {
 	* Retrieves candidates from the backend
 	*/
 	public fetchCandidates(): void{
-    	this.fetchCandidatesByFilters(this.getCandidateFilterParamString());
+    	this.fetchCandidatesByFilters(this.getCandidateFilterParamString(), true);
 	}
 	
 	/**
 	* Retrieves candidates from the backend
 	*/
 	public fetchFlaggedAsUnavailableCandidates(): void{
-    	this.fetchCandidatesByFilters(this.getCandidateFlaggedAsUnavailableFilterParamString());
+    	this.fetchCandidatesByFilters(this.getCandidateFlaggedAsUnavailableFilterParamString(), false);
 	}
 	
 	/**
@@ -572,7 +572,7 @@ export class AccountsComponent implements OnInit {
 	*/
 	public confirmDeleteCandidate():void{
 		this.candidateService.deleteCandidate(this.candidateToDelete).subscribe(res => {
-			this.fetchCandidatesByFilters(this.getCandidateFilterParamString());
+			this.fetchCandidatesByFilters(this.getCandidateFilterParamString(), true);
 			this.candidateToDelete = '';
 		});
 	}	
