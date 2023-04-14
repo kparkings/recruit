@@ -331,7 +331,7 @@
 					<pre style="white-space:pre-line;font-family: Roboto, 'Helvetica Neue', sans-serif;">{{candidateProfile.introduction}}</pre>
 				</div>
 			</div>		
-			<div *ngIf="candidateProfile.introduction && candidateProfile.introduction.length == 0">
+			<div *ngIf="!candidateProfile.introduction || candidateProfile.introduction.length == 0">
 				<div>
 					<h1 style="background:#e8e8e8">Candidate Introduction</h1>
 				</div>
