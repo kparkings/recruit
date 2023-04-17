@@ -75,8 +75,7 @@ public class CurriculumController {
 		}
 		
 		String 			postFix						= curriculumFile.getOriginalFilename().substring(curriculumFile.getOriginalFilename().lastIndexOf('.')+1).toLowerCase();
-		long 			nextAvailableCurriculumId	= curriculumService.getNextCurriculumId();
-		Curriculum 		curriculum					= Curriculum.builder().fileType(FileType.valueOf(postFix)).file(curriculumFile.getBytes()).id(String.valueOf(nextAvailableCurriculumId)).build();
+		Curriculum 		curriculum					= Curriculum.builder().fileType(FileType.valueOf(postFix)).file(curriculumFile.getBytes()).id(String.valueOf(curriculumId)).build();
 		
 		return curriculumService.extractDetails(curriculumService.updateCurriculum(curriculumId, curriculum), FileType.valueOf(postFix), curriculumFile.getBytes());
 		
