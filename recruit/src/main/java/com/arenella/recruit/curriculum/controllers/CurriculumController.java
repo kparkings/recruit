@@ -61,6 +61,28 @@ public class CurriculumController {
 	}
 	
 	/**
+	* EndPoint for updating a Curriculum
+	* @param curriculum		- MultiPart representation of file
+	* @return Id of the Curriculum
+	* @throws Exception
+	*/
+	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('ROLE_CANDIDATE')")
+	@PutMapping(value="/curriculum/{curriculumId}",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	public CurriculumUpdloadDetails updateCurriculum(@PathVariable("curriculumId") long curriculumId, @RequestParam("file") MultipartFile curriculumFile) throws Exception{
+		
+		if (!fileSecurityParser.isSafe(curriculumFile)) {
+			throw new RuntimeException("Unacceptable File");
+		}
+		
+		String 			postFix						= curriculumFile.getOriginalFilename().substring(curriculumFile.getOriginalFilename().lastIndexOf('.')+1).toLowerCase();
+		long 			nextAvailableCurriculumId	= curriculumService.getNextCurriculumId();
+		Curriculum 		curriculum					= Curriculum.builder().fileType(FileType.valueOf(postFix)).file(curriculumFile.getBytes()).id(String.valueOf(nextAvailableCurriculumId)).build();
+		
+		return curriculumService.extractDetails(curriculumService.updateCurriculum(curriculumId, curriculum), FileType.valueOf(postFix), curriculumFile.getBytes());
+		
+	}
+	
+	/**
 	* Returns the Curriculum file 
 	* @param  - curriculumId - Unique Id of the curriculum to download
 	* @param  - principal	 - Contains id of User who made the request

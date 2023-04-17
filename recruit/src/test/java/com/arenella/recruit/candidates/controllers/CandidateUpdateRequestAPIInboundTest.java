@@ -64,6 +64,7 @@ public class CandidateUpdateRequestAPIInboundTest {
 							.perm(perm)
 							.yearsExperience(yearsExperience)
 							.languages(languages)
+							.skills(skills)
 							.build();
 		
 		assertEquals(function, 			candidate.getFunction());
@@ -76,6 +77,7 @@ public class CandidateUpdateRequestAPIInboundTest {
 		assertEquals(yearsExperience, 	candidate.getYearsExperience());
 		
 		candidate.getLanguages().stream().filter(l -> l.getLanguage() == language.getLanguage()).findAny().orElseThrow();
+		candidate.getSkills().stream().filter(s -> s.equals(skill)).findAny().orElseThrow();
 		
 	}
 	

@@ -31,6 +31,7 @@ public class CandidateUpdateRequest {
 	private Rate			rate;
 	private String			introduction;
 	private byte[]			photoBytes;
+	private Set<String>		skills						= new LinkedHashSet<>();
 	
 	/**
 	* Constructor based upon a builder
@@ -52,6 +53,7 @@ public class CandidateUpdateRequest {
 		this.rate						= builder.rate;
 		this.introduction				= builder.introduction;
 		this.photoBytes					= builder.photoBytes;
+		this.skills						= builder.skills;
 		this.languages.addAll(builder.languages);
 	
 	}
@@ -157,6 +159,14 @@ public class CandidateUpdateRequest {
 	}
 	
 	/**
+	* Returns updates set of Candidates skills
+	* @return skills
+	*/
+	public Set<String> getSkills(){
+		return this.skills;
+	}
+	
+	/**
 	* Returns the Candidates introduction about themselves
 	* @return Introduction
 	*/
@@ -210,6 +220,7 @@ public class CandidateUpdateRequest {
 		private Rate			rate;
 		private String			introduction;
 		private byte[]			photoBytes;
+		private Set<String> 	skills					= new LinkedHashSet<>();
 		
 		/**
 		* Sets the candidates Unique identifier in the System
@@ -329,6 +340,17 @@ public class CandidateUpdateRequest {
 		public CandidateUpdateRequestBuilder languages(Set<Language> languages) {
 			this.languages.clear();
 			this.languages.addAll(languages);
+			return this;
+		}
+		
+		/**
+		* Sets the skills the Candidate has
+		* @param skills - Candidates skills
+		* @return Builder
+		*/
+		public CandidateUpdateRequestBuilder skills(Set<String> skills) {
+			this.skills.clear();
+			this.skills.addAll(skills);
 			return this;
 		}
 		

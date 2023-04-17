@@ -38,6 +38,7 @@ public class CandidateUpdateRequestAPIInbound {
 	private Set<Language> 	languages					= new LinkedHashSet<>();
 	private Rate			rate;
 	private String			introduction;
+	private Set<String>		skills						= new LinkedHashSet<>();
 	
 	/**
 	* Constructor based upon a builder
@@ -57,6 +58,7 @@ public class CandidateUpdateRequestAPIInbound {
 		this.yearsExperience 			= builder.yearsExperience;
 		this.rate						= builder.rate;
 		this.introduction				= builder.introduction;
+		this.skills						= builder.skills;
 		
 		this.languages.addAll(builder.languages);
 	
@@ -171,6 +173,14 @@ public class CandidateUpdateRequestAPIInbound {
 	}
 	
 	/**
+	* Returns the Candidates Skills
+	* @return Candidates skills
+	*/
+	public Set<String> getSkills(){
+		return this.skills;
+	}
+	
+	/**
 	* Builder for the Candidate class
 	* @return A Builder for the Candidate class
 	*/
@@ -198,6 +208,7 @@ public class CandidateUpdateRequestAPIInbound {
 		private Set<Language> 	languages					= new LinkedHashSet<>();
 		private Rate			rate;
 		private String			introduction;
+		private Set<String>		skills						= new LinkedHashSet<>();
 		
 		/**
 		* Sets the First name of the Candidate
@@ -331,6 +342,17 @@ public class CandidateUpdateRequestAPIInbound {
 		}
 		
 		/**
+		* Sets the Skills of the Candidate
+		* @param skills - Candidates Skills
+		* @return Builder
+		*/
+		public CandidateUpdateRequestAPIInboundBuilder skills(Set<String> skills) {
+			this.skills.clear();
+			this.skills.addAll(skills);
+			return this;
+		}
+		
+		/**
 		* Returns an instance of Candidate initialized with the 
 		* values in the builder
 		* @return Initialized instance of Candidate
@@ -376,6 +398,7 @@ public class CandidateUpdateRequestAPIInbound {
 						.yearsExperience(updateRequest.getYearsExperience())
 						.introduction(updateRequest.getIntroduction())
 						.rate(rate)
+						.skills(updateRequest.getSkills())
 						.photoBytes(profileImage.isEmpty() ? null : profileImage.get().getBytes())
 					.build();
 	}

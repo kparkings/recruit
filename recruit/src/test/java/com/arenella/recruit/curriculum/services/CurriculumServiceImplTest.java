@@ -4,10 +4,14 @@ import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -33,6 +37,8 @@ import com.arenella.recruit.curriculum.enums.FileType;
 */
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 @ExtendWith(MockitoExtension.class)
@@ -53,12 +59,23 @@ public class CurriculumServiceImplTest {
 	@Mock
 	private 				ExternalEventPublisher			mockExternalEventPublisher;
 	
+	@Mock
+	private 				SecurityContext					mockSecurityContext;
+	
 	@InjectMocks
 	private static final 	CurriculumServiceImpl 	service 			= new CurriculumServiceImpl();
 	
 	final 	String 		curriculumId 	= "501";
 	final 	FileType 	fileType 		= FileType.doc;
 	final 	byte[] 		file 			= new byte[] {};
+	
+	/**
+	* Sets up test environment 
+	*/
+	@BeforeEach
+	public void init() throws Exception{
+		SecurityContextHolder.setContext(mockSecurityContext);
+	}
 	
 	/**
 	* Happy Path test for persisting a new Curriculum
@@ -152,8 +169,8 @@ public class CurriculumServiceImplTest {
 	public void testLogCurriculumDownloadedEvent() throws Exception{
 		
 		final String curriculumId = "100";
-		
-		SecurityContextHolder.getContext().setAuthentication(mockAuthentication);
+	
+		Mockito.when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
 		
 		ArgumentCaptor<CurriculumDownloadedEventEntity> captor = ArgumentCaptor.forClass(CurriculumDownloadedEventEntity.class);
 		
@@ -309,6 +326,146 @@ public class CurriculumServiceImplTest {
 		service.deleteCurriculum(curriculumId);
 		
 		Mockito.verify(this.mockCurriculumDao, Mockito.never()).deleteById(curriculumId);
+		
+	}
+	
+	/**
+	* Tests Exception thrown if Curriculum not found
+	* @throws Exception
+	*/
+	@Test
+	public void testUpdateCurriculum_does_not_exist() throws Exception {
+		
+		Curriculum curriculum = Curriculum
+				.builder()
+					.id(curriculumId)
+					.fileType(fileType)
+					.file(file)
+				.build();
+		
+		Assertions.assertThrows(IllegalArgumentException.class, () -> {
+			service.updateCurriculum(Long.valueOf(curriculumId), curriculum);
+		});
+		
+	}
+	
+	/**
+	* Tests Exception thrown if Curriculum being updates by Candidate
+	* belongs to another Candidate
+	* @throws Exception
+	*/
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@Test
+	public void testUpdateCurriculum_candidate_user_other_candidates_curriculum() throws Exception {
+		
+		Curriculum curriculum = Curriculum
+				.builder()
+					.id(curriculumId)
+					.fileType(fileType)
+					.file(file)
+				.build();
+		
+		Collection authorities = new HashSet<>();
+		authorities.add(new SimpleGrantedAuthority("ROLE_CANDIDATE"));
+
+		Mockito.when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
+		Mockito.when(mockAuthentication.getAuthorities()).thenReturn(authorities);
+		Mockito.when(mockAuthentication.getPrincipal()).thenReturn(2L);
+		Mockito.when(this.mockCurriculumDao.existsById(Long.valueOf(curriculumId))).thenReturn(true);
+		
+		Assertions.assertThrows(IllegalArgumentException.class, () -> {
+			service.updateCurriculum(Long.valueOf(curriculumId), curriculum);
+		});
+		
+	}
+	
+	/**
+	* Tests Exception thrown if Curriculum being updates by Candidate
+	* belongs to another Candidate
+	* @throws Exception
+	*/
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@Test
+	public void testUpdateCurriculum_not_candidate_not_admin() throws Exception {
+		
+		Curriculum curriculum = Curriculum
+				.builder()
+					.id(curriculumId)
+					.fileType(fileType)
+					.file(file)
+				.build();
+		
+		Collection authorities = new HashSet<>();
+		authorities.add(new SimpleGrantedAuthority("ROLE_RECRUITER"));
+
+		Mockito.when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
+		Mockito.when(mockAuthentication.getAuthorities()).thenReturn(authorities);
+		Mockito.when(mockAuthentication.getPrincipal()).thenReturn(curriculumId);
+		Mockito.when(this.mockCurriculumDao.existsById(Long.valueOf(curriculumId))).thenReturn(true);
+		
+		Assertions.assertThrows(IllegalArgumentException.class, () -> {
+			service.updateCurriculum(Long.valueOf(curriculumId), curriculum);
+		});
+		
+	}
+	
+	/**
+	* Tests Exception thrown if Curriculum being updates by Candidate
+	* belongs to another Candidate
+	* @throws Exception
+	*/
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@Test
+	public void testUpdateCurriculum_owning_canidate() throws Exception {
+		
+		Curriculum curriculum = Curriculum
+				.builder()
+					.id(curriculumId)
+					.fileType(fileType)
+					.file(file)
+				.build();
+		
+		Collection authorities = new HashSet<>();
+		authorities.add(new SimpleGrantedAuthority("ROLE_CANDIDATE"));
+
+		Mockito.when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
+		Mockito.when(mockAuthentication.getAuthorities()).thenReturn(authorities);
+		Mockito.when(mockAuthentication.getPrincipal()).thenReturn(curriculumId);
+		Mockito.when(this.mockCurriculumDao.existsById(Long.valueOf(curriculumId))).thenReturn(true);
+		
+		service.updateCurriculum(Long.valueOf(curriculumId), curriculum);
+		
+		Mockito.verify(this.mockCurriculumDao).updateCurriculum(curriculum);
+		
+	}
+	
+	/**
+	* Tests Exception thrown if Curriculum being updates by Candidate
+	* belongs to another Candidate
+	* @throws Exception
+	*/
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@Test
+	public void testUpdateCurriculum_admin() throws Exception {
+		
+		Curriculum curriculum = Curriculum
+				.builder()
+					.id(curriculumId)
+					.fileType(fileType)
+					.file(file)
+				.build();
+		
+		Collection authorities = new HashSet<>();
+		authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+
+		Mockito.when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
+		Mockito.when(mockAuthentication.getAuthorities()).thenReturn(authorities);
+		Mockito.when(mockAuthentication.getPrincipal()).thenReturn(2L);
+		Mockito.when(this.mockCurriculumDao.existsById(Long.valueOf(curriculumId))).thenReturn(true);
+		
+		service.updateCurriculum(Long.valueOf(curriculumId), curriculum);
+		
+		Mockito.verify(this.mockCurriculumDao).updateCurriculum(curriculum);
 		
 	}
 	

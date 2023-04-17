@@ -672,7 +672,7 @@ public class CandidateServiceImpl implements CandidateService{
 					.perm(candidate.isPerm())
 					.registerd(existingCandidate.getRegisteredOn())
 					.roleSought(candidate.getRoleSought())
-					.skills(existingCandidate.getSkills())
+					.skills(candidate.getSkills().isEmpty() ? existingCandidate.getSkills() : candidate.getSkills())
 					.surname(candidate.getSurname())
 					.yearsExperience(candidate.getYearsExperience())
 					.photo(photo)

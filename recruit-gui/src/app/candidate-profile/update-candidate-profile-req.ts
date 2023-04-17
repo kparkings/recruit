@@ -20,5 +20,6 @@ export class UpdateCandidateProfileRequest{
 	public introduction:string 			= '';
 	public photo:PhotoAPIOutbound 		= new PhotoAPIOutbound();
 	public rate:Rate 					= new Rate();
+	public skills:Array<string>			= new Array<string>();
 	
 }

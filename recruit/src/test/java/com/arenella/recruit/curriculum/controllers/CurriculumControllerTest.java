@@ -102,6 +102,21 @@ public class CurriculumControllerTest {
 	}
 	
 	/**
+	* Tests case that file is deemed unsafe to upload
+	* @throws Exception
+	*/
+	@Test
+	public void testUpdateCurriculum_unsafe_file() throws Exception {
+		
+		Mockito.when(this.mockFileSecurityParser.isSafe(Mockito.any())).thenReturn(false);
+		
+		assertThrows(RuntimeException.class, () -> {
+			curriculumController.updateCurriculum(1L, mockMultipartFile);
+		
+		});
+	}
+	
+	/**
 	* Test calling of endpoint to get bytes for PDF version of 
 	* curriculum
 	* @throws Exception

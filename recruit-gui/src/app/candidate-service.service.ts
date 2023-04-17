@@ -68,13 +68,27 @@ export class CandidateServiceService {
 	* Update a Candidate profile 
 	*/
 	public updateCandidate(candidateId:string, candidate: UpdateCandidateProfileRequest, profileImage:File):Observable<any> {
-	console.log(JSON.stringify(candidate));
+	
 		const backendUrl:string = environment.backendUrl +'candidate/'+candidateId + '/profile';
 		
 		var fd = new FormData();
 		fd.append('file', profileImage);
   		fd.append("profile", new Blob([JSON.stringify(candidate)], { type: 'application/json' }));
 	
+		return this.httpClient.put<any>(backendUrl, fd, {headers: new HttpHeaders({ }), withCredentials: true});
+		
+	}
+	
+	/**
+	* Update a Candidate CV 
+	*/
+	public updateCandidateCV(candidateId:string, cvFile:File):Observable<any> {
+	
+		const backendUrl:string = environment.backendUrl +'curriculum/'+candidateId;
+		
+		var fd = new FormData();
+		fd.append('file', cvFile);
+  	
 		return this.httpClient.put<any>(backendUrl, fd, {headers: new HttpHeaders({ }), withCredentials: true});
 		
 	}

@@ -1,15 +1,12 @@
-import { Component } 											from '@angular/core';
-import { PhotoAPIOutbound, CandidateProfile, Language, Rate } 	from './candidate-profile';
-import { CandidateProfileService} 								from '../candidate-profile-service.service';
-import { CandidateServiceService} 								from '../candidate-service.service';
-import { AddCandidateProfileRequest }							from './add-candidate-profile'
-import { UntypedFormGroup, UntypedFormControl }					from '@angular/forms';
-import { TupleStrValueByPos }									from './tuple-string-pos-pipe';
-import { EmailService, EmailRequest }							from '../email.service';
-import { NgbModal, NgbModalOptions}								from '@ng-bootstrap/ng-bootstrap';
-import { CandidateFunction }									from '../candidate-function';
-import { UpdateCandidateProfileRequest}							from './update-candidate-profile-req';
-import { Router}												from '@angular/router';
+import { Component } 															from '@angular/core';
+import { PhotoAPIOutbound, CandidateProfile, Language, Rate, CVAPIOutbound } 	from './candidate-profile';
+import { CandidateServiceService} 												from '../candidate-service.service';
+import { UntypedFormGroup, UntypedFormControl }									from '@angular/forms';
+import { EmailService, EmailRequest }											from '../email.service';
+import { NgbModal, NgbModalOptions}												from '@ng-bootstrap/ng-bootstrap';
+import { CandidateFunction }													from '../candidate-function';
+import { UpdateCandidateProfileRequest}											from './update-candidate-profile-req';
+import { Router}																from '@angular/router';
 
 @Component({
   selector: 'app-candidate-profile',
@@ -22,6 +19,7 @@ export class CandidateProfileComponent {
 	public selectedCandidateProfile:CandidateProfile = new CandidateProfile();
 	public currentView = 'view-main'; 
 	private imageFile!:File| any;
+	private cvFile!:File| any;
 	public functionTypes:	 	Array<CandidateFunction> 	= new Array<CandidateFunction>();
 	
 	/**
@@ -207,12 +205,33 @@ export class CandidateProfileComponent {
 		updateRequest.rate				= rate;
 		updateRequest.introduction		= this.candidateProfileFormBean.get('introduction')?.value;
 		
-		this.candidateService.updateCandidate(this.getOwnUserId(), updateRequest, this.imageFile).subscribe(res => {
-			this.fetchCandidate();
-			this.showViewMain();
-		}, err => {
-			console.log("Failed to update Candidate");
-		});
+		
+		
+		if(this.cvFile) {
+			this.candidateService.updateCandidateCV(this.getOwnUserId(), this.cvFile).subscribe(res => {
+				
+				updateRequest.skills = res.skills;
+				
+				this.candidateService.updateCandidate(this.getOwnUserId(), updateRequest, this.imageFile).subscribe(res => {
+					this.fetchCandidate();
+					this.showViewMain();
+				}, err => {
+					console.log("Failed to update Candidate");
+				});
+				}, err => {
+					console.log("Failed to update Candidate");
+				}	
+			);
+		} else {
+			this.candidateService.updateCandidate(this.getOwnUserId(), updateRequest, this.imageFile).subscribe(res => {
+				this.fetchCandidate();
+				this.showViewMain();
+			}, err => {
+				console.log("Failed to update Candidate");
+			});
+		}
+		
+		
 		
 	}
 	
@@ -260,6 +279,23 @@ export class CandidateProfileComponent {
 		
 		if (this.candidateProfile && this.candidateProfile!.photo){
 			this.candidateProfile.photo = new PhotoAPIOutbound();	
+  		}
+  		
+	}
+	
+	/**
+	* Uploads the CV file
+	*/
+  	public uploadCVFile(event:any):void{
+  
+	 	if (event.target.files.length <= 0) {
+  			return;
+  		}
+  	
+		this.cvFile = event.target.files[0];
+		
+		if (this.candidateProfile && this.candidateProfile!.cvFile){
+			this.candidateProfile.cvFile = new CVAPIOutbound();	
   		}
   		
 	}

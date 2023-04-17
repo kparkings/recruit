@@ -19,9 +19,6 @@
 				<div>
 					<h3 style="border:none;">{{candidateProfile.firstname | enumToHumanReadableValue}} {{candidateProfile.surname | enumToHumanReadableValue}}</h3>
 				</div>
-				<!-- 
-				<button class="btn btn-secondary action-btn main-action_btn" style="width:300px;margin-bottom:10px;" (click)="contactCandidate(contactBox)">Contact</button>
-				 -->
 				<br>
 				<div>
 					<h3>Location</h3>
@@ -92,14 +89,6 @@
 			<div class="details-right" style="max-width:75%;min-width:300px;">
 				<div style="float:center">
 					<h1>{{candidateProfile.roleSought}}</h1>
-					
-					<!-- 
-					<pre>
-					{{candidateProfile.firstname}} is a {{candidateProfile.roleSought}} with {{candidateProfile.yearsExperience}} years experience 
-					who is based in {{candidateProfile.country}}.
-					
-					</pre>
-					 -->
 					<div style="width:100%;margin-bottom:10px;padding:20px;">
 						<pre style="white-space:pre-line;font-family: Roboto, 'Helvetica Neue', sans-serif;">{{candidateProfile.introduction}}</pre>
 					</div>
@@ -117,10 +106,12 @@
 						<th>Profile Image</th>
 						<td>
 							<input type="file" accept="image/jpeg,image/png" (change)="uploadProfileImage($event)">
-							<!-- 
-							<img class="profile-photo" *ngIf="candidateProfile?.profilePhoto?.imageBytes" id='base64image'                 
-   									src='data:image/jpeg;base64, {{candidateProfile?.profilePhoto?.imageBytes}}'/>
-   							 -->
+						</td>
+					</tr>
+					<tr>
+						<th>CV</th>
+						<td>
+							<input type="file" accept="pdf,doc,docx" (change)="uploadCVFile($event)">
 						</td>
 					</tr>
 					<tr>

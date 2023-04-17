@@ -13,6 +13,7 @@ import org.apache.poi.xwpf.converter.pdf.PdfConverter;
 import org.apache.poi.xwpf.converter.pdf.PdfOptions;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.arenella.recruit.candidates.adapters.ExternalEventPublisher;
@@ -194,6 +195,53 @@ public class CurriculumServiceImpl implements CurriculumService{
 		this.logCurriculumDownloadedEvent(curriculumId);
 		
 		return stream.toByteArray();
+	}
+
+	/**
+	* Refer to the CurriculumService interface for details
+	*/
+	@Override
+	public String updateCurriculum(long curriculumId, Curriculum curriculum) {
+		
+		if (!this.curriculumDao.existsById(curriculumId)) {
+			throw new IllegalArgumentException("Cannot update a non existand Curriculum");
+		}
+		
+		final String 	userId 			= this.getAuthenticatedUserId();
+		final boolean 	isAdmin			= checkHasRole("ROLE_ADMIN");
+		final boolean 	isCandidate		= checkHasRole("ROLE_CANDIDATE");
+			
+		if (isCandidate && !String.valueOf(curriculumId).equals(userId)) {
+			throw new IllegalArgumentException("Cannot update another Candidates Curriculum");
+		}
+		
+		if (!isAdmin && !isCandidate) {
+			throw new IllegalArgumentException("You are not authorized to update Curriculums");
+		}
+		
+		curriculumDao.updateCurriculum(curriculum);
+		
+		return curriculum.getId().get();
+		
+		
 	} 
+	
+	/**
+	* Retrieves the Id of the current Recruiter
+	* @return id from security context
+	*/
+	private String getAuthenticatedUserId() {
+		return SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+	}
+	
+	/**
+	* Checks if the currently authenticated user has 
+	* a specific role
+	* @param roleToCheck - Role to check
+	* @return whether or not the user has the role
+	*/
+	private boolean checkHasRole(String roleToCheck) {
+		return SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream().filter(role -> role.getAuthority().equals(roleToCheck)).findAny().isPresent();
+	}
 	
 }

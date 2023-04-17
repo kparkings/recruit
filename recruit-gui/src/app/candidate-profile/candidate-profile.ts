@@ -4,6 +4,7 @@
 export class CandidateProfile{
 	
 	public photo:PhotoAPIOutbound			= new PhotoAPIOutbound();
+	public cvFile:CVAPIOutbound				= new CVAPIOutbound();
 	public introduction:string				= '';
 	public rate:Rate						= new Rate();
 	public email:string						= '';
@@ -38,6 +39,14 @@ export class Language {
 */
 export class PhotoAPIOutbound {
 	public imageBytes?:any;
+	public format:string = '';
+}
+
+/**
+* Class represents a Candidate Profile Image
+*/
+export class CVAPIOutbound {
+	public fileBytes?:any;
 	public format:string = '';
 }
 

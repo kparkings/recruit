@@ -71,6 +71,7 @@ public class CandidateUpdateRequestTest {
 							.rate(rate)
 							.photoBytes(photoBytes)
 							.introduction(introduction)
+							.skills(skills)
 							.build();
 		
 		assertEquals(candidateId, 		candidate.getCandidateId());
@@ -86,7 +87,7 @@ public class CandidateUpdateRequestTest {
 		assertEquals(photoBytes, 		candidate.getPhotoBytes().get());
 		assertEquals(introduction, 		candidate.getIntroduction());
 		candidate.getLanguages().stream().filter(l -> l.getLanguage() == language.getLanguage()).findAny().orElseThrow();
-		
+		candidate.getSkills().stream().filter(s -> s.equals(skill)).findAny().orElseThrow();
 	}
 	
 }

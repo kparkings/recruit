@@ -82,4 +82,12 @@ public interface CurriculumService {
 	*/
 	public byte[] getCurriculamAsPdfBytes(String curriculumId) throws IOException;
 
+	/**
+	* Replaces an existing curriculum with a newer version
+	* @param curriculumId 	- Id of Curriculum to replace (corresponds to a Candidate Id)
+	* @param curriculum		- File of new Curriculum 
+	* @return id of curriculum
+	*/
+	public String updateCurriculum(long curriculumId, Curriculum curriculum);
+
 }
