@@ -71,43 +71,46 @@
 		</dependency>
 		
 		<!--  [KP] Issue : conflict with fr.opensagres.xdocreport v 1.0.6
+		-->
+		<!-- 
 		<dependency>
-    		<gvroupId>org.apache.poi</groupId>
+    		<groupId>org.apache.poi</groupId>
     		<artifactId>poi</artifactId>
     		<version>5.2.0</version>
 		</dependency>
-		
+		-->
 		<dependency>
 		    <groupId>org.apache.poi</groupId>
 		    <artifactId>poi-ooxml</artifactId>
 		    <version>5.2.0</version>
 		</dependency>
-		-->
-		
 		<!-- https://mvnrepository.com/artifact/org.apache.poi/ooxml-schemas -->
+		<!-- 
 		<dependency>
 		    <groupId>org.apache.poi</groupId>
 		    <artifactId>ooxml-schemas</artifactId>
 		    <version>1.4</version>
 		</dependency>		
-		 		
+		 	 -->
+		<!-- 	
 		<dependency>
 			<groupId>fr.opensagres.xdocreport</groupId>
 			<artifactId>org.apache.poi.xwpf.converter.pdf</artifactId>
 			<version>1.0.6</version>
 		</dependency>
+		-->
+		<dependency>
+    <groupId>fr.opensagres.xdocreport</groupId>
+    <artifactId>fr.opensagres.poi.xwpf.converter.pdf-gae</artifactId>
+    <version>2.0.3</version>
+</dependency>
+		
 		
 		<!-- https://mvnrepository.com/artifact/org.apache.pdfbox/pdfbox -->
 		<dependency>
     		<groupId>org.apache.pdfbox</groupId>
     		<artifactId>pdfbox</artifactId>
-    		<version>2.0.23</version>
-		</dependency>
-				<!-- https://mvnrepository.com/artifact/org.apache.pdfbox/pdfbox -->
-		<dependency>
-    		<groupId>org.apache.pdfbox</groupId>
-    		<artifactId>pdfbox</artifactId>
-    		<version>2.0.23</version>
+    		<version>2.0.28</version>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core -->
 		<dependency>

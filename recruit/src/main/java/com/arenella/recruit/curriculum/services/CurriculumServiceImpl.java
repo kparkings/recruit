@@ -9,8 +9,8 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-import org.apache.poi.xwpf.converter.pdf.PdfConverter;
-import org.apache.poi.xwpf.converter.pdf.PdfOptions;
+//import org.apache.poi.xwpf.converter.pdf.PdfConverter;
+//import org.apache.poi.xwpf.converter.pdf.PdfOptions;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -26,6 +26,10 @@ import com.arenella.recruit.curriculum.dao.CurriculumDownloadedEventDao;
 import com.arenella.recruit.curriculum.dao.PendingCurriculumDao;
 import com.arenella.recruit.curriculum.dao.CurriculumSkillsDao;
 import com.arenella.recruit.curriculum.utils.CurriculumDetailsExtractionFactory;
+
+import fr.opensagres.poi.xwpf.converter.pdf.PdfConverter;
+import fr.opensagres.poi.xwpf.converter.pdf.PdfOptions;
+
 import com.arenella.recruit.curriculum.entity.CurriculumDownloadedEventEntity;
 import com.arenella.recruit.curriculum.entity.CurriculumEntity;
 import com.arenella.recruit.curriculum.entity.PendingCurriculumEntity;
