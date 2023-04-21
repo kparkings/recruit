@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.security.Principal;
+import java.util.Collection;
 import java.util.Optional;
 import java.util.Set;
 
@@ -17,6 +17,8 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.arenella.recruit.recruiters.beans.Recruiter;
@@ -60,19 +62,19 @@ public class RecruiterProfileControllerTest {
 	private static final REC_TYPE	 		RECRUITER_TYPE 				= REC_TYPE.COMMERCIAL;
 	
 	@Mock
-	private Principal							mockPrincipal;
+	private UsernamePasswordAuthenticationToken		mockPrincipal;
 	
 	@Mock
-	private MultipartFile						mockMultipartFile;
+	private MultipartFile							mockMultipartFile;
 	
 	@Mock
-	private RecruiterProfileService 			mockRPService;
+	private RecruiterProfileService 				mockRPService;
 	
 	@Mock
-	private RecruiterService					mockRecruiterService;
+	private RecruiterService						mockRecruiterService;
 	
 	@InjectMocks
-	private RecruiterProfileController controller;
+	private RecruiterProfileController 				controller;
 	
 	/**
 	* Test adding new Recruiter Profile
@@ -175,6 +177,13 @@ public class RecruiterProfileControllerTest {
 		
 		Recruiter recruiter1 = Recruiter.builder().userId("bparkings").companyName("arenella bv").firstName("kevin").surname("parkings").build();
 		
+		GrantedAuthority 				mockGA = Mockito.mock(GrantedAuthority.class);
+		Collection<GrantedAuthority> 	authorities = Set.of(mockGA);
+		
+		Mockito.when(this.mockPrincipal.getAuthorities()).thenReturn(authorities);
+		Mockito.when(mockGA.getAuthority()).thenReturn("ROLE_RECRUITER");
+		
+		
 		RecruiterProfile rp1 = 
 				RecruiterProfile
 					.builder()
@@ -236,6 +245,156 @@ public class RecruiterProfileControllerTest {
 		
 	}
 	
+	/**
+	* Tests Candidates can only see profiles available to candidates
+	* @throws Exception
+	*/
+	@Test
+	public void testFetchRecruiterProfiles_isCandidate() throws Exception{
+		
+		Recruiter recruiter1 = Recruiter.builder().userId("bparkings").companyName("arenella bv").firstName("kevin").surname("parkings").build();
+		
+		GrantedAuthority 				mockGA = Mockito.mock(GrantedAuthority.class);
+		Collection<GrantedAuthority> 	authorities = Set.of(mockGA);
+		
+		Mockito.when(this.mockPrincipal.getAuthorities()).thenReturn(authorities);
+		Mockito.when(mockGA.getAuthority()).thenReturn("ROLE_CANDIDATE");
+		
+		
+		RecruiterProfile rp1 = 
+				RecruiterProfile
+					.builder()
+						.coreTech(CORE_TECH)
+						.introduction(INTRODUCTION)
+						.jobTitle(JOB_TITLE)
+						.languagesSpoken(LANGUAGES_SPOKEN)
+						.profilePhoto(PROFILE_PHOTO)
+						.recruiterId(RECRUITER_ID)
+						.recruiterType(RECRUITER_TYPE)
+						.recruitsContractTypes(RECRUITER_CONTRACT_TYPES)
+						.recruitsIn(RECRUITS_IN)
+						.sectors(SECTORS)
+						.visibleToCandidates(VISIBLE_TO_CANDIDATES)
+						.visibleToPublic(VISIBLE_TO_PUBLIC)
+						.visibleToRecruiters(VISIBLE_TO_RECRUITERS)
+						.yearsExperience(YEARS_EXPERIENCE)
+					.build();
+		
+		Recruiter recruiter2 = Recruiter.builder().userId("kparkings").companyName("arenella bv").firstName("kevin").surname("parkings").build();
+		
+		RecruiterProfile rp2 = 
+				RecruiterProfile
+					.builder()
+						.coreTech(CORE_TECH)
+						.introduction(INTRODUCTION)
+						.jobTitle(JOB_TITLE)
+						.languagesSpoken(LANGUAGES_SPOKEN)
+						.profilePhoto(PROFILE_PHOTO)
+						.recruiterId(RECRUITER_ID)
+						.recruiterType(RECRUITER_TYPE)
+						.recruitsContractTypes(RECRUITER_CONTRACT_TYPES)
+						.recruitsIn(RECRUITS_IN)
+						.sectors(SECTORS)
+						.visibleToCandidates(VISIBLE_TO_CANDIDATES)
+						.visibleToPublic(VISIBLE_TO_PUBLIC)
+						.visibleToRecruiters(VISIBLE_TO_RECRUITERS)
+						.yearsExperience(YEARS_EXPERIENCE)
+					.build();
+		
+		
+		ArgumentCaptor<RecruiterProfileFilter> filterCapt = ArgumentCaptor.forClass(RecruiterProfileFilter.class);
+		
+		Mockito.when(this.mockRPService.fetchRecruiterProfiles(filterCapt.capture())).thenReturn(Set.of(rp1,rp2));
+		Mockito.when(this.mockRecruiterService.fetchRecruiters()).thenReturn(Set.of(recruiter1, recruiter2));
+		
+		ResponseEntity<Set<RecruiterProfileAPIOutbound>> response = controller.fetchRecruiterProfiles(Set.of(COUNTRY.BELGIUM), Set.of(TECH.ARCHITECT), Set.of(CONTRACT_TYPE.FREELANCE), VISIBILITY_TYPE.RECRUITERS, this.mockPrincipal);
+		
+		RecruiterProfileFilter filters = filterCapt.getValue();
+		
+		assertTrue(filters.getRecruitsIn().contains(COUNTRY.BELGIUM));
+		assertTrue(filters.getCoreTech().contains(TECH.ARCHITECT));
+		assertTrue(filters.getRecruitsContractTypes().contains(CONTRACT_TYPE.FREELANCE));
+		assertTrue(filters.isVisibleToCandidates().get().booleanValue());
+		assertTrue(filters.isVisibleToRecruiters().isEmpty());
+		assertTrue(filters.isVisibleToPublic().isEmpty());
+		
+		assertEquals(HttpStatus.OK, response.getStatusCode());
+		
+	}
+	
+	/**
+	* Tests Public can only see profiles available to Public
+	* @throws Exception
+	*/
+	@Test
+	public void testFetchRecruiterProfiles_isPublic() throws Exception{
+		
+		Recruiter recruiter1 = Recruiter.builder().userId("bparkings").companyName("arenella bv").firstName("kevin").surname("parkings").build();
+		
+		Collection<GrantedAuthority> 	authorities = Set.of();
+		
+		Mockito.when(this.mockPrincipal.getAuthorities()).thenReturn(authorities);
+		
+		RecruiterProfile rp1 = 
+				RecruiterProfile
+					.builder()
+						.coreTech(CORE_TECH)
+						.introduction(INTRODUCTION)
+						.jobTitle(JOB_TITLE)
+						.languagesSpoken(LANGUAGES_SPOKEN)
+						.profilePhoto(PROFILE_PHOTO)
+						.recruiterId(RECRUITER_ID)
+						.recruiterType(RECRUITER_TYPE)
+						.recruitsContractTypes(RECRUITER_CONTRACT_TYPES)
+						.recruitsIn(RECRUITS_IN)
+						.sectors(SECTORS)
+						.visibleToCandidates(VISIBLE_TO_CANDIDATES)
+						.visibleToPublic(VISIBLE_TO_PUBLIC)
+						.visibleToRecruiters(VISIBLE_TO_RECRUITERS)
+						.yearsExperience(YEARS_EXPERIENCE)
+					.build();
+		
+		Recruiter recruiter2 = Recruiter.builder().userId("kparkings").companyName("arenella bv").firstName("kevin").surname("parkings").build();
+		
+		RecruiterProfile rp2 = 
+				RecruiterProfile
+					.builder()
+						.coreTech(CORE_TECH)
+						.introduction(INTRODUCTION)
+						.jobTitle(JOB_TITLE)
+						.languagesSpoken(LANGUAGES_SPOKEN)
+						.profilePhoto(PROFILE_PHOTO)
+						.recruiterId(RECRUITER_ID)
+						.recruiterType(RECRUITER_TYPE)
+						.recruitsContractTypes(RECRUITER_CONTRACT_TYPES)
+						.recruitsIn(RECRUITS_IN)
+						.sectors(SECTORS)
+						.visibleToCandidates(VISIBLE_TO_CANDIDATES)
+						.visibleToPublic(VISIBLE_TO_PUBLIC)
+						.visibleToRecruiters(VISIBLE_TO_RECRUITERS)
+						.yearsExperience(YEARS_EXPERIENCE)
+					.build();
+		
+		
+		ArgumentCaptor<RecruiterProfileFilter> filterCapt = ArgumentCaptor.forClass(RecruiterProfileFilter.class);
+		
+		Mockito.when(this.mockRPService.fetchRecruiterProfiles(filterCapt.capture())).thenReturn(Set.of(rp1,rp2));
+		Mockito.when(this.mockRecruiterService.fetchRecruiters()).thenReturn(Set.of(recruiter1, recruiter2));
+		
+		ResponseEntity<Set<RecruiterProfileAPIOutbound>> response = controller.fetchRecruiterProfiles(Set.of(COUNTRY.BELGIUM), Set.of(TECH.ARCHITECT), Set.of(CONTRACT_TYPE.FREELANCE), VISIBILITY_TYPE.RECRUITERS, this.mockPrincipal);
+		
+		RecruiterProfileFilter filters = filterCapt.getValue();
+		
+		assertTrue(filters.getRecruitsIn().contains(COUNTRY.BELGIUM));
+		assertTrue(filters.getCoreTech().contains(TECH.ARCHITECT));
+		assertTrue(filters.getRecruitsContractTypes().contains(CONTRACT_TYPE.FREELANCE));
+		assertTrue(filters.isVisibleToCandidates().isEmpty());
+		assertTrue(filters.isVisibleToRecruiters().isEmpty());
+		assertTrue(filters.isVisibleToPublic().get().booleanValue());
+		
+		assertEquals(HttpStatus.OK, response.getStatusCode());
+		
+	}
 	/**
 	* Test sending of contact request email
 	* @throws Exception

@@ -66,13 +66,6 @@ export class SuggestionsComponent implements OnInit {
 	}
 	
 	/**
-	* Navigates to current Candidates profile page
-	*/
-	showCandidateProfile():void{
-		
-	}
-
-	/**
  	* Extracts filters from job specification file
 	*/	
 

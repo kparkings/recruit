@@ -103,10 +103,7 @@
 	color:#6A5ACD;
 }
 
-.listing-view-div{
-	margin-top:10px;
-	margin-right:30px;
-}
+
 
 .listing-country{
 	margin-right:20px;
@@ -254,3 +251,42 @@
 	padding-left:10px;
 }
 
+.left-box{
+	min-width:300px;
+	margin-bottom:30px;
+	
+}
+
+.left-box-body{
+	padding:5px;
+	background:#e8e8e8;
+}
+
+.left-box table{
+	width:100%;
+}
+
+.left-box table th{
+	width:120px;
+}
+
+.left-box h5{
+	border-bottom:2px solid black;
+}
+
+.skill{
+ 	margin:2px;
+ 	padding:5px;
+ 	border-radius:5px;
+ 	background:grey;
+ 	display:inline-block;
+ 	background:green;
+ 	color:white;
+}
+
+.profile-photo-details{
+	width:300px;
+	height:320px;
+	border:2px solid lightgrey;
+	margin-bottom:10px;
+}

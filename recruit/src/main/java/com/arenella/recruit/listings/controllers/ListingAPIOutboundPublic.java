@@ -20,6 +20,7 @@ import com.arenella.recruit.listings.beans.Listing.listing_type;
 public class ListingAPIOutboundPublic {
 
 	private UUID 				listingId;
+	private String				ownerId;
 	private String				ownerName;
 	private String 				ownerCompany;
 	private String				ownerEmail;
@@ -42,6 +43,7 @@ public class ListingAPIOutboundPublic {
 	public ListingAPIOutboundPublic(ListingAPIOutboundBuilder builder) {
 		
 		this.listingId 			= builder.listingId;
+		this.ownerId			= builder.ownerId;
 		this.ownerName			= builder.ownerName;
 		this.ownerCompany		= builder.ownerCompany;
 		this.ownerEmail			= builder.ownerEmail;
@@ -185,6 +187,15 @@ public class ListingAPIOutboundPublic {
 	}
 	
 	/**
+	* Returns the Id of the Recruiter who pwns
+	* the Listing
+	* @return id of Owner
+	*/
+	public String getOwnerId() {
+		return this.ownerId;
+	}
+	
+	/**
 	* Returns an instance of a Builder for the ListingAPIOutbound class
 	* @return Builder
 	*/
@@ -199,6 +210,7 @@ public class ListingAPIOutboundPublic {
 	public static class ListingAPIOutboundBuilder{
 
 		private UUID 				listingId;
+		private String				ownerId;
 		private String				ownerName;
 		private String 				ownerCompany;
 		private String				ownerEmail;
@@ -370,6 +382,16 @@ public class ListingAPIOutboundPublic {
 		}
 		
 		/**
+		* Sets the Id of the recruiter who owns the Listing
+		* @param ownerId - Id of recruiter
+		* @return Builder
+		*/
+		public ListingAPIOutboundBuilder ownerId(String ownerId) {
+			this.ownerId = ownerId;
+			return this;
+		}
+		
+		/**
 		* Returns an instantiated instance of the ListingAPIOutbound class
 		* @return instance of Listing
 		*/
@@ -405,6 +427,7 @@ public class ListingAPIOutboundPublic {
 									.ownerName(listing.getOwnerName())
 									.ownerCompany(listing.getOwnerCompany())
 									.ownerEmail(listing.getOwnerEmail())
+									.ownerId(listing.getOwnerId())
 								.build();
 		
 	}

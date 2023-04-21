@@ -82,6 +82,7 @@ public class ListingAPIOutboundPublicTest {
 														.title(title)
 														.type(type)
 														.yearsExperience(yearsExperience)
+														.ownerId(ownerId)
 													.build();
 		
 		assertEquals(country, 			listing.getCountry());
@@ -97,6 +98,7 @@ public class ListingAPIOutboundPublicTest {
 		assertEquals(ownerName, 		listing.getOwnerName());
 		assertEquals(ownerCompany, 		listing.getOwnerCompany());
 		assertEquals(ownerEmail, 		listing.getOwnerEmail());
+		assertEquals(ownerId, 			listing.getOwnerId());
 		
 		assertTrue(listing.getLanguages().contains(Listing.language.DUTCH));
 		assertTrue(listing.getLanguages().contains(Listing.language.FRENCH));
@@ -150,6 +152,7 @@ public class ListingAPIOutboundPublicTest {
 					.type(type)
 					.yearsExperience(yearsExperience)
 					.views(views)
+					.ownerId(ownerId)
 				.build();
 		
 		ListingAPIOutboundPublic outbound = ListingAPIOutboundPublic.convertFromListing(listing);
@@ -167,6 +170,7 @@ public class ListingAPIOutboundPublicTest {
 		assertEquals(ownerName, 		outbound.getOwnerName());
 		assertEquals(ownerCompany, 		outbound.getOwnerCompany());
 		assertEquals(ownerEmail, 		outbound.getOwnerEmail());
+		assertEquals(ownerId, 			outbound.getOwnerId());
 		
 		assertTrue(outbound.getLanguages().contains(Listing.language.DUTCH));
 		assertTrue(outbound.getLanguages().contains(Listing.language.FRENCH));

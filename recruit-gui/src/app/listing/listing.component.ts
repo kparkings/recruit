@@ -7,6 +7,8 @@ import { UntypedFormGroup, UntypedFormControl,  }		from '@angular/forms';
 import { NgbModal, NgbModalOptions }					from '@ng-bootstrap/ng-bootstrap';
 import { HostListener}									from '@angular/core';
 import { DeviceDetectorService } 						from 'ngx-device-detector';
+import { RecruiterProfileService} 						from '../recruiter-profile.service';
+import { RecruiterProfile }								from '../recruiter-profile/recruiter-profile';
 
 @Component({
   selector: 'app-listing',
@@ -15,11 +17,15 @@ import { DeviceDetectorService } 						from 'ngx-device-detector';
 })
 export class ListingComponent implements OnInit {
 
+	public recruiterProfiles:Array<RecruiterProfile> 	= new Array<RecruiterProfile>();
+	public recruiterProfile:RecruiterProfile 			= new RecruiterProfile();
+
   	constructor(private listingService:ListingService, 
 				private emailService:EmailService, 
 				private _Activatedroute:ActivatedRoute, 
 				private modalService:NgbModal, 
-				private deviceDetector:DeviceDetectorService) { 
+				private deviceDetector:DeviceDetectorService,
+				private recruiterProfileService:RecruiterProfileService) { 
 	
 		this.isMobile = deviceDetector.isMobile();
 		
@@ -29,6 +35,8 @@ export class ListingComponent implements OnInit {
 		} else {
 			this.displayFilters = true;
 		}
+		
+		this.recruiterProfileService.fetchRecruiterProfiles("RECRUITERS").subscribe(rps => this.recruiterProfiles = rps);
 	
 	}
 	
@@ -176,8 +184,18 @@ export class ListingComponent implements OnInit {
 		this.activeView 			= 'show';
 		
 		if (selectedListing) {
+			
 			this.selectedListing	= selectedListing;	
 			this.registerListingViewedEvent();
+			
+			this.recruiterProfile = new RecruiterProfile();
+			
+			this.recruiterProfile = this.recruiterProfiles.filter(p => p.recruiterId == selectedListing.ownerId)[0];
+			
+			console.log('rp' + JSON.stringify(this.selectedListing));
+			console.log('ownerId' + selectedListing.ownerId);
+			console.log('rp' + JSON.stringify(this.recruiterProfile));
+			
 			
 			window.scroll({ 
       			top: 0, 

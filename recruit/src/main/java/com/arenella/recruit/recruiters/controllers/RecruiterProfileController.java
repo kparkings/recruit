@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -136,7 +137,7 @@ public class RecruiterProfileController {
 	* @param recruitsContractTypes	- Contract types recruiter recruits for
 	* @return Recruiter Profiles
 	*/
-	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('RECRUITER')")
+	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('RECRUITER') OR hasRole('CANDIDATE')")
 	@GetMapping(path="recruiter-profile")
 	public ResponseEntity<Set<RecruiterProfileAPIOutbound>> fetchRecruiterProfiles(	@RequestParam(required = false) Set<COUNTRY> 		recruitsIn,
 																					@RequestParam(required = false) Set<TECH>			coreTech,
@@ -145,6 +146,20 @@ public class RecruiterProfileController {
 																					Principal authenticatedUser) {
 		
 		RecruiterProfileFilterBuilder filters = RecruiterProfileFilter.builder();
+		
+		UsernamePasswordAuthenticationToken user = (UsernamePasswordAuthenticationToken)authenticatedUser;
+		boolean isCandidate = user.getAuthorities().stream().filter(a -> a.getAuthority().equals("ROLE_CANDIDATE")).findAny().isPresent();
+		boolean isRecruiter = user.getAuthorities().stream().filter(a -> a.getAuthority().equals("ROLE_RECRUITER")).findAny().isPresent();
+		boolean isAdmin 	= user.getAuthorities().stream().filter(a -> a.getAuthority().equals("ROLE_ADMIN")).findAny().isPresent();
+		
+		
+		if (isCandidate) {
+			visibilityType = VISIBILITY_TYPE.CANDIDATES;
+		}
+		
+		if (!isCandidate && !isRecruiter && !isAdmin) {
+			visibilityType = VISIBILITY_TYPE.PUBLIC;
+		}
 		
 		if (Optional.ofNullable(recruitsIn).isPresent()  && !recruitsIn.isEmpty()) {
 			filters.recruitsIn(recruitsIn);
