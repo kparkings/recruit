@@ -1,10 +1,13 @@
 package com.arenella.recruit.recruiters.services;
 
+import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.util.Set;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -177,6 +180,10 @@ public class SupplyAndDemandServiceImpl implements SupplyAndDemandService{
 			return;
 		}
 		
+		if (isAdmin()) {
+			return;
+		}
+		
 		this.supplyAndDemandEventDao
 			.persistEvent(SupplyAndDemandEvent
 					.builder()
@@ -189,6 +196,18 @@ public class SupplyAndDemandServiceImpl implements SupplyAndDemandService{
 	}
 	
 	/**
+	* Returns whether or not the authenticated user is an Admin user
+	* @return is Admin or not Admin
+	*/
+	private boolean isAdmin() {
+
+		UsernamePasswordAuthenticationToken user = (UsernamePasswordAuthenticationToken)SecurityContextHolder.getContext().getAuthentication();
+		
+		return user.getAuthorities().stream().filter(a -> a.getAuthority().equals("ROLE_ADMIN")).findAny().isPresent();		
+	
+	}
+	
+	/**
 	* Logs an event stating that an offered candidate was viewed
 	* @param id - Unique id of the Offered Candidate viewed
 	*/
@@ -196,6 +215,10 @@ public class SupplyAndDemandServiceImpl implements SupplyAndDemandService{
 	public void registerOfferedCandidateViewedEvent(UUID id) {
 	
 		if (this.isOwnerOfOfferedCandidate(id)) {
+			return;
+		}
+		
+		if (isAdmin()) {
 			return;
 		}
 		
@@ -215,7 +238,7 @@ public class SupplyAndDemandServiceImpl implements SupplyAndDemandService{
 	*/
 	@Override
 	public Set<SupplyAndDemandEvent> fetchOpenPositionViewStats() {
-		return this.supplyAndDemandEventDao.fetchThisWeeksEvents(LocalDateTime.now().minusWeeks(1), EventType.OPEN_POSITION);		
+		return this.supplyAndDemandEventDao.fetchThisWeeksEvents(LocalDateTime.now().with(DayOfWeek.MONDAY).withHour(0).withMinute(0).withSecond(0).withNano(0), EventType.OPEN_POSITION);		
 	}
 
 	/**
@@ -223,7 +246,7 @@ public class SupplyAndDemandServiceImpl implements SupplyAndDemandService{
 	*/
 	@Override
 	public Set<SupplyAndDemandEvent> fetchOfferedCandidateViewStats() {
-		return this.supplyAndDemandEventDao.fetchThisWeeksEvents(LocalDateTime.now().minusWeeks(1), EventType.OFFERED_CANDIDATE);
+		return this.supplyAndDemandEventDao.fetchThisWeeksEvents(LocalDateTime.now().with(DayOfWeek.MONDAY).withHour(0).withMinute(0).withSecond(0).withNano(0), EventType.OFFERED_CANDIDATE);
 	}
 	
 	/**

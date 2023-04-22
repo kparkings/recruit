@@ -12,6 +12,11 @@
 			<div class="profile-overwiew" *ngFor="let profile of recruiterProfiles" (click)="showViewDetails(profile)">
 				<div>
 					<img class="profile-photo-overview" *ngIf="profile?.profilePhoto?.imageBytes" id='base64image' src='data:image/jpeg;base64, {{profile?.profilePhoto?.imageBytes}}' />
+					<div *ngIf="!profile?.profilePhoto?.imageBytes" class="profile-photo-overview material-icons person ">
+						<span style="font-size:100px;color:green;">person</span>
+					</div>
+					
+					
 					<span class="profile-photo-name">
 						<h3>{{profile.recruiterFirstName | enumToHumanReadableValue}} {{profile.recruiterSurname | enumToHumanReadableValue}}</h3>
 						{{profile.jobTitle | enumToHumanReadableValue}}
@@ -29,12 +34,11 @@
 		
 		<div *ngIf="currentView === 'view-details'">
 		
-		
-			
-		
-		
 			<div  class="details-left">
 				<img class="profile-photo-details" *ngIf="selectedRecruiterProfile?.profilePhoto?.imageBytes" id='base64image' src='data:image/jpeg;base64, {{selectedRecruiterProfile?.profilePhoto?.imageBytes}}' />
+				<div *ngIf="!selectedRecruiterProfile?.profilePhoto?.imageBytes" class="profile-photo-details material-icons person ">
+						<span style="font-size:300px;color:green;">person</span>
+					</div>
 				<br>
 				<table>
 					<tr>
