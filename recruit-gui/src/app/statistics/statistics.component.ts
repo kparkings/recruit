@@ -218,7 +218,7 @@ export class StatisticsComponent implements OnInit {
 			this.marketPlaceEventsChartDataRequestedWeekly = [{ data: viewsByRecruiterWeekly, label: 'Views By Recruiter' },];
 			this.marketPlaceEventsChartLabelsRequestedWeekly = recruiterIds;	
 			
-			this.switchMarketplaceRequestedCandidatesChartData('week');
+			this.switchMarketplaceRequestedCandidatesChartData('day');
 					
 		}, 
 		err => {
