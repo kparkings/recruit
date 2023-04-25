@@ -192,10 +192,6 @@ export class ListingComponent implements OnInit {
 			
 			this.recruiterProfile = this.recruiterProfiles.filter(p => p.recruiterId == selectedListing.ownerId)[0];
 			
-			console.log('rp' + JSON.stringify(this.selectedListing));
-			console.log('ownerId' + selectedListing.ownerId);
-			console.log('rp' + JSON.stringify(this.recruiterProfile));
-			
 			
 			window.scroll({ 
       			top: 0, 

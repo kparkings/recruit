@@ -10,6 +10,10 @@ import { CandidateServiceService }						from '../candidate-service.service';
 import { SuggestionsService }							from '../suggestions.service';
 import { environment }									from '../../environments/environment';
 import { Router}										from '@angular/router';
+import { DeviceDetectorService } 						from 'ngx-device-detector';
+import { RecruiterProfileService} 						from '../recruiter-profile.service';
+import { RecruiterProfile }								from '../recruiter-profile/recruiter-profile';
+
 
 @Component({
   selector: 'app-recruiter-listings',
@@ -20,14 +24,25 @@ export class RecruiterListingsComponent implements OnInit {
 
 	@ViewChild('feedbackBox', { static: false }) private content:any;
 
-  	constructor(private listingService:			ListingService, 
-				private modalService: 			NgbModal, 
-				private recruiterService:		RecruiterService, 
-				public 	candidateService:		CandidateServiceService,
-				public 	suggestionsService:		SuggestionsService,
-				public 	router:					Router) {
+  	constructor(private listingService:				ListingService, 
+				private modalService: 				NgbModal, 
+				private recruiterService:			RecruiterService, 
+				public 	candidateService:			CandidateServiceService,
+				public 	suggestionsService:			SuggestionsService,
+				private deviceDetector:				DeviceDetectorService,
+				private recruiterProfileService: 	RecruiterProfileService,
+				public 	router:						Router) {
+					
+				this.isMobile = deviceDetector.isMobile();
+				
+				this.recruiterProfileService.fetchOwnRecruiterProfile().subscribe(rec => {
+					this.recruiterProfile = rec;
+				});
 					
 	}
+	
+	public isMobile:boolean = false;
+	public recruiterProfile:RecruiterProfile 			= new RecruiterProfile();
 	
 	ngOnInit(): void {
 	

@@ -76,55 +76,105 @@
 						<button (click)="performmDelete()" 	  *ngIf="enabldeDeleteOption"	class="btn btn-secondary btn-listing confirm-delete">Confirm</button>
 					</div>
 					
-					<div style="margin-top:20px;">
-					
-						<div class="listing-view-div">
-							<h1 class="listing-view-title">{{selectedListing.title}}</h1></div>
-						<div></div>
-						<div class="listing-view-div">
-							<span><b>{{getCountryCode(selectedListing.country)}}</b></span> : <span>{{selectedListing.location}}</span>
-						</div>
-						
-						<div class="listing-view-div">
-							<span><b>{{getContractType(selectedListing.type)}} | </b>{{selectedListing.currency}}</span> : <span>{{selectedListing.rate}}</span>
-						</div>
-						
-						<div class="listing-view-div">
-							<!--  <p>-->
-							<pre style="white-space:pre-line;font-family: Roboto, 'Helvetica Neue', sans-serif;">{{selectedListing.description}}</pre>
-							<!-- </p> -->
-						</div>
-						
-						<h2 class="listing-view-title">Requirements</h2>
-						
-						<div class="listing-view-div"><b>Years Experience: </b>{{selectedListing.yearsExperience}}</div>	
-						
-						<h3  class="listing-view-title">Languages</h3>
-						<div class="listing-view-div">
-							<table>
-								<tr *ngFor="let language of selectedListing.languages">
-									<td>{{getLanguage(language)}}</td>
-								</tr>
-							</table>
-						</div>
-						
-						<h3  class="listing-view-title">Skills</h3>
-						<div class="listing-view-div">
-							<table>
-								<tr *ngFor="let skill of selectedListing.skills">
-									<td>{{skill}}</td>
-								</tr>
-							</table>
-						</div>
-						
-						<h2  class="listing-view-title">Contact Details</h2>
-						<div>
-							<div>{{selectedListing.ownerName}}</div>	
-							<div>{{selectedListing.ownerCompany}}</div>	
-							<div>{{selectedListing.ownerEmail}}</div>	
-						</div>
-						
-					</div>
+					<div>
+	        					<div style="float:left; min-width:300px; margin-top:20px;">
+	        						<h1 *ngIf="isMobile" class="listing-view-title">{{selectedListing.title}}</h1>
+	        						<div class="left-box">
+	        							<div>
+	        								<img class="profile-photo-details" *ngIf="recruiterProfile?.profilePhoto?.imageBytes" id='base64image' src='data:image/jpeg;base64, {{recruiterProfile?.profilePhoto?.imageBytes}}' />
+											<div *ngIf="!recruiterProfile?.profilePhoto?.imageBytes && !isMobile" class="profile-photo-details material-icons person ">
+												<span style="font-size:300px;color:green;">person</span>
+											</div>
+	        							</div>
+	        							<div class="left-box">
+	        								<h5>Recruiter Details</h5>
+	        								<div class="left-box-body">
+		        								<table>
+		        									<tr>
+		        										<th>Name</th>
+		        										<td>{{selectedListing.ownerName}}</td>
+		        									</tr>
+		        									<tr>
+		        										<th>Company</th>
+		        										<td>{{selectedListing.ownerCompany}}</td>
+		        									</tr>
+		        								</table>
+	        								</div>
+	        							</div>
+	        						</div>
+	        						
+	        						<div class="left-box" *ngIf="selectedListing.country || selectedListing.location">
+	        							<h5>Location</h5>
+	        							<div class="left-box-body">
+	        								<table>
+	        									<tr *ngIf="selectedListing.country">
+	        										<th>Country</th>
+	        										<td>{{getCountryCode(selectedListing.country)}}</td>
+	        									</tr>
+	        									<tr *ngIf="selectedListing.location">
+	        										<th>City</th>
+	        										<td>{{selectedListing.location}}</td>
+	        									</tr>
+	        								</table>
+	        							</div>
+	        						</div>
+	        						<div class="left-box" *ngIf="selectedListing.type || selectedListing.currency">
+	        							<h5>Contract Information</h5>
+	        							<div class="left-box-body">
+	        								<table>
+	        									<tr *ngIf="selectedListing.type">
+	        										<th>Contract Type</th>
+	        										<td>{{getContractType(selectedListing.type)}}</td>
+	        									</tr>
+	        									<tr *ngIf="selectedListing.currency">
+	        										<th>Renumeration</th>
+	        										<td><span>{{selectedListing.currency}}</span> : <span>{{selectedListing.rate}}</span></td>
+	        									</tr>
+	        								</table>
+	        							</div>
+	        						</div>
+	        						<div class="left-box">
+	        							<h5>Years Experience</h5>
+	        							<div class="left-box-body">
+	        								{{selectedListing.yearsExperience}}
+	        							</div>	
+	        						</div>
+	        						<div class="left-box" *ngIf="selectedListing.languages.length > 0">
+	        							<h5>Languages</h5>
+	        							<div class="left-box-body">
+											<table>
+												<tr *ngFor="let language of selectedListing.languages">
+													<td>{{getLanguage(language)}}</td>
+												</tr>
+											</table>
+										</div>
+	        						</div>
+	        						<div class="left-box" *ngIf="selectedListing.skills.length > 0">
+	        							<h5>Skills</h5>
+	        							<div class="left-box-body">
+											<table>
+												<tr>
+													<td><span class="skill" *ngFor="let skill of selectedListing.skills">{{skill}}</span></td>
+												</tr>
+											</table>
+										</div>
+	        						</div>
+	        					</div>
+	        			
+	        					<div style="float:left;margin-left:10px;min-width:300px;max-width:72%;padding:5px;">
+	        							<div class="listing-view-div">
+											<h1 *ngIf="!isMobile" class="listing-view-title">{{selectedListing.title}}</h1>
+											<h1 *ngIf="isMobile" class="listing-view-title">Description</h1>
+										</div>
+									<div>
+									<div>
+										<pre style="white-space:pre-line;font-family: Roboto, 'Helvetica Neue', sans-serif;">{{selectedListing.description}}</pre>
+									</div>
+								
+	        					</div>
+	        				</div>
+							
+							</div>
 	
 				
 				</div>
