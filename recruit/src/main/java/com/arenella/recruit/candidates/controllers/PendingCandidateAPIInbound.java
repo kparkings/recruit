@@ -1,8 +1,15 @@
 package com.arenella.recruit.candidates.controllers;
 
+import java.io.IOException;
+import java.util.Optional;
 import java.util.UUID;
 
+import org.springframework.web.multipart.MultipartFile;
+
+import com.arenella.recruit.candidates.beans.Candidate.Photo;
+import com.arenella.recruit.candidates.beans.Candidate.Photo.PHOTO_FORMAT;
 import com.arenella.recruit.candidates.beans.PendingCandidate;
+import com.arenella.recruit.candidates.controllers.CandidateUpdateRequestAPIInbound.Rate;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 
@@ -15,6 +22,8 @@ public class PendingCandidateAPIInbound {
 	private String 			email;
 	private boolean 		perm;
 	private boolean 		freelance;
+	private Rate			rate;
+	private String			introduction;
 	
 	/**
 	* Constructor based upon a builder
@@ -28,6 +37,8 @@ public class PendingCandidateAPIInbound {
 		this.email						= builder.email;
 		this.perm 						= builder.perm;
 		this.freelance 					= builder.freelance;
+		this.rate						= builder.rate;
+		this.introduction				= builder.introduction;
 		
 	}
 	
@@ -81,6 +92,22 @@ public class PendingCandidateAPIInbound {
 	}
 	
 	/**
+	* Returns the Candidates Rate information
+	* @return Rate information
+	*/
+	public Optional<Rate> getRate() {
+		return Optional.ofNullable(this.rate);
+	}
+	
+	/**
+	* Returns the candidates introduction to themselves
+	* @return introduction
+	*/
+	public String getIntroduction() {
+		return this.introduction;
+	}
+	
+	/**
 	* Builder for the PendingCandidateAPIInbound class
 	* @return A Builder for the PendiPendingCandidateAPIInboundngCandidate class
 	*/
@@ -101,6 +128,8 @@ public class PendingCandidateAPIInbound {
 		private String 			email;
 		private boolean 		perm;
 		private boolean 		freelance;
+		private Rate			rate;
+		private String			introduction;
 		
 		/**
 		* Sets the candidates Unique identifier in the System
@@ -163,6 +192,26 @@ public class PendingCandidateAPIInbound {
 		}
 		
 		/**
+		* Sets the Canddates rate information
+		* @param rate - rate information
+		* @return Builder
+		*/
+		public PendingCandidateAPIInboundBuilder rate(Rate rate) {
+			this.rate = rate;
+			return this;
+		}
+		
+		/**
+		* Sets the Candidates introduction to themselves
+		* @param introduction - candidates intro
+		* @return Builder
+		*/
+		public PendingCandidateAPIInboundBuilder introduction(String introduction) {
+			this.introduction = introduction;
+			return this;
+		}
+		
+		/**
 		* Returns an instance of PendingCandidate initialized with the 
 		* values in the builder
 		* @return Initialized instance of PendingCandidate
@@ -177,8 +226,20 @@ public class PendingCandidateAPIInbound {
 	* Domain version
 	* @param candiateAPIInbound - API Incoming version of the Candidate
 	* @return Domain version of the Candidate
+	 * @throws IOException 
 	*/
-	public static PendingCandidate convertToPendingCandidate(PendingCandidateAPIInbound candiateAPIInbound) {
+	public static PendingCandidate convertToPendingCandidate(PendingCandidateAPIInbound candiateAPIInbound, Optional<MultipartFile> profileImage) throws IOException {
+		
+		com.arenella.recruit.candidates.beans.Candidate.Rate rate = null;
+		
+		if (candiateAPIInbound.getRate().isPresent()) {
+		
+			rate = new com.arenella.recruit.candidates.beans.Candidate.Rate(
+					candiateAPIInbound.getRate().get().getCurrency(),
+					candiateAPIInbound.getRate().get().getPeriod(),
+					candiateAPIInbound.getRate().get().getValue());
+			
+		}
 		
 		return PendingCandidate
 				.builder()
@@ -188,6 +249,9 @@ public class PendingCandidateAPIInbound {
 					.email(candiateAPIInbound.getEmail())
 					.freelance(candiateAPIInbound.isFreelance())
 					.perm(candiateAPIInbound.isPerm())
+					.rate(rate)
+					.photo(profileImage.isEmpty() ? null : new Photo(profileImage.get().getBytes(), PHOTO_FORMAT.jpeg))
+					.introduction(candiateAPIInbound.getIntroduction())
 					.build();
 		
 	}

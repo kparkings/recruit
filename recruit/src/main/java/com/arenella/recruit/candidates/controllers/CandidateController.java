@@ -219,12 +219,14 @@ public class CandidateController {
 	
 	/**
 	* Adds a new Candidate
-	* @param candidate - Contains candidate details
+	* @param candidate 		- Contains candidate details
+	* @param profilePhoto	- Optional Profile Photo0
 	* @return id of the candidate
+	 * @throws IOException 
 	*/
-	@PostMapping(path="pending-candidate", consumes="application/json", produces="application/json")
-	public void addPendingCandidate(@RequestBody PendingCandidateAPIInbound candidate) {
-		candidateService.persistPendingCandidate(PendingCandidateAPIInbound.convertToPendingCandidate(candidate));
+	@PostMapping(path="pending-candidate",consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+	public void addPendingCandidate(@RequestPart PendingCandidateAPIInbound candidate, @RequestPart("file") Optional<MultipartFile> profilePhoto) throws IOException {
+		candidateService.persistPendingCandidate(PendingCandidateAPIInbound.convertToPendingCandidate(candidate, profilePhoto));
 	}
 	
 	/**

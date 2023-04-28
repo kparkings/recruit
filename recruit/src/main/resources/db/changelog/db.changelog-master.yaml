@@ -1714,4 +1714,32 @@ databaseChangeLog:
             - column:
                 name: photo_bytes
                 type: bytea
+  - changeSet:
+      id: addPendingCandidateAdditionalInfoCols
+      author: kevin
+      changes:
+        - addColumn:
+            tableName: pending_candidate
+            schemaName: candidate
+            columns:
+            - column:
+                name: introduction
+                type: varchar
+            - column:
+                name: rate_currency
+                type: varchar
+            - column:
+                name: rate_period
+                type: varchar
+            - column:
+                name: rate_value
+                type: numeric
+                constraints:
+                  default: 0.0
+            - column:
+                name: photo_format
+                type: varchar
+            - column:
+                name: photo_bytes
+                type: bytea
                 

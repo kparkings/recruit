@@ -3,6 +3,7 @@
         <div class="center-table">
         	<form [formGroup]="formBean">
 				<div class="wholepagerow">
+					<h3>Register As Candidate</h3>
 					<div class="div-spacing">
 						<p style="border-bottom:2px solid black;">Curriculum</p>
 						<input type="file" (change)="uploadCurriculumFile($event)">
@@ -10,15 +11,15 @@
 					<div class="div-spacing">
 						<table>
 							<tr>
-								<td class="tb-lbl">First name</td>
+								<th class="tb-lbl">First name</th>
 								<td><input type="text" class="inpt-tab-std" formControlName="firstname"/></td>
 							</tr>
 							<tr>
-								<td class="tb-lbl">Surname</td>
+								<th class="tb-lbl">Surname</th>
 								<td><input type="text" class="inpt-tab-std" formControlName="surname"/></td>
 							</tr>
 							<tr>
-								<td class="tb-lbl">Email</td>
+								<th class="tb-lbl">Email</th>
 								<td><input type="text" class="inpt-tab-std" formControlName="email"/></td>
 							</tr>
 						</table>
@@ -26,14 +27,69 @@
 					<div class="div-spacing">
 						<table>
 							<tr>
-								<td class="tb-lbl-checkbox">Contract</td>
+								<th class="tb-lbl-checkbox">Contract</th>
 								<td><input type="checkbox" formControlName="contract"/></td>
 							</tr>
 							<tr>
-								<td class="tb-lbl-checkbox">Perm</td>
+								<th class="tb-lbl-checkbox">Perm</th>
 								<td><input type="checkbox" formControlName="perm"/></td>
 							</tr>
 						</table>
+					</div>
+					<div class="additional-info">
+						<h3>Additional Information</h3>
+						<div>
+							<p>
+							By providing this optional additional information you will help to make your profile
+							stand out to the recruiters
+							</p>
+						</div>
+						<div class="div-spacing">
+							<p style="border-bottom:2px solid black;">Profile Photo</p>
+							<input type="file" accept="image/jpeg,image/png" (change)="uploadProfileImage($event)">
+						</div>
+						<br>
+						<div>
+							<table>
+								<tr>
+									<th>Rate Currency</th>
+									<td>
+										<select class="inpt-tab-std" formControlName="rateCurrency">
+											<option value=""></option>
+											<option value="EUR">Euros</option>
+											<option value="GBP">Pounds Sterling</option>
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<th>Rate Period</th>
+									<td>
+										<select class="inpt-tab-std" formControlName="ratePeriod">
+											<option value=""></option>
+											<option value="HOUR">Per hour</option>
+											<option value="DAY">Per Day</option>
+											<option value="YEAR">Per Year</option>
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<th>Rate Amount</th>
+									<td>
+										<input type="number" class="inpt-tab-std" formControlName="rateValue">
+									</td>
+								</tr>
+							</table>
+						</div>
+						
+					</div>
+					<br>
+					<div>
+						<b>Personal Introduction</b>
+						<br>
+						<div>
+							<textarea formControlName="introduction"></textarea>
+						</div>
+						
 					</div>
 					<div class="div-spacing">
 						<p>

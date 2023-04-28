@@ -237,6 +237,19 @@ public class Candidate {
 		return Optional.ofNullable(this.photo);
 	}
 	
+	public void setRate(Rate rate) {
+		this.rate = rate;
+		
+	}
+	
+	
+	public void setIntroduction(String introduction) {
+		this.introduction = introduction;
+	}
+	public void setPhoto(Photo photo) {
+		this.photo = photo;
+	}
+	
 	/**
 	* Manke the Candidates details anonymous and mark the candidate 
 	* as no longer being available

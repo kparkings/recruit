@@ -127,6 +127,17 @@ public class CandidateServiceImpl implements CandidateService{
 			throw new CandidateValidationException("Canidate with this Email alredy exists.");
 		}
 		
+		Optional<PendingCandidate> optPendingCandidate = pendingCandidateDao.fetchPendingCandidateByEmail(candidate.getEmail()).stream().findFirst();
+		
+		if (optPendingCandidate.isPresent()) {
+			
+			PendingCandidate pendingCandidate = optPendingCandidate.get();
+			
+			candidate.setIntroduction(pendingCandidate.getIntroduction());
+			candidate.setPhoto(pendingCandidate.getPhoto().isEmpty() 	? null : pendingCandidate.getPhoto().get());
+			candidate.setRate(pendingCandidate.getRate().isEmpty() 		? null : pendingCandidate.getRate().get());
+		}
+		
 		CandidateEntity entity = CandidateEntity.convertToEntity(candidate);
 		
 		long candidateId = candidateDao.save(entity).getCandidateId();
@@ -217,6 +228,14 @@ public class CandidateServiceImpl implements CandidateService{
 		
 		if (this.pendingCandidateDao.existsById(pendingCandidate.getPendingCandidateId())) {
 			throw new IllegalArgumentException("Cannot create candidate with Id " + pendingCandidate.getPendingCandidateId());
+		}
+		
+		if (pendingCandidate.getPhoto().isPresent()) {
+			
+			if (!imageFileSecurityParser.isSafe(pendingCandidate.getPhoto().get().getImageBytes())) {
+				throw new IllegalArgumentException("Invalid file type detected"); 
+			}
+			
 		}
 		
 		this.pendingCandidateDao.save(PendingCandidateEntity.convertToEntity(pendingCandidate));

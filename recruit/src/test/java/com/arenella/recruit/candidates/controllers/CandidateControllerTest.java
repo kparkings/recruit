@@ -169,7 +169,7 @@ public class CandidateControllerTest {
 		
 		PendingCandidateAPIInbound pendingCandidate = PendingCandidateAPIInbound.builder().build();
 		
-		this.controller.addPendingCandidate(pendingCandidate);
+		this.controller.addPendingCandidate(pendingCandidate, Optional.empty());
 		
 		Mockito.verify(mockCandidateService).persistPendingCandidate(Mockito.any(PendingCandidate.class));
 	}

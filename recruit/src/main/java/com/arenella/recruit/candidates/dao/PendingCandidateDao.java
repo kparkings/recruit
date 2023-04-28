@@ -1,11 +1,13 @@
 package com.arenella.recruit.candidates.dao;
 
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
+import com.arenella.recruit.candidates.beans.PendingCandidate;
 import com.arenella.recruit.candidates.entities.PendingCandidateEntity;
 
 /**
@@ -24,6 +26,27 @@ public interface PendingCandidateDao extends CrudRepository<PendingCandidateEnti
 	*/
 	default boolean emailInUse(String email) {
 		return !this.fetchByEmail(email).isEmpty();
+	}
+	
+	/**
+	* 
+	* @param emailId
+	* @return
+	*/
+	default Optional<PendingCandidate> fetchPendingCandidateByEmail(String emailId){
+		
+		Set<PendingCandidateEntity> matches = this.fetchByEmail(emailId);
+		
+		if (matches.size() > 1) {
+			throw new IllegalStateException("Cant have two Candidates with the same Email");
+		} 
+		
+		if (matches.isEmpty()) {
+			return Optional.empty();
+		}
+		
+		return matches.stream().findFirst().map(e -> PendingCandidateEntity.convertFromEntity(e));
+		
 	}
 	
 }

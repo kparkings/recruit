@@ -1,6 +1,10 @@
 package com.arenella.recruit.candidates.beans;
 
+import java.util.Optional;
 import java.util.UUID;
+
+import com.arenella.recruit.candidates.beans.Candidate.Photo;
+import com.arenella.recruit.candidates.beans.Candidate.Rate;
 
 /**
 * Class represents a Candidate that has uploaded their details but not 
@@ -16,6 +20,9 @@ public class PendingCandidate {
 	private String 			email;
 	private boolean 		perm;
 	private boolean 		freelance;
+	private String 			introduction;
+	private Rate			rate;
+	private Photo			photo;
 	
 	/**
 	* Constructor based upon a builder
@@ -29,6 +36,9 @@ public class PendingCandidate {
 		this.email						= builder.email;
 		this.perm 						= builder.perm;
 		this.freelance 					= builder.freelance;
+		this.introduction				= builder.introduction;
+		this.rate						= builder.rate;
+		this.photo						= builder.photo;
 		
 	}
 	
@@ -82,6 +92,31 @@ public class PendingCandidate {
 	}
 	
 	/**
+	* Returns the Candidates Rate information
+	* @return Rate information
+	*/
+	public Optional<Rate> getRate() {
+		return Optional.ofNullable(this.rate);
+	}
+	
+	/**
+	* Returns the Candidates introduction to themselves and what
+	* they are looking for
+	* @return Intro
+	*/
+	public String getIntroduction() {
+		return this.introduction;
+	}
+	
+	/**
+	* If available returns a photo of the Candidate
+	* @return Profile Photo
+	*/
+	public Optional<Photo> getPhoto(){
+		return Optional.ofNullable(this.photo);
+	}
+	
+	/**
 	* Builder for the PendingCandidate class
 	* @return A Builder for the PendingCandidate class
 	*/
@@ -101,6 +136,9 @@ public class PendingCandidate {
 		private String 			email;
 		private boolean			perm;
 		private boolean 		freelance;
+		private String 			introduction;
+		private Rate			rate;
+		private Photo			photo;
 		
 		/**
 		* Sets the candidates Unique identifier in the System
@@ -159,6 +197,36 @@ public class PendingCandidate {
 		*/
 		public PendingCandidateBuilder freelance(boolean freelance) {
 			this.freelance = freelance;
+			return this;
+		}
+		
+		/**
+		* Sets the Candidates Rate information
+		* @param rate - Rate information
+		* @return Builder
+		*/
+		public PendingCandidateBuilder rate(Rate rate) {
+			this.rate = rate;
+			return this;
+		}
+		
+		/**
+		* Sets the Candidate introduction to themselves
+		* @param introduction - Introduction
+		* @return Builder
+		 */
+		public PendingCandidateBuilder introduction(String introduction) {
+			this.introduction = introduction;
+			return this;
+		}
+		
+		/**
+		* Sets Profile Photo for the Candidate
+		* @param photo - Photo of the Candidate
+		* @return Builde
+		*/
+		public PendingCandidateBuilder photo(Photo photo) {
+			this.photo = photo;
 			return this;
 		}
 		

@@ -62,6 +62,16 @@ export class CurriculumService {
   	
 		return this.httpClient.put<any>(backendUrl, null, this.httpOptions);
 	}
+	
+	/**
+	* Deletes an existing Pending Curriculum
+	*/
+	public deletePendingCurriculum(pendingCurriculumId:string):Observable<any>{
+	
+		const backendUrl:string = environment.backendUrl + 'pending-curriculum/' +pendingCurriculumId;
+  	
+		return this.httpClient.delete<any>(backendUrl, this.httpOptions);
+	}
   
 	/**
 	* Retuns url to get bytes for inline PDF version of Curriculum

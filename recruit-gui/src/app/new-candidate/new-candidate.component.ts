@@ -21,6 +21,8 @@ export class NewCandidateComponent implements OnInit {
 
     public functionTypes:	 	Array<CandidateFunction> 	= new Array<CandidateFunction>();
 	public pendingCandidates: 	Array<PendingCandidate> 	= new Array<PendingCandidate>();
+	
+	public currentPendingCandidate:PendingCandidate | null = null;
    
   	public selectOptionLangDutch:string = '';
   	public selectOptionLangEnglish:string = '';
@@ -100,7 +102,15 @@ export class NewCandidateComponent implements OnInit {
   	*/
   	public addCandidate(): void {
     	this.candidateService.addCandidate(this.formBean).subscribe(d=>{
-    	  this.open('feedbackBox', "Success",  true)
+    	  	this.open('feedbackBox', "Success",  true);
+		
+			if (this.currentPendingCandidate) {
+				this.curriculumService.deletePendingCurriculum(this.currentPendingCandidate?.pendingCandidateId).subscribe(res => {
+				
+				});	
+			}
+
+			
     	});
   	};
 
@@ -210,6 +220,17 @@ export class NewCandidateComponent implements OnInit {
       }
       
   }
+
+	/**
+	* Sends request to delete Pending candidate
+	*/
+	public deletePendingCurriculum(pendingCandidate:PendingCandidate, closeModal:boolean):void{
+		this.curriculumService.deletePendingCurriculum(pendingCandidate.pendingCandidateId).subscribe(res => {
+			if	(closeModal == true) {
+				this.closeModal();
+			}
+		});
+	}
 	
 	/**
 	* Loads a PendingCandidates details intothe New candidate screen

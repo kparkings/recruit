@@ -4,10 +4,17 @@ import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
 import com.arenella.recruit.candidates.beans.PendingCandidate;
+import com.arenella.recruit.candidates.beans.Candidate.Photo;
+import com.arenella.recruit.candidates.beans.Candidate.Rate;
+import com.arenella.recruit.candidates.beans.Candidate.Photo.PHOTO_FORMAT;
+import com.arenella.recruit.candidates.beans.Candidate.Rate.CURRENCY;
+import com.arenella.recruit.candidates.beans.Candidate.Rate.PERIOD;
 
 /**
 * Represents a Candidate that has uploaded their details 
@@ -37,6 +44,27 @@ public class PendingCandidateEntity {
 	@Column(name="freelance")
 	private boolean 	freelance;
 	
+	@Column(name="introduction")
+	private String introduction;
+	
+	@Enumerated(EnumType.STRING)
+	@Column(name="rate_currency")
+	private CURRENCY rateCurrency;
+	
+	@Enumerated(EnumType.STRING)
+    @Column(name="rate_period")
+    private PERIOD ratePeriod;
+    
+    @Column(name="rate_value")
+    private float rateValue;      
+    
+    @Enumerated(EnumType.STRING)
+    @Column(name="photo_format")
+    private PHOTO_FORMAT photoFormat;      
+    
+    @Column(name="photo_bytes")
+    private byte[] photoBytes;
+	
 	/**
 	* Constructor based upon a builder
 	* @param builder - Contains initialization parameters
@@ -49,6 +77,12 @@ public class PendingCandidateEntity {
 		this.email						= builder.email;
 		this.perm 						= builder.perm;
 		this.freelance 					= builder.freelance;
+		this.introduction				= builder.introduction;
+		this.rateCurrency				= builder.rateCurrency;
+		this.ratePeriod					= builder.ratePeriod;
+		this.rateValue					= builder.rateValue;      
+		this.photoFormat				= builder.photoFormat;      
+		this.photoBytes					= builder.photoBytes;
 		
 	}
 	
@@ -110,6 +144,57 @@ public class PendingCandidateEntity {
 	}
 	
 	/**
+	* Returns the Candidates introduction about themselves
+	* @return intro
+	*/
+	public String getIntroduction() {
+		return this.introduction;
+	}
+	
+	/**
+	* Returns the Currency the Candidate 
+	* charges in
+	* @return currency
+	*/
+	public CURRENCY getRateCurrency() {
+		return this.rateCurrency;
+	}
+	
+	/**
+	* Returns the period the Candidate 
+	* charges in
+	* @return Period
+	*/
+	public PERIOD getRatePeriod() {
+		return this.ratePeriod;
+	}
+	
+	/**
+	* Returns the value per period
+	* the Candidate charges
+	* @return value
+	*/
+	public float getRateValue() {
+		return this.rateValue;
+	}
+	
+	/**
+	* Returns the format of the photo
+	* @return file format
+	*/
+	public PHOTO_FORMAT getPhotoFormat() {
+		return this.photoFormat;
+	}
+	
+	/**
+	* Returns the bytes for the image file
+	* @return bytes
+	*/
+	public byte[] getPhotoBytes() {
+		return this.photoBytes;
+	}
+	
+	/**
 	* Returns a Builder for the PendingCandidateEntity class
 	* @return Builder for the PendingCandidateEntity class
 	*/
@@ -129,6 +214,12 @@ public class PendingCandidateEntity {
 		private String 			email;
 		private boolean	 		perm;
 		private boolean 		freelance;
+		private String 			introduction;
+		private CURRENCY 		rateCurrency;
+		private PERIOD 			ratePeriod;
+		private float 			rateValue;      
+		private PHOTO_FORMAT 	photoFormat;      
+		private byte[] 			photoBytes;
 		
 		/**
 		* Sets the Unique Identifier of the Candidate
@@ -190,6 +281,65 @@ public class PendingCandidateEntity {
 			return this;
 		}
 		
+		/**
+		* Sets the Candidates introduction about themselves
+		* @param introduction - Candiadate's introduction
+		* @return Builder
+		*/
+		public PendingCandidateEntityBuilder introduction(String introduction) {
+			this.introduction = introduction;
+			return this;
+		}
+		
+		/**
+		* Sets the Currency the Candidate charges in
+		* @param rateCurrency - Currency
+		* @return Builder
+		*/
+		public PendingCandidateEntityBuilder rateCurrency(CURRENCY rateCurrency) {
+			this.rateCurrency = rateCurrency;
+			return this;
+		}
+		
+		/**
+		* Sets the unit the Rate is in
+		* @param ratePeriod - Unit of the Rate
+		* @return Builder
+		*/
+		public PendingCandidateEntityBuilder ratePeriod(PERIOD ratePeriod) {
+			this.ratePeriod = ratePeriod;
+			return this;
+		}
+		
+		/**
+		* Sets the amount the Candidate charges per period
+		* @param rateValue - amount per period
+		* @return Builder
+		*/
+		public PendingCandidateEntityBuilder rateValue(float rateValue) {
+			this.rateValue = rateValue;
+			return this;
+		}
+		
+		/**
+		* Sets the format of the Candidates Profile Photo
+		* @param photoFormat - file format
+		* @return Builder
+		*/
+		public PendingCandidateEntityBuilder photoFormat(PHOTO_FORMAT photoFormat) {
+			this.photoFormat = photoFormat;
+			return this;
+		}
+		
+		/**
+		* Sets the bytes of the Candidates profile photo
+		* @param photoBytes - bytes of image
+		* @return Builder
+		*/
+		public PendingCandidateEntityBuilder photoBytes(byte[] photoBytes) {
+			this.photoBytes = photoBytes;
+			return this;
+		}
 		
 		/**
 		* Returns a CandidateEntity instance initialized with 
@@ -210,6 +360,8 @@ public class PendingCandidateEntity {
 	*/
 	public static PendingCandidateEntity convertToEntity(PendingCandidate pendingCandidate) {
 		
+		
+		
 		return PendingCandidateEntity
 					.builder()
 						.pendingCandidateId(pendingCandidate.getPendingCandidateId())
@@ -218,7 +370,13 @@ public class PendingCandidateEntity {
 						.email(pendingCandidate.getEmail())
 						.freelance(pendingCandidate.isFreelance())
 						.perm(pendingCandidate.isPerm())
-						.build();
+						.introduction(pendingCandidate.getIntroduction())
+						.rateCurrency(pendingCandidate.getRate().isEmpty() 	? null 	: pendingCandidate.getRate().get().getCurrency())
+						.ratePeriod(pendingCandidate.getRate().isEmpty() 	? null 	: pendingCandidate.getRate().get().getPeriod())
+						.rateValue(pendingCandidate.getRate().isEmpty() 	? 0 	: pendingCandidate.getRate().get().getValue())
+						.photoFormat(pendingCandidate.getPhoto().isEmpty() 	? null 	: pendingCandidate.getPhoto().get().getFormat())
+						.photoBytes(pendingCandidate.getPhoto().isEmpty() 	? null 	: pendingCandidate.getPhoto().get().getImageBytes())
+					.build();
 		
 	}
 
@@ -230,6 +388,17 @@ public class PendingCandidateEntity {
 	*/
 	public static PendingCandidate convertFromEntity(PendingCandidateEntity pendingCandidateEntity) {
 		
+		Rate 	rate 	= null;
+		Photo 	photo 	= null;
+		
+		if (pendingCandidateEntity.rateCurrency != null && pendingCandidateEntity.ratePeriod != null) {
+			rate = new Rate(pendingCandidateEntity.getRateCurrency(), pendingCandidateEntity.getRatePeriod(), pendingCandidateEntity.getRateValue());
+		}
+		
+		if (pendingCandidateEntity.getPhotoBytes() != null && pendingCandidateEntity.getPhotoFormat() != null) {
+			photo = new Photo(pendingCandidateEntity.getPhotoBytes(), pendingCandidateEntity.getPhotoFormat());
+		}
+		
 		return PendingCandidate
 					.builder()
 						.pendingCandidateId(pendingCandidateEntity.getPendingCandidateId())
@@ -238,6 +407,9 @@ public class PendingCandidateEntity {
 						.email(pendingCandidateEntity.getEmail())
 						.freelance(pendingCandidateEntity.isFreelance())
 						.perm(pendingCandidateEntity.isPerm())
+						.introduction(pendingCandidateEntity.getIntroduction())
+						.rate(rate)
+						.photo(photo)
 						.build();
 		
 	}

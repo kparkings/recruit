@@ -5,6 +5,7 @@ import { CandidateServiceService }						from '../candidate-service.service';
 import { NgbModal, NgbModalOptions}						from '@ng-bootstrap/ng-bootstrap';
 import { ViewChild }									from '@angular/core';
 import { PopupsService }								from '../popups.service';
+
 /**
 * Component for Candidates to present their own Curriculum and Profile.
 */
@@ -27,17 +28,23 @@ export class CreateCandidateComponent implements OnInit {
  	ngOnInit(): void {
   	}
 	
+	private imageFile!:File| any;
+	
 	public feedbackBoxClass:string            = '';
   	public feedbackBoxTitle                   = '';
   	public feedbackBoxText:string             = '';
 
 	public formBean:UntypedFormGroup = new UntypedFormGroup({
      
-		surname:		new UntypedFormControl(''),
-		firstname:		new UntypedFormControl(''),
-		email:			new UntypedFormControl(''),
-		contract:		new UntypedFormControl(''),
-		perm:			new UntypedFormControl(''),
+		surname:			new UntypedFormControl(''),
+		firstname:			new UntypedFormControl(''),
+		email:				new UntypedFormControl(''),
+		contract:			new UntypedFormControl(''),
+		perm:				new UntypedFormControl(''),
+		rateCurrency:		new UntypedFormControl(''),
+		ratePeriod:			new UntypedFormControl(''),
+		rateValue:			new UntypedFormControl(''),
+		introduction:		new UntypedFormControl(''),
 	});
 	
   	private curriculumFile!:File;
@@ -97,16 +104,25 @@ export class CreateCandidateComponent implements OnInit {
 		let email:string 		= this.formBean.get('email')?.value;
 		let contract:boolean 	= this.formBean.get('contract')?.value;
 		let perm:boolean 		= this.formBean.get('perm')?.value;
+		let rateCurrency:string	= this.formBean.get('rateCurrency')?.value;
+		let ratePeriod:string 	= this.formBean.get('ratePeriod')?.value;
+		let rateValue:string	= this.formBean.get('rateValue')?.value;
+		let introduction:string	= this.formBean.get('introduction')?.value;
 			
 		this.curriculumService.uploadPendingCurriculum(this.curriculumFile).subscribe(pendingCandidateId =>{
       		
-			this.candidateService.addPendingCandidate(pendingCandidateId, firstname, surname, email, contract, perm).subscribe(data => {
+			this.candidateService.addPendingCandidate(pendingCandidateId, firstname, surname, email, contract, perm, rateCurrency, ratePeriod, rateValue, introduction, this.imageFile).subscribe(data => {
 				
 				this.formBean.get('surname')?.setValue('');
 				this.formBean.get('firstname')?.setValue('');
 				this.formBean.get('email')?.setValue('');
 				this.formBean.get('contract')?.setValue('');
 				this.formBean.get('perm')?.setValue('');
+			
+				this.formBean.get('rateCurrency')?.setValue('');
+				this.formBean.get('ratePeriod')?.setValue('');
+				this.formBean.get('rateValue')?.setValue('');
+				this.formBean.get('introduction')?.setValue('');
 			
 				this.open('feedbackBox', "Success",  true);
 				
@@ -159,5 +175,19 @@ export class CreateCandidateComponent implements OnInit {
   public closeModal(): void {
     this.modalService.dismissAll();
   }
+
+	/**
+	* Uploads the file for the Profile Image and stored 
+	* it ready to be sent to the backend
+	*/
+  	public uploadProfileImage(event:any):void{
+  
+	 	if (event.target.files.length <= 0) {
+  			return;
+  		}
+  	
+		this.imageFile = event.target.files[0];
+		
+	}
 
 }

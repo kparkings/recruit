@@ -4,7 +4,7 @@ import { HttpClient, HttpResponse, HttpHeaders }  		from '@angular/common/http';
 import { Observable, throwError }                 		from 'rxjs';
 import { NewCandidate }                           		from './new-candidate/new-candidate';
 import { Candidate }                           			from './candidate';
-import { NewPendingCandidate }                      	from './create-candidate/new-pending-candidate';
+import { NewPendingCandidate, Rate }                    from './create-candidate/new-pending-candidate';
 import { Language}                                		from './new-candidate/language';
 import { CandidateFunction }                      		from './candidate-function';
 import { environment }									from './../environments/environment';
@@ -108,25 +108,45 @@ export class CandidateServiceService {
 	* Sends a request to add a new PendingCandidate
 	* @param pendingCandidateId - Unique Id of the Candidate. Must be the same as the Curriculum
 	* @param firstname          - Candidates firstname
-	* @param surname			- Candudares surname
+	* @param surname			- Candidates surname
 	* @param email				- Candidates email address
 	* @param contract			- Whether or not the Candidate is interested in Contract positions
 	* @param perm				- Whether or not the Candidate is interested in Perm positions
 	*/
-	public addPendingCandidate(pendingCandidateId:string, firstname:string, surname:string, email:string, contract:boolean, perm:boolean): Observable<any>{
+	public addPendingCandidate(pendingCandidateId:string, firstname:string, surname:string, email:string, contract:boolean, perm:boolean, rateCurrency:string, ratePeriod:string, rateValue:string, introduction:string, profileImage:File| any): Observable<any>{
 		
 		const newPendingCandidate:NewPendingCandidate = new NewPendingCandidate();
 		
+		const rate:Rate = new Rate();
+		
 		newPendingCandidate.pendingCandidateId 	= pendingCandidateId;
+		
+		if (rateCurrency.length > 0 && ratePeriod.length > 0) {
+		console.log("WHY ARE WE HERE");
+			rate.currency 	= rateCurrency;
+			rate.period 	= ratePeriod;
+			rate.value 		= rateValue;
+			
+			newPendingCandidate.rate				= rate;
+		
+		}
+		
 		newPendingCandidate.firstname 			= firstname;
 		newPendingCandidate.surname 			= surname;
 		newPendingCandidate.email 				= email;
 		newPendingCandidate.freelance 			= contract;
 		newPendingCandidate.perm 				= perm;
+		newPendingCandidate.introduction		= introduction;
+		
+		
 		
 		const backendUrl:string = environment.backendUrl +'pending-candidate';
 		
-		return this.httpClient.post<any>(backendUrl, JSON.stringify(newPendingCandidate), this.httpOptions);
+		var fd = new FormData();
+		fd.append('file', profileImage);
+  		fd.append("candidate", new Blob([JSON.stringify(newPendingCandidate)], { type: 'application/json' }));
+	
+		return this.httpClient.post<any>(backendUrl, fd, {headers: new HttpHeaders({ }), withCredentials: true});
 	}
 	
 	/**

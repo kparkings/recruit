@@ -137,4 +137,19 @@ public class CurriculumControllerTest {
 		
 	}
 	
+	/**
+	* Tests deletion of a Pending Curriculum
+	* @throws Exception
+	*/
+	@Test
+	public void testDeletePendingCurriculum() throws Exception{
+		
+		ResponseEntity<Void> response = this.curriculumController.deletePendingCurriculum(UUID.randomUUID());
+		
+		assertEquals(HttpStatus.OK, response.getStatusCode());
+		
+		Mockito.verify(this.mockCurriculumService).deletePendingCurriculum(Mockito.any());
+		
+	}
+	
 }

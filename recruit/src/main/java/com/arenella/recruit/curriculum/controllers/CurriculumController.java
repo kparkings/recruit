@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -159,9 +160,25 @@ public class CurriculumController {
 									.id(String.valueOf(nextAvailableCurriculumId))
 									.build();
 		
-		this.curriculumService.deletePendingCurriculum(pendingCurriculumId);
+		//this.curriculumService.deletePendingCurriculum(pendingCurriculumId);
 		
 		return curriculumService.extractDetails(curriculumService.persistCurriculum(curriculum), curriculum.getFileType(), curriculum.getFile());
+	}
+	
+	/**
+	* Deletes an existing Pending curriculum
+	* @param pendingCurriculumId - Id of Curriculum to delete
+	* @return ResponseEntity
+	* @throws Exception
+	*/
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@DeleteMapping(value="/pending-curriculum/{pendingCurriculumId}")
+	public ResponseEntity<Void> deletePendingCurriculum(@PathVariable("pendingCurriculumId") UUID pendingCurriculumId) throws Exception{
+		
+		this.curriculumService.deletePendingCurriculum(pendingCurriculumId);
+		
+		return ResponseEntity.ok().build();
+		
 	}
 	
 	/**

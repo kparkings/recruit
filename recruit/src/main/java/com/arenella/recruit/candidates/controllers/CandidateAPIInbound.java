@@ -37,6 +37,7 @@ public class CandidateAPIInbound {
 	private Set<String> 	skills						= new LinkedHashSet<>();
 	private Set<Language> 	languages					= new LinkedHashSet<>();
 	
+	
 	/**
 	* Constructor based upon a builder
 	* @param builder = Contains initialization information

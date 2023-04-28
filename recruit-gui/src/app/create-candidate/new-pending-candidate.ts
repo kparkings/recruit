@@ -1,3 +1,4 @@
+
 /**
 * Class represents a Candidate uploaded by themselves that 
 * needs to be further processed and accepted into the system
@@ -34,4 +35,14 @@ export class NewPendingCandidate{
 	*/
 	public perm:boolean = false;
 	
+	public rate:Rate | null = null;
+	public introduction:string 	= "";
+	
+	
+}
+
+export class Rate{
+	public currency:string 	= '';
+	public period:string 	= '';
+	public value:string 	= ''; 
 }
