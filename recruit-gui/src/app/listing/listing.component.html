@@ -10,7 +10,7 @@
 		        		<div class="action-buttons" *ngIf="isAuthenticated() && !isAuthenticatedAsAdmin() && !isCandidate()">
 							<button class="btn btn-secondary btn-listing" routerLink="/recruiter-listings">Manage Your Posts</button>
 						</div>
-	        		
+	        			
 						<!-- Listings Table -->
 						<div>
 						
@@ -78,8 +78,10 @@
 	        			
 		        			<!-- Action buttons -->
 							<div class="action-buttons">
+								<button class="btn btn-secondary btn-listing" *ngIf="isAuthenticated() && isAuthenticatedAsAdmin()" (click)="showPublicity(publicityBox)">Publicity</button>
 								<button (click)="showList()" class="btn btn-secondary btn-listing">Back</button>
 							</div>
+							
 					
 							<div>
 	        					<div style="float:left; min-width:300px; margin-top:20px;">
@@ -248,6 +250,32 @@
 		</div>
 		<div class="modal-body" *ngIf="showSendAlertBoxFailure">
 			<p>Unfortunately it was not possible to send the Email at this time.</p>
+		</div>
+	</div>
+</ng-template>
+
+<!-- Publicity Box -->
+<ng-template #publicityBox let-modal>
+	<div class="modal-header">
+		<h4 class="modal-title">Create Email Alert</h4>
+ 		<div class="filter-close-box" (click)="closeModal()">X</div>
+	</div>
+	<div class="feedbackBox;">
+		<div class="modal-body"  style="height:400px;">
+			<p>Open Position: {{selectedListing.title}}</p>
+			<br>
+			<p>Location: {{getCountryCode(selectedListing.country)}}</p>
+			<br>
+			<p>https://www.arenella-ict.com/listing/{{selectedListing.listingId}}</p>
+			<br>
+			<span>#openposition </span>
+			<span>#itjob </span>
+			<span>#itjobs </span>
+			<span>#ictbaan </span>
+			<span>#ictbanen </span>
+			<span>#itjobboard </span>
+			<span>#cvdatabase </span>
+			<span *ngFor="let skill of selectedListing.skills">#{{skill}} </span>
 		</div>
 	</div>
 </ng-template>

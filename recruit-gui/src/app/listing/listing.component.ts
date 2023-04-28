@@ -520,6 +520,14 @@ export class ListingComponent implements OnInit {
 	public isCandidate():boolean{
 		return sessionStorage.getItem('isCandidate') === 'true';
 	}
+	
+	/**
+	* Shows a popup with the details of the listing to 
+	* post on other websites
+	*/
+	public showPublicity(content:any):void{
+		this.open(content);
+	}
   
 
 }
