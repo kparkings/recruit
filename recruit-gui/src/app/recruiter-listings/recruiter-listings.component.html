@@ -184,8 +184,9 @@
 				
 					<!-- Action buttons -->
 					<div class="action-buttons">
-						<button (click)="showPreviousShowOption()" class="btn btn-secondary btn-listing">Back</button>
-						<button (click)="publishListing()" class="btn btn-secondary btn-listing">Publish</button>
+						<button class="btn btn-secondary btnRight main-btns" (click)="showFilterByJobSpecDialog(specUploadBox)" download>Create From Job Spec</button>
+						<button (click)="showPreviousShowOption()" class="btn btn-secondary btnRight main-btns">Back</button>
+						<button (click)="publishListing()" class="btn btn-secondary btnRight main-btns">Publish</button>
 					</div>
 				
 					<form [formGroup]="newListingFormBean">
@@ -412,4 +413,24 @@
 	    	<button class="btn btn-secondary btn-action suggestion-button" (click)="showSuggestedCandidateListView()">back</button>
 	    </div>
 	</div>    
+</ng-template> 
+
+<ng-template #specUploadBox let-modal>
+	<div class="modal-header">
+		<h4 class="modal-title">Extract Filters from Job Specification</h4>
+ 		<div class="filter-close-box" (click)="closeModal()">X</div>
+	</div>
+	<div class="feedbackBox">
+		<div class="modal-body" *ngIf="showFilterByJobSpec">
+			<input type="file" (change)="setJobSepecFile($event)">
+			<br><br>
+				<button class="btn btn-secondary" (click)="extractFiltersFromJobSpec()">Perform Extraction</button>
+			<br><br>
+			<p>File types of .doc, .docx and pdf up to 1MB</p>
+			<br><br>
+		</div>
+		<div class="modal-body" *ngIf="showFilterByJonSpecFailure">
+			<p>Unfortunately it was not possible to extract filters from this file.</p>
+		</div>
+	</div>
 </ng-template> 

@@ -68,7 +68,6 @@ export class SuggestionsComponent implements OnInit {
 	/**
  	* Extracts filters from job specification file
 	*/	
-
   	public extractFiltersFromJobSpec():void{
   		
   		this.candidateService.extractFiltersFromDocument(this.jobSpecFile).subscribe(extractedFilters=>{

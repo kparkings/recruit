@@ -41,6 +41,107 @@ export class RecruiterListingsComponent implements OnInit {
 					
 	}
 	
+	private jobSpecFile!:File;
+	public showFilterByJonSpecFailure:boolean  	= false;
+	public showFilterByJobSpec:boolean 				= false;
+	
+  
+  	public setJobSepecFile(event:any):void{
+  
+  		if (event.target.files.length <= 0) {
+  			return;
+  		}
+  	
+  		this.jobSpecFile = event.target.files[0];
+  		
+  	}
+
+	/**
+ 	* Extracts filters from job specification file
+	*/	
+  	public extractFiltersFromJobSpec():void{
+  		
+  		this.candidateService.extractFiltersFromDocument(this.jobSpecFile).subscribe(extractedFilters=>{
+  			
+			console.log(JSON.stringify(extractedFilters));
+			
+			
+			
+			this.skills = extractedFilters.skills;
+			
+			let freelance 	= extractedFilters.freelance 	== 'TRUE' ? true : false;
+			let perm 		= extractedFilters.perm 		== 'TRUE' ? true : false;
+			
+			let netherlands = extractedFilters.netherlands;
+			let uk 			= extractedFilters.uk;
+			let belgium 	= extractedFilters.belgium;
+			let ireland 	= extractedFilters.ireland;
+			
+			let country = netherlands ? "NETHERLANDS" : uk ? "UK" : belgium ? "BELGIUM" : ireland ? "IRELAND" : "";
+			
+			let type = (freelance && perm) ? "BOTH" : freelance ? "CONTRACT_ROLE" : "PERM_ROLE";
+			
+			this.newListingFormBean.get("title")?.setValue(extractedFilters.jobTitle);
+			this.newListingFormBean.get("type")?.setValue(type);
+			this.newListingFormBean.get("experienceYears")?.setValue(extractedFilters.experienceGTE);
+			this.newListingFormBean.get("country")?.setValue(country);
+			
+			this.newListingFormBean.get("langDutch")?.setValue(extractedFilters.dutch);
+			this.newListingFormBean.get("langEnglish")?.setValue(extractedFilters.english);
+			this.newListingFormBean.get("langFrench")?.setValue(extractedFilters.french);
+			
+			//public newListingFormBean:UntypedFormGroup 				= new UntypedFormGroup({
+     
+		//title:				new UntypedFormControl(''),
+		//type:				new UntypedFormControl(),
+       	//country:			new UntypedFormControl(),
+		//location:			new UntypedFormControl(),	
+		//experienceYears:	new UntypedFormControl(),
+		//rate:				new UntypedFormControl(),
+		//rateCurrency:		new UntypedFormControl(),
+		//description:		new UntypedFormControl(),
+		//contactName:		new UntypedFormControl(),
+		//contactCompany:		new UntypedFormControl(),
+		//contactEmail:		new UntypedFormControl(),
+		//langDutch:			new UntypedFormControl(),
+		//langEnglish:		new UntypedFormControl(),
+		//langFrench:			new UntypedFormControl(),
+		//skill:				new UntypedFormControl()
+		
+	//});
+			
+			
+			
+			
+			
+			
+			
+			
+	
+			this.closeModal();
+		
+		},(failure =>{
+			this.showFilterByJonSpecFailure 	= true;
+			this.showFilterByJobSpec 			= false;		
+		}));
+  		
+  	}
+
+	/**
+	* Displays dialog to create an alert for the current search critera
+	*/
+	public showFilterByJobSpecDialog(content:any):void{
+		
+		this.showFilterByJonSpecFailure  	= false;
+		this.showFilterByJobSpec 			= true;
+		
+		let options: NgbModalOptions = {
+			centered: true
+		};
+		
+		this.modalService.open(content, options);
+	}
+	
 	public isMobile:boolean = false;
 	public recruiterProfile:RecruiterProfile 			= new RecruiterProfile();
 	
