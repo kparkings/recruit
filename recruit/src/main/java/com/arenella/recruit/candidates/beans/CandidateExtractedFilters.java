@@ -25,6 +25,7 @@ public class CandidateExtractedFilters {
 	private boolean			ireland;
 	private FREELANCE 		freelance;
 	private PERM 			perm;
+	private String			extractedText;
 	
 	/**
 	* Constructor based on a Builder
@@ -44,6 +45,7 @@ public class CandidateExtractedFilters {
 		this.ireland		= builder.ireland;
 		this.freelance 		= builder.freelance;
 		this.perm 			= builder.perm;
+		this.extractedText	= builder.extractedText;
 	}
 	
 	/**
@@ -151,6 +153,14 @@ public class CandidateExtractedFilters {
 	}
 	
 	/**
+	* Text extracted from the document
+	* @return document contents
+	*/
+	public String getExtractedText() {
+		return this.extractedText;
+	}
+	
+	/**
 	* Returns a builder for the CandidateExtractedFilters class
 	* @return Builder
 	*/
@@ -177,6 +187,7 @@ public class CandidateExtractedFilters {
 		private boolean			ireland;
 		private FREELANCE 		freelance;
 		private PERM 			perm;
+		private String			extractedText;
 		
 		/**
 		* Sets the Job title to filter on
@@ -306,6 +317,16 @@ public class CandidateExtractedFilters {
 		*/
 		public CandidateExtractedFiltersBuilder perm(PERM perm) {
 			this.perm = perm;
+			return this;
+		}
+		
+		/**
+		* Sets the text contained in the document
+		* @param extractedText - text 
+		* @return Builder
+		*/
+		public CandidateExtractedFiltersBuilder extractedText(String extractedText) {
+			this.extractedText = extractedText;
 			return this;
 		}
 		

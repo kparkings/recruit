@@ -1,6 +1,9 @@
 package com.arenella.recruit.candidates.extractors;
 
+import java.util.Arrays;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -38,6 +41,7 @@ public class DocumentFilterExtractionUtil {
 	
 	public CandidateExtractedFilters extractFilters(FileType fileType, byte[] fileBytes) throws Exception{
 
+		
 		String documentText = getInstance(fileType).extract(fileBytes);
 		
 		CandidateExtractedFiltersBuilder filterBuilder = CandidateExtractedFilters.builder();
@@ -72,6 +76,60 @@ public class DocumentFilterExtractionUtil {
 		
 		return null;
 	}
+	
+	/**
+	* Sets a formatted version of the extracted text to the filter
+	* @param documentText - Original Text from the Document
+	* @return formatted Text
+	*/
+	private void getExtractedText(String documentText, CandidateExtractedFiltersBuilder filterBuilder) {
+		
+		final String[] 					lines 				= documentText.split("\\n");
+		final StringBuilder 			extractedText 		= new StringBuilder();
+		final AtomicBoolean 			hitFirstParagraph 	= new AtomicBoolean(false);
+		final AtomicReference<String> 	previousLine 		= new AtomicReference<>("");
+		
+		Arrays.asList(lines).forEach(line -> {
+			
+			if (hitFirstParagraph.get()) {
+				
+				if (!line.startsWith("•") && previousLine.get().startsWith("•")) {
+					extractedText.append('\n').append('\n');
+				}
+				
+				extractedText.append(line).append('\n');
+				
+				if (line.startsWith("•")) {
+					//Do nothing special 
+				} else if (line.startsWith("-") && line.endsWith(".")) {
+					extractedText.append('\n');
+				}
+				else if (line.endsWith(".")) {
+					extractedText.append('\n').append('\n');
+				} else {
+					extractedText.append('\n');
+				}
+				
+			} else {
+				if (line.split(" ").length > 10) {
+					hitFirstParagraph.set(true);
+					extractedText.append(line);
+				}
+			}
+			
+			previousLine.set(line);
+			
+		});
+		
+		String extractedTextStr = extractedText.toString();
+		
+		while(extractedTextStr.contains("\n\n\n")) {
+			extractedTextStr = extractedTextStr.replace("\n\n\n", "\n\n");
+		}
+		
+		filterBuilder.extractedText(extractedTextStr);
+		
+	}
 
 	/**
 	* Sets filters based upon the contents of the document
@@ -79,7 +137,9 @@ public class DocumentFilterExtractionUtil {
 	* @param filtersBuilder	  	- filters to be set
 	*/
 	private void extractFilters(String documentText, CandidateExtractedFiltersBuilder filterBuilder) {
-	
+		
+		this.getExtractedText(documentText, filterBuilder);
+		
 		documentText = documentText.toLowerCase();
 		
 		jobTitleExtractor.extractFilters(documentText, filterBuilder);
@@ -87,20 +147,8 @@ public class DocumentFilterExtractionUtil {
 		countryExtractor.extractFilters(documentText, filterBuilder);
 		languageExtractor.extractFilters(documentText, filterBuilder);
 		skillExtractor.extractFilters(documentText, filterBuilder);
-		contractTypeExtractor.extractFilters(documentText, filterBuilder);
-		
+		contractTypeExtractor.extractFilters(documentText, filterBuilder);	
 		
 	}
-	
-
-	
-	
-	
-	
-	
-	
-	
-	
-
 	
 }

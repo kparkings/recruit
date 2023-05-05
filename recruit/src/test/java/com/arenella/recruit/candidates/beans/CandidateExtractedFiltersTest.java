@@ -36,6 +36,7 @@ public class CandidateExtractedFiltersTest {
 		final boolean		ireland				= true;
 		final FREELANCE 	freelance			= FREELANCE.TRUE;
 		final PERM 			perm				= PERM.TRUE;
+		final String		extractedText		= "some text";
 		
 		CandidateExtractedFilters filters = 
 				CandidateExtractedFilters.builder()
@@ -52,6 +53,7 @@ public class CandidateExtractedFiltersTest {
 					.perm(perm)
 					.skills(skills)
 					.uk(uk)
+					.extractedText(extractedText)
 				.build();
 		
 		assertEquals(jobTitle, 		filters.getJobTitle());
@@ -66,6 +68,7 @@ public class CandidateExtractedFiltersTest {
 		assertEquals(ireland, 		filters.getIreland());
 		assertEquals(freelance, 	filters.getFreelance());
 		assertEquals(perm, 			filters.getPerm());
+		assertEquals(extractedText, filters.getExtractedText());
 		
 		assertTrue(filters.getSkills().contains("java"));
 		assertTrue(filters.getSkills().contains("angular"));

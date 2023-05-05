@@ -63,10 +63,6 @@ export class RecruiterListingsComponent implements OnInit {
   		
   		this.candidateService.extractFiltersFromDocument(this.jobSpecFile).subscribe(extractedFilters=>{
   			
-			console.log(JSON.stringify(extractedFilters));
-			
-			
-			
 			this.skills = extractedFilters.skills;
 			
 			let freelance 	= extractedFilters.freelance 	== 'TRUE' ? true : false;
@@ -90,34 +86,8 @@ export class RecruiterListingsComponent implements OnInit {
 			this.newListingFormBean.get("langEnglish")?.setValue(extractedFilters.english);
 			this.newListingFormBean.get("langFrench")?.setValue(extractedFilters.french);
 			
-			//public newListingFormBean:UntypedFormGroup 				= new UntypedFormGroup({
-     
-		//title:				new UntypedFormControl(''),
-		//type:				new UntypedFormControl(),
-       	//country:			new UntypedFormControl(),
-		//location:			new UntypedFormControl(),	
-		//experienceYears:	new UntypedFormControl(),
-		//rate:				new UntypedFormControl(),
-		//rateCurrency:		new UntypedFormControl(),
-		//description:		new UntypedFormControl(),
-		//contactName:		new UntypedFormControl(),
-		//contactCompany:		new UntypedFormControl(),
-		//contactEmail:		new UntypedFormControl(),
-		//langDutch:			new UntypedFormControl(),
-		//langEnglish:		new UntypedFormControl(),
-		//langFrench:			new UntypedFormControl(),
-		//skill:				new UntypedFormControl()
-		
-	//});
+			this.newListingFormBean.get("description")?.setValue(extractedFilters.extractedText);
 			
-			
-			
-			
-			
-			
-			
-			
-	
 			this.closeModal();
 		
 		},(failure =>{
@@ -314,6 +284,9 @@ export class RecruiterListingsComponent implements OnInit {
 	* Switches to Add Listing view
 	*/
 	public showAdd():void{
+		
+		this.reset();
+		
 		this.activeView 			= 'add';
 		this.activeSubView 			= 'step1';
 		this.selectedListing		= new Listing();
@@ -466,13 +439,22 @@ export class RecruiterListingsComponent implements OnInit {
 										
 										let failedFields:Array<any> = err.error;
 										
+										if (err.error.error == 'Bad Request') {
+											this.validationErrors.push("Country must be provided");
+										}
+										
 										if (typeof err.error[Symbol.iterator] === 'function') {
 											failedFields.forEach(failedField => {
 												this.validationErrors.push(failedField.fieldMessageOrKey);
 											});
 											this.open('feedbackBox', "Failure",  false);
 										} else {
-											console.log("Failed to Update Listing " + JSON.stringify(err.error));
+											
+											if (err.error.error == 'Bad Request'){
+												this.open('feedbackBox', "Failure",  false);	
+											}else {
+												console.log("Failed to Update Listing " + JSON.stringify(err.error));
+											}
 										}
 										
 									}
@@ -1371,5 +1353,18 @@ export class RecruiterListingsComponent implements OnInit {
 		this.candidateService.markCandidateAsUnavailable(this.suggestedCandidate.candidateId).subscribe(data => {});
 		this.suggestedCandidate.flaggedAsUnavailable = true;
 	}
+	
+	/**
+	* Shows a popup with the details of the listing to 
+	* post on other websites
+	*/
+	public showPublicity(content:any):void{
+		let options: NgbModalOptions = {
+	    	 centered: true
+	   };
+
+		this.modalService.open(content, options);
+	}
+
 	
 }
