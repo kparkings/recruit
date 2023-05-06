@@ -438,11 +438,11 @@
 <!-- Publicity Box -->
 <ng-template #publicityBox let-modal>
 	<div class="modal-header">
-		<h4 class="modal-title">Create Email Alert</h4>
+		<h4 class="modal-title">Publicity</h4>
  		<div class="filter-close-box" (click)="closeModal()">X</div>
 	</div>
 	<div class="feedbackBox;">
-		<div class="modal-body"  style="height:400px;">
+		<div class="modal-body"  style="height:400px;overflow:auto">
 			<p>Open Position: {{selectedListing.title}}</p>
 			<br>
 			<p>Location: {{getCountryCode(selectedListing.country)}}</p>
