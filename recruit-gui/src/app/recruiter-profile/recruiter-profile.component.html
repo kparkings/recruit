@@ -8,7 +8,11 @@
 			</div>
 		</div>
 		
-		<div *ngIf="currentView === 'view-main'">
+		<div *ngIf="currentView === 'view-main' && !recruiterProfile">
+			<p class="no-account">Please create your profile to access the community page</p>
+		</div>
+		
+		<div *ngIf="currentView === 'view-main' && recruiterProfile">
 			<div class="profile-overwiew" *ngFor="let profile of recruiterProfiles" (click)="showViewDetails(profile)">
 				<div>
 					<img class="profile-photo-overview" *ngIf="profile?.profilePhoto?.imageBytes" id='base64image' src='data:image/jpeg;base64, {{profile?.profilePhoto?.imageBytes}}' />
