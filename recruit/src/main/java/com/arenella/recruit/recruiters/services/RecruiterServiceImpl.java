@@ -254,7 +254,7 @@ public class RecruiterServiceImpl implements RecruiterService{
 		
 		Recruiter recruiter = recruiters.stream().findFirst().get();
 		
-		String rawPassword = PasswordUtil.generatePassword(recruiter.getUserId());
+		String rawPassword = PasswordUtil.generatePassword();
 		String encPassword = PasswordUtil.encryptPassword(rawPassword);
 		
 		this.externEventPublisher.publishRecruiterPasswordUpdated(new RecruiterPasswordUpdatedEvent(recruiter.getUserId(), encPassword));

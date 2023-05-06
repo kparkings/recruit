@@ -62,9 +62,9 @@
 							
 							<td *ngIf="showJustMyCandidatesActive">
 								<div *ngIf="!isAuthenticatedAsAdmin()">
-									<button class="btn btn-secondary small-action-btn" (click)="editOfferedCandidate(candidate)">Edit</button>
-									<button class="btn btn-secondary small-action-btn" *ngIf="confirmDeleteCandidate != candidate.id"  (click)="deleteMyCandidate(candidate.id)">Delete</button>
-									<button class="btn btn-secondary small-action-btn small-action-btn-confirm-del" *ngIf="confirmDeleteCandidate === candidate.id" (click)="applyDeleteMyCandidate(candidate.id)">Confirm</button>
+									<button class="btn btn-secondary btnRight main-btns" (click)="editOfferedCandidate(candidate)">Edit</button>
+									<button class="btn btn-secondary btnRight main-btns" *ngIf="confirmDeleteCandidate != candidate.id"  (click)="deleteMyCandidate(candidate.id)">Delete</button>
+									<button class="btn btn-secondary btnRight main-btns small-action-btn-confirm-del" *ngIf="confirmDeleteCandidate === candidate.id" (click)="applyDeleteMyCandidate(candidate.id)">Confirm</button>
 								</div>
 							</td>
 						</tr>
@@ -76,8 +76,8 @@
 		<div *ngIf="addSupply">
 			<h3>Add details of Candidate to make available to other recruiters</h3>
 			<div class="action-buttons">
-				<button class="btn btn-secondary  small-action-btn" (click)="publishOfferedCandidate()">Publish</button>
-				<button class="btn btn-secondary  small-action-btn" (click)="showOfferedCandidates()">Back</button>
+				<button class="btn btn-secondary btnRight main-btns" (click)="showOfferedCandidates()">Back</button>
+				<button class="btn btn-secondary btnRight main-btns" (click)="publishOfferedCandidate()">Publish</button>
 			</div>
 			<form [formGroup]="offeredCandidateFormBean">
 				<table class="table marketplace-table">
@@ -133,7 +133,7 @@
 						</td>	
 					</tr>
 					<tr>
-						<td>Renumeration</td>
+						<td>Salary / Rate</td>
 						<td>
 							<input  formControlName="renumeration" type="text"/>
 						</td>	
@@ -196,8 +196,8 @@
 		<div *ngIf="editSupply">
 			<h3>Update Candidate</h3>
 			<div class="action-buttons">
-				<button class="btn btn-secondary  small-action-btn" (click)="publishOfferedCandidate()">Update</button>
-				<button class="btn btn-secondary  small-action-btn" (click)="showOfferedCandidates()">Back</button>
+				<button class="btn btn-secondary btnRight main-btns" (click)="publishOfferedCandidate()">Update</button>
+				<button class="btn btn-secondary btnRight main-btns" (click)="showOfferedCandidates()">Back</button>
 			</div>
 			<form [formGroup]="offeredCandidateFormBean">
 				<table class="table marketplace-table">
@@ -253,7 +253,7 @@
 						</td>	
 					</tr>
 					<tr>
-						<td>Renumeration</td>
+						<td>Salary / Rate</td>
 						<td>
 							<input  formControlName="renumeration" type="text"/>
 						</td>	
@@ -315,9 +315,9 @@
 		<!-- Show Supply Details -->
 		<div *ngIf="showSupplyDetails">
 			<div class="action-buttons">
-				<button class="btn btn-secondary  small-action-btn" (click)="showOfferedCandidates()">Back</button>
-				<button class="btn btn-secondary  small-action-btn" (click)="contactRecruiter(contactBox)" *ngIf="isMyCandidate()" disabled>Contact</button>
-				<button class="btn btn-secondary  small-action-btn" (click)="contactRecruiter(contactBox)" *ngIf="!isMyCandidate()">Contact</button>
+				<button class="btn btn-secondary btnRight main-btns" (click)="showOfferedCandidates()">Back</button>
+				<button class="btn btn-secondary btnRight main-btns" (click)="contactRecruiter(contactBox)" *ngIf="isMyCandidate()" disabled>Contact</button>
+				<button class="btn btn-secondary btnRight main-btns" (click)="contactRecruiter(contactBox)" *ngIf="!isMyCandidate()">Contact</button>
 			</div>
 			<div style='clear:both'>
 				<div style="margin-left:10px;margin-bottom:20px;">
@@ -366,7 +366,7 @@
 					</div>
 				</div>
 				<div class="open-position-view-div-standard">
-					<h3>Renumeration</h3>
+					<h3>Conditions</h3>
 					<table>
 						<tr>
 							<td class="table-hdr-td">Contract Type</td>
@@ -377,7 +377,7 @@
 							<td class="table-bdy-td">{{activeCandidate.daysOnSite}}</td>
 						</tr>
 						<tr>
-							<td class="table-hdr-td">Renumeration</td>
+							<td class="table-hdr-td">Salary / Rate</td>
 							<td class="table-bdy-td">{{activeCandidate.renumeration}}</td>
 						</tr>
 					</table>
@@ -444,9 +444,9 @@
 							<td class="table-bdy-td td-date" (click)="viewOpenPosition(openPosition)" *ngIf="!showJustMyOpenPositionsActive && !openPosition.viewed && isNotMineOP(openPosition)"><b>{{openPosition.positionClosingDate}}</b></td>
 							<td *ngIf="showJustMyOpenPositionsActive">
 								<div *ngIf="!isAuthenticatedAsAdmin()">
-									<button class="btn btn-secondary small-action-btn" (click)="editOpenPosition(openPosition)">Edit</button>
-									<button class="btn btn-secondary small-action-btn" *ngIf="confirmDeleteOpenPosition != openPosition.id"  (click)="deleteMyOpenPosition(openPosition.id)">Delete</button>
-									<button class="btn btn-secondary small-action-btn small-action-btn-confirm-del" *ngIf="confirmDeleteOpenPosition === openPosition.id" (click)="applyDeleteMyOpenPosition(openPosition.id)">Confirm</button>
+									<button class="btn btn-secondary btnRight main-btns" (click)="editOpenPosition(openPosition)">Edit</button>
+									<button class="btn btn-secondary btnRight main-btns" *ngIf="confirmDeleteOpenPosition != openPosition.id"  (click)="deleteMyOpenPosition(openPosition.id)">Delete</button>
+									<button class="btn btn-secondary btnRight main-btns small-action-btn-confirm-del" *ngIf="confirmDeleteOpenPosition === openPosition.id" (click)="applyDeleteMyOpenPosition(openPosition.id)">Confirm</button>
 								</div>
 							</td>
 						</tr>
@@ -459,8 +459,9 @@
 		<div *ngIf="addDemand">
 			<h3>Add details of position you wish to fill via other recruiters</h3>
 			<div class="action-buttons">
-				<button class="btn btn-secondary  small-action-btn" (click)="publishOpenPosition()">Publish</button>
-				<button class="btn btn-secondary  small-action-btn" (click)="showOpenPositions()">Back</button>
+				<button class="btn btn-secondary btnRight main-btns" (click)="showFilterByJobSpecDialog(specUploadBox)" download>Create From Job Spec</button>
+				<button class="btn btn-secondary btnRight main-btns" (click)="showOpenPositions()">Back</button>
+				<button class="btn btn-secondary btnRight main-btns" (click)="publishOpenPosition()">Publish</button>
 			</div>
 			<form [formGroup]="requestedCandidateFormBean">
 				<table class="table marketplace-table">
@@ -502,11 +503,24 @@
 						</td>	
 					</tr>
 					<tr>
-						<td>Renumeration</td>
+						<td>Salary / Rate</td>
 						<td>
 							<input formControlName="renumeration" type="text"/>
 						</td>	
 					</tr>
+					<!--  
+					<tr>
+						<td>
+							Skills
+						</td>
+						<td class="sugg-srch-bdy">
+							<input type="text" formControlName="skill"><button (click)="addOfferedPositionSkill()" class="btn btn-secondary add-skill-btn" *ngIf="!isAuthenticatedAsAdmin()">Add</button>
+							<div style="min-height:35px;">
+								<div class="selected-skill" *ngFor="let skill of requestedCandidateCoreSkills" (click)="removeRequestedCandidateSkill(skill)">{{skill}}</div>
+							</div>
+						</td>	
+					</tr>
+					-->
 					<tr>
 						<td>Start Date</td>
 						<td>
@@ -540,8 +554,8 @@
 	<div *ngIf="editDemand">
 		<h3>Update Requested Candidate</h3>
 		<div class="action-buttons">
-			<button class="btn btn-secondary  small-action-btn" (click)="publishOpenPosition()">Update</button>
-			<button class="btn btn-secondary  small-action-btn" (click)="showOpenPositions()">Back</button>
+			<button class="btn btn-secondary btnRight main-btns" (click)="publishOpenPosition()">Update</button>
+			<button class="btn btn-secondary btnRight main-btns" (click)="showOpenPositions()">Back</button>
 		</div>
 		<form [formGroup]="requestedCandidateFormBean">
 		<table class="table marketplace-table">
@@ -583,7 +597,7 @@
 					</td>	
 				</tr>
 				<tr>
-					<td>Renumeration</td>
+					<td>Salary / Rate</td>
 					<td>
 						<input formControlName="renumeration" type="text"/>
 					</td>	
@@ -619,9 +633,9 @@
 	<!-- Open Position Details -->
 	<div *ngIf="showDemandDetails">
 			<div class="action-buttons">
-				<button class="btn btn-secondary  small-action-btn" (click)="showOpenPositions()">Back</button>
-				<button class="btn btn-secondary  small-action-btn" (click)="contactRecruiter(contactBox)" *ngIf="isMyOpenPosition()" disabled>Contact</button>
-				<button class="btn btn-secondary  small-action-btn" (click)="contactRecruiter(contactBox)" *ngIf="!isMyOpenPosition()">Contact</button>
+				<button class="btn btn-secondary btnRight main-btns" (click)="showOpenPositions()">Back</button>
+				<button class="btn btn-secondary btnRight main-btns" (click)="contactRecruiter(contactBox)" *ngIf="isMyOpenPosition()" disabled>Contact</button>
+				<button class="btn btn-secondary btnRight main-btns" (click)="contactRecruiter(contactBox)" *ngIf="!isMyOpenPosition()">Contact</button>
 			</div>
 			<div style='clear:both'>
 				<div style="margin-left:10px;margin-bottom:20px;">
@@ -655,14 +669,14 @@
 					</table>
 				</div>
 				<div class="open-position-view-div-standard">
-					<h3>Renumeration</h3>
+					<h3>Conditions</h3>
 					<table>
 						<tr>
 							<td class="table-hdr-td">Contract Type</td>
 							<td class="table-bdy-td">{{activeOpenPosition.contractType}}</td>
 						</tr>
 						<tr>
-							<td class="table-hdr-td">Renumeration</td>
+							<td class="table-hdr-td">Salary / Rate</td>
 							<td class="table-bdy-td">{{activeOpenPosition.renumeration}}</td>
 						</tr>
 						<tr>
@@ -726,5 +740,25 @@
 	</div>
 	<div class="modal-body" *ngIf="contactRecruiterView === 'failure'">
 			<p class="message-send-failure">Failed to Send Message</p>
+	</div>
+</ng-template> 
+
+<ng-template #specUploadBox let-modal>
+	<div class="modal-header">
+		<h4 class="modal-title">Extract Filters from Job Specification</h4>
+ 		<div class="filter-close-box" (click)="closeModal()">X</div>
+	</div>
+	<div class="feedbackBox">
+		<div class="modal-body" *ngIf="showFilterByJobSpec">
+			<input type="file" (change)="setJobSepecFile($event)">
+			<br><br>
+				<button class="btn btn-secondary" (click)="extractFiltersFromJobSpec()">Perform Extraction</button>
+			<br><br>
+			<p>File types of .doc, .docx and pdf up to 1MB</p>
+			<br><br>
+		</div>
+		<div class="modal-body" *ngIf="showFilterByJonSpecFailure">
+			<p>Unfortunately it was not possible to extract filters from this file.</p>
+		</div>
 	</div>
 </ng-template> 

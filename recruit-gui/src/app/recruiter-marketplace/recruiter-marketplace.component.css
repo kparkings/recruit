@@ -221,3 +221,11 @@ td{
 .main-action_btn{
 	background:green;
 }
+
+.main-btns{
+	width:200px;
+	margin-right:10px;
+	margin-bottom:10px;
+	margin-top:5px;
+	
+}

@@ -5,7 +5,8 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.WeekFields;
 import java.util.Locale;
-import java.util.Random;
+import java.util.Set;
+import java.util.concurrent.ThreadLocalRandom;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
@@ -17,21 +18,37 @@ import com.arenella.recruit.recruiters.beans.Recruiter;
 */
 public class PasswordUtil{
 
+	public static final int PASSWORD_LENGTH = 16;
+	
+	private static Set<Character> chars = Set.of('!','@','$','%','-','W','D','S','s',':','1','8','9','+');
+	
 	/**
 	* Generates a password for the user
 	* @param username - username of the user
 	* @return password for the user
 	*/
-	public static String generatePassword(String username) {
+	public static String generatePassword() {
 		
-		Random x = new Random();
+		String passwordUnencoded =  "";
 		
-		final String 	code 		=	String.valueOf(x.nextInt()).substring(1,5);
-		
-		String passwordUnencoded = username + "!" + code;
+		while(passwordUnencoded.length() < PASSWORD_LENGTH) {
+			passwordUnencoded = passwordUnencoded + getRandom();
+		};
 		
 		return passwordUnencoded;
 		
+		
+	}
+	
+	/**
+	* Generates a random String
+	* @return randomString
+	*/
+	private static String getRandom() {
+		
+		int randomInt = ThreadLocalRandom.current().nextInt(0, chars.size());
+		
+		return chars.toArray()[randomInt] +  (randomInt > 3 ? "R" : chars.toArray()[randomInt]+"");
 		
 	}
 	

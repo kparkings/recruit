@@ -8,6 +8,7 @@ import { EmailService, EmailRequest }					from '../email.service';
 import { OfferedCandidate }								from './offered-candidate';
 import { OpenPosition }									from './open-position';
 import { Router}										from '@angular/router';
+import { CandidateServiceService }						from '../candidate-service.service';
 
 @Component({
   selector: 'app-recruiter-marketplace',
@@ -25,7 +26,8 @@ export class RecruiterMarketplaceComponent implements OnInit {
 				private marketplaceService: RecruiterMarketplaceService, 
 				private recruiterService:	RecruiterService,
 				private emailService:		EmailService,
-				private router:				Router) {
+				private router:				Router,
+				public 	candidateService:			CandidateServiceService) {
 					
 					this.marketplaceService.fetchUnseenOfferedCandidates().subscribe(val => {
 						this.unseenOfferedCandidates = val;
@@ -206,6 +208,7 @@ export class RecruiterMarketplaceComponent implements OnInit {
 		startDate:				new UntypedFormControl(),
 		positionClosingDate:	new UntypedFormControl(),
 		description:			new UntypedFormControl(),
+		skill:					new UntypedFormControl(),
 		comments:				new UntypedFormControl(),
 	});
 	
@@ -222,6 +225,7 @@ export class RecruiterMarketplaceComponent implements OnInit {
 			startDate:				new UntypedFormControl(),
 			positionClosingDate:	new UntypedFormControl(),
 			description:			new UntypedFormControl(),
+			skill:					new UntypedFormControl(),
 			comments:				new UntypedFormControl(),
 		});
 		this.requestedCandidateSpokenLanguages 	= new Array<string>();
@@ -475,6 +479,34 @@ export class RecruiterMarketplaceComponent implements OnInit {
 		skill = skill.toLocaleLowerCase();
 		
 		this.coreSkills = this.coreSkills.filter(s => s  !== skill);
+		
+	}
+	
+	/**
+	* Adds a skill posessed required 
+	*/
+	public addOfferedPositionSkill():void{
+		
+		let skillFormatted:string 	= this.requestedCandidateFormBean.get('skill')?.value.trim();
+		skillFormatted 				= skillFormatted.toLocaleLowerCase();
+		
+		if (skillFormatted.length > 0 && this.coreSkills.indexOf(skillFormatted) == -1) {
+			this.requestedCandidateCoreSkills.push(skillFormatted);	
+		}
+		
+		this.requestedCandidateFormBean.get('skill')?.setValue('');
+		
+	}
+	
+	/**
+	* Removes a skill posessed by the offered Candidate
+	*/
+	public removeRequestedCandidateSkill(skill:string):void{
+		
+		skill = skill.trim();
+		skill = skill.toLocaleLowerCase();
+		
+		this.requestedCandidateCoreSkills = this.requestedCandidateCoreSkills.filter(s => s  !== skill);
 		
 	}
 	
@@ -836,5 +868,77 @@ export class RecruiterMarketplaceComponent implements OnInit {
 	public isNotMineOC(offeredCandidate:OfferedCandidate):boolean{
 		return !(sessionStorage.getItem("userId")+'' == offeredCandidate.recruiter.recruiterId);
 	}
+	
+	/**
+	* Displays dialog to create an alert for the current search critera
+	*/
+	public showFilterByJobSpecDialog(content:any):void{
+		
+		this.showFilterByJonSpecFailure  	= false;
+		this.showFilterByJobSpec 			= true;
+		
+		let options: NgbModalOptions = {
+			centered: true
+		};
+		
+		this.modalService.open(content, options);
+	}
+	
+	private jobSpecFile!:File;
+	public showFilterByJonSpecFailure:boolean  	= false;
+	public showFilterByJobSpec:boolean 				= false;
+	
+  
+  	public setJobSepecFile(event:any):void{
+  
+  		if (event.target.files.length <= 0) {
+  			return;
+  		}
+  	
+  		this.jobSpecFile = event.target.files[0];
+  		
+  	}
+
+	/**
+ 	* Extracts filters from job specification file
+	*/	
+  	public extractFiltersFromJobSpec():void{
+  		
+  		this.candidateService.extractFiltersFromDocument(this.jobSpecFile).subscribe(extractedFilters=>{
+  			
+		this.requestedCandidateCoreSkills = extractedFilters.skills;
+			
+			let freelance 	= extractedFilters.freelance 	== 'TRUE' ? true : false;
+			let perm 		= extractedFilters.perm 		== 'TRUE' ? true : false;
+			
+			let netherlands = extractedFilters.netherlands;
+			let uk 			= extractedFilters.uk;
+			let belgium 	= extractedFilters.belgium;
+			let ireland 	= extractedFilters.ireland;
+			
+			let country = netherlands ? "NETHERLANDS" : uk ? "UK" : belgium ? "BELGIUM" : ireland ? "IRELAND" : "";
+			
+			let type = (freelance && perm) ? "BOTH" : freelance ? "CONTRACT" : "PERM";
+			
+			this.requestedCandidateFormBean.get("positionTitle")?.setValue(extractedFilters.jobTitle);
+			this.requestedCandidateFormBean.get("contractType")?.setValue(type);
+			this.requestedCandidateFormBean.get("experienceYears")?.setValue(extractedFilters.experienceGTE);
+			this.requestedCandidateFormBean.get("country")?.setValue(country);
+			
+			this.requestedCandidateFormBean.get("langDutch")?.setValue(extractedFilters.dutch);
+			this.requestedCandidateFormBean.get("langEnglish")?.setValue(extractedFilters.english);
+			this.requestedCandidateFormBean.get("langFrench")?.setValue(extractedFilters.french);
+			
+			this.requestedCandidateFormBean.get("description")?.setValue(extractedFilters.extractedText);
+			
+			this.closeModal();
+		
+		},(failure =>{
+			this.showFilterByJonSpecFailure 	= true;
+			this.showFilterByJobSpec 			= false;		
+		}));
+  		
+  	}
+	
 
 }
