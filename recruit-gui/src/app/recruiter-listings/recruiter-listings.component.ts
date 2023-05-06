@@ -13,6 +13,7 @@ import { Router}										from '@angular/router';
 import { DeviceDetectorService } 						from 'ngx-device-detector';
 import { RecruiterProfileService} 						from '../recruiter-profile.service';
 import { RecruiterProfile }								from '../recruiter-profile/recruiter-profile';
+import { RecruiterMarketplaceService }					from '../recruiter-marketplace.service';
 
 
 @Component({
@@ -23,6 +24,7 @@ import { RecruiterProfile }								from '../recruiter-profile/recruiter-profile'
 export class RecruiterListingsComponent implements OnInit {
 
 	@ViewChild('feedbackBox', { static: false }) private content:any;
+	@ViewChild('marketplaceBox', { static: false }) private mpBox:any;
 
   	constructor(private listingService:				ListingService, 
 				private modalService: 				NgbModal, 
@@ -31,7 +33,8 @@ export class RecruiterListingsComponent implements OnInit {
 				public 	suggestionsService:			SuggestionsService,
 				private deviceDetector:				DeviceDetectorService,
 				private recruiterProfileService: 	RecruiterProfileService,
-				public 	router:						Router) {
+				public 	router:						Router,
+				private marketplaceService: RecruiterMarketplaceService) {
 					
 				this.isMobile = deviceDetector.isMobile();
 				
@@ -186,6 +189,12 @@ export class RecruiterListingsComponent implements OnInit {
 		
 	});
 	
+	public mpFormBean:UntypedFormGroup 				= new UntypedFormGroup({
+		startDate:				new UntypedFormControl(''),
+		lastSubmissionDate:		new UntypedFormControl(),
+       	comments:				new UntypedFormControl(),
+	});
+	
 	public reset():void{
 		
 		this.newListingFormBean  = new UntypedFormGroup({
@@ -206,6 +215,12 @@ export class RecruiterListingsComponent implements OnInit {
 			langFrench:			new UntypedFormControl(),
 			skill:				new UntypedFormControl()
 			
+		});
+		
+		this.mpFormBean = new UntypedFormGroup({
+			startDate:				new UntypedFormControl(),
+			lastSubmissionDate:		new UntypedFormControl(),
+       		comments:				new UntypedFormControl(),
 		});
 		
 		this.skills 				= new Array<string>();
@@ -430,9 +445,10 @@ export class RecruiterListingsComponent implements OnInit {
 								rate, 			
 								currency, 		
 								false).subscribe( data => {
-									this.reset();
-									this.fetchListings();
-									this.showList();
+									//this.reset();
+									//this.fetchListings();
+									//this.showList();
+									this.showMPBox();
 								}, err => {
 									
 									if(err.status === 400) {
@@ -1365,6 +1381,100 @@ export class RecruiterListingsComponent implements OnInit {
 
 		this.modalService.open(content, options);
 	}
-
 	
+	/**
+	* Persists and Published the OfferedCandidate	
+	*/
+	public publishOpenPosition():void{
+
+		let title:string 				= this.newListingFormBean.get('title')?.value;
+		let description:string 			= this.newListingFormBean.get('description')?.value;
+		let type:string 				= this.newListingFormBean.get('type')?.value;
+		let country:string 				= this.newListingFormBean.get('country')?.value;	
+		let location:string 			= this.newListingFormBean.get('location')?.value;	
+		let rate:number 				= this.newListingFormBean.get('rate')?.value; 			
+		let currency:string 			= this.newListingFormBean.get('rateCurrency')?.value; 		
+		
+		let langDutch:boolean 			= this.newListingFormBean.get('langDutch')?.value;
+		let langEnglish:boolean 		= this.newListingFormBean.get('langEnglish')?.value;
+		let langFrench:boolean 			= this.newListingFormBean.get('langFrench')?.value;
+		
+		let languages:Array<string> = new Array<string>();
+		
+		
+		let startDate:Date 				= this.mpFormBean.get('startDate')?.value;
+		let lastSubmissionDate:Date 	= this.mpFormBean.get('lastSubmissionDate')?.value;
+		let comments:string 			= this.mpFormBean.get('comments')?.value;
+		
+		if (langDutch === true) {
+			languages.push('DUTCH');
+		}
+		
+		if (langEnglish === true) {
+			languages.push('ENGLISH');
+		}
+		
+		if (langFrench === true) {
+			languages.push('FRENCH');
+		}
+		
+		type = type == "CONTRACT_ROLE" ? "CONTRACT" : type == "PERM_ROLE" ? "PERM" : "BOTH";
+		
+		this.validationErrors			= new Array<string>();
+		
+			this.marketplaceService.registerOpenPosition(
+				title,
+				country,
+				location,
+				type,
+				(currency == null ? "" : currency) + " " + (rate == null ? "" : rate) ,
+				startDate,
+				lastSubmissionDate,
+				description,
+				comments,
+				languages,
+				this.skills
+			).subscribe( data => {
+				this.reset();
+				this.fetchListings();
+				this.showList();
+				this.closeModal();
+			}, err => {
+		
+				if (err.status === 400) {
+											
+					let failedFields:Array<any> = err.error;
+											
+					if (typeof err.error[Symbol.iterator] === 'function') {
+						failedFields.forEach(failedField => {
+							this.validationErrors.push(failedField.issue);
+						});
+						this.open('feedbackBox', "Failure",  false);
+					} else {
+						console.log("Failed to persist new Open Position " + JSON.stringify(err.error));
+					}
+				}
+											
+			});
+	
+	}
+	
+	public showMPBox():void{
+		
+		let options: NgbModalOptions = {
+	    	 centered: true
+	   };
+
+		this.modalService.open(this.mpBox, options);
+		
+	
+	}
+	
+	public declineMarketplace():void{
+		this.reset();
+		this.fetchListings();
+		this.showList();
+		this.closeModal();
+	}
+
 }
