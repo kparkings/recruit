@@ -326,7 +326,7 @@
       				<h1 *ngIf="isMobile" class="listing-view-title">{{activeCandidate.candidateRoleTitle}}</h1>
       				<div class="left-box">
      					<div>
-     						<img class="profile-photo-details" *ngIf="recruiterProfile?.profilePhoto?.imageBytes" id='base64image' src='data:image/jpeg;base64, {{recruiterProfile?.profilePhoto?.imageBytes}}' />
+     						<img class="profile-photo-details" *ngIf="!isMobile && recruiterProfile?.profilePhoto?.imageBytes" id='base64image' src='data:image/jpeg;base64, {{recruiterProfile?.profilePhoto?.imageBytes}}' />
 							<div *ngIf="!recruiterProfile?.profilePhoto?.imageBytes && !isMobile" class="profile-photo-details material-icons person ">
 								<span style="font-size:300px;color:green;">person</span>
 							</div>
@@ -337,19 +337,19 @@
 							<br>
      					</div>
      				</div>
-     				<div class="left-box-title"  *ngIf="recruiterProfile">
+     				<div class="left-box-title"  *ngIf="activeCandidate?.recruiter">
       					<h5>Offered By</h5>
       				</div>
-     				<div class="left-box"  *ngIf="recruiterProfile">
+     				<div class="left-box"  *ngIf="activeCandidate?.recruiter">
      					<div class="left-box-body">
       						<table>
       							<tr>
       								<th>Name</th>
-      								<td>{{recruiterProfile.recruiterFirstName}} {{recruiterProfile.recruiterSurname}}</td>
+      								<td>{{activeCandidate?.recruiter?.recruiterName}}</td>
       							</tr>
       							<tr>
       								<th>Company</th>
-      								<td>{{recruiterProfile.companyName}}</td>
+      								<td>{{activeCandidate?.recruiter?.companyName}}</td>
       							</tr>
       						</table>
      					</div>
@@ -678,7 +678,7 @@
       			<h1 *ngIf="isMobile" class="listing-view-title">{{activeOpenPosition.positionTitle}}</h1>
       				<div class="left-box">
      					<div>
-     						<img class="profile-photo-details" *ngIf="recruiterProfile?.profilePhoto?.imageBytes" id='base64image' src='data:image/jpeg;base64, {{recruiterProfile?.profilePhoto?.imageBytes}}' />
+     						<img class="profile-photo-details" *ngIf="!isMobile && recruiterProfile?.profilePhoto?.imageBytes" id='base64image' src='data:image/jpeg;base64, {{recruiterProfile?.profilePhoto?.imageBytes}}' />
 						<div *ngIf="!recruiterProfile?.profilePhoto?.imageBytes && !isMobile" class="profile-photo-details material-icons person ">
 						<span style="font-size:300px;color:green;">person</span>
 						</div>
@@ -689,20 +689,20 @@
 						<br>
      				</div>
      				
-     				<div class="left-box-title" *ngIf="recruiterProfile">
+     				<div class="left-box-title" *ngIf="activeOpenPosition?.recruiter?.recruiterName">
       					<h5>Requested By</h5>
       				</div>
      				
-     				<div class="left-box" *ngIf="recruiterProfile">
+     				<div class="left-box" *ngIf="activeOpenPosition?.recruiter?.recruiterName">
      					<div class="left-box-body">
       						<table>
       							<tr>
       								<th>Name</th>
-      								<td>{{recruiterProfile.recruiterFirstName}} {{recruiterProfile.recruiterSurname}}</td>
+      								<td>{{activeOpenPosition?.recruiter?.recruiterName}}</td>
       							</tr>
       							<tr>
       								<th>Company</th>
-      								<td>{{recruiterProfile.companyName}}</td>
+      								<td>{{activeOpenPosition?.recruiter?.companyName}}</td>
       							</tr>
       						</table>
      					</div>

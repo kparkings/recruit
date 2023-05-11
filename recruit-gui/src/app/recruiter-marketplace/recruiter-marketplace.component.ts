@@ -37,6 +37,8 @@ export class RecruiterMarketplaceComponent implements OnInit {
 				private deviceDetector:				DeviceDetectorService,
 				private recruiterProfileService: 	RecruiterProfileService) {
 					
+					this.isMobile = deviceDetector.isMobile();
+					
 					this.marketplaceService.fetchUnseenOfferedCandidates().subscribe(val => {
 						this.unseenOfferedCandidates = val;
 						this.fetchOfferedCandidates();
