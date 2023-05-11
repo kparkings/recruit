@@ -230,7 +230,13 @@ td{
 	
 }
 
-
+.left-box-title{
+	min-width:300px;
+	margin-bottom:30px;
+	max-width:300px;
+	color:#6A5ACD;
+	font-weight:bold;
+}
 
 .left-box{
 	min-width:300px;
@@ -253,6 +259,11 @@ td{
 
 .left-box h5{
 	border-bottom:2px solid black;
+}
+
+.left-box-title h5{
+	margin-top:20px;
+	border-bottom:none;
 }
 
 .skill{

@@ -334,8 +334,12 @@
 							<button class="btn btn-secondary action-btn main-action_btn main-btns main-bt" style="width:300px;margin-bottom:10px;background:green;" (click)="contactRecruiter(contactBox)" *ngIf="!isMyCandidate()">Contact</button>
 						<br>
      				</div>
+     				
+     				<div class="left-box-title">
+      					<h5>Offered By</h5>
+      				</div>
+     				
      				<div class="left-box">
-     					<h5>Recruiter Details</h5>
      					<div class="left-box-body">
       						<table>
       							<tr>
@@ -350,6 +354,9 @@
      					</div>
      				</div>
      			</div>
+      			<div class="left-box-title">
+      				<h5>Candidate Details</h5>
+      			</div>
       						
 				<div class="left-box" *ngIf="activeCandidate.country || activeCandidate.location">
 					<h5>Location</h5>
