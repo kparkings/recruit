@@ -133,6 +133,7 @@ export class RecruiterMarketplaceComponent implements OnInit {
 		this.confirmDeleteOpenPosition = '';
 		this.marketplaceService.deleteRecruitersOwnOpenPositions(openPositionId).subscribe(data => {
 			this.refreshOpenPositionList();
+			this.switchTab('showDemand');
 		});
 	}
 		
@@ -151,6 +152,7 @@ export class RecruiterMarketplaceComponent implements OnInit {
 		this.confirmDeleteCandidate = '';
 		this.marketplaceService.deleteRecruitersOwnOfferedCandidates(candidateId).subscribe(data => {
 			this.refreshCandidateList();
+			this.switchTab('showSupply');
 		});
 	}
 	
