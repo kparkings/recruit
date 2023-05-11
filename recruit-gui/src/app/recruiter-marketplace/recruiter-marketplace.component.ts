@@ -25,8 +25,8 @@ export class RecruiterMarketplaceComponent implements OnInit {
 	public unseenOfferedCandidates:number 		= 0;
 	public unseenOpenPositions:number 			= 0;
 	public isMobile:boolean 					= false;
-	public recruiterProfile:RecruiterProfile 	= new RecruiterProfile();
-	
+	public recruiterProfiles:Array<RecruiterProfile> 	= new Array<RecruiterProfile>();
+	public recruiterProfile:RecruiterProfile 			= new RecruiterProfile();
 
   	constructor(private modalService: 				NgbModal, 
 				private marketplaceService: 		RecruiterMarketplaceService, 
@@ -47,11 +47,8 @@ export class RecruiterMarketplaceComponent implements OnInit {
 						this.fetchOpenPositions();
 					});
 					
-					this.recruiterProfileService.fetchOwnRecruiterProfile().subscribe(rec => {
-					this.recruiterProfile = rec;
-					this.isMobile = deviceDetector.isMobile();
-				
-				});
+					//TODO: [KP] Fetching own profile not profile of postion/candidate
+					this.recruiterProfileService.fetchRecruiterProfiles("RECRUITERS").subscribe(rps => this.recruiterProfiles = rps);
 					
 	}
 
@@ -330,6 +327,8 @@ export class RecruiterMarketplaceComponent implements OnInit {
 		this.marketplaceService.registerOfferedCandidateViewedEvent(candidate.id).subscribe( data => {
 			this.marketplaceService.updateUnseenMpPosts();
 		});
+		this.recruiterProfile = new RecruiterProfile();
+		this.recruiterProfile = this.recruiterProfiles.filter(p => p.recruiterId == candidate.recruiter.recruiterId)[0];
 	}
 	
 	/**
@@ -341,6 +340,13 @@ export class RecruiterMarketplaceComponent implements OnInit {
 		this.marketplaceService.registerOpenPositionViewedEvent(openPosition.id).subscribe( data => {
 			this.marketplaceService.updateUnseenMpPosts();
 		});
+		
+		this.recruiterProfile = new RecruiterProfile();
+		
+		console.log("DDDDDDDDDDDDd " + openPosition.recruiter.recruiterId);
+		console.log("DDDDDDDDDDDDc " + JSON.stringify(this.recruiterProfiles));
+		
+		this.recruiterProfile = this.recruiterProfiles.filter(p => p.recruiterId == openPosition.recruiter.recruiterId)[0];
 	}
 
 	/**

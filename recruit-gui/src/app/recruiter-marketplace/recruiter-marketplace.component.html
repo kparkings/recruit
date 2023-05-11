@@ -40,7 +40,6 @@
 							<th class="bg-tab-hdr">Role</th>
 							<th class="bg-tab-hdr" *ngIf="!showJustMyCandidatesActive">Country</th>
 							<th class="bg-tab-hdr" *ngIf="!showJustMyCandidatesActive">Contract Type</th>
-							<th class="bg-tab-hdr" *ngIf="showJustMyCandidatesActive">Actions</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -60,6 +59,7 @@
 							<td class="table-bdy-td" (click)="viewCandidate(candidate)" *ngIf="!showJustMyCandidatesActive && (candidate.viewed || !isNotMineOC(candidate))">{{candidate.contractType}}</td>
 							<td class="table-bdy-td" (click)="viewCandidate(candidate)" *ngIf="!showJustMyCandidatesActive && !candidate.viewed && isNotMineOC(candidate)"><b>{{candidate.contractType}}</b></td>
 							
+							<!-- 
 							<td *ngIf="showJustMyCandidatesActive">
 								<div *ngIf="!isAuthenticatedAsAdmin()">
 									<button class="btn btn-secondary btnRight main-btns" (click)="editOfferedCandidate(candidate)">Edit</button>
@@ -67,6 +67,7 @@
 									<button class="btn btn-secondary btnRight main-btns small-action-btn-confirm-del" *ngIf="confirmDeleteCandidate === candidate.id" (click)="applyDeleteMyCandidate(candidate.id)">Confirm</button>
 								</div>
 							</td>
+							-->
 						</tr>
 					</tbody>	
 				</table>
@@ -313,10 +314,11 @@
 		</div>
 		
 		<!-- Show Supply Details -->
-		
-		
 		<div *ngIf="showSupplyDetails">
 			<div class="action-buttons">
+				<button class="btn btn-secondary btnRight main-btns" *ngIf="isMyCandidate()" (click)="editOfferedCandidate(activeCandidate)">Edit</button>
+				<button class="btn btn-secondary btnRight main-btns" *ngIf="isMyCandidate() && confirmDeleteCandidate != activeCandidate.id"  (click)="deleteMyCandidate(activeCandidate.id)">Delete</button>
+				<button class="btn btn-secondary btnRight main-btns small-action-btn-confirm-del" *ngIf="isMyCandidate() && confirmDeleteCandidate === activeCandidate.id" (click)="applyDeleteMyCandidate(activeCandidate.id)">Confirm</button>
 				<button class="btn btn-secondary btnRight main-btns" (click)="showOfferedCandidates()">Back</button>
 			</div>
 			<div>
@@ -325,21 +327,20 @@
       				<div class="left-box">
      					<div>
      						<img class="profile-photo-details" *ngIf="recruiterProfile?.profilePhoto?.imageBytes" id='base64image' src='data:image/jpeg;base64, {{recruiterProfile?.profilePhoto?.imageBytes}}' />
-						<div *ngIf="!recruiterProfile?.profilePhoto?.imageBytes && !isMobile" class="profile-photo-details material-icons person ">
-						<span style="font-size:300px;color:green;">person</span>
-						</div>
-						<br>
-						<br>
-							<button class="btn btn-secondary action-btn main-action_btn main-btns main-bt" (click)="contactRecruiter(contactBox)" *ngIf="isMyCandidate()" disabled>Contact</button>
+							<div *ngIf="!recruiterProfile?.profilePhoto?.imageBytes && !isMobile" class="profile-photo-details material-icons person ">
+								<span style="font-size:300px;color:green;">person</span>
+							</div>
+							<br>
+							<br>
+							<button class="btn btn-secondary action-btn main-action_btn main-btns main-bt" style="width:300px;margin-bottom:10px;background:grey;"(click)="contactRecruiter(contactBox)" *ngIf="isMyCandidate()" disabled>Contact</button>
 							<button class="btn btn-secondary action-btn main-action_btn main-btns main-bt" style="width:300px;margin-bottom:10px;background:green;" (click)="contactRecruiter(contactBox)" *ngIf="!isMyCandidate()">Contact</button>
-						<br>
+							<br>
+     					</div>
      				</div>
-     				
-     				<div class="left-box-title">
+     				<div class="left-box-title"  *ngIf="recruiterProfile">
       					<h5>Offered By</h5>
       				</div>
-     				
-     				<div class="left-box">
+     				<div class="left-box"  *ngIf="recruiterProfile">
      					<div class="left-box-body">
       						<table>
       							<tr>
@@ -353,98 +354,90 @@
       						</table>
      					</div>
      				</div>
-     			</div>
-      			<div class="left-box-title">
-      				<h5>Candidate Details</h5>
+     				<div class="left-box-title">
+      					<h5>Candidate Details</h5>
+      				</div>
+      				<div class="left-box" *ngIf="activeCandidate.country || activeCandidate.location">
+						<h5>Location</h5>
+						<div class="left-box-body">
+							<table>
+								<tr *ngIf="activeCandidate.country">
+									<th>Country</th>
+									<td>{{getCountryCode(activeCandidate.country)}}</td>
+								</tr>
+								<tr *ngIf="activeCandidate.location">
+									<th>City</th>
+									<td>{{activeCandidate.location}}</td>
+								</tr>
+							</table>
+						</div>
+					</div>
+					<div class="left-box">
+   						<h5>Years Experience</h5>
+   						<div class="left-box-body">
+   							{{activeCandidate.yearsExperience}}
+   						</div>	
+   					</div>
+   					<div class="left-box" *ngIf="activeCandidate.spokenLanguages.length > 0">
+   						<h5>Languages</h5>
+   						<div class="left-box-body">
+							<table>
+								<tr *ngFor="let language of activeCandidate.spokenLanguages">
+									<td>{{getLanguage(language)}}</td>
+								</tr>
+							</table>
+						</div>
+   					</div>
+   					<div class="left-box" *ngIf="activeCandidate.coreSkills.length > 0">
+   						<h5>Skills</h5>
+   						<div class="left-box-body">
+							<table>
+								<tr>
+									<td><span class="skill" *ngFor="let skill of activeCandidate.coreSkills">{{skill}}</span></td>
+								</tr>
+							</table>
+						</div>
+      				</div>	
+      				<div class="left-box" *ngIf="activeCandidate.contractType || activeCandidate.daysOnSite || activeCandidate.renumeration">
+						<h5>Conditions</h5>
+						<div class="left-box-body">
+							<table>
+								<tr *ngIf="activeCandidate.contractType">
+									<th>Contract Type</th>
+									<td>{{getContractType(activeCandidate.contractType)}}</td>
+								</tr>
+								<tr *ngIf="activeCandidate.daysOnSite">
+									<th>Days On Site</th>
+									<td>{{activeCandidate.daysOnSite}}</td>
+								</tr>
+								<tr *ngIf="activeCandidate.renumeration">
+									<th>Rate/Salary</th>
+									<td>{{activeCandidate.renumeration}}</td>
+								</tr>
+							</table>
+						</div>
+					</div>	
+				</div>
+		
+				<div style="float:left;margin-left:10px;min-width:300px;max-width:72%;padding:5px;">
+      				<div class="listing-view-div">
+						<h1 *ngIf="!isMobile" class="listing-view-title">{{activeCandidate.candidateRoleTitle}}</h1>
+						<h1 *ngIf="isMobile" class="listing-view-title">Description</h1>
+					</div>
+					<div>
+						<div>
+							<pre style="white-space:pre-line;font-family: Roboto, 'Helvetica Neue', sans-serif;">{{activeCandidate.description}}</pre>
+						</div>
+					</div>
+					<div *ngIf="activeCandidate.comments">
+						<h1 *ngIf="isMobile" class="listing-view-title">Comments</h1>
+						<div>
+							<pre style="white-space:pre-line;font-family: Roboto, 'Helvetica Neue', sans-serif;">{{activeCandidate.comments}}</pre>
+						</div>
+					</div>
       			</div>
-      						
-				<div class="left-box" *ngIf="activeCandidate.country || activeCandidate.location">
-					<h5>Location</h5>
-					<div class="left-box-body">
-						<table>
-							<tr *ngIf="activeCandidate.country">
-								<th>Country</th>
-								<td>{{getCountryCode(activeCandidate.country)}}</td>
-							</tr>
-							<tr *ngIf="activeCandidate.location">
-								<th>City</th>
-								<td>{{activeCandidate.location}}</td>
-							</tr>
-						</table>
-					</div>
-				</div>
-				
-				<div class="left-box">
-   					<h5>Years Experience</h5>
-   					<div class="left-box-body">
-   						{{activeCandidate.yearsExperience}}
-   					</div>	
-   				</div>
-   				<div class="left-box" *ngIf="activeCandidate.spokenLanguages.length > 0">
-   					<h5>Languages</h5>
-   					<div class="left-box-body">
-						<table>
-							<tr *ngFor="let language of activeCandidate.spokenLanguages">
-								<td>{{getLanguage(language)}}</td>
-							</tr>
-						</table>
-					</div>
-   				</div>
-   				<div class="left-box" *ngIf="activeCandidate.coreSkills.length > 0">
-   					<h5>Skills</h5>
-   					<div class="left-box-body">
-						<table>
-							<tr>
-								<td><span class="skill" *ngFor="let skill of activeCandidate.coreSkills">{{skill}}</span></td>
-							</tr>
-						</table>
-					</div>
-      			</div>	
-      			
-      			<div class="left-box" *ngIf="activeCandidate.contractType || activeCandidate.daysOnSite || activeCandidate.renumeration">
-					<h5>Conditions</h5>
-					<div class="left-box-body">
-						<table>
-							<tr *ngIf="activeCandidate.contractType">
-								<th>Contract Type</th>
-								<td>{{getContractType(activeCandidate.contractType)}}</td>
-							</tr>
-							<tr *ngIf="activeCandidate.daysOnSite">
-								<th>Days On Site</th>
-								<td>{{activeCandidate.daysOnSite}}</td>
-							</tr>
-							<tr *ngIf="activeCandidate.renumeration">
-								<th>Rate/Salary</th>
-								<td>{{activeCandidate.renumeration}}</td>
-							</tr>
-						</table>
-					</div>
-					
-				</div>	
-				
-				
-				
-      				
+			</div>
 		</div>
-		
-		<div style="float:left;margin-left:10px;min-width:300px;max-width:72%;padding:5px;">
-      		<div class="listing-view-div">
-				<h1 *ngIf="!isMobile" class="listing-view-title">{{activeCandidate.candidateRoleTitle}}</h1>
-				<h1 *ngIf="isMobile" class="listing-view-title">Description</h1>
-			</div>
-			<div>
-				<div>
-					<pre style="white-space:pre-line;font-family: Roboto, 'Helvetica Neue', sans-serif;">{{activeCandidate.description}}</pre>
-				</div>
-			</div>
-			<div *ngIf="activeCandidate.comments">
-				<h1 *ngIf="isMobile" class="listing-view-title">Comments</h1>
-				<div>
-					<pre style="white-space:pre-line;font-family: Roboto, 'Helvetica Neue', sans-serif;">{{activeCandidate.comments}}</pre>
-				</div>
-			</div>
-      	</div>
-		
 		<!-- Show Demand  -->
 		<div *ngIf="showDemand">
 			<p>
@@ -470,7 +463,6 @@
 							<th class="bg-tab-hdr">Position</th>
 							<th class="bg-tab-hdr" *ngIf="!showJustMyOpenPositionsActive">Country</th>
 							<th class="bg-tab-hdr" *ngIf="!showJustMyOpenPositionsActive">Closing Date</th>
-							<th class="bg-tab-hdr" *ngIf="showJustMyOpenPositionsActive">Actions</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -492,13 +484,6 @@
 							</td>
 							<td class="table-bdy-td td-date" (click)="viewOpenPosition(openPosition)" *ngIf="!showJustMyOpenPositionsActive && (openPosition.viewed || !isNotMineOP(openPosition))">{{openPosition.positionClosingDate}}</td>
 							<td class="table-bdy-td td-date" (click)="viewOpenPosition(openPosition)" *ngIf="!showJustMyOpenPositionsActive && !openPosition.viewed && isNotMineOP(openPosition)"><b>{{openPosition.positionClosingDate}}</b></td>
-							<td *ngIf="showJustMyOpenPositionsActive">
-								<div *ngIf="!isAuthenticatedAsAdmin()">
-									<button class="btn btn-secondary btnRight main-btns" (click)="editOpenPosition(openPosition)">Edit</button>
-									<button class="btn btn-secondary btnRight main-btns" *ngIf="confirmDeleteOpenPosition != openPosition.id"  (click)="deleteMyOpenPosition(openPosition.id)">Delete</button>
-									<button class="btn btn-secondary btnRight main-btns small-action-btn-confirm-del" *ngIf="confirmDeleteOpenPosition === openPosition.id" (click)="applyDeleteMyOpenPosition(openPosition.id)">Confirm</button>
-								</div>
-							</td>
 						</tr>
 						
 					</tbody>	
@@ -681,78 +666,103 @@
 		
 	</div>
 	<!-- Open Position Details -->
-	<div *ngIf="showDemandDetails">
-			<div class="action-buttons">
-				<button class="btn btn-secondary btnRight main-btns" (click)="showOpenPositions()">Back</button>
-				<button class="btn btn-secondary btnRight main-btns" (click)="contactRecruiter(contactBox)" *ngIf="isMyOpenPosition()" disabled>Contact</button>
-				<button class="btn btn-secondary btnRight main-btns" (click)="contactRecruiter(contactBox)" *ngIf="!isMyOpenPosition()">Contact</button>
+	<div *ngIf="showDemandDetails" style="margin-left:20px;">
+		<div class="action-buttons">
+			<button class="btn btn-secondary btnRight main-btns" *ngIf="isMyOpenPosition()" (click)="editOpenPosition(activeOpenPosition)">Edit</button>
+			<button class="btn btn-secondary btnRight main-btns" *ngIf="isMyOpenPosition() && confirmDeleteOpenPosition != activeOpenPosition.id"  (click)="deleteMyOpenPosition(activeOpenPosition.id)">Delete</button>
+			<button class="btn btn-secondary btnRight main-btns small-action-btn-confirm-del" *ngIf="isMyOpenPosition() && confirmDeleteOpenPosition === activeOpenPosition.id" (click)="applyDeleteMyOpenPosition(activeOpenPosition.id)">Confirm</button>
+			<button class="btn btn-secondary btnRight main-btns" (click)="showOpenPositions()">Back</button>
+		</div>
+		<div>
+      		<div style="float:left; min-width:300px; margin-top:20px;">
+      			<h1 *ngIf="isMobile" class="listing-view-title">{{activeOpenPosition.positionTitle}}</h1>
+      				<div class="left-box">
+     					<div>
+     						<img class="profile-photo-details" *ngIf="recruiterProfile?.profilePhoto?.imageBytes" id='base64image' src='data:image/jpeg;base64, {{recruiterProfile?.profilePhoto?.imageBytes}}' />
+						<div *ngIf="!recruiterProfile?.profilePhoto?.imageBytes && !isMobile" class="profile-photo-details material-icons person ">
+						<span style="font-size:300px;color:green;">person</span>
+						</div>
+						<br>
+						<br>
+							<button class="btn btn-secondary action-btn main-action_btn main-btns main-bt" style="width:300px;margin-bottom:10px;background:grey;" (click)="contactRecruiter(contactBox)" *ngIf="isMyOpenPosition()" disabled>Contact</button>
+							<button class="btn btn-secondary action-btn main-action_btn main-btns main-bt" style="width:300px;margin-bottom:10px;background:green;" (click)="contactRecruiter(contactBox)" *ngIf="!isMyOpenPosition()">Contact</button>
+						<br>
+     				</div>
+     				
+     				<div class="left-box-title" *ngIf="recruiterProfile">
+      					<h5>Requested By</h5>
+      				</div>
+     				
+     				<div class="left-box" *ngIf="recruiterProfile">
+     					<div class="left-box-body">
+      						<table>
+      							<tr>
+      								<th>Name</th>
+      								<td>{{recruiterProfile.recruiterFirstName}} {{recruiterProfile.recruiterSurname}}</td>
+      							</tr>
+      							<tr>
+      								<th>Company</th>
+      								<td>{{recruiterProfile.companyName}}</td>
+      							</tr>
+      						</table>
+     					</div>
+     				</div>
+     			</div>
+      			<div class="left-box-title">
+      				<h5>Position Details</h5>
+      			</div>
+      						
+				<div class="left-box" *ngIf="activeOpenPosition.country || activeOpenPosition.location">
+					<h5>Location</h5>
+					<div class="left-box-body">
+						<table>
+							<tr *ngIf="activeOpenPosition.country">
+								<th>Country</th>
+								<td>{{getCountryCode(activeOpenPosition.country)}}</td>
+							</tr>
+							<tr *ngIf="activeOpenPosition.location">
+								<th>City</th>
+								<td>{{activeOpenPosition.location}}</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+				<div class="left-box" *ngIf="activeOpenPosition.contractType || activeOpenPosition.startDate || activeOpenPosition.renumeration">
+					<h5>Conditions</h5>
+					<div class="left-box-body">
+						<table>
+							<tr *ngIf="activeOpenPosition.contractType">
+								<th>Contract Type</th>
+								<td>{{getContractType(activeOpenPosition.contractType)}}</td>
+							</tr>
+							<tr *ngIf="activeOpenPosition.startDate">
+								<th>Days On Site</th>
+								<td>{{activeOpenPosition.startDate}}</td>
+							</tr>
+							<tr *ngIf="activeOpenPosition.renumeration">
+								<th>Rate/Salary</th>
+								<td>{{activeOpenPosition.renumeration}}</td>
+							</tr>
+						</table>
+					</div>
+				</div>	
 			</div>
-			<div style='clear:both'>
-				<div style="margin-left:10px;margin-bottom:20px;">
-					<h3>{{activeOpenPosition.created}}: <span class="candidate-title">{{activeOpenPosition.positionTitle}}</span></h3>
+		
+			<div style="float:left;margin-left:10px;min-width:300px;max-width:72%;padding:5px;">
+      			<div class="listing-view-div">
+					<h1 *ngIf="!isMobile" class="listing-view-title">{{activeOpenPosition.positionTitle}}</h1>
+					<h1 *ngIf="isMobile" class="listing-view-title">Description</h1>
 				</div>
-				<div class="open-position-view-div-standard">
-					<h3>Requested By</h3>
-					<table>
-						<tr>
-							<td class="table-hdr-td">Company</td>
-							<td class="table-bdy-td">{{activeOpenPosition.recruiter.companyName}}</td>
-						</tr>
-						<tr>
-							<td class="table-hdr-td">Recruiter</td>
-							<td class="table-bdy-td">{{activeOpenPosition.recruiter.recruiterName}}</td>
-						</tr>
-
-					</table>
+				<div>
+					<div>
+						<pre style="white-space:pre-line;font-family: Roboto, 'Helvetica Neue', sans-serif;">{{activeOpenPosition.description}}</pre>
+					</div>
 				</div>
-				<div class="open-position-view-div-standard">
-					<h3>Location</h3>
-					<table>
-						<tr>
-							<td class="table-hdr-td">Country</td>
-							<td class="table-bdy-td">{{activeOpenPosition.country}}</td>
-						</tr>
-						<tr>
-							<td class="table-hdr-td">Location</td>
-							<td class="table-bdy-td">{{activeOpenPosition.location}}</td>
-						</tr>
-					</table>
-				</div>
-				<div class="open-position-view-div-standard">
-					<h3>Conditions</h3>
-					<table>
-						<tr>
-							<td class="table-hdr-td">Contract Type</td>
-							<td class="table-bdy-td">{{activeOpenPosition.contractType}}</td>
-						</tr>
-						<tr>
-							<td class="table-hdr-td">Salary / Rate</td>
-							<td class="table-bdy-td">{{activeOpenPosition.renumeration}}</td>
-						</tr>
-						<tr>
-							<td class="table-hdr-td">Start Date</td>
-							<td class="table-bdy-td">{{activeOpenPosition.startDate}}</td>
-						</tr>
-					</table>
-				</div>
-				<div class="open-position-view-div-standard">
-					<h3>Submission Details</h3>
-					<p>All applications must be submitted before this date.</p>
-					<table>
-						<tr>
-							<td class="table-hdr-td">Position closes</td>
-							<td class="table-bdy-td">{{activeOpenPosition.positionClosingDate}}</td>
-						</tr>
-					</table>
-				</div>
-				<div class="candidate-view-div">
-					<h3>Description</h3>
-					<pre style="white-space:pre-line;font-family: Roboto, 'Helvetica Neue', sans-serif;padding:10px;">{{activeOpenPosition.description}}</pre>
-				</div>
-				
-				<div class="candidate-view-div">
-					<h3>Recruiter Comments</h3>
-					<p>{{activeOpenPosition.comments}}</p>
+				<div *ngIf="activeOpenPosition.comments">
+					<h1 *ngIf="isMobile" class="listing-view-title">Comments</h1>
+					<div>
+						<pre style="white-space:pre-line;font-family: Roboto, 'Helvetica Neue', sans-serif;">{{activeOpenPosition.comments}}</pre>
+					</div>
 				</div>
 				<div class="candidate-view-div-footer"></div>
 			</div>
