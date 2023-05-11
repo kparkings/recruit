@@ -9,6 +9,9 @@ import { OfferedCandidate }								from './offered-candidate';
 import { OpenPosition }									from './open-position';
 import { Router}										from '@angular/router';
 import { CandidateServiceService }						from '../candidate-service.service';
+import { RecruiterProfileService} 						from '../recruiter-profile.service';
+import { RecruiterProfile }								from '../recruiter-profile/recruiter-profile';
+import { DeviceDetectorService } 						from 'ngx-device-detector';
 
 @Component({
   selector: 'app-recruiter-marketplace',
@@ -19,15 +22,20 @@ export class RecruiterMarketplaceComponent implements OnInit {
 
 	@ViewChild('feedbackBox', { static: false }) private content:any;
 
-	public unseenOfferedCandidates:number = 0;
-	public unseenOpenPositions:number = 0;
+	public unseenOfferedCandidates:number 		= 0;
+	public unseenOpenPositions:number 			= 0;
+	public isMobile:boolean 					= false;
+	public recruiterProfile:RecruiterProfile 	= new RecruiterProfile();
+	
 
-  	constructor(private modalService: 		NgbModal, 
-				private marketplaceService: RecruiterMarketplaceService, 
-				private recruiterService:	RecruiterService,
-				private emailService:		EmailService,
-				private router:				Router,
-				public 	candidateService:			CandidateServiceService) {
+  	constructor(private modalService: 				NgbModal, 
+				private marketplaceService: 		RecruiterMarketplaceService, 
+				private recruiterService:			RecruiterService,
+				private emailService:				EmailService,
+				private router:						Router,
+				public 	candidateService:			CandidateServiceService,
+				private deviceDetector:				DeviceDetectorService,
+				private recruiterProfileService: 	RecruiterProfileService) {
 					
 					this.marketplaceService.fetchUnseenOfferedCandidates().subscribe(val => {
 						this.unseenOfferedCandidates = val;
@@ -39,7 +47,13 @@ export class RecruiterMarketplaceComponent implements OnInit {
 						this.fetchOpenPositions();
 					});
 					
-				 }
+					this.recruiterProfileService.fetchOwnRecruiterProfile().subscribe(rec => {
+					this.recruiterProfile = rec;
+					this.isMobile = deviceDetector.isMobile();
+				
+				});
+					
+	}
 
 	/**
 	* Sets up initial component
@@ -940,5 +954,83 @@ export class RecruiterMarketplaceComponent implements OnInit {
   		
   	}
 	
+
+	/**
+	* Returns the code identifying the country
+	* @param country - Country to get the country code for
+	*/
+	public getCountryCode(country:string):string{
+
+		switch(country){
+			case "NETHERLANDS":{
+				return "The Netherlands";
+			}
+			case "BELGIUM":{
+				return "Belgium";
+			}
+			case "UK":{
+				return "United Kingdom";
+			}
+			case "IRELAND":{
+				return "Ireland";
+			}
+			case "EU_REMOTE":{
+				return "Remote within EU";
+			}
+			case "UK":{
+				return "Remote within World";
+			}
+			default:{
+				return 'NA';
+			}
+		}
+
+  	}
+
+/**
+	* Returns the code identifying the country
+	* @param country - Country to get the country code for
+	*/
+	public getContractType(type:string):string{
+
+		switch(type){
+			case "CONTRACT":{
+				return "Contract";
+			}
+			case "PERM":{
+				return "Permanent";
+			}
+			case "BOTH":{
+				return "Contract/Permanent";
+			}
+			default:{
+				return 'NA';
+			}
+		}
+
+  	}	
+
+	/**
+	* Returns the Humand readable version of the Language
+	* @param country - Language to get the readable version for
+	*/
+	public getLanguage(lang:string):string{
+
+		switch(lang){
+			case "DUTCH":{
+				return "Dutch";
+			}
+			case "FRENCH":{
+				return "French";
+			}
+			case "ENGLISH":{
+				return "English";
+			}
+			default:{
+				return 'NA';
+			}
+		}
+
+  	}	
 
 }
