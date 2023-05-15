@@ -430,7 +430,7 @@
 						</div>
 					</div>
 					<div *ngIf="activeCandidate.comments">
-						<h1 *ngIf="isMobile" class="listing-view-title">Comments</h1>
+						<h1 class="listing-view-title">Comments</h1>
 						<div>
 							<pre style="white-space:pre-line;font-family: Roboto, 'Helvetica Neue', sans-serif;">{{activeCandidate.comments}}</pre>
 						</div>
@@ -736,7 +736,7 @@
 								<td>{{getContractType(activeOpenPosition.contractType)}}</td>
 							</tr>
 							<tr *ngIf="activeOpenPosition.startDate">
-								<th>Days On Site</th>
+								<th>Start Date</th>
 								<td>{{activeOpenPosition.startDate}}</td>
 							</tr>
 							<tr *ngIf="activeOpenPosition.renumeration">
