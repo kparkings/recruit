@@ -272,6 +272,14 @@
 	background:#e8e8e8;
 }
 
+.desc-body{
+	float:left;
+	padding:5px;
+	min-width:310px;
+	max-width:72%;
+	
+}
+
 .left-box table{
 	width:100%;
 }
