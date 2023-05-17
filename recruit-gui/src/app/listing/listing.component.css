@@ -256,6 +256,15 @@
 	min-width:300px;
 	margin-bottom:30px;
 	max-width:300px;
+	width:95%;
+	max-width:360px;
+}
+
+.profile-photo-details{
+	width:100%;
+	height:320px;
+	border:2px solid lightgrey;
+	margin-bottom:10px;
 }
 
 .left-box-body{
@@ -283,11 +292,4 @@
  	display:inline-block;
  	background:green;
  	color:white;
-}
-
-.profile-photo-details{
-	width:300px;
-	height:320px;
-	border:2px solid lightgrey;
-	margin-bottom:10px;
 }
