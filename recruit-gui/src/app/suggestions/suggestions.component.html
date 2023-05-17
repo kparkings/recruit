@@ -197,7 +197,7 @@
 		</div>
 	</div>
 	
-	<div *ngIf="currentView === 'suggested-canidate-overview'" class="suggestion-results" style="width:90%;margin-left:30px;border:1px solid white;">
+	<div *ngIf="currentView === 'suggested-canidate-overview'" class="suggestion-results" style="border:1px solid white;">
 		<div  class="details-left">
 		
 			<img class="profile-photo-details" *ngIf="candidateProfile?.photo?.imageBytes" id='base64image' src='data:image/jpeg;base64, {{candidateProfile?.photo?.imageBytes}}' />
@@ -206,7 +206,7 @@
 			</div>
 			<br>
 			<br>
-			<button class="btn btn-secondary action-btn main-action_btn main-btns main-btn" style="width:300px;margin-bottom:10px;background:green;" (click)="contactCandidate(contactBox)">Contact</button>
+			<button class="btn btn-secondary action-btn main-action_btn main-btns main-btn" style="width:100%;margin-bottom:10px;background:green;" (click)="contactCandidate(contactBox)">Contact</button>
 			<br>
 			<div>
 				<h3>Location</h3>
