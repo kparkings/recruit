@@ -71,6 +71,9 @@ public class ListingEntity {
 	@Column(name="years_experience")
 	private int 				yearsExperience;
 	
+	@Column(name="active")
+	private boolean				active	= true; 
+	
 	@Column(name="language")
 	@Enumerated(EnumType.STRING)
 	@ElementCollection(targetClass=language.class)
@@ -124,6 +127,7 @@ public class ListingEntity {
 		this.rate 				= builder.rate;
 		this.currency 			= builder.currency;
 		this.views 				= builder.views;
+		this.active				= builder.active;
 		
 		this.languages.clear();
 		this.skills.clear();
@@ -272,6 +276,16 @@ public class ListingEntity {
 	}
 	
 	/**
+	* Returns whether the listing is active. A listing will be active
+	* if the owning recruiter has an active account and disabled if the 
+	* listing is not active
+	* @return
+	*/
+	public boolean isActive() {
+		return this.active;
+	}
+	
+	/**
 	* Sets the unique identifier for the Listing
 	* @return Unique identifier for the Listing
 	*/
@@ -350,6 +364,14 @@ public class ListingEntity {
 	*/
 	public void setCountry(country country) {
 		this.country = country;
+	}
+	
+	/**
+	* Sets whether or not the listing is Active
+	* @param active - whether or not the listing is Active
+	*/
+	public void setActive(boolean active) {
+		this.active = active;
 	}
 	
 	/**
@@ -440,6 +462,7 @@ public class ListingEntity {
 		private String 							rate;
 		private currency						currency;
 		private Set<ListingViewedEventEntity> 	views				= new LinkedHashSet<>();
+		private boolean							active;
 		
 		/**
 		* Sets the Unique identifier of the ListingEntity
@@ -615,6 +638,16 @@ public class ListingEntity {
 		}
 		
 		/**
+		* Sets whether or not the Listing is active
+		* @param active - whether or not the Listing is active
+		* @return Builder
+		*/
+		public ListingEntityBuilder active(boolean active){
+			this.active = active;
+			return this;
+		}
+		
+		/**
 		* Returns a new Instance of ListingEntity initialized with the 
 		* values in the Builder
 		* @return new Instance of ListingEntity
@@ -650,6 +683,7 @@ public class ListingEntity {
 			entity.setDescription(listing.getDescription());
 			entity.setCurrency(listing.getCurrency());
 			entity.setCountry(listing.getCountry());
+			entity.setActive(listing.isActive());
 			
 			/**
 			* Views are events and therefore unmodifiable. We do however want to be able to add new 
@@ -689,6 +723,7 @@ public class ListingEntity {
 						.currency(listing.getCurrency())
 						.created(listing.getCreated())
 						.country(listing.getCountry())
+						.active(listing.isActive())
 					.build();
 	}
 	
@@ -718,6 +753,7 @@ public class ListingEntity {
 					.currency(entity.getCurrency())
 					.created(entity.getCreated())
 					.country(entity.getCountry())
+					.active(entity.isActive())
 				.build();
 	}
 	

@@ -30,6 +30,7 @@ public class ListingFilterTest {
 		final listing_type 		type			= listing_type.CONTRACT_ROLE;
 		final country 			countryVal		= country.BELGIUM;
 		final LISTING_AGE		listingAge		= LISTING_AGE.THIS_WEEK;
+		final boolean			active			= false;
 		
 		ListingFilter filter = ListingFilter
 									.builder()
@@ -38,6 +39,7 @@ public class ListingFilterTest {
 										.type(type)
 										.country(countryVal)
 										.listingAge(listingAge)
+										.active(active)
 									.build();
 		
 		assertEquals(filter.getListingId().get(), 	listingId);
@@ -45,6 +47,7 @@ public class ListingFilterTest {
 		assertEquals(filter.getType().get(), 		type);
 		assertEquals(filter.getCountry().get(), 	countryVal);
 		assertEquals(filter.getListingAge().get(), 	listingAge);
+		assertEquals(filter.getActive().get(), 		active);
 		
 	}
 
@@ -64,6 +67,7 @@ public class ListingFilterTest {
 		assertFalse(filter.getType().isPresent());
 		assertFalse(filter.getCountry().isPresent());
 		assertFalse(filter.getListingAge().isPresent());
+		assertFalse(filter.getActive().isPresent());
 	}
 	
 }

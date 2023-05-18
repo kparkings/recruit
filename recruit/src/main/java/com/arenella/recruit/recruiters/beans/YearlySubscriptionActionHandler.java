@@ -89,6 +89,8 @@ public class YearlySubscriptionActionHandler implements RecruiterSubscriptionAct
 				
 				((YearlyRecruiterSubscription)subscription).renewSubscription();
 				
+				this.externEventPublisher.publishRecruiterHasOpenSubscriptionEvent(recruiter.getUserId());
+				
 				return Optional.empty();
 				
 			}

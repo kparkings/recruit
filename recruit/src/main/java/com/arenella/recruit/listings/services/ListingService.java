@@ -61,4 +61,17 @@ public interface ListingService {
 	* @param contactRequest - Details of contactRequest to be Sent
 	*/
 	public void sendContactRequestFomCandidateToListingOwner(CandidateListingContactRequest contactRequest);
+
+	/**
+	* Sets the Listings for the recruiter as being active
+	* @param recruiterId - Id of the recruiter owning the Listings
+	*/
+	public void disableListingsForRecruiter(String recruiterId);
+
+	/**
+	* Sets the Listings for the recruiter as not being active
+	* @param recruiterId - Id of the recruiter owning the Listings
+	*/
+	public void enableListingsForRecruiter(String recruiterId);
+
 }

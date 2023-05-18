@@ -18,6 +18,7 @@ public class ListingFilter {
 	private listing_type 		type;
 	private country 			country;
 	private LISTING_AGE			listingAge;
+	private Boolean				active;
 	
 	/**
 	* Constructor Based upon a Builder
@@ -29,6 +30,7 @@ public class ListingFilter {
 		this.type 			= builder.type;
 		this.country 		= builder.country;
 		this.listingAge		= builder.listingAge;
+		this.active			= builder.active;
 	}
 	
 	/**
@@ -65,10 +67,18 @@ public class ListingFilter {
 	
 	/**
 	* Returns the age to filter on
-	* @return period the listig was posted in
+	* @return period the listing was posted in
 	*/
 	public Optional<LISTING_AGE> getListingAge(){
 		return Optional.ofNullable(this.listingAge);
+	}
+	
+	/**
+	* Returns the active value to filter on
+	* @return if selected to filter on active nor active
+	*/
+	public Optional<Boolean> getActive(){
+		return Optional.ofNullable(this.active);
 	}
 	
 	/**
@@ -90,6 +100,7 @@ public class ListingFilter {
 		private listing_type 		type;
 		private country 			country;
 		private LISTING_AGE			listingAge;
+		private Boolean				active;
 		
 		/**
 		* Unique listingId to filter on
@@ -138,6 +149,16 @@ public class ListingFilter {
 		*/
 		public ListingFilterBuilder listingAge(LISTING_AGE listingAge) {
 			this.listingAge = listingAge;
+			return this;
+		}
+		
+		/**
+		* Sets whether to filter on the active state
+		* @param active - to filter on active / not active
+		* @return Builder
+		*/
+		public ListingFilterBuilder active(boolean active) {
+			this.active = active;
 			return this;
 		}
 		

@@ -3,6 +3,7 @@ package com.arenella.recruit.recruiters.listings.beans;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import java.time.LocalDateTime;
 import java.util.LinkedHashSet;
@@ -48,6 +49,7 @@ public class ListingTest {
 	private final 			String 						rate				= "115.00";
 	private final 			currency					currency			= Listing.currency.EUR;
 	private final 			Set<ListingViewedEvent>		views				= Set.of(ListingViewedEvent.builder().build());
+	private final 			boolean						active				= true;
 	
 	/**
 	* Sets up test environment 
@@ -84,6 +86,7 @@ public class ListingTest {
 								.type(type)
 								.yearsExperience(yearsExperience)
 								.views(views)
+								.active(active)
 							.build();
 		
 		assertEquals(country, 			listing.getCountry());
@@ -105,6 +108,7 @@ public class ListingTest {
 		assertTrue(listing.getLanguages().contains(Listing.language.DUTCH));
 		assertTrue(listing.getLanguages().contains(Listing.language.FRENCH));
 		assertEquals(listing.getLanguages().size(), 2);
+		assertTrue(listing.isActive());
 		
 		assertTrue(listing.getSkills().contains(SKILL_JAVA));
 		assertTrue(listing.getSkills().contains(SKILL_CSHARP));
@@ -142,10 +146,12 @@ public class ListingTest {
 		
 		listing.initializeAsNewListing();
 		listing.setOwnerId(ownerId);
+		listing.setActive(false);
 		
 		assertEquals(ownerId, 				listing.getOwnerId());
 		assertTrue(listing.getListingId() 	instanceof UUID);
 		assertTrue(listing.getCreated() 	instanceof LocalDateTime);
+		assertFalse(listing.isActive());
 		
 	}
 		

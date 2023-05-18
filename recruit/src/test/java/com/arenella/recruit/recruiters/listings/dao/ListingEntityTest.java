@@ -52,7 +52,7 @@ public class ListingEntityTest {
 	private final 			currency						currency			= Listing.currency.EUR;
 	private final 			Set<ListingViewedEventEntity>	entityViews			= Set.of(ListingViewedEventEntity.builder().build());
 	private final 			Set<ListingViewedEvent>			views				= Set.of(ListingViewedEvent.builder().build());
-	
+	private final 			boolean							active				= true;
 	/**
 	* Sets up test environment 
 	*/
@@ -88,6 +88,7 @@ public class ListingEntityTest {
 											.type(type)
 											.yearsExperience(yearsExperience)
 											.views(entityViews)
+											.active(active)
 										.build();
 		
 		assertEquals(country, 			listing.getCountry());
@@ -109,6 +110,7 @@ public class ListingEntityTest {
 		assertTrue(listing.getLanguages().contains(Listing.language.DUTCH));
 		assertTrue(listing.getLanguages().contains(Listing.language.FRENCH));
 		assertEquals(listing.getLanguages().size(), 2);
+		assertTrue(listing.isActive());
 		
 		assertTrue(listing.getSkills().contains(SKILL_JAVA));
 		assertTrue(listing.getSkills().contains(SKILL_CSHARP));
@@ -213,6 +215,7 @@ public class ListingEntityTest {
 					.type(type)
 					.yearsExperience(yearsExperience)
 					.views(views)
+					.active(active)
 				.build();
 		
 			ListingEntity existingEntity	= ListingEntity.builder().listingId(listingId).build();
@@ -239,6 +242,7 @@ public class ListingEntityTest {
 			assertTrue(entity.getLanguages().contains(Listing.language.DUTCH));
 			assertTrue(entity.getLanguages().contains(Listing.language.FRENCH));
 			assertEquals(entity.getLanguages().size(), 2);
+			assertTrue(entity.isActive());
 			
 			assertTrue(entity.getSkills().contains(SKILL_JAVA));
 			assertTrue(entity.getSkills().contains(SKILL_CSHARP));
@@ -361,6 +365,7 @@ public class ListingEntityTest {
 					.type(type)
 					.yearsExperience(yearsExperience)
 					.views(views)
+					.active(active)
 				.build();
 		
 			ListingEntity entity 			= ListingEntity.convertToEntity(listing, Optional.empty());
@@ -384,6 +389,8 @@ public class ListingEntityTest {
 			assertTrue(entity.getLanguages().contains(Listing.language.DUTCH));
 			assertTrue(entity.getLanguages().contains(Listing.language.FRENCH));
 			assertEquals(entity.getLanguages().size(), 2);
+			
+			assertTrue(entity.isActive());
 			
 			assertTrue(entity.getSkills().contains(SKILL_JAVA));
 			assertTrue(entity.getSkills().contains(SKILL_CSHARP));

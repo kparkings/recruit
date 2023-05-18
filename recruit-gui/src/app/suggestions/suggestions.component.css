@@ -111,7 +111,8 @@
 .suggestion-icon{
 	float:left;
 	background:#E8E8E8;
-	width:155px;
+	width:170px;
+	max-width:47%;
 	height:140px;
 	cursor:pointer;
 	margin-left:10px;

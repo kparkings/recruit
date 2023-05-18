@@ -43,7 +43,7 @@ public class RecruiterSubscriptonScheduler {
 	@Autowired
 	private RecruiterDao					recruiterDao;
 	
-	private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+	private final ScheduledExecutorService 	scheduler 			= Executors.newSingleThreadScheduledExecutor();
 	
 	/**
 	* Initiates the schedulting
@@ -97,6 +97,7 @@ public class RecruiterSubscriptonScheduler {
 											RecruiterSubscriptionActionHandler actionHandler = subscriptionFactory.getActionHandlerByType(subscription_type.YEAR_SUBSCRIPTION);
 											
 											try {
+												
 												actionHandler.performAction(recruiter, subscription, subscription_action.END_SUBSCRIPTION, true);
 												
 												recruiterDao.save(RecruiterEntity.convertToEntity(recruiter, recruiterDao.findById(recruiter.getUserId())));

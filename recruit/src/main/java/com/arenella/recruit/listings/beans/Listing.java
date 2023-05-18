@@ -35,6 +35,7 @@ public class Listing {
 	private String 						rate;
 	private currency					currency;
 	private Set<ListingViewedEvent> 	views				= new LinkedHashSet<>();
+	private boolean						active				= true;
 	
 	/**
 	* Constructor based upon a builder
@@ -57,6 +58,7 @@ public class Listing {
 		this.rate 				= builder.rate;
 		this.currency 			= builder.currency;
 		this.views				= builder.views;
+		this.active				= builder.active;
 		
 		this.languages.addAll(builder.languages);
 		this.skills.addAll(builder.skills);
@@ -203,6 +205,16 @@ public class Listing {
 	}
 	
 	/**
+	* Returns whether the listing is active. A listing will be active
+	* if the owning recruiter has an active account and disabled if the 
+	* listing is not active
+	* @return
+	*/
+	public boolean isActive() {
+		return this.active;
+	}
+	
+	/**
 	* Generates a unique Id for the Listing and sets
 	* the created data
 	*/
@@ -217,6 +229,14 @@ public class Listing {
 	*/
 	public void setOwnerId(String ownerId) {
 		this.ownerId = ownerId;
+	}
+	
+	/**
+	* Sets whether the Listing is active or not
+	* @param ownerId - Whether the Listing is active or not
+	*/
+	public void setActive(boolean active) {
+		this.active = active;
 	}
 	
 	/**
@@ -250,6 +270,7 @@ public class Listing {
 		private String 						rate;
 		private currency					currency;
 		private Set<ListingViewedEvent>		views				= new LinkedHashSet<>();
+		private boolean						active				= true;
 		
 		/**
 		* Sets the Unique Identifier for the Listing
@@ -423,6 +444,16 @@ public class Listing {
 		*/
 		public ListingBuilder views(Set<ListingViewedEvent> views) {
 			this.views = views;
+			return this;
+		}
+		
+		/**
+		* Sets whether or not the Listing is active
+		* @param active - whether or not the Listing is active
+		* @return Builder
+		*/
+		public ListingBuilder active(boolean active){
+			this.active = active;
 			return this;
 		}
 		

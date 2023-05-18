@@ -2,6 +2,7 @@ package com.arenella.recruit.listings.services;
 
 import java.io.IOException;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -209,6 +210,38 @@ public class ListingServiceImpl implements ListingService{
 		}catch(IOException e) {
 			throw new RuntimeException("Unable to send request"); 
 		}
+	}
+	
+	/**
+	* Refer to the Listing interface for details
+	*/
+	@Override
+	public void disableListingsForRecruiter(String recruiterId) {
+		
+		ListingFilter filters = ListingFilter.builder().ownerId(recruiterId).build();
+		
+		Set<Listing> listings = this.listingDao.findAllListings(filters);
+		
+		listings.stream().forEach(l -> l.setActive(false));
+		
+		this.listingDao.saveListings(listings);
+		
+	}
+
+	/**
+	* Refer to the Listing interface for details
+	*/
+	@Override
+	public void enableListingsForRecruiter(String recruiterId) {
+		
+		ListingFilter filters = ListingFilter.builder().ownerId(recruiterId).build();
+		
+		Set<Listing> listings = this.listingDao.findAllListings(filters);
+		
+		listings.stream().forEach(l -> l.setActive(true));
+		
+		this.listingDao.saveListings(listings);
+		
 	}
 	
 	/**

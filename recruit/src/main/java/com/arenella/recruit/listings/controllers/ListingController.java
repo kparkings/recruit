@@ -98,6 +98,7 @@ public class ListingController {
 				.builder()
 					.ownerId(recruiterId)
 					.listingAge(listingAge)
+					.active(true)
 				.build();
 		
 		return service.fetchListings(filters, pageable).map(listing -> ListingAPIOutbound.convertFromListing(listing));	
@@ -119,6 +120,7 @@ public class ListingController {
 				.builder()
 					.type(listingType)
 					.listingAge(listingAge)
+					.active(true)
 				.build();
 
 		return service.fetchListings(filters, pageable).map(listing -> ListingAPIOutboundPublic.convertFromListing(listing));	

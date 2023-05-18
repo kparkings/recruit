@@ -42,10 +42,13 @@ import com.arenella.recruit.emailservice.beans.Email.Sender.SenderType;
 public class RecruitersMonolithExternalEventPublisher implements RecruitersExternalEventPublisher{
 
 	@Autowired
-	private AuthenticationExternalEventListener authenticationExternalEventListener;
+	private AuthenticationExternalEventListener 	authenticationExternalEventListener;
 	
 	@Autowired
-	private EmailServiceExternalEventListener emailServiceExternalEventListener;
+	private EmailServiceExternalEventListener 		emailServiceExternalEventListener;
+	
+	@Autowired
+	private ListingsExternalEventListener 			listingExternalEventListener;
 	
 	/**
 	* Refer to the ExternalEventPublisher interface for details 
@@ -62,6 +65,7 @@ public class RecruitersMonolithExternalEventPublisher implements RecruitersExter
 	@Override
 	public void publishRecruiterNoOpenSubscriptionsEvent(String recruiterId) {
 		this.authenticationExternalEventListener.listenForRecruiterNoOpenSubscriptionsEvent(new RecruiterNoOpenSubscriptionEvent(recruiterId));
+		this.listingExternalEventListener.listenForRecruiterNoOpenSubscriptionsEvent(new RecruiterNoOpenSubscriptionEvent(recruiterId));
 	}
 
 	/**
@@ -70,6 +74,7 @@ public class RecruitersMonolithExternalEventPublisher implements RecruitersExter
 	@Override
 	public void publishRecruiterHasOpenSubscriptionEvent(String recruiterId) {
 		this.authenticationExternalEventListener.listenForRecruiterHasOpenSubscriptionEvent(new RecruiterHasOpenSubscriptionEvent(recruiterId));
+		this.listingExternalEventListener.listenForRecruiterHasOpenSubscriptionsEvent(new RecruiterHasOpenSubscriptionEvent(recruiterId));
 	}
 
 	/**

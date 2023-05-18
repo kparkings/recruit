@@ -4,7 +4,9 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -37,6 +39,24 @@ public interface ListingDao extends CrudRepository<ListingEntity, UUID>, JpaSpec
 	*/
 	public default Page<ListingEntity> findAll(ListingFilter filterOptions, Pageable pageable) {
 		return this.findAll(new FilterSpecification(filterOptions), pageable);
+	}
+	
+	/**
+	* Returns all listing matching the filters 
+	* @param filterOptions - Filter values to apply to the search results
+	* @param pageable - Pagination information
+	* @return results
+	*/
+	public default Set<Listing> findAllListings(ListingFilter filterOptions) {
+		return this.findAll(new FilterSpecification(filterOptions)).stream().map(l -> ListingEntity.convertFromEntity(l)).collect(Collectors.toSet());
+	}
+	
+	/**
+	* Converts domain to entity and persists
+	* @param listings
+	*/
+	public default void saveListings(Set<Listing> listings) {
+		this.saveAll(listings.stream().map(l -> ListingEntity.convertToEntity(l, Optional.empty())).collect(Collectors.toSet()));
 	}
 	
 	/**
@@ -151,6 +171,14 @@ public interface ListingDao extends CrudRepository<ListingEntity, UUID>, JpaSpec
 			if (this.filterOptions.getCountry().isPresent()) {
 				Expression<String> countryExpression = root.get("country");
 				predicates.add(criteriaBuilder.equal(countryExpression, this.filterOptions.getCountry().get()));
+			}
+			
+			/**
+			* Only return active Listings 
+			*/
+			if (this.filterOptions.getActive().isPresent()) {
+				Expression<Boolean> activeExpression = root.get("active");
+				predicates.add(criteriaBuilder.equal(activeExpression, this.filterOptions.getActive().get()));
 			}
 			
 			/**

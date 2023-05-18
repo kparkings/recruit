@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 import org.junit.jupiter.api.Assertions;
@@ -537,4 +538,55 @@ public class ListingServiceImplTest {
 		assertEquals(senderName, 			capt.getValue().getSenderName());
 		
 	}
+	
+	/**
+	* Tests activating of Listings for a Recruiter
+	* @throws Exception
+	*/
+	@Test
+	public void testEnableListingsForRecruiter() throws Exception{
+		
+		final String recruiterId = "kparkings01";
+		
+		Set<Listing> listings = Set.of(Listing.builder().active(false).build(), Listing.builder().active(false).build());
+		
+		@SuppressWarnings("unchecked")
+		ArgumentCaptor<Set<Listing>> listingArgCapt = ArgumentCaptor.forClass(Set.class);
+		
+		Mockito.when(this.mockListingDao.findAllListings(Mockito.any())).thenReturn(listings);
+		Mockito.doNothing().when(this.mockListingDao).saveListings(listingArgCapt.capture());
+		
+		this.service.enableListingsForRecruiter(recruiterId);
+		
+		Mockito.verify(this.mockListingDao).saveListings(Mockito.anySet());
+		
+		listingArgCapt.getValue().stream().forEach(l -> Assertions.assertTrue(l.isActive()));
+		
+	}
+	
+	/**
+	* Tests activating of Listings for a Recruiter
+	* @throws Exception
+	*/
+	@Test
+	public void testDisableListingsForRecruiter() throws Exception{
+		
+		final String recruiterId = "kparkings01";
+		
+		Set<Listing> listings = Set.of(Listing.builder().active(true).build(), Listing.builder().active(true).build());
+		
+		@SuppressWarnings("unchecked")
+		ArgumentCaptor<Set<Listing>> listingArgCapt = ArgumentCaptor.forClass(Set.class);
+		
+		Mockito.when(this.mockListingDao.findAllListings(Mockito.any())).thenReturn(listings);
+		Mockito.doNothing().when(this.mockListingDao).saveListings(listingArgCapt.capture());
+		
+		this.service.disableListingsForRecruiter(recruiterId);
+		
+		Mockito.verify(this.mockListingDao).saveListings(Mockito.anySet());
+		
+		listingArgCapt.getValue().stream().forEach(l -> Assertions.assertFalse(l.isActive()));
+		
+	}
+	
 }
