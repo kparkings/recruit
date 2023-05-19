@@ -502,4 +502,72 @@ public class SupplyAndDemandServiceImplTest {
 		
 	}
 	
+	/**
+	* Tests disabling of OpenPositions and OfferedCandidates belonging to a Recruiter
+	* @throws Exception
+	*/
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testDisableSupplyAndDemandPostsForRecruiter() throws Exception{
+		
+		final String recruiterId = "rec222";
+		final Set<OfferedCandidate> ocs = Set.of(OfferedCandidate.builder().active(true).build(), OfferedCandidate.builder().active(true).build());
+		final Set<OpenPosition> 	ops = Set.of(OpenPosition.builder().active(true).build(), OpenPosition.builder().active(true).build(), OpenPosition.builder().active(true).build());
+		
+		ArgumentCaptor<Set<OfferedCandidate>> 	argCaptOcs = ArgumentCaptor.forClass(Set.class);
+		ArgumentCaptor<Set<OpenPosition>> 		argCaptOps = ArgumentCaptor.forClass(Set.class);
+		
+		Mockito.when(this.mockOfferedCandidateDao.findAllOfferedCandidatesByRecruiterId(Mockito.anyString())).thenReturn(ocs);
+		Mockito.when(this.mockOpenPositionDao.findAllOpenPositionsByRecruiterId(Mockito.anyString())).thenReturn(ops);
+		
+		Mockito.doNothing().when(this.mockOfferedCandidateDao).persistOfferedCandidates(argCaptOcs.capture());
+		Mockito.doNothing().when(this.mockOpenPositionDao).persistOpenPositions(argCaptOps.capture());
+		
+		this.service.disableSupplyAndDemandPostsForRecruiter(recruiterId);
+		
+		Mockito.verify(this.mockOfferedCandidateDao).persistOfferedCandidates(Mockito.anySet());
+		Mockito.verify(this.mockOpenPositionDao).persistOpenPositions(Mockito.anySet());
+		
+		assertEquals(2, argCaptOcs.getValue().size());
+		assertEquals(3, argCaptOps.getValue().size());
+		
+		argCaptOcs.getValue().stream().forEach(oc -> Assertions.assertFalse(oc.isActive()));
+		argCaptOps.getValue().stream().forEach(op -> Assertions.assertFalse(op.isActive()));
+		
+	}
+	
+	/**
+	* Tests disabling of OpenPositions and OfferedCandidates belonging to a Recruiter
+	* @throws Exception
+	*/
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testEnableSupplyAndDemandPostsForRecruiter() throws Exception{
+		
+		final String recruiterId = "rec222";
+		final Set<OfferedCandidate> ocs = Set.of(OfferedCandidate.builder().active(false).build(), OfferedCandidate.builder().active(false).build());
+		final Set<OpenPosition> 	ops = Set.of(OpenPosition.builder().active(false).build(), OpenPosition.builder().active(false).build(), OpenPosition.builder().active(false).build());
+		
+		ArgumentCaptor<Set<OfferedCandidate>> 	argCaptOcs = ArgumentCaptor.forClass(Set.class);
+		ArgumentCaptor<Set<OpenPosition>> 		argCaptOps = ArgumentCaptor.forClass(Set.class);
+		
+		Mockito.when(this.mockOfferedCandidateDao.findAllOfferedCandidatesByRecruiterId(Mockito.anyString())).thenReturn(ocs);
+		Mockito.when(this.mockOpenPositionDao.findAllOpenPositionsByRecruiterId(Mockito.anyString())).thenReturn(ops);
+		
+		Mockito.doNothing().when(this.mockOfferedCandidateDao).persistOfferedCandidates(argCaptOcs.capture());
+		Mockito.doNothing().when(this.mockOpenPositionDao).persistOpenPositions(argCaptOps.capture());
+		
+		this.service.enableSupplyAndDemandPostsForRecruiter(recruiterId);
+		
+		Mockito.verify(this.mockOfferedCandidateDao).persistOfferedCandidates(Mockito.anySet());
+		Mockito.verify(this.mockOpenPositionDao).persistOpenPositions(Mockito.anySet());
+		
+		assertEquals(2, argCaptOcs.getValue().size());
+		assertEquals(3, argCaptOps.getValue().size());
+		
+		argCaptOcs.getValue().stream().forEach(oc -> Assertions.assertTrue(oc.isActive()));
+		argCaptOps.getValue().stream().forEach(op -> Assertions.assertTrue(op.isActive()));
+		
+	}
+	
 }

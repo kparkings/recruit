@@ -36,6 +36,7 @@ public class OfferedCandidate {
 	private Set<LANGUAGE>				spokenLanguages			= new HashSet<>();
 	private String 						comments;
 	private LocalDate					created;
+	private boolean						active					= true;
 	
 	/**
 	* Constructor based upon a Builder
@@ -58,6 +59,7 @@ public class OfferedCandidate {
 		this.spokenLanguages 		= builder.spokenLanguages;
 		this.comments 				= builder.comments;
 		this.created				= builder.created;
+		this.active				 	= builder.active;
 		
 	}
 	
@@ -110,7 +112,7 @@ public class OfferedCandidate {
 	}
 	
 	/**
-	* Returns the location ( city / region ) where the Candidate is avaialbel 
+	* Returns the location ( city / region ) where the Candidate is available 
 	* for work
 	* @return Location where the Candidate can work
 	*/
@@ -192,10 +194,28 @@ public class OfferedCandidate {
 	
 	/**
 	* Returns the date the OfferedCandidate was created
-	* @return when the Offered Candiate was created
+	* @return when the Offered Candidate was created
 	*/
 	public LocalDate getCreated() {
 		return this.created;
+	}
+	
+	/**
+	* Returns whether or not the OfferedCandidate is active
+	* @return whether or not the OfferedCandidate is active
+	*/
+	public boolean isActive() {
+		return this.active;
+	}
+	
+	/**
+	* Sets whether or not the Offered Candidate is active or not
+	* Only active candidates will be displayed to users
+	* @param active
+	* @return
+	*/
+	public void setActive(boolean active) {
+		this.active = active;
 	}
 	
 	/**
@@ -228,6 +248,7 @@ public class OfferedCandidate {
 		private Set<LANGUAGE>				spokenLanguages			= new HashSet<>();
 		private String 						comments;
 		private LocalDate					created;
+		private boolean						active					= true;
 		
 		/**
 		* Sets the unique Id of the offered Candidate
@@ -407,6 +428,18 @@ public class OfferedCandidate {
 		public OfferedCandidateAPIInboundBuilder comments(String comments) {
 			
 			this.comments = comments;
+			
+			return this;
+		}
+		
+		/**
+		* Sets whether or not the OfferedCandidate is active
+		* @param active - Whether or not the OfferedCandidate is Active
+		* @return Builder
+		*/
+		public OfferedCandidateAPIInboundBuilder active(boolean active) {
+			
+			this.active = active;
 			
 			return this;
 		}

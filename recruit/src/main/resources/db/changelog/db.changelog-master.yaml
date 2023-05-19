@@ -1756,5 +1756,29 @@ databaseChangeLog:
                 constraints:
                   nullable: true
                   default: true
-                  
+  - changeSet:
+      id: addColumn-active_to_supply_and_demand
+      author: kevin
+      changes:
+        - addColumn:
+            tableName: offered_candidates
+            schemaName: recruiter
+            columns:
+            - column:
+                name: active
+                type: boolean
+                constraints:
+                  nullable: true
+                  default: true
+        - addColumn:
+            tableName: open_positions
+            schemaName: recruiter
+            columns:
+            - column:
+                name: active
+                type: boolean
+                constraints:
+                  nullable: true
+                  default: true                  
+                
                 

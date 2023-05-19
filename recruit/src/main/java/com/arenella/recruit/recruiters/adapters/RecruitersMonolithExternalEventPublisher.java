@@ -50,6 +50,9 @@ public class RecruitersMonolithExternalEventPublisher implements RecruitersExter
 	@Autowired
 	private ListingsExternalEventListener 			listingExternalEventListener;
 	
+	@Autowired
+	private RecruitersExternalEventListener			RecruitersInternalEventListener;
+	
 	/**
 	* Refer to the ExternalEventPublisher interface for details 
 	*/
@@ -66,6 +69,7 @@ public class RecruitersMonolithExternalEventPublisher implements RecruitersExter
 	public void publishRecruiterNoOpenSubscriptionsEvent(String recruiterId) {
 		this.authenticationExternalEventListener.listenForRecruiterNoOpenSubscriptionsEvent(new RecruiterNoOpenSubscriptionEvent(recruiterId));
 		this.listingExternalEventListener.listenForRecruiterNoOpenSubscriptionsEvent(new RecruiterNoOpenSubscriptionEvent(recruiterId));
+		this.RecruitersInternalEventListener.listenForRecruiterNoOpenSubscriptionsEvent(new RecruiterNoOpenSubscriptionEvent(recruiterId));
 	}
 
 	/**
@@ -75,6 +79,7 @@ public class RecruitersMonolithExternalEventPublisher implements RecruitersExter
 	public void publishRecruiterHasOpenSubscriptionEvent(String recruiterId) {
 		this.authenticationExternalEventListener.listenForRecruiterHasOpenSubscriptionEvent(new RecruiterHasOpenSubscriptionEvent(recruiterId));
 		this.listingExternalEventListener.listenForRecruiterHasOpenSubscriptionsEvent(new RecruiterHasOpenSubscriptionEvent(recruiterId));
+		this.RecruitersInternalEventListener.listenForRecruiterHasOpenSubscriptionsEvent(new RecruiterHasOpenSubscriptionEvent(recruiterId));
 	}
 
 	/**

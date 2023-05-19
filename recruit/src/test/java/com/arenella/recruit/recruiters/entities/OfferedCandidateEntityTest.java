@@ -1,6 +1,7 @@
 package com.arenella.recruit.recruiters.entities;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -37,6 +38,7 @@ public class OfferedCandidateEntityTest {
 	private static final Set<LANGUAGE>	SPOKEN_LANGUAGES		= new HashSet<>();
 	private static final String 		COMMENTS			 	= "Some additional commment from recruiter";
 	private static final LocalDate		CREATED					= LocalDate.of(2022, 8, 15);
+	private static final boolean		ACTIVE				 	= false;
 	
 	/**
 	* Tests construction via a Builder
@@ -63,6 +65,7 @@ public class OfferedCandidateEntityTest {
 					.renumeration(RENUMERATION)
 					.spokenLanguages(SPOKEN_LANGUAGES)
 					.yearsExperience(YEARS_EXPERIENCE)	
+					.active(ACTIVE)
 				.build();
 		
 		assertEquals(ID,					entity.getId());			
@@ -80,6 +83,8 @@ public class OfferedCandidateEntityTest {
 		assertEquals(SPOKEN_LANGUAGES,		entity.getSpokenLanguages());
 		assertEquals(COMMENTS,				entity.getComments());
 		assertEquals(CREATED,				entity.getCreated());
+		
+		assertFalse(entity.isActive());
 		
 	}
 	
@@ -106,6 +111,7 @@ public class OfferedCandidateEntityTest {
 				.renumeration(RENUMERATION)
 				.spokenLanguages(SPOKEN_LANGUAGES)
 				.yearsExperience(YEARS_EXPERIENCE)
+				.active(ACTIVE)
 				.build();
 		
 		OfferedCandidateEntity.convertToEntity(candidate, Optional.empty());
@@ -125,6 +131,8 @@ public class OfferedCandidateEntityTest {
 		assertEquals(SPOKEN_LANGUAGES,		candidate.getspokenLanguages());
 		assertEquals(COMMENTS,				candidate.getcomments());
 		assertEquals(CREATED,				candidate.getCreated());
+		
+		assertFalse(candidate.isActive());
 		
 	}
 	
@@ -156,6 +164,7 @@ public class OfferedCandidateEntityTest {
 				.renumeration(RENUMERATION)
 				.spokenLanguages(SPOKEN_LANGUAGES)
 				.yearsExperience(YEARS_EXPERIENCE)
+				.active(ACTIVE)
 				.build();
 		
 		OfferedCandidateEntity originalEntity =
@@ -164,6 +173,7 @@ public class OfferedCandidateEntityTest {
 						.id(originalId)
 						.recruiterId(originalRecruiterId)
 						.created(originalCreated)
+						.active(true)
 					.build();
 		
 		OfferedCandidateEntity updated = OfferedCandidateEntity.convertToEntity(candidate, Optional.of(originalEntity));
@@ -183,6 +193,8 @@ public class OfferedCandidateEntityTest {
 		assertEquals(SPOKEN_LANGUAGES,		updated.getSpokenLanguages());
 		assertEquals(COMMENTS,				updated.getComments());
 		assertEquals(originalCreated,		updated.getCreated());
+		
+		assertFalse(candidate.isActive());
 		
 	}
 
@@ -211,6 +223,7 @@ public class OfferedCandidateEntityTest {
 					.renumeration(RENUMERATION)
 					.spokenLanguages(SPOKEN_LANGUAGES)
 					.yearsExperience(YEARS_EXPERIENCE)	
+					.active(ACTIVE)
 				.build();
 		
 		OfferedCandidate domain = OfferedCandidateEntity.convertFromEntity(entity); 
@@ -230,6 +243,8 @@ public class OfferedCandidateEntityTest {
 		assertEquals(SPOKEN_LANGUAGES,		domain.getspokenLanguages());
 		assertEquals(COMMENTS,				domain.getcomments());
 		assertEquals(CREATED,				domain.getCreated());
+		
+		assertFalse(domain.isActive());
 		
 	}
 	

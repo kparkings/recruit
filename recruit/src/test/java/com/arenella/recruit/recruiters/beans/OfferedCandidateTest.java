@@ -1,8 +1,10 @@
 package com.arenella.recruit.recruiters.beans;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDate;
 import java.util.Set;
@@ -37,6 +39,7 @@ public class OfferedCandidateTest {
 	private static final Set<LANGUAGE>	SPOKEN_LANGUAGES		= Set.of(LANGUAGE.DUTCH, LANGUAGE.FRENCH);
 	private static final String 		COMMENTS 				= "Candiadte preferes 32 hours per week over 4 days";
 	private static final LocalDate		CREATED 				= LocalDate.of(2022, 9, 16);
+	private static final boolean		ACTIVE					= false;
 	
 	/**
 	* Tests construction via the Builder
@@ -61,6 +64,7 @@ public class OfferedCandidateTest {
 				.renumeration(RENUMERATION)
 				.spokenLanguages(SPOKEN_LANGUAGES)
 				.yearsExperience(YEARS_EXPERIENCE)
+				.active(ACTIVE)
 				.build();
 		
 		assertEquals(ID, 					candidate.getId());
@@ -78,6 +82,8 @@ public class OfferedCandidateTest {
 		assertEquals(SPOKEN_LANGUAGES,		candidate.getspokenLanguages());
 		assertEquals(COMMENTS,				candidate.getcomments());
 		assertEquals(CREATED,				candidate.getCreated());
+		
+		assertFalse(candidate.isActive());
 		
 	}
 	
@@ -99,6 +105,22 @@ public class OfferedCandidateTest {
 	}
 	
 	/**
+	* Tests the setters
+	*/
+	@Test
+	public void testSetters() throws Exception{
+		
+		OfferedCandidate candidate = OfferedCandidate.builder().build();
+		
+		assertTrue(candidate.isActive());
+		
+		candidate.setActive(false);
+		
+		assertFalse(candidate.isActive());
+		
+	}
+	
+	/**
 	* Tests the successful initialization of an OfferedCandidate
 	*/
 	@Test
@@ -114,6 +136,7 @@ public class OfferedCandidateTest {
 		assertNotNull(candidate.getId());
 		assertEquals(RECRUITER_ID, 			candidate.getRecruiterId());
 		assertNotNull(candidate.getCreated());
+		assertTrue(candidate.isActive());
 			
 	}
 	

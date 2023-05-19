@@ -140,5 +140,17 @@ public interface SupplyAndDemandService {
 	* @return -Posts viewed
 	*/
 	public Set<UUID> fetchViewedEventsByRecruiter(EventType type, String recruiterId);
+
+	/**
+	* Disables all the SupplyAndDemand posts owned by a specific Recruiter
+	* @param geRecruiterId - Unique id of the Recruiter
+	*/
+	public void disableSupplyAndDemandPostsForRecruiter(String geRecruiterId);
+
+	/**
+	* Enables all the SupplyAndDemand posts owned by a specific Recruiter
+	* @param geRecruiterId - Unique id of the Recruiter
+	*/
+	public void enableSupplyAndDemandPostsForRecruiter(String geRecruiterId);
 	
 }

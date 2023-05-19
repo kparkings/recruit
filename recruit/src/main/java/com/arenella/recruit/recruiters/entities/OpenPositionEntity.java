@@ -61,6 +61,9 @@ public class OpenPositionEntity {
 	@Column(name="created")
 	private LocalDate					created;
 	
+	@Column(name="active")
+	private boolean						active						= true;
+	
 	/**
 	* Constructor based upon a Builder
 	* @param builder - Contains initialization values
@@ -79,6 +82,7 @@ public class OpenPositionEntity {
 		this.description 					= builder.description;
 		this.comments 						= builder.comments;
 		this.created						= builder.created;
+		this.active							= builder.active;
 		
 		if (Optional.ofNullable(created).isEmpty()) {
 			this.created = LocalDate.now();
@@ -193,6 +197,14 @@ public class OpenPositionEntity {
 	}
 	
 	/**
+	* Returns whether or not it is active
+	* @return whether or not it is active
+	*/
+	public boolean isActive() {
+		return this.active;
+	}
+	
+	/**
 	* Sets the unique Id of the Object to a 
 	* random UUID to make it a new OpenPosition and 
 	* sets the id of the recruiter that owns the OpenPosition
@@ -229,6 +241,7 @@ public class OpenPositionEntity {
 		private String 						description;
 		private String 						comments;
 		private LocalDate					created;
+		private boolean						active						= true;
 		
 		/**
 		* Sets the Unique Identifier for the Open Position
@@ -354,6 +367,16 @@ public class OpenPositionEntity {
 		}
 		
 		/**
+		* Sets whether or not the OpenPosition is active
+		* @param active - whether or not the OfferedCandidate is active
+		* @return Builder
+		*/
+		public OpenPositionEntityBuilder active(boolean active){
+			this.active = active;
+			return this;
+		}
+		
+		/**
 		* Returns an instance of OpenPositionEntityBuilder initalized with 
 		* the values in the Builder
 		* @return Builder
@@ -384,6 +407,7 @@ public class OpenPositionEntity {
 						.renumeration(entity.getRenumeration())
 						.startDate(entity.getStartDate())
 						.created(entity.getCreated())
+						.active(entity.isActive())
 					.build();
 	}
 	
@@ -408,6 +432,7 @@ public class OpenPositionEntity {
 			originalEntity.positionClosingDate 	= openPosition.getPositionClosingDate();
 			originalEntity.description 			= openPosition.getDescription();
 			originalEntity.comments 			= openPosition.getComments();
+			originalEntity.active				= openPosition.isActive();
 			
 			return originalEntity; 
 		}
@@ -425,6 +450,7 @@ public class OpenPositionEntity {
 								.recruiterId(openPosition.getRecruiterId())
 								.renumeration(openPosition.getRenumeration())
 								.startDate(openPosition.getStartDate())
+								.active(openPosition.isActive())
 							.build();
 	}
 	

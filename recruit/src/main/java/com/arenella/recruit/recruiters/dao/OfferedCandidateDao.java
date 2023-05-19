@@ -18,6 +18,14 @@ import com.arenella.recruit.recruiters.entities.OfferedCandidateEntity;
 public interface OfferedCandidateDao extends CrudRepository<OfferedCandidateEntity, UUID>{
 	
 	/**
+	* Persists a Set of OpenPositions
+	* @param openPositions - OpenPositions to persist
+	*/
+	default void persistOfferedCandidates(Set<OfferedCandidate> offeredCandidates) {
+		this.saveAll(offeredCandidates.stream().map(op -> OfferedCandidateEntity.convertToEntity(op, Optional.empty())).collect(Collectors.toSet()));
+	}
+	
+	/**
 	* Returns an existing OfferedCandidate
 	* @param offeredCandidateId - Unique identifier of OfferedCandidate to return
 	* @return offeredCandidate
@@ -59,6 +67,7 @@ public interface OfferedCandidateDao extends CrudRepository<OfferedCandidateEnti
 	default Set<OfferedCandidate> findAllOfferedCandidates(){
 		return  StreamSupport
 			.stream(this.findAll().spliterator(), false)
+			.filter(oc -> oc.isActive() == true)
 			.sorted(Comparator.comparing(OfferedCandidateEntity::getCreated).reversed())
 			.map(entity -> OfferedCandidateEntity.convertFromEntity(entity))
 			.collect(Collectors.toCollection(LinkedHashSet::new));

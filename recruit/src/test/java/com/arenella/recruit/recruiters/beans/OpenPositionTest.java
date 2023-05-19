@@ -2,6 +2,7 @@ package com.arenella.recruit.recruiters.beans;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.time.LocalDate;
@@ -30,6 +31,7 @@ public class OpenPositionTest {
 	private String 			description			 	= "Some long descriptive text";
 	private String 			comments				= "Some comments fromt he Recruiter";
 	private LocalDate		created					= LocalDate.of(2022, 9, 26);
+	private boolean			active					= false;
 	
 	/**
 	* Tests creation via Builder
@@ -52,6 +54,7 @@ public class OpenPositionTest {
 					.renumeration(renumeration)
 					.startDate(startDate)
 					.created(created)
+					.active(active)
 				.build();
 		
 		assertEquals(position.getComments(), 				comments);
@@ -66,6 +69,26 @@ public class OpenPositionTest {
 		assertEquals(position.getRenumeration(), 			renumeration);
 		assertEquals(position.getStartDate(), 				startDate);
 		assertEquals(position.getCreated(), 				created);
+		assertFalse(position.isActive());
+		
+	}
+	
+	/**
+	* Tests setters set values correctly
+	* @throws Exception
+	*/
+	@Test
+	public void testSetters() throws Exception{
+		
+		OpenPosition position = OpenPosition
+				.builder()
+				.build();
+		
+		assertTrue(position.isActive());
+		
+		position.setActive(false);
+		
+		assertFalse(position.isActive());
 		
 	}
 	
@@ -87,6 +110,8 @@ public class OpenPositionTest {
 		
 		assertTrue(position.getId() instanceof UUID);
 		assertEquals(position.getRecruiterId(), recruiterId);
+		
+		assertTrue(position.isActive());
 		
 	}
 	

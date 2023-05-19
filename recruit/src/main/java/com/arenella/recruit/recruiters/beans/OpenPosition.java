@@ -25,6 +25,7 @@ public class OpenPosition {
 	private String 						description;
 	private String 						comments;
 	private LocalDate 					created;
+	private boolean						active					= true;
 	
 	/**
 	* Constructor based upon a Builder
@@ -44,6 +45,7 @@ public class OpenPosition {
 		this.description 					= builder.description;
 		this.comments 						= builder.comments;
 		this.created						= builder.created;
+		this.active						 	= builder.active;
 	}
 	
 	/**
@@ -146,6 +148,23 @@ public class OpenPosition {
 	}
 	
 	/**
+	* Returns whether or not the Open Position 
+	* is active or disabled
+	* @return whether or not the Open position is active or disabled
+	*/
+	public boolean isActive() {
+		return this.active;
+	}
+	
+	/**
+	* Sets whether or not the Open position is active or disabled
+	* @param active - whether or not the Open position is active or disabled
+	*/
+	public void setActive(boolean active) {
+		this.active = active;
+	}
+	
+	/**
 	* Sets the unique Id of the Object to a 
 	* random UUID to make it a new OpenPosition and 
 	* sets the id of the recruiter that owns the OpenPosition
@@ -182,6 +201,7 @@ public class OpenPosition {
 		private String 						description;
 		private String 						comments;
 		private LocalDate					created;
+		private boolean						active					= true;
 		
 		/**
 		* Sets the Unique Identifier for the Open Position
@@ -303,6 +323,16 @@ public class OpenPosition {
 		*/
 		public OpenPositionBuilder created(LocalDate created){
 			this.created = created;
+			return this;
+		}
+		
+		/**
+		* Sets whether or not the Open position is active or disabled
+		* @param active - whether or not the Open position is active or disabled
+		* @return Builder
+		*/
+		public OpenPositionBuilder active(boolean active){
+			this.active = active;
 			return this;
 		}
 		

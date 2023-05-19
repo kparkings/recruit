@@ -84,6 +84,9 @@ public class OfferedCandidateEntity {
 	@Column(name="created")
 	private LocalDate					created;
 	
+	@Column(name="active")
+	private boolean						active				 	= true;
+	
 	/**
 	* Default Constructor
 	*/
@@ -111,6 +114,7 @@ public class OfferedCandidateEntity {
 		this.spokenLanguages 		= builder.spokenLanguages;
 		this.comments 				= builder.comments;
 		this.created 				= builder.created;
+		this.active					= builder.active;
 		
 	}
 	
@@ -235,6 +239,14 @@ public class OfferedCandidateEntity {
 	}
 	
 	/**
+	* Returns whether or not it is active
+	* @return whether or not it is active
+	*/
+	public boolean isActive() {
+		return this.active;
+	}
+	
+	/**
 	* Returns a Builder for the OfferedCandidateEntity class
 	* @return Builder
 	*/
@@ -263,6 +275,7 @@ public class OfferedCandidateEntity {
 		private Set<LANGUAGE>				spokenLanguages			= new HashSet<>();
 		private String 						comments;
 		private LocalDate					created;
+		private boolean						active					= true;
 		
 		/**
 		* Sets the unique identifier for the offered candidate
@@ -417,6 +430,16 @@ public class OfferedCandidateEntity {
 		}
 		
 		/**
+		* Sets whether or not the OfferedCandidate is active
+		* @param active - whether or not the OfferedCandidate is active
+		* @return Builder
+		*/
+		public OfferedCandidateEntityBuilder active(boolean active){
+			this.active = active;
+			return this;
+		}
+		
+		/**
 		* Returns a new instance initialized with the values
 		* in the Builder 
 		* @return Builder
@@ -450,6 +473,7 @@ public class OfferedCandidateEntity {
 					.renumeration(entity.getRenumeration())
 					.spokenLanguages(entity.getSpokenLanguages())
 					.yearsExperience(entity.getYearsExperience())
+					.active(entity.isActive())
 				.build();
 	}
 	
@@ -478,6 +502,7 @@ public class OfferedCandidateEntity {
 						.renumeration(candidate.getrenumeration())
 						.spokenLanguages(candidate.getspokenLanguages())
 						.yearsExperience(candidate.getyearsExperience())
+						.active(candidate.isActive())
 					.build();
 		}
 		
@@ -495,6 +520,7 @@ public class OfferedCandidateEntity {
 		entity.description 			= candidate.getdescription();
 		entity.spokenLanguages 		= candidate.getspokenLanguages();
 		entity.comments 			= candidate.getcomments();
+		entity.active				= candidate.isActive();
 		
 		return entity;
 		

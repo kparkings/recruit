@@ -23,6 +23,14 @@ import com.arenella.recruit.recruiters.entities.OpenPositionEntity;
 public interface OpenPositionDao extends CrudRepository<OpenPositionEntity, UUID>{
 
 	/**
+	* Persists a Set of OpenPositions
+	* @param openPositions - OpenPositions to persist
+	*/
+	default void persistOpenPositions(Set<OpenPosition> openPositions) {
+		this.saveAll(openPositions.stream().map(op -> OpenPositionEntity.convertToEntity(op, Optional.empty())).collect(Collectors.toSet()));
+	}
+	
+	/**
 	* Persists an OpenPosition
 	* @param openPosition - Open Position to persist
 	*/
@@ -64,6 +72,7 @@ public interface OpenPositionDao extends CrudRepository<OpenPositionEntity, UUID
 	default Set<OpenPosition> findAllOpenPositions(){
 		return StreamSupport
 			.stream(this.findAll().spliterator(), false)
+			.filter(op -> op.isActive() == true)
 			.sorted(Comparator.comparing(OpenPositionEntity::getCreated).reversed())
 			.map(e -> OpenPositionEntity.convertFromEntity(e))
 			.collect(Collectors.toCollection(LinkedHashSet::new));

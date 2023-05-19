@@ -4,6 +4,7 @@ import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -293,6 +294,51 @@ public class SupplyAndDemandServiceImpl implements SupplyAndDemandService{
 						.openPositionId(openPositionId)
 						.openPositionTitle(openPosition.getPositionTitle())
 					.build());
+		
+	}
+	
+	/**
+	* Refer to the SupplyAndDemandService interface for details 
+	*/
+	@Override
+	public void disableSupplyAndDemandPostsForRecruiter(String recruiterId) {
+		
+		Set<OpenPosition> openPositions = this.openPositionDao.findAllOpenPositionsByRecruiterId(recruiterId).stream().map(op -> {
+			op.setActive(false);
+			return op;
+		}).collect(Collectors.toSet());
+		
+		this.openPositionDao.persistOpenPositions(openPositions);
+		
+		
+		Set<OfferedCandidate> offeredCandidates  = this.offeredCandidateDao.findAllOfferedCandidatesByRecruiterId(recruiterId).stream().map(oc -> {
+			oc.setActive(false);
+			return oc;
+		}).collect(Collectors.toSet());
+		
+		this.offeredCandidateDao.persistOfferedCandidates(offeredCandidates);
+		
+	}
+
+	/**
+	* Refer to the SupplyAndDemandService interface for details 
+	*/
+	@Override
+	public void enableSupplyAndDemandPostsForRecruiter(String recruiterId) {
+
+		Set<OpenPosition> openPositions = this.openPositionDao.findAllOpenPositionsByRecruiterId(recruiterId).stream().map(op -> {
+			op.setActive(true);
+			return op;
+		}).collect(Collectors.toSet());
+		
+		this.openPositionDao.persistOpenPositions(openPositions);
+		
+		Set<OfferedCandidate> offeredCandidates  = this.offeredCandidateDao.findAllOfferedCandidatesByRecruiterId(recruiterId).stream().map(oc -> {
+			oc.setActive(true);
+			return oc;
+		}).collect(Collectors.toSet());
+		
+		this.offeredCandidateDao.persistOfferedCandidates(offeredCandidates);
 		
 	}
 	

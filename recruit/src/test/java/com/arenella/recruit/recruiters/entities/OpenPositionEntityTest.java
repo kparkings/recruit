@@ -2,6 +2,7 @@ package com.arenella.recruit.recruiters.entities;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
@@ -33,6 +34,7 @@ public class OpenPositionEntityTest {
 	private String 			description			 	= "Some long descriptive text";
 	private String 			comments				= "Some comments fromt he Recruiter";
 	private LocalDate		created					= LocalDate.of(2022, 7, 26);
+	private boolean			active					= false;
 	
 	/**
 	* Tests creation via Builder
@@ -55,6 +57,7 @@ public class OpenPositionEntityTest {
 					.renumeration(renumeration)
 					.startDate(startDate)
 					.created(created)
+					.active(active)
 				.build();
 		
 		assertEquals(position.getComments(), 				comments);
@@ -69,6 +72,7 @@ public class OpenPositionEntityTest {
 		assertEquals(position.getRenumeration(), 			renumeration);
 		assertEquals(position.getStartDate(), 				startDate);
 		assertEquals(position.getCreated(), 				created);
+		assertFalse(position.isActive());
 		
 	}
 	
@@ -91,7 +95,7 @@ public class OpenPositionEntityTest {
 		assertTrue(position.getId() instanceof UUID);
 		assertEquals(position.getRecruiterId(), recruiterId);
 		assertNotNull(position.getCreated());
-		
+		assertTrue(position.isActive());
 	}
 	
 	/**
@@ -114,6 +118,7 @@ public class OpenPositionEntityTest {
 					.recruiterId(recruiterId)
 					.renumeration(renumeration)
 					.startDate(startDate)
+					.active(active)
 				.build();
 		
 		OpenPositionEntity entity = OpenPositionEntity.convertToEntity(position, Optional.empty());
@@ -132,6 +137,7 @@ public class OpenPositionEntityTest {
 		
 		assertNotNull(entity.getCreated());
 		assertTrue(entity.getCreated() instanceof LocalDate);
+		assertFalse(position.isActive());
 		
 	}
 	
@@ -168,6 +174,7 @@ public class OpenPositionEntityTest {
 					.recruiterId(recruiterId)
 					.renumeration(renumeration)
 					.startDate(startDate)
+					.active(active)
 				.build();
 		
 		OpenPositionEntity positionEntity = OpenPositionEntity
@@ -183,6 +190,8 @@ public class OpenPositionEntityTest {
 					.recruiterId(recruiterIdOrig)
 					.renumeration(renumerationOrig)
 					.startDate(startDateOrig)
+					.active(true)
+					
 				.build();
 		
 		final LocalDate createdOrig = positionEntity.getCreated();
@@ -206,6 +215,7 @@ public class OpenPositionEntityTest {
 		
 		assertNotNull(entity.getCreated());
 		assertTrue(entity.getCreated() instanceof LocalDate);
+		assertFalse(entity.isActive());
 		
 	}
 	
@@ -230,6 +240,7 @@ public class OpenPositionEntityTest {
 					.renumeration(renumeration)
 					.startDate(startDate)
 					.created(created)
+					.active(active)
 				.build();
 		
 		OpenPosition position = OpenPositionEntity.convertFromEntity(entity);
@@ -246,6 +257,8 @@ public class OpenPositionEntityTest {
 		assertEquals(position.getRenumeration(), 			renumeration);
 		assertEquals(position.getStartDate(), 				startDate);
 		assertEquals(position.getCreated(), 				created);
+		
+		assertFalse(position.isActive());
 		
 	}
 	
