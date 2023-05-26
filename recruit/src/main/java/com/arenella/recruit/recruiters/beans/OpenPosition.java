@@ -1,6 +1,8 @@
 package com.arenella.recruit.recruiters.beans;
 
 import java.time.LocalDate;
+import java.util.LinkedHashSet;
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -26,6 +28,8 @@ public class OpenPosition {
 	private String 						comments;
 	private LocalDate 					created;
 	private boolean						active					= true;
+	private Set<String> 				skills					= new LinkedHashSet<>();
+	//Add specification
 	
 	/**
 	* Constructor based upon a Builder
@@ -46,6 +50,8 @@ public class OpenPosition {
 		this.comments 						= builder.comments;
 		this.created						= builder.created;
 		this.active						 	= builder.active;
+		this.skills							= builder.skills;
+		
 	}
 	
 	/**
@@ -157,6 +163,14 @@ public class OpenPosition {
 	}
 	
 	/**
+	* Returns the Skills required for the Open Position
+	* @return
+	*/
+	public Set<String> getSkills(){
+		return this.skills;
+	}
+	
+	/**
 	* Sets whether or not the Open position is active or disabled
 	* @param active - whether or not the Open position is active or disabled
 	*/
@@ -202,6 +216,7 @@ public class OpenPosition {
 		private String 						comments;
 		private LocalDate					created;
 		private boolean						active					= true;
+		private Set<String> 				skills					= new LinkedHashSet<>();
 		
 		/**
 		* Sets the Unique Identifier for the Open Position
@@ -333,6 +348,17 @@ public class OpenPosition {
 		*/
 		public OpenPositionBuilder active(boolean active){
 			this.active = active;
+			return this;
+		}
+		
+		/**
+		* Sets the skills required for the OpenPosition
+		* @param skills - Skills required for the OpenPosition
+		* @return Builder
+		*/
+		public OpenPositionBuilder skills(Set<String> skills){
+			this.skills.clear();
+			this.skills.addAll(skills);
 			return this;
 		}
 		

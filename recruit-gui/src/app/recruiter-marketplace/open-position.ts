@@ -19,4 +19,5 @@ export class OpenPosition{
 	public comments:string 					= '';
 	public created:Date						= new Date();
 	public viewed:boolean					= false;
+	public skills:Array<string>				= new Array<string>();
 }

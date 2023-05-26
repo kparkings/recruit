@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDate;
+import java.util.Set;
 import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
@@ -34,6 +35,7 @@ public class OpenPositionAPIOutboundTest {
 	private String 				comments				= "Some comments fromt he Recruiter";
 	private RecruiterDetails 	recruiter				= new RecruiterDetails(recruiterId, recruiterName, recruiterCompanyName, recruiterEmail);
 	private LocalDate 			created					= LocalDate.of(2022, 6, 14);
+	private Set<String>			skills					= Set.of("java","c#");
 	
 	/**
 	* Tests creation via Builder
@@ -57,6 +59,7 @@ public class OpenPositionAPIOutboundTest {
 					.startDate(startDate)
 					.created(created)
 					.viewed(true)
+					.skills(skills)
 				.build();
 		
 		assertEquals(position.getComments(), 						comments);
@@ -76,5 +79,61 @@ public class OpenPositionAPIOutboundTest {
 		assertEquals(position.getCreated(), 						created);
 		assertTrue(position.isViewed());
 		
+		assertTrue(position.getSkills().contains("java"));
+		assertTrue(position.getSkills().contains("c#"));
+		
 	}
+	
+	/**
+	* Tests the conversion of OpenPosition domain representation 
+	* to a OpenPositionAPIOutbound representation
+	* @throws Exception
+	*/
+	@Test
+	public void testConvertFromDomain() throws Exception{
+		
+		final String recruiterId 	= "rec1";
+		final String recruiterName 	= "rec name";
+		final String companyName 	= "rec1 BV";
+		final String email			= "rec1@rec1.nl";
+		final UUID   viewedPost		= UUID.randomUUID();
+		final UUID   id				= UUID.randomUUID();
+		
+		OpenPosition position = OpenPosition
+				.builder()
+					.id(id)
+					.comments(comments)
+					.contractType(contractType)
+					.country(country)
+					.description(description)
+					.location(location)
+					.positionClosingDate(positionClosingDate)
+					.positionTitle(positionTitle)
+					.recruiterId(recruiterId)
+					.renumeration(renumeration)
+					.startDate(startDate)
+					.skills(skills)
+				.build();
+		
+		OpenPositionAPIOutbound openPosition = OpenPositionAPIOutbound.convertFromDomain(position, new RecruiterDetails(recruiterId, recruiterName, companyName, email), Set.of(viewedPost));
+		
+		assertEquals(comments, 				openPosition.getComments());
+		assertEquals(contractType, 			openPosition.getContractType());
+		assertEquals(country, 				openPosition.getCountry());
+		assertEquals(description, 			openPosition.getDescription());
+		assertEquals(location, 				openPosition.getLocation());
+		assertEquals(positionClosingDate, 	openPosition.getPositionClosingDate());
+		assertEquals(positionTitle, 		openPosition.getPositionTitle());
+		assertEquals(recruiterId, 			openPosition.getRecruiter().getRecruiterId());
+		assertEquals(recruiterName, 		openPosition.getRecruiter().getRecruiterName());
+		assertEquals(companyName, 			openPosition.getRecruiter().getCompanyName());
+		assertEquals(email, 				openPosition.getRecruiter().getRecruiterEmail());
+		assertEquals(renumeration, 			openPosition.getRenumeration());
+		assertEquals(startDate, 			openPosition.getStartDate());
+		
+		assertTrue(openPosition.getSkills().contains("java"));
+		assertTrue(openPosition.getSkills().contains("c#"));
+	
+	}
+	
 }

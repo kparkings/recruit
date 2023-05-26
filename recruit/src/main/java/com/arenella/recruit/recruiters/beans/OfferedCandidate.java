@@ -37,6 +37,9 @@ public class OfferedCandidate {
 	private String 						comments;
 	private LocalDate					created;
 	private boolean						active					= true;
+	//Add Skills
+	//Need to add curriculum to curriculum service
+	//Need to upload and extract all the details from CV
 	
 	/**
 	* Constructor based upon a Builder

@@ -3,9 +3,11 @@ package com.arenella.recruit.recruiters.beans;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.time.LocalDate;
+import java.util.Set;
 import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
@@ -32,6 +34,7 @@ public class OpenPositionTest {
 	private String 			comments				= "Some comments fromt he Recruiter";
 	private LocalDate		created					= LocalDate.of(2022, 9, 26);
 	private boolean			active					= false;
+	private Set<String>		skills					= Set.of("java","c#");
 	
 	/**
 	* Tests creation via Builder
@@ -55,6 +58,7 @@ public class OpenPositionTest {
 					.startDate(startDate)
 					.created(created)
 					.active(active)
+					.skills(skills)
 				.build();
 		
 		assertEquals(position.getComments(), 				comments);
@@ -70,6 +74,9 @@ public class OpenPositionTest {
 		assertEquals(position.getStartDate(), 				startDate);
 		assertEquals(position.getCreated(), 				created);
 		assertFalse(position.isActive());
+		
+		assertTrue(position.getSkills().contains("java"));
+		assertTrue(position.getSkills().contains("c#"));
 		
 	}
 	
@@ -105,7 +112,7 @@ public class OpenPositionTest {
 		
 		assertNull(position.getId());
 		assertNull(position.getRecruiterId());
-		
+		assertNotNull(position.getSkills());
 		position.initializeAsNewObject(recruiterId);
 		
 		assertTrue(position.getId() instanceof UUID);

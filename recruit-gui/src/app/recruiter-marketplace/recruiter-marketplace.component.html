@@ -543,7 +543,6 @@
 							<input formControlName="renumeration" type="text"/>
 						</td>	
 					</tr>
-					<!--  
 					<tr>
 						<td>
 							Skills
@@ -555,7 +554,6 @@
 							</div>
 						</td>	
 					</tr>
-					-->
 					<tr>
 						<td>Start Date</td>
 						<td>
@@ -629,6 +627,17 @@
 							<option value="PERM">Perm</option>
 							<option value="BOTH">Both</option>
 						</select>
+					</td>	
+				</tr>
+				<tr>
+					<td>
+						Skills
+					</td>
+					<td class="sugg-srch-bdy">
+						<input type="text" formControlName="skill"><button (click)="addOfferedPositionSkill()" class="btn btn-secondary add-skill-btn" *ngIf="!isAuthenticatedAsAdmin()">Add</button>
+						<div style="min-height:35px;">
+							<div class="selected-skill" *ngFor="let skill of requestedCandidateCoreSkills" (click)="removeRequestedCandidateSkill(skill)">{{skill}}</div>
+						</div>
 					</td>	
 				</tr>
 				<tr>
@@ -727,7 +736,20 @@
 						</table>
 					</div>
 				</div>
-				<div class="left-box" *ngIf="activeOpenPosition.contractType || activeOpenPosition.startDate || activeOpenPosition.renumeration">
+				<div class="left-box-title" *ngIf="activeOpenPosition.skills.length > 0">
+      				<h5>Skills</h5>
+      			</div>
+				<div class="left-box" *ngIf="activeOpenPosition.skills.length > 0">
+  					<h5>Skills</h5>
+  					<div class="left-box-body">
+						<table>
+							<tr>
+								<td><span class="skill" *ngFor="let skill of activeOpenPosition.skills">{{skill}}</span></td>
+							</tr>
+						</table>
+					</div>
+  				</div>
+	        	<div class="left-box" *ngIf="activeOpenPosition.contractType || activeOpenPosition.startDate || activeOpenPosition.renumeration">
 					<h5>Conditions</h5>
 					<div class="left-box-body">
 						<table>

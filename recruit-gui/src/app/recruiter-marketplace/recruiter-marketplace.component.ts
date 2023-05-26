@@ -309,6 +309,9 @@ export class RecruiterMarketplaceComponent implements OnInit {
 		this.switchTab('editDemand');
 		this.activeOpenPosition = openPosition;
 		
+		this.requestedCandidateCoreSkills = new Array<string>();
+		this.requestedCandidateCoreSkills = this.activeOpenPosition.skills;
+		
 		this.requestedCandidateFormBean = new UntypedFormGroup({
 	     	positionTitle:			new UntypedFormControl(openPosition.positionTitle),
 			country:				new UntypedFormControl(openPosition.country),
@@ -319,6 +322,7 @@ export class RecruiterMarketplaceComponent implements OnInit {
 			positionClosingDate:	new UntypedFormControl(openPosition.positionClosingDate),
 			description:			new UntypedFormControl(openPosition.description),
 			comments:				new UntypedFormControl(openPosition.comments),
+			skill:					new UntypedFormControl(),
 			});
 	}
 		
@@ -346,9 +350,6 @@ export class RecruiterMarketplaceComponent implements OnInit {
 		});
 		
 		this.recruiterProfile = new RecruiterProfile();
-		
-		console.log("DDDDDDDDDDDDd " + openPosition.recruiter.recruiterId);
-		console.log("DDDDDDDDDDDDc " + JSON.stringify(this.recruiterProfiles));
 		
 		this.recruiterProfile = this.recruiterProfiles.filter(p => p.recruiterId == openPosition.recruiter.recruiterId)[0];
 	}
@@ -510,7 +511,8 @@ export class RecruiterMarketplaceComponent implements OnInit {
 	* Adds a skill posessed required 
 	*/
 	public addOfferedPositionSkill():void{
-		
+		//console.log("XX");
+		//console.log(this.requestedCandidateFormBean.get('skill')?.value);
 		let skillFormatted:string 	= this.requestedCandidateFormBean.get('skill')?.value.trim();
 		skillFormatted 				= skillFormatted.toLocaleLowerCase();
 		

@@ -1,6 +1,8 @@
 package com.arenella.recruit.recruiters.beans;
 
 import java.time.LocalDate;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 import com.arenella.recruit.recruiters.beans.OpenPosition.ContractType;
 import com.arenella.recruit.recruiters.beans.OpenPosition.Country;
@@ -26,6 +28,7 @@ public class OpenPositionAPIInbound {
 	private LocalDate 					positionClosingDate;
 	private String 						description;
 	private String 						comments;
+	private Set<String> 				skills					= new LinkedHashSet<>();
 	
 	/**
 	* Constructor based upon a Builder
@@ -43,6 +46,7 @@ public class OpenPositionAPIInbound {
 		this.positionClosingDate 			= builder.positionClosingDate;
 		this.description 					= builder.description;
 		this.comments 						= builder.comments;
+		this.skills							= builder.skills;
 		
 	}
 	
@@ -130,6 +134,14 @@ public class OpenPositionAPIInbound {
 	}
 	
 	/**
+	* Returns the Skills required for the Open Position
+	* @return
+	*/
+	public Set<String> getSkills(){
+		return this.skills;
+	}
+	
+	/**
 	* Returns a Builder for the Class
 	* @return Builder for the Class
 	*/
@@ -154,16 +166,7 @@ public class OpenPositionAPIInbound {
 		private LocalDate 					positionClosingDate;
 		private String 						description;
 		private String 						comments;
-		
-		/**
-		* Sets the Unique Identifier for the Open Position
-		* @param id - UniqueId of the Open Position
-		* @return Builder
-		*/
-		//public OpenPositionAPIInboundBuilder id(UUID id){
-		//	this.id = id;
-		//	return this;
-		//}
+		private Set<String> 				skills					= new LinkedHashSet<>();
 		
 		/**
 		* Sets the unique Id of the Recruiter who owns the 
@@ -269,6 +272,17 @@ public class OpenPositionAPIInbound {
 		}
 		
 		/**
+		* Sets the skills required for the OpenPosition
+		* @param skills - Skills required for the OpenPosition
+		* @return Builder
+		*/
+		public OpenPositionAPIInboundBuilder skills(Set<String> skills){
+			this.skills.clear();
+			this.skills.addAll(skills);
+			return this;
+		}
+		
+		/**
 		* Returns an instance of OpenPositionAPIInbound initalized with 
 		* the values in the Builder
 		* @return Builder
@@ -298,6 +312,7 @@ public class OpenPositionAPIInbound {
 					.recruiterId(openPositionAPIInbound.getRecruiterId())
 					.renumeration(openPositionAPIInbound.getRenumeration())
 					.startDate(openPositionAPIInbound.getStartDate())
+					.skills(openPositionAPIInbound.getSkills())
 				.build();
 	}
 	

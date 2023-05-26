@@ -1,14 +1,20 @@
 package com.arenella.recruit.recruiters.entities;
 
 import java.time.LocalDate;
+import java.util.LinkedHashSet;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.Table;
 
 import com.arenella.recruit.recruiters.beans.OpenPosition;
@@ -64,6 +70,12 @@ public class OpenPositionEntity {
 	@Column(name="active")
 	private boolean						active						= true;
 	
+	@ElementCollection(targetClass=String.class, fetch=FetchType.EAGER)
+	@CollectionTable(schema="recruiter", name="open_positions_skills", joinColumns=@JoinColumn(name="open_position_id"))
+	@Column(name="skill")
+	private Set<String> 			skills							= new LinkedHashSet<>();
+	
+	
 	/**
 	* Constructor based upon a Builder
 	* @param builder - Contains initialization values
@@ -83,6 +95,7 @@ public class OpenPositionEntity {
 		this.comments 						= builder.comments;
 		this.created						= builder.created;
 		this.active							= builder.active;
+		this.skills							= builder.skills;
 		
 		if (Optional.ofNullable(created).isEmpty()) {
 			this.created = LocalDate.now();
@@ -205,6 +218,14 @@ public class OpenPositionEntity {
 	}
 	
 	/**
+	* Returns the Skills required for the Open Position
+	* @return
+	*/
+	public Set<String> getSkills(){
+		return this.skills;
+	}
+	
+	/**
 	* Sets the unique Id of the Object to a 
 	* random UUID to make it a new OpenPosition and 
 	* sets the id of the recruiter that owns the OpenPosition
@@ -242,6 +263,7 @@ public class OpenPositionEntity {
 		private String 						comments;
 		private LocalDate					created;
 		private boolean						active						= true;
+		private Set<String> 				skills						= new LinkedHashSet<>();
 		
 		/**
 		* Sets the Unique Identifier for the Open Position
@@ -377,6 +399,17 @@ public class OpenPositionEntity {
 		}
 		
 		/**
+		* Sets the skills required for the OpenPosition
+		* @param skills - Skills required for the OpenPosition
+		* @return Builder
+		*/
+		public OpenPositionEntityBuilder skills(Set<String> skills){
+			this.skills.clear();
+			this.skills.addAll(skills);
+			return this;
+		}
+		
+		/**
 		* Returns an instance of OpenPositionEntityBuilder initalized with 
 		* the values in the Builder
 		* @return Builder
@@ -408,6 +441,7 @@ public class OpenPositionEntity {
 						.startDate(entity.getStartDate())
 						.created(entity.getCreated())
 						.active(entity.isActive())
+						.skills(entity.getSkills())
 					.build();
 	}
 	
@@ -433,6 +467,7 @@ public class OpenPositionEntity {
 			originalEntity.description 			= openPosition.getDescription();
 			originalEntity.comments 			= openPosition.getComments();
 			originalEntity.active				= openPosition.isActive();
+			originalEntity.skills				= openPosition.getSkills();
 			
 			return originalEntity; 
 		}
@@ -451,6 +486,7 @@ public class OpenPositionEntity {
 								.renumeration(openPosition.getRenumeration())
 								.startDate(openPosition.getStartDate())
 								.active(openPosition.isActive())
+								.skills(openPosition.getSkills())
 							.build();
 	}
 	

@@ -17,6 +17,6 @@ export class NewOpenPosition{
 	public comments:string 					= '';
 	
 	public spokenLanguages:Array<string> 	= new Array<string>();
-	public coreSkills:Array<string> 		= new Array<string>();
+	public skills:Array<string> 		= new Array<string>();
 	
 }

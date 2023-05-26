@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.time.LocalDate;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
@@ -35,6 +36,7 @@ public class OpenPositionEntityTest {
 	private String 			comments				= "Some comments fromt he Recruiter";
 	private LocalDate		created					= LocalDate.of(2022, 7, 26);
 	private boolean			active					= false;
+	private Set<String>		skills					= Set.of("java","c#");
 	
 	/**
 	* Tests creation via Builder
@@ -58,6 +60,7 @@ public class OpenPositionEntityTest {
 					.startDate(startDate)
 					.created(created)
 					.active(active)
+					.skills(skills)
 				.build();
 		
 		assertEquals(position.getComments(), 				comments);
@@ -74,6 +77,9 @@ public class OpenPositionEntityTest {
 		assertEquals(position.getCreated(), 				created);
 		assertFalse(position.isActive());
 		
+		assertTrue(position.getSkills().contains("java"));
+		assertTrue(position.getSkills().contains("c#"));
+		
 	}
 	
 	/**
@@ -89,6 +95,7 @@ public class OpenPositionEntityTest {
 		
 		assertNull(position.getId());
 		assertNull(position.getRecruiterId());
+		assertNotNull(position.getSkills());
 		
 		position.initializeAsNewObject(recruiterId);
 		
@@ -119,6 +126,7 @@ public class OpenPositionEntityTest {
 					.renumeration(renumeration)
 					.startDate(startDate)
 					.active(active)
+					.skills(skills)
 				.build();
 		
 		OpenPositionEntity entity = OpenPositionEntity.convertToEntity(position, Optional.empty());
@@ -138,6 +146,9 @@ public class OpenPositionEntityTest {
 		assertNotNull(entity.getCreated());
 		assertTrue(entity.getCreated() instanceof LocalDate);
 		assertFalse(position.isActive());
+		
+		assertTrue(entity.getSkills().contains("java"));
+		assertTrue(entity.getSkills().contains("c#"));
 		
 	}
 	
@@ -175,6 +186,7 @@ public class OpenPositionEntityTest {
 					.renumeration(renumeration)
 					.startDate(startDate)
 					.active(active)
+					.skills(skills)
 				.build();
 		
 		OpenPositionEntity positionEntity = OpenPositionEntity
@@ -217,6 +229,9 @@ public class OpenPositionEntityTest {
 		assertTrue(entity.getCreated() instanceof LocalDate);
 		assertFalse(entity.isActive());
 		
+		assertTrue(entity.getSkills().contains("java"));
+		assertTrue(entity.getSkills().contains("c#"));
+		
 	}
 	
 	/**
@@ -241,6 +256,7 @@ public class OpenPositionEntityTest {
 					.startDate(startDate)
 					.created(created)
 					.active(active)
+					.skills(skills)
 				.build();
 		
 		OpenPosition position = OpenPositionEntity.convertFromEntity(entity);
@@ -259,6 +275,9 @@ public class OpenPositionEntityTest {
 		assertEquals(position.getCreated(), 				created);
 		
 		assertFalse(position.isActive());
+		
+		assertTrue(position.getSkills().contains("java"));
+		assertTrue(position.getSkills().contains("c#"));
 		
 	}
 	

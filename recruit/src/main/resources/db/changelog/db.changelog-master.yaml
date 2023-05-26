@@ -1780,5 +1780,28 @@ databaseChangeLog:
                 constraints:
                   nullable: true
                   default: true                  
-                
-                
+  - changeSet:
+      id: open_position_skills
+      author: kevin
+      changes:
+        - createTable:
+            tableName: open_positions_skills
+            schemaName: recruiter
+            columns:
+              - column:
+                  name: open_position_id
+                  type: uuid
+                  constraints:
+                    nullable: false                    
+                    foreignKeyName: fk_open_positions_skills
+                    references: recruiter.open_positions(id)
+              - column:
+                  name: skill
+                  type: varchar
+                  constraints:
+                    nullable: false
+        - addPrimaryKey:  
+            columnNames:  open_position_id, skill  
+            constraintName:  pk_open_position_skill  
+            tableName:  open_positions_skills  
+            schemaName: recruiter

@@ -1,6 +1,7 @@
 package com.arenella.recruit.recruiters.beans;
 
 import java.time.LocalDate;
+import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.UUID;
 
@@ -28,6 +29,7 @@ public class OpenPositionAPIOutbound {
 	private String 						comments;
 	private LocalDate					created;
 	private boolean						viewed;
+	private Set<String> 				skills					= new LinkedHashSet<>();
 	
 	/**
 	* Constructor based upon a Builder
@@ -48,6 +50,7 @@ public class OpenPositionAPIOutbound {
 		this.comments 						= builder.comments;
 		this.created						= builder.created;
 		this.viewed							= builder.viewed;
+		this.skills							= builder.skills;
 
 	}
 	
@@ -160,6 +163,14 @@ public class OpenPositionAPIOutbound {
 	}
 	
 	/**
+	* Returns the Skills required for the Open Position
+	* @return
+	*/
+	public Set<String> getSkills(){
+		return this.skills;
+	}
+	
+	/**
 	* Returns a Builder for the Class
 	* @return Builder for the Class
 	*/
@@ -186,6 +197,7 @@ public class OpenPositionAPIOutbound {
 		private String 						comments;
 		private LocalDate					created;
 		private boolean						viewed;
+		private Set<String> 				skills					= new LinkedHashSet<>();
 		
 		/**
 		* Sets the Unique Identifier for the Open Position
@@ -322,6 +334,17 @@ public class OpenPositionAPIOutbound {
 		}
 		
 		/**
+		* Sets the skills required for the OpenPosition
+		* @param skills - Skills required for the OpenPosition
+		* @return Builder
+		*/
+		public OpenPositionAPIOutboundBuilder skills(Set<String> skills){
+			this.skills.clear();
+			this.skills.addAll(skills);
+			return this;
+		}
+		
+		/**
 		* Returns an instance of OpenPositionAPIOutbound initalized with 
 		* the values in the Builder
 		* @return Initialzied instance of OpenPositionAPIOutbound
@@ -355,6 +378,7 @@ public class OpenPositionAPIOutbound {
 					.startDate(openPosition.getStartDate())
 					.created(openPosition.getCreated())
 					.viewed(viewedPosts.contains(openPosition.getId()))
+					.skills(openPosition.getSkills())
 				.build();
 	}
 	

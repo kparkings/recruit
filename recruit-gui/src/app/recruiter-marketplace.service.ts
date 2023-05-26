@@ -253,7 +253,7 @@ export class RecruiterMarketplaceService {
 		openPosition.description 			= description;
 		openPosition.comments 				= comments; 			
 		openPosition.spokenLanguages 		= languages;
-		openPosition.coreSkills 			= skills;
+		openPosition.skills 				= skills;
 		
 		return this.httpClient.post<any>(backendUrl, JSON.stringify(openPosition), this.httpOptions);
 	
@@ -291,7 +291,7 @@ export class RecruiterMarketplaceService {
 		openPosition.description 			= description;
 		openPosition.comments 				= comments; 			
 		openPosition.spokenLanguages 		= languages;
-		openPosition.coreSkills 			= skills;
+		openPosition.skills 				= skills;
 		
 		return this.httpClient.put<any>(backendUrl, JSON.stringify(openPosition), this.httpOptions);
 	
