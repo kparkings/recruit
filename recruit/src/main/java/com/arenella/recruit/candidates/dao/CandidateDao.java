@@ -106,7 +106,7 @@ public interface CandidateDao extends CrudRepository<CandidateEntity, Long>, Jpa
 	}
 	
 	public default Set<Candidate> findCandidates(CandidateFilterOptions filterOptions){
-		return StreamSupport.stream(this.findAll(filterOptions).spliterator(), false).map(e -> CandidateEntity.convertFromEntity(e)).collect(Collectors.toCollection(LinkedHashSet::new));
+		return StreamSupport.stream(this.findAll(filterOptions).spliterator(), false).map(CandidateEntity::convertFromEntity).collect(Collectors.toCollection(LinkedHashSet::new));
 	}
 			
 	/**
@@ -158,9 +158,9 @@ public interface CandidateDao extends CrudRepository<CandidateEntity, Long>, Jpa
 				
 				Expression<Collection<String>> skillValues = root.get("skills");
 				
-				this.filterOptions.getSkills().forEach(skill -> {
-					predicates.add(criteriaBuilder.isMember(skill.toLowerCase().trim(), skillValues));
-				});
+				this.filterOptions.getSkills().forEach(skill -> 
+					predicates.add(criteriaBuilder.isMember(skill.toLowerCase().trim(), skillValues))
+				);
 				
 			}
 			

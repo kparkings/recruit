@@ -24,8 +24,8 @@ public class Email {
 		REC_TO_REC_EMAIL_REPLY_NOTICICATION,
 		REC_TO_REC_CONTACT_REQUEST};
 		
-	public static enum EmailType 	{INTERN, EXTERN, SYSTEM_INTERN, SYSTEM_EXTERN};
-	public static enum Status 		{DRAFT, TO_OUTBOX, SENT_INTERN, SENT_EXTERN, FAILURE};
+	public static enum EmailType 	{INTERN, EXTERN, SYSTEM_INTERN, SYSTEM_EXTERN}
+	public static enum Status 		{DRAFT, TO_OUTBOX, SENT_INTERN, SENT_EXTERN, FAILURE}
 	
 	private UUID 						id;
 	private String 						title;

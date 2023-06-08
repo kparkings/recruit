@@ -28,7 +28,7 @@ public class StatisticsServiceImpl implements StatisticsService{
 	@Override
 	public CurriculumDownloadsStatistics fetchCurriculumDownloadsStatistics() {
 		
-		List<CurriculumDownloadedEvent> events = StreamSupport.stream(dao.findAll().spliterator(), false).map(event -> CurriculumDownloadedEventEntity.fromEntity(event)).collect(Collectors.toList());
+		List<CurriculumDownloadedEvent> events = StreamSupport.stream(dao.findAll().spliterator(), false).map(CurriculumDownloadedEventEntity::fromEntity).collect(Collectors.toList());
 		
 		return new CurriculumDownloadsStatistics(events);
 		

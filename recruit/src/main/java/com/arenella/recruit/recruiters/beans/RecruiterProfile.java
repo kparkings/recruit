@@ -28,9 +28,9 @@ public class RecruiterProfile {
 	private String				jobTitle;
 	private int					yearsExperience;
 	private String				introduction;
-	private Set<SECTOR>			sectors					= new LinkedHashSet<>();;
-	private Set<TECH>			coreTech				= new LinkedHashSet<>();;
-	private Set<CONTRACT_TYPE> 	recruitsContractTypes	= new LinkedHashSet<>();;
+	private Set<SECTOR>			sectors					= new LinkedHashSet<>();
+	private Set<TECH>			coreTech				= new LinkedHashSet<>();
+	private Set<CONTRACT_TYPE> 	recruitsContractTypes	= new LinkedHashSet<>();
 	private REC_TYPE	 		recruiterType;
 	
 	/**
@@ -192,8 +192,8 @@ public class RecruiterProfile {
 	public static class RecruiterProfileBuilder{
 		
 		private String 				recruiterId;
-		private Set<COUNTRY> 		recruitsIn				= new LinkedHashSet<>();;
-		private Set<LANGUAGE>		languagesSpoken			= new LinkedHashSet<>();;
+		private Set<COUNTRY> 		recruitsIn				= new LinkedHashSet<>();
+		private Set<LANGUAGE>		languagesSpoken			= new LinkedHashSet<>();
 		private Photo				profilePhoto;
 		private boolean 			visibleToRecruiters;
 		private boolean 			visibleToCandidates;
@@ -201,9 +201,9 @@ public class RecruiterProfile {
 		private String				jobTitle;
 		private int					yearsExperience;
 		private String				introduction;
-		private Set<SECTOR>			sectors					= new LinkedHashSet<>();;
-		private Set<TECH>			coreTech				= new LinkedHashSet<>();;
-		private Set<CONTRACT_TYPE> 	recruitsContractTypes	= new LinkedHashSet<>();;
+		private Set<SECTOR>			sectors					= new LinkedHashSet<>();
+		private Set<TECH>			coreTech				= new LinkedHashSet<>();
+		private Set<CONTRACT_TYPE> 	recruitsContractTypes	= new LinkedHashSet<>();
 		private REC_TYPE	 		recruiterType;
 		
 		/**

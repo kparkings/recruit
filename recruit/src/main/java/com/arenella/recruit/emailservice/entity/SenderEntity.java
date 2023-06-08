@@ -196,7 +196,7 @@ public class SenderEntity {
 	* @return Domain representation
 	*/
 	public static Sender<String> convertFromEntity(SenderEntity sender) {
-		return new Sender<String>(sender.getId().toString(),sender.getContactId(), sender.getContactType(), sender.getEmailAddress());
+		return new Sender<>(sender.getId(),sender.getContactId(), sender.getContactType(), sender.getEmailAddress());
 	}
 	
 }

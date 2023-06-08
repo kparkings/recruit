@@ -352,7 +352,7 @@ public class EmailEntity {
 					.sent(email.getSent())
 					.status(email.getStatus())
 					.title(email.getTitle())
-					.attachments(email.getAttachments().stream().map(a -> EmailAttachmentEntity.convertFromDomain(a)).collect(Collectors.toCollection(LinkedHashSet::new)))
+					.attachments(email.getAttachments().stream().map(EmailAttachmentEntity::convertFromDomain).collect(Collectors.toCollection(LinkedHashSet::new)))
 				.build();
 		
 	}
@@ -370,13 +370,13 @@ public class EmailEntity {
 					.created(entity.getCreated())
 					.emailType(entity.getEmailType())
 					.id(entity.getId())
-					.recipients(entity.getRecipients().stream().map(r -> EmailRecipientEntity.convertFromEntity(r)).collect(Collectors.toSet()))
+					.recipients(entity.getRecipients().stream().map(EmailRecipientEntity::convertFromEntity).collect(Collectors.toSet()))
 					.scheduledToBeSentAfter(entity.getScheduledToBeSentAfter())
 					.sender(SenderEntity.convertFromEntity(entity.getSender())) //TODO: T saved to DB String returned
 					.sent(entity.getSent())
 					.status(entity.getStatus())
 					.title(entity.getTitle())
-					.attachments(entity.getAttachments().stream().map(a -> EmailAttachmentEntity.convertToDomain(a)).collect(Collectors.toCollection(LinkedHashSet::new)))
+					.attachments(entity.getAttachments().stream().map(EmailAttachmentEntity::convertToDomain).collect(Collectors.toCollection(LinkedHashSet::new)))
 				.build();
 	}
 	

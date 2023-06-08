@@ -30,19 +30,11 @@ public class CurriculumFileSecurityParserImpl implements CurriculumFileSecurityP
 		    Metadata 	metadata 	= new Metadata();
 		    MediaType 	mediaType 	= detector.detect(new ByteArrayInputStream(file.getBytes()), metadata);
 		    
-			switch (mediaType.toString()) {
-				case "application/vnd.oasis.opendocument.text":
-				case "application/msword":
-				case "application/pdf":{
-					return true;
-				}
-				case "application/x-tika-ooxml":{
-					return file.getContentType().equals("application/vnd.openxmlformats-officedocument.wordprocessingml.document");
-				}
-				default:{
-					return false;
-				}
-			}
+			return switch (mediaType.toString()) {
+				case "application/vnd.oasis.opendocument.text","application/msword","application/pdf" -> true;  
+				case "application/x-tika-ooxml" -> file.getContentType().equals("application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+				default -> false;
+			};
 			
 		} catch (Exception e) {
 			return false;

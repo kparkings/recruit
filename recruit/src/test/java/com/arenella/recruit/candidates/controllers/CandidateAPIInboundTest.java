@@ -74,18 +74,18 @@ public class CandidateAPIInboundTest {
 							.languages(languages)
 							.build();
 		
-		assertEquals(candidate.getCandidateId(), 				candidateId);
-		assertEquals(candidate.getFirstname(), 					firstname);
-		assertEquals(candidate.getSurname(), 					surname);
-		assertEquals(candidate.getEmail(), 						email);
-		assertEquals(candidate.getFunction(), 					function);
-		assertEquals(candidate.getRoleSought(),					roleSought);
-		assertEquals(candidate.getCountry(), 					country);
-		assertEquals(candidate.getCity(), 						city);
-		assertEquals(candidate.isAvailable(), 					available);
-		assertEquals(candidate.isFreelance(), 					freelance);
-		assertEquals(candidate.isPerm(), 						perm);
-		assertEquals(candidate.getYearsExperience(), 			yearsExperience);
+		assertEquals(candidateId, 		candidate.getCandidateId());
+		assertEquals(firstname, 		candidate.getFirstname());
+		assertEquals(surname, 			candidate.getSurname());
+		assertEquals(email, 			candidate.getEmail());
+		assertEquals(function, 			candidate.getFunction());
+		assertEquals(roleSought, 		candidate.getRoleSought());
+		assertEquals(country, 			candidate.getCountry());
+		assertEquals(city, 				candidate.getCity());
+		assertEquals(available, 		candidate.isAvailable());
+		assertEquals(freelance, 		candidate.isFreelance());
+		assertEquals(perm, 				candidate.isPerm());
+		assertEquals(yearsExperience, 	candidate.getYearsExperience());
 		
 		assertTrue(candidate.getSkills().contains(skill));
 		candidate.getLanguages().stream().filter(l -> l.getLanguage() == language.getLanguage()).findAny().orElseThrow();
@@ -120,20 +120,18 @@ public class CandidateAPIInboundTest {
 		
 		Candidate candidate = CandidateAPIInbound.convertToCandidate(candidateEntity);
 
-		assertEquals(candidate.getCandidateId(), 				candidateId);
-		assertEquals(candidate.getFirstname(), 					firstname);
-		assertEquals(candidate.getSurname(), 					surname);
-		assertEquals(candidate.getEmail(), 						email);
-		assertEquals(candidate.getRoleSought(),					roleSought);
-		assertEquals(candidate.getFunction(), 					function);
-		assertEquals(candidate.getCountry(), 					country);
-		assertEquals(candidate.getCity(), 						city);
-		assertEquals(candidate.isAvailable(), 					available);
-		assertEquals(candidate.isFreelance(), 					freelance);
-		assertEquals(candidate.isPerm(), 						perm);
-		//assertEquals(candidate.getLastAvailabilityCheckOn(), 	lastAvailabilityCheck);
-		//assertEquals(candidate.getRegisteredOn(), 				registerd);
-		assertEquals(candidate.getYearsExperience(), 			yearsExperience);
+		assertEquals(candidateId, 		candidate.getCandidateId());
+		assertEquals(firstname, 		candidate.getFirstname());
+		assertEquals(surname, 			candidate.getSurname());
+		assertEquals(email, 			candidate.getEmail());
+		assertEquals(roleSought, 		candidate.getRoleSought());
+		assertEquals(function, 			candidate.getFunction());
+		assertEquals(country, 			candidate.getCountry());
+		assertEquals(city, 				candidate.getCity());
+		assertEquals(available, 		candidate.isAvailable());
+		assertEquals(freelance, 		candidate.isFreelance());
+		assertEquals(perm, 				candidate.isPerm());
+		assertEquals(yearsExperience, 	candidate.getYearsExperience());
 		
 		assertTrue(candidate.getSkills().contains(skill));
 		assertEquals(candidate.getLanguages().stream().findFirst().get().getLanguage(), language.getLanguage());

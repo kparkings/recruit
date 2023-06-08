@@ -74,7 +74,7 @@ public interface OpenPositionDao extends CrudRepository<OpenPositionEntity, UUID
 			.stream(this.findAll().spliterator(), false)
 			.filter(op -> op.isActive() == true)
 			.sorted(Comparator.comparing(OpenPositionEntity::getCreated).reversed())
-			.map(e -> OpenPositionEntity.convertFromEntity(e))
+			.map(OpenPositionEntity::convertFromEntity)
 			.collect(Collectors.toCollection(LinkedHashSet::new));
 	}
 
@@ -86,7 +86,7 @@ public interface OpenPositionDao extends CrudRepository<OpenPositionEntity, UUID
 		return StreamSupport
 				.stream(this.findAllByRecruiterId(recruiterId).spliterator(), false)
 				.sorted(Comparator.comparing(OpenPositionEntity::getCreated).reversed())
-				.map(e -> OpenPositionEntity.convertFromEntity(e))
+				.map(OpenPositionEntity::convertFromEntity)
 				.collect(Collectors.toCollection(LinkedHashSet::new));
 	}
 	

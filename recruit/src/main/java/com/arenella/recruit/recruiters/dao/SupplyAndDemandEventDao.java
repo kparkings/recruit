@@ -61,7 +61,7 @@ public interface SupplyAndDemandEventDao extends CrudRepository<SupplyAndDemandE
 	* @return Events in period
 	*/
 	default Set<SupplyAndDemandEvent> fetchThisWeeksEvents(LocalDateTime after, EventType type){
-		return this.fetchEvents(after, type).stream().map(e -> SupplyAndDemandEventEntity.convertFromEntity(e)).collect(Collectors.toCollection(LinkedHashSet::new));
+		return this.fetchEvents(after, type).stream().map(SupplyAndDemandEventEntity::convertFromEntity).collect(Collectors.toCollection(LinkedHashSet::new));
 	}
 	
 	

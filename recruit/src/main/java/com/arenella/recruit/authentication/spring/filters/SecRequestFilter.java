@@ -101,7 +101,7 @@ public class SecRequestFilter extends OncePerRequestFilter {
 					
 					Set<String> roleNames = this.jwtTokenUtil.getRoles(token);
 					
-					List<GrantedAuthority> roles = roleNames.stream().map(role -> new SimpleGrantedAuthority(role)).collect(Collectors.toList());
+					List<GrantedAuthority> roles = roleNames.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList());
 					
 					UsernamePasswordAuthenticationToken  authToken = new UsernamePasswordAuthenticationToken(username, "", roles);
 					

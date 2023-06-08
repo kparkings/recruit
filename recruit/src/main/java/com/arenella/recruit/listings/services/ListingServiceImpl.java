@@ -111,7 +111,7 @@ public class ListingServiceImpl implements ListingService{
 	*/
 	@Override
 	public Page<Listing> fetchListings(ListingFilter filters, Pageable pageable) {
-		return listingDao.findAll(filters, pageable).map(listing -> ListingEntity.convertFromEntity(listing));
+		return listingDao.findAll(filters, pageable).map(ListingEntity::convertFromEntity);
 	}
 	
 	/**

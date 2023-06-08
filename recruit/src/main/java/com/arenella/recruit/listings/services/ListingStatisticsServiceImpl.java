@@ -28,7 +28,7 @@ public class ListingStatisticsServiceImpl implements ListingStatisticsService{
 	@Override
 	public ListingStatistics fetchListingStatistics() {
 		
-		List<ListingViewedEvent> events = StreamSupport.stream(listingStatsDao.findAll().spliterator(), false).map(event -> ListingViewedEventEntity.convertFromEntity(event)).collect(Collectors.toList());
+		List<ListingViewedEvent> events = StreamSupport.stream(listingStatsDao.findAll().spliterator(), false).map(ListingViewedEventEntity::convertFromEntity).collect(Collectors.toList());
 		
 		return new ListingStatistics(events);
 		

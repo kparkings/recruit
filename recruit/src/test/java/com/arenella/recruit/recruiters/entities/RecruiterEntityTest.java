@@ -57,14 +57,14 @@ public class RecruiterEntityTest {
 											.userId(userId)
 										.build();
 		
-		assertEquals(entity.getAccountCreated(), 	accountCreated);
-		assertEquals(entity.getCompanyName(), 		companyName);
-		assertEquals(entity.getEmail(), 			email);
-		assertEquals(entity.getFirstName(), 		firstName);
-		assertEquals(entity.isActive(), 			active);
-		assertEquals(entity.getLanguage(), 			language);
-		assertEquals(entity.getSurname(), 			surname);
-		assertEquals(entity.getUserId(), 			userId);
+		assertEquals(accountCreated,	entity.getAccountCreated());
+		assertEquals(companyName, 		entity.getCompanyName());
+		assertEquals(email, 			entity.getEmail());
+		assertEquals(firstName, 		entity.getFirstName());
+		assertEquals(active, 			entity.isActive());
+		assertEquals(language, 			entity.getLanguage());
+		assertEquals(surname, 			entity.getSurname());
+		assertEquals(userId, 			entity.getUserId());
 		
 	}
 	
@@ -86,12 +86,12 @@ public class RecruiterEntityTest {
 		entity.setSurname(surname);
 		entity.setUserId(userId);
 		
-		assertEquals(entity.getCompanyName(), 		companyName);
-		assertEquals(entity.getEmail(), 			email);
-		assertEquals(entity.getFirstName(), 		firstName);
-		assertEquals(entity.getLanguage(), 			language);
-		assertEquals(entity.getSurname(), 			surname);
-		assertEquals(entity.getUserId(), 			userId);
+		assertEquals(companyName, 	entity.getCompanyName());
+		assertEquals(email, 		entity.getEmail());
+		assertEquals(firstName, 	entity.getFirstName());
+		assertEquals(language, 		entity.getLanguage());
+		assertEquals(surname, 		entity.getSurname());
+		assertEquals(userId, 		entity.getUserId());
 		
 	}
 	
@@ -127,14 +127,14 @@ public class RecruiterEntityTest {
 		
 		Recruiter recruiter = RecruiterEntity.convertFromEntity(entity);
 
-		assertEquals(recruiter.getAccountCreated(), 	accountCreated);
-		assertEquals(recruiter.getCompanyName(), 		companyName);
-		assertEquals(recruiter.getEmail(), 				email);
-		assertEquals(recruiter.getFirstName(), 			firstName);
-		assertEquals(recruiter.isActive(), 				active);
-		assertEquals(recruiter.getLanguage(), 			language);
-		assertEquals(recruiter.getSurname(), 			surname);
-		assertEquals(recruiter.getUserId(), 			userId);
+		assertEquals(accountCreated, 	recruiter.getAccountCreated());
+		assertEquals(companyName, 		recruiter.getCompanyName());
+		assertEquals(email, 			recruiter.getEmail());
+		assertEquals(firstName, 		recruiter.getFirstName());
+		assertEquals(active, 			recruiter.isActive());
+		assertEquals(language, 			recruiter.getLanguage());
+		assertEquals(surname, 			recruiter.getSurname());
+		assertEquals(userId, 			recruiter.getUserId());
 		
 		RecruiterSubscription subscription = recruiter.getSubscriptions().stream().findFirst().get();
 		
@@ -168,14 +168,14 @@ public class RecruiterEntityTest {
 						
 		RecruiterEntity entity = RecruiterEntity.convertToEntity(recruiter, Optional.empty());
 
-		assertEquals(entity.getAccountCreated(), 	accountCreated);
-		assertEquals(entity.getCompanyName(), 		companyName);
-		assertEquals(entity.getEmail(), 			email);
-		assertEquals(entity.getFirstName(), 		firstName);
-		assertEquals(entity.isActive(), 			active);
-		assertEquals(entity.getLanguage(), 			language);
-		assertEquals(entity.getSurname(), 			surname);
-		assertEquals(entity.getUserId(), 			userId);
+		assertEquals(accountCreated,	entity.getAccountCreated());
+		assertEquals(companyName, 		entity.getCompanyName());
+		assertEquals(email, 			entity.getEmail());
+		assertEquals(firstName, 		entity.getFirstName());
+		assertEquals(active, 			entity.isActive());
+		assertEquals(language, 			entity.getLanguage());
+		assertEquals(surname, 			entity.getSurname());
+		assertEquals(userId, 			entity.getUserId());
 		
 	}
 	

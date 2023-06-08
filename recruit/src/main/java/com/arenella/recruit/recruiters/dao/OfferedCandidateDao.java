@@ -69,7 +69,7 @@ public interface OfferedCandidateDao extends CrudRepository<OfferedCandidateEnti
 			.stream(this.findAll().spliterator(), false)
 			.filter(oc -> oc.isActive() == true)
 			.sorted(Comparator.comparing(OfferedCandidateEntity::getCreated).reversed())
-			.map(entity -> OfferedCandidateEntity.convertFromEntity(entity))
+			.map(OfferedCandidateEntity::convertFromEntity)
 			.collect(Collectors.toCollection(LinkedHashSet::new));
 	}
 	
@@ -81,7 +81,7 @@ public interface OfferedCandidateDao extends CrudRepository<OfferedCandidateEnti
 		return StreamSupport
 			.stream(this.findAllByRecruiterId(recruiterId).spliterator(), false)
 			.sorted(Comparator.comparing(OfferedCandidateEntity::getCreated).reversed())
-			.map(entity -> OfferedCandidateEntity.convertFromEntity(entity))
+			.map(OfferedCandidateEntity::convertFromEntity)
 			.collect(Collectors.toCollection(LinkedHashSet::new));
 	}
 	

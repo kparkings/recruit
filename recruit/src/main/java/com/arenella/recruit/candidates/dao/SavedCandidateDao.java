@@ -32,7 +32,7 @@ public interface SavedCandidateDao extends CrudRepository<SavedCandidateEntity, 
 	public default Set<SavedCandidate> fetchSavedCandidatesByUserId(String userId) {
 		return this.fetchByUserId(userId)
 				.stream()
-				.map(entity -> SavedCandidateEntity.convertFromEntity(entity))
+				.map(SavedCandidateEntity::convertFromEntity)
 				.collect(Collectors.toCollection(LinkedHashSet::new));
 	}
 	

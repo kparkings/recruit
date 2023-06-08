@@ -114,7 +114,7 @@ public class ListingEntityTest {
 		
 		assertTrue(listing.getSkills().contains(SKILL_JAVA));
 		assertTrue(listing.getSkills().contains(SKILL_CSHARP));
-		assertEquals(listing.getSkills().size(), 2);
+		assertEquals(2, listing.getSkills().size());
 		
 	}
 	
@@ -184,7 +184,7 @@ public class ListingEntityTest {
 		
 		assertTrue(listing.getSkills().contains(SKILL_JAVA));
 		assertTrue(listing.getSkills().contains(SKILL_CSHARP));
-		assertEquals(listing.getSkills().size(), 2);
+		assertEquals(2, listing.getSkills().size());
 		
 	}
 	
@@ -241,7 +241,7 @@ public class ListingEntityTest {
 			
 			assertTrue(entity.getLanguages().contains(Listing.language.DUTCH));
 			assertTrue(entity.getLanguages().contains(Listing.language.FRENCH));
-			assertEquals(entity.getLanguages().size(), 2);
+			assertEquals(2, entity.getLanguages().size());
 			assertTrue(entity.isActive());
 			
 			assertTrue(entity.getSkills().contains(SKILL_JAVA));
@@ -328,7 +328,7 @@ public class ListingEntityTest {
 			
 			assertTrue(entity.getSkills().contains(SKILL_JAVA));
 			assertTrue(entity.getSkills().contains(SKILL_CSHARP));
-			assertEquals(entity.getSkills().size(), 2);
+			assertEquals(2, entity.getSkills().size());
 			
 			Set<ListingViewedEventEntity> finalViews = entity.getViews();
 			

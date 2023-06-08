@@ -69,7 +69,7 @@ public class RecruiterController {
 		return recruiterService
 				.fetchRecruiters()
 				.stream()
-				.map(r -> RecruiterAPIOutbound.convertFromDomain(r))
+				.map(RecruiterAPIOutbound::convertFromDomain)
 				.collect(Collectors.toSet());
 	}
 	

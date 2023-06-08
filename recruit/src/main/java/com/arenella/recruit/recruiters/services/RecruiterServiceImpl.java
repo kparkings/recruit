@@ -116,7 +116,7 @@ public class RecruiterServiceImpl implements RecruiterService{
 	*/
 	@Override
 	public Set<Recruiter> fetchRecruiters() {
-		return StreamSupport.stream(recruiterDao.findAll().spliterator(), false).map(re -> RecruiterEntity.convertFromEntity(re)).collect(Collectors.toCollection(LinkedHashSet::new));
+		return StreamSupport.stream(recruiterDao.findAll().spliterator(), false).map(RecruiterEntity::convertFromEntity).collect(Collectors.toCollection(LinkedHashSet::new));
 	}
 
 	/**
@@ -194,7 +194,7 @@ public class RecruiterServiceImpl implements RecruiterService{
 		performIsAdminOrRecruiterAccessingOwnAccountCheck(recruiterId);
 		
 		//1. Check recruiter exists
-		Recruiter recruiter = this.recruiterDao.findRecruiterById(recruiterId).orElseThrow(() -> new IllegalArgumentException("Unable to retrieve recruiter: " + recruiterId));;
+		Recruiter recruiter = this.recruiterDao.findRecruiterById(recruiterId).orElseThrow(() -> new IllegalArgumentException("Unable to retrieve recruiter: " + recruiterId));
 		
 		//2. Check subscription exists
 		RecruiterSubscription subscription = recruiter.getSubscriptions().stream().filter(sub -> sub.getSubscriptionId().equals(subscriptionId)).findFirst().orElseThrow(() -> new IllegalArgumentException("Unknown Subscription: " + subscriptionId.toString()));

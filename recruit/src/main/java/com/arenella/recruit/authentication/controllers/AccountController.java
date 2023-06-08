@@ -42,7 +42,7 @@ public class AccountController {
 	*/
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@PostMapping(path="account", consumes="application/json", produces="application/json")
-	public AccountCreatedAPIOutbound createAccount(@RequestBody CreateAccountAPIInbound account) throws Exception{
+	public AccountCreatedAPIOutbound createAccount(@RequestBody CreateAccountAPIInbound account) {
 		 
 		return AccountCreatedAPIOutbound.convertFromUser(accountService.createAccount(account.getProposedUsername(), account.getAccountType()));
 		

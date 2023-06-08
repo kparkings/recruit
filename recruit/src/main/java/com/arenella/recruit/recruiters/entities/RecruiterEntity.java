@@ -405,7 +405,7 @@ public class RecruiterEntity {
 					.language(recruiterEntity.getLanguage())
 					.surname(recruiterEntity.getSurname())
 					.userId(recruiterEntity.getUserId())
-					.subscriptions(recruiterEntity.getSubscriptions().stream().map(s -> RecruiterSubscriptionEntity.convertFromEntity(s)).collect(Collectors.toSet()))
+					.subscriptions(recruiterEntity.getSubscriptions().stream().map(RecruiterSubscriptionEntity::convertFromEntity).collect(Collectors.toSet()))
 				.build();
 	}
 	

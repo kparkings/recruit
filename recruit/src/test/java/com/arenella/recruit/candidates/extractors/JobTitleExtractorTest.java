@@ -65,18 +65,6 @@ public class JobTitleExtractorTest {
 	}
 	
 	/**
-	* Tests the case that multiple job types have been identified and no single 
-	* job type has the the maxium number of occurrences of a related search term
-	* @throws Exception
-	*/
-	@Test
-	public void testMultipleJobTitlesFoundMultioleHaveHighestWeight() throws Exception{
-		
-		//TODO: [KP] Decide how to handle this. Currently just selects one.
-		
-	}
-	
-	/**
 	* Tests that if two or more job types have an equal weighting for score that 
 	* preference is given to non it recruiter roles
 	* @throws Exception

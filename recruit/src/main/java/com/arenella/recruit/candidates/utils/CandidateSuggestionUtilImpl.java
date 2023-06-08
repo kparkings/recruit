@@ -48,8 +48,8 @@ public class CandidateSuggestionUtilImpl implements CandidateSuggestionUtil{
 			return 100;
 		}
 		
-		final Set<String> requiredSkills = skills.stream().map(skill -> skill.toLowerCase()).collect(Collectors.toSet());
-		final Set<String> candidateSkills = candidate.get().getSkills().stream().map(skill -> skill.toLowerCase()).collect(Collectors.toSet());
+		final Set<String> requiredSkills = skills.stream().map(String::toLowerCase).collect(Collectors.toSet());
+		final Set<String> candidateSkills = candidate.get().getSkills().stream().map(String::toLowerCase).collect(Collectors.toSet());
 		
 		AtomicInteger matchingSkillCount = new AtomicInteger(0);
 		

@@ -48,7 +48,7 @@ public interface ListingDao extends CrudRepository<ListingEntity, UUID>, JpaSpec
 	* @return results
 	*/
 	public default Set<Listing> findAllListings(ListingFilter filterOptions) {
-		return this.findAll(new FilterSpecification(filterOptions)).stream().map(l -> ListingEntity.convertFromEntity(l)).collect(Collectors.toSet());
+		return this.findAll(new FilterSpecification(filterOptions)).stream().map(ListingEntity::convertFromEntity).collect(Collectors.toSet());
 	}
 	
 	/**
@@ -71,7 +71,7 @@ public interface ListingDao extends CrudRepository<ListingEntity, UUID>, JpaSpec
 			return Optional.empty();
 		}
 		
-		return entity.stream().map(e -> ListingEntity.convertFromEntity(e)).findAny();
+		return entity.stream().map(ListingEntity::convertFromEntity).findAny();
 		
 	}
 	

@@ -22,16 +22,16 @@ public class LanguageExtractor implements JobSpecifcationFilterExtractor{
 	*/
 	public void extractFilters(String documentText, CandidateExtractedFiltersBuilder filterBuilder) {
 	
-			boolean includeEN = ENGLISH.stream().filter(place -> documentText.contains(place)).count() 	> 0;
-			boolean includeNL = DUTCH.stream().filter(place -> documentText.contains(place)).count() 	> 0;
-			boolean includeFR = FRENCH.stream().filter(place -> documentText.contains(place)).count() 	> 0;
+			boolean includeEN = ENGLISH.stream().filter(documentText::contains).count() 	> 0;
+			boolean includeNL = DUTCH.stream().filter(documentText::contains).count() 	> 0;
+			boolean includeFR = FRENCH.stream().filter(documentText::contains).count() 	> 0;
 			
 			if (!includeEN && filterBuilder.build().getUK()) {
 				includeEN = true;
 			}
 			
 			if (!includeEN) {
-				includeEN = DocumentFilterExtractionUtil.uk.stream().filter(place -> documentText.contains(" "+place + " ") || documentText.contains(" "+place + ".")).count() > 0;
+				includeEN = DocumentFilterExtractionUtil.UK.stream().filter(place -> documentText.contains(" "+place + " ") || documentText.contains(" "+place + ".")).count() > 0;
 			}
 			
 			

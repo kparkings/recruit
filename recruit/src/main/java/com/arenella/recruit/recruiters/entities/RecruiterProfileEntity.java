@@ -260,8 +260,8 @@ public class RecruiterProfileEntity {
 	public static class RecruiterProfileEntityBuilder{
 		
 		private String 				recruiterId;
-		private Set<COUNTRY> 		recruitsIn				= new LinkedHashSet<>();;
-		private Set<LANGUAGE>		languagesSpoken			= new LinkedHashSet<>();;
+		private Set<COUNTRY> 		recruitsIn				= new LinkedHashSet<>();
+		private Set<LANGUAGE>		languagesSpoken			= new LinkedHashSet<>();
 		private byte[]				photoBytes;
 		private PHOTO_FORMAT		photoFormat;
 		private boolean 			visibleToRecruiters;
@@ -270,9 +270,9 @@ public class RecruiterProfileEntity {
 		private String				jobTitle;
 		private int					yearsExperience;
 		private String				introduction;
-		private Set<SECTOR>			sectors					= new LinkedHashSet<>();;
-		private Set<TECH>			coreTech				= new LinkedHashSet<>();;
-		private Set<CONTRACT_TYPE> 	recruitsContractTypes	= new LinkedHashSet<>();;
+		private Set<SECTOR>			sectors					= new LinkedHashSet<>();
+		private Set<TECH>			coreTech				= new LinkedHashSet<>();
+		private Set<CONTRACT_TYPE> 	recruitsContractTypes	= new LinkedHashSet<>();
 		private REC_TYPE	 		recruiterType;
 		
 		/**

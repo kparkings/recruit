@@ -81,7 +81,7 @@ public class SupplyAndDemandControllerTest {
 	@Test
 	public void testUpdateOpenPosition() throws Exception{
 		ResponseEntity<Void> response = controller.updateOpenPosition(UUID.randomUUID(), OpenPositionAPIInbound.builder().positionTitle("Java Dev").build());
-		assertEquals(response.getStatusCode(), HttpStatus.OK);
+		assertEquals(HttpStatus.OK, response.getStatusCode());
 		Mockito.verify(supplyAndDemandService).updateOpenPosition(Mockito.any(UUID.class), Mockito.any(OpenPosition.class));
 	}
 	
@@ -92,7 +92,7 @@ public class SupplyAndDemandControllerTest {
 	@Test
 	public void testAddOfferedCandidate() throws Exception{
 		ResponseEntity<Void> response = controller.addOfferedCandidate(OfferedCandidateAPIInbound.builder().candidateRoleTitle("Java Dev").build());
-		assertEquals(response.getStatusCode(), HttpStatus.CREATED);
+		assertEquals(HttpStatus.CREATED, response.getStatusCode());
 	}
 	
 	/**
@@ -125,7 +125,7 @@ public class SupplyAndDemandControllerTest {
 	@Test
 	public void testAddRecruiterToGlobalBlacklist() throws Exception{
 		ResponseEntity<Void> response = controller.addRecruiterToGlobalBlacklist("recruiter1Id");
-		assertEquals(response.getStatusCode(), HttpStatus.OK);
+		assertEquals(HttpStatus.OK, response.getStatusCode());
 	}
 	
 	/**
@@ -135,7 +135,7 @@ public class SupplyAndDemandControllerTest {
 	@Test
 	public void testDeleteRecruiterFromGlobalBlacklist() throws Exception{
 		ResponseEntity<Void> response = controller.deleteRecruiterFromGlobalBlacklist("recruiter1Id");
-		assertEquals(response.getStatusCode(), HttpStatus.OK);
+		assertEquals(HttpStatus.OK, response.getStatusCode());
 	}
 	
 	/**
@@ -175,7 +175,7 @@ public class SupplyAndDemandControllerTest {
 		response.getBody().stream().filter(c -> c.getId()== id2).findAny().orElseThrow();
 		response.getBody().stream().filter(c -> c.getId()== id3).findAny().orElseThrow();
 		
-		assertEquals(response.getStatusCode(), HttpStatus.OK);
+		assertEquals(HttpStatus.OK, response.getStatusCode());
 		
 	}
 	
@@ -207,7 +207,7 @@ public class SupplyAndDemandControllerTest {
 		response.getBody().stream().filter(c -> c.getId()== id2).findAny().orElseThrow();
 		response.getBody().stream().filter(c -> c.getId()== id3).findAny().orElseThrow();
 		
-		assertEquals(response.getStatusCode(), HttpStatus.OK);
+		assertEquals(HttpStatus.OK, response.getStatusCode());
 		
 	}
 	
@@ -240,7 +240,7 @@ public class SupplyAndDemandControllerTest {
 		response.getBody().stream().filter(c -> c.getId()== id2).findAny().orElseThrow();
 		response.getBody().stream().filter(c -> c.getId()== id3).findAny().orElseThrow();
 		
-		assertEquals(response.getStatusCode(), HttpStatus.OK);
+		assertEquals(HttpStatus.OK, response.getStatusCode());
 		
 	}
 	
@@ -271,7 +271,7 @@ public class SupplyAndDemandControllerTest {
 		response.getBody().stream().filter(c -> c.getId()== id2).findAny().orElseThrow();
 		response.getBody().stream().filter(c -> c.getId()== id3).findAny().orElseThrow();
 		
-		assertEquals(response.getStatusCode(), HttpStatus.OK);
+		assertEquals(HttpStatus.OK, response.getStatusCode());
 		
 	}
 	

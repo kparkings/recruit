@@ -173,7 +173,7 @@ public class CurriculumController {
 	*/
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@DeleteMapping(value="/pending-curriculum/{pendingCurriculumId}")
-	public ResponseEntity<Void> deletePendingCurriculum(@PathVariable("pendingCurriculumId") UUID pendingCurriculumId) throws Exception{
+	public ResponseEntity<Void> deletePendingCurriculum(@PathVariable("pendingCurriculumId") UUID pendingCurriculumId) {
 		
 		this.curriculumService.deletePendingCurriculum(pendingCurriculumId);
 		

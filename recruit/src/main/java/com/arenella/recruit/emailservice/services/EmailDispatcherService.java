@@ -65,9 +65,9 @@ public class EmailDispatcherService {
 	@PostConstruct
 	public void init() {
 		
-		this.emailDao.fetchEmailsByStatus(Status.TO_OUTBOX).stream().forEach(email -> {
-			this.dispatchEmail(email, this.emailDao);
-		});
+		this.emailDao.fetchEmailsByStatus(Status.TO_OUTBOX).stream().forEach(email -> 
+			this.dispatchEmail(email, this.emailDao)
+		);
 
 	}
 	
@@ -237,14 +237,9 @@ public class EmailDispatcherService {
 	* @return Initial status to assign the type of email
 	*/
 	private static final Status calculateStatus(EmailType type) {
-		switch(type) {
-			case INTERN:
-			case SYSTEM_INTERN:{
-				return Status.SENT_INTERN;
-			}
-			default:{
-				return Status.TO_OUTBOX;
-			}
-		} 
+		return switch(type) {
+			case INTERN, SYSTEM_INTERN -> Status.SENT_INTERN;
+			default -> Status.TO_OUTBOX;
+		};
 	}
 }

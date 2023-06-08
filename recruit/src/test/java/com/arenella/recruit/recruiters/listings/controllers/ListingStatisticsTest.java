@@ -29,8 +29,8 @@ public class ListingStatisticsTest {
 		
 		ListingStatistics stats = new ListingStatistics(events);
 		
-		assertEquals(stats.getViewsThisWeek(), 0L);
-		assertEquals(stats.getViewsToday(), 0L);
+		assertEquals(0L, stats.getViewsThisWeek());
+		assertEquals(0L, stats.getViewsToday());
 		
 	}
 	

@@ -44,9 +44,9 @@ public class UserEntityTest {
 									.roles(roles)
 									.build();
 		
-		assertEquals(entity.getUsername(), username);
-		assertEquals(entity.getPassword(), password);
-		assertEquals(entity.isEnabled(), enabled);
+		assertEquals(username, entity.getUsername());
+		assertEquals(password, entity.getPassword());
+		assertEquals(enabled, entity.isEnabled());
 		
 		assertTrue(entity.getRoles().contains(USER_ROLE.admin));
 		
@@ -70,9 +70,9 @@ public class UserEntityTest {
 
 		UserEntity userEntity = UserEntity.convertToEntity(user);
 		
-		assertEquals(userEntity.getUsername(), username);
-		assertEquals(userEntity.getPassword(), password);
-		assertEquals(userEntity.isEnabled(), enabled);
+		assertEquals(username, 	userEntity.getUsername());
+		assertEquals(password, 	userEntity.getPassword());
+		assertEquals(enabled, 	userEntity.isEnabled());
 		
 		assertTrue(userEntity.getRoles().contains(USER_ROLE.admin));
 		
@@ -96,9 +96,9 @@ public class UserEntityTest {
 
 		User user = UserEntity.convertFromEntity(entity);
 		
-		assertEquals(user.getUsername(), username);
-		assertEquals(user.getPassword(), password);
-		assertEquals(user.isEnabled(), enabled);
+		assertEquals(username, 	user.getUsername());
+		assertEquals(password, 	user.getPassword());
+		assertEquals(enabled, 	user.isEnabled());
 		
 		assertTrue(user.getRoles().contains(USER_ROLE.admin));
 		

@@ -97,19 +97,19 @@ public class PendingCandidateEntityTest {
 														
 		PendingCandidate candidate = PendingCandidateEntity.convertFromEntity(candidateEntity);
 
-		assertEquals(candidate.getPendingCandidateId(), 		pendingCandidateId);
-		assertEquals(candidate.getFirstname(), 					firstname);
-		assertEquals(candidate.getSurname(), 					surname);
-		assertEquals(candidate.getEmail(), 						email);
-		assertEquals(candidate.isFreelance(), 					freelance);
-		assertEquals(candidate.isPerm(), 						perm);
+		assertEquals(pendingCandidateId,	candidate.getPendingCandidateId());
+		assertEquals(firstname, 			candidate.getFirstname());
+		assertEquals(surname, 				candidate.getSurname());
+		assertEquals(email, 				candidate.getEmail());
+		assertEquals(freelance, 			candidate.isFreelance());
+		assertEquals(perm, 					candidate.isPerm());
 		
-		assertEquals(candidate.getIntroduction(), 				introduction);
-		assertEquals(candidate.getRate().get().getCurrency(), 	rateCurrency);
-		assertEquals(candidate.getRate().get().getPeriod(), 	ratePeriod);
-		assertEquals(candidate.getRate().get().getValue(), 		rateValue);
-		assertEquals(candidate.getPhoto().get().getImageBytes(),photoBytes);
-		assertEquals(candidate.getPhoto().get().getFormat(), 	photoFormat);
+		assertEquals(introduction, 			candidate.getIntroduction());
+		assertEquals(rateCurrency, 			candidate.getRate().get().getCurrency());
+		assertEquals(ratePeriod, 			candidate.getRate().get().getPeriod());
+		assertEquals(rateValue, 			candidate.getRate().get().getValue());
+		assertEquals(photoBytes, 			candidate.getPhoto().get().getImageBytes());
+		assertEquals(photoFormat,	 		candidate.getPhoto().get().getFormat());
 		
 	}
 	

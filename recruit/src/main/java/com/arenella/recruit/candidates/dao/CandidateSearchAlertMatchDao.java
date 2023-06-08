@@ -39,7 +39,7 @@ public interface CandidateSearchAlertMatchDao extends CrudRepository<CandidateSe
 	public default Set<CandidateSearchAlertMatch> getMatchesForRecruiters(String recruiterId){
 		return this.getMatchesForRecruitersAsEntities(recruiterId)
 			.stream()
-			.map(entity -> CandidateSearchAlertMatchEntity.convertFromEntity(entity))
+			.map(CandidateSearchAlertMatchEntity::convertFromEntity)
 			.collect(Collectors.toCollection(LinkedHashSet::new));
 	}
 

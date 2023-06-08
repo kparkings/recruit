@@ -63,9 +63,9 @@ public class AlertTestUtilImpl implements AlertTestUtil{
 						
 						constructAndSendDailyMatchSummaryEmail(recruiterId, matches);
 						
-						matches.stream().forEach(match -> { 
-							matchDao.deleteById(match.getId());
-						});
+						matches.stream().forEach(match ->  
+							matchDao.deleteById(match.getId())
+						);
 						
 						});
 					
@@ -98,9 +98,9 @@ public class AlertTestUtilImpl implements AlertTestUtil{
 	@Override
 	public void testAgainstCandidateSearchAlerts(CandidateCreatedEvent event) {
 		
-		this.alertDao.fetchAlerts().forEach(alert -> {
-			scheduler.execute(packageTest(event,alert));
-		});
+		this.alertDao.fetchAlerts().forEach(alert -> 
+			scheduler.execute(packageTest(event,alert))
+		);
 		
 	}
 	

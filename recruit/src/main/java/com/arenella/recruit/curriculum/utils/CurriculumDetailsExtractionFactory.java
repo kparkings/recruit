@@ -28,17 +28,12 @@ public class CurriculumDetailsExtractionFactory {
 	*/
 	public static CurriculumDetailsExtractor getInstance(FileType fileType) {
 		
-		switch(fileType) {
-			case pdf:{
-				return new PDFCurriculumDetailsExtractor();
-			}
-			case doc:
-			case docx:{
-				return new WordCurriculumDetailsExtractor(); 
-			}
-		}
+		return switch(fileType) {
+			case pdf -> new PDFCurriculumDetailsExtractor();
+			case doc, docx -> new WordCurriculumDetailsExtractor(); 
+			default -> null;
+		};
 		
-		return null;
 	}
 	
 	/**

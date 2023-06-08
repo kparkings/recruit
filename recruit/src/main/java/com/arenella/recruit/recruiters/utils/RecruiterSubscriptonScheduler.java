@@ -50,7 +50,7 @@ public class RecruiterSubscriptonScheduler {
 	* @throws Exception
 	*/
 	@PostConstruct
-	public void runTasks() throws Exception {
+	public void runTasks() {
 		
 		scheduler.scheduleAtFixedRate(new Runnable() {
 
@@ -59,7 +59,7 @@ public class RecruiterSubscriptonScheduler {
 				
 				try {
 				
-						recruiterService.fetchRecruiters().stream().forEach(recruiter -> {
+						recruiterService.fetchRecruiters().stream().forEach(recruiter -> 
 							
 							recruiter.getSubscriptions().stream().filter(a -> a.getStatus() == subscription_status.ACTIVE).collect(Collectors.toSet()).stream().forEach(subscription -> {
 								
@@ -114,9 +114,9 @@ public class RecruiterSubscriptonScheduler {
 									
 								}
 								
-							});
+							})
 							
-						});
+						);
 					
 				} catch(Exception e) {
 					e.printStackTrace();

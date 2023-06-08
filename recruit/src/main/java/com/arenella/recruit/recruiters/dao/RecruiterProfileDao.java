@@ -65,7 +65,7 @@ public interface RecruiterProfileDao extends PagingAndSortingRepository<Recruite
 		
 		Set<RecruiterProfileEntity> matches = this.findAll(new RecruiterEntitySpecification(filters)).stream().collect(Collectors.toSet());
 		
-		return matches.stream().map(r -> RecruiterProfileEntity.convertFromEntity(r)).collect(Collectors.toCollection(LinkedHashSet::new));
+		return matches.stream().map(RecruiterProfileEntity::convertFromEntity).collect(Collectors.toCollection(LinkedHashSet::new));
 		
 	}
 	

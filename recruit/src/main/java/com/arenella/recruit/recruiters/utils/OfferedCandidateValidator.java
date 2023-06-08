@@ -12,18 +12,18 @@ import com.arenella.recruit.recruiters.beans.OfferedCandidateAPIInbound;
 */
 public class OfferedCandidateValidator {
 
-	public static int 		CANDIDATE_ROLE_MAX_LENGTH 		= 150;
-	public static String 	ATTR_CANDODIDATE_FUNC 			= "Candidates Function";
-	public static String 	MISSING_CANDIDATE_FUNCTION 		= "You must provide the Candidates Function";
-	public static String 	EMPTY_CANDIDATE_FUNCTION 		= "Candidate Function must not exceed";
+	public static final int 	CANDIDATE_ROLE_MAX_LENGTH 		= 150;
+	public static final String 	ATTR_CANDODIDATE_FUNC 			= "Candidates Function";
+	public static final String 	MISSING_CANDIDATE_FUNCTION 		= "You must provide the Candidates Function";
+	public static final String 	EMPTY_CANDIDATE_FUNCTION 		= "Candidate Function must not exceed";
 	
-	public static int 		RENUMERATION_MAX_LENGTH 			= 150;
-	public static String 	ATTR_RENUMERATION 					= "Renumeration";
-	public static String 	RENUMERATION_GT_MAX	 				= "Renumeration must not exceed ";
+	public static final int 	RENUMERATION_MAX_LENGTH 		= 150;
+	public static final String 	ATTR_RENUMERATION 				= "Renumeration";
+	public static final String 	RENUMERATION_GT_MAX	 			= "Renumeration must not exceed ";
 	
-	public static int 		LOCATION_MAX_LENGTH 				= 150;
-	public static String 	ATTR_LOCATION 						= "Location";
-	public static String 	LOCATION_GT_MAX	 					= "Location must not exceed ";
+	public static final int 	LOCATION_MAX_LENGTH 			= 150;
+	public static final String 	ATTR_LOCATION 					= "Location";
+	public static final String 	LOCATION_GT_MAX	 				= "Location must not exceed ";
 	
 	/**
 	* Performs validation of an Offered Candidate
@@ -64,7 +64,7 @@ public class OfferedCandidateValidator {
 
 		private static final long serialVersionUID = 2351352671765825396L;
 		
-		private Set<AttributeIssue> errors = new LinkedHashSet<>();
+		private final Set<AttributeIssue> errors = new LinkedHashSet<>();
 		
 		@Override
 		public String getMessage() {

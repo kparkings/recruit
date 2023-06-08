@@ -42,7 +42,7 @@ public class ListingExceptionHandlerTest {
 		
 		ResponseEntity<Set<FailedField>> response = handler.handleListingValidationException(exception);
 		
-		assertEquals(response.getStatusCode(), HttpStatus.BAD_REQUEST);
+		assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
 		assertTrue(exception.getFailedFields().stream().filter(f -> f.getFieldName().equals(field1)).findAny().isPresent());
 		assertTrue(exception.getFailedFields().stream().filter(f -> f.getFieldName().equals(field2)).findAny().isPresent());
 		assertEquals(exception.getFailedFields().stream().filter(f -> f.getFieldName().equals(field1)).findAny().get().getFieldMessageOrKey(), field1MessageOrKey);

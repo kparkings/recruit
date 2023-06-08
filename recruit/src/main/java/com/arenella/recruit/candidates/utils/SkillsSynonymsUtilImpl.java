@@ -160,13 +160,13 @@ public class SkillsSynonymsUtilImpl implements SkillsSynonymsUtil{
 	@Override
 	public void addSynonymsForSkills(Set<String> extractedSkills ,Set<String> skills) {
 		
-		skills = skills.stream().filter(s -> StringUtils.hasText(s)).collect(Collectors.toSet());
+		skills = skills.stream().filter(StringUtils::hasText).collect(Collectors.toSet());
 		
-		extractedSkills.addAll(skills.stream().map(skill -> skill.toLowerCase()).collect(Collectors.toSet()));
+		extractedSkills.addAll(skills.stream().map(String::toLowerCase).collect(Collectors.toSet()));
 		
-		skills.stream().forEach(skill -> {
-			this.synonyms.stream().forEach(synonym -> synonym.getSynonymsForSkill(extractedSkills, skill));
-		});
+		skills.stream().forEach(skill -> 
+			this.synonyms.stream().forEach(synonym -> synonym.getSynonymsForSkill(extractedSkills, skill))
+		);
 	
 	}
 

@@ -24,8 +24,8 @@ public class ContractTypeExtractor implements JobSpecifcationFilterExtractor{
 	@Override
 	public void extractFilters(String documentText, CandidateExtractedFiltersBuilder filterBuilder) {
 		
-		boolean isPerm 		= perm.stream().filter(a -> documentText.contains(a)).count() > 0;
-		boolean isContract 	= contract.stream().filter(a -> documentText.contains(a)).count() > 0;
+		boolean isPerm 		= perm.stream().filter(documentText::contains).count() > 0;
+		boolean isContract 	= contract.stream().filter(documentText::contains).count() > 0;
 		
 		if (isPerm && isContract) {
 			return;

@@ -37,7 +37,7 @@ public class DocumentFilterExtractionUtil {
 	@Autowired
 	private ContractTypeExtractor 	contractTypeExtractor;
 	
-	public static Set<String> uk = Set.of("bristol","gbp","stockport","£"," uk ", "uk.","uk\\t", "inside ir35", "milton keynes", "england", "midlands", "derby", "wales", "scotland", "edinburgh","glasgow", "london", "liverpool", "manchester", "oxford", "glousester", "surrey", "Buckinghamshire", "Berkshire", "hounslow", "Milton Keynes", "edgware", "Leicester", "bracknell", "barking", "Colchester", "cardiff", "Brentford", "Stoke-on-Trent", "maidenhead", "guildford", "reading", "leeds");
+	public static final Set<String> UK = Set.of("bristol","gbp","stockport","£"," uk ", "uk.","uk\\t", "inside ir35", "milton keynes", "england", "midlands", "derby", "wales", "scotland", "edinburgh","glasgow", "london", "liverpool", "manchester", "oxford", "glousester", "surrey", "Buckinghamshire", "Berkshire", "hounslow", "Milton Keynes", "edgware", "Leicester", "bracknell", "barking", "Colchester", "cardiff", "Brentford", "Stoke-on-Trent", "maidenhead", "guildford", "reading", "leeds");
 	
 	public CandidateExtractedFilters extractFilters(FileType fileType, byte[] fileBytes) throws Exception{
 
@@ -64,17 +64,12 @@ public class DocumentFilterExtractionUtil {
 			return null;
 		}
 		
-		switch(fileType) {
-			case pdf:{
-				return new PDFExtractor();
-			}
-			case doc:
-			case docx:{
-				return new WordExtractor(); 
-			}
-		}
+		return switch(fileType) {
+			case pdf -> new PDFExtractor();
+			case doc, docx -> new WordExtractor(); 
+			default -> null;
+		};
 		
-		return null;
 	}
 	
 	/**

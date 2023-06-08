@@ -696,7 +696,7 @@ public class CandidateEntity {
 						.perm(candidate.isPerm())
 						.registerd(candidate.getRegisteredOn())
 						.yearsExperience(candidate.getYearsExperience())
-						.skills(candidate.getSkills().stream().map(skill -> skill.trim()).map(skill ->skill.toLowerCase()).collect(Collectors.toSet()))
+						.skills(candidate.getSkills().stream().map(String::trim).map(String::toLowerCase).collect(Collectors.toSet()))
 						.languages(candidate.getLanguages())
 						.introduction(candidate.getIntroduction())
 						.rateCurrency(candidate.getRate().isEmpty() ? null 	: candidate.getRate().get().getCurrency())

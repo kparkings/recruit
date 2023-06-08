@@ -219,7 +219,7 @@ public class EmailRecipientEntity {
 	*/
 	public static EmailRecipient<UUID> convertFromEntity(EmailRecipientEntity entity) {
 		
-		EmailRecipient<UUID> recipient =  new EmailRecipient<UUID>(entity.getId(), entity.getContactId(), entity.getContactType());
+		EmailRecipient<UUID> recipient =  new EmailRecipient<>(entity.getId(), entity.getContactId(), entity.getContactType());
 		
 		recipient.setEmail(entity.getEmailAddress());
 		recipient.setFirstName(entity.getFirstName());

@@ -33,6 +33,7 @@ import fr.opensagres.poi.xwpf.converter.pdf.PdfOptions;
 import com.arenella.recruit.curriculum.entity.CurriculumDownloadedEventEntity;
 import com.arenella.recruit.curriculum.entity.CurriculumEntity;
 import com.arenella.recruit.curriculum.entity.PendingCurriculumEntity;
+import com.arenella.recruit.curriculum.entity.SkillEntity;
 import com.arenella.recruit.curriculum.enums.FileType;
 
 /**
@@ -127,7 +128,7 @@ public class CurriculumServiceImpl implements CurriculumService{
 		
 		try {
 				
-			Set<String> skills = StreamSupport.stream(skillsDao.findAll().spliterator(), false).map(skill -> skill.getSkill()).collect(Collectors.toSet());
+			Set<String> skills = StreamSupport.stream(skillsDao.findAll().spliterator(), false).map(SkillEntity::getSkill).collect(Collectors.toSet());
 			
 			return CurriculumDetailsExtractionFactory.getInstance(fileType).extract(skills, curriculumId, curriculumFileBytes);
 				

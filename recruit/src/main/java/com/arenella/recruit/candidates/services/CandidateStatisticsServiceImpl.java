@@ -54,7 +54,7 @@ public class CandidateStatisticsServiceImpl implements CandidateStatisticsServic
 	@Override
 	public List<CandidateRoleStats> fetchCandidateRoleStats() {
 		
-		return candidateDao.getCandidateRoleStats().stream().map(stat -> CandidateRoleStatsView.convertFromView(stat)).collect(Collectors.toCollection(LinkedList::new));
+		return candidateDao.getCandidateRoleStats().stream().map(CandidateRoleStatsView::convertFromView).collect(Collectors.toCollection(LinkedList::new));
 	}
 	
 	/**
@@ -94,7 +94,7 @@ public class CandidateStatisticsServiceImpl implements CandidateStatisticsServic
 			events.add(this.onlyGeneralValuesAvailable(userId, searchId, filterOptions));
 		}
 			
-		statisticsDao.saveAll(events.stream().map(e -> CandidateSearchEventEntity.toEntity(e)).collect(Collectors.toSet()));
+		statisticsDao.saveAll(events.stream().map(CandidateSearchEventEntity::toEntity).collect(Collectors.toSet()));
 		
 	}
 	
@@ -175,7 +175,7 @@ public class CandidateStatisticsServiceImpl implements CandidateStatisticsServic
 	*/
 	public boolean isOnlyCountryAvailable(CandidateFilterOptions filterOptions) {
 		return !filterOptions.getCountries().isEmpty() && filterOptions.getFunctions().isEmpty() && filterOptions.getSkills().isEmpty();
-	};
+	}
 	
 	/**
 	* Process Event for Search where only Options selected (And general search attributes)
@@ -187,17 +187,13 @@ public class CandidateStatisticsServiceImpl implements CandidateStatisticsServic
 		
 		Set<CandidateSearchEvent> events = new HashSet<>();
 		
-		filterOptions.getSkills().stream().forEach(skill -> {
-			
-			filterOptions.getCountries().stream().forEach(country -> {
-				
-				filterOptions.getFunctions().stream().forEach(function -> {
-					events.add(this.generateEvent(userId, searchId ,skill, country, function, filterOptions));
-				});
-				
-			});
-			
-		});
+		filterOptions.getSkills().stream().forEach(skill -> 
+			filterOptions.getCountries().stream().forEach(country -> 
+				filterOptions.getFunctions().stream().forEach(function -> 
+					events.add(this.generateEvent(userId, searchId ,skill, country, function, filterOptions))
+				)
+			)
+		);
 		
 		return events;
 		
@@ -213,13 +209,11 @@ public class CandidateStatisticsServiceImpl implements CandidateStatisticsServic
 		
 		Set<CandidateSearchEvent> events = new HashSet<>();
 			
-		filterOptions.getCountries().stream().forEach(country -> {
-			
-			filterOptions.getFunctions().stream().forEach(function -> {
-				events.add(this.generateEvent(userId, searchId, null, country, function, filterOptions));
-			});
-			
-		});
+		filterOptions.getCountries().stream().forEach(country -> 
+			filterOptions.getFunctions().stream().forEach(function -> 
+				events.add(this.generateEvent(userId, searchId, null, country, function, filterOptions))
+			)
+		);
 		
 		return events;
 		
@@ -235,15 +229,11 @@ public class CandidateStatisticsServiceImpl implements CandidateStatisticsServic
 		
 		Set<CandidateSearchEvent> events = new HashSet<>();
 		
-		filterOptions.getSkills().stream().forEach(skill -> {
-			
-			filterOptions.getCountries().stream().forEach(country -> {
-				
-					events.add(this.generateEvent(userId, searchId, skill, country, null, filterOptions));
-				
-			});
-			
-		});
+		filterOptions.getSkills().stream().forEach(skill -> 
+			filterOptions.getCountries().stream().forEach(country -> 
+				events.add(this.generateEvent(userId, searchId, skill, country, null, filterOptions))
+			)
+		);
 		
 		return events;
 		
@@ -259,13 +249,11 @@ public class CandidateStatisticsServiceImpl implements CandidateStatisticsServic
 		
 		Set<CandidateSearchEvent> events = new HashSet<>();
 		
-		filterOptions.getSkills().stream().forEach(skill -> {
-			
-			filterOptions.getFunctions().stream().forEach(function -> {
-				events.add(this.generateEvent(userId, searchId, skill, null, function, filterOptions));
-			});
-			
-		});
+		filterOptions.getSkills().stream().forEach(skill -> 
+			filterOptions.getFunctions().stream().forEach(function -> 
+				events.add(this.generateEvent(userId, searchId, skill, null, function, filterOptions))
+			)			
+		);
 		
 		return events;
 		
@@ -278,7 +266,7 @@ public class CandidateStatisticsServiceImpl implements CandidateStatisticsServic
 	* @return Events
 	*/
 	public Set<CandidateSearchEvent> onlySkillAvailable(String userId, UUID searchId, CandidateFilterOptions filterOptions) {
-		return filterOptions.getSkills().stream().map(skill -> (CandidateSearchEvent)this.generateEvent(userId, searchId, skill, null, null, filterOptions)).collect(Collectors.toSet());
+		return filterOptions.getSkills().stream().map(skill -> this.generateEvent(userId, searchId, skill, null, null, filterOptions)).collect(Collectors.toSet());
 	}
 	
 	/**
@@ -288,7 +276,7 @@ public class CandidateStatisticsServiceImpl implements CandidateStatisticsServic
 	* @return Events
 	*/
 	public Set<CandidateSearchEvent> onlyFunctionAvailable(String userId, UUID searchId, CandidateFilterOptions filterOptions) {
-		return filterOptions.getFunctions().stream().map(function -> (CandidateSearchEvent)this.generateEvent(userId, searchId, null, null, function, filterOptions)).collect(Collectors.toSet());
+		return filterOptions.getFunctions().stream().map(function -> this.generateEvent(userId, searchId, null, null, function, filterOptions)).collect(Collectors.toSet());
 	}
 	
 	/**
@@ -298,8 +286,8 @@ public class CandidateStatisticsServiceImpl implements CandidateStatisticsServic
 	* @return Events
 	*/
 	public Set<CandidateSearchEvent> onlyCountryAvailable(String userId, UUID searchId, CandidateFilterOptions filterOptions) {
-		return filterOptions.getCountries().stream().map(country -> (CandidateSearchEvent)this.generateEvent(userId, searchId, null, country, null, filterOptions)).collect(Collectors.toSet());
-	};
+		return filterOptions.getCountries().stream().map(country -> this.generateEvent(userId, searchId, null, country, null, filterOptions)).collect(Collectors.toSet());
+	}
 	
 	/**
 	* Generates an event where no multiple search values where selected
@@ -309,7 +297,7 @@ public class CandidateStatisticsServiceImpl implements CandidateStatisticsServic
 	*/
 	public CandidateSearchEvent onlyGeneralValuesAvailable(String userId, UUID searchId, CandidateFilterOptions filterOptions) {
 		return generateEvent(userId, searchId, null, null, null, filterOptions);
-	};
+	}
 	
 	/**
 	* Produces an event based upon the provided attribute values

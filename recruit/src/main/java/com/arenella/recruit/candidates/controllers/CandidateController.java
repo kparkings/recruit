@@ -213,7 +213,7 @@ public class CandidateController {
 																		.available(available)
 																	.build();
 		
-		return candidateService.getCandidateSuggestions(filterOptions, pageable.getPageSize()).map(candidate -> CandidateSuggestionAPIOutbound.convertFromCandidate(candidate));
+		return candidateService.getCandidateSuggestions(filterOptions, pageable.getPageSize()).map(CandidateSuggestionAPIOutbound::convertFromCandidate);
 		
 	}
 	
@@ -237,7 +237,7 @@ public class CandidateController {
 	@GetMapping(path="pending-candidate", produces="application/json")
 	public ResponseEntity<Set<PendingCandidateAPIOutbound>> getAllPendingCandidates() {
 		
-		LinkedHashSet<PendingCandidateAPIOutbound> candidates = candidateService.getPendingCandidates().stream().map(p -> PendingCandidateAPIOutbound.convertFromPendingCandidate(p)).collect(Collectors.toCollection(LinkedHashSet::new));
+		LinkedHashSet<PendingCandidateAPIOutbound> candidates = candidateService.getPendingCandidates().stream().map(PendingCandidateAPIOutbound::convertFromPendingCandidate).collect(Collectors.toCollection(LinkedHashSet::new));
 		
 		return new ResponseEntity<>(candidates, HttpStatus.OK);
 	}
@@ -276,7 +276,7 @@ public class CandidateController {
 		return ResponseEntity.ok(candidateService
 				.getAlertsForCurrentUser()
 				.stream()
-				.map(a -> CandidateSearchAlertAPIOutbound.convertFromDomain(a))
+				.map(CandidateSearchAlertAPIOutbound::convertFromDomain)
 				.collect(Collectors.toCollection(LinkedHashSet::new))
 				);
 	}
@@ -325,9 +325,9 @@ public class CandidateController {
 		
 		Set<SavedCandidateAPIOutbound> candidates = new LinkedHashSet<>();
 			
-		this.candidateService.fetchSavedCandidatesForUser().entrySet().forEach(es -> {
-			candidates.add(SavedCandidateAPIOutbound.convertFromDomain(es.getKey(), new CandidateSearchAccuracyWrapper(es.getValue())));
-		});
+		this.candidateService.fetchSavedCandidatesForUser().entrySet().forEach(es -> 
+			candidates.add(SavedCandidateAPIOutbound.convertFromDomain(es.getKey(), new CandidateSearchAccuracyWrapper(es.getValue())))
+		);
 		
 		return ResponseEntity.status(HttpStatus.OK).body(candidates);
 	}

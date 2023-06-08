@@ -40,7 +40,7 @@ public interface CandidateSearchAlertDao extends CrudRepository<CandidateSearchA
 	public default Set<CandidateSearchAlert> fetchAlertsByRecruiterId(String recruiterId){
 		return fetchAlertEntitiesByRecruiterId(recruiterId)
 				.stream()
-				.map(ae -> CandidateSearchAlertEntity.convertFromEntity(ae))
+				.map(CandidateSearchAlertEntity::convertFromEntity)
 				.collect(Collectors.toCollection(LinkedHashSet::new));
 	}
 	
@@ -50,7 +50,7 @@ public interface CandidateSearchAlertDao extends CrudRepository<CandidateSearchA
 	*/
 	public default Set<CandidateSearchAlert> fetchAlerts(){
 		return StreamSupport.stream(this.findAll().spliterator(), false)
-				.map(ae -> CandidateSearchAlertEntity.convertFromEntity(ae))
+				.map(CandidateSearchAlertEntity::convertFromEntity)
 				.collect(Collectors.toCollection(LinkedHashSet::new));
 	}
 	

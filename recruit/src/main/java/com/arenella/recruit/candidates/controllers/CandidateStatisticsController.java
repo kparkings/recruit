@@ -44,7 +44,7 @@ public class CandidateStatisticsController {
 	*/
 	@GetMapping(path="candidate/stat/function-count")
 	public ResponseEntity<List<CandidateRoleStatsAPIOutbound>> fetchCandidateRoleStats(){
-		return ResponseEntity.ok(candidateStatisticsService.fetchCandidateRoleStats().stream().map(stat -> CandidateRoleStatsAPIOutbound.convertFromDomain(stat)).collect(Collectors.toCollection(LinkedList::new)));
+		return ResponseEntity.ok(candidateStatisticsService.fetchCandidateRoleStats().stream().map(CandidateRoleStatsAPIOutbound::convertFromDomain).collect(Collectors.toCollection(LinkedList::new)));
 	}
 	
 	/**
@@ -59,7 +59,7 @@ public class CandidateStatisticsController {
 		LocalDate 						lastRunDate = this.candidateStatisticsService.getLastRunDateNewCandidateStats(NEW_STATS_TYPE.NEW_CANDIDATES);
 		NewCandidatesAPIOutboundBuilder builder 	= NewCandidatesAPIOutbound.builder();
 		
-		this.candidateStatisticsService.fetchNewCandidates(lastRunDate).forEach(c -> builder.addCandidate(c));
+		this.candidateStatisticsService.fetchNewCandidates(lastRunDate).forEach(builder::addCandidate);
 		
 		return new ResponseEntity<>(builder.build(), HttpStatus.OK);
 	}
@@ -75,7 +75,7 @@ public class CandidateStatisticsController {
 		LocalDate 								lastRunDate = this.candidateStatisticsService.getLastRunDateNewCandidateStats(NEW_STATS_TYPE.NEW_CANDIDATE_BREAKDOWN);
 		NewCandidateSummaryAPIOutboundBuilder 	builder 	= NewCandidateSummaryAPIOutbound.builder();
 		
-		this.candidateStatisticsService.fetchNewCandidates(lastRunDate).forEach(c -> builder.addCandidate(c));
+		this.candidateStatisticsService.fetchNewCandidates(lastRunDate).forEach(builder::addCandidate);
 		
 		return new ResponseEntity<>(builder.build(), HttpStatus.OK);
 	}

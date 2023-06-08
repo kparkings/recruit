@@ -61,25 +61,6 @@ public class CandidateControllerTest {
 	private CandidateController 				controller;
 	
 	/**
-	* Tests Incoming Candidate is converted to Domain Candidate
-	* and passed to the service to be persisted
-	* @throws Exception
-	*/
-	@Test
-	public void testPersistCandidate() throws Exception{
-		
-	}
-	
-	/**
-	* Tests all candidates are returned
-	* @throws Exception
-	*/
-	@Test
-	public void testGetCandidates() throws Exception{
-		
-	}
-	
-	/**
 	* Tests retrieval of candidate suggestions
 	* @throws Exception
 	*/
@@ -193,7 +174,7 @@ public class CandidateControllerTest {
 		
 		ResponseEntity<Set<PendingCandidateAPIOutbound>> response = controller.getAllPendingCandidates();
 		
-		assertEquals(response.getStatusCode(), HttpStatus.OK);
+		assertEquals(HttpStatus.OK, response.getStatusCode());
 		
 		response.getBody().stream().filter(pc -> pc.getPendingCandidateId().toString().equals(c1Id)).findAny().orElseThrow();
 		
@@ -248,15 +229,6 @@ public class CandidateControllerTest {
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		
 		assertTrue(response.getBody() instanceof CandidateExtractedFilters);
-		
-	}
-	
-	/**
-	* Tests request for saved candidates are returned
-	* @throws Exception
-	*/
-	@Test
-	public void testFetchSavedCandidates() throws Exception{
 		
 	}
 	

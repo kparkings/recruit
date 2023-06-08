@@ -14,6 +14,6 @@ public interface CurriculumSkillsDao extends CrudRepository<SkillEntity,String>{
 	* @param skills - Skills to persist
 	*/
 	default void persistSkills(Set<String> skills) {
-		this.saveAll(skills.stream().map(s -> new SkillEntity(s)).collect(Collectors.toSet()));
+		this.saveAll(skills.stream().map(SkillEntity::new).collect(Collectors.toSet()));
 	}
 }

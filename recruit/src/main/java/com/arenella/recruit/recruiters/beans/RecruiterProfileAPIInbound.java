@@ -31,9 +31,9 @@ public class RecruiterProfileAPIInbound {
 	private String				jobTitle;
 	private int					yearsExperience;
 	private String				introduction;
-	private Set<SECTOR>			sectors					= new LinkedHashSet<>();;
-	private Set<TECH>			coreTech				= new LinkedHashSet<>();;
-	private Set<CONTRACT_TYPE> 	recruitsContractTypes	= new LinkedHashSet<>();;
+	private Set<SECTOR>			sectors					= new LinkedHashSet<>();
+	private Set<TECH>			coreTech				= new LinkedHashSet<>();
+	private Set<CONTRACT_TYPE> 	recruitsContractTypes	= new LinkedHashSet<>();
 	private REC_TYPE	 		recruiterType;
 	
 	/**
@@ -178,8 +178,8 @@ public class RecruiterProfileAPIInbound {
 	@JsonPOJOBuilder(buildMethodName="build", withPrefix="")
 	public static class RecruiterProfileAPIInboundBuilder{
 		
-		private Set<COUNTRY> 		recruitsIn				= new LinkedHashSet<>();;
-		private Set<LANGUAGE>		languagesSpoken			= new LinkedHashSet<>();;
+		private Set<COUNTRY> 		recruitsIn				= new LinkedHashSet<>();
+		private Set<LANGUAGE>		languagesSpoken			= new LinkedHashSet<>();
 		private PhotoAPIInbound		profilePhoto;
 		private boolean 			visibleToRecruiters;
 		private boolean 			visibleToCandidates;
@@ -187,9 +187,9 @@ public class RecruiterProfileAPIInbound {
 		private String				jobTitle;
 		private int					yearsExperience;
 		private String				introduction;
-		private Set<SECTOR>			sectors					= new LinkedHashSet<>();;
-		private Set<TECH>			coreTech				= new LinkedHashSet<>();;
-		private Set<CONTRACT_TYPE> 	recruitsContractTypes	= new LinkedHashSet<>();;
+		private Set<SECTOR>			sectors					= new LinkedHashSet<>();
+		private Set<TECH>			coreTech				= new LinkedHashSet<>();
+		private Set<CONTRACT_TYPE> 	recruitsContractTypes	= new LinkedHashSet<>();
 		private REC_TYPE	 		recruiterType;
 		
 		/**

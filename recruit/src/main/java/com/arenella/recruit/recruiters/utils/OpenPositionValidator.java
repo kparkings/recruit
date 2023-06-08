@@ -12,18 +12,18 @@ import com.arenella.recruit.recruiters.beans.OpenPositionAPIInbound;
 */
 public class OpenPositionValidator {
 
-	public static int 		OPEN_POSITION_TITLE_MAX_LENGTH 		= 150;
-	public static String 	ATTR_POSITION_TITLE 				= "Position Title";
-	public static String 	MISSING_POSITION_TITLE	 			= "You must provide the Candidates Function";
-	public static String 	POSITION_TITLE_GT_MAX	 			= "Position title must not exceed ";
+	public static final int 	OPEN_POSITION_TITLE_MAX_LENGTH 		= 150;
+	public static final String 	ATTR_POSITION_TITLE 				= "Position Title";
+	public static final String 	MISSING_POSITION_TITLE	 			= "You must provide the Candidates Function";
+	public static final String 	POSITION_TITLE_GT_MAX	 			= "Position title must not exceed ";
 	
-	public static int 		RENUMERATION_MAX_LENGTH 			= 150;
-	public static String 	ATTR_RENUMERATION 					= "Renumeration";
-	public static String 	RENUMERATION_GT_MAX	 				= "Renumeration must not exceed ";
+	public static final int 	RENUMERATION_MAX_LENGTH 			= 150;
+	public static final String 	ATTR_RENUMERATION 					= "Renumeration";
+	public static final String 	RENUMERATION_GT_MAX	 				= "Renumeration must not exceed ";
 	
-	public static int 		LOCATION_MAX_LENGTH 				= 150;
-	public static String 	ATTR_LOCATION 						= "Location";
-	public static String 	LOCATION_GT_MAX	 					= "Location must not exceed ";
+	public static final int 	LOCATION_MAX_LENGTH 				= 150;
+	public static final String 	ATTR_LOCATION 						= "Location";
+	public static final String 	LOCATION_GT_MAX	 					= "Location must not exceed ";
 	
 	/**
 	* Performs validation of an OpenPosition
@@ -64,7 +64,7 @@ public class OpenPositionValidator {
 
 		private static final long serialVersionUID = 2351352671765825396L;
 		
-		private Set<AttributeIssue> errors = new LinkedHashSet<>();
+		private final Set<AttributeIssue> errors = new LinkedHashSet<>();
 		
 		@Override
 		public String getMessage() {

@@ -26,7 +26,7 @@ public class PasswordUtil{
 		
 		while(passwordUnencoded.length() < PASSWORD_LENGTH) {
 			passwordUnencoded = passwordUnencoded + getRandom();
-		};
+		}
 		
 		return passwordUnencoded;
 		

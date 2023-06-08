@@ -100,27 +100,27 @@ public class CandidateEntityTest {
 		
 		CandidateEntity candidateEntity = CandidateEntity.convertToEntity(candidate);
 
-		assertEquals(candidateEntity.getCandidateId(), 				Long.valueOf(candidateId));
-		assertEquals(candidateEntity.getFirstname(), 				firstname);
-		assertEquals(candidateEntity.getSurname(), 					surname);
-		assertEquals(candidateEntity.getEmail(), 					email);
-		assertEquals(candidateEntity.getRoleSought(),				roleSought);
-		assertEquals(candidateEntity.getFunction(),					function);
-		assertEquals(candidateEntity.getCountry(), 					country);
-		assertEquals(candidateEntity.getCity(), 					city);
-		assertEquals(candidateEntity.isAvailable(), 				available);
-		assertEquals(candidateEntity.isFlaggedAsUnavailable(), 		flaggedAsUnavailable);
-		assertEquals(candidateEntity.isFreelance(), 				freelance);
-		assertEquals(candidateEntity.isPerm(), 						perm);
-		assertEquals(candidateEntity.getLastAvailabilityCheckOn(), 	lastAvailabilityCheck);
-		assertEquals(candidateEntity.getRegisteredOn(), 			registerd);
-		assertEquals(candidateEntity.getYearsExperience(), 			yearsExperience);
-		assertEquals(candidateEntity.getIntroduction(), 			introduction);
-		assertEquals(candidateEntity.getRateCurrency(), 			rateCurrency);
-		assertEquals(candidateEntity.getRatePeriod(), 				ratePeriod);
-		assertEquals(candidateEntity.getRateValue(), 				rateValue);
-		assertEquals(candidateEntity.getPhotoBytes(), 				photoBytes);
-		assertEquals(candidateEntity.getPhotoFormat(), 				photoFormat);
+		assertEquals(Long.valueOf(candidateId), candidateEntity.getCandidateId());
+		assertEquals(firstname, 				candidateEntity.getFirstname());
+		assertEquals(surname, 					candidateEntity.getSurname());
+		assertEquals(email, 					candidateEntity.getEmail());
+		assertEquals(roleSought, 				candidateEntity.getRoleSought());
+		assertEquals(function, 					candidateEntity.getFunction());
+		assertEquals(country, 					candidateEntity.getCountry());
+		assertEquals(city, 						candidateEntity.getCity());
+		assertEquals(available, 				candidateEntity.isAvailable());
+		assertEquals(flaggedAsUnavailable, 		candidateEntity.isFlaggedAsUnavailable());
+		assertEquals(freelance, 				candidateEntity.isFreelance());
+		assertEquals(perm, 						candidateEntity.isPerm());
+		assertEquals(lastAvailabilityCheck, 	candidateEntity.getLastAvailabilityCheckOn());
+		assertEquals(registerd, 				candidateEntity.getRegisteredOn());
+		assertEquals(yearsExperience, 			candidateEntity.getYearsExperience());
+		assertEquals(introduction, 				candidateEntity.getIntroduction());
+		assertEquals(rateCurrency, 				candidateEntity.getRateCurrency());
+		assertEquals(ratePeriod, 				candidateEntity.getRatePeriod());
+		assertEquals(rateValue, 				candidateEntity.getRateValue());
+		assertEquals(photoBytes, 				candidateEntity.getPhotoBytes());
+		assertEquals(photoFormat, 				candidateEntity.getPhotoFormat());
 		
 	}
 	
@@ -161,28 +161,27 @@ public class CandidateEntityTest {
 		
 		Candidate candidate = CandidateEntity.convertFromEntity(candidateEntity);
 
-		assertEquals(candidate.getCandidateId(), 				candidateId);
-		assertEquals(candidate.getFirstname(), 					firstname);
-		assertEquals(candidate.getSurname(), 					surname);
-		assertEquals(candidate.getEmail(), 						email);
-		assertEquals(candidate.getRoleSought(),					roleSought);
-		assertEquals(candidate.getFunction(), 					function);
-		assertEquals(candidate.getCountry(), 					country);
-		assertEquals(candidate.getCity(), 						city);
-		assertEquals(candidate.isAvailable(), 					available);
-		assertEquals(candidate.isFlaggedAsUnavailable(), 		flaggedAsUnavailable);
-		assertEquals(candidate.isFreelance(), 					freelance);
-		assertEquals(candidate.isPerm(), 						perm);
-		assertEquals(candidate.getLastAvailabilityCheckOn(), 	lastAvailabilityCheck);
-		assertEquals(candidate.getRegisteredOn(), 				registerd);
-		assertEquals(candidate.getYearsExperience(), 			yearsExperience);
-		
-		assertEquals(candidate.getIntroduction(), 				introduction);
-		assertEquals(candidate.getRate().get().getCurrency(), 	rateCurrency);
-		assertEquals(candidate.getRate().get().getPeriod(), 	ratePeriod);
-		assertEquals(candidate.getRate().get().getValue(), 		rateValue);
-		assertEquals(candidate.getPhoto().get().getImageBytes(),photoBytes);
-		assertEquals(candidate.getPhoto().get().getFormat(), 	photoFormat);
+		assertEquals(candidateId, 			candidate.getCandidateId());
+		assertEquals(firstname, 			candidate.getFirstname());
+		assertEquals(surname, 				candidate.getSurname());
+		assertEquals(email, 				candidate.getEmail());
+		assertEquals(roleSought, 			candidate.getRoleSought());
+		assertEquals(function, 				candidate.getFunction());
+		assertEquals(country, 				candidate.getCountry());
+		assertEquals(city, 					candidate.getCity());
+		assertEquals(available, 			candidate.isAvailable());
+		assertEquals(flaggedAsUnavailable, 	candidate.isFlaggedAsUnavailable());
+		assertEquals(freelance, 		candidate.isFreelance());
+		assertEquals(perm, 					candidate.isPerm());
+		assertEquals(lastAvailabilityCheck, candidate.getLastAvailabilityCheckOn());
+		assertEquals(registerd, 			candidate.getRegisteredOn());
+		assertEquals(yearsExperience,		candidate.getYearsExperience());
+		assertEquals(introduction, 			candidate.getIntroduction());
+		assertEquals(rateCurrency, 			candidate.getRate().get().getCurrency());
+		assertEquals(ratePeriod, 			candidate.getRate().get().getPeriod());
+		assertEquals(rateValue, 			candidate.getRate().get().getValue());
+		assertEquals(photoBytes,	 		candidate.getPhoto().get().getImageBytes());
+		assertEquals(photoFormat, 			candidate.getPhoto().get().getFormat());
 		
 		
 		assertTrue(candidate.getSkills().contains(skill));

@@ -45,7 +45,7 @@ public interface PendingCandidateDao extends CrudRepository<PendingCandidateEnti
 			return Optional.empty();
 		}
 		
-		return matches.stream().findFirst().map(e -> PendingCandidateEntity.convertFromEntity(e));
+		return matches.stream().findFirst().map(PendingCandidateEntity::convertFromEntity);
 		
 	}
 	

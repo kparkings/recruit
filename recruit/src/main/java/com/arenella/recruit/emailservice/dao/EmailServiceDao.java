@@ -42,7 +42,7 @@ public interface EmailServiceDao extends CrudRepository<EmailEntity, UUID> {
 	default Set<Email> fetchEmailsByStatus(Status status){
 		return StreamSupport
 			.stream(this.findEmailEntitiessByStatus(status).spliterator(),false)
-			.map(e -> EmailEntity.convertFromEntity(e)).collect(Collectors.toSet());
+			.map(EmailEntity::convertFromEntity).collect(Collectors.toSet());
 		
 	}
 	
@@ -65,7 +65,7 @@ public interface EmailServiceDao extends CrudRepository<EmailEntity, UUID> {
 	default Set<Email> fetchEmailsByRecipientId(@Param("recipientId") String recipientId){
 		return this.fetchEmailEntitiesByRecipientId(recipientId)
 				.stream()
-				.map(e -> EmailEntity.convertFromEntity(e))
+				.map(EmailEntity::convertFromEntity)
 				.sorted(Comparator.comparing(Email::getCreated).reversed())
 				.collect(Collectors.toCollection(LinkedHashSet::new));
 	}
@@ -84,9 +84,9 @@ public interface EmailServiceDao extends CrudRepository<EmailEntity, UUID> {
 			return Optional.empty();
 		}
 		
-		return results.stream().findFirst().get().getAttachments().stream().filter(a -> a.getAttachmentId().toString().equals(attachmentId.toString())).findAny().map(a -> EmailAttachmentEntity.convertToDomain(a));
+		return results.stream().findFirst().get().getAttachments().stream().filter(a -> a.getAttachmentId().toString().equals(attachmentId.toString())).findAny().map(EmailAttachmentEntity::convertToDomain);
 	
-	};
+	}
 	
 	/**
 	* If it exists returns the email with given id

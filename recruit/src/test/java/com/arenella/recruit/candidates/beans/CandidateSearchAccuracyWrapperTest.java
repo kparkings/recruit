@@ -84,21 +84,21 @@ public class CandidateSearchAccuracyWrapperTest {
 			wrapper.setAccuracyLanguages(accuracyLanguages);
 			wrapper.setAccuracySkills(accuracySkills);
 			
-			assertEquals(wrapper.get().getCandidateId(), 				candidateId);
-			assertEquals(wrapper.get().getFunction(), 					function);
-			assertEquals(wrapper.get().getCountry(), 					country);
-			assertEquals(wrapper.get().getCity(), 						city);
-			assertEquals(wrapper.get().getEmail(), 						email);
-			assertEquals(wrapper.get().getRoleSought(), 				roleSought);
-			assertEquals(wrapper.get().isAvailable(), 					available);
-			assertEquals(wrapper.get().isFlaggedAsUnavailable(), 		flaggedAsUnavailable);
-			assertEquals(wrapper.get().isFreelance(), 					freelance);
-			assertEquals(wrapper.get().isPerm(), 						perm);
-			assertEquals(wrapper.get().getLastAvailabilityCheckOn(), 	lastAvailabilityCheck);
-			assertEquals(wrapper.get().getRegisteredOn(), 				registerd);
-			assertEquals(wrapper.get().getYearsExperience(), 			yearsExperience);
-			assertEquals(wrapper.getAccuracyLanguages(), 				accuracyLanguages);
-			assertEquals(wrapper.getAccuracySkills(), 					accuracySkills);
+			assertEquals(candidateId, 			wrapper.get().getCandidateId());
+			assertEquals(function, 				wrapper.get().getFunction());
+			assertEquals(country, 				wrapper.get().getCountry());
+			assertEquals(city, 					wrapper.get().getCity());
+			assertEquals(email, 				wrapper.get().getEmail());
+			assertEquals(roleSought, 			wrapper.get().getRoleSought());
+			assertEquals(available, 			wrapper.get().isAvailable());
+			assertEquals(flaggedAsUnavailable, 	wrapper.get().isFlaggedAsUnavailable());
+			assertEquals(freelance, 			wrapper.get().isFreelance());
+			assertEquals(perm, 					wrapper.get().isPerm());
+			assertEquals(lastAvailabilityCheck, wrapper.get().getLastAvailabilityCheckOn());
+			assertEquals(registerd, 			wrapper.get().getRegisteredOn());
+			assertEquals(yearsExperience, 		wrapper.get().getYearsExperience());
+			assertEquals(accuracyLanguages, 	wrapper.getAccuracyLanguages());
+			assertEquals(accuracySkills, 		wrapper.getAccuracySkills());
 			
 			assertTrue(wrapper.get().getSkills().contains(skill));
 			wrapper.get().getLanguages().stream().filter(l -> l.getLanguage() == language.getLanguage()).findAny().orElseThrow();

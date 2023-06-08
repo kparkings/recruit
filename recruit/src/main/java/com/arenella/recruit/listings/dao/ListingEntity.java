@@ -707,7 +707,7 @@ public class ListingEntity {
 		return ListingEntity
 					.builder()
 						.yearsExperience(listing.getYearsExperience())
-						.views(listing.getViews().stream().map(e -> ListingViewedEventEntity.convertToEntity(e)).collect(Collectors.toSet()))
+						.views(listing.getViews().stream().map(ListingViewedEventEntity::convertToEntity).collect(Collectors.toSet()))
 						.type(listing.getType())
 						.title(listing.getTitle())
 						.rate(listing.getRate())
@@ -737,7 +737,7 @@ public class ListingEntity {
 		return Listing
 				.builder()
 					.yearsExperience(entity.getYearsExperience())
-					.views(entity.getViews().stream().map(e -> ListingViewedEventEntity.convertFromEntity(e)).collect(Collectors.toSet()))
+					.views(entity.getViews().stream().map(ListingViewedEventEntity::convertFromEntity).collect(Collectors.toSet()))
 					.type(entity.getType())
 					.title(entity.getTitle())
 					.rate(entity.getRate())

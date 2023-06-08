@@ -49,7 +49,7 @@ public interface ContactDao extends CrudRepository<ContactEntity, ContactEntityP
 			return Optional.empty();
 		}
 
-		return contactOpt.map(f -> ContactEntity.convertFromEntity(f));
+		return contactOpt.map(ContactEntity::convertFromEntity);
 		
 	}
 
@@ -79,7 +79,7 @@ public interface ContactDao extends CrudRepository<ContactEntity, ContactEntityP
 	* @return matching Contacts
 	*/
 	default public Set<Contact> fetchContacts(Set<String> contactIds){
-		return this.getEntitiesByIdAndType(Set.of(ContactType.RECRUITER,ContactType.CANDIDATE), contactIds).stream().map(c -> ContactEntity.convertFromEntity(c)).collect(Collectors.toSet());
+		return this.getEntitiesByIdAndType(Set.of(ContactType.RECRUITER,ContactType.CANDIDATE), contactIds).stream().map(ContactEntity::convertFromEntity).collect(Collectors.toSet());
 	}
 	
 }

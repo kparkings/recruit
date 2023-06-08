@@ -249,7 +249,7 @@ public class CandidateServiceImpl implements CandidateService{
 	public Set<PendingCandidate> getPendingCandidates() {
 		
 		return StreamSupport.stream(this.pendingCandidateDao.findAll().spliterator(), false)
-				.map(entity -> PendingCandidateEntity.convertFromEntity(entity)).collect(Collectors.toCollection(LinkedHashSet::new));
+				.map(PendingCandidateEntity::convertFromEntity).collect(Collectors.toCollection(LinkedHashSet::new));
 	}
 	
 	/**
@@ -379,7 +379,7 @@ public class CandidateServiceImpl implements CandidateService{
 		
 		while (true) {
 		
-			Page<Candidate> candidates = candidateDao.findAll(filterOptions, pageable).map(candidate -> CandidateEntity.convertFromEntity(candidate));
+			Page<Candidate> candidates = candidateDao.findAll(filterOptions, pageable).map(CandidateEntity::convertFromEntity);
 			
 			candidates.getContent().stream().filter(c -> !suggestionIds.contains(c.getCandidateId())).forEach(candidate -> {
 		
@@ -420,7 +420,7 @@ public class CandidateServiceImpl implements CandidateService{
 			});
 		
 			if (suggestions.size() >= maxSuggestions) {
-				return new PageImpl<CandidateSearchAccuracyWrapper>(suggestions.stream().limit(maxSuggestions).collect(Collectors.toCollection(LinkedList::new)));
+				return new PageImpl<>(suggestions.stream().limit(maxSuggestions).collect(Collectors.toCollection(LinkedList::new)));
 			} else if (!(candidates.getTotalPages() >= pageCounter)) {
 			
 				pageCounter = -1;
@@ -443,7 +443,7 @@ public class CandidateServiceImpl implements CandidateService{
 						break;
 					}
 					case poor:{
-						return new PageImpl<CandidateSearchAccuracyWrapper>(suggestions.stream().limit(maxSuggestions).collect(Collectors.toCollection(LinkedList::new)));
+						return new PageImpl<>(suggestions.stream().limit(maxSuggestions).collect(Collectors.toCollection(LinkedList::new)));
 					}
 					
 				} 

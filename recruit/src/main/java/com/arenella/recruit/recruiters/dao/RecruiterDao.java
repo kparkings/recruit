@@ -62,7 +62,7 @@ public interface RecruiterDao extends CrudRepository<RecruiterEntity, String>{
 	* @return Recruiters
 	*/
 	default Set<Recruiter> findRecruitersByEmail(String email){
-		return this.findByEmail(email).stream().map(e -> RecruiterEntity.convertFromEntity(e)).collect(Collectors.toSet());
+		return this.findByEmail(email).stream().map(RecruiterEntity::convertFromEntity).collect(Collectors.toSet());
 	}
 	
 	

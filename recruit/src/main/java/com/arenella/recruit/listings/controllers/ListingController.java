@@ -101,7 +101,7 @@ public class ListingController {
 					.active(true)
 				.build();
 		
-		return service.fetchListings(filters, pageable).map(listing -> ListingAPIOutbound.convertFromListing(listing));	
+		return service.fetchListings(filters, pageable).map(ListingAPIOutbound::convertFromListing);	
 		
 	}
 	
@@ -123,7 +123,7 @@ public class ListingController {
 					.active(true)
 				.build();
 
-		return service.fetchListings(filters, pageable).map(listing -> ListingAPIOutboundPublic.convertFromListing(listing));	
+		return service.fetchListings(filters, pageable).map(ListingAPIOutboundPublic::convertFromListing);	
 		
 	}
 	

@@ -259,7 +259,7 @@ public class RecruiterAPIOutbound {
 									.language(recruiter.getLanguage())
 									.surname(recruiter.getSurname())
 									.userId(recruiter.getUserId())
-									.subscriptions(recruiter.getSubscriptions().stream().map(s -> RecruiterSubscriptionAPIOutbound.convertFromSubscription(s)).collect(Collectors.toCollection(LinkedHashSet::new)))
+									.subscriptions(recruiter.getSubscriptions().stream().map(RecruiterSubscriptionAPIOutbound::convertFromSubscription).collect(Collectors.toCollection(LinkedHashSet::new)))
 								.build();
 	}
 	

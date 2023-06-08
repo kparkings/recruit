@@ -71,16 +71,16 @@ public class CandidateAPOutboundTest {
 							.languages(languages)
 							.build();
 		
-		assertEquals(candidate.getCandidateId(), 				candidateId);
-		assertEquals(candidate.getFunction(), 					function);
-		assertEquals(candidate.getCountry(), 					country);
-		assertEquals(candidate.getCity(), 						city);
-		assertEquals(candidate.isAvailable(), 					available);
-		assertEquals(candidate.isFreelance(), 					freelance);
-		assertEquals(candidate.isPerm(), 						perm);
-		assertEquals(candidate.getLastAvailabilityCheckOn(), 	lastAvailabilityCheck);
-		assertEquals(candidate.getRegisteredOn(), 				registerd);
-		assertEquals(candidate.getYearsExperience(), 			yearsExperience);
+		assertEquals(candidateId, 			candidate.getCandidateId());
+		assertEquals(function, 				candidate.getFunction());
+		assertEquals(country, 			candidate.getCountry());
+		assertEquals(city, 					candidate.getCity());
+		assertEquals(available, 			candidate.isAvailable());
+		assertEquals(freelance, 			candidate.isFreelance());
+		assertEquals(perm, 					candidate.isPerm());
+		assertEquals(lastAvailabilityCheck, candidate.getLastAvailabilityCheckOn());
+		assertEquals(registerd, 			candidate.getRegisteredOn());
+		assertEquals(yearsExperience, 		candidate.getYearsExperience());
 		
 		assertTrue(candidate.getSkills().contains(skill));
 		candidate.getLanguages().stream().filter(l -> l.getLanguage() == language.getLanguage()).findAny().orElseThrow();
