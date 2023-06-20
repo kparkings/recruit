@@ -1,5 +1,8 @@
 package com.arenella.recruit.authentication.services;
 
+import java.time.LocalDateTime;
+import java.util.Set;
+
 import javax.servlet.http.Cookie;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +12,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
+import com.arenella.recruit.authentication.beans.AuthenticatedEvent;
+import com.arenella.recruit.authentication.dao.AuthenticatedEventDao;
 import com.arenella.recruit.authentication.utils.JwtTokenUtil;
 
 /**
@@ -26,6 +31,9 @@ public class AuthenticationServiceImpl implements AuthenticationService{
 	
 	@Autowired
 	private UserDetailsService	 		userDetailsService;
+	
+	@Autowired
+	private AuthenticatedEventDao		authenticatedEventDao;
 	
 	/**
 	* Refer to the AuthenticationService for details
@@ -62,6 +70,20 @@ public class AuthenticationServiceImpl implements AuthenticationService{
 	private void authenticate(String username, String password) {
 		
 		this.authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+		
+	}
+
+	/**
+	* Refer to the AuthenticationService for details
+	*/
+	@Override
+	public void logLogin(UserDetails userDetails, Set<String> roles) {
+		
+		final String 	userName 		= userDetails.getUsername();
+		final boolean 	isRecruiter 	= roles.stream().anyMatch(r -> r.equals("ROLE_RECRUITER"));
+		final boolean 	isCandidate 	= roles.stream().anyMatch(r -> r.equals("ROLE_CANDIDATE"));
+		
+		this.authenticatedEventDao.persitAuthenticatedEvent(new AuthenticatedEvent(userName, isRecruiter, isCandidate, LocalDateTime.now()));
 		
 	}
 

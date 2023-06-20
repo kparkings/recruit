@@ -1805,3 +1805,38 @@ databaseChangeLog:
             constraintName:  pk_open_position_skill  
             tableName:  open_positions_skills  
             schemaName: recruiter
+databaseChangeLog:
+  - changeSet:
+      id: authenticated_event
+      author: kparkings
+      changes:
+        - createTable:
+            tableName: login_events
+            schemaName: users
+            columns:
+              - column:
+                  name: id
+                  type: UUID
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: varchar
+                  constraints:
+                    nullable: false
+              - column:
+                  name: recruiter
+                  type: boolean
+                  constraints:
+                    nullable: false
+              - column:
+                  name: candidate
+                  type: boolean
+                  constraints:
+                    nullable: false
+              - column:
+                  name: logged_in_at
+                  type: timestamp
+                  constraints:
+                    nullable: false
