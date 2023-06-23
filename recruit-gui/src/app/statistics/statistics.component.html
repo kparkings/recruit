@@ -9,6 +9,9 @@
 			
 		<ul class="nav nav-tabs">
 		  <li class="nav-item">
+		    <span class="nav-link statsChartTab" (click)="switchTab('logins')">Logins</span>
+		  </li>
+		  <li class="nav-item">
 		    <span class="nav-link statsChartTab" (click)="switchTab('downloads')">Downloads</span>
 		  </li>
 		   <li class="nav-item statsChartTab">
@@ -24,6 +27,43 @@
 		    <span class="nav-link" (click)="switchTab('newCandidateStats')">New Candidate Stats</span>
 		  </li>
 		</ul>
+		
+		<!-- Logins -->
+		<div *ngIf="showStatsLogins">
+					
+			<div class="chart-wrapper-page">		
+				<div class="chart-wrapper">
+					<h3>Logins</h3>
+					<button (click)="switchLoginStats('year')">Year</button>
+					<button (click)="switchLoginStats('3months')">3 Months</button>
+					<button (click)="switchLoginStats('week')">Week</button>
+	   	 			<canvas baseChart 
+	        				[datasets]="loginChartData" 
+	        				[labels]="loginChartLabels" 
+	        				[options]="loginChartOptions"
+	        				[colors]="loginChartColors" 
+	        				[legend]="loginChartLegend" 
+	        				[chartType]="loginChartType" 
+	       			 		[plugins]="loginChartPlugins">
+	   				 </canvas>
+				</div>
+							
+				<div class="chart-wrapper">
+					<h3>Recruiter logins</h3>
+					<button (click)="switchUserStats('today')">Today</button>
+					<button (click)="switchUserStats('week')">Week</button>
+					<canvas baseChart 
+	        				[datasets]="recruiterLoginsChartData" 
+	        				[labels]="recruiterLoginsChartLabels" 
+	        				[options]="recruiterLoginsChartOptions"
+	        				[colors]="recruiterLoginsChartColors" 
+	        				[legend]="recruiterLoginsChartLegend" 
+	        				[chartType]="recruiterLoginsChartType" 
+	        				[plugins]="recruiterLoginsChartPlugins">
+	    			</canvas>
+				</div>
+			</div>
+		</div>
 				
 		<!-- Downloads -->
 		<div *ngIf="showStatsDownloads">

@@ -4,6 +4,7 @@ import { HttpClient, HttpResponse, HttpHeaders }  	from '@angular/common/http';
 import { Observable, throwError }                 	from 'rxjs';
 import { environment }								from './../environments/environment';
 import { MarketplaceRecruiterViewStatResponse }		from './statistics/marketplace-recruiter-view-stat';
+import { LoginStats}  								from './login-event-stats';
 
 @Injectable({
   providedIn: 'root'
@@ -119,5 +120,13 @@ export class StatisticsService {
   
 		return this.httpClient.get<any>(backendUrl, this.httpOptions);
 		
+	}
+	
+	public fetchLoginStats(): Observable<LoginStats>{
+		
+		const backendUrl:string = environment.backendUrl +'authentication/stats';
+  
+    	return this.httpClient.get<any>(backendUrl, this.httpOptions);
+
 	}
 }

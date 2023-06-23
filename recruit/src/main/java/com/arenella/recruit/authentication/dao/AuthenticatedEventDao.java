@@ -1,7 +1,12 @@
 package com.arenella.recruit.authentication.dao;
 
+import java.time.LocalDateTime;
+import java.util.LinkedHashSet;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 import com.arenella.recruit.authentication.beans.AuthenticatedEvent;
@@ -13,6 +18,9 @@ import com.arenella.recruit.authentication.entity.AuthenticatedEventEntity;
 */
 public interface AuthenticatedEventDao extends CrudRepository<AuthenticatedEventEntity, UUID>{
 
+	@Query("from AuthenticatedEventEntity where loggedInAt >= :since")
+	public Set<AuthenticatedEventEntity> fetchInternalEventsSince(LocalDateTime since);
+	
 	/**
 	* Persists AuthenticatedEvent 
 	* @param authenticatedEvent - Event to persist
@@ -21,4 +29,13 @@ public interface AuthenticatedEventDao extends CrudRepository<AuthenticatedEvent
 		this.save(AuthenticatedEventEntity.convertToEntity(authenticatedEvent, UUID.randomUUID()));
 	}
 	
+	
+	/**
+	* Returns the Events that occurred after a certain moment in tim
+	* @param since - Moment from when to include events
+	* @return Events since the moment in time stipulate
+	*/
+	public default Set<AuthenticatedEvent> fetchEventsSince(LocalDateTime since){
+		return this.fetchInternalEventsSince(since).stream().map(AuthenticatedEventEntity::convertFromEntity).collect(Collectors.toCollection(LinkedHashSet::new));
+	}
 }

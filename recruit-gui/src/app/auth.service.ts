@@ -35,5 +35,5 @@ constructor(private httpClient: HttpClient) { }
         return this.httpClient.post<any>(backendUrl, authDetails, this.httpOptions);
 
     }
-
+    
 }
