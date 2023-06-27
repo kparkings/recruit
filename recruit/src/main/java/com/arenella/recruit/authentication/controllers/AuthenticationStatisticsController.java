@@ -55,47 +55,49 @@ public class AuthenticationStatisticsController {
 		Set<DayStat> 			yearStats			= new LinkedHashSet<>();
 		
 		/**
-		* 
-		* @return
+		* Events today
+		* @return Events
 		*/
 		public Set<AuthenticatedEvent> getEventsToday(){
 			return this.eventsToday;
 		}
 		
+		/**
+		* Events for past week
+		* @return Events
+		*/
 		public Set<AuthenticatedEvent> getEventsWeek(){
 			return this.eventsWeek;
 		}
 		
 		/**
-		* 
-		* @return
+		* Returns stats for past week split into days
+		* @return - Past week stats
 		*/
 		public Set<DayStat> getWeekStats(){
 			return this.weekStats;
 		}
 		
 		/**
-		* 
-		* @return
+		* Returns stats for past 3 months split into 
+		* days
+		* @return - 3 month Stats
 		*/
 		public Set<DayStat> getThreeMonthStats(){
 			return this.threeMonthStats;
 		}	
 		
 		/**
-		* 
-		* @return
+		* Returns Status for the whole year split into days
+		* @return - Year stats
 		*/
 		public Set<DayStat> getYearStats(){
 			return this.yearStats;
 		}
 		
 		/**
-		* 
-		* @param eventsToday
-		* @param eventsWeek
-		* @param events3Months
-		* @param eventsYear
+		* Constuctor processes Events
+		* @param eventsYear - All events for past year
 		*/
 		public LoginTrendStats(Set<AuthenticatedEvent> eventsYear) {
 			
@@ -109,6 +111,16 @@ public class AuthenticationStatisticsController {
 			fillBuckets(weekStats, 			eventsYear.stream().filter(s -> s.getLoggedInAt().toLocalDate().isAfter(LocalDate.now().minusDays(7))).collect(Collectors.toCollection(LinkedHashSet::new)));
 			fillBuckets(threeMonthStats, 	eventsYear.stream().filter(s -> s.getLoggedInAt().toLocalDate().isAfter(LocalDate.now().minusDays(90))).collect(Collectors.toCollection(LinkedHashSet::new)));
 			fillBuckets(yearStats, 			eventsYear.stream().filter(s -> s.getLoggedInAt().toLocalDate().isAfter(LocalDate.now().minusYears(1))).collect(Collectors.toCollection(LinkedHashSet::new)));
+			
+			this.eventsToday = this.eventsToday.stream()
+					.filter(e -> !Set.of("kparkings","kevin3p284").contains(e.getUserId()))
+					.sorted((a,b) -> Boolean.compare(a.isCandidate(), b.isCandidate()))
+					.collect(Collectors.toCollection(LinkedHashSet::new));
+			
+			this.eventsWeek = this.eventsWeek.stream()
+					.filter(e -> !Set.of("kparkings","kevin3p284").contains(e.getUserId()))
+					.sorted((a,b) -> Boolean.compare(a.isCandidate(), b.isCandidate()))
+					.collect(Collectors.toCollection(LinkedHashSet::new));
 			
 		}
 		

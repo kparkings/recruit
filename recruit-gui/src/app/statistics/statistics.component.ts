@@ -5,7 +5,7 @@ import { Color, Label } 									from 'ng2-charts';
 import { NewCandidate, 	   NewCandidateSummaryItem } 		from '../new-candidate';
 import { NewCandidateStat, NewCandidateStatItem } 			from '../new-candidate-stat';
 import { Router}											from '@angular/router';
-import { LoginStats } from '../login-event-stats';
+import { LoginStats } 										from '../login-event-stats';
 
 @Component({
   selector: 'app-statistics',
@@ -271,16 +271,28 @@ export class StatisticsComponent implements OnInit {
 		
 	}
 	
+	public loginCountRecruiter:number = 0;
+	public loginCountCandidate:number = 0;
+	
+	public loginCountRecruiterToday:number = 0;
+	public loginCountCandidateToday:number = 0;
+	public loginCountRecruiterWeek:number = 0;
+	public loginCountCandidateWeek:number = 0;
+	
 	public switchUserStats(period:string):void{
 		
 		if(period === 'today') {
 			this.recruiterLoginsChartData = [{ data: this.loginsToday, label: 'Todays logins' }]; 
 	        this.recruiterLoginsChartLabels  = this.userIdsToday; 
+	        this.loginCountRecruiter = this.loginCountRecruiterToday;
+			this.loginCountCandidate = this.loginCountCandidateToday;
 		}
 		
 		if(period === 'week') {
 			this.recruiterLoginsChartData = [{ data: this.loginsWeek, label: 'Weeks logins' }]; 
 	        this.recruiterLoginsChartLabels  = this.userIdsWeek; 	
+	        this.loginCountRecruiter = this.loginCountRecruiterWeek;
+			this.loginCountCandidate = this.loginCountCandidateWeek;
 		}
 		
 	}
@@ -313,13 +325,11 @@ export class StatisticsComponent implements OnInit {
 			
 			let statsObj:LoginStats 		= Object.assign(new LoginStats(), stats)
 			
-			this.userIdsToday 			= Array.from(statsObj.getEventsTodayKeys());
-			this.loginsToday 			= statsObj.getEventsTodayValues();
+			this.userIdsToday 				= Array.from(statsObj.getEventsTodayKeys());
+			this.loginsToday 				= statsObj.getEventsTodayValues();
 			
-			this.userIdsWeek 			= Array.from(statsObj.getEventsWeekKeys());
-			this.loginsWeek 			= statsObj.getEventsWeekValues();
-			
-			
+			this.userIdsWeek 				= Array.from(statsObj.getEventsWeekKeys());
+			this.loginsWeek 				= statsObj.getEventsWeekValues();
 			
 			this.yearKeys 					= Array.from(statsObj.getYearStatsKeysAsStrings());
 			this.yearValues 				= statsObj.getYearStatsValues();
@@ -336,6 +346,11 @@ export class StatisticsComponent implements OnInit {
 			
 			this.recruiterLoginsChartData = [{ data: this.loginsToday, label: 'Todays logins' }]; 
 	        this.recruiterLoginsChartLabels  = this.userIdsToday; 
+	        
+	        this.loginCountRecruiterToday = stats.eventsToday.filter(e => e.recruiter).length;
+			this.loginCountCandidateToday = stats.eventsToday.filter(e => e.candidate).length;
+			this.loginCountRecruiterWeek  = stats.eventsWeek.filter(e => e.recruiter).length;
+			this.loginCountCandidateWeek  = stats.eventsWeek.filter(e => e.candidate).length;
 			
 			
     	});	
@@ -503,7 +518,7 @@ export class StatisticsComponent implements OnInit {
 	recruiterLoginsChartLabels: 		Label[] 			= [];
 
   	recruiterLoginsChartOptions = {
-    	responsive: true,
+    	responsive: true, 	
   	};
 
   	recruiterLoginsChartColors: Color[] = [
@@ -521,7 +536,7 @@ export class StatisticsComponent implements OnInit {
 	loginChartLabels: 	Label[] 			= [];
 
   	loginChartOptions = {
-    	responsive: true,
+    	responsive: true
   	};
 
   	loginChartColors: Color[] = [
