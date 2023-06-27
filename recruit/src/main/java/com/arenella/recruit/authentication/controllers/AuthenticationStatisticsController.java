@@ -1,5 +1,6 @@
 package com.arenella.recruit.authentication.controllers;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -102,13 +103,13 @@ public class AuthenticationStatisticsController {
 		public LoginTrendStats(Set<AuthenticatedEvent> eventsYear) {
 			
 			this.eventsToday.addAll(eventsYear.stream().filter(s -> s.getLoggedInAt().isAfter(LocalDateTime.of(LocalDate.now(), LocalTime.MIDNIGHT))).collect(Collectors.toCollection(LinkedHashSet::new)));
-			this.eventsWeek.addAll(eventsYear.stream().filter(s -> s.getLoggedInAt().isAfter(LocalDateTime.of(LocalDate.now(), LocalTime.MIDNIGHT).minusWeeks(1))).collect(Collectors.toCollection(LinkedHashSet::new)));
+			this.eventsWeek.addAll(eventsYear.stream().filter(s -> s.getLoggedInAt().isAfter(LocalDateTime.of(LocalDate.now().with(DayOfWeek.MONDAY), LocalTime.MIDNIGHT))).collect(Collectors.toCollection(LinkedHashSet::new)));
 			
 			this.weekStats 			= this.generateBuckets(LocalDate.now().minusDays(7), 	LocalDate.now().plusDays(1));
 			this.threeMonthStats 	= this.generateBuckets(LocalDate.now().minusMonths(3), 	LocalDate.now().plusDays(1));
 			this.yearStats 			= this.generateBuckets(LocalDate.now().minusYears(1), 	LocalDate.now().plusDays(1));
 			
-			fillBuckets(weekStats, 			eventsYear.stream().filter(s -> s.getLoggedInAt().toLocalDate().isAfter(LocalDate.now().minusDays(7))).collect(Collectors.toCollection(LinkedHashSet::new)));
+			fillBuckets(weekStats, 			eventsYear.stream().filter(s -> s.getLoggedInAt().toLocalDate().isAfter(LocalDate.now().with(DayOfWeek.MONDAY).minusDays(1))).collect(Collectors.toCollection(LinkedHashSet::new)));
 			fillBuckets(threeMonthStats, 	eventsYear.stream().filter(s -> s.getLoggedInAt().toLocalDate().isAfter(LocalDate.now().minusDays(90))).collect(Collectors.toCollection(LinkedHashSet::new)));
 			fillBuckets(yearStats, 			eventsYear.stream().filter(s -> s.getLoggedInAt().toLocalDate().isAfter(LocalDate.now().minusYears(1))).collect(Collectors.toCollection(LinkedHashSet::new)));
 			

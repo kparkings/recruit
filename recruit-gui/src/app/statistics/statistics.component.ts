@@ -352,6 +352,9 @@ export class StatisticsComponent implements OnInit {
 			this.loginCountRecruiterWeek  = stats.eventsWeek.filter(e => e.recruiter).length;
 			this.loginCountCandidateWeek  = stats.eventsWeek.filter(e => e.candidate).length;
 			
+			this.loginCountRecruiter = this.loginCountRecruiterToday;
+			this.loginCountCandidate = this.loginCountCandidateToday;
+			
 			
     	});	
 		
