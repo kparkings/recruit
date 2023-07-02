@@ -28,9 +28,9 @@ import { FaqComponent } 					from './faq/faq.component';
 import { EmailComponent } 					from './email/email.component';
 import { RecruiterProfileComponent } 		from './recruiter-profile/recruiter-profile.component';
 import { TupleStrValueByPos }				from './recruiter-profile/tuple-string-pos-pipe';
-import { EnumToHumanReadableValue }				from './recruiter-profile/enum-to-hr-pipe';
-import { CandidateProfileComponent } from './candidate-profile/candidate-profile.component';
-
+import { EnumToHumanReadableValue }			from './recruiter-profile/enum-to-hr-pipe';
+import { CandidateProfileComponent } 		from './candidate-profile/candidate-profile.component';
+import { RecruiterStatsComponent } 			from './recruiter-stats/recruiter-stats.component';
 
 @NgModule({
   declarations: [
@@ -53,7 +53,8 @@ import { CandidateProfileComponent } from './candidate-profile/candidate-profile
     RecruiterProfileComponent,
 	TupleStrValueByPos,
 	EnumToHumanReadableValue,
- CandidateProfileComponent
+ CandidateProfileComponent,
+ RecruiterStatsComponent
   ],
   imports: [
     BrowserModule,

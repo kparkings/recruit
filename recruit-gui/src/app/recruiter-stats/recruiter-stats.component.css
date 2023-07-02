@@ -1,0 +1,58 @@
+.chart-data-panel-page{
+	max-width:90%;
+}
+
+.chart-panel{
+	float:left;
+	min-width:45%;
+	margin:20px;
+}
+
+.listing-filter-panel{
+	overflow:auto;
+	height:200px;
+	border: solid 1px grey;
+}
+
+.listing-filter-panel table {
+	width:100%;
+	min-width:320px;
+}
+
+.listing-filter-panel table thead tr{
+	background:#6c757d;
+	color:white;
+	width:100%;
+	text-align:center;
+}
+
+.listing-filter-panel table tbody tr{
+	cursor:pointer;
+	
+}
+
+.listing-filter-panel table tbody tr td{
+	padding-left:10px;
+}
+
+.selectedListing{
+	background:green;
+}
+
+.no-posts{
+	text-align:left;
+	padding: 30px;
+	min-width:350px;
+	max-width:500px;
+	margin: auto; 
+}
+
+.no-posts h2{
+	text-align:center; 
+}
+
+.action-buttons{
+	text-align:right;
+	margin-right:70px;
+	margin-top:30px;
+}

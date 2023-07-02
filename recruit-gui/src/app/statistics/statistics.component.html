@@ -50,8 +50,8 @@
 							
 				<div class="chart-wrapper">
 					<h3>logins: Recruiters: {{loginCountRecruiter}} Candidates: {{loginCountCandidate}}</h3>
+					<button (click)="switchUserStats('week')">This Week</button>
 					<button (click)="switchUserStats('today')">Today</button>
-					<button (click)="switchUserStats('week')">Week</button>
 					<canvas baseChart 
 	        				[datasets]="recruiterLoginsChartData" 
 	        				[labels]="recruiterLoginsChartLabels" 

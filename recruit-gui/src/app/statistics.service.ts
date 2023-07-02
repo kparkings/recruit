@@ -5,6 +5,7 @@ import { Observable, throwError }                 	from 'rxjs';
 import { environment }								from './../environments/environment';
 import { MarketplaceRecruiterViewStatResponse }		from './statistics/marketplace-recruiter-view-stat';
 import { LoginStats}  								from './login-event-stats';
+import { RecruiterListingStatistics } 				from './recruiter-listing-statistics';
 
 @Injectable({
   providedIn: 'root'
@@ -128,5 +129,16 @@ export class StatisticsService {
   
     	return this.httpClient.get<any>(backendUrl, this.httpOptions);
 
+	}
+	
+	/**
+	* Returns statistics relating to Listing for an individual recruiter 
+	*/
+	public fetchRecruiterListingStats(recruiterId:string):Observable<RecruiterListingStatistics> {
+		
+		const backendUrl:string = environment.backendUrl +'listings/stats/recruiter/'+recruiterId;
+  
+		return this.httpClient.get<any>(backendUrl, this.httpOptions);
+		
 	}
 }

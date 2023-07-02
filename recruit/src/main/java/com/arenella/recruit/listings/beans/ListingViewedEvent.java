@@ -1,6 +1,7 @@
 package com.arenella.recruit.listings.beans;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -13,6 +14,7 @@ public class ListingViewedEvent {
 	private UUID 			eventId;
 	private UUID 			listingId;
 	private LocalDateTime 	created;
+	private String			title;
 	
 	/**
 	* Constructor based upon a Builder
@@ -49,6 +51,23 @@ public class ListingViewedEvent {
 	*/
 	public LocalDateTime getCreated() {
 		return this.created;
+	}
+	
+	/**
+	* Will return the title of the Listing where available or the
+	* listing id where it is not available
+	* @return title for the Listing
+	*/
+	public String getTitleOrLisingId(){
+		return Optional.ofNullable(this.title).isPresent() ? this.title : this.listingId.toString();
+	}
+	
+	/**
+	* Sets the human readable title for the Listing
+	* @param title - Human readable title
+	*/
+	public void setTitle(String title) {
+		this.title = title;
 	}
 	
 	/**

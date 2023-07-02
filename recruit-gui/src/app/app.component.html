@@ -53,7 +53,10 @@
 		<li  class="li-arenella-nav" *ngIf="isAuthenticated() && !isCandidate()">
            <a  class="dropdown-item" routerLink="/recruiter-profile">Community</a>
         </li>
-		<li class="li-arenella-nav" *ngIf="isAuthenticatedAsAdmin() && !isCandidate()">
+        <li  class="li-arenella-nav" *ngIf="isAuthenticated() && isRecruiter() && !isRecruiterNoSubscription() && !hasUnpaidSubscription()">
+           <a  class="dropdown-item" routerLink="/recruiter-stats">Stat's</a>
+        </li>
+        <li class="li-arenella-nav" *ngIf="isAuthenticatedAsAdmin() && !isCandidate()">
            <a  class="dropdown-item" routerLink="/accounts">Accounts</a>
         </li>
 		<li class="li-arenella-nav" *ngIf="isAuthenticated() && !isAuthenticatedAsAdmin() && !isCandidate()">

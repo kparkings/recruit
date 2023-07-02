@@ -347,10 +347,10 @@ export class StatisticsComponent implements OnInit {
 			this.recruiterLoginsChartData = [{ data: this.loginsToday, label: 'Todays logins' }]; 
 	        this.recruiterLoginsChartLabels  = this.userIdsToday; 
 	        
-	        this.loginCountRecruiterToday = stats.eventsToday.filter(e => e.recruiter).length;
-			this.loginCountCandidateToday = stats.eventsToday.filter(e => e.candidate).length;
-			this.loginCountRecruiterWeek  = stats.eventsWeek.filter(e => e.recruiter).length;
-			this.loginCountCandidateWeek  = stats.eventsWeek.filter(e => e.candidate).length;
+	        this.loginCountRecruiterToday = new Set(stats.eventsToday.filter(e => e.recruiter).map(e => e.userId)).size;
+			this.loginCountCandidateToday = new Set(stats.eventsToday.filter(e => e.candidate).map(e => e.userId)).size;
+			this.loginCountRecruiterWeek  = new Set(stats.eventsWeek.filter(e => e.recruiter).map(e => e.userId)).size;
+			this.loginCountCandidateWeek  = new Set(stats.eventsWeek.filter(e => e.candidate).map(e => e.userId)).size;
 			
 			this.loginCountRecruiter = this.loginCountRecruiterToday;
 			this.loginCountCandidate = this.loginCountCandidateToday;

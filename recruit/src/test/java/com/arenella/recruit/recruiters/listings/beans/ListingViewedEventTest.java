@@ -57,4 +57,32 @@ public class ListingViewedEventTest {
 		
 	}
 	
+	/**
+	* Tests title is returned or where not present 
+	* the id
+	* @throws Exception
+	*/
+	@Test
+	public void testGetTitle() throws Exception {
+		
+		final String 			title 			= "Java Developer";
+		final UUID 				eventId 		= UUID.randomUUID();
+		final UUID 				listingId 		= UUID.randomUUID();
+		final LocalDateTime 	created 		= LocalDateTime.of(2021,12,12, 00,00,01);
+		
+		ListingViewedEvent event = ListingViewedEvent
+												.builder()
+													.eventId(eventId)
+													.listingId(listingId)
+													.created(created)
+												.build();
+		
+		assertEquals(listingId.toString(), event.getTitleOrLisingId());
+		
+		event.setTitle(title);
+		
+		assertEquals(title, event.getTitleOrLisingId());
+		
+	}
+	
 }

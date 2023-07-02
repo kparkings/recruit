@@ -1,7 +1,7 @@
 export class LoginStats{
 	
 	public eventsToday:Array<Event> 		= new Array<Event>();
-	public eventsWeek:Array<Event> 		= new Array<Event>();
+	public eventsWeek:Array<Event> 			= new Array<Event>();
 	public weekStats:Array<Stat> 			= new Array<Stat>();
 	public threeMonthStats:Array<Stat> 		= new Array<Stat>();
 	public yearStats:Array<Stat> 			= new Array<Stat>();
