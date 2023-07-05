@@ -10,8 +10,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.arenella.recruit.candidates.beans.RecruiterStats;
 import com.arenella.recruit.candidates.controllers.NewCandidateSummaryAPIOutbound.NewCandidateSummaryAPIOutboundBuilder;
 import com.arenella.recruit.candidates.controllers.NewCandidatesAPIOutbound.NewCandidatesAPIOutboundBuilder;
 import com.arenella.recruit.candidates.services.CandidateStatisticsService;
@@ -23,6 +26,8 @@ import com.arenella.recruit.candidates.services.CandidateStatisticsService.NEW_S
 */
 @RestController
 public class CandidateStatisticsController {
+	
+	public enum STAT_PERIOD {WEEK, DAY}
 	
 	@Autowired
 	private CandidateStatisticsService candidateStatisticsService;
@@ -78,6 +83,17 @@ public class CandidateStatisticsController {
 		this.candidateStatisticsService.fetchNewCandidates(lastRunDate).forEach(builder::addCandidate);
 		
 		return new ResponseEntity<>(builder.build(), HttpStatus.OK);
+	}
+	
+	/**
+	* Returns Stat's relating to Searches performed
+	* by a Recruiter
+	* @return Recruiters login history
+	*/
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@GetMapping(path="candidate/stat/search/{recruiterId}")
+	public ResponseEntity<RecruiterStats> fetchSearchStatsForRecruiter(@PathVariable("recruiterId") String recruiterId, @RequestParam("period") STAT_PERIOD period){
+		return new ResponseEntity<>(this.candidateStatisticsService.fetchSearchStatsForRecruiter(recruiterId, period), HttpStatus.OK);
 	}
 	
 }

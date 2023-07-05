@@ -1,6 +1,7 @@
 package com.arenella.recruit.candidates.controllers;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDate;
 import java.util.Set;
@@ -15,6 +16,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import com.arenella.recruit.candidates.beans.Candidate;
+import com.arenella.recruit.candidates.beans.RecruiterStats;
+import com.arenella.recruit.candidates.controllers.CandidateStatisticsController.STAT_PERIOD;
 import com.arenella.recruit.candidates.enums.FUNCTION;
 import com.arenella.recruit.candidates.services.CandidateStatisticsService;
 import com.arenella.recruit.candidates.services.CandidateStatisticsService.NEW_STATS_TYPE;
@@ -94,20 +97,20 @@ public class CandidateStatisticsControllerTest {
 	}
 	
 	/**
-	* Tests logging of email requested event
+	* Tests stat's are returned
 	* @throws Exception
 	*/
-	//@Test
-	//public void testLogEventEmailRequestedEvent() throws Exception{
+	@Test
+	public void testFetchSearchStatsForRecruiter() throws Exception{
 		
-	//	Mockito.doNothing().when(this.mockCandidateStatisticsService).logEventEmailRequested(Mockito.anyLong());
+		final String recruiterId = "recruiter1";
 		
-	//	ResponseEntity<Void> response = controller.logEventEmailRequestedEvent(1L);
+		Mockito.when(this.mockCandidateStatisticsService.fetchSearchStatsForRecruiter(recruiterId, STAT_PERIOD.DAY)).thenReturn(new RecruiterStats(Set.of()));
+		ResponseEntity<RecruiterStats> response = this.controller.fetchSearchStatsForRecruiter(recruiterId, STAT_PERIOD.DAY);
 		
-	//	Mockito.verify(mockCandidateStatisticsService).logEventEmailRequested(Mockito.anyLong());
-		
-	//	assertEquals(HttpStatus.OK, response.getStatusCode());
-		
-	//}
+		assertEquals(HttpStatus.OK, response.getStatusCode());
+		assertTrue(response.getBody() instanceof RecruiterStats);
+	
+	}
 	
 }

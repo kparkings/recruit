@@ -16,6 +16,8 @@ import com.arenella.recruit.candidates.beans.Candidate;
 import com.arenella.recruit.candidates.beans.CandidateFilterOptions;
 import com.arenella.recruit.candidates.beans.CandidateRoleStats;
 import com.arenella.recruit.candidates.beans.CandidateSearchEvent;
+import com.arenella.recruit.candidates.beans.RecruiterStats;
+import com.arenella.recruit.candidates.controllers.CandidateStatisticsController.STAT_PERIOD;
 import com.arenella.recruit.candidates.dao.CandidateDao;
 import com.arenella.recruit.candidates.dao.CandidateSearchStatisticsDao;
 import com.arenella.recruit.candidates.dao.NewCandidateStatsTypeDao;
@@ -55,6 +57,20 @@ public class CandidateStatisticsServiceImpl implements CandidateStatisticsServic
 	public List<CandidateRoleStats> fetchCandidateRoleStats() {
 		
 		return candidateDao.getCandidateRoleStats().stream().map(CandidateRoleStatsView::convertFromView).collect(Collectors.toCollection(LinkedList::new));
+	}
+
+	/**
+	* Refer to StatisticsService for details
+	*/
+	@Override
+	public RecruiterStats fetchSearchStatsForRecruiter(String recruiterId, STAT_PERIOD period) {
+		
+		LocalDate since = period == STAT_PERIOD.DAY ? LocalDate.now() : LocalDate.now().minusWeeks(1);
+		
+		Set<CandidateSearchEvent> events =  this.statisticsDao.fetchEventForRecruiter(recruiterId, since);
+		
+		return new RecruiterStats(events);
+		
 	}
 	
 	/**

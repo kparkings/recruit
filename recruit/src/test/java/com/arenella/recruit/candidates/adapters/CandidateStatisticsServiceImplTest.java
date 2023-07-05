@@ -7,13 +7,16 @@ import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.arenella.recruit.candidates.beans.Candidate;
+import com.arenella.recruit.candidates.controllers.CandidateStatisticsController.STAT_PERIOD;
 import com.arenella.recruit.candidates.dao.CandidateDao;
+import com.arenella.recruit.candidates.dao.CandidateSearchStatisticsDao;
 import com.arenella.recruit.candidates.dao.NewCandidateStatsTypeDao;
 import com.arenella.recruit.candidates.services.CandidateStatisticsServiceImpl;
 import com.arenella.recruit.candidates.services.CandidateStatisticsService.NEW_STATS_TYPE;
@@ -30,6 +33,9 @@ public class CandidateStatisticsServiceImplTest {
 	
 	@Mock
 	private NewCandidateStatsTypeDao			mockNewCandidateStatsTypeDao;
+	
+	@Mock
+	private CandidateSearchStatisticsDao 		mockStatisticsDao;
 	
 	@InjectMocks
 	private CandidateStatisticsServiceImpl 	service	= new CandidateStatisticsServiceImpl();
@@ -80,6 +86,25 @@ public class CandidateStatisticsServiceImplTest {
 		LocalDate lastRunDate = this.service.getLastRunDateNewCandidateStats(NEW_STATS_TYPE.NEW_CANDIDATE_BREAKDOWN);
 		
 		assertEquals(since, lastRunDate);
+		
+	}
+	
+	/**
+	* Tests fetching of RecruiterStats
+	* @throws Exception
+	*/
+	@Test
+	public void fetchSearchStatsForRecruiter() throws Exception{
+		
+		final String recruiterId = "recruiter1";
+		
+		ArgumentCaptor<LocalDate> argCaptSince = ArgumentCaptor.forClass(LocalDate.class);
+		
+		Mockito.when(this.mockStatisticsDao.fetchEventForRecruiter(Mockito.anyString(), argCaptSince.capture())).thenReturn(Set.of());
+		
+		this.service.fetchSearchStatsForRecruiter(recruiterId, STAT_PERIOD.WEEK);
+	
+		assertEquals(LocalDate.now().minusWeeks(1), argCaptSince.getValue());
 		
 	}
 	

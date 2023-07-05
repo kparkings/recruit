@@ -7,6 +7,8 @@ import java.util.Set;
 import com.arenella.recruit.candidates.beans.Candidate;
 import com.arenella.recruit.candidates.beans.CandidateFilterOptions;
 import com.arenella.recruit.candidates.beans.CandidateRoleStats;
+import com.arenella.recruit.candidates.beans.RecruiterStats;
+import com.arenella.recruit.candidates.controllers.CandidateStatisticsController.STAT_PERIOD;
 
 /**
 * Defines services relating to Candidate statistics
@@ -47,5 +49,13 @@ public interface CandidateStatisticsService {
 	* @return Last date the request for candidates was run
 	*/
 	public LocalDate getLastRunDateNewCandidateStats(NEW_STATS_TYPE statsType);
+
+	/**
+	* Returns Stat's for a specific Recruiter
+	* @param recruiterId - Id of Recruiter to return stats for
+	* @param period 	 - Period to return stats for
+	* @return Stat's
+	*/
+	public RecruiterStats fetchSearchStatsForRecruiter(String recruiterId, STAT_PERIOD period);
 	
 }
