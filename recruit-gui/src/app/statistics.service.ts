@@ -6,6 +6,7 @@ import { environment }								from './../environments/environment';
 import { MarketplaceRecruiterViewStatResponse }		from './statistics/marketplace-recruiter-view-stat';
 import { LoginStats}  								from './login-event-stats';
 import { RecruiterListingStatistics } 				from './recruiter-listing-statistics';
+import { RecruiterSearchStatistics } from './recruiter-search-stats';
 
 @Injectable({
   providedIn: 'root'
@@ -141,4 +142,16 @@ export class StatisticsService {
 		return this.httpClient.get<any>(backendUrl, this.httpOptions);
 		
 	}
+	
+	/**
+	* Returns statistics relating to Recruiter searches
+	*/
+	public fetchRecruiterSearchStats(recruiterId:string, period:string):Observable<RecruiterSearchStatistics> {
+		
+		const backendUrl:string = environment.backendUrl +'candidate/stat/search/'+recruiterId + "?period="+period;
+  
+		return this.httpClient.get<any>(backendUrl, this.httpOptions);
+		
+	}
+	
 }

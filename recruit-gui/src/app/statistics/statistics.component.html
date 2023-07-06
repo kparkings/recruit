@@ -48,8 +48,9 @@
 	   				 </canvas>
 				</div>
 							
-				<div class="chart-wrapper">
+				<div class="chart-wrapper" *ngIf="loginChartView == 'chart'">
 					<h3>logins: Recruiters: {{loginCountRecruiter}} Candidates: {{loginCountCandidate}}</h3>
+					<button (click)="switchUserStatsView('table')" class="toggle-view">Table</button>
 					<button (click)="switchUserStats('week')">This Week</button>
 					<button (click)="switchUserStats('today')">Today</button>
 					<canvas baseChart 
@@ -61,6 +62,51 @@
 	        				[chartType]="recruiterLoginsChartType" 
 	        				[plugins]="recruiterLoginsChartPlugins">
 	    			</canvas>
+				</div>
+				
+				<div class="chart-wrapper" *ngIf="loginChartView == 'table'">
+					<h3>logins: Recruiters: {{loginCountRecruiter}} Candidates: {{loginCountCandidate}}</h3>
+					<button (click)="switchUserStatsView('chart')"  class="toggle-view">Chart</button>
+					<button (click)="switchUserStats('week')">This Week</button>
+					<button (click)="switchUserStats('today')">Today</button>
+					<div class="login-table-view">
+						<table style="width:100%">
+							<thead>
+								<tr>
+									<th>User</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr *ngFor="let user of recruiterLoginsChartLabels" (click)="switchUserStatsView('recruiter-stats', user)">
+									<td>{{user}}</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<div class="chart-wrapper" *ngIf="loginChartView == 'recruiter-stats'">
+					<h3>logins: Recruiters: {{loginCountRecruiter}} Candidates: {{loginCountCandidate}}</h3>
+					<button (click)="switchUserStatsView('table')"  class="toggle-view">Back</button>
+					<div class="recruiter-stats">
+					<table style="width:100%">
+							<thead>
+								<tr>
+									<th>Country</th>
+									<th>Function</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr *ngFor="let search of recruiterStats.uniqueSearches">
+									<td *ngIf="search.country === 'NETHERLANDS'"  			class="flag-icon flag-icon-nl suggestion-flag-country listing-country"></td>
+									<td *ngIf="search.country === 'BELGIUM'"				class="flag-icon flag-icon-be suggestion-flag-country listing-country"></td>
+									<td *ngIf="search.country === 'UK'"						class="flag-icon flag-icon-gb suggestion-flag-country listing-country"></td>
+									<td *ngIf="search.country === 'REPUBLIC_OF_IRELAND'"	class="flag-icon flag-icon-ie suggestion-flag-country listing-country"></td>
+									<td>{{getFunctionLabel(search.function)}}</td>
+								</tr>
+							</tbody>
+						</table>
+						
+					</div>
 				</div>
 			</div>
 		</div>

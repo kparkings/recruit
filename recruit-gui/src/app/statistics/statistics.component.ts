@@ -6,6 +6,9 @@ import { NewCandidate, 	   NewCandidateSummaryItem } 		from '../new-candidate';
 import { NewCandidateStat, NewCandidateStatItem } 			from '../new-candidate-stat';
 import { Router}											from '@angular/router';
 import { LoginStats } 										from '../login-event-stats';
+import { RecruiterSearchStatistics } 						from '../recruiter-search-stats';
+import { CandidateFunction } 								from '../candidate-function';
+import { CandidateServiceService }							from '../candidate-service.service';
 
 @Component({
   selector: 'app-statistics',
@@ -66,7 +69,20 @@ export class StatisticsComponent implements OnInit {
 	public marketPlaceEventsChartLabelsOfferedWeekly:Label[] 			= [];
 	public marketPlaceEventsChartDataRequestedWeekly:ChartDataSets[] 	= [];
 	public marketPlaceEventsChartLabelsRequestedWeekly:Label[] 			= [];
+	
+	public loginChartView:string = 'chart';
+	public loginChartViewUser:string = '';
 
+	public candidateFunctions:Array<CandidateFunction> = new Array<CandidateFunction>();
+	public getFunctionLabel(type:string){
+		
+		if(type == null){
+			return "";
+		}
+		
+		return this.candidateFunctions.filter(f => f.id == type)[0].desc;
+	}
+	
   	public marketPlaceEventsChartOptions = {
     	responsive: true,
   	};
@@ -77,6 +93,17 @@ export class StatisticsComponent implements OnInit {
       		backgroundColor: 'rgba(0,0,0,0.28)',
     	},
   	];
+  	
+  	/**
+	* Toggles between the chart 
+	* and table views
+	* @param view - chart | table
+	*/
+  	public switchUserStatsView(view:string, selectedUserId:Label = ""):void{
+		  this.loginChartView 		= view;
+		  this.loginChartViewUser 	= selectedUserId.toString();
+		  this.fetchReruiterSearchStats();
+	}
 
   	public marketPlaceEventsChartLegend 					= true;
   	public marketPlaceEventsChartPlugins 					= [];
@@ -86,7 +113,7 @@ export class StatisticsComponent implements OnInit {
 	/**
   	* Constructor
 	*/
-	constructor(public statisticsService:StatisticsService, private router:Router) {
+	constructor(public statisticsService:StatisticsService, public candidateService:CandidateServiceService, private router:Router) {
 
 		this.fetchStatus();
 		//this.getEmailRequestStats();
@@ -94,10 +121,23 @@ export class StatisticsComponent implements OnInit {
 		
 		this.showNewCandidateStatsDiv 				= false;
 		this.showNewCandidatesDiv 					= false;
+		this.candidateFunctions 					= this.candidateService.loadFunctionTypes();
 		
 	}
 
 	ngOnInit(): void {
+	}
+	
+	public recruiterStats:RecruiterSearchStatistics = new RecruiterSearchStatistics();
+	
+	/**
+	* Fetches and displays searches carries out by the selected Recruiter
+	*/
+	public fetchReruiterSearchStats():void{
+		
+		this.statisticsService.fetchRecruiterSearchStats(this.loginChartViewUser, this.recruiterStatPeriod).subscribe(stats => {
+			this.recruiterStats = stats;
+		});
 	}
 	
 	/**
@@ -279,6 +319,8 @@ export class StatisticsComponent implements OnInit {
 	public loginCountRecruiterWeek:number = 0;
 	public loginCountCandidateWeek:number = 0;
 	
+	public recruiterStatPeriod:string = "DAY";
+	
 	public switchUserStats(period:string):void{
 		
 		if(period === 'today') {
@@ -286,6 +328,7 @@ export class StatisticsComponent implements OnInit {
 	        this.recruiterLoginsChartLabels  = this.userIdsToday; 
 	        this.loginCountRecruiter = this.loginCountRecruiterToday;
 			this.loginCountCandidate = this.loginCountCandidateToday;
+			this.recruiterStatPeriod = "DAY";
 		}
 		
 		if(period === 'week') {
@@ -293,6 +336,7 @@ export class StatisticsComponent implements OnInit {
 	        this.recruiterLoginsChartLabels  = this.userIdsWeek; 	
 	        this.loginCountRecruiter = this.loginCountRecruiterWeek;
 			this.loginCountCandidate = this.loginCountCandidateWeek;
+			this.recruiterStatPeriod = "WEEK";
 		}
 		
 	}

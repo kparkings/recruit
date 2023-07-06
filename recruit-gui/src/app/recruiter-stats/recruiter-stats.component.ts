@@ -14,7 +14,10 @@ export class RecruiterStatsComponent {
 	private recruiterId:string 									= "";
 	public  listingStatistics:RecruiterListingStatistics 		= new RecruiterListingStatistics();
 	public  listingViewsChart:ChartData 						= new ChartData("Post views");
+	public  availabilityChart:ChartData 						= new ChartData("Candidate Availability");
 	public	selectedListing:string								= "all";
+	public	currentTab:string									= "general-stats";
+	public totalNumberActiveCandidates:number 					= 0;
 
 	/**
 	* Constructor
@@ -34,6 +37,27 @@ export class RecruiterStatsComponent {
 			this.listingStatistics = Object.assign(new RecruiterListingStatistics(), stats);
 			this.switchListing(this.selectedListing);
 		});	
+		this.statisticsService.getTotalNumberOfActiceCandidatesStatistics().forEach(count => {
+			this.totalNumberActiveCandidates = count;
+    	});
+    	this.statisticsService.getAvailableCandidatesByFunctionStatistics().forEach(data => {
+		
+			let stats:any[] = data;
+			
+			let functionStatCount:Array<number> 		= new Array<number>(); 
+			let functionStatName:Array<string> 			= new Array<string>(); 
+				
+			stats.forEach(functonStat => {
+				
+				functionStatName.push(functonStat.function);
+				functionStatCount.push(functonStat.availableCandidates);
+				
+			});
+			
+			this.availabilityChart.chartData	= [{ data: functionStatCount, label: 'Function' },];
+			this.availabilityChart.chartLabels 	= functionStatName;
+			
+    	});
 	}
 	
 	/**
@@ -55,7 +79,7 @@ export class RecruiterStatsComponent {
 	* @param tabId - Id of Tab to display 
 	*/
 	public switchTab(tabId:string):void{
-		//TODO:
+		this.currentTab = tabId;
 	}
 	
 }

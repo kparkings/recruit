@@ -39,3 +39,47 @@ chart-wrapper-page{
 	width:340px;
 	margin-bottom:10px;
 }
+
+.toggle-view{
+	background:green;
+	margin-right:15px;
+}
+
+.login-table-view{
+	margin-top:20px;
+	overflow:auto;
+	height:265px;
+	border:1px solid black;
+	width:100%;
+}
+
+
+.login-table-view table thead tr th{
+	background:#6c757d;
+	width:100%;
+}
+
+.login-table-view table tbody tr{
+	cursor:pointer;
+}
+
+.login-table-view table tbody tr:hover{
+	cursor:pointer;
+	background:green;
+	padding:5px;
+}
+
+.login-table-view table tbody tr td{
+	cursor:pointer;
+	width:100%;	
+	padding:5px;
+}
+
+.recruiter-stats{
+	margin-top:20px;
+	overflow:auto;
+	height:265px;
+	border:1px solid black;
+	width:100%;
+	padding:5px;
+}

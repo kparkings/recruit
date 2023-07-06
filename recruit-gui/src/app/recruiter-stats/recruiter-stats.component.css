@@ -56,3 +56,12 @@
 	margin-right:70px;
 	margin-top:30px;
 }
+
+.nav-item{
+	width:200px;
+}
+
+.statsChartTab{
+	width:200px;
+	cursor:pointer;
+}
