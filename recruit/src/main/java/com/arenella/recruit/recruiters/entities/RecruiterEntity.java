@@ -48,6 +48,18 @@ public class RecruiterEntity {
 	@Column(name="company_name")
 	private String								companyName;
 	
+	@Column(name="company_address")
+	private String								companyAddress;
+	
+	@Column(name="company_country")
+	private String								companyCountry;
+	
+	@Column(name="company_vat_number")
+	private String								companyVatNumber;
+	
+	@Column(name="company_registration_number")
+	private String								companyRegistrationNumber;
+	
 	@Column(name="active")
 	private boolean 							active				= true;
 	
@@ -67,15 +79,19 @@ public class RecruiterEntity {
 	*/
 	public RecruiterEntity(RecruiterEntityBuilder builder) {
 	
-		this.userId 		= builder.userId;
-		this.firstName 		= builder.firstName;
-		this.surname 		= builder.surname;
-		this.email 			= builder.email;
-		this.companyName 	= builder.companyName;
-		this.active			= builder.active;
-		this.language 		= builder.language;
-		this.accountCreated = builder.accountCreated;
-		this.subscriptions  = builder.subscriptions;
+		this.userId 						= builder.userId;
+		this.firstName 						= builder.firstName;
+		this.surname 						= builder.surname;
+		this.email 							= builder.email;
+		this.companyName 					= builder.companyName;
+		this.active							= builder.active;
+		this.language 						= builder.language;
+		this.accountCreated 				= builder.accountCreated;
+		this.subscriptions  				= builder.subscriptions;
+		this.companyAddress					= builder.companyAddress;
+		this.companyCountry					= builder.companyCountry;
+		this.companyVatNumber				= builder.companyVatNumber;
+		this.companyRegistrationNumber		= builder.companyRegistrationNumber;
 
 	}
 	
@@ -144,6 +160,38 @@ public class RecruiterEntity {
 	public LocalDate getAccountCreated() {
 		return accountCreated;
 	}
+
+	/**
+	* Returns the address of the Company
+	* @return address of the Company
+	*/
+	public String getCompanyAddress(){
+		return this.companyAddress;
+	}
+	
+	/**
+	* Returns the Country where the Company is registered
+	* @return Country of registration
+	*/
+	public String getCompanyCountry(){
+		return this.companyCountry;
+	}			
+	
+	/**
+	* Returns the Company VAT Number
+	* @return VAT Number
+	*/
+	public String getCompanyVatNumber(){
+		return this.companyVatNumber;
+	}			
+	
+	/**
+	* Returns the Registration number of the Company
+	* @return Registration Number
+	*/
+	public String getCompanyRegistrationNumber(){
+		return this.companyRegistrationNumber;
+	}
 	
 	/**
 	* Returns the Subscriptions associated with the Recruiter
@@ -202,6 +250,38 @@ public class RecruiterEntity {
 	}
 	
 	/**
+	* Sets the address of the comapany
+	* @param companyAddress - comapny address
+	*/
+	public void setCompanyAddress(String companyAddress) {
+		this.companyAddress = companyAddress;
+	}
+	
+	/**
+	* Sets the country where the Company is registered
+	* @param companyCountry - country
+	*/
+	public void setCompanyCountry(String companyCountry) {
+		this.companyCountry = companyCountry;
+	}
+	
+	/**
+	* Sets the Companies VAT number
+	* @param companyVatNumber - VAT Number
+	*/
+	public void setCompanyVatNumber(String companyVatNumber) {
+		this.companyVatNumber = companyVatNumber;
+	}
+	
+	/**
+	* Sets the Companies registration number
+	* @param companyRegistrationNumber - Registration number
+	*/
+	public void setCompanyRegistrationNumber(String companyRegistrationNumber) {
+		this.companyRegistrationNumber = companyRegistrationNumber;
+	}
+	
+	/**
 	* Sets the primary langauge spoken by the Recruiter 
 	* @param language - language spoken by the Recruiter
 	*/
@@ -229,11 +309,15 @@ public class RecruiterEntity {
 		private String 								surname;
 		private String 								email;
 		private String								companyName;
-		private boolean 							active				= true;
+		private String 								companyAddress;
+		private String 								companyCountry;
+		private String 								companyVatNumber;
+		private String 								companyRegistrationNumber;
+		private boolean 							active							= true;
 		private language 							language;
 		private LocalDate							accountCreated;
-		private Set<RecruiterSubscriptionEntity> 	subscriptions 		= new LinkedHashSet<>();
-		
+		private Set<RecruiterSubscriptionEntity> 	subscriptions 					= new LinkedHashSet<>();
+
 		/**
 		* Sets the Recruiters unique iderId
 		* @param userId - UserId associated with the Recruiter
@@ -281,6 +365,46 @@ public class RecruiterEntity {
 		*/
 		public RecruiterEntityBuilder companyName(String companyName) {
 			this.companyName = companyName;
+			return this;
+		}
+		
+		/**
+		* Sets the address of the Company
+		* @param companyAddress - Address of the Company
+		* @return Builder
+		*/
+		public RecruiterEntityBuilder companyAddress(String companyAddress) {
+			this.companyAddress = companyAddress;
+			return this;
+		}
+		
+		/**
+		* Sets the Country where the Company is registered
+		* @param companyCountry - Country
+		* @return Builder
+		*/
+		public RecruiterEntityBuilder companyCountry(String companyCountry) {
+			this.companyCountry = companyCountry;
+			return this;
+		}
+		
+		/**
+		* Sets the VAT Number of the Compamy
+		* @param companyVatNumber - VAT Number
+		* @return Builder
+		*/
+		public RecruiterEntityBuilder companyVatNumber(String companyVatNumber) {
+			this.companyVatNumber = companyVatNumber;
+			return this;
+		}
+		
+		/**
+		* Sets the companies registration Number
+		* @param companyRegistrationNumber - Registration Number 
+		* @return Builder
+		*/
+		public RecruiterEntityBuilder companyRegistrationNumber(String companyRegistrationNumber) {
+			this.companyRegistrationNumber = companyRegistrationNumber;
 			return this;
 		}
 		
@@ -355,6 +479,10 @@ public class RecruiterEntity {
 								.language(recruiter.getLanguage())
 								.surname(recruiter.getSurname())
 								.userId(recruiter.getUserId())
+								.companyAddress(recruiter.getCompanyAddress())
+								.companyCountry(recruiter.getCompanyCountry())					
+								.companyVatNumber(recruiter.getCompanyVatNumber())				
+								.companyRegistrationNumber(recruiter.getCompanyRegistrationNumber())		
 								.subscriptions(recruiter.getSubscriptions().stream().map(s -> RecruiterSubscriptionEntity.convertToEntity(s, Optional.empty())).collect(Collectors.toSet()))
 							.build();
 		}
@@ -384,6 +512,10 @@ public class RecruiterEntity {
 					.surname(recruiter.getSurname())
 					.userId(recruiter.getUserId())
 					.subscriptions(subscriptions)
+					.companyAddress(recruiter.getCompanyAddress())
+					.companyCountry(recruiter.getCompanyCountry())					
+					.companyVatNumber(recruiter.getCompanyVatNumber())				
+					.companyRegistrationNumber(recruiter.getCompanyRegistrationNumber())	
 				.build();
 		
 		
@@ -405,6 +537,10 @@ public class RecruiterEntity {
 					.language(recruiterEntity.getLanguage())
 					.surname(recruiterEntity.getSurname())
 					.userId(recruiterEntity.getUserId())
+					.companyAddress(recruiterEntity.getCompanyAddress())
+					.companyCountry(recruiterEntity.getCompanyCountry())					
+					.companyVatNumber(recruiterEntity.getCompanyVatNumber())				
+					.companyRegistrationNumber(recruiterEntity.getCompanyRegistrationNumber())	
 					.subscriptions(recruiterEntity.getSubscriptions().stream().map(RecruiterSubscriptionEntity::convertFromEntity).collect(Collectors.toSet()))
 				.build();
 	}

@@ -18,6 +18,10 @@ public class RecruiterAPIOutbound {
 	private String 									surname;
 	private String 									email;
 	private String									companyName;
+	private String 									companyAddress;
+	private String 									companyCountry;
+	private String 									companyVatNumber;
+	private String 									companyRegistrationNumber;
 	private boolean 								active					= true;
 	private language 								language;
 	private Set<RecruiterSubscriptionAPIOutbound> 	subscriptions			= new LinkedHashSet<>();
@@ -29,13 +33,17 @@ public class RecruiterAPIOutbound {
 	*/
 	public RecruiterAPIOutbound(RecruiterAPIOutboundBuilder builder) {
 		
-		this.userId 			= builder.userId;
-		this.firstName 			= builder.firstName;
-		this.surname 			= builder.surname;
-		this.email 				= builder.email;
-		this.companyName 		= builder.companyName;
-		this.active 			= builder.active;
-		this.language 			= builder.language;
+		this.userId 					= builder.userId;
+		this.firstName 					= builder.firstName;
+		this.surname 					= builder.surname;
+		this.email 						= builder.email;
+		this.companyName 				= builder.companyName;
+		this.companyAddress				= builder.companyAddress;
+		this.companyCountry				= builder.companyCountry;
+		this.companyVatNumber			= builder.companyVatNumber;
+		this.companyRegistrationNumber 	= builder.companyRegistrationNumber;
+		this.active 					= builder.active;
+		this.language 					= builder.language;
 		
 		this.subscriptions.clear();
 		this.subscriptions.addAll(builder.subscriptions);
@@ -89,6 +97,38 @@ public class RecruiterAPIOutbound {
 	*/
 	public String getCompanyName() {
 		return companyName;
+	}
+	
+	/**
+	* Returns the address of the Company
+	* @return address
+	*/
+	public String getCompanyAddress() {
+		return this.companyAddress;
+	}
+	
+	/**
+	* Returns the country where the Company is base
+	* @return country
+	*/
+	public String getCompanyCountry() {
+		return this.companyCountry;
+	}
+	
+	/**
+	* Returns the Companies VAT number
+	* @return vat number
+	*/
+	public String getCompanyVatNumber() {
+		return this.companyVatNumber;
+	}
+	
+	/**
+	* Returns the companies registration number
+	* @return company registration number
+	*/
+	public String getCompanyRegistrationNumber() {
+		return this.companyRegistrationNumber;
 	}
 	
 	/**
@@ -146,6 +186,10 @@ public class RecruiterAPIOutbound {
 		private String 									surname;
 		private String 									email;
 		private String									companyName;
+		private String 									companyAddress;
+		private String 									companyCountry;
+		private String 									companyVatNumber;
+		private String 									companyRegistrationNumber;
 		private boolean 								active			= true;
 		private language 								language;
 		private Set<RecruiterSubscriptionAPIOutbound> 	subscriptions	= new LinkedHashSet<>();
@@ -197,6 +241,46 @@ public class RecruiterAPIOutbound {
 		*/
 		public RecruiterAPIOutboundBuilder companyName(String companyName) {
 			this.companyName = companyName;
+			return this;
+		}
+		
+		/**
+		* Sets the address of the Company
+		* @param companyAddress - Address of the Company
+		* @return Builder
+		*/
+		public RecruiterAPIOutboundBuilder companyAddress(String companyAddress) {
+			this.companyAddress = companyAddress;
+			return this;
+		}
+		
+		/**
+		* Sets the Country where the Company is registered
+		* @param companyCountry - Country
+		* @return Builder
+		*/
+		public RecruiterAPIOutboundBuilder companyCountry(String companyCountry) {
+			this.companyCountry = companyCountry;
+			return this;
+		}
+		
+		/**
+		* Sets the VAT Number of the Compamy
+		* @param companyVatNumber - VAT Number
+		* @return Builder
+		*/
+		public RecruiterAPIOutboundBuilder companyVatNumber(String companyVatNumber) {
+			this.companyVatNumber = companyVatNumber;
+			return this;
+		}
+		
+		/**
+		* Sets the companies registration Number
+		* @param companyRegistrationNumber - Registration Number 
+		* @return Builder
+		*/
+		public RecruiterAPIOutboundBuilder companyRegistrationNumber(String companyRegistrationNumber) {
+			this.companyRegistrationNumber = companyRegistrationNumber;
 			return this;
 		}
 		
@@ -253,6 +337,10 @@ public class RecruiterAPIOutbound {
 		return RecruiterAPIOutbound
 								.builder()
 									.companyName(recruiter.getCompanyName())
+									.companyAddress(recruiter.getCompanyAddress())
+									.companyCountry(recruiter.getCompanyCountry())
+									.companyVatNumber(recruiter.getCompanyVatNumber())
+									.companyRegistrationNumber(recruiter.getCompanyRegistrationNumber())
 									.email(recruiter.getEmail())
 									.firstName(recruiter.getFirstName())
 									.active(recruiter.isActive())

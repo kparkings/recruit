@@ -12,13 +12,17 @@ import java.util.Set;
 */
 public class Recruiter {
 
-	public static enum language {ENGLISH, DUTCH, FRENCH}
+	public enum language {ENGLISH, DUTCH, FRENCH}
 	
 	private String 						userId;
 	private String 						firstName;
 	private String 						surname;
 	private String 						email;
 	private String						companyName;
+	private String 						companyAddress;
+	private String 						companyCountry;
+	private String 						companyVatNumber;
+	private String 						companyRegistrationNumber;
 	private boolean 					active;
 	private language 					language;
 	private LocalDate					accountCreated;
@@ -36,6 +40,10 @@ public class Recruiter {
 		this.surname 					= builder.surname;
 		this.email 						= builder.email;
 		this.companyName 				= builder.companyName;
+		this.companyAddress				= builder.companyAddress;
+		this.companyCountry 			= builder.companyCountry;
+		this.companyVatNumber 			= builder.companyVatNumber;
+		this.companyRegistrationNumber 	= builder.companyRegistrationNumber;
 		this.active 					= builder.active;
 		this.language 					= builder.language;
 		this.accountCreated 			= builder.accountCreated;
@@ -109,6 +117,38 @@ public class Recruiter {
 	*/
 	public LocalDate getAccountCreated() {
 		return accountCreated;
+	}
+	
+	/**
+	* Returns the address of the Company
+	* @return address of the Company
+	*/
+	public String getCompanyAddress(){
+		return this.companyAddress;
+	}
+	
+	/**
+	* Returns the Country where the Company is registered
+	* @return Country of registration
+	*/
+	public String getCompanyCountry(){
+		return this.companyCountry;
+	}			
+	
+	/**
+	* Returns the Company VAT Number
+	* @return VAT Number
+	*/
+	public String getCompanyVatNumber(){
+		return this.companyVatNumber;
+	}			
+	
+	/**
+	* Returns the Registration number of the Company
+	* @return Registration Number
+	*/
+	public String getCompanyRegistrationNumber(){
+		return this.companyRegistrationNumber;
 	}
 	
 	/**
@@ -192,6 +232,10 @@ public class Recruiter {
 		private String 						surname;
 		private String 						email;
 		private String						companyName;
+		private String 						companyAddress;
+		private String 						companyCountry;
+		private String 						companyVatNumber;
+		private String 						companyRegistrationNumber;
 		private boolean 					active;
 		private language 					language;
 		private LocalDate					accountCreated;
@@ -245,6 +289,46 @@ public class Recruiter {
 		*/
 		public RecruiterBuilder companyName(String companyName) {
 			this.companyName = companyName.toLowerCase().trim();
+			return this;
+		}
+		
+		/**
+		* Sets the address of the Company
+		* @param companyAddress - Address of the Company
+		* @return Builder
+		*/
+		public RecruiterBuilder companyAddress(String companyAddress) {
+			this.companyAddress = companyAddress;
+			return this;
+		}
+		
+		/**
+		* Sets the Country where the Company is registered
+		* @param companyCountry - Country
+		* @return Builder
+		*/
+		public RecruiterBuilder companyCountry(String companyCountry) {
+			this.companyCountry = companyCountry;
+			return this;
+		}
+		
+		/**
+		* Sets the VAT Number of the Compamy
+		* @param companyVatNumber - VAT Number
+		* @return Builder
+		*/
+		public RecruiterBuilder companyVatNumber(String companyVatNumber) {
+			this.companyVatNumber = companyVatNumber;
+			return this;
+		}
+		
+		/**
+		* Sets the companies registration Number
+		* @param companyRegistrationNumber - Registration Number 
+		* @return Builder
+		*/
+		public RecruiterBuilder companyRegistrationNumber(String companyRegistrationNumber) {
+			this.companyRegistrationNumber = companyRegistrationNumber;
 			return this;
 		}
 		

@@ -8,6 +8,17 @@ import com.arenella.recruit.recruiters.beans.Recruiter.language;
 
 public class RecruiterAPIInboundTest {
 
+	private static final String 		USER_ID						= "kparkings";
+	private static final String 		FIRST_NAME					= "kevin";
+	private static final String 		SURNAME						= "parkings";
+	private static final String 		EMAIL						= "kparkings@gmail.com";
+	private static final String			COMPANY_NAME				= "Arenella";
+	private static final String 		COMPANY_ADDRESS				= "Julianastraat 16, Noordwijk, 2202KD";
+	private static final String 		COMPANY_COUNTRY				= "Nederland";
+	private static final String 		COMPANY_VAT_NUMBER			= "123214";
+	private static final String 		COMPANY_REGISTRATION_NUMBER = "AAFF23";
+	private static final language 		LANGUAGE					= Recruiter.language.DUTCH;
+	
 	/**
 	* Tests creation via Builder
 	* @throws Exception
@@ -15,30 +26,68 @@ public class RecruiterAPIInboundTest {
 	@Test
 	public void testBuilder() throws Exception {
 		
-		final String 		userId			= "kparkings";
-		final String 		firstName		= "kevin";
-		final String 		surname			= "parkings";
-		final String 		email			= "kparkings@gmail.com";
-		final String		companyName		= "Arenella";
-		final language 		language		= Recruiter.language.DUTCH;
-		
 		RecruiterAPIInbound recruiter = RecruiterAPIInbound
 													.builder()
-														.companyName(companyName)
-														.email(email)
-														.firstName(firstName)
-														.language(language)
-														.surname(surname)
-														.userId(userId)
+														.companyName(COMPANY_NAME)
+														.companyAddress(COMPANY_ADDRESS)
+														.companyCountry(COMPANY_COUNTRY)
+														.companyVatNumber(COMPANY_VAT_NUMBER)
+														.companyRegistrationNumber(COMPANY_REGISTRATION_NUMBER)
+														.email(EMAIL)
+														.firstName(FIRST_NAME)
+														.language(LANGUAGE)
+														.surname(SURNAME)
+														.userId(USER_ID)
 													.build();
 		
-		assertEquals(recruiter.getCompanyName(), 	companyName);
-		assertEquals(recruiter.getEmail(), 			email);
-		assertEquals(recruiter.getFirstName(), 		firstName);
-		assertEquals(recruiter.getLanguage(), 		language);
-		assertEquals(recruiter.getSurname(), 		surname);
-		assertEquals(recruiter.getUserId(), 		userId);
+		assertEquals(COMPANY_NAME, 					recruiter.getCompanyName());
+		assertEquals(COMPANY_ADDRESS, 				recruiter.getCompanyAddress());
+		assertEquals(COMPANY_COUNTRY, 				recruiter.getCompanyCountry());
+		assertEquals(COMPANY_VAT_NUMBER, 			recruiter.getCompanyVatNumber());
+		assertEquals(COMPANY_REGISTRATION_NUMBER, 	recruiter.getCompanyRegistrationNumber());
+		assertEquals(EMAIL, 						recruiter.getEmail());
+		assertEquals(FIRST_NAME, 					recruiter.getFirstName());
+		assertEquals(LANGUAGE, 						recruiter.getLanguage());
+		assertEquals(SURNAME, 						recruiter.getSurname());
+		assertEquals(USER_ID, 						recruiter.getUserId());
 		
+	}
+	
+	/**
+	* Tests conversion from APIInbound representation to 
+	* Domain representation
+	* @throws Exception
+	*/
+	@Test
+	public void testConvertToDomain() throws Exception{
+		
+		RecruiterAPIInbound recruiterAPIOutbound = RecruiterAPIInbound
+				.builder()
+					.companyName(COMPANY_NAME)
+					.companyAddress(COMPANY_ADDRESS)
+					.companyCountry(COMPANY_COUNTRY)
+					.companyVatNumber(COMPANY_VAT_NUMBER)
+					.companyRegistrationNumber(COMPANY_REGISTRATION_NUMBER)
+					.email(EMAIL)
+					.firstName(FIRST_NAME)
+					.language(LANGUAGE)
+					.surname(SURNAME)
+					.userId(USER_ID)
+				.build();
+
+		Recruiter recruiter = RecruiterAPIInbound.convertToDomain(recruiterAPIOutbound);
+		
+		assertEquals(COMPANY_NAME.toLowerCase(), 	recruiter.getCompanyName());
+		assertEquals(COMPANY_ADDRESS, 				recruiter.getCompanyAddress());
+		assertEquals(COMPANY_COUNTRY, 				recruiter.getCompanyCountry());
+		assertEquals(COMPANY_VAT_NUMBER, 			recruiter.getCompanyVatNumber());
+		assertEquals(COMPANY_REGISTRATION_NUMBER, 	recruiter.getCompanyRegistrationNumber());
+		assertEquals(EMAIL, 						recruiter.getEmail());
+		assertEquals(FIRST_NAME, 					recruiter.getFirstName());
+		assertEquals(LANGUAGE, 						recruiter.getLanguage());
+		assertEquals(SURNAME, 						recruiter.getSurname());
+		assertEquals(USER_ID, 						recruiter.getUserId());
+
 	}
 	
 }

@@ -1840,3 +1840,23 @@ databaseChangeLog:
                   type: timestamp
                   constraints:
                     nullable: false
+  - changeSet:
+      id: addColumns-billing_to_recruiter
+      author: kevin
+      changes:
+        - addColumn:
+            tableName: recruiter
+            schemaName: recruiter
+            columns:
+            - column:
+                name: company_address
+                type: varchar
+            - column:
+                name: company_country
+                type: varchar
+            - column:
+                name: company_registration_number
+                type: varchar
+            - column:
+                name: company_vat_number
+                type: varchar

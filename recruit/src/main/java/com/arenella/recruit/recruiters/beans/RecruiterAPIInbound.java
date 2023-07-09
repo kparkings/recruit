@@ -16,6 +16,11 @@ public class RecruiterAPIInbound {
 	private String 		surname;
 	private String 		email;
 	private String		companyName;
+	private String 		companyAddress;
+	private String 		companyCountry;
+	private String 		companyVatNumber;
+	private String 		companyRegistrationNumber;
+	
 	private language 	language;
 	
 	/**
@@ -24,12 +29,16 @@ public class RecruiterAPIInbound {
 	*/
 	public RecruiterAPIInbound(RecruiterAPIInboundBuilder builder) {
 		
-		this.userId 			= builder.userId;
-		this.firstName 			= builder.firstName;
-		this.surname 			= builder.surname;
-		this.email 				= builder.email;
-		this.companyName 		= builder.companyName;
-		this.language 			= builder.language;
+		this.userId 					= builder.userId;
+		this.firstName 					= builder.firstName;
+		this.surname 					= builder.surname;
+		this.email 						= builder.email;
+		this.companyName 				= builder.companyName;
+		this.companyAddress				= builder.companyAddress;
+		this.companyCountry				= builder.companyCountry;
+		this.companyVatNumber			= builder.companyVatNumber;
+		this.companyRegistrationNumber 	= builder.companyRegistrationNumber;
+		this.language 					= builder.language;
 		
 	}
 	
@@ -75,6 +84,38 @@ public class RecruiterAPIInbound {
 	}
 	
 	/**
+	* Returns the address of the Company
+	* @return address
+	*/
+	public String getCompanyAddress() {
+		return this.companyAddress;
+	}
+	
+	/**
+	* Returns the country where the Company is base
+	* @return country
+	*/
+	public String getCompanyCountry() {
+		return this.companyCountry;
+	}
+	
+	/**
+	* Returns the Companies VAT number
+	* @return vat number
+	*/
+	public String getCompanyVatNumber() {
+		return this.companyVatNumber;
+	}
+	
+	/**
+	* Returns the companies registration number
+	* @return company registration number
+	*/
+	public String getCompanyRegistrationNumber() {
+		return this.companyRegistrationNumber;
+	}
+	
+	/**
 	* Returns the language spoken by the Recruiter
 	* @return language spoken by the recruiter
 	*/
@@ -102,6 +143,10 @@ public class RecruiterAPIInbound {
 		private String 		surname;
 		private String 		email;
 		private String		companyName;
+		private String 		companyAddress;
+		private String 		companyCountry;
+		private String 		companyVatNumber;
+		private String 		companyRegistrationNumber;
 		private language 	language;
 		
 		/**
@@ -155,6 +200,46 @@ public class RecruiterAPIInbound {
 		}
 		
 		/**
+		* Sets the address of the Company
+		* @param companyAddress - Address of the Company
+		* @return Builder
+		*/
+		public RecruiterAPIInboundBuilder companyAddress(String companyAddress) {
+			this.companyAddress = companyAddress;
+			return this;
+		}
+		
+		/**
+		* Sets the Country where the Company is registered
+		* @param companyCountry - Country
+		* @return Builder
+		*/
+		public RecruiterAPIInboundBuilder companyCountry(String companyCountry) {
+			this.companyCountry = companyCountry;
+			return this;
+		}
+		
+		/**
+		* Sets the VAT Number of the Company
+		* @param companyVatNumber - VAT Number
+		* @return Builder
+		*/
+		public RecruiterAPIInboundBuilder companyVatNumber(String companyVatNumber) {
+			this.companyVatNumber = companyVatNumber;
+			return this;
+		}
+		
+		/**
+		* Sets the companies registration Number
+		* @param companyRegistrationNumber - Registration Number 
+		* @return Builder
+		*/
+		public RecruiterAPIInboundBuilder companyRegistrationNumber(String companyRegistrationNumber) {
+			this.companyRegistrationNumber = companyRegistrationNumber;
+			return this;
+		}
+		
+		/**
 		* Sets the Language spoken by the Recruiter 
 		* @param language - Language spoken by the Recruiter
 		* @return Builder
@@ -185,6 +270,10 @@ public class RecruiterAPIInbound {
 		return Recruiter
 				.builder()
 					.companyName(recruiter.getCompanyName())
+					.companyAddress(recruiter.getCompanyAddress())
+					.companyCountry(recruiter.getCompanyCountry())
+					.companyVatNumber(recruiter.getCompanyVatNumber())
+					.companyRegistrationNumber(recruiter.getCompanyRegistrationNumber())
 					.email(recruiter.getEmail())
 					.firstName(recruiter.getFirstName())
 					.language(recruiter.getLanguage())

@@ -30,6 +30,10 @@ public class RecruiterTest {
 		final String 		surname						= "parkings";
 		final String 		email						= "kparkings@gmail.com";
 		final String		companyName					= "arenella";
+		final String 		companyAddress				= "Julianastraat 16, Noordwijk, 2202KD";
+		final String 		companyCountry				= "Nederland";
+		final String 		companyVatNumber			= "123214";
+		final String 		companyRegistrationNumber 	= "AAFF23";
 		final boolean 		active						= false;
 		final language 		language					= Recruiter.language.DUTCH;
 		final LocalDate		accountCreated				= LocalDate.of(2021, 5, 1);
@@ -39,6 +43,10 @@ public class RecruiterTest {
 								.builder()
 									.accountCreated(accountCreated)
 									.companyName(" "+ companyName.toUpperCase() + " ")
+									.companyAddress(companyAddress)
+									.companyCountry(companyCountry)
+									.companyVatNumber(companyVatNumber)
+									.companyRegistrationNumber(companyRegistrationNumber)
 									.email(" "+ email.toUpperCase() + " ")
 									.firstName(" "+ firstName.toLowerCase() + " ")
 									.active(active)
@@ -48,14 +56,18 @@ public class RecruiterTest {
 									.visibleToOtherRecruiters(visibleToOtherRecruiters)
 								.build();
 		
-		assertEquals(recruiter.getAccountCreated(), accountCreated);
-		assertEquals(recruiter.getCompanyName(), 	companyName);
-		assertEquals(recruiter.getEmail(), 			email);
-		assertEquals(recruiter.getFirstName(), 		firstName);
-		assertEquals(recruiter.isActive(), 			active);
-		assertEquals(recruiter.getLanguage(), 		language);
-		assertEquals(recruiter.getSurname(), 		surname);
-		assertEquals(recruiter.getUserId(), 		userId);
+		assertEquals(accountCreated, 				recruiter.getAccountCreated());
+		assertEquals(companyName, 					recruiter.getCompanyName());
+		assertEquals(companyAddress, 				recruiter.getCompanyAddress());
+		assertEquals(companyCountry, 				recruiter.getCompanyCountry());
+		assertEquals(companyVatNumber, 				recruiter.getCompanyVatNumber());
+		assertEquals(companyRegistrationNumber, 	recruiter.getCompanyRegistrationNumber());
+		assertEquals(email, 						recruiter.getEmail());
+		assertEquals(firstName, 					recruiter.getFirstName());
+		assertEquals(active, 						recruiter.isActive());
+		assertEquals(language, 						recruiter.getLanguage());
+		assertEquals(surname, 						recruiter.getSurname());
+		assertEquals(userId, 						recruiter.getUserId());
 		assertTrue(recruiter.isVisibleToOtherRecruiters());
 	}
 	

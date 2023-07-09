@@ -22,21 +22,25 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 */
 public class RecruiterEntityTest {
 
-	private static final String 				userId				= "kparkings";
-	private static final String 				firstName			= "kevin";
-	private static final String 				surname				= "parkings";
-	private static final String 				email				= "kparkings@gmail.com";
-	private static final String					companyName			= "arenella";
-	private static final boolean 				active				= false;
-	private static final language 				language			= Recruiter.language.DUTCH;
-	private static final LocalDate				accountCreated		= LocalDate.of(2021, 5, 1);
+	private static final String 				userId						= "kparkings";
+	private static final String 				firstName					= "kevin";
+	private static final String 				surname						= "parkings";
+	private static final String 				email						= "kparkings@gmail.com";
+	private static final String					companyName					= "arenella";
+	private static final String 				companyAddress				= "Julianastraat 16, Noordwijk, 2202KD";
+	private static final String 				companyCountry				= "Nederland";
+	private static final String 				companyVatNumber			= "123214";
+	private static final String 				companyRegistrationNumber 	= "AAFF23";
+	private static final boolean 				active						= false;
+	private static final language 				language					= Recruiter.language.DUTCH;
+	private static final LocalDate				accountCreated				= LocalDate.of(2021, 5, 1);
 	
-	private static final LocalDateTime 			created 			= LocalDateTime.of(2021, 12, 18, 10, 10);
-	private static final LocalDateTime 			activatedDate 		= LocalDateTime.of(2021, 12, 24, 10, 10);
-	private static final String					recruiterId			= "kparkings";
-	private static final UUID					subscriptionId		= UUID.randomUUID();
-	private static final subscription_status 	status 				= subscription_status.ACTIVE;
-	private static final subscription_type		type				= subscription_type.FIRST_GEN;
+	private static final LocalDateTime 			created 					= LocalDateTime.of(2021, 12, 18, 10, 10);
+	private static final LocalDateTime 			activatedDate 				= LocalDateTime.of(2021, 12, 24, 10, 10);
+	private static final String					recruiterId					= "kparkings";
+	private static final UUID					subscriptionId				= UUID.randomUUID();
+	private static final subscription_status 	status 						= subscription_status.ACTIVE;
+	private static final subscription_type		type						= subscription_type.FIRST_GEN;
 	
 	/**
 	* Tests Builder and Getters
@@ -50,6 +54,10 @@ public class RecruiterEntityTest {
 											.accountCreated(accountCreated)
 											.active(active)
 											.companyName(companyName)
+											.companyAddress(companyAddress)
+											.companyCountry(companyCountry)
+											.companyVatNumber(companyVatNumber)
+											.companyRegistrationNumber(companyRegistrationNumber)
 											.email(email)
 											.firstName(firstName)
 											.language(language)
@@ -57,14 +65,18 @@ public class RecruiterEntityTest {
 											.userId(userId)
 										.build();
 		
-		assertEquals(accountCreated,	entity.getAccountCreated());
-		assertEquals(companyName, 		entity.getCompanyName());
-		assertEquals(email, 			entity.getEmail());
-		assertEquals(firstName, 		entity.getFirstName());
-		assertEquals(active, 			entity.isActive());
-		assertEquals(language, 			entity.getLanguage());
-		assertEquals(surname, 			entity.getSurname());
-		assertEquals(userId, 			entity.getUserId());
+		assertEquals(accountCreated,				entity.getAccountCreated());
+		assertEquals(companyName, 					entity.getCompanyName());
+		assertEquals(companyAddress, 				entity.getCompanyAddress());
+		assertEquals(companyCountry, 				entity.getCompanyCountry());
+		assertEquals(companyVatNumber, 				entity.getCompanyVatNumber());
+		assertEquals(companyRegistrationNumber, 	entity.getCompanyRegistrationNumber());
+		assertEquals(email, 						entity.getEmail());
+		assertEquals(firstName, 					entity.getFirstName());
+		assertEquals(active, 						entity.isActive());
+		assertEquals(language, 						entity.getLanguage());
+		assertEquals(surname, 						entity.getSurname());
+		assertEquals(userId, 						entity.getUserId());
 		
 	}
 	
@@ -80,18 +92,26 @@ public class RecruiterEntityTest {
 										.build();
 		
 		entity.setCompanyName(companyName);
+		entity.setCompanyAddress(companyAddress);
+		entity.setCompanyCountry(companyCountry);
+		entity.setCompanyVatNumber(companyVatNumber);
+		entity.setCompanyRegistrationNumber(companyRegistrationNumber);
 		entity.setEmail(email);
 		entity.setFirstName(firstName);
 		entity.setLanguage(language);
 		entity.setSurname(surname);
 		entity.setUserId(userId);
 		
-		assertEquals(companyName, 	entity.getCompanyName());
-		assertEquals(email, 		entity.getEmail());
-		assertEquals(firstName, 	entity.getFirstName());
-		assertEquals(language, 		entity.getLanguage());
-		assertEquals(surname, 		entity.getSurname());
-		assertEquals(userId, 		entity.getUserId());
+		assertEquals(companyName, 					entity.getCompanyName());
+		assertEquals(email, 						entity.getEmail());
+		assertEquals(firstName, 					entity.getFirstName());
+		assertEquals(language, 						entity.getLanguage());
+		assertEquals(surname, 						entity.getSurname());
+		assertEquals(userId, 						entity.getUserId());
+		assertEquals(companyAddress, 				entity.getCompanyAddress());
+		assertEquals(companyCountry, 				entity.getCompanyCountry());
+		assertEquals(companyVatNumber, 				entity.getCompanyVatNumber());
+		assertEquals(companyRegistrationNumber, 	entity.getCompanyRegistrationNumber());
 		
 	}
 	
@@ -117,6 +137,10 @@ public class RecruiterEntityTest {
 					.accountCreated(accountCreated)
 					.active(active)
 					.companyName(companyName)
+					.companyAddress(companyAddress)
+					.companyCountry(companyCountry)
+					.companyVatNumber(companyVatNumber)
+					.companyRegistrationNumber(companyRegistrationNumber)
 					.email(email)
 					.firstName(firstName)
 					.language(language)
@@ -127,14 +151,18 @@ public class RecruiterEntityTest {
 		
 		Recruiter recruiter = RecruiterEntity.convertFromEntity(entity);
 
-		assertEquals(accountCreated, 	recruiter.getAccountCreated());
-		assertEquals(companyName, 		recruiter.getCompanyName());
-		assertEquals(email, 			recruiter.getEmail());
-		assertEquals(firstName, 		recruiter.getFirstName());
-		assertEquals(active, 			recruiter.isActive());
-		assertEquals(language, 			recruiter.getLanguage());
-		assertEquals(surname, 			recruiter.getSurname());
-		assertEquals(userId, 			recruiter.getUserId());
+		assertEquals(accountCreated, 				recruiter.getAccountCreated());
+		assertEquals(companyName, 					recruiter.getCompanyName());
+		assertEquals(companyAddress, 				entity.getCompanyAddress());
+		assertEquals(companyCountry, 				entity.getCompanyCountry());
+		assertEquals(companyVatNumber, 				entity.getCompanyVatNumber());
+		assertEquals(companyRegistrationNumber, 	entity.getCompanyRegistrationNumber());
+		assertEquals(email, 						recruiter.getEmail());
+		assertEquals(firstName, 					recruiter.getFirstName());
+		assertEquals(active, 						recruiter.isActive());
+		assertEquals(language, 						recruiter.getLanguage());
+		assertEquals(surname, 						recruiter.getSurname());
+		assertEquals(userId, 						recruiter.getUserId());
 		
 		RecruiterSubscription subscription = recruiter.getSubscriptions().stream().findFirst().get();
 		
@@ -159,6 +187,10 @@ public class RecruiterEntityTest {
 									.accountCreated(accountCreated)
 									.active(active)
 									.companyName(companyName)
+									.companyAddress(companyAddress)
+									.companyCountry(companyCountry)
+									.companyVatNumber(companyVatNumber)
+									.companyRegistrationNumber(companyRegistrationNumber)
 									.email(email)
 									.firstName(firstName)
 									.language(language)
@@ -168,14 +200,18 @@ public class RecruiterEntityTest {
 						
 		RecruiterEntity entity = RecruiterEntity.convertToEntity(recruiter, Optional.empty());
 
-		assertEquals(accountCreated,	entity.getAccountCreated());
-		assertEquals(companyName, 		entity.getCompanyName());
-		assertEquals(email, 			entity.getEmail());
-		assertEquals(firstName, 		entity.getFirstName());
-		assertEquals(active, 			entity.isActive());
-		assertEquals(language, 			entity.getLanguage());
-		assertEquals(surname, 			entity.getSurname());
-		assertEquals(userId, 			entity.getUserId());
+		assertEquals(accountCreated,				entity.getAccountCreated());
+		assertEquals(companyName, 					entity.getCompanyName());
+		assertEquals(companyAddress, 				entity.getCompanyAddress());
+		assertEquals(companyCountry, 				entity.getCompanyCountry());
+		assertEquals(companyVatNumber, 				entity.getCompanyVatNumber());
+		assertEquals(companyRegistrationNumber, 	entity.getCompanyRegistrationNumber());
+		assertEquals(email, 						entity.getEmail());
+		assertEquals(firstName, 					entity.getFirstName());
+		assertEquals(active, 						entity.isActive());
+		assertEquals(language, 						entity.getLanguage());
+		assertEquals(surname, 						entity.getSurname());
+		assertEquals(userId, 						entity.getUserId());
 		
 	}
 	
