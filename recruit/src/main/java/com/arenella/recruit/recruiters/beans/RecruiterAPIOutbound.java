@@ -17,15 +17,15 @@ public class RecruiterAPIOutbound {
 	private String 									firstName;
 	private String 									surname;
 	private String 									email;
-	private String									companyName;
-	private String 									companyAddress;
-	private String 									companyCountry;
-	private String 									companyVatNumber;
-	private String 									companyRegistrationNumber;
-	private boolean 								active					= true;
+	private String									companyName					= "";
+	private String 									companyAddress				= "";
+	private String 									companyCountry				= "";
+	private String 									companyVatNumber			= "";
+	private String 									companyRegistrationNumber	= "";
+	private boolean 								active						= true;
 	private language 								language;
-	private Set<RecruiterSubscriptionAPIOutbound> 	subscriptions			= new LinkedHashSet<>();
-	private boolean 								hasActiveSubscription 	= false;
+	private Set<RecruiterSubscriptionAPIOutbound> 	subscriptions				= new LinkedHashSet<>();
+	private boolean 								hasActiveSubscription 		= false;
 	
 	/**
 	* Constuctor based upon a builder
@@ -185,14 +185,14 @@ public class RecruiterAPIOutbound {
 		private String 									firstName;
 		private String 									surname;
 		private String 									email;
-		private String									companyName;
-		private String 									companyAddress;
-		private String 									companyCountry;
-		private String 									companyVatNumber;
-		private String 									companyRegistrationNumber;
-		private boolean 								active			= true;
+		private String									companyName					= "";
+		private String 									companyAddress				= "";
+		private String 									companyCountry				= "";
+		private String 									companyVatNumber			= "";
+		private String 									companyRegistrationNumber	= "";
+		private boolean 								active						= true;
 		private language 								language;
-		private Set<RecruiterSubscriptionAPIOutbound> 	subscriptions	= new LinkedHashSet<>();
+		private Set<RecruiterSubscriptionAPIOutbound> 	subscriptions				= new LinkedHashSet<>();
 		
 		/**
 		* Sets the userId associated with the Recruiter

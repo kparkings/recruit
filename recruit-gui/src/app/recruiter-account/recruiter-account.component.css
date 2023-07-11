@@ -107,3 +107,13 @@
 #account-details-input input[type="text"]{
 	width:50%;
 }
+
+#account-details-input textarea{
+	width:50%;
+	height:100px;
+}
+
+.rec-account-footer{
+		
+	height:50px;
+}

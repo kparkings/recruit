@@ -21,11 +21,12 @@ public class RecruiterUpdatedEvent {
 	* @param builder - Contains initialization values
 	*/
 	public RecruiterUpdatedEvent(RecruiterUpdatedEventBuilder builder) {
-		this.recruiterId	= builder.recruiterId;
-		this.firstName		= builder.firstName;
-		this.surname		= builder.surname;
-		this.email			= builder.email;
-		this.companyName	= builder.companyName;
+		this.recruiterId				= builder.recruiterId;
+		this.firstName					= builder.firstName;
+		this.surname					= builder.surname;
+		this.email						= builder.email;
+		this.companyName				= builder.companyName;
+		
 		this.language		= builder.language;
 	}
 	

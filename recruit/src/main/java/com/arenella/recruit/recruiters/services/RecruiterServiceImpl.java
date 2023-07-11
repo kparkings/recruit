@@ -83,6 +83,10 @@ public class RecruiterServiceImpl implements RecruiterService{
 		try {
 		
 			entity.setCompanyName(recruiter.getCompanyName());
+			entity.setCompanyAddress(recruiter.getCompanyAddress());
+			entity.setCompanyCountry(recruiter.getCompanyCountry());
+			entity.setCompanyVatNumber(recruiter.getCompanyVatNumber());
+			entity.setCompanyRegistrationNumber(recruiter.getCompanyRegistrationNumber());
 			entity.setEmail(recruiter.getEmail());
 			entity.setFirstName(recruiter.getFirstName());
 			entity.setLanguage(recruiter.getLanguage());

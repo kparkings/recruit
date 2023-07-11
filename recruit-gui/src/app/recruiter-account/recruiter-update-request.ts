@@ -32,6 +32,29 @@ export class RecruiterUpdateRequest {
 	companyName:string 	= "";
 	
 	/**
+	* Recruiters current Company Country
+	*/
+	companyCountry:string 	= "";
+	
+	/**
+	* Recruiters current Company Address
+	*/
+	companyAddress:string 	= "";
+	
+	/**
+	* Recruiters current Company VAT Number
+	*/
+	companyVatNumber:string 	= "";
+	
+	/**
+	* Recruiters current Company Registation Number
+	*/
+	companyRegistrationNumber:string 	= "";
+	
+	
+	
+	
+	/**
 	* Primary language spoken by the Recruiter
 	*/
 	language:string 	= "";

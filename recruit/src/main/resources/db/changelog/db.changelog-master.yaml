@@ -1851,12 +1851,20 @@ databaseChangeLog:
             - column:
                 name: company_address
                 type: varchar
+                constraints:
+                    default: ""
             - column:
                 name: company_country
                 type: varchar
+                constraints:
+                    default: ""
             - column:
                 name: company_registration_number
                 type: varchar
+                constraints:
+                    default: ""
             - column:
                 name: company_vat_number
                 type: varchar
+                constraints:
+                    default: ""

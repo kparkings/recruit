@@ -40,13 +40,6 @@
 						</td>
 					</tr>
 					<tr>
-						<td class="table-left-hdr">Company Name</td>
-						<td class="table-cell label" *ngIf="!isInEditMode"><label>{{recruiter.companyName}}</label></td>
-						<td class="table-cell" *ngIf="isInEditMode">
-							<input type="text" formControlName="companyName"/> 
-						</td>
-					</tr>
-					<tr>
 						<td class="table-left-hdr">Email Address</td>
 						<td class="table-cell label" *ngIf="!isInEditMode"><label>{{recruiter.email}}</label></td>
 						<td class="table-cell" *ngIf="isInEditMode">
@@ -62,6 +55,41 @@
 								<option value="DUTCH"	>Dutch</option>
 								<option value="FRENCH"	>French</option>
 							</select>
+						</td>
+					</tr>
+					<tr>
+						<td class="table-left-hdr">Company Name</td>
+						<td class="table-cell label" *ngIf="!isInEditMode"><label>{{recruiter.companyName}}</label></td>
+						<td class="table-cell" *ngIf="isInEditMode">
+							<input type="text" formControlName="companyName"/> 
+						</td>
+					</tr>
+					<tr>
+						<td class="table-left-hdr">Company Address</td>
+						<td class="table-cell label" *ngIf="!isInEditMode"><label>{{recruiter.companyAddress}}</label></td>
+						<td class="table-cell" *ngIf="isInEditMode">
+							<textarea formControlName="companyAddress"></textarea> 
+						</td>
+					</tr>
+					<tr>
+						<td class="table-left-hdr">Company Country</td>
+						<td class="table-cell label" *ngIf="!isInEditMode"><label>{{recruiter.companyCountry}}</label></td>
+						<td class="table-cell" *ngIf="isInEditMode">
+							<input type="text" formControlName="companyCountry"/> 
+						</td>
+					</tr>
+					<tr>
+						<td class="table-left-hdr">Company VAT Number</td>
+						<td class="table-cell label" *ngIf="!isInEditMode"><label>{{recruiter.companyVatNumber}}</label></td>
+						<td class="table-cell" *ngIf="isInEditMode">
+							<input type="text" formControlName="companyVatNumber"/> 
+						</td>
+					</tr>
+					<tr>
+						<td class="table-left-hdr">Company Registration Number</td>
+						<td class="table-cell label" *ngIf="!isInEditMode"><label>{{recruiter.companyRegistrationNumber}}</label></td>
+						<td class="table-cell" *ngIf="isInEditMode">
+							<input type="text" formControlName="companyRegistrationNumber"/> 
 						</td>
 					</tr>
 				</table>
@@ -180,4 +208,7 @@
 	</div>
 	
 	
+	
 </div>
+
+<div class="rec-account-footer"></div>

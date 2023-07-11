@@ -3,9 +3,8 @@ import { Router}								from '@angular/router';
 import { RecruiterService }						from '../recruiter.service';
 import { Recruiter }							from './recruiter';
 import { Subscription }							from './subscription';
-import { NgbModal}								from '@ng-bootstrap/ng-bootstrap';
-import { SubscriptionAction }					from './subscription-action';
-import { UntypedFormGroup, UntypedFormControl }				from '@angular/forms';
+import { NgbModal}								from '@ng-bootstrap/ng-bootstrap'
+import { UntypedFormGroup, UntypedFormControl }	from '@angular/forms';
 import {RecruiterUpdateRequest }				from './recruiter-update-request';
 
 /**
@@ -54,11 +53,15 @@ export class RecruiterAccountComponent implements OnInit {
 	});
 	
 	public accoundDetailsForm:UntypedFormGroup = new UntypedFormGroup({
-		firstName:				new UntypedFormControl(''),
-		surname:				new UntypedFormControl(''),
-		companyName:			new UntypedFormControl(''),
-		email:					new UntypedFormControl(''),
-		language:				new UntypedFormControl(''),
+		firstName:					new UntypedFormControl(''),
+		surname:					new UntypedFormControl(''),
+		companyName:				new UntypedFormControl(''),
+		companyCountry:				new UntypedFormControl(''),
+		companyAddress:				new UntypedFormControl(''),
+		companyVatNumber:			new UntypedFormControl(''),
+		companyRegistationNumber:	new UntypedFormControl(''),
+		email:						new UntypedFormControl(''),
+		language:					new UntypedFormControl(''),
 	});
 		
 	/**
@@ -83,11 +86,15 @@ export class RecruiterAccountComponent implements OnInit {
 			}
 			
 			this.accoundDetailsForm = new UntypedFormGroup({
-				firstName:				new UntypedFormControl(this.recruiter.firstName),
-				surname:				new UntypedFormControl(this.recruiter.surname),
-				companyName:			new UntypedFormControl(this.recruiter.companyName),
-				email:					new UntypedFormControl(this.recruiter.email),
-				language:				new UntypedFormControl(this.recruiter.language),
+				firstName:					new UntypedFormControl(this.recruiter.firstName),
+				surname:					new UntypedFormControl(this.recruiter.surname),
+				companyName:				new UntypedFormControl(this.recruiter.companyName),
+				companyCountry:				new UntypedFormControl(this.recruiter.companyCountry),
+				companyAddress:				new UntypedFormControl(this.recruiter.companyAddress),
+				companyVatNumber:			new UntypedFormControl(this.recruiter.companyVatNumber),
+				companyRegistrationNumber:	new UntypedFormControl(this.recruiter.companyRegistrationNumber),
+				email:						new UntypedFormControl(this.recruiter.email),
+				language:					new UntypedFormControl(this.recruiter.language),
 			});
 				
 		}, err => {
@@ -310,11 +317,16 @@ export class RecruiterAccountComponent implements OnInit {
 		
 		const firstName:string = String(this.accoundDetailsForm.get('firstName')); 
 		
-		recruiter.userId 		= this.recruiter.userId;
-		recruiter.firstName 	= String(this.accoundDetailsForm.get('firstName')?.value);
-		recruiter.surname 		= String(this.accoundDetailsForm.get('surname')?.value);
-		recruiter.email 		= String(this.accoundDetailsForm.get('email')?.value);
-		recruiter.companyName 	= String(this.accoundDetailsForm.get('companyName')?.value);
+		recruiter.userId 					= this.recruiter.userId;
+		recruiter.firstName 				= String(this.accoundDetailsForm.get('firstName')?.value);
+		recruiter.surname 					= String(this.accoundDetailsForm.get('surname')?.value);
+		recruiter.email 					= String(this.accoundDetailsForm.get('email')?.value);
+		recruiter.companyName 				= String(this.accoundDetailsForm.get('companyName')?.value);
+		recruiter.companyCountry			= String(this.accoundDetailsForm.get('companyCountry')?.value);
+		recruiter.companyAddress			= String(this.accoundDetailsForm.get('companyAddress')?.value);
+		recruiter.companyVatNumber			= String(this.accoundDetailsForm.get('companyVatNumber')?.value);
+		recruiter.companyRegistrationNumber	= String(this.accoundDetailsForm.get('companyRegistrationNumber')?.value);
+		
 		recruiter.language 		= String(this.accoundDetailsForm.get('language')?.value);
 		
 		this.recruiterService.updateRecruiter(recruiter).subscribe(data => {

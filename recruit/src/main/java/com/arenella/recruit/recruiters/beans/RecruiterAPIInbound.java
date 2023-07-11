@@ -15,11 +15,11 @@ public class RecruiterAPIInbound {
 	private String 		firstName;
 	private String 		surname;
 	private String 		email;
-	private String		companyName;
-	private String 		companyAddress;
-	private String 		companyCountry;
-	private String 		companyVatNumber;
-	private String 		companyRegistrationNumber;
+	private String		companyName					= "";
+	private String 		companyAddress				= "";
+	private String 		companyCountry				= "";
+	private String 		companyVatNumber			= "";
+	private String 		companyRegistrationNumber	= "";
 	
 	private language 	language;
 	
@@ -142,11 +142,11 @@ public class RecruiterAPIInbound {
 		private String 		firstName;
 		private String 		surname;
 		private String 		email;
-		private String		companyName;
-		private String 		companyAddress;
-		private String 		companyCountry;
-		private String 		companyVatNumber;
-		private String 		companyRegistrationNumber;
+		private String		companyName					= "";
+		private String 		companyAddress				= "";
+		private String 		companyCountry				= "";
+		private String 		companyVatNumber			= "";
+		private String 		companyRegistrationNumber	= "";
 		private language 	language;
 		
 		/**
