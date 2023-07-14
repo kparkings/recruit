@@ -77,16 +77,15 @@
 								</tr>
 							</thead>
 							<tbody>
-								<tr *ngFor="let user of recruiterLoginsChartLabels" (click)="switchUserStatsView('recruiter-stats', user)">
+								<tr *ngFor="let user of recruiterLoginsChartLabels" (click)="switchUserStatsView('table', user)">
 									<td>{{user}}</td>
 								</tr>
 							</tbody>
 						</table>
 					</div>
 				</div>
-				<div class="chart-wrapper" *ngIf="loginChartView == 'recruiter-stats'">
+				<div class="chart-wrapper" *ngIf="loginChartView == 'table'">
 					<h3>logins: Recruiters: {{loginCountRecruiter}} Candidates: {{loginCountCandidate}}</h3>
-					<button (click)="switchUserStatsView('table')"  class="toggle-view">Back</button>
 					<div class="recruiter-stats">
 					<table style="width:100%">
 							<thead>

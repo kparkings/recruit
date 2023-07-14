@@ -100,6 +100,7 @@ export class StatisticsComponent implements OnInit {
 	* @param view - chart | table
 	*/
   	public switchUserStatsView(view:string, selectedUserId:Label = ""):void{
+		 console.log("AA" + selectedUserId);
 		  this.loginChartView 		= view;
 		  this.loginChartViewUser 	= selectedUserId.toString();
 		  this.fetchReruiterSearchStats();
