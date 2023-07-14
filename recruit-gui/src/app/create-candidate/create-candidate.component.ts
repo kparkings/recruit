@@ -1,9 +1,8 @@
-import { Component, OnInit } 							from '@angular/core';
-import { UntypedFormGroup, UntypedFormControl }						from '@angular/forms';
+import { Component, OnInit, ViewChild } 				from '@angular/core';
+import { UntypedFormGroup, UntypedFormControl }			from '@angular/forms';
 import { CurriculumService }							from '../curriculum.service';
 import { CandidateServiceService }						from '../candidate-service.service';
 import { NgbModal, NgbModalOptions}						from '@ng-bootstrap/ng-bootstrap';
-import { ViewChild }									from '@angular/core';
 import { PopupsService }								from '../popups.service';
 
 /**
@@ -133,7 +132,13 @@ export class CreateCandidateComponent implements OnInit {
 				let exceptions:Array<string> = new Array<string>();
 				exceptions.push(err.error);
 				this.popupsService.setValidationErrors(exceptions)
+			} else {
+				let exceptions:Array<string> = new Array<string>();
+				exceptions.push("There was an issue with the profile image");
+				this.popupsService.setValidationErrors(exceptions);	
 			}
+			
+			
 			
 		});
 			
