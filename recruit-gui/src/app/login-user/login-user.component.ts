@@ -20,7 +20,7 @@ export class LoginUserComponent implements OnInit {
 	@ViewChild('resetPasswordDialog', { static: false }) private resetDialog:any;
 	
 	public showForgottenPassword:boolean = false;
-	
+	public showSubscriptionMsg:boolean = false;
 	public formBeanForgottenPassword:UntypedFormGroup = new UntypedFormGroup({
 		email: new UntypedFormControl(),
 	});
@@ -41,6 +41,10 @@ export class LoginUserComponent implements OnInit {
   * Performs initialization
   */
   ngOnInit(): void {
+	  if(sessionStorage.getItem("new-subscription") == 'true') {
+		  this.showSubscriptionMsg = true;
+		  sessionStorage.setItem('beforeAuthPage', '/suggestions');
+	  }
   }
 
 	/**
@@ -48,6 +52,9 @@ export class LoginUserComponent implements OnInit {
 	*/
 	public login(): void{
     
+    	sessionStorage.removeItem("new-subscription");
+    	this.showSubscriptionMsg = false;
+		
 		this.authService.authenticate(this.formBean.get('username')?.value, this.formBean.get('password')?.value).subscribe( data => {
      
 			const roles:Array<string> = data;
@@ -95,6 +102,8 @@ export class LoginUserComponent implements OnInit {
 	    	}
 
 		}, err => {
+			
+			console.log("DID A BOOP -> " + JSON.stringify(err));
 			if (err.status === 401) {
 				this.open(this.content);
 		}

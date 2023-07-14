@@ -52,7 +52,7 @@ public class RecruiterController {
 	* @param recruiter
 	* @throws IllegalAccessException 
 	*/
-	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('ROLE_RECRUITER')")
+	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('ROLE_RECRUITER') OR hasRole('ROLE_RECRUITERNOSUBSCRITION')")
 	@PutMapping(value="/recruiter", consumes="application/json", produces="application/json")
 	public ResponseEntity<Void> updateRecruiter(@RequestBody RecruiterAPIInbound recruiter) throws IllegalAccessException {
 		recruiterService.updateRecruiter(RecruiterAPIInbound.convertToDomain(recruiter));

@@ -2,6 +2,12 @@
     <div class="centerdiv" *ngIf="!showForgottenPassword">
        	<form [formGroup]="formBean">
 			<div class="wholepagerow">
+			
+				<div class="new-subscription" *ngIf="showSubscriptionMsg">
+					<h2>Thank you for subscribing.</h2>
+					<h3>Please log back in to continue</h3>
+				</div>
+			
 				<table>
 					<tr>
 						<td><span style="padding-right:20px;">Username</span></td>

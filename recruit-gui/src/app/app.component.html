@@ -27,7 +27,7 @@
         </li>
 
 		<!-- Post Authentication -->
-		<li  class="li-arenella-nav" *ngIf="isAuthenticated()">
+		<li  class="li-arenella-nav" *ngIf="isAuthenticated() && !isRecruiterNoSubscription() && !hasUnpaidSubscription()">
            <a  class="dropdown-item" routerLink="/listing">Job Board</a>
         </li>
         <li  class="li-arenella-nav"  *ngIf="isAuthenticated() && !isRecruiterNoSubscription() && !hasUnpaidSubscription() && !isCandidate()">	
@@ -43,14 +43,14 @@
  		<li  class="li-arenella-nav" *ngIf="isAuthenticatedAsAdmin()">
            <a  class="dropdown-item" routerLink="/new-candidate">New</a>
         </li>
-		<li  class="li-arenella-nav" *ngIf="isAuthenticated()">
+		<li  class="li-arenella-nav" *ngIf="isAuthenticated() && !isRecruiterNoSubscription() && !hasUnpaidSubscription()">
         	<a *ngIf="unseenEmails > 0" 	class="dropdown-item" routerLink="/email"><span class="unseen-posts">{{unseenEmails}}</span>Emails</a>
 			<a *ngIf="unseenEmails <= 0"	class="dropdown-item" routerLink="/email">Emails</a>
         </li>
 		<li  class="li-arenella-nav"  *ngIf="isCandidate()">	
            <a  class="dropdown-item" routerLink="/candidate-profile">Profile</a>
         </li>
-		<li  class="li-arenella-nav" *ngIf="isAuthenticated() && !isCandidate()">
+		<li  class="li-arenella-nav" *ngIf="isAuthenticated() && !isRecruiterNoSubscription() && !hasUnpaidSubscription() && !isCandidate()">
            <a  class="dropdown-item" routerLink="/recruiter-profile">Community</a>
         </li>
         <li  class="li-arenella-nav" *ngIf="isAuthenticated() && isRecruiter() && !isRecruiterNoSubscription() && !hasUnpaidSubscription()">

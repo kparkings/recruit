@@ -59,7 +59,7 @@ export class RecruiterAccountComponent implements OnInit {
 		companyCountry:				new UntypedFormControl(''),
 		companyAddress:				new UntypedFormControl(''),
 		companyVatNumber:			new UntypedFormControl(''),
-		companyRegistationNumber:	new UntypedFormControl(''),
+		companyRegistrationNumber:	new UntypedFormControl(''),
 		email:						new UntypedFormControl(''),
 		language:					new UntypedFormControl(''),
 	});
@@ -172,7 +172,6 @@ export class RecruiterAccountComponent implements OnInit {
 	*/
 	public hasUnpaidSubscription():boolean{
 		
-		//let status:string = '';
 		let hasUnpaidSubscription:boolean = false;
 		
 		this.recruiter.subscriptions.forEach( s => {
@@ -271,8 +270,15 @@ export class RecruiterAccountComponent implements OnInit {
 		
 		this.showSwitchToYearlySubscriptionConfirmButtons	= false;
 		
+		try{
+			this.persistAccountDetails();
+		} catch (ex){
+			console.log("Failed to update Account details ");
+		}
 		this.recruiterService.requestNewSubscription(this.recruiter.userId, subscriptionType).subscribe(data => {
-			this.fetchRecruiterDetails();
+			sessionStorage.clear();
+			sessionStorage.setItem("new-subscription", "true");
+			this.router.navigate(['login-user']);
 		}, 
 		err => {
 			console.log(JSON.stringify(err));		

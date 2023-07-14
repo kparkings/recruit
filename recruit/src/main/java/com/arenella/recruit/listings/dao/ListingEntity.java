@@ -14,6 +14,7 @@ import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
@@ -76,12 +77,12 @@ public class ListingEntity {
 	
 	@Column(name="language")
 	@Enumerated(EnumType.STRING)
-	@ElementCollection(targetClass=language.class)
+	@ElementCollection(targetClass=language.class, fetch = FetchType.EAGER)
 	@CollectionTable(schema="listings", name="listing_language", joinColumns=@JoinColumn(name="listing_id"))
 	private Set<language> 		languages			= new LinkedHashSet<>();
 
 	@Column(name="skill")
-	@ElementCollection(targetClass=String.class)
+	@ElementCollection(targetClass=String.class, fetch = FetchType.EAGER)
 	@CollectionTable(schema="listings", name="listing_skill", joinColumns=@JoinColumn(name="listing_id"))
 	private Set<String> 		skills			= new LinkedHashSet<>();
 	
@@ -92,7 +93,7 @@ public class ListingEntity {
 	@Enumerated(EnumType.STRING)
 	private currency			currency;
 
-	@OneToMany(mappedBy = "listingId", cascade = CascadeType.ALL, orphanRemoval=true)
+	@OneToMany(mappedBy = "listingId", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval=true)
 	private Set<ListingViewedEventEntity> 		views			= new LinkedHashSet<>();
 	
 	/**
