@@ -24,6 +24,7 @@
 			<!--  General stat's -->
 			<div *ngIf="currentTab == 'general-stats'">
 				<div class="chart-panel">
+					<h2>Candidate Availability</h2>
 					<h5>Totals:</h5>
 					<table>
 						<tr>
@@ -44,6 +45,32 @@
      						[plugins]="availabilityChart.chartPlugins">
   					</canvas>
 				</div>	
+				<div class="chart-panel">
+					<h2>Job board Views</h2>
+					<h5>Totals:</h5>
+					<table>
+						<tr>
+							<td>Listings viewed today</td>
+							<td>{{listingViewsToday}}</td>
+						</tr>
+						<tr>
+							<td>Listings viewed this week</td>
+							<td>{{listingViewsThisWeek}}</td>
+						</tr>
+					</table>
+				</div>
+				<div class="chart-panel">
+					<h5>Job board Views</h5>
+ 						<canvas baseChart 
+     					[datasets]="jobboardChart.chartData" 
+     						[labels]="jobboardChart.chartLabels" 
+     						[options]="jobboardChart.chartOptions"
+     						[colors]="jobboardChart.chartColors" 
+     						[legend]="jobboardChart.chartLegend" 
+     						[chartType]="jobBoardType" 
+     						[plugins]="jobboardChart.chartPlugins">
+  					</canvas>
+				</div>
 			</div>
 			
 			<!-- Job board stats -->

@@ -26,7 +26,7 @@ public class ListingStatisticsController {
 	* Returns a summary of Listing statistics
 	* @return stats of daily downloads
 	*/
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('ROLE_RECRUITER')")
 	@GetMapping(value="/listings/stats/")
 	public ResponseEntity<ListingStatistics> fetchDownloadStats(){
 		return ResponseEntity.ok(statisticsService.fetchListingStatistics());

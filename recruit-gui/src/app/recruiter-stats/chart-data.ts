@@ -33,6 +33,10 @@ export class ChartData{
 		this.chartLabels = labels;
 	}
 	
+	public setType(type:ChartType):void{
+		this.chartType = type;
+	}
+	
 	public switchStats(period:string):void{
 		
 	}

@@ -1,9 +1,9 @@
 import { Component, OnInit } 								from '@angular/core';
 import { StatisticsService } 								from '../statistics.service';
-import { ChartDataSets, ChartOptions, ChartType } 			from 'chart.js';
+import { ChartDataSets, ChartType }				 			from 'chart.js';
 import { Color, Label } 									from 'ng2-charts';
-import { NewCandidate, 	   NewCandidateSummaryItem } 		from '../new-candidate';
-import { NewCandidateStat, NewCandidateStatItem } 			from '../new-candidate-stat';
+import { NewCandidateSummaryItem } 							from '../new-candidate';
+import { NewCandidateStatItem } 							from '../new-candidate-stat';
 import { Router}											from '@angular/router';
 import { LoginStats } 										from '../login-event-stats';
 import { RecruiterSearchStatistics } 						from '../recruiter-search-stats';
@@ -716,50 +716,6 @@ export class StatisticsComponent implements OnInit {
   	listingChartLegend = true;
   	listingChartPlugins = [];
   	listingChartType:ChartType = 'line';
-
-
-	/**
-	* recruiter Email Requests
-	*/
-	//emailRequestChartData: 		ChartDataSets[] 	= [];
-	//emailRequestChartLabels: 	Label[] 			= [];
-
-  	//emailRequestChartOptions = {
-    //	responsive: true,
-  	//};
-
-  	//emailRequestChartColors: Color[] = [
-    //	{
-     // 		borderColor: 'black',
-     // 		backgroundColor: 'rgba(0,0,0,0.28)',
-    //	},
-  	//];
-
-  	//emailRequestChartLegend = true;
-  	//emailRequestChartPlugins = [];
-  	//emailRequestChartType:ChartType = 'line';
- 
-
-	/**
-	* Daily Email Requests
-	*/
-	//emailRequestRecruiterChartData: 	ChartDataSets[] 	= [];
-	//emailRequestRecruiterChartLabels: 	Label[] 			= [];
-
-  	//emailRequestRecruiterChartOptions = {
-    //	responsive: true,
-  	//};
-
-  	//emailRequestRecruiterChartColors: Color[] = [
-    //	{
-    //  		borderColor: 'black',
-    //  		backgroundColor: 'rgba(0,0,0,0.28)',
-    //	},
-  	//];
-
-  	//emailRequestRecruiterChartLegend = true;
-  	//emailRequestRecruiterChartPlugins = [];
-  	//emailRequestRecruiterChartType:ChartType = 'bar';
 
 
 	public newCandidates:Array<NewCandidateSummaryItem>  	= new Array<NewCandidateSummaryItem>();
