@@ -105,15 +105,57 @@
 }
 
 
-
-.listing-country{
-	margin-right:20px;
-	margin-left:10px;
-}
-
 .listing-table-td{
 	text-align:left;
+	background: linear-gradient(to bottom, red 50%, grey 51%)
 }
+
+/** START **/
+.site-header{
+	margin-top:50px;
+	text-align:center;
+}
+
+.listing-pane{
+	width:95%;
+	margin: auto;
+}
+
+.job-post{
+	width:320px;
+	height:150px;
+	padding:20px;
+	background:#e8e8e8;
+	margin:15px;
+	display:inline-block;
+	vertical-align: top;
+	cursor:pointer;
+	
+}
+
+
+.listing-title{
+	text-align:center;
+	font-weight:bold;
+}
+
+.mobile-listing-layout{
+	max-width:340px;
+}
+
+.listing-country{
+	display: table;
+    margin: 0 auto;
+	padding-top:30px;	
+}
+
+.job-post-contract-type{
+	text-align:center;
+	margin-top:10px;
+}
+
+
+/** END **/
 
 .listing-table-td-date{
 	text-align:center;
@@ -152,10 +194,6 @@
 	padding-top:0px;
 	padding-bottom:0px;
 	min-width:100%;
-}
-
-.hide-url{
-	cursor:default;
 }
 
 .contact-recruiter-textarea{
@@ -228,11 +266,6 @@
 	height:100%;
 	cursor:pointer;
 	min-width:96%;
-}
-
-.mobile-listing-layout{
-	width:100px;
-	min-width:85%;
 }
 
 .filters table tr th{

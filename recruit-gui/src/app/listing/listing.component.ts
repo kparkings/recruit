@@ -180,7 +180,7 @@ export class ListingComponent implements OnInit {
 	* Switches to Show Listing view
 	*/
 	public showListingDetails(selectedListing?:Listing):void{
-		
+	
 		this.activeView 			= 'show';
 		
 		if (selectedListing) {
@@ -202,6 +202,20 @@ export class ListingComponent implements OnInit {
 
 		}
 		
+	}
+	
+	/**
+	* Returns human readable version
+	*/
+	public getFormattedContractType(type:string):string{
+		return type.replace('_ROLE','');
+	}
+	
+	/**
+	* Returns size limited version
+	*/
+	public getFormattedJobTitle(title:string):string{
+		return title.length < 50 ? title : title.substring(0,49) + "...";
 	}
 	
 	/**
@@ -457,7 +471,7 @@ export class ListingComponent implements OnInit {
 		if (window.location.href.indexOf('listing') < 0){
 			externalUrl = window.location.href + 'listing/' +  id;
 		} else {
-			externalUrl = window.location.href + id;
+			externalUrl = window.location.href + '/' + id;
 		}
 		
 		return externalUrl;

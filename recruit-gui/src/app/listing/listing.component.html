@@ -14,6 +14,10 @@
 						<!-- Listings Table -->
 						<div>
 						
+							<div class="site-header">
+								<h1>Welcome to Arenella-ICT</h1>
+								<h3>A place for IT candidates and IT recruiters to come together</h3>
+							</div>
 							<div class="filters">
 								<div class="filters-title" *ngIf="displayFilters"  (click)="toggleFilters()">Filters:<span style="float:right; margin-right:20px;cursor:pointer"> Hide </span></div>
 								<div class="filters-title" *ngIf="!displayFilters" (click)="toggleFilters()">Filters:<span style="float:right; margin-right:20px;cursor:pointer"> Show </span></div>
@@ -46,31 +50,31 @@
 								</table>
 							</div>
 							
-							<div *ngFor="let listing of listings" class="listing {{mobileListingclass}}">
-							
-								<table>
-									<tr>
-										<td class="listing-table-td">
-										
-											<a href="{{getExternalUrl(listing.listingId)}}" class="hide-url">
-												<span  title="{{listing.listingId}}" *ngIf="listing.country === 'NETHERLANDS'"  	class="flag-icon flag-icon-nl suggestion-flag-country listing-country"></span>
+							<div class="listing-pane">
+								<div class="job-post {{mobileListingclass}}" *ngFor="let listing of listings">
+									<div (click)="showListingDetails(listing)">
+										<div class="listing-title">{{getFormattedJobTitle(listing.title)}}</div>
+											<div>
+												<span title="{{listing.listingId}}" *ngIf="listing.country === 'NETHERLANDS'"  	class="flag-icon flag-icon-nl suggestion-flag-country listing-country"></span>
 												<span title="{{listing.listingId}}" *ngIf="listing.country === 'BELGIUM'"		class="flag-icon flag-icon-be suggestion-flag-country listing-country"></span>
 												<span title="{{listing.listingId}}" *ngIf="listing.country === 'UK'"			class="flag-icon flag-icon-gb suggestion-flag-country listing-country"></span>
 												<span title="{{listing.listingId}}" *ngIf="listing.country === 'IRELAND'"		class="flag-icon flag-icon-ie suggestion-flag-country listing-country"></span>
 												<span title="{{listing.listingId}}" *ngIf="listing.country === 'EU_REMOTE'"		class="flag-icon flag-icon-eu suggestion-flag-country listing-country"></span>
 												<span title="{{listing.listingId}}" *ngIf="listing.country === 'WORLD_REMOTE'"	class="flag-icon flag-icon-xx suggestion-flag-country listing-country"></span>	
-											</a>
-										</td>
-										<td (click)="showListingDetails(listing)" class="listing-table-td listing-title">{{listing.title}}</td>
-									</tr>
-								</table>
-								
-							</div>
+											</div>
+											<div class="job-post-contract-type">
+												{{getFormattedContractType(listing.type)}}
+											</div>
+											<div>
+												<a href="{{getExternalUrl(listing.listingId)}}"></a>
+											</div>
+										</div>
+									</div>
+									
+								</div>
 						
 						</div>
-						<br><br>
-						</div>
-					
+					</div>
 	        		<!-- Show Selected Listing View -->
 	        		<div class="listing-view">
 	        			
