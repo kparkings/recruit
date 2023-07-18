@@ -30,11 +30,10 @@ export class ListingComponent implements OnInit {
 		this.isMobile = deviceDetector.isMobile();
 		
 		if (this.isMobile) {
-			this.displayFilters = false;
-			this.mobileListingclass = 'mobile-listing-layout';
-		} else {
-			this.displayFilters = true;
-		}
+			this.mobileListingclass 		= 'mobile-listing-layout';
+			this.mobileListingclassPane 	= 'mobile-listing-layout-pane';
+			this.mobileListingclassFilters 	= 'mobile-listing-layout-filters';
+		} 
 		
 		this.recruiterProfileService.fetchRecruiterProfiles("RECRUITERS").subscribe(rps => this.recruiterProfiles = rps);
 	
@@ -65,10 +64,12 @@ export class ListingComponent implements OnInit {
 
   	public curriculumFile!:File| any;
 
-	public displayFilters:boolean				= true;
+	public displayFilters:boolean				= false;
 	
 	public isMobile:boolean = false;
 	public mobileListingclass:string 			= '';
+	public mobileListingclassPane:string 		= '';
+	public mobileListingclassFilters:string 		= '';
 	
 	/**
 	* Uploads the file for the Curriculum and stored 
@@ -462,6 +463,13 @@ export class ListingComponent implements OnInit {
 		}
 		
 		return "inactive-filter";
+	}
+	
+	/**
+  	* Returns whether the user has logged into the system 
+  	*/
+	public isLoggedIn():boolean{
+		return sessionStorage.getItem('loggedIn') == 'true';
 	}
 	
 	public getExternalUrl(id:string):string{

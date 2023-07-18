@@ -14,11 +14,11 @@
 						<!-- Listings Table -->
 						<div>
 						
-							<div class="site-header">
+							<div class="site-header" *ngIf="!isLoggedIn()">
 								<h1>Welcome to Arenella-ICT</h1>
 								<h3>A place for IT candidates and IT recruiters to come together</h3>
 							</div>
-							<div class="filters">
+							<div class="filters {{mobileListingclassFilters}}">
 								<div class="filters-title" *ngIf="displayFilters"  (click)="toggleFilters()">Filters:<span style="float:right; margin-right:20px;cursor:pointer"> Hide </span></div>
 								<div class="filters-title" *ngIf="!displayFilters" (click)="toggleFilters()">Filters:<span style="float:right; margin-right:20px;cursor:pointer"> Show </span></div>
 								<table *ngIf="displayFilters">
@@ -50,7 +50,7 @@
 								</table>
 							</div>
 							
-							<div class="listing-pane">
+							<div class="listing-pane {{mobileListingclassPane}}">
 								<div class="job-post {{mobileListingclass}}" *ngFor="let listing of listings">
 									<div (click)="showListingDetails(listing)">
 										<div class="listing-title">{{getFormattedJobTitle(listing.title)}}</div>
