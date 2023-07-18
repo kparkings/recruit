@@ -19,7 +19,7 @@ export class ListingComponent implements OnInit {
 
 	public recruiterProfiles:Array<RecruiterProfile> 	= new Array<RecruiterProfile>();
 	public recruiterProfile:RecruiterProfile 			= new RecruiterProfile();
-
+	
   	constructor(private listingService:ListingService, 
 				private emailService:EmailService, 
 				private _Activatedroute:ActivatedRoute, 

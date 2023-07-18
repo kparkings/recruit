@@ -97,27 +97,24 @@
 } 
 
 .suggestion-results{
-	width:100%;
+	width:96%;
 	margin-bottom:100px;
-}
-
-.suggestion-result-icons{
-	width:100%;
-	min-width:320px;
+	display:inline-block;
 	margin:0 auto;
-	padding-left:6px;
+	margin-left:2%;
+	margin-right:2%;
+	padding-left:2%;
 }
 
 .suggestion-icon{
 	float:left;
 	background:#E8E8E8;
-	width:170px;
-	max-width:47%;
+	width:13%;
 	height:140px;
 	cursor:pointer;
-	margin-left:10px;
+	margin-right:1%;
 	margin-top:0px;
-	margin-bottom:10px;
+	margin-bottom:1%;
 }
 
 .suggestion-icon-body{
@@ -200,4 +197,39 @@
 	background:green;
 	width:100%;	
 	height:10px;
+}
+
+.suggestion-icon-mobile{
+	width:48%;
+	margin-right:2%;
+	margin-bottom:2%;
+}
+
+.button-panel-mobile{
+	width:100%;
+	display:inline-block;
+	padding-left:2%;
+}
+
+.main-btn {
+    width: 155px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    margin-top: 5px;
+    margin-right:10px;
+}
+
+.btnRight{
+	margin-top:10px;
+	margin-bottom:10px;
+	margin-right:10px;
+	min-width:100px;
+	float:right;
+}
+
+.buttons-icon-mobile{
+	width:47%;
+	margin-top: 10px;
+    margin-right:1%;
+    margin-bottom:0px;
 }

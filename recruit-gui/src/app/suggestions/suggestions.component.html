@@ -1,13 +1,13 @@
 <div class=".container m-2">
 
 	<!-- Action buttons -->
-	<div *ngIf="currentView === 'suggestion-results'">
-		<button class="btn btn-secondary btnRight main-btns" (click)="doReset()">Reset</button>
-		<button class="btn btn-secondary btnRight main-btns" (click)="openPublicityDialog(publicityModal)" *ngIf="isAuthenticatedAsAdmin()" download>Copy</button>
-		<button class="btn btn-secondary btnRight main-btns" (click)="showFilterByJobSpecDialog(specUploadBox)" download>Filter by Job Spec</button>
-		<button class="btn btn-secondary btnRight main-btns" (click)="showCreateAlertDialog(feedbackBox)" download>Create Email Alert</button>
-		<button class="btn btn-secondary btnRight main-btns" routerLink="/recruiter-alerts" download>Manage Alerts</button>
-        <button class="btn btn-secondary btnRight main-btns" (click)="showSavedCandidates()" download>My Candidates</button>
+	<div *ngIf="currentView === 'suggestion-results'" class="button-panel-mobile">
+		<button class="btn btn-secondary btnRight main-btn {{suggestionMobileBtnClass}}" (click)="doReset()">Reset</button>
+		<button class="btn btn-secondary btnRight main-btn {{suggestionMobileBtnClass}}" (click)="openPublicityDialog(publicityModal)" *ngIf="isAuthenticatedAsAdmin()" download>Copy</button>
+		<button class="btn btn-secondary btnRight main-btn {{suggestionMobileBtnClass}}" (click)="showFilterByJobSpecDialog(specUploadBox)" download>Filter by Job Spec</button>
+		<button class="btn btn-secondary btnRight main-btn {{suggestionMobileBtnClass}}" (click)="showCreateAlertDialog(feedbackBox)" download>Create Email Alert</button>
+		<button class="btn btn-secondary btnRight main-btn {{suggestionMobileBtnClass}}" routerLink="/recruiter-alerts" download>Manage Alerts</button>
+        <button class="btn btn-secondary btnRight main-btn {{suggestionMobileBtnClass}}" (click)="showSavedCandidates()" download>My Candidates</button>
 	 </div>
 	
 	<div *ngIf="currentView === 'saved-candidates'" class="suggestion-results">
@@ -19,27 +19,25 @@
 		<br>
 	 
 		<div class="suggestion-result-icons" style="margin-top:50px">
-			
-			<div class="suggestion-icon" *ngFor="let savedCandidate of savedCandidates" (click)="showSuggestedCandidateOverviewSavedCandidate(savedCandidate)">
-				<div class="saved-candidate-icon-header" *ngIf="!isNoLongerAvailableSC(savedCandidate)">
-					C{{savedCandidate.candidate.candidateId}}
-				</div>
-				<div class="saved-candidate-icon-header" *ngIf="isNoLongerAvailableSC(savedCandidate)">
-					{{savedCandidate.candidate.candidateId}}
-				</div>
-				<div title="Accuracy Skills" class="suggestion-perception-result-{{savedCandidate.candidate.accuracySkills}}"></div>
-				<div title="Accuracy Languages" class="suggestion-perception-result-{{savedCandidate.candidate.accuracyLanguages}}"></div>
-				<div class="suggestion-icon-body">
-					<div>
-						{{savedCandidate.candidate.firstname}} {{savedCandidate.candidate.surname}}
+				<div class="suggestion-icon {{suggestionMobileClass}}" *ngFor="let savedCandidate of savedCandidates" (click)="showSuggestedCandidateOverviewSavedCandidate(savedCandidate)">
+					<div class="saved-candidate-icon-header" *ngIf="!isNoLongerAvailableSC(savedCandidate)">
+						C{{savedCandidate.candidate.candidateId}}
 					</div>
-					<div>
-						{{savedCandidate.candidate.roleSought}}
+					<div class="saved-candidate-icon-header" *ngIf="isNoLongerAvailableSC(savedCandidate)">
+						{{savedCandidate.candidate.candidateId}}
 					</div>
-				</div>
-				
+					<div title="Accuracy Skills" class="suggestion-perception-result-{{savedCandidate.candidate.accuracySkills}}"></div>
+					<div title="Accuracy Languages" class="suggestion-perception-result-{{savedCandidate.candidate.accuracyLanguages}}"></div>
+					<div class="suggestion-icon-body">
+						<div>
+							{{savedCandidate.candidate.firstname}} {{savedCandidate.candidate.surname}}
+						</div>
+						<div>
+							{{savedCandidate.candidate.roleSought}}
+						</div>
+					</div>
+					
 			</div>
-				
 		</div>
 		<div style="height:20px;width:300px;">&nbsp;</div>
 	</div>
@@ -149,7 +147,7 @@
 		
 		<div class="suggestion-result-icons">
 			
-			<div class="suggestion-icon" *ngFor="let suggestion of suggestions" (click)="showSuggestedCandidateOverview(suggestion)">
+			<div class="suggestion-icon {{suggestionMobileClass}}" *ngFor="let suggestion of suggestions" (click)="showSuggestedCandidateOverview(suggestion)">
 				<div>
 					<div *ngIf="!isSavedCandidate(suggestion)" class="suggestion-icon-header">	
 					C{{suggestion.candidateId}}

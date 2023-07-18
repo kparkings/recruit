@@ -228,7 +228,8 @@ export class SuggestionsComponent implements OnInit {
 	public trustedResourceUrl : SafeResourceUrl;
 	
 	public isMobile:boolean = false;
-	
+	public suggestionMobileClass:string			= '';
+	public suggestionMobileBtnClass:string		= '';
 	/**
 	* Constructor
 	* @param candidateService - Services relating to Candidates
@@ -246,6 +247,11 @@ export class SuggestionsComponent implements OnInit {
 		this.getSuggestions();	
 	 	this.trustedResourceUrl = this.sanitizer.bypassSecurityTrustResourceUrl('');
 		this.isMobile = deviceDetector.isMobile();
+		
+		if (this.isMobile) {
+			this.suggestionMobileClass 		= 'suggestion-icon-mobile';
+			this.suggestionMobileBtnClass	= 'buttons-icon-mobile';
+		}
 		
 	}
 	
