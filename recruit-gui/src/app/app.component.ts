@@ -29,7 +29,8 @@ export class AppComponent {
 	public unseenMpPosts:number = 0;
 	public unseenEmails:number 	= 0;
 	
-	public validationExceptions:Array<string> = new Array<string>();
+	public validationExceptions:Array<string> 	= new Array<string>();
+	public menuItemMobileCss 					= '';
 	
 	/**
 	* Constructor
@@ -43,6 +44,10 @@ export class AppComponent {
 				public  popupsService:		PopupsService){
 		
 		this.isMobile = deviceDetector.isMobile();
+		
+		if (this.isMobile) {
+			this.menuItemMobileCss 			= 'li-arenella-nav-mob';
+		}
 		
 		if (this.isRecruiterNoSubscription() || this.hasUnpaidSubscription()) {
 			this.router.navigate(['recruiter-account']);

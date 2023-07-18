@@ -208,7 +208,6 @@
 .button-panel-mobile{
 	width:100%;
 	display:inline-block;
-	padding-left:2%;
 }
 
 .main-btn {
@@ -228,8 +227,9 @@
 }
 
 .buttons-icon-mobile{
-	width:47%;
+	width:48%;
 	margin-top: 10px;
     margin-right:1%;
+    margin-left:1%;
     margin-bottom:0px;
 }
