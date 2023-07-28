@@ -34,7 +34,8 @@ public class CandidateFullProfileAPIOutbound implements CandidateAPIOutbound{
 	private Set<Language> 			languages					= new LinkedHashSet<>();
 	private String					firstname;
 	private String					surname;
-	private RateAPIOutbound			rate;
+	private RateAPIOutbound			rateContract;
+	private RateAPIOutbound			ratePerm;
 	private PhotoAPIOutbound		photo;
 	private String					introduction;
 	private String					email;
@@ -57,7 +58,8 @@ public class CandidateFullProfileAPIOutbound implements CandidateAPIOutbound{
 		this.lastAvailabilityCheck 		= builder.lastAvailabilityCheck;
 		this.firstname					= builder.firstname;
 		this.surname					= builder.surname;
-		this.rate						= builder.rate;
+		this.rateContract				= builder.rateContract;
+		this.ratePerm					= builder.ratePerm;
 		this.photo						= builder.photo;
 		this.introduction				= builder.introduction;
 		this.email					 	= builder.email;
@@ -183,11 +185,20 @@ public class CandidateFullProfileAPIOutbound implements CandidateAPIOutbound{
 	}
 	
 	/**
-	* Returns the Rate charged by the Candidate
-	* @return Rate charged by the Candidate
+	* If available the Contract Rate
+	* @return Contract Rate
 	*/
-	public Optional<RateAPIOutbound> getRate(){
-		return Optional.ofNullable(this.rate);
+	public Optional<RateAPIOutbound> getRateContract(){
+		return Optional.ofNullable(this.rateContract);
+	}
+	
+	/**
+	* If available Perm rate the Candidate is 
+	* looking for
+	* @return Perm rate
+	*/
+	public Optional<RateAPIOutbound> getRatePerm(){
+		return Optional.ofNullable(this.ratePerm);
 	}
 	
 	/**
@@ -242,7 +253,8 @@ public class CandidateFullProfileAPIOutbound implements CandidateAPIOutbound{
 		private Set<Language> 			languages					= new LinkedHashSet<>();
 		private String					firstname;
 		private String					surname;
-		private RateAPIOutbound			rate;
+		private RateAPIOutbound			rateContract;
+		private RateAPIOutbound			ratePerm;
 		private PhotoAPIOutbound		photo;
 		private String					introduction;
 		private String					email;
@@ -401,12 +413,23 @@ public class CandidateFullProfileAPIOutbound implements CandidateAPIOutbound{
 		}
 		
 		/**
-		* Sets the Rate charged by the candidate
-		* @param rate - Rate charged by the Candidate
+		* Sets the contract rate the Candidate will accept
+		* @param rateContract - rate
 		* @return Builder
 		*/
-		public CandidateFullProfileAPIOutboundBuilder rate(RateAPIOutbound rate) {
-			this.rate = rate;
+		public CandidateFullProfileAPIOutboundBuilder rateContract(RateAPIOutbound rateContract) {
+			this.rateContract = rateContract;
+			return this;
+		}
+		
+		
+		/**
+		* Sets the perm salary the Candidate will accept
+		* @param ratePerm - salary
+		* @return Builder
+		*/
+		public CandidateFullProfileAPIOutboundBuilder ratePerm(RateAPIOutbound ratePerm) {
+			this.ratePerm = ratePerm;
 			return this;
 		}
 		
@@ -464,7 +487,8 @@ public class CandidateFullProfileAPIOutbound implements CandidateAPIOutbound{
 					.lastAvailabilityCheck(candidate.getLastAvailabilityCheckOn())
 					.firstname(candidate.getFirstname())
 					.surname(candidate.getSurname())
-					.rate(RateAPIOutbound.convertFromDomain(candidate.getRate()))
+					.rateContract(RateAPIOutbound.convertFromDomain(candidate.getRateContract()))
+					.ratePerm(RateAPIOutbound.convertFromDomain(candidate.getRatePerm()))
 					.photo(PhotoAPIOutbound.convertFromDomain(candidate.getPhoto()))
 					.introduction(candidate.getIntroduction())
 					.email(candidate.getEmail())

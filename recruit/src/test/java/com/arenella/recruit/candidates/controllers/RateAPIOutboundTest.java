@@ -24,13 +24,15 @@ public class RateAPIOutboundTest {
 	@Test
 	public void testConstructor() throws Exception{
 		
-		final float value = 110.50f;
+		final float valueMin = 110.50f;
+		final float valueMax = 210.50f;
 		
-		RateAPIOutbound rate = new RateAPIOutbound(CURRENCY.EUR, PERIOD.HOUR, value);
+		RateAPIOutbound rate = new RateAPIOutbound(CURRENCY.EUR, PERIOD.HOUR, valueMin, valueMax);
 		
-		assertEquals(CURRENCY.EUR, rate.getCurrency());
-		assertEquals(PERIOD.HOUR, rate.getPeriod());
-		assertEquals(value, rate.getValue());
+		assertEquals(CURRENCY.EUR, 	rate.getCurrency());
+		assertEquals(PERIOD.HOUR, 	rate.getPeriod());
+		assertEquals(valueMin, 		rate.getValueMin());
+		assertEquals(valueMax, 		rate.getValueMax());
 		
 	}
 	
@@ -41,13 +43,14 @@ public class RateAPIOutboundTest {
 	@Test
 	public void testConvertFromDomain_exists() throws Exception{
 		
-		Rate rate = new Rate(CURRENCY.EUR, PERIOD.DAY, 100);
+		Rate rate = new Rate(CURRENCY.EUR, PERIOD.DAY, 100, 200);
 		
 		RateAPIOutbound rateAPIOutbound = RateAPIOutbound.convertFromDomain(Optional.of(rate));
 		
 		assertEquals(CURRENCY.EUR, 	rateAPIOutbound.getCurrency());
 		assertEquals(PERIOD.DAY, 	rateAPIOutbound.getPeriod());
-		assertEquals(100, 			rateAPIOutbound.getValue());
+		assertEquals(100, 			rateAPIOutbound.getValueMin());
+		assertEquals(200, 			rateAPIOutbound.getValueMax());
 		
 	}
 	

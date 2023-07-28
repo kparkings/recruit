@@ -34,7 +34,8 @@ public class PendingCandidateAPIInboundTest {
 	private static final String 		email					= "kparkings@gmail.com";
 	private static final boolean 		freelance 				= true;
 	private static final boolean 		perm 					= true;
-	private static final Rate			rate					= new Rate(CURRENCY.EUR, PERIOD.HOUR, 300);
+	private static final Rate			RATE_CONTRACT			= new Rate(CURRENCY.EUR, PERIOD.HOUR, 300, 400);
+	private static final Rate			RATE_PERM				= new Rate(CURRENCY.GBP, PERIOD.DAY, 300, 500);
 	private static final String			introduction			= "an intro";
 	private static final byte[]			PHOTO_BYTES				= new byte[] {1,33,4};
 	
@@ -52,7 +53,8 @@ public class PendingCandidateAPIInboundTest {
 							.email(email)
 							.freelance(freelance)
 							.perm(perm)
-							.rate(rate)
+							.rateContract(RATE_CONTRACT)
+							.ratePerm(RATE_PERM)
 							.introduction(introduction)
 							.build();
 		
@@ -63,9 +65,16 @@ public class PendingCandidateAPIInboundTest {
 		assertEquals(candidate.isFreelance(), 					freelance);
 		assertEquals(candidate.isPerm(), 						perm);
 		assertEquals(introduction, 								candidate.getIntroduction());
-		assertEquals(CURRENCY.EUR, 								candidate.getRate().get().getCurrency());
-		assertEquals(PERIOD.HOUR, 								candidate.getRate().get().getPeriod());
-		assertEquals(300,										candidate.getRate().get().getValue());
+		
+		assertEquals(RATE_CONTRACT.getCurrency(), 	candidate.getRateContract().get().getCurrency());
+		assertEquals(RATE_CONTRACT.getPeriod(), 	candidate.getRateContract().get().getPeriod());
+		assertEquals(RATE_CONTRACT.getValueMin(), 	candidate.getRateContract().get().getValueMin());
+		assertEquals(RATE_CONTRACT.getValueMax(), 	candidate.getRateContract().get().getValueMax());
+		
+		assertEquals(RATE_PERM.getCurrency(), 		candidate.getRatePerm().get().getCurrency());
+		assertEquals(RATE_PERM.getPeriod(), 		candidate.getRatePerm().get().getPeriod());
+		assertEquals(RATE_PERM.getValueMin(), 		candidate.getRatePerm().get().getValueMin());
+		assertEquals(RATE_PERM.getValueMax(), 		candidate.getRatePerm().get().getValueMax());
 		
 	}
 	
@@ -85,7 +94,8 @@ public class PendingCandidateAPIInboundTest {
 					.email(email)
 					.freelance(freelance)
 					.perm(perm)
-					.rate(rate)
+					.rateContract(RATE_CONTRACT)
+					.ratePerm(RATE_PERM)
 					.introduction(introduction)
 					.build();
 		
@@ -98,10 +108,16 @@ public class PendingCandidateAPIInboundTest {
 		assertEquals(pendingCandidate.isFreelance(), 			freelance);
 		assertEquals(pendingCandidate.isPerm(), 				perm);
 		assertEquals(introduction, 								pendingCandidate.getIntroduction());
-		assertEquals(CURRENCY.EUR, 								pendingCandidate.getRate().get().getCurrency());
-		assertEquals(PERIOD.HOUR, 								pendingCandidate.getRate().get().getPeriod());
-		assertEquals(300,										pendingCandidate.getRate().get().getValue());
 		
+		assertEquals(RATE_CONTRACT.getCurrency(), 	pendingCandidate.getRateContract().get().getCurrency());
+		assertEquals(RATE_CONTRACT.getPeriod(), 	pendingCandidate.getRateContract().get().getPeriod());
+		assertEquals(RATE_CONTRACT.getValueMin(), 	pendingCandidate.getRateContract().get().getValueMin());
+		assertEquals(RATE_CONTRACT.getValueMax(), 	pendingCandidate.getRateContract().get().getValueMax());
+		
+		assertEquals(RATE_PERM.getCurrency(), 		pendingCandidate.getRatePerm().get().getCurrency());
+		assertEquals(RATE_PERM.getPeriod(), 		pendingCandidate.getRatePerm().get().getPeriod());
+		assertEquals(RATE_PERM.getValueMin(), 		pendingCandidate.getRatePerm().get().getValueMin());
+		assertEquals(RATE_PERM.getValueMax(), 		pendingCandidate.getRatePerm().get().getValueMax());
 	}
 	
 	/**
@@ -120,7 +136,8 @@ public class PendingCandidateAPIInboundTest {
 					.email(email)
 					.freelance(freelance)
 					.perm(perm)
-					.rate(rate)
+					.rateContract(RATE_CONTRACT)
+					.ratePerm(RATE_PERM)
 					.introduction(introduction)
 					.build();
 		
@@ -136,12 +153,18 @@ public class PendingCandidateAPIInboundTest {
 		assertEquals(pendingCandidate.isFreelance(), 			freelance);
 		assertEquals(pendingCandidate.isPerm(), 				perm);
 		assertEquals(introduction, 								pendingCandidate.getIntroduction());
-		assertEquals(CURRENCY.EUR, 								pendingCandidate.getRate().get().getCurrency());
-		assertEquals(PERIOD.HOUR, 								pendingCandidate.getRate().get().getPeriod());
-		assertEquals(300,										pendingCandidate.getRate().get().getValue());
 		assertEquals(PHOTO_BYTES,								pendingCandidate.getPhoto().get().getImageBytes());
 		assertEquals(PHOTO_FORMAT.jpeg,							pendingCandidate.getPhoto().get().getFormat());
+	
+		assertEquals(RATE_CONTRACT.getCurrency(), 	pendingCandidate.getRateContract().get().getCurrency());
+		assertEquals(RATE_CONTRACT.getPeriod(), 	pendingCandidate.getRateContract().get().getPeriod());
+		assertEquals(RATE_CONTRACT.getValueMin(), 	pendingCandidate.getRateContract().get().getValueMin());
+		assertEquals(RATE_CONTRACT.getValueMax(), 	pendingCandidate.getRateContract().get().getValueMax());
 		
+		assertEquals(RATE_PERM.getCurrency(), 		pendingCandidate.getRatePerm().get().getCurrency());
+		assertEquals(RATE_PERM.getPeriod(), 		pendingCandidate.getRatePerm().get().getPeriod());
+		assertEquals(RATE_PERM.getValueMin(), 		pendingCandidate.getRatePerm().get().getValueMin());
+		assertEquals(RATE_PERM.getValueMax(), 		pendingCandidate.getRatePerm().get().getValueMax());
 		
 	}
 	

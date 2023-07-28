@@ -4,6 +4,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.time.LocalDate;
 import java.util.LinkedHashSet;
@@ -11,6 +12,8 @@ import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 
+import com.arenella.recruit.candidates.beans.Candidate.CANDIDATE_TYPE;
+import com.arenella.recruit.candidates.beans.Candidate.DAYS_ON_SITE;
 import com.arenella.recruit.candidates.beans.Candidate.Photo;
 import com.arenella.recruit.candidates.beans.Candidate.Photo.PHOTO_FORMAT;
 import com.arenella.recruit.candidates.beans.Candidate.Rate;
@@ -29,34 +32,40 @@ import com.arenella.recruit.candidates.enums.PERM;
 */
 public class CandidateTest {
 
-	private static final String 		candidateId 			= "Candidate1";
-	private static final FUNCTION		function				= FUNCTION.JAVA_DEV;
-	private static final COUNTRY 		country 				= COUNTRY.NETHERLANDS;
-	private static final String 		city 					= "Den Haag";
-	private static final String 		email					= "kparkings@gmail.com";
-	private static final String 		roleSought				= "Senior java Dev";
-	private static final boolean 		available 				= true;
-	private static final boolean 		flaggedAsUnavailable	= true;
-	private static final FREELANCE 		freelance 				= FREELANCE.TRUE;
-	private static final PERM 			perm 					= PERM.TRUE;
-	private static final LocalDate 		lastAvailabilityCheck 	= LocalDate.of(1980, 12, 3);
-	private static final LocalDate 		registerd 				= LocalDate.of(2021, 02, 20);
-	private static final int 			yearsExperience 		= 21;
-	private static final Set<String>	skills					= new LinkedHashSet<>();
-	private static final Set<Language>	languages				= new LinkedHashSet<>();
-	private static final String			skill					= "Java";
-	private static final Language		language				= Language.builder().language(LANGUAGE.DUTCH).level(LEVEL.PROFICIENT).build();
-	private static final Rate			rate					= new Rate(CURRENCY.EUR, PERIOD.HOUR, 11.34f);
-	private static final String			introduction			= "Candiates own intro";
-	private static final Photo			profilePhoto			= new Photo(new byte[] {}, PHOTO_FORMAT.jpeg);
+	private static final String 		CANDIDATE_ID 				= "Candidate1";
+	private static final FUNCTION		FUNCTION_VAL				= FUNCTION.JAVA_DEV;
+	private static final COUNTRY 		COUNTRY_VAL 				= COUNTRY.NETHERLANDS;
+	private static final String 		CITY 						= "Den Haag";
+	private static final String 		EMAIL						= "kparkings@gmail.com";
+	private static final String 		ROLE_SOUGHT					= "Senior java Dev";
+	private static final boolean 		AVAILABLE 					= true;
+	private static final boolean 		FLAGGED_AS_UNAVAILABLE		= true;
+	private static final FREELANCE 		FREELANCE_VAL 				= FREELANCE.TRUE;
+	private static final PERM 			PERM_VAL 					= PERM.TRUE;
+	private static final LocalDate 		LAST_AVAILABILITY_CHECK 	= LocalDate.of(1980, 12, 3);
+	private static final LocalDate 		REGISTERED 					= LocalDate.of(2021, 02, 20);
+	private static final int 			YEARS_EXPERIENCE 			= 21;
+	private static final Set<String>	SKILLS						= new LinkedHashSet<>();
+	private static final Set<Language>	LANGUAGES					= new LinkedHashSet<>();
+	private static final String			SKILL						= "Java";
+	private static final Language		LANGUAGE_VAL				= Language.builder().language(LANGUAGE.DUTCH).level(LEVEL.PROFICIENT).build();
+	private static final String			INTRODUCTION				= "Candiates own intro";
+	private static final Photo			PROFILE_PHOTO				= new Photo(new byte[] {}, PHOTO_FORMAT.jpeg);
+	private static final String 		COMMENTS					= "aComment";
+	private static final DAYS_ON_SITE	DAYS_ON_SITE_VAL			= DAYS_ON_SITE.ZERO;
+	private static final Rate			RATE_CONTRACT 				= new Rate(CURRENCY.EUR, PERIOD.DAY, 80.50f, 99f);
+	private static final Rate			RATE_PERM 					= new Rate(CURRENCY.EUR, PERIOD.YEAR, 25000f, 30000);
+	private static final LocalDate 		AVAILABLE_FROM_DATE 		= LocalDate.of(2023, 7, 21);
+	private static final String			OWNER_ID					= "kparkings";
+	private static final CANDIDATE_TYPE	CANDIDATE_TYPE_VAL			= CANDIDATE_TYPE.MARKETPLACE_CANDIDATE;
 	
 	/**
 	* Sets up test environment 
 	*/
 	public CandidateTest(){
 		
-		languages.add(language);
-		skills.add(skill);
+		LANGUAGES.add(LANGUAGE_VAL);
+		SKILLS.add(SKILL);
 		
 	}
 	
@@ -68,48 +77,58 @@ public class CandidateTest {
 		
 		Candidate candidate = Candidate
 						.builder()
-							.candidateId(candidateId)
-							.function(function)
-							.country(country)
-							.city(city)
-							.email(email)
-							.roleSought(roleSought)
-							.available(available)
-							.flaggedAsUnavailable(flaggedAsUnavailable)
-							.freelance(freelance)
-							.perm(perm)
-							.lastAvailabilityCheck(lastAvailabilityCheck)
-							.registerd(registerd)
-							.yearsExperience(yearsExperience)
-							.skills(skills)
-							.languages(languages)
-							.rate(rate)
-							.introduction(introduction)
-							.photo(profilePhoto)
+							.candidateId(CANDIDATE_ID)
+							.function(FUNCTION_VAL)
+							.country(COUNTRY_VAL)
+							.city(CITY)
+							.email(EMAIL)
+							.roleSought(ROLE_SOUGHT)
+							.available(AVAILABLE)
+							.flaggedAsUnavailable(FLAGGED_AS_UNAVAILABLE)
+							.freelance(FREELANCE_VAL)
+							.perm(PERM_VAL)
+							.lastAvailabilityCheck(LAST_AVAILABILITY_CHECK)
+							.registerd(REGISTERED)
+							.yearsExperience(YEARS_EXPERIENCE)
+							.skills(SKILLS)
+							.languages(LANGUAGES)
+							.introduction(INTRODUCTION)
+							.photo(PROFILE_PHOTO)
+							.comments(COMMENTS)
+							.daysOnSite(DAYS_ON_SITE_VAL)
+							.rateContract(RATE_CONTRACT)
+							.ratePerm(RATE_PERM)
+							.availableFromDate(AVAILABLE_FROM_DATE)
+							.ownerId(OWNER_ID)
+							.candidateType(CANDIDATE_TYPE_VAL)
 							.build();
 		
-		assertEquals(candidateId, 			candidate.getCandidateId());
-		assertEquals(function, 				candidate.getFunction());
-		assertEquals(country, 				candidate.getCountry());
-		assertEquals(city, 					candidate.getCity());
-		assertEquals(email, 				candidate.getEmail());
-		assertEquals(roleSought, 			candidate.getRoleSought());
-		assertEquals(available, 			candidate.isAvailable());
-		assertEquals(flaggedAsUnavailable, 	candidate.isFlaggedAsUnavailable());
-		assertEquals(freelance, 			candidate.isFreelance());
-		assertEquals(perm, 					candidate.isPerm());
-		assertEquals(lastAvailabilityCheck, candidate.getLastAvailabilityCheckOn());
-		assertEquals(registerd, 			candidate.getRegisteredOn());
-		assertEquals(yearsExperience, 		candidate.getYearsExperience());
-		assertEquals(profilePhoto, 			candidate.getPhoto().get());
+		assertEquals(CANDIDATE_ID, 				candidate.getCandidateId());
+		assertEquals(FUNCTION_VAL, 				candidate.getFunction());
+		assertEquals(COUNTRY_VAL, 				candidate.getCountry());
+		assertEquals(CITY, 						candidate.getCity());
+		assertEquals(EMAIL, 					candidate.getEmail());
+		assertEquals(ROLE_SOUGHT, 				candidate.getRoleSought());
+		assertEquals(AVAILABLE, 				candidate.isAvailable());
+		assertEquals(FLAGGED_AS_UNAVAILABLE, 	candidate.isFlaggedAsUnavailable());
+		assertEquals(FREELANCE_VAL, 			candidate.isFreelance());
+		assertEquals(PERM_VAL, 					candidate.isPerm());
+		assertEquals(LAST_AVAILABILITY_CHECK, 	candidate.getLastAvailabilityCheckOn());
+		assertEquals(REGISTERED, 				candidate.getRegisteredOn());
+		assertEquals(YEARS_EXPERIENCE, 			candidate.getYearsExperience());
+		assertEquals(PROFILE_PHOTO, 			candidate.getPhoto().get());
 		
-		assertEquals(introduction, 			candidate.getIntroduction());
-		assertEquals(rate.getCurrency(), 	candidate.getRate().get().getCurrency());
-		assertEquals(rate.getPeriod(), 		candidate.getRate().get().getPeriod());
-		assertEquals(rate.getValue(), 		candidate.getRate().get().getValue());
+		assertEquals(INTRODUCTION, 				candidate.getIntroduction());
 		
-		assertTrue(candidate.getSkills().contains(skill));
-		candidate.getLanguages().stream().filter(l -> l.getLanguage() == language.getLanguage()).findAny().orElseThrow();
+		assertEquals(DAYS_ON_SITE_VAL, 			candidate.getDaysOnSite());
+		assertEquals(RATE_CONTRACT, 			candidate.getRateContract().get());
+		assertEquals(RATE_PERM, 				candidate.getRatePerm().get());
+		assertEquals(AVAILABLE_FROM_DATE, 		candidate.getvailableFromDate());
+		assertEquals(OWNER_ID, 					candidate.getOwnerId().get());
+		assertEquals(CANDIDATE_TYPE_VAL, 		candidate.getCandidateType());
+		
+		assertTrue(candidate.getSkills().contains(SKILL));
+		candidate.getLanguages().stream().filter(l -> l.getLanguage() == LANGUAGE_VAL.getLanguage()).findAny().orElseThrow();
 		
 	}
 	
@@ -163,6 +182,32 @@ public class CandidateTest {
 		candidate.makeAvailable();
 	
 		assertTrue(candidate.isAvailable());
+		
+	}
+	
+	/**
+	* Tests construction via builder with no values provided
+	* @throws Exception
+	*/
+	@Test
+	public void testBuilder_defaults() throws Exception {
+		
+		Candidate candidate = Candidate.builder().build();
+		
+		assertTrue("Expect empty but instantiated Set", candidate.getSkills().isEmpty());
+		assertTrue("Expect empty but instantiated Set", candidate.getLanguages().isEmpty());
+		assertEquals(0, 								candidate.getYearsExperience());
+		assertNull(candidate.isFreelance());
+		assertNull(candidate.isPerm());
+		assertNull(candidate.getFunction());
+		assertNull(candidate.getCountry());
+		
+		assertTrue(candidate.getRateContract().isEmpty());
+		assertTrue(candidate.getRatePerm().isEmpty());
+		assertTrue(candidate.getOwnerId().isEmpty());
+		
+		assertEquals(candidate.getvailableFromDate(), LocalDate.now()); //[KP] Small chance of failure if test run in exactly midnight
+		
 		
 	}
 	

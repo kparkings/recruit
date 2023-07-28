@@ -17,6 +17,9 @@ import com.arenella.recruit.candidates.enums.PERM;
 */
 public class Candidate {
 
+	public enum DAYS_ON_SITE {ZERO, ONE,TWO,THREE,FOUR,FIVE}
+	public enum CANDIDATE_TYPE {CANDIDATE, MARKETPLACE_CANDIDATE}
+	
 	public static final String ANONYMOUS_USER_ATTR_VALUE = "unknown";
 			
 	private String 			candidateId;
@@ -36,9 +39,18 @@ public class Candidate {
 	private LocalDate 		lastAvailabilityCheck		= LocalDate.now();	
 	private Set<String> 	skills						= new LinkedHashSet<>();
 	private Set<Language> 	languages					= new LinkedHashSet<>();
-	private Rate			rate;
 	private String			introduction;
 	private Photo			photo;
+	
+	private String 			comments;
+	private DAYS_ON_SITE	daysOnSite;
+	private Rate			rateContract;
+	private Rate			ratePerm;
+	private LocalDate 		availableFromDate;
+	//To be set if MP candidate based upon authenticated user via service
+	private String 			ownerId;
+	private CANDIDATE_TYPE	candidateType;
+	
 	
 	/**
 	* Constructor based upon a builder
@@ -61,9 +73,15 @@ public class Candidate {
 		this.flaggedAsUnavailable		= builder.flaggedAsUnavailable;
 		this.registerd 					= builder.registerd;
 		this.lastAvailabilityCheck 		= builder.lastAvailabilityCheck;
-		this.rate 						= builder.rate;
 		this.introduction				= builder.introduction;
 		this.photo						= builder.photo;
+		this.comments					= builder.comments;
+		this.daysOnSite					= builder.daysOnSite;
+		this.rateContract				= builder.rateContract;
+		this.ratePerm					= builder.ratePerm;
+		this.availableFromDate			= builder.availableFromDate;
+		this.ownerId					= builder.ownerId;
+		this.candidateType				= builder.candidateType;
 		
 		this.skills.addAll(builder.skills);
 		this.languages.addAll(builder.languages);
@@ -197,6 +215,82 @@ public class Candidate {
 	}
 	
 	/**
+	* Returns comments relating to the Candidate
+	* @return Comment about the candidate
+	*/
+	public String getComments() {
+		return this.comments;
+	}
+	
+	/**
+	* Returns the introduction to the Candidate
+	* @return candidate introduction text
+	*/
+	public String getIntroduction() {
+		return this.introduction;
+	}
+	
+	/**
+	* Returns the max number of days the candidate is prepared
+	* to work onsite
+	* @return Number of days Candidate will work onsite
+	*/
+	public DAYS_ON_SITE	getDaysOnSite() {
+		return this.daysOnSite;
+	}
+	
+	/**
+	* Returns the unique id of the Owner of the Candidate if the Candidate 
+	* is associated with another entity such as a recruiter
+	* @return id of owner
+	*/
+	public Optional<String> getOwnerId() {
+		return Optional.ofNullable(this.ownerId);
+	}
+	
+	/**
+	* Returns the type/flavour of the Candidate
+	* @return type of Candidate
+	*/
+	public CANDIDATE_TYPE candidateType() {
+		return this.candidateType;
+	}
+	
+	/**
+	* If available the Contract Rate
+	* @return Contract Rate
+	*/
+	public Optional<Rate> getRateContract(){
+		return Optional.ofNullable(this.rateContract);
+	}
+	
+	/**
+	* If available Perm rate the Candidate is 
+	* looking for
+	* @return Perm rate
+	*/
+	public Optional<Rate> getRatePerm(){
+		return Optional.ofNullable(this.ratePerm);
+	}
+	
+	/**
+	* returns the date the Candidate is available from. If not specified 
+	* uses the current date
+	* @return When the candidate is available from
+	*/
+	public LocalDate getvailableFromDate(){
+		return Optional.ofNullable(this.availableFromDate).orElse(LocalDate.now());
+	}
+	
+	/**
+	* Returns the type of the Candidate
+	* @return - Type of the Candidate
+	*/
+	public CANDIDATE_TYPE getCandidateType() {
+		return this.candidateType;
+	}
+	
+	/**
 	* Returns the Skills the candidate has experience with
 	* @return candidates skills
 	*/
@@ -213,23 +307,6 @@ public class Candidate {
 	}
 	
 	/**
-	* Returns Candidates introduction about themselves
-	* @return candidate introduction
-	*/
-	public String getIntroduction() {
-		return this.introduction;
-	}
-	
-	/**
-	* If available returns information about the rate 
-	* charges by the Candidate for their work
-	* @return rate information
-	*/
-	public Optional<Rate> getRate(){
-		return Optional.ofNullable(this.rate);
-	}
-	
-	/**
 	* If available returns a photo of the Candidate
 	* @return Profile Photo
 	*/
@@ -237,19 +314,38 @@ public class Candidate {
 		return Optional.ofNullable(this.photo);
 	}
 	
-	public void setRate(Rate rate) {
-		this.rate = rate;
-		
-	}
-	
-	
+	/**
+	* Sets the introduction describing the Candidate
+	* @param introduction - intro
+	*/
 	public void setIntroduction(String introduction) {
 		this.introduction = introduction;
 	}
+	
+	/**
+	* Sets the Candidates profile photo
+	* @param photo - profile photo
+	*/
 	public void setPhoto(Photo photo) {
 		this.photo = photo;
 	}
 	
+	/**
+	* Sets the Contract rate the candidate wants
+	* @param rateContract
+	*/
+	public void setRateContract(Rate rateContract) {
+		this.rateContract = rateContract;
+	}
+	
+	/**
+	* Sets the Perm salary the Candidate wants
+	* @param ratePerm
+	*/
+	public void setRatePerm(Rate ratePerm) {
+		this.ratePerm = ratePerm;
+	}
+
 	/**
 	* Manke the Candidates details anonymous and mark the candidate 
 	* as no longer being available
@@ -293,13 +389,20 @@ public class Candidate {
 		private int				yearsExperience;
 		private boolean 		available;
 		private boolean 		flaggedAsUnavailable;
-		private LocalDate 		registerd					= LocalDate.now();;
-		private LocalDate 		lastAvailabilityCheck		= LocalDate.now();;
+		private LocalDate 		registerd					= LocalDate.now();
+		private LocalDate 		lastAvailabilityCheck		= LocalDate.now();
 		private Set<String> 	skills						= new LinkedHashSet<>();
 		private Set<Language> 	languages					= new LinkedHashSet<>();
-		private Rate			rate;
 		private String			introduction;
 		private Photo			photo;
+		private String 			comments;
+		private DAYS_ON_SITE	daysOnSite;
+		private Rate			rateContract;
+		private Rate			ratePerm;
+		private LocalDate 		availableFromDate;
+		//To be set if MP candidate based upon authenticated user via service
+		private String 			ownerId;
+		private CANDIDATE_TYPE	candidateType;
 		
 		/**
 		* Sets the candidates Unique identifier in the System
@@ -452,16 +555,6 @@ public class Candidate {
 		}
 		
 		/**
-		* Sets Rate charged by the Candidate
-		* @param rate - Rate charged by the Candidate
-		* @return Builder
-		*/
-		public CandidateBuilder rate(Rate rate) {
-			this.rate = rate;
-			return this;
-		}
-		
-		/**
 		* Sets Profile Photo for the Candidate
 		* @param photo - Photo of the Candidate
 		* @return Builde
@@ -479,6 +572,57 @@ public class Candidate {
 		*/
 		public CandidateBuilder lastAvailabilityCheck(LocalDate lastAvailabilityCheck) {
 			this.lastAvailabilityCheck = lastAvailabilityCheck;
+			return this;
+		}
+		
+		/**
+		* Sets comments relating to the Candidate
+		* @param comments - additional notes/comments
+		* @return Builder
+		*/
+		public CandidateBuilder comments(String comments) {
+			this.comments = comments;
+			return this;
+		}
+		
+		/**
+		* Sets the max number of days the Candidate is prepared to work onsite
+		* @param daysOnSite - Max number of days onsite
+		* @return Builder
+		*/
+		public CandidateBuilder daysOnSite(DAYS_ON_SITE daysOnSite) {
+			this.daysOnSite = daysOnSite;
+			return this;
+		}
+		
+		/**
+		* Sets the contract rate the Candidate will accept
+		* @param rateContract - rate
+		* @return Builder
+		*/
+		public CandidateBuilder rateContract(Rate rateContract) {
+			this.rateContract = rateContract;
+			return this;
+		}
+		
+		
+		/**
+		* Sets the perm salary the Candidate will accept
+		* @param ratePerm - salary
+		* @return Builder
+		*/
+		public CandidateBuilder ratePerm(Rate ratePerm) {
+			this.ratePerm = ratePerm;
+			return this;
+		}
+		
+		/**
+		* Sets the Date the Candidate is available from
+		* @param availableFromDate - When the Candidate will be available from
+		* @return Builder
+		*/
+		public CandidateBuilder availableFromDate(LocalDate availableFromDate) {
+			this.availableFromDate = availableFromDate;
 			return this;
 		}
 		
@@ -505,6 +649,26 @@ public class Candidate {
 		}
 		
 		/**
+		* Sets the Id of the Owner of the Candidate
+		* @param ownerId - unique id of the Owner
+		* @return Builder
+		*/
+		public CandidateBuilder ownerId(String ownerId) {
+			this.ownerId = ownerId;
+			return this;
+		}
+		
+		/**
+		* Sets the Candidate type
+		* @param candidateType - type of the Candidate
+		* @return Builder
+		*/
+		public CandidateBuilder candidateType(CANDIDATE_TYPE candidateType) {
+			this.candidateType = candidateType;
+			return this;
+		}
+		
+		/**
 		* Returns an instance of Candidate initialized with the 
 		* values in the builder
 		* @return Initialized instance of Candidate
@@ -521,23 +685,26 @@ public class Candidate {
 	*/
 	public static class Rate{
 		
-		public static enum CURRENCY{EUR,GBP}
-		public static enum PERIOD{HOUR,DAY,YEAR}
+		public enum CURRENCY{EUR,GBP}
+		public enum PERIOD{HOUR,DAY,YEAR}
 		
 		private final CURRENCY 	currency;
 		private final PERIOD 	period;
-		private final float 	value;
+		private final float 	valueMin;
+		private final float 	valueMax;
 
 		/**
 		* Constructor
-		* @param currency - Currency being charged
-		* @param period   - Unit of charging
-		* @param value	  - amount charged per unit
+		* @param currency 	- Currency being charged
+		* @param period   	- Unit of charging
+		* @param valueMin	- Min value acceptable for the Candidate
+		* @param valueMax	- Max value acceptable for the Candidate
 		*/
-		public Rate(CURRENCY currency, PERIOD period, float value) {
+		public Rate(CURRENCY currency, PERIOD period, float valueMin, float valueMax) {
 			this.currency 	= currency;
 			this.period 	= period;
-			this.value 		= value;
+			this.valueMin 	= valueMin;
+			this.valueMax	= valueMax;
 		}
 		
 		/**
@@ -557,12 +724,21 @@ public class Candidate {
 		}
 		
 		/**
-		* Returns amount charged per unit 
+		* Returns minimum amount charged per unit 
 		* of charging
 		* @return value
 		*/
-		public float getValue() {
-			return this.value;
+		public float getValueMin() {
+			return this.valueMin;
+		}
+		
+		/**
+		* Returns max amount charged per unit 
+		* of charging
+		* @return value
+		*/
+		public float getValueMax() {
+			return this.valueMax;
 		}
 
 	}
@@ -573,7 +749,7 @@ public class Candidate {
 	*/
 	public static class Photo{
 		
-		public static enum PHOTO_FORMAT {jpeg, png}
+		public  enum PHOTO_FORMAT {jpeg, png}
 		
 		private final byte[] 		imageBytes;
 		private final PHOTO_FORMAT 	format;

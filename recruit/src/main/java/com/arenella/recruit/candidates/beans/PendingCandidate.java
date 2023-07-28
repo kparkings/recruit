@@ -21,7 +21,8 @@ public class PendingCandidate {
 	private boolean 		perm;
 	private boolean 		freelance;
 	private String 			introduction;
-	private Rate			rate;
+	private Rate			rateContract;
+	private Rate			ratePerm;
 	private Photo			photo;
 	
 	/**
@@ -37,7 +38,8 @@ public class PendingCandidate {
 		this.perm 						= builder.perm;
 		this.freelance 					= builder.freelance;
 		this.introduction				= builder.introduction;
-		this.rate						= builder.rate;
+		this.rateContract				= builder.rateContract;
+		this.ratePerm					= builder.ratePerm;
 		this.photo						= builder.photo;
 		
 	}
@@ -92,11 +94,20 @@ public class PendingCandidate {
 	}
 	
 	/**
-	* Returns the Candidates Rate information
-	* @return Rate information
+	* If available the Contract Rate
+	* @return Contract Rate
 	*/
-	public Optional<Rate> getRate() {
-		return Optional.ofNullable(this.rate);
+	public Optional<Rate> getRateContract(){
+		return Optional.ofNullable(this.rateContract);
+	}
+	
+	/**
+	* If available Perm rate the Candidate is 
+	* looking for
+	* @return Perm rate
+	*/
+	public Optional<Rate> getRatePerm(){
+		return Optional.ofNullable(this.ratePerm);
 	}
 	
 	/**
@@ -137,7 +148,8 @@ public class PendingCandidate {
 		private boolean			perm;
 		private boolean 		freelance;
 		private String 			introduction;
-		private Rate			rate;
+		private Rate			rateContract;
+		private Rate			ratePerm;
 		private Photo			photo;
 		
 		/**
@@ -201,12 +213,23 @@ public class PendingCandidate {
 		}
 		
 		/**
-		* Sets the Candidates Rate information
-		* @param rate - Rate information
+		* Sets the contract rate the Candidate will accept
+		* @param rateContract - rate
 		* @return Builder
 		*/
-		public PendingCandidateBuilder rate(Rate rate) {
-			this.rate = rate;
+		public PendingCandidateBuilder rateContract(Rate rateContract) {
+			this.rateContract = rateContract;
+			return this;
+		}
+		
+		
+		/**
+		* Sets the perm salary the Candidate will accept
+		* @param ratePerm - salary
+		* @return Builder
+		*/
+		public PendingCandidateBuilder ratePerm(Rate ratePerm) {
+			this.ratePerm = ratePerm;
 			return this;
 		}
 		

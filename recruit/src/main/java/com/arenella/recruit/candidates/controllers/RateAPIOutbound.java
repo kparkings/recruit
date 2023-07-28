@@ -12,20 +12,23 @@ import com.arenella.recruit.candidates.beans.Candidate.Rate.PERIOD;
 */
 public class RateAPIOutbound {
 	
-	private final CURRENCY currency;
-	private final PERIOD period;
-	private final float value;
+	private final CURRENCY 	currency;
+	private final PERIOD 	period;
+	private final float 	valueMin;
+	private final float 	valueMax;
 	
 	/**
 	* Constructor
 	* @param currency 	- Currency Candidate charges in
 	* @param period	  	- Period charged in
-	* @param value		- amount charged for work
+	* @param valueMin	- Min value acceptable for the Candidate
+	* @param valueMax	- Max value acceptable for the Candidate
 	*/
-	public RateAPIOutbound(CURRENCY currency, PERIOD period, float value) {
+	public RateAPIOutbound(CURRENCY currency, PERIOD period, float valueMin, float valueMax) {
 		this.currency 	= currency;
 		this.period 	= period;
-		this.value 	= value;
+		this.valueMin 	= valueMin;
+		this.valueMax 	= valueMax;
 	}
 	
 	/**
@@ -45,11 +48,21 @@ public class RateAPIOutbound {
 	}
 
 	/**
-	* Returns amount charged per unit
-	* @return amount charged
+	* Returns minimum amount charged per unit 
+	* of charging
+	* @return value
 	*/
-	public float getValue() {
-		return this.value;
+	public float getValueMin() {
+		return this.valueMin;
+	}
+	
+	/**
+	* Returns max amount charged per unit 
+	* of charging
+	* @return value
+	*/
+	public float getValueMax() {
+		return this.valueMax;
 	}
 	
 	/**
@@ -63,7 +76,7 @@ public class RateAPIOutbound {
 			return null;
 		}
 		
-		return new RateAPIOutbound(rate.get().getCurrency(), rate.get().getPeriod(), rate.get().getValue());
+		return new RateAPIOutbound(rate.get().getCurrency(), rate.get().getPeriod(), rate.get().getValueMin(), rate.get().getValueMax());
 	}
 	
 }

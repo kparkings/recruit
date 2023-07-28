@@ -22,7 +22,8 @@ public class PendingCandidateAPIInbound {
 	private String 			email;
 	private boolean 		perm;
 	private boolean 		freelance;
-	private Rate			rate;
+	private Rate			rateContract;
+	private Rate			ratePerm;
 	private String			introduction;
 	
 	/**
@@ -37,7 +38,8 @@ public class PendingCandidateAPIInbound {
 		this.email						= builder.email;
 		this.perm 						= builder.perm;
 		this.freelance 					= builder.freelance;
-		this.rate						= builder.rate;
+		this.rateContract				= builder.rateContract;
+		this.ratePerm					= builder.ratePerm;
 		this.introduction				= builder.introduction;
 		
 	}
@@ -75,6 +77,23 @@ public class PendingCandidateAPIInbound {
 	}
 	
 	/**
+	* If available the Contract Rate
+	* @return Contract Rate
+	*/
+	public Optional<Rate> getRateContract(){
+		return Optional.ofNullable(this.rateContract);
+	}
+	
+	/**
+	* If available Perm rate the Candidate is 
+	* looking for
+	* @return Perm rate
+	*/
+	public Optional<Rate> getRatePerm(){
+		return Optional.ofNullable(this.ratePerm);
+	}
+	
+	/**
 	* Returns whether or not the Candidate is looking for
 	* freelance projects
 	* @return Whether or not the Candidate is interested in freelance roles
@@ -92,11 +111,19 @@ public class PendingCandidateAPIInbound {
 	}
 	
 	/**
-	* Returns the Candidates Rate information
-	* @return Rate information
+	* Sets the Contract rate the candidate wants
+	* @param rateContract
 	*/
-	public Optional<Rate> getRate() {
-		return Optional.ofNullable(this.rate);
+	public void setRateContract(Rate rateContract) {
+		this.rateContract = rateContract;
+	}
+	
+	/**
+	* Sets the Perm salary the Candidate wants
+	* @param ratePerm
+	*/
+	public void setRatePerm(Rate ratePerm) {
+		this.ratePerm = ratePerm;
 	}
 	
 	/**
@@ -128,7 +155,8 @@ public class PendingCandidateAPIInbound {
 		private String 			email;
 		private boolean 		perm;
 		private boolean 		freelance;
-		private Rate			rate;
+		private Rate			rateContract;
+		private Rate			ratePerm;
 		private String			introduction;
 		
 		/**
@@ -192,12 +220,23 @@ public class PendingCandidateAPIInbound {
 		}
 		
 		/**
-		* Sets the Canddates rate information
-		* @param rate - rate information
+		* Sets the contract rate the Candidate will accept
+		* @param rateContract - rate
 		* @return Builder
 		*/
-		public PendingCandidateAPIInboundBuilder rate(Rate rate) {
-			this.rate = rate;
+		public PendingCandidateAPIInboundBuilder rateContract(Rate rateContract) {
+			this.rateContract = rateContract;
+			return this;
+		}
+		
+		
+		/**
+		* Sets the perm salary the Candidate will accept
+		* @param ratePerm - salary
+		* @return Builder
+		*/
+		public PendingCandidateAPIInboundBuilder ratePerm(Rate ratePerm) {
+			this.ratePerm = ratePerm;
 			return this;
 		}
 		
@@ -230,14 +269,26 @@ public class PendingCandidateAPIInbound {
 	*/
 	public static PendingCandidate convertToPendingCandidate(PendingCandidateAPIInbound candiateAPIInbound, Optional<MultipartFile> profileImage) throws IOException {
 		
-		com.arenella.recruit.candidates.beans.Candidate.Rate rate = null;
+		com.arenella.recruit.candidates.beans.Candidate.Rate rateContract = null;
+		com.arenella.recruit.candidates.beans.Candidate.Rate ratePerm = null;
 		
-		if (candiateAPIInbound.getRate().isPresent()) {
+		if (candiateAPIInbound.getRateContract().isPresent()) {
 		
-			rate = new com.arenella.recruit.candidates.beans.Candidate.Rate(
-					candiateAPIInbound.getRate().get().getCurrency(),
-					candiateAPIInbound.getRate().get().getPeriod(),
-					candiateAPIInbound.getRate().get().getValue());
+			rateContract = new com.arenella.recruit.candidates.beans.Candidate.Rate(
+					candiateAPIInbound.getRateContract().get().getCurrency(),
+					candiateAPIInbound.getRateContract().get().getPeriod(),
+					candiateAPIInbound.getRateContract().get().getValueMin(),
+					candiateAPIInbound.getRateContract().get().getValueMax());
+			
+		}
+		
+		if (candiateAPIInbound.getRatePerm().isPresent()) {
+			
+			ratePerm = new com.arenella.recruit.candidates.beans.Candidate.Rate(
+					candiateAPIInbound.getRatePerm().get().getCurrency(),
+					candiateAPIInbound.getRatePerm().get().getPeriod(),
+					candiateAPIInbound.getRatePerm().get().getValueMin(),
+					candiateAPIInbound.getRatePerm().get().getValueMax());
 			
 		}
 		
@@ -249,7 +300,8 @@ public class PendingCandidateAPIInbound {
 					.email(candiateAPIInbound.getEmail())
 					.freelance(candiateAPIInbound.isFreelance())
 					.perm(candiateAPIInbound.isPerm())
-					.rate(rate)
+					.rateContract(rateContract)
+					.ratePerm(ratePerm)
 					.photo(profileImage.isEmpty() ? null : new Photo(profileImage.get().getBytes(), PHOTO_FORMAT.jpeg))
 					.introduction(candiateAPIInbound.getIntroduction())
 					.build();

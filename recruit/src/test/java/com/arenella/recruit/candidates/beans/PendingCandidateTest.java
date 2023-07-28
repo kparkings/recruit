@@ -22,7 +22,8 @@ public class PendingCandidateTest {
 	private static final String 		email					= "kparkings@gmail.com";
 	private static final boolean 		freelance 				= true;
 	private static final boolean		perm 					= true;
-	private static final Rate			rate					= new Rate(CURRENCY.EUR, PERIOD.HOUR, 300);
+	private static final Rate			RATE_CONTRACT			= new Rate(CURRENCY.EUR, PERIOD.HOUR, 300, 400);
+	private static final Rate			RATE_PERM				= new Rate(CURRENCY.GBP, PERIOD.DAY, 100, 200);
 	private static final String			introduction			= "An intro";
 	private static final Photo			profilePhoto			= new Photo(new byte[] {}, PHOTO_FORMAT.jpeg);
 	
@@ -38,7 +39,8 @@ public class PendingCandidateTest {
 													.email(email)
 													.freelance(freelance)
 													.perm(perm)
-													.rate(rate)
+													.rateContract(RATE_CONTRACT)
+													.ratePerm(RATE_PERM)
 													.introduction(introduction)
 													.photo(profilePhoto)
 													.build();
@@ -47,9 +49,8 @@ public class PendingCandidateTest {
 		assertEquals(email, 					candidate.getEmail());
 		assertEquals(freelance, 				candidate.isFreelance());
 		assertEquals(perm, 						candidate.isPerm());
-		assertEquals(rate.getCurrency(), 		candidate.getRate().get().getCurrency());
-		assertEquals(rate.getPeriod(), 			candidate.getRate().get().getPeriod());
-		assertEquals(rate.getValue(), 			candidate.getRate().get().getValue());
+		assertEquals(RATE_CONTRACT, 			candidate.getRateContract().get());
+		assertEquals(RATE_PERM, 				candidate.getRatePerm().get());
 		assertEquals(introduction, 				candidate.getIntroduction());
 		assertEquals(profilePhoto, 				candidate.getPhoto().get());
 		

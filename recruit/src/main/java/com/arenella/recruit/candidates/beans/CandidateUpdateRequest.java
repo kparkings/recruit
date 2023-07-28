@@ -1,9 +1,11 @@
 package com.arenella.recruit.candidates.beans;
 
+import java.time.LocalDate;
 import java.util.LinkedHashSet;
 import java.util.Optional;
 import java.util.Set;
 
+import com.arenella.recruit.candidates.beans.Candidate.DAYS_ON_SITE;
 import com.arenella.recruit.candidates.beans.Candidate.Rate;
 import com.arenella.recruit.candidates.enums.COUNTRY;
 import com.arenella.recruit.candidates.enums.FREELANCE;
@@ -28,10 +30,14 @@ public class CandidateUpdateRequest {
 	private FREELANCE 		freelance;
 	private int				yearsExperience;
 	private Set<Language> 	languages					= new LinkedHashSet<>();
-	private Rate			rate;
 	private String			introduction;
 	private byte[]			photoBytes;
 	private Set<String>		skills						= new LinkedHashSet<>();
+	private String 			comments;
+	private DAYS_ON_SITE	daysOnSite;
+	private Rate			rateContract;
+	private Rate			ratePerm;
+	private LocalDate 		availableFromDate;
 	
 	/**
 	* Constructor based upon a builder
@@ -50,11 +56,16 @@ public class CandidateUpdateRequest {
 		this.perm 						= builder.perm;
 		this.freelance 					= builder.freelance;
 		this.yearsExperience 			= builder.yearsExperience;
-		this.rate						= builder.rate;
-		this.introduction				= builder.introduction;
 		this.photoBytes					= builder.photoBytes;
 		this.skills						= builder.skills;
+		this.comments					= builder.comments;
+		this.introduction				= builder.introduction;
+		this.daysOnSite					= builder.daysOnSite;
+		this.rateContract				= builder.rateContract;
+		this.ratePerm					= builder.ratePerm;
+		this.availableFromDate			= builder.availableFromDate;
 		this.languages.addAll(builder.languages);
+		
 	
 	}
 	
@@ -167,28 +178,64 @@ public class CandidateUpdateRequest {
 	}
 	
 	/**
-	* Returns the Candidates introduction about themselves
-	* @return Introduction
-	*/
-	public String getIntroduction() {
-		return this.introduction;
-	}
-	
-	/**
-	* If available returns info about the Candidates Rate
-	* @return Rate information
-	*/
-	public Optional<Rate> getRate(){
-		return Optional.ofNullable(this.rate);
-	}
-	
-	/**
 	* If available Returns the Profile Photo for
 	* the Candidate
 	* @return
 	*/
 	public Optional<byte[]> getPhotoBytes(){
 		return Optional.ofNullable(this.photoBytes);
+	}
+	
+	/**
+	* Returns comments relating to the Candidate
+	* @return Comment about the candidate
+	*/
+	public String getComments() {
+		return this.comments;
+	}
+	
+	/**
+	* Returns the introduction to the Candidate
+	* @return candidate introduction text
+	*/
+	public String getIntroduction() {
+		return this.introduction;
+	}
+	
+	/**
+	* Returns the max number of days the candidate is prepared
+	* to work onsite
+	* @return
+	*/
+	public DAYS_ON_SITE	getDaysOnSite() {
+		return this.daysOnSite;
+	}
+	
+	/**
+	* If available the contract rate the Candidate is 
+	* looking for
+	* @return min contract Rate
+	*/
+	public Optional<Rate> getRateContract(){
+		return Optional.ofNullable(this.rateContract);
+	}
+	
+	/**
+	* If available the salary the Candidate is 
+	* looking for
+	* @return max salary
+	*/
+	public Optional<Rate> getRatePerm(){
+		return Optional.ofNullable(this.ratePerm);
+	}
+	
+	/**
+	* returns the date the Candidate is available from. If not specified 
+	* uses the current date
+	* @return When the candidate is available from
+	*/
+	public LocalDate getAvailableFromDate(){
+		return Optional.ofNullable(this.availableFromDate).orElse(LocalDate.now());
 	}
 	
 	/**
@@ -217,10 +264,14 @@ public class CandidateUpdateRequest {
 		private FREELANCE 		freelance;
 		private int				yearsExperience;
 		private Set<Language> 	languages					= new LinkedHashSet<>();
-		private Rate			rate;
 		private String			introduction;
 		private byte[]			photoBytes;
 		private Set<String> 	skills					= new LinkedHashSet<>();
+		private String 			comments;
+		private DAYS_ON_SITE	daysOnSite;
+		private Rate			rateContract;
+		private Rate			ratePerm;
+		private LocalDate 		availableFromDate;
 		
 		/**
 		* Sets the candidates Unique identifier in the System
@@ -355,16 +406,6 @@ public class CandidateUpdateRequest {
 		}
 		
 		/**
-		* Sets info about Candidates Rate
-		* @param rate - Rate info
-		* @return Builder
-		*/
-		public CandidateUpdateRequestBuilder rate(Rate rate) {
-			this.rate = rate;
-			return this;
-		}
-		
-		/**
 		* Sets the Candidates introduction about themselves
 		* @param introduction - Candidate introduction
 		* @return Builder
@@ -381,6 +422,56 @@ public class CandidateUpdateRequest {
 		*/
 		public CandidateUpdateRequestBuilder photoBytes(byte[] photoBytes) {
 			this.photoBytes = photoBytes;
+			return this;
+		}
+		
+		/**
+		* Sets comments relating to the Candidate
+		* @param comments - additional notes/comments
+		* @return Builder
+		*/
+		public CandidateUpdateRequestBuilder comments(String comments) {
+			this.comments = comments;
+			return this;
+		}
+		
+		/**
+		* Sets the max number of days the Candidate is prepared to work onsite
+		* @param daysOnSite - Max number of days onsite
+		* @return Builder
+		*/
+		public CandidateUpdateRequestBuilder daysOnSite(DAYS_ON_SITE daysOnSite) {
+			this.daysOnSite = daysOnSite;
+			return this;
+		}
+		
+		/**
+		* Sets the contract rate the Candidate will accept
+		* @param rateContract - rate
+		* @return Builder
+		*/
+		public CandidateUpdateRequestBuilder rateContract(Rate rateContract) {
+			this.rateContract = rateContract;
+			return this;
+		}
+		
+		/**
+		* Sets the perm salary the Candidate is looking for
+		* @param rateToPerm - salary
+		* @return Builder
+		*/
+		public CandidateUpdateRequestBuilder ratePerm(Rate ratePerm) {
+			this.ratePerm = ratePerm;
+			return this;
+		}
+		
+		/**
+		* Sets the Date the Candidate is available from
+		* @param availableFromDate - When the Candidate will be available from
+		* @return Builder
+		*/
+		public CandidateUpdateRequestBuilder availableFromDate(LocalDate availableFromDate) {
+			this.availableFromDate = availableFromDate;
 			return this;
 		}
 		

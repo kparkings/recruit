@@ -1,15 +1,19 @@
 package com.arenella.recruit.candidates.controllers;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.LinkedHashSet;
 import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import com.arenella.recruit.candidates.beans.Candidate;
+import com.arenella.recruit.candidates.beans.Candidate.DAYS_ON_SITE;
 import com.arenella.recruit.candidates.beans.Candidate.Rate.CURRENCY;
 import com.arenella.recruit.candidates.beans.Candidate.Rate.PERIOD;
 import com.arenella.recruit.candidates.beans.CandidateUpdateRequest;
+import com.arenella.recruit.candidates.beans.CandidateUpdateRequest.CandidateUpdateRequestBuilder;
 import com.arenella.recruit.candidates.beans.Language;
 import com.arenella.recruit.candidates.enums.COUNTRY;
 import com.arenella.recruit.candidates.enums.FREELANCE;
@@ -36,9 +40,13 @@ public class CandidateUpdateRequestAPIInbound {
 	private FREELANCE 		freelance;
 	private int				yearsExperience;
 	private Set<Language> 	languages					= new LinkedHashSet<>();
-	private Rate			rate;
 	private String			introduction;
 	private Set<String>		skills						= new LinkedHashSet<>();
+	private String 			comments;
+	private DAYS_ON_SITE	daysOnSite;
+	private Rate			rateContract;
+	private Rate			ratePerm;
+	private LocalDate 		availableFromDate;
 	
 	/**
 	* Constructor based upon a builder
@@ -56,9 +64,14 @@ public class CandidateUpdateRequestAPIInbound {
 		this.perm 						= builder.perm;
 		this.freelance 					= builder.freelance;
 		this.yearsExperience 			= builder.yearsExperience;
-		this.rate						= builder.rate;
 		this.introduction				= builder.introduction;
 		this.skills						= builder.skills;
+		this.introduction				= builder.introduction;
+		this.daysOnSite					= builder.daysOnSite;
+		this.rateContract				= builder.rateContract;
+		this.ratePerm					= builder.ratePerm;
+		this.availableFromDate			= builder.availableFromDate;
+		this.comments					= builder.comments;
 		
 		this.languages.addAll(builder.languages);
 	
@@ -157,19 +170,55 @@ public class CandidateUpdateRequestAPIInbound {
 	}
 	
 	/**
-	* Returns the Rate charged by the Candidate
-	* @return Rate charged by the candidate
+	* Returns comments relating to the Candidate
+	* @return Comment about the candidate
 	*/
-	public Optional<Rate> getRate() {
-		return Optional.ofNullable(this.rate);
+	public String getComments() {
+		return this.comments;
 	}
 	
 	/**
-	* Returns the Candidates introduction about themselves
-	* @return Candidate introduction
+	* Returns the introduction to the Candidate
+	* @return candidate introduction text
 	*/
 	public String getIntroduction() {
 		return this.introduction;
+	}
+	
+	/**
+	* Returns the max number of days the candidate is prepared
+	* to work onsite
+	* @return
+	*/
+	public DAYS_ON_SITE	getDaysOnSite() {
+		return this.daysOnSite;
+	}
+	
+	/**
+	* If available thecontract rate the Candidate is 
+	* looking for
+	* @return contract Rate
+	*/
+	public Optional<Rate> getRateContract(){
+		return Optional.ofNullable(this.rateContract);
+	}
+	
+	/**
+	* If available the perm salary the Candidate is 
+	* looking for
+	* @return salary
+	*/
+	public Optional<Rate> getRatePerm(){
+		return Optional.ofNullable(this.ratePerm);
+	}
+	
+	/**
+	* returns the date the Candidate is available from. If not specified 
+	* uses the current date
+	* @return When the candidate is available from
+	*/
+	public LocalDate getAvailableFromDate(){
+		return Optional.ofNullable(this.availableFromDate).orElse(LocalDate.now());
 	}
 	
 	/**
@@ -206,9 +255,14 @@ public class CandidateUpdateRequestAPIInbound {
 		private FREELANCE 		freelance;
 		private int				yearsExperience;
 		private Set<Language> 	languages					= new LinkedHashSet<>();
-		private Rate			rate;
 		private String			introduction;
 		private Set<String>		skills						= new LinkedHashSet<>();
+		private String 			comments;
+		private DAYS_ON_SITE	daysOnSite;
+		private Rate			rateContract;
+		private Rate			ratePerm;
+		private LocalDate 		availableFromDate;
+		
 		
 		/**
 		* Sets the First name of the Candidate
@@ -322,18 +376,29 @@ public class CandidateUpdateRequestAPIInbound {
 		}
 		
 		/**
-		* Sets the Rate charged by the Candidate
-		* @param rate - Rate information
+		* Sets the Skills of the Candidate
+		* @param skills - Candidates Skills
 		* @return Builder
 		*/
-		public CandidateUpdateRequestAPIInboundBuilder rate(Rate rate) {
-			this.rate = rate;
+		public CandidateUpdateRequestAPIInboundBuilder skills(Set<String> skills) {
+			this.skills.clear();
+			this.skills.addAll(skills);
 			return this;
 		}
 		
 		/**
-		* Sets the Candidates introduction about themselves
-		* @param introduction - Introduction
+		* Sets comments relating to the Candidate
+		* @param comments - additional notes/comments
+		* @return Builder
+		*/
+		public CandidateUpdateRequestAPIInboundBuilder comments(String comments) {
+			this.comments = comments;
+			return this;
+		}
+		
+		/**
+		* Sets an introduction about the Candidate and their experience
+		* @param introduction - Introduction to the Candidate
 		* @return Builder
 		*/
 		public CandidateUpdateRequestAPIInboundBuilder introduction(String introduction) {
@@ -342,13 +407,43 @@ public class CandidateUpdateRequestAPIInbound {
 		}
 		
 		/**
-		* Sets the Skills of the Candidate
-		* @param skills - Candidates Skills
+		* Sets the max number of days the Candidate is prepared to work onsite
+		* @param daysOnSite - Max number of days onsite
 		* @return Builder
 		*/
-		public CandidateUpdateRequestAPIInboundBuilder skills(Set<String> skills) {
-			this.skills.clear();
-			this.skills.addAll(skills);
+		public CandidateUpdateRequestAPIInboundBuilder daysOnSite(DAYS_ON_SITE daysOnSite) {
+			this.daysOnSite = daysOnSite;
+			return this;
+		}
+		
+		/**
+		* Sets the contract rate the Candidate will accept
+		* @param rateFromContract - rate
+		* @return Builder
+		*/
+		public CandidateUpdateRequestAPIInboundBuilder rateContract(Rate rateContract) {
+			this.rateContract = rateContract;
+			return this;
+		}
+		
+		
+		/**
+		* Sets the perm salary the Candidate will accept
+		* @param rateFromPerm -salary
+		* @return Builder
+		*/
+		public CandidateUpdateRequestAPIInboundBuilder ratePerm(Rate ratePerm) {
+			this.ratePerm = ratePerm;
+			return this;
+		}
+		
+		/**
+		* Sets the Date the Candidate is available from
+		* @param availableFromDate - When the Candidate will be available from
+		* @return Builder
+		*/
+		public CandidateUpdateRequestAPIInboundBuilder availableFromDate(LocalDate availableFromDate) {
+			this.availableFromDate = availableFromDate;
 			return this;
 		}
 		
@@ -367,40 +462,53 @@ public class CandidateUpdateRequestAPIInbound {
 	* @param candidateId	- Unique id of the Candidate
 	* @param updateRequest	- To concert
 	* @return Converted
-	 * @throws IOException 
+	* @throws IOException 
 	*/
 	public static  CandidateUpdateRequest convertToDomain(String candidateId, CandidateUpdateRequestAPIInbound updateRequest, Optional<MultipartFile> profileImage) throws IOException {
 		
-		com.arenella.recruit.candidates.beans.Candidate.Rate rate = null;
+		//com.arenella.recruit.candidates.beans.Candidate.Rate rate = null;
 		
-		if (updateRequest.getRate().isPresent()) {
+		//if (updateRequest.getRate().isPresent()) {
+		//
+		//	rate = new com.arenella.recruit.candidates.beans.Candidate.Rate(
+		//			updateRequest.getRate().get().getCurrency(),
+		//			updateRequest.getRate().get().getPeriod(),
+		//			updateRequest.getRate().get().getValue());
+		//	
+		//}
 		
-			rate = new com.arenella.recruit.candidates.beans.Candidate.Rate(
-					updateRequest.getRate().get().getCurrency(),
-					updateRequest.getRate().get().getPeriod(),
-					updateRequest.getRate().get().getValue());
+		CandidateUpdateRequestBuilder builder = CandidateUpdateRequest.builder();
+		
+		builder
+			.candidateId(candidateId)
+			.city(updateRequest.getCity())
+			.country(updateRequest.getCountry())
+			.email(updateRequest.getEmail())
+			.firstname(updateRequest.getFirstname())
+			.freelance(updateRequest.isFreelance())
+			.function(updateRequest.getFunction())
+			.languages(updateRequest.getLanguages())
+			.perm(updateRequest.isPerm())
+			.roleSought(updateRequest.roleSought)
+			.surname(updateRequest.getSurname())
+			.yearsExperience(updateRequest.getYearsExperience())
+			.introduction(updateRequest.getIntroduction())
+			.skills(updateRequest.getSkills())
+			.photoBytes(profileImage.isEmpty() ? null : profileImage.get().getBytes())
+			.comments(updateRequest.getComments())
+			.introduction(updateRequest.getIntroduction())
+			.availableFromDate(updateRequest.getAvailableFromDate())
+			.daysOnSite(updateRequest.getDaysOnSite());
 			
-		}
+			if (updateRequest.getRateContract().isPresent()) {
+				builder.rateContract(new Candidate.Rate(updateRequest.getRateContract().get().getCurrency(), updateRequest.getRateContract().get().getPeriod(), updateRequest.getRateContract().get().getValueMin(), updateRequest.getRateContract().get().getValueMax()));
+			}
 		
-		return CandidateUpdateRequest
-					.builder()
-						.candidateId(candidateId)
-						.city(updateRequest.getCity())
-						.country(updateRequest.getCountry())
-						.email(updateRequest.getEmail())
-						.firstname(updateRequest.getFirstname())
-						.freelance(updateRequest.isFreelance())
-						.function(updateRequest.getFunction())
-						.languages(updateRequest.getLanguages())
-						.perm(updateRequest.isPerm())
-						.roleSought(updateRequest.roleSought)
-						.surname(updateRequest.getSurname())
-						.yearsExperience(updateRequest.getYearsExperience())
-						.introduction(updateRequest.getIntroduction())
-						.rate(rate)
-						.skills(updateRequest.getSkills())
-						.photoBytes(profileImage.isEmpty() ? null : profileImage.get().getBytes())
-					.build();
+			if (updateRequest.getRatePerm().isPresent()) {
+				builder.ratePerm(new Candidate.Rate(updateRequest.getRatePerm().get().getCurrency(), updateRequest.getRatePerm().get().getPeriod(), updateRequest.getRatePerm().get().getValueMin(), updateRequest.getRatePerm().get().getValueMax()));
+			}
+			
+		return builder.build();
 	}
 	
 	/**
@@ -412,7 +520,8 @@ public class CandidateUpdateRequestAPIInbound {
 		
 		private final CURRENCY 	currency;
 		private final PERIOD 	period;
-		private final float 	value;
+		private final float 	valueMin;
+		private final float 	valueMax;
 
 		/**
 		* Constructor
@@ -420,10 +529,11 @@ public class CandidateUpdateRequestAPIInbound {
 		* @param period   - Unit of charging
 		* @param value	  - amount charged per unit
 		*/
-		public Rate(CURRENCY currency, PERIOD period, float value) {
+		public Rate(CURRENCY currency, PERIOD period, float valueMin, float valueMax) {
 			this.currency 	= currency;
 			this.period 	= period;
-			this.value 		= value;
+			this.valueMin 	= valueMin;
+			this.valueMax	= valueMax;
 		}
 		
 		/**
@@ -443,12 +553,21 @@ public class CandidateUpdateRequestAPIInbound {
 		}
 		
 		/**
-		* Returns amount charged per unit 
+		* Returns minimum amount charged per unit 
 		* of charging
 		* @return value
 		*/
-		public float getValue() {
-			return this.value;
+		public float getValueMin() {
+			return this.valueMin;
+		}
+		
+		/**
+		* Returns max amount charged per unit 
+		* of charging
+		* @return value
+		*/
+		public float getValueMax() {
+			return this.valueMax;
 		}
 
 	}

@@ -49,14 +49,43 @@ public class PendingCandidateEntity {
 	
 	@Enumerated(EnumType.STRING)
 	@Column(name="rate_currency")
-	private CURRENCY rateCurrency;
+	private CURRENCY rateContractCurrency;
+		
+	@Enumerated(EnumType.STRING)
+	@Column(name="rate_period")
+	private PERIOD rateContractPeriod;
+	    
+	@Column(name="rate_value")
+	private float rateContractValueMin;   
+	
+	@Column(name="rate_value")
+	private float rateContractValueMax;
+	
 	
 	@Enumerated(EnumType.STRING)
-    @Column(name="rate_period")
-    private PERIOD ratePeriod;
+	@Column(name="rate_currency")
+	private CURRENCY ratePermCurrency;
+		
+	@Enumerated(EnumType.STRING)
+	@Column(name="rate_period")
+	private PERIOD ratePermPeriod;
+	    
+	@Column(name="rate_value")
+	private float ratePermValueMin;   
+	
+	@Column(name="rate_value")
+	private float ratePermValueMax;
+	
+	//@Enumerated(EnumType.STRING)
+	//@Column(name="rate_currency")
+	//private CURRENCY rateCurrency;
+	
+	//@Enumerated(EnumType.STRING)
+    //@Column(name="rate_period")
+    //private PERIOD ratePeriod;
     
-    @Column(name="rate_value")
-    private float rateValue;      
+    //@Column(name="rate_value")
+    //private float rateValue;      
     
     @Enumerated(EnumType.STRING)
     @Column(name="photo_format")
@@ -78,9 +107,19 @@ public class PendingCandidateEntity {
 		this.perm 						= builder.perm;
 		this.freelance 					= builder.freelance;
 		this.introduction				= builder.introduction;
-		this.rateCurrency				= builder.rateCurrency;
-		this.ratePeriod					= builder.ratePeriod;
-		this.rateValue					= builder.rateValue;      
+		//this.rateCurrency				= builder.rateCurrency;
+		//this.ratePeriod					= builder.ratePeriod;
+		//this.rateValue					= builder.rateValue;      
+		
+		this.rateContractCurrency 		= builder.rateContractCurrency;
+		this.rateContractPeriod 		= builder.rateContractPeriod;
+		this.rateContractValueMin 		= builder.rateContractValueMin;   
+		this.rateContractValueMax 		= builder.rateContractValueMax;
+		this.ratePermCurrency 			= builder.ratePermCurrency;
+		this.ratePermPeriod 			= builder.ratePermPeriod;
+		this.ratePermValueMin 			= builder.ratePermValueMin;   
+		this.ratePermValueMax 			= builder.ratePermValueMax;
+		
 		this.photoFormat				= builder.photoFormat;      
 		this.photoBytes					= builder.photoBytes;
 		
@@ -156,26 +195,90 @@ public class PendingCandidateEntity {
 	* charges in
 	* @return currency
 	*/
-	public CURRENCY getRateCurrency() {
-		return this.rateCurrency;
-	}
+	//public CURRENCY getRateCurrency() {
+	//	return this.rateCurrency;
+	//}
 	
 	/**
 	* Returns the period the Candidate 
 	* charges in
 	* @return Period
 	*/
-	public PERIOD getRatePeriod() {
-		return this.ratePeriod;
-	}
+	//public PERIOD getRatePeriod() {
+	//	return this.ratePeriod;
+	//}
 	
 	/**
 	* Returns the value per period
 	* the Candidate charges
 	* @return value
 	*/
-	public float getRateValue() {
-		return this.rateValue;
+	//public float getRateValue() {
+	//	return this.rateValue;
+	//}
+	
+	/**
+	* Returns the Currency for the contract rate
+	* @return Currency for the contract rate
+	*/
+	public CURRENCY getRateContractCurrency() {
+		return this.rateContractCurrency;
+	}
+	
+	/**
+	* Returns the Period for the Contract Rate
+	* @return Period for the Contract Rate
+	*/
+	public PERIOD getRateContractPeriod() {
+		return this.rateContractPeriod;
+	}
+	
+	/**
+	* Returns the min contract rate
+	* @return min contract rate
+	*/
+	public float getRateContractValueMin() {
+		return this.rateContractValueMin;
+	}   
+	
+	/**
+	* Returns the max contract rate
+	* @return max contract rate
+	*/
+	public float getRateContractValueMax() {
+		return this.rateContractValueMax;
+	}
+	
+	/**
+	* Returns the Currency for the perm salary
+	* @return Currency for the perm salary
+	*/
+	public CURRENCY getRatePermCurrency() {
+		return this.ratePermCurrency;
+	}
+	
+	/**
+	* Returns the Period for the Perm salary
+	* @return Period for the Perm salary
+	*/
+	public PERIOD getRatePermPeriod() {
+		return this.ratePermPeriod;
+	}
+	
+	/**
+	* Returns the min perm salart
+	* @return min perm salary
+	*/
+	public float getRatePermValueMin() {
+		return this.ratePermValueMin;
+	}   
+	
+	/**
+	* Returns the max perm salary
+	* @return max perm salary
+	*/
+	public float getRatePermValueMax() {
+		return this.ratePermValueMax;
 	}
 	
 	/**
@@ -215,9 +318,17 @@ public class PendingCandidateEntity {
 		private boolean	 		perm;
 		private boolean 		freelance;
 		private String 			introduction;
-		private CURRENCY 		rateCurrency;
-		private PERIOD 			ratePeriod;
-		private float 			rateValue;      
+		//private CURRENCY 		rateCurrency;
+		//private PERIOD 			ratePeriod;
+		//private float 			rateValue;      
+		private CURRENCY 		rateContractCurrency;
+		private PERIOD 			rateContractPeriod;
+		private float 			rateContractValueMin;   
+		private float 			rateContractValueMax;
+		private CURRENCY 		ratePermCurrency;
+		private PERIOD 			ratePermPeriod;
+		private float 			ratePermValueMin;   
+		private float 			ratePermValueMax;
 		private PHOTO_FORMAT 	photoFormat;      
 		private byte[] 			photoBytes;
 		
@@ -296,28 +407,108 @@ public class PendingCandidateEntity {
 		* @param rateCurrency - Currency
 		* @return Builder
 		*/
-		public PendingCandidateEntityBuilder rateCurrency(CURRENCY rateCurrency) {
-			this.rateCurrency = rateCurrency;
-			return this;
-		}
+		//public PendingCandidateEntityBuilder rateCurrency(CURRENCY rateCurrency) {
+		//	this.rateCurrency = rateCurrency;
+		//	return this;
+		//}
 		
 		/**
 		* Sets the unit the Rate is in
 		* @param ratePeriod - Unit of the Rate
 		* @return Builder
 		*/
-		public PendingCandidateEntityBuilder ratePeriod(PERIOD ratePeriod) {
-			this.ratePeriod = ratePeriod;
-			return this;
-		}
+		//public PendingCandidateEntityBuilder ratePeriod(PERIOD ratePeriod) {
+		//	this.ratePeriod = ratePeriod;
+		//	return this;
+		//}
 		
 		/**
 		* Sets the amount the Candidate charges per period
 		* @param rateValue - amount per period
 		* @return Builder
 		*/
-		public PendingCandidateEntityBuilder rateValue(float rateValue) {
-			this.rateValue = rateValue;
+		//public PendingCandidateEntityBuilder rateValue(float rateValue) {
+		//	this.rateValue = rateValue;
+		//	return this;
+		//}
+		
+		/**
+		* Sets the currency to use 
+		* @param rateContractCurrency - contract currency
+		* @return Builder
+		*/
+		public PendingCandidateEntityBuilder rateContractCurrency(CURRENCY rateContractCurrency) {
+			this.rateContractCurrency = rateContractCurrency;
+			return this;
+		}
+		
+		/**
+		* Sets the Rate period
+		* @param rateContractPeriod - Rate period for contract
+		* @return Builder
+		*/
+		public PendingCandidateEntityBuilder rateContractPeriod(PERIOD rateContractPeriod) {
+			this.rateContractPeriod = rateContractPeriod;
+			return this;
+		}
+		
+		/**
+		* Sets the min contract rate
+		* @param rateContractValueFrom - Min contract rate
+		* @return Builder
+		*/
+		public PendingCandidateEntityBuilder rateContractValueMin(float rateContractValueMin) {
+			this.rateContractValueMin = rateContractValueMin;
+			return this;
+		}   
+		
+		/**
+		* Sets the max contract rate
+		* @param rateContractValueTo - Max contract rate
+		* @return Builder
+		*/
+		public PendingCandidateEntityBuilder rateContractValueMax(float rateContractValueMax) {
+			this.rateContractValueMax = rateContractValueMax;
+			return this;
+		}
+		
+		/**
+		* Sets the currency to use 
+		* @param ratePermCurrency - perm currency
+		* @return Builder
+		*/
+		public PendingCandidateEntityBuilder ratePermCurrency(CURRENCY ratePermCurrency) {
+			this.ratePermCurrency = ratePermCurrency;
+			return this;
+		}
+		
+		/**
+		* Sets the Rate period
+		* @param rateContractPeriod - Contract rate period
+		* @return Builder
+		*/
+		public PendingCandidateEntityBuilder ratePermPeriod(PERIOD ratePermPeriod) {
+			this.ratePermPeriod = ratePermPeriod;
+			return this;
+		}
+		
+		/**
+		* Sets the min perm salary
+		* @param ratePermValueFrom - min perm salary
+		* @return Builder
+		*/
+		public PendingCandidateEntityBuilder ratePermValueMin(float ratePermValueMin) {
+			this.ratePermValueMin = ratePermValueMin;
+			return this;
+		}   
+		
+		/**
+		* Sets the max perm salary
+		* @param ratePermValueTo - max perm salary
+		* @return Builder
+		*/
+		public PendingCandidateEntityBuilder ratePermValueMax(float ratePermValueMax) {
+			this.ratePermValueMax = ratePermValueMax;
 			return this;
 		}
 		
@@ -371,9 +562,17 @@ public class PendingCandidateEntity {
 						.freelance(pendingCandidate.isFreelance())
 						.perm(pendingCandidate.isPerm())
 						.introduction(pendingCandidate.getIntroduction())
-						.rateCurrency(pendingCandidate.getRate().isEmpty() 	? null 	: pendingCandidate.getRate().get().getCurrency())
-						.ratePeriod(pendingCandidate.getRate().isEmpty() 	? null 	: pendingCandidate.getRate().get().getPeriod())
-						.rateValue(pendingCandidate.getRate().isEmpty() 	? 0 	: pendingCandidate.getRate().get().getValue())
+						//.rateCurrency(pendingCandidate.getRate().isEmpty() 	? null 	: pendingCandidate.getRate().get().getCurrency())
+						//.ratePeriod(pendingCandidate.getRate().isEmpty() 	? null 	: pendingCandidate.getRate().get().getPeriod())
+						//.rateValue(pendingCandidate.getRate().isEmpty() 	? 0 	: pendingCandidate.getRate().get().getValue())
+						.rateContractCurrency(pendingCandidate.getRateContract().isEmpty() ? null 	: pendingCandidate.getRateContract().get().getCurrency())
+						.rateContractPeriod(pendingCandidate.getRateContract().isEmpty() ? null 	: pendingCandidate.getRateContract().get().getPeriod())
+						.rateContractValueMin(pendingCandidate.getRateContract().isEmpty() ? 0f 	: pendingCandidate.getRateContract().get().getValueMin())
+						.rateContractValueMax(pendingCandidate.getRateContract().isEmpty() ? 0f 	: pendingCandidate.getRateContract().get().getValueMax())
+						.ratePermCurrency(pendingCandidate.getRatePerm().isEmpty() ? null 	: pendingCandidate.getRatePerm().get().getCurrency())
+						.ratePermPeriod(pendingCandidate.getRatePerm().isEmpty() ? null 	: pendingCandidate.getRatePerm().get().getPeriod())
+						.ratePermValueMin(pendingCandidate.getRatePerm().isEmpty() ? 0f 	: pendingCandidate.getRatePerm().get().getValueMin())
+						.ratePermValueMax(pendingCandidate.getRatePerm().isEmpty() ? 0f 	: pendingCandidate.getRatePerm().get().getValueMax())
 						.photoFormat(pendingCandidate.getPhoto().isEmpty() 	? null 	: pendingCandidate.getPhoto().get().getFormat())
 						.photoBytes(pendingCandidate.getPhoto().isEmpty() 	? null 	: pendingCandidate.getPhoto().get().getImageBytes())
 					.build();
@@ -388,11 +587,16 @@ public class PendingCandidateEntity {
 	*/
 	public static PendingCandidate convertFromEntity(PendingCandidateEntity pendingCandidateEntity) {
 		
-		Rate 	rate 	= null;
-		Photo 	photo 	= null;
+		Rate 	rateContract 	= null;
+		Rate 	ratePerm 		= null;
+		Photo 	photo 			= null;
 		
-		if (pendingCandidateEntity.rateCurrency != null && pendingCandidateEntity.ratePeriod != null) {
-			rate = new Rate(pendingCandidateEntity.getRateCurrency(), pendingCandidateEntity.getRatePeriod(), pendingCandidateEntity.getRateValue());
+		if (pendingCandidateEntity.getRateContractCurrency() != null && pendingCandidateEntity.getRateContractPeriod() != null) {
+			rateContract = new Rate(pendingCandidateEntity.getRateContractCurrency(), pendingCandidateEntity.getRateContractPeriod(), pendingCandidateEntity.getRateContractValueMin(), pendingCandidateEntity.getRateContractValueMax());
+		}
+		
+		if (pendingCandidateEntity.getRatePermCurrency() != null && pendingCandidateEntity.getRatePermPeriod() != null) {
+			ratePerm = new Rate(pendingCandidateEntity.getRatePermCurrency(), pendingCandidateEntity.getRatePermPeriod(), pendingCandidateEntity.getRatePermValueMin(), pendingCandidateEntity.getRatePermValueMax());
 		}
 		
 		if (pendingCandidateEntity.getPhotoBytes() != null && pendingCandidateEntity.getPhotoFormat() != null) {
@@ -408,7 +612,8 @@ public class PendingCandidateEntity {
 						.freelance(pendingCandidateEntity.isFreelance())
 						.perm(pendingCandidateEntity.isPerm())
 						.introduction(pendingCandidateEntity.getIntroduction())
-						.rate(rate)
+						.rateContract(rateContract)
+						.ratePerm(ratePerm)
 						.photo(photo)
 						.build();
 		

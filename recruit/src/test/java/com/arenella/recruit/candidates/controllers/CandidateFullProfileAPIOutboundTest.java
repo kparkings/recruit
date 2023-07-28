@@ -43,8 +43,10 @@ public class CandidateFullProfileAPIOutboundTest {
 	private static final String				ROLE_SOUGHT				= "Java Dev";
 	private static final String				FIRST_NAME				= "Kevin";
 	private static final String				SURNAME					= "Parkings";
-	private static final Rate				RATE					= new Rate(CURRENCY.EUR, PERIOD.HOUR, 100);
-	private static final RateAPIOutbound	RATE_API_OUTBOUND		= new RateAPIOutbound(CURRENCY.EUR, PERIOD.HOUR, 100);
+	private static final RateAPIOutbound	RATE_CONTRACT			= new RateAPIOutbound(CURRENCY.EUR, PERIOD.HOUR, 100, 200);
+	private static final RateAPIOutbound	RATE_PERM				= new RateAPIOutbound(CURRENCY.GBP, PERIOD.YEAR, 10000, 20000);
+	private static final Rate				RATE_CONTRACT_CAN		= new Rate(CURRENCY.EUR, PERIOD.HOUR, 200, 300);
+	private static final Rate				RATE_PERM_CAN			= new Rate(CURRENCY.GBP, PERIOD.YEAR, 20000, 30000);
 	private static final String				EMAIL				 	= "kparkings@gmail.com";
 	
 	/**
@@ -79,7 +81,8 @@ public class CandidateFullProfileAPIOutboundTest {
 							.roleSought(ROLE_SOUGHT)
 							.firstname(FIRST_NAME)
 							.surname(SURNAME)
-							.rate(RATE_API_OUTBOUND)
+							.rateContract(RATE_CONTRACT)
+							.ratePerm(RATE_PERM)
 							.email(EMAIL)
 							.build();
 		
@@ -95,9 +98,8 @@ public class CandidateFullProfileAPIOutboundTest {
 		assertEquals(ROLE_SOUGHT, 						candidate.getRoleSought());
 		assertEquals(FIRST_NAME,	 					candidate.getFirstname());
 		assertEquals(SURNAME, 							candidate.getSurname());
-		assertEquals(RATE.getCurrency(), 				candidate.getRate().get().getCurrency());
-		assertEquals(RATE.getPeriod(), 					candidate.getRate().get().getPeriod());
-		assertEquals(RATE.getValue(), 					candidate.getRate().get().getValue());
+		assertEquals(RATE_CONTRACT, 					candidate.getRateContract().get());
+		assertEquals(RATE_PERM, 						candidate.getRatePerm().get());
 		assertEquals(EMAIL, 							candidate.getEmail());
 		
 		assertTrue(candidate.getSkills().contains(SKILL));
@@ -127,7 +129,8 @@ public class CandidateFullProfileAPIOutboundTest {
 							.roleSought(ROLE_SOUGHT)
 							.firstname(FIRST_NAME)
 							.surname(SURNAME)
-							.rate(RATE)
+							.rateContract(RATE_CONTRACT_CAN)
+							.ratePerm(RATE_PERM_CAN)
 							.email(EMAIL)
 							.build();
 		
@@ -150,22 +153,27 @@ public class CandidateFullProfileAPIOutboundTest {
 		
 		CandidateFullProfileAPIOutbound candidateProfile = CandidateFullProfileAPIOutbound.convertFromDomain(candidate);
 		
-		assertEquals(CANDIDATE_ID, 				candidateProfile.getCandidateId());
-		assertEquals(FUNCTIONVAL,				candidateProfile.getFunction());
-		assertEquals(COUNTRYVAL, 				candidateProfile.getCountry());
-		assertEquals(CITY, 						candidateProfile.getCity());
-		assertEquals(AVAILABLE, 				candidateProfile.isAvailable());
-		assertEquals(FREELANCEVAL, 				candidateProfile.getFreelance());
-		assertEquals(PERMVAL, 					candidateProfile.getPerm());
-		assertEquals(LAST_AVAILABILITY_CHECK, 	candidateProfile.getLastAvailabilityCheckOn());
-		assertEquals(YEARS_EXPERIENCE, 			candidateProfile.getYearsExperience());
-		assertEquals(ROLE_SOUGHT, 				candidateProfile.getRoleSought());
-		assertEquals(FIRST_NAME,	 			candidateProfile.getFirstname());
-		assertEquals(SURNAME, 					candidateProfile.getSurname());
-		assertEquals(SURNAME, 					candidateProfile.getSurname());
-		assertEquals(RATE.getCurrency(), 		candidateProfile.getRate().get().getCurrency());
-		assertEquals(RATE.getPeriod(), 			candidateProfile.getRate().get().getPeriod());
-		assertEquals(RATE.getValue(), 			candidateProfile.getRate().get().getValue());
+		assertEquals(CANDIDATE_ID, 							candidateProfile.getCandidateId());
+		assertEquals(FUNCTIONVAL,							candidateProfile.getFunction());
+		assertEquals(COUNTRYVAL, 							candidateProfile.getCountry());
+		assertEquals(CITY, 									candidateProfile.getCity());
+		assertEquals(AVAILABLE, 							candidateProfile.isAvailable());
+		assertEquals(FREELANCEVAL, 							candidateProfile.getFreelance());
+		assertEquals(PERMVAL, 								candidateProfile.getPerm());
+		assertEquals(LAST_AVAILABILITY_CHECK, 				candidateProfile.getLastAvailabilityCheckOn());
+		assertEquals(YEARS_EXPERIENCE, 						candidateProfile.getYearsExperience());
+		assertEquals(ROLE_SOUGHT, 							candidateProfile.getRoleSought());
+		assertEquals(FIRST_NAME,	 						candidateProfile.getFirstname());
+		assertEquals(SURNAME, 								candidateProfile.getSurname());
+		assertEquals(SURNAME, 								candidateProfile.getSurname());
+		assertEquals(RATE_CONTRACT_CAN.getCurrency(), 		candidateProfile.getRateContract().get().getCurrency());
+		assertEquals(RATE_CONTRACT_CAN.getPeriod(), 		candidateProfile.getRateContract().get().getPeriod());
+		assertEquals(RATE_CONTRACT_CAN.getValueMin(), 		candidateProfile.getRateContract().get().getValueMin());
+		assertEquals(RATE_CONTRACT_CAN.getValueMax(), 		candidateProfile.getRateContract().get().getValueMax());
+		assertEquals(RATE_PERM_CAN.getCurrency(), 			candidateProfile.getRatePerm().get().getCurrency());
+		assertEquals(RATE_PERM_CAN.getPeriod(), 			candidateProfile.getRatePerm().get().getPeriod());
+		assertEquals(RATE_PERM_CAN.getValueMin(), 			candidateProfile.getRatePerm().get().getValueMin());
+		assertEquals(RATE_PERM_CAN.getValueMax(), 			candidateProfile.getRatePerm().get().getValueMax());
 		
 	}
 	

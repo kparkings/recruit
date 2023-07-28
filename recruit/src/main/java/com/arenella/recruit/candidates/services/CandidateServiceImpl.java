@@ -135,7 +135,14 @@ public class CandidateServiceImpl implements CandidateService{
 			
 			candidate.setIntroduction(pendingCandidate.getIntroduction());
 			candidate.setPhoto(pendingCandidate.getPhoto().isEmpty() 	? null : pendingCandidate.getPhoto().get());
-			candidate.setRate(pendingCandidate.getRate().isEmpty() 		? null : pendingCandidate.getRate().get());
+			
+			if	(pendingCandidate.getRateContract().isPresent()) {
+				candidate.setRateContract(pendingCandidate.getRateContract().get());
+			}
+		
+			if	(pendingCandidate.getRatePerm().isPresent()) {
+				candidate.setRatePerm(pendingCandidate.getRatePerm().get());
+			}
 		}
 		
 		CandidateEntity entity = CandidateEntity.convertToEntity(candidate);
@@ -655,11 +662,16 @@ public class CandidateServiceImpl implements CandidateService{
 		}
 		
 		//TODO: IF photo already exists and not specifically removed dont remote ( check what you did for recruiter profile )
-		Photo	photo 	= null;
-		Rate 	rate 	= null;
+		Photo	photo 			= null;
+		Rate 	rateContract 	= null;
+		Rate 	ratePerm		= null;
 		
-		if (candidate.getRate().isPresent()) {
-			rate = candidate.getRate().get();
+		if (candidate.getRateContract().isPresent()) {
+			rateContract = candidate.getRateContract().get();
+		}
+		
+		if (candidate.getRatePerm().isPresent()) {
+			ratePerm = candidate.getRatePerm().get();
 		}
 		
 		if (candidate.getPhotoBytes().isPresent()) {
@@ -695,7 +707,8 @@ public class CandidateServiceImpl implements CandidateService{
 					.surname(candidate.getSurname())
 					.yearsExperience(candidate.getYearsExperience())
 					.photo(photo)
-					.rate(rate)
+					.rateContract(rateContract)
+					.ratePerm(ratePerm)
 					.introduction(candidate.getIntroduction())
 					.available(existingCandidate.isAvailable())
 				.build();

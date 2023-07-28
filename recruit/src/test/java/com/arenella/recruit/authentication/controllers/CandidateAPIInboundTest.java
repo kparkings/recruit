@@ -4,12 +4,17 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
+import java.time.LocalDate;
 import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 
 import com.arenella.recruit.candidates.beans.Candidate;
 import com.arenella.recruit.candidates.beans.Language;
+import com.arenella.recruit.candidates.beans.Candidate.DAYS_ON_SITE;
+import com.arenella.recruit.candidates.beans.Candidate.Rate;
+import com.arenella.recruit.candidates.beans.Candidate.Rate.CURRENCY;
+import com.arenella.recruit.candidates.beans.Candidate.Rate.PERIOD;
 import com.arenella.recruit.candidates.beans.Language.LANGUAGE;
 import com.arenella.recruit.candidates.beans.Language.LEVEL;
 import com.arenella.recruit.candidates.controllers.CandidateAPIInbound;
@@ -39,6 +44,13 @@ public class CandidateAPIInboundTest {
 	private static final  Set<String> 		skills					= Set.of("Java","Angular");
 	private static final  Set<Language> 	languages				= Set.of(Language.builder().language(LANGUAGE.DUTCH).level(LEVEL.PROFICIENT).build());
 	
+	private static final String 			COMMENTS				= "aComment";
+	private static final String 			INTRODUCTION 			= "anIntro";
+	private static final DAYS_ON_SITE		DAYS_ON_SITE_VAL		= DAYS_ON_SITE.ZERO;
+	private static final Rate				RATE_CONTRACT 			= new Rate(CURRENCY.EUR, PERIOD.DAY, 80.50f, 10.0f);
+	private static final Rate				RATE_PERM 				= new Rate(CURRENCY.EUR, PERIOD.YEAR, 25000f, 12.0f);
+	private static final LocalDate 			AVAILABLE_FROM_DATE 	= LocalDate.of(2023, 7, 21);
+	
 	/**
 	* Tests construction via builder with no values provided
 	* @throws Exception
@@ -56,6 +68,12 @@ public class CandidateAPIInboundTest {
 		assertNull(candidate.isPerm());
 		assertNull(candidate.getFunction());
 		assertNull(candidate.getCountry());
+		
+		assertTrue(candidate.getRateContract().isEmpty());
+		assertTrue(candidate.getRatePerm().isEmpty());
+		
+		assertEquals(candidate.getAvailableFromDate(), LocalDate.now()); //[KP] Small chance of failure if test run in exactly midnight
+		
 		
 	}
 	
@@ -82,20 +100,32 @@ public class CandidateAPIInboundTest {
 														.skills(skills)
 														.surname(surname)
 														.yearsExperience(yearsExperience)
+														.comments(COMMENTS)
+														.introduction(INTRODUCTION)
+														.daysOnSite(DAYS_ON_SITE_VAL)
+														.rateContract(RATE_CONTRACT)
+														.ratePerm(RATE_PERM)
+														.availableFromDate(AVAILABLE_FROM_DATE)
 													.build();
 		
-		assertEquals(candidateId, 		candidate.getCandidateId());
-		assertEquals(firstname, 		candidate.getFirstname());
-		assertEquals(surname, 			candidate.getSurname());
-		assertEquals(email, 			candidate.getEmail());
-		assertEquals(roleSought, 		candidate.getRoleSought());
-		assertEquals(function, 			candidate.getFunction());
-		assertEquals(country, 			candidate.getCountry());
-		assertEquals(city, 				candidate.getCity());
-		assertEquals(perm, 				candidate.isPerm());
-		assertEquals(freelance, 		candidate.isFreelance());
-		assertEquals(yearsExperience, 	candidate.getYearsExperience());
-		assertEquals(available, 		candidate.isAvailable());
+		assertEquals(candidateId, 			candidate.getCandidateId());
+		assertEquals(firstname, 			candidate.getFirstname());
+		assertEquals(surname, 				candidate.getSurname());
+		assertEquals(email, 				candidate.getEmail());
+		assertEquals(roleSought, 			candidate.getRoleSought());
+		assertEquals(function, 				candidate.getFunction());
+		assertEquals(country, 				candidate.getCountry());
+		assertEquals(city, 					candidate.getCity());
+		assertEquals(perm, 					candidate.isPerm());
+		assertEquals(freelance, 			candidate.isFreelance());
+		assertEquals(yearsExperience, 		candidate.getYearsExperience());
+		assertEquals(available, 			candidate.isAvailable());
+		assertEquals(DAYS_ON_SITE_VAL, 		candidate.getDaysOnSite());
+		assertEquals(RATE_CONTRACT, 		candidate.getRateContract().get());
+		assertEquals(RATE_PERM, 			candidate.getRatePerm().get());
+		assertEquals(AVAILABLE_FROM_DATE, 	candidate.getAvailableFromDate());
+		assertEquals(COMMENTS, 				candidate.getComments());
+		assertEquals(INTRODUCTION, 			candidate.getIntroduction());
 		
 		assertTrue(skills.contains("Java"));
 		assertTrue(skills.contains("Angular"));
@@ -122,22 +152,36 @@ public class CandidateAPIInboundTest {
 					.skills(skills)
 					.surname(surname)
 					.yearsExperience(yearsExperience)
+					.comments(COMMENTS)
+					.introduction(INTRODUCTION)
+					.daysOnSite(DAYS_ON_SITE_VAL)
+					.rateContract(RATE_CONTRACT)
+					.ratePerm(RATE_PERM)
+					.availableFromDate(AVAILABLE_FROM_DATE)
 				.build();
 		
 		Candidate candidate = CandidateAPIInbound.convertToCandidate(candidateAPIInbound);
 		
-		assertEquals(candidate.getCandidateId(), 		candidate.getCandidateId());
+		assertEquals(candidate.getCandidateId(), 	candidate.getCandidateId());
 		assertEquals(candidate.getFirstname(), 		candidate.getFirstname());
-		assertEquals(candidate.getSurname(), 			candidate.getSurname());
+		assertEquals(candidate.getSurname(), 		candidate.getSurname());
 		assertEquals(candidate.getEmail(), 			candidate.getEmail());
-		assertEquals(candidate.getRoleSought(), 		candidate.getRoleSought());
-		assertEquals(candidate.getFunction(), 			candidate.getFunction());
-		assertEquals(candidate.getCountry(), 			candidate.getCountry());
-		assertEquals(candidate.getCity(), 				candidate.getCity());
-		assertEquals(candidate.isPerm(), 				candidate.isPerm());
-		assertEquals(freelance, 		candidate.isFreelance());
-		assertEquals(yearsExperience, 	candidate.getYearsExperience());
-		assertEquals(available, 		candidate.isAvailable());
+		assertEquals(candidate.getRoleSought(), 	candidate.getRoleSought());
+		assertEquals(candidate.getFunction(), 		candidate.getFunction());
+		assertEquals(candidate.getCountry(), 		candidate.getCountry());
+		assertEquals(candidate.getCity(), 			candidate.getCity());
+		assertEquals(candidate.isPerm(), 			candidate.isPerm());
+		
+		assertEquals(DAYS_ON_SITE_VAL, 				candidate.getDaysOnSite());
+		assertEquals(RATE_CONTRACT, 				candidate.getRateContract().get());
+		assertEquals(RATE_PERM, 					candidate.getRatePerm().get());
+		assertEquals(AVAILABLE_FROM_DATE, 			candidate.getvailableFromDate());
+		assertEquals(COMMENTS, 						candidate.getComments());
+		assertEquals(INTRODUCTION, 					candidate.getIntroduction());
+		
+		assertEquals(freelance, 					candidate.isFreelance());
+		assertEquals(yearsExperience, 				candidate.getYearsExperience());
+		assertEquals(available, 					candidate.isAvailable());
 		
 		assertTrue(skills.contains("Java"));
 		assertTrue(skills.contains("Angular"));

@@ -26,9 +26,8 @@ public class PendingCandidateEntityTest {
 	private static final boolean 		freelance 				= true;
 	private static final boolean		perm 					= true;
 	private static final String			introduction			= "intro";
-	private static final CURRENCY		rateCurrency			= CURRENCY.EUR;
-	private static final PERIOD			ratePeriod				= PERIOD.DAY;
-	private static final float			rateValue				= 1f;
+	private static final Rate			RATE_CONTRACT			= new Rate(CURRENCY.EUR, PERIOD.DAY, 1f, 2f);
+	private static final Rate			RATE_PERM				= new Rate(CURRENCY.GBP, PERIOD.YEAR, 1100f, 2200f);
 	private static final byte[]			photoBytes			 	= new byte[] {1,2,3};
 	private static final PHOTO_FORMAT	photoFormat				= PHOTO_FORMAT.jpeg;
 	
@@ -49,7 +48,8 @@ public class PendingCandidateEntityTest {
 													.freelance(freelance)
 													.perm(perm)
 													.introduction(introduction)
-													.rate(new Rate(rateCurrency, ratePeriod, rateValue))
+													.rateContract(RATE_CONTRACT)
+													.ratePerm(RATE_PERM)
 													.photo(new Photo(photoBytes, photoFormat))
 													
 												.build();
@@ -63,9 +63,14 @@ public class PendingCandidateEntityTest {
 		assertEquals(candidateEntity.isFreelance(), 				freelance);
 		assertEquals(candidateEntity.isPerm(), 						perm);
 		assertEquals(candidateEntity.getIntroduction(), 			introduction);
-		assertEquals(candidateEntity.getRateCurrency(), 			rateCurrency);
-		assertEquals(candidateEntity.getRatePeriod(), 				ratePeriod);
-		assertEquals(candidateEntity.getRateValue(), 				rateValue);
+		assertEquals(RATE_CONTRACT.getCurrency(), 					candidateEntity.getRateContractCurrency());
+		assertEquals(RATE_CONTRACT.getPeriod(), 						candidateEntity.getRateContractPeriod());
+		assertEquals(RATE_CONTRACT.getValueMin(), 					candidateEntity.getRateContractValueMin());
+		assertEquals(RATE_CONTRACT.getValueMax(), 					candidateEntity.getRateContractValueMax());
+		assertEquals(RATE_PERM.getCurrency(), 						candidateEntity.getRatePermCurrency());
+		assertEquals(RATE_PERM.getPeriod(), 							candidateEntity.getRatePermPeriod());
+		assertEquals(RATE_PERM.getValueMin(), 						candidateEntity.getRatePermValueMin());
+		assertEquals(RATE_PERM.getValueMax(), 						candidateEntity.getRatePermValueMax());
 		assertEquals(candidateEntity.getPhotoBytes(), 				photoBytes);
 		assertEquals(candidateEntity.getPhotoFormat(), 				photoFormat);
 		
@@ -88,28 +93,37 @@ public class PendingCandidateEntityTest {
 																	.freelance(freelance)
 																	.perm(perm)
 																	.introduction(introduction)
-																	.rateCurrency(rateCurrency)
-																	.ratePeriod(ratePeriod)
-																	.rateValue(rateValue)
+																	.rateContractCurrency(RATE_CONTRACT.getCurrency())
+																	.rateContractPeriod(RATE_CONTRACT.getPeriod())
+																	.rateContractValueMin(RATE_CONTRACT.getValueMin())
+																	.rateContractValueMax(RATE_CONTRACT.getValueMax())
+																	.ratePermCurrency(RATE_PERM.getCurrency())
+																	.ratePermPeriod(RATE_PERM.getPeriod())
+																	.ratePermValueMin(RATE_PERM.getValueMin())
+																	.ratePermValueMax(RATE_PERM.getValueMax())
 																	.photoBytes(photoBytes)
 																	.photoFormat(photoFormat)
 																.build();
 														
 		PendingCandidate candidate = PendingCandidateEntity.convertFromEntity(candidateEntity);
 
-		assertEquals(pendingCandidateId,	candidate.getPendingCandidateId());
-		assertEquals(firstname, 			candidate.getFirstname());
-		assertEquals(surname, 				candidate.getSurname());
-		assertEquals(email, 				candidate.getEmail());
-		assertEquals(freelance, 			candidate.isFreelance());
-		assertEquals(perm, 					candidate.isPerm());
-		
-		assertEquals(introduction, 			candidate.getIntroduction());
-		assertEquals(rateCurrency, 			candidate.getRate().get().getCurrency());
-		assertEquals(ratePeriod, 			candidate.getRate().get().getPeriod());
-		assertEquals(rateValue, 			candidate.getRate().get().getValue());
-		assertEquals(photoBytes, 			candidate.getPhoto().get().getImageBytes());
-		assertEquals(photoFormat,	 		candidate.getPhoto().get().getFormat());
+		assertEquals(pendingCandidateId,			candidate.getPendingCandidateId());
+		assertEquals(firstname, 					candidate.getFirstname());
+		assertEquals(surname, 						candidate.getSurname());
+		assertEquals(email, 						candidate.getEmail());
+		assertEquals(freelance, 					candidate.isFreelance());
+		assertEquals(perm, 							candidate.isPerm());
+		assertEquals(introduction, 					candidate.getIntroduction());
+		assertEquals(RATE_CONTRACT.getCurrency(), 	candidate.getRateContract().get().getCurrency());
+		assertEquals(RATE_CONTRACT.getPeriod(), 	candidate.getRateContract().get().getPeriod());
+		assertEquals(RATE_CONTRACT.getValueMin(), 	candidate.getRateContract().get().getValueMin());
+		assertEquals(RATE_CONTRACT.getValueMax(), 	candidate.getRateContract().get().getValueMax());
+		assertEquals(RATE_PERM.getCurrency(), 		candidate.getRatePerm().get().getCurrency());
+		assertEquals(RATE_PERM.getPeriod(), 		candidate.getRatePerm().get().getPeriod());
+		assertEquals(RATE_PERM.getValueMin(), 		candidate.getRatePerm().get().getValueMin());
+		assertEquals(RATE_PERM.getValueMax(), 		candidate.getRatePerm().get().getValueMax());
+		assertEquals(photoBytes, 					candidate.getPhoto().get().getImageBytes());
+		assertEquals(photoFormat,	 				candidate.getPhoto().get().getFormat());
 		
 	}
 	
