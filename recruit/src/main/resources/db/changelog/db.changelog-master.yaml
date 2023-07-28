@@ -1868,3 +1868,80 @@ databaseChangeLog:
                 type: varchar
                 constraints:
                     default: ""
+  - changeSet:
+      id: addCandidateRateCols
+      author: kevin
+      changes:
+        - addColumn:
+            tableName: candidate
+            schemaName: candidate
+            columns:
+            - column:
+                name: rate_contract_currency
+                type: varchar
+            - column:
+                name: rate_contract_period
+                type: varchar
+            - column:
+                name: rate_contract_value_min
+                type: numeric
+                constraints:
+                  default: 0.0
+            - column:
+                name: rate_contract_value_max
+                type: numeric
+                constraints:
+                  default: 0.0
+            - column:
+                name: rate_perm_currency
+                type: varchar
+            - column:
+                name: rate_perm_period
+                type: varchar
+            - column:
+                name: rate_perm_value_min
+                type: numeric
+                constraints:
+                  default: 0.0
+            - column:
+                name: rate_perm_value_max
+                type: numeric
+                constraints:
+                  default: 0.0
+        - addColumn:
+            tableName: pending_candidate
+            schemaName: candidate
+            columns:
+            - column:
+                name: rate_contract_currency
+                type: varchar
+            - column:
+                name: rate_contract_period
+                type: varchar
+            - column:
+                name: rate_contract_value_min
+                type: numeric
+                constraints:
+                  default: 0.0
+            - column:
+                name: rate_contract_value_max
+                type: numeric
+                constraints:
+                  default: 0.0
+            - column:
+                name: rate_perm_currency
+                type: varchar
+            - column:
+                name: rate_perm_period
+                type: varchar
+            - column:
+                name: rate_perm_value_min
+                type: numeric
+                constraints:
+                  default: 0.0
+            - column:
+                name: rate_perm_value_max
+                type: numeric
+                constraints:
+                  default: 0.0
+                  

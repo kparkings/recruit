@@ -48,32 +48,31 @@ public class PendingCandidateEntity {
 	private String introduction;
 	
 	@Enumerated(EnumType.STRING)
-	@Column(name="rate_currency")
+	@Column(name="rate_contract_currency")
 	private CURRENCY rateContractCurrency;
 		
 	@Enumerated(EnumType.STRING)
-	@Column(name="rate_period")
+	@Column(name="rate_contract_period")
 	private PERIOD rateContractPeriod;
 	    
-	@Column(name="rate_value")
+	@Column(name="rate_contract_value_min")
 	private float rateContractValueMin;   
 	
-	@Column(name="rate_value")
+	@Column(name="rate_contract_value_max")
 	private float rateContractValueMax;
 	
-	
 	@Enumerated(EnumType.STRING)
-	@Column(name="rate_currency")
+	@Column(name="rate_perm_currency")
 	private CURRENCY ratePermCurrency;
 		
 	@Enumerated(EnumType.STRING)
-	@Column(name="rate_period")
+	@Column(name="rate_perm_period")
 	private PERIOD ratePermPeriod;
 	    
-	@Column(name="rate_value")
+	@Column(name="rate_perm_value_min")
 	private float ratePermValueMin;   
 	
-	@Column(name="rate_value")
+	@Column(name="rate_perm_value_max")
 	private float ratePermValueMax;
 	
 	//@Enumerated(EnumType.STRING)
