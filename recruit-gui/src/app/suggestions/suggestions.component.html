@@ -268,11 +268,18 @@
 					</tr>
 				</table>
 			</div>
-			<div *ngIf="candidateProfile.rate && candidateProfile.rate.value != '0' && candidateProfile.rate.value != ''">
-				<h3>Rate</h3>
+			<!-- Contract Rate -->
+			<div *ngIf="hasContractRate()">
+				<h3>Contract Rate</h3>
 			</div>
-			<div class="left-info-box" *ngIf="candidateProfile.rate && candidateProfile.rate.value != '0' && candidateProfile.rate.value != ''">
-				<p>{{candidateProfile.rate.currency | enumToHumanReadableValue}}: {{candidateProfile.rate.value}} per {{candidateProfile.rate.period | enumToHumanReadableValue}}</p>
+			<div class="left-info-box" *ngIf="hasContractRate()">
+				<p>{{getContractRate()}}</p>
+			</div>
+			<div *ngIf="hasPermRate()">
+				<h3>Perm Rate</h3>
+			</div>
+			<div class="left-info-box" *ngIf="hasPermRate()">
+				<p>{{getPermRate()}}</p>
 			</div>
 			<div>
 				<h3>Years Experience</h3>

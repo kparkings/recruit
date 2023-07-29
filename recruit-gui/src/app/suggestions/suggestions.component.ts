@@ -799,7 +799,75 @@ export class SuggestionsComponent implements OnInit {
 			this.contactCandidateView = 'failure';
 		});
 		
+	}
+	
+	/**
+	* Whether Contract Rate info is available 
+	*/
+	public hasContractRate():boolean{
+		return this.candidateProfile.rateContract && (this.candidateProfile.rateContract.valueMin != 0 || this.candidateProfile.rateContract.valueMax != 0);
+	}
+	
+	/**
+	* Contract Rate info 
+	*/
+	public getContractRate():string{
+		
+		if(this.candidateProfile.rateContract.valueMin != 0 && this.candidateProfile.rateContract.valueMax != 0){
+			return "Rate: " + this.candidateProfile.rateContract.currency + " "
+			+ this.candidateProfile.rateContract.valueMin 
+			+ " to " + this.candidateProfile.rateContract.valueMax 
+			+ " per " + this.candidateProfile.rateContract.period.toLowerCase() ;
+		}
+		
+		if(this.candidateProfile.rateContract.valueMin == 0 && this.candidateProfile.rateContract.valueMax != 0){
+			return "Rate: " + this.candidateProfile.rateContract.currency 
+			+ " " + this.candidateProfile.rateContract.valueMax 
+			+ " per " + this.candidateProfile.rateContract.period.toLowerCase() ;
+		}
+		
+		if(this.candidateProfile.rateContract.valueMin != 0 && this.candidateProfile.rateContract.valueMax == 0){
+			return "Rate: " + this.candidateProfile.rateContract.currency 
+			+ " " + this.candidateProfile.rateContract.valueMin 
+			+ " per " + this.candidateProfile.rateContract.period.toLowerCase() ;
+		}
+		
+		return "";
 		
 	}
 
+	/**
+	* Whether Perm Rate info is available 
+	*/
+	public hasPermRate():boolean{
+		return this.candidateProfile.ratePerm && (this.candidateProfile.ratePerm.valueMin != 0 || this.candidateProfile.ratePerm.valueMax != 0);
+	}
+	
+	/**
+	* Contract Rate info 
+	*/
+	public getPermRate():string{
+		
+		if(this.candidateProfile.ratePerm.valueMin != 0 && this.candidateProfile.ratePerm.valueMax != 0){
+			return "Rate: " + this.candidateProfile.ratePerm.currency + " "
+			+ this.candidateProfile.ratePerm.valueMin 
+			+ " to " + this.candidateProfile.ratePerm.valueMax 
+			+ " per " + this.candidateProfile.ratePerm.period.toLowerCase() ;
+		}
+		
+		if(this.candidateProfile.ratePerm.valueMin == 0 && this.candidateProfile.ratePerm.valueMax != 0){
+			return "Rate: " + this.candidateProfile.ratePerm.currency 
+			+ " " + this.candidateProfile.ratePerm.valueMax 
+			+ " per " + this.candidateProfile.ratePerm.period.toLowerCase() ;
+		}
+		
+		if(this.candidateProfile.ratePerm.valueMin != 0 && this.candidateProfile.ratePerm.valueMax == 0){
+			return "Rate: " + this.candidateProfile.ratePerm.currency 
+			+ " " + this.candidateProfile.ratePerm.valueMin 
+			+ " per " + this.candidateProfile.ratePerm.period.toLowerCase() ;
+		}
+		
+		return "";
+		
+	}
 }

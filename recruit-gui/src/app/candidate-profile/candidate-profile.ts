@@ -6,7 +6,9 @@ export class CandidateProfile{
 	public photo:PhotoAPIOutbound			= new PhotoAPIOutbound();
 	public cvFile:CVAPIOutbound				= new CVAPIOutbound();
 	public introduction:string				= '';
-	public rate:Rate						= new Rate();
+	public rate:Rate						= new Rate(); //TODO [KP] This one should be removed
+	public rateContract:Rate				= new Rate();
+	public ratePerm:Rate					= new Rate();
 	public email:string						= '';
 	public candidateId:string 				= '';
 	public function:string 					= '';
@@ -53,5 +55,7 @@ export class CVAPIOutbound {
 export class Rate{
 	public currency:string 	= '';
 	public period:string 	= '';
-	public value:string 	= ''; 
+	public value:string 	= ''; //TODO [KP] remove when done
+	public valueMin:number  = 0;
+	public valueMax:number 	= 0; 
 }
