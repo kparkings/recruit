@@ -26,7 +26,7 @@ const routes: Routes = [
 	{path: '', 						component: ListingComponent},
 	{path: 'about', 				component: HomeComponent},
 	{path: 'faq', 					component: FaqComponent},
-	{path: 'new-candidate', 		component: NewCandidateComponent, 			canActivate: [AuthGuardService, AdminGuardGuard]},
+	{path: 'new-candidate', 		component: NewCandidateComponent, 			canActivate: [AuthGuardService]},
 	{path: 'suggestions',	 		component: SuggestionsComponent, 			canActivate: [AuthGuardService]},
 	{path: 'email',	 				component: EmailComponent, 					canActivate: [AuthGuardService]},
 	{path: 'statistics', 			component: StatisticsComponent, 			canActivate: [AuthGuardService, AdminGuardGuard]},

@@ -45,7 +45,7 @@ public class CurriculumController {
 	* @return Id of the Curriculum
 	* @throws Exception
 	*/
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('ROLE_RECRUITER')")
 	@PostMapping(value="/curriculum",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public CurriculumUpdloadDetails uploadCurriculum(@RequestParam("file") MultipartFile curriculumFile) throws Exception{
 		

@@ -42,6 +42,7 @@ export class RecruiterMarketplaceComponent implements OnInit {
 					this.marketplaceService.fetchUnseenOfferedCandidates().subscribe(val => {
 						this.unseenOfferedCandidates = val;
 						this.fetchOfferedCandidates();
+						this.showJustMyCandidates();
 					});
 					
 					this.marketplaceService.fetchUnseenOpenPositions().subscribe(val => {
@@ -61,13 +62,13 @@ export class RecruiterMarketplaceComponent implements OnInit {
 		
 		this.fetchOfferedCandidates();
 		this.fetchOpenPositions();
+		this.showJustMyCandidates();
 		
  	}
 
 	currentTab:string 						= "downloads";
-	showSupply:boolean						= true;
-	showDemand:boolean						= false;
-	addSupply:boolean						= false;
+	showSupply:boolean						= false;
+	showDemand:boolean						= true;
 	editSupply:boolean						= false;
 	editDemand:boolean						= false;
 	addDemand:Boolean						= false;
@@ -86,7 +87,7 @@ export class RecruiterMarketplaceComponent implements OnInit {
 	* OfferedCandidate - List 
 	*/
 	public offeredCandidates:Array<OfferedCandidate> 	= new Array<OfferedCandidate>();
-	public showJustMyCandidatesActive:boolean			= false;
+	public showJustMyCandidatesActive:boolean			= true;
 
 	/**
 	* OpenPositions - List 
@@ -383,18 +384,18 @@ export class RecruiterMarketplaceComponent implements OnInit {
 			case "showSupply":{
 				this.showSupply			= true;
 				this.showDemand			= false;
-				this.addSupply			= false;
+				//this.addSupply			= true;
 				this.addDemand			= false;
 				this.editSupply 		= false;
 				this.editDemand			= false;
 				this.showSupplyDetails 	= false;
 				this.showDemandDetails 	= false;
+				this.showJustMyCandidates();
 				break;
 			}
 			case "showDemand":{
 				this.showSupply			= false;
 				this.showDemand			= true;
-				this.addSupply			= false;
 				this.addDemand			= false;
 				this.editSupply 		= false;
 				this.editDemand			= false;
@@ -403,20 +404,13 @@ export class RecruiterMarketplaceComponent implements OnInit {
 				break;
 			}
 			case "addSupply":{
-				this.showSupply			= false;
-				this.showDemand			= false; 
-				this.addSupply			= true;
-				this.addDemand			= false;
-				this.editSupply 		= false;
-				this.editDemand			= false;
-				this.showSupplyDetails 	= false;
-				this.showDemandDetails 	= false;
+				sessionStorage.setItem("last-page", 'rec-mp');
+				this.router.navigate(['new-candidate']);
 				break;
 			}
 			case "editSupply":{
 				this.showSupply			= false;
 				this.showDemand			= false; 
-				this.addSupply			= false;
 				this.addDemand			= false;
 				this.editSupply 		= true;
 				this.editDemand			= false;
@@ -427,7 +421,6 @@ export class RecruiterMarketplaceComponent implements OnInit {
 			case "addDemand":{
 				this.showSupply			= false;
 				this.showDemand			= false;
-				this.addSupply			= false;
 				this.addDemand			= true;
 				this.editSupply 		= false;
 				this.editDemand			= false;
@@ -438,7 +431,6 @@ export class RecruiterMarketplaceComponent implements OnInit {
 			case "showSupplyDetails":{
 				this.showSupply			= false;
 				this.showDemand			= false;
-				this.addSupply			= false;
 				this.addDemand			= false;
 				this.editSupply 		= false;
 				this.editDemand			= false;
@@ -449,7 +441,6 @@ export class RecruiterMarketplaceComponent implements OnInit {
 			case "showDemandDetails":{
 				this.showSupply			= false;
 				this.showDemand			= false;
-				this.addSupply			= false;
 				this.addDemand			= false;
 				this.editSupply 		= false;
 				this.editDemand			= false;
@@ -460,7 +451,6 @@ export class RecruiterMarketplaceComponent implements OnInit {
 			case "editDemand":{
 				this.showSupply			= false;
 				this.showDemand			= false;
-				this.addSupply			= false;
 				this.addDemand			= false;
 				this.editSupply 		= false;
 				this.editDemand			= true;
@@ -511,8 +501,7 @@ export class RecruiterMarketplaceComponent implements OnInit {
 	* Adds a skill posessed required 
 	*/
 	public addOfferedPositionSkill():void{
-		//console.log("XX");
-		//console.log(this.requestedCandidateFormBean.get('skill')?.value);
+	
 		let skillFormatted:string 	= this.requestedCandidateFormBean.get('skill')?.value.trim();
 		skillFormatted 				= skillFormatted.toLocaleLowerCase();
 		
@@ -597,7 +586,7 @@ export class RecruiterMarketplaceComponent implements OnInit {
 	*/
 	public fetchOfferedCandidates():void{
 		this.offeredCandidates 			= new Array<OfferedCandidate>();
-		this.showJustMyCandidatesActive = false;
+		this.showJustMyCandidatesActive = true;
 		this.marketplaceService.fetchOfferedCandidates().subscribe(data => {
 			this.offeredCandidates = data;
 		}, err => {
@@ -709,104 +698,6 @@ export class RecruiterMarketplaceComponent implements OnInit {
 						this.open('feedbackBox', "Failure",  false);
 					} else {
 						console.log("Failed to update Open Position " + JSON.stringify(err.error));
-					}
-				}
-											
-			});
-		}
-	
-	}
-	
-	/**
-	* Persists and Published the OfferedCandidate	
-	*/
-	public publishOfferedCandidate():void{
-
-		let candidateRoleTitle:string 	= this.offeredCandidateFormBean.get('candidateRoleTitle')?.value; 
-		let country:string 				= this.offeredCandidateFormBean.get('country')?.value;
-		let location:string 			= this.offeredCandidateFormBean.get('location')?.value;
-		let contractType:string 		= this.offeredCandidateFormBean.get('contractType')?.value;
-		let daysOnSite:string 			= this.offeredCandidateFormBean.get('daysOnSite')?.value;
-		let renumeration:string 		= this.offeredCandidateFormBean.get('renumeration')?.value;
-		let availableFromDate:string 	= this.offeredCandidateFormBean.get('availableFromDate')?.value;	
-		let yearsExperience:string 		= this.offeredCandidateFormBean.get('yearsExperience')?.value;	
-		let description:string 			= this.offeredCandidateFormBean.get('description')?.value;
-		let comments:string 			= this.offeredCandidateFormBean.get('comments')?.value; 			
-		
-		let languages:Array<string> 	= this.spokenLanguages;
-		let skills:Array<string> 		= this.coreSkills;
-		
-		this.validationErrors			= new Array<string>();
-		
-		if (this.addSupply) {
-			this.marketplaceService.registerOfferedCandidate(
-				candidateRoleTitle,
-				country,
-				location,
-				contractType,
-				daysOnSite,
-				renumeration,
-				availableFromDate,
-				yearsExperience,
-				description,
-				comments,
-				languages,
-				skills
-			).subscribe( data => {
-				this.resetOfferedCandidatesForm();
-				this.switchTab('showSupply');
-				this.refreshCandidateList();
-			}, err => {
-				console.log(err);
-				if (err.status === 400) {
-											
-					let failedFields:Array<any> = err.error;
-											
-					if (typeof err.error[Symbol.iterator] === 'function') {
-						failedFields.forEach(failedField => {
-							this.validationErrors.push(failedField.issue);
-						});
-						this.open('feedbackBox', "Failure",  false);
-					} else {
-						console.log("Failed to persist new OfferedCandidate " + JSON.stringify(err.error));
-					}
-				}
-											
-			});
-						
-		} else {
-			
-			this.marketplaceService.updateOfferedCandidate(
-				this.activeCandidate.id,
-				candidateRoleTitle,
-				country,
-				location,
-				contractType,
-				daysOnSite,
-				renumeration,
-				availableFromDate,
-				yearsExperience,
-				description,
-				comments,
-				languages,
-				skills
-			).subscribe( data => {
-				this.resetOfferedCandidatesForm();
-				this.switchTab('showSupply');
-				this.refreshCandidateList();
-			}, err => {
-				
-				if (err.status === 400) {
-											
-					let failedFields:Array<any> = err.error;
-											
-					if (typeof err.error[Symbol.iterator] === 'function') {
-						failedFields.forEach(failedField => {
-							this.validationErrors.push(failedField.issue);
-						});
-						this.open('feedbackBox', "Failure",  false);
-					} else {
-						console.log("Failed to update OfferedCandidate " + JSON.stringify(err.error));
 					}
 				}
 											

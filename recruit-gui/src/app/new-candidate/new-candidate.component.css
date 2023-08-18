@@ -83,11 +83,10 @@
 }
 
 .new-candidate-inpt-lbl{
-	width:200px;
 	margin-top:2px;
 }
+
 .new-candidate-inpt{
-	width:300px;
 	margin-top:2px;
 }
 .new-candidate-group{
@@ -119,3 +118,76 @@
 	padding-left:0px;
 	padding-right:5px;
 } 
+
+
+
+
+
+
+.container-div{
+	margin:20px;
+}
+
+.action-buttons{
+	text-align:right;
+}
+
+.btn-right{
+	float:right;
+}
+
+.main-btns{
+	width:200px;
+	margin-right:10px;
+	margin-bottom:10px;
+	margin-top:0px;
+	
+}
+
+.selected-skill{
+	margin:2px;
+ 	padding:5px;
+ 	border-radius:5px;
+ 	background:grey;
+ 	display:inline-block;
+ }
+ 
+.selected-skill:hover{
+ 	margin:2px;
+ 	padding:5px;
+ 	border-radius:5px;
+ 	background:red;
+ 	cursor:pointer;
+ 	display:inline-block;
+ }
+ 
+ .add-skill-btn{
+ 	margin-left:5px;
+ }
+
+ .hdr-label{
+ 	font-weight:bold;
+ 	width:250px;
+ }
+ 
+ .show-row{
+ 	display:true;
+ }
+ 
+ .hide-row{
+ 	display:none;
+ }
+ 
+ .new-user-table{
+ 	width:95%;
+ }
+ 
+ .new-user-table tr td{
+ 	max-width:50%;
+ 	word-wrap:break-word;
+    table-layout: fixed;
+ }
+ 
+ select{
+ 	max-width:50%;
+ }

@@ -3,16 +3,16 @@
 	<!-- Nav options -->
 	<ul class="nav nav-tabs">
 	  <li class="nav-item">
-	    <span class="nav-link tabNav tabNavActive" *ngIf="showSupply  && unseenOfferedCandidates >  0"  (click)="switchTab('showSupply')"><span class="unseen-posts">{{unseenOfferedCandidates}}</span>Offered Candidates</span>
-	    <span class="nav-link tabNav tabNavActive" *ngIf="showSupply  && unseenOfferedCandidates <=  0"  (click)="switchTab('showSupply')"><span style="margin-left:20px;">&nbsp;</span>Offered Candidates</span>
-	    <span class="nav-link tabNav" *ngIf="!showSupply  && unseenOfferedCandidates >  0" (click)="switchTab('showSupply')"><span class="unseen-posts">{{unseenOfferedCandidates}}</span>Offered Candidates</span>
-	    <span class="nav-link tabNav" *ngIf="!showSupply   && unseenOfferedCandidates <=  0" (click)="switchTab('showSupply')"><span style="margin-left:20px;">&nbsp;</span>Offered Candidates</span>
-	  </li>
-	  <li class="nav-item">
 	    <span class="nav-link tabNav tabNavActive" *ngIf="showDemand  && unseenOpenPositions > 0" (click)="switchTab('showDemand')"><span class="unseen-posts">{{unseenOpenPositions}}</span>Requested Candidates</span>
 	    <span class="nav-link tabNav tabNavActive" *ngIf="showDemand  && unseenOpenPositions <= 0" (click)="switchTab('showDemand')"><span style="margin-left:20px;">&nbsp;</span>Requested Candidates</span>
 	    <span class="nav-link tabNav" *ngIf="!showDemand && unseenOpenPositions > 0" (click)="switchTab('showDemand')"><span class="unseen-posts">{{unseenOpenPositions}}</span>Requested Candidates</span>
 	    <span class="nav-link tabNav" *ngIf="!showDemand   && unseenOpenPositions <= 0" (click)="switchTab('showDemand')"><span style="margin-left:20px;">&nbsp;</span>Requested Candidates</span>
+	  </li>
+	  <li class="nav-item">
+	    <span class="nav-link tabNav tabNavActive" *ngIf="showSupply  && unseenOfferedCandidates >  0"  (click)="switchTab('showSupply')"><span class="unseen-posts">{{unseenOfferedCandidates}}</span>Your Candidates</span>
+	    <span class="nav-link tabNav tabNavActive" *ngIf="showSupply  && unseenOfferedCandidates <=  0"  (click)="switchTab('showSupply')"><span style="margin-left:20px;">&nbsp;</span>Your Candidates</span>
+	    <span class="nav-link tabNav" *ngIf="!showSupply  && unseenOfferedCandidates >  0" (click)="switchTab('showSupply')"><span class="unseen-posts">{{unseenOfferedCandidates}}</span>Your Candidates</span>
+	    <span class="nav-link tabNav" *ngIf="!showSupply   && unseenOfferedCandidates <=  0" (click)="switchTab('showSupply')"><span style="margin-left:20px;">&nbsp;</span>Your Candidates</span>
 	  </li>
 	</ul>
 	
@@ -27,8 +27,10 @@
 			</p>
 			
 			<div class="action-buttons">
+				<!--  
 				<button class="btn btn-secondary action-btn" 					(click)="showJustMyCandidates()" 	*ngIf="!showJustMyCandidatesActive">My Candidate</button>
 				<button class="btn btn-secondary action-btn" 					(click)="fetchOfferedCandidates()" *ngIf="showJustMyCandidatesActive">All Candidates</button>
+				-->
 				<button class="btn btn-secondary action-btn  main-action_btn" 	(click)="switchTab('addSupply')" 	*ngIf="!isAuthenticatedAsAdmin()">Offer Candidate</button>
 			</div>
 			<!-- List of offered Candidates -->
@@ -72,245 +74,6 @@
 					</tbody>	
 				</table>
 			</div>
-		</div>
-		<!-- Add Supply -->
-		<div *ngIf="addSupply">
-			<h3>Add details of Candidate to make available to other recruiters</h3>
-			<div class="action-buttons">
-				<button class="btn btn-secondary btnRight main-btns" (click)="showOfferedCandidates()">Back</button>
-				<button class="btn btn-secondary btnRight main-btns" (click)="publishOfferedCandidate()">Publish</button>
-			</div>
-			<form [formGroup]="offeredCandidateFormBean">
-				<table class="table marketplace-table">
-					<tr>
-						<td>Candidates Function</td>
-						<td>
-							<input formControlName="candidateRoleTitle" type="text"/>
-						</td>	
-					</tr>
-					<tr>
-						<td>Country</td>
-						<td>
-							<select formControlName="country">
-								<option></option>
-								<option value="BELGIUM">Belgium</option>
-								<option value="IRL">Ireland</option>
-								<option value="NETHERLANDS">Netherlands</option>
-								<option value="UK">UK</option>
-								<option value="EUROPE">EU</option>
-								<option value="WORLD">World</option>
-							</select>
-						</td>	
-					</tr>
-					<tr>
-						<td>Location</td>
-						<td>
-							<input  formControlName="location" type="text"/>
-						</td>	
-					</tr>
-					<tr>
-						<td>Contract Type</td>
-						<td>
-							<select  formControlName="contractType">
-								<option></option>
-								<option value="CONTRACT">Contract</option>
-								<option value="PERM">Perm</option>
-								<option value="BOTH">Both</option>
-							</select>
-						</td>	
-					</tr>
-					<tr>
-						<td>Max Days On Site (per Week)</td>
-						<td>
-							<select  formControlName="daysOnSite">
-								<option></option>
-								<option value="ZERO">Fully Remote</option>
-								<option value="ONE">1</option>
-								<option value="TWO">2</option>
-								<option value="THREE">3</option>
-								<option value="FOUR">4</option>
-								<option value="FIVE">5</option>
-							</select>
-						</td>	
-					</tr>
-					<tr>
-						<td>Salary / Rate</td>
-						<td>
-							<input  formControlName="renumeration" type="text"/>
-						</td>	
-					</tr>
-					<tr>
-						<td>Available From</td>
-						<td>
-						<input  formControlName="availableFromDate" type="date"/>
-						</td>	
-					</tr>
-					<tr>
-						<td>
-							Skills
-						</td>
-						<td class="sugg-srch-bdy">
-							<input type="text" formControlName="skill"><button (click)="addOfferedCandidateSkill()" class="btn btn-secondary add-skill-btn" *ngIf="!isAuthenticatedAsAdmin()">Add</button>
-							<div style="min-height:35px;">
-								<div class="selected-skill" *ngFor="let skill of coreSkills" (click)="removeOfferedCandidateSkill(skill)">{{skill}}</div>
-							</div>
-						</td>	
-					</tr>
-					<tr>
-						<td>Years Experience</td>
-						<td>
-							<input  formControlName="yearsExperience" type="text"/>
-						</td>	
-					</tr>
-					<tr>
-						<td>Description</td>
-						<td>
-							<textarea formControlName="description"></textarea>
-						</td>
-					</tr>
-					<tr>
-						<td>Spoken Languages</td>
-						<td>
-							<select formControlName="language">
-								<option></option>
-								<option value="DUTCH">Dutch</option>
-								<option value="ENGLISH">English</option>
-								<option value="FRENCH">French</option>
-							</select>
-							<button (click)="addOfferedCandidateLanguage()" class="btn btn-secondary add-skill-btn">Add</button>
-							<div style="min-height:35px;">
-								<div class="selected-skill" *ngFor="let language of spokenLanguages" (click)="removeOfferedCandidateLanguage(language)">{{language}}</div>
-							</div>
-						</td>	
-					</tr>
-					<tr>
-						<td>Comments</td>
-						<td>
-							<textarea formControlName="comments"></textarea>
-						</td>	
-					</tr>
-				</table>
-			</form>
-		</div>
-		
-		<!-- Edit Supply -->
-		<div *ngIf="editSupply">
-			<h3>Update Candidate</h3>
-			<div class="action-buttons">
-				<button class="btn btn-secondary btnRight main-btns" (click)="publishOfferedCandidate()">Update</button>
-				<button class="btn btn-secondary btnRight main-btns" (click)="showOfferedCandidates()">Back</button>
-			</div>
-			<form [formGroup]="offeredCandidateFormBean">
-				<table class="table marketplace-table">
-					<tr>
-						<td>Candidates Function</td>
-						<td>
-							<input formControlName="candidateRoleTitle" type="text"/>
-						</td>	
-					</tr>
-					<tr>
-						<td>Country</td>
-						<td>
-							<select formControlName="country">
-								<option></option>
-								<option value="BELGIUM">Belgium</option>
-								<option value="IRL">Ireland</option>
-								<option value="NETHERLANDS">Netherlands</option>
-								<option value="UK">UK</option>
-								<option value="EUROPE">EU</option>
-								<option value="WORLD">World</option>
-							</select>
-						</td>	
-					</tr>
-					<tr>
-						<td>Location</td>
-						<td>
-							<input  formControlName="location" type="text"/>
-						</td>	
-					</tr>
-					<tr>
-						<td>Contract Type</td>
-						<td>
-							<select  formControlName="contractType">
-								<option></option>
-								<option value="CONTRACT">Contract</option>
-								<option value="PERM">Perm</option>
-								<option value="BOTH">Both</option>
-							</select>
-						</td>	
-					</tr>
-					<tr>
-						<td>Max Days On Site (per Week)</td>
-						<td>
-							<select  formControlName="daysOnSite">
-								<option></option>
-								<option value="ZERO">Fully Remote</option>
-								<option value="ONE">1</option>
-								<option value="TWO">2</option>
-								<option value="THREE">3</option>
-								<option value="FOUR">4</option>
-								<option value="FIVE">5</option>
-							</select>
-						</td>	
-					</tr>
-					<tr>
-						<td>Salary / Rate</td>
-						<td>
-							<input  formControlName="renumeration" type="text"/>
-						</td>	
-					</tr>
-					<tr>
-						<td>Available From</td>
-						<td>
-						<input  formControlName="availableFromDate" type="date"/>
-						</td>	
-					</tr>
-					<tr>
-						<td>
-							Skills
-						</td>
-						<td class="sugg-srch-bdy">
-							<input type="text" formControlName="skill"><button (click)="addOfferedCandidateSkill()" class="btn btn-secondary add-skill-btn">Add</button>
-							<div style="min-height:35px;">
-								<div class="selected-skill" *ngFor="let skill of coreSkills" (click)="removeOfferedCandidateSkill(skill)">{{skill}}</div>
-							</div>
-						</td>	
-					</tr>
-					<tr>
-						<td>Years Experience</td>
-						<td>
-							<input  formControlName="yearsExperience" type="text"/>
-						</td>	
-					</tr>
-					<tr>
-						<td>Description</td>
-						<td>
-							<textarea formControlName="description"></textarea>
-						</td>
-					</tr>
-					<tr>
-						<td>Spoken Languages</td>
-						<td>
-							<select formControlName="language">
-								<option></option>
-								<option value="DUTCH">Dutch</option>
-								<option value="ENGLISH">English</option>
-								<option value="FRENCH">French</option>
-							</select>
-							<button (click)="addOfferedCandidateLanguage()" class="btn btn-secondary add-skill-btn">Add</button>
-							<div style="min-height:35px;">
-								<div class="selected-skill" *ngFor="let language of spokenLanguages" (click)="removeOfferedCandidateLanguage(language)">{{language}}</div>
-							</div>
-						</td>	
-					</tr>
-					<tr>
-						<td>Comments</td>
-						<td>
-							<textarea formControlName="comments"></textarea>
-						</td>	
-					</tr>
-				</table>
-			</form>
 		</div>
 		
 		<!-- Show Supply Details -->

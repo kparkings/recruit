@@ -46,7 +46,7 @@ public class CandidateAPIInbound {
 	private DAYS_ON_SITE	daysOnSite;
 	private Rate			rateContract;
 	private Rate			ratePerm;
-	private Rate			rateToPerm;
+//	private Rate			rateToPerm;
 	private LocalDate 		availableFromDate;
 	
 	/**
@@ -241,9 +241,9 @@ public class CandidateAPIInbound {
 	* looking for
 	* @return max salary
 	*/
-	public Optional<Rate> getRateToPerm(){
-		return Optional.ofNullable(this.rateToPerm);
-	}
+	//public Optional<Rate> getRateToPerm(){
+	//	return Optional.ofNullable(this.rateToPerm);
+	//}
 	
 	/**
 	* returns the date the Candidate is available from. If not specified 

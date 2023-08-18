@@ -8,6 +8,7 @@ import { ViewChild }									from '@angular/core';
 import { Router}										from '@angular/router';
 import { PendingCandidate }								from './pending-candidate';
 import { environment }									from '../../environments/environment';
+import { NewCandidateRequest, Rate, Language } 					from './new-candidate-request';
 
 @Component({
   selector: 'app-new-candidate',
@@ -28,25 +29,25 @@ export class NewCandidateComponent implements OnInit {
   	public selectOptionLangEnglish:string = '';
   	public selectOptionLangFrench:string = '';
 
-	public formBean:UntypedFormGroup = new UntypedFormGroup({
+	//public formBean:UntypedFormGroup = new UntypedFormGroup({
      
-		candidateId:		new UntypedFormControl(''),
-       	firstname:			new UntypedFormControl(),
-       	surname:			new UntypedFormControl(),
-       	email:				new UntypedFormControl(),
-       	roleSought:			new UntypedFormControl(),
-       	country:			new UntypedFormControl(),
-       	city:				new UntypedFormControl(),
-       	perm:				new UntypedFormControl(),
-       	freelance:			new UntypedFormControl(),
-       	dutch:				new UntypedFormControl(),
-       	english:			new UntypedFormControl(),
-       	french:				new UntypedFormControl(),
-       	function:			new UntypedFormControl(),
-       	yearsExperience:	new UntypedFormControl(),
-       	skills:				new UntypedFormControl()
+//		candidateId:		new UntypedFormControl(''),
+ //      	firstname:			new UntypedFormControl(),
+  //     	surname:			new UntypedFormControl(),
+   //    	email:				new UntypedFormControl(),
+   //    	roleSought:			new UntypedFormControl(),
+    //   	country:			new UntypedFormControl(),
+   //    	city:				new UntypedFormControl(),
+    //   	perm:				new UntypedFormControl(),
+    //   	freelance:			new UntypedFormControl(),
+    //   	dutch:				new UntypedFormControl(),
+    //   	english:			new UntypedFormControl(),
+    //   	french:				new UntypedFormControl(),
+    //   	function:			new UntypedFormControl(),
+    //   	yearsExperience:	new UntypedFormControl(),
+    //   	skills:				new UntypedFormControl()
 
-  	 });
+  	 //});
 
 	/**
   	* Constructor
@@ -56,6 +57,15 @@ export class NewCandidateComponent implements OnInit {
     	this.candidateService.loadFunctionTypes().forEach(funcType => {
       		this.functionTypes.push(funcType);
     	});
+    	
+    	this.languageOptions.push("NONE");
+    	this.languageOptions.push("BASIC");
+    	this.languageOptions.push("PROFICIENT");
+    	
+    	this.languages.push(new Language("DUTCH","NONE"));
+    	this.languages.push(new Language("FRENCH","PROFICIENT"));
+    	this.languages.push(new Language("ENGLISH","BASIC"));
+    	
 
 		this.candidateService.fetchPendingCandidates().forEach(data => {
 			
@@ -65,7 +75,7 @@ export class NewCandidateComponent implements OnInit {
                     this.pendingCandidates.push(pc);
             });
 			
-			if (this.isPendingCandidates()) {
+			if (this.isPendingCandidates() && this.isAuthenticatedAsAdmin()) {
 				this.openPendingCandidatesBox();
 			}
 		});
@@ -101,17 +111,42 @@ export class NewCandidateComponent implements OnInit {
   	* Registers a new Candidate with the backend
   	*/
   	public addCandidate(): void {
-    	this.candidateService.addCandidate(this.formBean).subscribe(d=>{
-    	  	this.open('feedbackBox', "Success",  true);
+		  
+		//START  
+		 let candidate:NewCandidateRequest = new NewCandidateRequest();
+		 
+		candidate.candidateId 						= this.offeredCandidateFormBean.get('candidateId')!.value;
+		candidate.firstname							= this.offeredCandidateFormBean.get('firstName')!.value;
+		candidate.surname							= this.offeredCandidateFormBean.get('surname')!.value;
+		candidate.email								= this.offeredCandidateFormBean.get('email')!.value;
+		candidate.roleSought						= this.offeredCandidateFormBean.get('roleSought')!.value;
+		candidate.function							= this.offeredCandidateFormBean.get('function')!.value;
+		candidate.country							= this.offeredCandidateFormBean.get('country')!.value;
+		candidate.city								= this.offeredCandidateFormBean.get('city')!.value;
+		candidate.perm								= this.offeredCandidateFormBean.get('perm')!.value;
+		candidate.freelance							= this.offeredCandidateFormBean.get('freelance')!.value;
+		candidate.yearsExperience 					= this.offeredCandidateFormBean.get('yearsExperience')!.value;
+		candidate.languages 						= this.languages;
+		candidate.skills 							= this.coreSkills;
+		candidate.comments 							= this.offeredCandidateFormBean.get('comments')!.value;
+		candidate.introduction 						= this.offeredCandidateFormBean.get('introduction')!.value;
+		candidate.daysOnSite 						= this.offeredCandidateFormBean.get('daysOnSite')!.value;
+		candidate.ratePerm 							= new Rate();
+		candidate.rateToPermRate 					= new Rate();
+		candidate.availableFromDate 				= new Date();
+		  
+		//END
+    	//this.candidateService.addCandidate(this.formBean).subscribe(d=>{
+    	//  	this.open('feedbackBox', "Success",  true);
 		
-			if (this.currentPendingCandidate) {
-				this.curriculumService.deletePendingCurriculum(this.currentPendingCandidate?.pendingCandidateId).subscribe(res => {
+		//	if (this.currentPendingCandidate) {
+		//		this.curriculumService.deletePendingCurriculum(this.currentPendingCandidate?.pendingCandidateId).subscribe(res => {
 				
-				});	
-			}
+		//		});	
+		//	}
 
 			
-    	});
+    	//});
   	};
 
   	public feedbackBoxClass:string            = '';
@@ -163,9 +198,16 @@ export class NewCandidateComponent implements OnInit {
   		this.curriculumFile = event.target.files[0];
   
   		this.curriculumService.uploadCurriculum(this.curriculumFile).subscribe(data=>{
-      		this.formBean.get('candidateId')?.setValue(data.id);
-			this.formBean.get('email')?.setValue(data.emailAddress);
-			this.formBean.get('skills')?.setValue(data.skills.join(", "));
+			
+			this.offeredCandidateFormBean.get('email')?.setValue(data.emailAddress);
+			
+			this.candidateId = data.id;
+			this.coreSkills	= new Array<string>();
+			
+			data.skills.forEach((skill: string) => {
+				this.coreSkills.push(skill);
+			});
+			
     	});
   		
   }
@@ -190,34 +232,34 @@ export class NewCandidateComponent implements OnInit {
   */
   public updateCountry():void {
       
-      let country:string = this.formBean.get('country') === null ? "" : this.formBean.get('country')!.value;
+  //    let country:string = this.formBean.get('country') === null ? "" : this.formBean.get('country')!.value;
       
-      switch(country) {
-          case 'UK':{
-              this.formBean.get('dutch')!.setValue('NO');
-              this.formBean.get('english')!.setValue('YES');
-              this.formBean.get('french')!.setValue('NO');
-              break;
-          }
-		case 'REPUBLIC_OF_IRELAND':{
-              this.formBean.get('dutch')!.setValue('NO');
-              this.formBean.get('english')!.setValue('YES');
-              this.formBean.get('french')!.setValue('NO');
-              break;
-          }  
-          case 'NETHERLANDS':{
-              this.formBean.get('dutch')!.setValue('NO');
-              this.formBean.get('english')!.setValue('YES');
-              this.formBean.get('french')!.setValue('NO');
-              break;
-          } 
-          case 'BELGIUM':{
-              this.formBean.get('dutch')!.setValue('NO');
-              this.formBean.get('english')!.setValue('NO');
-              this.formBean.get('french')!.setValue('NO');
-              break;
-          } 
-      }
+   //   switch(country) {
+   //       case 'UK':{
+   //           this.formBean.get('dutch')!.setValue('NO');
+   //           this.formBean.get('english')!.setValue('YES');
+   //           this.formBean.get('french')!.setValue('NO');
+   //           break;
+   //       }
+	//	case 'REPUBLIC_OF_IRELAND':{
+    //          this.formBean.get('dutch')!.setValue('NO');
+    //          this.formBean.get('english')!.setValue('YES');
+    //          this.formBean.get('french')!.setValue('NO');
+    //          break;
+    //      }  
+    //      case 'NETHERLANDS':{
+    //          this.formBean.get('dutch')!.setValue('NO');
+    //          this.formBean.get('english')!.setValue('YES');
+    //          this.formBean.get('french')!.setValue('NO');
+    //          break;
+    //      } 
+    //      case 'BELGIUM':{
+    //          this.formBean.get('dutch')!.setValue('NO');
+    //          this.formBean.get('english')!.setValue('NO');
+    //          this.formBean.get('french')!.setValue('NO');
+    //          break;
+    //      } 
+    //  }
       
   }
 
@@ -237,26 +279,26 @@ export class NewCandidateComponent implements OnInit {
 	*/
 	public loadPendingCandidate(pendingCandidate:PendingCandidate):void{
 		
-		this.curriculumService.makePendingCurriculumActive(pendingCandidate.pendingCandidateId).subscribe(candidate=>{
-      		this.formBean.get('candidateId')?.setValue(candidate.id);
-			this.formBean.get('firstname')?.setValue(pendingCandidate.firstname);
-			this.formBean.get('surname')?.setValue(pendingCandidate.surname);
-			this.formBean.get('email')?.setValue(pendingCandidate.email);
-			this.formBean.get('skills')?.setValue(candidate.skills.join(", "));
+	//	this.curriculumService.makePendingCurriculumActive(pendingCandidate.pendingCandidateId).subscribe(candidate=>{
+      		//this.formBean.get('candidateId')?.setValue(candidate.id);
+			//this.formBean.get('firstname')?.setValue(pendingCandidate.firstname);
+			//this.formBean.get('surname')?.setValue(pendingCandidate.surname);
+			//this.formBean.get('email')?.setValue(pendingCandidate.email);
+			//this.formBean.get('skills')?.setValue(candidate.skills.join(", "));
 			
-			if(pendingCandidate.perm) {
-				this.formBean.get('perm')?.setValue("TRUE");
-			} else {
-				this.formBean.get('perm')?.setValue("FALSE");
-			}
+			//if(pendingCandidate.perm) {
+		//		this.formBean.get('perm')?.setValue("TRUE");
+	//		} else {
+	//			this.formBean.get('perm')?.setValue("FALSE");
+	//		}
 			
-			if(pendingCandidate.freelance) {
-				this.formBean.get('freelance')?.setValue("TRUE");
-			} else {
-				this.formBean.get('freelance')?.setValue("FALSE");
-			}
-			this.closePendingCandidateModal();
-    	});
+		//	if(pendingCandidate.freelance) {
+		//		this.formBean.get('freelance')?.setValue("TRUE");
+		//	} else {
+		//		this.formBean.get('freelance')?.setValue("FALSE");
+	//		}
+	//		this.closePendingCandidateModal();
+    //	});
 		
 	}
 	
@@ -267,4 +309,126 @@ export class NewCandidateComponent implements OnInit {
 		return  environment.backendUrl + 'pending-curriculum/'+ pendingCandidateId;
 	}
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	/**
+	* OfferedCandidate - Add details 
+	*/
+	coreSkills:Array<string>				= new Array<string>();
+	spokenLanguages:Array<string>			= new Array<string>();
+	public currentView:string 				= 'add';
+	public candidateId:string = '';
+	
+	public offeredCandidateFormBean:UntypedFormGroup = new UntypedFormGroup({
+     	candidateRoleTitle:		new UntypedFormControl(''),
+		email:					new UntypedFormControl(),
+		country:				new UntypedFormControl(),
+       	location:				new UntypedFormControl(),
+		contractType:			new UntypedFormControl(),
+		perm:					new UntypedFormControl('UNKNOWN'),
+		freelance:				new UntypedFormControl('UNKNOWN'),
+		daysOnSite:				new UntypedFormControl(),
+		renumeration:			new UntypedFormControl(),
+		availableFromDate:		new UntypedFormControl(new Date()),
+		yearsExperience:		new UntypedFormControl(),
+		description:			new UntypedFormControl(),
+		comments:				new UntypedFormControl(),
+		skill:					new UntypedFormControl(),
+		language:				new UntypedFormControl(),
+		
+	});
+
+
+
+	/**
+	* Returns the previous OfferedCandidate list (all/own candidate)
+	*/		
+	public showOfferedCandidates():void{
+		
+	}
+	
+	public publishOfferedCandidate():void{
+		
+	}
+	
+	public languageOptions:Array<string> = new Array<string>();
+	public languages:Array<Language> = new Array<Language>();
+	
+	
+	/**
+	* Adds a Skill to the Candidates list of Skills
+	*/
+	public addOfferedCandidateSkill():void{
+		
+		let skillValue:string = this.offeredCandidateFormBean.get("skill")!.value; 
+		
+		if (this.coreSkills.indexOf(skillValue) < 0) {
+			this.coreSkills.push(skillValue);
+		}		
+		
+		this.offeredCandidateFormBean.get('skill')?.setValue('');
+	
+	}
+	
+	/**
+	* Removes a Skill to the Candidates list of Skills
+	*/
+	public removeOfferedCandidateSkill(skill:string):void{
+		this.coreSkills = this.coreSkills.filter(s => s != skill);
+	}
+
+	/**
+	* Sets the Candidate level with a language
+	*/
+	public updateOfferedCandidateLanguage(language:Language, level:string):void{
+		language.level = level;
+	}
+
+	/**
+  	* Whether or not the user has authenticated as an Admin user 
+  	*/
+  	public isAuthenticatedAsAdmin():boolean {
+    	return sessionStorage.getItem('isAdmin') === 'true';
+  	}
+  	
+  	
+  	public permRoleClass = "hide-row";
+  	public permOnChange(newValue:any):void{
+		if (newValue == 'TRUE') {
+			this.permRoleClass = "show-row";
+		} else {
+			this.permRoleClass = "hide-row";
+		}
+	}
+	
+	public contractRoleClass = "hide-row";
+  	public contractOnChange(newValue:any):void{
+		if (newValue == 'TRUE') {
+			this.contractRoleClass = "show-row";
+		} else {
+			this.contractRoleClass = "hide-row";
+		}
+	}
 }
