@@ -28,8 +28,8 @@ export class NewCandidateRequest{
 * Represents Rate/Salary requested by the Candidate 
 */
 export class Rate{
-	public currency:string 							= '';
-	public period:string 							= '';
+	public currency:string 							= 'EUR';
+	public period:string 							= 'HOUR';
 	public valueMin:number 							= 0.0;
 	public valueMax:number 							= 0.0;;
 }

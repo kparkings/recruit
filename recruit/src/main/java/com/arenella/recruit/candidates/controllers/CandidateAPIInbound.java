@@ -46,7 +46,6 @@ public class CandidateAPIInbound {
 	private DAYS_ON_SITE	daysOnSite;
 	private Rate			rateContract;
 	private Rate			ratePerm;
-//	private Rate			rateToPerm;
 	private LocalDate 		availableFromDate;
 	
 	/**

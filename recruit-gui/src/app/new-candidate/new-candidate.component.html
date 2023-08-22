@@ -15,8 +15,24 @@
 				</td>
 			</tr>
 			<tr>
+				<td class="hdr-label" colspan="2">Profile Image</td>
+			</tr>
+			<tr>
+				<td colspan="2">
+					<input type="file"  (change)="updateProfileImageFile($event)">
+				</td>
+			</tr>
+			<tr>
 				<td class="hdr-label">Candidate Id</td>
 				<td class="hdr-value">{{candidateId}}</td>
+			</tr>
+			<tr>
+				<td class="hdr-label">Firstname</td>
+				<input formControlName="firstName" type="text"/>
+			</tr>
+			<tr>
+				<td class="hdr-label">Surname</td>
+				<input formControlName="surname" type="text"/>
 			</tr>
 			<tr>
 				<td class="hdr-label">Email</td>
@@ -25,9 +41,18 @@
 				</td>	
 			</tr>
 			<tr>
-				<td class="hdr-label">Function</td>
+				<td class="hdr-label">Function Group</td>
 				<td class="hdr-value">
-					<input formControlName="candidateRoleTitle" type="text"/>
+					<select formControlName="function">
+						<option></option>
+						<option value="{{func.id}}" *ngFor="let func of functionTypes">{{func.desc}}</option>
+					</select>
+				</td>	
+			</tr>
+			<tr>
+				<td class="hdr-label">Role Sought</td>
+				<td class="hdr-value">
+					<input formControlName="roleSought" type="text"/>
 				</td>	
 			</tr>
 			<tr>
@@ -36,18 +61,18 @@
 					<select formControlName="country">
 						<option></option>
 						<option value="BELGIUM">Belgium</option>
-						<option value="IRL">Ireland</option>
+						<option value="REPUBLIC_OF_IRELAND">Ireland</option>
 						<option value="NETHERLANDS">Netherlands</option>
 						<option value="UK">UK</option>
 						<option value="EUROPE">EU</option>
-						<option value="WORLD">World</option>
+						<!--<option value="WORLD">World</option>-->
 					</select>
 				</td>	
 			</tr>
 			<tr>
 				<td class="hdr-label">Location</td>
 				<td>
-					<input  formControlName="location" type="text"/>
+					<input  formControlName="city" type="text"/>
 				</td>	
 			</tr>
 			<tr>
@@ -117,12 +142,6 @@
 				</td>	
 			</tr>
 			<tr>
-				<td class="hdr-label">Salary / Rate</td>
-				<td>
-					<input  formControlName="renumeration" type="text"/>
-				</td>	
-			</tr>
-			<tr>
 				<td class="hdr-label">Available From</td>
 				<td>
 				<input  formControlName="availableFromDate" type="date"/>
@@ -143,7 +162,7 @@
 			<tr>
 				<td class="hdr-label">Years Experience</td>
 				<td>
-					<input  formControlName="yearsExperience" type="text"/>
+					<input  formControlName="yearsExperience" type="number"/>
 				</td>	
 			</tr>
 			<tr>

@@ -54,9 +54,13 @@ public class CandidateController {
 	* @param candidate - Contains candidate details
 	* @return id of the candidate
 	*/
+	
+	
+	//@PostMapping(path="candidate", consumes="application/json", produces="application/json")
+	//public void addCandidate(@RequestPart CandidateAPIInbound candidate) {
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	@PostMapping(path="candidate", consumes="application/json", produces="application/json")
-	public void addCandidate(@RequestBody CandidateAPIInbound candidate) {
+	@PostMapping(path="candidate",consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+	public void addCandidate(@RequestPart("candidate") CandidateAPIInbound candidate, @RequestPart("profileImage")Optional<MultipartFile> profilePhoto) {
 		candidateService.persistCandidate(CandidateAPIInbound.convertToCandidate(candidate));
 	}
 	

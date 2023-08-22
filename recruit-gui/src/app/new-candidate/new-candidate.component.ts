@@ -29,25 +29,7 @@ export class NewCandidateComponent implements OnInit {
   	public selectOptionLangEnglish:string = '';
   	public selectOptionLangFrench:string = '';
 
-	//public formBean:UntypedFormGroup = new UntypedFormGroup({
-     
-//		candidateId:		new UntypedFormControl(''),
- //      	firstname:			new UntypedFormControl(),
-  //     	surname:			new UntypedFormControl(),
-   //    	email:				new UntypedFormControl(),
-   //    	roleSought:			new UntypedFormControl(),
-    //   	country:			new UntypedFormControl(),
-   //    	city:				new UntypedFormControl(),
-    //   	perm:				new UntypedFormControl(),
-    //   	freelance:			new UntypedFormControl(),
-    //   	dutch:				new UntypedFormControl(),
-    //   	english:			new UntypedFormControl(),
-    //   	french:				new UntypedFormControl(),
-    //   	function:			new UntypedFormControl(),
-    //   	yearsExperience:	new UntypedFormControl(),
-    //   	skills:				new UntypedFormControl()
-
-  	 //});
+	public boop:Date = new Date();
 
 	/**
   	* Constructor
@@ -62,10 +44,9 @@ export class NewCandidateComponent implements OnInit {
     	this.languageOptions.push("BASIC");
     	this.languageOptions.push("PROFICIENT");
     	
-    	this.languages.push(new Language("DUTCH","NONE"));
+    	this.languages.push(new Language("DUTCH","UNKNOWN"));
     	this.languages.push(new Language("FRENCH","PROFICIENT"));
     	this.languages.push(new Language("ENGLISH","BASIC"));
-    	
 
 		this.candidateService.fetchPendingCandidates().forEach(data => {
 			
@@ -113,9 +94,10 @@ export class NewCandidateComponent implements OnInit {
   	public addCandidate(): void {
 		  
 		//START  
-		 let candidate:NewCandidateRequest = new NewCandidateRequest();
+		let candidate:NewCandidateRequest = new NewCandidateRequest();
 		 
-		candidate.candidateId 						= this.offeredCandidateFormBean.get('candidateId')!.value;
+		 
+		candidate.candidateId 						= this.candidateId;
 		candidate.firstname							= this.offeredCandidateFormBean.get('firstName')!.value;
 		candidate.surname							= this.offeredCandidateFormBean.get('surname')!.value;
 		candidate.email								= this.offeredCandidateFormBean.get('email')!.value;
@@ -131,22 +113,23 @@ export class NewCandidateComponent implements OnInit {
 		candidate.comments 							= this.offeredCandidateFormBean.get('comments')!.value;
 		candidate.introduction 						= this.offeredCandidateFormBean.get('introduction')!.value;
 		candidate.daysOnSite 						= this.offeredCandidateFormBean.get('daysOnSite')!.value;
+		
 		candidate.ratePerm 							= new Rate();
 		candidate.rateToPermRate 					= new Rate();
-		candidate.availableFromDate 				= new Date();
+		candidate.availableFromDate 				= this.offeredCandidateFormBean.get('availableFromDate')!.value;
 		  
 		//END
-    	//this.candidateService.addCandidate(this.formBean).subscribe(d=>{
-    	//  	this.open('feedbackBox', "Success",  true);
+    	this.candidateService.addCandidate(candidate, this.profileImageFile).subscribe(d=>{
+    	  	this.open('feedbackBox', "Success",  true);
 		
-		//	if (this.currentPendingCandidate) {
-		//		this.curriculumService.deletePendingCurriculum(this.currentPendingCandidate?.pendingCandidateId).subscribe(res => {
+			if (this.currentPendingCandidate) {
+				this.curriculumService.deletePendingCurriculum(this.currentPendingCandidate?.pendingCandidateId).subscribe(res => {
 				
-		//		});	
-		//	}
+				});	
+			}
 
 			
-    	//});
+    	});
   	};
 
   	public feedbackBoxClass:string            = '';
@@ -188,6 +171,7 @@ export class NewCandidateComponent implements OnInit {
   }
   
   private curriculumFile!:File;
+  private profileImageFile!:File;
   
   public uploadCurriculumFile(event:any):void{
   
@@ -209,6 +193,16 @@ export class NewCandidateComponent implements OnInit {
 			});
 			
     	});
+  		
+  }
+  
+  public updateProfileImageFile(event:any):void{
+  
+  		if (event.target.files.length <= 0) {
+  			return;
+  		}
+  	
+  		this.profileImageFile = event.target.files[0];
   		
   }
    
@@ -345,22 +339,26 @@ export class NewCandidateComponent implements OnInit {
      	candidateRoleTitle:		new UntypedFormControl(''),
 		email:					new UntypedFormControl(),
 		country:				new UntypedFormControl(),
+		firstName:				new UntypedFormControl(),
+		surname:				new UntypedFormControl(),
+      	function:				new UntypedFormControl(),
+       	roleSought:				new UntypedFormControl(),
+       	city:					new UntypedFormControl(),
        	location:				new UntypedFormControl(),
 		contractType:			new UntypedFormControl(),
 		perm:					new UntypedFormControl('UNKNOWN'),
 		freelance:				new UntypedFormControl('UNKNOWN'),
 		daysOnSite:				new UntypedFormControl(),
 		renumeration:			new UntypedFormControl(),
-		availableFromDate:		new UntypedFormControl(new Date()),
+		availableFromDate:		new UntypedFormControl(new Date().toJSON().slice(0, 10)),
 		yearsExperience:		new UntypedFormControl(),
 		description:			new UntypedFormControl(),
 		comments:				new UntypedFormControl(),
+		introduction:			new UntypedFormControl(),
 		skill:					new UntypedFormControl(),
 		language:				new UntypedFormControl(),
 		
 	});
-
-
 
 	/**
 	* Returns the previous OfferedCandidate list (all/own candidate)
@@ -431,4 +429,5 @@ export class NewCandidateComponent implements OnInit {
 			this.contractRoleClass = "hide-row";
 		}
 	}
+	
 }
