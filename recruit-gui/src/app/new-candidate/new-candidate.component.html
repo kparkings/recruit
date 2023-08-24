@@ -89,17 +89,17 @@
 			<tr class="{{permRoleClass}}">
 				<td class="hdr-label">Rate</td>
 				<td>
-					<select>
+					<select formControlName="permCurrency">
 						<option>EUR</option>
 						<option>GBP</option>
 					</select>
 				
-					<select>
+					<select formControlName="permTimeUnit">
 						<option value="HOUR">Hour</option>
 						<option value="DAY">Day</option>
-						<option	value="YEAR">YEAR</option>
+						<option	value="YEAR">Year</option>
 					</select>
-					From: <input type="number"> To: <input type="number">
+					From: <input type="number" formControlName="permFrom"> To: <input type="number" formControlName="permTo">
 				</td>	
 			</tr>
 			<tr>
@@ -115,17 +115,17 @@
 			<tr class="{{contractRoleClass}}">
 				<td class="hdr-label">Rate</td>
 				<td>
-					<select>
+					<select formControlName="contractCurrency">
 						<option>EUR</option>
 						<option>GBP</option>
 					</select>
-					<select>
+					<select formControlName="contractTimeUnit">
 						<option value="HOUR">Hour</option>
 						<option value="DAY">Day</option>
-						<option	value="YEAR">YEAR</option>
+						<option	value="YEAR">Year</option>
 					</select>
-				From: <input type="number">
-				To: <input type="number">
+				From: <input type="number" formControlName="contractFrom">
+				To: <input type="number" formControlName="contractTo">
 			</tr>
 			<tr>
 				<td class="hdr-label">Days On Site (per Week)</td>

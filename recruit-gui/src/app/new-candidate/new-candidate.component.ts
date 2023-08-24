@@ -114,8 +114,42 @@ export class NewCandidateComponent implements OnInit {
 		candidate.introduction 						= this.offeredCandidateFormBean.get('introduction')!.value;
 		candidate.daysOnSite 						= this.offeredCandidateFormBean.get('daysOnSite')!.value;
 		
-		candidate.ratePerm 							= new Rate();
-		candidate.rateToPermRate 					= new Rate();
+		
+		//
+		let permCurrency:string 		= this.offeredCandidateFormBean.get('permCurrency')!.value;
+		let permTimeUnit:string 		= this.offeredCandidateFormBean.get('permTimeUnit')!.value;
+		let permFrom:string 			= this.offeredCandidateFormBean.get('permFrom')!.value;
+		let permTo:string 				= this.offeredCandidateFormBean.get('permTo')!.value;
+		
+		console.log("A" + permFrom);
+		console.log("B" + Number.parseFloat(permFrom));
+		
+		if (permCurrency && permTimeUnit) {
+			let permRate:Rate 		= new Rate();
+			permRate.currency 		= permCurrency;
+			permRate.period 		= permTimeUnit;
+			permRate.valueMin 		= Number.parseFloat(permFrom);
+			permRate.valueMax 		= Number.parseFloat(permTo);
+			candidate.ratePerm 		= permRate;
+		}
+		
+		let contractCurrency:string 		= this.offeredCandidateFormBean.get('contractCurrency')!.value;
+		let contractTimeUnit:string 		= this.offeredCandidateFormBean.get('contractTimeUnit')!.value;
+		let contractFrom:string 			= this.offeredCandidateFormBean.get('contractFrom')!.value;
+		let contractTo:string 				= this.offeredCandidateFormBean.get('contractTo')!.value;
+		
+		if (contractCurrency && contractTimeUnit) {
+			console.log("C");
+			let contractRate:Rate 	= new Rate();
+			contractRate.currency 	= contractCurrency;
+			contractRate.period 	= contractTimeUnit;
+			contractRate.valueMin 	= Number.parseFloat(contractFrom);
+			contractRate.valueMax 	= Number.parseFloat(contractTo);
+			console.log("D" + JSON.stringify(contractRate));
+			candidate.rateContract 		= contractRate;
+		}
+		
+		//
 		candidate.availableFromDate 				= this.offeredCandidateFormBean.get('availableFromDate')!.value;
 		  
 		//END
@@ -357,7 +391,14 @@ export class NewCandidateComponent implements OnInit {
 		introduction:			new UntypedFormControl(),
 		skill:					new UntypedFormControl(),
 		language:				new UntypedFormControl(),
-		
+		permCurrency:			new UntypedFormControl("EUR"),
+		permTimeUnit:			new UntypedFormControl(),
+		permFrom:				new UntypedFormControl(0.0),
+		permTo:					new UntypedFormControl(0.0),
+		contractCurrency:		new UntypedFormControl("EUR"),
+		contractTimeUnit:		new UntypedFormControl(),
+		contractFrom:			new UntypedFormControl(0.0),
+		contractTo:				new UntypedFormControl(0.0),
 	});
 
 	/**

@@ -166,6 +166,8 @@ export class CandidateServiceService {
 	*/
 	public addCandidate(newCandidateRequest:NewCandidateRequest, profileImage:File| any): Observable<any>{
 	
+		console.log("NEW-CAN = " + JSON.stringify(newCandidateRequest));
+	
 		//const newCandidate:NewCandidate = new NewCandidate();
 	
 	    //newCandidate.candidateId           		= formBean.get('candidateId')?.value;

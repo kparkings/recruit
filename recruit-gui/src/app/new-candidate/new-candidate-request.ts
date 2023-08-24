@@ -20,7 +20,7 @@ export class NewCandidateRequest{
 	public introduction:string 						= '';
 	public daysOnSite:string 						= '';
 	public ratePerm:Rate 							= new Rate();
-	public rateToPermRate 							= new Rate();
+	public rateContract 							= new Rate();
 	public availableFromDate:Date 					= new Date();
 }
 
