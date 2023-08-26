@@ -345,6 +345,34 @@ public class Candidate {
 	public void setRatePerm(Rate ratePerm) {
 		this.ratePerm = ratePerm;
 	}
+	
+	/**
+	* Sets the email address to contact the Candidate
+	* could be recruiter email if candidate offered by 
+	* recruiter 
+	* @param email - email address
+	*/
+	public void setEmail(String email) {
+		this.email = email;
+		
+	}
+
+	/**
+	* Sets the type of Candidate
+	* @param marketplaceCandidate - type of Candidate
+	*/
+	public void setCandidateType(CANDIDATE_TYPE candidateType) {
+		this.candidateType = candidateType;
+		
+	}
+
+	/**
+	* If the Candidate is offered via an Agency the id of the 
+	* owner
+	*/
+	public void setOwnerId(String ownerId) {
+		this.ownerId = ownerId;
+	}
 
 	/**
 	* Manke the Candidates details anonymous and mark the candidate 

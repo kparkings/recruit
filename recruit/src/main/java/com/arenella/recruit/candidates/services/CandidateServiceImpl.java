@@ -24,6 +24,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.arenella.recruit.adapters.events.CandidateAccountCreatedEvent;
 import com.arenella.recruit.adapters.events.CandidateDeletedEvent;
@@ -38,6 +39,7 @@ import com.arenella.recruit.candidates.beans.CandidateSearchAccuracyWrapper;
 import com.arenella.recruit.candidates.beans.CandidateSearchAlert;
 import com.arenella.recruit.candidates.beans.CandidateUpdateRequest;
 import com.arenella.recruit.candidates.beans.PendingCandidate;
+import com.arenella.recruit.candidates.beans.Candidate.CANDIDATE_TYPE;
 import com.arenella.recruit.candidates.beans.Candidate.Photo;
 import com.arenella.recruit.candidates.beans.Candidate.Photo.PHOTO_FORMAT;
 import com.arenella.recruit.candidates.beans.Candidate.Rate;
@@ -79,40 +81,40 @@ import com.arenella.recruit.candidates.utils.CandidateImageManipulator;
 public class CandidateServiceImpl implements CandidateService{
 	
 	@Autowired
-	private CandidateDao 					candidateDao;
+	private CandidateDao 						candidateDao;
 
 	@Autowired
-	private PendingCandidateDao 			pendingCandidateDao;
+	private PendingCandidateDao 				pendingCandidateDao;
 
 	@Autowired
-	private CandidateStatisticsService 		statisticsService;
+	private CandidateStatisticsService 			statisticsService;
 	
 	@Autowired
-	private ExternalEventPublisher			externalEventPublisher;
+	private ExternalEventPublisher				externalEventPublisher;
 	
 	@Autowired
-	private CandidateSuggestionUtil			suggestionUtil;
+	private CandidateSuggestionUtil				suggestionUtil;
 	
 	@Autowired
-	private SkillsSynonymsUtil				skillsSynonymsUtil;
+	private SkillsSynonymsUtil					skillsSynonymsUtil;
 	
 	@Autowired
-	private CandidateSearchAlertDao			skillAlertDao;
+	private CandidateSearchAlertDao				skillAlertDao;
 	
 	@Autowired
-	private DocumentFilterExtractionUtil	documentFilterExtractionUtil;
+	private DocumentFilterExtractionUtil		documentFilterExtractionUtil;
 	
 	@Autowired
-	private CandidateSkillsDao				skillDao;
+	private CandidateSkillsDao					skillDao;
 	
 	@Autowired
-	private CandidateFunctionExtractor		candidateFunctionExtractor;
+	private CandidateFunctionExtractor			candidateFunctionExtractor;
 	
 	@Autowired
-	private SavedCandidateDao				savedCandidateDao;
+	private SavedCandidateDao					savedCandidateDao;
 	
 	@Autowired
-	private CandidateImageFileSecurityParser			imageFileSecurityParser;
+	private CandidateImageFileSecurityParser	imageFileSecurityParser;
 	
 	@Autowired
 	private CandidateImageManipulator			imageManipulator;
@@ -123,7 +125,16 @@ public class CandidateServiceImpl implements CandidateService{
 	@Override
 	public void persistCandidate(Candidate candidate) {
 		
-		if (this.candidateDao.emailInUse(candidate.getEmail())) {
+		if(checkHasRole("ROLE_RECRUITER")) {
+			//candidate.setEmailAddress(); //Need Email from Recruiter that is not available in this MS
+			candidate.setCandidateType(CANDIDATE_TYPE.MARKETPLACE_CANDIDATE);
+			candidate.setOwnerId(this.getAuthenticatedUserId());
+		} else {
+			candidate.setCandidateType(CANDIDATE_TYPE.CANDIDATE);
+		}
+		
+		//IF Recruiter use recruiter email address and dont do this check
+		if (checkHasRole("ROLE_ADMIN") && this.candidateDao.emailInUse(candidate.getEmail())) {
 			throw new CandidateValidationException("Canidate with this Email alredy exists.");
 		}
 		
@@ -673,9 +684,10 @@ public class CandidateServiceImpl implements CandidateService{
 		if (candidate.getRatePerm().isPresent()) {
 			ratePerm = candidate.getRatePerm().get();
 		}
-		
+
+		//TODO: [KP] Practically duplicate of convertToPhoto but input is different
 		if (candidate.getPhotoBytes().isPresent()) {
-			
+
 			if (!imageFileSecurityParser.isSafe(candidate.getPhotoBytes().get())) {
 				throw new RuntimeException("Invalid file type detected"); 
 			}
@@ -742,6 +754,30 @@ public class CandidateServiceImpl implements CandidateService{
 		
 		this.externalEventPublisher.publishCandidateDeletedEvent(new CandidateDeletedEvent(candidateId));
 		
+	}
+
+	/**
+	* Refer to the CandidateService for details 
+	*/
+	@Override
+	public Optional<Photo> convertToPhoto(Optional<MultipartFile> profilePhoto) throws IOException {
+		
+		Photo photo = null;
+		
+		if (profilePhoto.isPresent()) {
+			
+			if (!imageFileSecurityParser.isSafe(profilePhoto.get().getBytes())) {
+				throw new RuntimeException("Invalid file type detected"); 
+			}
+		
+			byte[] photoBytes = this.imageManipulator.toProfileImage(profilePhoto.get().getBytes(), PHOTO_FORMAT.jpeg);
+					
+			photo = new Photo(photoBytes, PHOTO_FORMAT.jpeg);
+			
+		}
+		
+		
+		return Optional.ofNullable(photo);
 	}
 	
 }

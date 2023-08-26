@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.time.LocalDate;
+import java.util.Optional;
 import java.util.Set;
 
 import org.junit.jupiter.api.Test;
@@ -160,7 +161,7 @@ public class CandidateAPIInboundTest {
 					.availableFromDate(AVAILABLE_FROM_DATE)
 				.build();
 		
-		Candidate candidate = CandidateAPIInbound.convertToCandidate(candidateAPIInbound);
+		Candidate candidate = CandidateAPIInbound.convertToCandidate(candidateAPIInbound, Optional.empty());
 		
 		assertEquals(candidate.getCandidateId(), 	candidate.getCandidateId());
 		assertEquals(candidate.getFirstname(), 		candidate.getFirstname());

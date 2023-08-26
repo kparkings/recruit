@@ -59,6 +59,7 @@ public class CandidateTest {
 	private static final String			OWNER_ID					= "kparkings";
 	private static final CANDIDATE_TYPE	CANDIDATE_TYPE_VAL			= CANDIDATE_TYPE.MARKETPLACE_CANDIDATE;
 	
+	
 	/**
 	* Sets up test environment 
 	*/
@@ -208,6 +209,24 @@ public class CandidateTest {
 		
 		assertEquals(candidate.getvailableFromDate(), LocalDate.now()); //[KP] Small chance of failure if test run in exactly midnight
 		
+	}
+	
+	/**
+	* Tests setters
+	* @throws Exception
+	*/
+	@Test
+	public void testSetters() throws Exception{
+		
+		Candidate candidate = Candidate.builder().build();
+		
+		candidate.setCandidateType(CANDIDATE_TYPE_VAL);
+		candidate.setOwnerId(OWNER_ID);
+		candidate.setEmail(EMAIL);
+		
+		assertEquals(CANDIDATE_TYPE_VAL, 	candidate.getCandidateType());
+		assertEquals(OWNER_ID, 				candidate.getOwnerId().get());
+		assertEquals(EMAIL, 				candidate.getEmail());
 		
 	}
 	

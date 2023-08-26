@@ -4,6 +4,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.LinkedHashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import org.junit.jupiter.api.Test;
@@ -118,7 +119,7 @@ public class CandidateAPIInboundTest {
 					.languages(languages)
 					.build();
 		
-		Candidate candidate = CandidateAPIInbound.convertToCandidate(candidateEntity);
+		Candidate candidate = CandidateAPIInbound.convertToCandidate(candidateEntity, Optional.empty());
 
 		assertEquals(candidateId, 		candidate.getCandidateId());
 		assertEquals(firstname, 		candidate.getFirstname());

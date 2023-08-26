@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.HashSet;
@@ -31,11 +32,14 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.util.ReflectionTestUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.arenella.recruit.adapters.events.CandidateAccountCreatedEvent;
 import com.arenella.recruit.adapters.events.CandidateDeletedEvent;
 import com.arenella.recruit.adapters.events.CandidateUpdatedEvent;
 import com.arenella.recruit.candidates.beans.Candidate;
+import com.arenella.recruit.candidates.beans.Candidate.Photo;
+import com.arenella.recruit.candidates.beans.Candidate.Photo.PHOTO_FORMAT;
 import com.arenella.recruit.candidates.beans.CandidateFilterOptions;
 import com.arenella.recruit.candidates.beans.CandidateSearchAccuracyWrapper;
 import com.arenella.recruit.candidates.beans.CandidateSearchAlert;
@@ -61,6 +65,8 @@ import com.arenella.recruit.candidates.enums.PERM;
 import com.arenella.recruit.candidates.services.CandidateServiceImpl;
 import com.arenella.recruit.candidates.services.CandidateStatisticsService;
 import com.arenella.recruit.candidates.utils.CandidateFunctionExtractorImpl;
+import com.arenella.recruit.candidates.utils.CandidateImageFileSecurityParser;
+import com.arenella.recruit.candidates.utils.CandidateImageManipulator;
 import com.arenella.recruit.candidates.utils.CandidateSuggestionUtil;
 import com.arenella.recruit.candidates.utils.SkillsSynonymsUtil;
 import com.arenella.recruit.emailservice.adapters.RequestSendEmailCommand;
@@ -105,6 +111,12 @@ public class CandidateServiceImplTest {
 	
 	@Mock
 	private SavedCandidateDao						mockSavedCandidateDao;
+	
+	@Mock
+	private CandidateImageFileSecurityParser		mockImageFileSecurityParser;
+	
+	@Mock
+	private CandidateImageManipulator				mockImageManipulator;
 	
 	@Spy
 	private CandidateFunctionExtractorImpl			mockCandidateFunctionExtractor;
@@ -1349,6 +1361,55 @@ public class CandidateServiceImplTest {
 		Mockito.verify(this.mockSavedCandidateDao).deleteByCandidateId(Long.valueOf(candidateId));
 		Mockito.verify(this.mockExternalEventPublisher).publishCandidateDeletedEvent(Mockito.any(CandidateDeletedEvent.class));
 		
+	}
+	
+	/**
+	* Tests if MultipartFile is empty, empty Photo returned
+	* @throws Exception
+	*/
+	@Test
+	public void testConvertToPhoto() throws Exception{
+		
+		MultipartFile mpf = null;
+		
+		assertTrue(this.service.convertToPhoto(Optional.ofNullable(mpf)).isEmpty());
+		
+	}
+	
+	/**
+	* Tests if Unsafe file Exception thrown
+	* @throws Exception
+	*/
+	@Test
+	public void testConvertToPhoto_unsafeFile() throws Exception{
+		
+		MultipartFile mockMpf = Mockito.mock(MultipartFile.class);
+		
+		Mockito.when(mockMpf.getBytes()).thenReturn(new byte[]{});
+		Mockito.when(this.mockImageFileSecurityParser.isSafe(new byte[]{})).thenReturn(false);
+		
+		assertThrows(RuntimeException.class, () -> {
+			this.service.convertToPhoto(Optional.ofNullable(mockMpf));
+		});
+		
+	}
+	
+	/**
+	* Tests Happy Path
+	* @throws Exception
+	*/
+	@Test
+	public void testConvertToPhoto_happypath() throws Exception{
+		
+		MultipartFile mockMpf = Mockito.mock(MultipartFile.class);
+		
+		Mockito.when(mockMpf.getBytes()).thenReturn(new byte[]{});
+		Mockito.when(this.mockImageFileSecurityParser.isSafe(new byte[]{})).thenReturn(true);
+		Mockito.when(this.mockImageManipulator.toProfileImage(new byte[]{}, PHOTO_FORMAT.jpeg)).thenReturn(new byte[]{});
+		
+		Optional<Photo> photo = this.service.convertToPhoto(Optional.ofNullable(mockMpf));
+		
+		photo.orElseThrow();
 		
 	}
 	

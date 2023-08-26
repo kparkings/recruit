@@ -4,12 +4,15 @@ import java.io.IOException;
 import java.security.Principal;
 import java.util.Collection;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.arenella.recruit.candidates.beans.Candidate;
+import com.arenella.recruit.candidates.beans.Candidate.Photo;
 import com.arenella.recruit.candidates.beans.CandidateExtractedFilters;
 import com.arenella.recruit.candidates.beans.CandidateFilterOptions;
 import com.arenella.recruit.candidates.beans.CandidateSearchAccuracyWrapper;
@@ -161,5 +164,13 @@ public interface CandidateService {
 	* @param candidateId - id of Candidate to delete
 	*/
 	public void deleteCandidate(String candidateId);
+
+	/**
+	* Converts Multiplart file to Candidate Photo 
+	* @param profilePhoto - bytes
+	* @return Photo
+	* @throws IOException 
+	*/
+	public Optional<Photo> convertToPhoto(Optional<MultipartFile> profilePhoto) throws IOException;
 	
 }

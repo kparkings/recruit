@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.arenella.recruit.candidates.beans.Candidate;
+import com.arenella.recruit.candidates.beans.Candidate.Photo;
 import com.arenella.recruit.candidates.beans.CandidateExtractedFilters;
 import com.arenella.recruit.candidates.beans.CandidateFilterOptions;
 import com.arenella.recruit.candidates.beans.CandidateSearchAccuracyWrapper;
@@ -53,15 +54,15 @@ public class CandidateController {
 	* Adds a new Candidate
 	* @param candidate - Contains candidate details
 	* @return id of the candidate
+	 * @throws IOException 
 	*/
-	
-	
-	//@PostMapping(path="candidate", consumes="application/json", produces="application/json")
-	//public void addCandidate(@RequestPart CandidateAPIInbound candidate) {
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_RECRUITER')")
 	@PostMapping(path="candidate",consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-	public void addCandidate(@RequestPart("candidate") CandidateAPIInbound candidate, @RequestPart("profileImage")Optional<MultipartFile> profilePhoto) {
-		candidateService.persistCandidate(CandidateAPIInbound.convertToCandidate(candidate));
+	public void addCandidate(@RequestPart("candidate") CandidateAPIInbound candidate, @RequestPart("profileImage")Optional<MultipartFile> profilePhoto, Principal principal) throws IOException {
+		
+		Optional<Photo> photo = candidateService.convertToPhoto(profilePhoto);
+		
+		candidateService.persistCandidate(CandidateAPIInbound.convertToCandidate(candidate, photo));
 	}
 	
 	/**

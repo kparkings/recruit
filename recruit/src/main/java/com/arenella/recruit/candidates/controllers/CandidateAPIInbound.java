@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 import com.arenella.recruit.candidates.beans.Candidate;
 import com.arenella.recruit.candidates.beans.Candidate.CandidateBuilder;
 import com.arenella.recruit.candidates.beans.Candidate.DAYS_ON_SITE;
+import com.arenella.recruit.candidates.beans.Candidate.Photo;
 import com.arenella.recruit.candidates.beans.Candidate.Rate;
 import com.arenella.recruit.candidates.beans.Language;
 import com.arenella.recruit.candidates.enums.COUNTRY;
@@ -507,7 +508,7 @@ public class CandidateAPIInbound {
 	* @param candiateAPIInbound - API Incoming version of the Candidate
 	* @return Domain version of the Candidate
 	*/
-	public static Candidate convertToCandidate(CandidateAPIInbound candiateAPIInbound) {
+	public static Candidate convertToCandidate(CandidateAPIInbound candiateAPIInbound, Optional<Photo> profileImage) {
 		
 		CandidateBuilder builder = Candidate.builder();
 		
@@ -529,8 +530,10 @@ public class CandidateAPIInbound {
 					.comments(candiateAPIInbound.getComments())
 					.introduction(candiateAPIInbound.getIntroduction())
 					.availableFromDate(candiateAPIInbound.getAvailableFromDate())
-					.daysOnSite(candiateAPIInbound.getDaysOnSite());
+					.daysOnSite(candiateAPIInbound.getDaysOnSite())
+					.photo(profileImage.isEmpty() ? null : profileImage.get());
 					
+				
 					if (candiateAPIInbound.getRateContract().isPresent()) {
 						builder.rateContract(candiateAPIInbound.getRateContract().get());
 					}
@@ -538,8 +541,6 @@ public class CandidateAPIInbound {
 					if (candiateAPIInbound.getRatePerm().isPresent()) {
 						builder.ratePerm(candiateAPIInbound.getRatePerm().get());
 					}
-					
-					Candidate c = builder.build();
 					
 					return builder.build();
 		
