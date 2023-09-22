@@ -250,6 +250,11 @@ public interface CandidateDao extends CrudRepository<CandidateEntity, Long>, Jpa
 				predicates.add(criteriaBuilder.lessThanOrEqualTo(daysSinceLastAvailabilityCheck, cutOff));
 			}
 			
+			if (this.filterOptions.getOwnerId().isPresent()) {
+				Expression<String> ownerIdExpression 				= root.get("ownerId");
+				predicates.add(criteriaBuilder.equal(ownerIdExpression, 		this.filterOptions.getOwnerId().get()));
+			}
+			
 			Expression<String> sortExpression 				= root.get("candidateId");
 			
 			if (this.filterOptions.getOrderAttribute().isPresent()) {

@@ -12,6 +12,7 @@ import java.util.Set;
 import org.junit.jupiter.api.Test;
 
 import com.arenella.recruit.candidates.beans.Candidate;
+import com.arenella.recruit.candidates.beans.Candidate.CANDIDATE_TYPE;
 import com.arenella.recruit.candidates.beans.Candidate.Photo;
 import com.arenella.recruit.candidates.beans.Candidate.Photo.PHOTO_FORMAT;
 import com.arenella.recruit.candidates.beans.Candidate.Rate;
@@ -55,8 +56,9 @@ public class CandidateEntityTest {
 	private static final PHOTO_FORMAT	photoFormat				= PHOTO_FORMAT.jpeg;
 	private static final Rate			RATE_CONTRACT			= new Rate(CURRENCY.EUR, PERIOD.DAY, 1f, 2f);
 	private static final Rate			RATE_PERM				= new Rate(CURRENCY.GBP, PERIOD.YEAR, 11f, 22f);
-	
-	
+	private static final LocalDate		AVAILABLE_FROM			= LocalDate.of(2023, 02, 20);
+	private static final String			OWNER_ID				= "rec33";
+	private static final CANDIDATE_TYPE CANDIDATE_TYPE_VAL		= CANDIDATE_TYPE.MARKETPLACE_CANDIDATE;
 	/**
 	* Sets up test environment 
 	*/
@@ -96,6 +98,9 @@ public class CandidateEntityTest {
 					.rateContract(RATE_CONTRACT)
 					.ratePerm(RATE_PERM)
 					.photo(new Photo(photoBytes, photoFormat))
+					.availableFromDate(AVAILABLE_FROM)
+					.ownerId(OWNER_ID)
+					.candidateType(CANDIDATE_TYPE_VAL)
 					.build();
 		
 		CandidateEntity candidateEntity = CandidateEntity.convertToEntity(candidate);
@@ -126,6 +131,9 @@ public class CandidateEntityTest {
 		assertEquals(RATE_PERM.getValueMax(), 		candidateEntity.getRatePermValueMax());
 		assertEquals(photoBytes, 					candidateEntity.getPhotoBytes());
 		assertEquals(photoFormat, 					candidateEntity.getPhotoFormat());
+		assertEquals(AVAILABLE_FROM, 				candidateEntity.getAvailableFromDate());
+		assertEquals(OWNER_ID, 						candidateEntity.getOwnerId().get());
+		assertEquals(CANDIDATE_TYPE_VAL, 			candidateEntity.getCandidateType());
 		
 	}
 	
@@ -167,6 +175,9 @@ public class CandidateEntityTest {
 					.ratePermValueMax(RATE_PERM.getValueMax())
 					.photoBytes(photoBytes)
 					.photoFormat(photoFormat)
+					.availableFromDate(AVAILABLE_FROM)
+					.ownerId(OWNER_ID)
+					.candidateType(CANDIDATE_TYPE_VAL)
 				.build();
 		
 		Candidate candidate = CandidateEntity.convertFromEntity(candidateEntity);
@@ -197,6 +208,9 @@ public class CandidateEntityTest {
 		assertEquals(RATE_PERM.getValueMax(), 		candidate.getRatePerm().get().getValueMax());
 		assertEquals(photoBytes,	 				candidate.getPhoto().get().getImageBytes());
 		assertEquals(photoFormat, 					candidate.getPhoto().get().getFormat());
+		assertEquals(AVAILABLE_FROM, 				candidate.getAvailableFromDate());
+		assertEquals(OWNER_ID, 						candidate.getOwnerId().get());
+		assertEquals(CANDIDATE_TYPE_VAL, 			candidate.getCandidateType());
 		
 		assertTrue(candidate.getSkills().contains(skill));
 		assertEquals(candidate.getLanguages().stream().findFirst().get().getLanguage(), language.getLanguage());
@@ -263,4 +277,33 @@ public class CandidateEntityTest {
 		
 	}
 	
+	/**
+	* Test conversion where no ownerId is present
+	* @throws Exception
+	*/
+	@Test
+	public void testConvertFromEntity_noOwnerId() throws Exception{
+		
+		CandidateEntity candidateEntity = CandidateEntity.builder().candidateId("123").build();
+		
+		Candidate candidate = CandidateEntity.convertFromEntity(candidateEntity);
+		
+		assertTrue(candidate.getOwnerId().isEmpty());
+	
+	}
+	
+	/**
+	* Test conversion where no ownerId is present
+	* @throws Exception
+	*/
+	@Test
+	public void testConvertToEntity_noOwnerId() throws Exception{
+		
+		Candidate candidate = Candidate.builder().candidateId("123").build();
+		
+		CandidateEntity candidateEntity = CandidateEntity.convertToEntity(candidate);
+		
+		assertTrue(candidateEntity.getOwnerId().isEmpty());
+		
+	}
 }

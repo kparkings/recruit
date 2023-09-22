@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.HashSet;
@@ -135,8 +134,16 @@ public class CandidateServiceImplTest {
 	/**
 	* Tests exception is thrown if Email already used for the Candidate 
 	*/
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Test
 	public void testPersistCandidate_emailAlreadyExists() {
+		
+		Collection authorities = new HashSet<>();
+		authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+		
+		Mockito.when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
+		Mockito.when(mockAuthentication.getAuthorities()).thenReturn(authorities);
+
 		
 		Mockito.when(this.mockCandidateDao.emailInUse(Mockito.anyString())).thenReturn(true);
 		
@@ -149,12 +156,19 @@ public class CandidateServiceImplTest {
 	/**
 	* Tests exception is thrown if Email not used for the Pending Candidate 
 	*/
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Test
 	public void testPersistCandidate() {
 		
+		Collection authorities = new HashSet<>();
+		authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+
 		Mockito.when(this.mockCandidateDao.emailInUse(Mockito.anyString())).thenReturn(false);
 		Mockito.when(this.mockCandidateDao.save(Mockito.any())).thenReturn(CandidateEntity.builder().candidateId("1000").build());
-		
+
+		Mockito.when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
+		Mockito.when(mockAuthentication.getAuthorities()).thenReturn(authorities);
+
 		this.service.persistCandidate(Candidate
 				.builder()
 					.candidateId("1000")

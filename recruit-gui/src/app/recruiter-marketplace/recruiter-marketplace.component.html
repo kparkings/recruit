@@ -35,22 +35,25 @@
 			</div>
 			<!-- List of offered Candidates -->
 			<div>
+			
 				<table class="table marketplace-table">
 					<thead>
 						<tr>
-							<th class="bg-tab-hdr">Created</th>
+							<th class="bg-tab-hdr">Country</th>
+							<th class="bg-tab-hdr">First name</th>
+							<th class="bg-tab-hdr">Surname</th>
 							<th class="bg-tab-hdr">Role</th>
-							<th class="bg-tab-hdr" *ngIf="!showJustMyCandidatesActive">Country</th>
-							<th class="bg-tab-hdr" *ngIf="!showJustMyCandidatesActive">Contract Type</th>
 						</tr>
 					</thead>
 					<tbody>
 						<tr *ngFor="let candidate of offeredCandidates" class="as-link">
+						<!--  
 							<td class="table-bdy-td" *ngIf="candidate.viewed || !isNotMineOC(candidate)" (click)="viewCandidate(candidate)">{{candidate.created}}</td>
 							<td class="table-bdy-td" *ngIf="!candidate.viewed && isNotMineOC(candidate)" (click)="viewCandidate(candidate)"><b>{{candidate.created}}</b></td>
 							<td class="table-bdy-td" *ngIf="candidate.viewed || !isNotMineOC(candidate)" (click)="viewCandidate(candidate)">{{candidate.candidateRoleTitle}}</td>
 							<td class="table-bdy-td" *ngIf="!candidate.viewed && isNotMineOC(candidate)" (click)="viewCandidate(candidate)"><b>{{candidate.candidateRoleTitle}}</b></td>
-							<td class="table-bdy-td" (click)="viewCandidate(candidate)" align="center" *ngIf="!showJustMyCandidatesActive">
+						-->
+							<td class="table-bdy-td" (click)="viewCandidate(candidate)" align="center">
 								<span title="{{candidate.country}}" *ngIf="candidate.country === 'NETHERLANDS'"  	class="flag-icon flag-icon-nl"></span>
 								<span title="{{candidate.country}}" *ngIf="candidate.country === 'BELGIUM'"			class="flag-icon flag-icon-be"></span>
 								<span title="{{candidate.country}}" *ngIf="candidate.country === 'UK'"				class="flag-icon flag-icon-gb"></span>
@@ -58,9 +61,13 @@
 								<span title="{{candidate.country}}" *ngIf="candidate.country === 'EU_REMOTE'"		class="flag-icon flag-icon-eu"></span>
 								<span title="{{candidate.country}}" *ngIf="candidate.country === 'WORLD_REMOTE'"	class="flag-icon flag-icon-xx"></span>
 							</td>
+							<td>{{candidate.firstname}}</td>
+							<td>{{candidate.surname}}</td>
+							<td>{{candidate.roleSought}}</td>
+							<!--  
 							<td class="table-bdy-td" (click)="viewCandidate(candidate)" *ngIf="!showJustMyCandidatesActive && (candidate.viewed || !isNotMineOC(candidate))">{{candidate.contractType}}</td>
 							<td class="table-bdy-td" (click)="viewCandidate(candidate)" *ngIf="!showJustMyCandidatesActive && !candidate.viewed && isNotMineOC(candidate)"><b>{{candidate.contractType}}</b></td>
-							
+							-->
 							<!-- 
 							<td *ngIf="showJustMyCandidatesActive">
 								<div *ngIf="!isAuthenticatedAsAdmin()">

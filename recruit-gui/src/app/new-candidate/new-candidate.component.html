@@ -1,7 +1,7 @@
 <div *ngIf="currentView == 'add'" class="container-div">
 			
 	<div class="action-buttons">
-		<button class="btn btn-secondary btnRight main-btns" (click)="showOfferedCandidates()">Back</button>
+		<button class="btn btn-secondary btnRight main-btns" (click)="showOfferedCandidates()" *ngIf="hasLastPage()">Back</button>
 		<button class="btn btn-secondary btnRight main-btns" (click)="addCandidate()">Publish</button>
 	</div>
 	<form [formGroup]="offeredCandidateFormBean">

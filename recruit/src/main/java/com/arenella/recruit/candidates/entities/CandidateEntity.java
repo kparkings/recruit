@@ -3,6 +3,7 @@ package com.arenella.recruit.candidates.entities;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -20,6 +21,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.arenella.recruit.candidates.beans.Candidate;
+import com.arenella.recruit.candidates.beans.Candidate.CANDIDATE_TYPE;
 import com.arenella.recruit.candidates.beans.Candidate.Photo;
 import com.arenella.recruit.candidates.beans.Candidate.Photo.PHOTO_FORMAT;
 import com.arenella.recruit.candidates.beans.Candidate.Rate;
@@ -124,6 +126,16 @@ public class CandidateEntity {
 	@Column(name="rate_perm_value_max")
 	private float ratePermValueMax;
 	
+	@Column(name="available_from_date")
+	private LocalDate 		availableFromDate;
+	
+	@Column(name="owner_id")
+	private String 			ownerId;
+	
+	@Column(name="candidate_type")
+	@Enumerated(EnumType.STRING)
+	private CANDIDATE_TYPE	candidateType;
+	
 	
 	
 	//@Enumerated(EnumType.STRING)
@@ -189,6 +201,10 @@ public class CandidateEntity {
 		
 		this.photoFormat				= builder.photoFormat;      
 		this.photoBytes					= builder.photoBytes;
+		
+		this.availableFromDate			= builder.availableFromDate;
+		this.ownerId					= builder.ownerId;
+		this.candidateType				= builder.candidateType;
 		
 		this.skills.addAll(builder.skills);
 		this.languages.addAll(builder.languages.stream().map(lang -> LanguageEntity.builder().candidate(this).language(lang.getLanguage()).level(lang.getLevel()).build()).collect(Collectors.toSet()));
@@ -342,6 +358,31 @@ public class CandidateEntity {
 	*/
 	public Set<LanguageEntity> getLanguages(){
 		return this.languages;
+	}
+	
+	/**
+	* Return the Date the Candidate is available to begin from
+	* @return first possible begin date
+	*/
+	public LocalDate getAvailableFromDate() {
+		return this.availableFromDate;
+	}
+	
+	/**
+	* Returns the id of the party that is representing the 
+	* Candidate if a party is representing the candidate
+	* @return id of owner
+	*/
+	public Optional<String> getOwnerId(){
+		return Optional.ofNullable(this.ownerId);
+	}
+	
+	/**
+	* Returns the type of the Candidate
+	* @return type of the Candidate
+	*/
+	public CANDIDATE_TYPE getCandidateType() {
+		return this.candidateType;
 	}
 	
 	/**
@@ -536,6 +577,11 @@ public class CandidateEntity {
 		
 		private PHOTO_FORMAT 	photoFormat;      
 		private byte[] 			photoBytes;
+		
+		private LocalDate 		availableFromDate;
+		private String 			ownerId;
+		private CANDIDATE_TYPE	candidateType;
+		
 		
 		private Set<String> 	skills						= new LinkedHashSet<>();
 		private Set<Language> 	languages					= new LinkedHashSet<>();
@@ -855,6 +901,37 @@ public class CandidateEntity {
 		}
 		
 		/**
+		* Sets when the Candidate is available from
+		* @param availableFromDate - When the candidate will be available
+		* @return Builder
+		*/
+		public CandidateEntityBuilder availableFromDate(LocalDate availableFromDate) {
+			this.availableFromDate = availableFromDate;
+			return this;
+		}
+		
+		/**
+		* Sets the id of the owner of the Candidate if the candidate is offered via
+		* another party
+		* @param ownerId - Id of owner
+		* @return Builder
+		*/
+		public CandidateEntityBuilder ownerId(String ownerId) {
+			this.ownerId = ownerId;
+			return this;
+		}
+		
+		/**
+		* Sets the type of the Candidate
+		* @param candidateType - type of candidate
+		* @return
+		*/
+		public CandidateEntityBuilder candidateType(CANDIDATE_TYPE	candidateType) {
+			this.candidateType = candidateType;
+			return this;
+		}
+		
+		/**
 		* Returns a CandidateEntity instance initialized with 
 		* the values in the Builder
 		* @return Instance of CandidateEntity
@@ -903,7 +980,9 @@ public class CandidateEntity {
 						.ratePermPeriod(candidate.getRatePerm().isEmpty() ? null 	: candidate.getRatePerm().get().getPeriod())
 						.ratePermValueMin(candidate.getRatePerm().isEmpty() ? 0f 	: candidate.getRatePerm().get().getValueMin())
 						.ratePermValueMax(candidate.getRatePerm().isEmpty() ? 0f 	: candidate.getRatePerm().get().getValueMax())
-						
+						.availableFromDate(candidate.getAvailableFromDate())
+						.ownerId(candidate.getOwnerId().isPresent() ? candidate.getOwnerId().get() : null)
+						.candidateType(candidate.getCandidateType())
 					.build();
 		
 	}
@@ -955,7 +1034,10 @@ public class CandidateEntity {
 						.ratePerm(ratePerm)
 						.photo(photo)
 						.languages(candidateEntity.getLanguages().stream().map(lang -> Language.builder().language(lang.getLanguage()).level(lang.getLevel()).build()).collect(Collectors.toCollection(HashSet::new)))
-						.build();
+						.availableFromDate(candidateEntity.getAvailableFromDate())
+						.ownerId(candidateEntity.getOwnerId().isPresent() ? candidateEntity.getOwnerId().get() : null)
+						.candidateType(candidateEntity.getCandidateType())
+					.build();
 		
 	}
 	

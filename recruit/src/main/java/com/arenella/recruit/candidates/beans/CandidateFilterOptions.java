@@ -35,6 +35,7 @@ public class CandidateFilterOptions {
 	private String 				email;
 	private Boolean				flaggedAsUnavailable 				= false;
 	private Integer				daysSinceLastAvailabilityCheck;
+	private String				ownerId;
 	
 	/**
 	* Builder for the  
@@ -62,6 +63,7 @@ public class CandidateFilterOptions {
 		this.daysSinceLastAvailabilityCheck	= builder.daysSinceLastAvailabilityCheck;
 		this.searchText						= builder.searchText;
 		this.available 					 	= builder.available;
+		this.ownerId						= builder.ownerId;
 		
 	}
 	
@@ -219,6 +221,14 @@ public class CandidateFilterOptions {
 	}
 	
 	/**
+	* Returns the ownerId to filter on
+	* @return ownerId
+	*/
+	public Optional<String> getOwnerId(){
+		return Optional.ofNullable(this.ownerId);
+	}
+	
+	/**
 	* Returns the search text to filter on
 	* @return a search term to filter on
 	*/
@@ -295,6 +305,7 @@ public class CandidateFilterOptions {
 		private Boolean			 	available							= null;
 		private Integer				daysSinceLastAvailabilityCheck; 
 		private String 				searchText							= "";
+		private String 				ownerId;
 		
 		/**
 		* Sets the name of the attribute to order on
@@ -508,6 +519,16 @@ public class CandidateFilterOptions {
 		*/
 		public CandidateFilterOptionsBuilder available(Boolean available) {
 			this.available = available;
+			return this;
+		}
+		
+		/**
+		* Sets the Id of the User who owns/represents the Candidate
+		* @param ownerId - Owner Id
+		* @return Builder
+		*/
+		public CandidateFilterOptionsBuilder ownerId(String ownerId) {
+			this.ownerId = ownerId;
 			return this;
 		}
 		

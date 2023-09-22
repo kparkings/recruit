@@ -176,7 +176,7 @@ public class CandidateAPIInboundTest {
 		assertEquals(DAYS_ON_SITE_VAL, 				candidate.getDaysOnSite());
 		assertEquals(RATE_CONTRACT, 				candidate.getRateContract().get());
 		assertEquals(RATE_PERM, 					candidate.getRatePerm().get());
-		assertEquals(AVAILABLE_FROM_DATE, 			candidate.getvailableFromDate());
+		assertEquals(AVAILABLE_FROM_DATE, 			candidate.getAvailableFromDate());
 		assertEquals(COMMENTS, 						candidate.getComments());
 		assertEquals(INTRODUCTION, 					candidate.getIntroduction());
 		

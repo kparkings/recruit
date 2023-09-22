@@ -38,6 +38,8 @@ import com.arenella.recruit.candidates.beans.CandidateFilterOptions;
 import com.arenella.recruit.candidates.beans.CandidateSearchAccuracyWrapper;
 import com.arenella.recruit.candidates.beans.CandidateSearchAlert;
 import com.arenella.recruit.candidates.beans.CandidateUpdateRequest;
+import com.arenella.recruit.candidates.beans.Contact;
+import com.arenella.recruit.candidates.beans.Contact.CONTACT_TYPE;
 import com.arenella.recruit.candidates.beans.PendingCandidate;
 import com.arenella.recruit.candidates.beans.Candidate.CANDIDATE_TYPE;
 import com.arenella.recruit.candidates.beans.Candidate.Photo;
@@ -48,6 +50,7 @@ import com.arenella.recruit.candidates.controllers.CandidateValidationException;
 import com.arenella.recruit.candidates.controllers.SavedCandidate;
 import com.arenella.recruit.candidates.dao.CandidateDao;
 import com.arenella.recruit.candidates.dao.PendingCandidateDao;
+import com.arenella.recruit.candidates.dao.RecruiterContactDao;
 import com.arenella.recruit.candidates.entities.CandidateEntity;
 import com.arenella.recruit.candidates.entities.PendingCandidateEntity;
 import com.arenella.recruit.candidates.enums.FUNCTION;
@@ -119,14 +122,21 @@ public class CandidateServiceImpl implements CandidateService{
 	@Autowired
 	private CandidateImageManipulator			imageManipulator;
 	
+	@Autowired
+	private RecruiterContactDao					contactDao;
+	
 	/**
 	* Refer to the CandidateService Interface for Details
 	*/
 	@Override
 	public void persistCandidate(Candidate candidate) {
 		
-		if(checkHasRole("ROLE_RECRUITER")) {
-			//candidate.setEmailAddress(); //Need Email from Recruiter that is not available in this MS
+		if (checkHasRole("ROLE_RECRUITER")) {
+			
+			//TODO: [KP] wont work until the events to populate the Contact table have been implements and data present
+			Optional<Contact> recruiter = this.contactDao.getByTypeAndId(CONTACT_TYPE.RECRUITER, this.getAuthenticatedUserId()); 
+			
+			candidate.setEmail(recruiter.orElseThrow().getEmail());
 			candidate.setCandidateType(CANDIDATE_TYPE.MARKETPLACE_CANDIDATE);
 			candidate.setOwnerId(this.getAuthenticatedUserId());
 		} else {

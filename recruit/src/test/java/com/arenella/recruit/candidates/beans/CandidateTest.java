@@ -124,7 +124,7 @@ public class CandidateTest {
 		assertEquals(DAYS_ON_SITE_VAL, 			candidate.getDaysOnSite());
 		assertEquals(RATE_CONTRACT, 			candidate.getRateContract().get());
 		assertEquals(RATE_PERM, 				candidate.getRatePerm().get());
-		assertEquals(AVAILABLE_FROM_DATE, 		candidate.getvailableFromDate());
+		assertEquals(AVAILABLE_FROM_DATE, 		candidate.getAvailableFromDate());
 		assertEquals(OWNER_ID, 					candidate.getOwnerId().get());
 		assertEquals(CANDIDATE_TYPE_VAL, 		candidate.getCandidateType());
 		
@@ -207,7 +207,7 @@ public class CandidateTest {
 		assertTrue(candidate.getRatePerm().isEmpty());
 		assertTrue(candidate.getOwnerId().isEmpty());
 		
-		assertEquals(candidate.getvailableFromDate(), LocalDate.now()); //[KP] Small chance of failure if test run in exactly midnight
+		assertEquals(candidate.getAvailableFromDate(), LocalDate.now()); //[KP] Small chance of failure if test run in exactly midnight
 		
 	}
 	

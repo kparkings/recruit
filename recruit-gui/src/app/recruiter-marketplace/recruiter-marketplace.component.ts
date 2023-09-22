@@ -12,7 +12,7 @@ import { CandidateServiceService }						from '../candidate-service.service';
 import { RecruiterProfileService} 						from '../recruiter-profile.service';
 import { RecruiterProfile }								from '../recruiter-profile/recruiter-profile';
 import { DeviceDetectorService } 						from 'ngx-device-detector';
-
+import { Candidate } 									from '../suggestions/candidate';
 @Component({
   selector: 'app-recruiter-marketplace',
   templateUrl: './recruiter-marketplace.component.html',
@@ -53,6 +53,12 @@ export class RecruiterMarketplaceComponent implements OnInit {
 					//TODO: [KP] Fetching own profile not profile of postion/candidate
 					this.recruiterProfileService.fetchRecruiterProfiles("RECRUITERS").subscribe(rps => this.recruiterProfiles = rps);
 					
+					var lastView:string | null = sessionStorage.getItem("mp-lastview");
+					
+					if (lastView){
+						this.switchTab('showSupply');
+					}
+					
 	}
 
 	/**
@@ -86,7 +92,8 @@ export class RecruiterMarketplaceComponent implements OnInit {
 	/**
 	* OfferedCandidate - List 
 	*/
-	public offeredCandidates:Array<OfferedCandidate> 	= new Array<OfferedCandidate>();
+	//public offeredCandidates:Array<OfferedCandidate> 	= new Array<OfferedCandidate>();
+	public offeredCandidates:Array<Candidate> 	= new Array<Candidate>();
 	public showJustMyCandidatesActive:boolean			= true;
 
 	/**
@@ -99,12 +106,18 @@ export class RecruiterMarketplaceComponent implements OnInit {
 	* Fetches only candidates offered by the current Recruiter 
 	*/		
 	public showJustMyCandidates(){
-		this.offeredCandidates = new Array<OfferedCandidate>();
+		//this.offeredCandidates = new Array<OfferedCandidate>();
+		this.offeredCandidates = new Array<Candidate>();
 		this.showJustMyCandidatesActive = true;
 		this.recruiterService.getOwnRecruiterAccount().subscribe(data => {
-			this.marketplaceService.fetchRecruitersOwnOfferedCandidates(data.userId).subscribe(data => {
-				this.offeredCandidates = data;
-			});	
+			this.candidateService.getCandidates("orderAttribute=candidateId&order=desc&ownerId=rec33" + this.activeCandidate.id).subscribe(candidates =>{
+				//OfferedCandidate
+				this.offeredCandidates = candidates.content;
+				console.log("XX" + JSON.stringify(this.offeredCandidates));
+			});
+			//this.marketplaceService.fetchRecruitersOwnOfferedCandidates(data.userId).subscribe(data => {
+			//	this.offeredCandidates = data;
+			//});	
 		});	
 	}
 
@@ -278,26 +291,30 @@ export class RecruiterMarketplaceComponent implements OnInit {
 	*/
 	public editOfferedCandidate(candidate:OfferedCandidate){
 		
-		this.switchTab('editSupply');
-		this.activeCandidate = candidate;
 		
-		this.offeredCandidateFormBean = new UntypedFormGroup({
-	     	candidateRoleTitle:		new UntypedFormControl(candidate.candidateRoleTitle),
-			country:				new UntypedFormControl(candidate.country),
-	       	location:				new UntypedFormControl(candidate.location),
-			contractType:			new UntypedFormControl(candidate.contractType),	
-			daysOnSite:				new UntypedFormControl(candidate.daysOnSite),
-			renumeration:			new UntypedFormControl(candidate.renumeration),
-			availableFromDate:		new UntypedFormControl(candidate.availableFromDate),
-			yearsExperience:		new UntypedFormControl(candidate.yearsExperience),
-			description:			new UntypedFormControl(candidate.description),
-			comments:				new UntypedFormControl(candidate.comments),
-			skill:					new UntypedFormControl(),
-			language:				new UntypedFormControl()});
+		//this.switchTab('editSupply');
+		//this.activeCandidate = candidate;
+		
+		//this.offeredCandidateFormBean = new UntypedFormGroup({
+	    // 	candidateRoleTitle:		new UntypedFormControl(candidate.candidateRoleTitle),
+		//	country:				new UntypedFormControl(candidate.country),
+	    //   	location:				new UntypedFormControl(candidate.location),
+		//	contractType:			new UntypedFormControl(candidate.contractType),	
+		//	daysOnSite:				new UntypedFormControl(candidate.daysOnSite),
+		//	renumeration:			new UntypedFormControl(candidate.renumeration),
+		//	availableFromDate:		new UntypedFormControl(candidate.availableFromDate),
+		//	yearsExperience:		new UntypedFormControl(candidate.yearsExperience),
+		//	description:			new UntypedFormControl(candidate.description),
+		//	comments:				new UntypedFormControl(candidate.comments),
+		//	skill:					new UntypedFormControl(),
+		//	language:				new UntypedFormControl()});
 			
-			this.coreSkills 		= candidate.coreSkills;
-			this.spokenLanguages 	= candidate.spokenLanguages;
+		//	this.coreSkills 		= candidate.coreSkills;
+		//	this.spokenLanguages 	= candidate.spokenLanguages;
 		
+		sessionStorage.setItem("last-page", 'rec-mp');
+		sessionStorage.setItem("mp-edit-candidate", candidate.id);
+		this.router.navigate(['new-candidate']);
 	}
 
 	/**
@@ -330,14 +347,15 @@ export class RecruiterMarketplaceComponent implements OnInit {
 	/**
 	* Shows details of selected Offered Candidate
 	*/
-	public viewCandidate(candidate:OfferedCandidate){
-		this.activeCandidate = candidate;
-		this.switchTab('showSupplyDetails');
-		this.marketplaceService.registerOfferedCandidateViewedEvent(candidate.id).subscribe( data => {
-			this.marketplaceService.updateUnseenMpPosts();
-		});
-		this.recruiterProfile = new RecruiterProfile();
-		this.recruiterProfile = this.recruiterProfiles.filter(p => p.recruiterId == candidate.recruiter.recruiterId)[0];
+	//public viewCandidate(candidate:OfferedCandidate){
+	public viewCandidate(candidate:Candidate){
+		//this.activeCandidate = candidate;
+		//this.switchTab('showSupplyDetails');
+		//this.marketplaceService.registerOfferedCandidateViewedEvent(candidate.id).subscribe( data => {
+		//	this.marketplaceService.updateUnseenMpPosts();
+		//});
+		//this.recruiterProfile = new RecruiterProfile();
+		//this.recruiterProfile = this.recruiterProfiles.filter(p => p.recruiterId == candidate.recruiter.recruiterId)[0];
 	}
 	
 	/**
@@ -585,19 +603,20 @@ export class RecruiterMarketplaceComponent implements OnInit {
 	* Fetches available Candidates offered by other Recruiters
 	*/
 	public fetchOfferedCandidates():void{
-		this.offeredCandidates 			= new Array<OfferedCandidate>();
-		this.showJustMyCandidatesActive = true;
-		this.marketplaceService.fetchOfferedCandidates().subscribe(data => {
-			this.offeredCandidates = data;
-		}, err => {
-			if (err.status === 401 || err.status === 0) {
-				sessionStorage.removeItem('isAdmin');
-				sessionStorage.removeItem('isRecruter');
-				sessionStorage.removeItem('loggedIn');
-				sessionStorage.setItem('beforeAuthPage', 'view-candidates');
-				this.router.navigate(['login-user']);
-			}
-    	});
+		//this.offeredCandidates 			= new Array<OfferedCandidate>();
+		//this.offeredCandidates 			= new Array<Candidate>();
+		//this.showJustMyCandidatesActive = true;
+		//this.marketplaceService.fetchOfferedCandidates().subscribe(data => {
+		//	this.offeredCandidates = data;
+		//}, err => {
+		//	if (err.status === 401 || err.status === 0) {
+		//		sessionStorage.removeItem('isAdmin');
+		//		sessionStorage.removeItem('isRecruter');
+		//		sessionStorage.removeItem('loggedIn');
+		//		sessionStorage.setItem('beforeAuthPage', 'view-candidates');
+		//		this.router.navigate(['login-user']);
+		//	}
+    	//});
 	}
 
 	/**

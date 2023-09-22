@@ -60,6 +60,23 @@ export class NewCandidateComponent implements OnInit {
 				this.openPendingCandidatesBox();
 			}
 		});
+		
+		/**
+		* Is Edit  
+		*/
+		if(this.hasLastPage() ) {
+			var lastPage:string | null  =  sessionStorage.getItem("last-page");
+		
+			/**
+			* Marketpalce Edit 
+			*/
+			if (lastPage === 'rec-mp') {
+				var candidateId:string | null  =  sessionStorage.getItem("mp-edit-candidate");
+				this.candidateService.getCandidateById(""+candidateId).subscribe(candidate => {
+					console.log("XXXXX " + JSON.stringify(candidate));
+				});
+			}
+		}
 
   	}
 
@@ -121,9 +138,6 @@ export class NewCandidateComponent implements OnInit {
 		let permFrom:string 			= this.offeredCandidateFormBean.get('permFrom')!.value;
 		let permTo:string 				= this.offeredCandidateFormBean.get('permTo')!.value;
 		
-		console.log("A" + permFrom);
-		console.log("B" + Number.parseFloat(permFrom));
-		
 		if (permCurrency && permTimeUnit) {
 			let permRate:Rate 		= new Rate();
 			permRate.currency 		= permCurrency;
@@ -139,13 +153,11 @@ export class NewCandidateComponent implements OnInit {
 		let contractTo:string 				= this.offeredCandidateFormBean.get('contractTo')!.value;
 		
 		if (contractCurrency && contractTimeUnit) {
-			console.log("C");
 			let contractRate:Rate 	= new Rate();
 			contractRate.currency 	= contractCurrency;
 			contractRate.period 	= contractTimeUnit;
 			contractRate.valueMin 	= Number.parseFloat(contractFrom);
 			contractRate.valueMax 	= Number.parseFloat(contractTo);
-			console.log("D" + JSON.stringify(contractRate));
 			candidate.rateContract 		= contractRate;
 		}
 		
@@ -401,10 +413,29 @@ export class NewCandidateComponent implements OnInit {
 		contractTo:				new UntypedFormControl(0.0),
 	});
 
+	public hasLastPage():boolean{
+		
+		var lastPage:string | null  =  sessionStorage.getItem("last-page");
+		
+		return lastPage != null;
+	}
+	
 	/**
 	* Returns the previous OfferedCandidate list (all/own candidate)
 	*/		
 	public showOfferedCandidates():void{
+		
+		var lastPage:string | null  =  sessionStorage.getItem("last-page");
+		
+		if (lastPage  && lastPage === 'rec-mp') {
+			sessionStorage.setItem("mp-lastview", "showSupply");
+			this.router.navigate(['recruiter-marketplace']);
+		}
+		
+		
+		
+		//	sessionStorage.setItem("last-page", 'rec-mp');
+		//sessionStorage.setItem("mp-edit-candidate", candidate.id);
 		
 	}
 	

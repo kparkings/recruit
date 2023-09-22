@@ -278,7 +278,7 @@ public class Candidate {
 	* uses the current date
 	* @return When the candidate is available from
 	*/
-	public LocalDate getvailableFromDate(){
+	public LocalDate getAvailableFromDate(){
 		return Optional.ofNullable(this.availableFromDate).orElse(LocalDate.now());
 	}
 	

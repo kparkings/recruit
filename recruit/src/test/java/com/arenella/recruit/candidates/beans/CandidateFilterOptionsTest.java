@@ -46,6 +46,7 @@ public class CandidateFilterOptionsTest {
 		Boolean					flaggedAsUnavailable			= true;	
 		Integer					daysSinceLastAvailabilityCheck 	= 14;
 		String					searchText						= "Java Developer";
+		String					ownerId							= "rec22";
 		
 		candidateIds.add(candidateId);
 		skills.add(skill);
@@ -73,6 +74,7 @@ public class CandidateFilterOptionsTest {
 													.flaggedAsUnavailable(flaggedAsUnavailable)
 													.daysSinceLastAvailabilityCheck(daysSinceLastAvailabilityCheck)
 													.searchText(searchText)
+													.ownerId(ownerId)
 													.build();
 		
 		assertEquals(filters.getCandidateIds().stream().findAny().get(), 	candidateId);
@@ -92,7 +94,7 @@ public class CandidateFilterOptionsTest {
 		assertEquals(searchText,											filters.getSearchText());
 		assertEquals(flaggedAsUnavailable, 									filters.isFlaggedAsUnavailable().get());
 		assertEquals(daysSinceLastAvailabilityCheck, 						filters.getDaysSinceLastAvailabilityCheck().get());
-		
+		assertEquals(ownerId,						 						filters.getOwnerId().get());
 	}
 	
 	/**

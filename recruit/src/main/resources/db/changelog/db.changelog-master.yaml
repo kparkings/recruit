@@ -1944,4 +1944,59 @@ databaseChangeLog:
                 type: numeric
                 constraints:
                   default: 0.0
-                  
+databaseChangeLog:
+  - changeSet:
+      id: add_table_candidate_contact
+      author: kparkings
+      changes:
+        - createTable:
+            tableName: contacts
+            schemaName: candidate
+            columns:
+              - column:
+                  name: contact_type
+                  type: varchar
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: varchar
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: email
+                  type: varchar
+                  constraints:
+                    nullable: false
+              - column:
+                  name: firstname
+                  type: varchar
+                  constraints:
+                    nullable: false
+              - column:
+                  name: surname
+                  type: varchar
+                  constraints:
+                    nullable: false
+  - changeSet:
+      id: addCandidateOwnerCols
+      author: kevin
+      changes:
+        - addColumn:
+            tableName: candidate
+            schemaName: candidate
+            columns:
+            - column:
+                name: available_from_date
+                type: timestamp
+            - column:
+                name: owner_id
+                type: varchar
+            - column:
+                name: candidate_type
+                type: varchar
+                constraints:
+                  default: 'CANDIDATE'
+                    
