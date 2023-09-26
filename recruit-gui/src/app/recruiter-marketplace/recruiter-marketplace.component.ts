@@ -110,14 +110,9 @@ export class RecruiterMarketplaceComponent implements OnInit {
 		this.offeredCandidates = new Array<Candidate>();
 		this.showJustMyCandidatesActive = true;
 		this.recruiterService.getOwnRecruiterAccount().subscribe(data => {
-			this.candidateService.getCandidates("orderAttribute=candidateId&order=desc&ownerId=rec33" + this.activeCandidate.id).subscribe(candidates =>{
-				//OfferedCandidate
+			this.candidateService.getCandidates("orderAttribute=candidateId&order=desc&ownerId="+sessionStorage.getItem("userId")).subscribe(candidates =>{
 				this.offeredCandidates = candidates.content;
-				console.log("XX" + JSON.stringify(this.offeredCandidates));
 			});
-			//this.marketplaceService.fetchRecruitersOwnOfferedCandidates(data.userId).subscribe(data => {
-			//	this.offeredCandidates = data;
-			//});	
 		});	
 	}
 

@@ -398,7 +398,6 @@ export class NewCandidateComponent implements OnInit {
 		renumeration:			new UntypedFormControl(),
 		availableFromDate:		new UntypedFormControl(new Date().toJSON().slice(0, 10)),
 		yearsExperience:		new UntypedFormControl(),
-		description:			new UntypedFormControl(),
 		comments:				new UntypedFormControl(),
 		introduction:			new UntypedFormControl(),
 		skill:					new UntypedFormControl(),

@@ -37,12 +37,15 @@ import com.arenella.recruit.adapters.events.CandidateAccountCreatedEvent;
 import com.arenella.recruit.adapters.events.CandidateDeletedEvent;
 import com.arenella.recruit.adapters.events.CandidateUpdatedEvent;
 import com.arenella.recruit.candidates.beans.Candidate;
+import com.arenella.recruit.candidates.beans.Candidate.CANDIDATE_TYPE;
 import com.arenella.recruit.candidates.beans.Candidate.Photo;
 import com.arenella.recruit.candidates.beans.Candidate.Photo.PHOTO_FORMAT;
+import com.arenella.recruit.candidates.beans.Contact.CONTACT_TYPE;
 import com.arenella.recruit.candidates.beans.CandidateFilterOptions;
 import com.arenella.recruit.candidates.beans.CandidateSearchAccuracyWrapper;
 import com.arenella.recruit.candidates.beans.CandidateSearchAlert;
 import com.arenella.recruit.candidates.beans.CandidateUpdateRequest;
+import com.arenella.recruit.candidates.beans.Contact;
 import com.arenella.recruit.candidates.beans.Language;
 import com.arenella.recruit.candidates.beans.Language.LANGUAGE;
 import com.arenella.recruit.candidates.beans.Language.LEVEL;
@@ -54,6 +57,7 @@ import com.arenella.recruit.candidates.dao.CandidateDao;
 import com.arenella.recruit.candidates.dao.CandidateSearchAlertDao;
 import com.arenella.recruit.candidates.dao.CandidateSkillsDao;
 import com.arenella.recruit.candidates.dao.PendingCandidateDao;
+import com.arenella.recruit.candidates.dao.RecruiterContactDao;
 import com.arenella.recruit.candidates.dao.SavedCandidateDao;
 import com.arenella.recruit.candidates.entities.CandidateEntity;
 import com.arenella.recruit.candidates.entities.PendingCandidateEntity;
@@ -117,6 +121,9 @@ public class CandidateServiceImplTest {
 	@Mock
 	private CandidateImageManipulator				mockImageManipulator;
 	
+	@Mock
+	private RecruiterContactDao						mockContactDao;
+	
 	@Spy
 	private CandidateFunctionExtractorImpl			mockCandidateFunctionExtractor;
 	
@@ -137,14 +144,12 @@ public class CandidateServiceImplTest {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Test
 	public void testPersistCandidate_emailAlreadyExists() {
-		
+
 		Collection authorities = new HashSet<>();
 		authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
 		
 		Mockito.when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
 		Mockito.when(mockAuthentication.getAuthorities()).thenReturn(authorities);
-
-		
 		Mockito.when(this.mockCandidateDao.emailInUse(Mockito.anyString())).thenReturn(true);
 		
 		assertThrows(CandidateValidationException.class, () -> {
@@ -153,6 +158,56 @@ public class CandidateServiceImplTest {
 		
 	}
 	
+	/**
+	* Tests OwnerId is added if the User adding the Candidate is not an admin user 
+	*/
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@Test
+	public void testPersistCandidate_NonAdminUserOwnerId() {
+
+		ArgumentCaptor<CandidateEntity> argCapt = ArgumentCaptor.forClass(CandidateEntity.class);
+		
+		Contact contact = Contact.builder().contactType(CONTACT_TYPE.RECRUITER).email("kp@test.it").firstname("kevin").surname("parkings").userId("kp1").build();
+		
+		Collection authorities = new HashSet<>();
+		authorities.add(new SimpleGrantedAuthority("ROLE_RECRUITER"));
+		
+		Mockito.when(mockCandidateDao.save(argCapt.capture())).thenReturn(CandidateEntity.builder().candidateId("123").build());
+		
+		Mockito.when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
+		Mockito.when(mockAuthentication.getAuthorities()).thenReturn(authorities);
+		Mockito.when(mockAuthentication.getPrincipal()).thenReturn("kp1");
+		
+		Mockito.when(this.mockContactDao.getByTypeAndId(Mockito.any(), Mockito.any())).thenReturn(Optional.of(contact));
+		
+		this.service.persistCandidate(Candidate.builder().candidateId("123").firstname("kevin").email("kparkings@gmail.com").build());
+		
+		Assertions.assertEquals(CANDIDATE_TYPE.MARKETPLACE_CANDIDATE, argCapt.getValue().getCandidateType());
+		Assertions.assertEquals("kp1", argCapt.getValue().getOwnerId().get());
+	}
+	
+	/**
+	* Tests OwnerId is not added if the User adding the Candidate is not an admin user 
+	*/
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@Test
+	public void testPersistCandidate_adminUserOwnerId() {
+
+		ArgumentCaptor<CandidateEntity> argCapt = ArgumentCaptor.forClass(CandidateEntity.class);
+		
+		Collection authorities = new HashSet<>();
+		authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+		
+		Mockito.when(mockCandidateDao.save(argCapt.capture())).thenReturn(CandidateEntity.builder().candidateId("123").build());
+		
+		Mockito.when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
+		Mockito.when(mockAuthentication.getAuthorities()).thenReturn(authorities);
+		
+		this.service.persistCandidate(Candidate.builder().candidateId("123").firstname("kevin").email("kparkings@gmail.com").build());
+		
+		Assertions.assertEquals(CANDIDATE_TYPE.CANDIDATE, argCapt.getValue().getCandidateType());
+		Assertions.assertTrue(argCapt.getValue().getOwnerId().isEmpty());
+	}
 	/**
 	* Tests exception is thrown if Email not used for the Pending Candidate 
 	*/

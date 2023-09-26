@@ -141,6 +141,7 @@ public class CandidateServiceImpl implements CandidateService{
 			candidate.setOwnerId(this.getAuthenticatedUserId());
 		} else {
 			candidate.setCandidateType(CANDIDATE_TYPE.CANDIDATE);
+			candidate.setOwnerId(null);
 		}
 		
 		//IF Recruiter use recruiter email address and dont do this check

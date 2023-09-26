@@ -40,7 +40,7 @@
 					<thead>
 						<tr>
 							<th class="bg-tab-hdr">Country</th>
-							<th class="bg-tab-hdr">First name</th>
+							<th class="bg-tab-hdr">Firstname</th>
 							<th class="bg-tab-hdr">Surname</th>
 							<th class="bg-tab-hdr">Role</th>
 						</tr>
@@ -54,12 +54,12 @@
 							<td class="table-bdy-td" *ngIf="!candidate.viewed && isNotMineOC(candidate)" (click)="viewCandidate(candidate)"><b>{{candidate.candidateRoleTitle}}</b></td>
 						-->
 							<td class="table-bdy-td" (click)="viewCandidate(candidate)" align="center">
-								<span title="{{candidate.country}}" *ngIf="candidate.country === 'NETHERLANDS'"  	class="flag-icon flag-icon-nl"></span>
-								<span title="{{candidate.country}}" *ngIf="candidate.country === 'BELGIUM'"			class="flag-icon flag-icon-be"></span>
-								<span title="{{candidate.country}}" *ngIf="candidate.country === 'UK'"				class="flag-icon flag-icon-gb"></span>
-								<span title="{{candidate.country}}" *ngIf="candidate.country === 'IRL'"				class="flag-icon flag-icon-ie"></span>
-								<span title="{{candidate.country}}" *ngIf="candidate.country === 'EU_REMOTE'"		class="flag-icon flag-icon-eu"></span>
-								<span title="{{candidate.country}}" *ngIf="candidate.country === 'WORLD_REMOTE'"	class="flag-icon flag-icon-xx"></span>
+								<span title="{{candidate.country}}" *ngIf="candidate.country === 'NETHERLANDS'"  		class="flag-icon flag-icon-nl"></span>
+								<span title="{{candidate.country}}" *ngIf="candidate.country === 'BELGIUM'"				class="flag-icon flag-icon-be"></span>
+								<span title="{{candidate.country}}" *ngIf="candidate.country === 'UK'"					class="flag-icon flag-icon-gb"></span>
+								<span title="{{candidate.country}}" *ngIf="candidate.country === 'REPUBLIC_OF_IRELAND'"	class="flag-icon flag-icon-ie"></span>
+								<span title="{{candidate.country}}" *ngIf="candidate.country === 'EU_REMOTE'"			class="flag-icon flag-icon-eu"></span>
+								<span title="{{candidate.country}}" *ngIf="candidate.country === 'WORLD_REMOTE'"		class="flag-icon flag-icon-xx"></span>
 							</td>
 							<td>{{candidate.firstname}}</td>
 							<td>{{candidate.surname}}</td>
