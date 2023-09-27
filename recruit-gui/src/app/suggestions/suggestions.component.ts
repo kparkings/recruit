@@ -41,6 +41,40 @@ export class SuggestionsComponent implements OnInit {
 	});
 	
 	private jobSpecFile!:File;
+	
+		/**
+	* Constructor
+	* @param candidateService - Services relating to Candidates
+	*/
+	constructor(public candidateService:CandidateServiceService, 
+				public suggestionsService:	SuggestionsService, 
+				private clipboard: 			Clipboard, 
+				private modalService: 		NgbModal, 
+				private sanitizer: 			DomSanitizer,
+				private curriculumService: 	CurriculumService,
+				private deviceDetector: 	DeviceDetectorService,
+				private router:				Router,
+				private emailService:		EmailService) { 
+					
+		this.getSuggestions();	
+	 	this.trustedResourceUrl = this.sanitizer.bypassSecurityTrustResourceUrl('');
+		this.isMobile = deviceDetector.isMobile();
+		
+		if (this.isMobile) {
+			this.suggestionMobileClass 		= 'suggestion-icon-mobile';
+			this.suggestionMobileBtnClass	= 'buttons-icon-mobile';
+		}
+		
+		//If View From MP - Fetch and show candidate: Refactor into central navigation service
+		let lastPage:string|null = sessionStorage.getItem("last-page");
+		let mpCandidate:string|null = sessionStorage.getItem("mp-candidate");
+		if (lastPage && lastPage == 'rec-mp-your-candidate') {
+			this.candidateService.getCandidateById(""+mpCandidate).subscribe(c => {
+				this.showSuggestedCandidateOverview(c.content[0]);	
+			});
+		}
+		
+	}
   
   	public setJobSepecFile(event:any):void{
   
@@ -230,30 +264,7 @@ export class SuggestionsComponent implements OnInit {
 	public isMobile:boolean = false;
 	public suggestionMobileClass:string			= '';
 	public suggestionMobileBtnClass:string		= '';
-	/**
-	* Constructor
-	* @param candidateService - Services relating to Candidates
-	*/
-	constructor(public candidateService:CandidateServiceService, 
-				public suggestionsService:	SuggestionsService, 
-				private clipboard: 			Clipboard, 
-				private modalService: 		NgbModal, 
-				private sanitizer: 			DomSanitizer,
-				private curriculumService: 	CurriculumService,
-				private deviceDetector: 	DeviceDetectorService,
-				private router:				Router,
-				private emailService:		EmailService) { 
-					
-		this.getSuggestions();	
-	 	this.trustedResourceUrl = this.sanitizer.bypassSecurityTrustResourceUrl('');
-		this.isMobile = deviceDetector.isMobile();
-		
-		if (this.isMobile) {
-			this.suggestionMobileClass 		= 'suggestion-icon-mobile';
-			this.suggestionMobileBtnClass	= 'buttons-icon-mobile';
-		}
-		
-	}
+
 	
 	public showCVInline(candidateId:string):void{
 		
@@ -419,9 +430,20 @@ export class SuggestionsComponent implements OnInit {
 	* Shows the Suggesion result view
 	*/
 	public showSuggestionsResults():void{
-		this.currentView 		= 'suggestion-results';
-		this.suggestedCandidate = new Candidate();	
-		this.lastView 			= '';
+		
+		//If View From MP - Fetch and show candidate: Refactor into central navigation service
+		let lastPage:string|null = sessionStorage.getItem("last-page");
+		let mpCandidate:string|null = sessionStorage.getItem("mp-candidate");
+		if (lastPage && lastPage == 'rec-mp-your-candidate') {
+			sessionStorage.removeItem("last-page");
+			sessionStorage.removeItem("mp-candidate");
+			sessionStorage.setItem("mp-lastview", "xxx");
+			this.router.navigate(['recruiter-marketplace']);
+		} else {
+			this.currentView 		= 'suggestion-results';
+			this.suggestedCandidate = new Candidate();	
+			this.lastView 			= '';
+		}
 	}
 
 	/**
@@ -440,6 +462,9 @@ export class SuggestionsComponent implements OnInit {
 	public showSuggestedCandidateOverview(candidateSuggestion:Candidate):void{
 		this.currentView 			= 'suggested-canidate-overview';
 		this.suggestedCandidate 	= candidateSuggestion;
+		
+		console.log("DDDDD " + JSON.stringify(candidateSuggestion.candidateId));
+		
 		this.fetchCandidateProfile(candidateSuggestion.candidateId);
 	}
 	
@@ -721,11 +746,12 @@ export class SuggestionsComponent implements OnInit {
 	*/
 	public fetchCandidateProfile(candidateId:string):void{
 		this.candidateProfile = new CandidateProfile();
-		this.candidateService.getCandidateById(candidateId).subscribe( candidate => {
+		this.candidateService.getCandidateProfileById(candidateId).subscribe( candidate => {
 				this.candidateProfile = candidate;
 				this.currentView = 'suggested-canidate-overview';
-				
+				console.log("LLL " + this.candidateProfile);
 			}, err => {
+				console.log("LLL FAILED " + JSON.stringify(err));
 				if (err.status === 401 || err.status === 0) {
 					sessionStorage.removeItem('isAdmin');
 					sessionStorage.removeItem('isRecruter');

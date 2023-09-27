@@ -1,11 +1,11 @@
 import { Injectable }                             		from '@angular/core';
-import { UntypedFormGroup }                         	from '@angular/forms';
+//import { UntypedFormGroup }                         	from '@angular/forms';
 import { HttpClient, HttpResponse, HttpHeaders }  		from '@angular/common/http';
 import { Observable, throwError }                 		from 'rxjs';
-import { NewCandidate }                           		from './new-candidate/new-candidate';
-import { Candidate }                           			from './candidate';
+//import { NewCandidate }                           		from './new-candidate/new-candidate';
+//import { Candidate }                           			from './candidate';
 import { NewPendingCandidate, Rate }                    from './create-candidate/new-pending-candidate';
-import { Language}                                		from './new-candidate/language';
+//import { Language}                                		from './new-candidate/language';
 import { CandidateFunction }                      		from './candidate-function';
 import { environment }									from './../environments/environment';
 import { SearchAlert }		 	                    	from './recruiter-alerts/search-alert';
@@ -48,7 +48,17 @@ export class CandidateServiceService {
 	/**
   	* Returns a Candidate by its Id 
   	*/
-  	public getCandidateById(candidateId:string): Observable<CandidateProfile>{
+  	public getCandidateById(candidateId:string): Observable<any>{
+      
+		const backendUrl:string = environment.backendUrl +'candidate/?orderAttribute=candidateId&order=desc&candidateId='+candidateId
+  
+    	return this.httpClient.get<any>(backendUrl, this.httpOptions);
+  	}
+  	
+	/**
+  	* Returns a Candidate by its Id 
+  	*/
+  	public getCandidateProfileById(candidateId:string): Observable<CandidateProfile>{
       
 		const backendUrl:string = environment.backendUrl +'candidate/'+candidateId;
   

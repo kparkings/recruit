@@ -319,26 +319,27 @@ export class NewCandidateComponent implements OnInit {
 	*/
 	public loadPendingCandidate(pendingCandidate:PendingCandidate):void{
 		
-	//	this.curriculumService.makePendingCurriculumActive(pendingCandidate.pendingCandidateId).subscribe(candidate=>{
-      		//this.formBean.get('candidateId')?.setValue(candidate.id);
-			//this.formBean.get('firstname')?.setValue(pendingCandidate.firstname);
-			//this.formBean.get('surname')?.setValue(pendingCandidate.surname);
-			//this.formBean.get('email')?.setValue(pendingCandidate.email);
-			//this.formBean.get('skills')?.setValue(candidate.skills.join(", "));
-			
-			//if(pendingCandidate.perm) {
-		//		this.formBean.get('perm')?.setValue("TRUE");
-	//		} else {
-	//			this.formBean.get('perm')?.setValue("FALSE");
-	//		}
-			
-		//	if(pendingCandidate.freelance) {
-		//		this.formBean.get('freelance')?.setValue("TRUE");
-		//	} else {
-		//		this.formBean.get('freelance')?.setValue("FALSE");
-	//		}
-	//		this.closePendingCandidateModal();
-    //	});
+		this.curriculumService.makePendingCurriculumActive(pendingCandidate.pendingCandidateId).subscribe(candidate=>{
+      		
+      		this.candidateId = candidate.id;
+      		this.offeredCandidateFormBean.get('firstName')?.setValue(pendingCandidate.firstname);
+      		this.offeredCandidateFormBean.get('surname')?.setValue(pendingCandidate.surname);
+      		this.offeredCandidateFormBean.get('email')?.setValue(pendingCandidate.email);
+      		this.offeredCandidateFormBean.get('freelance')?.setValue(pendingCandidate.freelance);
+      		this.offeredCandidateFormBean.get('perm')?.setValue(pendingCandidate.perm);
+      		this.coreSkills = candidate.skills;
+      		if (pendingCandidate.perm) {
+				this.offeredCandidateFormBean.get('perm')?.setValue("TRUE");
+			} else {
+				this.offeredCandidateFormBean.get('perm')?.setValue("FALSE");
+			}
+			if (pendingCandidate.freelance) {
+				this.offeredCandidateFormBean.get('freelance')?.setValue("TRUE");
+			} else {
+				this.offeredCandidateFormBean.get('freelance')?.setValue("FALSE");
+			}
+			this.closePendingCandidateModal();
+    	});
 		
 	}
 	

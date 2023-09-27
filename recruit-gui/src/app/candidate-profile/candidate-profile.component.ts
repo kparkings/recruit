@@ -52,7 +52,7 @@ export class CandidateProfileComponent {
 	* Fetches Candidate
 	*/
 	public fetchCandidate():void{
-		this.candidateService.getCandidateById(this.getOwnUserId()).subscribe( candidate => {
+		this.candidateService.getCandidateProfileById(this.getOwnUserId()).subscribe( candidate => {
 				this.candidateProfile = candidate;
 				
 				let lvlEnglish 	= 'UNKNOWN';

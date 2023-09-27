@@ -53,6 +53,7 @@ export class RecruiterMarketplaceComponent implements OnInit {
 					//TODO: [KP] Fetching own profile not profile of postion/candidate
 					this.recruiterProfileService.fetchRecruiterProfiles("RECRUITERS").subscribe(rps => this.recruiterProfiles = rps);
 					
+					//Refactor into central navigation logic service
 					var lastView:string | null = sessionStorage.getItem("mp-lastview");
 					
 					if (lastView){
@@ -351,6 +352,9 @@ export class RecruiterMarketplaceComponent implements OnInit {
 		//});
 		//this.recruiterProfile = new RecruiterProfile();
 		//this.recruiterProfile = this.recruiterProfiles.filter(p => p.recruiterId == candidate.recruiter.recruiterId)[0];
+		sessionStorage.setItem("last-page", 'rec-mp-your-candidate');
+		sessionStorage.setItem("mp-candidate", candidate.candidateId);
+		this.router.navigate(['suggestions']);
 	}
 	
 	/**
