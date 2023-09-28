@@ -41,7 +41,7 @@ export class RecruiterMarketplaceComponent implements OnInit {
 					
 					this.marketplaceService.fetchUnseenOfferedCandidates().subscribe(val => {
 						this.unseenOfferedCandidates = val;
-						this.fetchOfferedCandidates();
+						//this.fetchOfferedCandidates();
 						this.showJustMyCandidates();
 					});
 					
@@ -67,7 +67,7 @@ export class RecruiterMarketplaceComponent implements OnInit {
 	*/
 	ngOnInit(): void {
 		
-		this.fetchOfferedCandidates();
+	//	this.fetchOfferedCandidates();
 		this.fetchOpenPositions();
 		this.showJustMyCandidates();
 		
@@ -171,9 +171,10 @@ export class RecruiterMarketplaceComponent implements OnInit {
 	public refreshCandidateList(){
 		if (this.showJustMyCandidatesActive){
 			this.showJustMyCandidates();
-		} else {
-			this.fetchOfferedCandidates();
 		}
+		// else {
+		//	this.fetchOfferedCandidates();
+		//}
 	}
 
 	public refreshOpenPositionList(){
@@ -598,26 +599,6 @@ export class RecruiterMarketplaceComponent implements OnInit {
 		
 	}
 	
-	/**
-	* Fetches available Candidates offered by other Recruiters
-	*/
-	public fetchOfferedCandidates():void{
-		//this.offeredCandidates 			= new Array<OfferedCandidate>();
-		//this.offeredCandidates 			= new Array<Candidate>();
-		//this.showJustMyCandidatesActive = true;
-		//this.marketplaceService.fetchOfferedCandidates().subscribe(data => {
-		//	this.offeredCandidates = data;
-		//}, err => {
-		//	if (err.status === 401 || err.status === 0) {
-		//		sessionStorage.removeItem('isAdmin');
-		//		sessionStorage.removeItem('isRecruter');
-		//		sessionStorage.removeItem('loggedIn');
-		//		sessionStorage.setItem('beforeAuthPage', 'view-candidates');
-		//		this.router.navigate(['login-user']);
-		//	}
-    	//});
-	}
-
 	/**
 	* Fetches available Open Positions
 	*/	

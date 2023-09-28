@@ -42,7 +42,7 @@ export class SuggestionsComponent implements OnInit {
 	
 	private jobSpecFile!:File;
 	
-		/**
+	/**
 	* Constructor
 	* @param candidateService - Services relating to Candidates
 	*/
@@ -72,6 +72,13 @@ export class SuggestionsComponent implements OnInit {
 			this.candidateService.getCandidateById(""+mpCandidate).subscribe(c => {
 				this.showSuggestedCandidateOverview(c.content[0]);	
 			});
+		}
+		
+		//Candidate
+		if (this.isCandidate()) {
+			let candidate:Candidate = new Candidate();
+			candidate.candidateId = this.getLoggedInUserId();
+			this.showSuggestedCandidateOverview(candidate);	
 		}
 		
 	}
@@ -354,6 +361,7 @@ export class SuggestionsComponent implements OnInit {
 										if (err.status === 401 || err.status === 0) {
 											sessionStorage.removeItem('isAdmin');
 											sessionStorage.removeItem('isRecruter');
+											sessionStorage.removeItem('isCandidate');
 											sessionStorage.removeItem('loggedIn');
 											sessionStorage.setItem('beforeAuthPage', 'suggestions');
 											this.router.navigate(['login-user']);
@@ -755,6 +763,7 @@ export class SuggestionsComponent implements OnInit {
 				if (err.status === 401 || err.status === 0) {
 					sessionStorage.removeItem('isAdmin');
 					sessionStorage.removeItem('isRecruter');
+					sessionStorage.removeItem('isCandidate');
 					sessionStorage.removeItem('loggedIn');
 					sessionStorage.setItem('beforeAuthPage', 'view-candidates');
 					this.router.navigate(['login-user']);
@@ -896,4 +905,19 @@ export class SuggestionsComponent implements OnInit {
 		return "";
 		
 	}
+	
+	/**
+	* Whether or not the Use is a Candidate
+	*/
+	public isCandidate():boolean{
+		return sessionStorage.getItem('isCandidate') === 'true';
+	}
+	
+	/**
+	* Whether or not the Use is a Candidate
+	*/
+	public getLoggedInUserId():string{
+		return ""+sessionStorage.getItem("userId");
+	}
+	
 }

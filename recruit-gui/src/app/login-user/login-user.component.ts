@@ -83,6 +83,12 @@ export class LoginUserComponent implements OnInit {
 			} else {
 				sessionStorage.setItem('isCandidate',      				'false');
 			}
+			
+			if (roles.includes('ROLE_CANDIDATE')) {
+				sessionStorage.setItem('isCandidate',     	 			'true');
+			} else {
+				sessionStorage.setItem('isCandidate',      				'false');
+			}
 	      
 			sessionStorage.setItem('loggedIn',      					'true');
 	      

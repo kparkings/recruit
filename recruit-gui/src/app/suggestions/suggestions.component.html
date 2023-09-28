@@ -178,18 +178,18 @@
 		<div class="suggestion-buttons">
 			
 			
-			<button class="btn btn-secondary btnRight main-btn {{suggestionMobileBtnClass}}" (click)="showSuggestionsResults()" 						*ngIf="lastView != 'saved-candidates'">Back</button>
-			<button class="btn btn-secondary btnRight main-btn {{suggestionMobileBtnClass}}" (click)="showSavedCandidates()" 						*ngIf="lastView === 'saved-candidates'">Back</button>
-			<button class="btn btn-secondary btnRight main-btn {{suggestionMobileBtnClass}}" (click)="rememberCandidate(suggestedCandidate)" 		*ngIf="lastView != 'saved-candidates' && !isSavedCandidate(suggestedCandidate)" title="Add candidate to your list of saved candidates">Save Candidate</button>
-			<button class="btn btn-secondary btnRight main-btn {{suggestionMobileBtnClass}}" (click)="rememberCandidate(suggestedCandidate)" 		*ngIf="lastView != 'saved-candidates' && isSavedCandidate(suggestedCandidate)" title="Add candidate to your list of saved candidates" disabled>Save Candidate</button>
+			<button class="btn btn-secondary btnRight main-btn {{suggestionMobileBtnClass}}" (click)="showSuggestionsResults()" 					*ngIf="lastView != 'saved-candidates'  && !isCandidate()">Back</button>
+			<button class="btn btn-secondary btnRight main-btn {{suggestionMobileBtnClass}}" (click)="showSavedCandidates()" 						*ngIf="lastView === 'saved-candidates'  && !isCandidate()">Back</button>
+			<button class="btn btn-secondary btnRight main-btn {{suggestionMobileBtnClass}}" (click)="rememberCandidate(suggestedCandidate)" 		*ngIf="lastView != 'saved-candidates' && !isSavedCandidate(suggestedCandidate) && !isCandidate()" title="Add candidate to your list of saved candidates">Save Candidate</button>
+			<button class="btn btn-secondary btnRight main-btn {{suggestionMobileBtnClass}}" (click)="rememberCandidate(suggestedCandidate)" 		*ngIf="lastView != 'saved-candidates' && isSavedCandidate(suggestedCandidate) && !isCandidate()" title="Add candidate to your list of saved candidates" disabled>Save Candidate</button>
 			<button class="btn btn-secondary btnRight main-btn {{suggestionMobileBtnClass}}" (click)="forgetCandidate()" 							*ngIf="lastView === 'saved-candidates'" title="removed candidate from your list of saved candidates">Unsave Candidate</button>
 			<button class="btn btn-secondary btnRight main-btn {{suggestionMobileBtnClass}}" (click)="showNotesDialog(notesBox,suggestedCandidate)" 	*ngIf="lastView === 'saved-candidates'">Notes</button>
 			
-			<a class="currliculum-link" href="{{getCurriculumDownloadUrl(suggestedCandidate.candidateId)}}" *ngIf="lastView != 'saved-candidates' || (lastView == 'saved-candidates' && !isNoLongerAvailable())">
+			<a class="currliculum-link" href="{{getCurriculumDownloadUrl(suggestedCandidate.candidateId)}}" *ngIf="(!isCandidate()) && (lastView != 'saved-candidates' || (lastView == 'saved-candidates' && !isNoLongerAvailable()))">
 				<button class="btn btn-secondary btnRight main-btn {{suggestionMobileBtnClass}}">Download CV</button>
 			</a>
 			
-			<button class="btn btn-secondary btnRight main-btn" (click)="showInlineCVView()" 							*ngIf="!isMobile && (lastView != 'saved-candidates' || (lastView == 'saved-candidates' && !isNoLongerAvailable()))">Display CV</button>
+			<button class="btn btn-secondary btnRight main-btn" (click)="showInlineCVView()" 							*ngIf="!isMobile && (lastView != 'saved-candidates' || (lastView == 'saved-candidates' && !isNoLongerAvailable())) && !isCandidate()">Display CV</button>
 			
 			
 		</div>
@@ -204,7 +204,7 @@
 			</div>
 			<br>
 			<br>
-			<button class="btn btn-secondary action-btn main-action_btn main-btns main-btn" style="width:100%;margin-bottom:10px;background:green;" (click)="contactCandidate(contactBox)">Contact</button>
+			<button *ngIf="!isCandidate()" class="btn btn-secondary action-btn main-action_btn main-btns main-btn" style="width:100%;margin-bottom:10px;background:green;" (click)="contactCandidate(contactBox)">Contact</button>
 			<br>
 			<div>
 				<h3>Location</h3>

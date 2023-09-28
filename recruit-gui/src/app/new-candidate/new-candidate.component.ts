@@ -266,42 +266,6 @@ export class NewCandidateComponent implements OnInit {
       
   }
   
-  /**
-  * Updates Language options with best guesses based upon the country 
-  * selected for the Candidate 
-  */
-  public updateCountry():void {
-      
-  //    let country:string = this.formBean.get('country') === null ? "" : this.formBean.get('country')!.value;
-      
-   //   switch(country) {
-   //       case 'UK':{
-   //           this.formBean.get('dutch')!.setValue('NO');
-   //           this.formBean.get('english')!.setValue('YES');
-   //           this.formBean.get('french')!.setValue('NO');
-   //           break;
-   //       }
-	//	case 'REPUBLIC_OF_IRELAND':{
-    //          this.formBean.get('dutch')!.setValue('NO');
-    //          this.formBean.get('english')!.setValue('YES');
-    //          this.formBean.get('french')!.setValue('NO');
-    //          break;
-    //      }  
-    //      case 'NETHERLANDS':{
-    //          this.formBean.get('dutch')!.setValue('NO');
-    //          this.formBean.get('english')!.setValue('YES');
-    //          this.formBean.get('french')!.setValue('NO');
-    //          break;
-    //      } 
-    //      case 'BELGIUM':{
-    //          this.formBean.get('dutch')!.setValue('NO');
-    //          this.formBean.get('english')!.setValue('NO');
-    //          this.formBean.get('french')!.setValue('NO');
-    //          break;
-    //      } 
-    //  }
-      
-  }
 
 	/**
 	* Sends request to delete Pending candidate
@@ -328,16 +292,19 @@ export class NewCandidateComponent implements OnInit {
       		this.offeredCandidateFormBean.get('freelance')?.setValue(pendingCandidate.freelance);
       		this.offeredCandidateFormBean.get('perm')?.setValue(pendingCandidate.perm);
       		this.coreSkills = candidate.skills;
+
       		if (pendingCandidate.perm) {
 				this.offeredCandidateFormBean.get('perm')?.setValue("TRUE");
 			} else {
 				this.offeredCandidateFormBean.get('perm')?.setValue("FALSE");
 			}
+
 			if (pendingCandidate.freelance) {
 				this.offeredCandidateFormBean.get('freelance')?.setValue("TRUE");
 			} else {
 				this.offeredCandidateFormBean.get('freelance')?.setValue("FALSE");
 			}
+
 			this.closePendingCandidateModal();
     	});
 		
@@ -349,30 +316,6 @@ export class NewCandidateComponent implements OnInit {
 	public getPendingCurriculumDownloadUrl(pendingCandidateId:string):string{
 		return  environment.backendUrl + 'pending-curriculum/'+ pendingCandidateId;
 	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 	/**
 	* OfferedCandidate - Add details 
@@ -432,11 +375,6 @@ export class NewCandidateComponent implements OnInit {
 			this.router.navigate(['recruiter-marketplace']);
 		}
 		
-		
-		
-		//	sessionStorage.setItem("last-page", 'rec-mp');
-		//sessionStorage.setItem("mp-edit-candidate", candidate.id);
-		
 	}
 	
 	public publishOfferedCandidate():void{
@@ -445,7 +383,6 @@ export class NewCandidateComponent implements OnInit {
 	
 	public languageOptions:Array<string> = new Array<string>();
 	public languages:Array<Language> = new Array<Language>();
-	
 	
 	/**
 	* Adds a Skill to the Candidates list of Skills

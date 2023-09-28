@@ -41,14 +41,14 @@
            <a  class="dropdown-item" routerLink="/statistics">Statistics</a>
         </li>
  		<li  class="li-arenella-nav {{menuItemMobileCss}}" *ngIf="isAuthenticatedAsAdmin()">
-           <a  class="dropdown-item" routerLink="/new-candidate">New</a>
+           <a  class="dropdown-item" routerLink="/suggestions">New</a>
         </li>
 		<li  class="li-arenella-nav {{menuItemMobileCss}}" *ngIf="isAuthenticated() && !isRecruiterNoSubscription() && !hasUnpaidSubscription()">
         	<a *ngIf="unseenEmails > 0" 	class="dropdown-item" routerLink="/email"><span class="unseen-posts">{{unseenEmails}}</span>Emails</a>
 			<a *ngIf="unseenEmails <= 0"	class="dropdown-item" routerLink="/email">Emails</a>
         </li>
 		<li  class="li-arenella-nav {{menuItemMobileCss}}"  *ngIf="isCandidate()">	
-           <a  class="dropdown-item" routerLink="/candidate-profile">Profile</a>
+           <a  class="dropdown-item" routerLink="/suggestions">Profile</a>
         </li>
 		<li  class="li-arenella-nav {{menuItemMobileCss}}" *ngIf="isAuthenticated() && !isRecruiterNoSubscription() && !hasUnpaidSubscription() && !isCandidate()">
            <a  class="dropdown-item" routerLink="/recruiter-profile">Community</a>

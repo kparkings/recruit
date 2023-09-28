@@ -107,6 +107,7 @@ export class CandidateProfileComponent {
 				if (err.status === 401 || err.status === 0) {
 					sessionStorage.removeItem('isAdmin');
 					sessionStorage.removeItem('isRecruter');
+					sessionStorage.removeItem('isCandidate');
 					sessionStorage.removeItem('loggedIn');
 					sessionStorage.setItem('beforeAuthPage', 'view-candidates');
 					this.router.navigate(['login-user']);
