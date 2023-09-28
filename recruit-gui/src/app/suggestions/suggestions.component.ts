@@ -14,7 +14,7 @@ import { DomSanitizer, SafeResourceUrl } 									from '@angular/platform-browse
 import { DeviceDetectorService } 											from 'ngx-device-detector';
 import { Router}															from '@angular/router';
 import { debounceTime } 													from "rxjs/operators";
-import { PhotoAPIOutbound, CandidateProfile, Language, Rate } 				from '../candidate-profile/candidate-profile';
+import { PhotoAPIOutbound, CandidateProfile, Language, Rate } 				from '../candidate-profile';
 import { EmailService, EmailRequest }										from '../email.service';
 
 /**

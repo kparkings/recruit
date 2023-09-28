@@ -18,7 +18,6 @@ import { RecruiterSignupComponent } 					from './recruiter-signup/recruiter-sign
 import { RecruiterMarketplaceComponent } 				from './recruiter-marketplace/recruiter-marketplace.component';
 import { RecruiterAlertsComponent } 					from './recruiter-alerts/recruiter-alerts.component';
 import { RecruiterProfileComponent } 					from './recruiter-profile/recruiter-profile.component';
-import { CandidateProfileComponent } 					from './candidate-profile/candidate-profile.component';
 import { RecruiterStatsComponent } 						from './recruiter-stats/recruiter-stats.component';
 
 
@@ -37,7 +36,6 @@ const routes: Routes = [
 	{path: 'recruiter-marketplace', component: RecruiterMarketplaceComponent, 	canActivate: [AuthGuardService]},
 	{path: 'recruiter-alerts', 		component: RecruiterAlertsComponent, 		canActivate: [AuthGuardService]},
 	{path: 'recruiter-profile', 	component: RecruiterProfileComponent, 		canActivate: [AuthGuardService]},
-	{path: 'candidate-profile', 	component: CandidateProfileComponent, 		canActivate: [AuthGuardService]},
 	{path: 'login-user', 			component: LoginUserComponent},
 	{path: 'login-user', 			component: LoginUserComponent},
 	{path: 'listing/:id',		 	component: ListingComponent},

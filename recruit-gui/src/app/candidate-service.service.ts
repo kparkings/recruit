@@ -12,9 +12,8 @@ import { SearchAlert }		 	                    	from './recruiter-alerts/search-a
 import { CandidateSearchAlert }                     	from './suggestions/candidate-search-alert';
 import { ExtractedFilters }                     		from './suggestions/extracted-filters';
 import { SavedCandidate }		 	                	from './suggestions/saved-candidate';
-import { CandidateProfile }								from './candidate-profile/candidate-profile';
-import { UpdateCandidateProfileRequest}					from './candidate-profile/update-candidate-profile-req';
 import { NewCandidateRequest } from './new-candidate/new-candidate-request';
+import { CandidateProfile } from './candidate-profile';
 
 /**
 * Services for new Candidates
@@ -78,17 +77,17 @@ export class CandidateServiceService {
 	/**
 	* Update a Candidate profile 
 	*/
-	public updateCandidate(candidateId:string, candidate: UpdateCandidateProfileRequest, profileImage:File):Observable<any> {
+	//public updateCandidate(candidateId:string, candidate: UpdateCandidateProfileRequest, profileImage:File):Observable<any> {
 	
-		const backendUrl:string = environment.backendUrl +'candidate/'+candidateId + '/profile';
+	//	const backendUrl:string = environment.backendUrl +'candidate/'+candidateId + '/profile';
 		
-		var fd = new FormData();
-		fd.append('file', profileImage);
-  		fd.append("profile", new Blob([JSON.stringify(candidate)], { type: 'application/json' }));
+	//	var fd = new FormData();
+	//	fd.append('file', profileImage);
+  	//	fd.append("profile", new Blob([JSON.stringify(candidate)], { type: 'application/json' }));
 	
-		return this.httpClient.put<any>(backendUrl, fd, {headers: new HttpHeaders({ }), withCredentials: true});
+	//	return this.httpClient.put<any>(backendUrl, fd, {headers: new HttpHeaders({ }), withCredentials: true});
 		
-	}
+	//}
 	
 	/**
 	* Update a Candidate CV 
