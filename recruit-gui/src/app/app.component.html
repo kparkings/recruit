@@ -41,7 +41,7 @@
            <a  class="dropdown-item" routerLink="/statistics">Statistics</a>
         </li>
  		<li  class="li-arenella-nav {{menuItemMobileCss}}" *ngIf="isAuthenticatedAsAdmin()">
-           <a  class="dropdown-item" routerLink="/suggestions">New</a>
+           <a  class="dropdown-item" routerLink="/new-candidate">New</a>
         </li>
 		<li  class="li-arenella-nav {{menuItemMobileCss}}" *ngIf="isAuthenticated() && !isRecruiterNoSubscription() && !hasUnpaidSubscription()">
         	<a *ngIf="unseenEmails > 0" 	class="dropdown-item" routerLink="/email"><span class="unseen-posts">{{unseenEmails}}</span>Emails</a>

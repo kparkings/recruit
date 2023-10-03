@@ -10,6 +10,8 @@ import java.util.Set;
 import org.junit.jupiter.api.Test;
 
 import com.arenella.recruit.candidates.beans.Candidate;
+import com.arenella.recruit.candidates.beans.Candidate.CANDIDATE_TYPE;
+import com.arenella.recruit.candidates.beans.Candidate.DAYS_ON_SITE;
 import com.arenella.recruit.candidates.beans.Candidate.Rate;
 import com.arenella.recruit.candidates.beans.Candidate.Rate.CURRENCY;
 import com.arenella.recruit.candidates.beans.Candidate.Rate.PERIOD;
@@ -48,6 +50,10 @@ public class CandidateFullProfileAPIOutboundTest {
 	private static final Rate				RATE_CONTRACT_CAN		= new Rate(CURRENCY.EUR, PERIOD.HOUR, 200, 300);
 	private static final Rate				RATE_PERM_CAN			= new Rate(CURRENCY.GBP, PERIOD.YEAR, 20000, 30000);
 	private static final String				EMAIL				 	= "kparkings@gmail.com";
+	private static final String 			COMMENTS				= "A comment";
+	private static final DAYS_ON_SITE		DAYS_ON_SITE_VAL		= DAYS_ON_SITE.FOUR;
+	private static final LocalDate 			AVAILABLE_FROM_DATE		= LocalDate.of(2023, 12, 3);
+	private static final CANDIDATE_TYPE		CANDIDATE_TYPE_VAL		= CANDIDATE_TYPE.CANDIDATE;
 	
 	/**
 	* Sets up test environment 
@@ -84,6 +90,10 @@ public class CandidateFullProfileAPIOutboundTest {
 							.rateContract(RATE_CONTRACT)
 							.ratePerm(RATE_PERM)
 							.email(EMAIL)
+							.comments(COMMENTS)
+							.daysOnSite(DAYS_ON_SITE_VAL)
+							.availableFromDate(AVAILABLE_FROM_DATE)
+							.candidateType(CANDIDATE_TYPE_VAL)
 							.build();
 		
 		assertEquals(CANDIDATE_ID, 						candidate.getCandidateId());
@@ -101,6 +111,10 @@ public class CandidateFullProfileAPIOutboundTest {
 		assertEquals(RATE_CONTRACT, 					candidate.getRateContract().get());
 		assertEquals(RATE_PERM, 						candidate.getRatePerm().get());
 		assertEquals(EMAIL, 							candidate.getEmail());
+		assertEquals(COMMENTS, 							candidate.getComments());
+		assertEquals(DAYS_ON_SITE_VAL, 					candidate.getDaysOnSite());
+		assertEquals(AVAILABLE_FROM_DATE, 				candidate.getAvailableFromDate());
+		assertEquals(CANDIDATE_TYPE_VAL, 				candidate.getCandidateType());
 		
 		assertTrue(candidate.getSkills().contains(SKILL));
 		candidate.getLanguages().stream().filter(l -> l.getLanguage() == LANGUAGEVAL.getLanguage()).findAny().orElseThrow();
@@ -132,6 +146,10 @@ public class CandidateFullProfileAPIOutboundTest {
 							.rateContract(RATE_CONTRACT_CAN)
 							.ratePerm(RATE_PERM_CAN)
 							.email(EMAIL)
+							.comments(COMMENTS)
+							.daysOnSite(DAYS_ON_SITE_VAL)
+							.availableFromDate(AVAILABLE_FROM_DATE)
+							.candidateType(CANDIDATE_TYPE_VAL)
 							.build();
 		
 		assertEquals(CANDIDATE_ID, 				candidate.getCandidateId());
@@ -147,6 +165,10 @@ public class CandidateFullProfileAPIOutboundTest {
 		assertEquals(FIRST_NAME,	 			candidate.getFirstname());
 		assertEquals(SURNAME, 					candidate.getSurname());
 		assertEquals(SURNAME, 					candidate.getSurname());
+		assertEquals(COMMENTS, 					candidate.getComments());
+		assertEquals(DAYS_ON_SITE_VAL, 			candidate.getDaysOnSite());
+		assertEquals(AVAILABLE_FROM_DATE, 		candidate.getAvailableFromDate());
+		assertEquals(CANDIDATE_TYPE_VAL, 		candidate.getCandidateType());
 		
 		assertTrue(candidate.getSkills().contains(SKILL));
 		candidate.getLanguages().stream().filter(l -> l.getLanguage() == LANGUAGEVAL.getLanguage()).findAny().orElseThrow();
@@ -174,7 +196,10 @@ public class CandidateFullProfileAPIOutboundTest {
 		assertEquals(RATE_PERM_CAN.getPeriod(), 			candidateProfile.getRatePerm().get().getPeriod());
 		assertEquals(RATE_PERM_CAN.getValueMin(), 			candidateProfile.getRatePerm().get().getValueMin());
 		assertEquals(RATE_PERM_CAN.getValueMax(), 			candidateProfile.getRatePerm().get().getValueMax());
-		
+		assertEquals(COMMENTS, 								candidateProfile.getComments());
+		assertEquals(DAYS_ON_SITE_VAL, 						candidateProfile.getDaysOnSite());
+		assertEquals(AVAILABLE_FROM_DATE, 					candidateProfile.getAvailableFromDate());
+		assertEquals(CANDIDATE_TYPE_VAL, 					candidateProfile.getCandidateType());
 	}
 	
 }

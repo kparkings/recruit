@@ -9,6 +9,7 @@ import { Router}										from '@angular/router';
 import { PendingCandidate }								from './pending-candidate';
 import { environment }									from '../../environments/environment';
 import { NewCandidateRequest, Rate, Language } 					from './new-candidate-request';
+import { CandidateProfile } from '../candidate-profile';
 
 @Component({
   selector: 'app-new-candidate',
@@ -47,8 +48,33 @@ export class NewCandidateComponent implements OnInit {
     	this.languages.push(new Language("DUTCH","UNKNOWN"));
     	this.languages.push(new Language("FRENCH","PROFICIENT"));
     	this.languages.push(new Language("ENGLISH","BASIC"));
-
-		this.candidateService.fetchPendingCandidates().forEach(data => {
+		console.log("XX1");
+		/**
+		* Is Edit  
+		*/
+		if(this.hasLastPage() ) {
+			var lastPage:string | null  =  sessionStorage.getItem("last-page");
+		console.log("XX2");
+			/**
+			* Marketpalce Edit 
+			*/
+			if (lastPage === 'rec-mp') {
+				console.log("XX3");
+				var candidateId:string | null  =  sessionStorage.getItem("mp-edit-candidate");
+				this.candidateService.getCandidateProfileById(""+candidateId).subscribe(candidate => {
+					this.populateForEdit(candidate);
+				});
+			}
+			
+			if (lastPage === 'candidate-profile') {
+				console.log("XX4");
+				this.candidateService.getCandidateProfileById(""+sessionStorage.getItem("userId")).subscribe(candidate => {
+					this.populateForEdit(candidate);
+				});
+			}
+		} else {
+			console.log("XX5");
+			this.candidateService.fetchPendingCandidates().forEach(data => {
 			
 			let pendingCandidates: Array<PendingCandidate> = data;
 			
@@ -61,24 +87,49 @@ export class NewCandidateComponent implements OnInit {
 			}
 		});
 		
-		/**
-		* Is Edit  
-		*/
-		if(this.hasLastPage() ) {
-			var lastPage:string | null  =  sessionStorage.getItem("last-page");
-		
-			/**
-			* Marketpalce Edit 
-			*/
-			if (lastPage === 'rec-mp') {
-				var candidateId:string | null  =  sessionStorage.getItem("mp-edit-candidate");
-				this.candidateService.getCandidateById(""+candidateId).subscribe(candidate => {
-					console.log("XXXXX " + JSON.stringify(candidate));
-				});
-			}
 		}
 
   	}
+  	
+  	/** 
+	* Populates Profile fields for Edit 
+	*/
+	private populateForEdit(candidate:CandidateProfile):void {
+		
+		console.log("XXX " + JSON.stringify(candidate));
+		this.offeredCandidateFormBean.get('candidateRoleTitle')?.setValue(candidate.roleSought);
+		this.offeredCandidateFormBean.get('email')?.setValue(candidate.email);
+		this.offeredCandidateFormBean.get('country')?.setValue(candidate.country);
+		this.offeredCandidateFormBean.get('firstName')?.setValue(candidate.firstname);
+		this.offeredCandidateFormBean.get('surname')?.setValue(candidate.surname);
+      	this.offeredCandidateFormBean.get('function')?.setValue(candidate.function);
+       	this.offeredCandidateFormBean.get('roleSought')?.setValue(candidate.roleSought);
+       	this.offeredCandidateFormBean.get('city')?.setValue(candidate.city);
+       	//this.offeredCandidateFormBean.get('location')?.setValue(candidate.);
+		this.offeredCandidateFormBean.get('perm')?.setValue(candidate.perm);
+		this.offeredCandidateFormBean.get('freelance')?.setValue(candidate.freelance);
+		this.offeredCandidateFormBean.get('daysOnSite')?.setValue(candidate.daysOnSite);
+		//this.offeredCandidateFormBean.get('availableFromDate')?.setValue();
+		this.offeredCandidateFormBean.get('yearsExperience')?.setValue(candidate.yearsExperience);
+		this.offeredCandidateFormBean.get('comments')?.setValue(candidate.comments);
+		this.offeredCandidateFormBean.get('introduction')?.setValue(candidate.introduction);
+		//skill:					new UntypedFormControl(),
+		//language:				new UntypedFormControl(),
+		this.offeredCandidateFormBean.get('permCurrency')?.setValue(candidate.ratePerm.currency);
+		this.offeredCandidateFormBean.get('permTimeUnit')?.setValue(candidate.ratePerm.period);
+		this.offeredCandidateFormBean.get('permFrom')?.setValue(candidate.ratePerm.valueMin);
+		this.offeredCandidateFormBean.get('permTo')?.setValue(candidate.ratePerm.valueMax);
+		this.offeredCandidateFormBean.get('contractCurrency')?.setValue(candidate.rateContract.currency);
+		this.offeredCandidateFormBean.get('contractTimeUnit')?.setValue(candidate.rateContract.period);
+		this.offeredCandidateFormBean.get('contractFrom')?.setValue(candidate.rateContract.valueMin);
+		this.offeredCandidateFormBean.get('contractTo')?.setValue(candidate.rateContract.valueMax);
+
+		this.coreSkills = candidate.skills;
+		
+		this.languages = candidate.languages;
+		
+		
+	}
 
   	/**
   	*  Init 

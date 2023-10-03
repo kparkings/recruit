@@ -82,6 +82,22 @@ export class SuggestionsComponent implements OnInit {
 		}
 		
 	}
+	
+	/*
+	* Navigates to the edit page
+	*/
+	public editAccount():void{
+		sessionStorage.setItem("last-page", "candidate-profile");
+		this.router.navigate(['new-candidate']);
+	}
+	
+	public deleteAccount():void{
+		
+	}
+	
+	public confirmDeleteAcount():void{
+		
+	}
   
   	public setJobSepecFile(event:any):void{
   

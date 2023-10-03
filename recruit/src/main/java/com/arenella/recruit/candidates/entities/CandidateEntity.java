@@ -22,6 +22,7 @@ import javax.persistence.Table;
 
 import com.arenella.recruit.candidates.beans.Candidate;
 import com.arenella.recruit.candidates.beans.Candidate.CANDIDATE_TYPE;
+import com.arenella.recruit.candidates.beans.Candidate.DAYS_ON_SITE;
 import com.arenella.recruit.candidates.beans.Candidate.Photo;
 import com.arenella.recruit.candidates.beans.Candidate.Photo.PHOTO_FORMAT;
 import com.arenella.recruit.candidates.beans.Candidate.Rate;
@@ -111,7 +112,6 @@ public class CandidateEntity {
 	@Column(name="rate_contract_value_max")
 	private float rateContractValueMax;
 	
-	
 	@Enumerated(EnumType.STRING)
 	@Column(name="rate_perm_currency")
 	private CURRENCY ratePermCurrency;
@@ -136,18 +136,12 @@ public class CandidateEntity {
 	@Enumerated(EnumType.STRING)
 	private CANDIDATE_TYPE	candidateType;
 	
+	@Column(name="comments")
+	private String comments;
 	
-	
-	//@Enumerated(EnumType.STRING)
-	//@Column(name="rate_currency")
-	//private CURRENCY rateCurrency;
-	
-	//@Enumerated(EnumType.STRING)
-    //@Column(name="rate_period")
-    //private PERIOD ratePeriod;
-    
-    //@Column(name="rate_value")
-    //private float rateValue;      
+	@Column(name="days_on_site")
+	@Enumerated(EnumType.STRING)
+	private DAYS_ON_SITE daysOnSite;
     
 	@Enumerated(EnumType.STRING)
     @Column(name="photo_format")
@@ -186,9 +180,6 @@ public class CandidateEntity {
 		this.lastAvailabilityCheck 		= builder.lastAvailabilityCheck;
 		this.flaggedAsUnavailable		= builder.flaggedAsUnavailable;
 		this.introduction				= builder.introduction;
-		//this.rateCurrency				= builder.rateCurrency;
-		//this.ratePeriod					= builder.ratePeriod;
-		//this.rateValue					= builder.rateValue;      
 		
 		this.rateContractCurrency 		= builder.rateContractCurrency;
 		this.rateContractPeriod 		= builder.rateContractPeriod;
@@ -205,6 +196,9 @@ public class CandidateEntity {
 		this.availableFromDate			= builder.availableFromDate;
 		this.ownerId					= builder.ownerId;
 		this.candidateType				= builder.candidateType;
+		
+		this.comments					= builder.comments;
+		this.daysOnSite				 	= builder.daysOnSite;
 		
 		this.skills.addAll(builder.skills);
 		this.languages.addAll(builder.languages.stream().map(lang -> LanguageEntity.builder().candidate(this).language(lang.getLanguage()).level(lang.getLevel()).build()).collect(Collectors.toSet()));
@@ -386,6 +380,22 @@ public class CandidateEntity {
 	}
 	
 	/**
+	* Returns comments relating to the Candidate
+	* @return comments about the Candidate
+	*/
+	public String getComments(){
+		return this.comments;
+	}
+	
+	/**
+	* Returns max number of days the Candidate will work onsite
+	* @return max number of days onsite
+	*/
+	public DAYS_ON_SITE getDaysOnSite(){
+		return this.daysOnSite;
+	}
+	
+	/**
 	* Updates the availability of the Candidate
 	* @param available - Whether or not the Candidate is available
 	*/
@@ -425,33 +435,6 @@ public class CandidateEntity {
 	public String getIntroduction() {
 		return this.introduction;
 	}
-	
-	/**
-	* Returns the Currency the Candidate 
-	* charges in
-	* @return currency
-	*/
-	//public CURRENCY getRateCurrency() {
-	//	return this.rateCurrency;
-	//}
-	
-	/**
-	* Returns the period the Candidate 
-	* charges in
-	* @return Period
-	*/
-	//public PERIOD getRatePeriod() {
-	//	return this.ratePeriod;
-	//}
-	
-	/**
-	* Returns the value per period
-	* the Candidate charges
-	* @return value
-	*/
-	//public float getRateValue() {
-	//	return this.rateValue;
-	//}
 	
 	/**
 	* Returns the Currency for the contract rate
@@ -563,9 +546,6 @@ public class CandidateEntity {
 		private LocalDate 		lastAvailabilityCheck		= LocalDate.now();
 		private boolean			flaggedAsUnavailable;
 		private String 			introduction;
-		//private CURRENCY 		rateCurrency;
-		//private PERIOD 			ratePeriod;
-		//private float 			rateValue;      
 		private CURRENCY 		rateContractCurrency;
 		private PERIOD 			rateContractPeriod;
 		private float 			rateContractValueMin;   
@@ -582,6 +562,8 @@ public class CandidateEntity {
 		private String 			ownerId;
 		private CANDIDATE_TYPE	candidateType;
 		
+		private String comments;
+		private DAYS_ON_SITE daysOnSite;
 		
 		private Set<String> 	skills						= new LinkedHashSet<>();
 		private Set<Language> 	languages					= new LinkedHashSet<>();
@@ -736,36 +718,6 @@ public class CandidateEntity {
 			this.introduction = introduction;
 			return this;
 		}
-		
-		/**
-		* Sets the Currency the Candidate charges in
-		* @param rateCurrency - Currency
-		* @return Builder
-		*/
-		//public CandidateEntityBuilder rateCurrency(CURRENCY rateCurrency) {
-		//	this.rateCurrency = rateCurrency;
-		//	return this;
-		//}
-		
-		/**
-		* Sets the unit the Rate is in
-		* @param ratePeriod - Unit of the Rate
-		* @return Builder
-		*/
-		//public CandidateEntityBuilder ratePeriod(PERIOD ratePeriod) {
-		//	this.ratePeriod = ratePeriod;
-		//	return this;
-		//}
-		
-		/**
-		* Sets the amount the Candidate charges per period
-		* @param rateValue - amount per period
-		* @return Builder
-		*/
-		//public CandidateEntityBuilder rateValue(float rateValue) {
-		//	this.rateValue = rateValue;
-		//	return this;
-		//}
 		
 		/**
 		* Sets the format of the Candidates Profile Photo
@@ -932,6 +884,26 @@ public class CandidateEntity {
 		}
 		
 		/**
+		* Sets comments relating to the Candidate
+		* @param comments
+		* @return Builder
+		*/
+		public CandidateEntityBuilder comments(String comments) {
+			this.comments = comments;
+			return this;
+		}
+		
+		/**
+		* Sets the Max number of days on site the Candidate is prepared to work
+		* @param daysOnSite - Max number of days onsite
+		* @return Builder
+		*/
+		public CandidateEntityBuilder daysOnSite(DAYS_ON_SITE daysOnSite) {
+			this.daysOnSite = daysOnSite;
+			return this;
+		}
+		
+		/**
 		* Returns a CandidateEntity instance initialized with 
 		* the values in the Builder
 		* @return Instance of CandidateEntity
@@ -983,6 +955,8 @@ public class CandidateEntity {
 						.availableFromDate(candidate.getAvailableFromDate())
 						.ownerId(candidate.getOwnerId().isPresent() ? candidate.getOwnerId().get() : null)
 						.candidateType(candidate.getCandidateType())
+						.comments(candidate.getComments())
+						.daysOnSite(candidate.getDaysOnSite())
 					.build();
 		
 	}
@@ -1037,6 +1011,9 @@ public class CandidateEntity {
 						.availableFromDate(candidateEntity.getAvailableFromDate())
 						.ownerId(candidateEntity.getOwnerId().isPresent() ? candidateEntity.getOwnerId().get() : null)
 						.candidateType(candidateEntity.getCandidateType())
+						.comments(candidateEntity.getComments())
+						.daysOnSite(candidateEntity.getDaysOnSite())
+						.availableFromDate(candidateEntity.getAvailableFromDate())
 					.build();
 		
 	}

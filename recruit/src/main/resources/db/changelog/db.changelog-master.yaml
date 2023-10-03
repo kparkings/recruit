@@ -1999,4 +1999,18 @@ databaseChangeLog:
                 type: varchar
                 constraints:
                   default: 'CANDIDATE'
-                    
+  - changeSet:
+      id: addCandidateExtraCols
+      author: kevin
+      changes:
+        - addColumn:
+            tableName: candidate
+            schemaName: candidate
+            columns:
+            - column:
+                name: comments
+                type: varchar
+            - column:
+                name: days_on_site
+                type: varchar
+            

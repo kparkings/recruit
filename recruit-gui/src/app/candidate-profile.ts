@@ -24,6 +24,10 @@ export class CandidateProfile{
 	public languages:Array<Language> 		= new Array<Language>();
 	public firstname:string 				= '';
 	public surname:string 					= '';
+	public comments:string					= '';
+	public daysOnSite:string				= '';
+	public availableFromDate:Date 			= new Date();
+	public candidateType:string				= '';
 
 }
 

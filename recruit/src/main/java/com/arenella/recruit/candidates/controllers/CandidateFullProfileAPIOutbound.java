@@ -6,6 +6,8 @@ import java.util.Optional;
 import java.util.Set;
 
 import com.arenella.recruit.candidates.beans.Candidate;
+import com.arenella.recruit.candidates.beans.Candidate.CANDIDATE_TYPE;
+import com.arenella.recruit.candidates.beans.Candidate.DAYS_ON_SITE;
 import com.arenella.recruit.candidates.beans.Candidate.Photo;
 import com.arenella.recruit.candidates.beans.Candidate.Photo.PHOTO_FORMAT;
 import com.arenella.recruit.candidates.beans.Language;
@@ -39,6 +41,11 @@ public class CandidateFullProfileAPIOutbound implements CandidateAPIOutbound{
 	private PhotoAPIOutbound		photo;
 	private String					introduction;
 	private String					email;
+	private String 					comments;
+	private DAYS_ON_SITE			daysOnSite;
+	private LocalDate 				availableFromDate;
+	private CANDIDATE_TYPE			candidateType;
+	
 	
 	/**
 	* Constructor based upon a builder
@@ -63,6 +70,10 @@ public class CandidateFullProfileAPIOutbound implements CandidateAPIOutbound{
 		this.photo						= builder.photo;
 		this.introduction				= builder.introduction;
 		this.email					 	= builder.email;
+		this.comments					= builder.comments;
+		this.daysOnSite					= builder.daysOnSite;
+		this.availableFromDate			= builder.availableFromDate;
+		this.candidateType				= builder.candidateType;
 		
 		this.skills.addAll(builder.skills);
 		this.languages.addAll(builder.languages);
@@ -226,6 +237,40 @@ public class CandidateFullProfileAPIOutbound implements CandidateAPIOutbound{
 	}
 	
 	/**
+	* Returns comments related to the Candidate
+	* @return comments
+	*/
+	public String getComments(){
+		return this.comments;
+	}
+	
+	/**
+	* Returns the max number of Days the Candidate 
+	* will work onste
+	* @return max days onsite
+	*/
+	public DAYS_ON_SITE getDaysOnSite() {
+		return this.daysOnSite;
+	}
+	
+	/**
+	* Returns the Date the Candidate is available from
+	* @return available from date
+	*/
+	public LocalDate getAvailableFromDate() {
+		return this.availableFromDate;
+	}
+	
+	/**
+	* Returns the type of the Candidate
+	* @return type of the Candidate
+	*/
+	public CANDIDATE_TYPE getCandidateType() {
+		return this.candidateType;
+	}
+	
+	
+	/**
 	* Builder for the  class
 	* @return A Builder for the  class
 	*/
@@ -258,6 +303,10 @@ public class CandidateFullProfileAPIOutbound implements CandidateAPIOutbound{
 		private PhotoAPIOutbound		photo;
 		private String					introduction;
 		private String					email;
+		private String 					comments;
+		private DAYS_ON_SITE			daysOnSite;
+		private LocalDate 				availableFromDate;
+		private CANDIDATE_TYPE			candidateType;
 		
 		/**
 		* Sets the candidates Unique identifier in the System
@@ -454,6 +503,46 @@ public class CandidateFullProfileAPIOutbound implements CandidateAPIOutbound{
 		}
 		
 		/**
+		* Sets comments about the Candidate
+		* @param comments - Comments by owner
+		* @return Builder
+		*/
+		public CandidateFullProfileAPIOutboundBuilder  comments(String comments) {
+			this.comments = comments;
+			return this;
+		}
+		
+		/**
+		* Sets max number of days the Candidate will work onsite
+		* @param daysOnSite - Max days onsite
+		* @return Builder
+		*/
+		public CandidateFullProfileAPIOutboundBuilder daysOnSite(DAYS_ON_SITE daysOnSite) {
+			this.daysOnSite = daysOnSite;
+			return this;
+		}
+		
+		/**
+		* Sets the date the Candidate is available from
+		* @param availableFromDate - Date Candidate is available from
+		* @return Builder
+		*/
+		public CandidateFullProfileAPIOutboundBuilder availableFromDate(LocalDate availableFromDate) {
+			this.availableFromDate = availableFromDate;
+			return this;
+		}
+		
+		/**
+		* Sets the type of the Candidate
+		* @param candidateType - Type of the Candidate
+		* @return Builder
+		*/
+		public CandidateFullProfileAPIOutboundBuilder candidateType(CANDIDATE_TYPE candidateType) {
+			this.candidateType = candidateType;
+			return this;
+		}
+		
+		/**
 		* Returns an instance of Candidate initialized with the 
 		* values in the builder
 		* @return Initialized instance of Candidate
@@ -492,6 +581,15 @@ public class CandidateFullProfileAPIOutbound implements CandidateAPIOutbound{
 					.photo(PhotoAPIOutbound.convertFromDomain(candidate.getPhoto()))
 					.introduction(candidate.getIntroduction())
 					.email(candidate.getEmail())
+					.comments(candidate.getComments())
+					.daysOnSite(candidate.getDaysOnSite())
+					.availableFromDate(candidate.getAvailableFromDate())
+					.candidateType(candidate.getCandidateType())
+					.skills(candidate.getSkills())
+					.comments(candidate.getComments())
+					.daysOnSite(candidate.getDaysOnSite())
+					.availableFromDate(candidate.getAvailableFromDate())
+					.candidateType(candidate.getCandidateType())
 				.build();
 		
 	}
