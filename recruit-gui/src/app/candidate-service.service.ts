@@ -1,11 +1,7 @@
 import { Injectable }                             		from '@angular/core';
-//import { UntypedFormGroup }                         	from '@angular/forms';
 import { HttpClient, HttpResponse, HttpHeaders }  		from '@angular/common/http';
 import { Observable, throwError }                 		from 'rxjs';
-//import { NewCandidate }                           		from './new-candidate/new-candidate';
-//import { Candidate }                           			from './candidate';
 import { NewPendingCandidate, Rate }                    from './create-candidate/new-pending-candidate';
-//import { Language}                                		from './new-candidate/language';
 import { CandidateFunction }                      		from './candidate-function';
 import { environment }									from './../environments/environment';
 import { SearchAlert }		 	                    	from './recruiter-alerts/search-alert';

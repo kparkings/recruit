@@ -127,8 +127,12 @@ export class NewCandidateComponent implements OnInit {
 		this.coreSkills = candidate.skills;
 		
 		this.languages = candidate.languages;
+
+		this.languages.forEach(lang => {
+			this.offeredCandidateFormBean.get(lang.language)?.setValue(lang.level);
+		});	
 		
-		
+		this.offeredCandidateFormBean.get("DUTCH")?.setValue("BASIC");
 	}
 
   	/**
@@ -405,6 +409,9 @@ export class NewCandidateComponent implements OnInit {
 		contractTimeUnit:		new UntypedFormControl(),
 		contractFrom:			new UntypedFormControl(0.0),
 		contractTo:				new UntypedFormControl(0.0),
+		FRENCH:					new UntypedFormControl(),
+		DUTCH:					new UntypedFormControl(),
+		ENGLISH:				new UntypedFormControl(),
 	});
 
 	public hasLastPage():boolean{
@@ -460,8 +467,11 @@ export class NewCandidateComponent implements OnInit {
 	/**
 	* Sets the Candidate level with a language
 	*/
-	public updateOfferedCandidateLanguage(language:Language, level:string):void{
-		language.level = level;
+	public updateOfferedCandidateLanguage(language:string, level:string):void{
+		this.languages.filter(l => l.language == language).forEach(l => {
+			l.level = level;	
+		});
+		
 	}
 
 	/**

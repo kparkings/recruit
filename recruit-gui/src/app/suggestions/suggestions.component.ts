@@ -56,7 +56,10 @@ export class SuggestionsComponent implements OnInit {
 				private router:				Router,
 				private emailService:		EmailService) { 
 					
-		this.getSuggestions();	
+		if(!this.isCandidate()) {
+			console.log("TTT");
+			this.getSuggestions();	
+		}
 	 	this.trustedResourceUrl = this.sanitizer.bypassSecurityTrustResourceUrl('');
 		this.isMobile = deviceDetector.isMobile();
 		
@@ -70,15 +73,18 @@ export class SuggestionsComponent implements OnInit {
 		let mpCandidate:string|null = sessionStorage.getItem("mp-candidate");
 		if (lastPage && lastPage == 'rec-mp-your-candidate') {
 			this.candidateService.getCandidateById(""+mpCandidate).subscribe(c => {
-				this.showSuggestedCandidateOverview(c.content[0]);	
+				this.showSuggestedCandidateOverview(c.content[0]);
 			});
 		}
 		
 		//Candidate
 		if (this.isCandidate()) {
-			let candidate:Candidate = new Candidate();
-			candidate.candidateId = this.getLoggedInUserId();
-			this.showSuggestedCandidateOverview(candidate);	
+			console.log("AAA");
+			this.candidateService.getCandidateById(this.getLoggedInUserId()).subscribe(candidate => {
+			console.log("BBB");
+				//candidate.candidateId = this.getLoggedInUserId();
+				this.showSuggestedCandidateOverview(candidate.content[0]);	
+			});
 		}
 		
 	}
@@ -487,8 +493,6 @@ export class SuggestionsComponent implements OnInit {
 		this.currentView 			= 'suggested-canidate-overview';
 		this.suggestedCandidate 	= candidateSuggestion;
 		
-		console.log("DDDDD " + JSON.stringify(candidateSuggestion.candidateId));
-		
 		this.fetchCandidateProfile(candidateSuggestion.candidateId);
 	}
 	
@@ -773,7 +777,8 @@ export class SuggestionsComponent implements OnInit {
 		this.candidateService.getCandidateProfileById(candidateId).subscribe( candidate => {
 				this.candidateProfile = candidate;
 				this.currentView = 'suggested-canidate-overview';
-				console.log("LLL " + this.candidateProfile);
+				console.log("LLL-1 " + JSON.stringify(this.candidateProfile));
+				console.log("LLL-2 " + JSON.stringify(this.suggestedCandidate));
 			}, err => {
 				console.log("LLL FAILED " + JSON.stringify(err));
 				if (err.status === 401 || err.status === 0) {

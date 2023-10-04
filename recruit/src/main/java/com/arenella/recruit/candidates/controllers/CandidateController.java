@@ -169,7 +169,7 @@ public class CandidateController {
 	* @param skills					- Optional Skills to filter on
 	* @return Page of results
 	*/
-	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('RECRUITER')")
+	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('RECRUITER') OR hasRole('CANDIDATE')")
 	@GetMapping(path="candidate")
 	public Page<CandidateAPIOutbound> getCandidate( @RequestParam("orderAttribute") 	String 				orderAttribute,
 													@RequestParam("order") 				RESULT_ORDER		order,
@@ -192,8 +192,20 @@ public class CandidateController {
 													@RequestParam(required = false)		String				searchText,
 													@RequestParam(required = false)		Boolean				available,
 													@RequestParam(required = false)		String				ownerId,
-													Pageable pageable
-												 	) {
+													Pageable pageable,
+													Principal principal
+													) {
+		
+		
+		
+		
+		UsernamePasswordAuthenticationToken user = (UsernamePasswordAuthenticationToken)principal;
+		
+		boolean isCandidate = user.getAuthorities().stream().filter(a -> a.getAuthority().equals("ROLE_CANDIDATE")).findAny().isPresent();
+		if (isCandidate) {
+			candidateId.clear();
+			candidateId.add(user.getName());
+		}
 		
 		CandidateFilterOptions filterOptions = CandidateFilterOptions
 																	.builder()

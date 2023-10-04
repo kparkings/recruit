@@ -174,11 +174,27 @@
 			<tr>
 				<td class="hdr-label" colspan="2">Spoken Languages</td>
 			</tr>
-			<tr *ngFor="let language of languages">
-				<td>{{language.language}}</td>
+			<tr>
+				<td>Dutch</td>
 				<td>
-					<select>
-						<option *ngFor="let level of languageOptions" (change)="updateOfferedCandidateLanguage(language, level)">{{level}}</option>
+					<select formControlName="DUTCH">
+						<option *ngFor="let level of languageOptions" (change)="updateOfferedCandidateLanguage('DUTCH', level)">{{level}}</option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td>English</td>
+				<td>
+					<select formControlName="ENGLISH">
+						<option *ngFor="let level of languageOptions" (change)="updateOfferedCandidateLanguage('ENGLISH', level)">{{level}}</option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td>French</td>
+				<td>
+					<select formControlName="FRENCH">
+						<option *ngFor="let level of languageOptions" (change)="updateOfferedCandidateLanguage('FRENCH', level)">{{level}}</option>
 					</select>
 				</td>
 			</tr>
