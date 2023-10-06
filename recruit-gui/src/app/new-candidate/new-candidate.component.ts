@@ -48,18 +48,17 @@ export class NewCandidateComponent implements OnInit {
     	this.languages.push(new Language("DUTCH","UNKNOWN"));
     	this.languages.push(new Language("FRENCH","PROFICIENT"));
     	this.languages.push(new Language("ENGLISH","BASIC"));
-		console.log("XX1");
+	
 		/**
 		* Is Edit  
 		*/
-		if(this.hasLastPage() ) {
+		if (this.hasLastPage()) {
 			var lastPage:string | null  =  sessionStorage.getItem("last-page");
-		console.log("XX2");
+	
 			/**
 			* Marketpalce Edit 
 			*/
 			if (lastPage === 'rec-mp') {
-				console.log("XX3");
 				var candidateId:string | null  =  sessionStorage.getItem("mp-edit-candidate");
 				this.candidateService.getCandidateProfileById(""+candidateId).subscribe(candidate => {
 					this.populateForEdit(candidate);
@@ -67,13 +66,19 @@ export class NewCandidateComponent implements OnInit {
 			}
 			
 			if (lastPage === 'candidate-profile') {
-				console.log("XX4");
 				this.candidateService.getCandidateProfileById(""+sessionStorage.getItem("userId")).subscribe(candidate => {
 					this.populateForEdit(candidate);
 				});
 			}
+			
+			if (lastPage === 'admin-candidate-profile' || lastPage === 'rec-candidate-profile') {
+				this.candidateService.getCandidateProfileById(""+sessionStorage.getItem("candidate-to-edit")).subscribe(candidate => {
+					this.populateForEdit(candidate);
+				});
+			}
+			
 		} else {
-			console.log("XX5");
+			
 			this.candidateService.fetchPendingCandidates().forEach(data => {
 			
 			let pendingCandidates: Array<PendingCandidate> = data;
@@ -425,12 +430,19 @@ export class NewCandidateComponent implements OnInit {
 	* Returns the previous OfferedCandidate list (all/own candidate)
 	*/		
 	public showOfferedCandidates():void{
-		
+		console.log("XXX1");
 		var lastPage:string | null  =  sessionStorage.getItem("last-page");
 		
 		if (lastPage  && lastPage === 'rec-mp') {
+			console.log("XXX2");
 			sessionStorage.setItem("mp-lastview", "showSupply");
 			this.router.navigate(['recruiter-marketplace']);
+		}
+	
+		if (lastPage === 'admin-candidate-profile' || lastPage === 'rec-candidate-profile') {
+			console.log("XXX3");
+			sessionStorage.setItem("last-page","admin-edit-candidate");
+			this.router.navigate(['suggestions']);
 		}
 		
 	}
@@ -498,6 +510,13 @@ export class NewCandidateComponent implements OnInit {
 		} else {
 			this.contractRoleClass = "hide-row";
 		}
+	}
+	
+	/**
+	* Whether or not the User is a Admin
+	*/
+	public isAdmin():boolean{
+		return sessionStorage.getItem('isAdmin') === 'true';
 	}
 	
 }

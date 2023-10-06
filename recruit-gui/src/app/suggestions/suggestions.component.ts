@@ -77,6 +77,14 @@ export class SuggestionsComponent implements OnInit {
 			});
 		}
 		
+		//If view from Admin Edit
+		if (lastPage && lastPage == 'admin-edit-candidate') {
+			let candidateId:string = ""+sessionStorage.getItem("candidate-to-edit");
+			this.candidateService.getCandidateById(candidateId).subscribe(c => {
+				this.showSuggestedCandidateOverview(c.content[0]);
+			});
+		}
+		
 		//Candidate
 		if (this.isCandidate()) {
 			console.log("AAA");
@@ -93,8 +101,24 @@ export class SuggestionsComponent implements OnInit {
 	* Navigates to the edit page
 	*/
 	public editAccount():void{
-		sessionStorage.setItem("last-page", "candidate-profile");
-		this.router.navigate(['new-candidate']);
+		
+		if (this.isCandidate()) {
+			sessionStorage.setItem("last-page", "candidate-profile");
+			this.router.navigate(['new-candidate']);
+		}
+		
+		if (this.isAdmin()) {
+			sessionStorage.setItem("last-page", "admin-candidate-profile");
+			sessionStorage.setItem("candidate-to-edit", this.candidateProfile.candidateId);
+			this.router.navigate(['new-candidate']);
+		}
+		
+		if (this.isRecruiter()) {
+			sessionStorage.setItem("last-page", "rec-candidate-profile");
+			sessionStorage.setItem("candidate-to-edit", this.candidateProfile.candidateId);
+			this.router.navigate(['new-candidate']);
+		}
+		
 	}
 	
 	public deleteAccount():void{
@@ -928,10 +952,39 @@ export class SuggestionsComponent implements OnInit {
 	}
 	
 	/**
-	* Whether or not the Use is a Candidate
+	* Whether or not the User is a Candidate
 	*/
 	public isCandidate():boolean{
 		return sessionStorage.getItem('isCandidate') === 'true';
+	}
+	
+	/**
+	* Whether or not the User is a Admin
+	*/
+	public isAdmin():boolean{
+		return sessionStorage.getItem('isAdmin') === 'true';
+	}
+	
+	/**
+	* If the Recruiter is the owner of the selected Candidate
+	*/
+	public isOwner():boolean{
+		
+		let lastPage:string|null = sessionStorage.getItem("last-page");
+		let mpCandidate:string|null = sessionStorage.getItem("mp-candidate");
+		if (this.isRecruiter() && lastPage && lastPage == 'rec-mp-your-candidate') {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	
+	/**
+	* Whether or not the User is a Recruiter
+	*/
+	public isRecruiter():boolean{
+		return sessionStorage.getItem('isRecruiter') === 'true';
 	}
 	
 	/**
