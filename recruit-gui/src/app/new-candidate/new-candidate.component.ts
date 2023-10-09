@@ -10,6 +10,7 @@ import { PendingCandidate }								from './pending-candidate';
 import { environment }									from '../../environments/environment';
 import { NewCandidateRequest, Rate, Language } 					from './new-candidate-request';
 import { CandidateProfile } from '../candidate-profile';
+import { CandidateNavService } from '../candidate-nav.service';
 
 @Component({
   selector: 'app-new-candidate',
@@ -35,7 +36,11 @@ export class NewCandidateComponent implements OnInit {
 	/**
   	* Constructor
   	*/
-  	constructor(private curriculumService: CurriculumService , private candidateService: CandidateServiceService , private modalService: NgbModal, private router: Router) {
+  	constructor(private curriculumService: CurriculumService, 
+  				private candidateService: CandidateServiceService,
+  				private modalService: NgbModal,
+  				private router: Router,
+  				private candidateNavService: 	CandidateNavService) {
     
     	this.candidateService.loadFunctionTypes().forEach(funcType => {
       		this.functionTypes.push(funcType);
@@ -49,48 +54,23 @@ export class NewCandidateComponent implements OnInit {
     	this.languages.push(new Language("FRENCH","PROFICIENT"));
     	this.languages.push(new Language("ENGLISH","BASIC"));
 	
-		/**
-		* Is Edit  
-		*/
-		if (this.hasLastPage()) {
-			var lastPage:string | null  =  sessionStorage.getItem("last-page");
-	
-			/**
-			* Marketpalce Edit 
-			*/
-			if (lastPage === 'rec-mp') {
-				var candidateId:string | null  =  sessionStorage.getItem("mp-edit-candidate");
-				this.candidateService.getCandidateProfileById(""+candidateId).subscribe(candidate => {
-					this.populateForEdit(candidate);
-				});
-			}
-			
-			if (lastPage === 'candidate-profile') {
-				this.candidateService.getCandidateProfileById(""+sessionStorage.getItem("userId")).subscribe(candidate => {
-					this.populateForEdit(candidate);
-				});
-			}
-			
-			if (lastPage === 'admin-candidate-profile' || lastPage === 'rec-candidate-profile') {
-				this.candidateService.getCandidateProfileById(""+sessionStorage.getItem("candidate-to-edit")).subscribe(candidate => {
-					this.populateForEdit(candidate);
-				});
-			}
-			
+		if (this.candidateNavService.isRouteActive()) {
+			this.candidateService.getCandidateProfileById(this.candidateNavService.getCandidateId()).subscribe(candidate => {
+				this.populateForEdit(candidate);
+			});
 		} else {
-			
 			this.candidateService.fetchPendingCandidates().forEach(data => {
 			
-			let pendingCandidates: Array<PendingCandidate> = data;
+				let pendingCandidates: Array<PendingCandidate> = data;
 			
-			pendingCandidates.forEach(pc => {
+				pendingCandidates.forEach(pc => {
                     this.pendingCandidates.push(pc);
-            });
+            	});
 			
-			if (this.isPendingCandidates() && this.isAuthenticatedAsAdmin()) {
-				this.openPendingCandidatesBox();
-			}
-		});
+				if (this.isPendingCandidates() && this.isAuthenticatedAsAdmin()) {
+					this.openPendingCandidatesBox();
+				}
+			});
 		
 		}
 
@@ -419,31 +399,33 @@ export class NewCandidateComponent implements OnInit {
 		ENGLISH:				new UntypedFormControl(),
 	});
 
-	public hasLastPage():boolean{
+	//public hasLastPage():boolean{
 		
-		var lastPage:string | null  =  sessionStorage.getItem("last-page");
+	//	var lastPage:string | null  =  sessionStorage.getItem("last-page");
 		
-		return lastPage != null;
-	}
+	//	return lastPage != null;
+	//}
 	
 	/**
 	* Returns the previous OfferedCandidate list (all/own candidate)
 	*/		
 	public showOfferedCandidates():void{
-		console.log("XXX1");
-		var lastPage:string | null  =  sessionStorage.getItem("last-page");
 		
-		if (lastPage  && lastPage === 'rec-mp') {
-			console.log("XXX2");
-			sessionStorage.setItem("mp-lastview", "showSupply");
-			this.router.navigate(['recruiter-marketplace']);
-		}
+		this.candidateNavService.doNextMove("back", this.candidateNavService.getCandidateId());
+		//console.log("XXX1");
+		//var lastPage:string | null  =  sessionStorage.getItem("last-page");
+		
+		//if (lastPage  && lastPage === 'rec-mp') {
+		//	console.log("XXX2");
+		//	sessionStorage.setItem("mp-lastview", "showSupply");
+		//	this.router.navigate(['recruiter-marketplace']);
+		//}
 	
-		if (lastPage === 'admin-candidate-profile' || lastPage === 'rec-candidate-profile') {
-			console.log("XXX3");
-			sessionStorage.setItem("last-page","admin-edit-candidate");
-			this.router.navigate(['suggestions']);
-		}
+		//if (lastPage === 'admin-candidate-profile' || lastPage === 'rec-candidate-profile') {
+		//	console.log("XXX3");
+		//	sessionStorage.setItem("last-page","admin-edit-candidate");
+		//	this.router.navigate(['suggestions']);
+		//}
 		
 	}
 	

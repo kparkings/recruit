@@ -13,6 +13,7 @@ import { RecruiterProfileService} 						from '../recruiter-profile.service';
 import { RecruiterProfile }								from '../recruiter-profile/recruiter-profile';
 import { DeviceDetectorService } 						from 'ngx-device-detector';
 import { Candidate } 									from '../suggestions/candidate';
+import { CandidateNavService } from '../candidate-nav.service';
 @Component({
   selector: 'app-recruiter-marketplace',
   templateUrl: './recruiter-marketplace.component.html',
@@ -35,13 +36,13 @@ export class RecruiterMarketplaceComponent implements OnInit {
 				private router:						Router,
 				public 	candidateService:			CandidateServiceService,
 				private deviceDetector:				DeviceDetectorService,
-				private recruiterProfileService: 	RecruiterProfileService) {
+				private recruiterProfileService: 	RecruiterProfileService,
+				private candidateNavService: 		CandidateNavService) {
 					
 					this.isMobile = deviceDetector.isMobile();
 					
 					this.marketplaceService.fetchUnseenOfferedCandidates().subscribe(val => {
 						this.unseenOfferedCandidates = val;
-						//this.fetchOfferedCandidates();
 						this.showJustMyCandidates();
 					});
 					
@@ -54,11 +55,15 @@ export class RecruiterMarketplaceComponent implements OnInit {
 					this.recruiterProfileService.fetchRecruiterProfiles("RECRUITERS").subscribe(rps => this.recruiterProfiles = rps);
 					
 					//Refactor into central navigation logic service
-					var lastView:string | null = sessionStorage.getItem("mp-lastview");
+					//var lastView:string | null = sessionStorage.getItem("mp-lastview");
 					
-					if (lastView){
+					//if (lastView){
+					//	this.switchTab('showSupply');
+					//}
+					if (this.candidateNavService.isRouteActive()) {
 						this.switchTab('showSupply');
-					}
+					} 
+					
 					
 	}
 
@@ -346,6 +351,7 @@ export class RecruiterMarketplaceComponent implements OnInit {
 	*/
 	//public viewCandidate(candidate:OfferedCandidate){
 	public viewCandidate(candidate:Candidate){
+		
 		//this.activeCandidate = candidate;
 		//this.switchTab('showSupplyDetails');
 		//this.marketplaceService.registerOfferedCandidateViewedEvent(candidate.id).subscribe( data => {
@@ -353,9 +359,11 @@ export class RecruiterMarketplaceComponent implements OnInit {
 		//});
 		//this.recruiterProfile = new RecruiterProfile();
 		//this.recruiterProfile = this.recruiterProfiles.filter(p => p.recruiterId == candidate.recruiter.recruiterId)[0];
-		sessionStorage.setItem("last-page", 'rec-mp-your-candidate');
-		sessionStorage.setItem("mp-candidate", candidate.candidateId);
-		this.router.navigate(['suggestions']);
+		this.candidateNavService.startCandidateProfileRouteForRecruiter();
+		this.candidateNavService.doNextMove("view", candidate.candidateId);
+		//sessionStorage.setItem("last-page", 'rec-mp-your-candidate');
+		//sessionStorage.setItem("mp-candidate", candidate.candidateId);
+		//this.router.navigate(['suggestions']);
 	}
 	
 	/**

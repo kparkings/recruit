@@ -16,6 +16,7 @@ import { Router}															from '@angular/router';
 import { debounceTime } 													from "rxjs/operators";
 import { PhotoAPIOutbound, CandidateProfile, Language, Rate } 				from '../candidate-profile';
 import { EmailService, EmailRequest }										from '../email.service';
+import { CandidateNavService } from '../candidate-nav.service';
 
 /**
 * Component to suggest suitable Candidates based upon a 
@@ -46,20 +47,21 @@ export class SuggestionsComponent implements OnInit {
 	* Constructor
 	* @param candidateService - Services relating to Candidates
 	*/
-	constructor(public candidateService:CandidateServiceService, 
-				public suggestionsService:	SuggestionsService, 
-				private clipboard: 			Clipboard, 
-				private modalService: 		NgbModal, 
-				private sanitizer: 			DomSanitizer,
-				private curriculumService: 	CurriculumService,
-				private deviceDetector: 	DeviceDetectorService,
-				private router:				Router,
-				private emailService:		EmailService) { 
+	constructor(public candidateService:		CandidateServiceService, 
+				public suggestionsService:		SuggestionsService, 
+				private clipboard: 				Clipboard, 
+				private modalService: 			NgbModal, 
+				private sanitizer: 				DomSanitizer,
+				private curriculumService: 		CurriculumService,
+				private deviceDetector: 		DeviceDetectorService,
+				private router:					Router,
+				private emailService:			EmailService,
+				private candidateNavService: 	CandidateNavService) { 
 					
 		if(!this.isCandidate()) {
-			console.log("TTT");
 			this.getSuggestions();	
 		}
+		
 	 	this.trustedResourceUrl = this.sanitizer.bypassSecurityTrustResourceUrl('');
 		this.isMobile = deviceDetector.isMobile();
 		
@@ -69,31 +71,43 @@ export class SuggestionsComponent implements OnInit {
 		}
 		
 		//If View From MP - Fetch and show candidate: Refactor into central navigation service
-		let lastPage:string|null = sessionStorage.getItem("last-page");
-		let mpCandidate:string|null = sessionStorage.getItem("mp-candidate");
-		if (lastPage && lastPage == 'rec-mp-your-candidate') {
-			this.candidateService.getCandidateById(""+mpCandidate).subscribe(c => {
-				this.showSuggestedCandidateOverview(c.content[0]);
-			});
-		}
+		//let lastPage:string|null = sessionStorage.getItem("last-page");
+		//let mpCandidate:string|null = sessionStorage.getItem("mp-candidate");
+		//if (lastPage && lastPage == 'rec-mp-your-candidate') {
+		//	this.candidateService.getCandidateById(""+mpCandidate).subscribe(c => {
+		//		this.showSuggestedCandidateOverview(c.content[0]);
+		//	});
+		//}
 		
 		//If view from Admin Edit
-		if (lastPage && lastPage == 'admin-edit-candidate') {
-			let candidateId:string = ""+sessionStorage.getItem("candidate-to-edit");
-			this.candidateService.getCandidateById(candidateId).subscribe(c => {
-				this.showSuggestedCandidateOverview(c.content[0]);
-			});
-		}
+		//if (lastPage && lastPage == 'admin-edit-candidate') {
+		//	let candidateId:string = ""+sessionStorage.getItem("candidate-to-edit");
+		//	this.candidateService.getCandidateById(candidateId).subscribe(c => {
+		//		this.showSuggestedCandidateOverview(c.content[0]);
+		//	});
+		//}
 		
 		//Candidate
 		if (this.isCandidate()) {
-			console.log("AAA");
+			this.candidateNavService.startCandidateProfileRouteForCandidate();
 			this.candidateService.getCandidateById(this.getLoggedInUserId()).subscribe(candidate => {
-			console.log("BBB");
-				//candidate.candidateId = this.getLoggedInUserId();
 				this.showSuggestedCandidateOverview(candidate.content[0]);	
 			});
 		}
+		
+		//Recruiter
+		if (this.isRecruiter() && this.candidateNavService.isRouteActive()) {
+			this.candidateService.getCandidateById(this.candidateNavService.getCandidateId()).subscribe(candidate => {
+				this.showSuggestedCandidateOverview(candidate.content[0]);	
+			});
+		}
+
+		//Admin
+		if (this.isAdmin() && this.candidateNavService.isRouteActive()) {
+			this.candidateService.getCandidateById(this.candidateNavService.getCandidateId()).subscribe(candidate => {
+				this.showSuggestedCandidateOverview(candidate.content[0]);	
+			});
+		}		
 		
 	}
 	
@@ -101,24 +115,7 @@ export class SuggestionsComponent implements OnInit {
 	* Navigates to the edit page
 	*/
 	public editAccount():void{
-		
-		if (this.isCandidate()) {
-			sessionStorage.setItem("last-page", "candidate-profile");
-			this.router.navigate(['new-candidate']);
-		}
-		
-		if (this.isAdmin()) {
-			sessionStorage.setItem("last-page", "admin-candidate-profile");
-			sessionStorage.setItem("candidate-to-edit", this.candidateProfile.candidateId);
-			this.router.navigate(['new-candidate']);
-		}
-		
-		if (this.isRecruiter()) {
-			sessionStorage.setItem("last-page", "rec-candidate-profile");
-			sessionStorage.setItem("candidate-to-edit", this.candidateProfile.candidateId);
-			this.router.navigate(['new-candidate']);
-		}
-		
+		this.candidateNavService.doNextMove("edit", this.candidateProfile.candidateId);
 	}
 	
 	public deleteAccount():void{
@@ -484,20 +481,31 @@ export class SuggestionsComponent implements OnInit {
 	* Shows the Suggesion result view
 	*/
 	public showSuggestionsResults():void{
-		
-		//If View From MP - Fetch and show candidate: Refactor into central navigation service
-		let lastPage:string|null = sessionStorage.getItem("last-page");
-		let mpCandidate:string|null = sessionStorage.getItem("mp-candidate");
-		if (lastPage && lastPage == 'rec-mp-your-candidate') {
-			sessionStorage.removeItem("last-page");
-			sessionStorage.removeItem("mp-candidate");
-			sessionStorage.setItem("mp-lastview", "xxx");
-			this.router.navigate(['recruiter-marketplace']);
+		console.log("TT1");
+		if (this.isRecruiter() && this.candidateNavService.isRouteActive()) {
+			console.log("TT2");
+			this.candidateNavService.doNextMove("back",this.candidateNavService.getCandidateId());	
 		} else {
+			console.log("TT3");
 			this.currentView 		= 'suggestion-results';
 			this.suggestedCandidate = new Candidate();	
 			this.lastView 			= '';
 		}
+		
+		//If View From MP - Fetch and show candidate: Refactor into central navigation service
+		
+		//let lastPage:string|null = sessionStorage.getItem("last-page");
+		//let mpCandidate:string|null = sessionStorage.getItem("mp-candidate");
+		//if (lastPage && lastPage == 'rec-mp-your-candidate') {
+		//	sessionStorage.removeItem("last-page");
+		//	sessionStorage.removeItem("mp-candidate");
+		//	sessionStorage.setItem("mp-lastview", "xxx");
+		//	this.router.navigate(['recruiter-marketplace']);
+		//} else {
+		//	this.currentView 		= 'suggestion-results';
+		//	this.suggestedCandidate = new Candidate();	
+		//	this.lastView 			= '';
+		//}
 	}
 
 	/**
@@ -514,6 +522,17 @@ export class SuggestionsComponent implements OnInit {
 	* Shows the Suggesion result view
 	*/
 	public showSuggestedCandidateOverview(candidateSuggestion:Candidate):void{
+		
+		//Admin
+		if (this.isAdmin()) {
+			this.candidateNavService.startCandidateProfileRouteForAdmin();
+		}
+		
+		//Recruiter
+		//if (this.isRecruiter()) {
+		//	this.candidateNavService.startCandidateProfileRouteForRecruiter();
+		//}
+		
 		this.currentView 			= 'suggested-canidate-overview';
 		this.suggestedCandidate 	= candidateSuggestion;
 		
@@ -801,10 +820,7 @@ export class SuggestionsComponent implements OnInit {
 		this.candidateService.getCandidateProfileById(candidateId).subscribe( candidate => {
 				this.candidateProfile = candidate;
 				this.currentView = 'suggested-canidate-overview';
-				console.log("LLL-1 " + JSON.stringify(this.candidateProfile));
-				console.log("LLL-2 " + JSON.stringify(this.suggestedCandidate));
 			}, err => {
-				console.log("LLL FAILED " + JSON.stringify(err));
 				if (err.status === 401 || err.status === 0) {
 					sessionStorage.removeItem('isAdmin');
 					sessionStorage.removeItem('isRecruter');

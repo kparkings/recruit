@@ -31,7 +31,7 @@
            <a  class="dropdown-item" routerLink="/listing">Job Board</a>
         </li>
         <li  class="li-arenella-nav {{menuItemMobileCss}}"  *ngIf="isAuthenticated() && !isRecruiterNoSubscription() && !hasUnpaidSubscription() && !isCandidate()">	
-           <a  class="dropdown-item" routerLink="/suggestions">Suggestions</a>
+           <a  class="dropdown-item" (click)="navToSuggestions()">Suggestions</a>
         </li>
 		<li class="li-arenella-nav {{menuItemMobileCss}}" *ngIf="isAuthenticated() && !isRecruiterNoSubscription() && !hasUnpaidSubscription() && !isCandidate()">
         	<a *ngIf="unseenMpPosts > 0" 	class="dropdown-item" routerLink="/recruiter-marketplace"><span class="unseen-posts">{{unseenMpPosts}}</span>Marketplace</a>

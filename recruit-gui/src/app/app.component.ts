@@ -8,6 +8,7 @@ import { EmailService }						from './email.service';
 import { PopupsService }					from './popups.service';
 import { Observable, Observer }             from 'rxjs';
 import {ElementRef} from '@angular/core';
+import { CandidateNavService } from './candidate-nav.service';
 
 @Component({
   selector: 'app-root',
@@ -35,13 +36,14 @@ export class AppComponent {
 	/**
 	* Constructor
 	*/
-	constructor(private router: 			Router, 
-				private cookieService: 		CookieService, 
-				private modalService: 		NgbModal, 
-				private deviceDetector: 	DeviceDetectorService,
-				private mpService:			RecruiterMarketplaceService,
-				private emailService:		EmailService,
-				public  popupsService:		PopupsService){
+	constructor(private router: 				Router, 
+				private cookieService: 			CookieService, 
+				private modalService: 			NgbModal, 
+				private deviceDetector: 		DeviceDetectorService,
+				private mpService:				RecruiterMarketplaceService,
+				private emailService:			EmailService,
+				public  popupsService:			PopupsService,
+				private candidateNavService: 	CandidateNavService){
 		
 		this.isMobile = deviceDetector.isMobile();
 		
@@ -74,6 +76,14 @@ export class AppComponent {
 				this.popupsService.openModal(this.content);
 			}
 		});
+	}
+	
+	/**
+	* Returns the name of the current T&C acceptance cookie
+	*/
+	public navToSuggestions():void{
+		this.candidateNavService.reset();
+		this.router.navigate(['suggestions']);
 	}
 	
 	/**
