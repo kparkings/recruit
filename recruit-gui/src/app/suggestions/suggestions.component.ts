@@ -70,23 +70,6 @@ export class SuggestionsComponent implements OnInit {
 			this.suggestionMobileBtnClass	= 'buttons-icon-mobile';
 		}
 		
-		//If View From MP - Fetch and show candidate: Refactor into central navigation service
-		//let lastPage:string|null = sessionStorage.getItem("last-page");
-		//let mpCandidate:string|null = sessionStorage.getItem("mp-candidate");
-		//if (lastPage && lastPage == 'rec-mp-your-candidate') {
-		//	this.candidateService.getCandidateById(""+mpCandidate).subscribe(c => {
-		//		this.showSuggestedCandidateOverview(c.content[0]);
-		//	});
-		//}
-		
-		//If view from Admin Edit
-		//if (lastPage && lastPage == 'admin-edit-candidate') {
-		//	let candidateId:string = ""+sessionStorage.getItem("candidate-to-edit");
-		//	this.candidateService.getCandidateById(candidateId).subscribe(c => {
-		//		this.showSuggestedCandidateOverview(c.content[0]);
-		//	});
-		//}
-		
 		//Candidate
 		if (this.isCandidate()) {
 			this.candidateNavService.startCandidateProfileRouteForCandidate();
@@ -986,13 +969,11 @@ export class SuggestionsComponent implements OnInit {
 	*/
 	public isOwner():boolean{
 		
-		let lastPage:string|null = sessionStorage.getItem("last-page");
-		let mpCandidate:string|null = sessionStorage.getItem("mp-candidate");
-		if (this.isRecruiter() && lastPage && lastPage == 'rec-mp-your-candidate') {
-			return true;
-		} else {
+		if (!this.candidateNavService.isRouteActive()) {
 			return false;
 		}
+		
+		return this.candidateProfile.ownerId == this.getLoggedInUserId();
 	}
 	
 	

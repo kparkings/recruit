@@ -54,7 +54,7 @@ public class CandidateFullProfileAPIOutboundTest {
 	private static final DAYS_ON_SITE		DAYS_ON_SITE_VAL		= DAYS_ON_SITE.FOUR;
 	private static final LocalDate 			AVAILABLE_FROM_DATE		= LocalDate.of(2023, 12, 3);
 	private static final CANDIDATE_TYPE		CANDIDATE_TYPE_VAL		= CANDIDATE_TYPE.CANDIDATE;
-	
+	private static final String				OWNER_ID				= "rec33";
 	/**
 	* Sets up test environment 
 	*/
@@ -94,6 +94,7 @@ public class CandidateFullProfileAPIOutboundTest {
 							.daysOnSite(DAYS_ON_SITE_VAL)
 							.availableFromDate(AVAILABLE_FROM_DATE)
 							.candidateType(CANDIDATE_TYPE_VAL)
+							.ownerId(OWNER_ID)
 							.build();
 		
 		assertEquals(CANDIDATE_ID, 						candidate.getCandidateId());
@@ -115,6 +116,7 @@ public class CandidateFullProfileAPIOutboundTest {
 		assertEquals(DAYS_ON_SITE_VAL, 					candidate.getDaysOnSite());
 		assertEquals(AVAILABLE_FROM_DATE, 				candidate.getAvailableFromDate());
 		assertEquals(CANDIDATE_TYPE_VAL, 				candidate.getCandidateType());
+		assertEquals(OWNER_ID,			 				candidate.getOwnerId());
 		
 		assertTrue(candidate.getSkills().contains(SKILL));
 		candidate.getLanguages().stream().filter(l -> l.getLanguage() == LANGUAGEVAL.getLanguage()).findAny().orElseThrow();
@@ -150,6 +152,7 @@ public class CandidateFullProfileAPIOutboundTest {
 							.daysOnSite(DAYS_ON_SITE_VAL)
 							.availableFromDate(AVAILABLE_FROM_DATE)
 							.candidateType(CANDIDATE_TYPE_VAL)
+							.ownerId(OWNER_ID)
 							.build();
 		
 		assertEquals(CANDIDATE_ID, 				candidate.getCandidateId());
@@ -169,6 +172,7 @@ public class CandidateFullProfileAPIOutboundTest {
 		assertEquals(DAYS_ON_SITE_VAL, 			candidate.getDaysOnSite());
 		assertEquals(AVAILABLE_FROM_DATE, 		candidate.getAvailableFromDate());
 		assertEquals(CANDIDATE_TYPE_VAL, 		candidate.getCandidateType());
+		assertEquals(OWNER_ID, 					candidate.getOwnerId().get());
 		
 		assertTrue(candidate.getSkills().contains(SKILL));
 		candidate.getLanguages().stream().filter(l -> l.getLanguage() == LANGUAGEVAL.getLanguage()).findAny().orElseThrow();
@@ -200,6 +204,7 @@ public class CandidateFullProfileAPIOutboundTest {
 		assertEquals(DAYS_ON_SITE_VAL, 						candidateProfile.getDaysOnSite());
 		assertEquals(AVAILABLE_FROM_DATE, 					candidateProfile.getAvailableFromDate());
 		assertEquals(CANDIDATE_TYPE_VAL, 					candidateProfile.getCandidateType());
+		assertEquals(OWNER_ID,			 					candidateProfile.getOwnerId());
 	}
 	
 }

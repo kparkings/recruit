@@ -398,35 +398,12 @@ export class NewCandidateComponent implements OnInit {
 		DUTCH:					new UntypedFormControl(),
 		ENGLISH:				new UntypedFormControl(),
 	});
-
-	//public hasLastPage():boolean{
-		
-	//	var lastPage:string | null  =  sessionStorage.getItem("last-page");
-		
-	//	return lastPage != null;
-	//}
 	
 	/**
 	* Returns the previous OfferedCandidate list (all/own candidate)
 	*/		
 	public showOfferedCandidates():void{
-		
 		this.candidateNavService.doNextMove("back", this.candidateNavService.getCandidateId());
-		//console.log("XXX1");
-		//var lastPage:string | null  =  sessionStorage.getItem("last-page");
-		
-		//if (lastPage  && lastPage === 'rec-mp') {
-		//	console.log("XXX2");
-		//	sessionStorage.setItem("mp-lastview", "showSupply");
-		//	this.router.navigate(['recruiter-marketplace']);
-		//}
-	
-		//if (lastPage === 'admin-candidate-profile' || lastPage === 'rec-candidate-profile') {
-		//	console.log("XXX3");
-		//	sessionStorage.setItem("last-page","admin-edit-candidate");
-		//	this.router.navigate(['suggestions']);
-		//}
-		
 	}
 	
 	public publishOfferedCandidate():void{

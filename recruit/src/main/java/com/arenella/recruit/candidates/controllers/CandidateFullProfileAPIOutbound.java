@@ -45,6 +45,7 @@ public class CandidateFullProfileAPIOutbound implements CandidateAPIOutbound{
 	private DAYS_ON_SITE			daysOnSite;
 	private LocalDate 				availableFromDate;
 	private CANDIDATE_TYPE			candidateType;
+	private String					ownerId;
 	
 	
 	/**
@@ -74,6 +75,7 @@ public class CandidateFullProfileAPIOutbound implements CandidateAPIOutbound{
 		this.daysOnSite					= builder.daysOnSite;
 		this.availableFromDate			= builder.availableFromDate;
 		this.candidateType				= builder.candidateType;
+		this.ownerId					= builder.ownerId;
 		
 		this.skills.addAll(builder.skills);
 		this.languages.addAll(builder.languages);
@@ -196,6 +198,13 @@ public class CandidateFullProfileAPIOutbound implements CandidateAPIOutbound{
 	}
 	
 	/**
+	* If Candidate has an owner/manager returns the id of the owner
+	*/
+	public String getOwnerId() {
+		return this.ownerId;
+	}
+	
+	/**
 	* If available the Contract Rate
 	* @return Contract Rate
 	*/
@@ -307,6 +316,7 @@ public class CandidateFullProfileAPIOutbound implements CandidateAPIOutbound{
 		private DAYS_ON_SITE			daysOnSite;
 		private LocalDate 				availableFromDate;
 		private CANDIDATE_TYPE			candidateType;
+		private String					ownerId;
 		
 		/**
 		* Sets the candidates Unique identifier in the System
@@ -543,6 +553,16 @@ public class CandidateFullProfileAPIOutbound implements CandidateAPIOutbound{
 		}
 		
 		/**
+		* Sets the id of the Candidates owner if the candidate has one
+		* @param owner - id of the owner
+		* @return Builder
+		*/
+		public CandidateFullProfileAPIOutboundBuilder ownerId(String ownerId) {
+			this.ownerId = ownerId;
+			return this;
+		}
+		
+		/**
 		* Returns an instance of Candidate initialized with the 
 		* values in the builder
 		* @return Initialized instance of Candidate
@@ -590,6 +610,7 @@ public class CandidateFullProfileAPIOutbound implements CandidateAPIOutbound{
 					.daysOnSite(candidate.getDaysOnSite())
 					.availableFromDate(candidate.getAvailableFromDate())
 					.candidateType(candidate.getCandidateType())
+					.ownerId(candidate.getOwnerId().isPresent() ? candidate.getOwnerId().get() : null)
 				.build();
 		
 	}

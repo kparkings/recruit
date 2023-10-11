@@ -44,8 +44,6 @@ export class CandidateNavService {
 	}
 	
 	public isRouteActive():boolean{
-		
-		console.log("FF " + sessionStorage.getItem("candidate-nav-route"));
 		return sessionStorage.getItem("candidate-nav-route") != null;
 	}
 	
@@ -111,11 +109,18 @@ export class CandidateNavService {
 		}
 		
 		if (move == 'edit'){
+			sessionStorage.setItem("candidate-nav-route-recruiter-edit",""+this.getCandidateId());
 			this.router.navigate(['new-candidate']);
 		}
 		
 		if (move == 'back'){
-			this.router.navigate(['recruiter-marketplace']);
+			if(sessionStorage.getItem("candidate-nav-route-recruiter-edit")){
+				sessionStorage.removeItem("candidate-nav-route-recruiter-edit");
+				this.router.navigate(['suggestions']);	
+			} else {
+				this.router.navigate(['recruiter-marketplace']);	
+			}
+			
 		}
 		
 	}

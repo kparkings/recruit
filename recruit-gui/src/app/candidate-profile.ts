@@ -28,6 +28,7 @@ export class CandidateProfile{
 	public daysOnSite:string				= '';
 	public availableFromDate:Date 			= new Date();
 	public candidateType:string				= '';
+	public ownerId:string					= '';
 
 }
 

@@ -61,7 +61,7 @@ public class CandidateSuggestionAPIOutbound implements CandidateAPIOutbound{
 		this.email						= builder.email;
 		this.accuracyLanguages			= builder.accuracyLanguages;
 		this.accuracySkills				= builder.accuracySkills;
-	
+		
 		this.skills.addAll(builder.skills);
 		this.languages.addAll(builder.languages);
 	
@@ -251,6 +251,7 @@ public class CandidateSuggestionAPIOutbound implements CandidateAPIOutbound{
 		private String					email;
 		private suggestion_accuracy		accuracyLanguages;
 		private suggestion_accuracy		accuracySkills;
+
 		
 		/**
 		* Sets the candidates Unique identifier in the System
