@@ -69,7 +69,7 @@ public class CandidateController {
 	* Deletes a Candidate account from the System
 	* @author K Parkings
 	*/
-	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_CANDIDATE')")
+	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_RECRUITER') or hasRole('ROLE_CANDIDATE')")
 	@DeleteMapping(path="candidate/{candidateId}", consumes="application/json", produces="application/json")
 	public ResponseEntity<Void> deleteCandidate(@PathVariable("candidateId") String candidateId) {
 		candidateService.deleteCandidate(candidateId);

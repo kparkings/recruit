@@ -758,7 +758,11 @@ public class CandidateServiceImpl implements CandidateService{
 			throw new IllegalStateException("You cannot delete another Candidate from the System");
 		}
 		
-		this.candidateDao.findCandidateById(Long.valueOf(candidateId)).orElseThrow(() -> new IllegalArgumentException("Cannot delete a non existent Candidate"));
+		Candidate candidate = this.candidateDao.findCandidateById(Long.valueOf(candidateId)).orElseThrow(() -> new IllegalArgumentException("Cannot delete a non existent Candidate"));
+		
+		if (checkHasRole("ROLE_RECRUITER") && !this.getAuthenticatedUserId().equals(candidate.getOwnerId().get())) {
+			throw new IllegalArgumentException("You cannot delete this Candidate from the System");
+		}
 		
 		this.savedCandidateDao.deleteByCandidateId(Long.valueOf(candidateId));
 		this.candidateDao.deleteById(Long.valueOf(candidateId));

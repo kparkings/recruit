@@ -180,7 +180,7 @@
 			
 			<button class="btn btn-secondary btnRight main-btn {{suggestionMobileBtnClass}}" (click)="showSuggestionsResults()" 					*ngIf="lastView != 'saved-candidates'  && !isCandidate()">Back</button>
 			<button class="btn btn-secondary btnRight main-btn {{suggestionMobileBtnClass}}" (click)="showSavedCandidates()" 						*ngIf="lastView === 'saved-candidates'  && !isCandidate()">Back</button>
-			<button class="btn btn-secondary btnRight main-btn {{suggestionMobileBtnClass}}" *ngIf="isCandidate() || isAdmin() || isOwner()" (click)="deleteAccount()"> Delete</button>
+			<button class="btn btn-secondary btnRight main-btn {{suggestionMobileBtnClass}}" *ngIf="isCandidate() || isAdmin() || isOwner()" (click)="deleteAccount(confirmDeleteModal)"> Delete</button>
 			<button class="btn btn-secondary btnRight main-btn {{suggestionMobileBtnClass}}" *ngIf="isCandidate() || isAdmin() || isOwner()" (click)="editAccount()"> Edit</button>
         	
 			<button class="btn btn-secondary btnRight main-btn {{suggestionMobileBtnClass}}" (click)="rememberCandidate(suggestedCandidate)" 		*ngIf="lastView != 'saved-candidates' && !isSavedCandidate(suggestedCandidate) && !isCandidate()" title="Add candidate to your list of saved candidates">Save Candidate</button>
@@ -433,6 +433,19 @@
 				{{getCountryCode(c.country) + ' - Exp: ' + c.yearsExperience + ' years - ' + c.roleSought}}
 			</div>
 		</table>
+	</div> 
+</ng-template>
+<!-- Delete -->
+<ng-template #confirmDeleteModal let-modal>
+
+	<!--  Options -->
+	<div class="modal-header">
+		<h4 class="modal-title">Confirm Delete</h4>
+		<div class="filter-close-box" (click)="closeModal()">X</div>
+	</div>
+	<div class="modal-body publicity-suggestions">
+		<p>This profile will be deleted and it will no longer be possible to access the associated data</p>
+		<button class="btn btn-secondary action-btn btn-right" (click)="confirmDeleteProfile()">Confirm</button>
 	</div> 
 </ng-template>
 <!-- Candidte contact -->

@@ -58,13 +58,19 @@ export class SuggestionsComponent implements OnInit {
 				private emailService:			EmailService,
 				private candidateNavService: 	CandidateNavService) { 
 					
+		this.trustedResourceUrl = this.sanitizer.bypassSecurityTrustResourceUrl('');
+		this.isMobile = deviceDetector.isMobile();
+		
+		this.init();
+	}
+	
+	private init():void{
+		
 		if(!this.isCandidate()) {
 			this.getSuggestions();	
 		}
 		
-	 	this.trustedResourceUrl = this.sanitizer.bypassSecurityTrustResourceUrl('');
-		this.isMobile = deviceDetector.isMobile();
-		
+	 	
 		if (this.isMobile) {
 			this.suggestionMobileClass 		= 'suggestion-icon-mobile';
 			this.suggestionMobileBtnClass	= 'buttons-icon-mobile';
@@ -91,7 +97,6 @@ export class SuggestionsComponent implements OnInit {
 				this.showSuggestedCandidateOverview(candidate.content[0]);	
 			});
 		}		
-		
 	}
 	
 	/*
@@ -100,15 +105,33 @@ export class SuggestionsComponent implements OnInit {
 	public editAccount():void{
 		this.candidateNavService.doNextMove("edit", this.candidateProfile.candidateId);
 	}
-	
-	public deleteAccount():void{
-		
+
+	/*
+	* Opens confirm delete popup
+	*/	
+	public deleteAccount(content:any){
+		this.open(content, '', true);
 	}
 	
-	public confirmDeleteAcount():void{
-		
+	public confirmDeleteProfile():void{
+		this.candidateService.deleteCandidate(this.candidateProfile.candidateId).subscribe(data => {
+			if (this.isCandidate()) {
+				sessionStorage.removeItem('isAdmin');
+				sessionStorage.removeItem('isRecruter');
+				sessionStorage.removeItem('isCandidate');
+				sessionStorage.removeItem('loggedIn');
+				sessionStorage.setItem('beforeAuthPage', 'view-candidates');
+				this.candidateNavService.reset();
+				this.router.navigate(['login-user']);
+			}else {
+				this.doReset();
+				this.currentView = 'suggestion-results';
+			}
+			this.closeModal();
+			
+		});
 	}
-  
+	
   	public setJobSepecFile(event:any):void{
   
   		if (event.target.files.length <= 0) {
@@ -351,6 +374,7 @@ export class SuggestionsComponent implements OnInit {
 		
 			this.getSuggestions();
 			this.closeModal();	
+			
 		});
 		
   	}
@@ -510,11 +534,6 @@ export class SuggestionsComponent implements OnInit {
 		if (this.isAdmin()) {
 			this.candidateNavService.startCandidateProfileRouteForAdmin();
 		}
-		
-		//Recruiter
-		//if (this.isRecruiter()) {
-		//	this.candidateNavService.startCandidateProfileRouteForRecruiter();
-		//}
 		
 		this.currentView 			= 'suggested-canidate-overview';
 		this.suggestedCandidate 	= candidateSuggestion;

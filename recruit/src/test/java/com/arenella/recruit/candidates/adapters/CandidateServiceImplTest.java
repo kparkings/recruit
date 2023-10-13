@@ -1433,6 +1433,60 @@ public class CandidateServiceImplTest {
 	}
 	
 	/**
+	* Tests deletion of Candidate by Administrator
+	* @throws Exception
+	*/
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@Test
+	public void testDeleteProfile_happy_path_recruiter() throws Exception{
+		
+		final String candidateId = "1234";
+		final String recruiterId = "7777";
+		
+		Collection authorities = new HashSet<>();
+		authorities.add(new SimpleGrantedAuthority("ROLE_RECRUITER"));
+
+		Mockito.when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
+		Mockito.when(mockAuthentication.getAuthorities()).thenReturn(authorities);
+		Mockito.when(mockAuthentication.getPrincipal()).thenReturn(recruiterId);
+
+		Mockito.when(this.mockCandidateDao.findCandidateById(Mockito.anyLong())).thenReturn(Optional.of(Candidate.builder().ownerId(recruiterId).build()));
+		
+		this.service.deleteCandidate(candidateId);
+		
+		Mockito.verify(this.mockCandidateDao).deleteById(Long.valueOf(candidateId));
+		Mockito.verify(this.mockSavedCandidateDao).deleteByCandidateId(Long.valueOf(candidateId));
+		Mockito.verify(this.mockExternalEventPublisher).publishCandidateDeletedEvent(Mockito.any(CandidateDeletedEvent.class));
+		
+	}
+
+	/**
+	* Tests deletion of Candidate by recruiter not owned by the recruiter
+	* @throws Exception
+	*/
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@Test
+	public void testDeleteProfile_not_owned_by_recruiter() throws Exception{
+		
+		final String candidateId = "1234";
+		final String recruiterId = "7777";
+		
+		Collection authorities = new HashSet<>();
+		authorities.add(new SimpleGrantedAuthority("ROLE_RECRUITER"));
+
+		Mockito.when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
+		Mockito.when(mockAuthentication.getAuthorities()).thenReturn(authorities);
+		Mockito.when(mockAuthentication.getPrincipal()).thenReturn(recruiterId);
+
+		Mockito.when(this.mockCandidateDao.findCandidateById(Mockito.anyLong())).thenReturn(Optional.of(Candidate.builder().ownerId("999").build()));
+		
+		assertThrows(IllegalArgumentException.class, () -> {
+			this.service.deleteCandidate(candidateId);
+		});
+		
+	}
+	
+	/**
 	* Tests if MultipartFile is empty, empty Photo returned
 	* @throws Exception
 	*/
