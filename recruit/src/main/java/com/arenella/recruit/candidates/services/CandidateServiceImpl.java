@@ -129,6 +129,24 @@ public class CandidateServiceImpl implements CandidateService{
 	* Refer to the CandidateService Interface for Details
 	*/
 	@Override
+	public void updateContact(String recruiterId, String email, String firstName, String surname) {
+	
+		Contact contact = Contact.builder()
+					.contactType(CONTACT_TYPE.RECRUITER)
+					.email(email)
+					.firstname(firstName)
+					.surname(surname)
+					.userId(recruiterId)
+				.build();
+	
+		this.contactDao.persit(contact);
+		
+	}
+	
+	/**
+	* Refer to the CandidateService Interface for Details
+	*/
+	@Override
 	public void persistCandidate(Candidate candidate) {
 		
 		if (checkHasRole("ROLE_RECRUITER")) {

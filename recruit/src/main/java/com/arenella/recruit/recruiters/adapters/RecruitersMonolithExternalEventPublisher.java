@@ -17,6 +17,7 @@ import com.arenella.recruit.adapters.events.RecruiterNoOpenSubscriptionEvent;
 import com.arenella.recruit.adapters.events.RecruiterPasswordUpdatedEvent;
 import com.arenella.recruit.adapters.events.RecruiterUpdatedEvent;
 import com.arenella.recruit.authentication.adapters.AuthenticationExternalEventListener;
+import com.arenella.recruit.candidates.adapters.CandidateExternalEventListener;
 import com.arenella.recruit.emailservice.adapters.EmailServiceExternalEventListener;
 import com.arenella.recruit.emailservice.adapters.RequestSendEmailCommand;
 import com.arenella.recruit.emailservice.beans.Email.EmailRecipient;
@@ -51,7 +52,10 @@ public class RecruitersMonolithExternalEventPublisher implements RecruitersExter
 	private ListingsExternalEventListener 			listingExternalEventListener;
 	
 	@Autowired
-	private RecruitersExternalEventListener			RecruitersInternalEventListener;
+	private RecruitersExternalEventListener			recruitersInternalEventListener;
+	
+	@Autowired
+	private CandidateExternalEventListener			candidateExternalEventListener;
 	
 	/**
 	* Refer to the ExternalEventPublisher interface for details 
@@ -60,6 +64,7 @@ public class RecruitersMonolithExternalEventPublisher implements RecruitersExter
 	public void publishRecruiterAccountCreatedEvent(RecruiterCreatedEvent event) {
 		this.authenticationExternalEventListener.listenForRecruiterCreatedEvent(event);
 		this.emailServiceExternalEventListener.listenForRecruiterCreatedEvent(event);
+		this.candidateExternalEventListener.listenForRecruiterCreatedEvent(event);
 	}
 
 	/**
@@ -69,7 +74,7 @@ public class RecruitersMonolithExternalEventPublisher implements RecruitersExter
 	public void publishRecruiterNoOpenSubscriptionsEvent(String recruiterId) {
 		this.authenticationExternalEventListener.listenForRecruiterNoOpenSubscriptionsEvent(new RecruiterNoOpenSubscriptionEvent(recruiterId));
 		this.listingExternalEventListener.listenForRecruiterNoOpenSubscriptionsEvent(new RecruiterNoOpenSubscriptionEvent(recruiterId));
-		this.RecruitersInternalEventListener.listenForRecruiterNoOpenSubscriptionsEvent(new RecruiterNoOpenSubscriptionEvent(recruiterId));
+		this.recruitersInternalEventListener.listenForRecruiterNoOpenSubscriptionsEvent(new RecruiterNoOpenSubscriptionEvent(recruiterId));
 	}
 
 	/**
@@ -79,7 +84,7 @@ public class RecruitersMonolithExternalEventPublisher implements RecruitersExter
 	public void publishRecruiterHasOpenSubscriptionEvent(String recruiterId) {
 		this.authenticationExternalEventListener.listenForRecruiterHasOpenSubscriptionEvent(new RecruiterHasOpenSubscriptionEvent(recruiterId));
 		this.listingExternalEventListener.listenForRecruiterHasOpenSubscriptionsEvent(new RecruiterHasOpenSubscriptionEvent(recruiterId));
-		this.RecruitersInternalEventListener.listenForRecruiterHasOpenSubscriptionsEvent(new RecruiterHasOpenSubscriptionEvent(recruiterId));
+		this.recruitersInternalEventListener.listenForRecruiterHasOpenSubscriptionsEvent(new RecruiterHasOpenSubscriptionEvent(recruiterId));
 	}
 
 	/**
@@ -105,6 +110,7 @@ public class RecruitersMonolithExternalEventPublisher implements RecruitersExter
 	@Override
 	public void publishRecruiterAccountUpdatedEvent(RecruiterUpdatedEvent event) {
 		this.emailServiceExternalEventListener.listenForRecruiterUpdatedEvent(event);
+		this.candidateExternalEventListener.listenForRecruiterUpdatedEvent(event);
 	}
 
 	/**

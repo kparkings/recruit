@@ -1,0 +1,74 @@
+package com.arenella.recruit.authentication.utils;
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import com.arenella.recruit.adapters.events.RecruiterCreatedEvent;
+import com.arenella.recruit.adapters.events.RecruiterUpdatedEvent;
+import com.arenella.recruit.candidates.services.CandidateService;
+
+/**
+* Unit tests for the CandidateMonolithExternalEventListener class
+* @author K Parkings
+*/
+@ExtendWith(MockitoExtension.class)
+public class CandidateMonolithExternalEventListenerTest {
+
+	private static final String EMAIL 			= "a@b.cd";
+	private static final String FIRSTNAME 		= "fred";
+	private static final String SURNAME 		= "smith";
+	private static final String RECRUITER_ID 	= "rec44";
+	
+	@InjectMocks
+	private CandidateMonolithExternalEventListener listener;
+	
+	@Mock
+	private CandidateService mockCandidateService;
+	
+	/**
+	* Tests handling of RecruiterCreatedEvent persists contact
+	* @throws Exception
+	*/
+	@Test
+	public void testListenForRecruiterCreatedEvent() throws Exception{
+		
+		RecruiterCreatedEvent event = RecruiterCreatedEvent
+			.builder()
+				.email(EMAIL)
+				.firstName(FIRSTNAME)
+				.recruiterId(RECRUITER_ID)
+				.surname(SURNAME)
+			.build();
+		
+		listener.listenForRecruiterCreatedEvent(event);
+		
+		Mockito.verify(mockCandidateService).updateContact(RECRUITER_ID, EMAIL, FIRSTNAME, SURNAME);
+		
+	}
+	
+	/**
+	* Tests handling of RecruiterCreatedEvent persists contact
+	* @throws Exception
+	*/
+	@Test
+	public void testListenForRecruiterUpdatedEvent() throws Exception{
+		
+		RecruiterUpdatedEvent event = RecruiterUpdatedEvent
+			.builder()
+				.email(EMAIL)
+				.firstName(FIRSTNAME)
+				.recruiterId(RECRUITER_ID)
+				.surname(SURNAME)
+			.build();
+		
+		listener.listenForRecruiterUpdatedEvent(event);
+		
+		Mockito.verify(mockCandidateService).updateContact(RECRUITER_ID, EMAIL, FIRSTNAME, SURNAME);
+		
+	}
+	
+}

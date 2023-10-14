@@ -172,5 +172,14 @@ public interface CandidateService {
 	* @throws IOException 
 	*/
 	public Optional<Photo> convertToPhoto(Optional<MultipartFile> profilePhoto) throws IOException;
+
+	/**
+	* Adds or updates the recruiter's contact record
+	* @param recruiterId - Unique identifier of the Recruiter
+	* @param email		 - Email address of the Recruiter
+	* @param firstName	 - Firstname of the Recruiter
+	* @param surname	  -Surname of the Recruiter
+	*/
+	void updateContact(String recruiterId, String email, String firstName, String surname);
 	
 }

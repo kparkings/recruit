@@ -36,5 +36,23 @@ public interface RecruiterContactDao extends CrudRepository<RecruiterContactEnti
 		return Optional.of(RecruiterContactEntity.convertFromEntity(entity.get()));
 		
 	}
+	
+	/**
+	* Adds/Updates a contact
+	* @param contact - Contact to be added/updates
+	*/
+	default void persit(Contact contact) {
+		
+		RecruiterContactEntity entity = RecruiterContactEntity.builder()
+				.contactType(contact.getContactType())
+				.userId(contact.getUserId())
+				.firstname(contact.getFirstname())
+				.surname(contact.getSurname())
+				.email(contact.getEmail())
+				.build();
+		
+		this.save(entity);
+		
+	}
 
 }
