@@ -466,17 +466,6 @@ public class CandidateUpdateRequestAPIInbound {
 	*/
 	public static  CandidateUpdateRequest convertToDomain(String candidateId, CandidateUpdateRequestAPIInbound updateRequest, Optional<MultipartFile> profileImage) throws IOException {
 		
-		//com.arenella.recruit.candidates.beans.Candidate.Rate rate = null;
-		
-		//if (updateRequest.getRate().isPresent()) {
-		//
-		//	rate = new com.arenella.recruit.candidates.beans.Candidate.Rate(
-		//			updateRequest.getRate().get().getCurrency(),
-		//			updateRequest.getRate().get().getPeriod(),
-		//			updateRequest.getRate().get().getValue());
-		//	
-		//}
-		
 		CandidateUpdateRequestBuilder builder = CandidateUpdateRequest.builder();
 		
 		builder

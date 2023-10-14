@@ -10,6 +10,7 @@ import { ExtractedFilters }                     		from './suggestions/extracted-
 import { SavedCandidate }		 	                	from './suggestions/saved-candidate';
 import { NewCandidateRequest } from './new-candidate/new-candidate-request';
 import { CandidateProfile } from './candidate-profile';
+import { UpdateCandidateRequest } from './new-candidate/update-candidate-request';
 
 /**
 * Services for new Candidates
@@ -73,17 +74,17 @@ export class CandidateServiceService {
 	/**
 	* Update a Candidate profile 
 	*/
-	//public updateCandidate(candidateId:string, candidate: UpdateCandidateProfileRequest, profileImage:File):Observable<any> {
+	public updateCandidate(candidateId:string, candidate: UpdateCandidateRequest, profileImage:File):Observable<any> {
 	
-	//	const backendUrl:string = environment.backendUrl +'candidate/'+candidateId + '/profile';
+		const backendUrl:string = environment.backendUrl +'candidate/'+candidateId + '/profile';
 		
-	//	var fd = new FormData();
-	//	fd.append('file', profileImage);
-  	//	fd.append("profile", new Blob([JSON.stringify(candidate)], { type: 'application/json' }));
+		var fd = new FormData();
+		fd.append('file', profileImage);
+  		fd.append("profile", new Blob([JSON.stringify(candidate)], { type: 'application/json' }));
 	
-	//	return this.httpClient.put<any>(backendUrl, fd, {headers: new HttpHeaders({ }), withCredentials: true});
+		return this.httpClient.put<any>(backendUrl, fd, {headers: new HttpHeaders({ }), withCredentials: true});
 		
-	//}
+	}
 	
 	/**
 	* Update a Candidate CV 
@@ -172,56 +173,6 @@ export class CandidateServiceService {
 	public addCandidate(newCandidateRequest:NewCandidateRequest, profileImage:File| any): Observable<any>{
 	
 		console.log("NEW-CAN = " + JSON.stringify(newCandidateRequest));
-	
-		//const newCandidate:NewCandidate = new NewCandidate();
-	
-	    //newCandidate.candidateId           		= formBean.get('candidateId')?.value;
-	    //newCandidate.firstname               	= formBean.get('firstname')?.value;
-	    //newCandidate.surname                	= formBean.get('surname')?.value;
-	    //newCandidate.email                     	= formBean.get('email')?.value;
-	    //newCandidate.country                  	= formBean.get('country')?.value;
-	    //newCandidate.city                       = formBean.get('city')?.value;
-	    //newCandidate.perm                     	= formBean.get('perm')?.value;
-	    //newCandidate.freelance              	= formBean.get('freelance')?.value;
-	    //newCandidate.yearsExperience   			= formBean.get('yearsExperience')?.value;
-	    //newCandidate.function                	= formBean.get('function')?.value;
-	    //newCandidate.roleSought           		= formBean.get('roleSought')?.value;
-	    //const langDutch: string                 = formBean.get('dutch')?.value;
-	    //const langFrench: string                = formBean.get('french')?.value;
-	    //const langEnglish: string               = formBean.get('english')?.value;
-	
-	    //if (langDutch === 'YES') {
-	    //  newCandidate.languages.push(new Language('DUTCH', 'PROFICIENT'));
-	    //}
-	    
-	    //if (langDutch === 'BASIC') {
-	    //  newCandidate.languages.push(new Language('DUTCH', 'BASIC'));
-	    //}
-	    
-	    //if (langFrench === 'YES') {
-	    //  newCandidate.languages.push(new Language('FRENCH', 'PROFICIENT'));
-	    //}
-	    
-	    //if (langFrench === 'BASIC') {
-	    //  newCandidate.languages.push(new Language('FRENCH', 'BASIC'));
-	    //}
-	        
-	    //if (langEnglish === 'YES') {
-	    //  newCandidate.languages.push(new Language('ENGLISH', 'PROFICIENT'));
-	    //}
-	    
-	    //if (langEnglish === 'BASIC') {
-	    //  newCandidate.languages.push(new Language('ENGLISH', 'BASIC'));
-	    //}
-	    
-	    //const skills                                        = formBean.get('skills')?.value ? formBean.get('skills')?.value : '';
-	    //const skillTokens: Array<string>      = skills.split(',');
-	    
-	    //newCandidate.skills = new Array<string>();
-	
-	    //skillTokens.forEach(skillToken => {
-	    //  newCandidate.skills.push(skillToken);
-	    //});
 	
 	    const backendUrl:string = environment.backendUrl +'candidate';
 	    

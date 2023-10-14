@@ -18,6 +18,7 @@ export class CandidateNavService {
 	* Reset 
 	*/
 	public reset():void{
+		sessionStorage.removeItem("candidate-mode");
 		sessionStorage.removeItem("candidate-nav-route");
 		sessionStorage.removeItem("candidate-nav-route-candidate-id");
 	}
@@ -26,6 +27,7 @@ export class CandidateNavService {
 	* Initiates the route when user is Candidate 
 	*/
 	public startCandidateProfileRouteForCandidate():void{
+		this.reset();
 		sessionStorage.setItem("candidate-nav-route", "candidate");
 	}
 
@@ -33,6 +35,7 @@ export class CandidateNavService {
 	* Initiates the route when user is Admin 
 	*/	
 	public startCandidateProfileRouteForAdmin():void{
+		this.reset();
 		sessionStorage.setItem("candidate-nav-route", "admin");
 	}
 	
@@ -40,6 +43,7 @@ export class CandidateNavService {
 	* Initiates the route when user is Rectuiter 
 	*/
 	public startCandidateProfileRouteForRecruiter():void{
+		this.reset();
 		sessionStorage.setItem("candidate-nav-route", "recruiter");
 	}
 	
@@ -52,6 +56,13 @@ export class CandidateNavService {
 	*/
 	public getCandidateId():string{
 		return ""+sessionStorage.getItem("candidate-nav-route-candidate-id");
+	}
+	
+	/**
+	* Returns the candateId of the Candidate being interacted with 
+	*/
+	public isEditMode():boolean{
+		return ""+sessionStorage.getItem("candidate-mode") == 'edit';
 	}
 	
 	public doNextMove(move:string, candidateId:string|null):void{
@@ -81,10 +92,12 @@ export class CandidateNavService {
 	private doNextCandidateMove(move:string):void{
 		
 		if (move == 'edit'){
+			sessionStorage.setItem("candidate-mode", "edit");
 			this.router.navigate(['new-candidate']);
 		}
 		
 		if (move == 'back'){
+			sessionStorage.removeItem("candidate-mode");
 			this.router.navigate(['suggestions']);
 		}
 		
@@ -93,10 +106,12 @@ export class CandidateNavService {
 	private doNextAdminMove(move:string):void{
 		
 		if (move == 'edit'){
+			sessionStorage.setItem("candidate-mode", "edit");
 			this.router.navigate(['new-candidate']);
 		}
 		
 		if (move == 'back'){
+			sessionStorage.removeItem("candidate-mode");
 			this.router.navigate(['suggestions']);
 		}
 		
@@ -105,15 +120,18 @@ export class CandidateNavService {
 	private doNextRecruiterMove(move:string):void{
 		
 		if (move == 'view'){
+			sessionStorage.removeItem("candidate-mode");
 			this.router.navigate(['suggestions']);
 		}
 		
 		if (move == 'edit'){
+			sessionStorage.setItem("candidate-mode", "edit");
 			sessionStorage.setItem("candidate-nav-route-recruiter-edit",""+this.getCandidateId());
 			this.router.navigate(['new-candidate']);
 		}
 		
 		if (move == 'back'){
+			sessionStorage.removeItem("candidate-mode");
 			if(sessionStorage.getItem("candidate-nav-route-recruiter-edit")){
 				sessionStorage.removeItem("candidate-nav-route-recruiter-edit");
 				this.router.navigate(['suggestions']);	

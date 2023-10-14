@@ -32,6 +32,7 @@ export class NewCandidateComponent implements OnInit {
   	public selectOptionLangFrench:string = '';
 
 	public boop:Date = new Date();
+	public isEdit:boolean = false;
 
 	/**
   	* Constructor
@@ -80,8 +81,7 @@ export class NewCandidateComponent implements OnInit {
 	* Populates Profile fields for Edit 
 	*/
 	private populateForEdit(candidate:CandidateProfile):void {
-		
-		console.log("XXX " + JSON.stringify(candidate));
+		this.candidateId = candidate.candidateId;
 		this.offeredCandidateFormBean.get('candidateRoleTitle')?.setValue(candidate.roleSought);
 		this.offeredCandidateFormBean.get('email')?.setValue(candidate.email);
 		this.offeredCandidateFormBean.get('country')?.setValue(candidate.country);
@@ -90,16 +90,12 @@ export class NewCandidateComponent implements OnInit {
       	this.offeredCandidateFormBean.get('function')?.setValue(candidate.function);
        	this.offeredCandidateFormBean.get('roleSought')?.setValue(candidate.roleSought);
        	this.offeredCandidateFormBean.get('city')?.setValue(candidate.city);
-       	//this.offeredCandidateFormBean.get('location')?.setValue(candidate.);
-		this.offeredCandidateFormBean.get('perm')?.setValue(candidate.perm);
+       	this.offeredCandidateFormBean.get('perm')?.setValue(candidate.perm);
 		this.offeredCandidateFormBean.get('freelance')?.setValue(candidate.freelance);
 		this.offeredCandidateFormBean.get('daysOnSite')?.setValue(candidate.daysOnSite);
-		//this.offeredCandidateFormBean.get('availableFromDate')?.setValue();
 		this.offeredCandidateFormBean.get('yearsExperience')?.setValue(candidate.yearsExperience);
 		this.offeredCandidateFormBean.get('comments')?.setValue(candidate.comments);
 		this.offeredCandidateFormBean.get('introduction')?.setValue(candidate.introduction);
-		//skill:					new UntypedFormControl(),
-		//language:				new UntypedFormControl(),
 		this.offeredCandidateFormBean.get('permCurrency')?.setValue(candidate.ratePerm.currency);
 		this.offeredCandidateFormBean.get('permTimeUnit')?.setValue(candidate.ratePerm.period);
 		this.offeredCandidateFormBean.get('permFrom')?.setValue(candidate.ratePerm.valueMin);
@@ -153,7 +149,6 @@ export class NewCandidateComponent implements OnInit {
 		//START  
 		let candidate:NewCandidateRequest = new NewCandidateRequest();
 		 
-		 
 		candidate.candidateId 						= this.candidateId;
 		candidate.firstname							= this.offeredCandidateFormBean.get('firstName')!.value;
 		candidate.surname							= this.offeredCandidateFormBean.get('surname')!.value;
@@ -171,8 +166,6 @@ export class NewCandidateComponent implements OnInit {
 		candidate.introduction 						= this.offeredCandidateFormBean.get('introduction')!.value;
 		candidate.daysOnSite 						= this.offeredCandidateFormBean.get('daysOnSite')!.value;
 		
-		
-		//
 		let permCurrency:string 		= this.offeredCandidateFormBean.get('permCurrency')!.value;
 		let permTimeUnit:string 		= this.offeredCandidateFormBean.get('permTimeUnit')!.value;
 		let permFrom:string 			= this.offeredCandidateFormBean.get('permFrom')!.value;
@@ -205,17 +198,24 @@ export class NewCandidateComponent implements OnInit {
 		candidate.availableFromDate 				= this.offeredCandidateFormBean.get('availableFromDate')!.value;
 		  
 		//END
-    	this.candidateService.addCandidate(candidate, this.profileImageFile).subscribe(d=>{
-    	  	this.open('feedbackBox', "Success",  true);
 		
-			if (this.currentPendingCandidate) {
-				this.curriculumService.deletePendingCurriculum(this.currentPendingCandidate?.pendingCandidateId).subscribe(res => {
-				
-				});	
-			}
-
+		if (this.candidateNavService.isEditMode()) {
 			
-    	});
+			console.log("EDIT-CANDIDATE: " + JSON.stringify(candidate));
+			
+			this.candidateService.updateCandidate(candidate.candidateId, candidate, this.profileImageFile).subscribe(d=>{
+    	  		this.open('feedbackBox', "Success",  true);			
+    		});
+		} else {
+			this.candidateService.addCandidate(candidate, this.profileImageFile).subscribe(d=>{
+    	  		this.open('feedbackBox', "Success",  true);
+					if (this.currentPendingCandidate) {
+						this.curriculumService.deletePendingCurriculum(this.currentPendingCandidate?.pendingCandidateId).subscribe(res => {
+					});	
+				}
+    		});	
+		}
+    	
   	};
 
   	public feedbackBoxClass:string            = '';
@@ -267,7 +267,8 @@ export class NewCandidateComponent implements OnInit {
   	
   		this.curriculumFile = event.target.files[0];
   
-  		this.curriculumService.uploadCurriculum(this.curriculumFile).subscribe(data=>{
+  		if (this.candidateNavService.isEditMode()) {
+			this.curriculumService.updateCurriculum(this.candidateId, this.curriculumFile).subscribe(data=>{
 			
 			this.offeredCandidateFormBean.get('email')?.setValue(data.emailAddress);
 			
@@ -279,6 +280,21 @@ export class NewCandidateComponent implements OnInit {
 			});
 			
     	});
+		} else {
+  			this.curriculumService.uploadCurriculum(this.curriculumFile).subscribe(data=>{
+			
+			this.offeredCandidateFormBean.get('email')?.setValue(data.emailAddress);
+			
+			this.candidateId = data.id;
+			this.coreSkills	= new Array<string>();
+			
+			data.skills.forEach((skill: string) => {
+				this.coreSkills.push(skill);
+			});
+			
+    	});
+  		}
+  		
   		
   }
   
@@ -442,7 +458,6 @@ export class NewCandidateComponent implements OnInit {
 		this.languages.filter(l => l.language == language).forEach(l => {
 			l.level = level;	
 		});
-		
 	}
 
 	/**
