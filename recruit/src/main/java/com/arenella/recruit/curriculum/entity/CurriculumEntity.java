@@ -1,5 +1,7 @@
 package com.arenella.recruit.curriculum.entity;
 
+import java.util.Optional;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -29,6 +31,9 @@ public class CurriculumEntity {
 	@Column(name="file_bytes")
 	private byte[] 		file;
 
+	@Column(name="owner_id")
+	private String 		ownerId;
+
 	/**
 	* Default constructor for Hibernate
 	*/
@@ -43,7 +48,7 @@ public class CurriculumEntity {
 		this.curriculumId 		= builder.curriculumId;
 		this.fileType 			= builder.fileType;
 		this.file 				= builder.file;
-		 
+		this.ownerId			= builder.ownerId;
 	}
 	
 	/**
@@ -72,6 +77,14 @@ public class CurriculumEntity {
 	}
 	
 	/**
+	* If Curriculum has an owner the id of the Owner
+	* @return id of the Owner
+	*/
+	public Optional<String> getOwnerId() {
+		return Optional.ofNullable(this.ownerId);
+	}
+	
+	/**
 	* Returns a Builder for the class
 	* @return Builder
 	*/
@@ -88,6 +101,7 @@ public class CurriculumEntity {
 		private long 		curriculumId;
 		private FileType 	fileType;
 		private byte[] 		file;
+		private String		ownerId;
 		
 		/**
 		* Sets the Unique identifier of the Curriculum 
@@ -120,6 +134,16 @@ public class CurriculumEntity {
 		}
 		
 		/**
+		* Sets the Id of the Owner of the Curriculum
+		* @param ownerId - Id of the Owner
+		* @return Builder
+		*/
+		public CurriculumEntityBuilder ownerId(String ownerId) {
+			this.ownerId = ownerId;
+			return this;
+		}
+		
+		/**
 		* Builds an instance of CurriculumEntity initialized with 
 		* the values in the Builder
 		* @return CurriculumEntity
@@ -142,6 +166,7 @@ public class CurriculumEntity {
 								.curriculumId(Long.valueOf(curriculum.getId().get()))	//TODO: [KP] Need to decide where how to set up the sequence
 								.fileType(curriculum.getFileType())
 								.file(curriculum.getFile())
+								.ownerId(curriculum.getOwnerId().isPresent() ? curriculum.getOwnerId().get() : null)
 							.build();
 	}
 
@@ -157,6 +182,7 @@ public class CurriculumEntity {
 							.id(String.valueOf(curriculumEntity.getCurriculumId()))	//TODO: [KP] Need to decide where how to set up the sequence
 							.fileType(curriculumEntity.getFileType())
 							.file(curriculumEntity.getFile())
+							.ownerId(curriculumEntity.getOwnerId().isPresent() ? curriculumEntity.getOwnerId().get() : null)
 						.build();
 	}
 	

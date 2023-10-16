@@ -24,12 +24,13 @@ public class CurriculumTest {
 	@Test
 	public void testBuilder() throws Exception{
 		
-		Curriculum curriculum = Curriculum.builder()
-																	.id(id)
-																	.fileType(fileType)
-																	.file(file)
-																.build();
-		
+		Curriculum curriculum = 
+				Curriculum.builder()
+								.id(id)
+								.fileType(fileType)
+								.file(file)
+							.build();
+
 		assertEquals(curriculum.getId().get(), 	id);
 		assertEquals(curriculum.getFileType(), 	fileType);
 		assertEquals(curriculum.getFile(), 		file);
@@ -43,13 +44,33 @@ public class CurriculumTest {
 	@Test
 	public void testBuilderNoId() throws Exception{
 		
-		Curriculum curriculum = Curriculum.builder()
-																	.fileType(fileType)
-																	.file(file)
-																.build();
+		Curriculum curriculum = 
+				Curriculum.builder()
+								.fileType(fileType)
+								.file(file)
+							.build();
 		
 		assertTrue(curriculum.getId().isEmpty());
 		
 	}
-	
+
+	/**
+	* Test setters
+	* @throws Exception
+	*/
+	@Test
+	public void testSetters() throws Exception{
+		
+		final String ownerId = "a1";
+		
+		Curriculum curriculum = 
+				Curriculum.builder()
+								.fileType(fileType)
+								.file(file)
+							.build();
+		
+		curriculum.setOwnerId(ownerId);
+		assertEquals(ownerId, curriculum.getOwnerId().get());
+		
+	}
 }

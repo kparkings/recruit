@@ -1,6 +1,7 @@
 package com.arenella.recruit.curriculum.controllers;
 
 import java.io.ByteArrayOutputStream;
+import java.security.Principal;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,12 +43,13 @@ public class CurriculumController {
 	/**
 	* EndPoint for uploading a Curriculum
 	* @param curriculum		- MultiPart representation of file
+	* @param principal		- Security information
 	* @return Id of the Curriculum
 	* @throws Exception
 	*/
-	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('ROLE_RECRUITER')")
+	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('ROLE_RECRUITER') OR hasRole('ROLE_CANDIDATE')")
 	@PostMapping(value="/curriculum",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-	public CurriculumUpdloadDetails uploadCurriculum(@RequestParam("file") MultipartFile curriculumFile) throws Exception{
+	public CurriculumUpdloadDetails uploadCurriculum(@RequestParam("file") MultipartFile curriculumFile, Principal principal) throws Exception{
 		
 		if (!fileSecurityParser.isSafe(curriculumFile)) {
 			throw new RuntimeException("Unacceptable File");
@@ -63,13 +65,15 @@ public class CurriculumController {
 	
 	/**
 	* EndPoint for updating a Curriculum
-	* @param curriculum		- MultiPart representation of file
+	* @param curriculumId		- Id of the Curriculum
+	* @param curriculumFile		- MultiPart representation of file
+	* @param principal			- Security information
 	* @return Id of the Curriculum
 	* @throws Exception
 	*/
-	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('ROLE_CANDIDATE')")
+	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('ROLE_RECRUITER') OR hasRole('ROLE_CANDIDATE')")
 	@PutMapping(value="/curriculum/{curriculumId}",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-	public CurriculumUpdloadDetails updateCurriculum(@PathVariable("curriculumId") long curriculumId, @RequestParam("file") MultipartFile curriculumFile) throws Exception{
+	public CurriculumUpdloadDetails updateCurriculum(@PathVariable("curriculumId") long curriculumId, @RequestParam("file") MultipartFile curriculumFile, Principal principal) throws Exception{
 		
 		if (!fileSecurityParser.isSafe(curriculumFile)) {
 			throw new RuntimeException("Unacceptable File");

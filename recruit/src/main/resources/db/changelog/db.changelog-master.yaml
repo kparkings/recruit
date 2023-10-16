@@ -2013,4 +2013,13 @@ databaseChangeLog:
             - column:
                 name: days_on_site
                 type: varchar
-            
+      id: addCurriculumExtraCols
+      author: kevin
+      changes:
+        - addColumn:
+            tableName: curriculum
+            schemaName: curriculum
+            columns:
+            - column:
+                name: owner_id
+                type: varchar

@@ -13,6 +13,7 @@ public class Curriculum {
 	private String 		id;
 	private FileType 	fileType;
 	private byte[] 		file;
+	private String 		ownerId;
 	
 	/**
 	* Constructor based upon a Builder
@@ -22,6 +23,7 @@ public class Curriculum {
 		this.id 		= builder.id;
 		this.fileType 	= builder.fileType;
 		this.file 		= builder.file;
+		this.ownerId	= builder.ownerId;
 	}
 	
 	/**
@@ -51,6 +53,23 @@ public class Curriculum {
 	}
 	
 	/**
+	* If Curriculum has an owner the id of the Owner
+	* @return id of the Owner
+	*/
+	public Optional<String> getOwnerId() {
+		return Optional.ofNullable(this.ownerId);
+	}
+	
+	/**
+	* Sets the Id of the owner of the Curriculum
+	* @param ownerId id of the Curriculums owner
+	*/
+	public void setOwnerId(String ownerId) {
+		this.ownerId = ownerId;
+		
+	}
+	
+	/**
 	* Returns a Builder for the class
 	* @return
 	*/
@@ -67,6 +86,7 @@ public class Curriculum {
 		private String 		id;
 		private FileType 	fileType;
 		private byte[] 		file;
+		private String 		ownerId;
 		
 		/**
 		* Unique id of the Curriculum if it has already been set
@@ -100,6 +120,16 @@ public class Curriculum {
 		}
 		
 		/**
+		* Sets the Id of the Owner of the Curriculum
+		* @param ownerId - Id of the Owner
+		* @return Builder
+		*/
+		public CurriculumAPIInboundBuilder ownerId(String ownerId) {
+			this.ownerId = ownerId;
+			return this;
+		}
+		
+		/**
 		* Returns an initialized Curriculum based upon the 
 		* values set in the Builder
 		* @return
@@ -107,6 +137,6 @@ public class Curriculum {
 		public Curriculum build() {
 			return new Curriculum(this);
 		}
-	}
+	}	
 	
 }

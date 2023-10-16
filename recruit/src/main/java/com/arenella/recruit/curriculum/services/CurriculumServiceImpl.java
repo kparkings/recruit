@@ -64,6 +64,14 @@ public class CurriculumServiceImpl implements CurriculumService{
 	@Override
 	public String persistCurriculum(Curriculum curriculum) {
 
+		if (checkHasRole("ROLE_RECRUITER")) {
+			curriculum.setOwnerId(this.getAuthenticatedUserId());
+		}
+		
+		if (checkHasRole("ROLE_ADMIN")) {
+			curriculum.setOwnerId(curriculum.getId().get());
+		}
+		
 		CurriculumEntity entity = CurriculumEntity.convertToEntity(curriculum);
 		
 		curriculumDao.save(entity);
@@ -90,7 +98,8 @@ public class CurriculumServiceImpl implements CurriculumService{
 		
 		Optional<CurriculumEntity> entity = this.curriculumDao.findById(Long.valueOf(curriculumId));
 		
-		//TODO: [KP] Validation Curriculum does not exist and how to handle that in FE
+		//TODO: [KP] If Candidate can only update CV for self. Must be just one curriculum with owner_id of the candidate
+		//TODO: [KP] If Recruiter can only update CV where owner_id is userId
 		
 		return CurriculumEntity.convertFromEntity(entity.get());
 		
@@ -212,22 +221,30 @@ public class CurriculumServiceImpl implements CurriculumService{
 			throw new IllegalArgumentException("Cannot update a non existand Curriculum");
 		}
 		
+		Optional<Curriculum> curriculumOpt = this.curriculumDao.findCurriculumById(curriculumId);
+		
 		final String 	userId 			= this.getAuthenticatedUserId();
 		final boolean 	isAdmin			= checkHasRole("ROLE_ADMIN");
+		final boolean 	isRecruiter		= checkHasRole("ROLE_RECRUITER");
 		final boolean 	isCandidate		= checkHasRole("ROLE_CANDIDATE");
+		
+		if (isCandidate || isRecruiter) {
+			String ownerId = curriculumOpt.get().getOwnerId().get();
 			
-		if (isCandidate && !String.valueOf(curriculumId).equals(userId)) {
-			throw new IllegalArgumentException("Cannot update another Candidates Curriculum");
+			if (!ownerId.equals(userId)) {
+				throw new IllegalArgumentException("Cannot update another Candidates Curriculum");
+			}
 		}
 		
-		if (!isAdmin && !isCandidate) {
+		if (!isAdmin && !isRecruiter && !isCandidate) {
 			throw new IllegalArgumentException("You are not authorized to update Curriculums");
 		}
+		
+		curriculum.setOwnerId(curriculumOpt.isPresent() ? curriculumOpt.get().getOwnerId().get() : null);
 		
 		curriculumDao.updateCurriculum(curriculum);
 		
 		return curriculum.getId().get();
-		
 		
 	} 
 	

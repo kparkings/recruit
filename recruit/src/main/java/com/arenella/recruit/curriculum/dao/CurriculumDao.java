@@ -31,4 +31,20 @@ public interface CurriculumDao extends CrudRepository<CurriculumEntity, Long> {
 		
 	}
 	
+	/**
+	* Returns the Curriculum matching the Id
+	* @return Curriculum
+	*/
+	default Optional<Curriculum> findCurriculumById(long curriculumId){
+	
+		Optional<CurriculumEntity> entity = this.findById(curriculumId);
+		
+		if(entity.isEmpty()) {
+			return Optional.empty();
+		}
+		
+		return Optional.of(CurriculumEntity.convertFromEntity(entity.get()));
+		
+	}
+	
 }

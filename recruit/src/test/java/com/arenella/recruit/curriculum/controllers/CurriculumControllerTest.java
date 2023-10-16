@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.security.Principal;
 import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
@@ -40,6 +41,9 @@ public class CurriculumControllerTest {
 	
 	@Mock
 	private CurriculumFileSecurityParser	mockFileSecurityParser;
+	
+	@Mock
+	private Principal						mockPrincipal;
 	
 	
 	/**
@@ -96,7 +100,7 @@ public class CurriculumControllerTest {
 		Mockito.when(this.mockFileSecurityParser.isSafe(Mockito.any())).thenReturn(false);
 		
 		assertThrows(RuntimeException.class, () -> {
-			curriculumController.uploadCurriculum(mockMultipartFile);
+			curriculumController.uploadCurriculum(mockMultipartFile, mockPrincipal);
 		
 		});
 	}
@@ -111,7 +115,7 @@ public class CurriculumControllerTest {
 		Mockito.when(this.mockFileSecurityParser.isSafe(Mockito.any())).thenReturn(false);
 		
 		assertThrows(RuntimeException.class, () -> {
-			curriculumController.updateCurriculum(1L, mockMultipartFile);
+			curriculumController.updateCurriculum(1L, mockMultipartFile, mockPrincipal);
 		
 		});
 	}
