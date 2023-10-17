@@ -28,11 +28,11 @@
 						<table>
 							<tr>
 								<th class="tb-lbl-checkbox">Contract</th>
-								<td><input type="checkbox" formControlName="contract"/></td>
+								<td><input type="checkbox" formControlName="contract" (click)="updateContract()"/></td>
 							</tr>
 							<tr>
 								<th class="tb-lbl-checkbox">Perm</th>
-								<td><input type="checkbox" formControlName="perm"/></td>
+								<td><input type="checkbox" formControlName="perm" (click)="updatePerm()"/></td>
 							</tr>
 						</table>
 					</div>
@@ -51,6 +51,7 @@
 						<br>
 						<div>
 							<table>
+								<!--  
 								<tr>
 									<th>Rate Currency</th>
 									<td>
@@ -77,6 +78,40 @@
 									<td>
 										<input type="number" class="inpt-tab-std" formControlName="rateValue">
 									</td>
+								</tr>
+								-->
+								
+								<tr class="{{contractRoleClass}}">
+									<td class="hdr-label">Contract Rate</td>
+									<td>
+										<select formControlName="contractCurrency">
+											<option>EUR</option>
+											<option>GBP</option>
+										</select>
+										<select formControlName="contractTimeUnit">
+											<option value="HOUR">Hour</option>
+											<option value="DAY">Day</option>
+											<option	value="YEAR">Year</option>
+										</select>
+									From: <input type="number" formControlName="contractFrom">
+									To: <input type="number" formControlName="contractTo">
+								</tr>
+								
+								<tr class="{{permRoleClass}}">
+									<td class="hdr-label">Perm Rate</td>
+									<td>
+										<select formControlName="permCurrency">
+											<option>EUR</option>
+											<option>GBP</option>
+										</select>
+									
+										<select formControlName="permTimeUnit">
+											<option value="HOUR">Hour</option>
+											<option value="DAY">Day</option>
+											<option	value="YEAR">Year</option>
+										</select>
+										From: <input type="number" formControlName="permFrom"> To: <input type="number" formControlName="permTo">
+									</td>	
 								</tr>
 							</table>
 						</div>

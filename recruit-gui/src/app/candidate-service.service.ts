@@ -1,6 +1,6 @@
 import { Injectable }                             		from '@angular/core';
-import { HttpClient, HttpResponse, HttpHeaders }  		from '@angular/common/http';
-import { Observable, throwError }                 		from 'rxjs';
+import { HttpClient, HttpHeaders }  					from '@angular/common/http';
+import { Observable }        		         			from 'rxjs';
 import { NewPendingCandidate, Rate }                    from './create-candidate/new-pending-candidate';
 import { CandidateFunction }                      		from './candidate-function';
 import { environment }									from './../environments/environment';
@@ -8,9 +8,9 @@ import { SearchAlert }		 	                    	from './recruiter-alerts/search-a
 import { CandidateSearchAlert }                     	from './suggestions/candidate-search-alert';
 import { ExtractedFilters }                     		from './suggestions/extracted-filters';
 import { SavedCandidate }		 	                	from './suggestions/saved-candidate';
-import { NewCandidateRequest } from './new-candidate/new-candidate-request';
-import { CandidateProfile } from './candidate-profile';
-import { UpdateCandidateRequest } from './new-candidate/update-candidate-request';
+import { NewCandidateRequest } 							from './new-candidate/new-candidate-request';
+import { CandidateProfile } 							from './candidate-profile';
+import { UpdateCandidateRequest } 						from './new-candidate/update-candidate-request';
 
 /**
 * Services for new Candidates
@@ -113,45 +113,16 @@ export class CandidateServiceService {
 	
 	/**
 	* Sends a request to add a new PendingCandidate
-	* @param pendingCandidateId - Unique Id of the Candidate. Must be the same as the Curriculum
-	* @param firstname          - Candidates firstname
-	* @param surname			- Candidates surname
-	* @param email				- Candidates email address
-	* @param contract			- Whether or not the Candidate is interested in Contract positions
-	* @param perm				- Whether or not the Candidate is interested in Perm positions
+	* @param pendingCandidate 	- Contains details of the new Pending Candidate
+	* @param profileImage		- Optional profile image
 	*/
-	public addPendingCandidate(pendingCandidateId:string, firstname:string, surname:string, email:string, contract:boolean, perm:boolean, rateCurrency:string, ratePeriod:string, rateValue:string, introduction:string, profileImage:File| any): Observable<any>{
-		
-		const newPendingCandidate:NewPendingCandidate = new NewPendingCandidate();
-		
-		const rate:Rate = new Rate();
-		
-		newPendingCandidate.pendingCandidateId 	= pendingCandidateId;
-		
-		if (rateCurrency.length > 0 && ratePeriod.length > 0) {
-		
-			rate.currency 	= rateCurrency;
-			rate.period 	= ratePeriod;
-			rate.value 		= rateValue;
-			
-			newPendingCandidate.rate				= rate;
-		
-		}
-		
-		newPendingCandidate.firstname 			= firstname;
-		newPendingCandidate.surname 			= surname;
-		newPendingCandidate.email 				= email;
-		newPendingCandidate.freelance 			= contract;
-		newPendingCandidate.perm 				= perm;
-		newPendingCandidate.introduction		= introduction;
-		
-		
+	public addPendingCandidate(pendingCandidate: NewPendingCandidate, profileImage:File| any): Observable<any>{
 		
 		const backendUrl:string = environment.backendUrl +'pending-candidate';
 		
 		var fd = new FormData();
 		fd.append('file', profileImage);
-  		fd.append("candidate", new Blob([JSON.stringify(newPendingCandidate)], { type: 'application/json' }));
+  		fd.append("candidate", new Blob([JSON.stringify(pendingCandidate)], { type: 'application/json' }));
 	
 		return this.httpClient.post<any>(backendUrl, fd, {headers: new HttpHeaders({ }), withCredentials: true});
 	}

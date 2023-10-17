@@ -1001,6 +1001,135 @@ public class CandidateServiceImplTest {
 		});
 		
 	}
+
+	/**
+	* Test same email can exist for recruiters
+	* @throws Exception
+	*/
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@Test
+	public void testUpdateCandidateProfile_recruiter_sameEmail() throws Exception{
+		
+		final String 		candidateId 			= "123";
+		final FUNCTION		function				= FUNCTION.JAVA_DEV;
+		final COUNTRY 		country 				= COUNTRY.NETHERLANDS;
+		final String 		city 					= "Den Haag";
+		final String 		email					= "kparkings@gmail.com";
+		final String 		roleSought				= "Senior java Dev";
+		final boolean 		available 				= true;
+		final boolean 		flaggedAsUnavailable	= true;
+		final FREELANCE 	freelance 				= FREELANCE.TRUE;
+		final PERM 			perm 					= PERM.TRUE;
+		final LocalDate 	lastAvailabilityCheck 	= LocalDate.of(1980, 12, 3);
+		final LocalDate 	registerd 				= LocalDate.of(2021, 02, 20);
+		final int 			yearsExperience 		= 21;
+		final Set<String>	skills					= new LinkedHashSet<>();
+		final Set<Language>	languages				= new LinkedHashSet<>();
+		final String		skill					= "Java";
+		final Language		language				= Language.builder().language(LANGUAGE.DUTCH).level(LEVEL.PROFICIENT).build();
+		final String		firstName				= "kevin";
+		final String 		surname					= "parkings";
+		
+		final FUNCTION		functionUpdt				= FUNCTION.CSHARP_DEV;
+		final COUNTRY 		countryUpdt 				= COUNTRY.BELGIUM;
+		final String 		cityUpdt 					= "Brussels";
+		final String 		emailUpdt					= "kparkings@gmail.nl";
+		final String 		roleSoughtUpdt				= "Senior C# Dev";
+		final FREELANCE 	freelanceUpdt 				= FREELANCE.FALSE;
+		final PERM 			permUpdt 					= PERM.FALSE;
+		final int 			yearsExperienceUpdt 		= 22;
+		final Set<Language>	languagesUpdt				= new LinkedHashSet<>();
+		final Language		languageUpdt				= Language.builder().language(LANGUAGE.FRENCH).level(LEVEL.BASIC).build();
+		final String		firstNameUpdt				= "kevin1";
+		final String 		surnameUpdt					= "parkings1";
+		
+		ArgumentCaptor<CandidateUpdatedEvent> caEventArgCapt = ArgumentCaptor.forClass(CandidateUpdatedEvent.class);
+		
+		languages.add(language);
+		languagesUpdt.add(languageUpdt);
+		
+		skills.add(skill);
+		
+		Candidate original = Candidate
+				.builder()
+					.available(available)
+					.candidateId(candidateId)
+					.city(city)
+					.country(country)
+					.email(email)
+					.firstname(firstName)
+					.flaggedAsUnavailable(flaggedAsUnavailable)
+					.freelance(freelance)
+					.function(function)
+					.languages(languages)
+					.lastAvailabilityCheck(lastAvailabilityCheck)
+					.perm(perm)
+					.registerd(registerd)
+					.roleSought(roleSought)
+					.skills(skills)
+					.surname(surname)
+					.yearsExperience(yearsExperience)
+				.build();
+		
+		ArgumentCaptor<Candidate> candidateArgCapt = ArgumentCaptor.forClass(Candidate.class);
+		
+		CandidateUpdateRequest update = CandidateUpdateRequest
+				.builder()
+					.candidateId(candidateId)
+					.city(cityUpdt)
+					.country(countryUpdt)
+					.email(emailUpdt)
+					.firstname(firstNameUpdt)
+					.freelance(freelanceUpdt)
+					.function(functionUpdt)
+					.languages(languagesUpdt)
+					.perm(permUpdt)
+					.roleSought(roleSoughtUpdt)
+					.surname(surnameUpdt)
+					.yearsExperience(yearsExperienceUpdt)
+				.build();
+		
+		Collection authorities = new HashSet<>();
+		authorities.add(new SimpleGrantedAuthority("ROLE_RECRUITER"));
+
+		Mockito.when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
+		Mockito.when(mockAuthentication.getAuthorities()).thenReturn(authorities);
+		Mockito.when(mockAuthentication.getPrincipal()).thenReturn(candidateId);
+		Mockito.when(this.mockCandidateDao.findCandidateById(Mockito.anyLong())).thenReturn(Optional.of(original));
+		//Mockito.when(this.mockCandidateDao.emailInUseByOtherUser(Mockito.anyString(), Mockito.anyLong())).thenReturn(true);
+		Mockito.doNothing().when(this.mockExternalEventPublisher).publishCandidateAccountUpdatedEvent(caEventArgCapt.capture());
+		
+		Mockito.doNothing().when(this.mockCandidateDao).saveCandidate(candidateArgCapt.capture());
+		
+		this.service.updateCandidateProfile(update);
+		
+		Candidate persisted = candidateArgCapt.getValue();
+		
+		assertEquals(candidateId, 			persisted.getCandidateId());
+		assertEquals(functionUpdt, 			persisted.getFunction());
+		assertEquals(countryUpdt, 			persisted.getCountry());
+		assertEquals(cityUpdt, 				persisted.getCity());
+		assertEquals(emailUpdt, 			persisted.getEmail());
+		assertEquals(roleSoughtUpdt, 		persisted.getRoleSought());
+		assertEquals(available, 			persisted.isAvailable());
+		assertEquals(flaggedAsUnavailable, 	persisted.isFlaggedAsUnavailable());
+		assertEquals(freelanceUpdt, 		persisted.isFreelance());
+		assertEquals(permUpdt, 				persisted.isPerm());
+		assertEquals(lastAvailabilityCheck, persisted.getLastAvailabilityCheckOn());
+		assertEquals(registerd, 			persisted.getRegisteredOn());
+		assertEquals(yearsExperienceUpdt, 	persisted.getYearsExperience());
+		
+		assertTrue(persisted.getSkills().contains(skill));
+		persisted.getLanguages().stream().filter(l -> l.getLanguage() == languageUpdt.getLanguage()).findAny().orElseThrow();
+		
+		Mockito.verify(this.mockExternalEventPublisher).publishCandidateAccountUpdatedEvent(Mockito.any(CandidateUpdatedEvent.class));
+		
+		assertEquals(candidateId, 			persisted.getCandidateId());
+		assertEquals(firstNameUpdt, 		persisted.getFirstname());
+		assertEquals(surnameUpdt, 			persisted.getSurname());
+		assertEquals(emailUpdt, 			persisted.getEmail());
+		
+	}
 	
 	/**
 	* Test can only update if candidate or recruiter

@@ -1,7 +1,9 @@
 package com.arenella.recruit.candidates.controllers;
 
+import java.util.Optional;
 import java.util.UUID;
 
+import com.arenella.recruit.candidates.beans.Candidate.Rate;
 import com.arenella.recruit.candidates.beans.PendingCandidate;
 
 /**
@@ -18,6 +20,9 @@ public class PendingCandidateAPIOutbound {
 	private String 			email;
 	private boolean 		perm;
 	private boolean 		freelance;
+	private Rate			rateContract;
+	private Rate			ratePerm;
+	private String			introduction;
 	
 	/**
 	* Constructor based upon a builder
@@ -31,6 +36,9 @@ public class PendingCandidateAPIOutbound {
 		this.email						= builder.email;
 		this.perm 						= builder.perm;
 		this.freelance 					= builder.freelance;
+		this.rateContract				= builder.rateContract;
+		this.ratePerm					= builder.ratePerm;
+		this.introduction				= builder.introduction;
 		
 	}
 	
@@ -82,6 +90,31 @@ public class PendingCandidateAPIOutbound {
 	public boolean isPerm() {
 		return this.perm;
 	}
+	
+	/**
+	* If available the Contract Rate
+	* @return Contract Rate
+	*/
+	public Optional<Rate> getRateContract(){
+		return Optional.ofNullable(this.rateContract);
+	}
+	
+	/**
+	* If available Perm rate the Candidate is 
+	* looking for
+	* @return Perm rate
+	*/
+	public Optional<Rate> getRatePerm(){
+		return Optional.ofNullable(this.ratePerm);
+	}
+	
+	/**
+	* Returns the candidates introduction to themselves
+	* @return introduction
+	*/
+	public String getIntroduction() {
+		return this.introduction;
+	}
 		
 	/**
 	* Builder for the PendingCandidateAPIOutbound class
@@ -103,6 +136,9 @@ public class PendingCandidateAPIOutbound {
 		private String 			email;
 		private boolean 		perm;
 		private boolean 		freelance;
+		private Rate			rateContract;
+		private Rate			ratePerm;
+		private String			introduction;
 		
 		/**
 		* Sets the candidates Unique identifier in the System
@@ -166,6 +202,37 @@ public class PendingCandidateAPIOutbound {
 		}
 		
 		/**
+		* Sets the contract rate the Candidate will accept
+		* @param rateContract - rate
+		* @return Builder
+		*/
+		public PendingCandidateAPIOutboundBuilder rateContract(Rate rateContract) {
+			this.rateContract = rateContract;
+			return this;
+		}
+		
+		
+		/**
+		* Sets the perm salary the Candidate will accept
+		* @param ratePerm - salary
+		* @return Builder
+		*/
+		public PendingCandidateAPIOutboundBuilder ratePerm(Rate ratePerm) {
+			this.ratePerm = ratePerm;
+			return this;
+		}
+		
+		/**
+		* Sets the Candidates introduction to themselves
+		* @param introduction - candidates intro
+		* @return Builder
+		*/
+		public PendingCandidateAPIOutboundBuilder introduction(String introduction) {
+			this.introduction = introduction;
+			return this;
+		}
+		
+		/**
 		* Returns an instance of Candidate initialized with the 
 		* values in the builder
 		* @return Initialized instance of Candidate
@@ -176,7 +243,7 @@ public class PendingCandidateAPIOutbound {
 	}
 	
 	/**
-	* Converts an incoming API representation of a Canidate to the 
+	* Converts an incoming API representation of a Candidate to the 
 	* Domain version
 	* @param candiateAPIInbound - API Incoming version of the Candidate
 	* @return Domain version of the Candidate
@@ -191,6 +258,9 @@ public class PendingCandidateAPIOutbound {
 					.email(pendingCandidate.getEmail())
 					.freelance(pendingCandidate.isFreelance())
 					.perm(pendingCandidate.isPerm())
+					.ratePerm(pendingCandidate.getRatePerm().orElse(null))
+					.rateContract(pendingCandidate.getRateContract().orElse(null))
+					.introduction(pendingCandidate.getIntroduction())
 				.build();
 		
 	}

@@ -4,6 +4,7 @@ import { CurriculumService }							from '../curriculum.service';
 import { CandidateServiceService }						from '../candidate-service.service';
 import { NgbModal, NgbModalOptions}						from '@ng-bootstrap/ng-bootstrap';
 import { PopupsService }								from '../popups.service';
+import { NewPendingCandidate, Rate } 					from './new-pending-candidate';
 
 /**
 * Component for Candidates to present their own Curriculum and Profile.
@@ -44,6 +45,15 @@ export class CreateCandidateComponent implements OnInit {
 		ratePeriod:			new UntypedFormControl(''),
 		rateValue:			new UntypedFormControl(''),
 		introduction:		new UntypedFormControl(''),
+		permCurrency:		new UntypedFormControl(''),
+		permTimeUnit:		new UntypedFormControl(''),
+		permFrom:			new UntypedFormControl(''),
+		permTo:				new UntypedFormControl(''),
+		contractCurrency:	new UntypedFormControl(''),
+		contractTimeUnit:	new UntypedFormControl(''),
+		contractFrom:		new UntypedFormControl(''),
+		contractTo:			new UntypedFormControl(''),
+
 	});
 	
   	private curriculumFile!:File;
@@ -88,6 +98,46 @@ export class CreateCandidateComponent implements OnInit {
 	}
 	
 	/**
+	* Resets Perm salary fields 
+	*/
+	private resetPermRateFields():void{
+		this.formBean.get('permCurrency')?.setValue('');
+		this.formBean.get('permTimeUnit')?.setValue('');
+		this.formBean.get('permFrom')?.setValue('');
+		this.formBean.get('permTo')?.setValue('');
+		this.permRoleClass = "hide-row";
+	}
+
+	/**
+	* Resets Perm salary fields 
+	*/
+	private resetContractRateFields():void{
+		this.formBean.get('contractCurrency')?.setValue('');
+		this.formBean.get('contractTimeUnit')?.setValue('');
+		this.formBean.get('contractFrom')?.setValue('');
+		this.formBean.get('contractTo')?.setValue('');
+		this.contractRoleClass = "hide-row";
+	}
+		
+	/**
+	* Resets the form bean fields 
+	*/
+	private resetFormBean():void{
+		this.formBean.get('surname')?.setValue('');
+		this.formBean.get('firstname')?.setValue('');
+		this.formBean.get('email')?.setValue('');
+		this.formBean.get('contract')?.setValue('');
+		this.formBean.get('perm')?.setValue('');
+		this.formBean.get('rateCurrency')?.setValue('');
+		this.formBean.get('ratePeriod')?.setValue('');
+		this.formBean.get('rateValue')?.setValue('');
+		this.formBean.get('introduction')?.setValue('');
+		
+		this.resetContractRateFields();
+		this.resetPermRateFields();
+	}
+	
+	/**
 	* Sends the Curriculum to the backend. If the curriculum is added successfully
 	* the candidate details are then sent along with the Id returned from the Curriculun
 	* so the Curriculum and Candidate can be associated with one another
@@ -98,33 +148,60 @@ export class CreateCandidateComponent implements OnInit {
 			return;
 		}
 		
-		let surname:string 		= this.formBean.get('surname')?.value;
-		let firstname:string 	= this.formBean.get('firstname')?.value;
-		let email:string 		= this.formBean.get('email')?.value;
-		let contract:boolean 	= this.formBean.get('contract')?.value;
-		let perm:boolean 		= this.formBean.get('perm')?.value;
-		let rateCurrency:string	= this.formBean.get('rateCurrency')?.value;
-		let ratePeriod:string 	= this.formBean.get('ratePeriod')?.value;
-		let rateValue:string	= this.formBean.get('rateValue')?.value;
-		let introduction:string	= this.formBean.get('introduction')?.value;
+		let surname:string 			= this.formBean.get('surname')?.value;
+		let firstname:string 		= this.formBean.get('firstname')?.value;
+		let email:string 			= this.formBean.get('email')?.value;
+		let contract:boolean 		= this.formBean.get('contract')?.value;
+		let perm:boolean 			= this.formBean.get('perm')?.value;
+		let introduction:string		= this.formBean.get('introduction')?.value;
+		let permCurrency:string 	= this.formBean.get('permCurrency')?.value;
+		let permTimeUnit:string 	= this.formBean.get('permTimeUnit')?.value;
+		let permFrom:string 		= this.formBean.get('permFrom')?.value;
+		let permTo:string 			= this.formBean.get('permTo')?.value;
+		let contractCurrency:string = this.formBean.get('contractCurrency')?.value;
+		let contractTimeUnit:string = this.formBean.get('contractTimeUnit')?.value;
+		let contractFrom:string 	= this.formBean.get('contractFrom')?.value;
+		let contractTo:string 		= this.formBean.get('contractTo')?.value;
 			
 		this.curriculumService.uploadPendingCurriculum(this.curriculumFile).subscribe(pendingCandidateId =>{
-      		
-			this.candidateService.addPendingCandidate(pendingCandidateId, firstname, surname, email, contract, perm, rateCurrency, ratePeriod, rateValue, introduction, this.imageFile).subscribe(data => {
-				
-				this.formBean.get('surname')?.setValue('');
-				this.formBean.get('firstname')?.setValue('');
-				this.formBean.get('email')?.setValue('');
-				this.formBean.get('contract')?.setValue('');
-				this.formBean.get('perm')?.setValue('');
 			
-				this.formBean.get('rateCurrency')?.setValue('');
-				this.formBean.get('ratePeriod')?.setValue('');
-				this.formBean.get('rateValue')?.setValue('');
-				this.formBean.get('introduction')?.setValue('');
+			const pc:NewPendingCandidate = new NewPendingCandidate();
 			
-				this.open('feedbackBox', "Success",  true);
-				
+			pc.pendingCandidateId 	= pendingCandidateId;
+			pc.firstname			= firstname;
+			pc.surname 				= surname;
+			pc.email 				= email;
+			pc.introduction 		= introduction;
+			pc.freelance			= contract;
+			pc.perm					= perm;
+			
+			if (permCurrency.length > 0 && permTimeUnit.length > 0){
+				let permRate:Rate = new Rate();	
+				permRate.currency = permCurrency;
+				permRate.period = permTimeUnit;
+				if (typeof permFrom === 'number' ){
+					permRate.valueMin = permFrom;
+				}
+				if (typeof permTo === 'number' ){
+					permRate.valueMax = permTo;
+				}
+				pc.ratePerm = permRate;
+			}
+			if (contractCurrency.length > 0 && contractTimeUnit.length > 0){
+				let contractRate:Rate = new Rate();	
+				contractRate.currency = contractCurrency;
+				contractRate.period = contractTimeUnit;
+				if (typeof contractFrom === 'number' ){
+					contractRate.valueMin = contractFrom;
+				}
+				if (typeof contractTo === 'number' ){
+					contractRate.valueMax = contractTo;
+				}
+				pc.rateContract = contractRate;
+			}			
+			this.candidateService.addPendingCandidate(pc, this.imageFile).subscribe(data => {
+				this.resetFormBean();
+				this.open('feedbackBox', "Success",  true);				
 			}, 
 		err => {
 			
@@ -137,8 +214,6 @@ export class CreateCandidateComponent implements OnInit {
 				exceptions.push("There was an issue with the profile image");
 				this.popupsService.setValidationErrors(exceptions);	
 			}
-			
-			
 			
 		});
 			
@@ -157,18 +232,18 @@ export class CreateCandidateComponent implements OnInit {
 	public open(content:any, msg:string, success:boolean):void {
     
 	    if (success) {
-	      this.feedbackBoxTitle = 'Success';
-	      this.feedbackBoxText = 'Your details have been successfully uploaded. They will now be reviewed and added to the system';
-	      this.feedbackBoxClass = 'feedback-success';
+	      this.feedbackBoxTitle 	= 'Success';
+	      this.feedbackBoxText 		= 'Your details have been successfully uploaded. They will now be reviewed and added to the system';
+	      this.feedbackBoxClass 	= 'feedback-success';
 	    } else {
-	      this.feedbackBoxTitle = 'Failure';
-	      this.feedbackBoxText = 'Unable to add Candidate';
-	      this.feedbackBoxClass = 'feedback-failure';
+	      this.feedbackBoxTitle 	= 'Failure';
+	      this.feedbackBoxText 		= 'Unable to add Candidate';
+	      this.feedbackBoxClass 	= 'feedback-failure';
 	    }
 	
-	      let options: NgbModalOptions = {
-	    	 centered: true
-	   };
+	    let options: NgbModalOptions = {
+	    	centered: true
+	   	};
 	
 	  this.modalService.open(this.content, options);
 
@@ -195,4 +270,29 @@ export class CreateCandidateComponent implements OnInit {
 		
 	}
 
+	public permRoleClass = "hide-row";
+  	public permOnChange(newValue:any):void{
+		if (newValue == true) {
+			this.permRoleClass = "show-row";
+		} else {
+			this.resetPermRateFields();
+		}
+	}
+	
+	public contractRoleClass = "hide-row";
+  	public contractOnChange(newValue:any):void{
+		if (newValue == true) {
+			this.contractRoleClass = "show-row";
+		} else {
+			this.resetContractRateFields();
+		}
+	}
+	
+	public updateContract():void{
+		this.contractOnChange(!this.formBean.get('contract')?.value);
+	}
+	
+	public updatePerm():void{
+		this.permOnChange(!this.formBean.get('perm')?.value);
+	}
 }

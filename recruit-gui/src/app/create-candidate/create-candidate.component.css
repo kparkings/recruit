@@ -107,5 +107,12 @@ textarea{
 	height:100px;
 }
 
+.show-row{
+	display:true;
+}
+
+.hide-row{
+	display:none;
+}
 
 

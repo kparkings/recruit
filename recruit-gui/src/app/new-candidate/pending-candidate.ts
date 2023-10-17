@@ -34,4 +34,17 @@ export class PendingCandidate{
 	*/
 	public perm:boolean = false;
 	
+	public ratePerm:Rate|null = null;
+	public rateContract:Rate|null = null;
+	
+	public introduction:string 	= "";
+	
+	
+}
+
+export class Rate{
+	public currency:string 							= '';
+	public period:string 							= '';
+	public valueMin:number 							= 0.0;
+	public valueMax:number 							= 0.0;;
 }

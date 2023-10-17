@@ -347,16 +347,30 @@ export class NewCandidateComponent implements OnInit {
       		this.offeredCandidateFormBean.get('email')?.setValue(pendingCandidate.email);
       		this.offeredCandidateFormBean.get('freelance')?.setValue(pendingCandidate.freelance);
       		this.offeredCandidateFormBean.get('perm')?.setValue(pendingCandidate.perm);
+      		this.offeredCandidateFormBean.get('introduction')?.setValue(pendingCandidate.introduction);
+      		
       		this.coreSkills = candidate.skills;
 
       		if (pendingCandidate.perm) {
+				  
 				this.offeredCandidateFormBean.get('perm')?.setValue("TRUE");
+				
+				this.offeredCandidateFormBean.get('permCurrency')?.setValue(pendingCandidate.ratePerm?.currency);
+				this.offeredCandidateFormBean.get('permTimeUnit')?.setValue(pendingCandidate.ratePerm?.period);
+				this.offeredCandidateFormBean.get('permFrom')?.setValue(pendingCandidate.ratePerm?.valueMin);
+				this.offeredCandidateFormBean.get('permTo')?.setValue(pendingCandidate.ratePerm?.valueMax);
+				
 			} else {
 				this.offeredCandidateFormBean.get('perm')?.setValue("FALSE");
 			}
 
 			if (pendingCandidate.freelance) {
 				this.offeredCandidateFormBean.get('freelance')?.setValue("TRUE");
+				this.offeredCandidateFormBean.get('contractCurrency')?.setValue(pendingCandidate.rateContract?.currency);
+				this.offeredCandidateFormBean.get('contractTimeUnit')?.setValue(pendingCandidate.rateContract?.period);
+				this.offeredCandidateFormBean.get('contractFrom')?.setValue(pendingCandidate.rateContract?.valueMin);
+				this.offeredCandidateFormBean.get('contractTo')?.setValue(pendingCandidate.rateContract?.valueMax);
+				
 			} else {
 				this.offeredCandidateFormBean.get('freelance')?.setValue("FALSE");
 			}

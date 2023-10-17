@@ -151,7 +151,6 @@ public class CandidateServiceImpl implements CandidateService{
 		
 		if (checkHasRole("ROLE_RECRUITER")) {
 			
-			//TODO: [KP] wont work until the events to populate the Contact table have been implements and data present
 			Optional<Contact> recruiter = this.contactDao.getByTypeAndId(CONTACT_TYPE.RECRUITER, this.getAuthenticatedUserId()); 
 			
 			candidate.setEmail(recruiter.orElseThrow().getEmail());
@@ -685,19 +684,20 @@ public class CandidateServiceImpl implements CandidateService{
 		
 		final String 	userId 			= this.getAuthenticatedUserId();
 		final boolean 	isAdmin			= checkHasRole("ROLE_ADMIN");
+		final boolean 	isRecruiter		= checkHasRole("ROLE_RECRUITER");
 		final boolean 	isCandidate		= checkHasRole("ROLE_CANDIDATE");
 			
 		if (isCandidate && !candidate.getCandidateId().equals(userId)) {
 			throw new IllegalArgumentException("Cannot update another Candidates Profile");
 		}
 		
-		if (!isAdmin && !isCandidate) {
+		if (!isAdmin && !isRecruiter && !isCandidate) {
 			throw new IllegalArgumentException("You are not authorized to update Candidate profiles");
 		}
 		
 		Candidate existingCandidate = this.candidateDao.findCandidateById(Long.valueOf(candidate.getCandidateId())).orElseThrow(() -> new IllegalArgumentException("Cannot update Unknown Candidate"));
 		
-		if (this.candidateDao.emailInUseByOtherUser(candidate.getEmail(), Long.valueOf(candidate.getCandidateId()))) {
+		if (!isRecruiter && this.candidateDao.emailInUseByOtherUser(candidate.getEmail(), Long.valueOf(candidate.getCandidateId()))) {
 			throw new IllegalStateException("Cannot update. Email address alread in use by anothe user");
 		}
 		
@@ -752,6 +752,7 @@ public class CandidateServiceImpl implements CandidateService{
 					.ratePerm(ratePerm)
 					.introduction(candidate.getIntroduction())
 					.available(existingCandidate.isAvailable())
+					.ownerId(existingCandidate.getOwnerId().isEmpty() ? null : existingCandidate.getOwnerId().get())
 				.build();
 		
 		this.candidateDao.saveCandidate(updatedCandidate);

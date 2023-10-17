@@ -96,7 +96,7 @@ public class CandidateController {
 	* @return ResponseEntity
 	 * @throws IOException 
 	*/
-	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('ROLE_CANDIDATE')")
+	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('ROLE_RECRUITER') OR hasRole('ROLE_CANDIDATE')")
 	@PutMapping(path="candidate/{candidateId}/profile",consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
 	public ResponseEntity<Void> updateCandidateProfile(@RequestPart("profile") CandidateUpdateRequestAPIInbound updateRequest, @RequestPart("file") Optional<MultipartFile> file, @PathVariable("candidateId") String candidateId, Principal principal) throws IOException {
 		
