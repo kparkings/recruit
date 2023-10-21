@@ -13,6 +13,7 @@ import com.arenella.recruit.adapters.events.CandidateDeletedEvent;
 import com.arenella.recruit.adapters.events.CandidateNoLongerAvailableEvent;
 import com.arenella.recruit.adapters.events.CandidatePasswordUpdatedEvent;
 import com.arenella.recruit.adapters.events.CandidateUpdatedEvent;
+import com.arenella.recruit.adapters.events.ContactRequestEvent;
 import com.arenella.recruit.authentication.adapters.AuthenticationExternalEventListener;
 import com.arenella.recruit.curriculum.adapters.CurriculumExternalEventListener;
 import com.arenella.recruit.emailservice.adapters.EmailServiceExternalEventListener;
@@ -157,4 +158,48 @@ public class MonolithExternalEventPublisher implements ExternalEventPublisher{
 		
 	}
 
+	/**
+	* Refer to the ExternalEventPublisher interface for details 
+	*/
+	@Override
+	public void publishContactRequestEvent(ContactRequestEvent event) {
+		
+		Map<String, Object> modelExt = new HashMap<>();
+		modelExt.put("message", 	event.getMessage()); 
+		modelExt.put("title", 		event.getTitle());
+		
+		Map<String, Object> modelInt = new HashMap<>();
+		modelInt.put("message", 	event.getMessage());
+		modelInt.put("title",	 	event.getTitle());
+		
+		RequestSendEmailCommand cInt = 
+				RequestSendEmailCommand
+					.builder()
+						.emailType(EmailType.INTERN)
+						.model(modelInt)
+						.persistable(true)
+						.recipients(Set.of(new EmailRecipient<UUID>(UUID.randomUUID(), event.getRecipientId(), ContactType.RECRUITER)))
+						.sender(new Sender<>(UUID.randomUUID(), event.getSenderRecruiterId(), SenderType.RECRUITER, "get in email service"))
+						.title(event.getTitle())
+						.topic(EmailTopic.REC_TO_REC_CONTACT_REQUEST)
+					.build();
+		
+		this.emailServiceExternalEventListener.listenForSendEmailCommand(cInt);
+		
+		RequestSendEmailCommand cExt = 
+				RequestSendEmailCommand
+					.builder()
+						.emailType(EmailType.EXTERN)
+						.model(modelExt)
+						.persistable(false)
+						.recipients(Set.of(new EmailRecipient<UUID>(UUID.randomUUID(), event.getRecipientId(), ContactType.RECRUITER)))
+						.sender(new Sender<>(UUID.randomUUID(), "", SenderType.SYSTEM, "kparkings@gmail.com"))
+						.title("Arenella-ICT - Contact Request From A Recruiter")
+						.topic(EmailTopic.REC_TO_REC_CONTACT_REQUEST)
+					.build();
+		
+		this.emailServiceExternalEventListener.listenForSendEmailCommand(cExt);
+		
+	}
+	
 }

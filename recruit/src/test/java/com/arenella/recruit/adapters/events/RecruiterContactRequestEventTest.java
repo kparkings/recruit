@@ -21,10 +21,10 @@ public class RecruiterContactRequestEventTest {
 		final String title 					= "contact request";
 		final String message 				= "hello";
 		
-		RecruiterContactRequestEvent event = new RecruiterContactRequestEvent(senderRecruiterId, recipientRecruiterId, title, message);
+		ContactRequestEvent event = new ContactRequestEvent(senderRecruiterId, recipientRecruiterId, title, message);
 		
 		assertEquals(senderRecruiterId, 		event.getSenderRecruiterId());
-		assertEquals(recipientRecruiterId, 		event.getRecipientRecruiterId());
+		assertEquals(recipientRecruiterId, 		event.getRecipientId());
 		assertEquals(title, 					event.getTitle());
 		assertEquals(message, 					event.getMessage());
 		

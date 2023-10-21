@@ -6,7 +6,7 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.arenella.recruit.adapters.events.RecruiterContactRequestEvent;
+import com.arenella.recruit.adapters.events.ContactRequestEvent;
 import com.arenella.recruit.recruiters.adapters.RecruitersExternalEventPublisher;
 import com.arenella.recruit.recruiters.beans.Recruiter;
 import com.arenella.recruit.recruiters.beans.RecruiterProfile;
@@ -134,10 +134,10 @@ public class RecruiterProfileServiceImpl implements RecruiterProfileService{
 	* Refer to the RecruiterProfileService interface for details 
 	*/
 	@Override
-	public void sendEmailToRecruiter(String message, String recruiterId, String title, String authorizedUserId) {
+	public void sendEmailToRecruiter(String message, String title, String recruiterId, String authorizedUserId) {
 		
 		this.eventPublisher
-			.publishRecruiterContactRequestEvent(new RecruiterContactRequestEvent(authorizedUserId, recruiterId, title, message));
+			.publishRecruiterContactRequestEvent(new ContactRequestEvent(authorizedUserId, recruiterId, title, message));
 		
 	}
 

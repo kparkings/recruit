@@ -14,7 +14,7 @@
 		<div style="margin-top: 10px">Dear ${recipientName}</div>
 		
 		<p>
-		We are pleased to inform you that you have received a contact request from another recruiter with the subject. 
+		We are pleased to inform you that you have received a contact request from a recruiter with the subject. 
 		</p>
 		<p><b>${title}</b></p>
 		<p>You can view the message and download and view any attachments from your personal Arenella-ICT inbox</p>

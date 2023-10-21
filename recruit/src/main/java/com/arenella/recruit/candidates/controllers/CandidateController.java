@@ -380,4 +380,17 @@ public class CandidateController {
 		return ResponseEntity.status(HttpStatus.OK).build();
 	}
 	
+	/**
+	* Sends email to recruiter
+	* @return ResponseEntity
+	*/
+	@PutMapping("/v1/candidate/{id}/_message")
+	@PreAuthorize("hasRole('ROLE_RECRUITER') or hasRole('ROLE_ADMIN')")
+	public ResponseEntity<Void> contactRecruiterForOpenPosition(@PathVariable("id") String candidateId, @RequestPart("title") String title, @RequestPart("message") String message, Principal principal) {
+		
+		this.candidateService.sendEmailToCandidate(message, candidateId, title, principal.getName());
+		
+		return ResponseEntity.status(HttpStatus.OK).build();
+	}
+	
 }

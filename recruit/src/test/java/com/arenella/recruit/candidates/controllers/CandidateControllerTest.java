@@ -371,4 +371,22 @@ public class CandidateControllerTest {
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 	}
 	
+	/**
+	* 
+	* @throws Exception
+	*/
+	@Test
+	public void testContactRecruiterForOpenPosition() throws Exception{
+		
+		final String candidateId 	= "123";
+		final String title			= "aTitle";
+		final String message		= "aMessage";
+		
+		ResponseEntity<Void> response = this.controller.contactRecruiterForOpenPosition(candidateId, title, message, mockPrincipal);
+	
+		Mockito.verify(this.mockCandidateService).sendEmailToCandidate(message, candidateId, title, mockPrincipal.getName());
+		
+		assertEquals(HttpStatus.OK, response.getStatusCode());
+	}
+	
 }

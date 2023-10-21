@@ -887,7 +887,7 @@ export class SuggestionsComponent implements OnInit {
 		emailRequest.title = this.sendMessageGroup.get('title')?.value;;
 		emailRequest.message = this.sendMessageGroup.get('message')?.value;;
 		
-		this.emailService.sendRecruiterContactEmail(emailRequest,this.candidateProfile.candidateId).subscribe(body => {
+		this.emailService.sendCandidateContactEmail(emailRequest,this.candidateProfile.candidateId).subscribe(body => {
 			this.contactCandidateView = 'success';
 			this.sendMessageGroup = new UntypedFormGroup({
 				message: new UntypedFormControl(''),

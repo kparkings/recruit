@@ -181,5 +181,14 @@ public interface CandidateService {
 	* @param surname	  -Surname of the Recruiter
 	*/
 	void updateContact(String recruiterId, String email, String firstName, String surname);
+
+	/**
+	* Sends a message to the Candidate
+	* @param message		- Message to send
+	* @param candidateId	- Id of candidate to receive the message
+	* @param title			- Title of the message
+	* @param userId			- Id of the currently logged in User
+	*/
+	public void sendEmailToCandidate(String message, String candidateId, String title, String userId);
 	
 }

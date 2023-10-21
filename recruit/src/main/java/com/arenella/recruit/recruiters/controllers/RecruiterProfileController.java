@@ -60,7 +60,7 @@ public class RecruiterProfileController {
 	@PreAuthorize("hasRole('ROLE_RECRUITER') or hasRole('ROLE_ADMIN')")
 	public ResponseEntity<Void> contactRecruiterForOpenPosition(@PathVariable("id") String recruiterId, @RequestPart("title") String title, @RequestPart("message") String message, Principal principal) {
 		
-		this.rpService.sendEmailToRecruiter(message, recruiterId, title, principal.getName());
+		this.rpService.sendEmailToRecruiter(message, title, recruiterId, principal.getName());
 		
 		return ResponseEntity.status(HttpStatus.OK).build();
 	}

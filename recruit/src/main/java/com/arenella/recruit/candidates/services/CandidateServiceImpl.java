@@ -30,6 +30,7 @@ import com.arenella.recruit.adapters.events.CandidateAccountCreatedEvent;
 import com.arenella.recruit.adapters.events.CandidateDeletedEvent;
 import com.arenella.recruit.adapters.events.CandidateNoLongerAvailableEvent;
 import com.arenella.recruit.adapters.events.CandidateUpdatedEvent;
+import com.arenella.recruit.adapters.events.ContactRequestEvent;
 import com.arenella.recruit.candidates.adapters.CandidateCreatedEvent;
 import com.arenella.recruit.candidates.adapters.ExternalEventPublisher;
 import com.arenella.recruit.candidates.beans.Candidate;
@@ -813,5 +814,25 @@ public class CandidateServiceImpl implements CandidateService{
 		
 		return Optional.ofNullable(photo);
 	}
+
+	/**
+	* Refer to the CandidateService for details 
+	*/
+	@Override
+	public void sendEmailToCandidate(String message, String candidateId, String title, String userId) {
+		
+		Candidate candidate = this.candidateDao.findCandidateById(Long.valueOf(candidateId)).orElseThrow();
+		
+		if (candidate.getOwnerId().isPresent()) {
+			this.externalEventPublisher
+			.publishContactRequestEvent(new ContactRequestEvent(userId, candidate.getOwnerId().get(), "Contact Request for " + candidate.getFirstname() + " " + candidate.getSurname(), message));
+		} else {
+			this.externalEventPublisher
+			.publishContactRequestEvent(new ContactRequestEvent(userId, candidateId, title, message));
+		}
+		
+		
+	}
+	
 	
 }

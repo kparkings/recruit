@@ -4,12 +4,12 @@ package com.arenella.recruit.adapters.events;
 * Event requesting contact from one recruiter to another
 * @author K Parkings
 */
-public class RecruiterContactRequestEvent {
+public class ContactRequestEvent {
 
 	final String title;
 	final String message;
 	final String senderRecruiterId;
-	final String recipientRecruiterId;
+	final String recipientId;
 	
 	/**
 	* 
@@ -17,19 +17,19 @@ public class RecruiterContactRequestEvent {
 	* @param recipientRecruiterId
 	* @param message
 	*/
-	public RecruiterContactRequestEvent(String senderRecruiterId, String recipientRecruiterId, String title, String message) {
-		this.recipientRecruiterId 	= recipientRecruiterId;
+	public ContactRequestEvent(String senderRecruiterId, String recipientId, String title, String message) {
+		this.recipientId 			= recipientId;
 		this.senderRecruiterId 		= senderRecruiterId;
 		this.title					= title;
 		this.message 				= message;
 	}
 	
 	/**
-	* Returns the unique id of the receiving recruiter
+	* Returns the unique id of the receiving User
 	* @return
 	*/
-	public String getRecipientRecruiterId() {
-		return this.recipientRecruiterId;
+	public String getRecipientId() {
+		return this.recipientId;
 	}
 
 	/**

@@ -115,7 +115,7 @@ public class CurriculumServiceImplTest {
 		assertEquals(fileType, 						captorEntity.getValue().getFileType());
 		
 		assertNotNull(captorEntity.getValue().getFile());
-		assertTrue(captorEntity.getValue().getOwnerId().isEmpty());
+		assertTrue(captorEntity.getValue().getOwnerId().isPresent());
 	}
 	
 	/**
@@ -129,13 +129,11 @@ public class CurriculumServiceImplTest {
 		ArgumentCaptor<CurriculumEntity> captorEntity = ArgumentCaptor.forClass(CurriculumEntity.class);
 		
 		final Collection 	authorities = new HashSet<>();
-		final String 		ownerId 	= "a1";
-		
+	
 		authorities.add(new SimpleGrantedAuthority("ROLE_CANDIDATE"));
 		
 		Mockito.when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
 		Mockito.when(mockAuthentication.getAuthorities()).thenReturn(authorities);
-		Mockito.when(this.mockAuthentication.getPrincipal()).thenReturn(ownerId);
 		
 		Curriculum curriculum = Curriculum
 										.builder()
@@ -153,7 +151,7 @@ public class CurriculumServiceImplTest {
 		assertEquals(fileType, 						captorEntity.getValue().getFileType());
 		
 		assertNotNull(captorEntity.getValue().getFile());
-		assertEquals(ownerId, captorEntity.getValue().getOwnerId().get());
+		assertTrue(captorEntity.getValue().getOwnerId().isEmpty());
 	}
 	
 	/**
@@ -180,6 +178,7 @@ public class CurriculumServiceImplTest {
 											.id(curriculumId)
 											.fileType(fileType)
 											.file(file)
+											.ownerId(ownerId)
 										.build();
 		
 		String returnedId = service.persistCurriculum(curriculum);
@@ -205,20 +204,17 @@ public class CurriculumServiceImplTest {
 		ArgumentCaptor<CurriculumEntity> captorEntity = ArgumentCaptor.forClass(CurriculumEntity.class);
 		
 		final Collection 	authorities 	= new HashSet<>();
-		final String 		ownerId 		= "candidate11";
 		
 		authorities.add(new SimpleGrantedAuthority("ROLE_CANDIDATE"));
 		
 		Mockito.when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
 		Mockito.when(mockAuthentication.getAuthorities()).thenReturn(authorities);
-		Mockito.when(this.mockAuthentication.getPrincipal()).thenReturn(mockPrincipal);
 		
 		Curriculum curriculum = Curriculum
 										.builder()
 											.id(curriculumId)
 											.fileType(fileType)
 											.file(file)
-											.ownerId(ownerId)
 										.build();
 		
 		String returnedId = service.persistCurriculum(curriculum);
@@ -496,6 +492,8 @@ public class CurriculumServiceImplTest {
 		
 		Collection authorities = new HashSet<>();
 		authorities.add(new SimpleGrantedAuthority("ROLE_CANDIDATE"));
+		
+		Mockito.when(this.mockCurriculumDao.findCurriculumById(Long.valueOf(curriculumId))).thenReturn(Optional.of(curriculum));
 
 		Mockito.when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
 		Mockito.when(mockAuthentication.getAuthorities()).thenReturn(authorities);
@@ -527,6 +525,8 @@ public class CurriculumServiceImplTest {
 		
 		Collection authorities = new HashSet<>();
 		authorities.add(new SimpleGrantedAuthority("ROLE_RECRUITER"));
+
+		Mockito.when(this.mockCurriculumDao.findCurriculumById(Long.valueOf(curriculumId))).thenReturn(Optional.of(curriculum));
 
 		Mockito.when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
 		Mockito.when(mockAuthentication.getAuthorities()).thenReturn(authorities);
@@ -588,6 +588,8 @@ public class CurriculumServiceImplTest {
 		
 		Collection authorities = new HashSet<>();
 		authorities.add(new SimpleGrantedAuthority("ROLE_CANDIDATE"));
+
+		Mockito.when(this.mockCurriculumDao.findCurriculumById(Long.valueOf(curriculumId))).thenReturn(Optional.of(curriculum));
 
 		Mockito.when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
 		Mockito.when(mockAuthentication.getAuthorities()).thenReturn(authorities);

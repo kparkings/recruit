@@ -35,14 +35,11 @@
 		
 		<p>During the trial you will have access to all the features of the site including</p>
 		
-		<h3>The Candidates search screen</h3>
-		<p>This is the classic search screen. You can filter on suitable candidates using the filters above each column. The purple document icon downloads the CVs</p>
-		
 		<h3>Suggestions</h3>
-		<p>This is a more advanced search tool. It returns the best 15 matches based upon the combination of Job title, skills and languages selected by you</p>
+		<p>This is an advanced search tool. It returns the best matches based upon the combination of filters selected by you</p>
 		
 		<h3>Job Board</h3>
-		<p>You can add your open positions to the Job board. The advert's you place will be actively promoted within a network of 16000+ connections. </p>
+		<p>You can add your open positions to the Job board. The advert's you place will be actively promoted within a network of 23000+ connections. </p>
 		
 		<h3>Marketplace</h3>
 		<p>The marketplace allows collaboration between recruiters. You can request candidates for positions you are trying to fill and you can also offer candidates that you have available but currently have no suitable role for. </p>

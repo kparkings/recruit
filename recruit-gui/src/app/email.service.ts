@@ -117,6 +117,22 @@ export class EmailService {
 	}
 	
 	/**
+	* Sends Email to Candidate or Owner of the Candidate
+	*/
+	public sendCandidateContactEmail(emailRequest:EmailRequest, candidateId:string):Observable<any>{
+	
+		var fd = new FormData();
+  	
+		fd.append("message",	emailRequest.message);
+		fd.append("title",		emailRequest.title);
+
+		const backendUrl:string = environment.backendUrl +'v1/candidate/'+candidateId+'/_message';
+		
+		return this.httpClient.put<any>(backendUrl, fd, {headers: new HttpHeaders({ }), withCredentials: true});
+				
+	}
+	
+	/**
 	* Retrieves Emails sent to the Authenticated User
 	*/
 	public fetchEmails():Observable<Array<Email>>{

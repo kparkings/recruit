@@ -1,8 +1,8 @@
 package com.arenella.recruit.recruiters.adapters;
 
+import com.arenella.recruit.adapters.events.ContactRequestEvent;
 import com.arenella.recruit.adapters.events.OfferedCandidateContactRequestEvent;
 import com.arenella.recruit.adapters.events.OpenPositionContactRequestEvent;
-import com.arenella.recruit.adapters.events.RecruiterContactRequestEvent;
 import com.arenella.recruit.adapters.events.RecruiterCreatedEvent;
 import com.arenella.recruit.adapters.events.RecruiterPasswordUpdatedEvent;
 import com.arenella.recruit.adapters.events.RecruiterUpdatedEvent;
@@ -69,6 +69,6 @@ public interface RecruitersExternalEventPublisher {
 	* Sends a contact request from one recruiter to another
 	* @param event - Event informing of contact request
 	*/
-	public void publishRecruiterContactRequestEvent(RecruiterContactRequestEvent event);
+	public void publishRecruiterContactRequestEvent(ContactRequestEvent event);
 	
 }

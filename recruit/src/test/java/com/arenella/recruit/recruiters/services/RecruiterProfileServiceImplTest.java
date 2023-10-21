@@ -11,12 +11,13 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.arenella.recruit.adapters.events.ContactRequestEvent;
+import com.arenella.recruit.recruiters.adapters.RecruitersExternalEventPublisher;
 import com.arenella.recruit.recruiters.beans.RecruiterProfile;
 import com.arenella.recruit.recruiters.beans.RecruiterProfile.Photo;
 import com.arenella.recruit.recruiters.beans.RecruiterProfile.Photo.PHOTO_FORMAT;
 import com.arenella.recruit.recruiters.dao.RecruiterProfileDao;
 import com.arenella.recruit.recruiters.utils.ImageManipulator;
-
 
 /**
 * Unit tests for the RecruiterProfileServiceImpl class
@@ -26,16 +27,20 @@ import com.arenella.recruit.recruiters.utils.ImageManipulator;
 public class RecruiterProfileServiceImplTest {
 
 	@Mock
-	private RecruiterProfileDao		mockRecruiterProfileDao;
+	private RecruiterProfileDao					mockRecruiterProfileDao;
 	
 	@Mock
-	private ImageFileSecurityParser mockImageFileSecruityParser;
+	private ImageFileSecurityParser 			mockImageFileSecruityParser;
 	
 	@Mock
-	private ImageManipulator		mockImageManipulator;
+	private ImageManipulator					mockImageManipulator;
+	
+	@Mock
+	private RecruitersExternalEventPublisher	mockEeventPublisher;
 	
 	@InjectMocks
-	private RecruiterProfileService service = new RecruiterProfileServiceImpl();
+	private RecruiterProfileService 			service 						= new RecruiterProfileServiceImpl();
+	
 	
 	/**
 	* Test case Profile already exits for the Recruiter
@@ -142,6 +147,31 @@ public class RecruiterProfileServiceImplTest {
 		service.updateRecruiterProfile(RecruiterProfile.builder().recruiterId("kparkings").profilePhoto(new Photo(new byte[]{}, PHOTO_FORMAT.jpeg)).build());
 		
 		assertEquals(resizedImage, argRecProf.getValue().getProfilePhoto().get().getImageBytes());
+		
+	}
+	
+	/**
+	* Test event generated and published
+	* @throws Exception
+	*/
+	@Test
+	public void testSendEmailToRecruiter() throws Exception{
+		
+		final String message 			= "aMessage";
+		final String title 				= "aTitle";
+		final String recipientId 		= "ref45";
+		final String senderId 			= "123";
+		
+		ArgumentCaptor<ContactRequestEvent> argCapt = ArgumentCaptor.forClass(ContactRequestEvent.class);
+		
+		Mockito.doNothing().when(this.mockEeventPublisher).publishRecruiterContactRequestEvent(argCapt.capture());
+		
+		this.service.sendEmailToRecruiter(message, title, recipientId, senderId);
+		
+		assertEquals(message, 		argCapt.getValue().getMessage());
+		assertEquals(recipientId, 	argCapt.getValue().getRecipientId());
+		assertEquals(senderId, 		argCapt.getValue().getSenderRecruiterId());
+		assertEquals(title, 		argCapt.getValue().getTitle());
 		
 	}
 	

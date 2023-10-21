@@ -20,6 +20,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import com.arenella.recruit.adapters.events.CandidateNoLongerAvailableEvent;
+import com.arenella.recruit.adapters.events.ContactRequestEvent;
 import com.arenella.recruit.candidates.beans.CandidateSearchAlertMatch;
 import com.arenella.recruit.curriculum.adapters.CurriculumExternalEventListener;
 import com.arenella.recruit.emailservice.adapters.EmailServiceExternalEventListener;
@@ -161,6 +162,26 @@ public class MonolithExternalEventPublisherTest {
 		publisher.publishRequestSendAlertDailySummaryEmailCommand(command);
 		
 		Mockito.verify(this.mockEmailServiceListener).listenForSendEmailCommand(Mockito.any(RequestSendEmailCommand.class));
+		
+	}
+	
+	/**
+	* Tests both internal and external email sent
+	* @throws Exception
+	*/
+	@Test
+	public void testPublishContactRequestEvent() throws Exception{
+		
+		final String senderRecruiterId 	= "rec33"; 
+		final String recipientId		= "123"; 
+		final String title				= "aTitle"; 
+		final String message			= "aMessage";
+		
+		ContactRequestEvent event = new ContactRequestEvent(senderRecruiterId, recipientId, title, message);
+		
+		this.publisher.publishContactRequestEvent(event);
+		
+		Mockito.verify(this.mockEmailServiceListener, Mockito.times(2)).listenForSendEmailCommand(Mockito.any());
 		
 	}
 	

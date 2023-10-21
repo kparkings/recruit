@@ -36,6 +36,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.arenella.recruit.adapters.events.CandidateAccountCreatedEvent;
 import com.arenella.recruit.adapters.events.CandidateDeletedEvent;
 import com.arenella.recruit.adapters.events.CandidateUpdatedEvent;
+import com.arenella.recruit.adapters.events.ContactRequestEvent;
 import com.arenella.recruit.candidates.beans.Candidate;
 import com.arenella.recruit.candidates.beans.Candidate.CANDIDATE_TYPE;
 import com.arenella.recruit.candidates.beans.Candidate.Photo;
@@ -1662,6 +1663,67 @@ public class CandidateServiceImplTest {
 		Optional<Photo> photo = this.service.convertToPhoto(Optional.ofNullable(mockMpf));
 		
 		photo.orElseThrow();
+		
+	}
+	
+	/**
+	* Tests sending of a contact request to a candidate. Request should be sent to the candidate 
+	* themselves
+	* @throws Exception
+	*/
+	@Test
+	public void testsendEmailToCandidate_standardCandidate() throws Exception{
+		
+		ArgumentCaptor<ContactRequestEvent> argCapt = ArgumentCaptor.forClass(ContactRequestEvent.class); 
+		
+		final String message 		= "aMessage";
+		final String candidateId 	= "123";
+		final String title 			= "aTitle";
+		final String userId 		= "aUserId";
+		
+		Candidate candidate = Candidate.builder().candidateId("124").build();
+		
+		Mockito.when(this.mockCandidateDao.findCandidateById(Long.valueOf(candidateId))).thenReturn(Optional.of(candidate));
+		Mockito.doNothing().when(this.mockExternalEventPublisher).publishContactRequestEvent(argCapt.capture());
+		
+		this.service.sendEmailToCandidate(message, candidateId, title, userId);
+		
+		assertEquals(message, 		argCapt.getValue().getMessage());
+		assertEquals(candidateId, 	argCapt.getValue().getRecipientId());
+		assertEquals(title, 		argCapt.getValue().getTitle());
+		assertEquals(userId, 		argCapt.getValue().getSenderRecruiterId());
+		
+	}
+	
+	/**
+	* Tests sending of a contact request to a candidate owner by a recruiter. Request should be sent to 
+	* the owner of the candidate and not the candidate themselves 
+	* themselves
+	* @throws Exception
+	*/
+	@Test
+	public void testsendEmailToCandidate_candidateOwnedByRecruiter() throws Exception{
+		
+		ArgumentCaptor<ContactRequestEvent> argCapt = ArgumentCaptor.forClass(ContactRequestEvent.class); 
+		
+		final String message 		= "aMessage";
+		final String candidateId 	= "123";
+		final String title 			= "aTitle";
+		final String userId 		= "aUserId";
+		final String ownerId		= "rec33";
+		
+		Candidate candidate = Candidate.builder().candidateId("124").firstname("kevn").surname("parkings").ownerId(ownerId).build();
+		
+		Mockito.when(this.mockCandidateDao.findCandidateById(Long.valueOf(candidateId))).thenReturn(Optional.of(candidate));
+		Mockito.doNothing().when(this.mockExternalEventPublisher).publishContactRequestEvent(argCapt.capture());
+		
+		this.service.sendEmailToCandidate(message, candidateId, title, userId);
+		
+		assertEquals(message, 		argCapt.getValue().getMessage());
+		assertEquals(ownerId,	 	argCapt.getValue().getRecipientId());
+		assertEquals(userId, 		argCapt.getValue().getSenderRecruiterId());
+		
+		assertEquals("Contact Request for " + candidate.getFirstname() + " " + candidate.getSurname(), argCapt.getValue().getTitle());
 		
 	}
 	
