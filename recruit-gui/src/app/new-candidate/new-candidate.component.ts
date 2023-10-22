@@ -19,7 +19,8 @@ import { CandidateNavService } from '../candidate-nav.service';
 })
 export class NewCandidateComponent implements OnInit {
 
-@ViewChild('feedbackBox', { static: false }) private content:any;
+@ViewChild('feedbackBox', { static: false }) private feedbackBox:any;
+@ViewChild('validationBox', { static: false }) private validationBox:any;
 @ViewChild('pendingCandidateBox', { static: false }) private pendingCandidateBoxChild:any;
 
     public functionTypes:	 	Array<CandidateFunction> 	= new Array<CandidateFunction>();
@@ -139,13 +140,66 @@ export class NewCandidateComponent implements OnInit {
 
   		this.modalService.open(this.pendingCandidateBoxChild, options);
   	}
+  	
+  	public openFeedbackBox():void {
+    
+      	let options: NgbModalOptions = {
+     		centered: true
+   		};
+
+  		this.modalService.open(this.feedbackBox, options);
+  	}
+  	
+  	public openValidationBox():void {
+    
+      	let options: NgbModalOptions = {
+     		centered: true
+   		};
+
+  		this.modalService.open(this.validationBox, options);
+  	}
 	
+
+	private addCandidateVaidates(candidate:NewCandidateRequest):boolean{
+		
+		this.validationErrors = new Array<string>();
+		
+		if(candidate.candidateId == null || candidate.candidateId == ''){
+			this.validationErrors.push("Curriculum");
+		}
+		
+		if(candidate.firstname == null || candidate.firstname == ''){
+			this.validationErrors.push("Firstname");
+		}
+		
+		if(candidate.surname == null || candidate.surname == ''){
+			this.validationErrors.push("Surname");
+		}
+		
+		if(candidate.email == null || candidate.email == ''){
+			this.validationErrors.push("Email");
+		}					
+		
+		if(candidate.roleSought == null || candidate.roleSought == ''){
+			this.validationErrors.push("Role Sought");
+		}	
+		
+		if(candidate.country == null ||candidate.country == ''){
+			this.validationErrors.push("Country");
+		}
+		
+		if(candidate.city == null || candidate.city == ''){
+			this.validationErrors.push("Location");
+		}
+		
+		return this.validationErrors.length == 0;
+	}
 
 	/**
   	* Registers a new Candidate with the backend
   	*/
   	public addCandidate(): void {
-		  
+		
 		//START  
 		let candidate:NewCandidateRequest = new NewCandidateRequest();
 		 
@@ -165,6 +219,10 @@ export class NewCandidateComponent implements OnInit {
 		candidate.comments 							= this.offeredCandidateFormBean.get('comments')!.value;
 		candidate.introduction 						= this.offeredCandidateFormBean.get('introduction')!.value;
 		candidate.daysOnSite 						= this.offeredCandidateFormBean.get('daysOnSite')!.value;
+		
+		if(this.isRecruiter()){
+			candidate.email = "useRecruiters";
+		}
 		
 		let permCurrency:string 		= this.offeredCandidateFormBean.get('permCurrency')!.value;
 		let permTimeUnit:string 		= this.offeredCandidateFormBean.get('permTimeUnit')!.value;
@@ -199,10 +257,12 @@ export class NewCandidateComponent implements OnInit {
 		  
 		//END
 		
+		if(!this.addCandidateVaidates(candidate)){
+			this.openValidationBox();
+			return;
+		} 
+		
 		if (this.candidateNavService.isEditMode()) {
-			
-			console.log("EDIT-CANDIDATE: " + JSON.stringify(candidate));
-			
 			this.candidateService.updateCandidate(candidate.candidateId, candidate, this.profileImageFile).subscribe(d=>{
     	  		this.open('feedbackBox', "Success",  true);			
     		});
@@ -238,10 +298,10 @@ export class NewCandidateComponent implements OnInit {
      		centered: true
    		};
 
-  		this.modalService.open(this.content, options);
+  		this.modalService.open(this.feedbackBox, options);
   	}
 
-    /**
+  /**
   *  Closes the confirm popup
   */
   public closeModal(): void {
@@ -249,6 +309,15 @@ export class NewCandidateComponent implements OnInit {
     this.router.navigate(['suggestions']);
   }
 
+	/**
+  *  Closes the confirm popup
+  */
+  public closeValidationModal(): void {
+    this.modalService.dismissAll();
+  }
+  
+  public validationErrors:Array<string> = new Array<string>();
+  
   /**
   *  Closes the confirm popup
   */
@@ -505,6 +574,13 @@ export class NewCandidateComponent implements OnInit {
 	*/
 	public isAdmin():boolean{
 		return sessionStorage.getItem('isAdmin') === 'true';
+	}
+	
+		/**
+	* Whether or not User is a Recruiter
+	*/
+	public isRecruiter():boolean{
+		return sessionStorage.getItem('isRecruiter') === 'true';
 	}
 	
 }

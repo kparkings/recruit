@@ -34,7 +34,7 @@
 				<td class="hdr-label">Surname</td>
 				<input formControlName="surname" type="text"/>
 			</tr>
-			<tr>
+			<tr *ngIf="!isRecruiter()">
 				<td class="hdr-label">Email</td>
 				<td class="hdr-value">
 					<input formControlName="email" type="text"/>
@@ -217,6 +217,22 @@
 	<div class="feedbackBox; {{feedbackBoxClass}}">
 		<div class="modal-body">
 			<p class="modal-body-text">{{feedbackBoxText}}</p>
+		</div>       
+	</div>
+</ng-template>
+
+<ng-template #validationBox let-modal>
+
+	<div class="modal-header">
+		<h4 class="modal-title">Validation Errors</h4>
+   		<div class="filter-close-box" (click)="closeValidationModal()">X</div>
+ 		</div>
+	<div class="validationBox">
+		<div class="modal-body">
+			<p>The following fields are required</p>
+			<ul>
+				<li *ngFor="let valErr of validationErrors">{{valErr}}</li>
+			</ul>
 		</div>       
 	</div>
 </ng-template>

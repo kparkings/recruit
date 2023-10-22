@@ -192,29 +192,30 @@ public class CandidateServiceImpl implements CandidateService{
 		String password 			= PasswordUtil.generatePassword();
 		String encryptedPassword 	= PasswordUtil.encryptPassword(password);
 		
-		this.externalEventPublisher
-			.publishCandidateAccountCreatedEvent(new CandidateAccountCreatedEvent(candidate.getCandidateId(), encryptedPassword));
-
-		this.externalEventPublisher
-		.publishCandidateCreatedEvent(CandidateCreatedEvent
-				.builder()
-					.candidate(candidate)
-					.candidateId(String.valueOf(candidateId))
-				.build());
-		
-		RequestSendEmailCommand command = RequestSendEmailCommand
-				.builder()
-					.emailType(EmailType.EXTERN)
-					.recipients(Set.of(new EmailRecipient<UUID>(UUID.randomUUID(),candidate.getCandidateId(), ContactType.CANDIDATE)))
-					.sender(new Sender<>(UUID.randomUUID(), "", SenderType.SYSTEM, "kparkings@gmail.com"))
-					.title("Arenella-ICT - Account created")
-					.topic(EmailTopic.CANDIDATE_ACCOUNT_CREATED)
-					.model(Map.of("firstname",candidate.getFirstname(),"userid",candidate.getCandidateId(),"password",password))
-					.persistable(false)
-				.build();
-		
-		this.externalEventPublisher.publishSendEmailCommand(command);
-		
+		if(!checkHasRole("ROLE_RECRUITER") ) {
+			this.externalEventPublisher
+				.publishCandidateAccountCreatedEvent(new CandidateAccountCreatedEvent(candidate.getCandidateId(), encryptedPassword));
+	
+			this.externalEventPublisher
+			.publishCandidateCreatedEvent(CandidateCreatedEvent
+					.builder()
+						.candidate(candidate)
+						.candidateId(String.valueOf(candidateId))
+					.build());
+			
+			RequestSendEmailCommand command = RequestSendEmailCommand
+					.builder()
+						.emailType(EmailType.EXTERN)
+						.recipients(Set.of(new EmailRecipient<UUID>(UUID.randomUUID(),candidate.getCandidateId(), ContactType.CANDIDATE)))
+						.sender(new Sender<>(UUID.randomUUID(), "", SenderType.SYSTEM, "kparkings@gmail.com"))
+						.title("Arenella-ICT - Account created")
+						.topic(EmailTopic.CANDIDATE_ACCOUNT_CREATED)
+						.model(Map.of("firstname",candidate.getFirstname(),"userid",candidate.getCandidateId(),"password",password))
+						.persistable(false)
+					.build();
+			
+			this.externalEventPublisher.publishSendEmailCommand(command);
+		}
 				
 	}
 	

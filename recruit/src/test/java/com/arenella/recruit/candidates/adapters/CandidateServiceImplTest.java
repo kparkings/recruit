@@ -209,6 +209,7 @@ public class CandidateServiceImplTest {
 		Assertions.assertEquals(CANDIDATE_TYPE.CANDIDATE, argCapt.getValue().getCandidateType());
 		Assertions.assertTrue(argCapt.getValue().getOwnerId().isEmpty());
 	}
+	
 	/**
 	* Tests exception is thrown if Email not used for the Pending Candidate 
 	*/
@@ -238,6 +239,40 @@ public class CandidateServiceImplTest {
 		
 	}
 	
+	/**
+	* If Recruiter created the Candidate then there should be no User created and no email with the 
+	* Users login details sent
+	*/
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@Test
+	public void testPersistCandidate_recruiter() {
+		
+		Contact contact = Contact.builder().firstname("kevin").surname("parkings").email("kparkings@gmail.com").build();
+		
+		Collection authorities = new HashSet<>();
+		authorities.add(new SimpleGrantedAuthority("ROLE_RECRUITER"));
+
+		//Mockito.when(this.mockCandidateDao.emailInUse(Mockito.anyString())).thenReturn(false);
+		Mockito.when(this.mockCandidateDao.save(Mockito.any())).thenReturn(CandidateEntity.builder().candidateId("1000").build());
+
+		Mockito.when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
+		Mockito.when(mockAuthentication.getAuthorities()).thenReturn(authorities);
+		Mockito.when(mockAuthentication.getPrincipal()).thenReturn("kp1");
+		
+		Mockito.when(this.mockContactDao.getByTypeAndId(CONTACT_TYPE.RECRUITER, "kp1")).thenReturn(Optional.of(contact)); 
+
+		this.service.persistCandidate(Candidate
+				.builder()
+					.candidateId("1000")
+					.email("kparkings@gmail.com")
+					.firstname("kevin")
+				.build());
+		
+		Mockito.verify(this.mockExternalEventPublisher, Mockito.times(0)).publishCandidateAccountCreatedEvent(Mockito.any(CandidateAccountCreatedEvent.class));
+		Mockito.verify(this.mockExternalEventPublisher, Mockito.times(0)).publishSendEmailCommand(Mockito.any(RequestSendEmailCommand.class));
+		Mockito.verify(this.mockExternalEventPublisher, Mockito.times(0)).publishCandidateCreatedEvent(Mockito.any(CandidateCreatedEvent.class));
+		
+	}
 	/**
 	* Tests exception is thrown if Email not used for the Pending Candidate 
 	*/

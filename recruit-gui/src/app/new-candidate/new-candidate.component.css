@@ -12,6 +12,11 @@
     height:500px;
 }
 
+.validationBox{
+    width:500px;
+    height:280px;
+}
+
 .modal-header{
     background: #303030;
     font-size: medium;
