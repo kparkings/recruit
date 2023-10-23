@@ -1999,6 +1999,16 @@ databaseChangeLog:
                 type: varchar
                 constraints:
                   default: 'CANDIDATE'
+      id: addCurriculumExtraCols
+      author: kevin
+      changes:
+        - addColumn:
+            tableName: curriculum
+            schemaName: curriculum
+            columns:
+            - column:
+                name: owner_id
+                type: varchar
   - changeSet:
       id: addCandidateExtraCols
       author: kevin
@@ -2012,14 +2022,4 @@ databaseChangeLog:
                 type: varchar
             - column:
                 name: days_on_site
-                type: varchar
-      id: addCurriculumExtraCols
-      author: kevin
-      changes:
-        - addColumn:
-            tableName: curriculum
-            schemaName: curriculum
-            columns:
-            - column:
-                name: owner_id
                 type: varchar
