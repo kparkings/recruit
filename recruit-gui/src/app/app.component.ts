@@ -89,6 +89,14 @@ export class AppComponent {
 	/**
 	* Returns the name of the current T&C acceptance cookie
 	*/
+	public navToNewCandidate():void{
+		this.candidateNavService.reset();
+		this.router.navigate(['new-candidate']);
+	}
+	
+	/**
+	* Returns the name of the current T&C acceptance cookie
+	*/
 	private getTandCsCookieName():string{
 		
 		const termsAndConditionsCookieName:string = "arenella-tandc-v" + this.termsAndConditionsCookieVersion;

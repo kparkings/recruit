@@ -48,13 +48,13 @@ export class NewCandidateComponent implements OnInit {
       		this.functionTypes.push(funcType);
     	});
     	
-    	this.languageOptions.push("NONE");
+    	this.languageOptions.push("UNKNOWN");
     	this.languageOptions.push("BASIC");
     	this.languageOptions.push("PROFICIENT");
     	
-    	this.languages.push(new Language("DUTCH","UNKNOWN"));
-    	this.languages.push(new Language("FRENCH","PROFICIENT"));
-    	this.languages.push(new Language("ENGLISH","BASIC"));
+    	//this.languages.push(new Language("DUTCH","UNKNOWN"));
+    	//this.languages.push(new Language("FRENCH","PROFICIENT"));
+    	//this.languages.push(new Language("ENGLISH","BASIC"));
 	
 		if (this.candidateNavService.isRouteActive()) {
 			this.candidateService.getCandidateProfileById(this.candidateNavService.getCandidateId()).subscribe(candidate => {
@@ -114,7 +114,6 @@ export class NewCandidateComponent implements OnInit {
 			this.offeredCandidateFormBean.get(lang.language)?.setValue(lang.level);
 		});	
 		
-		this.offeredCandidateFormBean.get("DUTCH")?.setValue("BASIC");
 	}
 
   	/**
@@ -220,7 +219,19 @@ export class NewCandidateComponent implements OnInit {
 		candidate.introduction 						= this.offeredCandidateFormBean.get('introduction')!.value;
 		candidate.daysOnSite 						= this.offeredCandidateFormBean.get('daysOnSite')!.value;
 		
-		if(this.isRecruiter()){
+		
+		let dutchLang:Language	=  new Language('DUTCH', this.offeredCandidateFormBean.get('DUTCH')!.value);
+		let englishLang:Language	=  new Language('ENGLISH', this.offeredCandidateFormBean.get('ENGLISH')!.value);
+		let frenchLang:Language	=  new Language('FRENCH', this.offeredCandidateFormBean.get('FRENCH')!.value);
+		
+		console.log(JSON.stringify(frenchLang));
+		
+		candidate.languages = new Array<Language>();
+		candidate.languages.push(dutchLang);
+		candidate.languages.push(englishLang);
+		candidate.languages.push(frenchLang);
+		
+		if (this.isRecruiter()) {
 			candidate.email = "useRecruiters";
 		}
 		
@@ -493,9 +504,9 @@ export class NewCandidateComponent implements OnInit {
 		contractTimeUnit:		new UntypedFormControl(),
 		contractFrom:			new UntypedFormControl(0.0),
 		contractTo:				new UntypedFormControl(0.0),
-		FRENCH:					new UntypedFormControl(),
-		DUTCH:					new UntypedFormControl(),
-		ENGLISH:				new UntypedFormControl(),
+		FRENCH:					new UntypedFormControl("UNKNOWN"),
+		DUTCH:					new UntypedFormControl("UNKNOWN"),
+		ENGLISH:				new UntypedFormControl("UNKNOWN"),
 	});
 	
 	/**
@@ -537,11 +548,11 @@ export class NewCandidateComponent implements OnInit {
 	/**
 	* Sets the Candidate level with a language
 	*/
-	public updateOfferedCandidateLanguage(language:string, level:string):void{
-		this.languages.filter(l => l.language == language).forEach(l => {
-			l.level = level;	
-		});
-	}
+	//public updateOfferedCandidateLanguage(language:string, level:string):void{
+	//	this.languages.filter(l => l.language == language).forEach(l => {
+	//		l.level = level;	
+	//	});
+	//}
 
 	/**
   	* Whether or not the user has authenticated as an Admin user 

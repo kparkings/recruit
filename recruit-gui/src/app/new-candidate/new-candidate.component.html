@@ -64,7 +64,7 @@
 						<option value="REPUBLIC_OF_IRELAND">Ireland</option>
 						<option value="NETHERLANDS">Netherlands</option>
 						<option value="UK">UK</option>
-						<option value="EUROPE">EU</option>
+						<!--<option value="EUROPE">EU</option>-->
 						<!--<option value="WORLD">World</option>-->
 					</select>
 				</td>	
@@ -178,7 +178,7 @@
 				<td>Dutch</td>
 				<td>
 					<select formControlName="DUTCH">
-						<option *ngFor="let level of languageOptions" (change)="updateOfferedCandidateLanguage('DUTCH', level)">{{level}}</option>
+						<option *ngFor="let level of languageOptions">{{level}}</option>
 					</select>
 				</td>
 			</tr>
@@ -186,7 +186,7 @@
 				<td>English</td>
 				<td>
 					<select formControlName="ENGLISH">
-						<option *ngFor="let level of languageOptions" (change)="updateOfferedCandidateLanguage('ENGLISH', level)">{{level}}</option>
+						<option *ngFor="let level of languageOptions">{{level}}</option>
 					</select>
 				</td>
 			</tr>
@@ -194,16 +194,18 @@
 				<td>French</td>
 				<td>
 					<select formControlName="FRENCH">
-						<option *ngFor="let level of languageOptions" (change)="updateOfferedCandidateLanguage('FRENCH', level)">{{level}}</option>
+						<option *ngFor="let level of languageOptions">{{level}}</option>
 					</select>
 				</td>
 			</tr>
+			<!--  
 			<tr>
 				<td class="hdr-label">Comments</td>
 				<td>
 					<textarea formControlName="comments"></textarea>
 				</td>	
 			</tr>
+			-->
 		</table>
 	</form>
 </div>
