@@ -5,6 +5,7 @@ import java.util.UUID;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import com.arenella.recruit.adapters.actions.GrantCreditCommand;
 import com.arenella.recruit.listings.beans.Listing;
 import com.arenella.recruit.listings.beans.ListingFilter;
 import com.arenella.recruit.listings.beans.ListingViewedEvent;
@@ -73,5 +74,11 @@ public interface ListingService {
 	* @param recruiterId - Id of the recruiter owning the Listings
 	*/
 	public void enableListingsForRecruiter(String recruiterId);
+
+	/**
+	* Sets Credits available to Recruiters
+	* @param command - credits info
+	*/
+	public void updateCredits(GrantCreditCommand command);
 
 }

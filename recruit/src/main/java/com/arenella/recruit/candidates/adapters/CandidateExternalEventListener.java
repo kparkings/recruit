@@ -1,5 +1,6 @@
 package com.arenella.recruit.candidates.adapters;
 
+import com.arenella.recruit.adapters.actions.GrantCreditCommand;
 import com.arenella.recruit.adapters.events.RecruiterCreatedEvent;
 import com.arenella.recruit.adapters.events.RecruiterUpdatedEvent;
 
@@ -20,4 +21,11 @@ public interface CandidateExternalEventListener {
 	* @param event - Recruiter update
 	*/
 	public void listenForRecruiterUpdatedEvent(RecruiterUpdatedEvent event);
+
+	/**
+	* Listener for GrantCreditCommand indicating it is time to update
+	* the Credits for a Recruiter
+	* @param command - To update Credit's
+	*/
+	public void listenForGrantCreditCommand(GrantCreditCommand command);
 }

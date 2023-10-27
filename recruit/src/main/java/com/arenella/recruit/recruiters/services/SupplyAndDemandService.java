@@ -3,6 +3,7 @@ package com.arenella.recruit.recruiters.services;
 import java.util.Set;
 import java.util.UUID;
 
+import com.arenella.recruit.adapters.actions.GrantCreditCommand;
 import com.arenella.recruit.recruiters.beans.OfferedCandidate;
 import com.arenella.recruit.recruiters.beans.OfferedCandidateAPIOutbound.RecruiterDetails;
 import com.arenella.recruit.recruiters.beans.SupplyAndDemandEvent.EventType;
@@ -152,5 +153,11 @@ public interface SupplyAndDemandService {
 	* @param geRecruiterId - Unique id of the Recruiter
 	*/
 	public void enableSupplyAndDemandPostsForRecruiter(String geRecruiterId);
+
+	/**
+	* Updaes the Credits available to the Recruiters
+	* @param command - GrantCredit command details
+	*/
+	public void updateCredits(GrantCreditCommand command);
 	
 }

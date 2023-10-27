@@ -11,8 +11,11 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import com.arenella.recruit.adapters.actions.GrantCreditCommand;
 import com.arenella.recruit.adapters.events.OfferedCandidateContactRequestEvent;
 import com.arenella.recruit.adapters.events.OpenPositionContactRequestEvent;
+import com.arenella.recruit.listings.beans.RecruiterCredit;
+import com.arenella.recruit.listings.dao.ListingRecruiterCreditDao;
 import com.arenella.recruit.recruiters.adapters.RecruitersExternalEventPublisher;
 import com.arenella.recruit.recruiters.beans.OfferedCandidate;
 import com.arenella.recruit.recruiters.beans.OfferedCandidateAPIOutbound.RecruiterDetails;
@@ -45,6 +48,9 @@ public class SupplyAndDemandServiceImpl implements SupplyAndDemandService{
 	
 	@Autowired
 	private RecruitersExternalEventPublisher	eventPublisher;
+	
+	@Autowired
+	private ListingRecruiterCreditDao			creditDao;
 	
 	/**
 	* Refer to the SupplyAndDemandService interface for details 
@@ -418,6 +424,20 @@ public class SupplyAndDemandServiceImpl implements SupplyAndDemandService{
 	*/
 	private String getAuthenticatedRecruiterId() {
 		return SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+	}
+
+	/**
+	* Refer to the CandidateService for details 
+	*/
+	@Override
+	public void updateCredits(GrantCreditCommand command) {
+		
+		Set<RecruiterCredit> credits = this.creditDao.fetchRecruiterCredits();
+		
+		credits.stream().forEach(credit -> credit.setCredits(RecruiterCredit.DEFAULT_CREDITS));
+		
+		creditDao.saveAll(credits);
+		
 	}
 	
 }

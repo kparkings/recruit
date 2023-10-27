@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.arenella.recruit.adapters.actions.GrantCreditCommand;
 import com.arenella.recruit.listings.adapters.CandidateRequestListingContactEmailCommand;
 import com.arenella.recruit.listings.adapters.CandidateRequestListingContactEmailCommand.CandidateRequestListingContactEmailCommandBuilder;
 import com.arenella.recruit.listings.adapters.ExternalEventPublisher;
@@ -30,6 +31,8 @@ import com.arenella.recruit.listings.dao.ListingViewedEventEntity;
 import com.arenella.recruit.listings.exceptions.ListingValidationException;
 import com.arenella.recruit.listings.exceptions.ListingValidationException.ListingValidationExceptionBuilder;
 import com.arenella.recruit.listings.services.FileSecurityParser.FileType;
+import com.arenella.recruit.recruiters.beans.RecruiterCredit;
+import com.arenella.recruit.recruiters.dao.RecruiterCreditDao;
 
 /**
 * Services for working with Listings
@@ -39,13 +42,16 @@ import com.arenella.recruit.listings.services.FileSecurityParser.FileType;
 public class ListingServiceImpl implements ListingService{
 
 	@Autowired
-	private ListingDao 				listingDao;
+	private ListingDao 						listingDao;
 	
 	@Autowired
-	private FileSecurityParser 		fileSecurityParser;
+	private FileSecurityParser 				fileSecurityParser;
 	
 	@Autowired
-	private ExternalEventPublisher	externalEventPublisher;
+	private ExternalEventPublisher			externalEventPublisher;
+	
+	@Autowired
+	private RecruiterCreditDao 				creditDao;
 	
 	/**
 	* Refer to the Listing interface for details
@@ -285,6 +291,20 @@ public class ListingServiceImpl implements ListingService{
 	}
 	
 	/**
+	* Refer to the CandidateService for details 
+	*/
+	@Override
+	public void updateCredits(GrantCreditCommand command) {
+		
+		Set<RecruiterCredit> credits = this.creditDao.fetchRecruiterCredits();
+		
+		credits.stream().forEach(credit -> credit.setCredits(RecruiterCredit.DEFAULT_CREDITS));
+		
+		creditDao.saveAll(credits);
+		
+	}
+	
+	/**
 	* Checks safety of File
 	* @param attachment
 	*/
@@ -301,10 +321,7 @@ public class ListingServiceImpl implements ListingService{
 	* @return Whether or not the current User is an Admin
 	*/
 	private boolean isAdmin() {
-		
 		return SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream().filter(role -> role.getAuthority().equals("ROLE_ADMIN")).findAny().isPresent();
-		
-		
 	}
 	
 }

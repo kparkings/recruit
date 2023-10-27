@@ -21,8 +21,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import com.arenella.recruit.adapters.actions.GrantCreditCommand;
 import com.arenella.recruit.adapters.events.OfferedCandidateContactRequestEvent;
 import com.arenella.recruit.adapters.events.OpenPositionContactRequestEvent;
+import com.arenella.recruit.listings.beans.RecruiterCredit;
+import com.arenella.recruit.listings.dao.ListingRecruiterCreditDao;
 import com.arenella.recruit.recruiters.adapters.RecruitersExternalEventPublisher;
 import com.arenella.recruit.recruiters.beans.OfferedCandidate;
 import com.arenella.recruit.recruiters.beans.OpenPosition;
@@ -57,6 +60,9 @@ public class SupplyAndDemandServiceImplTest {
 	
 	@Mock
 	private SupplyAndDemandEventDao			 	mockSupplyAndDemandEventDao;
+	
+	@Mock
+	private ListingRecruiterCreditDao			mockCreditDao;
 	
 	/**
 	* Sets up test environment
@@ -567,6 +573,30 @@ public class SupplyAndDemandServiceImplTest {
 		
 		argCaptOcs.getValue().stream().forEach(oc -> Assertions.assertTrue(oc.isActive()));
 		argCaptOps.getValue().stream().forEach(op -> Assertions.assertTrue(op.isActive()));
+		
+	}
+	
+	/**
+	* Test updating the RecruiterCredits
+	* @throws Exception
+	*/
+	@Test
+	public void testUpdateCredits() throws Exception{
+		
+		@SuppressWarnings("unchecked")
+		ArgumentCaptor<Set<RecruiterCredit>> argCapt = ArgumentCaptor.forClass(Set.class);
+		
+		RecruiterCredit rc1 = RecruiterCredit.builder().recruiterId("recruiter1").credits(2).build();
+		RecruiterCredit rc2 = RecruiterCredit.builder().recruiterId("recruiter1").credits(5).build();
+		
+		Mockito.when(this.mockCreditDao.fetchRecruiterCredits()).thenReturn(Set.of(rc1,rc2));
+		Mockito.doNothing().when(this.mockCreditDao).saveAll(argCapt.capture());
+		
+		this.service.updateCredits(new GrantCreditCommand());
+		
+		if (argCapt.getValue().stream().filter(rc -> rc.getCredits() != RecruiterCredit.DEFAULT_CREDITS).findAny().isPresent()) {
+			throw new RuntimeException();
+		}
 		
 	}
 	

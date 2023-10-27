@@ -3,6 +3,7 @@ package com.arenella.recruit.authentication.adapters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.arenella.recruit.adapters.actions.GrantCreditCommand;
 import com.arenella.recruit.adapters.events.RecruiterHasOpenSubscriptionEvent;
 import com.arenella.recruit.adapters.events.RecruiterNoOpenSubscriptionEvent;
 import com.arenella.recruit.listings.services.ListingService;
@@ -33,6 +34,14 @@ public class ListingsExternalEventListenerImpl implements ListingsExternalEventL
 	public void listenForRecruiterHasOpenSubscriptionsEvent(RecruiterHasOpenSubscriptionEvent recruiterHasOpenSubscriptionEvent) {
 		this.listingService.enableListingsForRecruiter(recruiterHasOpenSubscriptionEvent.geRecruiterId());
 		
+	}
+
+	/**
+	* Refer to the ListingsExternalEventListener interface for details
+	*/
+	@Override
+	public void listenForGrantCreditCommand(GrantCreditCommand command) {
+		this.listingService.updateCredits(command);
 	}
 
 }

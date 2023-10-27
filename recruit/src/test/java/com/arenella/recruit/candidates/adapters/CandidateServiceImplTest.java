@@ -33,6 +33,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.arenella.recruit.adapters.actions.GrantCreditCommand;
 import com.arenella.recruit.adapters.events.CandidateAccountCreatedEvent;
 import com.arenella.recruit.adapters.events.CandidateDeletedEvent;
 import com.arenella.recruit.adapters.events.CandidateUpdatedEvent;
@@ -51,10 +52,12 @@ import com.arenella.recruit.candidates.beans.Language;
 import com.arenella.recruit.candidates.beans.Language.LANGUAGE;
 import com.arenella.recruit.candidates.beans.Language.LEVEL;
 import com.arenella.recruit.candidates.beans.PendingCandidate;
+import com.arenella.recruit.candidates.beans.RecruiterCredit;
 import com.arenella.recruit.candidates.controllers.CandidateController.CANDIDATE_UPDATE_ACTIONS;
 import com.arenella.recruit.candidates.controllers.CandidateValidationException;
 import com.arenella.recruit.candidates.controllers.SavedCandidate;
 import com.arenella.recruit.candidates.dao.CandidateDao;
+import com.arenella.recruit.candidates.dao.CandidateRecruiterCreditDao;
 import com.arenella.recruit.candidates.dao.CandidateSearchAlertDao;
 import com.arenella.recruit.candidates.dao.CandidateSkillsDao;
 import com.arenella.recruit.candidates.dao.PendingCandidateDao;
@@ -124,6 +127,9 @@ public class CandidateServiceImplTest {
 	
 	@Mock
 	private RecruiterContactDao						mockContactDao;
+	
+	@Mock
+	private CandidateRecruiterCreditDao				mockCreditDao;
 	
 	@Spy
 	private CandidateFunctionExtractorImpl			mockCandidateFunctionExtractor;
@@ -1759,6 +1765,30 @@ public class CandidateServiceImplTest {
 		assertEquals(userId, 		argCapt.getValue().getSenderRecruiterId());
 		
 		assertEquals("Contact Request for " + candidate.getFirstname() + " " + candidate.getSurname(), argCapt.getValue().getTitle());
+		
+	}
+	
+	/**
+	* Test updating the RecruiterCredits
+	* @throws Exception
+	*/
+	@Test
+	public void testUpdateCredits() throws Exception{
+		
+		@SuppressWarnings("unchecked")
+		ArgumentCaptor<Set<RecruiterCredit>> argCapt = ArgumentCaptor.forClass(Set.class);
+		
+		RecruiterCredit rc1 = RecruiterCredit.builder().recruiterId("recruiter1").credits(2).build();
+		RecruiterCredit rc2 = RecruiterCredit.builder().recruiterId("recruiter1").credits(5).build();
+		
+		Mockito.when(this.mockCreditDao.fetchRecruiterCredits()).thenReturn(Set.of(rc1,rc2));
+		Mockito.doNothing().when(this.mockCreditDao).saveAll(argCapt.capture());
+		
+		this.service.updateCredits(new GrantCreditCommand());
+		
+		if (argCapt.getValue().stream().filter(rc -> rc.getCredits() != RecruiterCredit.DEFAULT_CREDITS).findAny().isPresent()) {
+			throw new RuntimeException();
+		}
 		
 	}
 	

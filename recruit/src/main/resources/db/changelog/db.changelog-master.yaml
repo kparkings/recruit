@@ -2023,3 +2023,52 @@ databaseChangeLog:
             - column:
                 name: days_on_site
                 type: varchar
+  - changeSet:
+      id: credits
+      author: kparkings
+      changes:
+        - createTable:
+            tableName: credits
+            schemaName: candidate
+            columns:
+              - column:
+                  name: recruiter_id
+                  type: varchar
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: credits
+                  type: tinyint
+                  constraints:
+                    nullable: false
+        - createTable:
+            tableName: credits
+            schemaName: recruiter
+            columns:
+              - column:
+                  name: recruiter_id
+                  type: varchar
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: credits
+                  type: tinyint
+                  constraints:
+                    nullable: false
+        - createTable:
+            tableName: credits
+            schemaName: listings
+            columns:
+              - column:
+                  name: recruiter_id
+                  type: varchar
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: credits
+                  type: tinyint
+                  constraints:
+                    nullable: false

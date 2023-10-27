@@ -26,6 +26,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.arenella.recruit.adapters.actions.GrantCreditCommand;
 import com.arenella.recruit.adapters.events.CandidateAccountCreatedEvent;
 import com.arenella.recruit.adapters.events.CandidateDeletedEvent;
 import com.arenella.recruit.adapters.events.CandidateNoLongerAvailableEvent;
@@ -42,6 +43,7 @@ import com.arenella.recruit.candidates.beans.CandidateUpdateRequest;
 import com.arenella.recruit.candidates.beans.Contact;
 import com.arenella.recruit.candidates.beans.Contact.CONTACT_TYPE;
 import com.arenella.recruit.candidates.beans.PendingCandidate;
+import com.arenella.recruit.candidates.beans.RecruiterCredit;
 import com.arenella.recruit.candidates.beans.Candidate.CANDIDATE_TYPE;
 import com.arenella.recruit.candidates.beans.Candidate.Photo;
 import com.arenella.recruit.candidates.beans.Candidate.Photo.PHOTO_FORMAT;
@@ -50,6 +52,7 @@ import com.arenella.recruit.candidates.controllers.CandidateController.CANDIDATE
 import com.arenella.recruit.candidates.controllers.CandidateValidationException;
 import com.arenella.recruit.candidates.controllers.SavedCandidate;
 import com.arenella.recruit.candidates.dao.CandidateDao;
+import com.arenella.recruit.candidates.dao.CandidateRecruiterCreditDao;
 import com.arenella.recruit.candidates.dao.PendingCandidateDao;
 import com.arenella.recruit.candidates.dao.RecruiterContactDao;
 import com.arenella.recruit.candidates.entities.CandidateEntity;
@@ -125,6 +128,9 @@ public class CandidateServiceImpl implements CandidateService{
 	
 	@Autowired
 	private RecruiterContactDao					contactDao;
+	
+	@Autowired
+	private CandidateRecruiterCreditDao			creditDao;
 	
 	/**
 	* Refer to the CandidateService Interface for Details
@@ -832,6 +838,20 @@ public class CandidateServiceImpl implements CandidateService{
 			.publishContactRequestEvent(new ContactRequestEvent(userId, candidateId, title, message));
 		}
 		
+		
+	}
+
+	/**
+	* Refer to the CandidateService for details 
+	*/
+	@Override
+	public void updateCredits(GrantCreditCommand command) {
+		
+		Set<RecruiterCredit> credits = this.creditDao.fetchRecruiterCredits();
+		
+		credits.stream().forEach(credit -> credit.setCredits(RecruiterCredit.DEFAULT_CREDITS));
+		
+		creditDao.saveAll(credits);
 		
 	}
 	

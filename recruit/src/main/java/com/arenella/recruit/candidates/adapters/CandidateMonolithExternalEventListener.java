@@ -1,11 +1,11 @@
-package com.arenella.recruit.authentication.utils;
+package com.arenella.recruit.candidates.adapters;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.arenella.recruit.adapters.actions.GrantCreditCommand;
 import com.arenella.recruit.adapters.events.RecruiterCreatedEvent;
 import com.arenella.recruit.adapters.events.RecruiterUpdatedEvent;
-import com.arenella.recruit.candidates.adapters.CandidateExternalEventListener;
 import com.arenella.recruit.candidates.services.CandidateService;
 
 /**
@@ -32,6 +32,16 @@ public class CandidateMonolithExternalEventListener implements CandidateExternal
 	@Override
 	public void listenForRecruiterUpdatedEvent(RecruiterUpdatedEvent event) {
 		this.candidateService.updateContact(event.getRecruiterId(), event.getEmail(), event.getFirstName(), event.getSurname());
+	}
+
+	/**
+	* Refer to CandidateExternalEventListener for details 
+	*/
+	@Override
+	public void listenForGrantCreditCommand(GrantCreditCommand command) {
+		
+		this.candidateService.updateCredits(command);
+		
 	}
 
 }

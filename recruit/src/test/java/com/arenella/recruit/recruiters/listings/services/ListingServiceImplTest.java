@@ -22,6 +22,7 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
+import com.arenella.recruit.adapters.actions.GrantCreditCommand;
 import com.arenella.recruit.listings.adapters.ExternalEventPublisher;
 import com.arenella.recruit.listings.adapters.RequestListingContactEmailCommand;
 import com.arenella.recruit.listings.beans.Listing;
@@ -32,6 +33,8 @@ import com.arenella.recruit.listings.dao.ListingEntity;
 import com.arenella.recruit.listings.exceptions.ListingValidationException;
 import com.arenella.recruit.listings.services.FileSecurityParser;
 import com.arenella.recruit.listings.services.FileSecurityParser.FileType;
+import com.arenella.recruit.recruiters.beans.RecruiterCredit;
+import com.arenella.recruit.recruiters.dao.RecruiterCreditDao;
 import com.arenella.recruit.listings.services.ListingServiceImpl;
 
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -48,16 +51,19 @@ public class ListingServiceImplTest {
 	private ListingServiceImpl 	service = new ListingServiceImpl();
 	
 	@Mock
-	private ListingDao 				mockListingDao;
+	private ListingDao 						mockListingDao;
 	
 	@Mock
-	private	Authentication			mockAuthentication;
+	private	Authentication					mockAuthentication;
 	
 	@Mock
-	private FileSecurityParser 		mockFileSecurityParser;
+	private FileSecurityParser 				mockFileSecurityParser;
 	
 	@Mock
-	private ExternalEventPublisher 	mockExternalEventPublisher;
+	private ExternalEventPublisher 			mockExternalEventPublisher;
+	
+	@Mock
+	private RecruiterCreditDao 				mockCreditDao;
 	
 	/**
 	* Sets up test environment
@@ -586,6 +592,30 @@ public class ListingServiceImplTest {
 		Mockito.verify(this.mockListingDao).saveListings(Mockito.anySet());
 		
 		listingArgCapt.getValue().stream().forEach(l -> Assertions.assertFalse(l.isActive()));
+		
+	}
+	
+	/**
+	* Test updating the RecruiterCredits
+	* @throws Exception
+	*/
+	@Test
+	public void testUpdateCredits() throws Exception{
+		
+		@SuppressWarnings("unchecked")
+		ArgumentCaptor<Set<RecruiterCredit>> argCapt = ArgumentCaptor.forClass(Set.class);
+		
+		RecruiterCredit rc1 = RecruiterCredit.builder().recruiterId("recruiter1").credits(2).build();
+		RecruiterCredit rc2 = RecruiterCredit.builder().recruiterId("recruiter1").credits(5).build();
+		
+		Mockito.when(this.mockCreditDao.fetchRecruiterCredits()).thenReturn(Set.of(rc1,rc2));
+		Mockito.doNothing().when(this.mockCreditDao).saveAll(argCapt.capture());
+		
+		this.service.updateCredits(new GrantCreditCommand());
+		
+		if (argCapt.getValue().stream().filter(rc -> rc.getCredits() != RecruiterCredit.DEFAULT_CREDITS).findAny().isPresent()) {
+			throw new RuntimeException();
+		}
 		
 	}
 	

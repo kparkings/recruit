@@ -9,6 +9,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.arenella.recruit.adapters.events.RecruiterCreatedEvent;
 import com.arenella.recruit.adapters.events.RecruiterUpdatedEvent;
+import com.arenella.recruit.candidates.adapters.CandidateMonolithExternalEventListener;
 import com.arenella.recruit.candidates.services.CandidateService;
 
 /**
