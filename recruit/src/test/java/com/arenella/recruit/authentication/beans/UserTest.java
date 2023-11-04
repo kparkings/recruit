@@ -1,6 +1,7 @@
 package com.arenella.recruit.authentication.beans;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.LinkedHashSet;
@@ -16,10 +17,11 @@ import com.arenella.recruit.authentication.beans.User.USER_ROLE;
 */
 public class UserTest {
 
-	private static final String 			username 	= "aUser";
-	private static final String 			password 	= "aPassword";
-	private static final boolean 			enabled 	= true;
-	private static final Set<USER_ROLE> 	roles 	= new LinkedHashSet<>();
+	private static final String 			USERNAME 		= "aUser";
+	private static final String 			PASSWORD 		= "aPassword";
+	private static final boolean 			ENABLED 		= true;
+	private static final boolean 			USE_CREDITS 	= true;
+	private static final Set<USER_ROLE> 	ROLES 			= new LinkedHashSet<>();
 	
 	/**
 	* Test User is created with the values set in the Builder
@@ -28,13 +30,13 @@ public class UserTest {
 	@Test
 	public void testBuilder() throws Exception{
 		
-		roles.add(USER_ROLE.admin);
+		ROLES.add(USER_ROLE.admin);
 		
-		User user = User.builder().username(username).password(password).enabled(enabled).roles(roles).build();
+		User user = User.builder().username(USERNAME).password(PASSWORD).enabled(ENABLED).roles(ROLES).build();
 		
-		assertEquals(user.getUsername(), 	username);
-		assertEquals(user.getPassword(), 	password);
-		assertEquals(user.isEnabled(), 		enabled);
+		assertEquals(user.getUsername(), 	USERNAME);
+		assertEquals(user.getPassword(), 	PASSWORD);
+		assertEquals(user.isEnabled(), 		ENABLED);
 		
 		user.getRoles().stream().filter(r -> r == USER_ROLE.admin).findAny().orElseThrow(() -> new RuntimeException("Expected Role"));
 		
@@ -78,17 +80,37 @@ public class UserTest {
 		
 		User user = User
 				.builder()
-					.username(username)
-					.password(password)
-					.enabled(enabled)
-					.roles(roles)
+					.username(USERNAME)
+					.password(PASSWORD)
+					.enabled(ENABLED)
+					.roles(ROLES)
 					.build();
 		
-		assertEquals(password, user.getPassword());
+		assertEquals(PASSWORD, user.getPassword());
 		
 		user.setPassword(newPassword);
 		
 		assertEquals(newPassword, user.getPassword());
+		
+	}
+	
+	/**
+	* Tests the useCredit of a the Password
+	* @throws Exception
+	*/
+	@Test
+	public void testUseCredits() throws Exception{
+		
+		User user = User
+				.builder()
+					.useCredits(USE_CREDITS)
+				.build();
+		
+		assertTrue(user.isUseCredits());
+		
+		user.setUseCredits(!USE_CREDITS);
+		
+		assertFalse(user.isUseCredits());
 		
 	}
 	

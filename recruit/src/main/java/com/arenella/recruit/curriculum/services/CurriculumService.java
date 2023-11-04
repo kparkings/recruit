@@ -90,4 +90,24 @@ public interface CurriculumService {
 	*/
 	public String updateCurriculum(long curriculumId, Curriculum curriculum);
 
+	/**
+	* Updates the Credits for the Users
+	* @param credits - Credits to assign to all users
+	*/
+	public void updateCredits(int credits);
+
+	/**
+	* Updates a Recruiters credits. Decrementing them by 1
+	* @param userId - id of User who used a Credit
+	*/
+	void useCredit(String userId);
+
+	/**
+	* Returns whether the User either does not have Credit based access or does 
+	* have credit based access to curriculums but has remining credits
+	* @param name - id of Authorized User
+	* @return whether User can access Curriculums
+	*/
+	public boolean doCreditsCheck(String name);
+
 }

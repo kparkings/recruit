@@ -2,6 +2,7 @@ import { Injectable }                                                   from '@a
 import { Observable }                 	                                from 'rxjs';
 import { HttpClient, HttpHeaders }  	                                from '@angular/common/http';
 import { environment } 								                    from './../environments/environment';
+import { delay } from 'rxjs/operators';
 
 /**
 * Service for interacting with Curriculums 
@@ -10,7 +11,7 @@ import { environment } 								                    from './../environments/envir
   providedIn: 'root'
 })
 export class CurriculumService {
-
+    
 	/**
     * Constructor
     * @param httpClient - For communicating with backend
@@ -85,13 +86,26 @@ export class CurriculumService {
   	
 		return this.httpClient.delete<any>(backendUrl, this.httpOptions);
 	}
-  
+	
 	/**
 	* Retuns url to get bytes for inline PDF version of Curriculum
 	*/
 	public getCurriculumUrlForInlinePdf(candidateId:string):string{
 		
 		return environment.backendUrl + 'curriculum-test/' + candidateId + '.pdf';
+	}
+	
+	/**
+	* Performs a check to see if the User has access to the Curriculum either
+	* because they do not use credt based acces or beause they have remaining 
+	* credits 
+	*/
+	public doCreditCheck():Observable<boolean>{
+		
+		const backendUrl:string = environment.backendUrl + 'curriculum/creditCheck';
+  	
+		return this.httpClient.get<boolean>(backendUrl, this.httpOptions);
+		
 	}
 		
 }

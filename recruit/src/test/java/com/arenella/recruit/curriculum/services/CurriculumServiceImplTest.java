@@ -2,6 +2,7 @@ package com.arenella.recruit.curriculum.services;
 
 import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -10,6 +11,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 import org.junit.jupiter.api.Assertions;
@@ -21,12 +23,15 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 
-import com.arenella.recruit.candidates.adapters.ExternalEventPublisher;
+import com.arenella.recruit.adapters.events.CreditsAssignedEvent;
+import com.arenella.recruit.curriculum.adapters.ExternalEventPublisher;
 import com.arenella.recruit.curriculum.beans.Curriculum;
 import com.arenella.recruit.curriculum.beans.PendingCurriculum;
+import com.arenella.recruit.curriculum.beans.RecruiterCredit;
 import com.arenella.recruit.curriculum.controllers.CurriculumUpdloadDetails;
 import com.arenella.recruit.curriculum.dao.CurriculumDao;
 import com.arenella.recruit.curriculum.dao.CurriculumDownloadedEventDao;
+import com.arenella.recruit.curriculum.dao.CurriculumRecruiterCreditDao;
 import com.arenella.recruit.curriculum.dao.PendingCurriculumDao;
 import com.arenella.recruit.curriculum.entity.CurriculumDownloadedEventEntity;
 import com.arenella.recruit.curriculum.entity.CurriculumEntity;
@@ -66,6 +71,9 @@ public class CurriculumServiceImplTest {
 	
 	@Mock
 	private 				Principal						mockPrincipal;
+	
+	@Mock
+	private					CurriculumRecruiterCreditDao	mockCreditDao;
 	
 	@InjectMocks
 	private static final 	CurriculumServiceImpl 	service 			= new CurriculumServiceImpl();
@@ -631,5 +639,120 @@ public class CurriculumServiceImplTest {
 		Mockito.verify(this.mockCurriculumDao).updateCurriculum(curriculum);
 		
 	}
+	
+	/**
+	* Test credits assigned and event sent
+	* @throws Exception
+	*/
+	@Test
+	public void testUpdateCredits() throws Exception{
+		
+		RecruiterCredit rc1 = RecruiterCredit.builder().recruiterId("rec1").credits(1).build();
+		RecruiterCredit rc2 = RecruiterCredit.builder().recruiterId("rec2").credits(2).build();
+		RecruiterCredit rc3 = RecruiterCredit.builder().recruiterId("rec3").credits(3).build();
+		
+		Mockito.when(this.mockCreditDao.fetchRecruiterCredits()).thenReturn(Set.of(rc1,rc2,rc3));
+		
+		service.updateCredits(0);
+		
+		Mockito.verify(this.mockCreditDao, 				Mockito.times(3)).persist(Mockito.any(RecruiterCredit.class));
+		Mockito.verify(this.mockExternalEventPublisher, Mockito.times(3)).publishCreditsAssignedEvent(Mockito.any(CreditsAssignedEvent.class));;
+		
+	}
+	
+	/**
+	* Checks Exception thrown if credits used for unkown user
+	* @throws Exception
+	*/
+	@Test
+	public void testUseCredit_unknownUser() throws Exception{
+		
+		Mockito.when(this.mockCreditDao.getByRecruiterId(Mockito.anyString())).thenReturn(Optional.empty());
+		
+		assertThrows(IllegalArgumentException.class, () -> {
+			service.useCredit("userId");
+		});
+		
+	}
+	
+	/**
+	* Tests exception thrown if User has no credits left
+	* @throws Exception
+	*/
+	@Test
+	public void testUseCredit_noCredits() throws Exception{
+		
+		RecruiterCredit rc = RecruiterCredit.builder().recruiterId("r1").credits(0).build();
+		
+		Mockito.when(this.mockCreditDao.getByRecruiterId(Mockito.anyString())).thenReturn(Optional.of(rc));
+		
+		assertThrows(IllegalStateException.class, () -> {
+			service.useCredit("userId");
+		});
+		
+	}
+	
+	/**
+	* Tests successful decrement
+	* @throws Exception
+	*/
+	@Test
+	public void testUseCredit() throws Exception{
+		
+		ArgumentCaptor<RecruiterCredit> rcCapt = ArgumentCaptor.forClass(RecruiterCredit.class);
+		
+		RecruiterCredit rc = RecruiterCredit.builder().recruiterId("r1").credits(2).build();
+		
+		Mockito.when(this.mockCreditDao.getByRecruiterId(Mockito.anyString())).thenReturn(Optional.of(rc));
+		Mockito.doNothing().when(this.mockCreditDao).persist(rcCapt.capture());
+		
+		service.useCredit("userId");
+		
+		assertEquals(1, rcCapt.getValue().getCredits());
+		
+	}
+	
+	/**
+	* Test false returned if User not known
+	* @throws Exception
+	*/
+	@Test
+	public void testDoCreditsCheck_unknownUser() throws Exception{
+		
+		Mockito.when(this.mockCreditDao.getByRecruiterId(Mockito.anyString())).thenReturn(Optional.empty());
+		
+		assertFalse(service.doCreditsCheck("recruiter33"));
+		
+	}
+	
+	/**
+	* Test false returned if User has no remaining credits
+	* @throws Exception
+	*/
+	@Test
+	public void testDoCreditsCheck_knownUser_no_credits() throws Exception{
+		
+		RecruiterCredit rc = RecruiterCredit.builder().credits(0).build();
+		
+		Mockito.when(this.mockCreditDao.getByRecruiterId(Mockito.anyString())).thenReturn(Optional.of(rc));
+		
+		assertFalse(service.doCreditsCheck("recruiter33"));
+		
+	} 
+	
+	/**
+	* Test false returned if User has no remaining credits
+	* @throws Exception
+	*/
+	@Test
+	public void testDoCreditsCheck_knownUser_has_credits() throws Exception{
+		
+		RecruiterCredit rc = RecruiterCredit.builder().credits(1).build();
+		
+		Mockito.when(this.mockCreditDao.getByRecruiterId(Mockito.anyString())).thenReturn(Optional.of(rc));
+		
+		assertTrue(service.doCreditsCheck("recruiter33"));
+		
+	} 
 	
 }

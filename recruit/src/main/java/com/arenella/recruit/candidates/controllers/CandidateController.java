@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.arenella.recruit.authentication.spring.filters.ClaimsUsernamePasswordAuthenticationToken;
 import com.arenella.recruit.candidates.beans.Candidate;
 import com.arenella.recruit.candidates.beans.Candidate.Photo;
 import com.arenella.recruit.candidates.beans.CandidateExtractedFilters;
@@ -199,9 +200,11 @@ public class CandidateController {
 		
 		
 		
-		UsernamePasswordAuthenticationToken user = (UsernamePasswordAuthenticationToken)principal;
+		ClaimsUsernamePasswordAuthenticationToken user = (ClaimsUsernamePasswordAuthenticationToken)principal;
 		
 		boolean isCandidate = user.getAuthorities().stream().filter(a -> a.getAuthority().equals("ROLE_CANDIDATE")).findAny().isPresent();
+		boolean isRecruiter = user.getAuthorities().stream().filter(a -> a.getAuthority().equals("ROLE_RECRUITER")).findAny().isPresent();
+		
 		if (isCandidate) {
 			candidateId.clear();
 			candidateId.add(user.getName());
@@ -232,8 +235,22 @@ public class CandidateController {
 																		.ownerId(ownerId)
 																	.build();
 		
-		return candidateService.getCandidateSuggestions(filterOptions, pageable.getPageSize()).map(CandidateSuggestionAPIOutbound::convertFromCandidate);
+		if (isRecruiter && (Boolean)user.getClaim("useCredits").get() && this.userCreditsExpired(user.getName())) {
+			return candidateService.getCandidateSuggestions(filterOptions, pageable.getPageSize()).map(CandidateSuggestionAPIOutbound::convertFromCandidateAsCensored);
+		} else {
+			return candidateService.getCandidateSuggestions(filterOptions, pageable.getPageSize()).map(CandidateSuggestionAPIOutbound::convertFromCandidate);
+		}
 		
+		
+	}
+	
+	/**
+	* Returns whether the User has credits left
+	* @param userName - Name of the user
+	* @return Whether user has credits left
+	*/
+	private boolean userCreditsExpired(String userName) {
+		return !this.candidateService.hasCreditsLeft(userName);
 	}
 	
 	/**

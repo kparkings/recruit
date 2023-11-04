@@ -97,7 +97,7 @@ public class JwtTokenUtil implements Serializable{
 	* @param token - Token containing claims
 	* @return claims
 	*/
-	private Claims getAllClaimsFromToken(String token) {
+	public Claims getAllClaimsFromToken(String token) {
 		
 		Claims claims = Jwts.parser().setSigningKey(this.secret).parseClaimsJws(token).getBody(); 
 		
@@ -117,12 +117,14 @@ public class JwtTokenUtil implements Serializable{
 	/**
 	* Generates a new Token for a User
 	* @param userDetails - Details of User
+	* @param extraClaims - Additional non standard claims to add to the token
 	* @return Token for the User
 	*/
-	public String generateToken(UserDetails userDetails) {
+	public String generateToken(UserDetails userDetails, Map<String,Object> extraClaims) {
 		Map<String,Object> claims = new HashMap<>();
 		
 		claims.put("ROLES", String.join(",", userDetails.getAuthorities().stream().map(auth -> auth.getAuthority()).collect(Collectors.toSet())));
+		claims.putAll(extraClaims);
 		
 		return Jwts.builder().setClaims(claims)
 							.setSubject(userDetails.getUsername())

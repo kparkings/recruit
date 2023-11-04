@@ -3,7 +3,8 @@ package com.arenella.recruit.candidates.adapters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.arenella.recruit.adapters.actions.GrantCreditCommand;
+import com.arenella.recruit.adapters.events.CreditsAssignedEvent;
+import com.arenella.recruit.adapters.events.CreditsUsedEvent;
 import com.arenella.recruit.adapters.events.RecruiterCreatedEvent;
 import com.arenella.recruit.adapters.events.RecruiterUpdatedEvent;
 import com.arenella.recruit.candidates.services.CandidateService;
@@ -38,10 +39,17 @@ public class CandidateMonolithExternalEventListener implements CandidateExternal
 	* Refer to CandidateExternalEventListener for details 
 	*/
 	@Override
-	public void listenForGrantCreditCommand(GrantCreditCommand command) {
+	public void listenForCreditsAssignedEvent(CreditsAssignedEvent event) {
+		this.candidateService.updateCreditsForUser(event.getUserId(), event.getCurrentCreditCount());
 		
-		this.candidateService.updateCredits(command);
-		
+	}
+
+	/**
+	* Refer to CandidateExternalEventListener for details 
+	*/
+	@Override
+	public void listenForCreditsUsedEvent(CreditsUsedEvent event) {
+		this.candidateService.updateCreditsForUser(event.getUserId(), event.getCredits());
 	}
 
 }

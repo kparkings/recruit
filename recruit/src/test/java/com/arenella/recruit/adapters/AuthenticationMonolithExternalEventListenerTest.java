@@ -78,7 +78,7 @@ public class AuthenticationMonolithExternalEventListenerTest {
 		this.eventListener.listenForRecruiterNoOpenSubscriptionsEvent(event);
 	
 		Mockito.verify(this.mockAccountService).replaceRolesForUser(recruiterId, userRoles);
-		
+		Mockito.verify(this.mockAccountService).updateUsersCreditStatus(recruiterId, true);
 	}
 	
 	/**
@@ -97,6 +97,7 @@ public class AuthenticationMonolithExternalEventListenerTest {
 		this.eventListener.listenForRecruiterHasOpenSubscriptionEvent(event);
 	
 		Mockito.verify(this.mockAccountService).replaceRolesForUser(Mockito.eq(recruiterId), Mockito.anySet());
+		Mockito.verify(this.mockAccountService).updateUsersCreditStatus(recruiterId, false);
 		
 		Set<USER_ROLE> roles = userRoleArgCapt.getValue();
 		

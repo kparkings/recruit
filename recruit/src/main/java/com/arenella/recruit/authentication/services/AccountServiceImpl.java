@@ -108,6 +108,20 @@ public class AccountServiceImpl implements AccountService{
 	}
 	
 	/**
+	* Refer to AccountService for details 
+	*/
+	@Override
+	public void updateUsersCreditStatus(String userId, boolean useCredits) {
+
+		User user = this.userDao.fetchUser(userId).orElseThrow(() -> new IllegalArgumentException("Unknown User Id."));
+		
+		user.setUseCredits(useCredits);
+		
+		this.userDao.updateUser(user);
+		
+	}
+	
+	/**
 	* Returns the roles associated with the AccountType
 	* @param accountType - Type of account being created
 	* @return Roles for the account

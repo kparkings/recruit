@@ -1,6 +1,5 @@
 package com.arenella.recruit.recruiters.adapters;
 
-import com.arenella.recruit.adapters.actions.GrantCreditCommand;
 import com.arenella.recruit.adapters.events.ContactRequestEvent;
 import com.arenella.recruit.adapters.events.OfferedCandidateContactRequestEvent;
 import com.arenella.recruit.adapters.events.OpenPositionContactRequestEvent;
@@ -71,12 +70,5 @@ public interface RecruitersExternalEventPublisher {
 	* @param event - Event informing of contact request
 	*/
 	public void publishRecruiterContactRequestEvent(ContactRequestEvent event);
-	
-	/**
-	* Sends a command instructing external services to Grant credits to 
-	* the Recruiters
-	* @param command - Command for Grant Credits
-	*/
-	public void publishGrantCreditCommand(GrantCreditCommand command);
 	
 }

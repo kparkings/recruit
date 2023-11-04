@@ -35,6 +35,9 @@ public class UserEntity {
 	@Column(name="enabled")
 	private boolean 			enabled;
 	
+	@Column(name="useCredits")
+	private boolean 			useCredits;
+	
 	@Enumerated(EnumType.STRING)
 	@ElementCollection(targetClass=USER_ROLE.class, fetch=FetchType.EAGER)
 	@CollectionTable(schema="users", name="user_roles", joinColumns=@JoinColumn(name="username"))
@@ -54,9 +57,10 @@ public class UserEntity {
 	*/
 	public UserEntity(UserEntityBuilder builder) {
 		
-		this.username = builder.username;
-		this.password = builder.password;
+		this.username 	= builder.username;
+		this.password 	= builder.password;
 		this.enabled	= builder.enabled;
+		this.useCredits	= builder.useCredits;
 		this.roles.addAll(builder.roles);
 		
 	}
@@ -84,6 +88,14 @@ public class UserEntity {
 	*/
 	public boolean isEnabled() {
 		return enabled;
+	}
+	
+	/**
+	* Whether the User has credit based access to the system
+	* @return if user has credit based access to the system
+	*/
+	public boolean isUseCredits() {
+		return this.useCredits;
 	}
 	
 	/**
@@ -119,6 +131,7 @@ public class UserEntity {
 		private String 				username;
 		private String 				password;
 		private boolean 			enabled;
+		private boolean				useCredits;
 		private Set<USER_ROLE> 		roles		= new LinkedHashSet<>();
 		
 		/**
@@ -149,6 +162,16 @@ public class UserEntity {
 		*/
 		public UserEntityBuilder enabled(boolean enabled) {
 			this.enabled = enabled;
+			return this;
+		}
+		
+		/**
+		* Sets whether the User has Credit based access to the system
+		* @param useCredits - Whether user has credit based access
+		* @return Builder
+		*/
+		public UserEntityBuilder useCredits(boolean useCredits) {
+			this.useCredits = useCredits;
 			return this;
 		}
 		
@@ -187,6 +210,7 @@ public class UserEntity {
 						.password(user.getPassword())
 						.enabled(user.isEnabled())
 						.roles(user.getRoles())
+						.useCredits(user.isUseCredits())
 						.build();
 	}
 	
@@ -203,6 +227,7 @@ public class UserEntity {
 					.password(userEntity.getPassword())
 					.enabled(userEntity.isEnabled())
 					.roles(userEntity.getRoles())
+					.useCredits(userEntity.isUseCredits())
 					.build();
 	}
 	

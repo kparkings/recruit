@@ -14,6 +14,7 @@ public class User {
 	private String			username;
 	private String			password;
 	private boolean			enabled;
+	private boolean			useCredits;
 	private Set<USER_ROLE> 	roles		= new LinkedHashSet<>();
 	
 	/**
@@ -25,6 +26,7 @@ public class User {
 		this.username 	= builder.username;
 		this.password 	= builder.password;
 		this.enabled	= builder.enabled;
+		this.useCredits	= builder.useCredits;
 		this.roles.addAll(builder.roles);
 	
 	}
@@ -43,6 +45,14 @@ public class User {
 	*/
 	public String getPassword() {
 		return this.password;
+	}
+	
+	/**
+	* Whether the User has credit based access to the system
+	* @return if user has credit based access to the system
+	*/
+	public boolean isUseCredits() {
+		return this.useCredits;
 	}
 	
 	/**
@@ -80,6 +90,14 @@ public class User {
 	}
 	
 	/**
+	* Sets whether the user is using credit based access
+	* @param useCredits - whether to use credit based access
+	*/
+	public void setUseCredits(boolean useCredits) {
+		this.useCredits = useCredits;
+	}
+	
+	/**
 	* Returns an instance of a builder for the User class
 	* @return Builder for the User class
 	*/
@@ -96,6 +114,7 @@ public class User {
 		private String			username;
 		private String			password;
 		private boolean			enabled;
+		private boolean			useCredits;
 		private Set<USER_ROLE> 	roles		= new LinkedHashSet<>();
 		
 		/**
@@ -125,6 +144,16 @@ public class User {
 		*/
 		public UserBuilder enabled(boolean enabled) {
 			this.enabled = enabled;
+			return this;
+		}
+		
+		/**
+		* Sets whether the User has Credit based access to the system
+		* @param useCredits - Whether user has credit based access
+		* @return Builder
+		*/
+		public UserBuilder useCredits(boolean useCredits) {
+			this.useCredits = useCredits;
 			return this;
 		}
 		

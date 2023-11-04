@@ -60,9 +60,9 @@ public class MonolithExternalEventPublisher implements ExternalEventPublisher{
 	/**
 	* Refer to ExternalEventPublisher for details 
 	*/
-	public void publishPendingCurriculumDeletedEvent(UUID pendingCurriculumId) {
-		curriculumExternalEventListener.listenForPendingCurriculumDeletedEvent(pendingCurriculumId);
-	}
+	//public void publishPendingCurriculumDeletedEvent(UUID pendingCurriculumId) {
+	//	curriculumExternalEventListener.listenForPendingCurriculumDeletedEvent(pendingCurriculumId);
+	//}
 
 	/**
 	* Refer to ExternalEventPublisher for details 

@@ -13,7 +13,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -21,6 +20,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.arenella.recruit.authentication.utils.JwtTokenUtil;
+
+import io.jsonwebtoken.Claims;
 
 /**
 * Performs authentication of each incomming request
@@ -101,9 +102,11 @@ public class SecRequestFilter extends OncePerRequestFilter {
 					
 					Set<String> roleNames = this.jwtTokenUtil.getRoles(token);
 					
+					Claims claims = this.jwtTokenUtil.getAllClaimsFromToken(token);
+					
 					List<GrantedAuthority> roles = roleNames.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList());
 					
-					UsernamePasswordAuthenticationToken  authToken = new UsernamePasswordAuthenticationToken(username, "", roles);
+					ClaimsUsernamePasswordAuthenticationToken  authToken = new ClaimsUsernamePasswordAuthenticationToken(username, "", roles, claims);
 					
 					SecurityContextHolder.getContext().setAuthentication(authToken);
 					

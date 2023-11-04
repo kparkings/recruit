@@ -16,13 +16,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import com.arenella.recruit.candidates.adapters.ExternalEventPublisher;
+import com.arenella.recruit.adapters.events.CreditsAssignedEvent;
+import com.arenella.recruit.adapters.events.CreditsUsedEvent;
+import com.arenella.recruit.curriculum.adapters.ExternalEventPublisher;
+//import com.arenella.recruit.candidates.adapters.ExternalEventPublisher;
 import com.arenella.recruit.curriculum.beans.Curriculum;
 import com.arenella.recruit.curriculum.beans.CurriculumDownloadedEvent;
 import com.arenella.recruit.curriculum.beans.PendingCurriculum;
+import com.arenella.recruit.curriculum.beans.RecruiterCredit;
 import com.arenella.recruit.curriculum.controllers.CurriculumUpdloadDetails;
 import com.arenella.recruit.curriculum.dao.CurriculumDao;
 import com.arenella.recruit.curriculum.dao.CurriculumDownloadedEventDao;
+import com.arenella.recruit.curriculum.dao.CurriculumRecruiterCreditDao;
 import com.arenella.recruit.curriculum.dao.PendingCurriculumDao;
 import com.arenella.recruit.curriculum.dao.CurriculumSkillsDao;
 import com.arenella.recruit.curriculum.utils.CurriculumDetailsExtractionFactory;
@@ -57,6 +62,9 @@ public class CurriculumServiceImpl implements CurriculumService{
 
 	@Autowired
 	private ExternalEventPublisher			externalEventPublisher;
+	
+	@Autowired
+	private CurriculumRecruiterCreditDao	creditDao;
 	
 	/**
 	* Refer to the CurriculumService interface for details
@@ -264,6 +272,56 @@ public class CurriculumServiceImpl implements CurriculumService{
 	*/
 	private boolean checkHasRole(String roleToCheck) {
 		return SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream().filter(role -> role.getAuthority().equals(roleToCheck)).findAny().isPresent();
+	}
+
+	/**
+	* Refer to the CurriculumService interface for details
+	*/
+	@Override
+	public void updateCredits(int credits) {
+		
+		creditDao.fetchRecruiterCredits().stream().forEach(rc -> {
+			rc.setCredits(credits);
+			this.creditDao.persist(rc);
+			this.externalEventPublisher.publishCreditsAssignedEvent(new CreditsAssignedEvent(rc.getRecruiterId(), credits));
+		});
+		
+	}
+	
+	/**
+	* Refer to the CurriclumService interface for details
+	* @param userId
+	*/
+	@Override
+	public void useCredit(String userId) {
+		
+		RecruiterCredit credit = this.creditDao.getByRecruiterId(userId).orElseThrow(() -> new IllegalArgumentException("Unknown User - Cant use Credit"));
+		
+		if (credit.getCredits() == 0) {
+			throw new IllegalStateException("No credits available for User");
+		}
+		
+		credit.decrementCredits();
+		
+		this.creditDao.persist(credit);
+		
+		this.externalEventPublisher.publishCreditsUsedEvent(new CreditsUsedEvent(credit.getRecruiterId(), credit.getCredits()));
+		
+	}
+
+	/**
+	* Refer to the CurriculumService interface for details
+	*/
+	@Override
+	public boolean doCreditsCheck(String recruiterId) {
+		
+		Optional<RecruiterCredit> recruiterCreditOpt = this.creditDao.getByRecruiterId(recruiterId);
+		
+		if (recruiterCreditOpt.isEmpty()) {
+			return false;
+		}
+		
+		return recruiterCreditOpt.get().getCredits() > 0;
 	}
 	
 }

@@ -2,11 +2,13 @@ package com.arenella.recruit.authentication.utils;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.arenella.recruit.adapters.events.CreditsUsedEvent;
 import com.arenella.recruit.adapters.events.RecruiterCreatedEvent;
 import com.arenella.recruit.adapters.events.RecruiterUpdatedEvent;
 import com.arenella.recruit.candidates.adapters.CandidateMonolithExternalEventListener;
@@ -69,6 +71,27 @@ public class CandidateMonolithExternalEventListenerTest {
 		listener.listenForRecruiterUpdatedEvent(event);
 		
 		Mockito.verify(mockCandidateService).updateContact(RECRUITER_ID, EMAIL, FIRSTNAME, SURNAME);
+		
+	}
+	
+	/**
+	* Tests handling of the Event
+	* @throws Exception
+	*/
+	@Test
+	public void testListenForCreditsUsedEvent() throws Exception{
+		
+		final String 	userId 		= "kparkings";
+		final int 		credits 	= 20;
+		
+		CreditsUsedEvent event = new CreditsUsedEvent(userId, credits);
+		
+		
+		Mockito.doNothing().when(this.mockCandidateService).updateCreditsForUser(userId, credits);
+		
+		this.listener.listenForCreditsUsedEvent(event);
+		
+		Mockito.verify(this.mockCandidateService).updateCreditsForUser(userId, credits);
 		
 	}
 	

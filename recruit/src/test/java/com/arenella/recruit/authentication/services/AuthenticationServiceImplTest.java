@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.Optional;
 import java.util.Set;
 
 import javax.servlet.http.Cookie;
@@ -22,7 +23,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 import com.arenella.recruit.authentication.beans.AuthenticatedEvent;
+import com.arenella.recruit.authentication.beans.User;
 import com.arenella.recruit.authentication.dao.AuthenticatedEventDao;
+import com.arenella.recruit.authentication.dao.UserDao;
 import com.arenella.recruit.authentication.utils.JwtTokenUtil;
 
 /**
@@ -49,6 +52,9 @@ public class AuthenticationServiceImplTest {
 	
 	@Mock
 	private AuthenticatedEventDao		mockAuthenticatedEventDao;
+	
+	@Mock
+	private UserDao						mockUserDao;
 	
 	/**
 	* Test if user not found exception is thrown
@@ -79,14 +85,15 @@ public class AuthenticationServiceImplTest {
 		final Cookie cookie		= new Cookie("a","b");
 		
 		Mockito.when(this.mockUserDetailsService.loadUserByUsername(Mockito.anyString())).thenReturn(mockUserDetails);
-		Mockito.when(this.mockJwtTokenUtil.generateToken(mockUserDetails)).thenReturn(token);
+		Mockito.when(this.mockJwtTokenUtil.generateToken(Mockito.any(), Mockito.any())).thenReturn(token);
 		Mockito.when(this.mockJwtTokenUtil.wrapInCookie(token)).thenReturn(cookie);
+		Mockito.when(this.mockUserDao.fetchUser(username)).thenReturn(Optional.of(User.builder().build()));
 		
 		Cookie returnedCookie = authService.authenticateUser(username, password);
 		
 		assertNotNull(returnedCookie);
 		
-		Mockito.verify(this.mockJwtTokenUtil, Mockito.times(1)).generateToken(mockUserDetails);
+		Mockito.verify(this.mockJwtTokenUtil, Mockito.times(1)).generateToken(Mockito.any(), Mockito.any());
 		Mockito.verify(this.mockJwtTokenUtil, Mockito.times(1)).wrapInCookie(token);
 		
 	}

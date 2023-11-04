@@ -2,6 +2,7 @@ package com.arenella.recruit.authentication.services;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Optional;
@@ -154,6 +155,52 @@ public class AccountServiceImplTest {
 		this.service.deleteAccount(userId);
 		
 		Mockito.verify(this.mockUserDao, Mockito.never()).deleteById(userId);
+		
+	}
+
+	
+	
+	
+	
+	
+	
+	/**
+	* Test exception thrown if User can not be found
+	* @throws Exception
+	*/
+	@Test
+	public void testUpdateUsersCreditStatus_unknownUser() throws Exception{
+		
+		final String userId 	= "kparkings";
+		
+		Mockito.when(this.mockUserDao.fetchUser(userId)).thenReturn(Optional.empty());
+		
+		Assertions.assertThrows(IllegalArgumentException.class, () -> {
+			this.service.updateUsersCreditStatus(userId, false);
+		});
+		
+	}
+	
+	/**
+	* Test exception thrown if User can not be found
+	* @throws Exception
+	*/
+	@Test
+	public void testupdateUsersCreditStatus() throws Exception{
+		
+		final String	userId 		= "kparkings";
+		final User		user		= User.builder().username(userId).useCredits(true).build();
+		
+		ArgumentCaptor<User> userArgCapt = ArgumentCaptor.forClass(User.class);
+		
+		Mockito.when(this.mockUserDao.fetchUser(userId)).thenReturn(Optional.of(user));
+		Mockito.doNothing().when(this.mockUserDao).updateUser(userArgCapt.capture());
+		
+		this.service.updateUsersCreditStatus(userId, false);
+		
+		Mockito.verify(this.mockUserDao).updateUser(user);
+		
+		assertFalse(userArgCapt.getValue().isUseCredits());
 		
 	}
 	

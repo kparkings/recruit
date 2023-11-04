@@ -1,11 +1,13 @@
 package com.arenella.recruit.candidates.controllers;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.security.Principal;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -21,11 +23,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.arenella.recruit.authentication.spring.filters.ClaimsUsernamePasswordAuthenticationToken;
 import com.arenella.recruit.candidates.beans.Candidate;
 import com.arenella.recruit.candidates.beans.CandidateExtractedFilters;
 import com.arenella.recruit.candidates.beans.CandidateFilterOptions;
@@ -46,43 +48,100 @@ import com.arenella.recruit.curriculum.enums.FileType;
 public class CandidateControllerTest {
 	
 	@Mock
-	private CandidateService					mockCandidateService;
+	private CandidateService							mockCandidateService;
 	
 	@Mock
-	private Authentication 						mockAuthentication;
+	private Authentication 								mockAuthentication;
 	
 	@Mock
-	private MultipartFile						mockMultipartFile;
+	private MultipartFile								mockMultipartFile;
 	
 	@Mock
-	private Principal							mockPrincipal;
+	private Principal									mockPrincipal;
 	
 	@Mock
-	private UsernamePasswordAuthenticationToken mockUsernamePasswordAuthenticationToken;
+	private ClaimsUsernamePasswordAuthenticationToken 	mockUsernamePasswordAuthenticationToken;
 	
 	@InjectMocks
-	private CandidateController 				controller;
+	private CandidateController 						controller;
 	
 	/**
 	* Tests retrieval of candidate suggestions
 	* @throws Exception
 	*/
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Test
 	public void testGetCandidate_suggestions() throws Exception{
+	
+		final String email 		= "kparkings@gmail.com";
+		final String firstname 	= "kevin";
+		final String surname 	= "parkings";
 		
-		Page<CandidateSearchAccuracyWrapper> candidatePage = Page.empty();
+		Candidate candidate = Candidate.builder().firstname(firstname).surname(surname).email(email).build();
+		CandidateSearchAccuracyWrapper wrapper = new CandidateSearchAccuracyWrapper(candidate);
+		
+		org.springframework.data.domain.PageImpl<CandidateSearchAccuracyWrapper> page = new org.springframework.data.domain.PageImpl(List.of(wrapper));
+		Page<CandidateSearchAccuracyWrapper> candidatePage = page;
 		
 		Mockito.when(this.mockCandidateService.getCandidateSuggestions(Mockito.any(), Mockito.any())).thenReturn(candidatePage);
 		Mockito.when(this.mockUsernamePasswordAuthenticationToken.getAuthorities()).thenReturn(Set.of());
 		
+		PageRequest mockPageRequest = Mockito.mock(PageRequest.class);
+		Mockito.when(mockPageRequest.getPageSize()).thenReturn(1);
+		
+		Page<CandidateAPIOutbound> results = this.controller.getCandidate(null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,true,null,null,null,null, mockPageRequest, this.mockUsernamePasswordAuthenticationToken);
+		
+		Mockito.verify(this.mockCandidateService).getCandidateSuggestions(Mockito.any(), Mockito.any());
+	
+		CandidateSuggestionAPIOutbound candidateFirst = (CandidateSuggestionAPIOutbound) results.get().findFirst().get();
+	
+		assertNotEquals(CandidateSuggestionAPIOutbound.CENSORED_ITEM, candidateFirst.getFirstname());
+		assertNotEquals(CandidateSuggestionAPIOutbound.CENSORED_ITEM, candidateFirst.getSurname());
+		assertNotEquals(CandidateSuggestionAPIOutbound.CENSORED_ITEM, candidateFirst.getEmail());
+		
+	}
+	
+	/**
+	* Tests retrieval of candidate suggestions when User has no credits
+	* @throws Exception
+	*/
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@Test
+	public void testGetCandidate_suggestions_noCredits() throws Exception{
+	
+		final String email 		= "kparkings@gmail.com";
+		final String firstname 	= "kevin";
+		final String surname 	= "parkings";
+		
+		Candidate candidate = Candidate.builder().firstname(firstname).surname(surname).email(email).ownerId("c1").build();
+		CandidateSearchAccuracyWrapper wrapper = new CandidateSearchAccuracyWrapper(candidate);
+		
+		org.springframework.data.domain.PageImpl<CandidateSearchAccuracyWrapper> page = new org.springframework.data.domain.PageImpl(List.of(wrapper));
+		Page<CandidateSearchAccuracyWrapper> candidatePage = page;
+		
+		Collection authorities = new HashSet<>();
+		authorities.add(new SimpleGrantedAuthority("ROLE_RECRUITER"));
+		
+		Mockito.when(this.mockCandidateService.getCandidateSuggestions(Mockito.any(), Mockito.any())).thenReturn(candidatePage);
+		Mockito.when(this.mockUsernamePasswordAuthenticationToken.getAuthorities()).thenReturn(authorities);
+		Mockito.when(this.mockUsernamePasswordAuthenticationToken.getName()).thenReturn(firstname);
 		
 		PageRequest mockPageRequest = Mockito.mock(PageRequest.class);
 		Mockito.when(mockPageRequest.getPageSize()).thenReturn(1);
 		
-		this.controller.getCandidate(null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,true,null,null,null,null, mockPageRequest, this.mockUsernamePasswordAuthenticationToken);
+		Mockito.when(this.mockUsernamePasswordAuthenticationToken.getClaim("useCredits")).thenReturn(Optional.of(Boolean.TRUE));
+		Mockito.when(this.mockCandidateService.hasCreditsLeft(Mockito.anyString())).thenReturn(false);
+		
+		Page<CandidateAPIOutbound> results = this.controller.getCandidate(null,null, null,null,null,null,null,null,null,null,null,null,null,null,null,null,true,null,null,null,null, mockPageRequest, this.mockUsernamePasswordAuthenticationToken);
 		
 		Mockito.verify(this.mockCandidateService).getCandidateSuggestions(Mockito.any(), Mockito.any());
 	
+		CandidateSuggestionAPIOutbound candidateFirst = (CandidateSuggestionAPIOutbound) results.get().findFirst().get();
+	
+		assertEquals(CandidateSuggestionAPIOutbound.CENSORED_ITEM, candidateFirst.getFirstname());
+		assertEquals(CandidateSuggestionAPIOutbound.CENSORED_ITEM, candidateFirst.getSurname());
+		assertEquals(CandidateSuggestionAPIOutbound.CENSORED_ITEM, candidateFirst.getEmail());
+		
 	}
 	
 	/**

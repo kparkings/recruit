@@ -1,7 +1,6 @@
 package com.arenella.recruit.candidates.adapters;
 
 import java.util.Set;
-import java.util.UUID;
 
 import com.arenella.recruit.adapters.events.CandidateAccountCreatedEvent;
 import com.arenella.recruit.adapters.events.CandidateDeletedEvent;
@@ -23,12 +22,6 @@ public interface ExternalEventPublisher {
 	* @param skills - Skills used in Candidate Search
 	*/
 	public void publishSearchedSkillsEvent(Set<String> skills);
-	
-	/**
-	* Publishes an event when PendingCurriculum is deleted
-	* @param pendingCandidateId - Unique Id of PendingCurriculum that was deleted
-	*/
-	public void publishPendingCurriculumDeletedEvent(UUID pendingCandidateId);
 	
 	/**
 	* Publishes an event informing that a Candidate is no longer available

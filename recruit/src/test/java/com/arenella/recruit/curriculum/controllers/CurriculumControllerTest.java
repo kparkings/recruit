@@ -3,8 +3,12 @@ package com.arenella.recruit.curriculum.controllers;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.security.Principal;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
@@ -16,8 +20,10 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.arenella.recruit.authentication.spring.filters.ClaimsUsernamePasswordAuthenticationToken;
 import com.arenella.recruit.curriculum.beans.PendingCurriculum;
 import com.arenella.recruit.curriculum.enums.FileType;
 import com.arenella.recruit.curriculum.services.CurriculumFileSecurityParser;
@@ -31,19 +37,19 @@ import com.arenella.recruit.curriculum.services.CurriculumService;
 public class CurriculumControllerTest {
 
 	@InjectMocks
-	private CurriculumController 			curriculumController		= new CurriculumController();
+	private CurriculumController 						curriculumController		= new CurriculumController();
 	
 	@Mock
-	private CurriculumService 				mockCurriculumService;
+	private CurriculumService 							mockCurriculumService;
 	
 	@Mock
-	private MultipartFile					mockMultipartFile;
+	private MultipartFile								mockMultipartFile;
 	
 	@Mock
-	private CurriculumFileSecurityParser	mockFileSecurityParser;
+	private CurriculumFileSecurityParser				mockFileSecurityParser;
 	
 	@Mock
-	private Principal						mockPrincipal;
+	private ClaimsUsernamePasswordAuthenticationToken	mockPrincipal;
 	
 	
 	/**
@@ -125,19 +131,84 @@ public class CurriculumControllerTest {
 	* curriculum
 	* @throws Exception
 	*/
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Test
 	public void testGetCurriculumAsPDF() throws Exception {
 		
 		final String 	curriculumId 	= "1";
 		final byte[] 	pdfBytes 		=  new byte[]{};
+	
+		Collection authorities = new HashSet<>();
+		authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+		
+		Mockito.when(this.mockPrincipal.getAuthorities()).thenReturn(authorities);
+		Mockito.when(this.mockPrincipal.getClaim("useCredits")).thenReturn(Optional.of(Boolean.FALSE));
+		ArgumentCaptor<String> argCaptId = ArgumentCaptor.forClass(String.class);
+		
+		Mockito.when(this.mockCurriculumService.getCurriculamAsPdfBytes(argCaptId.capture())).thenReturn(pdfBytes);
+		byte[] response = this.curriculumController.getCurriculumAsPDF(curriculumId, this.mockPrincipal);
+		
+		assertEquals(pdfBytes, response);
+		assertEquals(curriculumId, argCaptId.getValue());
+		
+	}
+	
+	/**
+	* Test calling of endpoint to get bytes for PDF version of 
+	* curriculum
+	* @throws Exception
+	*/
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@Test
+	public void testGetCurriculumAsPDF_recruiter_non_creditbased() throws Exception {
+		
+		final String 	curriculumId 	= "1";
+		final byte[] 	pdfBytes 		=  new byte[]{};
+		
+		Collection authorities = new HashSet<>();
+		authorities.add(new SimpleGrantedAuthority("ROLE_RECRUITER"));
+		
+		Mockito.when(this.mockPrincipal.getAuthorities()).thenReturn(authorities);
+		Mockito.when(this.mockPrincipal.getClaim("useCredits")).thenReturn(Optional.of(Boolean.FALSE));
 		
 		ArgumentCaptor<String> argCaptId = ArgumentCaptor.forClass(String.class);
 		
 		Mockito.when(this.mockCurriculumService.getCurriculamAsPdfBytes(argCaptId.capture())).thenReturn(pdfBytes);
-		byte[] response = this.curriculumController.getCurriculumAsPDF(curriculumId);
+		byte[] response = this.curriculumController.getCurriculumAsPDF(curriculumId, this.mockPrincipal);
 		
 		assertEquals(pdfBytes, response);
 		assertEquals(curriculumId, argCaptId.getValue());
+		
+	}
+	
+	/**
+	* Test calling of endpoint to get bytes for PDF version of 
+	* curriculum
+	* @throws Exception
+	*/
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@Test
+	public void testGetCurriculumAsPDF_recruiter_creditbased() throws Exception {
+		
+		final String 	curriculumId 	= "1";
+		final byte[] 	pdfBytes 		=  new byte[]{};
+		
+		Collection authorities = new HashSet<>();
+		authorities.add(new SimpleGrantedAuthority("ROLE_RECRUITER"));
+		
+		Mockito.when(this.mockPrincipal.getAuthorities()).thenReturn(authorities);
+		Mockito.when(this.mockPrincipal.getClaim("useCredits")).thenReturn(Optional.of(Boolean.TRUE));
+		Mockito.when(this.mockPrincipal.getName()).thenReturn("userId");
+		
+		ArgumentCaptor<String> argCaptId = ArgumentCaptor.forClass(String.class);
+		
+		Mockito.when(this.mockCurriculumService.getCurriculamAsPdfBytes(argCaptId.capture())).thenReturn(pdfBytes);
+		byte[] response = this.curriculumController.getCurriculumAsPDF(curriculumId, this.mockPrincipal);
+		
+		assertEquals(pdfBytes, response);
+		assertEquals(curriculumId, argCaptId.getValue());
+		
+		Mockito.verify(this.mockCurriculumService).useCredit("userId");
 		
 	}
 	
@@ -154,6 +225,75 @@ public class CurriculumControllerTest {
 		
 		Mockito.verify(this.mockCurriculumService).deletePendingCurriculum(Mockito.any());
 		
+	}
+	
+	/**
+	* Tests if admin returns true
+	* @throws Exception
+	*/
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@Test
+	public void testPassesCreditCheck_admin() throws Exception{
+		
+		Collection authorities = new HashSet<>();
+		authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+		
+		Mockito.when(this.mockPrincipal.getAuthorities()).thenReturn(authorities);
+		Mockito.when(this.mockPrincipal.getClaim("useCredits")).thenReturn(Optional.of(Boolean.TRUE));
+		
+		ResponseEntity<Boolean> response = this.curriculumController.passesCreditCheck(mockPrincipal);
+		
+		assertTrue(response.getBody());
+
+		Mockito.verify(this.mockCurriculumService, Mockito.never()).doCreditsCheck(mockPrincipal.getName());
+		
+	}
+	
+	/**
+	* Tests if recruiter but no using credit based access return true
+	* @throws Exception
+	*/
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@Test
+	public void testPassesCreditCheck_recruiter_not_creditbased() throws Exception{
+		
+		Collection authorities = new HashSet<>();
+		authorities.add(new SimpleGrantedAuthority("ROLE_RECRUITER"));
+		
+		Mockito.when(this.mockPrincipal.getAuthorities()).thenReturn(authorities);
+		Mockito.when(this.mockPrincipal.getClaim("useCredits")).thenReturn(Optional.of(Boolean.FALSE));
+		//Mockito.when(this.mockPrincipal.getName()).thenReturn("userId");
+		
+		ResponseEntity<Boolean> response = this.curriculumController.passesCreditCheck(mockPrincipal);
+		
+		assertTrue(response.getBody());
+		
+		Mockito.verify(this.mockCurriculumService, Mockito.never()).doCreditsCheck(mockPrincipal.getName());
+
+	}
+	
+	/**
+	* Tests if recruiter but no using credit based access return true
+	* @throws Exception
+	*/
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@Test
+	public void testPassesCreditCheck_recruiter_creditbased() throws Exception{
+		
+		Collection authorities = new HashSet<>();
+		authorities.add(new SimpleGrantedAuthority("ROLE_RECRUITER"));
+		
+		Mockito.when(this.mockCurriculumService.doCreditsCheck(Mockito.any())).thenReturn(true);
+		Mockito.when(this.mockPrincipal.getAuthorities()).thenReturn(authorities);
+		Mockito.when(this.mockPrincipal.getClaim("useCredits")).thenReturn(Optional.of(Boolean.TRUE));
+		Mockito.when(this.mockPrincipal.getName()).thenReturn("userId");
+		
+		ResponseEntity<Boolean> response = this.curriculumController.passesCreditCheck(mockPrincipal);
+		
+		assertTrue(response.getBody());
+		
+		Mockito.verify(this.mockCurriculumService).doCreditsCheck(mockPrincipal.getName());
+
 	}
 	
 }

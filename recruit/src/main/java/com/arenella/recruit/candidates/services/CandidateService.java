@@ -11,7 +11,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.arenella.recruit.adapters.actions.GrantCreditCommand;
 import com.arenella.recruit.candidates.beans.Candidate;
 import com.arenella.recruit.candidates.beans.Candidate.Photo;
 import com.arenella.recruit.candidates.beans.CandidateExtractedFilters;
@@ -193,9 +192,14 @@ public interface CandidateService {
 	public void sendEmailToCandidate(String message, String candidateId, String title, String userId);
 
 	/**
+	* Whether or not the User has remaining credits
+	*/
+	boolean hasCreditsLeft(String userName);
+
+	/**
 	* Updates the amount of Credits the Recruiter has
 	* @param command - information about credits
 	*/
-	public void updateCredits(GrantCreditCommand command);
+	void updateCreditsForUser(String userId, int availableCredits);
 	
 }

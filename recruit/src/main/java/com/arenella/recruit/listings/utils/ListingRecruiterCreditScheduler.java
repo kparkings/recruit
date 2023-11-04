@@ -1,4 +1,4 @@
-package com.arenella.recruit.recruiters.utils;
+package com.arenella.recruit.listings.utils;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -14,7 +14,7 @@ import com.arenella.recruit.recruiters.services.SupplyAndDemandService;
 */
 @Component
 @EnableScheduling
-public class RecruiterCreditScheduler {
+public class ListingRecruiterCreditScheduler {
 	
 	@Autowired
 	private SupplyAndDemandService supplyAndDemandService;

@@ -26,7 +26,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.arenella.recruit.adapters.actions.GrantCreditCommand;
 import com.arenella.recruit.adapters.events.CandidateAccountCreatedEvent;
 import com.arenella.recruit.adapters.events.CandidateDeletedEvent;
 import com.arenella.recruit.adapters.events.CandidateNoLongerAvailableEvent;
@@ -845,13 +844,34 @@ public class CandidateServiceImpl implements CandidateService{
 	* Refer to the CandidateService for details 
 	*/
 	@Override
-	public void updateCredits(GrantCreditCommand command) {
+	public void updateCreditsForUser(String userId, int availableCredits) {
 		
-		Set<RecruiterCredit> credits = this.creditDao.fetchRecruiterCredits();
+		Optional<RecruiterCredit> creditOpt = this.creditDao.getByRecruiterId(userId);
 		
-		credits.stream().forEach(credit -> credit.setCredits(RecruiterCredit.DEFAULT_CREDITS));
+		if (!creditOpt.isPresent()) {
+			return;
+		}
 		
-		creditDao.saveAll(credits);
+		RecruiterCredit credits = creditOpt.get();
+		
+		credits.setCredits(availableCredits);
+		
+		creditDao.persist(credits);
+		
+	}
+	
+	/**
+	* Refer to the CandidateService for details 
+	*/
+	@Override
+	public boolean hasCreditsLeft(String userName) {
+		Optional<RecruiterCredit> credits = this.creditDao.getByRecruiterId(userName);
+		
+		if (credits.isEmpty()) {
+			return false;
+		}
+		
+		return credits.get().getCredits() > 0;
 		
 	}
 	

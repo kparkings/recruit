@@ -35,15 +35,11 @@ public class UserDetailsServiceImpl implements UserDetailsService{
 		
 		User user = userDao.fetchUser(username).orElseThrow(() -> new UsernameNotFoundException("Unknown User"));
 		
-		//User user = User.builder().username("javainuse").password("$2a$10$slYQmyNdGzTn7ZLBXBChFOC9f6kFjAqPhccnP6DxlWXx2lPk1C3G6").enabled(true).roles(roles).build();
-		
 		List<GrantedAuthority> roles = user.getRoles()
 											.stream()
 											.map(r -> new SimpleGrantedAuthority("ROLE_".concat(r.toString().toUpperCase())))
 											.collect(Collectors.toList());
 		
-		//TODO: Need to check if recruiter has avtive subscription. Else only role will be ACCOUNT_DISABLED this will allow user to log in to select a subscription but nothing else.
-		// Need events from recruiter service to inform when a recruiter is active / disabled.
 		
 		return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(),roles);
 		 

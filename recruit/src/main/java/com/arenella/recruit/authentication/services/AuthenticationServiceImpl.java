@@ -1,6 +1,7 @@
 package com.arenella.recruit.authentication.services;
 
 import java.time.LocalDateTime;
+import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.http.Cookie;
@@ -13,7 +14,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
 import com.arenella.recruit.authentication.beans.AuthenticatedEvent;
+import com.arenella.recruit.authentication.beans.User;
 import com.arenella.recruit.authentication.dao.AuthenticatedEventDao;
+import com.arenella.recruit.authentication.dao.UserDao;
 import com.arenella.recruit.authentication.utils.JwtTokenUtil;
 
 /**
@@ -35,6 +38,9 @@ public class AuthenticationServiceImpl implements AuthenticationService{
 	@Autowired
 	private AuthenticatedEventDao		authenticatedEventDao;
 	
+	@Autowired
+	private UserDao						userDao;
+	
 	/**
 	* Refer to the AuthenticationService for details
 	*/
@@ -50,12 +56,13 @@ public class AuthenticationServiceImpl implements AuthenticationService{
 		/**
 		* Loads the details of the just authenticated User
 		*/
-		final UserDetails userDetails = this.userDetailsService.loadUserByUsername(userName);
+		final UserDetails 	userDetails = this.userDetailsService.loadUserByUsername(userName);
+		final User 			user 		= this.userDao.fetchUser(userName).orElseThrow();
 		
 		/**
 		* Creates an Auth token for a User. Wraps it in a cookie and returns it. 
 		*/
-		final String token = this.jwtTokenUtil.generateToken(userDetails);
+		final String token = this.jwtTokenUtil.generateToken(userDetails, Map.of("useCredits", user.isUseCredits()));
 		
 		return this.jwtTokenUtil.wrapInCookie(token);
 		

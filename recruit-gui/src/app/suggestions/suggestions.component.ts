@@ -488,47 +488,59 @@ export class SuggestionsComponent implements OnInit {
 	* Shows the Suggesion result view
 	*/
 	public showSuggestionsResults():void{
-		console.log("TT1");
+		
+		this.getSuggestions();	
+		
 		if (this.isRecruiter() && this.candidateNavService.isRouteActive()) {
-			console.log("TT2");
 			this.candidateNavService.doNextMove("back",this.candidateNavService.getCandidateId());	
 		} else {
-			console.log("TT3");
 			this.currentView 		= 'suggestion-results';
 			this.suggestedCandidate = new Candidate();	
 			this.lastView 			= '';
 		}
-		
-		//If View From MP - Fetch and show candidate: Refactor into central navigation service
-		
-		//let lastPage:string|null = sessionStorage.getItem("last-page");
-		//let mpCandidate:string|null = sessionStorage.getItem("mp-candidate");
-		//if (lastPage && lastPage == 'rec-mp-your-candidate') {
-		//	sessionStorage.removeItem("last-page");
-		//	sessionStorage.removeItem("mp-candidate");
-		//	sessionStorage.setItem("mp-lastview", "xxx");
-		//	this.router.navigate(['recruiter-marketplace']);
-		//} else {
-		//	this.currentView 		= 'suggestion-results';
-		//	this.suggestedCandidate = new Candidate();	
-		//	this.lastView 			= '';
-		//}
+	
+	}
+	
+	public passedCreditCheck:boolean = false;
+	public doCreditCheck():void{
+		console.log("DOING CHECK");
+		this.curriculumService.doCreditCheck().subscribe(passed => {
+			this.passedCreditCheck = passed;
+			console.log("DOING CHECK  " + passed);
+		});
+	}
+	
+	disableDownload():void{
+		this.passedCreditCheck = false;
+		this.doCreditCheck();
 	}
 
 	/**
 	* Shows the inline CV view
 	*/
 	public showInlineCVView():void{
-		this.currentView = 'inline-cv';
-		this.showCVInline(this.suggestedCandidate.candidateId);
+		
+		if (this.passedCreditCheck) {
+			this.currentView = 'inline-cv';
+			this.showCVInline(this.suggestedCandidate.candidateId);
+		} else {
+			this.handleNoCredit();		
+		}
+		
+		this.doCreditCheck();
+	
 	}
 
-
+	public handleNoCredit():void{
+		console.log("show buy credit message")
+	}
 	
 	/**
 	* Shows the Suggesion result view
 	*/
 	public showSuggestedCandidateOverview(candidateSuggestion:Candidate):void{
+		
+		this.doCreditCheck();
 		
 		//Admin
 		if (this.isAdmin()) {
@@ -582,6 +594,8 @@ export class SuggestionsComponent implements OnInit {
 			this.showSavedCandidates();
 		});
 	}
+	
+	
 	
 	/**
 	*  Returns the url to perform the download of the candidates CV

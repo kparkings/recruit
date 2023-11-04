@@ -47,5 +47,13 @@ public interface AccountService {
 	* @param userId - Unique id of the User
 	*/
 	public void deleteAccount(String userId);
+
+	/**
+	* Updates whether Recruiter is using Credit based subscription or have unlimited access 
+	* due to another subscription type
+	* @param geRecruiterId
+	* @param b
+	*/
+	public void updateUsersCreditStatus(String geRecruiterId, boolean b);
 	
 }

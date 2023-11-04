@@ -1,6 +1,5 @@
 package com.arenella.recruit.recruiters.adapters;
 
-import com.arenella.recruit.adapters.actions.GrantCreditCommand;
 import com.arenella.recruit.adapters.events.RecruiterHasOpenSubscriptionEvent;
 import com.arenella.recruit.adapters.events.RecruiterNoOpenSubscriptionEvent;
 
@@ -21,12 +20,5 @@ public interface ListingsExternalEventListener {
 	* @param recruiterHasOpenSubscriptionEvent
 	*/
 	void listenForRecruiterHasOpenSubscriptionsEvent(RecruiterHasOpenSubscriptionEvent recruiterHasOpenSubscriptionEvent);
-
-	/**
-	* Listener for GrantCreditCommand indicating it is time to update
-	* the Credits for a Recruiter
-	* @param command - To update Credit's
-	*/
-	void listenForGrantCreditCommand(GrantCreditCommand command);
 
 }

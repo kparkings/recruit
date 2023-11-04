@@ -187,10 +187,12 @@
 			<button class="btn btn-secondary btnRight main-btn {{suggestionMobileBtnClass}}" (click)="rememberCandidate(suggestedCandidate)" 		*ngIf="lastView != 'saved-candidates' && isSavedCandidate(suggestedCandidate) && !isCandidate()" title="Add candidate to your list of saved candidates" disabled>Save Candidate</button>
 			<button class="btn btn-secondary btnRight main-btn {{suggestionMobileBtnClass}}" (click)="forgetCandidate()" 							*ngIf="lastView === 'saved-candidates'" title="removed candidate from your list of saved candidates">Unsave Candidate</button>
 			<button class="btn btn-secondary btnRight main-btn {{suggestionMobileBtnClass}}" (click)="showNotesDialog(notesBox,suggestedCandidate)" 	*ngIf="lastView === 'saved-candidates'">Notes</button>
-			
-			<a class="currliculum-link" href="{{getCurriculumDownloadUrl(suggestedCandidate.candidateId)}}" *ngIf="(!isCandidate()) && (lastView != 'saved-candidates' || (lastView == 'saved-candidates' && !isNoLongerAvailable()))">
-				<button class="btn btn-secondary btnRight main-btn {{suggestionMobileBtnClass}}">Download CV</button>
+				
+			<a class="currliculum-link" href="{{getCurriculumDownloadUrl(suggestedCandidate.candidateId)}}" *ngIf="passedCreditCheck && (!isCandidate()) && (lastView != 'saved-candidates' || (lastView == 'saved-candidates' && !isNoLongerAvailable()))">
+				<button class="btn btn-secondary btnRight main-btn {{suggestionMobileBtnClass}}" (click)="doCreditCheck()">Download CV</button>
 			</a>
+			
+			<button class="btn btn-secondary btnRight main-btn {{suggestionMobileBtnClass}}" (click)="handleNoCredit()" *ngIf="!passedCreditCheck && (!isCandidate()) && (lastView != 'saved-candidates' || (lastView == 'saved-candidates' && !isNoLongerAvailable()))">Download CV</button>
 			
 			<button class="btn btn-secondary btnRight main-btn" (click)="showInlineCVView()" 							*ngIf="!isMobile && (lastView != 'saved-candidates' || (lastView == 'saved-candidates' && !isNoLongerAvailable())) && !isCandidate()">Display CV</button>
 			

@@ -20,6 +20,8 @@ import com.arenella.recruit.candidates.utils.CandidateSuggestionUtil.suggestion_
 */
 public class CandidateSuggestionAPIOutbound implements CandidateAPIOutbound{
 
+	public static final String CENSORED_ITEM = "-";
+	
 	private String 					candidateId;
 	private FUNCTION				function;
 	private String					roleSought;
@@ -475,6 +477,37 @@ public class CandidateSuggestionAPIOutbound implements CandidateAPIOutbound{
 					.firstname(candidate.get().getFirstname())
 					.surname(candidate.get().getSurname())
 					.email(candidate.get().getEmail())
+					.accuracyLanguages(candidate.getAccuracyLanguages())
+					.accuracySkills(candidate.getAccuracySkills())
+				.build();
+		
+	}
+	
+	/**
+	* Returns results with identifying features of the Candidate removed
+	* @param candidate - Candidate to be converted
+	* @return converted candidate
+	*/
+	public static CandidateSuggestionAPIOutbound convertFromCandidateAsCensored(CandidateSearchAccuracyWrapper candidate) {
+		
+		return CandidateSuggestionAPIOutbound
+				.builder()
+					.candidateId(candidate.get().getCandidateId())
+					.country(candidate.get().getCountry())
+					.function(candidate.get().getFunction())
+					.roleSought(candidate.get().getRoleSought())
+					.city(candidate.get().getCity())
+					.freelance(candidate.get().isFreelance())
+					.perm(candidate.get().isPerm())
+					.languages(candidate.get().getLanguages())
+					.skills(candidate.get().getSkills())
+					.yearsExperience(candidate.get().getYearsExperience())
+					.available(candidate.get().isAvailable())
+					.flaggedAsUnavailable(candidate.get().isFlaggedAsUnavailable())
+					.lastAvailabilityCheck(candidate.get().getLastAvailabilityCheckOn())
+					.firstname(CENSORED_ITEM)
+					.surname(CENSORED_ITEM)
+					.email(CENSORED_ITEM)
 					.accuracyLanguages(candidate.getAccuracyLanguages())
 					.accuracySkills(candidate.getAccuracySkills())
 				.build();

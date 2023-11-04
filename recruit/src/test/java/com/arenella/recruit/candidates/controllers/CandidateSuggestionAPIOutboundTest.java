@@ -53,7 +53,7 @@ public class CandidateSuggestionAPIOutboundTest {
 	@Test
 	public void testBuilder() throws Exception{
 		
-		 CandidateSuggestionAPIOutbound candidate =  CandidateSuggestionAPIOutbound
+		CandidateSuggestionAPIOutbound candidate =  CandidateSuggestionAPIOutbound
 														.builder()
 															.available(available)
 															.candidateId(candidateId)
@@ -168,6 +168,68 @@ public class CandidateSuggestionAPIOutboundTest {
 		assertEquals(email, 					candidateAPIOutbound.getEmail());
 		assertEquals(accuracyLanguages, 		candidateAPIOutbound.getAccuracyLanguages());
 		assertEquals(accuracySkills, 			candidateAPIOutbound.getAccuracySkills());
+		
+		assertTrue(candidateAPIOutbound.getSkills().contains("Java"));
+		assertTrue(candidateAPIOutbound.getSkills().contains("Angular"));
+		
+		candidateAPIOutbound.getLanguages().stream().filter(l -> l.getLanguage() == LANGUAGE.DUTCH && l.getLevel() == LEVEL.PROFICIENT).findAny().orElseThrow();
+		
+	}
+	
+	/**
+	* Tests convertsion from Domain representatin of Candidate to API Outbound
+	* representation
+	* @throws Exception
+	*/
+	@Test
+	public void testConvertFromCandidateAsCensored() throws Exception{
+		
+		Candidate candidate = Candidate
+									.builder()
+										.flaggedAsUnavailable(flaggedAsUnavailable)
+										.available(available)
+										.candidateId(candidateId)
+										.city(city)
+										.email(email)
+										.country(country)
+										.freelance(freelance)
+										.function(function)
+										.languages(languages)
+										.lastAvailabilityCheck(lastAvailabilityCheck)
+										.perm(perm)
+										.roleSought(roleSought)
+										.skills(skills)
+										.yearsExperience(yearsExperience)
+										.firstname(firstname)
+										.registerd(registered)
+										.surname(surname)
+										.available(available)
+										.ownerId(ownerId)
+									.build();
+		
+		CandidateSearchAccuracyWrapper wrapper = new CandidateSearchAccuracyWrapper(candidate);
+		
+		wrapper.setAccuracyLanguages(accuracyLanguages);
+		wrapper.setAccuracySkills(accuracySkills);
+		
+		CandidateSuggestionAPIOutbound candidateAPIOutbound = CandidateSuggestionAPIOutbound.convertFromCandidateAsCensored(wrapper);
+		
+		assertEquals(candidateId, 									candidateAPIOutbound.getCandidateId());
+		assertEquals(roleSought, 									candidateAPIOutbound.getRoleSought());
+		assertEquals(function, 										candidateAPIOutbound.getFunction());
+		assertEquals(country, 										candidateAPIOutbound.getCountry());
+		assertEquals(city, 											candidateAPIOutbound.getCity());
+		assertEquals(perm, 											candidateAPIOutbound.getPerm());
+		assertEquals(freelance, 									candidateAPIOutbound.getFreelance());
+		assertEquals(yearsExperience, 								candidateAPIOutbound.getYearsExperience());
+		assertEquals(available, 									candidateAPIOutbound.isAvailable());
+		assertEquals(flaggedAsUnavailable, 							candidateAPIOutbound.isFlaggedAsUnavailable());
+		assertEquals(lastAvailabilityCheck, 						candidateAPIOutbound.getLastAvailabilityCheckOn());
+		assertEquals(CandidateSuggestionAPIOutbound.CENSORED_ITEM, 	candidateAPIOutbound.getFirstname());
+		assertEquals(CandidateSuggestionAPIOutbound.CENSORED_ITEM, 	candidateAPIOutbound.getSurname());
+		assertEquals(CandidateSuggestionAPIOutbound.CENSORED_ITEM, 	candidateAPIOutbound.getEmail());
+		assertEquals(accuracyLanguages, 							candidateAPIOutbound.getAccuracyLanguages());
+		assertEquals(accuracySkills, 								candidateAPIOutbound.getAccuracySkills());
 		
 		assertTrue(candidateAPIOutbound.getSkills().contains("Java"));
 		assertTrue(candidateAPIOutbound.getSkills().contains("Angular"));

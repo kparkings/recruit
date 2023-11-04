@@ -42,6 +42,7 @@ public class AuthenticationMonolithExternalEventListener implements Authenticati
 	@Override
 	public void listenForRecruiterNoOpenSubscriptionsEvent(RecruiterNoOpenSubscriptionEvent event) {
 		accountService.replaceRolesForUser(event.geRecruiterId(), Set.of(USER_ROLE.recruiterNoSubscrition));
+		accountService.updateUsersCreditStatus(event.geRecruiterId(), true);
 	}
 
 	/**
@@ -50,6 +51,7 @@ public class AuthenticationMonolithExternalEventListener implements Authenticati
 	@Override
 	public void listenForRecruiterHasOpenSubscriptionEvent(RecruiterHasOpenSubscriptionEvent event) {
 		accountService.replaceRolesForUser(event.geRecruiterId(), Set.of(USER_ROLE.recruiter));
+		accountService.updateUsersCreditStatus(event.geRecruiterId(), false);
 	}
 
 	/**

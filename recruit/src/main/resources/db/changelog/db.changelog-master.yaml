@@ -2072,3 +2072,31 @@ databaseChangeLog:
                   type: tinyint
                   constraints:
                     nullable: false
+  - changeSet:
+      id: credits
+      author: kevin
+      changes:
+        - addColumn:
+            tableName: users
+            schemaName: users
+            columns:
+            - column:
+                name: use_credits
+                type: boolean
+                constraints:
+                  default: true
+        - createTable:
+            tableName: credits
+            schemaName: curriculum
+            columns:
+              - column:
+                  name: recruiter_id
+                  type: varchar
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: credits
+                  type: tinyint
+                  constraints:
+                    nullable: false

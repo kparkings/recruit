@@ -17,16 +17,17 @@ import com.arenella.recruit.authentication.beans.User.USER_ROLE;
 */
 public class UserEntityTest {
 
-	private static final String 			username 	= "username";
-	private static final String 			password 	= "password";
-	private static final boolean 			enabled 	= true;
-	private static final Set<USER_ROLE> 	roles 		= new LinkedHashSet<>();
+	private static final String 			USERNAME 	= "username";
+	private static final String 			PASSWORD 	= "password";
+	private static final boolean 			ENABLED 	= true;
+	private static final boolean			USE_CREDITS	= true;
+	private static final Set<USER_ROLE> 	ROLES 		= new LinkedHashSet<>();
 	
 	/**
 	* Constructor 
 	*/
 	public UserEntityTest() {
-		roles.add(USER_ROLE.admin);
+		ROLES.add(USER_ROLE.admin);
 	}
 	
 	/**
@@ -38,15 +39,17 @@ public class UserEntityTest {
 		
 		UserEntity entity = UserEntity
 								.builder()
-									.username(username)
-									.password(password)
-									.enabled(enabled)
-									.roles(roles)
+									.username(USERNAME)
+									.password(PASSWORD)
+									.enabled(ENABLED)
+									.roles(ROLES)
+									.useCredits(USE_CREDITS)
 									.build();
 		
-		assertEquals(username, entity.getUsername());
-		assertEquals(password, entity.getPassword());
-		assertEquals(enabled, entity.isEnabled());
+		assertEquals(USERNAME, 		entity.getUsername());
+		assertEquals(PASSWORD, 		entity.getPassword());
+		assertEquals(ENABLED, 		entity.isEnabled());
+		assertEquals(USE_CREDITS, 	entity.isEnabled());
 		
 		assertTrue(entity.getRoles().contains(USER_ROLE.admin));
 		
@@ -62,17 +65,19 @@ public class UserEntityTest {
 		
 		User user = User
 				.builder()
-					.username(username)
-					.password(password)
-					.enabled(enabled)
-					.roles(roles)
+					.username(USERNAME)
+					.password(PASSWORD)
+					.enabled(ENABLED)
+					.roles(ROLES)
+					.useCredits(USE_CREDITS)
 					.build();
 
 		UserEntity userEntity = UserEntity.convertToEntity(user);
 		
-		assertEquals(username, 	userEntity.getUsername());
-		assertEquals(password, 	userEntity.getPassword());
-		assertEquals(enabled, 	userEntity.isEnabled());
+		assertEquals(USERNAME, 		userEntity.getUsername());
+		assertEquals(PASSWORD, 		userEntity.getPassword());
+		assertEquals(ENABLED, 		userEntity.isEnabled());
+		assertEquals(USE_CREDITS, 	userEntity.isEnabled());
 		
 		assertTrue(userEntity.getRoles().contains(USER_ROLE.admin));
 		
@@ -88,17 +93,19 @@ public class UserEntityTest {
 		
 		UserEntity entity = UserEntity
 				.builder()
-					.username(username)
-					.password(password)
-					.enabled(enabled)
-					.roles(roles)
+					.username(USERNAME)
+					.password(PASSWORD)
+					.enabled(ENABLED)
+					.roles(ROLES)
+					.useCredits(USE_CREDITS)
 					.build();
 
 		User user = UserEntity.convertFromEntity(entity);
 		
-		assertEquals(username, 	user.getUsername());
-		assertEquals(password, 	user.getPassword());
-		assertEquals(enabled, 	user.isEnabled());
+		assertEquals(USERNAME, 		user.getUsername());
+		assertEquals(PASSWORD, 		user.getPassword());
+		assertEquals(ENABLED, 		user.isEnabled());
+		assertEquals(USE_CREDITS, 	user.isEnabled());
 		
 		assertTrue(user.getRoles().contains(USER_ROLE.admin));
 		
@@ -115,13 +122,13 @@ public class UserEntityTest {
 		
 		UserEntity entity = UserEntity
 				.builder()
-					.username(username)
-					.password(password)
-					.enabled(enabled)
-					.roles(roles)
+					.username(USERNAME)
+					.password(PASSWORD)
+					.enabled(ENABLED)
+					.roles(ROLES)
 					.build();
 		
-		assertEquals(password, entity.getPassword());
+		assertEquals(PASSWORD, entity.getPassword());
 		
 		entity.setPassword(newPassword);
 		

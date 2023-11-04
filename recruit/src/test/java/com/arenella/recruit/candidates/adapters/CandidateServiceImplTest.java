@@ -33,7 +33,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.arenella.recruit.adapters.actions.GrantCreditCommand;
 import com.arenella.recruit.adapters.events.CandidateAccountCreatedEvent;
 import com.arenella.recruit.adapters.events.CandidateDeletedEvent;
 import com.arenella.recruit.adapters.events.CandidateUpdatedEvent;
@@ -1769,26 +1768,91 @@ public class CandidateServiceImplTest {
 	}
 	
 	/**
-	* Test updating the RecruiterCredits
+	* Tests case credits left
 	* @throws Exception
 	*/
 	@Test
-	public void testUpdateCredits() throws Exception{
+	public void testHasCreditsLeft_userNotFound() throws Exception{
 		
-		@SuppressWarnings("unchecked")
-		ArgumentCaptor<Set<RecruiterCredit>> argCapt = ArgumentCaptor.forClass(Set.class);
+		final String userId = "kparkings";
 		
-		RecruiterCredit rc1 = RecruiterCredit.builder().recruiterId("recruiter1").credits(2).build();
-		RecruiterCredit rc2 = RecruiterCredit.builder().recruiterId("recruiter1").credits(5).build();
+		Mockito.when(this.mockCreditDao.getByRecruiterId(userId)).thenReturn(Optional.empty());
 		
-		Mockito.when(this.mockCreditDao.fetchRecruiterCredits()).thenReturn(Set.of(rc1,rc2));
-		Mockito.doNothing().when(this.mockCreditDao).saveAll(argCapt.capture());
+		assertFalse(this.service.hasCreditsLeft(userId));
+	}
+	
+	/**
+	* Tests case credits left
+	* @throws Exception
+	*/
+	@Test
+	public void testHasCreditsLeft_true() throws Exception{
 		
-		this.service.updateCredits(new GrantCreditCommand());
+		final String userId = "kparkings";
 		
-		if (argCapt.getValue().stream().filter(rc -> rc.getCredits() != RecruiterCredit.DEFAULT_CREDITS).findAny().isPresent()) {
-			throw new RuntimeException();
-		}
+		RecruiterCredit rc = RecruiterCredit.builder().credits(1).recruiterId(userId).build();
+		
+		Mockito.when(this.mockCreditDao.getByRecruiterId(userId)).thenReturn(Optional.of(rc));
+		
+		assertTrue(this.service.hasCreditsLeft(userId));
+	}
+	
+	/**
+	* Tests case no credits left
+	* @throws Exception
+	*/
+	@Test
+	public void testHasCreditsLeft_false() throws Exception{
+		
+		final String userId = "kparkings";
+		
+		RecruiterCredit rc = RecruiterCredit.builder().credits(0).recruiterId(userId).build();
+		
+		Mockito.when(this.mockCreditDao.getByRecruiterId(userId)).thenReturn(Optional.of(rc));
+		
+		assertFalse(this.service.hasCreditsLeft(userId));
+	}
+	
+	/**
+	* Happy path
+	* @throws Exception
+	*/
+	@Test
+	public void testUpdateCreditsForUser() throws Exception{
+		
+		final String 	userId 		= "kparkings";
+		final int 		credits 	= 20;
+
+		ArgumentCaptor<RecruiterCredit> argCapt = ArgumentCaptor.forClass(RecruiterCredit.class);
+		
+		RecruiterCredit recCredits = RecruiterCredit.builder().recruiterId(userId).credits(30).build();
+		
+		Mockito.when(this.mockCreditDao.getByRecruiterId(userId)).thenReturn(Optional.of(recCredits));
+		Mockito.doNothing().when(this.mockCreditDao).persist(argCapt.capture());
+		
+		this.service.updateCreditsForUser(userId, credits);
+	
+		Mockito.verify(this.mockCreditDao).persist(Mockito.any());
+		
+		assertEquals(credits, argCapt.getValue().getCredits());
+		
+	}
+	
+	/**
+	* If no credits for user does nothing
+	* @throws Exception
+	*/
+	@Test
+	public void testUpdateCreditsForUser_unknownRecruiter() throws Exception{
+		
+		final String 	userId 		= "kparkings";
+		final int 		credits 	= 20;
+
+		Mockito.when(this.mockCreditDao.getByRecruiterId(userId)).thenReturn(Optional.empty());
+		
+		this.service.updateCreditsForUser(userId, credits);
+	
+		Mockito.verify(this.mockCreditDao, Mockito.never()).persist(Mockito.any());
 		
 	}
 	

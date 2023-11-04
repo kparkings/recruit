@@ -3,7 +3,6 @@ package com.arenella.recruit.recruiters.adapters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.arenella.recruit.adapters.actions.GrantCreditCommand;
 import com.arenella.recruit.adapters.events.RecruiterHasOpenSubscriptionEvent;
 import com.arenella.recruit.adapters.events.RecruiterNoOpenSubscriptionEvent;
 import com.arenella.recruit.adapters.events.RecruiterUserAccountCreatedEvent;
@@ -45,11 +44,6 @@ public class RecruitersMonolithExternalEventListener implements RecruitersExtern
 	@Override
 	public void listenForRecruiterHasOpenSubscriptionsEvent(RecruiterHasOpenSubscriptionEvent recruiterHasOpenSubscriptionEvent) {
 		this.supplyAndDemandService.enableSupplyAndDemandPostsForRecruiter(recruiterHasOpenSubscriptionEvent.geRecruiterId());
-	}
-
-	@Override
-	public void listenForGrantCreditCommand(GrantCreditCommand command) {
-		this.supplyAndDemandService.updateCredits(command);
 	}
 
 }

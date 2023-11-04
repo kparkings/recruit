@@ -8,7 +8,6 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.arenella.recruit.adapters.actions.GrantCreditCommand;
 import com.arenella.recruit.adapters.events.ContactRequestEvent;
 import com.arenella.recruit.adapters.events.OfferedCandidateContactRequestEvent;
 import com.arenella.recruit.adapters.events.OpenPositionContactRequestEvent;
@@ -243,18 +242,6 @@ public class RecruitersMonolithExternalEventPublisher implements RecruitersExter
 					.build();
 		
 		this.emailServiceExternalEventListener.listenForSendEmailCommand(cExt);
-		
-	}
-
-	/**
-	* Refer to the ExternalEventPublisher interface for details 
-	*/
-	@Override
-	public void publishGrantCreditCommand(GrantCreditCommand command) {
-		
-		this.listingExternalEventListener.listenForGrantCreditCommand(command);
-		this.recruitersInternalEventListener.listenForGrantCreditCommand(command);
-		this.candidateExternalEventListener.listenForGrantCreditCommand(command);
 		
 	}
 

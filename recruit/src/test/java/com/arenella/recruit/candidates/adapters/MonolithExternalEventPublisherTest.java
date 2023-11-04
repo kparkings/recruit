@@ -99,21 +99,6 @@ public class MonolithExternalEventPublisherTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testPublishPendingCurriculumDeletedEvent() throws Exception {
-		
-		Mockito.doNothing().when(mockCurriculumEventListener).listenForPendingCurriculumDeletedEvent(Mockito.any());
-		
-		publisher.publishPendingCurriculumDeletedEvent(UUID.randomUUID());
-		
-		Mockito.verify(mockCurriculumEventListener).listenForPendingCurriculumDeletedEvent(Mockito.any());
-	
-	}
-
-	/**
-	* Tests listener is called when Event is published
-	* @throws Exception
-	*/
-	@Test
 	public void testPublishCandidateNoLongerAvailableEvent() throws Exception {
 		
 		final long candidateId = 123L;
