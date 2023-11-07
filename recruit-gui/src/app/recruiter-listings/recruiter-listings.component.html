@@ -9,7 +9,8 @@
 				<div>
 					<!-- Action buttons -->
 					<div class="action-buttons">
-						<button (click)="showAdd()" class="btn btn-secondary btn-listing">Add Job</button>
+						<button *ngIf="passedCreditCheck" 	(click)="showAdd()" class="btn btn-secondary btn-listing">Add Job</button>
+						<button *ngIf="!passedCreditCheck" 	(click)="showNoCredits()" class="btn btn-secondary btn-listing">Add Job</button>
 						<button class="btn btn-secondary btn-listing" routerLink="/listing">Back</button>
 					</div>
 			

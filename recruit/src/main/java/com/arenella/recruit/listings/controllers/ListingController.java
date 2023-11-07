@@ -24,7 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.arenella.recruit.listings.beans.Listing.LISTING_AGE;
 import com.arenella.recruit.listings.beans.Listing.listing_type;
-
+import com.arenella.recruit.authentication.spring.filters.ClaimsUsernamePasswordAuthenticationToken;
 import com.arenella.recruit.listings.beans.ListingFilter;
 import com.arenella.recruit.listings.beans.ListingViewedEvent;
 import com.arenella.recruit.listings.controllers.CandidateListingContactRequest.CandidateListingContactRequestBuilder;
@@ -46,12 +46,20 @@ public class ListingController {
 	* Adds a new listing
 	* @param recruiterId - Id of the recruiter who is the owner of the listing
 	* @param listing	 - Details of the listing to be created
+	* @param principal	 - Contains logged in User id
 	* @return Unique identifier of the Listing
 	*/
 	@PreAuthorize("hasRole('ROLE_RECRUITER')")
 	@PostMapping(value="/listing/")
-	public ResponseEntity<UUID> addListing(@RequestBody ListingAPIInbound listing){
-		return ResponseEntity.status(HttpStatus.CREATED).body(service.addListing(ListingAPIInbound.convertToListing(listing), listing.isPostToSocialMedia()));
+	public ResponseEntity<UUID> addListing(@RequestBody ListingAPIInbound listing, Principal principal){
+
+		UUID id = service.addListing(ListingAPIInbound.convertToListing(listing), listing.isPostToSocialMedia());
+		
+		//START
+		this.performCreditCheck(principal);
+		//END
+		
+		return ResponseEntity.status(HttpStatus.CREATED).body(id);
 	}
 	
 	/**
@@ -194,4 +202,42 @@ public class ListingController {
 		
 	}
 	
+	/**
+	* Performs a check to see if the User passes the credit check. That is. If the users access to 
+	* curriculums is via credits does the User have remaining credits. If the Users access is not 
+	* dependent upon credits or the User has remaining credits then returns true else false
+	* @param principal - Authroized User
+	* @return whether the creditCheck passed for the User
+	*/
+	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('ROLE_RECRUITER')")
+	@GetMapping(value="/listing/creditCheck")
+	public ResponseEntity<Boolean> passesCreditCheck(Principal principal){
+		
+		ClaimsUsernamePasswordAuthenticationToken 	user 			= (ClaimsUsernamePasswordAuthenticationToken)principal;
+		boolean 									isRecruiter 	= user.getAuthorities().stream().filter(a -> a.getAuthority().equals("ROLE_RECRUITER")).findAny().isPresent();
+		boolean 									useCredits 		= (Boolean)user.getClaim("useCredits").get();
+		
+		if (isRecruiter && useCredits) {
+			return ResponseEntity.ok(this.service.doCreditsCheck(principal.getName()));
+		}
+		
+		return ResponseEntity.ok(true);
+	}
+	
+	/**
+	* Performs check to ensure user either doesnt use credit based access or 
+	* has enough credits to perform an operation
+	* @param principal - currently logged in user
+	*/
+	private void performCreditCheck(Principal principal) {
+		
+		ClaimsUsernamePasswordAuthenticationToken 	user 			= (ClaimsUsernamePasswordAuthenticationToken)principal;
+		boolean 									isRecruiter 	= user.getAuthorities().stream().filter(a -> a.getAuthority().equals("ROLE_RECRUITER")).findAny().isPresent();
+		boolean 									useCredits 		= (Boolean)user.getClaim("useCredits").get();
+		
+		if (isRecruiter && useCredits) {
+			this.service.useCredit(user.getName());
+		}
+		
+	}
 }

@@ -516,9 +516,7 @@ export class SuggestionsComponent implements OnInit {
 	}
 	
 	public doCreditCheck():void{
-		//this.curriculumService.doCreditCheck().subscribe(passed => {
-		//	this.passedCreditCheck = passed;
-		//});
+		
 		if(this.isAdmin()){
 			this.passedCreditCheck = true;
 		} else {

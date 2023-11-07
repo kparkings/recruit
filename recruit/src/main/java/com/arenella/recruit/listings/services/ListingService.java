@@ -81,4 +81,29 @@ public interface ListingService {
 	*/
 	public void updateCredits(GrantCreditCommand command);
 
+	/**
+	* Returns whether or not the user has Credits. If the User does not
+	* have credit based access then this will be true. Otherwise true will 
+	* be returned when the user has remaining credits and false where they
+	* do not
+	* @param userName - id of the user
+	* @return Whether or not the User has remaining credits
+	*/
+	public boolean hasCreditsLeft(String userName);
+
+	/**
+	* Returns whether the User either does not have Credit based access or does 
+	* have credit based access to curriculums but has remaining credits
+	* @param name - id of Authorized User
+	* @return whether User can access Curriculums
+	*/
+	public Boolean doCreditsCheck(String name);
+
+	/**
+	* Updates a Recruiters credits. Decrementing them by 1
+	* @param userId - id of User who used a Credit
+	*/
+	public void useCredit(String userId);
+
+
 }

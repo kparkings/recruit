@@ -41,6 +41,8 @@ export class RecruiterListingsComponent implements OnInit {
 				this.recruiterProfileService.fetchOwnRecruiterProfile().subscribe(rec => {
 					this.recruiterProfile = rec;
 				});
+				
+				this.doCreditCheck();
 					
 	}
 	
@@ -227,6 +229,7 @@ export class RecruiterListingsComponent implements OnInit {
 		this.skills 				= new Array<string>();
 		this.validationErrors 		= new Array<string>();
 		this.enabldeDeleteOption	= false;
+		this.doCreditCheck();
 		
 	}
 	
@@ -1476,6 +1479,19 @@ export class RecruiterListingsComponent implements OnInit {
 		this.fetchListings();
 		this.showList();
 		this.closeModal();
+	}
+	
+	public passedCreditCheck:boolean = false;
+	
+	
+	public doCreditCheck():void{
+		this.listingService.doCreditCheck().subscribe(passed => {
+			this.passedCreditCheck = passed;
+		});
+	}
+	
+	public showNoCredits():void{
+		console.log("No credits left");
 	}
 
 }

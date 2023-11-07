@@ -1,10 +1,12 @@
 package com.arenella.recruit.recruiters.listings.controllers;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.security.Principal;
 import java.time.LocalDateTime;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -21,12 +23,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.arenella.recruit.listings.beans.Listing.LISTING_AGE;
 import com.arenella.recruit.listings.beans.Listing.listing_type;
+import com.arenella.recruit.authentication.spring.filters.ClaimsUsernamePasswordAuthenticationToken;
 import com.arenella.recruit.listings.beans.ListingFilter;
 import com.arenella.recruit.listings.beans.ListingViewedEvent;
 import com.arenella.recruit.listings.controllers.CandidateListingContactRequest;
@@ -45,16 +49,16 @@ import com.arenella.recruit.listings.services.ListingService;
 public class ListingControllerTest {
 	
 	@Mock
-	private Pageable 			mockPageable;
+	private Pageable 									mockPageable;
 	
 	@Mock
-	private ListingService 		mockListingService;
+	private ListingService 								mockListingService;
 	
 	@Mock
-	private	Authentication		mockAuthentication;
+	private	Authentication								mockAuthentication;
 	
 	@Mock
-	private Principal			mockPrincipal;
+	private ClaimsUsernamePasswordAuthenticationToken 	mockUsernamePasswordAuthenticationToken;
 	
 	@InjectMocks
 	private ListingController 	controller 				= new ListingController();
@@ -72,20 +76,85 @@ public class ListingControllerTest {
 	* Test successful addition of a new Listing
 	* @throws Exception
 	*/
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Test
 	public void testAddListing() throws Exception{
+		
+		Collection authorities = new HashSet<>();
+		authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+		
+		Mockito.when(this.mockUsernamePasswordAuthenticationToken.getAuthorities()).thenReturn(authorities);
+	//	Mockito.when(this.mockUsernamePasswordAuthenticationToken.getName()).thenReturn("kevin");
+		
 		
 		ListingAPIInbound 	listing 		= ListingAPIInbound.builder().build();
 		
 		Mockito.when(mockListingService.addListing(Mockito.any(), Mockito.anyBoolean())).thenReturn(UUID.randomUUID());
+	//	Mockito.doThrow(new IllegalStateException("")).when(mockListingService).useCredit("kevin");
+		Mockito.when(this.mockUsernamePasswordAuthenticationToken.getClaim("useCredits")).thenReturn(Optional.of(Boolean.TRUE));
+		//Mockito.when(this.mockListingService.hasCreditsLeft(Mockito.anyString())).thenReturn(true);
 		
-		ResponseEntity<UUID> response = controller.addListing(listing);
+		ResponseEntity<UUID> response = controller.addListing(listing, mockUsernamePasswordAuthenticationToken);
 		
 		if (!(response.getBody() instanceof UUID)) {
 			throw new RuntimeException("Expected UUID");
 		}
 		
 		assertEquals(response.getStatusCode(), HttpStatus.CREATED);
+		
+	}
+	
+	/**
+	* Test successful addition of a new Listing
+	* @throws Exception
+	*/
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@Test
+	public void testAddListing_recruiter_has_credits() throws Exception{
+		
+		Collection authorities = new HashSet<>();
+		authorities.add(new SimpleGrantedAuthority("ROLE_RECRUITER"));
+		
+		Mockito.when(this.mockUsernamePasswordAuthenticationToken.getAuthorities()).thenReturn(authorities);
+		Mockito.when(this.mockUsernamePasswordAuthenticationToken.getName()).thenReturn("kevin");
+		Mockito.when(this.mockUsernamePasswordAuthenticationToken.getClaim("useCredits")).thenReturn(Optional.of(Boolean.TRUE));
+		
+		ListingAPIInbound 	listing 		= ListingAPIInbound.builder().build();
+		
+		Mockito.when(mockListingService.addListing(Mockito.any(), Mockito.anyBoolean())).thenReturn(UUID.randomUUID());
+		
+		ResponseEntity<UUID> response = controller.addListing(listing, mockUsernamePasswordAuthenticationToken);
+		
+		if (!(response.getBody() instanceof UUID)) {
+			throw new RuntimeException("Expected UUID");
+		}
+		
+		assertEquals(response.getStatusCode(), HttpStatus.CREATED);
+		
+	}
+	
+	/**
+	* Test successful addition of a new Listing
+	* @throws Exception
+	*/
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@Test
+	public void testAddListing_recruiter_has_no_credits() throws Exception{
+		
+		Collection authorities = new HashSet<>();
+		authorities.add(new SimpleGrantedAuthority("ROLE_RECRUITER"));
+		
+		Mockito.when(this.mockUsernamePasswordAuthenticationToken.getAuthorities()).thenReturn(authorities);
+		Mockito.when(this.mockUsernamePasswordAuthenticationToken.getName()).thenReturn("kevin");
+		Mockito.when(this.mockUsernamePasswordAuthenticationToken.getClaim("useCredits")).thenReturn(Optional.of(Boolean.TRUE));
+//		Mockito.when(this.mockListingService.hasCreditsLeft(Mockito.anyString())).thenReturn(false);
+		Mockito.doThrow(new IllegalStateException("")).when(mockListingService).useCredit("kevin");
+		
+		ListingAPIInbound 	listing 		= ListingAPIInbound.builder().build();
+		
+		assertThrows(IllegalStateException.class, () -> {
+			controller.addListing(listing, mockUsernamePasswordAuthenticationToken);
+		});
 		
 	}
 	
@@ -272,10 +341,10 @@ public class ListingControllerTest {
 		
 		ArgumentCaptor<CandidateListingContactRequest> argCaptContactRequest = ArgumentCaptor.forClass(CandidateListingContactRequest.class);
 		
-		Mockito.when(this.mockPrincipal.getName()).thenReturn(candidateId);
+		Mockito.when(this.mockUsernamePasswordAuthenticationToken.getName()).thenReturn(candidateId);
 		Mockito.doNothing().when(this.mockListingService).sendContactRequestFomCandidateToListingOwner(argCaptContactRequest.capture());
 		
-		ResponseEntity<Void> response = this.controller.sendContactRequestToListingOwnerFromCandidate(listingId, message, Optional.of(attachment), this.mockPrincipal);
+		ResponseEntity<Void> response = this.controller.sendContactRequestToListingOwnerFromCandidate(listingId, message, Optional.of(attachment), this.mockUsernamePasswordAuthenticationToken);
 		
 		Mockito.verify(this.mockListingService).sendContactRequestFomCandidateToListingOwner(Mockito.any(CandidateListingContactRequest.class));
 		
@@ -286,6 +355,74 @@ public class ListingControllerTest {
 		assertEquals(candidateId, 	argCaptContactRequest.getValue().getCandidateId());
 		assertEquals(message, 		argCaptContactRequest.getValue().getMessage());
 		
+	}
+	
+	/**
+	* Tests if admin returns true
+	* @throws Exception
+	*/
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@Test
+	public void testPassesCreditCheck_admin() throws Exception{
+		
+		Collection authorities = new HashSet<>();
+		authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+		
+		Mockito.when(this.mockUsernamePasswordAuthenticationToken.getAuthorities()).thenReturn(authorities);
+		Mockito.when(this.mockUsernamePasswordAuthenticationToken.getClaim("useCredits")).thenReturn(Optional.of(Boolean.TRUE));
+		
+		ResponseEntity<Boolean> response = this.controller.passesCreditCheck(mockUsernamePasswordAuthenticationToken);
+		
+		assertTrue(response.getBody());
+
+		Mockito.verify(this.mockListingService, Mockito.never()).doCreditsCheck(mockUsernamePasswordAuthenticationToken.getName());
+		
+	}
+	
+	/**
+	* Tests if recruiter but no using credit based access return true
+	* @throws Exception
+	*/
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@Test
+	public void testPassesCreditCheck_recruiter_not_creditbased() throws Exception{
+		
+		Collection authorities = new HashSet<>();
+		authorities.add(new SimpleGrantedAuthority("ROLE_RECRUITER"));
+		
+		Mockito.when(this.mockUsernamePasswordAuthenticationToken.getAuthorities()).thenReturn(authorities);
+		Mockito.when(this.mockUsernamePasswordAuthenticationToken.getClaim("useCredits")).thenReturn(Optional.of(Boolean.FALSE));
+		
+		ResponseEntity<Boolean> response = this.controller.passesCreditCheck(mockUsernamePasswordAuthenticationToken);
+		
+		assertTrue(response.getBody());
+		
+		Mockito.verify(this.mockListingService, Mockito.never()).doCreditsCheck(mockUsernamePasswordAuthenticationToken.getName());
+
+	}
+	
+	/**
+	* Tests if recruiter but no using credit based access return true
+	* @throws Exception
+	*/
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@Test
+	public void testPassesCreditCheck_recruiter_creditbased() throws Exception{
+		
+		Collection authorities = new HashSet<>();
+		authorities.add(new SimpleGrantedAuthority("ROLE_RECRUITER"));
+		
+		Mockito.when(this.mockListingService.doCreditsCheck(Mockito.any())).thenReturn(true);
+		Mockito.when(this.mockUsernamePasswordAuthenticationToken.getAuthorities()).thenReturn(authorities);
+		Mockito.when(this.mockUsernamePasswordAuthenticationToken.getClaim("useCredits")).thenReturn(Optional.of(Boolean.TRUE));
+		Mockito.when(this.mockUsernamePasswordAuthenticationToken.getName()).thenReturn("userId");
+		
+		ResponseEntity<Boolean> response = this.controller.passesCreditCheck(mockUsernamePasswordAuthenticationToken);
+		
+		assertTrue(response.getBody());
+		
+		Mockito.verify(this.mockListingService).doCreditsCheck(mockUsernamePasswordAuthenticationToken.getName());
+
 	}
 		
 }

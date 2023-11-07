@@ -149,5 +149,18 @@ export class ListingService {
 		return this.httpClient.post<any>(backendUrl, null, this.httpOptions);
 				
 	}
+	
+		/**
+	* Performs a check to see if the User has access to the Curriculum either
+	* because they do not use credt based acces or beause they have remaining 
+	* credits 
+	*/
+	public doCreditCheck():Observable<boolean>{
+		
+		const backendUrl:string = environment.backendUrl + 'listing/creditCheck';
+  	
+		return this.httpClient.get<boolean>(backendUrl, this.httpOptions);
+		
+	}
 
 }

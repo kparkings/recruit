@@ -865,6 +865,7 @@ public class CandidateServiceImpl implements CandidateService{
 	*/
 	@Override
 	public boolean hasCreditsLeft(String userName) {
+		
 		Optional<RecruiterCredit> credits = this.creditDao.getByRecruiterId(userName);
 		
 		if (credits.isEmpty()) {

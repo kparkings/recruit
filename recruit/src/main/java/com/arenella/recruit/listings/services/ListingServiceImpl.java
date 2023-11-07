@@ -23,16 +23,16 @@ import com.arenella.recruit.listings.adapters.RequestListingContactEmailCommand.
 import com.arenella.recruit.listings.beans.Listing;
 import com.arenella.recruit.listings.beans.ListingFilter;
 import com.arenella.recruit.listings.beans.ListingViewedEvent;
+import com.arenella.recruit.listings.beans.RecruiterCredit;
 import com.arenella.recruit.listings.controllers.CandidateListingContactRequest;
 import com.arenella.recruit.listings.controllers.ListingContactRequest;
 import com.arenella.recruit.listings.dao.ListingDao;
 import com.arenella.recruit.listings.dao.ListingEntity;
+import com.arenella.recruit.listings.dao.ListingRecruiterCreditDao;
 import com.arenella.recruit.listings.dao.ListingViewedEventEntity;
 import com.arenella.recruit.listings.exceptions.ListingValidationException;
 import com.arenella.recruit.listings.exceptions.ListingValidationException.ListingValidationExceptionBuilder;
 import com.arenella.recruit.listings.services.FileSecurityParser.FileType;
-import com.arenella.recruit.recruiters.beans.RecruiterCredit;
-import com.arenella.recruit.recruiters.dao.RecruiterCreditDao;
 
 /**
 * Services for working with Listings
@@ -51,7 +51,7 @@ public class ListingServiceImpl implements ListingService{
 	private ExternalEventPublisher			externalEventPublisher;
 	
 	@Autowired
-	private RecruiterCreditDao 				creditDao;
+	private ListingRecruiterCreditDao 		creditDao;
 	
 	/**
 	* Refer to the Listing interface for details
@@ -291,7 +291,7 @@ public class ListingServiceImpl implements ListingService{
 	}
 	
 	/**
-	* Refer to the CandidateService for details 
+	* Refer to the ListingsService for details 
 	*/
 	@Override
 	public void updateCredits(GrantCreditCommand command) {
@@ -301,6 +301,56 @@ public class ListingServiceImpl implements ListingService{
 		credits.stream().forEach(credit -> credit.setCredits(RecruiterCredit.DEFAULT_CREDITS));
 		
 		creditDao.saveAll(credits);
+		
+	}
+	
+	/**
+	* Refer to the CandidateService for details 
+	*/
+	@Override
+	public boolean hasCreditsLeft(String userName) {
+		
+		Optional<RecruiterCredit> credits = this.creditDao.getByRecruiterId(userName);
+		
+		if (credits.isEmpty()) {
+			return false;
+		}
+		
+		return credits.get().getCredits() > 0;
+	}
+
+	/**
+	* Refer to the ListingsService for details 
+	*/
+	@Override
+	public Boolean doCreditsCheck(String recruiterId) {
+		
+		Optional<RecruiterCredit> recruiterCreditOpt = this.creditDao.getByRecruiterId(recruiterId);
+		
+		if (recruiterCreditOpt.isEmpty()) {
+			return false;
+		}
+		
+		return recruiterCreditOpt.get().getCredits() > 0;
+		
+	}
+	
+	/**
+	* Refer to the CurriclumService interface for details
+	* @param userId
+	*/
+	@Override
+	public void useCredit(String userId) {
+		
+		RecruiterCredit credit = this.creditDao.getByRecruiterId(userId).orElseThrow(() -> new IllegalArgumentException("Unknown User - Cant use Credit"));
+		
+		if (credit.getCredits() == 0) {
+			throw new IllegalStateException("No credits available for User");
+		}
+		
+		credit.decrementCredits();
+		
+		this.creditDao.persist(credit);
 		
 	}
 	
