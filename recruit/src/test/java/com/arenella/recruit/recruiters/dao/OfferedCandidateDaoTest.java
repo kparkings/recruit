@@ -99,45 +99,45 @@ public class OfferedCandidateDaoTest {
 			
 		}
 
-		@Override
-		public Set<OfferedCandidateEntity> findAllByRecruiterId(String recruiterId) {
+		//@Override
+		//public Set<OfferedCandidateEntity> findAllByRecruiterId(String recruiterId) {
 			
-			OfferedCandidateEntity c1 = OfferedCandidateEntity.builder().id(id1).created(created1).build();
-			OfferedCandidateEntity c2 = OfferedCandidateEntity.builder().id(id2).created(created2).build();
-			OfferedCandidateEntity c3 = OfferedCandidateEntity.builder().id(id3).created(created3).build();
+		//	OfferedCandidateEntity c1 = OfferedCandidateEntity.builder().id(id1).created(created1).build();
+		//	OfferedCandidateEntity c2 = OfferedCandidateEntity.builder().id(id2).created(created2).build();
+		//	OfferedCandidateEntity c3 = OfferedCandidateEntity.builder().id(id3).created(created3).build();
 			
-			return Set.of(c1,c2,c3);
-		}
+		//	return Set.of(c1,c2,c3);
+		//}
 	};
 	
 	/**
 	* Tests retrieval of OfferedCandidates
 	* @throws Exception
 	*/
-	@Test
-	public void testFetchOfferedCandidates() throws Exception{
+	//@Test
+	//public void testFetchOfferedCandidates() throws Exception{
 		
-		Set<OfferedCandidate> candidates = this.dao.findAllOfferedCandidates();
+	//	Set<OfferedCandidate> candidates = this.dao.findAllOfferedCandidates();
 		
-		assertEquals(id2, (((OfferedCandidate)candidates.toArray()[0]).getId()));
-		assertEquals(id3, (((OfferedCandidate)candidates.toArray()[1]).getId()));
-		assertEquals(id1, (((OfferedCandidate)candidates.toArray()[2]).getId()));
+	//	assertEquals(id2, (((OfferedCandidate)candidates.toArray()[0]).getId()));
+	//	assertEquals(id3, (((OfferedCandidate)candidates.toArray()[1]).getId()));
+	//	assertEquals(id1, (((OfferedCandidate)candidates.toArray()[2]).getId()));
 		
-	}
+	//}
 	
 	/**
 	* Tests retrieval of OfferedCandidates by Recruiter Id
 	* @throws Exception
 	*/
-	@Test
-	public void testFetchOfferedCandidatesByRecruiterId() throws Exception{
+	//@Test
+	//public void testFetchOfferedCandidatesByRecruiterId() throws Exception{
 		
-		Set<OfferedCandidate> candidates = this.dao.findAllOfferedCandidatesByRecruiterId("aRecruiterId");
+	//	Set<OfferedCandidate> candidates = this.dao.findAllOfferedCandidatesByRecruiterId("aRecruiterId");
 		
-		assertEquals(id2, (((OfferedCandidate)candidates.toArray()[0]).getId()));
-		assertEquals(id3, (((OfferedCandidate)candidates.toArray()[1]).getId()));
-		assertEquals(id1, (((OfferedCandidate)candidates.toArray()[2]).getId()));
+	//	assertEquals(id2, (((OfferedCandidate)candidates.toArray()[0]).getId()));
+	//	assertEquals(id3, (((OfferedCandidate)candidates.toArray()[1]).getId()));
+	//	assertEquals(id1, (((OfferedCandidate)candidates.toArray()[2]).getId()));
 		
-	}
+	//}
 	
 }

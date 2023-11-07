@@ -91,54 +91,54 @@ public class SupplyAndDemandServiceImpl implements SupplyAndDemandService{
 	/**
 	* Refer to the SupplyAndDemandService interface for details 
 	*/
-	@Override
-	public void addOfferedCandidate(OfferedCandidate offeredCandidate) {
+	//@Override
+	//public void addOfferedCandidate(OfferedCandidate offeredCandidate) {
 		
-		offeredCandidate.initializeAsNewObject(getAuthenticatedRecruiterId());
+	//	offeredCandidate.initializeAsNewObject(getAuthenticatedRecruiterId());
 		
-		offeredCandidateDao.persistOfferedCandidate(offeredCandidate);
+	//	offeredCandidateDao.persistOfferedCandidate(offeredCandidate);
 		
-	}
+	//}
 	
 	/**
 	* Refer to the SupplyAndDemandService interface for details 
 	*/
-	@Override
-	public void updateOfferedCandidate(UUID offeredCandidateId, OfferedCandidate offeredCandidate) throws IllegalAccessException {
+	//@Override
+	//public void updateOfferedCandidate(UUID offeredCandidateId, OfferedCandidate offeredCandidate) throws IllegalAccessException {
 		
-		validateAuthenticationForUserForOfferedCandidate(offeredCandidateId);
+	//	validateAuthenticationForUserForOfferedCandidate(offeredCandidateId);
 	
-		offeredCandidateDao.updateExistingOfferedCandidate(offeredCandidateId, offeredCandidate);
+	//	offeredCandidateDao.updateExistingOfferedCandidate(offeredCandidateId, offeredCandidate);
 		
-	}
+	//}
 	
 	/**
 	* Refer to the SupplyAndDemandService interface for details 
 	*/
-	@Override
-	public void deleteOfferedCandidate(UUID offeredCandidateId) throws IllegalAccessException{
+	//@Override
+	//public void deleteOfferedCandidate(UUID offeredCandidateId) throws IllegalAccessException{
 		
-		validateAuthenticationForUserForOfferedCandidate(offeredCandidateId);
+	//	validateAuthenticationForUserForOfferedCandidate(offeredCandidateId);
 		
-		offeredCandidateDao.deleteById(offeredCandidateId);
+	//	offeredCandidateDao.deleteById(offeredCandidateId);
 		
-	}
+	//}
 
 	/**
 	* Refer to the SupplyAndDemandService interface for details 
 	*/
-	@Override
-	public Set<OfferedCandidate> fetchOfferedCandidates() {
-		return offeredCandidateDao.findAllOfferedCandidates();
-	}
+	//@Override
+	//public Set<OfferedCandidate> fetchOfferedCandidates() {
+	//	return offeredCandidateDao.findAllOfferedCandidates();
+	//}
 	
 	/**
 	* Refer to the SupplyAndDemandService interface for details 
 	*/
-	@Override
-	public Set<OfferedCandidate> fetchOfferedCandidates(String recruiterId) {
-		return offeredCandidateDao.findAllOfferedCandidatesByRecruiterId(recruiterId);
-	}
+	//@Override
+	//public Set<OfferedCandidate> fetchOfferedCandidates(String recruiterId) {
+	//	return offeredCandidateDao.findAllOfferedCandidatesByRecruiterId(recruiterId);
+	//}
 
 	/**
 	* Refer to the SupplyAndDemandService interface for details 
@@ -220,9 +220,10 @@ public class SupplyAndDemandServiceImpl implements SupplyAndDemandService{
 	@Override
 	public void registerOfferedCandidateViewedEvent(UUID id) {
 	
-		if (this.isOwnerOfOfferedCandidate(id)) {
-			return;
-		}
+		//TODO: [KP] Now just standard candidate. If we show stats need to re-implement this
+		//if (this.isOwnerOfOfferedCandidate(id)) {
+		//	return;
+		//}
 		
 		if (isAdmin()) {
 			return;
@@ -258,26 +259,26 @@ public class SupplyAndDemandServiceImpl implements SupplyAndDemandService{
 	/**
 	* Refer to the SupplyAndDemandService interface for details 
 	*/
-	@Override
-	public void sendOfferedCandidateContactEmail(UUID offeredCandidateId, String message, String authenticatedUserId) {
+	//@Override
+	//public void sendOfferedCandidateContactEmail(UUID offeredCandidateId, String message, String authenticatedUserId) {
 		
-		if (!this.offeredCandidateDao.existsById(offeredCandidateId)) {
-			throw new RuntimeException("Unknown Offered Candidate");
-		}
+	//	if (!this.offeredCandidateDao.existsById(offeredCandidateId)) {
+	//		throw new RuntimeException("Unknown Offered Candidate");
+	//	}
 		
-		OfferedCandidate offeredCandidate = this.offeredCandidateDao.findByOfferedCandidateId(offeredCandidateId);
+	//	OfferedCandidate offeredCandidate = this.offeredCandidateDao.findByOfferedCandidateId(offeredCandidateId);
 		
-		this.eventPublisher
-			.publishOffereedCandidateRequestEvent(OfferedCandidateContactRequestEvent
-					.builder()
-						.message(message)
-						.recipientId(offeredCandidate.getRecruiterId())
-						.senderId(authenticatedUserId)
-						.offeredCandidateId(offeredCandidateId)
-						.offeredCandidateTitle(offeredCandidate.getcandidateRoleTitle())
-					.build());
-		
-	}
+	//	this.eventPublisher
+	//		.publishOffereedCandidateRequestEvent(OfferedCandidateContactRequestEvent
+	//				.builder()
+	//					.message(message)
+	//					.recipientId(offeredCandidate.getRecruiterId())
+	//					.senderId(authenticatedUserId)
+	//					.offeredCandidateId(offeredCandidateId)
+	//					.offeredCandidateTitle(offeredCandidate.getcandidateRoleTitle())
+	//				.build());
+	//	
+	//}
 
 	/**
 	* Refer to the SupplyAndDemandService interface for details 
@@ -317,12 +318,12 @@ public class SupplyAndDemandServiceImpl implements SupplyAndDemandService{
 		this.openPositionDao.persistOpenPositions(openPositions);
 		
 		
-		Set<OfferedCandidate> offeredCandidates  = this.offeredCandidateDao.findAllOfferedCandidatesByRecruiterId(recruiterId).stream().map(oc -> {
-			oc.setActive(false);
-			return oc;
-		}).collect(Collectors.toSet());
+		//Set<OfferedCandidate> offeredCandidates  = this.offeredCandidateDao.findAllOfferedCandidatesByRecruiterId(recruiterId).stream().map(oc -> {
+		//	oc.setActive(false);
+		//	return oc;
+		//}).collect(Collectors.toSet());
 		
-		this.offeredCandidateDao.persistOfferedCandidates(offeredCandidates);
+		//this.offeredCandidateDao.persistOfferedCandidates(offeredCandidates);
 		
 	}
 
@@ -339,12 +340,12 @@ public class SupplyAndDemandServiceImpl implements SupplyAndDemandService{
 		
 		this.openPositionDao.persistOpenPositions(openPositions);
 		
-		Set<OfferedCandidate> offeredCandidates  = this.offeredCandidateDao.findAllOfferedCandidatesByRecruiterId(recruiterId).stream().map(oc -> {
-			oc.setActive(true);
-			return oc;
-		}).collect(Collectors.toSet());
+		//Set<OfferedCandidate> offeredCandidates  = this.offeredCandidateDao.findAllOfferedCandidatesByRecruiterId(recruiterId).stream().map(oc -> {
+		//	oc.setActive(true);
+		//	return oc;
+		//}).collect(Collectors.toSet());
 		
-		this.offeredCandidateDao.persistOfferedCandidates(offeredCandidates);
+		//this.offeredCandidateDao.persistOfferedCandidates(offeredCandidates);
 		
 	}
 	
@@ -353,16 +354,16 @@ public class SupplyAndDemandServiceImpl implements SupplyAndDemandService{
 	* @param offeredCandidateId - Unique id of the Offered Candidate
 	* @return Whether the current user is the owner
 	*/
-	private boolean isOwnerOfOfferedCandidate(UUID offeredCandidateId) {
+	//private boolean isOwnerOfOfferedCandidate(UUID offeredCandidateId) {
 		
-		OfferedCandidate offeredCandidate = offeredCandidateDao.findByOfferedCandidateId(offeredCandidateId);
+	//	OfferedCandidate offeredCandidate = offeredCandidateDao.findByOfferedCandidateId(offeredCandidateId);
 		
-		if (!getAuthenticatedRecruiterId().equals(offeredCandidate.getRecruiterId())) {
-			return false;
-		}
+	//	if (!getAuthenticatedRecruiterId().equals(offeredCandidate.getRecruiterId())) {
+	//		return false;
+	//	}
 		
-		return true;
-	}
+	//	return true;
+	//}
 	
 	/**
 	* Returns whether the OpenPosition is owned by the current logged in User
@@ -387,17 +388,17 @@ public class SupplyAndDemandServiceImpl implements SupplyAndDemandService{
 	* @return If user has rights to the OpenPosition the existing OpenPosition
 	* @throws IllegalAccessException
 	*/
-	private OfferedCandidate validateAuthenticationForUserForOfferedCandidate(UUID offeredCandidateId) throws IllegalAccessException{
+	//private OfferedCandidate validateAuthenticationForUserForOfferedCandidate(UUID offeredCandidateId) throws IllegalAccessException{
 		
-		OfferedCandidate offeredCandidate = offeredCandidateDao.findByOfferedCandidateId(offeredCandidateId);
+	//	OfferedCandidate offeredCandidate = offeredCandidateDao.findByOfferedCandidateId(offeredCandidateId);
 		
-		if (!getAuthenticatedRecruiterId().equals(offeredCandidate.getRecruiterId())) {
-			throw new IllegalAccessException();
-		}
+	//	if (!getAuthenticatedRecruiterId().equals(offeredCandidate.getRecruiterId())) {
+	//		throw new IllegalAccessException();
+	//	}
 		
-		return offeredCandidate;
+	//	return offeredCandidate;
 		
-	}
+	//}
 	
 	/**
 	* Performs authentication validation to ensure a User can only update their 

@@ -42,14 +42,14 @@ public interface SupplyAndDemandService {
 	* Adds a new OfferedCandidate
 	* @param offeredCandidate - Details of the Candidate being offered
 	*/
-	public void addOfferedCandidate(OfferedCandidate offeredCandidate);
+	//public void addOfferedCandidate(OfferedCandidate offeredCandidate);
 
 	/**
 	* Deletes an existing offeredCandidateId
 	* @param offeredCandidateId - Unique Id of the candidate to delete
 	* @throws IllegalAccessException 
 	*/
-	public void deleteOfferedCandidate(UUID offeredCandidateId) throws IllegalAccessException;
+	//public void deleteOfferedCandidate(UUID offeredCandidateId) throws IllegalAccessException;
 
 	/**
 	* Updates an existing OfferedCandidate
@@ -57,13 +57,13 @@ public interface SupplyAndDemandService {
 	* @param offeredCandidate			- OfferedCandidate to update
 	* @throws IllegalAccessException
 	*/
-	public void updateOfferedCandidate(UUID offeredCandidateId, OfferedCandidate offeredCandidate) throws IllegalAccessException;
+	//public void updateOfferedCandidate(UUID offeredCandidateId, OfferedCandidate offeredCandidate) throws IllegalAccessException;
 
 	/**
 	* Returns available OfferedCandidates
 	* @return offeredCandidates
 	*/
-	public Set<OfferedCandidate> fetchOfferedCandidates();
+	//public Set<OfferedCandidate> fetchOfferedCandidates();
 	
 	/**
 	* Returns details of a Recruiter based upon their unique identifier
@@ -89,7 +89,7 @@ public interface SupplyAndDemandService {
 	* Returns OfferedCandidates for a specificRecruiter
 	* @param recruiterId - Unique Id of the Recruiter
 	*/
-	public Set<OfferedCandidate> fetchOfferedCandidates(String recruiterId);
+	//public Set<OfferedCandidate> fetchOfferedCandidates(String recruiterId);
 	
 	/**
 	* Logs an event stating that an open position was viewed
@@ -123,7 +123,7 @@ public interface SupplyAndDemandService {
 	* @param message 				- message to be sent to the owner 
 	* @param authenticatedUserId	- userId of currently authenticated user
 	*/
-	public void sendOfferedCandidateContactEmail(UUID offeredCandidateId, String message, String authenticatedUserId);
+	//public void sendOfferedCandidateContactEmail(UUID offeredCandidateId, String message, String authenticatedUserId);
 	
 	/**
 	* 

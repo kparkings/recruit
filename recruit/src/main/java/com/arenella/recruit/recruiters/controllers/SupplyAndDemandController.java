@@ -95,30 +95,30 @@ public class SupplyAndDemandController {
 	* @param offeredCandidate - OfferedCandidate details
 	* @return Status Code
 	*/
-	@PostMapping(path="/v1/offered-candidate", consumes="application/json", produces="application/json")
-	@PreAuthorize("hasRole('ROLE_RECRUITER') or hasRole('ROLE_ADMIN')")
-	public ResponseEntity<Void> addOfferedCandidate(@RequestBody OfferedCandidateAPIInbound offeredCandidate){
+	//@PostMapping(path="/v1/offered-candidate", consumes="application/json", produces="application/json")
+	//@PreAuthorize("hasRole('ROLE_RECRUITER') or hasRole('ROLE_ADMIN')")
+	//public ResponseEntity<Void> addOfferedCandidate(@RequestBody OfferedCandidateAPIInbound offeredCandidate){
 		
-		OfferedCandidateValidator.validate(offeredCandidate);
+	//	OfferedCandidateValidator.validate(offeredCandidate);
 		
-		supplyAndDemandService.addOfferedCandidate(OfferedCandidateAPIInbound.convertToDomain(offeredCandidate));
+	//	supplyAndDemandService.addOfferedCandidate(OfferedCandidateAPIInbound.convertToDomain(offeredCandidate));
 		
-		return ResponseEntity.status(HttpStatus.CREATED).build();
-	}
+	//	return ResponseEntity.status(HttpStatus.CREATED).build();
+	//}
 	
 	/**
 	* Allows Recruiter to remove a previously offered Candidate
 	* @param offeredCandidateId - Unique Id of Candidate to be removed
 	* @return Status Code
 	*/
-	@DeleteMapping(value="/v1/offered-candidate/{id}")
-	@PreAuthorize("hasRole('ROLE_RECRUITER') or hasRole('ROLE_ADMIN')")
-	public ResponseEntity<Void> deleteOfferedCandidate(@PathVariable("id") UUID offeredCandidateId) throws IllegalAccessException{
+	//@DeleteMapping(value="/v1/offered-candidate/{id}")
+	//@PreAuthorize("hasRole('ROLE_RECRUITER') or hasRole('ROLE_ADMIN')")
+	//public ResponseEntity<Void> deleteOfferedCandidate(@PathVariable("id") UUID offeredCandidateId) throws IllegalAccessException{
 		
-		supplyAndDemandService.deleteOfferedCandidate(offeredCandidateId);
+	//	supplyAndDemandService.deleteOfferedCandidate(offeredCandidateId);
 		
-		return ResponseEntity.ok().build();
-	}
+	//	return ResponseEntity.ok().build();
+	//}
 	
 	/**
 	* Updates an Offered Candidate published by the Recruiter
@@ -127,16 +127,16 @@ public class SupplyAndDemandController {
 	* @return Status Code
 	* @throws IllegalAccessException 
 	*/
-	@PutMapping(value="/v1/offered-candidate/{id}")
-	@PreAuthorize("hasRole('ROLE_RECRUITER') or hasRole('ROLE_ADMIN')")
-	public ResponseEntity<Void> updateOfferedCandidate(@PathVariable("id") UUID offeredCandidateId, @RequestBody OfferedCandidateAPIInbound offeredCandidate) throws IllegalAccessException{
+	//@PutMapping(value="/v1/offered-candidate/{id}")
+	//@PreAuthorize("hasRole('ROLE_RECRUITER') or hasRole('ROLE_ADMIN')")
+	//public ResponseEntity<Void> updateOfferedCandidate(@PathVariable("id") UUID offeredCandidateId, @RequestBody OfferedCandidateAPIInbound offeredCandidate) throws IllegalAccessException{
 		
-		OfferedCandidateValidator.validate(offeredCandidate);
+	//	OfferedCandidateValidator.validate(offeredCandidate);
 		
-		this.supplyAndDemandService.updateOfferedCandidate(offeredCandidateId, OfferedCandidateAPIInbound.convertToDomain(offeredCandidate));
+	//	this.supplyAndDemandService.updateOfferedCandidate(offeredCandidateId, OfferedCandidateAPIInbound.convertToDomain(offeredCandidate));
 		
-		return ResponseEntity.ok().build();
-	}
+	//	return ResponseEntity.ok().build();
+	//}
 	
 	/**
 	* Allows Recruiter to add a Recruiter to their blacklist so that their Offered Candidates and Open
@@ -177,19 +177,19 @@ public class SupplyAndDemandController {
 	* Returns all Candidates offered by Recruiters
 	* @return - Offered Candidates
 	*/
-	@GetMapping(value="/v1/offered-candidate/")
-	@PreAuthorize("hasRole('ROLE_RECRUITER') or hasRole('ROLE_ADMIN')")
-	public ResponseEntity<Set<OfferedCandidateAPIOutbound>> fetchOfferedCandidates(Principal principal){
+	//@GetMapping(value="/v1/offered-candidate/")
+	//@PreAuthorize("hasRole('ROLE_RECRUITER') or hasRole('ROLE_ADMIN')")
+	//public ResponseEntity<Set<OfferedCandidateAPIOutbound>> fetchOfferedCandidates(Principal principal){
 		
-		Set<UUID> viewedPosts = this.supplyAndDemandService.fetchViewedEventsByRecruiter(EventType.OFFERED_CANDIDATE, principal.getName());
+	//	Set<UUID> viewedPosts = this.supplyAndDemandService.fetchViewedEventsByRecruiter(EventType.OFFERED_CANDIDATE, principal.getName());
 		
-		return ResponseEntity
-				.ok()
-				.body(this.supplyAndDemandService.fetchOfferedCandidates()
-						.stream()
-						.map(c -> OfferedCandidateAPIOutbound.convertFromDomain(c, this.supplyAndDemandService.fetchRecruiterDetails(c.getRecruiterId()), viewedPosts))
-						.collect(Collectors.toCollection(LinkedHashSet::new)));
-	}
+	//	return ResponseEntity
+	//			.ok()
+	//			.body(this.supplyAndDemandService.fetchOfferedCandidates()
+	//					.stream()
+	//					.map(c -> OfferedCandidateAPIOutbound.convertFromDomain(c, this.supplyAndDemandService.fetchRecruiterDetails(c.getRecruiterId()), viewedPosts))
+	//					.collect(Collectors.toCollection(LinkedHashSet::new)));
+	//}
 	
 	/**
 	* Returns all Open Positions from recruiters
@@ -214,17 +214,17 @@ public class SupplyAndDemandController {
 	* @param recruiterId - Unique id of the Recruiter
 	* @return Candidates offered by the Recruiter
 	*/
-	@GetMapping(value="/v1/offered-candidate/rectuiter/{id}")
-	@PreAuthorize("hasRole('ROLE_RECRUITER') or hasRole('ROLE_ADMIN')")
-	public ResponseEntity<Set<OfferedCandidateAPIOutbound>> fetchOfferedCandidates(@PathVariable("id") String recruiterId, Principal principal){
-		Set<UUID> viewedPosts = this.supplyAndDemandService.fetchViewedEventsByRecruiter(EventType.OFFERED_CANDIDATE, principal.getName());
-		return ResponseEntity
-				.ok()
-				.body(this.supplyAndDemandService.fetchOfferedCandidates(recruiterId)
-						.stream()
-						.map(c -> OfferedCandidateAPIOutbound.convertFromDomain(c, this.supplyAndDemandService.fetchRecruiterDetails(c.getRecruiterId()),viewedPosts))
-						.collect(Collectors.toCollection(LinkedHashSet::new)));
-	}
+	//@GetMapping(value="/v1/offered-candidate/rectuiter/{id}")
+	//@PreAuthorize("hasRole('ROLE_RECRUITER') or hasRole('ROLE_ADMIN')")
+	//public ResponseEntity<Set<OfferedCandidateAPIOutbound>> fetchOfferedCandidates(@PathVariable("id") String recruiterId, Principal principal){
+	//	Set<UUID> viewedPosts = this.supplyAndDemandService.fetchViewedEventsByRecruiter(EventType.OFFERED_CANDIDATE, principal.getName());
+	//	return ResponseEntity
+	//			.ok()
+	//			.body(this.supplyAndDemandService.fetchOfferedCandidates(recruiterId)
+	//					.stream()
+	//					.map(c -> OfferedCandidateAPIOutbound.convertFromDomain(c, this.supplyAndDemandService.fetchRecruiterDetails(c.getRecruiterId()),viewedPosts))
+	//					.collect(Collectors.toCollection(LinkedHashSet::new)));
+	//}
 	
 	/**
 	* Returns all Positions advertised by a specific Recruiter
@@ -275,14 +275,14 @@ public class SupplyAndDemandController {
 	* Logs that a Recruiter has viewed an offered candidate
 	* @return ResponseEntity
 	*/
-	@PutMapping("/v1/offered-candidate/{id}/_message")
-	@PreAuthorize("hasRole('ROLE_RECRUITER') or hasRole('ROLE_ADMIN')")
-	public ResponseEntity<Void> contactRecruiterForOfferedCandidate(@PathVariable("id") UUID offeredCandidateId, @RequestPart("message") String message, Principal principal) {
+	//@PutMapping("/v1/offered-candidate/{id}/_message")
+	//@PreAuthorize("hasRole('ROLE_RECRUITER') or hasRole('ROLE_ADMIN')")
+	//public ResponseEntity<Void> contactRecruiterForOfferedCandidate(@PathVariable("id") UUID offeredCandidateId, @RequestPart("message") String message, Principal principal) {
 		
-		this.supplyAndDemandService.sendOfferedCandidateContactEmail(offeredCandidateId, message, principal.getName());
+	//	this.supplyAndDemandService.sendOfferedCandidateContactEmail(offeredCandidateId, message, principal.getName());
 		
-		return ResponseEntity.status(HttpStatus.OK).build();
-	}
+	//	return ResponseEntity.status(HttpStatus.OK).build();
+	//}
 	
 	/**
 	* Logs that a Recruiter has viewed an offered candidate
