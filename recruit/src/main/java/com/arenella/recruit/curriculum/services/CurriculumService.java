@@ -110,4 +110,11 @@ public interface CurriculumService {
 	*/
 	public boolean doCreditsCheck(String name);
 
+	/**
+	* Returns the number of remaining credits the User has
+	* @param name - id of the User
+	* @return remaining credits
+	*/
+	public int getCreditCountForUser(String name);
+
 }

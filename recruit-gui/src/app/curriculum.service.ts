@@ -107,5 +107,18 @@ export class CurriculumService {
 		return this.httpClient.get<boolean>(backendUrl, this.httpOptions);
 		
 	}
+	
+	/**
+	* Performs a check to see if the User has access to the Curriculum either
+	* because they do not use credt based acces or beause they have remaining 
+	* credits 
+	*/
+	public getCreditCount():Observable<number>{
+		
+		const backendUrl:string = environment.backendUrl + 'curriculum/creditCount';
+  	
+		return this.httpClient.get<number>(backendUrl, this.httpOptions);
+		
+	}
 		
 }

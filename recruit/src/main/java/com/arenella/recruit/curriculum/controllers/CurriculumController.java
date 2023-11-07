@@ -109,16 +109,26 @@ public class CurriculumController {
 		return ResponseEntity.ok(true);
 	}
 	
-	private void performCreditCheck(Principal principal) {
+	/**
+	* Returns the number of remaining credits for the currently logged in user
+	* @param principal - Authroized User
+	* @return whether the creditCheck passed for the User
+	*/
+	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('ROLE_RECRUITER')")
+	@GetMapping(value="/curriculum/creditCount")
+	public ResponseEntity<Integer> getCreditCount(Principal principal){
+		
+		final int creditNotApplicableToUser = -1;
 		
 		ClaimsUsernamePasswordAuthenticationToken 	user 			= (ClaimsUsernamePasswordAuthenticationToken)principal;
 		boolean 									isRecruiter 	= user.getAuthorities().stream().filter(a -> a.getAuthority().equals("ROLE_RECRUITER")).findAny().isPresent();
 		boolean 									useCredits 		= (Boolean)user.getClaim("useCredits").get();
 		
 		if (isRecruiter && useCredits) {
-			this.curriculumService.useCredit(user.getName());
+			return ResponseEntity.ok(curriculumService.getCreditCountForUser(user.getName()));
 		}
 		
+		return ResponseEntity.ok(creditNotApplicableToUser);
 	}
 	
 	/**
@@ -249,5 +259,22 @@ public class CurriculumController {
 		return new ResponseEntity<>(new ByteArrayResource(stream.toByteArray()), header, HttpStatus.OK);
 		
 	} 
+	
+	/**
+	* Performs check to ensure user either doesnt use credit based access or 
+	* has enough credits to perform an operation
+	* @param principal - currently logged in user
+	*/
+	private void performCreditCheck(Principal principal) {
+		
+		ClaimsUsernamePasswordAuthenticationToken 	user 			= (ClaimsUsernamePasswordAuthenticationToken)principal;
+		boolean 									isRecruiter 	= user.getAuthorities().stream().filter(a -> a.getAuthority().equals("ROLE_RECRUITER")).findAny().isPresent();
+		boolean 									useCredits 		= (Boolean)user.getClaim("useCredits").get();
+		
+		if (isRecruiter && useCredits) {
+			this.curriculumService.useCredit(user.getName());
+		}
+		
+	}
 	
 }

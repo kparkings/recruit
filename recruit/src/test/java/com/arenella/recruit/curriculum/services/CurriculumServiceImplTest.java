@@ -755,4 +755,32 @@ public class CurriculumServiceImplTest {
 		
 	} 
 	
+	/**
+	* Tests case User is not known
+	* @throws Exception
+	*/
+	@Test
+	public void testGetCreditCountForUser_unknownUser() throws Exception{
+	
+		Mockito.when(this.mockCreditDao.getByRecruiterId(Mockito.anyString())).thenReturn(Optional.empty());
+		
+		assertThrows(IllegalArgumentException.class, () -> {
+			service.getCreditCountForUser("aUser");
+		});
+		
+	}
+	
+	/**
+	* Tests case User is known
+	* @throws Exception
+	*/
+	@Test
+	public void testGetCreditCountForUser_knownUser() throws Exception{
+	
+		Mockito.when(this.mockCreditDao.getByRecruiterId(Mockito.anyString())).thenReturn(Optional.of(RecruiterCredit.builder().credits(1).build()));
+		
+		assertEquals(1, service.getCreditCountForUser("aUser"));
+		
+	}
+	
 }

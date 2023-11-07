@@ -502,12 +502,30 @@ export class SuggestionsComponent implements OnInit {
 	}
 	
 	public passedCreditCheck:boolean = false;
+	
+	public doCreditCheckByCount():void{
+		
+		if(this.isAdmin()){
+			this.passedCreditCheck = true;
+		} else {
+			this.curriculumService.getCreditCount().subscribe(count => {
+				this.passedCreditCheck = count > 1;
+			});	
+		}
+		
+	}
+	
 	public doCreditCheck():void{
-		console.log("DOING CHECK");
-		this.curriculumService.doCreditCheck().subscribe(passed => {
-			this.passedCreditCheck = passed;
-			console.log("DOING CHECK  " + passed);
-		});
+		//this.curriculumService.doCreditCheck().subscribe(passed => {
+		//	this.passedCreditCheck = passed;
+		//});
+		if(this.isAdmin()){
+			this.passedCreditCheck = true;
+		} else {
+			this.curriculumService.getCreditCount().subscribe(count => {
+				this.passedCreditCheck = count > 0;
+			});	
+		}
 	}
 	
 	disableDownload():void{
@@ -528,7 +546,6 @@ export class SuggestionsComponent implements OnInit {
 		}
 		
 		this.doCreditCheck();
-	
 	}
 
 	public handleNoCredit():void{

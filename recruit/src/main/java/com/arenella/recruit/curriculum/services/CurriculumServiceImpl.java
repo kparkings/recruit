@@ -9,8 +9,6 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-//import org.apache.poi.xwpf.converter.pdf.PdfConverter;
-//import org.apache.poi.xwpf.converter.pdf.PdfOptions;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,7 +17,6 @@ import org.springframework.stereotype.Service;
 import com.arenella.recruit.adapters.events.CreditsAssignedEvent;
 import com.arenella.recruit.adapters.events.CreditsUsedEvent;
 import com.arenella.recruit.curriculum.adapters.ExternalEventPublisher;
-//import com.arenella.recruit.candidates.adapters.ExternalEventPublisher;
 import com.arenella.recruit.curriculum.beans.Curriculum;
 import com.arenella.recruit.curriculum.beans.CurriculumDownloadedEvent;
 import com.arenella.recruit.curriculum.beans.PendingCurriculum;
@@ -322,6 +319,17 @@ public class CurriculumServiceImpl implements CurriculumService{
 		}
 		
 		return recruiterCreditOpt.get().getCredits() > 0;
+	}
+
+	/**
+	* Refer to the CurriculumService interface for details
+	*/
+	@Override
+	public int getCreditCountForUser(String name) {
+		
+		RecruiterCredit credits = this.creditDao.getByRecruiterId(name).orElseThrow(() -> new IllegalArgumentException("Unknwn User. No Credit count information"));
+		
+		return credits.getCredits();
 	}
 	
 }

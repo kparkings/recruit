@@ -20,6 +20,8 @@ import { UpdateCandidateRequest } 						from './new-candidate/update-candidate-r
   providedIn: 'root'
 })
 export class CandidateServiceService {
+    
+   
 	
 	constructor(private httpClient: HttpClient) { }
 	
@@ -40,7 +42,7 @@ export class CandidateServiceService {
   
     	return this.httpClient.get<any>(backendUrl, this.httpOptions);
   	}
-
+  	
 	/**
   	* Returns a Candidate by its Id 
   	*/

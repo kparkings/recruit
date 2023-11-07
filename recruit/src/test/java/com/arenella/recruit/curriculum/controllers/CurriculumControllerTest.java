@@ -5,12 +5,12 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.security.Principal;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -294,6 +294,76 @@ public class CurriculumControllerTest {
 		
 		Mockito.verify(this.mockCurriculumService).doCreditsCheck(mockPrincipal.getName());
 
+	}
+	
+	/**
+	* Checks if Credit based accesss credits returned
+	* @throws Exception
+	*/
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@Test
+	public void testGetCreditCount_creditBased() throws Exception{
+		
+		Collection authorities = new HashSet<>();
+		authorities.add(new SimpleGrantedAuthority("ROLE_RECRUITER"));
+		
+		Mockito.when(this.mockCurriculumService.getCreditCountForUser(Mockito.any())).thenReturn(1);
+		Mockito.when(this.mockPrincipal.getAuthorities()).thenReturn(authorities);
+		Mockito.when(this.mockPrincipal.getClaim("useCredits")).thenReturn(Optional.of(Boolean.TRUE));
+		Mockito.when(this.mockPrincipal.getName()).thenReturn("userId");
+		
+		ResponseEntity<Integer> result = this.curriculumController.getCreditCount(mockPrincipal);
+		
+		Assertions.assertEquals(1, result.getBody());
+		
+		Mockito.verify(this.mockCurriculumService).getCreditCountForUser(mockPrincipal.getName());
+		
+	}
+	
+	/**
+	* Checks if not Credit based accesss returns -1
+	* @throws Exception
+	*/
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@Test
+	public void testGetCreditCount_notCreditBasedhasCredits() throws Exception{
+		
+		Collection authorities = new HashSet<>();
+		authorities.add(new SimpleGrantedAuthority("ROLE_RECRUITER"));
+		
+		Mockito.when(this.mockPrincipal.getAuthorities()).thenReturn(authorities);
+		Mockito.when(this.mockPrincipal.getClaim("useCredits")).thenReturn(Optional.of(Boolean.FALSE));
+		Mockito.when(this.mockPrincipal.getName()).thenReturn("userId");
+		
+		ResponseEntity<Integer> result = this.curriculumController.getCreditCount(mockPrincipal);
+		
+		Assertions.assertEquals(-1, result.getBody());
+		
+		Mockito.verify(this.mockCurriculumService, Mockito.never()).getCreditCountForUser(mockPrincipal.getName());
+		
+	}
+	
+	/**
+	* Checks if Admin returns -1
+	* @throws Exception
+	*/
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@Test
+	public void testGetCreditCount_adminDoesNotUseCredits() throws Exception{
+		
+		Collection authorities = new HashSet<>();
+		authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+		
+		Mockito.when(this.mockPrincipal.getAuthorities()).thenReturn(authorities);
+		Mockito.when(this.mockPrincipal.getClaim("useCredits")).thenReturn(Optional.of(Boolean.FALSE));
+		Mockito.when(this.mockPrincipal.getName()).thenReturn("userId");
+		
+		ResponseEntity<Integer> result = this.curriculumController.getCreditCount(mockPrincipal);
+		
+		Assertions.assertEquals(-1, result.getBody());
+		
+		Mockito.verify(this.mockCurriculumService, Mockito.never()).getCreditCountForUser(mockPrincipal.getName());
+		
 	}
 	
 }
