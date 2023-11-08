@@ -70,7 +70,8 @@
 			<div class="action-buttons">
 				<button class="btn btn-secondary action-btn" 					(click)="showJustMyOpenPositions()" 	*ngIf="!showJustMyOpenPositionsActive">My Candidates</button>
 				<button class="btn btn-secondary action-btn" 					(click)="fetchOpenPositions()" 		*ngIf="showJustMyOpenPositionsActive">All Candidates</button>
-				<button class="btn btn-secondary action-btn main-action_btn" 	(click)="switchTab('addDemand')" *ngIf="!isAuthenticatedAsAdmin()">Request Candidate</button>
+				<button class="btn btn-secondary action-btn main-action_btn" 	(click)="switchTab('addDemand')" *ngIf="!isAuthenticatedAsAdmin() && passedCreditCheck">Request Candidate</button>
+				<button class="btn btn-secondary action-btn main-action_btn" 	(click)="showNoCredits()" *ngIf="!isAuthenticatedAsAdmin() && !passedCreditCheck">Request Candidate</button>
 			</div>
 			<!-- List of Requested Candidates -->
 			<div>

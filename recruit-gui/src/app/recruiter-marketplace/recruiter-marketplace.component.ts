@@ -64,6 +64,8 @@ export class RecruiterMarketplaceComponent implements OnInit {
 						this.switchTab('showSupply');
 					} 
 					
+					this.doCreditCheck();
+					
 					
 	}
 
@@ -652,6 +654,7 @@ export class RecruiterMarketplaceComponent implements OnInit {
 				languages,
 				skills
 			).subscribe( data => {
+				this.doCreditCheck();
 				this.resetOpenPositionsForm();
 				this.switchTab('showDemand');
 				this.refreshOpenPositionList();
@@ -942,5 +945,18 @@ export class RecruiterMarketplaceComponent implements OnInit {
 		}
 
   	}	
+  	
+  	public passedCreditCheck:boolean = false;
+	
+	
+	public doCreditCheck():void{
+		this.marketplaceService.doCreditCheck().subscribe(passed => {
+			this.passedCreditCheck = passed;
+		});
+	}
+	
+	public showNoCredits():void{
+		console.log("No credits left");
+	}
 
 }

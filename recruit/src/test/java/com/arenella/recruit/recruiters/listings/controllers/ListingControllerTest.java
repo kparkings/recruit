@@ -83,16 +83,12 @@ public class ListingControllerTest {
 		Collection authorities = new HashSet<>();
 		authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
 		
-		Mockito.when(this.mockUsernamePasswordAuthenticationToken.getAuthorities()).thenReturn(authorities);
-	//	Mockito.when(this.mockUsernamePasswordAuthenticationToken.getName()).thenReturn("kevin");
-		
+		Mockito.when(this.mockUsernamePasswordAuthenticationToken.getAuthorities()).thenReturn(authorities);		
 		
 		ListingAPIInbound 	listing 		= ListingAPIInbound.builder().build();
 		
 		Mockito.when(mockListingService.addListing(Mockito.any(), Mockito.anyBoolean())).thenReturn(UUID.randomUUID());
-	//	Mockito.doThrow(new IllegalStateException("")).when(mockListingService).useCredit("kevin");
 		Mockito.when(this.mockUsernamePasswordAuthenticationToken.getClaim("useCredits")).thenReturn(Optional.of(Boolean.TRUE));
-		//Mockito.when(this.mockListingService.hasCreditsLeft(Mockito.anyString())).thenReturn(true);
 		
 		ResponseEntity<UUID> response = controller.addListing(listing, mockUsernamePasswordAuthenticationToken);
 		

@@ -4,7 +4,6 @@ import java.util.Set;
 import java.util.UUID;
 
 import com.arenella.recruit.adapters.actions.GrantCreditCommand;
-import com.arenella.recruit.recruiters.beans.OfferedCandidate;
 import com.arenella.recruit.recruiters.beans.OfferedCandidateAPIOutbound.RecruiterDetails;
 import com.arenella.recruit.recruiters.beans.SupplyAndDemandEvent.EventType;
 import com.arenella.recruit.recruiters.beans.OpenPosition;
@@ -39,33 +38,6 @@ public interface SupplyAndDemandService {
 	public void updateOpenPosition(UUID OpenPositionId, OpenPosition openPosition) throws IllegalAccessException;
 	
 	/**
-	* Adds a new OfferedCandidate
-	* @param offeredCandidate - Details of the Candidate being offered
-	*/
-	//public void addOfferedCandidate(OfferedCandidate offeredCandidate);
-
-	/**
-	* Deletes an existing offeredCandidateId
-	* @param offeredCandidateId - Unique Id of the candidate to delete
-	* @throws IllegalAccessException 
-	*/
-	//public void deleteOfferedCandidate(UUID offeredCandidateId) throws IllegalAccessException;
-
-	/**
-	* Updates an existing OfferedCandidate
-	* @param offeredCandidateId			- Unique Id of the OfferedCandidate
-	* @param offeredCandidate			- OfferedCandidate to update
-	* @throws IllegalAccessException
-	*/
-	//public void updateOfferedCandidate(UUID offeredCandidateId, OfferedCandidate offeredCandidate) throws IllegalAccessException;
-
-	/**
-	* Returns available OfferedCandidates
-	* @return offeredCandidates
-	*/
-	//public Set<OfferedCandidate> fetchOfferedCandidates();
-	
-	/**
 	* Returns details of a Recruiter based upon their unique identifier
 	* @param recruiterId - Unique identifier of the recruiter
 	* @return Details of the Recruiter
@@ -85,12 +57,6 @@ public interface SupplyAndDemandService {
 	*/
 	public Set<OpenPosition> fetchOpenPositions(String recruiterId);
 
-	/**
-	* Returns OfferedCandidates for a specificRecruiter
-	* @param recruiterId - Unique Id of the Recruiter
-	*/
-	//public Set<OfferedCandidate> fetchOfferedCandidates(String recruiterId);
-	
 	/**
 	* Logs an event stating that an open position was viewed
 	* @param id - Unique id of the Open Position viewed
@@ -117,14 +83,6 @@ public interface SupplyAndDemandService {
 	*/
 	public Set<SupplyAndDemandEvent> fetchOfferedCandidateViewStats();
 
-	/**
-	* Sends email to Owner of an offered candidate
-	* @param offeredCandidateId 	- Id of the offered candidate
-	* @param message 				- message to be sent to the owner 
-	* @param authenticatedUserId	- userId of currently authenticated user
-	*/
-	//public void sendOfferedCandidateContactEmail(UUID offeredCandidateId, String message, String authenticatedUserId);
-	
 	/**
 	* 
 	* @param openPositionId			- Id of the open position
@@ -159,5 +117,20 @@ public interface SupplyAndDemandService {
 	* @param command - GrantCredit command details
 	*/
 	public void updateCredits(GrantCreditCommand command);
+	
+	/**
+	* Returns whether the User either does not have Credit based access or does 
+	* have credit based access to curriculums but has remaining credits
+	* @param name - id of Authorized User
+	* @return whether User can access Curriculums
+	*/
+	public Boolean doCreditsCheck(String name);
+
+	/**
+	* Updates a Recruiters credits. Decrementing them by 1
+	* @param userId - id of User who used a Credit
+	*/
+	public void useCredit(String userId);
+
 	
 }

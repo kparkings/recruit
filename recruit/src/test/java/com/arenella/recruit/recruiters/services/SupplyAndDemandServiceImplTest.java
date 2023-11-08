@@ -1,10 +1,12 @@
 package com.arenella.recruit.recruiters.services;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDate;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
@@ -22,12 +24,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import com.arenella.recruit.adapters.actions.GrantCreditCommand;
-import com.arenella.recruit.adapters.events.OfferedCandidateContactRequestEvent;
 import com.arenella.recruit.adapters.events.OpenPositionContactRequestEvent;
-import com.arenella.recruit.listings.beans.RecruiterCredit;
-import com.arenella.recruit.listings.dao.ListingRecruiterCreditDao;
+import com.arenella.recruit.recruiters.beans.RecruiterCredit;
+import com.arenella.recruit.recruiters.dao.RecruiterCreditDao;
 import com.arenella.recruit.recruiters.adapters.RecruitersExternalEventPublisher;
-import com.arenella.recruit.recruiters.beans.OfferedCandidate;
 import com.arenella.recruit.recruiters.beans.OpenPosition;
 import com.arenella.recruit.recruiters.beans.SupplyAndDemandEvent.EventType;
 import com.arenella.recruit.recruiters.dao.OfferedCandidateDao;
@@ -62,7 +62,7 @@ public class SupplyAndDemandServiceImplTest {
 	private SupplyAndDemandEventDao			 	mockSupplyAndDemandEventDao;
 	
 	@Mock
-	private ListingRecruiterCreditDao			mockCreditDao;
+	private RecruiterCreditDao					mockCreditDao;
 	
 	/**
 	* Sets up test environment
@@ -180,139 +180,6 @@ public class SupplyAndDemandServiceImplTest {
 	}
 	
 	/**
-	* Tests persisting of an OfferedCandidate
-	* @throws Exception
-	*/
-	//@Test
-	//public void testAddOfferedCandidate() throws Exception{
-		
-	//	Mockito.when(mockAuthentication.getPrincipal()).thenReturn(RECRUITER_ID);
-		
-	//	ArgumentCaptor<OfferedCandidate> captor = ArgumentCaptor.forClass(OfferedCandidate.class);
-		
-	//	OfferedCandidate offeredCandidate = OfferedCandidate.builder().candidateRoleTitle("aRole").build();
-		
-	//	service.addOfferedCandidate(offeredCandidate);
-		
-	//	Mockito.verify(mockOfferedCandidateDao).persistOfferedCandidate(captor.capture());
-		
-	//	assertEquals(RECRUITER_ID, captor.getValue().getRecruiterId());
-		
-	//}
-	
-	/**
-	* Happy path for deleting an OfferedCandidate
-	* @throws Exception
-	*/
-	//@Test
-	//public void testDeleteOfferedCandidate() throws Exception{
-		
-	//	Mockito.when(mockAuthentication.getPrincipal()).thenReturn(RECRUITER_ID);
-		
-	//	UUID 				offeredCandidateId 		= UUID.randomUUID();
-	//	OfferedCandidate 	offeredCandidate 		= OfferedCandidate.builder().candidateRoleTitle("aRole").recruiterId(RECRUITER_ID).build();
-		
-	//	Mockito.when(this.mockOfferedCandidateDao.findByOfferedCandidateId(offeredCandidateId)).thenReturn(offeredCandidate);
-		
-	//	service.deleteOfferedCandidate(offeredCandidateId);
-		
-	//}
-	
-	/**
-	* Failure path where OfferedCandidate does not exist
-	* @throws Exception
-	*/
-	//@Test
-	//public void testDeleteOfferedCandidate_unknownOpenPosition() throws Exception{
-		
-	//	UUID offeredCandidateId 	= UUID.randomUUID();
-		
-	//	Assertions.assertThrows(RuntimeException.class, () -> {
-	//		service.deleteOfferedCandidate(offeredCandidateId);
-	//	});
-		
-	//}
-	
-	/**
-	* Failure position where an attempt is made to delete another users 
-	* OfferedCandidate
-	* @throws Exception
-	*/
-	//@Test
-	//public void testDeleteOfferedCandidate_wrongUser() throws Exception{
-
-	//	Mockito.when(mockAuthentication.getPrincipal()).thenReturn(RECRUITER_ID);
-		
-	//	UUID 				offeredCandidateId 	= UUID.randomUUID();
-	//	OfferedCandidate 	offeredCandidate 	= OfferedCandidate.builder().candidateRoleTitle("aRole").recruiterId("AnotherRecruitersId").build();
-		
-	//	Mockito.when(this.mockOfferedCandidateDao.findByOfferedCandidateId(offeredCandidateId)).thenReturn(offeredCandidate);
-		
-	//	Assertions.assertThrows(IllegalAccessException.class, () -> {
-	//		service.deleteOfferedCandidate(offeredCandidateId);
-	//	});
-		
-	//}
-	
-	/**
-	* Tests retrieval of OfferedCandidates
-	* @throws Exception
-	*/
-	//@Test
-	//public void testFetchOfferedCandidates() throws Exception{
-		
-	//	final UUID id1 = UUID.randomUUID();
-	//	final UUID id2 = UUID.randomUUID();
-	//	final UUID id3 = UUID.randomUUID();
-		
-	//	final LocalDate created1 = LocalDate.of(2001, 1, 1);
-	//	final LocalDate created2 = LocalDate.of(2003, 1, 1);
-	//	final LocalDate created3 = LocalDate.of(2002, 1, 1);
-		
-	//	OfferedCandidate c1 = OfferedCandidate.builder().id(id1).candidateRoleTitle("aRole").created(created1).build();
-	//	OfferedCandidate c2 = OfferedCandidate.builder().id(id2).candidateRoleTitle("aRole").created(created2).build();
-	//	OfferedCandidate c3 = OfferedCandidate.builder().id(id3).candidateRoleTitle("aRole").created(created3).build();
-		
-	//	Mockito.when(this.mockOfferedCandidateDao.findAllOfferedCandidates()).thenReturn(Set.of(c1,c2,c3));
-		
-	//	Set<OfferedCandidate> candidates = this.service.fetchOfferedCandidates();
-		
-	//	candidates.stream().filter(c -> c.getId()== id1).findAny().orElseThrow();
-	//	candidates.stream().filter(c -> c.getId()== id2).findAny().orElseThrow();
-	//	candidates.stream().filter(c -> c.getId()== id3).findAny().orElseThrow();
-		
-	//}
-	
-	/**
-	* Tests retrieval of OfferedCandidates for a specific Recruiter
-	* @throws Exception
-	*/
-	//@Test
-	//public void testFetchOfferedCandidatesByRecruiterId() throws Exception{
-		
-	//	final UUID id1 = UUID.randomUUID();
-	//	final UUID id2 = UUID.randomUUID();
-	//	final UUID id3 = UUID.randomUUID();
-		
-	//	final LocalDate created1 = LocalDate.of(2001, 1, 1);
-	//	final LocalDate created2 = LocalDate.of(2003, 1, 1);
-	//	final LocalDate created3 = LocalDate.of(2002, 1, 1);
-		
-	//	OfferedCandidate c1 = OfferedCandidate.builder().id(id1).created(created1).build();
-	//	OfferedCandidate c2 = OfferedCandidate.builder().id(id2).created(created2).build();
-	//	OfferedCandidate c3 = OfferedCandidate.builder().id(id3).created(created3).build();
-		
-	//	Mockito.when(this.mockOfferedCandidateDao.findAllOfferedCandidatesByRecruiterId(RECRUITER_ID)).thenReturn(Set.of(c1,c2,c3));
-		
-	//	Set<OfferedCandidate> candidates = this.service.fetchOfferedCandidates(RECRUITER_ID);
-		
-	//	candidates.stream().filter(c -> c.getId()== id1).findAny().orElseThrow();
-	//	candidates.stream().filter(c -> c.getId()== id2).findAny().orElseThrow();
-	//	candidates.stream().filter(c -> c.getId()== id3).findAny().orElseThrow();
-		
-	//}
-	
-	/**
 	* Tests retrieval of OpenPositions
 	* @throws Exception
 	*/
@@ -369,65 +236,6 @@ public class SupplyAndDemandServiceImplTest {
 		openPositions.stream().filter(c -> c.getId()== id3).findAny().orElseThrow();
 		
 	}
-	
-	/**
-	* Tests case the Offered Candidate the contact request is for
-	* does not exist
-	* @throws Exception
-	*/
-	//@Test
-	//public void testSendOfferedCandidateContactEmail_unknownOfferedCandidate() throws Exception{
-		
-	//	final UUID 		offeredCandidateId 	= UUID.randomUUID();
-	//	final String 	message				= "aMessage";
-	//	final String 	authenticatedUserId	= "recriter22";
-		
-	//	Mockito.when(this.mockOfferedCandidateDao.existsById(offeredCandidateId)).thenReturn(false);
-		
-	//	assertThrows(RuntimeException.class, () -> {
-	//		this.service.sendOfferedCandidateContactEmail(offeredCandidateId, message, authenticatedUserId);
-	//	});
-		
-	//}
-	
-	/**
-	* Tests Happy Path
-	* @throws Exception
-	*/
-	//@Test
-	//public void testSendOfferedCandidateContactEmail() throws Exception{
-		
-	//	final UUID 		offeredCandidateId 	= UUID.randomUUID();
-	//	final String 	message				= "aMessage";
-	//	final String 	authenticatedUserId	= "recriter22";
-	//	final String	recruiterId			= "recruiter33";
-	//	final String 	candidateRoleTitle	= "Java Developer";
-	//	final OfferedCandidate offeredCandidate = OfferedCandidate
-	//			.builder()
-	//				.recruiterId(recruiterId)
-	//				.candidateRoleTitle(candidateRoleTitle)
-	//			.build();
-		
-	//	ArgumentCaptor<OfferedCandidateContactRequestEvent> argCapt = ArgumentCaptor.forClass(OfferedCandidateContactRequestEvent.class);
-		
-	//	Mockito.when(this.mockOfferedCandidateDao.existsById(offeredCandidateId)).thenReturn(true);
-	//	Mockito.when(this.mockOfferedCandidateDao.findByOfferedCandidateId(offeredCandidateId)).thenReturn(offeredCandidate);
-		
-	//	Mockito.doNothing().when(this.mockEventPublisher).publishOffereedCandidateRequestEvent(argCapt.capture());
-		
-	//	this.service.sendOfferedCandidateContactEmail(offeredCandidateId, message, authenticatedUserId);
-		
-	//	Mockito.verify(this.mockEventPublisher).publishOffereedCandidateRequestEvent(Mockito.any());
-		
-	//	OfferedCandidateContactRequestEvent event = argCapt.getValue();
-		
-	//	assertEquals(message, 				event.getMessage());
-	//	assertEquals(offeredCandidateId, 	event.getOfferedCandidateId());
-	//	assertEquals(candidateRoleTitle, 	event.getOfferedCandidateTitle());
-	//	assertEquals(recruiterId, 			event.getRecipientId());
-	//	assertEquals(authenticatedUserId, 	event.getSenderId());
-		
-	//}
 	
 	/**
 	* Tests case the Open Position the contact request is for
@@ -517,27 +325,19 @@ public class SupplyAndDemandServiceImplTest {
 	public void testDisableSupplyAndDemandPostsForRecruiter() throws Exception{
 		
 		final String recruiterId = "rec222";
-		//final Set<OfferedCandidate> ocs = Set.of(OfferedCandidate.builder().active(true).build(), OfferedCandidate.builder().active(true).build());
 		final Set<OpenPosition> 	ops = Set.of(OpenPosition.builder().active(true).build(), OpenPosition.builder().active(true).build(), OpenPosition.builder().active(true).build());
 		
-		//ArgumentCaptor<Set<OfferedCandidate>> 	argCaptOcs = ArgumentCaptor.forClass(Set.class);
 		ArgumentCaptor<Set<OpenPosition>> 		argCaptOps = ArgumentCaptor.forClass(Set.class);
 		
-		//Mockito.when(this.mockOfferedCandidateDao.findAllOfferedCandidatesByRecruiterId(Mockito.anyString())).thenReturn(ocs);
 		Mockito.when(this.mockOpenPositionDao.findAllOpenPositionsByRecruiterId(Mockito.anyString())).thenReturn(ops);
-		
-		//Mockito.doNothing().when(this.mockOfferedCandidateDao).persistOfferedCandidates(argCaptOcs.capture());
 		Mockito.doNothing().when(this.mockOpenPositionDao).persistOpenPositions(argCaptOps.capture());
 		
 		this.service.disableSupplyAndDemandPostsForRecruiter(recruiterId);
-		
-		//Mockito.verify(this.mockOfferedCandidateDao).persistOfferedCandidates(Mockito.anySet());
+	
 		Mockito.verify(this.mockOpenPositionDao).persistOpenPositions(Mockito.anySet());
 		
-		//assertEquals(2, argCaptOcs.getValue().size());
 		assertEquals(3, argCaptOps.getValue().size());
 		
-		//argCaptOcs.getValue().stream().forEach(oc -> Assertions.assertFalse(oc.isActive()));
 		argCaptOps.getValue().stream().forEach(op -> Assertions.assertFalse(op.isActive()));
 		
 	}
@@ -551,27 +351,19 @@ public class SupplyAndDemandServiceImplTest {
 	public void testEnableSupplyAndDemandPostsForRecruiter() throws Exception{
 		
 		final String recruiterId = "rec222";
-		//final Set<OfferedCandidate> ocs = Set.of(OfferedCandidate.builder().active(false).build(), OfferedCandidate.builder().active(false).build());
 		final Set<OpenPosition> 	ops = Set.of(OpenPosition.builder().active(false).build(), OpenPosition.builder().active(false).build(), OpenPosition.builder().active(false).build());
 		
-		//ArgumentCaptor<Set<OfferedCandidate>> 	argCaptOcs = ArgumentCaptor.forClass(Set.class);
 		ArgumentCaptor<Set<OpenPosition>> 		argCaptOps = ArgumentCaptor.forClass(Set.class);
 		
-		//Mockito.when(this.mockOfferedCandidateDao.findAllOfferedCandidatesByRecruiterId(Mockito.anyString())).thenReturn(ocs);
 		Mockito.when(this.mockOpenPositionDao.findAllOpenPositionsByRecruiterId(Mockito.anyString())).thenReturn(ops);
-		
-		//Mockito.doNothing().when(this.mockOfferedCandidateDao).persistOfferedCandidates(argCaptOcs.capture());
 		Mockito.doNothing().when(this.mockOpenPositionDao).persistOpenPositions(argCaptOps.capture());
 		
 		this.service.enableSupplyAndDemandPostsForRecruiter(recruiterId);
 		
-		//Mockito.verify(this.mockOfferedCandidateDao).persistOfferedCandidates(Mockito.anySet());
 		Mockito.verify(this.mockOpenPositionDao).persistOpenPositions(Mockito.anySet());
 		
-		//assertEquals(2, argCaptOcs.getValue().size());
 		assertEquals(3, argCaptOps.getValue().size());
 		
-		//argCaptOcs.getValue().stream().forEach(oc -> Assertions.assertTrue(oc.isActive()));
 		argCaptOps.getValue().stream().forEach(op -> Assertions.assertTrue(op.isActive()));
 		
 	}
@@ -597,6 +389,49 @@ public class SupplyAndDemandServiceImplTest {
 		if (argCapt.getValue().stream().filter(rc -> rc.getCredits() != RecruiterCredit.DEFAULT_CREDITS).findAny().isPresent()) {
 			throw new RuntimeException();
 		}
+		
+	}
+	
+	/**
+	* Test false returned if User not known
+	* @throws Exception
+	*/
+	@Test
+	public void testDoCreditsCheck_unknownUser() throws Exception{
+		
+		Mockito.when(this.mockCreditDao.getByRecruiterId(Mockito.anyString())).thenReturn(Optional.empty());
+		
+		assertFalse(service.doCreditsCheck("recruiter33"));
+		
+	}
+	
+	/**
+	* Test false returned if User has no remaining credits
+	* @throws Exception
+	*/
+	@Test
+	public void testDoCreditsCheck_knownUser_no_credits() throws Exception{
+		
+		RecruiterCredit rc = RecruiterCredit.builder().credits(0).build();
+		
+		Mockito.when(this.mockCreditDao.getByRecruiterId(Mockito.anyString())).thenReturn(Optional.of(rc));
+		
+		assertFalse(service.doCreditsCheck("recruiter33"));
+		
+	} 
+	
+	/**
+	* Test false returned if User has no remaining credits
+	* @throws Exception
+	*/
+	@Test
+	public void testDoCreditsCheck_knownUser_has_credits() throws Exception{
+		
+		RecruiterCredit rc = RecruiterCredit.builder().credits(1).build();
+		
+		Mockito.when(this.mockCreditDao.getByRecruiterId(Mockito.anyString())).thenReturn(Optional.of(rc));
+		
+		assertTrue(service.doCreditsCheck("recruiter33"));
 		
 	}
 	

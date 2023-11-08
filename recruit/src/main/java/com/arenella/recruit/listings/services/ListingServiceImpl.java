@@ -307,17 +307,17 @@ public class ListingServiceImpl implements ListingService{
 	/**
 	* Refer to the CandidateService for details 
 	*/
-	@Override
-	public boolean hasCreditsLeft(String userName) {
+	//@Override
+	//public boolean hasCreditsLeft(String userName) {
 		
-		Optional<RecruiterCredit> credits = this.creditDao.getByRecruiterId(userName);
+	//	Optional<RecruiterCredit> credits = this.creditDao.getByRecruiterId(userName);
 		
-		if (credits.isEmpty()) {
-			return false;
-		}
+	//	if (credits.isEmpty()) {
+	//		return false;
+	//	}
 		
-		return credits.get().getCredits() > 0;
-	}
+	//	return credits.get().getCredits() > 0;
+	//}
 
 	/**
 	* Refer to the ListingsService for details 

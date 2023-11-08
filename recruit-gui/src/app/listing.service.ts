@@ -150,7 +150,7 @@ export class ListingService {
 				
 	}
 	
-		/**
+	/**
 	* Performs a check to see if the User has access to the Curriculum either
 	* because they do not use credt based acces or beause they have remaining 
 	* credits 

@@ -19,14 +19,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.arenella.recruit.authentication.spring.filters.ClaimsUsernamePasswordAuthenticationToken;
 import com.arenella.recruit.recruiters.beans.BlacklistedRecruiterAPIOutbound;
-import com.arenella.recruit.recruiters.beans.OfferedCandidateAPIInbound;
-import com.arenella.recruit.recruiters.beans.OfferedCandidateAPIOutbound;
 import com.arenella.recruit.recruiters.beans.OpenPositionAPIInbound;
 import com.arenella.recruit.recruiters.beans.OpenPositionAPIOutbound;
 import com.arenella.recruit.recruiters.beans.SupplyAndDemandEvent.EventType;
 import com.arenella.recruit.recruiters.services.SupplyAndDemandService;
-import com.arenella.recruit.recruiters.utils.OfferedCandidateValidator;
 import com.arenella.recruit.recruiters.utils.OpenPositionValidator;
 
 /**
@@ -48,10 +46,14 @@ public class SupplyAndDemandController {
 	*/
 	@PostMapping(value="/v1/open-position")
 	@PreAuthorize("hasRole('ROLE_RECRUITER') or hasRole('ROLE_ADMIN')")
-	public ResponseEntity<Void> addOpenPosition(@RequestBody OpenPositionAPIInbound openPosition) {
+	public ResponseEntity<Void> addOpenPosition(@RequestBody OpenPositionAPIInbound openPosition, Principal principal) {
 		
 		OpenPositionValidator.validate(openPosition);
-		
+
+		//START
+		this.performCreditCheck(principal);
+		//END
+				
 		supplyAndDemandService.addOpenPosition(OpenPositionAPIInbound.convertToDomain(openPosition));
 		
 		return ResponseEntity.status(HttpStatus.CREATED).build();
@@ -89,54 +91,6 @@ public class SupplyAndDemandController {
 		
 		return ResponseEntity.ok().build();
 	}
-	
-	/**
-	* Allows the Recruiter to Offer a new Candidate to other Recruiters
-	* @param offeredCandidate - OfferedCandidate details
-	* @return Status Code
-	*/
-	//@PostMapping(path="/v1/offered-candidate", consumes="application/json", produces="application/json")
-	//@PreAuthorize("hasRole('ROLE_RECRUITER') or hasRole('ROLE_ADMIN')")
-	//public ResponseEntity<Void> addOfferedCandidate(@RequestBody OfferedCandidateAPIInbound offeredCandidate){
-		
-	//	OfferedCandidateValidator.validate(offeredCandidate);
-		
-	//	supplyAndDemandService.addOfferedCandidate(OfferedCandidateAPIInbound.convertToDomain(offeredCandidate));
-		
-	//	return ResponseEntity.status(HttpStatus.CREATED).build();
-	//}
-	
-	/**
-	* Allows Recruiter to remove a previously offered Candidate
-	* @param offeredCandidateId - Unique Id of Candidate to be removed
-	* @return Status Code
-	*/
-	//@DeleteMapping(value="/v1/offered-candidate/{id}")
-	//@PreAuthorize("hasRole('ROLE_RECRUITER') or hasRole('ROLE_ADMIN')")
-	//public ResponseEntity<Void> deleteOfferedCandidate(@PathVariable("id") UUID offeredCandidateId) throws IllegalAccessException{
-		
-	//	supplyAndDemandService.deleteOfferedCandidate(offeredCandidateId);
-		
-	//	return ResponseEntity.ok().build();
-	//}
-	
-	/**
-	* Updates an Offered Candidate published by the Recruiter
-	* @param offeredCandidateId - Unique Id of Offered Candidate to be updated
-	* @param offeredCandidate	- Updated version of Offered Candidate
-	* @return Status Code
-	* @throws IllegalAccessException 
-	*/
-	//@PutMapping(value="/v1/offered-candidate/{id}")
-	//@PreAuthorize("hasRole('ROLE_RECRUITER') or hasRole('ROLE_ADMIN')")
-	//public ResponseEntity<Void> updateOfferedCandidate(@PathVariable("id") UUID offeredCandidateId, @RequestBody OfferedCandidateAPIInbound offeredCandidate) throws IllegalAccessException{
-		
-	//	OfferedCandidateValidator.validate(offeredCandidate);
-		
-	//	this.supplyAndDemandService.updateOfferedCandidate(offeredCandidateId, OfferedCandidateAPIInbound.convertToDomain(offeredCandidate));
-		
-	//	return ResponseEntity.ok().build();
-	//}
 	
 	/**
 	* Allows Recruiter to add a Recruiter to their blacklist so that their Offered Candidates and Open
@@ -270,19 +224,7 @@ public class SupplyAndDemandController {
 		
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
-	
-	/**
-	* Logs that a Recruiter has viewed an offered candidate
-	* @return ResponseEntity
-	*/
-	//@PutMapping("/v1/offered-candidate/{id}/_message")
-	//@PreAuthorize("hasRole('ROLE_RECRUITER') or hasRole('ROLE_ADMIN')")
-	//public ResponseEntity<Void> contactRecruiterForOfferedCandidate(@PathVariable("id") UUID offeredCandidateId, @RequestPart("message") String message, Principal principal) {
-		
-	//	this.supplyAndDemandService.sendOfferedCandidateContactEmail(offeredCandidateId, message, principal.getName());
-		
-	//	return ResponseEntity.status(HttpStatus.OK).build();
-	//}
+
 	
 	/**
 	* Logs that a Recruiter has viewed an offered candidate
@@ -295,5 +237,44 @@ public class SupplyAndDemandController {
 		this.supplyAndDemandService.sendOpenPositionContactEmail(openPositionId, message, principal.getName());
 		
 		return ResponseEntity.status(HttpStatus.OK).build();
+	}
+	
+	/**
+	* Performs a check to see if the User passes the credit check. That is. If the users access to 
+	* curriculums is via credits does the User have remaining credits. If the Users access is not 
+	* dependent upon credits or the User has remaining credits then returns true else false
+	* @param principal - Authorized User
+	* @return whether the creditCheck passed for the User
+	*/
+	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('ROLE_RECRUITER')")
+	@GetMapping(value="/v1/open-position/creditCheck")
+	public ResponseEntity<Boolean> passesCreditCheck(Principal principal){
+		
+		ClaimsUsernamePasswordAuthenticationToken 	user 			= (ClaimsUsernamePasswordAuthenticationToken)principal;
+		boolean 									isRecruiter 	= user.getAuthorities().stream().filter(a -> a.getAuthority().equals("ROLE_RECRUITER")).findAny().isPresent();
+		boolean 									useCredits 		= (Boolean)user.getClaim("useCredits").get();
+		
+		if (isRecruiter && useCredits) {
+			return ResponseEntity.ok(this.supplyAndDemandService.doCreditsCheck(principal.getName()));
+		}
+		
+		return ResponseEntity.ok(true);
+	}
+	
+	/**
+	* Performs check to ensure user either doesnt use credit based access or 
+	* has enough credits to perform an operation
+	* @param principal - currently logged in user
+	*/
+	private void performCreditCheck(Principal principal) {
+		
+		ClaimsUsernamePasswordAuthenticationToken 	user 			= (ClaimsUsernamePasswordAuthenticationToken)principal;
+		boolean 									isRecruiter 	= user.getAuthorities().stream().filter(a -> a.getAuthority().equals("ROLE_RECRUITER")).findAny().isPresent();
+		boolean 									useCredits 		= (Boolean)user.getClaim("useCredits").get();
+		
+		if (isRecruiter && useCredits) {
+			this.supplyAndDemandService.useCredit(user.getName());
+		}
+		
 	}
 }

@@ -319,4 +319,17 @@ export class RecruiterMarketplaceService {
 	
 	}
 	
+	/**
+	* Performs a check to see if the User has access to the Curriculum either
+	* because they do not use credt based acces or beause they have remaining 
+	* credits 
+	*/
+	public doCreditCheck():Observable<boolean>{
+		
+		const backendUrl:string = environment.backendUrl + 'v1/open-position/creditCheck';
+  	
+		return this.httpClient.get<boolean>(backendUrl, this.httpOptions);
+		
+	}
+	
 }

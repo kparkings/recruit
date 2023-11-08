@@ -89,7 +89,7 @@ public interface ListingService {
 	* @param userName - id of the user
 	* @return Whether or not the User has remaining credits
 	*/
-	public boolean hasCreditsLeft(String userName);
+	//public boolean hasCreditsLeft(String userName);
 
 	/**
 	* Returns whether the User either does not have Credit based access or does 

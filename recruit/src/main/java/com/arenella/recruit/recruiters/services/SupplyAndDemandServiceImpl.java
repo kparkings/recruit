@@ -2,6 +2,7 @@ package com.arenella.recruit.recruiters.services;
 
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -12,18 +13,15 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.arenella.recruit.adapters.actions.GrantCreditCommand;
-import com.arenella.recruit.adapters.events.OfferedCandidateContactRequestEvent;
 import com.arenella.recruit.adapters.events.OpenPositionContactRequestEvent;
-import com.arenella.recruit.listings.beans.RecruiterCredit;
-import com.arenella.recruit.listings.dao.ListingRecruiterCreditDao;
+import com.arenella.recruit.recruiters.beans.RecruiterCredit;
 import com.arenella.recruit.recruiters.adapters.RecruitersExternalEventPublisher;
-import com.arenella.recruit.recruiters.beans.OfferedCandidate;
 import com.arenella.recruit.recruiters.beans.OfferedCandidateAPIOutbound.RecruiterDetails;
 import com.arenella.recruit.recruiters.beans.OpenPosition;
 import com.arenella.recruit.recruiters.beans.SupplyAndDemandEvent;
 import com.arenella.recruit.recruiters.beans.SupplyAndDemandEvent.EventType;
-import com.arenella.recruit.recruiters.dao.OfferedCandidateDao;
 import com.arenella.recruit.recruiters.dao.OpenPositionDao;
+import com.arenella.recruit.recruiters.dao.RecruiterCreditDao;
 import com.arenella.recruit.recruiters.dao.RecruiterDao;
 import com.arenella.recruit.recruiters.dao.SupplyAndDemandEventDao;
 
@@ -38,9 +36,6 @@ public class SupplyAndDemandServiceImpl implements SupplyAndDemandService{
 	private OpenPositionDao 					openPositionDao;
 	
 	@Autowired
-	private OfferedCandidateDao 				offeredCandidateDao;
-	
-	@Autowired
 	private RecruiterDao						recruiterDao;
 	
 	@Autowired
@@ -50,7 +45,7 @@ public class SupplyAndDemandServiceImpl implements SupplyAndDemandService{
 	private RecruitersExternalEventPublisher	eventPublisher;
 	
 	@Autowired
-	private ListingRecruiterCreditDao			creditDao;
+	private RecruiterCreditDao					creditDao;
 	
 	/**
 	* Refer to the SupplyAndDemandService interface for details 
@@ -428,7 +423,7 @@ public class SupplyAndDemandServiceImpl implements SupplyAndDemandService{
 	}
 
 	/**
-	* Refer to the CandidateService for details 
+	* Refer to the SupplyAndDemandService for details 
 	*/
 	@Override
 	public void updateCredits(GrantCreditCommand command) {
@@ -438,6 +433,40 @@ public class SupplyAndDemandServiceImpl implements SupplyAndDemandService{
 		credits.stream().forEach(credit -> credit.setCredits(RecruiterCredit.DEFAULT_CREDITS));
 		
 		creditDao.saveAll(credits);
+		
+	}
+
+	/**
+	* Refer to the SupplyAndDemandService for details 
+	*/
+	@Override
+	public Boolean doCreditsCheck(String recruiterId) {
+		
+		Optional<RecruiterCredit> recruiterCreditOpt = this.creditDao.getByRecruiterId(recruiterId);
+		
+		if (recruiterCreditOpt.isEmpty()) {
+			return false;
+		}
+		
+		return recruiterCreditOpt.get().getCredits() > 0;
+		
+	}
+
+	/**
+	* Refer to the SupplyAndDemandService for details 
+	*/
+	@Override
+	public void useCredit(String userId) {
+		
+		RecruiterCredit credit = this.creditDao.getByRecruiterId(userId).orElseThrow(() -> new IllegalArgumentException("Unknown User - Cant use Credit"));
+		
+		if (credit.getCredits() == 0) {
+			throw new IllegalStateException("No credits available for User");
+		}
+		
+		credit.decrementCredits();
+		
+		this.creditDao.persist(credit);
 		
 	}
 	

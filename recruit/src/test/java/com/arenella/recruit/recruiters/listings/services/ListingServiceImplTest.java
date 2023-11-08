@@ -625,47 +625,47 @@ public class ListingServiceImplTest {
 	* Tests case credits left
 	* @throws Exception
 	*/
-	@Test
-	public void testHasCreditsLeft_userNotFound() throws Exception{
+	//@Test
+	//public void testHasCreditsLeft_userNotFound() throws Exception{
 		
-		final String userId = "kparkings";
+	//	final String userId = "kparkings";
 		
-		Mockito.when(this.mockCreditDao.getByRecruiterId(userId)).thenReturn(Optional.empty());
+	//	Mockito.when(this.mockCreditDao.getByRecruiterId(userId)).thenReturn(Optional.empty());
 		
-		assertFalse(this.service.hasCreditsLeft(userId));
-	}
+	//	assertFalse(this.service.hasCreditsLeft(userId));
+	//}
 	
 	/**
 	* Tests case credits left
 	* @throws Exception
 	*/
-	@Test
-	public void testHasCreditsLeft_true() throws Exception{
+	//@Test
+	//public void testHasCreditsLeft_true() throws Exception{
 		
-		final String userId = "kparkings";
+	//	final String userId = "kparkings";
 		
-		RecruiterCredit rc = RecruiterCredit.builder().credits(1).recruiterId(userId).build();
+	//	RecruiterCredit rc = RecruiterCredit.builder().credits(1).recruiterId(userId).build();
 		
-		Mockito.when(this.mockCreditDao.getByRecruiterId(userId)).thenReturn(Optional.of(rc));
+	//	Mockito.when(this.mockCreditDao.getByRecruiterId(userId)).thenReturn(Optional.of(rc));
 		
-		assertTrue(this.service.hasCreditsLeft(userId));
-	}
+	//	assertTrue(this.service.hasCreditsLeft(userId));
+	//}
 	
 	/**
 	* Tests case no credits left
 	* @throws Exception
 	*/
-	@Test
-	public void testHasCreditsLeft_false() throws Exception{
+	//@Test
+	//public void testHasCreditsLeft_false() throws Exception{
 		
-		final String userId = "kparkings";
+	//	final String userId = "kparkings";
 		
-		RecruiterCredit rc = RecruiterCredit.builder().credits(0).recruiterId(userId).build();
+	//	RecruiterCredit rc = RecruiterCredit.builder().credits(0).recruiterId(userId).build();
 		
-		Mockito.when(this.mockCreditDao.getByRecruiterId(userId)).thenReturn(Optional.of(rc));
+	//	Mockito.when(this.mockCreditDao.getByRecruiterId(userId)).thenReturn(Optional.of(rc));
 		
-		assertFalse(this.service.hasCreditsLeft(userId));
-	}
+	//	assertFalse(this.service.hasCreditsLeft(userId));
+	//}
 	
 	/**
 	* Test false returned if User not known
