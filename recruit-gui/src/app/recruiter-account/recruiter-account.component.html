@@ -104,7 +104,6 @@
 	
 	<!-- Subscriptions -->
 	<div class="container-div container-div-high" *ngIf="showSubscriptions">
-		<h2 *ngIf="hasActiveSubscription()">Your subscriptions</h2>
 		
 		<div *ngIf="isBuyingSubscription" class="no-sub-warn">
 		
@@ -233,6 +232,9 @@
 		</div>
 		
 		<div  *ngIf="hasActiveSubscription() && !isBuyingSubscription">
+			
+			<h2>Your subscriptions</h2>
+			
 			<table class="table">
 				<thead>
 					<tr>

@@ -16,8 +16,8 @@ import { Router}															from '@angular/router';
 import { debounceTime } 													from "rxjs/operators";
 import { PhotoAPIOutbound, CandidateProfile, Language, Rate } 				from '../candidate-profile';
 import { EmailService, EmailRequest }										from '../email.service';
-import { CandidateNavService } from '../candidate-nav.service';
-import { CreditsService } from '../credits.service';
+import { CandidateNavService } 												from '../candidate-nav.service';
+import { CreditsService } 													from '../credits.service';
 
 /**
 * Component to suggest suitable Candidates based upon a 

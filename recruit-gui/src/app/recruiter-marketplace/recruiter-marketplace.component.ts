@@ -13,7 +13,9 @@ import { RecruiterProfileService} 						from '../recruiter-profile.service';
 import { RecruiterProfile }								from '../recruiter-profile/recruiter-profile';
 import { DeviceDetectorService } 						from 'ngx-device-detector';
 import { Candidate } 									from '../suggestions/candidate';
-import { CandidateNavService } from '../candidate-nav.service';
+import { CandidateNavService } 							from '../candidate-nav.service';
+import { CreditsService } 								from '../credits.service';
+
 @Component({
   selector: 'app-recruiter-marketplace',
   templateUrl: './recruiter-marketplace.component.html',
@@ -37,7 +39,8 @@ export class RecruiterMarketplaceComponent implements OnInit {
 				public 	candidateService:			CandidateServiceService,
 				private deviceDetector:				DeviceDetectorService,
 				private recruiterProfileService: 	RecruiterProfileService,
-				private candidateNavService: 		CandidateNavService) {
+				private candidateNavService: 		CandidateNavService,
+				private creditsService:				CreditsService) {
 					
 					this.isMobile = deviceDetector.isMobile();
 					
@@ -55,11 +58,7 @@ export class RecruiterMarketplaceComponent implements OnInit {
 					this.recruiterProfileService.fetchRecruiterProfiles("RECRUITERS").subscribe(rps => this.recruiterProfiles = rps);
 					
 					//Refactor into central navigation logic service
-					//var lastView:string | null = sessionStorage.getItem("mp-lastview");
 					
-					//if (lastView){
-					//	this.switchTab('showSupply');
-					//}
 					if (this.candidateNavService.isRouteActive()) {
 						this.switchTab('showSupply');
 					} 
@@ -956,7 +955,7 @@ export class RecruiterMarketplaceComponent implements OnInit {
 	}
 	
 	public showNoCredits():void{
-		console.log("No credits left");
+		this.creditsService.tokensExhaused();
 	}
 
 }

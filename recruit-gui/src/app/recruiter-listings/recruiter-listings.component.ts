@@ -14,6 +14,7 @@ import { DeviceDetectorService } 						from 'ngx-device-detector';
 import { RecruiterProfileService} 						from '../recruiter-profile.service';
 import { RecruiterProfile }								from '../recruiter-profile/recruiter-profile';
 import { RecruiterMarketplaceService }					from '../recruiter-marketplace.service';
+import { CreditsService } 								from '../credits.service';
 
 
 @Component({
@@ -34,7 +35,8 @@ export class RecruiterListingsComponent implements OnInit {
 				private deviceDetector:				DeviceDetectorService,
 				private recruiterProfileService: 	RecruiterProfileService,
 				public 	router:						Router,
-				private marketplaceService: RecruiterMarketplaceService) {
+				private marketplaceService: 		RecruiterMarketplaceService,
+				private creditsService:				CreditsService) {
 					
 				this.isMobile = deviceDetector.isMobile();
 				
@@ -1491,7 +1493,7 @@ export class RecruiterListingsComponent implements OnInit {
 	}
 	
 	public showNoCredits():void{
-		console.log("No credits left");
+		this.creditsService.tokensExhaused();
 	}
 
 }
