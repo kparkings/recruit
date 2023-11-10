@@ -12,7 +12,8 @@
 .center {
   margin: auto;
   width: 95%;
-  padding: 5%;
+  padding-left: 5%;
+  padding-right: 5%;
 }
 
 .container-div{
@@ -156,4 +157,40 @@
 	height:50px;
 	padding:10px;
 	float:right;
+}
+
+.sub-opt-div{
+	float:left;
+	width:45%;
+	margin:10px;
+	border:2px solid grey;
+	padding:10px;
+	text-align:center;
+	min-height:460px;
+}
+
+.sub-opt-div-mob{
+	width:100%;
+	height:550px;
+	margin:0px;
+	margin-bottom:20px;
+}
+
+.sub-opt-div p{
+	text-align:left;
+}
+
+.sub-opt-div ul{
+	text-align:left;
+	height:150px;
+}
+
+.sub-opt-div-mob ul{
+	text-align:left;
+	height:200px;
+}
+
+.spacer{
+	clear:both;
+	height:20px;
 }

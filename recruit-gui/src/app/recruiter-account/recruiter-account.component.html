@@ -180,6 +180,48 @@
 		
 		<div *ngIf="!hasActiveSubscription() && !isBuyingSubscription" class="no-sub-warn">
 		
+			<h1>Trial Ended</h1>
+			
+			<p>
+			Your trial subscription has ended. We hope that you have found the site useful. To continue to use the site please select 
+			one of the following options
+			</p>
+			
+			<div class="center">
+				<div class="sub-opt-div {{mobCss}}">
+					<h3>Free - Credit Based Access</h3>
+					<p>
+					This option provides free access based on a weekly allocation of credits. Once the credits are 
+					exhausted you will no longer have access to specific features until you are assigned more credits the
+					following week.
+					</p>
+					<ul>
+						<li>Free access to the site</li>
+						<li>8 Credits for downloading Curriculums</li>
+						<li>2 Credits for the Job board</li>
+						<li>2 Credits for the Marketplace</li>
+						<li>New credits added every Monday</li>
+						<li>Unused credits will be lost.</li>
+					</ul>
+					<button class="btn btn-secondary">Select</button>
+				</div>
+				<div class="sub-opt-div {{mobCss}}">
+					<h3>Paid Subscription</h3>
+					<p>
+					This option provides unlimited access to the site for the duration of the Subscription. Once the subscription has 
+					expired you can opt to take out a further subscription. Select this option to see the types of available subscriptions.
+					</p>
+					<ul>
+						<li>Paid access to the site from 15 euro's</li>
+						<li>Unlimited Curriculums downloads</li>
+						<li>Unlimited Job Board postings</li>
+						<li>Unlimited Marketplace requests</li>
+					</ul>
+					<button class="btn btn-secondary" (click)="showSubscriptionOptions()">Select</button>
+				</div>
+				<div class="spacer"></div>
+			</div>
+			<!--  
 			<h1>Your 30 day free trial has come to an end</h1>
 			<p>
 			We hope that you found the site useful and would like to continue with us in the future. For continued access a subscription costs 
@@ -224,7 +266,7 @@
 					</table>
 				</form>
 			</div>
-		
+		-->
 		</div>
 		
 		<div *ngIf="hasUnpaidSubscription()" class="no-sub-warn">
@@ -265,6 +307,7 @@
 					
 				</tr>
 			</table>
+			
 		</div>
 		
 </div>

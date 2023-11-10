@@ -7,6 +7,7 @@ import { NgbModal}								from '@ng-bootstrap/ng-bootstrap'
 import { UntypedFormGroup, UntypedFormControl }	from '@angular/forms';
 import {RecruiterUpdateRequest }				from './recruiter-update-request';
 import { CreditsService } from '../credits.service';
+import { DeviceDetectorService } from 'ngx-device-detector';
 
 /**
 * Component to allow the Recruiter to aministrate their 
@@ -19,13 +20,22 @@ import { CreditsService } from '../credits.service';
 })
 export class RecruiterAccountComponent implements OnInit {
 
+	public isMobile:boolean = false;
+	public mobCss:string = "";
 	/**
 	* Constructor
 	*/
 	constructor(private recruiterService:RecruiterService, 
 				private router: Router, 
 				private modalService: NgbModal,
+				private deviceDetector:DeviceDetectorService,
 				private creditsService: CreditsService) { 
+					
+					this.isMobile = deviceDetector.isMobile();
+					
+					if(this.isMobile){
+						this.mobCss = "sub-opt-div-mob";
+					}
 					
 					this.creditsService.isPurchaseSubscription().subscribe(value => {
 						this.creditsService.setPurchaseSubscription(false);
@@ -336,6 +346,9 @@ export class RecruiterAccountComponent implements OnInit {
 		this.isInEditMode = false;
 	}
 	
+	public showSubscriptionOptions():void{
+		this.isBuyingSubscription = true;
+	}
 	/**
 	* Persists any unsaved changes
 	*/
