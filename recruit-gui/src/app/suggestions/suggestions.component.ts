@@ -17,6 +17,7 @@ import { debounceTime } 													from "rxjs/operators";
 import { PhotoAPIOutbound, CandidateProfile, Language, Rate } 				from '../candidate-profile';
 import { EmailService, EmailRequest }										from '../email.service';
 import { CandidateNavService } from '../candidate-nav.service';
+import { CreditsService } from '../credits.service';
 
 /**
 * Component to suggest suitable Candidates based upon a 
@@ -56,7 +57,8 @@ export class SuggestionsComponent implements OnInit {
 				private deviceDetector: 		DeviceDetectorService,
 				private router:					Router,
 				private emailService:			EmailService,
-				private candidateNavService: 	CandidateNavService) { 
+				private candidateNavService: 	CandidateNavService,
+				private creditsService:			CreditsService) { 
 					
 		this.trustedResourceUrl = this.sanitizer.bypassSecurityTrustResourceUrl('');
 		this.isMobile = deviceDetector.isMobile();
@@ -547,7 +549,7 @@ export class SuggestionsComponent implements OnInit {
 	}
 
 	public handleNoCredit():void{
-		console.log("show buy credit message")
+		this.creditsService.tokensExhaused();
 	}
 	
 	/**

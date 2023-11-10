@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-arenella-primary nav-primary">
-  <h1>Arenella ICT Candidate Recruitment</h1>
+  <h1>Arenella ICT</h1>
 </nav>
 
 <div>
@@ -129,5 +129,22 @@
 		<ul>
 			<li *ngFor="let msg of validationExceptions">{{msg}}</li>
 		</ul>
+	</div>
+</ng-template>
+<ng-template #noCreditsBox let-modal>
+	<div class="modal-header">
+		<h4 class="modal-title">0 Credits remaining</h4>
+ 		<div class="filter-close-box" (click)="popupsService.closeModal()">X</div>
+	</div>
+	<div class="feedbackBox">
+	
+		<p>Unfortunately you have used your credits for this week. You will receive new credits next week.</p>
+		<p>
+		Opting for a paid subscription will provide unlimited access to all site features for the duration of the subscription.
+		</p>
+		<div style="text-align:center">
+			<button class="btn btn-secondary main-btn" style="margin-left:5px; margin-top:5px;min-width:200px;" (click)="navToSubscriptions()">Choose Subscription</button>
+			<button class="btn btn-secondary main-btn" style="margin-left:5px; margin-top:5px;min-width:200px;" (click)="popupsService.closeModal()">Wait for new Credits</button>
+		</div>
 	</div>
 </ng-template>

@@ -6,6 +6,7 @@ import { Subscription }							from './subscription';
 import { NgbModal}								from '@ng-bootstrap/ng-bootstrap'
 import { UntypedFormGroup, UntypedFormControl }	from '@angular/forms';
 import {RecruiterUpdateRequest }				from './recruiter-update-request';
+import { CreditsService } from '../credits.service';
 
 /**
 * Component to allow the Recruiter to aministrate their 
@@ -21,7 +22,17 @@ export class RecruiterAccountComponent implements OnInit {
 	/**
 	* Constructor
 	*/
-	constructor(private recruiterService:RecruiterService, private router: Router, private modalService: NgbModal) { }
+	constructor(private recruiterService:RecruiterService, 
+				private router: Router, 
+				private modalService: NgbModal,
+				private creditsService: CreditsService) { 
+					
+					this.creditsService.isPurchaseSubscription().subscribe(value => {
+						this.creditsService.setPurchaseSubscription(false);
+						this.isBuyingSubscription = value;
+					});					
+					
+				}
 
 	/**
 	* Initializes the Component
@@ -30,19 +41,27 @@ export class RecruiterAccountComponent implements OnInit {
 		
 		this.fetchRecruiterDetails();
 		
-		if (this.isRecruiterNoSubscription() || this.hasUnpaidSubscription()) {
+		if (this.isRecruiterNoSubscription() || this.hasUnpaidSubscription() || this.isBuyingSubscription) {
 			this.switchTab("showSubscriptions");
 		}
 		
   	}
+  	
+  	public setSubscriptionOption():void{
+		  
+		let subscription:string = this.accoundDetailsForm.get('subscriptionOption')?.value;
+		this.subscriptionOption = subscription;
+	}
 
+	public subscriptionOption:string					 	="CREDIT_BASED_ACCESS";
+	isBuyingSubscription:boolean							= false;
 	currentTab:string 										= "downloads";
 	showAccountTab:boolean									= true;
 	recruiter:Recruiter										= new Recruiter();
 		
 	showAccountDetails:boolean								= true;
 	showSubscriptions:boolean								= false;
-	
+		
 	showSwitchToYearlySubscriptionConfirmButtons:boolean	= false;
 	showCancelSubscriptionConfirmButtons:boolean 			= false;
 	
@@ -62,6 +81,7 @@ export class RecruiterAccountComponent implements OnInit {
 		companyRegistrationNumber:	new UntypedFormControl(''),
 		email:						new UntypedFormControl(''),
 		language:					new UntypedFormControl(''),
+		subscriptionOption:			new UntypedFormControl('CREDIT_BASED_ACCESS'),
 	});
 		
 	/**
@@ -95,6 +115,7 @@ export class RecruiterAccountComponent implements OnInit {
 				companyRegistrationNumber:	new UntypedFormControl(this.recruiter.companyRegistrationNumber),
 				email:						new UntypedFormControl(this.recruiter.email),
 				language:					new UntypedFormControl(this.recruiter.language),
+				subscriptionOption:			new UntypedFormControl('CREDIT_BASED_ACCESS'),
 			});
 				
 		}, err => {

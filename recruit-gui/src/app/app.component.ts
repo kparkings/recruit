@@ -9,6 +9,7 @@ import { PopupsService }					from './popups.service';
 import { Observable, Observer }             from 'rxjs';
 import {ElementRef} from '@angular/core';
 import { CandidateNavService } from './candidate-nav.service';
+import { CreditsService } from './credits.service';
 
 @Component({
   selector: 'app-root',
@@ -18,6 +19,7 @@ import { CandidateNavService } from './candidate-nav.service';
 export class AppComponent {
 
 	@ViewChild('validationExBox', { static: false }) private content:any;
+	@ViewChild('noCreditsBox', { static: false }) 	 private noCreditsBox:any;
 	
 	private readonly termsAndConditionsCookieVersion:string = '3';
 
@@ -43,7 +45,8 @@ export class AppComponent {
 				private mpService:				RecruiterMarketplaceService,
 				private emailService:			EmailService,
 				public  popupsService:			PopupsService,
-				private candidateNavService: 	CandidateNavService){
+				private candidateNavService: 	CandidateNavService,
+				private creditsService:			CreditsService){
 		
 		this.isMobile = deviceDetector.isMobile();
 		
@@ -67,11 +70,17 @@ export class AppComponent {
 			this.unseenEmails = val;
 		});
 		
+		this.creditsService.hasTokens().subscribe(tokens => {
+			if (tokens == false) {
+				this.popupsService.openModal(this.noCreditsBox);
+			} else {
+				console.log("Has Credits");
+			}
+		});
+		
 		this.popupsService.fetchValidationErrors().subscribe(val => {
-			console.log("V Udates");
-			
 			this.validationExceptions = val;
-			
+			this.closeModal();
 			if (this.validationExceptions.length > 0) {
 				this.popupsService.openModal(this.content);
 			}
@@ -92,6 +101,17 @@ export class AppComponent {
 	public navToNewCandidate():void{
 		this.candidateNavService.reset();
 		this.router.navigate(['new-candidate']);
+	}
+	
+	/**
+	* Navigates to the recruiter-account page to 
+	* allow the use to buy a subscription
+	*/
+	public navToSubscriptions():void{
+		this.candidateNavService.reset();
+		this.closeModal();
+		this.creditsService.buySubscription();
+		this.router.navigate(['recruiter-account']);
 	}
 	
 	/**
