@@ -166,7 +166,7 @@
 	border:2px solid grey;
 	padding:10px;
 	text-align:center;
-	min-height:460px;
+	min-height:420px;
 }
 
 .sub-opt-div-mob{
@@ -178,11 +178,12 @@
 
 .sub-opt-div p{
 	text-align:left;
+	min-height:80px;
 }
 
 .sub-opt-div ul{
 	text-align:left;
-	height:150px;
+	height:140px;
 }
 
 .sub-opt-div-mob ul{
