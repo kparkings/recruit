@@ -12,12 +12,13 @@ import java.util.UUID;
 import org.junit.jupiter.api.Test;
 
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_status;
+import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_type;
 
 /**
-* Unit tests for the YearlyRecruiterSubscription class
+* Unit tests for the PaidPeriodRecruiterSubscription class
 * @author K Parkings
 */
-public class YearlyRecruiterSubscriptionTest {
+public class PaidPeriodRecruiterSubscriptionTest {
 
 	/**
 	* Tests creation via the Builder
@@ -30,15 +31,17 @@ public class YearlyRecruiterSubscriptionTest {
 		final LocalDateTime 		activatedDate 		= LocalDateTime.of(2021, 12, 24, 10, 10);
 		final String				recruiterId			= "kparkings";
 		final UUID					subscriptionId		= UUID.randomUUID();
+		final subscription_type		type				= subscription_type.SIX_MONTHS_SUBSCRIPTION;
 		final subscription_status 	status 				= subscription_status.ACTIVE;
 		
-		YearlyRecruiterSubscription subscription = YearlyRecruiterSubscription
+		PaidPeriodRecruiterSubscription subscription = PaidPeriodRecruiterSubscription
 																			.builder()
 																				.activateDate(activatedDate)
 																				.created(created)
 																				.recruiterId(recruiterId)
 																				.subscriptionId(subscriptionId)
 																				.status(status)
+																				.type(type)
 																				.currentSubscription(true)
 																			.build();
 		
@@ -46,8 +49,9 @@ public class YearlyRecruiterSubscriptionTest {
 		assertEquals(created, 													subscription.getCreated());
 		assertEquals(recruiterId, 												subscription.getRecruiterId());
 		assertEquals(status, 													subscription.getStatus());
+		assertEquals(type, 														subscription.getType());
 		assertEquals(subscriptionId, 											subscription.getSubscriptionId());
-		assertEquals(RecruiterSubscription.subscription_type.YEAR_SUBSCRIPTION, subscription.getType());
+		assertEquals(type, 														subscription.getType());
 		assertTrue(subscription.isCurrentSubscription());
 		
 	}
@@ -64,7 +68,7 @@ public class YearlyRecruiterSubscriptionTest {
 		final UUID					subscriptionId		= UUID.randomUUID();
 		final subscription_status 	status 				= subscription_status.AWAITING_ACTIVATION;
 		
-		YearlyRecruiterSubscription subscription = YearlyRecruiterSubscription
+		PaidPeriodRecruiterSubscription subscription = PaidPeriodRecruiterSubscription
 				.builder()
 					.created(created)
 					.recruiterId(recruiterId)
@@ -95,7 +99,7 @@ public class YearlyRecruiterSubscriptionTest {
 		final UUID					subscriptionId		= UUID.randomUUID();
 		final subscription_status 	status 				= subscription_status.ACTIVE_PENDING_PAYMENT;
 		
-		YearlyRecruiterSubscription subscription = YearlyRecruiterSubscription
+		PaidPeriodRecruiterSubscription subscription = PaidPeriodRecruiterSubscription
 				.builder()
 					.created(created)
 					.recruiterId(recruiterId)
@@ -124,7 +128,7 @@ public class YearlyRecruiterSubscriptionTest {
 		final UUID					subscriptionId		= UUID.randomUUID();
 		final subscription_status 	status 				= subscription_status.ACTIVE;
 		
-		YearlyRecruiterSubscription subscription = YearlyRecruiterSubscription
+		PaidPeriodRecruiterSubscription subscription = PaidPeriodRecruiterSubscription
 				.builder()
 					.created(created)
 					.recruiterId(recruiterId)
@@ -157,7 +161,7 @@ public class YearlyRecruiterSubscriptionTest {
 		final LocalDateTime			activationDate		= LocalDateTime.of(2021, 12, 18, 10, 10).minusYears(1);
 		final subscription_status 	status 				= subscription_status.ACTIVE;
 		
-		YearlyRecruiterSubscription subscription = YearlyRecruiterSubscription
+		PaidPeriodRecruiterSubscription subscription = PaidPeriodRecruiterSubscription
 				.builder()
 					.created(created)
 					.recruiterId(recruiterId)
@@ -178,13 +182,23 @@ public class YearlyRecruiterSubscriptionTest {
 	}
 	
 	/**
-	* Tests check to see if a year has elapsed since the last activation date
+	* Tests check to see if the subscription period has elapsed since the last activation date
 	*/
 	@Test
-	public void testHasYearElapsedSinceActivation() throws Exception {
+	public void testPeriodElapsedSinceActivation() throws Exception {
 
-		assertTrue(YearlyRecruiterSubscription.hasYearElapsedSinceActivation(YearlyRecruiterSubscription.builder().activateDate(LocalDateTime.now().minusMonths(13)).build()));
-		assertFalse(YearlyRecruiterSubscription.hasYearElapsedSinceActivation(YearlyRecruiterSubscription.builder().activateDate(LocalDateTime.now().minusMonths(1)).build()));
+		assertTrue(PaidPeriodRecruiterSubscription.hasPeriodElapsedSinceActivation(PaidPeriodRecruiterSubscription.builder().type(subscription_type.YEAR_SUBSCRIPTION).activateDate(LocalDateTime.now().minusMonths(13)).build()));
+		assertFalse(PaidPeriodRecruiterSubscription.hasPeriodElapsedSinceActivation(PaidPeriodRecruiterSubscription.builder().type(subscription_type.YEAR_SUBSCRIPTION).activateDate(LocalDateTime.now().minusMonths(1)).build()));
+		
+		assertTrue(PaidPeriodRecruiterSubscription.hasPeriodElapsedSinceActivation(PaidPeriodRecruiterSubscription.builder().type(subscription_type.ONE_MONTH_SUBSCRIPTION).activateDate(LocalDateTime.now().minusDays(60)).build()));
+		assertFalse(PaidPeriodRecruiterSubscription.hasPeriodElapsedSinceActivation(PaidPeriodRecruiterSubscription.builder().type(subscription_type.ONE_MONTH_SUBSCRIPTION).activateDate(LocalDateTime.now().minusDays(1)).build()));
+		
+		assertTrue(PaidPeriodRecruiterSubscription.hasPeriodElapsedSinceActivation(PaidPeriodRecruiterSubscription.builder().type(subscription_type.THREE_MONTHS_SUBSCRIPTION).activateDate(LocalDateTime.now().minusMonths(4)).build()));
+		assertFalse(PaidPeriodRecruiterSubscription.hasPeriodElapsedSinceActivation(PaidPeriodRecruiterSubscription.builder().type(subscription_type.THREE_MONTHS_SUBSCRIPTION).activateDate(LocalDateTime.now().minusMonths(2)).build()));
+		
+		assertTrue(PaidPeriodRecruiterSubscription.hasPeriodElapsedSinceActivation(PaidPeriodRecruiterSubscription.builder().type(subscription_type.SIX_MONTHS_SUBSCRIPTION).activateDate(LocalDateTime.now().minusMonths(7)).build()));
+		assertFalse(PaidPeriodRecruiterSubscription.hasPeriodElapsedSinceActivation(PaidPeriodRecruiterSubscription.builder().type(subscription_type.SIX_MONTHS_SUBSCRIPTION).activateDate(LocalDateTime.now().minusMonths(5)).build()));
+		
 		
 	}
 	

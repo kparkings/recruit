@@ -9,12 +9,13 @@ import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
 
+import com.arenella.recruit.recruiters.beans.CreditBasedSubscription;
 import com.arenella.recruit.recruiters.beans.FirstGenRecruiterSubscription;
+import com.arenella.recruit.recruiters.beans.PaidPeriodRecruiterSubscription;
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription;
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_status;
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_type;
 import com.arenella.recruit.recruiters.beans.TrialPeriodSubscription;
-import com.arenella.recruit.recruiters.beans.YearlyRecruiterSubscription;
 
 /**
 * Unit tests for the RecruiterSubscriptionEntity class
@@ -201,7 +202,7 @@ public class RecruiterSubscriptionEntityTest {
 					.currentSubscription(true)
 				.build();
 		
-		YearlyRecruiterSubscription subscription = (YearlyRecruiterSubscription) RecruiterSubscriptionEntity.convertFromEntity(entity);
+		PaidPeriodRecruiterSubscription subscription = (PaidPeriodRecruiterSubscription) RecruiterSubscriptionEntity.convertFromEntity(entity);
 		
 		assertEquals(activatedDate, 											subscription.getActivatedDate());
 		assertEquals(created, 													subscription.getCreated());
@@ -209,6 +210,37 @@ public class RecruiterSubscriptionEntityTest {
 		assertEquals(status, 													subscription.getStatus());
 		assertEquals(subscriptionId, 											subscription.getSubscriptionId());
 		assertEquals(RecruiterSubscription.subscription_type.YEAR_SUBSCRIPTION, subscription.getType());
+		assertTrue(subscription.isCurrentSubscription());
+		
+	}
+	
+	/**
+	* Tests conversion of Entity representation of RecruiterSubscription to 
+	* Domain representation [type == YEARLY_SUBSCRIPTION ]
+	* @throws Exception
+	*/
+	@Test
+	public void testConvertFromEntity_CREDIT_BASED_SUBSCRIPTION() throws Exception {
+		
+		RecruiterSubscriptionEntity entity = RecruiterSubscriptionEntity
+				.builder()
+					.activateDate(activatedDate)
+					.created(created)
+					.recruiterId(recruiterId)
+					.subscriptionId(subscriptionId)
+					.status(status)
+					.type(subscription_type.CREDIT_BASED_SUBSCRIPTION)
+					.currentSubscription(true)
+				.build();
+		
+		CreditBasedSubscription subscription = (CreditBasedSubscription) RecruiterSubscriptionEntity.convertFromEntity(entity);
+		
+		assertEquals(activatedDate, 													subscription.getActivatedDate());
+		assertEquals(created, 															subscription.getCreated());
+		assertEquals(recruiterId, 														subscription.getRecruiterId());
+		assertEquals(status, 															subscription.getStatus());
+		assertEquals(subscriptionId, 													subscription.getSubscriptionId());
+		assertEquals(RecruiterSubscription.subscription_type.CREDIT_BASED_SUBSCRIPTION, subscription.getType());
 		assertTrue(subscription.isCurrentSubscription());
 		
 	}

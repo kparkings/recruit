@@ -35,13 +35,13 @@ import com.arenella.recruit.emailservice.adapters.RequestSendEmailCommand;
 import com.arenella.recruit.emailservice.beans.Email.EmailTopic;
 import com.arenella.recruit.recruiters.adapters.RecruitersExternalEventPublisher;
 import com.arenella.recruit.recruiters.beans.FirstGenRecruiterSubscription;
+import com.arenella.recruit.recruiters.beans.PaidPeriodRecruiterSubscription;
 import com.arenella.recruit.recruiters.beans.Recruiter;
 import com.arenella.recruit.recruiters.beans.Recruiter.language;
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_action;
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_status;
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_type;
 import com.arenella.recruit.recruiters.beans.TrialPeriodSubscription;
-import com.arenella.recruit.recruiters.beans.YearlyRecruiterSubscription;
 import com.arenella.recruit.recruiters.dao.RecruiterDao;
 import com.arenella.recruit.recruiters.entities.RecruiterEntity;
 import com.arenella.recruit.recruiters.entities.RecruiterSubscriptionEntity;
@@ -699,7 +699,7 @@ public class RecruiterServiceImplTest {
 	public void testAddSubscription_yearSubscription_existingYearSubscription() throws Exception {
 		
 		final String 				recruiterId 		= "kparkings";
-		final Recruiter				recruiter			= Recruiter.builder().userId(recruiterId).subscriptions(Set.of(YearlyRecruiterSubscription.builder().status(subscription_status.AWAITING_ACTIVATION).build())).build();
+		final Recruiter				recruiter			= Recruiter.builder().userId(recruiterId).subscriptions(Set.of(PaidPeriodRecruiterSubscription.builder().type(subscription_type.YEAR_SUBSCRIPTION).status(subscription_status.AWAITING_ACTIVATION).build())).build();
 		
 		SecurityContextHolder.setContext(mockSecurityContext);
 		
@@ -724,7 +724,7 @@ public class RecruiterServiceImplTest {
 	public void testAddSubscription_yearSubscription_existingYearSubscription_ended() throws Exception {
 		
 		final String 				recruiterId 		= "kparkings";
-		final Recruiter				recruiter			= Recruiter.builder().userId(recruiterId).subscriptions(Set.of(YearlyRecruiterSubscription.builder().status(subscription_status.SUBSCRIPTION_ENDED).build())).build();
+		final Recruiter				recruiter			= Recruiter.builder().userId(recruiterId).subscriptions(Set.of(PaidPeriodRecruiterSubscription.builder().type(subscription_type.YEAR_SUBSCRIPTION).status(subscription_status.SUBSCRIPTION_ENDED).build())).build();
 		
 		SecurityContextHolder.setContext(mockSecurityContext);
 		
@@ -751,7 +751,7 @@ public class RecruiterServiceImplTest {
 		
 		final String 				recruiterId 				= "kparkings";
 		final UUID					existingSubscriptionId	 	= UUID.randomUUID();
-		final Recruiter				recruiter					= Recruiter.builder().userId(recruiterId).subscriptions(Set.of(YearlyRecruiterSubscription.builder().subscriptionId(existingSubscriptionId).status(subscription_status.SUBSCRIPTION_ENDED).build())).build();
+		final Recruiter				recruiter					= Recruiter.builder().userId(recruiterId).subscriptions(Set.of(PaidPeriodRecruiterSubscription.builder().type(subscription_type.YEAR_SUBSCRIPTION).subscriptionId(existingSubscriptionId).status(subscription_status.SUBSCRIPTION_ENDED).build())).build();
 		
 		SecurityContextHolder.setContext(mockSecurityContext);
 		

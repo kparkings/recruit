@@ -9,26 +9,28 @@ import java.util.UUID;
 * is activated.
 * @author K Parkings
 */
-public class YearlyRecruiterSubscription implements RecruiterSubscription{
+public class PaidPeriodRecruiterSubscription implements RecruiterSubscription{
 
 	private UUID 					subscriptionId;
 	private String 					recruiterId;
 	private LocalDateTime 			created;
 	private LocalDateTime 			activatedDate;
 	private subscription_status		status;
+	private subscription_type		type;
 	private boolean					currentSubscription;
 	
 	/**
 	* Constructor based upon a builder
 	* @param builder
 	*/
-	public YearlyRecruiterSubscription(YearlyRecruiterSubscriptionBuilder builder) {
+	public PaidPeriodRecruiterSubscription(PaidPeriodRecruiterSubscriptionBuilder builder) {
 		
 		this.subscriptionId 		= builder.subscriptionId;
 		this.created				= builder.created;
 		this.activatedDate			= builder.activatedDate;
 		this.recruiterId			= builder.recruiterId;
 		this.status					= builder.status;
+		this.type					= builder.type;
 		this.currentSubscription 	= builder.currentSubscription;
 		
 	}
@@ -78,7 +80,7 @@ public class YearlyRecruiterSubscription implements RecruiterSubscription{
 	*/
 	@Override
 	public subscription_type getType() {
-		return subscription_type.YEAR_SUBSCRIPTION;
+		return this.type;
 	}
 
 	/**
@@ -126,21 +128,22 @@ public class YearlyRecruiterSubscription implements RecruiterSubscription{
 	* Returns an instance of a builder for the YearlyRecruiterSubscription class
 	* @return Builder
 	*/
-	public static YearlyRecruiterSubscriptionBuilder builder() {
-		return new YearlyRecruiterSubscriptionBuilder();
+	public static PaidPeriodRecruiterSubscriptionBuilder builder() {
+		return new PaidPeriodRecruiterSubscriptionBuilder();
 	}
 	
 	/**
 	* Builder for the YearlyRecruiterSubscription class
 	* @author K Parkings
 	*/
-	public static class YearlyRecruiterSubscriptionBuilder {
+	public static class PaidPeriodRecruiterSubscriptionBuilder {
 		
 		private UUID 					subscriptionId;
 		private String 					recruiterId;
 		private LocalDateTime 			created;
 		private LocalDateTime 			activatedDate;
 		private subscription_status		status;
+		private subscription_type		type;
 		private boolean					currentSubscription;
 		
 		/**
@@ -148,7 +151,7 @@ public class YearlyRecruiterSubscription implements RecruiterSubscription{
 		* @param subscriptionId - Unique identifier of the subscription
 		* @return Builder
 		*/
-		public YearlyRecruiterSubscriptionBuilder subscriptionId(UUID subscriptionId) {
+		public PaidPeriodRecruiterSubscriptionBuilder subscriptionId(UUID subscriptionId) {
 			this.subscriptionId = subscriptionId;
 			return this;
 		}
@@ -158,7 +161,7 @@ public class YearlyRecruiterSubscription implements RecruiterSubscription{
 		* @param recruiterId - Unique Id of the Recruiter
 		* @return Builder
 		*/
-		public YearlyRecruiterSubscriptionBuilder recruiterId(String recruiterId) {
+		public PaidPeriodRecruiterSubscriptionBuilder recruiterId(String recruiterId) {
 			this.recruiterId = recruiterId;
 			return this;
 		}
@@ -168,7 +171,7 @@ public class YearlyRecruiterSubscription implements RecruiterSubscription{
 		* @param created - Creation date of the Subscription
 		* @return Builder
 		*/
-		public YearlyRecruiterSubscriptionBuilder created(LocalDateTime created) {
+		public PaidPeriodRecruiterSubscriptionBuilder created(LocalDateTime created) {
 			this.created = created;
 			return this;
 		}
@@ -178,8 +181,18 @@ public class YearlyRecruiterSubscription implements RecruiterSubscription{
 		* @param created - Status of the Subscription
 		* @return Builder
 		*/
-		public YearlyRecruiterSubscriptionBuilder status(subscription_status status) {
+		public PaidPeriodRecruiterSubscriptionBuilder status(subscription_status status) {
 			this.status = status;
+			return this;
+		}
+		
+		/**
+		* Sets the type of the Subscription
+		* @param type - type of Subscription
+		* @return Builder
+		*/
+		public PaidPeriodRecruiterSubscriptionBuilder type(subscription_type type) {
+			this.type = type;
 			return this;
 		}
 		
@@ -188,7 +201,7 @@ public class YearlyRecruiterSubscription implements RecruiterSubscription{
 		* @param activatedDate - When the subscription becomes/became active
 		* @return Builder
 		*/
-		public YearlyRecruiterSubscriptionBuilder activateDate(LocalDateTime activatedDate) {
+		public PaidPeriodRecruiterSubscriptionBuilder activateDate(LocalDateTime activatedDate) {
 			this.activatedDate = activatedDate;
 			return this;
 		}
@@ -198,7 +211,7 @@ public class YearlyRecruiterSubscription implements RecruiterSubscription{
 		* @param currentSubscription - Whether or not the subscription is the current subscription
 		* @return Builder
 		*/
-		public YearlyRecruiterSubscriptionBuilder currentSubscription(boolean currentSubscription) {
+		public PaidPeriodRecruiterSubscriptionBuilder currentSubscription(boolean currentSubscription) {
 			this.currentSubscription = currentSubscription;
 			return this;
 		}
@@ -207,25 +220,43 @@ public class YearlyRecruiterSubscription implements RecruiterSubscription{
 		* Returns an initialized instance of YearlyRecruiterSubscription
 		* @return new instance of YearlyRecruiterSubscription
 		*/
-		public YearlyRecruiterSubscription build() {
-			return new YearlyRecruiterSubscription(this);
+		public PaidPeriodRecruiterSubscription build() {
+			return new PaidPeriodRecruiterSubscription(this);
 		}
 	}
 	
 	/**
-	* Returns true if a year has passed since the activation date. This signals the end of the 
+	* Returns true if the subscription period has passed since the activation date. This signals the end of the 
 	* subscription period and that a new Invoice must be sent to the Recruiter
 	* @param subscription - Subscription to test
 	* @return whether a year has passed since the subscription was activated
 	*/
-	public static boolean hasYearElapsedSinceActivation(YearlyRecruiterSubscription subscription) {
+	public static boolean hasPeriodElapsedSinceActivation(PaidPeriodRecruiterSubscription subscription) {
 		
-		final int lengthOfSubcriptionPeriodInYears = 1;
+		//final int lengthOfSubcriptionPeriodInYears = 1;
 		
 		LocalDateTime 	now 		= LocalDateTime.now();
-		LocalDateTime 	expiryDate 	= subscription.getActivatedDate().plusYears(lengthOfSubcriptionPeriodInYears);
+		LocalDateTime 	expiryDate 	= calculateExpiryDate(subscription.getType(), subscription.getActivatedDate());
 		
 		return expiryDate.isBefore(now);
+		
+	}
+	
+	/**
+	* Calculated when the subscription is due to expire
+	* @param type
+	* @param activationDate
+	* @return
+	*/
+	private static LocalDateTime calculateExpiryDate(subscription_type type, LocalDateTime activationDate) {
+		
+		return switch(type) {
+			case YEAR_SUBSCRIPTION -> activationDate.plusYears(1);
+			case ONE_MONTH_SUBSCRIPTION -> activationDate.plusMonths(1);
+			case THREE_MONTHS_SUBSCRIPTION -> activationDate.plusMonths(3);
+			case SIX_MONTHS_SUBSCRIPTION -> activationDate.plusMonths(6);
+			default -> throw new IllegalArgumentException("Unexpected value: " + type);	
+		};
 		
 	}
 }

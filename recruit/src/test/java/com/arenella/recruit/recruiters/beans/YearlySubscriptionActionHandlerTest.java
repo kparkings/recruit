@@ -18,6 +18,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.arenella.recruit.recruiters.adapters.RecruitersExternalEventPublisher;
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_action;
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_status;
+import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_type;
 import com.arenella.recruit.recruiters.utils.RecruiterSubscriptionActionHandler;
 
 /**
@@ -76,12 +77,13 @@ public class YearlySubscriptionActionHandlerTest {
 		final UUID					subscriptionId		= UUID.randomUUID();
 		final subscription_status 	status 				= subscription_status.ACTIVE;
 		
-		YearlyRecruiterSubscription subscription = YearlyRecruiterSubscription
+		PaidPeriodRecruiterSubscription subscription = PaidPeriodRecruiterSubscription
 																		.builder()
 																			.created(created)
 																			.recruiterId(recruiterId)
 																			.subscriptionId(subscriptionId)
 																			.status(status)
+																			.type(subscription_type.YEAR_SUBSCRIPTION)
 																			.currentSubscription(true)
 																		.build();
 		
@@ -103,13 +105,14 @@ public class YearlySubscriptionActionHandlerTest {
 		final UUID					subscriptionId		= UUID.randomUUID();
 		final subscription_status 	status 				= subscription_status.ACTIVE_PENDING_PAYMENT;
 		
-		YearlyRecruiterSubscription subscription = YearlyRecruiterSubscription
+		PaidPeriodRecruiterSubscription subscription = PaidPeriodRecruiterSubscription
 																		.builder()
 																			.created(created)
 																			.recruiterId(recruiterId)
 																			.subscriptionId(subscriptionId)
 																			.status(status)
 																			.currentSubscription(true)
+																			.type(subscription_type.YEAR_SUBSCRIPTION)
 																		.build();
 		
 		actionHandler.performAction(recruiter, subscription, subscription_action.ACTIVATE_SUBSCRIPTION, true);
@@ -133,13 +136,14 @@ public class YearlySubscriptionActionHandlerTest {
 		final UUID					subscriptionId		= UUID.randomUUID();
 		final subscription_status 	status 				= subscription_status.DISABLED_PENDING_PAYMENT;
 		
-		YearlyRecruiterSubscription subscription = YearlyRecruiterSubscription
+		PaidPeriodRecruiterSubscription subscription = PaidPeriodRecruiterSubscription
 																		.builder()
 																			.created(created)
 																			.recruiterId(recruiterId)
 																			.subscriptionId(subscriptionId)
 																			.status(status)
 																			.currentSubscription(true)
+																			.type(subscription_type.YEAR_SUBSCRIPTION)
 																		.build();
 		
 		actionHandler.performAction(recruiter, subscription, subscription_action.ACTIVATE_SUBSCRIPTION, true);
@@ -164,13 +168,14 @@ public class YearlySubscriptionActionHandlerTest {
 		final UUID					subscriptionId		= UUID.randomUUID();
 		final subscription_status 	status 				= subscription_status.ACTIVE;
 		
-		YearlyRecruiterSubscription subscription = YearlyRecruiterSubscription
+		PaidPeriodRecruiterSubscription subscription = PaidPeriodRecruiterSubscription
 																		.builder()
 																			.created(created)
 																			.recruiterId(recruiterId)
 																			.subscriptionId(subscriptionId)
 																			.status(status)
 																			.currentSubscription(true)
+																			.type(subscription_type.YEAR_SUBSCRIPTION)
 																		.build();
 		
 		assertThrows(IllegalStateException.class, () -> {
@@ -191,13 +196,14 @@ public class YearlySubscriptionActionHandlerTest {
 		final UUID					subscriptionId		= UUID.randomUUID();
 		final subscription_status 	status 				= subscription_status.ACTIVE_PENDING_PAYMENT;
 		
-		YearlyRecruiterSubscription subscription = YearlyRecruiterSubscription
+		PaidPeriodRecruiterSubscription subscription = PaidPeriodRecruiterSubscription
 																		.builder()
 																			.created(created)
 																			.recruiterId(recruiterId)
 																			.subscriptionId(subscriptionId)
 																			.status(status)
 																			.currentSubscription(true)
+																			.type(subscription_type.YEAR_SUBSCRIPTION)
 																		.build();
 		
 		actionHandler.performAction(recruiter, subscription, subscription_action.DISABLE_PENDING_PAYMENT, true);
@@ -220,13 +226,14 @@ public class YearlySubscriptionActionHandlerTest {
 		final UUID					subscriptionId		= UUID.randomUUID();
 		final subscription_status 	status 				= subscription_status.DISABLED_PENDING_PAYMENT;
 		
-		YearlyRecruiterSubscription subscription = YearlyRecruiterSubscription
+		PaidPeriodRecruiterSubscription subscription = PaidPeriodRecruiterSubscription
 																		.builder()
 																			.created(created)
 																			.recruiterId(recruiterId)
 																			.subscriptionId(subscriptionId)
 																			.status(status)
 																			.currentSubscription(true)
+																			.type(subscription_type.YEAR_SUBSCRIPTION)
 																		.build();
 		
 		assertThrows(IllegalAccessException.class, () -> {
@@ -247,13 +254,14 @@ public class YearlySubscriptionActionHandlerTest {
 		final UUID					subscriptionId		= UUID.randomUUID();
 		final subscription_status 	status 				= subscription_status.SUBSCRIPTION_ENDED;
 		
-		YearlyRecruiterSubscription subscription = YearlyRecruiterSubscription
+		PaidPeriodRecruiterSubscription subscription = PaidPeriodRecruiterSubscription
 																		.builder()
 																			.created(created)
 																			.recruiterId(recruiterId)
 																			.subscriptionId(subscriptionId)
 																			.status(status)
 																			.currentSubscription(true)
+																			.type(subscription_type.YEAR_SUBSCRIPTION)
 																		.build();
 		
 		assertThrows(IllegalStateException.class, () -> {
@@ -274,13 +282,14 @@ public class YearlySubscriptionActionHandlerTest {
 		final UUID					subscriptionId		= UUID.randomUUID();
 		final subscription_status 	status 				= subscription_status.ACTIVE;
 		
-		YearlyRecruiterSubscription subscription = YearlyRecruiterSubscription
+		PaidPeriodRecruiterSubscription subscription = PaidPeriodRecruiterSubscription
 																		.builder()
 																			.created(created)
 																			.recruiterId(recruiterId)
 																			.subscriptionId(subscriptionId)
 																			.status(status)
 																			.currentSubscription(true)
+																			.type(subscription_type.YEAR_SUBSCRIPTION)
 																		.build();
 		
 		actionHandler.performAction(recruiter, subscription, subscription_action.END_SUBSCRIPTION, true);
@@ -305,13 +314,14 @@ public class YearlySubscriptionActionHandlerTest {
 		final UUID					subscriptionId		= UUID.randomUUID();
 		final subscription_status 	status 				= subscription_status.ACTIVE;
 		
-		YearlyRecruiterSubscription subscription = YearlyRecruiterSubscription
+		PaidPeriodRecruiterSubscription subscription = PaidPeriodRecruiterSubscription
 																		.builder()
 																			.created(created)
 																			.recruiterId(recruiterId)
 																			.subscriptionId(subscriptionId)
 																			.status(status)
 																			.currentSubscription(true)
+																			.type(subscription_type.YEAR_SUBSCRIPTION)
 																		.build();
 		
 		assertThrows(IllegalAccessException.class, () -> {
@@ -332,13 +342,14 @@ public class YearlySubscriptionActionHandlerTest {
 		final UUID					subscriptionId		= UUID.randomUUID();
 		final subscription_status 	status 				= subscription_status.ACTIVE_PENDING_PAYMENT;
 		
-		YearlyRecruiterSubscription subscription = YearlyRecruiterSubscription
+		PaidPeriodRecruiterSubscription subscription = PaidPeriodRecruiterSubscription
 																		.builder()
 																			.created(created)
 																			.recruiterId(recruiterId)
 																			.subscriptionId(subscriptionId)
 																			.status(status)
 																			.currentSubscription(true)
+																			.type(subscription_type.YEAR_SUBSCRIPTION)
 																		.build();
 		
 		assertThrows(IllegalStateException.class, () -> {
@@ -360,7 +371,7 @@ public class YearlySubscriptionActionHandlerTest {
 		final UUID					subscriptionId		= UUID.randomUUID();
 		final subscription_status 	status 				= subscription_status.ACTIVE;
 		
-		YearlyRecruiterSubscription subscription = YearlyRecruiterSubscription
+		PaidPeriodRecruiterSubscription subscription = PaidPeriodRecruiterSubscription
 																		.builder()
 																			.created(created)
 																			.recruiterId(recruiterId)
@@ -368,6 +379,7 @@ public class YearlySubscriptionActionHandlerTest {
 																			.status(status)
 																			.activateDate(activateDate)
 																			.currentSubscription(true)
+																			.type(subscription_type.YEAR_SUBSCRIPTION)
 																		.build();
 		
 		actionHandler.performAction(recruiter, subscription, subscription_action.RENEW_SUBSCRIPTION, true);

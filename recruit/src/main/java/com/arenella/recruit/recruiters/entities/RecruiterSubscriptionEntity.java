@@ -11,9 +11,10 @@ import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.arenella.recruit.recruiters.beans.CreditBasedSubscription;
 import com.arenella.recruit.recruiters.beans.FirstGenRecruiterSubscription;
+import com.arenella.recruit.recruiters.beans.PaidPeriodRecruiterSubscription;
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription;
-import com.arenella.recruit.recruiters.beans.YearlyRecruiterSubscription;
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_status;
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_type;
 import com.arenella.recruit.recruiters.beans.TrialPeriodSubscription;
@@ -335,7 +336,7 @@ public class RecruiterSubscriptionEntity {
 	*/
 	public static RecruiterSubscription convertFromEntity(RecruiterSubscriptionEntity entity) {
 		switch(entity.getType()) {
-			case FIRST_GEN: {
+			case FIRST_GEN -> {
 				return FirstGenRecruiterSubscription
 											.builder()
 												.activateDate(entity.getActivatedDate())
@@ -346,7 +347,7 @@ public class RecruiterSubscriptionEntity {
 												.currentSubscription(entity.isCurrentSubscription())
 											.build();
 			}
-			case TRIAL_PERIOD: {
+			case TRIAL_PERIOD -> {
 				return TrialPeriodSubscription
 											.builder()
 												.activateDate(entity.getActivatedDate())
@@ -358,8 +359,8 @@ public class RecruiterSubscriptionEntity {
 											.build();
 				
 			}
-			case YEAR_SUBSCRIPTION: {
-				return YearlyRecruiterSubscription
+			case YEAR_SUBSCRIPTION, ONE_MONTH_SUBSCRIPTION, THREE_MONTHS_SUBSCRIPTION, SIX_MONTHS_SUBSCRIPTION -> {
+				return PaidPeriodRecruiterSubscription
 											.builder()
 												.activateDate(entity.getActivatedDate())
 												.created(entity.getCreated())
@@ -367,10 +368,21 @@ public class RecruiterSubscriptionEntity {
 												.status(entity.getStatus())
 												.subscriptionId(entity.getSubscriptionId())
 												.currentSubscription(entity.isCurrentSubscription())
+												.type(entity.getType())
 											.build();
 				
 			}
-			default: {
+			case CREDIT_BASED_SUBSCRIPTION -> {
+				return CreditBasedSubscription.builder()
+											.activateDate(entity.getActivatedDate())
+											.created(entity.getCreated())
+											.recruiterId(entity.getRecruiterId())
+											.status(entity.getStatus())
+											.subscriptionId(entity.getSubscriptionId())
+											.currentSubscription(entity.isCurrentSubscription())
+										.build();
+			}
+			default -> {
 				throw new IllegalArgumentException("Unknown type for recruiter subscription: " + entity.getType());
 			}
 		}

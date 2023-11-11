@@ -38,7 +38,7 @@ public class YearlySubscriptionActionHandler implements RecruiterSubscriptionAct
 					throw new IllegalStateException("Can only activate subscritions in state ACTIVE_PENDING_PAYMENT or DISABLED_PENDING_PAYMENT: " + subscription.getSubscriptionId());
 				}
 				
-				((YearlyRecruiterSubscription)subscription).activateSubscription();
+				((PaidPeriodRecruiterSubscription)subscription).activateSubscription();
 				
 				this.externEventPublisher.publishRecruiterHasOpenSubscriptionEvent(recruiter.getUserId());
 				
@@ -54,7 +54,7 @@ public class YearlySubscriptionActionHandler implements RecruiterSubscriptionAct
 					throw new IllegalStateException("Can only activate subscritions in state ACTIVE_PENDING_PAYMENT: " + subscription.getSubscriptionId());
 				}
 				
-				((YearlyRecruiterSubscription)subscription).disablePendingPayment();
+				((PaidPeriodRecruiterSubscription)subscription).disablePendingPayment();
 				
 				this.externEventPublisher.publishRecruiterNoOpenSubscriptionsEvent(recruiter.getUserId());
 				
@@ -70,7 +70,7 @@ public class YearlySubscriptionActionHandler implements RecruiterSubscriptionAct
 					throw new IllegalStateException("Subscription is already ended. Cant end a second time: " + subscription.getSubscriptionId());
 				}
 				
-				((YearlyRecruiterSubscription)subscription).endSubscription();
+				((PaidPeriodRecruiterSubscription)subscription).endSubscription();
 				
 				this.externEventPublisher.publishRecruiterNoOpenSubscriptionsEvent(recruiter.getUserId());
 				
@@ -87,7 +87,7 @@ public class YearlySubscriptionActionHandler implements RecruiterSubscriptionAct
 					throw new IllegalStateException("Subscription is already ended. Cant end a second time: " + subscription.getSubscriptionId());
 				}
 				
-				((YearlyRecruiterSubscription)subscription).renewSubscription();
+				((PaidPeriodRecruiterSubscription)subscription).renewSubscription();
 				
 				this.externEventPublisher.publishRecruiterHasOpenSubscriptionEvent(recruiter.getUserId());
 				

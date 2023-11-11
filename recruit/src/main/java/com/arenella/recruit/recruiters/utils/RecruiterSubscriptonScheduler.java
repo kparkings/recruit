@@ -13,8 +13,8 @@ import org.springframework.stereotype.Component;
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_action;
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_status;
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_type;
+import com.arenella.recruit.recruiters.beans.PaidPeriodRecruiterSubscription;
 import com.arenella.recruit.recruiters.beans.TrialPeriodSubscription;
-import com.arenella.recruit.recruiters.beans.YearlyRecruiterSubscription;
 import com.arenella.recruit.recruiters.dao.RecruiterDao;
 import com.arenella.recruit.recruiters.entities.RecruiterEntity;
 import com.arenella.recruit.recruiters.services.RecruiterService;
@@ -65,7 +65,7 @@ public class RecruiterSubscriptonScheduler {
 								
 								
 								switch(subscription.getType()) {
-									case TRIAL_PERIOD: {
+									case TRIAL_PERIOD -> {
 										
 										/**
 										* Test if Trial has expired. If so end the subscription
@@ -86,13 +86,13 @@ public class RecruiterSubscriptonScheduler {
 										
 										return;
 									}
-									case YEAR_SUBSCRIPTION: {
+									case YEAR_SUBSCRIPTION, ONE_MONTH_SUBSCRIPTION, THREE_MONTHS_SUBSCRIPTION, SIX_MONTHS_SUBSCRIPTION ->  {
 										
 										/**
 										* If a year or year multiple has elapsed then sets the status to ACTIVE_PENDING_PAYMENT so the 
 										* Recruiter can be sent a new invoice
 										*/
-										if (YearlyRecruiterSubscription.hasYearElapsedSinceActivation((YearlyRecruiterSubscription) subscription)) {
+										if (PaidPeriodRecruiterSubscription.hasPeriodElapsedSinceActivation((PaidPeriodRecruiterSubscription) subscription)) {
 											
 											RecruiterSubscriptionActionHandler actionHandler = subscriptionFactory.getActionHandlerByType(subscription_type.YEAR_SUBSCRIPTION);
 											
@@ -110,7 +110,9 @@ public class RecruiterSubscriptonScheduler {
 										
 										return;
 									}
-									default:{}
+									default ->{
+										//No expiry so nothing to do here
+									}
 									
 								}
 								

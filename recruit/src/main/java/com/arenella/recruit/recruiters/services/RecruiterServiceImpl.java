@@ -24,7 +24,9 @@ import com.arenella.recruit.emailservice.beans.Email.Sender;
 import com.arenella.recruit.emailservice.beans.Email.EmailRecipient.ContactType;
 import com.arenella.recruit.emailservice.beans.Email.Sender.SenderType;
 import com.arenella.recruit.recruiters.adapters.RecruitersExternalEventPublisher;
+import com.arenella.recruit.recruiters.beans.CreditBasedSubscription;
 import com.arenella.recruit.recruiters.beans.FirstGenRecruiterSubscription;
+import com.arenella.recruit.recruiters.beans.PaidPeriodRecruiterSubscription;
 import com.arenella.recruit.recruiters.beans.Recruiter;
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription;
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_action;
@@ -32,7 +34,6 @@ import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_type;
 import com.arenella.recruit.recruiters.beans.SubscriptionActionFeedback;
 import com.arenella.recruit.recruiters.beans.TrialPeriodSubscription;
-import com.arenella.recruit.recruiters.beans.YearlyRecruiterSubscription;
 import com.arenella.recruit.recruiters.dao.RecruiterDao;
 import com.arenella.recruit.recruiters.entities.RecruiterEntity;
 import com.arenella.recruit.recruiters.utils.PasswordUtil;
@@ -234,9 +235,9 @@ public class RecruiterServiceImpl implements RecruiterService{
 		/**
 		* Handle case YEAR_SUBSCRIPTION 
 		*/
-		if (type == subscription_type.YEAR_SUBSCRIPTION) {
-			switchToYearSubscription(recruiter);
-		}
+		//if (type == subscription_type.YEAR_SUBSCRIPTION) {
+			switchSubscription(recruiter, type);
+		//}
 		
 	}
 	
@@ -284,7 +285,7 @@ public class RecruiterServiceImpl implements RecruiterService{
 	* @param recruiterId
 	* @param type
 	*/
-	private void switchToYearSubscription(Recruiter recruiter) {
+	private void switchSubscription(Recruiter recruiter, subscription_type type) {
 		
 		/**
 		* Ensure that at max only non ended YEAR_SUBSCRIPTION exists per recruiter 
@@ -325,17 +326,14 @@ public class RecruiterServiceImpl implements RecruiterService{
 			
 		}
 		
-		YearlyRecruiterSubscription yearlySubscription = YearlyRecruiterSubscription
-																			.builder()
-																				.activateDate(activationDate)
-																				.created(createdDate)
-																				.currentSubscription(true)
-																				.recruiterId(recruiter.getUserId())
-																				.status(subscription_status.ACTIVE_PENDING_PAYMENT)
-																				.subscriptionId(UUID.randomUUID())
-																			.build();
-														
-		recruiter.addSubscription(yearlySubscription);
+		switch(type) {
+			case ONE_MONTH_SUBSCRIPTION, 
+				 THREE_MONTHS_SUBSCRIPTION, 
+				 SIX_MONTHS_SUBSCRIPTION, 
+				 YEAR_SUBSCRIPTION -> recruiter.addSubscription(paidPeriodRecruiterSubscription(recruiter, type, activationDate, createdDate));
+			case CREDIT_BASED_SUBSCRIPTION -> recruiter.addSubscription(creditBasedSubscription(recruiter, activationDate, createdDate));
+			default -> throw new IllegalArgumentException("Unexpected value: " + type);
+		}
 		
 		this.recruiterDao.save(RecruiterEntity.convertToEntity(recruiter, this.recruiterDao.findById(recruiter.getUserId())));
 		
@@ -343,6 +341,32 @@ public class RecruiterServiceImpl implements RecruiterService{
 		
 	}
 	
+	//MOVE TO FACTORY
+	private PaidPeriodRecruiterSubscription paidPeriodRecruiterSubscription(Recruiter recruiter, subscription_type type, LocalDateTime activationDate, LocalDateTime createdDate) {
+		return PaidPeriodRecruiterSubscription
+				.builder()
+				.activateDate(activationDate)
+				.created(createdDate)
+				.currentSubscription(true)
+				.recruiterId(recruiter.getUserId())
+				.type(type)
+				.status(subscription_status.ACTIVE_PENDING_PAYMENT)
+				.subscriptionId(UUID.randomUUID())
+			.build();
+	}
+	
+	private CreditBasedSubscription creditBasedSubscription(Recruiter recruiter, LocalDateTime activationDate, LocalDateTime createdDate) {
+		return CreditBasedSubscription.builder()
+				.activateDate(activationDate)
+				.created(createdDate)
+				.currentSubscription(true)
+				.recruiterId(recruiter.getUserId())
+				.status(subscription_status.ACTIVE)
+				.subscriptionId(UUID.randomUUID())
+			.build();
+	}
+	
+	//END
 	
 	
 	/**
