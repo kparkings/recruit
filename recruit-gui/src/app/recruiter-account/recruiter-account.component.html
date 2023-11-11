@@ -105,79 +105,92 @@
 	<!-- Subscriptions -->
 	<div class="container-div container-div-high" *ngIf="showSubscriptions">
 		
-		<div *ngIf="isBuyingSubscription" class="no-sub-warn">
+		<div *ngIf="isBuyingSubscription && !showBillingDetails" class="no-sub-warn">
 		
-			<h1>Please select a subscription option</h1>
+			<h1>Subscription options</h1>
 			
-			<p>
-			Please select a subscription option and enter your company details. Upon confirmation you will receive immediate access 
-			to the site. Your invoice will be e-mailed to the email address associated with your account and needs to be paid within 
-			30 days. 
-			</p>
-			
-			<div class="company-details">
-				<form [formGroup]="accoundDetailsForm">
-					<table>
-						<tr>
-							<td class="label">Subscription Type</td>
-							<td>
-								<select formControlName="subscriptionOption" (change)="setSubscriptionOption()">
-									<option value="CREDIT_BASED_ACCESS">Credit Based Access (Free)</option>
-									<option value="THREE_MONTH_SUBSCRIPTION">3 Month Subscription (15 Euros ex TAX)</option>
-									<option value="SIX_MONTH_SUBSCRIPTION">6 Month Subscription (60 Euros ex TAX)</option>
-									<option value="YEAR_SUBSCRIPTION">Annual Subscription (120 Euros ex TAX)</option>
-								</select>
-								<br><br>
-								<p *ngIf="subscriptionOption == 'CREDIT_BASED_ACCESS'">
-									Your access is free and based on an assignment of weekly credits. Once the credits have been used certain functions will no longer be available 
-									until you are assigned new credits the following week. Credits need to be used the same week that they are assigned or else they will be lost.
-								</p>
-								<p *ngIf="subscriptionOption == 'THREE_MONTH_SUBSCRIPTION'">
-									You have unlimited access to the sites functions for a period of 3 months. When your subscription expires you will be able to select a new 
-									subscription for continued access to the site.
-								</p>
-								<p *ngIf="subscriptionOption == 'SIX_MONTH_SUBSCRIPTION'">
-									You have unlimited access to the sites functions for a period of 6 months. When your subscription expires you will be able to select a new 
-									subscription for continued access to the site.
-								</p>
-								<p *ngIf="subscriptionOption == 'YEAR_SUBSCRIPTION'">
-									You have unlimited access to the sites functions for a period of 1 year. When your subscription expires you will be able to select a new 
-									subscription for continued access to the site.
-								</p>
-							</td>
-						</tr>
-						<tr>
-							<td class="label">Company Name</td>
-							<td><input type="text" formControlName="companyName"></td>
-						</tr>
-						<tr>
-							<td class="label">Company Address</td>
-							<td><textarea formControlName="companyAddress"></textarea></td>
-						</tr>
-						<tr>
-							<td class="label">Company Country</td>
-							<td><input type="text" formControlName="companyCountry"></td>
-						</tr>
-						<tr>
-							<td class="label">Company Tax Number</td>
-							<td><input type="text" formControlName="companyVatNumber"></td>
-						</tr>
-						<tr>
-							<td class="label">Company Registration Number</td>
-							<td><input type="text" formControlName="companyRegistrationNumber"></td>
-						</tr>
-						<tr>
-							<td class="label"></td>
-							<td>
-								<button class="btn btn-secondary btnRight btnSubscribe" (click)="confirmSwitchToYearlySubscription()">Confirm Subscription</button>
-							</td>
-						</tr>
-					</table>
-				</form>
+			<div>
+				<div class="subs-opt-box {{subscriptionSelectionMobCss}}" (click)="doShowBillingDetails('CREDIT_BASED_ACCESS')">
+					<h3>Free Credit Based</h3>
+					<p>0 Euro</p>
+				</div>
+				<div class="subs-opt-box {{subscriptionSelectionMobCss}}" (click)="doShowBillingDetails('ONE_MONTH_SUBSCRIPTION')">
+					<h3>1 Month</h3>
+					<p>12 Euros ex Tax</p>
+				</div>
+				<div class="subs-opt-box {{subscriptionSelectionMobCss}}" (click)="doShowBillingDetails('THREE_MONTHS_SUBSCRIPTION')">
+					<h3>3 Months</h3>
+					<p>36 Euros ex Tax</p>
+				</div>
+				<div class="subs-opt-box {{subscriptionSelectionMobCss}}" (click)="doShowBillingDetails('SIX_MONTH_SUBSCRIPTION')">
+					<h3>6 Months</h3>
+					<p>60 Euros ex Tax</p>
+				</div>
+				<div class="subs-opt-box {{subscriptionSelectionMobCss}}" (click)="doShowBillingDetails('ONE_YEAR_SUBSCRIPTION')">
+					<h3>1 Year</h3>
+					<p>120 Euros ex Tax</p>
+				</div>
 			</div>
-		
+			<div class="spacer"></div>
 		</div>
 		
+		<div class="no-sub-warn" *ngIf="showBillingDetails">
+		
+				<h1>Payment Details</h1>
+				
+				<div class="account-details {{accountDetailsMobCss}}">
+					<form [formGroup]="accoundDetailsForm">
+						<table class="center">
+							<tr>
+								<td class="label">Company Name</td>
+							</tr>
+							<tr>
+								<td><input type="text" formControlName="companyName"></td>
+							</tr>
+					
+					
+							<tr>
+								<td class="label">Company Address</td>
+							</tr>
+							<tr>
+								<td><textarea formControlName="companyAddress"></textarea></td>
+							</tr>
+					
+					
+							<tr>
+								<td class="label">Company Country</td>
+							</tr>
+							<tr>
+								<td><input type="text" formControlName="companyCountry"></td>
+							</tr>
+					
+					
+							<tr>
+								<td class="label">Company Tax Number</td>
+							</tr>
+							<tr>
+								<td><input type="text" formControlName="companyVatNumber"></td>
+							</tr>
+					
+					
+							<tr>
+								<td class="label">Company Registration Number</td>
+							</tr>
+							<tr>
+								<td><input type="text" formControlName="companyRegistrationNumber"></td>
+							</tr>
+					
+					
+							<tr>
+								<td>
+									<button class="btn btn-secondary btnRight btnSubscribe" (click)="confirmSwitchToYearlySubscription()">Confirm Subscription</button>
+								</td>
+							</tr>
+						</table>
+					</form>
+				</div>
+			</div>
+			
 		<div *ngIf="!hasActiveSubscription() && !isBuyingSubscription" class="no-sub-warn">
 		
 			<h1>Trial Ended</h1>

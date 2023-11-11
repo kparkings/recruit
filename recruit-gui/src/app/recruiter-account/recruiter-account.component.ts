@@ -22,6 +22,11 @@ export class RecruiterAccountComponent implements OnInit {
 
 	public isMobile:boolean = false;
 	public mobCss:string = "";
+	public subscriptionSelectionMobCss = "";
+	public accountDetailsMobCss = "";
+	public showBillingDetails:boolean = false;
+	public selectedSubscriptionOption:string = "";
+	
 	/**
 	* Constructor
 	*/
@@ -35,6 +40,8 @@ export class RecruiterAccountComponent implements OnInit {
 					
 					if(this.isMobile){
 						this.mobCss = "sub-opt-div-mob";
+						this.subscriptionSelectionMobCss = "subs-opt-box-mob";
+						this.accountDetailsMobCss = "account-details-mob";
 					}
 					
 					this.creditsService.isPurchaseSubscription().subscribe(value => {
@@ -56,6 +63,11 @@ export class RecruiterAccountComponent implements OnInit {
 		}
 		
   	}
+  	
+  	public doShowBillingDetails(subscriptionOption:string):void{
+		  this.showBillingDetails 			= true;
+		  this.selectedSubscriptionOption 	= subscriptionOption;
+	}
   	
   	public setSubscriptionOption():void{
 		  
@@ -146,7 +158,9 @@ export class RecruiterAccountComponent implements OnInit {
 	*/
 	public switchTab(tab:string){
 		
-		this.currentTab = tab;
+		this.currentTab 					= tab;
+		this.showBillingDetails 			= false;
+		this.selectedSubscriptionOption 	= "";
 		
 		switch(tab){
 			case "showAccountDetails":{
