@@ -17,7 +17,7 @@ import com.arenella.recruit.recruiters.utils.RecruiterSubscriptionActionHandler;
 * @author K Parkings
 */
 @Component
-public class YearlySubscriptionActionHandler implements RecruiterSubscriptionActionHandler{
+public class PaidPeriodSubscriptionActionHandler implements RecruiterSubscriptionActionHandler{
 	
 	@Autowired
 	private RecruitersExternalEventPublisher 	externEventPublisher;

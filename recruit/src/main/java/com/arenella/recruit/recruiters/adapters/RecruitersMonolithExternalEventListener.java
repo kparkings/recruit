@@ -34,9 +34,9 @@ public class RecruitersMonolithExternalEventListener implements RecruitersExtern
 	* Refer to ExternalEventListener interface for details 
 	*/
 	@Override
-	public void listenForRecruiterNoOpenSubscriptionsEvent(RecruiterNoOpenSubscriptionEvent recruiterNoOpenSubscriptionEvent) {
-		this.supplyAndDemandService.disableSupplyAndDemandPostsForRecruiter(recruiterNoOpenSubscriptionEvent.geRecruiterId());
-		
+	public void listenForRecruiterNoOpenSubscriptionsEvent(RecruiterNoOpenSubscriptionEvent event) {
+		this.supplyAndDemandService.disableSupplyAndDemandPostsForRecruiter(event.geRecruiterId());
+		this.supplyAndDemandService.updateCreditsForUser(event.geRecruiterId(), RecruiterCredit.DISABLED_CREDITS);
 	}
 
 	/**

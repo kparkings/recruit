@@ -23,8 +23,9 @@ public class ListingsExternalEventListenerImpl implements ListingsExternalEventL
 	* Refer to the ListingsExternalEventListener interface for details
 	*/
 	@Override
-	public void listenForRecruiterNoOpenSubscriptionsEvent(RecruiterNoOpenSubscriptionEvent recruiterNoOpenSubscriptionEvent) {
-		this.listingService.disableListingsForRecruiter(recruiterNoOpenSubscriptionEvent.geRecruiterId());
+	public void listenForRecruiterNoOpenSubscriptionsEvent(RecruiterNoOpenSubscriptionEvent event) {
+		this.listingService.disableListingsForRecruiter(event.geRecruiterId());
+		this.listingService.updateCreditsForUser(event.geRecruiterId(), RecruiterCredit.DISABLED_CREDITS);
 	}
 
 	/**

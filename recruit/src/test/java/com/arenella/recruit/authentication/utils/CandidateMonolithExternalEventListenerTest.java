@@ -1,10 +1,5 @@
 package com.arenella.recruit.authentication.utils;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import java.util.Set;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -14,9 +9,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.arenella.recruit.adapters.events.CreditsUsedEvent;
 import com.arenella.recruit.adapters.events.RecruiterCreatedEvent;
+import com.arenella.recruit.adapters.events.RecruiterNoOpenSubscriptionEvent;
 import com.arenella.recruit.adapters.events.RecruiterUpdatedEvent;
 import com.arenella.recruit.adapters.events.SubscriptionAddedEvent;
-import com.arenella.recruit.authentication.beans.User.USER_ROLE;
 import com.arenella.recruit.candidates.adapters.CandidateMonolithExternalEventListener;
 import com.arenella.recruit.candidates.beans.RecruiterCredit;
 import com.arenella.recruit.candidates.services.CandidateService;
@@ -117,6 +112,21 @@ public class CandidateMonolithExternalEventListenerTest {
 		this.listener.listenForSubscriptionAddedEvent(event);
 	
 		Mockito.verify(this.mockCandidateService).updateCreditsForUser(event.getRecruiterId(), RecruiterCredit.DISABLED_CREDITS);
+		
+	}
+
+	/**
+	* Tests if no subscription credits are disabled. 
+	* @throws Exception
+	*/
+	@Test
+	public void testListenForRecruiterNoOpenSubscriptionsEvent() throws Exception{
+		
+		final String recruiterId = "r55";
+		
+		this.listener.listenForRecruiterNoOpenSubscriptionsEvent(new RecruiterNoOpenSubscriptionEvent(recruiterId));
+	
+		Mockito.verify(this.mockCandidateService).updateCreditsForUser(recruiterId, RecruiterCredit.DISABLED_CREDITS);
 		
 	}
 }

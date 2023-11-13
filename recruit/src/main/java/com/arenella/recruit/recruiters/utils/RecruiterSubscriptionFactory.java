@@ -4,9 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.arenella.recruit.recruiters.beans.FirstGenRecruiterSubscription;
+import com.arenella.recruit.recruiters.beans.PaidPeriodSubscriptionActionHandler;
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_type;
 import com.arenella.recruit.recruiters.beans.TrialPeriodSubscriptionActionHandler;
-import com.arenella.recruit.recruiters.beans.YearlySubscriptionActionHandler;
 
 /**
 * Factory for retrieving a RecruiterSubscription 
@@ -20,7 +20,7 @@ public class RecruiterSubscriptionFactory {
 	private TrialPeriodSubscriptionActionHandler 	trialPeriodActionHandler;
 	
 	@Autowired
-	private YearlySubscriptionActionHandler 		yearlySubscriptionActionHandler;
+	private PaidPeriodSubscriptionActionHandler 	paidPeriodSubscriptionActionHandler;
 	
 	/**
 	* Returns appropriate Action handler for the Subscription type
@@ -33,20 +33,16 @@ public class RecruiterSubscriptionFactory {
 			throw new IllegalArgumentException("Unknown subscriptionType null");
 		}
 		
-		switch(subscriptionType) {
-			case FIRST_GEN:{
-				return FirstGenRecruiterSubscription.getActionHandler();
-			}
-			case TRIAL_PERIOD:{
-				return trialPeriodActionHandler;
-			}
-			case YEAR_SUBSCRIPTION:{
-				return yearlySubscriptionActionHandler;
-			}
-			default:{
-				throw new IllegalArgumentException("Unknown subscriptionType: "  + subscriptionType);
-			}
-		}
+		return switch(subscriptionType) {
+				case FIRST_GEN -> FirstGenRecruiterSubscription.getActionHandler();
+				case TRIAL_PERIOD -> trialPeriodActionHandler;
+				case ONE_MONTH_SUBSCRIPTION, 
+					 THREE_MONTHS_SUBSCRIPTION, 
+					 SIX_MONTHS_SUBSCRIPTION, 
+					 YEAR_SUBSCRIPTION -> paidPeriodSubscriptionActionHandler;
+				case CREDIT_BASED_SUBSCRIPTION -> throw new IllegalArgumentException("Actions not supported for CREDIT_BASED_SUBSCRIPTION");
+				default ->  throw new IllegalArgumentException("Unknown subscriptionType: "  + subscriptionType);
+		};
 		
 	}
 	

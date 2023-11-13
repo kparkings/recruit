@@ -30,7 +30,7 @@ import com.arenella.recruit.recruiters.utils.RecruiterSubscriptionActionHandler;
 public class YearlySubscriptionActionHandlerTest {
 	
 	@InjectMocks
-	private RecruiterSubscriptionActionHandler actionHandler = new YearlySubscriptionActionHandler();
+	private RecruiterSubscriptionActionHandler actionHandler = new PaidPeriodSubscriptionActionHandler();
 	
 	@Mock
 	private RecruitersExternalEventPublisher mockRecruitersExternalEventPublisher;

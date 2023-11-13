@@ -10,7 +10,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.arenella.recruit.recruiters.beans.TrialPeriodSubscriptionActionHandler;
-import com.arenella.recruit.recruiters.beans.YearlySubscriptionActionHandler;
+import com.arenella.recruit.recruiters.beans.PaidPeriodSubscriptionActionHandler;
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_type;
 
 /**
@@ -27,7 +27,7 @@ public class RecruiterSubscriptionFactoryTest {
 	private TrialPeriodSubscriptionActionHandler 	trialPeriodActionHander;
 	
 	@Mock
-	private YearlySubscriptionActionHandler 		yearlySubscriptionActionHander;
+	private PaidPeriodSubscriptionActionHandler 	paidPeriodSubscriptionActionHandler;
 	
 	
 	/**
@@ -53,6 +53,20 @@ public class RecruiterSubscriptionFactoryTest {
 		assertNotNull(factory.getActionHandlerByType(subscription_type.FIRST_GEN));
 		assertNotNull(factory.getActionHandlerByType(subscription_type.TRIAL_PERIOD));
 		assertNotNull(factory.getActionHandlerByType(subscription_type.YEAR_SUBSCRIPTION));
+		
+	}
+	
+	/**
+	* Tests Exception is thrown if Action used with CREDIT_BASED_SUBSCRIPTION
+	* @return
+	* @throws Exception
+	*/
+	@Test
+	public void testgetActionHandlerByType_credits() throws Exception{
+		
+		assertThrows(IllegalArgumentException.class, () -> {
+			this.factory.getActionHandlerByType(subscription_type.CREDIT_BASED_SUBSCRIPTION);
+		});
 		
 	}
 }
