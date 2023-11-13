@@ -122,11 +122,11 @@
 					<h3>3 Months</h3>
 					<p>36 Euros ex Tax</p>
 				</div>
-				<div class="subs-opt-box {{subscriptionSelectionMobCss}}" (click)="doShowBillingDetails('SIX_MONTH_SUBSCRIPTION')">
+				<div class="subs-opt-box {{subscriptionSelectionMobCss}}" (click)="doShowBillingDetails('SIX_MONTHS_SUBSCRIPTION')">
 					<h3>6 Months</h3>
 					<p>60 Euros ex Tax</p>
 				</div>
-				<div class="subs-opt-box {{subscriptionSelectionMobCss}}" (click)="doShowBillingDetails('ONE_YEAR_SUBSCRIPTION')">
+				<div class="subs-opt-box {{subscriptionSelectionMobCss}}" (click)="doShowBillingDetails('YEAR_SUBSCRIPTION')">
 					<h3>1 Year</h3>
 					<p>120 Euros ex Tax</p>
 				</div>
@@ -183,7 +183,7 @@
 					
 							<tr>
 								<td>
-									<button class="btn btn-secondary btnRight btnSubscribe" (click)="confirmSwitchToYearlySubscription()">Confirm Subscription</button>
+									<button class="btn btn-secondary btnRight btnSubscribe" (click)="confirmSwitchToOtherSubscription()">Confirm Subscription</button>
 								</td>
 							</tr>
 						</table>
@@ -236,52 +236,6 @@
 				</div>
 				<div class="spacer"></div>
 			</div>
-			<!--  
-			<h1>Your 30 day free trial has come to an end</h1>
-			<p>
-			We hope that you found the site useful and would like to continue with us in the future. For continued access a subscription costs 
-			just 120 euro's per year excluding tax. 
-			</p>
-			<p>
-			There are no other fees involved. You will have full access to all the features on the site and will be able to place as many candidates 
-			as you you like for no additional fees.
-			</p>
-			
-			<h2>Annual Subscription 120 euro's</h2>
-			
-			<div class="company-details">
-				<form [formGroup]="accoundDetailsForm">
-					<table>
-						<tr>
-							<td class="label">Company Name</td>
-							<td><input type="text" formControlName="companyName"></td>
-						</tr>
-						<tr>
-							<td class="label">Company Address</td>
-							<td><textarea formControlName="companyAddress"></textarea></td>
-						</tr>
-						<tr>
-							<td class="label">Company Country</td>
-							<td><input type="text" formControlName="companyCountry"></td>
-						</tr>
-						<tr>
-							<td class="label">Company Tax Number</td>
-							<td><input type="text" formControlName="companyVatNumber"></td>
-						</tr>
-						<tr>
-							<td class="label">Company Registration Number</td>
-							<td><input type="text" formControlName="companyRegistrationNumber"></td>
-						</tr>
-						<tr>
-							<td class="label"></td>
-							<td>
-								<button class="btn btn-secondary btnRight btnSubscribe" (click)="confirmSwitchToYearlySubscription()">Confirm Subscription</button>
-							</td>
-						</tr>
-					</table>
-				</form>
-			</div>
-		-->
 		</div>
 		
 		<div *ngIf="hasUnpaidSubscription()" class="no-sub-warn">
@@ -300,7 +254,6 @@
 						<th class="bg-tab-hdr">Created</th>
 						<th class="bg-tab-hdr">Activated / Activates</th>
 						<th class="bg-tab-hdr">Status</th>
-						<th class="bg-tab-hdr"></th>
 					</tr>
 				</thead>
 				<tr *ngFor="let subscription of getOrderedRecruiterSubscriptions()">
@@ -309,17 +262,6 @@
 					<td class="subscription-tab-col">{{subscription.created | date:'yyyy-MM-dd'}}</td>
 					<td class="subscription-tab-col">{{subscription.activatedDate | date:'yyyy-MM-dd'}}</td>
 					<td class="subscription-tab-col">{{subscription.status}}</td>
-						
-					<td class="subscription-tab-col subscription-table-btn" *ngIf="subscription.type === 'YEAR_SUBSCRIPTION' && subscription.status != 'SUBSCRIPTION_ENDED'">
-							<button class="btn btn-secondary  alter-subscription-btn" 			*ngIf="!hasUnpaidSubscription() && !showCancelSubscriptionConfirmButtons" (click)="cancelSubscription()">Cancel Subscription</button>
-							<button class="btn btn-secondary  alter-subscription-btn-confirm" 	*ngIf="!hasUnpaidSubscription() && showCancelSubscriptionConfirmButtons"  (click)="confirmCancelSubscription(subscription)">Confirm</button>
-							<button class="btn btn-secondary  alter-subscription-btn-cancel" 	*ngIf="!hasUnpaidSubscription() && showCancelSubscriptionConfirmButtons"  (click)="cancelCancelSubscription()">Cancel</button>
-					</td>
-					
-					<td class="subscription-tab-col subscription-table-btn" *ngIf="subscription.type != 'YEAR_SUBSCRIPTION' || (subscription.type === 'YEAR_SUBSCRIPTION' && subscription.status === 'SUBSCRIPTION_ENDED')">
-						<span style="width:200px">&nbsp;</span>
-					</td>
-					
 				</tr>
 			</table>
 			

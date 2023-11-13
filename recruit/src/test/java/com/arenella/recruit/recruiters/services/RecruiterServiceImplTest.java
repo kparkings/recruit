@@ -31,6 +31,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 import com.arenella.recruit.adapters.events.RecruiterPasswordUpdatedEvent;
 import com.arenella.recruit.adapters.events.RecruiterUpdatedEvent;
+import com.arenella.recruit.adapters.events.SubscriptionAddedEvent;
 import com.arenella.recruit.emailservice.adapters.RequestSendEmailCommand;
 import com.arenella.recruit.emailservice.beans.Email.EmailTopic;
 import com.arenella.recruit.recruiters.adapters.RecruitersExternalEventPublisher;
@@ -738,7 +739,7 @@ public class RecruiterServiceImplTest {
 		
 		Mockito.verify(this.mockDao).save(Mockito.any());
 		
-		Mockito.verify(this.mockExternEventPublisher).publishRecruiterHasOpenSubscriptionEvent(recruiterId);
+		Mockito.verify(this.mockExternEventPublisher).publishSubscriptionAddedEvent(Mockito.any(SubscriptionAddedEvent.class));
 		
 	}
 	
@@ -784,7 +785,7 @@ public class RecruiterServiceImplTest {
 		assertFalse(subEntityExisting.isCurrentSubscription());
 		assertEquals(subscription_status.SUBSCRIPTION_ENDED, subEntityExisting.getStatus());
 		
-		Mockito.verify(this.mockExternEventPublisher).publishRecruiterHasOpenSubscriptionEvent(recruiterId);
+		Mockito.verify(this.mockExternEventPublisher).publishSubscriptionAddedEvent(Mockito.any(SubscriptionAddedEvent.class));
 		
 	}
 	
@@ -831,7 +832,7 @@ public class RecruiterServiceImplTest {
 		assertFalse(subEntityExisting.isCurrentSubscription());
 		assertEquals(subscription_status.SUBSCRIPTION_ENDED, subEntityExisting.getStatus());
 		
-		Mockito.verify(this.mockExternEventPublisher).publishRecruiterHasOpenSubscriptionEvent(recruiterId);
+		Mockito.verify(this.mockExternEventPublisher).publishSubscriptionAddedEvent(Mockito.any(SubscriptionAddedEvent.class));
 		
 	}
 	
@@ -871,7 +872,7 @@ public class RecruiterServiceImplTest {
 		assertFalse(subEntityExisting.isCurrentSubscription());
 		assertEquals(subscription_status.SUBSCRIPTION_ENDED, subEntityExisting.getStatus());
 		
-		Mockito.verify(this.mockExternEventPublisher).publishRecruiterHasOpenSubscriptionEvent(recruiterId);
+		Mockito.verify(this.mockExternEventPublisher).publishSubscriptionAddedEvent(Mockito.any(SubscriptionAddedEvent.class));
 		
 	}
 	

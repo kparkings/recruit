@@ -7,10 +7,11 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.arenella.recruit.adapters.events.RecruiterHasOpenSubscriptionEvent;
 import com.arenella.recruit.adapters.events.RecruiterNoOpenSubscriptionEvent;
+import com.arenella.recruit.adapters.events.SubscriptionAddedEvent;
 import com.arenella.recruit.listings.services.ListingService;
 import com.arenella.recruit.recruiters.adapters.ListingsExternalEventListener;
+import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_type;
 
 /**
 * Unit tests for the ListingsExternalEventListener class
@@ -33,7 +34,7 @@ public class ListingsExternalEventListenerTest {
 		
 		final String recruiterId = "kparkings";
 		
-		listener.listenForRecruiterHasOpenSubscriptionsEvent(new RecruiterHasOpenSubscriptionEvent(recruiterId));
+		listener.listenForSubscriptionAddedEvent(new SubscriptionAddedEvent(recruiterId, subscription_type.ONE_MONTH_SUBSCRIPTION));
 		
 		Mockito.verify(this.mockListingService).enableListingsForRecruiter(recruiterId);
 		

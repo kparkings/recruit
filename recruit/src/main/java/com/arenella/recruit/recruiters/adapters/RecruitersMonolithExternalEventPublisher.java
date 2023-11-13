@@ -12,10 +12,10 @@ import com.arenella.recruit.adapters.events.ContactRequestEvent;
 import com.arenella.recruit.adapters.events.OfferedCandidateContactRequestEvent;
 import com.arenella.recruit.adapters.events.OpenPositionContactRequestEvent;
 import com.arenella.recruit.adapters.events.RecruiterCreatedEvent;
-import com.arenella.recruit.adapters.events.RecruiterHasOpenSubscriptionEvent;
 import com.arenella.recruit.adapters.events.RecruiterNoOpenSubscriptionEvent;
 import com.arenella.recruit.adapters.events.RecruiterPasswordUpdatedEvent;
 import com.arenella.recruit.adapters.events.RecruiterUpdatedEvent;
+import com.arenella.recruit.adapters.events.SubscriptionAddedEvent;
 import com.arenella.recruit.authentication.adapters.AuthenticationExternalEventListener;
 import com.arenella.recruit.candidates.adapters.CandidateExternalEventListener;
 import com.arenella.recruit.emailservice.adapters.EmailServiceExternalEventListener;
@@ -75,16 +75,19 @@ public class RecruitersMonolithExternalEventPublisher implements RecruitersExter
 		this.authenticationExternalEventListener.listenForRecruiterNoOpenSubscriptionsEvent(new RecruiterNoOpenSubscriptionEvent(recruiterId));
 		this.listingExternalEventListener.listenForRecruiterNoOpenSubscriptionsEvent(new RecruiterNoOpenSubscriptionEvent(recruiterId));
 		this.recruitersInternalEventListener.listenForRecruiterNoOpenSubscriptionsEvent(new RecruiterNoOpenSubscriptionEvent(recruiterId));
+		//TODO: [Set credits 0 or defaults -> Test year subscription allows can]
+		
 	}
 
 	/**
 	* Refer to the ExternalEventPublisher interface for details 
 	*/
 	@Override
-	public void publishRecruiterHasOpenSubscriptionEvent(String recruiterId) {
-		this.authenticationExternalEventListener.listenForRecruiterHasOpenSubscriptionEvent(new RecruiterHasOpenSubscriptionEvent(recruiterId));
-		this.listingExternalEventListener.listenForRecruiterHasOpenSubscriptionsEvent(new RecruiterHasOpenSubscriptionEvent(recruiterId));
-		this.recruitersInternalEventListener.listenForRecruiterHasOpenSubscriptionsEvent(new RecruiterHasOpenSubscriptionEvent(recruiterId));
+	public void publishSubscriptionAddedEvent(SubscriptionAddedEvent event) {
+		this.authenticationExternalEventListener.listenForSubscriptionAddedEvent(event);
+		this.listingExternalEventListener.listenForSubscriptionAddedEvent(event);
+		this.recruitersInternalEventListener.listenForSubscriptionAddedEvent(event);
+		this.candidateExternalEventListener.listenForSubscriptionAddedEvent(event);
 	}
 
 	/**

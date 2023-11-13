@@ -3,9 +3,10 @@ package com.arenella.recruit.recruiters.adapters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.arenella.recruit.adapters.events.RecruiterHasOpenSubscriptionEvent;
 import com.arenella.recruit.adapters.events.RecruiterNoOpenSubscriptionEvent;
 import com.arenella.recruit.adapters.events.RecruiterUserAccountCreatedEvent;
+import com.arenella.recruit.adapters.events.SubscriptionAddedEvent;
+import com.arenella.recruit.recruiters.beans.RecruiterCredit;
 import com.arenella.recruit.recruiters.services.SupplyAndDemandService;
 
 /**
@@ -42,8 +43,9 @@ public class RecruitersMonolithExternalEventListener implements RecruitersExtern
 	* Refer to ExternalEventListener interface for details 
 	*/
 	@Override
-	public void listenForRecruiterHasOpenSubscriptionsEvent(RecruiterHasOpenSubscriptionEvent recruiterHasOpenSubscriptionEvent) {
-		this.supplyAndDemandService.enableSupplyAndDemandPostsForRecruiter(recruiterHasOpenSubscriptionEvent.geRecruiterId());
+	public void listenForSubscriptionAddedEvent(SubscriptionAddedEvent event) {
+		this.supplyAndDemandService.enableSupplyAndDemandPostsForRecruiter(event.getRecruiterId());
+		this.supplyAndDemandService.updateCreditsForUser(event.getRecruiterId(), RecruiterCredit.DISABLED_CREDITS);
 	}
 
 }

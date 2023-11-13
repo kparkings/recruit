@@ -7,6 +7,8 @@ import com.arenella.recruit.adapters.events.CreditsAssignedEvent;
 import com.arenella.recruit.adapters.events.CreditsUsedEvent;
 import com.arenella.recruit.adapters.events.RecruiterCreatedEvent;
 import com.arenella.recruit.adapters.events.RecruiterUpdatedEvent;
+import com.arenella.recruit.adapters.events.SubscriptionAddedEvent;
+import com.arenella.recruit.candidates.beans.RecruiterCredit;
 import com.arenella.recruit.candidates.services.CandidateService;
 
 /**
@@ -50,6 +52,14 @@ public class CandidateMonolithExternalEventListener implements CandidateExternal
 	@Override
 	public void listenForCreditsUsedEvent(CreditsUsedEvent event) {
 		this.candidateService.updateCreditsForUser(event.getUserId(), event.getCredits());
+	}
+
+	/**
+	* Refer to CandidateExternalEventListener for details 
+	*/
+	@Override
+	public void listenForSubscriptionAddedEvent(SubscriptionAddedEvent event) {
+		this.candidateService.updateCreditsForUser(event.getRecruiterId(), RecruiterCredit.DISABLED_CREDITS);
 	}
 
 }

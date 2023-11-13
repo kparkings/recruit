@@ -383,25 +383,6 @@ public class SupplyAndDemandServiceImpl implements SupplyAndDemandService{
 	* @return If user has rights to the OpenPosition the existing OpenPosition
 	* @throws IllegalAccessException
 	*/
-	//private OfferedCandidate validateAuthenticationForUserForOfferedCandidate(UUID offeredCandidateId) throws IllegalAccessException{
-		
-	//	OfferedCandidate offeredCandidate = offeredCandidateDao.findByOfferedCandidateId(offeredCandidateId);
-		
-	//	if (!getAuthenticatedRecruiterId().equals(offeredCandidate.getRecruiterId())) {
-	//		throw new IllegalAccessException();
-	//	}
-		
-	//	return offeredCandidate;
-		
-	//}
-	
-	/**
-	* Performs authentication validation to ensure a User can only update their 
-	* own OpenPositions
-	* @param openPositionId - OpenPoistion the user wants to update
-	* @return If user has rights to the OpenPosition the existing OpenPosition
-	* @throws IllegalAccessException
-	*/
 	private OpenPosition validateAuthenticationForUserForOpenPosition(UUID openPositionId) throws IllegalAccessException{
 		
 		OpenPosition openPosition = openPositionDao.findByOpenPositionId(openPositionId);
@@ -467,6 +448,26 @@ public class SupplyAndDemandServiceImpl implements SupplyAndDemandService{
 		credit.decrementCredits();
 		
 		this.creditDao.persist(credit);
+		
+	}
+	
+	/**
+	* Refer to the SupplyAndDemandService for details 
+	*/
+	@Override
+	public void updateCreditsForUser(String userId, int availableCredits) {
+		
+		Optional<RecruiterCredit> creditOpt = this.creditDao.getByRecruiterId(userId);
+		
+		if (!creditOpt.isPresent()) {
+			return;
+		}
+		
+		RecruiterCredit credits = creditOpt.get();
+		
+		credits.setCredits(availableCredits);
+		
+		creditDao.persist(credits);
 		
 	}
 	

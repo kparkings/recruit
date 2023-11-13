@@ -105,5 +105,11 @@ public interface ListingService {
 	*/
 	public void useCredit(String userId);
 
+	/**
+	* Updates the amount of Credits the Recruiter has
+	* @param command - information about credits
+	*/
+	public void updateCreditsForUser(String recruiterId, int disabledCredits);
+
 
 }

@@ -9,9 +9,9 @@ import com.arenella.recruit.adapters.events.CandidateAccountCreatedEvent;
 import com.arenella.recruit.adapters.events.CandidateDeletedEvent;
 import com.arenella.recruit.adapters.events.CandidatePasswordUpdatedEvent;
 import com.arenella.recruit.adapters.events.RecruiterCreatedEvent;
-import com.arenella.recruit.adapters.events.RecruiterHasOpenSubscriptionEvent;
 import com.arenella.recruit.adapters.events.RecruiterNoOpenSubscriptionEvent;
 import com.arenella.recruit.adapters.events.RecruiterPasswordUpdatedEvent;
+import com.arenella.recruit.adapters.events.SubscriptionAddedEvent;
 import com.arenella.recruit.authentication.beans.User.USER_ROLE;
 import com.arenella.recruit.authentication.enums.AccountType;
 import com.arenella.recruit.authentication.services.AccountService;
@@ -49,9 +49,9 @@ public class AuthenticationMonolithExternalEventListener implements Authenticati
 	* Refer to ExternalEventListener interface for details 
 	*/
 	@Override
-	public void listenForRecruiterHasOpenSubscriptionEvent(RecruiterHasOpenSubscriptionEvent event) {
-		accountService.replaceRolesForUser(event.geRecruiterId(), Set.of(USER_ROLE.recruiter));
-		accountService.updateUsersCreditStatus(event.geRecruiterId(), false);
+	public void listenForSubscriptionAddedEvent(SubscriptionAddedEvent event) {
+		accountService.replaceRolesForUser(event.getRecruiterId(), Set.of(USER_ROLE.recruiter));
+		accountService.updateUsersCreditStatus(event.getRecruiterId(), false);
 	}
 
 	/**

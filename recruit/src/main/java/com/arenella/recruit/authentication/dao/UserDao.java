@@ -36,14 +36,11 @@ public interface UserDao extends CrudRepository<UserEntity, String>{
 	* Updates a User
 	* @param user - User to update
 	*/
-	//TODO: [KP] Currently only updates password. Need to add Roles and enabled later
 	public default void updateUser(User user) {
 		
-		UserEntity entity = this.findById(user.getUsername()).orElseThrow(()-> new IllegalArgumentException("No Such User"));
+		this.findById(user.getUsername()).orElseThrow(()-> new IllegalArgumentException("No Such User"));
 		
-		entity.setPassword(user.getPassword());
-		
-		this.save(entity);
+		this.save(UserEntity.convertToEntity(user));
 		
 	}
 		

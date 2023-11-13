@@ -15,6 +15,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.arenella.recruit.adapters.events.SubscriptionAddedEvent;
 import com.arenella.recruit.recruiters.adapters.RecruitersExternalEventPublisher;
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_action;
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_status;
@@ -120,7 +121,7 @@ public class YearlySubscriptionActionHandlerTest {
 		assertNotNull(subscription.getActivatedDate());
 		assertEquals(subscription_status.ACTIVE, subscription.getStatus());
 		
-		Mockito.verify(this.mockRecruitersExternalEventPublisher).publishRecruiterHasOpenSubscriptionEvent(recruiter.getUserId());
+		Mockito.verify(this.mockRecruitersExternalEventPublisher).publishSubscriptionAddedEvent(Mockito.any(SubscriptionAddedEvent.class));
 		
 	}
 
@@ -151,7 +152,7 @@ public class YearlySubscriptionActionHandlerTest {
 		assertNotNull(subscription.getActivatedDate());
 		assertEquals(subscription_status.ACTIVE, subscription.getStatus());
 		
-		Mockito.verify(this.mockRecruitersExternalEventPublisher).publishRecruiterHasOpenSubscriptionEvent(recruiter.getUserId());
+		Mockito.verify(this.mockRecruitersExternalEventPublisher).publishSubscriptionAddedEvent(Mockito.any(SubscriptionAddedEvent.class));
 		
 	}
 	

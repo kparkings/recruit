@@ -511,7 +511,7 @@ export class SuggestionsComponent implements OnInit {
 			this.passedCreditCheck = true;
 		} else {
 			this.curriculumService.getCreditCount().subscribe(count => {
-				this.passedCreditCheck = count > 1;
+				this.passedCreditCheck = (count > 1 || count == -1);
 			});	
 		}
 		
@@ -523,7 +523,7 @@ export class SuggestionsComponent implements OnInit {
 			this.passedCreditCheck = true;
 		} else {
 			this.curriculumService.getCreditCount().subscribe(count => {
-				this.passedCreditCheck = count > 0;
+				this.passedCreditCheck = (count > 0 || count == -1);
 			});	
 		}
 	}

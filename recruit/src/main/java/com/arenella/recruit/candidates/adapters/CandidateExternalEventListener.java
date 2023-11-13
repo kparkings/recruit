@@ -4,6 +4,7 @@ import com.arenella.recruit.adapters.events.CreditsAssignedEvent;
 import com.arenella.recruit.adapters.events.CreditsUsedEvent;
 import com.arenella.recruit.adapters.events.RecruiterCreatedEvent;
 import com.arenella.recruit.adapters.events.RecruiterUpdatedEvent;
+import com.arenella.recruit.adapters.events.SubscriptionAddedEvent;
 
 /**
 * Defines Listeners for incoming events from External services
@@ -34,5 +35,11 @@ public interface CandidateExternalEventListener {
 	* @param event - CreditsAssignedEvent
 	*/
 	public void listenForCreditsUsedEvent(CreditsUsedEvent any);
+
+	/**
+	* Listens for SubscriptionAddedEvent 
+	* @param event - SubscriptionAddedEvent
+	*/
+	public void listenForSubscriptionAddedEvent(SubscriptionAddedEvent event);
 	
 }

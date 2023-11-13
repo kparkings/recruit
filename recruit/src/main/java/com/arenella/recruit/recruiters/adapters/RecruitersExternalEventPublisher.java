@@ -6,6 +6,7 @@ import com.arenella.recruit.adapters.events.OpenPositionContactRequestEvent;
 import com.arenella.recruit.adapters.events.RecruiterCreatedEvent;
 import com.arenella.recruit.adapters.events.RecruiterPasswordUpdatedEvent;
 import com.arenella.recruit.adapters.events.RecruiterUpdatedEvent;
+import com.arenella.recruit.adapters.events.SubscriptionAddedEvent;
 import com.arenella.recruit.emailservice.adapters.RequestSendEmailCommand;
 
 /**
@@ -29,9 +30,9 @@ public interface RecruitersExternalEventPublisher {
 
 	/**
 	* Publishes an Event informing that a Recruiter has an Open subscription
-	* @param recruiterId - Recruiter event relates to
+	* @param event - Details of Subscription
 	*/
-	public void publishRecruiterHasOpenSubscriptionEvent(String recruiterId);
+	public void publishSubscriptionAddedEvent(SubscriptionAddedEvent event);
 	
 	/**
 	* Published a command to send an email

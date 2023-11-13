@@ -265,9 +265,10 @@ export class RecruiterAccountComponent implements OnInit {
 	/**
  	* Confirms the swithch to Yearly subscription button
 	*/
-	public confirmSwitchToYearlySubscription():void{
+	public confirmSwitchToOtherSubscription():void{
 		this.cancelAlterSubscriptionOptions();
-		this.addAlternateSubscription("YEAR_SUBSCRIPTION");
+		//this.addAlternateSubscription("YEAR_SUBSCRIPTION");
+		this.addAlternateSubscription(this.selectedSubscriptionOption);
 	}
 	
 	/**

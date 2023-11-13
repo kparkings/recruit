@@ -1,8 +1,8 @@
 package com.arenella.recruit.recruiters.adapters;
 
-import com.arenella.recruit.adapters.events.RecruiterHasOpenSubscriptionEvent;
 import com.arenella.recruit.adapters.events.RecruiterNoOpenSubscriptionEvent;
 import com.arenella.recruit.adapters.events.RecruiterUserAccountCreatedEvent;
+import com.arenella.recruit.adapters.events.SubscriptionAddedEvent;
 
 /**
 * Defines functionality for listening to Events from external Services
@@ -27,6 +27,6 @@ public interface RecruitersExternalEventListener {
 	* Listener for event indicating that the Recruiter has active subscription
 	* @param recruiterHasOpenSubscriptionEvent
 	*/
-	void listenForRecruiterHasOpenSubscriptionsEvent(RecruiterHasOpenSubscriptionEvent recruiterHasOpenSubscriptionEvent);
+	void listenForSubscriptionAddedEvent(SubscriptionAddedEvent event);
 	
 }

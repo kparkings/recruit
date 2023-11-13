@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import com.arenella.recruit.adapters.events.RecruiterPasswordUpdatedEvent;
 import com.arenella.recruit.adapters.events.RecruiterUpdatedEvent;
+import com.arenella.recruit.adapters.events.SubscriptionAddedEvent;
 import com.arenella.recruit.emailservice.adapters.RequestSendEmailCommand;
 import com.arenella.recruit.emailservice.beans.Email.EmailRecipient;
 import com.arenella.recruit.emailservice.beans.Email.EmailTopic;
@@ -232,12 +233,7 @@ public class RecruiterServiceImpl implements RecruiterService{
 		
 		Recruiter recruiter = this.recruiterDao.findRecruiterById(recruiterId).orElseThrow(() -> new IllegalArgumentException("Unable to retrieve recruiter: " + recruiterId));
 		
-		/**
-		* Handle case YEAR_SUBSCRIPTION 
-		*/
-		//if (type == subscription_type.YEAR_SUBSCRIPTION) {
-			switchSubscription(recruiter, type);
-		//}
+		switchSubscription(recruiter, type);
 		
 	}
 	
@@ -337,7 +333,7 @@ public class RecruiterServiceImpl implements RecruiterService{
 		
 		this.recruiterDao.save(RecruiterEntity.convertToEntity(recruiter, this.recruiterDao.findById(recruiter.getUserId())));
 		
-		this.externEventPublisher.publishRecruiterHasOpenSubscriptionEvent(recruiter.getUserId());
+		this.externEventPublisher.publishSubscriptionAddedEvent(new SubscriptionAddedEvent(recruiter.getUserId(), type));
 		
 	}
 	

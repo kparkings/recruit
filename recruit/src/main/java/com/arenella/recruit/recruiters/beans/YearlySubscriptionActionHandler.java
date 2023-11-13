@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.arenella.recruit.adapters.events.SubscriptionAddedEvent;
 import com.arenella.recruit.recruiters.adapters.RecruitersExternalEventPublisher;
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_action;
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_status;
@@ -40,7 +41,7 @@ public class YearlySubscriptionActionHandler implements RecruiterSubscriptionAct
 				
 				((PaidPeriodRecruiterSubscription)subscription).activateSubscription();
 				
-				this.externEventPublisher.publishRecruiterHasOpenSubscriptionEvent(recruiter.getUserId());
+				this.externEventPublisher.publishSubscriptionAddedEvent(new SubscriptionAddedEvent(recruiter.getUserId(), subscription.getType()));
 				
 				return Optional.empty();
 			}
@@ -89,7 +90,7 @@ public class YearlySubscriptionActionHandler implements RecruiterSubscriptionAct
 				
 				((PaidPeriodRecruiterSubscription)subscription).renewSubscription();
 				
-				this.externEventPublisher.publishRecruiterHasOpenSubscriptionEvent(recruiter.getUserId());
+				this.externEventPublisher.publishSubscriptionAddedEvent(new SubscriptionAddedEvent(recruiter.getUserId(), subscription.getType()));
 				
 				return Optional.empty();
 				

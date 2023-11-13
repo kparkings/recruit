@@ -710,4 +710,47 @@ public class ListingServiceImplTest {
 		
 	}
 	
+	/**
+	* Happy path
+	* @throws Exception
+	*/
+	@Test
+	public void testUpdateCreditsForUser() throws Exception{
+		
+		final String 	userId 		= "kparkings";
+		final int 		credits 	= 20;
+
+		ArgumentCaptor<RecruiterCredit> argCapt = ArgumentCaptor.forClass(RecruiterCredit.class);
+		
+		RecruiterCredit recCredits = RecruiterCredit.builder().recruiterId(userId).credits(30).build();
+		
+		Mockito.when(this.mockCreditDao.getByRecruiterId(userId)).thenReturn(Optional.of(recCredits));
+		Mockito.doNothing().when(this.mockCreditDao).persist(argCapt.capture());
+		
+		this.service.updateCreditsForUser(userId, credits);
+	
+		Mockito.verify(this.mockCreditDao).persist(Mockito.any());
+		
+		assertEquals(credits, argCapt.getValue().getCredits());
+		
+	}
+	
+	/**
+	* If no credits for user does nothing
+	* @throws Exception
+	*/
+	@Test
+	public void testUpdateCreditsForUser_unknownRecruiter() throws Exception{
+		
+		final String 	userId 		= "kparkings";
+		final int 		credits 	= 20;
+
+		Mockito.when(this.mockCreditDao.getByRecruiterId(userId)).thenReturn(Optional.empty());
+		
+		this.service.updateCreditsForUser(userId, credits);
+	
+		Mockito.verify(this.mockCreditDao, Mockito.never()).persist(Mockito.any());
+		
+	}
+	
 }

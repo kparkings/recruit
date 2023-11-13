@@ -17,13 +17,14 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.arenella.recruit.adapters.events.CandidateAccountCreatedEvent;
 import com.arenella.recruit.adapters.events.CandidatePasswordUpdatedEvent;
 import com.arenella.recruit.adapters.events.RecruiterCreatedEvent;
-import com.arenella.recruit.adapters.events.RecruiterHasOpenSubscriptionEvent;
 import com.arenella.recruit.adapters.events.RecruiterNoOpenSubscriptionEvent;
 import com.arenella.recruit.adapters.events.RecruiterPasswordUpdatedEvent;
+import com.arenella.recruit.adapters.events.SubscriptionAddedEvent;
 import com.arenella.recruit.authentication.adapters.AuthenticationMonolithExternalEventListener;
 import com.arenella.recruit.authentication.beans.User.USER_ROLE;
 import com.arenella.recruit.authentication.enums.AccountType;
 import com.arenella.recruit.authentication.services.AccountService;
+import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_type;
 
 /**
 * Unit tests for the AuthenticationMonolithExternalEventListener class
@@ -90,11 +91,11 @@ public class AuthenticationMonolithExternalEventListenerTest {
 	
 		final String 			recruiterId 		= "kparkings";
 		
-		RecruiterHasOpenSubscriptionEvent event = new RecruiterHasOpenSubscriptionEvent(recruiterId);
+		SubscriptionAddedEvent event = new SubscriptionAddedEvent(recruiterId, subscription_type.ONE_MONTH_SUBSCRIPTION);
 		
 		Mockito.doNothing().when(this.mockAccountService).replaceRolesForUser(Mockito.eq(recruiterId), userRoleArgCapt.capture());
 		
-		this.eventListener.listenForRecruiterHasOpenSubscriptionEvent(event);
+		this.eventListener.listenForSubscriptionAddedEvent(event);
 	
 		Mockito.verify(this.mockAccountService).replaceRolesForUser(Mockito.eq(recruiterId), Mockito.anySet());
 		Mockito.verify(this.mockAccountService).updateUsersCreditStatus(recruiterId, false);

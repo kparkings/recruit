@@ -7,7 +7,8 @@ package com.arenella.recruit.listings.beans;
 */
 public class RecruiterCredit {
 
-	public static final int DEFAULT_CREDITS = 2;
+	public static final int DEFAULT_CREDITS 	= 2;
+	public static final int DISABLED_CREDITS 	= -1;
 	
 	private String 	recruiterId;
 	private int 	credits			= DEFAULT_CREDITS;
