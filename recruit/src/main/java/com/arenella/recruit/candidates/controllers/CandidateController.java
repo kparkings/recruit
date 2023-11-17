@@ -150,7 +150,13 @@ public class CandidateController {
 		
 		Candidate candidate = this.candidateService.fetchCandidate(candidateId, principal.getName(), user.getAuthorities());
 		
-		return ResponseEntity.ok(CandidateFullProfileAPIOutbound.convertFromDomain(candidate));
+		if (this.isRecruiter(principal) && isUseCredits(principal) && this.userCreditsExpired(user.getName())) {
+			return ResponseEntity.ok(CandidateFullProfileAPIOutbound.convertFromCandidateAsCensored(candidate));
+		} else {
+			return ResponseEntity.ok(CandidateFullProfileAPIOutbound.convertFromDomain(candidate));
+		}
+		
+		
 	}
 	
 	/**
@@ -197,17 +203,9 @@ public class CandidateController {
 													Principal principal
 													) {
 		
-		
-		
-		
-		ClaimsUsernamePasswordAuthenticationToken user = (ClaimsUsernamePasswordAuthenticationToken)principal;
-		
-		boolean isCandidate = user.getAuthorities().stream().filter(a -> a.getAuthority().equals("ROLE_CANDIDATE")).findAny().isPresent();
-		boolean isRecruiter = user.getAuthorities().stream().filter(a -> a.getAuthority().equals("ROLE_RECRUITER")).findAny().isPresent();
-		
-		if (isCandidate) {
+		if (this.isCandidate(principal)) {
 			candidateId.clear();
-			candidateId.add(user.getName());
+			candidateId.add(getLoggedInUserName(principal));
 		}
 		
 		CandidateFilterOptions filterOptions = CandidateFilterOptions
@@ -235,7 +233,7 @@ public class CandidateController {
 																		.ownerId(ownerId)
 																	.build();
 		
-		if (isRecruiter && (Boolean)user.getClaim("useCredits").get() && this.userCreditsExpired(user.getName())) {
+		if (this.isRecruiter(principal) && this.isUseCredits(principal) && this.userCreditsExpired(this.getLoggedInUserName(principal))) {
 			return candidateService.getCandidateSuggestions(filterOptions, pageable.getPageSize()).map(CandidateSuggestionAPIOutbound::convertFromCandidateAsCensored);
 		} else {
 			return candidateService.getCandidateSuggestions(filterOptions, pageable.getPageSize()).map(CandidateSuggestionAPIOutbound::convertFromCandidate);
@@ -408,6 +406,56 @@ public class CandidateController {
 		this.candidateService.sendEmailToCandidate(message, candidateId, title, principal.getName());
 		
 		return ResponseEntity.status(HttpStatus.OK).build();
+	}
+	
+	/**
+	* Returns whether or not the user is a Candidate
+	* @return whether or not the user is a Candidate
+	*/
+	private boolean isCandidate(Principal principal) {
+		return this.hasRole(principal, "ROLE_CANDIDATE");
+	}
+	
+	/**
+	* Returns whether or not the user is a Recruiter
+	* @return whether or not the user is a Recruiter
+	*/
+	private boolean isRecruiter(Principal principal) {
+		return this.hasRole(principal, "ROLE_RECRUITER");
+	}
+	
+	/**
+	* Returns whether or not the user has Credit based access
+	* @return whether or not the user has Credit based access
+	*/
+	private boolean isUseCredits(Principal principal) {
+		
+		ClaimsUsernamePasswordAuthenticationToken user = (ClaimsUsernamePasswordAuthenticationToken)principal;
+		
+		return (Boolean)user.getClaim("useCredits").get();
+	}
+	
+	/**
+	* Returns whether or not the user has Credit based access
+	* @return whether or not the user has Credit based access
+	*/
+	private String getLoggedInUserName(Principal principal) {
+		
+		ClaimsUsernamePasswordAuthenticationToken user = (ClaimsUsernamePasswordAuthenticationToken)principal;
+		
+		return user.getName();
+	}
+	
+	/**
+	* Returns whether or not the user has a given Role
+	* @return whether or not the user has a given Role
+	*/
+	private boolean hasRole(Principal principal, String role) {
+		
+		ClaimsUsernamePasswordAuthenticationToken user = (ClaimsUsernamePasswordAuthenticationToken)principal;
+		
+		return user.getAuthorities().stream().filter(a -> a.getAuthority().equals(role)).findAny().isPresent();
+		
 	}
 	
 }

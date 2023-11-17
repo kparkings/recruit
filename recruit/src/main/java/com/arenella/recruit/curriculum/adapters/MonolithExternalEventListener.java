@@ -9,11 +9,15 @@ import org.springframework.stereotype.Service;
 
 import com.arenella.recruit.adapters.events.CandidateDeletedEvent;
 import com.arenella.recruit.adapters.events.CandidateNoLongerAvailableEvent;
+import com.arenella.recruit.adapters.events.RecruiterNoOpenSubscriptionEvent;
+import com.arenella.recruit.adapters.events.SubscriptionAddedEvent;
 import com.arenella.recruit.candidates.adapters.CandidateCreatedEvent;
 import com.arenella.recruit.candidates.dao.PendingCandidateDao;
 import com.arenella.recruit.candidates.services.AlertTestUtil;
 import com.arenella.recruit.curriculum.dao.CurriculumSkillsDao;
 import com.arenella.recruit.curriculum.services.CurriculumService;
+import com.arenella.recruit.listings.beans.RecruiterCredit;
+import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_type;
 
 /**
 * Implementation of ExternalEventListener optimized to 
@@ -116,6 +120,28 @@ public class MonolithExternalEventListener implements CurriculumExternalEventLis
 	@Override
 	public void listenForCandidteDeletedEvent(CandidateDeletedEvent candidateDeletedEvent) {
 		this.curriculumService.deleteCurriculum(Long.valueOf(candidateDeletedEvent.getCandidateId()));
+	}
+	
+	/**
+	* Refer to the ListingsExternalEventListener interface for details
+	*/
+	@Override
+	public void listenForRecruiterNoOpenSubscriptionsEvent(RecruiterNoOpenSubscriptionEvent event) {
+		this.curriculumService.updateCreditsForUser(event.geRecruiterId(), RecruiterCredit.DISABLED_CREDITS);
+	}
+
+	/**
+	* Refer to the ListingsExternalEventListener interface for details
+	*/
+	@Override
+	public void listenForSubscriptionAddedEvent(SubscriptionAddedEvent event) {
+		
+		if (event.getSubscriptionType() != subscription_type.CREDIT_BASED_SUBSCRIPTION) {
+			this.curriculumService.updateCreditsForUser(event.getRecruiterId(), RecruiterCredit.DEFAULT_CREDITS);
+		} else {
+			this.curriculumService.updateCreditsForUser(event.getRecruiterId(), RecruiterCredit.DISABLED_CREDITS);
+		}
+		
 	}
 
 }

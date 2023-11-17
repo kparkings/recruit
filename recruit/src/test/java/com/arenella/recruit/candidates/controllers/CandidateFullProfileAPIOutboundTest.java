@@ -207,4 +207,112 @@ public class CandidateFullProfileAPIOutboundTest {
 		assertEquals(OWNER_ID,			 					candidateProfile.getOwnerId());
 	}
 	
+	/**
+	* Tests no exceptions thrown if null values present
+	* @throws Exception
+	*/
+	@Test
+	public void testCensored_null_values() throws Exception{
+		
+		Candidate candidate = Candidate.builder().build();
+		
+		CandidateFullProfileAPIOutbound.convertFromCandidateAsCensored(candidate);
+	
+	}
+	
+	/**
+	* Null in equals null out
+	* @throws Exception
+	*/
+	@Test
+	public void testCensored() throws Exception{
+		
+		final String comments 			= "My name is " + FIRST_NAME + " " + SURNAME + " my email is " + EMAIL + " Number 0031 643 220 866" + " 1 years experience";
+		final String commentsCensored 	= "My name is " + CandidateFullProfileAPIOutbound.CENSORED_ITEM + " " + CandidateFullProfileAPIOutbound.CENSORED_ITEM + " my email is " + CandidateFullProfileAPIOutbound.CENSORED_ITEM + " Number " + CandidateFullProfileAPIOutbound.CENSORED_ITEM + " " + CandidateFullProfileAPIOutbound.CENSORED_ITEM + " " + CandidateFullProfileAPIOutbound.CENSORED_ITEM + " " + CandidateFullProfileAPIOutbound.CENSORED_ITEM + " 1 years experience";
+		final String intro 				= "My name is " + FIRST_NAME + " " + SURNAME + " my email is " + EMAIL + " Number 0031 643 220 866" + " 1 years experience";
+		final String introCensored 		= "My name is " + CandidateFullProfileAPIOutbound.CENSORED_ITEM + " " + CandidateFullProfileAPIOutbound.CENSORED_ITEM + " my email is " + CandidateFullProfileAPIOutbound.CENSORED_ITEM + " Number " + CandidateFullProfileAPIOutbound.CENSORED_ITEM + " " + CandidateFullProfileAPIOutbound.CENSORED_ITEM + " " + CandidateFullProfileAPIOutbound.CENSORED_ITEM + " " + CandidateFullProfileAPIOutbound.CENSORED_ITEM + " 1 years experience";
+		
+		
+		Candidate candidate = Candidate
+				.builder()
+					.candidateId(CANDIDATE_ID)
+					.function(FUNCTIONVAL)
+					.country(COUNTRYVAL)
+					.city(CITY)
+					.available(AVAILABLE)
+					.freelance(FREELANCEVAL)
+					.perm(PERMVAL)
+					.lastAvailabilityCheck(LAST_AVAILABILITY_CHECK)
+					.yearsExperience(YEARS_EXPERIENCE)
+					.skills(SKILLS)
+					.languages(LANGUAGES)
+					.roleSought(ROLE_SOUGHT)
+					.firstname(FIRST_NAME)
+					.surname(SURNAME)
+					.rateContract(RATE_CONTRACT_CAN)
+					.ratePerm(RATE_PERM_CAN)
+					.email(EMAIL)
+					.comments(comments)
+					.daysOnSite(DAYS_ON_SITE_VAL)
+					.availableFromDate(AVAILABLE_FROM_DATE)
+					.candidateType(CANDIDATE_TYPE_VAL)
+					.ownerId(OWNER_ID)
+					.introduction(intro)
+					.build();
+
+		assertEquals(CANDIDATE_ID, 				candidate.getCandidateId());
+		assertEquals(FUNCTIONVAL,				candidate.getFunction());
+		assertEquals(COUNTRYVAL, 				candidate.getCountry());
+		assertEquals(CITY, 						candidate.getCity());
+		assertEquals(AVAILABLE, 				candidate.isAvailable());
+		assertEquals(FREELANCEVAL, 				candidate.isFreelance());
+		assertEquals(PERMVAL, 					candidate.isPerm());
+		assertEquals(LAST_AVAILABILITY_CHECK, 	candidate.getLastAvailabilityCheckOn());
+		assertEquals(YEARS_EXPERIENCE, 			candidate.getYearsExperience());
+		assertEquals(ROLE_SOUGHT, 				candidate.getRoleSought());
+		assertEquals(FIRST_NAME,	 			candidate.getFirstname());
+		assertEquals(SURNAME, 					candidate.getSurname());
+		assertEquals(SURNAME, 					candidate.getSurname());
+		assertEquals(comments, 					candidate.getComments());
+		assertEquals(intro, 					candidate.getIntroduction());
+		assertEquals(DAYS_ON_SITE_VAL, 			candidate.getDaysOnSite());
+		assertEquals(AVAILABLE_FROM_DATE, 		candidate.getAvailableFromDate());
+		assertEquals(CANDIDATE_TYPE_VAL, 		candidate.getCandidateType());
+		assertEquals(OWNER_ID, 					candidate.getOwnerId().get());
+		
+		assertTrue(candidate.getSkills().contains(SKILL));
+		candidate.getLanguages().stream().filter(l -> l.getLanguage() == LANGUAGEVAL.getLanguage()).findAny().orElseThrow();
+		
+		CandidateFullProfileAPIOutbound candidateProfile = CandidateFullProfileAPIOutbound.convertFromCandidateAsCensored(candidate);
+		
+		assertEquals(CANDIDATE_ID, 							candidateProfile.getCandidateId());
+		assertEquals(FUNCTIONVAL,							candidateProfile.getFunction());
+		assertEquals(COUNTRYVAL, 							candidateProfile.getCountry());
+		assertEquals(CITY, 									candidateProfile.getCity());
+		assertEquals(AVAILABLE, 							candidateProfile.isAvailable());
+		assertEquals(FREELANCEVAL, 							candidateProfile.getFreelance());
+		assertEquals(PERMVAL, 								candidateProfile.getPerm());
+		assertEquals(LAST_AVAILABILITY_CHECK, 				candidateProfile.getLastAvailabilityCheckOn());
+		assertEquals(YEARS_EXPERIENCE, 						candidateProfile.getYearsExperience());
+		assertEquals(ROLE_SOUGHT, 							candidateProfile.getRoleSought());
+		assertEquals(CandidateFullProfileAPIOutbound.CENSORED_ITEM,	candidateProfile.getFirstname());
+		assertEquals(CandidateFullProfileAPIOutbound.CENSORED_ITEM, candidateProfile.getSurname());
+		assertEquals(CandidateFullProfileAPIOutbound.CENSORED_ITEM, candidateProfile.getEmail());
+		assertEquals(RATE_CONTRACT_CAN.getCurrency(), 		candidateProfile.getRateContract().get().getCurrency());
+		assertEquals(RATE_CONTRACT_CAN.getPeriod(), 		candidateProfile.getRateContract().get().getPeriod());
+		assertEquals(RATE_CONTRACT_CAN.getValueMin(), 		candidateProfile.getRateContract().get().getValueMin());
+		assertEquals(RATE_CONTRACT_CAN.getValueMax(), 		candidateProfile.getRateContract().get().getValueMax());
+		assertEquals(RATE_PERM_CAN.getCurrency(), 			candidateProfile.getRatePerm().get().getCurrency());
+		assertEquals(RATE_PERM_CAN.getPeriod(), 			candidateProfile.getRatePerm().get().getPeriod());
+		assertEquals(RATE_PERM_CAN.getValueMin(), 			candidateProfile.getRatePerm().get().getValueMin());
+		assertEquals(RATE_PERM_CAN.getValueMax(), 			candidateProfile.getRatePerm().get().getValueMax());
+		assertEquals(commentsCensored, 						candidateProfile.getComments());
+		assertEquals(introCensored, 						candidateProfile.getIntroduction());
+		assertEquals(DAYS_ON_SITE_VAL, 						candidateProfile.getDaysOnSite());
+		assertEquals(AVAILABLE_FROM_DATE, 					candidateProfile.getAvailableFromDate());
+		assertEquals(CANDIDATE_TYPE_VAL, 					candidateProfile.getCandidateType());
+		assertEquals(OWNER_ID,			 					candidateProfile.getOwnerId());
+		
+	}
+	
 }

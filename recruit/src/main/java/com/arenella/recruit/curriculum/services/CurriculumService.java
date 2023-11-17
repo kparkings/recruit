@@ -117,4 +117,9 @@ public interface CurriculumService {
 	*/
 	public int getCreditCountForUser(String name);
 
+	/**
+	* Refer to the CurriclumService for details 
+	*/
+	void updateCreditsForUser(String userId, int availableCredits);
+
 }

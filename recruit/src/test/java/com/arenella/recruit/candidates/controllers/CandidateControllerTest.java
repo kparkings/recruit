@@ -378,13 +378,50 @@ public class CandidateControllerTest {
 	public void testFetchCandidate() throws Exception{
 		
 		final String 	candidateId = "1234";
-		final Candidate candidate = Candidate.builder().build();
+		final String	firstName	= "fred";
+		final Candidate candidate 	= Candidate.builder().firstname(firstName).build();
 		
 		Mockito.when(this.mockCandidateService.fetchCandidate(Mockito.anyString(), Mockito.anyString(), Mockito.anyCollection())).thenReturn(candidate);
 		Mockito.when(this.mockUsernamePasswordAuthenticationToken.getAuthorities()).thenReturn(Set.of());
 		Mockito.when(this.mockUsernamePasswordAuthenticationToken.getName()).thenReturn(candidateId);
 		
 		ResponseEntity<CandidateFullProfileAPIOutbound> response = this.controller.fetchCandidate(candidateId, mockUsernamePasswordAuthenticationToken);
+		
+		assertEquals(firstName, response.getBody().getFirstname());
+		assertEquals(HttpStatus.OK, response.getStatusCode());
+		assertTrue(response.getBody() instanceof CandidateFullProfileAPIOutbound);
+		
+	}
+	
+	/**
+	* Tests request to fetch a specific Candidate when the User has credit based access but 
+	* no remaining credits. A censored version of the Candidate should be returned
+	* @throws Exception
+	*/
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@Test
+	public void testFetchCandidate_no_credits() throws Exception{
+		
+		final String 	candidateId 	= "1234";
+		final String 	userId	 		= "rec33";
+		final Candidate candidate 		= Candidate.builder().firstname("").surname("").email("").build();
+		
+		Mockito.when(this.mockCandidateService.fetchCandidate(Mockito.anyString(), Mockito.anyString(), Mockito.anyCollection())).thenReturn(candidate);
+		Mockito.when(this.mockUsernamePasswordAuthenticationToken.getAuthorities()).thenReturn(Set.of());
+		Mockito.when(this.mockUsernamePasswordAuthenticationToken.getName()).thenReturn(candidateId);
+		
+		Collection authorities = new HashSet<>();
+		authorities.add(new SimpleGrantedAuthority("ROLE_RECRUITER"));
+		
+		Mockito.when(this.mockUsernamePasswordAuthenticationToken.getAuthorities()).thenReturn(authorities);
+		Mockito.when(this.mockUsernamePasswordAuthenticationToken.getName()).thenReturn(userId);
+		
+		Mockito.when(this.mockUsernamePasswordAuthenticationToken.getClaim("useCredits")).thenReturn(Optional.of(Boolean.TRUE));
+		Mockito.when(this.mockCandidateService.hasCreditsLeft(Mockito.anyString())).thenReturn(false);
+		
+		ResponseEntity<CandidateFullProfileAPIOutbound> response = this.controller.fetchCandidate(candidateId, mockUsernamePasswordAuthenticationToken);
+		
+		assertEquals("-", response.getBody().getFirstname());
 		
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		assertTrue(response.getBody() instanceof CandidateFullProfileAPIOutbound);

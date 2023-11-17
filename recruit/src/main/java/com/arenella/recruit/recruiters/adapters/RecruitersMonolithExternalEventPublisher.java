@@ -18,6 +18,7 @@ import com.arenella.recruit.adapters.events.RecruiterUpdatedEvent;
 import com.arenella.recruit.adapters.events.SubscriptionAddedEvent;
 import com.arenella.recruit.authentication.adapters.AuthenticationExternalEventListener;
 import com.arenella.recruit.candidates.adapters.CandidateExternalEventListener;
+import com.arenella.recruit.curriculum.adapters.CurriculumExternalEventListener;
 import com.arenella.recruit.emailservice.adapters.EmailServiceExternalEventListener;
 import com.arenella.recruit.emailservice.adapters.RequestSendEmailCommand;
 import com.arenella.recruit.emailservice.beans.Email.EmailRecipient;
@@ -57,6 +58,9 @@ public class RecruitersMonolithExternalEventPublisher implements RecruitersExter
 	@Autowired
 	private CandidateExternalEventListener			candidateExternalEventListener;
 	
+	@Autowired
+	private CurriculumExternalEventListener			curriculumExternalEventListener;
+	
 	/**
 	* Refer to the ExternalEventPublisher interface for details 
 	*/
@@ -76,6 +80,7 @@ public class RecruitersMonolithExternalEventPublisher implements RecruitersExter
 		this.listingExternalEventListener.listenForRecruiterNoOpenSubscriptionsEvent(new RecruiterNoOpenSubscriptionEvent(recruiterId));
 		this.recruitersInternalEventListener.listenForRecruiterNoOpenSubscriptionsEvent(new RecruiterNoOpenSubscriptionEvent(recruiterId));
 		this.candidateExternalEventListener.listenForRecruiterNoOpenSubscriptionsEvent(new RecruiterNoOpenSubscriptionEvent(recruiterId));
+		this.curriculumExternalEventListener.listenForRecruiterNoOpenSubscriptionsEvent(new RecruiterNoOpenSubscriptionEvent(recruiterId));
 		//TODO: [Set credits 0 or defaults -> Test year subscription allows can]
 		
 	}
@@ -89,6 +94,7 @@ public class RecruitersMonolithExternalEventPublisher implements RecruitersExter
 		this.listingExternalEventListener.listenForSubscriptionAddedEvent(event);
 		this.recruitersInternalEventListener.listenForSubscriptionAddedEvent(event);
 		this.candidateExternalEventListener.listenForSubscriptionAddedEvent(event);
+		this.curriculumExternalEventListener.listenForSubscriptionAddedEvent(event);
 	}
 
 	/**

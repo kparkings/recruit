@@ -1,9 +1,12 @@
 package com.arenella.recruit.candidates.controllers;
 
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Optional;
 import java.util.Set;
+
+import org.apache.commons.lang.math.NumberUtils;
 
 import com.arenella.recruit.candidates.beans.Candidate;
 import com.arenella.recruit.candidates.beans.Candidate.CANDIDATE_TYPE;
@@ -22,6 +25,8 @@ import com.arenella.recruit.candidates.enums.PERM;
 */
 public class CandidateFullProfileAPIOutbound implements CandidateAPIOutbound{
 
+	public static final String CENSORED_ITEM = "-";
+	
 	private String 					candidateId;
 	private FUNCTION				function;
 	private String					roleSought;
@@ -613,6 +618,83 @@ public class CandidateFullProfileAPIOutbound implements CandidateAPIOutbound{
 					.ownerId(candidate.getOwnerId().isPresent() ? candidate.getOwnerId().get() : null)
 				.build();
 		
+	}
+	
+	/**
+	* Returns a censored version of the Candidate where contact and identifying details are 
+	* censored
+	* @param candidate - Candidate to convert
+	* @return converted and censored version of Candidate
+	*/
+	public static CandidateFullProfileAPIOutbound convertFromCandidateAsCensored(Candidate candidate) {
+		return CandidateFullProfileAPIOutbound
+				.builder()
+					.candidateId(candidate.getCandidateId())
+					.country(candidate.getCountry())
+					.function(candidate.getFunction())
+					.roleSought(candidate.getRoleSought())
+					.city(candidate.getCity())
+					.freelance(candidate.isFreelance())
+					.perm(candidate.isPerm())
+					.languages(candidate.getLanguages())
+					.skills(candidate.getSkills())
+					.yearsExperience(candidate.getYearsExperience())
+					.available(candidate.isAvailable())
+					.lastAvailabilityCheck(candidate.getLastAvailabilityCheckOn())
+					.firstname(CENSORED_ITEM)
+					.surname(CENSORED_ITEM)
+					.rateContract(RateAPIOutbound.convertFromDomain(candidate.getRateContract()))
+					.ratePerm(RateAPIOutbound.convertFromDomain(candidate.getRatePerm()))
+					.photo(PhotoAPIOutbound.convertFromDomain(candidate.getPhoto()))
+					.introduction(censorString(candidate, candidate.getIntroduction()))
+					.email(CENSORED_ITEM)
+					.comments(censorString(candidate, candidate.getComments()))
+					.daysOnSite(candidate.getDaysOnSite())
+					.availableFromDate(candidate.getAvailableFromDate())
+					.candidateType(candidate.getCandidateType())
+					.skills(candidate.getSkills())
+					.daysOnSite(candidate.getDaysOnSite())
+					.availableFromDate(candidate.getAvailableFromDate())
+					.candidateType(candidate.getCandidateType())
+					.ownerId(candidate.getOwnerId().isPresent() ? candidate.getOwnerId().get() : null)
+				.build();
+	}
+	
+	/**
+	* Removes identifying information about the Candidate from the source string
+	* @param candidate 	- Contains details of the Candidate
+	* @param source 	- String to censor 
+	* @return Censored String
+	*/
+	private static String censorString(Candidate candidate, String source) {
+		
+		final int couldBePhoneNumber = 3;
+		
+		String censored = source;
+		
+		if (source == null) {
+			return source;
+		}
+
+		StringBuilder censoredStr = new StringBuilder();
+		
+		 Arrays.asList(censored.split(" ")).stream().forEach(tok -> {
+			
+			if(tok.length() >= couldBePhoneNumber && NumberUtils.isNumber(tok)) {
+				censoredStr.append(CENSORED_ITEM).append(" ");
+			} else {
+				if(tok.toLowerCase().equals(candidate.getFirstname().toLowerCase())
+						|| tok.toLowerCase().equals(candidate.getSurname().toLowerCase())
+						|| tok.toLowerCase().equals(candidate.getEmail().toLowerCase())) {
+					censoredStr.append(CENSORED_ITEM).append(" ");
+				} else {
+					censoredStr.append(tok).append(" ");
+				}
+			}
+			
+		});
+
+		return censoredStr.toString().strip();
 	}
 	
 	/**

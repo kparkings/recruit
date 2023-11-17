@@ -332,4 +332,24 @@ public class CurriculumServiceImpl implements CurriculumService{
 		return credits.getCredits();
 	}
 	
+	/**
+	* Refer to the CurriclumService for details 
+	*/
+	@Override
+	public void updateCreditsForUser(String userId, int availableCredits) {
+		
+		Optional<RecruiterCredit> creditOpt = this.creditDao.getByRecruiterId(userId);
+		
+		if (!creditOpt.isPresent()) {
+			return;
+		}
+		
+		RecruiterCredit credits = creditOpt.get();
+		
+		credits.setCredits(availableCredits);
+		
+		creditDao.persist(credits);
+		
+	}
+	
 }
