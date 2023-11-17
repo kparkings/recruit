@@ -11,6 +11,7 @@ import com.arenella.recruit.adapters.events.RecruiterUpdatedEvent;
 import com.arenella.recruit.adapters.events.SubscriptionAddedEvent;
 import com.arenella.recruit.candidates.beans.RecruiterCredit;
 import com.arenella.recruit.candidates.services.CandidateService;
+import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_type;
 
 /**
 * Monolith implementation of the listener. In monolith setup just calls services.
@@ -60,7 +61,11 @@ public class CandidateMonolithExternalEventListener implements CandidateExternal
 	*/
 	@Override
 	public void listenForSubscriptionAddedEvent(SubscriptionAddedEvent event) {
-		this.candidateService.updateCreditsForUser(event.getRecruiterId(), RecruiterCredit.DISABLED_CREDITS);
+		if(event.getSubscriptionType() != subscription_type.CREDIT_BASED_SUBSCRIPTION) {
+			this.candidateService.updateCreditsForUser(event.getRecruiterId(), RecruiterCredit.DISABLED_CREDITS);
+		} else {
+			this.candidateService.updateCreditsForUser(event.getRecruiterId(), RecruiterCredit.DEFAULT_CREDITS);
+		}
 	}
 
 	/**

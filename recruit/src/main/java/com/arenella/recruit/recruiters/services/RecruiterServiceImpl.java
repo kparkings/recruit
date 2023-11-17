@@ -1,7 +1,6 @@
 package com.arenella.recruit.recruiters.services;
 
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Optional;
@@ -283,10 +282,16 @@ public class RecruiterServiceImpl implements RecruiterService{
 	*/
 	private void switchSubscription(Recruiter recruiter, subscription_type type) {
 		
+		Set<subscription_type> paidSubscriptionTypes 
+			= Set.of(subscription_type.YEAR_SUBSCRIPTION, 
+					 subscription_type.SIX_MONTHS_SUBSCRIPTION, 
+					 subscription_type.THREE_MONTHS_SUBSCRIPTION, 
+					 subscription_type.ONE_MONTH_SUBSCRIPTION);
+		
 		/**
-		* Ensure that at max only non ended YEAR_SUBSCRIPTION exists per recruiter 
+		* Ensure that at max only non ended PAID_SUBSCRIPTION exists per recruiter 
 		*/
-		if (recruiter.getSubscriptions().stream().filter(s -> s.getType() == subscription_type.YEAR_SUBSCRIPTION && s.getStatus() != subscription_status.SUBSCRIPTION_ENDED).findAny().isPresent()) {
+		if (recruiter.getSubscriptions().stream().filter(s -> paidSubscriptionTypes.contains(s.getType()) && s.getStatus() != subscription_status.SUBSCRIPTION_ENDED).findAny().isPresent()) {
 			throw new IllegalStateException("Subscription already exists. Cannot add a second time.");
 		}
 		 
@@ -306,28 +311,32 @@ public class RecruiterServiceImpl implements RecruiterService{
 		* If TRIAL_SUBSCRIPTION is not finished then make the start date of the subscription todays date plus the outstanding number 
 		* of days from the Trial subscription. Otherwise use todays date
 		*/
-		Optional<RecruiterSubscription> trialSubscriptionOpt = recruiter.getSubscriptions().stream().filter(s -> s.getType() == subscription_type.TRIAL_PERIOD && s.getStatus() != subscription_status.SUBSCRIPTION_ENDED).findFirst();
+		//Optional<RecruiterSubscription> trialSubscriptionOpt = recruiter.getSubscriptions().stream().filter(s -> s.getType() == subscription_type.TRIAL_PERIOD && s.getStatus() != subscription_status.SUBSCRIPTION_ENDED).findFirst();
 		
 		LocalDateTime activationDate 	= LocalDateTime.now();
 		LocalDateTime createdDate		= activationDate;
 		
-		if (trialSubscriptionOpt.isPresent()) {
-			TrialPeriodSubscription subscription = (TrialPeriodSubscription)trialSubscriptionOpt.get();
-			subscription.endSubscription();
-			subscription.setCurrentSubscription(false);
+		//TODO: This is now likely redundant as we only give the option to buy once trial has ended
+		//if (trialSubscriptionOpt.isPresent()) {
+		//	TrialPeriodSubscription subscription = (TrialPeriodSubscription)trialSubscriptionOpt.get();
+		//	subscription.endSubscription();
+		//	subscription.setCurrentSubscription(false);
 			
-			long secondsRemainingFromTrialPeriod = ChronoUnit.SECONDS.between(LocalDateTime.now(),subscription.getActivatedDate().plusDays(TrialPeriodSubscription.trialPeriodInDays));
+		//	long secondsRemainingFromTrialPeriod = ChronoUnit.SECONDS.between(LocalDateTime.now(),subscription.getActivatedDate().plusDays(TrialPeriodSubscription.trialPeriodInDays));
 			
-			activationDate = activationDate.plusSeconds(secondsRemainingFromTrialPeriod);
+		//	activationDate = activationDate.plusSeconds(secondsRemainingFromTrialPeriod);
 			
-		}
+		//}
 		
 		switch(type) {
 			case ONE_MONTH_SUBSCRIPTION, 
 				 THREE_MONTHS_SUBSCRIPTION, 
 				 SIX_MONTHS_SUBSCRIPTION, 
 				 YEAR_SUBSCRIPTION -> recruiter.addSubscription(paidPeriodRecruiterSubscription(recruiter, type, activationDate, createdDate));
-			case CREDIT_BASED_SUBSCRIPTION -> recruiter.addSubscription(creditBasedSubscription(recruiter, activationDate, createdDate));
+			case CREDIT_BASED_SUBSCRIPTION -> {
+				recruiter.addSubscription(creditBasedSubscription(recruiter, activationDate, createdDate));
+				//TODO: [KP] Assign credits to the 3 services for just this user. Listen for Subscription adde. If CREDIT_BASED update for user
+			}
 			default -> throw new IllegalArgumentException("Unexpected value: " + type);
 		}
 		

@@ -39,6 +39,7 @@ public class EmailTemplateFactory {
 			case LISTING_RECRUITER_CONTACT_REQUEST 		-> handleRecruiterContactRequest(sendEmailCommand, model);
 			case REC_TO_REC_CONTACT_REQUEST 			-> handleRecToRecContactRequest(sendEmailCommand, model);
 			case CANDIDATE_ACCOUNT_CREATED 				-> loadTemplate("new-candidate-signup.ftlh", model);
+			case NEW_CREDITS_ASSIGNED					-> loadTemplate("new-credits-assigned.ftlh", model);
 			default -> "Could not process template";
 		};
 		

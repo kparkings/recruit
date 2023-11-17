@@ -10,8 +10,9 @@
 		<div style="margin-top: 10px">Dear ${firstname}</div>
 		
 		<p>
-		I have set you up with a 90 day free trial account. During the trial period you have full access to all the Arenella-ICT features. At the end of the 90 days the trial will stop 
-		automatically. For continued access to the site after the trial expires you can take out a subscription via the site for 120 euro's per year ex tax.
+		I have set you up with a 30 day free trial account. During the trial period you have full access to all the Arenella-ICT features. At the end of the 30 days the trial will stop 
+		automatically. For continued access to the site after the trial expires you can take out either a free Credit based subscription or a paid subscription with unlimited access to 
+		the site for the duration of the Subscription.
 		</p>
 	
 		<P>
@@ -42,7 +43,7 @@
 		<p>You can add your open positions to the Job board. The advert's you place will be actively promoted within a network of 23000+ connections. </p>
 		
 		<h3>Marketplace</h3>
-		<p>The marketplace allows collaboration between recruiters. You can request candidates for positions you are trying to fill and you can also offer candidates that you have available but currently have no suitable role for. </p>
+		<p>The marketplace allows collaboration between recruiters so that you can request candidates for positions you are trying to fill. </p>
 		
 		<div> 
 			<p>Kind regards</p>

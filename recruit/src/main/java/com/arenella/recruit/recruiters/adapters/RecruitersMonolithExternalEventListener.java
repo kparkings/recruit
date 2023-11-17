@@ -7,6 +7,7 @@ import com.arenella.recruit.adapters.events.RecruiterNoOpenSubscriptionEvent;
 import com.arenella.recruit.adapters.events.RecruiterUserAccountCreatedEvent;
 import com.arenella.recruit.adapters.events.SubscriptionAddedEvent;
 import com.arenella.recruit.recruiters.beans.RecruiterCredit;
+import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_type;
 import com.arenella.recruit.recruiters.services.SupplyAndDemandService;
 
 /**
@@ -44,8 +45,16 @@ public class RecruitersMonolithExternalEventListener implements RecruitersExtern
 	*/
 	@Override
 	public void listenForSubscriptionAddedEvent(SubscriptionAddedEvent event) {
-		this.supplyAndDemandService.enableSupplyAndDemandPostsForRecruiter(event.getRecruiterId());
-		this.supplyAndDemandService.updateCreditsForUser(event.getRecruiterId(), RecruiterCredit.DISABLED_CREDITS);
+		
+		if (event.getSubscriptionType() != subscription_type.CREDIT_BASED_SUBSCRIPTION) {
+			this.supplyAndDemandService.enableSupplyAndDemandPostsForRecruiter(event.getRecruiterId());
+			this.supplyAndDemandService.updateCreditsForUser(event.getRecruiterId(), RecruiterCredit.DISABLED_CREDITS);
+		
+		} else {
+			this.supplyAndDemandService.enableSupplyAndDemandPostsForRecruiter(event.getRecruiterId());
+			this.supplyAndDemandService.updateCreditsForUser(event.getRecruiterId(), RecruiterCredit.DEFAULT_CREDITS);
+		
+		}
 	}
 
 }

@@ -790,53 +790,6 @@ public class RecruiterServiceImplTest {
 	}
 	
 	/**
-	* Tests happy path where the is a currently open trial period subscription and it 
-	* has still got days left before it runs out 
-	* @throws Exception
-	*/
-	@Test
-	public void testAddSubscription_yearSubscription_success_OpenTrialPeriod() throws Exception {
-		
-		final String 				recruiterId 				= "kparkings";
-		final UUID					existingSubscriptionId	 	= UUID.randomUUID();
-		final LocalDateTime			existingCreatedActivated	= LocalDateTime.now().minusDays(1);
-		final Recruiter				recruiter					= Recruiter.builder().userId(recruiterId).subscriptions(Set.of(TrialPeriodSubscription.builder().subscriptionId(existingSubscriptionId).created(existingCreatedActivated).activateDate(existingCreatedActivated).currentSubscription(true).status(subscription_status.ACTIVE).build())).build();
-		
-		SecurityContextHolder.setContext(mockSecurityContext);
-		
-		Mockito.when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
-		Mockito.when(mockAuthentication.getAuthorities()).thenReturn(Set.of());
-		Mockito.when(mockAuthentication.getName()).thenReturn(recruiterId);
-		
-		Mockito.when(this.mockDao.findRecruiterById(recruiterId)).thenReturn(Optional.of(recruiter));
-		
-		ArgumentCaptor<RecruiterEntity> entityArgCapt = ArgumentCaptor.forClass(RecruiterEntity.class);
-		
-		Mockito.when(this.mockDao.save(entityArgCapt.capture())).thenReturn(null);
-		
-		this.service.addSubscription(recruiterId, subscription_type.YEAR_SUBSCRIPTION);
-		
-		Mockito.verify(this.mockDao).save(Mockito.any());
-		
-		RecruiterEntity savedEntity = entityArgCapt.getValue();
-		
-		assertEquals(2, savedEntity.getSubscriptions().size()); 
-		
-		RecruiterSubscriptionEntity subEntity = savedEntity.getSubscriptions().stream().filter(se -> se.getSubscriptionId() != existingSubscriptionId).findFirst().get();
-		
-		assertNotEquals(subEntity.getActivatedDate(), subEntity.getCreated());
-		assertTrue(subEntity.isCurrentSubscription());
-		assertEquals(subscription_status.ACTIVE_PENDING_PAYMENT, subEntity.getStatus());
-		
-		RecruiterSubscriptionEntity subEntityExisting = savedEntity.getSubscriptions().stream().filter(se -> se.getSubscriptionId() == existingSubscriptionId).findFirst().get();
-		assertFalse(subEntityExisting.isCurrentSubscription());
-		assertEquals(subscription_status.SUBSCRIPTION_ENDED, subEntityExisting.getStatus());
-		
-		Mockito.verify(this.mockExternEventPublisher).publishSubscriptionAddedEvent(Mockito.any(SubscriptionAddedEvent.class));
-		
-	}
-	
-	/**
 	* Tests that any currently open FIRST_GEN subscriptions are ended
 	* @throws Exception
 	*/

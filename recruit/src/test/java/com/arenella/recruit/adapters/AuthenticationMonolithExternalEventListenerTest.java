@@ -79,7 +79,7 @@ public class AuthenticationMonolithExternalEventListenerTest {
 		this.eventListener.listenForRecruiterNoOpenSubscriptionsEvent(event);
 	
 		Mockito.verify(this.mockAccountService).replaceRolesForUser(recruiterId, userRoles);
-		Mockito.verify(this.mockAccountService).updateUsersCreditStatus(recruiterId, true);
+		Mockito.verify(this.mockAccountService).updateUsersCreditStatus(recruiterId, false);
 	}
 	
 	/**

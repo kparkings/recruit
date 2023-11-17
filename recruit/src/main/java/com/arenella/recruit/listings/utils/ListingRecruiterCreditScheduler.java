@@ -26,6 +26,7 @@ public class ListingRecruiterCreditScheduler {
 	@Scheduled(cron = "0 0 0 * * MON")
 	public void grantCredits() {
 		this.supplyAndDemandService.updateCredits(new GrantCreditCommand());
+		
 	}
 	
 }

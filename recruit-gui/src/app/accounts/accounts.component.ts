@@ -255,7 +255,12 @@ export class AccountsComponent implements OnInit {
 					this.recruitersWithSubscriptionActions.push(sa);
 				}
 				
-				if (s.currentSubscription && s.status === "ACTIVE_PENDING_PAYMENT" && s.type === "YEAR_SUBSCRIPTION") {
+				if (s.currentSubscription && s.status === "ACTIVE_PENDING_PAYMENT" && 
+					(	   s.type === "YEAR_SUBSCRIPTION"
+						|| s.type === "ONE_MONTH_SUBSCRIPTION"
+						|| s.type === "THREE_MONTHS_SUBSCRIPTION" 
+						|| s.type === "SIX_MONTHS_SUBSCRIPTION")
+					) {
 					
 					let sa:SubscriptionAction = new SubscriptionAction();
 					
@@ -273,7 +278,12 @@ export class AccountsComponent implements OnInit {
 					this.recruitersWithSubscriptionActions.push(sa);
 				}
 				
-				if (s.currentSubscription && s.status === "DISABLED_PENDING_PAYMENT" && s.type === "YEAR_SUBSCRIPTION") {
+				if (s.currentSubscription && s.status === "DISABLED_PENDING_PAYMENT" && 
+					(	s.type === "YEAR_SUBSCRIPTION"
+						|| s.type === "ONE_MONTH_SUBSCRIPTION"
+						|| s.type === "THREE_MONTHS_SUBSCRIPTION" 
+						|| s.type === "SIX_MONTHS_SUBSCRIPTION")
+					) {
 					
 					let sa:SubscriptionAction = new SubscriptionAction();
 					

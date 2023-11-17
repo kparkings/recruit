@@ -9,7 +9,7 @@ import java.util.UUID;
 */
 public class TrialPeriodSubscription implements RecruiterSubscription{
 
-	public static final int trialPeriodInDays = 90;
+	public static final int trialPeriodInDays = 30;
 	
 	private UUID 					subscriptionId;
 	private String 					recruiterId;
@@ -210,13 +210,13 @@ public class TrialPeriodSubscription implements RecruiterSubscription{
 	
 	/**
 	* Performs check to determine whether the Subscription has expired. TrialPeriodSubscriptions
-	* expire automatically after 90 days.
+	* expire automatically after 30 days.
 	* @param subscription - Subscription to check
 	* @return
 	*/
 	public static boolean isTrialPeriodExpired(TrialPeriodSubscription subscription) {
 		
-		final int lengthOfTrialPeriodInDays = 90;
+		final int lengthOfTrialPeriodInDays = 30;
 		
 		LocalDateTime 	now 		= LocalDateTime.now();
 		LocalDateTime 	expiryDate 	= subscription.getActivatedDate().plusDays(lengthOfTrialPeriodInDays);

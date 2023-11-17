@@ -110,6 +110,9 @@ public class RecruiterSubscriptonScheduler {
 										
 										return;
 									}
+									case CREDIT_BASED_SUBSCRIPTION -> {
+										//Nothing to Credit subscription doesnt expire. It just gets removed if paid subscription is selected
+									}
 									default ->{
 										//No expiry so nothing to do here
 									}

@@ -64,6 +64,14 @@ export class RecruiterAccountComponent implements OnInit {
 		
   	}
   	
+  	/**
+	* Requests a Credit based subscription to the site for the
+	* Recruiter
+	*/
+	public selectCreditBasedSubscription():void{
+		this.addAlternateSubscription("CREDIT_BASED_SUBSCRIPTION");
+	}
+  	
   	public doShowBillingDetails(subscriptionOption:string):void{
 		  this.showBillingDetails 			= true;
 		  this.selectedSubscriptionOption 	= subscriptionOption;

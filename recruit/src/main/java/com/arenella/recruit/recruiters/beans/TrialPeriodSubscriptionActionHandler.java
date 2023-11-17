@@ -73,7 +73,7 @@ public class TrialPeriodSubscriptionActionHandler implements RecruiterSubscripti
 								.emailType(EmailType.EXTERN)
 								.recipients(Set.of(new EmailRecipient<UUID>(UUID.randomUUID(),recruiter.getUserId(), ContactType.RECRUITER)))
 								.sender(new Sender<>(UUID.randomUUID(), "", SenderType.SYSTEM, "kparkings@gmail.com"))
-								.title("Arenella-ICT - 90 Day Free Trial")
+								.title("Arenella-ICT - 30 Day Free Trial")
 								.topic(EmailTopic.ACCOUNT_CREATED)
 								.model(Map.of("firstname",recruiter.getFirstName(),"userid",recruiter.getUserId(),"password",password))
 								.persistable(false)

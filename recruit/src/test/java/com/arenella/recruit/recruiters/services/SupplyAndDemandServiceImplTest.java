@@ -25,6 +25,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 import com.arenella.recruit.adapters.actions.GrantCreditCommand;
 import com.arenella.recruit.adapters.events.OpenPositionContactRequestEvent;
+import com.arenella.recruit.emailservice.adapters.RequestSendEmailCommand;
 import com.arenella.recruit.recruiters.beans.RecruiterCredit;
 import com.arenella.recruit.recruiters.dao.RecruiterCreditDao;
 import com.arenella.recruit.recruiters.adapters.RecruitersExternalEventPublisher;
@@ -389,6 +390,8 @@ public class SupplyAndDemandServiceImplTest {
 		if (argCapt.getValue().stream().filter(rc -> rc.getCredits() != RecruiterCredit.DEFAULT_CREDITS).findAny().isPresent()) {
 			throw new RuntimeException();
 		}
+		
+		Mockito.verify(this.mockEventPublisher, Mockito.times(2)).publishSendEmailCommand(Mockito.any(RequestSendEmailCommand.class));
 		
 	}
 	

@@ -8,6 +8,7 @@ import com.arenella.recruit.adapters.events.SubscriptionAddedEvent;
 import com.arenella.recruit.listings.beans.RecruiterCredit;
 import com.arenella.recruit.listings.services.ListingService;
 import com.arenella.recruit.recruiters.adapters.ListingsExternalEventListener;
+import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_type;
 
 /**
 * Event listener for Listings
@@ -33,8 +34,14 @@ public class ListingsExternalEventListenerImpl implements ListingsExternalEventL
 	*/
 	@Override
 	public void listenForSubscriptionAddedEvent(SubscriptionAddedEvent event) {
-		this.listingService.enableListingsForRecruiter(event.getRecruiterId());
-		this.listingService.updateCreditsForUser(event.getRecruiterId(), RecruiterCredit.DISABLED_CREDITS);
+		
+		if (event.getSubscriptionType() != subscription_type.CREDIT_BASED_SUBSCRIPTION) {
+			this.listingService.enableListingsForRecruiter(event.getRecruiterId());
+			this.listingService.updateCreditsForUser(event.getRecruiterId(), RecruiterCredit.DEFAULT_CREDITS);
+		} else {
+			this.listingService.enableListingsForRecruiter(event.getRecruiterId());
+			this.listingService.updateCreditsForUser(event.getRecruiterId(), RecruiterCredit.DISABLED_CREDITS);
+		}
 		
 	}
 

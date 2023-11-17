@@ -15,6 +15,7 @@ import com.arenella.recruit.adapters.events.SubscriptionAddedEvent;
 import com.arenella.recruit.authentication.beans.User.USER_ROLE;
 import com.arenella.recruit.authentication.enums.AccountType;
 import com.arenella.recruit.authentication.services.AccountService;
+import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_type;
 
 /**
 * Implementation of ExternalEventListener optimized to 
@@ -42,7 +43,7 @@ public class AuthenticationMonolithExternalEventListener implements Authenticati
 	@Override
 	public void listenForRecruiterNoOpenSubscriptionsEvent(RecruiterNoOpenSubscriptionEvent event) {
 		accountService.replaceRolesForUser(event.geRecruiterId(), Set.of(USER_ROLE.recruiterNoSubscrition));
-		accountService.updateUsersCreditStatus(event.geRecruiterId(), true);
+		accountService.updateUsersCreditStatus(event.geRecruiterId(), false);
 	}
 
 	/**
@@ -51,7 +52,13 @@ public class AuthenticationMonolithExternalEventListener implements Authenticati
 	@Override
 	public void listenForSubscriptionAddedEvent(SubscriptionAddedEvent event) {
 		accountService.replaceRolesForUser(event.getRecruiterId(), Set.of(USER_ROLE.recruiter));
-		accountService.updateUsersCreditStatus(event.getRecruiterId(), false);
+		
+		if (event.getSubscriptionType() == subscription_type.CREDIT_BASED_SUBSCRIPTION) {
+			accountService.updateUsersCreditStatus(event.getRecruiterId(), true);
+		} else {
+			accountService.updateUsersCreditStatus(event.getRecruiterId(), false);
+		}
+		
 	}
 
 	/**

@@ -2,6 +2,7 @@ package com.arenella.recruit.recruiters.services;
 
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -14,6 +15,13 @@ import org.springframework.stereotype.Service;
 
 import com.arenella.recruit.adapters.actions.GrantCreditCommand;
 import com.arenella.recruit.adapters.events.OpenPositionContactRequestEvent;
+import com.arenella.recruit.emailservice.adapters.RequestSendEmailCommand;
+import com.arenella.recruit.emailservice.beans.Email.EmailRecipient;
+import com.arenella.recruit.emailservice.beans.Email.EmailTopic;
+import com.arenella.recruit.emailservice.beans.Email.EmailType;
+import com.arenella.recruit.emailservice.beans.Email.Sender;
+import com.arenella.recruit.emailservice.beans.Email.EmailRecipient.ContactType;
+import com.arenella.recruit.emailservice.beans.Email.Sender.SenderType;
 import com.arenella.recruit.recruiters.beans.RecruiterCredit;
 import com.arenella.recruit.recruiters.adapters.RecruitersExternalEventPublisher;
 import com.arenella.recruit.recruiters.beans.OfferedCandidateAPIOutbound.RecruiterDetails;
@@ -83,58 +91,6 @@ public class SupplyAndDemandServiceImpl implements SupplyAndDemandService{
 		
 	}
 	
-	/**
-	* Refer to the SupplyAndDemandService interface for details 
-	*/
-	//@Override
-	//public void addOfferedCandidate(OfferedCandidate offeredCandidate) {
-		
-	//	offeredCandidate.initializeAsNewObject(getAuthenticatedRecruiterId());
-		
-	//	offeredCandidateDao.persistOfferedCandidate(offeredCandidate);
-		
-	//}
-	
-	/**
-	* Refer to the SupplyAndDemandService interface for details 
-	*/
-	//@Override
-	//public void updateOfferedCandidate(UUID offeredCandidateId, OfferedCandidate offeredCandidate) throws IllegalAccessException {
-		
-	//	validateAuthenticationForUserForOfferedCandidate(offeredCandidateId);
-	
-	//	offeredCandidateDao.updateExistingOfferedCandidate(offeredCandidateId, offeredCandidate);
-		
-	//}
-	
-	/**
-	* Refer to the SupplyAndDemandService interface for details 
-	*/
-	//@Override
-	//public void deleteOfferedCandidate(UUID offeredCandidateId) throws IllegalAccessException{
-		
-	//	validateAuthenticationForUserForOfferedCandidate(offeredCandidateId);
-		
-	//	offeredCandidateDao.deleteById(offeredCandidateId);
-		
-	//}
-
-	/**
-	* Refer to the SupplyAndDemandService interface for details 
-	*/
-	//@Override
-	//public Set<OfferedCandidate> fetchOfferedCandidates() {
-	//	return offeredCandidateDao.findAllOfferedCandidates();
-	//}
-	
-	/**
-	* Refer to the SupplyAndDemandService interface for details 
-	*/
-	//@Override
-	//public Set<OfferedCandidate> fetchOfferedCandidates(String recruiterId) {
-	//	return offeredCandidateDao.findAllOfferedCandidatesByRecruiterId(recruiterId);
-	//}
-
 	/**
 	* Refer to the SupplyAndDemandService interface for details 
 	*/
@@ -254,30 +210,6 @@ public class SupplyAndDemandServiceImpl implements SupplyAndDemandService{
 	/**
 	* Refer to the SupplyAndDemandService interface for details 
 	*/
-	//@Override
-	//public void sendOfferedCandidateContactEmail(UUID offeredCandidateId, String message, String authenticatedUserId) {
-		
-	//	if (!this.offeredCandidateDao.existsById(offeredCandidateId)) {
-	//		throw new RuntimeException("Unknown Offered Candidate");
-	//	}
-		
-	//	OfferedCandidate offeredCandidate = this.offeredCandidateDao.findByOfferedCandidateId(offeredCandidateId);
-		
-	//	this.eventPublisher
-	//		.publishOffereedCandidateRequestEvent(OfferedCandidateContactRequestEvent
-	//				.builder()
-	//					.message(message)
-	//					.recipientId(offeredCandidate.getRecruiterId())
-	//					.senderId(authenticatedUserId)
-	//					.offeredCandidateId(offeredCandidateId)
-	//					.offeredCandidateTitle(offeredCandidate.getcandidateRoleTitle())
-	//				.build());
-	//	
-	//}
-
-	/**
-	* Refer to the SupplyAndDemandService interface for details 
-	*/
 	@Override
 	public void sendOpenPositionContactEmail(UUID openPositionId, String message, String authenticatedUserId) {
 		
@@ -312,14 +244,6 @@ public class SupplyAndDemandServiceImpl implements SupplyAndDemandService{
 		
 		this.openPositionDao.persistOpenPositions(openPositions);
 		
-		
-		//Set<OfferedCandidate> offeredCandidates  = this.offeredCandidateDao.findAllOfferedCandidatesByRecruiterId(recruiterId).stream().map(oc -> {
-		//	oc.setActive(false);
-		//	return oc;
-		//}).collect(Collectors.toSet());
-		
-		//this.offeredCandidateDao.persistOfferedCandidates(offeredCandidates);
-		
 	}
 
 	/**
@@ -335,30 +259,7 @@ public class SupplyAndDemandServiceImpl implements SupplyAndDemandService{
 		
 		this.openPositionDao.persistOpenPositions(openPositions);
 		
-		//Set<OfferedCandidate> offeredCandidates  = this.offeredCandidateDao.findAllOfferedCandidatesByRecruiterId(recruiterId).stream().map(oc -> {
-		//	oc.setActive(true);
-		//	return oc;
-		//}).collect(Collectors.toSet());
-		
-		//this.offeredCandidateDao.persistOfferedCandidates(offeredCandidates);
-		
 	}
-	
-	/**
-	* Returns whether the OfferedCandidate is owned by the current logged in User
-	* @param offeredCandidateId - Unique id of the Offered Candidate
-	* @return Whether the current user is the owner
-	*/
-	//private boolean isOwnerOfOfferedCandidate(UUID offeredCandidateId) {
-		
-	//	OfferedCandidate offeredCandidate = offeredCandidateDao.findByOfferedCandidateId(offeredCandidateId);
-		
-	//	if (!getAuthenticatedRecruiterId().equals(offeredCandidate.getRecruiterId())) {
-	//		return false;
-	//	}
-		
-	//	return true;
-	//}
 	
 	/**
 	* Returns whether the OpenPosition is owned by the current logged in User
@@ -411,7 +312,27 @@ public class SupplyAndDemandServiceImpl implements SupplyAndDemandService{
 		
 		Set<RecruiterCredit> credits = this.creditDao.fetchRecruiterCredits();
 		
-		credits.stream().forEach(credit -> credit.setCredits(RecruiterCredit.DEFAULT_CREDITS));
+		credits.stream().forEach(credit -> {
+				
+			credit.setCredits(RecruiterCredit.DEFAULT_CREDITS);
+			
+			Map<String,Object> modelExt = Map.of("CREDITS_CURRICULUM",8,"CREDITS_LISTINGS",2,"CREDITS_MARKETPLACE",2);
+			
+			RequestSendEmailCommand emailCommand = 
+					RequestSendEmailCommand
+					.builder()
+						.emailType(EmailType.EXTERN)
+						.model(modelExt)
+						.persistable(false)
+						.recipients(Set.of(new EmailRecipient<UUID>(UUID.randomUUID(), credit.getRecruiterId(), ContactType.RECRUITER)))
+						.sender(new Sender<>(UUID.randomUUID(), "", SenderType.SYSTEM, "kparkings@gmail.com"))
+						.title("Arenella-ICT - New Credits Available")
+						.topic(EmailTopic.NEW_CREDITS_ASSIGNED)
+					.build();
+			
+				this.eventPublisher.publishSendEmailCommand(emailCommand);
+				
+		});
 		
 		creditDao.saveAll(credits);
 		
