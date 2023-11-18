@@ -311,22 +311,8 @@ public class RecruiterServiceImpl implements RecruiterService{
 		* If TRIAL_SUBSCRIPTION is not finished then make the start date of the subscription todays date plus the outstanding number 
 		* of days from the Trial subscription. Otherwise use todays date
 		*/
-		//Optional<RecruiterSubscription> trialSubscriptionOpt = recruiter.getSubscriptions().stream().filter(s -> s.getType() == subscription_type.TRIAL_PERIOD && s.getStatus() != subscription_status.SUBSCRIPTION_ENDED).findFirst();
-		
 		LocalDateTime activationDate 	= LocalDateTime.now();
 		LocalDateTime createdDate		= activationDate;
-		
-		//TODO: This is now likely redundant as we only give the option to buy once trial has ended
-		//if (trialSubscriptionOpt.isPresent()) {
-		//	TrialPeriodSubscription subscription = (TrialPeriodSubscription)trialSubscriptionOpt.get();
-		//	subscription.endSubscription();
-		//	subscription.setCurrentSubscription(false);
-			
-		//	long secondsRemainingFromTrialPeriod = ChronoUnit.SECONDS.between(LocalDateTime.now(),subscription.getActivatedDate().plusDays(TrialPeriodSubscription.trialPeriodInDays));
-			
-		//	activationDate = activationDate.plusSeconds(secondsRemainingFromTrialPeriod);
-			
-		//}
 		
 		switch(type) {
 			case ONE_MONTH_SUBSCRIPTION, 
@@ -334,8 +320,15 @@ public class RecruiterServiceImpl implements RecruiterService{
 				 SIX_MONTHS_SUBSCRIPTION, 
 				 YEAR_SUBSCRIPTION -> recruiter.addSubscription(paidPeriodRecruiterSubscription(recruiter, type, activationDate, createdDate));
 			case CREDIT_BASED_SUBSCRIPTION -> {
-				recruiter.addSubscription(creditBasedSubscription(recruiter, activationDate, createdDate));
-				//TODO: [KP] Assign credits to the 3 services for just this user. Listen for Subscription adde. If CREDIT_BASED update for user
+				
+				Optional<RecruiterSubscription> subscription = recruiter.getSubscriptions().stream().filter(s -> s.getStatus() == subscription_status.ACTIVE).findFirst();
+				
+				if(subscription.isEmpty()) {
+					recruiter.addSubscription(creditBasedSubscription(recruiter, activationDate, createdDate));
+				} else {
+					throw new IllegalStateException("Cannt create a Credit Based Subscription where a subscription already exsits");
+				}
+	
 			}
 			default -> throw new IllegalArgumentException("Unexpected value: " + type);
 		}

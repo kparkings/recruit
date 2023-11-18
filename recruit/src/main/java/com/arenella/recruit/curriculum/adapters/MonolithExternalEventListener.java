@@ -137,9 +137,9 @@ public class MonolithExternalEventListener implements CurriculumExternalEventLis
 	public void listenForSubscriptionAddedEvent(SubscriptionAddedEvent event) {
 		
 		if (event.getSubscriptionType() != subscription_type.CREDIT_BASED_SUBSCRIPTION) {
-			this.curriculumService.updateCreditsForUser(event.getRecruiterId(), RecruiterCredit.DEFAULT_CREDITS);
-		} else {
 			this.curriculumService.updateCreditsForUser(event.getRecruiterId(), RecruiterCredit.DISABLED_CREDITS);
+		} else {
+			this.curriculumService.updateCreditsForUser(event.getRecruiterId(), RecruiterCredit.DEFAULT_CREDITS);
 		}
 		
 	}

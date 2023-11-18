@@ -26,6 +26,7 @@ export class RecruiterAccountComponent implements OnInit {
 	public accountDetailsMobCss = "";
 	public showBillingDetails:boolean = false;
 	public selectedSubscriptionOption:string = "";
+	public isCreditBasedSubscription:boolean = false;
 	
 	/**
 	* Constructor
@@ -133,6 +134,12 @@ export class RecruiterAccountComponent implements OnInit {
 				sessionStorage.setItem('hasUnpaidSubscription',		'true');
 			} else {
 				sessionStorage.setItem('hasUnpaidSubscription',		'false');
+			}
+			
+			let activeSubscription:Subscription = this.recruiter.subscriptions.filter(s => s.status == 'ACTIVE')[0];
+			
+			if (activeSubscription && activeSubscription.type == 'CREDIT_BASED_SUBSCRIPTION'){
+				this.isCreditBasedSubscription = true;
 			}
 			
 			this.accoundDetailsForm = new UntypedFormGroup({

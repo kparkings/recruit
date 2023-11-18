@@ -110,7 +110,11 @@
 			<h1>Subscription options</h1>
 			
 			<div>
-				<div class="subs-opt-box {{subscriptionSelectionMobCss}}" (click)="doShowBillingDetails('CREDIT_BASED_SUBSCRIPTION')">
+				<div class="subs-opt-box {{subscriptionSelectionMobCss}}" (click)="doShowBillingDetails('CREDIT_BASED_SUBSCRIPTION')" *ngIf="!isCreditBasedSubscription">
+					<h3>Free Credit Based</h3>
+					<p>0 Euro</p>
+				</div>
+				<div class="subs-opt-box {{subscriptionSelectionMobCss}}" style="background:grey;cursor:unset;border:none" *ngIf="isCreditBasedSubscription">
 					<h3>Free Credit Based</h3>
 					<p>0 Euro</p>
 				</div>
