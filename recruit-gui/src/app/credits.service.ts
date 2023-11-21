@@ -1,5 +1,7 @@
-import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders } 					from '@angular/common/http';
+import { Injectable } 								from '@angular/core';
 import { Observable, BehaviorSubject  }             from 'rxjs';
+import { environment }								from './../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -12,9 +14,40 @@ export class CreditsService {
 	/**
 	* constructor 
 	*/
-	constructor() { 
-	 
-	}
+	constructor(private httpClient: HttpClient) { }
+	httpOptions = {
+      headers: new HttpHeaders({ 'Content-Type': 'application/json' }), withCredentials: true
+    };
+    
+    /**
+  	* Returns remaining credits for Curriculum downloads for USer 
+  	*/
+  	public getCreditCountCurriculum(): Observable<any>{
+      
+		const backendUrl:string = environment.backendUrl +'candidate/_credits';
+  
+    	return this.httpClient.get<any>(backendUrl, this.httpOptions);
+  	}
+  	
+  	/**
+  	* Returns remaining credits for Curriculum downloads for USer 
+  	*/
+  	public getCreditCountJobboard(): Observable<any>{
+      
+		const backendUrl:string = environment.backendUrl +'listings/_credits';
+  
+    	return this.httpClient.get<any>(backendUrl, this.httpOptions);
+  	}
+  	
+  	/**
+  	* Returns remaining credits for Curriculum downloads for USer 
+  	*/
+  	public getCreditCountMarketplace(): Observable<any>{
+      
+		const backendUrl:string = environment.backendUrl +'v1/open-position/_credits';
+  
+    	return this.httpClient.get<any>(backendUrl, this.httpOptions);
+  	}
 
 	/**
 	* Returns whether or not User has remaining tokens 

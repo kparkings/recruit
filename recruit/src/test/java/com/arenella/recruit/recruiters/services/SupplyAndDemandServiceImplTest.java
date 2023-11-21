@@ -481,4 +481,35 @@ public class SupplyAndDemandServiceImplTest {
 		
 	}
 	
+	/**
+	* Tests case no credits
+	* @throws Exception
+	*/
+	@Test
+	public void testGetCreditCountForUser_unknownUser() throws Exception{
+		
+		Mockito.when(this.mockCreditDao.getByRecruiterId(Mockito.anyString())).thenReturn(Optional.empty());
+		
+		assertThrows(IllegalArgumentException.class, () -> {
+			this.service.getCreditCountForUser("rec22");
+		});
+		
+	}
+	
+	/**
+	* Tests case no credits
+	* @throws Exception
+	*/
+	@Test
+	public void testGetCreditCountForUser() throws Exception{
+		
+		final int credits = 5;
+		
+		RecruiterCredit rc = RecruiterCredit.builder().credits(credits).build();
+		
+		Mockito.when(this.mockCreditDao.getByRecruiterId(Mockito.anyString())).thenReturn(Optional.of(rc));
+		
+		assertEquals(credits, this.service.getCreditCountForUser("rec22"));
+		
+	}
 }

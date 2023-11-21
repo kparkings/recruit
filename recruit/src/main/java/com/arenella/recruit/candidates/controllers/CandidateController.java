@@ -243,6 +243,16 @@ public class CandidateController {
 	}
 	
 	/**
+	* Returns the number of credits the Candidate has left
+	* @return
+	*/
+	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('RECRUITER')")
+	@GetMapping(path="candidate/_credits")
+	public ResponseEntity<Integer> fetchRemainingCreditCount(Principal principal){
+		return ResponseEntity.ok(candidateService.getCreditCountForUser(principal.getName()));
+	}
+	
+	/**
 	* Returns whether the User has credits left
 	* @param userName - Name of the user
 	* @return Whether user has credits left

@@ -139,6 +139,18 @@
 	<div class="feedbackBox">
 	
 		<p>Unfortunately you have used your credits for this week. You will receive new credits next week.</p>
+		
+		<p *ngIf="creditsCurriculum > 0" class="credits-available">
+		You still have {{creditsCurriculum}} tokens to download curriculums.
+		</p>
+		<p *ngIf="creditsMarketplace > 0" class="credits-available">
+		You still have {{creditsMarketplace}} tokens to request candidates on the Marketplace.
+		</p>
+		<p *ngIf="creditsJobboard> 0" class="credits-available">
+		You still have {{creditsJobboard}} tokens to post on the Jobboard.
+		</p>
+		
+		
 		<p>
 		Opting for a paid subscription will provide unlimited access to all site features for the duration of the subscription.
 		</p>

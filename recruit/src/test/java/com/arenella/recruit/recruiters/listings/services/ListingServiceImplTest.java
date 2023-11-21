@@ -2,6 +2,7 @@ package com.arenella.recruit.recruiters.listings.services;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDateTime;
@@ -750,6 +751,38 @@ public class ListingServiceImplTest {
 		this.service.updateCreditsForUser(userId, credits);
 	
 		Mockito.verify(this.mockCreditDao, Mockito.never()).persist(Mockito.any());
+		
+	}
+	
+	/**
+	* Tests case no credits
+	* @throws Exception
+	*/
+	@Test
+	public void testGetCreditCountForUser_unknownUser() throws Exception{
+		
+		Mockito.when(this.mockCreditDao.getByRecruiterId(Mockito.anyString())).thenReturn(Optional.empty());
+		
+		assertThrows(IllegalArgumentException.class, () -> {
+			this.service.getCreditCountForUser("rec22");
+		});
+		
+	}
+	
+	/**
+	* Tests case no credits
+	* @throws Exception
+	*/
+	@Test
+	public void testGetCreditCountForUser() throws Exception{
+		
+		final int credits = 5;
+		
+		RecruiterCredit rc = RecruiterCredit.builder().credits(credits).build();
+		
+		Mockito.when(this.mockCreditDao.getByRecruiterId(Mockito.anyString())).thenReturn(Optional.of(rc));
+		
+		assertEquals(credits, this.service.getCreditCountForUser("rec22"));
 		
 	}
 	

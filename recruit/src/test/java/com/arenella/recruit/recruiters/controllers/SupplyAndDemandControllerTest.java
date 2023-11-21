@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.security.Principal;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.HashSet;
@@ -47,6 +48,9 @@ public class SupplyAndDemandControllerTest {
 	
 	@Mock
 	private SupplyAndDemandEventDao								mockSupplyAndDemandEventDao;
+	
+	@Mock
+	private Principal											mockPrincipal;
 	
 	/**
 	* Test Success
@@ -347,6 +351,25 @@ public class SupplyAndDemandControllerTest {
 		
 		Mockito.verify(this.mockSupplyAndDemandService).doCreditsCheck(mockUsernamePasswordAuthenticationToken.getName());
 
+	}
+	
+	/**
+	* Tests Fetch of remaining credit count for a User
+	* @throws Exception
+	*/
+	@Test
+	public void testFetchRemainingCreditCount() throws Exception{
+	
+		final int count = 6;
+		
+		Mockito.when(mockPrincipal.getName()).thenReturn("rec22");
+		Mockito.when(this.mockSupplyAndDemandService.getCreditCountForUser(Mockito.anyString())).thenReturn(count);
+		
+		ResponseEntity<Integer> response = this.controller.fetchRemainingCreditCount(mockPrincipal);
+	
+		assertEquals(HttpStatus.OK, response.getStatusCode());
+		assertEquals(count, response.getBody());
+	
 	}
 	
 }

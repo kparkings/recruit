@@ -213,6 +213,16 @@ public class SupplyAndDemandController {
 	}
 	
 	/**
+	* Returns the number of credits the Candidate has left
+	* @return
+	*/
+	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('RECRUITER')")
+	@GetMapping(path="v1/open-position/_credits")
+	public ResponseEntity<Integer> fetchRemainingCreditCount(Principal principal){
+		return ResponseEntity.ok(supplyAndDemandService.getCreditCountForUser(principal.getName()));
+	}
+	
+	/**
 	* Logs that a Recruiter has viewed an offered candidate
 	* @return ResponseEntity
 	*/

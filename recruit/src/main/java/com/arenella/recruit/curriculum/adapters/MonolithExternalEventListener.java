@@ -16,7 +16,7 @@ import com.arenella.recruit.candidates.dao.PendingCandidateDao;
 import com.arenella.recruit.candidates.services.AlertTestUtil;
 import com.arenella.recruit.curriculum.dao.CurriculumSkillsDao;
 import com.arenella.recruit.curriculum.services.CurriculumService;
-import com.arenella.recruit.listings.beans.RecruiterCredit;
+import com.arenella.recruit.curriculum.beans.RecruiterCredit;
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_type;
 
 /**

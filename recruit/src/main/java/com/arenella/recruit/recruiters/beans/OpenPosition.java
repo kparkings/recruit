@@ -12,7 +12,7 @@ import java.util.UUID;
 */
 public class OpenPosition {
 
-	public enum Country 				{NETHERLANDS, BELGIUM, UK, IRL, EUROPE, WORLD}
+	public enum Country 				{NETHERLANDS, BELGIUM, UK, IRELAND, EU_REMOTE, WORLD_REMOTE}
 	public enum ContractType 			{CONTRACT, PERM, BOTH}
 	
 	private UUID 						id;

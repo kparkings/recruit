@@ -37,10 +37,10 @@ public class ListingsExternalEventListenerImpl implements ListingsExternalEventL
 		
 		if (event.getSubscriptionType() != subscription_type.CREDIT_BASED_SUBSCRIPTION) {
 			this.listingService.enableListingsForRecruiter(event.getRecruiterId());
-			this.listingService.updateCreditsForUser(event.getRecruiterId(), RecruiterCredit.DEFAULT_CREDITS);
+			this.listingService.updateCreditsForUser(event.getRecruiterId(), RecruiterCredit.DISABLED_CREDITS);
 		} else {
 			this.listingService.enableListingsForRecruiter(event.getRecruiterId());
-			this.listingService.updateCreditsForUser(event.getRecruiterId(), RecruiterCredit.DISABLED_CREDITS);
+			this.listingService.updateCreditsForUser(event.getRecruiterId(), RecruiterCredit.DEFAULT_CREDITS);
 		}
 		
 	}

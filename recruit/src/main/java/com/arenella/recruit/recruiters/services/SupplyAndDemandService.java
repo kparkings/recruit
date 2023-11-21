@@ -137,6 +137,14 @@ public interface SupplyAndDemandService {
 	* @param command - information about credits
 	*/
 	public void updateCreditsForUser(String recruiterId, int disabledCredits);
+	
+	/**
+	* Returns the number of Credits the candidate still has
+	* available
+	* @param userId - Id of the User to get Credit count for
+	* @return Number of remaining credits
+	*/
+	public int getCreditCountForUser(String userId);
 
 	
 }

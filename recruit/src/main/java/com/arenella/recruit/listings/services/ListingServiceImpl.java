@@ -375,6 +375,22 @@ public class ListingServiceImpl implements ListingService{
 	}
 	
 	/**
+	* Refer to the CandidateService for details 
+	*/
+	@Override
+	public int getCreditCountForUser(String userId) {
+		
+		Optional<RecruiterCredit> credits =  this.creditDao.getByRecruiterId(userId);
+			
+		if(credits.isEmpty()) {
+			throw new IllegalArgumentException("Unknown User: " + userId);	
+		}
+		
+		return credits.get().getCredits();
+		
+	}
+	
+	/**
 	* Checks safety of File
 	* @param attachment
 	*/

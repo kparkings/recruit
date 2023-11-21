@@ -35,6 +35,10 @@ export class AppComponent {
 	public validationExceptions:Array<string> 	= new Array<string>();
 	public menuItemMobileCss 					= '';
 	
+	public creditsCurriculum:number 	= 0;
+	public creditsMarketplace:number 	= 0;
+	public creditsJobboard:number 		= 0;
+	
 	/**
 	* Constructor
 	*/
@@ -46,7 +50,7 @@ export class AppComponent {
 				private emailService:			EmailService,
 				public  popupsService:			PopupsService,
 				private candidateNavService: 	CandidateNavService,
-				private creditsService:			CreditsService){
+				public  creditsService:			CreditsService){
 		
 		this.isMobile = deviceDetector.isMobile();
 		
@@ -72,7 +76,9 @@ export class AppComponent {
 		
 		this.creditsService.hasTokens().subscribe(tokens => {
 			if (tokens == false) {
+				this.updateTokenCounts();
 				this.popupsService.openModal(this.noCreditsBox);
+				
 			} else {
 				console.log("Has Credits");
 			}
@@ -101,6 +107,18 @@ export class AppComponent {
 	public navToNewCandidate():void{
 		this.candidateNavService.reset();
 		this.router.navigate(['new-candidate']);
+	}
+	
+	private updateTokenCounts():void{
+		this.creditsService.getCreditCountCurriculum().subscribe(res => {
+			this.creditsCurriculum = res;
+		});
+		this.creditsService.getCreditCountJobboard().subscribe(res => {
+			this.creditsJobboard = res;
+		});
+		this.creditsService.getCreditCountMarketplace().subscribe(res => {
+			this.creditsMarketplace = res;
+		});
 	}
 	
 	/**

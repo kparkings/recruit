@@ -201,5 +201,13 @@ public interface CandidateService {
 	* @param command - information about credits
 	*/
 	void updateCreditsForUser(String userId, int availableCredits);
+
+	/**
+	* Returns the number of Credits the candidate still has
+	* available
+	* @param userId - Id of the User to get Credit count for
+	* @return Number of remaining credits
+	*/
+	public int getCreditCountForUser(String userId);
 	
 }

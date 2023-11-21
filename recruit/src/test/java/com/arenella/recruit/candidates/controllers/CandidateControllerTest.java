@@ -485,4 +485,23 @@ public class CandidateControllerTest {
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 	}
 	
+	/**
+	* Tests Fetch of remaining credit count for a User
+	* @throws Exception
+	*/
+	@Test
+	public void testFetchRemainingCreditCount() throws Exception{
+	
+		final int count = 6;
+		
+		Mockito.when(mockPrincipal.getName()).thenReturn("rec22");
+		Mockito.when(this.mockCandidateService.getCreditCountForUser(Mockito.anyString())).thenReturn(count);
+		
+		ResponseEntity<Integer> response = this.controller.fetchRemainingCreditCount(mockPrincipal);
+	
+		assertEquals(HttpStatus.OK, response.getStatusCode());
+		assertEquals(count, response.getBody());
+	
+	}
+	
 }

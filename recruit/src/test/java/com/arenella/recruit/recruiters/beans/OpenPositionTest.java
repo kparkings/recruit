@@ -24,7 +24,7 @@ public class OpenPositionTest {
 	private UUID 			id						= UUID.randomUUID();
 	private String 			recruiterId				= "recruier1Id";
 	private String 			positionTitle			= "Java Developer";
-	private Country	 		country					= Country.EUROPE;
+	private Country	 		country					= Country.EU_REMOTE;
 	private String			location				= "Remote in Europe";
 	private ContractType 	contractType			= ContractType.CONTRACT;
 	private String	 		renumeration			= "500 euros per day";

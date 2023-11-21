@@ -225,6 +225,16 @@ public class ListingController {
 	}
 	
 	/**
+	* Returns the number of credits the Candidate has left
+	* @return
+	*/
+	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('RECRUITER')")
+	@GetMapping(path="listing/_credits")
+	public ResponseEntity<Integer> fetchRemainingCreditCount(Principal principal){
+		return ResponseEntity.ok(this.service.getCreditCountForUser(principal.getName()));
+	}
+	
+	/**
 	* Performs check to ensure user either doesnt use credit based access or 
 	* has enough credits to perform an operation
 	* @param principal - currently logged in user
