@@ -15,6 +15,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.arenella.recruit.adapters.events.CandidateDeletedEvent;
 import com.arenella.recruit.adapters.events.CandidateNoLongerAvailableEvent;
+import com.arenella.recruit.adapters.events.RecruiterCreatedEvent;
 import com.arenella.recruit.curriculum.dao.CurriculumSkillsDao;
 import com.arenella.recruit.curriculum.services.CurriculumService;
 
@@ -144,6 +145,19 @@ public class MonolithExternalEventListenerTest {
 		this.listener.listenForCandidteDeletedEvent(event);
 		
 		Mockito.verify(this.mockCurriculumService).deleteCurriculum(Long.valueOf(candidateId));
+		
+	}
+	
+	/**
+	* Tests handling of Recruiter created event
+	* @throws Exception
+	*/
+	@Test
+	public void testListenForRecruiterCreatedEvent() throws Exception{
+		
+		this.listener.listenForRecruiterCreatedEvent(RecruiterCreatedEvent.builder().recruiterId("rec22").build());
+		
+		Mockito.verify(this.mockCurriculumService).addCreditsRecordForUser(Mockito.anyString());
 		
 	}
 	

@@ -1,5 +1,6 @@
 package com.arenella.recruit.recruiters.utils;
 
+import java.util.Set;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -34,6 +35,8 @@ import com.arenella.recruit.recruiters.services.RecruiterService;
 @Component
 public class RecruiterSubscriptonScheduler {
 	
+	private static final Set<subscription_status> ACTIVE_STATUSES = Set.of(subscription_status.ACTIVE_PENDING_PAYMENT, subscription_status.ACTIVE, subscription_status.DISABLED_PENDING_PAYMENT);
+	
 	@Autowired
 	private RecruiterService 				recruiterService;
 	
@@ -61,8 +64,7 @@ public class RecruiterSubscriptonScheduler {
 				
 						recruiterService.fetchRecruiters().stream().forEach(recruiter -> 
 							
-							recruiter.getSubscriptions().stream().filter(a -> a.getStatus() == subscription_status.ACTIVE).collect(Collectors.toSet()).stream().forEach(subscription -> {
-								
+							recruiter.getSubscriptions().stream().filter(a -> ACTIVE_STATUSES.contains(a.getStatus())).collect(Collectors.toSet()).stream().forEach(subscription -> {
 								
 								switch(subscription.getType()) {
 									case TRIAL_PERIOD -> {

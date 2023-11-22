@@ -23,8 +23,12 @@ public class RecruiterCreditScheduler {
 	* Periodically grants new credits to Recruiters so that can carry
 	* out operations in the system 
 	*/
-	@Scheduled(cron = "0 0 0 * * MON")
+	//@Scheduled(cron = "0 0 0 * * MON")
+	@Scheduled(cron = "* * * * * *")
 	public void grantCredits() {
+		
+		//TODO: [KP] send event. Call updateCredits in each service. Do this one as last as it sends the email and if there is an exception it wont send the email
+		
 		this.supplyAndDemandService.updateCredits(new GrantCreditCommand());
 	}
 	

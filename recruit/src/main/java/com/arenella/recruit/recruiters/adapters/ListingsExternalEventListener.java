@@ -1,5 +1,6 @@
 package com.arenella.recruit.recruiters.adapters;
 
+import com.arenella.recruit.adapters.events.RecruiterCreatedEvent;
 import com.arenella.recruit.adapters.events.RecruiterNoOpenSubscriptionEvent;
 import com.arenella.recruit.adapters.events.SubscriptionAddedEvent;
 
@@ -20,5 +21,11 @@ public interface ListingsExternalEventListener {
 	* @param recruiterHasOpenSubscriptionEvent
 	*/
 	void listenForSubscriptionAddedEvent(SubscriptionAddedEvent event);
+
+	/**
+	* Listens for events for the creation of a new recruiter
+	* @param event - Recruiter created
+	*/
+	void listenForRecruiterCreatedEvent(RecruiterCreatedEvent event);
 
 }

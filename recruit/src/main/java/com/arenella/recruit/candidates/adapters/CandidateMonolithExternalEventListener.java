@@ -29,6 +29,7 @@ public class CandidateMonolithExternalEventListener implements CandidateExternal
 	@Override
 	public void listenForRecruiterCreatedEvent(RecruiterCreatedEvent event) {
 		this.candidateService.updateContact(event.getRecruiterId(), event.getEmail(), event.getFirstName(), event.getSurname());
+		this.candidateService.addCreditsRecordForUser(event.getRecruiterId());
 	}
 
 	/**

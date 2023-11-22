@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.arenella.recruit.adapters.events.CandidateDeletedEvent;
 import com.arenella.recruit.adapters.events.CandidateNoLongerAvailableEvent;
+import com.arenella.recruit.adapters.events.RecruiterCreatedEvent;
 import com.arenella.recruit.adapters.events.RecruiterNoOpenSubscriptionEvent;
 import com.arenella.recruit.adapters.events.SubscriptionAddedEvent;
 import com.arenella.recruit.candidates.adapters.CandidateCreatedEvent;
@@ -142,6 +143,14 @@ public class MonolithExternalEventListener implements CurriculumExternalEventLis
 			this.curriculumService.updateCreditsForUser(event.getRecruiterId(), RecruiterCredit.DEFAULT_CREDITS);
 		}
 		
+	}
+
+	/**
+	* Refer to the ListingsExternalEventListener interface for details
+	*/
+	@Override
+	public void listenForRecruiterCreatedEvent(RecruiterCreatedEvent event) {
+		this.curriculumService.addCreditsRecordForUser(event.getRecruiterId());
 	}
 
 }

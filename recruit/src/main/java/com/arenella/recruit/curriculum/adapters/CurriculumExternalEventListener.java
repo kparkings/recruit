@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import com.arenella.recruit.adapters.events.CandidateDeletedEvent;
 import com.arenella.recruit.adapters.events.CandidateNoLongerAvailableEvent;
+import com.arenella.recruit.adapters.events.RecruiterCreatedEvent;
 import com.arenella.recruit.adapters.events.RecruiterNoOpenSubscriptionEvent;
 import com.arenella.recruit.adapters.events.SubscriptionAddedEvent;
 import com.arenella.recruit.candidates.adapters.CandidateCreatedEvent;
@@ -56,6 +57,12 @@ public interface CurriculumExternalEventListener {
 	* Handles event of RecruiterNoOpenSubscriptionEvent for Recruiter 
 	*/
 	void listenForRecruiterNoOpenSubscriptionsEvent(RecruiterNoOpenSubscriptionEvent event);
+
+	/**
+	* Listens for events for the creation of a new recruiter
+	* @param event - Recruiter created
+	*/
+	public void listenForRecruiterCreatedEvent(RecruiterCreatedEvent event);
 
 	
 }

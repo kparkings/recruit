@@ -146,5 +146,11 @@ public interface SupplyAndDemandService {
 	*/
 	public int getCreditCountForUser(String userId);
 
+	/**
+	* Adds the initial record to the Credit table 
+	* for the User
+	*/
+	void addCreditsRecordForUser(String userId);
+
 	
 }

@@ -34,7 +34,7 @@ export class CreditsService {
   	*/
   	public getCreditCountJobboard(): Observable<any>{
       
-		const backendUrl:string = environment.backendUrl +'listings/_credits';
+		const backendUrl:string = environment.backendUrl +'listing/_credits';
   
     	return this.httpClient.get<any>(backendUrl, this.httpOptions);
   	}

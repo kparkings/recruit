@@ -122,4 +122,10 @@ public interface CurriculumService {
 	*/
 	void updateCreditsForUser(String userId, int availableCredits);
 
+	/**
+	* Adds the initial record to the Credit table 
+	* for the User
+	*/
+	void addCreditsRecordForUser(String userId);
+
 }

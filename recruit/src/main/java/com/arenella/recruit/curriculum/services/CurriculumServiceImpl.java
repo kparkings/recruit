@@ -352,4 +352,20 @@ public class CurriculumServiceImpl implements CurriculumService{
 		
 	}
 	
+	/**
+	* Refer to the CandidateService for details 
+	*/
+	@Override
+	public void addCreditsRecordForUser(String userId) {
+		
+		Optional<RecruiterCredit> creditOpt = this.creditDao.getByRecruiterId(userId);
+		
+		if (creditOpt.isPresent()) {
+			throw new IllegalStateException("Candidate Credits already exist for user " + userId);
+		}
+		
+		creditDao.persist(RecruiterCredit.builder().recruiterId(userId).credits(RecruiterCredit.DISABLED_CREDITS).build());
+		
+	}
+	
 }
