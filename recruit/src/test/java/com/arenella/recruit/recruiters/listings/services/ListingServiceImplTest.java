@@ -599,74 +599,28 @@ public class ListingServiceImplTest {
 	}
 	
 	/**
-	* Test updating the RecruiterCredits
+	* Test credits assigned and event sent
 	* @throws Exception
 	*/
+	@SuppressWarnings("unchecked")
 	@Test
 	public void testUpdateCredits() throws Exception{
 		
-		@SuppressWarnings("unchecked")
 		ArgumentCaptor<Set<RecruiterCredit>> argCapt = ArgumentCaptor.forClass(Set.class);
 		
-		RecruiterCredit rc1 = RecruiterCredit.builder().recruiterId("recruiter1").credits(2).build();
-		RecruiterCredit rc2 = RecruiterCredit.builder().recruiterId("recruiter1").credits(5).build();
+		RecruiterCredit rc1 = RecruiterCredit.builder().recruiterId("rec1").credits(1).build();
+		RecruiterCredit rc2 = RecruiterCredit.builder().recruiterId("rec2").credits(2).build();
+		RecruiterCredit rc3 = RecruiterCredit.builder().recruiterId("rec3").credits(RecruiterCredit.DISABLED_CREDITS).build();
 		
-		Mockito.when(this.mockCreditDao.fetchRecruiterCredits()).thenReturn(Set.of(rc1,rc2));
 		Mockito.doNothing().when(this.mockCreditDao).saveAll(argCapt.capture());
+		Mockito.when(this.mockCreditDao.fetchRecruiterCredits()).thenReturn(Set.of(rc1,rc2,rc3));
 		
-		this.service.updateCredits(new GrantCreditCommand());
+		service.updateCredits(new GrantCreditCommand());
 		
-		if (argCapt.getValue().stream().filter(rc -> rc.getCredits() != RecruiterCredit.DEFAULT_CREDITS).findAny().isPresent()) {
-			throw new RuntimeException();
-		}
+		assertEquals(2, argCapt.getValue().stream().filter(rc -> rc.getCredits()== RecruiterCredit.DEFAULT_CREDITS).count());
+		assertEquals(1, argCapt.getValue().stream().filter(rc -> rc.getCredits()== RecruiterCredit.DISABLED_CREDITS).count());
 		
 	}
-	
-	/**
-	* Tests case credits left
-	* @throws Exception
-	*/
-	//@Test
-	//public void testHasCreditsLeft_userNotFound() throws Exception{
-		
-	//	final String userId = "kparkings";
-		
-	//	Mockito.when(this.mockCreditDao.getByRecruiterId(userId)).thenReturn(Optional.empty());
-		
-	//	assertFalse(this.service.hasCreditsLeft(userId));
-	//}
-	
-	/**
-	* Tests case credits left
-	* @throws Exception
-	*/
-	//@Test
-	//public void testHasCreditsLeft_true() throws Exception{
-		
-	//	final String userId = "kparkings";
-		
-	//	RecruiterCredit rc = RecruiterCredit.builder().credits(1).recruiterId(userId).build();
-		
-	//	Mockito.when(this.mockCreditDao.getByRecruiterId(userId)).thenReturn(Optional.of(rc));
-		
-	//	assertTrue(this.service.hasCreditsLeft(userId));
-	//}
-	
-	/**
-	* Tests case no credits left
-	* @throws Exception
-	*/
-	//@Test
-	//public void testHasCreditsLeft_false() throws Exception{
-		
-	//	final String userId = "kparkings";
-		
-	//	RecruiterCredit rc = RecruiterCredit.builder().credits(0).recruiterId(userId).build();
-		
-	//	Mockito.when(this.mockCreditDao.getByRecruiterId(userId)).thenReturn(Optional.of(rc));
-		
-	//	assertFalse(this.service.hasCreditsLeft(userId));
-	//}
 	
 	/**
 	* Test false returned if User not known

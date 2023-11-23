@@ -6,7 +6,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import com.arenella.recruit.adapters.actions.GrantCreditCommand;
-import com.arenella.recruit.recruiters.services.SupplyAndDemandService;
+import com.arenella.recruit.listings.services.ListingService;
 
 /**
 * Scheduler sends a command to reset the Recruiters Credits once per week
@@ -17,7 +17,7 @@ import com.arenella.recruit.recruiters.services.SupplyAndDemandService;
 public class ListingRecruiterCreditScheduler {
 	
 	@Autowired
-	private SupplyAndDemandService supplyAndDemandService;
+	private ListingService listingService;
 	
 	/**
 	* Periodically grants new credits to Recruiters so that can carry
@@ -25,7 +25,7 @@ public class ListingRecruiterCreditScheduler {
 	*/
 	@Scheduled(cron = "0 0 0 * * MON")
 	public void grantCredits() {
-		this.supplyAndDemandService.updateCredits(new GrantCreditCommand());
+		this.listingService.updateCredits(new GrantCreditCommand());
 		
 	}
 	

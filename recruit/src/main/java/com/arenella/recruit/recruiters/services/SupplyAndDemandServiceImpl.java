@@ -312,7 +312,7 @@ public class SupplyAndDemandServiceImpl implements SupplyAndDemandService{
 		
 		Set<RecruiterCredit> credits = this.creditDao.fetchRecruiterCredits();
 		
-		credits.stream().forEach(credit -> {
+		credits.stream().filter(rc -> rc.getCredits() != RecruiterCredit.DISABLED_CREDITS).forEach(credit -> {
 				
 			credit.setCredits(RecruiterCredit.DEFAULT_CREDITS);
 			

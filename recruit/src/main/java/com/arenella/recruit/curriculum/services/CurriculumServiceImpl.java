@@ -277,7 +277,7 @@ public class CurriculumServiceImpl implements CurriculumService{
 	@Override
 	public void updateCredits(int credits) {
 		
-		creditDao.fetchRecruiterCredits().stream().forEach(rc -> {
+		creditDao.fetchRecruiterCredits().stream().filter(rc -> rc.getCredits() != RecruiterCredit.DISABLED_CREDITS).forEach(rc -> {
 			rc.setCredits(credits);
 			this.creditDao.persist(rc);
 			this.externalEventPublisher.publishCreditsAssignedEvent(new CreditsAssignedEvent(rc.getRecruiterId(), credits));

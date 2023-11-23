@@ -649,19 +649,20 @@ public class CurriculumServiceImplTest {
 		
 		RecruiterCredit rc1 = RecruiterCredit.builder().recruiterId("rec1").credits(1).build();
 		RecruiterCredit rc2 = RecruiterCredit.builder().recruiterId("rec2").credits(2).build();
-		RecruiterCredit rc3 = RecruiterCredit.builder().recruiterId("rec3").credits(3).build();
+		RecruiterCredit rc3 = RecruiterCredit.builder().recruiterId("rec3").credits(RecruiterCredit.DISABLED_CREDITS).build();
 		
 		Mockito.when(this.mockCreditDao.fetchRecruiterCredits()).thenReturn(Set.of(rc1,rc2,rc3));
 		
 		service.updateCredits(0);
 		
-		Mockito.verify(this.mockCreditDao, 				Mockito.times(3)).persist(Mockito.any(RecruiterCredit.class));
-		Mockito.verify(this.mockExternalEventPublisher, Mockito.times(3)).publishCreditsAssignedEvent(Mockito.any(CreditsAssignedEvent.class));;
+		Mockito.verify(this.mockCreditDao, 				Mockito.times(2)).persist(Mockito.any(RecruiterCredit.class));
+		Mockito.verify(this.mockExternalEventPublisher, Mockito.times(2)).publishCreditsAssignedEvent(Mockito.any(CreditsAssignedEvent.class));;
+		
 		
 	}
 	
 	/**
-	* Checks Exception thrown if credits used for unkown user
+	* Checks Exception thrown if credits used for unknown user
 	* @throws Exception
 	*/
 	@Test

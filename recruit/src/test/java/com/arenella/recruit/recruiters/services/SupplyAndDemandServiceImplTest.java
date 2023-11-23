@@ -381,17 +381,17 @@ public class SupplyAndDemandServiceImplTest {
 		
 		RecruiterCredit rc1 = RecruiterCredit.builder().recruiterId("recruiter1").credits(2).build();
 		RecruiterCredit rc2 = RecruiterCredit.builder().recruiterId("recruiter1").credits(5).build();
+		RecruiterCredit rc3 = RecruiterCredit.builder().recruiterId("recruiter1").credits(RecruiterCredit.DISABLED_CREDITS).build();
 		
-		Mockito.when(this.mockCreditDao.fetchRecruiterCredits()).thenReturn(Set.of(rc1,rc2));
+		Mockito.when(this.mockCreditDao.fetchRecruiterCredits()).thenReturn(Set.of(rc1,rc2, rc3));
 		Mockito.doNothing().when(this.mockCreditDao).saveAll(argCapt.capture());
 		
 		this.service.updateCredits(new GrantCreditCommand());
 		
-		if (argCapt.getValue().stream().filter(rc -> rc.getCredits() != RecruiterCredit.DEFAULT_CREDITS).findAny().isPresent()) {
-			throw new RuntimeException();
-		}
-		
 		Mockito.verify(this.mockEventPublisher, Mockito.times(2)).publishSendEmailCommand(Mockito.any(RequestSendEmailCommand.class));
+		
+		assertEquals(2, argCapt.getValue().stream().filter(rc -> rc.getCredits() == RecruiterCredit.DEFAULT_CREDITS).count());
+		assertEquals(1, argCapt.getValue().stream().filter(rc -> rc.getCredits() == RecruiterCredit.DISABLED_CREDITS).count());
 		
 	}
 	
