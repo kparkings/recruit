@@ -38,12 +38,14 @@ export class AccountsComponent implements OnInit {
 	expiredSubscriptionRecruiters:Array<Recruiter>					= Array<Recruiter>();
 	trialPeriodRecruiters:Array<Recruiter>							= Array<Recruiter>();
 	activePaidSubscription:Array<Recruiter>							= Array<Recruiter>();
+	creditBasedSubscription:Array<Recruiter>						= Array<Recruiter>();
 	firstGenActiveSubscription:Array<Recruiter>						= Array<Recruiter>();
 	candidatesToCheckForAvailability:Array<Candidate>				= Array<Candidate>();
 	
 	showExpiredSubscriptionRecruiters:boolean 						= true;
 	showTrialPeriodRecruiters:boolean								= true;
 	showActivePaidSubscription:boolean								= true;
+	showCreditBasedSubscription:boolean								= true;
 	showFirstGenActiveSubscription:boolean							= true;
 	
 	
@@ -336,6 +338,7 @@ export class AccountsComponent implements OnInit {
 		this.expiredSubscriptionRecruiters		= new Array<Recruiter>();
 		this.trialPeriodRecruiters				= new Array<Recruiter>();
 		this.activePaidSubscription 			= new Array<Recruiter>();
+		this.creditBasedSubscription			= new Array<Recruiter>();
 		this.firstGenActiveSubscription			= new Array<Recruiter>();
 		
     	this.recruiterService.getRecruiters().subscribe( data => {
@@ -386,6 +389,11 @@ export class AccountsComponent implements OnInit {
 			return;
 		}
 		
+		if (activeSubscription.type == 'CREDIT_BASED_SUBSCRIPTION') {
+			this.creditBasedSubscription.push(recruiter);
+			return;
+		}
+		
 		if (	activeSubscription.status == 'AWAITING_ACTIVATION'
 			|| 	activeSubscription.status == 'ACTIVE_PENDING_PAYMENT'
 			|| 	activeSubscription.status == 'ACTIVE'){
@@ -420,6 +428,10 @@ export class AccountsComponent implements OnInit {
 	*/
 	toggleShowActivePaidSubscription():void{
 		this.showActivePaidSubscription = !this.showActivePaidSubscription;
+	}
+	
+	toggleShowCreditBasedSubscription():void{
+		this.showCreditBasedSubscription = !this.showCreditBasedSubscription;
 	}
 	
 	/**

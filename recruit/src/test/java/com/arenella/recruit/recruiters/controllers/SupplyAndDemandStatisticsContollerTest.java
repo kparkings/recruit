@@ -53,23 +53,4 @@ public class SupplyAndDemandStatisticsContollerTest {
 		
 	}
 	
-	/*
-	* Tests response from request to fetch weekly stat's for Offered Candidates
-	* @throws Exception
-	*/
-	@Test
-	public void testGetOfferedCandidatesWeeklyStats() throws Exception{
-		
-		Mockito.when(this.supplyAndDemandService.fetchOfferedCandidateViewStats()).thenReturn(Set.of(SupplyAndDemandEvent
-				.builder()
-					.created(LocalDateTime.of(2022, 12, 13,20, 46)).recruiterId(recruiterId).build()));
-		
-		ResponseEntity<RecruiterMarketplaceViewStatsAPIOutput> response = controller.getOfferedCandidatesWeeklyStats();
-		
-		assertEquals(HttpStatus.OK, response.getStatusCode());
-		
-		response.getBody().getStats().stream().filter(s -> s.getRecruiterId().equals(recruiterId)).findAny().orElseThrow();
-		
-	}
-	
 }

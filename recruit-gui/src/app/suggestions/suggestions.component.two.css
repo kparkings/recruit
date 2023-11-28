@@ -362,3 +362,7 @@ textarea {
 	height:320px;
 	border:2px solid lightgrey;
 }
+
+.left-info-box table tr td {
+	padding-left:20px;
+}

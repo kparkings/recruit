@@ -75,14 +75,7 @@ public interface SupplyAndDemandService {
 	* @return Stats
 	*/
 	public Set<SupplyAndDemandEvent> fetchOpenPositionViewStats();
-
-	/**
-	* Fetches Status relating to views of Offered 
-	* Candidates by recruiters
-	* @return Stats
-	*/
-	public Set<SupplyAndDemandEvent> fetchOfferedCandidateViewStats();
-
+	
 	/**
 	* 
 	* @param openPositionId			- Id of the open position

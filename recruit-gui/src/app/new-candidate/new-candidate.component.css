@@ -143,6 +143,7 @@
 
 .main-btns{
 	width:200px;
+	max-width:46%;
 	margin-right:10px;
 	margin-bottom:10px;
 	margin-top:0px;

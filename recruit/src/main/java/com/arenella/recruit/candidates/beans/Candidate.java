@@ -17,7 +17,7 @@ import com.arenella.recruit.candidates.enums.PERM;
 */
 public class Candidate {
 
-	public enum DAYS_ON_SITE {ZERO, ONE,TWO,THREE,FOUR,FIVE}
+	public enum DAYS_ON_SITE {ZERO,ONE,TWO,THREE,FOUR,FIVE}
 	public enum CANDIDATE_TYPE {CANDIDATE, MARKETPLACE_CANDIDATE}
 	
 	public static final String ANONYMOUS_USER_ATTR_VALUE = "unknown";

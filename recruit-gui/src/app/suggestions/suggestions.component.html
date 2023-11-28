@@ -293,6 +293,27 @@
 				<p>{{suggestedCandidate.yearsExperience}}
 			</div>
 			
+			<div>
+				<h3>Availability</h3>
+			</div>
+			<div class="left-info-box" *ngIf="candidateProfile.daysOnSite || candidateProfile.availableFromDate">
+				<table>
+					<tr *ngIf="candidateProfile.daysOnSite">
+						<th>Max Days on Site</th>
+						<td>
+							{{formatHumanReadableDaysOnsite(candidateProfile.daysOnSite)}}
+						</td>
+					</tr>
+					<tr *ngIf="candidateProfile.availableFromDate">
+						<th>Available From</th>
+						<td>
+							{{candidateProfile.availableFromDate}}
+						</td>
+					</tr>
+				</table>
+				
+			</div>
+			
 		</div>	
 				
 		<div class="details-right" >
@@ -300,39 +321,7 @@
 				<h1>{{suggestedCandidate.roleSought}}</h1>
 			</div>
 			
-			<div>
-				<table class="table candidate-suggestion-table">
-					<tr>
-						<td class="candidate-suggestion-table-hdr">Candidate Number</td>
-						<td>{{suggestedCandidate.candidateId}}</td>
-					</tr>
-					<tr>
-						<td class="candidate-suggestion-table-hdr">Name</td>
-						<td>{{suggestedCandidate.firstname}} {{suggestedCandidate.surname}}</td>
-					</tr>
-					<tr *ng="!isCandidate()">
-						<td class="candidate-suggestion-table-hdr">Skill Accuracy</td>
-						<td>
-							<div class="suggestion-perception-{{suggestedCandidate.accuracySkills}}"></div>
-						</td>
-					</tr>
-					<tr *ng="!isCandidate()">
-						<td class="candidate-suggestion-table-hdr">Language Accuracy</td>
-						<td>
-							<div class="suggestion-perception-{{suggestedCandidate.accuracyLanguages}}"></div>
-						</td>
-					</tr>
-					<tr *ng="!isCandidate()">
-						<td class="candidate-suggestion-table-hdr">Matching Skills</td>
-						<td>
-							<div style="float:center" *ngFor="let skill of skillFilters" class="{{hasRequiredSkill(skill)}}">
-								{{skill}}
-							</div>
-						</td>
-					</tr>
-				</table>
-			</div>
-			<div *ngIf="candidateProfile.introduction && candidateProfile.introduction.length != 0">
+			<div *ngIf="candidateProfile.introduction && candidateProfile.introduction.length != 0" style="margin-top:50px;margin-bottom:50px;">
 				<div>
 					<h1 style="background:#e8e8e8">Candidate Introduction</h1>
 				</div>
@@ -340,7 +329,7 @@
 					<pre style="white-space:pre-line;font-family: Roboto, 'Helvetica Neue', sans-serif;">{{candidateProfile.introduction}}</pre>
 				</div>
 			</div>		
-			<div *ngIf="!candidateProfile.introduction || candidateProfile.introduction.length == 0">
+			<div *ngIf="!candidateProfile.introduction || candidateProfile.introduction.length == 0" style="margin-top:50px;margin-bottom:50px;">
 				<div>
 					<h1 style="background:#e8e8e8">Candidate Introduction</h1>
 				</div>
@@ -352,7 +341,49 @@
 					I am based in {{this.suggestedCandidate.country | enumToHumanReadableValue}} 
 					</div>
 				</div>
-			</div>					
+			</div>		
+			
+			<div>
+				<table class="table candidate-suggestion-table">
+					<tr>
+						<td class="candidate-suggestion-table-hdr">Candidate Number</td>
+						<td>{{suggestedCandidate.candidateId}}</td>
+					</tr>
+					<tr>
+						<td class="candidate-suggestion-table-hdr">Name</td>
+						<td>{{suggestedCandidate.firstname}} {{suggestedCandidate.surname}}</td>
+					</tr>
+					<tr *ngIf="!isCandidate()">
+						<td class="candidate-suggestion-table-hdr">Skill Accuracy</td>
+						<td>
+							<div class="suggestion-perception-{{suggestedCandidate.accuracySkills}}"></div>
+						</td>
+					</tr>
+					<tr *ngIf="!isCandidate()">
+						<td class="candidate-suggestion-table-hdr">Language Accuracy</td>
+						<td>
+							<div class="suggestion-perception-{{suggestedCandidate.accuracyLanguages}}"></div>
+						</td>
+					</tr>
+					<tr *ngIf="!isCandidate()">
+						<td class="candidate-suggestion-table-hdr">Matching Skills</td>
+						<td>
+							<div style="float:center" *ngFor="let skill of skillsFiltersMatch()" class="{{hasRequiredSkill(skill)}}">
+								{{skill}}
+							</div>
+						</td>
+					</tr>
+					<tr *ngIf="!isCandidate()">
+						<td class="candidate-suggestion-table-hdr">Missing Skills</td>
+						<td>
+							<div style="float:center" *ngFor="let skill of skillsFiltersNoMatch()" class="{{hasRequiredSkill(skill)}}">
+								{{skill}}
+							</div>
+						</td>
+					</tr>
+				</table>
+			</div>
+						
 		</div>
 			
 	</div>

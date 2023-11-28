@@ -760,6 +760,8 @@ public class CandidateServiceImpl implements CandidateService{
 					.introduction(candidate.getIntroduction())
 					.available(existingCandidate.isAvailable())
 					.ownerId(existingCandidate.getOwnerId().isEmpty() ? null : existingCandidate.getOwnerId().get())
+					.daysOnSite(candidate.getDaysOnSite())
+					.availableFromDate(candidate.getAvailableFromDate())
 				.build();
 		
 		this.candidateDao.saveCandidate(updatedCandidate);

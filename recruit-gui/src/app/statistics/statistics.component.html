@@ -176,20 +176,6 @@
 		
 		<!-- Marketplace Views -->
 		<div *ngIf="showMarketplaceStats">		
-			<div class="chart-wrapper">
-				<h3>Offered Candidate Views: {{offeredCandidateViewsTotal}}</h3>
-				<button (click)="switchMarketplaceOfferedCandidatesChartData('week')">This week</button>
-				<button (click)="switchMarketplaceOfferedCandidatesChartData('day')">Today</button>
-    			<canvas baseChart 
-        				[datasets]="marketPlaceEventsChartDataOffered" 
-        				[labels]="marketPlaceEventsChartLabelsOffered" 
-        				[options]="marketPlaceEventsChartOptions"
-        				[colors]="marketPlaceEventsChartColors" 
-        				[legend]="marketPlaceEventsChartLegend" 
-        				[chartType]="marketPlaceEventsChartType" 
-        				[plugins]="marketPlaceEventsChartPlugins">
-    			</canvas>
-    		</div>	
 			<div class="chart-wrapper">			
 				<h3>Requested Candidate Views: {{requestedCandidateViewsTotal}}</h3>
 				<button (click)="switchMarketplaceRequestedCandidatesChartData('week')">This week</button>

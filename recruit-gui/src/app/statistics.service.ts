@@ -103,17 +103,6 @@ export class StatisticsService {
 	}
 	
 	/**
-	* Returns stats relating to Views of Offered Candidates in the Marketplace
-	*/
-	public getMarketPlaceOfferedCandidateViewStats():Observable<MarketplaceRecruiterViewStatResponse>{
-		
-		const backendUrl:string = environment.backendUrl +'v1/offered-candidate/stats/week/';
-  
-		return this.httpClient.get<any>(backendUrl, this.httpOptions);
-		
-	}
-	
-	/**
 	* Returns stats relating to Views of Requested Candidates in the Marketplace
 	*/
 	public getMarketPlaceRequestedCandidateViewStats():Observable<MarketplaceRecruiterViewStatResponse>{

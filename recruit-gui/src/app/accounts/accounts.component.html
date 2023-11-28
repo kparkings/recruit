@@ -37,6 +37,11 @@
 					<td><button class="btn btn-secondary btn-action" (click)="toggleShowActivePaidSubscription()">Toggle</button></td>
 				</tr>
 				<tr>
+					<td class="recruiter-credit-based-subscription">Credit Based Subscription</td>
+					<td>{{creditBasedSubscription.length}}</td>
+					<td><button class="btn btn-secondary btn-action" (click)="toggleShowCreditBasedSubscription()">Toggle</button></td>
+				</tr>
+				<tr>
 					<td>Expired Subscription</td>
 					<td class="recruiter-expired-subscription">{{expiredSubscriptionRecruiters.length}}</td>
 					<td><button class="btn btn-secondary btn-action" (click)="toggleShowExpiredSubscriptionRecruiters()">Toggle</button></td>
@@ -88,6 +93,13 @@
 	            	    <td *ngIf="showExpiredSubscriptionRecruiters" class="candidate-tab-col medicol">{{recruiter.email}}</td>
 	            	    <td *ngIf="showExpiredSubscriptionRecruiters" class="candidate-tab-col medicol">{{recruiter.companyName}}</td>
 	            	    <td *ngIf="showExpiredSubscriptionRecruiters" class="candidate-tab-col medicol">{{recruiter.hasActiveSubscription}}</td>
+	      			</tr>	
+	      			<tr *ngFor="let recruiter of creditBasedSubscription" class="recruiter-credit-based-subscription">
+	      				<td *ngIf="showCreditBasedSubscription" class="candidate-tab-col medicol"><span class="candidate-id-prefix"></span>{{recruiter.userId}}</td>
+	            	    <td *ngIf="showCreditBasedSubscription" class="candidate-tab-col medicol"> {{recruiter.firstName}} {{recruiter.surname}}</td>
+	            	    <td *ngIf="showCreditBasedSubscription" class="candidate-tab-col medicol">{{recruiter.email}}</td>
+	            	    <td *ngIf="showCreditBasedSubscription" class="candidate-tab-col medicol">{{recruiter.companyName}}</td>
+	            	    <td *ngIf="showCreditBasedSubscription" class="candidate-tab-col medicol">{{recruiter.hasActiveSubscription}}</td>
 	      			</tr>	
 	      			<tr *ngFor="let recruiter of trialPeriodRecruiters" class="recruiter-trial-subscription">
 	      				<td *ngIf="showTrialPeriodRecruiters" class="candidate-tab-col medicol"><span class="candidate-id-prefix"></span>{{recruiter.userId}}</td>

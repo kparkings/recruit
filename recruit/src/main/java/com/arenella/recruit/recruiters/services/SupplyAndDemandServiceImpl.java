@@ -198,14 +198,6 @@ public class SupplyAndDemandServiceImpl implements SupplyAndDemandService{
 	public Set<SupplyAndDemandEvent> fetchOpenPositionViewStats() {
 		return this.supplyAndDemandEventDao.fetchThisWeeksEvents(LocalDateTime.now().with(DayOfWeek.MONDAY).withHour(0).withMinute(0).withSecond(0).withNano(0), EventType.OPEN_POSITION);		
 	}
-
-	/**
-	* Refer to the SupplyAndDemandService interface for details 
-	*/
-	@Override
-	public Set<SupplyAndDemandEvent> fetchOfferedCandidateViewStats() {
-		return this.supplyAndDemandEventDao.fetchThisWeeksEvents(LocalDateTime.now().with(DayOfWeek.MONDAY).withHour(0).withMinute(0).withSecond(0).withNano(0), EventType.OFFERED_CANDIDATE);
-	}
 	
 	/**
 	* Refer to the SupplyAndDemandService interface for details 

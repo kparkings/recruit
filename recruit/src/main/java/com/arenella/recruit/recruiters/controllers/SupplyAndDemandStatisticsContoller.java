@@ -29,15 +29,5 @@ public class SupplyAndDemandStatisticsContoller {
 	public ResponseEntity<RecruiterMarketplaceViewStatsAPIOutput> getOpenPositionsWeeklyStats(){
 		return ResponseEntity.status(HttpStatus.OK).body(new RecruiterMarketplaceViewStatsAPIOutput(supplyAndDemandService.fetchOpenPositionViewStats()));
 	}
-	
-	/**
-	* Returns stats for offered candidates viewed by Recruiter for the current week
-	* @return Stats for current week
-	*/
-	@GetMapping(value="/v1/offered-candidate/stats/week/")
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	public ResponseEntity<RecruiterMarketplaceViewStatsAPIOutput> getOfferedCandidatesWeeklyStats(){
-		return ResponseEntity.status(HttpStatus.OK).body(new RecruiterMarketplaceViewStatsAPIOutput(supplyAndDemandService.fetchOfferedCandidateViewStats()));
-	}
-	
+
 }

@@ -11,6 +11,7 @@ import { environment }									from '../../environments/environment';
 import { NewCandidateRequest, Rate, Language } 					from './new-candidate-request';
 import { CandidateProfile } from '../candidate-profile';
 import { CandidateNavService } from '../candidate-nav.service';
+import { LanguageOption } from './language-option';
 
 @Component({
   selector: 'app-new-candidate',
@@ -48,14 +49,10 @@ export class NewCandidateComponent implements OnInit {
       		this.functionTypes.push(funcType);
     	});
     	
-    	this.languageOptions.push("UNKNOWN");
-    	this.languageOptions.push("BASIC");
-    	this.languageOptions.push("PROFICIENT");
-    	
-    	//this.languages.push(new Language("DUTCH","UNKNOWN"));
-    	//this.languages.push(new Language("FRENCH","PROFICIENT"));
-    	//this.languages.push(new Language("ENGLISH","BASIC"));
-	
+    	this.languageOptions.push(new LanguageOption("UNKNOWN", "No"));
+    	this.languageOptions.push(new LanguageOption("BASIC", "Basic"));
+    	this.languageOptions.push(new LanguageOption("PROFICIENT", "Yes"));
+    
 		if (this.candidateNavService.isRouteActive()) {
 			this.candidateService.getCandidateProfileById(this.candidateNavService.getCandidateId()).subscribe(candidate => {
 				this.populateForEdit(candidate);
@@ -223,8 +220,6 @@ export class NewCandidateComponent implements OnInit {
 		let dutchLang:Language	=  new Language('DUTCH', this.offeredCandidateFormBean.get('DUTCH')!.value);
 		let englishLang:Language	=  new Language('ENGLISH', this.offeredCandidateFormBean.get('ENGLISH')!.value);
 		let frenchLang:Language	=  new Language('FRENCH', this.offeredCandidateFormBean.get('FRENCH')!.value);
-		
-		console.log(JSON.stringify(frenchLang));
 		
 		candidate.languages = new Array<Language>();
 		candidate.languages.push(dutchLang);
@@ -520,7 +515,7 @@ export class NewCandidateComponent implements OnInit {
 		
 	}
 	
-	public languageOptions:Array<string> = new Array<string>();
+	public languageOptions:Array<LanguageOption> = new Array<LanguageOption>();
 	public languages:Array<Language> = new Array<Language>();
 	
 	/**
@@ -544,15 +539,6 @@ export class NewCandidateComponent implements OnInit {
 	public removeOfferedCandidateSkill(skill:string):void{
 		this.coreSkills = this.coreSkills.filter(s => s != skill);
 	}
-
-	/**
-	* Sets the Candidate level with a language
-	*/
-	//public updateOfferedCandidateLanguage(language:string, level:string):void{
-	//	this.languages.filter(l => l.language == language).forEach(l => {
-	//		l.level = level;	
-	//	});
-	//}
 
 	/**
   	* Whether or not the user has authenticated as an Admin user 

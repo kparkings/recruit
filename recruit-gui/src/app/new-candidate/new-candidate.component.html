@@ -178,7 +178,7 @@
 				<td>Dutch</td>
 				<td>
 					<select formControlName="DUTCH">
-						<option *ngFor="let level of languageOptions">{{level}}</option>
+						<option *ngFor="let level of languageOptions" value="{{level.value}}">{{level.label}}</option>
 					</select>
 				</td>
 			</tr>
@@ -186,7 +186,7 @@
 				<td>English</td>
 				<td>
 					<select formControlName="ENGLISH">
-						<option *ngFor="let level of languageOptions">{{level}}</option>
+						<option *ngFor="let level of languageOptions" value="{{level.value}}">{{level.label}}</option>
 					</select>
 				</td>
 			</tr>
@@ -194,7 +194,7 @@
 				<td>French</td>
 				<td>
 					<select formControlName="FRENCH">
-						<option *ngFor="let level of languageOptions">{{level}}</option>
+						<option *ngFor="let level of languageOptions" value="{{level.value}}">{{level.label}}</option>
 					</select>
 				</td>
 			</tr>

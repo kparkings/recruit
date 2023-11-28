@@ -89,7 +89,7 @@ public class CandidateController {
 	}
 	
 	/**
-	* Updates Candidates Profile
+	* Updates Candidates 	
 	* @param updateRequest	- New Candidate details
 	* @param file			- Optional profile image file
 	* @param candidateId	- Id of candidate to update

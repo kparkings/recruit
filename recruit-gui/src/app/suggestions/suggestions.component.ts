@@ -656,6 +656,15 @@ export class SuggestionsComponent implements OnInit {
 	
 	public hasRequiredSkill(skill:string):string {
 		
+		if (this.hasSkill(skill)) {
+			return 'skill-match';
+		}
+		
+		return 'skill-no-match';
+	}
+
+	public hasSkill(skill:string):boolean {
+		
 		let formattedSkill:string = skill.trim().toLowerCase();
 		
 		let match:boolean = false;
@@ -666,12 +675,12 @@ export class SuggestionsComponent implements OnInit {
 		})
 		
 		if (match) {
-			return 'skill-match';
+			return true;
 		}
 		
-		return 'skill-no-match';
+		return false;
 	}
-	
+		
 	/**
  	* Saves the alert
 	*/
@@ -1041,4 +1050,34 @@ export class SuggestionsComponent implements OnInit {
 		return ""+sessionStorage.getItem("userId");
 	}
 	
+	/**
+	* Returns skills that the Canidate has that match the 
+	* required skills
+	*/
+	public skillsFiltersMatch():Array<string>{
+		return this.skillFilters.filter(s => this.hasSkill(s) && s != '').sort();
+	}
+	
+	/**
+	* Returns skills that the Canidate does not has that are 
+	* required skills
+	*/
+	public skillsFiltersNoMatch():Array<string>{
+		return this.skillFilters.filter(s => !this.hasSkill(s) && s != '').sort();
+	}
+	
+	/**
+	* Returns human readable version of days onsite
+	*/
+	public formatHumanReadableDaysOnsite(value:string):string{
+		switch(value){
+			case 'ZERO': 	return "Fully Remote";
+			case 'ONE': 	return "1";
+			case 'TWO': 	return "2";
+			case 'THREE': 	return "3";
+			case 'FOUR': 	return "4";
+			case 'FIVE':	return "5";
+			default: 		return "";
+		}
+	}
 }
