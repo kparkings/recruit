@@ -33,28 +33,28 @@
 			<tbody>
 				<tr>
 					<td class="recruiter-active-subscription">Active Paid Subscription</td>
-					<td>{{activePaidSubscription.length}}</td>
+					<td class="recruiter-active-subscription">{{activePaidSubscription.length}}</td>
 					<td><button class="btn btn-secondary btn-action" (click)="toggleShowActivePaidSubscription()">Toggle</button></td>
 				</tr>
 				<tr>
-					<td class="recruiter-credit-based-subscription">Credit Based Subscription</td>
-					<td>{{creditBasedSubscription.length}}</td>
+					<td class="recruiter-credit-based-subscription">Credit Based</td>
+					<td class="recruiter-credit-based-subscription">{{creditBasedSubscription.length}}</td>
 					<td><button class="btn btn-secondary btn-action" (click)="toggleShowCreditBasedSubscription()">Toggle</button></td>
 				</tr>
 				<tr>
-					<td>Expired Subscription</td>
+					<td class="recruiter-expired-subscription">Expired Subscription</td>
 					<td class="recruiter-expired-subscription">{{expiredSubscriptionRecruiters.length}}</td>
 					<td><button class="btn btn-secondary btn-action" (click)="toggleShowExpiredSubscriptionRecruiters()">Toggle</button></td>
 				</tr>
 				<tr>
-					<td>Trial Subscription</td>
+					<td class="recruiter-trial-subscription">Trial Subscription</td>
 					<td class="recruiter-trial-subscription">{{trialPeriodRecruiters.length}}</td>
 					<td><button class="btn btn-secondary btn-action" (click)="toggleShowTrialPeriodRecruiters()">Toggle</button></td>
 				</tr>
 				
 				<tr>
 					<td class="recruiter-firstgen">FirstGen Subscription</td>
-					<td>{{firstGenActiveSubscription.length}}</td>
+					<td class="recruiter-firstgen">{{firstGenActiveSubscription.length}}</td>
 					<td><button class="btn btn-secondary btn-action" (click)="toggleShowFirstGenActiveSubscription()">Toggle</button></td>
 				</tr>
 				<tr>
@@ -218,37 +218,6 @@
 		</div>
 		
 	</div>
-	
-	<!-- Flagged as Unavailable-->
-	<!-- 
-	//TODO: [KP] This is no longer used since candidate screen was removed. Can delete all associated code
-	<div *ngIf="showFlaggedAsUnavailableTab">
-		<form [formGroup]="candidateFormGroup">
-			<h3>Flagged as Unavailable</h3>
-			<table class="table candidate-table">
-				<thead>
-	      			<tr>
-		      			<th class="bg-tab-hdr">Id</th>
-		      			<th class="bg-tab-hdr">Name</th>
-		                <th class="bg-tab-hdr">Email</th>
-		                <th class="bg-tab-hdr">Actions</th>
-		        	</tr>
-	      		</thead>
-	      		<tbody>
-	      			<tr *ngFor="let candidate of candidates">
-	      				<td class="candidate-tab-col"><span class="candidate-id-prefix">C</span>{{candidate.candidateId}}</td>
-	                	<td class="candidate-tab-col medicol"> {{candidate.firstname}} {{candidate.surname}}</td>
-	                	<td class="candidate-tab-col medicol">{{candidate.email}}</td>
-	                	<td class="candidate-tab-col medicol">
-	                		<button	class="control-spacing btn btn-secondary btn-action" (click)="disableFlaggedAsUnavailableCandidate(candidate.candidateId)">Disable</button>
-	                		<button	class="control-spacing btn btn-secondary btn-action" (click)="removeFlaggedAsUnavailableFlag(candidate.candidateId)">Dismiss</button>
-	                	</td>
-	      			</tr>	
-	      		</tbody>
-			</table>
-		</form>
-	</div>
-	 -->
 	 
 	<!-- Subscriptions requiring actions -->
 	<div *ngIf="showSubscriptionActionsTab">
