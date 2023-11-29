@@ -909,6 +909,14 @@ public class CandidateServiceImpl implements CandidateService{
 		return credits.get().getCredits();
 		
 	}
+
+	/**
+	* Refer to the CandidateService for details 
+	*/
+	@Override
+	public CandidateExtractedFilters extractFiltersFromText(String jobspec) {
+		return this.documentFilterExtractionUtil.extractFilters(jobspec);
+	}
 	
 	
 }

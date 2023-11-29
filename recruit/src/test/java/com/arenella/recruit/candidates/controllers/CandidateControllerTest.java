@@ -2,6 +2,7 @@ package com.arenella.recruit.candidates.controllers;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.security.Principal;
@@ -502,6 +503,22 @@ public class CandidateControllerTest {
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		assertEquals(count, response.getBody());
 	
+	}
+	
+	/**
+	* Tests request to extract filters from a job specification in text for
+	* @throws Exception
+	*/
+	@Test
+	public void testExtractSearchFiltersFromText() throws Exception{
+	
+		Mockito.when(this.mockCandidateService.extractFiltersFromText(Mockito.anyString())).thenReturn(CandidateExtractedFilters.builder().build());
+		
+		ResponseEntity<CandidateExtractedFilters> response = this.controller.extractSearchFiltersFromText("some text");
+		
+		assertEquals(HttpStatus.OK, response.getStatusCode());
+		assertNotNull(response.getBody());
+		
 	}
 	
 }

@@ -18,6 +18,7 @@ import { PhotoAPIOutbound, CandidateProfile, Language, Rate } 				from '../candi
 import { EmailService, EmailRequest }										from '../email.service';
 import { CandidateNavService } 												from '../candidate-nav.service';
 import { CreditsService } 													from '../credits.service';
+import { ExtractedFilters } from './extracted-filters';
 
 /**
 * Component to suggest suitable Candidates based upon a 
@@ -43,6 +44,16 @@ export class SuggestionsComponent implements OnInit {
 	});
 	
 	private jobSpecFile!:File;
+	
+	public jobSpecUploadView:string = "chooseType"; //chooseType | doc | text
+	
+	/**
+	* Switches between options on how to upload job spec 
+	* to use to perform filtering
+	*/
+	public switchJobSpecUpldOpt(type:string):void{
+		this.jobSpecUploadView = type;
+	}
 	
 	/**
 	* Constructor
@@ -157,14 +168,9 @@ export class SuggestionsComponent implements OnInit {
 		return savedCandidate.candidate.candidateId === ' Removed';
 	}
 	
-	/**
- 	* Extracts filters from job specification file
-	*/	
-  	public extractFiltersFromJobSpec():void{
-  		
-  		this.candidateService.extractFiltersFromDocument(this.jobSpecFile).subscribe(extractedFilters=>{
-  				
-			this.resetSearchFilters(false);
+	private processJobSpecExtratedFilters(extractedFilters:ExtractedFilters):void{
+		
+		this.resetSearchFilters(false);
 			
 			this.skillFilters = extractedFilters.skills;
 			
@@ -236,7 +242,31 @@ export class SuggestionsComponent implements OnInit {
 			});
 			
 			this.getSuggestions();
+			
+	}
+	
+	public extractFiltersFromJobSpecText():void{
 		
+		let jobSpecText = this.filterByJobSpecForm.get('specAsText')?.value; 
+		
+		this.candidateService.extractFiltersFromText(jobSpecText).subscribe(extractedFilters=>{
+			this.processJobSpecExtratedFilters(extractedFilters);
+		},(failure =>{
+			this.showFilterByJonSpecFailure 	= true;
+			this.showFilterByJobSpec 			= false;
+			this.suggestionFilterForm.valueChanges.subscribe(value => {
+				this.getSuggestions();	
+			});
+		}));
+	}
+	
+	/**
+ 	* Extracts filters from job specification file
+	*/	
+  	public extractFiltersFromJobSpec():void{
+  		
+  		this.candidateService.extractFiltersFromDocument(this.jobSpecFile).subscribe(extractedFilters=>{
+  			this.processJobSpecExtratedFilters(extractedFilters);
 		},(failure =>{
 			this.showFilterByJonSpecFailure 	= true;
 			this.showFilterByJobSpec 			= false;
@@ -264,7 +294,9 @@ export class SuggestionsComponent implements OnInit {
 		skill: 					new UntypedFormControl(''),
 	});
 	
-	
+	public filterByJobSpecForm:UntypedFormGroup = new UntypedFormGroup({
+		specAsText:				new UntypedFormControl('Enter Job specification Text here...'),
+	});
 	
 	/**
 	* Resets the filters
@@ -741,6 +773,12 @@ export class SuggestionsComponent implements OnInit {
 	*/
 	public showFilterByJobSpecDialog(content:any):void{
 		
+		this.switchJobSpecUpldOpt('chooseType');
+		
+		this.filterByJobSpecForm = new UntypedFormGroup({
+			specAsText: new UntypedFormControl('Enter Job specification Text here...'),
+		});
+		
 		this.showFilterByJonSpecFailure  	= false;
 		this.showFilterByJobSpec 			= true;
 	
@@ -1064,6 +1102,20 @@ export class SuggestionsComponent implements OnInit {
 	*/
 	public skillsFiltersNoMatch():Array<string>{
 		return this.skillFilters.filter(s => !this.hasSkill(s) && s != '').sort();
+	}
+	
+	/**
+	* Removes defailt text from text area so user can paste 
+	* actial content
+	*/
+	public clearSpecAsText():void{
+		
+		let jobSpecText = this.filterByJobSpecForm.get('specAsText')?.value;
+		
+		if (jobSpecText == 'Enter Job specification Text here...'){
+			this.filterByJobSpecForm.get('specAsText')?.setValue(''); 
+		}
+		 
 	}
 	
 	/**

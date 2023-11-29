@@ -39,14 +39,30 @@ public class DocumentFilterExtractionUtil {
 	
 	public static final Set<String> UK = Set.of("bristol","gbp","stockport","£"," uk ", "uk.","uk\\t", "inside ir35", "milton keynes", "england", "midlands", "derby", "wales", "scotland", "edinburgh","glasgow", "london", "liverpool", "manchester", "oxford", "glousester", "surrey", "Buckinghamshire", "Berkshire", "hounslow", "Milton Keynes", "edgware", "Leicester", "bracknell", "barking", "Colchester", "cardiff", "Brentford", "Stoke-on-Trent", "maidenhead", "guildford", "reading", "leeds");
 	
+	/**
+	* Extracts Filters from a document
+	* @param fileType	- Type of document
+	* @param fileBytes	- Document as bytes
+	* @return			- Filters extracted from the document
+	* @throws Exception
+	*/
 	public CandidateExtractedFilters extractFilters(FileType fileType, byte[] fileBytes) throws Exception{
 
-		
 		String documentText = getInstance(fileType).extract(fileBytes);
+		
+		return extractFilters(documentText);
+	}
+	
+	/**
+	* Extracts filters from a piece of text
+	* @param text - text to extract filters from
+	* @return extracted Filters
+	*/
+	public CandidateExtractedFilters extractFilters(String text) {
 		
 		CandidateExtractedFiltersBuilder filterBuilder = CandidateExtractedFilters.builder();
 		
-		extractFilters(documentText,  filterBuilder);
+		extractFilters(text,  filterBuilder);
 		
 		return filterBuilder.build();
 		

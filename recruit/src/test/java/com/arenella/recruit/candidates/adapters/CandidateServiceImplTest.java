@@ -41,6 +41,7 @@ import com.arenella.recruit.candidates.beans.Candidate;
 import com.arenella.recruit.candidates.beans.Candidate.CANDIDATE_TYPE;
 import com.arenella.recruit.candidates.beans.Candidate.Photo;
 import com.arenella.recruit.candidates.beans.Candidate.Photo.PHOTO_FORMAT;
+import com.arenella.recruit.candidates.beans.CandidateExtractedFilters;
 import com.arenella.recruit.candidates.beans.Contact.CONTACT_TYPE;
 import com.arenella.recruit.candidates.beans.CandidateFilterOptions;
 import com.arenella.recruit.candidates.beans.CandidateSearchAccuracyWrapper;
@@ -68,6 +69,7 @@ import com.arenella.recruit.candidates.enums.COUNTRY;
 import com.arenella.recruit.candidates.enums.FREELANCE;
 import com.arenella.recruit.candidates.enums.FUNCTION;
 import com.arenella.recruit.candidates.enums.PERM;
+import com.arenella.recruit.candidates.extractors.DocumentFilterExtractionUtil;
 import com.arenella.recruit.candidates.services.CandidateServiceImpl;
 import com.arenella.recruit.candidates.services.CandidateStatisticsService;
 import com.arenella.recruit.candidates.utils.CandidateFunctionExtractorImpl;
@@ -129,6 +131,9 @@ public class CandidateServiceImplTest {
 	
 	@Mock
 	private CandidateRecruiterCreditDao				mockCreditDao;
+	
+	@Mock
+	private DocumentFilterExtractionUtil			mockDocumentFilterExtractionUtil;
 	
 	@Spy
 	private CandidateFunctionExtractorImpl			mockCandidateFunctionExtractor;
@@ -751,6 +756,8 @@ public class CandidateServiceImplTest {
 	*/
 	@Test
 	public void testExtractFiltersFromDocument_failure() throws Exception{
+		
+		Mockito.doThrow(RuntimeException.class).when(this.mockDocumentFilterExtractionUtil).extractFilters(null, null);
 		
 		Assertions.assertThrows(RuntimeException.class, () ->{
 			this.service.extractFiltersFromDocument(null, null);
@@ -1885,6 +1892,21 @@ public class CandidateServiceImplTest {
 		Mockito.when(this.mockCreditDao.getByRecruiterId(Mockito.anyString())).thenReturn(Optional.of(rc));
 		
 		assertEquals(credits, this.service.getCreditCountForUser("rec22"));
+		
+	}
+	
+	/**
+	* Test extraction of filters
+	* @throws Exception
+	*/
+	@Test
+	public void testExtractFiltersFromText() throws Exception{
+	
+		Mockito.when(this.mockDocumentFilterExtractionUtil.extractFilters("")).thenReturn(CandidateExtractedFilters.builder().build());
+		
+		CandidateExtractedFilters filters = this.service.extractFiltersFromText("");
+	
+		assertNotNull(filters);
 		
 	}
 	

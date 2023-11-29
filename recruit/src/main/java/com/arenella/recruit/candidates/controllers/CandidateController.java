@@ -345,6 +345,21 @@ public class CandidateController {
 	}
 	
 	/**
+	* Returns filters based upon the content of a job specification
+	* @param jobspec - Text from a job spec to extract filters from
+	* @throws Exception
+	*/
+	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('ROLE_RECRUITER')")
+	@PostMapping(value="/extract-filters-text")
+	public ResponseEntity<CandidateExtractedFilters> extractSearchFiltersFromText(@RequestBody String jobspec) throws Exception{
+		
+		CandidateExtractedFilters extractedFilters = this.candidateService.extractFiltersFromText(jobspec);
+		
+		return ResponseEntity.ok(extractedFilters);
+		
+	}
+	
+	/**
 	* Adds a Candidate to the Users list of saved Candidates
 	* @param savedCandidate - Candidate to add to the Users saved candidate list
 	* @return ResponseEntity

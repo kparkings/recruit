@@ -215,5 +215,12 @@ public interface CandidateService {
 	* for the User
 	*/
 	void addCreditsRecordForUser(String userId);
+
+	/**
+	* Extracts filters from a block of text from a job specification
+	* @param jobspec - Job specification text
+	* @return
+	*/
+	public CandidateExtractedFilters extractFiltersFromText(String jobspec);
 	
 }

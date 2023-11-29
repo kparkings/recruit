@@ -366,3 +366,17 @@ textarea {
 .left-info-box table tr td {
 	padding-left:20px;
 }
+
+.job-spec-upld-opt{
+	float:left;
+	width:40%;
+	margin:20px;
+	border:2px green solid;
+	cursor:pointer;
+	padding:20px;
+	font-weight:bold;
+}
+
+.job-spec-upld-opt:hover{
+	background:grey;
+}

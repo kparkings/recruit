@@ -295,6 +295,17 @@ export class CandidateServiceService {
   	}
 
 	/**
+  	* Uploads a Job description so that its search filters can be extracted 
+  	*/
+  	public extractFiltersFromText(jobSpecification:string): Observable<ExtractedFilters>{
+  
+  		const backendUrl:string = environment.backendUrl + 'extract-filters-text';
+  	
+  		return this.httpClient.post<any>(backendUrl, jobSpecification, this.httpOptions);
+    	
+  	}
+
+	/**
 	* Adds a Saved Candidate for a User
 	*/
 	public addSavedCandidate(savedCandidate:SavedCandidate): Observable<void>{
