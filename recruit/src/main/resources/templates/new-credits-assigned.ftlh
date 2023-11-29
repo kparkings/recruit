@@ -33,7 +33,7 @@
 			<tr>
 				<td>Marketplace</td>
 				<td>${CREDITS_MARKETPLACE}</td>
-				<td>Request Candidates from other Recruiters. Hint! If you add the role on the Job board and opt to Share on the Marketplace you only use 1 credit.</td>
+				<td>Request Candidates from other Recruiters.</td>
 			</tr>
 		</table>
 		<P>
