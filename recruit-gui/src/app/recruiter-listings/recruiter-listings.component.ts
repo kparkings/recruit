@@ -15,6 +15,7 @@ import { RecruiterProfileService} 						from '../recruiter-profile.service';
 import { RecruiterProfile }								from '../recruiter-profile/recruiter-profile';
 import { RecruiterMarketplaceService }					from '../recruiter-marketplace.service';
 import { CreditsService } 								from '../credits.service';
+import { ExtractedFilters } from '../suggestions/extracted-filters';
 
 
 @Component({
@@ -48,11 +49,23 @@ export class RecruiterListingsComponent implements OnInit {
 					
 	}
 	
-	private jobSpecFile!:File;
-	public showFilterByJonSpecFailure:boolean  	= false;
-	public showFilterByJobSpec:boolean 				= false;
+	public filterByJobSpecForm:UntypedFormGroup = new UntypedFormGroup({
+		specAsText:				new UntypedFormControl('Enter Job specification Text here...'),
+	});
 	
-  
+	private jobSpecFile!:File;
+	public showFilterByJonSpecFailure:boolean  		= false;
+	public showFilterByJobSpec:boolean 				= false;
+	public jobSpecUploadView:string 				= "chooseType"; //chooseType | doc | text
+	
+  	/**
+	* Switches between options on how to upload job spec 
+	* to use to perform filtering
+	*/
+	public switchJobSpecUpldOpt(type:string):void{
+		this.jobSpecUploadView = type;
+	}
+	
   	public setJobSepecFile(event:any):void{
   
   		if (event.target.files.length <= 0) {
@@ -62,15 +75,23 @@ export class RecruiterListingsComponent implements OnInit {
   		this.jobSpecFile = event.target.files[0];
   		
   	}
-
-	/**
- 	* Extracts filters from job specification file
-	*/	
-  	public extractFiltersFromJobSpec():void{
-  		
-  		this.candidateService.extractFiltersFromDocument(this.jobSpecFile).subscribe(extractedFilters=>{
-  			
-			this.skills = extractedFilters.skills;
+  	
+  	public extractFiltersFromJobSpecText():void{
+		
+		let jobSpecText = this.filterByJobSpecForm.get('specAsText')?.value; 
+		
+		this.candidateService.extractFiltersFromText(jobSpecText).subscribe(extractedFilters=>{
+			this.processJobSpecExtratedFilters(extractedFilters);
+		},(failure =>{
+			this.showFilterByJonSpecFailure 	= true;
+			this.showFilterByJobSpec 			= false;
+			
+		}));
+	}
+	
+	private processJobSpecExtratedFilters(extractedFilters:ExtractedFilters):void{
+		
+		this.skills = extractedFilters.skills;
 			
 			let freelance 	= extractedFilters.freelance 	== 'TRUE' ? true : false;
 			let perm 		= extractedFilters.perm 		== 'TRUE' ? true : false;
@@ -96,6 +117,17 @@ export class RecruiterListingsComponent implements OnInit {
 			this.newListingFormBean.get("description")?.setValue(extractedFilters.extractedText);
 			
 			this.closeModal();
+			
+	}
+
+	/**
+ 	* Extracts filters from job specification file
+	*/	
+  	public extractFiltersFromJobSpec():void{
+  		
+  		this.candidateService.extractFiltersFromDocument(this.jobSpecFile).subscribe(extractedFilters=>{
+  			
+			this.processJobSpecExtratedFilters(extractedFilters);
 		
 		},(failure =>{
 			this.showFilterByJonSpecFailure 	= true;
@@ -111,6 +143,11 @@ export class RecruiterListingsComponent implements OnInit {
 		
 		this.showFilterByJonSpecFailure  	= false;
 		this.showFilterByJobSpec 			= true;
+		this.jobSpecUploadView 				= 'chooseType';
+		
+		this.filterByJobSpecForm = new UntypedFormGroup({
+			specAsText:				new UntypedFormControl('Enter Job specification Text here...'),
+		});
 		
 		let options: NgbModalOptions = {
 			centered: true
@@ -226,6 +263,10 @@ export class RecruiterListingsComponent implements OnInit {
 			startDate:				new UntypedFormControl(),
 			lastSubmissionDate:		new UntypedFormControl(),
        		comments:				new UntypedFormControl(),
+		});
+		
+		this.filterByJobSpecForm = new UntypedFormGroup({
+			specAsText:				new UntypedFormControl('Enter Job specification Text here...'),
 		});
 		
 		this.skills 				= new Array<string>();
@@ -1494,6 +1535,20 @@ export class RecruiterListingsComponent implements OnInit {
 	
 	public showNoCredits():void{
 		this.creditsService.tokensExhaused();
+	}
+	
+	/**
+	* Removes defailt text from text area so user can paste 
+	* actial content
+	*/
+	public clearSpecAsText():void{
+		
+		let jobSpecText = this.filterByJobSpecForm.get('specAsText')?.value;
+		
+		if (jobSpecText == 'Enter Job specification Text here...'){
+			this.filterByJobSpecForm.get('specAsText')?.setValue(''); 
+		}
+		 
 	}
 
 }

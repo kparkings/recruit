@@ -416,6 +416,7 @@
 	</div>    
 </ng-template> 
 
+<!-- 
 <ng-template #specUploadBox let-modal>
 	<div class="modal-header">
 		<h4 class="modal-title">Extract Filters from Job Specification</h4>
@@ -435,6 +436,43 @@
 		</div>
 	</div>
 </ng-template> 
+-->
+<ng-template #specUploadBox let-modal>
+	<div class="modal-header">
+		<h4 class="modal-title">Extract Filters from Job Specification</h4>
+ 		<div class="filter-close-box" (click)="closeModal()">X</div>
+	</div>
+	<div class="feedbackBox;">
+		<div class="modal-body" *ngIf="showFilterByJobSpec && jobSpecUploadView == 'chooseType'">
+			<p>Please choose how to upload the job specification to filter on</p>
+			<div class="job-spec-upld-opt" (click)="switchJobSpecUpldOpt('doc')">Upload File</div>
+			<div class="job-spec-upld-opt" (click)="switchJobSpecUpldOpt('text')">Paste Text</div>
+		</div>
+		<div class="modal-body" *ngIf="showFilterByJobSpec && jobSpecUploadView == 'doc'">
+			<input type="file" (change)="setJobSepecFile($event)">
+			<br><br>
+				<button class="btn btn-secondary" (click)="extractFiltersFromJobSpec()">Perform Extraction</button>
+			<br><br>
+			<p>File types of .doc, .docx and pdf up to 1MB</p>
+			<br><br>
+		</div>
+		<div class="modal-body" *ngIf="showFilterByJobSpec && jobSpecUploadView == 'text'">
+			<form [formGroup]="filterByJobSpecForm">
+				<textarea formControlName="specAsText" (click)="clearSpecAsText()">
+					
+				</textarea>
+				<br><br>
+					<button class="btn btn-secondary" (click)="extractFiltersFromJobSpecText()">Perform Extraction</button>
+				<br><br>
+				<br><br>
+			</form>
+		</div>
+		<div class="modal-body" *ngIf="showFilterByJonSpecFailure">
+			<p>Unfortunately it was not possible to extract filters from this file.</p>
+		</div>
+	</div>
+</ng-template>
+
 
 <!-- Publicity Box -->
 <ng-template #publicityBox let-modal>
@@ -500,7 +538,6 @@
 				</form>
 			</div>
 			
-			<br>
 			<div>
 				<button class="btn btn-secondary btn-action suggestion-button" (click)="declineMarketplace()">Decline</button>
 				<button class="btn btn-secondary btn-action suggestion-button" (click)="publishOpenPosition()">Agree</button>
