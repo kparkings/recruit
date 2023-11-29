@@ -1,5 +1,5 @@
 import { NgModule }										from '@angular/core';
-import { RouterModule, Routes, CanActivate }			from '@angular/router';
+import { RouterModule, Routes }			from '@angular/router';
 import { NewCandidateComponent }						from './new-candidate/new-candidate.component';
 import { StatisticsComponent }							from './statistics/statistics.component';
 import { SuggestionsComponent }							from './suggestions/suggestions.component';
