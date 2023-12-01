@@ -2,7 +2,7 @@ import { Component } 									from '@angular/core';
 import { RecruiterListingStatistics, ListingStat } 		from '../recruiter-listing-statistics';
 import { StatisticsService } 							from '../statistics.service';
 import { ChartData}										from './chart-data';
-import { Label, SingleLineLabel } 						from 'ng2-charts';
+import { NgChartsModule } 								from 'ng2-charts';
 import { Router}										from '@angular/router';
 import { ChartType } from 'chart.js';
 
@@ -62,8 +62,8 @@ export class RecruiterStatsComponent {
 				
 			});
 			
-			this.availabilityChart.chartData	= [{ data: functionStatCount, label: 'Function' },];
-			this.availabilityChart.chartLabels 	= functionStatName;
+			//this.availabilityChart.chartData	= [{ data: functionStatCount, label: 'Function' },];
+			//this.availabilityChart.chartLabels 	= functionStatName;
 			
     	}).catch(err => {this.handleSessionEnded(err)});;
     	
@@ -75,8 +75,8 @@ export class RecruiterStatsComponent {
 					let listingChartViews:number[] 		= Object.values(listingData.viewsPerWeek);
 					let listingChartViewsKeys:string[] 	= Object.keys(listingData.viewsPerWeek);
 		
-					this.jobboardChart.chartData = [{ data: listingChartViews, label: 'Downloads' },];
-					this.jobboardChart.chartLabels = listingChartViewsKeys;
+			//		this.jobboardChart.chartData = [{ data: listingChartViews, label: 'Downloads' },];
+			//		this.jobboardChart.chartLabels = listingChartViewsKeys;
 					
 				}, err => { this.handleSessionEnded(err)});
 	}
@@ -103,8 +103,8 @@ export class RecruiterStatsComponent {
 		let listingStat = this.listingStatistics.listingStats.filter(l => l.listingId == listingId)[0]
 		let stats 		= listingStat.stats;
 	
-		this.listingViewsChart.chartData 	= [{ data: stats.map(s => s.count), label: listingStat.title },];
-		this.listingViewsChart.chartLabels 	= stats.map(s => s.bucket.toString());
+		//this.listingViewsChart.chartData 	= [{ data: stats.map(s => s.count), label: listingStat.title },];
+		//this.listingViewsChart.chartLabels 	= stats.map(s => s.bucket.toString());
 		
 	}
 	

@@ -145,3 +145,11 @@
 .credits-available{
 	color:green;
 }
+
+ dialog {
+	overflow: hidden;
+	padding:0px;
+	border:none;
+	width:50%;
+	min-width:280px;
+}

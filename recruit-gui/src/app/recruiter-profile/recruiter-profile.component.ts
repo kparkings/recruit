@@ -1,4 +1,4 @@
-import { Component } 								from '@angular/core';
+import { Component, ViewChild } 								from '@angular/core';
 import { PhotoAPIOutbound, RecruiterProfile } 		from './recruiter-profile';
 import { RecruiterProfileService} 					from '../recruiter-profile.service';
 import { AddRecruiterProfileRequest }				from './add-recruiter-profile'
@@ -17,6 +17,8 @@ import { NgbModal, NgbModalOptions}					from '@ng-bootstrap/ng-bootstrap';
 })
 export class RecruiterProfileComponent {
 
+	@ViewChild('contactBox', { static: false }) private contactBox:any;
+	
 	public recruiterProfile?:RecruiterProfile;
 	public recruiterProfiles:Array<RecruiterProfile> = new Array<RecruiterProfile>();
 	public selectedRecruiterProfile:RecruiterProfile = new RecruiterProfile();
@@ -449,14 +451,15 @@ export class RecruiterProfileComponent {
 	/**
 	* Opend dialog to contact recuiter posting	
 	*/
-	public contactRecruiter(contactBox:any):void{
+	public contactRecruiter():void{
+		
 		
 		this.contactRecruiterView = 'message';
-		let options: NgbModalOptions = {
-	    	 centered: true
-	   };
-
-		this.modalService.open(contactBox, options);
+		//let options: NgbModalOptions = {
+	    //	 centered: true
+	   //};
+		this.contactBox.nativeElement.showModal();
+		//this.modalService.open(contactBox, options);
 	
 	}
 	

@@ -60,7 +60,7 @@
 				</table>
 				
 				<br>
-				<button class="btn btn-secondary action-btn main-action_btn" style="width:300px;margin-bottom:10px;" (click)="contactRecruiter(contactBox)">Contact</button>
+				<button class="btn btn-secondary action-btn main-action_btn" style="width:300px;margin-bottom:10px;" (click)="contactRecruiter()">Contact</button>
 			</div>	
 				
 			<div class="details-left" style="max-width:75%;min-width:300px;">
@@ -260,15 +260,15 @@
 	</div>
 </div>
 
-<ng-template #contactBox let-modal>
+<dialog #contactBox>
 	<div class="modal-header">
-		<h4 class="modal-title">Send Message To Recruiter</h4>
- 		<div class="filter-close-box" (click)="closeModal()">X</div>
+		<h4 class="modal-title">Send Message</h4>
+ 		<div class="filter-close-box" (click)="contactBox.close()">X</div>
 	</div>
 	<div class="modal-body" *ngIf="contactRecruiterView === 'message'">
 		<form [formGroup]="sendMessageGroup">
 			<div style="float:left;margin:0px; margin-bottom:10px;">
-				<b>Title:</b><input type="text" style="margin-left:10px;width:300px;" formControlName="title"/>
+				<b>Title:</b><input type="text" style="margin-left:10px;" formControlName="title"/>
 				<br>
 			</div>
 			<textarea formControlName="message"></textarea>
@@ -282,4 +282,4 @@
 	<div class="modal-body" *ngIf="contactRecruiterView === 'failure'">
 			<p class="message-send-failure">Failed to Send Message</p>
 	</div>
-</ng-template> 
+</dialog> 

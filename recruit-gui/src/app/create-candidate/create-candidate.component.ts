@@ -16,7 +16,7 @@ import { NewPendingCandidate, Rate } 					from './new-pending-candidate';
 })
 export class CreateCandidateComponent implements OnInit {
 
-	@ViewChild('feedbackBox', { static: false }) private content:any;
+	@ViewChild('feedbackBox', { static: false }) private feedbackDialog:any;
 
   	constructor(private curriculumService: CurriculumService, 
 				private candidateService: CandidateServiceService,
@@ -201,7 +201,7 @@ export class CreateCandidateComponent implements OnInit {
 			}			
 			this.candidateService.addPendingCandidate(pc, this.imageFile).subscribe(data => {
 				this.resetFormBean();
-				this.open('feedbackBox', "Success",  true);				
+				this.open("Success",  true);				
 			}, 
 		err => {
 			
@@ -229,7 +229,7 @@ export class CreateCandidateComponent implements OnInit {
 	/**
 	* Opens the specified Dialog box
 	*/
-	public open(content:any, msg:string, success:boolean):void {
+	public open(msg:string, success:boolean):void {
     
 	    if (success) {
 	      this.feedbackBoxTitle 	= 'Success';
@@ -241,11 +241,12 @@ export class CreateCandidateComponent implements OnInit {
 	      this.feedbackBoxClass 	= 'feedback-failure';
 	    }
 	
-	    let options: NgbModalOptions = {
-	    	centered: true
-	   	};
+	    //let options: NgbModalOptions = {
+	    //	centered: true
+	   	//};
 	
-	  this.modalService.open(this.content, options);
+		this.feedbackDialog.nativeElement.showModal();
+	  //this.modalService.open(this.content, options);
 
   }
 

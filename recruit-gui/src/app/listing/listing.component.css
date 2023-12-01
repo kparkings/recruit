@@ -348,3 +348,9 @@
  	background:green;
  	color:white;
 }
+
+dialog {
+	overflow: hidden;
+	padding:0px;
+	border:none;
+}

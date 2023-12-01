@@ -369,15 +369,23 @@ textarea {
 
 .job-spec-upld-opt{
 	float:left;
-	width:90%;
 	min-width:280px;
 	margin:20px;
 	border:2px green solid;
 	cursor:pointer;
 	padding:20px;
 	font-weight:bold;
+	margin-left:5px;
 }
 
 .job-spec-upld-opt:hover{
 	background:grey;
 }
+
+dialog {
+	overflow: hidden;
+	padding:0px;
+	border:none;
+	
+}
+

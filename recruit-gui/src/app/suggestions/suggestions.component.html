@@ -3,9 +3,9 @@
 	<!-- Action buttons -->
 	<div *ngIf="currentView === 'suggestion-results'" class="button-panel-mobile">
 		<button class="btn btn-secondary btnRight main-btn {{suggestionMobileBtnClass}}" (click)="doReset()">Reset</button>
-		<button class="btn btn-secondary btnRight main-btn {{suggestionMobileBtnClass}}" (click)="openPublicityDialog(publicityModal)" *ngIf="isAuthenticatedAsAdmin()" download>Copy</button>
+		<button class="btn btn-secondary btnRight main-btn {{suggestionMobileBtnClass}}" (click)="openPublicityDialog()" *ngIf="isAuthenticatedAsAdmin()" download>Copy</button>
 		<button class="btn btn-secondary btnRight main-btn {{suggestionMobileBtnClass}}" (click)="showFilterByJobSpecDialog(specUploadBox)" download>Filter by Job Spec</button>
-		<button class="btn btn-secondary btnRight main-btn {{suggestionMobileBtnClass}}" (click)="showCreateAlertDialog(feedbackBox)" download>Create Email Alert</button>
+		<button class="btn btn-secondary btnRight main-btn {{suggestionMobileBtnClass}}" (click)="showCreateAlertDialog()" download>Create Email Alert</button>
 		<button class="btn btn-secondary btnRight main-btn {{suggestionMobileBtnClass}}" routerLink="/recruiter-alerts" download>Manage Alerts</button>
         <button class="btn btn-secondary btnRight main-btn {{suggestionMobileBtnClass}}" (click)="showSavedCandidates()" download>My Candidates</button>
      </div>
@@ -180,7 +180,7 @@
 			
 			<button class="btn btn-secondary btnRight main-btn {{suggestionMobileBtnClass}}" (click)="showSuggestionsResults()" 					*ngIf="lastView != 'saved-candidates'  && !isCandidate()">Back</button>
 			<button class="btn btn-secondary btnRight main-btn {{suggestionMobileBtnClass}}" (click)="showSavedCandidates()" 						*ngIf="lastView === 'saved-candidates'  && !isCandidate()">Back</button>
-			<button class="btn btn-secondary btnRight main-btn {{suggestionMobileBtnClass}}" *ngIf="isCandidate() || isAdmin() || isOwner()" (click)="deleteAccount(confirmDeleteModal)"> Delete</button>
+			<button class="btn btn-secondary btnRight main-btn {{suggestionMobileBtnClass}}" *ngIf="isCandidate() || isAdmin() || isOwner()" (click)="deleteAccount()"> Delete</button>
 			<button class="btn btn-secondary btnRight main-btn {{suggestionMobileBtnClass}}" *ngIf="isCandidate() || isAdmin() || isOwner()" (click)="editAccount()"> Edit</button>
         	
 			<button class="btn btn-secondary btnRight main-btn {{suggestionMobileBtnClass}}" (click)="rememberCandidate(suggestedCandidate)" 		*ngIf="lastView != 'saved-candidates' && !isSavedCandidate(suggestedCandidate) && !isCandidate()" title="Add candidate to your list of saved candidates">Save Candidate</button>
@@ -389,16 +389,18 @@
 	</div>
 </div>
 
-<ng-template #specUploadBox let-modal>
+<dialog #specUploadBox>
 	<div class="modal-header">
-		<h4 class="modal-title">Extract Filters from Job Specification</h4>
- 		<div class="filter-close-box" (click)="closeModal()">X</div>
+		<h4 class="modal-title">Extract Filters</h4>
+ 		<div class="filter-close-box" (click)="specUploadBox.close()">X</div>
 	</div>
 	<div class="feedbackBox;">
 		<div class="modal-body" *ngIf="showFilterByJobSpec && jobSpecUploadView == 'chooseType'">
 			<p>Please choose how to upload the job specification to filter on</p>
+			<div class="job-spec-options">
 			<div class="job-spec-upld-opt" (click)="switchJobSpecUpldOpt('doc')">Upload File</div>
 			<div class="job-spec-upld-opt" (click)="switchJobSpecUpldOpt('text')">Paste Text</div>
+			</div>
 		</div>
 		<div class="modal-body" *ngIf="showFilterByJobSpec && jobSpecUploadView == 'doc'">
 			<input type="file" (change)="setJobSepecFile($event)">
@@ -423,12 +425,12 @@
 			<p>Unfortunately it was not possible to extract filters from this file.</p>
 		</div>
 	</div>
-</ng-template> 
+</dialog> 
 
-<ng-template #feedbackBox let-modal>
+<dialog #feedbackBox >
 	<div class="modal-header">
 		<h4 class="modal-title">Create Email Alert</h4>
- 		<div class="filter-close-box" (click)="closeModal()">X</div>
+ 		<div class="filter-close-box" (click)="feedbackBox.close()">X</div>
 	</div>
 	<div class="feedbackBox;">
 		<form [formGroup]="createAlertForm">
@@ -447,12 +449,12 @@
 			</div>
 		</form>
 	</div>
-</ng-template>
+</dialog>
 
-<ng-template #notesBox let-modal>
+<dialog #notesBox>
 	<div class="modal-header">
 		<h4 class="modal-title">Notes for Candidate</h4>
- 		<div class="filter-close-box" (click)="closeModal()">X</div>
+ 		<div class="filter-close-box" (click)="notesBox.close()">X</div>
 	</div>
 	<div class="feedbackBox;">
 		<form [formGroup]="savedCandidateNotesForm">
@@ -466,15 +468,15 @@
 			</div>              
 		</form>
 	</div>
-</ng-template>
+</dialog>
 
 <!-- publicity -->
-<ng-template #publicityModal let-modal>
+<dialog #publicityModal>
 
 	<!--  Options -->
 	<div class="modal-header">
 		<h4 class="modal-title">Publicity</h4>
-		<div class="filter-close-box" (click)="closeModal()">X</div>
+		<div class="filter-close-box" (click)="publicityModal.close()">X</div>
 	</div>
 	<div class="modal-body publicity-suggestions">
 		<table>
@@ -483,25 +485,25 @@
 			</div>
 		</table>
 	</div> 
-</ng-template>
+</dialog>
 <!-- Delete -->
-<ng-template #confirmDeleteModal let-modal>
+<dialog #confirmDeleteModal>
 
 	<!--  Options -->
 	<div class="modal-header">
 		<h4 class="modal-title">Confirm Delete</h4>
-		<div class="filter-close-box" (click)="closeModal()">X</div>
+		<div class="filter-close-box" (click)="confirmDeleteModal.close()">X</div>
 	</div>
 	<div class="modal-body publicity-suggestions">
 		<p>This profile will be deleted and it will no longer be possible to access the associated data</p>
 		<button class="btn btn-secondary action-btn btn-right" (click)="confirmDeleteProfile()">Confirm</button>
 	</div> 
-</ng-template>
+</dialog>
 <!-- Candidte contact -->
-<ng-template #contactBox let-modal>
+<dialog #contactBox >
 	<div class="modal-header">
-		<h4 class="modal-title">Send Message To Candidate</h4>
- 		<div class="filter-close-box" (click)="closeModalContact()">X</div>
+		<h4 class="modal-title">Message Candidate</h4>
+ 		<div class="filter-close-box" (click)="contactBox.close()">X</div>
 	</div>
 	<div class="modal-body" *ngIf="contactCandidateView === 'message'">
 		<form [formGroup]="sendMessageGroup">
@@ -520,4 +522,4 @@
 	<div class="modal-body" *ngIf="contactCandidateView === 'failure'">
 			<p class="message-send-failure">Failed to Send Message</p>
 	</div>
-</ng-template> 
+</dialog> 

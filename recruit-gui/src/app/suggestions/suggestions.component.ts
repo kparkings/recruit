@@ -1,24 +1,24 @@
-import { Component, OnInit } 												from '@angular/core';
-import { UntypedFormGroup, UntypedFormControl }								from '@angular/forms';
-import { CandidateServiceService }											from '../candidate-service.service';
-import { SuggestionsService }												from '../suggestions.service';
-import { CurriculumService }												from '../curriculum.service';
-import { Candidate}															from './candidate';
-import { SavedCandidate}													from './saved-candidate';
-import { SuggestionParams}													from './suggestion-param-generator';
-import { environment }														from '../../environments/environment';
-import { Clipboard } 														from '@angular/cdk/clipboard';
-import { NgbModal, NgbModalOptions }										from '@ng-bootstrap/ng-bootstrap';
-import { CandidateSearchAlert }												from './candidate-search-alert';
-import { DomSanitizer, SafeResourceUrl } 									from '@angular/platform-browser';
-import { DeviceDetectorService } 											from 'ngx-device-detector';
-import { Router}															from '@angular/router';
-import { debounceTime } 													from "rxjs/operators";
-import { PhotoAPIOutbound, CandidateProfile, Language, Rate } 				from '../candidate-profile';
-import { EmailService, EmailRequest }										from '../email.service';
-import { CandidateNavService } 												from '../candidate-nav.service';
-import { CreditsService } 													from '../credits.service';
-import { ExtractedFilters } from './extracted-filters';
+import { Component, ElementRef, OnInit, TemplateRef, ViewChild } 														from '@angular/core';
+import { UntypedFormGroup, UntypedFormControl, FormsModule, ReactiveFormsModule }	from '@angular/forms';
+import { CandidateServiceService }													from '../candidate-service.service';
+import { SuggestionsService }														from '../suggestions.service';
+import { CurriculumService }														from '../curriculum.service';
+import { Candidate}																	from './candidate';
+import { SavedCandidate}															from './saved-candidate';
+import { SuggestionParams}															from './suggestion-param-generator';
+import { environment }																from '../../environments/environment';
+import { Clipboard } 																from '@angular/cdk/clipboard';
+import { NgbModal, NgbModalOptions, NgbAlert }												from '@ng-bootstrap/ng-bootstrap';
+import { CandidateSearchAlert }														from './candidate-search-alert';
+import { DomSanitizer, SafeResourceUrl } 											from '@angular/platform-browser';
+import { DeviceDetectorService } 													from 'ngx-device-detector';
+import { Router}																	from '@angular/router';
+import { debounceTime } 															from "rxjs/operators";
+import { PhotoAPIOutbound, CandidateProfile, Language, Rate } 						from '../candidate-profile';
+import { EmailService, EmailRequest }												from '../email.service';
+import { CandidateNavService } 														from '../candidate-nav.service';
+import { CreditsService } 															from '../credits.service';
+import { ExtractedFilters } 														from './extracted-filters';
 
 /**
 * Component to suggest suitable Candidates based upon a 
@@ -31,6 +31,13 @@ import { ExtractedFilters } from './extracted-filters';
 })
 export class SuggestionsComponent implements OnInit {
 
+ 	@ViewChild('specUploadBox', { static: true }) 		specUploadDialogBox!: ElementRef<HTMLDialogElement>;
+ 	@ViewChild('feedbackBox', { static: true }) 		feedbackDialogBox!: ElementRef<HTMLDialogElement>;
+ 	@ViewChild('notesBox', { static: true }) 			notesDialogBox!: ElementRef<HTMLDialogElement>;
+ 	@ViewChild('publicityModal', {static:true})			publicityDialogBox!: ElementRef<HTMLDialogElement>;
+ 	@ViewChild('confirmDeleteModal', {static:true})		confirmDeleteDialogBox!: ElementRef<HTMLDialogElement>;
+ 	@ViewChild('contactBox', {static:true})				contactDialogBox!: ElementRef<HTMLDialogElement>;
+ 	
 	public candidateProfile:CandidateProfile = new CandidateProfile();
 	
 	public savedCandidates:Array<SavedCandidate> = new Array<SavedCandidate>();
@@ -122,8 +129,9 @@ export class SuggestionsComponent implements OnInit {
 	/*
 	* Opens confirm delete popup
 	*/	
-	public deleteAccount(content:any){
-		this.open(content, '', true);
+	public deleteAccount(){
+		this.confirmDeleteDialogBox.nativeElement.showModal();
+		//this.open(content, '', true);
 	}
 	
 	public confirmDeleteProfile():void{
@@ -140,8 +148,9 @@ export class SuggestionsComponent implements OnInit {
 				this.doReset();
 				this.currentView = 'suggestion-results';
 			}
-			this.closeModal();
-			
+			//this.closeModal();
+			this.confirmDeleteDialogBox.nativeElement.close();
+		
 		});
 	}
 	
@@ -759,13 +768,14 @@ export class SuggestionsComponent implements OnInit {
 	/**
 	* Displays dialog to create an alert for the current search critera
 	*/
-	public showCreateAlertDialog(content:any):void{
+	public showCreateAlertDialog():void{
 		
 		this.showSaveAlertBox 			= true;
 		this.showSaveAlertBoxSuccess 	= false;
 		this.showSaveAlertBoxFailure 	= false;
 		
-		this.open(content, '', true);
+		this.feedbackDialogBox.nativeElement.showModal();
+		//this.open(content, '', true);
 	}
 	
 	/**
@@ -782,7 +792,7 @@ export class SuggestionsComponent implements OnInit {
 		this.showFilterByJonSpecFailure  	= false;
 		this.showFilterByJobSpec 			= true;
 	
-		this.open(content, '', true);
+		 this.specUploadDialogBox.nativeElement.showModal();
 			
 	}
 	
@@ -810,7 +820,8 @@ export class SuggestionsComponent implements OnInit {
 			notes:			new UntypedFormControl(this.currentSavedCandidate.notes)
 		});
 	
-		this.open(content, '', true);
+		this.notesDialogBox.nativeElement.showModal();
+		//this.open(content, '', true);
 	}
 	
 	public updatedSavedCandidate:boolean = false; 
@@ -856,15 +867,15 @@ export class SuggestionsComponent implements OnInit {
 
 	public publicitySuggestions:Array<Candidate>  = new Array<Candidate>();
 	
-	public openPublicityDialog(content: any) {
+	public openPublicityDialog() {
 		
 		this.publicitySuggestions = this.suggestions.slice();
 		
 		
 		this.publicitySuggestions = this.publicitySuggestions.splice(0,Math.min(this.publicitySuggestions.length, 10));
 		
-		
-    	this.modalService.open(content, { centered: true });
+		this.publicityDialogBox.nativeElement.showModal();
+    	//this.modalService.open(content, { centered: true });
   	}
 
 	/**
@@ -942,7 +953,8 @@ export class SuggestionsComponent implements OnInit {
 	    	 centered: true
 	   };
 
-		this.modalService.open(contactBox, options);
+		this.contactDialogBox.nativeElement.showModal();
+		//this.modalService.open(contactBox, options);
 	
 	}
 	

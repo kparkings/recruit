@@ -1,4 +1,4 @@
-import { Component } 							from '@angular/core';
+import { Component, ElementRef, ViewChild } 	from '@angular/core';
 import { EmailService} 							from '../email.service';
 import { Email} 								from './email';
 import { EmailAttachment} 						from './email-attachment';
@@ -16,6 +16,10 @@ import { Observable, Observer }                 from 'rxjs';
   styleUrls: ['./email.component.css']
 })
 export class EmailComponent {
+
+	@ViewChild('replyBox', {static:true})replyDialogBox!: ElementRef<HTMLDialogElement>;
+ 	
+//replyBox
 
 	public emails:Array<Email> 		= new Array<Email>();
 	public currentView:string 		= "view-inbox";
@@ -108,21 +112,22 @@ export class EmailComponent {
 	/**
 	* Opens editor to reply to the Email
 	*/
-	public composeReply(replyBox:any):void{
+	public composeReply():void{
 		this.replyState = 'compose';
-		let options: NgbModalOptions = {
-	    	 centered: true
-	   };
+		//let options: NgbModalOptions = {
+	    //	 centered: true
+	   //};
 
-		this.modalService.open(replyBox, options);
+		this.replyDialogBox.nativeElement.showModal();
+		//this.modalService.open(replyBox, options);
 	}
 	
 	/**
 	*  Closes the popups
 	*/
-	public closeModal(): void {
-		this.modalService.dismissAll();
-	}
+	//public closeModal(): void {
+	//	this.modalService.dismissAll();
+	//}
 	
 
 	/**

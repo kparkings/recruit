@@ -1,4 +1,4 @@
-import { Component, OnInit } 					from '@angular/core';
+import { Component, ElementRef, OnInit } 					from '@angular/core';
 import { UntypedFormGroup, UntypedFormControl }	from '@angular/forms';
 import { RecruiterService }						from '../recruiter.service';
 import { CandidateServiceService }				from '../candidate-service.service';

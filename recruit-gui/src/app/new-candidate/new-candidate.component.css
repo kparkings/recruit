@@ -13,7 +13,6 @@
 }
 
 .validationBox{
-    width:500px;
     height:280px;
 }
 
@@ -22,7 +21,6 @@
     font-size: medium;
     height: 50px;
     text-align:center;
-    width:500px;
     padding:0px;
     margin:0px;
     
@@ -32,13 +30,12 @@
     text-align:center;
     color:#6f42c1;
     margin-top:10px;
-    width:500px;
-    
 }
 
 .pendingCandidateRow:hover{
 	background:#6f42c1;
 	color:white;
+	cursor:pointer;
 }
 
 .feedbackBox{
@@ -64,6 +61,7 @@
     font-size: large;
     height:200px;
     text-align: center;
+    
 }
 
 .modal-body-text{
@@ -197,3 +195,11 @@
  select{
  	max-width:50%;
  }
+ 
+ dialog {
+	overflow: hidden;
+	padding:0px;
+	border:none;
+	width:50%;
+	min-width:280px;
+}

@@ -83,3 +83,17 @@ chart-wrapper-page{
 	width:100%;
 	padding:5px;
 }
+
+.border-top{
+	padding-top:20px;
+	padding-left:20px;
+}
+
+.stat-canvas{
+	width:40%;
+	height:400px;
+	min-width:300px;
+	margin:20px;
+	float:left;
+	padding:5px;
+}

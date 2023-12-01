@@ -56,28 +56,26 @@
 	</div>
 </div>
     
-<ng-template #feedbackBox let-modal>
+<dialog #feedbackBox>
 	<div class="modal-header">
 		<h4 class="modal-title">&nbsp;</h4>
-   		<div class="filter-close-box" (click)="closeModal()">X</div>
+   		<div class="filter-close-box" (click)="feedbackBox.close()">X</div>
  	</div>
 	<div class="feedbackBox">
 		<div class="modal-body">
 			Invalid Login attempt
 		</div>       
 	</div>
-</ng-template>
+</dialog>
 
-<ng-template #resetPasswordDialog let-modal>
+<dialog #resetPasswordDialog>
 	<div class="modal-header">
 		<h4 class="modal-title">&nbsp;</h4>
-   		<div class="filter-close-box" (click)="closeModal()">X</div>
+   		<div class="filter-close-box" (click)="resetPasswordDialog.close()">X</div>
  	</div>
 	<div class="feedbackBox">
 		<div class="modal-body">
 			Email Sent
 		</div>       
 	</div>
-</ng-template>
-
-
+</dialog>

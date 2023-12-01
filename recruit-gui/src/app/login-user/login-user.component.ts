@@ -16,7 +16,7 @@ import {NgbModal, NgbModalOptions, ModalDismissReasons}			from '@ng-bootstrap/ng
 */
 export class LoginUserComponent implements OnInit {
 	
-	@ViewChild('feedbackBox', { static: false }) private content:any;
+	@ViewChild('feedbackBox', { static: false }) private feedbackBox:any;
 	@ViewChild('resetPasswordDialog', { static: false }) private resetDialog:any;
 	
 	public showForgottenPassword:boolean = false;
@@ -111,7 +111,8 @@ export class LoginUserComponent implements OnInit {
 			
 			console.log("DID A BOOP -> " + JSON.stringify(err));
 			if (err.status === 401) {
-				this.open(this.content);
+				//this.open(this.content);
+				this.feedbackBox.nativeElement.showModal();
 		}
 	});
 
@@ -156,8 +157,8 @@ export class LoginUserComponent implements OnInit {
 		
 			this.showForgottenPassword = false;
 		
-			this.open(this.resetDialog);
-			
+			//this.open(this.resetDialog);
+			this.resetDialog.nativeElement.showModal();
 		},
 		err => {
 			console.log('Error resetting password');

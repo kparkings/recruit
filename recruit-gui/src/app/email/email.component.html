@@ -5,7 +5,7 @@
 				
 			</div>
 			<div class="action-buttons" *ngIf="currentView == 'view-read'">
-				<button class="btn btn-secondary action-btn" (click)="composeReply(replyBox)"	*ngIf="currentEmail.sender.senderType === 'RECRUITER' || currentEmail.sender.senderType === 'CANDIDATE'">Reply</button>
+				<button class="btn btn-secondary action-btn" (click)="composeReply()"	*ngIf="currentEmail.sender.senderType === 'RECRUITER' || currentEmail.sender.senderType === 'CANDIDATE'">Reply</button>
 				<button class="btn btn-secondary action-btn" (click)="markAsUnread()" 			*ngIf="currentEmail.viewed">Mark Unread</button>
 				<button class="btn btn-secondary action-btn"  									*ngIf="!currentEmail.viewed" disabled>Mark Unread</button>
 				<button class="btn btn-secondary action-btn" (click)="viewInbox()">Back</button>
@@ -68,10 +68,10 @@
 </div>
 
 <!-- Reply Box -->
-<ng-template #replyBox let-modal>
+<dialog #replyBox>
 	<div class="modal-header">
-		<h4 class="modal-title">Send Reply To Email</h4>
- 		<div class="filter-close-box" (click)="closeModal()">X</div>
+		<h4 class="modal-title">Send Reply</h4>
+ 		<div class="filter-close-box" (click)="replyBox.close()">X</div>
 	</div>
 	<div class="feedbackBox;">
 		<div class="modal-body" *ngIf="replyState === 'compose'">
@@ -87,4 +87,4 @@
 			<p>Unfortunately it was not possible to send the reply at this time.</p>
 		</div>
 	</div>
-</ng-template>
+</dialog>

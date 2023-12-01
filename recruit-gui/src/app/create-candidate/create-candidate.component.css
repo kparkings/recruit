@@ -19,7 +19,6 @@
     font-size: medium;
     height: 50px;
     text-align:center;
-    width:500px;
     padding:0px;
     margin:0px;
     
@@ -46,7 +45,7 @@
 
 .modal-body-text{
     vertical-align: middle;
-    margin-top: 60px;
+    margin-top: 50px;
     font-weight: bold;
 }
 
@@ -113,6 +112,13 @@ textarea{
 
 .hide-row{
 	display:none;
+}
+
+dialog {
+	overflow: hidden;
+	padding:0px;
+	border:none;
+	
 }
 
 

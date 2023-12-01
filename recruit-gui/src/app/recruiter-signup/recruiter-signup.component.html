@@ -66,29 +66,25 @@
 <!-- Pricing information -->
 <div class="segment">
 	<h1>Pricing</h1>
-						<p><b class="highlight">EUR 120</b> ex BTW per recruiter for an annual subscription</p>
-						<p>You have the option to start a subscription after the 30 days trial period has expired if you wish to continue to access the site.</p>
-						<p>IT recruiters will have full access to the site features including</p>
-						<ul>
-							<li>Unlimited Access to the IT Candidate CV database</li>
-							<li>Unlimited Postings on the IT Job board</li>
-							<li>Access to the advanced Suggestion Search feature</li>
-							<li>Access to the B2B Marketplace</li>
-						</ul>
+	<p><b class="highlight">EUR 120</b> ex BTW per recruiter for an annual subscription</p>
+	<p>You have the option to start a subscription after the 30 days trial period has expired if you wish to continue to access the site.</p>
+	<p>IT recruiters will have full access to the site features including</p>
+	<ul>
+		<li>Unlimited Access to the IT Candidate CV database</li>
+		<li>Unlimited Postings on the IT Job board</li>
+		<li>Access to the advanced Suggestion Search feature</li>
+		<li>Access to the B2B Marketplace</li>
+	</ul>
 </div>
 
-
-	
-
-
-<ng-template #feedbackBox let-modal>
+<dialog #feedbackBox>
 	<div class="modal-header">
 		<h4 class="modal-title">&nbsp;</h4>
-		<div class="filter-close-box" (click)="closeModal()">X</div>
+		<div class="filter-close-box" (click)="feedbackBox.close()">X</div>
 	</div>
 	<div class="feedbackBox; {{feedbackBoxClass}}">
 		<div class="modal-body">
 			<p class="modal-body-text">{{feedbackBoxText}}</p>
 		</div>       
 	</div>
-</ng-template>
+</dialog>

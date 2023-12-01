@@ -33,7 +33,6 @@
     font-size: medium;
     height: 50px;
     text-align:center;
-    width:500px;
     padding:0px;
     margin:0px;
     
@@ -51,9 +50,7 @@
 .modal-header-text{
     text-align:center;
     color:#6f42c1;
-    margin-top:10px;
-    width:500px;
-    
+    margin-top:10px; 
 }
 
 .feedbackBox{
@@ -73,9 +70,16 @@
     font-weight: bold;
 }
 
- .modal-header{
-     background:#181414;
-     color:#6A5ACD;
-     font-weight:bold;
- }
+.modal-header{
+	background:#181414;
+    color:#6A5ACD;
+    font-weight:bold;
+}
 
+dialog {
+	overflow: hidden;
+	padding:0px;
+	border:none;
+	width:50%;
+	min-width:280px;
+}

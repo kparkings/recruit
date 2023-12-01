@@ -23,7 +23,10 @@ import { CreditsService } 								from '../credits.service';
 })
 export class RecruiterMarketplaceComponent implements OnInit {
 
-	@ViewChild('feedbackBox', { static: false }) private content:any;
+	@ViewChild('feedbackBox', { static: false }) private feedbackBox:any;
+	@ViewChild('contactBox', { static: false }) private contactBox:any;
+	@ViewChild('specUploadBox', { static: false }) private specUploadBox:any;
+
 
 	public unseenOfferedCandidates:number 		= 0;
 	public unseenOpenPositions:number 			= 0;
@@ -101,7 +104,7 @@ export class RecruiterMarketplaceComponent implements OnInit {
 	*/
 	//public offeredCandidates:Array<OfferedCandidate> 	= new Array<OfferedCandidate>();
 	public offeredCandidates:Array<Candidate> 	= new Array<Candidate>();
-	public showJustMyCandidatesActive:boolean			= true;
+	public showJustMyCandidatesActive:boolean			= false;
 
 	/**
 	* OpenPositions - List 
@@ -571,7 +574,7 @@ export class RecruiterMarketplaceComponent implements OnInit {
 	/**
 	* Opens the specified Dialog box
 	*/
-	public open(content:any, msg:string, success:boolean):void {
+	public open(success:boolean):void {
 		
 	    if (success) {
 	      //Currently not used
@@ -580,19 +583,21 @@ export class RecruiterMarketplaceComponent implements OnInit {
 	      this.feedbackBoxClass = 'feedback-failure';
 	    }
 	
-	   let options: NgbModalOptions = {
-	    	 centered: true
-	   };
+	   //let options: NgbModalOptions = {
+	   // 	 centered: true
+	   //};
 
-		this.modalService.open(this.content, options);
-
+		//this.modalService.open(this.content, options);
+		this.feedbackBox.nativeElement.showModal();
   	}
 	
 	/**
 	*  Closes the confirm popup
 	*/
 	public closeModal(): void {
-		this.modalService.dismissAll();
+		this.feedbackBox.nativeElement.close();
+		this.contactBox.nativeElement.close();
+		this.specUploadBox.nativeElement.close();
 		this.validationErrors = new Array<string>();
 	}
 	
@@ -667,7 +672,7 @@ export class RecruiterMarketplaceComponent implements OnInit {
 						failedFields.forEach(failedField => {
 							this.validationErrors.push(failedField.issue);
 						});
-						this.open('feedbackBox', "Failure",  false);
+						this.open(false);
 					} else {
 						console.log("Failed to persist new Open Position " + JSON.stringify(err.error));
 					}
@@ -704,7 +709,7 @@ export class RecruiterMarketplaceComponent implements OnInit {
 						failedFields.forEach(failedField => {
 							this.validationErrors.push(failedField.issue);
 						});
-						this.open('feedbackBox', "Failure",  false);
+						this.open(false);
 					} else {
 						console.log("Failed to update Open Position " + JSON.stringify(err.error));
 					}
@@ -720,14 +725,15 @@ export class RecruiterMarketplaceComponent implements OnInit {
 	/**
 	* Opend dialog to contact recuiter posting	
 	*/
-	public contactRecruiter(contactBox:any):void{
+	public contactRecruiter():void{
 		
 		this.contactRecruiterView = 'message';
-		let options: NgbModalOptions = {
-	    	 centered: true
-	   };
+		//let options: NgbModalOptions = {
+	    //	 centered: true
+	   //};
 
-		this.modalService.open(contactBox, options);
+		this.contactBox.nativeElement.showModal();
+		//this.modalService.open(contactBox, options);
 	
 	}
 	
@@ -798,16 +804,17 @@ export class RecruiterMarketplaceComponent implements OnInit {
 	/**
 	* Displays dialog to create an alert for the current search critera
 	*/
-	public showFilterByJobSpecDialog(content:any):void{
+	public showFilterByJobSpecDialog():void{
 		
 		this.showFilterByJonSpecFailure  	= false;
 		this.showFilterByJobSpec 			= true;
 		
-		let options: NgbModalOptions = {
-			centered: true
-		};
+		//let options: NgbModalOptions = {
+		//	centered: true
+		//};
 		
-		this.modalService.open(content, options);
+		//this.modalService.open(content, options);
+		this.specUploadBox.nativeElement.showModal();
 	}
 	
 	private jobSpecFile!:File;

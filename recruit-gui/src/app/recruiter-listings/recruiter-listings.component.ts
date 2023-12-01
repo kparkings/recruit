@@ -25,8 +25,13 @@ import { ExtractedFilters } from '../suggestions/extracted-filters';
 })
 export class RecruiterListingsComponent implements OnInit {
 
-	@ViewChild('feedbackBox', { static: false }) private content:any;
-	@ViewChild('marketplaceBox', { static: false }) private mpBox:any;
+	@ViewChild('feedbackBox', { static: false }) private feedbackBox:any;
+	@ViewChild('recommendedCandidates', { static: false }) private recommendedCandidatesBox:any;
+	@ViewChild('specUploadBox', { static: false }) private specUploadBox:any;
+	@ViewChild('publicityBox', { static: false }) private publicityBox:any;
+	@ViewChild('marketplaceBox', { static: false }) private marketplaceBox:any;
+	
+	
 
   	constructor(private listingService:				ListingService, 
 				private modalService: 				NgbModal, 
@@ -139,7 +144,7 @@ export class RecruiterListingsComponent implements OnInit {
 	/**
 	* Displays dialog to create an alert for the current search critera
 	*/
-	public showFilterByJobSpecDialog(content:any):void{
+	public showFilterByJobSpecDialog():void{
 		
 		this.showFilterByJonSpecFailure  	= false;
 		this.showFilterByJobSpec 			= true;
@@ -149,11 +154,12 @@ export class RecruiterListingsComponent implements OnInit {
 			specAsText:				new UntypedFormControl('Enter Job specification Text here...'),
 		});
 		
-		let options: NgbModalOptions = {
-			centered: true
-		};
+		//let options: NgbModalOptions = {
+		//	centered: true
+		//};
 		
-		this.modalService.open(content, options);
+		//this.modalService.open(content, options);
+		this.specUploadBox.nativeElement.showModal();
 	}
 	
 	public isMobile:boolean = false;
@@ -288,19 +294,25 @@ export class RecruiterListingsComponent implements OnInit {
 	      this.feedbackBoxClass = 'feedback-failure';
 	    }
 	
-	   let options: NgbModalOptions = {
-	    	 centered: true
-	   };
+	   //let options: NgbModalOptions = {
+	   // 	 centered: true
+	   //};
 
-		this.modalService.open(this.content, options);
-
+		//this.modalService.open(this.content, options);
+		this.feedbackBox.nativeElement.showModal();
   }
 	
 	/**
 	*  Closes the confirm popup
 	*/
 	public closeModal(): void {
-		this.modalService.dismissAll();
+		//this.modalService.dismissAll();
+		this.feedbackBox.nativeElement.close();
+		this.publicityBox.nativeElement.close();
+		this.recommendedCandidatesBox.nativeElement.close();
+		this.specUploadBox.nativeElement.close();
+		this.marketplaceBox.nativeElement.close();
+	
 		this.validationErrors = new Array<string>();
 	}
 
@@ -1386,7 +1398,7 @@ export class RecruiterListingsComponent implements OnInit {
 	/**
 	* Shows the user suggestions relating to their listing 
 	*/
-	public openSuggestions(popupRecommendations:any, listing:Listing):void{
+	public openSuggestions(listing:Listing):void{
 	
 		this.showSuggestedCandidate 		= false;
 		this.suggestedCandidate	 			= new Candidate();
@@ -1394,11 +1406,12 @@ export class RecruiterListingsComponent implements OnInit {
 		
 		this.fetchCandidateRecommendations(listing);
 	
-		let options: NgbModalOptions = {
-			centered: true
-		};
+		//let options: NgbModalOptions = {
+		//	centered: true
+		//};
 		
-		this.modalService.open(popupRecommendations, options);
+		//this.modalService.open(popupRecommendations, options);
+		this.recommendedCandidatesBox.nativeElement.showModal();
 
 	}
 	
@@ -1421,12 +1434,13 @@ export class RecruiterListingsComponent implements OnInit {
 	* Shows a popup with the details of the listing to 
 	* post on other websites
 	*/
-	public showPublicity(content:any):void{
-		let options: NgbModalOptions = {
-	    	 centered: true
-	   };
+	public showPublicity():void{
+		//let options: NgbModalOptions = {
+	    //	 centered: true
+	   //};
 
-		this.modalService.open(content, options);
+		//this.modalService.open(content, options);
+		this.publicityBox.nativeElement.showModal();
 	}
 	
 	/**
@@ -1508,12 +1522,12 @@ export class RecruiterListingsComponent implements OnInit {
 	
 	public showMPBox():void{
 		
-		let options: NgbModalOptions = {
-	    	 centered: true
-	   };
+		//let options: NgbModalOptions = {
+	    //	 centered: true
+	   //};
 
-		this.modalService.open(this.mpBox, options);
-		
+		//this.modalService.open(this.mpBox, options);
+		this.marketplaceBox.nativeElement.showModal();
 	
 	}
 	

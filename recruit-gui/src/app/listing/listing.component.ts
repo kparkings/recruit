@@ -1,4 +1,4 @@
-import { Component, OnInit } 							from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } 							from '@angular/core';
 import { ListingService }								from '../listing.service';
 import { EmailService, EmailRequest }					from '../email.service';
 import { Listing}										from './listing';
@@ -17,6 +17,11 @@ import { RecruiterProfile }								from '../recruiter-profile/recruiter-profile'
 })
 export class ListingComponent implements OnInit {
 
+	@ViewChild('feedbackBox',  {static:true})feedbackDialogBox!:  ElementRef<HTMLDialogElement>;
+	@ViewChild('publicityBox', {static:true}) publicityDialogBox!: ElementRef<HTMLDialogElement>;
+	
+	
+	
 	public recruiterProfiles:Array<RecruiterProfile> 	= new Array<RecruiterProfile>();
 	public recruiterProfile:RecruiterProfile 			= new RecruiterProfile();
 	
@@ -121,7 +126,7 @@ export class ListingComponent implements OnInit {
 	/**
 	* Send an email request 
 	*/
-	public sendEmailRequest(content:any):void{
+	public sendEmailRequest():void{
 		
 		let emailRequest:EmailRequest = new EmailRequest();
 		
@@ -135,11 +140,13 @@ export class ListingComponent implements OnInit {
 			this.curriculumFile = null;
 			this.showSendAlertBoxSuccess 		= true;
 			this.showSendAlertBoxFailure 		= false;
-			this.open(content);
+			//this.open(content);
+			this.feedbackDialogBox.nativeElement.showModal();
 	    },err => {
 			this.showSendAlertBoxSuccess 		= false;
 			this.showSendAlertBoxFailure 		= true;
-			this.open(content);
+			//this.open(content);
+			this.feedbackDialogBox.nativeElement.showModal();
 		});
 
 	}
@@ -502,24 +509,26 @@ export class ListingComponent implements OnInit {
 	/**
 	*  Closes the confirm popup
 	*/
-	public closeModal(): void {
+	//public closeModal(): void {
 		
-		this.showSendAlertBoxSuccess 		= false;
-		this.showSendAlertBoxFailure 		= false;
+	//	this.showSendAlertBoxSuccess 		= false;
+	//	this.showSendAlertBoxFailure 		= false;
 		
-		this.modalService.dismissAll();
-	}
+	//	this.modalService.dismissAll();
+	//}
 	
-	public open(content:any):void {
+	//`public open(content:any):void {
 		
 	
-	   let options: NgbModalOptions = {
-	    	 centered: true
-	   };
+	   //let options: NgbModalOptions = {
+	   // 	 centered: true
+	   //};
 
-		this.modalService.open(content, options);
+		//this.modalService.open(content, options);
+	
+		//this.feedbackDialogBox.nativeElement.showModal();
 
-  	}
+  	//}
 	
 	private pageYPos = 0;
 	
@@ -547,8 +556,9 @@ export class ListingComponent implements OnInit {
 	* Shows a popup with the details of the listing to 
 	* post on other websites
 	*/
-	public showPublicity(content:any):void{
-		this.open(content);
+	public showPublicity():void{
+		this.publicityDialogBox.nativeElement.showModal();
+		//this.open(content);
 	}
   
 

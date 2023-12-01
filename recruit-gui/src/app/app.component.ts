@@ -1,13 +1,14 @@
 import { Component, ViewChild }				from '@angular/core';
 import { Router}							from '@angular/router';
-import { CookieService } 					from 'ngx-cookie';
+//import { CookieService } 					from 'ngx-cookie';
+import { CookieService } from 'ngx-cookie-service';
 import { NgbModal, NgbModalOptions}			from '@ng-bootstrap/ng-bootstrap'
 import { DeviceDetectorService } 			from 'ngx-device-detector';
 import { RecruiterMarketplaceService }		from './recruiter-marketplace.service';
 import { EmailService }						from './email.service';
 import { PopupsService }					from './popups.service';
-import { Observable, Observer }             from 'rxjs';
-import {ElementRef} from '@angular/core';
+//import { Observable, Observer }             from 'rxjs';
+//import {ElementRef} from '@angular/core';
 import { CandidateNavService } from './candidate-nav.service';
 import { CreditsService } from './credits.service';
 
@@ -18,7 +19,7 @@ import { CreditsService } from './credits.service';
 }) 
 export class AppComponent {
 
-	@ViewChild('validationExBox', { static: false }) private content:any;
+	@ViewChild('validationExBox', { static: false }) private validationExBox:any;
 	@ViewChild('noCreditsBox', { static: false }) 	 private noCreditsBox:any;
 	
 	private readonly termsAndConditionsCookieVersion:string = '3';
@@ -88,7 +89,7 @@ export class AppComponent {
 			this.validationExceptions = val;
 			this.closeModal();
 			if (this.validationExceptions.length > 0) {
-				this.popupsService.openModal(this.content);
+				this.popupsService.openModal(this.validationExBox);
 			}
 		});
 	}
@@ -128,6 +129,8 @@ export class AppComponent {
 	public navToSubscriptions():void{
 		this.candidateNavService.reset();
 		this.closeModal();
+		this.validationExBox.nativeElement.close();
+		this.noCreditsBox.nativeElement.close();
 		this.creditsService.buySubscription();
 		this.router.navigate(['recruiter-account']);
 	}
@@ -151,7 +154,7 @@ export class AppComponent {
 		let date:Date = new Date();
 		date.setFullYear(date.getFullYear() + 1);
 		
-		this.cookieService.put(this.getTandCsCookieName(),"Accepted",{expires: date});
+		this.cookieService.set(this.getTandCsCookieName(),"Accepted",{expires: date});
 		
 		this.termsAndConditionsAccepted = true;
 	}

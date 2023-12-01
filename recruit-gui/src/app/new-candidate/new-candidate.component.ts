@@ -35,6 +35,7 @@ export class NewCandidateComponent implements OnInit {
 
 	public boop:Date = new Date();
 	public isEdit:boolean = false;
+    pendingCandidateBox: any;
 
 	/**
   	* Constructor
@@ -130,29 +131,31 @@ export class NewCandidateComponent implements OnInit {
 	
 	public openPendingCandidatesBox():void {
     
-      	let options: NgbModalOptions = {
-     		centered: true
-   		};
+      	//let options: NgbModalOptions = {
+     	//	centered: true
+   		//};
 
-  		this.modalService.open(this.pendingCandidateBoxChild, options);
+  		//this.modalService.open(this.pendingCandidateBoxChild, options);
+  		this.pendingCandidateBoxChild.nativeElement.showModal();
   	}
   	
-  	public openFeedbackBox():void {
+  	//public openFeedbackBox():void {
     
-      	let options: NgbModalOptions = {
-     		centered: true
-   		};
+     // 	let options: NgbModalOptions = {
+    // 		centered: true
+   	//	};
 
-  		this.modalService.open(this.feedbackBox, options);
-  	}
+//  		this.modalService.open(this.feedbackBox, options);
+ // 	}
   	
   	public openValidationBox():void {
     
-      	let options: NgbModalOptions = {
-     		centered: true
-   		};
+      	//let options: NgbModalOptions = {
+     	//	centered: true
+   		//};
 
-  		this.modalService.open(this.validationBox, options);
+  		//this.modalService.open(this.validationBox, options);
+  		this.validationBox.nativeElement.showModal();
   	}
 	
 
@@ -270,11 +273,11 @@ export class NewCandidateComponent implements OnInit {
 		
 		if (this.candidateNavService.isEditMode()) {
 			this.candidateService.updateCandidate(candidate.candidateId, candidate, this.profileImageFile).subscribe(d=>{
-    	  		this.open('feedbackBox', "Success",  true);			
+    	  		this.open(true);			
     		});
 		} else {
 			this.candidateService.addCandidate(candidate, this.profileImageFile).subscribe(d=>{
-    	  		this.open('feedbackBox', "Success",  true);
+    	  		this.open(true);
 					if (this.currentPendingCandidate) {
 						this.curriculumService.deletePendingCurriculum(this.currentPendingCandidate?.pendingCandidateId).subscribe(res => {
 					});	
@@ -288,7 +291,7 @@ export class NewCandidateComponent implements OnInit {
   	public feedbackBoxTitle                   = '';
   	public feedbackBoxText:string             = '';
 
-	public open(content:any, msg:string, success:boolean):void {
+	public open(success:boolean):void {
     
     	if (success) {
     	  this.feedbackBoxTitle = 'Success';
@@ -304,7 +307,8 @@ export class NewCandidateComponent implements OnInit {
      		centered: true
    		};
 
-  		this.modalService.open(this.feedbackBox, options);
+  		//this.modalService.open(this.feedbackBox, options);
+  		this.feedbackBox.nativeElement.showModal();
   	}
 
   /**
@@ -324,12 +328,7 @@ export class NewCandidateComponent implements OnInit {
   
   public validationErrors:Array<string> = new Array<string>();
   
-  /**
-  *  Closes the confirm popup
-  */
-  public closePendingCandidateModal(): void {
-    this.modalService.dismissAll();
-  }
+  
   
   private curriculumFile!:File;
   private profileImageFile!:File;
@@ -450,7 +449,8 @@ export class NewCandidateComponent implements OnInit {
 				this.offeredCandidateFormBean.get('freelance')?.setValue("FALSE");
 			}
 
-			this.closePendingCandidateModal();
+			//this.closePendingCandidateModal();
+			this.pendingCandidateBoxChild.nativeElement.close();
     	});
 		
 	}

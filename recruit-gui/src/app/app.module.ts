@@ -10,10 +10,10 @@ import { AuthService }						from './auth.service';
 import { AuthGuardService }					from './auth-guard.service';
 import { HomeComponent }					from './home/home.component';
 import { NgbModule }						from '@ng-bootstrap/ng-bootstrap';
-import { MatIconModule }					from '@angular/material/icon';
+//import { MatIconModule }					from '@angular/material/icon';
 import { BrowserAnimationsModule }			from '@angular/platform-browser/animations';
 import { StatisticsComponent }				from './statistics/statistics.component';
-import { ChartsModule }						from 'ng2-charts';
+import { NgChartsModule }					from 'ng2-charts';
 import { AccountsComponent } 				from './accounts/accounts.component';
 import { CreateCandidateComponent } 		from './create-candidate/create-candidate.component';
 import { RecruiterAccountComponent } 		from './recruiter-account/recruiter-account.component';
@@ -21,7 +21,7 @@ import { RecruiterListingsComponent } 		from './recruiter-listings/recruiter-lis
 import { ListingComponent } 				from './listing/listing.component';
 import { RecruiterSignupComponent } 		from './recruiter-signup/recruiter-signup.component';
 import { SuggestionsComponent } 			from './suggestions/suggestions.component';
-import { CookieModule } 					from 'ngx-cookie';
+import { CookieService} 					from 'ngx-cookie-service';
 import { RecruiterMarketplaceComponent } 	from './recruiter-marketplace/recruiter-marketplace.component';
 import { RecruiterAlertsComponent } 		from './recruiter-alerts/recruiter-alerts.component';
 import { FaqComponent } 					from './faq/faq.component';
@@ -52,20 +52,20 @@ import { RecruiterStatsComponent } 			from './recruiter-stats/recruiter-stats.co
     RecruiterProfileComponent,
 	TupleStrValueByPos,
 	EnumToHumanReadableValue,
- 	RecruiterStatsComponent
+ 	RecruiterStatsComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     ReactiveFormsModule,
     HttpClientModule,
-    NgbModule,
-    MatIconModule,
+    //NgbModule,
+    //MatIconModule,
     BrowserAnimationsModule,
-	ChartsModule,
-	CookieModule.forRoot()
+	NgChartsModule.forRoot()
+	//CookieModule.forRoot()
   ],
-  providers: [AuthGuardService, AuthService],
+  providers: [AuthGuardService, AuthService, CookieService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

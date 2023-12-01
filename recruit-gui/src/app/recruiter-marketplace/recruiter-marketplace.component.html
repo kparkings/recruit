@@ -117,7 +117,7 @@
 		<div *ngIf="addDemand">
 			<h3>Add details of position you wish to fill via other recruiters</h3>
 			<div class="action-buttons">
-				<button class="btn btn-secondary btnRight main-btns" (click)="showFilterByJobSpecDialog(specUploadBox)" download>Create From Job Spec</button>
+				<button class="btn btn-secondary btnRight main-btns" (click)="showFilterByJobSpecDialog()" download>Create From Job Spec</button>
 				<button class="btn btn-secondary btnRight main-btns" (click)="showOpenPositions()">Back</button>
 				<button class="btn btn-secondary btnRight main-btns" (click)="publishOpenPosition()">Publish</button>
 			</div>
@@ -316,8 +316,8 @@
 						</div>
 						<br>
 						<br>
-							<button class="btn btn-secondary action-btn main-action_btn main-btns main-bt" style="width:300px;margin-bottom:10px;background:grey;" (click)="contactRecruiter(contactBox)" *ngIf="isMyOpenPosition()" disabled>Contact</button>
-							<button class="btn btn-secondary action-btn main-action_btn main-btns main-bt" style="width:300px;margin-bottom:10px;background:green;" (click)="contactRecruiter(contactBox)" *ngIf="!isMyOpenPosition()">Contact</button>
+							<button class="btn btn-secondary action-btn main-action_btn main-btns main-bt" style="width:300px;margin-bottom:10px;background:grey;" (click)="contactRecruiter()" *ngIf="isMyOpenPosition()" disabled>Contact</button>
+							<button class="btn btn-secondary action-btn main-action_btn main-btns main-bt" style="width:300px;margin-bottom:10px;background:green;" (click)="contactRecruiter()" *ngIf="!isMyOpenPosition()">Contact</button>
 						<br>
      				</div>
      				
@@ -414,7 +414,7 @@
 		</div>
 </div>
 
-<ng-template #feedbackBox let-modal>
+<dialog #feedbackBox>
 	<div class="modal-header">
 		<h4 class="modal-title">{{feedbackBoxTitle}}</h4>
  				<div class="filter-close-box" (click)="closeModal()">X</div>
@@ -426,9 +426,9 @@
 			</ul><br>
 		</div>       
 	</div>
-</ng-template> 
+</dialog> 
 
-<ng-template #contactBox let-modal>
+<dialog #contactBox>
 	<div class="modal-header">
 		<h4 class="modal-title">Send Message To Recruiter</h4>
  		<div class="filter-close-box" (click)="closeModal()">X</div>
@@ -436,7 +436,7 @@
 	<div class="modal-body" *ngIf="contactRecruiterView === 'message'">
 		<form [formGroup]="sendMessageGroup">
 			<textarea formControlName="message"></textarea>
-			<button class="btn btn-secondary action-btn btn-right" (click)="sendMessageToRecruiter()" 	*ngIf="!showJustMyCandidatesActive">Send</button>
+			<button class="btn btn-secondary action-btn btn-right" (click)="sendMessageToRecruiter()" 	*ngIf="!showJustMyOpenPositionsActive">Send</button>
 		</form>	
 	</div>
 	<div class="modal-body message-send-success" *ngIf="contactRecruiterView === 'success'">
@@ -446,11 +446,11 @@
 	<div class="modal-body" *ngIf="contactRecruiterView === 'failure'">
 			<p class="message-send-failure">Failed to Send Message</p>
 	</div>
-</ng-template> 
+</dialog> 
 
-<ng-template #specUploadBox let-modal>
+<dialog #specUploadBox>
 	<div class="modal-header">
-		<h4 class="modal-title">Extract Filters from Job Specification</h4>
+		<h4 class="modal-title">Extract Filters</h4>
  		<div class="filter-close-box" (click)="closeModal()">X</div>
 	</div>
 	<div class="feedbackBox">
@@ -466,4 +466,4 @@
 			<p>Unfortunately it was not possible to extract filters from this file.</p>
 		</div>
 	</div>
-</ng-template> 
+</dialog> 

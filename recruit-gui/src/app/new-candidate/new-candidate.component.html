@@ -202,24 +202,23 @@
 	</form>
 </div>
 
-<ng-template #feedbackBox let-modal>
-
+<dialog #feedbackBox>
 	<div class="modal-header">
 		<h4 class="modal-title">&nbsp;</h4>
-   		<div class="filter-close-box" (click)="closeModal()">X</div>
+   		<div class="filter-close-box" (click)="feedbackBox.close()">X</div>
  		</div>
 	<div class="feedbackBox; {{feedbackBoxClass}}">
 		<div class="modal-body">
 			<p class="modal-body-text">{{feedbackBoxText}}</p>
 		</div>       
 	</div>
-</ng-template>
+</dialog>
 
-<ng-template #validationBox let-modal>
+<dialog #validationBox>
 
 	<div class="modal-header">
 		<h4 class="modal-title">Validation Errors</h4>
-   		<div class="filter-close-box" (click)="closeValidationModal()">X</div>
+   		<div class="filter-close-box" (click)="validationBox.close()">X</div>
  		</div>
 	<div class="validationBox">
 		<div class="modal-body">
@@ -229,18 +228,15 @@
 			</ul>
 		</div>       
 	</div>
-</ng-template>
+</dialog>
 
-<ng-template #pendingCandidateBox let-modal>
-	
+<dialog #pendingCandidateBox>
 	<div>
 		<div class="modal-header">
 		<h4 class="modal-title">Pending Candidates</h4>
-   		<div class="filter-close-box" (click)="closePendingCandidateModal()">X</div>
+   		<div class="filter-close-box" (click)="pendingCandidateBox.close()">X</div>
  	</div>
-	
 	<div class="modal-bod">
-	
 		<table class="table pendng-candidate-table" >
 			<thead>
 				<tr>
@@ -265,15 +261,11 @@
 					<td class="pendingCandidateBox-td" (click)="loadPendingCandidate(pendingCandidate)">{{pendingCandidate.email}}</td>
 					<td class="pendingCandidateBox-td">
 						<button class="btn btn-secondary action-btn" (click)="deletePendingCurriculum(pendingCandidate, false)">Delete</button>
-					</td>
-					
+					</td>	
 				</tr>
 			</tbody>
-		</table>
-			
+		</table>			
 	</div> 
 </div>
-	  
-	
-</ng-template>
+</dialog>
      

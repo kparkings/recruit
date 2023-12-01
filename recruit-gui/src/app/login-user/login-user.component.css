@@ -26,7 +26,6 @@ input{
     font-size: medium;
     height: 50px;
     text-align:center;
-    width:500px;
     padding:0px;
     margin:0px;
 }
@@ -58,11 +57,9 @@ input{
  }
 
  .filter-close-box{
-     padding:10px;
      cursor:pointer;
-     font-size:20px;
-     font-weight: bold;
-    text-align: right;  
+     margin-right:10px;
+     margin-top:10px;  
 }
 
 .wholepagerow {
@@ -119,4 +116,12 @@ input{
 
 .new-subscription h3{
 	font-size:14px;
+}
+
+dialog {
+	overflow: hidden;
+	padding:0px;
+	border:none;
+	width:50%;
+	min-width:280px;
 }

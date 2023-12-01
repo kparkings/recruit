@@ -82,7 +82,7 @@
 	        			
 		        			<!-- Action buttons -->
 							<div class="action-buttons">
-								<button class="btn btn-secondary btn-listing" *ngIf="isAuthenticated() && isAuthenticatedAsAdmin()" (click)="showPublicity(publicityBox)">Publicity</button>
+								<button class="btn btn-secondary btn-listing" *ngIf="isAuthenticated() && isAuthenticatedAsAdmin()" (click)="showPublicity()">Publicity</button>
 								<button (click)="showList()" class="btn btn-secondary btn-listing">Back</button>
 							</div>
 							
@@ -200,7 +200,7 @@
 											<div style="margin-top:10px">.doc, .docx, .pdf - up to 1MB</div>
 										</div>
 										<div class="action-buttons">
-											<button class="btn btn-secondary btn-listing btnRight" (click)="sendEmailRequest(feedbackBox)" *ngIf="enableSendEmail()">Send</button>
+											<button class="btn btn-secondary btn-listing btnRight" (click)="sendEmailRequest()" *ngIf="enableSendEmail()">Send</button>
 											<button class="btn btn-secondary btn-listing btnRight" disabled *ngIf="!enableSendEmail()">Send</button>
 										</div>
 									</form>
@@ -224,7 +224,7 @@
 											
 										</div>
 										<div class="action-buttons">
-											<button class="btn btn-secondary btn-listing btnRight" (click)="sendEmailRequest(feedbackBox)" *ngIf="enableSendEmail()">Send</button>
+											<button class="btn btn-secondary btn-listing btnRight" (click)="sendEmailRequest()" *ngIf="enableSendEmail()">Send</button>
 											<button class="btn btn-secondary btn-listing btnRight" disabled *ngIf="!enableSendEmail()">Send</button>
 										</div>
 									</form>
@@ -243,26 +243,27 @@
 </div>
 
 <!-- Feedback Box -->
-<ng-template #feedbackBox let-modal>
+<dialog #feedbackBox>
 	<div class="modal-header">
-		<h4 class="modal-title">Create Email Alert</h4>
- 		<div class="filter-close-box" (click)="closeModal()">X</div>
+		<h4 class="modal-title">Contact Recruiter</h4>
+ 		<div class="filter-close-box" (click)="feedbackBox.close()">X</div>
 	</div>
 	<div class="feedbackBox;">
 		<div class="modal-body" *ngIf="showSendAlertBoxSuccess">
-			<p>The message has been sent to the recruiter managing this role. They will get back to you shortly.</p>
+			<p>The message has been sent to the recruiter managing this role. </p>
+			<p>They will get back to you shortly.</p>
 		</div>
 		<div class="modal-body" *ngIf="showSendAlertBoxFailure">
 			<p>Unfortunately it was not possible to send the Email at this time.</p>
 		</div>
 	</div>
-</ng-template>
+</dialog>
 
 <!-- Publicity Box -->
-<ng-template #publicityBox let-modal>
+<dialog #publicityBox>
 	<div class="modal-header">
 		<h4 class="modal-title">Publicity</h4>
- 		<div class="filter-close-box" (click)="closeModal()">X</div>
+ 		<div class="filter-close-box" (click)="publicityBox.close()">X</div>
 	</div>
 	<div class="feedbackBox;">
 		<div class="modal-body"  style="height:400px;">
@@ -282,4 +283,4 @@
 			<span *ngFor="let skill of selectedListing.skills">#{{skill}} </span>
 		</div>
 	</div>
-</ng-template>
+</dialog>

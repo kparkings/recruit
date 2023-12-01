@@ -11,12 +11,12 @@ export class LoginStats{
 		return Array.from(new Set(this.eventsToday.map(e => e.userId)));
 	}
 	
-	public getEventsTodayValues():number[]{
+	public getEventsTodayValues():string[]{
 	
-		let values:Array<number> = new Array<number>();
+		let values:Array<string> = new Array<string>();
 		
 		this.getEventsTodayKeys().forEach(k => {
-			values.push(this.eventsToday.filter(e => e.userId === k).length);
+			values.push(''+this.eventsToday.filter(e => e.userId === k).length);
 		})
 		
 		return values;
@@ -30,12 +30,12 @@ export class LoginStats{
 		return Array.from(new Set(this.eventsWeek.map(e => e.userId)));
 	}
 	
-	public getEventsWeekValues():number[]{
+	public getEventsWeekValues():string[]{
 	
-		let values:Array<number> = new Array<number>();
+		let values:Array<string> = new Array<string>();
 		
 		this.getEventsWeekKeys().forEach(k => {
-			values.push(this.eventsWeek.filter(e => e.userId === k).length);
+			values.push(''+this.eventsWeek.filter(e => e.userId === k).length);
 		})
 		
 		return values;
@@ -53,15 +53,15 @@ export class LoginStats{
 		return Array.from(new Set(this.threeMonthStats.map(e => e.date)));
 	}
 
-	public getThreeMonthStatsValues():number[]{
+	public getThreeMonthStatsValues():string[]{
 	
-		let values:Array<number> = new Array<number>();
+		let values:Array<string> = new Array<string>();
 		
 		this.getThreeMonthStatsKeys().forEach(k => {
 			
 			let stat:Stat = this.threeMonthStats.filter(e => e.date === k)[0]; 
 			
-			values.push(stat.logins.length);
+			values.push(''+stat.logins.length);
 		})
 		
 		return values;
@@ -78,15 +78,15 @@ export class LoginStats{
 		return Array.from(new Set(this.weekStats.map(e => e.date)));
 	}
 
-	public getWeekStatsValues():number[]{
+	public getWeekStatsValues():string[]{
 	
-		let values:Array<number> = new Array<number>();
+		let values:Array<string> = new Array<string>();
 		
 		this.getWeekStatsKeys().forEach(k => {
 			
 			let stat:Stat = this.weekStats.filter(e => e.date === k)[0]; 
 			
-			values.push(stat.logins.length);
+			values.push(''+stat.logins.length);
 		})
 		
 		return values;
@@ -102,15 +102,15 @@ export class LoginStats{
 		return Array.from(new Set(this.yearStats.map(e => e.date)));
 	}
 
-	public getYearStatsValues():number[]{
+	public getYearStatsValues():string[]{
 	
-		let values:Array<number> = new Array<number>();
+		let values:Array<string> = new Array<string>();
 		
 		this.getYearStatsKeys().forEach(k => {
 			
 			let stat:Stat = this.yearStats.filter(e => e.date === k)[0]; 
 			
-			values.push(stat.logins.length);
+			values.push(''+stat.logins.length);
 		})
 		
 		return values;

@@ -118,10 +118,10 @@
 </div>
 
 <!-- Reply Box -->
-<ng-template #validationExBox let-modal>
+<dialog #validationExBox>
 	<div class="modal-header">
 		<h4 class="modal-title">Validation Errors</h4>
- 		<div class="filter-close-box" (click)="popupsService.closeModal()">X</div>
+ 		<div class="filter-close-box" (click)="validationExBox.close()">X</div>
 	</div>
 	<div class="feedbackBox">
 	
@@ -130,11 +130,11 @@
 			<li *ngFor="let msg of validationExceptions">{{msg}}</li>
 		</ul>
 	</div>
-</ng-template>
-<ng-template #noCreditsBox let-modal>
+</dialog>
+<dialog #noCreditsBox>
 	<div class="modal-header">
 		<h4 class="modal-title">0 Credits remaining</h4>
- 		<div class="filter-close-box" (click)="popupsService.closeModal()">X</div>
+ 		<div class="filter-close-box" (click)="noCreditsBox.close()">X</div>
 	</div>
 	<div class="feedbackBox">
 	
@@ -156,7 +156,7 @@
 		</p>
 		<div style="text-align:center">
 			<button class="btn btn-secondary main-btn" style="margin-left:5px; margin-top:5px;min-width:200px;" (click)="navToSubscriptions()">Choose Subscription</button>
-			<button class="btn btn-secondary main-btn" style="margin-left:5px; margin-top:5px;min-width:200px;" (click)="popupsService.closeModal()">Wait for new Credits</button>
+			<button class="btn btn-secondary main-btn" style="margin-left:5px; margin-top:5px;min-width:200px;" (click)="noCreditsBox.close()">Wait for new Credits</button>
 		</div>
 	</div>
-</ng-template>
+</dialog>

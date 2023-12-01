@@ -47,7 +47,7 @@
 				      	<tbody>
 				      		<!-- Table row -->
 				      		<tr class="listing-tab-row" *ngFor="let listing of listings" >
-				      			<td  class="listing-tab-col" (click)="openSuggestions(recommendedCandidates, listing)">
+				      			<td  class="listing-tab-col" (click)="openSuggestions(listing)">
 				      				<span class="material-icons" style="font-size:14px;">
 	      								search
 	      							</span>
@@ -71,7 +71,7 @@
 	   			
 	   				<!-- Action buttons -->
 					<div class="action-buttons">
-						<button class="btn btn-secondary btn-listing" (click)="showPublicity(publicityBox)">Publicity</button>
+						<button class="btn btn-secondary btn-listing" (click)="showPublicity()">Publicity</button>
 						<button (click)="showEditListing()" class="btn btn-secondary btn-listing">Edit</button>
 						<button (click)="showConfirmDelete()" *ngIf="!enabldeDeleteOption" class="btn btn-secondary btn-listing">Delete</button>
 						<button (click)="performmDelete()" 	  *ngIf="enabldeDeleteOption"	class="btn btn-secondary btn-listing confirm-delete">Confirm</button>
@@ -186,7 +186,7 @@
 				
 					<!-- Action buttons -->
 					<div class="action-buttons">
-						<button class="btn btn-secondary btnRight main-btns" (click)="showFilterByJobSpecDialog(specUploadBox)" download>Create From Job Spec</button>
+						<button class="btn btn-secondary btnRight main-btns" (click)="showFilterByJobSpecDialog()" download>Create From Job Spec</button>
 						<button (click)="publishListing()" class="btn btn-secondary btnRight main-btns">Publish</button>
 						<button (click)="showPreviousShowOption()" class="btn btn-secondary btnRight main-btns">Back</button>
 					</div>
@@ -343,7 +343,7 @@
 		</div>
 </div>
 
-<ng-template #feedbackBox let-modal>
+<dialog #feedbackBox>
 	<div class="modal-header">
 		<h4 class="modal-title">{{feedbackBoxTitle}}</h4>
  				<div class="filter-close-box" (click)="closeModal()">X</div>
@@ -355,9 +355,9 @@
 			</ul><br>
 		</div>       
 	</div>
-</ng-template> 
+</dialog> 
 
-<ng-template #recommendedCandidates let-modal>
+<dialog #recommendedCandidates>
 	
 	<div class="modal-header">
 		<h4 class="modal-title">Recommended Candidates</h4>
@@ -414,32 +414,11 @@
 	    	<button class="btn btn-secondary btn-action suggestion-button" (click)="showSuggestedCandidateListView()">back</button>
 	    </div>
 	</div>    
-</ng-template> 
+</dialog> 
 
-<!-- 
-<ng-template #specUploadBox let-modal>
+<dialog #specUploadBox>
 	<div class="modal-header">
-		<h4 class="modal-title">Extract Filters from Job Specification</h4>
- 		<div class="filter-close-box" (click)="closeModal()">X</div>
-	</div>
-	<div class="feedbackBox">
-		<div class="modal-body" *ngIf="showFilterByJobSpec">
-			<input type="file" (change)="setJobSepecFile($event)">
-			<br><br>
-				<button class="btn btn-secondary" (click)="extractFiltersFromJobSpec()">Perform Extraction</button>
-			<br><br>
-			<p>File types of .doc, .docx and pdf up to 1MB</p>
-			<br><br>
-		</div>
-		<div class="modal-body" *ngIf="showFilterByJonSpecFailure">
-			<p>Unfortunately it was not possible to extract filters from this file.</p>
-		</div>
-	</div>
-</ng-template> 
--->
-<ng-template #specUploadBox let-modal>
-	<div class="modal-header">
-		<h4 class="modal-title">Extract Filters from Job Specification</h4>
+		<h4 class="modal-title">Extract Filters</h4>
  		<div class="filter-close-box" (click)="closeModal()">X</div>
 	</div>
 	<div class="feedbackBox;">
@@ -471,11 +450,11 @@
 			<p>Unfortunately it was not possible to extract filters from this file.</p>
 		</div>
 	</div>
-</ng-template>
+</dialog>
 
 
 <!-- Publicity Box -->
-<ng-template #publicityBox let-modal>
+<dialog #publicityBox>
 	<div class="modal-header">
 		<h4 class="modal-title">Publicity</h4>
  		<div class="filter-close-box" (click)="closeModal()">X</div>
@@ -498,10 +477,10 @@
 			<span *ngFor="let skill of selectedListing.skills">#{{skill}} </span>
 		</div>
 	</div>
-</ng-template>
+</dialog>
 
 <!-- Marketplace Box -->
-<ng-template #marketplaceBox let-modal>
+<dialog #marketplaceBox>
 	<div class="modal-header">
 		<h4 class="modal-title">Marketplace</h4>
  		<div class="filter-close-box" (click)="closeModal()">X</div>
@@ -510,8 +489,8 @@
 		<div class="modal-body"  style="height:400px;">
 			<h3>Add to Marketplace</h3>
 			<p>
-			Confirm to add the role to the Marketplace where other recruiters will be able to contact 
-			you with suitable candidates that they have available.
+			Add the role to the Marketplace so other recruiters will be able to contact 
+			you with suitable candidates.
 			</p>
 			<div style="min-width:320px;">
 				
@@ -545,4 +524,4 @@
 			
 		</div>
 	</div>
-</ng-template>
+</dialog>

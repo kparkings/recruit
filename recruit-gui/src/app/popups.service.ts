@@ -29,11 +29,12 @@ export class PopupsService {
 	* Opens the popups
 	*/
 	public openModal(modalBox:any):void{
-		let options: NgbModalOptions = {
-	    	 centered: true
-	  	};
+		//let options: NgbModalOptions = {
+	    //	 centered: true
+	  	//};
 
-		this.modalService.open(modalBox, options);
+		//this.modalService.open(modalBox, options);
+		modalBox.nativeElement.showModal();
 	}
 	
 	public fetchValidationErrors():Observable<Array<string>>{

@@ -1,7 +1,8 @@
 import { Component, OnInit } 								from '@angular/core';
 import { StatisticsService } 								from '../statistics.service';
-import { ChartDataSets, ChartType }				 			from 'chart.js';
-import { Color, Label } 									from 'ng2-charts';
+//import { Chart, ChartDataSets, ChartType }				 			from 'chart.js';
+//import { Chart, ChartType }				 			from 'chart.js';
+//import { Color, Label } 									from 'ng2-charts';
 import { NewCandidateSummaryItem } 							from '../new-candidate';
 import { NewCandidateStatItem } 							from '../new-candidate-stat';
 import { Router}											from '@angular/router';
@@ -10,6 +11,8 @@ import { RecruiterSearchStatistics } 						from '../recruiter-search-stats';
 import { CandidateFunction } 								from '../candidate-function';
 import { CandidateServiceService }							from '../candidate-service.service';
 
+import { Chart } from 'chart.js';
+
 @Component({
   selector: 'app-statistics',
   templateUrl: './statistics.component.html',
@@ -17,6 +20,7 @@ import { CandidateServiceService }							from '../candidate-service.service';
 })
 export class StatisticsComponent implements OnInit {
 
+	public chartColor:string = 'grey';
 	public totalNumberActiveCandidates:number 			= 0;
 	public candidatesByFunction:Map<string,number> 		= new Map<string,number>();
 	public currentTab:string 							= "downloads";
@@ -28,9 +32,9 @@ export class StatisticsComponent implements OnInit {
 	public showNewCandidates:boolean					= false;
 	public showMarketplaceStats:boolean					= false;
 
-	public recruiterDownloads:number[] 					= [];
-	public recruiterDownloadsDaily:number[] 			= [];
-	public recruiterDownloadsWeekly:number[] 			= [];
+	public recruiterDownloads:string[] 					= [];
+	public recruiterDownloadsDaily:string[] 			= [];
+	public recruiterDownloadsWeekly:string[] 			= [];
 	
 	public recruiterDownloadsCols:string[] 				= [];
 	public recruiterDownloadsDailyCols:string[] 		= [];
@@ -52,16 +56,16 @@ export class StatisticsComponent implements OnInit {
 	public requestedCandidateViewsTotalDaily:number						= 0;	
 	public requestedCandidateViewsTotalWeekly:number					= 0;	
 	
-	public marketPlaceEventsChartDataRequested:ChartDataSets[] 			= [];
-	public marketPlaceEventsChartLabelsRequested:Label[] 				= [];
+	//public marketPlaceEventsChartDataRequested:ChartDataSets[] 			= [];
+	//public marketPlaceEventsChartLabelsRequested:Label[] 				= [];
 	
-	public marketPlaceEventsChartDataRequestedDaily:ChartDataSets[] 	= [];
-	public marketPlaceEventsChartLabelsRequestedDaily:Label[] 			= [];
+	//public marketPlaceEventsChartDataRequestedDaily:ChartDataSets[] 	= [];
+	//public marketPlaceEventsChartLabelsRequestedDaily:Label[] 			= [];
 
-	public marketPlaceEventsChartDataRequestedWeekly:ChartDataSets[] 	= [];
-	public marketPlaceEventsChartLabelsRequestedWeekly:Label[] 			= [];
+	//public marketPlaceEventsChartDataRequestedWeekly:ChartDataSets[] 	= [];
+	//public marketPlaceEventsChartLabelsRequestedWeekly:Label[] 			= [];
 	
-	public loginChartView:string = 'chart';
+	//public loginChartView:string = 'chart';
 	public loginChartViewUser:string = '';
 
 	public candidateFunctions:Array<CandidateFunction> = new Array<CandidateFunction>();
@@ -78,28 +82,27 @@ export class StatisticsComponent implements OnInit {
     	responsive: true,
   	};
 
-  	public marketPlaceEventsChartColors: Color[] 			= [
-    	{
-      		borderColor: 'black',
-      		backgroundColor: 'rgba(0,0,0,0.28)',
-    	},
-  	];
+  	//public marketPlaceEventsChartColors: Color[] 			= [
+   // 	{
+    //  		borderColor: 'black',
+    //  		backgroundColor: 'rgba(0,0,0,0.28)',
+    //	},
+  //	];
   	
   	/**
 	* Toggles between the chart 
 	* and table views
 	* @param view - chart | table
 	*/
-  	public switchUserStatsView(view:string, selectedUserId:Label = ""):void{
-		 console.log("AA" + selectedUserId);
-		  this.loginChartView 		= view;
+  	public switchUserStatsView(view:string, selectedUserId:any = ""):void{
+		  //this.loginChartView 		= view;
 		  this.loginChartViewUser 	= selectedUserId.toString();
 		  this.fetchReruiterSearchStats();
 	}
 
   	public marketPlaceEventsChartLegend 					= true;
   	public marketPlaceEventsChartPlugins 					= [];
-  	public marketPlaceEventsChartType:ChartType 			= 'bar';	
+  	//public marketPlaceEventsChartType:ChartType 			= 'bar';	
 	
 		
 	/**
@@ -118,6 +121,8 @@ export class StatisticsComponent implements OnInit {
 	}
 
 	ngOnInit(): void {
+		this.createLeftChart(this.loginChartLabels, this.loginChartData);
+		this.createRightChart(this.recruiterLoginsChartLabels, this.recruiterLoginsChartData);
 	}
 	
 	public recruiterStats:RecruiterSearchStatistics = new RecruiterSearchStatistics();
@@ -140,15 +145,15 @@ export class StatisticsComponent implements OnInit {
 		
 		switch (type) {
 			case "day":{
-				this.marketPlaceEventsChartDataRequested 	= this.marketPlaceEventsChartDataRequestedDaily;
-				this.marketPlaceEventsChartLabelsRequested 	= this.marketPlaceEventsChartLabelsRequestedDaily;
-				this.requestedCandidateViewsTotal 			= this.requestedCandidateViewsTotalDaily;
+			//	this.marketPlaceEventsChartDataRequested 	= this.marketPlaceEventsChartDataRequestedDaily;
+			//	this.marketPlaceEventsChartLabelsRequested 	= this.marketPlaceEventsChartLabelsRequestedDaily;
+			//	this.requestedCandidateViewsTotal 			= this.requestedCandidateViewsTotalDaily;
 				return;
 			}
 			case "week":{
-				this.marketPlaceEventsChartDataRequested 	= this.marketPlaceEventsChartDataRequestedWeekly;
-				this.marketPlaceEventsChartLabelsRequested 	= this.marketPlaceEventsChartLabelsRequestedWeekly;
-				this.requestedCandidateViewsTotal 			= this.requestedCandidateViewsTotalWeekly;
+			//	this.marketPlaceEventsChartDataRequested 	= this.marketPlaceEventsChartDataRequestedWeekly;
+			//	this.marketPlaceEventsChartLabelsRequested 	= this.marketPlaceEventsChartLabelsRequestedWeekly;
+			//	this.requestedCandidateViewsTotal 			= this.requestedCandidateViewsTotalWeekly;
 				return;
 			}
 		}
@@ -160,12 +165,12 @@ export class StatisticsComponent implements OnInit {
 		this.requestedCandidateViewsTotalDaily					= 0;	
 		this.requestedCandidateViewsTotalWeekly					= 0;	
 	
-		this.marketPlaceEventsChartDataRequested 				= [];
-		this.marketPlaceEventsChartDataRequestedDaily 			= [];
-		this.marketPlaceEventsChartLabelsRequestedDaily 		= [];
-		this.marketPlaceEventsChartLabelsRequested 				= [];
-		this.marketPlaceEventsChartDataRequestedWeekly 			= [];
-		this.marketPlaceEventsChartLabelsRequestedWeekly 		= [];
+		//this.marketPlaceEventsChartDataRequested 				= [];
+		//this.marketPlaceEventsChartDataRequestedDaily 			= [];
+		//this.marketPlaceEventsChartLabelsRequestedDaily 		= [];
+		//this.marketPlaceEventsChartLabelsRequested 				= [];
+		//this.marketPlaceEventsChartDataRequestedWeekly 			= [];
+		//this.marketPlaceEventsChartLabelsRequestedWeekly 		= [];
 		
 		this.statisticsService.getMarketPlaceRequestedCandidateViewStats().subscribe(mpStats => {
 					
@@ -184,11 +189,11 @@ export class StatisticsComponent implements OnInit {
 				
 			});
 		
-			this.marketPlaceEventsChartDataRequestedDaily = [{ data: viewsByRecruiterDaily, label: 'Views By Recruiter' },];
-			this.marketPlaceEventsChartLabelsRequestedDaily = recruiterIds;
+			//this.marketPlaceEventsChartDataRequestedDaily = [{ data: viewsByRecruiterDaily, label: 'Views By Recruiter' },];
+			//this.marketPlaceEventsChartLabelsRequestedDaily = recruiterIds;
 			
-			this.marketPlaceEventsChartDataRequestedWeekly = [{ data: viewsByRecruiterWeekly, label: 'Views By Recruiter' },];
-			this.marketPlaceEventsChartLabelsRequestedWeekly = recruiterIds;	
+			//this.marketPlaceEventsChartDataRequestedWeekly = [{ data: viewsByRecruiterWeekly, label: 'Views By Recruiter' },];
+			//this.marketPlaceEventsChartLabelsRequestedWeekly = recruiterIds;	
 			
 			this.switchMarketplaceRequestedCandidatesChartData('day');
 					
@@ -205,38 +210,44 @@ export class StatisticsComponent implements OnInit {
 	}
 	
 	yearKeys:string[] 			= new Array<string>();
-	yearValues:number[] 		= new Array<number>();
+	yearValues:string[] 		= new Array<string>();
+
+	downloads:string[] 			= new Array<string>();
+	downloadKeys:string[]		= new Array<string>();
 			
 	threeMonthKeys:string[] 	= new Array<string>();
-	threeMonthValues:number[] 	= new Array<number>();
+	threeMonthValues:string[] 	= new Array<string>();
 			
 	weekKeys:string[] 			= new Array<string>();
-	weekValues:number[] 		= new Array<number>();
+	weekValues:string[] 		= new Array<string>();
 	
 	
-	userIdsToday:string[] 		= new Array<string>();
-	loginsToday:number[] 		= new Array<number>();
+	loginsUserIdsToday:string[] = new Array<string>();
+	loginsToday:string[] 		= new Array<string>();
 			
 			
-	userIdsWeek:string[] 		= new Array<string>();
-	loginsWeek:number[] 		= new Array<number>();
+	loginsUserIdsWeek:string[] 	= new Array<string>();
+	loginsWeek:string[] 		= new Array<string>();
 			
 	
 	public switchLoginStats(period:string):void{
 		
 		if(period === 'year') {
-			this.loginChartData = [{ data: this.yearValues, label: 'Downloads' },];
+			this.loginChartData = [{ data: this.yearValues, label: 'Downloads', backgroundColor: this.chartColor },];
 			this.loginChartLabels = this.yearKeys;
+			this.createLeftChart(this.loginChartLabels, this.loginChartData);
 		}
 		
 		if(period === '3months') {
-			this.loginChartData = [{ data: this.threeMonthValues, label: 'Downloads' },];
-			this.loginChartLabels = this.threeMonthKeys;	
+			this.loginChartData = [{ data: this.threeMonthValues, label: 'Downloads', backgroundColor: this.chartColor },];
+			this.loginChartLabels = this.threeMonthKeys;
+			this.createLeftChart(this.loginChartLabels, this.loginChartData);	
 		}
 		
 		if(period === 'week') {
-			this.loginChartData = [{ data: this.weekValues, label: 'Downloads' },];
+			this.loginChartData = [{ data: this.weekValues, label: 'Downloads', backgroundColor: this.chartColor },];
 			this.loginChartLabels = this.weekKeys;
+			this.createLeftChart(this.loginChartLabels, this.loginChartData);
 		}
 		
 	}
@@ -254,19 +265,21 @@ export class StatisticsComponent implements OnInit {
 	public switchUserStats(period:string):void{
 		
 		if(period === 'today') {
-			this.recruiterLoginsChartData = [{ data: this.loginsToday, label: 'Todays logins' }]; 
-	        this.recruiterLoginsChartLabels  = this.userIdsToday; 
+			this.recruiterLoginsChartData = [{ data: this.loginsToday, label: 'Todays logins', backgroundColor: this.chartColor  }]; 
+	        this.recruiterLoginsChartLabels  = this.loginsUserIdsToday; 
 	        this.loginCountRecruiter = this.loginCountRecruiterToday;
 			this.loginCountCandidate = this.loginCountCandidateToday;
 			this.recruiterStatPeriod = "DAY";
+			this.createRightChart(this.recruiterLoginsChartLabels, this.recruiterLoginsChartData);	
 		}
 		
 		if(period === 'week') {
-			this.recruiterLoginsChartData = [{ data: this.loginsWeek, label: 'Weeks logins' }]; 
-	        this.recruiterLoginsChartLabels  = this.userIdsWeek; 	
+			this.recruiterLoginsChartData = [{ data: this.loginsWeek, label: 'Weeks logins' ,backgroundColor: this.chartColor  }]; 
+	        this.recruiterLoginsChartLabels  = this.loginsUserIdsWeek; 	
 	        this.loginCountRecruiter = this.loginCountRecruiterWeek;
 			this.loginCountCandidate = this.loginCountCandidateWeek;
 			this.recruiterStatPeriod = "WEEK";
+			this.createRightChart(this.recruiterLoginsChartLabels, this.recruiterLoginsChartData);
 		}
 		
 	}
@@ -281,8 +294,8 @@ export class StatisticsComponent implements OnInit {
 					let listingChartViews:number[] 		= Object.values(listingData.viewsPerWeek);
 					let listingChartViewsKeys:string[] 	= Object.keys(listingData.viewsPerWeek);
 			
-					this.listingChartData = [{ data: listingChartViews, label: 'Downloads' },];
-					this.listingChartLabels = listingChartViewsKeys;
+					//this.listingChartData = [{ data: listingChartViews, label: 'Downloads' },];
+					//this.listingChartLabels = listingChartViewsKeys;
 			
 					
 				}, err => {
@@ -300,10 +313,10 @@ export class StatisticsComponent implements OnInit {
 			
 			let statsObj:LoginStats 		= Object.assign(new LoginStats(), stats)
 			
-			this.userIdsToday 				= Array.from(statsObj.getEventsTodayKeys());
+			this.loginsUserIdsToday 				= Array.from(statsObj.getEventsTodayKeys());
 			this.loginsToday 				= statsObj.getEventsTodayValues();
 			
-			this.userIdsWeek 				= Array.from(statsObj.getEventsWeekKeys());
+			this.loginsUserIdsWeek 				= Array.from(statsObj.getEventsWeekKeys());
 			this.loginsWeek 				= statsObj.getEventsWeekValues();
 			
 			this.yearKeys 					= Array.from(statsObj.getYearStatsKeysAsStrings());
@@ -315,12 +328,37 @@ export class StatisticsComponent implements OnInit {
 			this.weekKeys 					= Array.from(statsObj.getWeekStatsKeysAsStrings());
 			this.weekValues 				= statsObj.getWeekStatsValues();
 			
-			this.loginChartData = [{ data: this.yearValues, label: 'Downloads' },];
+			//this.loginChartData = [{ data: this.yearValues, label: 'Downloads',backgroundColor: this.chartColor},];
+			//this.loginChartLabels = this.yearKeys;
+			
+			//START
+			this.loginChartData = [
+	           	{
+	            label: "Logins",
+	       	    data: this.yearValues,
+	            backgroundColor: this.chartColor
+	          },
+	        	];
 			this.loginChartLabels = this.yearKeys;
+			this.createLeftChart(this.loginChartLabels, this.loginChartData);
+			//END
 			
 			
-			this.recruiterLoginsChartData = [{ data: this.loginsToday, label: 'Todays logins' }]; 
-	        this.recruiterLoginsChartLabels  = this.userIdsToday; 
+			//START
+			this.recruiterLoginsChartData = [
+	           	{
+	            label: "Todays Logins",
+	       	    data: this.loginsToday,
+	            backgroundColor: this.chartColor
+	          },
+	        	];
+			this.recruiterLoginsChartLabels = this.loginsUserIdsToday; 
+			this.createRightChart(this.recruiterLoginsChartLabels, this.recruiterLoginsChartData);
+			//END
+			
+			
+			//this.recruiterLoginsChartData = [{ data: this.loginsToday, label: 'Todays logins' }]; 
+	        //this.recruiterLoginsChartLabels  = this.userIdsToday; 
 	        
 	        this.loginCountRecruiterToday = new Set(stats.eventsToday.filter(e => e.recruiter).map(e => e.userId)).size;
 			this.loginCountCandidateToday = new Set(stats.eventsToday.filter(e => e.candidate).map(e => e.userId)).size;
@@ -335,11 +373,11 @@ export class StatisticsComponent implements OnInit {
 		
 		this.statisticsService.getCurriculumDownloadStatistics().forEach(stat => {
 
-			let downloads:number[] 		= Object.values(stat.weeklyDownloads);
-			let downloadDates:string[] 	= Object.keys(stat.weeklyDownloads);
+			this.downloads 		= Object.values(stat.weeklyDownloads);
+			this.downloadKeys 	= Object.keys(stat.weeklyDownloads);
 			
-			this.lineChartData = [{ data: downloads, label: 'Downloads' },];
-			this.lineChartLabels = downloadDates;
+			//this.lineChartData = [{ data: downloads, label: 'Downloads' },];
+			//this.lineChartLabels = downloadDates;
 			
 			this.recruiterDownloadsDaily 			= Object.values(stat.recruiterDownloadsDaily);
 			this.recruiterDownloadsWeekly 			= Object.values(stat.recruiterDownloadsWeekly);
@@ -347,10 +385,39 @@ export class StatisticsComponent implements OnInit {
 			this.recruiterDownloadsDailyCols 		= Object.keys(stat.recruiterDownloadsDaily);
 			this.recruiterDownloadsWeeklyCols 		= Object.keys(stat.recruiterDownloadsWeekly);
 			
-			this.recruiterDownloadsChartData = [{ data: this.recruiterDownloadsDaily, label: 'Todays downloads' }];
+			//this.recruiterDownloadsChartData = [{ data: this.recruiterDownloadsDaily, label: 'Todays downloads' }];
 												
-			this.recruiterDownloadsChartLabels 		= this.recruiterDownloadsDailyCols;
+			//this.recruiterDownloadsChartLabels 		= this.recruiterDownloadsDailyCols;
+			
+			//START
+			this.downloadsChartData = [
+	           	{
+	            label: "Logins",
+	       	    data: this.downloads,
+	            backgroundColor: this.chartColor
+	          },
+	        	];
+			this.loginChartLabels = this.yearKeys;
+			this.createLeftChart(this.downloadsChartLabels, this.downloadsChartData);
+			//END
+			
+			
+			//START
+			this.recruiterDownloadsChartData = [
+	           	{
+	            label: "Todays Logins",
+	       	    data: this.recruiterDownloadsDaily,
+	            backgroundColor: this.chartColor
+	          },
+	        	];
+			this.recruiterLoginsChartLabels = this.recruiterDownloadsDailyCols; 
+			this.createRightChart(this.recruiterLoginsChartLabels, this.recruiterDownloadsChartData);
+			//END
+			
+			
 			this.chartDownloadsTotal 				= this.recruiterDownloadsDaily.length;
+			
+			
 
     	});
 
@@ -374,8 +441,8 @@ export class StatisticsComponent implements OnInit {
 				
 			});
 			
-			this.functionChartData = [{ data: functionStatCount, label: 'Function' },];
-			this.functionChartLabels = functionStatName;
+			//this.functionChartData = [{ data: functionStatCount, label: 'Function' },];
+			//this.functionChartLabels = functionStatName;
 			
     	});
 
@@ -389,15 +456,17 @@ export class StatisticsComponent implements OnInit {
 		
 		switch (type) {
 			case "day":{
-				this.recruiterDownloadsChartData = [{ data: this.recruiterDownloadsDaily, label: 'Todays downloads' }];
+				this.recruiterDownloadsChartData = [{ data: this.recruiterDownloadsDaily, label: 'Todays downloads' ,backgroundColor: this.chartColor   }];
 				this.recruiterDownloadsChartLabels = this.recruiterDownloadsDailyCols;
 				this.chartDownloadsTotal = this.recruiterDownloadsDaily.length;
+				this.createRightChart(this.recruiterDownloadsChartLabels, this.recruiterDownloadsChartData);
 				return;
 			}
 			case "week":{
-				this.recruiterDownloadsChartData = [{ data: this.recruiterDownloadsWeekly, label: 'This Weeks downloads' }];
+				this.recruiterDownloadsChartData = [{ data: this.recruiterDownloadsWeekly, label: 'This Weeks downloads' ,backgroundColor: this.chartColor   }];
 				this.recruiterDownloadsChartLabels = this.recruiterDownloadsWeeklyCols;
 				this.chartDownloadsTotal = this.recruiterDownloadsWeekly.length;
+				this.createRightChart(this.recruiterDownloadsChartLabels, this.recruiterDownloadsChartData);
 				return;
 			}
 		}
@@ -418,6 +487,11 @@ export class StatisticsComponent implements OnInit {
 				//this.showStatsEmailRequests=false;
 				this.showNewCandidates=false;
 				this.showMarketplaceStats=false;
+				
+				this.loginChartData = [{ data: this.yearValues, label: 'Downloads', backgroundColor: this.chartColor },];
+				this.loginChartLabels = this.yearKeys;
+				this.createLeftChart(this.loginChartLabels, this.loginChartData);
+				this.createRightChart(this.recruiterLoginsChartLabels, this.recruiterLoginsChartData);
 				break;
 			}
 			case "downloads":{
@@ -428,6 +502,13 @@ export class StatisticsComponent implements OnInit {
 				//this.showStatsEmailRequests=false;
 				this.showNewCandidates=false;
 				this.showMarketplaceStats=false;
+				//this.loginChartData = [{ data: this.yearValues, label: 'Downloads', backgroundColor: this.chartColor },];
+				//this.loginChartLabels = this.yearKeys;
+				
+				
+				this.createLeftChart(this.downloadsChartLabels, this.downloadsChartData);
+				this.createRightChart(this.recruiterLoginsChartLabels, this.recruiterDownloadsChartData);
+			
 				break;
 			}
 			case "listings":{
@@ -492,41 +573,42 @@ export class StatisticsComponent implements OnInit {
 	/**
 	* Logins
 	*/
-	recruiterLoginsChartData: 		ChartDataSets[] 	= [];
-	recruiterLoginsChartLabels: 		Label[] 			= [];
+	//recruiterLoginsChartData: 		ChartDataSets[] 	= [];
+	//recruiterLoginsChartLabels: 		Label[] 			= [];
 
   	recruiterLoginsChartOptions = {
     	responsive: true, 	
   	};
 
-  	recruiterLoginsChartColors: Color[] = [
-    	{
-      		borderColor: 'black',
-      		backgroundColor: 'rgba(0,0,0,0.28)',
-    	},
-  	];
+  	//recruiterLoginsChartColors: Color[] = [
+    //	{
+     // 		borderColor: 'black',
+    //  		backgroundColor: 'rgba(0,0,0,0.28)',
+    //	},
+  	//];
 
   	recruiterLoginsChartLegend = true;
   	recruiterLoginsChartPlugins = [];
-  	recruiterLoginsChartType:ChartType = 'bar';
+  	//recruiterLoginsChartType:ChartType = 'bar';
  
-	loginChartData: 	ChartDataSets[] 	= [];
-	loginChartLabels: 	Label[] 			= [];
+	//loginChartData: 	ChartDataSets[] 	= [];
+	//loginChartLabels: 	Label[] 			= [];
+	
 
   	loginChartOptions = {
     	responsive: true
   	};
 
-  	loginChartColors: Color[] = [
-    	{
-      		borderColor: 'black',
-      		backgroundColor: 'rgba(0,0,0,0.28)',
-    	},
-  	];
+  	//loginChartColors: Color[] = [
+    //	{
+     // 		borderColor: 'black',
+    //  		backgroundColor: 'rgba(0,0,0,0.28)',
+    //	},
+  	//];
 
   	loginChartLegend = true;
   	loginChartPlugins = [];
-  	loginChartType:ChartType = 'line';
+  	//loginChartType:ChartType = 'line';
 
 	
 
@@ -566,87 +648,87 @@ export class StatisticsComponent implements OnInit {
 	/**
 	* recruiter Downloads
 	*/
-	recruiterDownloadsChartData: 		ChartDataSets[] 	= [];
-	recruiterDownloadsChartLabels: 		Label[] 			= [];
+	//recruiterDownloadsChartData: 		ChartDataSets[] 	= [];
+	//recruiterDownloadsChartLabels: 		Label[] 			= [];
 
   	recruiterDownloadsChartOptions = {
     	responsive: true,
   	};
 
-  	recruiterDownloadsChartColors: Color[] = [
-    	{
-      		borderColor: 'black',
-      		backgroundColor: 'rgba(0,0,0,0.28)',
-    	},
-  	];
+  	//recruiterDownloadsChartColors: Color[] = [
+    //	{
+     // 		borderColor: 'black',
+    //  		backgroundColor: 'rgba(0,0,0,0.28)',
+    //	},
+  	//];
 
   	recruiterDownloadsChartLegend = true;
   	recruiterDownloadsChartPlugins = [];
-  	recruiterDownloadsChartType:ChartType = 'bar';
+  	//recruiterDownloadsChartType:ChartType = 'bar';
  
 
 	/**
 	* Daily Downloads
 	*/
-	lineChartData: 		ChartDataSets[] 	= [];
-	lineChartLabels: 	Label[] 			= [];
+	//lineChartData: 		ChartDataSets[] 	= [];
+	//lineChartLabels: 	Label[] 			= [];
 
   	lineChartOptions = {
     	responsive: true,
   	};
 
-  	lineChartColors: Color[] = [
-    	{
-      		borderColor: 'black',
-      		backgroundColor: 'rgba(0,0,0,0.28)',
-    	},
-  	];
+  	//lineChartColors: Color[] = [
+    //	{
+     // 		borderColor: 'black',
+     // 		backgroundColor: 'rgba(0,0,0,0.28)',
+    //	},
+  	//];
 
   	lineChartLegend = true;
   	lineChartPlugins = [];
-  	lineChartType:ChartType = 'line';
+  	//lineChartType:ChartType = 'line';
  
 	/**
 	* Availability by Function
 	*/
-	functionChartData: 		ChartDataSets[] 	= [];
-	functionChartLabels: 	Label[] 			= [];
+	//functionChartData: 		ChartDataSets[] 	= [];
+	//functionChartLabels: 	Label[] 			= [];
 
   	functionChartOptions = {
     	responsive: true,
   	};
 
-  	functionChartColors: Color[] = [
-    	{
-      		borderColor: 'black',
-      		backgroundColor: 'rgba(0,0,0,0.28)',
-    	},
-  	];
+  	//functionChartColors: Color[] = [
+    //	{
+     // 		borderColor: 'black',
+     // 		backgroundColor: 'rgba(0,0,0,0.28)',
+    //	},
+  	//];
 
   	functionChartLegend = true;
   	functionChartPlugins = [];
-  	functionChartType:ChartType = 'bar';
+  	//functionChartType:ChartType = 'bar';
 
 	/**
 	* Listing Downloads
 	*/
-	listingChartData: 		ChartDataSets[] 	= [];
-	listingChartLabels: 	Label[] 			= [];
+	//listingChartData: 		ChartDataSets[] 	= [];
+	//listingChartLabels: 	Label[] 			= [];
 
   	listingChartOptions = {
     	responsive: true,
   	};
 
-  	listingChartColors: Color[] = [
-    	{
-      		borderColor: 'black',
-      		backgroundColor: 'rgba(0,0,0,0.28)',
-    	},
-  	];
+  	//listingChartColors: Color[] = [
+    //	{
+    //  		borderColor: 'black',
+    //  		backgroundColor: 'rgba(0,0,0,0.28)',
+    //	},
+  	//];
 
   	listingChartLegend = true;
   	listingChartPlugins = [];
-  	listingChartType:ChartType = 'line';
+  	//listingChartType:ChartType = 'line';
 
 
 	public newCandidates:Array<NewCandidateSummaryItem>  	= new Array<NewCandidateSummaryItem>();
@@ -696,5 +778,131 @@ export class StatisticsComponent implements OnInit {
 		}
 		
 	}
+	
+	
+	loginChartData = [
+	           	{
+	            label: "Sales",
+	            data: ['467','576', '572', '79', '92',
+									 '574', '573', '576'],
+	            backgroundColor: 'blue'
+	          },
+	        	];
+	loginChartLabels = ['2022-05-10', '2022-05-11', '2022-05-12','2022-05-13','2022-05-14', '2022-05-15', '2022-05-16','2022-05-17', ];
+	
+	recruiterLoginsChartData = [
+	           	{
+	            label: "Sales",
+	            data: ['467','576', '572', '79', '92',
+									 '574', '573', '576'],
+	            backgroundColor: 'blue'
+	          },
+	        	];
+	recruiterLoginsChartLabels = ['2022-05-10', '2022-05-11', '2022-05-12','2022-05-13','2022-05-14', '2022-05-15', '2022-05-16','2022-05-17', ];
+	
+	
+	downloadsChartLabels = ['2022-05-10', '2022-05-11', '2022-05-12','2022-05-13','2022-05-14', '2022-05-15', '2022-05-16','2022-05-17', ];
+	
+	downloadsChartData = [
+	           	{
+	            label: "Sales",
+	            data: ['467','576', '572', '79', '92',
+									 '574', '573', '576'],
+	            backgroundColor: 'blue'
+	          },
+	        	];
+	        	
+	recruiterDownloadsChartLabels = ['2022-05-10', '2022-05-11', '2022-05-12','2022-05-13','2022-05-14', '2022-05-15', '2022-05-16','2022-05-17', ];
+	
+	recruiterDownloadsChartData = [
+	           	{
+	            label: "Sales",
+	            data: ['467','576', '572', '79', '92',
+									 '574', '573', '576'],
+	            backgroundColor: 'blue'
+	          },
+	        	];
+	
+	createLeftChart(leftChartLabels:string[], leftChartData:any){
+		
+		
+  		if(this.leftChart){
+  			this.leftChart.destroy();
+  		}
+  		//this.rightChart.destroy();
+  		
+	    this.leftChart = new Chart("leftChart", {
+	      type: 'bar', //this denotes tha type of chart
+	
+	      data: {// values on X-Axis
+	        labels: leftChartLabels, 
+		       datasets: leftChartData
+	      },
+	      options: {
+	        aspectRatio:2.5
+	      }
+	      
+	    });
+	   
+  	}
+	
+	
+	
+	public leftChart: any;
+	public rightChart: any;
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	createRightChart(chartLabels:string[], chartData:any){
+		
+  		if(this.rightChart){
+  			this.rightChart.destroy();
+  		}
+  		//this.rightChart.destroy();
+  		
+	    this.rightChart = new Chart("rightChart", {
+	      type: 'bar', //this denotes tha type of chart
+	
+	      data: {// values on X-Axis
+	        labels: chartLabels, 
+		       datasets: chartData
+	      },
+	      options: {
+	        aspectRatio:2.5
+	      }
+	      
+	    });
+	    
+  	}
+	
+	
+	
+	
+	
+	
 
 }

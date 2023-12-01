@@ -14,7 +14,7 @@ import { ViewChild }									from '@angular/core';
 })
 export class RecruiterSignupComponent implements OnInit {
 
-	@ViewChild('feedbackBox', { static: false }) private content:any;
+	@ViewChild('feedbackBox', { static: false }) private feedbackBox:any;
 	
 	public feedbackBoxClass:string            = '';
   	public feedbackBoxTitle                   = '';
@@ -113,8 +113,8 @@ export class RecruiterSignupComponent implements OnInit {
 	    	 centered: true
 	   };
 	
-	  this.modalService.open(this.content, options);
-
+	  //this.modalService.open(this.content, options);
+		this.feedbackBox.nativeElement.showModal();
   }
 
   /**

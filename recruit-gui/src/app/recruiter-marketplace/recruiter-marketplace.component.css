@@ -322,3 +322,11 @@ td{
 .listing-view-div{
 	margin-top:10px;
 }
+
+ dialog {
+	overflow: hidden;
+	padding:0px;
+	border:none;
+	width:50%;
+	min-width:380px;
+}
