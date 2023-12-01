@@ -7,6 +7,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
+import java.util.LinkedHashSet;
 import java.util.stream.Collectors;
 
 import com.arenella.recruit.listings.beans.ListingViewedEvent;
@@ -25,8 +27,15 @@ public class ListingStatistics {
 	* Returns view events info grouped by week
 	* @return
 	*/
-	public Map<String, Long> getViewsPerWeek() {
-		return this.viewsPerWeek;
+	public Set<ViewItem> getViewsPerWeek() {
+		
+		Set<ViewItem> items = new LinkedHashSet<>();
+		
+		this.viewsPerWeek.entrySet().forEach(entry ->{
+			items.add(new ViewItem(entry.getKey(), entry.getValue()));
+		});
+		
+		return items;
 	}
 
 	/**
@@ -94,6 +103,25 @@ public class ListingStatistics {
 			this.viewsToday = this.viewsToday + 1;
 		}
 		
+	}
+	
+	public static class ViewItem{
+		
+		private final String 	bucketName;
+		private final long		count;
+		
+		public ViewItem(String bucketName, long count) {
+			this.bucketName = bucketName;
+			this.count = count;
+		}
+		
+		public String getBucketName() {
+			return this.bucketName;
+		}
+		
+		public long getCount() {
+			return this.count;
+		}
 	}
 	
 }

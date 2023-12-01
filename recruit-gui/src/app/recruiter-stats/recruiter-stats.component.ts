@@ -71,9 +71,10 @@ export class RecruiterStatsComponent {
 					
 					this.listingViewsToday 		= listingData.viewsToday;
 					this.listingViewsThisWeek 	= listingData.viewsThisWeek;
-					
-					let listingChartViews:number[] 		= Object.values(listingData.viewsPerWeek);
-					let listingChartViewsKeys:string[] 	= Object.keys(listingData.viewsPerWeek);
+				
+					//KP WE COMMENTED THIS OUT WHEN WORKING ON STATISTICS. WOULD HAVE BEEN ENABLED !!!!!!!!!!!!!!!!!!!!!!!!!!
+					//let listingChartViews:number[] 		= Object.values(listingData.viewsPerWeek);
+					//let listingChartViewsKeys:string[] 	= Object.keys(listingData.viewsPerWeek);
 		
 			//		this.jobboardChart.chartData = [{ data: listingChartViews, label: 'Downloads' },];
 			//		this.jobboardChart.chartLabels = listingChartViewsKeys;

@@ -7,6 +7,7 @@ import { MarketplaceRecruiterViewStatResponse }		from './statistics/marketplace-
 import { LoginStats}  								from './login-event-stats';
 import { RecruiterListingStatistics } 				from './recruiter-listing-statistics';
 import { RecruiterSearchStatistics } from './recruiter-search-stats';
+import { ListingStatistics } from './listing-statistics';
 
 @Injectable({
   providedIn: 'root'
@@ -61,7 +62,7 @@ export class StatisticsService {
 	/**
 	* Returns status relating to Listings
 	*/
-	public getListingStats():Observable<any>{
+	public getListingStats():Observable<ListingStatistics>{
 		
 		const backendUrl:string = environment.backendUrl +'listings/stats/';
   

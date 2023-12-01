@@ -12,6 +12,7 @@ import { CandidateFunction } 								from '../candidate-function';
 import { CandidateServiceService }							from '../candidate-service.service';
 
 import { Chart } from 'chart.js';
+import { ListingStatistics, ViewItem } from '../listing-statistics';
 
 @Component({
   selector: 'app-statistics',
@@ -209,6 +210,9 @@ export class StatisticsComponent implements OnInit {
 		this.fetchMarketplaceStats();
 	}
 	
+	listingViewsWeekKeys:string[] 		= new Array<string>();
+	listingViewWeekValues:string[] 		= new Array<string>();
+
 	yearKeys:string[] 			= new Array<string>();
 	yearValues:string[] 		= new Array<string>();
 
@@ -291,14 +295,39 @@ export class StatisticsComponent implements OnInit {
 					this.listingViewsToday 		= listingData.viewsToday;
 					this.listingViewsThisWeek 	= listingData.viewsThisWeek;
 					
-					let listingChartViews:number[] 		= Object.values(listingData.viewsPerWeek);
-					let listingChartViewsKeys:string[] 	= Object.keys(listingData.viewsPerWeek);
-			
+				
 					//this.listingChartData = [{ data: listingChartViews, label: 'Downloads' },];
 					//this.listingChartLabels = listingChartViewsKeys;
+					
+					//let aa:Array<ViewItem> = listingData.viewsPerWeek;
+					
+
+					
+					console.log(JSON.stringify(listingData.viewsPerWeek.map(aa => aa.bucketName)));
+					console.log(JSON.stringify(listingData.viewsPerWeek.map(aa => aa.count)));
+					
+					this.listingViewsWeekKeys 		= listingData.viewsPerWeek.map(aa => aa.bucketName);
+					this.listingViewWeekValues 		= listingData.viewsPerWeek.map(aa => aa.count);
+					
+					
+					
+					//START
+					this.listingsChartData = [
+			           	{
+			            label: "Job Board Views",
+			       	    data: this.listingViewWeekValues,
+			            backgroundColor: this.chartColor
+			          },
+			        	];
+					this.listingsChartLabels = this.listingViewsWeekKeys; 
+					this.createRightChart(this.listingsChartLabels, this.listingsChartData);
+					//END
+					
 			
 					
 				}, err => {
+					
+					console.log("ERR " + JSON.stringify(err));
 			if (err.status === 401 || err.status === 0) {
 				sessionStorage.removeItem('isAdmin');
 				sessionStorage.removeItem('isRecruter');
@@ -310,13 +339,13 @@ export class StatisticsComponent implements OnInit {
     	});
     	
     	this.statisticsService.fetchLoginStats().subscribe(stats => {
-			
+	
 			let statsObj:LoginStats 		= Object.assign(new LoginStats(), stats)
 			
-			this.loginsUserIdsToday 				= Array.from(statsObj.getEventsTodayKeys());
+			this.loginsUserIdsToday 		= Array.from(statsObj.getEventsTodayKeys());
 			this.loginsToday 				= statsObj.getEventsTodayValues();
 			
-			this.loginsUserIdsWeek 				= Array.from(statsObj.getEventsWeekKeys());
+			this.loginsUserIdsWeek 			= Array.from(statsObj.getEventsWeekKeys());
 			this.loginsWeek 				= statsObj.getEventsWeekValues();
 			
 			this.yearKeys 					= Array.from(statsObj.getYearStatsKeysAsStrings());
@@ -519,6 +548,13 @@ export class StatisticsComponent implements OnInit {
 				//this.showStatsEmailRequests=false;
 				this.showNewCandidates=false;
 				this.showMarketplaceStats=false;
+				
+				this.createRightChart(this.listingsChartLabels, this.listingsChartData);
+				
+				if(this.leftChart){
+  					this.leftChart.destroy();
+  				}
+				//this.createLeftChart(this.listingsChartLabels, this.downloadsChartData);
 				break;
 			}
 			case "availability":{
@@ -778,6 +814,17 @@ export class StatisticsComponent implements OnInit {
 		}
 		
 	}
+	
+	
+	listingsChartData = [
+	           	{
+	            label: "Sales",
+	            data: ['467','576', '572', '79', '92',
+									 '574', '573', '576'],
+	            backgroundColor: 'blue'
+	          },
+	        	];
+	listingsChartLabels = ['2022-05-10', '2022-05-11', '2022-05-12','2022-05-13','2022-05-14', '2022-05-15', '2022-05-16','2022-05-17', ];
 	
 	
 	loginChartData = [

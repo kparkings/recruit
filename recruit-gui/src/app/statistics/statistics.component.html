@@ -45,10 +45,27 @@
 				<div *ngIf="showStatsDownloads" style="margin-bottom:45px;">
 					<h3>Daily downloads</h3>
 				</div>
+				<!-- Listings -->
+				<div *ngIf="showStatsListings">
+					<div class="chart-wrapper">
+						<h5>Totals:</h5>
+						<table>
+							<tr>
+								<td>Listings viewed today</td>
+								<td>{{listingViewsToday}}</td>
+							</tr>
+							<tr>
+								<td>Listings viewed this week</td>
+								<td>{{listingViewsThisWeek}}</td>
+							</tr>
+						</table>
+					</div>
+				</div>
 				<div>
 					<canvas  id="leftChart" >{{ leftChart }}</canvas>	
 				</div>
 			</div>
+			
 			<div class="stat-canvas">
 				<!-- Logins -->
 				<div *ngIf="showStatsLogins">
@@ -110,7 +127,7 @@
 		</div>
 		-->
 		<!-- Listings -->
-		<div *ngIf="showStatsListings">
+		<!--  div *ngIf="showStatsListings">
 			
 			<div class="chart-wrapper">
 				<h5>Totals:</h5>
@@ -138,8 +155,10 @@
      					[plugins]="listingChartPlugins">
   					</canvas>
   					-->
+  					<!-- 
 			</div>			
 		</div>
+		-->
 		
 		<!-- Marketplace Views -->
 		<div *ngIf="showMarketplaceStats">		
