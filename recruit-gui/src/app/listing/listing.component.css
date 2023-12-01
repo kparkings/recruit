@@ -228,17 +228,18 @@
     width:200px;
     height:350px;
 }
-
+/*
 .modal-title{
 	margin-left:20px;
 }
-
+*/
+/*
 .modal-header{
      background:#181414;
      color:#6A5ACD;
      font-weight:bold;
 }
-
+*/
 .filter-close-box{
 	padding:10px;
 	cursor:pointer;
@@ -246,12 +247,13 @@
 	font-weight: bold;
 	text-align: right;
 }
-
+/*
 .modal-body{
     font-size: large;
     height:200px;
     text-align: center;
 }
+*/
 
 .listing-view{
 	margin-left:30px;
@@ -347,10 +349,4 @@
  	display:inline-block;
  	background:green;
  	color:white;
-}
-
-dialog {
-	overflow: hidden;
-	padding:0px;
-	border:none;
 }

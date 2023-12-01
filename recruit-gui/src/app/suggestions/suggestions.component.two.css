@@ -99,28 +99,6 @@
 	font-size:16px;
 }
 
-.modal-title{
-	margin-left:20px;
-}
-
-.modal-body{
-	font-size: large;
-	height:200px;
-	text-align: center;
-}
-
-.modal-body-text{
-	vertical-align: middle;
-	margin-top: 60px;
-	font-weight: bold;
-}
-
-.modal-header{
-	background:#181414;
-	color:#6A5ACD;
-	font-weight:bold;
-}
-
 .filter-close-box{
 	padding:10px;
 	cursor:pointer;
@@ -202,23 +180,25 @@
 	background:#e8e8e8;
 	padding:2px;
 }
-
+/*
 .modal-title{
 	margin-left:20px;
 }
-
+*/
+/*
 .modal-body{
 	font-size: large;
 	height:345px;
 	text-align: center;
 }
-
+*/
+/*
 .modal-header{
 	background:#181414;
 	color:#6A5ACD;
 	font-weight:bold;
 }
-
+*/
 .filter-close-box{
 	padding:10px;
 	cursor:pointer;
@@ -276,16 +256,18 @@ textarea {
 	background:#e8e8e8;
 	padding:2px;
 }
-
+/*
 .modal-title{
 	margin-left:20px;
 }
-
+*/
+/*
 .modal-body{
 	font-size: large;
 	height:345px;
 	text-align: center;
 }
+*/
 
 .modal-header{
 	background:#181414;
@@ -309,11 +291,6 @@ textarea {
 .message-send-success{
 	margin-top:100px;
 	font-weight:bold;
-}
-
-textarea {
-    width:100%;
-    height:200px;
 }
 
 .details-left h3{
@@ -367,25 +344,18 @@ textarea {
 	padding-left:20px;
 }
 
+/*
 .job-spec-upld-opt{
 	float:left;
 	min-width:280px;
-	margin:20px;
+	margin:2%;
 	border:2px green solid;
 	cursor:pointer;
 	padding:20px;
 	font-weight:bold;
-	margin-left:5px;
+	width:45%;
 }
 
 .job-spec-upld-opt:hover{
 	background:grey;
-}
-
-dialog {
-	overflow: hidden;
-	padding:0px;
-	border:none;
-	
-}
-
+}*/

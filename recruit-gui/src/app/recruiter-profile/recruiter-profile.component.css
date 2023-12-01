@@ -167,22 +167,25 @@ table tr th{
 	padding:2px;
 }
 
+/*
 .modal-title{
 	margin-left:20px;
 }
-
+*/
+/*
 .modal-body{
 	font-size: large;
 	height:345px;
 	text-align: center;
 }
-
+*/
+/*
 .modal-header{
 	background:#181414;
 	color:#6A5ACD;
 	font-weight:bold;
 }
-
+*/
 .filter-close-box{
 	padding:10px;
 	cursor:pointer;
@@ -210,12 +213,4 @@ textarea {
 	text-align:center;
 	font-weight:bold;
 	margin-top:120px;
-}
-
- dialog {
-	overflow: hidden;
-	padding:0px;
-	border:none;
-	width:50%;
-	min-width:280px;
 }

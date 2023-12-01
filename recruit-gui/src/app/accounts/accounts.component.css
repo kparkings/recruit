@@ -29,23 +29,23 @@ h3{
     margin-bottom:5px;
     margin-top:5px;
 }
-
+/*
 .modal-header{
      background:#181414;
      color:#6A5ACD;
      font-weight:bold;
  }
-
+*/
 .filter-close-box{
      padding:10px;
      cursor:pointer;
      font-size:20px;
      font-weight: bold;
  }
- 
+ /*
 .modal-body{
 	min-height:150px;
-}
+}*/
 
 .feedback-label{
     font-size:12px;

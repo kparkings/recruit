@@ -15,7 +15,7 @@
 .validationBox{
     height:280px;
 }
-
+/*
 .modal-header{
     background: #303030;
     font-size: medium;
@@ -25,7 +25,7 @@
     margin:0px;
     
 }
-
+*/
 .modal-header-text{
     text-align:center;
     color:#6f42c1;
@@ -42,10 +42,11 @@
     width:200px;
     height:350px;
 }
-
+/*
 .modal-title{
 	margin-left:20px;
 }
+*/
 
 
 .pendingCandidateBox-td{
@@ -56,26 +57,28 @@
     font-size:12px;
     font-weight:bold;
 }
-
+/*
 .modal-body{
     font-size: large;
     height:200px;
     text-align: center;
     
 }
-
+*/
+/*
 .modal-body-text{
     vertical-align: middle;
     margin-top: 60px;
     font-weight: bold;
 }
-
+*/
+/*
  .modal-header{
      background:#181414;
      color:#6A5ACD;
      font-weight:bold;
  }
-
+*/
  .filter-close-box{
      padding:10px;
      cursor:pointer;
@@ -196,10 +199,3 @@
  	max-width:50%;
  }
  
- dialog {
-	overflow: hidden;
-	padding:0px;
-	border:none;
-	width:50%;
-	min-width:280px;
-}

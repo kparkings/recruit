@@ -27,7 +27,7 @@
 .feedback-success{
     background: #F0F0F0;
 }
-
+/*
 .modal-header{
     background: #303030;
     font-size: medium;
@@ -37,7 +37,7 @@
     margin:0px;
     
 }
-
+*/
 .filter-close-box{
      padding:10px;
      cursor:pointer;
@@ -57,29 +57,24 @@
     width:200px;
     height:350px;
 }
-
+/*
 .modal-body{
     font-size: large;
     height:200px;
     text-align: center;
 }
-
+*/
+/*
 .modal-body-text{
     vertical-align: middle;
     margin-top: 60px;
     font-weight: bold;
 }
-
+*/
+/*
 .modal-header{
 	background:#181414;
     color:#6A5ACD;
     font-weight:bold;
 }
-
-dialog {
-	overflow: hidden;
-	padding:0px;
-	border:none;
-	width:50%;
-	min-width:280px;
-}
+*/
