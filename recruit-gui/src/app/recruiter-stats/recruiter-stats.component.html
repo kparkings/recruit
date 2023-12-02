@@ -18,11 +18,108 @@
 			</ul>
 		</div>
 		
+		<div *ngIf="currentTab == 'jobboard-stats' && listingStatistics.listingStats.length == 0" class="no-posts">
+			<h2>Job board statistics</h2>
+			<p>
+			To view statistics you will need to create at least on post on the Job board
+			</p>
+			<p>
+			To add a post to the job board you can either enter the information manually or use the 'Create From Job Spec' feature. 
+			This will scan a job description file in either Word or PDF format up to 1MB in size and automatically generate the post. 
+			You will simply need to verify that details are correct and publish the post.  
+			</p>
+			<p>
+			Posts on the job board allow site visitors to contact you directly. Posts are also shared in an external network of 20,000+ connections 
+			to attract as many candidates as possible
+			</p>
+			<p>
+			When you view your own posts you can use the 'Publish' button to generate a message to copy and paste on social media which contains the hashtags for the 
+			skills selected in your post. 
+			</p>
+		
+		</div>
+		
 		<!-- Main panel -->
 		<div class="chart-data-panel-page">	
+			
+		
+			<!-- TOP -->
+			<div class="chart-panel">
+				<div *ngIf="currentTab == 'general-stats'">
+					<h2>Candidate Availability</h2>
+					<h5>Totals:</h5>
+					<table>
+						<tr>
+							<td>Active Users</td>
+							<td>{{totalNumberActiveCandidates}}</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+			<div *ngIf="currentTab == 'jobboard-stats' &&listingStatistics.listingStats.length > 0">	
+				<div class="chart-panel listing-filter-panel">
+				
+					<table>
+						<thead>
+							<tr>
+								<th>
+									Filter by Post
+								</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr *ngFor="let ls of listingStatistics.listingStats" (click)="switchListing(ls.listingId)">
+								<td *ngIf="ls.listingId == selectedListing" class="selectedListing">{{ls.title}}</td>
+								<td *ngIf="ls.listingId != selectedListing">{{ls.title}}</td>
+							</tr>
+						</tbody>
+					</table>
+					
+				</div>
+				<div>	
+					<h3 style="margin-left:20px;">{{listingViewsChart.chartTitle}}</h3>
+				</div>
+			</div>
+			<div class="chart-panel">
+				<div class="stat-canvas">
+					<canvas  id="topChart" >{{ topChart }}</canvas>
+				<div>
+			</div>
+		
+			<!-- BOTTOM -->
+			<div class="chart-panel">
+				<div *ngIf="currentTab == 'general-stats'">
+					<h2>Job board Views</h2>
+					<h5>Totals:</h5>
+					<table>
+						<tr>
+							<td>Listings viewed today</td>
+							<td>{{listingViewsToday}}</td>
+						</tr>
+						<tr>
+							<td>Listings viewed this week</td>
+							<td>{{listingViewsThisWeek}}</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+			<div class="chart-panel">
+				<div class="chart-panel">
+					<div class="stat-canvas">
+						<canvas  id="bottomChart" >{{ bottomChart }}</canvas>
+					<div>
+				</div>	
+			</div>
+			
+			
+						
+			
+			
+		
 				
 			<!--  General stat's -->
-			<div *ngIf="currentTab == 'general-stats'">
+			<!--  div *ngIf="currentTab == 'general-stats'"-->
+			<!--  
 				<div class="chart-panel">
 					<h2>Candidate Availability</h2>
 					<h5>Totals:</h5>
@@ -34,7 +131,7 @@
 					</table>
 				</div>
 				<div class="chart-panel">
-					<h5>Available by Function</h5>
+					<h5>Available by Function</h5>-->
 					<!--  
  						<canvas baseChart 
      						[datasets]="availabilityChart.chartData" 
@@ -45,8 +142,10 @@
      						[chartType]="availabilityChart.chartType" 
      						[plugins]="availabilityChart.chartPlugins">
   					</canvas>
-  					-->
-				</div>	
+  					
+				</div>
+				-->	
+				<!--  
 				<div class="chart-panel">
 					<h2>Job board Views</h2>
 					<h5>Totals:</h5>
@@ -63,6 +162,7 @@
 				</div>
 				<div class="chart-panel">
 					<h5>Job board Views</h5>
+					-->
 					<!--  
  						<canvas baseChart 
      					[datasets]="jobboardChart.chartData" 
@@ -74,55 +174,17 @@
      						[plugins]="jobboardChart.chartPlugins">
   					</canvas>
   					-->
+  					<!--  
 				</div>
-			</div>
+			</div>-->
+			
+			
+			
 			
 			<!-- Job board stats -->
-			<div *ngIf="currentTab == 'jobboard-stats'">
-				<div *ngIf="listingStatistics.listingStats.length == 0" class="no-posts">
-					<h2>Job board statistics</h2>
-					<p>
-					To view statistics you will need to create at least on post on the Job board
-					</p>
-					<p>
-					To add a post to the job board you can either enter the information manually or use the 'Create From Job Spec' feature. 
-					This will scan a job description file in either Word or PDF format up to 1MB in size and automatically generate the post. 
-					You will simply need to verify that details are correct and publish the post.  
-					</p>
-					<p>
-					Posts on the job board allow site visitors to contact you directly. Posts are also shared in an external network of 20,000+ connections 
-					to attract as many candidates as possible
-					</p>
-					<p>
-					When you view your own posts you can use the 'Publish' button to generate a message to copy and paste on social media which contains the hashtags for the 
-					skills selected in your post. 
-					</p>
 				
-				</div>
-					
-				<div *ngIf="listingStatistics.listingStats.length > 0">	
-					
-					<div class="chart-panel listing-filter-panel">
-					
-						<table>
-							<thead>
-								<tr>
-									<th>
-										Filter by Post
-									</th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr *ngFor="let ls of listingStatistics.listingStats" (click)="switchListing(ls.listingId)">
-									<td *ngIf="ls.listingId == selectedListing" class="selectedListing">{{ls.title}}</td>
-									<td *ngIf="ls.listingId != selectedListing">{{ls.title}}</td>
-								</tr>
-							</tbody>
-						</table>
-					</div>
 					 
 					<div class="chart-panel">
-						<h3>{{listingViewsChart.chartTitle}}</h3>
 						<!--
 						<canvas baseChart 
 				  				[datasets]="listingViewsChart.chartData" 

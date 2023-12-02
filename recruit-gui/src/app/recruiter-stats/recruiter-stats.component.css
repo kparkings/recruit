@@ -3,8 +3,8 @@
 }
 
 .chart-panel{
-	float:left;
-	min-width:45%;
+/*	float:left;
+	min-width:45%;*/
 	margin:20px;
 }
 
@@ -64,4 +64,8 @@
 .statsChartTab{
 	width:200px;
 	cursor:pointer;
+}
+
+.stat-canvas{
+	max-height:300px;
 }
