@@ -74,7 +74,6 @@ export class StatisticsComponent implements OnInit {
 	* @param view - chart | table
 	*/
   	public switchUserStatsView(view:string, selectedUserId:any = ""):void{
-		  //this.loginChartView 		= view;
 		  this.loginChartViewUser 	= selectedUserId.toString();
 		  this.fetchReruiterSearchStats();
 	}
@@ -98,8 +97,7 @@ export class StatisticsComponent implements OnInit {
 	}
 
 	ngOnInit(): void {
-		this.createLeftChart(this.loginChartLabels, this.loginChartData);
-		this.createRightChart(this.recruiterLoginsChartLabels, this.recruiterLoginsChartData);
+		this.switchTab('logins');
 	}
 	
 	public recruiterStats:RecruiterSearchStatistics = new RecruiterSearchStatistics();
@@ -187,10 +185,7 @@ export class StatisticsComponent implements OnInit {
 		          },
 		        	];
 				this.marketplaceChartLabels = this.marketplaceViewsKeys; 
-				this.createRightChart(this.marketplaceChartLabels, this.marketplaceChartData);
 				//END
-			
-			this.switchMarketplaceRequestedCandidatesChartData('day');
 					
 		}, 
 		err => {
@@ -202,6 +197,8 @@ export class StatisticsComponent implements OnInit {
 	public refreshData():void{
 		this.fetchStatus();
 		this.fetchMarketplaceStats();
+		this.switchTab('logins');
+		
 	}
 	
 	listingViewsWeekKeys:string[] 			= new Array<string>();
@@ -307,7 +304,6 @@ export class StatisticsComponent implements OnInit {
 			          },
 			        	];
 					this.listingsChartLabels = this.listingViewsWeekKeys; 
-					this.createRightChart(this.listingsChartLabels, this.listingsChartData);
 					//END
 					
 				}, err => {
@@ -408,7 +404,6 @@ export class StatisticsComponent implements OnInit {
 	          },
 	        	];
 			this.recruiterLoginsChartLabels = this.recruiterDownloadsDailyCols; 
-			this.createRightChart(this.recruiterLoginsChartLabels, this.recruiterDownloadsChartData);
 			//END
 			
 			this.chartDownloadsTotal 				= this.recruiterDownloadsDaily.length;
@@ -444,7 +439,6 @@ export class StatisticsComponent implements OnInit {
 	          },
 	        	];
 			this.availabilityChartLabels = functionStatName; 
-			this.createRightChart(this.availabilityChartLabels, this.availabilityChartData);
 			//END
 			
     	});
@@ -517,10 +511,10 @@ export class StatisticsComponent implements OnInit {
 				this.showNewCandidates=false;
 				this.showMarketplaceStats=false;
 				
-				this.createRightChart(this.listingsChartLabels, this.listingsChartData);
+				this.createLeftChart(this.listingsChartLabels, this.listingsChartData);
 				
-				if(this.leftChart){
-  					this.leftChart.destroy();
+				if(this.rightChart){
+  					this.rightChart.destroy();
   				}
 				break;
 			}
@@ -531,10 +525,10 @@ export class StatisticsComponent implements OnInit {
 				this.showStatsAvailability=true;
 				this.showNewCandidates=false;
 				this.showMarketplaceStats=false;
-				this.createRightChart(this.availabilityChartLabels, this.availabilityChartData);
+				this.createLeftChart(this.availabilityChartLabels, this.availabilityChartData);
 				
-				if(this.leftChart){
-  					this.leftChart.destroy();
+				if(this.rightChart){
+  					this.rightChart.destroy();
   				}
 				break;
 			}
@@ -580,49 +574,7 @@ export class StatisticsComponent implements OnInit {
 		}
 		
 	}
-
-  	recruiterLoginsChartOptions = {
-    	responsive: true, 	
-  	};
-
-  	recruiterLoginsChartLegend = true;
-  	recruiterLoginsChartPlugins = [];
-
-  	loginChartOptions = {
-    	responsive: true
-  	};
-
-  	loginChartLegend = true;
-  	loginChartPlugins = [];
-
-  	recruiterDownloadsChartOptions = {
-    	responsive: true,
-  	};
-
-  	recruiterDownloadsChartLegend = true;
-  	recruiterDownloadsChartPlugins = [];
-
-  	lineChartOptions = {
-    	responsive: true,
-  	};
-
-  	lineChartLegend = true;
-  	lineChartPlugins = [];
-
-  	functionChartOptions = {
-    	responsive: true,
-  	};
-
-  	functionChartLegend = true;
-  	functionChartPlugins = [];
-
-  	listingChartOptions = {
-    	responsive: true,
-  	};
-
-  	listingChartLegend = true;
-  	listingChartPlugins = [];
-
+  	
 	public newCandidates:Array<NewCandidateSummaryItem>  	= new Array<NewCandidateSummaryItem>();
 	public newCandidateStats:Array<NewCandidateStatItem>  	= new Array<NewCandidateStatItem>();
 	
@@ -747,7 +699,6 @@ export class StatisticsComponent implements OnInit {
 	        	];
 	
 	createLeftChart(leftChartLabels:string[], leftChartData:any){
-		
 		
   		if(this.leftChart){
   			this.leftChart.destroy();

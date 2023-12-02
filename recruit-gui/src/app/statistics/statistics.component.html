@@ -41,22 +41,6 @@
 				<div *ngIf="showStatsDownloads" style="margin-bottom:45px;">
 					<h3>Daily downloads</h3>
 				</div>
-				<!-- Listings -->
-				<div *ngIf="showStatsListings">
-					<div class="chart-wrapper">
-						<h5>Totals:</h5>
-						<table>
-							<tr>
-								<td>Listings viewed today</td>
-								<td>{{listingViewsToday}}</td>
-							</tr>
-							<tr>
-								<td>Listings viewed this week</td>
-								<td>{{listingViewsThisWeek}}</td>
-							</tr>
-						</table>
-					</div>
-				</div>
 				<!-- Marketplace -->
 				<div class="chart-wrapper" *ngIf="showMarketplaceStats">			
 					<h3>Requested Candidate Views: {{requestedCandidateViewsTotal}}</h3>
@@ -65,14 +49,8 @@
 				</div>
 				<!-- Availability -->
 				<div class="chart-wrapper" *ngIf="showStatsAvailability">
-				<h5>Totals:</h5>
-				<table>
-					<tr>
-						<td>Active Users</td>
-						<td>{{totalNumberActiveCandidates}}</td>
-					</tr>
-				</table>
-			</div>
+					<h5>Available by Function</h5>
+				</div>
 				<!-- New Candidate Stats -->
 				<div class="action-buttons" *ngIf="showNewCandidates">
 					<button class="btn btn-secondary btnRight stat-btn" (click)="loadNewCandidates()" 		download>Show New Candidates</button>
@@ -97,9 +75,31 @@
 					<button (click)="switchChartData('week')">This week</button>
 					<button (click)="switchChartData('day')">Today</button>
 				</div>
+				<!-- Listings -->
+				<div *ngIf="showStatsListings">
+					<div class="chart-wrapper">
+						<h5>Totals:</h5>
+						<table>
+							<tr>
+								<td>Listings viewed today</td>
+								<td>{{listingViewsToday}}</td>
+							</tr>
+							<tr>
+								<td>Listings viewed this week</td>
+								<td>{{listingViewsThisWeek}}</td>
+							</tr>
+						</table>
+					</div>
+				</div>
 				<!-- Availability -->
 				<div class="chart-wrapper" *ngIf="showStatsAvailability">
-					<h5>Available by Function</h5>
+					<h5>Totals:</h5>
+					<table>
+						<tr>
+							<td>Active Users</td>
+							<td>{{totalNumberActiveCandidates}}</td>
+						</tr>
+					</table>
 				</div>
 				<!-- Weekly Stats -->
 				<div *ngIf="showNewCandidates && showNewCandidatesDiv">
