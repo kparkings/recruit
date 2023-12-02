@@ -1,10 +1,6 @@
 <div class=".container m-2">
 	<div>
 	
-		
-		
-    	
-	
 		<!-- Action buttons -->
 		<div class="action-buttons">
 			<button class="btn btn-secondary btnRight" (click)="refreshData()" download>Refresh</button>
@@ -136,136 +132,8 @@
 				</div>
 			</div>
 		</div>
-		
 
-				
-		<!-- Downloads -->
-		<!-- 
-		<div *ngIf="showStatsDownloads">
-					
-			<div class="chart-wrapper-page">		
-				<div class="chart-wrapper">
-					<h3>Daily downloads</h3>
-					<canvas baseChart 
-	        				[datasets]="lineChartData" 
-	        				[labels]="lineChartLabels" 
-	        				[options]="lineChartOptions"
-	        				[colors]="lineChartColors" 
-	        				[legend]="lineChartLegend" 
-	        				[chartType]="lineChartType" 
-	       			 		[plugins]="lineChartPlugins">
-	   				 </canvas>
-	   			</div>
-							
-				<div class="chart-wrapper">
-					<h3>Recruiter downloads: {{chartDownloadsTotal}}</h3>
-					<button (click)="switchChartData('week')">This week</button>
-					<button (click)="switchChartData('day')">Today</button>
-	    			<canvas baseChart 
-	        				[datasets]="recruiterDownloadsChartData" 
-	        				[labels]="recruiterDownloadsChartLabels" 
-	        				[options]="recruiterDownloadsChartOptions"
-	        				[colors]="recruiterDownloadsChartColors" 
-	        				[legend]="recruiterDownloadsChartLegend" 
-	        				[chartType]="recruiterDownloadsChartType" 
-	        				[plugins]="recruiterDownloadsChartPlugins">
-	    			</canvas>
-
-				</div>
-			</div>
-		
-		</div>
-		-->
-		<!-- Listings -->
-		<!--  div *ngIf="showStatsListings">
-			
-			<div class="chart-wrapper">
-				<h5>Totals:</h5>
-				<table>
-					<tr>
-						<td>Listings viewed today</td>
-						<td>{{listingViewsToday}}</td>
-					</tr>
-					<tr>
-						<td>Listings viewed this week</td>
-						<td>{{listingViewsThisWeek}}</td>
-					</tr>
-				</table>
-			</div>
-			<div class="chart-wrapper">
-				<h5>Available by Function</h5>
-				<!--  
- 					<canvas baseChart 
-     					[datasets]="listingChartData" 
-     					[labels]="listingChartLabels" 
-     					[options]="listingChartOptions"
-     					[colors]="listingChartColors" 
-     					[legend]="listingChartLegend" 
-     					[chartType]="listingChartType" 
-     					[plugins]="listingChartPlugins">
-  					</canvas>
-  					-->
-  					<!-- 
-			</div>			
-		</div>
-		-->
-		
-		<!-- Marketplace Views -->
-		<!--  
-		<div *ngIf="showMarketplaceStats">		
-			<div class="chart-wrapper">			
-				<h3>Requested Candidate Views: {{requestedCandidateViewsTotal}}</h3>
-				<button (click)="switchMarketplaceRequestedCandidatesChartData('week')">This week</button>
-				<button (click)="switchMarketplaceRequestedCandidatesChartData('day')">Today</button>
-				-->
-				<!--  
-    			<canvas baseChart 
-        				[datasets]="marketPlaceEventsChartDataRequested" 
-        				[labels]="marketPlaceEventsChartLabelsRequested" 
-        				[options]="marketPlaceEventsChartOptions"
-        				[colors]="marketPlaceEventsChartColors" 
-        				[legend]="marketPlaceEventsChartLegend" 
-        				[chartType]="marketPlaceEventsChartType" 
-        				[plugins]="marketPlaceEventsChartPlugins">
-    			</canvas>
-    			-->
-    			<!--  
-			</div>			
-		</div>-->
-			
-		<!-- Availability -->
-		<!--  div *ngIf="showStatsAvailability"-->
-		<!-- 
-			<div class="chart-wrapper" *ngIf="showStatsAvailability">
-				<h5>Totals:</h5>
-				<table>
-					<tr>
-						<td>Active Users</td>
-						<td>{{totalNumberActiveCandidates}}</td>
-					</tr>
-				</table>
-			</div>
-			-->
-			<!--  
-			<div class="chart-wrapper">
-				<h5>Available by Function</h5>-->
-				<!--  
- 						<canvas baseChart 
-     						[datasets]="functionChartData" 
-     						[labels]="functionChartLabels" 
-     						[options]="functionChartOptions"
-     						[colors]="functionChartColors" 
-     						[legend]="functionChartLegend" 
-     						[chartType]="functionChartType" 
-     						[plugins]="functionChartPlugins">
-  					</canvas>
-  					-->
-  					<!--  
-			</div>	
-		</div>	-->
-		
-		<!-- Logins -->
-		
+		<!-- Logins -->		
 		<div *ngIf="showStatsLogins">
 					
 			<div class="chart-wrapper-page">		
@@ -317,43 +185,6 @@
 			</div>
 			<div style="clear:both;margin-bottom:50px;"></div>
 		</div>
-		
-		<!-- New Candidate Stats -->
-		<div *ngIf="showNewCandidates" class="stats-table">
-			<!-- 
-			<div class="action-buttons" *ngIf="showNewCandidates">
-				<button class="btn btn-secondary btnRight stat-btn" (click)="loadNewCandidates()" 		download>Show New Candidates</button>
-				<button class="btn btn-secondary btnRight stat-btn" (click)="loadNewCandidateStats()" 	download>Show New Candidate Stats</button>
-			</div>
-			-->	
-			<!-- 
-			<div *ngIf="showNewCandidates && showNewCandidatesDiv">
-				<p>
-					New Candidates available
-				</p>
-				<br/>
-				<ul *ngFor="let candidate of newCandidates">
-					<li>{{countryToCode(candidate.country)}} - EXP: {{candidate.yearsExperience}} Years - {{candidate.functionDesc}}</li>	
-				</ul>
-				<br/>
-				<p>
-					https://www.arenella-ict.com
-				</p>
-				<p>
-					#available #looking #lookingforwork #itcandidates #ictkandidaten #candidate #kandidaat
-					#itjobboard #ictojobboard #beschikbaar #it #ict #opentowork #seeking 
-				</p>
-			</div>
-			<div *ngIf="showNewCandidates && showNewCandidateStatsDiv" class="stats-table">
-				<p>The following new candidates have been added:</p>
-				<table>
-				<tr *ngFor="let candidateStat of newCandidateStats">
-					<td class="new-candidate-table-td">{{candidateStat.count}}</td>  <td class="new-candidate-table-td">x</td> <td class="new-candidate-table-td">{{candidateStat.functionType}}</td>
-				</tr>
-				</table>
-				
-			</div>
-			-->
-		</div>	  
+		  
 	</div>
 </div>

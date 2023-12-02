@@ -1,8 +1,5 @@
 import { Component, OnInit } 								from '@angular/core';
 import { StatisticsService } 								from '../statistics.service';
-//import { Chart, ChartDataSets, ChartType }				 			from 'chart.js';
-//import { Chart, ChartType }				 			from 'chart.js';
-//import { Color, Label } 									from 'ng2-charts';
 import { NewCandidateSummaryItem } 							from '../new-candidate';
 import { NewCandidateStatItem } 							from '../new-candidate-stat';
 import { Router}											from '@angular/router';
@@ -29,7 +26,6 @@ export class StatisticsComponent implements OnInit {
 	public showStatsDownloads:boolean					= false;
 	public showStatsAvailability:boolean				= false;
 	public showStatsListings:boolean					= false;
-	//public showStatsEmailRequests:boolean				= false;
 	public showNewCandidates:boolean					= false;
 	public showMarketplaceStats:boolean					= false;
 
@@ -56,17 +52,6 @@ export class StatisticsComponent implements OnInit {
 	public requestedCandidateViewsTotal:number							= 0;
 	public requestedCandidateViewsTotalDaily:number						= 0;	
 	public requestedCandidateViewsTotalWeekly:number					= 0;	
-	
-	//public marketPlaceEventsChartDataRequested:ChartDataSets[] 			= [];
-	//public marketPlaceEventsChartLabelsRequested:Label[] 				= [];
-	
-	//public marketPlaceEventsChartDataRequestedDaily:ChartDataSets[] 	= [];
-	//public marketPlaceEventsChartLabelsRequestedDaily:Label[] 			= [];
-
-	//public marketPlaceEventsChartDataRequestedWeekly:ChartDataSets[] 	= [];
-	//public marketPlaceEventsChartLabelsRequestedWeekly:Label[] 			= [];
-	
-	//public loginChartView:string = 'chart';
 	public loginChartViewUser:string = '';
 
 	public candidateFunctions:Array<CandidateFunction> = new Array<CandidateFunction>();
@@ -83,13 +68,6 @@ export class StatisticsComponent implements OnInit {
     	responsive: true,
   	};
 
-  	//public marketPlaceEventsChartColors: Color[] 			= [
-   // 	{
-    //  		borderColor: 'black',
-    //  		backgroundColor: 'rgba(0,0,0,0.28)',
-    //	},
-  //	];
-  	
   	/**
 	* Toggles between the chart 
 	* and table views
@@ -103,7 +81,6 @@ export class StatisticsComponent implements OnInit {
 
   	public marketPlaceEventsChartLegend 					= true;
   	public marketPlaceEventsChartPlugins 					= [];
-  	//public marketPlaceEventsChartType:ChartType 			= 'bar';	
 	
 		
 	/**
@@ -112,7 +89,6 @@ export class StatisticsComponent implements OnInit {
 	constructor(public statisticsService:StatisticsService, public candidateService:CandidateServiceService, private router:Router) {
 
 		this.fetchStatus();
-		//this.getEmailRequestStats();
 		this.fetchMarketplaceStats();
 		
 		this.showNewCandidateStatsDiv 				= false;
@@ -144,43 +120,21 @@ export class StatisticsComponent implements OnInit {
 	*/
 	public switchMarketplaceRequestedCandidatesChartData(type:string):void{
 		
-			console.log("TYPE = " + type);		
 		switch (type) {
 			case "day":{
-				
-				console.log("X1 " + this.marketplaceViewsKeys);
-				console.log("X2 " + this.marketpalceViewsValues);
-				
-				
-				
 				this.marketplaceChartLabels = this.marketplaceViewsDayKeys;
 				this.marketpalceViewsValues = this.marketpalceViewsDayValues;
-				
-				
-			//	this.marketPlaceEventsChartDataRequested 	= this.marketPlaceEventsChartDataRequestedDaily;
-			//	this.marketPlaceEventsChartLabelsRequested 	= this.marketPlaceEventsChartLabelsRequestedDaily;
 				this.requestedCandidateViewsTotal 			= this.requestedCandidateViewsTotalDaily;
 				this.createLeftChart(this.marketplaceChartLabels, this.marketplaceChartData);
 				return;
 			}
 			case "week":{
-				
-				console.log("Z1 " + this.marketplaceViewsKeys);
-				console.log("Z2 " + this.marketpalceViewsValues);
-				
-				//this.marketplaceViewsKeys	= this.marketplaceViewsWeekKeys
-				//this.marketpalceViewsValues = this.marketpalceViewsWeekValues;
-			//	this.marketPlaceEventsChartDataRequested 	= this.marketPlaceEventsChartDataRequestedWeekly;
-			//	this.marketPlaceEventsChartLabelsRequested 	= this.marketPlaceEventsChartLabelsRequestedWeekly;
-				
 				this.marketplaceChartLabels = this.marketplaceViewsWeekKeys;
 				this.marketpalceViewsValues = this.marketpalceViewsWeekValues;
-				
 				this.requestedCandidateViewsTotal 			= this.requestedCandidateViewsTotalWeekly;
 				this.createLeftChart(this.marketplaceChartLabels, this.marketplaceChartData);
 				return;
 			}
-			
 				
 		}
 	}
@@ -191,13 +145,6 @@ export class StatisticsComponent implements OnInit {
 		this.requestedCandidateViewsTotalDaily					= 0;	
 		this.requestedCandidateViewsTotalWeekly					= 0;	
 	
-		//this.marketPlaceEventsChartDataRequested 				= [];
-		//this.marketPlaceEventsChartDataRequestedDaily 			= [];
-		//this.marketPlaceEventsChartLabelsRequestedDaily 		= [];
-		//this.marketPlaceEventsChartLabelsRequested 				= [];
-		//this.marketPlaceEventsChartDataRequestedWeekly 			= [];
-		//this.marketPlaceEventsChartLabelsRequestedWeekly 		= [];
-		
 		this.statisticsService.getMarketPlaceRequestedCandidateViewStats().subscribe(mpStats => {
 					
 			let viewsByRecruiterDaily:string[] 		= new Array<string>();
@@ -221,13 +168,6 @@ export class StatisticsComponent implements OnInit {
 				this.requestedCandidateViewsTotalWeekly = this.requestedCandidateViewsTotalWeekly + recruiterStat.viewsThisWeek;
 				
 			});
-		
-			//this.marketPlaceEventsChartDataRequestedDaily = [{ data: viewsByRecruiterDaily, label: 'Views By Recruiter' },];
-			//this.marketPlaceEventsChartLabelsRequestedDaily = recruiterIds;
-			
-			//this.marketPlaceEventsChartDataRequestedWeekly = [{ data: viewsByRecruiterWeekly, label: 'Views By Recruiter' },];
-			//this.marketPlaceEventsChartLabelsRequestedWeekly = recruiterIds;	
-			
 			
 				this.marketplaceViewsWeekKeys 		= recruiterIdsWeekly;
 				this.marketpalceViewsWeekValues 	= viewsByRecruiterWeekly;
@@ -264,41 +204,36 @@ export class StatisticsComponent implements OnInit {
 		this.fetchMarketplaceStats();
 	}
 	
-	listingViewsWeekKeys:string[] 		= new Array<string>();
-	listingViewWeekValues:string[] 		= new Array<string>();
+	listingViewsWeekKeys:string[] 			= new Array<string>();
+	listingViewWeekValues:string[] 			= new Array<string>();
 
-
-	marketplaceViewsKeys:string[] 		= new Array<string>();
+	marketplaceViewsKeys:string[] 			= new Array<string>();
 	marketpalceViewsValues:string[] 		= new Array<string>();
 					
 	marketplaceViewsWeekKeys:string[] 		= new Array<string>();
-	marketpalceViewsWeekValues:string[] 		= new Array<string>();
+	marketpalceViewsWeekValues:string[] 	= new Array<string>();
 					
 	marketplaceViewsDayKeys:string[] 		= new Array<string>();
 	marketpalceViewsDayValues:string[] 		= new Array<string>();
 				
-				
-	yearKeys:string[] 			= new Array<string>();
-	yearValues:string[] 		= new Array<string>();
+	yearKeys:string[] 						= new Array<string>();
+	yearValues:string[] 					= new Array<string>();
 
-	downloads:string[] 			= new Array<string>();
-	downloadKeys:string[]		= new Array<string>();
+	downloads:string[] 						= new Array<string>();
+	downloadKeys:string[]					= new Array<string>();
 			
-	threeMonthKeys:string[] 	= new Array<string>();
-	threeMonthValues:string[] 	= new Array<string>();
+	threeMonthKeys:string[] 				= new Array<string>();
+	threeMonthValues:string[] 				= new Array<string>();
 			
-	weekKeys:string[] 			= new Array<string>();
-	weekValues:string[] 		= new Array<string>();
+	weekKeys:string[] 						= new Array<string>();
+	weekValues:string[] 					= new Array<string>();
 	
-	
-	loginsUserIdsToday:string[] = new Array<string>();
-	loginsToday:string[] 		= new Array<string>();
+	loginsUserIdsToday:string[] 			= new Array<string>();
+	loginsToday:string[] 					= new Array<string>();
 			
-			
-	loginsUserIdsWeek:string[] 	= new Array<string>();
-	loginsWeek:string[] 		= new Array<string>();
-			
-	
+	loginsUserIdsWeek:string[] 				= new Array<string>();
+	loginsWeek:string[] 					= new Array<string>();
+				
 	public switchLoginStats(period:string):void{
 		
 		if(period === 'year') {
@@ -359,17 +294,9 @@ export class StatisticsComponent implements OnInit {
 					
 					this.listingViewsToday 		= listingData.viewsToday;
 					this.listingViewsThisWeek 	= listingData.viewsThisWeek;
-					
-				
-					//this.listingChartData = [{ data: listingChartViews, label: 'Downloads' },];
-					//this.listingChartLabels = listingChartViewsKeys;
-					
-					//let aa:Array<ViewItem> = listingData.viewsPerWeek;
 
 					this.listingViewsWeekKeys 		= listingData.viewsPerWeek.map(aa => aa.bucketName);
 					this.listingViewWeekValues 		= listingData.viewsPerWeek.map(aa => aa.count);
-					
-					
 					
 					//START
 					this.listingsChartData = [
@@ -382,8 +309,6 @@ export class StatisticsComponent implements OnInit {
 					this.listingsChartLabels = this.listingViewsWeekKeys; 
 					this.createRightChart(this.listingsChartLabels, this.listingsChartData);
 					//END
-					
-			
 					
 				}, err => {
 					
@@ -417,9 +342,6 @@ export class StatisticsComponent implements OnInit {
 			this.weekKeys 					= Array.from(statsObj.getWeekStatsKeysAsStrings());
 			this.weekValues 				= statsObj.getWeekStatsValues();
 			
-			//this.loginChartData = [{ data: this.yearValues, label: 'Downloads',backgroundColor: this.chartColor},];
-			//this.loginChartLabels = this.yearKeys;
-			
 			//START
 			this.loginChartData = [
 	           	{
@@ -432,7 +354,6 @@ export class StatisticsComponent implements OnInit {
 			this.createLeftChart(this.loginChartLabels, this.loginChartData);
 			//END
 			
-			
 			//START
 			this.recruiterLoginsChartData = [
 	           	{
@@ -444,10 +365,6 @@ export class StatisticsComponent implements OnInit {
 			this.recruiterLoginsChartLabels = this.loginsUserIdsToday; 
 			this.createRightChart(this.recruiterLoginsChartLabels, this.recruiterLoginsChartData);
 			//END
-			
-			
-			//this.recruiterLoginsChartData = [{ data: this.loginsToday, label: 'Todays logins' }]; 
-	        //this.recruiterLoginsChartLabels  = this.userIdsToday; 
 	        
 	        this.loginCountRecruiterToday = new Set(stats.eventsToday.filter(e => e.recruiter).map(e => e.userId)).size;
 			this.loginCountCandidateToday = new Set(stats.eventsToday.filter(e => e.candidate).map(e => e.userId)).size;
@@ -457,7 +374,6 @@ export class StatisticsComponent implements OnInit {
 			this.loginCountRecruiter = this.loginCountRecruiterToday;
 			this.loginCountCandidate = this.loginCountCandidateToday;
 			
-			
     	});	
 		
 		this.statisticsService.getCurriculumDownloadStatistics().forEach(stat => {
@@ -465,18 +381,11 @@ export class StatisticsComponent implements OnInit {
 			this.downloads 		= Object.values(stat.weeklyDownloads);
 			this.downloadKeys 	= Object.keys(stat.weeklyDownloads);
 			
-			//this.lineChartData = [{ data: downloads, label: 'Downloads' },];
-			//this.lineChartLabels = downloadDates;
-			
 			this.recruiterDownloadsDaily 			= Object.values(stat.recruiterDownloadsDaily);
 			this.recruiterDownloadsWeekly 			= Object.values(stat.recruiterDownloadsWeekly);
 	
 			this.recruiterDownloadsDailyCols 		= Object.keys(stat.recruiterDownloadsDaily);
 			this.recruiterDownloadsWeeklyCols 		= Object.keys(stat.recruiterDownloadsWeekly);
-			
-			//this.recruiterDownloadsChartData = [{ data: this.recruiterDownloadsDaily, label: 'Todays downloads' }];
-												
-			//this.recruiterDownloadsChartLabels 		= this.recruiterDownloadsDailyCols;
 			
 			//START
 			this.downloadsChartData = [
@@ -490,7 +399,6 @@ export class StatisticsComponent implements OnInit {
 			this.createLeftChart(this.downloadsChartLabels, this.downloadsChartData);
 			//END
 			
-			
 			//START
 			this.recruiterDownloadsChartData = [
 	           	{
@@ -503,10 +411,7 @@ export class StatisticsComponent implements OnInit {
 			this.createRightChart(this.recruiterLoginsChartLabels, this.recruiterDownloadsChartData);
 			//END
 			
-			
 			this.chartDownloadsTotal 				= this.recruiterDownloadsDaily.length;
-			
-			
 
     	});
 
@@ -541,9 +446,6 @@ export class StatisticsComponent implements OnInit {
 			this.availabilityChartLabels = functionStatName; 
 			this.createRightChart(this.availabilityChartLabels, this.availabilityChartData);
 			//END
-			
-			//this.functionChartData = [{ data: functionStatCount, label: 'Function' },];
-			//this.functionChartLabels = functionStatName;
 			
     	});
 
@@ -585,7 +487,6 @@ export class StatisticsComponent implements OnInit {
 				this.showStatsDownloads=false;
 				this.showStatsAvailability=false;
 				this.showStatsListings=false;
-				//this.showStatsEmailRequests=false;
 				this.showNewCandidates=false;
 				this.showMarketplaceStats=false;
 				
@@ -600,12 +501,8 @@ export class StatisticsComponent implements OnInit {
 				this.showStatsDownloads=true;
 				this.showStatsAvailability=false;
 				this.showStatsListings=false;
-				//this.showStatsEmailRequests=false;
 				this.showNewCandidates=false;
 				this.showMarketplaceStats=false;
-				//this.loginChartData = [{ data: this.yearValues, label: 'Downloads', backgroundColor: this.chartColor },];
-				//this.loginChartLabels = this.yearKeys;
-				
 				
 				this.createLeftChart(this.downloadsChartLabels, this.downloadsChartData);
 				this.createRightChart(this.recruiterLoginsChartLabels, this.recruiterDownloadsChartData);
@@ -617,7 +514,6 @@ export class StatisticsComponent implements OnInit {
 				this.showStatsDownloads=false;
 				this.showStatsAvailability=false;
 				this.showStatsListings=true;
-				//this.showStatsEmailRequests=false;
 				this.showNewCandidates=false;
 				this.showMarketplaceStats=false;
 				
@@ -626,7 +522,6 @@ export class StatisticsComponent implements OnInit {
 				if(this.leftChart){
   					this.leftChart.destroy();
   				}
-				//this.createLeftChart(this.listingsChartLabels, this.downloadsChartData);
 				break;
 			}
 			case "availability":{
@@ -634,7 +529,6 @@ export class StatisticsComponent implements OnInit {
 				this.showStatsDownloads=false;
 				this.showStatsListings=false;
 				this.showStatsAvailability=true;
-				//this.showStatsEmailRequests=false;
 				this.showNewCandidates=false;
 				this.showMarketplaceStats=false;
 				this.createRightChart(this.availabilityChartLabels, this.availabilityChartData);
@@ -649,7 +543,6 @@ export class StatisticsComponent implements OnInit {
 				this.showStatsDownloads=false;
 				this.showStatsListings=false;
 				this.showStatsAvailability=false;
-				//this.showStatsEmailRequests=true;
 				this.showNewCandidates=false;
 				this.showMarketplaceStats=false;
 				break;
@@ -659,7 +552,6 @@ export class StatisticsComponent implements OnInit {
 				this.showStatsDownloads=false;
 				this.showStatsListings=false;
 				this.showStatsAvailability=false;
-				//this.showStatsEmailRequests=false;
 				this.showNewCandidates=true;
 				this.showMarketplaceStats=false;
 				if(this.leftChart){
@@ -675,7 +567,6 @@ export class StatisticsComponent implements OnInit {
 				this.showStatsDownloads=false;
 				this.showStatsListings=false;
 				this.showStatsAvailability=false;
-				//this.showStatsEmailRequests=false;
 				this.showNewCandidates=false;
 				this.showMarketplaceStats=true;
 				
@@ -690,171 +581,47 @@ export class StatisticsComponent implements OnInit {
 		
 	}
 
-
-
-
-
-
-	/**
-	* Logins
-	*/
-	//recruiterLoginsChartData: 		ChartDataSets[] 	= [];
-	//recruiterLoginsChartLabels: 		Label[] 			= [];
-
   	recruiterLoginsChartOptions = {
     	responsive: true, 	
   	};
 
-  	//recruiterLoginsChartColors: Color[] = [
-    //	{
-     // 		borderColor: 'black',
-    //  		backgroundColor: 'rgba(0,0,0,0.28)',
-    //	},
-  	//];
-
   	recruiterLoginsChartLegend = true;
   	recruiterLoginsChartPlugins = [];
-  	//recruiterLoginsChartType:ChartType = 'bar';
- 
-	//loginChartData: 	ChartDataSets[] 	= [];
-	//loginChartLabels: 	Label[] 			= [];
-	
 
   	loginChartOptions = {
     	responsive: true
   	};
 
-  	//loginChartColors: Color[] = [
-    //	{
-     // 		borderColor: 'black',
-    //  		backgroundColor: 'rgba(0,0,0,0.28)',
-    //	},
-  	//];
-
   	loginChartLegend = true;
   	loginChartPlugins = [];
-  	//loginChartType:ChartType = 'line';
-
-	
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	/**
-	* recruiter Downloads
-	*/
-	//recruiterDownloadsChartData: 		ChartDataSets[] 	= [];
-	//recruiterDownloadsChartLabels: 		Label[] 			= [];
 
   	recruiterDownloadsChartOptions = {
     	responsive: true,
   	};
 
-  	//recruiterDownloadsChartColors: Color[] = [
-    //	{
-     // 		borderColor: 'black',
-    //  		backgroundColor: 'rgba(0,0,0,0.28)',
-    //	},
-  	//];
-
   	recruiterDownloadsChartLegend = true;
   	recruiterDownloadsChartPlugins = [];
-  	//recruiterDownloadsChartType:ChartType = 'bar';
- 
-
-	/**
-	* Daily Downloads
-	*/
-	//lineChartData: 		ChartDataSets[] 	= [];
-	//lineChartLabels: 	Label[] 			= [];
 
   	lineChartOptions = {
     	responsive: true,
   	};
 
-  	//lineChartColors: Color[] = [
-    //	{
-     // 		borderColor: 'black',
-     // 		backgroundColor: 'rgba(0,0,0,0.28)',
-    //	},
-  	//];
-
   	lineChartLegend = true;
   	lineChartPlugins = [];
-  	//lineChartType:ChartType = 'line';
- 
-	/**
-	* Availability by Function
-	*/
-	//functionChartData: 		ChartDataSets[] 	= [];
-	//functionChartLabels: 	Label[] 			= [];
 
   	functionChartOptions = {
     	responsive: true,
   	};
 
-  	//functionChartColors: Color[] = [
-    //	{
-     // 		borderColor: 'black',
-     // 		backgroundColor: 'rgba(0,0,0,0.28)',
-    //	},
-  	//];
-
   	functionChartLegend = true;
   	functionChartPlugins = [];
-  	//functionChartType:ChartType = 'bar';
-
-	/**
-	* Listing Downloads
-	*/
-	//listingChartData: 		ChartDataSets[] 	= [];
-	//listingChartLabels: 	Label[] 			= [];
 
   	listingChartOptions = {
     	responsive: true,
   	};
 
-  	//listingChartColors: Color[] = [
-    //	{
-    //  		borderColor: 'black',
-    //  		backgroundColor: 'rgba(0,0,0,0.28)',
-    //	},
-  	//];
-
   	listingChartLegend = true;
   	listingChartPlugins = [];
-  	//listingChartType:ChartType = 'line';
-
 
 	public newCandidates:Array<NewCandidateSummaryItem>  	= new Array<NewCandidateSummaryItem>();
 	public newCandidateStats:Array<NewCandidateStatItem>  	= new Array<NewCandidateStatItem>();
@@ -985,7 +752,6 @@ export class StatisticsComponent implements OnInit {
   		if(this.leftChart){
   			this.leftChart.destroy();
   		}
-  		//this.rightChart.destroy();
   		
 	    this.leftChart = new Chart("leftChart", {
 	      type: 'bar', //this denotes tha type of chart
@@ -1002,43 +768,14 @@ export class StatisticsComponent implements OnInit {
 	   
   	}
 	
-	
-	
 	public leftChart: any;
 	public rightChart: any;
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	createRightChart(chartLabels:string[], chartData:any){
 		
   		if(this.rightChart){
   			this.rightChart.destroy();
   		}
-  		//this.rightChart.destroy();
   		
 	    this.rightChart = new Chart("rightChart", {
 	      type: 'bar', //this denotes tha type of chart
@@ -1054,11 +791,5 @@ export class StatisticsComponent implements OnInit {
 	    });
 	    
   	}
-	
-	
-	
-	
-	
-	
 
 }
