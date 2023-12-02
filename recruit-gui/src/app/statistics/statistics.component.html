@@ -61,6 +61,27 @@
 						</table>
 					</div>
 				</div>
+				<!-- Marketplace -->
+				<div class="chart-wrapper" *ngIf="showMarketplaceStats">			
+					<h3>Requested Candidate Views: {{requestedCandidateViewsTotal}}</h3>
+					<button (click)="switchMarketplaceRequestedCandidatesChartData('week')">This week</button>
+					<button (click)="switchMarketplaceRequestedCandidatesChartData('day')">Today</button>
+				</div>
+				<!-- Availability -->
+				<div class="chart-wrapper" *ngIf="showStatsAvailability">
+				<h5>Totals:</h5>
+				<table>
+					<tr>
+						<td>Active Users</td>
+						<td>{{totalNumberActiveCandidates}}</td>
+					</tr>
+				</table>
+			</div>
+				<!-- New Candidate Stats -->
+				<div class="action-buttons" *ngIf="showNewCandidates">
+					<button class="btn btn-secondary btnRight stat-btn" (click)="loadNewCandidates()" 		download>Show New Candidates</button>
+					<button class="btn btn-secondary btnRight stat-btn" (click)="loadNewCandidateStats()" 	download>Show New Candidate Stats</button>
+				</div>	
 				<div>
 					<canvas  id="leftChart" >{{ leftChart }}</canvas>	
 				</div>
@@ -80,7 +101,36 @@
 					<button (click)="switchChartData('week')">This week</button>
 					<button (click)="switchChartData('day')">Today</button>
 				</div>
-				
+				<!-- Availability -->
+				<div class="chart-wrapper" *ngIf="showStatsAvailability">
+					<h5>Available by Function</h5>
+				</div>
+				<!-- Weekly Stats -->
+				<div *ngIf="showNewCandidates && showNewCandidatesDiv">
+				<p>
+					New Candidates available
+				</p>
+				<br/>
+				<ul *ngFor="let candidate of newCandidates">
+					<li>{{countryToCode(candidate.country)}} - EXP: {{candidate.yearsExperience}} Years - {{candidate.functionDesc}}</li>	
+				</ul>
+				<br/>
+				<p>
+					https://www.arenella-ict.com
+				</p>
+				<p>
+					#available #looking #lookingforwork #itcandidates #ictkandidaten #candidate #kandidaat
+					#itjobboard #ictojobboard #beschikbaar #it #ict #opentowork #seeking 
+				</p>
+				</div>
+				<div *ngIf="showNewCandidates && showNewCandidateStatsDiv" class="stats-table">
+					<p>The following new candidates have been added:</p>
+					<table>
+					<tr *ngFor="let candidateStat of newCandidateStats">
+						<td class="new-candidate-table-td">{{candidateStat.count}}</td>  <td class="new-candidate-table-td">x</td> <td class="new-candidate-table-td">{{candidateStat.functionType}}</td>
+					</tr>
+					</table>
+				</div>
 				<div>
 					<canvas  id="rightChart">{{ rightChart }}</canvas>	
 				</div>
@@ -161,11 +211,13 @@
 		-->
 		
 		<!-- Marketplace Views -->
+		<!--  
 		<div *ngIf="showMarketplaceStats">		
 			<div class="chart-wrapper">			
 				<h3>Requested Candidate Views: {{requestedCandidateViewsTotal}}</h3>
 				<button (click)="switchMarketplaceRequestedCandidatesChartData('week')">This week</button>
 				<button (click)="switchMarketplaceRequestedCandidatesChartData('day')">Today</button>
+				-->
 				<!--  
     			<canvas baseChart 
         				[datasets]="marketPlaceEventsChartDataRequested" 
@@ -177,12 +229,14 @@
         				[plugins]="marketPlaceEventsChartPlugins">
     			</canvas>
     			-->
+    			<!--  
 			</div>			
-		</div>
+		</div>-->
 			
 		<!-- Availability -->
-		<div *ngIf="showStatsAvailability">
-			<div class="chart-wrapper">
+		<!--  div *ngIf="showStatsAvailability"-->
+		<!-- 
+			<div class="chart-wrapper" *ngIf="showStatsAvailability">
 				<h5>Totals:</h5>
 				<table>
 					<tr>
@@ -191,8 +245,10 @@
 					</tr>
 				</table>
 			</div>
+			-->
+			<!--  
 			<div class="chart-wrapper">
-				<h5>Available by Function</h5>
+				<h5>Available by Function</h5>-->
 				<!--  
  						<canvas baseChart 
      						[datasets]="functionChartData" 
@@ -204,10 +260,12 @@
      						[plugins]="functionChartPlugins">
   					</canvas>
   					-->
+  					<!--  
 			</div>	
-		</div>	
+		</div>	-->
 		
-				<!-- Logins -->
+		<!-- Logins -->
+		
 		<div *ngIf="showStatsLogins">
 					
 			<div class="chart-wrapper-page">		
@@ -262,11 +320,14 @@
 		
 		<!-- New Candidate Stats -->
 		<div *ngIf="showNewCandidates" class="stats-table">
-			<div class="action-buttons">
+			<!-- 
+			<div class="action-buttons" *ngIf="showNewCandidates">
 				<button class="btn btn-secondary btnRight stat-btn" (click)="loadNewCandidates()" 		download>Show New Candidates</button>
 				<button class="btn btn-secondary btnRight stat-btn" (click)="loadNewCandidateStats()" 	download>Show New Candidate Stats</button>
-			</div>	
-			<div *ngIf="showNewCandidatesDiv">
+			</div>
+			-->	
+			<!-- 
+			<div *ngIf="showNewCandidates && showNewCandidatesDiv">
 				<p>
 					New Candidates available
 				</p>
@@ -283,7 +344,7 @@
 					#itjobboard #ictojobboard #beschikbaar #it #ict #opentowork #seeking 
 				</p>
 			</div>
-			<div *ngIf="showNewCandidateStatsDiv" class="stats-table">
+			<div *ngIf="showNewCandidates && showNewCandidateStatsDiv" class="stats-table">
 				<p>The following new candidates have been added:</p>
 				<table>
 				<tr *ngFor="let candidateStat of newCandidateStats">
@@ -292,6 +353,7 @@
 				</table>
 				
 			</div>
+			-->
 		</div>	  
 	</div>
 </div>

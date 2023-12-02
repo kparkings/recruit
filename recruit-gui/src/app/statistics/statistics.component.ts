@@ -144,19 +144,44 @@ export class StatisticsComponent implements OnInit {
 	*/
 	public switchMarketplaceRequestedCandidatesChartData(type:string):void{
 		
+			console.log("TYPE = " + type);		
 		switch (type) {
 			case "day":{
+				
+				console.log("X1 " + this.marketplaceViewsKeys);
+				console.log("X2 " + this.marketpalceViewsValues);
+				
+				
+				
+				this.marketplaceChartLabels = this.marketplaceViewsDayKeys;
+				this.marketpalceViewsValues = this.marketpalceViewsDayValues;
+				
+				
 			//	this.marketPlaceEventsChartDataRequested 	= this.marketPlaceEventsChartDataRequestedDaily;
 			//	this.marketPlaceEventsChartLabelsRequested 	= this.marketPlaceEventsChartLabelsRequestedDaily;
-			//	this.requestedCandidateViewsTotal 			= this.requestedCandidateViewsTotalDaily;
+				this.requestedCandidateViewsTotal 			= this.requestedCandidateViewsTotalDaily;
+				this.createLeftChart(this.marketplaceChartLabels, this.marketplaceChartData);
 				return;
 			}
 			case "week":{
+				
+				console.log("Z1 " + this.marketplaceViewsKeys);
+				console.log("Z2 " + this.marketpalceViewsValues);
+				
+				//this.marketplaceViewsKeys	= this.marketplaceViewsWeekKeys
+				//this.marketpalceViewsValues = this.marketpalceViewsWeekValues;
 			//	this.marketPlaceEventsChartDataRequested 	= this.marketPlaceEventsChartDataRequestedWeekly;
 			//	this.marketPlaceEventsChartLabelsRequested 	= this.marketPlaceEventsChartLabelsRequestedWeekly;
-			//	this.requestedCandidateViewsTotal 			= this.requestedCandidateViewsTotalWeekly;
+				
+				this.marketplaceChartLabels = this.marketplaceViewsWeekKeys;
+				this.marketpalceViewsValues = this.marketpalceViewsWeekValues;
+				
+				this.requestedCandidateViewsTotal 			= this.requestedCandidateViewsTotalWeekly;
+				this.createLeftChart(this.marketplaceChartLabels, this.marketplaceChartData);
 				return;
 			}
+			
+				
 		}
 	}
 	
@@ -175,15 +200,22 @@ export class StatisticsComponent implements OnInit {
 		
 		this.statisticsService.getMarketPlaceRequestedCandidateViewStats().subscribe(mpStats => {
 					
-			let viewsByRecruiterDaily:number[] 		= new Array<number>();
-			let viewsByRecruiterWeekly:number[] 	= new Array<number>();
-			let recruiterIds:string[] 				= new Array<string>();			
-
+			let viewsByRecruiterDaily:string[] 		= new Array<string>();
+			let viewsByRecruiterWeekly:string[] 	= new Array<string>();
+			let recruiterIdsDaily:string[] 			= new Array<string>();			
+			let recruiterIdsWeekly:string[]			= new Array<string>();
+			
 			mpStats.stats.forEach(recruiterStat => {
+	
+				if (recruiterStat.viewsToday && recruiterStat.viewsToday > 0){
+					viewsByRecruiterDaily.push(''+recruiterStat.viewsToday);
+					recruiterIdsDaily.push(recruiterStat.recruiterId);
+				}
 				
-				viewsByRecruiterDaily.push(recruiterStat.viewsToday);
-				viewsByRecruiterWeekly.push(recruiterStat.viewsThisWeek);
-				recruiterIds.push(recruiterStat.recruiterId);
+				if (recruiterStat.viewsThisWeek && recruiterStat.viewsThisWeek > 0){
+					viewsByRecruiterWeekly.push(''+recruiterStat.viewsThisWeek);
+					recruiterIdsWeekly.push(recruiterStat.recruiterId);
+				}
 				
 				this.requestedCandidateViewsTotalDaily  = this.requestedCandidateViewsTotalDaily + recruiterStat.viewsToday;
 				this.requestedCandidateViewsTotalWeekly = this.requestedCandidateViewsTotalWeekly + recruiterStat.viewsThisWeek;
@@ -196,11 +228,33 @@ export class StatisticsComponent implements OnInit {
 			//this.marketPlaceEventsChartDataRequestedWeekly = [{ data: viewsByRecruiterWeekly, label: 'Views By Recruiter' },];
 			//this.marketPlaceEventsChartLabelsRequestedWeekly = recruiterIds;	
 			
+			
+				this.marketplaceViewsWeekKeys 		= recruiterIdsWeekly;
+				this.marketpalceViewsWeekValues 	= viewsByRecruiterWeekly;
+					
+				this.marketplaceViewsDayKeys 		= recruiterIdsDaily;
+				this.marketpalceViewsDayValues 		= viewsByRecruiterDaily;
+					
+				this.marketplaceViewsKeys			= this.marketplaceViewsWeekKeys
+				this.marketpalceViewsValues 		= this.marketpalceViewsWeekValues;
+					
+				//START
+				this.marketplaceChartData = [
+		           	{
+		            label: "Marketplace Views",
+		       	    data: this.marketpalceViewsValues,
+		            backgroundColor: this.chartColor
+		          },
+		        	];
+				this.marketplaceChartLabels = this.marketplaceViewsKeys; 
+				this.createRightChart(this.marketplaceChartLabels, this.marketplaceChartData);
+				//END
+			
 			this.switchMarketplaceRequestedCandidatesChartData('day');
 					
 		}, 
 		err => {
-			console.log("Error retrieving listings stats" + JSON.stringify(err));			
+			console.log("Error retrieving Marketplace stats" + JSON.stringify(err));			
 		});
 		
 	}
@@ -213,6 +267,17 @@ export class StatisticsComponent implements OnInit {
 	listingViewsWeekKeys:string[] 		= new Array<string>();
 	listingViewWeekValues:string[] 		= new Array<string>();
 
+
+	marketplaceViewsKeys:string[] 		= new Array<string>();
+	marketpalceViewsValues:string[] 		= new Array<string>();
+					
+	marketplaceViewsWeekKeys:string[] 		= new Array<string>();
+	marketpalceViewsWeekValues:string[] 		= new Array<string>();
+					
+	marketplaceViewsDayKeys:string[] 		= new Array<string>();
+	marketpalceViewsDayValues:string[] 		= new Array<string>();
+				
+				
 	yearKeys:string[] 			= new Array<string>();
 	yearValues:string[] 		= new Array<string>();
 
@@ -300,12 +365,7 @@ export class StatisticsComponent implements OnInit {
 					//this.listingChartLabels = listingChartViewsKeys;
 					
 					//let aa:Array<ViewItem> = listingData.viewsPerWeek;
-					
 
-					
-					console.log(JSON.stringify(listingData.viewsPerWeek.map(aa => aa.bucketName)));
-					console.log(JSON.stringify(listingData.viewsPerWeek.map(aa => aa.count)));
-					
 					this.listingViewsWeekKeys 		= listingData.viewsPerWeek.map(aa => aa.bucketName);
 					this.listingViewWeekValues 		= listingData.viewsPerWeek.map(aa => aa.count);
 					
@@ -460,7 +520,7 @@ export class StatisticsComponent implements OnInit {
 		
 			let stats:any[] = data;
 			
-			let functionStatCount:Array<number> 		= new Array<number>(); 
+			let functionStatCount:Array<string> 		= new Array<string>(); 
 			let functionStatName:Array<string> 			= new Array<string>(); 
 				
 			stats.forEach(functonStat => {
@@ -469,6 +529,18 @@ export class StatisticsComponent implements OnInit {
 				functionStatCount.push(functonStat.availableCandidates);
 				
 			});
+			
+			//START
+			this.availabilityChartData = [
+	           	{
+	            label: "Todays Logins",
+	       	    data: functionStatCount,
+	            backgroundColor: this.chartColor
+	          },
+	        	];
+			this.availabilityChartLabels = functionStatName; 
+			this.createRightChart(this.availabilityChartLabels, this.availabilityChartData);
+			//END
 			
 			//this.functionChartData = [{ data: functionStatCount, label: 'Function' },];
 			//this.functionChartLabels = functionStatName;
@@ -565,6 +637,11 @@ export class StatisticsComponent implements OnInit {
 				//this.showStatsEmailRequests=false;
 				this.showNewCandidates=false;
 				this.showMarketplaceStats=false;
+				this.createRightChart(this.availabilityChartLabels, this.availabilityChartData);
+				
+				if(this.leftChart){
+  					this.leftChart.destroy();
+  				}
 				break;
 			}
 			case "email":{
@@ -585,6 +662,12 @@ export class StatisticsComponent implements OnInit {
 				//this.showStatsEmailRequests=false;
 				this.showNewCandidates=true;
 				this.showMarketplaceStats=false;
+				if(this.leftChart){
+  					this.leftChart.destroy();
+  				}
+  				if(this.rightChart){
+  					this.rightChart.destroy();
+  				}
 				break;
 			}
 			case "marketplace":{
@@ -595,6 +678,12 @@ export class StatisticsComponent implements OnInit {
 				//this.showStatsEmailRequests=false;
 				this.showNewCandidates=false;
 				this.showMarketplaceStats=true;
+				
+				this.createLeftChart(this.marketplaceChartLabels, this.marketplaceChartData);
+				
+				if(this.rightChart){
+  					this.rightChart.destroy();
+  				}
 				break;
 			}
 		}
@@ -815,6 +904,16 @@ export class StatisticsComponent implements OnInit {
 		
 	}
 	
+	marketplaceChartData = [
+	           	{
+	            label: "Sales",
+	            data: ['467','576', '572', '79', '92',
+									 '574', '573', '576'],
+	            backgroundColor: 'blue'
+	          },
+	        	];
+	marketplaceChartLabels = ['2022-05-10', '2022-05-11', '2022-05-12','2022-05-13','2022-05-14', '2022-05-15', '2022-05-16','2022-05-17', ];
+	
 	
 	listingsChartData = [
 	           	{
@@ -825,6 +924,16 @@ export class StatisticsComponent implements OnInit {
 	          },
 	        	];
 	listingsChartLabels = ['2022-05-10', '2022-05-11', '2022-05-12','2022-05-13','2022-05-14', '2022-05-15', '2022-05-16','2022-05-17', ];
+	
+	availabilityChartData = [
+	           	{
+	            label: "Sales",
+	            data: ['467','576', '572', '79', '92',
+									 '574', '573', '576'],
+	            backgroundColor: 'blue'
+	          },
+	        	];
+	availabilityChartLabels = ['2022-05-10', '2022-05-11', '2022-05-12','2022-05-13','2022-05-14', '2022-05-15', '2022-05-16','2022-05-17', ];
 	
 	
 	loginChartData = [
