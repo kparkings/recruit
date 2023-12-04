@@ -1,17 +1,16 @@
 .chart-data-panel-page{
-	max-width:90%;
+	margin:10px;
 }
 
 .chart-panel{
-/*	float:left;
-	min-width:45%;*/
-	margin:20px;
+	margin-top:40px;
 }
 
 .listing-filter-panel{
 	overflow:auto;
 	height:200px;
 	border: solid 1px grey;
+	margin-bottom:50px;
 }
 
 .listing-filter-panel table {

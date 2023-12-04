@@ -180,41 +180,12 @@
 	background:#e8e8e8;
 	padding:2px;
 }
-/*
-.modal-title{
-	margin-left:20px;
-}
-*/
-/*
-.modal-body{
-	font-size: large;
-	height:345px;
-	text-align: center;
-}
-*/
-/*
-.modal-header{
-	background:#181414;
-	color:#6A5ACD;
-	font-weight:bold;
-}
-*/
 .filter-close-box{
 	padding:10px;
 	cursor:pointer;
 	font-size:20px;
 	font-weight: bold;
 	text-align: right;        
-}
-
-.message-send-failure{
-	margin-top:100px;
-	font-weight:bold;
-}
-
-.message-send-success{
-	margin-top:100px;
-	font-weight:bold;
 }
 
 textarea {
@@ -282,17 +253,6 @@ textarea {
 	font-weight: bold;
 	text-align: right;        
 }
-
-.message-send-failure{
-	margin-top:100px;
-	font-weight:bold;
-}
-
-.message-send-success{
-	margin-top:100px;
-	font-weight:bold;
-}
-
 .details-left h3{
 	color:#6A5ACD;
 	border-bottom:2px black solid;
@@ -343,19 +303,3 @@ textarea {
 .left-info-box table tr td {
 	padding-left:20px;
 }
-
-/*
-.job-spec-upld-opt{
-	float:left;
-	min-width:280px;
-	margin:2%;
-	border:2px green solid;
-	cursor:pointer;
-	padding:20px;
-	font-weight:bold;
-	width:45%;
-}
-
-.job-spec-upld-opt:hover{
-	background:grey;
-}*/

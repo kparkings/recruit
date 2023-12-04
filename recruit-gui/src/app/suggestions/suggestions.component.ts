@@ -260,6 +260,7 @@ export class SuggestionsComponent implements OnInit {
 		
 		this.candidateService.extractFiltersFromText(jobSpecText).subscribe(extractedFilters=>{
 			this.processJobSpecExtratedFilters(extractedFilters);
+			this.specUploadDialogBox.nativeElement.close();
 		},(failure =>{
 			this.showFilterByJonSpecFailure 	= true;
 			this.showFilterByJobSpec 			= false;
@@ -276,6 +277,7 @@ export class SuggestionsComponent implements OnInit {
   		
   		this.candidateService.extractFiltersFromDocument(this.jobSpecFile).subscribe(extractedFilters=>{
   			this.processJobSpecExtratedFilters(extractedFilters);
+  			this.specUploadDialogBox.nativeElement.close();
 		},(failure =>{
 			this.showFilterByJonSpecFailure 	= true;
 			this.showFilterByJobSpec 			= false;

@@ -120,7 +120,6 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 .modal-body-text{
 	vertical-align: middle;
-	margin-top: 60px;
 	font-weight: bold;
 }
 
@@ -138,6 +137,14 @@ dialog {
 	min-width:320px;
 }
 
+.message-send-failure{
+	font-weight:bold;
+}
+
+.message-send-success{
+	font-weight:bold;
+}
+
 /*Dialog upload spec*/
 .job-spec-options{
 	width:100%;
@@ -145,14 +152,11 @@ dialog {
 }
 
 .job-spec-upld-opt{
-	float:left;
-	min-width:280px;
 	margin:2%;
 	border:2px green solid;
 	cursor:pointer;
 	padding:20px;
 	font-weight:bold;
-	width:45%;
 }
 
 .job-spec-upld-opt:hover{

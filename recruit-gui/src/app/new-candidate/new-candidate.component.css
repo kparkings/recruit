@@ -57,28 +57,6 @@
     font-size:12px;
     font-weight:bold;
 }
-/*
-.modal-body{
-    font-size: large;
-    height:200px;
-    text-align: center;
-    
-}
-*/
-/*
-.modal-body-text{
-    vertical-align: middle;
-    margin-top: 60px;
-    font-weight: bold;
-}
-*/
-/*
- .modal-header{
-     background:#181414;
-     color:#6A5ACD;
-     font-weight:bold;
- }
-*/
  .filter-close-box{
      padding:10px;
      cursor:pointer;

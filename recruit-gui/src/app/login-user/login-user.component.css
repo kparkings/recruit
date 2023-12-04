@@ -20,37 +20,13 @@ input{
     float:right;
     margin-right:20px;
 }
-/*
-.modal-header{
-    background: #303030;
-    font-size: medium;
-    height: 50px;
-    text-align:center;
-    padding:0px;
-    margin:0px;
-}
-*/
+
 .modal-header-text{
     text-align:center;
     color:#6f42c1;
     margin-top:10px;
     width:500px;
 }
-/*
-.modal-body{
-	margin-top:100px;
-	font-size: large;
-    height:200px;
-    text-align: center;
-}
-*/
-/*
-.modal-body-text{
-    vertical-align: middle;
-    margin-top: 60px;
-    font-weight: bold;
-}
-*/
  .modal-header{
      background:#181414;
      color:#6A5ACD;

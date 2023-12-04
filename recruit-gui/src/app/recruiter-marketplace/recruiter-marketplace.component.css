@@ -210,16 +210,6 @@ td{
 	float:right;
 }
 
-.message-send-failure{
-	margin-top:100px;
-	font-weight:bold;
-}
-
-.message-send-success{
-	margin-top:100px;
-	font-weight:bold;
-}
-
 .main-action_btn{
 	background:green;
 }
@@ -296,20 +286,7 @@ td{
 .modal-title{
 	margin-left:20px;
 }
-/*
-.modal-body{
-	font-size: large;
-	height:300px;
-	text-align: center;
-}
-*/
-/*
-.modal-body-text{
-	vertical-align: middle;
-	margin-top: 60px;
-	font-weight: bold;
-}
-*/
+
 .feedbackBox{
 	padding:20px;
 	min-height:200px;

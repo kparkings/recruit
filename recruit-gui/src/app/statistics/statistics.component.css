@@ -92,8 +92,8 @@ chart-wrapper-page{
 
 .stat-canvas{
 	width:40%;
-	min-width:300px;
-	margin:20px;
+	min-width:350px;
 	float:left;
 	padding:5px;
+	margin-bottom:40px;
 }
