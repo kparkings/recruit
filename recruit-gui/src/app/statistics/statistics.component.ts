@@ -131,7 +131,7 @@ export class StatisticsComponent implements OnInit {
 	}
 
 	ngOnInit(): void {
-		this.switchTab('logins');
+		//this.switchTab('logins');
 	}
 	
 	public recruiterStats:RecruiterSearchStatistics = new RecruiterSearchStatistics();
@@ -315,7 +315,7 @@ export class StatisticsComponent implements OnInit {
 			
 			this.loginChartData = [{label: "Logins", data: this.yearValues, backgroundColor: this.chartColor}];
 			this.loginChartLabels = this.yearKeys;
-			this.createLeftChart(this.loginChartLabels, this.loginChartData);
+			this.createLeftChartAsLine(this.loginChartLabels, this.loginChartData);
 			
 			this.recruiterLoginsChartData = [{label: "Todays Logins", data: this.loginsToday, backgroundColor: this.chartColor}];
 			this.recruiterLoginsChartLabels = this.loginsUserIdsToday; 
@@ -343,11 +343,11 @@ export class StatisticsComponent implements OnInit {
 			this.recruiterDownloadsWeeklyCols 		= Object.keys(stat.recruiterDownloadsWeekly);
 			
 			this.downloadsChartData = [{label: "Downloads", data: this.downloads, backgroundColor: this.chartColor}];
-			this.loginChartLabels = this.yearKeys;
-			this.createLeftChartAsLine(this.downloadsChartLabels, this.downloadsChartData);
+			this.downloadsChartLabels = this.downloadKeys;
+			//this.createLeftChartAsLine(this.downloadsChartLabels, this.downloadsChartData);
 			
 			this.recruiterDownloadsChartData = [{label: "Todays Downloads", data: this.recruiterDownloadsDaily, backgroundColor: this.chartColor}];
-			this.recruiterLoginsChartLabels = this.recruiterDownloadsDailyCols; 
+			this.recruiterDownloadsChartLabels = this.recruiterDownloadsDailyCols; 
 			
 			this.chartDownloadsTotal 				= this.recruiterDownloadsDaily.length;
 
@@ -432,9 +432,9 @@ export class StatisticsComponent implements OnInit {
 				this.showStatsListings=false;
 				this.showNewCandidates=false;
 				this.showMarketplaceStats=false;
-				
+				 
 				this.createLeftChartAsLine(this.downloadsChartLabels, this.downloadsChartData);
-				this.createRightChart(this.recruiterLoginsChartLabels, this.recruiterDownloadsChartData);
+				this.createRightChart(this.recruiterDownloadsChartLabels, this.recruiterDownloadsChartData);
 			
 				break;
 			}
