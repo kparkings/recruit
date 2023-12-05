@@ -163,6 +163,9 @@ dialog {
 	background:grey;
 }
 
+/*END DIALOG CSS*/
+
+/* Buttons START*/
 .btn-main-bar{
  	margin-top:15px;
 	min-width:150px;
@@ -177,4 +180,29 @@ dialog {
     margin-bottom: 0px;
 }
 
-/*END DIALOG CSS*/
+/*Buttons end*/
+.left-info-box table tr td {
+	padding-left:20px;
+}
+
+/*Left right panes - stat*/
+.left-box-container{
+	float:left; 
+	width:100%; 
+	min-width:320px; 
+	max-width:360px; 
+	margin-top:20px;
+}
+
+.mobile-left-pane-container{
+	min-width:100%; 
+	max-width:100%; 
+	padding:0px;	
+}
+
+.left-box{
+	margin-bottom:30px;
+}
+
+
+/*Left right panes - stat*/

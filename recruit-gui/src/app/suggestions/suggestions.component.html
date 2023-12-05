@@ -1,4 +1,4 @@
-<div class=".container m-2">
+<div class=".containerX m-2X page">
 
 	<!-- Action buttons -->
 	<div *ngIf="currentView === 'suggestion-results'" class="button-panel-mobile">
@@ -12,7 +12,7 @@
 	
 	<div *ngIf="currentView === 'saved-candidates'" class="suggestion-results">
 		
-		<div style="margin-top:10px;">
+		<div>
 			<button class="btn btn-secondary btnRight main-btns" (click)="showSuggestionsResults()">Back</button>
 		</div>
 		
@@ -174,9 +174,8 @@
 	</div>
 
 	<!-- Suggestion Profile -->
-	<div style="margin-top:10px;" *ngIf="currentView !== 'suggestion-results' && currentView !== 'inline-cv' && currentView !== 'saved-candidates'">
-		<div class="suggestion-buttons">
-			
+	<div *ngIf="currentView !== 'suggestion-results' && currentView !== 'inline-cv' && currentView !== 'saved-candidates'">
+		<div class="suggestion-buttons button-panel-mobile">
 			
 			<button class="btn btn-secondary btnRight main-btn {{suggestionMobileBtnClass}}" (click)="showSuggestionsResults()" 					*ngIf="lastView != 'saved-candidates'  && !isCandidate()">Back</button>
 			<button class="btn btn-secondary btnRight main-btn {{suggestionMobileBtnClass}}" (click)="showSavedCandidates()" 						*ngIf="lastView === 'saved-candidates'  && !isCandidate()">Back</button>
@@ -200,7 +199,7 @@
 		</div>
 	</div>
 	
-	<div *ngIf="currentView === 'suggested-canidate-overview'" class="suggestion-results" style="border:1px solid white;padding-left:10px;">
+	<div *ngIf="currentView === 'suggested-canidate-overview'" class="suggestion-results">
 		<div class="left-box-container {{mobileListingLeftPaneContainer}}">
 		<!--  div  class="details-left"-->
 		
