@@ -45,8 +45,8 @@
 	<div>	
 		<form [formGroup]="suggestionFilterForm" *ngIf="currentView === 'suggestion-results'">
 	
-			<div class="left-menu" *ngIf="currentView === 'suggestion-results'">		
-				<table>
+			<div class="left-menu " *ngIf="currentView === 'suggestion-results'">		
+				<table class="{{mobileSearchBox}}">
 					<tr>
 						<td class="sugg-srch-hdr">Job Title</td>
 						<td class="sugg-srch-bdy">

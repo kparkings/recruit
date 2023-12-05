@@ -58,6 +58,7 @@ export class SuggestionsComponent implements OnInit {
 	public mobileListingLeftPaneContainer:string = '';
 	public mobileDescBody:string = '';
 	public mobileJobTitleBar:string = '';
+	public mobileSearchBox:string = '';
 	
 	/**
 	* Switches between options on how to upload job spec 
@@ -91,6 +92,7 @@ export class SuggestionsComponent implements OnInit {
 			this.mobileListingLeftPaneContainer = "mobile-left-pane-container";
 			this.mobileDescBody 				= 'mobile-desc-body';
 			this.mobileJobTitleBar				= 'sugg-srch-job-title-mobile';
+			this.mobileSearchBox			 	= 'mobile-search-box';
 		} 
 		
 		this.init();
