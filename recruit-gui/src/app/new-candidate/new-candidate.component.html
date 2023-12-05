@@ -1,8 +1,8 @@
-<div *ngIf="currentView == 'add'" class="container-div">
+<div *ngIf="currentView == 'add'" class="container-div page {{mobilePage}}">
 			
-	<div class="action-buttons">
-		<button class="btn btn-secondary btnRight main-btns" (click)="showOfferedCandidates()">Back</button>
-		<button class="btn btn-secondary btnRight main-btns" (click)="addCandidate()">Publish</button>
+	<div class="action-buttons button-panel-mobile">
+		<button class="btn btn-secondary btnRight main-btns {{mobileBtnClass}}" (click)="showOfferedCandidates()">Back</button>
+		<button class="btn btn-secondary btnRight main-btns {{mobileBtnClass}}" (click)="addCandidate()">Publish</button>
 	</div>
 	<form [formGroup]="offeredCandidateFormBean">
 		<table class="table new-user-table">

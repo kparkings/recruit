@@ -46,11 +46,11 @@
 		<form [formGroup]="suggestionFilterForm" *ngIf="currentView === 'suggestion-results'">
 	
 			<div class="left-menu" *ngIf="currentView === 'suggestion-results'">		
-				<table style="width:80%;">
+				<table>
 					<tr>
 						<td class="sugg-srch-hdr">Job Title</td>
 						<td class="sugg-srch-bdy">
-							<input type="text" value="Java Developer" class="sugg-srch-job-title" formControlName="searchPhrase">
+							<input type="text" value="Java Developer" class="sugg-srch-job-title {{mobileJobTitleBar}}" formControlName="searchPhrase">
 							
 						</td>
 						

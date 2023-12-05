@@ -110,6 +110,7 @@
 
 .container-div{
 	margin:20px;
+	margin-top:10px;
 }
 
 .action-buttons{
@@ -122,7 +123,7 @@
 
 .main-btns{
 	width:200px;
-	max-width:46%;
+	max-width:48%;
 	margin-right:10px;
 	margin-bottom:10px;
 	margin-top:0px;
@@ -176,4 +177,21 @@
  select{
  	max-width:50%;
  }
+ 
+ .button-panel-mobile{
+	padding-left:10px;
+	padding-right:10px;	
+}
+
+ .buttons-icon-mobile{
+	width:48%;
+	margin-top: 10px;
+    margin-right:1%;
+    margin-left:1%;
+    margin-bottom:0px;
+}
+
+.mobile-page{
+	margin:0px;
+}
  

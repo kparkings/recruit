@@ -12,6 +12,7 @@ import { NewCandidateRequest, Rate, Language } 					from './new-candidate-reques
 import { CandidateProfile } from '../candidate-profile';
 import { CandidateNavService } from '../candidate-nav.service';
 import { LanguageOption } from './language-option';
+import { DeviceDetectorService } from 'ngx-device-detector';
 
 @Component({
   selector: 'app-new-candidate',
@@ -37,6 +38,10 @@ export class NewCandidateComponent implements OnInit {
 	public isEdit:boolean = false;
     pendingCandidateBox: any;
 
+	
+	public isMobile:boolean = false;
+	public mobileBtnClass:string = '';
+	public mobilePage:string = '';
 	/**
   	* Constructor
   	*/
@@ -44,6 +49,7 @@ export class NewCandidateComponent implements OnInit {
   				private candidateService: CandidateServiceService,
   				private modalService: NgbModal,
   				private router: Router,
+  				private deviceDetector: 		DeviceDetectorService,
   				private candidateNavService: 	CandidateNavService) {
     
     	this.candidateService.loadFunctionTypes().forEach(funcType => {
@@ -54,6 +60,13 @@ export class NewCandidateComponent implements OnInit {
     	this.languageOptions.push(new LanguageOption("BASIC", "Basic"));
     	this.languageOptions.push(new LanguageOption("PROFICIENT", "Yes"));
     
+    	this.isMobile = deviceDetector.isMobile();
+		
+		if (this.isMobile) {
+			this.mobileBtnClass = "buttons-icon-mobile";
+			this.mobilePage = 'mobile-page';
+		} 
+		
 		if (this.candidateNavService.isRouteActive()) {
 			this.candidateService.getCandidateProfileById(this.candidateNavService.getCandidateId()).subscribe(candidate => {
 				this.populateForEdit(candidate);

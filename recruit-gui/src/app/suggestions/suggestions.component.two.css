@@ -310,3 +310,11 @@ textarea {
 	padding-right:0px;
 	padding-left:0px;
 }
+
+.sugg-srch-job-title{
+	min-width:1000px;
+}
+
+.sugg-srch-job-title-mobile{
+	min-width:0px;
+}
