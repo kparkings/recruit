@@ -56,7 +56,7 @@
 					<button class="btn btn-secondary btnRight stat-btn" (click)="loadNewCandidates()" 		download>Show New Candidates</button>
 					<button class="btn btn-secondary btnRight stat-btn" (click)="loadNewCandidateStats()" 	download>Show New Candidate Stats</button>
 				</div>	
-				<div>
+				<div class="statChartDiv">
 					<canvas  id="leftChart" >{{ leftChart }}</canvas>	
 				</div>
 			</div>
@@ -127,7 +127,7 @@
 					</tr>
 					</table>
 				</div>
-				<div>
+				<div class="statChartDiv">
 					<canvas  id="rightChart">{{ rightChart }}</canvas>	
 				</div>
 			</div>
@@ -139,9 +139,7 @@
 			<div class="chart-wrapper-page">		
 				
 				<div class="chart-wrapper">
-					<h3>logins: Recruiters: {{loginCountRecruiter}} Candidates: {{loginCountCandidate}}</h3>
-					<button (click)="switchUserStats('week')">This Week</button>
-					<button (click)="switchUserStats('today')">Today</button>
+					<h3>logins</h3>
 					<div class="login-table-view">
 						<table style="width:100%">
 							<thead>
@@ -161,7 +159,7 @@
 					<h3>Searches</h3>
 					<button (click)="switchUserStats('week')">This Week</button>
 					<button (click)="switchUserStats('today')">Today</button>
-					<div class="recruiter-stats">
+					<div class="login-table-view">
 					<table style="width:100%">
 							<thead>
 								<tr>

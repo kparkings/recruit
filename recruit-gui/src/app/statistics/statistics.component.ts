@@ -201,15 +201,16 @@ export class StatisticsComponent implements OnInit {
 				
 			});
 			
-				this.marketplaceViewsWeekKeys 		= recruiterIdsWeekly;
-				this.marketpalceViewsWeekValues 	= viewsByRecruiterWeekly;
-				this.marketplaceViewsDayKeys 		= recruiterIdsDaily;
-				this.marketpalceViewsDayValues 		= viewsByRecruiterDaily;
-				this.marketplaceViewsKeys			= this.marketplaceViewsWeekKeys
-				this.marketpalceViewsValues 		= this.marketpalceViewsWeekValues;
-					
-				this.marketplaceChartData = [{label: "Marketplace Views", data: this.marketpalceViewsValues, backgroundColor: this.chartColor}];
-				this.marketplaceChartLabels = this.marketplaceViewsKeys; 
+			this.marketplaceViewsWeekKeys 		= recruiterIdsWeekly;
+			this.marketpalceViewsWeekValues 	= viewsByRecruiterWeekly;
+			this.marketplaceViewsDayKeys 		= recruiterIdsDaily;
+			this.marketpalceViewsDayValues 		= viewsByRecruiterDaily;
+			this.marketplaceViewsKeys			= this.marketplaceViewsWeekKeys
+			this.marketpalceViewsValues 		= this.marketpalceViewsWeekValues;
+				
+			this.marketplaceChartData = [{label: "Marketplace Views", data: this.marketpalceViewsValues, backgroundColor: this.chartColor}];
+			this.marketplaceChartLabels = this.marketplaceViewsKeys; 
+			this.requestedCandidateViewsTotal 	= this.requestedCandidateViewsTotalWeekly;
 				
 		}, 
 		err => {
@@ -344,7 +345,6 @@ export class StatisticsComponent implements OnInit {
 			
 			this.downloadsChartData = [{label: "Downloads", data: this.downloads, backgroundColor: this.chartColor}];
 			this.downloadsChartLabels = this.downloadKeys;
-			//this.createLeftChartAsLine(this.downloadsChartLabels, this.downloadsChartData);
 			
 			this.recruiterDownloadsChartData = [{label: "Todays Downloads", data: this.recruiterDownloadsDaily, backgroundColor: this.chartColor}];
 			this.recruiterDownloadsChartLabels = this.recruiterDownloadsDailyCols; 
@@ -597,7 +597,7 @@ export class StatisticsComponent implements OnInit {
 		       datasets: leftChartData
 	      },
 	      options: {
-	        aspectRatio:2.5
+	        aspectRatio:1.75
 	      }
 	      
 	    });
@@ -618,7 +618,7 @@ export class StatisticsComponent implements OnInit {
 		       datasets: chartData
 	      },
 	      options: {
-	        aspectRatio:2.5
+	        aspectRatio:1.75
 	      }
 	      
 	    });
