@@ -8,7 +8,7 @@
 	        		<div  *ngSwitchCase="'list'">
 	        		
 		        		<div class="action-buttons" *ngIf="isAuthenticated() && !isAuthenticatedAsAdmin() && !isCandidate()">
-							<button class="btn btn-secondary btn-listing" routerLink="/recruiter-listings">Manage Your Posts</button>
+							<button class="btn btn-secondary btn-main-bar" routerLink="/recruiter-listings">Manage Your Posts</button>
 						</div>
 	        			
 						<!-- Listings Table -->
@@ -76,19 +76,19 @@
 						</div>
 					</div>
 	        		<!-- Show Selected Listing View -->
-	        		<div class="listing-view">
+	        		<div class="listing-view {{mobileListingViewDiv}}">
 	        			
 	        			<div  *ngSwitchCase="'show'">
 	        			
 		        			<!-- Action buttons -->
 							<div class="action-buttons">
-								<button class="btn btn-secondary btn-listing" *ngIf="isAuthenticated() && isAuthenticatedAsAdmin()" (click)="showPublicity()">Publicity</button>
-								<button (click)="showList()" class="btn btn-secondary btn-listing">Back</button>
+								<button class="btn btn-secondary btn-main-bar {{mobileButton}}" *ngIf="isAuthenticated() && isAuthenticatedAsAdmin()" (click)="showPublicity()">Publicity</button>
+								<button (click)="showList()" class="btn btn-secondary btn-main-bar {{mobileButton}}">Back</button>
 							</div>
 							
 					
 							<div>
-	        					<div style="float:left; width:100%; min-width:320px; max-width:360px; margin-top:20px;">
+	        					<div class="left-box-container {{mobileListingLeftPaneContainer}}">
 	        						<h1 *ngIf="isMobile" class="listing-view-title">{{selectedListing.title}}</h1>
 	        						<div class="left-box">
 	        							<div class="photo">
@@ -172,7 +172,7 @@
 	        						</div>
 	        					</div>
 	        			
-	        					<div class="desc-body">
+	        					<div class="desc-body {{mobileDescBody}}">
 	        							<div class="listing-view-div">
 											<h1 *ngIf="!isMobile" class="listing-view-title">{{selectedListing.title}}</h1>
 											<h1 *ngIf="isMobile" class="listing-view-title">Description</h1>
@@ -200,8 +200,8 @@
 											<div style="margin-top:10px">.doc, .docx, .pdf - up to 1MB</div>
 										</div>
 										<div class="action-buttons">
-											<button class="btn btn-secondary btn-listing btnRight" (click)="sendEmailRequest()" *ngIf="enableSendEmail()">Send</button>
-											<button class="btn btn-secondary btn-listing btnRight" disabled *ngIf="!enableSendEmail()">Send</button>
+											<button class="btn btn-secondary btn-main-bar btnRight" (click)="sendEmailRequest()" *ngIf="enableSendEmail()">Send</button>
+											<button class="btn btn-secondary btn-main-bar btnRight" disabled *ngIf="!enableSendEmail()">Send</button>
 										</div>
 									</form>
 								</div>
@@ -224,8 +224,8 @@
 											
 										</div>
 										<div class="action-buttons">
-											<button class="btn btn-secondary btn-listing btnRight" (click)="sendEmailRequest()" *ngIf="enableSendEmail()">Send</button>
-											<button class="btn btn-secondary btn-listing btnRight" disabled *ngIf="!enableSendEmail()">Send</button>
+											<button class="btn btn-secondary btn-main-bar btnRight" (click)="sendEmailRequest()" *ngIf="enableSendEmail()">Send</button>
+											<button class="btn btn-secondary btn-main-bar btnRight" disabled *ngIf="!enableSendEmail()">Send</button>
 										</div>
 									</form>
 								</div>

@@ -35,9 +35,13 @@ export class ListingComponent implements OnInit {
 		this.isMobile = deviceDetector.isMobile();
 		
 		if (this.isMobile) {
-			this.mobileListingclass 		= 'mobile-listing-layout';
-			this.mobileListingclassPane 	= 'mobile-listing-layout-pane';
-			this.mobileListingclassFilters 	= 'mobile-listing-layout-filters';
+			this.mobileListingclass 			= 'mobile-listing-layout';
+			this.mobileListingclassPane 		= 'mobile-listing-layout-pane';
+			this.mobileListingclassFilters 		= 'mobile-listing-layout-filters';
+			this.mobileListingLeftPaneContainer = "mobile-left-pane-container";
+			this.mobileDescBody 				= 'mobile-desc-body';
+			this.mobileListingViewDiv			= 'mobile-listing-view';
+			this.mobileButton				 	= 'buttons-icon-mobile';
 		} 
 		
 		this.recruiterProfileService.fetchRecruiterProfiles("RECRUITERS").subscribe(rps => this.recruiterProfiles = rps);
@@ -72,10 +76,13 @@ export class ListingComponent implements OnInit {
 	public displayFilters:boolean				= false;
 	
 	public isMobile:boolean = false;
-	public mobileListingclass:string 			= '';
-	public mobileListingclassPane:string 		= '';
+	public mobileListingclass:string 				= '';
+	public mobileListingclassPane:string 			= '';
 	public mobileListingclassFilters:string 		= '';
-	
+	public mobileListingLeftPaneContainer:string 	= '';
+	public mobileDescBody:string					= '';
+	public mobileListingViewDiv:string				= '';
+	public mobileButton:string						= '';					
 	/**
 	* Uploads the file for the Curriculum and stored 
 	* it ready to be sent to the backend

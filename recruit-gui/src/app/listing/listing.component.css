@@ -13,12 +13,6 @@
  	margin-top:50px;
  	margin-left:50px;
  }
- 
- .btn-listing{
- 	margin-top:15px;
-	min-width:150px;
-	margin-left:10px;
-}
 
 .a-table-cell{
 	display:table-cell; 
@@ -259,6 +253,10 @@
 	margin-left:30px;
 }
 
+.mobile-listing-view{
+	margin-left:10px;
+}
+
 .filters{
 	
 	width:95%;
@@ -301,12 +299,25 @@
 	padding-left:10px;
 }
 
+.left-box-container{
+	float:left; 
+	width:100%; 
+	min-width:320px; 
+	max-width:360px; 
+	margin-top:20px;
+}
+
+.mobile-left-pane-container{
+	min-width:100%; 
+	max-width:100%; 
+	padding:0px;	
+}
+
 .left-box{
-	min-width:300px;
+	/*min-width:300px;*/
 	margin-bottom:30px;
-	max-width:300px;
-	width:95%;
-	max-width:360px;
+	/*max-width:300px;*/
+	/*max-width:360px;*/
 }
 
 .profile-photo-details{
@@ -324,9 +335,22 @@
 .desc-body{
 	float:left;
 	padding:5px;
+	padding-left:20px;
 	min-width:310px;
 	max-width:72%;
-	
+}
+
+.mobile-left-pane-container{
+	min-width:98%; 
+	max-width:98%; 
+	padding:0px;
+	padding-left:5px;
+}
+
+.mobile-desc-body{
+	min-width:98%;
+	padding-right:0px;
+	padding-left:5px;
 }
 
 .left-box table{
