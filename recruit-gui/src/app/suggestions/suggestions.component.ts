@@ -54,6 +54,10 @@ export class SuggestionsComponent implements OnInit {
 	
 	public jobSpecUploadView:string = "chooseType"; //chooseType | doc | text
 	
+	/*Mobile */
+	public mobileListingLeftPaneContainer:string = '';
+	public mobileDescBody:string = '';
+	
 	/**
 	* Switches between options on how to upload job spec 
 	* to use to perform filtering
@@ -79,7 +83,13 @@ export class SuggestionsComponent implements OnInit {
 				private creditsService:			CreditsService) { 
 					
 		this.trustedResourceUrl = this.sanitizer.bypassSecurityTrustResourceUrl('');
+		
 		this.isMobile = deviceDetector.isMobile();
+		
+		if (this.isMobile) {
+			this.mobileListingLeftPaneContainer = "mobile-left-pane-container";
+			this.mobileDescBody 				= 'mobile-desc-body';
+		} 
 		
 		this.init();
 	}

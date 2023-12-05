@@ -201,7 +201,8 @@
 	</div>
 	
 	<div *ngIf="currentView === 'suggested-canidate-overview'" class="suggestion-results" style="border:1px solid white;padding-left:10px;">
-		<div  class="details-left">
+		<div class="left-box-container {{mobileListingLeftPaneContainer}}">
+		<!--  div  class="details-left"-->
 		
 			<img class="profile-photo-details" *ngIf="candidateProfile?.photo?.imageBytes" id='base64image' src='data:image/jpeg;base64, {{candidateProfile?.photo?.imageBytes}}' />
 			<div *ngIf="!candidateProfile?.photo?.imageBytes && !isMobile" class="profile-photo-details material-icons person ">
@@ -316,7 +317,8 @@
 			
 		</div>	
 				
-		<div class="details-right" >
+		<!-- div class="details-right" -->
+		<div class="desc-body details-right {{mobileDescBody}}">
 			<div style="width:100%">
 				<h1>{{suggestedCandidate.roleSought}}</h1>
 			</div>

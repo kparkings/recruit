@@ -303,3 +303,27 @@ textarea {
 .left-info-box table tr td {
 	padding-left:20px;
 }
+
+.left-box-container{
+	float:left; 
+	width:100%; 
+	min-width:320px; 
+	max-width:360px; 
+	margin-top:20px;
+}
+
+.mobile-left-pane-container{
+	min-width:100%; 
+	max-width:100%; 
+	padding:0px;	
+}
+
+.left-box{
+	margin-bottom:30px;
+}
+
+.mobile-desc-body{
+	min-width:98%;
+	padding-right:0px;
+	padding-left:5px;
+}
