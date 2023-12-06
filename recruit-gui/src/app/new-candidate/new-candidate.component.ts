@@ -42,6 +42,8 @@ export class NewCandidateComponent implements OnInit {
 	public isMobile:boolean = false;
 	public mobileBtnClass:string = '';
 	public mobilePage:string = '';
+	
+	public showBackBtn:boolean = false;
 	/**
   	* Constructor
   	*/
@@ -70,6 +72,7 @@ export class NewCandidateComponent implements OnInit {
 		if (this.candidateNavService.isRouteActive()) {
 			this.candidateService.getCandidateProfileById(this.candidateNavService.getCandidateId()).subscribe(candidate => {
 				this.populateForEdit(candidate);
+				this.showBackBtn = true;
 			});
 		} else {
 			this.candidateService.fetchPendingCandidates().forEach(data => {
@@ -143,32 +146,11 @@ export class NewCandidateComponent implements OnInit {
 	}
 	
 	public openPendingCandidatesBox():void {
-    
-      	//let options: NgbModalOptions = {
-     	//	centered: true
-   		//};
-
-  		//this.modalService.open(this.pendingCandidateBoxChild, options);
-  		this.pendingCandidateBoxChild.nativeElement.showModal();
+      	this.pendingCandidateBoxChild.nativeElement.showModal();
   	}
-  	
-  	//public openFeedbackBox():void {
-    
-     // 	let options: NgbModalOptions = {
-    // 		centered: true
-   	//	};
-
-//  		this.modalService.open(this.feedbackBox, options);
- // 	}
-  	
+  	  	
   	public openValidationBox():void {
-    
-      	//let options: NgbModalOptions = {
-     	//	centered: true
-   		//};
-
-  		//this.modalService.open(this.validationBox, options);
-  		this.validationBox.nativeElement.showModal();
+    	this.validationBox.nativeElement.showModal();
   	}
 	
 
@@ -320,7 +302,6 @@ export class NewCandidateComponent implements OnInit {
      		centered: true
    		};
 
-  		//this.modalService.open(this.feedbackBox, options);
   		this.feedbackBox.nativeElement.showModal();
   	}
 
@@ -340,8 +321,6 @@ export class NewCandidateComponent implements OnInit {
   }
   
   public validationErrors:Array<string> = new Array<string>();
-  
-  
   
   private curriculumFile!:File;
   private profileImageFile!:File;
@@ -382,7 +361,6 @@ export class NewCandidateComponent implements OnInit {
     	});
   		}
   		
-  		
   }
   
   public updateProfileImageFile(event:any):void{
@@ -399,7 +377,6 @@ export class NewCandidateComponent implements OnInit {
       
       switch(language) {
           case 'dutch':{
-           //   this.selectOptionLangDutch = this.formBean.get('dutch')!.value;
              return;
           } 
           case 'english':{
@@ -408,7 +385,6 @@ export class NewCandidateComponent implements OnInit {
       }
       
   }
-  
 
 	/**
 	* Sends request to delete Pending candidate
@@ -462,7 +438,6 @@ export class NewCandidateComponent implements OnInit {
 				this.offeredCandidateFormBean.get('freelance')?.setValue("FALSE");
 			}
 
-			//this.closePendingCandidateModal();
 			this.pendingCandidateBoxChild.nativeElement.close();
     	});
 		

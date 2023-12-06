@@ -29,7 +29,7 @@
 		
 		<!--  Define charts -->
 		<div >
-			<div class="stat-canvas">
+			<div class="stat-canvas ">
 				<!-- Logins -->
 				<div *ngIf="showStatsLogins">
 					<h3>Logins</h3>
@@ -56,7 +56,7 @@
 					<button class="btn btn-secondary btnRight stat-btn" (click)="loadNewCandidates()" 		download>Show New Candidates</button>
 					<button class="btn btn-secondary btnRight stat-btn" (click)="loadNewCandidateStats()" 	download>Show New Candidate Stats</button>
 				</div>	
-				<div class="statChartDiv">
+				<div class="statChartDiv {{statChartDivMobile}}">
 					<canvas  id="leftChart" >{{ leftChart }}</canvas>	
 				</div>
 			</div>
@@ -127,7 +127,7 @@
 					</tr>
 					</table>
 				</div>
-				<div class="statChartDiv">
+				<div class="statChartDiv {{statChartDivMobile}}">
 					<canvas  id="rightChart">{{ rightChart }}</canvas>	
 				</div>
 			</div>
@@ -154,7 +154,7 @@
 						</table>
 					</div>
 				</div>
-				<div class="chart-wrapper">
+				<div class="chart-wrapper" >
 					<h3>Searches</h3>
 					<button (click)="switchUserStats('week')">This Week</button>
 					<button (click)="switchUserStats('today')">Today</button>

@@ -1,7 +1,7 @@
 <div *ngIf="currentView == 'add'" class="container-div page {{mobilePage}}">
 			
 	<div class="action-buttons button-panel-mobile">
-		<button class="btn btn-secondary btnRight main-btns {{mobileBtnClass}}" (click)="showOfferedCandidates()">Back</button>
+		<button class="btn btn-secondary btnRight main-btns {{mobileBtnClass}}" (click)="showOfferedCandidates()" *ngIf="showBackBtn">Back</button>
 		<button class="btn btn-secondary btnRight main-btns {{mobileBtnClass}}" (click)="addCandidate()">Publish</button>
 	</div>
 	<form [formGroup]="offeredCandidateFormBean">
@@ -243,7 +243,6 @@
 					<th class="pendingCandidateBox-th">&nbsp;</th>
 					<th class="pendingCandidateBox-th">First Name</th>
 					<th class="pendingCandidateBox-th">Surname</th>
-					<th class="pendingCandidateBox-th">Email</th>
 					<th>actions</th>
 				</tr>
 			</thead>
@@ -258,9 +257,8 @@
 					</td>
 					<td class="pendingCandidateBox-td" (click)="loadPendingCandidate(pendingCandidate)">{{pendingCandidate.firstname}}</td>
 					<td class="pendingCandidateBox-td" (click)="loadPendingCandidate(pendingCandidate)">{{pendingCandidate.surname}}</td>
-					<td class="pendingCandidateBox-td" (click)="loadPendingCandidate(pendingCandidate)">{{pendingCandidate.email}}</td>
 					<td class="pendingCandidateBox-td">
-						<button class="btn btn-secondary action-btn" (click)="deletePendingCurriculum(pendingCandidate, false)">Delete</button>
+						<button class="btn btn-secondary action-btn" style="width:60px;" (click)="deletePendingCurriculum(pendingCandidate, false)">Delete</button>
 					</td>	
 				</tr>
 			</tbody>

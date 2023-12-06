@@ -10,6 +10,7 @@ import { CandidateServiceService }							from '../candidate-service.service';
 
 import { Chart } from 'chart.js';
 import { ListingStatistics, ViewItem } from '../listing-statistics';
+import { DeviceDetectorService } from 'ngx-device-detector';
 
 @Component({
   selector: 'app-statistics',
@@ -89,6 +90,9 @@ export class StatisticsComponent implements OnInit {
 	private downloadsChartData 									= [{label: "",data: [''], backgroundColor: ''}];
 	private recruiterDownloadsChartData 						= [{label: "", data: [''], backgroundColor: ''}];
 
+	public statChartDivMobile:string = '';
+	public isMobile:boolean 					= false;
+	
 	public getFunctionLabel(type:string){
 		
 		if(type == null){
@@ -119,7 +123,10 @@ export class StatisticsComponent implements OnInit {
 	/**
   	* Constructor
 	*/
-	constructor(public statisticsService:StatisticsService, public candidateService:CandidateServiceService, private router:Router) {
+	constructor(	public statisticsService:StatisticsService, 
+					public candidateService:CandidateServiceService,
+					private deviceDetector:DeviceDetectorService, 
+					private router:Router) {
 
 		this.fetchStatus();
 		this.fetchMarketplaceStats();
@@ -128,6 +135,12 @@ export class StatisticsComponent implements OnInit {
 		this.showNewCandidatesDiv 					= false;
 		this.candidateFunctions 					= this.candidateService.loadFunctionTypes();
 		
+		this.isMobile = deviceDetector.isMobile();
+					
+		if (this.isMobile){
+			this.statChartDivMobile = 'stat-cart-div-mobile';	
+		
+		}
 	}
 
 	ngOnInit(): void {
