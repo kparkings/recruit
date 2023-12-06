@@ -1,4 +1,4 @@
-<div class=".container m-2">
+<div class=".containerX m-2X page">
 	
 	<!-- Nav options -->
 	<ul class="nav nav-tabs">
@@ -117,9 +117,9 @@
 		<div *ngIf="addDemand">
 			<h3>Add details of position you wish to fill via other recruiters</h3>
 			<div class="action-buttons">
-				<button class="btn btn-secondary btnRight main-btns" (click)="showFilterByJobSpecDialog()" download>Create From Job Spec</button>
-				<button class="btn btn-secondary btnRight main-btns" (click)="showOpenPositions()">Back</button>
-				<button class="btn btn-secondary btnRight main-btns" (click)="publishOpenPosition()">Publish</button>
+				<button class="btn btn-secondary btnRight {{suggestionMobileBtnClass}}" (click)="showFilterByJobSpecDialog()" download>Create by Spec</button>
+				<button class="btn btn-secondary btnRight {{suggestionMobileBtnClass}}" (click)="showOpenPositions()">Back</button>
+				<button class="btn btn-secondary btnRight {{suggestionMobileBtnClass}}" (click)="publishOpenPosition()">Publish</button>
 			</div>
 			<form [formGroup]="requestedCandidateFormBean">
 				<table class="table marketplace-table">
@@ -210,8 +210,8 @@
 	<div *ngIf="editDemand">
 		<h3>Update Requested Candidate</h3>
 		<div class="action-buttons">
-			<button class="btn btn-secondary btnRight main-btns" (click)="publishOpenPosition()">Update</button>
-			<button class="btn btn-secondary btnRight main-btns" (click)="showOpenPositions()">Back</button>
+			<button class="btn btn-secondary btnRight {{suggestionMobileBtnClass}}" (click)="publishOpenPosition()">Update</button>
+			<button class="btn btn-secondary btnRight {{suggestionMobileBtnClass}}" (click)="showOpenPositions()">Back</button>
 		</div>
 		<form [formGroup]="requestedCandidateFormBean">
 		<table class="table marketplace-table">
@@ -298,34 +298,34 @@
 		
 	</div>
 	<!-- Open Position Details -->
-	<div *ngIf="showDemandDetails" style="margin-left:20px;">
+	<div *ngIf="showDemandDetails">
 		<div class="action-buttons">
-			<button class="btn btn-secondary btnRight main-btns" *ngIf="isMyOpenPosition()" (click)="editOpenPosition(activeOpenPosition)">Edit</button>
-			<button class="btn btn-secondary btnRight main-btns" *ngIf="isMyOpenPosition() && confirmDeleteOpenPosition != activeOpenPosition.id"  (click)="deleteMyOpenPosition(activeOpenPosition.id)">Delete</button>
-			<button class="btn btn-secondary btnRight main-btns small-action-btn-confirm-del" *ngIf="isMyOpenPosition() && confirmDeleteOpenPosition === activeOpenPosition.id" (click)="applyDeleteMyOpenPosition(activeOpenPosition.id)">Confirm</button>
-			<button class="btn btn-secondary btnRight main-btns" (click)="showOpenPositions()">Back</button>
+			<button class="btn btn-secondary btnRight main-btn {{suggestionMobileBtnClass}}" *ngIf="isMyOpenPosition()" (click)="editOpenPosition(activeOpenPosition)">Edit</button>
+			<button class="btn btn-secondary btnRight main-btn {{suggestionMobileBtnClass}}" *ngIf="isMyOpenPosition() && confirmDeleteOpenPosition != activeOpenPosition.id"  (click)="deleteMyOpenPosition(activeOpenPosition.id)">Delete</button>
+			<button class="btn btn-secondary btnRight main-btn {{suggestionMobileBtnClass}} small-action-btn-confirm-del " *ngIf="isMyOpenPosition() && confirmDeleteOpenPosition === activeOpenPosition.id" (click)="applyDeleteMyOpenPosition(activeOpenPosition.id)">Confirm</button>
+			<button class="btn btn-secondary btnRight main-btn {{suggestionMobileBtnClass}}" (click)="showOpenPositions()">Back</button>
 		</div>
-		<div>
-      		<div style="float:left; min-width:300px; margin-top:20px;">
-      			<h1 *ngIf="isMobile" class="listing-view-title">{{activeOpenPosition.positionTitle}}</h1>
-      				<div class="left-box">
+		<div class="left-box-container {{mobileListingLeftPaneContainer}}">
+		<!--  div-->
+      		<div>
+      			
+      			<h1 *ngIf="isMobile" class="listing-view-title {{mobileListingViewTitle}}">{{activeOpenPosition.positionTitle}}</h1>
+      				<div class="left-box {{mobileLeftBox}}" style="float:left;">
      					<div>
      						<img class="profile-photo-details" *ngIf="!isMobile && recruiterProfile?.profilePhoto?.imageBytes" id='base64image' src='data:image/jpeg;base64, {{recruiterProfile?.profilePhoto?.imageBytes}}' />
 						<div *ngIf="!recruiterProfile?.profilePhoto?.imageBytes && !isMobile" class="profile-photo-details material-icons person ">
-						<span style="font-size:300px;color:green;">person</span>
+							<span style="font-size:300px;color:green;">person</span>
 						</div>
 						<br>
 						<br>
-							<button class="btn btn-secondary action-btn main-action_btn main-btns main-bt" style="width:300px;margin-bottom:10px;background:grey;" (click)="contactRecruiter()" *ngIf="isMyOpenPosition()" disabled>Contact</button>
-							<button class="btn btn-secondary action-btn main-action_btn main-btns main-bt" style="width:300px;margin-bottom:10px;background:green;" (click)="contactRecruiter()" *ngIf="!isMyOpenPosition()">Contact</button>
+						<button class="btn btn-secondary action-btn main-action_btn main-btns main-bt" style="width:98%;margin-left:0px;;margin-right:10px;background:grey;" (click)="contactRecruiter()" *ngIf="isMyOpenPosition()" disabled>Contact</button>
+						<button class="btn btn-secondary action-btn main-action_btn main-btns main-bt" style="width:98%;margin-left:0px;;margin-right:10px;;background:green;" (click)="contactRecruiter()" *ngIf="!isMyOpenPosition()">Contact</button>
 						<br>
      				</div>
      				
-     				<div class="left-box-title" *ngIf="activeOpenPosition?.recruiter?.recruiterName">
-      					<h5>Requested By</h5>
-      				</div>
-     				
-     				<div class="left-box" *ngIf="activeOpenPosition?.recruiter?.recruiterName">
+     				</div>
+     				<div class="left-box {{mobileLeftBox}}" *ngIf="activeOpenPosition?.recruiter?.recruiterName">
+     					<h5>Requested By</h5>
      					<div class="left-box-body">
       						<table>
       							<tr>
@@ -339,12 +339,9 @@
       						</table>
      					</div>
      				</div>
-     			</div>
-      			<div class="left-box-title">
-      				<h5>Position Details</h5>
-      			</div>
-      						
-				<div class="left-box" *ngIf="activeOpenPosition.country || activeOpenPosition.location">
+     			
+      				
+				<div class="left-box {{mobileLeftBox}}" *ngIf="activeOpenPosition.country || activeOpenPosition.location">
 					<h5>Location</h5>
 					<div class="left-box-body">
 						<table>
@@ -359,10 +356,8 @@
 						</table>
 					</div>
 				</div>
-				<div class="left-box-title" *ngIf="activeOpenPosition.skills.length > 0">
-      				<h5>Skills</h5>
-      			</div>
-				<div class="left-box" *ngIf="activeOpenPosition.skills.length > 0">
+			
+				<div class="left-box {{mobileLeftBox}}" *ngIf="activeOpenPosition.skills.length > 0">
   					<h5>Skills</h5>
   					<div class="left-box-body">
 						<table>
@@ -372,7 +367,7 @@
 						</table>
 					</div>
   				</div>
-	        	<div class="left-box" *ngIf="activeOpenPosition.contractType || activeOpenPosition.startDate || activeOpenPosition.renumeration">
+	        	<div class="left-box {{mobileLeftBox}}" *ngIf="activeOpenPosition.contractType || activeOpenPosition.startDate || activeOpenPosition.renumeration">
 					<h5>Conditions</h5>
 					<div class="left-box-body">
 						<table>
@@ -393,7 +388,9 @@
 				</div>	
 			</div>
 		
-			<div style="float:left;margin-left:10px;min-width:300px;max-width:72%;padding:5px;">
+			
+		</div>
+		<div class="desc-bdy {{mobileDescBody}}">
       			<div class="listing-view-div">
 					<h1 *ngIf="!isMobile" class="listing-view-title">{{activeOpenPosition.positionTitle}}</h1>
 					<h1 *ngIf="isMobile" class="listing-view-title">Description</h1>
@@ -411,7 +408,6 @@
 				</div>
 				<div class="candidate-view-div-footer"></div>
 			</div>
-		</div>
 </div>
 
 <dialog #feedbackBox>

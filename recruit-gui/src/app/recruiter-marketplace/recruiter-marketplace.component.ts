@@ -31,6 +31,11 @@ export class RecruiterMarketplaceComponent implements OnInit {
 	public unseenOfferedCandidates:number 		= 0;
 	public unseenOpenPositions:number 			= 0;
 	public isMobile:boolean 					= false;
+	public suggestionMobileBtnClass:string		= '';
+	public mobileListingLeftPaneContainer:string 	= '';
+	public mobileDescBody:string = '';
+	public mobileLeftBox:string = '';
+	public mobileListingViewTitle:string = '';
 	public recruiterProfiles:Array<RecruiterProfile> 	= new Array<RecruiterProfile>();
 	public recruiterProfile:RecruiterProfile 			= new RecruiterProfile();
 
@@ -46,6 +51,14 @@ export class RecruiterMarketplaceComponent implements OnInit {
 				private creditsService:				CreditsService) {
 					
 					this.isMobile = deviceDetector.isMobile();
+					
+					if (this.isMobile) {
+						this.suggestionMobileBtnClass		= 'buttons-icon-mobile';
+						this.mobileListingLeftPaneContainer = "mobile-left-pane-container";
+						this.mobileDescBody 				= 'mobile-desc-body';
+						this.mobileLeftBox					= 'mobile-left-box';
+						this.mobileListingViewTitle			= 'mobile-listing-view-title';
+					}
 					
 					this.marketplaceService.fetchUnseenOfferedCandidates().subscribe(val => {
 						this.unseenOfferedCandidates = val;
