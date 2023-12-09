@@ -12,11 +12,12 @@ import java.util.UUID;
 */
 public class Listing {
 
-	public static enum listing_type {CONTRACT_ROLE, PERM_ROLE, BOTH}
-	public static enum LISTING_AGE	{TODAY, THIS_WEEK, THIS_MONTH, ALL}
-	public static enum country 		{NETHERLANDS, BELGIUM, UK, IRELAND, EU_REMOTE, WORLD_REMOTE}
-	public static enum language 	{DUTCH, FRENCH, ENGLISH}
-	public static enum currency		{EUR, GBP}
+	public static enum listing_type 	{CONTRACT_ROLE, PERM_ROLE, BOTH}
+	public static enum LISTING_AGE		{TODAY, THIS_WEEK, THIS_MONTH, ALL}
+	public static enum country 			{NETHERLANDS, BELGIUM, UK, IRELAND, EU_REMOTE, WORLD_REMOTE}
+	public static enum language 		{DUTCH, FRENCH, ENGLISH}
+	public static enum currency			{EUR, GBP}
+	public static enum TECH				{JAVA, DOT_NET, DEV_OPS, NETWORKS, CLOUD, WEB, UI_UX, PROJECT_NANAGMENT, TESTING, BUSINESS_ANALYSTS, SECURITY, IT_SUPPORT, ARCHITECT, BI, REC2REC }
 	
 	private UUID 						listingId;
 	private String						ownerId;

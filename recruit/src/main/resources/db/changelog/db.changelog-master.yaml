@@ -2100,3 +2100,97 @@ databaseChangeLog:
                   type: tinyint
                   constraints:
                     nullable: false
+  - changeSet:
+      id: listing_alerts
+      author: kevin
+      changes:
+        - createTable:
+            tableName: listing_alerts
+            schemaName: listings
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: bigint
+                  constraints:
+                    nullable: true
+              - column:
+                  name: email
+                  type: varchar
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created
+                  type: timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: contract_type
+                  type: varchar
+                  constraints:
+                    nullable: false
+        - createTable:
+            tableName: listing_alerts_countries
+            schemaName: listings
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: listing_alert_id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: country
+                  type: varchar
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+        - createTable:
+            tableName: listing_alerts_categories
+            schemaName: listings
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: listing_alert_id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: category
+                  type: varchar
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+        - addForeignKeyConstraint:  
+            constraintName: fk_listing_alerts_countries
+            baseColumnNames: listing_alert_id
+            baseTableName: listing_alerts_countries
+            baseTableSchemaName: listings
+            referencedTableName: listing_alerts
+            referencedTableSchemaName: listings
+            referencedColumnNames: id
+        - addForeignKeyConstraint:  
+            constraintName: fk_listing_alerts_categories
+            baseColumnNames: listing_alert_id
+            baseTableName: listing_alerts_categories
+            baseTableSchemaName: listings
+            referencedTableName: listing_alerts
+            referencedTableSchemaName: listings
+            referencedColumnNames: id
