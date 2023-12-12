@@ -37,6 +37,26 @@ public class ListingAlert {
 	}
 	
 	/**
+	* Initialzies the attributes that need to be set when the object is first created
+	*/
+	public void initializeAlert() {
+		if(Optional.ofNullable(id).isPresent() || Optional.ofNullable(created).isPresent()) {
+			throw new IllegalStateException("You cand initalize the ListingAlert twice");
+		}
+		this.id 		= UUID.randomUUID();
+		this.created 	= LocalDate.now();
+	}
+	
+	/**
+	* Sets the unique id of the User who owns the Alert
+	* @param userId - Unique id of the User
+	*/
+	public void setUserId(long userId) {
+		this.userId = userId;
+	}
+	
+	
+	/**
 	* Returns the unique id of the alert
 	* @return id of the alert
 	*/

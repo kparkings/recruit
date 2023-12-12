@@ -17,8 +17,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.CrudRepository;
 
-import com.arenella.recruit.candidates.enums.FREELANCE;
-import com.arenella.recruit.listings.beans.Listing;
 import com.arenella.recruit.listings.beans.ListingAlert;
 import com.arenella.recruit.listings.beans.ListingAlertFilterOptions;
 
@@ -56,7 +54,7 @@ public interface ListingAlertDao extends CrudRepository<ListingAlertEntity, UUID
 	public static class FilterSpecification implements Specification<ListingAlertEntity>{
 
 		private static final long serialVersionUID = 2778934779924481177L;
-		private ListingAlertFilterOptions filterOptions;
+		private transient ListingAlertFilterOptions filterOptions;
 		
 		/**
 		* Constructor

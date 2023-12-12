@@ -8,6 +8,7 @@ import java.time.LocalDate;
 import java.util.Set;
 import java.util.UUID;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import com.arenella.recruit.listings.beans.Listing;
@@ -54,6 +55,77 @@ public class ListingAlertTest {
 		
 		alert.getCategories().stream().filter(c -> c == Listing.TECH.ARCHITECT).findAny().orElseThrow();
 		alert.getCountries().stream().filter(c -> c == Listing.country.NETHERLANDS).findAny().orElseThrow();
+		
+	}
+	
+	/**
+	* Tests userId setter
+	* @throws Exception
+	*/
+	@Test
+	public void testSetUserId() throws Exception{
+		
+		final long userIdOld = 1L;
+		final long userIdNew = 2L;
+		
+		ListingAlert alert = 
+				ListingAlert
+					.builder()
+						.userId(userIdOld)
+					.build();
+		
+		assertEquals(userIdOld, alert.getUserId().get());
+		
+		alert.setUserId(userIdNew);
+		
+		assertEquals(userIdNew, alert.getUserId().get());
+	}
+	
+	/**
+	* Test Alert cannot be initialzied twice
+	* @throws Exception
+	*/
+	@Test
+	public void testInitializeAlert_idPresent() throws Exception{
+		
+		ListingAlert alert = 
+				ListingAlert
+					.builder()
+						.categories(CATEGORIES)
+						.contractType(CONTRACT_TYPE)
+						.countries(COUNTRIES)
+						.email(EMAIL)
+						.id(ID)
+						.userId(USER_ID)
+					.build();
+		
+		Assertions.assertThrows(IllegalStateException.class, () ->{
+			alert.initializeAlert();
+		});
+		
+	}
+	
+	/**
+	* Test Alert cannot be initialzied twice
+	* @throws Exception
+	*/
+	@Test
+	public void testInitializeAlert_createdPresent() throws Exception{
+		
+		ListingAlert alert = 
+				ListingAlert
+					.builder()
+						.categories(CATEGORIES)
+						.contractType(CONTRACT_TYPE)
+						.countries(COUNTRIES)
+						.email(EMAIL)
+						.created(CREATED)
+						.userId(USER_ID)
+					.build();
+		
+		Assertions.assertThrows(IllegalStateException.class, () ->{
+			alert.initializeAlert();
+		});
 		
 	}
 	
