@@ -2139,12 +2139,6 @@ databaseChangeLog:
             schemaName: listings
             columns:
               - column:
-                  name: id
-                  type: uuid
-                  constraints:
-                    primaryKey: true
-                    nullable: false
-              - column:
                   name: listing_alert_id
                   type: uuid
                   constraints:
@@ -2160,12 +2154,6 @@ databaseChangeLog:
             tableName: listing_alerts_categories
             schemaName: listings
             columns:
-              - column:
-                  name: id
-                  type: uuid
-                  constraints:
-                    primaryKey: true
-                    nullable: false
               - column:
                   name: listing_alert_id
                   type: uuid

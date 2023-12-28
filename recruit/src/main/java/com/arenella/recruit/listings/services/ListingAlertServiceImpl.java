@@ -30,7 +30,7 @@ public class ListingAlertServiceImpl implements ListingAlertService{
 		
 		alert.initializeAlert();
 		
-		if (this.isCandidate(currentUser)) {
+		if (currentUser != null && this.isCandidate(currentUser)) {
 			alert.setUserId(Long.valueOf(currentUser.getName()));
 		}
 		

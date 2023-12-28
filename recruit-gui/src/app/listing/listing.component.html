@@ -7,6 +7,9 @@
 	        		<!-- List View -->
 	        		<div  *ngSwitchCase="'list'">
 	        		
+	        			<div class="action-buttons" *ngIf="!isAuthenticated() || isAuthenticated() && isCandidate()">
+							<button class="btn btn-secondary btn-main-bar" (click)="openCreateAlertDialog()">Create Alert</button>
+						</div>
 		        		<div class="action-buttons" *ngIf="isAuthenticated() && !isAuthenticatedAsAdmin() && !isCandidate()">
 							<button class="btn btn-secondary btn-main-bar" routerLink="/recruiter-listings">Manage Your Posts</button>
 						</div>
@@ -282,5 +285,56 @@
 			<span>#cvdatabase </span>
 			<span *ngFor="let skill of selectedListing.skills">#{{skill}} </span>
 		</div>
+	</div>
+</dialog>
+<!-- Listing Alert Box -->
+<dialog #listingAlertBox>
+	<div class="modal-header">
+		<h4 class="modal-title">Create Email Alert</h4>
+ 		<div class="filter-close-box" (click)="listingAlertBox.close()">X</div>
+	</div>
+	<div class="feedbackBox;">
+		<form [formGroup]="alertFormBean">
+			<div class="modal-body"  style="height:400px;">
+				<div *ngIf="createAlertStep == 0">
+					<P>1/3 Select a Contract type</P>
+					<select formControlName="contractType">
+						<option Value="BOTH">All</option>
+						<option Value="CONTRACT_ROLE">Contract/Freelance</option>
+						<option Value="PERM_ROLE">Permanent</option>
+					</select>
+				</div>
+				<div *ngIf="createAlertStep == 1">
+					<P>2/3 Select roles of interest</P>
+					<div class="alert-options center">
+						<div class="listing-alert-option {{selectedFunctionTypeCss(sft)}}" *ngFor="let sft of selectableFunctionTypes" (click)="toggleFunctionType(sft)">{{sft.functionType.humanReadable}}</div>
+					</div>
+				</div>
+				<div *ngIf="createAlertStep == 2">
+					<P>3/3 Select a Countries of interest</P>
+					<div class="alert-options center">
+						<div class="listing-alert-option {{selectedCountryCss(sc)}}" *ngFor="let sc of selectableCountries" (click)="toggleCountry(sc)">{{sc.country.humanReadable}}</div>
+					</div>
+				</div>
+				<div *ngIf="createAlertStep == 3">
+					<P>Email address and confirm</P>
+					<div style="margin-top:50px;">
+						<b style="margin-right:10px;">Email:</b><input type="email" formControlName="emailAddress"/>
+					</div>
+				</div>
+				<div *ngIf="createAlertStep == 4">
+					<P>&nbsp;</P>
+					<div style="margin-top:50px;">
+						<h1>Alert Created</h1>
+					</div>
+				</div>
+				<div style="clear:both;margin-top:50px;" >
+					<button *ngIf="createAlertStep != 0 && createAlertStep != 4" class="btn btn-secondary action-btn listing-alert-btn" (click)="createListingAlertLastStep()">Back</button>
+					<button *ngIf="createAlertStep != 3 && createAlertStep != 4" class="btn btn-secondary action-btn listing-alert-btn" (click)="createListingAlertNextStep()">Next</button>
+					<button *ngIf="createAlertStep == 3" 						 class="btn btn-secondary action-btn listing-alert-btn" (click)="createListingAlert()">Confirm</button>
+				</div>
+			
+			</div>	
+		</form>
 	</div>
 </dialog>

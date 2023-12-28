@@ -27,7 +27,7 @@ import com.arenella.recruit.listings.beans.ListingAlert;
 * @author K Parkings
 */
 @Entity
-@Table(schema="listing", name="listing_alerts")
+@Table(schema="listings", name="listing_alerts")
 public class ListingAlertEntity {
 
 	@Id
@@ -44,16 +44,16 @@ public class ListingAlertEntity {
 	private LocalDate created;
 	
 	@Enumerated(EnumType.STRING)
-	@Column(name="listing_type")
+	@Column(name="contract_type")
 	private Listing.listing_type contractType;
 	
 	@Column(name="country")
-	@ElementCollection(targetClass=String.class, fetch = FetchType.EAGER)
+	@ElementCollection(targetClass=Listing.country.class, fetch = FetchType.EAGER)
 	@CollectionTable(schema="listings", name="listing_alerts_countries", joinColumns=@JoinColumn(name="listing_alert_id"))
 	private Set<Listing.country> countries = new LinkedHashSet<>();
 	
 	@Column(name="category")
-	@ElementCollection(targetClass=String.class, fetch = FetchType.EAGER)
+	@ElementCollection(targetClass=Listing.TECH.class, fetch = FetchType.EAGER)
 	@CollectionTable(schema="listings", name="listing_alerts_categories", joinColumns=@JoinColumn(name="listing_alert_id"))
 	private Set<Listing.TECH> categories = new LinkedHashSet<>();
 	

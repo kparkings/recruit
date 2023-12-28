@@ -9,6 +9,9 @@ import { HostListener}									from '@angular/core';
 import { DeviceDetectorService } 						from 'ngx-device-detector';
 import { RecruiterProfileService} 						from '../recruiter-profile.service';
 import { RecruiterProfile }								from '../recruiter-profile/recruiter-profile';
+import { ListingAlertAddRequest } from './listing-alert-add-request';
+import { FunctionType, SelectableFunctionType } from './function-type';
+import { SelectableCountry } from './country';
 
 @Component({
   selector: 'app-listing',
@@ -17,13 +20,15 @@ import { RecruiterProfile }								from '../recruiter-profile/recruiter-profile'
 })
 export class ListingComponent implements OnInit {
 
-	@ViewChild('feedbackBox',  {static:true})feedbackDialogBox!:  ElementRef<HTMLDialogElement>;
-	@ViewChild('publicityBox', {static:true}) publicityDialogBox!: ElementRef<HTMLDialogElement>;
+	@ViewChild('feedbackBox',  		{static:true}) feedbackDialogBox!:  ElementRef<HTMLDialogElement>;
+	@ViewChild('publicityBox', 		{static:true}) publicityDialogBox!: ElementRef<HTMLDialogElement>;
+	@ViewChild('listingAlertBox', 	{static:true}) listingAlertDialogBox!: ElementRef<HTMLDialogElement>;
 	
-	
-	
-	public recruiterProfiles:Array<RecruiterProfile> 	= new Array<RecruiterProfile>();
-	public recruiterProfile:RecruiterProfile 			= new RecruiterProfile();
+	public recruiterProfiles:Array<RecruiterProfile> 				= new Array<RecruiterProfile>();
+	public recruiterProfile:RecruiterProfile 						= new RecruiterProfile();
+	public selectableFunctionTypes:Array<SelectableFunctionType>	= new Array<SelectableFunctionType>();
+	public selectableCountries:Array<SelectableCountry>				= new Array<SelectableCountry>();
+	public createAlertStep:number = 0;
 	
   	constructor(private listingService:ListingService, 
 				private emailService:EmailService, 
@@ -45,6 +50,9 @@ export class ListingComponent implements OnInit {
 		} 
 		
 		this.recruiterProfileService.fetchRecruiterProfiles("RECRUITERS").subscribe(rps => this.recruiterProfiles = rps);
+	
+		this.selectableFunctionTypes 	= this.listingService.fetchFunctionTypes().map(ft => new SelectableFunctionType(ft, false));
+		this.selectableCountries 		= this.listingService.fetchCountries().map(c => new SelectableCountry(c, false));
 	
 	}
 	
@@ -83,6 +91,29 @@ export class ListingComponent implements OnInit {
 	public mobileDescBody:string					= '';
 	public mobileListingViewDiv:string				= '';
 	public mobileButton:string						= '';					
+	
+	/**
+	* Toggoles whether or not a FunctionType has been selected by the User
+	*/
+	public toggleFunctionType(ft:SelectableFunctionType):void{
+		
+		let sft:SelectableFunctionType = this.selectableFunctionTypes.filter(ftItem => ftItem == ft)[0];
+	
+		sft.selected = !sft.selected;
+	
+	}
+	
+	/**
+	* Toggoles whether or not a Country has been selected by the User
+	*/
+	public toggleCountry(ft:SelectableCountry):void{
+		
+		let sft:SelectableCountry = this.selectableCountries.filter(ftItem => ftItem == ft)[0];
+	
+		sft.selected = !sft.selected;
+	
+	}
+	
 	/**
 	* Uploads the file for the Curriculum and stored 
 	* it ready to be sent to the backend
@@ -100,6 +131,28 @@ export class ListingComponent implements OnInit {
 	showSendAlertBoxSuccess:boolean 		= false;
 	showSendAlertBoxFailure:boolean 		= false;
 	
+	/**
+	* Form for job alert 
+	*/
+	public alertFormBean:UntypedFormGroup = new UntypedFormGroup({
+		emailAddress: new UntypedFormControl(''),
+			contractType: new UntypedFormControl('BOTH')
+	});
+	
+	/**
+	* Reset Form for jb alert 
+	*/
+	private resetAlertFormBean():void{
+		
+		this.alertFormBean = new UntypedFormGroup({
+			emailAddress: new UntypedFormControl(''),
+			contractType: new UntypedFormControl('BOTH')
+		});
+		
+		this.createAlertStep = 0;
+		this.selectableFunctionTypes 	= this.listingService.fetchFunctionTypes().map(ft => new SelectableFunctionType(ft, false));
+		this.selectableCountries 		= this.listingService.fetchCountries().map(c => new SelectableCountry(c, false));
+	}
 	
 	public emailRequestFormBean:UntypedFormGroup = new UntypedFormGroup({
      	email:			new UntypedFormControl(),
@@ -147,12 +200,10 @@ export class ListingComponent implements OnInit {
 			this.curriculumFile = null;
 			this.showSendAlertBoxSuccess 		= true;
 			this.showSendAlertBoxFailure 		= false;
-			//this.open(content);
 			this.feedbackDialogBox.nativeElement.showModal();
 	    },err => {
 			this.showSendAlertBoxSuccess 		= false;
 			this.showSendAlertBoxFailure 		= true;
-			//this.open(content);
 			this.feedbackDialogBox.nativeElement.showModal();
 		});
 
@@ -512,30 +563,6 @@ export class ListingComponent implements OnInit {
   	public isAuthenticatedAsAdmin():boolean {
     	return sessionStorage.getItem('isAdmin') === 'true';
   	}
-
-	/**
-	*  Closes the confirm popup
-	*/
-	//public closeModal(): void {
-		
-	//	this.showSendAlertBoxSuccess 		= false;
-	//	this.showSendAlertBoxFailure 		= false;
-		
-	//	this.modalService.dismissAll();
-	//}
-	
-	//`public open(content:any):void {
-		
-	
-	   //let options: NgbModalOptions = {
-	   // 	 centered: true
-	   //};
-
-		//this.modalService.open(content, options);
-	
-		//this.feedbackDialogBox.nativeElement.showModal();
-
-  	//}
 	
 	private pageYPos = 0;
 	
@@ -565,8 +592,58 @@ export class ListingComponent implements OnInit {
 	*/
 	public showPublicity():void{
 		this.publicityDialogBox.nativeElement.showModal();
-		//this.open(content);
 	}
-  
-
+	
+	/**
+	* Creates a new ListingAlert
+	*/
+	public createListingAlert():void{
+		
+		let alert:ListingAlertAddRequest = new ListingAlertAddRequest();
+		
+		alert.categories 	= this.selectableFunctionTypes.filter(c => c.selected == true).map(c => c.functionType.key);
+		alert.countries 	= this.selectableCountries.filter(c => c.selected == true).map(c => c.country.key);
+		alert.email		 	= this.alertFormBean.get('emailAddress')?.value;
+		alert.contractType  = this.alertFormBean.get('contractType')?.value;
+		
+		this.listingService.createAlert(alert).subscribe(res => {
+			this.resetAlertFormBean();
+			//this.listingAlertDialogBox.nativeElement.close();
+			this.createAlertStep = 4;
+		});	
+		
+	}
+	
+	/**
+	* Opens a dialog box to create a Listing Alert 
+	*/
+	public openCreateAlertDialog():void{
+		this.resetAlertFormBean();
+		this.listingAlertDialogBox.nativeElement.showModal();
+	}
+	
+	public selectedFunctionTypeCss(ft:SelectableFunctionType):string{
+		if(this.selectableFunctionTypes.filter(ftItem => ftItem == ft)[0].selected){
+			return "listing-alert-option-selected";
+		} else {
+			return "";
+		}
+	}
+	
+	public selectedCountryCss(ft:SelectableCountry):string{
+		if(this.selectableCountries.filter(ftItem => ftItem == ft)[0].selected){
+			return "listing-alert-option-selected";
+		} else {
+			return "";
+		}
+	}
+	
+	public createListingAlertNextStep():void{
+		this.createAlertStep = this.createAlertStep+1;
+	}
+	
+	public createListingAlertLastStep():void{
+		this.createAlertStep = this.createAlertStep-1;
+	}
+	
 }

@@ -5,11 +5,14 @@ import java.util.Set;
 
 import com.arenella.recruit.listings.beans.Listing;
 import com.arenella.recruit.listings.beans.ListingAlert;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 
 /**
 * API Incomming representation of a ListingAlert
 * @author K Parkings
 */
+@JsonDeserialize(builder=ListingAlertAPIIncoming.ListingAlertAPIIncomingBuilder.class)
 public class ListingAlertAPIIncoming {
 
 	private String email;
@@ -75,6 +78,7 @@ public class ListingAlertAPIIncoming {
 	* Builder for the class
 	* @author K Parkings
 	*/
+	@JsonPOJOBuilder(buildMethodName="build", withPrefix="")
 	public static class ListingAlertAPIIncomingBuilder {
 	
 		private String 					email;

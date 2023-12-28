@@ -4,10 +4,10 @@ import java.security.Principal;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.arenella.recruit.listings.services.ListingAlertService;
@@ -26,9 +26,9 @@ public class ListingAlertController {
 	* Adds a new ListingAlert
 	* @param alert - Details of ListingAlert to create
 	*/
-	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_RECRUITER') or hasRole('ROLE_CANDIDATE')")
-	@PostMapping(path="public/listing-alert/", consumes="application/json", produces="application/json")
-	public void addListingAlert(ListingAlertAPIIncoming alert, Principal principal) {
+	//@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_RECRUITER') or hasRole('ROLE_CANDIDATE')")
+	@PostMapping(path="/public/listing-alert", consumes="application/json", produces="application/json")
+	public void addListingAlert(@RequestBody ListingAlertAPIIncoming alert, Principal principal) {
 		this.listingAlertService.addListingAlert(ListingAlertAPIIncoming.convertToDomain(alert), principal);
 	}
 	
@@ -43,7 +43,7 @@ public class ListingAlertController {
 	* 
 	* @param alertId - Unique id of the Alert to delete
 	*/
-	@DeleteMapping(path="public/listing-alert/{alertId}", consumes="application/json", produces="application/json")
+	@DeleteMapping(path="/public/listing-alert/{alertId}", consumes="application/json", produces="application/json")
 	public void deleteListingAlert(@PathVariable("alertId")UUID alertId) {
 		this.listingAlertService.deleteListingAlert(alertId);
 	}

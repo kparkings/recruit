@@ -371,3 +371,30 @@
  	background:green;
  	color:white;
 }
+
+.alert-options{
+	width:90%;
+}
+
+.listing-alert-option{
+	padding:5px;
+	border-radius:0%;
+	background:grey;
+	border:black;
+	margin-right:5px;
+	margin-bottom:5px;
+	white-space: nowrap;
+	float:left;
+}
+
+.listing-alert-option:hover{
+	cursor:pointer;
+}
+
+.listing-alert-option-selected{
+	background:green;
+}
+
+.listing-alert-btn{
+	margin:5px;
+}
