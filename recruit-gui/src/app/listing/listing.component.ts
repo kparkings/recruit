@@ -29,6 +29,7 @@ export class ListingComponent implements OnInit {
 	public selectableFunctionTypes:Array<SelectableFunctionType>	= new Array<SelectableFunctionType>();
 	public selectableCountries:Array<SelectableCountry>				= new Array<SelectableCountry>();
 	public createAlertStep:number = 0;
+	public listingAlertConfirmDisabled:boolean = true;
 	
   	constructor(private listingService:ListingService, 
 				private emailService:EmailService, 
@@ -644,6 +645,19 @@ export class ListingComponent implements OnInit {
 	
 	public createListingAlertLastStep():void{
 		this.createAlertStep = this.createAlertStep-1;
+	}
+	
+	public handleAlertEmailOnChange():void{
+		
+		let email:string = this.alertFormBean.get('emailAddress')?.value;
+		
+		console.log("XXX " + email);
+		
+		if (email && email.length >= 6) {
+			this.listingAlertConfirmDisabled = false;
+		} else {
+			this.listingAlertConfirmDisabled = true;
+		}
 	}
 	
 }

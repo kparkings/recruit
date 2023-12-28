@@ -319,7 +319,7 @@
 				<div *ngIf="createAlertStep == 3">
 					<P>Email address and confirm</P>
 					<div style="margin-top:50px;">
-						<b style="margin-right:10px;">Email:</b><input type="email" formControlName="emailAddress"/>
+						<b style="margin-right:10px;">Email:</b><input type="email" formControlName="emailAddress" (keyup)="handleAlertEmailOnChange()"/>
 					</div>
 				</div>
 				<div *ngIf="createAlertStep == 4">
@@ -331,7 +331,7 @@
 				<div style="clear:both;margin-top:50px;" >
 					<button *ngIf="createAlertStep != 0 && createAlertStep != 4" class="btn btn-secondary action-btn listing-alert-btn" (click)="createListingAlertLastStep()">Back</button>
 					<button *ngIf="createAlertStep != 3 && createAlertStep != 4" class="btn btn-secondary action-btn listing-alert-btn" (click)="createListingAlertNextStep()">Next</button>
-					<button *ngIf="createAlertStep == 3" 						 class="btn btn-secondary action-btn listing-alert-btn" (click)="createListingAlert()">Confirm</button>
+					<button *ngIf="createAlertStep == 3" 						 class="btn btn-secondary action-btn listing-alert-btn" [disabled]="listingAlertConfirmDisabled" (click)="createListingAlert()">Confirm</button>
 				</div>
 			
 			</div>	
