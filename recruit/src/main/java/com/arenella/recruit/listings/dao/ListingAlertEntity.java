@@ -50,11 +50,13 @@ public class ListingAlertEntity {
 	@Column(name="country")
 	@ElementCollection(targetClass=Listing.country.class, fetch = FetchType.EAGER)
 	@CollectionTable(schema="listings", name="listing_alerts_countries", joinColumns=@JoinColumn(name="listing_alert_id"))
+	@Enumerated(EnumType.STRING) 
 	private Set<Listing.country> countries = new LinkedHashSet<>();
 	
 	@Column(name="category")
 	@ElementCollection(targetClass=Listing.TECH.class, fetch = FetchType.EAGER)
 	@CollectionTable(schema="listings", name="listing_alerts_categories", joinColumns=@JoinColumn(name="listing_alert_id"))
+	@Enumerated(EnumType.STRING) 
 	private Set<Listing.TECH> categories = new LinkedHashSet<>();
 	
 	/**
