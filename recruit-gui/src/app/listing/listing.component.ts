@@ -651,8 +651,6 @@ export class ListingComponent implements OnInit {
 		
 		let email:string = this.alertFormBean.get('emailAddress')?.value;
 		
-		console.log("XXX " + email);
-		
 		if (email && email.length >= 6) {
 			this.listingAlertConfirmDisabled = false;
 		} else {

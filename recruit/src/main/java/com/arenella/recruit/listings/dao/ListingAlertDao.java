@@ -1,6 +1,7 @@
 package com.arenella.recruit.listings.dao;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -17,6 +18,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.CrudRepository;
 
+import com.arenella.recruit.listings.beans.Listing;
 import com.arenella.recruit.listings.beans.ListingAlert;
 import com.arenella.recruit.listings.beans.ListingAlertFilterOptions;
 
@@ -78,16 +80,27 @@ public interface ListingAlertDao extends CrudRepository<ListingAlertEntity, UUID
 				predicates.add(criteriaBuilder.equal(contractTypeExpression, 	this.filterOptions.getContractType().get()));
 			}
 			
-			/*Contract Type*/
+			/*Countries*/
 			if (!this.filterOptions.getCountries().isEmpty()) {
-				Predicate countriesFltr 						= root.get("countries").in(filterOptions.getCountries());
-				predicates.add(countriesFltr);
+				
+				Expression<Collection<Listing.country>> countryValues = root.get("countries");
+				
+				this.filterOptions.getCountries().forEach(country -> 
+					predicates.add(criteriaBuilder.isMember(country, countryValues))
+				);
+				
 			}
 			
-			/*Categories Type*/
+			/*Categories*/
 			if (!this.filterOptions.getCountries().isEmpty()) {
-				Predicate categoriesFltr 						= root.get("categories").in(filterOptions.getCategories());
-				predicates.add(categoriesFltr);
+		
+				Expression<Collection<Listing.TECH>> categoryValues = root.get("categories");
+				
+				this.filterOptions.getCategories().forEach(category -> 
+					predicates.add(criteriaBuilder.isMember(category, categoryValues))
+				);
+				
+			
 			}
 			
 			return criteriaBuilder.and(predicates.stream().toArray(n -> new Predicate[n]));

@@ -17,6 +17,5 @@ public interface ExternalEventPublisher {
 	* @param command - Command containing details for email
 	*/
 	public void publicRequestSendListingContactEmailCommand(CandidateRequestListingContactEmailCommand command);
-	
-	
+
 }

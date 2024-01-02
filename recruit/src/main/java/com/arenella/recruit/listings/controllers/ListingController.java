@@ -30,6 +30,7 @@ import com.arenella.recruit.listings.beans.ListingViewedEvent;
 import com.arenella.recruit.listings.controllers.CandidateListingContactRequest.CandidateListingContactRequestBuilder;
 import com.arenella.recruit.listings.controllers.ListingContactRequest.ListingContactRequestBuilder;
 import com.arenella.recruit.listings.services.ListingService;
+import com.arenella.recruit.listings.utils.ListingAlertHitTesterUtil;
 
 /**
 * REST API for interacting with Listings. A Listing is a type of role 
@@ -40,7 +41,10 @@ import com.arenella.recruit.listings.services.ListingService;
 public class ListingController {
 
 	@Autowired
-	private ListingService service;
+	private ListingService 				service;
+	
+	@Autowired
+	private ListingAlertHitTesterUtil 	listingAlertHitUtil;
 	
 	/**
 	* Adds a new listing
@@ -55,9 +59,9 @@ public class ListingController {
 
 		UUID id = service.addListing(ListingAPIInbound.convertToListing(listing), listing.isPostToSocialMedia());
 		
-		//START
-		this.performCreditCheck(principal);
-		//END
+		this.performCreditCheck(principal); //TODO: [KP] Check this should not be above the first line. Im sure it was working ok but potentially this allows unlimited listings ot be posted
+		
+		this.listingAlertHitUtil.registerListing(ListingAPIInbound.convertToListing(listing));
 		
 		return ResponseEntity.status(HttpStatus.CREATED).body(id);
 	}

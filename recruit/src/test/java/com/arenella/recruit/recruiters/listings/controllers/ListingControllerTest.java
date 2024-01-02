@@ -29,6 +29,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.arenella.recruit.listings.beans.Listing;
 import com.arenella.recruit.listings.beans.Listing.LISTING_AGE;
 import com.arenella.recruit.listings.beans.Listing.listing_type;
 import com.arenella.recruit.authentication.spring.filters.ClaimsUsernamePasswordAuthenticationToken;
@@ -41,6 +42,7 @@ import com.arenella.recruit.listings.controllers.ListingAPIOutboundPublic;
 import com.arenella.recruit.listings.controllers.ListingContactRequest;
 import com.arenella.recruit.listings.controllers.ListingController;
 import com.arenella.recruit.listings.services.ListingService;
+import com.arenella.recruit.listings.utils.ListingAlertHitTesterUtil;
 
 /**
 * Unit tests for the ListingController Class
@@ -63,6 +65,9 @@ public class ListingControllerTest {
 	
 	@Mock
 	private ClaimsUsernamePasswordAuthenticationToken 	mockUsernamePasswordAuthenticationToken;
+	
+	@Mock
+	private ListingAlertHitTesterUtil 					mockListingAlertHitUtil;
 	
 	@InjectMocks
 	private ListingController 	controller 				= new ListingController();
@@ -102,6 +107,8 @@ public class ListingControllerTest {
 		
 		assertEquals(response.getStatusCode(), HttpStatus.CREATED);
 		
+		Mockito.verify(this.mockListingAlertHitUtil).registerListing(Mockito.any(Listing.class));
+		
 	}
 	
 	/**
@@ -131,6 +138,8 @@ public class ListingControllerTest {
 		
 		assertEquals(response.getStatusCode(), HttpStatus.CREATED);
 		
+		Mockito.verify(this.mockListingAlertHitUtil).registerListing(Mockito.any(Listing.class));
+		
 	}
 	
 	/**
@@ -147,7 +156,6 @@ public class ListingControllerTest {
 		Mockito.when(this.mockUsernamePasswordAuthenticationToken.getAuthorities()).thenReturn(authorities);
 		Mockito.when(this.mockUsernamePasswordAuthenticationToken.getName()).thenReturn("kevin");
 		Mockito.when(this.mockUsernamePasswordAuthenticationToken.getClaim("useCredits")).thenReturn(Optional.of(Boolean.TRUE));
-//		Mockito.when(this.mockListingService.hasCreditsLeft(Mockito.anyString())).thenReturn(false);
 		Mockito.doThrow(new IllegalStateException("")).when(mockListingService).useCredit("kevin");
 		
 		ListingAPIInbound 	listing 		= ListingAPIInbound.builder().build();
@@ -156,6 +164,7 @@ public class ListingControllerTest {
 			controller.addListing(listing, mockUsernamePasswordAuthenticationToken);
 		});
 		
+		Mockito.verify(this.mockListingAlertHitUtil, Mockito.never()).registerListing(Mockito.any(Listing.class));
 	}
 	
 	/**
