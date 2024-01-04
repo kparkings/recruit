@@ -147,8 +147,10 @@ public class ListingTest {
 		listing.initializeAsNewListing();
 		listing.setOwnerId(ownerId);
 		listing.setActive(false);
+		listing.setListingId(listingId);
 		
 		assertEquals(ownerId, 				listing.getOwnerId());
+		assertEquals(listingId, 			listing.getListingId());
 		assertTrue(listing.getListingId() 	instanceof UUID);
 		assertTrue(listing.getCreated() 	instanceof LocalDateTime);
 		assertFalse(listing.isActive());

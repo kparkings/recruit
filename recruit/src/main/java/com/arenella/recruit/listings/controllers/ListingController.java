@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.arenella.recruit.listings.beans.Listing;
 import com.arenella.recruit.listings.beans.Listing.LISTING_AGE;
 import com.arenella.recruit.listings.beans.Listing.listing_type;
 import com.arenella.recruit.authentication.spring.filters.ClaimsUsernamePasswordAuthenticationToken;
@@ -55,13 +56,16 @@ public class ListingController {
 	*/
 	@PreAuthorize("hasRole('ROLE_RECRUITER')")
 	@PostMapping(value="/listing/")
-	public ResponseEntity<UUID> addListing(@RequestBody ListingAPIInbound listing, Principal principal){
+	public ResponseEntity<UUID> addListing(@RequestBody ListingAPIInbound listingAPIInbound, Principal principal){
 
-		UUID id = service.addListing(ListingAPIInbound.convertToListing(listing), listing.isPostToSocialMedia());
+		UUID id = service.addListing(ListingAPIInbound.convertToListing(listingAPIInbound), listingAPIInbound.isPostToSocialMedia());
 		
 		this.performCreditCheck(principal); //TODO: [KP] Check this should not be above the first line. Im sure it was working ok but potentially this allows unlimited listings ot be posted
 		
-		this.listingAlertHitUtil.registerListing(ListingAPIInbound.convertToListing(listing));
+		Listing listing = ListingAPIInbound.convertToListing(listingAPIInbound);
+		listing.setListingId(id);
+		
+		this.listingAlertHitUtil.registerListing(listing);
 		
 		return ResponseEntity.status(HttpStatus.CREATED).body(id);
 	}

@@ -1,13 +1,23 @@
 package com.arenella.recruit.listings.utils;
 
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import com.arenella.recruit.emailservice.adapters.RequestSendEmailCommand;
+import com.arenella.recruit.emailservice.beans.Email.EmailRecipient;
+import com.arenella.recruit.emailservice.beans.Email.EmailTopic;
+import com.arenella.recruit.emailservice.beans.Email.EmailType;
+import com.arenella.recruit.emailservice.beans.Email.Sender;
+import com.arenella.recruit.emailservice.beans.Email.EmailRecipient.ContactType;
+import com.arenella.recruit.emailservice.beans.Email.Sender.SenderType;
+import com.arenella.recruit.listings.adapters.ExternalEventPublisher;
 import com.arenella.recruit.listings.beans.Listing;
 import com.arenella.recruit.listings.beans.ListingAlertFilterOptions;
 import com.arenella.recruit.listings.services.ListingAlertService;
@@ -21,12 +31,15 @@ import com.arenella.recruit.listings.services.ListingAlertService;
 public class ListingAlertHitTesterUtil {
 
 	@Autowired
-	private ListingAlertService listingAlertService;
+	private ListingAlertService 	listingAlertService;
 	
 	@Autowired
-	private CategoryExtractorUtil categoryExtractor;
+	private CategoryExtractorUtil 	categoryExtractor;
 	
-	private final HashSet<Listing> pendingListings = new HashSet<>();
+	@Autowired
+	private ExternalEventPublisher 	eventPublisher;
+	
+	private final HashSet<Listing> 	pendingListings = new HashSet<>();
 	
 	/**
 	* Registers a new Listing to be tested against existing Alerts to 
@@ -55,8 +68,19 @@ public class ListingAlertHitTesterUtil {
 		ListingAlertFilterOptions filters = extractListingAlertFilters(listing.get());
 		
 		this.listingAlertService.fetchListingAlerts(filters).stream().forEach(hit -> {
-			//Send email command with link to Listing
-			System.out.println("RUNNING LISTING ALERT : Listing " + listing.get().getListingId() + " Alert: " + hit.getId());
+			
+			RequestSendEmailCommand command = RequestSendEmailCommand
+					.builder()
+						.emailType(EmailType.EXTERN)
+						.recipients(Set.of(new EmailRecipient<UUID>(UUID.randomUUID(),hit.getEmail(), ContactType.UNREGISTERED_USER)))
+						.sender(new Sender<>(UUID.randomUUID(), "", SenderType.SYSTEM, "kparkings@gmail.com"))
+						.title("Arenella-ICT - Matching Role")
+						.topic(EmailTopic.LISTING_MATCHING_ROLE)
+						.model(Map.of("listingId",listing.get().getListingId(),"listingTitle",listing.get().getTitle(),"alertId",hit.getId()))
+						.persistable(false)
+					.build();
+			
+			this.eventPublisher.RequestSendListingAlertHitEmailCommand(command);
 		});
 		
 		System.out.println("RUNNING ALERT TESTER - DONE");
@@ -69,7 +93,6 @@ public class ListingAlertHitTesterUtil {
 	* @return Filters
 	*/
 	private ListingAlertFilterOptions extractListingAlertFilters(Listing listing) {
-		//1. extract filters ( country / contractType / categories )
 		
 		listing.getType();
 		
@@ -84,8 +107,6 @@ public class ListingAlertHitTesterUtil {
 		}
 		
 		this.categoryExtractor.extractFilters(listing.getTitle(), filters);
-		
-		//TODO: [KP] Need to add logic to determine category from title
 		
 		return filters.build();
 	

@@ -23,7 +23,8 @@ public class Email {
 		OFFERED_CANDIDATE_CONTACT_REQUEST,
 		REC_TO_REC_EMAIL_REPLY_NOTICICATION,
 		REC_TO_REC_CONTACT_REQUEST,
-		NEW_CREDITS_ASSIGNED}
+		NEW_CREDITS_ASSIGNED,
+		LISTING_MATCHING_ROLE}
 		
 	public static enum EmailType 	{INTERN, EXTERN, SYSTEM_INTERN, SYSTEM_EXTERN}
 	public static enum Status 		{DRAFT, TO_OUTBOX, SENT_INTERN, SENT_EXTERN, FAILURE}
@@ -420,7 +421,7 @@ public class Email {
 	*/
 	public static class EmailRecipient<T>{
 		
-		public static enum ContactType {SYSTEM, RECRUITER, CANDIDATE};
+		public static enum ContactType {SYSTEM, RECRUITER, UNREGISTERED_USER, CANDIDATE}
 		
 		private final T 				id;
 		private final ContactType 		contactType;

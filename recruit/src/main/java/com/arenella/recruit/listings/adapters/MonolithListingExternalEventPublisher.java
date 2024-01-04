@@ -134,6 +134,14 @@ public class MonolithListingExternalEventPublisher implements ExternalEventPubli
 		this.emailServiceListener.listenForSendEmailCommand(cExt);
 		
 	}
+
+	/**
+	* Refer to ExternalEventPublisher for details 
+	*/
+	@Override
+	public void RequestSendListingAlertHitEmailCommand(RequestSendEmailCommand command) {
+		this.emailServiceListener.listenForSendEmailCommand(command);
+	}
 	
 	/**
 	* Constructs the Attachment

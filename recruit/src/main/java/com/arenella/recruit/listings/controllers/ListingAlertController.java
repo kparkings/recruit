@@ -4,7 +4,7 @@ import java.security.Principal;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,7 +26,6 @@ public class ListingAlertController {
 	* Adds a new ListingAlert
 	* @param alert - Details of ListingAlert to create
 	*/
-	//@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_RECRUITER') or hasRole('ROLE_CANDIDATE')")
 	@PostMapping(path="/public/listing-alert", consumes="application/json", produces="application/json")
 	public void addListingAlert(@RequestBody ListingAlertAPIIncoming alert, Principal principal) {
 		this.listingAlertService.addListingAlert(ListingAlertAPIIncoming.convertToDomain(alert), principal);
@@ -43,9 +42,10 @@ public class ListingAlertController {
 	* 
 	* @param alertId - Unique id of the Alert to delete
 	*/
-	@DeleteMapping(path="/public/listing-alert/{alertId}", consumes="application/json", produces="application/json")
-	public void deleteListingAlert(@PathVariable("alertId")UUID alertId) {
+	@GetMapping(path="/public/listing-alert/{alertId}/_delete", consumes="application/json", produces="text/html")
+	public String deleteListingAlert(@PathVariable("alertId")UUID alertId) {
 		this.listingAlertService.deleteListingAlert(alertId);
+		return "You have been successfully unsubscribed";
 	}
 	
 	

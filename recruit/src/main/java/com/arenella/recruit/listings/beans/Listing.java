@@ -241,6 +241,14 @@ public class Listing {
 	}
 	
 	/**
+	* Sets the unique Id of the Listing
+	* @param id - unique Id
+	*/
+	public void setListingId(UUID listingId) {
+		this.listingId = listingId;
+	}
+	
+	/**
 	* Returns an instance of a Builder for the Listing class
 	* @return Builder
 	*/
@@ -467,5 +475,5 @@ public class Listing {
 		}
 		
 	}
-	
+
 }
