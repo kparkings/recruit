@@ -17,6 +17,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import com.arenella.recruit.listings.beans.Listing;
 import com.arenella.recruit.listings.beans.ListingAlert;
 
@@ -51,12 +54,16 @@ public class ListingAlertEntity {
 	@ElementCollection(targetClass=Listing.country.class, fetch = FetchType.EAGER)
 	@CollectionTable(schema="listings", name="listing_alerts_countries", joinColumns=@JoinColumn(name="listing_alert_id"))
 	@Enumerated(EnumType.STRING) 
+	@OnDelete(action = OnDeleteAction.CASCADE)
+	@JoinColumn(name = "listing_alert_id")
 	private Set<Listing.country> countries = new LinkedHashSet<>();
 	
 	@Column(name="category")
 	@ElementCollection(targetClass=Listing.TECH.class, fetch = FetchType.EAGER)
 	@CollectionTable(schema="listings", name="listing_alerts_categories", joinColumns=@JoinColumn(name="listing_alert_id"))
 	@Enumerated(EnumType.STRING) 
+	@OnDelete(action = OnDeleteAction.CASCADE)
+	@JoinColumn(name = "listing_alert_id")    
 	private Set<Listing.TECH> categories = new LinkedHashSet<>();
 	
 	/**

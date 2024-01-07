@@ -66,6 +66,14 @@ public class SecRequestFilter extends OncePerRequestFilter {
 		/**
 		* We want to allow the listings url to be accessed before authentication
 		*/
+		if (request.getRequestURI().startsWith("/public/listing-alert")) {
+			filterChain.doFilter(request, response);
+			return;
+		}
+		
+		/**
+		* We want to allow the listings url to be accessed before authentication
+		*/
 		if (request.getRequestURI().startsWith("/public/recruiter")) {
 			filterChain.doFilter(request, response);
 			return;

@@ -42,9 +42,11 @@ public class ListingAlertController {
 	* 
 	* @param alertId - Unique id of the Alert to delete
 	*/
-	@GetMapping(path="/public/listing-alert/{alertId}/_delete", consumes="application/json", produces="text/html")
+	@GetMapping(path="/public/listing-alert/{alertId}/_delete")
 	public String deleteListingAlert(@PathVariable("alertId")UUID alertId) {
+	
 		this.listingAlertService.deleteListingAlert(alertId);
+		
 		return "You have been successfully unsubscribed";
 	}
 	

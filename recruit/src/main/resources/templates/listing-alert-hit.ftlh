@@ -30,7 +30,7 @@
 		</table>
 		
 		<p>
-		If you no longer wish to receive these alerts you can click on the following link: <a target="_blank" href="https://www.arenella-ict.com/public/listing-alert/${alertId}/_delete">unsubscribe</a>
+		If you no longer wish to receive these alerts you can click on the following link: <a href="https://www.arenella-ict.com/public/listing-alert/${alertId}/_delete">unsubscribe</a>
 		</p>
 		
 		<div> 

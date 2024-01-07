@@ -38,6 +38,6 @@ public class SimpleCORSFilter extends OncePerRequestFilter {
 	        response.setStatus(HttpServletResponse.SC_OK);
 	    }
 	    
-	    chain.doFilter(req, res);
+	    chain.doFilter(req, res);	
 	}
 }

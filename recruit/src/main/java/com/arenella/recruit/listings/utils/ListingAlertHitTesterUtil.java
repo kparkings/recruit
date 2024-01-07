@@ -56,7 +56,7 @@ public class ListingAlertHitTesterUtil {
 	*/
 	@Scheduled(fixedRate=10000)
 	private void pollForHits() {
-		System.out.println("RUNNING ALERT TESTER");
+		
 		Optional<Listing> listing = this.pendingListings.stream().findFirst();
 		
 		if (listing.isEmpty()) {
@@ -82,8 +82,6 @@ public class ListingAlertHitTesterUtil {
 			
 			this.eventPublisher.RequestSendListingAlertHitEmailCommand(command);
 		});
-		
-		System.out.println("RUNNING ALERT TESTER - DONE");
 		
 	}
 	
