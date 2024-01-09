@@ -46,6 +46,7 @@ import com.arenella.recruit.candidates.beans.Contact.CONTACT_TYPE;
 import com.arenella.recruit.candidates.beans.CandidateFilterOptions;
 import com.arenella.recruit.candidates.beans.CandidateSearchAccuracyWrapper;
 import com.arenella.recruit.candidates.beans.CandidateSearchAlert;
+import com.arenella.recruit.candidates.beans.CandidateSkill;
 import com.arenella.recruit.candidates.beans.CandidateUpdateRequest;
 import com.arenella.recruit.candidates.beans.Contact;
 import com.arenella.recruit.candidates.beans.Language;
@@ -64,6 +65,7 @@ import com.arenella.recruit.candidates.dao.PendingCandidateDao;
 import com.arenella.recruit.candidates.dao.RecruiterContactDao;
 import com.arenella.recruit.candidates.dao.SavedCandidateDao;
 import com.arenella.recruit.candidates.entities.CandidateEntity;
+import com.arenella.recruit.candidates.entities.CandidateSkillEntity.VALIDATION_STATUS;
 import com.arenella.recruit.candidates.entities.PendingCandidateEntity;
 import com.arenella.recruit.candidates.enums.COUNTRY;
 import com.arenella.recruit.candidates.enums.FREELANCE;
@@ -89,7 +91,7 @@ public class CandidateServiceImplTest {
 
 	@Mock
 	private CandidateDao 							mockCandidateDao;
-	
+
 	@Mock
 	private PendingCandidateDao 					mockPendingCandidateDao;
 	
@@ -1908,6 +1910,75 @@ public class CandidateServiceImplTest {
 	
 		assertNotNull(filters);
 		
+	}
+	
+	/**
+	* Tests retrieval of Skills pending validation
+	* @throws Exception
+	*/
+	@Test
+	public void testFetchPendingCandidateSkills() throws Exception {
+		
+		this.service.fetchPendingCandidateSkills();
+		
+		Mockito.verify(this.mockSkillDao).getValidationPendingSkills();
+		
+	}
+	
+	/**
+	* Test that existing skills are sent to be updated
+	* @throws Exception
+	*/
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testUpdateCandidateSkills() throws Exception{
+		
+		final CandidateSkill java 	= CandidateSkill.builder().skill("java").validationStatus(VALIDATION_STATUS.ACCEPTED).build();
+		final CandidateSkill nutmeg = CandidateSkill.builder().skill("nutmeg").validationStatus(VALIDATION_STATUS.REJECTED).build();
+		final CandidateSkill dog 	= CandidateSkill.builder().skill("dog").validationStatus(VALIDATION_STATUS.REJECTED).build();
+		
+		ArgumentCaptor<Set<CandidateSkill>> skillCaptor = ArgumentCaptor.forClass(Set.class);
+		
+		Set<CandidateSkill> skills = Set.of(java, nutmeg, dog);
+		
+		Mockito.doNothing().when(this.mockSkillDao).persistExistingSkills(skillCaptor.capture());
+		Mockito.when(this.mockSkillDao.existsById("java")).thenReturn(true);
+		Mockito.when(this.mockSkillDao.existsById("nutmeg")).thenReturn(true);
+		Mockito.when(this.mockSkillDao.existsById("dog")).thenReturn(true);
+		
+		this.service.updateCandidateSkills(skills);
+		
+		Set<CandidateSkill> results = skillCaptor.getValue();
+		
+		results.stream().filter(s -> s == java).findAny().orElseThrow();
+		results.stream().filter(s -> s == nutmeg).findAny().orElseThrow();
+		results.stream().filter(s -> s == dog).findAny().orElseThrow();
+
+	}
+
+	/**
+	* Test that only existing skills are sent to be updated. If a non existing Skill 
+	* is sent to be updated an exception should be thrown and no updates should take place
+	* @throws Exception
+	*/
+	@Test
+	public void testUpdateCandidateSkills_unknownSkill() throws Exception{
+		
+		final CandidateSkill java 	= CandidateSkill.builder().skill("java").validationStatus(VALIDATION_STATUS.ACCEPTED).build();
+		final CandidateSkill nutmeg = CandidateSkill.builder().skill("nutmeg").validationStatus(VALIDATION_STATUS.REJECTED).build();
+		final CandidateSkill dog 	= CandidateSkill.builder().skill("dog").validationStatus(VALIDATION_STATUS.REJECTED).build();
+		
+		Set<CandidateSkill> skills = Set.of(java, nutmeg, dog);
+		
+		Mockito.when(this.mockSkillDao.existsById(Mockito.anyString())).thenReturn(false);
+		
+		assertThrows(IllegalStateException.class, () -> {
+			this.service.updateCandidateSkills(skills);
+			
+		});
+		
+		Mockito.verify(this.mockSkillDao, Mockito.never()).persistExistingSkills(Mockito.anySet());
+
 	}
 	
 }

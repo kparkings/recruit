@@ -34,6 +34,7 @@ import com.arenella.recruit.candidates.beans.CandidateExtractedFilters;
 import com.arenella.recruit.candidates.beans.CandidateFilterOptions;
 import com.arenella.recruit.candidates.beans.CandidateSearchAccuracyWrapper;
 import com.arenella.recruit.candidates.beans.CandidateSearchAlert;
+import com.arenella.recruit.candidates.beans.CandidateSkill;
 import com.arenella.recruit.candidates.beans.CandidateUpdateRequest;
 import com.arenella.recruit.candidates.beans.PendingCandidate;
 import com.arenella.recruit.candidates.controllers.CandidateController.CANDIDATE_UPDATE_ACTIONS;
@@ -518,6 +519,40 @@ public class CandidateControllerTest {
 		
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		assertNotNull(response.getBody());
+		
+	}
+	
+	/**
+	* Tests endpoint for fetching skills with validation pending
+	* @throws Exception
+	*/
+	@Test
+	public void testFetchValidationPendingCandidateSkills() throws Exception{
+		
+		Mockito.when(this.mockCandidateService.fetchPendingCandidateSkills()).thenReturn(Set.of(CandidateSkill.builder().skill("java").build()));
+		
+		ResponseEntity<Set<CandidateSkillAPIOutbound>> response = this.controller.fetchValidationPendingCandidateSkills();
+		
+		assertEquals(HttpStatus.OK, response.getStatusCode());
+		
+		assertEquals("java",response.getBody().stream().findFirst().get().getSkill());
+		
+	}
+	
+	/**
+	* Tests endpoint for updating existing skills validation statuses
+	* @throws Exception
+	*/
+	@Test
+	public void testUpdateCandidateSkills() throws Exception {
+		
+		Set<CandidateSkillAPIInbound> skills = Set.of(CandidateSkillAPIInbound.builder().skill("pmo").build());
+		
+		ResponseEntity<Void> response = this.controller.updateCandidateSkills(skills);
+		
+		Mockito.verify(this.mockCandidateService).updateCandidateSkills(Mockito.anySet());
+		
+		assertEquals(HttpStatus.OK, response.getStatusCode());
 		
 	}
 	

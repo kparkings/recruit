@@ -17,6 +17,7 @@ import com.arenella.recruit.candidates.beans.CandidateExtractedFilters;
 import com.arenella.recruit.candidates.beans.CandidateFilterOptions;
 import com.arenella.recruit.candidates.beans.CandidateSearchAccuracyWrapper;
 import com.arenella.recruit.candidates.beans.CandidateSearchAlert;
+import com.arenella.recruit.candidates.beans.CandidateSkill;
 import com.arenella.recruit.candidates.beans.CandidateUpdateRequest;
 import com.arenella.recruit.candidates.beans.PendingCandidate;
 import com.arenella.recruit.candidates.controllers.CandidateController.CANDIDATE_UPDATE_ACTIONS;
@@ -59,14 +60,6 @@ public interface CandidateService {
 	* @return Candidates
 	*/
 	public Page<CandidateSearchAccuracyWrapper> getCandidateSuggestions(CandidateFilterOptions filterOptions, Integer maxSuggestions);
-	
-	
-	/**
-	* Retrieves a list of Candidates
-	* @param filterOptions - filters to apply to the results
-	* @return Candidates
-	*/
-	//public Set<Candidate> getCandidates(CandidateFilterOptions filterOptions);
 
 	/**
 	* Adds a Pending Candidate to the System
@@ -222,5 +215,17 @@ public interface CandidateService {
 	* @return
 	*/
 	public CandidateExtractedFilters extractFiltersFromText(String jobspec);
+	
+	/**
+	* Returns Skills that have not yet been verified by an Administrator
+	* @return
+	*/
+	public Set<CandidateSkill> fetchPendingCandidateSkills();
+	
+	/**
+	* Persists Candidate skills
+	* @param skills - Updates existing skills
+	*/
+	public void updateCandidateSkills(Set<CandidateSkill> skills);
 	
 }

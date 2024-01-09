@@ -38,6 +38,7 @@ import com.arenella.recruit.candidates.beans.CandidateExtractedFilters;
 import com.arenella.recruit.candidates.beans.CandidateFilterOptions;
 import com.arenella.recruit.candidates.beans.CandidateSearchAccuracyWrapper;
 import com.arenella.recruit.candidates.beans.CandidateSearchAlert;
+import com.arenella.recruit.candidates.beans.CandidateSkill;
 import com.arenella.recruit.candidates.beans.CandidateUpdateRequest;
 import com.arenella.recruit.candidates.beans.Contact;
 import com.arenella.recruit.candidates.beans.Contact.CONTACT_TYPE;
@@ -88,6 +89,9 @@ public class CandidateServiceImpl implements CandidateService{
 	
 	@Autowired
 	private CandidateDao 						candidateDao;
+	
+	@Autowired
+	private CandidateSkillsDao					skillsDao;
 
 	@Autowired
 	private PendingCandidateDao 				pendingCandidateDao;
@@ -109,9 +113,6 @@ public class CandidateServiceImpl implements CandidateService{
 	
 	@Autowired
 	private DocumentFilterExtractionUtil		documentFilterExtractionUtil;
-	
-	@Autowired
-	private CandidateSkillsDao					skillDao;
 	
 	@Autowired
 	private CandidateFunctionExtractor			candidateFunctionExtractor;
@@ -361,13 +362,13 @@ public class CandidateServiceImpl implements CandidateService{
 		Set<String> newSkills = new HashSet<>();
 		
 		skills.stream().map(skill -> preprocessSkill(skill)).forEach(skill -> {		
-			if( !this.skillDao.existsById(skill)) {
+			if( !this.skillsDao.existsById(skill)) {
 				newSkills.add(skill);
 			}
 		});
 		
 		if (!newSkills.isEmpty()) {
-			this.skillDao.persistSkills(newSkills);
+			this.skillsDao.persistSkills(newSkills);
 		}	
 		
 	}
@@ -916,6 +917,30 @@ public class CandidateServiceImpl implements CandidateService{
 	@Override
 	public CandidateExtractedFilters extractFiltersFromText(String jobspec) {
 		return this.documentFilterExtractionUtil.extractFilters(jobspec);
+	}
+
+	/**
+	* Refer to the CandidateService for details 
+	*/
+	@Override
+	public Set<CandidateSkill> fetchPendingCandidateSkills() {
+		return this.skillsDao.getValidationPendingSkills();
+	}
+
+	/**
+	* Refer to the CandidateService for details 
+	*/
+	@Override
+	public void updateCandidateSkills(Set<CandidateSkill> skills) {
+		
+		skills.stream().forEach(skill -> {
+			if(!this.skillsDao.existsById(skill.getSkill())) {
+				throw new IllegalStateException("Cant update unknown Skills status");
+			}
+		});
+		
+		this.skillsDao.persistExistingSkills(skills);
+		
 	}
 	
 	

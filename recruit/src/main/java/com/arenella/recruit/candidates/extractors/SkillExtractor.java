@@ -46,7 +46,7 @@ public class SkillExtractor implements JobSpecifcationFilterExtractor{
 		
 		String sanitizedDocumentText = sanitizeDocumentText(documentText);
 		
-		skillsDao.getSkills().stream().filter(s -> !s.equals("")).forEach(skill -> {
+		skillsDao.getActiveAndPendingSkills().stream().filter(s -> !s.equals("")).forEach(skill -> {
 					
 			String skillPatternSpace = " " + skill.trim() + " ";
 			

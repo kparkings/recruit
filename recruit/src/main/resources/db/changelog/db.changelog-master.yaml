@@ -2182,3 +2182,14 @@ databaseChangeLog:
             referencedTableName: listing_alerts
             referencedTableSchemaName: listings
             referencedColumnNames: id
+  - changeSet:
+      id: addCValidatedColumn
+      author: kevin
+      changes:
+        - addColumn:
+            tableName: skills
+            schemaName: candidate
+            columns:
+            - column:
+                name: validation_status
+                type: varchar
