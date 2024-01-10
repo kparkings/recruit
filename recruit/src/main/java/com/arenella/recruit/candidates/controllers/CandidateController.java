@@ -439,7 +439,7 @@ public class CandidateController {
 	* @return Skills
 	*/
 	@GetMapping("/candidate/skills/pending")
-	@PreAuthorize("hasRole(hasRole('ROLE_ADMIN')")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ResponseEntity<Set<CandidateSkillAPIOutbound>> fetchValidationPendingCandidateSkills(){
 		return ResponseEntity.status(HttpStatus.OK)
 				.body(this.candidateService
@@ -453,9 +453,9 @@ public class CandidateController {
 	* Returns Skills that need verification 
 	* @return Skills
 	*/
-	@GetMapping("/candidate/skills")
-	@PreAuthorize("hasRole(hasRole('ROLE_ADMIN')")
-	public ResponseEntity<Void> updateCandidateSkills(Set<CandidateSkillAPIInbound> skills){
+	@PutMapping("/candidate/skills")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	public ResponseEntity<Void> updateCandidateSkills(@RequestBody Set<CandidateSkillAPIInbound> skills){
 		this.candidateService.updateCandidateSkills(skills.stream().map(CandidateSkillAPIInbound::convertToDomain).collect(Collectors.toCollection(LinkedHashSet::new)));
 		return ResponseEntity.status(HttpStatus.OK).build();
 	}

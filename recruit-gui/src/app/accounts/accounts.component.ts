@@ -10,6 +10,7 @@ import { environment }							from '../../environments/environment';
 import { Router}								from '@angular/router';
 import { NgbModal, NgbModalOptions}				from '@ng-bootstrap/ng-bootstrap';
 import { ViewChild }							from '@angular/core';
+import { CandidateSkill } from './candidate-skill';
 
 @Component({
   selector: 'app-accounts',
@@ -26,12 +27,14 @@ export class AccountsComponent implements OnInit {
 	showFlaggedAsUnavailableTab:boolean								= false;
 	showSubscriptionActionsTab:boolean								= false;
 	showAvailabilityCheckTab:boolean								= false;
+	showSkillsValidationTab:boolean									= true;
 	createAccountDetailsAvailable:boolean 							= false;
 	recruiterUsername:string										= '';
 	recruiterPassword:string										= '';
 	candidates:Array<Candidate>										= new Array<Candidate>();
 	recruiters:Array<Recruiter>										= new Array<Recruiter>();
 	recruitersWithSubscriptionActions:Array<SubscriptionAction>		= new Array<SubscriptionAction>();
+	skillsToValidate:Array<CandidateSkill>							= new Array<CandidateSkill>();
 	recruiterCount:number											= 0;
 	activateRecruiterUserId:string									= '';
 	activateRecruiterUserPassword:string							= '';
@@ -73,6 +76,7 @@ export class AccountsComponent implements OnInit {
 				this.showFlaggedAsUnavailableTab	= false;
 				this.showSubscriptionActionsTab		= false;
 				this.showAvailabilityCheckTab		= false;
+				this.showSkillsValidationTab		= false;
 				break;
 			}
 			case "recruiters":{
@@ -81,6 +85,7 @@ export class AccountsComponent implements OnInit {
 				this.showFlaggedAsUnavailableTab	= false;
 				this.showSubscriptionActionsTab		= false;
 				this.showAvailabilityCheckTab		= false;
+				this.showSkillsValidationTab		= false;
 				this.fetchRecruiters();
 				break;
 			}
@@ -90,6 +95,7 @@ export class AccountsComponent implements OnInit {
 				this.showFlaggedAsUnavailableTab	= true;
 				this.showSubscriptionActionsTab		= false;
 				this.showAvailabilityCheckTab		= false;
+				this.showSkillsValidationTab		= false;
 				this.fetchFlaggedAsUnavailableCandidates();
 				break;
 			}
@@ -99,6 +105,7 @@ export class AccountsComponent implements OnInit {
 				this.showFlaggedAsUnavailableTab	= false;
 				this.showSubscriptionActionsTab		= true;
 				this.showAvailabilityCheckTab		= false;
+				this.showSkillsValidationTab		= false;
 				this.fetchRecruiters();
 				break;
 			}
@@ -108,9 +115,20 @@ export class AccountsComponent implements OnInit {
 				this.showFlaggedAsUnavailableTab	= false;
 				this.showSubscriptionActionsTab		= false;
 				this.showAvailabilityCheckTab		= true;
+				this.showSkillsValidationTab		= false;
 				this.fetchCandidatesDueForAvailabilityCheck();
 				break;
 			}			
+			case "skillValidation":{
+				this.showCandidatesTab				= false;
+				this.showRecruitersTab				= false;
+				this.showFlaggedAsUnavailableTab	= false;
+				this.showSubscriptionActionsTab		= false;
+				this.showAvailabilityCheckTab		= false;
+				this.showSkillsValidationTab		= true;
+				this.fetchPendingSkills();
+				break;
+			}
 		}
 	}
 	
@@ -510,6 +528,37 @@ export class AccountsComponent implements OnInit {
 	enableCandidate(candidateId:string):void{
 		this.candidateService.enableCandidate(candidateId);
 		this.fetchCandidates();
+	}
+	
+	/**
+	* Retrieves all skills that still need to be validated by an Admin
+	*/
+	fetchPendingSkills():void{
+		
+		this.candidateService.fetchSkillsToValidate().subscribe(skills => {
+			this.skillsToValidate = skills;	
+		});
+		
+	}
+	
+	/**
+	* Updates the skills status
+	*/
+	public updateSkillValidationStatus(skill:string, validationStatus:string):void{
+		this.skillsToValidate.filter(s => s.skill == skill)[0].validationStatus = validationStatus;
+	}
+
+	/**
+	* Sends any Skills that have been accepted/rejected to be updated in the backend 
+	*/	
+	public persistValidatedSkills():void{
+		
+		let validatedSkills:Array<CandidateSkill> = this.skillsToValidate.filter(s => s.validationStatus != 'PENDING');
+		
+		this.candidateService.updateValidatedSkills(validatedSkills).subscribe(results => {
+			this.fetchPendingSkills();
+		});
+		
 	}
 	
 	/**

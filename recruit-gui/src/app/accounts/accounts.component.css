@@ -91,3 +91,11 @@ h3{
 .unavailable{
 	color:red;	
 }
+
+.skillAccepted{
+	color:green;	
+}
+
+.skillRejected{
+	color:red;	
+}

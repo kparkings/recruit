@@ -11,6 +11,7 @@ import { SavedCandidate }		 	                	from './suggestions/saved-candidat
 import { NewCandidateRequest } 							from './new-candidate/new-candidate-request';
 import { CandidateProfile } 							from './candidate-profile';
 import { UpdateCandidateRequest } 						from './new-candidate/update-candidate-request';
+import { CandidateSkill } from './accounts/candidate-skill';
 
 /**
 * Services for new Candidates
@@ -21,8 +22,6 @@ import { UpdateCandidateRequest } 						from './new-candidate/update-candidate-r
 })
 export class CandidateServiceService {
     
-   
-	
 	constructor(private httpClient: HttpClient) { }
 	
 	httpOptions = {
@@ -359,5 +358,27 @@ export class CandidateServiceService {
 		return this.httpClient.delete<any>(backendUrl, this.httpOptions);
 
 	}
+	
+	/**
+	* Fetches skills to be validated
+	*/
+	fetchSkillsToValidate(): Observable<Array<CandidateSkill>> {
+       
+       const backendUrl:string = environment.backendUrl +'candidate/skills/pending';
+  
+    	return this.httpClient.get<any>(backendUrl, this.httpOptions);
+    
+    }
+    
+    /**
+	* Updates Skills that have been validated
+	*/
+    updateValidatedSkills(validatedSkills: Array<CandidateSkill>): Observable<void> {
+       
+        const backendUrl:string = environment.backendUrl +'candidate/skills';
+	
+		return this.httpClient.put<any>(backendUrl, JSON.stringify(validatedSkills), this.httpOptions);
+    }
+    
 			
 }
