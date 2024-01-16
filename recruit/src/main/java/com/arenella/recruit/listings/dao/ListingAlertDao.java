@@ -76,8 +76,14 @@ public interface ListingAlertDao extends CrudRepository<ListingAlertEntity, UUID
 			
 			/*Contract Type*/
 			if (!this.filterOptions.getContractType().isEmpty()) {
+				
+				Listing.listing_type type = this.filterOptions.getContractType().get();
+				
 				Expression<String> contractTypeExpression = root.get("contractType");
-				predicates.add(criteriaBuilder.equal(contractTypeExpression, 	this.filterOptions.getContractType().get()));
+			
+				if (type != Listing.listing_type.BOTH) {
+					predicates.add(contractTypeExpression.in(Set.of(Listing.listing_type.BOTH, type)));
+				}
 			}
 			
 			/*Countries*/
@@ -92,7 +98,7 @@ public interface ListingAlertDao extends CrudRepository<ListingAlertEntity, UUID
 			}
 			
 			/*Categories*/
-			if (!this.filterOptions.getCountries().isEmpty()) {
+			if (!this.filterOptions.getCategories().isEmpty()) {
 		
 				Expression<Collection<Listing.TECH>> categoryValues = root.get("categories");
 				

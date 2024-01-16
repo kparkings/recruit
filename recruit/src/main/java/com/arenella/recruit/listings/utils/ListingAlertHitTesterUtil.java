@@ -92,8 +92,6 @@ public class ListingAlertHitTesterUtil {
 	*/
 	private ListingAlertFilterOptions extractListingAlertFilters(Listing listing) {
 		
-		listing.getType();
-		
 		ListingAlertFilterOptions.ListingAlertFilterOptionsBuilder filters = ListingAlertFilterOptions.builder();
 		
 		if (Optional.ofNullable(listing.getCountry()).isPresent()) {

@@ -87,8 +87,8 @@ public class CategoryExtractorUtil{
 		
 		categories.stream().forEach(jobType -> 
 			jobType.getKeywords().stream().forEach(title -> {
-				if (documentText.contains(title)) {
-					scored.get(jobType.getCategory()).addAndGet(getNumOccurrencesOfMatchingTitle(documentText, title));
+				if (documentText.toLowerCase().contains(title)) {
+					scored.get(jobType.getCategory()).addAndGet(getNumOccurrencesOfMatchingTitle(documentText.toLowerCase(), title));
 				}
 			})
 		);
@@ -96,10 +96,6 @@ public class CategoryExtractorUtil{
 		Comparator<AtomicInteger> comparator = Comparator.comparing(o1 -> o1.get());
 		
 		Listing.TECH type = Collections.max(scored.entrySet(), Map.Entry.comparingByValue(comparator)).getKey();
-		
-		//if (type == Listing.TECH.softwareDeveloper) {
-		//	type = applySoftwareDeveloperWeighting(scored, filterBuilder, comparator);
-		//}
 		
 		/**
 		* If no matched don't provide job title filter 
