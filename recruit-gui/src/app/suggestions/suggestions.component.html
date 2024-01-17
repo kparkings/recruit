@@ -113,7 +113,9 @@
 					<tr>
 						<td class="sugg-srch-hdr">Skills</td>
 						<td class="sugg-srch-bdy">
-							<input class="skill-field" type="text" formControlName="skill"><button (click)="addSkill()" class="btnX btn-secondary add-skill-btn">Add</button>
+							<form [formGroup]="skilFilterForm">
+								<input class="skill-field" type="text" formControlName="skill"><button (click)="addSkill()" class="btnX btn-secondary add-skill-btn">Add</button>
+							</form>
 						</td>
 					</tr>
 					<tr>

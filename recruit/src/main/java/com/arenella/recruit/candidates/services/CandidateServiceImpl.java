@@ -342,15 +342,15 @@ public class CandidateServiceImpl implements CandidateService{
 		
 		CandidateSearchAccuracyWrapper 	wrappedCandidate 	= new CandidateSearchAccuracyWrapper(candidate);
 		
-		if (suggestionUtil.isPerfectMatch(wrappedCandidate, suggestionFilterOptions)) {
+		if (suggestionUtil.isPerfectMatch(wrappedCandidate, suggestionFilterOptions, Set.of())) {
 			return suggestion_accuracy.perfect;
 		}
 		
-		if (suggestionUtil.isExcellentMatch(wrappedCandidate, suggestionFilterOptions)) {
+		if (suggestionUtil.isExcellentMatch(wrappedCandidate, suggestionFilterOptions, Set.of())) {
 			return suggestion_accuracy.excellent;
 		}
 		
-		if (suggestionUtil.isGoodMatch(wrappedCandidate, suggestionFilterOptions)) {
+		if (suggestionUtil.isGoodMatch(wrappedCandidate, suggestionFilterOptions, Set.of())) {
 			return suggestion_accuracy.good;
 		}
 		
@@ -407,7 +407,6 @@ public class CandidateServiceImpl implements CandidateService{
 		Set<String> 								suggestionIds 		= new HashSet<>();
 		AtomicReference<suggestion_accuracy> 		accuracy 			= new AtomicReference<>(suggestion_accuracy.perfect);
 		Pageable 									pageable 			= PageRequest.of(0,100);
-		Set<String>									skillFilterOptions 	= new HashSet<>();
 		
 		//TODO: [KP] Need to add skills for things like React, Vue where the FUNCTION alone is not sufficient
 		//TODO: [KP] Alerts also need to work with searchText not function and we then need to remove alert from Candidates page
@@ -417,15 +416,10 @@ public class CandidateServiceImpl implements CandidateService{
 		if (StringUtils.hasText(filterOptions.getSearchText())) {
 			Set<FUNCTION> functionToFilterOn = this.candidateFunctionExtractor.extractFunctions(filterOptions.getSearchText());
 			filterOptions.setFunctions(functionToFilterOn);
-			
-			CandidateExtractedFiltersBuilder filterBuilder = CandidateExtractedFilters.builder();
-			this.skillsExtractor.extractFilters(" " + filterOptions.getSearchText() + " ", filterBuilder);
-			skillFilterOptions.addAll(filterBuilder.build().getSkills());
 		}
 		this.externalEventPublisher.publishSearchedSkillsEvent(filterOptions.getSkills());
 		
-		skillFilterOptions.addAll(filterOptions.getSkills());
-		extractAndPersistNewSkills(skillFilterOptions);
+		extractAndPersistNewSkills(filterOptions.getSkills());
 		
 		CandidateFilterOptions suggestionFilterOptions = CandidateFilterOptions
 																		.builder()
@@ -442,6 +436,12 @@ public class CandidateServiceImpl implements CandidateService{
 		filterOptions.setEnglish(null);
 		filterOptions.setFrench(null);
 		
+		CandidateExtractedFiltersBuilder searchTermFilter = CandidateExtractedFilters.builder();
+		
+		skillsExtractor.extractFilters(" " + filterOptions.getSearchText() + " ", searchTermFilter);
+		
+		Set<String> searchTermKeywords = searchTermFilter.build().getSkills();
+		
 		while (true) {
 		
 			Page<Candidate> candidates = candidateDao.findAll(filterOptions, pageable).map(CandidateEntity::convertFromEntity);
@@ -455,23 +455,23 @@ public class CandidateServiceImpl implements CandidateService{
 				
 				switch(accuracy.get()) {
 					case perfect:{
-						isMatch = suggestionUtil.isPerfectMatch(wrappedCandidate, suggestionFilterOptions);
+						isMatch = suggestionUtil.isPerfectMatch(wrappedCandidate, suggestionFilterOptions, searchTermKeywords);
 						break;
 					}
 					case excellent:{
-						isMatch = suggestionUtil.isExcellentMatch(wrappedCandidate, suggestionFilterOptions);
+						isMatch = suggestionUtil.isExcellentMatch(wrappedCandidate, suggestionFilterOptions, searchTermKeywords);
 						break;
 					}
 					case good:{
-						isMatch = suggestionUtil.isGoodMatch(wrappedCandidate, suggestionFilterOptions);
+						isMatch = suggestionUtil.isGoodMatch(wrappedCandidate, suggestionFilterOptions, searchTermKeywords);
 						break;
 					}
 					case average:{
-						isMatch = suggestionUtil.isAverageMatch(wrappedCandidate, suggestionFilterOptions);
+						isMatch = suggestionUtil.isAverageMatch(wrappedCandidate, suggestionFilterOptions, searchTermKeywords);
 						break;
 					}
 					case poor:{
-						isMatch = suggestionUtil.isPoorMatch(wrappedCandidate, suggestionFilterOptions);
+						isMatch = suggestionUtil.isPoorMatch(wrappedCandidate, suggestionFilterOptions, searchTermKeywords);
 						break;
 					}
 				}

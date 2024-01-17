@@ -316,6 +316,10 @@ export class SuggestionsComponent implements OnInit {
 		frenchLanguage:			new UntypedFormControl(false),
 		minYearsExperience: 	new UntypedFormControl(''),
 		maxYearsExperience: 	new UntypedFormControl(''),
+		//skill: 					new UntypedFormControl(''),
+	});
+	
+	public skilFilterForm:UntypedFormGroup 	= new UntypedFormGroup({
 		skill: 					new UntypedFormControl(''),
 	});
 	
@@ -350,6 +354,10 @@ export class SuggestionsComponent implements OnInit {
 			skill: 					new UntypedFormControl(''),
 		});
 		
+		this.skilFilterForm = new UntypedFormGroup({
+			skill: 					new UntypedFormControl(''),
+		});
+	
 		this.skillFilters = new Array<string>();
 		
 		if (attachValueChangeListener) {
@@ -396,6 +404,9 @@ export class SuggestionsComponent implements OnInit {
 	ngOnInit(): void {
 		
 		this.suggestionFilterForm.valueChanges.pipe(debounceTime(500)).subscribe(res => {
+			
+			console.log("RRR + " + JSON.stringify(res));
+			
 			this.getSuggestions();
 		});
 		
@@ -505,7 +516,7 @@ export class SuggestionsComponent implements OnInit {
 	*/
 	public addSkill():void{
 		
-		let skillFormatted:string 	= this.suggestionFilterForm.get('skill')?.value.trim();
+		let skillFormatted:string 	= this.skilFilterForm.get('skill')?.value.trim();
 		skillFormatted 				= skillFormatted.toLocaleLowerCase();
 		
 		if (skillFormatted.length > 0 && this.skillFilters.indexOf(skillFormatted) == -1) {
@@ -514,7 +525,7 @@ export class SuggestionsComponent implements OnInit {
 		
 		this.getSuggestions();
 		
-		this.suggestionFilterForm.get('skill')?.setValue('');
+		this.skilFilterForm.get('skill')?.setValue('');
 		
 	}
 	

@@ -689,7 +689,7 @@ public class CandidateServiceImplTest {
 			.thenReturn(Set.of(Candidate.builder().candidateId(String.valueOf(candidateId)).build()));
 		
 		Mockito
-			.when(this.mockSuggestionUtil.isPerfectMatch(Mockito.any(CandidateSearchAccuracyWrapper.class), filterArgCaptor.capture()))
+			.when(this.mockSuggestionUtil.isPerfectMatch(Mockito.any(CandidateSearchAccuracyWrapper.class), filterArgCaptor.capture(), Mockito.any()))
 			.thenReturn(true);
 		
 		Mockito
@@ -732,15 +732,15 @@ public class CandidateServiceImplTest {
 			.thenReturn(Set.of(Candidate.builder().candidateId(String.valueOf(candidateId)).build()));
 		
 		Mockito
-			.when(this.mockSuggestionUtil.isPerfectMatch(Mockito.any(CandidateSearchAccuracyWrapper.class), Mockito.any()))
+			.when(this.mockSuggestionUtil.isPerfectMatch(Mockito.any(CandidateSearchAccuracyWrapper.class), Mockito.any(), Mockito.any()))
 			.thenReturn(false);
 		
 		Mockito
-		.when(this.mockSuggestionUtil.isExcellentMatch(Mockito.any(CandidateSearchAccuracyWrapper.class), Mockito.any()))
+		.when(this.mockSuggestionUtil.isExcellentMatch(Mockito.any(CandidateSearchAccuracyWrapper.class), Mockito.any(), Mockito.any()))
 		.thenReturn(false);
 	
 		Mockito
-		.when(this.mockSuggestionUtil.isGoodMatch(Mockito.any(CandidateSearchAccuracyWrapper.class), Mockito.any()))
+		.when(this.mockSuggestionUtil.isGoodMatch(Mockito.any(CandidateSearchAccuracyWrapper.class), Mockito.any(), Mockito.any()))
 		.thenReturn(false);
 	
 		Mockito

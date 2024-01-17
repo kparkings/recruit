@@ -32,7 +32,7 @@ public class CandidateSuggestionUtilImplTest {
 		Candidate 				candidate 	= Candidate.builder().skills(Set.of("JAVA","SPRING")).build();
 		CandidateFilterOptions 	filters 	= CandidateFilterOptions.builder().skills(Set.of()).build();
 		
-		assertTrue(util.isPerfectMatch(new CandidateSearchAccuracyWrapper(candidate), filters));
+		assertTrue(util.isPerfectMatch(new CandidateSearchAccuracyWrapper(candidate), filters, Set.of()));
 		
 	}
 	
@@ -46,7 +46,7 @@ public class CandidateSuggestionUtilImplTest {
 		Candidate 				candidate 	= Candidate.builder().skills(Set.of()).build();
 		CandidateFilterOptions 	filters 	= CandidateFilterOptions.builder().skills(Set.of()).build();
 		
-		assertTrue(util.isPerfectMatch(new CandidateSearchAccuracyWrapper(candidate), filters));
+		assertTrue(util.isPerfectMatch(new CandidateSearchAccuracyWrapper(candidate), filters, Set.of()));
 	}
 	
 	/**
@@ -59,7 +59,7 @@ public class CandidateSuggestionUtilImplTest {
 		Candidate 				candidate 	= Candidate.builder().skills(Set.of("JAVA","SPRING")).build();
 		CandidateFilterOptions 	filters 	= CandidateFilterOptions.builder().skills(Set.of("Java","Spring")).build();
 		
-		assertTrue(util.isPerfectMatch(new CandidateSearchAccuracyWrapper(candidate), filters));
+		assertTrue(util.isPerfectMatch(new CandidateSearchAccuracyWrapper(candidate), filters, Set.of()));
 		
 	}
 	
@@ -73,7 +73,7 @@ public class CandidateSuggestionUtilImplTest {
 		Candidate 				candidate 	= Candidate.builder().skills(Set.of("JAVA","SPRING","HIBERNATE")).build();
 		CandidateFilterOptions 	filters 	= CandidateFilterOptions.builder().skills(Set.of("Java","Spring")).build();
 		
-		assertTrue(util.isPerfectMatch(new CandidateSearchAccuracyWrapper(candidate), filters));
+		assertTrue(util.isPerfectMatch(new CandidateSearchAccuracyWrapper(candidate), filters, Set.of()));
 		
 	}
 	
@@ -87,7 +87,7 @@ public class CandidateSuggestionUtilImplTest {
 		Candidate 				candidate 	= Candidate.builder().skills(Set.of("JAVA")).build();
 		CandidateFilterOptions 	filters 	= CandidateFilterOptions.builder().skills(Set.of("Java","Spring")).build();
 		
-		assertFalse(util.isPerfectMatch(new CandidateSearchAccuracyWrapper(candidate), filters));
+		assertFalse(util.isPerfectMatch(new CandidateSearchAccuracyWrapper(candidate), filters, Set.of()));
 		
 	}
 	
@@ -101,7 +101,7 @@ public class CandidateSuggestionUtilImplTest {
 		Candidate 				candidate 	= Candidate.builder().skills(Set.of("1","2","3","4","5","6","7","8","9","10")).build();
 		CandidateFilterOptions 	filters 	= CandidateFilterOptions.builder().skills(Set.of()).build();
 		
-		assertTrue(util.isExcellentMatch(new CandidateSearchAccuracyWrapper(candidate), filters));
+		assertTrue(util.isExcellentMatch(new CandidateSearchAccuracyWrapper(candidate), filters, Set.of()));
 		
 	}
 	
@@ -115,7 +115,7 @@ public class CandidateSuggestionUtilImplTest {
 		Candidate 				candidate 	= Candidate.builder().skills(Set.of()).build();
 		CandidateFilterOptions 	filters 	= CandidateFilterOptions.builder().skills(Set.of()).build();
 		
-		assertTrue(util.isExcellentMatch(new CandidateSearchAccuracyWrapper(candidate), filters));
+		assertTrue(util.isExcellentMatch(new CandidateSearchAccuracyWrapper(candidate), filters, Set.of()));
 	}
 	
 	/**
@@ -128,7 +128,7 @@ public class CandidateSuggestionUtilImplTest {
 		Candidate 				candidate 	= Candidate.builder().skills(Set.of("1","2","3","4","5","6","7","8","9")).build();
 		CandidateFilterOptions 	filters 	= CandidateFilterOptions.builder().skills(Set.of("1","2","3","4","5","6","7","8","9","10")).build();
 		
-		assertTrue(util.isExcellentMatch(new CandidateSearchAccuracyWrapper(candidate), filters));
+		assertTrue(util.isExcellentMatch(new CandidateSearchAccuracyWrapper(candidate), filters, Set.of()));
 		
 	}
 	
@@ -142,7 +142,7 @@ public class CandidateSuggestionUtilImplTest {
 		Candidate 				candidate 	= Candidate.builder().skills(Set.of("1","2","3","4","5","6","7","8","9","10")).build();
 		CandidateFilterOptions 	filters 	= CandidateFilterOptions.builder().skills(Set.of("1","2","3","4","5","6","7","8","9")).build();
 		
-		assertTrue(util.isExcellentMatch(new CandidateSearchAccuracyWrapper(candidate), filters));
+		assertTrue(util.isExcellentMatch(new CandidateSearchAccuracyWrapper(candidate), filters, Set.of()));
 		
 	}
 	
@@ -156,7 +156,7 @@ public class CandidateSuggestionUtilImplTest {
 		Candidate 				candidate 	= Candidate.builder().skills(Set.of("1","2","3","4","5","6","7")).build();
 		CandidateFilterOptions 	filters 	= CandidateFilterOptions.builder().skills(Set.of("1","2","3","4","5","6","7","8","9","10")).build();
 		
-		assertFalse(util.isExcellentMatch(new CandidateSearchAccuracyWrapper(candidate), filters));
+		assertFalse(util.isExcellentMatch(new CandidateSearchAccuracyWrapper(candidate), filters, Set.of()));
 		
 	}
 	
@@ -170,7 +170,7 @@ public class CandidateSuggestionUtilImplTest {
 		Candidate 				candidate 	= Candidate.builder().skills(Set.of("1","2","3","4","5","6","7","8","9","10")).build();
 		CandidateFilterOptions 	filters 	= CandidateFilterOptions.builder().skills(Set.of()).build();
 		
-		assertTrue(util.isGoodMatch(new CandidateSearchAccuracyWrapper(candidate), filters));
+		assertTrue(util.isGoodMatch(new CandidateSearchAccuracyWrapper(candidate), filters, Set.of()));
 		
 	}
 	
@@ -184,7 +184,7 @@ public class CandidateSuggestionUtilImplTest {
 		Candidate 				candidate 	= Candidate.builder().skills(Set.of()).build();
 		CandidateFilterOptions 	filters 	= CandidateFilterOptions.builder().skills(Set.of()).build();
 		
-		assertTrue(util.isGoodMatch(new CandidateSearchAccuracyWrapper(candidate), filters));
+		assertTrue(util.isGoodMatch(new CandidateSearchAccuracyWrapper(candidate), filters, Set.of()));
 	}
 	
 	/**
@@ -197,7 +197,7 @@ public class CandidateSuggestionUtilImplTest {
 		Candidate 				candidate 	= Candidate.builder().skills(Set.of("1","2","3","4","5","6","7","8")).build();
 		CandidateFilterOptions 	filters 	= CandidateFilterOptions.builder().skills(Set.of("1","2","3","4","5","6","7","8")).build();
 		
-		assertTrue(util.isGoodMatch(new CandidateSearchAccuracyWrapper(candidate), filters));
+		assertTrue(util.isGoodMatch(new CandidateSearchAccuracyWrapper(candidate), filters, Set.of()));
 		
 	}
 	
@@ -211,7 +211,7 @@ public class CandidateSuggestionUtilImplTest {
 		Candidate 				candidate 	= Candidate.builder().skills(Set.of("1","2","3","4","5","6","7","8","9","10")).build();
 		CandidateFilterOptions 	filters 	= CandidateFilterOptions.builder().skills(Set.of("1","2","3","4","5","6","7","8","9")).build();
 		
-		assertTrue(util.isGoodMatch(new CandidateSearchAccuracyWrapper(candidate), filters));
+		assertTrue(util.isGoodMatch(new CandidateSearchAccuracyWrapper(candidate), filters, Set.of()));
 		
 	}
 	
@@ -225,7 +225,7 @@ public class CandidateSuggestionUtilImplTest {
 		Candidate 				candidate 	= Candidate.builder().skills(Set.of("1","2","3","4")).build();
 		CandidateFilterOptions 	filters 	= CandidateFilterOptions.builder().skills(Set.of("1","2","3","4","5","6","7","8","9","10")).build();
 		
-		assertFalse(util.isGoodMatch(new CandidateSearchAccuracyWrapper(candidate), filters));
+		assertFalse(util.isGoodMatch(new CandidateSearchAccuracyWrapper(candidate), filters, Set.of()));
 		
 	}
 	
@@ -239,7 +239,7 @@ public class CandidateSuggestionUtilImplTest {
 		Candidate 				candidate 	= Candidate.builder().skills(Set.of("1","2","3","4","5","6","7","8","9","10")).build();
 		CandidateFilterOptions 	filters 	= CandidateFilterOptions.builder().skills(Set.of()).build();
 		
-		assertTrue(util.isAverageMatch(new CandidateSearchAccuracyWrapper(candidate), filters));
+		assertTrue(util.isAverageMatch(new CandidateSearchAccuracyWrapper(candidate), filters, Set.of()));
 		
 	}
 	
@@ -253,7 +253,7 @@ public class CandidateSuggestionUtilImplTest {
 		Candidate 				candidate 	= Candidate.builder().skills(Set.of()).build();
 		CandidateFilterOptions 	filters 	= CandidateFilterOptions.builder().skills(Set.of()).build();
 		
-		assertTrue(util.isAverageMatch(new CandidateSearchAccuracyWrapper(candidate), filters));
+		assertTrue(util.isAverageMatch(new CandidateSearchAccuracyWrapper(candidate), filters, Set.of()));
 	}
 	
 	/**
@@ -266,7 +266,7 @@ public class CandidateSuggestionUtilImplTest {
 		Candidate 				candidate 	= Candidate.builder().skills(Set.of("1","2","3","4","5","6")).build();
 		CandidateFilterOptions 	filters 	= CandidateFilterOptions.builder().skills(Set.of("1","2","3","4","5","6","7","8")).build();
 		
-		assertTrue(util.isAverageMatch(new CandidateSearchAccuracyWrapper(candidate), filters));
+		assertTrue(util.isAverageMatch(new CandidateSearchAccuracyWrapper(candidate), filters, Set.of()));
 		
 	}
 	
@@ -280,7 +280,7 @@ public class CandidateSuggestionUtilImplTest {
 		Candidate 				candidate 	= Candidate.builder().skills(Set.of("1","2","3","4","5","6","7")).build();
 		CandidateFilterOptions 	filters 	= CandidateFilterOptions.builder().skills(Set.of("1","2","3","4","5","6")).build();
 		
-		assertTrue(util.isAverageMatch(new CandidateSearchAccuracyWrapper(candidate), filters));
+		assertTrue(util.isAverageMatch(new CandidateSearchAccuracyWrapper(candidate), filters, Set.of()));
 		
 	}
 	
@@ -294,7 +294,7 @@ public class CandidateSuggestionUtilImplTest {
 		Candidate 				candidate 	= Candidate.builder().skills(Set.of("1","2","3")).build();
 		CandidateFilterOptions 	filters 	= CandidateFilterOptions.builder().skills(Set.of("1","2","3","4","5","6","7","8","9","10")).build();
 		
-		assertFalse(util.isAverageMatch(new CandidateSearchAccuracyWrapper(candidate), filters));
+		assertFalse(util.isAverageMatch(new CandidateSearchAccuracyWrapper(candidate), filters, Set.of()));
 		
 	}
 	
@@ -308,7 +308,7 @@ public class CandidateSuggestionUtilImplTest {
 		Candidate 				candidate 	= Candidate.builder().skills(Set.of("1","2","3","4","5","6","7","8","9","10")).build();
 		CandidateFilterOptions 	filters 	= CandidateFilterOptions.builder().skills(Set.of()).build();
 		
-		assertTrue(util.isPoorMatch(new CandidateSearchAccuracyWrapper(candidate), filters));
+		assertTrue(util.isPoorMatch(new CandidateSearchAccuracyWrapper(candidate), filters, Set.of()));
 		
 	}
 	
@@ -322,7 +322,7 @@ public class CandidateSuggestionUtilImplTest {
 		Candidate 				candidate 	= Candidate.builder().skills(Set.of()).build();
 		CandidateFilterOptions 	filters 	= CandidateFilterOptions.builder().skills(Set.of()).build();
 		
-		assertTrue(util.isPoorMatch(new CandidateSearchAccuracyWrapper(candidate), filters));
+		assertTrue(util.isPoorMatch(new CandidateSearchAccuracyWrapper(candidate), filters, Set.of()));
 	}
 	
 	/**
@@ -335,7 +335,7 @@ public class CandidateSuggestionUtilImplTest {
 		Candidate 				candidate 	= Candidate.builder().skills(Set.of("1","2","3","4","5")).build();
 		CandidateFilterOptions 	filters 	= CandidateFilterOptions.builder().skills(Set.of("1","2","3","4","5","6","7","8")).build();
 		
-		assertTrue(util.isPoorMatch(new CandidateSearchAccuracyWrapper(candidate), filters));
+		assertTrue(util.isPoorMatch(new CandidateSearchAccuracyWrapper(candidate), filters, Set.of()));
 		
 	}
 	
@@ -349,7 +349,7 @@ public class CandidateSuggestionUtilImplTest {
 		Candidate 				candidate 	= Candidate.builder().skills(Set.of("1","2","3","4","5","6","7")).build();
 		CandidateFilterOptions 	filters 	= CandidateFilterOptions.builder().skills(Set.of("1","2","3","4","5","6")).build();
 		
-		assertTrue(util.isPoorMatch(new CandidateSearchAccuracyWrapper(candidate), filters));
+		assertTrue(util.isPoorMatch(new CandidateSearchAccuracyWrapper(candidate), filters, Set.of()));
 		
 	}
 	
@@ -363,7 +363,7 @@ public class CandidateSuggestionUtilImplTest {
 		Candidate 				candidate 	= Candidate.builder().skills(Set.of("1","2")).build();
 		CandidateFilterOptions 	filters 	= CandidateFilterOptions.builder().skills(Set.of("1","2","3","4","5","6","7","8","9","10")).build();
 		
-		assertFalse(util.isPoorMatch(new CandidateSearchAccuracyWrapper(candidate), filters));
+		assertFalse(util.isPoorMatch(new CandidateSearchAccuracyWrapper(candidate), filters, Set.of()));
 		
 	}
 	
@@ -382,7 +382,7 @@ public class CandidateSuggestionUtilImplTest {
 		
 		CandidateFilterOptions 	filters 	= CandidateFilterOptions.builder().dutch(LEVEL.PROFICIENT).english(LEVEL.PROFICIENT).french(LEVEL.PROFICIENT).build();
 		
-		assertTrue(util.isPerfectMatch(new CandidateSearchAccuracyWrapper(candidate), filters));
+		assertTrue(util.isPerfectMatch(new CandidateSearchAccuracyWrapper(candidate), filters, Set.of()));
 		
 	}
 	
@@ -401,7 +401,7 @@ public class CandidateSuggestionUtilImplTest {
 		
 		CandidateFilterOptions 	filters 	= CandidateFilterOptions.builder().dutch(LEVEL.PROFICIENT).english(LEVEL.PROFICIENT).french(LEVEL.PROFICIENT).build();
 		
-		assertFalse(util.isPerfectMatch(new CandidateSearchAccuracyWrapper(candidate), filters));
+		assertFalse(util.isPerfectMatch(new CandidateSearchAccuracyWrapper(candidate), filters, Set.of()));
 		
 	}
 	

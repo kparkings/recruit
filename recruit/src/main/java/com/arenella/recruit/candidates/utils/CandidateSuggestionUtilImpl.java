@@ -31,21 +31,53 @@ public class CandidateSuggestionUtilImpl implements CandidateSuggestionUtil{
 	public static final int THRESHOLD_POOR 			= 25;
 	
 	/**
+	* Returns the percentage of keywords from the search term found in the title
+	* @param candidate 		- Candidate to check for accuracy
+	* @param searchTermKeywords - Keywords extracted from search term
+	* @return percentage of keywords in the candidate Title
+	*/
+	private int getAccuracyOfTitle(CandidateSearchAccuracyWrapper candidate, Set<String> searchTermKeywords) {
+		
+		if (searchTermKeywords.isEmpty()) {
+			return 0;
+		}
+		
+		String title = candidate.get().getRoleSought().toLowerCase();
+		
+		Set<String> matchingKeywords = searchTermKeywords.stream().map(String::toLowerCase).filter(keyword -> title.contains(keyword)).collect(Collectors.toSet());
+		
+		if (matchingKeywords.isEmpty()) {
+			return 0;
+		}
+		
+		Float perc = ((float)matchingKeywords.size()  /  searchTermKeywords.size()) * 100;
+		
+		return perc.intValue();
+	}
+	
+	/**
 	* Returns the percentage of matching skills between those asked and 
 	* those the Candidate has
 	* @param candidate 	- Candidate to check for accuracy
 	* @param skills		 - target skills required
 	* @return percentage of skills possessed by the Candidate
 	*/
-	private int getAccuracyOfSkillsMatch(CandidateSearchAccuracyWrapper candidate, Set<String> skills) {
+	private int getAccuracyOfSkillsMatch(CandidateSearchAccuracyWrapper candidate, Set<String> skills, boolean searchTermPresent) {
 		
 		int	totalPossibleSkills		= skills.size();
 		
 		/**
 		* If no required skills then is always a perfect match
 		*/
-		if (skills.isEmpty()) {
+		if (skills.isEmpty() && !searchTermPresent) {
 			return 100;
+		}
+		
+		/**
+		* In this case we want to leave the filtering to just the searchTerms
+		*/
+		if (skills.isEmpty() && searchTermPresent) {
+			return 0;
 		}
 		
 		final Set<String> requiredSkills = skills.stream().map(String::toLowerCase).collect(Collectors.toSet());
@@ -205,12 +237,13 @@ public class CandidateSuggestionUtilImpl implements CandidateSuggestionUtil{
 	* Refer to the CandidateSuggestionUtil interface for details 
 	*/
 	@Override
-	public boolean isPerfectMatch(CandidateSearchAccuracyWrapper candidate, CandidateFilterOptions filterOptions) {
+	public boolean isPerfectMatch(CandidateSearchAccuracyWrapper candidate, CandidateFilterOptions filterOptions, Set<String> searchTermKeywords) {
 		
-		int skillsAccuracy 		= this.getAccuracyOfSkillsMatch(candidate, filterOptions.getSkills());
+		int titleAccuracy		= this.getAccuracyOfTitle(candidate, searchTermKeywords);
+		int skillsAccuracy 		= this.getAccuracyOfSkillsMatch(candidate, filterOptions.getSkills(), !searchTermKeywords.isEmpty());
 		int languageAccuracy 	= this.getAccuracyOfLanguageMatch(candidate, extractLanguageRequirements(filterOptions)) ;
 		
-		if (skillsAccuracy == THRESHOLD_PERFECT && languageAccuracy == 100) {
+		if ((skillsAccuracy == THRESHOLD_PERFECT || titleAccuracy == THRESHOLD_PERFECT) && languageAccuracy == 100) {
 			candidate.setAccuracySkills(convertPercentAccuracy(skillsAccuracy));
 			candidate.setAccuracyLanguages(convertPercentAccuracy(languageAccuracy));
 			return true;
@@ -224,12 +257,13 @@ public class CandidateSuggestionUtilImpl implements CandidateSuggestionUtil{
 	* Refer to the CandidateSuggestionUtil interface for details 
 	*/
 	@Override
-	public boolean isExcellentMatch(CandidateSearchAccuracyWrapper candidate, CandidateFilterOptions filterOptions) {
+	public boolean isExcellentMatch(CandidateSearchAccuracyWrapper candidate, CandidateFilterOptions filterOptions, Set<String> searchTermKeywords) {
 		
-		int skillsAccuracy 		= this.getAccuracyOfSkillsMatch(candidate, filterOptions.getSkills());
+		int titleAccuracy		= this.getAccuracyOfTitle(candidate, searchTermKeywords);
+		int skillsAccuracy 		= this.getAccuracyOfSkillsMatch(candidate, filterOptions.getSkills(), !searchTermKeywords.isEmpty());
 		int languageAccuracy 	= this.getAccuracyOfLanguageMatch(candidate, extractLanguageRequirements(filterOptions)) ;
 		
-		if (skillsAccuracy >= THRESHOLD_EXCELLENT && languageAccuracy >= 60) {
+		if ((skillsAccuracy >= THRESHOLD_EXCELLENT || titleAccuracy >= 60) && languageAccuracy >= 60) {
 			candidate.setAccuracySkills(convertPercentAccuracy(skillsAccuracy));
 			candidate.setAccuracyLanguages(convertPercentAccuracy(languageAccuracy));
 			return true;
@@ -242,12 +276,13 @@ public class CandidateSuggestionUtilImpl implements CandidateSuggestionUtil{
 	* Refer to the CandidateSuggestionUtil interface for details 
 	*/
 	@Override
-	public boolean isGoodMatch(CandidateSearchAccuracyWrapper candidate, CandidateFilterOptions filterOptions) {
+	public boolean isGoodMatch(CandidateSearchAccuracyWrapper candidate, CandidateFilterOptions filterOptions, Set<String> searchTermKeywords) {
 
-		int skillsAccuracy 		= this.getAccuracyOfSkillsMatch(candidate, filterOptions.getSkills());
+		int titleAccuracy		= this.getAccuracyOfTitle(candidate, searchTermKeywords);
+		int skillsAccuracy 		= this.getAccuracyOfSkillsMatch(candidate, filterOptions.getSkills(), !searchTermKeywords.isEmpty());
 		int languageAccuracy 	= this.getAccuracyOfLanguageMatch(candidate, extractLanguageRequirements(filterOptions)) ;
 		
-		if (skillsAccuracy >= THRESHOLD_GOOD && languageAccuracy >= 50) {
+		if ((skillsAccuracy >= THRESHOLD_GOOD || titleAccuracy >= 50) && languageAccuracy >= 50) {
 			candidate.setAccuracySkills(convertPercentAccuracy(skillsAccuracy));
 			candidate.setAccuracyLanguages(convertPercentAccuracy(languageAccuracy));
 			return true;
@@ -260,12 +295,13 @@ public class CandidateSuggestionUtilImpl implements CandidateSuggestionUtil{
 	* Refer to the CandidateSuggestionUtil interface for details 
 	*/
 	@Override
-	public boolean isAverageMatch(CandidateSearchAccuracyWrapper candidate, CandidateFilterOptions filterOptions) {
+	public boolean isAverageMatch(CandidateSearchAccuracyWrapper candidate, CandidateFilterOptions filterOptions, Set<String> searchTermKeywords) {
 
-		int skillsAccuracy 		= this.getAccuracyOfSkillsMatch(candidate, filterOptions.getSkills());
+		int titleAccuracy		= this.getAccuracyOfTitle(candidate, searchTermKeywords);
+		int skillsAccuracy 		= this.getAccuracyOfSkillsMatch(candidate, filterOptions.getSkills(), !searchTermKeywords.isEmpty());
 		int languageAccuracy 	= this.getAccuracyOfLanguageMatch(candidate, extractLanguageRequirements(filterOptions)) ;
 		
-		if (skillsAccuracy >= THRESHOLD_AVERAGE && languageAccuracy >= 40) {
+		if ((skillsAccuracy >= THRESHOLD_AVERAGE || titleAccuracy >= 40) && languageAccuracy >= 40) {
 			candidate.setAccuracySkills(convertPercentAccuracy(skillsAccuracy));
 			candidate.setAccuracyLanguages(convertPercentAccuracy(languageAccuracy));
 			return true;
@@ -278,12 +314,13 @@ public class CandidateSuggestionUtilImpl implements CandidateSuggestionUtil{
 	* Refer to the CandidateSuggestionUtil interface for details 
 	*/
 	@Override
-	public boolean isPoorMatch(CandidateSearchAccuracyWrapper candidate, CandidateFilterOptions filterOptions) {
+	public boolean isPoorMatch(CandidateSearchAccuracyWrapper candidate, CandidateFilterOptions filterOptions, Set<String> searchTermKeywords) {
 
-		int skillsAccuracy 		= this.getAccuracyOfSkillsMatch(candidate, filterOptions.getSkills());
+		int titleAccuracy		= this.getAccuracyOfTitle(candidate, searchTermKeywords);
+		int skillsAccuracy 		= this.getAccuracyOfSkillsMatch(candidate, filterOptions.getSkills(), !searchTermKeywords.isEmpty());
 		int languageAccuracy 	= this.getAccuracyOfLanguageMatch(candidate, extractLanguageRequirements(filterOptions)) ;
 		
-		if (skillsAccuracy >= THRESHOLD_POOR && languageAccuracy >= 30) {
+		if ((skillsAccuracy >= THRESHOLD_POOR || titleAccuracy >= 30) && languageAccuracy >= 30) {
 			candidate.setAccuracySkills(convertPercentAccuracy(skillsAccuracy));
 			candidate.setAccuracyLanguages(convertPercentAccuracy(languageAccuracy));
 			return true;
