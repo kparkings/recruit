@@ -35,6 +35,7 @@ import com.arenella.recruit.candidates.adapters.CandidateCreatedEvent;
 import com.arenella.recruit.candidates.adapters.ExternalEventPublisher;
 import com.arenella.recruit.candidates.beans.Candidate;
 import com.arenella.recruit.candidates.beans.CandidateExtractedFilters;
+import com.arenella.recruit.candidates.beans.CandidateExtractedFilters.CandidateExtractedFiltersBuilder;
 import com.arenella.recruit.candidates.beans.CandidateFilterOptions;
 import com.arenella.recruit.candidates.beans.CandidateSearchAccuracyWrapper;
 import com.arenella.recruit.candidates.beans.CandidateSearchAlert;
@@ -59,6 +60,7 @@ import com.arenella.recruit.candidates.entities.CandidateEntity;
 import com.arenella.recruit.candidates.entities.PendingCandidateEntity;
 import com.arenella.recruit.candidates.enums.FUNCTION;
 import com.arenella.recruit.candidates.extractors.DocumentFilterExtractionUtil;
+import com.arenella.recruit.candidates.extractors.SkillExtractor;
 import com.arenella.recruit.candidates.utils.CandidateSuggestionUtil;
 import com.arenella.recruit.candidates.utils.CandidateSuggestionUtil.suggestion_accuracy;
 import com.arenella.recruit.candidates.utils.SkillsSynonymsUtil;
@@ -131,6 +133,9 @@ public class CandidateServiceImpl implements CandidateService{
 	
 	@Autowired
 	private CandidateRecruiterCreditDao			creditDao;
+	
+	@Autowired
+	private SkillExtractor						skillsExtractor;
 	
 	/**
 	* Refer to the CandidateService Interface for Details
@@ -402,6 +407,7 @@ public class CandidateServiceImpl implements CandidateService{
 		Set<String> 								suggestionIds 		= new HashSet<>();
 		AtomicReference<suggestion_accuracy> 		accuracy 			= new AtomicReference<>(suggestion_accuracy.perfect);
 		Pageable 									pageable 			= PageRequest.of(0,100);
+		Set<String>									skillFilterOptions 	= new HashSet<>();
 		
 		//TODO: [KP] Need to add skills for things like React, Vue where the FUNCTION alone is not sufficient
 		//TODO: [KP] Alerts also need to work with searchText not function and we then need to remove alert from Candidates page
@@ -411,10 +417,15 @@ public class CandidateServiceImpl implements CandidateService{
 		if (StringUtils.hasText(filterOptions.getSearchText())) {
 			Set<FUNCTION> functionToFilterOn = this.candidateFunctionExtractor.extractFunctions(filterOptions.getSearchText());
 			filterOptions.setFunctions(functionToFilterOn);
+			
+			CandidateExtractedFiltersBuilder filterBuilder = CandidateExtractedFilters.builder();
+			this.skillsExtractor.extractFilters(" " + filterOptions.getSearchText() + " ", filterBuilder);
+			skillFilterOptions.addAll(filterBuilder.build().getSkills());
 		}
 		this.externalEventPublisher.publishSearchedSkillsEvent(filterOptions.getSkills());
 		
-		extractAndPersistNewSkills(filterOptions.getSkills());
+		skillFilterOptions.addAll(filterOptions.getSkills());
+		extractAndPersistNewSkills(skillFilterOptions);
 		
 		CandidateFilterOptions suggestionFilterOptions = CandidateFilterOptions
 																		.builder()
@@ -437,7 +448,6 @@ public class CandidateServiceImpl implements CandidateService{
 			
 			candidates.getContent().stream().filter(c -> !suggestionIds.contains(c.getCandidateId())).forEach(candidate -> {
 		
-				//candidate.getSkills().addAll(this.skillsSynonymsUtil.addtSynonymsForSkills(candidate.getSkills()));
 				this.skillsSynonymsUtil.addSynonymsForSkills(candidate.getSkills(), candidate.getSkills());
 				
 				CandidateSearchAccuracyWrapper 	wrappedCandidate 	= new CandidateSearchAccuracyWrapper(candidate);
