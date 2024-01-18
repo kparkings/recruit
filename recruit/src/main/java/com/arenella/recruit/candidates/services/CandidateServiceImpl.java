@@ -438,7 +438,7 @@ public class CandidateServiceImpl implements CandidateService{
 		
 		CandidateExtractedFiltersBuilder searchTermFilter = CandidateExtractedFilters.builder();
 		
-		skillsExtractor.extractFilters(" " + filterOptions.getSearchText() + " ", searchTermFilter);
+		skillsExtractor.extractFilters(" " + filterOptions.getSearchText().toLowerCase() + " ", searchTermFilter);
 		
 		Set<String> searchTermKeywords = searchTermFilter.build().getSkills();
 		
@@ -484,7 +484,7 @@ public class CandidateServiceImpl implements CandidateService{
 			});
 		
 			if (suggestions.size() >= maxSuggestions) {
-				return new PageImpl<>(suggestions.stream().limit(maxSuggestions).collect(Collectors.toCollection(LinkedList::new)));
+				return new PageImpl<>(suggestions.stream().limit(maxSuggestions).sorted((CandidateSearchAccuracyWrapper s1, CandidateSearchAccuracyWrapper s2) -> s1.getAccuracySkillsAsNumber().compareTo(s2.getAccuracySkillsAsNumber())).collect(Collectors.toCollection(LinkedList::new)));
 			} else if (!(candidates.getTotalPages() >= pageCounter)) {
 			
 				pageCounter = -1;
@@ -507,7 +507,7 @@ public class CandidateServiceImpl implements CandidateService{
 						break;
 					}
 					case poor:{
-						return new PageImpl<>(suggestions.stream().limit(maxSuggestions).collect(Collectors.toCollection(LinkedList::new)));
+						return new PageImpl<>(suggestions.stream().limit(maxSuggestions).sorted((CandidateSearchAccuracyWrapper s1, CandidateSearchAccuracyWrapper s2) -> s1.getAccuracySkillsAsNumber().compareTo(s2.getAccuracySkillsAsNumber())).collect(Collectors.toCollection(LinkedList::new)));
 					}
 					
 				} 

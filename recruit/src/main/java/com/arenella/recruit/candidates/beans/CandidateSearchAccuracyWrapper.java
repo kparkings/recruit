@@ -1,5 +1,7 @@
 package com.arenella.recruit.candidates.beans;
 
+import java.util.Optional;
+
 import com.arenella.recruit.candidates.utils.CandidateSuggestionUtil.suggestion_accuracy;
 
 /**
@@ -52,6 +54,20 @@ public class CandidateSearchAccuracyWrapper {
 	*/
 	public suggestion_accuracy getAccuracySkills() {
 		return this.accuracySkills;
+	}
+	
+	/**
+	* Returns a numeric representation of the skills accuracy which 
+	* can be useful for sorting
+	* @return accuracy as number
+	*/
+	public Integer getAccuracySkillsAsNumber() {
+		
+		if (Optional.ofNullable(this.accuracySkills).isEmpty()) {
+			return 100;
+		}
+		
+		return this.accuracySkills.asNumber();
 	}
 
 	/**

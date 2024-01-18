@@ -13,7 +13,25 @@ import com.arenella.recruit.candidates.beans.CandidateSearchAccuracyWrapper;
 */
 public interface CandidateSuggestionUtil {
 
-	public enum suggestion_accuracy {perfect, excellent, good, average, poor}
+	public enum suggestion_accuracy {
+	
+		perfect(1), excellent(2), good(3), average(4), poor(5);
+		
+		public final int asNumber;
+		
+		public int asNumber() {
+			return this.asNumber;
+		}
+		
+		/**
+		* Constructor
+		* @param asNumber
+		*/
+		private suggestion_accuracy(int asNumber) {
+			this.asNumber = asNumber;
+		}
+		
+	}
 	
 	/**
 	* Whether the Candidate is considered a perfect Match based 

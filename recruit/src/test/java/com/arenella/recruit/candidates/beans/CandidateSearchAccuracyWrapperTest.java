@@ -84,21 +84,22 @@ public class CandidateSearchAccuracyWrapperTest {
 			wrapper.setAccuracyLanguages(accuracyLanguages);
 			wrapper.setAccuracySkills(accuracySkills);
 			
-			assertEquals(candidateId, 			wrapper.get().getCandidateId());
-			assertEquals(function, 				wrapper.get().getFunction());
-			assertEquals(country, 				wrapper.get().getCountry());
-			assertEquals(city, 					wrapper.get().getCity());
-			assertEquals(email, 				wrapper.get().getEmail());
-			assertEquals(roleSought, 			wrapper.get().getRoleSought());
-			assertEquals(available, 			wrapper.get().isAvailable());
-			assertEquals(flaggedAsUnavailable, 	wrapper.get().isFlaggedAsUnavailable());
-			assertEquals(freelance, 			wrapper.get().isFreelance());
-			assertEquals(perm, 					wrapper.get().isPerm());
-			assertEquals(lastAvailabilityCheck, wrapper.get().getLastAvailabilityCheckOn());
-			assertEquals(registerd, 			wrapper.get().getRegisteredOn());
-			assertEquals(yearsExperience, 		wrapper.get().getYearsExperience());
-			assertEquals(accuracyLanguages, 	wrapper.getAccuracyLanguages());
-			assertEquals(accuracySkills, 		wrapper.getAccuracySkills());
+			assertEquals(candidateId, 								wrapper.get().getCandidateId());
+			assertEquals(function, 									wrapper.get().getFunction());
+			assertEquals(country, 									wrapper.get().getCountry());
+			assertEquals(city, 										wrapper.get().getCity());
+			assertEquals(email, 									wrapper.get().getEmail());
+			assertEquals(roleSought, 								wrapper.get().getRoleSought());
+			assertEquals(available, 								wrapper.get().isAvailable());
+			assertEquals(flaggedAsUnavailable, 						wrapper.get().isFlaggedAsUnavailable());
+			assertEquals(freelance, 								wrapper.get().isFreelance());
+			assertEquals(perm, 										wrapper.get().isPerm());
+			assertEquals(lastAvailabilityCheck, 					wrapper.get().getLastAvailabilityCheckOn());
+			assertEquals(registerd, 								wrapper.get().getRegisteredOn());
+			assertEquals(yearsExperience, 							wrapper.get().getYearsExperience());
+			assertEquals(accuracyLanguages, 						wrapper.getAccuracyLanguages());
+			assertEquals(accuracySkills, 							wrapper.getAccuracySkills());
+			assertEquals(suggestion_accuracy.perfect.asNumber(), 	wrapper.getAccuracySkillsAsNumber());
 			
 			assertTrue(wrapper.get().getSkills().contains(skill));
 			wrapper.get().getLanguages().stream().filter(l -> l.getLanguage() == language.getLanguage()).findAny().orElseThrow();
