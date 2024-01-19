@@ -1,80 +1,86 @@
-<!-- Signup box -->
-<div class="segment signupbox">
-	<h1>30 Day free trial</h1>
-	<form [formGroup]="signupForm">
-		<table>
-		<tr>
-			<td class="tb-lbl">First name</td>
-			<td><input type="text" class="inpt-tab-std" formControlName="firstName"/></td>
-		</tr>
-		<tr>
-			<td class="tb-lbl">Surname</td>
-			<td><input type="text" class="inpt-tab-std" formControlName="surname"/></td>
-		</tr>
-		<tr>
-			<td class="tb-lbl">Email</td>
-			<td><input type="text" class="inpt-tab-std" formControlName="email"/></td>
-		</tr>
-		<tr>
-			<td>Company Name</td>
-			<td><input type="text" class="inpt-tab-std" formControlName="company"/></td>
-		</tr>
-		<tr>
-			<td>Preferred Language</td>
-			<td>
-				<select formControlName="preferredLanguage">
-					<option value="ENGLISH">English</option>
-					<option value="DUTCH">Dutch</option>
-					<option value="FRENCH">French</option>
-				</select>
-			</td>
-			</tr>
-			<tr>
-				<td colspan="2" style="max-width:400px; padding-top:10px; font-style:italic; font-size:12px;">
-					By registering you are agreeing to your information being stored in the system. 
-					Your data will not be shared with third parties.
-					Your activity in the site will be stored internally to provide statistics and 
-					to improve your user experience.
-				</td>
-			</tr>
-			<tr>
-				<td></td>
-				<td>
-					<button (click)="startFreeTrial()" [disabled]="isFreeTrialButtonEnabled()" style="margin-top:10px;float:right;">Start free trial</button>
-				</td>
-			</tr>
-		</table>
-	</form>
-</div>
-
-<!-- Free trial information -->
-<div class="segment">
-	<h1>Free trial</h1>
+<div>
+    <div class="centerdiv">
+        <div class="center-table">
+            <div class="row">
+            	<div class="reruiter-signup-page">
+            		<h1>Create Recruiter Account</h1>
+            		<h5>Sign-up for a no obligation 30 day free trial</h5>
+            	</div>
+            	
+            	<div style="margin-top:40px;">
+	            	<div style="float:left;margin-right:30px"> 
+						<form [formGroup]="signupForm">
+							<table>
+							<tr>
+								<td class="tb-lbl">First name</td>
+								<td><input type="text" class="inpt-tab-std" formControlName="firstName"/></td>
+							</tr>
+							<tr>
+								<td class="tb-lbl">Surname</td>
+								<td><input type="text" class="inpt-tab-std" formControlName="surname"/></td>
+							</tr>
+							<tr>
+								<td class="tb-lbl">Email</td>
+								<td><input type="text" class="inpt-tab-std" formControlName="email"/></td>
+							</tr>
+							<tr>
+								<td>Company Name</td>
+								<td><input type="text" class="inpt-tab-std" formControlName="company"/></td>
+							</tr>
+							<tr>
+								<td>Preferred Language</td>
+								<td>
+									<select formControlName="preferredLanguage">
+										<option value="ENGLISH">English</option>
+										<option value="DUTCH">Dutch</option>
+										<option value="FRENCH">French</option>
+									</select>
+								</td>
+								</tr>
+								<tr>
+									<td colspan="2" style="max-width:400px; padding-top:10px; font-style:italic; font-size:12px;">
+										By registering you are agreeing to your information being stored in the system. 
+										Your data will not be shared with third parties.
+										Your activity in the site will be stored internally to provide statistics and 
+										to improve your user experience.
+									</td>
+								</tr>
+								<tr>
+									<td></td>
+									<td>
+										<button (click)="startFreeTrial()" [disabled]="isFreeTrialButtonEnabled()" style="margin-top:10px;float:right;">Start free trial</button>
+									</td>
+								</tr>
+							</table>
+						</form>
+					</div>
+					
+					<div class="rec-signup-info"  style="float:left;margin-right:30px;">
+					<div>
+						<b>Free trial</b>
 						<p>
-						IT Recruiters are offered a free 30 day trial with full access to the system. 
-						Within this time you have full access the CV database and can post open roles on the IT job board.
-						<p>
-						<p>
-						After the trial period has expired you can still access the site using the free credit based system. You will be assigned a set amount of credits each week. 
-						Once the credits run out you will have to wait until you have new credits to carry out certain function on the site
-						</p>	
-						<p>
-						Alternatively you can opt for a paid subscription. With subscription based access there are no limits to how many functions you can carry out on the site.
+						Sign up for a no obligation free trial. During the trial you can download unlimited candidate CVs, Create unlimited posts on the job board and unlimited requests 
+						for candidates from other recruitment agencies in the Marketplace.
 						</p>
-</div>
-
-<!-- Pricing information -->
-<div class="segment">
-	<h1>Pricing</h1>
-	<p><b class="highlight">EUR 120</b> ex BTW per recruiter for an annual subscription</p>
-	<p>You have the option to start a subscription after the 30 days trial period has expired if you wish to continue to access the site.</p>
-	<p>IT recruiters will have full access to the site features including</p>
-	<ul>
-		<li>Unlimited Access to the IT Candidate CV database</li>
-		<li>Unlimited Postings on the IT Job board</li>
-		<li>Access to the advanced Suggestion Search feature</li>
-		<li>Access to the B2B Marketplace</li>
-	</ul>
+					</div>
+					
+					<div>
+						<b>Free and paid subscriptions</b>
+						<p>
+						The site generates revenue based upon a subscription model. After your 30 day trial ends, the next time you login you will be able to choose from either a 
+						Free subscription with limited weekly downloads, job board posts and marketplace requests or for just 120 euro's per year excluding Tax you 
+						have access to all these features with no limits.
+						</p>
+						<p>
+						The subscription is the only cost involved in using the site. There are no additional costs such as 
+						margins or commissions for placing candidates.  
+						</p>
+					</div>
+					</div>
+	            </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <dialog #feedbackBox>

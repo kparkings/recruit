@@ -26,3 +26,24 @@ table th{
 table td{
 	padding-left:10px;
 }
+
+.subject-header{
+	width:100%;
+	padding:20px;
+	border-bottom:grey;
+	margin-bottom:10px;
+	text-align:center;
+	 
+}
+
+.main-img{
+	float:left;
+	width:300px;
+	height:300px;
+	margin:20px;
+	margin-top:0px;	
+}
+
+.aboutpage h5{
+	color:grey;
+}

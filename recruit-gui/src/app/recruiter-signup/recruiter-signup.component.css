@@ -1,11 +1,16 @@
-.segment{
-	width:30%;
-	padding-top:20px;
-	padding-left:20px;
-	padding-right:5px;
-	float:left;
-	min-width:350px;
+.centerdiv{
+    margin: 0 auto;
+    padding-left:10px;
+    padding-right:10px;
+    width:90%;
 }
+
+.center-table{
+    margin:0 auto;
+    margin-top:25px;
+}
+
+
 
 .tb-lbl{
 	padding-right:20px;
@@ -37,6 +42,15 @@
         
 }
 
+.subject-header h1{
+	width:100%;
+	padding:20px;
+	border-bottom:grey;
+	margin-bottom:10px;
+	text-align:center;
+	 
+}
+
 .modal-header-text{
     text-align:center;
     color:#6f42c1;
@@ -46,4 +60,19 @@
 .feedbackBox{
     width:200px;
     height:350px;
+}
+
+.reruiter-signup-page{
+	margin-top:20px;
+	width:100%;
+	text-align:center;
+}
+
+.reruiter-signup-page h5{
+	color:grey;
+}
+
+.rec-signup-info{
+	float:right;
+	max-width:900px;
 }

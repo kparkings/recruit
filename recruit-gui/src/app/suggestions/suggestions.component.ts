@@ -405,8 +405,6 @@ export class SuggestionsComponent implements OnInit {
 		
 		this.suggestionFilterForm.valueChanges.pipe(debounceTime(500)).subscribe(res => {
 			
-			console.log("RRR + " + JSON.stringify(res));
-			
 			this.getSuggestions();
 		});
 		
