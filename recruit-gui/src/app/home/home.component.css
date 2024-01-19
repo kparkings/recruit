@@ -30,6 +30,8 @@ table td{
 .subject-header{
 	width:100%;
 	padding:20px;
+	padding-left:0px;
+	padding-right:0px;
 	border-bottom:grey;
 	margin-bottom:10px;
 	text-align:center;
