@@ -1,8 +1,7 @@
 import { Component, OnInit } 							from '@angular/core';
-import { UntypedFormGroup, UntypedFormControl }						from '@angular/forms';
+import { UntypedFormGroup, UntypedFormControl }			from '@angular/forms';
 import { ListingService }								from '../listing.service';
 import { RecruiterService }								from '../recruiter.service';
-import { NgbModal, NgbModalOptions}						from '@ng-bootstrap/ng-bootstrap';
 import { ViewChild }									from '@angular/core';
 import { Listing}										from './listing';
 import { Candidate}										from './candidate';
@@ -16,7 +15,9 @@ import { RecruiterProfile }								from '../recruiter-profile/recruiter-profile'
 import { RecruiterMarketplaceService }					from '../recruiter-marketplace.service';
 import { CreditsService } 								from '../credits.service';
 import { ExtractedFilters } from '../suggestions/extracted-filters';
-
+import { FormBeanNewListing } from '../listing/form-bean-new-listing';
+import { FormBeanMarketPlace } from '../listing/form-bean-market-place';
+import { FormBeanFilterByJobSpec } from '../listing/form-bean-filter-by-jobspec';
 
 @Component({
   selector: 'app-recruiter-listings',
@@ -25,16 +26,48 @@ import { ExtractedFilters } from '../suggestions/extracted-filters';
 })
 export class RecruiterListingsComponent implements OnInit {
 
-	@ViewChild('feedbackBox', { static: false }) private feedbackBox:any;
-	@ViewChild('recommendedCandidates', { static: false }) private recommendedCandidatesBox:any;
-	@ViewChild('specUploadBox', { static: false }) private specUploadBox:any;
-	@ViewChild('publicityBox', { static: false }) private publicityBox:any;
-	@ViewChild('marketplaceBox', { static: false }) private marketplaceBox:any;
+	@ViewChild('feedbackBox', { static: false }) 			private feedbackBox:any;
+	@ViewChild('recommendedCandidates', { static: false }) 	private recommendedCandidatesBox:any;
+	@ViewChild('specUploadBox', { static: false }) 			private specUploadBox:any;
+	@ViewChild('publicityBox', { static: false }) 			private publicityBox:any;
+	@ViewChild('marketplaceBox', { static: false }) 		private marketplaceBox:any;
 	
+	public isMobile:boolean 							= false;
+	public recruiterProfile:RecruiterProfile 			= new RecruiterProfile();
+	public showFilterByJonSpecFailure:boolean  			= false;
+	public showFilterByJobSpec:boolean 					= false;
+	public jobSpecUploadView:string 					= "chooseType"; //chooseType | doc | text
+	public skills:Array<string> 						= new Array<string>();
+	public listings:Array<Listing>						= new Array<Listing>();
+	public activeView:string							= 'list';
+	public activeSubView:string							= 'none';
+	public selectedListing:Listing						= new Listing();
+	public feedbackBoxClass:string          			= '';
+  	public feedbackBoxTitle                 			= '';
+  	public feedbackBoxText:string           			= '';
+	public validationErrors:Array<string>				= new Array<string>();
+	public enabldeDeleteOption:boolean					= false;
+	public passedCreditCheck:boolean = false;
 	
-
+	public totalPages:number							= 0;
+  	public currentPage:number							= 0;
+	public yearsExperienceValues:Array<number>			= new Array<number>();		
+	public showSuggestedCandidate:boolean 				= false;
+	public suggestedCandidate:Candidate			 		= new Candidate();
+	public listingForSuggestedCandidate:Listing 		= new Listing();	
+	
+	private	pageSize:number								= 8;
+  	private jobSpecFile!:File;
+	private  recruiterId:string							= '';
+	private  recruiterFirstName:string 					= '';
+	private  recruiterSurname:string					= '';
+	private  recruiterEmail:string 						= '';
+	private  recruiterCompany:string					= '';
+	
+	/**
+	* Constructor 
+	*/
   	constructor(private listingService:				ListingService, 
-				private modalService: 				NgbModal, 
 				private recruiterService:			RecruiterService, 
 				public 	candidateService:			CandidateServiceService,
 				public 	suggestionsService:			SuggestionsService,
@@ -54,14 +87,54 @@ export class RecruiterListingsComponent implements OnInit {
 					
 	}
 	
-	public filterByJobSpecForm:UntypedFormGroup = new UntypedFormGroup({
-		specAsText:				new UntypedFormControl('Enter Job specification Text here...'),
-	});
+	/**
+	* On Init 
+	*/
+	ngOnInit(): void {
 	
-	private jobSpecFile!:File;
-	public showFilterByJonSpecFailure:boolean  		= false;
-	public showFilterByJobSpec:boolean 				= false;
-	public jobSpecUploadView:string 				= "chooseType"; //chooseType | doc | text
+		this.recruiterService.getOwnRecruiterAccount().subscribe(data => {
+			this.recruiterId 					= data.userId;
+			this.recruiterFirstName				= data.firstName;
+			this.recruiterSurname				= data.surname;
+			this.recruiterEmail					= data.email;
+			this.recruiterCompany				= data.companyName;
+			this.fetchListings();			
+		}, err => {
+			if (err.status === 401 || err.status === 0) {
+				sessionStorage.removeItem('isAdmin');
+				sessionStorage.removeItem('isRecruter');
+				sessionStorage.removeItem('isCandidate');
+				sessionStorage.removeItem('loggedIn');
+				sessionStorage.setItem('beforeAuthPage', 'view-candidates');
+				this.router.navigate(['login-user']);
+			}
+    	});
+	
+		this.loadYearsExperienceValues();
+	
+  	}
+	
+	/**
+	* Forms 
+	*/
+	public filterByJobSpecForm = FormBeanFilterByJobSpec.getInstance();
+	public newListingFormBean:UntypedFormGroup 	= FormBeanNewListing.getInstance();
+	public mpFormBean:UntypedFormGroup 			= FormBeanMarketPlace.getInstance();
+	
+	/**
+	* Resets the page 
+	*/
+	public reset():void{
+		this.newListingFormBean 	= FormBeanNewListing.getInstance();
+		this.mpFormBean 			= FormBeanMarketPlace.getInstance();
+		this.filterByJobSpecForm 	= FormBeanFilterByJobSpec.getInstance();
+		
+		this.skills 				= new Array<string>();
+		this.validationErrors 		= new Array<string>();
+		this.enabldeDeleteOption	= false;
+		this.doCreditCheck();
+		
+	}
 	
   	/**
 	* Switches between options on how to upload job spec 
@@ -82,9 +155,7 @@ export class RecruiterListingsComponent implements OnInit {
   	}
   	
   	public extractFiltersFromJobSpecText():void{
-		
 		let jobSpecText = this.filterByJobSpecForm.get('specAsText')?.value; 
-		
 		this.candidateService.extractFiltersFromText(jobSpecText).subscribe(extractedFilters=>{
 			this.processJobSpecExtratedFilters(extractedFilters);
 		},(failure =>{
@@ -134,7 +205,7 @@ export class RecruiterListingsComponent implements OnInit {
   			
 			this.processJobSpecExtratedFilters(extractedFilters);
 		
-		},(failure =>{
+		},(() =>{
 			this.showFilterByJonSpecFailure 	= true;
 			this.showFilterByJobSpec 			= false;		
 		}));
@@ -150,136 +221,9 @@ export class RecruiterListingsComponent implements OnInit {
 		this.showFilterByJobSpec 			= true;
 		this.jobSpecUploadView 				= 'chooseType';
 		
-		this.filterByJobSpecForm = new UntypedFormGroup({
-			specAsText:				new UntypedFormControl('Enter Job specification Text here...'),
-		});
+		this.filterByJobSpecForm = FormBeanFilterByJobSpec.getInstance();
 		
-		//let options: NgbModalOptions = {
-		//	centered: true
-		//};
-		
-		//this.modalService.open(content, options);
 		this.specUploadBox.nativeElement.showModal();
-	}
-	
-	public isMobile:boolean = false;
-	public recruiterProfile:RecruiterProfile 			= new RecruiterProfile();
-	
-	ngOnInit(): void {
-	
-		this.recruiterService.getOwnRecruiterAccount().subscribe(data => {
-			this.recruiterId 					= data.userId;
-			this.recruiterFirstName				= data.firstName;
-			this.recruiterSurname				= data.surname;
-			this.recruiterEmail					= data.email;
-			this.recruiterCompany				= data.companyName;
-			this.fetchListings();			
-		}, err => {
-			if (err.status === 401 || err.status === 0) {
-				sessionStorage.removeItem('isAdmin');
-				sessionStorage.removeItem('isRecruter');
-				sessionStorage.removeItem('isCandidate');
-				sessionStorage.removeItem('loggedIn');
-				sessionStorage.setItem('beforeAuthPage', 'view-candidates');
-				this.router.navigate(['login-user']);
-			}
-    	});
-	
-		this.loadYearsExperienceValues();
-	
-  	}
-
-	private  recruiterId:string							= '';
-	private  recruiterFirstName:string 					= '';
-	private  recruiterSurname:string					= '';
-	private  recruiterEmail:string 						= '';
-	private  recruiterCompany:string					= '';
-	
-	public skills:Array<string> 						= new Array<string>();
-	public listings:Array<Listing>						= new Array<Listing>();
-	public activeView:string							= 'list';
-	public activeSubView:string							= 'none';
-	public selectedListing:Listing						= new Listing();
-	
-	public feedbackBoxClass:string          			= '';
-  	public feedbackBoxTitle                 			= '';
-  	public feedbackBoxText:string           			= '';
-	public validationErrors:Array<string>				= new Array<string>();
-	public enabldeDeleteOption:boolean					= false;
-	
-	private	pageSize:number								= 8;
-  	public	totalPages:number							= 0;
-  	public	currentPage:number							= 0;
-	public 	yearsExperienceValues:Array<number>			= new Array<number>();		
-	
-	public showSuggestedCandidate:boolean 				= false;
-	public suggestedCandidate:Candidate			 		= new Candidate();
-	public listingForSuggestedCandidate:Listing 		= new Listing();			
-  	
-
-	public newListingFormBean:UntypedFormGroup 				= new UntypedFormGroup({
-     
-		title:				new UntypedFormControl(''),
-		type:				new UntypedFormControl(),
-       	country:			new UntypedFormControl(),
-		location:			new UntypedFormControl(),	
-		experienceYears:	new UntypedFormControl(),
-		rate:				new UntypedFormControl(),
-		rateCurrency:		new UntypedFormControl(),
-		description:		new UntypedFormControl(),
-		contactName:		new UntypedFormControl(),
-		contactCompany:		new UntypedFormControl(),
-		contactEmail:		new UntypedFormControl(),
-		langDutch:			new UntypedFormControl(),
-		langEnglish:		new UntypedFormControl(),
-		langFrench:			new UntypedFormControl(),
-		skill:				new UntypedFormControl()
-		
-	});
-	
-	public mpFormBean:UntypedFormGroup 				= new UntypedFormGroup({
-		startDate:				new UntypedFormControl(''),
-		lastSubmissionDate:		new UntypedFormControl(),
-       	comments:				new UntypedFormControl(),
-	});
-	
-	public reset():void{
-		
-		this.newListingFormBean  = new UntypedFormGroup({
-     
-			title:				new UntypedFormControl(''),
-			type:				new UntypedFormControl(),
-	       	country:			new UntypedFormControl(),
-			location:			new UntypedFormControl(),	
-			experienceYears:	new UntypedFormControl(),
-			rate:				new UntypedFormControl(),
-			rateCurrency:		new UntypedFormControl(),
-			description:		new UntypedFormControl(),
-			contactName:		new UntypedFormControl(),
-			contactCompany:		new UntypedFormControl(),
-			contactEmail:		new UntypedFormControl(),
-			langDutch:			new UntypedFormControl(),
-			langEnglish:		new UntypedFormControl(),
-			langFrench:			new UntypedFormControl(),
-			skill:				new UntypedFormControl()
-			
-		});
-		
-		this.mpFormBean = new UntypedFormGroup({
-			startDate:				new UntypedFormControl(),
-			lastSubmissionDate:		new UntypedFormControl(),
-       		comments:				new UntypedFormControl(),
-		});
-		
-		this.filterByJobSpecForm = new UntypedFormGroup({
-			specAsText:				new UntypedFormControl('Enter Job specification Text here...'),
-		});
-		
-		this.skills 				= new Array<string>();
-		this.validationErrors 		= new Array<string>();
-		this.enabldeDeleteOption	= false;
-		this.doCreditCheck();
-		
 	}
 	
 	/**
@@ -294,25 +238,17 @@ export class RecruiterListingsComponent implements OnInit {
 	      this.feedbackBoxClass = 'feedback-failure';
 	    }
 	
-	   //let options: NgbModalOptions = {
-	   // 	 centered: true
-	   //};
-
-		//this.modalService.open(this.content, options);
-		this.feedbackBox.nativeElement.showModal();
-  }
+	   	this.feedbackBox.nativeElement.showModal();
+  	}
 	
 	/**
 	*  Closes the confirm popup
 	*/
 	public closeModal(): void {
-		//this.modalService.dismissAll();
 		this.feedbackBox.nativeElement.close();
 		this.publicityBox.nativeElement.close();
-		this.recommendedCandidatesBox.nativeElement.close();
 		this.specUploadBox.nativeElement.close();
 		this.marketplaceBox.nativeElement.close();
-	
 		this.validationErrors = new Array<string>();
 	}
 
@@ -504,9 +440,6 @@ export class RecruiterListingsComponent implements OnInit {
 								rate, 			
 								currency, 		
 								false).subscribe( data => {
-									//this.reset();
-									//this.fetchListings();
-									//this.showList();
 									this.showMPBox();
 								}, err => {
 									
@@ -1406,11 +1339,6 @@ export class RecruiterListingsComponent implements OnInit {
 		
 		this.fetchCandidateRecommendations(listing);
 	
-		//let options: NgbModalOptions = {
-		//	centered: true
-		//};
-		
-		//this.modalService.open(popupRecommendations, options);
 		this.recommendedCandidatesBox.nativeElement.showModal();
 
 	}
@@ -1435,11 +1363,6 @@ export class RecruiterListingsComponent implements OnInit {
 	* post on other websites
 	*/
 	public showPublicity():void{
-		//let options: NgbModalOptions = {
-	    //	 centered: true
-	   //};
-
-		//this.modalService.open(content, options);
 		this.publicityBox.nativeElement.showModal();
 	}
 	
@@ -1521,14 +1444,7 @@ export class RecruiterListingsComponent implements OnInit {
 	}
 	
 	public showMPBox():void{
-		
-		//let options: NgbModalOptions = {
-	    //	 centered: true
-	   //};
-
-		//this.modalService.open(this.mpBox, options);
 		this.marketplaceBox.nativeElement.showModal();
-	
 	}
 	
 	public declineMarketplace():void{
@@ -1537,9 +1453,6 @@ export class RecruiterListingsComponent implements OnInit {
 		this.showList();
 		this.closeModal();
 	}
-	
-	public passedCreditCheck:boolean = false;
-	
 	
 	public doCreditCheck():void{
 		this.listingService.doCreditCheck().subscribe(passed => {
