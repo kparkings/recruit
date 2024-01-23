@@ -173,10 +173,7 @@
 									<td>Type</td>
 									<td>
 										<select formControlName="type">
-											<option></option>
-											<option value="CONTRACT_ROLE">Contract</option>
-											<option value="PERM_ROLE">Perm</option>
-											<option value="BOTH">Contract/Perm</option>
+											<option *ngFor="let type of getContractTypeOptions()" [ngValue]="type.value">{{type.label}}</option>
 										</select>
 									</td>
 								</tr>
@@ -184,13 +181,7 @@
 									<td>Country</td>
 									<td>
 										<select formControlName="country">
-											<option></option>
-											<option value="NETHERLANDS">Netherlands</option>
-											<option value="BELGIUM">Belgium</option>
-											<option value="UK">UK</option>
-											<option value="IRELAND">Ireland</option>
-											<option value="EU_REMOTE">Remote EU</option>
-											<option value="WORLD_REMOTE">Remote World</option>
+											<option *ngFor="let opt of getCountryOptions()" [ngValue]="opt.value">{{opt.label}}</option>
 										</select>
 									</td>
 								</tr>

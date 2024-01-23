@@ -6,6 +6,8 @@ import { NewListingRequest } 						from './recruiter-listings/new-listing-reques
 import { ListingAlertAddRequest } from './listing/listing-alert-add-request';
 import { FunctionType } from './listing/function-type';
 import { Country } from './listing/country';
+import { ContractType } from './listing/contract-type';
+import { LanguageType } from './listing/language-type';
 
 /**
 * Service relating to the management of listings
@@ -229,6 +231,36 @@ export class ListingService {
 		countries.push(new Country("WORLD_REMOTE", "Remote (Worldwide)"));
 		
 		return countries;
+		
+	}
+	
+	/**
+	* Returns ContractTypes a listing can be for
+	*/
+	public fetchContractTypes():Array<ContractType>{
+		
+		let contractTypes:Array<ContractType> = new Array<ContractType>();
+		
+		contractTypes.push(new ContractType("CONTRACT_ROLE", "Contract"));
+		contractTypes.push(new ContractType("PERM_ROLE", "Perm"));
+		contractTypes.push(new ContractType("BOTH", "Contract/Perm"));
+		
+		return contractTypes;
+		
+	}
+	
+		/**
+	* Returns ContractTypes a listing can be for
+	*/
+	public fetchLanguageTypes():Array<LanguageType>{
+		
+		let languageTypes:Array<LanguageType> = new Array<LanguageType>();
+		
+		languageTypes.push(new LanguageType("DUTCH", "Dutch"));
+		languageTypes.push(new LanguageType("FRENCH", "French"));
+		languageTypes.push(new LanguageType("ENGLISH", "English"));
+		
+		return languageTypes;
 		
 	}
 
