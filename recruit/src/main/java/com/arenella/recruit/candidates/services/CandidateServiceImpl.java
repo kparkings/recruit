@@ -438,8 +438,9 @@ public class CandidateServiceImpl implements CandidateService{
 		
 		CandidateExtractedFiltersBuilder searchTermFilter = CandidateExtractedFilters.builder();
 		
-		skillsExtractor.extractFilters(" " + filterOptions.getSearchText().toLowerCase() + " ", searchTermFilter);
-		
+		if (Optional.ofNullable(filterOptions.getSearchText()).isPresent()) {
+			skillsExtractor.extractFilters(" " + filterOptions.getSearchText().toLowerCase() + " ", searchTermFilter);
+		}
 		Set<String> searchTermKeywords = searchTermFilter.build().getSkills();
 		
 		while (true) {
