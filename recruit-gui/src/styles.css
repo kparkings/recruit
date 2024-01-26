@@ -169,8 +169,9 @@ dialog {
 /* Buttons START*/
 .btn-main-bar{
  	margin-top:15px;
-	min-width:155px;
-	margin-left:10px;
+	min-width:160px;
+	margin-left:5px;
+	margin-right:5px;
 }
 
 .buttons-icon-mobile {
@@ -187,14 +188,7 @@ dialog {
 }
 
 /*Left right panes - stat*/
-.left-box-container{
-	float:left; 
-	width:100%; 
-	min-width:320px; 
-	max-width:360px; 
-	margin-top:20px;
-}
-
+/*
 .mobile-left-pane-container{
 	min-width:100%; 
 	max-width:100%; 
@@ -203,10 +197,11 @@ dialog {
 
 .left-box{
 	margin-bottom:30px;
-}
+}*/
 
 .action-buttons{
 	text-align:right;
+	margin-bottom:20px;
 }
 
 .page{
