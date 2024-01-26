@@ -30,9 +30,6 @@ export class CandidateInfoBoxComponent {
 			this.mobileContainerCSS = "mobile-left-pane-container";
 		} 	
 	
-			console.log("A" + JSON.stringify(this.config.getProfilePhotoBytes));
-		
-	
 	}
 	
 

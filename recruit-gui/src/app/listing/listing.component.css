@@ -1,8 +1,3 @@
-.page{
-	width:98%;
-	margin-bottom:100px;
-}
-
 .center {
   margin: auto;
   width: 50%;
@@ -62,10 +57,6 @@
     min-width:50px;
 }
 
-.action-buttons{
-	text-align:right;
-	margin-right:10px;
-}
 
 .btnRight{
 	margin-top:20px;
@@ -117,14 +108,19 @@
 
 }
 
+
+
 .mobile-listing-layout-pane{
+	width:100%;
 	padding-left:0%;
-	margin-left:3%;
+	margin-left:0%;
 }
 
+
 .mobile-listing-layout-filters{
-	margin-left:3%;
+	margin-left:0%;
 }
+
 
 .job-post{
 	width:22%;
@@ -139,6 +135,10 @@
 	
 }
 
+.mobile-listing-layout{
+	min-width:100%;
+}
+
 .listing-country{
 	display: table;
     margin: 0 auto;
@@ -149,12 +149,6 @@
 	text-align:center;
 	margin-top:10px;
 }
-
-.mobile-listing-layout{
-	width:100%;
-	
-}
-
 
 /** END **/
 
@@ -229,14 +223,13 @@
 .listing-view{
 	margin-left:30px;
 }
-
+/*
 .mobile-listing-view{
 	margin-left:10px;
 }
+*/
 
 .filters{
-	width:95%;
-	margin:auto;
 	border-bottom:1px solid black;
 	margin-bottom:10px;
 	background:#e8e8e8;

@@ -18,6 +18,7 @@ import { FormBeanMarketPlace } 							from '../listing/form-bean-market-place';
 import { FormBeanFilterByJobSpec } 						from '../listing/form-bean-filter-by-jobspec';
 import { HtmlOption } 									from '../html-option';
 import { StaticDataService } from '../static-data.service';
+import { InfoItemBlock, InfoItemConfig, InfoItemRowKeyValue, InfoItemRowMultiValues, InfoItemRowSingleValue } from '../candidate-info-box/info-item';
 
 @Component({
   selector: 'app-recruiter-listings',
@@ -62,6 +63,8 @@ export class RecruiterListingsComponent implements OnInit {
 	private  recruiterSurname:string					= '';
 	private  recruiterEmail:string 						= '';
 	private  recruiterCompany:string					= '';
+	
+	public infoItemConfig:InfoItemConfig 							= new InfoItemConfig();
 	
 	/**
 	* Constructor 
@@ -331,7 +334,70 @@ export class RecruiterListingsComponent implements OnInit {
 		this.enabldeDeleteOption 	= false;
 		
 		if (selectedListing) {
-			this.selectedListing	= selectedListing;	
+			
+			this.selectedListing	= selectedListing;
+		
+			this.infoItemConfig = new InfoItemConfig();
+			this.infoItemConfig.setProfilePhoto(this.recruiterProfile?.profilePhoto?.imageBytes);
+	
+			//Recruiter Block
+			let recruiterBlock:InfoItemBlock = new InfoItemBlock();
+			recruiterBlock.setTitle("Recruiter Details");
+			recruiterBlock.addRow(new InfoItemRowKeyValue("Name",selectedListing!.ownerName));
+			recruiterBlock.addRow(new InfoItemRowKeyValue("Company",selectedListing!.ownerCompany));
+			this.infoItemConfig.addItem(recruiterBlock);
+		
+			//Location Block
+			if (selectedListing!.country || selectedListing!.location) {
+				let locationBlock:InfoItemBlock = new InfoItemBlock();
+				locationBlock.setTitle("Location");
+				if	(selectedListing!.country) {
+					locationBlock.addRow(new InfoItemRowKeyValue("Country",this.getCountryCode(selectedListing!.country)));
+				}
+				if	(selectedListing!.location) {
+					locationBlock.addRow(new InfoItemRowKeyValue("City",selectedListing!.location));
+				}
+				this.infoItemConfig.addItem(locationBlock);
+			}
+		
+			//Contract Block
+			if (selectedListing!.type || selectedListing!.currency) {
+				let currencyBlock:InfoItemBlock = new InfoItemBlock();
+				currencyBlock.setTitle("Contract Information");
+				if	(selectedListing!.type) {
+					currencyBlock.addRow(new InfoItemRowKeyValue("Contract Type",this.getContractType(selectedListing!.type)));
+				}
+				if	(selectedListing!.currency) {
+					currencyBlock.addRow(new InfoItemRowKeyValue("Renumeration",selectedListing!.currency + " : " + selectedListing!.rate));
+				}
+				this.infoItemConfig.addItem(currencyBlock);
+			}
+		
+			//Recruiter Block
+			let experienceBlock:InfoItemBlock = new InfoItemBlock();
+			experienceBlock.setTitle("Years Experience");
+			experienceBlock.addRow(new InfoItemRowSingleValue(selectedListing!.yearsExperience));
+			this.infoItemConfig.addItem(experienceBlock);
+		
+			//Languages Block
+			if (selectedListing!.languages.length > 0) {
+				let languagesBlock:InfoItemBlock = new InfoItemBlock();
+				languagesBlock.setTitle("Languages");
+				selectedListing!.languages.forEach(lang => {
+					languagesBlock.addRow(new InfoItemRowSingleValue(this.getLanguage(lang)));	
+				});
+				this.infoItemConfig.addItem(languagesBlock);
+			}
+		
+			//Skills Block
+			if ( selectedListing!.skills.length > 0) {
+				let skillsBlock:InfoItemBlock = new InfoItemBlock();
+				skillsBlock.setTitle("Skills");
+				skillsBlock.addRow(new InfoItemRowMultiValues(selectedListing!.skills, "skill"));
+				this.infoItemConfig.addItem(skillsBlock);
+			}
+		
+				
 		}
 		
 	}

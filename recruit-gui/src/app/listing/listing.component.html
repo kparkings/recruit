@@ -2,12 +2,10 @@
 	<div [ngSwitch]="activeView">
 		
 	    <!-- List View -->
-	    <div  *ngSwitchCase="'list'">
-	    	<div class="action-buttons" *ngIf="!isAuthenticated() || isAuthenticated() && isCandidate()">
-				<button class="btn btn-secondary btn-main-bar" (click)="openCreateAlertDialog()">Create Alert</button>
-			</div>
-	        <div class="action-buttons" *ngIf="isAuthenticated() && !isAuthenticatedAsAdmin() && !isCandidate()">
-				<button class="btn btn-secondary btn-main-bar" routerLink="/recruiter-listings">Manage Your Posts</button>
+	    <div *ngSwitchCase="'list'">
+	    	<div class="action-buttons" >
+				<button class="	" (click)="openCreateAlertDialog()" *ngIf="!isAuthenticated() || isAuthenticated() && isCandidate()">Create Alert</button>
+				<button class="btn btn-secondary btn-main-bar" routerLink="/recruiter-listings" *ngIf="isAuthenticated() && !isAuthenticatedAsAdmin() && !isCandidate()">Manage Your Posts</button>
 			</div>
 	       	<!-- Listings Table -->
 			<div>
@@ -70,7 +68,7 @@
 			</div>
 		</div>
 		<!-- Show Selected Listing View -->
-		<div class="listing-view {{mobileListingViewDiv}}">
+		<div class="{{mobileListingViewDiv}}">
 			<div  *ngSwitchCase="'show'">
 	       		<!-- Action buttons -->
 				<div class="action-buttons">

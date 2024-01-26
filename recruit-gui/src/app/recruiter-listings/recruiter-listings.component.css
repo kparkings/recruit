@@ -1,36 +1,11 @@
 .steps {
-  margin: auto;
-  width: 90%;
-  padding: 10px;
+	margin: auto;
+	width: 90%;
+	padding: 10px;
 }
-
-.center {
-	margin-top:15px;
-}
-
-.listing-nav{
-     cursor:pointer;
-     color:blue;
-     font-weight:bold;
-     margin-left:20px;
-     margin-right:20px;
- }
-
- .listing-nav-disabled{
-     color:grey;
-     font-weight:bold;
-     margin-left:20px;
-     margin-right:20px;
- }
  
- .listing-step-content{
- 	width:90%;
- }
- 
- .btn-listing{
- 	margin-right:10px;
-	margin-bottom:20px;
-    min-width:85px;
+.listing-step-content{
+	width:90%;
 }
 
 .text-area-listing{
@@ -39,7 +14,7 @@
 }
 
 .checkbox-ctrl{
-		margin-right:5px;
+	margin-right:5px;
 }
 
 .radio-button{
@@ -49,45 +24,43 @@
 .radio-button_label{
 	margin-right:10px;
 }
-
  
- .selected-skills-filter{
+.selected-skills-filter{
 	min-height:100px;
 	margin-top:10px;	
 	display: inline-block; 
- }
+}
  
- .selected-skill{
+.selected-skill{
  	margin:2px;
  	padding:5px;
  	border-radius:5px;
  	background:grey;
  	display:inline-block;
- }
+}
  
- .selected-skill:hover{
- 	margin:2px;
+.selected-skill:hover{
+	margin:2px;
  	padding:5px;
  	border-radius:5px;
  	background:red;
  	cursor:pointer;
  	display:inline-block;
- }
+}
  
- .feedback-failure{
-    background: #F0F0F0;
+.feedback-failure{
+	background: #F0F0F0;
     color: red;
     list-style-type: none;
     text-align:left;
 }
 
 .filter-close-box{
-     padding:10px;
-     cursor:pointer;
-     font-size:20px;
-     font-weight: bold;
-    text-align: right;
-        
+	padding:10px;
+    cursor:pointer;
+    font-size:20px;
+    font-weight: bold;
+    text-align: right;    
 }
 
 .listing-table{
@@ -116,10 +89,6 @@
     font-size: x-small;
     text-align: center;
     padding: 5px;
-}
-
-.action-buttons{
-	text-align:right;
 }
 
 .pagination-options{
@@ -161,65 +130,8 @@
 	background:red;
 }
 
-.modal-body-recommendations{
-    font-size: large;
-    height:350px;
-    text-align: center;
-    padding-top:12px;
-    padding-left:11px;
-}
-
 .suggestion-button{
 	margin-right:5px;
-}
-
-
-.left-box{
-	min-width:300px;
-	margin-bottom:30px;
-	max-width:300px;
-}
-
-.left-box-body{
-	padding:5px;
-	background:#e8e8e8;
-}
-
-.left-box table{
-	width:100%;
-}
-
-.left-box table th{
-	width:120px;
-}
-
-.left-box h5{
-	border-bottom:2px solid black;
-}
-
-.skill{
- 	margin:2px;
- 	padding:5px;
- 	border-radius:5px;
- 	background:grey;
- 	display:inline-block;
- 	background:green;
- 	color:white;
-}
-
-.profile-photo-details{
-	width:300px;
-	height:320px;
-	border:2px solid lightgrey;
-	margin-bottom:10px;
-}
-
-.main-btns{
-	width:200px;
-	margin-right:10px;
-	margin-bottom:10px;
-	margin-top:5px;
-	
 }
 
 .feedbackBox{

@@ -1,11 +1,11 @@
-<div class="arenella-page center">
+<div class="page">
 	<div [ngSwitch]="activeView">
 		<div  *ngSwitchCase="'list'">
 			<div>
 				<div class="action-buttons">
-					<button *ngIf="passedCreditCheck" 	(click)="showAdd()" 		class="btn btn-secondary btn-listing">Add Job</button>
-					<button *ngIf="!passedCreditCheck" 	(click)="showNoCredits()" 	class="btn btn-secondary btn-listing">Add Job</button>
-					<button class="btn btn-secondary btn-listing" routerLink="/listing">Back</button>
+					<button *ngIf="passedCreditCheck" 	(click)="showAdd()" 		class="btn btn-secondary btn-main-bar">Add Job</button>
+					<button *ngIf="!passedCreditCheck" 	(click)="showNoCredits()" 	class="btn btn-secondary btn-main-bar">Add Job</button>
+					<button routerLink="/listing" 									class="btn btn-secondary btn-main-bar">Back</button>
 				</div>
 				<div class="recruiter-listing-main-text">
 					<p>Add a job to the job board and allow candidates both within the site and outside to contact you directly.</p>
@@ -47,115 +47,35 @@
 	<div [ngSwitch]="activeView">
 		<div *ngSwitchCase="'show'">
    			<div class="action-buttons">
-				<button class="btn btn-secondary btn-listing" (click)="showPublicity()">Publicity</button>
-				<button (click)="showEditListing()" class="btn btn-secondary btn-listing">Edit</button>
-				<button (click)="showConfirmDelete()" *ngIf="!enabldeDeleteOption" class="btn btn-secondary btn-listing">Delete</button>
-				<button (click)="performmDelete()" 	  *ngIf="enabldeDeleteOption"	class="btn btn-secondary btn-listing confirm-delete">Confirm</button>
-				<button (click)="showList()" class="btn btn-secondary btn-listing">Back</button>
+				<button (click)="showPublicity()"		class="btn btn-secondary btn-main-bar">Publicity</button>
+				<button (click)="showEditListing()" 	class="btn btn-secondary btn-main-bar">Edit</button>
+				<button (click)="showConfirmDelete()"   class="btn btn-secondary btn-main-bar" *ngIf="!enabldeDeleteOption">Delete</button>
+				<button (click)="performmDelete()" 	  	class="btn btn-secondary btn-main-bar confirm-delete" *ngIf="enabldeDeleteOption">Confirm</button>
+				<button (click)="showList()" 			class="btn btn-secondary btn-main-bar">Back</button>
 			</div>
-			<div>
-        		<div style="float:left; min-width:300px; margin-top:20px;">
-        			<h1 *ngIf="isMobile" class="listing-view-title">{{selectedListing.title}}</h1>
-        			<div class="left-box">
-        				<div>
-        					<img class="profile-photo-details" *ngIf="recruiterProfile?.profilePhoto?.imageBytes" id='base64image' src='data:image/jpeg;base64, {{recruiterProfile?.profilePhoto?.imageBytes}}' />
-							<div *ngIf="!recruiterProfile?.profilePhoto?.imageBytes && !isMobile" class="profile-photo-details material-icons person ">
-								<span style="font-size:300px;color:green;">person</span>
-							</div>
-        				</div>
-        				<div class="left-box">
-        					<h5>Recruiter Details</h5>
-        					<div class="left-box-body">
-	        					<table>
-	        						<tr>
-	        							<th>Name</th>
-	        							<td>{{selectedListing.ownerName}}</td>
-	        						</tr>
-	        						<tr>
-	        							<th>Company</th>
-	        							<td>{{selectedListing.ownerCompany}}</td>
-	        						</tr>
-	        					</table>
-        					</div>
-						</div>
-        			</div>
-        			<div class="left-box" *ngIf="selectedListing.country || selectedListing.location">
-        				<h5>Location</h5>
-        				<div class="left-box-body">
-        					<table>
-        						<tr *ngIf="selectedListing.country">
-        							<th>Country</th>
-        							<td>{{getCountryCode(selectedListing.country)}}</td>
-        						</tr>
-        						<tr *ngIf="selectedListing.location">
-        							<th>City</th>
-        							<td>{{selectedListing.location}}</td>
-        						</tr>
-        					</table>
-        				</div>
-        			</div>
-        			<div class="left-box" *ngIf="selectedListing.type || selectedListing.currency">
-        				<h5>Contract Information</h5>
-        				<div class="left-box-body">
-        					<table>
-        						<tr *ngIf="selectedListing.type">
-        							<th>Contract Type</th>
-        							<td>{{getContractType(selectedListing.type)}}</td>
-        						</tr>
-        						<tr *ngIf="selectedListing.currency">
-        							<th>Renumeration</th>
-        							<td><span>{{selectedListing.currency}}</span> : <span>{{selectedListing.rate}}</span></td>
-        						</tr>
-        					</table>
-        				</div>
-        			</div>
-        			<div class="left-box">
-        				<h5>Years Experience</h5>
-        				<div class="left-box-body">
-        					{{selectedListing.yearsExperience}}
-        				</div>	
-        			</div>
-        			<div class="left-box" *ngIf="selectedListing.languages.length > 0">
-        				<h5>Languages</h5>
-        				<div class="left-box-body">
-							<table>
-								<tr *ngFor="let language of selectedListing.languages">
-									<td>{{getLanguage(language)}}</td>
-								</tr>
-							</table>
-						</div>
-        			</div>
-        			<div class="left-box" *ngIf="selectedListing.skills.length > 0">
-        				<h5>Skills</h5>
-        				<div class="left-box-body">
-							<table>
-								<tr>
-									<td><span class="skill" *ngFor="let skill of selectedListing.skills">{{skill}}</span></td>
-								</tr>
-							</table>
-						</div>
-        			</div>
-        		</div>
-        		<div style="float:left;margin-left:10px;min-width:300px;max-width:72%;padding:5px;">
-        			<div class="listing-view-div">
-						<h1 *ngIf="!isMobile" class="listing-view-title">{{selectedListing.title}}</h1>
-						<h1 *ngIf="isMobile" class="listing-view-title">Description</h1>
-					</div>
+			
+			<app-candidate-info-box [config]="infoItemConfig"></app-candidate-info-box>
+				
+        	<div style="float:left;margin-left:15px;min-width:300px;max-width:72%;padding:5px;">
+        		<div class="listing-view-div">
+					<h1 *ngIf="!isMobile" class="listing-view-title">{{selectedListing.title}}</h1>
+					<h1 *ngIf="isMobile" class="listing-view-title">Description</h1>
+				</div>
+				<div>
 					<div>
-						<div>
-							<pre style="white-space:pre-line;font-family: Roboto, 'Helvetica Neue', sans-serif;">{{selectedListing.description}}</pre>
-						</div>
+						<pre style="white-space:pre-line;font-family: Roboto, 'Helvetica Neue', sans-serif;">{{selectedListing.description}}</pre>
 					</div>
 				</div>
 			</div>
+			
 		</div>
 			
 		<!-- List Listings -->
 		<div  *ngSwitchCase="['add', 'edit'].includes(activeView) ? activeView : !activeView">
 			<div class="action-buttons">
-				<button class="btn btn-secondary btnRight main-btns" (click)="showFilterByJobSpecDialog()" download>Create From Job Spec</button>
-				<button (click)="publishListing()" class="btn btn-secondary btnRight main-btns">Publish</button>
-				<button (click)="showPreviousShowOption()" class="btn btn-secondary btnRight main-btns">Back</button>
+				<button (click)="showFilterByJobSpecDialog()"	class="btn btn-secondary btn-main-bar" download>Create From Spec</button>
+				<button (click)="publishListing()" 				class="btn btn-secondary btn-main-bar">Publish</button>
+				<button (click)="showPreviousShowOption()" 		class="btn btn-secondary btn-main-bar">Back</button>
 			</div>
 			<form [formGroup]="newListingFormBean">
 				<div [ngSwitch]="activeSubView" class="steps">

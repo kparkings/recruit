@@ -169,7 +169,7 @@ dialog {
 /* Buttons START*/
 .btn-main-bar{
  	margin-top:15px;
-	min-width:150px;
+	min-width:155px;
 	margin-left:10px;
 }
 
@@ -205,10 +205,13 @@ dialog {
 	margin-bottom:30px;
 }
 
-.arenella-page{
-	margin-left:30px;
-	margin-right:30px;
+.action-buttons{
+	text-align:right;
 }
 
-
+.page{
+	padding: 10px;
+	width:100%;
+	
+}
 /*Left right panes - stat*/

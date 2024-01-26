@@ -31,8 +31,9 @@ export class ListingComponent implements OnInit {
 	public recruiterProfile:RecruiterProfile 						= new RecruiterProfile();
 	public selectableFunctionTypes:Array<SelectableFunctionType>	= new Array<SelectableFunctionType>();
 	public selectableCountries:Array<SelectableCountry>				= new Array<SelectableCountry>();
-	public createAlertStep:number = 0;
-	public listingAlertConfirmDisabled:boolean = true;
+	public createAlertStep:number 									= 0;
+	public listingAlertConfirmDisabled:boolean 						= true;
+	public infoItemConfig:InfoItemConfig 							= new InfoItemConfig();
 	
   	constructor(private listingService:ListingService, 
 				private emailService:EmailService, 
@@ -250,8 +251,6 @@ export class ListingComponent implements OnInit {
 		this.selectedListing		= new Listing();
 	}
 	
-	public infoItemConfig:InfoItemConfig = new InfoItemConfig();
-	
 	/**
 	* Switches to Show Listing view
 	*/
@@ -325,7 +324,7 @@ export class ListingComponent implements OnInit {
 			}
 			
 			this.selectedListing	= selectedListing;	
-				this.recruiterProfile = new RecruiterProfile();
+			this.recruiterProfile = new RecruiterProfile();
 			this.recruiterProfile = this.recruiterProfiles.filter(p => p.recruiterId == selectedListing.ownerId)[0];
 	
 			this.registerListingViewedEvent();
