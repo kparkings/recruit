@@ -30,6 +30,7 @@ import { RecruiterProfileComponent } 		from './recruiter-profile/recruiter-profi
 import { TupleStrValueByPos }				from './recruiter-profile/tuple-string-pos-pipe';
 import { EnumToHumanReadableValue }			from './recruiter-profile/enum-to-hr-pipe';
 import { RecruiterStatsComponent } 			from './recruiter-stats/recruiter-stats.component';
+import { CandidateInfoBoxComponent } from './candidate-info-box/candidate-info-box.component';
 
 @NgModule({
   declarations: [
@@ -43,6 +44,7 @@ import { RecruiterStatsComponent } 			from './recruiter-stats/recruiter-stats.co
     RecruiterAccountComponent,
     RecruiterListingsComponent,
     ListingComponent,
+    CandidateInfoBoxComponent,
     RecruiterSignupComponent,
     SuggestionsComponent,
     RecruiterMarketplaceComponent,

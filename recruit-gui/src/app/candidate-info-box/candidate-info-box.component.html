@@ -1,0 +1,25 @@
+<div class="left-box-container {{mobileContainerCSS}}">
+	<h1 *ngIf="isMobile" class="listing-view-title">{{config.getTitle()}}</h1>
+    <div class="left-box">
+    	<div class="photo">
+       		<img class="profile-photo-details" *ngIf="config.hasProfilePhoto()" id='base64image' src='data:image/jpeg;base64, {{config.getProfilePhotoBytes()}}' />
+			<div *ngIf="!config.hasProfilePhoto() && !isMobile" class="profile-photo-details material-icons person ">
+				<span class="person-span">person</span>
+			</div>
+       	</div>
+       	<div *ngFor="let infoItem of config.getItems()" class="left-box">
+       		<h5>{{infoItem.getTitle()}}</h5>
+       		<div class="left-box-body">
+	       		<table>
+	       			<tr *ngFor="let row of infoItem.getRows()">
+	       				<th *ngIf="row.hasLabel()">{{row.getLabel()}}</th>
+	       				<td *ngIf="!row.hasMultipleValues()">{{row.getValue()}}</td>
+	       				<td *ngIf="row.hasMultipleValues()">
+	       					<span *ngFor="let skill of row.getValue()" class="{{row.getValueItemCSS()}}">{{skill}}</span>
+	       				</td>
+	       			</tr>
+	       		</table>
+       		</div>
+       	</div>
+    </div>
+</div>

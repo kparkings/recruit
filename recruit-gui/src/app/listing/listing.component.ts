@@ -9,9 +9,12 @@ import { HostListener}									from '@angular/core';
 import { DeviceDetectorService } 						from 'ngx-device-detector';
 import { RecruiterProfileService} 						from '../recruiter-profile.service';
 import { RecruiterProfile }								from '../recruiter-profile/recruiter-profile';
-import { ListingAlertAddRequest } from './listing-alert-add-request';
-import { FunctionType, SelectableFunctionType } from './function-type';
-import { SelectableCountry } from './country';
+import { ListingAlertAddRequest } 						from './listing-alert-add-request';
+import { SelectableFunctionType } 						from '../shared-domain-object/function-type';
+import { SelectableCountry } 							from '../shared-domain-object/country';
+import { StaticDataService } 							from '../static-data.service';
+import { HtmlOption } 									from '../html-option';
+import { InfoItemBlock, InfoItemConfig, InfoItemRowKeyValue, InfoItemRowMultiValues, InfoItemRowSingleValue } 				from '../candidate-info-box/info-item';
 
 @Component({
   selector: 'app-listing',
@@ -36,7 +39,8 @@ export class ListingComponent implements OnInit {
 				private _Activatedroute:ActivatedRoute, 
 				private modalService:NgbModal, 
 				private deviceDetector:DeviceDetectorService,
-				private recruiterProfileService:RecruiterProfileService) { 
+				private recruiterProfileService:RecruiterProfileService,
+				private staticDataService:			StaticDataService) { 
 	
 		this.isMobile = deviceDetector.isMobile();
 		
@@ -50,10 +54,13 @@ export class ListingComponent implements OnInit {
 			this.mobileButton				 	= 'buttons-icon-mobile';
 		} 
 		
-		this.recruiterProfileService.fetchRecruiterProfiles("RECRUITERS").subscribe(rps => this.recruiterProfiles = rps);
+		this.recruiterProfileService.fetchRecruiterProfiles("RECRUITERS").subscribe(rps => {
+			this.recruiterProfiles = rps
+			console.log("SET RECRUITER PROFILE");
+		});
 	
-		this.selectableFunctionTypes 	= this.listingService.fetchFunctionTypes().map(ft => new SelectableFunctionType(ft, false));
-		this.selectableCountries 		= this.listingService.fetchCountries().map(c => new SelectableCountry(c, false));
+		this.selectableFunctionTypes 	= this.staticDataService.fetchFunctionTypes().map(ft => new SelectableFunctionType(ft, false));
+		this.selectableCountries 		= this.staticDataService.fetchCountries().map(c => new SelectableCountry(c, false));
 	
 	}
 	
@@ -151,8 +158,8 @@ export class ListingComponent implements OnInit {
 		});
 		
 		this.createAlertStep = 0;
-		this.selectableFunctionTypes 	= this.listingService.fetchFunctionTypes().map(ft => new SelectableFunctionType(ft, false));
-		this.selectableCountries 		= this.listingService.fetchCountries().map(c => new SelectableCountry(c, false));
+		this.selectableFunctionTypes 	= this.staticDataService.fetchFunctionTypes().map(ft => new SelectableFunctionType(ft, false));
+		this.selectableCountries 		= this.staticDataService.fetchCountries().map(c => new SelectableCountry(c, false));
 	}
 	
 	public emailRequestFormBean:UntypedFormGroup = new UntypedFormGroup({
@@ -243,6 +250,8 @@ export class ListingComponent implements OnInit {
 		this.selectedListing		= new Listing();
 	}
 	
+	public infoItemConfig:InfoItemConfig = new InfoItemConfig();
+	
 	/**
 	* Switches to Show Listing view
 	*/
@@ -251,14 +260,75 @@ export class ListingComponent implements OnInit {
 		this.activeView 			= 'show';
 		
 		if (selectedListing) {
+		
+			this.recruiterProfile = this.recruiterProfiles.filter(p => p.recruiterId == selectedListing.ownerId)[0];
+		
+		
+			this.infoItemConfig = new InfoItemConfig();
+			this.infoItemConfig.setProfilePhoto(this.recruiterProfile.profilePhoto?.imageBytes);
+	
+			//Recruiter Block
+			let recruiterBlock:InfoItemBlock = new InfoItemBlock();
+			recruiterBlock.setTitle("Recruiter Details");
+			recruiterBlock.addRow(new InfoItemRowKeyValue("Name",selectedListing!.ownerName));
+			recruiterBlock.addRow(new InfoItemRowKeyValue("Company",selectedListing!.ownerCompany));
+			this.infoItemConfig.addItem(recruiterBlock);
+		
+			//Location Block
+			if (selectedListing!.country || selectedListing!.location) {
+				let locationBlock:InfoItemBlock = new InfoItemBlock();
+				locationBlock.setTitle("Location");
+				if	(selectedListing!.country) {
+					locationBlock.addRow(new InfoItemRowKeyValue("Country",this.getCountryCode(selectedListing!.country)));
+				}
+				if	(selectedListing!.location) {
+					locationBlock.addRow(new InfoItemRowKeyValue("City",selectedListing!.location));
+				}
+				this.infoItemConfig.addItem(locationBlock);
+			}
+		
+			//Contract Block
+			if (selectedListing!.type || selectedListing!.currency) {
+				let currencyBlock:InfoItemBlock = new InfoItemBlock();
+				currencyBlock.setTitle("Contract Information");
+				if	(selectedListing!.type) {
+					currencyBlock.addRow(new InfoItemRowKeyValue("Contract Type",this.getContractType(selectedListing!.type)));
+				}
+				if	(selectedListing!.currency) {
+					currencyBlock.addRow(new InfoItemRowKeyValue("Renumeration",selectedListing!.currency + " : " + selectedListing!.rate));
+				}
+				this.infoItemConfig.addItem(currencyBlock);
+			}
+		
+			//Recruiter Block
+			let experienceBlock:InfoItemBlock = new InfoItemBlock();
+			experienceBlock.setTitle("Years Experience");
+			experienceBlock.addRow(new InfoItemRowSingleValue(selectedListing!.yearsExperience));
+			this.infoItemConfig.addItem(experienceBlock);
+		
+			//Languages Block
+			if (selectedListing!.languages.length > 0) {
+				let languagesBlock:InfoItemBlock = new InfoItemBlock();
+				languagesBlock.setTitle("Languages");
+				selectedListing!.languages.forEach(lang => {
+					languagesBlock.addRow(new InfoItemRowSingleValue(this.getLanguage(lang)));	
+				});
+				this.infoItemConfig.addItem(languagesBlock);
+			}
+		
+			//Skills Block
+			if ( selectedListing!.skills.length > 0) {
+				let skillsBlock:InfoItemBlock = new InfoItemBlock();
+				skillsBlock.setTitle("Skills");
+				skillsBlock.addRow(new InfoItemRowMultiValues(selectedListing!.skills, "skill"));
+				this.infoItemConfig.addItem(skillsBlock);
+			}
 			
 			this.selectedListing	= selectedListing;	
-			this.registerListingViewedEvent();
-			
-			this.recruiterProfile = new RecruiterProfile();
-			
+				this.recruiterProfile = new RecruiterProfile();
 			this.recruiterProfile = this.recruiterProfiles.filter(p => p.recruiterId == selectedListing.ownerId)[0];
-			
+	
+			this.registerListingViewedEvent();
 			
 			window.scroll({ 
       			top: 0, 
@@ -359,6 +429,17 @@ export class ListingComponent implements OnInit {
 			this.listingService.registerListingViewedEvent(this.selectedListing.listingId).subscribe();
 		}
 	}
+	
+	public getContractTypeOptions():Array<HtmlOption>{
+		  
+		let types:Array<HtmlOption> = new Array<HtmlOption>();
+		  
+		this.staticDataService.fetchContractTypes().forEach(contractType => {
+			types.push(new HtmlOption(contractType.contractType,contractType.humanReadable));
+		});
+		  		  
+		return types;
+	}
 
 	/**
 	* Returns the code identifying the country
@@ -366,30 +447,10 @@ export class ListingComponent implements OnInit {
 	*/
 	public getCountryCode(country:string):string{
 
-		switch(country){
-			case "NETHERLANDS":{
-				return "The Netherlands";
-			}
-			case "BELGIUM":{
-				return "Belgium";
-			}
-			case "UK":{
-				return "United Kingdom";
-			}
-			case "IRELAND":{
-				return "Ireland";
-			}
-			case "EU_REMOTE":{
-				return "Remote within EU";
-			}
-			case "UK":{
-				return "Remote within World";
-			}
-			default:{
-				return 'NA';
-			}
-		}
-
+		const matchingCountry = this.staticDataService.fetchCountries().filter(countryObj => countryObj.key == country)[0];
+		
+		return matchingCountry == null ? "NA" : matchingCountry.humanReadable;
+		
   	}
 
 	/**
@@ -398,22 +459,11 @@ export class ListingComponent implements OnInit {
 	*/
 	public getContractType(type:string):string{
 
-		switch(type){
-			case "CONTRACT_ROLE":{
-				return "Contract";
-			}
-			case "PERM_ROLE":{
-				return "Permanent";
-			}
-			case "BOTH":{
-				return "Contract/Permanent";
-			}
-			default:{
-				return 'NA';
-			}
-		}
-
-  	}	
+		const matchingType = this.staticDataService.fetchContractTypes().filter(contractTypeObj => contractTypeObj.contractType == type)[0];
+		
+		return matchingType == null ? "NA" : matchingType.humanReadable;
+		
+  	}
 
 	/**
 	* Returns the Humand readable version of the Language
@@ -421,21 +471,10 @@ export class ListingComponent implements OnInit {
 	*/
 	public getLanguage(lang:string):string{
 
-		switch(lang){
-			case "DUTCH":{
-				return "Dutch";
-			}
-			case "FRENCH":{
-				return "French";
-			}
-			case "ENGLISH":{
-				return "English";
-			}
-			default:{
-				return 'NA';
-			}
-		}
-
+		const matchingType = this.staticDataService.fetchLanguageTypes().filter(langTypeObj => langTypeObj.value == lang)[0];
+		
+		return matchingType == null ? "NA" : matchingType.humanReadable;
+		
   	}	
 
 	/**
@@ -657,5 +696,6 @@ export class ListingComponent implements OnInit {
 			this.listingAlertConfirmDisabled = true;
 		}
 	}
+	
 	
 }

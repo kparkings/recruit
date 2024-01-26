@@ -1,249 +1,152 @@
-<div class=".containerX m-2X page">
-	<div class='content-divX'>
-	    <div class="centerdivX">
-	        <div class="center-tableX">
-	        	<div [ngSwitch]="activeView">
-	        		
-	        		<!-- List View -->
-	        		<div  *ngSwitchCase="'list'">
-	        		
-	        			<div class="action-buttons" *ngIf="!isAuthenticated() || isAuthenticated() && isCandidate()">
-							<button class="btn btn-secondary btn-main-bar" (click)="openCreateAlertDialog()">Create Alert</button>
-						</div>
-		        		<div class="action-buttons" *ngIf="isAuthenticated() && !isAuthenticatedAsAdmin() && !isCandidate()">
-							<button class="btn btn-secondary btn-main-bar" routerLink="/recruiter-listings">Manage Your Posts</button>
-						</div>
-	        			
-						<!-- Listings Table -->
-						<div>
-						
-							<div class="site-header" *ngIf="!isLoggedIn()">
-								<h1>Welcome to Arenella-ICT</h1>
-								<h5>A place for IT candidates and IT recruiters to come together</h5>
-							</div>
-							<div class="filters {{mobileListingclassFilters}}">
-								<div class="filters-title" *ngIf="displayFilters"  (click)="toggleFilters()">Filters:<span style="float:right; margin-right:20px;cursor:pointer"> Hide </span></div>
-								<div class="filters-title" *ngIf="!displayFilters" (click)="toggleFilters()">Filters:<span style="float:right; margin-right:20px;cursor:pointer"> Show </span></div>
-								<table *ngIf="displayFilters">
-									<tr>
-										<th>Contract Type</th>
-										<td>
-											<div>
-												<ul class="contract-type-filter">
-													<li><span class="{{getFilterTypeClass('')}}" 		 		(click)="updateContractTypeFilter('')"></span>Both</li>
-													<li><span class="{{getFilterTypeClass('CONTRACT_ROLE')}}" 	(click)="updateContractTypeFilter('Contract')"></span>Contract</li>
-													<li><span class="{{getFilterTypeClass('PERM_ROLE')}}" 	 	(click)="updateContractTypeFilter('Perm')"></span>Perm</li>
-												</ul>
-											</div>
-										</td>
-									</tr>
-									<tr>
-										<th>Age of Post</th>
-										<td>
-											<div>
-												<ul class="contract-type-filter">
-													<li><span class="{{getPostAgeClass('ALL')}}"	 	 	(click)="updatePostAgeFilter('ALL')"></span>All</li>
-													<li><span class="{{getPostAgeClass('TODAY')}}" 	 		(click)="updatePostAgeFilter('TODAY')"></span>Today</li>
-													<li><span class="{{getPostAgeClass('THIS_WEEK')}}" 		(click)="updatePostAgeFilter('THIS_WEEK')"></span>This Week</li>
-													<li><span class="{{getPostAgeClass('THIS_MONTH')}}" 	(click)="updatePostAgeFilter('THIS_MONTH')"></span>This Month</li>
-												</ul>
-											</div>
-										</td>
-									</tr>
-								</table>
-							</div>
-							
-							<div class="listing-pane {{mobileListingclassPane}}">
-								<div class="job-post {{mobileListingclass}}" *ngFor="let listing of listings">
-									<div (click)="showListingDetails(listing)">
-										<div class="listing-title">{{getFormattedJobTitle(listing.title)}}</div>
-											<div>
-												<span title="{{listing.listingId}}" *ngIf="listing.country === 'NETHERLANDS'"  	class="flag-icon flag-icon-nl suggestion-flag-country listing-country"></span>
-												<span title="{{listing.listingId}}" *ngIf="listing.country === 'BELGIUM'"		class="flag-icon flag-icon-be suggestion-flag-country listing-country"></span>
-												<span title="{{listing.listingId}}" *ngIf="listing.country === 'UK'"			class="flag-icon flag-icon-gb suggestion-flag-country listing-country"></span>
-												<span title="{{listing.listingId}}" *ngIf="listing.country === 'IRELAND'"		class="flag-icon flag-icon-ie suggestion-flag-country listing-country"></span>
-												<span title="{{listing.listingId}}" *ngIf="listing.country === 'EU_REMOTE'"		class="flag-icon flag-icon-eu suggestion-flag-country listing-country"></span>
-												<span title="{{listing.listingId}}" *ngIf="listing.country === 'WORLD_REMOTE'"	class="flag-icon flag-icon-xx suggestion-flag-country listing-country"></span>	
-											</div>
-											<div class="job-post-contract-type">
-												{{getFormattedContractType(listing.type)}}
-											</div>
-											<div>
-												<a href="{{getExternalUrl(listing.listingId)}}"></a>
-											</div>
-										</div>
-									</div>
-									
+<div class="page">
+	<div [ngSwitch]="activeView">
+		
+	    <!-- List View -->
+	    <div  *ngSwitchCase="'list'">
+	    	<div class="action-buttons" *ngIf="!isAuthenticated() || isAuthenticated() && isCandidate()">
+				<button class="btn btn-secondary btn-main-bar" (click)="openCreateAlertDialog()">Create Alert</button>
+			</div>
+	        <div class="action-buttons" *ngIf="isAuthenticated() && !isAuthenticatedAsAdmin() && !isCandidate()">
+				<button class="btn btn-secondary btn-main-bar" routerLink="/recruiter-listings">Manage Your Posts</button>
+			</div>
+	       	<!-- Listings Table -->
+			<div>
+				<div class="site-header" *ngIf="!isLoggedIn()">
+					<h1>Welcome to Arenella-ICT</h1>
+					<h5>A place for IT candidates and IT recruiters to come together</h5>
+				</div>
+				<div class="filters {{mobileListingclassFilters}}">
+					<div class="filters-title" *ngIf="displayFilters"  (click)="toggleFilters()">Filters:<span style="float:right; margin-right:20px;cursor:pointer"> Hide </span></div>
+					<div class="filters-title" *ngIf="!displayFilters" (click)="toggleFilters()">Filters:<span style="float:right; margin-right:20px;cursor:pointer"> Show </span></div>
+					<table *ngIf="displayFilters">
+						<tr>
+							<th>Contract Type</th>
+							<td>
+								<div>
+									<ul class="contract-type-filter">
+										<li><span class="{{getFilterTypeClass('')}}" 		 		(click)="updateContractTypeFilter('')"></span>Both</li>
+										<li><span class="{{getFilterTypeClass('CONTRACT_ROLE')}}" 	(click)="updateContractTypeFilter('Contract')"></span>Contract</li>
+										<li><span class="{{getFilterTypeClass('PERM_ROLE')}}" 	 	(click)="updateContractTypeFilter('Perm')"></span>Perm</li>
+									</ul>
 								</div>
-						
+							</td>
+						</tr>
+						<tr>
+							<th>Age of Post</th>
+							<td>
+								<div>
+									<ul class="contract-type-filter">
+										<li><span class="{{getPostAgeClass('ALL')}}"	 	 	(click)="updatePostAgeFilter('ALL')"></span>All</li>
+										<li><span class="{{getPostAgeClass('TODAY')}}" 	 		(click)="updatePostAgeFilter('TODAY')"></span>Today</li>
+										<li><span class="{{getPostAgeClass('THIS_WEEK')}}" 		(click)="updatePostAgeFilter('THIS_WEEK')"></span>This Week</li>
+										<li><span class="{{getPostAgeClass('THIS_MONTH')}}" 	(click)="updatePostAgeFilter('THIS_MONTH')"></span>This Month</li>
+									</ul>
+								</div>
+							</td>
+						</tr>
+					</table>
+				</div>
+				<div class="listing-pane {{mobileListingclassPane}}">
+					<div class="job-post {{mobileListingclass}}" *ngFor="let listing of listings">
+						<div (click)="showListingDetails(listing)">
+							<div class="listing-title">{{getFormattedJobTitle(listing.title)}}</div>
+							<div>
+								<span title="{{listing.listingId}}" *ngIf="listing.country === 'NETHERLANDS'"  	class="flag-icon flag-icon-nl suggestion-flag-country listing-country"></span>
+								<span title="{{listing.listingId}}" *ngIf="listing.country === 'BELGIUM'"		class="flag-icon flag-icon-be suggestion-flag-country listing-country"></span>
+								<span title="{{listing.listingId}}" *ngIf="listing.country === 'UK'"			class="flag-icon flag-icon-gb suggestion-flag-country listing-country"></span>
+								<span title="{{listing.listingId}}" *ngIf="listing.country === 'IRELAND'"		class="flag-icon flag-icon-ie suggestion-flag-country listing-country"></span>
+								<span title="{{listing.listingId}}" *ngIf="listing.country === 'EU_REMOTE'"		class="flag-icon flag-icon-eu suggestion-flag-country listing-country"></span>
+								<span title="{{listing.listingId}}" *ngIf="listing.country === 'WORLD_REMOTE'"	class="flag-icon flag-icon-xx suggestion-flag-country listing-country"></span>	
+							</div>
+							<div class="job-post-contract-type">
+								{{getFormattedContractType(listing.type)}}
+							</div>
+							<div>
+								<a href="{{getExternalUrl(listing.listingId)}}"></a>
+							</div>
 						</div>
 					</div>
-	        		<!-- Show Selected Listing View -->
-	        		<div class="listing-view {{mobileListingViewDiv}}">
-	        			
-	        			<div  *ngSwitchCase="'show'">
-	        			
-		        			<!-- Action buttons -->
-							<div class="action-buttons">
-								<button class="btn btn-secondary btn-main-bar {{mobileButton}}" *ngIf="isAuthenticated() && isAuthenticatedAsAdmin()" (click)="showPublicity()">Publicity</button>
-								<button (click)="showList()" class="btn btn-secondary btn-main-bar {{mobileButton}}">Back</button>
-							</div>
-							
-					
-							<div>
-	        					<div class="left-box-container {{mobileListingLeftPaneContainer}}">
-	        						<h1 *ngIf="isMobile" class="listing-view-title">{{selectedListing.title}}</h1>
-	        						<div class="left-box">
-	        							<div class="photo">
-	        								<img class="profile-photo-details" *ngIf="recruiterProfile?.profilePhoto?.imageBytes" id='base64image' src='data:image/jpeg;base64, {{recruiterProfile?.profilePhoto?.imageBytes}}' />
-											<div *ngIf="!recruiterProfile?.profilePhoto?.imageBytes && !isMobile" class="profile-photo-details material-icons person ">
-												<span style="font-size:300px;color:green;">person</span>
-											</div>
-	        							</div>
-	        							<div>
-	        								<h5>Recruiter Details</h5>
-	        								<div class="left-box-body">
-		        								<table>
-		        									<tr>
-		        										<th>Name</th>
-		        										<td>{{selectedListing.ownerName}}</td>
-		        									</tr>
-		        									<tr>
-		        										<th>Company</th>
-		        										<td>{{selectedListing.ownerCompany}}</td>
-		        									</tr>
-		        								</table>
-	        								</div>
-	        							</div>
-	        						</div>
-	        						
-	        						<div class="left-box" *ngIf="selectedListing.country || selectedListing.location">
-	        							<h5>Location</h5>
-	        							<div class="left-box-body">
-	        								<table>
-	        									<tr *ngIf="selectedListing.country">
-	        										<th>Country</th>
-	        										<td>{{getCountryCode(selectedListing.country)}}</td>
-	        									</tr>
-	        									<tr *ngIf="selectedListing.location">
-	        										<th>City</th>
-	        										<td>{{selectedListing.location}}</td>
-	        									</tr>
-	        								</table>
-	        							</div>
-	        						</div>
-	        						<div class="left-box" *ngIf="selectedListing.type || selectedListing.currency">
-	        							<h5>Contract Information</h5>
-	        							<div class="left-box-body">
-	        								<table>
-	        									<tr *ngIf="selectedListing.type">
-	        										<th>Contract Type</th>
-	        										<td>{{getContractType(selectedListing.type)}}</td>
-	        									</tr>
-	        									<tr *ngIf="selectedListing.currency">
-	        										<th>Renumeration</th>
-	        										<td><span>{{selectedListing.currency}}</span> : <span>{{selectedListing.rate}}</span></td>
-	        									</tr>
-	        								</table>
-	        							</div>
-	        						</div>
-	        						<div class="left-box">
-	        							<h5>Years Experience</h5>
-	        							<div class="left-box-body">
-	        								{{selectedListing.yearsExperience}}
-	        							</div>	
-	        						</div>
-	        						<div class="left-box" *ngIf="selectedListing.languages.length > 0">
-	        							<h5>Languages</h5>
-	        							<div class="left-box-body">
-											<table>
-												<tr *ngFor="let language of selectedListing.languages">
-													<td>{{getLanguage(language)}}</td>
-												</tr>
-											</table>
-										</div>
-	        						</div>
-	        						<div class="left-box" *ngIf="selectedListing.skills.length > 0">
-	        							<h5>Skills</h5>
-	        							<div class="left-box-body">
-											<table>
-												<tr>
-													<td><span class="skill" *ngFor="let skill of selectedListing.skills">{{skill}}</span></td>
-												</tr>
-											</table>
-										</div>
-	        						</div>
-	        					</div>
-	        			
-	        					<div class="desc-body {{mobileDescBody}}">
-	        							<div class="listing-view-div">
-											<h1 *ngIf="!isMobile" class="listing-view-title">{{selectedListing.title}}</h1>
-											<h1 *ngIf="isMobile" class="listing-view-title">Description</h1>
-										</div>
-									<div>
-									<div>
-										<pre style="white-space:pre-line;font-family: Roboto, 'Helvetica Neue', sans-serif;">{{selectedListing.description}}</pre>
-									</div>
-									
-								<div *ngIf="!isCandidate()" style="min-width:75%">
-									<form [formGroup]="emailRequestFormBean">
-										<div>
-											<p class="email-label">Your Name:</p>
-											<input class="email-input" type="email" formControlName="name">
-										</div>
-										<div>
-											<p class="email-label">Your Email:</p>
-											<input class="email-input" type="email" formControlName="email">
-										</div>
-										<p class="email-label">Message To Recruiter</p>
-										<textarea class="contact-recruiter-textarea" formControlName="message"></textarea>
-										<div class="div-spacing">
-											<p class="email-label">Curriculum</p>
-											<input class="email-input" type="file" (change)="uploadCurriculumFile($event)"> 
-											<div style="margin-top:10px">.doc, .docx, .pdf - up to 1MB</div>
-										</div>
-										<div class="action-buttons">
-											<button class="btn btn-secondary btn-main-bar btnRight" (click)="sendEmailRequest()" *ngIf="enableSendEmail()">Send</button>
-											<button class="btn btn-secondary btn-main-bar btnRight" disabled *ngIf="!enableSendEmail()">Send</button>
-										</div>
-									</form>
-								</div>
-								<div *ngIf="isCandidate()" style="min-width:75%">
-									<form [formGroup]="emailRequestFormBean">
-										<p class="email-label">Message To Recruiter</p>
-										<textarea class="contact-recruiter-textarea" formControlName="message"></textarea>
-										<div class="div-spacing">
-											<p class="email-label">Curriculum</p>
-											<div *ngIf="!curriculumFile">
-												<br>
-												<input type="checkbox" disabled="disabled" checked><span> Use stored CV</span>
-												<br><br>
-												<p>Or</p>
-											
-											</div>
-											<input class="email-input" name="selected-file" type="file" (change)="uploadCurriculumFile($event)"> 
-											
-											<div style="margin-top:10px">.doc, .docx, .pdf - up to 1MB</div>
-											
-										</div>
-										<div class="action-buttons">
-											<button class="btn btn-secondary btn-main-bar btnRight" (click)="sendEmailRequest()" *ngIf="enableSendEmail()">Send</button>
-											<button class="btn btn-secondary btn-main-bar btnRight" disabled *ngIf="!enableSendEmail()">Send</button>
-										</div>
-									</form>
-								</div>
-	        					</div>
-	        				</div>
-							
-							</div>
+				</div>
+			</div>
+		</div>
+		<!-- Show Selected Listing View -->
+		<div class="listing-view {{mobileListingViewDiv}}">
+			<div  *ngSwitchCase="'show'">
+	       		<!-- Action buttons -->
+				<div class="action-buttons">
+					<button class="btn btn-secondary btn-main-bar {{mobileButton}}" *ngIf="isAuthenticated() && isAuthenticatedAsAdmin()" (click)="showPublicity()">Publicity</button>
+					<button (click)="showList()" class="btn btn-secondary btn-main-bar {{mobileButton}}">Back</button>
+				</div>
+				
+				<app-candidate-info-box [config]="infoItemConfig"></app-candidate-info-box>
+				
+				<div>
+	       			<div class="left-box-container {{mobileListingLeftPaneContainer}}">
+	       				<h1 *ngIf="isMobile" class="listing-view-title">{{selectedListing.title}}</h1>
+	       				
+	       			</div>
+	       			
+	       			<div class="desc-body {{mobileDescBody}}">
+			       		<div class="listing-view-div">
+							<h1 *ngIf="!isMobile" class="listing-view-title">{{selectedListing.title}}</h1>
+							<h1 *ngIf="isMobile" class="listing-view-title">Description</h1>
 						</div>
-	        		</div>
-	        		
-	        	</div>
-	        </div>
-	    </div>
+						<div>
+							<div>
+								<pre style="white-space:pre-line;font-family: Roboto, 'Helvetica Neue', sans-serif;">{{selectedListing.description}}</pre>
+							</div>
+							<div *ngIf="!isCandidate()" style="min-width:75%">
+								<form [formGroup]="emailRequestFormBean">
+									<div>
+										<p class="email-label">Your Name:</p>
+										<input class="email-input" type="email" formControlName="name">
+									</div>
+									<div>
+										<p class="email-label">Your Email:</p>
+										<input class="email-input" type="email" formControlName="email">
+									</div>
+									<p class="email-label">Message To Recruiter</p>
+									<textarea class="contact-recruiter-textarea" formControlName="message"></textarea>
+									<div class="div-spacing">
+										<p class="email-label">Curriculum</p>
+										<input class="email-input" type="file" (change)="uploadCurriculumFile($event)"> 
+										<div style="margin-top:10px">.doc, .docx, .pdf - up to 1MB</div>
+									</div>
+										<div class="action-buttons">
+											<button class="btn btn-secondary btn-main-bar btnRight" (click)="sendEmailRequest()" *ngIf="enableSendEmail()">Send</button>
+											<button class="btn btn-secondary btn-main-bar btnRight" disabled *ngIf="!enableSendEmail()">Send</button>
+										</div>
+								</form>
+							</div>
+							<div *ngIf="isCandidate()" style="min-width:75%">
+								<form [formGroup]="emailRequestFormBean">
+									<p class="email-label">Message To Recruiter</p>
+									<textarea class="contact-recruiter-textarea" formControlName="message"></textarea>
+									<div class="div-spacing">
+										<p class="email-label">Curriculum</p>
+										<div *ngIf="!curriculumFile">
+											<br>
+											<input type="checkbox" disabled="disabled" checked><span> Use stored CV</span>
+											<br><br>
+											<p>Or</p>
+										</div>
+										<input class="email-input" name="selected-file" type="file" (change)="uploadCurriculumFile($event)"> 
+										<div style="margin-top:10px">.doc, .docx, .pdf - up to 1MB</div>
+									</div>
+									<div class="action-buttons">
+										<button class="btn btn-secondary btn-main-bar btnRight" (click)="sendEmailRequest()" *ngIf="enableSendEmail()">Send</button>
+										<button class="btn btn-secondary btn-main-bar btnRight" disabled *ngIf="!enableSendEmail()">Send</button>
+									</div>
+								</form>
+							</div>
+		       			</div>
+		       		</div>
+				</div>
+			</div>
+		</div>
 	</div>
 </div>
+
 
 <!-- Feedback Box -->
 <dialog #feedbackBox>
@@ -299,9 +202,7 @@
 				<div *ngIf="createAlertStep == 0">
 					<P>1/3 Select a Contract type</P>
 					<select formControlName="contractType">
-						<option Value="BOTH">All</option>
-						<option Value="CONTRACT_ROLE">Contract/Freelance</option>
-						<option Value="PERM_ROLE">Permanent</option>
+						<option *ngFor="let type of getContractTypeOptions()" [ngValue]="type.value">{{type.label}}</option>
 					</select>
 				</div>
 				<div *ngIf="createAlertStep == 1">

@@ -17,6 +17,7 @@ import { FormBeanNewListing } 							from '../listing/form-bean-new-listing';
 import { FormBeanMarketPlace } 							from '../listing/form-bean-market-place';
 import { FormBeanFilterByJobSpec } 						from '../listing/form-bean-filter-by-jobspec';
 import { HtmlOption } 									from '../html-option';
+import { StaticDataService } from '../static-data.service';
 
 @Component({
   selector: 'app-recruiter-listings',
@@ -73,7 +74,8 @@ export class RecruiterListingsComponent implements OnInit {
 				private recruiterProfileService: 	RecruiterProfileService,
 				public 	router:						Router,
 				private marketplaceService: 		RecruiterMarketplaceService,
-				private creditsService:				CreditsService) {
+				private creditsService:				CreditsService,
+				private staticDataService:			StaticDataService) {
 					
 				this.isMobile = deviceDetector.isMobile();
 				
@@ -419,6 +421,8 @@ export class RecruiterListingsComponent implements OnInit {
 			languages.push('FRENCH');
 		}
 		
+		type = type == "" ? "BOTH" : type; // == "CONTRACT_ROLE" ? "CONTRACT" : type == "PERM_ROLE" ? "PERM" : "BOTH";
+		
 		this.validationErrors	= new Array<string>();
 		
 		if (this.selectedListing.listingId === '') {
@@ -608,7 +612,7 @@ export class RecruiterListingsComponent implements OnInit {
 	*/
 	public getCountryCode(country:string):string{
 
-		const matchingCountry = this.listingService.fetchCountries().filter(countryObj => countryObj.key == country)[0];
+		const matchingCountry = this.staticDataService.fetchCountries().filter(countryObj => countryObj.key == country)[0];
 		
 		return matchingCountry == null ? "NA" : matchingCountry.humanReadable;
 	
@@ -623,7 +627,7 @@ export class RecruiterListingsComponent implements OnInit {
 		  let countries:Array<HtmlOption> = new Array<HtmlOption>();
 		  
 		  countries.push(new HtmlOption("",""));
-		  this.listingService.fetchCountries().forEach( country => {
+		  this.staticDataService.fetchCountries().forEach( country => {
 			countries.push(new HtmlOption(country.key,country.humanReadable));  
 		  });
 		  		  
@@ -640,7 +644,7 @@ export class RecruiterListingsComponent implements OnInit {
 		  
 		types.push(new HtmlOption("",""));
 		
-		this.listingService.fetchContractTypes().forEach(contractType => {
+		this.staticDataService.fetchContractTypes().forEach(contractType => {
 			types.push(new HtmlOption(contractType.contractType,contractType.humanReadable));
 		});
 		  		  
@@ -653,7 +657,7 @@ export class RecruiterListingsComponent implements OnInit {
 	*/
 	public getContractType(type:string):string{
 
-		const matchingType = this.listingService.fetchContractTypes().filter(contractTypeObj => contractTypeObj.contractType == type)[0];
+		const matchingType = this.staticDataService.fetchContractTypes().filter(contractTypeObj => contractTypeObj.contractType == type)[0];
 		
 		return matchingType == null ? "NA" : matchingType.humanReadable;
 		
@@ -665,7 +669,7 @@ export class RecruiterListingsComponent implements OnInit {
 	*/
 	public getLanguage(lang:string):string{
 
-		const matchingType = this.listingService.fetchLanguageTypes().filter(langTypeObj => langTypeObj.value == lang)[0];
+		const matchingType = this.staticDataService.fetchLanguageTypes().filter(langTypeObj => langTypeObj.value == lang)[0];
 		
 		return matchingType == null ? "NA" : matchingType.humanReadable;
 		
@@ -749,7 +753,7 @@ export class RecruiterListingsComponent implements OnInit {
 			languages.push('FRENCH');
 		}
 		
-		type = type == "CONTRACT_ROLE" ? "CONTRACT" : type == "PERM_ROLE" ? "PERM" : "BOTH";
+		type = type == "" ? "BOTH" : type == "CONTRACT_ROLE" ? "CONTRACT" : type == "PERM_ROLE" ? "PERM" : "BOTH";
 		
 		this.validationErrors			= new Array<string>();
 		

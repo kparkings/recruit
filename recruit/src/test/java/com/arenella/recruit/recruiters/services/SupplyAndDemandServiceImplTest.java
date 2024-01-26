@@ -31,7 +31,6 @@ import com.arenella.recruit.recruiters.dao.RecruiterCreditDao;
 import com.arenella.recruit.recruiters.adapters.RecruitersExternalEventPublisher;
 import com.arenella.recruit.recruiters.beans.OpenPosition;
 import com.arenella.recruit.recruiters.beans.SupplyAndDemandEvent.EventType;
-import com.arenella.recruit.recruiters.dao.OfferedCandidateDao;
 import com.arenella.recruit.recruiters.dao.OpenPositionDao;
 import com.arenella.recruit.recruiters.dao.SupplyAndDemandEventDao;
 
@@ -49,9 +48,6 @@ public class SupplyAndDemandServiceImplTest {
 	
 	@Mock
 	private OpenPositionDao 					mockOpenPositionDao;
-	
-	@Mock
-	private OfferedCandidateDao					mockOfferedCandidateDao;
 	
 	@Mock
 	private	Authentication						mockAuthentication;

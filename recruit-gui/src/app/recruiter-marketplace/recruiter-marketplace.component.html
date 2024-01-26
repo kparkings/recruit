@@ -1,21 +1,21 @@
-<div class=".containerX m-2X page">
-	
+<div class="page">
 	<!-- Nav options -->
-	<ul class="nav nav-tabs">
-	  <li class="nav-item">
-	    <span class="nav-link tabNav tabNavActive" *ngIf="showDemand  && unseenOpenPositions > 0" (click)="switchTab('showDemand')"><span class="unseen-posts">{{unseenOpenPositions}}</span>Requested Candidates</span>
-	    <span class="nav-link tabNav tabNavActive" *ngIf="showDemand  && unseenOpenPositions <= 0" (click)="switchTab('showDemand')"><span style="margin-left:20px;">&nbsp;</span>Requested Candidates</span>
-	    <span class="nav-link tabNav" *ngIf="!showDemand && unseenOpenPositions > 0" (click)="switchTab('showDemand')"><span class="unseen-posts">{{unseenOpenPositions}}</span>Requested Candidates</span>
-	    <span class="nav-link tabNav" *ngIf="!showDemand   && unseenOpenPositions <= 0" (click)="switchTab('showDemand')"><span style="margin-left:20px;">&nbsp;</span>Requested Candidates</span>
-	  </li>
-	  <li class="nav-item">
-	    <span class="nav-link tabNav tabNavActive" *ngIf="showSupply  && unseenOfferedCandidates >  0"  (click)="switchTab('showSupply')"><span class="unseen-posts">{{unseenOfferedCandidates}}</span>Your Candidates</span>
-	    <span class="nav-link tabNav tabNavActive" *ngIf="showSupply  && unseenOfferedCandidates <=  0"  (click)="switchTab('showSupply')"><span style="margin-left:20px;">&nbsp;</span>Your Candidates</span>
-	    <span class="nav-link tabNav" *ngIf="!showSupply  && unseenOfferedCandidates >  0" (click)="switchTab('showSupply')"><span class="unseen-posts">{{unseenOfferedCandidates}}</span>Your Candidates</span>
-	    <span class="nav-link tabNav" *ngIf="!showSupply   && unseenOfferedCandidates <=  0" (click)="switchTab('showSupply')"><span style="margin-left:20px;">&nbsp;</span>Your Candidates</span>
-	  </li>
-	</ul>
-	
+	<div>
+		<ul class="nav nav-tabs">
+		  <li class="nav-item">
+		    <span class="nav-link tabNav tabNavActive" *ngIf="showDemand  && unseenOpenPositions > 0" (click)="switchTab('showDemand')"><span class="unseen-posts">{{unseenOpenPositions}}</span>Requested Candidates</span>
+		    <span class="nav-link tabNav tabNavActive" *ngIf="showDemand  && unseenOpenPositions <= 0" (click)="switchTab('showDemand')"><span style="margin-left:20px;">&nbsp;</span>Requested Candidates</span>
+		    <span class="nav-link tabNav" *ngIf="!showDemand && unseenOpenPositions > 0" (click)="switchTab('showDemand')"><span class="unseen-posts">{{unseenOpenPositions}}</span>Requested Candidates</span>
+		    <span class="nav-link tabNav" *ngIf="!showDemand   && unseenOpenPositions <= 0" (click)="switchTab('showDemand')"><span style="margin-left:20px;">&nbsp;</span>Requested Candidates</span>
+		  </li>
+		  <li class="nav-item">
+		    <span class="nav-link tabNav tabNavActive" *ngIf="showSupply  && unseenOfferedCandidates >  0"  (click)="switchTab('showSupply')"><span class="unseen-posts">{{unseenOfferedCandidates}}</span>Your Candidates</span>
+		    <span class="nav-link tabNav tabNavActive" *ngIf="showSupply  && unseenOfferedCandidates <=  0"  (click)="switchTab('showSupply')"><span style="margin-left:20px;">&nbsp;</span>Your Candidates</span>
+		    <span class="nav-link tabNav" *ngIf="!showSupply  && unseenOfferedCandidates >  0" (click)="switchTab('showSupply')"><span class="unseen-posts">{{unseenOfferedCandidates}}</span>Your Candidates</span>
+		    <span class="nav-link tabNav" *ngIf="!showSupply   && unseenOfferedCandidates <=  0" (click)="switchTab('showSupply')"><span style="margin-left:20px;">&nbsp;</span>Your Candidates</span>
+		  </li>
+		</ul>
+	</div>
 	<div class="container-div">
 	
 		<!-- Supply -->
@@ -25,13 +25,11 @@
 			to other recruiters for a rate set by you? If so this feature is for you. Add your available candidates and 
 			allow other recruiters to contact you with available projects.  
 			</p>
-			
 			<div class="action-buttons">
 				<button class="btn btn-secondary action-btn  main-action_btn" 	(click)="switchTab('addSupply')" 	*ngIf="!isAuthenticatedAsAdmin()">Offer Candidate</button>
 			</div>
 			<!-- List of offered Candidates -->
 			<div>
-			
 				<table class="table marketplace-table">
 					<thead>
 						<tr>
@@ -59,7 +57,6 @@
 				</table>
 			</div>
 		</div>
-		
 		<!-- Show Demand  -->
 		<div *ngIf="showDemand">
 			<p>
@@ -205,7 +202,6 @@
 			</form>
 		</div>
 	</div>
-	
 	<!-- Edit Demand  -->
 	<div *ngIf="editDemand">
 		<h3>Update Requested Candidate</h3>
@@ -295,7 +291,6 @@
 				</tr>
 			</table>
 		</form>
-		
 	</div>
 	<!-- Open Position Details -->
 	<div *ngIf="showDemandDetails">
@@ -306,13 +301,11 @@
 			<button class="btn btn-secondary btnRight main-btn {{suggestionMobileBtnClass}}" (click)="showOpenPositions()">Back</button>
 		</div>
 		<div class="left-box-container {{mobileListingLeftPaneContainer}}">
-		<!--  div-->
-      		<div>
-      			
+			<div>
       			<h1 *ngIf="isMobile" class="listing-view-title {{mobileListingViewTitle}}">{{activeOpenPosition.positionTitle}}</h1>
-      				<div class="left-box {{mobileLeftBox}}" style="float:left;">
-     					<div>
-     						<img class="profile-photo-details" *ngIf="!isMobile && recruiterProfile?.profilePhoto?.imageBytes" id='base64image' src='data:image/jpeg;base64, {{recruiterProfile?.profilePhoto?.imageBytes}}' />
+      			<div class="left-box {{mobileLeftBox}}" style="float:left;">
+     				<div>
+     					<img class="profile-photo-details" *ngIf="!isMobile && recruiterProfile?.profilePhoto?.imageBytes" id='base64image' src='data:image/jpeg;base64, {{recruiterProfile?.profilePhoto?.imageBytes}}' />
 						<div *ngIf="!recruiterProfile?.profilePhoto?.imageBytes && !isMobile" class="profile-photo-details material-icons person ">
 							<span style="font-size:300px;color:green;">person</span>
 						</div>
@@ -322,26 +315,23 @@
 						<button class="btn btn-secondary action-btn main-action_btn main-btns main-bt" style="width:98%;margin-left:0px;;margin-right:10px;;background:green;" (click)="contactRecruiter()" *ngIf="!isMyOpenPosition()">Contact</button>
 						<br>
      				</div>
-     				
-     				</div>
-     				<div class="left-box {{mobileLeftBox}}" *ngIf="activeOpenPosition?.recruiter?.recruiterName">
-     					<h5>Requested By</h5>
-     					<div class="left-box-body">
-      						<table>
-      							<tr>
-      								<th>Name</th>
-      								<td>{{activeOpenPosition?.recruiter?.recruiterName}}</td>
-      							</tr>
-      							<tr>
-      								<th>Company</th>
-      								<td>{{activeOpenPosition?.recruiter?.companyName}}</td>
-      							</tr>
-      						</table>
-     					</div>
-     				</div>
-     			
-      				
-				<div class="left-box {{mobileLeftBox}}" *ngIf="activeOpenPosition.country || activeOpenPosition.location">
+     			</div>
+     			<div class="left-box {{mobileLeftBox}}" *ngIf="activeOpenPosition?.recruiter?.recruiterName">
+     				<h5>Requested By</h5>
+     				<div class="left-box-body">
+      					<table>
+    						<tr>
+    							<th>Name</th>
+    							<td>{{activeOpenPosition?.recruiter?.recruiterName}}</td>
+    						</tr>
+    						<tr>
+    							<th>Company</th>
+    							<td>{{activeOpenPosition?.recruiter?.companyName}}</td>
+    						</tr>
+    					</table>
+   					</div>
+     			</div>
+     			<div class="left-box {{mobileLeftBox}}" *ngIf="activeOpenPosition.country || activeOpenPosition.location">
 					<h5>Location</h5>
 					<div class="left-box-body">
 						<table>
@@ -356,7 +346,6 @@
 						</table>
 					</div>
 				</div>
-			
 				<div class="left-box {{mobileLeftBox}}" *ngIf="activeOpenPosition.skills.length > 0">
   					<h5>Skills</h5>
   					<div class="left-box-body">
@@ -387,28 +376,28 @@
 					</div>
 				</div>	
 			</div>
-		
-			
 		</div>
 		<div class="desc-bdy {{mobileDescBody}}">
-      			<div class="listing-view-div">
-					<h1 *ngIf="!isMobile" class="listing-view-title">{{activeOpenPosition.positionTitle}}</h1>
-					<h1 *ngIf="isMobile" class="listing-view-title">Description</h1>
-				</div>
-				<div>
-					<div>
-						<pre style="white-space:pre-line;font-family: Roboto, 'Helvetica Neue', sans-serif;">{{activeOpenPosition.description}}</pre>
-					</div>
-				</div>
-				<div *ngIf="activeOpenPosition.comments">
-					<h1 *ngIf="isMobile" class="listing-view-title">Comments</h1>
-					<div>
-						<pre style="white-space:pre-line;font-family: Roboto, 'Helvetica Neue', sans-serif;">{{activeOpenPosition.comments}}</pre>
-					</div>
-				</div>
-				<div class="candidate-view-div-footer"></div>
+      		<div class="listing-view-div">
+				<h1 *ngIf="!isMobile" class="listing-view-title">{{activeOpenPosition.positionTitle}}</h1>
+				<h1 *ngIf="isMobile" class="listing-view-title">Description</h1>
 			</div>
+			<div>
+				<div>
+					<pre style="white-space:pre-line;font-family: Roboto, 'Helvetica Neue', sans-serif;">{{activeOpenPosition.description}}</pre>
+				</div>
+			</div>
+			<div *ngIf="activeOpenPosition.comments">
+				<h1 *ngIf="isMobile" class="listing-view-title">Comments</h1>
+				<div>
+					<pre style="white-space:pre-line;font-family: Roboto, 'Helvetica Neue', sans-serif;">{{activeOpenPosition.comments}}</pre>
+				</div>
+			</div>
+			<div class="candidate-view-div-footer"></div>
+		</div>
+	</div>
 </div>
+
 
 <dialog #feedbackBox>
 	<div class="modal-header">
