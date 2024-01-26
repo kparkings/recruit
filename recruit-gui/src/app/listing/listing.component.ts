@@ -265,7 +265,7 @@ export class ListingComponent implements OnInit {
 		
 		
 			this.infoItemConfig = new InfoItemConfig();
-			this.infoItemConfig.setProfilePhoto(this.recruiterProfile.profilePhoto?.imageBytes);
+			this.infoItemConfig.setProfilePhoto(this.recruiterProfile?.profilePhoto?.imageBytes);
 	
 			//Recruiter Block
 			let recruiterBlock:InfoItemBlock = new InfoItemBlock();
