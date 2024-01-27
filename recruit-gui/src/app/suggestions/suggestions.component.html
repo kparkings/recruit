@@ -1,4 +1,4 @@
-<div class=".containerX m-2X page">
+<div class="page">
 
 	<!-- Action buttons -->
 	<div *ngIf="currentView === 'suggestion-results'" class="button-panel-mobile">
@@ -10,52 +10,45 @@
         <button class="btn btn-secondary btnRight main-btn {{suggestionMobileBtnClass}}" (click)="showSavedCandidates()" download>My Candidates</button>
      </div>
 	
-	<div *ngIf="currentView === 'saved-candidates'" class="suggestion-resultsXX">
-		
+	<div *ngIf="currentView === 'saved-candidates'">
 		<div>
 			<button class="btn btn-secondary btnRight main-btns" (click)="showSuggestionsResults()">Back</button>
-		</div>
-		
+		</div>	 
 		<br>
-	 
-		<div class="suggestion-result-icons" style="margin-top:50px">
-				<div class="suggestion-icon {{suggestionMobileClass}}" *ngFor="let savedCandidate of savedCandidates" (click)="showSuggestedCandidateOverviewSavedCandidate(savedCandidate)">
-					<div class="saved-candidate-icon-header" *ngIf="!isNoLongerAvailableSC(savedCandidate)">
-						C{{savedCandidate.candidate.candidateId}}
+		<div class="suggestion-result-icons">
+			<div class="suggestion-icon {{suggestionMobileClass}}" *ngFor="let savedCandidate of savedCandidates" (click)="showSuggestedCandidateOverviewSavedCandidate(savedCandidate)">
+				<div class="saved-candidate-icon-header" *ngIf="!isNoLongerAvailableSC(savedCandidate)">
+					C{{savedCandidate.candidate.candidateId}}
+				</div>
+				<div class="saved-candidate-icon-header" *ngIf="isNoLongerAvailableSC(savedCandidate)">
+					{{savedCandidate.candidate.candidateId}}
+				</div>
+				<div title="Accuracy Skills" class="suggestion-perception-result-{{savedCandidate.candidate.accuracySkills}}"></div>
+				<div title="Accuracy Languages" class="suggestion-perception-result-{{savedCandidate.candidate.accuracyLanguages}}"></div>
+				<div class="suggestion-icon-body">
+					<div>
+						{{savedCandidate.candidate.firstname}} {{savedCandidate.candidate.surname}}
 					</div>
-					<div class="saved-candidate-icon-header" *ngIf="isNoLongerAvailableSC(savedCandidate)">
-						{{savedCandidate.candidate.candidateId}}
+					<div>
+						{{savedCandidate.candidate.roleSought}}
 					</div>
-					<div title="Accuracy Skills" class="suggestion-perception-result-{{savedCandidate.candidate.accuracySkills}}"></div>
-					<div title="Accuracy Languages" class="suggestion-perception-result-{{savedCandidate.candidate.accuracyLanguages}}"></div>
-					<div class="suggestion-icon-body">
-						<div>
-							{{savedCandidate.candidate.firstname}} {{savedCandidate.candidate.surname}}
-						</div>
-						<div>
-							{{savedCandidate.candidate.roleSought}}
-						</div>
-					</div>
+				</div>
 					
 			</div>
 		</div>
-		<div style="height:20px;width:300px;">&nbsp;</div>
+		<div class="suggestion-result-footer">&nbsp;</div>
 	</div>
 	
 	<div>	
-		<form [formGroup]="suggestionFilterForm" *ngIf="currentView === 'suggestion-results'">
-	
-			<div class="left-menu " *ngIf="currentView === 'suggestion-results'">		
+		<form [formGroup]="suggestionFilterForm" *ngIf="currentView === 'suggestion-results'">	
+			<div class="left-menuXX " *ngIf="currentView === 'suggestion-results'">		
 				<table class="{{mobileSearchBox}}">
 					<tr>
 						<td class="sugg-srch-hdr">Job Title</td>
 						<td class="sugg-srch-bdy">
 							<input type="text" value="Java Developer" class="sugg-srch-job-title {{mobileJobTitleBar}}" formControlName="searchPhrase">
-							
 						</td>
-						
 					</tr>
-					
 					<tr>
 						<td class="sugg-srch-hdr">Country</td>
 						<td class="sugg-srch-bdy country-filters">
@@ -172,7 +165,7 @@
 			</div>
 				
 		</div>
-		<div style="height:20px;width:300px;">&nbsp;</div>
+		<div class="suggestion-result-footer">&nbsp;</div>
 	</div>
 
 	<!-- Suggestion Profile -->

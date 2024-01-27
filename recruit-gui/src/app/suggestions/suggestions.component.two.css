@@ -3,23 +3,27 @@
 	width:90%;
 	height:10px;
 }
-
 .suggestion-perception-good{
 	background:green;
 	width:75%;
 	height:10px;
 }
-
 .suggestion-perception-average{
 	background:orange;
 	width:60%;
 	height:10px;
 }
-
 .suggestion-perception-poor{
 	background:red;
 	width:25%;
 	height:10px;
+}
+
+.suggestion-perception-result-perfect{
+	background:green;
+	width:100%;	
+	height:8px;
+	border-bottom: 1px solid black;
 }
 
 .suggestion-perception-result-perfect{
@@ -61,79 +65,6 @@
 	border-right: 1px solid black;
 }
 
-.candidate-suggestion-table > .table th, .table td {
-	padding: 0.75rem;
-	vertical-align: top;
-	border-top: 1px solid #dee2e6;
-}
-
-
-.candidate-suggestion-table-hdr {
-	font-weight:bold;
-}
-
-.candidate-suggestion-table-hdr-saved {
-	font-weight:bold;
-	background:red;
-}
-
-.suggestion-role-header{
-	margin-bottom:10px;
-}
-
-.available-check-icon{
-	color:green;
-	font-weight:bold;
-	font-size:16px;
-}
-
-.lang-proficient-check-icon{
-	color:green;
-	font-weight:bold;
-	font-size:16px;
-}
-
-.lang-basic-check-icon{
-	color:orange;
-	font-weight:bold;
-	font-size:16px;
-}
-
-.filter-close-box{
-	padding:10px;
-	cursor:pointer;
-	font-size:20px;
-	font-weight: bold;
-	text-align: right;        
-}
-
-.cv-inline{
-	margin-top:20px;
-	margin-left:40px;
-}
-
-.contract-type{
-	width:195px;
-}
-
-.country-filter{
-	margin-left:8px;
-}
-
-.skill-field{
-	width:140px;
-}
-
-.min{
-	width:75px;
- 	margin-right:13px;
-}
- 
-.max{
- 	width:75px;
- 	margin-left:13px;
-}
-
 .info-text{
 	color:blue;
 	font-style:italic;
@@ -144,7 +75,6 @@
 	margin-right:10px;
 	margin-bottom:10px;
 	margin-top:5px;
-	
 }
 
 .saved-candidate-icon-header{
@@ -164,28 +94,12 @@
 	min-height:130px;
 }
 
-
-.details-left{
-	float:left;
-	width:100%;
-	max-width:380px;
-	padding-left:20px;
-	padding-right:20px;
-}
-
-.details-left-collections ul{
-	list-style-type:none;
-}
-.details-left-collections h5{
-	background:#e8e8e8;
-	padding:2px;
-}
 .filter-close-box{
 	padding:10px;
 	cursor:pointer;
 	font-size:20px;
 	font-weight: bold;
-	text-align: right;        
+	text-align: right;
 }
 
 textarea {
@@ -193,52 +107,11 @@ textarea {
     height:200px;
 }
 
-.left-info-box{
-	width:100%;
-	background:#e8e8e8;
-	padding:10px;
-	margin-bottom:20px;
-}
-
-.details-left p{
-	color:black;
-	font-weight:bold;
-}
-
 .publicity-suggestions{
 	text-align:left;
 	font-size:16px;
 	overflow: auto;
 }
-
-.details-left{
-	float:left;
-}
-
-.details-left-collections{
-	min-width:300px;
-	margin-bottom:20px;
-}
-
-.details-left-collections ul{
-	list-style-type:none;
-}
-.details-left-collections h5{
-	background:#e8e8e8;
-	padding:2px;
-}
-/*
-.modal-title{
-	margin-left:20px;
-}
-*/
-/*
-.modal-body{
-	font-size: large;
-	height:345px;
-	text-align: center;
-}
-*/
 
 .modal-header{
 	background:#181414;
@@ -251,25 +124,7 @@ textarea {
 	cursor:pointer;
 	font-size:20px;
 	font-weight: bold;
-	text-align: right;        
-}
-.details-left h3{
-	color:#6A5ACD;
-	border-bottom:2px black solid;
-	width:100%;
-	max-width:360px;
-}
-
-.left-info-box{
-	min-width:300px;
-	margin-bottom:30px;
-}
-
-
-
-.details-left p{
-	color:black;
-	font-weight:bold;
+	text-align: right;
 }
 
 .details-right{
@@ -284,20 +139,12 @@ textarea {
 	padding-left:20px;
 }
 
-
-
 .details-right h1{
 	background:#6A5ACD; 
 	width:100%;
 	margin-bottom:10px;
 	margin-left:0px;
-	padding:10px;	
-}
-
-.profile-photo-details{
-	width:100%;
-	height:320px;
-	border:2px solid lightgrey;
+	padding:10px;
 }
 
 .button-panel-mobile{
@@ -325,17 +172,11 @@ textarea {
 	width:98%;
 }
 
-
-
-
-.left-box-container{
-	float:left; 
-	width:100%; 
-	min-width:320px; 
-	max-width:360px; 
-	margin-top:20px;
+.suggestion-result-icons{
+	margin-top:50px;
 }
 
-.left-box{
-	margin-bottom:30px;
+.suggestion-result-footer{
+	height:20px;
+	width:300px;
 }

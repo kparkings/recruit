@@ -1,10 +1,3 @@
-.left-menu{
-	margin:10px;
-	padding:10px;
-	margin-bottom:0px;
-	font-size:14px;
-}
-
 .sugg-srch-hdr{
 	width:120px;
 	font-weight:bold;
@@ -44,11 +37,10 @@
 	opacity:0.25;
 }
 
-
 .flag-icon-med{
 	width:30px;
 	height:30px;
-	margin:10px;	
+	margin:10px;
 	margin-top:0px;
 	margin-left:0px;
 	cursor:pointer;
@@ -58,11 +50,10 @@
 	float:right;
 }
 
-
 .btn-action{
 	margin-top:5px;
 	margin-right:10px;
-	min-width:150px
+	min-width:150px;
 }
 
 .selected-skill{
@@ -95,17 +86,7 @@
 	padding-left:4px;
 	padding-right:4px;
 } 
-/*
-.suggestion-results{
-	width:96%;
-	margin-bottom:100px;
-	display:inline-block;
-	margin:0 auto;
-	margin-left:2%;
-	margin-right:2%;
-	padding-left:2%;
-}
-*/
+
 .suggestion-icon{
 	float:left;
 	background:#E8E8E8;
@@ -184,7 +165,6 @@
 	display:inline-block;	
 }
 
-
 .skill-no-match{
 	margin:2px;
 	padding:5px;
@@ -233,3 +213,55 @@
     margin-left:1%;
     margin-bottom:0px;
 }
+
+.candidate-suggestion-table > .table th, .table td {
+	padding: 0.75rem;
+	vertical-align: top;
+	border-top: 1px solid #dee2e6;
+}
+
+.candidate-suggestion-table-hdr {
+	font-weight:bold;
+}
+
+.lang-proficient-check-icon{
+	color:green;
+	font-weight:bold;
+	font-size:16px;
+}
+
+.filter-close-box{
+	padding:10px;
+	cursor:pointer;
+	font-size:20px;
+	font-weight: bold;
+	text-align: right;
+}
+
+.cv-inline{
+	margin-top:20px;
+	margin-left:40px;
+}
+
+.contract-type{
+	width:195px;
+}
+
+.country-filter{
+	margin-left:8px;
+}
+
+.skill-field{
+	width:140px;
+}
+
+.min{
+	width:75px;
+ 	margin-right:13px;
+}
+
+.max{
+ 	width:75px;
+ 	margin-left:13px;
+}
+
