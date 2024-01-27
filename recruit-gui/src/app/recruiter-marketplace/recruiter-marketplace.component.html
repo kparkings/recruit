@@ -21,7 +21,7 @@
 		<!-- Supply -->
 		<div *ngIf="showSupply">
 			<div class="action-buttons">
-				<button class="btn btn-secondary action-btn  main-action_btn" 	(click)="switchTab('addSupply')" 	*ngIf="!isAuthenticatedAsAdmin()">Offer Candidate</button>
+				<button class="btn btn-secondary arenella-btn" 	(click)="switchTab('addSupply')" 	*ngIf="!isAuthenticatedAsAdmin()">Offer Candidate</button>
 			</div>
 			<p>
 			Do you have candidates that you cannot currently place? Would you like to make these candidates available
@@ -61,10 +61,10 @@
 		<!-- Show Demand  -->
 		<div *ngIf="showDemand">
 			<div class="action-buttons">
-				<button class="btn btn-secondary action-btn" 					(click)="showJustMyOpenPositions()" 	*ngIf="!showJustMyOpenPositionsActive">My Candidates</button>
-				<button class="btn btn-secondary action-btn" 					(click)="fetchOpenPositions()" 		*ngIf="showJustMyOpenPositionsActive">All Candidates</button>
-				<button class="btn btn-secondary action-btn main-action_btn" 	(click)="switchTab('addDemand')" *ngIf="!isAuthenticatedAsAdmin() && passedCreditCheck">Request Candidate</button>
-				<button class="btn btn-secondary action-btn main-action_btn" 	(click)="showNoCredits()" *ngIf="!isAuthenticatedAsAdmin() && !passedCreditCheck">Request Candidate</button>
+				<button class="btn btn-secondary arenella-btn" 					(click)="showJustMyOpenPositions()" 	*ngIf="!showJustMyOpenPositionsActive">My Candidates</button>
+				<button class="btn btn-secondary arenella-btn" 					(click)="fetchOpenPositions()" 		*ngIf="showJustMyOpenPositionsActive">All Candidates</button>
+				<button class="btn btn-secondary arenella-btn" 					(click)="switchTab('addDemand')" *ngIf="!isAuthenticatedAsAdmin() && passedCreditCheck">Request Candidate</button>
+				<button class="btn btn-secondary arenella-btn" 					(click)="showNoCredits()" *ngIf="!isAuthenticatedAsAdmin() && !passedCreditCheck">Request Candidate</button>
 			</div>
 			<p>
 			Do you have a position that you currently cannot fill? Would you like other Recruiters to be able to contact you 
@@ -111,9 +111,9 @@
 		<div *ngIf="addDemand">
 			<h3>Add details of position you wish to fill via other recruiters</h3>
 			<div class="action-buttons">
-				<button class="btn btn-secondary btnRight {{suggestionMobileBtnClass}}" (click)="showFilterByJobSpecDialog()" download>Create by Spec</button>
-				<button class="btn btn-secondary btnRight {{suggestionMobileBtnClass}}" (click)="showOpenPositions()">Back</button>
-				<button class="btn btn-secondary btnRight {{suggestionMobileBtnClass}}" (click)="publishOpenPosition()">Publish</button>
+				<button class="btn btn-secondary arenella-btn {{suggestionMobileBtnClass}}" (click)="showFilterByJobSpecDialog()" download>Create by Spec</button>
+				<button class="btn btn-secondary arenella-btn {{suggestionMobileBtnClass}}" (click)="showOpenPositions()">Back</button>
+				<button class="btn btn-secondary arenella-btn {{suggestionMobileBtnClass}}" (click)="publishOpenPosition()">Publish</button>
 			</div>
 			<form [formGroup]="requestedCandidateFormBean">
 				<table class="table marketplace-table">
@@ -202,8 +202,8 @@
 		<div *ngIf="editDemand">
 			<h3>Update Requested Candidate</h3>
 			<div class="action-buttons">
-				<button class="btn btn-secondary btnRight {{suggestionMobileBtnClass}}" (click)="publishOpenPosition()">Update</button>
-				<button class="btn btn-secondary btnRight {{suggestionMobileBtnClass}}" (click)="showOpenPositions()">Back</button>
+				<button class="btn btn-secondary arenella-btn {{suggestionMobileBtnClass}}" (click)="publishOpenPosition()">Update</button>
+				<button class="btn btn-secondary arenella-btn {{suggestionMobileBtnClass}}" (click)="showOpenPositions()">Back</button>
 			</div>
 			<form [formGroup]="requestedCandidateFormBean">
 				<table class="table marketplace-table">
@@ -291,10 +291,10 @@
 		<!-- Open Position Details -->
 		<div *ngIf="showDemandDetails">
 			<div class="action-buttons">
-				<button class="btn btn-secondary btnRight main-btn {{suggestionMobileBtnClass}}" *ngIf="isMyOpenPosition()" (click)="editOpenPosition(activeOpenPosition)">Edit</button>
-				<button class="btn btn-secondary btnRight main-btn {{suggestionMobileBtnClass}}" *ngIf="isMyOpenPosition() && confirmDeleteOpenPosition != activeOpenPosition.id"  (click)="deleteMyOpenPosition(activeOpenPosition.id)">Delete</button>
-				<button class="btn btn-secondary btnRight main-btn {{suggestionMobileBtnClass}} small-action-btn-confirm-del " *ngIf="isMyOpenPosition() && confirmDeleteOpenPosition === activeOpenPosition.id" (click)="applyDeleteMyOpenPosition(activeOpenPosition.id)">Confirm</button>
-				<button class="btn btn-secondary btnRight main-btn {{suggestionMobileBtnClass}}" (click)="showOpenPositions()">Back</button>
+				<button class="btn btn-secondary arenella-btn {{suggestionMobileBtnClass}}" *ngIf="isMyOpenPosition()" (click)="editOpenPosition(activeOpenPosition)">Edit</button>
+				<button class="btn btn-secondary arenella-btn {{suggestionMobileBtnClass}}" *ngIf="isMyOpenPosition() && confirmDeleteOpenPosition != activeOpenPosition.id"  (click)="deleteMyOpenPosition(activeOpenPosition.id)">Delete</button>
+				<button class="btn btn-secondary arenella-btn {{suggestionMobileBtnClass}} small-action-btn-confirm-del " *ngIf="isMyOpenPosition() && confirmDeleteOpenPosition === activeOpenPosition.id" (click)="applyDeleteMyOpenPosition(activeOpenPosition.id)">Confirm</button>
+				<button class="btn btn-secondary arenella-btn {{suggestionMobileBtnClass}}" (click)="showOpenPositions()">Back</button>
 			</div>
 			<div class="left-box-containerX {{mobileListingLeftPaneContainer}}X">
 				<!-- Left Pane -->
@@ -344,7 +344,7 @@
 	<div class="modal-body" *ngIf="contactRecruiterView === 'message'">
 		<form [formGroup]="sendMessageGroup">
 			<textarea formControlName="message"></textarea>
-			<button class="btn btn-secondary action-btn btn-right" (click)="sendMessageToRecruiter()" 	*ngIf="!showJustMyOpenPositionsActive">Send</button>
+			<button class="btn btn-secondary arenella-btn" (click)="sendMessageToRecruiter()" 	*ngIf="!showJustMyOpenPositionsActive">Send</button>
 		</form>	
 	</div>
 	<div class="modal-body message-send-success" *ngIf="contactRecruiterView === 'success'">

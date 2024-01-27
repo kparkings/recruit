@@ -15,21 +15,8 @@ chart-wrapper-page{
 	width:90%;
 }
 .chart-wrapper{
-	/*float:left;*/
-	/*width:45%;*/
 	min-width:45%;
 	margin:20px;
-}
-
-
-.action-buttons{
-	text-align:right;
-	margin-right:60px;
-	margin-top:30px;
-}
-
-.btnRight{
-	margin-right:10px;
 }
 
 .new-candidate-table-td{

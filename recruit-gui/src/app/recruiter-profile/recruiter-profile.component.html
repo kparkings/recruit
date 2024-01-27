@@ -7,9 +7,9 @@
 		<div>
 			<div class="recruiter-profile-buttons">
 				<div class="action-buttons">
-					<button class="btn btn-secondary action-btn  main-action_btn"  *ngIf="isOwnAccountExists()  && currentView != 'view-create' && currentView != 'view-details'" 	(click)="showViewCreate()">Edit Profile</button>
-					<button class="btn btn-secondary action-btn  main-action_btn"  *ngIf="!isOwnAccountExists() && currentView != 'view-create' && currentView != 'view-details'" 	(click)="showViewCreate()">Create Profile</button>
-					<button class="btn btn-secondary action-btn" 				   *ngIf="currentView != 'view-main'" 																(click)="showViewMain()">Back</button>
+					<button class="btn btn-secondary arenella-btn"  *ngIf="isOwnAccountExists()  && currentView != 'view-create' && currentView != 'view-details'" 	(click)="showViewCreate()">Edit Profile</button>
+					<button class="btn btn-secondary arenella-btn"  *ngIf="!isOwnAccountExists() && currentView != 'view-create' && currentView != 'view-details'" 	(click)="showViewCreate()">Create Profile</button>
+					<button class="btn btn-secondary arenella-btn" 				   *ngIf="currentView != 'view-main'" 																(click)="showViewMain()">Back</button>
 				</div>
 			</div>
 			
@@ -237,7 +237,7 @@
 				</form>
 			</div>
 			<div class="action-buttons" style="padding-bottom:50px;">
-				<button class="btn btn-secondary action-btn" *ngIf="currentView === 'view-create'" (click)="saveProfile()">Save</button>		
+				<button class="btn btn-secondary arenella-btn" *ngIf="currentView === 'view-create'" (click)="saveProfile()">Save</button>		
 			</div>
 			
 		</div>
@@ -256,7 +256,7 @@
 				<br>
 			</div>
 			<textarea formControlName="message"></textarea>
-			<button class="btn btn-secondary action-btn btn-right" (click)="sendMessageToRecruiter()">Send</button>
+			<button class="btn btn-secondary arenella-btn" (click)="sendMessageToRecruiter()">Send</button>
 		</form>	
 	</div>
 	<div class="modal-body message-send-success" *ngIf="contactRecruiterView === 'success'">

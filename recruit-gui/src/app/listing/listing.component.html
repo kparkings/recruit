@@ -8,8 +8,8 @@
 	    <!-- List View -->
 	    <div *ngSwitchCase="'list'">
 	    	<div class="action-buttons" >
-				<button class="	" (click)="openCreateAlertDialog()" *ngIf="!isAuthenticated() || isAuthenticated() && isCandidate()">Create Alert</button>
-				<button class="btn btn-secondary btn-main-bar" routerLink="/recruiter-listings" *ngIf="isAuthenticated() && !isAuthenticatedAsAdmin() && !isCandidate()">Manage Your Posts</button>
+				<button class="btn btn-secondary arenella-btn" (click)="openCreateAlertDialog()" *ngIf="!isAuthenticated() || isAuthenticated() && isCandidate()">Create Alert</button>
+				<button class="btn btn-secondary arenella-btn" routerLink="/recruiter-listings" *ngIf="isAuthenticated() && !isAuthenticatedAsAdmin() && !isCandidate()">Manage Your Posts</button>
 			</div>
 	       	<!-- Listings Table -->
 			<div>
@@ -76,8 +76,8 @@
 			<div  *ngSwitchCase="'show'">
 	       		<!-- Action buttons -->
 				<div class="action-buttons">
-					<button class="btn btn-secondary btn-main-bar {{mobileButton}}" *ngIf="isAuthenticated() && isAuthenticatedAsAdmin()" (click)="showPublicity()">Publicity</button>
-					<button (click)="showList()" class="btn btn-secondary btn-main-bar {{mobileButton}}">Back</button>
+					<button class="btn btn-secondary arenella-btn {{mobileButton}}" *ngIf="isAuthenticated() && isAuthenticatedAsAdmin()" (click)="showPublicity()">Publicity</button>
+					<button (click)="showList()" class="btn btn-secondary arenella-btn {{mobileButton}}">Back</button>
 				</div>
 				
 				<app-candidate-info-box [config]="infoItemConfig"></app-candidate-info-box>
@@ -115,8 +115,8 @@
 										<div style="margin-top:10px">.doc, .docx, .pdf - up to 1MB</div>
 									</div>
 										<div class="action-buttons">
-											<button class="btn btn-secondary btn-main-bar btnRight" (click)="sendEmailRequest()" *ngIf="enableSendEmail()">Send</button>
-											<button class="btn btn-secondary btn-main-bar btnRight" disabled *ngIf="!enableSendEmail()">Send</button>
+											<button class="btn btn-secondary arenella-btn" (click)="sendEmailRequest()" *ngIf="enableSendEmail()">Send</button>
+											<button class="btn btn-secondary arenella-btn" disabled *ngIf="!enableSendEmail()">Send</button>
 										</div>
 								</form>
 							</div>
@@ -136,8 +136,8 @@
 										<div style="margin-top:10px">.doc, .docx, .pdf - up to 1MB</div>
 									</div>
 									<div class="action-buttons">
-										<button class="btn btn-secondary btn-main-bar btnRight" (click)="sendEmailRequest()" *ngIf="enableSendEmail()">Send</button>
-										<button class="btn btn-secondary btn-main-bar btnRight" disabled *ngIf="!enableSendEmail()">Send</button>
+										<button class="btn btn-secondary arenella-btn" (click)="sendEmailRequest()" *ngIf="enableSendEmail()">Send</button>
+										<button class="btn btn-secondary arenella-btn" disabled *ngIf="!enableSendEmail()">Send</button>
 									</div>
 								</form>
 							</div>
@@ -235,9 +235,9 @@
 					</div>
 				</div>
 				<div style="clear:both;margin-top:50px;" >
-					<button *ngIf="createAlertStep != 0 && createAlertStep != 4" class="btn btn-secondary action-btn listing-alert-btn" (click)="createListingAlertLastStep()">Back</button>
-					<button *ngIf="createAlertStep != 3 && createAlertStep != 4" class="btn btn-secondary action-btn listing-alert-btn" (click)="createListingAlertNextStep()">Next</button>
-					<button *ngIf="createAlertStep == 3" 						 class="btn btn-secondary action-btn listing-alert-btn" [disabled]="listingAlertConfirmDisabled" (click)="createListingAlert()">Confirm</button>
+					<button *ngIf="createAlertStep != 0 && createAlertStep != 4" class="btn btn-secondary arenella-btn" (click)="createListingAlertLastStep()">Back</button>
+					<button *ngIf="createAlertStep != 3 && createAlertStep != 4" class="btn btn-secondary arenella-btn" (click)="createListingAlertNextStep()">Next</button>
+					<button *ngIf="createAlertStep == 3" 						 class="btn btn-secondary arenella-btn" [disabled]="listingAlertConfirmDisabled" (click)="createListingAlert()">Confirm</button>
 				</div>
 			
 			</div>	

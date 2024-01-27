@@ -14,8 +14,8 @@
 	<div class="container-div" *ngIf="showAccountDetails">
 
 		<div class="action-buttons">
-			<button class="btn btn-secondary btnRight" (click)="switchToEditMode()" *ngIf="!isInEditMode">Edit Details</button>
-			<button class="btn btn-secondary btnRight" (click)="cancelEditMode()"	*ngIf="isInEditMode">Cancel</button>
+			<button class="btn btn-secondary arenella-btn" (click)="switchToEditMode()" *ngIf="!isInEditMode">Edit Details</button>
+			<button class="btn btn-secondary arenella-btn" (click)="cancelEditMode()"	*ngIf="isInEditMode">Cancel</button>
 		</div>
 		
 		<div id="account-details-input">
@@ -95,7 +95,7 @@
 				</table>
 				
 				<div class="action-buttons">
-					<button class="btn btn-secondary btnRight" (click)="persistAccountDetails()" *ngIf="isInEditMode">Save Changes</button>
+					<button class="btn btn-secondary arenella-btn" (click)="persistAccountDetails()" *ngIf="isInEditMode">Save Changes</button>
 				</div>
 			
 			</form>
@@ -187,7 +187,7 @@
 					
 							<tr>
 								<td>
-									<button class="btn btn-secondary btnRight btnSubscribe" (click)="confirmSwitchToOtherSubscription()">Confirm Subscription</button>
+									<button class="btn btn-secondary arenella-btn btnSubscribe" (click)="confirmSwitchToOtherSubscription()">Confirm Subscription</button>
 								</td>
 							</tr>
 						</table>

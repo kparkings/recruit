@@ -95,28 +95,11 @@
     margin-bottom: 10px;
 }
 
-.action-btn{
-	width:100px;
-	margin-top:5px;
-	margin-left:5px;
-	padding-left:0px;
-	padding-right:5px;
-} 
-
-
-
-
-
-
 .container-div{
 	margin:20px;
 	margin-top:10px;
 }
-
-.action-buttons{
-	text-align:right;
-}
-
+/*
 .btn-right{
 	float:right;
 }
@@ -128,7 +111,7 @@
 	margin-bottom:10px;
 	margin-top:0px;
 	
-}
+}*/
 
 .selected-skill{
 	margin:2px;

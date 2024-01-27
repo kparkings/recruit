@@ -20,8 +20,7 @@
 		</ul>
 	</div>
 	
-	<div class="page-body">
-		<!-- Recruiters-->
+	<!-- Recruiters-->
 	<div *ngIf="showRecruitersTab">
 		<table>
 			<thead>
@@ -35,27 +34,27 @@
 				<tr>
 					<td class="recruiter-active-subscription">Active Paid Subscription</td>
 					<td class="recruiter-active-subscription">{{activePaidSubscription.length}}</td>
-					<td><button class="btn btn-secondary btn-action" (click)="toggleShowActivePaidSubscription()">Toggle</button></td>
+					<td><button class="btn btn-secondary arenella-action" (click)="toggleShowActivePaidSubscription()">Toggle</button></td>
 				</tr>
 				<tr>
 					<td class="recruiter-credit-based-subscription">Credit Based</td>
 					<td class="recruiter-credit-based-subscription">{{creditBasedSubscription.length}}</td>
-					<td><button class="btn btn-secondary btn-action" (click)="toggleShowCreditBasedSubscription()">Toggle</button></td>
+					<td><button class="btn btn-secondary arenella-action" (click)="toggleShowCreditBasedSubscription()">Toggle</button></td>
 				</tr>
 				<tr>
 					<td class="recruiter-trial-subscription">Trial Subscription</td>
 					<td class="recruiter-trial-subscription">{{trialPeriodRecruiters.length}}</td>
-					<td><button class="btn btn-secondary btn-action" (click)="toggleShowTrialPeriodRecruiters()">Toggle</button></td>
+					<td><button class="btn btn-secondary arenella-btn" (click)="toggleShowTrialPeriodRecruiters()">Toggle</button></td>
 				</tr>
 				<tr>
 					<td class="recruiter-expired-subscription">Expired Subscription</td>
 					<td class="recruiter-expired-subscription">{{expiredSubscriptionRecruiters.length}}</td>
-					<td><button class="btn btn-secondary btn-action" (click)="toggleShowExpiredSubscriptionRecruiters()">Toggle</button></td>
+					<td><button class="btn btn-secondary arenella-btn" (click)="toggleShowExpiredSubscriptionRecruiters()">Toggle</button></td>
 				</tr>
 				<tr>
 					<td class="recruiter-firstgen">FirstGen Subscription</td>
 					<td class="recruiter-firstgen">{{firstGenActiveSubscription.length}}</td>
-					<td><button class="btn btn-secondary btn-action" (click)="toggleShowFirstGenActiveSubscription()">Toggle</button></td>
+					<td><button class="btn btn-secondary arenella-btn" (click)="toggleShowFirstGenActiveSubscription()">Toggle</button></td>
 				</tr>
 				<tr>
 					<td>Total  / Total active</td>
@@ -154,8 +153,8 @@
 	      				{{candidate.roleSought}}
 	      			</td>
 	      			<td class="medicol">
-	      				<button	class="control-spacing btn btn-secondary btn-action" (click)="markCandidateAsAvailable(candidate.candidateId)">Available</button>
-	      				<button	class="control-spacing btn btn-secondary btn-action" (click)="disableNoLongerAvailableFlaggedAsUnavailableCandidate(candidate.candidateId)">Disable</button>
+	      				<button	class="control-spacing btn btn-secondary arenella-btn" (click)="markCandidateAsAvailable(candidate.candidateId)">Available</button>
+	      				<button	class="control-spacing btn btn-secondary arenella-btn" (click)="disableNoLongerAvailableFlaggedAsUnavailableCandidate(candidate.candidateId)">Disable</button>
 	      			</td>
 	      		</tr>
 	      	</tbody>
@@ -178,7 +177,7 @@
 			<div style="float:left">
 				<label 	class="control-spacing candidate-lbl">email</label>
 				<input 	class="control-spacing candidate-input" type="text" formControlName="email"/>
-				<button	class="control-spacing btn btn-secondary btn-action" (click)="fetchCandidates()">Filter</button>
+				<button	class="control-spacing btn btn-secondary arenella-btn" (click)="fetchCandidates()">Filter</button>
 			</div>
 			
 		</form>
@@ -204,11 +203,11 @@
 	            	    <td class="candidate-tab-col medicol">
 	            	    	<div [ngSwitch]="candidate.available">
 	                			<div  *ngSwitchCase="true">
-	                				<button	class="control-spacing btn btn-secondary btn-action" (click)="disableCandidate(candidate.candidateId)">Disable</button>
+	                				<button	class="control-spacing btn btn-secondary arenella-btn" (click)="disableCandidate(candidate.candidateId)">Disable</button>
 	                			</div>
 	                			<div>
-	                				<button	class="control-spacing btn btn-secondary btn-action" *ngIf="candidateToDelete == '' || candidateToDelete != candidate.candidateId" (click)="deleteCandidate(candidate.candidateId)">Delete</button>
-	                				<button	class="control-spacing btn btn-secondary btn-action" *ngIf="candidateToDelete == candidate.candidateId" (click)="confirmDeleteCandidate()" style="background:red">Confirm</button>
+	                				<button	class="control-spacing btn btn-secondary arenella-btn" *ngIf="candidateToDelete == '' || candidateToDelete != candidate.candidateId" (click)="deleteCandidate(candidate.candidateId)">Delete</button>
+	                				<button	class="control-spacing btn btn-secondary arenella-btn" *ngIf="candidateToDelete == candidate.candidateId" (click)="confirmDeleteCandidate()" style="background:red">Confirm</button>
 	                			</div>
 	                		</div>
 	                	</td>
@@ -234,15 +233,15 @@
       		<tbody>
       			<tr style="padding-bottom:20px; border-bottom:2px black solid;border-top:2px black solid;">
 	      			<td><b>Pending:</b> {{skillsToValidate.length}}</td>
-	      			<td><button	class="control-spacing btn btn-secondary btn-action" style="float:right;" (click)="persistValidatedSkills()">Update</button></td>
+	      			<td><button	class="control-spacing btn btn-secondary arenella-btn" style="float:right;" (click)="persistValidatedSkills()">Update</button></td>
 	      		</tr>
 	      		<tr *ngFor="let skill of skillsToValidate">
 	      			<td *ngIf="skill.validationStatus == 'PENDING'">{{skill.skill}}</td>
 	      			<td *ngIf="skill.validationStatus == 'ACCEPTED'" class="skillAccepted">{{skill.skill}}</td>
 	      			<td *ngIf="skill.validationStatus == 'REJECTED'" class="skillRejected">{{skill.skill}}</td>
 	      			<td>
-	      				<button	class="control-spacing btn btn-secondary btn-action" (click)="updateSkillValidationStatus(skill.skill, 'ACCEPTED')">Accept</button>
-	      				<button	class="control-spacing btn btn-secondary btn-action" (click)="updateSkillValidationStatus(skill.skill, 'REJECTED')">Reject</button>
+	      				<button	class="control-spacing btn btn-secondary arenella-btn" (click)="updateSkillValidationStatus(skill.skill, 'ACCEPTED')">Accept</button>
+	      				<button	class="control-spacing btn btn-secondary arenella-btn" (click)="updateSkillValidationStatus(skill.skill, 'REJECTED')">Reject</button>
 	      			</td>
 	      		</tr>
 	      	</tbody>
@@ -276,12 +275,11 @@
 					<td class="medicol">{{subscriptionAction.type}}</td>
 					<td class="medicol">{{subscriptionAction.status}}</td>
 					<td>
-						<button class="btn btn-secondary btn-action" *ngFor="let action of subscriptionAction.actions" (click)="performAction(subscriptionAction, action)">{{frmtSubscriptionAction(action)}}</button>
+						<button class="btn btn-secondary arenella-btn" *ngFor="let action of subscriptionAction.actions" (click)="performAction(subscriptionAction, action)">{{frmtSubscriptionAction(action)}}</button>
 					</td>
 				</tr>
 			</tbody>
 		</table>
 	<div>
-	</div>
 	
 </div>

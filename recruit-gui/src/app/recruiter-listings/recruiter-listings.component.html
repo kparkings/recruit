@@ -8,9 +8,9 @@
 			<div  *ngSwitchCase="'list'">
 				<div>
 					<div class="action-buttons">
-						<button *ngIf="passedCreditCheck" 	(click)="showAdd()" 		class="btn btn-secondary btn-main-bar">Add Job</button>
-						<button *ngIf="!passedCreditCheck" 	(click)="showNoCredits()" 	class="btn btn-secondary btn-main-bar">Add Job</button>
-						<button routerLink="/listing" 									class="btn btn-secondary btn-main-bar">Back</button>
+						<button *ngIf="passedCreditCheck" 	(click)="showAdd()" 		class="btn btn-secondary arenella-btn">Add Job</button>
+						<button *ngIf="!passedCreditCheck" 	(click)="showNoCredits()" 	class="btn btn-secondary arenella-btn">Add Job</button>
+						<button routerLink="/listing" 									class="btn btn-secondary arenella-btn">Back</button>
 					</div>
 					<div class="recruiter-listing-main-text">
 						<p>Add a job to the job board and allow candidates both within the site and outside to contact you directly.</p>
@@ -52,11 +52,11 @@
 		<div [ngSwitch]="activeView">
 			<div *ngSwitchCase="'show'">
 	   			<div class="action-buttons">
-					<button (click)="showPublicity()"		class="btn btn-secondary btn-main-bar">Publicity</button>
-					<button (click)="showEditListing()" 	class="btn btn-secondary btn-main-bar">Edit</button>
-					<button (click)="showConfirmDelete()"   class="btn btn-secondary btn-main-bar" *ngIf="!enabldeDeleteOption">Delete</button>
-					<button (click)="performmDelete()" 	  	class="btn btn-secondary btn-main-bar confirm-delete" *ngIf="enabldeDeleteOption">Confirm</button>
-					<button (click)="showList()" 			class="btn btn-secondary btn-main-bar">Back</button>
+					<button (click)="showPublicity()"		class="btn btn-secondary arenella-btn">Publicity</button>
+					<button (click)="showEditListing()" 	class="btn btn-secondary arenella-btn">Edit</button>
+					<button (click)="showConfirmDelete()"   class="btn btn-secondary arenella-btn" *ngIf="!enabldeDeleteOption">Delete</button>
+					<button (click)="performmDelete()" 	  	class="btn btn-secondary arenella-btn confirm-delete" *ngIf="enabldeDeleteOption">Confirm</button>
+					<button (click)="showList()" 			class="btn btn-secondary arenella-btn">Back</button>
 				</div>
 				
 				<app-candidate-info-box [config]="infoItemConfig"></app-candidate-info-box>
@@ -78,9 +78,9 @@
 			<!-- List Listings -->
 			<div  *ngSwitchCase="['add', 'edit'].includes(activeView) ? activeView : !activeView">
 				<div class="action-buttons">
-					<button (click)="showFilterByJobSpecDialog()"	class="btn btn-secondary btn-main-bar" download>Create From Spec</button>
-					<button (click)="publishListing()" 				class="btn btn-secondary btn-main-bar">Publish</button>
-					<button (click)="showPreviousShowOption()" 		class="btn btn-secondary btn-main-bar">Back</button>
+					<button (click)="showFilterByJobSpecDialog()"	class="btn btn-secondary arenella-btn" download>Create From Spec</button>
+					<button (click)="publishListing()" 				class="btn btn-secondary arenella-btn">Publish</button>
+					<button (click)="showPreviousShowOption()" 		class="btn btn-secondary arenella-btn">Back</button>
 				</div>
 				<form [formGroup]="newListingFormBean">
 					<div [ngSwitch]="activeSubView" class="steps">
@@ -326,8 +326,8 @@
 			</div>
 			
 			<div>
-				<button class="btn btn-secondary btn-action suggestion-button" (click)="declineMarketplace()">Decline</button>
-				<button class="btn btn-secondary btn-action suggestion-button" (click)="publishOpenPosition()">Agree</button>
+				<button class="btn btn-secondary arenella-btn suggestion-button" (click)="declineMarketplace()">Decline</button>
+				<button class="btn btn-secondary arenella-btn suggestion-button" (click)="publishOpenPosition()">Agree</button>
 			</div>
 			
 		</div>

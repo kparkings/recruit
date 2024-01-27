@@ -261,7 +261,6 @@ export class ListingComponent implements OnInit {
 		
 			this.recruiterProfile = this.recruiterProfiles.filter(p => p.recruiterId == selectedListing.ownerId)[0];
 		
-		
 			this.infoItemConfig = new InfoItemConfig();
 			this.infoItemConfig.setProfilePhoto(this.recruiterProfile?.profilePhoto?.imageBytes);
 	

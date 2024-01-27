@@ -95,17 +95,6 @@
 	 margin-top:0px;
 }
 
-.action-buttons{
-	text-align:right;
-	margin-right:40px;
-	margin-bottom:20px;
-	margin-top:20px;
-}
-
-.action-buttons button{
-	width:150px;
-}
-
 #account-details-input label{
 	width:100%;
 }

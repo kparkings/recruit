@@ -25,20 +25,6 @@
     min-width:50px;
 }
 
-.action-buttons{
-	text-align:right;
-	margin-right:10px;
-	margin-left:10px;
-}
-
-.action-btn{
-	width:150px;
-	margin-top:5px;
-	margin-left:5px;
-	padding-left:0px;
-	padding-right:5px;
-} 
-
 .small-action-btn{
 	width:100px;
 	margin-top:5px;
@@ -208,22 +194,22 @@ td{
 	font-weight: bold;
 	text-align: right;        
 }
-
+/*
 .btn-right{
 	float:right;
 }
-
+*/
 .main-action_btn{
 	background:green;
 }
-
+/*
 .main-btns{
 	width:200px;
 	margin-right:10px;
 	margin-bottom:10px;
 	margin-top:5px;
 	
-}
+}*/
 /*
 .left-box-title{
 	min-width:300px;
@@ -274,7 +260,7 @@ td{
 	border:2px solid lightgrey;
 	margin-bottom:10px;
 }
-
+/*
 .main-btns{
 	width:200px;
 	margin-right:10px;
@@ -282,7 +268,7 @@ td{
 	margin-top:5px;
 	
 }
-
+*/
 .modal-title{
 	margin-left:20px;
 }
@@ -356,13 +342,13 @@ td{
 	margin-left:5px;
 	margin-right:0px;
 }
-
+/*
 .btnRight{
 	margin-top:20px;
     margin-bottom:20px;
     margin-right:10px;
     min-width:100px;
-}
+}*/
 
 .buttons-icon-mobile{
 	width:48%;
