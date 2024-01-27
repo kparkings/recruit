@@ -6,6 +6,8 @@ import { UntypedFormGroup, UntypedFormControl }		from '@angular/forms';
 import { TupleStrValueByPos }						from './tuple-string-pos-pipe';
 import { EmailService, EmailRequest }				from '../email.service';
 import { NgbModal, NgbModalOptions}					from '@ng-bootstrap/ng-bootstrap';
+import { InfoItemBlock, InfoItemConfig, InfoItemRowKeyValue } from '../candidate-info-box/info-item';
+import { EnumToHumanReadableValue } from './enum-to-hr-pipe';
 
 /**
 * Component for working with Recruiter Profiles
@@ -20,10 +22,11 @@ export class RecruiterProfileComponent {
 	@ViewChild('contactBox', { static: false }) private contactBox:any;
 	
 	public recruiterProfile?:RecruiterProfile;
-	public recruiterProfiles:Array<RecruiterProfile> = new Array<RecruiterProfile>();
-	public selectedRecruiterProfile:RecruiterProfile = new RecruiterProfile();
+	public recruiterProfiles:Array<RecruiterProfile> 				= new Array<RecruiterProfile>();
+	public selectedRecruiterProfile:RecruiterProfile 				= new RecruiterProfile();
 	public currentView = 'view-main'; 
 	private imageFile!:File| any;
+	public infoItemConfig:InfoItemConfig 							= new InfoItemConfig();
 	
 	/**
 	* Constructor
@@ -206,6 +209,21 @@ export class RecruiterProfileComponent {
 		this.currentView = 'view-details';
 		
 		this.selectedRecruiterProfile = recruiterProfile;
+		
+		let enumPipe:EnumToHumanReadableValue = new EnumToHumanReadableValue();
+		
+		this.infoItemConfig = new InfoItemConfig();
+		this.infoItemConfig.setProfilePhoto(this.selectedRecruiterProfile?.profilePhoto?.imageBytes);
+		this.infoItemConfig.setShowContactButton(true);
+		
+		let recruiterBlock:InfoItemBlock = new InfoItemBlock();
+		
+		recruiterBlock.addRow(new InfoItemRowKeyValue("Company",enumPipe.transform(this.selectedRecruiterProfile.companyName)));
+		recruiterBlock.addRow(new InfoItemRowKeyValue("Type",enumPipe.transform(this.selectedRecruiterProfile.recruiterType)));
+		recruiterBlock.addRow(new InfoItemRowKeyValue("Years Experience",""+this.selectedRecruiterProfile.yearsExperience));
+		this.infoItemConfig.addItem(recruiterBlock);
+		
+		
 	}
 	
 	/**

@@ -1,5 +1,5 @@
-<div class=".container">
-	<div class='content-div'>
+<div class="page">
+	<div>
 		<div class="recruiter-profile-buttons">
 			<div class="action-buttons">
 				<button class="btn btn-secondary action-btn  main-action_btn"  *ngIf="isOwnAccountExists()  && currentView != 'view-create' && currentView != 'view-details'" 	(click)="showViewCreate()">Edit Profile</button>
@@ -38,32 +38,10 @@
 		
 		<div *ngIf="currentView === 'view-details'">
 		
-			<div  class="details-left">
-				<img class="profile-photo-details" *ngIf="selectedRecruiterProfile?.profilePhoto?.imageBytes" id='base64image' src='data:image/jpeg;base64, {{selectedRecruiterProfile?.profilePhoto?.imageBytes}}' />
-				<div *ngIf="!selectedRecruiterProfile?.profilePhoto?.imageBytes" class="profile-photo-details material-icons person ">
-						<span style="font-size:300px;color:green;">person</span>
-					</div>
-				<br>
-				<table>
-					<tr>
-						<th>Company</th>
-						<td>{{selectedRecruiterProfile.companyName | enumToHumanReadableValue}}</td>
-					</tr>
-					<tr>
-						<th>Type</th>
-						<td>{{selectedRecruiterProfile.recruiterType | enumToHumanReadableValue}}</td>
-					</tr>
-					<tr>
-						<th>Years Exp</th>
-						<td>{{selectedRecruiterProfile.yearsExperience}}</td>
-					</tr>
-				</table>
-				
-				<br>
-				<button class="btn btn-secondary action-btn main-action_btn" style="width:300px;margin-bottom:10px;" (click)="contactRecruiter()">Contact</button>
-			</div>	
-				
-			<div class="details-left" style="max-width:75%;min-width:300px;">
+			<!-- Left Pane -->
+			<app-candidate-info-box [config]="infoItemConfig" (openContactBoxEvent)="contactRecruiter()"></app-candidate-info-box>
+		
+			<div class="desc-body">
 				<div style="float:center">
 					
 					<h1>{{selectedRecruiterProfile.recruiterFirstName | enumToHumanReadableValue}} {{selectedRecruiterProfile.recruiterSurname | enumToHumanReadableValue}}</h1>
