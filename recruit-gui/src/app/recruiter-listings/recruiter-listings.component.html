@@ -1,206 +1,212 @@
 <div class="page">
-	<div [ngSwitch]="activeView">
-		<div  *ngSwitchCase="'list'">
-			<div>
-				<div class="action-buttons">
-					<button *ngIf="passedCreditCheck" 	(click)="showAdd()" 		class="btn btn-secondary btn-main-bar">Add Job</button>
-					<button *ngIf="!passedCreditCheck" 	(click)="showNoCredits()" 	class="btn btn-secondary btn-main-bar">Add Job</button>
-					<button routerLink="/listing" 									class="btn btn-secondary btn-main-bar">Back</button>
-				</div>
-				<div class="recruiter-listing-main-text">
-					<p>Add a job to the job board and allow candidates both within the site and outside to contact you directly.</p>
-					<p>All postings on the job board will be shared in a network of 23,000+ connections to attract as many views for your job listing as possible.</p>
-				</div>
-				<div class="pagination-options">
-			    	<span [ngSwitch]="showNavPrev()">
-						<span *ngSwitchCase="true"  class="listing-nav" (click)="previousPage()"><<<<<</span>
-						<span *ngSwitchCase="false" class="listing-nav-disabled"><<<<<</span>
-					</span>
-					<span>{{currentPage+1}}</span>
-					<span [ngSwitch]="showNavNext()">
-						<span *ngSwitchCase="true"class="listing-nav" (click)="nextPage()">>>>>></span>
-						<span *ngSwitchCase="false"class="listing-nav-disabled">>>>>></span>
-					</span>
-				</div>
-			</div>
-			<div class="listings">
-      			<table class="table listing-table">
-					<thead>
-				    	<tr>
-				      		<th>Created</th>
-							<th>Title</th>
-				            <th>Views</th>
-				      	</tr>
-					</thead>
-					<tbody>
-				    	<tr class="listing-tab-row" *ngFor="let listing of listings" >
-				      		<td (click)="showListingDetails(listing)">{{listing.created | date:'yyyy-MM-dd hh:mm'}}</td>
-				      		<td (click)="showListingDetails(listing)">{{listing.title}}</td>
-				        	<td (click)="showListingDetails(listing)">{{listing.views}}</td>
-				      	</tr>	
-					</tbody>
-				</table>
-			</div>
-		</div>
-	</div>
-		
-	<div [ngSwitch]="activeView">
-		<div *ngSwitchCase="'show'">
-   			<div class="action-buttons">
-				<button (click)="showPublicity()"		class="btn btn-secondary btn-main-bar">Publicity</button>
-				<button (click)="showEditListing()" 	class="btn btn-secondary btn-main-bar">Edit</button>
-				<button (click)="showConfirmDelete()"   class="btn btn-secondary btn-main-bar" *ngIf="!enabldeDeleteOption">Delete</button>
-				<button (click)="performmDelete()" 	  	class="btn btn-secondary btn-main-bar confirm-delete" *ngIf="enabldeDeleteOption">Confirm</button>
-				<button (click)="showList()" 			class="btn btn-secondary btn-main-bar">Back</button>
-			</div>
-			
-			<app-candidate-info-box [config]="infoItemConfig"></app-candidate-info-box>
-				
-        	<div style="float:left;margin-left:15px;min-width:300px;max-width:72%;padding:5px;">
-        		<div class="listing-view-div">
-					<h1 *ngIf="!isMobile" class="listing-view-title">{{selectedListing.title}}</h1>
-					<h1 *ngIf="isMobile" class="listing-view-title">Description</h1>
-				</div>
+	
+	<!-- Nav options -->
+	<div class="nav-tabs-bar"></div>
+	
+	<div class="page-body">
+		<div [ngSwitch]="activeView">
+			<div  *ngSwitchCase="'list'">
 				<div>
+					<div class="action-buttons">
+						<button *ngIf="passedCreditCheck" 	(click)="showAdd()" 		class="btn btn-secondary btn-main-bar">Add Job</button>
+						<button *ngIf="!passedCreditCheck" 	(click)="showNoCredits()" 	class="btn btn-secondary btn-main-bar">Add Job</button>
+						<button routerLink="/listing" 									class="btn btn-secondary btn-main-bar">Back</button>
+					</div>
+					<div class="recruiter-listing-main-text">
+						<p>Add a job to the job board and allow candidates both within the site and outside to contact you directly.</p>
+						<p>All postings on the job board will be shared in a network of 23,000+ connections to attract as many views for your job listing as possible.</p>
+					</div>
+					<div class="pagination-options">
+				    	<span [ngSwitch]="showNavPrev()">
+							<span *ngSwitchCase="true"  class="listing-nav" (click)="previousPage()"><<<<<</span>
+							<span *ngSwitchCase="false" class="listing-nav-disabled"><<<<<</span>
+						</span>
+						<span>{{currentPage+1}}</span>
+						<span [ngSwitch]="showNavNext()">
+							<span *ngSwitchCase="true"class="listing-nav" (click)="nextPage()">>>>>></span>
+							<span *ngSwitchCase="false"class="listing-nav-disabled">>>>>></span>
+						</span>
+					</div>
+				</div>
+				<div class="listings">
+	      			<table class="table listing-table">
+						<thead>
+					    	<tr>
+					      		<th>Created</th>
+								<th>Title</th>
+					            <th>Views</th>
+					      	</tr>
+						</thead>
+						<tbody>
+					    	<tr class="listing-tab-row" *ngFor="let listing of listings" >
+					      		<td (click)="showListingDetails(listing)">{{listing.created | date:'yyyy-MM-dd hh:mm'}}</td>
+					      		<td (click)="showListingDetails(listing)">{{listing.title}}</td>
+					        	<td (click)="showListingDetails(listing)">{{listing.views}}</td>
+					      	</tr>	
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+			
+		<div [ngSwitch]="activeView">
+			<div *ngSwitchCase="'show'">
+	   			<div class="action-buttons">
+					<button (click)="showPublicity()"		class="btn btn-secondary btn-main-bar">Publicity</button>
+					<button (click)="showEditListing()" 	class="btn btn-secondary btn-main-bar">Edit</button>
+					<button (click)="showConfirmDelete()"   class="btn btn-secondary btn-main-bar" *ngIf="!enabldeDeleteOption">Delete</button>
+					<button (click)="performmDelete()" 	  	class="btn btn-secondary btn-main-bar confirm-delete" *ngIf="enabldeDeleteOption">Confirm</button>
+					<button (click)="showList()" 			class="btn btn-secondary btn-main-bar">Back</button>
+				</div>
+				
+				<app-candidate-info-box [config]="infoItemConfig"></app-candidate-info-box>
+					
+	        	<div style="float:left;margin-left:15px;min-width:300px;max-width:72%;padding:5px;">
+	        		<div class="listing-view-div">
+						<h1 *ngIf="!isMobile" class="listing-view-title">{{selectedListing.title}}</h1>
+						<h1 *ngIf="isMobile" class="listing-view-title">Description</h1>
+					</div>
 					<div>
-						<pre style="white-space:pre-line;font-family: Roboto, 'Helvetica Neue', sans-serif;">{{selectedListing.description}}</pre>
-					</div>
-				</div>
-			</div>
-			
-		</div>
-			
-		<!-- List Listings -->
-		<div  *ngSwitchCase="['add', 'edit'].includes(activeView) ? activeView : !activeView">
-			<div class="action-buttons">
-				<button (click)="showFilterByJobSpecDialog()"	class="btn btn-secondary btn-main-bar" download>Create From Spec</button>
-				<button (click)="publishListing()" 				class="btn btn-secondary btn-main-bar">Publish</button>
-				<button (click)="showPreviousShowOption()" 		class="btn btn-secondary btn-main-bar">Back</button>
-			</div>
-			<form [formGroup]="newListingFormBean">
-				<div [ngSwitch]="activeSubView" class="steps">
-					<div  *ngSwitchCase="'step1'">
-						<h2>1 of 5: Job Info</h2>
-						<span class="listing-nav" >Previous</span>
-						<span class="listing-nav" (click)="updateSubviewStep('step2')">Next</span>
-						<div class="table listing-step-content">
-							<table>
-								<tr>
-									<td>Title</td>
-									<td><input type="text" formControlName="title"></td>
-								</tr>
-								<tr>
-									<td>Type</td>
-									<td>
-										<select formControlName="type">
-											<option *ngFor="let type of getContractTypeOptions()" [ngValue]="type.value">{{type.label}}</option>
-										</select>
-									</td>
-								</tr>
-								<tr>
-									<td>Country</td>
-									<td>
-										<select formControlName="country">
-											<option *ngFor="let opt of getCountryOptions()" [ngValue]="opt.value">{{opt.label}}</option>
-										</select>
-									</td>
-								</tr>
-								<tr>
-									<td>Location</td>
-									<td><input type="text" formControlName="location"></td>
-								</tr>
-								<tr>
-									<td>Required Years Experience</td>
-									<td>
-										<select formControlName="experienceYears">
-											<option *ngFor="let yearVal of yearsExperienceValues" value="{{yearVal}}">{{yearVal}}</option>
-										</select>
-									</td>
-								</tr>
-								<tr>
-									<td>Rate</td>
-									<td>
-										<input type="radio" name="rateCurrency" value="EUR" class="radio-button" formControlName="rateCurrency"><label class="radio-button_label">Eur</label>
-										<input type="radio" name="rateCurrency" value="GBP" class="radio-button" formControlName="rateCurrency"><label class="radio-button_label">GBP</label>
-										<br>
-										<input type="text" formControlName="rate">
-									</td>
-								</tr>
-							</table>
-						</div>
-					</div>
-					<div  *ngSwitchCase="'step2'">
-						<h2>2 of 5: Job Description</h2>
-						<span class="listing-nav" (click)="updateSubviewStep('step1')">Previous</span>
-						<span class="listing-nav" (click)="updateSubviewStep('step3')">Next</span>
-						<div class="table listing-step-content">
-							<table class="table">
-								<thead>
-									<tr>
-										<th>Description</th>
-									</tr>
-								</thead>
-								<tbody>
-									<tr>
-										<td>
-											<textarea class="text-area-listing" formControlName="description"></textarea>	
-										</td>	
-									</tr>
-								</tbody>
-							</table>
-						</div>
-					</div>
-					<div  *ngSwitchCase="'step3'">
-						<h3>3 of 5: Contact information</h3>
-						<span class="listing-nav" (click)="updateSubviewStep('step2')">Previous</span>
-						<span class="listing-nav" (click)="updateSubviewStep('step4')">Next</span>
-						<div class="table listing-step-content">
-							<table>
-								<tr>
-									<td>Contact Name</td>
-									<td><input type="text" formControlName="contactName"></td>
-								</tr>
-								<tr>
-									<td>Company Name</td>
-									<td><input type="text" formControlName="contactCompany"></td>
-								</tr>
-								<tr>
-									<td>Email address</td>
-									<td><input type="text" formControlName="contactEmail"></td>
-								</tr>
-							</table>
-						</div>
-					</div>
-					<div  *ngSwitchCase="'step4'">
-						<h2>4 of 5: Languages</h2>
-						<span class="listing-nav" (click)="updateSubviewStep('step3')">Previous</span>
-						<span class="listing-nav" (click)="updateSubviewStep('step5')">Next</span>
-						<div class="listing-step-content">
-							<div><input type="checkbox" name="language" value="Dutch" class="checkbox-ctrl" formControlName="langDutch"><label>Dutch</label></div>
-							<div><input type="checkbox" name="language" value="English" class="checkbox-ctrl" formControlName="langEnglish"><label>English</label></div>	
-							<div><input type="checkbox" name="language" value="French" class="checkbox-ctrl" formControlName="langFrench"><label>French</label></div>
-						</div>
-					</div>
-					<div  *ngSwitchCase="'step5'">
-						<h2>5 of 5: Skills</h2>
-						<span class="listing-nav" (click)="updateSubviewStep('step4')">Previous</span>
-						<span class="listing-nav">Next</span>
-						<div class="listing-step-content">
 						<div>
-								<input type="text" formControlName="skill">
-								<button (click)="addSkill()">Add Skill</button>
-						</div>
-						<div class="selected-skills-filter">
-							<span *ngFor="let skill of skills" class="selected-skill" (click)="removeSkill(skill)">
-								{{skill}}
-							</span>
+							<pre style="white-space:pre-line;font-family: Roboto, 'Helvetica Neue', sans-serif;">{{selectedListing.description}}</pre>
 						</div>
 					</div>
 				</div>
+				
+			</div>
+				
+			<!-- List Listings -->
+			<div  *ngSwitchCase="['add', 'edit'].includes(activeView) ? activeView : !activeView">
+				<div class="action-buttons">
+					<button (click)="showFilterByJobSpecDialog()"	class="btn btn-secondary btn-main-bar" download>Create From Spec</button>
+					<button (click)="publishListing()" 				class="btn btn-secondary btn-main-bar">Publish</button>
+					<button (click)="showPreviousShowOption()" 		class="btn btn-secondary btn-main-bar">Back</button>
 				</div>
-			</form>
-		</div>
-	</div>			
+				<form [formGroup]="newListingFormBean">
+					<div [ngSwitch]="activeSubView" class="steps">
+						<div  *ngSwitchCase="'step1'">
+							<h2>1 of 5: Job Info</h2>
+							<span class="listing-nav" >Previous</span>
+							<span class="listing-nav" (click)="updateSubviewStep('step2')">Next</span>
+							<div class="table listing-step-content">
+								<table>
+									<tr>
+										<td>Title</td>
+										<td><input type="text" formControlName="title"></td>
+									</tr>
+									<tr>
+										<td>Type</td>
+										<td>
+											<select formControlName="type">
+												<option *ngFor="let type of getContractTypeOptions()" [ngValue]="type.value">{{type.label}}</option>
+											</select>
+										</td>
+									</tr>
+									<tr>
+										<td>Country</td>
+										<td>
+											<select formControlName="country">
+												<option *ngFor="let opt of getCountryOptions()" [ngValue]="opt.value">{{opt.label}}</option>
+											</select>
+										</td>
+									</tr>
+									<tr>
+										<td>Location</td>
+										<td><input type="text" formControlName="location"></td>
+									</tr>
+									<tr>
+										<td>Required Years Experience</td>
+										<td>
+											<select formControlName="experienceYears">
+												<option *ngFor="let yearVal of yearsExperienceValues" value="{{yearVal}}">{{yearVal}}</option>
+											</select>
+										</td>
+									</tr>
+									<tr>
+										<td>Rate</td>
+										<td>
+											<input type="radio" name="rateCurrency" value="EUR" class="radio-button" formControlName="rateCurrency"><label class="radio-button_label">Eur</label>
+											<input type="radio" name="rateCurrency" value="GBP" class="radio-button" formControlName="rateCurrency"><label class="radio-button_label">GBP</label>
+											<br>
+											<input type="text" formControlName="rate">
+										</td>
+									</tr>
+								</table>
+							</div>
+						</div>
+						<div  *ngSwitchCase="'step2'">
+							<h2>2 of 5: Job Description</h2>
+							<span class="listing-nav" (click)="updateSubviewStep('step1')">Previous</span>
+							<span class="listing-nav" (click)="updateSubviewStep('step3')">Next</span>
+							<div class="table listing-step-content">
+								<table class="table">
+									<thead>
+										<tr>
+											<th>Description</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td>
+												<textarea class="text-area-listing" formControlName="description"></textarea>	
+											</td>	
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+						<div  *ngSwitchCase="'step3'">
+							<h3>3 of 5: Contact information</h3>
+							<span class="listing-nav" (click)="updateSubviewStep('step2')">Previous</span>
+							<span class="listing-nav" (click)="updateSubviewStep('step4')">Next</span>
+							<div class="table listing-step-content">
+								<table>
+									<tr>
+										<td>Contact Name</td>
+										<td><input type="text" formControlName="contactName"></td>
+									</tr>
+									<tr>
+										<td>Company Name</td>
+										<td><input type="text" formControlName="contactCompany"></td>
+									</tr>
+									<tr>
+										<td>Email address</td>
+										<td><input type="text" formControlName="contactEmail"></td>
+									</tr>
+								</table>
+							</div>
+						</div>
+						<div  *ngSwitchCase="'step4'">
+							<h2>4 of 5: Languages</h2>
+							<span class="listing-nav" (click)="updateSubviewStep('step3')">Previous</span>
+							<span class="listing-nav" (click)="updateSubviewStep('step5')">Next</span>
+							<div class="listing-step-content">
+								<div><input type="checkbox" name="language" value="Dutch" class="checkbox-ctrl" formControlName="langDutch"><label>Dutch</label></div>
+								<div><input type="checkbox" name="language" value="English" class="checkbox-ctrl" formControlName="langEnglish"><label>English</label></div>	
+								<div><input type="checkbox" name="language" value="French" class="checkbox-ctrl" formControlName="langFrench"><label>French</label></div>
+							</div>
+						</div>
+						<div  *ngSwitchCase="'step5'">
+							<h2>5 of 5: Skills</h2>
+							<span class="listing-nav" (click)="updateSubviewStep('step4')">Previous</span>
+							<span class="listing-nav">Next</span>
+							<div class="listing-step-content">
+							<div>
+									<input type="text" formControlName="skill">
+									<button (click)="addSkill()">Add Skill</button>
+							</div>
+							<div class="selected-skills-filter">
+								<span *ngFor="let skill of skills" class="selected-skill" (click)="removeSkill(skill)">
+									{{skill}}
+								</span>
+							</div>
+						</div>
+					</div>
+					</div>
+				</form>
+			</div>
+		</div>			
+	</div>
 </div>
 
 

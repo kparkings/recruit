@@ -177,27 +177,13 @@ dialog {
 .buttons-icon-mobile {
     width: 49%;
     margin-top: 10px;
-    /*margin-right: 1%;*/
     margin-left: 1%;
     margin-bottom: 0px;
 }
 
-/*Buttons end*/
 .left-info-box table tr td {
 	padding-left:20px;
 }
-
-/*Left right panes - stat*/
-/*
-.mobile-left-pane-container{
-	min-width:100%; 
-	max-width:100%; 
-	padding:0px;	
-}
-
-.left-box{
-	margin-bottom:30px;
-}*/
 
 .action-buttons{
 	text-align:right;
@@ -205,8 +191,19 @@ dialog {
 }
 
 .page{
-	padding: 10px;
+	padding: 0px;
 	width:100%;
 	
 }
-/*Left right panes - stat*/
+
+.nav-tabs-bar{
+	min-height:40px;
+	background:green;
+}
+
+
+.page-body{
+	/*margin:10px;*/
+	width:98%;
+	margin: auto;
+}

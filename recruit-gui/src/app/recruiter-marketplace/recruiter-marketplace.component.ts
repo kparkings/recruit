@@ -15,6 +15,7 @@ import { DeviceDetectorService } 						from 'ngx-device-detector';
 import { Candidate } 									from '../suggestions/candidate';
 import { CandidateNavService } 							from '../candidate-nav.service';
 import { CreditsService } 								from '../credits.service';
+import { InfoItemBlock, InfoItemConfig, InfoItemRowKeyValue, InfoItemRowMultiValues } from '../candidate-info-box/info-item';
 
 @Component({
   selector: 'app-recruiter-marketplace',
@@ -28,16 +29,17 @@ export class RecruiterMarketplaceComponent implements OnInit {
 	@ViewChild('specUploadBox', { static: false }) private specUploadBox:any;
 
 
-	public unseenOfferedCandidates:number 		= 0;
-	public unseenOpenPositions:number 			= 0;
-	public isMobile:boolean 					= false;
-	public suggestionMobileBtnClass:string		= '';
-	public mobileListingLeftPaneContainer:string 	= '';
-	public mobileDescBody:string = '';
-	public mobileLeftBox:string = '';
-	public mobileListingViewTitle:string = '';
+	public unseenOfferedCandidates:number 				= 0;
+	public unseenOpenPositions:number 					= 0;
+	public isMobile:boolean 							= false;
+	public suggestionMobileBtnClass:string				= '';
+	public mobileListingLeftPaneContainer:string 		= '';
+	public mobileDescBody:string 						= '';
+	public mobileLeftBox:string 						= '';
+	public mobileListingViewTitle:string 				= '';
 	public recruiterProfiles:Array<RecruiterProfile> 	= new Array<RecruiterProfile>();
 	public recruiterProfile:RecruiterProfile 			= new RecruiterProfile();
+	public infoItemConfig:InfoItemConfig 				= new InfoItemConfig();
 
   	constructor(private modalService: 				NgbModal, 
 				private marketplaceService: 		RecruiterMarketplaceService, 
@@ -309,28 +311,6 @@ export class RecruiterMarketplaceComponent implements OnInit {
 	* details
 	*/
 	public editOfferedCandidate(candidate:OfferedCandidate){
-		
-		
-		//this.switchTab('editSupply');
-		//this.activeCandidate = candidate;
-		
-		//this.offeredCandidateFormBean = new UntypedFormGroup({
-	    // 	candidateRoleTitle:		new UntypedFormControl(candidate.candidateRoleTitle),
-		//	country:				new UntypedFormControl(candidate.country),
-	    //   	location:				new UntypedFormControl(candidate.location),
-		//	contractType:			new UntypedFormControl(candidate.contractType),	
-		//	daysOnSite:				new UntypedFormControl(candidate.daysOnSite),
-		//	renumeration:			new UntypedFormControl(candidate.renumeration),
-		//	availableFromDate:		new UntypedFormControl(candidate.availableFromDate),
-		//	yearsExperience:		new UntypedFormControl(candidate.yearsExperience),
-		//	description:			new UntypedFormControl(candidate.description),
-		//	comments:				new UntypedFormControl(candidate.comments),
-		//	skill:					new UntypedFormControl(),
-		//	language:				new UntypedFormControl()});
-			
-		//	this.coreSkills 		= candidate.coreSkills;
-		//	this.spokenLanguages 	= candidate.spokenLanguages;
-		
 		sessionStorage.setItem("last-page", 'rec-mp');
 		sessionStorage.setItem("mp-edit-candidate", candidate.id);
 		this.router.navigate(['new-candidate']);
@@ -368,19 +348,8 @@ export class RecruiterMarketplaceComponent implements OnInit {
 	*/
 	//public viewCandidate(candidate:OfferedCandidate){
 	public viewCandidate(candidate:Candidate){
-		
-		//this.activeCandidate = candidate;
-		//this.switchTab('showSupplyDetails');
-		//this.marketplaceService.registerOfferedCandidateViewedEvent(candidate.id).subscribe( data => {
-		//	this.marketplaceService.updateUnseenMpPosts();
-		//});
-		//this.recruiterProfile = new RecruiterProfile();
-		//this.recruiterProfile = this.recruiterProfiles.filter(p => p.recruiterId == candidate.recruiter.recruiterId)[0];
 		this.candidateNavService.startCandidateProfileRouteForRecruiter();
 		this.candidateNavService.doNextMove("view", candidate.candidateId);
-		//sessionStorage.setItem("last-page", 'rec-mp-your-candidate');
-		//sessionStorage.setItem("mp-candidate", candidate.candidateId);
-		//this.router.navigate(['suggestions']);
 	}
 	
 	/**
@@ -396,6 +365,56 @@ export class RecruiterMarketplaceComponent implements OnInit {
 		this.recruiterProfile = new RecruiterProfile();
 		
 		this.recruiterProfile = this.recruiterProfiles.filter(p => p.recruiterId == openPosition.recruiter.recruiterId)[0];
+		
+		
+		this.infoItemConfig = new InfoItemConfig();
+		this.infoItemConfig.setProfilePhoto(this.recruiterProfile?.profilePhoto?.imageBytes);
+		
+		this.infoItemConfig.setShowContactButton(!this.isMyOpenPosition());
+		 
+		if (this.activeOpenPosition?.recruiter?.recruiterName) {
+			let recruiterBlock:InfoItemBlock = new InfoItemBlock();
+			recruiterBlock.setTitle("Requested By");
+			recruiterBlock.addRow(new InfoItemRowKeyValue("Name",this.activeOpenPosition?.recruiter?.recruiterName));
+			recruiterBlock.addRow(new InfoItemRowKeyValue("Company",this.activeOpenPosition?.recruiter?.companyName));
+			this.infoItemConfig.addItem(recruiterBlock);
+		}
+		
+		if (this.activeOpenPosition.country || this.activeOpenPosition.location) {
+			let recruiterBlock:InfoItemBlock = new InfoItemBlock();
+			recruiterBlock.setTitle("Requested By");
+			if (this.activeOpenPosition.country) {
+				recruiterBlock.addRow(new InfoItemRowKeyValue("Country",this.getCountryCode(this.activeOpenPosition.country)));
+			}
+			if (this.activeOpenPosition.location) {
+				recruiterBlock.addRow(new InfoItemRowKeyValue("City",this.activeOpenPosition.location));
+			}
+			this.infoItemConfig.addItem(recruiterBlock);
+		}
+		
+		if ( this.activeOpenPosition.skills.length > 0) {
+			let skillsBlock:InfoItemBlock = new InfoItemBlock();
+			skillsBlock.setTitle("Skills");
+			skillsBlock.addRow(new InfoItemRowMultiValues(this.activeOpenPosition.skills, "skill"));
+			this.infoItemConfig.addItem(skillsBlock);
+		}
+		
+		if (this.activeOpenPosition.contractType || this.activeOpenPosition.startDate || this.activeOpenPosition.renumeration) {
+			let conditionsBlock:InfoItemBlock = new InfoItemBlock();
+			conditionsBlock.setTitle("Conditions");
+			if (this.activeOpenPosition.contractType) {
+				conditionsBlock.addRow(new InfoItemRowKeyValue("Contract Type",this.getContractType(this.activeOpenPosition.contractType)));
+			}
+			if (this.activeOpenPosition.startDate) {
+				conditionsBlock.addRow(new InfoItemRowKeyValue("Rate / Salary",""+this.activeOpenPosition.startDate));
+			}
+			if (this.activeOpenPosition.renumeration) {
+				conditionsBlock.addRow(new InfoItemRowKeyValue("Renumeration",this.activeOpenPosition.renumeration));
+			}
+			
+			this.infoItemConfig.addItem(conditionsBlock);
+		}
+		
 	}
 
 	/**
@@ -595,12 +614,7 @@ export class RecruiterMarketplaceComponent implements OnInit {
 	      this.feedbackBoxTitle = 'Validation errors';
 	      this.feedbackBoxClass = 'feedback-failure';
 	    }
-	
-	   //let options: NgbModalOptions = {
-	   // 	 centered: true
-	   //};
 
-		//this.modalService.open(this.content, options);
 		this.feedbackBox.nativeElement.showModal();
   	}
 	
@@ -739,15 +753,8 @@ export class RecruiterMarketplaceComponent implements OnInit {
 	* Opend dialog to contact recuiter posting	
 	*/
 	public contactRecruiter():void{
-		
 		this.contactRecruiterView = 'message';
-		//let options: NgbModalOptions = {
-	    //	 centered: true
-	   //};
-
 		this.contactBox.nativeElement.showModal();
-		//this.modalService.open(contactBox, options);
-	
 	}
 	
 	/**
@@ -821,12 +828,6 @@ export class RecruiterMarketplaceComponent implements OnInit {
 		
 		this.showFilterByJonSpecFailure  	= false;
 		this.showFilterByJobSpec 			= true;
-		
-		//let options: NgbModalOptions = {
-		//	centered: true
-		//};
-		
-		//this.modalService.open(content, options);
 		this.specUploadBox.nativeElement.showModal();
 	}
 	

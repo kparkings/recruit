@@ -375,3 +375,11 @@ td{
 .stat-cart-div-mobile{
 	width:100%;
 }
+
+.desc-body{
+    float: left;
+    padding: 5px;
+    padding-left: 20px;
+    min-width: 72%;
+    max-width: 72%;
+}

@@ -1,240 +1,246 @@
 <div class="page">
-	<div>
-		<div class="recruiter-profile-buttons">
-			<div class="action-buttons">
-				<button class="btn btn-secondary action-btn  main-action_btn"  *ngIf="isOwnAccountExists()  && currentView != 'view-create' && currentView != 'view-details'" 	(click)="showViewCreate()">Edit Profile</button>
-				<button class="btn btn-secondary action-btn  main-action_btn"  *ngIf="!isOwnAccountExists() && currentView != 'view-create' && currentView != 'view-details'" 	(click)="showViewCreate()">Create Profile</button>
-				<button class="btn btn-secondary action-btn" 				   *ngIf="currentView != 'view-main'" 																(click)="showViewMain()">Back</button>
+
+	<!-- Nav options -->
+	<div class="nav-tabs-bar"></div>
+	
+	<div class="page-body">
+		<div>
+			<div class="recruiter-profile-buttons">
+				<div class="action-buttons">
+					<button class="btn btn-secondary action-btn  main-action_btn"  *ngIf="isOwnAccountExists()  && currentView != 'view-create' && currentView != 'view-details'" 	(click)="showViewCreate()">Edit Profile</button>
+					<button class="btn btn-secondary action-btn  main-action_btn"  *ngIf="!isOwnAccountExists() && currentView != 'view-create' && currentView != 'view-details'" 	(click)="showViewCreate()">Create Profile</button>
+					<button class="btn btn-secondary action-btn" 				   *ngIf="currentView != 'view-main'" 																(click)="showViewMain()">Back</button>
+				</div>
 			</div>
-		</div>
-		
-		<div *ngIf="currentView === 'view-main' && !recruiterProfile">
-			<p class="no-account">Please create your profile to access the community page</p>
-		</div>
-		
-		<div *ngIf="currentView === 'view-main' && recruiterProfile">
-			<div class="profile-overwiew" *ngFor="let profile of recruiterProfiles" (click)="showViewDetails(profile)">
-				<div>
-					<img class="profile-photo-overview" *ngIf="profile?.profilePhoto?.imageBytes" id='base64image' src='data:image/jpeg;base64, {{profile?.profilePhoto?.imageBytes}}' />
-					<div *ngIf="!profile?.profilePhoto?.imageBytes" class="profile-photo-overview material-icons person ">
-						<span style="font-size:100px;color:green;">person</span>
+			
+			<div *ngIf="currentView === 'view-main' && !recruiterProfile">
+				<p class="no-account">Please create your profile to access the community page</p>
+			</div>
+			
+			<div *ngIf="currentView === 'view-main' && recruiterProfile">
+				<div class="profile-overwiew" *ngFor="let profile of recruiterProfiles" (click)="showViewDetails(profile)">
+					<div>
+						<img class="profile-photo-overview" *ngIf="profile?.profilePhoto?.imageBytes" id='base64image' src='data:image/jpeg;base64, {{profile?.profilePhoto?.imageBytes}}' />
+						<div *ngIf="!profile?.profilePhoto?.imageBytes" class="profile-photo-overview material-icons person ">
+							<span style="font-size:100px;color:green;">person</span>
+						</div>
+						
+						
+						<span class="profile-photo-name">
+							<h3>{{profile.recruiterFirstName | enumToHumanReadableValue}} {{profile.recruiterSurname | enumToHumanReadableValue}}</h3>
+							{{profile.jobTitle | enumToHumanReadableValue}}
+							<br>
+							{{profile.companyName | enumToHumanReadableValue}}				
+						</span>	
+					</div>
+					<div class="profile-recruits-in">
+						<span *ngFor="let country of profile.recruitsIn">
+							<span class="flag-icon flag-icon-{{getCountryFlagClass(country)}} profile-country-flag"></span>
+						</span>
+					</div>
+				</div>
+			</div>
+			
+			<div *ngIf="currentView === 'view-details'">
+			
+				<!-- Left Pane -->
+				<app-candidate-info-box [config]="infoItemConfig" (openContactBoxEvent)="contactRecruiter()"></app-candidate-info-box>
+			
+				<div class="desc-body">
+					<div style="float:center">
+						
+						<h1>{{selectedRecruiterProfile.recruiterFirstName | enumToHumanReadableValue}} {{selectedRecruiterProfile.recruiterSurname | enumToHumanReadableValue}}</h1>
+						<br>
+						<pre style="white-space:pre-line;font-family: Roboto, 'Helvetica Neue', sans-serif;">{{selectedRecruiterProfile.introduction}}</pre>
 					</div>
 					
-					
-					<span class="profile-photo-name">
-						<h3>{{profile.recruiterFirstName | enumToHumanReadableValue}} {{profile.recruiterSurname | enumToHumanReadableValue}}</h3>
-						{{profile.jobTitle | enumToHumanReadableValue}}
-						<br>
-						{{profile.companyName | enumToHumanReadableValue}}				
-					</span>	
-				</div>
-				<div class="profile-recruits-in">
-					<span *ngFor="let country of profile.recruitsIn">
-						<span class="flag-icon flag-icon-{{getCountryFlagClass(country)}} profile-country-flag"></span>
-					</span>
-				</div>
-			</div>
-		</div>
-		
-		<div *ngIf="currentView === 'view-details'">
-		
-			<!-- Left Pane -->
-			<app-candidate-info-box [config]="infoItemConfig" (openContactBoxEvent)="contactRecruiter()"></app-candidate-info-box>
-		
-			<div class="desc-body">
-				<div style="float:center">
-					
-					<h1>{{selectedRecruiterProfile.recruiterFirstName | enumToHumanReadableValue}} {{selectedRecruiterProfile.recruiterSurname | enumToHumanReadableValue}}</h1>
-					<br>
-					<pre style="white-space:pre-line;font-family: Roboto, 'Helvetica Neue', sans-serif;">{{selectedRecruiterProfile.introduction}}</pre>
+					<div>
+						<div  class="details-left-collections">
+					<h5>Recruits In</h5>
+					<ul>
+						<li *ngFor="let country of selectedRecruiterProfile.recruitsIn">
+							<span class="flag-icon flag-icon-{{getCountryFlagClass(country)}} profile-country-flag"></span>
+						</li>
+					</ul>
 				</div>
 				
-				<div>
-					<div  class="details-left-collections">
-				<h5>Recruits In</h5>
-				<ul>
-					<li *ngFor="let country of selectedRecruiterProfile.recruitsIn">
-						<span class="flag-icon flag-icon-{{getCountryFlagClass(country)}} profile-country-flag"></span>
-					</li>
-				</ul>
-			</div>
-			
-			<div  class="details-left-collections">
-				<h5>Languages Spoken</h5>
-				<ul>
-					<li *ngFor="let language of selectedRecruiterProfile.languagesSpoken">
-						{{language | enumToHumanReadableValue}}
-					</li>
-				</ul>
-			</div>
-			
-			<div  class="details-left-collections">
-				<h5>Sectors Active In</h5>
-				<ul>
-					<li *ngFor="let sector of selectedRecruiterProfile.sectors">
-						{{sector | enumToHumanReadableValue}}
-					</li>
-				</ul>
-			</div>
-			
-			<div  class="details-left-collections">
-				<h5>Recruits For The Following Markets</h5>
-				<ul>
-				<li *ngFor="let tech of selectedRecruiterProfile.coreTech">
-					{{tech | enumToHumanReadableValue}}
-				</li>
-				</ul>
-			</div>
-			
-			<div  class="details-left-collections">
-				<h5>Recruits For The Following Contract Types</h5>
-				<ul>
-				<li *ngFor="let contractType of selectedRecruiterProfile.recruitsContractTypes">
-					{{contractType | enumToHumanReadableValue}}
-				</li>
-				</ul>
-			</div>
+				<div  class="details-left-collections">
+					<h5>Languages Spoken</h5>
+					<ul>
+						<li *ngFor="let language of selectedRecruiterProfile.languagesSpoken">
+							{{language | enumToHumanReadableValue}}
+						</li>
+					</ul>
 				</div>
+				
+				<div  class="details-left-collections">
+					<h5>Sectors Active In</h5>
+					<ul>
+						<li *ngFor="let sector of selectedRecruiterProfile.sectors">
+							{{sector | enumToHumanReadableValue}}
+						</li>
+					</ul>
+				</div>
+				
+				<div  class="details-left-collections">
+					<h5>Recruits For The Following Markets</h5>
+					<ul>
+					<li *ngFor="let tech of selectedRecruiterProfile.coreTech">
+						{{tech | enumToHumanReadableValue}}
+					</li>
+					</ul>
+				</div>
+				
+				<div  class="details-left-collections">
+					<h5>Recruits For The Following Contract Types</h5>
+					<ul>
+					<li *ngFor="let contractType of selectedRecruiterProfile.recruitsContractTypes">
+						{{contractType | enumToHumanReadableValue}}
+					</li>
+					</ul>
+				</div>
+					</div>
+				</div>
+		
+				<div class="action-buttons" style="padding-bottom:50px;">
+				</div>
+			
 			</div>
-	
+			
+			<div *ngIf="currentView === 'view-create'" id="view-create-table">
+				<form [formGroup]="newProfileFormBean">
+					<table>
+						<tr>
+							<th>Profile Image</th>
+							<td>
+								<input type="file" accept="image/jpeg,image/png" (change)="uploadProfileImage($event)">
+								<img class="profile-photo" *ngIf="recruiterProfile?.profilePhoto?.imageBytes" id='base64image'                 
+	   									src='data:image/jpeg;base64, {{recruiterProfile?.profilePhoto?.imageBytes}}'/>
+							</td>
+						</tr>
+						<tr>
+							<th>Job Title</th>
+							<td>
+								<input type="text" formControlName="jobTitle">
+							</td>
+						</tr>
+						<tr>
+							<th>Recruitment Type</th>
+							<td>
+								<select formControlName="recruiterType">
+									<option *ngFor="let opt of getRecruitmentTypeOptions()" value="{{opt}}">{{getUserReadableVal(opt)}}</option>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<th>Years Experience</th>
+							<td>
+								<input type="number" formControlName="yearsExperience">
+							</td>
+						</tr>
+						<tr>
+							<th>Recruits In</th>
+							<td>
+								<select formControlName="recruitsIn" (change)="addRecruitsInItem()">
+									<option *ngFor="let opt of getCountryOptions()"	value="{{opt}}">{{opt[1]}}</option>
+								</select>
+								<br>
+								<div class="selected-items">
+									<span *ngFor="let item of recruitsIn" (click)="removeRecruitsInItem(item)" class="selected-item">
+										{{item | tupleStrValueByPos: false}}
+									</span>
+								</div>
+							</td>
+								
+						</tr>
+						<tr>
+							<th>Introduction</th>
+							<td>
+								<textarea formControlName="introduction"></textarea>
+							</td>
+						</tr>
+						<tr>
+							<th>Languages Spoken</th>
+							<td>
+								<select formControlName="languagesSpoken" (change)="addLanguageSpokenItem()">
+									<option *ngFor="let opt of getLanguageOptions()" value="{{opt}}">{{opt[1]}}</option>
+								</select>
+								<br>
+								<div class="selected-items">
+									<span *ngFor="let item of languagesSpoken" (click)="removeLanguageSpokenItem(item)" class="selected-item">
+										{{item | tupleStrValueByPos: false}}
+									</span>
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<th>Sectors</th>
+							<td>
+								<select formControlName="sectorItem" (change)="addSectorItem()">
+									<option *ngFor="let opt of getSectorOptions()" value="{{opt}}">{{opt[1]}}</option>
+								</select>
+								<br>
+								<div class="selected-items">
+									<span *ngFor="let item of sectors" (click)="removeSectorItem(item)" class="selected-item">
+										{{item | tupleStrValueByPos: false}}
+									</span>
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<th>Core Technologies</th>
+							<td>
+								<select formControlName="coreTechItem" (change)="addCoreTechItem()">
+									<option *ngFor="let opt of getTechOptions()" value="{{opt}}">{{opt[1]}}</option>
+								</select>
+								<br>
+								<div class="selected-items">
+									<span *ngFor="let item of coreTech" (click)="removeCoreTechItem(item)" class="selected-item">
+										{{item | tupleStrValueByPos: false}}
+									</span>
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<th>Contract Types</th>
+							<td>
+								<select  formControlName="contractTypeItem" (change)="addContractTypeItem()">
+									<option *ngFor="let opt of getContractTypeOptions()" value="{{opt}}">{{opt[1]}}</option>
+								</select>
+								<br>
+								<div class="selected-items">
+									<span *ngFor="let item of contractTypes" (click)="removeContractTypeItem(item)" class="selected-item">
+										{{item | tupleStrValueByPos: false}}
+									</span>
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<th>Visible To Recruiters</th>
+							<td>
+								<input type="checkbox" formControlName="visibleToRecruiters"/>
+							</td>
+						</tr>
+						<tr>
+							<th>Visible To Candidates</th>
+							<td>
+								<input type="checkbox" formControlName="visibleToCandidates"/>
+							</td>
+						</tr>
+						<tr>
+							<th>Visible To Public</th>
+							<td>
+								<input type="checkbox" formControlName="visibleToPublic"/>
+							</td>
+						</tr>
+					</table>
+				</form>
+			</div>
 			<div class="action-buttons" style="padding-bottom:50px;">
+				<button class="btn btn-secondary action-btn" *ngIf="currentView === 'view-create'" (click)="saveProfile()">Save</button>		
 			</div>
-		
+			
 		</div>
-		
-		<div *ngIf="currentView === 'view-create'" id="view-create-table">
-			<form [formGroup]="newProfileFormBean">
-				<table>
-					<tr>
-						<th>Profile Image</th>
-						<td>
-							<input type="file" accept="image/jpeg,image/png" (change)="uploadProfileImage($event)">
-							<img class="profile-photo" *ngIf="recruiterProfile?.profilePhoto?.imageBytes" id='base64image'                 
-   									src='data:image/jpeg;base64, {{recruiterProfile?.profilePhoto?.imageBytes}}'/>
-						</td>
-					</tr>
-					<tr>
-						<th>Job Title</th>
-						<td>
-							<input type="text" formControlName="jobTitle">
-						</td>
-					</tr>
-					<tr>
-						<th>Recruitment Type</th>
-						<td>
-							<select formControlName="recruiterType">
-								<option *ngFor="let opt of getRecruitmentTypeOptions()" value="{{opt}}">{{getUserReadableVal(opt)}}</option>
-							</select>
-						</td>
-					</tr>
-					<tr>
-						<th>Years Experience</th>
-						<td>
-							<input type="number" formControlName="yearsExperience">
-						</td>
-					</tr>
-					<tr>
-						<th>Recruits In</th>
-						<td>
-							<select formControlName="recruitsIn" (change)="addRecruitsInItem()">
-								<option *ngFor="let opt of getCountryOptions()"	value="{{opt}}">{{opt[1]}}</option>
-							</select>
-							<br>
-							<div class="selected-items">
-								<span *ngFor="let item of recruitsIn" (click)="removeRecruitsInItem(item)" class="selected-item">
-									{{item | tupleStrValueByPos: false}}
-								</span>
-							</div>
-						</td>
-							
-					</tr>
-					<tr>
-						<th>Introduction</th>
-						<td>
-							<textarea formControlName="introduction"></textarea>
-						</td>
-					</tr>
-					<tr>
-						<th>Languages Spoken</th>
-						<td>
-							<select formControlName="languagesSpoken" (change)="addLanguageSpokenItem()">
-								<option *ngFor="let opt of getLanguageOptions()" value="{{opt}}">{{opt[1]}}</option>
-							</select>
-							<br>
-							<div class="selected-items">
-								<span *ngFor="let item of languagesSpoken" (click)="removeLanguageSpokenItem(item)" class="selected-item">
-									{{item | tupleStrValueByPos: false}}
-								</span>
-							</div>
-						</td>
-					</tr>
-					<tr>
-						<th>Sectors</th>
-						<td>
-							<select formControlName="sectorItem" (change)="addSectorItem()">
-								<option *ngFor="let opt of getSectorOptions()" value="{{opt}}">{{opt[1]}}</option>
-							</select>
-							<br>
-							<div class="selected-items">
-								<span *ngFor="let item of sectors" (click)="removeSectorItem(item)" class="selected-item">
-									{{item | tupleStrValueByPos: false}}
-								</span>
-							</div>
-						</td>
-					</tr>
-					<tr>
-						<th>Core Technologies</th>
-						<td>
-							<select formControlName="coreTechItem" (change)="addCoreTechItem()">
-								<option *ngFor="let opt of getTechOptions()" value="{{opt}}">{{opt[1]}}</option>
-							</select>
-							<br>
-							<div class="selected-items">
-								<span *ngFor="let item of coreTech" (click)="removeCoreTechItem(item)" class="selected-item">
-									{{item | tupleStrValueByPos: false}}
-								</span>
-							</div>
-						</td>
-					</tr>
-					<tr>
-						<th>Contract Types</th>
-						<td>
-							<select  formControlName="contractTypeItem" (change)="addContractTypeItem()">
-								<option *ngFor="let opt of getContractTypeOptions()" value="{{opt}}">{{opt[1]}}</option>
-							</select>
-							<br>
-							<div class="selected-items">
-								<span *ngFor="let item of contractTypes" (click)="removeContractTypeItem(item)" class="selected-item">
-									{{item | tupleStrValueByPos: false}}
-								</span>
-							</div>
-						</td>
-					</tr>
-					<tr>
-						<th>Visible To Recruiters</th>
-						<td>
-							<input type="checkbox" formControlName="visibleToRecruiters"/>
-						</td>
-					</tr>
-					<tr>
-						<th>Visible To Candidates</th>
-						<td>
-							<input type="checkbox" formControlName="visibleToCandidates"/>
-						</td>
-					</tr>
-					<tr>
-						<th>Visible To Public</th>
-						<td>
-							<input type="checkbox" formControlName="visibleToPublic"/>
-						</td>
-					</tr>
-				</table>
-			</form>
-		</div>
-		<div class="action-buttons" style="padding-bottom:50px;">
-			<button class="btn btn-secondary action-btn" *ngIf="currentView === 'view-create'" (click)="saveProfile()">Save</button>		
-		</div>
-		
 	</div>
 </div>
 

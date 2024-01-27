@@ -57,7 +57,6 @@ export class ListingComponent implements OnInit {
 		
 		this.recruiterProfileService.fetchRecruiterProfiles("RECRUITERS").subscribe(rps => {
 			this.recruiterProfiles = rps
-			console.log("SET RECRUITER PROFILE");
 		});
 	
 		this.selectableFunctionTypes 	= this.staticDataService.fetchFunctionTypes().map(ft => new SelectableFunctionType(ft, false));

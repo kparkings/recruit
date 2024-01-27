@@ -1,205 +1,213 @@
-<div *ngIf="currentView == 'add'" class="container-div page {{mobilePage}}">
-			
-	<div class="action-buttons button-panel-mobile">
-		<button class="btn btn-secondary btnRight main-btns {{mobileBtnClass}}" (click)="showOfferedCandidates()" *ngIf="showBackBtn">Back</button>
-		<button class="btn btn-secondary btnRight main-btns {{mobileBtnClass}}" (click)="addCandidate()">Publish</button>
+<div class="page">
+
+	<!-- Nav options -->
+	<div class="nav-tabs-bar"></div>
+	
+		<div class='page-body'>
+			<div *ngIf="currentView == 'add'" class="container-div page {{mobilePage}}">
+						
+				<div class="action-buttons button-panel-mobile">
+					<button class="btn btn-secondary btnRight main-btns {{mobileBtnClass}}" (click)="showOfferedCandidates()" *ngIf="showBackBtn">Back</button>
+					<button class="btn btn-secondary btnRight main-btns {{mobileBtnClass}}" (click)="addCandidate()">Publish</button>
+				</div>
+				<form [formGroup]="offeredCandidateFormBean">
+					<table class="table new-user-table">
+						<tr>
+							<td class="hdr-label" colspan="2">Curriculum</td>
+						</tr>
+						<tr>
+							<td colspan="2">
+								<input type="file"  (change)="uploadCurriculumFile($event)">
+							</td>
+						</tr>
+						<tr>
+							<td class="hdr-label" colspan="2">Profile Image</td>
+						</tr>
+						<tr>
+							<td colspan="2">
+								<input type="file"  (change)="updateProfileImageFile($event)">
+							</td>
+						</tr>
+						<tr>
+							<td class="hdr-label">Candidate Id</td>
+							<td class="hdr-value">{{candidateId}}</td>
+						</tr>
+						<tr>
+							<td class="hdr-label">Firstname</td>
+							<input formControlName="firstName" type="text"/>
+						</tr>
+						<tr>
+							<td class="hdr-label">Surname</td>
+							<input formControlName="surname" type="text"/>
+						</tr>
+						<tr *ngIf="!isRecruiter()">
+							<td class="hdr-label">Email</td>
+							<td class="hdr-value">
+								<input formControlName="email" type="text"/>
+							</td>	
+						</tr>
+						<tr>
+							<td class="hdr-label">Function Group</td>
+							<td class="hdr-value">
+								<select formControlName="function">
+									<option></option>
+									<option value="{{func.id}}" *ngFor="let func of functionTypes">{{func.desc}}</option>
+								</select>
+							</td>	
+						</tr>
+						<tr>
+							<td class="hdr-label">Role Sought</td>
+							<td class="hdr-value">
+								<input formControlName="roleSought" type="text"/>
+							</td>	
+						</tr>
+						<tr>
+							<td class="hdr-label">Country</td>
+							<td>
+								<select formControlName="country">
+									<option></option>
+									<option value="BELGIUM">Belgium</option>
+									<option value="REPUBLIC_OF_IRELAND">Ireland</option>
+									<option value="NETHERLANDS">Netherlands</option>
+									<option value="UK">UK</option>
+									<!--<option value="EUROPE">EU</option>-->
+									<!--<option value="WORLD">World</option>-->
+								</select>
+							</td>	
+						</tr>
+						<tr>
+							<td class="hdr-label">Location</td>
+							<td>
+								<input  formControlName="city" type="text"/>
+							</td>	
+						</tr>
+						<tr>
+							<td class="hdr-label">Permanent</td>
+							<td>
+								<select class="new-candidate-inpt" formControlName="perm" (ngModelChange)="permOnChange($event)">
+									<option value="FALSE">No</option>
+									<option value="TRUE">Yes</option>
+									<option value="UNKNOWN">Unknown</option>
+								</select>
+							</td>	
+						</tr>
+						
+						<tr class="{{permRoleClass}}">
+							<td class="hdr-label">Rate</td>
+							<td>
+								<select formControlName="permCurrency">
+									<option>EUR</option>
+									<option>GBP</option>
+								</select>
+							
+								<select formControlName="permTimeUnit">
+									<option value="HOUR">Hour</option>
+									<option value="DAY">Day</option>
+									<option	value="YEAR">Year</option>
+								</select>
+								From: <input type="number" formControlName="permFrom"> To: <input type="number" formControlName="permTo">
+							</td>	
+						</tr>
+						<tr>
+							<td class="hdr-label">Contract</td>
+							<td>
+								<select class="new-candidate-inpt" formControlName="freelance" (ngModelChange)="contractOnChange($event)">
+									<option value="FALSE">No</option>
+									<option value="TRUE">Yes</option>
+									<option value="UNKNOWN">Unknown</option>
+								</select>
+							</td>	
+						</tr>
+						<tr class="{{contractRoleClass}}">
+							<td class="hdr-label">Rate</td>
+							<td>
+								<select formControlName="contractCurrency">
+									<option>EUR</option>
+									<option>GBP</option>
+								</select>
+								<select formControlName="contractTimeUnit">
+									<option value="HOUR">Hour</option>
+									<option value="DAY">Day</option>
+									<option	value="YEAR">Year</option>
+								</select>
+							From: <input type="number" formControlName="contractFrom">
+							To: <input type="number" formControlName="contractTo">
+						</tr>
+						<tr>
+							<td class="hdr-label">Days On Site (per Week)</td>
+							<td>
+								<select  formControlName="daysOnSite">
+									<option></option>
+									<option value="ZERO">Fully Remote</option>
+									<option value="ONE">1</option>
+									<option value="TWO">2</option>
+									<option value="THREE">3</option>
+									<option value="FOUR">4</option>
+									<option value="FIVE">5</option>
+								</select>
+							</td>	
+						</tr>
+						<tr>
+							<td class="hdr-label">Available From</td>
+							<td>
+							<input  formControlName="availableFromDate" type="date"/>
+							</td>	
+						</tr>
+						<tr>
+							<td class="hdr-label" colspan="2">Skills</td>
+						</tr>
+						<tr>
+							<td class="sugg-srch-bdy" colspan="2">
+								<div style="min-height:35px;">
+									<div class="selected-skill" *ngFor="let skill of coreSkills" (click)="removeOfferedCandidateSkill(skill)">{{skill}}</div>
+								</div>
+								<input type="text" formControlName="skill">
+								<button (click)="addOfferedCandidateSkill()" class="btn btn-secondary add-skill-btn">Add</button>
+							</td>	
+						</tr>
+						<tr>
+							<td class="hdr-label">Years Experience</td>
+							<td>
+								<input  formControlName="yearsExperience" type="number"/>
+							</td>	
+						</tr>
+						<tr>
+							<td class="hdr-label">Introduction</td>
+							<td>
+								<textarea formControlName="introduction"></textarea>
+							</td>
+						</tr>
+						<tr>
+							<td class="hdr-label" colspan="2">Spoken Languages</td>
+						</tr>
+						<tr>
+							<td>Dutch</td>
+							<td>
+								<select formControlName="DUTCH">
+									<option *ngFor="let level of languageOptions" value="{{level.value}}">{{level.label}}</option>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<td>English</td>
+							<td>
+								<select formControlName="ENGLISH">
+									<option *ngFor="let level of languageOptions" value="{{level.value}}">{{level.label}}</option>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<td>French</td>
+							<td>
+								<select formControlName="FRENCH">
+									<option *ngFor="let level of languageOptions" value="{{level.value}}">{{level.label}}</option>
+								</select>
+							</td>
+						</tr>
+					</table>
+				</form>
+			</div>
 	</div>
-	<form [formGroup]="offeredCandidateFormBean">
-		<table class="table new-user-table">
-			<tr>
-				<td class="hdr-label" colspan="2">Curriculum</td>
-			</tr>
-			<tr>
-				<td colspan="2">
-					<input type="file"  (change)="uploadCurriculumFile($event)">
-				</td>
-			</tr>
-			<tr>
-				<td class="hdr-label" colspan="2">Profile Image</td>
-			</tr>
-			<tr>
-				<td colspan="2">
-					<input type="file"  (change)="updateProfileImageFile($event)">
-				</td>
-			</tr>
-			<tr>
-				<td class="hdr-label">Candidate Id</td>
-				<td class="hdr-value">{{candidateId}}</td>
-			</tr>
-			<tr>
-				<td class="hdr-label">Firstname</td>
-				<input formControlName="firstName" type="text"/>
-			</tr>
-			<tr>
-				<td class="hdr-label">Surname</td>
-				<input formControlName="surname" type="text"/>
-			</tr>
-			<tr *ngIf="!isRecruiter()">
-				<td class="hdr-label">Email</td>
-				<td class="hdr-value">
-					<input formControlName="email" type="text"/>
-				</td>	
-			</tr>
-			<tr>
-				<td class="hdr-label">Function Group</td>
-				<td class="hdr-value">
-					<select formControlName="function">
-						<option></option>
-						<option value="{{func.id}}" *ngFor="let func of functionTypes">{{func.desc}}</option>
-					</select>
-				</td>	
-			</tr>
-			<tr>
-				<td class="hdr-label">Role Sought</td>
-				<td class="hdr-value">
-					<input formControlName="roleSought" type="text"/>
-				</td>	
-			</tr>
-			<tr>
-				<td class="hdr-label">Country</td>
-				<td>
-					<select formControlName="country">
-						<option></option>
-						<option value="BELGIUM">Belgium</option>
-						<option value="REPUBLIC_OF_IRELAND">Ireland</option>
-						<option value="NETHERLANDS">Netherlands</option>
-						<option value="UK">UK</option>
-						<!--<option value="EUROPE">EU</option>-->
-						<!--<option value="WORLD">World</option>-->
-					</select>
-				</td>	
-			</tr>
-			<tr>
-				<td class="hdr-label">Location</td>
-				<td>
-					<input  formControlName="city" type="text"/>
-				</td>	
-			</tr>
-			<tr>
-				<td class="hdr-label">Permanent</td>
-				<td>
-					<select class="new-candidate-inpt" formControlName="perm" (ngModelChange)="permOnChange($event)">
-						<option value="FALSE">No</option>
-						<option value="TRUE">Yes</option>
-						<option value="UNKNOWN">Unknown</option>
-					</select>
-				</td>	
-			</tr>
-			
-			<tr class="{{permRoleClass}}">
-				<td class="hdr-label">Rate</td>
-				<td>
-					<select formControlName="permCurrency">
-						<option>EUR</option>
-						<option>GBP</option>
-					</select>
-				
-					<select formControlName="permTimeUnit">
-						<option value="HOUR">Hour</option>
-						<option value="DAY">Day</option>
-						<option	value="YEAR">Year</option>
-					</select>
-					From: <input type="number" formControlName="permFrom"> To: <input type="number" formControlName="permTo">
-				</td>	
-			</tr>
-			<tr>
-				<td class="hdr-label">Contract</td>
-				<td>
-					<select class="new-candidate-inpt" formControlName="freelance" (ngModelChange)="contractOnChange($event)">
-						<option value="FALSE">No</option>
-						<option value="TRUE">Yes</option>
-						<option value="UNKNOWN">Unknown</option>
-					</select>
-				</td>	
-			</tr>
-			<tr class="{{contractRoleClass}}">
-				<td class="hdr-label">Rate</td>
-				<td>
-					<select formControlName="contractCurrency">
-						<option>EUR</option>
-						<option>GBP</option>
-					</select>
-					<select formControlName="contractTimeUnit">
-						<option value="HOUR">Hour</option>
-						<option value="DAY">Day</option>
-						<option	value="YEAR">Year</option>
-					</select>
-				From: <input type="number" formControlName="contractFrom">
-				To: <input type="number" formControlName="contractTo">
-			</tr>
-			<tr>
-				<td class="hdr-label">Days On Site (per Week)</td>
-				<td>
-					<select  formControlName="daysOnSite">
-						<option></option>
-						<option value="ZERO">Fully Remote</option>
-						<option value="ONE">1</option>
-						<option value="TWO">2</option>
-						<option value="THREE">3</option>
-						<option value="FOUR">4</option>
-						<option value="FIVE">5</option>
-					</select>
-				</td>	
-			</tr>
-			<tr>
-				<td class="hdr-label">Available From</td>
-				<td>
-				<input  formControlName="availableFromDate" type="date"/>
-				</td>	
-			</tr>
-			<tr>
-				<td class="hdr-label" colspan="2">Skills</td>
-			</tr>
-			<tr>
-				<td class="sugg-srch-bdy" colspan="2">
-					<div style="min-height:35px;">
-						<div class="selected-skill" *ngFor="let skill of coreSkills" (click)="removeOfferedCandidateSkill(skill)">{{skill}}</div>
-					</div>
-					<input type="text" formControlName="skill">
-					<button (click)="addOfferedCandidateSkill()" class="btn btn-secondary add-skill-btn">Add</button>
-				</td>	
-			</tr>
-			<tr>
-				<td class="hdr-label">Years Experience</td>
-				<td>
-					<input  formControlName="yearsExperience" type="number"/>
-				</td>	
-			</tr>
-			<tr>
-				<td class="hdr-label">Introduction</td>
-				<td>
-					<textarea formControlName="introduction"></textarea>
-				</td>
-			</tr>
-			<tr>
-				<td class="hdr-label" colspan="2">Spoken Languages</td>
-			</tr>
-			<tr>
-				<td>Dutch</td>
-				<td>
-					<select formControlName="DUTCH">
-						<option *ngFor="let level of languageOptions" value="{{level.value}}">{{level.label}}</option>
-					</select>
-				</td>
-			</tr>
-			<tr>
-				<td>English</td>
-				<td>
-					<select formControlName="ENGLISH">
-						<option *ngFor="let level of languageOptions" value="{{level.value}}">{{level.label}}</option>
-					</select>
-				</td>
-			</tr>
-			<tr>
-				<td>French</td>
-				<td>
-					<select formControlName="FRENCH">
-						<option *ngFor="let level of languageOptions" value="{{level.value}}">{{level.label}}</option>
-					</select>
-				</td>
-			</tr>
-		</table>
-	</form>
 </div>
 
 <dialog #feedbackBox>

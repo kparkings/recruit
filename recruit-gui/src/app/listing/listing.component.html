@@ -1,5 +1,9 @@
 <div class="page">
-	<div [ngSwitch]="activeView">
+	<!-- Nav options -->
+	<div class="nav-tabs-bar"></div>
+
+	<div class="page-body">
+		<div [ngSwitch]="activeView">
 		
 	    <!-- List View -->
 	    <div *ngSwitchCase="'list'">
@@ -144,6 +148,9 @@
 		</div>
 	</div>
 </div>
+	</div>
+	
+	
 
 
 <!-- Feedback Box -->
