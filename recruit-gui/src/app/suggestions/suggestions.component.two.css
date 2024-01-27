@@ -324,3 +324,18 @@ textarea {
 	margin-right:1%;
 	width:98%;
 }
+
+
+
+
+.left-box-container{
+	float:left; 
+	width:100%; 
+	min-width:320px; 
+	max-width:360px; 
+	margin-top:20px;
+}
+
+.left-box{
+	margin-bottom:30px;
+}

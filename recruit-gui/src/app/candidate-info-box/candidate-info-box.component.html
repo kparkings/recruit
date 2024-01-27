@@ -7,16 +7,25 @@
 				<span class="person-span">person</span>
 			</div>
        	</div>
+       	<div>
+       		<button *ngIf="config.showContactButton()" class="btn btn-secondary action-btn main-action_btn main-btns main-btn contact-button"  (click)="openContatBox()">Contact</button>
+	   	</div>
        	<div *ngFor="let infoItem of config.getItems()" class="left-box">
        		<h5>{{infoItem.getTitle()}}</h5>
        		<div class="left-box-body">
 	       		<table>
 	       			<tr *ngFor="let row of infoItem.getRows()">
 	       				<th *ngIf="row.hasLabel()">{{row.getLabel()}}</th>
-	       				<td *ngIf="!row.hasMultipleValues()">{{row.getValue()}}</td>
+	       				<td *ngIf="!row.hasMultipleValues() && !row.hasFlagIconClassForValue() && !row.hasMaterialIconForValue()">{{row.getValue()}}</td>
 	       				<td *ngIf="row.hasMultipleValues()">
 	       					<span *ngFor="let skill of row.getValue()" class="{{row.getValueItemCSS()}}">{{skill}}</span>
 	       				</td>
+	       				<td *ngIf="row.hasFlagIconClassForValue()">
+	       					<span class="flag-icon {{row.getValue()}} country-flag"></span>
+	       				</td>
+	       				<td *ngIf="row.hasMaterialIconForValue() && row.getValue() != ''" class="material-icons {{row.getValue()}}">
+							check
+						</td>
 	       			</tr>
 	       		</table>
        		</div>

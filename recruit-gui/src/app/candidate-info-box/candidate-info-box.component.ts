@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DeviceDetectorService } from 'ngx-device-detector';
 import { InfoItem, InfoItemConfig } from './info-item';
@@ -12,6 +12,8 @@ import { InfoItem, InfoItemConfig } from './info-item';
 export class CandidateInfoBoxComponent {
 
 	@Input() config:InfoItemConfig = new InfoItemConfig();
+	
+	@Output() openContactBoxEvent = new EventEmitter<string>();
 
 	public isMobile:boolean = false;
 	
@@ -31,6 +33,10 @@ export class CandidateInfoBoxComponent {
 		} 	
 	
 	}
+	
+	public openContatBox() {
+    	this.openContactBoxEvent.emit('openContactDialogBox');
+  	}
 	
 
 }

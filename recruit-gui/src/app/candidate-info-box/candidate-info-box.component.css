@@ -52,3 +52,35 @@
 	font-size:300px;
 	color:green;
 }
+
+.country-flag{
+	height:20px;
+	width:50px;
+	padding-left:0px;
+	margin-left:0px;
+	background-position:0%;
+}
+
+.lang-proficient-check-icon{
+	color:green;
+	font-weight:bold;
+	font-size:16px;
+}
+
+.available-check-icon{
+	color:green;
+	font-weight:bold;
+	font-size:16px;
+}
+
+.lang-basic-check-icon{
+	color:orange;
+	font-weight:bold;
+	font-size:16px;
+}
+
+.contact-button{
+	width:100%;
+	margin-bottom:10px;
+	background:green;
+}

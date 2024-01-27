@@ -19,6 +19,7 @@ import { EmailService, EmailRequest }												from '../email.service';
 import { CandidateNavService } 														from '../candidate-nav.service';
 import { CreditsService } 															from '../credits.service';
 import { ExtractedFilters } 														from './extracted-filters';
+import { InfoItemBlock, InfoItemConfig, InfoItemRowKeyValue, InfoItemRowKeyValueFlag, InfoItemRowKeyValueMaterialIcon, InfoItemRowSingleValue } from '../candidate-info-box/info-item';
 
 /**
 * Component to suggest suitable Candidates based upon a 
@@ -59,6 +60,8 @@ export class SuggestionsComponent implements OnInit {
 	public mobileDescBody:string = '';
 	public mobileJobTitleBar:string = '';
 	public mobileSearchBox:string = '';
+	
+	public infoItemConfig:InfoItemConfig 							= new InfoItemConfig();
 	
 	/**
 	* Switches between options on how to upload job spec 
@@ -630,10 +633,121 @@ export class SuggestionsComponent implements OnInit {
 			this.candidateNavService.startCandidateProfileRouteForAdmin();
 		}
 		
+		this.candidateService.getCandidateProfileById(candidateSuggestion.candidateId).subscribe( candidate => {
+		this.candidateProfile = candidate;
+		//START
+		this.infoItemConfig = new InfoItemConfig();
+		this.infoItemConfig.setProfilePhoto(this.candidateProfile?.photo?.imageBytes);
+		if (!this.isCandidate()){
+			this.infoItemConfig.setShowContactButton(true);
+		}
+		
+		
+		//Location
+		let recruiterBlock:InfoItemBlock = new InfoItemBlock();
+		recruiterBlock.setTitle("Location");
+		recruiterBlock.addRow(new InfoItemRowKeyValueFlag("Country",this.getFlagClassFromCountry(this.suggestedCandidate.country)));
+		recruiterBlock.addRow(new InfoItemRowKeyValue("City",this.suggestedCandidate.city));
+		this.infoItemConfig.addItem(recruiterBlock);
+		
+		//Languages Block
+		let languageBlock:InfoItemBlock = new InfoItemBlock();
+		languageBlock.setTitle("Languages");
+		this.suggestedCandidate.languages.forEach(lang => {
+				languageBlock.addRow(new InfoItemRowKeyValueMaterialIcon(this.getLanguage(lang.language),this.getMaterialIconClassFromLangLevel(lang.level)));
+		});
+		this.infoItemConfig.addItem(languageBlock);
+		
+		//Contract Type Block
+		if (this.suggestedCandidate.freelance == 'TRUE' || this.suggestedCandidate.perm == 'TRUE') {
+			let contractTypeBlock:InfoItemBlock = new InfoItemBlock();
+			contractTypeBlock.setTitle("Contract Type");
+			if (this.suggestedCandidate.freelance == 'TRUE'){		
+				contractTypeBlock.addRow(new InfoItemRowKeyValueMaterialIcon("Contract","available-check-icon"));
+			}
+			if (this.suggestedCandidate.perm == 'TRUE'){		
+				contractTypeBlock.addRow(new InfoItemRowKeyValueMaterialIcon("Permanent","available-check-icon"));
+			}
+			this.infoItemConfig.addItem(contractTypeBlock);
+		}
+		//Contract Rate 
+		if(this.hasContractRate()) {
+			let contractRateBlock:InfoItemBlock = new InfoItemBlock();
+			contractRateBlock.setTitle("Contract Rate");
+			contractRateBlock.addRow(new InfoItemRowSingleValue(this.getContractRate()));
+			this.infoItemConfig.addItem(contractRateBlock);
+		}
+		
+		//Perm Rate 
+		if(this.hasPermRate()) {
+			let permRateBlock:InfoItemBlock = new InfoItemBlock();
+			permRateBlock.setTitle("Perm Rate");
+			permRateBlock.addRow(new InfoItemRowSingleValue(this.getPermRate()));
+			this.infoItemConfig.addItem(permRateBlock);
+		}
+		
+		//Years Experience 
+		let yearsExperienceBlock:InfoItemBlock = new InfoItemBlock();
+		yearsExperienceBlock.setTitle("Years Experience");
+		yearsExperienceBlock.addRow(new InfoItemRowSingleValue(""+this.suggestedCandidate.yearsExperience));
+		this.infoItemConfig.addItem(yearsExperienceBlock);
+		
+		//Availability
+		let availabilityBlock:InfoItemBlock = new InfoItemBlock();
+		availabilityBlock.setTitle("Availability");
+		if (this.candidateProfile.daysOnSite) {
+			availabilityBlock.addRow(new InfoItemRowKeyValue("Max Days on Site",this.formatHumanReadableDaysOnsite(this.candidateProfile.daysOnSite)));
+		}
+		if (this.candidateProfile.availableFromDate) {
+			availabilityBlock.addRow(new InfoItemRowKeyValue("Available From",""+this.candidateProfile.availableFromDate));
+		}
+		this.infoItemConfig.addItem(availabilityBlock);
+		
+		
+		//END
+				
+			});
+		
 		this.currentView 			= 'suggested-canidate-overview';
 		this.suggestedCandidate 	= candidateSuggestion;
 		
-		this.fetchCandidateProfile(candidateSuggestion.candidateId);
+		//this.fetchCandidateProfile(candidateSuggestion.candidateId);
+		
+		
+	}
+	
+	public handleOpenContactBoxEvent():void{
+		
+	}
+	
+	/**
+	* Returns the flag css class for the Flag matching
+	* the Country 
+	*/
+	private getFlagClassFromCountry(country:string):string{
+		
+		switch(country){
+			case "NETHERLANDS":{return "flag-icon-nl"}
+			case "BELGIUM":{return "flag-icon-be"}
+			case "UK":{return "flag-icon-gb"}
+			case "REPUBLIC_OF_IRELAND":{return "flag-icon-ie"}
+			default: return "";
+		}
+		
+	}
+	
+	/**
+	* Returns the materialIcon css class for the Flag matching
+	* the Country 
+	*/
+	private getMaterialIconClassFromLangLevel(langLevel:string):string{
+		
+		switch(langLevel){
+			case "PROFICIENT":{return "lang-proficient-check-icon"}
+			case "BASIC":{return "lang-basic-check-icon"}
+			default: return "";
+		}
+			
 	}
 	
 	public showSuggestedCandidateOverviewSavedCandidate(savedCandidate:SavedCandidate){

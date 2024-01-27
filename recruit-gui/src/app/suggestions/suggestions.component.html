@@ -10,7 +10,7 @@
         <button class="btn btn-secondary btnRight main-btn {{suggestionMobileBtnClass}}" (click)="showSavedCandidates()" download>My Candidates</button>
      </div>
 	
-	<div *ngIf="currentView === 'saved-candidates'" class="suggestion-results">
+	<div *ngIf="currentView === 'saved-candidates'" class="suggestion-resultsXX">
 		
 		<div>
 			<button class="btn btn-secondary btnRight main-btns" (click)="showSuggestionsResults()">Back</button>
@@ -145,7 +145,7 @@
 	</div>
 	
 	<!-- Suggestion Results -->
-	<div *ngIf="currentView === 'suggestion-results'" class="suggestion-results">
+	<div *ngIf="currentView === 'suggestion-results'" class="suggestion-resultsXX">
 		
 		<div class="suggestion-result-icons">
 			
@@ -201,123 +201,11 @@
 		</div>
 	</div>
 	
-	<div *ngIf="currentView === 'suggested-canidate-overview'" class="suggestion-results">
-		<div class="left-box-container {{mobileListingLeftPaneContainer}}">
-		<!--  div  class="details-left"-->
-		
-			<img class="profile-photo-details" *ngIf="candidateProfile?.photo?.imageBytes" id='base64image' src='data:image/jpeg;base64, {{candidateProfile?.photo?.imageBytes}}' />
-			<div *ngIf="!candidateProfile?.photo?.imageBytes && !isMobile" class="profile-photo-details material-icons person ">
-				<span style="font-size:300px;color:green;">person</span>
-			</div>
-			<br>
-			<br>
-			<button *ngIf="!isCandidate()" class="btn btn-secondary action-btn main-action_btn main-btns main-btn" style="width:100%;margin-bottom:10px;background:green;" (click)="contactCandidate(contactBox)">Contact</button>
-			<br>
-			<div>
-				<h3>Location</h3>
-			</div>
-			<div class="left-info-box">
-				<table>
-					<tr>
-						<th>Country</th>
-						<td *ngIf="suggestedCandidate.country === 'NETHERLANDS'">
-							<span class="flag-icon flag-icon-nl suggestion-flag-country"></span>
-						</td>
-						<td *ngIf="suggestedCandidate.country === 'BELGIUM'">
-							<span class="flag-icon flag-icon-be  suggestion-flag-country"></span>
-						</td>
-						<td *ngIf="suggestedCandidate.country === 'UK'">
-							<span class="flag-icon flag-icon-gb  suggestion-flag-country"></span>
-						</td>
-						<td *ngIf="suggestedCandidate.country === 'REPUBLIC_OF_IRELAND'">
-							<span class="flag-icon flag-icon-ie  suggestion-flag-country"></span>
-						</td>
-					</tr>
-					<tr>
-						<th>City</th>
-						<td>{{suggestedCandidate.city | enumToHumanReadableValue}}</td>
-					</tr>
-				</table>
-			</div>
-			<div>
-				<h3>Languages</h3>
-			</div>
-			<div class="left-info-box">
-				<table>
-					<tr *ngFor="let language of suggestedCandidate.languages">
-						<th>{{getLanguage(language.language)}}</th>
-						<td *ngIf="language.level == 'PROFICIENT'" class="material-icons lang-proficient-check-icon">
-							check
-						</td>
-						<td *ngIf="language.level == 'BASIC'" class="material-icons  lang-basic-check-icon">
-							check
-						</td>		
-					</tr>
-				</table>
-				
-			</div>
-			<div>
-				<h3>Contract Types</h3>
-			</div>
-			<div class="left-info-box">
-				<table>
-					<tr>
-						<th>Contract</th>
-						<td *ngIf="suggestedCandidate.freelance == 'TRUE'" class="material-icons available-check-icon">
-							check
-						</td>
-					</tr>
-					<tr>
-						<th>Permanent</th>
-						<td *ngIf="suggestedCandidate.perm == 'TRUE'" class="material-icons available-check-icon">
-							check
-						</td>
-					</tr>
-				</table>
-			</div>
-			<!-- Contract Rate -->
-			<div *ngIf="hasContractRate()">
-				<h3>Contract Rate</h3>
-			</div>
-			<div class="left-info-box" *ngIf="hasContractRate()">
-				<p>{{getContractRate()}}</p>
-			</div>
-			<div *ngIf="hasPermRate()">
-				<h3>Perm Rate</h3>
-			</div>
-			<div class="left-info-box" *ngIf="hasPermRate()">
-				<p>{{getPermRate()}}</p>
-			</div>
-			<div>
-				<h3>Years Experience</h3>
-			</div>
-			<div  class="left-info-box">
-				<p>{{suggestedCandidate.yearsExperience}}
-			</div>
+	<div *ngIf="currentView === 'suggested-canidate-overview'" class="suggestion-resultsXX">
+	
+		<!-- Left Pane -->
+		<app-candidate-info-box [config]="infoItemConfig" (openContactBoxEvent)="contactCandidate(contactBox)"></app-candidate-info-box>
 			
-			<div>
-				<h3>Availability</h3>
-			</div>
-			<div class="left-info-box" *ngIf="candidateProfile.daysOnSite || candidateProfile.availableFromDate">
-				<table>
-					<tr *ngIf="candidateProfile.daysOnSite">
-						<th>Max Days on Site</th>
-						<td>
-							{{formatHumanReadableDaysOnsite(candidateProfile.daysOnSite)}}
-						</td>
-					</tr>
-					<tr *ngIf="candidateProfile.availableFromDate">
-						<th>Available From</th>
-						<td>
-							{{candidateProfile.availableFromDate}}
-						</td>
-					</tr>
-				</table>
-				
-			</div>
-			
-		</div>	
-				
 		<!-- div class="details-right" -->
 		<div class="desc-body details-right {{mobileDescBody}}">
 			<div style="width:100%">

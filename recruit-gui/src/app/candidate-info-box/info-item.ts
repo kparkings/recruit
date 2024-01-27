@@ -34,6 +34,16 @@ export interface InfoItemRow{
 	hasMultipleValues():boolean;
 	
 	/**
+	* If rows values is a Flag icon
+	*/
+	hasFlagIconClassForValue():boolean;
+	
+	/**
+	* If rows values is a Material icon
+	*/
+	hasMaterialIconForValue():boolean;
+	
+	/**
 	* Returns the Label
 	*/
 	getLabel():any;
@@ -117,6 +127,20 @@ export class InfoItemRowKeyValue implements InfoItemRow{
 	/**
 	* Refer to the InfoItemRow interface
 	*/
+	hasFlagIconClassForValue():boolean{
+		return false;
+	}
+	
+	/**
+	* Refer to the InfoItemRow interface
+	*/
+	hasMaterialIconForValue():boolean{
+		return false;
+	}
+	
+	/**
+	* Refer to the InfoItemRow interface
+	*/
 	public getLabel():any{
 		return this.label;		
 	}
@@ -166,6 +190,20 @@ export class InfoItemRowSingleValue implements InfoItemRow{
 	/**
 	* Refer to the InfoItemRow interface
 	*/
+	hasFlagIconClassForValue():boolean{
+		return false;
+	}
+	
+	/**
+	* Refer to the InfoItemRow interface
+	*/
+	hasMaterialIconForValue():boolean{
+		return false;
+	}
+	
+	/**
+	* Refer to the InfoItemRow interface
+	*/
 	public getLabel():any{
 		return "";		
 	}
@@ -185,6 +223,51 @@ export class InfoItemRowSingleValue implements InfoItemRow{
 	}
     
 }
+
+/**
+* Specific instance of Key/Value Row which 
+* shows a Flag of a Country
+*/
+export class InfoItemRowKeyValueFlag extends InfoItemRowKeyValue{
+	
+	/**
+	* Constructor 
+	*/
+	constructor(key:string, flagClass:string){
+        super(key, flagClass);
+    }
+	
+	/**
+	* Refer to the InfoItemRow interface
+	*/
+	hasFlagIconClassForValue():boolean{
+		return true;
+	}
+	
+}
+
+/**
+* Specific instance of Key/Value Row which 
+* shows a Flag of a Country
+*/
+export class InfoItemRowKeyValueMaterialIcon extends InfoItemRowKeyValue{
+	
+	/**
+	* Constructor 
+	*/
+	constructor(key:string, materialIconClass:string){
+        super(key, materialIconClass);
+    }
+	
+	/**
+	* Refer to the InfoItemRow interface
+	*/
+	hasMaterialIconForValue():boolean{
+		return true;
+	}
+	
+}
+
 
 /**
 * A row of information to display where 
@@ -212,6 +295,20 @@ export class InfoItemRowMultiValues implements InfoItemRow{
 	
 	public hasMultipleValues():boolean{
 		return true;
+	}
+	
+	/**
+	* Refer to the InfoItemRow interface
+	*/
+	hasFlagIconClassForValue():boolean{
+		return false;
+	}
+	
+	/**
+	* Refer to the InfoItemRow interface
+	*/
+	hasMaterialIconForValue():boolean{
+		return false;
 	}
 	
 	/**
@@ -247,6 +344,7 @@ export class InfoItemConfig{
 	private title:string 						= '';
 	private items:Array<InfoItem> 				= new Array<InfoItem>();
 	private profilePhoto:any;
+	private contactButton:boolean				= false;
 	
 	/**
 	* Sets the bytes of Poto to be displayed
@@ -295,6 +393,20 @@ export class InfoItemConfig{
 	*/
 	public getProfilePhotoBytes():any{
 		return this.profilePhoto;
+	}
+	
+	/**
+	* Returns whether to show Contact button
+	*/
+	public showContactButton():boolean{
+		return this.contactButton;
+	}
+	
+	/**
+	* Sets whether to show Contact button
+	*/
+	public setShowContactButton(showContactButton:boolean):boolean{
+		return this.contactButton = showContactButton;
 	}
 	
 }
