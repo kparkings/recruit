@@ -26,7 +26,7 @@
 							</tr>
 							<tr>
 								<td>&nbsp;</td>
-								<td><button class="loginbutton" (click)="login()">Login</button></td>
+								<td><button class="btn btn-secondary arenella-btn loginbutton" (click)="login()">Login</button></td>
 							</tr>
 							<tr>
 								<td></td>
@@ -37,7 +37,7 @@
 				</form>
 			</div>
 			<div *ngIf="showForgottenPassword">
-		       	<form [formGroup]="formBeanForgottenPassword">
+				<form [formGroup]="formBeanForgottenPassword">
 					<div class="wholepagerow">
 						<table>
 							<tr>
@@ -52,8 +52,8 @@
 							
 							<tr>
 								<td colspan="2">
-									<button class="loginbutton forgotten-password-button" (click)="resetPassword()">Reset Password</button>
-									<button class="loginbutton forgotten-password-button" (click)="cancelResetPassword()">Cancel</button>
+									<button class="btn btn-secondary arenella-btn forgotten-password-button" (click)="resetPassword()">Reset</button>
+									<button class="btn btn-secondary arenella-btn forgotten-password-button" (click)="cancelResetPassword()">Cancel</button>
 								</td>
 							</tr>
 							

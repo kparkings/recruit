@@ -35,6 +35,8 @@ export class ListingComponent implements OnInit {
 	public listingAlertConfirmDisabled:boolean 						= true;
 	public infoItemConfig:InfoItemConfig 							= new InfoItemConfig();
 	
+	public contractTypeOptions:Array<HtmlOption> 					= new Array<HtmlOption>();
+	
   	constructor(private listingService:ListingService, 
 				private emailService:EmailService, 
 				private _Activatedroute:ActivatedRoute, 
@@ -61,6 +63,8 @@ export class ListingComponent implements OnInit {
 	
 		this.selectableFunctionTypes 	= this.staticDataService.fetchFunctionTypes().map(ft => new SelectableFunctionType(ft, false));
 		this.selectableCountries 		= this.staticDataService.fetchCountries().map(c => new SelectableCountry(c, false));
+	
+		this.contractTypeOptions = this.getContractTypeOptions();
 	
 	}
 	
