@@ -382,7 +382,7 @@ export class RecruiterMarketplaceComponent implements OnInit {
 		
 		if (this.activeOpenPosition.country || this.activeOpenPosition.location) {
 			let recruiterBlock:InfoItemBlock = new InfoItemBlock();
-			recruiterBlock.setTitle("Requested By");
+			recruiterBlock.setTitle("Location");
 			if (this.activeOpenPosition.country) {
 				recruiterBlock.addRow(new InfoItemRowKeyValue("Country",this.getCountryCode(this.activeOpenPosition.country)));
 			}
