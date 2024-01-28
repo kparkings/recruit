@@ -198,7 +198,7 @@ dialog {
 
 .nav-tabs-bar{
 	min-height:40px;
-	background:green;
+	background:darkgreen;
 }
 
 .nav-tabs{
@@ -206,22 +206,27 @@ dialog {
 }
 
 .page-body{
-	/*margin:10px;*/
 	width:98%;
 	margin: auto;
 }
-/*
-.btnRight{
-	margin-top:10px;
-	margin-bottom:10px;
-	margin-right:10px;
-	min-width:100px;
-}
-*/
 
 .arenella-btn{
     width: 165px;
     margin-right: 5px;
     margin-bottom: 0px;
     margin-top: 5px;
-} 
+}
+
+@media (max-width:700px)  {
+	.page-body{
+		width:96%;
+		margin: auto;
+	}
+	.arenella-btn{
+	    width: 48%;
+	    margin-right: 1%;
+	    margin-bottom: 0px;
+	    margin-top: 5px;
+	}
+	
+}
