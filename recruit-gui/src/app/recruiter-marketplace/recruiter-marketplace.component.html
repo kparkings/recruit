@@ -3,10 +3,10 @@
 	<div class="nav-tabs-bar">
 		<ul class="nav nav-tabs">
 		  <li class="nav-item">
-		    <span class="nav-link tabNav tabNavActive" *ngIf="showDemand  && unseenOpenPositions > 0" (click)="switchTab('showDemand')"><span class="unseen-posts">{{unseenOpenPositions}}</span>Requested Candidates</span>
-		    <span class="nav-link tabNav tabNavActive" *ngIf="showDemand  && unseenOpenPositions <= 0" (click)="switchTab('showDemand')"><span style="margin-left:20px;">&nbsp;</span>Requested Candidates</span>
-		    <span class="nav-link tabNav" *ngIf="!showDemand && unseenOpenPositions > 0" (click)="switchTab('showDemand')"><span class="unseen-posts">{{unseenOpenPositions}}</span>Requested Candidates</span>
-		    <span class="nav-link tabNav" *ngIf="!showDemand   && unseenOpenPositions <= 0" (click)="switchTab('showDemand')"><span style="margin-left:20px;">&nbsp;</span>Requested Candidates</span>
+		    <span class="nav-link tabNav tabNavActive" *ngIf="showDemand  && unseenOpenPositions > 0" (click)="switchTab('showDemand')"><span class="unseen-posts">{{unseenOpenPositions}}</span>Open Roles</span>
+		    <span class="nav-link tabNav tabNavActive" *ngIf="showDemand  && unseenOpenPositions <= 0" (click)="switchTab('showDemand')"><span style="margin-left:20px;">&nbsp;</span>Open Roles</span>
+		    <span class="nav-link tabNav" *ngIf="!showDemand && unseenOpenPositions > 0" (click)="switchTab('showDemand')"><span class="unseen-posts">{{unseenOpenPositions}}</span>Open Roles</span>
+		    <span class="nav-link tabNav" *ngIf="!showDemand   && unseenOpenPositions <= 0" (click)="switchTab('showDemand')"><span style="margin-left:20px;">&nbsp;</span>Open Roles</span>
 		  </li>
 		  <li class="nav-item">
 		    <span class="nav-link tabNav tabNavActive" *ngIf="showSupply  && unseenOfferedCandidates >  0"  (click)="switchTab('showSupply')"><span class="unseen-posts">{{unseenOfferedCandidates}}</span>Your Candidates</span>
@@ -61,9 +61,9 @@
 		<!-- Show Demand  -->
 		<div *ngIf="showDemand">
 			<div class="action-buttons">
-				<button class="btn btn-secondary arenella-btn" 					(click)="showJustMyOpenPositions()" 	*ngIf="!showJustMyOpenPositionsActive">My Candidates</button>
-				<button class="btn btn-secondary arenella-btn" 					(click)="fetchOpenPositions()" 		*ngIf="showJustMyOpenPositionsActive">All Candidates</button>
-				<button class="btn btn-secondary arenella-btn" 					(click)="switchTab('addDemand')" *ngIf="!isAuthenticatedAsAdmin() && passedCreditCheck">Request Candidate</button>
+				<button class="btn btn-secondary arenella-btn" 					(click)="showJustMyOpenPositions()" 	*ngIf="!showJustMyOpenPositionsActive">My Roles</button>
+				<button class="btn btn-secondary arenella-btn" 					(click)="fetchOpenPositions()" 		*ngIf="showJustMyOpenPositionsActive">All Roles</button>
+				<button class="btn btn-secondary arenella-btn" 					(click)="switchTab('addDemand')" *ngIf="!isAuthenticatedAsAdmin() && passedCreditCheck">Make Request</button>
 				<button class="btn btn-secondary arenella-btn" 					(click)="showNoCredits()" *ngIf="!isAuthenticatedAsAdmin() && !passedCreditCheck">Request Candidate</button>
 			</div>
 			<p>
@@ -109,12 +109,12 @@
 		</div>
 		<!-- Add Demand  -->
 		<div *ngIf="addDemand">
-			<h3>Add details of position you wish to fill via other recruiters</h3>
 			<div class="action-buttons">
 				<button class="btn btn-secondary arenella-btn {{suggestionMobileBtnClass}}" (click)="showFilterByJobSpecDialog()" download>Create by Spec</button>
 				<button class="btn btn-secondary arenella-btn {{suggestionMobileBtnClass}}" (click)="showOpenPositions()">Back</button>
 				<button class="btn btn-secondary arenella-btn {{suggestionMobileBtnClass}}" (click)="publishOpenPosition()">Publish</button>
 			</div>
+			<h3>Add details of position you wish to fill via other recruiters</h3>
 			<form [formGroup]="requestedCandidateFormBean">
 				<table class="table marketplace-table">
 					<tr>
@@ -200,11 +200,11 @@
 		</div>
 		<!-- Edit Demand  -->
 		<div *ngIf="editDemand">
-			<h3>Update Requested Candidate</h3>
 			<div class="action-buttons">
 				<button class="btn btn-secondary arenella-btn {{suggestionMobileBtnClass}}" (click)="publishOpenPosition()">Update</button>
 				<button class="btn btn-secondary arenella-btn {{suggestionMobileBtnClass}}" (click)="showOpenPositions()">Back</button>
 			</div>
+			<h3>Update Requested Candidate</h3>
 			<form [formGroup]="requestedCandidateFormBean">
 				<table class="table marketplace-table">
 					<tr>
@@ -296,7 +296,7 @@
 				<button class="btn btn-secondary arenella-btn {{suggestionMobileBtnClass}} small-action-btn-confirm-del " *ngIf="isMyOpenPosition() && confirmDeleteOpenPosition === activeOpenPosition.id" (click)="applyDeleteMyOpenPosition(activeOpenPosition.id)">Confirm</button>
 				<button class="btn btn-secondary arenella-btn {{suggestionMobileBtnClass}}" (click)="showOpenPositions()">Back</button>
 			</div>
-			<div class="left-box-containerX {{mobileListingLeftPaneContainer}}X">
+			<div class="{{mobileListingLeftPaneContainer}}X">
 				<!-- Left Pane -->
 				<app-candidate-info-box [config]="infoItemConfig" (openContactBoxEvent)="contactRecruiter()"></app-candidate-info-box>
       		</div>

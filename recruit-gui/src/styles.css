@@ -201,6 +201,9 @@ dialog {
 	background:green;
 }
 
+.nav-tabs{
+	color:white;
+}
 
 .page-body{
 	/*margin:10px;*/
@@ -217,9 +220,8 @@ dialog {
 */
 
 .arenella-btn{
-    width: 155px;
-    margin-right: 10px;
-    margin-bottom: 10px;
+    width: 165px;
+    margin-right: 5px;
+    margin-bottom: 0px;
     margin-top: 5px;
-    margin-right:10px;
 } 

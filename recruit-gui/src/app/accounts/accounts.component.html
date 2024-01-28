@@ -1,4 +1,5 @@
 <div class="page">
+
 	<!-- Nav options -->
 	<div class="nav-tabs-bar">
 		<ul class="nav nav-tabs">
@@ -20,266 +21,269 @@
 		</ul>
 	</div>
 	
+	<div class="page-body">	
 	<!-- Recruiters-->
-	<div *ngIf="showRecruitersTab">
-		<table>
-			<thead>
-				<tr>
-					<th>Subscription Type</th>
-					<th>Count</th>
-					<th></th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr>
-					<td class="recruiter-active-subscription">Active Paid Subscription</td>
-					<td class="recruiter-active-subscription">{{activePaidSubscription.length}}</td>
-					<td><button class="btn btn-secondary arenella-action" (click)="toggleShowActivePaidSubscription()">Toggle</button></td>
-				</tr>
-				<tr>
-					<td class="recruiter-credit-based-subscription">Credit Based</td>
-					<td class="recruiter-credit-based-subscription">{{creditBasedSubscription.length}}</td>
-					<td><button class="btn btn-secondary arenella-action" (click)="toggleShowCreditBasedSubscription()">Toggle</button></td>
-				</tr>
-				<tr>
-					<td class="recruiter-trial-subscription">Trial Subscription</td>
-					<td class="recruiter-trial-subscription">{{trialPeriodRecruiters.length}}</td>
-					<td><button class="btn btn-secondary arenella-btn" (click)="toggleShowTrialPeriodRecruiters()">Toggle</button></td>
-				</tr>
-				<tr>
-					<td class="recruiter-expired-subscription">Expired Subscription</td>
-					<td class="recruiter-expired-subscription">{{expiredSubscriptionRecruiters.length}}</td>
-					<td><button class="btn btn-secondary arenella-btn" (click)="toggleShowExpiredSubscriptionRecruiters()">Toggle</button></td>
-				</tr>
-				<tr>
-					<td class="recruiter-firstgen">FirstGen Subscription</td>
-					<td class="recruiter-firstgen">{{firstGenActiveSubscription.length}}</td>
-					<td><button class="btn btn-secondary arenella-btn" (click)="toggleShowFirstGenActiveSubscription()">Toggle</button></td>
-				</tr>
-				<tr>
-					<td>Total  / Total active</td>
-					<td>{{recruiters.length}} / <span>{{getTotalActiveRecruiters()}}</span></td>
-				</tr>
-			</tbody>
-		</table>
-	
-		<div >
-	    	<table class="table candidate-table">
+		<div *ngIf="showRecruitersTab">
+			<table>
 				<thead>
-	      			<tr>
-	      				<!-- Table Headers -->
-	      				<th class="bg-tab-hdr">Id</th>
-	      				<th class="bg-tab-hdr">Name</th>
-	            	    <th class="bg-tab-hdr">Email</th>
-	                	<th class="bg-tab-hdr">Company</th>
-	                	<th class="bt-tab-hdr">Active</th>
-	      			</tr>
-	      	</thead>
-	      	<tbody>
-	      			<!-- Table row -->
-	      			
-	      			
-	      			<tr *ngFor="let recruiter of activePaidSubscription" class="recruiter-active-subscription">
-	      				<td *ngIf="showActivePaidSubscription" class="candidate-tab-col medicol"><span class="candidate-id-prefix"></span>{{recruiter.userId}}</td>
-	            	    <td *ngIf="showActivePaidSubscription" class="candidate-tab-col medicol"> {{recruiter.firstName}} {{recruiter.surname}}</td>
-	            	    <td *ngIf="showActivePaidSubscription" class="candidate-tab-col medicol">{{recruiter.email}}</td>
-	            	    <td *ngIf="showActivePaidSubscription" class="candidate-tab-col medicol">{{recruiter.companyName}}</td>
-	            	    <td *ngIf="showActivePaidSubscription" class="candidate-tab-col medicol">{{recruiter.hasActiveSubscription}}</td>
-	      			</tr>
-	      			<tr *ngFor="let recruiter of creditBasedSubscription" class="recruiter-credit-based-subscription">
-	      				<td *ngIf="showCreditBasedSubscription" class="candidate-tab-col medicol"><span class="candidate-id-prefix"></span>{{recruiter.userId}}</td>
-	            	    <td *ngIf="showCreditBasedSubscription" class="candidate-tab-col medicol"> {{recruiter.firstName}} {{recruiter.surname}}</td>
-	            	    <td *ngIf="showCreditBasedSubscription" class="candidate-tab-col medicol">{{recruiter.email}}</td>
-	            	    <td *ngIf="showCreditBasedSubscription" class="candidate-tab-col medicol">{{recruiter.companyName}}</td>
-	            	    <td *ngIf="showCreditBasedSubscription" class="candidate-tab-col medicol">{{recruiter.hasActiveSubscription}}</td>
-	      			</tr>	
-	      			<tr *ngFor="let recruiter of trialPeriodRecruiters" class="recruiter-trial-subscription">
-	      				<td *ngIf="showTrialPeriodRecruiters" class="candidate-tab-col medicol"><span class="candidate-id-prefix"></span>{{recruiter.userId}}</td>
-	            	    <td *ngIf="showTrialPeriodRecruiters" class="candidate-tab-col medicol"> {{recruiter.firstName}} {{recruiter.surname}}</td>
-	            	    <td *ngIf="showTrialPeriodRecruiters" class="candidate-tab-col medicol">{{recruiter.email}}</td>
-	            	    <td *ngIf="showTrialPeriodRecruiters" class="candidate-tab-col medicol">{{recruiter.companyName}}</td>
-	            	    <td *ngIf="showTrialPeriodRecruiters" class="candidate-tab-col medicol">{{recruiter.hasActiveSubscription}}</td>
-	      			</tr>	
-	      			<tr *ngFor="let recruiter of expiredSubscriptionRecruiters" class="recruiter-expired-subscription">
-	      				<td *ngIf="showExpiredSubscriptionRecruiters" class="candidate-tab-col medicol"><span class="candidate-id-prefix"></span>{{recruiter.userId}}</td>
-	            	    <td *ngIf="showExpiredSubscriptionRecruiters" class="candidate-tab-col medicol"> {{recruiter.firstName}} {{recruiter.surname}}</td>
-	            	    <td *ngIf="showExpiredSubscriptionRecruiters" class="candidate-tab-col medicol">{{recruiter.email}}</td>
-	            	    <td *ngIf="showExpiredSubscriptionRecruiters" class="candidate-tab-col medicol">{{recruiter.companyName}}</td>
-	            	    <td *ngIf="showExpiredSubscriptionRecruiters" class="candidate-tab-col medicol">{{recruiter.hasActiveSubscription}}</td>
-	      			</tr>	
-	      			<tr *ngFor="let recruiter of firstGenActiveSubscription" class="recruiter-firstgen" >
-	      				<td *ngIf="showFirstGenActiveSubscription" class="candidate-tab-col medicol"><span class="candidate-id-prefix"></span>{{recruiter.userId}}</td>
-	            	    <td *ngIf="showFirstGenActiveSubscription" class="candidate-tab-col medicol"> {{recruiter.firstName}} {{recruiter.surname}}</td>
-	            	    <td *ngIf="showFirstGenActiveSubscription" class="candidate-tab-col medicol">{{recruiter.email}}</td>
-	            	    <td *ngIf="showFirstGenActiveSubscription" class="candidate-tab-col medicol">{{recruiter.companyName}}</td>
-	            	    <td *ngIf="showFirstGenActiveSubscription" class="candidate-tab-col medicol">{{recruiter.hasActiveSubscription}}</td>
-	      			</tr>	
-	      		</tbody>
-			</table>	
-		</div>
-	</div>
-	
-	<!--  -->
-	<div *ngIf="showAvailabilityCheckTab">
-		<table class="table candidate-table availability">
-			<thead>
-	      		<tr>
-	      			<th class="bg-tab-hdr">Id</th>
-	      			<th class="bg-tab-hdr">Name</th>
-	      			<th class="bg-tab-hdr">Pos</th>
-	      			<th class="bg-tab-hdr">Role</th>
-	                <th class="bg-tab-hdr">Actions</th>
-	             </tr>
-	      	</thead>
-	      	<tbody>
-	      		<tr *ngFor="let candidate of candidatesToCheckForAvailability">
-	      			<td class="medicol available" *ngIf="candidate.available === true">
-	      				<span>{{candidate.candidateId}}</span>
-	      			</td>
-	      			<td class="medicol unavailable" *ngIf="candidate.available === false">
-	      				{{candidate.candidateId}}
-	      			</td>
-	      			<td class="medicol">
-	      				{{candidate.firstname}} {{candidate.surname}}
-	      			</td>
-	      			<td class="medicol">
-	      				<span *ngIf="candidate.country === 'NETHERLANDS'" 			class="flag-icon flag-icon-nl suggestion-flag-country"></span>
-						<span *ngIf="candidate.country === 'BELGIUM'" 				class="flag-icon flag-icon-be  suggestion-flag-country"></span>
-						<span *ngIf="candidate.country === 'UK'" 					class="flag-icon flag-icon-gb  suggestion-flag-country"></span>
-						<span *ngIf="candidate.country === 'REPUBLIC_OF_IRELAND'" 	class="flag-icon flag-icon-ie  suggestion-flag-country"></span>
-						{{candidate.city}}
-	      			</td>
-	      			<td class="medicol">
-	      				{{candidate.roleSought}}
-	      			</td>
-	      			<td class="medicol">
-	      				<button	class="control-spacing btn btn-secondary arenella-btn" (click)="markCandidateAsAvailable(candidate.candidateId)">Available</button>
-	      				<button	class="control-spacing btn btn-secondary arenella-btn" (click)="disableNoLongerAvailableFlaggedAsUnavailableCandidate(candidate.candidateId)">Disable</button>
-	      			</td>
-	      		</tr>
-	      	</tbody>
-		</table>
-	</div>
+					<tr>
+						<th>Subscription Type</th>
+						<th>Count</th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td class="recruiter-active-subscription">Active Paid Subscription</td>
+						<td class="recruiter-active-subscription">{{activePaidSubscription.length}}</td>
+						<td><button class="btn btn-secondary arenella-action" (click)="toggleShowActivePaidSubscription()">Toggle</button></td>
+					</tr>
+					<tr>
+						<td class="recruiter-credit-based-subscription">Credit Based</td>
+						<td class="recruiter-credit-based-subscription">{{creditBasedSubscription.length}}</td>
+						<td><button class="btn btn-secondary arenella-action" (click)="toggleShowCreditBasedSubscription()">Toggle</button></td>
+					</tr>
+					<tr>
+						<td class="recruiter-trial-subscription">Trial Subscription</td>
+						<td class="recruiter-trial-subscription">{{trialPeriodRecruiters.length}}</td>
+						<td><button class="btn btn-secondary arenella-btn" (click)="toggleShowTrialPeriodRecruiters()">Toggle</button></td>
+					</tr>
+					<tr>
+						<td class="recruiter-expired-subscription">Expired Subscription</td>
+						<td class="recruiter-expired-subscription">{{expiredSubscriptionRecruiters.length}}</td>
+						<td><button class="btn btn-secondary arenella-btn" (click)="toggleShowExpiredSubscriptionRecruiters()">Toggle</button></td>
+					</tr>
+					<tr>
+						<td class="recruiter-firstgen">FirstGen Subscription</td>
+						<td class="recruiter-firstgen">{{firstGenActiveSubscription.length}}</td>
+						<td><button class="btn btn-secondary arenella-btn" (click)="toggleShowFirstGenActiveSubscription()">Toggle</button></td>
+					</tr>
+					<tr>
+						<td>Total  / Total active</td>
+						<td>{{recruiters.length}} / <span>{{getTotalActiveRecruiters()}}</span></td>
+					</tr>
+				</tbody>
+			</table>
 		
-	<!-- Candidates-->
-	<div *ngIf="showCandidatesTab">
-		<form [formGroup]="candidateFormGroup">
-			<h3>Candidates</h3>
-			
-			<div style="float:left">
-				<label 	class="control-spacing candidate-lbl">Name</label>
-				<input 	class="control-spacing candidate-input" type="text" formControlName="firstname"/>
+			<div >
+		    	<table class="table candidate-table">
+					<thead>
+		      			<tr>
+		      				<!-- Table Headers -->
+		      				<th class="bg-tab-hdr">Id</th>
+		      				<th class="bg-tab-hdr">Name</th>
+		            	    <th class="bg-tab-hdr">Email</th>
+		                	<th class="bg-tab-hdr">Company</th>
+		                	<th class="bt-tab-hdr">Active</th>
+		      			</tr>
+		      	</thead>
+		      	<tbody>
+		      			<!-- Table row -->
+		      			
+		      			
+		      			<tr *ngFor="let recruiter of activePaidSubscription" class="recruiter-active-subscription">
+		      				<td *ngIf="showActivePaidSubscription" class="candidate-tab-col medicol"><span class="candidate-id-prefix"></span>{{recruiter.userId}}</td>
+		            	    <td *ngIf="showActivePaidSubscription" class="candidate-tab-col medicol"> {{recruiter.firstName}} {{recruiter.surname}}</td>
+		            	    <td *ngIf="showActivePaidSubscription" class="candidate-tab-col medicol">{{recruiter.email}}</td>
+		            	    <td *ngIf="showActivePaidSubscription" class="candidate-tab-col medicol">{{recruiter.companyName}}</td>
+		            	    <td *ngIf="showActivePaidSubscription" class="candidate-tab-col medicol">{{recruiter.hasActiveSubscription}}</td>
+		      			</tr>
+		      			<tr *ngFor="let recruiter of creditBasedSubscription" class="recruiter-credit-based-subscription">
+		      				<td *ngIf="showCreditBasedSubscription" class="candidate-tab-col medicol"><span class="candidate-id-prefix"></span>{{recruiter.userId}}</td>
+		            	    <td *ngIf="showCreditBasedSubscription" class="candidate-tab-col medicol"> {{recruiter.firstName}} {{recruiter.surname}}</td>
+		            	    <td *ngIf="showCreditBasedSubscription" class="candidate-tab-col medicol">{{recruiter.email}}</td>
+		            	    <td *ngIf="showCreditBasedSubscription" class="candidate-tab-col medicol">{{recruiter.companyName}}</td>
+		            	    <td *ngIf="showCreditBasedSubscription" class="candidate-tab-col medicol">{{recruiter.hasActiveSubscription}}</td>
+		      			</tr>	
+		      			<tr *ngFor="let recruiter of trialPeriodRecruiters" class="recruiter-trial-subscription">
+		      				<td *ngIf="showTrialPeriodRecruiters" class="candidate-tab-col medicol"><span class="candidate-id-prefix"></span>{{recruiter.userId}}</td>
+		            	    <td *ngIf="showTrialPeriodRecruiters" class="candidate-tab-col medicol"> {{recruiter.firstName}} {{recruiter.surname}}</td>
+		            	    <td *ngIf="showTrialPeriodRecruiters" class="candidate-tab-col medicol">{{recruiter.email}}</td>
+		            	    <td *ngIf="showTrialPeriodRecruiters" class="candidate-tab-col medicol">{{recruiter.companyName}}</td>
+		            	    <td *ngIf="showTrialPeriodRecruiters" class="candidate-tab-col medicol">{{recruiter.hasActiveSubscription}}</td>
+		      			</tr>	
+		      			<tr *ngFor="let recruiter of expiredSubscriptionRecruiters" class="recruiter-expired-subscription">
+		      				<td *ngIf="showExpiredSubscriptionRecruiters" class="candidate-tab-col medicol"><span class="candidate-id-prefix"></span>{{recruiter.userId}}</td>
+		            	    <td *ngIf="showExpiredSubscriptionRecruiters" class="candidate-tab-col medicol"> {{recruiter.firstName}} {{recruiter.surname}}</td>
+		            	    <td *ngIf="showExpiredSubscriptionRecruiters" class="candidate-tab-col medicol">{{recruiter.email}}</td>
+		            	    <td *ngIf="showExpiredSubscriptionRecruiters" class="candidate-tab-col medicol">{{recruiter.companyName}}</td>
+		            	    <td *ngIf="showExpiredSubscriptionRecruiters" class="candidate-tab-col medicol">{{recruiter.hasActiveSubscription}}</td>
+		      			</tr>	
+		      			<tr *ngFor="let recruiter of firstGenActiveSubscription" class="recruiter-firstgen" >
+		      				<td *ngIf="showFirstGenActiveSubscription" class="candidate-tab-col medicol"><span class="candidate-id-prefix"></span>{{recruiter.userId}}</td>
+		            	    <td *ngIf="showFirstGenActiveSubscription" class="candidate-tab-col medicol"> {{recruiter.firstName}} {{recruiter.surname}}</td>
+		            	    <td *ngIf="showFirstGenActiveSubscription" class="candidate-tab-col medicol">{{recruiter.email}}</td>
+		            	    <td *ngIf="showFirstGenActiveSubscription" class="candidate-tab-col medicol">{{recruiter.companyName}}</td>
+		            	    <td *ngIf="showFirstGenActiveSubscription" class="candidate-tab-col medicol">{{recruiter.hasActiveSubscription}}</td>
+		      			</tr>	
+		      		</tbody>
+				</table>	
 			</div>
-			<div style="float:left">
-				<label 	class="control-spacing candidate-lbl">Surname</label>
-				<input 	class="control-spacing candidate-input" type="text" formControlName="surname"/>
-			</div>
-			<div style="float:left">
-				<label 	class="control-spacing candidate-lbl">email</label>
-				<input 	class="control-spacing candidate-input" type="text" formControlName="email"/>
-				<button	class="control-spacing btn btn-secondary arenella-btn" (click)="fetchCandidates()">Filter</button>
-			</div>
-			
-		</form>
-	
-		<!-- Candidates table -->  
-		<div style="margin-top: 5px;">
-      
-			<table class="table candidate-table">
+		</div>
+		
+		<!--  -->
+		<div *ngIf="showAvailabilityCheckTab">
+			<table class="table candidate-table availability">
 				<thead>
-	      			<tr>
-	      				<!-- Table Headers -->
-	      				<th class="bg-tab-hdr">Id</th>
-	      				<th class="bg-tab-hdr">Name</th>
-	                	<th class="bg-tab-hdr">Actions</th>
-	              </tr>
-	      		</thead>
-	      		<tbody>
-	      			<!-- Table row -->
-	      			<tr *ngFor="let candidate of candidates">
-	      				<td class="candidate-tab-col"><span class="candidate-id-prefix">C</span>{{candidate.candidateId}}</td>
-	            	    <td class="candidate-tab-col medicol"> {{candidate.firstname}} {{candidate.surname}}</td>
-	            	    <td class="candidate-tab-col medicol">{{candidate.email}}</td>
-	            	    <td class="candidate-tab-col medicol">
-	            	    	<div [ngSwitch]="candidate.available">
-	                			<div  *ngSwitchCase="true">
-	                				<button	class="control-spacing btn btn-secondary arenella-btn" (click)="disableCandidate(candidate.candidateId)">Disable</button>
-	                			</div>
-	                			<div>
-	                				<button	class="control-spacing btn btn-secondary arenella-btn" *ngIf="candidateToDelete == '' || candidateToDelete != candidate.candidateId" (click)="deleteCandidate(candidate.candidateId)">Delete</button>
-	                				<button	class="control-spacing btn btn-secondary arenella-btn" *ngIf="candidateToDelete == candidate.candidateId" (click)="confirmDeleteCandidate()" style="background:red">Confirm</button>
-	                			</div>
-	                		</div>
-	                	</td>
-	      			</tr>	
-	      		</tbody>
+		      		<tr>
+		      			<th class="bg-tab-hdr">Id</th>
+		      			<th class="bg-tab-hdr">Name</th>
+		      			<th class="bg-tab-hdr">Pos</th>
+		      			<th class="bg-tab-hdr">Role</th>
+		                <th class="bg-tab-hdr">Actions</th>
+		             </tr>
+		      	</thead>
+		      	<tbody>
+		      		<tr *ngFor="let candidate of candidatesToCheckForAvailability">
+		      			<td class="medicol available" *ngIf="candidate.available === true">
+		      				<span>{{candidate.candidateId}}</span>
+		      			</td>
+		      			<td class="medicol unavailable" *ngIf="candidate.available === false">
+		      				{{candidate.candidateId}}
+		      			</td>
+		      			<td class="medicol">
+		      				{{candidate.firstname}} {{candidate.surname}}
+		      			</td>
+		      			<td class="medicol">
+		      				<span *ngIf="candidate.country === 'NETHERLANDS'" 			class="flag-icon flag-icon-nl suggestion-flag-country"></span>
+							<span *ngIf="candidate.country === 'BELGIUM'" 				class="flag-icon flag-icon-be  suggestion-flag-country"></span>
+							<span *ngIf="candidate.country === 'UK'" 					class="flag-icon flag-icon-gb  suggestion-flag-country"></span>
+							<span *ngIf="candidate.country === 'REPUBLIC_OF_IRELAND'" 	class="flag-icon flag-icon-ie  suggestion-flag-country"></span>
+							{{candidate.city}}
+		      			</td>
+		      			<td class="medicol">
+		      				{{candidate.roleSought}}
+		      			</td>
+		      			<td class="medicol">
+		      				<button	class="control-spacing btn btn-secondary arenella-btn" (click)="markCandidateAsAvailable(candidate.candidateId)">Available</button>
+		      				<button	class="control-spacing btn btn-secondary arenella-btn" (click)="disableNoLongerAvailableFlaggedAsUnavailableCandidate(candidate.candidateId)">Disable</button>
+		      			</td>
+		      		</tr>
+		      	</tbody>
 			</table>
 		</div>
-		
-	</div>
-	
-	<!-- Skills table -->
-	<div *ngIf="showSkillsValidationTab">
-	
-	
-		<table class="table candidate-table availability">
 			
-			<thead>
-      			<tr>
-      				<th class="bg-tab-hdr">Skill</th>
-      				<th class="bg-tab-hdr">Actions</th>
-      		     </tr>
-      		</thead>
-      		<tbody>
-      			<tr style="padding-bottom:20px; border-bottom:2px black solid;border-top:2px black solid;">
-	      			<td><b>Pending:</b> {{skillsToValidate.length}}</td>
-	      			<td><button	class="control-spacing btn btn-secondary arenella-btn" style="float:right;" (click)="persistValidatedSkills()">Update</button></td>
-	      		</tr>
-	      		<tr *ngFor="let skill of skillsToValidate">
-	      			<td *ngIf="skill.validationStatus == 'PENDING'">{{skill.skill}}</td>
-	      			<td *ngIf="skill.validationStatus == 'ACCEPTED'" class="skillAccepted">{{skill.skill}}</td>
-	      			<td *ngIf="skill.validationStatus == 'REJECTED'" class="skillRejected">{{skill.skill}}</td>
-	      			<td>
-	      				<button	class="control-spacing btn btn-secondary arenella-btn" (click)="updateSkillValidationStatus(skill.skill, 'ACCEPTED')">Accept</button>
-	      				<button	class="control-spacing btn btn-secondary arenella-btn" (click)="updateSkillValidationStatus(skill.skill, 'REJECTED')">Reject</button>
-	      			</td>
-	      		</tr>
-	      	</tbody>
-		</table>
-	</div>
-	 
-	<!-- Subscriptions requiring actions -->
-	<div *ngIf="showSubscriptionActionsTab">
-		<div class="sub-title">
-			<h3>Subscription actions required</h3>
+		<!-- Candidates-->
+		<div *ngIf="showCandidatesTab">
+			<form [formGroup]="candidateFormGroup">
+				<h3>Candidates</h3>
+				
+				<div style="float:left">
+					<label 	class="control-spacing candidate-lbl">Name</label>
+					<input 	class="control-spacing candidate-input" type="text" formControlName="firstname"/>
+				</div>
+				<div style="float:left">
+					<label 	class="control-spacing candidate-lbl">Surname</label>
+					<input 	class="control-spacing candidate-input" type="text" formControlName="surname"/>
+				</div>
+				<div style="float:left">
+					<label 	class="control-spacing candidate-lbl">email</label>
+					<input 	class="control-spacing candidate-input" type="text" formControlName="email"/>
+					<button	class="control-spacing btn btn-secondary arenella-btn" (click)="fetchCandidates()">Filter</button>
+				</div>
+				
+			</form>
+		
+			<!-- Candidates table -->  
+			<div style="margin-top: 5px;">
+	      
+				<table class="table candidate-table">
+					<thead>
+		      			<tr>
+		      				<!-- Table Headers -->
+		      				<th class="bg-tab-hdr">Id</th>
+		      				<th class="bg-tab-hdr">Name</th>
+		                	<th class="bg-tab-hdr">Actions</th>
+		              </tr>
+		      		</thead>
+		      		<tbody>
+		      			<!-- Table row -->
+		      			<tr *ngFor="let candidate of candidates">
+		      				<td class="candidate-tab-col"><span class="candidate-id-prefix">C</span>{{candidate.candidateId}}</td>
+		            	    <td class="candidate-tab-col medicol"> {{candidate.firstname}} {{candidate.surname}}</td>
+		            	    <td class="candidate-tab-col medicol">{{candidate.email}}</td>
+		            	    <td class="candidate-tab-col medicol">
+		            	    	<div [ngSwitch]="candidate.available">
+		                			<div  *ngSwitchCase="true">
+		                				<button	class="control-spacing btn btn-secondary arenella-btn" (click)="disableCandidate(candidate.candidateId)">Disable</button>
+		                			</div>
+		                			<div>
+		                				<button	class="control-spacing btn btn-secondary arenella-btn" *ngIf="candidateToDelete == '' || candidateToDelete != candidate.candidateId" (click)="deleteCandidate(candidate.candidateId)">Delete</button>
+		                				<button	class="control-spacing btn btn-secondary arenella-btn" *ngIf="candidateToDelete == candidate.candidateId" (click)="confirmDeleteCandidate()" style="background:red">Confirm</button>
+		                			</div>
+		                		</div>
+		                	</td>
+		      			</tr>	
+		      		</tbody>
+				</table>
+			</div>
+			
 		</div>
 		
-		<table class="table candidate-table">
-			<thead>
-				<tr>
-					<th class="medicol">Id</th>
-					<th class="medicol">Name</th>
-					<th class="medicol">Email</th>
-					<th class="medicol">Lang</th>
-					<th class="medicol">Type</th>
-					<th class="medicol">Status</th>
-					<th class="medicol">Actions</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr *ngFor="let subscriptionAction of recruitersWithSubscriptionActions">
-					<td class="medicol">{{subscriptionAction.userId}}</td>
-					<td class="medicol">{{subscriptionAction.firstName}} {{subscriptionAction.surname}}</td>
-					<td class="medicol">{{subscriptionAction.email}}</td>
-					<td class="medicol">{{subscriptionAction.language}}</td>
-					<td class="medicol">{{subscriptionAction.type}}</td>
-					<td class="medicol">{{subscriptionAction.status}}</td>
-					<td>
-						<button class="btn btn-secondary arenella-btn" *ngFor="let action of subscriptionAction.actions" (click)="performAction(subscriptionAction, action)">{{frmtSubscriptionAction(action)}}</button>
-					</td>
-				</tr>
-			</tbody>
-		</table>
-	<div>
+		<!-- Skills table -->
+		<div *ngIf="showSkillsValidationTab">
+		
+			<div class="action-buttons">
+				<button	class="btn btn-secondary arenella-btn" (click)="persistValidatedSkills()">Update</button>
+			</div>
+			<table class="table candidate-table availability">
+				
+				<thead>
+	      			<tr>
+	      				<th class="bg-tab-hdr">Skill</th>
+	      				<th class="bg-tab-hdr">Actions</th>
+	      		     </tr>
+	      		</thead>
+	      		<tbody>
+	      			<tr style="padding-bottom:20px; border-bottom:2px black solid;border-top:2px black solid;">
+		      			<td><b>Pending:</b> {{skillsToValidate.length}}</td>
+		      		</tr>
+		      		<tr *ngFor="let skill of skillsToValidate">
+		      			<td *ngIf="skill.validationStatus == 'PENDING'">{{skill.skill}}</td>
+		      			<td *ngIf="skill.validationStatus == 'ACCEPTED'" class="skillAccepted">{{skill.skill}}</td>
+		      			<td *ngIf="skill.validationStatus == 'REJECTED'" class="skillRejected">{{skill.skill}}</td>
+		      			<td>
+		      				<button	class="control-spacing btn btn-secondary arenella-btn" (click)="updateSkillValidationStatus(skill.skill, 'ACCEPTED')">Accept</button>
+		      				<button	class="control-spacing btn btn-secondary arenella-btn" (click)="updateSkillValidationStatus(skill.skill, 'REJECTED')">Reject</button>
+		      			</td>
+		      		</tr>
+		      	</tbody>
+			</table>
+		</div>
+		 
+		<!-- Subscriptions requiring actions -->
+		<div *ngIf="showSubscriptionActionsTab">
+			<div class="sub-title">
+				<h3>Subscription actions required</h3>
+			</div>
+			
+			<table class="table candidate-table">
+				<thead>
+					<tr>
+						<th class="medicol">Id</th>
+						<th class="medicol">Name</th>
+						<th class="medicol">Email</th>
+						<th class="medicol">Lang</th>
+						<th class="medicol">Type</th>
+						<th class="medicol">Status</th>
+						<th class="medicol">Actions</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr *ngFor="let subscriptionAction of recruitersWithSubscriptionActions">
+						<td class="medicol">{{subscriptionAction.userId}}</td>
+						<td class="medicol">{{subscriptionAction.firstName}} {{subscriptionAction.surname}}</td>
+						<td class="medicol">{{subscriptionAction.email}}</td>
+						<td class="medicol">{{subscriptionAction.language}}</td>
+						<td class="medicol">{{subscriptionAction.type}}</td>
+						<td class="medicol">{{subscriptionAction.status}}</td>
+						<td>
+							<button class="btn btn-secondary arenella-btn" *ngFor="let action of subscriptionAction.actions" (click)="performAction(subscriptionAction, action)">{{frmtSubscriptionAction(action)}}</button>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		<div>
+	</div>
 	
 </div>

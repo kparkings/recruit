@@ -91,3 +91,21 @@ textarea{
 	color:grey;
 }
 
+
+.candidate-signup-page{
+	margin-top:20px;
+	width:100%;
+	text-align:center;
+}
+
+.candidate-signup-page h5{
+	color:grey;
+}
+
+.candidate-signup-panel{
+	width:80%;
+	margin-top:20px;
+	margin-left:10%;
+	margin-right:10%;
+	margin-bottom:50px;
+}

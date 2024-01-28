@@ -127,7 +127,11 @@ tr:nth-child(even){
 }
 
 .no-emails{
-	text-align:center;
+	padding: 30px;
+	min-width:350px;
+	max-width:90%;
+	margin: auto;
+	text-align:center; 
 }
 
 .modal-body textarea{
@@ -149,3 +153,4 @@ tr:nth-child(even){
 .email-table{
 	margin-top:20px;
 }
+

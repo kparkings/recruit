@@ -4,6 +4,7 @@
 	<div class="nav-tabs-bar"></div>
 	
 	<div class='page-body'>
+	<div>
 		
 		<div class="action-buttons" *ngIf="currentView == 'view-read'">
 			<button class="btn btn-secondary arenella-btn" (click)="composeReply()"			*ngIf="currentEmail.sender.senderType === 'RECRUITER' || currentEmail.sender.senderType === 'CANDIDATE'">Reply</button>
@@ -12,7 +13,7 @@
 			<button class="btn btn-secondary arenella-btn" (click)="viewInbox()">Back</button>
 		</div>
 		
-		<div *ngIf="hasEmails()" >
+		<div *ngIf="hasEmails()">
 			<table class="table email-table" *ngIf="currentView == 'view-inbox'">
 				<thead>
 					<tr>
@@ -64,6 +65,7 @@
 		</div>
 	</div>
 	<div class="page-footer">
+	</div>
 	</div>
 </div>
 

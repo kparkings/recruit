@@ -1,58 +1,67 @@
-<div>
-    <div class="centerdiv" *ngIf="!showForgottenPassword">
-       	<form [formGroup]="formBean">
-			<div class="wholepagerow">
-			
-				<div class="new-subscription" *ngIf="showSubscriptionMsg">
-					<h2>Thank you for subscribing.</h2>
-					<h3>Please log back in to continue</h3>
-				</div>
-			
-				<table>
-					<tr>
-						<td><span style="padding-right:20px;">Username</span></td>
-						<td><input class="inpt-tab-std" type="text" formControlName="username"/></td>
-					</tr>
-					<tr>
-						<td>Password</td>
-						<td><input class="inpt-tab-std" type="password" formControlName="password"/></td>
-					</tr>
-					<tr>
-						<td>&nbsp;</td>
-						<td><button class="loginbutton" (click)="login()">Login</button></td>
-					</tr>
-					<tr>
-						<td></td>
-						<td class="forgotten-password-link" (click)="toggleForgottenPassword(true)">Forgotten Password?</td>
-					</tr>
-				</table>
-			</div>
-		</form>
-	</div>
-	<div class="centerdiv" *ngIf="showForgottenPassword">
-       	<form [formGroup]="formBeanForgottenPassword">
-			<div class="wholepagerow">
-				<table>
-					<tr>
-						<td colspan="2">
-							<p>Please enter your email and click on 'Reset Password' and a new username and passsword will be emailed to you shortly</p>
-						</td>
-					</tr>
-					<tr>
-						<td>Email:</td>
-						<td><input class="inpt-tab-std" type="text" formControlName="email"/></td>
-					</tr>
+<div class="page">
+
+	<!-- Nav options -->
+	<div class="nav-tabs-bar"></div>
+	
+	<div class="page-body">
+	
+		<div class="login-panel">
+		    <div *ngIf="!showForgottenPassword">
+		       	<form [formGroup]="formBean">
+					<div class="wholepagerow">
 					
-					<tr>
-						<td colspan="2">
-							<button class="loginbutton forgotten-password-button" (click)="resetPassword()">Reset Password</button>
-							<button class="loginbutton forgotten-password-button" (click)="cancelResetPassword()">Cancel</button>
-						</td>
-					</tr>
+						<div class="new-subscription" *ngIf="showSubscriptionMsg">
+							<h2>Thank you for subscribing.</h2>
+							<h3>Please log back in to continue</h3>
+						</div>
 					
-				</table>
+						<table>
+							<tr>
+								<td><span style="padding-right:20px;">Username</span></td>
+								<td><input class="inpt-tab-std" type="text" formControlName="username"/></td>
+							</tr>
+							<tr>
+								<td>Password</td>
+								<td><input class="inpt-tab-std" type="password" formControlName="password"/></td>
+							</tr>
+							<tr>
+								<td>&nbsp;</td>
+								<td><button class="loginbutton" (click)="login()">Login</button></td>
+							</tr>
+							<tr>
+								<td></td>
+								<td class="forgotten-password-link" (click)="toggleForgottenPassword(true)">Forgotten Password?</td>
+							</tr>
+						</table>
+					</div>
+				</form>
 			</div>
-		</form>
+			<div *ngIf="showForgottenPassword">
+		       	<form [formGroup]="formBeanForgottenPassword">
+					<div class="wholepagerow">
+						<table>
+							<tr>
+								<td colspan="2">
+									<p>Please enter your email and click on 'Reset Password' and a new username and passsword will be emailed to you shortly</p>
+								</td>
+							</tr>
+							<tr>
+								<td>Email:</td>
+								<td><input class="inpt-tab-std" type="text" formControlName="email"/></td>
+							</tr>
+							
+							<tr>
+								<td colspan="2">
+									<button class="loginbutton forgotten-password-button" (click)="resetPassword()">Reset Password</button>
+									<button class="loginbutton forgotten-password-button" (click)="cancelResetPassword()">Cancel</button>
+								</td>
+							</tr>
+							
+						</table>
+					</div>
+				</form>
+			</div>
+		</div>
 	</div>
 </div>
     

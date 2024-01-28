@@ -1,9 +1,9 @@
 .chart-data-panel-page{
-	margin:10px;
+	margin:0px;
 }
 
 .chart-panel{
-	margin-top:40px;
+	margin-bottom:0px;
 }
 
 .listing-filter-panel{
@@ -42,8 +42,9 @@
 	text-align:left;
 	padding: 30px;
 	min-width:350px;
-	max-width:500px;
-	margin: auto; 
+	max-width:90%;
+	margin: auto;
+	text-align:center; 
 }
 
 .no-posts h2{

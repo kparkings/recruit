@@ -1,25 +1,27 @@
-<div class=".container m-2">
-	<div>
+<div class="page">
+
+	<!-- Nav options -->
+	<div class="nav-tabs-bar">
+		<ul class="nav nav-tabs">
+			<li class="nav-item">
+				<span class="nav-link statsChartTabX" (click)="switchTab('general-stats')">General</span>
+			</li>
+			<li>
+				<span class="nav-link statsChartTabX" (click)="switchTab('jobboard-stats')">Job Board</span>
+			</li>
+		</ul>
+	</div>
+	
+	<div class="page-body">
 	
 		<!-- Action Buttons -->
 		<div class="action-buttons">
 			<button class="btn btn-secondary arenella-btn" (click)="refreshData()">Refresh</button>
 		</div>
-	
-		<!-- Menu -->
-		<div>
-			<ul class="nav nav-tabs">
-			  <li class="nav-item">
-			  	<span class="nav-link statsChartTab" (click)="switchTab('general-stats')">General Statistics</span>
-			  </li>
-			  <li>
-			  	<span class="nav-link statsChartTab" (click)="switchTab('jobboard-stats')">Job Board Statistics</span>
-			  </li>
-			</ul>
-		</div>
 		
 		<div *ngIf="currentTab == 'jobboard-stats' && listingStatistics.listingStats.length == 0" class="no-posts">
 			<h2>Job board statistics</h2>
+			<br>
 			<p>
 			To view statistics you will need to create at least on post on the Job board
 			</p>
@@ -29,7 +31,7 @@
 			You will simply need to verify that details are correct and publish the post.  
 			</p>
 			<p>
-			Posts on the job board allow site visitors to contact you directly. Posts are also shared in an external network of 20,000+ connections 
+			Posts on the job board allow site visitors to contact you directly. Posts are also shared in an external network of 24,000+ connections 
 			to attract as many candidates as possible
 			</p>
 			<p>
@@ -41,7 +43,6 @@
 		
 		<!-- Main panel -->
 		<div class="chart-data-panel-page">	
-			
 		
 			<!-- TOP -->
 			<div class="chart-panel">
@@ -58,13 +59,10 @@
 			</div>
 			<div *ngIf="currentTab == 'jobboard-stats' &&listingStatistics.listingStats.length > 0">	
 				<div class="chart-panel listing-filter-panel">
-				
 					<table>
 						<thead>
 							<tr>
-								<th>
-									Filter by Post
-								</th>
+								<th>Filter by Post</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -74,7 +72,6 @@
 							</tr>
 						</tbody>
 					</table>
-					
 				</div>
 				<div>	
 					<h3 style="margin-left:20px;">{{listingViewsChart.chartTitle}}</h3>
@@ -87,7 +84,7 @@
 			</div>
 		
 			<!-- BOTTOM -->
-			<div class="chart-panel">
+			<div class="chart-panel" style="margin-top:40px;">
 				<div *ngIf="currentTab == 'general-stats'">
 					<h2>Job board Views</h2>
 					<h5>Totals:</h5>
@@ -110,95 +107,7 @@
 					<div>
 				</div>	
 			</div>
-			
-			
-						
-			
-			
-		
-				
-			<!--  General stat's -->
-			<!--  div *ngIf="currentTab == 'general-stats'"-->
-			<!--  
-				<div class="chart-panel">
-					<h2>Candidate Availability</h2>
-					<h5>Totals:</h5>
-					<table>
-						<tr>
-							<td>Active Users</td>
-							<td>{{totalNumberActiveCandidates}}</td>
-						</tr>
-					</table>
-				</div>
-				<div class="chart-panel">
-					<h5>Available by Function</h5>-->
-					<!--  
- 						<canvas baseChart 
-     						[datasets]="availabilityChart.chartData" 
-     						[labels]="availabilityChart.chartLabels" 
-     						[options]="availabilityChart.chartOptions"
-     						[colors]="availabilityChart.chartColors" 
-     						[legend]="availabilityChart.chartLegend" 
-     						[chartType]="availabilityChart.chartType" 
-     						[plugins]="availabilityChart.chartPlugins">
-  					</canvas>
-  					
-				</div>
-				-->	
-				<!--  
-				<div class="chart-panel">
-					<h2>Job board Views</h2>
-					<h5>Totals:</h5>
-					<table>
-						<tr>
-							<td>Listings viewed today</td>
-							<td>{{listingViewsToday}}</td>
-						</tr>
-						<tr>
-							<td>Listings viewed this week</td>
-							<td>{{listingViewsThisWeek}}</td>
-						</tr>
-					</table>
-				</div>
-				<div class="chart-panel">
-					<h5>Job board Views</h5>
-					-->
-					<!--  
- 						<canvas baseChart 
-     					[datasets]="jobboardChart.chartData" 
-     						[labels]="jobboardChart.chartLabels" 
-     						[options]="jobboardChart.chartOptions"
-     						[colors]="jobboardChart.chartColors" 
-     						[legend]="jobboardChart.chartLegend" 
-     						[chartType]="jobBoardType" 
-     						[plugins]="jobboardChart.chartPlugins">
-  					</canvas>
-  					-->
-  					<!--  
-				</div>
-			</div>-->
-			
-			
-			
-			
-			<!-- Job board stats -->
-				
-					 
-					<div class="chart-panel">
-						<!--
-						<canvas baseChart 
-				  				[datasets]="listingViewsChart.chartData" 
-				  				[labels]="listingViewsChart.chartLabels" 
-				  				[options]="listingViewsChart.chartOptions"
-				  				[colors]="listingViewsChart.chartColors" 
-				  				[legend]="listingViewsChart.chartLegend" 
-				  				[chartType]="listingViewsChart.chartType" 
-				 			 	[plugins]="listingViewsChart.chartPlugins">
-					 </canvas>
-					 -->
-					</div>
-				</div>	
-			</div>
+			<div class="chart-panel">
 		</div>
 	</div>
 </div>

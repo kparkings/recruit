@@ -1,149 +1,127 @@
-<div>
-    <div class="centerdiv">
-        <div class="center-table">
+<div class="page">
+
+	<!-- Nav options -->
+	<div class="nav-tabs-bar"></div>
+	
+    <div class="page-body">
         	<form [formGroup]="formBean">
-				<div class="wholepagerow">
-					<h3>Register As Candidate</h3>
-					<p class="creat-candidate-intro">
-					The recruiters, IT agencies and Hiring Managers are all independent of the Arenella-ICT platform, making Arenella-ICT a one stop shop for reaching a whole 
-					network of new opportunities. By uploading your CV and creating your profile you are gaining access to this network of new possibilities.
-					</p>
-					<div class="div-spacing">
-						<p style="border-bottom:2px solid black;">Curriculum</p>
-						<input type="file" (change)="uploadCurriculumFile($event)">
-					</div>
-					<div class="div-spacing">
-						<table>
-							<tr>
-								<th class="tb-lbl">First name</th>
-								<td><input type="text" class="inpt-tab-std" formControlName="firstname"/></td>
-							</tr>
-							<tr>
-								<th class="tb-lbl">Surname</th>
-								<td><input type="text" class="inpt-tab-std" formControlName="surname"/></td>
-							</tr>
-							<tr>
-								<th class="tb-lbl">Email</th>
-								<td><input type="text" class="inpt-tab-std" formControlName="email"/></td>
-							</tr>
-						</table>
-					</div>
-					<div class="div-spacing">
-						<table>
-							<tr>
-								<th class="tb-lbl-checkbox">Contract</th>
-								<td><input type="checkbox" formControlName="contract" (click)="updateContract()"/></td>
-							</tr>
-							<tr>
-								<th class="tb-lbl-checkbox">Perm</th>
-								<td><input type="checkbox" formControlName="perm" (click)="updatePerm()"/></td>
-							</tr>
-						</table>
-					</div>
-					<div class="additional-info">
-						<h3>Additional Information</h3>
-						<div>
-							<p>
-							By providing this optional additional information you will help to make your profile
-							stand out to the recruiters
-							</p>
+				<div>
+				
+					<div class="candidate-signup-page">
+            			<h1>Register As Candidate</h1>
+            			<p class="creat-candidate-intro">
+						The recruiters, IT agencies and Hiring Managers are all independent of the Arenella-ICT platform, making Arenella-ICT a one stop shop for reaching a whole 
+						network of new opportunities. By uploading your CV and creating your profile you are gaining access to this network of new possibilities.
+						</p>
+            		</div>
+            		<div class="candidate-signup-panel">
+						<div class="div-spacing">
+							<p style="border-bottom:2px solid black;">Curriculum</p>
+							<input type="file" (change)="uploadCurriculumFile($event)">
 						</div>
 						<div class="div-spacing">
-							<p style="border-bottom:2px solid black;">Profile Photo [ .jpeg / .png ] Max 1 MB</p>
-							<input type="file" accept="image/jpeg,image/png" (change)="uploadProfileImage($event)">
-						</div>
-						<br>
-						<div>
 							<table>
-								<!--  
 								<tr>
-									<th>Rate Currency</th>
-									<td>
-										<select class="inpt-tab-std" formControlName="rateCurrency">
-											<option value=""></option>
-											<option value="EUR">Euros</option>
-											<option value="GBP">Pounds Sterling</option>
-										</select>
-									</td>
+									<th class="tb-lbl">First name</th>
+									<td><input type="text" class="inpt-tab-std" formControlName="firstname"/></td>
 								</tr>
 								<tr>
-									<th>Rate Period</th>
-									<td>
-										<select class="inpt-tab-std" formControlName="ratePeriod">
-											<option value=""></option>
-											<option value="HOUR">Per hour</option>
-											<option value="DAY">Per Day</option>
-											<option value="YEAR">Per Year</option>
-										</select>
-									</td>
+									<th class="tb-lbl">Surname</th>
+									<td><input type="text" class="inpt-tab-std" formControlName="surname"/></td>
 								</tr>
 								<tr>
-									<th>Rate Amount</th>
-									<td>
-										<input type="number" class="inpt-tab-std" formControlName="rateValue">
-									</td>
-								</tr>
-								-->
-								
-								<tr class="{{contractRoleClass}}">
-									<td class="hdr-label">Contract Rate</td>
-									<td>
-										<select formControlName="contractCurrency">
-											<option>EUR</option>
-											<option>GBP</option>
-										</select>
-										<select formControlName="contractTimeUnit">
-											<option value="HOUR">Hour</option>
-											<option value="DAY">Day</option>
-											<option	value="YEAR">Year</option>
-										</select>
-									From: <input type="number" formControlName="contractFrom">
-									To: <input type="number" formControlName="contractTo">
-								</tr>
-								
-								<tr class="{{permRoleClass}}">
-									<td class="hdr-label">Perm Rate</td>
-									<td>
-										<select formControlName="permCurrency">
-											<option>EUR</option>
-											<option>GBP</option>
-										</select>
-									
-										<select formControlName="permTimeUnit">
-											<option value="HOUR">Hour</option>
-											<option value="DAY">Day</option>
-											<option	value="YEAR">Year</option>
-										</select>
-										From: <input type="number" formControlName="permFrom"> To: <input type="number" formControlName="permTo">
-									</td>	
+									<th class="tb-lbl">Email</th>
+									<td><input type="text" class="inpt-tab-std" formControlName="email"/></td>
 								</tr>
 							</table>
 						</div>
-						
-					</div>
-					<br>
-					<div>
-						<b>Personal Introduction</b>
+						<div class="div-spacing">
+							<table>
+								<tr>
+									<th class="tb-lbl-checkbox">Contract</th>
+									<td><input type="checkbox" formControlName="contract" (click)="updateContract()"/></td>
+								</tr>
+								<tr>
+									<th class="tb-lbl-checkbox">Perm</th>
+									<td><input type="checkbox" formControlName="perm" (click)="updatePerm()"/></td>
+								</tr>
+							</table>
+						</div>
+						<div class="additional-info">
+							<h3>Additional Information</h3>
+							<div>
+								<p>
+								By providing this optional additional information you will help to make your profile
+								stand out to the recruiters
+								</p>
+							</div>
+							<div class="div-spacing">
+								<p style="border-bottom:2px solid black;">Profile Photo [ .jpeg / .png ] Max 1 MB</p>
+								<input type="file" accept="image/jpeg,image/png" (change)="uploadProfileImage($event)">
+							</div>
+							<br>
+							<div>
+								<table>
+									<tr class="{{contractRoleClass}}">
+										<td class="hdr-label">Contract Rate</td>
+										<td>
+											<select formControlName="contractCurrency">
+												<option>EUR</option>
+												<option>GBP</option>
+											</select>
+											<select formControlName="contractTimeUnit">
+												<option value="HOUR">Hour</option>
+												<option value="DAY">Day</option>
+												<option	value="YEAR">Year</option>
+											</select>
+										From: <input type="number" formControlName="contractFrom">
+										To: <input type="number" formControlName="contractTo">
+									</tr>
+									
+									<tr class="{{permRoleClass}}">
+										<td class="hdr-label">Perm Rate</td>
+										<td>
+											<select formControlName="permCurrency">
+												<option>EUR</option>
+												<option>GBP</option>
+											</select>
+										
+											<select formControlName="permTimeUnit">
+												<option value="HOUR">Hour</option>
+												<option value="DAY">Day</option>
+												<option	value="YEAR">Year</option>
+											</select>
+											From: <input type="number" formControlName="permFrom"> To: <input type="number" formControlName="permTo">
+										</td>	
+									</tr>
+								</table>
+							</div>
+							
+						</div>
 						<br>
 						<div>
-							<textarea formControlName="introduction"></textarea>
+							<b>Personal Introduction</b>
+							<br>
+							<div>
+								<textarea formControlName="introduction"></textarea>
+							</div>
+							
 						</div>
-						
-					</div>
-					<div class="div-spacing">
-						<p>
-						By uploading your CV and profile you are agreeing to allow your 
-						CV and details to be stored in the System and shared within the 
-						network of recruiters and clients. 
-						</p>
-						<div>
-							<button (click)="addCandidate()" [disabled]="uploadButtonDisabled()" style="margin-bottom:20px;">Save</button>
+						<div class="div-spacing">
+							<p>
+							By uploading your CV and profile you are agreeing to allow your 
+							CV and details to be stored in the System and shared within the 
+							network of recruiters and clients. 
+							</p>
+							<div>
+								<button (click)="addCandidate()" [disabled]="uploadButtonDisabled()" style="margin-bottom:20px;">Save</button>
+							</div>
 						</div>
 					</div>
 				</div>
 			</form>
 		</div>
-	</div>
+
 </div>   
 
 <dialog #feedbackBox >

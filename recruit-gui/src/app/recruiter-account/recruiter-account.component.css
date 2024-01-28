@@ -90,9 +90,8 @@
 }
 
 .no-sub-warn h1, h2{
-	color:green;
-	 margin-bottom:20px;
-	 margin-top:0px;
+	margin-bottom:20px;
+	margin-top:0px;
 }
 
 #account-details-input label{

@@ -9,7 +9,7 @@
 	    <div *ngSwitchCase="'list'">
 	    	<div class="action-buttons" >
 				<button class="btn btn-secondary arenella-btn" (click)="openCreateAlertDialog()" *ngIf="!isAuthenticated() || isAuthenticated() && isCandidate()">Create Alert</button>
-				<button class="btn btn-secondary arenella-btn" routerLink="/recruiter-listings" *ngIf="isAuthenticated() && !isAuthenticatedAsAdmin() && !isCandidate()">Manage Your Posts</button>
+				<button class="btn btn-secondary arenella-btn" routerLink="/recruiter-listings" *ngIf="isAuthenticated() && !isAuthenticatedAsAdmin() && !isCandidate()">Your Posts</button>
 			</div>
 	       	<!-- Listings Table -->
 			<div>
@@ -83,7 +83,7 @@
 				<app-candidate-info-box [config]="infoItemConfig"></app-candidate-info-box>
 				
 				<div>
-	       			<div class="left-box-containerXXX {{mobileListingLeftPaneContainer}}">
+	       			<div class="{{mobileListingLeftPaneContainer}}">
 	       				<h1 *ngIf="isMobile" class="listing-view-title">{{selectedListing.title}}</h1>
 	       				
 	       			</div>

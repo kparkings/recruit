@@ -1,21 +1,25 @@
-<div class=".container m-2" >
+<div class="page" >
 	
 	<!-- Nav options -->
-	<ul class="nav nav-tabs">
-	  <li class="nav-item" *ngIf="!isRecruiterNoSubscription() && !hasUnpaidSubscription()">
-	    <span class="nav-link tabNav" (click)="switchTab('showAccountDetails')">Account Details</span>
-	  </li>
-	  <li class="nav-item">
-	    <span class="nav-link tabNav" (click)="switchTab('showSubscriptions')">Subscriptions</span>
-	  </li>
-	</ul>
+	<div class="nav-tabs-bar">	
+		<ul class="nav nav-tabs">
+		  <li class="nav-item" *ngIf="!isRecruiterNoSubscription() && !hasUnpaidSubscription()">
+		    <span class="nav-link tabNav" (click)="switchTab('showAccountDetails')">Account Details</span>
+		  </li>
+		  <li class="nav-item">
+		    <span class="nav-link tabNav" (click)="switchTab('showSubscriptions')">Subscriptions</span>
+		  </li>
+		</ul>
+	</div>
 	
+	<div class="page-body">
 	<!-- Account details -->
-	<div class="container-div" *ngIf="showAccountDetails">
+	<div *ngIf="showAccountDetails">
 
 		<div class="action-buttons">
-			<button class="btn btn-secondary arenella-btn" (click)="switchToEditMode()" *ngIf="!isInEditMode">Edit Details</button>
-			<button class="btn btn-secondary arenella-btn" (click)="cancelEditMode()"	*ngIf="isInEditMode">Cancel</button>
+			<button class="btn btn-secondary arenella-btn" (click)="switchToEditMode()" 		*ngIf="!isInEditMode">Edit Details</button>
+			<button class="btn btn-secondary arenella-btn" (click)="cancelEditMode()"			*ngIf="isInEditMode">Cancel</button>
+			<button class="btn btn-secondary arenella-btn" (click)="persistAccountDetails()"	*ngIf="isInEditMode">Save Changes</button>
 		</div>
 		
 		<div id="account-details-input">
@@ -93,10 +97,6 @@
 						</td>
 					</tr>
 				</table>
-				
-				<div class="action-buttons">
-					<button class="btn btn-secondary arenella-btn" (click)="persistAccountDetails()" *ngIf="isInEditMode">Save Changes</button>
-				</div>
 			
 			</form>
 		</div>
@@ -187,7 +187,7 @@
 					
 							<tr>
 								<td>
-									<button class="btn btn-secondary arenella-btn btnSubscribe" (click)="confirmSwitchToOtherSubscription()">Confirm Subscription</button>
+									<button class="btn btn-secondary arenella-btn btnSubscribe" (click)="confirmSwitchToOtherSubscription()">Confirm</button>
 								</td>
 							</tr>
 						</table>
@@ -270,7 +270,7 @@
 			</table>
 			
 		</div>
-		
+	</div>		
 </div>
 
 <div *ngIf="hasActiveSubscription()" class="rec-account-footer"></div>

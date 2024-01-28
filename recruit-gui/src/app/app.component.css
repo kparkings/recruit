@@ -94,10 +94,12 @@
 
 .signup-recruiter{
 	background:orange;
+	width:165px;
 }
 
 .signup-candidate{
 	background:green;
+	width:165px;
 }
 /*
 .modal-body{

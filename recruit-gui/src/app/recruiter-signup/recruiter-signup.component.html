@@ -1,14 +1,18 @@
-<div>
-    <div class="centerdiv">
-        <div class="center-table">
-            <div class="row">
+<div class="page">
+
+	<!-- Nav options -->
+	<div class="nav-tabs-bar"></div>
+	
+    <div class="page-body">
+            <div>
             	<div class="reruiter-signup-page">
             		<h1>Create Recruiter Account</h1>
             		<h5>Sign-up for a no obligation 30 day free trial</h5>
             	</div>
             	
-            	<div style="margin-top:40px;">
-	            	<div style="float:left;margin-right:30px;margin-bottom:50px;"> 
+            	<div class="recruiter-signup-panel">
+	            	<div class="recruiter-signup-box"> 
+	            		<h3>Sign-up</h3>
 						<form [formGroup]="signupForm">
 							<table>
 							<tr>
@@ -55,32 +59,31 @@
 						</form>
 					</div>
 					
-					<div class="rec-signup-info"  style="float:left;margin-right:30px">
-					<div style="margin-bottom:40px;">
-						<h5>Free trial</h5>
-						<p>
-						Sign up for a no obligation free trial. During the trial you can download unlimited candidate CVs, Create unlimited posts on the job board and unlimited requests 
-						for candidates from other recruitment agencies in the Marketplace.
-						</p>
-					</div>
-					
-					<div>
-						<h5>Free and paid subscriptions</h5>
-						<p>
-						The site generates revenue based upon a subscription model. After your 30 day trial ends, the next time you login you will be able to choose from either a 
-						Free subscription with limited weekly downloads, job board posts and marketplace requests or for just 120 euro's per year excluding Tax you 
-						have access to all these features with no limits.
-						</p>
-						<p>
-						The subscription is the only cost involved in using the site. There are no additional costs such as 
-						margins or commissions for placing candidates.  
-						</p>
-					</div>
+					<div class="recruiter-info-box">
+						<div style="margin-bottom:40px;">
+							<h3>Free trial</h3>
+							<p>
+							Sign up for a no obligation free trial. During the trial you can download unlimited candidate CVs, Create unlimited posts on the job board and unlimited requests 
+							for candidates from other recruitment agencies in the Marketplace.
+							</p>
+						</div>
+						
+						<div>
+							<h3>Free and paid subscriptions</h3>
+							<p>
+							The site generates revenue based upon a subscription model. After your 30 day trial ends, the next time you login you will be able to choose from either a 
+							Free subscription with limited weekly downloads, job board posts and marketplace requests or for just 120 euro's per year excluding Tax you 
+							have access to all these features with no limits.
+							</p>
+							<p>
+							The subscription is the only cost involved in using the site. There are no additional costs such as 
+							margins or commissions for placing candidates.  
+							</p>
+						</div>
 					</div>
 	            </div>
             </div>
         </div>
-    </div>
 </div>
 
 <dialog #feedbackBox>
