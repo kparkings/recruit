@@ -28,12 +28,27 @@ export class RecruiterProfileComponent {
 	private imageFile!:File| any;
 	public infoItemConfig:InfoItemConfig 							= new InfoItemConfig();
 	
+	public recruitmentTypeOptions:Array<string> = new Array<string>();
+	public countryOptions:Array<[string,string]> = new Array<[string,string]>();
+	public languageOptions:Array<[string,string]> = new Array<[string,string]>();
+	public sectorOptions:Array<[string,string]> = new Array<[string,string]>();
+	public techOptions:Array<[string,string]> = new Array<[string,string]>();
+	public contractTypeOptions:Array<[string,string]> = new Array<[string,string]>();
+	
 	/**
 	* Constructor
 	*/
 	constructor(private recruierProfileService:RecruiterProfileService, private emailService:EmailService, private modalService:NgbModal){
 		this.recruierProfileService.fetchOwnRecruiterProfile().subscribe( response => {
 			this.recruiterProfile = response;
+			
+			this.recruitmentTypeOptions 	= this.getRecruitmentTypeOptions();
+			this.countryOptions 			= this.getCountryOptions();
+			this.languageOptions 			= this.getLanguageOptions();
+			this.sectorOptions 				= this.getSectorOptions();
+			this.techOptions 				= this.getTechOptions();
+			this.contractTypeOptions 		= this.getContractTypeOptions();
+			
 		})
 		
 		this.loadRecuiterProfiles();

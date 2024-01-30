@@ -9,7 +9,7 @@
 				<div class="action-buttons">
 					<button class="btn btn-secondary arenella-btn"  *ngIf="isOwnAccountExists()  && currentView != 'view-create' && currentView != 'view-details'" 	(click)="showViewCreate()">Edit Profile</button>
 					<button class="btn btn-secondary arenella-btn"  *ngIf="!isOwnAccountExists() && currentView != 'view-create' && currentView != 'view-details'" 	(click)="showViewCreate()">Create Profile</button>
-					<button class="btn btn-secondary arenella-btn" 				   *ngIf="currentView != 'view-main'" 																(click)="showViewMain()">Back</button>
+					<button class="btn btn-secondary arenella-btn" 	*ngIf="currentView != 'view-main'" 																(click)="showViewMain()">Back</button>
 				</div>
 			</div>
 			
@@ -128,7 +128,7 @@
 							<th>Recruitment Type</th>
 							<td>
 								<select formControlName="recruiterType">
-									<option *ngFor="let opt of getRecruitmentTypeOptions()" value="{{opt}}">{{getUserReadableVal(opt)}}</option>
+									<option *ngFor="let opt of recruitmentTypeOptions" value="{{opt}}">{{getUserReadableVal(opt)}}</option>
 								</select>
 							</td>
 						</tr>
@@ -142,7 +142,7 @@
 							<th>Recruits In</th>
 							<td>
 								<select formControlName="recruitsIn" (change)="addRecruitsInItem()">
-									<option *ngFor="let opt of getCountryOptions()"	value="{{opt}}">{{opt[1]}}</option>
+									<option *ngFor="let opt of countryOptions"	value="{{opt}}">{{opt[1]}}</option>
 								</select>
 								<br>
 								<div class="selected-items">
@@ -163,7 +163,7 @@
 							<th>Languages Spoken</th>
 							<td>
 								<select formControlName="languagesSpoken" (change)="addLanguageSpokenItem()">
-									<option *ngFor="let opt of getLanguageOptions()" value="{{opt}}">{{opt[1]}}</option>
+									<option *ngFor="let opt of languageOptions" value="{{opt}}">{{opt[1]}}</option>
 								</select>
 								<br>
 								<div class="selected-items">
@@ -177,7 +177,7 @@
 							<th>Sectors</th>
 							<td>
 								<select formControlName="sectorItem" (change)="addSectorItem()">
-									<option *ngFor="let opt of getSectorOptions()" value="{{opt}}">{{opt[1]}}</option>
+									<option *ngFor="let opt of sectorOptions" value="{{opt}}">{{opt[1]}}</option>
 								</select>
 								<br>
 								<div class="selected-items">
@@ -191,7 +191,7 @@
 							<th>Core Technologies</th>
 							<td>
 								<select formControlName="coreTechItem" (change)="addCoreTechItem()">
-									<option *ngFor="let opt of getTechOptions()" value="{{opt}}">{{opt[1]}}</option>
+									<option *ngFor="let opt of techOptions" value="{{opt}}">{{opt[1]}}</option>
 								</select>
 								<br>
 								<div class="selected-items">
@@ -205,7 +205,7 @@
 							<th>Contract Types</th>
 							<td>
 								<select  formControlName="contractTypeItem" (change)="addContractTypeItem()">
-									<option *ngFor="let opt of getContractTypeOptions()" value="{{opt}}">{{opt[1]}}</option>
+									<option *ngFor="let opt of contractTypeOptions" value="{{opt}}">{{opt[1]}}</option>
 								</select>
 								<br>
 								<div class="selected-items">

@@ -7,12 +7,12 @@
 		
 		<!-- Action buttons -->
 		<div *ngIf="currentView === 'suggestion-results'" class="action-buttons">
-			<button class="btn btn-secondary arenella-btn {{suggestionMobileBtnClass}}" (click)="doReset()">Reset</button>
-			<button class="btn btn-secondary arenella-btn {{suggestionMobileBtnClass}}" (click)="openPublicityDialog()" *ngIf="isAuthenticatedAsAdmin()" download>Copy</button>
-			<button class="btn btn-secondary arenella-btn {{suggestionMobileBtnClass}}" (click)="showFilterByJobSpecDialog(specUploadBox)" download>Filter by Job Spec</button>
 			<button class="btn btn-secondary arenella-btn {{suggestionMobileBtnClass}}" (click)="showCreateAlertDialog()" download>Create Email Alert</button>
 			<button class="btn btn-secondary arenella-btn {{suggestionMobileBtnClass}}" routerLink="/recruiter-alerts" download>Manage Alerts</button>
 	        <button class="btn btn-secondary arenella-btn {{suggestionMobileBtnClass}}" (click)="showSavedCandidates()" download>My Candidates</button>
+	        <button class="btn btn-secondary arenella-btn {{suggestionMobileBtnClass}}" (click)="openPublicityDialog()" *ngIf="isAuthenticatedAsAdmin()" download>Copy</button>
+	        <button class="btn btn-secondary arenella-btn {{suggestionMobileBtnClass}}" (click)="showFilterByJobSpecDialog(specUploadBox)" download>Filter by Job Spec</button>
+	        <button class="btn btn-secondary arenella-btn {{suggestionMobileBtnClass}}" (click)="doReset()">Reset</button>
 	     </div>
 		
 		<div *ngIf="currentView === 'saved-candidates'">
@@ -176,24 +176,24 @@
 		<div *ngIf="currentView !== 'suggestion-results' && currentView !== 'inline-cv' && currentView !== 'saved-candidates'">
 			<div class="action-buttons">
 			
-				<button class="btn btn-secondary arenella-btn {{suggestionMobileBtnClass}}" (click)="showSuggestionsResults()" 					*ngIf="lastView != 'saved-candidates'  && !isCandidate()">Back</button>
-				<button class="btn btn-secondary arenella-btn {{suggestionMobileBtnClass}}" (click)="showSavedCandidates()" 						*ngIf="lastView === 'saved-candidates'  && !isCandidate()">Back</button>
-				<button class="btn btn-secondary arenella-btn {{suggestionMobileBtnClass}}" *ngIf="isCandidate() || isAdmin() || isOwner()" (click)="deleteAccount()"> Delete</button>
-				<button class="btn btn-secondary arenella-btn {{suggestionMobileBtnClass}}" *ngIf="isCandidate() || isAdmin() || isOwner()" (click)="editAccount()"> Edit</button>
-        	
-				<button class="btn btn-secondary arenella-btn {{suggestionMobileBtnClass}}" (click)="rememberCandidate(suggestedCandidate)" 		*ngIf="lastView != 'saved-candidates' && !isSavedCandidate(suggestedCandidate) && !isCandidate()" title="Add candidate to your list of saved candidates">Save Candidate</button>
-				<button class="btn btn-secondary arenella-btn {{suggestionMobileBtnClass}}" (click)="rememberCandidate(suggestedCandidate)" 		*ngIf="lastView != 'saved-candidates' && isSavedCandidate(suggestedCandidate) && !isCandidate()" title="Add candidate to your list of saved candidates" disabled>Save Candidate</button>
-				<button class="btn btn-secondary arenella-btn {{suggestionMobileBtnClass}}" (click)="forgetCandidate()" 							*ngIf="lastView === 'saved-candidates'" title="removed candidate from your list of saved candidates">Unsave Candidate</button>
-				<button class="btn btn-secondary arenella-btn {{suggestionMobileBtnClass}}" (click)="showNotesDialog(notesBox,suggestedCandidate)" 	*ngIf="lastView === 'saved-candidates'">Notes</button>
-				
 				<a class="currliculum-link" (click)="doCreditCheckByCount()" href="{{getCurriculumDownloadUrl(suggestedCandidate.candidateId)}}" *ngIf="passedCreditCheck && (!isCandidate()) && (lastView != 'saved-candidates' || (lastView == 'saved-candidates' && !isNoLongerAvailable()))">
 					<button class="btn btn-secondary arenella-btn {{suggestionMobileBtnClass}}">Download CV</button>
 				</a>
 			
 				<button class="btn btn-secondary arenella-btn {{suggestionMobileBtnClass}}" (click)="handleNoCredit()" *ngIf="!passedCreditCheck && (!isCandidate()) && (lastView != 'saved-candidates' || (lastView == 'saved-candidates' && !isNoLongerAvailable()))">Download CV</button>
-			
 				<button class="btn btn-secondary arenella-btn" (click)="showInlineCVView()" 							*ngIf="!isMobile && (lastView != 'saved-candidates' || (lastView == 'saved-candidates' && !isNoLongerAvailable())) && !isCandidate()">Display CV</button>
 			
+				<button class="btn btn-secondary arenella-btn {{suggestionMobileBtnClass}}" *ngIf="isCandidate() || isAdmin() || isOwner()" (click)="editAccount()"> Edit</button>
+        		<button class="btn btn-secondary arenella-btn {{suggestionMobileBtnClass}}" *ngIf="isCandidate() || isAdmin() || isOwner()" (click)="deleteAccount()"> Delete</button>
+				
+				<button class="btn btn-secondary arenella-btn {{suggestionMobileBtnClass}}" (click)="rememberCandidate(suggestedCandidate)" 		*ngIf="lastView != 'saved-candidates' && !isSavedCandidate(suggestedCandidate) && !isCandidate()" title="Add candidate to your list of saved candidates">Save Candidate</button>
+				<button class="btn btn-secondary arenella-btn {{suggestionMobileBtnClass}}" (click)="rememberCandidate(suggestedCandidate)" 		*ngIf="lastView != 'saved-candidates' && isSavedCandidate(suggestedCandidate) && !isCandidate()" title="Add candidate to your list of saved candidates" disabled>Save Candidate</button>
+				<button class="btn btn-secondary arenella-btn {{suggestionMobileBtnClass}}" (click)="forgetCandidate()" 							*ngIf="lastView === 'saved-candidates'" title="removed candidate from your list of saved candidates">Unsave Candidate</button>
+				<button class="btn btn-secondary arenella-btn {{suggestionMobileBtnClass}}" (click)="showNotesDialog(notesBox,suggestedCandidate)" 	*ngIf="lastView === 'saved-candidates'">Notes</button>
+				
+				<button class="btn btn-secondary arenella-btn {{suggestionMobileBtnClass}}" (click)="showSuggestionsResults()" 					*ngIf="lastView != 'saved-candidates'  && !isCandidate()">Back</button>
+				<button class="btn btn-secondary arenella-btn {{suggestionMobileBtnClass}}" (click)="showSavedCandidates()" 						*ngIf="lastView === 'saved-candidates'  && !isCandidate()">Back</button>
+				
 			</div>
 		</div>
 	

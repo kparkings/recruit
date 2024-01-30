@@ -7,8 +7,8 @@
 			<div *ngIf="currentView == 'add'">
 						
 				<div class="action-buttons">
-					<button class="btn btn-secondary arenella-btn {{mobileBtnClass}}" (click)="showOfferedCandidates()" *ngIf="showBackBtn">Back</button>
 					<button class="btn btn-secondary arenella-btn {{mobileBtnClass}}" (click)="addCandidate()">Publish</button>
+					<button class="btn btn-secondary arenella-btn {{mobileBtnClass}}" (click)="showOfferedCandidates()" *ngIf="showBackBtn">Back</button>
 				</div>
 				
 				<form [formGroup]="offeredCandidateFormBean">
@@ -267,7 +267,7 @@
 					<td class="pendingCandidateBox-td" (click)="loadPendingCandidate(pendingCandidate)">{{pendingCandidate.firstname}}</td>
 					<td class="pendingCandidateBox-td" (click)="loadPendingCandidate(pendingCandidate)">{{pendingCandidate.surname}}</td>
 					<td class="pendingCandidateBox-td">
-						<button class="btn btn-secondary arenella-btn" style="width:60px;" (click)="deletePendingCurriculum(pendingCandidate, false)">Delete</button>
+						<button class="btn btn-secondary arenella-btn" style="width:80px;" (click)="deletePendingCurriculum(pendingCandidate, false)">Delete</button>
 					</td>	
 				</tr>
 			</tbody>

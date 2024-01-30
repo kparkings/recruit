@@ -111,8 +111,8 @@
 		<div *ngIf="addDemand">
 			<div class="action-buttons">
 				<button class="btn btn-secondary arenella-btn {{suggestionMobileBtnClass}}" (click)="showFilterByJobSpecDialog()" download>Create by Spec</button>
-				<button class="btn btn-secondary arenella-btn {{suggestionMobileBtnClass}}" (click)="showOpenPositions()">Back</button>
 				<button class="btn btn-secondary arenella-btn {{suggestionMobileBtnClass}}" (click)="publishOpenPosition()">Publish</button>
+				<button class="btn btn-secondary arenella-btn {{suggestionMobileBtnClass}}" (click)="showOpenPositions()">Back</button>
 			</div>
 			<h3>Add details of position you wish to fill via other recruiters</h3>
 			<form [formGroup]="requestedCandidateFormBean">
