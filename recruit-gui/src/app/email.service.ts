@@ -37,7 +37,9 @@ export class EmailService {
 	* @param httpClient - for sending httpRequests to backend
 	*/
 	constructor(private httpClient: HttpClient) {
-		this.updateUnseenEmails();
+		if (sessionStorage.getItem("userId")) {
+			this.updateUnseenEmails();
+		}
 	}
 
 	httpOptions = {

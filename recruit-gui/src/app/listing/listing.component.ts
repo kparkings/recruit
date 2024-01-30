@@ -57,9 +57,11 @@ export class ListingComponent implements OnInit {
 			this.mobileButton				 	= 'buttons-icon-mobile';
 		} 
 		
-		this.recruiterProfileService.fetchRecruiterProfiles("RECRUITERS").subscribe(rps => {
-			this.recruiterProfiles = rps
-		});
+		if (sessionStorage.getItem("userId")) {		
+			this.recruiterProfileService.fetchRecruiterProfiles("RECRUITERS").subscribe(rps => {
+				this.recruiterProfiles = rps
+			});
+		}
 	
 		this.selectableFunctionTypes 	= this.staticDataService.fetchFunctionTypes().map(ft => new SelectableFunctionType(ft, false));
 		this.selectableCountries 		= this.staticDataService.fetchCountries().map(c => new SelectableCountry(c, false));
@@ -381,6 +383,7 @@ export class ListingComponent implements OnInit {
 	public fetchListings(id:string):void{
 		this.fetchListingsFull(id, false);
 	}
+	
 	/**
 	* Retrieves listings belonging to the Recruiter
 	*/

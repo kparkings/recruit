@@ -36,7 +36,9 @@ export class EmailComponent {
 	* Constrcutor
 	*/
 	constructor(private emailService:EmailService, private modalService:NgbModal){
-		this.fetchEmails();
+		if (sessionStorage.getItem("userId")) {		
+			this.fetchEmails();
+		}
 	}
 	
 	/**
