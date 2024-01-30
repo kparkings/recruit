@@ -34,7 +34,7 @@
 				
 			<!--  Define charts -->
 			<div >
-				<div class="stat-canvas ">
+				<div class="stat-canvas">
 					<!-- Logins -->
 					<div *ngIf="showStatsLogins">
 						<h3>Logins</h3>
@@ -57,9 +57,9 @@
 						<h5>Available by Function</h5>
 					</div>
 					<!-- New Candidate Stats -->
-					<div class="action-buttons" *ngIf="showNewCandidates">
-						<button class="btn btn-secondary arenella-btn" (click)="loadNewCandidates()" 		download>New Candidates</button>
-						<button class="btn btn-secondary arenella-btn" (click)="loadNewCandidateStats()" 	download>Candidate Stats</button>
+					<div class="action-buttons" *ngIf="showNewCandidates" style="float:left">
+						<button class="btn btn-secondary arenella-btn" (click)="loadNewCandidates()" 		download>Todays</button>
+						<button class="btn btn-secondary arenella-btn" (click)="loadNewCandidateStats()" 	download>Latest</button>
 					</div>	
 					<div class="statChartDiv {{statChartDivMobile}}">
 						<canvas  id="leftChart" >{{ leftChart }}</canvas>	

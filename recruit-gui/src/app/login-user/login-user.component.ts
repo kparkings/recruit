@@ -19,8 +19,9 @@ export class LoginUserComponent implements OnInit {
 	@ViewChild('feedbackBox', { static: false }) private feedbackBox:any;
 	@ViewChild('resetPasswordDialog', { static: false }) private resetDialog:any;
 	
-	public showForgottenPassword:boolean = false;
-	public showSubscriptionMsg:boolean = false;
+	public showForgottenPassword:boolean 	= false;
+	public showSubscriptionMsg:boolean 		= false;
+	public failureMessage:string			= "";
 	public formBeanForgottenPassword:UntypedFormGroup = new UntypedFormGroup({
 		email: new UntypedFormControl(),
 	});
@@ -108,10 +109,8 @@ export class LoginUserComponent implements OnInit {
 	    	}
 
 		}, err => {
-			
-			console.log("DID A BOOP -> " + JSON.stringify(err));
 			if (err.status === 401) {
-				//this.open(this.content);
+				this.failureMessage = "Invalid Login attempt";
 				this.feedbackBox.nativeElement.showModal();
 		}
 	});
@@ -156,12 +155,11 @@ export class LoginUserComponent implements OnInit {
 			});
 		
 			this.showForgottenPassword = false;
-		
-			//this.open(this.resetDialog);
 			this.resetDialog.nativeElement.showModal();
 		},
 		err => {
-			console.log('Error resetting password');
+			this.failureMessage = "Unable to send email. Possibly unknown email.";
+			this.feedbackBox.nativeElement.showModal();
 			this.showForgottenPassword = false;
 		});
 		
