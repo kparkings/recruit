@@ -89,9 +89,6 @@ export class RecruiterStatsComponent implements OnInit{
 					this.listingViewsWeekKeys 		= listingData.viewsPerWeek.map(aa => aa.bucketName);
 					this.listingViewWeekValues 		= listingData.viewsPerWeek.map(aa => aa.count);
 					
-					console.log(JSON.stringify(this.listingViewWeekValues));
-					console.log(JSON.stringify(this.listingViewsWeekKeys));
-					//START
 					this.listingsChartData = [
 			           	{
 			            label: "Job Board Views",
@@ -100,21 +97,22 @@ export class RecruiterStatsComponent implements OnInit{
 			          },
 			        	];
 					this.listingsChartLabels = this.listingViewsWeekKeys; 
-					//END
+				
 					this.switchTab(this.currentTab);
 					
 				}, err => {
 					
 					console.log("ERR " + JSON.stringify(err));
-			if (err.status === 401 || err.status === 0) {
-				sessionStorage.removeItem('isAdmin');
-				sessionStorage.removeItem('isRecruter');
-				sessionStorage.removeItem('isCandidate');
-				sessionStorage.removeItem('loggedIn');
-				sessionStorage.setItem('beforeAuthPage', 'view-candidates');
-				this.router.navigate(['login-user']);
-			}
-    	});
+					
+					if (err.status === 401 || err.status === 0) {
+						sessionStorage.removeItem('isAdmin');
+						sessionStorage.removeItem('isRecruter');
+						sessionStorage.removeItem('isCandidate');
+						sessionStorage.removeItem('loggedIn');
+						sessionStorage.setItem('beforeAuthPage', 'view-candidates');
+						this.router.navigate(['login-user']);
+					}
+		    	});
     	
 	}
 	
@@ -172,7 +170,6 @@ export class RecruiterStatsComponent implements OnInit{
 			            backgroundColor: this.chartColor
 			          },
 			        	];
-		console.log("labels = " + JSON.stringify(labels));
 		
 		this.createTopChart(labels, values);
 		

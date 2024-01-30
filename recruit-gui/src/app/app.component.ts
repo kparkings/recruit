@@ -80,8 +80,6 @@ export class AppComponent {
 				this.updateTokenCounts();
 				this.popupsService.openModal(this.noCreditsBox);
 				
-			} else {
-				console.log("Has Credits");
 			}
 		});
 		

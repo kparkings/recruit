@@ -10,7 +10,6 @@ import { AuthService }						from './auth.service';
 import { AuthGuardService }					from './auth-guard.service';
 import { HomeComponent }					from './home/home.component';
 import { NgbModule }						from '@ng-bootstrap/ng-bootstrap';
-//import { MatIconModule }					from '@angular/material/icon';
 import { BrowserAnimationsModule }			from '@angular/platform-browser/animations';
 import { StatisticsComponent }				from './statistics/statistics.component';
 import { NgChartsModule }					from 'ng2-charts';
@@ -61,11 +60,8 @@ import { CandidateInfoBoxComponent } from './candidate-info-box/candidate-info-b
     AppRoutingModule,
     ReactiveFormsModule,
     HttpClientModule,
-    //NgbModule,
-    //MatIconModule,
     BrowserAnimationsModule,
 	NgChartsModule.forRoot()
-	//CookieModule.forRoot()
   ],
   providers: [AuthGuardService, AuthService, CookieService],
   bootstrap: [AppComponent]

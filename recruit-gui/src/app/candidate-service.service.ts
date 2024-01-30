@@ -69,7 +69,9 @@ export class CandidateServiceService {
 	
 		const backendUrl:string = environment.backendUrl +'candidate/'+candidateId+'/?action=enable';
 			
-		this.httpClient.put<any>(backendUrl, '{}',  this.httpOptions).subscribe(data => console.log('XXXXXXXXXXXXXXXY'));
+		this.httpClient.put<any>(backendUrl, '{}',  this.httpOptions).subscribe(data => {
+			
+		});
 	}
 	 
 	/**
