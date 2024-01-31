@@ -98,7 +98,7 @@
 										<td>Type</td>
 										<td>
 											<select formControlName="type">
-												<option *ngFor="let type of getContractTypeOptions()" [ngValue]="type.value">{{type.label}}</option>
+												<option *ngFor="let type of contractTypeOptions" [ngValue]="type.value">{{type.label}}</option>
 											</select>
 										</td>
 									</tr>
@@ -106,7 +106,7 @@
 										<td>Country</td>
 										<td>
 											<select formControlName="country">
-												<option *ngFor="let opt of getCountryOptions()" [ngValue]="opt.value">{{opt.label}}</option>
+												<option *ngFor="let opt of countryOptions" [ngValue]="opt.value">{{opt.label}}</option>
 											</select>
 										</td>
 									</tr>

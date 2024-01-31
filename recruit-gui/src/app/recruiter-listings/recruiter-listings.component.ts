@@ -56,6 +56,11 @@ export class RecruiterListingsComponent implements OnInit {
 	public suggestedCandidate:Candidate			 		= new Candidate();
 	public listingForSuggestedCandidate:Listing 		= new Listing();	
 	
+	public infoItemConfig:InfoItemConfig 				= new InfoItemConfig();
+	public contractTypeOptions:Array<HtmlOption> 		= new Array<HtmlOption>();
+	public countryOptions:Array<HtmlOption> 			= new Array<HtmlOption>();
+  	
+  	
 	private	pageSize:number								= 8;
   	private jobSpecFile!:File;
 	private  recruiterId:string							= '';
@@ -64,7 +69,8 @@ export class RecruiterListingsComponent implements OnInit {
 	private  recruiterEmail:string 						= '';
 	private  recruiterCompany:string					= '';
 	
-	public infoItemConfig:InfoItemConfig 							= new InfoItemConfig();
+	
+	
 	
 	/**
 	* Constructor 
@@ -85,6 +91,9 @@ export class RecruiterListingsComponent implements OnInit {
 				this.recruiterProfileService.fetchOwnRecruiterProfile().subscribe(rec => {
 					this.recruiterProfile = rec;
 				});
+				
+				this.contractTypeOptions = this.getContractTypeOptions();
+				this.countryOptions = this.getCountryOptions();
 				
 				this.doCreditCheck();
 					
@@ -684,11 +693,12 @@ export class RecruiterListingsComponent implements OnInit {
 	
   	}
   	
+  	
   	/**
 	* Provides HTML Options for country 
 	* Selection 
 	*/
-  	public getCountryOptions():Array<HtmlOption>{
+  	private getCountryOptions():Array<HtmlOption>{
 		  
 		  let countries:Array<HtmlOption> = new Array<HtmlOption>();
 		  
@@ -704,7 +714,7 @@ export class RecruiterListingsComponent implements OnInit {
 	* Provides HTML Options for country 
 	* Selection 
 	*/
-  	public getContractTypeOptions():Array<HtmlOption>{
+  	private getContractTypeOptions():Array<HtmlOption>{
 		  
 		let types:Array<HtmlOption> = new Array<HtmlOption>();
 		  

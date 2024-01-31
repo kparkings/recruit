@@ -131,7 +131,6 @@ export class RecruiterStatsComponent implements OnInit{
 		this.statisticsService.fetchRecruiterListingStats(this.recruiterId).subscribe(stats =>  {
 			this.listingStatistics = Object.assign(new RecruiterListingStatistics(), stats);
 			this.switchListing(this.selectedListing);
-			//this.switchTab(this.currentTab);
 		});
 		
 	}
