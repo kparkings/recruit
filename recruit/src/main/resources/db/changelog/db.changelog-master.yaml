@@ -2209,3 +2209,63 @@ databaseChangeLog:
             cascadeConstraints:  true  
             schemaName: recruiter  
             tableName: offered_candidates
+  - changeSet:
+      id: add_tbl_newsfeed
+      author: kparkings
+      changes:
+        - createTable:
+            tableName: news_feed_items
+            schemaName: newsfeed
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: created
+                  type: timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: item_type
+                  type: varchar
+                  constraints:
+                    nullable: false
+        - createTable:
+            tableName: news_feed_item_lines
+            schemaName: newsfeed
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: newsfeed_item_id
+                  type: uuid
+                  constraints:
+                    foreignKeyName: fk_newsfeed_item_line
+                    references: newsfeed.news_feed_items(id)
+              - column:
+                  name: type
+                  type: varchar
+                  constraints:
+                    nullable: false
+              - column:
+                  name: text_value
+                  type: varchar
+                  constraints:
+                    nullable: false
+              - column:
+                  name: url_value
+                  type: varchar
+                  constraints:
+                    nullable: false
+              - column:
+                  name: image_value
+                  type: bytea
+                  constraints:
+                    nullable: false

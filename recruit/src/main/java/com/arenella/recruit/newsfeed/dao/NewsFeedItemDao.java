@@ -1,0 +1,132 @@
+package com.arenella.recruit.newsfeed.dao;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Expression;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import javax.persistence.criteria.CriteriaBuilder.In;
+
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.repository.CrudRepository;
+
+import com.arenella.recruit.newsfeed.beans.NewsFeedItem;
+import com.arenella.recruit.newsfeed.beans.NewsFeedItemFilters;
+import com.arenella.recruit.newsfeed.entity.NewsFeedItemEntity;
+
+/**
+* Repository for working with NewsFeedItemEntity objects
+* @author K Parkings
+*/
+public interface NewsFeedItemDao extends CrudRepository<NewsFeedItemEntity, UUID>, JpaSpecificationExecutor<NewsFeedItemEntity>{
+
+	/**
+	* Persists a NewsFeedItem
+	* @param item - Item to persist
+	*/
+	default void saveNewsFeedItem(NewsFeedItem item) {
+		this.save(NewsFeedItemEntity.convertToEntity(item));
+	}
+	
+	/**
+	* Returns a page of NewsFeedItem results
+	* @param pageable - defines page of results to return
+	* @return NewsFeedItems
+	*/
+	default Set<NewsFeedItem> fetchNewsFeedItem(NewsFeedItemFilters filters){
+		
+		
+		/**
+		* [KP] Its ugly I know but if a UUID is given as a filter we use/override the date/time 
+		* to find it as UUID's can't be sorted
+		*/
+		if (filters.getFirstId().isPresent()) {
+			Optional<NewsFeedItemEntity> entity = this.findById(filters.getFirstId().get());
+			if (entity.isPresent() && Optional.ofNullable(entity.get().getCreated()).isPresent()) {
+				filters.setCreateBefore(entity.get().getCreated().minusNanos(1));
+			}
+		}
+		
+		return this.findAll(new NewsFeedItemEntitySpecification(filters)).stream()
+				.map(NewsFeedItemEntity::convertFromEntity)
+				.limit(filters.getMaxResults().isEmpty() ? 100 : filters.getMaxResults().get())
+				.collect(Collectors.toCollection(LinkedHashSet::new));
+	}
+	
+	/**
+	* Specification for filtering on NewsFeedItem objects
+	* @author K parkings
+	*/
+	public class NewsFeedItemEntitySpecification implements Specification<NewsFeedItemEntity>{
+
+		private static final long serialVersionUID = -7833724126499411522L;
+
+		final NewsFeedItemFilters filters;
+		
+		/**
+		* Constructor
+		* @param filters - Contains info about what filters to apply to the results
+		*/
+		public NewsFeedItemEntitySpecification (NewsFeedItemFilters filters) {
+			this.filters = filters;
+		}
+		
+		/**
+		* Refer to Specification interface for details 
+		*/
+		@Override
+		public Predicate toPredicate(Root<NewsFeedItemEntity> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
+			
+			List<Predicate> predicates = new ArrayList<>();
+			
+			if (this.filters.getFirstId().isPresent()) {
+				//Handle in steam
+			}
+			
+			if (this.filters.getMaxResults().isPresent()) {
+				//Handle in stream
+			}
+			
+			/**
+			* Sets the Before Date/Time filter
+			*/
+			if (this.filters.getCreatedBefore().isPresent()) {
+				
+				Expression<LocalDateTime> expression = root.get("createBefore");
+				predicates.add(criteriaBuilder.greaterThan(expression, filters.getCreatedBefore().get()));
+			}
+			
+			/**
+			* Sets Type Filters
+			*/
+			if (!this.filters.getTypes().isEmpty()) {
+				
+				In<NewsFeedItem.NEWSFEED_ITEM_TYPE> inClause = criteriaBuilder.in(root.get("itemType"));
+				
+				for (NewsFeedItem.NEWSFEED_ITEM_TYPE type : filters.getTypes()) {
+				    inClause.value(type);
+				}
+				criteriaBuilder.in(inClause);
+				
+				predicates.add(criteriaBuilder.in(inClause));
+				
+			}
+			
+			
+			
+			return criteriaBuilder.and(predicates.stream().toArray(n -> new Predicate[n]));
+		}
+		
+	}
+		
+}
