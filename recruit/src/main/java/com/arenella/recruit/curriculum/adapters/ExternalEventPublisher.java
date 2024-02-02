@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import com.arenella.recruit.adapters.events.CreditsAssignedEvent;
 import com.arenella.recruit.adapters.events.CreditsUsedEvent;
+import com.arenella.recruit.adapters.events.CurriculumUpdatedEvent;
 
 /**
 * Defines functionality for publishing Events to external services 
@@ -28,5 +29,11 @@ public interface ExternalEventPublisher {
 	* @param creditsUsedEvent
 	*/
 	public void publishCreditsUsedEvent(CreditsUsedEvent creditsUsedEvent);
+	
+	/**
+	* Publishes an Event indicating that a Curriculum was updated 
+	* @param curriculumId
+	*/
+	public void publishCurriculumUpdates(CurriculumUpdatedEvent curriculumId);
 	
 }

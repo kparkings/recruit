@@ -250,14 +250,18 @@ public class CandidateServiceImpl implements CandidateService{
 		
 		Candidate candidate = this.candidateDao.findCandidateById(Long.valueOf(candidateId)).orElseThrow(() -> new RuntimeException("Cannot perform update on unknown Candidate: " + candidateId));
 		
+		NEWSFEED_ITEM_TYPE newsFeedItemType;
+		
 		switch (updateAction) {
 			case enable: {
 				candidate.makeAvailable();
+				newsFeedItemType = NEWSFEED_ITEM_TYPE.CANDIDATE_BECAME_AVAILABLE;
 				break;
 			}
 			case disable: {
 				candidate.noLongerAvailable();
 				this.externalEventPublisher.publishCandidateNoLongerAvailableEvent(new CandidateNoLongerAvailableEvent(Long.valueOf(candidate.getCandidateId())));
+				newsFeedItemType = NEWSFEED_ITEM_TYPE.CANDIDATE_BECAME_UNAVAILABLE;
 				break;
 			}
 			default: {
@@ -266,6 +270,17 @@ public class CandidateServiceImpl implements CandidateService{
 		}
 		
 		this.candidateDao.saveCandidate(candidate);
+		
+		CandidateUpdateEvent event = CandidateUpdateEvent
+				.builder()
+					.itemType(newsFeedItemType)
+					.candidateId(Integer.valueOf(candidateId))
+					.firstName(candidate.getFirstname())
+					.surname(candidate.getSurname())
+					.roleSought(candidate.getRoleSought())
+				.build(); 
+		
+		externalEventPublisher.publishCandidateUpdateEvent(event);
 		
 	}
 
@@ -790,6 +805,17 @@ public class CandidateServiceImpl implements CandidateService{
 		
 		this.candidateDao.saveCandidate(updatedCandidate);
 		this.externalEventPublisher.publishCandidateAccountUpdatedEvent(new CandidateUpdatedEvent(candidate.getCandidateId(), candidate.getFirstname(), candidate.getSurname(), candidate.getEmail()));
+		
+		CandidateUpdateEvent event = CandidateUpdateEvent
+				.builder()
+					.itemType(NEWSFEED_ITEM_TYPE.CANDIDATE_PROFILE_UPDATED)
+					.candidateId(Integer.valueOf(candidate.getCandidateId()))
+					.firstName(candidate.getFirstname())
+					.surname(candidate.getSurname())
+					.roleSought(candidate.getRoleSought())
+				.build(); 
+		
+		externalEventPublisher.publishCandidateUpdateEvent(event);
 		
 	}
 	

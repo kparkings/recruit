@@ -22,7 +22,6 @@ public class NewsFeedItem {
 									CANDIDATE_BECAME_AVAILABLE,
 									USER_POST}
 	
-	
 	private UUID 					id;
 	private String 					referencedUserId;
 	private LocalDateTime 			created;

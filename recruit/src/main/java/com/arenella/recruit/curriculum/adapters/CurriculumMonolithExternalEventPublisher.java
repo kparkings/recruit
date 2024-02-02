@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.arenella.recruit.adapters.events.CreditsAssignedEvent;
 import com.arenella.recruit.adapters.events.CreditsUsedEvent;
+import com.arenella.recruit.adapters.events.CurriculumUpdatedEvent;
 import com.arenella.recruit.candidates.adapters.CandidateExternalEventListener;
 
 /**
@@ -52,6 +53,14 @@ public class CurriculumMonolithExternalEventPublisher implements ExternalEventPu
 	public void publishCreditsUsedEvent(CreditsUsedEvent event) {
 		this.candiditeExternalEventListener.listenForCreditsUsedEvent(event);
 		
+	}
+
+	/**
+	* Refer to ExternalEventPublisher for details 
+	*/
+	@Override
+	public void publishCurriculumUpdates(CurriculumUpdatedEvent event) {
+		candiditeExternalEventListener.listenForCurriculumUpdatedEvent(event);
 	}
 	
 }

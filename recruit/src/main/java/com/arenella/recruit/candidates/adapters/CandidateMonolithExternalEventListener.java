@@ -1,16 +1,23 @@
 package com.arenella.recruit.candidates.adapters;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.arenella.recruit.adapters.events.CandidateUpdateEvent;
 import com.arenella.recruit.adapters.events.CreditsAssignedEvent;
 import com.arenella.recruit.adapters.events.CreditsUsedEvent;
+import com.arenella.recruit.adapters.events.CurriculumUpdatedEvent;
 import com.arenella.recruit.adapters.events.RecruiterCreatedEvent;
 import com.arenella.recruit.adapters.events.RecruiterNoOpenSubscriptionEvent;
 import com.arenella.recruit.adapters.events.RecruiterUpdatedEvent;
 import com.arenella.recruit.adapters.events.SubscriptionAddedEvent;
+import com.arenella.recruit.candidates.beans.Candidate;
 import com.arenella.recruit.candidates.beans.RecruiterCredit;
+import com.arenella.recruit.candidates.dao.CandidateDao;
 import com.arenella.recruit.candidates.services.CandidateService;
+import com.arenella.recruit.newsfeed.beans.NewsFeedItem.NEWSFEED_ITEM_TYPE;
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_type;
 
 /**
@@ -21,7 +28,13 @@ import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_
 public class CandidateMonolithExternalEventListener implements CandidateExternalEventListener {
 
 	@Autowired
-	private CandidateService candidateService;
+	private CandidateService 			candidateService;
+	
+	@Autowired
+	private CandidateDao 				canidateDao;
+	
+	@Autowired
+	private ExternalEventPublisher		externalEventPublisher;
 	
 	/**
 	* Refer to CandidateExternalEventListener for details 
@@ -75,6 +88,37 @@ public class CandidateMonolithExternalEventListener implements CandidateExternal
 	@Override
 	public void listenForRecruiterNoOpenSubscriptionsEvent(RecruiterNoOpenSubscriptionEvent event) {
 		this.candidateService.updateCreditsForUser(event.geRecruiterId(), RecruiterCredit.DISABLED_CREDITS);
+		
+	}
+
+	/**
+	* Refer to CandidateExternalEventListener for details
+	* [KP] Though I think this is okay, we are bouncing an event from curriculum -> candidate -> newsFeedItem. There is therefore
+	* coupling but as its async ( or would be in a non Monolith implementation and NewsFeedItems can be eventual consistency
+	* its probably an ok solution 
+	*/
+	@Override
+	public void listenForCurriculumUpdatedEvent(CurriculumUpdatedEvent event) {
+		
+		Optional<Candidate> optCandidate = this.canidateDao.findCandidateById(Integer.valueOf(event.getCurriculumId()));
+				
+		if (optCandidate.isPresent()) {
+			
+			Candidate candidate = optCandidate.get();
+			
+			CandidateUpdateEvent updateEvent = CandidateUpdateEvent
+					.builder()
+						.itemType(NEWSFEED_ITEM_TYPE.CANDIDATE_CV_UPDATED)
+						.candidateId(Integer.valueOf(candidate.getCandidateId()))
+						.firstName(candidate.getFirstname())
+						.surname(candidate.getSurname())
+						.roleSought(candidate.getRoleSought())
+					.build(); 
+			
+			externalEventPublisher.publishCandidateUpdateEvent(updateEvent);
+			
+		}
+		
 		
 	}
 

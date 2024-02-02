@@ -2,6 +2,7 @@ package com.arenella.recruit.candidates.adapters;
 
 import com.arenella.recruit.adapters.events.CreditsAssignedEvent;
 import com.arenella.recruit.adapters.events.CreditsUsedEvent;
+import com.arenella.recruit.adapters.events.CurriculumUpdatedEvent;
 import com.arenella.recruit.adapters.events.RecruiterCreatedEvent;
 import com.arenella.recruit.adapters.events.RecruiterNoOpenSubscriptionEvent;
 import com.arenella.recruit.adapters.events.RecruiterUpdatedEvent;
@@ -48,5 +49,11 @@ public interface CandidateExternalEventListener {
 	* @param event - RecruiterNoOpenSubscriptionEvent
 	*/
 	public void listenForRecruiterNoOpenSubscriptionsEvent(RecruiterNoOpenSubscriptionEvent recruiterNoOpenSubscriptionEvent);
+	
+	/**
+	* Listends for CurriculumUpdatedEvent
+	* @param event - Contains details of the Updated Curriculum
+	*/
+	public void listenForCurriculumUpdatedEvent(CurriculumUpdatedEvent event);
 	
 }

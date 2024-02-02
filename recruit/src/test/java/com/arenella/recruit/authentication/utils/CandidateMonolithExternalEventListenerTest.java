@@ -1,5 +1,7 @@
 package com.arenella.recruit.authentication.utils;
 
+import java.util.Optional;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -8,12 +10,16 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.arenella.recruit.adapters.events.CreditsUsedEvent;
+import com.arenella.recruit.adapters.events.CurriculumUpdatedEvent;
 import com.arenella.recruit.adapters.events.RecruiterCreatedEvent;
 import com.arenella.recruit.adapters.events.RecruiterNoOpenSubscriptionEvent;
 import com.arenella.recruit.adapters.events.RecruiterUpdatedEvent;
 import com.arenella.recruit.adapters.events.SubscriptionAddedEvent;
 import com.arenella.recruit.candidates.adapters.CandidateMonolithExternalEventListener;
+import com.arenella.recruit.candidates.adapters.ExternalEventPublisher;
+import com.arenella.recruit.candidates.beans.Candidate;
 import com.arenella.recruit.candidates.beans.RecruiterCredit;
+import com.arenella.recruit.candidates.dao.CandidateDao;
 import com.arenella.recruit.candidates.services.CandidateService;
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_type;
 
@@ -33,7 +39,13 @@ public class CandidateMonolithExternalEventListenerTest {
 	private CandidateMonolithExternalEventListener listener;
 	
 	@Mock
-	private CandidateService mockCandidateService;
+	private CandidateService 						mockCandidateService;
+	
+	@Mock
+	private CandidateDao 							mockCandidateDao;
+	
+	@Mock
+	private ExternalEventPublisher					mockExternalEventPublisher;
 	
 	/**
 	* Tests handling of RecruiterCreatedEvent persists contact
@@ -129,4 +141,44 @@ public class CandidateMonolithExternalEventListenerTest {
 		Mockito.verify(this.mockCandidateService).updateCreditsForUser(recruiterId, RecruiterCredit.DISABLED_CREDITS);
 		
 	}
+	
+	/**
+	* If no Candidates with id matching the curriculumId then we can't match the Curriculum to a Candidate and 
+	* therefore there is no need to create a NewsFeedItem so silently fail
+	* @throws Exception
+	*/
+	@Test
+	public void testListenForCurriculumUpdatedEvent_no_corresponding_candidate() throws Exception{
+		
+		final String id = "1000";
+		
+		Mockito.when(this.mockCandidateDao.findCandidateById(Long.valueOf(id))).thenReturn(Optional.empty());
+		
+		this.listener.listenForCurriculumUpdatedEvent(new CurriculumUpdatedEvent(id));
+		
+		Mockito.verify(this.mockExternalEventPublisher, Mockito.never()).publishCandidateUpdateEvent(Mockito.any());
+		
+	}
+	
+	/**
+	* If Candidates with id matching the curriculumId then we can match the Curriculum to a Candidate and 
+	* therefore  create a NewsFeedItem 
+	* @throws Exception
+	*/
+	@Test
+	public void testListenForCurriculumUpdatedEvent_corresponding_candidate() throws Exception{
+		
+		final String id = "1000";
+		
+		Mockito.when(this.mockCandidateDao.findCandidateById(Long.valueOf(id))).thenReturn(Optional.of(Candidate.builder()
+				.candidateId(id)
+				.build()));
+		
+		this.listener.listenForCurriculumUpdatedEvent(new CurriculumUpdatedEvent(id));
+		
+		Mockito.verify(this.mockExternalEventPublisher).publishCandidateUpdateEvent(Mockito.any());
+		
+	}
+	
+	
 }

@@ -11,6 +11,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.arenella.recruit.adapters.events.CreditsAssignedEvent;
 import com.arenella.recruit.adapters.events.CreditsUsedEvent;
+import com.arenella.recruit.adapters.events.CurriculumUpdatedEvent;
 import com.arenella.recruit.candidates.adapters.CandidateExternalEventListener;
 
 /**
@@ -70,4 +71,16 @@ public class CurriculumMonolithExternalEventPublisherTest {
 		
 	}
 	
+	/**
+	* Test sending of Event
+	* @throws Exception
+	*/
+	@Test
+	public void testPublishCurriculumUpdates() throws Exception{
+		
+		this.publisher.publishCurriculumUpdates(new CurriculumUpdatedEvent("1222"));
+		
+		Mockito.verify(this.mockCandiditeExternalEventListener).listenForCurriculumUpdatedEvent(Mockito.any(CurriculumUpdatedEvent.class));
+		
+	}
 }

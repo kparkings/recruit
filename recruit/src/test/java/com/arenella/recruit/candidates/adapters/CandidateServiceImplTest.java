@@ -81,6 +81,7 @@ import com.arenella.recruit.candidates.utils.CandidateImageManipulator;
 import com.arenella.recruit.candidates.utils.CandidateSuggestionUtil;
 import com.arenella.recruit.candidates.utils.SkillsSynonymsUtil;
 import com.arenella.recruit.emailservice.adapters.RequestSendEmailCommand;
+import com.arenella.recruit.newsfeed.beans.NewsFeedItem.NEWSFEED_ITEM_TYPE;
 import com.arenella.recruit.candidates.utils.CandidateSuggestionUtil.suggestion_accuracy;
 
 /**
@@ -315,6 +316,8 @@ public class CandidateServiceImplTest {
 			service.updateCandidate("1", CANDIDATE_UPDATE_ACTIONS.disable);
 		});
 		
+		Mockito.verify(this.mockExternalEventPublisher, Mockito.never()).publishCandidateUpdateEvent(Mockito.any());
+		
 	}
 	
 	/**
@@ -324,8 +327,9 @@ public class CandidateServiceImplTest {
 	@Test
 	public void testUpdateCandidate_enable() throws Exception {
 		
-		ArgumentCaptor<Candidate> 	captor 		= ArgumentCaptor.forClass(Candidate.class);
-		Candidate 					candidate 	= Candidate.builder().available(false).build();
+		ArgumentCaptor<Candidate> 				captor 				= ArgumentCaptor.forClass(Candidate.class);
+		ArgumentCaptor<CandidateUpdateEvent> 	newsFeedCaptor 		= ArgumentCaptor.forClass(CandidateUpdateEvent.class);
+		Candidate 								candidate 			= Candidate.builder().available(false).build();
 		
 		Mockito.when(mockCandidateDao.findCandidateById(1L)).thenReturn(Optional.of(candidate));
 		
@@ -336,6 +340,10 @@ public class CandidateServiceImplTest {
 		
 		assertTrue(captor.getValue().isAvailable());
 		
+		Mockito.verify(this.mockExternalEventPublisher).publishCandidateUpdateEvent(newsFeedCaptor.capture());
+		
+		assertEquals(NEWSFEED_ITEM_TYPE.CANDIDATE_BECAME_AVAILABLE, newsFeedCaptor.getValue().getItemType());
+		
 	}
 	
 	/**
@@ -345,8 +353,9 @@ public class CandidateServiceImplTest {
 	@Test
 	public void testUpdateCandidate_disable() throws Exception {
 		
-		ArgumentCaptor<Candidate> 	captor 		= ArgumentCaptor.forClass(Candidate.class);
-		Candidate 					candidate 	= Candidate.builder().candidateId("123").available(true).build();
+		ArgumentCaptor<Candidate> 				captor 				= ArgumentCaptor.forClass(Candidate.class);
+		ArgumentCaptor<CandidateUpdateEvent> 	newsFeedCaptor 		= ArgumentCaptor.forClass(CandidateUpdateEvent.class);
+		Candidate 								candidate 			= Candidate.builder().candidateId("123").available(true).build();
 		
 		Mockito.when(mockCandidateDao.findCandidateById(1L)).thenReturn(Optional.of(candidate));
 		
@@ -356,6 +365,10 @@ public class CandidateServiceImplTest {
 		Mockito.verify(this.mockExternalEventPublisher).publishCandidateNoLongerAvailableEvent(Mockito.any());
 		
 		assertFalse(captor.getValue().isAvailable());
+		
+		Mockito.verify(this.mockExternalEventPublisher).publishCandidateUpdateEvent(newsFeedCaptor.capture());
+		
+		assertEquals(NEWSFEED_ITEM_TYPE.CANDIDATE_BECAME_UNAVAILABLE, newsFeedCaptor.getValue().getItemType());
 		
 	}
 		
@@ -606,8 +619,6 @@ public class CandidateServiceImplTest {
 		this.service.deleteSearchAlert(id);
 		
 		Mockito.verify(this.mockSkillAlertDao).deleteById(id);
-		
-		Mockito.verify(this.mockExternalEventPublisher).publishCandidateUpdateEvent(Mockito.any(CandidateUpdateEvent.class));
 		
 	}
 	
@@ -1054,6 +1065,8 @@ public class CandidateServiceImplTest {
 			this.service.updateCandidateProfile(CandidateUpdateRequest.builder().candidateId("111").build());
 		});
 		
+		Mockito.verify(this.mockExternalEventPublisher, Mockito.never()).publishCandidateUpdateEvent(Mockito.any());
+		
 	}
 
 	/**
@@ -1183,6 +1196,8 @@ public class CandidateServiceImplTest {
 		assertEquals(surnameUpdt, 			persisted.getSurname());
 		assertEquals(emailUpdt, 			persisted.getEmail());
 		
+		Mockito.verify(this.mockExternalEventPublisher).publishCandidateUpdateEvent(Mockito.any());
+		
 	}
 	
 	/**
@@ -1203,6 +1218,8 @@ public class CandidateServiceImplTest {
 		assertThrows(IllegalArgumentException.class, () -> {
 			this.service.updateCandidateProfile(CandidateUpdateRequest.builder().candidateId("222").build());
 		});
+		
+		Mockito.verify(this.mockExternalEventPublisher, Mockito.never()).publishCandidateUpdateEvent(Mockito.any());
 		
 	}
 
@@ -1225,6 +1242,8 @@ public class CandidateServiceImplTest {
 		assertThrows(IllegalArgumentException.class, () -> {
 			this.service.updateCandidateProfile(CandidateUpdateRequest.builder().candidateId("222").build());
 		});
+		
+		Mockito.verify(this.mockExternalEventPublisher, Mockito.never()).publishCandidateUpdateEvent(Mockito.any());
 		
 	}
 	
@@ -1249,6 +1268,8 @@ public class CandidateServiceImplTest {
 		assertThrows(IllegalStateException.class, () -> {
 			this.service.updateCandidateProfile(CandidateUpdateRequest.builder().email("k@1.nl").candidateId("222").build());
 		});
+		
+		Mockito.verify(this.mockExternalEventPublisher, Mockito.never()).publishCandidateUpdateEvent(Mockito.any());
 		
 	}
 	
@@ -1379,6 +1400,7 @@ public class CandidateServiceImplTest {
 		assertEquals(surnameUpdt, 			persisted.getSurname());
 		assertEquals(emailUpdt, 			persisted.getEmail());
 		
+		Mockito.verify(this.mockExternalEventPublisher).publishCandidateUpdateEvent(Mockito.any());
 	}
 	
 	/**
@@ -1511,6 +1533,8 @@ public class CandidateServiceImplTest {
 		assertEquals(1, persisted.getSkills().size());
 		
 		persisted.getSkills().stream().filter(s -> s.equals("css")).findAny().orElseThrow();
+		
+		Mockito.verify(this.mockExternalEventPublisher).publishCandidateUpdateEvent(Mockito.any());
 		
 	}
 	
