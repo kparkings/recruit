@@ -2,6 +2,7 @@ package com.arenella.recruit.newsfeed.entity;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDateTime;
 import java.util.LinkedHashSet;
@@ -20,10 +21,11 @@ import com.arenella.recruit.newsfeed.beans.NewsFeedItemLine;
 */
 public class NewsFeedItemEntityTest {
 
-	private static final UUID 							ID 				= UUID.randomUUID();
-	private static final LocalDateTime 					CREATED 		= LocalDateTime.of(2024, 1, 31, 23, 06);
-	private static final NEWSFEED_ITEM_TYPE 			ITEM_TYPE 		= NEWSFEED_ITEM_TYPE.CANDIDATE_BECAME_AVAILABLE;
-	private static final Set<NewsFeedItemLineEntity> 	LINES 			= new LinkedHashSet<>();
+	private static final UUID 							ID 					= UUID.randomUUID();
+	private static final String							REFERENCED_USER_ID 	= "122";
+	private static final LocalDateTime 					CREATED 			= LocalDateTime.of(2024, 1, 31, 23, 06);
+	private static final NEWSFEED_ITEM_TYPE 			ITEM_TYPE 			= NEWSFEED_ITEM_TYPE.CANDIDATE_BECAME_AVAILABLE;
+	private static final Set<NewsFeedItemLineEntity> 	LINES 				= new LinkedHashSet<>();
 	
 	/**
 	* Tests construction via Builder 
@@ -31,12 +33,13 @@ public class NewsFeedItemEntityTest {
 	@Test
 	public void testBuilder() {
 		
-		NewsFeedItemEntity item = NewsFeedItemEntity.builder().id(ID).created(CREATED).itemType(ITEM_TYPE).lines(LINES).build();
+		NewsFeedItemEntity item = NewsFeedItemEntity.builder().id(ID).referencedUserId(REFERENCED_USER_ID).created(CREATED).itemType(ITEM_TYPE).lines(LINES).build();
 		
-		assertEquals(ID, 		item.getId());
-		assertEquals(CREATED, 	item.getCreated());
-		assertEquals(ITEM_TYPE, item.getItemType());
-		assertEquals(LINES, 	item.getLines());
+		assertEquals(ID, 					item.getId());
+		assertEquals(REFERENCED_USER_ID, 	item.getReferencedUserId().get());
+		assertEquals(CREATED, 				item.getCreated());
+		assertEquals(ITEM_TYPE, 			item.getItemType());
+		assertEquals(LINES, 				item.getLines());
 	}
 	
 	/**
@@ -48,14 +51,15 @@ public class NewsFeedItemEntityTest {
 		
 		final Set<NewsFeedItemLineEntity> lines = Set.of(NewsFeedItemLineEntity.builder().build(), NewsFeedItemLineEntity.builder().build());
 		
-		NewsFeedItemEntity entity = NewsFeedItemEntity.builder().id(ID).created(CREATED).itemType(ITEM_TYPE).lines(lines).build();
+		NewsFeedItemEntity entity = NewsFeedItemEntity.builder().id(ID).referencedUserId(REFERENCED_USER_ID).created(CREATED).itemType(ITEM_TYPE).lines(lines).build();
 		
 		NewsFeedItem item = NewsFeedItemEntity.convertFromEntity(entity); 
 		
-		assertEquals(ID, 			item.getId());
-		assertEquals(CREATED, 		item.getCreated());
-		assertEquals(ITEM_TYPE, 	item.getItemType());
-		assertEquals(lines.size(), 	item.getLines().size());
+		assertEquals(ID, 					item.getId());
+		assertEquals(REFERENCED_USER_ID, 	item.getReferencedUserId().get());
+		assertEquals(CREATED, 				item.getCreated());
+		assertEquals(ITEM_TYPE, 			item.getItemType());
+		assertEquals(lines.size(), 			item.getLines().size());
 		
 		NewsFeedItemLine line = item.getLines().stream().findFirst().get();
 		
@@ -72,11 +76,12 @@ public class NewsFeedItemEntityTest {
 		
 		final Set<NewsFeedItemLine> lines = Set.of(NewsFeedItemLine.builder().build(), NewsFeedItemLine.builder().build());
 		
-		NewsFeedItem item = NewsFeedItem.builder().id(ID).created(CREATED).itemType(ITEM_TYPE).lines(lines).build();
+		NewsFeedItem item = NewsFeedItem.builder().id(ID).referencedUserId(REFERENCED_USER_ID).created(CREATED).itemType(ITEM_TYPE).lines(lines).build();
 		
 		NewsFeedItemEntity entity = NewsFeedItemEntity.convertToEntity(item); 
 		
 		assertEquals(ID, 			entity.getId());
+		assertEquals(REFERENCED_USER_ID, 	item.getReferencedUserId().get());
 		assertEquals(CREATED, 		entity.getCreated());
 		assertEquals(ITEM_TYPE, 	entity.getItemType());
 		assertEquals(lines.size(), 	entity.getLines().size());
@@ -84,6 +89,48 @@ public class NewsFeedItemEntityTest {
 		NewsFeedItemLineEntity line = entity.getLines().stream().findFirst().get();
 		
 		assertNotNull(line);
+		
+	}
+	
+	
+	/**
+	* Tests construction via Builder when no referenced user
+	*/
+	@Test
+	public void testBuilder_no_referenced_user() {
+		
+		NewsFeedItemEntity item = NewsFeedItemEntity.builder().build();
+		
+		assertTrue(item.getReferencedUserId().isEmpty());
+	}
+	
+	/**
+	* Tests conversion from Entity to Domain representation when no referenced user
+	* @throws Exception
+	*/
+	@Test
+	public void testConvertFromEntity_no_referenced_user() throws Exception{
+		
+		NewsFeedItemEntity entity = NewsFeedItemEntity.builder().build();
+		
+		NewsFeedItem item = NewsFeedItemEntity.convertFromEntity(entity); 
+		
+		assertTrue(item.getReferencedUserId().isEmpty());
+		
+	}
+	
+	/**
+	* Tests conversion from Domain to Entity representation when no referenced user
+	* @throws Exception
+	*/
+	@Test
+	public void testConvertToEntity_no_referenced_user() throws Exception{
+		
+		NewsFeedItem item = NewsFeedItem.builder().build();
+		
+		NewsFeedItemEntity entity = NewsFeedItemEntity.convertToEntity(item); 
+		
+		assertTrue(entity.getReferencedUserId().isEmpty());
 		
 	}
 	

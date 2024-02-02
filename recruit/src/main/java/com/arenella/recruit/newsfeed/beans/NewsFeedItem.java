@@ -2,6 +2,7 @@ package com.arenella.recruit.newsfeed.beans;
 
 import java.time.LocalDateTime;
 import java.util.LinkedHashSet;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
@@ -21,19 +22,21 @@ public class NewsFeedItem {
 									USER_POST}
 	
 	
-	private UUID id;
-	private LocalDateTime created;
-	private NEWSFEED_ITEM_TYPE itemType;
-	private Set<NewsFeedItemLine> lines = new LinkedHashSet<>();
+	private UUID 					id;
+	private String 					referencedUserId;
+	private LocalDateTime 			created;
+	private NEWSFEED_ITEM_TYPE 		itemType;
+	private Set<NewsFeedItemLine> 	lines 					= new LinkedHashSet<>();
 	
 	/**
 	* Constructor based upon a builder
 	* @param builder
 	*/
 	public NewsFeedItem(NewsFeedItemBuilder builder) {
-		this.id 			= builder.id;
-		this.created 		= builder.created;
-		this.itemType 		= builder.itemType;
+		this.id 					= builder.id;
+		this.referencedUserId 		= builder.referencedUserId;
+		this.created 				= builder.created;
+		this.itemType 				= builder.itemType;
 		this.lines.clear();
 		this.lines.addAll(builder.lines);
 	}
@@ -44,6 +47,15 @@ public class NewsFeedItem {
 	*/
 	public UUID getId() {
 		return this.id;
+	}
+	
+	/**
+	* Returns the unique Id of the User the NewsItem related to 
+	* where the NewsItem related to a User
+	* @return userId
+	*/
+	public Optional<String> getReferencedUserId(){
+		return Optional.ofNullable(this.referencedUserId);
 	}
 	
 	/**
@@ -86,6 +98,7 @@ public class NewsFeedItem {
 	public static class NewsFeedItemBuilder{
 		
 		private UUID 					id;
+		private String 					referencedUserId;
 		private LocalDateTime 			created;
 		private NEWSFEED_ITEM_TYPE 		itemType;
 		private Set<NewsFeedItemLine> 	lines 			= new LinkedHashSet<>();
@@ -97,6 +110,17 @@ public class NewsFeedItem {
 		*/
 		public NewsFeedItemBuilder id(UUID id) {
 			this.id = id;
+			return this;
+		}
+		
+		/**
+		* Sets the referenced users Id. This is when for example the item related to a 
+		* Candidate or Recruiter. The id is the Candidate/Recruiter id
+		* @param referencedUserId - Unique id of User
+		* @return Builder
+		*/
+		public NewsFeedItemBuilder referencedUserId(String referencedUserId) {
+			this.referencedUserId = referencedUserId;
 			return this;
 		}
 		

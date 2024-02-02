@@ -12,6 +12,7 @@ import com.arenella.recruit.adapters.events.CandidateAccountCreatedEvent;
 import com.arenella.recruit.adapters.events.CandidateDeletedEvent;
 import com.arenella.recruit.adapters.events.CandidateNoLongerAvailableEvent;
 import com.arenella.recruit.adapters.events.CandidatePasswordUpdatedEvent;
+import com.arenella.recruit.adapters.events.CandidateUpdateEvent;
 import com.arenella.recruit.adapters.events.CandidateUpdatedEvent;
 import com.arenella.recruit.adapters.events.ContactRequestEvent;
 import com.arenella.recruit.authentication.adapters.AuthenticationExternalEventListener;
@@ -24,6 +25,7 @@ import com.arenella.recruit.emailservice.beans.Email.EmailTopic;
 import com.arenella.recruit.emailservice.beans.Email.EmailType;
 import com.arenella.recruit.emailservice.beans.Email.Sender;
 import com.arenella.recruit.emailservice.beans.Email.Sender.SenderType;
+import com.arenella.recruit.newsfeed.adapters.NewsFeedExternalEventListener;
 
 /**
 * An implementation of ExternalEventPublisher optimised to work when the 
@@ -49,6 +51,9 @@ public class MonolithExternalEventPublisher implements ExternalEventPublisher{
 	@Autowired
 	private EmailServiceExternalEventListener 		emailServiceExternalEventListener;
 	
+	@Autowired
+	private NewsFeedExternalEventListener			newsFeedExternalEventListener;
+	
 	/**
 	* Refer to ExternalEventPublisher for details 
 	*/
@@ -56,13 +61,6 @@ public class MonolithExternalEventPublisher implements ExternalEventPublisher{
 	public void publishSearchedSkillsEvent(Set<String> skills) {		
 		curriculumExternalEventListener.listenForSearchedSkillsEvent(skills);
 	}
-	
-	/**
-	* Refer to ExternalEventPublisher for details 
-	*/
-	//public void publishPendingCurriculumDeletedEvent(UUID pendingCurriculumId) {
-	//	curriculumExternalEventListener.listenForPendingCurriculumDeletedEvent(pendingCurriculumId);
-	//}
 
 	/**
 	* Refer to ExternalEventPublisher for details 
@@ -199,6 +197,16 @@ public class MonolithExternalEventPublisher implements ExternalEventPublisher{
 					.build();
 		
 		this.emailServiceExternalEventListener.listenForSendEmailCommand(cExt);
+		
+	}
+
+	/**
+	* Refer to the ExternalEventPublisher interface for details 
+	*/
+	@Override
+	public void publishCandidateUpdateEvent(CandidateUpdateEvent candidateUpdateEvent) {
+		
+		this.newsFeedExternalEventListener.listenForEventCandidateUpdate(candidateUpdateEvent);
 		
 	}
 	

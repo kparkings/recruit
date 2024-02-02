@@ -76,26 +76,26 @@ public class ListingAlertServiceImpl implements ListingAlertService{
 	}
 	
 	//TODO: This structure for determine category for incoming listing not for alert
-	private static class SearchTermToCategoryUtil{
+	//private static class SearchTermToCategoryUtil{
 		
-		private Set<String> JAVA_KEYWORDS 				= Set.of();
-		private Set<String> DOT_NET_KEYWORDS 			= Set.of();
-		private Set<String> DEV_OPS_KEYWORDS 			= Set.of();
-		private Set<String> NETWORKS_KEYWORDS			= Set.of();
-		private Set<String> CLOUD_KEYWORDS 				= Set.of(); 
-		private Set<String> WEB_KEYWORDS 				= Set.of(); 
-		private Set<String> UI_UX_KEYWORDS 				= Set.of(); 
-		private Set<String> PROJECT_NANAGMENT_KEYWORDS 	= Set.of(); 
-		private Set<String> TESTING_KEYWORDS 			= Set.of(); 
-		private Set<String> BUSINESS_ANALYSTS_KEYWORDS 	= Set.of(); 
-		private Set<String> SECURITY_KEYWORDS 			= Set.of(); 
-		private Set<String> IT_SUPPORT_KEYWORDS 		= Set.of(); 
-		private Set<String> ARCHITECT_KEYWORDS 			= Set.of(); 
-		private Set<String> BI_KEYWORDS 				= Set.of(); 
-		private Set<String> REC2REC_KEYWORDS 			= Set.of();
+	//	private Set<String> JAVA_KEYWORDS 				= Set.of();
+	//	private Set<String> DOT_NET_KEYWORDS 			= Set.of();
+	//	private Set<String> DEV_OPS_KEYWORDS 			= Set.of();
+	//	private Set<String> NETWORKS_KEYWORDS			= Set.of();
+	//	private Set<String> CLOUD_KEYWORDS 				= Set.of(); 
+	//	private Set<String> WEB_KEYWORDS 				= Set.of(); 
+	//	private Set<String> UI_UX_KEYWORDS 				= Set.of(); 
+	//	private Set<String> PROJECT_NANAGMENT_KEYWORDS 	= Set.of(); 
+	//	private Set<String> TESTING_KEYWORDS 			= Set.of(); 
+	//	private Set<String> BUSINESS_ANALYSTS_KEYWORDS 	= Set.of(); 
+	//	private Set<String> SECURITY_KEYWORDS 			= Set.of(); 
+	//	private Set<String> IT_SUPPORT_KEYWORDS 		= Set.of(); 
+	//	private Set<String> ARCHITECT_KEYWORDS 			= Set.of(); 
+	//	private Set<String> BI_KEYWORDS 				= Set.of(); 
+	//	private Set<String> REC2REC_KEYWORDS 			= Set.of();
 		
 		
 		
-	}
+	//}
 
 }

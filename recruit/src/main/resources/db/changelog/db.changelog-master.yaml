@@ -2224,6 +2224,11 @@ databaseChangeLog:
                     primaryKey: true
                     nullable: false
               - column:
+                  name: references_user_id
+                  type: varchar
+                  constraints:
+                    nullable: true
+              - column:
                   name: created
                   type: timestamp
                   constraints:

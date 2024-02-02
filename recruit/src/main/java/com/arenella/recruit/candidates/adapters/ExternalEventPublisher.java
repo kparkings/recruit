@@ -6,6 +6,7 @@ import com.arenella.recruit.adapters.events.CandidateAccountCreatedEvent;
 import com.arenella.recruit.adapters.events.CandidateDeletedEvent;
 import com.arenella.recruit.adapters.events.CandidateNoLongerAvailableEvent;
 import com.arenella.recruit.adapters.events.CandidatePasswordUpdatedEvent;
+import com.arenella.recruit.adapters.events.CandidateUpdateEvent;
 import com.arenella.recruit.adapters.events.CandidateUpdatedEvent;
 import com.arenella.recruit.adapters.events.ContactRequestEvent;
 import com.arenella.recruit.emailservice.adapters.RequestSendEmailCommand;
@@ -77,6 +78,12 @@ public interface ExternalEventPublisher {
 	* Publishes an event to send contact request to a recipient
 	*/
 	public void publishContactRequestEvent(ContactRequestEvent contactRequestEvent);
+	
+	/**
+	* Publishes an event for an update to a candidate
+	* @param candidateUpdateEvent
+	*/
+	public void publishCandidateUpdateEvent(CandidateUpdateEvent candidateUpdateEvent);
 	
 	
 	

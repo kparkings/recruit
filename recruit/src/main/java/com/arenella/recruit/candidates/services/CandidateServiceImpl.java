@@ -29,6 +29,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.arenella.recruit.adapters.events.CandidateAccountCreatedEvent;
 import com.arenella.recruit.adapters.events.CandidateDeletedEvent;
 import com.arenella.recruit.adapters.events.CandidateNoLongerAvailableEvent;
+import com.arenella.recruit.adapters.events.CandidateUpdateEvent;
 import com.arenella.recruit.adapters.events.CandidateUpdatedEvent;
 import com.arenella.recruit.adapters.events.ContactRequestEvent;
 import com.arenella.recruit.candidates.adapters.CandidateCreatedEvent;
@@ -72,7 +73,7 @@ import com.arenella.recruit.emailservice.beans.Email.EmailType;
 import com.arenella.recruit.emailservice.beans.Email.Sender;
 import com.arenella.recruit.emailservice.beans.Email.EmailRecipient.ContactType;
 import com.arenella.recruit.emailservice.beans.Email.Sender.SenderType;
-
+import com.arenella.recruit.newsfeed.beans.NewsFeedItem.NEWSFEED_ITEM_TYPE;
 import com.arenella.recruit.candidates.utils.PasswordUtil;
 import com.arenella.recruit.candidates.dao.CandidateSearchAlertDao;
 import com.arenella.recruit.candidates.dao.CandidateSkillsDao;
@@ -226,6 +227,17 @@ public class CandidateServiceImpl implements CandidateService{
 					.build();
 			
 			this.externalEventPublisher.publishSendEmailCommand(command);
+			
+			CandidateUpdateEvent event = CandidateUpdateEvent
+					.builder()
+						.itemType(NEWSFEED_ITEM_TYPE.CANDIDATE_ADDED)
+						.candidateId(Integer.valueOf(candidate.getCandidateId()))
+						.firstName(candidate.getFirstname())
+						.surname(candidate.getSurname())
+						.roleSought(candidate.getRoleSought())
+					.build(); 
+			
+			externalEventPublisher.publishCandidateUpdateEvent(event);
 		}
 				
 	}

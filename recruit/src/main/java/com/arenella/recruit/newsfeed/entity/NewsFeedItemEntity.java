@@ -2,6 +2,7 @@ package com.arenella.recruit.newsfeed.entity;
 
 import java.time.LocalDateTime;
 import java.util.LinkedHashSet;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -35,6 +36,9 @@ public class NewsFeedItemEntity {
 	@Column(name="created")
 	private LocalDateTime created;
 	
+	@Column(name="references_user_id")
+	private String referencedUserId;
+	
 	@Column(name="item_type")
 	@Enumerated(EnumType.STRING)
 	private NEWSFEED_ITEM_TYPE itemType;
@@ -54,9 +58,10 @@ public class NewsFeedItemEntity {
 	* @param builder
 	*/
 	public NewsFeedItemEntity(NewsFeedItemEntityBuilder builder) {
-		this.id 			= builder.id;
-		this.created 		= builder.created;
-		this.itemType 		= builder.itemType;
+		this.id 				= builder.id;
+		this.referencedUserId 	= builder.referencedUserId;
+		this.created 			= builder.created;
+		this.itemType 			= builder.itemType;
 		this.lines.clear();
 		this.lines.addAll(builder.lines);
 	}
@@ -67,6 +72,15 @@ public class NewsFeedItemEntity {
 	*/
 	public UUID getId() {
 		return this.id;
+	}
+	
+	/**
+	* Returns the unique Id of the User the NewsItem related to 
+	* where the NewsItem related to a User
+	* @return userId
+	*/
+	public Optional<String> getReferencedUserId(){
+		return Optional.ofNullable(this.referencedUserId);
 	}
 	
 	/**
@@ -109,6 +123,7 @@ public class NewsFeedItemEntity {
 	public static class NewsFeedItemEntityBuilder{
 		
 		private UUID 					id;
+		private String					referencedUserId;
 		private LocalDateTime 			created;
 		private NEWSFEED_ITEM_TYPE 		itemType;
 		private Set<NewsFeedItemLineEntity> 	lines 			= new LinkedHashSet<>();
@@ -120,6 +135,17 @@ public class NewsFeedItemEntity {
 		*/
 		public NewsFeedItemEntityBuilder id(UUID id) {
 			this.id = id;
+			return this;
+		}
+		
+		/**
+		* Sets the referenced users Id. This is when for example the item related to a 
+		* Candidate or Recruiter. The id is the Candidate/Recruiter id
+		* @param referencedUserId - Unique id of User
+		* @return Builder
+		*/
+		public NewsFeedItemEntityBuilder referencedUserId(String referencedUserId) {
+			this.referencedUserId = referencedUserId;
 			return this;
 		}
 		
@@ -173,6 +199,7 @@ public class NewsFeedItemEntity {
 		return NewsFeedItem
 				.builder()
 					.id(entity.getId())
+					.referencedUserId(entity.getReferencedUserId().isEmpty() ? null : entity.getReferencedUserId().get())
 					.created(entity.getCreated())
 					.itemType(entity.getItemType())
 					.lines(entity.getLines().stream().map( NewsFeedItemLineEntity::convertFromEntity).collect(Collectors.toCollection(LinkedHashSet::new)))
@@ -188,6 +215,7 @@ public class NewsFeedItemEntity {
 		return NewsFeedItemEntity
 				.builder()
 					.id(item.getId())
+					.referencedUserId(item.getReferencedUserId().isEmpty() ? null : item.getReferencedUserId().get())
 					.created(item.getCreated())
 					.itemType(item.getItemType())
 					.lines(item.getLines().stream().map(NewsFeedItemLineEntity::convertToEntity).collect(Collectors.toCollection(LinkedHashSet::new)))

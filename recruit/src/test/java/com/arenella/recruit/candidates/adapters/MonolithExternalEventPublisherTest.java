@@ -20,11 +20,13 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import com.arenella.recruit.adapters.events.CandidateNoLongerAvailableEvent;
+import com.arenella.recruit.adapters.events.CandidateUpdateEvent;
 import com.arenella.recruit.adapters.events.ContactRequestEvent;
 import com.arenella.recruit.candidates.beans.CandidateSearchAlertMatch;
 import com.arenella.recruit.curriculum.adapters.CurriculumExternalEventListener;
 import com.arenella.recruit.emailservice.adapters.EmailServiceExternalEventListener;
 import com.arenella.recruit.emailservice.adapters.RequestSendEmailCommand;
+import com.arenella.recruit.newsfeed.adapters.NewsFeedExternalEventListener;
 
 /**
 * Unit tests for the MonolithExternalEventPublisher class
@@ -38,6 +40,9 @@ public class MonolithExternalEventPublisherTest {
 
 	@Mock
 	private EmailServiceExternalEventListener 	mockEmailServiceListener;
+	
+	@Mock
+	private NewsFeedExternalEventListener		mockNewsFeedExternalEventListener;
 	
 	@InjectMocks
 	private MonolithExternalEventPublisher 		publisher;
@@ -169,5 +174,21 @@ public class MonolithExternalEventPublisherTest {
 		Mockito.verify(this.mockEmailServiceListener, Mockito.times(2)).listenForSendEmailCommand(Mockito.any());
 		
 	}
+	
+	/**
+	* Tests publishing of Event
+	* @throws Exception
+	*/
+	@Test
+	public void testPublishCandidateUpdateEvent() throws Exception{
+		
+		CandidateUpdateEvent candidateUpdateEvent = CandidateUpdateEvent.builder().build();
+		
+		this.publisher.publishCandidateUpdateEvent(candidateUpdateEvent);
+	
+		Mockito.verify(this.mockNewsFeedExternalEventListener).listenForEventCandidateUpdate(candidateUpdateEvent);
+		
+	}
+	
 	
 }

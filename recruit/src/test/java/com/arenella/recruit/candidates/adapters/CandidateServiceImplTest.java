@@ -35,6 +35,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.arenella.recruit.adapters.events.CandidateAccountCreatedEvent;
 import com.arenella.recruit.adapters.events.CandidateDeletedEvent;
+import com.arenella.recruit.adapters.events.CandidateUpdateEvent;
 import com.arenella.recruit.adapters.events.CandidateUpdatedEvent;
 import com.arenella.recruit.adapters.events.ContactRequestEvent;
 import com.arenella.recruit.candidates.beans.Candidate;
@@ -248,6 +249,7 @@ public class CandidateServiceImplTest {
 		Mockito.verify(this.mockExternalEventPublisher).publishCandidateAccountCreatedEvent(Mockito.any(CandidateAccountCreatedEvent.class));
 		Mockito.verify(this.mockExternalEventPublisher).publishSendEmailCommand(Mockito.any(RequestSendEmailCommand.class));
 		Mockito.verify(this.mockExternalEventPublisher).publishCandidateCreatedEvent(Mockito.any(CandidateCreatedEvent.class));
+		Mockito.verify(this.mockExternalEventPublisher).publishCandidateUpdateEvent(Mockito.any(CandidateUpdateEvent.class));
 		
 	}
 	
