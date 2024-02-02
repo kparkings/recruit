@@ -38,4 +38,24 @@ public class NewsFeedExternalEventListenerImplTest {
 		
 	}
 	
+	/**
+	* Tests handling of CandidateUpdateEvent when Candidate has been deleted. This is a special case
+	* as instead of creating a NewsFeedItem we use it as a command to trigger the deletion of all 
+	* NewsFeedItems relating to a Candidate that has deleted their account so we dont retain data 
+	* on Users who no longer want to be in the system
+	*/
+	@Test
+	public void testListenForEventCandidateUpdate_candidate_deleted() {
+		
+		final int id = 1234;
+		
+		CandidateUpdateEvent event = CandidateUpdateEvent.builder().candidateId(id).itemType(NewsFeedItem.NEWSFEED_ITEM_TYPE.CANDIDATE_DELETED).build();
+		
+		listener.listenForEventCandidateUpdate(event);
+		
+		Mockito.verify(this.mockService).deleteAllNewsFeedItemsForReferencedUserId(String.valueOf(id));
+		Mockito.verify(this.mockService, Mockito.never()).addNewsFeedItem(Mockito.any(NewsFeedItem.class));
+		
+	}
+	
 }

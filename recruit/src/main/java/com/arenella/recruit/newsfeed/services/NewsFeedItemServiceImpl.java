@@ -51,4 +51,13 @@ public class NewsFeedItemServiceImpl implements NewsFeedItemService{
 		
 	}
 
+	/**
+	* Refer to the NewsFeedItemService interface for details 
+	*/
+	@Override
+	public void deleteAllNewsFeedItemsForReferencedUserId(String id) {
+		this.newsFeedItemDao.deleteAllNewsFeedItemsForReferencedUserId(id);
+	}
+	
+
 }

@@ -30,5 +30,12 @@ public interface NewsFeedItemService {
 	* @param id - Unique if of NewsFeedItem
 	*/
 	public void deleteNewsFeedItem(UUID id);
+	
+	/**
+	* Used to clean u NewsFeedItems when a User has deleted their account. In this case
+	* any NewsFeedItem matching the Id will be deleted
+	* @param id - UniqueId of the User referenced in NewsFeedItems
+	*/
+	public void deleteAllNewsFeedItemsForReferencedUserId(String id);
 
 }

@@ -17,6 +17,7 @@ import javax.persistence.criteria.CriteriaBuilder.In;
 
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 import com.arenella.recruit.newsfeed.beans.NewsFeedItem;
@@ -111,5 +112,23 @@ public interface NewsFeedItemDao extends CrudRepository<NewsFeedItemEntity, UUID
 		}
 		
 	}
+	
+	/**
+	* Deletes all NewsFeedItems about a given User
+	* @param id - Unqiue id of the User
+	*/
+	default void deleteAllNewsFeedItemsForReferencedUserId(String id) {
+		this.fetchNewsFeedItemsByReferencedUserId(id).stream().forEach(item -> {
+			this.deleteById(item.getId());
+		});
+	}
+	
+	/**
+	* Retrieved all NewsFeedItems about a given User
+	* @param referencedUserId - Unique id of User
+	* @return NewsFeedItems referencing the User
+	*/
+	@Query("from NewsFeedItemEntity where referencedUserId = :referencedUserId")
+	Set<NewsFeedItemEntity> fetchNewsFeedItemsByReferencedUserId(String referencedUserId);
 		
 }

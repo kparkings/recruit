@@ -97,4 +97,19 @@ public class NewsFeedItemServiceImplTest {
 		
 	}
 	
+	/**
+	* Tests deletion of NewsFeedItem referencing a specific User
+	* @throws Exception
+	*/
+	@Test
+	public void testDeleteAllNewsFeedItemsForReferencedUserId() throws Exception{
+		
+		final String userId = "123";
+		
+		this.service.deleteAllNewsFeedItemsForReferencedUserId(userId);
+		
+		Mockito.verify(this.mockDao).deleteAllNewsFeedItemsForReferencedUserId(userId);
+		
+	}
+	
 }

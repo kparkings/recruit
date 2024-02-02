@@ -821,6 +821,17 @@ public class CandidateServiceImpl implements CandidateService{
 		
 		this.externalEventPublisher.publishCandidateDeletedEvent(new CandidateDeletedEvent(candidateId));
 		
+		/**
+		* This is used to remove all NewsFeedItems referencing the 
+		*/
+		CandidateUpdateEvent event = CandidateUpdateEvent
+				.builder()
+					.itemType(NEWSFEED_ITEM_TYPE.CANDIDATE_DELETED)
+					.candidateId(Integer.valueOf(candidateId))
+				.build(); 
+		
+		externalEventPublisher.publishCandidateUpdateEvent(event);
+		
 	}
 
 	/**

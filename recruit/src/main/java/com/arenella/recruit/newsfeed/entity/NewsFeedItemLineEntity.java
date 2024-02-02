@@ -5,6 +5,8 @@ import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -27,6 +29,7 @@ public class NewsFeedItemLineEntity {
 	private UUID 						newsItemId;
 	
 	@Column(name="type")
+	@Enumerated(EnumType.STRING)
 	private NEWS_FEED_ITEM_LINE_TYPE 	type;
 	
 	@Column(name="text_value")

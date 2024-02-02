@@ -31,6 +31,11 @@ public class NewsFeedExternalEventListenerImpl implements NewsFeedExternalEventL
 	@Override
 	public void listenForEventCandidateUpdate(CandidateUpdateEvent event) {
 		
+		if (event.getItemType() == NewsFeedItem.NEWSFEED_ITEM_TYPE.CANDIDATE_DELETED) {
+			this.service.deleteAllNewsFeedItemsForReferencedUserId(""+event.getCandidateId());
+			return ;
+		}
+		
 		final UUID newsItemId = UUID.randomUUID();
 		
 		Set<NewsFeedItemLine> lines = new LinkedHashSet<>();
@@ -38,7 +43,7 @@ public class NewsFeedExternalEventListenerImpl implements NewsFeedExternalEventL
 		lines.add(NewsFeedItemLine.builder().id(UUID.randomUUID()).newsItemId(newsItemId).type(NEWS_FEED_ITEM_LINE_TYPE.TEXT).text("C"+event.getCandidateId()).build());
 		lines.add(NewsFeedItemLine.builder().id(UUID.randomUUID()).newsItemId(newsItemId).type(NEWS_FEED_ITEM_LINE_TYPE.TEXT).text(event.getFirstName() + " " + event.getSurname()).build());
 		lines.add(NewsFeedItemLine.builder().id(UUID.randomUUID()).newsItemId(newsItemId).type(NEWS_FEED_ITEM_LINE_TYPE.TEXT).text(event.getRoleSought()).build());
-		lines.add(NewsFeedItemLine.builder().id(UUID.randomUUID()).newsItemId(newsItemId).type(NEWS_FEED_ITEM_LINE_TYPE.INTERNAL_URL).text("/"+event.getCandidateId()).build());
+		lines.add(NewsFeedItemLine.builder().id(UUID.randomUUID()).newsItemId(newsItemId).type(NEWS_FEED_ITEM_LINE_TYPE.INTERNAL_URL).url("/"+event.getCandidateId()).build());
 		
 		NewsFeedItem item = NewsFeedItem
 				.builder()

@@ -607,6 +607,8 @@ public class CandidateServiceImplTest {
 		
 		Mockito.verify(this.mockSkillAlertDao).deleteById(id);
 		
+		Mockito.verify(this.mockExternalEventPublisher).publishCandidateUpdateEvent(Mockito.any(CandidateUpdateEvent.class));
+		
 	}
 	
 	/**
