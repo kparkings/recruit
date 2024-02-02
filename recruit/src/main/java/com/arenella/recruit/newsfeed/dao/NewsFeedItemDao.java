@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -45,18 +44,6 @@ public interface NewsFeedItemDao extends CrudRepository<NewsFeedItemEntity, UUID
 	*/
 	default Set<NewsFeedItem> fetchNewsFeedItem(NewsFeedItemFilters filters){
 		
-		
-		/**
-		* [KP] Its ugly I know but if a UUID is given as a filter we use/override the date/time 
-		* to find it as UUID's can't be sorted
-		*/
-		if (filters.getFirstId().isPresent()) {
-			Optional<NewsFeedItemEntity> entity = this.findById(filters.getFirstId().get());
-			if (entity.isPresent() && Optional.ofNullable(entity.get().getCreated()).isPresent()) {
-				filters.setCreateBefore(entity.get().getCreated().minusNanos(1));
-			}
-		}
-		
 		return this.findAll(new NewsFeedItemEntitySpecification(filters)).stream()
 				.map(NewsFeedItemEntity::convertFromEntity)
 				.limit(filters.getMaxResults().isEmpty() ? 100 : filters.getMaxResults().get())
@@ -88,10 +75,6 @@ public interface NewsFeedItemDao extends CrudRepository<NewsFeedItemEntity, UUID
 		public Predicate toPredicate(Root<NewsFeedItemEntity> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
 			
 			List<Predicate> predicates = new ArrayList<>();
-			
-			if (this.filters.getFirstId().isPresent()) {
-				//Handle in steam
-			}
 			
 			if (this.filters.getMaxResults().isPresent()) {
 				//Handle in stream

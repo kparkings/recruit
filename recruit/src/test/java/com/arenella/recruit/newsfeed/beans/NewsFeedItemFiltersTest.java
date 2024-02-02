@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDateTime;
 import java.util.Set;
-import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
 
@@ -15,7 +14,6 @@ import org.junit.jupiter.api.Test;
 */
 public class NewsFeedItemFiltersTest {
 
-	private static final UUID 									FIRST_ID 	= UUID.randomUUID();
 	private static final Integer								MAX_RESULTS = 40;
 	private static final Set<NewsFeedItem.NEWSFEED_ITEM_TYPE> 	types 		= Set.of(NewsFeedItem.NEWSFEED_ITEM_TYPE.CANDIDATE_BECAME_AVAILABLE, 
 																					 NewsFeedItem.NEWSFEED_ITEM_TYPE.CANDIDATE_ADDED);
@@ -28,9 +26,8 @@ public class NewsFeedItemFiltersTest {
 	@Test
 	public void testBuilder() throws Exception{
 		
-		NewsFeedItemFilters filters = NewsFeedItemFilters.builder().firstId(FIRST_ID).maxResults(MAX_RESULTS).types(types).createdBefore(BEFORE).build();
+		NewsFeedItemFilters filters = NewsFeedItemFilters.builder().maxResults(MAX_RESULTS).types(types).createdBefore(BEFORE).build();
 		
-		assertEquals(FIRST_ID, 		filters.getFirstId().get());
 		assertEquals(MAX_RESULTS, 	filters.getMaxResults().get());
 		assertEquals(BEFORE, 		filters.getCreatedBefore().get());
 		
@@ -48,7 +45,6 @@ public class NewsFeedItemFiltersTest {
 		
 		NewsFeedItemFilters filters = NewsFeedItemFilters.builder().build();
 		
-		assertTrue(filters.getFirstId().isEmpty());
 		assertTrue(filters.getMaxResults().isEmpty());
 		assertTrue(filters.getTypes().isEmpty());
 		assertTrue(filters.getCreatedBefore().isEmpty());

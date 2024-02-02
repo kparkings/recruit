@@ -1,6 +1,5 @@
 package com.arenella.recruit.newsfeed.beans;
 
-import java.util.UUID;
 import java.util.Set;
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -12,7 +11,6 @@ import java.util.Optional;
 */
 public class NewsFeedItemFilters {
 
-	private UUID 									firstId;
 	private Integer									maxResults;
 	private Set<NewsFeedItem.NEWSFEED_ITEM_TYPE> 	types = new HashSet<>();
 	private LocalDateTime							createBefore;
@@ -22,23 +20,12 @@ public class NewsFeedItemFilters {
 	* @param builder - Contains initialization information
 	*/
 	public NewsFeedItemFilters(NewsFeedItemFiltersBuilder builder) {
-		this.firstId 		= builder.firstId;
 		this.maxResults 	= builder.maxResults;
 		this.createBefore 	= builder.createBefore;
 		this.types.clear();
 		this.types.addAll(builder.types);
 	}
-	
-	/**
-	* Returns the first Id to be returned. If missing 
-	* the newest id will be used as the starting point
-	* for the results
-	* @return first Id
-	*/
-	public Optional<UUID> getFirstId(){
-		return Optional.ofNullable(this.firstId);
-	}
-	
+		
 	/**
 	* Returns the max number of results to return
 	* @return max number of results
@@ -87,21 +74,9 @@ public class NewsFeedItemFilters {
 	*/
 	public static class NewsFeedItemFiltersBuilder{
 	
-		private UUID 									firstId;
 		private Integer									maxResults;
 		private Set<NewsFeedItem.NEWSFEED_ITEM_TYPE> 	types = new HashSet<>();
 		private LocalDateTime							createBefore;
-		
-		/**
-		* Sets firstId to filter results on. This is the starting point for 
-		* the feed of items
-		* @param firstId - id of the first item
-		* @return Builder
-		*/
-		public NewsFeedItemFiltersBuilder firstId(UUID firstId) {
-			this.firstId = firstId;
-			return this;
-		}
 		
 		/**
 		* Sets the max number of items to return
