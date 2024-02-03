@@ -106,7 +106,8 @@ public interface NewsFeedItemDao extends CrudRepository<NewsFeedItemEntity, UUID
 				
 			}
 			
-			
+			Expression<String> sortExpression 				= root.get("created");
+			query.orderBy(criteriaBuilder.desc(sortExpression));
 			
 			return criteriaBuilder.and(predicates.stream().toArray(n -> new Predicate[n]));
 		}
