@@ -106,13 +106,15 @@ export class CandidateServiceService {
 	/**
 	* Disables a Candidate  
 	*/
-	disableCandidate(candidateId: string): Observable<any> {
+	//disableCandidate(candidateId: string): Observable<any> {
 	
-		const backendUrl:string = environment.backendUrl +'candidate/'+candidateId+'/?action=disable';
+	//	const backendUrl:string = environment.backendUrl +'candidate/'+candidateId+'/?action=disable';
 			
-		return this.httpClient.put<any>(backendUrl,  '{}', this.httpOptions);
+	//	return this.httpClient.put<any>(backendUrl,  '{}', this.httpOptions);
 	
-	}
+	//}
+
+
 	
 	/**
 	* Sends a request to add a new PendingCandidate
@@ -145,9 +147,7 @@ export class CandidateServiceService {
 	* Adds a new Candidate 
 	*/
 	public addCandidate(newCandidateRequest:NewCandidateRequest, profileImage:File| any): Observable<any>{
-	
-		console.log("NEW-CAN = " + JSON.stringify(newCandidateRequest));
-	
+
 	    const backendUrl:string = environment.backendUrl +'candidate';
 	    
 	    var fd = new FormData();
@@ -381,6 +381,18 @@ export class CandidateServiceService {
 	
 		return this.httpClient.put<any>(backendUrl, JSON.stringify(validatedSkills), this.httpOptions);
     }
+    
+    /**
+	* Updates availability status
+	* @param action: enable | disable 
+	*/
+    setCandidateAvailability(candidateId: string, action:string): Observable<any> {
+	
+		const backendUrl:string = environment.backendUrl +'candidate/'+candidateId+'/?action=' + action;
+			
+		return this.httpClient.put<any>(backendUrl,  '{}', this.httpOptions);
+	
+	}
     
 			
 }

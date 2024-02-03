@@ -251,7 +251,8 @@ public class CandidateServiceImpl implements CandidateService{
 		Candidate candidate = this.candidateDao.findCandidateById(Long.valueOf(candidateId)).orElseThrow(() -> new RuntimeException("Cannot perform update on unknown Candidate: " + candidateId));
 		
 		NEWSFEED_ITEM_TYPE newsFeedItemType;
-		
+		boolean createNewsFeedItem = (candidate.isAvailable() && updateAction == CANDIDATE_UPDATE_ACTIONS.disable) || (!candidate.isAvailable() && updateAction == CANDIDATE_UPDATE_ACTIONS.enable);
+	
 		switch (updateAction) {
 			case enable: {
 				candidate.makeAvailable();
@@ -271,32 +272,34 @@ public class CandidateServiceImpl implements CandidateService{
 		
 		this.candidateDao.saveCandidate(candidate);
 		
-		CandidateUpdateEvent event = CandidateUpdateEvent
-				.builder()
-					.itemType(newsFeedItemType)
-					.candidateId(Integer.valueOf(candidateId))
-					.firstName(candidate.getFirstname())
-					.surname(candidate.getSurname())
-					.roleSought(candidate.getRoleSought())
-				.build(); 
-		
-		externalEventPublisher.publishCandidateUpdateEvent(event);
+		if (createNewsFeedItem) {
+			CandidateUpdateEvent event = CandidateUpdateEvent
+					.builder()
+						.itemType(newsFeedItemType)
+						.candidateId(Integer.valueOf(candidateId))
+						.firstName(candidate.getFirstname())
+						.surname(candidate.getSurname())
+						.roleSought(candidate.getRoleSought())
+					.build(); 
+			
+			externalEventPublisher.publishCandidateUpdateEvent(event);
+		}
 		
 	}
 
 	/**
 	* Refer to the CandidateService Interface for Details
 	*/
-	@Override
-	public void flagCandidateAvailability(long candidateId, boolean available) {
+	//@Override
+	//public void flagCandidateAvailability(long candidateId, boolean available) {
 		
-		CandidateEntity candidate = this.candidateDao.findById(candidateId).orElseThrow(() -> new IllegalArgumentException("Unknown candidate Id " + candidateId));
+	//	CandidateEntity candidate = this.candidateDao.findById(candidateId).orElseThrow(() -> new IllegalArgumentException("Unknown candidate Id " + candidateId));
 		
-		candidate.setFlaggedAsUnavailable(available);
+	//	candidate.setFlaggedAsUnavailable(available);
 		
-		this.candidateDao.save(candidate);
+	//	this.candidateDao.save(candidate);
 		
-	}
+	//}
 
 	/**
 	* Refer to the CandidateService Interface for Details

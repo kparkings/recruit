@@ -482,52 +482,11 @@ export class AccountsComponent implements OnInit {
     	this.fetchCandidatesByFilters(this.getCandidateFlaggedAsUnavailableFilterParamString(), false);
 	}
 	
-	/**
-	* Disables the Candidate
-	*/
-	disableCandidate(candidateId:string):void{
-		this.candidateService.disableCandidate(candidateId).subscribe(data => {
+	public updateCandidateAvailability(candidateId:string, action:string):void{
+		this.candidateService.setCandidateAvailability(candidateId, action).subscribe(data => {
+			this.fetchCandidatesDueForAvailabilityCheck();	
 			this.fetchCandidates();	
 		});
-		
-	}
-
-	/**
-	* Disables flagged As Unavailable Candidate
-	*/
-	disableFlaggedAsUnavailableCandidate(candidateId:string):void{
-		this.candidateService.disableCandidate(candidateId).subscribe(data => {
-			this.fetchFlaggedAsUnavailableCandidates();	
-		});
-		
-	}	
-	
-	/**
-	* Disables flagged As Unavailable Candidate
-	*/
-	disableNoLongerAvailableFlaggedAsUnavailableCandidate(candidateId:string):void{
-		this.candidateService.disableCandidate(candidateId).subscribe(data => {
-			this.fetchCandidatesDueForAvailabilityCheck();	
-		});
-		
-	}
-	
-	/**
-	* Removed the flag from flagged As Unavailable Candidate
-	*/
-	removeFlaggedAsUnavailableFlag(candidateId:string):void{
-		this.candidateService.removeMarkCandidateAsUnavailableFlag(candidateId).subscribe(data => {
-			this.fetchFlaggedAsUnavailableCandidates();	
-		});
-		
-	}	
-	
-	/**
-	* Enables the Candidate
-	*/
-	enableCandidate(candidateId:string):void{
-		this.candidateService.enableCandidate(candidateId);
-		this.fetchCandidates();
 	}
 	
 	/**
@@ -583,16 +542,7 @@ export class AccountsComponent implements OnInit {
 		});
 	}
 	
-	/**
-	* Marks a Candidate as having their availability checked and still 
-	* being available 
-	*/
-	markCandidateAsAvailable(candidateId:string):void{
-		this.candidateService.markCandidateAsAvailable(candidateId).subscribe(data => {
-			this.fetchCandidatesDueForAvailabilityCheck();	
-		});
-		
-	}
+	
 	
 	/**
 	* Update Recruiters subscription

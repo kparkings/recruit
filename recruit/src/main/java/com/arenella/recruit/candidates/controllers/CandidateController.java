@@ -113,14 +113,14 @@ public class CandidateController {
 	* Endpoint marks a Candidate as no possibly being no longer available. 
 	* @return ResponseEntity
 	*/
-	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('RECRUITER')")
-	@PutMapping(path="candidate/{candidateId}/flaggedAsUnavailable/{flaggedAsUnavailable}/")
-	public ResponseEntity<Void> updateCandidateflaggedAsUnavailable(@RequestBody String fakeBody, @PathVariable("candidateId") long candidateId, @PathVariable("flaggedAsUnavailable") boolean flaggedAsUnavailable){
+	//@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('RECRUITER')")
+	//@PutMapping(path="candidate/{candidateId}/flaggedAsUnavailable/{flaggedAsUnavailable}/")
+	//public ResponseEntity<Void> updateCandidateflaggedAsUnavailable(@RequestBody String fakeBody, @PathVariable("candidateId") long candidateId, @PathVariable("flaggedAsUnavailable") boolean flaggedAsUnavailable){
 		
-			this.candidateService.flagCandidateAvailability(candidateId, flaggedAsUnavailable);
+	//		this.candidateService.flagCandidateAvailability(candidateId, flaggedAsUnavailable);
 		
-			return ResponseEntity.ok().build();
-	}
+	//		return ResponseEntity.ok().build();
+	//}
 	
 	/**
 	* Endpoint marks a Candidate as being available. In this case we 

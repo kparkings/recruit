@@ -51,7 +51,7 @@ public interface CandidateService {
 	* @param candidateId - Unique Id of the candidate
 	* @param available 		- Whether or not the candidate is available
 	*/
-	public void flagCandidateAvailability(long candidateId, boolean available);
+	//public void flagCandidateAvailability(long candidateId, boolean available);
 	
 	/**
 	* Retrieves a list of Candidates

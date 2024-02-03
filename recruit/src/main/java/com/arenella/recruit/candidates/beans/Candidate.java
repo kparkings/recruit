@@ -388,6 +388,7 @@ public class Candidate {
 	*/
 	public void makeAvailable() {
 		this.available = true;
+		this.lastAvailabilityCheck 	= LocalDate.now();
 	}
 	
 	/**

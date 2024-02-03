@@ -347,6 +347,42 @@ public class CandidateServiceImplTest {
 	}
 	
 	/**
+	* Tests if update was enable and Candidate was already enabled that no newsfeed item was created
+	* @throws Exception
+	*/
+	@Test
+	public void testUpdateCandidate_enable_alreadyEnabled() throws Exception {
+		
+		ArgumentCaptor<CandidateUpdateEvent> 	newsFeedCaptor 		= ArgumentCaptor.forClass(CandidateUpdateEvent.class);
+		Candidate 								candidate 			= Candidate.builder().available(true).build();
+		
+		Mockito.when(mockCandidateDao.findCandidateById(1L)).thenReturn(Optional.of(candidate));
+		
+		this.service.updateCandidate("1", CANDIDATE_UPDATE_ACTIONS.enable);
+		
+		Mockito.verify(this.mockExternalEventPublisher, Mockito.never()).publishCandidateUpdateEvent(newsFeedCaptor.capture());
+		
+	}
+	
+	/**
+	* Tests if update was disable and Candidate was already disabled that no newsfeed item was created
+	* @throws Exception
+	*/
+	@Test
+	public void testUpdateCandidate_enable_alreadyDisabled() throws Exception {
+		
+		ArgumentCaptor<CandidateUpdateEvent> 	newsFeedCaptor 		= ArgumentCaptor.forClass(CandidateUpdateEvent.class);
+		Candidate 								candidate 			= Candidate.builder().candidateId("1").available(false).build();
+		
+		Mockito.when(mockCandidateDao.findCandidateById(1L)).thenReturn(Optional.of(candidate));
+		
+		this.service.updateCandidate("1", CANDIDATE_UPDATE_ACTIONS.disable);
+		
+		Mockito.verify(this.mockExternalEventPublisher, Mockito.never()).publishCandidateUpdateEvent(newsFeedCaptor.capture());
+		
+	}
+	
+	/**
 	* Tests setting the Candidate as not active
 	* @throws Exception
 	*/
@@ -376,37 +412,37 @@ public class CandidateServiceImplTest {
 	* Tests Exception thrown if Candidate does not exist
 	* @throws Exception
 	*/
-	@Test
-	public void testFlagCandidateAvailability_unknownCandidate() throws Exception{
+	//@Test
+	//public void testFlagCandidateAvailability_unknownCandidate() throws Exception{
 		
-		Mockito.when(this.mockCandidateDao.findById(Mockito.anyLong())).thenReturn(Optional.empty());
+	//	Mockito.when(this.mockCandidateDao.findById(Mockito.anyLong())).thenReturn(Optional.empty());
 		
-		Assertions.assertThrows(IllegalArgumentException.class, () -> {
-			this.service.flagCandidateAvailability(4L, false);
-		});
+	//	Assertions.assertThrows(IllegalArgumentException.class, () -> {
+	//		this.service.flagCandidateAvailability(4L, false);
+	//	});
 		
-	}
+	//}
 	
 	/**
 	* Test setting of flaggedAsUnavailable attribute
 	* @throws Exception
 	*/
-	@Test
-	public void testFlagCandidateAvailability() throws Exception{
+	//@Test
+	//public void testFlagCandidateAvailability() throws Exception{
 		
-		ArgumentCaptor<CandidateEntity> captor = ArgumentCaptor.forClass(CandidateEntity.class);
-		CandidateEntity candidateEntity = CandidateEntity.builder().build();
+	//	ArgumentCaptor<CandidateEntity> captor = ArgumentCaptor.forClass(CandidateEntity.class);
+	//	CandidateEntity candidateEntity = CandidateEntity.builder().build();
 		
-		Mockito.when(this.mockCandidateDao.findById(Mockito.anyLong())).thenReturn(Optional.of(candidateEntity));
-		Mockito.when(this.mockCandidateDao.save(captor.capture())).thenReturn(null);
+	//	Mockito.when(this.mockCandidateDao.findById(Mockito.anyLong())).thenReturn(Optional.of(candidateEntity));
+	//	Mockito.when(this.mockCandidateDao.save(captor.capture())).thenReturn(null);
 		
-		this.service.flagCandidateAvailability(4L, true);
+	//	this.service.flagCandidateAvailability(4L, true);
 		
-		Mockito.verify(this.mockCandidateDao).save(candidateEntity);
+	//	Mockito.verify(this.mockCandidateDao).save(candidateEntity);
 		
-		assertTrue(captor.getValue().isFlaggedAsUnavailable());
+	//	assertTrue(captor.getValue().isFlaggedAsUnavailable());
 		
-	}
+	//}
 	
 	/**
 	* Tests Exception thrown if Candidate does not exist
