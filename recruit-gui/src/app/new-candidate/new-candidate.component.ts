@@ -290,7 +290,7 @@ export class NewCandidateComponent implements OnInit {
     
     	if (success) {
     	  this.feedbackBoxTitle = 'Success';
-    	  this.feedbackBoxText = 'Candidate Added';
+    	  this.feedbackBoxText = 'Candidate Saved';
     	  this.feedbackBoxClass = 'feedback-success';
     	} else {
     	  this.feedbackBoxTitle = 'Failure';
@@ -326,7 +326,7 @@ export class NewCandidateComponent implements OnInit {
   private profileImageFile!:File;
   
   public uploadCurriculumFile(event:any):void{
-  
+	  
   		if (event.target.files.length <= 0) {
   			return;
   		}
@@ -334,9 +334,10 @@ export class NewCandidateComponent implements OnInit {
   		this.curriculumFile = event.target.files[0];
   
   		if (this.candidateNavService.isEditMode()) {
+	
 			this.curriculumService.updateCurriculum(this.candidateId, this.curriculumFile).subscribe(data=>{
 			
-			this.offeredCandidateFormBean.get('email')?.setValue(data.emailAddress);
+			//this.offeredCandidateFormBean.get('email')?.setValue(data.emailAddress);
 			
 			this.candidateId = data.id;
 			this.coreSkills	= new Array<string>();
@@ -344,10 +345,16 @@ export class NewCandidateComponent implements OnInit {
 			data.skills.forEach((skill: string) => {
 				this.coreSkills.push(skill);
 			});
+			
+			this.feedbackBoxTitle = 'Success';
+    	  	this.feedbackBoxText = 'CV Updated';
+    	  	this.feedbackBoxClass = 'feedback-success';
+			
+			this.feedbackBox.nativeElement.showModal();
 			
     	});
 		} else {
-  			this.curriculumService.uploadCurriculum(this.curriculumFile).subscribe(data=>{
+			this.curriculumService.uploadCurriculum(this.curriculumFile).subscribe(data=>{
 			
 			this.offeredCandidateFormBean.get('email')?.setValue(data.emailAddress);
 			
@@ -357,6 +364,7 @@ export class NewCandidateComponent implements OnInit {
 			data.skills.forEach((skill: string) => {
 				this.coreSkills.push(skill);
 			});
+			
 			
     	});
   		}

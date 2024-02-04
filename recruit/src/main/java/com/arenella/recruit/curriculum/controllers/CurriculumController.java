@@ -21,7 +21,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.arenella.recruit.adapters.events.CurriculumUpdatedEvent;
 import com.arenella.recruit.authentication.spring.filters.ClaimsUsernamePasswordAuthenticationToken;
+import com.arenella.recruit.curriculum.adapters.ExternalEventPublisher;
 import com.arenella.recruit.curriculum.beans.Curriculum;
 import com.arenella.recruit.curriculum.beans.PendingCurriculum;
 import com.arenella.recruit.curriculum.enums.FileType;
@@ -36,10 +38,13 @@ import com.arenella.recruit.curriculum.services.CurriculumService;
 public class CurriculumController {
 
 	@Autowired
-	private CurriculumService curriculumService;
+	private CurriculumService 				curriculumService;
 	
 	@Autowired
-	private CurriculumFileSecurityParser fileSecurityParser;
+	private CurriculumFileSecurityParser 	fileSecurityParser;
+	
+	@Autowired
+	private ExternalEventPublisher 			eventPublisher;
 	
 	/**
 	* EndPoint for uploading a Curriculum
@@ -83,7 +88,10 @@ public class CurriculumController {
 		String 			postFix						= curriculumFile.getOriginalFilename().substring(curriculumFile.getOriginalFilename().lastIndexOf('.')+1).toLowerCase();
 		Curriculum 		curriculum					= Curriculum.builder().fileType(FileType.valueOf(postFix)).file(curriculumFile.getBytes()).id(String.valueOf(curriculumId)).build();
 		
+		this.eventPublisher.publishCurriculumUpdates(new CurriculumUpdatedEvent(""+curriculumId));
+		
 		return curriculumService.extractDetails(curriculumService.updateCurriculum(curriculumId, curriculum), FileType.valueOf(postFix), curriculumFile.getBytes());
+		
 		
 	}
 	

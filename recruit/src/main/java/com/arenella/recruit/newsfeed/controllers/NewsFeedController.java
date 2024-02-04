@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.arenella.recruit.newsfeed.beans.NewsFeedItem;
@@ -32,7 +33,7 @@ public class NewsFeedController {
 	*/
 	@PreAuthorize("hasRole('ROLE_RECRUITER') OR hasRole('ROLE_ADMIN')")
 	@GetMapping(value="/newsfeeditem")
-	public ResponseEntity<Set<NewsFeedItemAPIOutbound>> fetchNewsItems(Set<NewsFeedItem.NEWSFEED_ITEM_TYPE> types){
+	public ResponseEntity<Set<NewsFeedItemAPIOutbound>> fetchNewsItems(@RequestParam(required = false) Set<NewsFeedItem.NEWSFEED_ITEM_TYPE> types){
 		
 		NewsFeedItemFilters filters = 
 				NewsFeedItemFilters

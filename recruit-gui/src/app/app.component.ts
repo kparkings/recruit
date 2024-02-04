@@ -1,14 +1,11 @@
 import { Component, ViewChild }				from '@angular/core';
 import { Router}							from '@angular/router';
-//import { CookieService } 					from 'ngx-cookie';
 import { CookieService } from 'ngx-cookie-service';
 import { NgbModal, NgbModalOptions}			from '@ng-bootstrap/ng-bootstrap'
 import { DeviceDetectorService } 			from 'ngx-device-detector';
 import { RecruiterMarketplaceService }		from './recruiter-marketplace.service';
 import { EmailService }						from './email.service';
 import { PopupsService }					from './popups.service';
-//import { Observable, Observer }             from 'rxjs';
-//import {ElementRef} from '@angular/core';
 import { CandidateNavService } from './candidate-nav.service';
 import { CreditsService } from './credits.service';
 

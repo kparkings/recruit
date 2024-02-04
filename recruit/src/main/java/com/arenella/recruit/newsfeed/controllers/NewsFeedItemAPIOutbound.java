@@ -3,6 +3,7 @@ package com.arenella.recruit.newsfeed.controllers;
 import java.time.LocalDateTime;
 import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import com.arenella.recruit.newsfeed.beans.NewsFeedItem;
@@ -15,6 +16,7 @@ import com.arenella.recruit.newsfeed.beans.NewsFeedItem.NEWSFEED_ITEM_TYPE;
 */
 public class NewsFeedItemAPIOutbound {
 	
+	private UUID								id;
 	private LocalDateTime 						created;
 	private NEWSFEED_ITEM_TYPE 					itemType;
 	private Set<NewsFeedItemLineAPIOutbound> 	lines 					= new LinkedHashSet<>();
@@ -24,10 +26,19 @@ public class NewsFeedItemAPIOutbound {
 	* @param builder
 	*/
 	public NewsFeedItemAPIOutbound(NewsFeedItemAPIOutboundBuilder builder) {
+		this.id						= builder.id;
 		this.created 				= builder.created;
 		this.itemType 				= builder.itemType;
 		this.lines.clear();
 		this.lines.addAll(builder.lines);
+	}
+	
+	/**
+	* Returns the Unique id of the Item
+	* @return id
+	*/
+	public UUID getId() {
+		return this.id;
 	}
 	
 	/**
@@ -69,9 +80,15 @@ public class NewsFeedItemAPIOutbound {
 	*/
 	public static class NewsFeedItemAPIOutboundBuilder{
 		
+		private UUID								id;
 		private LocalDateTime 						created;
 		private NEWSFEED_ITEM_TYPE 					itemType;
 		private Set<NewsFeedItemLineAPIOutbound> 	lines 				= new LinkedHashSet<>();
+		
+		public NewsFeedItemAPIOutboundBuilder id(UUID id) {
+			this.id = id;
+			return this;
+		}
 		
 		/**
 		* Sets creation date/time
@@ -122,6 +139,7 @@ public class NewsFeedItemAPIOutbound {
 	public static NewsFeedItemAPIOutbound convertFromDomain(NewsFeedItem item) {
 		return NewsFeedItemAPIOutbound
 				.builder()
+					.id(item.getId())
 					.created(item.getCreated())
 					.itemType(item.getItemType())
 					.lines(item.getLines().stream().map(NewsFeedItemLineAPIOutbound::convertFromDomain).collect(Collectors.toCollection(LinkedHashSet::new)))

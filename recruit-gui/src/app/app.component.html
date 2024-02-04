@@ -61,7 +61,10 @@
         </li>
 		<li class="li-arenella-nav {{menuItemMobileCss}}" *ngIf="isAuthenticated() && !isAuthenticatedAsAdmin() && !isCandidate()">
            <a class="dropdown-item recruiter-account" routerLink="/recruiter-account">Account</a>
-        </li>		
+        </li>	
+        <li  class="li-arenella-nav {{menuItemMobileCss}}" *ngIf="isAuthenticated() && !isRecruiterNoSubscription() && !hasUnpaidSubscription()">
+			<a class="dropdown-item" routerLink="/newsfeed">News Feed</a>
+        </li>	
       </ul>
 
 </div>

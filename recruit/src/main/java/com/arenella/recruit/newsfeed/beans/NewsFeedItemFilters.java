@@ -94,6 +94,11 @@ public class NewsFeedItemFilters {
 		* @return Builder
 		*/
 		public NewsFeedItemFiltersBuilder types(Set<NewsFeedItem.NEWSFEED_ITEM_TYPE> types) {
+			
+			if (Optional.ofNullable(types).isEmpty()) {
+				return this;
+			}
+			
 			this.types.clear();
 			this.types.addAll(types);
 			return this;

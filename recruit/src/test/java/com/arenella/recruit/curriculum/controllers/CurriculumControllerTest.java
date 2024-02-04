@@ -24,6 +24,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.arenella.recruit.authentication.spring.filters.ClaimsUsernamePasswordAuthenticationToken;
+import com.arenella.recruit.curriculum.adapters.ExternalEventPublisher;
 import com.arenella.recruit.curriculum.beans.PendingCurriculum;
 import com.arenella.recruit.curriculum.enums.FileType;
 import com.arenella.recruit.curriculum.services.CurriculumFileSecurityParser;
@@ -50,6 +51,9 @@ public class CurriculumControllerTest {
 	
 	@Mock
 	private ClaimsUsernamePasswordAuthenticationToken	mockPrincipal;
+	
+	@Mock
+	private ExternalEventPublisher 						mockEventPublisher;
 	
 	
 	/**

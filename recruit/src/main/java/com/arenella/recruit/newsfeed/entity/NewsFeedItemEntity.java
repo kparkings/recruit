@@ -43,6 +43,7 @@ public class NewsFeedItemEntity {
 	@Enumerated(EnumType.STRING)
 	private NEWSFEED_ITEM_TYPE itemType;
 	
+	
 	@OneToMany(mappedBy = "newsItemId", cascade = CascadeType.ALL, orphanRemoval=true, fetch=FetchType.EAGER)
 	private Set<NewsFeedItemLineEntity> lines = new LinkedHashSet<>();
 	

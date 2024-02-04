@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, TemplateRef, ViewChild } 														from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild } 														from '@angular/core';
 import { UntypedFormGroup, UntypedFormControl, FormsModule, ReactiveFormsModule }	from '@angular/forms';
 import { CandidateServiceService }													from '../candidate-service.service';
 import { SuggestionsService }														from '../suggestions.service';
@@ -27,17 +27,25 @@ import { InfoItemBlock, InfoItemConfig, InfoItemRowKeyValue, InfoItemRowKeyValue
 */
 @Component({
   selector: 'app-suggestions',
+  standalone: false,
   templateUrl: './suggestions.component.html',
   styleUrls: ['./suggestions.component.css','./suggestions.component.two.css']
 })
 export class SuggestionsComponent implements OnInit {
 
+	@Input()  externalProvileViewCandidateId:string = "";
+	@Output() switchViewEvent 						= new EventEmitter<string>();
+	
  	@ViewChild('specUploadBox', { static: true }) 		specUploadDialogBox!: ElementRef<HTMLDialogElement>;
  	@ViewChild('feedbackBox', { static: true }) 		feedbackDialogBox!: ElementRef<HTMLDialogElement>;
  	@ViewChild('notesBox', { static: true }) 			notesDialogBox!: ElementRef<HTMLDialogElement>;
  	@ViewChild('publicityModal', {static:true})			publicityDialogBox!: ElementRef<HTMLDialogElement>;
  	@ViewChild('confirmDeleteModal', {static:true})		confirmDeleteDialogBox!: ElementRef<HTMLDialogElement>;
  	@ViewChild('contactBox', {static:true})				contactDialogBox!: ElementRef<HTMLDialogElement>;
+ 	
+ 	public backToNewsFeed():void{
+		this.switchViewEvent.emit();	 
+	}
  	
 	public candidateProfile:CandidateProfile = new CandidateProfile();
 	
@@ -98,6 +106,7 @@ export class SuggestionsComponent implements OnInit {
 			this.mobileSearchBox			 	= 'mobile-search-box';
 		} 
 		
+		
 		this.init();
 	}
 	
@@ -134,6 +143,7 @@ export class SuggestionsComponent implements OnInit {
 				this.showSuggestedCandidateOverview(candidate.content[0]);	
 			});
 		}		
+		
 	}
 	
 	/*
@@ -415,7 +425,20 @@ export class SuggestionsComponent implements OnInit {
 			this.savedCandidates = response;
 		})
 		
+		if (this.externalProvileViewCandidateId.length > 0) {
+			this.candidateService.getCandidateById(this.externalProvileViewCandidateId).subscribe(result => {
+				this.showSuggestedCandidateOverview(result.content[0]);
+			});
+		}
 		
+	}
+	
+	/**
+	* If we are only viewing the profile or have access to edit and 
+	* update features 
+ 	*/
+	public isViewOnly():boolean{
+		return this.externalProvileViewCandidateId.length > 0;
 	}
 	
 	/**

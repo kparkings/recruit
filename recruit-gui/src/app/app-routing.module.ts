@@ -19,7 +19,7 @@ import { RecruiterMarketplaceComponent } 				from './recruiter-marketplace/recru
 import { RecruiterAlertsComponent } 					from './recruiter-alerts/recruiter-alerts.component';
 import { RecruiterProfileComponent } 					from './recruiter-profile/recruiter-profile.component';
 import { RecruiterStatsComponent } 						from './recruiter-stats/recruiter-stats.component';
-
+import { NewsfeedComponent } 							from './newsfeed/newsfeed.component';
 
 const routes: Routes = [
 	{path: '', 						component: ListingComponent},
@@ -36,6 +36,7 @@ const routes: Routes = [
 	{path: 'recruiter-marketplace', component: RecruiterMarketplaceComponent, 	canActivate: [AuthGuardService]},
 	{path: 'recruiter-alerts', 		component: RecruiterAlertsComponent, 		canActivate: [AuthGuardService]},
 	{path: 'recruiter-profile', 	component: RecruiterProfileComponent, 		canActivate: [AuthGuardService]},
+	{path: 'newsfeed', 				component: NewsfeedComponent, 				canActivate: [AuthGuardService]},
 	{path: 'login-user', 			component: LoginUserComponent},
 	{path: 'login-user', 			component: LoginUserComponent},
 	{path: 'listing/:id',		 	component: ListingComponent},

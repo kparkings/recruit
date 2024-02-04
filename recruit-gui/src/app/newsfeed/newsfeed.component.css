@@ -1,0 +1,23 @@
+.news-feed{
+	margin: 0 auto;
+	margin-top:20px;
+	width:33%;	
+}
+
+.news-feed-item{
+	border:1px solid blue;
+	margin:20px;
+}
+
+.news-feed-item-header{
+	padding:10px;
+	text-align:center;
+	font-weight:bold;
+}
+
+.news-feed-item-body{
+	min-height:50px;
+	padding:10px;
+	text-align:center;
+	
+}

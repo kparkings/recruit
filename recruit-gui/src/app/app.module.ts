@@ -30,6 +30,7 @@ import { TupleStrValueByPos }				from './recruiter-profile/tuple-string-pos-pipe
 import { EnumToHumanReadableValue }			from './recruiter-profile/enum-to-hr-pipe';
 import { RecruiterStatsComponent } 			from './recruiter-stats/recruiter-stats.component';
 import { CandidateInfoBoxComponent } from './candidate-info-box/candidate-info-box.component';
+import { NewsfeedComponent } 							from './newsfeed/newsfeed.component';
 
 @NgModule({
   declarations: [
@@ -54,6 +55,8 @@ import { CandidateInfoBoxComponent } from './candidate-info-box/candidate-info-b
 	TupleStrValueByPos,
 	EnumToHumanReadableValue,
  	RecruiterStatsComponent,
+ 	SuggestionsComponent,
+ 	NewsfeedComponent
   ],
   imports: [
     BrowserModule,
