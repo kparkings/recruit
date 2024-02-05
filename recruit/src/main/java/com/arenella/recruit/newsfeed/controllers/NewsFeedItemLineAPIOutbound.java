@@ -15,6 +15,7 @@ public class NewsFeedItemLineAPIOutbound {
 	private String 						text;
 	private String 						url;
 	private byte[] 						image;
+	private int							order;
 	
 	/**
 	* Constructor based upon a Builder
@@ -25,6 +26,7 @@ public class NewsFeedItemLineAPIOutbound {
 		this.text 			= builder.text;
 		this.url 			= builder.url;
 		this.image 			= builder.image;
+		this.order			= builder.order;
 	}
 	
 	/**
@@ -60,6 +62,14 @@ public class NewsFeedItemLineAPIOutbound {
 	}
 	
 	/**
+	* Returns display order
+	* @return order
+	*/
+	public int	getOrder() {
+		return this.order;
+	}
+	
+	/**
 	* Returns a Builder for the Class
 	* @return Builder 
 	*/
@@ -77,6 +87,7 @@ public class NewsFeedItemLineAPIOutbound {
 		private String 						text;
 		private String 						url;
 		private byte[] 						image;
+		private int							order;
 		
 		/**
 		* Returns the type of the line
@@ -119,6 +130,16 @@ public class NewsFeedItemLineAPIOutbound {
 		}
 		
 		/**
+		* Sets the display order
+		* @param order - display order
+		* @return Builder
+		*/
+		public NewsFeedItemLineAPIOutboundBuilder order(int order) {
+			this.order = order;
+			return this;
+		}
+		
+		/**
 		* Returns an Instance initialized with the values in the 
 		* Builder
 		* @return Initialized instance
@@ -137,6 +158,7 @@ public class NewsFeedItemLineAPIOutbound {
 	public static NewsFeedItemLineAPIOutbound convertFromDomain(NewsFeedItemLine line) {
 		return NewsFeedItemLineAPIOutbound
 				.builder()
+					.order(line.getOrder())
 					.type(line.getType())
 					.image(line.getImage().isEmpty()	? null : line.getImage().get())
 					.text(line.getText().isEmpty() 		? null : line.getText().get())

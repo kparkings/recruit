@@ -41,6 +41,9 @@ public class NewsFeedItemLineEntity {
 	@Column(name="image_bytes")
 	private byte[] 						image;
 	
+	@Column(name="display_order")
+	private int order;
+	
 	/**
 	* Constructor 
 	*/
@@ -59,6 +62,7 @@ public class NewsFeedItemLineEntity {
 		this.text 			= builder.text;
 		this.url 			= builder.url;
 		this.image 			= builder.image;
+		this.order			= builder.order;
 	}
 	
 	/**
@@ -111,6 +115,14 @@ public class NewsFeedItemLineEntity {
 	}
 	
 	/**
+	* Returns the display order of the line
+	* @return order
+	*/
+	public int	getOrder() {
+		return this.order;
+	}
+	
+	/**
 	* Returns a Builder for the Class
 	* @return Builder 
 	*/
@@ -130,6 +142,7 @@ public class NewsFeedItemLineEntity {
 		private String 						text;
 		private String 						url;
 		private byte[] 						image;
+		private int 						order;
 		
 		/**
 		* Sets the unique Id of the line
@@ -192,6 +205,16 @@ public class NewsFeedItemLineEntity {
 		}
 		
 		/**
+		* Sets the order to display the line in
+		* @param order - order to dislay
+		* @return Builder
+		*/
+		public NewsFeedItemLineEntityBuilder order(int order) {
+			this.order = order;
+			return this;
+		}
+		
+		/**
 		* Returns an Instance initialized with the values in the 
 		* Builder
 		* @return Initialized instance
@@ -216,6 +239,7 @@ public class NewsFeedItemLineEntity {
 					.text(entity.getText().isPresent() 		? entity.getText().get() 	: null)
 					.url(entity.getUrl().isPresent() 		? entity.getUrl().get() 	: null)
 					.image(entity.getImage().isPresent()	? entity.getImage().get()	: null)
+					.order(entity.getOrder())
 				.build();
 	}
 
@@ -233,6 +257,7 @@ public class NewsFeedItemLineEntity {
 					.text(item.getText().isPresent() 	? item.getText().get() 	: null)
 					.url(item.getUrl().isPresent() 		? item.getUrl().get() 	: null)
 					.image(item.getImage().isPresent()	? item.getImage().get()	: null)
+					.order(item.getOrder())
 				.build();
 	}
 }

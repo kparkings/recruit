@@ -433,6 +433,10 @@ export class SuggestionsComponent implements OnInit {
 		
 	}
 	
+	ngAfterViewChecked(){
+		this.doScrollTop();
+	}
+	
 	/**
 	* If we are only viewing the profile or have access to edit and 
 	* update features 
@@ -1305,5 +1309,15 @@ export class SuggestionsComponent implements OnInit {
 			case 'FIVE':	return "5";
 			default: 		return "";
 		}
+	}
+	
+	/**
+	* Scrolls to top of page
+	*/
+	public doScrollTop():void{
+		(<HTMLInputElement>document.getElementById('page-top')).scrollIntoView({
+			block: "start",
+			inline: "nearest"
+			});
 	}
 }

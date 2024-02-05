@@ -15,6 +15,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
 import com.arenella.recruit.newsfeed.beans.NewsFeedItem;
@@ -43,7 +44,7 @@ public class NewsFeedItemEntity {
 	@Enumerated(EnumType.STRING)
 	private NEWSFEED_ITEM_TYPE itemType;
 	
-	
+	@OrderBy("order")
 	@OneToMany(mappedBy = "newsItemId", cascade = CascadeType.ALL, orphanRemoval=true, fetch=FetchType.EAGER)
 	private Set<NewsFeedItemLineEntity> lines = new LinkedHashSet<>();
 	

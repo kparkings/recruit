@@ -11,7 +11,6 @@
 				<div>
 					<div class="news-feed-item" *ngFor="let item of newsFeedItems" id="{{item.id}}">
 						<div class="news-feed-item-header">{{getHumanReadableType(item)}}</div>
-						
 						<!-- Candidate Available -->
 						<div class="news-feed-item-body">
 							<div *ngFor="let line of item.lines">
@@ -19,15 +18,14 @@
 									{{line.text}}
 								</div>
 								<div *ngIf="line.type == 'INTERNAL_URL'">
-									<button class="btn btn-secondary arenella-btn" (click)="viewCandidateProfile(line.url, item.id)">View Profile</button>
+									<button *ngIf="item.itemType != 'CANDIDATE_BECAME_UNAVAILABLE'" class="btn btn-secondary arenella-btn" (click)="viewCandidateProfile(line.url, item.id)">View Profile</button>
 								</div>
 							</div>
 						</div>
-						
 					</div>
-					<div id="scrollHere">AAA</div>
 				</div>
-			</div>
+			</div>	
+			<div class="newsfeed-footer">&nbsp;</div>
 		</div>	
 	</div>
 </div>

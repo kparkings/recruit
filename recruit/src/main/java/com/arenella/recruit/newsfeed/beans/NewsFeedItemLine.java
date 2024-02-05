@@ -17,6 +17,7 @@ public class NewsFeedItemLine {
 	private String 						text;
 	private String 						url;
 	private byte[] 						image;
+	private int							order;
 	
 	/**
 	* Constructor based upon a Builder
@@ -29,6 +30,7 @@ public class NewsFeedItemLine {
 		this.text 			= builder.text;
 		this.url 			= builder.url;
 		this.image 			= builder.image;
+		this.order			= builder.order;
 	}
 	
 	/**
@@ -81,6 +83,14 @@ public class NewsFeedItemLine {
 	}
 	
 	/**
+	* Returns the order to display the line in
+	* @return display order
+	*/
+	public int	getOrder() {
+		return this.order;
+	}
+	
+	/**
 	* Returns a Builder for the Class
 	* @return Builder 
 	*/
@@ -100,6 +110,7 @@ public class NewsFeedItemLine {
 		private String 						text;
 		private String 						url;
 		private byte[] 						image;
+		private int							order;
 		
 		/**
 		* Sets the unique Id of the line
@@ -158,6 +169,16 @@ public class NewsFeedItemLine {
 		*/
 		public NewsFeedItemLineBuilder image(byte[] image) {
 			this.image = image;
+			return this;
+		}
+		
+		/**
+		* Sets the order of the line
+		* @param order - display order
+		* @return Builder
+		*/
+		public NewsFeedItemLineBuilder order(int order) {
+			this.order = order;
 			return this;
 		}
 		

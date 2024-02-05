@@ -2274,3 +2274,16 @@ databaseChangeLog:
                   type: bytea
                   constraints:
                     nullable: true
+  - changeSet:
+      id: addColumn-news_feed_item_line_order
+      author: kevin
+      changes:
+        - addColumn:
+            tableName: news_feed_item_lines
+            schemaName: newsfeed
+            columns:
+            - column:
+                name: display_order
+                type: number
+                constraints:
+                  default: 0

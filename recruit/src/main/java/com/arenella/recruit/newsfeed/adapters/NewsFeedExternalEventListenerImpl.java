@@ -40,10 +40,10 @@ public class NewsFeedExternalEventListenerImpl implements NewsFeedExternalEventL
 		
 		Set<NewsFeedItemLine> lines = new LinkedHashSet<>();
 		
-		lines.add(NewsFeedItemLine.builder().id(UUID.randomUUID()).newsItemId(newsItemId).type(NEWS_FEED_ITEM_LINE_TYPE.TEXT).text("C"+event.getCandidateId()).build());
-		lines.add(NewsFeedItemLine.builder().id(UUID.randomUUID()).newsItemId(newsItemId).type(NEWS_FEED_ITEM_LINE_TYPE.TEXT).text(event.getFirstName() + " " + event.getSurname()).build());
-		lines.add(NewsFeedItemLine.builder().id(UUID.randomUUID()).newsItemId(newsItemId).type(NEWS_FEED_ITEM_LINE_TYPE.TEXT).text(event.getRoleSought()).build());
-		lines.add(NewsFeedItemLine.builder().id(UUID.randomUUID()).newsItemId(newsItemId).type(NEWS_FEED_ITEM_LINE_TYPE.INTERNAL_URL).url("/"+event.getCandidateId()).build());
+		lines.add(NewsFeedItemLine.builder().id(UUID.randomUUID()).order(0).newsItemId(newsItemId).type(NEWS_FEED_ITEM_LINE_TYPE.TEXT).text("C"+event.getCandidateId()).build());
+		lines.add(NewsFeedItemLine.builder().id(UUID.randomUUID()).order(1).newsItemId(newsItemId).type(NEWS_FEED_ITEM_LINE_TYPE.TEXT).text(event.getFirstName() + " " + event.getSurname()).build());
+		lines.add(NewsFeedItemLine.builder().id(UUID.randomUUID()).order(2).newsItemId(newsItemId).type(NEWS_FEED_ITEM_LINE_TYPE.TEXT).text(event.getRoleSought()).build());
+		lines.add(NewsFeedItemLine.builder().id(UUID.randomUUID()).order(3).newsItemId(newsItemId).type(NEWS_FEED_ITEM_LINE_TYPE.INTERNAL_URL).url("/"+event.getCandidateId()).build());
 		
 		NewsFeedItem item = NewsFeedItem
 				.builder()

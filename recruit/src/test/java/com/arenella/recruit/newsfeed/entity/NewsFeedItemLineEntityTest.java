@@ -22,6 +22,7 @@ public class NewsFeedItemLineEntityTest {
 	private static final String 					TEXT			= "text";
 	private static final String 					URL				= "/candidate/4045";
 	private static final byte[] 					IMAGE			= new byte[] {};
+	private static final int 						ORDER			= 2;
 	
 	/**
 	* Tests construction via Builder
@@ -38,6 +39,7 @@ public class NewsFeedItemLineEntityTest {
 					.text(TEXT)
 					.url(URL)
 					.image(IMAGE)
+					.order(ORDER)
 				.build();
 		
 		assertEquals(ID, 			line.getId());
@@ -46,6 +48,7 @@ public class NewsFeedItemLineEntityTest {
 		assertEquals(TEXT, 			line.getText().get());
 		assertEquals(URL, 			line.getUrl().get());
 		assertEquals(IMAGE, 		line.getImage().get());
+		assertEquals(ORDER, 		line.getOrder());
 	}
 	
 	/**
@@ -84,6 +87,7 @@ public class NewsFeedItemLineEntityTest {
 					.text(TEXT)
 					.url(URL)
 					.image(IMAGE)
+					.order(ORDER)
 				.build();
 		
 		NewsFeedItemLine line = NewsFeedItemLineEntity.convertFromEntity(entity);
@@ -94,6 +98,7 @@ public class NewsFeedItemLineEntityTest {
 		assertEquals(TEXT, 			line.getText().get());
 		assertEquals(URL, 			line.getUrl().get());
 		assertEquals(IMAGE, 		line.getImage().get());
+		assertEquals(ORDER, 		line.getOrder());
 	}
 	
 	/**
@@ -136,6 +141,7 @@ public class NewsFeedItemLineEntityTest {
 					.text(TEXT)
 					.url(URL)
 					.image(IMAGE)
+					.order(ORDER)
 				.build();
 		
 		NewsFeedItemLineEntity entity = NewsFeedItemLineEntity.convertToEntity(line);
@@ -146,6 +152,7 @@ public class NewsFeedItemLineEntityTest {
 		assertEquals(TEXT, 			entity.getText().get());
 		assertEquals(URL, 			entity.getUrl().get());
 		assertEquals(IMAGE, 		entity.getImage().get());
+		assertEquals(ORDER, 		entity.getOrder());
 	}
 	
 	/**

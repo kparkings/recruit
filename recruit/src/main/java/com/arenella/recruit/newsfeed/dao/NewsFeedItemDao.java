@@ -44,7 +44,6 @@ public interface NewsFeedItemDao extends CrudRepository<NewsFeedItemEntity, UUID
 	* @return NewsFeedItems
 	*/
 	default Set<NewsFeedItem> fetchNewsFeedItem(NewsFeedItemFilters filters){
-		
 		return this.findAll(new NewsFeedItemEntitySpecification(filters)).stream()
 				.map(NewsFeedItemEntity::convertFromEntity)
 				.limit(filters.getMaxResults().isEmpty() ? 100 : filters.getMaxResults().get())

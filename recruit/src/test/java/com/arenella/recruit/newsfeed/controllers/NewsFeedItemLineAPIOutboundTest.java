@@ -18,6 +18,7 @@ public class NewsFeedItemLineAPIOutboundTest {
 	private static final String 					TEXT	= "text";
 	private static final String 					URL		= "/1234";
 	private static final byte[] 					IMAGE	= new byte[] {};
+	private static final int 						ORDER	= 4;
 	
 	/**
 	* Tests construction via Builder
@@ -26,8 +27,9 @@ public class NewsFeedItemLineAPIOutboundTest {
 	@Test
 	public void testConstruction() throws Exception{
 		
-		NewsFeedItemLineAPIOutbound line = NewsFeedItemLineAPIOutbound.builder().type(TYPE).text(TEXT).image(IMAGE).url(URL).build();
+		NewsFeedItemLineAPIOutbound line = NewsFeedItemLineAPIOutbound.builder().order(ORDER).type(TYPE).text(TEXT).image(IMAGE).url(URL).build();
 		
+		assertEquals(ORDER, 	line.getOrder());
 		assertEquals(TYPE, 	line.getType());
 		assertEquals(TEXT, 	line.getText().get());
 		assertEquals(URL, 	line.getUrl().get());
@@ -56,10 +58,11 @@ public class NewsFeedItemLineAPIOutboundTest {
 	@Test
 	public void testConvertFromDomain() throws Exception{
 	
-		NewsFeedItemLine line = NewsFeedItemLine.builder().type(TYPE).text(TEXT).image(IMAGE).url(URL).build();
+		NewsFeedItemLine line = NewsFeedItemLine.builder().order(ORDER).type(TYPE).text(TEXT).image(IMAGE).url(URL).build();
 		
 		NewsFeedItemLineAPIOutbound outbound = NewsFeedItemLineAPIOutbound.convertFromDomain(line);
 		
+		assertEquals(ORDER, outbound.getOrder());
 		assertEquals(TYPE, 	outbound.getType());
 		assertEquals(TEXT, 	outbound.getText().get());
 		assertEquals(URL, 	outbound.getUrl().get());
