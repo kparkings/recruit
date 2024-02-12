@@ -15,7 +15,9 @@
 						<div class="news-feed-item-body">
 							<div *ngFor="let line of item.lines">
 								<div *ngIf="line.type == 'TEXT'">
-									{{line.text}}
+									
+									<span *ngIf="isUnread(item)" class="news-item-body-unread">{{line.text}}</span>
+									<span *ngIf="!isUnread(item)">{{line.text}}</span>
 								</div>
 								<div *ngIf="line.type == 'INTERNAL_URL'">
 									<button *ngIf="item.itemType != 'CANDIDATE_BECAME_UNAVAILABLE'" class="btn btn-secondary arenella-btn" (click)="viewCandidateProfile(line.url, item.id)">View Profile</button>

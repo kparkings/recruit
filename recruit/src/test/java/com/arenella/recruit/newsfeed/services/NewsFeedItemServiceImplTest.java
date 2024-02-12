@@ -3,6 +3,9 @@ package com.arenella.recruit.newsfeed.services;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.security.Principal;
+import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
@@ -15,7 +18,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.arenella.recruit.newsfeed.beans.NewsFeedItem;
 import com.arenella.recruit.newsfeed.beans.NewsFeedItemFilters;
+import com.arenella.recruit.newsfeed.beans.NewsFeedUserView;
 import com.arenella.recruit.newsfeed.dao.NewsFeedItemDao;
+import com.arenella.recruit.newsfeed.dao.NewsFeedUserViewsDao;
 
 /**
 * Unit tests for the NewsFeedItemServiceImpl class
@@ -25,7 +30,13 @@ import com.arenella.recruit.newsfeed.dao.NewsFeedItemDao;
 public class NewsFeedItemServiceImplTest {
 
 	@Mock
-	private NewsFeedItemDao mockDao;
+	private NewsFeedItemDao 		mockDao;
+	
+	@Mock
+	private Principal				mockPrincipal;
+	
+	@Mock
+	private NewsFeedUserViewsDao 	mockNewsFeedItemViewDao;
 	
 	@InjectMocks
 	private NewsFeedItemServiceImpl service = new NewsFeedItemServiceImpl();
@@ -111,5 +122,79 @@ public class NewsFeedItemServiceImplTest {
 		Mockito.verify(this.mockDao).deleteAllNewsFeedItemsForReferencedUserId(userId);
 		
 	}
+	
+	/**
+	* Tests persisting NewsFeedUserView
+	* @throws Exception
+	*/
+	@Test
+	public void testSaveNewsFeedUserView() throws Exception{
+		
+		Mockito.when(this.mockPrincipal.getName()).thenReturn("1234");
+		
+		this.service.saveNewsFeedUserView(this.mockPrincipal);
+	
+		Mockito.verify(this.mockNewsFeedItemViewDao).saveNewsFeedUserView(Mockito.any(NewsFeedUserView.class));
+		
+	}
+	
+	/**
+	* Tests retrieval of View information for User
+	* @throws Exception
+	*/
+	@Test
+	public void testGetNewsFeedUserView() throws Exception{
+		
+		final LocalDateTime 	lastView 	= LocalDateTime.of(2024, 2, 8, 10,11);
+		final String 			userId 		= "1234";
+		
+		Mockito.when(this.mockNewsFeedItemViewDao.existsById(userId)).thenReturn(true);
+		
+		NewsFeedUserView newsFeedUserView = new NewsFeedUserView(userId, lastView);
+		
+		Mockito.when(this.mockNewsFeedItemViewDao.getNewsFeedUserView(userId)).thenReturn(Optional.of(newsFeedUserView));
+		
+		NewsFeedUserView result = this.service.getNewsFeedUserView(userId);
+	
+		assertEquals(userId, 	result.getUserId());
+		assertEquals(lastView, 	result.getLastViewed());
+		
+		Mockito.verify(this.mockNewsFeedItemViewDao, Mockito.never()).saveNewsFeedUserView(Mockito.any());
+		
+	}
+	
+	/**
+	* Tests If record for user does not already exist that one is created and returned
+	* @throws Exception
+	*/
+	@Test
+	public void testGetNewsFeedUserView_unknownUser() throws Exception{
+		
+		final String 			userId 		= "1234";
+		
+		Mockito.when(this.mockNewsFeedItemViewDao.existsById(userId)).thenReturn(false);
+		
+		Mockito.when(this.mockNewsFeedItemViewDao.getNewsFeedUserView(userId)).thenReturn(Optional.of(new NewsFeedUserView(userId, LocalDateTime.of(2024, 2, 11, 10, 8))));
+		
+		this.service.getNewsFeedUserView(userId);
+
+		Mockito.verify(this.mockNewsFeedItemViewDao).saveNewsFeedUserView(Mockito.any());
+		
+	}
+	
+	/**
+	* Tests deletion of NewsFeed view record of the User
+	* @throws Exception
+	*/
+	@Test
+	public void testDeleteNewsFeedUserView() throws Exception{
+		
+		final String 			userId 		= "1234";
+		
+		this.service.deleteNewsFeedUserView(userId);
+		
+		Mockito.verify(this.mockNewsFeedItemViewDao).deleteNewsFeedUserView(userId);
+		
+	} 
 	
 }

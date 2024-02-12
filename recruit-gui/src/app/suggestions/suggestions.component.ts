@@ -20,7 +20,7 @@ import { CandidateNavService } 														from '../candidate-nav.service';
 import { CreditsService } 															from '../credits.service';
 import { ExtractedFilters } 														from './extracted-filters';
 import { InfoItemBlock, InfoItemConfig, InfoItemRowKeyValue, InfoItemRowKeyValueFlag, InfoItemRowKeyValueMaterialIcon, InfoItemRowSingleValue } from '../candidate-info-box/info-item';
-
+import {AppComponent} 																from '../app.component';
 /**
 * Component to suggest suitable Candidates based upon a 
 * Recruiters search
@@ -85,7 +85,7 @@ export class SuggestionsComponent implements OnInit {
 	*/
 	constructor(public candidateService:		CandidateServiceService, 
 				public suggestionsService:		SuggestionsService, 
-				private clipboard: 				Clipboard, 
+				//private clipboard: 				Clipboard, 
 				private modalService: 			NgbModal, 
 				private sanitizer: 				DomSanitizer,
 				private curriculumService: 		CurriculumService,
@@ -93,7 +93,8 @@ export class SuggestionsComponent implements OnInit {
 				private router:					Router,
 				private emailService:			EmailService,
 				private candidateNavService: 	CandidateNavService,
-				private creditsService:			CreditsService) { 
+				private creditsService:			CreditsService,
+				private appComponent:			AppComponent) { 
 					
 		this.trustedResourceUrl = this.sanitizer.bypassSecurityTrustResourceUrl('');
 		
@@ -144,6 +145,9 @@ export class SuggestionsComponent implements OnInit {
 			});
 		}		
 		
+		console.log("-------YY");
+		this.appComponent.refreschUnreadAlerts();
+		
 	}
 	
 	/*
@@ -171,6 +175,7 @@ export class SuggestionsComponent implements OnInit {
 				sessionStorage.setItem('beforeAuthPage', 'view-candidates');
 				this.candidateNavService.reset();
 				this.router.navigate(['login-user']);
+				this.appComponent.refreschUnreadAlerts();
 			}else {
 				this.doReset();
 				this.currentView = 'suggestion-results';
@@ -434,7 +439,12 @@ export class SuggestionsComponent implements OnInit {
 	}
 	
 	ngAfterViewChecked(){
-		this.doScrollTop();
+		
+		if (sessionStorage.getItem("news-item-div")){
+			this.doScrollTop();	
+			//sessionStorage.setItem("clear-news-item-div", "true");
+		}
+		
 	}
 	
 	/**
@@ -739,6 +749,8 @@ export class SuggestionsComponent implements OnInit {
 		this.suggestedCandidate 	= candidateSuggestion;
 		
 		//this.fetchCandidateProfile(candidateSuggestion.candidateId);
+		
+		this.doScrollTop();
 		
 		
 	}
@@ -1319,5 +1331,9 @@ export class SuggestionsComponent implements OnInit {
 			block: "start",
 			inline: "nearest"
 			});
+			
+			
+		
+			
 	}
 }

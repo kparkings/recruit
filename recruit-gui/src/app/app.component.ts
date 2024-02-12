@@ -6,8 +6,9 @@ import { DeviceDetectorService } 			from 'ngx-device-detector';
 import { RecruiterMarketplaceService }		from './recruiter-marketplace.service';
 import { EmailService }						from './email.service';
 import { PopupsService }					from './popups.service';
-import { CandidateNavService } from './candidate-nav.service';
-import { CreditsService } from './credits.service';
+import { CandidateNavService } 				from './candidate-nav.service';
+import { CreditsService } 					from './credits.service';
+import { NewsfeedService } 					from './newsfeed.service';
 
 @Component({
   selector: 'app-root',
@@ -37,6 +38,13 @@ export class AppComponent {
 	public creditsMarketplace:number 	= 0;
 	public creditsJobboard:number 		= 0;
 	
+	public lastNewsfeedView:Date		= new Date();
+	public unseenNewsfeedItems:boolean  = true;
+	
+	//public intervalId = setInterval(() => {
+    //	this.refreschUnreadAlerts(); 
+    //}, 5000)
+	
 	/**
 	* Constructor
 	*/
@@ -48,7 +56,8 @@ export class AppComponent {
 				private emailService:			EmailService,
 				public  popupsService:			PopupsService,
 				private candidateNavService: 	CandidateNavService,
-				public  creditsService:			CreditsService){
+				public  creditsService:			CreditsService,
+				private newsfeedService:		NewsfeedService){
 		
 		this.isMobile = deviceDetector.isMobile();
 		
@@ -64,13 +73,7 @@ export class AppComponent {
 			this.termsAndConditionsAccepted = true;
 		}
 		
-		this.mpService.fetchUnseenMPPosts().subscribe(val => {
-			this.unseenMpPosts = val;
-		});
 		
-		this.emailService.fetchUnseenEmailsCount().subscribe(val => {
-			this.unseenEmails = val;
-		});
 		
 		this.creditsService.hasTokens().subscribe(tokens => {
 			if (tokens == false) {
@@ -86,6 +89,29 @@ export class AppComponent {
 			if (this.validationExceptions.length > 0) {
 				this.popupsService.openModal(this.validationExBox);
 			}
+		});
+	}
+	
+	public refreschUnreadAlerts():void{
+		if (sessionStorage.getItem("userId")) {
+			this.newsfeedService.getLastViewRecord().subscribe(record => {
+				this.lastNewsfeedView = record.lastViewed;	
+				this.newsfeedService.getNewsFeedItems().subscribe(items => {
+					if(items[0]) {
+						this.unseenNewsfeedItems = (items[0].created > this.lastNewsfeedView);
+					}
+				});
+			});
+		}
+		
+		console.log("----00");
+		this.mpService.updateUnseenMpPosts();
+		this.mpService.fetchUnseenMPPosts().subscribe(val => {
+			this.unseenMpPosts = val;
+		});
+		this.emailService.updateUnseenEmails();
+		this.emailService.fetchUnseenEmailsCount().subscribe(val => {
+			this.unseenEmails = val;
 		});
 	}
 	
@@ -201,5 +227,5 @@ export class AppComponent {
 	public hasUnpaidSubscription():boolean{
 		return sessionStorage.getItem('hasUnpaidSubscription') === 'true';
 	}
-
+	
 }

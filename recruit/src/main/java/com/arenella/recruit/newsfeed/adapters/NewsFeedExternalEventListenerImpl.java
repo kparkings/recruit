@@ -33,6 +33,7 @@ public class NewsFeedExternalEventListenerImpl implements NewsFeedExternalEventL
 		
 		if (event.getItemType() == NewsFeedItem.NEWSFEED_ITEM_TYPE.CANDIDATE_DELETED) {
 			this.service.deleteAllNewsFeedItemsForReferencedUserId(""+event.getCandidateId());
+			this.service.deleteNewsFeedUserView(""+event.getCandidateId());
 			return ;
 		}
 		

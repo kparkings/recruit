@@ -3,8 +3,8 @@ import { ReactiveFormsModule, UntypedFormGroup, UntypedFormControl }			from '@an
 import { AuthService }                                          from '../auth.service';
 import { RecruiterService }                                     from '../recruiter.service';
 import { Router}                                                from '@angular/router';
-import {TemplateRef, ViewChild,ElementRef, AfterViewInit  }		from '@angular/core';
-import {NgbModal, NgbModalOptions, ModalDismissReasons}			from '@ng-bootstrap/ng-bootstrap';
+import { TemplateRef, ViewChild,ElementRef, AfterViewInit  }		from '@angular/core';
+import { NgbModal, NgbModalOptions, ModalDismissReasons}			from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-login-user',
@@ -94,7 +94,6 @@ export class LoginUserComponent implements OnInit {
 			sessionStorage.setItem('loggedIn',      					'true');
 	      
 			sessionStorage.setItem("userId", 							this.formBean.get('username')?.value);
-
 
 			const beforeAuthPage: any = sessionStorage.getItem('beforeAuthPage');
 

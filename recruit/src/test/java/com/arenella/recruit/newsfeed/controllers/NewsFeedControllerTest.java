@@ -3,6 +3,8 @@ package com.arenella.recruit.newsfeed.controllers;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.security.Principal;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 import org.junit.jupiter.api.Test;
@@ -17,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 
 import com.arenella.recruit.newsfeed.beans.NewsFeedItem;
 import com.arenella.recruit.newsfeed.beans.NewsFeedItemFilters;
+import com.arenella.recruit.newsfeed.beans.NewsFeedUserView;
 import com.arenella.recruit.newsfeed.services.NewsFeedItemService;
 
 /**
@@ -28,6 +31,9 @@ public class NewsFeedControllerTest {
 
 	@Mock
 	private NewsFeedItemService 	mockService;
+	
+	@Mock
+	private Principal				mockPrincipal;
 	
 	@InjectMocks
 	private NewsFeedController 		controller 		= new NewsFeedController();
@@ -56,6 +62,40 @@ public class NewsFeedControllerTest {
 		
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		assertEquals(2, response.getBody().size());
+		
+	}
+	
+	/**
+	* Tests adding updating of Users last view of the NewsFeed
+	* @throws Exception
+	*/
+	@Test
+	public void testUpdateNewsFeedUserViewLastViewed() throws Exception{
+		
+		ResponseEntity<Void> response = this.controller.updateNewsFeedUserViewLastViewed(this.mockPrincipal);
+		
+		assertEquals(HttpStatus.OK, response.getStatusCode());
+		
+		Mockito.verify(this.mockService).saveNewsFeedUserView(mockPrincipal);
+		
+	}
+	
+	/**
+	* Tests retrieval of NewsFeedView information for user
+	* @throws Exception
+	*/
+	@Test
+	public void fetchNewsFeedUserView() throws Exception {
+		
+		final String userId = "4455";
+		
+		Mockito.when(this.mockPrincipal.getName()).thenReturn(userId);
+		Mockito.when(this.mockService.getNewsFeedUserView(userId)).thenReturn(new NewsFeedUserView(userId, LocalDateTime.of(2024, 2, 10, 11,11,11)));
+		
+		ResponseEntity<NewsFeedUserViewAPIOutbound> result = this.controller.fetchNewsFeedUserView(this.mockPrincipal);
+		
+		assertEquals(userId, result.getBody().getUserId());
+		assertEquals(HttpStatus.OK, result.getStatusCode());
 		
 	}
 	

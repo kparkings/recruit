@@ -27,43 +27,44 @@
         </li>
 
 		<!-- Post Authentication -->
-		<li  class="li-arenella-nav {{menuItemMobileCss}}" *ngIf="isAuthenticated() && !isRecruiterNoSubscription() && !hasUnpaidSubscription()">
+		<li  class="li-arenella-nav {{menuItemMobileCss}}" *ngIf="isAuthenticated() && !isRecruiterNoSubscription() && !hasUnpaidSubscription()" (click)="refreschUnreadAlerts()">
            <a  class="dropdown-item" routerLink="/listing">Job Board</a>
         </li>
         <li  class="li-arenella-nav {{menuItemMobileCss}}"  *ngIf="isAuthenticated() && !isRecruiterNoSubscription() && !hasUnpaidSubscription() && !isCandidate()">	
            <a  class="dropdown-item" (click)="navToSuggestions()">Suggestions</a>
         </li>
-		<li class="li-arenella-nav {{menuItemMobileCss}}" *ngIf="isAuthenticated() && !isRecruiterNoSubscription() && !hasUnpaidSubscription() && !isCandidate()">
+		<li class="li-arenella-nav {{menuItemMobileCss}}" *ngIf="isAuthenticated() && !isRecruiterNoSubscription() && !hasUnpaidSubscription() && !isCandidate()" (click)="refreschUnreadAlerts()">
         	<a *ngIf="unseenMpPosts > 0" 	class="dropdown-item" routerLink="/recruiter-marketplace"><span class="unseen-posts">{{unseenMpPosts}}</span>Marketplace</a>
 			<a *ngIf="unseenMpPosts <= 0" 	class="dropdown-item" routerLink="/recruiter-marketplace">Marketplace</a>
         </li>
-        <li  class="li-arenella-nav {{menuItemMobileCss}}" *ngIf="isAuthenticatedAsAdmin()">
+        <li  class="li-arenella-nav {{menuItemMobileCss}}" *ngIf="isAuthenticatedAsAdmin()" (click)="refreschUnreadAlerts()">
            <a  class="dropdown-item" routerLink="/statistics">Statistics</a>
         </li>
- 		<li  class="li-arenella-nav {{menuItemMobileCss}}" *ngIf="isAuthenticatedAsAdmin()">
+ 		<li  class="li-arenella-nav {{menuItemMobileCss}}" *ngIf="isAuthenticatedAsAdmin()" (click)="refreschUnreadAlerts()">
            <a  class="dropdown-item" (click)="navToNewCandidate()">New</a>
         </li>
-		<li  class="li-arenella-nav {{menuItemMobileCss}}" *ngIf="isAuthenticated() && !isRecruiterNoSubscription() && !hasUnpaidSubscription()">
+		<li  class="li-arenella-nav {{menuItemMobileCss}}" *ngIf="isAuthenticated() && !isRecruiterNoSubscription() && !hasUnpaidSubscription()" (click)="refreschUnreadAlerts()">
         	<a *ngIf="unseenEmails > 0" 	class="dropdown-item" routerLink="/email"><span class="unseen-posts">{{unseenEmails}}</span>Emails</a>
 			<a *ngIf="unseenEmails <= 0"	class="dropdown-item" routerLink="/email">Emails</a>
         </li>
-		<li  class="li-arenella-nav {{menuItemMobileCss}}"  *ngIf="isCandidate()">	
+		<li  class="li-arenella-nav {{menuItemMobileCss}}"  *ngIf="isCandidate()" (click)="refreschUnreadAlerts()">	
            <a  class="dropdown-item" routerLink="/suggestions">Profile</a>
         </li>
-		<li  class="li-arenella-nav {{menuItemMobileCss}}" *ngIf="isAuthenticated() && !isRecruiterNoSubscription() && !hasUnpaidSubscription() && !isCandidate()">
+		<li  class="li-arenella-nav {{menuItemMobileCss}}" *ngIf="isAuthenticated() && !isRecruiterNoSubscription() && !hasUnpaidSubscription() && !isCandidate()" (click)="refreschUnreadAlerts()">
            <a  class="dropdown-item" routerLink="/recruiter-profile">Community</a>
         </li>
-        <li  class="li-arenella-nav {{menuItemMobileCss}}" *ngIf="isAuthenticated() && isRecruiter() && !isRecruiterNoSubscription() && !hasUnpaidSubscription()">
+        <li  class="li-arenella-nav {{menuItemMobileCss}}" *ngIf="isAuthenticated() && isRecruiter() && !isRecruiterNoSubscription() && !hasUnpaidSubscription()" (click)="refreschUnreadAlerts()">
            <a  class="dropdown-item" routerLink="/recruiter-stats">Stat's</a>
         </li>
-        <li class="li-arenella-nav {{menuItemMobileCss}}" *ngIf="isAuthenticatedAsAdmin() && !isCandidate()">
+        <li class="li-arenella-nav {{menuItemMobileCss}}" *ngIf="isAuthenticatedAsAdmin() && !isCandidate()" (click)="refreschUnreadAlerts()">
            <a  class="dropdown-item" routerLink="/accounts">Accounts</a>
         </li>
-		<li class="li-arenella-nav {{menuItemMobileCss}}" *ngIf="isAuthenticated() && !isAuthenticatedAsAdmin() && !isCandidate()">
+		<li class="li-arenella-nav {{menuItemMobileCss}}" *ngIf="isAuthenticated() && !isAuthenticatedAsAdmin() && !isCandidate()" (click)="refreschUnreadAlerts()">
            <a class="dropdown-item recruiter-account" routerLink="/recruiter-account">Account</a>
         </li>	
-        <li  class="li-arenella-nav {{menuItemMobileCss}}" *ngIf="isAuthenticated() && !isRecruiterNoSubscription() && !hasUnpaidSubscription()">
-			<a class="dropdown-item" routerLink="/newsfeed">News Feed</a>
+        <li  class="li-arenella-nav {{menuItemMobileCss}}" *ngIf="isAuthenticated() && !isRecruiterNoSubscription() && !hasUnpaidSubscription()" (click)="refreschUnreadAlerts()">
+			<a *ngIf="unseenNewsfeedItems" 	class="dropdown-item" routerLink="/newsfeed"><span class="unseen-posts">&nbsp;</span>News Feed</a>
+			<a *ngIf="!unseenNewsfeedItems"	class="dropdown-item" routerLink="/newsfeed">News Feed</a>
         </li>	
       </ul>
 

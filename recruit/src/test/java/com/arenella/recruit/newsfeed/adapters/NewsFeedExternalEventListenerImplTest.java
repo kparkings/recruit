@@ -30,12 +30,15 @@ public class NewsFeedExternalEventListenerImplTest {
 	@Test
 	public void testListenForEventCandidateUpdate() {
 		
-		CandidateUpdateEvent event = CandidateUpdateEvent.builder().build();
+		final String id = "1234";
+		
+		CandidateUpdateEvent event = CandidateUpdateEvent.builder().candidateId(Integer.valueOf(id)).build();
 		
 		listener.listenForEventCandidateUpdate(event);
 		
 		Mockito.verify(this.mockService).addNewsFeedItem(Mockito.any(NewsFeedItem.class));
-		
+		Mockito.verify(this.mockService, Mockito.never()).deleteAllNewsFeedItemsForReferencedUserId(String.valueOf(id));
+		Mockito.verify(this.mockService, Mockito.never()).deleteNewsFeedUserView(String.valueOf(id));
 	}
 	
 	/**
@@ -54,6 +57,7 @@ public class NewsFeedExternalEventListenerImplTest {
 		listener.listenForEventCandidateUpdate(event);
 		
 		Mockito.verify(this.mockService).deleteAllNewsFeedItemsForReferencedUserId(String.valueOf(id));
+		Mockito.verify(this.mockService).deleteNewsFeedUserView(String.valueOf(id));
 		Mockito.verify(this.mockService, Mockito.never()).addNewsFeedItem(Mockito.any(NewsFeedItem.class));
 		
 	}

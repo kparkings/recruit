@@ -1,5 +1,5 @@
 import { Component, OnInit }							from '@angular/core';
-import { UntypedFormGroup, UntypedFormControl }						from '@angular/forms';
+import { UntypedFormGroup, UntypedFormControl }			from '@angular/forms';
 import { CandidateServiceService }						from '../candidate-service.service';
 import { CurriculumService }							from '../curriculum.service';
 import { CandidateFunction }							from '../candidate-function';
@@ -8,11 +8,12 @@ import { ViewChild }									from '@angular/core';
 import { Router}										from '@angular/router';
 import { PendingCandidate }								from './pending-candidate';
 import { environment }									from '../../environments/environment';
-import { NewCandidateRequest, Rate, Language } 					from './new-candidate-request';
-import { CandidateProfile } from '../candidate-profile';
-import { CandidateNavService } from '../candidate-nav.service';
-import { LanguageOption } from './language-option';
-import { DeviceDetectorService } from 'ngx-device-detector';
+import { NewCandidateRequest, Rate, Language } 			from './new-candidate-request';
+import { CandidateProfile } 							from '../candidate-profile';
+import { CandidateNavService } 							from '../candidate-nav.service';
+import { LanguageOption } 								from './language-option';
+import { DeviceDetectorService } 						from 'ngx-device-detector';
+import { AppComponent} 									from '../app.component';
 
 @Component({
   selector: 'app-new-candidate',
@@ -52,7 +53,8 @@ export class NewCandidateComponent implements OnInit {
   				private modalService: NgbModal,
   				private router: Router,
   				private deviceDetector: 		DeviceDetectorService,
-  				private candidateNavService: 	CandidateNavService) {
+  				private candidateNavService: 	CandidateNavService,
+  				private appComponent:AppComponent) {
     
     	this.candidateService.loadFunctionTypes().forEach(funcType => {
       		this.functionTypes.push(funcType);
@@ -214,7 +216,6 @@ export class NewCandidateComponent implements OnInit {
 		candidate.introduction 						= this.offeredCandidateFormBean.get('introduction')!.value;
 		candidate.daysOnSite 						= this.offeredCandidateFormBean.get('daysOnSite')!.value;
 		
-		
 		let dutchLang:Language	=  new Language('DUTCH', this.offeredCandidateFormBean.get('DUTCH')!.value);
 		let englishLang:Language	=  new Language('ENGLISH', this.offeredCandidateFormBean.get('ENGLISH')!.value);
 		let frenchLang:Language	=  new Language('FRENCH', this.offeredCandidateFormBean.get('FRENCH')!.value);
@@ -268,10 +269,12 @@ export class NewCandidateComponent implements OnInit {
 		
 		if (this.candidateNavService.isEditMode()) {
 			this.candidateService.updateCandidate(candidate.candidateId, candidate, this.profileImageFile).subscribe(d=>{
-    	  		this.open(true);			
+    	  		this.open(true);
+    	  		this.appComponent.refreschUnreadAlerts();			
     		});
 		} else {
 			this.candidateService.addCandidate(candidate, this.profileImageFile).subscribe(d=>{
+				this.appComponent.refreschUnreadAlerts();
     	  		this.open(true);
 					if (this.currentPendingCandidate) {
 						this.curriculumService.deletePendingCurriculum(this.currentPendingCandidate?.pendingCandidateId).subscribe(res => {
@@ -352,6 +355,8 @@ export class NewCandidateComponent implements OnInit {
 			
 			this.feedbackBox.nativeElement.showModal();
 			
+			this.appComponent.refreschUnreadAlerts();
+			
     	});
 		} else {
 			this.curriculumService.uploadCurriculum(this.curriculumFile).subscribe(data=>{
@@ -365,6 +370,7 @@ export class NewCandidateComponent implements OnInit {
 				this.coreSkills.push(skill);
 			});
 			
+			this.appComponent.refreschUnreadAlerts();
 			
     	});
   		}

@@ -20,9 +20,11 @@ export class EmailService {
 	* Updates the unseenEmails count
 	*/
 	public updateUnseenEmails():void{
-		this.fetchEmails().subscribe(emails => {
-			this.unseenEmails.next(emails.filter(a => a.viewed == false).length);
-		});
+		if (sessionStorage.getItem("userId")) {
+			this.fetchEmails().subscribe(emails => {
+				this.unseenEmails.next(emails.filter(a => a.viewed == false).length);
+			});
+		}
 	}
 	
 	/**

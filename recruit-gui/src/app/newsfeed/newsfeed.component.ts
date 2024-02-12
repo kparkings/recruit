@@ -1,6 +1,6 @@
-import { Component } 					from '@angular/core';
-import { NewsfeedService }				from '../newsfeed.service';
-import { NewsFeedItem, NewsFeedItemLine } from './news-feed-item';
+import { Component } 							from '@angular/core';
+import { NewsfeedService }						from '../newsfeed.service';
+import { NewsFeedItem, NewsFeedItemLine } 		from './news-feed-item';
 
 @Component({
   selector: 'app-newsfeed',
@@ -10,32 +10,47 @@ import { NewsFeedItem, NewsFeedItemLine } from './news-feed-item';
 })
 export class NewsfeedComponent {
 
-	public candidateId:string = "";
-	private itemDivId:string = "";
+	public		candidateId:string 					= "";
+	private 	itemDivId:string 					= "";
+	public 		lastNewsfeedView:Date				= new Date();
+	public 		newsFeedItems:Array<NewsFeedItem> 	= new Array<NewsFeedItem>();
+	
 	
 	public handleswitchViewEvent():void{
-		this.candidateId 	= "";
+		this.candidateId 	= "";	
 	}
+	
+
 	
 	ngAfterViewChecked(){
 		
-		let id:string = ""+sessionStorage.getItem("news-item-div");
-		
-		if (id != "") {
-			this.doScrollHere(id);
-			//sessionStorage.setItem("news-item-div", "");
+		let id:string = ""+sessionStorage.getItem("news-item-div-id");
+
+		if (id != null && id != "") {
+			if(document.getElementById(id)){
+				this.doScrollHere(id);
+			}
 		}
 	}
 	
-	public newsFeedItems:Array<NewsFeedItem> = new Array<NewsFeedItem>();
+	public isUnread(item:NewsFeedItem):boolean{
+		return (item.created > this.lastNewsfeedView);
+	}
+	
 	
 	/**
 	* Constructor
 	*/
 	public constructor(private newsFeedService:NewsfeedService){
-		sessionStorage.setItem("news-item-div", "");
+		sessionStorage.removeItem("news-item-div-id");
 		this.newsFeedService.getNewsFeedItems().subscribe(newsFeedItems => {
 			this.newsFeedItems = newsFeedItems;
+		});
+		
+		this.newsFeedService.getLastViewRecord().subscribe(record => {
+			this.lastNewsfeedView = record.lastViewed;
+			this.newsFeedService.updateLastViewedRecord().subscribe(respone => {
+			});
 		});
 	}
 	
@@ -44,7 +59,7 @@ export class NewsfeedComponent {
 	*/
 	public viewCandidateProfile(candidateId:string, itemDivId:string):void{
 		this.candidateId 	= candidateId.replace('/','');
-		sessionStorage.setItem("news-item-div", itemDivId);
+		sessionStorage.setItem("news-item-div-id", itemDivId);
 	}
 	
 	/**

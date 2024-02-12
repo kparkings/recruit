@@ -9,6 +9,10 @@
 	margin:20px;
 }
 
+.news-item-body-unread{
+	color:blue;
+}
+
 .news-feed-item-header{
 	padding:10px;
 	text-align:center;

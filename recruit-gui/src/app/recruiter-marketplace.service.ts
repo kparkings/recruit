@@ -20,6 +20,7 @@ export class RecruiterMarketplaceService {
 	* Refreshed MP data
 	*/
 	public updateUnseenMpPosts():void{
+		console.log("ddddddddddddddddddd");
 		this.fetchMPPosts();
 	}
 

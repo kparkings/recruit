@@ -84,6 +84,8 @@ export class RecruiterMarketplaceComponent implements OnInit {
 					this.doCreditCheck();
 					
 					
+					
+					
 	}
 
 	/**
@@ -94,6 +96,7 @@ export class RecruiterMarketplaceComponent implements OnInit {
 	//	this.fetchOfferedCandidates();
 		this.fetchOpenPositions();
 		this.showJustMyCandidates();
+		
 		
  	}
 

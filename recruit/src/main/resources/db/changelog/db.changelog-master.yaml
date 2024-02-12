@@ -2287,3 +2287,22 @@ databaseChangeLog:
                 type: number
                 constraints:
                   default: 0
+  - changeSet:
+      id: add_tbl_newsfeed_recruiter_views
+      author: kparkings
+      changes:
+        - createTable:
+            tableName: news_feed_user_views
+            schemaName: newsfeed
+            columns:
+              - column:
+                  name: user_id
+                  type: varchar
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: last_viewed_newsfeed
+                  type: timestamp
+                  constraints:
+                    nullable: true

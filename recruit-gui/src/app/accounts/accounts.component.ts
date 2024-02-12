@@ -10,7 +10,8 @@ import { environment }							from '../../environments/environment';
 import { Router}								from '@angular/router';
 import { NgbModal, NgbModalOptions}				from '@ng-bootstrap/ng-bootstrap';
 import { ViewChild }							from '@angular/core';
-import { CandidateSkill } from './candidate-skill';
+import { CandidateSkill } 						from './candidate-skill';
+import { AppComponent} 							from '../app.component';
 
 @Component({
   selector: 'app-accounts',
@@ -58,7 +59,11 @@ export class AccountsComponent implements OnInit {
 		email:		new UntypedFormControl('')
 	});
 	
-	constructor(private recruiterService:RecruiterService, public candidateService:CandidateServiceService, private modalService: NgbModal, private router: Router) {
+	constructor(private recruiterService:RecruiterService, 
+				public candidateService:CandidateServiceService, 
+				private modalService: NgbModal, 
+				private router: Router,
+				private appComponent:AppComponent) {
 		this.fetchRecruiters();
 	 }
 
@@ -486,6 +491,7 @@ export class AccountsComponent implements OnInit {
 		this.candidateService.setCandidateAvailability(candidateId, action).subscribe(data => {
 			this.fetchCandidatesDueForAvailabilityCheck();	
 			this.fetchCandidates();	
+			this.appComponent.refreschUnreadAlerts();
 		});
 	}
 	
