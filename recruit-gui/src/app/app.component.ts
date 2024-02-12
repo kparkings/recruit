@@ -92,27 +92,45 @@ export class AppComponent {
 		});
 	}
 	
+	private lastAlertRefresh!:Date;
+	
 	public refreschUnreadAlerts():void{
-		if (sessionStorage.getItem("userId")) {
-			this.newsfeedService.getLastViewRecord().subscribe(record => {
-				this.lastNewsfeedView = record.lastViewed;	
-				this.newsfeedService.getNewsFeedItems().subscribe(items => {
-					if(items[0]) {
-						this.unseenNewsfeedItems = (items[0].created > this.lastNewsfeedView);
-					}
+		
+		let now:Date = new Date();
+		
+		if(this.lastAlertRefresh && this.lastAlertRefresh > now){
+			//So we dont make lots of expensive backend calls
+		} else {
+			if(!this.lastAlertRefresh){
+				this.lastAlertRefresh = now;
+			} else {
+				this.lastAlertRefresh.setSeconds(this.lastAlertRefresh.getSeconds() + 10);
+			}	
+			
+			if (sessionStorage.getItem("userId")) {
+				this.newsfeedService.getLastViewRecord().subscribe(record => {
+					this.lastNewsfeedView = record.lastViewed;	
+					this.newsfeedService.getNewsFeedItems().subscribe(items => {
+						if(items[0]) {
+							this.unseenNewsfeedItems = (items[0].created > this.lastNewsfeedView);
+						}
+					});
 				});
+			}
+		
+			this.mpService.updateUnseenMpPosts();
+			this.mpService.fetchUnseenMPPosts().subscribe(val => {
+				this.unseenMpPosts = val;
 			});
+			this.emailService.updateUnseenEmails();
+			this.emailService.fetchUnseenEmailsCount().subscribe(val => {
+				this.unseenEmails = val;
+			});
+		
 		}
 		
-		console.log("----00");
-		this.mpService.updateUnseenMpPosts();
-		this.mpService.fetchUnseenMPPosts().subscribe(val => {
-			this.unseenMpPosts = val;
-		});
-		this.emailService.updateUnseenEmails();
-		this.emailService.fetchUnseenEmailsCount().subscribe(val => {
-			this.unseenEmails = val;
-		});
+		
+		
 	}
 	
 	/**
