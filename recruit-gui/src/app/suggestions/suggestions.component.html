@@ -131,15 +131,7 @@
 	
 		<!-- Inline CV -->
 		<div *ngIf="currentView === 'inline-cv'">
-	
-			<div style="text-align:right;margin-right:50px;">
-				<button class="btn btn-secondary arenella-btn" (click)="showSuggestedCandidateOverview(suggestedCandidate)">Back</button>
-			</div>
-		
-			<object id="content"  class="cv-inline" [attr.data]="trustedResourceUrl" width="95%" height="500px">
-			
-			</object>
-	
+			<app-inline-cv [trustedResourceUrl]="trustedResourceUrl" [candidate]="suggestedCandidate" (switchViewEvent)="showSuggestedCandidateOverview(suggestedCandidate)"></app-inline-cv>
 		</div>
 	
 		<!-- Suggestion Results -->

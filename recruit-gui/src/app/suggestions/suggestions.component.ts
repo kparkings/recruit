@@ -145,7 +145,6 @@ export class SuggestionsComponent implements OnInit {
 			});
 		}		
 		
-		console.log("-------YY");
 		this.appComponent.refreschUnreadAlerts();
 		
 	}
