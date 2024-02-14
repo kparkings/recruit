@@ -1,5 +1,5 @@
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild } 														from '@angular/core';
-import { UntypedFormGroup, UntypedFormControl, FormsModule, ReactiveFormsModule }	from '@angular/forms';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } 	from '@angular/core';
+import { UntypedFormGroup, UntypedFormControl }										from '@angular/forms';
 import { CandidateServiceService }													from '../candidate-service.service';
 import { SuggestionsService }														from '../suggestions.service';
 import { CurriculumService }														from '../curriculum.service';
@@ -7,14 +7,12 @@ import { Candidate}																	from './candidate';
 import { SavedCandidate}															from './saved-candidate';
 import { SuggestionParams}															from './suggestion-param-generator';
 import { environment }																from '../../environments/environment';
-import { Clipboard } 																from '@angular/cdk/clipboard';
-import { NgbModal, NgbModalOptions, NgbAlert }												from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbModalOptions }												from '@ng-bootstrap/ng-bootstrap';
 import { CandidateSearchAlert }														from './candidate-search-alert';
 import { DomSanitizer, SafeResourceUrl } 											from '@angular/platform-browser';
-import { DeviceDetectorService } 													from 'ngx-device-detector';
 import { Router}																	from '@angular/router';
 import { debounceTime } 															from "rxjs/operators";
-import { PhotoAPIOutbound, CandidateProfile, Language, Rate } 						from '../candidate-profile';
+import { CandidateProfile } 														from '../candidate-profile';
 import { EmailService, EmailRequest }												from '../email.service';
 import { CandidateNavService } 														from '../candidate-nav.service';
 import { CreditsService } 															from '../credits.service';
@@ -38,7 +36,6 @@ export class SuggestionsComponent implements OnInit {
 	
  	@ViewChild('specUploadBox', { static: true }) 		specUploadDialogBox!: ElementRef<HTMLDialogElement>;
  	@ViewChild('feedbackBox', { static: true }) 		feedbackDialogBox!: ElementRef<HTMLDialogElement>;
- 	@ViewChild('notesBox', { static: true }) 			notesDialogBox!: ElementRef<HTMLDialogElement>;
  	@ViewChild('publicityModal', {static:true})			publicityDialogBox!: ElementRef<HTMLDialogElement>;
  	@ViewChild('confirmDeleteModal', {static:true})		confirmDeleteDialogBox!: ElementRef<HTMLDialogElement>;
  	@ViewChild('contactBox', {static:true})				contactDialogBox!: ElementRef<HTMLDialogElement>;
@@ -55,19 +52,9 @@ export class SuggestionsComponent implements OnInit {
 		alertName:			new UntypedFormControl(''),
 	});
 	
-	public savedCandidateNotesForm:UntypedFormGroup = new UntypedFormGroup({
-		notes:			new UntypedFormControl(''),
-	});
-	
 	private jobSpecFile!:File;
 	
 	public jobSpecUploadView:string = "chooseType"; //chooseType | doc | text
-	
-	/*Mobile */
-	public mobileListingLeftPaneContainer:string = '';
-	public mobileDescBody:string = '';
-	public mobileJobTitleBar:string = '';
-	public mobileSearchBox:string = '';
 	
 	public infoItemConfig:InfoItemConfig 							= new InfoItemConfig();
 	
@@ -85,11 +72,9 @@ export class SuggestionsComponent implements OnInit {
 	*/
 	constructor(public candidateService:		CandidateServiceService, 
 				public suggestionsService:		SuggestionsService, 
-				//private clipboard: 				Clipboard, 
 				private modalService: 			NgbModal, 
 				private sanitizer: 				DomSanitizer,
 				private curriculumService: 		CurriculumService,
-				private deviceDetector: 		DeviceDetectorService,
 				private router:					Router,
 				private emailService:			EmailService,
 				private candidateNavService: 	CandidateNavService,
@@ -98,29 +83,13 @@ export class SuggestionsComponent implements OnInit {
 					
 		this.trustedResourceUrl = this.sanitizer.bypassSecurityTrustResourceUrl('');
 		
-		this.isMobile = deviceDetector.isMobile();
-		
-		if (this.isMobile) {
-			this.mobileListingLeftPaneContainer = "mobile-left-pane-container";
-			this.mobileDescBody 				= 'mobile-desc-body';
-			this.mobileJobTitleBar				= 'sugg-srch-job-title-mobile';
-			this.mobileSearchBox			 	= 'mobile-search-box';
-		} 
-		
-		
 		this.init();
 	}
 	
 	private init():void{
 		
-		if(!this.isCandidate()) {
+		if (!this.isCandidate()) {
 			this.getSuggestions();	
-		}
-		
-	 	
-		if (this.isMobile) {
-			this.suggestionMobileClass 		= 'suggestion-icon-mobile';
-			this.suggestionMobileBtnClass	= 'buttons-icon-mobile';
 		}
 		
 		//Candidate
@@ -161,7 +130,6 @@ export class SuggestionsComponent implements OnInit {
 	*/	
 	public deleteAccount(){
 		this.confirmDeleteDialogBox.nativeElement.showModal();
-		//this.open(content, '', true);
 	}
 	
 	public confirmDeleteProfile():void{
@@ -179,9 +147,7 @@ export class SuggestionsComponent implements OnInit {
 				this.doReset();
 				this.currentView = 'suggestion-results';
 			}
-			//this.closeModal();
 			this.confirmDeleteDialogBox.nativeElement.close();
-		
 		});
 	}
 	
@@ -194,19 +160,6 @@ export class SuggestionsComponent implements OnInit {
   		this.jobSpecFile = event.target.files[0];
   		
   	}
-
-	public isNoLongerAvailable():boolean{
-		
-		if (this.currentSavedCandidate.userId === '') {
-			return false;
-		}
-		
-		return this.currentSavedCandidate.candidate.candidateId === ' Removed';;
-	}
-	
-	public isNoLongerAvailableSC(savedCandidate:SavedCandidate):boolean{
-		return savedCandidate.candidate.candidateId === ' Removed';
-	}
 	
 	private processJobSpecExtratedFilters(extractedFilters:ExtractedFilters):void{
 		
@@ -333,7 +286,6 @@ export class SuggestionsComponent implements OnInit {
 		frenchLanguage:			new UntypedFormControl(false),
 		minYearsExperience: 	new UntypedFormControl(''),
 		maxYearsExperience: 	new UntypedFormControl(''),
-		//skill: 					new UntypedFormControl(''),
 	});
 	
 	public skilFilterForm:UntypedFormGroup 	= new UntypedFormGroup({
@@ -401,7 +353,6 @@ export class SuggestionsComponent implements OnInit {
 	public dangerousUrl = 'http://127.0.0.1:8080/curriculum-test/1623.pdf';
 	public trustedResourceUrl : SafeResourceUrl;
 	
-	public isMobile:boolean = false;
 	public suggestionMobileClass:string			= '';
 	public suggestionMobileBtnClass:string		= '';
 
@@ -441,7 +392,6 @@ export class SuggestionsComponent implements OnInit {
 		
 		if (sessionStorage.getItem("news-item-div")){
 			this.doScrollTop();	
-			//sessionStorage.setItem("clear-news-item-div", "true");
 		}
 		
 	}
@@ -747,8 +697,6 @@ export class SuggestionsComponent implements OnInit {
 		this.currentView 			= 'suggested-canidate-overview';
 		this.suggestedCandidate 	= candidateSuggestion;
 		
-		//this.fetchCandidateProfile(candidateSuggestion.candidateId);
-		
 		this.doScrollTop();
 		
 		
@@ -788,13 +736,6 @@ export class SuggestionsComponent implements OnInit {
 			
 	}
 	
-	public showSuggestedCandidateOverviewSavedCandidate(savedCandidate:SavedCandidate){
-		this.currentView 			= 'suggested-canidate-overview';
-		this.suggestedCandidate 	= savedCandidate.candidate;
-		this.currentSavedCandidate	= savedCandidate;
-		this.fetchCandidateProfile(savedCandidate.candidate.candidateId);
-	}
-	
 	/**
 	* Flags a Candidate as being potentially unavailable
 	*/
@@ -820,16 +761,6 @@ export class SuggestionsComponent implements OnInit {
 			})
 		});
 	}
-	
-	/**
-	* Marks Candidate as no longer being being remembered
-	*/
-	public forgetCandidate():void{
-		this.candidateService.deleteSavedCandidate(Number(this.currentSavedCandidate.candidateId)).subscribe(response => {
-			this.showSavedCandidates();
-		});
-	}
-	
 	
 	
 	/**
@@ -973,49 +904,7 @@ export class SuggestionsComponent implements OnInit {
 			
 	}
 	
-	
-	public currentSavedCandidate:SavedCandidate = new SavedCandidate();
-	
-	/**
-	* Displays dialog to edit notes for a SavedCandidate
-	*/
-	public showNotesDialog(content:any, candidate:Candidate):void{
-		
-		this.updatedSavedCandidate = false;
-		
-		if (!this.isNoLongerAvailable()){
-			this.currentSavedCandidate = new SavedCandidate()
-		}
-		
-		this.savedCandidates.forEach(sc => {
-			if(""+sc.candidateId === ""+candidate.candidateId) {
-				this.currentSavedCandidate = sc;
-			}
-		});
-		
-		this.savedCandidateNotesForm = new UntypedFormGroup({
-			notes:			new UntypedFormControl(this.currentSavedCandidate.notes)
-		});
-	
-		this.notesDialogBox.nativeElement.showModal();
-		//this.open(content, '', true);
-	}
-	
-	public updatedSavedCandidate:boolean = false; 
-	
-	/**
-	* Updates the current Saved Candidate
-	*/
-	public updateSavedCandidate():void{
-		this.updatedSavedCandidate = false;
-		this.currentSavedCandidate.notes = this.savedCandidateNotesForm.get('notes')?.value;
-		this.candidateService.updateSavedCandidate(this.currentSavedCandidate).subscribe(response =>{
-			this.candidateService.fetchSavedCandidates().subscribe(response => {
-				this.savedCandidates = response;
-				this.updatedSavedCandidate = true;
-			});
-		});
-	} 
+	//public updatedSavedCandidate:boolean = false; 
 	
 	/**
 	*  Closes the confirm popup
@@ -1052,7 +941,6 @@ export class SuggestionsComponent implements OnInit {
 		this.publicitySuggestions = this.publicitySuggestions.splice(0,Math.min(this.publicitySuggestions.length, 10));
 		
 		this.publicityDialogBox.nativeElement.showModal();
-    	//this.modalService.open(content, { centered: true });
   	}
 
 	/**
@@ -1330,9 +1218,6 @@ export class SuggestionsComponent implements OnInit {
 			block: "start",
 			inline: "nearest"
 			});
-			
-			
-		
 			
 	}
 }

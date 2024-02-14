@@ -32,6 +32,7 @@ import { RecruiterStatsComponent } 			from './recruiter-stats/recruiter-stats.co
 import { CandidateInfoBoxComponent } 		from './candidate-info-box/candidate-info-box.component';
 import { NewsfeedComponent } 				from './newsfeed/newsfeed.component';
 import { InlineCvComponent}					from './suggestions/inline-cv/inline-cv.component';
+import { SavedCandidatesComponent}			from './suggestions/saved-candidates/saved-candidates.component';
 
 @NgModule({
   declarations: [
@@ -58,7 +59,8 @@ import { InlineCvComponent}					from './suggestions/inline-cv/inline-cv.componen
  	RecruiterStatsComponent,
  	SuggestionsComponent,
  	NewsfeedComponent,
- 	InlineCvComponent
+ 	InlineCvComponent,
+ 	SavedCandidatesComponent
   ],
   imports: [
     BrowserModule,

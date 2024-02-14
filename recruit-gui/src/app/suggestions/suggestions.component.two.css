@@ -151,20 +151,20 @@ textarea {
 	padding-left:10px;
 	padding-right:10px;	
 }
-
+/**
 .mobile-desc-body{
 	min-width:100%;
 	padding-right:0px;
 	padding-left:0px;
-}
+}*/
 
 .sugg-srch-job-title{
 	min-width:1000px;
 }
-
+/**
 .sugg-srch-job-title-mobile{
 	min-width:0px;
-}
+}*/
 
 .mobile-search-box{
 	margin-left:1%;
@@ -177,14 +177,43 @@ textarea {
 	margin-left:40px;
 }
 
+.hide-for-mobile{
+	display:inline;
+}
+
 @media (max-width:700px)  {
 	.suggestion-result-icons{
 		margin-top:50px;
 		margin-left:0px;
 	}	
+	
+	.hide-for-mobile{
+	display:none;
+
+}
 }
 
 .suggestion-result-footer{
 	height:20px;
 	width:300px;
+}
+
+@media (max-width:700px)  {
+
+	 .suggestion-icon{
+	 	width:48%;
+		margin-right:2%;
+		margin-bottom:2%;
+	 }
+	 
+	 .sugg-srch-job-title{
+		min-width:0px;
+	}
+	
+	.desc-body{
+		min-width:100%;
+		padding-right:0px;
+		padding-left:0px;
+	}
+	
 }
