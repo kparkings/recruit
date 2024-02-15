@@ -1,54 +1,31 @@
 <div *ngIf="currentView === 'saved-candidates'">
 	<div class="action-buttons">
-				<button class="btn btn-secondary arenella-btn" (click)="handleswitchViewEvent()">Back</button>
-			</div>	 
-			<br>
-			<div class="suggestion-result-iconsXXXXXXX" style="margin-top:0px;">
-				<div class="suggestion-icon" *ngFor="let savedCandidate of savedCandidates" (click)="showSuggestedCandidateOverviewSavedCandidate(savedCandidate)">
-					<div class="saved-candidate-icon-header" *ngIf="!isNoLongerAvailableSC(savedCandidate)">
-						C{{savedCandidate.candidate.candidateId}}
-					</div>
-					<div class="saved-candidate-icon-header" *ngIf="isNoLongerAvailableSC(savedCandidate)">
-						{{savedCandidate.candidate.candidateId}}
-					</div>
-					<div class="suggestion-icon-body">
-						<div>
-							{{savedCandidate.candidate.firstname}} {{savedCandidate.candidate.surname}}
-						</div>
-						<div>
-							{{savedCandidate.candidate.roleSought}}
-						</div>
-					</div>
-					
+		<button class="btn btn-secondary arenella-btn" (click)="handleswitchViewEvent()">Back</button>
+	</div>	 
+	<br>
+	<div style="margin-top:0px;">
+		<div class="suggestion-icon" *ngFor="let savedCandidate of savedCandidates" (click)="showSuggestedCandidateOverviewSavedCandidate(savedCandidate)">
+			<div class="saved-candidate-icon-header" *ngIf="!isNoLongerAvailableSC(savedCandidate)">
+				C{{savedCandidate.candidate.candidateId}}
+			</div>
+			<div class="saved-candidate-icon-header" *ngIf="isNoLongerAvailableSC(savedCandidate)">
+				{{savedCandidate.candidate.candidateId}}
+			</div>
+			<div class="suggestion-icon-body">
+				<div>
+					{{savedCandidate.candidate.firstname}} {{savedCandidate.candidate.surname}}
+				</div>
+				<div>
+					{{savedCandidate.candidate.roleSought}}
 				</div>
 			</div>
-			<div class="suggestion-result-footer">&nbsp;</div>
+		</div>
+	</div>
+	<div class="suggestion-result-footer">&nbsp;</div>
 </div>
 
-<!-- START to be replaced by shared component-->
-
-<div *ngIf="currentView === 'suggested-canidate-overview'" style="margin-top:10px;">
-	To be replaced by other shared component	
+<div *ngIf="currentView === 'suggested-canidate-overview'">
+	<app-candidate-profile (backEvent)="showSavedCandidates()" [parentComponent]="'savedCandidates'"[infoItemConfig]="infoItemConfig" [suggestedCandidate]="suggestedCandidate" [candidateProfile]="candidateProfile" [skillFilters]="skillFilters"></app-candidate-profile>
 </div>
-			
-<!--END  -->
 
 			
-			<dialog #notesBox>
-	<div class="modal-header">
-		<h4 class="modal-title">Notes for Candidate</h4>
- 		<div class="filter-close-box" (click)="notesBox.close()">X</div>
-	</div>
-	<div class="feedbackBox;">
-		<form [formGroup]="savedCandidateNotesForm">
-			<div class="modal-body" *ngIf="!updatedSavedCandidate">
-				<textarea class="notes-textarea" formControlName="notes"></textarea>
-				<br/>
-				<button class="btn btn-secondary" (click)="updateSavedCandidate()" *ngIf="!isNoLongerAvailable()" download>Save</button>
-			</div>
-			<div class="modal-body" *ngIf="updatedSavedCandidate">
-				<h1>Updated</h1>
-			</div>              
-		</form>
-	</div>
-</dialog>

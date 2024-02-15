@@ -126,7 +126,7 @@ textarea {
 	font-weight: bold;
 	text-align: right;
 }
-
+/**
 .details-right{
 	margin-left:0px;
 	float:left;
@@ -145,7 +145,7 @@ textarea {
 	margin-bottom:10px;
 	margin-left:0px;
 	padding:10px;
-}
+}*/
 
 .button-panel-mobile{
 	padding-left:10px;

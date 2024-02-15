@@ -20,7 +20,6 @@ export class SuggestionParams{
 	private french:string								= "UNKNOWN";
 	private english:string								= "UNKNOWN";
 		
-		
 	/**
 	* Constructor
 	* @param suggestionFilterForm 	- contains raw filter info

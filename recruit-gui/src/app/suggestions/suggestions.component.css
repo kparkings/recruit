@@ -157,7 +157,7 @@
 	margin-left:0px;
 	background-position:0%;
 }
-
+/**
 .skill-match{
 	margin:2px;
 	padding:5px;
@@ -173,13 +173,12 @@
 	background:grey;
 	display:inline-block;
 }
-
+*/
 .suggestion-perception-perfect{
 	background:green;
 	width:100%;	
 	height:10px;
 }
-/**
 .suggestion-icon-mobile{
 	width:48%;
 	margin-right:2%;
@@ -214,16 +213,17 @@
     margin-left:1%;
     margin-bottom:0px;
 }*/
-
+/*
 .candidate-suggestion-table > .table th, .table td {
 	padding: 0.75rem;
 	vertical-align: top;
 	border-top: 1px solid #dee2e6;
 }
-
+*/
+/*
 .candidate-suggestion-table-hdr {
 	font-weight:bold;
-}
+}*/
 
 .lang-proficient-check-icon{
 	color:green;

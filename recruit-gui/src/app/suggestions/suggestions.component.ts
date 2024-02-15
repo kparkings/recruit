@@ -32,6 +32,7 @@ import {AppComponent} 																from '../app.component';
 export class SuggestionsComponent implements OnInit {
 
 	@Input()  externalProvileViewCandidateId:string = "";
+	@Input()  parentComponent:string = "";
 	@Output() switchViewEvent 						= new EventEmitter<string>();
 	
  	@ViewChild('specUploadBox', { static: true }) 		specUploadDialogBox!: ElementRef<HTMLDialogElement>;
@@ -40,9 +41,12 @@ export class SuggestionsComponent implements OnInit {
  	@ViewChild('confirmDeleteModal', {static:true})		confirmDeleteDialogBox!: ElementRef<HTMLDialogElement>;
  	@ViewChild('contactBox', {static:true})				contactDialogBox!: ElementRef<HTMLDialogElement>;
  	
- 	public backToNewsFeed():void{
+ 	public back():void{
 		this.switchViewEvent.emit();	 
 	}
+	
+	
+	
  	
 	public candidateProfile:CandidateProfile = new CandidateProfile();
 	
@@ -401,7 +405,8 @@ export class SuggestionsComponent implements OnInit {
 	* update features 
  	*/
 	public isViewOnly():boolean{
-		return this.externalProvileViewCandidateId.length > 0;
+		return this.parentComponent == 'newsfeed';
+		//return this.externalProvileViewCandidateId.length > 0;
 	}
 	
 	/**
@@ -546,15 +551,24 @@ export class SuggestionsComponent implements OnInit {
 	*/
 	public showSuggestionsResults():void{
 		
-		this.getSuggestions();	
+		 this.candidateService.fetchSavedCandidates().subscribe(response => {
+			this.savedCandidates = response;
+		});
 		
-		if (this.isRecruiter() && this.candidateNavService.isRouteActive()) {
-			this.candidateNavService.doNextMove("back",this.candidateNavService.getCandidateId());	
+		if(this.parentComponent == 'newsfeed') {
+			this.back();		
 		} else {
-			this.currentView 		= 'suggestion-results';
-			this.suggestedCandidate = new Candidate();	
-			this.lastView 			= '';
+			this.getSuggestions();	
+		
+			if (this.isRecruiter() && this.candidateNavService.isRouteActive()) {
+				this.candidateNavService.doNextMove("back",this.candidateNavService.getCandidateId());	
+			} else {
+				this.currentView 		= 'suggestion-results';
+				this.suggestedCandidate = new Candidate();	
+				this.lastView 			= '';
+			}	
 		}
+		
 	
 	}
 	
@@ -1218,6 +1232,9 @@ export class SuggestionsComponent implements OnInit {
 			block: "start",
 			inline: "nearest"
 			});
+			
+			
+		
 			
 	}
 }

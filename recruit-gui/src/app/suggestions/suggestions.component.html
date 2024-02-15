@@ -16,10 +16,7 @@
 	     </div>
 		
 		<div *ngIf="currentView === 'saved-candidates'">
-		
-			<app-saved-candidates [savedCandidates]="savedCandidates" (switchViewEvent)="showSuggestionsResults()"></app-saved-candidates>
-		
-			
+			<app-saved-candidates [savedCandidates]="savedCandidates" (switchViewEvent)="showSuggestionsResults()" [infoItemConfig]="infoItemConfig" [skillFilters]="skillFilters"></app-saved-candidates>
 		</div>
 	
 		<div>	
@@ -74,7 +71,7 @@
 						<tr>
 							<td class="sugg-srch-hdr">Years Exp</td>
 							<td class="sugg-srch-bdy">
-								<div style="margin-top:10px;">
+								<div>
 									<select class="min" formControlName="minYearsExperience">
 										<option *ngFor="let opt of minMaxOptions" value="{{opt}}">{{opt}}</option>
 									</select>
@@ -105,11 +102,6 @@
 					</table>
 				</div>
 			</form>
-		</div>
-	
-		<!-- Inline CV -->
-		<div *ngIf="currentView === 'inline-cv'">
-			<app-inline-cv [trustedResourceUrl]="trustedResourceUrl" [candidate]="suggestedCandidate" (switchViewEvent)="showSuggestedCandidateOverview(suggestedCandidate)"></app-inline-cv>
 		</div>
 	
 		<!-- Suggestion Results -->
@@ -143,129 +135,8 @@
 		</div>
 
 		<!-- Suggestion Profile -->
-		<div *ngIf="currentView !== 'suggestion-results' && currentView !== 'inline-cv' && currentView !== 'saved-candidates'">
-			<div class="action-buttons" *ngIf="!isViewOnly()">
-			
-				<a class="currliculum-link" (click)="doCreditCheckByCount()" href="{{getCurriculumDownloadUrl(suggestedCandidate.candidateId)}}" *ngIf="passedCreditCheck && (!isCandidate()) && (lastView != 'saved-candidates')">
-					<button class="btn btn-secondary arenella-btn {{suggestionMobileBtnClass}}">Download CV</button>
-				</a>
-			
-				<button class="btn btn-secondary arenella-btn {{suggestionMobileBtnClass}}" (click)="handleNoCredit()" *ngIf="!passedCreditCheck && (!isCandidate()) && (lastView != 'saved-candidates')">Download CV</button>
-				<button class="btn btn-secondary arenella-btn hide-for-mobile" (click)="showInlineCVView()" 							*ngIf="(lastView != 'saved-candidates') && !isCandidate()">Display CV</button>
-			
-				<button class="btn btn-secondary arenella-btn {{suggestionMobileBtnClass}}" *ngIf="isCandidate() || isAdmin() || isOwner()" (click)="editAccount()"> Edit</button>
-        		<button class="btn btn-secondary arenella-btn {{suggestionMobileBtnClass}}" *ngIf="isCandidate() || isAdmin() || isOwner()" (click)="deleteAccount()"> Delete</button>
-				
-				<button class="btn btn-secondary arenella-btn {{suggestionMobileBtnClass}}" (click)="rememberCandidate(suggestedCandidate)" 		*ngIf="lastView != 'saved-candidates' && !isSavedCandidate(suggestedCandidate) && !isCandidate()" title="Add candidate to your list of saved candidates">Save Candidate</button>
-				<button class="btn btn-secondary arenella-btn {{suggestionMobileBtnClass}}" (click)="rememberCandidate(suggestedCandidate)" 		*ngIf="lastView != 'saved-candidates' && isSavedCandidate(suggestedCandidate) && !isCandidate()" title="Add candidate to your list of saved candidates" disabled>Save Candidate</button>
-				
-				<!--
-				<button class="btn btn-secondary arenella-btn {{suggestionMobileBtnClass}}" (click)="forgetCandidate()" 							*ngIf="lastView === 'saved-candidates'" title="removed candidate from your list of saved candidates">Unsave Candidate</button>
-				<button class="btn btn-secondary arenella-btn {{suggestionMobileBtnClass}}" (click)="showNotesDialog(notesBox,suggestedCandidate)" 	*ngIf="lastView === 'saved-candidates'">Notes</button>
-				-->
-				<button class="btn btn-secondary arenella-btn {{suggestionMobileBtnClass}}" (click)="showSuggestionsResults()" 					*ngIf="lastView != 'saved-candidates'  && !isCandidate()">Back</button>
-				<button class="btn btn-secondary arenella-btn {{suggestionMobileBtnClass}}" (click)="showSavedCandidates()" 						*ngIf="lastView === 'saved-candidates'  && !isCandidate()">Back</button>
-				
-			</div>
-			
-			<div class="action-buttons" *ngIf="isViewOnly()">
-			
-				<a class="currliculum-link" (click)="doCreditCheckByCount()" href="{{getCurriculumDownloadUrl(suggestedCandidate.candidateId)}}" *ngIf="passedCreditCheck && (!isCandidate()) && (lastView != 'saved-candidates')">
-					<button class="btn btn-secondary arenella-btn {{suggestionMobileBtnClass}}">Download CV</button>
-				</a>
-			
-				<button class="btn btn-secondary arenella-btn {{suggestionMobileBtnClass}}" (click)="handleNoCredit()" *ngIf="!passedCreditCheck && (!isCandidate()) && (lastView != 'saved-candidates')">Download CV</button>
-				<button class="btn btn-secondary arenella-btn hide-for-mobile" (click)="showInlineCVView()" 							*ngIf="(lastView != 'saved-candidates') && !isCandidate()">Display CV</button>
-			
-				<button class="btn btn-secondary arenella-btn {{suggestionMobileBtnClass}}" (click)="rememberCandidate(suggestedCandidate)" 		*ngIf="lastView != 'saved-candidates' && !isSavedCandidate(suggestedCandidate) && !isCandidate()" title="Add candidate to your list of saved candidates">Save Candidate</button>
-				<button class="btn btn-secondary arenella-btn {{suggestionMobileBtnClass}}" (click)="rememberCandidate(suggestedCandidate)" 		*ngIf="lastView != 'saved-candidates' && isSavedCandidate(suggestedCandidate) && !isCandidate()" title="Add candidate to your list of saved candidates" disabled>Save Candidate</button>
-				
-				<!-- 
-				<button class="btn btn-secondary arenella-btn {{suggestionMobileBtnClass}}" (click)="forgetCandidate()" 							*ngIf="lastView === 'saved-candidates'" title="removed candidate from your list of saved candidates">Unsave Candidate</button>
-				<button class="btn btn-secondary arenella-btn {{suggestionMobileBtnClass}}" (click)="showNotesDialog(notesBox,suggestedCandidate)" 	*ngIf="lastView === 'saved-candidates'">Notes</button>
-				-->
-				<button class="btn btn-secondary arenella-btn {{suggestionMobileBtnClass}}" (click)="backToNewsFeed()" 						*ngIf="lastView != 'saved-candidates'  && !isCandidate()">Back</button>
-				
-			</div>
-			
-		</div>
-	
-		<div *ngIf="currentView === 'suggested-canidate-overview'" style="margin-top:10px;">
-	
-			<!-- Left Pane -->
-			<app-candidate-info-box [config]="infoItemConfig" (openContactBoxEvent)="contactCandidate(contactBox)"></app-candidate-info-box>
-			
-			<!-- div class="details-right" -->
-			<div class="desc-body details-right">
-				<div style="width:100%">
-					<h1>{{suggestedCandidate.roleSought}}</h1>
-				</div>
-			
-				<div *ngIf="candidateProfile.introduction && candidateProfile.introduction.length != 0" style="margin-top:50px;margin-bottom:50px;">
-					<div>
-						<h1 style="background:#e8e8e8">Candidate Introduction</h1>
-					</div>
-					<div style="width:100%;">
-						<pre style="white-space:pre-line;font-family: Roboto, 'Helvetica Neue', sans-serif;">{{candidateProfile.introduction}}</pre>
-					</div>
-				</div>		
-				<div *ngIf="!candidateProfile.introduction || candidateProfile.introduction.length == 0" style="margin-top:50px;margin-bottom:50px;">
-					<div>
-						<h1 style="background:#e8e8e8">Candidate Introduction</h1>
-					</div>
-					<div style="width:100%;">
-						<div style="white-space:pre-line;font-family: Roboto, 'Helvetica Neue', sans-serif;">
-						I would like to introduce myself. My name is {{this.suggestedCandidate.firstname}} 
-						and I have {{this.suggestedCandidate.yearsExperience}} years experience. I am currently looking for a new role.
-					
-						I am based in {{this.suggestedCandidate.country | enumToHumanReadableValue}} 
-						</div>
-					</div>
-				</div>		
-			
-				<div>
-					<table class="table candidate-suggestion-table">
-						<tr>
-							<td class="candidate-suggestion-table-hdr">Candidate Number</td>
-							<td>{{suggestedCandidate.candidateId}}</td>
-						</tr>
-						<tr>
-							<td class="candidate-suggestion-table-hdr">Name</td>
-							<td>{{suggestedCandidate.firstname}} {{suggestedCandidate.surname}}</td>
-						</tr>
-						<tr *ngIf="!isCandidate()">
-							<td class="candidate-suggestion-table-hdr">Skill Accuracy</td>
-							<td>
-								<div class="suggestion-perception-{{suggestedCandidate.accuracySkills}}"></div>
-							</td>
-						</tr>
-						<tr *ngIf="!isCandidate()">
-							<td class="candidate-suggestion-table-hdr">Language Accuracy</td>
-							<td>
-								<div class="suggestion-perception-{{suggestedCandidate.accuracyLanguages}}"></div>
-							</td>
-						</tr>
-						<tr *ngIf="!isCandidate()">
-							<td class="candidate-suggestion-table-hdr">Matching Skills</td>
-							<td>
-								<div style="float:center" *ngFor="let skill of skillsFiltersMatch()" class="{{hasRequiredSkill(skill)}}">
-									{{skill}}
-								</div>
-							</td>
-						</tr>
-						<tr *ngIf="!isCandidate()">
-							<td class="candidate-suggestion-table-hdr">Missing Skills</td>
-							<td>
-								<div style="float:center" *ngFor="let skill of skillsFiltersNoMatch()" class="{{hasRequiredSkill(skill)}}">
-									{{skill}}
-								</div>
-							</td>
-						</tr>
-					</table>
-				</div>
-						
-			</div>
-			
+		<div *ngIf="currentView === 'suggested-canidate-overview'">
+			<app-candidate-profile (backEvent)="showSuggestionsResults()" [isViewOnly]="isViewOnly()" [infoItemConfig]="infoItemConfig" [suggestedCandidate]="suggestedCandidate" [candidateProfile]="candidateProfile" [skillFilters]="skillFilters"></app-candidate-profile>
 		</div>
 	</div>
 </div>
@@ -331,9 +202,6 @@
 		</form>
 	</div>
 </dialog>
-
-
-
 <!-- publicity -->
 <dialog #publicityModal>
 
@@ -350,19 +218,7 @@
 		</table>
 	</div> 
 </dialog>
-<!-- Delete -->
-<dialog #confirmDeleteModal>
 
-	<!--  Options -->
-	<div class="modal-header">
-		<h4 class="modal-title">Confirm Delete</h4>
-		<div class="filter-close-box" (click)="confirmDeleteModal.close()">X</div>
-	</div>
-	<div class="modal-body publicity-suggestions">
-		<p>This profile will be deleted and it will no longer be possible to access the associated data</p>
-		<button class="btn btn-secondary arenella-btn" (click)="confirmDeleteProfile()">Confirm</button>
-	</div> 
-</dialog>
 <!-- Candidte contact -->
 <dialog #contactBox >
 	<div class="modal-header">

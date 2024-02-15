@@ -1,7 +1,7 @@
 <div class="page">
 	<!-- View Candidate of selected Item -->
 	<div *ngIf="candidateId.length > 0">
-		<app-suggestions [externalProvileViewCandidateId]="candidateId" (switchViewEvent)="handleswitchViewEvent()"></app-suggestions>
+		<app-suggestions [parentComponent]="'newsfeed'" [externalProvileViewCandidateId]="candidateId" (switchViewEvent)="handleswitchViewEvent()"></app-suggestions>
 	</div>
 	<!-- Main newsfeed -->
 	<div *ngIf="candidateId.length == 0">

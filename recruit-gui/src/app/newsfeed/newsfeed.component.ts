@@ -15,7 +15,6 @@ export class NewsfeedComponent {
 	public 		lastNewsfeedView:Date				= new Date();
 	public 		newsFeedItems:Array<NewsFeedItem> 	= new Array<NewsFeedItem>();
 	
-	
 	public handleswitchViewEvent():void{
 		this.candidateId 	= "";	
 	}

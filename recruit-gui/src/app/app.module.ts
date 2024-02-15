@@ -33,6 +33,7 @@ import { CandidateInfoBoxComponent } 		from './candidate-info-box/candidate-info
 import { NewsfeedComponent } 				from './newsfeed/newsfeed.component';
 import { InlineCvComponent}					from './suggestions/inline-cv/inline-cv.component';
 import { SavedCandidatesComponent}			from './suggestions/saved-candidates/saved-candidates.component';
+import { CandidateProfileComponent}			from './suggestions/candidate-profile/candidate-profile.component';
 
 @NgModule({
   declarations: [
@@ -60,7 +61,8 @@ import { SavedCandidatesComponent}			from './suggestions/saved-candidates/saved-
  	SuggestionsComponent,
  	NewsfeedComponent,
  	InlineCvComponent,
- 	SavedCandidatesComponent
+ 	SavedCandidatesComponent,
+ 	CandidateProfileComponent
   ],
   imports: [
     BrowserModule,

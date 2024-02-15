@@ -1,0 +1,155 @@
+<div *ngIf="currentView === 'inline-cv'">
+	<app-inline-cv [trustedResourceUrl]="trustedResourceUrl" [candidate]="suggestedCandidate" (switchViewEvent)="backToProfile()"></app-inline-cv>
+</div>
+	
+<div class="action-buttons" *ngIf="!isViewOnly">
+	<a class="currliculum-link" (click)="doCreditCheckByCount()" href="{{getCurriculumDownloadUrl(suggestedCandidate.candidateId)}}" *ngIf="passedCreditCheck && (!isCandidate()) && (currentView != 'saved-candidates')">
+		<button class="btn btn-secondary arenella-btn">Download CV</button>
+	</a>
+	<button class="btn btn-secondary arenella-btn" (click)="handleNoCredit()" *ngIf="!passedCreditCheck && (!isCandidate()) && (currentView != 'saved-candidates')">Download CV</button>
+	<button class="btn btn-secondary arenella-btn hide-for-mobile" (click)="showInlineCVView()" 							*ngIf="(currentView != 'saved-candidates') && !isCandidate()">Display CV</button>
+	<button class="btn btn-secondary arenella-btn" *ngIf="isCandidate() || isAdmin() || isOwner()" (click)="editAccount()"> Edit</button>
+     		<button class="btn btn-secondary arenella-btn" *ngIf="isCandidate() || isAdmin() || isOwner()" (click)="deleteAccount()"> Delete</button>
+	<button class="btn btn-secondary arenella-btn" (click)="rememberCandidate(suggestedCandidate)" 		*ngIf="currentView != 'saved-candidates' && !isSavedCandidate(suggestedCandidate) && !isCandidate()" title="Add candidate to your list of saved candidates">Save Candidate</button>
+	<button class="btn btn-secondary arenella-btn" (click)="rememberCandidate(suggestedCandidate)" 		*ngIf="currentView != 'saved-candidates' && isSavedCandidate(suggestedCandidate) && !isCandidate()" title="Add candidate to your list of saved candidates" disabled>Save Candidate</button>
+	<button class="btn btn-secondary arenella-btn" (click)="forgetCandidate()" 							*ngIf="currentView === 'saved-candidates'" title="removed candidate from your list of saved candidates">Unsave Candidate</button>
+	<button class="btn btn-secondary arenella-btn" (click)="showNotesDialog(notesBox,suggestedCandidate)" 	*ngIf="currentView === 'saved-candidates'">Notes</button>
+	<button class="btn btn-secondary arenella-btn" (click)="back()">Back</button>
+</div>
+			
+<div class="action-buttons" *ngIf="isViewOnly">
+	<a class="currliculum-link" (click)="doCreditCheckByCount()" href="{{getCurriculumDownloadUrl(suggestedCandidate.candidateId)}}" *ngIf="passedCreditCheck && (!isCandidate()) && (currentView != 'saved-candidates')">
+		<button class="btn btn-secondary arenella-btn">Download CV</button>
+	</a>
+	<button class="btn btn-secondary arenella-btn" (click)="handleNoCredit()" *ngIf="!passedCreditCheck && (!isCandidate()) && (currentView != 'saved-candidates')">Download CV</button>
+	<button class="btn btn-secondary arenella-btn hide-for-mobile" (click)="showInlineCVView()" 							*ngIf="(currentView != 'saved-candidates') && !isCandidate()">Display CV</button>
+	<button class="btn btn-secondary arenella-btn" (click)="rememberCandidate(suggestedCandidate)" 		*ngIf="currentView != 'saved-candidates' && !isSavedCandidate(suggestedCandidate) && !isCandidate()" title="Add candidate to your list of saved candidates">Save Candidate</button>
+	<button class="btn btn-secondary arenella-btn" (click)="rememberCandidate(suggestedCandidate)" 		*ngIf="currentView != 'saved-candidates' && isSavedCandidate(suggestedCandidate) && !isCandidate()" title="Add candidate to your list of saved candidates" disabled>Save Candidate</button>
+	<button class="btn btn-secondary arenella-btn" (click)="forgetCandidate()" 							*ngIf="currentView === 'saved-candidates'" title="removed candidate from your list of saved candidates">Unsave Candidate</button>
+	<button class="btn btn-secondary arenella-btn" (click)="showNotesDialog(notesBox,suggestedCandidate)" 	*ngIf="currentView === 'saved-candidates'">Notes</button>
+	<button class="btn btn-secondary arenella-btn" (click)="back()" 						*ngIf="currentView != 'saved-candidates'  && !isCandidate()">Back</button>
+</div>
+			
+<!-- Left Pane -->
+<app-candidate-info-box [config]="infoItemConfig" (openContactBoxEvent)="contactCandidate(contactBox)"></app-candidate-info-box>
+			
+<!-- div class="details-right" -->
+<div class="desc-body details-right">
+	<div style="width:100%"><h1>{{suggestedCandidate.roleSought}}</h1></div>
+
+	<div *ngIf="candidateProfile.introduction && candidateProfile.introduction.length != 0" style="margin-top:50px;margin-bottom:50px;">
+		<div>
+			<h1 style="background:#e8e8e8">Candidate Introduction</h1>
+		</div>
+		<div style="width:100%;">
+			<pre style="white-space:pre-line;font-family: Roboto, 'Helvetica Neue', sans-serif;">{{candidateProfile.introduction}}</pre>
+		</div>
+	</div>		
+	<div *ngIf="!candidateProfile.introduction || candidateProfile.introduction.length == 0" style="margin-top:50px;margin-bottom:50px;">
+		<div><h1 style="background:#e8e8e8">Candidate Introduction</h1></div>
+		<div style="width:100%;">
+			<div style="white-space:pre-line;font-family: Roboto, 'Helvetica Neue', sans-serif;">
+			I would like to introduce myself. My name is {{this.suggestedCandidate.firstname}} 
+			and I have {{this.suggestedCandidate.yearsExperience}} years experience. I am currently looking for a new role.
+		
+			I am based in {{this.suggestedCandidate.country | enumToHumanReadableValue}} 
+			</div>
+		</div>
+	</div>		
+
+	<div>
+		<table class="table candidate-suggestion-table">
+			<tr>
+				<td class="candidate-suggestion-table-hdr">Candidate Number</td>
+				<td>{{suggestedCandidate.candidateId}}</td>
+			</tr>
+			<tr>
+				<td class="candidate-suggestion-table-hdr">Name</td>
+				<td>{{suggestedCandidate.firstname}} {{suggestedCandidate.surname}}</td>
+			</tr>
+			<tr *ngIf="!isCandidate()">
+				<td class="candidate-suggestion-table-hdr">Skill Accuracy</td>
+				<td>
+					<div class="suggestion-perception-{{suggestedCandidate.accuracySkills}}"></div>
+				</td>
+			</tr>
+			<tr *ngIf="!isCandidate()">
+				<td class="candidate-suggestion-table-hdr">Language Accuracy</td>
+				<td>
+					<div class="suggestion-perception-{{suggestedCandidate.accuracyLanguages}}"></div>
+				</td>
+			</tr>
+			<tr *ngIf="!isCandidate()">
+				<td class="candidate-suggestion-table-hdr">Matching Skills</td>
+				<td>
+					<div style="float:center" *ngFor="let skill of skillsFiltersMatch()" class="{{hasRequiredSkill(skill)}}">
+						{{skill}}
+					</div>
+				</td>
+			</tr>
+			<tr *ngIf="!isCandidate()">
+				<td class="candidate-suggestion-table-hdr">Missing Skills</td>
+				<td>
+					<div style="float:center" *ngFor="let skill of skillsFiltersNoMatch()" class="{{hasRequiredSkill(skill)}}">
+						{{skill}}
+					</div>
+				</td>
+			</tr>
+		</table>
+	</div>
+</div>
+<!-- Candidte contact -->
+<dialog #contactBox >
+	<div class="modal-header">
+		<h4 class="modal-title">Message Candidate</h4>
+ 		<div class="filter-close-box" (click)="contactBox.close()">X</div>
+	</div>
+	<div class="modal-body" *ngIf="contactCandidateView === 'message'">
+		<form [formGroup]="sendMessageGroup">
+			<div style="float:left;margin:0px; margin-bottom:10px;">
+				<b>Title:</b><input type="text" style="margin-left:10px;width:300px;" formControlName="title"/>
+				<br>
+			</div>
+			<textarea formControlName="message"></textarea>
+			<button class="btn btn-secondary arenella-btn" (click)="sendMessageToCandidate()">Send</button>
+		</form>	
+	</div>
+	<div class="modal-body message-send-success" *ngIf="contactCandidateView === 'success'">
+			<p>Message Sent Successfully</p>
+			<p>You can view a copy of your message and any replies in your inbox</p>
+	</div>
+	<div class="modal-body" *ngIf="contactCandidateView === 'failure'">
+			<p class="message-send-failure">Failed to Send Message</p>
+	</div>
+</dialog> 
+<!-- Delete -->
+<dialog #confirmDeleteModal>
+
+	<!--  Options -->
+	<div class="modal-header">
+		<h4 class="modal-title">Confirm Delete</h4>
+		<div class="filter-close-box" (click)="confirmDeleteModal.close()">X</div>
+	</div>
+	<div class="modal-body publicity-suggestions">
+		<p>This profile will be deleted and it will no longer be possible to access the associated data</p>
+		<button class="btn btn-secondary arenella-btn" (click)="confirmDeleteProfile()">Confirm</button>
+	</div> 
+</dialog>
+<dialog #notesBox>
+	<div class="modal-header">
+		<h4 class="modal-title">Notes for Candidate</h4>
+ 		<div class="filter-close-box" (click)="notesBox.close()">X</div>
+	</div>
+	<div class="feedbackBox;">
+		<form [formGroup]="savedCandidateNotesForm">
+			<div class="modal-body" *ngIf="!updatedSavedCandidate">
+				<textarea class="notes-textarea" formControlName="notes"></textarea>
+				<br/>
+				<button class="btn btn-secondary" (click)="updateSavedCandidate()" *ngIf="!isNoLongerAvailable()" download>Save</button>
+			</div>
+			<div class="modal-body" *ngIf="updatedSavedCandidate">
+				<h1>Updated</h1>
+			</div>              
+		</form>
+	</div>
+</dialog>
