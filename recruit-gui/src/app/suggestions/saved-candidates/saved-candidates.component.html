@@ -8,8 +8,8 @@
 			<div class="saved-candidate-icon-header" *ngIf="!isNoLongerAvailableSC(savedCandidate)">
 				C{{savedCandidate.candidate.candidateId}}
 			</div>
-			<div class="saved-candidate-icon-header" *ngIf="isNoLongerAvailableSC(savedCandidate)">
-				{{savedCandidate.candidate.candidateId}}
+			<div class="saved-candidate-icon-header-disabled" *ngIf="isNoLongerAvailableSC(savedCandidate)">
+				C{{savedCandidate.candidate.candidateId}}
 			</div>
 			<div class="suggestion-icon-body">
 				<div>

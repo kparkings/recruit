@@ -191,9 +191,28 @@ public class NewsFeedItemServiceImplTest {
 		
 		final String 			userId 		= "1234";
 		
+		Mockito.when(this.mockNewsFeedItemViewDao.existsById(userId)).thenReturn(true);
+		
 		this.service.deleteNewsFeedUserView(userId);
 		
 		Mockito.verify(this.mockNewsFeedItemViewDao).deleteNewsFeedUserView(userId);
+		
+	}
+	
+	/**
+	* Tests that deletion is only carried out if recrd for User exists
+	* @throws Exception
+	*/
+	@Test
+	public void testDeleteNewsFeedUserView_no_recrd() throws Exception{
+		
+		final String 			userId 		= "1234";
+		
+		Mockito.when(this.mockNewsFeedItemViewDao.existsById(userId)).thenReturn(false);
+		
+		this.service.deleteNewsFeedUserView(userId);
+		
+		Mockito.verify(this.mockNewsFeedItemViewDao, Mockito.never()).deleteNewsFeedUserView(userId);
 		
 	} 
 	

@@ -92,7 +92,12 @@ public class NewsFeedItemServiceImpl implements NewsFeedItemService{
 	*/
 	@Override
 	public void deleteNewsFeedUserView(String userId) {
-		this.newsFeedItemViewDao.deleteNewsFeedUserView(userId);
+		
+		if (this.newsFeedItemViewDao.existsById(userId)) {
+			this.newsFeedItemViewDao.deleteNewsFeedUserView(userId);
+		}
+		
+		
 		
 	}
 	

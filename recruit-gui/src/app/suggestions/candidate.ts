@@ -86,4 +86,6 @@ export class Candidate {
 	*/
 	accuracySkills:string 					= 'poor';
 	
+	removed:boolean = false;
+	
 }

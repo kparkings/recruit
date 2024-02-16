@@ -2306,3 +2306,12 @@ databaseChangeLog:
                   type: timestamp
                   constraints:
                     nullable: true
+  - changeSet:
+      id: dropfk_saved_candidate_candidate
+      author: kparkings
+      changes:
+        - dropForeignKeyConstraint:
+            baseTableName: saved_candidates
+            baseTableSchemaName: candidate
+            constraintName: fk_saved_candidate_candidate
+            

@@ -652,20 +652,16 @@ public class CandidateServiceImpl implements CandidateService{
 		
 		this.savedCandidateDao.fetchSavedCandidatesByUserId(getAuthenticatedUserId()).stream().forEach(c -> {
 			
-			if (this.candidateDao.existsById(c.getCandidateId())) {
+			Optional<Candidate> candidate = candidateDao.findCandidateById(c.getCandidateId());
 			
-				Candidate candidate = candidateDao.findCandidateById(c.getCandidateId()).get();
-				
-				if (candidate.isAvailable()) {
-					candidates.put(c, candidate);
-				} else {
-					candidates.put(c, Candidate
-							.builder()
-								.candidateId(" Removed")
-								.firstname("Candidate No Longer Available")
-							.build());
-				}
-				
+			if (candidate.isPresent()) {
+				candidates.put(c, candidate.get());
+			} else {
+				candidates.put(c, Candidate
+						.builder()
+							.candidateId(""+c.getCandidateId())
+							.firstname("Candidate No Longer Available")
+						.build());
 			}
 			
 		});
@@ -845,7 +841,8 @@ public class CandidateServiceImpl implements CandidateService{
 			throw new IllegalArgumentException("You cannot delete this Candidate from the System");
 		}
 		
-		this.savedCandidateDao.deleteByCandidateId(Long.valueOf(candidateId));
+		//this.savedCandidateDao.deleteByCandidateId(Long.valueOf(candidateId));
+	
 		this.candidateDao.deleteById(Long.valueOf(candidateId));
 		
 		this.externalEventPublisher.publishCandidateDeletedEvent(new CandidateDeletedEvent(candidateId));

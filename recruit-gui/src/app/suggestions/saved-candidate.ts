@@ -8,4 +8,5 @@ export class SavedCandidate{
 	public candidateId:number		= 0;
 	public notes:string				= '';
 	public candidate:Candidate		= new Candidate();
+	public isRemoved:boolean		= false;
 }

@@ -27,6 +27,7 @@ import { AppComponent } from 'src/app/app.component';
 })
 export class CandidateProfileComponent {
 
+
 	@Input()  infoItemConfig:InfoItemConfig 			= new InfoItemConfig();
 	@Input()  suggestedCandidate:Candidate 				= new Candidate();
 	@Input()  skillFilters:Array<string>				= new Array<string>();
@@ -40,6 +41,7 @@ export class CandidateProfileComponent {
  	@ViewChild('confirmDeleteModal', {static:true})		confirmDeleteDialogBox!: ElementRef<HTMLDialogElement>;
  	@ViewChild('notesBox', { static: true }) 			notesDialogBox!: ElementRef<HTMLDialogElement>;
 	
+	public candidateIsRemoved:boolean					= false;
 	public contactCandidateView:string 					= 'message';
 	public currentView:string 							= 'suggestion-results';
 	public dangerousUrl 								= 'http://127.0.0.1:8080/curriculum-test/1623.pdf';
@@ -79,6 +81,9 @@ export class CandidateProfileComponent {
 		if (this.parentComponent == 'savedCandidates') {
 			this.currentView = 'saved-candidates';
 		}
+		
+		this.doCreditCheck();
+		
 	}
 	
 	/**
@@ -99,9 +104,9 @@ export class CandidateProfileComponent {
 		return this.currentSavedCandidate.candidate.candidateId === ' Removed';;
 	}
 	
-	public isNoLongerAvailableSC(savedCandidate:SavedCandidate):boolean{
-		return savedCandidate.candidate.candidateId === ' Removed';
-	}
+	//public isNoLongerAvailableSC(savedCandidate:SavedCandidate):boolean{
+	//	return savedCandidate.candidate.candidateId === ' Removed';
+	//}
 	
 	/**
 	* Displays dialog to edit notes for a SavedCandidate
@@ -249,7 +254,7 @@ export class CandidateProfileComponent {
 	}
 	
 	public doCreditCheckByCount():void{
-		
+		console.log("Running CC by count");
 		if(this.isAdmin()){
 			this.passedCreditCheck = true;
 		} else {
@@ -261,6 +266,7 @@ export class CandidateProfileComponent {
 	}
 	
 	public doCreditCheck():void{
+		console.log("Running DO CC");
 		if(this.isAdmin()){
 			this.passedCreditCheck = true;
 		} else {
@@ -270,7 +276,7 @@ export class CandidateProfileComponent {
 		}
 	}
 	
-	disableDownload():void{
+	disableDownloadXX():void{
 		this.passedCreditCheck = false;
 		this.doCreditCheck();
 	}
@@ -360,6 +366,7 @@ export class CandidateProfileComponent {
 	}
 	
 	public confirmDeleteProfile():void{
+		
 		this.candidateService.deleteCandidate(this.candidateProfile.candidateId).subscribe(data => {
 			if (this.isCandidate()) {
 				sessionStorage.removeItem('isAdmin');
@@ -371,7 +378,7 @@ export class CandidateProfileComponent {
 				this.router.navigate(['login-user']);
 				this.appComponent.refreschUnreadAlerts();
 			}else {
-				this.currentView = 'suggestion-results';
+				this.back();
 			}
 			this.confirmDeleteDialogBox.nativeElement.close();
 		});
@@ -405,11 +412,133 @@ export class CandidateProfileComponent {
 		return this.candidateProfile.ownerId == this.getLoggedInUserId();
 	}
 	
-		/**
+	/**
 	* Whether or not the Use is a Candidate
 	*/
 	public getLoggedInUserId():string{
 		return ""+sessionStorage.getItem("userId");
+	}
+	
+	/**
+	* [KP] Ugly and hacky. Need to do somethin gon the BE to ass status to candidate and
+	* use that insted
+	*/
+	public isNoLongerAvailableSC(suggestedCandidate:Candidate):boolean{
+		
+		console.log("FFF "+ JSON.stringify(this.suggestedCandidate));
+		console.log("EEE "+ JSON.stringify(this.candidateProfile));
+		return this.suggestedCandidate.removed;
+	}
+	
+	
+	
+	
+	
+	
+	
+	public showBtnNotes():boolean{
+		
+		if (this.suggestedCandidate.removed) {
+			return false;
+		}
+		
+		if (this.parentComponent == 'newsfeed'){
+			return false;
+		}
+		
+		return this.parentComponent == 'savedCandidates';
+	}
+	
+	public showBtnUnsaveCandidate():boolean{
+		
+		//if (this.suggestedCandidate.removed) {
+		//	return false;
+		//}
+		
+		if (this.parentComponent == 'newsfeed'){
+			return false;
+		}
+		
+		return this.currentView === 'saved-candidates'
+	}
+	
+	public showBtnSaveCandidate():boolean{
+		
+		if (this.parentComponent == 'newsfeed'){
+			return false;
+		}
+		
+		return this.currentView != 'saved-candidates' && !this.isSavedCandidate(this.suggestedCandidate) && !this.isCandidate();
+	}
+	
+	public showBtnUnsavedCandidateDisabled():boolean{
+		
+		if (this.suggestedCandidate.removed) {
+			return false;
+		}
+		
+		if (this.parentComponent == 'newsfeed'){
+			return false;
+		}
+		
+		return this.currentView != 'saved-candidates' && this.isSavedCandidate(this.suggestedCandidate) && !this.isCandidate()
+	}
+	
+	public showBtnDelete():boolean{
+		
+		if (this.parentComponent == 'newsfeed'){
+			return false;
+		}
+		
+		if (this.suggestedCandidate.removed) {
+			return false;
+		}
+		
+		return this.isCandidate() || this.isAdmin() || this.isOwner();
+	}
+	
+	public showBtnEdit():boolean{
+		console.log("--- this.parentComponent =  " + this.parentComponent);
+		if (this.parentComponent == 'savedCandidates') {
+			return false;
+		}
+		
+		if (this.parentComponent == 'newsfeed'){
+			return false;
+		}
+		
+		return this.isCandidate() || this.isAdmin() || this.isOwner();
+	}
+	
+	public showBtnShowCV():boolean{
+		
+		if (this.suggestedCandidate.removed) {
+			return false;
+		}
+		
+		//return (this.currentView != 'saved-candidates') && !this.isCandidate();
+		return !this.isCandidate();
+	}
+	
+	public showBtnDownloadCV():boolean{
+		
+		console.log("PCC = " + this.passedCreditCheck);
+		
+		if (this.suggestedCandidate.removed) {
+			return false;
+		}
+		
+		return !this.passedCreditCheck && (!this.isCandidate());
+	}
+	
+	public showBtnDownloadCVPassedCreditCheck():boolean{
+		
+		if (this.suggestedCandidate.removed) {
+			return false;
+		}
+		
+		//return this.passedCreditCheck && (!this.isCandidate()) && (this.currentView != 'saved-candidates');
+		return this.passedCreditCheck && (!this.isCandidate());
 	}
 	
 }

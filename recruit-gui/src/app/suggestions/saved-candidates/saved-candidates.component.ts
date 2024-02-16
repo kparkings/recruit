@@ -49,12 +49,13 @@ export class SavedCandidatesComponent {
 	}
 	
 	public isNoLongerAvailableSC(savedCandidate:SavedCandidate):boolean{
-		return savedCandidate.candidate.candidateId === ' Removed';
+		return savedCandidate.candidate.firstname === 'Candidate No Longer Available';
 	}
 	
 	public showSuggestedCandidateOverviewSavedCandidate(savedCandidate:SavedCandidate){
 		this.currentView 			= 'suggested-canidate-overview';
 		this.suggestedCandidate 	= savedCandidate.candidate;
+		this.suggestedCandidate.removed = this.isNoLongerAvailableSC(savedCandidate);
 		this.fetchCandidateProfile(savedCandidate.candidate.candidateId);
 	}
 	

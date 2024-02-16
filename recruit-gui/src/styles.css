@@ -210,6 +210,11 @@ dialog {
 	margin: auto;
 }
 
+textarea {
+    width: 100%;
+    height: 200px;
+}
+
 .arenella-btn{
     width: 165px;
     margin-right: 5px;

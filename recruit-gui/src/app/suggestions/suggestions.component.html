@@ -136,7 +136,7 @@
 
 		<!-- Suggestion Profile -->
 		<div *ngIf="currentView === 'suggested-canidate-overview'">
-			<app-candidate-profile (backEvent)="showSuggestionsResults()" [isViewOnly]="isViewOnly()" [infoItemConfig]="infoItemConfig" [suggestedCandidate]="suggestedCandidate" [candidateProfile]="candidateProfile" [skillFilters]="skillFilters"></app-candidate-profile>
+			<app-candidate-profile (backEvent)="showSuggestionsResults()" [parentComponent]="parentComponent" [isViewOnly]="isViewOnly()" [infoItemConfig]="infoItemConfig" [suggestedCandidate]="suggestedCandidate" [candidateProfile]="candidateProfile" [skillFilters]="skillFilters"></app-candidate-profile>
 		</div>
 	</div>
 </div>

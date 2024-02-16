@@ -2,6 +2,7 @@ package com.arenella.recruit.candidates.adapters;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -867,11 +868,9 @@ public class CandidateServiceImplTest {
 		
 		Mockito.when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
 		Mockito.when(mockAuthentication.getPrincipal()).thenReturn(userId);
-		Mockito.when(this.mockCandidateDao.findCandidateById(candidate1)).thenReturn(Optional.of(Candidate.builder().available(true).candidateId(String.valueOf(candidate1)).build()));
-		Mockito.when(this.mockCandidateDao.findCandidateById(candidate2)).thenReturn(Optional.of(Candidate.builder().available(true).candidateId(String.valueOf(candidate2)).build()));
-		Mockito.when(this.mockCandidateDao.existsById(Mockito.anyLong())).thenReturn(true);
+		Mockito.when(this.mockCandidateDao.findCandidateById(candidate1)).thenReturn(Optional.empty());
+		Mockito.when(this.mockCandidateDao.findCandidateById(candidate2)).thenReturn(Optional.of(Candidate.builder().available(true).firstname("Boop").candidateId(String.valueOf(candidate2)).build()));
 		Mockito.when(this.mockSavedCandidateDao.fetchSavedCandidatesByUserId(Mockito.anyString())).thenReturn(savedCandidates);
-		
 		Map<SavedCandidate, Candidate> result = this.service.fetchSavedCandidatesForUser();
 		
 		SavedCandidate sc1 = result.keySet().stream().filter(c -> c.getCandidateId() == candidate1).findAny().orElseThrow();
@@ -880,37 +879,8 @@ public class CandidateServiceImplTest {
 		assertEquals(String.valueOf(candidate1), result.get(sc1).getCandidateId());
 		assertEquals(String.valueOf(candidate2), result.get(sc2).getCandidateId());
 		
-	}
-	
-	/**
-	* Tests Fetch of SavedCandidates
-	* @throws Exception
-	*/
-	@Test
-	public void testFetchSavedCandidatesForUser_missingCandidate() throws Exception{
-		
-		final String 	userId 		= "kparkings";
-		final long 		candidate1 	= 1001;
-		final long 		candidate2 	= 1007;
-		
-		Set<SavedCandidate> savedCandidates = new HashSet<>();
-		
-		savedCandidates.add(SavedCandidate.builder().candidateId(1001).userId(userId).build());
-		savedCandidates.add(SavedCandidate.builder().candidateId(1007).userId(userId).build());
-		
-		Mockito.when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
-		Mockito.when(mockAuthentication.getPrincipal()).thenReturn(userId);
-		Mockito.when(this.mockCandidateDao.findCandidateById(candidate1)).thenReturn(Optional.of(Candidate.builder().candidateId(String.valueOf(candidate1)).build()));
-		Mockito.when(this.mockCandidateDao.existsById(candidate1)).thenReturn(true);
-		Mockito.when(this.mockCandidateDao.existsById(candidate2)).thenReturn(false);
-		Mockito.when(this.mockSavedCandidateDao.fetchSavedCandidatesByUserId(Mockito.anyString())).thenReturn(savedCandidates);
-		
-		Map<SavedCandidate, Candidate> result = this.service.fetchSavedCandidatesForUser();
-		
-		result.keySet().stream().filter(c -> c.getCandidateId() == candidate1).findAny().orElseThrow();
-		
-		assertTrue(result.keySet().stream().filter(c -> c.getCandidateId() == candidate2).findAny().isEmpty());
-		
+		assertNotEquals("Candidate No Longer Available", result.get(sc2).getFirstname());
+		assertEquals("Candidate No Longer Available", result.get(sc1).getFirstname());
 	}
 
 	/**
@@ -1644,7 +1614,6 @@ public class CandidateServiceImplTest {
 		this.service.deleteCandidate(candidateId);
 		
 		Mockito.verify(this.mockCandidateDao).deleteById(Long.valueOf(candidateId));
-		Mockito.verify(this.mockSavedCandidateDao).deleteByCandidateId(Long.valueOf(candidateId));
 		Mockito.verify(this.mockExternalEventPublisher).publishCandidateDeletedEvent(Mockito.any(CandidateDeletedEvent.class));
 	
 	}
@@ -1670,7 +1639,6 @@ public class CandidateServiceImplTest {
 		this.service.deleteCandidate(candidateId);
 		
 		Mockito.verify(this.mockCandidateDao).deleteById(Long.valueOf(candidateId));
-		Mockito.verify(this.mockSavedCandidateDao).deleteByCandidateId(Long.valueOf(candidateId));
 		Mockito.verify(this.mockExternalEventPublisher).publishCandidateDeletedEvent(Mockito.any(CandidateDeletedEvent.class));
 		
 	}
@@ -1698,7 +1666,6 @@ public class CandidateServiceImplTest {
 		this.service.deleteCandidate(candidateId);
 		
 		Mockito.verify(this.mockCandidateDao).deleteById(Long.valueOf(candidateId));
-		Mockito.verify(this.mockSavedCandidateDao).deleteByCandidateId(Long.valueOf(candidateId));
 		Mockito.verify(this.mockExternalEventPublisher).publishCandidateDeletedEvent(Mockito.any(CandidateDeletedEvent.class));
 		
 	}

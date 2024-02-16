@@ -115,3 +115,9 @@ suggestion-perception-excellent{
 	background:grey;
 	display:inline-block;
 }
+
+.notes-textarea{
+	width:95%;
+	overflow: auto;
+	min-height:130px;
+}

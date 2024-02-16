@@ -2,39 +2,26 @@
 	<app-inline-cv [trustedResourceUrl]="trustedResourceUrl" [candidate]="suggestedCandidate" (switchViewEvent)="backToProfile()"></app-inline-cv>
 </div>
 	
-<div class="action-buttons" *ngIf="!isViewOnly">
-	<a class="currliculum-link" (click)="doCreditCheckByCount()" href="{{getCurriculumDownloadUrl(suggestedCandidate.candidateId)}}" *ngIf="passedCreditCheck && (!isCandidate()) && (currentView != 'saved-candidates')">
+<div class="action-buttons">
+	<a class="currliculum-link" (click)="doCreditCheckByCount()" href="{{getCurriculumDownloadUrl(suggestedCandidate.candidateId)}}" *ngIf="showBtnDownloadCVPassedCreditCheck()">
 		<button class="btn btn-secondary arenella-btn">Download CV</button>
 	</a>
-	<button class="btn btn-secondary arenella-btn" (click)="handleNoCredit()" *ngIf="!passedCreditCheck && (!isCandidate()) && (currentView != 'saved-candidates')">Download CV</button>
-	<button class="btn btn-secondary arenella-btn hide-for-mobile" (click)="showInlineCVView()" 							*ngIf="(currentView != 'saved-candidates') && !isCandidate()">Display CV</button>
-	<button class="btn btn-secondary arenella-btn" *ngIf="isCandidate() || isAdmin() || isOwner()" (click)="editAccount()"> Edit</button>
-     		<button class="btn btn-secondary arenella-btn" *ngIf="isCandidate() || isAdmin() || isOwner()" (click)="deleteAccount()"> Delete</button>
-	<button class="btn btn-secondary arenella-btn" (click)="rememberCandidate(suggestedCandidate)" 		*ngIf="currentView != 'saved-candidates' && !isSavedCandidate(suggestedCandidate) && !isCandidate()" title="Add candidate to your list of saved candidates">Save Candidate</button>
-	<button class="btn btn-secondary arenella-btn" (click)="rememberCandidate(suggestedCandidate)" 		*ngIf="currentView != 'saved-candidates' && isSavedCandidate(suggestedCandidate) && !isCandidate()" title="Add candidate to your list of saved candidates" disabled>Save Candidate</button>
-	<button class="btn btn-secondary arenella-btn" (click)="forgetCandidate()" 							*ngIf="currentView === 'saved-candidates'" title="removed candidate from your list of saved candidates">Unsave Candidate</button>
-	<button class="btn btn-secondary arenella-btn" (click)="showNotesDialog(notesBox,suggestedCandidate)" 	*ngIf="currentView === 'saved-candidates'">Notes</button>
-	<button class="btn btn-secondary arenella-btn" (click)="back()">Back</button>
-</div>
-			
-<div class="action-buttons" *ngIf="isViewOnly">
-	<a class="currliculum-link" (click)="doCreditCheckByCount()" href="{{getCurriculumDownloadUrl(suggestedCandidate.candidateId)}}" *ngIf="passedCreditCheck && (!isCandidate()) && (currentView != 'saved-candidates')">
-		<button class="btn btn-secondary arenella-btn">Download CV</button>
-	</a>
-	<button class="btn btn-secondary arenella-btn" (click)="handleNoCredit()" *ngIf="!passedCreditCheck && (!isCandidate()) && (currentView != 'saved-candidates')">Download CV</button>
-	<button class="btn btn-secondary arenella-btn hide-for-mobile" (click)="showInlineCVView()" 							*ngIf="(currentView != 'saved-candidates') && !isCandidate()">Display CV</button>
-	<button class="btn btn-secondary arenella-btn" (click)="rememberCandidate(suggestedCandidate)" 		*ngIf="currentView != 'saved-candidates' && !isSavedCandidate(suggestedCandidate) && !isCandidate()" title="Add candidate to your list of saved candidates">Save Candidate</button>
-	<button class="btn btn-secondary arenella-btn" (click)="rememberCandidate(suggestedCandidate)" 		*ngIf="currentView != 'saved-candidates' && isSavedCandidate(suggestedCandidate) && !isCandidate()" title="Add candidate to your list of saved candidates" disabled>Save Candidate</button>
-	<button class="btn btn-secondary arenella-btn" (click)="forgetCandidate()" 							*ngIf="currentView === 'saved-candidates'" title="removed candidate from your list of saved candidates">Unsave Candidate</button>
-	<button class="btn btn-secondary arenella-btn" (click)="showNotesDialog(notesBox,suggestedCandidate)" 	*ngIf="currentView === 'saved-candidates'">Notes</button>
-	<button class="btn btn-secondary arenella-btn" (click)="back()" 						*ngIf="currentView != 'saved-candidates'  && !isCandidate()">Back</button>
+	<button class="btn btn-secondary arenella-btn" 					(click)="handleNoCredit()" 								*ngIf="showBtnDownloadCV()">Download CV</button>
+	<button class="btn btn-secondary arenella-btn hide-for-mobile" 	(click)="showInlineCVView()" 							*ngIf="showBtnShowCV()">Display CV</button>
+	<button class="btn btn-secondary arenella-btn" 					(click)="editAccount()"									*ngIf="showBtnEdit()" > Edit</button>
+    <button class="btn btn-secondary arenella-btn" 					(click)="deleteAccount()" 								*ngIf="showBtnDelete()"> Delete</button>
+	<button class="btn btn-secondary arenella-btn" 					(click)="rememberCandidate(suggestedCandidate)" 		*ngIf="showBtnSaveCandidate()" title="Add candidate to your list of saved candidates">Save Candidate</button>
+	<button class="btn btn-secondary arenella-btn" 					(click)="rememberCandidate(suggestedCandidate)" 		*ngIf="showBtnUnsavedCandidateDisabled()" title="Add candidate to your list of saved candidates" disabled>Save Candidate</button>
+	<button class="btn btn-secondary arenella-btn" 					(click)="forgetCandidate()" 							*ngIf="showBtnUnsaveCandidate()" title="removed candidate from your list of saved candidates">Unsave Candidate</button>
+	<button class="btn btn-secondary arenella-btn" 					(click)="showNotesDialog(notesBox,suggestedCandidate)" 	*ngIf="showBtnNotes()">Notes</button>
+	<button class="btn btn-secondary arenella-btn" 					(click)="back()">Back</button>
 </div>
 			
 <!-- Left Pane -->
-<app-candidate-info-box [config]="infoItemConfig" (openContactBoxEvent)="contactCandidate(contactBox)"></app-candidate-info-box>
+<app-candidate-info-box [config]="infoItemConfig" (openContactBoxEvent)="contactCandidate(contactBox)" *ngIf="!this.suggestedCandidate.removed"></app-candidate-info-box>
 			
 <!-- div class="details-right" -->
-<div class="desc-body details-right">
+<div class="desc-body details-right" *ngIf="!this.suggestedCandidate.removed">
 	<div style="width:100%"><h1>{{suggestedCandidate.roleSought}}</h1></div>
 
 	<div *ngIf="candidateProfile.introduction && candidateProfile.introduction.length != 0" style="margin-top:50px;margin-bottom:50px;">
