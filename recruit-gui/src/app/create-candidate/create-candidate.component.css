@@ -106,3 +106,18 @@ textarea{
 	margin-right:10%;
 	margin-bottom:50px;
 }
+
+@media ( max-width :700px) {
+	.candidate-signup-panel{
+		width:100%;
+		margin-top:50px;
+		margin-left:0%;
+		margin-right:0%;
+		margin-bottom:50px;
+	}
+	.arenella-btn{
+		margin-top:20px;
+		margin-bottom:20px;
+		width:200px
+	}
+}

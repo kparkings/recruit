@@ -1,7 +1,6 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { DeviceDetectorService } from 'ngx-device-detector';
-import { InfoItem, InfoItemConfig } from './info-item';
+import { Component, EventEmitter, Input, Output } 	from '@angular/core';
+import { CommonModule } 							from '@angular/common';
+import { InfoItem, InfoItemConfig } 				from './info-item';
 
 @Component({
   selector: 'app-candidate-info-box',
@@ -11,26 +10,13 @@ import { InfoItem, InfoItemConfig } from './info-item';
 })
 export class CandidateInfoBoxComponent {
 
-	@Input() config:InfoItemConfig = new InfoItemConfig();
-	
-	@Output() openContactBoxEvent = new EventEmitter<string>();
+	@Input()  config:InfoItemConfig = new InfoItemConfig();
+	@Output() openContactBoxEvent 	= new EventEmitter<string>();
 
-	public isMobile:boolean = false;
-	
-	/**
-	* Mobile CSS variables 
-	*/
-	public mobileContainerCSS:string = '';
-	
 	/**
 	* Constructor
  	*/	
-	public constructor(private deviceDetector:DeviceDetectorService){
-		this.isMobile = deviceDetector.isMobile();
-		
-		if (this.isMobile) {
-			this.mobileContainerCSS = "mobile-left-pane-container";
-		} 	
+	public constructor(){
 	
 	}
 	
@@ -38,5 +24,4 @@ export class CandidateInfoBoxComponent {
     	this.openContactBoxEvent.emit('openContactDialogBox');
   	}
 	
-
 }

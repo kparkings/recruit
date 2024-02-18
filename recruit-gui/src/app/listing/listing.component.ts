@@ -1,12 +1,11 @@
-import { Component, ElementRef, OnInit, ViewChild } 							from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } 	from '@angular/core';
 import { ListingService }								from '../listing.service';
 import { EmailService, EmailRequest }					from '../email.service';
 import { Listing}										from './listing';
 import { ActivatedRoute } 								from '@angular/router';
 import { UntypedFormGroup, UntypedFormControl,  }		from '@angular/forms';
-import { NgbModal, NgbModalOptions }					from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal }										from '@ng-bootstrap/ng-bootstrap';
 import { HostListener}									from '@angular/core';
-import { DeviceDetectorService } 						from 'ngx-device-detector';
 import { RecruiterProfileService} 						from '../recruiter-profile.service';
 import { RecruiterProfile }								from '../recruiter-profile/recruiter-profile';
 import { ListingAlertAddRequest } 						from './listing-alert-add-request';
@@ -41,21 +40,8 @@ export class ListingComponent implements OnInit {
 				private emailService:EmailService, 
 				private _Activatedroute:ActivatedRoute, 
 				private modalService:NgbModal, 
-				private deviceDetector:DeviceDetectorService,
 				private recruiterProfileService:RecruiterProfileService,
 				private staticDataService:			StaticDataService) { 
-	
-		this.isMobile = deviceDetector.isMobile();
-		
-		if (this.isMobile) {
-			this.mobileListingclass 			= 'mobile-listing-layout';
-			this.mobileListingclassPane 		= 'mobile-listing-layout-pane';
-			this.mobileListingclassFilters 		= 'mobile-listing-layout-filters';
-			this.mobileListingLeftPaneContainer = "mobile-left-pane-container";
-			this.mobileDescBody 				= 'mobile-desc-body';
-			this.mobileListingViewDiv			= 'mobile-listing-view';
-			this.mobileButton				 	= 'buttons-icon-mobile';
-		} 
 		
 		if (sessionStorage.getItem("userId")) {		
 			this.recruiterProfileService.fetchRecruiterProfiles("RECRUITERS").subscribe(rps => {
@@ -652,7 +638,6 @@ export class ListingComponent implements OnInit {
 		
 		this.listingService.createAlert(alert).subscribe(res => {
 			this.resetAlertFormBean();
-			//this.listingAlertDialogBox.nativeElement.close();
 			this.createAlertStep = 4;
 		});	
 		
@@ -700,6 +685,5 @@ export class ListingComponent implements OnInit {
 			this.listingAlertConfirmDisabled = true;
 		}
 	}
-	
 	
 }

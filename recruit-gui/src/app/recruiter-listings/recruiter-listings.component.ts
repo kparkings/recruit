@@ -7,7 +7,6 @@ import { Candidate}										from './candidate';
 import { CandidateServiceService }						from '../candidate-service.service';
 import { SuggestionsService }							from '../suggestions.service';
 import { Router}										from '@angular/router';
-import { DeviceDetectorService } 						from 'ngx-device-detector';
 import { RecruiterProfileService} 						from '../recruiter-profile.service';
 import { RecruiterProfile }								from '../recruiter-profile/recruiter-profile';
 import { RecruiterMarketplaceService }					from '../recruiter-marketplace.service';
@@ -60,7 +59,6 @@ export class RecruiterListingsComponent implements OnInit {
 	public contractTypeOptions:Array<HtmlOption> 		= new Array<HtmlOption>();
 	public countryOptions:Array<HtmlOption> 			= new Array<HtmlOption>();
   	
-  	
 	private	pageSize:number								= 8;
   	private jobSpecFile!:File;
 	private  recruiterId:string							= '';
@@ -69,9 +67,6 @@ export class RecruiterListingsComponent implements OnInit {
 	private  recruiterEmail:string 						= '';
 	private  recruiterCompany:string					= '';
 	
-	
-	
-	
 	/**
 	* Constructor 
 	*/
@@ -79,14 +74,11 @@ export class RecruiterListingsComponent implements OnInit {
 				private recruiterService:			RecruiterService, 
 				public 	candidateService:			CandidateServiceService,
 				public 	suggestionsService:			SuggestionsService,
-				private deviceDetector:				DeviceDetectorService,
 				private recruiterProfileService: 	RecruiterProfileService,
 				public 	router:						Router,
 				private marketplaceService: 		RecruiterMarketplaceService,
 				private creditsService:				CreditsService,
 				private staticDataService:			StaticDataService) {
-					
-				this.isMobile = deviceDetector.isMobile();
 				
 				this.recruiterProfileService.fetchOwnRecruiterProfile().subscribe(rec => {
 					this.recruiterProfile = rec;
@@ -811,7 +803,6 @@ export class RecruiterListingsComponent implements OnInit {
 		let langFrench:boolean 			= this.newListingFormBean.get('langFrench')?.value;
 		
 		let languages:Array<string> = new Array<string>();
-		
 		
 		let startDate:Date 				= this.mpFormBean.get('startDate')?.value;
 		let lastSubmissionDate:Date 	= this.mpFormBean.get('lastSubmissionDate')?.value;

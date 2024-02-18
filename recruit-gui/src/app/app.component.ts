@@ -2,7 +2,6 @@ import { Component, ViewChild }				from '@angular/core';
 import { Router}							from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import { NgbModal, NgbModalOptions}			from '@ng-bootstrap/ng-bootstrap'
-import { DeviceDetectorService } 			from 'ngx-device-detector';
 import { RecruiterMarketplaceService }		from './recruiter-marketplace.service';
 import { EmailService }						from './email.service';
 import { PopupsService }					from './popups.service';
@@ -41,29 +40,18 @@ export class AppComponent {
 	public lastNewsfeedView:Date		= new Date();
 	public unseenNewsfeedItems:boolean  = true;
 	
-	//public intervalId = setInterval(() => {
-    //	this.refreschUnreadAlerts(); 
-    //}, 5000)
-	
 	/**
 	* Constructor
 	*/
 	constructor(private router: 				Router, 
 				private cookieService: 			CookieService, 
 				private modalService: 			NgbModal, 
-				private deviceDetector: 		DeviceDetectorService,
 				private mpService:				RecruiterMarketplaceService,
 				private emailService:			EmailService,
 				public  popupsService:			PopupsService,
 				private candidateNavService: 	CandidateNavService,
 				public  creditsService:			CreditsService,
 				private newsfeedService:		NewsfeedService){
-		
-		this.isMobile = deviceDetector.isMobile();
-		
-		if (this.isMobile) {
-			this.menuItemMobileCss 			= 'li-arenella-nav-mob';
-		}
 		
 		if (this.isRecruiterNoSubscription() || this.hasUnpaidSubscription()) {
 			this.router.navigate(['recruiter-account']);
@@ -72,8 +60,6 @@ export class AppComponent {
 		if (cookieService.get(this.getTandCsCookieName())) {
 			this.termsAndConditionsAccepted = true;
 		}
-		
-		
 		
 		this.creditsService.hasTokens().subscribe(tokens => {
 			if (tokens == false) {
@@ -128,8 +114,6 @@ export class AppComponent {
 			});
 		
 		}
-		
-		
 		
 	}
 	

@@ -1,9 +1,8 @@
-<div class="left-box-container {{mobileContainerCSS}}">
-	<h1 *ngIf="isMobile" class="listing-view-title">{{config.getTitle()}}</h1>
-    <div class="left-box">
+<div class="left-box-container">
+	<div class="left-box">
     	<div class="photo">
        		<img class="profile-photo-details" *ngIf="config.hasProfilePhoto()" id='base64image' src='data:image/jpeg;base64, {{config.getProfilePhotoBytes()}}' />
-			<div *ngIf="!config.hasProfilePhoto() && !isMobile" class="profile-photo-details material-icons person ">
+			<div *ngIf="!config.hasProfilePhoto()" class="profile-photo-details material-icons person no-profile-photo-mobile">
 				<span class="person-span">person</span>
 			</div>
        	</div>

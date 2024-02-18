@@ -17,7 +17,7 @@
 					<h1>Welcome to Arenella-ICT</h1>
 					<h5>A place for IT candidates and IT recruiters to come together</h5>
 				</div>
-				<div class="filters {{mobileListingclassFilters}}">
+				<div class="filters">
 					<div class="filters-title" *ngIf="displayFilters"  (click)="toggleFilters()">Filters:<span style="float:right; margin-right:20px;cursor:pointer"> Hide </span></div>
 					<div class="filters-title" *ngIf="!displayFilters" (click)="toggleFilters()">Filters:<span style="float:right; margin-right:20px;cursor:pointer"> Show </span></div>
 					<table *ngIf="displayFilters">
@@ -48,8 +48,8 @@
 						</tr>
 					</table>
 				</div>
-				<div class="listing-pane {{mobileListingclassPane}}">
-					<div class="job-post {{mobileListingclass}}" *ngFor="let listing of listings">
+				<div class="listing-pane">
+					<div class="job-post" *ngFor="let listing of listings">
 						<div (click)="showListingDetails(listing)">
 							<div class="listing-title">{{getFormattedJobTitle(listing.title)}}</div>
 							<div>
@@ -72,27 +72,24 @@
 			</div>
 		</div>
 		<!-- Show Selected Listing View -->
-		<div class="{{mobileListingViewDiv}}">
+		<div>
 			<div  *ngSwitchCase="'show'">
 	       		<!-- Action buttons -->
 				<div class="action-buttons">
-					<button class="btn btn-secondary arenella-btn {{mobileButton}}" *ngIf="isAuthenticated() && isAuthenticatedAsAdmin()" (click)="showPublicity()">Publicity</button>
-					<button (click)="showList()" class="btn btn-secondary arenella-btn {{mobileButton}}">Back</button>
+					<button class="btn btn-secondary arenella-btn" *ngIf="isAuthenticated() && isAuthenticatedAsAdmin()" (click)="showPublicity()">Publicity</button>
+					<button (click)="showList()" class="btn btn-secondary arenella-btn">Back</button>
 				</div>
 				
 				<app-candidate-info-box [config]="infoItemConfig"></app-candidate-info-box>
 				
 				<div>
-	       			<div class="{{mobileListingLeftPaneContainer}}">
-	       				<h1 *ngIf="isMobile" class="listing-view-title">{{selectedListing.title}}</h1>
+	       			<div>
+	       				<h1 class="listing-view-title">{{selectedListing.title}}</h1>
 	       				
 	       			</div>
 	       			
-	       			<div class="desc-body {{mobileDescBody}}">
-			       		<div class="listing-view-div">
-							<h1 *ngIf="!isMobile" class="listing-view-title">{{selectedListing.title}}</h1>
-							<h1 *ngIf="isMobile" class="listing-view-title">Description</h1>
-						</div>
+	       			<div class="desc-body">
+			       		
 						<div>
 							<div>
 								<pre style="white-space:pre-line;font-family: Roboto, 'Helvetica Neue', sans-serif;">{{selectedListing.description}}</pre>
@@ -148,7 +145,7 @@
 		</div>
 	</div>
 </div>
-	</div>
+</div>
 	
 	
 

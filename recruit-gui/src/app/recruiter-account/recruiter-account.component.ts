@@ -6,8 +6,7 @@ import { Subscription }							from './subscription';
 import { NgbModal}								from '@ng-bootstrap/ng-bootstrap'
 import { UntypedFormGroup, UntypedFormControl }	from '@angular/forms';
 import {RecruiterUpdateRequest }				from './recruiter-update-request';
-import { CreditsService } from '../credits.service';
-import { DeviceDetectorService } from 'ngx-device-detector';
+import { CreditsService } 						from '../credits.service';
 
 /**
 * Component to allow the Recruiter to aministrate their 
@@ -33,24 +32,14 @@ export class RecruiterAccountComponent implements OnInit {
 	*/
 	constructor(private recruiterService:RecruiterService, 
 				private router: Router, 
-				private modalService: NgbModal,
-				private deviceDetector:DeviceDetectorService,
 				private creditsService: CreditsService) { 
 					
-					this.isMobile = deviceDetector.isMobile();
+		this.creditsService.isPurchaseSubscription().subscribe(value => {
+			this.creditsService.setPurchaseSubscription(false);
+			this.isBuyingSubscription = value;
+		});					
 					
-					if(this.isMobile){
-						this.mobCss = "sub-opt-div-mob";
-						this.subscriptionSelectionMobCss = "subs-opt-box-mob";
-						this.accountDetailsMobCss = "account-details-mob";
-					}
-					
-					this.creditsService.isPurchaseSubscription().subscribe(value => {
-						this.creditsService.setPurchaseSubscription(false);
-						this.isBuyingSubscription = value;
-					});					
-					
-				}
+	}
 
 	/**
 	* Initializes the Component
@@ -282,7 +271,6 @@ export class RecruiterAccountComponent implements OnInit {
 	*/
 	public confirmSwitchToOtherSubscription():void{
 		this.cancelAlterSubscriptionOptions();
-		//this.addAlternateSubscription("YEAR_SUBSCRIPTION");
 		this.addAlternateSubscription(this.selectedSubscriptionOption);
 	}
 	
@@ -301,7 +289,6 @@ export class RecruiterAccountComponent implements OnInit {
 		this.cancelAlterSubscriptionOptions();
 		this.showCancelSubscriptionConfirmButtons = true;
 	}
-
 
 	/**
  	* Cancels the swithch to subscription buttons

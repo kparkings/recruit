@@ -10,7 +10,6 @@ import { CandidateServiceService }							from '../candidate-service.service';
 
 import { Chart } from 'chart.js';
 import { ListingStatistics, ViewItem } from '../listing-statistics';
-import { DeviceDetectorService } from 'ngx-device-detector';
 
 @Component({
   selector: 'app-statistics',
@@ -125,7 +124,6 @@ export class StatisticsComponent implements OnInit {
 	*/
 	constructor(	public statisticsService:StatisticsService, 
 					public candidateService:CandidateServiceService,
-					private deviceDetector:DeviceDetectorService, 
 					private router:Router) {
 
 		this.fetchStatus();
@@ -135,12 +133,6 @@ export class StatisticsComponent implements OnInit {
 		this.showNewCandidatesDiv 					= false;
 		this.candidateFunctions 					= this.candidateService.loadFunctionTypes();
 		
-		this.isMobile = deviceDetector.isMobile();
-					
-		if (this.isMobile){
-			this.statChartDivMobile = 'stat-cart-div-mobile';	
-		
-		}
 	}
 
 	ngOnInit(): void {
@@ -570,7 +562,6 @@ export class StatisticsComponent implements OnInit {
 		}
 		
 	}
-	
 	
 	createLeftChart(leftChartLabels:string[], leftChartData:any){
 		

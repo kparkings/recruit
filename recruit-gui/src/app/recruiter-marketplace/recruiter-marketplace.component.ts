@@ -11,11 +11,10 @@ import { Router}										from '@angular/router';
 import { CandidateServiceService }						from '../candidate-service.service';
 import { RecruiterProfileService} 						from '../recruiter-profile.service';
 import { RecruiterProfile }								from '../recruiter-profile/recruiter-profile';
-import { DeviceDetectorService } 						from 'ngx-device-detector';
-import { Candidate } 									from '../suggestions/candidate';
-import { CandidateNavService } 							from '../candidate-nav.service';
-import { CreditsService } 								from '../credits.service';
-import { InfoItemBlock, InfoItemConfig, InfoItemRowKeyValue, InfoItemRowMultiValues } from '../candidate-info-box/info-item';
+import { Candidate } 																	from '../suggestions/candidate';
+import { CandidateNavService } 															from '../candidate-nav.service';
+import { CreditsService } 																from '../credits.service';
+import { InfoItemBlock, InfoItemConfig, InfoItemRowKeyValue, InfoItemRowMultiValues } 	from '../candidate-info-box/info-item';
 
 @Component({
   selector: 'app-recruiter-marketplace',
@@ -27,7 +26,6 @@ export class RecruiterMarketplaceComponent implements OnInit {
 	@ViewChild('feedbackBox', { static: false }) private feedbackBox:any;
 	@ViewChild('contactBox', { static: false }) private contactBox:any;
 	@ViewChild('specUploadBox', { static: false }) private specUploadBox:any;
-
 
 	public unseenOfferedCandidates:number 				= 0;
 	public unseenOpenPositions:number 					= 0;
@@ -47,20 +45,9 @@ export class RecruiterMarketplaceComponent implements OnInit {
 				private emailService:				EmailService,
 				private router:						Router,
 				public 	candidateService:			CandidateServiceService,
-				private deviceDetector:				DeviceDetectorService,
 				private recruiterProfileService: 	RecruiterProfileService,
 				private candidateNavService: 		CandidateNavService,
 				private creditsService:				CreditsService) {
-					
-					this.isMobile = deviceDetector.isMobile();
-					
-					if (this.isMobile) {
-						this.suggestionMobileBtnClass		= 'buttons-icon-mobile';
-						this.mobileListingLeftPaneContainer = "mobile-left-pane-container";
-						this.mobileDescBody 				= 'mobile-desc-body';
-						this.mobileLeftBox					= 'mobile-left-box';
-						this.mobileListingViewTitle			= 'mobile-listing-view-title';
-					}
 					
 					this.marketplaceService.fetchUnseenOfferedCandidates().subscribe(val => {
 						this.unseenOfferedCandidates = val;
@@ -83,22 +70,15 @@ export class RecruiterMarketplaceComponent implements OnInit {
 					
 					this.doCreditCheck();
 					
-					
-					
-					
 	}
 
 	/**
 	* Sets up initial component
 	*/
 	ngOnInit(): void {
-		
-	//	this.fetchOfferedCandidates();
 		this.fetchOpenPositions();
 		this.showJustMyCandidates();
-		
-		
- 	}
+	}
 
 	currentTab:string 						= "downloads";
 	showSupply:boolean						= false;
@@ -199,9 +179,6 @@ export class RecruiterMarketplaceComponent implements OnInit {
 		if (this.showJustMyCandidatesActive){
 			this.showJustMyCandidates();
 		}
-		// else {
-		//	this.fetchOfferedCandidates();
-		//}
 	}
 
 	public refreshOpenPositionList(){
@@ -442,14 +419,12 @@ export class RecruiterMarketplaceComponent implements OnInit {
 	public switchTab(tab:string){
 		
 		this.currentTab 				= tab;
-		//this.showJustMyCandidatesActive = false;
 		this.confirmDeleteCandidate 	= '';
 		
 		switch(tab){
 			case "showSupply":{
 				this.showSupply			= true;
 				this.showDemand			= false;
-				//this.addSupply			= true;
 				this.addDemand			= false;
 				this.editSupply 		= false;
 				this.editDemand			= false;
@@ -590,7 +565,7 @@ export class RecruiterMarketplaceComponent implements OnInit {
 		
 	}
 	
-		/**
+	/**
 	* Adds a language posessed by the offered candidate 
 	*/
 	public addOfferedCandidateLanguage():void{
@@ -668,7 +643,6 @@ export class RecruiterMarketplaceComponent implements OnInit {
 		let positionClosingDate:Date 	= this.requestedCandidateFormBean.get('positionClosingDate')?.value;	
 		let description:string 			= this.requestedCandidateFormBean.get('description')?.value;
 		let comments:string 			= this.requestedCandidateFormBean.get('comments')?.value; 			
-		
 		let languages:Array<string> 	= this.requestedCandidateSpokenLanguages;
 		let skills:Array<string> 		= this.requestedCandidateCoreSkills;
 		
@@ -838,7 +812,6 @@ export class RecruiterMarketplaceComponent implements OnInit {
 	public showFilterByJonSpecFailure:boolean  	= false;
 	public showFilterByJobSpec:boolean 				= false;
 	
-  
   	public setJobSepecFile(event:any):void{
   
   		if (event.target.files.length <= 0) {
@@ -923,7 +896,7 @@ export class RecruiterMarketplaceComponent implements OnInit {
 
   	}
 
-/**
+	/**
 	* Returns the code identifying the country
 	* @param country - Country to get the country code for
 	*/

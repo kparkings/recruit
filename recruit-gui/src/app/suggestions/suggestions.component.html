@@ -7,12 +7,12 @@
 		
 		<!-- Action buttons -->
 		<div *ngIf="currentView === 'suggestion-results'" class="action-buttons">
-			<button class="btn btn-secondary arenella-btn {{suggestionMobileBtnClass}}" (click)="showCreateAlertDialog()" download>Create Email Alert</button>
-			<button class="btn btn-secondary arenella-btn {{suggestionMobileBtnClass}}" routerLink="/recruiter-alerts" download>Manage Alerts</button>
-	        <button class="btn btn-secondary arenella-btn {{suggestionMobileBtnClass}}" (click)="showSavedCandidates()" download>My Candidates</button>
-	        <button class="btn btn-secondary arenella-btn {{suggestionMobileBtnClass}}" (click)="openPublicityDialog()" *ngIf="isAuthenticatedAsAdmin()" download>Copy</button>
-	        <button class="btn btn-secondary arenella-btn {{suggestionMobileBtnClass}}" (click)="showFilterByJobSpecDialog(specUploadBox)" download>Filter by Job Spec</button>
-	        <button class="btn btn-secondary arenella-btn {{suggestionMobileBtnClass}}" (click)="doReset()">Reset</button>
+			<button class="btn btn-secondary arenella-btn" (click)="showCreateAlertDialog()" download>Create Email Alert</button>
+			<button class="btn btn-secondary arenella-btn" routerLink="/recruiter-alerts" download>Manage Alerts</button>
+	        <button class="btn btn-secondary arenella-btn" (click)="showSavedCandidates()" download>My Candidates</button>
+	        <button class="btn btn-secondary arenella-btn" (click)="openPublicityDialog()" *ngIf="isAuthenticatedAsAdmin()" download>Copy</button>
+	        <button class="btn btn-secondary arenella-btn" (click)="showFilterByJobSpecDialog(specUploadBox)" download>Filter by Job Spec</button>
+	        <button class="btn btn-secondary arenella-btn" (click)="doReset()">Reset</button>
 	     </div>
 		
 		<div *ngIf="currentView === 'saved-candidates'">
