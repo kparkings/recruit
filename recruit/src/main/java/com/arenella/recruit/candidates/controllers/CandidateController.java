@@ -314,7 +314,7 @@ public class CandidateController {
 	* Returns Alerts for currently logged in Recruiter
 	* @return Alerts for Recruiter
 	*/
-	@PreAuthorize("hasRole('RECRUITER')")
+	@PreAuthorize("hasRole('RECRUITER') OR hasRole('ADMIN')")
 	@GetMapping(path="candidate/alert")
 	public ResponseEntity<Set<CandidateSearchAlertAPIOutbound>> getRecruiterAlerts(){
 		return ResponseEntity.ok(candidateService

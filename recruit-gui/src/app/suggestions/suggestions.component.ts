@@ -45,22 +45,51 @@ export class SuggestionsComponent implements OnInit {
 		this.switchViewEvent.emit();	 
 	}
 	
-	
-	
- 	
-	public candidateProfile:CandidateProfile = new CandidateProfile();
-	
-	public savedCandidates:Array<SavedCandidate> = new Array<SavedCandidate>();
-
-	public createAlertForm:UntypedFormGroup = new UntypedFormGroup({
+	public candidateProfile:CandidateProfile 					= new CandidateProfile();
+	public savedCandidates:Array<SavedCandidate> 				= new Array<SavedCandidate>();
+	private jobSpecFile!:File;
+	public jobSpecUploadView:string 							= "chooseType"; //chooseType | doc | text
+	public infoItemConfig:InfoItemConfig 						= new InfoItemConfig();
+	public suggestions:Array<Candidate>  						= new Array<Candidate>();
+	public currentView:string 									= 'suggestion-results';
+	public skillFilters:Array<string>							= new Array<string>();
+	public minMaxOptions:Array<string> 							= new Array<string>('','1','2','3','4','5','8','10','15','20','25','30');
+	public suggestedCandidate:Candidate							= new Candidate();
+	public showSaveAlertBoxFailure:boolean  					= false;
+	public showSaveAlertBoxSuccess:boolean  					= false;
+	public showSaveAlertBox:boolean 							= false;
+	public showFilterByJonSpecFailure:boolean  					= false;
+	public showFilterByJobSpec:boolean 							= false;
+	public dangerousUrl 										= 'http://127.0.0.1:8080/curriculum-test/1623.pdf';
+	public trustedResourceUrl : SafeResourceUrl;
+	public suggestionMobileClass:string							= '';
+	public suggestionMobileBtnClass:string						= '';
+	public passedCreditCheck:boolean 							= false;
+	public lastView:string 										= '';
+	public contactCandidateView:string 							= 'message';
+	public publicitySuggestions:Array<Candidate>  				= new Array<Candidate>();
+	public createAlertForm:UntypedFormGroup 					= new UntypedFormGroup({
 		alertName:			new UntypedFormControl(''),
 	});
-	
-	private jobSpecFile!:File;
-	
-	public jobSpecUploadView:string = "chooseType"; //chooseType | doc | text
-	
-	public infoItemConfig:InfoItemConfig 							= new InfoItemConfig();
+		public suggestionFilterForm:UntypedFormGroup 			= new UntypedFormGroup({
+		searchPhrase:			new UntypedFormControl(''),
+		nlResults: 				new UntypedFormControl(true),
+		beResults: 				new UntypedFormControl(true),
+		ukResults: 				new UntypedFormControl(true),
+		ieResults: 				new UntypedFormControl(true),
+		contractType: 			new UntypedFormControl('Both'),
+		dutchLanguage: 			new UntypedFormControl(false),
+		englishLanguage: 		new UntypedFormControl(false),
+		frenchLanguage:			new UntypedFormControl(false),
+		minYearsExperience: 	new UntypedFormControl(''),
+		maxYearsExperience: 	new UntypedFormControl(''),
+	});
+	public skilFilterForm:UntypedFormGroup 						= new UntypedFormGroup({
+		skill: 					new UntypedFormControl(''),
+	});
+	public filterByJobSpecForm:UntypedFormGroup 				= new UntypedFormGroup({
+		specAsText:				new UntypedFormControl('Enter Job specification Text here...'),
+	});
 	
 	/**
 	* Switches between options on how to upload job spec 
@@ -120,39 +149,6 @@ export class SuggestionsComponent implements OnInit {
 		
 		this.appComponent.refreschUnreadAlerts();
 		
-	}
-	
-	/*
-	* Navigates to the edit page
-	*/
-	public editAccount():void{
-		this.candidateNavService.doNextMove("edit", this.candidateProfile.candidateId);
-	}
-
-	/*
-	* Opens confirm delete popup
-	*/	
-	public deleteAccount(){
-		this.confirmDeleteDialogBox.nativeElement.showModal();
-	}
-	
-	public confirmDeleteProfile():void{
-		this.candidateService.deleteCandidate(this.candidateProfile.candidateId).subscribe(data => {
-			if (this.isCandidate()) {
-				sessionStorage.removeItem('isAdmin');
-				sessionStorage.removeItem('isRecruter');
-				sessionStorage.removeItem('isCandidate');
-				sessionStorage.removeItem('loggedIn');
-				sessionStorage.setItem('beforeAuthPage', 'view-candidates');
-				this.candidateNavService.reset();
-				this.router.navigate(['login-user']);
-				this.appComponent.refreschUnreadAlerts();
-			}else {
-				this.doReset();
-				this.currentView = 'suggestion-results';
-			}
-			this.confirmDeleteDialogBox.nativeElement.close();
-		});
 	}
 	
   	public setJobSepecFile(event:any):void{
@@ -275,30 +271,6 @@ export class SuggestionsComponent implements OnInit {
 		}));
   		
   	}
-
-	public suggestions:Array<Candidate>  = new Array<Candidate>();
-
-	public suggestionFilterForm:UntypedFormGroup 	= new UntypedFormGroup({
-		searchPhrase:			new UntypedFormControl(''),
-		nlResults: 				new UntypedFormControl(true),
-		beResults: 				new UntypedFormControl(true),
-		ukResults: 				new UntypedFormControl(true),
-		ieResults: 				new UntypedFormControl(true),
-		contractType: 			new UntypedFormControl('Both'),
-		dutchLanguage: 			new UntypedFormControl(false),
-		englishLanguage: 		new UntypedFormControl(false),
-		frenchLanguage:			new UntypedFormControl(false),
-		minYearsExperience: 	new UntypedFormControl(''),
-		maxYearsExperience: 	new UntypedFormControl(''),
-	});
-	
-	public skilFilterForm:UntypedFormGroup 	= new UntypedFormGroup({
-		skill: 					new UntypedFormControl(''),
-	});
-	
-	public filterByJobSpecForm:UntypedFormGroup = new UntypedFormGroup({
-		specAsText:				new UntypedFormControl('Enter Job specification Text here...'),
-	});
 	
 	/**
 	* Resets the filters
@@ -340,27 +312,7 @@ export class SuggestionsComponent implements OnInit {
 		}
 		
 	}
-	
-	public currentView:string 				= 'suggestion-results';
-	public skillFilters:Array<string>		= new Array<string>();
-	public minMaxOptions:Array<string> 		= new Array<string>('','1','2','3','4','5','8','10','15','20','25','30');
-	public suggestedCandidate:Candidate		= new Candidate();
-	
-	public showSaveAlertBoxFailure:boolean  = false;
-	public showSaveAlertBoxSuccess:boolean  = false;
-	public showSaveAlertBox:boolean 		= false;
-	
-	public showFilterByJonSpecFailure:boolean  	= false;
-	public showFilterByJobSpec:boolean 				= false;
-	
-	
-	public dangerousUrl = 'http://127.0.0.1:8080/curriculum-test/1623.pdf';
-	public trustedResourceUrl : SafeResourceUrl;
-	
-	public suggestionMobileClass:string			= '';
-	public suggestionMobileBtnClass:string		= '';
-
-	
+		
 	public showCVInline(candidateId:string):void{
 		
 		let url = this.curriculumService.getCurriculumUrlForInlinePdf(candidateId); 'http://127.0.0.1:8080/curriculum-test/';
@@ -393,11 +345,9 @@ export class SuggestionsComponent implements OnInit {
 	}
 	
 	ngAfterViewChecked(){
-		
 		if (sessionStorage.getItem("news-item-div")){
 			this.doScrollTop();	
 		}
-		
 	}
 	
 	/**
@@ -406,7 +356,6 @@ export class SuggestionsComponent implements OnInit {
  	*/
 	public isViewOnly():boolean{
 		return this.parentComponent == 'newsfeed';
-		//return this.externalProvileViewCandidateId.length > 0;
 	}
 	
 	/**
@@ -424,22 +373,6 @@ export class SuggestionsComponent implements OnInit {
 		
 		return chk;
 	}
-	
-	
-	public performFilterExtraction(event:any):void{
-  
-  		if (event.target.files.length <= 0) {
-  			return;
-  		}
-  	
-		this.candidateService.extractFiltersFromDocument(event.target.files[0]).subscribe(data => {
-		
-			this.getSuggestions();
-			this.closeModal();	
-			
-		});
-		
-  	}
 
 	/**
 	* Sends request for Suggestions to the backend API
@@ -572,20 +505,6 @@ export class SuggestionsComponent implements OnInit {
 	
 	}
 	
-	public passedCreditCheck:boolean = false;
-	
-	public doCreditCheckByCount():void{
-		
-		if(this.isAdmin()){
-			this.passedCreditCheck = true;
-		} else {
-			this.curriculumService.getCreditCount().subscribe(count => {
-				this.passedCreditCheck = (count > 1 || count == -1);
-			});	
-		}
-		
-	}
-	
 	public doCreditCheck():void{
 		
 		if(this.isAdmin()){
@@ -595,30 +514,6 @@ export class SuggestionsComponent implements OnInit {
 				this.passedCreditCheck = (count > 0 || count == -1);
 			});	
 		}
-	}
-	
-	disableDownload():void{
-		this.passedCreditCheck = false;
-		this.doCreditCheck();
-	}
-
-	/**
-	* Shows the inline CV view
-	*/
-	public showInlineCVView():void{
-		
-		if (this.passedCreditCheck) {
-			this.currentView = 'inline-cv';
-			this.showCVInline(this.suggestedCandidate.candidateId);
-		} else {
-			this.handleNoCredit();		
-		}
-		
-		this.doCreditCheck();
-	}
-
-	public handleNoCredit():void{
-		this.creditsService.tokensExhaused();
 	}
 	
 	/**
@@ -634,89 +529,81 @@ export class SuggestionsComponent implements OnInit {
 		}
 		
 		this.candidateService.getCandidateProfileById(candidateSuggestion.candidateId).subscribe( candidate => {
-		this.candidateProfile = candidate;
-		//START
-		this.infoItemConfig = new InfoItemConfig();
-		this.infoItemConfig.setProfilePhoto(this.candidateProfile?.photo?.imageBytes);
-		if (!this.isCandidate()){
-			this.infoItemConfig.setShowContactButton(true);
-		}
+			this.candidateProfile 	= candidate;
+			this.infoItemConfig 	= new InfoItemConfig();
+			this.infoItemConfig.setProfilePhoto(this.candidateProfile?.photo?.imageBytes);
 		
-		
-		//Location
-		let recruiterBlock:InfoItemBlock = new InfoItemBlock();
-		recruiterBlock.setTitle("Location");
-		recruiterBlock.addRow(new InfoItemRowKeyValueFlag("Country",this.getFlagClassFromCountry(this.suggestedCandidate.country)));
-		recruiterBlock.addRow(new InfoItemRowKeyValue("City",this.suggestedCandidate.city));
-		this.infoItemConfig.addItem(recruiterBlock);
-		
-		//Languages Block
-		let languageBlock:InfoItemBlock = new InfoItemBlock();
-		languageBlock.setTitle("Languages");
-		this.suggestedCandidate.languages.forEach(lang => {
-				languageBlock.addRow(new InfoItemRowKeyValueMaterialIcon(this.getLanguage(lang.language),this.getMaterialIconClassFromLangLevel(lang.level)));
-		});
-		this.infoItemConfig.addItem(languageBlock);
-		
-		//Contract Type Block
-		if (this.suggestedCandidate.freelance == 'TRUE' || this.suggestedCandidate.perm == 'TRUE') {
-			let contractTypeBlock:InfoItemBlock = new InfoItemBlock();
-			contractTypeBlock.setTitle("Contract Type");
-			if (this.suggestedCandidate.freelance == 'TRUE'){		
-				contractTypeBlock.addRow(new InfoItemRowKeyValueMaterialIcon("Contract","available-check-icon"));
+			if (!this.isCandidate()){
+				this.infoItemConfig.setShowContactButton(true);
 			}
-			if (this.suggestedCandidate.perm == 'TRUE'){		
-				contractTypeBlock.addRow(new InfoItemRowKeyValueMaterialIcon("Permanent","available-check-icon"));
-			}
-			this.infoItemConfig.addItem(contractTypeBlock);
-		}
-		//Contract Rate 
-		if(this.hasContractRate()) {
-			let contractRateBlock:InfoItemBlock = new InfoItemBlock();
-			contractRateBlock.setTitle("Contract Rate");
-			contractRateBlock.addRow(new InfoItemRowSingleValue(this.getContractRate()));
-			this.infoItemConfig.addItem(contractRateBlock);
-		}
 		
-		//Perm Rate 
-		if(this.hasPermRate()) {
-			let permRateBlock:InfoItemBlock = new InfoItemBlock();
-			permRateBlock.setTitle("Perm Rate");
-			permRateBlock.addRow(new InfoItemRowSingleValue(this.getPermRate()));
-			this.infoItemConfig.addItem(permRateBlock);
-		}
-		
-		//Years Experience 
-		let yearsExperienceBlock:InfoItemBlock = new InfoItemBlock();
-		yearsExperienceBlock.setTitle("Years Experience");
-		yearsExperienceBlock.addRow(new InfoItemRowSingleValue(""+this.suggestedCandidate.yearsExperience));
-		this.infoItemConfig.addItem(yearsExperienceBlock);
-		
-		//Availability
-		let availabilityBlock:InfoItemBlock = new InfoItemBlock();
-		availabilityBlock.setTitle("Availability");
-		if (this.candidateProfile.daysOnSite) {
-			availabilityBlock.addRow(new InfoItemRowKeyValue("Max Days on Site",this.formatHumanReadableDaysOnsite(this.candidateProfile.daysOnSite)));
-		}
-		if (this.candidateProfile.availableFromDate) {
-			availabilityBlock.addRow(new InfoItemRowKeyValue("Available From",""+this.candidateProfile.availableFromDate));
-		}
-		this.infoItemConfig.addItem(availabilityBlock);
-		
-		
-		//END
-				
+			//Location
+			let recruiterBlock:InfoItemBlock = new InfoItemBlock();
+			recruiterBlock.setTitle("Location");
+			recruiterBlock.addRow(new InfoItemRowKeyValueFlag("Country",this.getFlagClassFromCountry(this.suggestedCandidate.country)));
+			recruiterBlock.addRow(new InfoItemRowKeyValue("City",this.suggestedCandidate.city));
+			this.infoItemConfig.addItem(recruiterBlock);
+			
+			//Languages Block
+			let languageBlock:InfoItemBlock = new InfoItemBlock();
+			languageBlock.setTitle("Languages");
+			this.suggestedCandidate.languages.forEach(lang => {
+					languageBlock.addRow(new InfoItemRowKeyValueMaterialIcon(this.getLanguage(lang.language),this.getMaterialIconClassFromLangLevel(lang.level)));
 			});
+			this.infoItemConfig.addItem(languageBlock);
+			
+			//Contract Type Block
+			if (this.suggestedCandidate.freelance == 'TRUE' || this.suggestedCandidate.perm == 'TRUE') {
+				let contractTypeBlock:InfoItemBlock = new InfoItemBlock();
+				contractTypeBlock.setTitle("Contract Type");
+				if (this.suggestedCandidate.freelance == 'TRUE'){		
+					contractTypeBlock.addRow(new InfoItemRowKeyValueMaterialIcon("Contract","available-check-icon"));
+				}
+				if (this.suggestedCandidate.perm == 'TRUE'){		
+					contractTypeBlock.addRow(new InfoItemRowKeyValueMaterialIcon("Permanent","available-check-icon"));
+				}
+				this.infoItemConfig.addItem(contractTypeBlock);
+			}
+			
+			//Contract Rate 
+			if(this.hasContractRate()) {
+				let contractRateBlock:InfoItemBlock = new InfoItemBlock();
+				contractRateBlock.setTitle("Contract Rate");
+				contractRateBlock.addRow(new InfoItemRowSingleValue(this.getContractRate()));
+				this.infoItemConfig.addItem(contractRateBlock);
+			}
+		
+			//Perm Rate 
+			if(this.hasPermRate()) {
+				let permRateBlock:InfoItemBlock = new InfoItemBlock();
+				permRateBlock.setTitle("Perm Rate");
+				permRateBlock.addRow(new InfoItemRowSingleValue(this.getPermRate()));
+				this.infoItemConfig.addItem(permRateBlock);
+			}
+		
+			//Years Experience 
+			let yearsExperienceBlock:InfoItemBlock = new InfoItemBlock();
+			yearsExperienceBlock.setTitle("Years Experience");
+			yearsExperienceBlock.addRow(new InfoItemRowSingleValue(""+this.suggestedCandidate.yearsExperience));
+			this.infoItemConfig.addItem(yearsExperienceBlock);
+			
+			//Availability
+			let availabilityBlock:InfoItemBlock = new InfoItemBlock();
+			availabilityBlock.setTitle("Availability");
+			if (this.candidateProfile.daysOnSite) {
+				availabilityBlock.addRow(new InfoItemRowKeyValue("Max Days on Site",this.formatHumanReadableDaysOnsite(this.candidateProfile.daysOnSite)));
+			}
+			if (this.candidateProfile.availableFromDate) {
+				availabilityBlock.addRow(new InfoItemRowKeyValue("Available From",""+this.candidateProfile.availableFromDate));
+			}
+			this.infoItemConfig.addItem(availabilityBlock);
+			
+		});
 		
 		this.currentView 			= 'suggested-canidate-overview';
 		this.suggestedCandidate 	= candidateSuggestion;
 		
 		this.doScrollTop();
-		
-		
-	}
-	
-	public handleOpenContactBoxEvent():void{
 		
 	}
 	
@@ -748,40 +635,6 @@ export class SuggestionsComponent implements OnInit {
 			default: return "";
 		}
 			
-	}
-	
-	/**
-	* Flags a Candidate as being potentially unavailable
-	*/
-	public markCandidateAsUnavailable():void {
-		this.candidateService.markCandidateAsUnavailable(this.suggestedCandidate.candidateId).subscribe(data => {});
-		this.suggestedCandidate.flaggedAsUnavailable = true;
-	}
-	
-	public lastView:string = '';
-	
-	/**
-	* Marks Candidate as being remembered
-	*/
-	public rememberCandidate(suggestedCandidate:Candidate):void{
-		
-		const savedCandidate:SavedCandidate = new SavedCandidate();
-		
-		savedCandidate.candidateId = Number(suggestedCandidate.candidateId);
-		
-		this.candidateService.addSavedCandidate(savedCandidate).subscribe(response => {
-			this.candidateService.fetchSavedCandidates().subscribe(response => {
-				this.savedCandidates = response;
-			})
-		});
-	}
-	
-	
-	/**
-	*  Returns the url to perform the download of the candidates CV
-	*/
-	public getCurriculumDownloadUrl(curriculumId:string){
-		return  environment.backendUrl + 'curriculum/'+ curriculumId;
 	}
 	
 	safeUrl:any;
@@ -816,15 +669,6 @@ export class SuggestionsComponent implements OnInit {
 		}
 
   	}	
-	
-	public hasRequiredSkill(skill:string):string {
-		
-		if (this.hasSkill(skill)) {
-			return 'skill-match';
-		}
-		
-		return 'skill-no-match';
-	}
 
 	public hasSkill(skill:string):boolean {
 		
@@ -897,7 +741,7 @@ export class SuggestionsComponent implements OnInit {
 		this.showSaveAlertBoxFailure 	= false;
 		
 		this.feedbackDialogBox.nativeElement.showModal();
-		//this.open(content, '', true);
+		
 	}
 	
 	/**
@@ -918,8 +762,6 @@ export class SuggestionsComponent implements OnInit {
 			
 	}
 	
-	//public updatedSavedCandidate:boolean = false; 
-	
 	/**
 	*  Closes the confirm popup
 	*/
@@ -933,19 +775,6 @@ export class SuggestionsComponent implements OnInit {
 		
 		this.modalService.dismissAll();
 	}
-	
-	public open(content:any, msg:string, success:boolean):void {
-		
-	
-	   let options: NgbModalOptions = {
-	    	 centered: true
-	   };
-
-		this.modalService.open(content, options);
-
-  	}
-
-	public publicitySuggestions:Array<Candidate>  = new Array<Candidate>();
 	
 	public openPublicityDialog() {
 		
@@ -981,92 +810,6 @@ export class SuggestionsComponent implements OnInit {
      	return 'NA';
 
   	}
-
-	/**
-	* Fetches Candidate
-	*/
-	public fetchCandidateProfile(candidateId:string):void{
-		this.candidateProfile = new CandidateProfile();
-		this.candidateService.getCandidateProfileById(candidateId).subscribe( candidate => {
-				this.candidateProfile = candidate;
-				this.currentView = 'suggested-canidate-overview';
-			}, err => {
-				if (err.status === 401 || err.status === 0) {
-					sessionStorage.removeItem('isAdmin');
-					sessionStorage.removeItem('isRecruter');
-					sessionStorage.removeItem('isCandidate');
-					sessionStorage.removeItem('loggedIn');
-					sessionStorage.setItem('beforeAuthPage', 'view-candidates');
-					this.router.navigate(['login-user']);
-			}
-			});
-	}
-	
-	public contactCandidateView:string = 'message';
-	
-	/**
-	*Extract the level of proficiency in a language of the Candidate
-	*/
-	public getLanguageLevel(language:string):string{
-		if(!this.candidateProfile?.languages.filter(l => l.language == language)[0]) {
-			return '';
-		} else {
-			return this.candidateProfile?.languages.filter(l => l.language == language)[0].level;
-		}
-	}
-	
-	/**
-	*  Closes the confirm popup
-	*/
-	public closeModalContact(): void {
-		this.modalService.dismissAll();
-	}
-	
-	/**
-	* Opend dialog to contact recuiter posting	
-	*/
-	public contactCandidate(contactBox:any):void{
-		
-		this.contactCandidateView = 'message';
-		let options: NgbModalOptions = {
-	    	 centered: true
-	   };
-
-		this.contactDialogBox.nativeElement.showModal();
-		//this.modalService.open(contactBox, options);
-	
-	}
-	
-	/**
-	* Forms group for sending a message to a Recruiter relating to a
-	* specific post on the jobboard 
-	*/
-	public sendMessageGroup:UntypedFormGroup = new UntypedFormGroup({
-		message:				new UntypedFormControl(''),
-		title:				new UntypedFormControl('')
-	});
-	
-	/**
-	* Opend dialog to contact recuiter posting	
-	*/
-	public sendMessageToCandidate():void{
-		
-		let emailRequest:EmailRequest = new EmailRequest();
-		
-		emailRequest.title = this.sendMessageGroup.get('title')?.value;;
-		emailRequest.message = this.sendMessageGroup.get('message')?.value;;
-		
-		this.emailService.sendCandidateContactEmail(emailRequest,this.candidateProfile.candidateId).subscribe(body => {
-			this.contactCandidateView = 'success';
-			this.sendMessageGroup = new UntypedFormGroup({
-				message: new UntypedFormControl(''),
-				title: new UntypedFormControl(''),
-			});
-		}, err => {
-			this.contactCandidateView = 'failure';
-		});
-		
-	}
 	
 	/**
 	* Whether Contract Rate info is available 
@@ -1180,22 +923,6 @@ export class SuggestionsComponent implements OnInit {
 	}
 	
 	/**
-	* Returns skills that the Canidate has that match the 
-	* required skills
-	*/
-	public skillsFiltersMatch():Array<string>{
-		return this.skillFilters.filter(s => this.hasSkill(s) && s != '').sort();
-	}
-	
-	/**
-	* Returns skills that the Canidate does not has that are 
-	* required skills
-	*/
-	public skillsFiltersNoMatch():Array<string>{
-		return this.skillFilters.filter(s => !this.hasSkill(s) && s != '').sort();
-	}
-	
-	/**
 	* Removes defailt text from text area so user can paste 
 	* actial content
 	*/
@@ -1232,9 +959,6 @@ export class SuggestionsComponent implements OnInit {
 			block: "start",
 			inline: "nearest"
 			});
-			
-			
 		
-			
 	}
 }

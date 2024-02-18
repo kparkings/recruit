@@ -218,28 +218,3 @@
 		</table>
 	</div> 
 </dialog>
-
-<!-- Candidte contact -->
-<dialog #contactBox >
-	<div class="modal-header">
-		<h4 class="modal-title">Message Candidate</h4>
- 		<div class="filter-close-box" (click)="contactBox.close()">X</div>
-	</div>
-	<div class="modal-body" *ngIf="contactCandidateView === 'message'">
-		<form [formGroup]="sendMessageGroup">
-			<div style="float:left;margin:0px; margin-bottom:10px;">
-				<b>Title:</b><input type="text" style="margin-left:10px;width:300px;" formControlName="title"/>
-				<br>
-			</div>
-			<textarea formControlName="message"></textarea>
-			<button class="btn btn-secondary arenella-btn" (click)="sendMessageToCandidate()">Send</button>
-		</form>	
-	</div>
-	<div class="modal-body message-send-success" *ngIf="contactCandidateView === 'success'">
-			<p>Message Sent Successfully</p>
-			<p>You can view a copy of your message and any replies in your inbox</p>
-	</div>
-	<div class="modal-body" *ngIf="contactCandidateView === 'failure'">
-			<p class="message-send-failure">Failed to Send Message</p>
-	</div>
-</dialog> 

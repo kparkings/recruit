@@ -1,19 +1,19 @@
-import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
-import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
-import { InfoItemConfig } from 'src/app/candidate-info-box/info-item';
-import { CandidateProfile } from 'src/app/candidate-profile';
-import { EmailRequest, EmailService } from 'src/app/email.service';
-import { Candidate } from '../candidate';
-import { NgbModalOptions }												from '@ng-bootstrap/ng-bootstrap';
-import { CurriculumService } from 'src/app/curriculum.service';
-import { CreditsService } from 'src/app/credits.service';
-import { environment }																from '../../../environments/environment';
-import { SavedCandidate } from '../saved-candidate';
-import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { CandidateNavService } from 'src/app/candidate-nav.service';
-import { CandidateServiceService } from 'src/app/candidate-service.service';
-import { Router } from '@angular/router';
-import { AppComponent } from 'src/app/app.component';
+import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } 	from '@angular/core';
+import { UntypedFormControl, UntypedFormGroup } 							from '@angular/forms';
+import { InfoItemConfig } 													from 'src/app/candidate-info-box/info-item';
+import { CandidateProfile } 												from 'src/app/candidate-profile';
+import { EmailRequest, EmailService } 										from 'src/app/email.service';
+import { Candidate } 														from '../candidate';
+import { NgbModalOptions }													from '@ng-bootstrap/ng-bootstrap';
+import { CurriculumService } 												from 'src/app/curriculum.service';
+import { CreditsService } 													from 'src/app/credits.service';
+import { environment }														from '../../../environments/environment';
+import { SavedCandidate } 													from '../saved-candidate';
+import { DomSanitizer, SafeResourceUrl } 									from '@angular/platform-browser';
+import { CandidateNavService } 												from 'src/app/candidate-nav.service';
+import { CandidateServiceService } 											from 'src/app/candidate-service.service';
+import { Router } 															from '@angular/router';
+import { AppComponent } 													from 'src/app/app.component';
 
 /**
 * Candidate profile showing canidates details and options to interact with 
@@ -26,7 +26,6 @@ import { AppComponent } from 'src/app/app.component';
   styleUrl: './candidate-profile.component.css'
 })
 export class CandidateProfileComponent {
-
 
 	@Input()  infoItemConfig:InfoItemConfig 			= new InfoItemConfig();
 	@Input()  suggestedCandidate:Candidate 				= new Candidate();
@@ -104,10 +103,6 @@ export class CandidateProfileComponent {
 		return this.currentSavedCandidate.candidate.candidateId === ' Removed';;
 	}
 	
-	//public isNoLongerAvailableSC(savedCandidate:SavedCandidate):boolean{
-	//	return savedCandidate.candidate.candidateId === ' Removed';
-	//}
-	
 	/**
 	* Displays dialog to edit notes for a SavedCandidate
 	*/
@@ -131,13 +126,6 @@ export class CandidateProfileComponent {
 	
 		this.notesDialogBox.nativeElement.showModal();
 
-	}
-	
-	public showSavedCandidates():void{
-		this.currentView 	= 'saved-candidates';
-		this.candidateService.fetchSavedCandidates().subscribe(response => {
-			this.savedCandidates = response;
-		});
 	}
 	
 	/**
@@ -190,7 +178,7 @@ export class CandidateProfileComponent {
 	* specific post on the jobboard 
 	*/
 	public sendMessageGroup:UntypedFormGroup = new UntypedFormGroup({
-		message:				new UntypedFormControl(''),
+		message:			new UntypedFormControl(''),
 		title:				new UntypedFormControl('')
 	});
 	
@@ -254,7 +242,7 @@ export class CandidateProfileComponent {
 	}
 	
 	public doCreditCheckByCount():void{
-		console.log("Running CC by count");
+		
 		if(this.isAdmin()){
 			this.passedCreditCheck = true;
 		} else {
@@ -266,7 +254,7 @@ export class CandidateProfileComponent {
 	}
 	
 	public doCreditCheck():void{
-		console.log("Running DO CC");
+		
 		if(this.isAdmin()){
 			this.passedCreditCheck = true;
 		} else {
@@ -274,11 +262,6 @@ export class CandidateProfileComponent {
 				this.passedCreditCheck = (count > 0 || count == -1);
 			});	
 		}
-	}
-	
-	disableDownloadXX():void{
-		this.passedCreditCheck = false;
-		this.doCreditCheck();
 	}
 	
 	/**
@@ -299,10 +282,7 @@ export class CandidateProfileComponent {
 		return  environment.backendUrl + 'curriculum/'+ curriculumId;
 	}
 	
-	safeUrl:any;
-	public filename:string = '';
-	
-		/**
+	/**
 	* Shows the inline CV view
 	*/
 	public showInlineCVView():void{
@@ -424,16 +404,8 @@ export class CandidateProfileComponent {
 	* use that insted
 	*/
 	public isNoLongerAvailableSC(suggestedCandidate:Candidate):boolean{
-		
-		console.log("FFF "+ JSON.stringify(this.suggestedCandidate));
-		console.log("EEE "+ JSON.stringify(this.candidateProfile));
 		return this.suggestedCandidate.removed;
 	}
-	
-	
-	
-	
-	
 	
 	
 	public showBtnNotes():boolean{
@@ -450,10 +422,6 @@ export class CandidateProfileComponent {
 	}
 	
 	public showBtnUnsaveCandidate():boolean{
-		
-		//if (this.suggestedCandidate.removed) {
-		//	return false;
-		//}
 		
 		if (this.parentComponent == 'newsfeed'){
 			return false;
@@ -498,7 +466,6 @@ export class CandidateProfileComponent {
 	}
 	
 	public showBtnEdit():boolean{
-		console.log("--- this.parentComponent =  " + this.parentComponent);
 		if (this.parentComponent == 'savedCandidates') {
 			return false;
 		}
@@ -516,13 +483,10 @@ export class CandidateProfileComponent {
 			return false;
 		}
 		
-		//return (this.currentView != 'saved-candidates') && !this.isCandidate();
 		return !this.isCandidate();
 	}
 	
 	public showBtnDownloadCV():boolean{
-		
-		console.log("PCC = " + this.passedCreditCheck);
 		
 		if (this.suggestedCandidate.removed) {
 			return false;
@@ -537,7 +501,6 @@ export class CandidateProfileComponent {
 			return false;
 		}
 		
-		//return this.passedCreditCheck && (!this.isCandidate()) && (this.currentView != 'saved-candidates');
 		return this.passedCreditCheck && (!this.isCandidate());
 	}
 	
