@@ -21,19 +21,19 @@
 <app-candidate-info-box [config]="infoItemConfig" (openContactBoxEvent)="contactCandidate(contactBox)" *ngIf="!this.suggestedCandidate.removed"></app-candidate-info-box>
 			
 <!-- div class="details-right" -->
-<div class="desc-body details-right" *ngIf="!this.suggestedCandidate.removed">
+<div class="right-body-pane details-right" *ngIf="!this.suggestedCandidate.removed">
 	<div style="width:100%"><h1>{{suggestedCandidate.roleSought}}</h1></div>
 
 	<div *ngIf="candidateProfile.introduction && candidateProfile.introduction.length != 0" style="margin-top:50px;margin-bottom:50px;">
 		<div>
-			<h1 style="background:#e8e8e8">Candidate Introduction</h1>
+			<h1 style="background:#e8e8e8">Introduction</h1>
 		</div>
 		<div style="width:100%;">
 			<pre style="white-space:pre-line;font-family: Roboto, 'Helvetica Neue', sans-serif;">{{candidateProfile.introduction}}</pre>
 		</div>
 	</div>		
 	<div *ngIf="!candidateProfile.introduction || candidateProfile.introduction.length == 0" style="margin-top:50px;margin-bottom:50px;">
-		<div><h1 style="background:#e8e8e8">Candidate Introduction</h1></div>
+		<div><h1 style="background:#e8e8e8">Introduction</h1></div>
 		<div style="width:100%;">
 			<div style="white-space:pre-line;font-family: Roboto, 'Helvetica Neue', sans-serif;">
 			I would like to introduce myself. My name is {{this.suggestedCandidate.firstname}} 

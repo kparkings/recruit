@@ -42,24 +42,23 @@ suggestion-perception-excellent{
 	border-bottom: 1px solid black;
 }
 
-.details-right{
-	margin-left:0px;
-	float:left;
-	width:100%;
-	min-width:72%;
-	max-width:750px;
-	padding:0px;
-	margin-left:0px;
-	padding-right:20px;
-	padding-left:20px;
-}
-
 .details-right h1{
 	background:#6A5ACD; 
 	width:100%;
 	margin-bottom:10px;
 	margin-left:0px;
 	padding:10px;
+}
+
+@media (max-width:700px)  {
+	.details-right h1{
+		background:#6A5ACD; 
+		width:100%;
+		margin-bottom:10px;
+		margin-left:0px;
+		padding:10px;
+		text-align:center;
+	}	
 }
 .suggestion-perception-result-perfect{
 	background:green;

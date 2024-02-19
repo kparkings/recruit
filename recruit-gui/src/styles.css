@@ -222,6 +222,14 @@ textarea {
     margin-top: 5px;
 }
 
+.right-body-pane{
+	float:left;
+	padding:5px;
+	padding-left:20px;
+	min-width:310px;
+	max-width:72%;
+}
+
 @media (max-width:700px)  {
 	.page-body{
 		width:96%;
@@ -232,6 +240,16 @@ textarea {
 	    margin-right: 1%;
 	    margin-bottom: 0px;
 	    margin-top: 5px;
+	}
+	
+	.right-body-pane{
+		min-width:100%;
+		padding-right:0px;
+		padding-left:0px;
+	}
+	
+	.hide-for-mobile{
+		display:none;
 	}
 	
 }
