@@ -42,6 +42,10 @@ suggestion-perception-excellent{
 	border-bottom: 1px solid black;
 }
 
+.details-right{
+	min-width:72%
+}
+
 .details-right h1{
 	background:#6A5ACD; 
 	width:100%;
@@ -51,6 +55,10 @@ suggestion-perception-excellent{
 }
 
 @media (max-width:700px)  {
+
+	.details-right{
+		min-width:100%
+	}
 	.details-right h1{
 		background:#6A5ACD; 
 		width:100%;

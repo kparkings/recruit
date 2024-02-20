@@ -107,13 +107,14 @@
 			
 			</div>
 			
-			<div *ngIf="currentView === 'view-create'" id="view-create-table">
+			<div *ngIf="currentView === 'view-create'" class="view-create-table">
 				<form [formGroup]="newProfileFormBean">
-					<table>
+					<table class="rec-prof-edit-tbl">
+					 
 						<tr>
 							<th>Profile Image</th>
 							<td>
-								<input type="file" accept="image/jpeg,image/png" (change)="uploadProfileImage($event)">
+							  	<input type="file" accept="image/jpeg,image/png" (change)="uploadProfileImage($event)" class="file-input">
 								<img class="profile-photo" *ngIf="recruiterProfile?.profilePhoto?.imageBytes" id='base64image'                 
 	   									src='data:image/jpeg;base64, {{recruiterProfile?.profilePhoto?.imageBytes}}'/>
 							</td>

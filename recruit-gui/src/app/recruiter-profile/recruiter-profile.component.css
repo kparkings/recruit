@@ -150,25 +150,7 @@ table tr th{
 	padding:2px;
 }
 
-/*
-.modal-title{
-	margin-left:20px;
-}
-*/
-/*
-.modal-body{
-	font-size: large;
-	height:345px;
-	text-align: center;
-}
-*/
-/*
-.modal-header{
-	background:#181414;
-	color:#6A5ACD;
-	font-weight:bold;
-}
-*/
+
 .filter-close-box{
 	padding:10px;
 	cursor:pointer;
@@ -176,7 +158,6 @@ table tr th{
 	font-weight: bold;
 	text-align: right;        
 }
-
 
 
 textarea {
@@ -196,4 +177,13 @@ textarea {
     padding-left: 20px;
     min-width: 72%;
     max-width: 72%;
+}
+
+
+
+@media (max-width:700px)  {
+	
+	.file-input{
+		max-width:200px;
+	}
 }

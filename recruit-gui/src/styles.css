@@ -128,14 +128,14 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 	background:#181414;
 	color:#6A5ACD;
 	font-weight:bold;
+	min-width: 326px;
 }
 
 dialog {
 	overflow: hidden;
 	padding:0px;
 	border:none;
-	width:40%;
-	min-width:320px;
+	min-width:40%;
 }
 
 .message-send-failure{
@@ -226,7 +226,6 @@ textarea {
 	float:left;
 	padding:5px;
 	padding-left:20px;
-	min-width:310px;
 	max-width:72%;
 }
 

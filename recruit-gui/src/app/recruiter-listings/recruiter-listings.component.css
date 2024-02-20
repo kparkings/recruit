@@ -148,3 +148,7 @@ textarea {
 .recruiter-listing-main-text{
 	text-align:center;
 }
+
+.view-create-table{
+	max-width:100%;
+}
