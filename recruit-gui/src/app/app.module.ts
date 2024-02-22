@@ -35,6 +35,10 @@ import { InlineCvComponent}					from './suggestions/inline-cv/inline-cv.componen
 import { SavedCandidatesComponent}			from './suggestions/saved-candidates/saved-candidates.component';
 import { CandidateProfileComponent}			from './suggestions/candidate-profile/candidate-profile.component';
 
+import {TranslateLoader, TranslateModule} 	from '@ngx-translate/core';
+import {TranslateHttpLoader} 				from '@ngx-translate/http-loader';
+import {HttpClient} 						from '@angular/common/http';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -66,6 +70,14 @@ import { CandidateProfileComponent}			from './suggestions/candidate-profile/cand
   ],
   imports: [
     BrowserModule,
+    HttpClientModule,
+     TranslateModule.forRoot({
+            loader: {
+                provide: TranslateLoader,
+                useFactory: HttpLoaderFactory,
+                deps: [HttpClient]
+            }
+        }),
     AppRoutingModule,
     ReactiveFormsModule,
     HttpClientModule,
@@ -76,3 +88,9 @@ import { CandidateProfileComponent}			from './suggestions/candidate-profile/cand
   bootstrap: [AppComponent]
 })
 export class AppModule { }
+
+export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
+    return new TranslateHttpLoader(http);
+}
+
+

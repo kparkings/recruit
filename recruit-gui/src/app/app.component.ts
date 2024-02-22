@@ -9,6 +9,8 @@ import { CandidateNavService } 				from './candidate-nav.service';
 import { CreditsService } 					from './credits.service';
 import { NewsfeedService } 					from './newsfeed.service';
 
+import {TranslateService} from "@ngx-translate/core";
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -51,8 +53,12 @@ export class AppComponent {
 				public  popupsService:			PopupsService,
 				private candidateNavService: 	CandidateNavService,
 				public  creditsService:			CreditsService,
-				private newsfeedService:		NewsfeedService){
+				private newsfeedService:		NewsfeedService,
+				private translate: TranslateService){
 		
+		translate.setDefaultLang('en');
+    		translate.use('en');
+    
 		if (this.isRecruiterNoSubscription() || this.hasUnpaidSubscription()) {
 			this.router.navigate(['recruiter-account']);
 		}

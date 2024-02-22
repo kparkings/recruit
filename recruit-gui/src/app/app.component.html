@@ -8,7 +8,7 @@
       
 		<!-- Pre Authentication -->
 		<li  class="li-arenella-nav-pre-login li-arenella-nav-pre-login-std" *ngIf="!isAuthenticated()">
-           <a  class="dropdown-item dropdown-item-preauth" routerLink="/listing">Jobs</a>
+           <a  class="dropdown-item dropdown-item-preauth" routerLink="/listing">{{'jobs' | translate}}</a>
         </li>
 		<li  class="li-arenella-nav-pre-login li-arenella-nav-pre-login-std" *ngIf="!isAuthenticated()">
            <a  class="dropdown-item dropdown-item-preauth" routerLink="/about">About</a>
