@@ -3,16 +3,16 @@
 	<div class="nav-tabs-bar">
 		<ul class="nav nav-tabs">
 		  <li class="nav-item">
-		    <span class="nav-link tabNav tabNavActive" *ngIf="showDemand  && unseenOpenPositions > 0" (click)="switchTab('showDemand')"><span class="unseen-posts">{{unseenOpenPositions}}</span>Open Roles</span>
-		    <span class="nav-link tabNav tabNavActive" *ngIf="showDemand  && unseenOpenPositions <= 0" (click)="switchTab('showDemand')"><span style="margin-left:20px;">&nbsp;</span>Open Roles</span>
-		    <span class="nav-link tabNav" *ngIf="!showDemand && unseenOpenPositions > 0" (click)="switchTab('showDemand')"><span class="unseen-posts">{{unseenOpenPositions}}</span>Open Roles</span>
-		    <span class="nav-link tabNav" *ngIf="!showDemand   && unseenOpenPositions <= 0" (click)="switchTab('showDemand')"><span style="margin-left:20px;">&nbsp;</span>Open Roles</span>
+		    <span class="nav-link tabNav tabNavActive" *ngIf="showDemand  && unseenOpenPositions > 0" (click)="switchTab('showDemand')"><span class="unseen-posts">{{unseenOpenPositions}}</span>{{'arenella-recruiter-mp-open-roles' | translate}}</span>
+		    <span class="nav-link tabNav tabNavActive" *ngIf="showDemand  && unseenOpenPositions <= 0" (click)="switchTab('showDemand')"><span style="margin-left:20px;">&nbsp;</span>{{'arenella-recruiter-mp-open-roles' | translate}}Open Roles</span>
+		    <span class="nav-link tabNav" *ngIf="!showDemand && unseenOpenPositions > 0" (click)="switchTab('showDemand')"><span class="unseen-posts">{{unseenOpenPositions}}</span>{{'arenella-recruiter-mp-open-roles' | translate}}Open Roles</span>
+		    <span class="nav-link tabNav" *ngIf="!showDemand   && unseenOpenPositions <= 0" (click)="switchTab('showDemand')"><span style="margin-left:20px;">&nbsp;</span>{{'arenella-recruiter-mp-open-roles' | translate}}Open Roles</span>
 		  </li>
 		  <li class="nav-item">
-		    <span class="nav-link tabNav tabNavActive" *ngIf="showSupply  && unseenOfferedCandidates >  0"  (click)="switchTab('showSupply')"><span class="unseen-posts">{{unseenOfferedCandidates}}</span>Your Candidates</span>
-		    <span class="nav-link tabNav tabNavActive" *ngIf="showSupply  && unseenOfferedCandidates <=  0"  (click)="switchTab('showSupply')"><span style="margin-left:20px;">&nbsp;</span>Your Candidates</span>
-		    <span class="nav-link tabNav" *ngIf="!showSupply  && unseenOfferedCandidates >  0" (click)="switchTab('showSupply')"><span class="unseen-posts">{{unseenOfferedCandidates}}</span>Your Candidates</span>
-		    <span class="nav-link tabNav" *ngIf="!showSupply   && unseenOfferedCandidates <=  0" (click)="switchTab('showSupply')"><span style="margin-left:20px;">&nbsp;</span>Your Candidates</span>
+		    <span class="nav-link tabNav tabNavActive" *ngIf="showSupply  && unseenOfferedCandidates >  0"  (click)="switchTab('showSupply')"><span class="unseen-posts">{{unseenOfferedCandidates}}</span>{{'arenella-recruiter-mp-your-candidates' | translate}}</span>
+		    <span class="nav-link tabNav tabNavActive" *ngIf="showSupply  && unseenOfferedCandidates <=  0"  (click)="switchTab('showSupply')"><span style="margin-left:20px;">&nbsp;</span>{{'arenella-recruiter-mp-your-candidates' | translate}}</span>
+		    <span class="nav-link tabNav" *ngIf="!showSupply  && unseenOfferedCandidates >  0" (click)="switchTab('showSupply')"><span class="unseen-posts">{{unseenOfferedCandidates}}</span>{{'arenella-recruiter-mp-your-candidates' | translate}}</span>
+		    <span class="nav-link tabNav" *ngIf="!showSupply   && unseenOfferedCandidates <=  0" (click)="switchTab('showSupply')"><span style="margin-left:20px;">&nbsp;</span>{{'arenella-recruiter-mp-your-candidates' | translate}}</span>
 		  </li>
 		</ul>
 	</div>
@@ -21,23 +21,19 @@
 		<!-- Supply -->
 		<div *ngIf="showSupply">
 			<div class="action-buttons">
-				<button class="btn btn-secondary arenella-btn" 	(click)="switchTab('addSupply')" 	*ngIf="!isAuthenticatedAsAdmin()">Offer Candidate</button>
+				<button class="btn btn-secondary arenella-btn" 	(click)="switchTab('addSupply')" 	*ngIf="!isAuthenticatedAsAdmin()">{{'arenella-recruiter-mp-offer-candidate' | translate}}</button>
 			</div>
-			<p>
-			Do you have candidates that you cannot currently place? Would you like to make these candidates available
-			to other recruiters for a rate set by you? If so this feature is for you. Add your available candidates and 
-			allow other recruiters to contact you with available projects.  
-			</p>
+			<p>{{'arenella-recruiter-mp-offer-candidate-desc' | translate}}</p>
 			
 			<!-- List of offered Candidates -->
 			<div>
 				<table class="table marketplace-table">
 					<thead>
 						<tr>
-							<th class="bg-tab-hdr">Country</th>
-							<th class="bg-tab-hdr">Firstname</th>
-							<th class="bg-tab-hdr">Surname</th>
-							<th class="bg-tab-hdr">Role</th>
+							<th class="bg-tab-hdr">{{'arenella-recruiter-mp-offer-candidate-country' | translate}}</th>
+							<th class="bg-tab-hdr">{{'arenella-recruiter-mp-offer-candidate-firstname' | translate}}</th>
+							<th class="bg-tab-hdr">{{'arenella-recruiter-mp-offer-candidate-surname' | translate}}</th>
+							<th class="bg-tab-hdr">{{'arenella-recruiter-mp-offer-candidate-role' | translate}}</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -61,25 +57,23 @@
 		<!-- Show Demand  -->
 		<div *ngIf="showDemand">
 			<div class="action-buttons">
-				<button class="btn btn-secondary arenella-btn" 					(click)="showJustMyOpenPositions()" 	*ngIf="!showJustMyOpenPositionsActive">My Roles</button>
-				<button class="btn btn-secondary arenella-btn" 					(click)="fetchOpenPositions()" 		*ngIf="showJustMyOpenPositionsActive">All Roles</button>
-				<button class="btn btn-secondary arenella-btn" 					(click)="switchTab('addDemand')" *ngIf="!isAuthenticatedAsAdmin() && passedCreditCheck">Make Request</button>
-				<button class="btn btn-secondary arenella-btn" 					(click)="showNoCredits()" *ngIf="!isAuthenticatedAsAdmin() && !passedCreditCheck">Request Candidate</button>
+				<button class="btn btn-secondary arenella-btn" 					(click)="showJustMyOpenPositions()" 	*ngIf="!showJustMyOpenPositionsActive">{{'arenella-recruiter-mp-btn-my-roles' | translate}}</button>
+				<button class="btn btn-secondary arenella-btn" 					(click)="fetchOpenPositions()" 		*ngIf="showJustMyOpenPositionsActive">{{'arenella-recruiter-mp-btn-all-roles' | translate}}</button>
+				<button class="btn btn-secondary arenella-btn" 					(click)="switchTab('addDemand')" *ngIf="!isAuthenticatedAsAdmin() && passedCreditCheck">{{'arenella-recruiter-mp-btn-make-request' | translate}}</button>
+				<button class="btn btn-secondary arenella-btn" 					(click)="showNoCredits()" *ngIf="!isAuthenticatedAsAdmin() && !passedCreditCheck">{{'arenella-recruiter-mp-btn-request-candidate' | translate}}</button>
 			</div>
-			<p>
-			Do you have a position that you currently cannot fill? Would you like other Recruiters to be able to contact you 
-			with their available candidates in order to help you will the position. If so this feature is for you. Add details 
-			of the position you are trying to fill and allow other Recruiters to contact you with suitable candidates.  
+			<p>{{'arenella-recruiter-mp-roles-desc' | translate}}
+			 
 			</p>
 			<!-- Request Candidate -->
 			<div>
 				<table class="table marketplace-table">
 					<thead>
 						<tr>
-							<th class="bg-tab-hdr">Created</th>
-							<th class="bg-tab-hdr">Position</th>
-							<th class="bg-tab-hdr" *ngIf="!showJustMyOpenPositionsActive">Country</th>
-							<th class="bg-tab-hdr" *ngIf="!showJustMyOpenPositionsActive">Closing Date</th>
+							<th class="bg-tab-hdr">{{'arenella-recruiter-mp-roles-created' | translate}}</th>
+							<th class="bg-tab-hdr">{{'arenella-recruiter-mp-roles-position' | translate}}</th>
+							<th class="bg-tab-hdr" *ngIf="!showJustMyOpenPositionsActive">{{'arenella-recruiter-mp-roles-country' | translate}}</th>
+							<th class="bg-tab-hdr" *ngIf="!showJustMyOpenPositionsActive">{{'arenella-recruiter-mp-roles-closing' | translate}}</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -110,87 +104,87 @@
 		<!-- Add Demand  -->
 		<div *ngIf="addDemand">
 			<div class="action-buttons">
-				<button class="btn btn-secondary arenella-btn {{suggestionMobileBtnClass}}" (click)="showFilterByJobSpecDialog()" download>Create by Spec</button>
-				<button class="btn btn-secondary arenella-btn {{suggestionMobileBtnClass}}" (click)="publishOpenPosition()">Publish</button>
-				<button class="btn btn-secondary arenella-btn {{suggestionMobileBtnClass}}" (click)="showOpenPositions()">Back</button>
+				<button class="btn btn-secondary arenella-btn {{suggestionMobileBtnClass}}" (click)="showFilterByJobSpecDialog()" download>{{'arenella-recruiter-mp-add-btn-create-by-spec' | translate}}</button>
+				<button class="btn btn-secondary arenella-btn {{suggestionMobileBtnClass}}" (click)="publishOpenPosition()">{{'arenella-recruiter-mp-add-btn-publish' | translate}}</button>
+				<button class="btn btn-secondary arenella-btn {{suggestionMobileBtnClass}}" (click)="showOpenPositions()">{{'arenella-recruiter-mp-add-btn-back' | translate}}</button>
 			</div>
-			<h3>Add details of position you wish to fill via other recruiters</h3>
+			<h3>{{'arenella-recruiter-mp-add-title' | translate}}</h3>
 			<form [formGroup]="requestedCandidateFormBean">
 				<table class="table marketplace-table">
 					<tr>
-						<td>Position Title</td>
+						<td>{{'arenella-recruiter-mp-add-pos-]title' | translate}}</td>
 						<td>
 							<input formControlName="positionTitle" type="text"/>
 						</td>	
 					</tr>
 					<tr>
-						<td>Country</td>
+						<td>{{'arenella-recruiter-mp-add-country' | translate}}</td>
 						<td>
 							<select formControlName="country">
 								<option></option>
-								<option value="BELGIUM">Belgium</option>
-								<option value="IRL">Ireland</option>
-								<option value="NETHERLANDS">Netherlands</option>
-								<option value="UK">UK</option>
-								<option value="EUROPE">EU</option>
-								<option value="WORLD">World</option>
+								<option value="BELGIUM">{{'arenella-recruiter-mp-add-belgium' | translate}}</option>
+								<option value="IRL">{{'arenella-recruiter-mp-add-ireland' | translate}}</option>
+								<option value="NETHERLANDS">{{'arenella-recruiter-mp-add-netherlands' | translate}}</option>
+								<option value="UK">{{'arenella-recruiter-mp-add-uk' | translate}}</option>
+								<option value="EUROPE">{{'arenella-recruiter-mp-add-eu' | translate}}</option>
+								<option value="WORLD">{{'arenella-recruiter-mp-add-world' | translate}}</option>
 							</select>
 						</td>	
 					</tr>
 					<tr>
-						<td>Location</td>
+						<td>{{'arenella-recruiter-mp-add-location' | translate}}</td>
 						<td>
 							<input formControlName="location" type="text"/>
 						</td>	
 					</tr>
 					<tr>
-						<td>Contract Type</td>
+						<td>{{'arenella-recruiter-mp-add-contract-type' | translate}}</td>
 						<td>
 							<select  formControlName="contractType">
 								<option></option>
-								<option value="CONTRACT">Contract</option>
-								<option value="PERM">Perm</option>
-								<option value="BOTH">Both</option>
+								<option value="CONTRACT">{{'arenella-recruiter-mp-add-contract' | translate}}Contract</option>
+								<option value="PERM">{{'arenella-recruiter-mp-add-perm' | translate}}</option>
+								<option value="BOTH">{{'arenella-recruiter-mp-add-both' | translate}}</option>
 							</select>
 						</td>	
 					</tr>
 					<tr>
-						<td>Salary / Rate</td>
+						<td>{{'arenella-recruiter-mp-add-salary' | translate}}</td>
 						<td>
 							<input formControlName="renumeration" type="text"/>
 						</td>	
 					</tr>
 					<tr>
 						<td>
-							Skills
+							{{'arenella-recruiter-mp-add-skills' | translate}}
 						</td>
 						<td class="sugg-srch-bdy">
-							<input type="text" formControlName="skill"><button (click)="addOfferedPositionSkill()" class="btn btn-secondary add-skill-btn" *ngIf="!isAuthenticatedAsAdmin()">Add</button>
+							<input type="text" formControlName="skill"><button (click)="addOfferedPositionSkill()" class="btn btn-secondary add-skill-btn" *ngIf="!isAuthenticatedAsAdmin()">{{'arenella-recruiter-mp-add-btn-add' | translate}}</button>
 							<div style="min-height:35px;">
 								<div class="selected-skill" *ngFor="let skill of requestedCandidateCoreSkills" (click)="removeRequestedCandidateSkill(skill)">{{skill}}</div>
 							</div>
 						</td>	
 					</tr>
 					<tr>
-						<td>Start Date</td>
+						<td>{{'arenella-recruiter-mp-add-start-date' | translate}}</td>
 						<td>
 							<input formControlName="startDate" type="date"/>
 						</td>	
 					</tr>
 					<tr>
-						<td>Position Closing Date</td>
+						<td>{{'arenella-recruiter-mp-add-closing-date' | translate}}</td>
 						<td>
 							<input formControlName="positionClosingDate" type="date"/>
 						</td>	
 					</tr>
 					<tr>
-						<td>Description</td>
+						<td>{{'arenella-recruiter-mp-add-description' | translate}}</td>
 						<td>
 							<textarea formControlName="description"></textarea>
 						</td>	
 					</tr>
 					<tr>
-						<td>Comments</td>
+						<td>{{'arenella-recruiter-mp-add-comments' | translate}}</td>
 						<td>
 							<textarea formControlName="comments"></textarea>
 						</td>	
@@ -201,86 +195,86 @@
 		<!-- Edit Demand  -->
 		<div *ngIf="editDemand">
 			<div class="action-buttons">
-				<button class="btn btn-secondary arenella-btn {{suggestionMobileBtnClass}}" (click)="publishOpenPosition()">Update</button>
-				<button class="btn btn-secondary arenella-btn {{suggestionMobileBtnClass}}" (click)="showOpenPositions()">Back</button>
+				<button class="btn btn-secondary arenella-btn {{suggestionMobileBtnClass}}" (click)="publishOpenPosition()">{{'arenella-recruiter-mp-add-btn-update' | translate}}</button>
+				<button class="btn btn-secondary arenella-btn {{suggestionMobileBtnClass}}" (click)="showOpenPositions()">{{'arenella-recruiter-mp-add-btn-back' | translate}}</button>
 			</div>
-			<h3>Update Requested Candidate</h3>
+			<h3>{{'arenella-recruiter-mp-update-header' | translate}}</h3>
 			<form [formGroup]="requestedCandidateFormBean">
 				<table class="table marketplace-table">
 					<tr>
-						<td>Position Title</td>
+						<td>{{'arenella-recruiter-mp-update-pos-title' | translate}}</td>
 						<td>
 							<input formControlName="positionTitle" type="text"/>
 						</td>	
 					</tr>
 					<tr>
-						<td>Country</td>
+						<td>{{'arenella-recruiter-mp-update-country' | translate}}</td>
 						<td>
 							<select formControlName="country">
 								<option></option>
-								<option value="BELGIUM">Belgium</option>
-								<option value="IRL">Ireland</option>
-								<option value="NETHERLANDS">Netherlands</option>
-								<option value="UK">UK</option>
-								<option value="EUROPE">EU</option>
-								<option value="WORLD">World</option>
+								<option value="BELGIUM">{{'arenella-recruiter-mp-update-belgium' | translate}}</option>
+								<option value="IRL">{{'arenella-recruiter-mp-update-ireland' | translate}}</option>
+								<option value="NETHERLANDS">{{'arenella-recruiter-mp-update-netherlands' | translate}}</option>
+								<option value="UK">{{'arenella-recruiter-mp-update-uk' | translate}}</option>
+								<option value="EUROPE">{{'arenella-recruiter-mp-update-eu' | translate}}</option>
+								<option value="WORLD">{{'arenella-recruiter-mp-update-world' | translate}}</option>
 							</select>
 						</td>	
 					</tr>
 					<tr>
-						<td>Location</td>
+						<td>{{'arenella-recruiter-mp-update-location' | translate}}</td>
 						<td>
 							<input formControlName="location" type="text"/>
 						</td>	
 					</tr>
 					<tr>
-						<td>Contract Type</td>
+						<td>{{'arenella-recruiter-mp-update-contact-type' | translate}}</td>
 						<td>
 							<select  formControlName="contractType">
 								<option></option>
-								<option value="CONTRACT">Contract</option>
-								<option value="PERM">Perm</option>
-								<option value="BOTH">Both</option>
+								<option value="CONTRACT">{{'arenella-recruiter-mp-update-contract' | translate}}</option>
+								<option value="PERM">{{'arenella-recruiter-mp-update-perm' | translate}}Perm</option>
+								<option value="BOTH">{{'arenella-recruiter-mp-update-both' | translate}}</option>
 							</select>
 						</td>	
 					</tr>
 					<tr>
 						<td>
-							Skills
+							{{'arenella-recruiter-mp-update-skills' | translate}}
 						</td>
 						<td class="sugg-srch-bdy">
-							<input type="text" formControlName="skill"><button (click)="addOfferedPositionSkill()" class="btn btn-secondary add-skill-btn" *ngIf="!isAuthenticatedAsAdmin()">Add</button>
+							<input type="text" formControlName="skill"><button (click)="addOfferedPositionSkill()" class="btn btn-secondary add-skill-btn" *ngIf="!isAuthenticatedAsAdmin()">{{'arenella-recruiter-mp-update-btn-add' | translate}}</button>
 							<div style="min-height:35px;">
 								<div class="selected-skill" *ngFor="let skill of requestedCandidateCoreSkills" (click)="removeRequestedCandidateSkill(skill)">{{skill}}</div>
 							</div>
 						</td>	
 					</tr>
 					<tr>
-						<td>Salary / Rate</td>
+						<td>{{'arenella-recruiter-mp-update-salary' | translate}}</td>
 						<td>
 							<input formControlName="renumeration" type="text"/>
 						</td>	
 					</tr>
 					<tr>
-						<td>Start Date</td>
+						<td>{{'arenella-recruiter-mp-update-start' | translate}}</td>
 						<td>
 							<input formControlName="startDate" type="date"/>
 						</td>	
 					</tr>
 					<tr>
-						<td>Position Closing Date</td>
+						<td>{{'arenella-recruiter-mp-update-closing' | translate}}</td>
 						<td>
 							<input formControlName="positionClosingDate" type="date"/>
 						</td>	
 					</tr>
 					<tr>
-						<td>Description</td>
+						<td>{{'arenella-recruiter-mp-update-description' | translate}}</td>
 						<td>
 							<textarea formControlName="description"></textarea>
 						</td>	
 					</tr>
 					<tr>
-						<td>Comments</td>
+						<td>{{'arenella-recruiter-mp-update-comments' | translate}}</td>
 						<td>
 							<textarea formControlName="comments"></textarea>
 						</td>	
@@ -291,10 +285,10 @@
 		<!-- Open Position Details -->
 		<div *ngIf="showDemandDetails">
 			<div class="action-buttons">
-				<button class="btn btn-secondary arenella-btn {{suggestionMobileBtnClass}}" *ngIf="isMyOpenPosition()" (click)="editOpenPosition(activeOpenPosition)">Edit</button>
-				<button class="btn btn-secondary arenella-btn {{suggestionMobileBtnClass}}" *ngIf="isMyOpenPosition() && confirmDeleteOpenPosition != activeOpenPosition.id"  (click)="deleteMyOpenPosition(activeOpenPosition.id)">Delete</button>
-				<button class="btn btn-secondary arenella-btn {{suggestionMobileBtnClass}} small-action-btn-confirm-del " *ngIf="isMyOpenPosition() && confirmDeleteOpenPosition === activeOpenPosition.id" (click)="applyDeleteMyOpenPosition(activeOpenPosition.id)">Confirm</button>
-				<button class="btn btn-secondary arenella-btn {{suggestionMobileBtnClass}}" (click)="showOpenPositions()">Back</button>
+				<button class="btn btn-secondary arenella-btn {{suggestionMobileBtnClass}}" *ngIf="isMyOpenPosition()" (click)="editOpenPosition(activeOpenPosition)">{{'arenella-recruiter-mp-detils-btn-edit' | translate}}</button>
+				<button class="btn btn-secondary arenella-btn {{suggestionMobileBtnClass}}" *ngIf="isMyOpenPosition() && confirmDeleteOpenPosition != activeOpenPosition.id"  (click)="deleteMyOpenPosition(activeOpenPosition.id)">{{'arenella-recruiter-mp-detils-btn-delete' | translate}}</button>
+				<button class="btn btn-secondary arenella-btn {{suggestionMobileBtnClass}} small-action-btn-confirm-del " *ngIf="isMyOpenPosition() && confirmDeleteOpenPosition === activeOpenPosition.id" (click)="applyDeleteMyOpenPosition(activeOpenPosition.id)">{{'arenella-recruiter-mp-detils-btn-confirm' | translate}}</button>
+				<button class="btn btn-secondary arenella-btn {{suggestionMobileBtnClass}}" (click)="showOpenPositions()">{{'arenella-recruiter-mp-detils-btn-back' | translate}}</button>
 			</div>
 			<div class="{{mobileListingLeftPaneContainer}}X">
 				<!-- Left Pane -->
@@ -303,7 +297,7 @@
 			<div class="right-body-pane">
       			<div class="listing-view-div">
 					<h1 *ngIf="!isMobile" class="listing-view-title">{{activeOpenPosition.positionTitle}}</h1>
-					<h1 *ngIf="isMobile" class="listing-view-title">Description</h1>
+					<h1 *ngIf="isMobile" class="listing-view-title">{{'arenella-recruiter-mp-detils-desc' | translate}}</h1>
 				</div>
 				<div>
 					<div>
@@ -311,7 +305,7 @@
 					</div>
 				</div>
 				<div *ngIf="activeOpenPosition.comments">
-					<h1 *ngIf="isMobile" class="listing-view-title">Comments</h1>
+					<h1 *ngIf="isMobile" class="listing-view-title">{{'arenella-recruiter-mp-detils-comments' | translate}}</h1>
 					<div>
 						<pre style="white-space:pre-line;font-family: Roboto, 'Helvetica Neue', sans-serif;">{{activeOpenPosition.comments}}</pre>
 					</div>
@@ -338,40 +332,40 @@
 
 <dialog #contactBox>
 	<div class="modal-header">
-		<h4 class="modal-title">Send Message To Recruiter</h4>
+		<h4 class="modal-title">{{'arenella-recruiter-mp-box-contact-hdr' | translate}}</h4>
  		<div class="filter-close-box" (click)="closeModal()">X</div>
 	</div>
 	<div class="modal-body" *ngIf="contactRecruiterView === 'message'">
 		<form [formGroup]="sendMessageGroup">
 			<textarea formControlName="message"></textarea>
-			<button class="btn btn-secondary arenella-btn" (click)="sendMessageToRecruiter()" 	*ngIf="!showJustMyOpenPositionsActive">Send</button>
+			<button class="btn btn-secondary arenella-btn" (click)="sendMessageToRecruiter()" 	*ngIf="!showJustMyOpenPositionsActive">{{'arenella-recruiter-mp-box-contact-btn-send' | translate}}</button>
 		</form>	
 	</div>
 	<div class="modal-body message-send-success" *ngIf="contactRecruiterView === 'success'">
-			<p>Message Sent Successfully</p>
-			<p>You can view a copy of your message and any replies in your inbox</p>
+			<p>{{'arenella-recruiter-mp-box-msg-success-1' | translate}}</p>
+			<p>{{'arenella-recruiter-mp-box-msg-success-2' | translate}}</p>
 	</div>
 	<div class="modal-body" *ngIf="contactRecruiterView === 'failure'">
-			<p class="message-send-failure">Failed to Send Message</p>
+			<p class="message-send-failure">{{'arenella-recruiter-mp-box-msg-failed' | translate}}</p>
 	</div>
 </dialog> 
 
 <dialog #specUploadBox>
 	<div class="modal-header">
-		<h4 class="modal-title">Extract Filters</h4>
+		<h4 class="modal-title">{{'arenella-recruiter-mp-box-spec-upld-hdr' | translate}}</h4>
  		<div class="filter-close-box" (click)="closeModal()">X</div>
 	</div>
 	<div class="feedbackBox">
 		<div class="modal-body" *ngIf="showFilterByJobSpec">
 			<input type="file" (change)="setJobSepecFile($event)">
 			<br><br>
-				<button class="btn btn-secondary" (click)="extractFiltersFromJobSpec()">Perform Extraction</button>
+				<button class="btn btn-secondary" (click)="extractFiltersFromJobSpec()">{{'arenella-recruiter-mp-box-spec-upld-btn-extract' | translate}}</button>
 			<br><br>
-			<p>File types of .doc, .docx and pdf up to 1MB</p>
+			<p>{{'arenella-recruiter-mp-box-spec-upld-filetype' | translate}}</p>
 			<br><br>
 		</div>
 		<div class="modal-body" *ngIf="showFilterByJonSpecFailure">
-			<p>Unfortunately it was not possible to extract filters from this file.</p>
+			<p>{{'arenella-recruiter-mp-box-spec-upld-msg-failure' | translate}}</p>
 		</div>
 	</div>
 </dialog> 

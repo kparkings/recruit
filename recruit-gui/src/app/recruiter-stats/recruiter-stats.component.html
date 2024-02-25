@@ -4,10 +4,10 @@
 	<div class="nav-tabs-bar">
 		<ul class="nav nav-tabs">
 			<li class="nav-item">
-				<span class="nav-link statsChartTabX" (click)="switchTab('general-stats')">General</span>
+				<span class="nav-link statsChartTabX" (click)="switchTab('general-stats')">{{'arenella-recruiter-stats-general' | translate}}</span>
 			</li>
 			<li>
-				<span class="nav-link statsChartTabX" (click)="switchTab('jobboard-stats')">Job Board</span>
+				<span class="nav-link statsChartTabX" (click)="switchTab('jobboard-stats')">{{'arenella-recruiter-stats-jobboard' | translate}}</span>
 			</li>
 		</ul>
 	</div>
@@ -16,29 +16,16 @@
 	
 		<!-- Action Buttons -->
 		<div class="action-buttons">
-			<button class="btn btn-secondary arenella-btn" (click)="refreshData()">Refresh</button>
+			<button class="btn btn-secondary arenella-btn" (click)="refreshData()">{{'arenella-recruiter-stats-btn-refresh' | translate}}</button>
 		</div>
 		
 		<div *ngIf="currentTab == 'jobboard-stats' && listingStatistics.listingStats.length == 0" class="no-posts">
-			<h2>Job board statistics</h2>
+			<h2>{{'arenella-recruiter-stats-jb-stats' | translate}}</h2>
 			<br>
-			<p>
-			To view statistics you will need to create at least on post on the Job board
-			</p>
-			<p>
-			To add a post to the job board you can either enter the information manually or use the 'Create From Job Spec' feature. 
-			This will scan a job description file in either Word or PDF format up to 1MB in size and automatically generate the post. 
-			You will simply need to verify that details are correct and publish the post.  
-			</p>
-			<p>
-			Posts on the job board allow site visitors to contact you directly. Posts are also shared in an external network of 24,000+ connections 
-			to attract as many candidates as possible
-			</p>
-			<p>
-			When you view your own posts you can use the 'Publish' button to generate a message to copy and paste on social media which contains the hashtags for the 
-			skills selected in your post. 
-			</p>
-		
+			<p>{{'arenella-recruiter-stats-jb-stats-1' | translate}}</p>
+			<p>{{'arenella-recruiter-stats-jb-stats-2' | translate}}</p>
+			<p>{{'arenella-recruiter-stats-jb-stats-3' | translate}}</p>
+			<p>{{'arenella-recruiter-stats-jb-stats-4' | translate}}</p>
 		</div>
 		
 		<!-- Main panel -->
@@ -47,11 +34,11 @@
 			<!-- TOP -->
 			<div class="chart-panel">
 				<div *ngIf="currentTab == 'general-stats'">
-					<h2>Candidate Availability</h2>
+					<h2>{{'arenella-recruiter-stats-gen-hdr' | translate}}</h2>
 					<h5>Totals:</h5>
 					<table>
 						<tr>
-							<td>Active Users</td>
+							<td>{{'arenella-recruiter-stats-gen-active-users' | translate}}</td>
 							<td>{{totalNumberActiveCandidates}}</td>
 						</tr>
 					</table>
@@ -62,7 +49,7 @@
 					<table>
 						<thead>
 							<tr>
-								<th>Filter by Post</th>
+								<th>{{'arenella-recruiter-stats-gen-filter-by-post' | translate}}</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -86,15 +73,15 @@
 			<!-- BOTTOM -->
 			<div class="chart-panel" style="margin-top:40px;">
 				<div *ngIf="currentTab == 'general-stats'">
-					<h2>Job board Views</h2>
-					<h5>Totals:</h5>
+					<h2>{{'arenella-recruiter-stats-jb-views' | translate}}</h2>
+					<h5>{{'arenella-recruiter-stats-jb-totals' | translate}}:</h5>
 					<table>
 						<tr>
-							<td>Listings viewed today</td>
+							<td>{{'arenella-recruiter-stats-jb-views-today' | translate}}</td>
 							<td>{{listingViewsToday}}</td>
 						</tr>
 						<tr>
-							<td>Listings viewed this week</td>
+							<td>{{'arenella-recruiter-stats-jb-views-this-week' | translate}}</td>
 							<td>{{listingViewsThisWeek}}</td>
 						</tr>
 					</table>

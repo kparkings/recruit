@@ -7,14 +7,14 @@
 		<div>
 			<div class="recruiter-profile-buttons">
 				<div class="action-buttons">
-					<button class="btn btn-secondary arenella-btn"  *ngIf="isOwnAccountExists()  && currentView != 'view-create' && currentView != 'view-details'" 	(click)="showViewCreate()">Edit Profile</button>
-					<button class="btn btn-secondary arenella-btn"  *ngIf="!isOwnAccountExists() && currentView != 'view-create' && currentView != 'view-details'" 	(click)="showViewCreate()">Create Profile</button>
-					<button class="btn btn-secondary arenella-btn" 	*ngIf="currentView != 'view-main'" 																(click)="showViewMain()">Back</button>
+					<button class="btn btn-secondary arenella-btn"  *ngIf="isOwnAccountExists()  && currentView != 'view-create' && currentView != 'view-details'" 	(click)="showViewCreate()">{{'arenella-recruiter-prof-btn-edit' | translate}}</button>
+					<button class="btn btn-secondary arenella-btn"  *ngIf="!isOwnAccountExists() && currentView != 'view-create' && currentView != 'view-details'" 	(click)="showViewCreate()">{{'arenella-recruiter-prof-btn-create' | translate}}</button>
+					<button class="btn btn-secondary arenella-btn" 	*ngIf="currentView != 'view-main'" 																(click)="showViewMain()">{{'arenella-recruiter-prof-btn-back' | translate}}</button>
 				</div>
 			</div>
 			
 			<div *ngIf="currentView === 'view-main' && !recruiterProfile">
-				<p class="no-account">Please create your profile to access the community page</p>
+				<p class="no-account">{{'arenella-recruiter-prof-no-account' | translate}}</p>
 			</div>
 			
 			<div *ngIf="currentView === 'view-main' && recruiterProfile">
@@ -56,7 +56,7 @@
 					
 					<div>
 						<div  class="details-left-collections">
-					<h5>Recruits In</h5>
+					<h5>{{'arenella-recruiter-prof-recruits-in' | translate}}</h5>
 					<ul>
 						<li *ngFor="let country of selectedRecruiterProfile.recruitsIn">
 							<span class="flag-icon flag-icon-{{getCountryFlagClass(country)}} profile-country-flag"></span>
@@ -65,7 +65,7 @@
 				</div>
 				
 				<div  class="details-left-collections">
-					<h5>Languages Spoken</h5>
+					<h5>{{'arenella-recruiter-prof-laguages' | translate}}</h5>
 					<ul>
 						<li *ngFor="let language of selectedRecruiterProfile.languagesSpoken">
 							{{language | enumToHumanReadableValue}}
@@ -74,7 +74,7 @@
 				</div>
 				
 				<div  class="details-left-collections">
-					<h5>Sectors Active In</h5>
+					<h5>{{'arenella-recruiter-prof-sectors' | translate}}</h5>
 					<ul>
 						<li *ngFor="let sector of selectedRecruiterProfile.sectors">
 							{{sector | enumToHumanReadableValue}}
@@ -83,7 +83,7 @@
 				</div>
 				
 				<div  class="details-left-collections">
-					<h5>Recruits For The Following Markets</h5>
+					<h5>{{'arenella-recruiter-prof-markets' | translate}}</h5>
 					<ul>
 					<li *ngFor="let tech of selectedRecruiterProfile.coreTech">
 						{{tech | enumToHumanReadableValue}}
@@ -92,7 +92,7 @@
 				</div>
 				
 				<div  class="details-left-collections">
-					<h5>Recruits For The Following Contract Types</h5>
+					<h5>{{'arenella-recruiter-prof-contract-types' | translate}}</h5>
 					<ul>
 					<li *ngFor="let contractType of selectedRecruiterProfile.recruitsContractTypes">
 						{{contractType | enumToHumanReadableValue}}
@@ -112,7 +112,7 @@
 					<table class="rec-prof-edit-tbl">
 					 
 						<tr>
-							<th>Profile Image</th>
+							<th>{{'arenella-recruiter-prof-image' | translate}}</th>
 							<td>
 							  	<input type="file" accept="image/jpeg,image/png" (change)="uploadProfileImage($event)" class="file-input">
 								<img class="profile-photo" *ngIf="recruiterProfile?.profilePhoto?.imageBytes" id='base64image'                 
@@ -120,13 +120,13 @@
 							</td>
 						</tr>
 						<tr>
-							<th>Job Title</th>
+							<th>{{'arenella-recruiter-prof-title' | translate}}</th>
 							<td>
 								<input type="text" formControlName="jobTitle">
 							</td>
 						</tr>
 						<tr>
-							<th>Recruitment Type</th>
+							<th>{{'arenella-recruiter-prof-rec-type' | translate}}</th>
 							<td>
 								<select formControlName="recruiterType">
 									<option *ngFor="let opt of recruitmentTypeOptions" value="{{opt}}">{{getUserReadableVal(opt)}}</option>
@@ -134,13 +134,13 @@
 							</td>
 						</tr>
 						<tr>
-							<th>Years Experience</th>
+							<th>{{'arenella-recruiter-prof-exp' | translate}}</th>
 							<td>
 								<input type="number" formControlName="yearsExperience">
 							</td>
 						</tr>
 						<tr>
-							<th>Recruits In</th>
+							<th>{{'arenella-recruiter-prof-rec-in' | translate}}</th>
 							<td>
 								<select formControlName="recruitsIn" (change)="addRecruitsInItem()">
 									<option *ngFor="let opt of countryOptions"	value="{{opt}}">{{opt[1]}}</option>
@@ -155,13 +155,13 @@
 								
 						</tr>
 						<tr>
-							<th>Introduction</th>
+							<th>{{'arenella-recruiter-prof-intro' | translate}}</th>
 							<td>
 								<textarea formControlName="introduction"></textarea>
 							</td>
 						</tr>
 						<tr>
-							<th>Languages Spoken</th>
+							<th>{{'arenella-recruiter-prof-langs-spoken' | translate}}</th>
 							<td>
 								<select formControlName="languagesSpoken" (change)="addLanguageSpokenItem()">
 									<option *ngFor="let opt of languageOptions" value="{{opt}}">{{opt[1]}}</option>
@@ -175,7 +175,7 @@
 							</td>
 						</tr>
 						<tr>
-							<th>Sectors</th>
+							<th>{{'arenella-recruiter-prof-sectors' | translate}}Sectors</th>
 							<td>
 								<select formControlName="sectorItem" (change)="addSectorItem()">
 									<option *ngFor="let opt of sectorOptions" value="{{opt}}">{{opt[1]}}</option>
@@ -189,7 +189,7 @@
 							</td>
 						</tr>
 						<tr>
-							<th>Core Technologies</th>
+							<th>{{'arenella-recruiter-prof-techs-stack' | translate}}</th>
 							<td>
 								<select formControlName="coreTechItem" (change)="addCoreTechItem()">
 									<option *ngFor="let opt of techOptions" value="{{opt}}">{{opt[1]}}</option>
@@ -203,7 +203,7 @@
 							</td>
 						</tr>
 						<tr>
-							<th>Contract Types</th>
+							<th>{{'arenella-recruiter-prof-contract-types' | translate}}</th>
 							<td>
 								<select  formControlName="contractTypeItem" (change)="addContractTypeItem()">
 									<option *ngFor="let opt of contractTypeOptions" value="{{opt}}">{{opt[1]}}</option>
@@ -217,19 +217,19 @@
 							</td>
 						</tr>
 						<tr>
-							<th>Visible To Recruiters</th>
+							<th>{{'arenella-recruiter-prof-vis-rec' | translate}}</th>
 							<td>
 								<input type="checkbox" formControlName="visibleToRecruiters"/>
 							</td>
 						</tr>
 						<tr>
-							<th>Visible To Candidates</th>
+							<th>{{'arenella-recruiter-prof-vis-can' | translate}}</th>
 							<td>
 								<input type="checkbox" formControlName="visibleToCandidates"/>
 							</td>
 						</tr>
 						<tr>
-							<th>Visible To Public</th>
+							<th>{{'arenella-recruiter-prof-vis-public' | translate}}</th>
 							<td>
 								<input type="checkbox" formControlName="visibleToPublic"/>
 							</td>
@@ -238,7 +238,7 @@
 				</form>
 			</div>
 			<div class="action-buttons" style="padding-bottom:50px;">
-				<button class="btn btn-secondary arenella-btn" *ngIf="currentView === 'view-create'" (click)="saveProfile()">Save</button>		
+				<button class="btn btn-secondary arenella-btn" *ngIf="currentView === 'view-create'" (click)="saveProfile()">{{'arenella-recruiter-prof-btn-save' | translate}}</button>		
 			</div>
 			
 		</div>
@@ -247,7 +247,7 @@
 
 <dialog #contactBox>
 	<div class="modal-header">
-		<h4 class="modal-title">Send Message</h4>
+		<h4 class="modal-title">{{'arenella-recruiter-prof-box-contact-title' | translate}}</h4>
  		<div class="filter-close-box" (click)="contactBox.close()">X</div>
 	</div>
 	<div class="modal-body" *ngIf="contactRecruiterView === 'message'">
@@ -257,14 +257,14 @@
 				<br>
 			</div>
 			<textarea formControlName="message"></textarea>
-			<button class="btn btn-secondary arenella-btn" (click)="sendMessageToRecruiter()">Send</button>
+			<button class="btn btn-secondary arenella-btn" (click)="sendMessageToRecruiter()">{{'arenella-recruiter-prof-box-contact-btn-send' | translate}}</button>
 		</form>	
 	</div>
 	<div class="modal-body message-send-success" *ngIf="contactRecruiterView === 'success'">
-			<p>Message Sent Successfully</p>
-			<p>You can view a copy of your message and any replies in your inbox</p>
+			<p>{{'arenella-recruiter-prof-box-contact-desc1' | translate}}</p>
+			<p>{{'arenella-recruiter-prof-box-contact-desc2' | translate}}</p>
 	</div>
 	<div class="modal-body" *ngIf="contactRecruiterView === 'failure'">
-			<p class="message-send-failure">Failed to Send Message</p>
+			<p class="message-send-failure">{{'arenella-recruiter-prof-box-contact-failed' | translate}}</p>
 	</div>
 </dialog> 

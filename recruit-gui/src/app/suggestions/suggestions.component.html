@@ -7,12 +7,12 @@
 		
 		<!-- Action buttons -->
 		<div *ngIf="currentView === 'suggestion-results'" class="action-buttons">
-			<button class="btn btn-secondary arenella-btn" (click)="showCreateAlertDialog()" download>Create Email Alert</button>
-			<button class="btn btn-secondary arenella-btn" routerLink="/recruiter-alerts" download>Manage Alerts</button>
-	        <button class="btn btn-secondary arenella-btn" (click)="showSavedCandidates()" download>My Candidates</button>
-	        <button class="btn btn-secondary arenella-btn" (click)="openPublicityDialog()" *ngIf="isAuthenticatedAsAdmin()" download>Copy</button>
-	        <button class="btn btn-secondary arenella-btn" (click)="showFilterByJobSpecDialog(specUploadBox)" download>Filter by Job Spec</button>
-	        <button class="btn btn-secondary arenella-btn" (click)="doReset()">Reset</button>
+			<button class="btn btn-secondary arenella-btn" (click)="showCreateAlertDialog()" download>{{'arenella-suggestions-btn-create-alert' | translate}}</button>
+			<button class="btn btn-secondary arenella-btn" routerLink="/recruiter-alerts" download>{{'arenella-suggestions-btn-manage-alert' | translate}}</button>
+	        <button class="btn btn-secondary arenella-btn" (click)="showSavedCandidates()" download>{{'arenella-suggestions-btn-my-candidates' | translate}}</button>
+	        <button class="btn btn-secondary arenella-btn" (click)="openPublicityDialog()" *ngIf="isAuthenticatedAsAdmin()" download>{{'arenella-suggestions-btn-copy' | translate}}</button>
+	        <button class="btn btn-secondary arenella-btn" (click)="showFilterByJobSpecDialog(specUploadBox)" download>{{'arenella-suggestions-btn-filter-by-spec' | translate}}</button>
+	        <button class="btn btn-secondary arenella-btn" (click)="doReset()">{{'arenella-suggestions-btn-reset' | translate}}</button>
 	     </div>
 		
 		<div *ngIf="currentView === 'saved-candidates'">
@@ -24,13 +24,13 @@
 				<div *ngIf="currentView === 'suggestion-results'">		
 					<table class="mobile-search-box">
 						<tr>
-							<td class="sugg-srch-hdr">Job Title</td>
+							<td class="sugg-srch-hdr">{{'arenella-suggestions-job-title' | translate}}</td>
 							<td class="sugg-srch-bdy">
 								<input type="text" value="Java Developer" class="sugg-srch-job-title" formControlName="searchPhrase">
 							</td>
 						</tr>
 						<tr>
-							<td class="sugg-srch-hdr">Country</td>
+							<td class="sugg-srch-hdr">{{'arenella-suggestions-country' | translate}}</td>
 							<td class="sugg-srch-bdy country-filters">
 								<span class="country-filter country-selected-{{includeResultsForCountry('nl')}}" (click)="toggleCountrySelection('nl')">
 									<span class="flag-icon flag-icon-nl flag-icon-med"></span>
@@ -48,34 +48,34 @@
 						</tr>
 					
 						<tr>
-							<td class="sugg-srch-hdr">Contract</td>
+							<td class="sugg-srch-hdr">{{'arenella-suggestions-contract' | translate}}Contract</td>
 							<td class="sugg-srch-bdy">
 								<select class="contract-type" formControlName="contractType">
-									<option value="BOTH">Both (Includes unknown)</option>
-									<option value="CONTRACT">Contract</option>
-									<option value="PERM">Permanent</option>
+									<option value="BOTH">{{'arenella-suggestions-both' | translate}}</option>
+									<option value="CONTRACT">{{'arenella-suggestions-contract' | translate}}</option>
+									<option value="PERM">{{'arenella-suggestions-permanent' | translate}}</option>
 								</select>
 							</td>
 						</tr>
 						<tr>
-							<td class="sugg-srch-hdr">Languages</td>
+							<td class="sugg-srch-hdr">{{'arenella-suggestions-language' | translate}}</td>
 							<td class="sugg-srch-bdy">
 								<ul class="sugg-srch-ctry-ul">
-									<li class="sugg-srch-ctry-chkbox"><input type="checkbox" formControlName="dutchLanguage" class="lang-checkbox">Dutch</li>
-									<li class="sugg-srch-ctry-chkbox"><input type="checkbox" formControlName="frenchLanguage" class="lang-checkbox">French</li>
-									<li class="sugg-srch-ctry-chkbox"><input type="checkbox" formControlName="englishLanguage" class="lang-checkbox">English</li>
+									<li class="sugg-srch-ctry-chkbox"><input type="checkbox" formControlName="dutchLanguage" class="lang-checkbox">{{'arenella-suggestions-dutch' | translate}}</li>
+									<li class="sugg-srch-ctry-chkbox"><input type="checkbox" formControlName="frenchLanguage" class="lang-checkbox">{{'arenella-suggestions-french' | translate}}</li>
+									<li class="sugg-srch-ctry-chkbox"><input type="checkbox" formControlName="englishLanguage" class="lang-checkbox">{{'arenella-suggestions-english' | translate}}</li>
 								</ul>					
 							</td>
 						</tr>
 					
 						<tr>
-							<td class="sugg-srch-hdr">Years Exp</td>
+							<td class="sugg-srch-hdr">{{'arenella-suggestions-experience' | translate}}</td>
 							<td class="sugg-srch-bdy">
 								<div>
 									<select class="min" formControlName="minYearsExperience">
 										<option *ngFor="let opt of minMaxOptions" value="{{opt}}">{{opt}}</option>
 									</select>
-									<span> <B>TO</B> </span>
+									<span> <B>{{'arenella-suggestions-to' | translate}}</B> </span>
 									<select class="max" formControlName="maxYearsExperience">
 										<option *ngFor="let opt of minMaxOptions" value="{{opt}}">{{opt}}</option>
 									</select>
@@ -84,10 +84,10 @@
 						</tr>
 					
 						<tr>
-							<td class="sugg-srch-hdr">Skills</td>
+							<td class="sugg-srch-hdr">{{'arenella-suggestions-skills' | translate}}</td>
 							<td class="sugg-srch-bdy">
 								<form [formGroup]="skilFilterForm">
-									<input class="skill-field" type="text" formControlName="skill"><button (click)="addSkill()" class="btnX btn-secondary add-skill-btn">Add</button>
+									<input class="skill-field" type="text" formControlName="skill"><button (click)="addSkill()" class="btnX btn-secondary add-skill-btn">{{'arenella-suggestions-add' | translate}}</button>
 								</form>
 							</td>
 						</tr>
@@ -143,23 +143,23 @@
 
 <dialog #specUploadBox>
 	<div class="modal-header">
-		<h4 class="modal-title">Extract Filters</h4>
+		<h4 class="modal-title">{{'arenella-suggestions-box-spec-hdr' | translate}}</h4>
  		<div class="filter-close-box" (click)="specUploadBox.close()">X</div>
 	</div>
 	<div class="specUploadBox;">
 		<div class="modal-body" *ngIf="showFilterByJobSpec && jobSpecUploadView == 'chooseType'">
-			<p>Please choose how to upload the job specification to filter on</p>
+			<p>{{'arenella-suggestions-box-spec-intro' | translate}}</p>
 			<div class="job-spec-options">
-			<div class="job-spec-upld-opt" (click)="switchJobSpecUpldOpt('doc')">Upload File</div>
-			<div class="job-spec-upld-opt" (click)="switchJobSpecUpldOpt('text')">Paste Text</div>
+			<div class="job-spec-upld-opt" (click)="switchJobSpecUpldOpt('doc')">{{'arenella-suggestions-box-spec-file' | translate}}</div>
+			<div class="job-spec-upld-opt" (click)="switchJobSpecUpldOpt('text')">{{'arenella-suggestions-box-spec-text' | translate}}</div>
 			</div>
 		</div>
 		<div class="modal-body" *ngIf="showFilterByJobSpec && jobSpecUploadView == 'doc'">
 			<input type="file" (change)="setJobSepecFile($event)">
 			<br><br>
-				<button class="btn btn-secondary" (click)="extractFiltersFromJobSpec()">Perform Extraction</button>
+				<button class="btn btn-secondary" (click)="extractFiltersFromJobSpec()">{{'arenella-suggestions-box-spec-extraction' | translate}}</button>
 			<br><br>
-			<p>File types of .doc, .docx and pdf up to 1MB</p>
+			<p>{{'arenella-suggestions-box-spec-file-types' | translate}}</p>
 			<br><br>
 		</div>
 		<div class="modal-body" *ngIf="showFilterByJobSpec && jobSpecUploadView == 'text'">
@@ -168,36 +168,36 @@
 					
 				</textarea>
 				<br><br>
-					<button class="btn btn-secondary" (click)="extractFiltersFromJobSpecText()">Perform Extraction</button>
+					<button class="btn btn-secondary" (click)="extractFiltersFromJobSpecText()">{{'arenella-suggestions-box-spec-extraction' | translate}}</button>
 				<br><br>
 				<br><br>
 			</form>
 		</div>
 		<div class="modal-body" *ngIf="showFilterByJonSpecFailure">
-			<p>Unfortunately it was not possible to extract filters from this file.</p>
+			<p>{{'arenella-suggestions-box-spec-msg-failure' | translate}}</p>
 		</div>
 	</div>
 </dialog> 
 
 <dialog #feedbackBox >
 	<div class="modal-header">
-		<h4 class="modal-title">Create Email Alert</h4>
+		<h4 class="modal-title">{{'arenella-suggestions-box-alert-hdr' | translate}}</h4>
  		<div class="filter-close-box" (click)="feedbackBox.close()">X</div>
 	</div>
 	<div class="feedbackBox;">
 		<form [formGroup]="createAlertForm">
 			<div class="modal-body" *ngIf="showSaveAlertBox">
-				<p class="info-text">Please add required filters before creating your alert</p>
+				<p class="info-text">{{'arenella-suggestions-box-alert-text' | translate}}</p>
 				Alert Name: <input type="text" formControlName="alertName">
 				<br/><br/>
-				<button class="btn btn-secondary" (click)="saveAlert()" download>Save</button>
+				<button class="btn btn-secondary" (click)="saveAlert()" download>{{'arenella-suggestions-box-alert-btn-save' | translate}}</button>
 			</div>       
 			<div class="modal-body" *ngIf="showSaveAlertBoxSuccess">
-				<p>Your Candidate Search Alert was created successfully. You will now receive alerts when matching candidates are uploaded.</p>
-				<p>You can manage alerts in the 'Manage Search Alerts' screen.</p>
+				<p>{{'arenella-suggestions-box-alert-success-1' | translate}}</p>
+				<p>{{'arenella-suggestions-box-alert-success-2' | translate}}</p>
 			</div>
 			<div class="modal-body" *ngIf="showSaveAlertBoxFailure">
-				<p>Unfortunately it was not possible to create your Candidate Search Alert at this time.</p>
+				<p>{{'arenella-suggestions-box-alert-failure' | translate}}</p>
 			</div>
 		</form>
 	</div>
@@ -207,13 +207,13 @@
 
 	<!--  Options -->
 	<div class="modal-header">
-		<h4 class="modal-title">Publicity</h4>
+		<h4 class="modal-title">{{'arenella-suggestions-box-publicity-hdr' | translate}}</h4>
 		<div class="filter-close-box" (click)="publicityModal.close()">X</div>
 	</div>
 	<div class="modal-body publicity-suggestions">
 		<table>
 			<div *ngFor="let c of publicitySuggestions">
-				{{getCountryCode(c.country) + ' - Exp: ' + c.yearsExperience + ' years - ' + c.roleSought}}
+				{{getCountryCode(c.country)}} - {{'arenella-suggestions-box-publicity-exp' | translate}}: {{c.yearsExperience}}  {{'arenella-suggestions-box-publicity-years' | translate}} -  {{c.roleSought}}
 			</div>
 		</table>
 	</div> 
