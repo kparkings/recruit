@@ -8,63 +8,63 @@
       
 		<!-- Pre Authentication -->
 		<li  class="li-arenella-nav-pre-login li-arenella-nav-pre-login-std" *ngIf="!isAuthenticated()">
-           <a  class="dropdown-item dropdown-item-preauth" routerLink="/listing">{{'jobs' | translate}}</a>
+           <a  class="dropdown-item dropdown-item-preauth" routerLink="/listing">{{'arenella-app-menu-jobs' | translate}}</a>
         </li>
 		<li  class="li-arenella-nav-pre-login li-arenella-nav-pre-login-std" *ngIf="!isAuthenticated()">
-           <a  class="dropdown-item dropdown-item-preauth" routerLink="/about">About</a>
+           <a  class="dropdown-item dropdown-item-preauth" routerLink="/about">{{'arenella-app-menu-about' | translate}}</a>
         </li>
 		<li  class="li-arenella-nav-pre-login li-arenella-nav-pre-login-std" *ngIf="!isAuthenticated()">
-           <a  class="dropdown-item dropdown-item-preauth" routerLink="/faq">Faq</a>
+           <a  class="dropdown-item dropdown-item-preauth" routerLink="/faq">{{'arenella-app-menu-faq' | translate}}</a>
         </li>
 		<li  class="li-arenella-nav-pre-login li-arenella-nav-pre-login-std" *ngIf="!isAuthenticated()">
-           <a  class="dropdown-item dropdown-item-preauth" routerLink="/suggestions">Login</a>
+           <a  class="dropdown-item dropdown-item-preauth" routerLink="/suggestions">{{'arenella-app-menu-login' | translate}}</a>
         </li> 
 		<li class="li-arenella-nav-pre-login li-arenella-nav-pre-signup signup-candidate" *ngIf="!isAuthenticated()">
-           	<a class="dropdown-item dropdown-item-preauth" routerLink="/create-candidate">Candidate Signup</a>
+           	<a class="dropdown-item dropdown-item-preauth" routerLink="/create-candidate">{{'arenella-app-menu-candidate-signup' | translate}}</a>
  	    </li>
 		<li class="li-arenella-nav-pre-login li-arenella-nav-pre-signup signup-recruiter" *ngIf="!isAuthenticated()">
-    		<a class="dropdown-item dropdown-item-preauth" routerLink="/recruiter-signup">Recruiter Signup</a>
+    		<a class="dropdown-item dropdown-item-preauth" routerLink="/recruiter-signup">{{'arenella-app-menu-recruiter-signup' | translate}}</a>
         </li>
 
 		<!-- Post Authentication -->
 		<li  class="li-arenella-nav {{menuItemMobileCss}}" *ngIf="isAuthenticated() && !isRecruiterNoSubscription() && !hasUnpaidSubscription()" (click)="refreschUnreadAlerts()">
-           <a  class="dropdown-item" routerLink="/listing">Job Board</a>
+           <a  class="dropdown-item" routerLink="/listing">{{'arenella-app-menu-job-board' | translate}}</a>
         </li>
         <li  class="li-arenella-nav {{menuItemMobileCss}}"  *ngIf="isAuthenticated() && !isRecruiterNoSubscription() && !hasUnpaidSubscription() && !isCandidate()">	
-           <a  class="dropdown-item" (click)="navToSuggestions()">Suggestions</a>
+           <a  class="dropdown-item" (click)="navToSuggestions()">{{'arenella-app-menu-suggestions' | translate}}</a>
         </li>
 		<li class="li-arenella-nav {{menuItemMobileCss}}" *ngIf="isAuthenticated() && !isRecruiterNoSubscription() && !hasUnpaidSubscription() && !isCandidate()" (click)="refreschUnreadAlerts()">
-        	<a *ngIf="unseenMpPosts > 0" 	class="dropdown-item" routerLink="/recruiter-marketplace"><span class="unseen-posts">{{unseenMpPosts}}</span>Marketplace</a>
-			<a *ngIf="unseenMpPosts <= 0" 	class="dropdown-item" routerLink="/recruiter-marketplace">Marketplace</a>
+        	<a *ngIf="unseenMpPosts > 0" 	class="dropdown-item" routerLink="/recruiter-marketplace"><span class="unseen-posts">{{unseenMpPosts}}</span>{{'arenella-app-menu-mp' | translate}}</a>
+			<a *ngIf="unseenMpPosts <= 0" 	class="dropdown-item" routerLink="/recruiter-marketplace">{{'arenella-app-menu-mp' | translate}}</a>
         </li>
         <li  class="li-arenella-nav {{menuItemMobileCss}}" *ngIf="isAuthenticatedAsAdmin()" (click)="refreschUnreadAlerts()">
-           <a  class="dropdown-item" routerLink="/statistics">Statistics</a>
+           <a  class="dropdown-item" routerLink="/statistics">{{'arenella-app-menu-statistics' | translate}}</a>
         </li>
  		<li  class="li-arenella-nav {{menuItemMobileCss}}" *ngIf="isAuthenticatedAsAdmin()" (click)="refreschUnreadAlerts()">
-           <a  class="dropdown-item" (click)="navToNewCandidate()">New</a>
+           <a  class="dropdown-item" (click)="navToNewCandidate()">{{'arenella-app-menu-new' | translate}}</a>
         </li>
 		<li  class="li-arenella-nav {{menuItemMobileCss}}" *ngIf="isAuthenticated() && !isRecruiterNoSubscription() && !hasUnpaidSubscription()" (click)="refreschUnreadAlerts()">
-        	<a *ngIf="unseenEmails > 0" 	class="dropdown-item" routerLink="/email"><span class="unseen-posts">{{unseenEmails}}</span>Emails</a>
-			<a *ngIf="unseenEmails <= 0"	class="dropdown-item" routerLink="/email">Emails</a>
+        	<a *ngIf="unseenEmails > 0" 	class="dropdown-item" routerLink="/email"><span class="unseen-posts">{{unseenEmails}}</span>{{'arenella-app-menu-emails' | translate}}</a>
+			<a *ngIf="unseenEmails <= 0"	class="dropdown-item" routerLink="/email">{{'arenella-app-menu-emails' | translate}}</a>
         </li>
 		<li  class="li-arenella-nav {{menuItemMobileCss}}"  *ngIf="isCandidate()" (click)="refreschUnreadAlerts()">	
-           <a  class="dropdown-item" routerLink="/suggestions">Profile</a>
+           <a  class="dropdown-item" routerLink="/suggestions">{{'arenella-app-menu-profile' | translate}}</a>
         </li>
 		<li  class="li-arenella-nav {{menuItemMobileCss}}" *ngIf="isAuthenticated() && !isRecruiterNoSubscription() && !hasUnpaidSubscription() && !isCandidate()" (click)="refreschUnreadAlerts()">
-           <a  class="dropdown-item" routerLink="/recruiter-profile">Community</a>
+           <a  class="dropdown-item" routerLink="/recruiter-profile">{{'arenella-app-menu-community' | translate}}</a>
         </li>
         <li  class="li-arenella-nav {{menuItemMobileCss}}" *ngIf="isAuthenticated() && isRecruiter() && !isRecruiterNoSubscription() && !hasUnpaidSubscription()" (click)="refreschUnreadAlerts()">
-           <a  class="dropdown-item" routerLink="/recruiter-stats">Stat's</a>
+           <a  class="dropdown-item" routerLink="/recruiter-stats">{{'arenella-app-menu-stats' | translate}}</a>
         </li>
         <li  class="li-arenella-nav {{menuItemMobileCss}}" *ngIf="!isCandidate() && isAuthenticated() && !isRecruiterNoSubscription() && !hasUnpaidSubscription()" (click)="refreschUnreadAlerts()">
-			<a *ngIf="unseenNewsfeedItems" 	class="dropdown-item" routerLink="/newsfeed"><span class="unseen-posts">&nbsp;</span>News Feed</a>
-			<a *ngIf="!unseenNewsfeedItems"	class="dropdown-item" routerLink="/newsfeed">News Feed</a>
+			<a *ngIf="unseenNewsfeedItems" 	class="dropdown-item" routerLink="/newsfeed"><span class="unseen-posts">&nbsp;</span>{{'arenella-app-menu-news-feed' | translate}}</a>
+			<a *ngIf="!unseenNewsfeedItems"	class="dropdown-item" routerLink="/newsfeed">{{'arenella-app-menu-news-feed' | translate}}</a>
         </li>
         <li class="li-arenella-nav {{menuItemMobileCss}}" *ngIf="isAuthenticatedAsAdmin() && !isCandidate()" (click)="refreschUnreadAlerts()">
-           <a  class="dropdown-item" routerLink="/accounts">Accounts</a>
+           <a  class="dropdown-item" routerLink="/accounts">{{'arenella-app-menu-accounts' | translate}}</a>
         </li>
 		<li class="li-arenella-nav {{menuItemMobileCss}}" *ngIf="isAuthenticated() && !isAuthenticatedAsAdmin() && !isCandidate()" (click)="refreschUnreadAlerts()">
-           <a class="dropdown-item recruiter-account" routerLink="/recruiter-account">Account</a>
+           <a class="dropdown-item recruiter-account" routerLink="/recruiter-account">{{'arenella-app-menu-account' | translate}}</a>
         </li>		
       </ul>
 
@@ -74,49 +74,26 @@
 
 <div *ngIf="!termsAndConditionsAccepted" class="terms-and-conditions-box">
 
-	<div class="cookie-policy-hdr"><span class="cookie-policy-title">Cookies and Privacy</span> <span class="cookie-policy-btn"><button (click)="acceptTandCs()">Accept Terms and Conditions</button></span></div>
+	<div class="cookie-policy-hdr"><span class="cookie-policy-title">{{'arenella-app-cookies-and-privacy' | translate}}</span> <span class="cookie-policy-btn"><button (click)="acceptTandCs()">{{'arenella-app-accept-terms-and-conditions' | translate}}</button></span></div>
 	
 	<div class="cookie-policy-text">
-		<h5>Cookies</h5>
-		<p>Cookies are used for security and to gain the site visitors consent to the terms and conditions. We use cookies for no other purpose</p>
-		<h5>Data retention Site Visitors</h5>
-		<p>The site visitor is not tracked by the application and we do not collect statistics for site visitors.</p>
-		<h5>Data use Recruiters</h5>
-		<p>
-		We store information about the Recruiters required to identify and contact them. Information about the actions the recruiter performs may be stored to provide insight relating to the 
-		individual recruiters use of the site and to help improve the site. The Recruiters information will not be shared with third parties without their explicit consent. 
-		</p>
-		<h5>Data use Candidates</h5>
-		<p>
-		Candidates are only added into the system with their consent or via the consent of the company that employs them. The Candidates informaion is available internally in the system and 
-		can also be downloaded by the Recruiters in order to contact them about potentially interesting roles. Candidates CVs can also be downloaded by the Recruiters.
-		</p>
-		<h5>Recruiter site use</h5>
-		<p>
-		By accepting these Terms and Conditions the recruiter agrees that the use of the site and data accessed via the site are entirely at their own risk. The Recruiter agrees that the Arenella BV is 
-		in no way responsible for any negative consequences on them or their company from the use of this site or the data or files contained therin.
-		</p>
-		<p>
-		By accepting these terms and conditions the recruiter agrees that the use of the Candidate data is limited to the sole use of contacting the Candidates about potentially relevant jobs 
-		that may be of interest to the Candidate. The Candidates data may not be passed on to third parties without the Candidates express permission and may not be stored in the Recruiters own 
-		system for longer than necessary to complete the recruitment process for the Candidate they are trying to place.
-		</p>
-		<h5>Candidate site use</h5>
-		<p>By uploading the CV or providing it to the site the Candidate has aggreed for their CV and information to be shared with the network of Recruiters that are already and will 
-		subsequently make use of the website. A Recruiter is any person or conpany with an account on the website that it looking for Candidates to place in a new role. 
-		The Candidate agrees that the Recruiters can access all their information contained within the site in order to contact them with potentially relevant job openings. Information will be 
-		extracted from within the CV and stored seperately in the site. This information may be made accessible to the Recruiters.
-		</p>
-		<h5>Data Retention Recruiters</h5>
-		<p>
-		Recruiters information will be stored in the System for the duration of their subscriptions. After which their data will either be removed or identifiable references to the Recruiter will be 
-		replaced. This update will be periodic but the we will make best endevours to make these updates as quickly as possible.
-		</p>
-		<h5>Data Retention Candidates</h5>
-		<p>
-		Candidates whose profiles have been accepted will receive login details for their Candidate account. Their account and profile will remain in the system up until the point they delete their profile. 
-		Candidates may also email the site administrator and request their details are removed from the site. 
-		</p>
+		<h5>{{'arenella-app-cookies-title1' | translate}}</h5>
+		<p>{{'arenella-app-cookies-text1' | translate}}</p>
+		<h5>{{'arenella-app-cookies-title2' | translate}}</h5>
+		<p>{{'arenella-app-cookies-text2' | translate}}</p>
+		<h5>{{'arenella-app-cookies-title3' | translate}}</h5>
+		<p>{{'arenella-app-cookies-text3' | translate}}</p>
+		<h5>{{'arenella-app-cookies-title4' | translate}}</h5>
+		<p>{{'arenella-app-cookies-text4' | translate}}</p>
+		<h5>{{'arenella-app-cookies-title5' | translate}}</h5>
+		<p>{{'arenella-app-cookies-text5-a' | translate}}</p>
+		<p>{{'arenella-app-cookies-text5-b' | translate}}</p>
+		<h5>{{'arenella-app-cookies-title6' | translate}}</h5>
+		<p>{{'arenella-app-cookies-text6' | translate}}</p>
+		<h5>{{'arenella-app-cookies-title7' | translate}}</h5>
+		<p>{{'arenella-app-cookies-text7' | translate}}</p>
+		<h5>{{'arenella-app-cookies-title8' | translate}}</h5>
+		<p>{{'arenella-app-cookies-text8' | translate}}</p>
 	</div>
 	
 </div>
@@ -124,12 +101,12 @@
 <!-- Reply Box -->
 <dialog #validationExBox>
 	<div class="modal-header">
-		<h4 class="modal-title">Validation Errors</h4>
+		<h4 class="modal-title">{{'arenella-app-validation-errors-title' | translate}}</h4>
  		<div class="filter-close-box" (click)="validationExBox.close()">X</div>
 	</div>
 	<div class="feedbackBox">
 	
-		<p>Unfortunately it was not possible to perform the actions because:</p>
+		<p>{{'arenella-app-validation-errors-text' | translate}}</p>
 		<ul>
 			<li *ngFor="let msg of validationExceptions">{{msg}}</li>
 		</ul>
@@ -137,30 +114,20 @@
 </dialog>
 <dialog #noCreditsBox>
 	<div class="modal-header">
-		<h4 class="modal-title">0 Credits remaining</h4>
+		<h4 class="modal-title">{{'arenella-app-no-credits-title' | translate}}</h4>
  		<div class="filter-close-box" (click)="noCreditsBox.close()">X</div>
 	</div>
 	<div class="feedbackBox">
 	
-		<p>Unfortunately you have used your credits for this week. You will receive new credits next week.</p>
+		<p>{{'arenella-app-no-credits-text' | translate}}</p>
 		
-		<p *ngIf="creditsCurriculum > 0" class="credits-available">
-		You still have {{creditsCurriculum}} tokens to download curriculums.
-		</p>
-		<p *ngIf="creditsMarketplace > 0" class="credits-available">
-		You still have {{creditsMarketplace}} tokens to request candidates on the Marketplace.
-		</p>
-		<p *ngIf="creditsJobboard> 0" class="credits-available">
-		You still have {{creditsJobboard}} tokens to post on the Jobboard.
-		</p>
-		
-		
-		<p>
-		Opting for a paid subscription will provide unlimited access to all site features for the duration of the subscription.
-		</p>
+		<p *ngIf="creditsCurriculum > 0" class="credits-available">{{'arenella-app-credits-curriculum' | translate:{creditsCurriculum} }}</p>
+		<p *ngIf="creditsMarketplace > 0" class="credits-available">{{'arenella-app-credits-mp' | translate:{creditsMarketplace} }}</p>
+		<p *ngIf="creditsJobboard> 0" class="credits-available">{{'arenella-app-credits-jobboard' | translate:{creditsJobboard} }}</p>
+		<p>{{'arenella-app-credits-text-footer' | translate}}</p>
 		<div style="text-align:center">
-			<button class="btn btn-secondary main-btn" style="margin-left:5px; margin-top:5px;min-width:200px;" (click)="navToSubscriptions()">Choose Subscription</button>
-			<button class="btn btn-secondary main-btn" style="margin-left:5px; margin-top:5px;min-width:200px;" (click)="noCreditsBox.close()">Wait for new Credits</button>
+			<button class="btn btn-secondary main-btn" style="margin-left:5px; margin-top:5px;min-width:200px;" (click)="navToSubscriptions()">{{'arenella-app-credits-btn-choose-subscription' | translate}}</button>
+			<button class="btn btn-secondary main-btn" style="margin-left:5px; margin-top:5px;min-width:200px;" (click)="noCreditsBox.close()">{{'arenella-app-credits-wait-for-credits' | translate}}</button>
 		</div>
 	</div>
 </dialog>

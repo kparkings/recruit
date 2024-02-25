@@ -8,29 +8,28 @@
 				<div>
 				
 					<div class="candidate-signup-page">
-            			<h1>Register As Candidate</h1>
+            			<h1>{{'arenella-create-candidate-title' | translate}}</h1>
             			<p class="creat-candidate-intro">
-						The recruiters, IT agencies and Hiring Managers are all independent of the Arenella-ICT platform, making Arenella-ICT a one stop shop for reaching a whole 
-						network of new opportunities. By uploading your CV and creating your profile you are gaining access to this network of new possibilities.
+						{{'arenella-create-candidate-intro' | translate}}
 						</p>
             		</div>
             		<div class="candidate-signup-panel">
 						<div class="div-spacing">
-							<p style="border-bottom:2px solid black;">Curriculum</p>
+							<p style="border-bottom:2px solid black;">{{'arenella-create-candidate-curriculum' | translate}}</p>
 							<input type="file" (change)="uploadCurriculumFile($event)">
 						</div>
 						<div class="div-spacing">
 							<table>
 								<tr>
-									<th class="tb-lbl">First name</th>
+									<th class="tb-lbl">{{'arenella-create-candidate-firstname' | translate}}</th>
 									<td><input type="text" class="inpt-tab-std" formControlName="firstname"/></td>
 								</tr>
 								<tr>
-									<th class="tb-lbl">Surname</th>
+									<th class="tb-lbl">{{'arenella-create-candidate-surname' | translate}}</th>
 									<td><input type="text" class="inpt-tab-std" formControlName="surname"/></td>
 								</tr>
 								<tr>
-									<th class="tb-lbl">Email</th>
+									<th class="tb-lbl">{{'arenella-create-candidate-email' | translate}}</th>
 									<td><input type="text" class="inpt-tab-std" formControlName="email"/></td>
 								</tr>
 							</table>
@@ -38,60 +37,59 @@
 						<div class="div-spacing">
 							<table>
 								<tr>
-									<th class="tb-lbl-checkbox">Contract</th>
+									<th class="tb-lbl-checkbox">{{'arenella-create-candidate-contract' | translate}}</th>
 									<td><input type="checkbox" formControlName="contract" (click)="updateContract()"/></td>
 								</tr>
 								<tr>
-									<th class="tb-lbl-checkbox">Perm</th>
+									<th class="tb-lbl-checkbox">{{'arenella-create-candidate-perm' | translate}}</th>
 									<td><input type="checkbox" formControlName="perm" (click)="updatePerm()"/></td>
 								</tr>
 							</table>
 						</div>
 						<div class="additional-info">
-							<h3>Additional Information</h3>
+							<h3>{{'arenella-create-candidate-additional-info-title' | translate}}</h3>
 							<div>
-								<p>
-								By providing this optional additional information you will help to make your profile
-								stand out to the recruiters
+								<p>{{'arenella-create-candidate-additional-info-text' | translate}}
+								
 								</p>
 							</div>
 							<div class="div-spacing">
-								<p style="border-bottom:2px solid black;">Profile Photo [ .jpeg / .png ] Max 1 MB</p>
+								<p style="border-bottom:2px solid black;">{{'arenella-create-candidate-photo' | translate}}</p>
 								<input type="file" accept="image/jpeg,image/png" (change)="uploadProfileImage($event)">
 							</div>
 							<br>
 							<div>
 								<table>
 									<tr class="{{contractRoleClass}}">
-										<td class="hdr-label">Contract Rate</td>
+										<td class="hdr-label">{{'arenella-create-candidate-contract-rate' | translate}}</td>
 										<td>
 											<select formControlName="contractCurrency">
-												<option>EUR</option>
-												<option>GBP</option>
+												<option>{{'arenella-create-candidate-eur' | translate}}</option>
+												<option>{{'arenella-create-candidate-gbp' | translate}}</option>
 											</select>
 											<select formControlName="contractTimeUnit">
-												<option value="HOUR">Hour</option>
-												<option value="DAY">Day</option>
-												<option	value="YEAR">Year</option>
+												<option value="HOUR">{{'arenella-create-candidate-hour' | translate}}</option>
+												<option value="DAY">{{'arenella-create-candidate-day' | translate}}</option>
+												<option	value="YEAR">{{'arenella-create-candidate-year' | translate}}</option>
 											</select>
-										From: <input type="number" formControlName="contractFrom">
-										To: <input type="number" formControlName="contractTo">
+										{{'arenella-create-candidate-from' | translate}}: <input type="number" formControlName="contractFrom">
+										{{'arenella-create-candidate-to' | translate}}: <input type="number" formControlName="contractTo">
 									</tr>
 									
 									<tr class="{{permRoleClass}}">
-										<td class="hdr-label">Perm Rate</td>
+										<td class="hdr-label">{{'arenella-create-candidate-perm-rate' | translate}}</td>
 										<td>
 											<select formControlName="permCurrency">
-												<option>EUR</option>
-												<option>GBP</option>
+												<option>{{'arenella-create-candidate-eur' | translate}}</option>
+												<option>{{'arenella-create-candidate-gbp' | translate}}</option>
 											</select>
 										
 											<select formControlName="permTimeUnit">
-												<option value="HOUR">Hour</option>
-												<option value="DAY">Day</option>
-												<option	value="YEAR">Year</option>
+												<option value="HOUR">{{'arenella-create-candidate-hour' | translate}}</option>
+												<option value="DAY">{{'arenella-create-candidate-day' | translate}}</option>
+												<option	value="YEAR">{{'arenella-create-candidate-year' | translate}}</option>
 											</select>
-											From: <input type="number" formControlName="permFrom"> To: <input type="number" formControlName="permTo">
+											{{'arenella-create-candidate-from' | translate}}: <input type="number" formControlName="permFrom">{{'arenella-create-candidate-to' | translate}}: <input type="number" formControlName="permTo">
 										</td>	
 									</tr>
 								</table>
@@ -100,7 +98,7 @@
 						</div>
 						<br>
 						<div>
-							<b>Personal Introduction</b>
+							<b>{{'arenella-create-candidate-personal-intro' | translate}}</b>
 							<br>
 							<div>
 								<textarea formControlName="introduction"></textarea>
@@ -108,14 +106,12 @@
 							
 						</div>
 						<div class="div-spacing">
-							<p>
-							By uploading your CV and profile you are agreeing to allow your 
-							CV and details to be stored in the System and shared within the 
-							network of recruiters and clients. 
+							<p>{{'arenella-create-candidate-agreement' | translate}}
+							
 							</p>
 							<div>
 								<div class="action-buttons">
-									<button (click)="addCandidate()" [disabled]="uploadButtonDisabled()" class="btn btn-secondary arenella-btn">Save</button>
+									<button (click)="addCandidate()" [disabled]="uploadButtonDisabled()" class="btn btn-secondary arenella-btn">{{'arenella-create-candidate-btn-save' | translate}}</button>
 								</div>
 							</div>
 						</div>

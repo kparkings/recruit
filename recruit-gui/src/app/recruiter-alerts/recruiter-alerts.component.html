@@ -6,19 +6,19 @@
 	<div class="page-body">
 	
 	<div class="action-buttons">
-		<button class="btn btn-secondary arenella-btn" routerLink="/suggestions">Back</button>
+		<button class="btn btn-secondary arenella-btn" routerLink="/suggestions">{{'arenella-recruiter-alerts-btn-back' | translate}}Back</button>
 	</div>
 	<div *ngIf="!hasAlerts()">
-		<h1>Search Alerts</h1>
-		<p>You currently have no Alert's. Alerts allow you to receive a notification via email whenever a Candidate is added to the system that meets one of your pre-defined searches</p>
-		<p>To add a Search Alert perform a Search in the Suggestions screen and click on 'Create Alert'</p>
+		<h1>{{'arenella-recruiter-alerts-title' | translate}}</h1>
+		<p>{{'arenella-recruiter-alerts-desc-1' | translate}}</p>
+		<p>{{'arenella-recruiter-alerts-desc-2' | translate}}</p>
 	</div>
 	
 	<div *ngIf="hasAlerts()">
 		<table class="table alerts-table">
 			<thead>
 				<tr>
-					<th class="bg-tab-hdr">Alert Name</th>
+					<th class="bg-tab-hdr">{{'arenella-recruiter-alerts-name' | translate}}</th>
 					<th class="bg-tab-hdr"></th>
 				</tr>
 			</thead>
@@ -27,9 +27,9 @@
 					<td>{{alert.alertName}}</td>
 					<td>
 						<div style="float:right;width:170px">
-							<button class="btn btn-secondary small-action-btn" *ngIf="alertToDeleteId != alert"  (click)="deleteAlert(alert)">Delete</button>
-							<button class="btn btn-secondary small-action-btn small-action-btn-confirm-del" *ngIf="alertToDeleteId === alert" (click)="confirmDeleteAlert()">Confirm</button>
-							<button class="btn btn-secondary small-action-btn" *ngIf="alertToDeleteId === alert" (click)="cancelDeleteAlert()">Cancel</button>
+							<button class="btn btn-secondary small-action-btn" *ngIf="alertToDeleteId != alert"  (click)="deleteAlert(alert)">{{'arenella-recruiter-alerts-btn-delete' | translate}}</button>
+							<button class="btn btn-secondary small-action-btn small-action-btn-confirm-del" *ngIf="alertToDeleteId === alert" (click)="confirmDeleteAlert()">{{'arenella-recruiter-alerts-btn-confirm' | translate}}</button>
+							<button class="btn btn-secondary small-action-btn" *ngIf="alertToDeleteId === alert" (click)="cancelDeleteAlert()">{{'arenella-recruiter-alerts-btn-cancel' | translate}}</button>
 						</div>
 					</td>
 											

@@ -8,40 +8,40 @@
 	    <!-- List View -->
 	    <div *ngSwitchCase="'list'">
 	    	<div class="action-buttons" >
-				<button class="btn btn-secondary arenella-btn" (click)="openCreateAlertDialog()" *ngIf="!isAuthenticated() || isAuthenticated() && isCandidate()">Create Alert</button>
-				<button class="btn btn-secondary arenella-btn" routerLink="/recruiter-listings" *ngIf="isAuthenticated() && !isAuthenticatedAsAdmin() && !isCandidate()">Your Posts</button>
+				<button class="btn btn-secondary arenella-btn" (click)="openCreateAlertDialog()" *ngIf="!isAuthenticated() || isAuthenticated() && isCandidate()">{{'arenella-listing-btn-create' | translate}}</button>
+				<button class="btn btn-secondary arenella-btn" routerLink="/recruiter-listings" *ngIf="isAuthenticated() && !isAuthenticatedAsAdmin() && !isCandidate()">{{'arenella-listing-btn-your-posts' | translate}}</button>
 			</div>
 	       	<!-- Listings Table -->
 			<div>
 				<div class="site-header" *ngIf="!isLoggedIn()">
-					<h1>Welcome to Arenella-ICT</h1>
-					<h5>A place for IT candidates and IT recruiters to come together</h5>
+					<h1>{{'arenella-listing-title' | translate}}</h1>
+					<h5>{{'arenella-listing-intro' | translate}}</h5>
 				</div>
 				<div class="filters">
-					<div class="filters-title" *ngIf="displayFilters"  (click)="toggleFilters()">Filters:<span style="float:right; margin-right:20px;cursor:pointer"> Hide </span></div>
-					<div class="filters-title" *ngIf="!displayFilters" (click)="toggleFilters()">Filters:<span style="float:right; margin-right:20px;cursor:pointer"> Show </span></div>
+					<div class="filters-title" *ngIf="displayFilters"  (click)="toggleFilters()">{{'arenella-listing-filters' | translate}}:<span style="float:right; margin-right:20px;cursor:pointer"> {{'arenella-listing-filters-hide' | translate}} </span></div>
+					<div class="filters-title" *ngIf="!displayFilters" (click)="toggleFilters()">{{'arenella-listing-filters' | translate}}:<span style="float:right; margin-right:20px;cursor:pointer"> {{'arenella-listing-filters-shw' | translate}} </span></div>
 					<table *ngIf="displayFilters">
 						<tr>
-							<th>Contract Type</th>
+							<th>{{'arenella-listing-contract-type' | translate}}</th>
 							<td>
 								<div>
 									<ul class="contract-type-filter">
-										<li><span class="{{getFilterTypeClass('')}}" 		 		(click)="updateContractTypeFilter('')"></span>Both</li>
-										<li><span class="{{getFilterTypeClass('CONTRACT_ROLE')}}" 	(click)="updateContractTypeFilter('Contract')"></span>Contract</li>
-										<li><span class="{{getFilterTypeClass('PERM_ROLE')}}" 	 	(click)="updateContractTypeFilter('Perm')"></span>Perm</li>
+										<li><span class="{{getFilterTypeClass('')}}" 		 		(click)="updateContractTypeFilter('')"></span>{{'arenella-listing-contract-type-both' | translate}}</li>
+										<li><span class="{{getFilterTypeClass('CONTRACT_ROLE')}}" 	(click)="updateContractTypeFilter('Contract')"></span>{{'arenella-listing-contract-type-contract' | translate}}</li>
+										<li><span class="{{getFilterTypeClass('PERM_ROLE')}}" 	 	(click)="updateContractTypeFilter('Perm')"></span>{{'arenella-listing-contract-type-perm' | translate}}</li>
 									</ul>
 								</div>
 							</td>
 						</tr>
 						<tr>
-							<th>Age of Post</th>
+							<th>{{'arenella-listing-contract-age' | translate}}</th>
 							<td>
 								<div>
 									<ul class="contract-type-filter">
-										<li><span class="{{getPostAgeClass('ALL')}}"	 	 	(click)="updatePostAgeFilter('ALL')"></span>All</li>
-										<li><span class="{{getPostAgeClass('TODAY')}}" 	 		(click)="updatePostAgeFilter('TODAY')"></span>Today</li>
-										<li><span class="{{getPostAgeClass('THIS_WEEK')}}" 		(click)="updatePostAgeFilter('THIS_WEEK')"></span>This Week</li>
-										<li><span class="{{getPostAgeClass('THIS_MONTH')}}" 	(click)="updatePostAgeFilter('THIS_MONTH')"></span>This Month</li>
+										<li><span class="{{getPostAgeClass('ALL')}}"	 	 	(click)="updatePostAgeFilter('ALL')"></span>{{'arenella-listing-contract-all' | translate}}</li>
+										<li><span class="{{getPostAgeClass('TODAY')}}" 	 		(click)="updatePostAgeFilter('TODAY')"></span>{{'arenella-listing-contract-today' | translate}}</li>
+										<li><span class="{{getPostAgeClass('THIS_WEEK')}}" 		(click)="updatePostAgeFilter('THIS_WEEK')"></span>{{'arenella-listing-contract-week' | translate}}</li>
+										<li><span class="{{getPostAgeClass('THIS_MONTH')}}" 	(click)="updatePostAgeFilter('THIS_MONTH')"></span>{{'arenella-listing-contract-month' | translate}}</li>
 									</ul>
 								</div>
 							</td>
@@ -76,8 +76,8 @@
 			<div  *ngSwitchCase="'show'">
 	       		<!-- Action buttons -->
 				<div class="action-buttons">
-					<button class="btn btn-secondary arenella-btn" *ngIf="isAuthenticated() && isAuthenticatedAsAdmin()" (click)="showPublicity()">Publicity</button>
-					<button (click)="showList()" class="btn btn-secondary arenella-btn">Back</button>
+					<button class="btn btn-secondary arenella-btn" *ngIf="isAuthenticated() && isAuthenticatedAsAdmin()" (click)="showPublicity()">{{'arenella-listing-btn-publicity' | translate}}</button>
+					<button (click)="showList()" class="btn btn-secondary arenella-btn">{{'arenella-listing-btn-back' | translate}}</button>
 				</div>
 				
 				<app-candidate-info-box [config]="infoItemConfig"></app-candidate-info-box>
@@ -97,44 +97,44 @@
 							<div *ngIf="!isCandidate()" style="min-width:75%">
 								<form [formGroup]="emailRequestFormBean">
 									<div>
-										<p class="email-label">Your Name:</p>
+										<p class="email-label">{{'arenella-listing-your-name' | translate}}:</p>
 										<input class="email-input" type="email" formControlName="name">
 									</div>
 									<div>
-										<p class="email-label">Your Email:</p>
+										<p class="email-label">{{'arenella-listing-your-email' | translate}}:</p>
 										<input class="email-input" type="email" formControlName="email">
 									</div>
-									<p class="email-label">Message To Recruiter</p>
+									<p class="email-label">{{'arenella-listing-message-to-recruiter' | translate}}</p>
 									<textarea class="contact-recruiter-textarea" formControlName="message"></textarea>
 									<div class="div-spacing">
-										<p class="email-label">Curriculum</p>
+										<p class="email-label">{{'arenella-listing-curriculum' | translate}}</p>
 										<input class="email-input" type="file" (change)="uploadCurriculumFile($event)"> 
-										<div style="margin-top:10px">.doc, .docx, .pdf - up to 1MB</div>
+										<div style="margin-top:10px">{{'arenella-listing-your-doc-types' | translate}}</div>
 									</div>
 										<div class="action-buttons">
-											<button class="btn btn-secondary arenella-btn" (click)="sendEmailRequest()" *ngIf="enableSendEmail()">Send</button>
-											<button class="btn btn-secondary arenella-btn" disabled *ngIf="!enableSendEmail()">Send</button>
+											<button class="btn btn-secondary arenella-btn" (click)="sendEmailRequest()" *ngIf="enableSendEmail()">{{'arenella-listing-btn-send' | translate}}</button>
+											<button class="btn btn-secondary arenella-btn" disabled *ngIf="!enableSendEmail()">{{'arenella-listing-btn-send' | translate}}</button>
 										</div>
 								</form>
 							</div>
 							<div *ngIf="isCandidate()" style="min-width:75%">
 								<form [formGroup]="emailRequestFormBean">
-									<p class="email-label">Message To Recruiter</p>
+									<p class="email-label">{{'arenella-listing-messate-to-recruiter' | translate}}</p>
 									<textarea class="contact-recruiter-textarea" formControlName="message"></textarea>
 									<div class="div-spacing">
-										<p class="email-label">Curriculum</p>
+										<p class="email-label">{{'arenella-listing-curriculum' | translate}}Curriculum</p>
 										<div *ngIf="!curriculumFile">
 											<br>
-											<input type="checkbox" disabled="disabled" checked><span> Use stored CV</span>
+											<input type="checkbox" disabled="disabled" checked><span>{{'arenella-listing-use-stored-cv' | translate}}</span>
 											<br><br>
 											<p>Or</p>
 										</div>
 										<input class="email-input" name="selected-file" type="file" (change)="uploadCurriculumFile($event)"> 
-										<div style="margin-top:10px">.doc, .docx, .pdf - up to 1MB</div>
+										<div style="margin-top:10px">{{'arenella-listing-your-doc-types' | translate}}</div>
 									</div>
 									<div class="action-buttons">
-										<button class="btn btn-secondary arenella-btn" (click)="sendEmailRequest()" *ngIf="enableSendEmail()">Send</button>
-										<button class="btn btn-secondary arenella-btn" disabled *ngIf="!enableSendEmail()">Send</button>
+										<button class="btn btn-secondary arenella-btn" (click)="sendEmailRequest()" *ngIf="enableSendEmail()">{{'arenella-listing-btn-send' | translate}}</button>
+										<button class="btn btn-secondary arenella-btn" disabled *ngIf="!enableSendEmail()">{{'arenella-listing-btn-send' | translate}}Send</button>
 									</div>
 								</form>
 							</div>
@@ -153,30 +153,30 @@
 <!-- Feedback Box -->
 <dialog #feedbackBox>
 	<div class="modal-header">
-		<h4 class="modal-title">Contact Recruiter</h4>
+		<h4 class="modal-title">{{'arenella-listing-feedback-title' | translate}}</h4>
  		<div class="filter-close-box" (click)="feedbackBox.close()">X</div>
 	</div>
 	<div class="feedbackBox;">
 		<div class="modal-body" *ngIf="showSendAlertBoxSuccess">
-			<p>The message has been sent to the recruiter managing this role. </p>
-			<p>They will get back to you shortly.</p>
+			<p>{{'arenella-listing-feedback-msg1' | translate}}</p>
+			<p>{{'arenella-listing-feedback-msg2' | translate}}</p>
 		</div>
 		<div class="modal-body" *ngIf="showSendAlertBoxFailure">
-			<p>Unfortunately it was not possible to send the Email at this time.</p>
+			<p>{{'arenella-listing-feedback-failure' | translate}}</p>
 		</div>
 	</div>
 </dialog>
 <!-- Publicity Box -->
 <dialog #publicityBox>
 	<div class="modal-header">
-		<h4 class="modal-title">Publicity</h4>
+		<h4 class="modal-title">{{'arenella-listing-publicity' | translate}}</h4>
  		<div class="filter-close-box" (click)="publicityBox.close()">X</div>
 	</div>
 	<div class="feedbackBox;">
 		<div class="modal-body"  style="height:400px;">
-			<p>Open Position: {{selectedListing.title}}</p>
+			<p>{{'arenella-listing-publicity-open-position' | translate}}Open Position: {{selectedListing.title}}</p>
 			<br>
-			<p>Location: {{getCountryCode(selectedListing.country)}}</p>
+			<p>{{'arenella-listing-publicity-location' | translate}}: {{getCountryCode(selectedListing.country)}}</p>
 			<br>
 			<p>https://www.arenella-ict.com/listing/{{selectedListing.listingId}}</p>
 			<br>
@@ -194,46 +194,46 @@
 <!-- Listing Alert Box -->
 <dialog #listingAlertBox>
 	<div class="modal-header">
-		<h4 class="modal-title">Create Email Alert</h4>
+		<h4 class="modal-title">{{'arenella-listing-email-alert' | translate}}</h4>
  		<div class="filter-close-box" (click)="listingAlertBox.close()">X</div>
 	</div>
 	<div class="feedbackBox;">
 		<form [formGroup]="alertFormBean">
 			<div class="modal-body"  style="height:400px;">
 				<div *ngIf="createAlertStep == 0">
-					<P>1/3 Select a Contract type</P>
+					<P>{{'arenella-listing-email-alert-1' | translate}}</P>
 					<select formControlName="contractType">
 						<option *ngFor="let type of contractTypeOptions" [ngValue]="type.value">{{type.label}}</option>
 					</select>
 				</div>
 				<div *ngIf="createAlertStep == 1">
-					<P>2/3 Select roles of interest</P>
+					<P>{{'arenella-listing-email-alert-2' | translate}}</P>
 					<div class="alert-options center">
 						<div class="listing-alert-option {{selectedFunctionTypeCss(sft)}}" *ngFor="let sft of selectableFunctionTypes" (click)="toggleFunctionType(sft)">{{sft.functionType.humanReadable}}</div>
 					</div>
 				</div>
 				<div *ngIf="createAlertStep == 2">
-					<P>3/3 Select a Countries of interest</P>
+					<P>{{'arenella-listing-email-alert-3' | translate}}</P>
 					<div class="alert-options center">
 						<div class="listing-alert-option {{selectedCountryCss(sc)}}" *ngFor="let sc of selectableCountries" (click)="toggleCountry(sc)">{{sc.country.humanReadable}}</div>
 					</div>
 				</div>
 				<div *ngIf="createAlertStep == 3">
-					<P>Email address and confirm</P>
+					<P>{{'arenella-listing-email-alert-confirm' | translate}}</P>
 					<div style="margin-top:50px;">
-						<b style="margin-right:10px;">Email:</b><input type="email" formControlName="emailAddress" (keyup)="handleAlertEmailOnChange()"/>
+						<b style="margin-right:10px;">{{'arenella-listing-email-alert-email' | translate}}:</b><input type="email" formControlName="emailAddress" (keyup)="handleAlertEmailOnChange()"/>
 					</div>
 				</div>
 				<div *ngIf="createAlertStep == 4">
 					<P>&nbsp;</P>
 					<div style="margin-top:50px;">
-						<h1>Alert Created</h1>
+						<h1>{{'arenella-listing-email-alert-created' | translate}}</h1>
 					</div>
 				</div>
 				<div style="clear:both;margin-top:50px;" >
-					<button *ngIf="createAlertStep != 0 && createAlertStep != 4" class="btn btn-secondary arenella-btn" (click)="createListingAlertLastStep()">Back</button>
-					<button *ngIf="createAlertStep != 3 && createAlertStep != 4" class="btn btn-secondary arenella-btn" (click)="createListingAlertNextStep()">Next</button>
-					<button *ngIf="createAlertStep == 3" 						 class="btn btn-secondary arenella-btn" [disabled]="listingAlertConfirmDisabled" (click)="createListingAlert()">Confirm</button>
+					<button *ngIf="createAlertStep != 0 && createAlertStep != 4" class="btn btn-secondary arenella-btn" (click)="createListingAlertLastStep()">{{'arenella-listing-email-alert-btn-back' | translate}}</button>
+					<button *ngIf="createAlertStep != 3 && createAlertStep != 4" class="btn btn-secondary arenella-btn" (click)="createListingAlertNextStep()">{{'arenella-listing-email-alert-btn-next' | translate}}</button>
+					<button *ngIf="createAlertStep == 3" 						 class="btn btn-secondary arenella-btn" [disabled]="listingAlertConfirmDisabled" (click)="createListingAlert()">{{'arenella-listing-email-alert-btn-confirm' | translate}}</button>
 				</div>
 			
 			</div>	

@@ -3,11 +3,11 @@
     	<div class="photo">
        		<img class="profile-photo-details" *ngIf="config.hasProfilePhoto()" id='base64image' src='data:image/jpeg;base64, {{config.getProfilePhotoBytes()}}' />
 			<div *ngIf="!config.hasProfilePhoto()" class="profile-photo-details material-icons person no-profile-photo-mobile">
-				<span class="person-span">person</span>
+				<span class="person-span">{{'arenella-infobox-person' | translate}}</span>
 			</div>
        	</div>
        	<div>
-       		<button *ngIf="config.showContactButton()" class="btn btn-secondary arenella-btn contact-button"  (click)="openContatBox()">Contact</button>
+       		<button *ngIf="config.showContactButton()" class="btn btn-secondary arenella-btn contact-button"  (click)="openContatBox()">{{'arenella-infobox-contact' | translate}}</button>
 	   	</div>
        	<div *ngFor="let infoItem of config.getItems()" class="left-box">
        		<h5>{{infoItem.getTitle()}}</h5>

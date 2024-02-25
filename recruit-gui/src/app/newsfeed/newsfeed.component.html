@@ -20,7 +20,7 @@
 									<span *ngIf="!isUnread(item)">{{line.text}}</span>
 								</div>
 								<div *ngIf="line.type == 'INTERNAL_URL'">
-									<button *ngIf="item.itemType != 'CANDIDATE_BECAME_UNAVAILABLE'" class="btn btn-secondary arenella-btn" (click)="viewCandidateProfile(line.url, item.id)">View Profile</button>
+									<button *ngIf="item.itemType != 'CANDIDATE_BECAME_UNAVAILABLE'" class="btn btn-secondary arenella-btn" (click)="viewCandidateProfile(line.url, item.id)">{{'arenella-newsfeed-view-profile' | translate}}</button>
 								</div>
 							</div>
 						</div>

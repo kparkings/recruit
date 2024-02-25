@@ -56,8 +56,8 @@ export class AppComponent {
 				private newsfeedService:		NewsfeedService,
 				private translate: TranslateService){
 		
-		translate.setDefaultLang('en');
-    		translate.use('en');
+		translate.setDefaultLang('fr');
+    		//translate.use('en');
     
 		if (this.isRecruiterNoSubscription() || this.hasUnpaidSubscription()) {
 			this.router.navigate(['recruiter-account']);

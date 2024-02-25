@@ -7,14 +7,14 @@
 			<div *ngIf="currentView == 'add'">
 						
 				<div class="action-buttons">
-					<button class="btn btn-secondary arenella-btn {{mobileBtnClass}}" (click)="addCandidate()">Publish</button>
-					<button class="btn btn-secondary arenella-btn {{mobileBtnClass}}" (click)="showOfferedCandidates()" *ngIf="showBackBtn">Back</button>
+					<button class="btn btn-secondary arenella-btn {{mobileBtnClass}}" (click)="addCandidate()">{{'arenella-new-candidate-btn-publish' | translate}}</button>
+					<button class="btn btn-secondary arenella-btn {{mobileBtnClass}}" (click)="showOfferedCandidates()" *ngIf="showBackBtn">{{'arenella-new-candidate-btn-back' | translate}}</button>
 				</div>
 				
 				<form [formGroup]="offeredCandidateFormBean">
 					<table class="table new-user-table">
 						<tr>
-							<td class="hdr-label" colspan="2">Curriculum</td>
+							<td class="hdr-label" colspan="2">{{'arenella-new-candidate-curriculum' | translate}}</td>
 						</tr>
 						<tr>
 							<td colspan="2">
@@ -22,7 +22,7 @@
 							</td>
 						</tr>
 						<tr>
-							<td class="hdr-label" colspan="2">Profile Image</td>
+							<td class="hdr-label" colspan="2">{{'arenella-new-candidate-profile-image' | translate}}</td>
 						</tr>
 						<tr>
 							<td colspan="2">
@@ -30,25 +30,25 @@
 							</td>
 						</tr>
 						<tr>
-							<td class="hdr-label">Candidate Id</td>
+							<td class="hdr-label">{{'arenella-new-candidate-candidate-id' | translate}}</td>
 							<td class="hdr-value">{{candidateId}}</td>
 						</tr>
 						<tr>
-							<td class="hdr-label">Firstname</td>
+							<td class="hdr-label">{{'arenella-new-candidate-firstname' | translate}}</td>
 							<input formControlName="firstName" type="text"/>
 						</tr>
 						<tr>
-							<td class="hdr-label">Surname</td>
+							<td class="hdr-label">{{'arenella-new-candidate-surname' | translate}}</td>
 							<input formControlName="surname" type="text"/>
 						</tr>
 						<tr *ngIf="!isRecruiter()">
-							<td class="hdr-label">Email</td>
+							<td class="hdr-label">{{'arenella-new-candidate-email' | translate}}</td>
 							<td class="hdr-value">
 								<input formControlName="email" type="text"/>
 							</td>	
 						</tr>
 						<tr>
-							<td class="hdr-label">Function Group</td>
+							<td class="hdr-label">{{'arenella-new-candidate-function-group' | translate}}</td>
 							<td class="hdr-value">
 								<select formControlName="function">
 									<option></option>
@@ -57,105 +57,105 @@
 							</td>	
 						</tr>
 						<tr>
-							<td class="hdr-label">Role Sought</td>
+							<td class="hdr-label">{{'arenella-new-candidate-role-sought' | translate}}</td>
 							<td class="hdr-value">
 								<input formControlName="roleSought" type="text"/>
 							</td>	
 						</tr>
 						<tr>
-							<td class="hdr-label">Country</td>
+							<td class="hdr-label">{{'arenella-new-candidate-country' | translate}}</td>
 							<td>
 								<select formControlName="country">
 									<option></option>
-									<option value="BELGIUM">Belgium</option>
-									<option value="REPUBLIC_OF_IRELAND">Ireland</option>
-									<option value="NETHERLANDS">Netherlands</option>
-									<option value="UK">UK</option>
+									<option value="BELGIUM">{{'arenella-new-candidate-belgium' | translate}}</option>
+									<option value="REPUBLIC_OF_IRELAND">{{'arenella-new-candidate-ireland' | translate}}</option>
+									<option value="NETHERLANDS">{{'arenella-new-candidate-netherlands' | translate}}</option>
+									<option value="UK">{{'arenella-new-candidate-uk' | translate}}</option>
 									<!--<option value="EUROPE">EU</option>-->
 									<!--<option value="WORLD">World</option>-->
 								</select>
 							</td>	
 						</tr>
 						<tr>
-							<td class="hdr-label">Location</td>
+							<td class="hdr-label">{{'arenella-new-candidate-location' | translate}}</td>
 							<td>
 								<input  formControlName="city" type="text"/>
 							</td>	
 						</tr>
 						<tr>
-							<td class="hdr-label">Permanent</td>
+							<td class="hdr-label">{{'arenella-new-candidate-permanent' | translate}}</td>
 							<td>
 								<select class="new-candidate-inpt" formControlName="perm" (ngModelChange)="permOnChange($event)">
-									<option value="FALSE">No</option>
-									<option value="TRUE">Yes</option>
-									<option value="UNKNOWN">Unknown</option>
+									<option value="FALSE">{{'arenella-new-candidate-no' | translate}}</option>
+									<option value="TRUE">{{'arenella-new-candidate-yes' | translate}}</option>
+									<option value="UNKNOWN">{{'arenella-new-candidate-unknown' | translate}}</option>
 								</select>
 							</td>	
 						</tr>
 						
 						<tr class="{{permRoleClass}}">
-							<td class="hdr-label">Rate</td>
+							<td class="hdr-label">{{'arenella-new-candidate-rate' | translate}}</td>
 							<td>
 								<select formControlName="permCurrency">
-									<option>EUR</option>
-									<option>GBP</option>
+									<option>{{'arenella-new-candidate-eur' | translate}}</option>
+									<option>{{'arenella-new-candidate-gbp' | translate}}</option>
 								</select>
 							
 								<select formControlName="permTimeUnit">
-									<option value="HOUR">Hour</option>
-									<option value="DAY">Day</option>
-									<option	value="YEAR">Year</option>
+									<option value="HOUR">{{'arenella-new-candidate-hour' | translate}}</option>
+									<option value="DAY">{{'arenella-new-candidate-day' | translate}}Day</option>
+									<option	value="YEAR">{{'arenella-new-candidate-year' | translate}}</option>
 								</select>
-								From: <input type="number" formControlName="permFrom"> To: <input type="number" formControlName="permTo">
+								{{'arenella-new-candidate-from' | translate}}: <input type="number" formControlName="permFrom"> {{'arenella-new-candidate-to' | translate}}: <input type="number" formControlName="permTo">
 							</td>	
 						</tr>
 						<tr>
-							<td class="hdr-label">Contract</td>
+							<td class="hdr-label">{{'arenella-new-candidate-contract' | translate}}</td>
 							<td>
 								<select class="new-candidate-inpt" formControlName="freelance" (ngModelChange)="contractOnChange($event)">
-									<option value="FALSE">No</option>
-									<option value="TRUE">Yes</option>
-									<option value="UNKNOWN">Unknown</option>
+									<option value="FALSE">{{'arenella-new-candidate-no' | translate}}</option>
+									<option value="TRUE">{{'arenella-new-candidate-yes' | translate}}</option>
+									<option value="UNKNOWN">{{'arenella-new-candidate-unknown' | translate}}</option>
 								</select>
 							</td>	
 						</tr>
 						<tr class="{{contractRoleClass}}">
-							<td class="hdr-label">Rate</td>
+							<td class="hdr-label">{{'arenella-new-candidate-rate' | translate}}</td>
 							<td>
 								<select formControlName="contractCurrency">
-									<option>EUR</option>
-									<option>GBP</option>
+									<option>{{'arenella-new-candidate-eur' | translate}}</option>
+									<option>{{'arenella-new-candidate-gbp' | translate}}</option>
 								</select>
 								<select formControlName="contractTimeUnit">
-									<option value="HOUR">Hour</option>
-									<option value="DAY">Day</option>
-									<option	value="YEAR">Year</option>
+									<option value="HOUR">{{'arenella-new-candidate-hour' | translate}}</option>
+									<option value="DAY">{{'arenella-new-candidate-day' | translate}}</option>
+									<option	value="YEAR">{{'arenella-new-candidate-year' | translate}}</option>
 								</select>
-							From: <input type="number" formControlName="contractFrom">
-							To: <input type="number" formControlName="contractTo">
+							{{'arenella-new-candidate-from' | translate}}From: <input type="number" formControlName="contractFrom">
+							{{'arenella-new-candidate-to' | translate}}: <input type="number" formControlName="contractTo">
 						</tr>
 						<tr>
-							<td class="hdr-label">Days On Site (per Week)</td>
+							<td class="hdr-label">{{'arenella-new-candidate-days-on-site' | translate}}</td>
 							<td>
 								<select  formControlName="daysOnSite">
 									<option></option>
-									<option value="ZERO">Fully Remote</option>
-									<option value="ONE">1</option>
-									<option value="TWO">2</option>
-									<option value="THREE">3</option>
-									<option value="FOUR">4</option>
-									<option value="FIVE">5</option>
+									<option value="ZERO">{{'arenella-new-candidate-fully-remote' | translate}}</option>
+									<option value="ONE">{{'arenella-new-candidate-1' | translate}}</option>
+									<option value="TWO">{{'arenella-new-candidate-2' | translate}}</option>
+									<option value="THREE">{{'arenella-new-candidate-3' | translate}}</option>
+									<option value="FOUR">{{'arenella-new-candidate-4' | translate}}</option>
+									<option value="FIVE">{{'arenella-new-candidate-5' | translate}}</option>
 								</select>
 							</td>	
 						</tr>
 						<tr>
-							<td class="hdr-label">Available From</td>
+							<td class="hdr-label">{{'arenella-new-candidate-available-from' | translate}}</td>
 							<td>
 							<input  formControlName="availableFromDate" type="date"/>
 							</td>	
 						</tr>
 						<tr>
-							<td class="hdr-label" colspan="2">Skills</td>
+							<td class="hdr-label" colspan="2">{{'arenella-new-candidate-skills' | translate}}</td>
 						</tr>
 						<tr>
 							<td class="sugg-srch-bdy" colspan="2">
@@ -163,26 +163,26 @@
 									<div class="selected-skill" *ngFor="let skill of coreSkills" (click)="removeOfferedCandidateSkill(skill)">{{skill}}</div>
 								</div>
 								<input type="text" formControlName="skill">
-								<button (click)="addOfferedCandidateSkill()" class="btn btn-secondary add-skill-btn">Add</button>
+								<button (click)="addOfferedCandidateSkill()" class="btn btn-secondary add-skill-btn">{{'arenella-new-candidate-btn-add' | translate}}</button>
 							</td>	
 						</tr>
 						<tr>
-							<td class="hdr-label">Years Experience</td>
+							<td class="hdr-label">{{'arenella-new-candidate-years-experience' | translate}}</td>
 							<td>
 								<input  formControlName="yearsExperience" type="number"/>
 							</td>	
 						</tr>
 						<tr>
-							<td class="hdr-label">Introduction</td>
+							<td class="hdr-label">{{'arenella-new-candidate-introduction' | translate}}</td>
 							<td>
 								<textarea formControlName="introduction"></textarea>
 							</td>
 						</tr>
 						<tr>
-							<td class="hdr-label" colspan="2">Spoken Languages</td>
+							<td class="hdr-label" colspan="2">{{'arenella-new-candidate-spoken-languages' | translate}}</td>
 						</tr>
 						<tr>
-							<td>Dutch</td>
+							<td>{{'arenella-new-candidate-dutch' | translate}}</td>
 							<td>
 								<select formControlName="DUTCH">
 									<option *ngFor="let level of languageOptions" value="{{level.value}}">{{level.label}}</option>
@@ -190,7 +190,7 @@
 							</td>
 						</tr>
 						<tr>
-							<td>English</td>
+							<td>{{'arenella-new-candidate-english' | translate}}</td>
 							<td>
 								<select formControlName="ENGLISH">
 									<option *ngFor="let level of languageOptions" value="{{level.value}}">{{level.label}}</option>
@@ -198,7 +198,7 @@
 							</td>
 						</tr>
 						<tr>
-							<td>French</td>
+							<td>{{'arenella-new-candidate-french' | translate}}</td>
 							<td>
 								<select formControlName="FRENCH">
 									<option *ngFor="let level of languageOptions" value="{{level.value}}">{{level.label}}</option>
@@ -226,12 +226,12 @@
 <dialog #validationBox>
 
 	<div class="modal-header">
-		<h4 class="modal-title">Validation Errors</h4>
+		<h4 class="modal-title">{{'arenella-new-candidate-validation-errors' | translate}}</h4>
    		<div class="filter-close-box" (click)="validationBox.close()">X</div>
  		</div>
 	<div class="validationBox">
 		<div class="modal-body">
-			<p>The following fields are required</p>
+			<p>{{'arenella-new-candidate-required-fields' | translate}}</p>
 			<ul>
 				<li *ngFor="let valErr of validationErrors">{{valErr}}</li>
 			</ul>
@@ -242,7 +242,7 @@
 <dialog #pendingCandidateBox>
 	<div>
 		<div class="modal-header">
-		<h4 class="modal-title">Pending Candidates</h4>
+		<h4 class="modal-title">{{'arenella-new-candidate-pending-candidates' | translate}}</h4>
    		<div class="filter-close-box" (click)="pendingCandidateBox.close()">X</div>
  	</div>
 	<div class="modal-bod">
@@ -250,8 +250,8 @@
 			<thead>
 				<tr>
 					<th class="pendingCandidateBox-th">&nbsp;</th>
-					<th class="pendingCandidateBox-th">First Name</th>
-					<th class="pendingCandidateBox-th">Surname</th>
+					<th class="pendingCandidateBox-th">{{'arenella-new-candidate-first-name' | translate}}</th>
+					<th class="pendingCandidateBox-th">{{'arenella-new-candidate-surname' | translate}}</th>
 					<th>actions</th>
 				</tr>
 			</thead>
@@ -267,7 +267,7 @@
 					<td class="pendingCandidateBox-td" (click)="loadPendingCandidate(pendingCandidate)">{{pendingCandidate.firstname}}</td>
 					<td class="pendingCandidateBox-td" (click)="loadPendingCandidate(pendingCandidate)">{{pendingCandidate.surname}}</td>
 					<td class="pendingCandidateBox-td">
-						<button class="btn btn-secondary arenella-btn" style="width:80px;" (click)="deletePendingCurriculum(pendingCandidate, false)">Delete</button>
+						<button class="btn btn-secondary arenella-btn" style="width:80px;" (click)="deletePendingCurriculum(pendingCandidate, false)">{{'arenella-new-candidate-btn-delete' | translate}}</button>
 					</td>	
 				</tr>
 			</tbody>
