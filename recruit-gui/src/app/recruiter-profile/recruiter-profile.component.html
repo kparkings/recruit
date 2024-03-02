@@ -68,7 +68,8 @@
 					<h5>{{'arenella-recruiter-prof-laguages' | translate}}</h5>
 					<ul>
 						<li *ngFor="let language of selectedRecruiterProfile.languagesSpoken">
-							{{language | enumToHumanReadableValue}}
+							<!--  {{language | enumToHumanReadableValue}}-->
+							{{getLang(language)}}
 						</li>
 					</ul>
 				</div>
@@ -77,7 +78,8 @@
 					<h5>{{'arenella-recruiter-prof-sectors' | translate}}</h5>
 					<ul>
 						<li *ngFor="let sector of selectedRecruiterProfile.sectors">
-							{{sector | enumToHumanReadableValue}}
+							<!--  {{sector | enumToHumanReadableValue}}-->
+							{{getSector(sector)}}
 						</li>
 					</ul>
 				</div>
@@ -86,7 +88,8 @@
 					<h5>{{'arenella-recruiter-prof-markets' | translate}}</h5>
 					<ul>
 					<li *ngFor="let tech of selectedRecruiterProfile.coreTech">
-						{{tech | enumToHumanReadableValue}}
+						<!--  {{tech | enumToHumanReadableValue}}-->
+						{{getTech(tech)}}
 					</li>
 					</ul>
 				</div>
@@ -95,7 +98,8 @@
 					<h5>{{'arenella-recruiter-prof-contract-types' | translate}}</h5>
 					<ul>
 					<li *ngFor="let contractType of selectedRecruiterProfile.recruitsContractTypes">
-						{{contractType | enumToHumanReadableValue}}
+						<!-- {{contractType | enumToHumanReadableValue}}-->
+						{{getContractType(contractType)}}
 					</li>
 					</ul>
 				</div>
@@ -253,7 +257,7 @@
 	<div class="modal-body" *ngIf="contactRecruiterView === 'message'">
 		<form [formGroup]="sendMessageGroup">
 			<div style="float:left;margin:0px; margin-bottom:10px;">
-				<b>Title:</b><input type="text" style="margin-left:10px;" formControlName="title"/>
+				<b>{{'arenella-recruiter-prof-box-contact-titleititle' | translate}}:</b><input type="text" style="margin-left:10px;" formControlName="title"/>
 				<br>
 			</div>
 			<textarea formControlName="message"></textarea>

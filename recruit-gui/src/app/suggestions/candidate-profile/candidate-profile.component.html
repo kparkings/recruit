@@ -7,7 +7,7 @@
 		<button class="btn btn-secondary arenella-btn">{{'arenella-suggestions-profile-btn-download-cv' | translate}}</button>
 	</a>
 	<button class="btn btn-secondary arenella-btn" 					(click)="handleNoCredit()" 								*ngIf="showBtnDownloadCV()">{{'arenella-suggestions-profile-btn-download-cv' | translate}}</button>
-	<button class="btn btn-secondary arenella-btn hide-for-mobile" 	(click)="showInlineCVView()" 							*ngIf="showBtnShowCV()">{{'arenella-suggestions-profile-btn-download-cv' | translate}}</button>
+	<button class="btn btn-secondary arenella-btn hide-for-mobile" 	(click)="showInlineCVView()" 							*ngIf="showBtnShowCV()">{{'arenella-suggestions-profile-btn-view-cv' | translate}}</button>
 	<button class="btn btn-secondary arenella-btn" 					(click)="editAccount()"									*ngIf="showBtnEdit()" > {{'arenella-suggestions-profile-btn-edit' | translate}}</button>
     <button class="btn btn-secondary arenella-btn" 					(click)="deleteAccount()" 								*ngIf="showBtnDelete()"> {{'arenella-suggestions-profile-btn-delete' | translate}}</button>
 	<button class="btn btn-secondary arenella-btn" 					(click)="rememberCandidate(suggestedCandidate)" 		*ngIf="showBtnSaveCandidate()" title="Add candidate to your list of saved candidates">{{'arenella-suggestions-profile-btn-save' | translate}}</button>
@@ -119,7 +119,7 @@
 	</div>
 	<div class="modal-body publicity-suggestions">
 		<p>{{'arenella-suggestions-profile-box-delete-msg' | translate}}</p>
-		<button class="btn btn-secondary arenella-btn" (click)="confirmDeleteProfile()">Confirm</button>
+		<button class="btn btn-secondary arenella-btn" (click)="confirmDeleteProfile()">{{'arenella-suggestions-profile-box-delete-msg-confirm' | translate}}</button>
 	</div> 
 </dialog>
 <dialog #notesBox>

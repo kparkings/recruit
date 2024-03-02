@@ -12,6 +12,7 @@ import { NewCandidateRequest } 							from './new-candidate/new-candidate-reques
 import { CandidateProfile } 							from './candidate-profile';
 import { UpdateCandidateRequest } 						from './new-candidate/update-candidate-request';
 import { CandidateSkill } from './accounts/candidate-skill';
+import { TranslateService } from '@ngx-translate/core';
 
 /**
 * Services for new Candidates
@@ -22,7 +23,7 @@ import { CandidateSkill } from './accounts/candidate-skill';
 })
 export class CandidateServiceService {
     
-	constructor(private httpClient: HttpClient) { }
+	constructor(private httpClient: HttpClient, private translate:TranslateService) { }
 	
 	httpOptions = {
       headers: new HttpHeaders({ 'Content-Type': 'application/json' }), withCredentials: true
@@ -167,22 +168,22 @@ export class CandidateServiceService {
 	
 		const functionTypes: Array<CandidateFunction> = new Array<CandidateFunction>();
 	
-	    functionTypes.push(new CandidateFunction('SUPPORT',					'Support analyst'));
-	    functionTypes.push(new CandidateFunction('BA',						'Business Analyst'));
-		functionTypes.push(new CandidateFunction('CSHARP_DEV',				'C# Developer'));
-		functionTypes.push(new CandidateFunction('DATA_SCIENTIST',			'Data Scientist'));
-		functionTypes.push(new CandidateFunction('JAVA_DEV',				'Java Developer'));
-		functionTypes.push(new CandidateFunction('IT_RECRUITER',			'IT Recruiter'));
-		functionTypes.push(new CandidateFunction('IT_SECURITY',				'IT Security'));
-		functionTypes.push(new CandidateFunction('NETWORK_ADMINISTRATOR',	'Network Administrator'));
-	    functionTypes.push(new CandidateFunction('PROJECT_MANAGER',			'Project Manager'));
-	    functionTypes.push(new CandidateFunction('SCRUM_MASTER',			'Scrum Master'));
-		functionTypes.push(new CandidateFunction('ARCHITECT',				'Software Architect'));
-	    functionTypes.push(new CandidateFunction('SOFTWARE_DEVELOPER',		'Software Developer'));
-		functionTypes.push(new CandidateFunction('SOFTWARE_DEV_IN_TEST',	'Software Dev In Test'));
-		functionTypes.push(new CandidateFunction('TESTER',					'Test Analyst'));
-		functionTypes.push(new CandidateFunction('UI_UX',					'UI \ UX'));
-	    functionTypes.push(new CandidateFunction('WEB_DEV',					'Web Developer'));
+	    functionTypes.push(new CandidateFunction('SUPPORT',					this.translate.instant('func-support')));//'Support analyst'));
+	    functionTypes.push(new CandidateFunction('BA',						this.translate.instant('func-ba')));//'Business Analyst'));
+		functionTypes.push(new CandidateFunction('CSHARP_DEV',				this.translate.instant('func-csharp-dev')));//'C# Developer'));
+		functionTypes.push(new CandidateFunction('DATA_SCIENTIST',			this.translate.instant('func-data-scientist')));//'Data Scientist'));
+		functionTypes.push(new CandidateFunction('JAVA_DEV',				this.translate.instant('func-java-dev')));//'Java Developer'));
+		functionTypes.push(new CandidateFunction('IT_RECRUITER',			this.translate.instant('func-it-recruiter')));//'IT Recruiter'));
+		functionTypes.push(new CandidateFunction('IT_SECURITY',				this.translate.instant('func-it-security')));//'IT Security'));
+		functionTypes.push(new CandidateFunction('NETWORK_ADMINISTRATOR',	this.translate.instant('func-network-admin')));//'Network Administrator'));
+	    functionTypes.push(new CandidateFunction('PROJECT_MANAGER',			this.translate.instant('func-pmo')));//'Project Manager'));
+	    functionTypes.push(new CandidateFunction('SCRUM_MASTER',			this.translate.instant('func-scrum-master')));//'Scrum Master'));
+		functionTypes.push(new CandidateFunction('ARCHITECT',				this.translate.instant('func-software-architect')));//'Software Architect'));
+	    functionTypes.push(new CandidateFunction('SOFTWARE_DEVELOPER',		this.translate.instant('func-software-dev')));//'Software Developer'));
+		functionTypes.push(new CandidateFunction('SOFTWARE_DEV_IN_TEST',	this.translate.instant('func-support-sdet')));//'Software Dev In Test'));
+		functionTypes.push(new CandidateFunction('TESTER',					this.translate.instant('func-tester')));//'Test Analyst'));
+		functionTypes.push(new CandidateFunction('UI_UX',					this.translate.instant('func-uiux')));//'UI \ UX'));
+	    functionTypes.push(new CandidateFunction('WEB_DEV',					this.translate.instant('func-web-dev')));//'Web Developer'));
 	    
 	    return functionTypes;
 	

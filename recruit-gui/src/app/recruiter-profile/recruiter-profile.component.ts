@@ -8,7 +8,7 @@ import { EmailService, EmailRequest }				from '../email.service';
 import { NgbModal, NgbModalOptions}					from '@ng-bootstrap/ng-bootstrap';
 import { InfoItemBlock, InfoItemConfig, InfoItemRowKeyValue } from '../candidate-info-box/info-item';
 import { EnumToHumanReadableValue } from './enum-to-hr-pipe';
-
+import { TranslateService } from '@ngx-translate/core';
 /**
 * Component for working with Recruiter Profiles
 */
@@ -38,7 +38,7 @@ export class RecruiterProfileComponent {
 	/**
 	* Constructor
 	*/
-	constructor(private recruierProfileService:RecruiterProfileService, private emailService:EmailService, private modalService:NgbModal){
+	constructor(private recruierProfileService:RecruiterProfileService, private emailService:EmailService, private modalService:NgbModal, private translate:TranslateService){
 		this.recruierProfileService.fetchOwnRecruiterProfile().subscribe( response => {
 			this.recruiterProfile = response;
 			
@@ -233,9 +233,9 @@ export class RecruiterProfileComponent {
 		
 		let recruiterBlock:InfoItemBlock = new InfoItemBlock();
 		
-		recruiterBlock.addRow(new InfoItemRowKeyValue("Company",enumPipe.transform(this.selectedRecruiterProfile.companyName)));
-		recruiterBlock.addRow(new InfoItemRowKeyValue("Type",enumPipe.transform(this.selectedRecruiterProfile.recruiterType)));
-		recruiterBlock.addRow(new InfoItemRowKeyValue("Years Experience",""+this.selectedRecruiterProfile.yearsExperience));
+		recruiterBlock.addRow(new InfoItemRowKeyValue(this.translate.instant('rec-prof-info-item-company'),enumPipe.transform(this.selectedRecruiterProfile.companyName)));
+		recruiterBlock.addRow(new InfoItemRowKeyValue(this.translate.instant('rec-prof-info-item-type'),enumPipe.transform(this.selectedRecruiterProfile.recruiterType)));
+		recruiterBlock.addRow(new InfoItemRowKeyValue(this.translate.instant('rec-prof-info-item-years-exp'),""+this.selectedRecruiterProfile.yearsExperience));
 		this.infoItemConfig.addItem(recruiterBlock);
 		
 		
@@ -281,12 +281,12 @@ export class RecruiterProfileComponent {
 		let options:Array<[string,string]> = new Array<[string,string]>();
 		
 		options.push(['',		 		'']);
-		options.push(['BELGIUM', 		'Belgium']);
-		options.push(['EUROPE', 		'Europe']);
-		options.push(['IRELAND', 		'Ireland']);
-		options.push(['NETHERLANDS', 	'Netherlands']);
-		options.push(['UK', 			'UK']);
-		options.push(['WORLD', 			'World']);
+		options.push(['BELGIUM', 		this.translate.instant('rec-prof-country-belgium')]);
+		options.push(['EUROPE', 		this.translate.instant('rec-prof-country-europe')]);
+		options.push(['IRELAND', 		this.translate.instant('rec-prof-country-ireland')]);
+		options.push(['NETHERLANDS', 	this.translate.instant('rec-prof-country-netherlands')]);
+		options.push(['UK', 			this.translate.instant('rec-prof-country-uk')]);
+		options.push(['WORLD', 			this.translate.instant('rec-prof-country-world')]);
 		
 		return options;
 		
@@ -300,12 +300,19 @@ export class RecruiterProfileComponent {
 		let options:Array<[string,string]> = new Array<[string,string]>();
 		
 		options.push(['',		 		'']);
-		options.push(['DUTCH', 			'Dutch']);
-		options.push(['ENGLISH', 		'English']);
-		options.push(['FRENCH', 		'French']);
+		options.push(['DUTCH', 			this.translate.instant('rec-prof-lang-dutch')]);
+		options.push(['ENGLISH', 		this.translate.instant('rec-prof-lang-english')]);
+		options.push(['FRENCH', 		this.translate.instant('rec-prof-lang-french')]);
 		
 		return options;
 		
+	}
+	
+	/**
+	* Human readable language value
+	*/
+	public getLang(langCode:string):string{
+		return this.getLanguageOptions().filter(opt => opt[0] == langCode)[0][1];
 	}
 	
 	/**
@@ -316,17 +323,24 @@ export class RecruiterProfileComponent {
 		let options:Array<[string,string]> = new Array<[string,string]>();
 		
 		options.push(['',		 			'']);
-		options.push(['AUTOMOBILES', 		'Automotive']);
-		options.push(['CYBER_INTEL', 		'Cyber Intelligence']);
-		options.push(['EU_INSTITUTIONS', 	'EU Institutions']);
-		options.push(['FINTECH', 			'Fintech']);
-		options.push(['GAMING', 			'Gaming']);
-		options.push(['GOVERNMENT', 		'Government']);
-		options.push(['LOGISTICS', 			'Logistics']);
-		options.push(['POLICE_AND_DEFENSE', 'Police and Defence']);
+		options.push(['AUTOMOBILES', 		this.translate.instant('rec-prof-sector-automitive')]);
+		options.push(['CYBER_INTEL', 		this.translate.instant('rec-prof-sector-cyber-intelligence')]);
+		options.push(['EU_INSTITUTIONS', 	this.translate.instant('rec-prof-sector-eu-institutions')]);
+		options.push(['FINTECH', 			this.translate.instant('rec-prof-sector-fintech')]);
+		options.push(['GAMING', 			this.translate.instant('rec-prof-sector-gaming')]);
+		options.push(['GOVERNMENT', 		this.translate.instant('rec-prof-sector-government')]);
+		options.push(['LOGISTICS', 			this.translate.instant('rec-prof-sector-logistice')]);
+		options.push(['POLICE_AND_DEFENSE', this.translate.instant('rec-prof-sector-police-and-defence')]);
 		
 		return options;
 		
+	}
+	
+	/**
+	* Human readable sector value
+	*/
+	public getSector(sectorCode:string):string{
+		return this.getSectorOptions().filter(opt => opt[0] == sectorCode)[0][1];
 	}
 	
 	/**
@@ -337,24 +351,31 @@ export class RecruiterProfileComponent {
 		let options:Array<[string,string]> = new Array<[string,string]>();
 		
 		options.push(['',		 			'']);
-		options.push(['ARCHITECT', 			'Architect']);
-		options.push(['BI', 				'Business Intelligence']);
-		options.push(['BUSINESS_ANALYSTS', 	'Business Analyst\'s']);
-		options.push(['CLOUD', 				'Cloud']);
-		options.push(['DEV_OPS', 			'DevOps']);
-		options.push(['DOT_NET', 			'DotNet']);
-		options.push(['IT_SUPPORT', 		'Support/Helpdesk']);
-		options.push(['JAVA', 				'Java']);
-		options.push(['NETWORKS', 			'Networks']);
-		options.push(['PROJECT_NANAGMENT', 	'Project Managment']);
-		options.push(['REC2REC', 			'Rec2Rec']);
-		options.push(['SECURITY', 			'Cyber Security']);
-		options.push(['TESTING', 			'Testing']);
-		options.push(['UI_UX', 				'UI/UX']);
-		options.push(['WEB', 				'Web']);
+		options.push(['ARCHITECT', 			this.translate.instant('rec-prof-func-architect')]);
+		options.push(['BI', 				this.translate.instant('rec-prof-func-business-intelligence')]);
+		options.push(['BUSINESS_ANALYSTS', 	this.translate.instant('rec-prof-func-busines-analyst')]);
+		options.push(['CLOUD', 				this.translate.instant('rec-prof-func-cloud')]);
+		options.push(['DEV_OPS', 			this.translate.instant('rec-prof-func-devops')]);
+		options.push(['DOT_NET', 			this.translate.instant('rec-prof-func-dotnet')]);
+		options.push(['IT_SUPPORT', 		this.translate.instant('rec-prof-func-support-helpdesk')]);
+		options.push(['JAVA', 				this.translate.instant('rec-prof-func-java')]);
+		options.push(['NETWORKS', 			this.translate.instant('rec-prof-func-networks')]);
+		options.push(['PROJECT_NANAGMENT', 	this.translate.instant('rec-prof-func-project-management')]);
+		options.push(['REC2REC', 			this.translate.instant('rec-prof-func-rec2rec')]);
+		options.push(['SECURITY', 			this.translate.instant('rec-prof-func-cyber-security')]);
+		options.push(['TESTING', 			this.translate.instant('rec-prof-func-testing')]);
+		options.push(['UI_UX', 				this.translate.instant('rec-prof-func-ui-ux')]);
+		options.push(['WEB', 				this.translate.instant('rec-prof-func-web')]);
 		
 		return options;
 		
+	}
+	
+	/**
+	* Human readable tech value
+	*/
+	public getTech(techCode:string):string{
+		return this.getTechOptions().filter(opt => opt[0] == techCode)[0][1];
 	}
 	
 	/**
@@ -365,14 +386,25 @@ export class RecruiterProfileComponent {
 		let options:Array<[string,string]> = new Array<[string,string]>();
 		
 		options.push(['',		 	'']);
-		options.push(['FREELANCE', 	'Freelance / Contract']);
-		options.push(['PERM', 		'Permanent / Payroll']);
+		options.push(['FREELANCE', 	this.translate.instant('rec-prof-type-freelance-contract')]);
+		options.push(['PERM', 		this.translate.instant('rec-prof-type-permanent-payroll')]);
 		
 		return options;
 		
 	}
 	
-		/**
+	
+	/**
+	* Human readable contractType value
+	*/
+	public getContractType(conrractTypeCode:string):string{
+		return this.getContractTypeOptions().filter(opt => opt[0] == conrractTypeCode)[0][1];
+	}
+	
+	//TODO: Need to get Values from options for HTML
+	
+	
+	/**
 	* Returns the code identifying the country
 	* @param country - Country to get the country code for
 	*/
@@ -486,13 +518,9 @@ export class RecruiterProfileComponent {
 	*/
 	public contactRecruiter():void{
 		
-		
 		this.contactRecruiterView = 'message';
-		//let options: NgbModalOptions = {
-	    //	 centered: true
-	   //};
+	
 		this.contactBox.nativeElement.showModal();
-		//this.modalService.open(contactBox, options);
 	
 	}
 	
@@ -516,13 +544,13 @@ export class RecruiterProfileComponent {
 		emailRequest.message = this.sendMessageGroup.get('message')?.value;;
 		
 		this.emailService.sendRecruiterContactEmail(emailRequest, this.selectedRecruiterProfile.recruiterId).subscribe(body => {
-			this.contactRecruiterView = 'success';
+			this.contactRecruiterView = this.translate.instant('success');
 			this.sendMessageGroup = new UntypedFormGroup({
 				message: new UntypedFormControl(''),
 				title: new UntypedFormControl(''),
 			});
 		}, err => {
-			this.contactRecruiterView = 'failure';
+			this.contactRecruiterView = this.translate.instant('failure');
 		});
 		
 		

@@ -48,7 +48,7 @@
 						</tr>
 					
 						<tr>
-							<td class="sugg-srch-hdr">{{'arenella-suggestions-contract' | translate}}Contract</td>
+							<td class="sugg-srch-hdr">{{'arenella-suggestions-contract' | translate}}</td>
 							<td class="sugg-srch-bdy">
 								<select class="contract-type" formControlName="contractType">
 									<option value="BOTH">{{'arenella-suggestions-both' | translate}}</option>
@@ -188,7 +188,7 @@
 		<form [formGroup]="createAlertForm">
 			<div class="modal-body" *ngIf="showSaveAlertBox">
 				<p class="info-text">{{'arenella-suggestions-box-alert-text' | translate}}</p>
-				Alert Name: <input type="text" formControlName="alertName">
+				{{'arenella-suggestions-box-alert-name' | translate}}: <input type="text" formControlName="alertName">
 				<br/><br/>
 				<button class="btn btn-secondary" (click)="saveAlert()" download>{{'arenella-suggestions-box-alert-btn-save' | translate}}</button>
 			</div>       

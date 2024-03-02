@@ -18,6 +18,7 @@ import { FormBeanFilterByJobSpec } 						from '../listing/form-bean-filter-by-jo
 import { HtmlOption } 									from '../html-option';
 import { StaticDataService } from '../static-data.service';
 import { InfoItemBlock, InfoItemConfig, InfoItemRowKeyValue, InfoItemRowMultiValues, InfoItemRowSingleValue } from '../candidate-info-box/info-item';
+import { ContractType } from '../suggestions/contract-type';
 
 @Component({
   selector: 'app-recruiter-listings',
@@ -718,7 +719,7 @@ export class RecruiterListingsComponent implements OnInit {
 		  		  
 		return types;
 	}
-
+	
 	/**
 	* Returns the code identifying the country
 	* @param country - Country to get the country code for

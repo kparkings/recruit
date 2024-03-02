@@ -5,6 +5,7 @@ import { RecruiterService }                                     from '../recruit
 import { Router}                                                from '@angular/router';
 import { TemplateRef, ViewChild,ElementRef, AfterViewInit  }		from '@angular/core';
 import { NgbModal, NgbModalOptions, ModalDismissReasons}			from '@ng-bootstrap/ng-bootstrap';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-login-user',
@@ -36,7 +37,11 @@ export class LoginUserComponent implements OnInit {
    * @param authService - Services for authenticating users
    * @param router      - Angular router
    */
-  constructor(private recruiterService:RecruiterService, private authService: AuthService, private modalService: NgbModal, private router: Router) { }
+  constructor(	private recruiterService:RecruiterService, 
+  				private authService: AuthService, 
+  				private modalService: NgbModal, 
+  				private router: Router,
+  				private translate: TranslateService) { }
 
   /**
   * Performs initialization
@@ -109,7 +114,7 @@ export class LoginUserComponent implements OnInit {
 
 		}, err => {
 			if (err.status === 401) {
-				this.failureMessage = "Invalid Login attempt";
+				this.failureMessage = this.translate.instant('login-user-invalid-login');
 				this.feedbackBox.nativeElement.showModal();
 		}
 	});
@@ -157,7 +162,7 @@ export class LoginUserComponent implements OnInit {
 			this.resetDialog.nativeElement.showModal();
 		},
 		err => {
-			this.failureMessage = "Unable to send email. Possibly unknown email.";
+			this.failureMessage = this.translate.instant('login-user-unable-to-send-email');
 			this.feedbackBox.nativeElement.showModal();
 			this.showForgottenPassword = false;
 		});

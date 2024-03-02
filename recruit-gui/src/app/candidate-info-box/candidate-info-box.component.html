@@ -3,7 +3,7 @@
     	<div class="photo">
        		<img class="profile-photo-details" *ngIf="config.hasProfilePhoto()" id='base64image' src='data:image/jpeg;base64, {{config.getProfilePhotoBytes()}}' />
 			<div *ngIf="!config.hasProfilePhoto()" class="profile-photo-details material-icons person no-profile-photo-mobile">
-				<span class="person-span">{{'arenella-infobox-person' | translate}}</span>
+				<span class="person-span">person</span>
 			</div>
        	</div>
        	<div>

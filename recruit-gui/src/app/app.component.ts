@@ -54,10 +54,10 @@ export class AppComponent {
 				private candidateNavService: 	CandidateNavService,
 				public  creditsService:			CreditsService,
 				private newsfeedService:		NewsfeedService,
-				private translate: TranslateService){
+				private translate: 				TranslateService){
 		
-		translate.setDefaultLang('fr');
-    		//translate.use('en');
+	translate.setDefaultLang('en');
+    		translate.use(""+translate.getBrowserLang());
     
 		if (this.isRecruiterNoSubscription() || this.hasUnpaidSubscription()) {
 			this.router.navigate(['recruiter-account']);

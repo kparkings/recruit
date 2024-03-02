@@ -131,7 +131,7 @@
 									<option value="DAY">{{'arenella-new-candidate-day' | translate}}</option>
 									<option	value="YEAR">{{'arenella-new-candidate-year' | translate}}</option>
 								</select>
-							{{'arenella-new-candidate-from' | translate}}From: <input type="number" formControlName="contractFrom">
+							{{'arenella-new-candidate-from' | translate}}: <input type="number" formControlName="contractFrom">
 							{{'arenella-new-candidate-to' | translate}}: <input type="number" formControlName="contractTo">
 						</tr>
 						<tr>
@@ -267,7 +267,7 @@
 					<td class="pendingCandidateBox-td" (click)="loadPendingCandidate(pendingCandidate)">{{pendingCandidate.firstname}}</td>
 					<td class="pendingCandidateBox-td" (click)="loadPendingCandidate(pendingCandidate)">{{pendingCandidate.surname}}</td>
 					<td class="pendingCandidateBox-td">
-						<button class="btn btn-secondary arenella-btn" style="width:80px;" (click)="deletePendingCurriculum(pendingCandidate, false)">{{'arenella-new-candidate-btn-delete' | translate}}</button>
+						<button class="btn btn-secondary arenella-btn arenella-btn-popup-action" (click)="deletePendingCurriculum(pendingCandidate, false)">{{'arenella-new-candidate-btn-delete' | translate}}</button>
 					</td>	
 				</tr>
 			</tbody>

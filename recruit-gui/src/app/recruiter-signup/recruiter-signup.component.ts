@@ -3,6 +3,7 @@ import { NgbModal, NgbModalOptions}						from '@ng-bootstrap/ng-bootstrap';
 import { UntypedFormGroup, UntypedFormControl }						from '@angular/forms';
 import { RecruiterService }								from '../recruiter.service';
 import { ViewChild }									from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 
 /**
 * Component for a new Recruiter to sign up for a free trial
@@ -23,7 +24,7 @@ export class RecruiterSignupComponent implements OnInit {
 	/**
 	* Constructor
 	*/
-  	constructor(private modalService: NgbModal, private recruiterService: RecruiterService) { }
+  	constructor(private modalService: NgbModal, private recruiterService: RecruiterService,private translate: TranslateService) { }
 
 	/**
 	* Initializes component
@@ -100,12 +101,12 @@ export class RecruiterSignupComponent implements OnInit {
 	public open(content:any, msg:string, success:boolean):void {
     
 	    if (success) {
-	      this.feedbackBoxTitle = 'Success';
-	      this.feedbackBoxText = 'Your request has been submitted. Once accepted an email will be sent with your login details.';
+	      this.feedbackBoxTitle = this.translate.instant('register-recruiter-success-title');
+	      	      this.feedbackBoxText = this.translate.instant('register-recruiter-success');
 	      this.feedbackBoxClass = 'feedback-success';
 	    } else {
-	      this.feedbackBoxTitle = 'Failure';
-	      this.feedbackBoxText = 'Unfortunately there was a problem. Please email kparkings@gmail.com directly for your account';
+	      this.feedbackBoxTitle = this.translate.instant('register-recruiter-failure-title');
+	      this.feedbackBoxText = this.translate.instant('register-recruiter-failure');
 	      this.feedbackBoxClass = 'feedback-failure';
 	    }
 	
@@ -113,7 +114,6 @@ export class RecruiterSignupComponent implements OnInit {
 	    	 centered: true
 	   };
 	
-	  //this.modalService.open(this.content, options);
 		this.feedbackBox.nativeElement.showModal();
   }
 

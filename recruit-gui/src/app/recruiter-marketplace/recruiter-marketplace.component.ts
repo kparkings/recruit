@@ -15,6 +15,7 @@ import { Candidate } 																	from '../suggestions/candidate';
 import { CandidateNavService } 															from '../candidate-nav.service';
 import { CreditsService } 																from '../credits.service';
 import { InfoItemBlock, InfoItemConfig, InfoItemRowKeyValue, InfoItemRowMultiValues } 	from '../candidate-info-box/info-item';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-recruiter-marketplace',
@@ -47,7 +48,8 @@ export class RecruiterMarketplaceComponent implements OnInit {
 				public 	candidateService:			CandidateServiceService,
 				private recruiterProfileService: 	RecruiterProfileService,
 				private candidateNavService: 		CandidateNavService,
-				private creditsService:				CreditsService) {
+				private creditsService:				CreditsService,
+				private translate:					TranslateService) {
 					
 					this.marketplaceService.fetchUnseenOfferedCandidates().subscribe(val => {
 						this.unseenOfferedCandidates = val;
@@ -354,42 +356,42 @@ export class RecruiterMarketplaceComponent implements OnInit {
 		 
 		if (this.activeOpenPosition?.recruiter?.recruiterName) {
 			let recruiterBlock:InfoItemBlock = new InfoItemBlock();
-			recruiterBlock.setTitle("Requested By");
-			recruiterBlock.addRow(new InfoItemRowKeyValue("Name",this.activeOpenPosition?.recruiter?.recruiterName));
-			recruiterBlock.addRow(new InfoItemRowKeyValue("Company",this.activeOpenPosition?.recruiter?.companyName));
+			recruiterBlock.setTitle(this.translate.instant('mp-left-mnu-requested-by'));//"Requested By"
+			recruiterBlock.addRow(new InfoItemRowKeyValue(this.translate.instant('mp-left-mnu-name'),this.activeOpenPosition?.recruiter?.recruiterName));
+			recruiterBlock.addRow(new InfoItemRowKeyValue(this.translate.instant('mp-left-mnu-company'),this.activeOpenPosition?.recruiter?.companyName));
 			this.infoItemConfig.addItem(recruiterBlock);
 		}
 		
 		if (this.activeOpenPosition.country || this.activeOpenPosition.location) {
 			let recruiterBlock:InfoItemBlock = new InfoItemBlock();
-			recruiterBlock.setTitle("Location");
+			recruiterBlock.setTitle(this.translate.instant('mp-left-mnu-location'));//Location
 			if (this.activeOpenPosition.country) {
-				recruiterBlock.addRow(new InfoItemRowKeyValue("Country",this.getCountryCode(this.activeOpenPosition.country)));
+				recruiterBlock.addRow(new InfoItemRowKeyValue(this.translate.instant('mp-left-mnu-country'),this.getCountryCode(this.activeOpenPosition.country)));
 			}
 			if (this.activeOpenPosition.location) {
-				recruiterBlock.addRow(new InfoItemRowKeyValue("City",this.activeOpenPosition.location));
+				recruiterBlock.addRow(new InfoItemRowKeyValue(this.translate.instant('mp-left-mnu-city'),this.activeOpenPosition.location));
 			}
 			this.infoItemConfig.addItem(recruiterBlock);
 		}
 		
 		if ( this.activeOpenPosition.skills.length > 0) {
 			let skillsBlock:InfoItemBlock = new InfoItemBlock();
-			skillsBlock.setTitle("Skills");
+			skillsBlock.setTitle(this.translate.instant('mp-left-mnu-requested-skills'));
 			skillsBlock.addRow(new InfoItemRowMultiValues(this.activeOpenPosition.skills, "skill"));
 			this.infoItemConfig.addItem(skillsBlock);
 		}
 		
 		if (this.activeOpenPosition.contractType || this.activeOpenPosition.startDate || this.activeOpenPosition.renumeration) {
 			let conditionsBlock:InfoItemBlock = new InfoItemBlock();
-			conditionsBlock.setTitle("Conditions");
+			conditionsBlock.setTitle(this.translate.instant('mp-left-mnu-condistons'));
 			if (this.activeOpenPosition.contractType) {
-				conditionsBlock.addRow(new InfoItemRowKeyValue("Contract Type",this.getContractType(this.activeOpenPosition.contractType)));
+				conditionsBlock.addRow(new InfoItemRowKeyValue(this.translate.instant('mp-left-mnu-contract-type'),this.getContractType(this.activeOpenPosition.contractType)));
 			}
 			if (this.activeOpenPosition.startDate) {
-				conditionsBlock.addRow(new InfoItemRowKeyValue("Rate / Salary",""+this.activeOpenPosition.startDate));
+				conditionsBlock.addRow(new InfoItemRowKeyValue(this.translate.instant('mp-left-mnu-rate-salsary'),""+this.activeOpenPosition.startDate));
 			}
 			if (this.activeOpenPosition.renumeration) {
-				conditionsBlock.addRow(new InfoItemRowKeyValue("Renumeration",this.activeOpenPosition.renumeration));
+				conditionsBlock.addRow(new InfoItemRowKeyValue(this.translate.instant('mp-left-mnu-renumerationo'),this.activeOpenPosition.renumeration));
 			}
 			
 			this.infoItemConfig.addItem(conditionsBlock);
@@ -678,7 +680,7 @@ export class RecruiterMarketplaceComponent implements OnInit {
 						});
 						this.open(false);
 					} else {
-						console.log("Failed to persist new Open Position " + JSON.stringify(err.error));
+						console.log(this.translate.instant('mp-left-failure-failed-to-persits-new-open-position') + " " + JSON.stringify(err.error));
 					}
 				}
 											
@@ -715,7 +717,7 @@ export class RecruiterMarketplaceComponent implements OnInit {
 						});
 						this.open(false);
 					} else {
-						console.log("Failed to update Open Position " + JSON.stringify(err.error));
+						console.log(this.translate.instant('mp-failure-failed-to-update-open-position') + " " + JSON.stringify(err.error));
 					}
 				}
 											
@@ -745,23 +747,23 @@ export class RecruiterMarketplaceComponent implements OnInit {
 		
 		if (this.showSupplyDetails) {
 			this.emailService.sendMarketplaceContactRequestOfferedCandidateEmail(emailRequest, this.activeCandidate).subscribe(body => {
-				this.contactRecruiterView = 'success';
+				this.contactRecruiterView = this.translate.instant('success');
 				this.sendMessageGroup = new UntypedFormGroup({
 					message: new UntypedFormControl('')
 				});
 			}, err => {
-				this.contactRecruiterView = 'failure';
+				this.contactRecruiterView = this.translate.instant('failure');
 			});
 		}
 		
 		if (this.showDemandDetails) {
 			this.emailService.sendMarketplaceContactRequestOpenPositionEmail(emailRequest, this.activeOpenPosition).subscribe(body => {
-				this.contactRecruiterView = 'success';
+				this.contactRecruiterView = this.translate.instant('success');
 				this.sendMessageGroup = new UntypedFormGroup({
 					message: new UntypedFormControl('')
 				});
 			}, err => {
-				this.contactRecruiterView = 'failure';
+				this.contactRecruiterView = this.translate.instant('failure');
 			});
 		}
 		

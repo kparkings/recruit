@@ -8,7 +8,7 @@
 			<div  *ngSwitchCase="'list'">
 				<div>
 					<div class="action-buttons">
-						<button *ngIf="passedCreditCheck" 	(click)="showAdd()" 		class="btn btn-secondary arenella-btn">{{'arenella-recruiter-listing-btn-add-job' | translate}}</button>/
+						<button *ngIf="passedCreditCheck" 	(click)="showAdd()" 		class="btn btn-secondary arenella-btn">{{'arenella-recruiter-listing-btn-add-job' | translate}}</button>
 						<button *ngIf="!passedCreditCheck" 	(click)="showNoCredits()" 	class="btn btn-secondary arenella-btn">{{'arenella-recruiter-listing-btn-add-job' | translate}}</button>
 						<button routerLink="/listing" 									class="btn btn-secondary arenella-btn">{{'arenella-recruiter-listing-btn-back' | translate}}</button>
 					</div>
@@ -56,7 +56,7 @@
 					<button (click)="showEditListing()" 	class="btn btn-secondary arenella-btn">{{'arenella-recruiter-listing-btn-edit' | translate}}</button>
 					<button (click)="showConfirmDelete()"   class="btn btn-secondary arenella-btn" *ngIf="!enabldeDeleteOption">{{'arenella-recruiter-listing-btn-delete' | translate}}</button>
 					<button (click)="performmDelete()" 	  	class="btn btn-secondary arenella-btn confirm-delete" *ngIf="enabldeDeleteOption">{{'arenella-recruiter-listing-btn-confirm' | translate}}</button>
-					<button (click)="showList()" 			class="btn btn-secondary arenella-btn">{{'arenella-recruiter-listing-btn-back' | translate}}Back</button>
+					<button (click)="showList()" 			class="btn btn-secondary arenella-btn">{{'arenella-recruiter-listing-btn-back' | translate}}</button>
 				</div>
 				
 				<app-candidate-info-box [config]="infoItemConfig"></app-candidate-info-box>
@@ -80,7 +80,7 @@
 				<div class="action-buttons">
 					<button (click)="showFilterByJobSpecDialog()"	class="btn btn-secondary arenella-btn" download>{{'arenella-recruiter-listing-btn-create-from-spec' | translate}}</button>
 					<button (click)="publishListing()" 				class="btn btn-secondary arenella-btn">{{'arenella-recruiter-listing-btn-publish' | translate}}</button>
-					<button (click)="showPreviousShowOption()" 		class="btn btn-secondary arenella-btn">{{'arenella-recruiter-listing-btn-back' | translate}}Back</button>
+					<button (click)="showPreviousShowOption()" 		class="btn btn-secondary arenella-btn">{{'arenella-recruiter-listing-btn-back' | translate}}</button>
 				</div>
 				<form [formGroup]="newListingFormBean">
 					<div [ngSwitch]="activeSubView" class="steps">

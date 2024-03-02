@@ -6,19 +6,20 @@ import { CurriculumService }														from '../curriculum.service';
 import { Candidate}																	from './candidate';
 import { SavedCandidate}															from './saved-candidate';
 import { SuggestionParams}															from './suggestion-param-generator';
-import { environment }																from '../../environments/environment';
-import { NgbModal, NgbModalOptions }												from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal }																	from '@ng-bootstrap/ng-bootstrap';
 import { CandidateSearchAlert }														from './candidate-search-alert';
 import { DomSanitizer, SafeResourceUrl } 											from '@angular/platform-browser';
 import { Router}																	from '@angular/router';
 import { debounceTime } 															from "rxjs/operators";
 import { CandidateProfile } 														from '../candidate-profile';
-import { EmailService, EmailRequest }												from '../email.service';
+import { EmailService }																from '../email.service';
 import { CandidateNavService } 														from '../candidate-nav.service';
 import { CreditsService } 															from '../credits.service';
 import { ExtractedFilters } 														from './extracted-filters';
 import { InfoItemBlock, InfoItemConfig, InfoItemRowKeyValue, InfoItemRowKeyValueFlag, InfoItemRowKeyValueMaterialIcon, InfoItemRowSingleValue } from '../candidate-info-box/info-item';
 import {AppComponent} 																from '../app.component';
+import { TranslateService } 														from '@ngx-translate/core';
+
 /**
 * Component to suggest suitable Candidates based upon a 
 * Recruiters search
@@ -112,7 +113,8 @@ export class SuggestionsComponent implements OnInit {
 				private emailService:			EmailService,
 				private candidateNavService: 	CandidateNavService,
 				private creditsService:			CreditsService,
-				private appComponent:			AppComponent) { 
+				private appComponent:			AppComponent,
+				private translate:				TranslateService) { 
 					
 		this.trustedResourceUrl = this.sanitizer.bypassSecurityTrustResourceUrl('');
 		
@@ -539,14 +541,14 @@ export class SuggestionsComponent implements OnInit {
 		
 			//Location
 			let recruiterBlock:InfoItemBlock = new InfoItemBlock();
-			recruiterBlock.setTitle("Location");
-			recruiterBlock.addRow(new InfoItemRowKeyValueFlag("Country",this.getFlagClassFromCountry(this.suggestedCandidate.country)));
-			recruiterBlock.addRow(new InfoItemRowKeyValue("City",this.suggestedCandidate.city));
+			recruiterBlock.setTitle(this.translate.instant('info-item-title-location'));
+			recruiterBlock.addRow(new InfoItemRowKeyValueFlag(this.translate.instant('info-item-title-country'),this.getFlagClassFromCountry(this.suggestedCandidate.country)));
+			recruiterBlock.addRow(new InfoItemRowKeyValue(this.translate.instant('info-item-title-city'),this.suggestedCandidate.city));
 			this.infoItemConfig.addItem(recruiterBlock);
 			
 			//Languages Block
 			let languageBlock:InfoItemBlock = new InfoItemBlock();
-			languageBlock.setTitle("Languages");
+			languageBlock.setTitle(this.translate.instant('info-item-title-languages'));
 			this.suggestedCandidate.languages.forEach(lang => {
 					languageBlock.addRow(new InfoItemRowKeyValueMaterialIcon(this.getLanguage(lang.language),this.getMaterialIconClassFromLangLevel(lang.level)));
 			});
@@ -555,12 +557,12 @@ export class SuggestionsComponent implements OnInit {
 			//Contract Type Block
 			if (this.suggestedCandidate.freelance == 'TRUE' || this.suggestedCandidate.perm == 'TRUE') {
 				let contractTypeBlock:InfoItemBlock = new InfoItemBlock();
-				contractTypeBlock.setTitle("Contract Type");
+				contractTypeBlock.setTitle(this.translate.instant('info-item-title-contract-type'));
 				if (this.suggestedCandidate.freelance == 'TRUE'){		
-					contractTypeBlock.addRow(new InfoItemRowKeyValueMaterialIcon("Contract","available-check-icon"));
+					contractTypeBlock.addRow(new InfoItemRowKeyValueMaterialIcon(this.translate.instant('info-item-title-contract'),"available-check-icon"));
 				}
 				if (this.suggestedCandidate.perm == 'TRUE'){		
-					contractTypeBlock.addRow(new InfoItemRowKeyValueMaterialIcon("Permanent","available-check-icon"));
+					contractTypeBlock.addRow(new InfoItemRowKeyValueMaterialIcon(this.translate.instant('info-item-title-permanent'),"available-check-icon"));
 				}
 				this.infoItemConfig.addItem(contractTypeBlock);
 			}
@@ -568,7 +570,7 @@ export class SuggestionsComponent implements OnInit {
 			//Contract Rate 
 			if(this.hasContractRate()) {
 				let contractRateBlock:InfoItemBlock = new InfoItemBlock();
-				contractRateBlock.setTitle("Contract Rate");
+				contractRateBlock.setTitle(this.translate.instant('info-item-contract-rate'));
 				contractRateBlock.addRow(new InfoItemRowSingleValue(this.getContractRate()));
 				this.infoItemConfig.addItem(contractRateBlock);
 			}
@@ -576,25 +578,25 @@ export class SuggestionsComponent implements OnInit {
 			//Perm Rate 
 			if(this.hasPermRate()) {
 				let permRateBlock:InfoItemBlock = new InfoItemBlock();
-				permRateBlock.setTitle("Perm Rate");
+				permRateBlock.setTitle(this.translate.instant('info-item-title-perm-rate'));
 				permRateBlock.addRow(new InfoItemRowSingleValue(this.getPermRate()));
 				this.infoItemConfig.addItem(permRateBlock);
 			}
 		
 			//Years Experience 
 			let yearsExperienceBlock:InfoItemBlock = new InfoItemBlock();
-			yearsExperienceBlock.setTitle("Years Experience");
+			yearsExperienceBlock.setTitle(this.translate.instant('info-item-title-years-experience'));
 			yearsExperienceBlock.addRow(new InfoItemRowSingleValue(""+this.suggestedCandidate.yearsExperience));
 			this.infoItemConfig.addItem(yearsExperienceBlock);
 			
 			//Availability
 			let availabilityBlock:InfoItemBlock = new InfoItemBlock();
-			availabilityBlock.setTitle("Availability");
+			availabilityBlock.setTitle(this.translate.instant('info-item-title-availability'));
 			if (this.candidateProfile.daysOnSite) {
-				availabilityBlock.addRow(new InfoItemRowKeyValue("Max Days on Site",this.formatHumanReadableDaysOnsite(this.candidateProfile.daysOnSite)));
+				availabilityBlock.addRow(new InfoItemRowKeyValue(this.translate.instant('info-item-title-max-days-on-site'),this.formatHumanReadableDaysOnsite(this.candidateProfile.daysOnSite)));
 			}
 			if (this.candidateProfile.availableFromDate) {
-				availabilityBlock.addRow(new InfoItemRowKeyValue("Available From",""+this.candidateProfile.availableFromDate));
+				availabilityBlock.addRow(new InfoItemRowKeyValue(this.translate.instant('info-item-title-available-from'),""+this.candidateProfile.availableFromDate));
 			}
 			this.infoItemConfig.addItem(availabilityBlock);
 			
@@ -655,16 +657,16 @@ export class SuggestionsComponent implements OnInit {
 
 		switch(lang){
 			case "DUTCH":{
-				return "Dutch";
+				return this.translate.instant('suggestions-lang-dutch');//"Dutch";
 			}
 			case "FRENCH":{
-				return "French";
+				return this.translate.instant('suggestions-lang-french');//"French";
 			}
 			case "ENGLISH":{
-				return "English";
+				return this.translate.instant('suggestions-lang-english');//"English";
 			}
 			default:{
-				return 'NA';
+				return this.translate.instant('suggestions-lang-na');//'NA';
 			}
 		}
 
@@ -824,22 +826,22 @@ export class SuggestionsComponent implements OnInit {
 	public getContractRate():string{
 		
 		if(this.candidateProfile.rateContract.valueMin != 0 && this.candidateProfile.rateContract.valueMax != 0){
-			return "Rate: " + this.candidateProfile.rateContract.currency + " "
+			return this.translate.instant('info-item-title-rate') + this.candidateProfile.rateContract.currency + " "
 			+ this.candidateProfile.rateContract.valueMin 
-			+ " to " + this.candidateProfile.rateContract.valueMax 
-			+ " per " + this.candidateProfile.rateContract.period.toLowerCase() ;
+			+ this.translate.instant('info-item-title-to') + this.candidateProfile.rateContract.valueMax 
+			+ this.translate.instant('info-item-title-per') + this.candidateProfile.rateContract.period.toLowerCase() ;
 		}
 		
 		if(this.candidateProfile.rateContract.valueMin == 0 && this.candidateProfile.rateContract.valueMax != 0){
-			return "Rate: " + this.candidateProfile.rateContract.currency 
+			return this.translate.instant('info-item-title-rate') + this.candidateProfile.rateContract.currency 
 			+ " " + this.candidateProfile.rateContract.valueMax 
-			+ " per " + this.candidateProfile.rateContract.period.toLowerCase() ;
+			+ this.translate.instant('info-item-title-per') + this.candidateProfile.rateContract.period.toLowerCase() ;
 		}
 		
 		if(this.candidateProfile.rateContract.valueMin != 0 && this.candidateProfile.rateContract.valueMax == 0){
-			return "Rate: " + this.candidateProfile.rateContract.currency 
+			return this.translate.instant('info-item-title-rate') + this.candidateProfile.rateContract.currency 
 			+ " " + this.candidateProfile.rateContract.valueMin 
-			+ " per " + this.candidateProfile.rateContract.period.toLowerCase() ;
+			+ this.translate.instant('info-item-title-per') + this.candidateProfile.rateContract.period.toLowerCase() ;
 		}
 		
 		return "";
@@ -859,22 +861,22 @@ export class SuggestionsComponent implements OnInit {
 	public getPermRate():string{
 		
 		if(this.candidateProfile.ratePerm.valueMin != 0 && this.candidateProfile.ratePerm.valueMax != 0){
-			return "Rate: " + this.candidateProfile.ratePerm.currency + " "
+			return this.translate.instant('info-item-title-rate') + this.candidateProfile.ratePerm.currency + " "
 			+ this.candidateProfile.ratePerm.valueMin 
-			+ " to " + this.candidateProfile.ratePerm.valueMax 
-			+ " per " + this.candidateProfile.ratePerm.period.toLowerCase() ;
+			+ this.translate.instant('info-item-title-to') + this.candidateProfile.ratePerm.valueMax 
+			+ this.translate.instant('info-item-title-per') + this.candidateProfile.ratePerm.period.toLowerCase() ;
 		}
 		
 		if(this.candidateProfile.ratePerm.valueMin == 0 && this.candidateProfile.ratePerm.valueMax != 0){
-			return "Rate: " + this.candidateProfile.ratePerm.currency 
+			return this.translate.instant('info-item-title-rate') + this.candidateProfile.ratePerm.currency 
 			+ " " + this.candidateProfile.ratePerm.valueMax 
-			+ " per " + this.candidateProfile.ratePerm.period.toLowerCase() ;
+			+ this.translate.instant('info-item-title-location-per') + this.candidateProfile.ratePerm.period.toLowerCase() ;
 		}
 		
 		if(this.candidateProfile.ratePerm.valueMin != 0 && this.candidateProfile.ratePerm.valueMax == 0){
-			return "Rate: " + this.candidateProfile.ratePerm.currency 
+			return this.translate.instant('info-item-title-rate') + this.candidateProfile.ratePerm.currency 
 			+ " " + this.candidateProfile.ratePerm.valueMin 
-			+ " per " + this.candidateProfile.ratePerm.period.toLowerCase() ;
+			+ this.translate.instant('info-item-title-per') + this.candidateProfile.ratePerm.period.toLowerCase() ;
 		}
 		
 		return "";
@@ -941,7 +943,7 @@ export class SuggestionsComponent implements OnInit {
 	*/
 	public formatHumanReadableDaysOnsite(value:string):string{
 		switch(value){
-			case 'ZERO': 	return "Fully Remote";
+			case 'ZERO': 	return this.translate.instant('info-item-days-onsite-fully-remote');//"Fully Remote";
 			case 'ONE': 	return "1";
 			case 'TWO': 	return "2";
 			case 'THREE': 	return "3";

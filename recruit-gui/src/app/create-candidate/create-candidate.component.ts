@@ -5,6 +5,7 @@ import { CandidateServiceService }						from '../candidate-service.service';
 import { NgbModal, NgbModalOptions}						from '@ng-bootstrap/ng-bootstrap';
 import { PopupsService }								from '../popups.service';
 import { NewPendingCandidate, Rate } 					from './new-pending-candidate';
+import { TranslateService } from '@ngx-translate/core';
 
 /**
 * Component for Candidates to present their own Curriculum and Profile.
@@ -18,10 +19,11 @@ export class CreateCandidateComponent implements OnInit {
 
 	@ViewChild('feedbackBox', { static: false }) private feedbackDialog:any;
 
-  	constructor(private curriculumService: CurriculumService, 
-				private candidateService: CandidateServiceService,
-				private popupsService: PopupsService, 
-				private modalService: NgbModal) {
+  	constructor(private curriculumService: 	CurriculumService, 
+				private candidateService: 	CandidateServiceService,
+				private popupsService: 		PopupsService, 
+				private modalService: 		NgbModal,
+				private translate: 			TranslateService) {
 					
 				 }
 
@@ -211,7 +213,7 @@ export class CreateCandidateComponent implements OnInit {
 				this.popupsService.setValidationErrors(exceptions)
 			} else {
 				let exceptions:Array<string> = new Array<string>();
-				exceptions.push("There was an issue with the profile image");
+				exceptions.push(this.translate.instant('create-candidate--profile-image'));
 				this.popupsService.setValidationErrors(exceptions);	
 			}
 			
@@ -220,7 +222,7 @@ export class CreateCandidateComponent implements OnInit {
     	}, 
 		err => {
 			let exceptions:Array<string> = new Array<string>();
-			exceptions.push("CV must be Word or PDF and less than 1MB");
+			exceptions.push(this.translate.instant('create-candidate-cv-format'));
 			this.popupsService.setValidationErrors(exceptions)
 		});
 		
@@ -233,21 +235,16 @@ export class CreateCandidateComponent implements OnInit {
     
 	    if (success) {
 	      this.feedbackBoxTitle 	= 'Success';
-	      this.feedbackBoxText 		= 'Your details have been successfully uploaded. They will now be reviewed and added to the system';
+	      this.feedbackBoxText 		= this.translate.instant('create-candidate-success');
 	      this.feedbackBoxClass 	= 'feedback-success';
 	    } else {
 	      this.feedbackBoxTitle 	= 'Failure';
-	      this.feedbackBoxText 		= 'Unable to add Candidate';
+	      this.feedbackBoxText 		= this.translate.instant('create-candidate-failure');
 	      this.feedbackBoxClass 	= 'feedback-failure';
 	    }
 	
-	    //let options: NgbModalOptions = {
-	    //	centered: true
-	   	//};
-	
 		this.feedbackDialog.nativeElement.showModal();
-	  //this.modalService.open(this.content, options);
-
+	
   }
 
   /**

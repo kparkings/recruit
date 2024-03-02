@@ -13,6 +13,7 @@ import { CandidateProfile } 							from '../candidate-profile';
 import { CandidateNavService } 							from '../candidate-nav.service';
 import { LanguageOption } 								from './language-option';
 import { AppComponent} 									from '../app.component';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-new-candidate',
@@ -46,20 +47,21 @@ export class NewCandidateComponent implements OnInit {
 	/**
   	* Constructor
   	*/
-  	constructor(private curriculumService: CurriculumService, 
-  				private candidateService: CandidateServiceService,
-  				private modalService: NgbModal,
-  				private router: Router,
-  				private candidateNavService: 	CandidateNavService,
-  				private appComponent:AppComponent) {
+  	constructor(private curriculumService: 			CurriculumService, 
+  				private candidateService: 			CandidateServiceService,
+  				private modalService: 				NgbModal,
+  				private router: 					Router,
+  				private candidateNavService: 		CandidateNavService,
+  				private appComponent:				AppComponent,
+  				private translate:					TranslateService) {
     
     	this.candidateService.loadFunctionTypes().forEach(funcType => {
       		this.functionTypes.push(funcType);
     	});
     	
-    	this.languageOptions.push(new LanguageOption("UNKNOWN", "No"));
-    	this.languageOptions.push(new LanguageOption("BASIC", "Basic"));
-    	this.languageOptions.push(new LanguageOption("PROFICIENT", "Yes"));
+    	this.languageOptions.push(new LanguageOption("UNKNOWN", 	this.translate.instant('new-candidate-no')));
+    	this.languageOptions.push(new LanguageOption("BASIC", 		this.translate.instant('new-candidate-basic')));
+    	this.languageOptions.push(new LanguageOption("PROFICIENT", 	this.translate.instant('new-candidate-yes')));
     	
 		if (this.candidateNavService.isRouteActive()) {
 			this.candidateService.getCandidateProfileById(this.candidateNavService.getCandidateId()).subscribe(candidate => {
@@ -279,12 +281,12 @@ export class NewCandidateComponent implements OnInit {
 	public open(success:boolean):void {
     
     	if (success) {
-    	  this.feedbackBoxTitle = 'Success';
-    	  this.feedbackBoxText = 'Candidate Saved';
+    	  this.feedbackBoxTitle = this.translate.instant('new-candidate-success-title');
+    	  this.feedbackBoxText = this.translate.instant('new-candidate-success');
     	  this.feedbackBoxClass = 'feedback-success';
     	} else {
-    	  this.feedbackBoxTitle = 'Failure';
-    	  this.feedbackBoxText = 'Unable to add Candidate';
+    	  this.feedbackBoxTitle = this.translate.instant('new-candidate-failure-title');
+    	  this.feedbackBoxText = this.translate.instant('new-candidate-failure');
     	  this.feedbackBoxClass = 'feedback-failure';
     	}
 
