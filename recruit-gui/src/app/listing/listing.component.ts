@@ -14,6 +14,8 @@ import { SelectableCountry } 							from '../shared-domain-object/country';
 import { StaticDataService } 							from '../static-data.service';
 import { HtmlOption } 									from '../html-option';
 import { InfoItemBlock, InfoItemConfig, InfoItemRowKeyValue, InfoItemRowMultiValues, InfoItemRowSingleValue } 				from '../candidate-info-box/info-item';
+import { ContractType } 								from '../suggestions/contract-type';
+import { TranslateService } 							from '@ngx-translate/core';
 
 @Component({
   selector: 'app-listing',
@@ -41,18 +43,16 @@ export class ListingComponent implements OnInit {
 				private _Activatedroute:ActivatedRoute, 
 				private modalService:NgbModal, 
 				private recruiterProfileService:RecruiterProfileService,
-				private staticDataService:			StaticDataService) { 
+				private staticDataService:			StaticDataService,
+				private translate:TranslateService) { 
 		
+		
+	
 		if (sessionStorage.getItem("userId")) {		
 			this.recruiterProfileService.fetchRecruiterProfiles("RECRUITERS").subscribe(rps => {
 				this.recruiterProfiles = rps
 			});
 		}
-	
-		this.selectableFunctionTypes 	= this.staticDataService.fetchFunctionTypes().map(ft => new SelectableFunctionType(ft, false));
-		this.selectableCountries 		= this.staticDataService.fetchCountries().map(c => new SelectableCountry(c, false));
-	
-		this.contractTypeOptions = this.getContractTypeOptions();
 	
 	}
 	
@@ -65,7 +65,11 @@ export class ListingComponent implements OnInit {
 		} else {
 			this.fetchListings("");
 		}
-		
+  	
+  		this.selectableFunctionTypes 	= this.staticDataService.fetchFunctionTypes().map(ft => new SelectableFunctionType(ft, false));
+		this.selectableCountries 		= this.staticDataService.fetchCountries().map(c => new SelectableCountry(c, false));
+		this.contractTypeOptions 		= this.getContractTypeOptions();
+  	
   	}
 
 	public activeView:string					= 'list';
@@ -258,20 +262,20 @@ export class ListingComponent implements OnInit {
 	
 			//Recruiter Block
 			let recruiterBlock:InfoItemBlock = new InfoItemBlock();
-			recruiterBlock.setTitle("Recruiter Details");
-			recruiterBlock.addRow(new InfoItemRowKeyValue("Name",selectedListing!.ownerName));
-			recruiterBlock.addRow(new InfoItemRowKeyValue("Company",selectedListing!.ownerCompany));
+			recruiterBlock.setTitle(this.translate.instant('arenella-listing-recruiter-details'));//"Recruiter Details");
+			recruiterBlock.addRow(new InfoItemRowKeyValue(this.translate.instant('arenella-listing-name'),selectedListing!.ownerName));
+			recruiterBlock.addRow(new InfoItemRowKeyValue(this.translate.instant('arenella-listing-company'),selectedListing!.ownerCompany));
 			this.infoItemConfig.addItem(recruiterBlock);
 		
 			//Location Block
 			if (selectedListing!.country || selectedListing!.location) {
 				let locationBlock:InfoItemBlock = new InfoItemBlock();
-				locationBlock.setTitle("Location");
+				locationBlock.setTitle(this.translate.instant('arenella-listing-location'));
 				if	(selectedListing!.country) {
-					locationBlock.addRow(new InfoItemRowKeyValue("Country",this.getCountryCode(selectedListing!.country)));
+					locationBlock.addRow(new InfoItemRowKeyValue(this.translate.instant('arenella-listing-country'),this.getCountryCode(selectedListing!.country)));
 				}
 				if	(selectedListing!.location) {
-					locationBlock.addRow(new InfoItemRowKeyValue("City",selectedListing!.location));
+					locationBlock.addRow(new InfoItemRowKeyValue(this.translate.instant('arenella-listing-city'),selectedListing!.location));
 				}
 				this.infoItemConfig.addItem(locationBlock);
 			}
@@ -279,26 +283,26 @@ export class ListingComponent implements OnInit {
 			//Contract Block
 			if (selectedListing!.type || selectedListing!.currency) {
 				let currencyBlock:InfoItemBlock = new InfoItemBlock();
-				currencyBlock.setTitle("Contract Information");
+				currencyBlock.setTitle(this.translate.instant('arenella-listing-contract-information'));
 				if	(selectedListing!.type) {
-					currencyBlock.addRow(new InfoItemRowKeyValue("Contract Type",this.getContractType(selectedListing!.type)));
+					currencyBlock.addRow(new InfoItemRowKeyValue(this.translate.instant('arenella-listing-contract-type'),this.getContractType(selectedListing!.type)));
 				}
 				if	(selectedListing!.currency) {
-					currencyBlock.addRow(new InfoItemRowKeyValue("Renumeration",selectedListing!.currency + " : " + selectedListing!.rate));
+					currencyBlock.addRow(new InfoItemRowKeyValue(this.translate.instant('arenella-listing-reumeration'),selectedListing!.currency + " : " + selectedListing!.rate));
 				}
 				this.infoItemConfig.addItem(currencyBlock);
 			}
 		
 			//Recruiter Block
 			let experienceBlock:InfoItemBlock = new InfoItemBlock();
-			experienceBlock.setTitle("Years Experience");
+			experienceBlock.setTitle(this.translate.instant('arenella-listing-years-experience'));
 			experienceBlock.addRow(new InfoItemRowSingleValue(selectedListing!.yearsExperience));
 			this.infoItemConfig.addItem(experienceBlock);
 		
 			//Languages Block
 			if (selectedListing!.languages.length > 0) {
 				let languagesBlock:InfoItemBlock = new InfoItemBlock();
-				languagesBlock.setTitle("Languages");
+				languagesBlock.setTitle(this.translate.instant('arenella-listing-language'));
 				selectedListing!.languages.forEach(lang => {
 					languagesBlock.addRow(new InfoItemRowSingleValue(this.getLanguage(lang)));	
 				});
@@ -308,7 +312,7 @@ export class ListingComponent implements OnInit {
 			//Skills Block
 			if ( selectedListing!.skills.length > 0) {
 				let skillsBlock:InfoItemBlock = new InfoItemBlock();
-				skillsBlock.setTitle("Skills");
+				skillsBlock.setTitle(this.translate.instant('arenella-listing-skills'));
 				skillsBlock.addRow(new InfoItemRowMultiValues(selectedListing!.skills, "skill"));
 				this.infoItemConfig.addItem(skillsBlock);
 			}

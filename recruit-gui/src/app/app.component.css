@@ -94,12 +94,12 @@
 
 .signup-recruiter{
 	background:orange;
-	width:165px;
+	width:175px;
 }
 
 .signup-candidate{
 	background:darkgreen;
-	width:165px;
+	width:175px;
 }
 
 @media (max-width:700px)  {

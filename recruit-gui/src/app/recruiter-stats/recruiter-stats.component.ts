@@ -5,6 +5,7 @@ import { ChartData}										from './chart-data';
 import { NgChartsModule } 								from 'ng2-charts';
 import { Router}										from '@angular/router';
 import { Chart, ChartType } from 'chart.js';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-recruiter-stats',
@@ -15,9 +16,9 @@ export class RecruiterStatsComponent implements OnInit{
 	
 	private recruiterId:string 									= "";
 	public  listingStatistics:RecruiterListingStatistics 		= new RecruiterListingStatistics();
-	public  listingViewsChart:ChartData 						= new ChartData("Post views");
-	public  availabilityChart:ChartData 						= new ChartData("Candidate Availability");
-	public  jobboardChart:ChartData 							= new ChartData("Jobboard Views");
+	public  listingViewsChart:ChartData 						= new ChartData(this.translate.instant('stat-post-views'));
+	public  availabilityChart:ChartData 						= new ChartData(this.translate.instant('stat-candidate-availability'));
+	public  jobboardChart:ChartData 							= new ChartData(this.translate.instant('stat-jobboard-views'));
 	public	selectedListing:string								= "all";
 	public	currentTab:string									= "general-stats";
 	public 	totalNumberActiveCandidates:number 					= 0;
@@ -37,7 +38,7 @@ export class RecruiterStatsComponent implements OnInit{
 	* Constructor
 	* @param statisticsService - Services relating to statistics
 	*/
-	public constructor(public statisticsService:StatisticsService, private router:Router){
+	public constructor(public statisticsService:StatisticsService, private router:Router, private translate: TranslateService){
 		//this.refreshData();
 	}
 
@@ -67,17 +68,14 @@ export class RecruiterStatsComponent implements OnInit{
 				
 			});
 			
-			//START
 			this.availabilityChartData = [
 	           	{
-	            label: "Todays Logins",
+	            label: this.translate.instant('stat-todays-logins'),
 	       	    data: functionStatCount,
 	            backgroundColor: this.chartColor
 	          },
 	        	];
 			this.availabilityChartLabels = functionStatName; 
-			//this.switchTab(this.currentTab);
-			//END
 			
     	});
     	
@@ -91,7 +89,7 @@ export class RecruiterStatsComponent implements OnInit{
 					
 					this.listingsChartData = [
 			           	{
-			            label: "Job Board Views",
+			            label: this.translate.instant('stat-job-board-views'),
 			       	    data: this.listingViewWeekValues,
 			            backgroundColor: this.chartColor
 			          },
@@ -164,7 +162,7 @@ export class RecruiterStatsComponent implements OnInit{
 		
 		let values = this.selectedListingsChartData = [
 			           	{
-			            label: "Listing View",
+			            label: this.translate.instant('stat-listing-views'),
 			       	    data: stats.map(s => ''+s.count),
 			            backgroundColor: this.chartColor
 			          },

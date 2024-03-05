@@ -7,6 +7,7 @@ import { NgbModal}								from '@ng-bootstrap/ng-bootstrap'
 import { UntypedFormGroup, UntypedFormControl }	from '@angular/forms';
 import {RecruiterUpdateRequest }				from './recruiter-update-request';
 import { CreditsService } 						from '../credits.service';
+import { TranslateService } 					from '@ngx-translate/core';
 
 /**
 * Component to allow the Recruiter to aministrate their 
@@ -19,20 +20,21 @@ import { CreditsService } 						from '../credits.service';
 })
 export class RecruiterAccountComponent implements OnInit {
 
-	public isMobile:boolean = false;
-	public mobCss:string = "";
-	public subscriptionSelectionMobCss = "";
-	public accountDetailsMobCss = "";
-	public showBillingDetails:boolean = false;
-	public selectedSubscriptionOption:string = "";
-	public isCreditBasedSubscription:boolean = false;
+	public isMobile:boolean 					= false;
+	public mobCss:string 						= "";
+	public subscriptionSelectionMobCss 			= "";
+	public accountDetailsMobCss 				= "";
+	public showBillingDetails:boolean 			= false;
+	public selectedSubscriptionOption:string 	= "";
+	public isCreditBasedSubscription:boolean 	= false;
 	
 	/**
 	* Constructor
 	*/
-	constructor(private recruiterService:RecruiterService, 
-				private router: Router, 
-				private creditsService: CreditsService) { 
+	constructor(private recruiterService:		RecruiterService, 
+				private router: 				Router, 
+				private creditsService: 		CreditsService,
+				private translate:				TranslateService) { 
 					
 		this.creditsService.isPurchaseSubscription().subscribe(value => {
 			this.creditsService.setPurchaseSubscription(false);
@@ -394,6 +396,20 @@ export class RecruiterAccountComponent implements OnInit {
 			console.log(JSON.stringify(err));		
 		});
 	
+	}
+	
+	/**
+	* Gets human readable translation for country code 
+	*/
+	public getLang(langCode:string):string{
+								
+		switch(langCode){
+			case 'ENGLISH': {return this.translate.instant('arenella-recruiter-account-english');}
+			case 'DUTCH': {return this.translate.instant('arenella-recruiter-account-dutch');}
+			case 'FRENCH': {return this.translate.instant('arenella-recruiter-account-french');}
+			default: {return langCode;}
+		}
+		
 	}
 	
 }

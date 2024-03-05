@@ -12,8 +12,11 @@
 				C{{savedCandidate.candidate.candidateId}}
 			</div>
 			<div class="suggestion-icon-body">
-				<div>
+				<div *ngIf="!isNoLongerAvailableSC(savedCandidate)">
 					{{savedCandidate.candidate.firstname}} {{savedCandidate.candidate.surname}}
+				</div>
+				<div *ngIf="isNoLongerAvailableSC(savedCandidate)">
+					{{'saved-candidate-no-longer-available' |translate}}
 				</div>
 				<div>
 					{{savedCandidate.candidate.roleSought}}

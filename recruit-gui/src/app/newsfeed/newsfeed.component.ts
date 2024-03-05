@@ -1,4 +1,5 @@
 import { Component } 							from '@angular/core';
+import { TranslateService } 					from '@ngx-translate/core';
 import { NewsfeedService }						from '../newsfeed.service';
 import { NewsFeedItem, NewsFeedItemLine } 		from './news-feed-item';
 
@@ -40,7 +41,7 @@ export class NewsfeedComponent {
 	/**
 	* Constructor
 	*/
-	public constructor(private newsFeedService:NewsfeedService){
+	public constructor(private newsFeedService:NewsfeedService, private translate:TranslateService){
 		sessionStorage.removeItem("news-item-div-id");
 		this.newsFeedService.getNewsFeedItems().subscribe(newsFeedItems => {
 			this.newsFeedItems = newsFeedItems;
@@ -67,14 +68,14 @@ export class NewsfeedComponent {
 	public getHumanReadableType(item:NewsFeedItem):string{
 		
 		switch(item.itemType){
-			case "CANDIDATE_CV_UPDATED":{			return "Candidate - CV Updated";}
-			case "CANDIDATE_PROFILE_UPDATED":{		return "Candidate - Updated";}
-			case "TODAYS_CANDIDATES":{				return "Todays Candidates";}
-			case "CANDIDATE_ADDED":{				return "Candidate - Added";}
-			case "CANDIDATE_DELETED":{				return "Candidate - Deleted";} 
-			case "CANDIDATE_BECAME_UNAVAILABLE":{	return "Candidate - Unavailable";}
-			case "CANDIDATE_BECAME_AVAILABLE":{		return "Candidate - Available";}
-			case "USER_POST":{						return "Na";}
+			case "CANDIDATE_CV_UPDATED":{			return this.translate.instant('newsfeed-cv-updated');}//"Candidate - CV Updated";}
+			case "CANDIDATE_PROFILE_UPDATED":{		return this.translate.instant('newsfeed-candidate-updated');}//"Candidate - Updated";}
+			case "TODAYS_CANDIDATES":{				return this.translate.instant('newsfeed-todays-candidates');}//"Todays Candidates";}
+			case "CANDIDATE_ADDED":{				return this.translate.instant('newsfeed-candidate-added');}//Candidate - Added";}
+			case "CANDIDATE_DELETED":{				return this.translate.instant('newsfeed-candidate-deleted');}//"Candidate - Deleted";} 
+			case "CANDIDATE_BECAME_UNAVAILABLE":{	return this.translate.instant('newsfeed-candidate-unavailable');}//"Candidate - Unavailable";}
+			case "CANDIDATE_BECAME_AVAILABLE":{		return this.translate.instant('newsfeed-candidate-available');}//"Candidate - Available";}
+			case "USER_POST":{						return this.translate.instant('newsfeed-na');}//"Na");}
 			default:{
 				return item.itemType;
 			} 

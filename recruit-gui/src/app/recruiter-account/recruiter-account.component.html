@@ -52,7 +52,7 @@
 					</tr>
 					<tr>
 						<td class="table-left-hdr">{{'arenella-recruiter-account-lang' | translate}}</td>
-						<td class="table-cell" *ngIf="!isInEditMode"><label>{{recruiter.language}}</label></td>
+						<td class="table-cell" *ngIf="!isInEditMode"><label>{{getLang(recruiter.language)}}</label></td>
 						<td class="table-cell" *ngIf="isInEditMode">
 						 	<select  formControlName="language">
 								<option value="ENGLISH" >{{'arenella-recruiter-account-english' | translate}}</option>

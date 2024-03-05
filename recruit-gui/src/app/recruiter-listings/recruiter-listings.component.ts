@@ -16,9 +16,11 @@ import { FormBeanNewListing } 							from '../listing/form-bean-new-listing';
 import { FormBeanMarketPlace } 							from '../listing/form-bean-market-place';
 import { FormBeanFilterByJobSpec } 						from '../listing/form-bean-filter-by-jobspec';
 import { HtmlOption } 									from '../html-option';
-import { StaticDataService } from '../static-data.service';
+import { StaticDataService } 							from '../static-data.service';
 import { InfoItemBlock, InfoItemConfig, InfoItemRowKeyValue, InfoItemRowMultiValues, InfoItemRowSingleValue } from '../candidate-info-box/info-item';
-import { ContractType } from '../suggestions/contract-type';
+import { ContractType } 								from '../suggestions/contract-type';
+import { TranslateService } 							from '@ngx-translate/core';
+
 
 @Component({
   selector: 'app-recruiter-listings',
@@ -79,7 +81,8 @@ export class RecruiterListingsComponent implements OnInit {
 				public 	router:						Router,
 				private marketplaceService: 		RecruiterMarketplaceService,
 				private creditsService:				CreditsService,
-				private staticDataService:			StaticDataService) {
+				private staticDataService:			StaticDataService,
+				private translate:					TranslateService) {
 				
 				this.recruiterProfileService.fetchOwnRecruiterProfile().subscribe(rec => {
 					this.recruiterProfile = rec;
@@ -344,20 +347,20 @@ export class RecruiterListingsComponent implements OnInit {
 	
 			//Recruiter Block
 			let recruiterBlock:InfoItemBlock = new InfoItemBlock();
-			recruiterBlock.setTitle("Recruiter Details");
-			recruiterBlock.addRow(new InfoItemRowKeyValue("Name",selectedListing!.ownerName));
-			recruiterBlock.addRow(new InfoItemRowKeyValue("Company",selectedListing!.ownerCompany));
+			recruiterBlock.setTitle(this.translate.instant('arenella-recruiter-listing-recruiter-details'));//"Recruiter Details");
+			recruiterBlock.addRow(new InfoItemRowKeyValue(this.translate.instant('arenella-recruiter-listing-name'),selectedListing!.ownerName));
+			recruiterBlock.addRow(new InfoItemRowKeyValue(this.translate.instant('arenella-recruiter-listing-company'),selectedListing!.ownerCompany));
 			this.infoItemConfig.addItem(recruiterBlock);
 		
 			//Location Block
 			if (selectedListing!.country || selectedListing!.location) {
 				let locationBlock:InfoItemBlock = new InfoItemBlock();
-				locationBlock.setTitle("Location");
+				locationBlock.setTitle(this.translate.instant('arenella-recruiter-listing-location'));
 				if	(selectedListing!.country) {
-					locationBlock.addRow(new InfoItemRowKeyValue("Country",this.getCountryCode(selectedListing!.country)));
+					locationBlock.addRow(new InfoItemRowKeyValue(this.translate.instant('arenella-recruiter-listing-country'),this.getCountryCode(selectedListing!.country)));
 				}
 				if	(selectedListing!.location) {
-					locationBlock.addRow(new InfoItemRowKeyValue("City",selectedListing!.location));
+					locationBlock.addRow(new InfoItemRowKeyValue(this.translate.instant('arenella-recruiter-listing-city'),selectedListing!.location));
 				}
 				this.infoItemConfig.addItem(locationBlock);
 			}
@@ -365,26 +368,26 @@ export class RecruiterListingsComponent implements OnInit {
 			//Contract Block
 			if (selectedListing!.type || selectedListing!.currency) {
 				let currencyBlock:InfoItemBlock = new InfoItemBlock();
-				currencyBlock.setTitle("Contract Information");
+				currencyBlock.setTitle(this.translate.instant('arenella-recruiter-listing-contract-information'));
 				if	(selectedListing!.type) {
-					currencyBlock.addRow(new InfoItemRowKeyValue("Contract Type",this.getContractType(selectedListing!.type)));
+					currencyBlock.addRow(new InfoItemRowKeyValue(this.translate.instant('arenella-recruiter-listing-contract-type'),this.getContractType(selectedListing!.type)));
 				}
 				if	(selectedListing!.currency) {
-					currencyBlock.addRow(new InfoItemRowKeyValue("Renumeration",selectedListing!.currency + " : " + selectedListing!.rate));
+					currencyBlock.addRow(new InfoItemRowKeyValue(this.translate.instant('arenella-recruiter-listing-renumeration'),selectedListing!.currency + " : " + selectedListing!.rate));
 				}
 				this.infoItemConfig.addItem(currencyBlock);
 			}
 		
 			//Recruiter Block
 			let experienceBlock:InfoItemBlock = new InfoItemBlock();
-			experienceBlock.setTitle("Years Experience");
+			experienceBlock.setTitle(this.translate.instant('arenella-recruiter-listing-years-experience'));
 			experienceBlock.addRow(new InfoItemRowSingleValue(selectedListing!.yearsExperience));
 			this.infoItemConfig.addItem(experienceBlock);
 		
 			//Languages Block
 			if (selectedListing!.languages.length > 0) {
 				let languagesBlock:InfoItemBlock = new InfoItemBlock();
-				languagesBlock.setTitle("Languages");
+				languagesBlock.setTitle(this.translate.instant('arenella-recruiter-listing-languages'));
 				selectedListing!.languages.forEach(lang => {
 					languagesBlock.addRow(new InfoItemRowSingleValue(this.getLanguage(lang)));	
 				});
@@ -394,12 +397,11 @@ export class RecruiterListingsComponent implements OnInit {
 			//Skills Block
 			if ( selectedListing!.skills.length > 0) {
 				let skillsBlock:InfoItemBlock = new InfoItemBlock();
-				skillsBlock.setTitle("Skills");
+				skillsBlock.setTitle(this.translate.instant('arenella-recruiter-listing-skills'));
 				skillsBlock.addRow(new InfoItemRowMultiValues(selectedListing!.skills, "skill"));
 				this.infoItemConfig.addItem(skillsBlock);
 			}
-		
-				
+			
 		}
 		
 	}

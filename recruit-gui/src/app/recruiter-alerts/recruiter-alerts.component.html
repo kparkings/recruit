@@ -26,10 +26,10 @@
 				<tr *ngFor="let alert of alerts">
 					<td>{{alert.alertName}}</td>
 					<td>
-						<div style="float:right;width:170px">
-							<button class="btn btn-secondary small-action-btn" *ngIf="alertToDeleteId != alert"  (click)="deleteAlert(alert)">{{'arenella-recruiter-alerts-btn-delete' | translate}}</button>
-							<button class="btn btn-secondary small-action-btn small-action-btn-confirm-del" *ngIf="alertToDeleteId === alert" (click)="confirmDeleteAlert()">{{'arenella-recruiter-alerts-btn-confirm' | translate}}</button>
-							<button class="btn btn-secondary small-action-btn" *ngIf="alertToDeleteId === alert" (click)="cancelDeleteAlert()">{{'arenella-recruiter-alerts-btn-cancel' | translate}}</button>
+						<div style="float:right">
+							<button class="btn btn-secondary arenella-btn alert-btn" *ngIf="alertToDeleteId != alert"  (click)="deleteAlert(alert)">{{'arenella-recruiter-alerts-btn-delete' | translate}}</button>
+							<button class="btn btn-secondary arenella-btn alert-btn small-action-btn-confirm-del" *ngIf="alertToDeleteId === alert" (click)="confirmDeleteAlert()">{{'arenella-recruiter-alerts-btn-confirm' | translate}}</button>
+							<button class="btn btn-secondary arenella-btn alert-btn" *ngIf="alertToDeleteId === alert" (click)="cancelDeleteAlert()">{{'arenella-recruiter-alerts-btn-cancel' | translate}}</button>
 						</div>
 					</td>
 											

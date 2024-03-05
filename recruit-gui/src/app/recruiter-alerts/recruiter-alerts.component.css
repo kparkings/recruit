@@ -17,13 +17,13 @@
 	word-wrap:break-word;
 }
 
-
-.Xsmall-action-btn{
-	width:100px;
-	float:right;
-}
-
 .small-action-btn-confirm-del{
 	background:red;
 	margin-right:5px;
-} 
+}
+
+@media (max-width: 700px){
+	.alert-btn {
+    	 width: 100%; 
+    }
+}

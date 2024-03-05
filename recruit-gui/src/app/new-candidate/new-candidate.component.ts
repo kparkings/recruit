@@ -13,7 +13,7 @@ import { CandidateProfile } 							from '../candidate-profile';
 import { CandidateNavService } 							from '../candidate-nav.service';
 import { LanguageOption } 								from './language-option';
 import { AppComponent} 									from '../app.component';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslateService } 							from '@ngx-translate/core';
 
 @Component({
   selector: 'app-new-candidate',
