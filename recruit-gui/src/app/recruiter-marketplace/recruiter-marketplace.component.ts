@@ -747,23 +747,23 @@ export class RecruiterMarketplaceComponent implements OnInit {
 		
 		if (this.showSupplyDetails) {
 			this.emailService.sendMarketplaceContactRequestOfferedCandidateEmail(emailRequest, this.activeCandidate).subscribe(body => {
-				this.contactRecruiterView = this.translate.instant('success');
+				this.contactRecruiterView = 'success';
 				this.sendMessageGroup = new UntypedFormGroup({
 					message: new UntypedFormControl('')
 				});
 			}, err => {
-				this.contactRecruiterView = this.translate.instant('failure');
+				this.contactRecruiterView = 'failure';
 			});
 		}
 		
 		if (this.showDemandDetails) {
 			this.emailService.sendMarketplaceContactRequestOpenPositionEmail(emailRequest, this.activeOpenPosition).subscribe(body => {
-				this.contactRecruiterView = this.translate.instant('success');
+				this.contactRecruiterView = 'success';
 				this.sendMessageGroup = new UntypedFormGroup({
 					message: new UntypedFormControl('')
 				});
 			}, err => {
-				this.contactRecruiterView = this.translate.instant('failure');
+				this.contactRecruiterView = 'failure';
 			});
 		}
 		
