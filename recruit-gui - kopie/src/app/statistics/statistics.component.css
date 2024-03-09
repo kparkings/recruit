@@ -1,0 +1,102 @@
+.stats-table{
+	margin-left:20px;
+	margin-right:20px;
+	vertical-align:middle;
+	margin:0 auto;
+    width:98%;
+    margin-top:25px;
+}
+
+.statsChartTab{
+	cursor:pointer;
+}
+
+chart-wrapper-page{
+	width:90%;
+}
+.chart-wrapper{
+	min-width:45%;
+	margin:20px;
+}
+
+.new-candidate-table-td{
+	padding-right:10px;
+}
+
+.stat-btn{
+	width:260px;
+	margin-bottom:10px;
+}
+
+.toggle-view{
+	background:green;
+	margin-right:15px;
+}
+
+.login-table-view{
+	margin-top:20px;
+	overflow:auto;
+	height:265px;
+	border:1px solid black;
+	width:100%;
+}
+
+
+.login-table-view table thead tr th{
+	background:#6c757d;
+	text-align:left;
+	padding:10px;
+}
+
+.login-table-view table tbody tr{
+	cursor:pointer;
+}
+
+.login-table-view table tbody tr:hover{
+	cursor:pointer;
+	background:green;
+	padding:10px;
+}
+
+.login-table-view table tbody tr td{
+	cursor:pointer;
+	padding:5px;
+}
+
+.recruiter-stats{
+	margin-top:20px;
+	min-width:300px;
+	overflow:auto;
+	height:265px;
+	border:1px solid black;
+	width:100%;
+	padding:5px;
+}
+
+.border-top{
+	padding-top:20px;
+	padding-left:20px;
+}
+
+.stat-canvas{
+	width:50%;
+	min-width:380px;
+	max-width:90%;
+	float:left;
+	padding:5px;
+	padding-right:0px;
+	margin-bottom:40px;
+}
+
+.statChartDiv{
+	width:90%;
+}
+
+.listing-country{
+	padding-left:5px;
+	margin-left:5px;
+}
+
+.stat-cart-div-mobile{
+	width:100%;
+}

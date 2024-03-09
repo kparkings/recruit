@@ -1,0 +1,100 @@
+<div class="page">
+
+	<!-- Nav options -->
+	<div class="nav-tabs-bar">
+		<ul class="nav nav-tabs">
+			<li class="nav-item">
+				<span class="nav-link statsChartTabX" (click)="switchTab('general-stats')">{{'arenella-recruiter-stats-general' | translate}}</span>
+			</li>
+			<li>
+				<span class="nav-link statsChartTabX" (click)="switchTab('jobboard-stats')">{{'arenella-recruiter-stats-jobboard' | translate}}</span>
+			</li>
+		</ul>
+	</div>
+	
+	<div class="page-body">
+	
+		<!-- Action Buttons -->
+		<div class="action-buttons">
+			<button class="btn btn-secondary arenella-btn" (click)="refreshData()">{{'arenella-recruiter-stats-btn-refresh' | translate}}</button>
+		</div>
+		
+		<div *ngIf="currentTab == 'jobboard-stats' && listingStatistics.listingStats.length == 0" class="no-posts">
+			<h2>{{'arenella-recruiter-stats-jb-stats' | translate}}</h2>
+			<br>
+			<p>{{'arenella-recruiter-stats-jb-stats-1' | translate}}</p>
+			<p>{{'arenella-recruiter-stats-jb-stats-2' | translate}}</p>
+			<p>{{'arenella-recruiter-stats-jb-stats-3' | translate}}</p>
+			<p>{{'arenella-recruiter-stats-jb-stats-4' | translate}}</p>
+		</div>
+		
+		<!-- Main panel -->
+		<div class="chart-data-panel-page">	
+		
+			<!-- TOP -->
+			<div class="chart-panel">
+				<div *ngIf="currentTab == 'general-stats'">
+					<h2>{{'arenella-recruiter-stats-gen-hdr' | translate}}</h2>
+					<h5>{{'arenella-recruiter-stats-totals' | translate}}</h5>
+					<table>
+						<tr>
+							<td>{{'arenella-recruiter-stats-gen-active-users' | translate}}</td>
+							<td>{{totalNumberActiveCandidates}}</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+			<div *ngIf="currentTab == 'jobboard-stats' &&listingStatistics.listingStats.length > 0">	
+				<div class="chart-panel listing-filter-panel">
+					<table>
+						<thead>
+							<tr>
+								<th>{{'arenella-recruiter-stats-gen-filter-by-post' | translate}}</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr *ngFor="let ls of listingStatistics.listingStats" (click)="switchListing(ls.listingId)">
+								<td *ngIf="ls.listingId == selectedListing" class="selectedListing">{{ls.title}}</td>
+								<td *ngIf="ls.listingId != selectedListing">{{ls.title}}</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div>	
+					<h3 style="margin-left:20px;">{{listingViewsChart.chartTitle | translate}}</h3>
+				</div>
+			</div>
+			<div class="chart-panel">
+				<div class="stat-canvas">
+					<canvas  id="topChart" >{{ topChart }}</canvas>
+				<div>
+			</div>
+		
+			<!-- BOTTOM -->
+			<div class="chart-panel" style="margin-top:40px;">
+				<div *ngIf="currentTab == 'general-stats'">
+					<h2>{{'arenella-recruiter-stats-jb-views' | translate}}</h2>
+					<h5>{{'arenella-recruiter-stats-jb-totals' | translate}}:</h5>
+					<table>
+						<tr>
+							<td>{{'arenella-recruiter-stats-jb-views-today' | translate}}</td>
+							<td>{{listingViewsToday}}</td>
+						</tr>
+						<tr>
+							<td>{{'arenella-recruiter-stats-jb-views-this-week' | translate}}</td>
+							<td>{{listingViewsThisWeek}}</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+			<div class="chart-panel">
+				<div class="chart-panel">
+					<div class="stat-canvas">
+						<canvas  id="bottomChart" >{{ bottomChart }}</canvas>
+					<div>
+				</div>	
+			</div>
+			<div class="chart-panel">
+		</div>
+	</div>
+</div>

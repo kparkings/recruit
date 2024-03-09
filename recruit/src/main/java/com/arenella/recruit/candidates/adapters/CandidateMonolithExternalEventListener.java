@@ -76,12 +76,28 @@ public class CandidateMonolithExternalEventListener implements CandidateExternal
 	@Override
 	public void listenForSubscriptionAddedEvent(SubscriptionAddedEvent event) {
 		if(event.getSubscriptionType() != subscription_type.CREDIT_BASED_SUBSCRIPTION) {
-			this.candidateService.updateCreditsForUser(event.getRecruiterId(), RecruiterCredit.DISABLED_CREDITS);
+			this.candidateService.updateCreditsForUser(event.getRecruiterId(), RecruiterCredit.DISABLED_CREDITS, Optional.of(this.isPaidSubscription(event)));
 		} else {
-			this.candidateService.updateCreditsForUser(event.getRecruiterId(), RecruiterCredit.DEFAULT_CREDITS);
+			this.candidateService.updateCreditsForUser(event.getRecruiterId(), RecruiterCredit.DEFAULT_CREDITS, Optional.of(false));
 		}
 	}
 
+	/**
+	* Returns whether the subscription is a paid subscription
+	* @param event - Contains infor about the subscription
+	* @return whether the subscription is a paid subscription
+	*/
+	private boolean isPaidSubscription(SubscriptionAddedEvent event) {
+		
+		return switch(event.getSubscriptionType()) {
+			case ONE_MONTH_SUBSCRIPTION, 
+				 THREE_MONTHS_SUBSCRIPTION, 
+				 SIX_MONTHS_SUBSCRIPTION, 
+				 YEAR_SUBSCRIPTION -> true;
+			default -> false;
+		};
+		
+	}
 	/**
 	* Refer to CandidateExternalEventListener for details 
 	*/

@@ -12,8 +12,9 @@ import com.arenella.recruit.candidates.beans.RecruiterCredit;
 */
 public class RecruiterCreditEntityTest {
 
-	final String 	RECRUITER_ID 	= "recruiter44";
-	final int 		CREDITS 		= 4;
+	private static final String 	RECRUITER_ID 		= "recruiter44";
+	private static final int 		CREDITS 			= 4;
+	private static final boolean 	PAID_SUBSCRIPTION 	= true;
 	
 	/**
 	* Tests construction via the Builder
@@ -27,10 +28,12 @@ public class RecruiterCreditEntityTest {
 				.builder()
 					.recruiterId(RECRUITER_ID)
 					.credits(CREDITS)
+					.paidSubscription(PAID_SUBSCRIPTION)
 				.build();
 		
-		assertEquals(RECRUITER_ID, 	entity.getRecruiterId());
-		assertEquals(CREDITS, 		entity.getCredits());
+		assertEquals(RECRUITER_ID, 		entity.getRecruiterId());
+		assertEquals(CREDITS, 			entity.getCredits());
+		assertEquals(PAID_SUBSCRIPTION, entity.hasPaidSubscription());
 		
 	}
 	
@@ -46,15 +49,18 @@ public class RecruiterCreditEntityTest {
 				.builder()
 					.recruiterId(RECRUITER_ID)
 					.credits(CREDITS)
+					.paidSubscription(PAID_SUBSCRIPTION)
 				.build();
 		
-		assertEquals(RECRUITER_ID, 	entity.getRecruiterId());
-		assertEquals(CREDITS, 		entity.getCredits());
+		assertEquals(RECRUITER_ID, 		entity.getRecruiterId());
+		assertEquals(CREDITS, 			entity.getCredits());
+		assertEquals(PAID_SUBSCRIPTION, entity.hasPaidSubscription());
 		
 		RecruiterCredit domain = CandidateRecruiterCreditEntity.convertFromEntity(entity);
 	
-		assertEquals(RECRUITER_ID, 	domain.getRecruiterId());
-		assertEquals(CREDITS, 		domain.getCredits());
+		assertEquals(RECRUITER_ID, 		domain.getRecruiterId());
+		assertEquals(CREDITS, 			domain.getCredits());
+		assertEquals(PAID_SUBSCRIPTION, domain.hasPaidSubscription());
 		
 	}
 
@@ -70,15 +76,18 @@ public class RecruiterCreditEntityTest {
 				.builder()
 					.recruiterId(RECRUITER_ID)
 					.credits(CREDITS)
+					.paidSubscription(PAID_SUBSCRIPTION)
 				.build();
 		
-		assertEquals(RECRUITER_ID, 	domain.getRecruiterId());
-		assertEquals(CREDITS, 		domain.getCredits());
+		assertEquals(RECRUITER_ID, 			domain.getRecruiterId());
+		assertEquals(CREDITS, 				domain.getCredits());
+		assertEquals(PAID_SUBSCRIPTION, 	domain.hasPaidSubscription());
 		
 		CandidateRecruiterCreditEntity entity = CandidateRecruiterCreditEntity.convertToEntity(domain);
 	
-		assertEquals(RECRUITER_ID, 	entity.getRecruiterId());
-		assertEquals(CREDITS, 		entity.getCredits());
+		assertEquals(RECRUITER_ID, 		entity.getRecruiterId());
+		assertEquals(CREDITS, 			entity.getCredits());
+		assertEquals(PAID_SUBSCRIPTION, entity.hasPaidSubscription());
 		
 	}
 

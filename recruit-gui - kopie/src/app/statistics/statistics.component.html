@@ -1,0 +1,193 @@
+<div class="page">
+	<div>
+		
+		<!-- Nav options -->
+		<div class="nav-tabs-bar">	
+			<ul class="nav nav-tabs">
+			  <li class="nav-item">
+			    <span class="nav-link statsChartTab" (click)="switchTab('logins')">{{'arenella-stats-logins' | translate}}</span>
+			  </li>
+			  <li class="nav-item">
+			    <span class="nav-link statsChartTab" (click)="switchTab('downloads')">{{'arenella-stats-downloads' | translate}}</span>
+			  </li>
+			   <li class="nav-item statsChartTab">
+			    <span class="nav-link" (click)="switchTab('listings')">{{'arenella-stats-listings' | translate}}</span>
+			  </li>
+			  <li class="nav-item statsChartTab">
+			    <span class="nav-link" (click)="switchTab('marketplace')">{{'arenella-stats-mp' | translate}}</span>
+			  </li>
+			  <li class="nav-item statsChartTab">
+			    <span class="nav-link" (click)="switchTab('availability')">{{'arenella-stats-availability' | translate}}</span>
+			  </li>
+			  <li class="nav-item statsChartTab">
+			    <span class="nav-link" (click)="switchTab('newCandidateStats')">{{'arenella-stats-new-candidates' | translate}}New Candidate Stats</span>
+			  </li>
+			</ul>
+		</div>
+		
+		<div class="page-body">
+	
+			<!-- Action buttons -->
+			<div class="action-buttons">
+				<button class="btn btn-secondary arenella-btn" (click)="refreshData()" download>{{'arenella-stats-btn-refresh' | translate}}</button>
+			</div>
+				
+			<!--  Define charts -->
+			<div >
+				<div class="stat-canvas">
+					<!-- Logins -->
+					<div *ngIf="showStatsLogins">
+						<h3>{{'arenella-stats-logins-title' | translate}}</h3>
+						<button (click)="switchLoginStats('year')">{{'arenella-stats-logins-btn-year' | translate}}</button>
+						<button (click)="switchLoginStats('3months')">{{'arenella-stats-logins-btn-3-months' | translate}}</button>
+						<button (click)="switchLoginStats('week')">{{'arenella-stats-logins-btn-week' | translate}}</button>
+					</div>
+					<!-- Downloads -->
+					<div *ngIf="showStatsDownloads" style="margin-bottom:45px;">
+						<h3>{{'arenella-stats-daily-downloads' | translate}}</h3>
+					</div>
+					<!-- Marketplace -->
+					<div class="chart-wrapper" *ngIf="showMarketplaceStats">			
+						<h3>{{'arenella-stats-candidate-views' | translate}}: {{requestedCandidateViewsTotal}}</h3>
+						<button (click)="switchMarketplaceRequestedCandidatesChartData('week')">{{'arenella-stats-candidate-views-btn-week' | translate}}</button>
+						<button (click)="switchMarketplaceRequestedCandidatesChartData('day')">{{'arenella-stats-candidate-views-btn-today' | translate}}</button>
+					</div>
+					<!-- Availability -->
+					<div class="chart-wrapper" *ngIf="showStatsAvailability">
+						<h5>{{'arenella-stats-by-function' | translate}}</h5>
+					</div>
+					<!-- New Candidate Stats -->
+					<div class="action-buttons" *ngIf="showNewCandidates" style="float:left">
+						<button class="btn btn-secondary arenella-btn" (click)="loadNewCandidates()" 		download>{{'arenella-stats-by-function-btn-todays' | translate}}</button>
+						<button class="btn btn-secondary arenella-btn" (click)="loadNewCandidateStats()" 	download>{{'arenella-stats-by-function-btn-latest' | translate}}</button>
+					</div>	
+					<div class="statChartDiv {{statChartDivMobile}}">
+						<canvas  id="leftChart" >{{ leftChart }}</canvas>	
+					</div>
+				</div>
+				
+				<div class="stat-canvas">
+					<!-- Logins -->
+					<div *ngIf="showStatsLogins">
+						<h3>{{'arenella-stats-logins-recruiters' | translate}} {{loginCountRecruiter}} {{'arenella-stats-logins-candidates' | translate}}: {{loginCountCandidate}}</h3>
+						<button (click)="switchUserStats('week')">{{'arenella-stats-logins-btn-this-week' | translate}}</button>
+						<button (click)="switchUserStats('today')">{{'arenella-stats-logins-btn-today' | translate}}</button>
+					</div>	
+						
+					<!-- Downloads -->
+					<div *ngIf="showStatsDownloads">
+						<h3>{{'arenella-stats-recruiter-downloads' | translate}}: {{chartDownloadsTotal}}</h3>
+						<button (click)="switchChartData('week')">{{'arenella-stats-recruiter-downloads-btn-week' | translate}}</button>
+						<button (click)="switchChartData('day')">{{'arenella-stats-recruiter-downloads-btn-today' | translate}}</button>
+					</div>
+					<!-- Listings -->
+					<div *ngIf="showStatsListings">
+						<div class="chart-wrapper">
+							<h5>{{'arenella-stats-recruiter-downloads-totals' | translate}}:</h5>
+							<table>
+								<tr>
+									<td>{{'arenella-stats-recruiter-downloads-views-today' | translate}}</td>
+									<td>{{listingViewsToday}}</td>
+								</tr>
+								<tr>
+									<td>{{'arenella-stats-recruiter-downloads-views-week' | translate}}</td>
+									<td>{{listingViewsThisWeek}}</td>
+								</tr>
+							</table>
+						</div>
+					</div>
+					<!-- Availability -->
+					<div class="chart-wrapper" *ngIf="showStatsAvailability">
+						<h5>{{'arenella-stats-availability-totals' | translate}}:</h5>
+						<table>
+							<tr>
+								<td>{{'arenella-stats-availability-active-users' | translate}}</td>
+								<td>{{totalNumberActiveCandidates}}</td>
+							</tr>
+						</table>
+					</div>
+					<!-- Weekly Stats -->
+					<div *ngIf="showNewCandidates && showNewCandidatesDiv">
+					<p>{{'arenella-stats-new-candidates' | translate}}
+						
+					</p>
+					<br/>
+					<ul *ngFor="let candidate of newCandidates">
+						<li>{{countryToCode(candidate.country)}} - {{'arenella-stats-new-candidates-exp' | translate}}: {{candidate.yearsExperience}} {{'arenella-stats-new-candidates-years' | translate}} - {{candidate.functionDesc}}</li>	
+					</ul>
+					<br/>
+					<p>
+						https://www.arenella-ict.com
+					</p>
+					<p>
+						#available #looking #lookingforwork #itcandidates #ictkandidaten #candidate #kandidaat
+						#itjobboard #ictojobboard #beschikbaar #it #ict #opentowork #seeking 
+					</p>
+					</div>
+					<div *ngIf="showNewCandidates && showNewCandidateStatsDiv" class="stats-table">
+						<p>{{'arenella-stats-added-candidates' | translate}}</p>
+						<table>
+						<tr *ngFor="let candidateStat of newCandidateStats">
+							<td class="new-candidate-table-td">{{candidateStat.count}}</td>  <td class="new-candidate-table-td">x</td> <td class="new-candidate-table-td">{{candidateStat.functionType}}</td>
+						</tr>
+						</table>
+					</div>
+					<div class="statChartDiv {{statChartDivMobile}}">
+						<canvas  id="rightChart">{{ rightChart }}</canvas>	
+					</div>
+				</div>
+			</div>
+	
+			<!-- Logins -->		
+			<div *ngIf="showStatsLogins">
+						
+				<div class="chart-wrapper-page">		
+					
+					<div class="chart-wrapper">
+						<div class="login-table-view">
+							<table style="width:100%">
+								<thead>
+									<tr>
+										<th>{{'arenella-stats-logins-user' | translate}}</th>
+									</tr>
+								</thead>
+								<tbody>  
+									<tr *ngFor="let user of recruiterLoginsChartLabels" (click)="switchUserStatsView('table', user)">
+										<td>{{user}}</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<div class="chart-wrapper" >
+						<h3>{{'arenella-stats-searches' | translate}}</h3>
+						<button (click)="switchUserStats('week')">{{'arenella-stats-searches-btn-week' | translate}}</button>
+						<button (click)="switchUserStats('today')">{{'arenella-stats-searches-btn-today' | translate}}</button>
+						<div class="login-table-view">
+						<table style="width:100%">
+								<thead>
+									<tr>
+										<th>{{'arenella-stats-searches-country' | translate}}</th>
+										<th>{{'arenella-stats-searches-function' | translate}}</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr *ngFor="let search of recruiterStats.uniqueSearches">
+										<td *ngIf="search.country === 'NETHERLANDS'"  			class="flag-icon flag-icon-nl suggestion-flag-country listing-country"></td>
+										<td *ngIf="search.country === 'BELGIUM'"				class="flag-icon flag-icon-be suggestion-flag-country listing-country"></td>
+										<td *ngIf="search.country === 'UK'"						class="flag-icon flag-icon-gb suggestion-flag-country listing-country"></td>
+										<td *ngIf="search.country === 'REPUBLIC_OF_IRELAND'"	class="flag-icon flag-icon-ie suggestion-flag-country listing-country"></td>
+										<td>{{getFunctionLabel(search.function)}}</td>
+									</tr>
+								</tbody>
+							</table>
+							
+						</div>
+					</div>
+				</div>
+				<div style="clear:both;margin-bottom:50px;"></div>
+			</div>
+			  
+		</div>
+	</div>
+</div>

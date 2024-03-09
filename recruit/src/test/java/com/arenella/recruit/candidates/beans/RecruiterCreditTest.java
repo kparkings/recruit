@@ -1,13 +1,15 @@
 package com.arenella.recruit.candidates.beans;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 import org.junit.jupiter.api.Test;
 
 public class RecruiterCreditTest {
 
-	final String 	RECRUITER_ID 	= "recruiter44";
-	final int 		CREDITS 		= 4;
+	final String 	RECRUITER_ID 		= "recruiter44";
+	final int 		CREDITS 			= 4;
+	final boolean 	PAID_SUBSCRIPTION 	= true;
 	
 	/**
 	* Tests credit default values
@@ -37,11 +39,12 @@ public class RecruiterCreditTest {
 				.builder()
 					.recruiterId(RECRUITER_ID)
 					.credits(CREDITS)
+					.paidSubscription(PAID_SUBSCRIPTION)
 				.build();
 		
-		assertEquals(RECRUITER_ID, 	recruiterCredit.getRecruiterId());
-		assertEquals(CREDITS, 		recruiterCredit.getCredits());
-		
+		assertEquals(RECRUITER_ID, 		recruiterCredit.getRecruiterId());
+		assertEquals(CREDITS, 			recruiterCredit.getCredits());
+		assertEquals(PAID_SUBSCRIPTION, recruiterCredit.hasPaidSubscription());
 	}
 	
 	/**
@@ -79,6 +82,29 @@ public class RecruiterCreditTest {
 		
 		assertEquals(0, 	recruiterCredit.getCredits());
 		
+	}
+	
+	/**
+	* Tests setters
+	* @throws Exception
+	*/
+	@Test
+	public void testSetters() throws Exception{
+		
+		RecruiterCredit recruiterCredit = 
+				RecruiterCredit
+				.builder()
+					.recruiterId(RECRUITER_ID)
+					.credits(CREDITS)
+					.paidSubscription(PAID_SUBSCRIPTION)
+				.build();
+		
+		assertEquals(PAID_SUBSCRIPTION, recruiterCredit.hasPaidSubscription());
+		
+		recruiterCredit.setPaidSubscription(!PAID_SUBSCRIPTION);
+	
+		assertNotEquals(PAID_SUBSCRIPTION, recruiterCredit.hasPaidSubscription());
+	
 	}
 	
 }

@@ -1,0 +1,291 @@
+<div class="page">
+
+	<!-- Nav options -->
+	<div class="nav-tabs-bar">
+		<ul class="nav nav-tabs">
+		  <li class="nav-item">
+		    <span class="nav-link tabNav" (click)="switchTab('recruiters')">{{'arenella-accounts-menu-recruiters' | translate}}</span>
+		  </li>
+		  <li class="nav-item tabNav">
+		    <span class="nav-link" (click)="switchTab('candidates')">{{'arenella-accounts-menu-candidates' | translate}}</span>
+		  </li>
+		  <li class="nav-item tabNav">
+		    <span class="nav-link" (click)="switchTab('availabilityChecks')">{{'arenella-accounts-menu-availability' | translate}}</span>
+		  </li>
+		<li class="nav-item tabNav">
+		    <span class="nav-link" (click)="switchTab('skillValidation')">{{'arenella-accounts-menu-skills' | translate}}</span>
+		  </li>
+		   <li class="nav-item tabNav">
+		    <span class="nav-link" (click)="switchTab('subscriptionActions')">{{'arenella-accounts-menu-subscription' | translate}}</span>
+		  </li>
+		</ul>
+	</div>
+	
+	<div class="page-body">	
+	<!-- Recruiters-->
+		<div *ngIf="showRecruitersTab">
+			<table>
+				<thead>
+					<tr>
+						<th>{{'arenella-accounts-tabrecruiters-subscription-type' | translate}}</th>
+						<th>{{'arenella-accounts-tabrecruiters-count' | translate}}</th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td class="recruiter-active-subscription">{{'arenella-accounts-tabrecruiters-paid-subscriptions' | translate}}</td>
+						<td class="recruiter-active-subscription">{{activePaidSubscription.length}}</td>
+						<td><button class="btn btn-secondary" (click)="toggleShowActivePaidSubscription()">{{'arenella-accounts-tabrecruiters-toggle' | translate}}</button></td>
+					</tr>
+					<tr>
+						<td class="recruiter-credit-based-subscription">{{'arenella-accounts-tabrecruiters-credit-based' | translate}}</td>
+						<td class="recruiter-credit-based-subscription">{{creditBasedSubscription.length}}</td>
+						<td><button class="btn btn-secondary" (click)="toggleShowCreditBasedSubscription()">{{'arenella-accounts-tabrecruiters-toggle' | translate}}</button></td>
+					</tr>
+					<tr>
+						<td class="recruiter-trial-subscription">{{'arenella-accounts-tabrecruiters-trial-subscriptions' | translate}}</td>
+						<td class="recruiter-trial-subscription">{{trialPeriodRecruiters.length}}</td>
+						<td><button class="btn btn-secondary" (click)="toggleShowTrialPeriodRecruiters()">{{'arenella-accounts-tabrecruiters-toggle' | translate}}</button></td>
+					</tr>
+					<tr>
+						<td class="recruiter-expired-subscription">{{'arenella-accounts-tabrecruiters-expired-subscriptions' | translate}}</td>
+						<td class="recruiter-expired-subscription">{{expiredSubscriptionRecruiters.length}}</td>
+						<td><button class="btn btn-secondary" (click)="toggleShowExpiredSubscriptionRecruiters()">{{'arenella-accounts-tabrecruiters-toggle' | translate}}</button></td>
+					</tr>
+					<tr>
+						<td class="recruiter-firstgen">{{'arenella-accounts-tabrecruiters-firstgen-subscriptions' | translate}}</td>
+						<td class="recruiter-firstgen">{{firstGenActiveSubscription.length}}</td>
+						<td><button class="btn btn-secondary" (click)="toggleShowFirstGenActiveSubscription()">{{'arenella-accounts-tabrecruiters-toggle' | translate}}</button></td>
+					</tr>
+					<tr>
+						<td>{{'arenella-accounts-tabrecruiters-subscriptions-totals' | translate}}</td>
+						<td>{{recruiters.length}} / <span>{{getTotalActiveRecruiters()}}</span></td>
+					</tr>
+				</tbody>
+			</table>
+		
+			<div >
+		    	<table class="table candidate-table">
+					<thead>
+		      			<tr>
+		      				<!-- Table Headers -->
+		      				<th class="bg-tab-hdr">{{'arenella-accounts-tabcandidates-id' | translate}}</th>
+		      				<th class="bg-tab-hdr">{{'arenella-accounts-tabcandidates-name' | translate}}</th>
+		            	    <th class="bg-tab-hdr">{{'arenella-accounts-tabcandidates-email' | translate}}</th>
+		                	<th class="bg-tab-hdr">{{'arenella-accounts-tabcandidates-company' | translate}}</th>
+		                	<th class="bt-tab-hdr">{{'arenella-accounts-tabcandidates-active' | translate}}</th>
+		      			</tr>
+		      	</thead>
+		      	<tbody>
+		      			<!-- Table row -->
+		      			
+		      			
+		      			<tr *ngFor="let recruiter of activePaidSubscription" class="recruiter-active-subscription">
+		      				<td *ngIf="showActivePaidSubscription" class="candidate-tab-col medicol"><span class="candidate-id-prefix"></span>{{recruiter.userId}}</td>
+		            	    <td *ngIf="showActivePaidSubscription" class="candidate-tab-col medicol"> {{recruiter.firstName}} {{recruiter.surname}}</td>
+		            	    <td *ngIf="showActivePaidSubscription" class="candidate-tab-col medicol">{{recruiter.email}}</td>
+		            	    <td *ngIf="showActivePaidSubscription" class="candidate-tab-col medicol">{{recruiter.companyName}}</td>
+		            	    <td *ngIf="showActivePaidSubscription" class="candidate-tab-col medicol">{{recruiter.hasActiveSubscription}}</td>
+		      			</tr>
+		      			<tr *ngFor="let recruiter of creditBasedSubscription" class="recruiter-credit-based-subscription">
+		      				<td *ngIf="showCreditBasedSubscription" class="candidate-tab-col medicol"><span class="candidate-id-prefix"></span>{{recruiter.userId}}</td>
+		            	    <td *ngIf="showCreditBasedSubscription" class="candidate-tab-col medicol"> {{recruiter.firstName}} {{recruiter.surname}}</td>
+		            	    <td *ngIf="showCreditBasedSubscription" class="candidate-tab-col medicol">{{recruiter.email}}</td>
+		            	    <td *ngIf="showCreditBasedSubscription" class="candidate-tab-col medicol">{{recruiter.companyName}}</td>
+		            	    <td *ngIf="showCreditBasedSubscription" class="candidate-tab-col medicol">{{recruiter.hasActiveSubscription}}</td>
+		      			</tr>	
+		      			<tr *ngFor="let recruiter of trialPeriodRecruiters" class="recruiter-trial-subscription">
+		      				<td *ngIf="showTrialPeriodRecruiters" class="candidate-tab-col medicol"><span class="candidate-id-prefix"></span>{{recruiter.userId}}</td>
+		            	    <td *ngIf="showTrialPeriodRecruiters" class="candidate-tab-col medicol"> {{recruiter.firstName}} {{recruiter.surname}}</td>
+		            	    <td *ngIf="showTrialPeriodRecruiters" class="candidate-tab-col medicol">{{recruiter.email}}</td>
+		            	    <td *ngIf="showTrialPeriodRecruiters" class="candidate-tab-col medicol">{{recruiter.companyName}}</td>
+		            	    <td *ngIf="showTrialPeriodRecruiters" class="candidate-tab-col medicol">{{recruiter.hasActiveSubscription}}</td>
+		      			</tr>	
+		      			<tr *ngFor="let recruiter of expiredSubscriptionRecruiters" class="recruiter-expired-subscription">
+		      				<td *ngIf="showExpiredSubscriptionRecruiters" class="candidate-tab-col medicol"><span class="candidate-id-prefix"></span>{{recruiter.userId}}</td>
+		            	    <td *ngIf="showExpiredSubscriptionRecruiters" class="candidate-tab-col medicol"> {{recruiter.firstName}} {{recruiter.surname}}</td>
+		            	    <td *ngIf="showExpiredSubscriptionRecruiters" class="candidate-tab-col medicol">{{recruiter.email}}</td>
+		            	    <td *ngIf="showExpiredSubscriptionRecruiters" class="candidate-tab-col medicol">{{recruiter.companyName}}</td>
+		            	    <td *ngIf="showExpiredSubscriptionRecruiters" class="candidate-tab-col medicol">{{recruiter.hasActiveSubscription}}</td>
+		      			</tr>	
+		      			<tr *ngFor="let recruiter of firstGenActiveSubscription" class="recruiter-firstgen" >
+		      				<td *ngIf="showFirstGenActiveSubscription" class="candidate-tab-col medicol"><span class="candidate-id-prefix"></span>{{recruiter.userId}}</td>
+		            	    <td *ngIf="showFirstGenActiveSubscription" class="candidate-tab-col medicol"> {{recruiter.firstName}} {{recruiter.surname}}</td>
+		            	    <td *ngIf="showFirstGenActiveSubscription" class="candidate-tab-col medicol">{{recruiter.email}}</td>
+		            	    <td *ngIf="showFirstGenActiveSubscription" class="candidate-tab-col medicol">{{recruiter.companyName}}</td>
+		            	    <td *ngIf="showFirstGenActiveSubscription" class="candidate-tab-col medicol">{{recruiter.hasActiveSubscription}}</td>
+		      			</tr>	
+		      		</tbody>
+				</table>	
+			</div>
+		</div>
+		
+		<!--  -->
+		<div *ngIf="showAvailabilityCheckTab">
+			<table class="table candidate-table availability">
+				<thead>
+		      		<tr>
+		      			<th class="bg-tab-hdr">{{'arenella-accounts-tabavailability-id' | translate}}</th>
+		      			<th class="bg-tab-hdr">{{'arenella-accounts-tabavailability-name' | translate}}</th>
+		      			<th class="bg-tab-hdr">{{'arenella-accounts-tabavailability-pos' | translate}}</th>
+		      			<th class="bg-tab-hdr">{{'arenella-accounts-tabavailability-role' | translate}}</th>
+		                <th class="bg-tab-hdr">{{'arenella-accounts-tabavailability-actions' | translate}}</th>
+		             </tr>
+		      	</thead>
+		      	<tbody>
+		      		<tr *ngFor="let candidate of candidatesToCheckForAvailability">
+		      			<td class="medicol available" *ngIf="candidate.available === true">
+		      				<span>{{candidate.candidateId}}</span>
+		      			</td>
+		      			<td class="medicol unavailable" *ngIf="candidate.available === false">
+		      				{{candidate.candidateId}}
+		      			</td>
+		      			<td class="medicol">
+		      				{{candidate.firstname}} {{candidate.surname}}
+		      			</td>
+		      			<td class="medicol">
+		      				<span *ngIf="candidate.country === 'NETHERLANDS'" 			class="flag-icon flag-icon-nl suggestion-flag-country"></span>
+							<span *ngIf="candidate.country === 'BELGIUM'" 				class="flag-icon flag-icon-be  suggestion-flag-country"></span>
+							<span *ngIf="candidate.country === 'UK'" 					class="flag-icon flag-icon-gb  suggestion-flag-country"></span>
+							<span *ngIf="candidate.country === 'REPUBLIC_OF_IRELAND'" 	class="flag-icon flag-icon-ie  suggestion-flag-country"></span>
+							{{candidate.city}}
+		      			</td>
+		      			<td class="medicol">
+		      				{{candidate.roleSought}}
+		      			</td>
+		      			<td class="medicol">
+		      				<button	class="btn btn-secondary arenella-btn" style="min-width:90px;" (click)="updateCandidateAvailability(candidate.candidateId, 'enable')">{{'arenella-accounts-tabavailability-btn-available' | translate}}</button>
+		      				<button	class="btn btn-secondary arenella-btn" style="min-width:90px;" (click)="updateCandidateAvailability(candidate.candidateId, 'disable')">{{'arenella-accounts-tabavailability-btn-disable' | translate}}</button>
+		      			</td>
+		      		</tr>
+		      	</tbody>
+			</table>
+		</div>
+			
+		<!-- Candidates-->
+		<div *ngIf="showCandidatesTab">
+			<form [formGroup]="candidateFormGroup">
+				<h3>Candidates</h3>
+				
+				<div style="float:left">
+					<label 	class="control-spacing candidate-lbl">{{'arenella-accounts-tabacandidates-name' | translate}}</label>
+					<input 	class="control-spacing candidate-input" type="text" formControlName="firstname"/>
+				</div>
+				<div style="float:left">
+					<label 	class="control-spacing candidate-lbl">{{'arenella-accounts-tabacandidates-surname' | translate}}</label>
+					<input 	class="control-spacing candidate-input" type="text" formControlName="surname"/>
+				</div>
+				<div style="float:left">
+					<label 	class="control-spacing candidate-lbl">{{'arenella-accounts-tabacandidates-email' | translate}}</label>
+					<input 	class="control-spacing candidate-input" type="text" formControlName="email"/>
+					
+				</div>
+				<div class="action-buttons">
+					<button	class="control-spacing btn btn-secondary arenella-btn" style="margin-top:10px;" (click)="fetchCandidates()">{{'arenella-accounts-tabacandidates-btn-filter' | translate}}</button>
+				</div>
+			</form>
+		
+			<!-- Candidates table -->  
+			<div style="margin-top: 5px;">
+	      
+				<table class="table candidate-table">
+					<thead>
+		      			<tr>
+		      				<!-- Table Headers -->
+		      				<th class="bg-tab-hdr">{{'arenella-accounts-tabacandidates-id' | translate}}</th>
+		      				<th class="bg-tab-hdr">{{'arenella-accounts-tabacandidates-name' | translate}}</th>
+		                	<th class="bg-tab-hdr">{{'arenella-accounts-tabacandidates-actions' | translate}}</th>
+		              </tr>
+		      		</thead>
+		      		<tbody>
+		      			<!-- Table row -->
+		      			<tr *ngFor="let candidate of candidates">
+		      				<td class="candidate-tab-col"><span class="candidate-id-prefix">C</span>{{candidate.candidateId}}</td>
+		            	    <td class="candidate-tab-col medicol"> {{candidate.firstname}} {{candidate.surname}}</td>
+		            	    <td class="candidate-tab-col medicol">{{candidate.email}}</td>
+		            	    <td class="candidate-tab-col medicol">
+		            	    	<div [ngSwitch]="candidate.available">
+		                			<div  *ngSwitchCase="true">
+		                				<button	class="btn btn-secondary arenella-btn" style="min-width:100px;" (click)="updateCandidateAvailability(candidate.candidateId, 'disable')">{{'arenella-accounts-tabacandidates-btn-disable' | translate}}</button>
+		                			</div>
+		                			<div>
+		                				<button	class="btn btn-secondary arenella-btn" style="min-width:100px;" *ngIf="candidateToDelete == '' || candidateToDelete != candidate.candidateId" (click)="deleteCandidate(candidate.candidateId)">{{'arenella-accounts-tabacandidates-btn-delete' | translate}}</button>
+		                				<button	class="btn btn-secondary arenella-btn" style="min-width:100px;" *ngIf="candidateToDelete == candidate.candidateId" (click)="confirmDeleteCandidate()" style="background:red">{{'arenella-accounts-tabacandidates-btn-confirm' | translate}}</button>
+		                			</div>
+		                		</div>
+		                	</td>
+		      			</tr>	
+		      		</tbody>
+				</table>
+			</div>
+			
+		</div>
+		
+		<!-- Skills table -->
+		<div *ngIf="showSkillsValidationTab">
+		
+			<div class="action-buttons">
+				<button	class="btn btn-secondary arenella-btn" (click)="persistValidatedSkills()">{{'arenella-accounts-tabskills-btn-udpate' | translate}}</button>
+			</div>
+			<table class="table candidate-table availability">
+				
+				<thead>
+	      			<tr>
+	      				<th class="bg-tab-hdr">{{'arenella-accounts-tabskills-skill' | translate}}</th>
+	      				<th class="bg-tab-hdr">{{'arenella-accounts-tabskills-actions' | translate}}</th>
+	      		     </tr>
+	      		</thead>
+	      		<tbody>
+	      			<tr style="padding-bottom:20px; border-bottom:2px black solid;border-top:2px black solid;">
+		      			<td><b>{{'arenella-accounts-tabskills-btn-pending' | translate}}:</b> {{skillsToValidate.length}}</td>
+		      		</tr>
+		      		<tr *ngFor="let skill of skillsToValidate">
+		      			<td *ngIf="skill.validationStatus == 'PENDING'">{{skill.skill}}</td>
+		      			<td *ngIf="skill.validationStatus == 'ACCEPTED'" class="skillAccepted">{{skill.skill}}</td>
+		      			<td *ngIf="skill.validationStatus == 'REJECTED'" class="skillRejected">{{skill.skill}}</td>
+		      			<td>
+		      				<button	class="btn btn-secondary arenella-btn" style="min-width:100px;" (click)="updateSkillValidationStatus(skill.skill, 'ACCEPTED')">{{'arenella-accounts-tabskills-btn-accept' | translate}}</button>
+		      				<button	class="btn btn-secondary arenella-btn" style="min-width:100px;" (click)="updateSkillValidationStatus(skill.skill, 'REJECTED')">{{'arenella-accounts-tabskills-btn-reject' | translate}}</button>
+		      			</td>
+		      		</tr>
+		      	</tbody>
+			</table>
+		</div>
+		 
+		<!-- Subscriptions requiring actions -->
+		<div *ngIf="showSubscriptionActionsTab">
+			<div class="sub-title">
+				<h3>{{'arenella-accounts-tabsubscriptions-title' | translate}}</h3>
+			</div>
+			
+			<table class="table candidate-table">
+				<thead>
+					<tr>
+						<th class="medicol">{{'arenella-accounts-tabsubscriptions-id' | translate}}</th>
+						<th class="medicol">{{'arenella-accounts-tabsubscriptions-name' | translate}}</th>
+						<th class="medicol">{{'arenella-accounts-tabsubscriptions-email' | translate}}</th>
+						<th class="medicol">{{'arenella-accounts-tabsubscriptions-lang' | translate}}</th>
+						<th class="medicol">{{'arenella-accounts-tabsubscriptions-type' | translate}}</th>
+						<th class="medicol">{{'arenella-accounts-tabsubscriptions-status' | translate}}</th>
+						<th class="medicol">{{'arenella-accounts-tabsubscriptions-actions' | translate}}</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr *ngFor="let subscriptionAction of recruitersWithSubscriptionActions">
+						<td class="medicol">{{subscriptionAction.userId}}</td>
+						<td class="medicol">{{subscriptionAction.firstName}} {{subscriptionAction.surname}}</td>
+						<td class="medicol">{{subscriptionAction.email}}</td>
+						<td class="medicol">{{subscriptionAction.language}}</td>
+						<td class="medicol">{{subscriptionAction.type}}</td>
+						<td class="medicol">{{subscriptionAction.status}}</td>
+						<td>
+							<button class="btn btn-secondary arenella-btn" style="min-width:100px;"  *ngFor="let action of subscriptionAction.actions" (click)="performAction(subscriptionAction, action)">{{frmtSubscriptionAction(action)}}</button>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		<div>
+	</div>
+	
+</div>

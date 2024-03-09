@@ -187,13 +187,19 @@ public interface CandidateService {
 	/**
 	* Whether or not the User has remaining credits
 	*/
-	boolean hasCreditsLeft(String userName);
+	public boolean hasCreditsLeft(String userName);
 
 	/**
 	* Updates the amount of Credits the Recruiter has
 	* @param command - information about credits
 	*/
 	void updateCreditsForUser(String userId, int availableCredits);
+
+	/**
+	* Updates the amount of Credits the Recruiter has
+	* @param command - information about credits
+	*/
+	void updateCreditsForUser(String userId, int availableCredits, Optional<Boolean> hasPaidSubscription);
 
 	/**
 	* Returns the number of Credits the candidate still has

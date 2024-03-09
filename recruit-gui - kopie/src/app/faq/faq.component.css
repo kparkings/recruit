@@ -1,0 +1,37 @@
+centerdiv{
+    margin: 0 auto;
+    padding-left:10px;
+    padding-right:10px;
+    width:90%;
+}
+
+.center-table{
+    margin:0 auto;
+    margin-top:25px;
+}
+
+.faqs{
+	width:80%;
+	margin-top:20px;
+	margin-left:10%;
+	margin-right:10%;
+	margin-bottom:50px;
+	
+}
+
+.faq h3{
+	color:black;
+}
+
+.subject-header{
+	width:100%;
+	padding:20px;
+	border-bottom:grey;
+	margin-bottom:10px;
+	text-align:center;
+	 
+}
+
+.aboutpage h5{
+	color:grey;
+}

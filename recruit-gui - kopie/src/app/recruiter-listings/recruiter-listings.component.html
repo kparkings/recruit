@@ -1,0 +1,332 @@
+<div class="page">
+	
+	<!-- Nav options -->
+	<div class="nav-tabs-bar"></div>
+	
+	<div class="page-body">
+		<div [ngSwitch]="activeView">
+			<div  *ngSwitchCase="'list'">
+				<div>
+					<div class="action-buttons">
+						<button *ngIf="passedCreditCheck" 	(click)="showAdd()" 		class="btn btn-secondary arenella-btn">{{'arenella-recruiter-listing-btn-add-job' | translate}}</button>
+						<button *ngIf="!passedCreditCheck" 	(click)="showNoCredits()" 	class="btn btn-secondary arenella-btn">{{'arenella-recruiter-listing-btn-add-job' | translate}}</button>
+						<button routerLink="/listing" 									class="btn btn-secondary arenella-btn">{{'arenella-recruiter-listing-btn-back' | translate}}</button>
+					</div>
+					<div class="recruiter-listing-main-text">
+						<p>{{'arenella-recruiter-listing-desc1' | translate}}</p>
+						<p>{{'arenella-recruiter-listing-desc2' | translate}}</p>
+					</div>
+					<div class="pagination-options">
+				    	<span [ngSwitch]="showNavPrev()">
+							<span *ngSwitchCase="true"  class="listing-nav" (click)="previousPage()"><<<<<</span>
+							<span *ngSwitchCase="false" class="listing-nav-disabled"><<<<<</span>
+						</span>
+						<span>{{currentPage+1}}</span>
+						<span [ngSwitch]="showNavNext()">
+							<span *ngSwitchCase="true"class="listing-nav" (click)="nextPage()">>>>>></span>
+							<span *ngSwitchCase="false"class="listing-nav-disabled">>>>>></span>
+						</span>
+					</div>
+				</div>
+				<div class="listings">
+	      			<table class="table listing-table">
+						<thead>
+					    	<tr>
+					      		<th>{{'arenella-recruiter-listing-created' | translate}}</th>
+								<th>{{'arenella-recruiter-listing-title' | translate}}</th>
+					            <th>{{'arenella-recruiter-listing-views' | translate}}</th>
+					      	</tr>
+						</thead>
+						<tbody>
+					    	<tr class="listing-tab-row" *ngFor="let listing of listings" >
+					      		<td (click)="showListingDetails(listing)">{{listing.created | date:'yyyy-MM-dd hh:mm'}}</td>
+					      		<td (click)="showListingDetails(listing)">{{listing.title}}</td>
+					        	<td (click)="showListingDetails(listing)">{{listing.views}}</td>
+					      	</tr>	
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+			
+		<div [ngSwitch]="activeView">
+			<div *ngSwitchCase="'show'">
+	   			<div class="action-buttons">
+					<button (click)="showPublicity()"		class="btn btn-secondary arenella-btn">{{'arenella-recruiter-listing-btn-publicity' | translate}}</button>
+					<button (click)="showEditListing()" 	class="btn btn-secondary arenella-btn">{{'arenella-recruiter-listing-btn-edit' | translate}}</button>
+					<button (click)="showConfirmDelete()"   class="btn btn-secondary arenella-btn" *ngIf="!enabldeDeleteOption">{{'arenella-recruiter-listing-btn-delete' | translate}}</button>
+					<button (click)="performmDelete()" 	  	class="btn btn-secondary arenella-btn confirm-delete" *ngIf="enabldeDeleteOption">{{'arenella-recruiter-listing-btn-confirm' | translate}}</button>
+					<button (click)="showList()" 			class="btn btn-secondary arenella-btn">{{'arenella-recruiter-listing-btn-back' | translate}}</button>
+				</div>
+				
+				<app-candidate-info-box [config]="infoItemConfig"></app-candidate-info-box>
+					
+	        	<div class="right-body-pane">
+	        		<div class="listing-view-div">
+						<h1 *ngIf="!isMobile" class="listing-view-title">{{selectedListing.title}}</h1>
+						<h1 *ngIf="isMobile" class="listing-view-title">Description</h1>
+					</div>
+					<div>
+						<div>
+							<pre style="white-space:pre-line;font-family: Roboto, 'Helvetica Neue', sans-serif;">{{selectedListing.description}}</pre>
+						</div>
+					</div>
+				</div>
+				
+			</div>
+				
+			<!-- List Listings -->
+			<div  *ngSwitchCase="['add', 'edit'].includes(activeView) ? activeView : !activeView">
+				<div class="action-buttons">
+					<button (click)="showFilterByJobSpecDialog()"	class="btn btn-secondary arenella-btn" download>{{'arenella-recruiter-listing-btn-create-from-spec' | translate}}</button>
+					<button (click)="publishListing()" 				class="btn btn-secondary arenella-btn">{{'arenella-recruiter-listing-btn-publish' | translate}}</button>
+					<button (click)="showPreviousShowOption()" 		class="btn btn-secondary arenella-btn">{{'arenella-recruiter-listing-btn-back' | translate}}</button>
+				</div>
+				<form [formGroup]="newListingFormBean">
+					<div [ngSwitch]="activeSubView" class="steps">
+						<div  *ngSwitchCase="'step1'">
+							<h2>{{'arenella-recruiter-listing-step1' | translate}}</h2>
+							<span class="listing-nav" >{{'arenella-recruiter-listing-previous' | translate}}</span>
+							<span class="listing-nav" (click)="updateSubviewStep('step2')">{{'arenella-recruiter-listing-next' | translate}}</span>
+							<div class="table listing-step-content">
+								<table>
+									<tr>
+										<td>{{'arenella-recruiter-listing-title' | translate}}Title</td>
+										<td><input type="text" formControlName="title"></td>
+									</tr>
+									<tr>
+										<td>{{'arenella-recruiter-listing-type' | translate}}</td>
+										<td>
+											<select formControlName="type">
+												<option *ngFor="let type of contractTypeOptions" [ngValue]="type.value">{{type.label}}</option>
+											</select>
+										</td>
+									</tr>
+									<tr>
+										<td>{{'arenella-recruiter-listing-country' | translate}}</td>
+										<td>
+											<select formControlName="country">
+												<option *ngFor="let opt of countryOptions" [ngValue]="opt.value">{{opt.label}}</option>
+											</select>
+										</td>
+									</tr>
+									<tr>
+										<td>{{'arenella-recruiter-listing-location' | translate}}</td>
+										<td><input type="text" formControlName="location"></td>
+									</tr>
+									<tr>
+										<td>{{'arenella-recruiter-listing-exp' | translate}}</td>
+										<td>
+											<select formControlName="experienceYears">
+												<option *ngFor="let yearVal of yearsExperienceValues" value="{{yearVal}}">{{yearVal}}</option>
+											</select>
+										</td>
+									</tr>
+									<tr>
+										<td>{{'arenella-recruiter-listing-rate' | translate}}</td>
+										<td>
+											<input type="radio" name="rateCurrency" value="EUR" class="radio-button" formControlName="rateCurrency"><label class="radio-button_label">{{'arenella-recruiter-listing-eur' | translate}}</label>
+											<input type="radio" name="rateCurrency" value="GBP" class="radio-button" formControlName="rateCurrency"><label class="radio-button_label">{{'arenella-recruiter-listing-gbp' | translate}}</label>
+											<br>
+											<input type="text" formControlName="rate">
+										</td>
+									</tr>
+								</table>
+							</div>
+						</div>
+						<div  *ngSwitchCase="'step2'">
+							<h2>{{'arenella-recruiter-listing-step2' | translate}}</h2>
+							<span class="listing-nav" (click)="updateSubviewStep('step1')">{{'arenella-recruiter-listing-previous' | translate}}</span>
+							<span class="listing-nav" (click)="updateSubviewStep('step3')">{{'arenella-recruiter-listing-next' | translate}}</span>
+							<div class="table listing-step-content">
+								<table class="table">
+									<thead>
+										<tr>
+											<th>{{'arenella-recruiter-listing-description' | translate}}</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td>
+												<textarea class="text-area-listing" formControlName="description"></textarea>	
+											</td>	
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+						<div  *ngSwitchCase="'step3'">
+							<h3>{{'arenella-recruiter-listing-step3' | translate}}</h3>
+							<span class="listing-nav" (click)="updateSubviewStep('step2')">{{'arenella-recruiter-listing-previous' | translate}}</span>
+							<span class="listing-nav" (click)="updateSubviewStep('step4')">{{'arenella-recruiter-listing-next' | translate}}</span>
+							<div class="table listing-step-content">
+								<table>
+									<tr>
+										<td>{{'arenella-recruiter-listing-contact-name' | translate}}</td>
+										<td><input type="text" formControlName="contactName"></td>
+									</tr>
+									<tr>
+										<td>{{'arenella-recruiter-listing-company-name' | translate}}</td>
+										<td><input type="text" formControlName="contactCompany"></td>
+									</tr>
+									<tr>
+										<td>{{'arenella-recruiter-listing-email-address' | translate}}</td>
+										<td><input type="text" formControlName="contactEmail"></td>
+									</tr>
+								</table>
+							</div>
+						</div>
+						<div  *ngSwitchCase="'step4'">
+							<h2>{{'arenella-recruiter-listing-step4' | translate}}</h2>
+							<span class="listing-nav" (click)="updateSubviewStep('step3')">{{'arenella-recruiter-listing-previous' | translate}}</span>
+							<span class="listing-nav" (click)="updateSubviewStep('step5')">{{'arenella-recruiter-listing-ext' | translate}}</span>
+							<div class="listing-step-content">
+								<div><input type="checkbox" name="language" value="Dutch" class="checkbox-ctrl" formControlName="langDutch"><label>{{'arenella-recruiter-listing-dutch' | translate}}</label></div>
+								<div><input type="checkbox" name="language" value="English" class="checkbox-ctrl" formControlName="langEnglish"><label>{{'arenella-recruiter-listing-englsh' | translate}}</label></div>	
+								<div><input type="checkbox" name="language" value="French" class="checkbox-ctrl" formControlName="langFrench"><label>{{'arenella-recruiter-listing-french' | translate}}</label></div>
+							</div>
+						</div>
+						<div  *ngSwitchCase="'step5'">
+							<h2>{{'arenella-recruiter-listing-step5' | translate}}</h2>
+							<span class="listing-nav" (click)="updateSubviewStep('step4')">{{'arenella-recruiter-listing-previous' | translate}}</span>
+							<span class="listing-nav">{{'arenella-recruiter-listing-next' | translate}}</span>
+							<div class="listing-step-content">
+							<div>
+									<input type="text" formControlName="skill">
+									<button (click)="addSkill()">{{'arenella-recruiter-listing-add-skill' | translate}}</button>
+							</div>
+							<div class="selected-skills-filter">
+								<span *ngFor="let skill of skills" class="selected-skill" (click)="removeSkill(skill)">
+									{{skill}}
+								</span>
+							</div>
+						</div>
+					</div>
+					</div>
+				</form>
+			</div>
+		</div>			
+	</div>
+</div>
+
+
+<dialog #feedbackBox>
+	<div class="modal-header">
+		<h4 class="modal-title">{{feedbackBoxTitle}}</h4>
+ 				<div class="filter-close-box" (click)="closeModal()">X</div>
+		</div>
+		<div class="feedbackBox; {{feedbackBoxClass}}">
+		<div class="modal-body">
+			<ul class='feedback-failure'>
+				<li *ngFor="let errMessage of validationErrors"> {{errMessage}} </li>
+			</ul><br>
+		</div>       
+	</div>
+</dialog> 
+
+<dialog #specUploadBox>
+	<div class="modal-header">
+		<h4 class="modal-title">{{'arenella-recruiter-listing-box-upld-extract-filters' | translate}}</h4>
+ 		<div class="filter-close-box" (click)="closeModal()">X</div>
+	</div>
+	<div class="feedbackBox;">
+		<div class="modal-body" *ngIf="showFilterByJobSpec && jobSpecUploadView == 'chooseType'">
+			<p>{{'arenella-recruiter-listing-box-upld-extract-filters-desc' | translate}}</p>
+			<div class="job-spec-upld-opt" (click)="switchJobSpecUpldOpt('doc')">{{'arenella-recruiter-listing-box-upld-extract-filters-file' | translate}}</div>
+			<div class="job-spec-upld-opt" (click)="switchJobSpecUpldOpt('text')">{{'arenella-recruiter-listing-box-upld-extract-tect' | translate}}</div>
+		</div>
+		<div class="modal-body" *ngIf="showFilterByJobSpec && jobSpecUploadView == 'doc'">
+			<input type="file" (change)="setJobSepecFile($event)">
+			<br><br>
+				<button class="btn btn-secondary" (click)="extractFiltersFromJobSpec()">{{'arenella-recruiter-listing-box-upld-extract-filters-btn-extract' | translate}}</button>
+			<br><br>
+			<p>{{'arenella-recruiter-listing-box-upld-extract-filters-file-type' | translate}}</p>
+			<br><br>
+		</div>
+		<div class="modal-body" *ngIf="showFilterByJobSpec && jobSpecUploadView == 'text'">
+			<form [formGroup]="filterByJobSpecForm">
+				<textarea formControlName="specAsText" (click)="clearSpecAsText()">
+					
+				</textarea>
+				<br><br>
+					<button class="btn btn-secondary" (click)="extractFiltersFromJobSpecText()">{{'arenella-recruiter-listing-box-upld-extract-filters-extract' | translate}}</button>
+				<br><br>
+				<br><br>
+			</form>
+		</div>
+		<div class="modal-body" *ngIf="showFilterByJonSpecFailure">
+			<p>{{'arenella-recruiter-listing-box-upld-extract-filters-failure' | translate}}</p>
+		</div>
+	</div>
+</dialog>
+
+
+<!-- Publicity Box -->
+<dialog #publicityBox>
+	<div class="modal-header">
+		<h4 class="modal-title">{{'arenella-recruiter-listing-pub-title' | translate}}Publicity</h4>
+ 		<div class="filter-close-box" (click)="closeModal()">X</div>
+	</div>
+	<div class="feedbackBox;">
+		<div class="modal-body"  style="height:400px;overflow:auto">
+			<p>{{'arenella-recruiter-listing-pub-title' | translate}}: {{selectedListing.title}}</p>
+			<br>
+			<p>{{'arenella-recruiter-listing-pub-location' | translate}}: {{getCountryCode(selectedListing.country)}}</p>
+			<br>
+			<p>https://www.arenella-ict.com/listing/{{selectedListing.listingId}}</p>
+			<br>
+			<span>#openposition </span>
+			<span>#itjob </span>
+			<span>#itjobs </span>
+			<span>#ictbaan </span>
+			<span>#ictbanen </span>
+			<span>#itjobboard </span>
+			<span>#cvdatabase </span>
+			<span *ngFor="let skill of selectedListing.skills">#{{skill}} </span>
+		</div>
+	</div>
+</dialog>
+
+<!-- Marketplace Box -->
+<dialog #marketplaceBox>
+	<div class="modal-header">
+		<h4 class="modal-title">{{'arenella-recruiter-listing-mp' | translate}}</h4>
+ 		<div class="filter-close-box" (click)="closeModal()">X</div>
+	</div>
+	<div class="feedbackBox;">
+		<div class="modal-body"  style="height:400px;">
+			<h3>{{'arenella-recruiter-listing-mp-add' | translate}}</h3>
+			<p>{{'arenella-recruiter-listing-mp-add-text' | translate}}</p>
+			<div style="min-width:320px;">
+				
+				<form [formGroup]="mpFormBean">
+					<table style="width:100%">
+						<tr>
+							<td style="text-align:left;">{{'arenella-recruiter-listing-mp-start' | translate}}</td>
+							<td style="padding-left:10px;"><input type="date" formControlName="startDate"/></td>
+						</tr>
+						<tr>
+							<td style="text-align:left;">{{'arenella-recruiter-listing-mp-last-submission' | translate}}</td>
+							<td style="padding-left:10px;"><input type="date" formControlName="lastSubmissionDate"/></td>
+						</tr>
+						<tr>
+							<td style="text-align:left;" colspan="2">{{'arenella-recruiter-listing-mp-comments' | translate}}</td>
+	
+						</tr>
+						<tr>
+							<td colspan="2">	
+								<textarea style="width:100%;" formControlName="comments"></textarea>
+							</td>
+						</tr>
+					</table>
+				</form>
+			</div>
+			
+			<div>
+				<button class="btn btn-secondary arenella-btn suggestion-button" (click)="declineMarketplace()">{{'arenella-recruiter-listing-mp-btn-decline' | translate}}</button>
+				<button class="btn btn-secondary arenella-btn suggestion-button" (click)="publishOpenPosition()">{{'arenella-recruiter-listing-mp-btn-agree' | translate}}</button>
+			</div>
+			
+		</div>
+	</div>
+</dialog>

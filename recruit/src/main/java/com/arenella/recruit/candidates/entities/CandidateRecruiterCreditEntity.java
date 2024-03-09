@@ -23,6 +23,9 @@ public class CandidateRecruiterCreditEntity {
 	@Column(name="credits")
 	private int 	credits;
 	
+	@Column(name="paid_subscription")
+	private boolean paidSubscription;
+	
 	/**
 	* Default Constructor 
 	*/
@@ -36,8 +39,9 @@ public class CandidateRecruiterCreditEntity {
 	* @param builder - Contains initialization data
 	*/
 	public CandidateRecruiterCreditEntity(CandidateRecruiterCreditEntityBuilder builder) {
-		this.recruiterId 	= builder.recruiterId;
-		this.credits 		= builder.credits;
+		this.recruiterId 		= builder.recruiterId;
+		this.credits 			= builder.credits;
+		this.paidSubscription 	= builder.paidSubscription;
 	}
 	
 	/**
@@ -58,6 +62,14 @@ public class CandidateRecruiterCreditEntity {
 	}
 	
 	/**
+	* Returns whether the Recruiter has a paid subscription active
+	* @return whether the Recruiter has a paid subscription active
+	*/
+	public boolean hasPaidSubscription() {
+		return this.paidSubscription;
+	}
+	
+	/**
 	* Returns a builder for the class
 	* @return Builder
 	*/
@@ -72,6 +84,7 @@ public class CandidateRecruiterCreditEntity {
 		
 		private String 	recruiterId;
 		private int 	credits;
+		private boolean paidSubscription;
 		
 		/**
 		* Sets the id of the Recruiter
@@ -90,6 +103,16 @@ public class CandidateRecruiterCreditEntity {
 		*/
 		public CandidateRecruiterCreditEntityBuilder credits(int credits) {
 			this.credits = credits;
+			return this;
+		}
+		
+		/**
+		* Sets whether the Recruiter has a currently active paid subscription
+		* @param paidSubscription - Active paid subscription
+		* @return Builder
+		*/
+		public CandidateRecruiterCreditEntityBuilder paidSubscription(boolean paidSubscription) {
+			this.paidSubscription = paidSubscription;
 			return this;
 		}
 		
@@ -113,6 +136,7 @@ public class CandidateRecruiterCreditEntity {
 				.builder()
 					.recruiterId(entity.getRecruiterId())
 					.credits(entity.getCredits())
+					.paidSubscription(entity.hasPaidSubscription())
 				.build();
 	}
 	
@@ -126,6 +150,7 @@ public class CandidateRecruiterCreditEntity {
 				.builder()
 					.recruiterId(domain.getRecruiterId())
 					.credits(domain.getCredits())
+					.paidSubscription(domain.hasPaidSubscription())
 				.build();
 	}
 	

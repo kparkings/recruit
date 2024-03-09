@@ -189,6 +189,15 @@ public class CandidateFilterOptions {
 	}
 	
 	/**
+	* Sets whether to filter on whether a Candidate 
+	* if Available, Unavailable or Both
+	* @param available
+	*/
+	public void setAvailable(Boolean available) {
+		this.available = available;
+	}
+	
+	/**
 	* Returns the skills to filter on
 	* @return skills of the Candidate
 	*/

@@ -1,0 +1,90 @@
+<div class="page">
+
+	<!-- Nav options -->
+	<div class="nav-tabs-bar"></div>
+	
+	<div class="page-body">
+	
+		<div class="login-panel">
+		    <div *ngIf="!showForgottenPassword">
+		       	<form [formGroup]="formBean">
+					<div class="wholepagerow">
+					
+						<div class="new-subscription" *ngIf="showSubscriptionMsg">
+							<h2>{{"arenella-login-user-subscription-thankyour" | translate}}</h2>
+							<h3>{{"arenella-login-user-subscription-login-to-continue" | translate}}</h3>
+						</div>
+					
+						<table>
+							<tr>
+								<td><span style="padding-right:20px;">{{"arenella-login-user-username" | translate}}</span></td>
+								<td><input class="inpt-tab-std" type="text" formControlName="username"/></td>
+							</tr>
+							<tr>
+								<td>{{"arenella-login-user-password" | translate}}</td>
+								<td><input class="inpt-tab-std" type="password" formControlName="password"/></td>
+							</tr>
+							<tr>
+								<td>&nbsp;</td>
+								<td><button class="btn btn-secondary arenella-btn loginbutton" (click)="login()">{{"arenella-login-user-login" | translate}}</button></td>
+							</tr>
+							<tr>
+								<td></td>
+								<td class="forgotten-password-link" (click)="toggleForgottenPassword(true)">{{"arenella-login-user-forgotten-password" | translate}}</td>
+							</tr>
+						</table>
+					</div>
+				</form>
+			</div>
+			<div *ngIf="showForgottenPassword">
+				<form [formGroup]="formBeanForgottenPassword">
+					<div class="wholepagerow">
+						<table>
+							<tr>
+								<td colspan="2">
+									<p>{{"arenella-login-user-forgotten-password-text" | translate}}</p>
+								</td>
+							</tr>
+							<tr>
+								<td>{{"arenella-login-user-email" | translate}}</td>
+								<td><input class="inpt-tab-std" type="text" formControlName="email"/></td>
+							</tr>
+							
+							<tr>
+								<td colspan="2">
+									<button class="btn btn-secondary arenella-btn forgotten-password-button" (click)="resetPassword()">{{"arenella-login-user-reset" | translate}}</button>
+									<button class="btn btn-secondary arenella-btn forgotten-password-button" (click)="cancelResetPassword()">{{"arenella-login-user-cancel" | translate}}</button>
+								</td>
+							</tr>
+							
+						</table>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+    
+<dialog #feedbackBox>
+	<div class="modal-header">
+		<h4 class="modal-title">&nbsp;</h4>
+   		<div class="filter-close-box" (click)="feedbackBox.close()">X</div>
+ 	</div>
+	<div class="feedbackBox">
+		<div class="modal-body">
+			{{failureMessage}}
+		</div>       
+	</div>
+</dialog>
+
+<dialog #resetPasswordDialog>
+	<div class="modal-header">
+		<h4 class="modal-title">&nbsp;</h4>
+   		<div class="filter-close-box" (click)="resetPasswordDialog.close()">X</div>
+ 	</div>
+	<div class="feedbackBox">
+		<div class="modal-body">
+			{{"arenella-login-user-email-sent" | translate}}
+		</div>       
+	</div>
+</dialog>

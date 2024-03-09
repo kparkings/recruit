@@ -1,0 +1,186 @@
+.feedback-failure{
+    background: #F0F0F0;
+    color: red;
+}
+
+.feedback-success{
+    background: #F0F0F0;
+}
+
+.feedbackBox{
+    width:300px;
+    height:500px;
+}
+
+.validationBox{
+    height:280px;
+}
+/*
+.modal-header{
+    background: #303030;
+    font-size: medium;
+    height: 50px;
+    text-align:center;
+    padding:0px;
+    margin:0px;
+    
+}
+*/
+.modal-header-text{
+    text-align:center;
+    color:#6f42c1;
+    margin-top:10px;
+}
+
+.pendingCandidateRow:hover{
+	background:#6f42c1;
+	color:white;
+	cursor:pointer;
+}
+
+.feedbackBox{
+    width:200px;
+    height:350px;
+}
+/*
+.modal-title{
+	margin-left:20px;
+}
+*/
+
+
+.pendingCandidateBox-td{
+    font-size:12px;
+}
+
+.pendingCandidateBox-th{
+    font-size:12px;
+    font-weight:bold;
+}
+ .filter-close-box{
+     padding:10px;
+     cursor:pointer;
+     font-size:20px;
+     font-weight: bold;
+    text-align: right;
+        
+}
+
+.new-candidate-inpt-lbl{
+	margin-top:2px;
+}
+
+.new-candidate-inpt{
+	margin-top:2px;
+}
+.new-candidate-group{
+	float:left;
+	margin-left:40px;
+	min-width:40%;
+}
+
+.new-candidate-skills {
+    width:300px;
+    height: 130px;
+    text-align: top;
+    margin-bottom: 20px;
+}
+
+.new-camdidate-bg-tab-hdr{
+	width:90%;
+	color: #000000;
+    border-bottom: 2px solid black;
+    font-weight: bold;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.container-div{
+	margin:20px;
+	margin-top:10px;
+}
+/*
+.btn-right{
+	float:right;
+}
+
+.main-btns{
+	width:200px;
+	max-width:48%;
+	margin-right:10px;
+	margin-bottom:10px;
+	margin-top:0px;
+	
+}*/
+
+.selected-skill{
+	margin:2px;
+ 	padding:5px;
+ 	border-radius:5px;
+ 	background:grey;
+ 	display:inline-block;
+ }
+ 
+.selected-skill:hover{
+ 	margin:2px;
+ 	padding:5px;
+ 	border-radius:5px;
+ 	background:red;
+ 	cursor:pointer;
+ 	display:inline-block;
+ }
+ 
+ .add-skill-btn{
+ 	margin-left:5px;
+ }
+
+ .hdr-label{
+ 	font-weight:bold;
+ 	width:250px;
+ }
+ 
+ .show-row{
+ 	display:true;
+ }
+ 
+ .hide-row{
+ 	display:none;
+ }
+ 
+ .new-user-table{
+ 	width:95%;
+ }
+ 
+ .new-user-table tr td{
+ 	max-width:50%;
+ 	word-wrap:break-word;
+    table-layout: fixed;
+ }
+ 
+ select{
+ 	max-width:50%;
+ }
+ 
+ .button-panel-mobile{
+	padding-left:10px;
+	padding-right:10px;	
+}
+
+ .buttons-icon-mobile{
+	width:48%;
+	margin-top: 10px;
+    margin-right:1%;
+    margin-left:1%;
+    margin-bottom:0px;
+}
+
+.mobile-page{
+	margin:0px;
+}
+
+@media (max-width: 700px) {
+	.arenella-btn-popup-action {
+	    width: 100%;
+	}
+}
+ 

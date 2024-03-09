@@ -1,0 +1,51 @@
+.centerdiv{
+    margin: 0 auto;
+    padding-left:10px;
+    padding-right:10px;
+    width:90%;
+}
+
+.center-table{
+    margin:0 auto;
+    margin-top:25px;
+}
+
+h2{
+    margin-bottom: 20px;
+}
+
+.skill {
+    font-weight: bold;
+    color:#6f42c1;
+}
+
+table th{
+	color:#6f42c1;
+}
+
+table td{
+	padding-left:10px;
+}
+
+.subject-header{
+	width:100%;
+	padding:20px;
+	padding-left:0px;
+	padding-right:0px;
+	border-bottom:grey;
+	margin-bottom:10px;
+	text-align:center;
+	 
+}
+
+.main-img{
+	float:left;
+	width:300px;
+	height:300px;
+	margin:20px;
+	margin-top:0px;	
+}
+
+.aboutpage h5{
+	color:grey;
+}

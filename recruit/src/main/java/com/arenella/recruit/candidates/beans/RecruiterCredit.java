@@ -11,7 +11,8 @@ public class RecruiterCredit {
 	public static final int DISABLED_CREDITS 	= -1;
 	
 	private String 	recruiterId;
-	private int 	credits			= DEFAULT_CREDITS;
+	private int 	credits					= DEFAULT_CREDITS;
+	private boolean paidSubscription		= false;
 	
 	
 	/**
@@ -21,6 +22,7 @@ public class RecruiterCredit {
 	public RecruiterCredit(RecruiterCreditBuilder builder) {
 		this.recruiterId 	= builder.recruiterId;
 		this.credits 		= builder.credits;
+		this.paidSubscription = builder.paidSubscription;
 	}
 	
 	/**
@@ -41,11 +43,29 @@ public class RecruiterCredit {
 	}
 	
 	/**
+	* Returns whether the Recruiter has a paid subscription 
+	* or not
+	* @return Whether the Recruiter has a paid subscription
+	*/
+	public boolean hasPaidSubscription() {
+		return this.paidSubscription;
+	}
+	
+	/**
 	* Sets the number of Credits the Recruiter has available
 	* @param credits - number of available credits
 	*/
 	public void setCredits(int credits) {
 		this.credits = credits;
+	}
+	
+	/**
+	* Sets whether the Recruiter has a Paid subscription or some 
+	* other type of Subscription
+	* @param paidSubscription - Whether subscription is a paid subscription
+	*/
+	public void setPaidSubscription(Boolean paidSubscription) {
+		this.paidSubscription = paidSubscription;
 	}
 	
 	/**
@@ -75,7 +95,8 @@ public class RecruiterCredit {
 	public static class RecruiterCreditBuilder{
 		
 		private String 	recruiterId;
-		private int 	credits			= DEFAULT_CREDITS;
+		private int 	credits					= DEFAULT_CREDITS;
+		private boolean paidSubscription		= false;
 		
 		/**
 		* Sets the id of the Recruiter
@@ -94,6 +115,17 @@ public class RecruiterCredit {
 		*/
 		public RecruiterCreditBuilder credits(int credits) {
 			this.credits = credits;
+			return this;
+		}
+		
+		/**
+		* Sets whether or not the Recruiter currently has a paid 
+		* subscription
+		* @param paidSubscription - Whether Recruiter has a paid subscription
+		* @return Builder
+		*/
+		public RecruiterCreditBuilder paidSubscription(boolean paidSubscription) {
+			this.paidSubscription = paidSubscription;
 			return this;
 		}
 		

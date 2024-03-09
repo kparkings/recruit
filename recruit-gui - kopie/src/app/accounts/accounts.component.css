@@ -1,0 +1,102 @@
+.tabNav{
+	cursor:pointer;
+	width:160px;
+	text-align:center;
+}
+
+h3{
+	margin-top:5px;
+	margin-left:15px;
+	color:#6A5ACD;
+}
+
+.control-spacing{
+	margin-top:2px;
+	margin-left:20px;
+}
+
+.candidate-input{
+	min-width:300px;
+}
+
+.candidate-lbl{
+	width:50px;
+}
+/*
+.btn-action{
+	margin-right:10px;
+    min-width:90px;
+    margin-bottom:5px;
+    margin-top:5px;
+}
+*/
+/*
+.modal-header{
+     background:#181414;
+     color:#6A5ACD;
+     font-weight:bold;
+ }
+*/
+.filter-close-box{
+     padding:10px;
+     cursor:pointer;
+     font-size:20px;
+     font-weight: bold;
+ }
+ /*
+.modal-body{
+	min-height:150px;
+}*/
+
+.feedback-label{
+    font-size:12px;
+    font-weight:bold;
+}
+
+.recruiter-firstgen{
+	color:brown;
+}
+
+.recruiter-credit-based-subscription{
+	color:purple;
+}
+
+.recruiter-active-subscription{
+	color:green;
+}
+
+.recruiter-expired-subscription{
+	color:red;
+}
+
+.recruiter-trial-subscription{
+	color:blue;
+}
+
+.medicol{
+	word-break: break-word;
+}
+
+.suggestion-flag-country{
+	height:20px;
+	width:50px;
+	padding-left:0px;
+	margin-left:0px;
+	background-position:0%;
+}
+
+.available{
+	color:darkgreen;	
+}
+
+.unavailable{
+	color:red;	
+}
+
+.skillAccepted{
+	color:green;	
+}
+
+.skillRejected{
+	color:red;	
+}

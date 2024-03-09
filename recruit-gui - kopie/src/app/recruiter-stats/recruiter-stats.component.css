@@ -1,0 +1,65 @@
+.chart-data-panel-page{
+	margin:0px;
+}
+
+.chart-panel{
+	margin-bottom:0px;
+}
+
+.listing-filter-panel{
+	overflow:auto;
+	height:200px;
+	border: solid 1px grey;
+	margin-bottom:50px;
+}
+
+.listing-filter-panel table {
+	width:100%;
+	min-width:320px;
+}
+
+.listing-filter-panel table thead tr{
+	background:#6c757d;
+	color:white;
+	width:100%;
+	text-align:center;
+}
+
+.listing-filter-panel table tbody tr{
+	cursor:pointer;
+	
+}
+
+.listing-filter-panel table tbody tr td{
+	padding-left:10px;
+}
+
+.selectedListing{
+	background:green;
+}
+
+.no-posts{
+	text-align:left;
+	padding: 30px;
+	min-width:350px;
+	max-width:90%;
+	margin: auto;
+	text-align:center; 
+}
+
+.no-posts h2{
+	text-align:center; 
+}
+
+.nav-item{
+	width:200px;
+}
+
+.statsChartTab{
+	width:200px;
+	cursor:pointer;
+}
+
+.stat-canvas{
+	max-height:300px;
+}

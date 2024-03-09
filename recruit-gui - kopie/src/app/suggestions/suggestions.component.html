@@ -1,0 +1,220 @@
+<div class="page">
+
+	<!-- Nav options -->
+	<div class="nav-tabs-bar"></div>
+		
+	<div class="page-body">	
+		
+		<!-- Action buttons -->
+		<div *ngIf="currentView === 'suggestion-results'" class="action-buttons">
+			<button class="btn btn-secondary arenella-btn" (click)="showCreateAlertDialog()" download>{{'arenella-suggestions-btn-create-alert' | translate}}</button>
+			<button class="btn btn-secondary arenella-btn" routerLink="/recruiter-alerts" download>{{'arenella-suggestions-btn-manage-alert' | translate}}</button>
+	        <button class="btn btn-secondary arenella-btn" (click)="showSavedCandidates()" download>{{'arenella-suggestions-btn-my-candidates' | translate}}</button>
+	        <button class="btn btn-secondary arenella-btn" (click)="openPublicityDialog()" *ngIf="isAuthenticatedAsAdmin()" download>{{'arenella-suggestions-btn-copy' | translate}}</button>
+	        <button class="btn btn-secondary arenella-btn" (click)="showFilterByJobSpecDialog(specUploadBox)" download>{{'arenella-suggestions-btn-filter-by-spec' | translate}}</button>
+	        <button class="btn btn-secondary arenella-btn" (click)="doReset()">{{'arenella-suggestions-btn-reset' | translate}}</button>
+	     </div>
+		
+		<div *ngIf="currentView === 'saved-candidates'">
+			<app-saved-candidates [savedCandidates]="savedCandidates" (switchViewEvent)="showSuggestionsResults()" [infoItemConfig]="infoItemConfig" [skillFilters]="skillFilters"></app-saved-candidates>
+		</div>
+	
+		<div>	
+			<form [formGroup]="suggestionFilterForm" *ngIf="currentView === 'suggestion-results'">	
+				<div *ngIf="currentView === 'suggestion-results'">		
+					<table class="mobile-search-box">
+						<tr>
+							<td class="sugg-srch-hdr">{{'arenella-suggestions-job-title' | translate}}</td>
+							<td class="sugg-srch-bdy">
+								<input type="text" value="Java Developer" class="sugg-srch-job-title" formControlName="searchPhrase">
+							</td>
+						</tr>
+						<tr>
+							<td class="sugg-srch-hdr">{{'arenella-suggestions-country' | translate}}</td>
+							<td class="sugg-srch-bdy country-filters">
+								<span class="country-filter country-selected-{{includeResultsForCountry('nl')}}" (click)="toggleCountrySelection('nl')">
+									<span class="flag-icon flag-icon-nl flag-icon-med"></span>
+								</span>
+								<span class="country-filter country-selected-{{includeResultsForCountry('be')}}" (click)="toggleCountrySelection('be')">
+									<span class="flag-icon flag-icon-be flag-icon-med"></span>
+								</span>
+								<span class="country-filter country-selected-{{includeResultsForCountry('uk')}}" (click)="toggleCountrySelection('uk')">
+									<span class="flag-icon flag-icon-gb flag-icon-med"></span>
+								</span>
+								<span class="country-filter country-selected-{{includeResultsForCountry('ie')}}" (click)="toggleCountrySelection('ie')">
+									<span class="flag-icon flag-icon-ie flag-icon-med"></span>
+								</span>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="sugg-srch-hdr">{{'arenella-suggestions-contract' | translate}}</td>
+							<td class="sugg-srch-bdy">
+								<select class="contract-type" formControlName="contractType">
+									<option value="BOTH">{{'arenella-suggestions-both' | translate}}</option>
+									<option value="CONTRACT">{{'arenella-suggestions-contract' | translate}}</option>
+									<option value="PERM">{{'arenella-suggestions-permanent' | translate}}</option>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<td class="sugg-srch-hdr">{{'arenella-suggestions-language' | translate}}</td>
+							<td class="sugg-srch-bdy">
+								<ul class="sugg-srch-ctry-ul">
+									<li class="sugg-srch-ctry-chkbox"><input type="checkbox" formControlName="dutchLanguage" class="lang-checkbox">{{'arenella-suggestions-dutch' | translate}}</li>
+									<li class="sugg-srch-ctry-chkbox"><input type="checkbox" formControlName="frenchLanguage" class="lang-checkbox">{{'arenella-suggestions-french' | translate}}</li>
+									<li class="sugg-srch-ctry-chkbox"><input type="checkbox" formControlName="englishLanguage" class="lang-checkbox">{{'arenella-suggestions-english' | translate}}</li>
+								</ul>					
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="sugg-srch-hdr">{{'arenella-suggestions-experience' | translate}}</td>
+							<td class="sugg-srch-bdy">
+								<div>
+									<select class="min" formControlName="minYearsExperience">
+										<option *ngFor="let opt of minMaxOptions" value="{{opt}}">{{opt}}</option>
+									</select>
+									<span> <B>{{'arenella-suggestions-to' | translate}}</B> </span>
+									<select class="max" formControlName="maxYearsExperience">
+										<option *ngFor="let opt of minMaxOptions" value="{{opt}}">{{opt}}</option>
+									</select>
+								</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="sugg-srch-hdr">{{'arenella-suggestions-skills' | translate}}</td>
+							<td class="sugg-srch-bdy">
+								<form [formGroup]="skilFilterForm">
+									<input class="skill-field" type="text" formControlName="skill"><button (click)="addSkill()" class="btnX btn-secondary add-skill-btn">{{'arenella-suggestions-add' | translate}}</button>
+								</form>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="2">
+								<div style="min-height:35px;">
+									<div class="selected-skill" *ngFor="let skill of skillFilters" (click)="removeSkill(skill)">{{skill}}</div>
+								</div>
+							</td>
+						</tr>
+					
+					</table>
+				</div>
+			</form>
+		</div>
+	
+		<!-- Suggestion Results -->
+		<div *ngIf="currentView === 'suggestion-results'">
+		
+			<div class="suggestion-result-icons">
+			
+				<div class="suggestion-icon {{suggestionMobileClass}}" *ngFor="let suggestion of suggestions" (click)="showSuggestedCandidateOverview(suggestion)">
+					<div>
+						<div *ngIf="!isSavedCandidate(suggestion)" class="suggestion-icon-header">	
+						C{{suggestion.candidateId}}
+						</div>
+						<div *ngIf="isSavedCandidate(suggestion)" class="suggestion-icon-header suggestion-icon-header-saved">	
+						C{{suggestion.candidateId}}
+						</div>
+					</div>
+					<div title="Accuracy Skills" class="suggestion-perception-result-{{suggestion.accuracySkills}}"></div>
+					<div title="Accuracy Languages" class="suggestion-perception-result-{{suggestion.accuracyLanguages}}"></div>
+					<div class="suggestion-icon-body">
+						<div>
+							{{suggestion.firstname}} {{suggestion.surname}}
+						</div>
+						<div>
+							{{suggestion.roleSought}}
+						</div>
+					</div>
+				</div>
+				
+			</div>
+			<div class="suggestion-result-footer">&nbsp;</div>
+		</div>
+
+		<!-- Suggestion Profile -->
+		<div *ngIf="currentView === 'suggested-canidate-overview'">
+			<app-candidate-profile (backEvent)="showSuggestionsResults()" [parentComponent]="parentComponent" [isViewOnly]="isViewOnly()" [infoItemConfig]="infoItemConfig" [suggestedCandidate]="suggestedCandidate" [candidateProfile]="candidateProfile" [skillFilters]="skillFilters"></app-candidate-profile>
+		</div>
+	</div>
+</div>
+
+<dialog #specUploadBox>
+	<div class="modal-header">
+		<h4 class="modal-title">{{'arenella-suggestions-box-spec-hdr' | translate}}</h4>
+ 		<div class="filter-close-box" (click)="specUploadBox.close()">X</div>
+	</div>
+	<div class="specUploadBox;">
+		<div class="modal-body" *ngIf="showFilterByJobSpec && jobSpecUploadView == 'chooseType'">
+			<p>{{'arenella-suggestions-box-spec-intro' | translate}}</p>
+			<div class="job-spec-options">
+			<div class="job-spec-upld-opt" (click)="switchJobSpecUpldOpt('doc')">{{'arenella-suggestions-box-spec-file' | translate}}</div>
+			<div class="job-spec-upld-opt" (click)="switchJobSpecUpldOpt('text')">{{'arenella-suggestions-box-spec-text' | translate}}</div>
+			</div>
+		</div>
+		<div class="modal-body" *ngIf="showFilterByJobSpec && jobSpecUploadView == 'doc'">
+			<input type="file" (change)="setJobSepecFile($event)">
+			<br><br>
+				<button class="btn btn-secondary" (click)="extractFiltersFromJobSpec()">{{'arenella-suggestions-box-spec-extraction' | translate}}</button>
+			<br><br>
+			<p>{{'arenella-suggestions-box-spec-file-types' | translate}}</p>
+			<br><br>
+		</div>
+		<div class="modal-body" *ngIf="showFilterByJobSpec && jobSpecUploadView == 'text'">
+			<form [formGroup]="filterByJobSpecForm">
+				<textarea formControlName="specAsText" (click)="clearSpecAsText()">
+					
+				</textarea>
+				<br><br>
+					<button class="btn btn-secondary" (click)="extractFiltersFromJobSpecText()">{{'arenella-suggestions-box-spec-extraction' | translate}}</button>
+				<br><br>
+				<br><br>
+			</form>
+		</div>
+		<div class="modal-body" *ngIf="showFilterByJonSpecFailure">
+			<p>{{'arenella-suggestions-box-spec-msg-failure' | translate}}</p>
+		</div>
+	</div>
+</dialog> 
+
+<dialog #feedbackBox >
+	<div class="modal-header">
+		<h4 class="modal-title">{{'arenella-suggestions-box-alert-hdr' | translate}}</h4>
+ 		<div class="filter-close-box" (click)="feedbackBox.close()">X</div>
+	</div>
+	<div class="feedbackBox;">
+		<form [formGroup]="createAlertForm">
+			<div class="modal-body" *ngIf="showSaveAlertBox">
+				<p class="info-text">{{'arenella-suggestions-box-alert-text' | translate}}</p>
+				{{'arenella-suggestions-box-alert-name' | translate}}: <input type="text" formControlName="alertName">
+				<br/><br/>
+				<button class="btn btn-secondary" (click)="saveAlert()" download>{{'arenella-suggestions-box-alert-btn-save' | translate}}</button>
+			</div>       
+			<div class="modal-body" *ngIf="showSaveAlertBoxSuccess">
+				<p>{{'arenella-suggestions-box-alert-success-1' | translate}}</p>
+				<p>{{'arenella-suggestions-box-alert-success-2' | translate}}</p>
+			</div>
+			<div class="modal-body" *ngIf="showSaveAlertBoxFailure">
+				<p>{{'arenella-suggestions-box-alert-failure' | translate}}</p>
+			</div>
+		</form>
+	</div>
+</dialog>
+<!-- publicity -->
+<dialog #publicityModal>
+
+	<!--  Options -->
+	<div class="modal-header">
+		<h4 class="modal-title">{{'arenella-suggestions-box-publicity-hdr' | translate}}</h4>
+		<div class="filter-close-box" (click)="publicityModal.close()">X</div>
+	</div>
+	<div class="modal-body publicity-suggestions">
+		<table>
+			<div *ngFor="let c of publicitySuggestions">
+				{{getCountryCode(c.country)}} - {{'arenella-suggestions-box-publicity-exp' | translate}}: {{c.yearsExperience}}  {{'arenella-suggestions-box-publicity-years' | translate}} -  {{c.roleSought}}
+			</div>
+		</table>
+	</div> 
+</dialog>

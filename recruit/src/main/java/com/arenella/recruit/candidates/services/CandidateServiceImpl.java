@@ -426,6 +426,24 @@ public class CandidateServiceImpl implements CandidateService{
 	}
 	
 	/**
+	* Whether or not the user has a paid subscription
+	* @return Whether or not the user has a paid subscription
+	*/
+	private boolean hasPaidSubscription() {
+		
+		if (this.checkHasRole("ROLE_RECRUITER")) {
+			
+			RecruiterCredit recruiterCreditRecord = this.getRecruiterCreditRecord(this.getAuthenticatedUserId());
+			
+			return recruiterCreditRecord.hasPaidSubscription();
+			
+		}
+		
+		return false;
+		
+	}
+	
+	/**
 	* Refer to the CandidateService Interface for Details
 	*/
 	@Override
@@ -438,11 +456,21 @@ public class CandidateServiceImpl implements CandidateService{
 		AtomicReference<suggestion_accuracy> 		accuracy 			= new AtomicReference<>(suggestion_accuracy.perfect);
 		Pageable 									pageable 			= PageRequest.of(0,100);
 		
-		//TODO: [KP] Need to add skills for things like React, Vue where the FUNCTION alone is not sufficient
-		//TODO: [KP] Alerts also need to work with searchText not function and we then need to remove alert from Candidates page
-		//TODO: [KP] Need to augment skill list with keywords found in search text
-		//TODO: [KP] Once we have set this up to also work with search text not generated from extract spec remove if and only set functions by searchText
-		//TODO: [KP] Cant remove because of candidate page filters !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
+		/**
+		* Recruiters may only view unavailable candidates if they have a paid subscription  
+		*/
+		if (!hasPaidSubscription()) { // Need to implement right hand check
+			filterOptions.setAvailable(true);
+		}
+		
+		/**
+		* Admin and Recruiters with a paid subscriptiion can apply an available filter  
+		*/
+		if (this.checkHasRole("ROLE_ADMIN") || (hasPaidSubscription())) { 
+			filterOptions.setAvailable(filterOptions.isAvailable().isEmpty() ? null : filterOptions.isAvailable().get());
+		}
+		
+		
 		if (StringUtils.hasText(filterOptions.getSearchText())) {
 			Set<FUNCTION> functionToFilterOn = this.candidateFunctionExtractor.extractFunctions(filterOptions.getSearchText());
 			filterOptions.setFunctions(functionToFilterOn);
@@ -718,6 +746,11 @@ public class CandidateServiceImpl implements CandidateService{
 			throw new IllegalArgumentException("Unknown Candidate.");
 		}
 		
+		if (!candidate.get().isAvailable() && isRecruiter &&  !hasPaidSubscription()) { // Need to implement right hand check
+			throw new IllegalArgumentException("Cant view unavailable candidates with unpaid subscriptin type.");
+		}
+		
+		
 		return candidate.get();
 	}
 
@@ -925,6 +958,16 @@ public class CandidateServiceImpl implements CandidateService{
 	@Override
 	public void updateCreditsForUser(String userId, int availableCredits) {
 		
+		this.updateCreditsForUser(userId, availableCredits, Optional.empty());
+		
+	}
+	
+	/**
+	* Refer to the CandidateService for details 
+	*/
+	@Override
+	public void updateCreditsForUser(String userId, int availableCredits, Optional<Boolean> hasPaidSubscription) {
+	
 		Optional<RecruiterCredit> creditOpt = this.creditDao.getByRecruiterId(userId);
 		
 		if (!creditOpt.isPresent()) {
@@ -935,8 +978,12 @@ public class CandidateServiceImpl implements CandidateService{
 		
 		credits.setCredits(availableCredits);
 		
-		creditDao.persist(credits);
+		if (hasPaidSubscription.isPresent()) {
+			credits.setPaidSubscription(hasPaidSubscription.get());
+		}
 		
+		creditDao.persist(credits);
+	
 	}
 	
 	/**
@@ -960,14 +1007,23 @@ public class CandidateServiceImpl implements CandidateService{
 	*/
 	@Override
 	public int getCreditCountForUser(String userId) {
+		return this.getRecruiterCreditRecord(userId).getCredits();
+	}
+	
+	/**
+	* Retrieves the Recruiter credit Record for the Recruiter
+	* @param userId - Id of the Recruiter
+	* @return Recruiter Credit information
+	*/
+	private RecruiterCredit getRecruiterCreditRecord(String userId) {
 		
 		Optional<RecruiterCredit> credits =  this.creditDao.getByRecruiterId(userId);
-			
+		
 		if(credits.isEmpty()) {
 			throw new IllegalArgumentException("Unknown User: " + userId);	
 		}
 		
-		return credits.get().getCredits();
+		return credits.get();
 		
 	}
 

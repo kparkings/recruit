@@ -1,0 +1,92 @@
+<div class="page">
+
+	<!-- Nav options -->
+	<div class="nav-tabs-bar"></div>
+	
+	<div class='page-body'>
+	<div>
+		
+		<div class="action-buttons" *ngIf="currentView == 'view-read'">
+			<button class="btn btn-secondary arenella-btn" (click)="composeReply()"			*ngIf="currentEmail.sender.senderType === 'RECRUITER' || currentEmail.sender.senderType === 'CANDIDATE'">{{'arenella-email-btn-reply' | translate}}</button>
+			<button class="btn btn-secondary arenella-btn" (click)="markAsUnread()" 			*ngIf="currentEmail.viewed">{{'arenella-email-btn-undread' | translate}}</button>
+			<button class="btn btn-secondary arenella-btn"  									*ngIf="!currentEmail.viewed" disabled>{{'arenella-email-btn-unread' | translate}}</button>
+			<button class="btn btn-secondary arenella-btn" (click)="viewInbox()">{{'arenella-email-menu-back' | translate}}</button>
+		</div>
+		
+		<div *ngIf="hasEmails()">
+			<table class="table email-table" *ngIf="currentView == 'view-inbox'">
+				<thead>
+					<tr>
+						<th>{{'arenella-email-from' | translate}}</th>
+						<th>{{'arenella-email-subject' | translate}}</th>
+						<th>{{'arenella-email-sent' | translate}}</th>
+					</tr>
+				</thead>
+				<tr class="email_viewed_{{email.viewed}}" *ngFor="let email of emails" (click)="viewEmail(email)">
+					<td>{{email.sender.senderName}}</td>
+					<td>{{email.title}}</td>
+					<td>{{email.created | date: 'dd / MM'}}</td>
+				</tr>
+			</table>
+		</div>
+		<div *ngIf="!hasEmails()" class="no-emails">
+			<p>{{'arenella-email-none-1' | translate}}</p>
+			<p>{{'arenella-email-none-2' | translate}}</p>
+		</div>
+	</div>
+	<div *ngIf="currentView == 'view-read'">
+		<div >
+			<div class="email-title">{{currentEmail.title}}</div>
+			<div class="email-header">
+				<div class="left-div-header" *ngIf="currentEmail.sender.senderType === 'RECRUITER' || currentEmail.sender.senderType === 'CANDIDATE'">{{currentEmail.sender.senderName}}</div>
+				<div class="left-div-header" *ngIf="currentEmail.sender.senderType != 'RECRUITER'">{{currentEmail.sender.senderName}} : {{currentEmail.sender.email}}</div>
+				<div class="right-div-header">
+					{{currentEmail.created | date: 'dd / MM / yyyy'}}
+					<br>
+					{{currentEmail.created | date: 'hh:mm:ss'}}
+				</div>
+			</div>
+			<div class="attachments">
+				<span class="attachment-title">{{'arenella-email-attachments' | translate}}:</span>
+				<span *ngFor="let attachment of currentEmail.attachments">
+					<a href="{{getAttachmentUrl(attachment, currentEmail)}}">
+						<span class="attachment">{{attachment.name}}</span>
+					</a>
+				</span>
+			</div>
+			<div class="email-body">
+				<div>
+					<div class="left-div" style="white-space: pre-wrap;">{{currentEmail.body}}</div>
+				</div>
+				<div class="email-footer">
+				</div>	
+			</div>
+			
+		</div>
+	</div>
+	<div class="page-footer">
+	</div>
+	</div>
+</div>
+
+<!-- Reply Box -->
+<dialog #replyBox>
+	<div class="modal-header">
+		<h4 class="modal-title">{{'arenella-email-msg-send-reply' | translate}}</h4>
+ 		<div class="filter-close-box" (click)="replyBox.close()">X</div>
+	</div>
+	<div class="feedbackBox;">
+		<div class="modal-body" *ngIf="replyState === 'compose'">
+			<form [formGroup]="replyFormGroup">
+				<textarea formControlName="message"></textarea>
+			</form>
+			<button class="btn btn-secondary arenella-btn" (click)="sendReply()">{{'arenella-email-msg-send' | translate}}</button>
+		</div>
+		<div class="modal-body modal-feedback" *ngIf="replyState === 'success'">
+			<p>{{'arenella-email-msg-reply-sent' | translate}}</p>
+		</div>
+		<div class="modal-body modal-feedback" *ngIf="replyState === 'failure'">
+			<p>{{'arenella-email-msg-reply-failed' | translate}}</p>
+		</div>
+	</div>
+</dialog>

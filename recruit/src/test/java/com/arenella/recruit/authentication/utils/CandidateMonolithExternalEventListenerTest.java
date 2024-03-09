@@ -123,7 +123,7 @@ public class CandidateMonolithExternalEventListenerTest {
 		
 		this.listener.listenForSubscriptionAddedEvent(event);
 	
-		Mockito.verify(this.mockCandidateService).updateCreditsForUser(event.getRecruiterId(), RecruiterCredit.DISABLED_CREDITS);
+		Mockito.verify(this.mockCandidateService).updateCreditsForUser(event.getRecruiterId(), RecruiterCredit.DISABLED_CREDITS, Optional.of(true));
 		
 	}
 
@@ -180,5 +180,47 @@ public class CandidateMonolithExternalEventListenerTest {
 		
 	}
 	
+	/**
+	* Test case that the Subscription is a credit based subscriptiio
+	* @throws Exception
+	*/
+	@Test
+	public void testSubscriptionAddedEvent_creditBased() throws Exception{
 	
+		final String userId = "user1";
+		
+		this.listener.listenForSubscriptionAddedEvent(new SubscriptionAddedEvent(userId, subscription_type.CREDIT_BASED_SUBSCRIPTION));
+		
+	}
+	
+	/**
+	* Tests case that the Subscription is a non paid Subscription
+	* @throws Exception
+	*/
+	@Test
+	public void testSubscriptionAddedEvent_unaidSubscription() throws Exception{
+		
+		final String userId = "user1";
+		
+		this.listener.listenForSubscriptionAddedEvent(new SubscriptionAddedEvent(userId, subscription_type.FIRST_GEN));
+		
+		Mockito.verify(this.mockCandidateService).updateCreditsForUser(userId, RecruiterCredit.DISABLED_CREDITS, Optional.of(false));
+		
+	}
+	
+	/**
+	* Tests case that the Subscription is a paid Subscription
+	* @throws Exception
+	*/
+	@Test
+	public void testSubscriptionAddedEvent_paidSubscription() throws Exception{
+		
+		final String userId = "user1";
+		
+		this.listener.listenForSubscriptionAddedEvent(new SubscriptionAddedEvent(userId, subscription_type.ONE_MONTH_SUBSCRIPTION));
+	
+		Mockito.verify(this.mockCandidateService).updateCreditsForUser(userId, RecruiterCredit.DISABLED_CREDITS, Optional.of(true));
+	
+	}
+
 }

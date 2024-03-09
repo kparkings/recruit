@@ -2314,4 +2314,16 @@ databaseChangeLog:
             baseTableName: saved_candidates
             baseTableSchemaName: candidate
             constraintName: fk_saved_candidate_candidate
+  - changeSet:
+      id: addColumn-paid_subscription
+      author: kevin
+      changes:
+        - addColumn:
+            tableName: credits
+            schemaName: candidate
+            columns:
+            - column:
+                name: paid_subscription
+                type: boolean
+                constraints:
             

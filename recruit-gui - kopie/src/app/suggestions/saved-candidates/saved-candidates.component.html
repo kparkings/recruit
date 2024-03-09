@@ -1,0 +1,34 @@
+<div *ngIf="currentView === 'saved-candidates'">
+	<div class="action-buttons">
+		<button class="btn btn-secondary arenella-btn" (click)="handleswitchViewEvent()">{{'arenella-suggestions-saved-candidate-btn-back' | translate}}</button>
+	</div>	 
+	<br>
+	<div style="margin-top:0px;">
+		<div class="suggestion-icon" *ngFor="let savedCandidate of savedCandidates" (click)="showSuggestedCandidateOverviewSavedCandidate(savedCandidate)">
+			<div class="saved-candidate-icon-header" *ngIf="!isNoLongerAvailableSC(savedCandidate)">
+				C{{savedCandidate.candidate.candidateId}}
+			</div>
+			<div class="saved-candidate-icon-header-disabled" *ngIf="isNoLongerAvailableSC(savedCandidate)">
+				C{{savedCandidate.candidate.candidateId}}
+			</div>
+			<div class="suggestion-icon-body">
+				<div *ngIf="!isNoLongerAvailableSC(savedCandidate)">
+					{{savedCandidate.candidate.firstname}} {{savedCandidate.candidate.surname}}
+				</div>
+				<div *ngIf="isNoLongerAvailableSC(savedCandidate)">
+					{{'saved-candidate-no-longer-available' |translate}}
+				</div>
+				<div>
+					{{savedCandidate.candidate.roleSought}}
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="suggestion-result-footer">&nbsp;</div>
+</div>
+
+<div *ngIf="currentView === 'suggested-canidate-overview'">
+	<app-candidate-profile (backEvent)="showSavedCandidates()" [parentComponent]="'savedCandidates'"[infoItemConfig]="infoItemConfig" [suggestedCandidate]="suggestedCandidate" [candidateProfile]="candidateProfile" [skillFilters]="skillFilters"></app-candidate-profile>
+</div>
+
+			

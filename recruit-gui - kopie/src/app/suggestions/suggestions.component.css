@@ -1,0 +1,221 @@
+.sugg-srch-hdr{
+	width:120px;
+	font-weight:bold;
+}
+
+.sugg-srch-bdy{
+	margin-top:10px;
+}
+
+.sugg-srch-job-title{
+	width:100%;
+	font-weight:bold;
+}
+
+.sugg-srch-ctry-ul{
+	margin:0;
+	padding:0;
+	margin-top:10px;
+}
+
+.sugg-srch-ctry-chkbox{
+	display:inline;
+	margin:0;
+	padding:0;
+}
+
+.left-menu h3, h5{
+	margin-top:10px;
+	text-align:center;
+}
+
+.country-selected-true{
+	opacity:1;
+}
+
+.country-selected-false{
+	opacity:0.25;
+}
+
+.flag-icon-med{
+	width:30px;
+	height:30px;
+	margin:10px;
+	margin-top:0px;
+	margin-left:0px;
+	cursor:pointer;
+}
+
+.suggestion-buttons{
+	float:right;
+}
+
+/**
+.btn-action{
+	margin-top:5px;
+	margin-right:10px;
+	min-width:150px;
+}*/
+
+.selected-skill{
+	margin:2px;
+	padding:5px;
+	border-radius:5px;
+	background:grey;
+	display:inline-block;
+}
+ 
+.selected-skill:hover{
+	margin:2px;
+	padding:5px;
+	border-radius:5px;
+	background:red;
+	cursor:pointer;
+	display:inline-block;
+}
+
+.lang-checkbox{
+	margin-right:5px;
+	margin-left:5px;
+	margin-top:5px;
+}
+
+.add-skill-btn{
+	margin-top:4px;
+	margin-left:4px;
+	padding-left:4px;
+	padding-right:4px;
+} 
+
+.suggestion-icon{
+	float:left;
+	background:#E8E8E8;
+	width:13%;
+	height:140px;
+	cursor:pointer;
+	margin-right:1%;
+	margin-top:0px;
+	margin-bottom:1%;
+}
+
+.suggestion-icon-body{
+	text-align:center;
+	margin-top:10px;
+	font-size:12px;
+}
+
+.suggestion-icon-header{
+	background:#6c757d;
+	margin:0px;
+	font-weight:bold;
+	font-size:16px;
+	width:100%;
+	padding:5px;
+	color:white;
+}
+
+.suggestion-icon-header:before{
+	content: ' ';
+	padding-left:20px;
+}
+.suggestion-icon-header-saved:before{
+	color:yellow;
+	content: '* ';
+	font-size:18px;
+	padding-left:10px;
+}
+
+.suggestion-summary-infobox{
+	background:#E8E8E8;
+	margin:10px;
+	margin-top:0px;
+	margin-bottom:0px;
+}
+
+.suggestion-summary-infobox-body{
+	text-align:center;
+	margin-top:0px;
+	padding:5px;
+	color:black;
+	float:left;
+}
+
+.language-level{
+	margin-left:10px;
+}
+
+.skill-level{
+	margin-left:10px;
+	margin-right:10px;
+}
+
+.suggestion-flag-country{
+	height:20px;
+	width:50px;
+	padding-left:0px;
+	margin-left:0px;
+	background-position:0%;
+}
+/**
+.skill-match{
+	margin:2px;
+	padding:5px;
+	border-radius:5px;
+	background:green;
+	display:inline-block;	
+}
+
+.skill-no-match{
+	margin:2px;
+	padding:5px;
+	border-radius:5px;
+	background:grey;
+	display:inline-block;
+}
+*/
+.suggestion-perception-perfect{
+	background:green;
+	width:100%;	
+	height:10px;
+}
+.suggestion-icon-mobile{
+	width:48%;
+	margin-right:2%;
+	margin-bottom:2%;
+}
+
+.lang-proficient-check-icon{
+	color:green;
+	font-weight:bold;
+	font-size:16px;
+}
+
+.filter-close-box{
+	padding:10px;
+	cursor:pointer;
+	font-size:20px;
+	font-weight: bold;
+	text-align: right;
+}
+
+.contract-type{
+	width:195px;
+}
+
+.country-filter{
+	margin-left:8px;
+}
+
+.skill-field{
+	width:140px;
+}
+
+.min{
+	width:75px;
+ 	margin-right:13px;
+}
+
+.max{
+ 	width:75px;
+ 	margin-left:13px;
+}

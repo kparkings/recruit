@@ -975,6 +975,56 @@ public class CandidateServiceImplTest {
 	}
 	
 	/**
+	* Tests case User is recruiter and attempts to view and unavailable candidate without 
+	* a paid subscription
+	* @throws Exception
+	*/
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@Test
+	public void testFetchCandidate_candidate_is_not_avaialble_and_recruiter_no_paid_subscription() throws Exception{
+		
+		Collection authorities = new HashSet<>();
+		authorities.add(new SimpleGrantedAuthority("ROLE_RECRUITER"));
+
+		Mockito.when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
+		Mockito.when(mockAuthentication.getAuthorities()).thenReturn(authorities);
+		Mockito.when(mockAuthentication.getPrincipal()).thenReturn("user1");
+		
+		Mockito.when(this.mockCandidateDao.findCandidateById(Mockito.anyLong())).thenReturn(Optional.of(Candidate.builder().available(false).build()));
+		Mockito.when(this.mockCreditDao.getByRecruiterId(Mockito.anyString())).thenReturn(Optional.of(RecruiterCredit.builder().paidSubscription(false).build()));
+		//Optional<RecruiterCredit> credits =  this.creditDao.getByRecruiterId(userId);
+		Assertions.assertThrows(IllegalArgumentException.class, () -> {
+			this.service.fetchCandidate("1960", "1961", authorities);
+		});
+		
+	}
+	
+	/**
+	* Tests case User is recruiter and attempts to view and unavailable candidate with 
+	* a paid subscription
+	* @throws Exception
+	*/
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@Test
+	public void testFetchCandidate_candidate_is_not_avaialble_and_recruiter_has_paid_subscription() throws Exception{
+		
+		Collection authorities = new HashSet<>();
+		authorities.add(new SimpleGrantedAuthority("ROLE_RECRUITER"));
+
+		Mockito.when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
+		Mockito.when(mockAuthentication.getAuthorities()).thenReturn(authorities);
+		Mockito.when(mockAuthentication.getPrincipal()).thenReturn("user1");
+		
+		Mockito.when(this.mockCandidateDao.findCandidateById(Mockito.anyLong())).thenReturn(Optional.of(Candidate.builder().available(false).build()));
+		Mockito.when(this.mockCreditDao.getByRecruiterId(Mockito.anyString())).thenReturn(Optional.of(RecruiterCredit.builder().paidSubscription(true).build()));
+		
+		Candidate candidate = 	this.service.fetchCandidate("1960", "1961", authorities);
+		
+		assertNotNull(candidate);
+		
+	}
+	
+	/**
 	* Tests Exception is thrown if Candidate not found
 	* @throws Exception
 	*/
@@ -1037,14 +1087,19 @@ public class CandidateServiceImplTest {
 	* Tests happy path for Recruiter requesting a Candidate profile
 	* @throws Exception
 	*/
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Test
 	public void testFetchCandidate_recruiter_candidate_found() throws Exception{
 		
-		GrantedAuthority 				mockGA = Mockito.mock(GrantedAuthority.class);
-		Collection<GrantedAuthority> 	authorities = Set.of(mockGA);
+		Collection authorities = new HashSet<>();
+		authorities.add(new SimpleGrantedAuthority("ROLE_RECRUITER"));
+
+		Mockito.when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
+		Mockito.when(mockAuthentication.getAuthorities()).thenReturn(authorities);
+		Mockito.when(mockAuthentication.getPrincipal()).thenReturn("user1");
 		
-		Mockito.when(mockGA.getAuthority()).thenReturn("ROLE_RECRUITER");
 		Mockito.when(this.mockCandidateDao.findCandidateById(Mockito.anyLong())).thenReturn(Optional.of(Candidate.builder().build()));
+		Mockito.when(this.mockCreditDao.getByRecruiterId(Mockito.anyString())).thenReturn(Optional.of(RecruiterCredit.builder().paidSubscription(true).build()));
 		
 		Candidate candidate = this.service.fetchCandidate("1961", "1961", authorities);
 		
@@ -1855,6 +1910,7 @@ public class CandidateServiceImplTest {
 	
 	/**
 	* Happy path
+	* Test case where paidSubscription value exists but is not being updated
 	* @throws Exception
 	*/
 	@Test
@@ -1865,7 +1921,7 @@ public class CandidateServiceImplTest {
 
 		ArgumentCaptor<RecruiterCredit> argCapt = ArgumentCaptor.forClass(RecruiterCredit.class);
 		
-		RecruiterCredit recCredits = RecruiterCredit.builder().recruiterId(userId).credits(30).build();
+		RecruiterCredit recCredits = RecruiterCredit.builder().recruiterId(userId).credits(30).paidSubscription(true).build();
 		
 		Mockito.when(this.mockCreditDao.getByRecruiterId(userId)).thenReturn(Optional.of(recCredits));
 		Mockito.doNothing().when(this.mockCreditDao).persist(argCapt.capture());
@@ -1875,7 +1931,32 @@ public class CandidateServiceImplTest {
 		Mockito.verify(this.mockCreditDao).persist(Mockito.any());
 		
 		assertEquals(credits, argCapt.getValue().getCredits());
+		assertTrue(argCapt.getValue().hasPaidSubscription());
+	}
+	
+	/**
+	* Test case where paidSubscription value is provided
+	* @throws Exception
+	*/
+	@Test
+	public void testUpdateCreditsForUser_paidSubscriptin_specified() throws Exception{
 		
+		final String 	userId 		= "kparkings";
+		final int 		credits 	= 20;
+
+		ArgumentCaptor<RecruiterCredit> argCapt = ArgumentCaptor.forClass(RecruiterCredit.class);
+		
+		RecruiterCredit recCredits = RecruiterCredit.builder().recruiterId(userId).credits(30).paidSubscription(true).build();
+		
+		Mockito.when(this.mockCreditDao.getByRecruiterId(userId)).thenReturn(Optional.of(recCredits));
+		Mockito.doNothing().when(this.mockCreditDao).persist(argCapt.capture());
+		
+		this.service.updateCreditsForUser(userId, credits, Optional.of(false));
+	
+		Mockito.verify(this.mockCreditDao).persist(Mockito.any());
+		
+		assertEquals(credits, argCapt.getValue().getCredits());
+		assertFalse(argCapt.getValue().hasPaidSubscription());
 	}
 	
 	/**

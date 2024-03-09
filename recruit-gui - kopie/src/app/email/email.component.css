@@ -1,0 +1,156 @@
+.content-div{
+	margin:10px;
+	margin-left:30px;
+	margin-right:30px;
+}
+
+.email-buttons{
+	margin-bottom:20px;
+	padding-bottom:20px;
+	min-height:75px;
+}
+
+.email-table{
+	width:100%;
+}
+
+th{
+	border: 1px black solid;
+    background: #6c757d;
+    color: #ffffff;
+    font-size: x-small;
+    padding: 5px;
+    margin: 5px;
+    text-align: center;
+    padding-left: 5px;
+    padding-right: 5px;
+    min-width: 50px;
+}
+
+td{
+	border: 1px black solid;
+    font-size: x-small;
+    padding: 5px;
+    margin: 5px;
+    text-align: center;
+    padding-left: 5px;
+    padding-right: 5px;
+    min-width: 50px;
+    word-wrap: break-word;
+}
+
+tr:nth-child(odd){
+  background-color: #ffffff;
+}
+
+tr:nth-child(even){
+  background-color: #e8e8e8;
+}
+
+.tab-nav{
+	cursor:pointer;
+}
+
+.email-header{
+	background:#6A5ACD;
+	padding-top:15px;
+	color:white;	
+	min-height:90px;
+}
+
+.attachments{
+	background:#6c757d;
+	padding-top:10px;
+	height:20px;
+	color:white;	
+	min-height:50px;
+	padding-left:20px;
+}
+
+.attachment-title{
+	margin-right:50px;	
+}
+.email-body{
+	background:#e8e8e8;
+	padding:20px;
+	margin-bottom:20px;
+}
+
+.email-footer{
+	clear:both;	
+}
+
+.page-footer{
+	clear:both;
+	margin-top:20px;
+}
+
+.left-div-header{
+	float:left;
+	margin-left:20px;
+	max-width:50%;
+	word-break: break-word;
+	line-break: anywhere;
+}
+
+.right-div-header{
+	float:right;
+	margin-right:20px;
+	text-align:right;
+}
+
+.left-div{
+	float:left;
+	margin-left:20px;
+	max-width:95%;
+}
+
+.email-title{
+	text-align:center;
+	font-size:22px;
+	font-weight:bold;
+	margin-bottom:20px;
+}
+
+.attachment{
+	color:white;
+	cursor:pointer;
+	text-decoration:underline;
+}
+
+.email_viewed_true{
+	font-weight:normal;
+}
+
+.email_viewed_false{
+	font-weight:bold;
+}
+
+.no-emails{
+	padding: 30px;
+	min-width:350px;
+	max-width:90%;
+	margin: auto;
+	text-align:center; 
+}
+
+.modal-body textarea{
+	width:100%;
+	height:310px;
+	margin:5px;
+}
+
+.filter-close-box{
+	cursor:pointer;
+}
+
+.modal-feedback{
+	min-height:200px;
+	margin-top:50px;
+	height:150px;
+}
+
+.email-table{
+	margin-top:20px;
+}
+

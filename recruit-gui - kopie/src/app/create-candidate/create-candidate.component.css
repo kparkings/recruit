@@ -1,0 +1,123 @@
+.feedback-failure{
+    background: #F0F0F0;
+    color: red;
+}
+
+.feedback-success{
+    background: #F0F0F0;
+}
+
+.feedbackBox{
+    width:300px;
+    height:500px;
+}
+
+.modal-header-text{
+    text-align:center;
+    color:#6f42c1;
+    margin-top:10px;
+    width:500px;
+    
+}
+
+.feedbackBox{
+    width:200px;
+    height:350px;
+}
+
+.filter-close-box{
+     padding:10px;
+     cursor:pointer;
+     font-size:20px;
+     font-weight: bold;
+    text-align: right;
+        
+}
+
+.centerdiv{
+    margin: 0 auto;
+    padding-left:10px;
+    padding-right:10px;
+    width:90%;
+}
+
+.center-table{
+    margin:0 auto;
+    margin-top:25px;
+    max-width:800px;
+}
+
+.tb-lbl{
+	padding-right:20px;
+}
+
+.tb-lbl-checkbox{
+	padding-right:40px;
+}
+
+.inpt-tab-std{
+	max-width:220px;
+}
+
+.div-spacing{
+	margin-top:40px;
+}
+
+.additional-info{
+	margin-top:40px;
+}
+
+table th{
+	width:220px;
+}
+
+textarea{
+	width:100%;
+	height:100px;
+}
+
+.show-row{
+	display:true;
+}
+
+.hide-row{
+	display:none;
+}
+
+.creat-candidate-intro{
+	color:grey;
+}
+
+
+.candidate-signup-page{
+	margin-top:20px;
+	width:100%;
+	text-align:center;
+}
+
+.candidate-signup-page h5{
+	color:grey;
+}
+
+.candidate-signup-panel{
+	width:80%;
+	margin-top:20px;
+	margin-left:10%;
+	margin-right:10%;
+	margin-bottom:50px;
+}
+
+@media ( max-width :700px) {
+	.candidate-signup-panel{
+		width:100%;
+		margin-top:50px;
+		margin-left:0%;
+		margin-right:0%;
+		margin-bottom:50px;
+	}
+	.arenella-btn{
+		margin-top:20px;
+		margin-bottom:20px;
+		width:200px
+	}
+}

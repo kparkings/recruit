@@ -102,20 +102,24 @@ public class CandidateFilterOptionsTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testSetFunctions() throws Exception{
+	public void testSetters() throws Exception{
 		
-		Set<FUNCTION> originalFunctions 	= Set.of(FUNCTION.ARCHITECT);
-		Set<FUNCTION> newFunctions 			= Set.of(FUNCTION.JAVA_DEV);
+		Set<FUNCTION> 	originalFunctions 	= Set.of(FUNCTION.ARCHITECT);
+		Set<FUNCTION> 	newFunctions 		= Set.of(FUNCTION.JAVA_DEV);
+		Boolean 		active 				= false;
 		
 		CandidateFilterOptions filters = CandidateFilterOptions.builder().functions(originalFunctions).build();
 		
 		assertTrue(filters.getFunctions().contains(FUNCTION.ARCHITECT));
 		assertFalse(filters.getFunctions().contains(FUNCTION.JAVA_DEV));
+		assertTrue(filters.isAvailable().isEmpty());
 		
 		filters.setFunctions(newFunctions);
+		filters.setAvailable(active);
 		
 		assertFalse(filters.getFunctions().contains(FUNCTION.ARCHITECT));
 		assertTrue(filters.getFunctions().contains(FUNCTION.JAVA_DEV));
+		assertFalse(filters.isAvailable().get());
 		
 	}
 	

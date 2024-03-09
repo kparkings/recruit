@@ -1,0 +1,266 @@
+<div class="page" >
+	
+	<!-- Nav options -->
+	<div class="nav-tabs-bar">	
+		<ul class="nav nav-tabs">
+		  <li class="nav-item" *ngIf="!isRecruiterNoSubscription() && !hasUnpaidSubscription()">
+		    <span class="nav-link tabNav" (click)="switchTab('showAccountDetails')">{{'arenella-recruiter-account-details' | translate}}</span>
+		  </li>
+		  <li class="nav-item">
+		    <span class="nav-link tabNav" (click)="switchTab('showSubscriptions')">{{'arenella-recruiter-account-subscriptions' | translate}}</span>
+		  </li>
+		</ul>
+	</div>
+	
+	<div class="page-body">
+	<!-- Account details -->
+	<div *ngIf="showAccountDetails">
+
+		<div class="action-buttons">
+			<button class="btn btn-secondary arenella-btn" (click)="switchToEditMode()" 		*ngIf="!isInEditMode">{{'arenella-recruiter-account-btn-edit' | translate}}</button>
+			<button class="btn btn-secondary arenella-btn" (click)="cancelEditMode()"			*ngIf="isInEditMode">{{'arenella-recruiter-account-btn-cancel' | translate}}</button>
+			<button class="btn btn-secondary arenella-btn" (click)="persistAccountDetails()"	*ngIf="isInEditMode">{{'arenella-recruiter-account-btn-save' | translate}}</button>
+		</div>
+		
+		<div id="account-details-input">
+			<form [formGroup]="accoundDetailsForm">
+				<table class="table center">
+					<tr>
+						<td class="table-left-hdr" ><label>UserId</label></td>
+						<td class="table-cell">{{recruiter.userId}}</td>
+					</tr>
+					<tr>
+						<td class="table-left-hdr">{{'arenella-recruiter-account-firstname' | translate}}</td>
+						<td class="table-cell" *ngIf="!isInEditMode"><label>{{recruiter.firstName}}</label></td>
+						<td class="table-cell" *ngIf="isInEditMode">
+							<input type="text" formControlName="firstName"/> 
+						</td>
+					</tr>
+					<tr>
+						<td class="table-left-hdr">{{'arenella-recruiter-account-surname' | translate}}</td>
+						<td class="table-cell" *ngIf="!isInEditMode"><label>{{recruiter.surname}}</label></td>
+						<td class="table-cell" *ngIf="isInEditMode">
+							<input type="text" formControlName="surname"/> 
+						</td>
+					</tr>
+					<tr>
+						<td class="table-left-hdr">{{'arenella-recruiter-account-email' | translate}}</td>
+						<td class="table-cell" *ngIf="!isInEditMode"><label>{{recruiter.email}}</label></td>
+						<td class="table-cell" *ngIf="isInEditMode">
+							<input type="text" formControlName="email"/> 
+						</td>
+					</tr>
+					<tr>
+						<td class="table-left-hdr">{{'arenella-recruiter-account-lang' | translate}}</td>
+						<td class="table-cell" *ngIf="!isInEditMode"><label>{{getLang(recruiter.language)}}</label></td>
+						<td class="table-cell" *ngIf="isInEditMode">
+						 	<select  formControlName="language">
+								<option value="ENGLISH" >{{'arenella-recruiter-account-english' | translate}}</option>
+								<option value="DUTCH"	>{{'arenella-recruiter-account-dutch' | translate}}</option>
+								<option value="FRENCH"	>{{'arenella-recruiter-account-french' | translate}}</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td class="table-left-hdr">{{'arenella-recruiter-account-company-name' | translate}}</td>
+						<td class="table-cell" *ngIf="!isInEditMode"><label>{{recruiter.companyName}}</label></td>
+						<td class="table-cell" *ngIf="isInEditMode">
+							<input type="text" formControlName="companyName"/> 
+						</td>
+					</tr>
+					<tr>
+						<td class="table-left-hdr">{{'arenella-recruiter-account-details-company-address' | translate}}</td>
+						<td class="table-cell" *ngIf="!isInEditMode"><label>{{recruiter.companyAddress}}</label></td>
+						<td class="table-cell" *ngIf="isInEditMode">
+							<textarea formControlName="companyAddress"></textarea> 
+						</td>
+					</tr>
+					<tr>
+						<td class="table-left-hdr">{{'arenella-recruiter-account-details-company-country' | translate}}</td>
+						<td class="table-cell" *ngIf="!isInEditMode"><label>{{recruiter.companyCountry}}</label></td>
+						<td class="table-cell" *ngIf="isInEditMode">
+							<input type="text" formControlName="companyCountry"/> 
+						</td>
+					</tr>
+					<tr>
+						<td class="table-left-hdr">{{'arenella-recruiter-account-details-company-vat-num' | translate}}</td>
+						<td class="table-cell" *ngIf="!isInEditMode"><label>{{recruiter.companyVatNumber}}</label></td>
+						<td class="table-cell" *ngIf="isInEditMode">
+							<input type="text" formControlName="companyVatNumber"/> 
+						</td>
+					</tr>
+					<tr>
+						<td class="table-left-hdr">{{'arenella-recruiter-account-details-company-reg-num' | translate}}</td>
+						<td class="table-cell" *ngIf="!isInEditMode"><label>{{recruiter.companyRegistrationNumber}}</label></td>
+						<td class="table-cell" *ngIf="isInEditMode">
+							<input type="text" formControlName="companyRegistrationNumber"/> 
+						</td>
+					</tr>
+				</table>
+			
+			</form>
+		</div>
+	</div>
+	
+	<!-- Subscriptions -->
+	<div class="container-div container-div-high" *ngIf="showSubscriptions">
+		
+		<div *ngIf="isBuyingSubscription && !showBillingDetails" class="no-sub-warn">
+		
+			<h1>{{'arenella-recruiter-account-details-sub-options' | translate}}</h1>
+			
+			<div>
+				<div class="subs-opt-box {{subscriptionSelectionMobCss}}" (click)="doShowBillingDetails('CREDIT_BASED_SUBSCRIPTION')" *ngIf="!isCreditBasedSubscription">
+					<h3>{{'arenella-recruiter-account-details-sub-credit' | translate}}</h3>
+					<p>{{'arenella-recruiter-account-details-sub-credit-cost' | translate}}</p>
+				</div>
+				<div class="subs-opt-box {{subscriptionSelectionMobCss}}" style="background:grey;cursor:unset;border:none" *ngIf="isCreditBasedSubscription">
+					<h3>{{'arenella-recruiter-account-details-sub-credit' | translate}}</h3>
+					<p>{{'arenella-recruiter-account-details-sub-credit-cost' | translate}}</p>
+				</div>
+				<div class="subs-opt-box {{subscriptionSelectionMobCss}}" (click)="doShowBillingDetails('ONE_MONTH_SUBSCRIPTION')">
+					<h3>{{'arenella-recruiter-account-details-month-1' | translate}}</h3>
+					<p>{{'arenella-recruiter-account-details-month-1-cost' | translate}}</p>
+				</div>
+				<div class="subs-opt-box {{subscriptionSelectionMobCss}}" (click)="doShowBillingDetails('THREE_MONTHS_SUBSCRIPTION')">
+					<h3>{{'arenella-recruiter-account-details-month-3' | translate}}</h3>
+					<p>{{'arenella-recruiter-account-details-month-3-cost' | translate}}</p>
+				</div>
+				<div class="subs-opt-box {{subscriptionSelectionMobCss}}" (click)="doShowBillingDetails('SIX_MONTHS_SUBSCRIPTION')">
+					<h3>{{'arenella-recruiter-account-details-month-6' | translate}}</h3>
+					<p>{{'arenella-recruiter-account-details-month-6-cost' | translate}}</p>
+				</div>
+				<div class="subs-opt-box {{subscriptionSelectionMobCss}}" (click)="doShowBillingDetails('YEAR_SUBSCRIPTION')">
+					<h3>{{'arenella-recruiter-account-details-month-12' | translate}}</h3>
+					<p>{{'arenella-recruiter-account-details-month-12-cost' | translate}}</p>
+				</div>
+			</div>
+			<div class="spacer"></div>
+		</div>
+		
+		<div class="no-sub-warn" *ngIf="showBillingDetails">
+		
+				<h1>{{'arenella-recruiter-account-detail-payment-details' | translate}}</h1>
+				
+				<div class="account-details {{accountDetailsMobCss}}">
+					<form [formGroup]="accoundDetailsForm">
+						<table class="center">
+							<tr>
+								<td class="label">{{'arenella-recruiter-account-detail-payment-company-name' | translate}}</td>
+							</tr>
+							<tr>
+								<td><input type="text" formControlName="companyName"></td>
+							</tr>
+					
+					
+							<tr>
+								<td class="label">{{'arenella-recruiter-account-detail-payment-company-name' | translate}}Company Address</td>
+							</tr>
+							<tr>
+								<td><textarea formControlName="companyAddress"></textarea></td>
+							</tr>
+					
+					
+							<tr>
+								<td class="label">{{'arenella-recruiter-account-detail-payment-company-country' | translate}}</td>
+							</tr>
+							<tr>
+								<td><input type="text" formControlName="companyCountry"></td>
+							</tr>
+					
+					
+							<tr>
+								<td class="label">{{'arenella-recruiter-account-detail-payment-company-tax-num' | translate}}</td>
+							</tr>
+							<tr>
+								<td><input type="text" formControlName="companyVatNumber"></td>
+							</tr>
+					
+					
+							<tr>
+								<td class="label">{{'arenella-recruiter-account-detail-payment-reg-num' | translate}}</td>
+							</tr>
+							<tr>
+								<td><input type="text" formControlName="companyRegistrationNumber"></td>
+							</tr>
+					
+					
+							<tr>
+								<td>
+									<button class="btn btn-secondary arenella-btn btnSubscribe" (click)="confirmSwitchToOtherSubscription()">{{'arenella-recruiter-account-detail-payment-btn-confirm' | translate}}</button>
+								</td>
+							</tr>
+						</table>
+					</form>
+				</div>
+			</div>
+			
+		<div *ngIf="!hasActiveSubscription() && !isBuyingSubscription" class="no-sub-warn">
+		
+			<h1>{{'arenella-recruiter-account-detail-trial-ended' | translate}}</h1>
+			
+			<p>{{'arenella-recruiter-account-detail-trial-ended-desc' | translate}}</p>
+			
+			<div class="center">
+				<div class="sub-opt-div {{mobCss}}">
+					<h3>{{'arenella-recruiter-account-detail-trial-ended-credit' | translate}}</h3>
+					<p>{{'arenella-recruiter-account-detail-trial-ended-credit-desc' | translate}}</p>
+					<div>
+						<ul>
+							<li>{{'arenella-recruiter-account-detail-trial-ended-credit-cv' | translate}}</li>
+							<li>{{'arenella-recruiter-account-detail-trial-ended-credit-jobs' | translate}}</li>
+							<li>{{'arenella-recruiter-account-detail-trial-ended-credit-mp' | translate}}</li>
+							<li>{{'arenella-recruiter-account-detail-trial-ended-credit-period' | translate}}</li>
+							<li>{{'arenella-recruiter-account-detail-trial-ended-credit-lost' | translate}}</li>
+						</ul>
+						<button class="btn btn-secondary" (click)="selectCreditBasedSubscription()">Select</button>
+					</div>
+				</div>
+				<div class="sub-opt-div {{mobCss}}">
+					<h3>{{'arenella-recruiter-account-detail-trial-ended-paid' | translate}}</h3>
+					<p>{{'arenella-recruiter-account-detail-trial-ended-paid-desc' | translate}}</p>
+					<div>
+					<ul>
+						<li>{{'arenella-recruiter-account-detail-trial-ended-paid-dowloads' | translate}}</li>
+						<li>{{'arenella-recruiter-account-detail-trial-ended-paid-jobs' | translate}}</li>
+						<li>{{'arenella-recruiter-account-detail-trial-ended-paid-mp' | translate}}</li>
+					</ul>
+					<button class="btn btn-secondary" (click)="showSubscriptionOptions()">{{'arenella-recruiter-account-detail-trial-ended-btn-select' | translate}}</button>
+					</div>
+				</div>
+				<div class="spacer"></div>
+			</div>
+		</div>
+		
+		<div *ngIf="hasUnpaidSubscription()" class="no-sub-warn">
+			<h2><b>{{'arenella-recruiter-account-detail-invoice-warn' | translate}}:</b> {{'arenella-recruiter-account-detail-invoice-warn-desc' | translate}} </h2>
+		</div>
+		
+		<div  *ngIf="hasActiveSubscription() && !isBuyingSubscription">
+			
+			<h2>{{'arenella-recruiter-account-detail-subs-title' | translate}}</h2>
+			
+			<table class="table">
+				<thead>
+					<tr>
+						<th class="bg-tab-hdr">{{'arenella-recruiter-account-detail-subs-id' | translate}}</th>
+						<th class="bg-tab-hdr">{{'arenella-recruiter-account-detail-subs-type' | translate}}</th>
+						<th class="bg-tab-hdr">{{'arenella-recruiter-account-detail-subs-created' | translate}}</th>
+						<th class="bg-tab-hdr">{{'arenella-recruiter-account-detail-subs-active' | translate}}</th>
+						<th class="bg-tab-hdr">{{'arenella-recruiter-account-detail-subs-status' | translate}}</th>
+					</tr>
+				</thead>
+				<tr *ngFor="let subscription of getOrderedRecruiterSubscriptions()">
+					<td class="subscription-tab-col">{{subscription.subscriptionId}}</td>
+					<td class="subscription-tab-col">{{subscription.type}}</td>
+					<td class="subscription-tab-col">{{subscription.created | date:'yyyy-MM-dd'}}</td>
+					<td class="subscription-tab-col">{{subscription.activatedDate | date:'yyyy-MM-dd'}}</td>
+					<td class="subscription-tab-col">{{subscription.status}}</td>
+				</tr>
+			</table>
+			
+		</div>
+	</div>		
+</div>
+
+<div *ngIf="hasActiveSubscription()" class="rec-account-footer"></div>

@@ -1,0 +1,97 @@
+.tb-lbl{
+	padding-right:20px;
+}
+
+.inpt-tab-std{
+	max-width:240px;
+}
+
+.highlight{
+	color:#6A5ACD;
+}
+
+.feedback-failure{
+    background: #F0F0F0;
+    color: red;
+}
+
+.feedback-success{
+    background: #F0F0F0;
+}
+
+.filter-close-box{
+     padding:10px;
+     cursor:pointer;
+     font-size:20px;
+     font-weight: bold;
+    text-align: right;
+        
+}
+
+.subject-header h1{
+	width:100%;
+	padding:20px;
+	border-bottom:grey;
+	margin-bottom:10px;
+	text-align:center;
+	 
+}
+
+.modal-header-text{
+    text-align:center;
+    color:#6f42c1;
+    margin-top:10px; 
+}
+
+.feedbackBox{
+    width:200px;
+    height:350px;
+}
+
+.reruiter-signup-page{
+	margin-top:20px;
+	width:100%;
+	text-align:center;
+}
+
+.reruiter-signup-page h5{
+	color:grey;
+}
+
+.rec-signup-info{
+	float:right;
+	max-width:900px;
+}
+
+.recruiter-signup-panel{
+	width:80%;
+	margin-top:50px;
+	margin-left:10%;
+	margin-right:10%;
+	margin-bottom:50px;
+}
+
+.recruiter-signup-box{
+	float:left;
+	margin-bottom:3	0px;
+}
+
+.recruiter-info-box{
+	float:right;
+	padding-bottom:50px;
+	max-width:720px;
+}
+
+@media ( max-width :700px) {
+	.recruiter-signup-panel{
+		width:100%;
+		margin-top:50px;
+		margin-left:0%;
+		margin-right:0%;
+		margin-bottom:50px;
+	}
+	.arenella-btn{
+		margin-top:20px;
+		width:200px
+	}
+}

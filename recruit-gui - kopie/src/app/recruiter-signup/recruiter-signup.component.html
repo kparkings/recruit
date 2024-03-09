@@ -1,0 +1,87 @@
+<div class="page">
+
+	<!-- Nav options -->
+	<div class="nav-tabs-bar"></div>
+	
+    <div class="page-body">
+            <div>
+            	<div class="reruiter-signup-page">
+            		<h1>{{'arenella-recruiter-signup-hdr1' | translate}}</h1>
+            		<h5>{{'arenella-recruiter-signup-hdr2' | translate}}</h5>
+            	</div>
+            	
+            	<div class="recruiter-signup-panel">
+	            	<div class="recruiter-signup-box"> 
+	            		<h3>{{'arenella-recruiter-signup-signup' | translate}}</h3>
+						<form [formGroup]="signupForm">
+							<table>
+							<tr>
+								<td class="tb-lbl">{{'arenella-recruiter-signup-firstname' | translate}}</td>
+								<td><input type="text" class="inpt-tab-std" formControlName="firstName"/></td>
+							</tr>
+							<tr>
+								<td class="tb-lbl">{{'arenella-recruiter-signup-surname' | translate}}</td>
+								<td><input type="text" class="inpt-tab-std" formControlName="surname"/></td>
+							</tr>
+							<tr>
+								<td class="tb-lbl">{{'arenella-recruiter-signup-email' | translate}}</td>
+								<td><input type="text" class="inpt-tab-std" formControlName="email"/></td>
+							</tr>
+							<tr>
+								<td>{{'arenella-recruiter-signup-companyname' | translate}}</td>
+								<td><input type="text" class="inpt-tab-std" formControlName="company"/></td>
+							</tr>
+							<tr>
+								<td>{{'arenella-recruiter-signup-preferred-lang' | translate}}</td>
+								<td>
+									<select formControlName="preferredLanguage">
+										<option value="ENGLISH">{{'arenella-recruiter-signup-en' | translate}}</option>
+										<option value="DUTCH">{{'arenella-recruiter-signup-nl' | translate}}
+										</option>
+										<option value="FRENCH">{{'arenella-recruiter-signup-fr' | translate}}</option>
+									</select>
+								</td>
+								</tr>
+								<tr>
+									<td colspan="2" style="max-width:400px; padding-top:10px; font-style:italic; font-size:12px;">{{'arenella-recruiter-signup-agree' | translate}}</td>
+								</tr>
+								<tr>
+									<td></td>
+									<td>
+										<div class="action-buttons">
+											<button (click)="startFreeTrial()" [disabled]="isFreeTrialButtonEnabled()" class="btn btn-secondary arenella-btn">{{'arenella-recruiter-signup-btn-start-trial' | translate}}</button>
+										</div>
+									</td>
+								</tr>
+							</table>
+						</form>
+					</div>
+					
+					<div class="recruiter-info-box">
+						<div style="margin-bottom:40px;">
+							<h3>{{'arenella-recruiter-signup-free-trial' | translate}}</h3>
+							<p>{{'arenella-recruiter-signup-free-trial-text' | translate}}</p>
+						</div>
+						
+						<div>
+							<h3>{{'arenella-recruiter-signup-subscription-titles' | translate}}</h3>
+							<p>{{'arenella-recruiter-signup-subscriptions-text1' | translate}}</p>
+							<p>{{'arenella-recruiter-signup-subscriptions-text2' | translate}}</p>
+						</div>
+					</div>
+	            </div>
+            </div>
+        </div>
+</div>
+
+<dialog #feedbackBox>
+	<div class="modal-header">
+		<h4 class="modal-title">&nbsp;</h4>
+		<div class="filter-close-box" (click)="feedbackBox.close()">X</div>
+	</div>
+	<div class="feedbackBox; {{feedbackBoxClass}}">
+		<div class="modal-body">
+			<p class="modal-body-text">{{feedbackBoxText}}</p>
+		</div>       
+	</div>
+</dialog>

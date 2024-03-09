@@ -1,0 +1,142 @@
+<div *ngIf="currentView === 'inline-cv'">
+	<app-inline-cv [trustedResourceUrl]="trustedResourceUrl" [candidate]="suggestedCandidate" (switchViewEvent)="backToProfile()"></app-inline-cv>
+</div>
+	
+<div class="action-buttons">
+	<a class="currliculum-link" (click)="doCreditCheckByCount()" href="{{getCurriculumDownloadUrl(suggestedCandidate.candidateId)}}" *ngIf="showBtnDownloadCVPassedCreditCheck()">
+		<button class="btn btn-secondary arenella-btn">{{'arenella-suggestions-profile-btn-download-cv' | translate}}</button>
+	</a>
+	<button class="btn btn-secondary arenella-btn" 					(click)="handleNoCredit()" 								*ngIf="showBtnDownloadCV()">{{'arenella-suggestions-profile-btn-download-cv' | translate}}</button>
+	<button class="btn btn-secondary arenella-btn hide-for-mobile" 	(click)="showInlineCVView()" 							*ngIf="showBtnShowCV()">{{'arenella-suggestions-profile-btn-view-cv' | translate}}</button>
+	<button class="btn btn-secondary arenella-btn" 					(click)="editAccount()"									*ngIf="showBtnEdit()" > {{'arenella-suggestions-profile-btn-edit' | translate}}</button>
+    <button class="btn btn-secondary arenella-btn" 					(click)="deleteAccount()" 								*ngIf="showBtnDelete()"> {{'arenella-suggestions-profile-btn-delete' | translate}}</button>
+	<button class="btn btn-secondary arenella-btn" 					(click)="rememberCandidate(suggestedCandidate)" 		*ngIf="showBtnSaveCandidate()" title="Add candidate to your list of saved candidates">{{'arenella-suggestions-profile-btn-save' | translate}}</button>
+	<button class="btn btn-secondary arenella-btn" 					(click)="rememberCandidate(suggestedCandidate)" 		*ngIf="showBtnUnsavedCandidateDisabled()" title="Add candidate to your list of saved candidates" disabled>{{'arenella-suggestions-profile-btn-save' | translate}}</button>
+	<button class="btn btn-secondary arenella-btn" 					(click)="forgetCandidate()" 							*ngIf="showBtnUnsaveCandidate()" title="removed candidate from your list of saved candidates">{{'arenella-suggestions-profile-btn-unsave' | translate}}</button>
+	<button class="btn btn-secondary arenella-btn" 					(click)="showNotesDialog(notesBox,suggestedCandidate)" 	*ngIf="showBtnNotes()">{{'arenella-suggestions-profile-btn-notes' | translate}}</button>
+	<button class="btn btn-secondary arenella-btn" 					(click)="back()"										*ngIf="!isCandidate()">{{'arenella-suggestions-profile-btn-back' | translate}}</button>
+</div>
+			
+<!-- Left Pane -->
+<app-candidate-info-box [config]="infoItemConfig" (openContactBoxEvent)="contactCandidate(contactBox)" *ngIf="!this.suggestedCandidate.removed"></app-candidate-info-box>
+			
+<!-- div class="details-right" -->
+<div class="right-body-pane details-right" *ngIf="!this.suggestedCandidate.removed">
+	<div style="width:100%"><h1>{{suggestedCandidate.roleSought}}</h1></div>
+
+	<div *ngIf="candidateProfile.introduction && candidateProfile.introduction.length != 0" style="margin-top:50px;margin-bottom:50px;">
+		<div>
+			<h1 style="background:#e8e8e8">{{'arenella-suggestions-profile-introduction' | translate}}</h1>
+		</div>
+		<div style="width:100%;">
+			<pre style="white-space:pre-line;font-family: Roboto, 'Helvetica Neue', sans-serif;">{{candidateProfile.introduction}}</pre>
+		</div>
+	</div>		
+	<div *ngIf="!candidateProfile.introduction || candidateProfile.introduction.length == 0" style="margin-top:50px;margin-bottom:50px;">
+		<div><h1 style="background:#e8e8e8">{{'arenella-suggestions-profile-introduction' | translate}}</h1></div>
+		<div style="width:100%;">
+			<div style="white-space:pre-line;font-family: Roboto, 'Helvetica Neue', sans-serif;">
+			{{'arenella-suggestions-profile-intro-text' | translate}} {{this.suggestedCandidate.firstname}} 
+			{{'arenella-suggestions-profile-intro-text-2' | translate}} {{this.suggestedCandidate.yearsExperience}} {{'arenella-suggestions-profile-intro-text-3' | translate}}years experience. I am currently looking for a new role.
+		
+			{{'arenella-suggestions-profile-intro-text-4' | translate}} {{this.suggestedCandidate.country | enumToHumanReadableValue}} 
+			</div>
+		</div>
+	</div>		
+
+	<div>
+		<table class="table candidate-suggestion-table">
+			<tr>
+				<td class="candidate-suggestion-table-hdr">{{'arenella-suggestions-profile-candidate-number' | translate}}</td>
+				<td>{{suggestedCandidate.candidateId}}</td>
+			</tr>
+			<tr>
+				<td class="candidate-suggestion-table-hdr">{{'arenella-suggestions-profile-candidate-name' | translate}}</td>
+				<td>{{suggestedCandidate.firstname}} {{suggestedCandidate.surname}}</td>
+			</tr>
+			<tr *ngIf="!isCandidate()">
+				<td class="candidate-suggestion-table-hdr">{{'arenella-suggestions-profile-candidate-skill-accuracy' | translate}}</td>
+				<td>
+					<div class="suggestion-perception-{{suggestedCandidate.accuracySkills}}"></div>
+				</td>
+			</tr>
+			<tr *ngIf="!isCandidate()">
+				<td class="candidate-suggestion-table-hdr">{{'arenella-suggestions-profile-candidate-lang-accuracy' | translate}}</td>
+				<td>
+					<div class="suggestion-perception-{{suggestedCandidate.accuracyLanguages}}"></div>
+				</td>
+			</tr>
+			<tr *ngIf="!isCandidate()">
+				<td class="candidate-suggestion-table-hdr">{{'arenella-suggestions-profile-candidate-matching-skills' | translate}}</td>
+				<td>
+					<div style="float:center" *ngFor="let skill of skillsFiltersMatch()" class="{{hasRequiredSkill(skill)}}">
+						{{skill}}
+					</div>
+				</td>
+			</tr>
+			<tr *ngIf="!isCandidate()">
+				<td class="candidate-suggestion-table-hdr">{{'arenella-suggestions-profile-candidate-missing-skills' | translate}}</td>
+				<td>
+					<div style="float:center" *ngFor="let skill of skillsFiltersNoMatch()" class="{{hasRequiredSkill(skill)}}">
+						{{skill}}
+					</div>
+				</td>
+			</tr>
+		</table>
+	</div>
+</div>
+<!-- Candidte contact -->
+<dialog #contactBox >
+	<div class="modal-header">
+		<h4 class="modal-title">{{'arenella-suggestions-profile-box-contact-hdr' | translate}}</h4>
+ 		<div class="filter-close-box" (click)="contactBox.close()">X</div>
+	</div>
+	<div class="modal-body" *ngIf="contactCandidateView === 'message'">
+		<form [formGroup]="sendMessageGroup">
+			<div style="float:left;margin:0px; margin-bottom:10px;">
+				<b>{{'arenella-suggestions-profile-box-contact-title' | translate}}:</b><input type="text" style="margin-left:10px;width:300px;" formControlName="title"/>
+				<br>
+			</div>
+			<textarea formControlName="message"></textarea>
+			<button class="btn btn-secondary arenella-btn" (click)="sendMessageToCandidate()">{{'arenella-suggestions-profile-box-contact-btn-send' | translate}}</button>
+		</form>	
+	</div>
+	<div class="modal-body message-send-success" *ngIf="contactCandidateView === 'success'">
+			<p>{{'arenella-suggestions-profile-box-contact-msg-success-1' | translate}}</p>
+			<p>{{'arenella-suggestions-profile-box-contact-msg-success-2' | translate}}</p>
+	</div>
+	<div class="modal-body" *ngIf="contactCandidateView === 'failure'">
+			<p class="message-send-failure">{{'arenella-suggestions-profile-box-contact-msg-failed' | translate}}</p>
+	</div>
+</dialog> 
+<!-- Delete -->
+<dialog #confirmDeleteModal>
+
+	<!--  Options -->
+	<div class="modal-header">
+		<h4 class="modal-title">{{'arenella-suggestions-profile-box-delete-hdr' | translate}}</h4>
+		<div class="filter-close-box" (click)="confirmDeleteModal.close()">X</div>
+	</div>
+	<div class="modal-body publicity-suggestions">
+		<p>{{'arenella-suggestions-profile-box-delete-msg' | translate}}</p>
+		<button class="btn btn-secondary arenella-btn" (click)="confirmDeleteProfile()">{{'arenella-suggestions-profile-box-delete-msg-confirm' | translate}}</button>
+	</div> 
+</dialog>
+<dialog #notesBox>
+	<div class="modal-header">
+		<h4 class="modal-title">{{'arenella-suggestions-profile-box-notes-hdr' | translate}}</h4>
+ 		<div class="filter-close-box" (click)="notesBox.close()">X</div>
+	</div>
+	<div class="feedbackBox;">
+		<form [formGroup]="savedCandidateNotesForm">
+			<div class="modal-body" *ngIf="!updatedSavedCandidate">
+				<textarea class="notes-textarea" formControlName="notes"></textarea>
+				<br/>
+				<button class="btn btn-secondary" (click)="updateSavedCandidate()" *ngIf="!isNoLongerAvailable()" download>{{'arenella-suggestions-profile-box-notes-btn-saved' | translate}}</button>
+			</div>
+			<div class="modal-body" *ngIf="updatedSavedCandidate">
+				<h1>{{'arenella-suggestions-profile-box-msg-updated' | translate}}</h1>
+			</div>              
+		</form>
+	</div>
+</dialog>

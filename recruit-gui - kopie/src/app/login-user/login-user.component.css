@@ -1,0 +1,98 @@
+
+.leftcol{
+    text-align:right;
+    margin-right:5px;
+    margin-bottom:5px;    
+}
+
+.rightcol{
+    text-align:left;
+    margin-right:5px;
+    margin-bottom:5px;
+}
+
+input{
+    width:300px;
+}
+
+.loginbutton{
+	float:right;
+}
+
+.modal-header-text{
+    text-align:center;
+    color:#6f42c1;
+    margin-top:10px;
+    width:500px;
+}
+ .modal-header{
+     background:#181414;
+     color:#6A5ACD;
+     font-weight:bold;
+ }
+
+ .filter-close-box{
+     cursor:pointer;
+     margin-right:10px;
+     margin-top:10px;  
+}
+
+.wholepagerow {
+    margin: 0 auto;
+    width: 330px;
+}
+
+.centerdiv{
+    margin: 0 auto;
+    padding-left:20px;
+    padding-right:10px;
+    margin-top:50px;
+}
+
+.center {
+  margin: auto;
+  width: 50%;
+  padding: 10px;
+  padding-top:50px;
+}
+
+.inpt-tab-std{
+	max-width:220px;
+}
+
+.forgotten-password-link{
+	color:blue;
+	cursor:pointer;
+	text-align:right;
+	padding-top:20px;
+}
+
+.forgotten-password-link:hover{
+	color:darkblue;
+	cursor:pointer;
+	text-align:right;
+	padding-top:20px;
+}
+
+.forgotten-password-button{
+	width:135px;
+}
+
+.new-subscription {
+	margin-top:20px;
+	margin-bottom:20px;
+	text-align:center;	
+}
+
+.new-subscription h2{
+	color: green;
+	
+}
+
+.new-subscription h3{
+	font-size:14px;
+}
+
+.login-panel{
+	margin-top:50px;
+}

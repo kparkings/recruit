@@ -1,0 +1,73 @@
+.suggestion-icon{
+	float:left;
+	background:#E8E8E8;
+	width:13%;
+	height:140px;
+	cursor:pointer;
+	margin-right:1%;
+	margin-top:0px;
+	margin-bottom:1%;
+}
+
+.suggestion-icon-disabled{
+	float:left;
+	background:#E8E8E8;
+	width:13%;
+	height:140px;
+	cursor:default;
+	margin-right:1%;
+	margin-top:0px;
+	margin-bottom:1%;
+}
+
+.saved-candidate-icon-header{
+	background:#6A5ACD;
+	margin:0px;
+	font-weight:bold;
+	font-size:16px;
+	width:100%;
+	padding:5px;
+	color:white;
+	padding-left:20px;
+}
+
+.saved-candidate-icon-header-disabled{
+	background:darkGrey;
+	margin:0px;
+	font-weight:bold;
+	font-size:16px;
+	width:100%;
+	padding:5px;
+	color:white;
+	padding-left:20px;
+}
+
+.suggestion-icon-body{
+	text-align:center;
+	margin-top:10px;
+	font-size:12px;
+}
+
+.suggestion-icon-body-disabled{
+	text-align:center;
+	margin-top:10px;
+	font-size:12px;
+}
+
+@media (max-width:700px)  {
+
+	 .suggestion-icon{
+	 	width:48%;
+		margin-right:2%;
+		margin-bottom:2%;
+		cursor:pointer;
+	 }
+
+	 .suggestion-icon-disabled{
+	 	background:darkGrey;
+	 	width:48%;
+		margin-right:2%;
+		margin-bottom:2%;
+		cursor:default;
+	 }	
+}
