@@ -41,6 +41,7 @@ export class SuggestionsComponent implements OnInit {
  	@ViewChild('publicityModal', {static:true})			publicityDialogBox!: ElementRef<HTMLDialogElement>;
  	@ViewChild('confirmDeleteModal', {static:true})		confirmDeleteDialogBox!: ElementRef<HTMLDialogElement>;
  	@ViewChild('contactBox', {static:true})				contactDialogBox!: ElementRef<HTMLDialogElement>;
+ 	@ViewChild('paidSubscriptionModal', {static:true})	paidSubscriptionBox!: ElementRef<HTMLDialogElement>;
  	
  	public back():void{
 		this.switchViewEvent.emit();	 
@@ -68,22 +69,24 @@ export class SuggestionsComponent implements OnInit {
 	public passedCreditCheck:boolean 							= false;
 	public lastView:string 										= '';
 	public contactCandidateView:string 							= 'message';
+	public showPaidSubscriptinOptions:boolean					= false;
 	public publicitySuggestions:Array<Candidate>  				= new Array<Candidate>();
 	public createAlertForm:UntypedFormGroup 					= new UntypedFormGroup({
 		alertName:			new UntypedFormControl(''),
 	});
 		public suggestionFilterForm:UntypedFormGroup 			= new UntypedFormGroup({
-		searchPhrase:			new UntypedFormControl(''),
-		nlResults: 				new UntypedFormControl(true),
-		beResults: 				new UntypedFormControl(true),
-		ukResults: 				new UntypedFormControl(true),
-		ieResults: 				new UntypedFormControl(true),
-		contractType: 			new UntypedFormControl('Both'),
-		dutchLanguage: 			new UntypedFormControl(false),
-		englishLanguage: 		new UntypedFormControl(false),
-		frenchLanguage:			new UntypedFormControl(false),
-		minYearsExperience: 	new UntypedFormControl(''),
-		maxYearsExperience: 	new UntypedFormControl(''),
+		searchPhrase:					new UntypedFormControl(''),
+		nlResults: 						new UntypedFormControl(true),
+		beResults: 						new UntypedFormControl(true),
+		ukResults: 						new UntypedFormControl(true),
+		ieResults: 						new UntypedFormControl(true),
+		contractType: 					new UntypedFormControl('Both'),
+		dutchLanguage: 					new UntypedFormControl(false),
+		englishLanguage: 				new UntypedFormControl(false),
+		frenchLanguage:					new UntypedFormControl(false),
+		minYearsExperience: 			new UntypedFormControl(''),
+		maxYearsExperience: 			new UntypedFormControl(''),
+		includeUnavailableCandidates: 	new UntypedFormControl('')
 	});
 	public skilFilterForm:UntypedFormGroup 						= new UntypedFormGroup({
 		skill: 					new UntypedFormControl(''),
@@ -148,6 +151,11 @@ export class SuggestionsComponent implements OnInit {
 				this.showSuggestedCandidateOverview(candidate.content[0]);	
 			});
 		}		
+		
+		if (this.isAdmin() || sessionStorage.getItem("hasPaidSubscription") === 'true') {
+			this.showPaidSubscriptinOptions = true;
+		} 
+		
 		
 		this.appComponent.refreschUnreadAlerts();
 		
@@ -286,19 +294,20 @@ export class SuggestionsComponent implements OnInit {
 	* Resets the filters
 	*/
 	private resetSearchFilters(attachValueChangeListener:boolean):void{
-		this.suggestionFilterForm = new UntypedFormGroup({
-			searchPhrase:			new UntypedFormControl(''),
-			nlResults: 				new UntypedFormControl(true),
-			beResults: 				new UntypedFormControl(true),
-			ukResults: 				new UntypedFormControl(true),
-			ieResults: 				new UntypedFormControl(true),
-			contractType: 			new UntypedFormControl('Both'),
-			dutchLanguage: 			new UntypedFormControl(false),
-			englishLanguage: 		new UntypedFormControl(false),
-			frenchLanguage:			new UntypedFormControl(false),
-			minYearsExperience: 	new UntypedFormControl(''),
-			maxYearsExperience: 	new UntypedFormControl(''),
-			skill: 					new UntypedFormControl(''),
+		this.suggestionFilterForm = 		new UntypedFormGroup({
+			searchPhrase:					new UntypedFormControl(''),
+			nlResults: 						new UntypedFormControl(true),
+			beResults: 						new UntypedFormControl(true),
+			ukResults: 						new UntypedFormControl(true),
+			ieResults: 						new UntypedFormControl(true),
+			contractType: 					new UntypedFormControl('Both'),
+			dutchLanguage: 					new UntypedFormControl(false),
+			englishLanguage: 				new UntypedFormControl(false),
+			frenchLanguage:					new UntypedFormControl(false),
+			minYearsExperience: 			new UntypedFormControl(''),
+			maxYearsExperience: 			new UntypedFormControl(''),
+			skill: 							new UntypedFormControl(''),
+			includeUnavailableCandidates: 	new UntypedFormControl('')
 		});
 		
 		this.skilFilterForm = new UntypedFormGroup({
@@ -394,7 +403,8 @@ export class SuggestionsComponent implements OnInit {
 									params.getMinExperience(),
 									params.getMaxExperience(),
 									params.getLanguages(),
-									params.getSkills()
+									params.getSkills(),
+									params.getIncludUnavailableCandidates()
 									).subscribe(data => {
 												
 										this.suggestions =  new Array<Candidate>();
@@ -951,6 +961,21 @@ export class SuggestionsComponent implements OnInit {
 			case 'FIVE':	return "5";
 			default: 		return "";
 		}
+	}
+	
+	public doPaidSubscriptionCheck():void{
+		let hasPaidSubscription:boolean = (sessionStorage.getItem("hasPaidSubscription") === 'true');
+		
+		if (!this.isAdmin() && !hasPaidSubscription) {
+			this.suggestionFilterForm.get("includeUnavailableCandidates")?.setValue('');
+			this.paidSubscriptionBox.nativeElement.showModal();
+		}
+		
+	}
+	
+	public choseSubscription():void{
+		this.creditsService.buySubscription();
+		this.router.navigate(['recruiter-account']);
 	}
 	
 	/**

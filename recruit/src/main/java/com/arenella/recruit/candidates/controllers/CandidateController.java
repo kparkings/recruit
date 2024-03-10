@@ -252,6 +252,17 @@ public class CandidateController {
 		return ResponseEntity.ok(candidateService.getCreditCountForUser(principal.getName()));
 	}
 	
+	//TOD): [My are the credits which are recruiter based in Candodate service. Need to move the whole lot to for now I will add this hear to keep it consistent
+	/**
+	* Returns if the recruiter has paid subscription
+	* @return
+	*/
+	@PreAuthorize("hasRole('RECRUITER')")
+	@GetMapping(path="candidate/_paid_subscription")
+	public ResponseEntity<Boolean> hasPaidSubscription(Principal principal){
+		return ResponseEntity.ok(candidateService.hasPaidSubscription(principal.getName()));
+	}
+	
 	/**
 	* Returns whether the User has credits left
 	* @param userName - Name of the user

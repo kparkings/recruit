@@ -29,7 +29,8 @@ export class SuggestionsService {
 							experienceMin:string, 
 							experienceMax:string, 
 							languages:Array<string>, 
-							skills:Array<string>): Observable<any>{
+							skills:Array<string>,
+							includeUnavailableCandidates:string): Observable<any>{
 		
 		return this.candidateService.getCandidates(this.getCandidateFilterParamString(	maxNumberOfSuggestions, 
 																						title, 
@@ -39,7 +40,9 @@ export class SuggestionsService {
 																						experienceMin, 
 																						experienceMax, 
 																						languages, 
-																						skills));
+																						includeUnavailableCandidates,
+																						skills,
+																						));
 		
 	}
 	
@@ -54,7 +57,8 @@ export class SuggestionsService {
 											experienceMin:string, 
 											experienceMax:string,
 											languages:Array<string>, 
-											skills:Array<string> ):string{
+											includeUnavailableCandidates:string,
+											skills:Array<string>):string{
 
 		const filterParams:string = 'orderAttribute=candidateId&order=desc'
                                                          + '&page=0'
@@ -63,11 +67,25 @@ export class SuggestionsService {
 														 + this.getCountryFilterParamString(countries) 			
                                                          + this.getContractTypeParamString(contract, perm)				
                                                          + this.getYearsExperienceFilterParamAsString(experienceMin, experienceMax)
+                                                         + this.includeUnavailableCandidates(includeUnavailableCandidates)
 														 + this.getSkillsParamString(skills)
 														 + this.getLanguagesParamString(languages);
-					                                   
+					                                  
 		return filterParams;
 	
+	}
+	
+	/**
+	* Adds filter if unavailable candidates should also be included
+	* By default only availabe. 
+	*/
+	public includeUnavailableCandidates(includeUnavailableCandidates:string):string{
+		
+		if (includeUnavailableCandidates.length === 0 || ""+includeUnavailableCandidates === 'false') {
+			return '&available=true';
+		}
+		
+		return '';
 	}
 	
 	/**

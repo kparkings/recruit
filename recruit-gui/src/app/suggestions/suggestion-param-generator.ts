@@ -19,6 +19,7 @@ export class SuggestionParams{
 	private dutch:string								= "UNKNOWN";
 	private french:string								= "UNKNOWN";
 	private english:string								= "UNKNOWN";
+	private unavailableCadidates:string					= "";
 		
 	/**
 	* Constructor
@@ -33,6 +34,8 @@ export class SuggestionParams{
 		this.title  		= suggestionFilterForm.get('searchPhrase')?.value;
 		this.minExperience 	= suggestionFilterForm.get('minYearsExperience')?.value;
 		this.maxExperience 	= suggestionFilterForm.get('maxYearsExperience')?.value;
+		
+		this.unavailableCadidates = suggestionFilterForm.get('includeUnavailableCandidates')?.value;
 		
 		/**
 		* Add any country filters 	
@@ -165,6 +168,13 @@ export class SuggestionParams{
 	*/
 	public getEnglishLevel():string{
 		return this.english;	
+	}
+	
+	/**
+	* Whether to include unavailable cadidates
+	*/
+	public getIncludUnavailableCandidates():string {
+		return this.unavailableCadidates;
 	}
 	
 }

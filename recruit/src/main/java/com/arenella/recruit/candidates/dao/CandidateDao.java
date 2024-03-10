@@ -198,20 +198,20 @@ public interface CandidateDao extends CrudRepository<CandidateEntity, Long>, Jpa
 			}
 			
 			if (this.filterOptions.isAvailable().isEmpty()) {
-				Predicate isActiveFltr 						= root.get("available").in(true);
-				predicates.add(isActiveFltr);
+				//Predicate isActiveFltr 						= root.get("available").in(true);
+				//predicates.add(isActiveFltr);
 			} else {
 				Predicate isActiveFltr 						= root.get("available").in(filterOptions.isAvailable().get().booleanValue());
 				predicates.add(isActiveFltr);
 			}
 			
 			
-			if (!this.filterOptions.isFlaggedAsUnavailable().isEmpty()) {
-				//Predicate isFlaggedAsUnavailableFltr 						= root.get("flaggedAsUnavailable").in(true);
-				//predicates.add(isFlaggedAsUnavailableFltr);
-				Expression<Boolean> flaggedAsUnavailableExpression 	= root.get("flaggedAsUnavailable");
-				predicates.add(criteriaBuilder.equal(flaggedAsUnavailableExpression, true));
-			}
+			//if (!this.filterOptions.isFlaggedAsUnavailable().isEmpty()) {
+			//	//Predicate isFlaggedAsUnavailableFltr 						= root.get("flaggedAsUnavailable").in(true);
+			//	//predicates.add(isFlaggedAsUnavailableFltr);
+			//	Expression<Boolean> flaggedAsUnavailableExpression 	= root.get("flaggedAsUnavailable");
+			//	predicates.add(criteriaBuilder.equal(flaggedAsUnavailableExpression, true));
+			//}
 			
 			
 			if (!this.filterOptions.getCountries().isEmpty()) {

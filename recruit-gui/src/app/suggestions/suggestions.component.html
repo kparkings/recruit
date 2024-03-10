@@ -21,6 +21,9 @@
 	
 		<div>	
 			<form [formGroup]="suggestionFilterForm" *ngIf="currentView === 'suggestion-results'">	
+			
+				
+			
 				<div *ngIf="currentView === 'suggestion-results'">		
 					<table class="mobile-search-box">
 						<tr>
@@ -82,7 +85,11 @@
 								</div>
 							</td>
 						</tr>
-					
+						<tr>
+						
+						</tr>
+							<td class="sugg-srch-hdr">{{'arenella-suggestions-include' | translate}}</td>
+							<li class="sugg-srch-ctry-chkbox"><input type="checkbox" formControlName="includeUnavailableCandidates" class="lang-checkbox" (click)="doPaidSubscriptionCheck()">{{'arenella-suggestions-include-unavailable-candidates' | translate}}</li>
 						<tr>
 							<td class="sugg-srch-hdr">{{'arenella-suggestions-skills' | translate}}</td>
 							<td class="sugg-srch-bdy">
@@ -216,5 +223,19 @@
 				{{getCountryCode(c.country)}} - {{'arenella-suggestions-box-publicity-exp' | translate}}: {{c.yearsExperience}}  {{'arenella-suggestions-box-publicity-years' | translate}} -  {{c.roleSought}}
 			</div>
 		</table>
+	</div> 
+</dialog>
+<!-- Paid subscription only -->
+<dialog #paidSubscriptionModal>
+
+	<!--  Options -->
+	<div class="modal-header">
+		<h4 class="modal-title">{{'arenella-suggestions-paid-subscription-option' | translate}}</h4>
+		<div class="filter-close-box" (click)="paidSubscriptionModal.close()">X</div>
+	</div>
+	<div class="modal-body">
+		<p>{{'arenella-suggestions-paid-subscription-text-1' | translate}}</p>
+		<p>{{'arenella-suggestions-paid-subscription-text-2' | translate}}</p>
+		<button class="btn btn-secondary" (click)="choseSubscription()" download>{{'arenella-suggestions-paid-subscription-choose-subscription-btn' | translate}}</button>
 	</div> 
 </dialog>

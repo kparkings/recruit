@@ -233,5 +233,12 @@ public interface CandidateService {
 	* @param skills - Updates existing skills
 	*/
 	public void updateCandidateSkills(Set<CandidateSkill> skills);
+
+	/**
+	* Returns whether the user has a paid subscription
+	* @param userId - unique if of the user
+	* @return whether the user has a paid subscription
+	*/
+	boolean hasPaidSubscription(String userId);
 	
 }

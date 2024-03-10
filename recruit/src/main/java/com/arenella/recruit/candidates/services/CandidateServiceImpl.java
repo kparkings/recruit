@@ -433,9 +433,7 @@ public class CandidateServiceImpl implements CandidateService{
 		
 		if (this.checkHasRole("ROLE_RECRUITER")) {
 			
-			RecruiterCredit recruiterCreditRecord = this.getRecruiterCreditRecord(this.getAuthenticatedUserId());
-			
-			return recruiterCreditRecord.hasPaidSubscription();
+			return this.hasPaidSubscription(this.getAuthenticatedUserId());
 			
 		}
 		
@@ -455,7 +453,7 @@ public class CandidateServiceImpl implements CandidateService{
 		Set<String> 								suggestionIds 		= new HashSet<>();
 		AtomicReference<suggestion_accuracy> 		accuracy 			= new AtomicReference<>(suggestion_accuracy.perfect);
 		Pageable 									pageable 			= PageRequest.of(0,100);
-		
+		Optional<Boolean>							available		 	= filterOptions.isAvailable();
 		/**
 		* Recruiters may only view unavailable candidates if they have a paid subscription  
 		*/
@@ -464,12 +462,11 @@ public class CandidateServiceImpl implements CandidateService{
 		}
 		
 		/**
-		* Admin and Recruiters with a paid subscriptiion can apply an available filter  
+		* Admin and Recruiters with a paid subscription can apply an available filter  
 		*/
 		if (this.checkHasRole("ROLE_ADMIN") || (hasPaidSubscription())) { 
-			filterOptions.setAvailable(filterOptions.isAvailable().isEmpty() ? null : filterOptions.isAvailable().get());
+			filterOptions.setAvailable(available.isEmpty() ? null : available.get());
 		}
-		
 		
 		if (StringUtils.hasText(filterOptions.getSearchText())) {
 			Set<FUNCTION> functionToFilterOn = this.candidateFunctionExtractor.extractFunctions(filterOptions.getSearchText());
@@ -1008,6 +1005,21 @@ public class CandidateServiceImpl implements CandidateService{
 	@Override
 	public int getCreditCountForUser(String userId) {
 		return this.getRecruiterCreditRecord(userId).getCredits();
+	}
+	
+	/**
+	* Refer to the CandidateService for details 
+	*/
+	@Override
+	public boolean hasPaidSubscription(String userId) {
+		
+		Optional<RecruiterCredit> credits =  this.creditDao.getByRecruiterId(userId);
+		
+		if(credits.isEmpty()) {
+			return false;	
+		}
+		
+		return credits.get().hasPaidSubscription();
 	}
 	
 	/**

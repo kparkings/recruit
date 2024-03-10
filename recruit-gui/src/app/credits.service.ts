@@ -30,6 +30,17 @@ export class CreditsService {
   	}
   	
   	/**
+  	* Returns whether User ( Recruiter ) has a paid subscription
+  	*/
+  	public hasPaidSubscription(): Observable<any>{
+      
+		const backendUrl:string = environment.backendUrl +'candidate/_paid_subscription';
+  
+    	return this.httpClient.get<any>(backendUrl, this.httpOptions);
+  	}
+  	
+  	
+  	/**
   	* Returns remaining credits for Curriculum downloads for USer 
   	*/
   	public getCreditCountJobboard(): Observable<any>{

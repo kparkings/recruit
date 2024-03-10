@@ -2093,4 +2093,30 @@ public class CandidateServiceImplTest {
 
 	}
 	
+	/**
+	* Tests case user has a paid subscription
+	* @throws Exception
+	*/
+	@Test
+	public void testHasPaidSubscription_true() throws Exception{
+		
+		Mockito.when(this.mockCreditDao.getByRecruiterId(Mockito.anyString())).thenReturn(Optional.of(RecruiterCredit.builder().paidSubscription(true).build()));
+		
+		assertTrue(this.service.hasPaidSubscription("userId"));
+		
+	}
+	
+	/**
+	* Tests case user does not have a paid subscription
+	* @throws Exception
+	*/
+	@Test
+	public void testHasPaidSubscription_false() throws Exception{
+		
+		Mockito.when(this.mockCreditDao.getByRecruiterId(Mockito.anyString())).thenReturn(Optional.of(RecruiterCredit.builder().paidSubscription(false).build()));
+		
+		assertFalse(this.service.hasPaidSubscription("userId"));
+		
+	}
+	
 }

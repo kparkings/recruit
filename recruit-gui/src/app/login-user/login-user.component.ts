@@ -6,6 +6,7 @@ import { Router}                                                from '@angular/r
 import { TemplateRef, ViewChild,ElementRef, AfterViewInit  }		from '@angular/core';
 import { NgbModal, NgbModalOptions, ModalDismissReasons}			from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
+import { CreditsService } from '../credits.service';
 
 @Component({
   selector: 'app-login-user',
@@ -41,7 +42,8 @@ export class LoginUserComponent implements OnInit {
   				private authService: AuthService, 
   				private modalService: NgbModal, 
   				private router: Router,
-  				private translate: TranslateService) { }
+  				private translate: TranslateService,
+  				private creditService:CreditsService) { }
 
   /**
   * Performs initialization
@@ -60,6 +62,8 @@ export class LoginUserComponent implements OnInit {
     
     	sessionStorage.removeItem("new-subscription");
     	this.showSubscriptionMsg = false;
+		
+		sessionStorage.setItem('hasPaidSubscription', 'false');
 		
 		this.authService.authenticate(this.formBean.get('username')?.value, this.formBean.get('password')?.value).subscribe( data => {
      
@@ -80,6 +84,11 @@ export class LoginUserComponent implements OnInit {
 	
 			if (roles.includes('ROLE_RECRUITER')) {
 				sessionStorage.setItem('isRecruiter',     	 			'true');
+				
+				this.creditService.hasPaidSubscription().subscribe(res => {
+					sessionStorage.setItem('hasPaidSubscription', ''+res)
+				});
+				
 			} else {
 				sessionStorage.setItem('isRecruiter',      				'false');
 			}
