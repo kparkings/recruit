@@ -112,7 +112,7 @@ public class MonolithExternalEventListener implements CurriculumExternalEventLis
 	*/
 	@Override
 	public void listenForCandidateNoLongerAvailableEvent(CandidateNoLongerAvailableEvent event) {
-		this.curriculumService.deleteCurriculum(event.getCandidateId());
+		//this.curriculumService.deleteCurriculum(event.getCandidateId());
 	}
 
 	/**

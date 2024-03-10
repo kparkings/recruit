@@ -73,7 +73,7 @@ public class MonolithExternalEventListenerTest {
 		
 		this.listener.listenForCandidateNoLongerAvailableEvent(event);
 		
-		Mockito.verify(mockCurriculumService).deleteCurriculum(candidateId);
+		Mockito.verify(mockCurriculumService, Mockito.never()).deleteCurriculum(candidateId);
 		
 	}
 	
