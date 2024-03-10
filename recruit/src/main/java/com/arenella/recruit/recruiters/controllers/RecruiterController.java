@@ -1,5 +1,6 @@
 package com.arenella.recruit.recruiters.controllers;
 
+import java.security.Principal;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -128,6 +129,17 @@ public class RecruiterController {
 		this.recruiterService.resetPassword(emailAddress);
 		
 		return ResponseEntity.ok().build();
+	}
+	
+	//TOD): [My are the credits which are recruiter based in Candodate service. Need to move the whole lot to for now I will add this hear to keep it consistent
+	/**
+	* Returns if the recruiter has paid subscription
+	* @return
+	*/
+	@PreAuthorize("hasRole('RECRUITER')")
+	@GetMapping(path="recruiter/_paid_subscription")
+	public ResponseEntity<Boolean> hasPaidSubscription(Principal principal){
+		return ResponseEntity.ok(recruiterService.hasPaidSubscription(principal.getName()));
 	}
 	
 }

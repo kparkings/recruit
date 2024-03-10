@@ -1,5 +1,6 @@
 package com.arenella.recruit.recruiters.services;
 
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
@@ -130,6 +131,12 @@ public interface SupplyAndDemandService {
 	* @param command - information about credits
 	*/
 	public void updateCreditsForUser(String recruiterId, int disabledCredits);
+	
+	/**
+	* Updates the amount of Credits the Recruiter has
+	* @param command - information about credits
+	*/
+	void updateCreditsForUser(String userId, int availableCredits, Optional<Boolean> hasPaidSubscription);
 	
 	/**
 	* Returns the number of Credits the candidate still has

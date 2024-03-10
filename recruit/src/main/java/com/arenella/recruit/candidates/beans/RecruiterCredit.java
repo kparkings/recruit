@@ -20,9 +20,9 @@ public class RecruiterCredit {
 	* @param builder - Contains initialization data
 	*/
 	public RecruiterCredit(RecruiterCreditBuilder builder) {
-		this.recruiterId 	= builder.recruiterId;
-		this.credits 		= builder.credits;
-		this.paidSubscription = builder.paidSubscription;
+		this.recruiterId 		= builder.recruiterId;
+		this.credits 			= builder.credits;
+		this.paidSubscription 	= builder.paidSubscription;
 	}
 	
 	/**

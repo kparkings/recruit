@@ -370,6 +370,16 @@ public class SupplyAndDemandServiceImpl implements SupplyAndDemandService{
 	@Override
 	public void updateCreditsForUser(String userId, int availableCredits) {
 		
+		this.updateCreditsForUser(userId, availableCredits, Optional.empty());
+		
+	}
+	
+	/**
+	* Refer to the CandidateService for details 
+	*/
+	@Override
+	public void updateCreditsForUser(String userId, int availableCredits, Optional<Boolean> hasPaidSubscription) {
+	
 		Optional<RecruiterCredit> creditOpt = this.creditDao.getByRecruiterId(userId);
 		
 		if (!creditOpt.isPresent()) {
@@ -380,8 +390,12 @@ public class SupplyAndDemandServiceImpl implements SupplyAndDemandService{
 		
 		credits.setCredits(availableCredits);
 		
-		creditDao.persist(credits);
+		if (hasPaidSubscription.isPresent()) {
+			credits.setPaidSubscription(hasPaidSubscription.get());
+		}
 		
+		creditDao.persist(credits);
+	
 	}
 	
 	/**

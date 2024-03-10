@@ -34,7 +34,7 @@ export class CreditsService {
   	*/
   	public hasPaidSubscription(): Observable<any>{
       
-		const backendUrl:string = environment.backendUrl +'candidate/_paid_subscription';
+		const backendUrl:string = environment.backendUrl +'recruiter/_paid_subscription';
   
     	return this.httpClient.get<any>(backendUrl, this.httpOptions);
   	}

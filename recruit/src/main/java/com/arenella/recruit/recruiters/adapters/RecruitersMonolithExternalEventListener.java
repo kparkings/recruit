@@ -1,5 +1,7 @@
 package com.arenella.recruit.recruiters.adapters;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -49,11 +51,11 @@ public class RecruitersMonolithExternalEventListener implements RecruitersExtern
 		
 		if (event.getSubscriptionType() != subscription_type.CREDIT_BASED_SUBSCRIPTION) {
 			this.supplyAndDemandService.enableSupplyAndDemandPostsForRecruiter(event.getRecruiterId());
-			this.supplyAndDemandService.updateCreditsForUser(event.getRecruiterId(), RecruiterCredit.DISABLED_CREDITS);
+			this.supplyAndDemandService.updateCreditsForUser(event.getRecruiterId(), RecruiterCredit.DISABLED_CREDITS, Optional.of(this.isPaidSubscription(event)));
 		
 		} else {
 			this.supplyAndDemandService.enableSupplyAndDemandPostsForRecruiter(event.getRecruiterId());
-			this.supplyAndDemandService.updateCreditsForUser(event.getRecruiterId(), RecruiterCredit.DEFAULT_CREDITS);
+			this.supplyAndDemandService.updateCreditsForUser(event.getRecruiterId(), RecruiterCredit.DEFAULT_CREDITS, Optional.of(false));
 		
 		}
 	}
@@ -65,5 +67,23 @@ public class RecruitersMonolithExternalEventListener implements RecruitersExtern
 	public void listenForRecruiterCreatedEvent(RecruiterCreatedEvent event) {
 		this.supplyAndDemandService.addCreditsRecordForUser(event.getRecruiterId());
 	}
+	
+	/**
+	* Returns whether the subscription is a paid subscription
+	* @param event - Contains info about the subscription
+	* @return whether the subscription is a paid subscription
+	*/
+	private boolean isPaidSubscription(SubscriptionAddedEvent event) {
+		
+		return switch(event.getSubscriptionType()) {
+			case ONE_MONTH_SUBSCRIPTION, 
+				 THREE_MONTHS_SUBSCRIPTION, 
+				 SIX_MONTHS_SUBSCRIPTION, 
+				 YEAR_SUBSCRIPTION -> true;
+			default -> false;
+		};
+		
+	}
+	
 
 }

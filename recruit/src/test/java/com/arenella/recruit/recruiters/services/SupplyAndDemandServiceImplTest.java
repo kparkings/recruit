@@ -446,7 +446,7 @@ public class SupplyAndDemandServiceImplTest {
 
 		ArgumentCaptor<RecruiterCredit> argCapt = ArgumentCaptor.forClass(RecruiterCredit.class);
 		
-		RecruiterCredit recCredits = RecruiterCredit.builder().recruiterId(userId).credits(30).build();
+		RecruiterCredit recCredits = RecruiterCredit.builder().recruiterId(userId).credits(30).paidSubscription(true).build();
 		
 		Mockito.when(this.mockCreditDao.getByRecruiterId(userId)).thenReturn(Optional.of(recCredits));
 		Mockito.doNothing().when(this.mockCreditDao).persist(argCapt.capture());
@@ -456,7 +456,33 @@ public class SupplyAndDemandServiceImplTest {
 		Mockito.verify(this.mockCreditDao).persist(Mockito.any());
 		
 		assertEquals(credits, argCapt.getValue().getCredits());
+		assertTrue(argCapt.getValue().hasPaidSubscription());
 		
+	}
+	
+	/**
+	* Test case where paidSubscription value is provided
+	* @throws Exception
+	*/
+	@Test
+	public void testUpdateCreditsForUser_paidSubscriptin_specified() throws Exception{
+		
+		final String 	userId 		= "kparkings";
+		final int 		credits 	= 20;
+
+		ArgumentCaptor<RecruiterCredit> argCapt = ArgumentCaptor.forClass(RecruiterCredit.class);
+		
+		RecruiterCredit recCredits = RecruiterCredit.builder().recruiterId(userId).credits(30).paidSubscription(true).build();
+		
+		Mockito.when(this.mockCreditDao.getByRecruiterId(userId)).thenReturn(Optional.of(recCredits));
+		Mockito.doNothing().when(this.mockCreditDao).persist(argCapt.capture());
+		
+		this.service.updateCreditsForUser(userId, credits, Optional.of(false));
+	
+		Mockito.verify(this.mockCreditDao).persist(Mockito.any());
+		
+		assertEquals(credits, argCapt.getValue().getCredits());
+		assertFalse(argCapt.getValue().hasPaidSubscription());
 	}
 	
 	/**

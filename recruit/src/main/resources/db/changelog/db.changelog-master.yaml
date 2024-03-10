@@ -2326,4 +2326,15 @@ databaseChangeLog:
                 name: paid_subscription
                 type: boolean
                 constraints:
-            
+  - changeSet:
+      id: addColumn-paid_subscription_recruiter
+      author: kevin
+      changes:
+        - addColumn:
+            tableName: credits
+            schemaName: recruiter
+            columns:
+            - column:
+                name: paid_subscription
+                type: boolean
+                constraints:

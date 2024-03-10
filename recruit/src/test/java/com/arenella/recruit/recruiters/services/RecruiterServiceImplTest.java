@@ -34,6 +34,7 @@ import com.arenella.recruit.adapters.events.SubscriptionAddedEvent;
 import com.arenella.recruit.emailservice.adapters.RequestSendEmailCommand;
 import com.arenella.recruit.emailservice.beans.Email.EmailTopic;
 import com.arenella.recruit.recruiters.adapters.RecruitersExternalEventPublisher;
+import com.arenella.recruit.recruiters.beans.CreditBasedSubscription;
 import com.arenella.recruit.recruiters.beans.FirstGenRecruiterSubscription;
 import com.arenella.recruit.recruiters.beans.PaidPeriodRecruiterSubscription;
 import com.arenella.recruit.recruiters.beans.Recruiter;
@@ -725,6 +726,60 @@ public class RecruiterServiceImplTest {
 		
 		final String 				recruiterId 		= "kparkings";
 		final Recruiter				recruiter			= Recruiter.builder().userId(recruiterId).subscriptions(Set.of(PaidPeriodRecruiterSubscription.builder().type(subscription_type.YEAR_SUBSCRIPTION).status(subscription_status.SUBSCRIPTION_ENDED).build())).build();
+		
+		SecurityContextHolder.setContext(mockSecurityContext);
+		
+		Mockito.when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
+		Mockito.when(mockAuthentication.getAuthorities()).thenReturn(Set.of());
+		Mockito.when(mockAuthentication.getName()).thenReturn(recruiterId);
+		
+		Mockito.when(this.mockDao.findRecruiterById(recruiterId)).thenReturn(Optional.of(recruiter));
+		
+		this.service.addSubscription(recruiterId, subscription_type.YEAR_SUBSCRIPTION);
+		
+		Mockito.verify(this.mockDao).save(Mockito.any());
+		
+		Mockito.verify(this.mockExternEventPublisher).publishSubscriptionAddedEvent(Mockito.any(SubscriptionAddedEvent.class));
+		
+	}
+	
+	/**
+	* Tests that if there is an existing TRIAL subscription that is still open that it 
+	* gets closed  
+	* @throws Exception
+	*/
+	@Test
+	public void testAddSubscription_yearSubscription_existingTrialSubscription_ended() throws Exception {
+		
+		final String 				recruiterId 		= "kparkings";
+		final Recruiter				recruiter			= Recruiter.builder().userId(recruiterId).subscriptions(Set.of(TrialPeriodSubscription.builder().status(subscription_status.ACTIVE).build())).build();
+		
+		SecurityContextHolder.setContext(mockSecurityContext);
+		
+		Mockito.when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
+		Mockito.when(mockAuthentication.getAuthorities()).thenReturn(Set.of());
+		Mockito.when(mockAuthentication.getName()).thenReturn(recruiterId);
+		
+		Mockito.when(this.mockDao.findRecruiterById(recruiterId)).thenReturn(Optional.of(recruiter));
+		
+		this.service.addSubscription(recruiterId, subscription_type.YEAR_SUBSCRIPTION);
+		
+		Mockito.verify(this.mockDao).save(Mockito.any());
+		
+		Mockito.verify(this.mockExternEventPublisher).publishSubscriptionAddedEvent(Mockito.any(SubscriptionAddedEvent.class));
+		
+	}
+	
+	/**
+	* Tests that if there is an existing CREDIT_BASED subscription that is still open that it 
+	* gets closed  
+	* @throws Exception
+	*/
+	@Test
+	public void testAddSubscription_yearSubscription_existingCreditBasedSubscription_ended() throws Exception {
+		
+		final String 				recruiterId 		= "kparkings";
+		final Recruiter				recruiter			= Recruiter.builder().userId(recruiterId).subscriptions(Set.of(CreditBasedSubscription.builder().status(subscription_status.ACTIVE).build())).build();
 		
 		SecurityContextHolder.setContext(mockSecurityContext);
 		

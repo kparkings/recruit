@@ -27,6 +27,7 @@ export class RecruiterAccountComponent implements OnInit {
 	public showBillingDetails:boolean 			= false;
 	public selectedSubscriptionOption:string 	= "";
 	public isCreditBasedSubscription:boolean 	= false;
+	public isTrialOrFirstGen 					= false;
 	
 	/**
 	* Constructor
@@ -131,6 +132,10 @@ export class RecruiterAccountComponent implements OnInit {
 			
 			if (activeSubscription && activeSubscription.type == 'CREDIT_BASED_SUBSCRIPTION'){
 				this.isCreditBasedSubscription = true;
+			}
+			
+			if (activeSubscription && (activeSubscription.type == 'FIRST_GEN' || activeSubscription.type =='TRIAL_PERIOD')){
+				this.isTrialOrFirstGen = true;
 			}
 			
 			this.accoundDetailsForm = new UntypedFormGroup({

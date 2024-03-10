@@ -257,11 +257,11 @@ public class CandidateController {
 	* Returns if the recruiter has paid subscription
 	* @return
 	*/
-	@PreAuthorize("hasRole('RECRUITER')")
-	@GetMapping(path="candidate/_paid_subscription")
-	public ResponseEntity<Boolean> hasPaidSubscription(Principal principal){
-		return ResponseEntity.ok(candidateService.hasPaidSubscription(principal.getName()));
-	}
+	//@PreAuthorize("hasRole('RECRUITER')")
+	//@GetMapping(path="candidate/_paid_subscription")
+	//public ResponseEntity<Boolean> hasPaidSubscription(Principal principal){
+	//	return ResponseEntity.ok(candidateService.hasPaidSubscription(principal.getName()));
+	//}
 	
 	/**
 	* Returns whether the User has credits left

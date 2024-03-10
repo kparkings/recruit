@@ -76,4 +76,11 @@ public interface RecruiterService {
 	*/
 	public void resetPassword(String emailAddress);
 	
+	/**
+	* Returns whether the user has a paid subscription
+	* @param userId - unique if of the user
+	* @return whether the user has a paid subscription
+	*/
+	boolean hasPaidSubscription(String userId);
+	
 }

@@ -556,22 +556,4 @@ public class CandidateControllerTest {
 		
 	}
 	
-	/**
-	* Tests endpoint to see if User has a paid subscription
-	* @throws Exception
-	*/
-	@Test
-	public void testHasPaidSubscription() throws Exception{
-		
-		Mockito.when(this.mockPrincipal.getName()).thenReturn("rec1");
-		Mockito.when(this.mockCandidateService.hasPaidSubscription(Mockito.anyString())).thenReturn(true);
-		
-		ResponseEntity<Boolean> response = this.controller.hasPaidSubscription(mockPrincipal);
-	
-		assertEquals(HttpStatus.OK, response.getStatusCode());
-		assertTrue(response.getBody());
-		
-	}
-	
-	
 }

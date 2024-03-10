@@ -93,6 +93,7 @@ public class TrialPeriodSubscription implements RecruiterSubscription{
 	*/
 	public void endSubscription() {
 		this.status = subscription_status.SUBSCRIPTION_ENDED;
+		this.currentSubscription = false;
 	}
 	
 	/**

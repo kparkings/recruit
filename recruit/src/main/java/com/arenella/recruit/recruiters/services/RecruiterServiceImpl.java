@@ -28,12 +28,14 @@ import com.arenella.recruit.recruiters.beans.CreditBasedSubscription;
 import com.arenella.recruit.recruiters.beans.FirstGenRecruiterSubscription;
 import com.arenella.recruit.recruiters.beans.PaidPeriodRecruiterSubscription;
 import com.arenella.recruit.recruiters.beans.Recruiter;
+import com.arenella.recruit.recruiters.beans.RecruiterCredit;
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription;
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_action;
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_status;
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_type;
 import com.arenella.recruit.recruiters.beans.SubscriptionActionFeedback;
 import com.arenella.recruit.recruiters.beans.TrialPeriodSubscription;
+import com.arenella.recruit.recruiters.dao.RecruiterCreditDao;
 import com.arenella.recruit.recruiters.dao.RecruiterDao;
 import com.arenella.recruit.recruiters.entities.RecruiterEntity;
 import com.arenella.recruit.recruiters.utils.PasswordUtil;
@@ -55,6 +57,9 @@ public class RecruiterServiceImpl implements RecruiterService{
 	
 	@Autowired
 	private RecruitersExternalEventPublisher 	externEventPublisher;
+	
+	@Autowired
+	private RecruiterCreditDao					creditDao;
 	
 	/**
 	* Refer to the RecruiterService for details
@@ -297,7 +302,10 @@ public class RecruiterServiceImpl implements RecruiterService{
 		 
 		/**
 		* Can't have both FIRST_GEN_SUBSCRIPTION and YEAR_SUBSCRIPTION so end any currently open
-		* FirstGen subscriptions
+		* FirstGen subscriptions. 
+		* 
+		* We also do the same for trial as now it is possible for a recruiter to end the trial earlier to 
+		* have access to premium features
 		*/
 		recruiter.getSubscriptions()
 								.stream()
@@ -307,6 +315,21 @@ public class RecruiterServiceImpl implements RecruiterService{
 									((FirstGenRecruiterSubscription) s).endSubscription();
 								});
 		
+		recruiter.getSubscriptions()
+								.stream()
+								.filter(s -> s.getType() == subscription_type.TRIAL_PERIOD)
+								.collect(Collectors.toSet())
+								.stream().forEach(s -> {
+									((TrialPeriodSubscription) s).endSubscription();
+								});
+		
+		recruiter.getSubscriptions()
+							.stream()
+							.filter(s -> s.getType() == subscription_type.CREDIT_BASED_SUBSCRIPTION)
+							.collect(Collectors.toSet())
+							.stream().forEach(s -> {
+								((CreditBasedSubscription) s).endSubscription();
+							});
 		/**
 		* If TRIAL_SUBSCRIPTION is not finished then make the start date of the subscription todays date plus the outstanding number 
 		* of days from the Trial subscription. Otherwise use todays date
@@ -337,6 +360,21 @@ public class RecruiterServiceImpl implements RecruiterService{
 		
 		this.externEventPublisher.publishSubscriptionAddedEvent(new SubscriptionAddedEvent(recruiter.getUserId(), type));
 		
+	}
+	
+	/**
+	* Refer to the CandidateService for details 
+	*/
+	@Override
+	public boolean hasPaidSubscription(String userId) {
+		
+		Optional<RecruiterCredit> credits =  this.creditDao.getByRecruiterId(userId);
+		
+		if(credits.isEmpty()) {
+			return false;	
+		}
+		
+		return credits.get().hasPaidSubscription();
 	}
 	
 	//MOVE TO FACTORY

@@ -98,6 +98,7 @@ public class CandidateMonolithExternalEventListener implements CandidateExternal
 		};
 		
 	}
+	
 	/**
 	* Refer to CandidateExternalEventListener for details 
 	*/

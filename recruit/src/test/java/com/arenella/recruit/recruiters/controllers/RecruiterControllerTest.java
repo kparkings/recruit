@@ -1,7 +1,9 @@
 package com.arenella.recruit.recruiters.controllers;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.security.Principal;
 import java.time.LocalDate;
 import java.util.Optional;
 import java.util.Set;
@@ -40,6 +42,10 @@ public class RecruiterControllerTest {
 	
 	@Mock
 	private RecruiterService 		mockRecruiterService;
+	
+	@Mock
+	private Principal				mockPrincipal;
+	
 	
 	final String 		companyName 		= " aCompanyName ";
 	final String 		email 				= " kparkings@gmail.com ";
@@ -235,6 +241,23 @@ public class RecruiterControllerTest {
 		Mockito.verify(this.mockRecruiterService).resetPassword(Mockito.eq(email));
 		
 		assertEquals(response.getStatusCode(), HttpStatus.OK);
+		
+	}
+	
+	/**
+	* Tests endpoint to see if User has a paid subscription
+	* @throws Exception
+	*/
+	@Test
+	public void testHasPaidSubscription() throws Exception{
+		
+		Mockito.when(this.mockPrincipal.getName()).thenReturn("rec1");
+		Mockito.when(this.mockRecruiterService.hasPaidSubscription(Mockito.anyString())).thenReturn(true);
+		
+		ResponseEntity<Boolean> response = this.recruiterController.hasPaidSubscription(mockPrincipal);
+	
+		assertEquals(HttpStatus.OK, response.getStatusCode());
+		assertTrue(response.getBody());
 		
 	}
 

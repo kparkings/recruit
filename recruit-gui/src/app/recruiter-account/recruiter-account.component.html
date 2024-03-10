@@ -110,7 +110,7 @@
 			<h1>{{'arenella-recruiter-account-details-sub-options' | translate}}</h1>
 			
 			<div>
-				<div class="subs-opt-box {{subscriptionSelectionMobCss}}" (click)="doShowBillingDetails('CREDIT_BASED_SUBSCRIPTION')" *ngIf="!isCreditBasedSubscription">
+				<div class="subs-opt-box {{subscriptionSelectionMobCss}}" (click)="doShowBillingDetails('CREDIT_BASED_SUBSCRIPTION')" *ngIf="!isCreditBasedSubscription && !isTrialOrFirstGen">
 					<h3>{{'arenella-recruiter-account-details-sub-credit' | translate}}</h3>
 					<p>{{'arenella-recruiter-account-details-sub-credit-cost' | translate}}</p>
 				</div>
