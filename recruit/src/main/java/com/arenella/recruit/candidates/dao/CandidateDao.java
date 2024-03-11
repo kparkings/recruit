@@ -18,6 +18,7 @@ import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -197,23 +198,6 @@ public interface CandidateDao extends CrudRepository<CandidateEntity, Long>, Jpa
 				predicates.add(candidateIdFltr);
 			}
 			
-			if (this.filterOptions.isAvailable().isEmpty()) {
-				//Predicate isActiveFltr 						= root.get("available").in(true);
-				//predicates.add(isActiveFltr);
-			} else {
-				Predicate isActiveFltr 						= root.get("available").in(filterOptions.isAvailable().get().booleanValue());
-				predicates.add(isActiveFltr);
-			}
-			
-			
-			//if (!this.filterOptions.isFlaggedAsUnavailable().isEmpty()) {
-			//	//Predicate isFlaggedAsUnavailableFltr 						= root.get("flaggedAsUnavailable").in(true);
-			//	//predicates.add(isFlaggedAsUnavailableFltr);
-			//	Expression<Boolean> flaggedAsUnavailableExpression 	= root.get("flaggedAsUnavailable");
-			//	predicates.add(criteriaBuilder.equal(flaggedAsUnavailableExpression, true));
-			//}
-			
-			
 			if (!this.filterOptions.getCountries().isEmpty()) {
 				Predicate countriesFltr 						= root.get("country").in(filterOptions.getCountries());
 				predicates.add(countriesFltr);
@@ -267,6 +251,27 @@ public interface CandidateDao extends CrudRepository<CandidateEntity, Long>, Jpa
 				
 			} else {
 				query.orderBy(criteriaBuilder.desc(sortExpression));
+			}
+			
+			if (this.filterOptions.getSearchText().startsWith("C#")) {
+				
+				String candidateId = this.filterOptions.getSearchText().substring(2);
+				
+				if (candidateId != null && !candidateId.equals("") && StringUtils.isNumeric(candidateId)) {
+					predicates.clear();
+					Expression<Long> candidateIdExpression 						= root.get("candidateId");
+					predicates.add(criteriaBuilder.equal(candidateIdExpression, Long.valueOf(candidateId)));
+				}
+				
+			} 
+			
+			//After CandidateId search so only Admin and paid subscription users can search on unavailable candidates
+			if (this.filterOptions.isAvailable().isEmpty()) {
+				//Predicate isActiveFltr 						= root.get("available").in(true);
+				//predicates.add(isActiveFltr);
+			} else {
+				Predicate isActiveFltr 						= root.get("available").in(filterOptions.isAvailable().get().booleanValue());
+				predicates.add(isActiveFltr);
 			}
 			
 			return criteriaBuilder.and(predicates.stream().toArray(n -> new Predicate[n]));

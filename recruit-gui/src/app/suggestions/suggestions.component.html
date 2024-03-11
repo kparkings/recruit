@@ -85,12 +85,11 @@
 								</div>
 							</td>
 						</tr>
-						<!--  
-						</tr>
+						 
+						<tr *ngIf="isAuthenticatedAsAdmin()">
 							<td class="sugg-srch-hdr">{{'arenella-suggestions-include' | translate}}</td>
 							<li class="sugg-srch-ctry-chkbox"><input type="checkbox" formControlName="includeUnavailableCandidates" class="lang-checkbox" (click)="doPaidSubscriptionCheck()">{{'arenella-suggestions-include-unavailable-candidates' | translate}}</li>
-						<tr>
-						-->
+						</tr>
 						<tr>
 							<td class="sugg-srch-hdr">{{'arenella-suggestions-skills' | translate}}</td>
 							<td class="sugg-srch-bdy">
