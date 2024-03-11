@@ -253,7 +253,7 @@ public interface CandidateDao extends CrudRepository<CandidateEntity, Long>, Jpa
 				query.orderBy(criteriaBuilder.desc(sortExpression));
 			}
 			
-			if (this.filterOptions.getSearchText().startsWith("C#")) {
+			if (this.filterOptions.getSearchText() != null && this.filterOptions.getSearchText().startsWith("C#")) {
 				
 				String candidateId = this.filterOptions.getSearchText().substring(2);
 				
