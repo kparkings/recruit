@@ -116,27 +116,30 @@ export class RecruiterMarketplaceComponent implements OnInit {
 	* Fetches only candidates offered by the current Recruiter 
 	*/		
 	public showJustMyCandidates(){
-		//this.offeredCandidates = new Array<OfferedCandidate>();
-		this.offeredCandidates = new Array<Candidate>();
-		this.showJustMyCandidatesActive = true;
-		this.recruiterService.getOwnRecruiterAccount().subscribe(data => {
-			this.candidateService.getCandidates("orderAttribute=candidateId&order=desc&ownerId="+sessionStorage.getItem("userId")).subscribe(candidates =>{
-				this.offeredCandidates = candidates.content;
-			});
-		});	
+		if (this.isRecruiter()) {
+			this.offeredCandidates = new Array<Candidate>();
+			this.showJustMyCandidatesActive = true;
+			this.recruiterService.getOwnRecruiterAccount().subscribe(data => {
+				this.candidateService.getCandidates("orderAttribute=candidateId&order=desc&ownerId="+sessionStorage.getItem("userId")).subscribe(candidates =>{
+					this.offeredCandidates = candidates.body.content;
+				});
+			});	
+		}
 	}
 
 	/**
 	* Fetches only candidates offered by the current Recruiter 
 	*/		
 	public showJustMyOpenPositions(){
-		this.openPositions = new Array<OpenPosition>();
-		this.showJustMyOpenPositionsActive = true;
-		this.recruiterService.getOwnRecruiterAccount().subscribe(data => {
-			this.marketplaceService.fetchRecruitersOwnOpenPositions(data.userId).subscribe(data => {
-				this.openPositions = data;
+		if(this.isRecruiter()) {
+			this.openPositions = new Array<OpenPosition>();
+			this.showJustMyOpenPositionsActive = true;
+			this.recruiterService.getOwnRecruiterAccount().subscribe(data => {
+				this.marketplaceService.fetchRecruitersOwnOpenPositions(data.userId).subscribe(data => {
+					this.openPositions = data;
+				});	
 			});	
-		});	
+		}
 	}
 	
 	/**
@@ -955,6 +958,13 @@ export class RecruiterMarketplaceComponent implements OnInit {
 	
 	public showNoCredits():void{
 		this.creditsService.tokensExhaused();
+	}
+	
+	/**
+	* Whether or not User is a Recruiter
+	*/
+	public isRecruiter():boolean{
+		return sessionStorage.getItem('isRecruiter') === 'true';
 	}
 
 }

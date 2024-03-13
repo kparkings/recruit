@@ -201,7 +201,7 @@ export class AccountsComponent implements OnInit {
 
     	this.candidateService.getCandidates(filterParams+ "&available=true").subscribe( data => {
   
-      		data.content.forEach((c:Candidate) => {
+      		data.body.content.forEach((c:Candidate) => {
         
         		const candidate:Candidate = new Candidate();
 
@@ -222,7 +222,7 @@ export class AccountsComponent implements OnInit {
 				*/
 				this.candidateService.getCandidates(filterParams + "&available=false").subscribe( data => {
 			
-		      		data.content.forEach((c:Candidate) => {
+		      		data.body.content.forEach((c:Candidate) => {
 		        
 		        		const candidate:Candidate = new Candidate();
 		

@@ -21,7 +21,8 @@ export class SuggestionsService {
 	/**
 	* Returns the Suggestons based upon the filter criteria 
 	*/
-	public getSuggestons(	maxNumberOfSuggestions:number, 
+	public getSuggestons(	backendRequestId:number,
+							maxNumberOfSuggestions:number, 
 							title:string, 
 							countries:Array<string>, 
 							contract:string, 
@@ -32,7 +33,8 @@ export class SuggestionsService {
 							skills:Array<string>,
 							includeUnavailableCandidates:string): Observable<any>{
 		
-		return this.candidateService.getCandidates(this.getCandidateFilterParamString(	maxNumberOfSuggestions, 
+		return this.candidateService.getCandidates(this.getCandidateFilterParamString(	backendRequestId,
+																						maxNumberOfSuggestions, 
 																						title, 
 																						countries, 
 																						contract, 
@@ -49,7 +51,8 @@ export class SuggestionsService {
 	/**
 	* Builds a query parameter string with the selected filter options
 	*/
-	private getCandidateFilterParamString(	maxNumberOfSuggestions:number, 
+	private getCandidateFilterParamString(	backendRequestId:number,
+											maxNumberOfSuggestions:number, 
 											title:string, 
 											countries:Array<string>, 
 											contract:string, 
@@ -63,6 +66,7 @@ export class SuggestionsService {
 		const filterParams:string = 'orderAttribute=candidateId&order=desc'
                                                          + '&page=0'
                                                          + '&size=' + maxNumberOfSuggestions
+                                                         + 'backendRequestId='+backendRequestId
 														 + '&searchText=' + encodeURIComponent(title)
 														 + this.getCountryFilterParamString(countries) 			
                                                          + this.getContractTypeParamString(contract, perm)				

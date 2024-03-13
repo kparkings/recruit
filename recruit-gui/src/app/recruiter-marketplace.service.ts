@@ -59,11 +59,11 @@ export class RecruiterMarketplaceService {
 			this.unseenMpPostsOfferedCandidates.next(0);
 			this.unseenMpPostsOpenPositions.next(0);
 			
-			this.fetchOfferedCandidates().subscribe(candidates => {
-				this.unseenMpPosts.next(this.unseenMpPosts.getValue() + candidates.filter( c => !c.viewed && c.recruiter.recruiterId != recruiterId).length);
-				this.unseenMpPostsOfferedCandidates.next(candidates.filter( c => !c.viewed && c.recruiter.recruiterId != recruiterId).length);
-				
-			});
+			//this.fetchOfferedCandidates().subscribe(candidates => {
+			//	this.unseenMpPosts.next(this.unseenMpPosts.getValue() + candidates.filter( c => !c.viewed && c.recruiter.recruiterId != recruiterId).length);
+			//	this.unseenMpPostsOfferedCandidates.next(candidates.filter( c => !c.viewed && c.recruiter.recruiterId != recruiterId).length);
+			//	
+			//});
 			
 			this.fetchOpenPositions().subscribe(positions => {
 				this.unseenMpPosts.next(this.unseenMpPosts.getValue() + positions.filter( p => !p.viewed && p.recruiter.recruiterId != recruiterId).length);

@@ -49,7 +49,9 @@ export class RecruiterAccountComponent implements OnInit {
 	*/
 	ngOnInit(): void {
 		
-		this.fetchRecruiterDetails();
+		if (this.isRecruiter()) {
+			this.fetchRecruiterDetails();
+		}
 		
 		if (this.isRecruiterNoSubscription() || this.hasUnpaidSubscription() || this.isBuyingSubscription) {
 			this.switchTab("showSubscriptions");
@@ -415,6 +417,13 @@ export class RecruiterAccountComponent implements OnInit {
 			default: {return langCode;}
 		}
 		
+	}
+	
+	/**
+	* Whether or not User is a Recruiter
+	*/
+	public isRecruiter():boolean{
+		return sessionStorage.getItem('isRecruiter') === 'true';
 	}
 	
 }

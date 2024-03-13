@@ -10,7 +10,7 @@ import { NgbModal }																	from '@ng-bootstrap/ng-bootstrap';
 import { CandidateSearchAlert }														from './candidate-search-alert';
 import { DomSanitizer, SafeResourceUrl } 											from '@angular/platform-browser';
 import { Router}																	from '@angular/router';
-import { debounceTime } 															from "rxjs/operators";
+import { debounceTime, map } 															from "rxjs/operators";
 import { CandidateProfile } 														from '../candidate-profile';
 import { EmailService }																from '../email.service';
 import { CandidateNavService } 														from '../candidate-nav.service';
@@ -19,6 +19,7 @@ import { ExtractedFilters } 														from './extracted-filters';
 import { InfoItemBlock, InfoItemConfig, InfoItemRowKeyValue, InfoItemRowKeyValueFlag, InfoItemRowKeyValueMaterialIcon, InfoItemRowSingleValue } from '../candidate-info-box/info-item';
 import {AppComponent} 																from '../app.component';
 import { TranslateService } 														from '@ngx-translate/core';
+import { HttpResponse } from '@angular/common/http';
 
 /**
 * Component to suggest suitable Candidates based upon a 
@@ -47,6 +48,7 @@ export class SuggestionsComponent implements OnInit {
 		this.switchViewEvent.emit();	 
 	}
 	
+	public backendRequestCounter:number							= 0;
 	public candidateProfile:CandidateProfile 					= new CandidateProfile();
 	public savedCandidates:Array<SavedCandidate> 				= new Array<SavedCandidate>();
 	private jobSpecFile!:File;
@@ -175,7 +177,7 @@ export class SuggestionsComponent implements OnInit {
 		
 		this.resetSearchFilters(false);
 			
-			this.skillFilters = extractedFilters.skills;
+			this.skillFilters 				= extractedFilters.skills;
 			
 			if (extractedFilters.jobTitle != ''){
 				this.suggestionFilterForm.get('searchPhrase')?.setValue(extractedFilters.jobTitle);	
@@ -316,6 +318,8 @@ export class SuggestionsComponent implements OnInit {
 	
 		this.skillFilters = new Array<string>();
 		
+		this.backendRequestCounter 		= 0;
+		
 		if (attachValueChangeListener) {
 			this.suggestionFilterForm.valueChanges.subscribe(value => {
 				this.getSuggestions();	
@@ -394,7 +398,11 @@ export class SuggestionsComponent implements OnInit {
 		
 		let params:SuggestionParams = new SuggestionParams(this.suggestionFilterForm, this.skillFilters, new Array<string>());
 		
+		let backendRequestId = this.backendRequestCounter + 1;
+		this.backendRequestCounter = backendRequestId;
+		
 		this.suggestionsService.getSuggestons(	
+									backendRequestId,
 									maxSuggestions,
 									params.getTitle(),
 									params.getCountries(),
@@ -405,25 +413,31 @@ export class SuggestionsComponent implements OnInit {
 									params.getLanguages(),
 									params.getSkills(),
 									params.getIncludUnavailableCandidates()
-									).subscribe(data => {
+									).pipe(
+										  map((response) => {
+										  
+										   	this.suggestions =  new Array<Candidate>();
 												
-										this.suggestions =  new Array<Candidate>();
+											if (this.backendRequestCounter == backendRequestId) {
+												response.body.content.forEach((s:Candidate) => {
+													this.suggestions.push(s);	
+												});	
+											}
 												
-										data.content.forEach((s:Candidate) => {
-											this.suggestions.push(s);	
-										});
-												 
-									}, err => {
-			
-										if (err.status === 401 || err.status === 0) {
-											sessionStorage.removeItem('isAdmin');
-											sessionStorage.removeItem('isRecruter');
-											sessionStorage.removeItem('isCandidate');
-											sessionStorage.removeItem('loggedIn');
-											sessionStorage.setItem('beforeAuthPage', 'suggestions');
-											this.router.navigate(['login-user']);
-										}
-    								});
+											
+										
+										    return response ;
+										  })).subscribe((data: HttpResponse<any>) => {}, 
+										  err => {
+											if (err.status === 401 || err.status === 0) {
+												sessionStorage.removeItem('isAdmin');
+												sessionStorage.removeItem('isRecruter');
+												sessionStorage.removeItem('isCandidate');
+												sessionStorage.removeItem('loggedIn');
+												sessionStorage.setItem('beforeAuthPage', 'suggestions');
+												this.router.navigate(['login-user']);
+											}
+    									});
 											
 	}
 	

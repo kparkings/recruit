@@ -69,18 +69,20 @@ export class NewCandidateComponent implements OnInit {
 				this.showBackBtn = true;
 			});
 		} else {
-			this.candidateService.fetchPendingCandidates().forEach(data => {
-			
-				let pendingCandidates: Array<PendingCandidate> = data;
-			
-				pendingCandidates.forEach(pc => {
-                    this.pendingCandidates.push(pc);
-            	});
-			
-				if (this.isPendingCandidates() && this.isAuthenticatedAsAdmin()) {
-					this.openPendingCandidatesBox();
-				}
-			});
+			//if (this.isAdmin()) {
+				this.candidateService.fetchPendingCandidates().forEach(data => {
+				
+					let pendingCandidates: Array<PendingCandidate> = data;
+				
+					pendingCandidates.forEach(pc => {
+	                    this.pendingCandidates.push(pc);
+	            	});
+				
+					if (this.isPendingCandidates() && this.isAuthenticatedAsAdmin()) {
+						this.openPendingCandidatesBox();
+					}
+				});
+			//}
 		
 		}
 
@@ -562,7 +564,7 @@ export class NewCandidateComponent implements OnInit {
 		return sessionStorage.getItem('isAdmin') === 'true';
 	}
 	
-		/**
+	/**
 	* Whether or not User is a Recruiter
 	*/
 	public isRecruiter():boolean{

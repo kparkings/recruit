@@ -1,5 +1,5 @@
 import { Injectable }                             		from '@angular/core';
-import { HttpClient, HttpHeaders }  					from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams }  					from '@angular/common/http';
 import { Observable }        		         			from 'rxjs';
 import { NewPendingCandidate, Rate }                    from './create-candidate/new-pending-candidate';
 import { CandidateFunction }                      		from './candidate-function';
@@ -13,6 +13,7 @@ import { CandidateProfile } 							from './candidate-profile';
 import { UpdateCandidateRequest } 						from './new-candidate/update-candidate-request';
 import { CandidateSkill } from './accounts/candidate-skill';
 import { TranslateService } from '@ngx-translate/core';
+import { map } from 'rxjs/operators';
 
 /**
 * Services for new Candidates
@@ -32,6 +33,7 @@ export class CandidateServiceService {
 	httpOptionsFileUpload = {
       headers: new HttpHeaders({ }), withCredentials: true
     };
+    
 
   	/**
   	* Returns a list of available Candidates 
@@ -40,7 +42,10 @@ export class CandidateServiceService {
       
 		const backendUrl:string = environment.backendUrl +'candidate?'+filterParams;
   
-    	return this.httpClient.get<any>(backendUrl, this.httpOptions);
+    	//return this.httpClient.get<any>(backendUrl, this.httpOptions);
+    	
+    	return this.httpClient.get<any>(backendUrl,  { observe: 'response', withCredentials: true});//
+    	
   	}
   	
 	/**

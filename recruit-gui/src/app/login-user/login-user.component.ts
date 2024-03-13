@@ -86,8 +86,6 @@ export class LoginUserComponent implements OnInit {
 				sessionStorage.setItem('isRecruiter',     	 			'true');
 				
 				this.creditService.hasPaidSubscription().subscribe(res => {
-					
-					console.log("PAID RESULT ====> " + JSON.stringify(res));
 					sessionStorage.setItem('hasPaidSubscription', ''+res)
 				});
 				

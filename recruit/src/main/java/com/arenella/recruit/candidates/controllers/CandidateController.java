@@ -8,6 +8,8 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -110,19 +112,6 @@ public class CandidateController {
 	}
 	
 	/**
-	* Endpoint marks a Candidate as no possibly being no longer available. 
-	* @return ResponseEntity
-	*/
-	//@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('RECRUITER')")
-	//@PutMapping(path="candidate/{candidateId}/flaggedAsUnavailable/{flaggedAsUnavailable}/")
-	//public ResponseEntity<Void> updateCandidateflaggedAsUnavailable(@RequestBody String fakeBody, @PathVariable("candidateId") long candidateId, @PathVariable("flaggedAsUnavailable") boolean flaggedAsUnavailable){
-		
-	//		this.candidateService.flagCandidateAvailability(candidateId, flaggedAsUnavailable);
-		
-	//		return ResponseEntity.ok().build();
-	//}
-	
-	/**
 	* Endpoint marks a Candidate as being available. In this case we 
 	* can update the data that their availability next needs to be checked
 	* @return ResponseEntity
@@ -199,8 +188,10 @@ public class CandidateController {
 													@RequestParam(required = false)		String				searchText,
 													@RequestParam(required = false)		Boolean				available,
 													@RequestParam(required = false)		String				ownerId,
-													Pageable pageable,
-													Principal principal
+													Integer				backendRequestId,
+													Pageable 			pageable,
+													Principal 			principal,
+													HttpServletResponse response
 													) {
 		
 		if (this.isCandidate(principal)) {
@@ -232,6 +223,8 @@ public class CandidateController {
 																		.available(available)
 																		.ownerId(ownerId)
 																	.build();
+		
+		response.setHeader("X-Arenella-Request-Id", ""+(backendRequestId == null ? 0 : backendRequestId.intValue()));
 		
 		if (this.isRecruiter(principal) && this.isUseCredits(principal) && this.userCreditsExpired(this.getLoggedInUserName(principal))) {
 			return candidateService.getCandidateSuggestions(filterOptions, pageable.getPageSize()).map(CandidateSuggestionAPIOutbound::convertFromCandidateAsCensored);
