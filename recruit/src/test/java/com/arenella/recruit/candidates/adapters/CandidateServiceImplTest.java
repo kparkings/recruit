@@ -2119,4 +2119,30 @@ public class CandidateServiceImplTest {
 		
 	}
 	
+	/**
+	* Test fetch of count - available
+	* @throws Exception
+	*/
+	@Test
+	public void testGetAccountByAvailable_available() throws Exception{
+		
+		this.service.getCountByAvailable(true);
+		
+		Mockito.verify(this.mockCandidateDao).getCountByAvailable(true);
+		
+	}
+	
+	/**
+	* Test fetch of count - unavailable
+	* @throws Exception
+	*/
+	@Test
+	public void testGetAccountByAvailable_unavailable() throws Exception{
+		
+		this.service.getCountByAvailable(true);
+		
+		Mockito.verify(this.mockCandidateDao).getCountByAvailable(true);
+		
+	}
+	
 }

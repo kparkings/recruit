@@ -1,5 +1,6 @@
 import { Component, OnInit } 					from '@angular/core';
-import { StatisticsService } 					from '../statistics.service';
+import { CandidateServiceService } from '../candidate-service.service';
+import { CandidateTotals } from '../candidate-totals';
 
 @Component({
   selector: 'app-home',
@@ -8,19 +9,15 @@ import { StatisticsService } 					from '../statistics.service';
 })
 export class HomeComponent implements OnInit {
 
-	totalNumberActiveCandidates:number = 0;
+	public candidateTotals:CandidateTotals					 	= new CandidateTotals(0,0,0);
 
 	/**	
 	* Constructor
 	* @param statisticsService - provides statistics about the system
 	*/
-  	constructor(public statisticsService:StatisticsService) {
+  	constructor(public candidateService:		CandidateServiceService) {
 	
-		this.statisticsService.getTotalNumberOfActiceCandidatesStatistics().forEach(count => {
-
-			this.totalNumberActiveCandidates = count;
-
-    	});
+			this.candidateService.fetchCandidateTotals().subscribe(totals => this.candidateTotals = totals);
 	
   	}
 

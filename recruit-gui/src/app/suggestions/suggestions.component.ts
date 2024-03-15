@@ -20,6 +20,7 @@ import { InfoItemBlock, InfoItemConfig, InfoItemRowKeyValue, InfoItemRowKeyValue
 import {AppComponent} 																from '../app.component';
 import { TranslateService } 														from '@ngx-translate/core';
 import { HttpResponse } from '@angular/common/http';
+import { CandidateTotals } from '../candidate-totals';
 
 /**
 * Component to suggest suitable Candidates based upon a 
@@ -48,6 +49,7 @@ export class SuggestionsComponent implements OnInit {
 		this.switchViewEvent.emit();	 
 	}
 	
+	public candidateTotals:CandidateTotals					 	= new CandidateTotals(0,0,0);
 	public backendRequestCounter:number							= 0;
 	public candidateProfile:CandidateProfile 					= new CandidateProfile();
 	public savedCandidates:Array<SavedCandidate> 				= new Array<SavedCandidate>();
@@ -158,6 +160,8 @@ export class SuggestionsComponent implements OnInit {
 			this.showPaidSubscriptinOptions = true;
 		} 
 		
+		
+		this.candidateService.fetchCandidateTotals().subscribe(totals => this.candidateTotals = totals);
 		
 		this.appComponent.refreschUnreadAlerts();
 		

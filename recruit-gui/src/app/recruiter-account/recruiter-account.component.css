@@ -189,8 +189,11 @@
 	cursor:pointer;
 }
 
-.subs-opt-box-mob{
-	width:100%;
+@media (max-width:700px)  {
+	.subs-opt-box{
+		width:100%;
+		margin-left:0px;
+	}
 }
 
 .subs-opt-box:hover{

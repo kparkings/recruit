@@ -4,23 +4,104 @@
 	<div class="nav-tabs-bar"></div>
 	
     <div class="page-body">
-    	<div>
-        	<div  class="subject-header">
-            	<h1>{{ "arenella-home-title" | translate }}</h1>
-            	<h5>{{ "arenella-home-sub-title" | translate }}</h5>
-            </div>
-           	<p>{{ "arenella-home-intro-1" | translate }}
-            
-            </p>
-            <p>{{ "arenella-home-intro-2" | translate }}
-            
-            </p>
-            <p>{{ "arenella-home-intro-3" | translate }}
-            
-            </p>
-            <p>{{ "arenella-home-intro-4" | translate }}
-            
-            </p>
+    	<div class="intro">
+      	
+    		<h1>{{ "arenella-homepage-title-intro" | translate }}</h1>
+    		<p>{{ "arenella-homepage-title-intro-text" | translate }}
+    		</p>
+    		
+    		<h1>{{"arenella-homepage-title-pricing" | translate }}</h1>
+    		<table class="pricing">
+    			<thead>
+    				<tr>
+    					<th>{{"arenella-homepage-title-pricing-plan-name" | translate }}</th>
+    					<th>{{"arenella-homepage-title-pricing-plan-cost" | translate }}</th>
+    					<th>{{"arenella-homepage-title-pricing-plan-description" | translate }}</th>
+    				</tr>
+    			</thead>
+    			<tbody>
+    				<tr>
+    					<td>{{"arenella-homepage-title-pricing-plan-credit-name" | translate }}</td>
+    					<td>{{"arenella-homepage-title-pricing-plan-credit-price" | translate }}</td>
+    					<td>{{"arenella-homepage-title-pricing-plan-credit-desc" | translate }}</td>
+    				</tr>
+    				<tr>
+    					<td>{{"arenella-homepage-title-pricing-plan-paid-name" | translate }}</td>
+    					<td>{{"arenella-homepage-title-pricing-plan-paid-price" | translate }}</td>
+    					<td>{{"arenella-homepage-title-pricing-plan-paid-desc" | translate }}</td>
+    				</tr>
+    			</tbody>
+    		</table>
+    		
+    		<h1>{{ "arenella-homepage-title-functionality" | translate }}</h1>
+    		<table class="functions">
+    			<tbody>
+    				<tr>
+    					<th>{{"arenella-homepage-func-suggestions-title" | translate }}</th>
+    					<td>{{"arenella-homepage-func-suggestions-desc" | translate }}</td>
+    				</tr>
+    				<tr>
+    					<th>{{"arenella-homepage-func-jb-title" | translate }}</th>
+    					<td>{{"arenella-homepage-func-jb-desc" | translate }}</td>
+    				</tr>
+    				<tr>
+    					<th>{{"arenella-homepage-func-market-title" | translate }}</th>
+    					<td>{{"arenella-homepage-func-market-desc" | translate }}</td>
+    				</tr>
+    				<tr>
+    					<th>{{"arenella-homepage-func-news-title" | translate }}</th>
+    					<td>{{"arenella-homepage-func-news-desc" | translate }}</td>
+    				</tr>
+    			</tbody>
+    		</table>
+    		
+    		<h1>{{ "arenella-homepage-title-candidates" | translate }}</h1>
+			
+			<div>
+				<h4>Real time candidate availability</h4>
+				<table class="candidate-availability">
+					<tr>
+						<th>Available Candidate</th>
+						<td>{{candidateTotals.available}}</td>
+					</tr>
+					<tr>
+						<th>Unavailable Candidate</th>
+						<td>{{candidateTotals.unavailable}}</td>
+					</tr>
+					<tr>
+						<th>Total registerd Candidate's</th>
+						<td>{{candidateTotals.totalRegisteredCandidates}}</td>
+					</tr>
+				</table>
+			</div>
+			
+			<p>
+			{{"arenella-homepage-candidates-1" | translate }}
+			</p>
+			<p>
+			{{"arenella-homepage-candidates-2" | translate }}
+			</p>
+			<p>
+			{{"arenella-homepage-candidates-3" | translate }}
+			</p>
+			<p>
+			{{"arenella-homepage-candidates-4" | translate }}
+			</p>
+		
+			<h1>{{ "arenella-homepage-title-fees" | translate }}</h1>
+			<p>
+			{{ "arenella-homepage-fees-1" | translate }}
+			</p>
+			<p>
+			{{ "arenella-homepage-fees-2" | translate }}
+			</p>
+			
+			<h1>{{ "arenella-homepage-title-getting-started" | translate }}</h1>
+			<p>
+			{{ "arenella-homepage-getting-started" | translate }}
+			</p>
+    		
 		</div>
+		<div class="footer"></div>
     </div>
 </div>

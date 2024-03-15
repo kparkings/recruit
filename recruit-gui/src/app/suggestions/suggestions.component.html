@@ -86,7 +86,7 @@
 							</td>
 						</tr>
 						 
-						<tr *ngIf="isAuthenticatedAsAdmin()">
+						<tr>
 							<td class="sugg-srch-hdr">{{'arenella-suggestions-include' | translate}}</td>
 							<li class="sugg-srch-ctry-chkbox"><input type="checkbox" formControlName="includeUnavailableCandidates" class="lang-checkbox" (click)="doPaidSubscriptionCheck()">{{'arenella-suggestions-include-unavailable-candidates' | translate}}</li>
 						</tr>
@@ -235,6 +235,7 @@
 	</div>
 	<div class="modal-body">
 		<p>{{'arenella-suggestions-paid-subscription-text-1' | translate}}</p>
+		<p>{{'arenella-suggestions-paid-subscription-text-3' | translate}} : {{candidateTotals.unavailable}}</p>
 		<p>{{'arenella-suggestions-paid-subscription-text-2' | translate}}</p>
 		<button class="btn btn-secondary" (click)="choseSubscription()" download>{{'arenella-suggestions-paid-subscription-choose-subscription-btn' | translate}}</button>
 	</div> 

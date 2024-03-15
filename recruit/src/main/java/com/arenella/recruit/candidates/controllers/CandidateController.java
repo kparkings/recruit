@@ -464,6 +464,20 @@ public class CandidateController {
 	}
 	
 	/**
+	* Returns counts of Candiates in the system
+	* @return Count of candidate info
+	*/
+	@GetMapping(path="/public/candidate/_counts")
+	public ResponseEntity<CandidateAvailabilityCountAPIOutbound> getCandidateCounts() {
+	
+		long available 		= this.candidateService.getCountByAvailable(true);
+		long unavailable 	= this.candidateService.getCountByAvailable(false);
+		
+		return ResponseEntity.ok(new CandidateAvailabilityCountAPIOutbound(available, unavailable));
+		
+	}
+	
+	/**
 	* Returns whether or not the user is a Candidate
 	* @return whether or not the user is a Candidate
 	*/

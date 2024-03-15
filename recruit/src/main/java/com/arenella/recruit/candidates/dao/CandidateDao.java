@@ -309,5 +309,13 @@ public interface CandidateDao extends CrudRepository<CandidateEntity, Long>, Jpa
 		return this.findNewSinceLastDateRaw(since).stream().map(CandidateEntity::convertFromEntity).collect(Collectors.toSet());
 	}
 	
+	/**
+	* Returns the number of available/unavailable candidates
+	* @param available - Filter on available / unavailable
+	* @return count
+	*/
+	@Query("select count(*) from CandidateEntity where available = :available")
+	public long getCountByAvailable(boolean available);
+	
 		
 }

@@ -1070,6 +1070,14 @@ public class CandidateServiceImpl implements CandidateService{
 		this.skillsDao.persistExistingSkills(skills);
 		
 	}
+
+	/**
+	* Refer to the CandidateService for details 
+	*/
+	@Override
+	public long getCountByAvailable(boolean available) {
+		return this.candidateDao.getCountByAvailable(available);
+	}
 	
 	
 }

@@ -561,4 +561,25 @@ public class CandidateControllerTest {
 		
 	}
 	
+	/**
+	* Tests retrieval of Candidate counts information
+	* @throws Exception
+	*/
+	@Test
+	public void testGetCandidateCounts() throws Exception{
+		
+		final long available 	= 10;
+		final long unavailable 	= 30;
+		
+		Mockito.when(this.mockCandidateService.getCountByAvailable(true)).thenReturn(available);
+		Mockito.when(this.mockCandidateService.getCountByAvailable(false)).thenReturn(unavailable);
+		
+		ResponseEntity<CandidateAvailabilityCountAPIOutbound> response = this.controller.getCandidateCounts();
+	
+		assertEquals(HttpStatus.OK, 			response.getStatusCode());
+		assertEquals(available, 				response.getBody().getAvailable());
+		assertEquals(unavailable, 				response.getBody().getUnavailable());
+		assertEquals(available + unavailable, 	response.getBody().getTotalRegisteredCandidates());
+	}
+	
 }

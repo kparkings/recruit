@@ -87,6 +87,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements W
 			.antMatchers("authenticate").permitAll()
 			.antMatchers("/public/listing-alert").permitAll()
 			.antMatchers("/public/listing-alert/**").permitAll()
+			.antMatchers("/public/candidate/**").permitAll()
 			.antMatchers(HttpMethod.OPTIONS,"/**").permitAll()
 			.anyRequest().authenticated().and()
 			.exceptionHandling().authenticationEntryPoint(authenticationEntryPoint)

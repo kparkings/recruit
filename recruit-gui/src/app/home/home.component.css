@@ -19,12 +19,51 @@ h2{
     color:#6f42c1;
 }
 
+table{
+	width:100%;
+	border:2px solid black;
+	margin-top:20px;
+	margin-bottom:20px;
+}
 table th{
 	color:#6f42c1;
+	border:solid 1px black;
 }
 
 table td{
 	padding-left:10px;
+	border:solid 1px black;
+}
+
+.pricing td{
+	width:33%;
+}
+
+.pricing th{
+	width:33%;
+	text-align:center;
+	font-weight:bold;
+}
+
+.functions td{
+	width:70%;
+}
+
+.functions th{
+	width:30%;
+	text-align:left;
+	font-weight:bold;
+	padding-left:10px;
+}
+
+.candidate-availability td{
+		width:70%;
+		text-align:center;
+		font-weight:bold;
+}
+
+.candidate-availability th{
+		width:30%;
 }
 
 .subject-header{
@@ -48,4 +87,17 @@ table td{
 
 .aboutpage h5{
 	color:grey;
+}
+
+.intro{
+	width:80%;
+	margin-top:20px;
+	margin-left:10%;
+	margin-right:10%;
+	margin-bottom:50px;
+	
+}
+
+.footer{
+	padding-bottom:20px;
 }

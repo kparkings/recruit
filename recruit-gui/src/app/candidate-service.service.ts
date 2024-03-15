@@ -14,6 +14,7 @@ import { UpdateCandidateRequest } 						from './new-candidate/update-candidate-r
 import { CandidateSkill } from './accounts/candidate-skill';
 import { TranslateService } from '@ngx-translate/core';
 import { map } from 'rxjs/operators';
+import { CandidateTotals } from './candidate-totals';
 
 /**
 * Services for new Candidates
@@ -398,6 +399,17 @@ export class CandidateServiceService {
 			
 		return this.httpClient.put<any>(backendUrl,  '{}', this.httpOptions);
 	
+	}
+	
+	/**
+	* Fetches info about number of candidates and their availability 
+	*/
+	fetchCandidateTotals():Observable<CandidateTotals>{
+		
+		const backendUrl:string = environment.backendUrl + "public/candidate/_counts";
+		
+		return this.httpClient.get<any>(backendUrl, this.httpOptions);
+		
 	}
     
 			

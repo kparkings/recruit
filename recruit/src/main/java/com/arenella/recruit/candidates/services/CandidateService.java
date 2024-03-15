@@ -241,4 +241,11 @@ public interface CandidateService {
 	*/
 	boolean hasPaidSubscription(String userId);
 	
+	/**
+	* Returns number of available/unavailable candiadtes
+	* @param available - filter for available/unavailable
+	* @return count
+	*/
+	public long getCountByAvailable(boolean available);
+	
 }
