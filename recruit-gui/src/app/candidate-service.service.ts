@@ -1,7 +1,7 @@
 import { Injectable }                             		from '@angular/core';
-import { HttpClient, HttpHeaders, HttpParams }  					from '@angular/common/http';
+import { HttpClient, HttpHeaders }  					from '@angular/common/http';
 import { Observable }        		         			from 'rxjs';
-import { NewPendingCandidate, Rate }                    from './create-candidate/new-pending-candidate';
+import { NewPendingCandidate }                   		from './create-candidate/new-pending-candidate';
 import { CandidateFunction }                      		from './candidate-function';
 import { environment }									from './../environments/environment';
 import { SearchAlert }		 	                    	from './recruiter-alerts/search-alert';
@@ -11,10 +11,10 @@ import { SavedCandidate }		 	                	from './suggestions/saved-candidat
 import { NewCandidateRequest } 							from './new-candidate/new-candidate-request';
 import { CandidateProfile } 							from './candidate-profile';
 import { UpdateCandidateRequest } 						from './new-candidate/update-candidate-request';
-import { CandidateSkill } from './accounts/candidate-skill';
-import { TranslateService } from '@ngx-translate/core';
-import { map } from 'rxjs/operators';
-import { CandidateTotals } from './candidate-totals';
+import { CandidateSkill } 								from './accounts/candidate-skill';
+import { TranslateService } 							from '@ngx-translate/core';
+import { CandidateTotals } 								from './candidate-totals';
+import { Country } 										from './country';
 
 /**
 * Services for new Candidates
@@ -25,7 +25,28 @@ import { CandidateTotals } from './candidate-totals';
 })
 export class CandidateServiceService {
     
-	constructor(private httpClient: HttpClient, private translate:TranslateService) { }
+    /**
+  	* Constructor
+  	*/
+	constructor(private httpClient: HttpClient, private translate:TranslateService) { 
+		
+		this.initializeCountries();
+		
+	}
+	
+	/**
+  	* Sets the available countrues
+  	* NB: Needs to come from the backend 
+  	*/
+	public initializeCountries():void{
+		
+		this.countries = new Array<Country>();
+		this.countries.push(new Country('NL', 'NETHERLANDS'));
+		this.countries.push(new Country('BE', 'BELGIUM'));
+		this.countries.push(new Country('UK', 'UK'));
+		this.countries.push(new Country('IE', 'REPUBLIC_OF_IRELAND'));
+		
+	}
 	
 	httpOptions = {
       headers: new HttpHeaders({ 'Content-Type': 'application/json' }), withCredentials: true
@@ -42,8 +63,6 @@ export class CandidateServiceService {
   	public getCandidates(filterParams:string): Observable<any>{
       
 		const backendUrl:string = environment.backendUrl +'candidate?'+filterParams;
-  
-    	//return this.httpClient.get<any>(backendUrl, this.httpOptions);
     	
     	return this.httpClient.get<any>(backendUrl,  { observe: 'response', withCredentials: true});//
     	
@@ -109,19 +128,6 @@ export class CandidateServiceService {
 		return this.httpClient.put<any>(backendUrl, fd, {headers: new HttpHeaders({ }), withCredentials: true});
 		
 	}
-
-	/**
-	* Disables a Candidate  
-	*/
-	//disableCandidate(candidateId: string): Observable<any> {
-	
-	//	const backendUrl:string = environment.backendUrl +'candidate/'+candidateId+'/?action=disable';
-			
-	//	return this.httpClient.put<any>(backendUrl,  '{}', this.httpOptions);
-	
-	//}
-
-
 	
 	/**
 	* Sends a request to add a new PendingCandidate
@@ -162,8 +168,6 @@ export class CandidateServiceService {
   		fd.append("candidate", new Blob([JSON.stringify(newCandidateRequest)], { type: 'application/json' }));
 		
 		return this.httpClient.post<any>(backendUrl, fd, {headers: new HttpHeaders({ }), withCredentials: true});
-	    
-	    // return this.httpClient.post<any>(backendUrl, JSON.stringify(newCandidateRequest), this.httpOptions);
 	
 	}
 	
@@ -411,6 +415,23 @@ export class CandidateServiceService {
 		return this.httpClient.get<any>(backendUrl, this.httpOptions);
 		
 	}
-    
-			
+	
+	public countries:Array<Country> = new Array<Country>();
+	
+	public getCountries():Array<Country>{
+		return this.countries;	
+	}
+	
+	/**
+	* Returns the code identifying the country
+	* @param country - Country to get the country code for
+	*/
+	public getCountryCode(country:string):string{
+
+		let result = this.countries.filter(c => c.countryName === country);
+		
+		return result[0] ? result[0].countryCode : 'NA';
+
+  	}
+  			
 }

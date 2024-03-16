@@ -540,27 +540,11 @@ export class StatisticsComponent implements OnInit {
 		});
 	}
 
+	/**
+	* Gets country code for the country 
+	*/
 	public countryToCode(country:string):string{
-		
-		switch(country){
-			case 'NETHERLANDS':{
-				return 'NL';
-			}
-			case 'BELGIUM':{
-				return 'NL';
-			}
-			case 'UK':{
-				return 'UK';
-			}
-			case 'REPUBLIC_OF_IRELAND':{
-				return 'IE';
-			}
-			default:{
-				return country;
-			}
-			
-		}
-		
+		return this.candidateService.getCountryCode(country);
 	}
 	
 	createLeftChart(leftChartLabels:string[], leftChartData:any){

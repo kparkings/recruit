@@ -1,5 +1,6 @@
 import { UntypedFormGroup }				from '@angular/forms';
 import { CandidateFunction }		from '../candidate-function';
+import { Country } from '../country';
 
 /**
 * Class containing the logic to prepare the filter params for the 
@@ -27,7 +28,7 @@ export class SuggestionParams{
 	* @param skillFilters			- contains raw skill filter info 
 	* @param functionTypes			- contains raw function types info
 	*/
-	public constructor(suggestionFilterForm:UntypedFormGroup, skillFilters:Array<string>, functionTypes:Array<string>){
+	public constructor(suggestionFilterForm:UntypedFormGroup, skillFilters:Array<string>, functionTypes:Array<string>, public availableCountries:Array<Country>){
 		
 		this.skills 		= skillFilters.concat();
 		this.functionTypes	= functionTypes;
@@ -40,22 +41,14 @@ export class SuggestionParams{
 		/**
 		* Add any country filters 	
 		*/
-		
-		if (suggestionFilterForm.get('nlResults')?.value) {
-			this.countries.push("NETHERLANDS");
-		}
-		
-		if (suggestionFilterForm.get('beResults')?.value) {
-			this.countries.push("BELGIUM");
-		}
-		
-		if (suggestionFilterForm.get('ukResults')?.value) {
-			this.countries.push("UK");
-		}
-
-		if (suggestionFilterForm.get('ieResults')?.value) {
-			this.countries.push("REPUBLIC_OF_IRELAND");
-		}
+		this.availableCountries.forEach(country => {
+			let key = country.countryCode.toLowerCase() + 'Results';
+			
+			if (suggestionFilterForm.get(key)?.value) {
+				this.countries.push(country.countryName);
+			}
+			
+		});
 		
 		/**
 		* Add any language filters 	

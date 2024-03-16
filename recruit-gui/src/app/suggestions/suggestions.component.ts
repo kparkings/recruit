@@ -78,20 +78,8 @@ export class SuggestionsComponent implements OnInit {
 	public createAlertForm:UntypedFormGroup 					= new UntypedFormGroup({
 		alertName:			new UntypedFormControl(''),
 	});
-		public suggestionFilterForm:UntypedFormGroup 			= new UntypedFormGroup({
-		searchPhrase:					new UntypedFormControl(''),
-		nlResults: 						new UntypedFormControl(true),
-		beResults: 						new UntypedFormControl(true),
-		ukResults: 						new UntypedFormControl(true),
-		ieResults: 						new UntypedFormControl(true),
-		contractType: 					new UntypedFormControl('Both'),
-		dutchLanguage: 					new UntypedFormControl(false),
-		englishLanguage: 				new UntypedFormControl(false),
-		frenchLanguage:					new UntypedFormControl(false),
-		minYearsExperience: 			new UntypedFormControl(''),
-		maxYearsExperience: 			new UntypedFormControl(''),
-		includeUnavailableCandidates: 	new UntypedFormControl('')
-	});
+	
+	public suggestionFilterForm:UntypedFormGroup 				= new UntypedFormGroup({});
 	public skilFilterForm:UntypedFormGroup 						= new UntypedFormGroup({
 		skill: 					new UntypedFormControl(''),
 	});
@@ -129,6 +117,8 @@ export class SuggestionsComponent implements OnInit {
 	}
 	
 	private init():void{
+		
+		this.resetSearchFilters(true);
 		
 		if (!this.isCandidate()) {
 			this.getSuggestions();	
@@ -296,10 +286,7 @@ export class SuggestionsComponent implements OnInit {
 		this.getSuggestions();
 	}	
 	
-	/**
-	* Resets the filters
-	*/
-	private resetSearchFilters(attachValueChangeListener:boolean):void{
+	public resetSuggestionFilterForm():void{
 		this.suggestionFilterForm = 		new UntypedFormGroup({
 			searchPhrase:					new UntypedFormControl(''),
 			nlResults: 						new UntypedFormControl(true),
@@ -315,6 +302,19 @@ export class SuggestionsComponent implements OnInit {
 			skill: 							new UntypedFormControl(''),
 			includeUnavailableCandidates: 	new UntypedFormControl('')
 		});
+		
+		this.candidateService.getCountries().forEach(c => {
+			this.suggestionFilterForm.addControl(c.countryCode+'Results', new UntypedFormControl(''));
+		});
+	
+	}
+	
+	/**
+	* Resets the filters
+	*/
+	private resetSearchFilters(attachValueChangeListener:boolean):void{
+		
+		this.resetSuggestionFilterForm();
 		
 		this.skilFilterForm = new UntypedFormGroup({
 			skill: 					new UntypedFormControl(''),
@@ -400,7 +400,7 @@ export class SuggestionsComponent implements OnInit {
 		
 		const maxSuggestions:number 		= 112;
 		
-		let params:SuggestionParams = new SuggestionParams(this.suggestionFilterForm, this.skillFilters, new Array<string>());
+		let params:SuggestionParams = new SuggestionParams(this.suggestionFilterForm, this.skillFilters, new Array<string>(), this.candidateService.getCountries());
 		
 		let backendRequestId = this.backendRequestCounter + 1;
 		this.backendRequestCounter = backendRequestId;
@@ -727,7 +727,7 @@ export class SuggestionsComponent implements OnInit {
 		this.showSaveAlertBoxSuccess 	= false;
 		this.showSaveAlertBoxFailure 	= false;
 		
-		let params:SuggestionParams 	= new SuggestionParams(this.suggestionFilterForm, this.skillFilters, new Array<string>());
+		let params:SuggestionParams 	= new SuggestionParams(this.suggestionFilterForm, this.skillFilters, new Array<string>(), this.candidateService.getCountries());
 		let alert:CandidateSearchAlert 	= new CandidateSearchAlert();
 		
 		alert.alertName 			= this.createAlertForm.get(('alertName'))?.value;
@@ -821,24 +821,7 @@ export class SuggestionsComponent implements OnInit {
 	* @param country - Country to get the country code for
 	*/
 	public getCountryCode(country:string):string{
-
-		switch(country){
-			case "NETHERLANDS":{
-				return "NL";
-			}
-			case "BELGIUM":{
-				return "BE";
-			}
-			case "UK":{
-				return "UK";
-			}
-			case "REPUBLIC_OF_IRELAND":{
-				return "IE";
-			}
-		}
-
-     	return 'NA';
-
+		return this.candidateService.getCountryCode(country);
   	}
 	
 	/**
