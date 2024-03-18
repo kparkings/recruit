@@ -66,7 +66,7 @@ export class SuggestionsService {
 		const filterParams:string = 'orderAttribute=candidateId&order=desc'
                                                          + '&page=0'
                                                          + '&size=' + maxNumberOfSuggestions
-                                                         + 'backendRequestId='+backendRequestId
+                                                         + '&backendRequestId='+backendRequestId
 														 + '&searchText=' + encodeURIComponent(title)
 														 + this.getCountryFilterParamString(countries) 			
                                                          + this.getContractTypeParamString(contract, perm)				
