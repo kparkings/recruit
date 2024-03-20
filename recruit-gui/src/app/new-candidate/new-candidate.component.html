@@ -52,7 +52,7 @@
 							<td class="hdr-value">
 								<select formControlName="function">
 									<option></option>
-									<option value="{{func.id}}" *ngFor="let func of functionTypes">{{func.desc}}</option>
+									<option value="{{func.id}}" *ngFor="let func of functionTypes">{{func.desc | translate}}</option>
 								</select>
 							</td>	
 						</tr>
@@ -65,14 +65,10 @@
 						<tr>
 							<td class="hdr-label">{{'arenella-new-candidate-country' | translate}}</td>
 							<td>
-								<select formControlName="country">
+								<select formControlName="country" class="new-candidate-country-list">
 									<option></option>
-									<option value="BELGIUM">{{'arenella-new-candidate-belgium' | translate}}</option>
-									<option value="REPUBLIC_OF_IRELAND">{{'arenella-new-candidate-ireland' | translate}}</option>
-									<option value="NETHERLANDS">{{'arenella-new-candidate-netherlands' | translate}}</option>
-									<option value="UK">{{'arenella-new-candidate-uk' | translate}}</option>
-									<!--<option value="EUROPE">EU</option>-->
-									<!--<option value="WORLD">World</option>-->
+									<option *ngFor="let country of countries" value="{{country.countryName}}">{{country.countryName | translate}}</option>
+									
 								</select>
 							</td>	
 						</tr>
@@ -181,27 +177,11 @@
 						<tr>
 							<td class="hdr-label" colspan="2">{{'arenella-new-candidate-spoken-languages' | translate}}</td>
 						</tr>
-						<tr>
-							<td>{{'arenella-new-candidate-dutch' | translate}}</td>
+						<tr *ngFor="let language of supportedLanguages">
+							<td>{{language.languageCode | translate}}</td>
 							<td>
-								<select formControlName="DUTCH">
-									<option *ngFor="let level of languageOptions" value="{{level.value}}">{{level.label}}</option>
-								</select>
-							</td>
-						</tr>
-						<tr>
-							<td>{{'arenella-new-candidate-english' | translate}}</td>
-							<td>
-								<select formControlName="ENGLISH">
-									<option *ngFor="let level of languageOptions" value="{{level.value}}">{{level.label}}</option>
-								</select>
-							</td>
-						</tr>
-						<tr>
-							<td>{{'arenella-new-candidate-french' | translate}}</td>
-							<td>
-								<select formControlName="FRENCH">
-									<option *ngFor="let level of languageOptions" value="{{level.value}}">{{level.label}}</option>
+								<select #langLevelSelect (change)="setLanguageFormValue(language.languageCode, langLevelSelect.value)">
+									<option *ngFor="let level of languageOptions" value="{{level.value}}">{{level.label | translate}}</option>
 								</select>
 							</td>
 						</tr>

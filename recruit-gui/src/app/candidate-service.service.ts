@@ -15,6 +15,7 @@ import { CandidateSkill } 								from './accounts/candidate-skill';
 import { TranslateService } 							from '@ngx-translate/core';
 import { CandidateTotals } 								from './candidate-totals';
 import { Country } 										from './country';
+import { SupportedLanguage } from './supported-language';
 
 /**
 * Services for new Candidates
@@ -25,12 +26,15 @@ import { Country } 										from './country';
 })
 export class CandidateServiceService {
     
+    public countries:Array<Country> 			= new Array<Country>();
+    public languages:Array<SupportedLanguage> 	= new Array<SupportedLanguage>();
     /**
   	* Constructor
   	*/
 	constructor(private httpClient: HttpClient, private translate:TranslateService) { 
 		
 		this.initializeCountries();
+		this.initializeSupportedLanguages();
 		
 	}
 	
@@ -39,15 +43,24 @@ export class CandidateServiceService {
   	* NB: Needs to come from the backend 
   	*/
 	public initializeCountries():void{
-		
 		this.countries = new Array<Country>();
 		this.countries.push(new Country('NL', 'NETHERLANDS'));
 		this.countries.push(new Country('BE', 'BELGIUM'));
 		this.countries.push(new Country('UK', 'UK'));
 		this.countries.push(new Country('IE', 'REPUBLIC_OF_IRELAND'));
-		
 	}
-	
+
+	/**
+  	* Sets the available countrues
+  	* NB: Needs to come from the backend 
+  	*/
+	public initializeSupportedLanguages():void{
+		this.languages = new Array<SupportedLanguage>();
+		this.languages.push(new SupportedLanguage('DUTCH'));
+		this.languages.push(new SupportedLanguage('ENGLISH'));
+		this.languages.push(new SupportedLanguage('FRENCH'));
+	}
+		
 	httpOptions = {
       headers: new HttpHeaders({ 'Content-Type': 'application/json' }), withCredentials: true
     };
@@ -416,10 +429,18 @@ export class CandidateServiceService {
 		
 	}
 	
-	public countries:Array<Country> = new Array<Country>();
-	
+	/**
+	* Returns Countries supported by the system 
+	*/
 	public getCountries():Array<Country>{
 		return this.countries;	
+	}
+	
+	/**
+	* Returns Languages supported by the system 
+	*/
+	public getLanguages():Array<SupportedLanguage>{
+		return this.languages;	
 	}
 	
 	/**

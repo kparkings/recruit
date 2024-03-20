@@ -14,6 +14,8 @@ import { CandidateNavService } 							from '../candidate-nav.service';
 import { LanguageOption } 								from './language-option';
 import { AppComponent} 									from '../app.component';
 import { TranslateService } 							from '@ngx-translate/core';
+import { Country } from '../country';
+import { SupportedLanguage } from '../supported-language';
 
 @Component({
   selector: 'app-new-candidate',
@@ -44,6 +46,9 @@ export class NewCandidateComponent implements OnInit {
 	public mobilePage:string = '';
 	
 	public showBackBtn:boolean = false;
+	public countries:Array<Country> 			= new Array<Country>();
+	public supportedLanguages:Array<SupportedLanguage> 	= new Array<SupportedLanguage>();
+	
 	/**
   	* Constructor
   	*/
@@ -54,6 +59,9 @@ export class NewCandidateComponent implements OnInit {
   				private candidateNavService: 		CandidateNavService,
   				private appComponent:				AppComponent,
   				private translate:					TranslateService) {
+    
+    	this.countries = this.candidateService.getCountries();
+    	this.supportedLanguages = this.candidateService.getLanguages();
     
     	this.candidateService.loadFunctionTypes().forEach(funcType => {
       		this.functionTypes.push(funcType);
@@ -189,6 +197,8 @@ export class NewCandidateComponent implements OnInit {
   	* Registers a new Candidate with the backend
   	*/
   	public addCandidate(): void {
+		
+		console.log("DDDDDDDDD  " + JSON.stringify(this.offeredCandidateFormBean.get('DUTCH')!.value));
 		
 		//START  
 		let candidate:NewCandidateRequest = new NewCandidateRequest();
@@ -569,6 +579,10 @@ export class NewCandidateComponent implements OnInit {
 	*/
 	public isRecruiter():boolean{
 		return sessionStorage.getItem('isRecruiter') === 'true';
+	}
+	
+	public setLanguageFormValue(langCode:string, langSelection:string):void{
+		this.offeredCandidateFormBean.get(langCode)?.setValue(langSelection);
 	}
 	
 }
