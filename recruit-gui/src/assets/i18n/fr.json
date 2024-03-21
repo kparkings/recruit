@@ -688,6 +688,7 @@
 	"arenella-suggestions-saved-candidate-btn-back": "Retour",
 	"arenella-suggestions-skills": "Compétences",
 	"arenella-suggestions-to": "À",
+	"BELGIUM": "Belgique",
 	"create-candidate--profile-image": "Il y a eu un problème avec l'image de profil",
 	"create-candidate-cv-format": "Le CV doit être Word ou PDF et moins de 1 Mo",
 	"create-candidate-failure": "Impossible d'ajouter un candidat",
@@ -745,6 +746,7 @@
 	"mp-left-mnu-renumerationo": "Rémunération",
 	"mp-left-mnu-requested-by": "Demandé par",
 	"mp-left-mnu-requested-skills": "Compétences",
+	"NETHERLANDS": "Les Pays-Bas",
 	"new-candidate-basic": "Basique",
 	"new-candidate-failure": "Impossible d'ajouter un candidat",
 	"new-candidate-failure-title": "Échec",
@@ -801,6 +803,7 @@
 	"register-recruiter-failure-title": "Échec",
 	"register-recruiter-success": "Votre requête à bien été envoyée. Une fois accepté, un e-mail vous sera envoyé avec vos informations de connexion.",
 	"register-recruiter-success-title": "Succès",
+	"REPUBLIC_OF_IRELAND": "Irlande",
 	"saved-candidate-no-longer-available": "Le candidat n'est plus disponible",
 	"stat-candidate-availability": "Disponibilité des candidats",
 	"stat-job-board-views": "Vues du site d'offres d'emploi",
@@ -839,5 +842,6 @@
 	"suggestions-lang-dutch": "Néerlandais",
 	"suggestions-lang-english": "Anglais",
 	"suggestions-lang-french": "Français",
-	"suggestions-lang-na": "NA"
+	"suggestions-lang-na": "NA",
+	"UK": "Royaume-Uni"
 }

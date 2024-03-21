@@ -688,6 +688,7 @@
 	"arenella-suggestions-saved-candidate-btn-back": "Back",
 	"arenella-suggestions-skills": "Skills",
 	"arenella-suggestions-to": "TO",
+	"BELGIUM": "Belgium",
 	"create-candidate--profile-image": "There was an issue with the profile image",
 	"create-candidate-cv-format": "CV must be Word or PDF and less than 1MB",
 	"create-candidate-failure": "Unable to add Candidate",
@@ -745,6 +746,7 @@
 	"mp-left-mnu-renumerationo": "Renumeration",
 	"mp-left-mnu-requested-by": "Requested By",
 	"mp-left-mnu-requested-skills": "Skills",
+	"NETHERLANDS": "The Netherlands",
 	"new-candidate-basic": "Basic",
 	"new-candidate-failure": "Unable to add Candidate",
 	"new-candidate-failure-title": "Failure",
@@ -801,6 +803,7 @@
 	"register-recruiter-failure-title": "Failure",
 	"register-recruiter-success": "Your request has been submitted. Once accepted an email will be sent with your login details.",
 	"register-recruiter-success-title": "Success",
+	"REPUBLIC_OF_IRELAND": "Ireland",
 	"saved-candidate-no-longer-available": "Candidate No Longer Available",
 	"stat-candidate-availability": "Candidate Availability",
 	"stat-job-board-views": "Job Board Views",
@@ -815,7 +818,7 @@
 	"static-country-eu": "EU",
 	"static-country-ir": "Ireland",
 	"static-country-nl": "The Netherlands",
-	"static-country-uk": "United Kingdon",
+	"static-country-uk": "United Kingdom",
 	"static-country-world": "World",
 	"static-func-architecture": "Architecture",
 	"static-func-ba": "BA",
@@ -839,5 +842,6 @@
 	"suggestions-lang-dutch": "Dutch",
 	"suggestions-lang-english": "English",
 	"suggestions-lang-french": "French",
-	"suggestions-lang-na": "NA"
+	"suggestions-lang-na": "NA",
+	"UK": "United Kingdom"
 }

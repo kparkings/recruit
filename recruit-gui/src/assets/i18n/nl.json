@@ -688,6 +688,7 @@
 	"arenella-suggestions-saved-candidate-btn-back": "Terug",
 	"arenella-suggestions-skills": "Vaardigheden",
 	"arenella-suggestions-to": "Naar",
+	"BELGIUM": "België",
 	"create-candidate--profile-image": "Er was een probleem met de profielafbeelding",
 	"create-candidate-cv-format": "CV moet Word of PDF zijn en minder dan 1 MB groot",
 	"create-candidate-failure": "Kan kandidaat niet toevoegen",
@@ -745,6 +746,7 @@
 	"mp-left-mnu-renumerationo": "Vergoeding",
 	"mp-left-mnu-requested-by": "Aangevraagd door",
 	"mp-left-mnu-requested-skills": "Vaardigheden",
+	"NETHERLANDS": "Nederland",
 	"new-candidate-basic": "Basis",
 	"new-candidate-failure": "Kan kandidaat niet toevoegen",
 	"new-candidate-failure-title": "Fout",
@@ -801,6 +803,7 @@
 	"register-recruiter-failure-title": "Fout",
 	"register-recruiter-success": "Uw aanvraag is ingediend. Na acceptatie wordt er een e-mail verzonden met uw inloggegevens.",
 	"register-recruiter-success-title": "Succes",
+	"REPUBLIC_OF_IRELAND": "Ierland",
 	"saved-candidate-no-longer-available": "Kandidaat niet langer beschikbaar",
 	"stat-candidate-availability": "Beschikbaarheid van kandidaten",
 	"stat-job-board-views": "Jobboard weergaven",
@@ -839,5 +842,6 @@
 	"suggestions-lang-dutch": "Nederlands",
 	"suggestions-lang-english": "Engels",
 	"suggestions-lang-french": "Frans",
-	"suggestions-lang-na": "NA"
+	"suggestions-lang-na": "NA",
+	"UK": "Verenigd Koninkrijk"
 }
