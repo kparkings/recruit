@@ -24,9 +24,9 @@ import { SupportedLanguage } from '../supported-language';
 })
 export class NewCandidateComponent implements OnInit {
 
-@ViewChild('feedbackBox', { static: false }) private feedbackBox:any;
-@ViewChild('validationBox', { static: false }) private validationBox:any;
-@ViewChild('pendingCandidateBox', { static: false }) private pendingCandidateBoxChild:any;
+@ViewChild('feedbackBox', 			{ static: false }) private feedbackBox:any;
+@ViewChild('validationBox', 		{ static: false }) private validationBox:any;
+@ViewChild('pendingCandidateBox', 	{ static: false }) private pendingCandidateBoxChild:any;
 
     public functionTypes:	 	Array<CandidateFunction> 	= new Array<CandidateFunction>();
 	public pendingCandidates: 	Array<PendingCandidate> 	= new Array<PendingCandidate>();
@@ -62,6 +62,7 @@ export class NewCandidateComponent implements OnInit {
     
     	this.countries = this.candidateService.getCountries();
     	this.supportedLanguages = this.candidateService.getLanguages();
+    	this.initializeOfferedCandidateForm();
     
     	this.candidateService.loadFunctionTypes().forEach(funcType => {
       		this.functionTypes.push(funcType);
@@ -77,21 +78,18 @@ export class NewCandidateComponent implements OnInit {
 				this.showBackBtn = true;
 			});
 		} else {
-			//if (this.isAdmin()) {
-				this.candidateService.fetchPendingCandidates().forEach(data => {
-				
-					let pendingCandidates: Array<PendingCandidate> = data;
-				
-					pendingCandidates.forEach(pc => {
-	                    this.pendingCandidates.push(pc);
-	            	});
-				
-					if (this.isPendingCandidates() && this.isAuthenticatedAsAdmin()) {
-						this.openPendingCandidatesBox();
-					}
-				});
-			//}
-		
+			this.candidateService.fetchPendingCandidates().forEach(data => {
+			
+				let pendingCandidates: Array<PendingCandidate> = data;
+			
+				pendingCandidates.forEach(pc => {
+                    this.pendingCandidates.push(pc);
+            	});
+			
+				if (this.isPendingCandidates() && this.isAuthenticatedAsAdmin()) {
+					this.openPendingCandidatesBox();
+				}
+			});
 		}
 
   	}
@@ -125,15 +123,15 @@ export class NewCandidateComponent implements OnInit {
 		this.offeredCandidateFormBean.get('contractTo')?.setValue(candidate.rateContract.valueMax);
 
 		this.coreSkills = candidate.skills;
-		
 		this.languages = candidate.languages;
 
 		this.languages.forEach(lang => {
 			this.offeredCandidateFormBean.get(lang.language)?.setValue(lang.level);
+			(<HTMLInputElement>document.getElementById('langOpt'+lang.language)).value = lang.level;	
 		});	
 		
 	}
-
+	
   	/**
   	*  Init 
   	*/
@@ -198,8 +196,6 @@ export class NewCandidateComponent implements OnInit {
   	*/
   	public addCandidate(): void {
 		
-		console.log("DDDDDDDDD  " + JSON.stringify(this.offeredCandidateFormBean.get('DUTCH')!.value));
-		
 		//START  
 		let candidate:NewCandidateRequest = new NewCandidateRequest();
 		 
@@ -220,14 +216,10 @@ export class NewCandidateComponent implements OnInit {
 		candidate.introduction 						= this.offeredCandidateFormBean.get('introduction')!.value;
 		candidate.daysOnSite 						= this.offeredCandidateFormBean.get('daysOnSite')!.value;
 		
-		let dutchLang:Language	=  new Language('DUTCH', this.offeredCandidateFormBean.get('DUTCH')!.value);
-		let englishLang:Language	=  new Language('ENGLISH', this.offeredCandidateFormBean.get('ENGLISH')!.value);
-		let frenchLang:Language	=  new Language('FRENCH', this.offeredCandidateFormBean.get('FRENCH')!.value);
-		
 		candidate.languages = new Array<Language>();
-		candidate.languages.push(dutchLang);
-		candidate.languages.push(englishLang);
-		candidate.languages.push(frenchLang);
+		this.supportedLanguages.forEach(lang => {
+			candidate.languages.push(new Language(lang.languageCode, this.offeredCandidateFormBean.get(lang.languageCode)!.value));
+		});
 		
 		if (this.isRecruiter()) {
 			candidate.email = "useRecruiters";
@@ -456,6 +448,8 @@ export class NewCandidateComponent implements OnInit {
 		
 	}
 	
+	
+	
 	/**
 	* Returns URL to download pening curriculum
 	*/
@@ -471,39 +465,13 @@ export class NewCandidateComponent implements OnInit {
 	public currentView:string 				= 'add';
 	public candidateId:string = '';
 	
-	public offeredCandidateFormBean:UntypedFormGroup = new UntypedFormGroup({
-     	candidateRoleTitle:		new UntypedFormControl(''),
-		email:					new UntypedFormControl(),
-		country:				new UntypedFormControl(),
-		firstName:				new UntypedFormControl(),
-		surname:				new UntypedFormControl(),
-      	function:				new UntypedFormControl(),
-       	roleSought:				new UntypedFormControl(),
-       	city:					new UntypedFormControl(),
-       	location:				new UntypedFormControl(),
-		contractType:			new UntypedFormControl(),
-		perm:					new UntypedFormControl('UNKNOWN'),
-		freelance:				new UntypedFormControl('UNKNOWN'),
-		daysOnSite:				new UntypedFormControl(),
-		renumeration:			new UntypedFormControl(),
-		availableFromDate:		new UntypedFormControl(new Date().toJSON().slice(0, 10)),
-		yearsExperience:		new UntypedFormControl(),
-		comments:				new UntypedFormControl(),
-		introduction:			new UntypedFormControl(),
-		skill:					new UntypedFormControl(),
-		language:				new UntypedFormControl(),
-		permCurrency:			new UntypedFormControl("EUR"),
-		permTimeUnit:			new UntypedFormControl(),
-		permFrom:				new UntypedFormControl(0.0),
-		permTo:					new UntypedFormControl(0.0),
-		contractCurrency:		new UntypedFormControl("EUR"),
-		contractTimeUnit:		new UntypedFormControl(),
-		contractFrom:			new UntypedFormControl(0.0),
-		contractTo:				new UntypedFormControl(0.0),
-		FRENCH:					new UntypedFormControl("UNKNOWN"),
-		DUTCH:					new UntypedFormControl("UNKNOWN"),
-		ENGLISH:				new UntypedFormControl("UNKNOWN"),
-	});
+	
+	public offeredCandidateFormBean:UntypedFormGroup = new UntypedFormGroup({});
+	public initOfferedCandidateForm():void{
+		
+	}
+	
+	
 	
 	/**
 	* Returns the previous OfferedCandidate list (all/own candidate)
@@ -512,7 +480,47 @@ export class NewCandidateComponent implements OnInit {
 		this.candidateNavService.doNextMove("back", this.candidateNavService.getCandidateId());
 	}
 	
-	public publishOfferedCandidate():void{
+	/**
+	* Constructs offeredCandidateFormBean
+	*/	
+	public initializeOfferedCandidateForm():void{
+		this.offeredCandidateFormBean = new UntypedFormGroup({
+	     	candidateRoleTitle:		new UntypedFormControl(''),
+			email:					new UntypedFormControl(),
+			country:				new UntypedFormControl(),
+			firstName:				new UntypedFormControl(),
+			surname:				new UntypedFormControl(),
+	      	function:				new UntypedFormControl(),
+	       	roleSought:				new UntypedFormControl(),
+	       	city:					new UntypedFormControl(),
+	       	location:				new UntypedFormControl(),
+			contractType:			new UntypedFormControl(),
+			perm:					new UntypedFormControl('UNKNOWN'),
+			freelance:				new UntypedFormControl('UNKNOWN'),
+			daysOnSite:				new UntypedFormControl(),
+			renumeration:			new UntypedFormControl(),
+			availableFromDate:		new UntypedFormControl(new Date().toJSON().slice(0, 10)),
+			yearsExperience:		new UntypedFormControl(),
+			comments:				new UntypedFormControl(),
+			introduction:			new UntypedFormControl(),
+			skill:					new UntypedFormControl(),
+			language:				new UntypedFormControl(),
+			permCurrency:			new UntypedFormControl("EUR"),
+			permTimeUnit:			new UntypedFormControl(),
+			permFrom:				new UntypedFormControl(0.0),
+			permTo:					new UntypedFormControl(0.0),
+			contractCurrency:		new UntypedFormControl("EUR"),
+			contractTimeUnit:		new UntypedFormControl(),
+			contractFrom:			new UntypedFormControl(0.0),
+			contractTo:				new UntypedFormControl(0.0),
+		//	FRENCH:					new UntypedFormControl("UNKNOWN"),
+		//	DUTCH:					new UntypedFormControl("UNKNOWN"),
+		//	ENGLISH:				new UntypedFormControl("UNKNOWN"),
+		});
+		
+		this.supportedLanguages.forEach(lang => {
+			this.offeredCandidateFormBean.addControl(lang.languageCode, new UntypedFormControl("UNKNOWN"));	
+		});
 		
 	}
 	

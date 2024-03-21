@@ -180,8 +180,8 @@
 						<tr *ngFor="let language of supportedLanguages">
 							<td>{{language.languageCode | translate}}</td>
 							<td>
-								<select #langLevelSelect (change)="setLanguageFormValue(language.languageCode, langLevelSelect.value)">
-									<option *ngFor="let level of languageOptions" value="{{level.value}}">{{level.label | translate}}</option>
+								<select id="langOpt{{language.languageCode}}" #langLevelSelect (change)="setLanguageFormValue(language.languageCode, langLevelSelect.value)" >
+									<option  *ngFor="let level of languageOptions" value="{{level.value}}">{{level.label | translate}}</option>
 								</select>
 							</td>
 						</tr>
