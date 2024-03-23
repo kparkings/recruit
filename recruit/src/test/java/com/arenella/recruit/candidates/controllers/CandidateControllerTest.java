@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.security.Principal;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -38,6 +39,7 @@ import com.arenella.recruit.candidates.beans.CandidateSearchAccuracyWrapper;
 import com.arenella.recruit.candidates.beans.CandidateSearchAlert;
 import com.arenella.recruit.candidates.beans.CandidateSkill;
 import com.arenella.recruit.candidates.beans.CandidateUpdateRequest;
+import com.arenella.recruit.candidates.beans.Language.LANGUAGE;
 import com.arenella.recruit.candidates.beans.PendingCandidate;
 import com.arenella.recruit.candidates.controllers.CandidateController.CANDIDATE_UPDATE_ACTIONS;
 
@@ -580,6 +582,17 @@ public class CandidateControllerTest {
 		assertEquals(available, 				response.getBody().getAvailable());
 		assertEquals(unavailable, 				response.getBody().getUnavailable());
 		assertEquals(available + unavailable, 	response.getBody().getTotalRegisteredCandidates());
+	}
+	
+	/**
+	* Tests retrieval of SupportedLanguages
+	* @throws Exception
+	*/
+	@Test
+	public void testfetchSupportedLanguages() throws Exception{
+		ResponseEntity<Set<LANGUAGE>> response = this.controller.fetchSupportedLanguages();
+		assertEquals(HttpStatus.OK, 			response.getStatusCode());
+		Arrays.stream(LANGUAGE.values()).forEach(l -> response.getBody().contains(l));
 	}
 	
 }

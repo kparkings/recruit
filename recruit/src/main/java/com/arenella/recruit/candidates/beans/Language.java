@@ -10,8 +10,8 @@ import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 @JsonDeserialize(builder=Language.LanguageBuilder.class)
 public class Language {
 
-	public static enum LANGUAGE {DUTCH, ENGLISH, FRENCH}
-	public static enum LEVEL {BASIC, PROFICIENT, UNKNOWN}
+	public enum LANGUAGE {DUTCH, ENGLISH, FRENCH, ITALIAN, SPANISH, GERMAN, PORTUGUESE,POLISH}
+	public enum LEVEL {BASIC, PROFICIENT, UNKNOWN}
 
 	private LANGUAGE 	language;
 	private LEVEL 		level;

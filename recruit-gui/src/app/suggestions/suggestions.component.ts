@@ -580,6 +580,9 @@ export class SuggestionsComponent implements OnInit {
 			this.suggestedCandidate.languages.forEach(lang => {
 					languageBlock.addRow(new InfoItemRowKeyValueMaterialIcon(this.getLanguage(lang.language),this.getMaterialIconClassFromLangLevel(lang.level)));
 			});
+			
+			languageBlock.sort();
+			
 			this.infoItemConfig.addItem(languageBlock);
 			
 			//Contract Type Block
@@ -683,20 +686,21 @@ export class SuggestionsComponent implements OnInit {
 	*/
 	public getLanguage(lang:string):string{
 
-		switch(lang){
-			case "DUTCH":{
-				return this.translate.instant('suggestions-lang-dutch');//"Dutch";
-			}
-			case "FRENCH":{
-				return this.translate.instant('suggestions-lang-french');//"French";
-			}
-			case "ENGLISH":{
-				return this.translate.instant('suggestions-lang-english');//"English";
-			}
-			default:{
-				return this.translate.instant('suggestions-lang-na');//'NA';
-			}
-		}
+		return this.translate.instant(lang);
+		//switch(lang){
+		//	case "DUTCH":{
+		//		return this.translate.instant('suggestions-lang-dutch');//"Dutch";
+		//	}
+		//	case "FRENCH":{
+		//		return this.translate.instant('suggestions-lang-french');//"French";
+		//	}
+		//	case "ENGLISH":{
+		//		return this.translate.instant('suggestions-lang-english');//"English";
+		//	}
+		//	default:{
+		//		return this.translate.instant('suggestions-lang-na');//'NA';
+		//	}
+		//}
 
   	}	
 

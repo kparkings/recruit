@@ -94,6 +94,14 @@ export class InfoItemBlock implements InfoItem {
 		return this.rows;
 	}
 	
+	/**
+	* Sorts values ascending 
+	*/
+	public sort():void{
+		this.rows = this.rows.sort((a,b)=>{
+			return a.getLabel() < b.getLabel() ? -1 : 0;
+		})
+	}
 }
 
 /**

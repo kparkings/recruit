@@ -59,7 +59,6 @@ public class CandidateTest {
 	private static final String			OWNER_ID					= "kparkings";
 	private static final CANDIDATE_TYPE	CANDIDATE_TYPE_VAL			= CANDIDATE_TYPE.MARKETPLACE_CANDIDATE;
 	
-	
 	/**
 	* Sets up test environment 
 	*/

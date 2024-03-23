@@ -2,6 +2,7 @@ package com.arenella.recruit.candidates.controllers;
 
 import java.io.IOException;
 import java.security.Principal;
+import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -37,6 +38,7 @@ import com.arenella.recruit.candidates.beans.CandidateFilterOptions;
 import com.arenella.recruit.candidates.beans.CandidateSearchAccuracyWrapper;
 import com.arenella.recruit.candidates.beans.CandidateUpdateRequest;
 import com.arenella.recruit.candidates.beans.Language;
+import com.arenella.recruit.candidates.beans.Language.LANGUAGE;
 import com.arenella.recruit.candidates.enums.COUNTRY;
 import com.arenella.recruit.candidates.enums.FUNCTION;
 import com.arenella.recruit.candidates.enums.RESULT_ORDER;
@@ -244,17 +246,6 @@ public class CandidateController {
 	public ResponseEntity<Integer> fetchRemainingCreditCount(Principal principal){
 		return ResponseEntity.ok(candidateService.getCreditCountForUser(principal.getName()));
 	}
-	
-	//TOD): [My are the credits which are recruiter based in Candodate service. Need to move the whole lot to for now I will add this hear to keep it consistent
-	/**
-	* Returns if the recruiter has paid subscription
-	* @return
-	*/
-	//@PreAuthorize("hasRole('RECRUITER')")
-	//@GetMapping(path="candidate/_paid_subscription")
-	//public ResponseEntity<Boolean> hasPaidSubscription(Principal principal){
-	//	return ResponseEntity.ok(candidateService.hasPaidSubscription(principal.getName()));
-	//}
 	
 	/**
 	* Returns whether the User has credits left
@@ -475,6 +466,16 @@ public class CandidateController {
 		
 		return ResponseEntity.ok(new CandidateAvailabilityCountAPIOutbound(available, unavailable));
 		
+	}
+	
+	/**
+	* Returns a list of Supported languages that a candidate can possibly speak
+	* @return supported languages
+	*/
+	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_RECRUITER') or hasRole('ROLE_CANDIDATE')")
+	@GetMapping(path="/candidate/languages")
+	public ResponseEntity<Set<LANGUAGE>> fetchSupportedLanguages(){
+		return ResponseEntity.ok(Arrays.stream(LANGUAGE.values()).collect(Collectors.toCollection(LinkedHashSet::new)));
 	}
 	
 	/**

@@ -513,9 +513,10 @@ export class NewCandidateComponent implements OnInit {
 			contractTimeUnit:		new UntypedFormControl(),
 			contractFrom:			new UntypedFormControl(0.0),
 			contractTo:				new UntypedFormControl(0.0),
-		//	FRENCH:					new UntypedFormControl("UNKNOWN"),
-		//	DUTCH:					new UntypedFormControl("UNKNOWN"),
-		//	ENGLISH:				new UntypedFormControl("UNKNOWN"),
+		});
+		
+		this.supportedLanguages = this.supportedLanguages.sort((a,b)=> {
+			return this.translate.instant(a.languageCode) < this.translate.instant(b.languageCode) ? -1 : 0;
 		});
 		
 		this.supportedLanguages.forEach(lang => {

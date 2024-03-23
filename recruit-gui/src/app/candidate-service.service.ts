@@ -55,10 +55,22 @@ export class CandidateServiceService {
   	* NB: Needs to come from the backend 
   	*/
 	public initializeSupportedLanguages():void{
-		this.languages = new Array<SupportedLanguage>();
-		this.languages.push(new SupportedLanguage('DUTCH'));
-		this.languages.push(new SupportedLanguage('ENGLISH'));
-		this.languages.push(new SupportedLanguage('FRENCH'));
+		
+		const backendUrl:string = environment.backendUrl +'candidate/languages';
+    	
+    	this.httpClient.get<any>(backendUrl,  { observe: 'response', withCredentials: true}).subscribe(supportedLanguages => {
+			this.languages = new Array<SupportedLanguage>();
+			
+			supportedLanguages.body.forEach( (lang: string) => {
+				this.languages.push(new SupportedLanguage(''+lang));	
+			});
+			
+			this.languages = this.languages.sort((a,b)=>{ 
+				return a.languageCode < b.languageCode ? -1 : 0;
+			});
+			
+		})
+    	
 	}
 		
 	httpOptions = {
