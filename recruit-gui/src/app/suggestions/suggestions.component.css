@@ -46,6 +46,23 @@
 	cursor:pointer;
 }
 
+.mat-icon{
+	width:30px;
+	height:30px;
+}
+
+.mat-icon-globe{
+	padding-top:2px;
+	padding-left:0px;
+	font-size:28px;
+	cursor:pointer;
+	margin-left:-4px;
+	color:green;
+}
+
+.flag-end-countries{
+	font-weight:bold;
+}
 .suggestion-buttons{
 	float:right;
 }

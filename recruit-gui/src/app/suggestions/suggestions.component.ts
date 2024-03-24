@@ -10,7 +10,7 @@ import { NgbModal }																	from '@ng-bootstrap/ng-bootstrap';
 import { CandidateSearchAlert }														from './candidate-search-alert';
 import { DomSanitizer, SafeResourceUrl } 											from '@angular/platform-browser';
 import { Router}																	from '@angular/router';
-import { debounceTime, map } 															from "rxjs/operators";
+import { debounceTime, map } 														from "rxjs/operators";
 import { CandidateProfile } 														from '../candidate-profile';
 import { EmailService }																from '../email.service';
 import { CandidateNavService } 														from '../candidate-nav.service';
@@ -19,8 +19,8 @@ import { ExtractedFilters } 														from './extracted-filters';
 import { InfoItemBlock, InfoItemConfig, InfoItemRowKeyValue, InfoItemRowKeyValueFlag, InfoItemRowKeyValueMaterialIcon, InfoItemRowSingleValue } from '../candidate-info-box/info-item';
 import {AppComponent} 																from '../app.component';
 import { TranslateService } 														from '@ngx-translate/core';
-import { HttpResponse } from '@angular/common/http';
-import { CandidateTotals } from '../candidate-totals';
+import { HttpResponse } 															from '@angular/common/http';
+import { CandidateTotals } 															from '../candidate-totals';
 
 /**
 * Component to suggest suitable Candidates based upon a 
@@ -74,6 +74,7 @@ export class SuggestionsComponent implements OnInit {
 	public lastView:string 										= '';
 	public contactCandidateView:string 							= 'message';
 	public showPaidSubscriptinOptions:boolean					= false;
+	public paidFeature:string								 	= '';
 	public publicitySuggestions:Array<Candidate>  				= new Array<Candidate>();
 	public createAlertForm:UntypedFormGroup 					= new UntypedFormGroup({
 		alertName:			new UntypedFormControl(''),
@@ -182,6 +183,8 @@ export class SuggestionsComponent implements OnInit {
 				this.suggestionFilterForm.get('beResults')?.setValue(false);
 				this.suggestionFilterForm.get('ukResults')?.setValue(false);
 				this.suggestionFilterForm.get('ieResults')?.setValue(false);
+				this.suggestionFilterForm.get('europeResults')?.setValue(false);
+				this.suggestionFilterForm.get('worldResults')?.setValue(false);
 			
 				if (extractedFilters.netherlands)  {
 					this.suggestionFilterForm.get('nlResults')?.setValue(extractedFilters.netherlands);
@@ -197,6 +200,14 @@ export class SuggestionsComponent implements OnInit {
 				
 				if (extractedFilters.ireland) {
 					this.suggestionFilterForm.get('ieResults')?.setValue(extractedFilters.ireland);
+				}
+				
+				if (extractedFilters.eu) {
+					this.suggestionFilterForm.get('ieResults')?.setValue(extractedFilters.eu);
+				}
+				
+				if (extractedFilters.world) {
+					this.suggestionFilterForm.get('ieResults')?.setValue(extractedFilters.world);
 				}	
 			}	
 			
@@ -293,6 +304,8 @@ export class SuggestionsComponent implements OnInit {
 			beResults: 						new UntypedFormControl(true),
 			ukResults: 						new UntypedFormControl(true),
 			ieResults: 						new UntypedFormControl(true),
+			europeResults: 					new UntypedFormControl(false),
+			worldResults: 					new UntypedFormControl(false),
 			contractType: 					new UntypedFormControl('Both'),
 			dutchLanguage: 					new UntypedFormControl(false),
 			englishLanguage: 				new UntypedFormControl(false),
@@ -400,7 +413,7 @@ export class SuggestionsComponent implements OnInit {
 		
 		const maxSuggestions:number 		= 112;
 		
-		let params:SuggestionParams = new SuggestionParams(this.suggestionFilterForm, this.skillFilters, new Array<string>(), this.candidateService.getCountries());
+		let params:SuggestionParams = new SuggestionParams(this.suggestionFilterForm, this.skillFilters, new Array<string>(), this.candidateService.getGeoZones(), this.candidateService.getCountries());
 		
 		let backendRequestId = this.backendRequestCounter + 1;
 		this.backendRequestCounter = backendRequestId;
@@ -409,6 +422,7 @@ export class SuggestionsComponent implements OnInit {
 									backendRequestId,
 									maxSuggestions,
 									params.getTitle(),
+									params.getGeoZones(),
 									params.getCountries(),
 									params.getContract(),
 									params.getPerm(),
@@ -446,6 +460,47 @@ export class SuggestionsComponent implements OnInit {
 	}
 	
 	/**
+	* Toggles GeoCpde
+	*/
+	public toggleGeoZoneSelection(geoCode:string):void{
+		
+		this.paidFeature = 'paidFeatureGeoZones';
+		
+		let valid:boolean = this.doPaidSubscriptionCheck();
+		
+		if (valid) {
+			
+			let included:boolean = this.suggestionFilterForm.get((geoCode+'Results'))?.value;
+			this.suggestionFilterForm.get((geoCode+'Results'))?.setValue(!included);
+		
+			let geoZoneActive = this.candidateService.getGeoZones().filter(gz => this.suggestionFilterForm.get((gz.toLowerCase()+'Results'))?.value == true).length > 0;
+		
+			if (!geoZoneActive) {
+				this.candidateService.getCountries().forEach(country => {
+					let key = country.countryCode.toLowerCase() + 'Results';
+					this.suggestionFilterForm.get(key)?.setValue(true);
+				});
+			} else {
+				this.candidateService.getCountries().forEach(country => {
+					let key = country.countryCode.toLowerCase() + 'Results';
+					this.suggestionFilterForm.get(key)?.setValue(false);
+				});
+			
+				
+				let worldActive:boolean = this.suggestionFilterForm.get(('worldResults'))?.value == true;
+				
+				if (worldActive) {
+					this.suggestionFilterForm.get(('europeResults'))?.setValue(true);
+				}
+				
+			}
+			
+		}
+		
+		
+	}
+	
+	/**
 	* Toggles whether Candidates from selected country 
 	* should be included in the Suggestions 
 	* @param country - Country to toggle
@@ -453,8 +508,12 @@ export class SuggestionsComponent implements OnInit {
 	public toggleCountrySelection(country:string):void{
 		
 		let included:boolean = this.suggestionFilterForm.get((country+'Results'))?.value;
-		
 		this.suggestionFilterForm.get((country+'Results'))?.setValue(!included);
+		
+		this.candidateService.getGeoZones().forEach(geoZone => {
+			let key = geoZone.toLowerCase() + 'Results';
+			this.suggestionFilterForm.get(key)?.setValue(false);
+		});
 				
 	}
 	
@@ -685,23 +744,7 @@ export class SuggestionsComponent implements OnInit {
 	* @param country - Language to get the readable version for
 	*/
 	public getLanguage(lang:string):string{
-
 		return this.translate.instant(lang);
-		//switch(lang){
-		//	case "DUTCH":{
-		//		return this.translate.instant('suggestions-lang-dutch');//"Dutch";
-		//	}
-		//	case "FRENCH":{
-		//		return this.translate.instant('suggestions-lang-french');//"French";
-		//	}
-		//	case "ENGLISH":{
-		//		return this.translate.instant('suggestions-lang-english');//"English";
-		//	}
-		//	default:{
-		//		return this.translate.instant('suggestions-lang-na');//'NA';
-		//	}
-		//}
-
   	}	
 
 	public hasSkill(skill:string):boolean {
@@ -731,7 +774,7 @@ export class SuggestionsComponent implements OnInit {
 		this.showSaveAlertBoxSuccess 	= false;
 		this.showSaveAlertBoxFailure 	= false;
 		
-		let params:SuggestionParams 	= new SuggestionParams(this.suggestionFilterForm, this.skillFilters, new Array<string>(), this.candidateService.getCountries());
+		let params:SuggestionParams 	= new SuggestionParams(this.suggestionFilterForm, this.skillFilters, new Array<string>(), this.candidateService.getGeoZones(), this.candidateService.getCountries());
 		let alert:CandidateSearchAlert 	= new CandidateSearchAlert();
 		
 		alert.alertName 			= this.createAlertForm.get(('alertName'))?.value;
@@ -968,14 +1011,20 @@ export class SuggestionsComponent implements OnInit {
 		}
 	}
 	
-	public doPaidSubscriptionCheck():void{
+	public doPaidSubscriptionCheckUnavailableCandidates():void{
+		this.paidFeature = 'paidFeatureUnavailableCandidates';
+		this.doPaidSubscriptionCheck();
+	}
+	
+	public doPaidSubscriptionCheck():boolean{
 		let hasPaidSubscription:boolean = (sessionStorage.getItem("hasPaidSubscription") === 'true');
 		
 		if (!this.isAdmin() && !hasPaidSubscription) {
 			this.suggestionFilterForm.get("includeUnavailableCandidates")?.setValue('');
 			this.paidSubscriptionBox.nativeElement.showModal();
+			return false;
 		}
-		
+		return true;
 	}
 	
 	public choseSubscription():void{

@@ -8,6 +8,7 @@ import { Country } from '../country';
 */
 export class SuggestionParams{
 	
+	private geoZones:Array<string> 						= new Array<string>();
 	private countries:Array<string> 					= new Array<string>();
 	private skills:Array<string> 						= new Array<string>();
 	private functionTypes:Array<string>					= new Array<string>();
@@ -28,7 +29,7 @@ export class SuggestionParams{
 	* @param skillFilters			- contains raw skill filter info 
 	* @param functionTypes			- contains raw function types info
 	*/
-	public constructor(suggestionFilterForm:UntypedFormGroup, skillFilters:Array<string>, functionTypes:Array<string>, public availableCountries:Array<Country>){
+	public constructor(suggestionFilterForm:UntypedFormGroup, skillFilters:Array<string>, functionTypes:Array<string>, public availableGeoZones:Array<string>, public availableCountries:Array<Country>){
 		
 		this.skills 		= skillFilters.concat();
 		this.functionTypes	= functionTypes;
@@ -37,6 +38,18 @@ export class SuggestionParams{
 		this.maxExperience 	= suggestionFilterForm.get('maxYearsExperience')?.value;
 		
 		this.unavailableCadidates = suggestionFilterForm.get('includeUnavailableCandidates')?.value;
+		
+		/**
+		* Add any geoZone filters 	
+		*/
+		this.availableGeoZones.forEach(geoZone => {
+			let key = geoZone.toLowerCase() + 'Results';
+			
+			if (suggestionFilterForm.get(key)?.value) {
+				this.geoZones.push(geoZone);
+			}
+			
+		});
 		
 		/**
 		* Add any country filters 	
@@ -87,6 +100,12 @@ export class SuggestionParams{
 		
 	}
 	
+	/**
+	* Returns geoZones to filter on
+	*/
+	public getGeoZones():Array<string>{
+		return this.geoZones;
+	} 
 	/**
 	* Returns countries to filter on
 	*/

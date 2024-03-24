@@ -24,6 +24,7 @@ export class SuggestionsService {
 	public getSuggestons(	backendRequestId:number,
 							maxNumberOfSuggestions:number, 
 							title:string, 
+							geoZones:Array<string>, 
 							countries:Array<string>, 
 							contract:string, 
 							perm:string, 
@@ -36,6 +37,7 @@ export class SuggestionsService {
 		return this.candidateService.getCandidates(this.getCandidateFilterParamString(	backendRequestId,
 																						maxNumberOfSuggestions, 
 																						title, 
+																						geoZones,
 																						countries, 
 																						contract, 
 																						perm, 
@@ -54,6 +56,7 @@ export class SuggestionsService {
 	private getCandidateFilterParamString(	backendRequestId:number,
 											maxNumberOfSuggestions:number, 
 											title:string, 
+											geoZones:Array<string>,
 											countries:Array<string>, 
 											contract:string, 
 											perm:string, 
@@ -68,6 +71,7 @@ export class SuggestionsService {
                                                          + '&size=' + maxNumberOfSuggestions
                                                          + '&backendRequestId='+backendRequestId
 														 + '&searchText=' + encodeURIComponent(title)
+														 + this.getGeoZoneFilterParamString(geoZones)
 														 + this.getCountryFilterParamString(countries) 			
                                                          + this.getContractTypeParamString(contract, perm)				
                                                          + this.getYearsExperienceFilterParamAsString(experienceMin, experienceMax)
@@ -102,6 +106,18 @@ export class SuggestionsService {
 		}
 		
 		return '&countries=' + countries;
+	}
+	
+	/**
+	* Adds filter string if geoZone specifed in Listing
+	*/
+	public getGeoZoneFilterParamString(geoZones:Array<string>):string{
+		
+		if (geoZones.length === 0){
+			return '';
+		}
+		
+		return '&geoZones=' + geoZones;
 	}
 	
 	/**

@@ -26,6 +26,7 @@ import { SupportedLanguage } from './supported-language';
 })
 export class CandidateServiceService {
     
+    public geoZones:Array<string>				= new Array<string>();
     public countries:Array<Country> 			= new Array<Country>();
     public languages:Array<SupportedLanguage> 	= new Array<SupportedLanguage>();
     /**
@@ -33,9 +34,20 @@ export class CandidateServiceService {
   	*/
 	constructor(private httpClient: HttpClient, private translate:TranslateService) { 
 		
+		this.initializeGeoZones();
 		this.initializeCountries();
 		this.initializeSupportedLanguages();
 		
+	}
+	
+	/**
+  	* Sets the available GeoZones
+  	* NB: Needs to come from the backend 
+  	*/
+	public initializeGeoZones():void{
+		this.geoZones = new Array<string>();
+		this.geoZones.push("WORLD");
+		this.geoZones.push("EUROPE");
 	}
 	
 	/**
@@ -439,6 +451,13 @@ export class CandidateServiceService {
 		
 		return this.httpClient.get<any>(backendUrl, this.httpOptions);
 		
+	}
+	
+	/**
+	* Returns GeoZones supported by the system 
+	*/
+	public getGeoZones():Array<string>{
+		return this.geoZones;	
 	}
 	
 	/**

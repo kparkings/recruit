@@ -173,7 +173,7 @@ textarea {
 }
 
 .suggestion-result-icons{
-	margin-top:50px;
+	margin-top:5px;
 	margin-left:40px;
 }
 
@@ -183,7 +183,7 @@ textarea {
 
 @media (max-width:700px)  {
 	.suggestion-result-icons{
-		margin-top:50px;
+		margin-top:5px;
 		margin-left:0px;
 	}	
 }

@@ -17,6 +17,8 @@ export class ExtractedFilters{
 	public uk:boolean					= false;
 	public belgium:boolean				= false;
 	public ireland:boolean				= false;
+	public eu:boolean					= false;
+	public world:boolean				= false;
 	public extractedText:string | any;
 	
 }

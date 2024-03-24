@@ -22,8 +22,6 @@
 		<div>	
 			<form [formGroup]="suggestionFilterForm" *ngIf="currentView === 'suggestion-results'">	
 			
-				
-			
 				<div *ngIf="currentView === 'suggestion-results'">		
 					<table class="mobile-search-box">
 						<tr>
@@ -33,19 +31,40 @@
 							</td>
 						</tr>
 						<tr>
+							<td class="sugg-srch-hdr">{{'arenella-suggestions-geoZones' | translate}}</td>
+							<td class="sugg-srch-bdy country-filters">
+								<span class="country-filter country-selected-{{includeResultsForCountry('world')}}" (click)="toggleGeoZoneSelection('world')">
+									<mat-icon fontSet="material-symbols-outlined" class="mat-icon-globe">globe</mat-icon>
+								</span>
+								<span class="country-filter country-selected-{{includeResultsForCountry('europe')}}" (click)="toggleGeoZoneSelection('europe')">
+									<mat-icon>
+										<span class="flag-icon flag-icon-eu flag-icon-med"></span>
+									</mat-icon>
+								</span>
+							</td>
+						</tr>
+						<tr>
 							<td class="sugg-srch-hdr">{{'arenella-suggestions-country' | translate}}</td>
 							<td class="sugg-srch-bdy country-filters">
 								<span class="country-filter country-selected-{{includeResultsForCountry('nl')}}" (click)="toggleCountrySelection('nl')">
-									<span class="flag-icon flag-icon-nl flag-icon-med"></span>
+									<mat-icon>
+										<span class="flag-icon flag-icon-nl flag-icon-med"></span>
+									</mat-icon>
 								</span>
 								<span class="country-filter country-selected-{{includeResultsForCountry('be')}}" (click)="toggleCountrySelection('be')">
-									<span class="flag-icon flag-icon-be flag-icon-med"></span>
+									<mat-icon>
+										<span class="flag-icon flag-icon-be flag-icon-med"></span>
+									</mat-icon>
 								</span>
 								<span class="country-filter country-selected-{{includeResultsForCountry('uk')}}" (click)="toggleCountrySelection('uk')">
-									<span class="flag-icon flag-icon-gb flag-icon-med"></span>
+									<mat-icon>
+										<span class="flag-icon flag-icon-gb flag-icon-med"></span>
+									</mat-icon>
 								</span>
 								<span class="country-filter country-selected-{{includeResultsForCountry('ie')}}" (click)="toggleCountrySelection('ie')">
-									<span class="flag-icon flag-icon-ie flag-icon-med"></span>
+									<mat-icon>
+										<span class="flag-icon flag-icon-ie flag-icon-med flag-end-countries"></span>
+									</mat-icon>
 								</span>
 							</td>
 						</tr>
@@ -88,7 +107,7 @@
 						 
 						<tr>
 							<td class="sugg-srch-hdr">{{'arenella-suggestions-include' | translate}}</td>
-							<li class="sugg-srch-ctry-chkbox"><input type="checkbox" formControlName="includeUnavailableCandidates" class="lang-checkbox" (click)="doPaidSubscriptionCheck()">{{'arenella-suggestions-include-unavailable-candidates' | translate}}</li>
+							<li class="sugg-srch-ctry-chkbox"><input type="checkbox" formControlName="includeUnavailableCandidates" class="lang-checkbox" (click)="doPaidSubscriptionCheckUnavailableCandidates()">{{'arenella-suggestions-include-unavailable-candidates' | translate}}</li>
 						</tr>
 						<tr>
 							<td class="sugg-srch-hdr">{{'arenella-suggestions-skills' | translate}}</td>
@@ -100,7 +119,7 @@
 						</tr>
 						<tr>
 							<td colspan="2">
-								<div style="min-height:35px;">
+								<div style="min-height:40px;">
 									<div class="selected-skill" *ngFor="let skill of skillFilters" (click)="removeSkill(skill)">{{skill}}</div>
 								</div>
 							</td>
@@ -235,7 +254,8 @@
 	</div>
 	<div class="modal-body">
 		<p>{{'arenella-suggestions-paid-subscription-text-1' | translate}}</p>
-		<p>{{'arenella-suggestions-paid-subscription-text-3' | translate}} : {{candidateTotals.unavailable}}</p>
+		<p *ngIf="paidFeature == 'paidFeatureUnavailableCandidates'">{{'arenella-suggestions-paid-subscription-text-3' | translate}} : {{candidateTotals.unavailable}}</p>
+		<p *ngIf="paidFeature == 'paidFeatureGeoZones'">{{'arenella-suggestions-paid-subscription-text-2-geozone' | translate}}</p>
 		<p>{{'arenella-suggestions-paid-subscription-text-2' | translate}}</p>
 		<button class="btn btn-secondary" (click)="choseSubscription()" download>{{'arenella-suggestions-paid-subscription-choose-subscription-btn' | translate}}</button>
 	</div> 
