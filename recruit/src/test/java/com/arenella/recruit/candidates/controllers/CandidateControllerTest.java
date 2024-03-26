@@ -98,7 +98,7 @@ public class CandidateControllerTest {
 		PageRequest mockPageRequest = Mockito.mock(PageRequest.class);
 		Mockito.when(mockPageRequest.getPageSize()).thenReturn(1);
 		
-		Page<CandidateAPIOutbound> results = this.controller.getCandidate(null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,true,null,null,null,null, 0, mockPageRequest, this.mockUsernamePasswordAuthenticationToken, mockResponse);
+		Page<CandidateAPIOutbound> results = this.controller.getCandidate(null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,true,null,null,null,null, 0, mockPageRequest, this.mockUsernamePasswordAuthenticationToken, mockResponse);
 		
 		Mockito.verify(this.mockCandidateService).getCandidateSuggestions(Mockito.any(), Mockito.any());
 	
@@ -141,7 +141,7 @@ public class CandidateControllerTest {
 		Mockito.when(this.mockUsernamePasswordAuthenticationToken.getClaim("useCredits")).thenReturn(Optional.of(Boolean.TRUE));
 		Mockito.when(this.mockCandidateService.hasCreditsLeft(Mockito.anyString())).thenReturn(false);
 		
-		Page<CandidateAPIOutbound> results = this.controller.getCandidate(null,null, null,null,null,null,null,null,null,null,null,null,null,null,null,null,true,null,null,null,null, 0, mockPageRequest, this.mockUsernamePasswordAuthenticationToken, mockResponse);
+		Page<CandidateAPIOutbound> results = this.controller.getCandidate(null,null, null, null,null,null,null,null,null,null,null,null,null,null,null,null,null,true,null,null,null,null, 0, mockPageRequest, this.mockUsernamePasswordAuthenticationToken, mockResponse);
 		
 		Mockito.verify(this.mockCandidateService).getCandidateSuggestions(Mockito.any(), Mockito.any());
 	
@@ -180,7 +180,7 @@ public class CandidateControllerTest {
 		
 		Set<String> ids = new HashSet<>();
 		ids.add("notOwncandidateId");
-		this.controller.getCandidate(null,null,ids,null,null,null,null,null,null,null,null,null,null,null,null,null,true,null,null,null,null, 0, mockPageRequest, this.mockUsernamePasswordAuthenticationToken, mockResponse);
+		this.controller.getCandidate(null,null,ids,null,null,null,null,null,null,null,null,null,null,null,null,null,null,true,null,null,null,null, 0, mockPageRequest, this.mockUsernamePasswordAuthenticationToken, mockResponse);
 		
 		Mockito.verify(this.mockCandidateService).getCandidateSuggestions(Mockito.any(), Mockito.any());
 		assertEquals(1, filterArgcapt.getValue().getCandidateIds().size());

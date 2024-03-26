@@ -7,6 +7,7 @@ import java.util.Set;
 import com.arenella.recruit.candidates.enums.COUNTRY;
 import com.arenella.recruit.candidates.enums.FUNCTION;
 import com.arenella.recruit.candidates.enums.RESULT_ORDER;
+import com.arenella.recruit.candidates.utils.GeoZoneSearchUtil.GEO_ZONE;
 
 /**
 * Represents the filter option to apply to a fetch of 
@@ -19,6 +20,7 @@ public class CandidateFilterOptions {
 	private RESULT_ORDER		order;
 	private String				searchText							= "";
 	private Set<String> 		candidateIds						= new HashSet<>();
+	private Set<GEO_ZONE>		geoZones							= new HashSet<>();
 	private Set<COUNTRY> 		countries							= new HashSet<>();
 	private Set<FUNCTION> 		functions							= new HashSet<>();
 	private Optional<Boolean> 	freelance							= Optional.empty();
@@ -46,6 +48,7 @@ public class CandidateFilterOptions {
 		this.orderAttribute 				= builder.orderAttribute;
 		this.order 							= builder.order;
 		this.candidateIds 					= builder.candidateIds;
+		this.geoZones						= builder.geoZones;
 		this.countries 						= builder.countries;
 		this.functions		 				= builder.functions;
 		this.freelance 						= builder.freelance;
@@ -90,6 +93,14 @@ public class CandidateFilterOptions {
 	public Set<String> 	getCandidateIds(){
 		return this.candidateIds;
 	}		
+	
+	/**
+	* Returns the GeoZones to filter on
+	* @return GeoZones to filter on
+	*/
+	public Set<GEO_ZONE> getGeoZones(){
+		return this.geoZones;
+	}	
 	
 	/**
 	* Returns the countries to filter on
@@ -281,6 +292,21 @@ public class CandidateFilterOptions {
 	}
 	
 	/**
+	* Removes GeoZone filters
+	*/
+	public void removeGeoZones() {
+		this.geoZones.clear();
+	}
+	
+	/**
+	* Adds a country to the filters
+	* @param country - country to add to filter on
+	*/
+	public void addCountry(COUNTRY country) {
+		this.countries.add(country);
+	}
+	
+	/**
 	* Returns a Builder for the CandidateFilterOptions class
 	* @return
 	*/
@@ -297,6 +323,7 @@ public class CandidateFilterOptions {
 		private String 				orderAttribute;
 		private RESULT_ORDER		order;
 		private Set<String> 		candidateIds						= new HashSet<>();
+		private Set<GEO_ZONE>		geoZones							= new HashSet<>();
 		private Set<COUNTRY> 		countries							= new HashSet<>();
 		private Set<FUNCTION> 		functions							= new HashSet<>();
 		private Optional<Boolean> 	freelance							= Optional.empty();
@@ -359,6 +386,18 @@ public class CandidateFilterOptions {
 		public CandidateFilterOptionsBuilder countries(Set<COUNTRY> countries) {
 			if (Optional.ofNullable(countries).isPresent()) {
 				this.countries.addAll(countries);
+			}
+			return this;
+		}
+		
+		/**
+		* Sets the GeoZones to filter on
+		* @param geoZones - GeoZones to filter on
+		* @return Builder
+		*/
+		public CandidateFilterOptionsBuilder geoZones(Set<GEO_ZONE> geoZones) {
+			if (Optional.ofNullable(geoZones).isPresent()) {
+				this.geoZones.addAll(geoZones);
 			}
 			return this;
 		}

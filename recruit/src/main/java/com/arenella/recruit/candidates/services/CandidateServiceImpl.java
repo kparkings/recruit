@@ -59,11 +59,14 @@ import com.arenella.recruit.candidates.dao.PendingCandidateDao;
 import com.arenella.recruit.candidates.dao.RecruiterContactDao;
 import com.arenella.recruit.candidates.entities.CandidateEntity;
 import com.arenella.recruit.candidates.entities.PendingCandidateEntity;
+import com.arenella.recruit.candidates.enums.COUNTRY;
 import com.arenella.recruit.candidates.enums.FUNCTION;
 import com.arenella.recruit.candidates.extractors.DocumentFilterExtractionUtil;
 import com.arenella.recruit.candidates.extractors.SkillExtractor;
 import com.arenella.recruit.candidates.utils.CandidateSuggestionUtil;
 import com.arenella.recruit.candidates.utils.CandidateSuggestionUtil.suggestion_accuracy;
+import com.arenella.recruit.candidates.utils.GeoZoneSearchUtil;
+import com.arenella.recruit.candidates.utils.GeoZoneSearchUtil.GEO_ZONE;
 import com.arenella.recruit.candidates.utils.SkillsSynonymsUtil;
 import com.arenella.recruit.curriculum.enums.FileType;				//TODO: [KP] Why are we referencing other service
 import com.arenella.recruit.emailservice.adapters.RequestSendEmailCommand;
@@ -290,20 +293,6 @@ public class CandidateServiceImpl implements CandidateService{
 	/**
 	* Refer to the CandidateService Interface for Details
 	*/
-	//@Override
-	//public void flagCandidateAvailability(long candidateId, boolean available) {
-		
-	//	CandidateEntity candidate = this.candidateDao.findById(candidateId).orElseThrow(() -> new IllegalArgumentException("Unknown candidate Id " + candidateId));
-		
-	//	candidate.setFlaggedAsUnavailable(available);
-		
-	//	this.candidateDao.save(candidate);
-		
-	//}
-
-	/**
-	* Refer to the CandidateService Interface for Details
-	*/
 	@Override
 	public void persistPendingCandidate(PendingCandidate pendingCandidate) {
 		
@@ -455,10 +444,38 @@ public class CandidateServiceImpl implements CandidateService{
 		Pageable 									pageable 			= PageRequest.of(0,100);
 		Optional<Boolean>							available		 	= filterOptions.isAvailable();
 		/**
-		* Recruiters may only view unavailable candidates if they have a paid subscription  
+		* Recruiters may only view unavailable candidates if they have a paid subscription 
+		* Candidates need to be able to view their own profile even if their profile is not 
+		* active as do Admin users 
 		*/
-		if (!hasPaidSubscription()) { // Need to implement right hand check
+		if (!hasPaidSubscription() && !this.checkHasRole("ROLE_ADMIN")) {
 			filterOptions.setAvailable(true);
+			filterOptions.removeGeoZones();
+		}
+		
+		/**
+		* Only Admin and recruiters should be able to filter on GEO_ZONES as this is a paid 
+		* feature 
+		*/
+		if (!this.checkHasRole("ROLE_ADMIN") && !this.checkHasRole("ROLE_RECRUITER")) {
+			filterOptions.removeGeoZones();
+		}
+		
+		/**
+		* In the case there is no filter for either GeoZone or Country we add in All the default 
+		* countries otherwise we end up with everything
+		*/
+		if (filterOptions.getGeoZones().isEmpty() && filterOptions.getCountries().isEmpty()) {
+			filterOptions.addCountry(COUNTRY.BELGIUM);
+			filterOptions.addCountry(COUNTRY.NETHERLANDS);
+			filterOptions.addCountry(COUNTRY.UK);
+			filterOptions.addCountry(COUNTRY.REPUBLIC_OF_IRELAND);
+		}
+		
+		if (!filterOptions.getGeoZones().isEmpty()) {
+			
+			GEO_ZONE[] geoZones = filterOptions.getGeoZones().toArray(new GEO_ZONE[] {});
+			GeoZoneSearchUtil.fetchCountriesFor(geoZones).stream().forEach(country -> filterOptions.addCountry(country));
 		}
 		
 		/**

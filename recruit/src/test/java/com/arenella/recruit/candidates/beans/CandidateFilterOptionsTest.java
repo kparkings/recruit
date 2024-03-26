@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import com.arenella.recruit.candidates.enums.COUNTRY;
 import com.arenella.recruit.candidates.enums.FUNCTION;
 import com.arenella.recruit.candidates.enums.RESULT_ORDER;
+import com.arenella.recruit.candidates.utils.GeoZoneSearchUtil.GEO_ZONE;
 
 /**
 * Unit tests for the CandidateFilterOptions class
@@ -28,6 +29,7 @@ public class CandidateFilterOptionsTest {
 	public void testBuilder() throws Exception{
 		
 		Set<String> 			candidateIds 					= new HashSet<>();
+		Set<GEO_ZONE> 			geoZones 						= new HashSet<>();
 		Set<COUNTRY> 			countries 						= new HashSet<>();
 		Set<FUNCTION> 			functions 						= new HashSet<>();
 		Set<String> 			skills 							= new HashSet<>();
@@ -51,12 +53,14 @@ public class CandidateFilterOptionsTest {
 		candidateIds.add(candidateId);
 		skills.add(skill);
 		
+		geoZones.add(GEO_ZONE.BENELUX);
 		countries.add(COUNTRY.NETHERLANDS);
 		functions.add(FUNCTION.PROJECT_MANAGER);
 		
 		CandidateFilterOptions filters = CandidateFilterOptions
 												.builder()
 													.candidateIds(candidateIds)
+													.geoZones(geoZones)
 													.countries(countries)
 													.dutch(dutch)
 													.english(english)
@@ -78,6 +82,7 @@ public class CandidateFilterOptionsTest {
 													.build();
 		
 		assertEquals(filters.getCandidateIds().stream().findAny().get(), 	candidateId);
+		assertEquals(filters.getGeoZones().stream().findAny().get(), 		GEO_ZONE.BENELUX);
 		assertEquals(filters.getCountries().stream().findAny().get(), 		COUNTRY.NETHERLANDS);
 		assertEquals(filters.getFunctions().stream().findAny().get(), 		FUNCTION.PROJECT_MANAGER);
 		assertEquals(filters.getSkills().stream().findAny().get(), 			skill);
@@ -121,6 +126,50 @@ public class CandidateFilterOptionsTest {
 		assertTrue(filters.getFunctions().contains(FUNCTION.JAVA_DEV));
 		assertFalse(filters.isAvailable().get());
 		
+	}
+	
+	/**
+	* Removes any GeoZone filters
+	* @throws Exception
+	*/
+	@Test
+	public void testRemoveGeoZones() throws Exception{
+		
+		CandidateFilterOptions filters = CandidateFilterOptions
+				.builder()
+					.geoZones(Set.of(GEO_ZONE.BRITISH_ISLES))
+				.build();
+		
+		assertEquals(filters.getGeoZones().stream().findAny().get(), GEO_ZONE.BRITISH_ISLES);
+				
+		filters.removeGeoZones();
+		
+		assertTrue(filters.getGeoZones().stream().findAny().isEmpty());
+		
+	}
+	
+	/**
+	* Tests adding countries to filter on
+	* @throws Exception
+	*/
+	@Test
+	public void testAddCountry() throws Exception{
+		
+		CandidateFilterOptions filters = CandidateFilterOptions
+				.builder()
+					.countries(Set.of(COUNTRY.BELGIUM))
+				.build();
+		
+		assertEquals(filters.getCountries().stream().filter(c -> c == COUNTRY.BELGIUM).findAny().get(), COUNTRY.BELGIUM);
+		assertEquals(1, filters.getCountries().size());
+		
+		
+		filters.addCountry(COUNTRY.BULGARIA);
+		
+		assertEquals(filters.getCountries().stream().filter(c -> c == COUNTRY.BELGIUM).findAny().get(), COUNTRY.BELGIUM);
+		assertEquals(filters.getCountries().stream().filter(c -> c == COUNTRY.BULGARIA).findAny().get(), COUNTRY.BULGARIA);
+		assertEquals(2, filters.getCountries().size());
+	
 	}
 	
 }

@@ -4,15 +4,20 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.annotation.PostConstruct;
+
+import org.springframework.stereotype.Component;
+
 import com.arenella.recruit.candidates.enums.COUNTRY;
 
 /**
 * Util to return supported Countries in a Geo zone 
 * @author K Parkings
 */
+@Component
 public class GeoZoneSearchUtil {
 
-	public enum GEO_ZONE {WORLD, EUROPE, NORTH_AMERICA, SOUTHERN_EUROPE, EASTERN_EUROPE, WESTERN_EUROPE, NORTHERN_EUROPE, BENELUX, BRITISH_ISLES, IRELAND}
+	public enum GEO_ZONE {WORLD, EUROPE, NORTH_AMERICA, SOUTHERN_EUROPE, EASTERN_EUROPE, WESTERN_EUROPE, NORTHERN_EUROPE, CENTRAL_EUROPE, BENELUX, BRITISH_ISLES, IRELAND, DACH}
 	
 	private static final Set<COUNTRY> WORLD 			= new HashSet<>();
 	private static final Set<COUNTRY> EUROPE 			= new HashSet<>();
@@ -21,16 +26,19 @@ public class GeoZoneSearchUtil {
 	private static final Set<COUNTRY> EASTERN_EUROPE 	= new HashSet<>();
 	private static final Set<COUNTRY> WESTERN_EUROPE 	= new HashSet<>();
 	private static final Set<COUNTRY> NORTHERN_EUROPE 	= new HashSet<>();
+	private static final Set<COUNTRY> CENTRAL_EUROPE 	= new HashSet<>();
 	private static final Set<COUNTRY> BENELUX  			= new HashSet<>();
 	private static final Set<COUNTRY> BRITISH_ISLES  	= new HashSet<>();
 	private static final Set<COUNTRY> IRELAND  			= new HashSet<>();
+	private static final Set<COUNTRY> DACH  			= new HashSet<>();
+	private static final Set<COUNTRY> BALTICS  			= new HashSet<>();
 	
 	/**
 	* Returns the countries in the requested GEO_ZONES
 	* @param geoZones - Geographical zones containing multiple Countries
 	* @return Countries in selected GEO_ZONE's
 	*/
-	public Set<COUNTRY> fetchCountriesFor(GEO_ZONE... geoZones ){
+	public static Set<COUNTRY> fetchCountriesFor(GEO_ZONE... geoZones ){
 		
 		Set<COUNTRY> countries = new HashSet<>();
 		
@@ -43,9 +51,11 @@ public class GeoZoneSearchUtil {
 				case EASTERN_EUROPE 	-> countries.addAll(EASTERN_EUROPE);
 				case WESTERN_EUROPE 	-> countries.addAll(WESTERN_EUROPE);
 				case NORTHERN_EUROPE 	-> countries.addAll(NORTHERN_EUROPE);
+				case CENTRAL_EUROPE 	-> countries.addAll(CENTRAL_EUROPE);
 				case BENELUX 			-> countries.addAll(BENELUX);
 				case BRITISH_ISLES 		-> countries.addAll(BRITISH_ISLES);
 				case IRELAND 			-> countries.addAll(IRELAND);
+				case DACH				-> countries.addAll(DACH);
 			}
 		});
 		
@@ -56,7 +66,8 @@ public class GeoZoneSearchUtil {
 	/**
 	* Populates the GeoZone datasets
 	*/
-	public GeoZoneSearchUtil() {
+	@PostConstruct
+	public void initGeoZoneSearchUtil() {
 		initalizeIreland();
 		initializeBritishIsles();
 		initializeBenelux();
@@ -67,6 +78,9 @@ public class GeoZoneSearchUtil {
 		initializeEurope();
 		initializeNorthAmerica();
 		initializeWorld();
+		initializeDach();
+		initializeBaltics();
+		initializeCentralEurope();
 	}
 	
 	/**
@@ -175,6 +189,41 @@ public class GeoZoneSearchUtil {
 	private static void initalizeIreland() {
 		IRELAND.add(COUNTRY.NORTHERN_IRELAND);
 		IRELAND.add(COUNTRY.REPUBLIC_OF_IRELAND);
+	}
+	
+	/**
+	* Initializes the island of Ireland dataset 
+	*/
+	private static void initializeDach() {
+		IRELAND.add(COUNTRY.GERMANY);
+		IRELAND.add(COUNTRY.AUSTRIA);
+		IRELAND.add(COUNTRY.SWITZERLAND);
+	}
+	
+	/**
+	* Initializes the island of Ireland dataset 
+	*/
+	private static void initializeBaltics() {
+		BALTICS.add(COUNTRY.ESTONIA);
+		BALTICS.add(COUNTRY.LATVIA);
+		BALTICS.add(COUNTRY.LITHUANIA);
+	}
+	
+	/**
+	* Initializes the island of Ireland dataset 
+	*/
+	private static void initializeCentralEurope() {
+		CENTRAL_EUROPE.add(COUNTRY.AUSTRIA);
+		CENTRAL_EUROPE.add(COUNTRY.CROATIA);
+		CENTRAL_EUROPE.add(COUNTRY.CZECH_REPUBLIC);
+		CENTRAL_EUROPE.add(COUNTRY.GERMANY);
+		CENTRAL_EUROPE.add(COUNTRY.HUNGRY);
+		CENTRAL_EUROPE.add(COUNTRY.LIECHTENSTEIN);
+		CENTRAL_EUROPE.add(COUNTRY.LITHUANIA);
+		CENTRAL_EUROPE.add(COUNTRY.POLAND);
+		CENTRAL_EUROPE.add(COUNTRY.SLOVAKIA);
+		CENTRAL_EUROPE.add(COUNTRY.SLOVENIA);
+		CENTRAL_EUROPE.add(COUNTRY.SWITZERLAND);
 	}
 
 }

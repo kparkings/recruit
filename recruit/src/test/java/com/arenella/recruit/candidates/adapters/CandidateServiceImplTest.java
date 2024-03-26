@@ -408,42 +408,6 @@ public class CandidateServiceImplTest {
 		assertEquals(NEWSFEED_ITEM_TYPE.CANDIDATE_BECAME_UNAVAILABLE, newsFeedCaptor.getValue().getItemType());
 		
 	}
-		
-	/**
-	* Tests Exception thrown if Candidate does not exist
-	* @throws Exception
-	*/
-	//@Test
-	//public void testFlagCandidateAvailability_unknownCandidate() throws Exception{
-		
-	//	Mockito.when(this.mockCandidateDao.findById(Mockito.anyLong())).thenReturn(Optional.empty());
-		
-	//	Assertions.assertThrows(IllegalArgumentException.class, () -> {
-	//		this.service.flagCandidateAvailability(4L, false);
-	//	});
-		
-	//}
-	
-	/**
-	* Test setting of flaggedAsUnavailable attribute
-	* @throws Exception
-	*/
-	//@Test
-	//public void testFlagCandidateAvailability() throws Exception{
-		
-	//	ArgumentCaptor<CandidateEntity> captor = ArgumentCaptor.forClass(CandidateEntity.class);
-	//	CandidateEntity candidateEntity = CandidateEntity.builder().build();
-		
-	//	Mockito.when(this.mockCandidateDao.findById(Mockito.anyLong())).thenReturn(Optional.of(candidateEntity));
-	//	Mockito.when(this.mockCandidateDao.save(captor.capture())).thenReturn(null);
-		
-	//	this.service.flagCandidateAvailability(4L, true);
-		
-	//	Mockito.verify(this.mockCandidateDao).save(candidateEntity);
-		
-	//	assertTrue(captor.getValue().isFlaggedAsUnavailable());
-		
-	//}
 	
 	/**
 	* Tests Exception thrown if Candidate does not exist
@@ -479,7 +443,6 @@ public class CandidateServiceImplTest {
 		
 	}
 
-	
 	/**
 	* Tests Exception is thrown if an attempt is made to persist 
 	* a PendingCandidate without specifying an Id

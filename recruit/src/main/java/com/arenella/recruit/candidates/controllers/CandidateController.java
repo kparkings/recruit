@@ -43,6 +43,7 @@ import com.arenella.recruit.candidates.enums.COUNTRY;
 import com.arenella.recruit.candidates.enums.FUNCTION;
 import com.arenella.recruit.candidates.enums.RESULT_ORDER;
 import com.arenella.recruit.candidates.services.CandidateService;
+import com.arenella.recruit.candidates.utils.GeoZoneSearchUtil.GEO_ZONE;
 import com.arenella.recruit.curriculum.enums.FileType;
 
 /**
@@ -155,6 +156,7 @@ public class CandidateController {
 	* @param orderAttribute			- Optional attribute to order the results on
 	* @param order					- Optional direction of ordering
 	* @param candidateId			- Optional candidates ids to filter on
+	* @param geoZones				- Optional geoZones to filter on
 	* @param countries				- Optional countries to filter on
 	* @param functions				- Optional functions to filter on
 	* @param freelance				- Optional freelance value to filter on
@@ -172,6 +174,7 @@ public class CandidateController {
 	public Page<CandidateAPIOutbound> getCandidate( @RequestParam("orderAttribute") 	String 				orderAttribute,
 													@RequestParam("order") 				RESULT_ORDER		order,
 													@RequestParam(required = false) 	Set<String> 		candidateId,
+													@RequestParam(required = false) 	Set<GEO_ZONE>		geoZones,
 													@RequestParam(required = false) 	Set<COUNTRY> 		countries,
 													@RequestParam(required = false) 	Set<FUNCTION> 		functions,
 													@RequestParam(required = false) 	Boolean 			freelance,
@@ -206,6 +209,7 @@ public class CandidateController {
 																		.orderAttribute(orderAttribute)
 																		.order(order)
 																		.candidateIds(candidateId)
+																		.geoZones(geoZones)
 																		.countries(countries)
 																		.functions(functions)
 																		.freelance(freelance)
