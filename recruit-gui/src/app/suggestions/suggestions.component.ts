@@ -21,6 +21,7 @@ import {AppComponent} 																from '../app.component';
 import { TranslateService } 														from '@ngx-translate/core';
 import { HttpResponse } 															from '@angular/common/http';
 import { CandidateTotals } 															from '../candidate-totals';
+import { GeoZone } from '../geo-zone';
 
 /**
 * Component to suggest suitable Candidates based upon a 
@@ -75,6 +76,8 @@ export class SuggestionsComponent implements OnInit {
 	public contactCandidateView:string 							= 'message';
 	public showPaidSubscriptinOptions:boolean					= false;
 	public paidFeature:string								 	= '';
+	public showGeoZoneFilters:string							= "";
+	public geoZones:Array<GeoZone>								= new Array<GeoZone>();
 	public publicitySuggestions:Array<Candidate>  				= new Array<Candidate>();
 	public createAlertForm:UntypedFormGroup 					= new UntypedFormGroup({
 		alertName:			new UntypedFormControl(''),
@@ -117,6 +120,7 @@ export class SuggestionsComponent implements OnInit {
 		this.init();
 	}
 	
+	
 	private init():void{
 		
 		this.resetSearchFilters(true);
@@ -151,11 +155,22 @@ export class SuggestionsComponent implements OnInit {
 			this.showPaidSubscriptinOptions = true;
 		} 
 		
+		this.initGeoZones();
 		
 		this.candidateService.fetchCandidateTotals().subscribe(totals => this.candidateTotals = totals);
 		
 		this.appComponent.refreschUnreadAlerts();
 		
+		
+		
+	}
+	
+	/**
+	* Swithches between open and closed filter view for GeoZones 
+	*/
+	public switchGeoZoneFilterView(view:string):void{
+		this.initGeoZones();
+		this.showGeoZoneFilters = view;
 	}
 	
   	public setJobSepecFile(event:any):void{
@@ -183,8 +198,8 @@ export class SuggestionsComponent implements OnInit {
 				this.suggestionFilterForm.get('beResults')?.setValue(false);
 				this.suggestionFilterForm.get('ukResults')?.setValue(false);
 				this.suggestionFilterForm.get('ieResults')?.setValue(false);
-				this.suggestionFilterForm.get('europeResults')?.setValue(false);
-				this.suggestionFilterForm.get('worldResults')?.setValue(false);
+				//this.suggestionFilterForm.get('europeResults')?.setValue(false);
+				//this.suggestionFilterForm.get('worldResults')?.setValue(false);
 			
 				if (extractedFilters.netherlands)  {
 					this.suggestionFilterForm.get('nlResults')?.setValue(extractedFilters.netherlands);
@@ -202,13 +217,6 @@ export class SuggestionsComponent implements OnInit {
 					this.suggestionFilterForm.get('ieResults')?.setValue(extractedFilters.ireland);
 				}
 				
-				if (extractedFilters.eu) {
-					this.suggestionFilterForm.get('ieResults')?.setValue(extractedFilters.eu);
-				}
-				
-				if (extractedFilters.world) {
-					this.suggestionFilterForm.get('ieResults')?.setValue(extractedFilters.world);
-				}	
 			}	
 			
 			if (extractedFilters.perm != 'TRUE' && extractedFilters.freelance != 'TRUE') {
@@ -304,8 +312,8 @@ export class SuggestionsComponent implements OnInit {
 			beResults: 						new UntypedFormControl(true),
 			ukResults: 						new UntypedFormControl(true),
 			ieResults: 						new UntypedFormControl(true),
-			europeResults: 					new UntypedFormControl(false),
-			worldResults: 					new UntypedFormControl(false),
+			//europeResults: 					new UntypedFormControl(false),
+			//worldResults: 					new UntypedFormControl(false),
 			contractType: 					new UntypedFormControl('Both'),
 			dutchLanguage: 					new UntypedFormControl(false),
 			englishLanguage: 				new UntypedFormControl(false),
@@ -319,7 +327,7 @@ export class SuggestionsComponent implements OnInit {
 		this.candidateService.getCountries().forEach(c => {
 			this.suggestionFilterForm.addControl(c.countryCode+'Results', new UntypedFormControl(''));
 		});
-	
+		
 	}
 	
 	/**
@@ -373,6 +381,16 @@ export class SuggestionsComponent implements OnInit {
 				this.showSuggestedCandidateOverview(result.content[0]);
 			});
 		}
+		
+	}
+	
+	private initGeoZones():void{
+		
+		this.geoZones = this.candidateService.getGeoZones();
+		
+		this.geoZones.forEach(gz => {
+			this.suggestionFilterForm.addControl(gz.geoZoneId.toLowerCase()+'Results', new UntypedFormControl(false));
+		});
 		
 	}
 	
@@ -462,18 +480,18 @@ export class SuggestionsComponent implements OnInit {
 	/**
 	* Toggles GeoCpde
 	*/
-	public toggleGeoZoneSelection(geoCode:string):void{
+	public toggleGeoZoneSelection(geoZone:GeoZone):void{
 		
 		this.paidFeature = 'paidFeatureGeoZones';
 		
 		let valid:boolean = this.doPaidSubscriptionCheck();
 		
 		if (valid) {
-			
-			let included:boolean = this.suggestionFilterForm.get((geoCode+'Results'))?.value;
-			this.suggestionFilterForm.get((geoCode+'Results'))?.setValue(!included);
 		
-			let geoZoneActive = this.candidateService.getGeoZones().filter(gz => this.suggestionFilterForm.get((gz.toLowerCase()+'Results'))?.value == true).length > 0;
+			let included:boolean = this.suggestionFilterForm.get((geoZone.geoZoneId.toLowerCase()+'Results'))?.value;
+			this.suggestionFilterForm.get((geoZone.geoZoneId.toLowerCase()+'Results'))?.setValue(!included);
+		
+			let geoZoneActive = this.candidateService.getGeoZones().filter(gz => this.suggestionFilterForm.get((gz.geoZoneId.toLowerCase()+'Results'))?.value == true).length > 0;
 		
 			if (!geoZoneActive) {
 				this.candidateService.getCountries().forEach(country => {
@@ -486,13 +504,6 @@ export class SuggestionsComponent implements OnInit {
 					this.suggestionFilterForm.get(key)?.setValue(false);
 				});
 			
-				
-				let worldActive:boolean = this.suggestionFilterForm.get(('worldResults'))?.value == true;
-				
-				if (worldActive) {
-					this.suggestionFilterForm.get(('europeResults'))?.setValue(true);
-				}
-				
 			}
 			
 		}
@@ -510,8 +521,8 @@ export class SuggestionsComponent implements OnInit {
 		let included:boolean = this.suggestionFilterForm.get((country+'Results'))?.value;
 		this.suggestionFilterForm.get((country+'Results'))?.setValue(!included);
 		
-		this.candidateService.getGeoZones().forEach(geoZone => {
-			let key = geoZone.toLowerCase() + 'Results';
+		this.geoZones.forEach(geoZone => {
+			let key = geoZone.geoZoneId.toLowerCase() + 'Results';
 			this.suggestionFilterForm.get(key)?.setValue(false);
 		});
 				
@@ -523,6 +534,14 @@ export class SuggestionsComponent implements OnInit {
 	*/
 	public includeResultsForCountry(country:string):boolean{
 		return this.suggestionFilterForm.get((country+'Results'))?.value;
+	}
+	
+	/**
+	* Returns whether Candidates from the selected GeoZone are currently
+	* included in the Suggestion results
+	*/
+	public includeResultsForGeoZone(geoZone:GeoZone):boolean{
+		return this.suggestionFilterForm.get((geoZone.geoZoneId.toLowerCase()+'Results'))?.value;
 	}
 	
 	/**

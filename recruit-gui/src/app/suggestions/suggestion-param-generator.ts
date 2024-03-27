@@ -1,6 +1,7 @@
 import { UntypedFormGroup }				from '@angular/forms';
 import { CandidateFunction }		from '../candidate-function';
 import { Country } from '../country';
+import { GeoZone } from '../geo-zone';
 
 /**
 * Class containing the logic to prepare the filter params for the 
@@ -29,7 +30,7 @@ export class SuggestionParams{
 	* @param skillFilters			- contains raw skill filter info 
 	* @param functionTypes			- contains raw function types info
 	*/
-	public constructor(suggestionFilterForm:UntypedFormGroup, skillFilters:Array<string>, functionTypes:Array<string>, public availableGeoZones:Array<string>, public availableCountries:Array<Country>){
+	public constructor(suggestionFilterForm:UntypedFormGroup, skillFilters:Array<string>, functionTypes:Array<string>, public availableGeoZones:Array<GeoZone>, public availableCountries:Array<Country>){
 		
 		this.skills 		= skillFilters.concat();
 		this.functionTypes	= functionTypes;
@@ -43,10 +44,10 @@ export class SuggestionParams{
 		* Add any geoZone filters 	
 		*/
 		this.availableGeoZones.forEach(geoZone => {
-			let key = geoZone.toLowerCase() + 'Results';
+			let key = geoZone.geoZoneId.toLowerCase() + 'Results';
 			
 			if (suggestionFilterForm.get(key)?.value) {
-				this.geoZones.push(geoZone);
+				this.geoZones.push(geoZone.geoZoneId);
 			}
 			
 		});

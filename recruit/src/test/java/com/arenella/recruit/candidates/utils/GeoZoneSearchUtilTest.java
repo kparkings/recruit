@@ -19,8 +19,6 @@ import com.arenella.recruit.candidates.utils.GeoZoneSearchUtil.GEO_ZONE;
 @ExtendWith(MockitoExtension.class)
 public class GeoZoneSearchUtilTest {
 
-	private GeoZoneSearchUtil util = new GeoZoneSearchUtil();
-	
 	/**
 	* Tests retrieving countries for multiple GeoZones
 	* @throws Exception
@@ -30,7 +28,9 @@ public class GeoZoneSearchUtilTest {
 	
 		final int expectedCountryCount = 6;
 		
-		Set<COUNTRY> countries = util.fetchCountriesFor(GEO_ZONE.BENELUX, GEO_ZONE.BRITISH_ISLES);
+		GeoZoneSearchUtil.initGeoZoneSearchUtil();
+		
+		Set<COUNTRY> countries = GeoZoneSearchUtil.fetchCountriesFor(GEO_ZONE.BENELUX, GEO_ZONE.BRITISH_ISLES);
 		
 		assertTrue(countries.contains(COUNTRY.NETHERLANDS));
 		assertTrue(countries.contains(COUNTRY.BELGIUM));

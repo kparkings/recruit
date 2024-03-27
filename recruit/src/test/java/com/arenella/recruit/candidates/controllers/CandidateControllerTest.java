@@ -44,6 +44,7 @@ import com.arenella.recruit.candidates.beans.PendingCandidate;
 import com.arenella.recruit.candidates.controllers.CandidateController.CANDIDATE_UPDATE_ACTIONS;
 
 import com.arenella.recruit.candidates.services.CandidateService;
+import com.arenella.recruit.candidates.utils.GeoZoneSearchUtil.GEO_ZONE;
 import com.arenella.recruit.curriculum.enums.FileType;
 
 /**
@@ -594,5 +595,16 @@ public class CandidateControllerTest {
 		assertEquals(HttpStatus.OK, 			response.getStatusCode());
 		Arrays.stream(LANGUAGE.values()).forEach(l -> response.getBody().contains(l));
 	}
-	
+
+	/**
+	* Tests retrieval of SupportedLanguages
+	* @throws Exception
+	*/
+	@Test
+	public void testfetchGeoZones() throws Exception{
+		ResponseEntity<Set<GEO_ZONE>> response = this.controller.fetchGeoZones();
+		assertEquals(HttpStatus.OK, 			response.getStatusCode());
+		Arrays.stream(GEO_ZONE.values()).forEach(l -> response.getBody().contains(l));
+	}
+
 }

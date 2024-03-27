@@ -16,6 +16,7 @@ import { TranslateService } 							from '@ngx-translate/core';
 import { CandidateTotals } 								from './candidate-totals';
 import { Country } 										from './country';
 import { SupportedLanguage } from './supported-language';
+import { GeoZone } from './geo-zone';
 
 /**
 * Services for new Candidates
@@ -26,18 +27,16 @@ import { SupportedLanguage } from './supported-language';
 })
 export class CandidateServiceService {
     
-    public geoZones:Array<string>				= new Array<string>();
+    public geoZones:Array<GeoZone>				= new Array<GeoZone>();
     public countries:Array<Country> 			= new Array<Country>();
     public languages:Array<SupportedLanguage> 	= new Array<SupportedLanguage>();
     /**
   	* Constructor
   	*/
 	constructor(private httpClient: HttpClient, private translate:TranslateService) { 
-		
-		this.initializeGeoZones();
 		this.initializeCountries();
 		this.initializeSupportedLanguages();
-		
+		this.initializeGeoZones();
 	}
 	
 	/**
@@ -45,9 +44,21 @@ export class CandidateServiceService {
   	* NB: Needs to come from the backend 
   	*/
 	public initializeGeoZones():void{
-		this.geoZones = new Array<string>();
-		this.geoZones.push("WORLD");
-		this.geoZones.push("EUROPE");
+		console.log("INITIALIZING THE BOOP ");
+		const backendUrl:string = environment.backendUrl +'candidate/geo-zone';
+    	
+    	this.httpClient.get<any>(backendUrl,  { observe: 'response', withCredentials: true}).subscribe(supportedGeoZones => {
+			this.geoZones = new Array<GeoZone>();
+			
+			supportedGeoZones.body.forEach( (geoZone: string) => {
+				this.geoZones.push(new GeoZone(''+geoZone));	
+			});
+			
+			this.geoZones = this.geoZones.sort((a,b)=>{ 
+				return a.geoZoneId < b.geoZoneId ? -1 : 0;
+			});
+			
+		})
 	}
 	
 	/**
@@ -456,7 +467,7 @@ export class CandidateServiceService {
 	/**
 	* Returns GeoZones supported by the system 
 	*/
-	public getGeoZones():Array<string>{
+	public getGeoZones():Array<GeoZone>{
 		return this.geoZones;	
 	}
 	

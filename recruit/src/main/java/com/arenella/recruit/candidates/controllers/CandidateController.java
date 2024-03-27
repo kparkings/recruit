@@ -483,6 +483,16 @@ public class CandidateController {
 	}
 	
 	/**
+	* Returns list of Geo Zones that a candidate can be available for work in
+	* @return Supported GeoZones
+	*/
+	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_RECRUITER')")
+	@GetMapping(path="/candidate/geo-zone")
+	public ResponseEntity<Set<GEO_ZONE>> fetchGeoZones(){
+		return ResponseEntity.ok(Arrays.stream(GEO_ZONE.values()).collect(Collectors.toCollection(LinkedHashSet::new)));
+	}
+	
+	/**
 	* Returns whether or not the user is a Candidate
 	* @return whether or not the user is a Candidate
 	*/

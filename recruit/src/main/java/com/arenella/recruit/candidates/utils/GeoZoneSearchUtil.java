@@ -17,7 +17,20 @@ import com.arenella.recruit.candidates.enums.COUNTRY;
 @Component
 public class GeoZoneSearchUtil {
 
-	public enum GEO_ZONE {WORLD, EUROPE, NORTH_AMERICA, SOUTHERN_EUROPE, EASTERN_EUROPE, WESTERN_EUROPE, NORTHERN_EUROPE, CENTRAL_EUROPE, BENELUX, BRITISH_ISLES, IRELAND, DACH}
+	public enum GEO_ZONE {
+		//WORLD, 
+		EUROPE, 
+		//NORTH_AMERICA, 
+		//SOUTHERN_EUROPE, 
+		//EASTERN_EUROPE, 
+		//WESTERN_EUROPE, 
+		//NORTHERN_EUROPE, 
+		//CENTRAL_EUROPE, 
+		BENELUX, 
+		BRITISH_ISLES, 
+		//IRELAND, 
+		//DACH
+		}
 	
 	private static final Set<COUNTRY> WORLD 			= new HashSet<>();
 	private static final Set<COUNTRY> EUROPE 			= new HashSet<>();
@@ -44,18 +57,18 @@ public class GeoZoneSearchUtil {
 		
 		Arrays.stream(geoZones).forEach(geoZone -> {
 			switch(geoZone) {
-				case WORLD 				-> countries.addAll(WORLD);
+				//case WORLD 				-> countries.addAll(WORLD);
 				case EUROPE 			-> countries.addAll(EUROPE);
-				case NORTH_AMERICA 		-> countries.addAll(NORTH_AMERICA);
-				case SOUTHERN_EUROPE 	-> countries.addAll(SOUTHERN_EUROPE);
-				case EASTERN_EUROPE 	-> countries.addAll(EASTERN_EUROPE);
-				case WESTERN_EUROPE 	-> countries.addAll(WESTERN_EUROPE);
-				case NORTHERN_EUROPE 	-> countries.addAll(NORTHERN_EUROPE);
-				case CENTRAL_EUROPE 	-> countries.addAll(CENTRAL_EUROPE);
+				//case NORTH_AMERICA 		-> countries.addAll(NORTH_AMERICA);
+				//case SOUTHERN_EUROPE 	-> countries.addAll(SOUTHERN_EUROPE);
+				//case EASTERN_EUROPE 	-> countries.addAll(EASTERN_EUROPE);
+				//case WESTERN_EUROPE 	-> countries.addAll(WESTERN_EUROPE);
+				//case NORTHERN_EUROPE 	-> countries.addAll(NORTHERN_EUROPE);
+				//case CENTRAL_EUROPE 	-> countries.addAll(CENTRAL_EUROPE);
 				case BENELUX 			-> countries.addAll(BENELUX);
 				case BRITISH_ISLES 		-> countries.addAll(BRITISH_ISLES);
-				case IRELAND 			-> countries.addAll(IRELAND);
-				case DACH				-> countries.addAll(DACH);
+				//case IRELAND 			-> countries.addAll(IRELAND);
+				//case DACH				-> countries.addAll(DACH);
 			}
 		});
 		
@@ -67,7 +80,7 @@ public class GeoZoneSearchUtil {
 	* Populates the GeoZone datasets
 	*/
 	@PostConstruct
-	public void initGeoZoneSearchUtil() {
+	public static void initGeoZoneSearchUtil() {
 		initalizeIreland();
 		initializeBritishIsles();
 		initializeBenelux();
@@ -195,9 +208,9 @@ public class GeoZoneSearchUtil {
 	* Initializes the island of Ireland dataset 
 	*/
 	private static void initializeDach() {
-		IRELAND.add(COUNTRY.GERMANY);
-		IRELAND.add(COUNTRY.AUSTRIA);
-		IRELAND.add(COUNTRY.SWITZERLAND);
+		DACH.add(COUNTRY.GERMANY);
+		DACH.add(COUNTRY.AUSTRIA);
+		DACH.add(COUNTRY.SWITZERLAND);
 	}
 	
 	/**

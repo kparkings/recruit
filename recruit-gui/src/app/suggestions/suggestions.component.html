@@ -32,15 +32,15 @@
 						</tr>
 						<tr>
 							<td class="sugg-srch-hdr">{{'arenella-suggestions-geoZones' | translate}}</td>
-							<td class="sugg-srch-bdy country-filters">
-								<span class="country-filter country-selected-{{includeResultsForCountry('world')}}" (click)="toggleGeoZoneSelection('world')">
-									<mat-icon fontSet="material-symbols-outlined" class="mat-icon-globe">globe</mat-icon>
-								</span>
-								<span class="country-filter country-selected-{{includeResultsForCountry('europe')}}" (click)="toggleGeoZoneSelection('europe')">
-									<mat-icon>
-										<span class="flag-icon flag-icon-eu flag-icon-med"></span>
-									</mat-icon>
-								</span>
+							<td *ngIf="!showGeoZoneFilters">
+								<p class="toggle-filter-option" (click)="switchGeoZoneFilterView('showGeoZoneFilters')">{{'Show' | translate}}..</p>
+							</td>
+							<td *ngIf="showGeoZoneFilters"class="sugg-srch-bdy geo-zone-filters">
+								<p class="toggle-filter-option" (click)="switchGeoZoneFilterView('')">{{'Hide' | translate}}..</p>
+								<div *ngFor="let geoZone of geoZones" class="geo-code-filter geo-code-selected-{{includeResultsForGeoZone(geoZone)}}" (click)="toggleGeoZoneSelection(geoZone)">
+									{{geoZone.geoZoneId | translate}}
+								</div>
+								
 							</td>
 						</tr>
 						<tr>
