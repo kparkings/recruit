@@ -16,6 +16,7 @@ import { AppComponent} 									from '../app.component';
 import { TranslateService } 							from '@ngx-translate/core';
 import { Country } from '../country';
 import { SupportedLanguage } from '../supported-language';
+import { SupportedCountry } from '../supported-candidate';
 
 @Component({
   selector: 'app-new-candidate',
@@ -46,7 +47,7 @@ export class NewCandidateComponent implements OnInit {
 	public mobilePage:string = '';
 	
 	public showBackBtn:boolean = false;
-	public countries:Array<Country> 			= new Array<Country>();
+	public countries:Array<SupportedCountry> 			= new Array<SupportedCountry>();
 	public supportedLanguages:Array<SupportedLanguage> 	= new Array<SupportedLanguage>();
 	
 	/**
@@ -60,8 +61,9 @@ export class NewCandidateComponent implements OnInit {
   				private appComponent:				AppComponent,
   				private translate:					TranslateService) {
     
-    	this.countries = this.candidateService.getCountries();
+    	this.countries 			= this.candidateService.getSupportedCountries();
     	this.supportedLanguages = this.candidateService.getLanguages();
+    	
     	this.initializeOfferedCandidateForm();
     
     	this.candidateService.loadFunctionTypes().forEach(funcType => {

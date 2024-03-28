@@ -12,7 +12,6 @@ import { DomSanitizer, SafeResourceUrl } 											from '@angular/platform-brow
 import { Router}																	from '@angular/router';
 import { debounceTime, map } 														from "rxjs/operators";
 import { CandidateProfile } 														from '../candidate-profile';
-import { EmailService }																from '../email.service';
 import { CandidateNavService } 														from '../candidate-nav.service';
 import { CreditsService } 															from '../credits.service';
 import { ExtractedFilters } 														from './extracted-filters';
@@ -21,7 +20,8 @@ import {AppComponent} 																from '../app.component';
 import { TranslateService } 														from '@ngx-translate/core';
 import { HttpResponse } 															from '@angular/common/http';
 import { CandidateTotals } 															from '../candidate-totals';
-import { GeoZone } from '../geo-zone';
+import { GeoZone } 																	from '../geo-zone';
+import { SupportedCountry } 														from '../supported-candidate';
 
 /**
 * Component to suggest suitable Candidates based upon a 
@@ -78,6 +78,7 @@ export class SuggestionsComponent implements OnInit {
 	public paidFeature:string								 	= '';
 	public showGeoZoneFilters:string							= "";
 	public geoZones:Array<GeoZone>								= new Array<GeoZone>();
+	public supportedCountries:Array<SupportedCountry>			= new Array<SupportedCountry>();
 	public publicitySuggestions:Array<Candidate>  				= new Array<Candidate>();
 	public createAlertForm:UntypedFormGroup 					= new UntypedFormGroup({
 		alertName:			new UntypedFormControl(''),
@@ -109,7 +110,6 @@ export class SuggestionsComponent implements OnInit {
 				private sanitizer: 				DomSanitizer,
 				private curriculumService: 		CurriculumService,
 				private router:					Router,
-				private emailService:			EmailService,
 				private candidateNavService: 	CandidateNavService,
 				private creditsService:			CreditsService,
 				private appComponent:			AppComponent,
@@ -156,6 +156,7 @@ export class SuggestionsComponent implements OnInit {
 		} 
 		
 		this.initGeoZones();
+		this.initSupportedCountries();
 		
 		this.candidateService.fetchCandidateTotals().subscribe(totals => this.candidateTotals = totals);
 		
@@ -198,8 +199,6 @@ export class SuggestionsComponent implements OnInit {
 				this.suggestionFilterForm.get('beResults')?.setValue(false);
 				this.suggestionFilterForm.get('ukResults')?.setValue(false);
 				this.suggestionFilterForm.get('ieResults')?.setValue(false);
-				//this.suggestionFilterForm.get('europeResults')?.setValue(false);
-				//this.suggestionFilterForm.get('worldResults')?.setValue(false);
 			
 				if (extractedFilters.netherlands)  {
 					this.suggestionFilterForm.get('nlResults')?.setValue(extractedFilters.netherlands);
@@ -312,8 +311,6 @@ export class SuggestionsComponent implements OnInit {
 			beResults: 						new UntypedFormControl(true),
 			ukResults: 						new UntypedFormControl(true),
 			ieResults: 						new UntypedFormControl(true),
-			//europeResults: 					new UntypedFormControl(false),
-			//worldResults: 					new UntypedFormControl(false),
 			contractType: 					new UntypedFormControl('Both'),
 			dutchLanguage: 					new UntypedFormControl(false),
 			englishLanguage: 				new UntypedFormControl(false),
@@ -384,6 +381,12 @@ export class SuggestionsComponent implements OnInit {
 		
 	}
 	
+	ngAfterViewChecked(){
+		if (sessionStorage.getItem("news-item-div")){
+			this.doScrollTop();	
+		}
+	}
+	
 	private initGeoZones():void{
 		
 		this.geoZones = this.candidateService.getGeoZones();
@@ -394,10 +397,11 @@ export class SuggestionsComponent implements OnInit {
 		
 	}
 	
-	ngAfterViewChecked(){
-		if (sessionStorage.getItem("news-item-div")){
-			this.doScrollTop();	
-		}
+	private initSupportedCountries():void{
+		
+		this.supportedCountries = this.candidateService.getSupportedCountries();
+		
+		
 	}
 	
 	/**
@@ -452,9 +456,13 @@ export class SuggestionsComponent implements OnInit {
 									).pipe(
 										  map((response) => {
 										  
-										   	this.suggestions =  new Array<Candidate>();
+										   	
+											const responseRequestId = response.headers.get('X-Arenella-Request-Id');
+											
+											console.log("RESPONSE_REQUEST_ID = " + responseRequestId);
 												
-											if (this.backendRequestCounter == backendRequestId) {
+											if (this.backendRequestCounter == responseRequestId) {
+												this.suggestions =  new Array<Candidate>();
 												response.body.content.forEach((s:Candidate) => {
 													this.suggestions.push(s);	
 												});	
@@ -724,13 +732,17 @@ export class SuggestionsComponent implements OnInit {
 	*/
 	private getFlagClassFromCountry(country:string):string{
 		
-		switch(country){
-			case "NETHERLANDS":{return "flag-icon-nl"}
-			case "BELGIUM":{return "flag-icon-be"}
-			case "UK":{return "flag-icon-gb"}
-			case "REPUBLIC_OF_IRELAND":{return "flag-icon-ie"}
-			default: return "";
-		}
+		
+		let sc:SupportedCountry = this.supportedCountries.filter(c => c.name == country)[0];
+		
+		return "flag-icon-"+sc.iso2Code;;
+		//switch(country){
+		//	case "NETHERLANDS":{return "flag-icon-nl"}
+		//	case "BELGIUM":{return "flag-icon-be"}
+		//	case "UK":{return "flag-icon-gb"}
+		//	case "REPUBLIC_OF_IRELAND":{return "flag-icon-ie"}
+		//	default: return "";
+		//}
 		
 	}
 	

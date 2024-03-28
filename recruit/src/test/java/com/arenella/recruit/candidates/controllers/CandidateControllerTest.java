@@ -42,7 +42,7 @@ import com.arenella.recruit.candidates.beans.CandidateUpdateRequest;
 import com.arenella.recruit.candidates.beans.Language.LANGUAGE;
 import com.arenella.recruit.candidates.beans.PendingCandidate;
 import com.arenella.recruit.candidates.controllers.CandidateController.CANDIDATE_UPDATE_ACTIONS;
-
+import com.arenella.recruit.candidates.enums.COUNTRY;
 import com.arenella.recruit.candidates.services.CandidateService;
 import com.arenella.recruit.candidates.utils.GeoZoneSearchUtil.GEO_ZONE;
 import com.arenella.recruit.curriculum.enums.FileType;
@@ -597,7 +597,7 @@ public class CandidateControllerTest {
 	}
 
 	/**
-	* Tests retrieval of SupportedLanguages
+	* Tests retrieval of GeoZones
 	* @throws Exception
 	*/
 	@Test
@@ -607,4 +607,15 @@ public class CandidateControllerTest {
 		Arrays.stream(GEO_ZONE.values()).forEach(l -> response.getBody().contains(l));
 	}
 
+	/**
+	* Tests retrieval of Supported Counties
+	* @throws Exception
+	*/
+	@Test
+	public void testfetchSupportedCountries() throws Exception{
+		ResponseEntity<Set<CountryEnumAPIOutbound>> response = this.controller.fetchSupportedCountries();
+		assertEquals(HttpStatus.OK, 			response.getStatusCode());
+		Arrays.stream(COUNTRY.values()).forEach(l -> response.getBody().stream().filter(c -> c.getName() == l).findAny().orElseThrow());
+	}
+	
 }

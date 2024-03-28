@@ -17,6 +17,7 @@ import { CandidateTotals } 								from './candidate-totals';
 import { Country } 										from './country';
 import { SupportedLanguage } from './supported-language';
 import { GeoZone } from './geo-zone';
+import { SupportedCountry } from './supported-candidate';
 
 /**
 * Services for new Candidates
@@ -27,9 +28,11 @@ import { GeoZone } from './geo-zone';
 })
 export class CandidateServiceService {
     
-    public geoZones:Array<GeoZone>				= new Array<GeoZone>();
-    public countries:Array<Country> 			= new Array<Country>();
-    public languages:Array<SupportedLanguage> 	= new Array<SupportedLanguage>();
+    public geoZones:Array<GeoZone>						= new Array<GeoZone>();
+    public countries:Array<Country> 					= new Array<Country>();
+    public languages:Array<SupportedLanguage> 			= new Array<SupportedLanguage>();
+    public supportedCountries:Array<SupportedCountry> 	= new Array<SupportedCountry>();
+   
     /**
   	* Constructor
   	*/
@@ -37,6 +40,7 @@ export class CandidateServiceService {
 		this.initializeCountries();
 		this.initializeSupportedLanguages();
 		this.initializeGeoZones();
+		this.initializeSupportedCountries();
 	}
 	
 	/**
@@ -44,7 +48,7 @@ export class CandidateServiceService {
   	* NB: Needs to come from the backend 
   	*/
 	public initializeGeoZones():void{
-		console.log("INITIALIZING THE BOOP ");
+		
 		const backendUrl:string = environment.backendUrl +'candidate/geo-zone';
     	
     	this.httpClient.get<any>(backendUrl,  { observe: 'response', withCredentials: true}).subscribe(supportedGeoZones => {
@@ -72,7 +76,27 @@ export class CandidateServiceService {
 		this.countries.push(new Country('UK', 'UK'));
 		this.countries.push(new Country('IE', 'REPUBLIC_OF_IRELAND'));
 	}
-
+	
+	/**
+  	* Supported countries. This is different to the countries the user can filter on in the 
+  	* suggestions page. Until there are enough candidates to make it work adding the filter we
+  	* maintin two separate country lists. The GeoZone filters will give access to candidates outside 
+  	* of the stadard coutries until there are enough candidates to add separate filters for the new countries
+  	* NB: Needs to eventually be refactored with initialzeCounties 
+  	*/
+	public initializeSupportedCountries():void{
+	const backendUrl:string = environment.backendUrl +'candidate/countries';
+    	
+    	this.httpClient.get<any>(backendUrl,  { observe: 'response', withCredentials: true}).subscribe(response => {
+			this.supportedCountries = new Array<SupportedCountry>();
+			
+			response.body.forEach( (country: SupportedCountry) => {
+				this.supportedCountries.push(new SupportedCountry(''+country.name, country.iso2Code));	
+			});
+			
+		})
+	}
+	
 	/**
   	* Sets the available countrues
   	* NB: Needs to come from the backend 
@@ -472,10 +496,17 @@ export class CandidateServiceService {
 	}
 	
 	/**
-	* Returns Countries supported by the system 
+	* Returns Countries that can be filtered on 
 	*/
 	public getCountries():Array<Country>{
 		return this.countries;	
+	}
+	
+	/**
+	* Returns Countries supported by the system 
+	*/
+	public getSupportedCountries():Array<SupportedCountry>{
+		return this.supportedCountries;	
 	}
 	
 	/**

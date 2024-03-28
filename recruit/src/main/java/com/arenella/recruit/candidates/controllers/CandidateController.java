@@ -493,6 +493,16 @@ public class CandidateController {
 	}
 	
 	/**
+	* Returns list of Countries that a candidate can be available for work in
+	* @return Supported Countries
+	*/
+	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_RECRUITER') or hasRole('ROLE_CANDIDATE')")
+	@GetMapping(path="/candidate/countries")
+	public ResponseEntity<Set<CountryEnumAPIOutbound>> fetchSupportedCountries(){
+		return ResponseEntity.ok(Arrays.stream(COUNTRY.values()).map(c -> new CountryEnumAPIOutbound(c)).collect(Collectors.toCollection(LinkedHashSet::new)));
+	}
+	
+	/**
 	* Returns whether or not the user is a Candidate
 	* @return whether or not the user is a Candidate
 	*/
