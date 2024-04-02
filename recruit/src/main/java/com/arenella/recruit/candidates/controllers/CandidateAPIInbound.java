@@ -12,6 +12,7 @@ import com.arenella.recruit.candidates.beans.Candidate.CandidateBuilder;
 import com.arenella.recruit.candidates.beans.Candidate.DAYS_ON_SITE;
 import com.arenella.recruit.candidates.beans.Candidate.Photo;
 import com.arenella.recruit.candidates.beans.Candidate.Rate;
+import com.arenella.recruit.candidates.beans.Candidate.SECURITY_CLEARANCE_TYPE;
 import com.arenella.recruit.candidates.beans.Language;
 import com.arenella.recruit.candidates.enums.COUNTRY;
 import com.arenella.recruit.candidates.enums.FREELANCE;
@@ -28,26 +29,28 @@ import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 @JsonDeserialize(builder=CandidateAPIInbound.CandidateAPIInboundBuilder.class)
 public class CandidateAPIInbound {
 
-	private String 			candidateId;
-	private String 			firstname;
-	private String 			surname;
-	private String 			email;
-	private String			roleSought;
-	private FUNCTION		function;
-	private COUNTRY 		country;
-	private String 			city;
-	private PERM 			perm;
-	private FREELANCE 		freelance;
-	private int				yearsExperience;
-	private boolean 		available					= true;
-	private Set<String> 	skills						= new LinkedHashSet<>();
-	private Set<Language> 	languages					= new LinkedHashSet<>();
-	private String 			comments;
-	private String 			introduction;
-	private DAYS_ON_SITE	daysOnSite;
-	private Rate			rateContract;
-	private Rate			ratePerm;
-	private LocalDate 		availableFromDate;
+	private String 					candidateId;
+	private String 					firstname;
+	private String 					surname;
+	private String 					email;
+	private String					roleSought;
+	private FUNCTION				function;
+	private COUNTRY 				country;
+	private String 					city;
+	private PERM 					perm;
+	private FREELANCE 				freelance;
+	private int						yearsExperience;
+	private boolean 				available					= true;
+	private Set<String> 			skills						= new LinkedHashSet<>();
+	private Set<Language> 			languages					= new LinkedHashSet<>();
+	private String 					comments;
+	private String 					introduction;
+	private DAYS_ON_SITE			daysOnSite;
+	private Rate					rateContract;
+	private Rate					ratePerm;
+	private LocalDate 				availableFromDate;
+	private SECURITY_CLEARANCE_TYPE securityClearance;
+	private boolean					requiresSponsorship;
 	
 	/**
 	* Constructor based upon a builder
@@ -73,6 +76,8 @@ public class CandidateAPIInbound {
 		this.rateContract				= builder.rateContract;
 		this.ratePerm					= builder.ratePerm;
 		this.availableFromDate			= builder.availableFromDate;
+		this.requiresSponsorship		= builder.requiresSponsorship;
+		this.securityClearance			= builder.securityClearance;
 		
 		this.skills.addAll(builder.skills);
 		this.languages.addAll(builder.languages);
@@ -171,7 +176,7 @@ public class CandidateAPIInbound {
 	
 	/**
 	* Returns whether the Candidate is currently available for work
-	* @return Whether the Candidate is avilable for work
+	* @return Whether the Candidate is available for work
 	*/
 	public boolean isAvailable() {
 		return this.available;
@@ -237,21 +242,28 @@ public class CandidateAPIInbound {
 	}
 	
 	/**
-	* If available the max perm salary the Candidate is 
-	* looking for
-	* @return max salary
-	*/
-	//public Optional<Rate> getRateToPerm(){
-	//	return Optional.ofNullable(this.rateToPerm);
-	//}
-	
-	/**
 	* returns the date the Candidate is available from. If not specified 
 	* uses the current date
 	* @return When the candidate is available from
 	*/
 	public LocalDate getAvailableFromDate(){
 		return Optional.ofNullable(this.availableFromDate).orElse(LocalDate.now());
+	}
+	
+	/**
+	* Returns the Candidate's Security clearance level
+	* @return Security clearance
+	*/
+	public SECURITY_CLEARANCE_TYPE getSecurityClearance() {
+		return this.securityClearance;
+	}
+	
+	/**
+	* Returns whether the Candidate requires sponsorship
+	* @return Whether the Candidate requires sponsorship
+	*/
+	public boolean getRequiresSponsorship() {
+		return this.requiresSponsorship;
 	}
 	
 	/**
@@ -269,26 +281,28 @@ public class CandidateAPIInbound {
 	@JsonPOJOBuilder(buildMethodName="build", withPrefix="")
 	public static class CandidateAPIInboundBuilder {
 		
-		private String 			candidateId;
-		private String 			firstname;
-		private String			surname;
-		private String 			email;
-		private String			roleSought;
-		private FUNCTION		function;
-		private COUNTRY 		country;
-		private String 			city;
-		private PERM 			perm;
-		private FREELANCE 		freelance;
-		private int				yearsExperience;
-		private boolean 		available					= true;
-		private Set<String> 	skills						= new LinkedHashSet<>();
-		private Set<Language> 	languages					= new LinkedHashSet<>();
-		private String 			comments;
-		private String 			introduction;
-		private DAYS_ON_SITE	daysOnSite;
-		private Rate			rateContract;
-		private Rate			ratePerm;
-		private LocalDate 		availableFromDate;
+		private String 					candidateId;
+		private String 					firstname;
+		private String					surname;
+		private String 					email;
+		private String					roleSought;
+		private FUNCTION				function;
+		private COUNTRY 				country;
+		private String 					city;
+		private PERM 					perm;
+		private FREELANCE 				freelance;
+		private int						yearsExperience;
+		private boolean 				available					= true;
+		private Set<String> 			skills						= new LinkedHashSet<>();
+		private Set<Language> 			languages					= new LinkedHashSet<>();
+		private String 					comments;
+		private String 					introduction;
+		private DAYS_ON_SITE			daysOnSite;
+		private Rate					rateContract;
+		private Rate					ratePerm;
+		private LocalDate 				availableFromDate;
+		private SECURITY_CLEARANCE_TYPE securityClearance;
+		private boolean					requiresSponsorship;
 		
 		/**
 		* Sets the candidates Unique identifier in the System
@@ -493,6 +507,26 @@ public class CandidateAPIInbound {
 		}
 		
 		/**
+		* Sets the Security Clearance type held by the candiddate
+		* @param securityClearance - Security clearance type
+		* @return Builder
+		*/
+		public CandidateAPIInboundBuilder securityClearance(SECURITY_CLEARANCE_TYPE securityClearance) {
+			this.securityClearance = securityClearance;
+			return this;
+		}
+		
+		/**
+		* Sets whether the Candidate requires sponsorship to take on a new role
+		* @param requiresSponsorship - Whether sponsorship required
+		* @return Builder
+		*/
+		public CandidateAPIInboundBuilder requiresSponsorship(boolean requiresSponsorship) {
+			this.requiresSponsorship = requiresSponsorship;
+			return this;
+		}		
+		
+		/**
 		* Returns an instance of Candidate initialized with the 
 		* values in the builder
 		* @return Initialized instance of Candidate
@@ -531,9 +565,10 @@ public class CandidateAPIInbound {
 					.introduction(candiateAPIInbound.getIntroduction())
 					.availableFromDate(candiateAPIInbound.getAvailableFromDate())
 					.daysOnSite(candiateAPIInbound.getDaysOnSite())
+					.securityClearance(candiateAPIInbound.getSecurityClearance())
+					.requiresSponsorship(candiateAPIInbound.getRequiresSponsorship())
 					.photo(profileImage.isEmpty() ? null : profileImage.get());
 					
-				
 					if (candiateAPIInbound.getRateContract().isPresent()) {
 						builder.rateContract(candiateAPIInbound.getRateContract().get());
 					}

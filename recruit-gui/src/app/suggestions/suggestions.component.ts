@@ -456,21 +456,17 @@ export class SuggestionsComponent implements OnInit {
 									).pipe(
 										  map((response) => {
 										  
-										   	
 											const responseRequestId = response.headers.get('X-Arenella-Request-Id');
 											
-											console.log("RESPONSE_REQUEST_ID = " + responseRequestId);
-												
 											if (this.backendRequestCounter == responseRequestId) {
 												this.suggestions =  new Array<Candidate>();
 												response.body.content.forEach((s:Candidate) => {
 													this.suggestions.push(s);	
 												});	
 											}
-												
-											
 										
 										    return response ;
+										
 										  })).subscribe((data: HttpResponse<any>) => {}, 
 										  err => {
 											if (err.status === 401 || err.status === 0) {

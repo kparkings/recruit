@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.arenella.recruit.candidates.beans.Candidate;
 import com.arenella.recruit.candidates.beans.Candidate.DAYS_ON_SITE;
+import com.arenella.recruit.candidates.beans.Candidate.SECURITY_CLEARANCE_TYPE;
 import com.arenella.recruit.candidates.beans.Candidate.Rate.CURRENCY;
 import com.arenella.recruit.candidates.beans.Candidate.Rate.PERIOD;
 import com.arenella.recruit.candidates.beans.CandidateUpdateRequest;
@@ -23,30 +24,32 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 
 /**
-* Request to update a Canidates profile information
+* Request to update a Candidates profile information
 * @author K Parkings
 */
 @JsonDeserialize(builder=CandidateUpdateRequestAPIInbound.CandidateUpdateRequestAPIInboundBuilder.class)
 public class CandidateUpdateRequestAPIInbound {
 
-	private String 			firstname;
-	private String 			surname;
-	private String 			email;
-	private String			roleSought;
-	private FUNCTION		function;
-	private COUNTRY 		country;
-	private String 			city;
-	private PERM 			perm;
-	private FREELANCE 		freelance;
-	private int				yearsExperience;
-	private Set<Language> 	languages					= new LinkedHashSet<>();
-	private String			introduction;
-	private Set<String>		skills						= new LinkedHashSet<>();
-	private String 			comments;
-	private DAYS_ON_SITE	daysOnSite;
-	private Rate			rateContract;
-	private Rate			ratePerm;
-	private LocalDate 		availableFromDate;
+	private String 					firstname;
+	private String 					surname;
+	private String 					email;
+	private String					roleSought;
+	private FUNCTION				function;
+	private COUNTRY 				country;
+	private String 					city;
+	private PERM 					perm;
+	private FREELANCE 				freelance;
+	private int						yearsExperience;
+	private Set<Language> 			languages					= new LinkedHashSet<>();
+	private String					introduction;
+	private Set<String>				skills						= new LinkedHashSet<>();
+	private String 					comments;
+	private DAYS_ON_SITE			daysOnSite;
+	private Rate					rateContract;
+	private Rate					ratePerm;
+	private LocalDate 				availableFromDate;
+	private SECURITY_CLEARANCE_TYPE securityClearance;
+	private boolean					requiresSponsorship;
 	
 	/**
 	* Constructor based upon a builder
@@ -72,6 +75,8 @@ public class CandidateUpdateRequestAPIInbound {
 		this.ratePerm					= builder.ratePerm;
 		this.availableFromDate			= builder.availableFromDate;
 		this.comments					= builder.comments;
+		this.requiresSponsorship		= builder.requiresSponsorship;
+		this.securityClearance			= builder.securityClearance;
 		
 		this.languages.addAll(builder.languages);
 	
@@ -230,6 +235,22 @@ public class CandidateUpdateRequestAPIInbound {
 	}
 	
 	/**
+	* Returns the Candidate's Security clearance level
+	* @return Security clearance
+	*/
+	public SECURITY_CLEARANCE_TYPE getSecurityClearance() {
+		return this.securityClearance;
+	}
+	
+	/**
+	* Returns whether the Candidate requires sponsorship
+	* @return Whether the Candidate requires sponsorship
+	*/
+	public boolean getRequiresSponsorship() {
+		return this.requiresSponsorship;
+	}
+	
+	/**
 	* Builder for the Candidate class
 	* @return A Builder for the Candidate class
 	*/
@@ -244,25 +265,26 @@ public class CandidateUpdateRequestAPIInbound {
 	@JsonPOJOBuilder(buildMethodName="build", withPrefix="")
 	public static class CandidateUpdateRequestAPIInboundBuilder {
 		
-		private String 			firstname;
-		private String			surname;
-		private String 			email;
-		private String			roleSought;
-		private FUNCTION		function;
-		private COUNTRY 		country;
-		private String 			city;
-		private PERM 			perm;
-		private FREELANCE 		freelance;
-		private int				yearsExperience;
-		private Set<Language> 	languages					= new LinkedHashSet<>();
-		private String			introduction;
-		private Set<String>		skills						= new LinkedHashSet<>();
-		private String 			comments;
-		private DAYS_ON_SITE	daysOnSite;
-		private Rate			rateContract;
-		private Rate			ratePerm;
-		private LocalDate 		availableFromDate;
-		
+		private String 					firstname;
+		private String					surname;
+		private String 					email;
+		private String					roleSought;
+		private FUNCTION				function;
+		private COUNTRY 				country;
+		private String 					city;
+		private PERM 					perm;
+		private FREELANCE 				freelance;
+		private int						yearsExperience;
+		private Set<Language> 			languages					= new LinkedHashSet<>();
+		private String					introduction;
+		private Set<String>				skills						= new LinkedHashSet<>();
+		private String 					comments;
+		private DAYS_ON_SITE			daysOnSite;
+		private Rate					rateContract;
+		private Rate					ratePerm;
+		private LocalDate 				availableFromDate;
+		private SECURITY_CLEARANCE_TYPE securityClearance;
+		private boolean					requiresSponsorship;
 		
 		/**
 		* Sets the First name of the Candidate
@@ -448,6 +470,26 @@ public class CandidateUpdateRequestAPIInbound {
 		}
 		
 		/**
+		* Sets the Security Clearance type held by the candidate
+		* @param securityClearance - Security clearance type
+		* @return Builder
+		*/
+		public CandidateUpdateRequestAPIInboundBuilder securityClearance(SECURITY_CLEARANCE_TYPE securityClearance) {
+			this.securityClearance = securityClearance;
+			return this;
+		}
+		
+		/**
+		* Sets whether the Candidate requires sponsorship to take on a new role
+		* @param requiresSponsorship - Whether sponsorship required
+		* @return Builder
+		*/
+		public CandidateUpdateRequestAPIInboundBuilder requiresSponsorship(boolean requiresSponsorship) {
+			this.requiresSponsorship = requiresSponsorship;
+			return this;
+		}	
+		
+		/**
 		* Returns an instance of Candidate initialized with the 
 		* values in the builder
 		* @return Initialized instance of Candidate
@@ -487,6 +529,8 @@ public class CandidateUpdateRequestAPIInbound {
 			.comments(updateRequest.getComments())
 			.introduction(updateRequest.getIntroduction())
 			.availableFromDate(updateRequest.getAvailableFromDate())
+			.securityClearance(updateRequest.getSecurityClearance())
+			.requiresSponsorship(updateRequest.getRequiresSponsorship())
 			.daysOnSite(updateRequest.getDaysOnSite());
 			
 			if (updateRequest.getRateContract().isPresent()) {

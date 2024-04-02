@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import com.arenella.recruit.candidates.beans.Candidate;
 import com.arenella.recruit.candidates.beans.CandidateSearchAccuracyWrapper;
 import com.arenella.recruit.candidates.beans.Language;
+import com.arenella.recruit.candidates.beans.Candidate.SECURITY_CLEARANCE_TYPE;
 import com.arenella.recruit.candidates.beans.Language.LANGUAGE;
 import com.arenella.recruit.candidates.beans.Language.LEVEL;
 import com.arenella.recruit.candidates.enums.COUNTRY;
@@ -25,26 +26,28 @@ import com.arenella.recruit.candidates.utils.CandidateSuggestionUtil.suggestion_
 */
 public class CandidateSuggestionAPIOutboundTest {
 
-	private static final String 				candidateId				= "999";
-	private static final String 				firstname				= "Kevin";
-	private static final String 				surname					= "Parkings";
-	private static final String 				email					= "kparkings@gmail.com";
-	private static final String					roleSought				= "Senior Java Developer";
-	private static final FUNCTION				function				= FUNCTION.JAVA_DEV;
-	private static final COUNTRY 				country					= COUNTRY.NETHERLANDS;
-	private static final String 				city					= "Noordwijk";
-	private static final PERM 					perm					= PERM.FALSE;
-	private static final FREELANCE 				freelance				= FREELANCE.TRUE;
-	private static final int					yearsExperience			= 22;
-	private static final boolean				flaggedAsUnavailable	= true;
-	private static final boolean 				available				= true;
-	private static final Set<String> 			skills					= Set.of("Java","Angular");
-	private static final Set<Language> 			languages				= Set.of(Language.builder().language(LANGUAGE.DUTCH).level(LEVEL.PROFICIENT).build());
-	private static final LocalDate				lastAvailabilityCheck	= LocalDate.of(2022, 05, 20);
-	private static final LocalDate				registered				= LocalDate.of(2021, 05, 20);
-	private static final suggestion_accuracy 	accuracySkills			= suggestion_accuracy.perfect;
-	private static final suggestion_accuracy 	accuracyLanguages		= suggestion_accuracy.poor; 
-	private static final String					ownerId 				= "rec44";
+	private static final String 					candidateId				= "999";
+	private static final String 					firstname				= "Kevin";
+	private static final String 					surname					= "Parkings";
+	private static final String 					email					= "kparkings@gmail.com";
+	private static final String						roleSought				= "Senior Java Developer";
+	private static final FUNCTION					function				= FUNCTION.JAVA_DEV;
+	private static final COUNTRY 					country					= COUNTRY.NETHERLANDS;
+	private static final String 					city					= "Noordwijk";
+	private static final PERM 						perm					= PERM.FALSE;
+	private static final FREELANCE 					freelance				= FREELANCE.TRUE;
+	private static final int						yearsExperience			= 22;
+	private static final boolean					flaggedAsUnavailable	= true;
+	private static final boolean 					available				= true;
+	private static final Set<String> 				skills					= Set.of("Java","Angular");
+	private static final Set<Language> 				languages				= Set.of(Language.builder().language(LANGUAGE.DUTCH).level(LEVEL.PROFICIENT).build());
+	private static final LocalDate					lastAvailabilityCheck	= LocalDate.of(2022, 05, 20);
+	private static final LocalDate					registered				= LocalDate.of(2021, 05, 20);
+	private static final suggestion_accuracy 		accuracySkills			= suggestion_accuracy.perfect;
+	private static final suggestion_accuracy 		accuracyLanguages		= suggestion_accuracy.poor; 
+	private static final String						ownerId 				= "rec44";
+	private static final SECURITY_CLEARANCE_TYPE 	SECURITY_CLEARANCE 		= SECURITY_CLEARANCE_TYPE.DV;
+	private static final boolean					REQUIRES_SPONSORSHIP 	= true;
 	
 	/**
 	* Tests construction via a Builder
@@ -73,6 +76,8 @@ public class CandidateSuggestionAPIOutboundTest {
 															.email(email)
 															.accuracyLanguages(accuracyLanguages)
 															.accuracySkills(accuracySkills)
+															.securityClearance(SECURITY_CLEARANCE)
+															.requiresSponsorship(REQUIRES_SPONSORSHIP)
 														.build();
 		
 		assertEquals(candidateId, 				candidate.getCandidateId());
@@ -91,6 +96,8 @@ public class CandidateSuggestionAPIOutboundTest {
 		assertEquals(email, 					candidate.getEmail());
 		assertEquals(accuracyLanguages, 		candidate.getAccuracyLanguages());
 		assertEquals(accuracySkills, 			candidate.getAccuracySkills());
+		assertEquals(SECURITY_CLEARANCE, 		candidate.getSecurityClearance());
+		assertEquals(REQUIRES_SPONSORSHIP, 		candidate.getRequiresSponsorship());
 		
 		assertTrue( candidate.getSkills().contains("Java"));
 		assertTrue(candidate.getSkills().contains("Angular"));
@@ -143,6 +150,8 @@ public class CandidateSuggestionAPIOutboundTest {
 										.surname(surname)
 										.available(available)
 										.ownerId(ownerId)
+										.securityClearance(SECURITY_CLEARANCE)
+										.requiresSponsorship(REQUIRES_SPONSORSHIP)
 									.build();
 		
 		CandidateSearchAccuracyWrapper wrapper = new CandidateSearchAccuracyWrapper(candidate);
@@ -168,6 +177,8 @@ public class CandidateSuggestionAPIOutboundTest {
 		assertEquals(email, 					candidateAPIOutbound.getEmail());
 		assertEquals(accuracyLanguages, 		candidateAPIOutbound.getAccuracyLanguages());
 		assertEquals(accuracySkills, 			candidateAPIOutbound.getAccuracySkills());
+		assertEquals(SECURITY_CLEARANCE, 		candidateAPIOutbound.getSecurityClearance());
+		assertEquals(REQUIRES_SPONSORSHIP, 		candidateAPIOutbound.getRequiresSponsorship());
 		
 		assertTrue(candidateAPIOutbound.getSkills().contains("Java"));
 		assertTrue(candidateAPIOutbound.getSkills().contains("Angular"));
@@ -205,6 +216,8 @@ public class CandidateSuggestionAPIOutboundTest {
 										.surname(surname)
 										.available(available)
 										.ownerId(ownerId)
+										.securityClearance(SECURITY_CLEARANCE)
+										.requiresSponsorship(REQUIRES_SPONSORSHIP)
 									.build();
 		
 		CandidateSearchAccuracyWrapper wrapper = new CandidateSearchAccuracyWrapper(candidate);
@@ -230,6 +243,8 @@ public class CandidateSuggestionAPIOutboundTest {
 		assertEquals(CandidateSuggestionAPIOutbound.CENSORED_ITEM, 	candidateAPIOutbound.getEmail());
 		assertEquals(accuracyLanguages, 							candidateAPIOutbound.getAccuracyLanguages());
 		assertEquals(accuracySkills, 								candidateAPIOutbound.getAccuracySkills());
+		assertEquals(SECURITY_CLEARANCE, 							candidateAPIOutbound.getSecurityClearance());
+		assertEquals(REQUIRES_SPONSORSHIP, 							candidateAPIOutbound.getRequiresSponsorship());
 		
 		assertTrue(candidateAPIOutbound.getSkills().contains("Java"));
 		assertTrue(candidateAPIOutbound.getSkills().contains("Angular"));

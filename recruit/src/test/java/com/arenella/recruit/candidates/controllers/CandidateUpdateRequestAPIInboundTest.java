@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import com.arenella.recruit.candidates.beans.CandidateUpdateRequest;
 import com.arenella.recruit.candidates.beans.Language;
 import com.arenella.recruit.candidates.beans.Candidate.DAYS_ON_SITE;
+import com.arenella.recruit.candidates.beans.Candidate.SECURITY_CLEARANCE_TYPE;
 import com.arenella.recruit.candidates.beans.Candidate.Rate.CURRENCY;
 import com.arenella.recruit.candidates.beans.Candidate.Rate.PERIOD;
 import com.arenella.recruit.candidates.beans.Language.LANGUAGE;
@@ -30,27 +31,28 @@ import com.arenella.recruit.candidates.enums.PERM;
 */
 public class CandidateUpdateRequestAPIInboundTest {
 
-	private static final String 		CANDIDATE_ID 			= "Candidate1";
-	private static final FUNCTION		FUNCTION_VAL			= FUNCTION.JAVA_DEV;
-	private static final COUNTRY 		COUNTRY_VAL 			= COUNTRY.NETHERLANDS;
-	private static final String 		CITY 					= "Den Haag";
-	private static final String 		EMAIL					= "kparkings@gmail.com";
-	private static final String 		ROLE_SOUGHT				= "Senior java Dev";
-	private static final FREELANCE 		FREELANCE_VAL 			= FREELANCE.TRUE;
-	private static final PERM 			PERM_VAL 				= PERM.TRUE;
-	private static final int 			YEARS_EXPERIENCE 		= 21;
-	private static final Set<String>	SKILLS					= new LinkedHashSet<>();
-	private static final Set<Language>	LANGUAGES				= new LinkedHashSet<>();
-	private static final String			SKILL					= "Java";
-	private static final Language		LANGUAGE_VAL			= Language.builder().language(LANGUAGE.DUTCH).level(LEVEL.PROFICIENT).build();
-	private static final String 		COMMENTS				= "aComment";
-	private static final String 		INTRODUCTION 			= "anIntro";
-	private static final DAYS_ON_SITE	DAYS_ON_SITE_VAL		= DAYS_ON_SITE.ZERO;
-	private static final Rate			RATE_CONTRACT 			= new Rate(CURRENCY.EUR, PERIOD.DAY, 80.50f, 90f);
-	private static final Rate			RATE_PERM 				= new Rate(CURRENCY.EUR, PERIOD.YEAR, 25000f, 35000);
+	private static final String 					CANDIDATE_ID 			= "Candidate1";
+	private static final FUNCTION					FUNCTION_VAL			= FUNCTION.JAVA_DEV;
+	private static final COUNTRY 					COUNTRY_VAL 			= COUNTRY.NETHERLANDS;
+	private static final String 					CITY 					= "Den Haag";
+	private static final String 					EMAIL					= "kparkings@gmail.com";
+	private static final String 					ROLE_SOUGHT				= "Senior java Dev";
+	private static final FREELANCE 					FREELANCE_VAL 			= FREELANCE.TRUE;
+	private static final PERM 						PERM_VAL 				= PERM.TRUE;
+	private static final int 						YEARS_EXPERIENCE 		= 21;
+	private static final Set<String>				SKILLS					= new LinkedHashSet<>();
+	private static final Set<Language>				LANGUAGES				= new LinkedHashSet<>();
+	private static final String						SKILL					= "Java";
+	private static final Language					LANGUAGE_VAL			= Language.builder().language(LANGUAGE.DUTCH).level(LEVEL.PROFICIENT).build();
+	private static final String 					COMMENTS				= "aComment";
+	private static final String 					INTRODUCTION 			= "anIntro";
+	private static final DAYS_ON_SITE				DAYS_ON_SITE_VAL		= DAYS_ON_SITE.ZERO;
+	private static final Rate						RATE_CONTRACT 			= new Rate(CURRENCY.EUR, PERIOD.DAY, 80.50f, 90f);
+	private static final Rate						RATE_PERM 				= new Rate(CURRENCY.EUR, PERIOD.YEAR, 25000f, 35000);
 	
-	private static final LocalDate 		AVAILABLE_FROM_DATE 	= LocalDate.of(2023, 7, 21);
-	
+	private static final LocalDate 					AVAILABLE_FROM_DATE 	= LocalDate.of(2023, 7, 21);
+	private static final SECURITY_CLEARANCE_TYPE 	SECURITY_CLEARANCE		= SECURITY_CLEARANCE_TYPE.DV;
+	private static final boolean					REQUIRES_SPONSORSHIP = true;
 	/**
 	* Sets up test environment 
 	*/
@@ -108,6 +110,8 @@ public class CandidateUpdateRequestAPIInboundTest {
 							.rateContract(RATE_CONTRACT)
 							.ratePerm(RATE_PERM)
 							.availableFromDate(AVAILABLE_FROM_DATE)
+							.requiresSponsorship(REQUIRES_SPONSORSHIP)
+							.securityClearance(SECURITY_CLEARANCE)
 							.build();
 		
 		assertEquals(FUNCTION_VAL, 			candidate.getFunction());
@@ -125,6 +129,8 @@ public class CandidateUpdateRequestAPIInboundTest {
 		assertEquals(AVAILABLE_FROM_DATE, 	candidate.getAvailableFromDate());
 		assertEquals(COMMENTS, 				candidate.getComments());
 		assertEquals(INTRODUCTION, 			candidate.getIntroduction());
+		assertEquals(REQUIRES_SPONSORSHIP, 	candidate.getRequiresSponsorship());
+		assertEquals(SECURITY_CLEARANCE, 	candidate.getSecurityClearance());
 		
 		candidate.getLanguages().stream().filter(l -> l.getLanguage() == LANGUAGE_VAL.getLanguage()).findAny().orElseThrow();
 		candidate.getSkills().stream().filter(s -> s.equals(SKILL)).findAny().orElseThrow();
@@ -154,6 +160,8 @@ public class CandidateUpdateRequestAPIInboundTest {
 					.rateContract(RATE_CONTRACT)
 					.ratePerm(RATE_PERM)
 					.availableFromDate(AVAILABLE_FROM_DATE)
+					.requiresSponsorship(REQUIRES_SPONSORSHIP)
+					.securityClearance(SECURITY_CLEARANCE)
 					.build();
 		
 		CandidateUpdateRequest domain = CandidateUpdateRequestAPIInbound.convertToDomain(CANDIDATE_ID, candidateAPIInboumd, Optional.empty());
@@ -168,6 +176,8 @@ public class CandidateUpdateRequestAPIInboundTest {
 		assertEquals(PERM_VAL, 							domain.isPerm());
 		assertEquals(YEARS_EXPERIENCE, 					domain.getYearsExperience());
 		assertEquals(DAYS_ON_SITE_VAL, 					domain.getDaysOnSite());
+		assertEquals(REQUIRES_SPONSORSHIP, 				domain.getRequiresSponsorship());
+		assertEquals(SECURITY_CLEARANCE, 				domain.getSecurityClearance());
 		
 		assertEquals(RATE_CONTRACT.getCurrency(), 		domain.getRateContract().get().getCurrency());
 		assertEquals(RATE_PERM.getCurrency(), 			domain.getRatePerm().get().getCurrency());

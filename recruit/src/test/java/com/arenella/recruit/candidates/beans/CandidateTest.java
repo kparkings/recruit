@@ -19,6 +19,7 @@ import com.arenella.recruit.candidates.beans.Candidate.Photo.PHOTO_FORMAT;
 import com.arenella.recruit.candidates.beans.Candidate.Rate;
 import com.arenella.recruit.candidates.beans.Candidate.Rate.CURRENCY;
 import com.arenella.recruit.candidates.beans.Candidate.Rate.PERIOD;
+import com.arenella.recruit.candidates.beans.Candidate.SECURITY_CLEARANCE_TYPE;
 import com.arenella.recruit.candidates.beans.Language.LANGUAGE;
 import com.arenella.recruit.candidates.beans.Language.LEVEL;
 import com.arenella.recruit.candidates.enums.COUNTRY;
@@ -32,32 +33,33 @@ import com.arenella.recruit.candidates.enums.PERM;
 */
 public class CandidateTest {
 
-	private static final String 		CANDIDATE_ID 				= "Candidate1";
-	private static final FUNCTION		FUNCTION_VAL				= FUNCTION.JAVA_DEV;
-	private static final COUNTRY 		COUNTRY_VAL 				= COUNTRY.NETHERLANDS;
-	private static final String 		CITY 						= "Den Haag";
-	private static final String 		EMAIL						= "kparkings@gmail.com";
-	private static final String 		ROLE_SOUGHT					= "Senior java Dev";
-	private static final boolean 		AVAILABLE 					= true;
-	private static final boolean 		FLAGGED_AS_UNAVAILABLE		= true;
-	private static final FREELANCE 		FREELANCE_VAL 				= FREELANCE.TRUE;
-	private static final PERM 			PERM_VAL 					= PERM.TRUE;
-	private static final LocalDate 		LAST_AVAILABILITY_CHECK 	= LocalDate.of(1980, 12, 3);
-	private static final LocalDate 		REGISTERED 					= LocalDate.of(2021, 02, 20);
-	private static final int 			YEARS_EXPERIENCE 			= 21;
-	private static final Set<String>	SKILLS						= new LinkedHashSet<>();
-	private static final Set<Language>	LANGUAGES					= new LinkedHashSet<>();
-	private static final String			SKILL						= "Java";
-	private static final Language		LANGUAGE_VAL				= Language.builder().language(LANGUAGE.DUTCH).level(LEVEL.PROFICIENT).build();
-	private static final String			INTRODUCTION				= "Candiates own intro";
-	private static final Photo			PROFILE_PHOTO				= new Photo(new byte[] {}, PHOTO_FORMAT.jpeg);
-	private static final String 		COMMENTS					= "aComment";
-	private static final DAYS_ON_SITE	DAYS_ON_SITE_VAL			= DAYS_ON_SITE.ZERO;
-	private static final Rate			RATE_CONTRACT 				= new Rate(CURRENCY.EUR, PERIOD.DAY, 80.50f, 99f);
-	private static final Rate			RATE_PERM 					= new Rate(CURRENCY.EUR, PERIOD.YEAR, 25000f, 30000);
-	private static final LocalDate 		AVAILABLE_FROM_DATE 		= LocalDate.of(2023, 7, 21);
-	private static final String			OWNER_ID					= "kparkings";
-	private static final CANDIDATE_TYPE	CANDIDATE_TYPE_VAL			= CANDIDATE_TYPE.MARKETPLACE_CANDIDATE;
+	private static final String 					CANDIDATE_ID 				= "Candidate1";
+	private static final FUNCTION					FUNCTION_VAL				= FUNCTION.JAVA_DEV;
+	private static final COUNTRY 					COUNTRY_VAL 				= COUNTRY.NETHERLANDS;
+	private static final String 					CITY 						= "Den Haag";
+	private static final String 					EMAIL						= "kparkings@gmail.com";
+	private static final String 					ROLE_SOUGHT					= "Senior java Dev";
+	private static final boolean 					AVAILABLE 					= true;
+	private static final boolean 					FLAGGED_AS_UNAVAILABLE		= true;
+	private static final FREELANCE 					FREELANCE_VAL 				= FREELANCE.TRUE;
+	private static final PERM 						PERM_VAL 					= PERM.TRUE;
+	private static final LocalDate 					LAST_AVAILABILITY_CHECK 	= LocalDate.of(1980, 12, 3);
+	private static final LocalDate 					REGISTERED 					= LocalDate.of(2021, 02, 20);
+	private static final int 						YEARS_EXPERIENCE 			= 21;
+	private static final Set<String>				SKILLS						= new LinkedHashSet<>();
+	private static final Set<Language>				LANGUAGES					= new LinkedHashSet<>();
+	private static final String						SKILL						= "Java";
+	private static final Language					LANGUAGE_VAL				= Language.builder().language(LANGUAGE.DUTCH).level(LEVEL.PROFICIENT).build();
+	private static final String						INTRODUCTION				= "Candiates own intro";
+	private static final Photo						PROFILE_PHOTO				= new Photo(new byte[] {}, PHOTO_FORMAT.jpeg);
+	private static final String 					COMMENTS					= "aComment";
+	private static final DAYS_ON_SITE				DAYS_ON_SITE_VAL			= DAYS_ON_SITE.ZERO;
+	private static final Rate						RATE_CONTRACT 				= new Rate(CURRENCY.EUR, PERIOD.DAY, 80.50f, 99f);
+	private static final Rate						RATE_PERM 					= new Rate(CURRENCY.EUR, PERIOD.YEAR, 25000f, 30000);
+	private static final LocalDate 					AVAILABLE_FROM_DATE 		= LocalDate.of(2023, 7, 21);
+	private static final String						OWNER_ID					= "kparkings";
+	private static final CANDIDATE_TYPE				CANDIDATE_TYPE_VAL			= CANDIDATE_TYPE.MARKETPLACE_CANDIDATE;
+	private static final SECURITY_CLEARANCE_TYPE 	SECURITY_LEVEL 				= SECURITY_CLEARANCE_TYPE.NATO;
 	
 	/**
 	* Sets up test environment 
@@ -101,6 +103,7 @@ public class CandidateTest {
 							.availableFromDate(AVAILABLE_FROM_DATE)
 							.ownerId(OWNER_ID)
 							.candidateType(CANDIDATE_TYPE_VAL)
+							.securityClearance(SECURITY_LEVEL)
 							.build();
 		
 		assertEquals(CANDIDATE_ID, 				candidate.getCandidateId());
@@ -126,6 +129,7 @@ public class CandidateTest {
 		assertEquals(AVAILABLE_FROM_DATE, 		candidate.getAvailableFromDate());
 		assertEquals(OWNER_ID, 					candidate.getOwnerId().get());
 		assertEquals(CANDIDATE_TYPE_VAL, 		candidate.getCandidateType());
+		assertEquals(SECURITY_LEVEL,			candidate.getSecurityClearance());
 		
 		assertTrue(candidate.getSkills().contains(SKILL));
 		candidate.getLanguages().stream().filter(l -> l.getLanguage() == LANGUAGE_VAL.getLanguage()).findAny().orElseThrow();

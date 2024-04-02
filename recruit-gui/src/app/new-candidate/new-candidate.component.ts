@@ -123,7 +123,9 @@ export class NewCandidateComponent implements OnInit {
 		this.offeredCandidateFormBean.get('contractTimeUnit')?.setValue(candidate.rateContract.period);
 		this.offeredCandidateFormBean.get('contractFrom')?.setValue(candidate.rateContract.valueMin);
 		this.offeredCandidateFormBean.get('contractTo')?.setValue(candidate.rateContract.valueMax);
-
+		this.offeredCandidateFormBean.get('securityClearance')?.setValue(candidate.securityClearance);
+		this.offeredCandidateFormBean.get('requiresSponsorship')?.setValue(candidate.requiresSponsorship);
+		
 		this.coreSkills = candidate.skills;
 		this.languages = candidate.languages;
 

@@ -451,6 +451,7 @@ public class CandidateServiceImpl implements CandidateService{
 		if (!hasPaidSubscription() && !this.checkHasRole("ROLE_ADMIN")) {
 			filterOptions.setAvailable(true);
 			filterOptions.removeGeoZones();
+			filterOptions.setIncludeRequiresSponsorship(null);
 		}
 		
 		/**

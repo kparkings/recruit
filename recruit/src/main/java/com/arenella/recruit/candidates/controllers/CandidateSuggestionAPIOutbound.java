@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import com.arenella.recruit.candidates.beans.Candidate.SECURITY_CLEARANCE_TYPE;
 import com.arenella.recruit.candidates.beans.CandidateSearchAccuracyWrapper;
 import com.arenella.recruit.candidates.beans.Language;
 import com.arenella.recruit.candidates.enums.COUNTRY;
@@ -14,7 +15,7 @@ import com.arenella.recruit.candidates.utils.CandidateSuggestionUtil.suggestion_
 
 /**
 * Outboud API representation of a Candidate which is related to some search critera. This representation
-* of the object contains infomation relating to how accurate the Candidate is in relation to the 
+* of the object contains information relating to how accurate the Candidate is in relation to the 
 * search having been carried out
 * @author K Parkings
 */
@@ -40,6 +41,8 @@ public class CandidateSuggestionAPIOutbound implements CandidateAPIOutbound{
 	private String					email;
 	private suggestion_accuracy		accuracyLanguages;
 	private suggestion_accuracy		accuracySkills;
+	private SECURITY_CLEARANCE_TYPE securityClearance;
+	private boolean					requiresSponsorship;
 
 	/**
 	* Constructor based upon a builder
@@ -63,6 +66,8 @@ public class CandidateSuggestionAPIOutbound implements CandidateAPIOutbound{
 		this.email						= builder.email;
 		this.accuracyLanguages			= builder.accuracyLanguages;
 		this.accuracySkills				= builder.accuracySkills;
+		this.securityClearance			= builder.securityClearance;
+		this.requiresSponsorship		= builder.requiresSponsorship;
 		
 		this.skills.addAll(builder.skills);
 		this.languages.addAll(builder.languages);
@@ -137,7 +142,7 @@ public class CandidateSuggestionAPIOutbound implements CandidateAPIOutbound{
 	
 	/**
 	* Returns whether the Candidate is currently available for work
-	* @return Whether the Candidate is avilable for work
+	* @return Whether the Candidate is available for work
 	*/
 	public boolean isAvailable() {
 		return this.available;
@@ -202,6 +207,23 @@ public class CandidateSuggestionAPIOutbound implements CandidateAPIOutbound{
 	}
 	
 	/**
+	* Returns the Candidates security clearance level
+	* @return Security clearance level
+	*/
+	public SECURITY_CLEARANCE_TYPE getSecurityClearance() {
+		return this.securityClearance;
+	}	
+	
+	/**
+	* Returns whether the Candidate requires sponsorship to 
+	* take on a new role
+	* @return Whether the Candidate requires sponsorship
+	*/
+	public boolean getRequiresSponsorship() {
+		return this.requiresSponsorship;
+	}
+	
+	/**
 	* Returns how accurate the languages possessed by the 
 	* Candidate are in relation to the search criteria
 	* used to get suggested candidates
@@ -253,7 +275,8 @@ public class CandidateSuggestionAPIOutbound implements CandidateAPIOutbound{
 		private String					email;
 		private suggestion_accuracy		accuracyLanguages;
 		private suggestion_accuracy		accuracySkills;
-
+		private SECURITY_CLEARANCE_TYPE securityClearance;
+		private boolean					requiresSponsorship;
 		
 		/**
 		* Sets the candidates Unique identifier in the System
@@ -420,7 +443,28 @@ public class CandidateSuggestionAPIOutbound implements CandidateAPIOutbound{
 		}
 		
 		/**
-		* Sets how accurate the languages match that of the Suggestion Search criteriathat was 
+		* Sets the Security clearance level held by the Candidate
+		* @param securityClearance - Level of security clearance
+		* @return Builder
+		*/
+		public CandidateAPIOutboundBuilder securityClearance(SECURITY_CLEARANCE_TYPE securityClearance) {
+			this.securityClearance = securityClearance;
+			return this;
+		}
+		
+		/**
+		* Sets whether the Candidate requires sponsorship to take 
+		* on a new role
+		* @param requiresSponsorship - Whether the Candidate requires sponsorship
+		* @return Builder
+		*/
+		public CandidateAPIOutboundBuilder requiresSponsorship(boolean requiresSponsorship) {
+			this.requiresSponsorship = requiresSponsorship;
+			return this;
+		}
+		
+		/**
+		* Sets how accurate the languages match that of the Suggestion Search criteria that was 
 		* performed
 		* @param accuracyLanguages - How accurate the Candidates language skills are in relation to those required
 		* @return Builder
@@ -479,6 +523,8 @@ public class CandidateSuggestionAPIOutbound implements CandidateAPIOutbound{
 					.email(candidate.get().getEmail())
 					.accuracyLanguages(candidate.getAccuracyLanguages())
 					.accuracySkills(candidate.getAccuracySkills())
+					.requiresSponsorship(candidate.get().getRequiresSponsorship())
+					.securityClearance(candidate.get().getSecurityClearance())
 				.build();
 		
 	}
@@ -510,6 +556,8 @@ public class CandidateSuggestionAPIOutbound implements CandidateAPIOutbound{
 					.email(CENSORED_ITEM)
 					.accuracyLanguages(candidate.getAccuracyLanguages())
 					.accuracySkills(candidate.getAccuracySkills())
+					.requiresSponsorship(candidate.get().getRequiresSponsorship())
+					.securityClearance(candidate.get().getSecurityClearance())
 				.build();
 		
 	}

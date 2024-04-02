@@ -49,6 +49,7 @@ public class CandidateFilterOptionsTest {
 		Integer					daysSinceLastAvailabilityCheck 	= 14;
 		String					searchText						= "Java Developer";
 		String					ownerId							= "rec22";
+		boolean 				includeRequiresSponsorship		= true;
 		
 		candidateIds.add(candidateId);
 		skills.add(skill);
@@ -79,6 +80,7 @@ public class CandidateFilterOptionsTest {
 													.daysSinceLastAvailabilityCheck(daysSinceLastAvailabilityCheck)
 													.searchText(searchText)
 													.ownerId(ownerId)
+													.includeRequiresSponsorship(includeRequiresSponsorship)
 													.build();
 		
 		assertEquals(filters.getCandidateIds().stream().findAny().get(), 	candidateId);
@@ -100,6 +102,7 @@ public class CandidateFilterOptionsTest {
 		assertEquals(flaggedAsUnavailable, 									filters.isFlaggedAsUnavailable().get());
 		assertEquals(daysSinceLastAvailabilityCheck, 						filters.getDaysSinceLastAvailabilityCheck().get());
 		assertEquals(ownerId,						 						filters.getOwnerId().get());
+		assertTrue(filters.getIncludeRequiresSponsorship().get());
 	}
 	
 	/**
@@ -109,22 +112,26 @@ public class CandidateFilterOptionsTest {
 	@Test
 	public void testSetters() throws Exception{
 		
-		Set<FUNCTION> 	originalFunctions 	= Set.of(FUNCTION.ARCHITECT);
-		Set<FUNCTION> 	newFunctions 		= Set.of(FUNCTION.JAVA_DEV);
-		Boolean 		active 				= false;
+		Set<FUNCTION> 	originalFunctions 				= Set.of(FUNCTION.ARCHITECT);
+		Set<FUNCTION> 	newFunctions 					= Set.of(FUNCTION.JAVA_DEV);
+		Boolean 		active 							= false;
+		Boolean 		includeRequiresSponsorship 		= true;
 		
-		CandidateFilterOptions filters = CandidateFilterOptions.builder().functions(originalFunctions).build();
+		CandidateFilterOptions filters = CandidateFilterOptions.builder().functions(originalFunctions).includeRequiresSponsorship(includeRequiresSponsorship).build();
 		
 		assertTrue(filters.getFunctions().contains(FUNCTION.ARCHITECT));
 		assertFalse(filters.getFunctions().contains(FUNCTION.JAVA_DEV));
 		assertTrue(filters.isAvailable().isEmpty());
+		assertTrue(filters.getIncludeRequiresSponsorship().get());
 		
 		filters.setFunctions(newFunctions);
 		filters.setAvailable(active);
+		filters.setIncludeRequiresSponsorship(false);
 		
 		assertFalse(filters.getFunctions().contains(FUNCTION.ARCHITECT));
 		assertTrue(filters.getFunctions().contains(FUNCTION.JAVA_DEV));
 		assertFalse(filters.isAvailable().get());
+		assertFalse(filters.getIncludeRequiresSponsorship().get());
 		
 	}
 	

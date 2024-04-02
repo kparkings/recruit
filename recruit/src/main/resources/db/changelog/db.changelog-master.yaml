@@ -2338,3 +2338,20 @@ databaseChangeLog:
                 name: paid_subscription
                 type: boolean
                 constraints:
+  - changeSet:
+      id: addColumn-requires-sponsorship_and_sc_type
+      author: kevin
+      changes:
+        - addColumn:
+            tableName: candidate
+            schemaName: candidate
+            columns:
+            - column:
+                name: requires_sponsorship
+                type: boolean
+                constraints:
+                  default: false
+            - column:
+                name: security_clearance_type
+                type: varchar
+                

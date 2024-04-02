@@ -193,6 +193,7 @@ public class CandidateController {
 													@RequestParam(required = false)		String				searchText,
 													@RequestParam(required = false)		Boolean				available,
 													@RequestParam(required = false)		String				ownerId,
+													@RequestParam(required = false)		Boolean				includeRequiresSponsorship,
 													Integer				backendRequestId,
 													Pageable 			pageable,
 													Principal 			principal,
@@ -228,6 +229,7 @@ public class CandidateController {
 																		.searchText(searchText)
 																		.available(available)
 																		.ownerId(ownerId)
+																		.includeRequiresSponsorship(includeRequiresSponsorship)
 																	.build();
 		
 		response.setHeader("X-Arenella-Request-Id", ""+(backendRequestId == null ? 0 : backendRequestId.intValue()));

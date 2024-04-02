@@ -7,6 +7,8 @@ import java.util.Set;
 
 import com.arenella.recruit.candidates.beans.Candidate.DAYS_ON_SITE;
 import com.arenella.recruit.candidates.beans.Candidate.Rate;
+import com.arenella.recruit.candidates.beans.Candidate.SECURITY_CLEARANCE_TYPE;
+import com.arenella.recruit.candidates.controllers.CandidateAPIInbound.CandidateAPIInboundBuilder;
 import com.arenella.recruit.candidates.enums.COUNTRY;
 import com.arenella.recruit.candidates.enums.FREELANCE;
 import com.arenella.recruit.candidates.enums.FUNCTION;
@@ -18,26 +20,28 @@ import com.arenella.recruit.candidates.enums.PERM;
 */
 public class CandidateUpdateRequest {
 
-	private String 			candidateId;
-	private String 			firstname;
-	private String 			surname;
-	private String 			email;
-	private String			roleSought;
-	private FUNCTION		function;
-	private COUNTRY 		country;
-	private String 			city;
-	private PERM 			perm;
-	private FREELANCE 		freelance;
-	private int				yearsExperience;
-	private Set<Language> 	languages					= new LinkedHashSet<>();
-	private String			introduction;
-	private byte[]			photoBytes;
-	private Set<String>		skills						= new LinkedHashSet<>();
-	private String 			comments;
-	private DAYS_ON_SITE	daysOnSite;
-	private Rate			rateContract;
-	private Rate			ratePerm;
-	private LocalDate 		availableFromDate;
+	private String 					candidateId;
+	private String 					firstname;
+	private String 					surname;
+	private String 					email;
+	private String					roleSought;
+	private FUNCTION				function;
+	private COUNTRY 				country;
+	private String 					city;
+	private PERM 					perm;
+	private FREELANCE 				freelance;
+	private int						yearsExperience;
+	private Set<Language> 			languages					= new LinkedHashSet<>();
+	private String					introduction;
+	private byte[]					photoBytes;
+	private Set<String>				skills						= new LinkedHashSet<>();
+	private String 					comments;
+	private DAYS_ON_SITE			daysOnSite;
+	private Rate					rateContract;
+	private Rate					ratePerm;
+	private LocalDate 				availableFromDate;
+	private SECURITY_CLEARANCE_TYPE securityClearance;
+	private boolean					requiresSponsorship;
 	
 	/**
 	* Constructor based upon a builder
@@ -64,8 +68,9 @@ public class CandidateUpdateRequest {
 		this.rateContract				= builder.rateContract;
 		this.ratePerm					= builder.ratePerm;
 		this.availableFromDate			= builder.availableFromDate;
+		this.requiresSponsorship		= builder.requiresSponsorship;
+		this.securityClearance			= builder.securityClearance;
 		this.languages.addAll(builder.languages);
-		
 	
 	}
 	
@@ -239,6 +244,22 @@ public class CandidateUpdateRequest {
 	}
 	
 	/**
+	* Returns the Candidate's Security clearance level
+	* @return Security clearance
+	*/
+	public SECURITY_CLEARANCE_TYPE getSecurityClearance() {
+		return this.securityClearance;
+	}
+	
+	/**
+	* Returns whether the Candidate requires sponsorship
+	* @return Whether the Candidate requires sponsorship
+	*/
+	public boolean getRequiresSponsorship() {
+		return this.requiresSponsorship;
+	}
+	
+	/**
 	* Builder for the Candidate class
 	* @return A Builder for the Candidate class
 	*/
@@ -252,26 +273,28 @@ public class CandidateUpdateRequest {
 	*/
 	public static class CandidateUpdateRequestBuilder {
 		
-		private String 			candidateId;
-		private String 			firstname;
-		private String			surname;
-		private String 			email;
-		private String			roleSought;
-		private FUNCTION		function;
-		private COUNTRY 		country;
-		private String 			city;
-		private PERM 			perm;
-		private FREELANCE 		freelance;
-		private int				yearsExperience;
-		private Set<Language> 	languages					= new LinkedHashSet<>();
-		private String			introduction;
-		private byte[]			photoBytes;
-		private Set<String> 	skills					= new LinkedHashSet<>();
-		private String 			comments;
-		private DAYS_ON_SITE	daysOnSite;
-		private Rate			rateContract;
-		private Rate			ratePerm;
-		private LocalDate 		availableFromDate;
+		private String 					candidateId;
+		private String 					firstname;
+		private String					surname;
+		private String 					email;
+		private String					roleSought;
+		private FUNCTION				function;
+		private COUNTRY 				country;
+		private String 					city;
+		private PERM 					perm;
+		private FREELANCE 				freelance;
+		private int						yearsExperience;
+		private Set<Language> 			languages					= new LinkedHashSet<>();
+		private String					introduction;
+		private byte[]					photoBytes;
+		private Set<String> 			skills					= new LinkedHashSet<>();
+		private String 					comments;
+		private DAYS_ON_SITE			daysOnSite;
+		private Rate					rateContract;
+		private Rate					ratePerm;
+		private LocalDate 				availableFromDate;
+		private SECURITY_CLEARANCE_TYPE securityClearance;
+		private boolean					requiresSponsorship;
 		
 		/**
 		* Sets the candidates Unique identifier in the System
@@ -472,6 +495,26 @@ public class CandidateUpdateRequest {
 		*/
 		public CandidateUpdateRequestBuilder availableFromDate(LocalDate availableFromDate) {
 			this.availableFromDate = availableFromDate;
+			return this;
+		}
+		
+		/**
+		* Sets the Security Clearance type held by the candidate
+		* @param securityClearance - Security clearance type
+		* @return Builder
+		*/
+		public CandidateUpdateRequestBuilder securityClearance(SECURITY_CLEARANCE_TYPE securityClearance) {
+			this.securityClearance = securityClearance;
+			return this;
+		}
+		
+		/**
+		* Sets whether the Candidate requires sponsorship to take on a new role
+		* @param requiresSponsorship - Whether sponsorship required
+		* @return Builder
+		*/
+		public CandidateUpdateRequestBuilder requiresSponsorship(boolean requiresSponsorship) {
+			this.requiresSponsorship = requiresSponsorship;
 			return this;
 		}
 		

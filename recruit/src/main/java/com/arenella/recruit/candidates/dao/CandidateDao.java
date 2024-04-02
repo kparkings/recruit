@@ -239,6 +239,11 @@ public interface CandidateDao extends CrudRepository<CandidateEntity, Long>, Jpa
 				predicates.add(criteriaBuilder.equal(ownerIdExpression, 		this.filterOptions.getOwnerId().get()));
 			}
 			
+			if (this.filterOptions.getIncludeRequiresSponsorship().isEmpty() || this.filterOptions.getIncludeRequiresSponsorship().get() == false) {
+				Expression<Boolean> includeRequiredSponsorship = root.get("requiresSponsorship");
+				predicates.add(criteriaBuilder.notEqual(includeRequiredSponsorship, true));
+			}
+			
 			Expression<String> sortExpression 				= root.get("candidateId");
 			
 			if (this.filterOptions.getOrderAttribute().isPresent()) {

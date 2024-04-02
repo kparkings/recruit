@@ -17,39 +17,42 @@ import com.arenella.recruit.candidates.enums.PERM;
 */
 public class Candidate {
 
-	public enum DAYS_ON_SITE {ZERO,ONE,TWO,THREE,FOUR,FIVE}
-	public enum CANDIDATE_TYPE {CANDIDATE, MARKETPLACE_CANDIDATE}
+	public enum DAYS_ON_SITE 				{ZERO,ONE,TWO,THREE,FOUR,FIVE}
+	public enum CANDIDATE_TYPE 				{CANDIDATE, MARKETPLACE_CANDIDATE}
+	public enum SECURITY_CLEARANCE_TYPE 	{NONE, SC, DV, NATO}
 	
 	public static final String ANONYMOUS_USER_ATTR_VALUE = "unknown";
 			
-	private String 			candidateId;
-	private String 			firstname;
-	private String 			surname;
-	private String 			email;
-	private String			roleSought;
-	private FUNCTION		function;
-	private COUNTRY 		country;
-	private String 			city;
-	private PERM 			perm;
-	private FREELANCE 		freelance;
-	private int				yearsExperience;
-	private boolean 		available;
-	private boolean			flaggedAsUnavailable;
-	private LocalDate 		registerd					= LocalDate.now();
-	private LocalDate 		lastAvailabilityCheck		= LocalDate.now();	
-	private Set<String> 	skills						= new LinkedHashSet<>();
-	private Set<Language> 	languages					= new LinkedHashSet<>();
-	private String			introduction;
-	private Photo			photo;
+	private String 						candidateId;
+	private String 						firstname;
+	private String 						surname;
+	private String 						email;
+	private String						roleSought;
+	private FUNCTION					function;
+	private COUNTRY 					country;
+	private String 						city;
+	private PERM 						perm;
+	private FREELANCE 					freelance;
+	private int							yearsExperience;
+	private boolean 					available;
+	private boolean						flaggedAsUnavailable;
+	private LocalDate 					registerd					= LocalDate.now();
+	private LocalDate 					lastAvailabilityCheck		= LocalDate.now();	
+	private Set<String> 				skills						= new LinkedHashSet<>();
+	private Set<Language> 				languages					= new LinkedHashSet<>();
+	private String						introduction;
+	private Photo						photo;
 	
-	private String 			comments;
-	private DAYS_ON_SITE	daysOnSite;
-	private Rate			rateContract;
-	private Rate			ratePerm;
-	private LocalDate 		availableFromDate;
+	private String 						comments;
+	private DAYS_ON_SITE				daysOnSite;
+	private Rate						rateContract;
+	private Rate						ratePerm;
+	private LocalDate 					availableFromDate;
 	//To be set if MP candidate based upon authenticated user via service
-	private String 			ownerId;
-	private CANDIDATE_TYPE	candidateType;
+	private String 						ownerId;
+	private CANDIDATE_TYPE				candidateType;
+	private boolean 					requiresSponsorship;
+	private SECURITY_CLEARANCE_TYPE 	securityClearance;
 	
 	
 	/**
@@ -82,6 +85,8 @@ public class Candidate {
 		this.availableFromDate			= builder.availableFromDate;
 		this.ownerId					= builder.ownerId;
 		this.candidateType				= builder.candidateType;
+		this.requiresSponsorship		= builder.requiresSponsorship;
+		this.securityClearance		 	= builder.securityClearance;
 		
 		this.skills.addAll(builder.skills);
 		this.languages.addAll(builder.languages);
@@ -291,6 +296,14 @@ public class Candidate {
 	}
 	
 	/**
+	* Returns the Canidate's level of security Clearance
+	* @return Candidates level of Security Clearance
+	*/
+	public SECURITY_CLEARANCE_TYPE getSecurityClearance() {
+		return this.securityClearance;
+	}
+	
+	/**
 	* Returns the Skills the candidate has experience with
 	* @return candidates skills
 	*/
@@ -312,6 +325,15 @@ public class Candidate {
 	*/
 	public Optional<Photo> getPhoto(){
 		return Optional.ofNullable(this.photo);
+	}
+	
+	/**
+	* Returns whether the Candidate requires sponsorship to take 
+	* on a new role
+	* @return Whether the Candidate requires sponsorship
+	*/
+	public boolean getRequiresSponsorship() {
+		return this.requiresSponsorship;
 	}
 	
 	/**
@@ -405,33 +427,35 @@ public class Candidate {
 	*/
 	public static class CandidateBuilder {
 		
-		private String 			candidateId;
-		private String 			firstname;
-		private String			surname;
-		private String 			email;
-		private String			roleSought;
-		private FUNCTION		function;
-		private COUNTRY 		country;
-		private String 			city;
-		private PERM 			perm;
-		private FREELANCE 		freelance;
-		private int				yearsExperience;
-		private boolean 		available;
-		private boolean 		flaggedAsUnavailable;
-		private LocalDate 		registerd					= LocalDate.now();
-		private LocalDate 		lastAvailabilityCheck		= LocalDate.now();
-		private Set<String> 	skills						= new LinkedHashSet<>();
-		private Set<Language> 	languages					= new LinkedHashSet<>();
-		private String			introduction;
-		private Photo			photo;
-		private String 			comments;
-		private DAYS_ON_SITE	daysOnSite;
-		private Rate			rateContract;
-		private Rate			ratePerm;
-		private LocalDate 		availableFromDate;
+		private String 						candidateId;
+		private String 						firstname;
+		private String						surname;
+		private String 						email;
+		private String						roleSought;
+		private FUNCTION					function;
+		private COUNTRY 					country;
+		private String 						city;
+		private PERM 						perm;
+		private FREELANCE 					freelance;
+		private int							yearsExperience;
+		private boolean 					available;
+		private boolean 					flaggedAsUnavailable;
+		private LocalDate 					registerd					= LocalDate.now();
+		private LocalDate 					lastAvailabilityCheck		= LocalDate.now();
+		private Set<String> 				skills						= new LinkedHashSet<>();
+		private Set<Language> 				languages					= new LinkedHashSet<>();
+		private String						introduction;
+		private Photo						photo;
+		private String 						comments;
+		private DAYS_ON_SITE				daysOnSite;
+		private Rate						rateContract;
+		private Rate						ratePerm;
+		private LocalDate 					availableFromDate;
 		//To be set if MP candidate based upon authenticated user via service
-		private String 			ownerId;
-		private CANDIDATE_TYPE	candidateType;
+		private String 						ownerId;
+		private CANDIDATE_TYPE				candidateType;
+		private boolean 					requiresSponsorship;
+		private SECURITY_CLEARANCE_TYPE 	securityClearance;
 		
 		/**
 		* Sets the candidates Unique identifier in the System
@@ -584,9 +608,19 @@ public class Candidate {
 		}
 		
 		/**
+		* Sets the Security clearance level held by the Candidate
+		* @param securityClearance - Level of Security Clearance 
+		* @return Builder
+		*/
+		public CandidateBuilder securityClearance(SECURITY_CLEARANCE_TYPE securityClearance) {
+			this.securityClearance = securityClearance;
+			return this;
+		}
+		
+		/**
 		* Sets Profile Photo for the Candidate
 		* @param photo - Photo of the Candidate
-		* @return Builde
+		* @return Builder
 		*/
 		public CandidateBuilder photo(Photo photo) {
 			this.photo = photo;
@@ -684,6 +718,17 @@ public class Candidate {
 		*/
 		public CandidateBuilder ownerId(String ownerId) {
 			this.ownerId = ownerId;
+			return this;
+		}
+		
+		/**
+		* Sets whether or not the Candidate requires sponsorship to take 
+		* on a new role
+		* @param requiresSponsorship - Whether the Candidate requires sponsorship
+		* @return Builder
+		*/
+		public CandidateBuilder requiresSponsorship(boolean requiresSponsorship) {
+			this.requiresSponsorship = requiresSponsorship;
 			return this;
 		}
 		

@@ -38,6 +38,7 @@ public class CandidateFilterOptions {
 	private Boolean				flaggedAsUnavailable 				= false;
 	private Integer				daysSinceLastAvailabilityCheck;
 	private String				ownerId;
+	private Boolean				includeRequiresSponsorship			= null;
 	
 	/**
 	* Builder for the  
@@ -67,6 +68,7 @@ public class CandidateFilterOptions {
 		this.searchText						= builder.searchText;
 		this.available 					 	= builder.available;
 		this.ownerId						= builder.ownerId;
+		this.includeRequiresSponsorship	 	= builder.includeRequiresSponsorship;
 		
 	}
 	
@@ -283,6 +285,14 @@ public class CandidateFilterOptions {
 	}
 	
 	/**
+	* Returns filter options for filtering on Candidate's that require
+	* Sponsorship
+	* @return Filter options for sponsorship
+	*/
+	public Optional<Boolean> getIncludeRequiresSponsorship() {
+		return Optional.ofNullable(this.includeRequiresSponsorship);
+	}
+	/**
 	* Replaces existing functions
 	* @param functions - Functions to filter on
 	*/
@@ -304,6 +314,15 @@ public class CandidateFilterOptions {
 	*/
 	public void addCountry(COUNTRY country) {
 		this.countries.add(country);
+	}
+
+	/**
+	* Sets whether or not to include Candidates that require sponsorship 
+	* in the search results
+	* @param includeRequiresSponsorship - Whether to include requires sponsorship candidates
+	*/
+	public void setIncludeRequiresSponsorship(Boolean includeRequiresSponsorship) {
+		this.includeRequiresSponsorship = includeRequiresSponsorship;
 	}
 	
 	/**
@@ -342,6 +361,7 @@ public class CandidateFilterOptions {
 		private Integer				daysSinceLastAvailabilityCheck; 
 		private String 				searchText							= "";
 		private String 				ownerId;
+		private Boolean				includeRequiresSponsorship			= null;
 		
 		/**
 		* Sets the name of the attribute to order on
@@ -592,6 +612,16 @@ public class CandidateFilterOptions {
 		}
 		
 		/**
+		* Sets whether or not to include candidates needing sponsorship
+		* @param includeRequiresSponsorship = Whether or not to include candidates needing sponsorship
+		* @return Builder
+		*/
+		public CandidateFilterOptionsBuilder includeRequiresSponsorship(Boolean includeRequiresSponsorship) {
+			this.includeRequiresSponsorship = includeRequiresSponsorship;
+			return this;
+		}
+		
+		/**
 		* Returns an instance of CandidateFilterOptions initialized with the
 		* values in the Builder 
 		* @return Instance of CandidateFilterOptions
@@ -601,5 +631,5 @@ public class CandidateFilterOptions {
 		}
 		
 	}
-	
+
 }

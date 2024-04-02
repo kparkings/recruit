@@ -29,6 +29,8 @@ export class CandidateProfile{
 	public availableFromDate:Date 			= new Date();
 	public candidateType:string				= '';
 	public ownerId:string					= '';
+	public requiresSponsorship:boolean		= false;
+	public securityClearance:string			= 'NONE';
 
 }
 

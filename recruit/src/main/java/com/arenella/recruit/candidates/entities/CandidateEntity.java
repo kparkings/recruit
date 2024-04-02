@@ -28,6 +28,7 @@ import com.arenella.recruit.candidates.beans.Candidate.Photo.PHOTO_FORMAT;
 import com.arenella.recruit.candidates.beans.Candidate.Rate;
 import com.arenella.recruit.candidates.beans.Candidate.Rate.CURRENCY;
 import com.arenella.recruit.candidates.beans.Candidate.Rate.PERIOD;
+import com.arenella.recruit.candidates.beans.Candidate.SECURITY_CLEARANCE_TYPE;
 import com.arenella.recruit.candidates.beans.Language;
 import com.arenella.recruit.candidates.enums.COUNTRY;
 import com.arenella.recruit.candidates.enums.FREELANCE;
@@ -149,6 +150,13 @@ public class CandidateEntity {
     
     @Column(name="photo_bytes")
     private byte[] photoBytes;
+    
+    @Column(name="requires_sponsorship")
+    private boolean requiresSponsorship;
+    
+    @Column(name="security_clearance_type")
+    @Enumerated(EnumType.STRING)
+    private SECURITY_CLEARANCE_TYPE securityClearance;
        
 	@ElementCollection(targetClass=String.class, fetch=FetchType.EAGER)
 	@CollectionTable(schema="candidate", name="candidate_skill", joinColumns=@JoinColumn(name="candidate_id"))
@@ -199,6 +207,9 @@ public class CandidateEntity {
 		
 		this.comments					= builder.comments;
 		this.daysOnSite				 	= builder.daysOnSite;
+		
+		this.requiresSponsorship	 	= builder.requiresSponsorship;
+		this.securityClearance			= builder.securityClearance;
 		
 		this.skills.addAll(builder.skills);
 		this.languages.addAll(builder.languages.stream().map(lang -> LanguageEntity.builder().candidate(this).language(lang.getLanguage()).level(lang.getLevel()).build()).collect(Collectors.toSet()));
@@ -315,7 +326,7 @@ public class CandidateEntity {
 	/**
 	* Returns whether or not the Candidate has been Flagged as
 	* being unavailable 
-	* @return whether the Canidate is potentially unavailable
+	* @return whether the Candidate is potentially unavailable
 	*/
 	public boolean isFlaggedAsUnavailable() {
 		return this.flaggedAsUnavailable;
@@ -393,6 +404,14 @@ public class CandidateEntity {
 	*/
 	public DAYS_ON_SITE getDaysOnSite(){
 		return this.daysOnSite;
+	}
+	
+	/**
+	* Returns the type of Security clearance held by the Candidate
+	* @return SC type
+	*/
+	public SECURITY_CLEARANCE_TYPE getSecurityClearance() {
+		return this.securityClearance;
 	}
 	
 	/**
@@ -517,6 +536,15 @@ public class CandidateEntity {
 	}
 	
 	/**
+	* Returns whether or not the Candidate needs sponsorship
+	* to take on a new role
+	* @return whether or not the Candidate needs sponsorship
+	*/
+	public boolean getRequiresSponsorship() {
+		return this.requiresSponsorship;
+	}
+	
+	/**
 	* Returns a Builder for the CandidateEntity class
 	* @return Builder for the CandidateEntity class
 	*/
@@ -530,43 +558,45 @@ public class CandidateEntity {
 	*/
 	public static class CandidateEntityBuilder {
 	
-		private Long 			candidateId;
-		private String 			firstname;
-		private String			surname;
-		private String 			email;
-		private String			roleSought;
-		private FUNCTION		function;
-		private COUNTRY 		country;
-		private String 			city;
-		private PERM	 		perm;
-		private FREELANCE 		freelance;
-		private int				yearsExperience;
-		private boolean 		available;
-		private LocalDate 		registerd					= LocalDate.now();				//Set app to work with UAT
-		private LocalDate 		lastAvailabilityCheck		= LocalDate.now();
-		private boolean			flaggedAsUnavailable;
-		private String 			introduction;
-		private CURRENCY 		rateContractCurrency;
-		private PERIOD 			rateContractPeriod;
-		private float 			rateContractValueMin;   
-		private float 			rateContractValueMax;
-		private CURRENCY 		ratePermCurrency;
-		private PERIOD 			ratePermPeriod;
-		private float 			ratePermValueMin;   
-		private float 			ratePermValueMax;
+		private Long 						candidateId;
+		private String 						firstname;
+		private String						surname;
+		private String 						email;
+		private String						roleSought;
+		private FUNCTION					function;
+		private COUNTRY 					country;
+		private String 						city;
+		private PERM	 					perm;
+		private FREELANCE 					freelance;
+		private int							yearsExperience;
+		private boolean 					available;
+		private LocalDate 					registerd					= LocalDate.now();				//Set app to work with UAT
+		private LocalDate 					lastAvailabilityCheck		= LocalDate.now();
+		private boolean						flaggedAsUnavailable;
+		private String 						introduction;
+		private CURRENCY 					rateContractCurrency;
+		private PERIOD 						rateContractPeriod;
+		private float 						rateContractValueMin;   
+		private float 						rateContractValueMax;
+		private CURRENCY 					ratePermCurrency;
+		private PERIOD 						ratePermPeriod;
+		private float 						ratePermValueMin;   
+		private float 						ratePermValueMax;
 		
-		private PHOTO_FORMAT 	photoFormat;      
-		private byte[] 			photoBytes;
+		private PHOTO_FORMAT 				photoFormat;      
+		private byte[] 						photoBytes;
 		
-		private LocalDate 		availableFromDate;
-		private String 			ownerId;
-		private CANDIDATE_TYPE	candidateType;
+		private LocalDate 					availableFromDate;
+		private String 						ownerId;
+		private CANDIDATE_TYPE				candidateType;
+		private boolean						requiresSponsorship;
 		
-		private String comments;
-		private DAYS_ON_SITE daysOnSite;
+		private String 						comments;
+		private DAYS_ON_SITE 				daysOnSite;
+		private SECURITY_CLEARANCE_TYPE 	securityClearance;
 		
-		private Set<String> 	skills						= new LinkedHashSet<>();
-		private Set<Language> 	languages					= new LinkedHashSet<>();
+		private Set<String> 				skills						= new LinkedHashSet<>();
+		private Set<Language> 				languages					= new LinkedHashSet<>();
 	
 		/**
 		* Sets the Unique Identifier of the Candidate
@@ -831,6 +861,16 @@ public class CandidateEntity {
 		}
 		
 		/**
+		* Sets the Candidates Security Clearance level
+		* @param securityClearance - Type of Security Clearance
+		* @return Builder
+		*/
+		public CandidateEntityBuilder securityClearance(SECURITY_CLEARANCE_TYPE securityClearance) {
+			this.securityClearance = securityClearance;
+			return this;
+		}
+		
+		/**
 		* Sets the skills that the Candidate has
 		* @param skills - Skills Candidate has experience with
 		* @return Builder
@@ -904,6 +944,16 @@ public class CandidateEntity {
 		}
 		
 		/**
+		* Sets whether the Candidate requires sponsorship for a new role
+		* @param requiredSponsorship - Whether the Candidate requires sponsorship
+		* @return Builder
+		*/
+		public CandidateEntityBuilder requiresSponsorship(boolean requiresSponsorship) {
+			this.requiresSponsorship = requiresSponsorship;
+			return this;
+		}
+		
+		/**
 		* Returns a CandidateEntity instance initialized with 
 		* the values in the Builder
 		* @return Instance of CandidateEntity
@@ -957,6 +1007,8 @@ public class CandidateEntity {
 						.candidateType(candidate.getCandidateType())
 						.comments(candidate.getComments())
 						.daysOnSite(candidate.getDaysOnSite())
+						.requiresSponsorship(candidate.getRequiresSponsorship())
+						.securityClearance(candidate.getSecurityClearance())
 					.build();
 		
 	}
@@ -1014,6 +1066,8 @@ public class CandidateEntity {
 						.comments(candidateEntity.getComments())
 						.daysOnSite(candidateEntity.getDaysOnSite())
 						.availableFromDate(candidateEntity.getAvailableFromDate())
+						.requiresSponsorship(candidateEntity.getRequiresSponsorship())
+						.securityClearance(candidateEntity.getSecurityClearance())
 					.build();
 		
 	}

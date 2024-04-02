@@ -22,6 +22,8 @@ export class NewCandidateRequest{
 	public ratePerm:Rate 							= new Rate();
 	public rateContract 							= new Rate();
 	public availableFromDate:Date 					= new Date();
+	public requiresSponsorship:boolean				= false;
+	public securityClearance:string					= 'NONE';	
 }
 
 /**
