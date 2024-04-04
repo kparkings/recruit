@@ -160,6 +160,7 @@ public class GeoZoneSearchUtil {
 		EUROPE.addAll(EASTERN_EUROPE);
 		EUROPE.addAll(SOUTHERN_EUROPE);
 		EUROPE.addAll(WESTERN_EUROPE);
+		EUROPE.addAll(CENTRAL_EUROPE);
 	}
 	
 	/**
