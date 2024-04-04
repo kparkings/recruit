@@ -24,6 +24,7 @@ export class NewCandidateRequest{
 	public availableFromDate:Date 					= new Date();
 	public requiresSponsorship:boolean				= false;
 	public securityClearance:string					= 'NONE';	
+	
 }
 
 /**

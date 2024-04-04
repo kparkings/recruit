@@ -38,31 +38,9 @@ export class CandidateServiceService {
   	*/
 	constructor(private httpClient: HttpClient, private translate:TranslateService) { 
 		this.initializeCountries();
-		this.initializeSupportedLanguages();
-		this.initializeGeoZones();
-		this.initializeSupportedCountries();
-	}
-	
-	/**
-  	* Sets the available GeoZones
-  	* NB: Needs to come from the backend 
-  	*/
-	public initializeGeoZones():void{
-		
-		const backendUrl:string = environment.backendUrl +'candidate/geo-zone';
-    	
-    	this.httpClient.get<any>(backendUrl,  { observe: 'response', withCredentials: true}).subscribe(supportedGeoZones => {
-			this.geoZones = new Array<GeoZone>();
-			
-			supportedGeoZones.body.forEach( (geoZone: string) => {
-				this.geoZones.push(new GeoZone(''+geoZone));	
-			});
-			
-			this.geoZones = this.geoZones.sort((a,b)=>{ 
-				return a.geoZoneId < b.geoZoneId ? -1 : 0;
-			});
-			
-		})
+		//this.initializeSupportedLanguages();
+		//this.initializeGeoZones();
+		//this.initializeSupportedCountries();
 	}
 	
 	/**
@@ -84,39 +62,68 @@ export class CandidateServiceService {
   	* of the stadard coutries until there are enough candidates to add separate filters for the new countries
   	* NB: Needs to eventually be refactored with initialzeCounties 
   	*/
-	public initializeSupportedCountries():void{
-	const backendUrl:string = environment.backendUrl +'candidate/countries';
+	public async initializeSupportedCountries():Promise<any>{
+	
+		const backendUrl:string = environment.backendUrl +'candidate/countries';	
+		const config 			= await this.httpClient.get<any>(backendUrl,  { observe: 'response', withCredentials: true}).toPromise();
+ 
+ 		config.body.forEach( (country: SupportedCountry) => {
+			this.supportedCountries.push(new SupportedCountry(''+country.name, country.iso2Code));	
+		});
+ 
+ 	   	Object.assign(this, config);
     	
-    	this.httpClient.get<any>(backendUrl,  { observe: 'response', withCredentials: true}).subscribe(response => {
-			this.supportedCountries = new Array<SupportedCountry>();
-			
-			response.body.forEach( (country: SupportedCountry) => {
-				this.supportedCountries.push(new SupportedCountry(''+country.name, country.iso2Code));	
-			});
-			
-		})
+    	return config;
+		
+	}
+	
+	/**
+  	* Sets the available GeoZones
+  	* NB: Needs to come from the backend 
+  	*/
+	public async initializeGeoZones():Promise<any>{
+		
+		const backendUrl:string = environment.backendUrl +'candidate/geo-zone';
+    	const config 			= await this.httpClient.get<any>(backendUrl,  { observe: 'response', withCredentials: true}).toPromise();
+    	
+		this.geoZones = new Array<GeoZone>();
+		
+		config.body.forEach( (geoZone: string) => {
+			this.geoZones.push(new GeoZone(''+geoZone));	
+		});
+		
+		this.geoZones = this.geoZones.sort((a,b)=>{ 
+			return a.geoZoneId < b.geoZoneId ? -1 : 0;
+		});
+		
+		Object.assign(this, config);
+    	
+    	return config;
+    	
 	}
 	
 	/**
   	* Sets the available countrues
   	* NB: Needs to come from the backend 
   	*/
-	public initializeSupportedLanguages():void{
+	public async initializeSupportedLanguages():Promise<any>{
 		
 		const backendUrl:string = environment.backendUrl +'candidate/languages';
+    	const config 			= await this.httpClient.get<any>(backendUrl,  { observe: 'response', withCredentials: true}).toPromise();
     	
-    	this.httpClient.get<any>(backendUrl,  { observe: 'response', withCredentials: true}).subscribe(supportedLanguages => {
-			this.languages = new Array<SupportedLanguage>();
+    	this.languages = new Array<SupportedLanguage>();
 			
-			supportedLanguages.body.forEach( (lang: string) => {
-				this.languages.push(new SupportedLanguage(''+lang));	
-			});
-			
-			this.languages = this.languages.sort((a,b)=>{ 
-				return a.languageCode < b.languageCode ? -1 : 0;
-			});
-			
-		})
+		config.body.forEach( (lang: string) => {
+			this.languages.push(new SupportedLanguage(''+lang));	
+		});
+		
+		this.languages = this.languages.sort((a,b)=>{ 
+			return a.languageCode < b.languageCode ? -1 : 0;
+		});
+		
+		Object.assign(this, config);
+    	
+    	return config;
     	
 	}
 		
@@ -146,6 +153,16 @@ export class CandidateServiceService {
   	public getCandidateById(candidateId:string): Observable<any>{
       
 		const backendUrl:string = environment.backendUrl +'candidate/?orderAttribute=candidateId&order=desc&candidateId='+candidateId
+  
+    	return this.httpClient.get<any>(backendUrl, this.httpOptions);
+  	}
+  	
+  	/**
+  	* Returns a Candidate by its Id where the ownerId is specified
+  	*/
+  	public getCandidateByIdWithRecruiterAsOwner(candidateId:string, ownerId:string): Observable<any>{
+      
+		const backendUrl:string = environment.backendUrl +'candidate/?orderAttribute=candidateId&order=desc&candidateId='+candidateId+ "&ownerId=" + ownerId
   
     	return this.httpClient.get<any>(backendUrl, this.httpOptions);
   	}

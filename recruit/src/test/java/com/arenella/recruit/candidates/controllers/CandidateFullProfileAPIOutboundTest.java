@@ -13,6 +13,7 @@ import com.arenella.recruit.candidates.beans.Candidate;
 import com.arenella.recruit.candidates.beans.Candidate.CANDIDATE_TYPE;
 import com.arenella.recruit.candidates.beans.Candidate.DAYS_ON_SITE;
 import com.arenella.recruit.candidates.beans.Candidate.Rate;
+import com.arenella.recruit.candidates.beans.Candidate.SECURITY_CLEARANCE_TYPE;
 import com.arenella.recruit.candidates.beans.Candidate.Rate.CURRENCY;
 import com.arenella.recruit.candidates.beans.Candidate.Rate.PERIOD;
 import com.arenella.recruit.candidates.beans.Language;
@@ -29,32 +30,36 @@ import com.arenella.recruit.candidates.enums.PERM;
 */
 public class CandidateFullProfileAPIOutboundTest {
 
-	private static final String 			CANDIDATE_ID 			= "Candidate1";
-	private static final FUNCTION			FUNCTIONVAL				= FUNCTION.JAVA_DEV;
-	private static final COUNTRY 			COUNTRYVAL 				= COUNTRY.NETHERLANDS;
-	private static final String 			CITY 					= "Den Haag";
-	private static final boolean 			AVAILABLE 				= true;
-	private static final FREELANCE 			FREELANCEVAL 			= FREELANCE.TRUE;
-	private static final PERM	 			PERMVAL 				= PERM.TRUE;
-	private static final LocalDate 			LAST_AVAILABILITY_CHECK = LocalDate.of(1980, 12, 3);
-	private static final int 				YEARS_EXPERIENCE 		= 21;
-	private static final Set<String>		SKILLS					= new LinkedHashSet<>();
-	private static final Set<Language>		LANGUAGES				= new LinkedHashSet<>();
-	private static final String				SKILL					= "Java";
-	private static final Language			LANGUAGEVAL				= Language.builder().language(LANGUAGE.DUTCH).level(LEVEL.PROFICIENT).build();
-	private static final String				ROLE_SOUGHT				= "Java Dev";
-	private static final String				FIRST_NAME				= "Kevin";
-	private static final String				SURNAME					= "Parkings";
-	private static final RateAPIOutbound	RATE_CONTRACT			= new RateAPIOutbound(CURRENCY.EUR, PERIOD.HOUR, 100, 200);
-	private static final RateAPIOutbound	RATE_PERM				= new RateAPIOutbound(CURRENCY.GBP, PERIOD.YEAR, 10000, 20000);
-	private static final Rate				RATE_CONTRACT_CAN		= new Rate(CURRENCY.EUR, PERIOD.HOUR, 200, 300);
-	private static final Rate				RATE_PERM_CAN			= new Rate(CURRENCY.GBP, PERIOD.YEAR, 20000, 30000);
-	private static final String				EMAIL				 	= "kparkings@gmail.com";
-	private static final String 			COMMENTS				= "A comment";
-	private static final DAYS_ON_SITE		DAYS_ON_SITE_VAL		= DAYS_ON_SITE.FOUR;
-	private static final LocalDate 			AVAILABLE_FROM_DATE		= LocalDate.of(2023, 12, 3);
-	private static final CANDIDATE_TYPE		CANDIDATE_TYPE_VAL		= CANDIDATE_TYPE.CANDIDATE;
-	private static final String				OWNER_ID				= "rec33";
+	private static final String 					CANDIDATE_ID 			= "Candidate1";
+	private static final FUNCTION					FUNCTIONVAL				= FUNCTION.JAVA_DEV;
+	private static final COUNTRY 					COUNTRYVAL 				= COUNTRY.NETHERLANDS;
+	private static final String 					CITY 					= "Den Haag";
+	private static final boolean 					AVAILABLE 				= true;
+	private static final FREELANCE 					FREELANCEVAL 			= FREELANCE.TRUE;
+	private static final PERM	 					PERMVAL 				= PERM.TRUE;
+	private static final LocalDate 					LAST_AVAILABILITY_CHECK = LocalDate.of(1980, 12, 3);
+	private static final int 						YEARS_EXPERIENCE 		= 21;
+	private static final Set<String>				SKILLS					= new LinkedHashSet<>();
+	private static final Set<Language>				LANGUAGES				= new LinkedHashSet<>();
+	private static final String						SKILL					= "Java";
+	private static final Language					LANGUAGEVAL				= Language.builder().language(LANGUAGE.DUTCH).level(LEVEL.PROFICIENT).build();
+	private static final String						ROLE_SOUGHT				= "Java Dev";
+	private static final String						FIRST_NAME				= "Kevin";
+	private static final String						SURNAME					= "Parkings";
+	private static final RateAPIOutbound			RATE_CONTRACT			= new RateAPIOutbound(CURRENCY.EUR, PERIOD.HOUR, 100, 200);
+	private static final RateAPIOutbound			RATE_PERM				= new RateAPIOutbound(CURRENCY.GBP, PERIOD.YEAR, 10000, 20000);
+	private static final Rate						RATE_CONTRACT_CAN		= new Rate(CURRENCY.EUR, PERIOD.HOUR, 200, 300);
+	private static final Rate						RATE_PERM_CAN			= new Rate(CURRENCY.GBP, PERIOD.YEAR, 20000, 30000);
+	private static final String						EMAIL				 	= "kparkings@gmail.com";
+	private static final String 					COMMENTS				= "A comment";
+	private static final DAYS_ON_SITE				DAYS_ON_SITE_VAL		= DAYS_ON_SITE.FOUR;
+	private static final LocalDate 					AVAILABLE_FROM_DATE		= LocalDate.of(2023, 12, 3);
+	private static final CANDIDATE_TYPE				CANDIDATE_TYPE_VAL		= CANDIDATE_TYPE.CANDIDATE;
+	private static final String						OWNER_ID				= "rec33";
+	private static final SECURITY_CLEARANCE_TYPE 	SECURITY_CLEARANCE 		= SECURITY_CLEARANCE_TYPE.DV;
+	private static final boolean					REQUIRES_SPONSORSHIP 	= true;
+	
+	
 	/**
 	* Sets up test environment 
 	*/
@@ -95,6 +100,8 @@ public class CandidateFullProfileAPIOutboundTest {
 							.availableFromDate(AVAILABLE_FROM_DATE)
 							.candidateType(CANDIDATE_TYPE_VAL)
 							.ownerId(OWNER_ID)
+							.securityClearance(SECURITY_CLEARANCE)
+							.requiresSponsorship(REQUIRES_SPONSORSHIP)
 							.build();
 		
 		assertEquals(CANDIDATE_ID, 						candidate.getCandidateId());
@@ -117,6 +124,8 @@ public class CandidateFullProfileAPIOutboundTest {
 		assertEquals(AVAILABLE_FROM_DATE, 				candidate.getAvailableFromDate());
 		assertEquals(CANDIDATE_TYPE_VAL, 				candidate.getCandidateType());
 		assertEquals(OWNER_ID,			 				candidate.getOwnerId());
+		assertEquals(SECURITY_CLEARANCE, 				candidate.getSecurityClearance());
+		assertEquals(REQUIRES_SPONSORSHIP, 				candidate.getRequiresSponsorship());
 		
 		assertTrue(candidate.getSkills().contains(SKILL));
 		candidate.getLanguages().stream().filter(l -> l.getLanguage() == LANGUAGEVAL.getLanguage()).findAny().orElseThrow();
@@ -153,6 +162,8 @@ public class CandidateFullProfileAPIOutboundTest {
 							.availableFromDate(AVAILABLE_FROM_DATE)
 							.candidateType(CANDIDATE_TYPE_VAL)
 							.ownerId(OWNER_ID)
+							.securityClearance(SECURITY_CLEARANCE)
+							.requiresSponsorship(REQUIRES_SPONSORSHIP)
 							.build();
 		
 		assertEquals(CANDIDATE_ID, 				candidate.getCandidateId());
@@ -173,6 +184,9 @@ public class CandidateFullProfileAPIOutboundTest {
 		assertEquals(AVAILABLE_FROM_DATE, 		candidate.getAvailableFromDate());
 		assertEquals(CANDIDATE_TYPE_VAL, 		candidate.getCandidateType());
 		assertEquals(OWNER_ID, 					candidate.getOwnerId().get());
+		assertEquals(SECURITY_CLEARANCE, 		candidate.getSecurityClearance());
+		assertEquals(REQUIRES_SPONSORSHIP, 		candidate.getRequiresSponsorship());
+		
 		
 		assertTrue(candidate.getSkills().contains(SKILL));
 		candidate.getLanguages().stream().filter(l -> l.getLanguage() == LANGUAGEVAL.getLanguage()).findAny().orElseThrow();
@@ -205,6 +219,8 @@ public class CandidateFullProfileAPIOutboundTest {
 		assertEquals(AVAILABLE_FROM_DATE, 					candidateProfile.getAvailableFromDate());
 		assertEquals(CANDIDATE_TYPE_VAL, 					candidateProfile.getCandidateType());
 		assertEquals(OWNER_ID,			 					candidateProfile.getOwnerId());
+		assertEquals(SECURITY_CLEARANCE, 					candidateProfile.getSecurityClearance());
+		assertEquals(REQUIRES_SPONSORSHIP, 					candidateProfile.getRequiresSponsorship());
 	}
 	
 	/**
@@ -258,6 +274,8 @@ public class CandidateFullProfileAPIOutboundTest {
 					.candidateType(CANDIDATE_TYPE_VAL)
 					.ownerId(OWNER_ID)
 					.introduction(intro)
+					.securityClearance(SECURITY_CLEARANCE)
+					.requiresSponsorship(REQUIRES_SPONSORSHIP)
 					.build();
 
 		assertEquals(CANDIDATE_ID, 				candidate.getCandidateId());
@@ -279,6 +297,8 @@ public class CandidateFullProfileAPIOutboundTest {
 		assertEquals(AVAILABLE_FROM_DATE, 		candidate.getAvailableFromDate());
 		assertEquals(CANDIDATE_TYPE_VAL, 		candidate.getCandidateType());
 		assertEquals(OWNER_ID, 					candidate.getOwnerId().get());
+		assertEquals(SECURITY_CLEARANCE, 		candidate.getSecurityClearance());
+		assertEquals(REQUIRES_SPONSORSHIP, 		candidate.getRequiresSponsorship());
 		
 		assertTrue(candidate.getSkills().contains(SKILL));
 		candidate.getLanguages().stream().filter(l -> l.getLanguage() == LANGUAGEVAL.getLanguage()).findAny().orElseThrow();
@@ -312,6 +332,9 @@ public class CandidateFullProfileAPIOutboundTest {
 		assertEquals(AVAILABLE_FROM_DATE, 					candidateProfile.getAvailableFromDate());
 		assertEquals(CANDIDATE_TYPE_VAL, 					candidateProfile.getCandidateType());
 		assertEquals(OWNER_ID,			 					candidateProfile.getOwnerId());
+		assertEquals(SECURITY_CLEARANCE, 					candidateProfile.getSecurityClearance());
+		assertEquals(REQUIRES_SPONSORSHIP, 					candidateProfile.getRequiresSponsorship());
+		
 		
 	}
 	

@@ -88,4 +88,7 @@ export class Candidate {
 	
 	removed:boolean = false;
 	
+	securityClearance:string			 	= 'NONE';
+	
+	requiresSponsorship:boolean				= false;
 }

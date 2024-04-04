@@ -48,8 +48,7 @@ export class RecruiterAccountComponent implements OnInit {
 	* Initializes the Component
 	*/
 	ngOnInit(): void {
-		
-		if (this.isRecruiter()) {
+		if (this.isRecruiter() || this.isRecruiterNoSubscription()) {
 			this.fetchRecruiterDetails();
 		}
 		
@@ -325,7 +324,7 @@ export class RecruiterAccountComponent implements OnInit {
  	* Ends the subscription
 	*/
 	public addAlternateSubscription(subscriptionType:string):void{
-		
+		console.log("..................4");
 		this.showSwitchToYearlySubscriptionConfirmButtons	= false;
 		
 		try{
@@ -333,6 +332,8 @@ export class RecruiterAccountComponent implements OnInit {
 		} catch (ex){
 			console.log("Failed to update Account details ");
 		}
+		
+		console.log("XXXXXXXXXXXXXXx " + JSON.stringify(this.recruiter));
 		this.recruiterService.requestNewSubscription(this.recruiter.userId, subscriptionType).subscribe(data => {
 			sessionStorage.clear();
 			sessionStorage.setItem("new-subscription", "true");

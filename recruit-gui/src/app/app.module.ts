@@ -1,4 +1,4 @@
-import { NgModule }							from '@angular/core';
+import { APP_INITIALIZER, NgModule }							from '@angular/core';
 import { BrowserModule }					from '@angular/platform-browser';
 import { ReactiveFormsModule }				from '@angular/forms';
 import { AppRoutingModule }					from './app-routing.module';
@@ -39,6 +39,7 @@ import {TranslateLoader, TranslateModule} 	from '@ngx-translate/core';
 import {TranslateHttpLoader} 				from '@ngx-translate/http-loader';
 import {HttpClient} 						from '@angular/common/http';
 import { MatIconModule } 					from "@angular/material/icon";
+import { CandidateServiceService } from './candidate-service.service';
 
 @NgModule({
   declarations: [
@@ -86,13 +87,31 @@ import { MatIconModule } 					from "@angular/material/icon";
     BrowserAnimationsModule,
 	NgChartsModule.forRoot()
   ],
-  providers: [AuthGuardService, AuthService, CookieService],
+  providers: [AuthGuardService, AuthService, CookieService, CandidateServiceService,{
+      provide: APP_INITIALIZER,
+      useFactory: initCandidateInfoBackendDataCalls,
+      deps: [CandidateServiceService], multi: true
+    }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
 
 export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
     return new TranslateHttpLoader(http);
+}
+
+/**
+* Factory to initialize service and populate with data called from 
+* API before service is available to components 
+*/
+export function initCandidateInfoBackendDataCalls(
+  candidateService: CandidateServiceService
+) {
+  return async () => {
+    await candidateService.initializeSupportedCountries();
+    await candidateService.initializeSupportedLanguages();
+    await candidateService.initializeGeoZones();
+  };
 }
 
 

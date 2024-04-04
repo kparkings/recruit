@@ -88,6 +88,41 @@ public class SecRequestFilter extends OncePerRequestFilter {
 		}
 		
 		/**
+		* TODO: [KP] Static data. Though not a big concern ideally this should 
+		* be called only after authentication but we are initializing the service 
+		* in angular before authentication so this needs to be public until a 
+		* better solution can be found
+		*/
+		if (request.getRequestURI().startsWith("/candidate/countries")) {
+			filterChain.doFilter(request, response);
+			return;
+		}
+		
+		/**
+		* TODO: [KP] Static data. Though not a big concern ideally this should 
+		* be called only after authentication but we are initializing the service 
+		* in angular before authentication so this needs to be public until a 
+		* better solution can be found
+		*/
+		if (request.getRequestURI().startsWith("/candidate/geo-zone")) {
+			filterChain.doFilter(request, response);
+			return;
+		}
+		
+		/**
+		* TODO: [KP] Static data. Though not a big concern ideally this should 
+		* be called only after authentication but we are initializing the service 
+		* in angular before authentication so this needs to be public until a 
+		* better solution can be found
+		*/
+		if (request.getRequestURI().startsWith("/candidate/languages")) {
+			filterChain.doFilter(request, response);
+			return;
+		}
+		
+		
+		
+		/**
 		* We want to allow Candidates to upload their CVs before authentication
 		*/
 		if (request.getRequestURI().equals("/pending-curriculum") || (request.getRequestURI().equals("/pending-candidate") && request.getMethod().equalsIgnoreCase("POST"))) {

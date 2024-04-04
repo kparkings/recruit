@@ -16,6 +16,7 @@ import { CandidateNavService } 															from '../candidate-nav.service';
 import { CreditsService } 																from '../credits.service';
 import { InfoItemBlock, InfoItemConfig, InfoItemRowKeyValue, InfoItemRowMultiValues } 	from '../candidate-info-box/info-item';
 import { TranslateService } from '@ngx-translate/core';
+import { SupportedCountry } from '../supported-candidate';
 
 @Component({
   selector: 'app-recruiter-marketplace',
@@ -39,6 +40,7 @@ export class RecruiterMarketplaceComponent implements OnInit {
 	public recruiterProfiles:Array<RecruiterProfile> 	= new Array<RecruiterProfile>();
 	public recruiterProfile:RecruiterProfile 			= new RecruiterProfile();
 	public infoItemConfig:InfoItemConfig 				= new InfoItemConfig();
+	public supportedCountries:Array<SupportedCountry>	= new Array<SupportedCountry>();
 
   	constructor(private modalService: 				NgbModal, 
 				private marketplaceService: 		RecruiterMarketplaceService, 
@@ -80,6 +82,7 @@ export class RecruiterMarketplaceComponent implements OnInit {
 	ngOnInit(): void {
 		this.fetchOpenPositions();
 		this.showJustMyCandidates();
+		this.supportedCountries = this.candidateService.getSupportedCountries();
 	}
 
 	currentTab:string 						= "downloads";
@@ -125,6 +128,10 @@ export class RecruiterMarketplaceComponent implements OnInit {
 				});
 			});	
 		}
+	}
+	
+	public getIso2Code(candidate:Candidate):string{
+		return this.supportedCountries.filter(c => c.name == candidate.country)[0].iso2Code;
 	}
 
 	/**

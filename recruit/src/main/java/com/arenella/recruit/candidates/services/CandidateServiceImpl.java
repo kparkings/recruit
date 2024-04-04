@@ -431,6 +431,22 @@ public class CandidateServiceImpl implements CandidateService{
 	}
 	
 	/**
+	* Returns whether only the main countries should be returned in the results or 
+	* all available countries
+	* @return whether to restricted results to supported countries
+	*/
+	private boolean limitToSupportedCountries(CandidateFilterOptions filterOptions) {
+	
+		return filterOptions.getGeoZones().isEmpty() 
+				&& filterOptions.getCountries().isEmpty() 
+				&& !this.checkHasRole("ROLE_CANDIDATE")
+				&& !this.checkHasRole("ROLE_ADMIN")
+				&& !(this.checkHasRole("ROLE_RECRUITER") && filterOptions.getOwnerId().isPresent() && filterOptions.getOwnerId().get().contains(this.getAuthenticatedUserId())) //TODO [KP] Low level secruity issue. Possible to add multiple ownerIds to set and with just one get access to candidate they dont own that is not in the standard set of free candidates  
+				&& !(this.checkHasRole("ROLE_RECRUITER") && !filterOptions.getCandidateIds().isEmpty()); //TODO [KP] Low level security risk. Recruiter can give an id of candidate they dont own that is not in the standard set of free candidates
+		
+	}
+	
+	/**
 	* Refer to the CandidateService Interface for Details
 	*/
 	@Override
@@ -451,7 +467,33 @@ public class CandidateServiceImpl implements CandidateService{
 		if (!hasPaidSubscription() && !this.checkHasRole("ROLE_ADMIN")) {
 			filterOptions.setAvailable(true);
 			filterOptions.removeGeoZones();
-			filterOptions.setIncludeRequiresSponsorship(null);
+			//filterOptions.setIncludeRequiresSponsorship(null);
+		}
+		
+		/**
+		* Only allows Requires sponsorship results in the case 
+		* - Either the User is Admin
+		* - The user has a paid subscription
+		* - The User is Recruiter and the Owner of the Candidates profile
+		* - The User is fetching their own profile
+		*/
+		if(	!this.checkHasRole("ROLE_ADMIN") 
+			&& !hasPaidSubscription()) {
+				filterOptions.setIncludeRequiresSponsorship(null);
+		}
+		
+		/**
+		* Candidate can view own profiel
+		*/
+		if (this.checkHasRole("ROLE_CANDIDATE")) {
+			filterOptions.setIncludeRequiresSponsorship(true);
+		}
+		
+		/**
+		* Recruiter can view own candidate
+		*/
+		if (this.checkHasRole("ROLE_RECRUITER") && filterOptions.getOwnerId().isPresent() && this.getAuthenticatedUserId().equals(filterOptions.getOwnerId().get())) {
+			filterOptions.setIncludeRequiresSponsorship(true);
 		}
 		
 		/**
@@ -466,7 +508,7 @@ public class CandidateServiceImpl implements CandidateService{
 		* In the case there is no filter for either GeoZone or Country we add in All the default 
 		* countries otherwise we end up with everything
 		*/
-		if (filterOptions.getGeoZones().isEmpty() && filterOptions.getCountries().isEmpty()) {
+		if (limitToSupportedCountries(filterOptions)) {
 			filterOptions.addCountry(COUNTRY.BELGIUM);
 			filterOptions.addCountry(COUNTRY.NETHERLANDS);
 			filterOptions.addCountry(COUNTRY.UK);
@@ -848,6 +890,8 @@ public class CandidateServiceImpl implements CandidateService{
 					.ownerId(existingCandidate.getOwnerId().isEmpty() ? null : existingCandidate.getOwnerId().get())
 					.daysOnSite(candidate.getDaysOnSite())
 					.availableFromDate(candidate.getAvailableFromDate())
+					.requiresSponsorship(candidate.getRequiresSponsorship())
+					.securityClearance(candidate.getSecurityClearance())
 				.build();
 		
 		this.candidateDao.saveCandidate(updatedCandidate);

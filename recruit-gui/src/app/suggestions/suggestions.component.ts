@@ -139,7 +139,7 @@ export class SuggestionsComponent implements OnInit {
 		
 		//Recruiter
 		if (this.isRecruiter() && this.candidateNavService.isRouteActive()) {
-			this.candidateService.getCandidateById(this.candidateNavService.getCandidateId()).subscribe(candidate => {
+			this.candidateService.getCandidateByIdWithRecruiterAsOwner(this.candidateNavService.getCandidateId(), this.getLoggedInUserId()).subscribe(candidate => {
 				this.showSuggestedCandidateOverview(candidate.content[0]);	
 			});
 		}
@@ -702,6 +702,20 @@ export class SuggestionsComponent implements OnInit {
 			yearsExperienceBlock.addRow(new InfoItemRowSingleValue(""+this.suggestedCandidate.yearsExperience));
 			this.infoItemConfig.addItem(yearsExperienceBlock);
 			
+			//Secuirty Level
+			let securityClearanceBlock:InfoItemBlock = new InfoItemBlock();
+			securityClearanceBlock.setTitle(this.translate.instant('info-item-title-security-clearance'));
+			securityClearanceBlock.addRow(new InfoItemRowKeyValue(this.translate.instant('info-item-security-clearance'),this.suggestedCandidate.securityClearance));
+			this.infoItemConfig.addItem(securityClearanceBlock);
+			
+			
+			//Requires Sponsorship
+			let requiresSponsorhipBlock:InfoItemBlock = new InfoItemBlock();
+			requiresSponsorhipBlock.setTitle(this.translate.instant('info-item-title-requires-sponsorship'));
+			requiresSponsorhipBlock.addRow(new InfoItemRowKeyValue(this.translate.instant('info-item-requires-sponsorship'),this.suggestedCandidate.requiresSponsorship ? this.translate.instant('yes') : this.translate.instant('no')));
+			this.infoItemConfig.addItem(requiresSponsorhipBlock);
+			
+			
 			//Availability
 			let availabilityBlock:InfoItemBlock = new InfoItemBlock();
 			availabilityBlock.setTitle(this.translate.instant('info-item-title-availability'));
@@ -728,17 +742,9 @@ export class SuggestionsComponent implements OnInit {
 	*/
 	private getFlagClassFromCountry(country:string):string{
 		
-		
 		let sc:SupportedCountry = this.supportedCountries.filter(c => c.name == country)[0];
 		
-		return "flag-icon-"+sc.iso2Code;;
-		//switch(country){
-		//	case "NETHERLANDS":{return "flag-icon-nl"}
-		//	case "BELGIUM":{return "flag-icon-be"}
-		//	case "UK":{return "flag-icon-gb"}
-		//	case "REPUBLIC_OF_IRELAND":{return "flag-icon-ie"}
-		//	default: return "";
-		//}
+		return sc ?  "flag-icon-"+sc.iso2Code : '';
 		
 	}
 	

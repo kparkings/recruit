@@ -12,6 +12,7 @@ import com.arenella.recruit.candidates.beans.Candidate;
 import com.arenella.recruit.candidates.beans.Candidate.CANDIDATE_TYPE;
 import com.arenella.recruit.candidates.beans.Candidate.DAYS_ON_SITE;
 import com.arenella.recruit.candidates.beans.Candidate.Photo;
+import com.arenella.recruit.candidates.beans.Candidate.SECURITY_CLEARANCE_TYPE;
 import com.arenella.recruit.candidates.beans.Candidate.Photo.PHOTO_FORMAT;
 import com.arenella.recruit.candidates.beans.Language;
 import com.arenella.recruit.candidates.enums.COUNTRY;
@@ -51,6 +52,8 @@ public class CandidateFullProfileAPIOutbound implements CandidateAPIOutbound{
 	private LocalDate 				availableFromDate;
 	private CANDIDATE_TYPE			candidateType;
 	private String					ownerId;
+	private SECURITY_CLEARANCE_TYPE securityClearance;
+	private boolean					requiresSponsorship;
 	
 	
 	/**
@@ -81,6 +84,8 @@ public class CandidateFullProfileAPIOutbound implements CandidateAPIOutbound{
 		this.availableFromDate			= builder.availableFromDate;
 		this.candidateType				= builder.candidateType;
 		this.ownerId					= builder.ownerId;
+		this.securityClearance			= builder.securityClearance;
+		this.requiresSponsorship		= builder.requiresSponsorship;
 		
 		this.skills.addAll(builder.skills);
 		this.languages.addAll(builder.languages);
@@ -210,6 +215,23 @@ public class CandidateFullProfileAPIOutbound implements CandidateAPIOutbound{
 	}
 	
 	/**
+	* Returns the Candidates security clearance level
+	* @return Security clearance level
+	*/
+	public SECURITY_CLEARANCE_TYPE getSecurityClearance() {
+		return this.securityClearance;
+	}	
+	
+	/**
+	* Returns whether the Candidate requires sponsorship to 
+	* take on a new role
+	* @return Whether the Candidate requires sponsorship
+	*/
+	public boolean getRequiresSponsorship() {
+		return this.requiresSponsorship;
+	}
+	
+	/**
 	* If available the Contract Rate
 	* @return Contract Rate
 	*/
@@ -322,6 +344,8 @@ public class CandidateFullProfileAPIOutbound implements CandidateAPIOutbound{
 		private LocalDate 				availableFromDate;
 		private CANDIDATE_TYPE			candidateType;
 		private String					ownerId;
+		private SECURITY_CLEARANCE_TYPE securityClearance;
+		private boolean					requiresSponsorship;
 		
 		/**
 		* Sets the candidates Unique identifier in the System
@@ -568,6 +592,27 @@ public class CandidateFullProfileAPIOutbound implements CandidateAPIOutbound{
 		}
 		
 		/**
+		* Sets the Security clearance level held by the Candidate
+		* @param securityClearance - Level of security clearance
+		* @return Builder
+		*/
+		public CandidateFullProfileAPIOutboundBuilder securityClearance(SECURITY_CLEARANCE_TYPE securityClearance) {
+			this.securityClearance = securityClearance;
+			return this;
+		}
+		
+		/**
+		* Sets whether the Candidate requires sponsorship to take 
+		* on a new role
+		* @param requiresSponsorship - Whether the Candidate requires sponsorship
+		* @return Builder
+		*/
+		public CandidateFullProfileAPIOutboundBuilder requiresSponsorship(boolean requiresSponsorship) {
+			this.requiresSponsorship = requiresSponsorship;
+			return this;
+		}
+		
+		/**
 		* Returns an instance of Candidate initialized with the 
 		* values in the builder
 		* @return Initialized instance of Candidate
@@ -616,6 +661,8 @@ public class CandidateFullProfileAPIOutbound implements CandidateAPIOutbound{
 					.availableFromDate(candidate.getAvailableFromDate())
 					.candidateType(candidate.getCandidateType())
 					.ownerId(candidate.getOwnerId().isPresent() ? candidate.getOwnerId().get() : null)
+					.requiresSponsorship(candidate.getRequiresSponsorship())
+					.securityClearance(candidate.getSecurityClearance())
 				.build();
 		
 	}
@@ -657,6 +704,8 @@ public class CandidateFullProfileAPIOutbound implements CandidateAPIOutbound{
 					.availableFromDate(candidate.getAvailableFromDate())
 					.candidateType(candidate.getCandidateType())
 					.ownerId(candidate.getOwnerId().isPresent() ? candidate.getOwnerId().get() : null)
+					.requiresSponsorship(candidate.getRequiresSponsorship())
+					.securityClearance(candidate.getSecurityClearance())
 				.build();
 	}
 	

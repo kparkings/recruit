@@ -200,16 +200,19 @@ public class CandidateController {
 													HttpServletResponse response
 													) {
 		
+		Set<String> candidateIdFilters = new LinkedHashSet<>();
+		
 		if (this.isCandidate(principal)) {
-			candidateId.clear();
-			candidateId.add(getLoggedInUserName(principal));
+			candidateIdFilters.add(getLoggedInUserName(principal));
+		} else if(Optional.ofNullable(candidateId).isPresent()) {
+			candidateIdFilters.addAll(candidateId);
 		}
 		
 		CandidateFilterOptions filterOptions = CandidateFilterOptions
 																	.builder()
 																		.orderAttribute(orderAttribute)
 																		.order(order)
-																		.candidateIds(candidateId)
+																		.candidateIds(candidateIdFilters)
 																		.geoZones(geoZones)
 																		.countries(countries)
 																		.functions(functions)
@@ -478,7 +481,7 @@ public class CandidateController {
 	* Returns a list of Supported languages that a candidate can possibly speak
 	* @return supported languages
 	*/
-	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_RECRUITER') or hasRole('ROLE_CANDIDATE')")
+	//@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_RECRUITER') or hasRole('ROLE_CANDIDATE')")
 	@GetMapping(path="/candidate/languages")
 	public ResponseEntity<Set<LANGUAGE>> fetchSupportedLanguages(){
 		return ResponseEntity.ok(Arrays.stream(LANGUAGE.values()).collect(Collectors.toCollection(LinkedHashSet::new)));
@@ -488,7 +491,7 @@ public class CandidateController {
 	* Returns list of Geo Zones that a candidate can be available for work in
 	* @return Supported GeoZones
 	*/
-	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_RECRUITER')")
+	//@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_RECRUITER')")
 	@GetMapping(path="/candidate/geo-zone")
 	public ResponseEntity<Set<GEO_ZONE>> fetchGeoZones(){
 		return ResponseEntity.ok(Arrays.stream(GEO_ZONE.values()).collect(Collectors.toCollection(LinkedHashSet::new)));
@@ -498,7 +501,7 @@ public class CandidateController {
 	* Returns list of Countries that a candidate can be available for work in
 	* @return Supported Countries
 	*/
-	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_RECRUITER') or hasRole('ROLE_CANDIDATE')")
+	//@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_RECRUITER') or hasRole('ROLE_CANDIDATE')")
 	@GetMapping(path="/candidate/countries")
 	public ResponseEntity<Set<CountryEnumAPIOutbound>> fetchSupportedCountries(){
 		return ResponseEntity.ok(Arrays.stream(COUNTRY.values()).map(c -> new CountryEnumAPIOutbound(c)).collect(Collectors.toCollection(LinkedHashSet::new)));

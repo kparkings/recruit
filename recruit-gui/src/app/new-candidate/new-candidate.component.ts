@@ -219,6 +219,8 @@ export class NewCandidateComponent implements OnInit {
 		candidate.comments 							= this.offeredCandidateFormBean.get('comments')!.value;
 		candidate.introduction 						= this.offeredCandidateFormBean.get('introduction')!.value;
 		candidate.daysOnSite 						= this.offeredCandidateFormBean.get('daysOnSite')!.value;
+		candidate.securityClearance 				= this.offeredCandidateFormBean.get('securityClearance')!.value;
+		candidate.requiresSponsorship 				= this.offeredCandidateFormBean.get('requiresSponsorship')!.value;
 		
 		candidate.languages = new Array<Language>();
 		this.supportedLanguages.forEach(lang => {
@@ -270,6 +272,9 @@ export class NewCandidateComponent implements OnInit {
     	  		this.appComponent.refreschUnreadAlerts();			
     		});
 		} else {
+			
+			console.log("AAAAA === " + JSON.stringify(candidate));
+			
 			this.candidateService.addCandidate(candidate, this.profileImageFile).subscribe(d=>{
 				this.appComponent.refreschUnreadAlerts();
     	  		this.open(true);
@@ -517,6 +522,8 @@ export class NewCandidateComponent implements OnInit {
 			contractTimeUnit:		new UntypedFormControl(),
 			contractFrom:			new UntypedFormControl(0.0),
 			contractTo:				new UntypedFormControl(0.0),
+			securityClearance:		new UntypedFormControl("NONE"),
+			requiresSponsorship:	new UntypedFormControl(false),
 		});
 		
 		this.supportedLanguages = this.supportedLanguages.sort((a,b)=> {
