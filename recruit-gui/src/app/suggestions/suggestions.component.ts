@@ -333,7 +333,7 @@ export class SuggestionsComponent implements OnInit {
 			this.subscription.unsubscribe();
 		}
 		
-		this.subscription = this.suggestionFilterForm.valueChanges.pipe(debounceTime(500)).subscribe(res => {
+		this.subscription = this.suggestionFilterForm.valueChanges.pipe(debounceTime(0)).subscribe(res => {
 		 		this.getSuggestions();	
 		}); 
 		
