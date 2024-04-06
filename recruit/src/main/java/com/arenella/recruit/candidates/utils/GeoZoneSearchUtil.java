@@ -81,19 +81,21 @@ public class GeoZoneSearchUtil {
 	*/
 	@PostConstruct
 	public static void initGeoZoneSearchUtil() {
+		
+		initializeCentralEurope();
+		initializeBaltics();
+		initializeDach();
 		initalizeIreland();
-		initializeBritishIsles();
 		initializeBenelux();
+		initializeNorthAmerica();
 		initializeSouthernEurope();
 		initializeEasternEurope();
-		initializeWesternEurope();
 		initializeNorthernEurope();
+		initializeBritishIsles();
+		initializeWesternEurope();
 		initializeEurope();
-		initializeNorthAmerica();
 		initializeWorld();
-		initializeDach();
-		initializeBaltics();
-		initializeCentralEurope();
+		
 	}
 	
 	/**
@@ -176,6 +178,7 @@ public class GeoZoneSearchUtil {
 	*/
 	private static void initializeWorld() {
 		WORLD.addAll(EUROPE);
+		WORLD.addAll(NORTH_AMERICA);
 		WORLD.add(COUNTRY.INDIA);
 		WORLD.add(COUNTRY.PAKISTAN);
 	}

@@ -22,6 +22,7 @@ import { HttpResponse } 															from '@angular/common/http';
 import { CandidateTotals } 															from '../candidate-totals';
 import { GeoZone } 																	from '../geo-zone';
 import { SupportedCountry } 														from '../supported-candidate';
+import { Subscription } from 'rxjs';
 
 /**
 * Component to suggest suitable Candidates based upon a 
@@ -120,6 +121,7 @@ export class SuggestionsComponent implements OnInit {
 		this.init();
 	}
 	
+	private subscription?:Subscription;
 	
 	private init():void{
 		
@@ -162,7 +164,14 @@ export class SuggestionsComponent implements OnInit {
 		
 		this.appComponent.refreschUnreadAlerts();
 		
+		if(this.subscription) {
+			this.subscription.unsubscribe();
+		}
 		
+		//this.subscription = this.suggestionFilterForm.valueChanges.subscribe(value => {
+		//		this.getSuggestions();	
+		//}); 
+		//this.addChageListener();
 		
 	}
 	
@@ -254,11 +263,12 @@ export class SuggestionsComponent implements OnInit {
 			
 			this.closeModal();
 			
-			this.suggestionFilterForm.valueChanges.subscribe(value => {
-				this.getSuggestions();	
-			});
+			//this.suggestionFilterForm.valueChanges.subscribe(value => {
+			//	this.getSuggestions();	
+			//});
+			//this.addChageListener();
 			
-			this.getSuggestions();
+			//this.getSuggestions();
 			
 	}
 	
@@ -269,12 +279,14 @@ export class SuggestionsComponent implements OnInit {
 		this.candidateService.extractFiltersFromText(jobSpecText).subscribe(extractedFilters=>{
 			this.processJobSpecExtratedFilters(extractedFilters);
 			this.specUploadDialogBox.nativeElement.close();
+			this.addChageListener();
 		},(failure =>{
 			this.showFilterByJonSpecFailure 	= true;
 			this.showFilterByJobSpec 			= false;
-			this.suggestionFilterForm.valueChanges.subscribe(value => {
-				this.getSuggestions();	
-			});
+			//this.suggestionFilterForm.valueChanges.subscribe(value => {
+			//	this.getSuggestions();	
+			//});
+			//this.addChageListener();
 		}));
 	}
 	
@@ -282,17 +294,19 @@ export class SuggestionsComponent implements OnInit {
  	* Extracts filters from job specification file
 	*/	
   	public extractFiltersFromJobSpec():void{
-  		
   		this.candidateService.extractFiltersFromDocument(this.jobSpecFile).subscribe(extractedFilters=>{
   			this.processJobSpecExtratedFilters(extractedFilters);
   			this.specUploadDialogBox.nativeElement.close();
+			this.addChageListener();
 		},(failure =>{
 			this.showFilterByJonSpecFailure 	= true;
 			this.showFilterByJobSpec 			= false;
-			this.suggestionFilterForm.valueChanges.subscribe(value => {
-				this.getSuggestions();	
-			});
+			//this.suggestionFilterForm.valueChanges.subscribe(value => {
+			//	this.getSuggestions();	
+			//});
+			//this.addChageListener();
 		}));
+		
   		
   	}
 	
@@ -301,7 +315,29 @@ export class SuggestionsComponent implements OnInit {
 	*/
 	public doReset():void{
 		this.resetSearchFilters(true);
-		this.getSuggestions();
+		
+		
+		//if(this.subscription) {
+		//	this.subscription.unsubscribe();
+		//}
+		
+		//this.subscription = this.suggestionFilterForm.valueChanges.pipe(debounceTime(500)).subscribe(res => {
+		 //		this.getSuggestions();	
+		//}); 
+		this.addChageListener();
+		//this.getSuggestions();
+	}
+	
+	private addChageListener():void{
+		if(this.subscription) {
+			this.subscription.unsubscribe();
+		}
+		
+		this.subscription = this.suggestionFilterForm.valueChanges.pipe(debounceTime(500)).subscribe(res => {
+		 		this.getSuggestions();	
+		}); 
+		
+		this.getSuggestions();	
 	}	
 	
 	public resetSuggestionFilterForm():void{
@@ -342,11 +378,13 @@ export class SuggestionsComponent implements OnInit {
 		
 		this.backendRequestCounter 		= 0;
 		
-		if (attachValueChangeListener) {
-			this.suggestionFilterForm.valueChanges.subscribe(value => {
-				this.getSuggestions();	
-			});
-		}
+		
+		//if (attachValueChangeListener) {
+		//	this.suggestionFilterForm.valueChanges.subscribe(value => {
+		//		this.getSuggestions();	
+		//	});
+		//}
+		//this.addChageListener();
 		
 	}
 		
@@ -364,8 +402,7 @@ export class SuggestionsComponent implements OnInit {
 	*/
 	ngOnInit(): void {
 		
-		this.suggestionFilterForm.valueChanges.pipe(debounceTime(500)).subscribe(res => {
-			
+		this.subscription = this.suggestionFilterForm.valueChanges.pipe(debounceTime(500)).subscribe(res => {
 			this.getSuggestions();
 		});
 		
