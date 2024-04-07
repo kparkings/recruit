@@ -168,11 +168,6 @@ export class SuggestionsComponent implements OnInit {
 			this.subscription.unsubscribe();
 		}
 		
-		//this.subscription = this.suggestionFilterForm.valueChanges.subscribe(value => {
-		//		this.getSuggestions();	
-		//}); 
-		//this.addChageListener();
-		
 	}
 	
 	/**
@@ -263,13 +258,6 @@ export class SuggestionsComponent implements OnInit {
 			
 			this.closeModal();
 			
-			//this.suggestionFilterForm.valueChanges.subscribe(value => {
-			//	this.getSuggestions();	
-			//});
-			//this.addChageListener();
-			
-			//this.getSuggestions();
-			
 	}
 	
 	public extractFiltersFromJobSpecText():void{
@@ -283,10 +271,6 @@ export class SuggestionsComponent implements OnInit {
 		},(failure =>{
 			this.showFilterByJonSpecFailure 	= true;
 			this.showFilterByJobSpec 			= false;
-			//this.suggestionFilterForm.valueChanges.subscribe(value => {
-			//	this.getSuggestions();	
-			//});
-			//this.addChageListener();
 		}));
 	}
 	
@@ -301,10 +285,6 @@ export class SuggestionsComponent implements OnInit {
 		},(failure =>{
 			this.showFilterByJonSpecFailure 	= true;
 			this.showFilterByJobSpec 			= false;
-			//this.suggestionFilterForm.valueChanges.subscribe(value => {
-			//	this.getSuggestions();	
-			//});
-			//this.addChageListener();
 		}));
 		
   		
@@ -315,17 +295,7 @@ export class SuggestionsComponent implements OnInit {
 	*/
 	public doReset():void{
 		this.resetSearchFilters(true);
-		
-		
-		//if(this.subscription) {
-		//	this.subscription.unsubscribe();
-		//}
-		
-		//this.subscription = this.suggestionFilterForm.valueChanges.pipe(debounceTime(500)).subscribe(res => {
-		 //		this.getSuggestions();	
-		//}); 
 		this.addChageListener();
-		//this.getSuggestions();
 	}
 	
 	private addChageListener():void{
@@ -361,6 +331,7 @@ export class SuggestionsComponent implements OnInit {
 			this.suggestionFilterForm.addControl(c.countryCode+'Results', new UntypedFormControl(''));
 		});
 		
+		this.initGeoZones();
 	}
 	
 	/**
@@ -377,14 +348,6 @@ export class SuggestionsComponent implements OnInit {
 		this.skillFilters = new Array<string>();
 		
 		this.backendRequestCounter 		= 0;
-		
-		
-		//if (attachValueChangeListener) {
-		//	this.suggestionFilterForm.valueChanges.subscribe(value => {
-		//		this.getSuggestions();	
-		//	});
-		//}
-		//this.addChageListener();
 		
 	}
 		
@@ -431,6 +394,8 @@ export class SuggestionsComponent implements OnInit {
 		this.geoZones.forEach(gz => {
 			this.suggestionFilterForm.addControl(gz.geoZoneId.toLowerCase()+'Results', new UntypedFormControl(false));
 		});
+		
+		this.showGeoZoneFilters = "";
 		
 	}
 	

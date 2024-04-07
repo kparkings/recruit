@@ -18,7 +18,7 @@ import com.arenella.recruit.candidates.enums.COUNTRY;
 public class GeoZoneSearchUtil {
 
 	public enum GEO_ZONE {
-		//WORLD, 
+		WORLD, 
 		EUROPE, 
 		//NORTH_AMERICA, 
 		//SOUTHERN_EUROPE, 
@@ -57,7 +57,7 @@ public class GeoZoneSearchUtil {
 		
 		Arrays.stream(geoZones).forEach(geoZone -> {
 			switch(geoZone) {
-				//case WORLD 				-> countries.addAll(WORLD);
+				case WORLD 				-> countries.addAll(WORLD);
 				case EUROPE 			-> countries.addAll(EUROPE);
 				//case NORTH_AMERICA 		-> countries.addAll(NORTH_AMERICA);
 				//case SOUTHERN_EUROPE 	-> countries.addAll(SOUTHERN_EUROPE);
