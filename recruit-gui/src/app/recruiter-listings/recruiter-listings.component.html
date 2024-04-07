@@ -294,13 +294,13 @@
  		<div class="filter-close-box" (click)="closeModal()">X</div>
 	</div>
 	<div class="feedbackBox;">
-		<div class="modal-body"  style="height:400px;">
+		<div class="modal-body"  style="min-height:400px;">
 			<h3>{{'arenella-recruiter-listing-mp-add' | translate}}</h3>
 			<p>{{'arenella-recruiter-listing-mp-add-text' | translate}}</p>
 			<div style="min-width:320px;">
 				
 				<form [formGroup]="mpFormBean">
-					<table style="width:100%">
+					<table class="mp-box-table">
 						<tr>
 							<td style="text-align:left;">{{'arenella-recruiter-listing-mp-start' | translate}}</td>
 							<td style="padding-left:10px;"><input type="date" formControlName="startDate"/></td>
@@ -315,7 +315,7 @@
 						</tr>
 						<tr>
 							<td colspan="2">	
-								<textarea style="width:100%;" formControlName="comments"></textarea>
+								<textarea class="textarea-mp-desc" formControlName="comments"></textarea>
 							</td>
 						</tr>
 					</table>

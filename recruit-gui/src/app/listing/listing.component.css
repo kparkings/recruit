@@ -13,6 +13,10 @@
 	display: table-cell;
 }
 
+.textarea-mp-desc{
+	height:150px;
+}
+
 .text-area-listing {
 	height: 260px;
 	width: 100%;

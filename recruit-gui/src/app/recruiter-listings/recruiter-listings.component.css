@@ -152,3 +152,25 @@ textarea {
 .view-create-table{
 	max-width:100%;
 }
+
+.textarea-mp-desc{
+	height:120px;
+	width:100%;
+}
+
+.mp-box-table{
+	width:100%;
+}
+
+/*mobile*/
+@media (max-width: 768px) {
+	.textarea-mp-desc{
+		height:50px;
+		width:100%;
+		margin:0px;
+	}	
+
+	.mp-box-table{
+		width:90%;
+	}
+}

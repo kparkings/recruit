@@ -149,7 +149,6 @@
  
 .table-bdy-td{
 	word-wrap:break-word;
-	/*max-width:100px;*/
 }
 
 textarea {
@@ -168,25 +167,7 @@ td{
 .as-link{
 	cursor:pointer;	
 }
-/*
-.modal-title{
-	margin-left:20px;
-}
-*/
-/*
-.modal-body{
-	font-size: large;
-	height:300px;
-	text-align: center;
-}
-*/
-/*
-.modal-header{
-	background:#181414;
-	color:#6A5ACD;
-	font-weight:bold;
-}
-*/
+
 .filter-close-box{
 	padding:10px;
 	cursor:pointer;
@@ -194,33 +175,10 @@ td{
 	font-weight: bold;
 	text-align: right;        
 }
-/*
-.btn-right{
-	float:right;
-}
-*/
+
 .main-action_btn{
 	background:green;
 }
-/*
-.main-btns{
-	width:200px;
-	margin-right:10px;
-	margin-bottom:10px;
-	margin-top:5px;
-	
-}*/
-/*
-.left-box-title{
-	min-width:300px;
-	margin-bottom:30px;
-	max-width:300px;
-	color:#6A5ACD;
-	font-weight:bold;
-}
-*/
-
-
 
 .left-box-body{
 	padding:5px;
@@ -260,15 +218,7 @@ td{
 	border:2px solid lightgrey;
 	margin-bottom:10px;
 }
-/*
-.main-btns{
-	width:200px;
-	margin-right:10px;
-	margin-bottom:10px;
-	margin-top:5px;
-	
-}
-*/
+
 .modal-title{
 	margin-left:20px;
 }
@@ -313,16 +263,7 @@ td{
 	padding-right:10px;
 	padding-left:10px;
 }
-/*
-.left-box-container{
-	float:left; 
-	width:100%; 
-	min-width:320px; 
-	max-width:360px; 
-	margin-top:20px;
-	padding-left:20px;
-}
-*/
+
 .mobile-left-pane-container{
 	min-width:98%; 
 	max-width:98%;
@@ -342,13 +283,6 @@ td{
 	margin-left:5px;
 	margin-right:0px;
 }
-/*
-.btnRight{
-	margin-top:20px;
-    margin-bottom:20px;
-    margin-right:10px;
-    min-width:100px;
-}*/
 
 .buttons-icon-mobile{
 	width:48%;
