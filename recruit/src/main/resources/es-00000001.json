@@ -1,0 +1,119 @@
+PUT /candidates
+{
+  "settings": {
+    "number_of_shards": 1
+  },
+  "mappings": {
+    "properties": {
+      "candidateId": {
+        "type": "long"
+      },
+      "firstname": {
+        "type": "keyword"
+      },
+      "surname": {
+        "type": "keyword"
+      },
+      "email": {
+        "type": "keyword"
+      },
+      "role_sought": {
+        "type": "keyword"
+      },
+      "function": {
+        "type": "keyword"
+      },
+      "country": {
+        "type": "keyword"
+      },
+      "city": {
+        "type": "keyword"
+      },
+      "perm": {
+        "type": "keyword"
+      },
+      "freelance": {
+        "type": "keyword"
+      },
+      "years_experience": {
+        "type": "integer"
+      },
+      "available": {
+        "type": "boolean"
+      },
+      "registered": {
+        "type": "date"
+      },
+      "last_availability_check": {
+        "type": "date"
+      },
+      "introduction": {
+        "type": "text"
+      },
+      "rate_contract_currency": {
+        "type": "keyword"
+      },
+      "rate_contract_period": {
+        "type": "keyword"
+      },
+      "rate_contract_value_min": {
+        "type": "float"
+      },
+      "rate_contract_value_max": {
+        "type": "float"
+      },
+      "rate_perm_currency": {
+        "type": "keyword"
+      },
+      "rate_perm_period": {
+        "type": "keyword"
+      },
+      "rate_perm_value_min": {
+        "type": "float"
+      },
+      "rate_perm_value_max": {
+        "type": "float"
+      },
+      "available_from_date": {
+        "type": "date"
+      },
+      "owner_id": {
+        "type": "keyword"
+      },
+      "candidate_type": {
+        "type": "keyword"
+      },
+      "comments": {
+        "type": "text"
+      },
+      "days_on_site": {
+        "type": "keyword"
+      },
+      "photo_format": {
+        "type": "keyword"
+      },
+      "photo_bytes": {
+        "type": "binary"
+      },
+      "requires_sponsorship": {
+        "type": "boolean"
+      },
+      "security_clearance_type": {
+        "type": "keyword"
+      },
+      "skills": {
+        "type": "keyword"
+      },
+      "languages": {
+        "properties": {
+          "language": {
+            "type": "keyword"
+          },
+          "level": {
+            "type": "keyword"
+          }
+        }
+      }
+    }
+  }
+}

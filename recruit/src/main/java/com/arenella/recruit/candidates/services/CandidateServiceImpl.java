@@ -63,6 +63,7 @@ import com.arenella.recruit.candidates.enums.COUNTRY;
 import com.arenella.recruit.candidates.enums.FUNCTION;
 import com.arenella.recruit.candidates.extractors.DocumentFilterExtractionUtil;
 import com.arenella.recruit.candidates.extractors.SkillExtractor;
+import com.arenella.recruit.candidates.repos.CandidateRepository;
 import com.arenella.recruit.candidates.utils.CandidateSuggestionUtil;
 import com.arenella.recruit.candidates.utils.CandidateSuggestionUtil.suggestion_accuracy;
 import com.arenella.recruit.candidates.utils.GeoZoneSearchUtil;
@@ -140,6 +141,9 @@ public class CandidateServiceImpl implements CandidateService{
 	
 	@Autowired
 	private SkillExtractor						skillsExtractor;
+	
+	@Autowired
+	private CandidateRepository					candidateRepo;
 	
 	/**
 	* Refer to the CandidateService Interface for Details
@@ -459,6 +463,15 @@ public class CandidateServiceImpl implements CandidateService{
 		AtomicReference<suggestion_accuracy> 		accuracy 			= new AtomicReference<>(suggestion_accuracy.perfect);
 		Pageable 									pageable 			= PageRequest.of(0,100);
 		Optional<Boolean>							available		 	= filterOptions.isAvailable();
+		
+		
+		//START WART
+		
+		long xx = candidateRepo.count();
+		System.out.println("ELASTICSEARCH -> CANDIDATES INDEX COUND =   " + xx);
+		
+		//END WART
+		
 		/**
 		* Recruiters may only view unavailable candidates if they have a paid subscription 
 		* Candidates need to be able to view their own profile even if their profile is not 
