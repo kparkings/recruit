@@ -7,18 +7,22 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import javax.persistence.CascadeType;
-import javax.persistence.CollectionTable;
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.CollectionTable;
+import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinColumns;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 
 import com.arenella.recruit.candidates.beans.Candidate;
 import com.arenella.recruit.candidates.beans.Candidate.CANDIDATE_TYPE;
@@ -164,6 +168,8 @@ public class CandidateEntity {
 	private Set<String> 			skills						= new LinkedHashSet<>();
 	
 	@OneToMany(mappedBy = "id.candidateId", cascade = CascadeType.ALL, orphanRemoval=true, fetch=FetchType.EAGER)
+	//@OneToMany( cascade = CascadeType.ALL, orphanRemoval=true, fetch=FetchType.EAGER)
+	//@JoinColumn(name = "candidate_id")
 	private Set<LanguageEntity> 	languages					= new LinkedHashSet<>();
 	
 	/**

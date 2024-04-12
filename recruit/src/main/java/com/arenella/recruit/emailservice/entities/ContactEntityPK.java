@@ -2,9 +2,9 @@ package com.arenella.recruit.emailservice.entities;
 
 import java.io.Serializable;
 
-import javax.persistence.Embeddable;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
+import jakarta.persistence.Embeddable;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 
 import com.arenella.recruit.emailservice.beans.Email.EmailRecipient.ContactType;
 

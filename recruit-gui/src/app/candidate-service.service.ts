@@ -152,7 +152,7 @@ export class CandidateServiceService {
   	*/
   	public getCandidateById(candidateId:string): Observable<any>{
       
-		const backendUrl:string = environment.backendUrl +'candidate/?orderAttribute=candidateId&order=desc&candidateId='+candidateId
+		const backendUrl:string = environment.backendUrl +'candidate?orderAttribute=candidateId&order=desc&candidateId='+candidateId
   
     	return this.httpClient.get<any>(backendUrl, this.httpOptions);
   	}
@@ -454,7 +454,7 @@ export class CandidateServiceService {
 	* Deletes an existing Candidate for a User
 	*/
 	public deleteCandidate(candidateId:string): Observable<void>{
-		
+		console.log("SENDING DELTE FROM HERE ");
 		const backendUrl:string = environment.backendUrl +'candidate/' + candidateId;
 	
 		return this.httpClient.delete<any>(backendUrl, this.httpOptions);

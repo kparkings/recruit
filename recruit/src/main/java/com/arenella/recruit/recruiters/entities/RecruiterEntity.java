@@ -6,15 +6,18 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.CollectionTable;
+import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 
 import com.arenella.recruit.recruiters.beans.Recruiter;
 import com.arenella.recruit.recruiters.beans.Recruiter.language;
@@ -70,7 +73,9 @@ public class RecruiterEntity {
 	@Column(name="account_created")
 	private LocalDate							accountCreated;
 	
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "recruiterId", cascade = CascadeType.ALL, orphanRemoval=true)
+	//@OneToMany(fetch = FetchType.EAGER, mappedBy = "recruiterId", cascade = CascadeType.ALL, orphanRemoval=true)
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval=true)
+	@JoinColumn(name = "recruiter_id")
 	private Set<RecruiterSubscriptionEntity> 	subscriptions 		= new LinkedHashSet<>();
 	
 	/**

@@ -109,6 +109,12 @@ public class OpenPositionDaoTest {
 			
 			return Set.of(c1,c2,c3);
 		}
+
+		@Override
+		public void deleteAllById(Iterable<? extends UUID> ids) {
+			// TODO Auto-generated method stub
+			
+		}
 	};
 	
 	/**

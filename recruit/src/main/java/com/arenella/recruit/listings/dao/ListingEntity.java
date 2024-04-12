@@ -7,24 +7,25 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import javax.persistence.CascadeType;
-import javax.persistence.CollectionTable;
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.CollectionTable;
+import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 
 import com.arenella.recruit.listings.beans.Listing;
 import com.arenella.recruit.listings.beans.Listing.country;
 import com.arenella.recruit.listings.beans.Listing.currency;
 import com.arenella.recruit.listings.beans.Listing.language;
 import com.arenella.recruit.listings.beans.Listing.listing_type;
+import com.arenella.recruit.newsfeed.entity.NewsFeedItemLineEntity;
 
 /**
 * Entity representation of a Listing
@@ -94,6 +95,8 @@ public class ListingEntity {
 	private currency			currency;
 
 	@OneToMany(mappedBy = "listingId", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval=true)
+	//@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval=true)
+	//@JoinColumn(name = "listing_id")
 	private Set<ListingViewedEventEntity> 		views			= new LinkedHashSet<>();
 	
 	/**

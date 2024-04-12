@@ -59,12 +59,6 @@ export class RecruiterMarketplaceService {
 			this.unseenMpPostsOfferedCandidates.next(0);
 			this.unseenMpPostsOpenPositions.next(0);
 			
-			//this.fetchOfferedCandidates().subscribe(candidates => {
-			//	this.unseenMpPosts.next(this.unseenMpPosts.getValue() + candidates.filter( c => !c.viewed && c.recruiter.recruiterId != recruiterId).length);
-			//	this.unseenMpPostsOfferedCandidates.next(candidates.filter( c => !c.viewed && c.recruiter.recruiterId != recruiterId).length);
-			//	
-			//});
-			
 			this.fetchOpenPositions().subscribe(positions => {
 				this.unseenMpPosts.next(this.unseenMpPosts.getValue() + positions.filter( p => !p.viewed && p.recruiter.recruiterId != recruiterId).length);
 				this.unseenMpPostsOpenPositions.next(positions.filter( p => !p.viewed && p.recruiter.recruiterId != recruiterId).length);
@@ -93,7 +87,7 @@ export class RecruiterMarketplaceService {
 	*/
 	public fetchOfferedCandidates(): Observable<Array<OfferedCandidate>>{
 		
-		const backendUrl:string = environment.backendUrl +'v1/offered-candidate/';
+		const backendUrl:string = environment.backendUrl +'v1/offered-candidate';
 		
 		return this.httpClient.get<any>(backendUrl, this.httpOptions);
 	}
@@ -103,7 +97,7 @@ export class RecruiterMarketplaceService {
 	*/
 	public fetchOpenPositions(): Observable<Array<OpenPosition>>{
 		
-		const backendUrl:string = environment.backendUrl +'v1/open-position/';
+		const backendUrl:string = environment.backendUrl +'v1/open-position';
 		
 		return this.httpClient.get<any>(backendUrl, this.httpOptions);
 	}
@@ -167,7 +161,7 @@ export class RecruiterMarketplaceService {
 									languages:Array<string>,
 									skills:Array<string>):Observable<any>{
 		
-		const backendUrl:string = environment.backendUrl +'v1/offered-candidate/';
+		const backendUrl:string = environment.backendUrl +'v1/offered-candidate';
 		
 		let offeredCandidate:NewOfferedCandidate = new NewOfferedCandidate();
 		
@@ -241,7 +235,7 @@ export class RecruiterMarketplaceService {
 								languages:Array<string>,
 								skills:Array<string>):Observable<any>{
 		
-		const backendUrl:string = environment.backendUrl +'v1/open-position/';
+		const backendUrl:string = environment.backendUrl +'v1/open-position';
 		
 		let openPosition:NewOpenPosition = new NewOpenPosition();
 		

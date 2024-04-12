@@ -7,19 +7,23 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.OrderBy;
-import javax.persistence.Table;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.CollectionTable;
+import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OrderBy;
+import jakarta.persistence.Table;
 
 import com.arenella.recruit.newsfeed.beans.NewsFeedItem;
 import com.arenella.recruit.newsfeed.beans.NewsFeedItem.NEWSFEED_ITEM_TYPE;
+import com.arenella.recruit.recruiters.entities.RecruiterSubscriptionEntity;
 
 /**
 * An Object as being something that can be displayed
@@ -46,6 +50,8 @@ public class NewsFeedItemEntity {
 	
 	@OrderBy("order")
 	@OneToMany(mappedBy = "newsItemId", cascade = CascadeType.ALL, orphanRemoval=true, fetch=FetchType.EAGER)
+	//@OneToMany( cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval=true)
+	//@JoinColumn(name = "newsfeed_item_id")
 	private Set<NewsFeedItemLineEntity> lines = new LinkedHashSet<>();
 	
 	/**

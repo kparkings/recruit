@@ -9,7 +9,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -95,7 +95,7 @@ public class CandidateController {
 	
 	/**
 	* Updates Candidates 	
-	* @param updateRequest	- New Candidate details
+	* @param updateRequest	- New Candidate details	
 	* @param file			- Optional profile image file
 	* @param candidateId	- Id of candidate to update
 	* @param principal		- Authorized used

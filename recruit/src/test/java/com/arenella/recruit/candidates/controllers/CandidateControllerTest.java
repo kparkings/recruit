@@ -14,7 +14,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletResponse;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

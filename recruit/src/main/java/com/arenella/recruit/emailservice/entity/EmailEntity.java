@@ -6,22 +6,25 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinColumns;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.CollectionTable;
+import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinColumns;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 
 import com.arenella.recruit.emailservice.beans.Email;
 import com.arenella.recruit.emailservice.beans.Email.EmailType;
 import com.arenella.recruit.emailservice.beans.Email.Status;
+import com.arenella.recruit.listings.dao.ListingViewedEventEntity;
 
 /**
 * Entity representation of an Email 
@@ -65,9 +68,13 @@ public class EmailEntity {
 	private SenderEntity 			sender; 
 	
 	@OneToMany(mappedBy = "emailId", cascade = CascadeType.ALL, orphanRemoval=true, fetch=FetchType.EAGER)
+	//@OneToMany(cascade = CascadeType.ALL, orphanRemoval=true, fetch=FetchType.EAGER)
+	//@JoinColumn(name = "email_id")
 	private Set<EmailRecipientEntity> 	recipients					= new LinkedHashSet<>(); 
 	
 	@OneToMany(mappedBy = "emailId", cascade = CascadeType.ALL, orphanRemoval=true, fetch=FetchType.EAGER)
+	//@OneToMany(cascade = CascadeType.ALL, orphanRemoval=true, fetch=FetchType.EAGER)
+	//@JoinColumn(name = "email_id")
 	private Set<EmailAttachmentEntity> 	attachments					= new LinkedHashSet<>(); 
 	
 	/**

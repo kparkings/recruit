@@ -1,7 +1,7 @@
 package com.arenella.recruit.authentication.services;
 import java.util.Set;
 
-import javax.servlet.http.Cookie;
+import jakarta.servlet.http.Cookie;
 
 import org.springframework.security.core.userdetails.UserDetails;
 

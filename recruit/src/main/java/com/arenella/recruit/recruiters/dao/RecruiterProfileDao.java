@@ -7,15 +7,16 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaBuilder.In;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Expression;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaBuilder.In;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Expression;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
 
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
@@ -32,13 +33,15 @@ import com.arenella.recruit.recruiters.entities.RecruiterProfileEntity;
 * @author K Parkings
 */
 @Repository
-public interface RecruiterProfileDao extends PagingAndSortingRepository<RecruiterProfileEntity,String>, JpaSpecificationExecutor<RecruiterProfileEntity>{
+public interface RecruiterProfileDao extends CrudRepository<RecruiterProfileEntity,String>, PagingAndSortingRepository<RecruiterProfileEntity,String>, JpaSpecificationExecutor<RecruiterProfileEntity>{
 
 	/**
 	* Saves the Recruiter Profile
 	* @param recruiterProfile
 	*/
 	default void saveRecruiterProfile(RecruiterProfile recruiterProfile) {
+		
+		
 		this.save(RecruiterProfileEntity.convertToEntity(recruiterProfile));
 	}
 	

@@ -3,12 +3,12 @@ package com.arenella.recruit.recruiters.entities;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.Table;
+import jakarta.persistence.Column;
+import jakarta.persistence.EmbeddedId;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.Table;
 
 import com.arenella.recruit.recruiters.beans.SupplyAndDemandEvent;
 import com.arenella.recruit.recruiters.beans.SupplyAndDemandEvent.EventType;

@@ -115,7 +115,7 @@ export class ListingService {
 	*/	
 	public fetchRecruiterListings(recruiterId:string, sortColumn:string, order:string, pageNum:number, pageSize:number):Observable<any>{
 		
-		const backendUrl:string = environment.backendUrl +'listing/?recruiterId='+recruiterId +'&orderAttribute='+  sortColumn +  '&order=' + order + '&page=' + pageNum + '&size=' + pageSize;
+		const backendUrl:string = environment.backendUrl +'listing?recruiterId='+recruiterId +'&orderAttribute='+  sortColumn +  '&order=' + order + '&page=' + pageNum + '&size=' + pageSize;
 		
 		return this.httpClient.get<any>(backendUrl, this.httpOptions);
 	}

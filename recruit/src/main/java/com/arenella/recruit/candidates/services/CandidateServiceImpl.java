@@ -464,14 +464,6 @@ public class CandidateServiceImpl implements CandidateService{
 		Pageable 									pageable 			= PageRequest.of(0,100);
 		Optional<Boolean>							available		 	= filterOptions.isAvailable();
 		
-		
-		//START WART
-		
-		long xx = candidateRepo.count();
-		System.out.println("ELASTICSEARCH -> CANDIDATES INDEX COUND =   " + xx);
-		
-		//END WART
-		
 		/**
 		* Recruiters may only view unavailable candidates if they have a paid subscription 
 		* Candidates need to be able to view their own profile even if their profile is not 
@@ -480,7 +472,6 @@ public class CandidateServiceImpl implements CandidateService{
 		if (!hasPaidSubscription() && !this.checkHasRole("ROLE_ADMIN")) {
 			filterOptions.setAvailable(true);
 			filterOptions.removeGeoZones();
-			//filterOptions.setIncludeRequiresSponsorship(null);
 		}
 		
 		/**
@@ -946,8 +937,6 @@ public class CandidateServiceImpl implements CandidateService{
 			throw new IllegalArgumentException("You cannot delete this Candidate from the System");
 		}
 		
-		//this.savedCandidateDao.deleteByCandidateId(Long.valueOf(candidateId));
-	
 		this.candidateDao.deleteById(Long.valueOf(candidateId));
 		
 		this.externalEventPublisher.publishCandidateDeletedEvent(new CandidateDeletedEvent(candidateId));

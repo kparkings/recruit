@@ -1,8 +1,8 @@
 package com.arenella.recruit.curriculum.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 /**
 * Represents a Skill that may me present in a 

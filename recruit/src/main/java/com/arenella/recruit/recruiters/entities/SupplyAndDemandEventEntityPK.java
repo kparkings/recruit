@@ -3,8 +3,8 @@ package com.arenella.recruit.recruiters.entities;
 import java.io.Serializable;
 import java.util.UUID;
 
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
 
 /**
 * Primary Key definition for SupplyAndDemandEventEntity
