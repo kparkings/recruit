@@ -20,8 +20,8 @@ public class ElasticSearchFromDBMigrationRunner {
 	@Autowired
 	private CandidateDao 		candidateDao;
 	
-	@Autowired
-	private CandidateRepository candidateRepo;
+	//@Autowired
+	//private CandidateRepository candidateRepo;
 	
 	
 	@PostConstruct

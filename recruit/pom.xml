@@ -160,30 +160,13 @@
 		    <artifactId>thumbnailator</artifactId>
 		    <version>0.4.19</version>
 		</dependency>
-		<!--
-		<dependency>
-		    <groupId>org.elasticsearch.client</groupId>
-    		<artifactId>elasticsearch-rest-client-sniffer</artifactId>
-    		<version>8.13.1</version>
-		</dependency>
-		-->
+		
 		<!-- https://mvnrepository.com/artifact/org.springframework.data/spring-data-elasticsearch -->
+		<!--
 		<dependency>
 			<groupId>org.springframework.data</groupId>
     		<artifactId>spring-data-elasticsearch</artifactId>
     	</dependency>
-		
-		<!--
-		<dependency>
-      <groupId>co.elastic.clients</groupId>
-      <artifactId>elasticsearch-java</artifactId>
-      <version>8.13.2</version>
-    </dependency>
-
-    <dependency>
-      <groupId>com.fasterxml.jackson.core</groupId>
-      <artifactId>jackson-databind</artifactId>
-    </dependency>
 -->
 	</dependencies>
 

@@ -1,7 +1,7 @@
 package com.arenella.recruit.candidates.entities;
 
-import org.springframework.data.elasticsearch.annotations.Field;
-import org.springframework.data.elasticsearch.annotations.FieldType;
+//import org.springframework.data.elasticsearch.annotations.Field;
+//import org.springframework.data.elasticsearch.annotations.FieldType;
 
 import com.arenella.recruit.candidates.beans.Candidate.Photo;
 import com.arenella.recruit.candidates.beans.Candidate.Photo.PHOTO_FORMAT;
@@ -12,10 +12,10 @@ import com.arenella.recruit.candidates.beans.Candidate.Photo.PHOTO_FORMAT;
 */
 public class PhotoDocument {
 
-	@Field(type = FieldType.Binary, name="image_bytes")
+	//@Field(type = FieldType.Binary, name="image_bytes")
 	private final byte[] 		imageBytes;
 	
-	@Field(type = FieldType.Keyword, name="format")
+	//@Field(type = FieldType.Keyword, name="format")
 	private final PHOTO_FORMAT 	format;
 	
 	/**

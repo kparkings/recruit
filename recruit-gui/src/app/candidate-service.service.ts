@@ -162,7 +162,7 @@ export class CandidateServiceService {
   	*/
   	public getCandidateByIdWithRecruiterAsOwner(candidateId:string, ownerId:string): Observable<any>{
       
-		const backendUrl:string = environment.backendUrl +'candidate/?orderAttribute=candidateId&order=desc&candidateId='+candidateId+ "&ownerId=" + ownerId
+		const backendUrl:string = environment.backendUrl +'candidate?orderAttribute=candidateId&order=desc&candidateId='+candidateId+ "&ownerId=" + ownerId
   
     	return this.httpClient.get<any>(backendUrl, this.httpOptions);
   	}
