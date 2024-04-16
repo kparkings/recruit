@@ -182,7 +182,7 @@ public class CandidateServiceImpl implements CandidateService{
 		}
 		
 		//IF Recruiter use recruiter email address and dont do this check
-		if (checkHasRole("ROLE_ADMIN") && this.candidateDao.emailInUse(candidate.getEmail())) {
+		if (checkHasRole("ROLE_ADMIN") && this.candidateRepo.emailInUse(candidate.getEmail())) {
 			throw new CandidateValidationException("Canidate with this Email alredy exists.");
 		}
 		
@@ -204,9 +204,23 @@ public class CandidateServiceImpl implements CandidateService{
 			}
 		}
 		
-		CandidateEntity entity = CandidateEntity.convertToEntity(candidate);
+		//CandidateEntity entity = CandidateEntity.convertToEntity(candidate);
 		
-		long candidateId = candidateDao.save(entity).getCandidateId();
+		//long candidateId = candidateDao.save(entity).getCandidateId();
+		
+		/****
+		* 
+		* START 
+		* 
+		*/
+		long candidateId = candidateRepo.saveCandidate(candidate);
+		/****
+		* 
+		* END 
+		* 
+		*/
+		
+		
 		
 		String password 			= PasswordUtil.generatePassword();
 		String encryptedPassword 	= PasswordUtil.encryptPassword(password);
@@ -255,7 +269,7 @@ public class CandidateServiceImpl implements CandidateService{
 	@Override
 	public void updateCandidate(String candidateId, CANDIDATE_UPDATE_ACTIONS updateAction) {
 		
-		Candidate candidate = this.candidateDao.findCandidateById(Long.valueOf(candidateId)).orElseThrow(() -> new RuntimeException("Cannot perform update on unknown Candidate: " + candidateId));
+		Candidate candidate = this.candidateRepo.findCandidateById(Long.valueOf(candidateId)).orElseThrow(() -> new RuntimeException("Cannot perform update on unknown Candidate: " + candidateId));
 		
 		NEWSFEED_ITEM_TYPE newsFeedItemType;
 		boolean createNewsFeedItem = (candidate.isAvailable() && updateAction == CANDIDATE_UPDATE_ACTIONS.disable) || (!candidate.isAvailable() && updateAction == CANDIDATE_UPDATE_ACTIONS.enable);
@@ -277,7 +291,7 @@ public class CandidateServiceImpl implements CandidateService{
 			}
 		}
 		
-		this.candidateDao.saveCandidate(candidate);
+		this.candidateRepo.saveCandidate(candidate);
 		
 		if (createNewsFeedItem) {
 			CandidateUpdateEvent event = CandidateUpdateEvent
@@ -741,7 +755,7 @@ public class CandidateServiceImpl implements CandidateService{
 		
 		this.savedCandidateDao.fetchSavedCandidatesByUserId(getAuthenticatedUserId()).stream().forEach(c -> {
 			
-			Optional<Candidate> candidate = candidateDao.findCandidateById(c.getCandidateId());
+			Optional<Candidate> candidate = candidateRepo.findCandidateById(c.getCandidateId());
 			
 			if (candidate.isPresent()) {
 				candidates.put(c, candidate.get());
@@ -801,7 +815,7 @@ public class CandidateServiceImpl implements CandidateService{
 			}
 		}
 		
-		Optional<Candidate> candidate = this.candidateDao.findCandidateById(Long.valueOf(candidateId));
+		Optional<Candidate> candidate = this.candidateRepo.findCandidateById(Long.valueOf(candidateId));
 		
 		if (candidate.isEmpty()) {
 			throw new IllegalArgumentException("Unknown Candidate.");
@@ -834,9 +848,9 @@ public class CandidateServiceImpl implements CandidateService{
 			throw new IllegalArgumentException("You are not authorized to update Candidate profiles");
 		}
 		
-		Candidate existingCandidate = this.candidateDao.findCandidateById(Long.valueOf(candidate.getCandidateId())).orElseThrow(() -> new IllegalArgumentException("Cannot update Unknown Candidate"));
+		Candidate existingCandidate = this.candidateRepo.findCandidateById(Long.valueOf(candidate.getCandidateId())).orElseThrow(() -> new IllegalArgumentException("Cannot update Unknown Candidate"));
 		
-		if (!isRecruiter && this.candidateDao.emailInUseByOtherUser(candidate.getEmail(), Long.valueOf(candidate.getCandidateId()))) {
+		if (!isRecruiter && this.candidateRepo.emailInUseByOtherUser(candidate.getEmail(), Long.valueOf(candidate.getCandidateId()))) {
 			throw new IllegalStateException("Cannot update. Email address alread in use by anothe user");
 		}
 		
@@ -898,7 +912,7 @@ public class CandidateServiceImpl implements CandidateService{
 					.securityClearance(candidate.getSecurityClearance())
 				.build();
 		
-		this.candidateDao.saveCandidate(updatedCandidate);
+		this.candidateRepo.saveCandidate(updatedCandidate);
 		this.externalEventPublisher.publishCandidateAccountUpdatedEvent(new CandidateUpdatedEvent(candidate.getCandidateId(), candidate.getFirstname(), candidate.getSurname(), candidate.getEmail()));
 		
 		CandidateUpdateEvent event = CandidateUpdateEvent
@@ -931,7 +945,7 @@ public class CandidateServiceImpl implements CandidateService{
 			throw new IllegalStateException("You cannot delete another Candidate from the System");
 		}
 		
-		Candidate candidate = this.candidateDao.findCandidateById(Long.valueOf(candidateId)).orElseThrow(() -> new IllegalArgumentException("Cannot delete a non existent Candidate"));
+		Candidate candidate = this.candidateRepo.findCandidateById(Long.valueOf(candidateId)).orElseThrow(() -> new IllegalArgumentException("Cannot delete a non existent Candidate"));
 		
 		if (checkHasRole("ROLE_RECRUITER") && !this.getAuthenticatedUserId().equals(candidate.getOwnerId().get())) {
 			throw new IllegalArgumentException("You cannot delete this Candidate from the System");
@@ -984,7 +998,7 @@ public class CandidateServiceImpl implements CandidateService{
 	@Override
 	public void sendEmailToCandidate(String message, String candidateId, String title, String userId) {
 		
-		Candidate candidate = this.candidateDao.findCandidateById(Long.valueOf(candidateId)).orElseThrow();
+		Candidate candidate = this.candidateRepo.findCandidateById(Long.valueOf(candidateId)).orElseThrow();
 		
 		if (candidate.getOwnerId().isPresent()) {
 			this.externalEventPublisher
@@ -1140,7 +1154,7 @@ public class CandidateServiceImpl implements CandidateService{
 	*/
 	@Override
 	public long getCountByAvailable(boolean available) {
-		return this.candidateDao.getCountByAvailable(available);
+		return this.candidateRepo.getCountByAvailable(available);
 	}
 	
 	

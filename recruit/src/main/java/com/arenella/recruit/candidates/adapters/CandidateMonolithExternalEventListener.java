@@ -15,7 +15,7 @@ import com.arenella.recruit.adapters.events.RecruiterUpdatedEvent;
 import com.arenella.recruit.adapters.events.SubscriptionAddedEvent;
 import com.arenella.recruit.candidates.beans.Candidate;
 import com.arenella.recruit.candidates.beans.RecruiterCredit;
-import com.arenella.recruit.candidates.dao.CandidateDao;
+import com.arenella.recruit.candidates.repos.CandidateRepository;
 import com.arenella.recruit.candidates.services.CandidateService;
 import com.arenella.recruit.newsfeed.beans.NewsFeedItem.NEWSFEED_ITEM_TYPE;
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_type;
@@ -29,12 +29,12 @@ public class CandidateMonolithExternalEventListener implements CandidateExternal
 
 	@Autowired
 	private CandidateService 			candidateService;
-	
-	@Autowired
-	private CandidateDao 				canidateDao;
-	
+		
 	@Autowired
 	private ExternalEventPublisher		externalEventPublisher;
+	
+	@Autowired
+	private CandidateRepository 		canidateRepo;
 	
 	/**
 	* Refer to CandidateExternalEventListener for details 
@@ -117,7 +117,7 @@ public class CandidateMonolithExternalEventListener implements CandidateExternal
 	@Override
 	public void listenForCurriculumUpdatedEvent(CurriculumUpdatedEvent event) {
 		
-		Optional<Candidate> optCandidate = this.canidateDao.findCandidateById(Integer.valueOf(event.getCurriculumId()));
+		Optional<Candidate> optCandidate = this.canidateRepo.findCandidateById(Integer.valueOf(event.getCurriculumId()));
 				
 		if (optCandidate.isPresent()) {
 			

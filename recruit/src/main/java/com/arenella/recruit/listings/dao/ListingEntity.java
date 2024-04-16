@@ -25,7 +25,6 @@ import com.arenella.recruit.listings.beans.Listing.country;
 import com.arenella.recruit.listings.beans.Listing.currency;
 import com.arenella.recruit.listings.beans.Listing.language;
 import com.arenella.recruit.listings.beans.Listing.listing_type;
-import com.arenella.recruit.newsfeed.entity.NewsFeedItemLineEntity;
 
 /**
 * Entity representation of a Listing

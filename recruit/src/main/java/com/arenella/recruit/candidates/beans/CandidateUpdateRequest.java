@@ -8,7 +8,6 @@ import java.util.Set;
 import com.arenella.recruit.candidates.beans.Candidate.DAYS_ON_SITE;
 import com.arenella.recruit.candidates.beans.Candidate.Rate;
 import com.arenella.recruit.candidates.beans.Candidate.SECURITY_CLEARANCE_TYPE;
-import com.arenella.recruit.candidates.controllers.CandidateAPIInbound.CandidateAPIInboundBuilder;
 import com.arenella.recruit.candidates.enums.COUNTRY;
 import com.arenella.recruit.candidates.enums.FREELANCE;
 import com.arenella.recruit.candidates.enums.FUNCTION;

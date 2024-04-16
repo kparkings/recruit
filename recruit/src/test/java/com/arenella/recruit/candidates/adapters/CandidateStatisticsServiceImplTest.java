@@ -18,6 +18,7 @@ import com.arenella.recruit.candidates.controllers.CandidateStatisticsController
 import com.arenella.recruit.candidates.dao.CandidateDao;
 import com.arenella.recruit.candidates.dao.CandidateSearchStatisticsDao;
 import com.arenella.recruit.candidates.dao.NewCandidateStatsTypeDao;
+import com.arenella.recruit.candidates.repos.CandidateRepository;
 import com.arenella.recruit.candidates.services.CandidateStatisticsServiceImpl;
 import com.arenella.recruit.candidates.services.CandidateStatisticsService.NEW_STATS_TYPE;
 
@@ -30,6 +31,10 @@ public class CandidateStatisticsServiceImplTest {
 
 	@Mock
 	private CandidateDao 						mockCandidateDao;
+	
+	@Mock
+	private CandidateRepository 				mockCandidateRepo;
+	
 	
 	@Mock
 	private NewCandidateStatsTypeDao			mockNewCandidateStatsTypeDao;
@@ -49,7 +54,7 @@ public class CandidateStatisticsServiceImplTest {
 		
 		final Long availableCandidates = 787L;
 		
-		Mockito.when(mockCandidateDao.countByAvailable(true)).thenReturn(availableCandidates);
+		Mockito.when(mockCandidateRepo.getCountByAvailable(true)).thenReturn(availableCandidates);
 		
 		assertEquals(availableCandidates, service.fetchNumberOfAvailableCandidates());
 		
@@ -64,7 +69,7 @@ public class CandidateStatisticsServiceImplTest {
 		
 		final Candidate candidate = Candidate.builder().build();
 		
-		Mockito.when(this.mockCandidateDao.findNewSinceLastDate(Mockito.any(LocalDate.class))).thenReturn(Set.of(candidate));
+		Mockito.when(this.mockCandidateRepo.findNewSinceLastDate(Mockito.any(LocalDate.class))).thenReturn(Set.of(candidate));
 		
 		Set<Candidate> candidates =  this.service.fetchNewCandidates(LocalDate.of(2022, 11, 5));
 		

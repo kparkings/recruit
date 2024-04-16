@@ -25,6 +25,7 @@ import com.arenella.recruit.candidates.entities.CandidateRoleStatsView;
 import com.arenella.recruit.candidates.entities.CandidateSearchEventEntity;
 import com.arenella.recruit.candidates.enums.COUNTRY;
 import com.arenella.recruit.candidates.enums.FUNCTION;
+import com.arenella.recruit.candidates.repos.CandidateRepository;
 
 /**
 * Services for retrieving statistics relating to Candidates
@@ -42,12 +43,15 @@ public class CandidateStatisticsServiceImpl implements CandidateStatisticsServic
 	@Autowired
 	private NewCandidateStatsTypeDao			newCandidateStatsTypeDao;
 	
+	@Autowired
+	private CandidateRepository					candidateRepo;
+	
 	/**
 	* Refer to StatisticsService for details 
 	*/
 	@Override
 	public Long fetchNumberOfAvailableCandidates() {
-		return candidateDao.countByAvailable(true);
+		return candidateRepo.getCountByAvailable(true);
 	}
 
 	/**
@@ -119,7 +123,7 @@ public class CandidateStatisticsServiceImpl implements CandidateStatisticsServic
 	*/
 	@Override
 	public Set<Candidate> fetchNewCandidates(LocalDate since) {
-		return this.candidateDao.findNewSinceLastDate(since);
+		return this.candidateRepo.findNewSinceLastDate(since);
 	}
 
 	/**

@@ -1,6 +1,5 @@
 package com.arenella.recruit.candidates.utils;
 
-import java.util.stream.StreamSupport;
 
 import javax.annotation.PostConstruct;
 
@@ -27,13 +26,13 @@ public class ElasticSearchFromDBMigrationRunner {
 	@PostConstruct
 	public void migrateDBtoElasticsearch() {
 		
-		StreamSupport.stream(this.candidateDao.findAll().spliterator(),false).forEach(candidateEntity -> {
+		//StreamSupport.stream(this.candidateDao.findAll().spliterator(),false).forEach(candidateEntity -> {
 			
-			Candidate candidate = CandidateEntity.convertFromEntity(candidateEntity);
+		//	Candidate candidate = CandidateEntity.convertFromEntity(candidateEntity);
 			
-			candidateRepo.save(CandidateDocument.convertToDocument(candidate));
+		//	candidateRepo.save(CandidateDocument.convertToDocument(candidate));
 			
-		});		
+		//});		
 		
 		
 	}

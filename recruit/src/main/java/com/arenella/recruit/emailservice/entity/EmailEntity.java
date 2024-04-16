@@ -7,9 +7,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import jakarta.persistence.CascadeType;
-import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
-import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -24,7 +22,6 @@ import jakarta.persistence.Table;
 import com.arenella.recruit.emailservice.beans.Email;
 import com.arenella.recruit.emailservice.beans.Email.EmailType;
 import com.arenella.recruit.emailservice.beans.Email.Status;
-import com.arenella.recruit.listings.dao.ListingViewedEventEntity;
 
 /**
 * Entity representation of an Email 

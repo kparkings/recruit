@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -25,7 +24,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
-import org.springframework.data.repository.query.Param;
 
 import com.arenella.recruit.candidates.beans.Candidate;
 import com.arenella.recruit.candidates.beans.CandidateFilterOptions;
@@ -43,29 +41,29 @@ import com.arenella.recruit.candidates.enums.RESULT_ORDER;
 */
 public interface CandidateDao extends CrudRepository<CandidateEntity, Long>, JpaSpecificationExecutor<CandidateEntity> {
 
-	@Query("from CandidateEntity where email = :emailId")
-	public Set<CandidateEntity> fetchByEmail(String emailId);
+	//@Query("from CandidateEntity where email = :emailId")
+	//public Set<CandidateEntity> fetchByEmail(String emailId);
 	
-	@Query("from CandidateEntity where email = :emailId and candidateId != :candidateId")
-	public Set<CandidateEntity> fetchByEmail(String emailId, long candidateId);
+	//@Query("from CandidateEntity where email = :emailId and candidateId != :candidateId")
+	//public Set<CandidateEntity> fetchByEmail(String emailId, long candidateId);
 	
 	/**
 	* Returns whether or not Email is already used for the Candidate
 	* @param email - email address to filter on
 	* @return If Email already used for the Candidate
 	*/
-	default boolean emailInUse(String email) {
-		return !this.fetchByEmail(email).isEmpty();
-	}
+	//default boolean emailInUse(String email) {
+	//	return !this.fetchByEmail(email).isEmpty();
+	//}
 	
 	/**
 	* Returns whether or not Email is already used by another Candidate
 	* @param email - email address to filter on
 	* @return If Email already used for another Candidate
 	*/
-	default boolean emailInUseByOtherUser(String email, long userId) {
-		return !this.fetchByEmail(email, userId).isEmpty();
-	}
+	//default boolean emailInUseByOtherUser(String email, long userId) {
+	//	return !this.fetchByEmail(email, userId).isEmpty();
+	//}
 	
 	/**
 	* Returns all Candidates matching the filter options
@@ -81,21 +79,21 @@ public interface CandidateDao extends CrudRepository<CandidateEntity, Long>, Jpa
 	* @param candidateId - Id to search for
 	* @return Candidate matching id
 	*/
-	public default Optional<Candidate> findCandidateById(long candidateId){
+	//public default Optional<Candidate> findCandidateById(long candidateId){
 		
-		Optional<CandidateEntity> entity = this.findById(candidateId);
+	//	Optional<CandidateEntity> entity = this.findById(candidateId);
 		
-		if (entity.isEmpty()) {
-			return Optional.empty();
-		}
+	//	if (entity.isEmpty()) {
+	//		return Optional.empty();
+	//	}
 		
-		return Optional.of(CandidateEntity.convertFromEntity(entity.get()));
+	//	return Optional.of(CandidateEntity.convertFromEntity(entity.get()));
 		
-	}
+	//}
 	
-	public default void saveCandidate(Candidate candidate) {
-		this.save(CandidateEntity.convertToEntity(candidate));
-	}
+	//public default void saveCandidate(Candidate candidate) {
+	//	this.save(CandidateEntity.convertToEntity(candidate));
+	//}
 	
 	/**
 	* Returns all Candidates matching the filter options
@@ -292,7 +290,7 @@ public interface CandidateDao extends CrudRepository<CandidateEntity, Long>, Jpa
 	* @param active - Whether the Candidates are looking for a new role
 	* @return count of matching Candidates
 	*/
-	public Long countByAvailable(boolean active);
+	//public Long countByAvailable(boolean active);
 	
 	/**
 	* Retrieves stats showing the number of available candidates 
@@ -302,25 +300,25 @@ public interface CandidateDao extends CrudRepository<CandidateEntity, Long>, Jpa
 	@Query("Select new com.arenella.recruit.candidates.entities.CandidateRoleStatsView(c.function, count(c.function) ) from CandidateEntity c where c.available = true group by c.function order by c.function")
 	public List<CandidateRoleStatsView> getCandidateRoleStats();
 
-	@Query("from CandidateEntity c where c.available = true and c.registerd > :#{#since} order by c.registerd")
-	public Set<CandidateEntity> findNewSinceLastDateRaw(@Param(value = "since") LocalDate since);
+	//@Query("from CandidateEntity c where c.available = true and c.registerd > :#{#since} order by c.registerd")
+	//public Set<CandidateEntity> findNewSinceLastDateRaw(@Param(value = "since") LocalDate since);
 	
 	/**
 	* Returns all the new candidates registered after a given date
 	* @param since - data after which candidates must have been registered
 	* @return New candidates
 	*/
-	public default Set<Candidate> findNewSinceLastDate(LocalDate since){
-		return this.findNewSinceLastDateRaw(since).stream().map(CandidateEntity::convertFromEntity).collect(Collectors.toSet());
-	}
+	//public default Set<Candidate> findNewSinceLastDate(LocalDate since){
+	//	return this.findNewSinceLastDateRaw(since).stream().map(CandidateEntity::convertFromEntity).collect(Collectors.toSet());
+//	}
 	
 	/**
 	* Returns the number of available/unavailable candidates
 	* @param available - Filter on available / unavailable
 	* @return count
 	*/
-	@Query("select count(*) from CandidateEntity where available = :available")
-	public long getCountByAvailable(boolean available);
+	//@Query("select count(*) from CandidateEntity where available = :available")
+	//public long getCountByAvailable(boolean available);
 	
 		
 }

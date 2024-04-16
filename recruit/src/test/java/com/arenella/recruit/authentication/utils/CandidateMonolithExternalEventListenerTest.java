@@ -20,6 +20,7 @@ import com.arenella.recruit.candidates.adapters.ExternalEventPublisher;
 import com.arenella.recruit.candidates.beans.Candidate;
 import com.arenella.recruit.candidates.beans.RecruiterCredit;
 import com.arenella.recruit.candidates.dao.CandidateDao;
+import com.arenella.recruit.candidates.repos.CandidateRepository;
 import com.arenella.recruit.candidates.services.CandidateService;
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_type;
 
@@ -46,6 +47,9 @@ public class CandidateMonolithExternalEventListenerTest {
 	
 	@Mock
 	private ExternalEventPublisher					mockExternalEventPublisher;
+	
+	@Mock
+	private CandidateRepository 					mockCandidateRepo;
 	
 	/**
 	* Tests handling of RecruiterCreatedEvent persists contact
@@ -152,7 +156,7 @@ public class CandidateMonolithExternalEventListenerTest {
 		
 		final String id = "1000";
 		
-		Mockito.when(this.mockCandidateDao.findCandidateById(Long.valueOf(id))).thenReturn(Optional.empty());
+		Mockito.when(this.mockCandidateRepo.findCandidateById(Long.valueOf(id))).thenReturn(Optional.empty());
 		
 		this.listener.listenForCurriculumUpdatedEvent(new CurriculumUpdatedEvent(id));
 		
@@ -170,7 +174,7 @@ public class CandidateMonolithExternalEventListenerTest {
 		
 		final String id = "1000";
 		
-		Mockito.when(this.mockCandidateDao.findCandidateById(Long.valueOf(id))).thenReturn(Optional.of(Candidate.builder()
+		Mockito.when(this.mockCandidateRepo.findCandidateById(Long.valueOf(id))).thenReturn(Optional.of(Candidate.builder()
 				.candidateId(id)
 				.build()));
 		
