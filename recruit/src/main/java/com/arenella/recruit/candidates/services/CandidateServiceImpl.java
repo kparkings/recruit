@@ -142,8 +142,8 @@ public class CandidateServiceImpl implements CandidateService{
 	@Autowired
 	private SkillExtractor						skillsExtractor;
 	
-	//@Autowired
-	//private CandidateRepository					candidateRepo;
+	@Autowired
+	private CandidateRepository					candidateRepo;
 	
 	/**
 	* Refer to the CandidateService Interface for Details

@@ -3,8 +3,8 @@ package com.arenella.recruit.candidates.entities;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 
-//import org.springframework.data.elasticsearch.annotations.Field;
-//import org.springframework.data.elasticsearch.annotations.FieldType;
+import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.FieldType;
 
 import com.arenella.recruit.candidates.beans.Language;
 
@@ -15,11 +15,11 @@ import com.arenella.recruit.candidates.beans.Language;
 */
 public class LanguageDocument {
 
-	//@Field(type = FieldType.Keyword, name="language")
+	@Field(type = FieldType.Keyword, name="language")
 	@Enumerated(EnumType.STRING)
 	private final Language.LANGUAGE		language;
 
-	//@Field(type = FieldType.Keyword, name="level")
+	@Field(type = FieldType.Keyword, name="level")
 	@Enumerated(EnumType.STRING)
 	private final Language.LEVEL		level;
 	

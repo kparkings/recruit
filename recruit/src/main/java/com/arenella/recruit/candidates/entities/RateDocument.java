@@ -1,7 +1,7 @@
 package com.arenella.recruit.candidates.entities;
 
-//import org.springframework.data.elasticsearch.annotations.Field;
-//import org.springframework.data.elasticsearch.annotations.FieldType;
+import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.FieldType;
 
 import com.arenella.recruit.candidates.beans.Candidate.Rate;
 import com.arenella.recruit.candidates.beans.Candidate.Rate.CURRENCY;
@@ -13,16 +13,16 @@ import com.arenella.recruit.candidates.beans.Candidate.Rate.PERIOD;
 */
 public class RateDocument {
 		
-	//@Field(type = FieldType.Keyword, name="curency")
+	@Field(type = FieldType.Keyword, name="curency")
 	private final CURRENCY 	currency;
 	
-	//@Field(type = FieldType.Keyword, name="period")
+	@Field(type = FieldType.Keyword, name="period")
 	private final PERIOD 	period;
 	
-	//@Field(type = FieldType.Float, name="value_min")
+	@Field(type = FieldType.Float, name="value_min")
 	private final float 	valueMin;
 	
-	//@Field(type = FieldType.Float, name="value_max")
+	@Field(type = FieldType.Float, name="value_max")
 	private final float 	valueMax;
 
 	/**

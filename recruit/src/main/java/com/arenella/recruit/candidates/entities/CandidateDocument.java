@@ -6,16 +6,13 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.OneToMany;
 
 import org.springframework.data.annotation.Id;
-//import org.springframework.data.elasticsearch.annotations.Document;
-//import org.springframework.data.elasticsearch.annotations.Field;
-//import org.springframework.data.elasticsearch.annotations.FieldType;
+import org.springframework.data.elasticsearch.annotations.Document;
+import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.FieldType;
 
 import com.arenella.recruit.candidates.beans.Candidate;
 import com.arenella.recruit.candidates.beans.Candidate.CANDIDATE_TYPE;
@@ -30,99 +27,99 @@ import com.arenella.recruit.candidates.enums.PERM;
 * Elasticasearch Document representation of a Candidate
 * @author K Parkings
 */ 
-//@Document(indexName="candidates")
+@Document(indexName="candidates")
 public class CandidateDocument {
 
-	//@Id
-	//@Field(type = FieldType.Keyword, name="candidate_id")
+	@Id
+	@Field(type = FieldType.Keyword, name="candidate_id")
 	private String		candidateId;
 	
-	//@Field(type = FieldType.Keyword, name="firstname")
+	@Field(type = FieldType.Keyword, name="firstname")
 	private String 		firstname;
 	
-	//@Field(type = FieldType.Keyword, name="surname")
+	@Field(type = FieldType.Keyword, name="surname")
 	private String 		surname;
 	
-	//@Field(type = FieldType.Keyword, name="email")
+	@Field(type = FieldType.Keyword, name="email")
 	private String 		email;
 	
-	//@Field(type = FieldType.Keyword, name="role_sought")
+	@Field(type = FieldType.Keyword, name="role_sought")
 	private String roleSought;
 	
-	//@Field(type = FieldType.Keyword, name="function")
+	@Field(type = FieldType.Keyword, name="function")
 	@Enumerated(EnumType.STRING)
 	private FUNCTION function;
 	
-	//@Field(type = FieldType.Keyword, name="country")
+	@Field(type = FieldType.Keyword, name="country")
 	@Enumerated(EnumType.STRING)
 	private COUNTRY 	country;
 	
-	//@Field(type = FieldType.Keyword, name="city")
+	@Field(type = FieldType.Keyword, name="city")
 	private String 		city;
 	
-	//@Field(type = FieldType.Keyword, name="perm")
+	@Field(type = FieldType.Keyword, name="perm")
 	@Enumerated(EnumType.STRING)
 	private PERM 		perm;
 	
-	//@Field(type = FieldType.Keyword, name="freelance")
+	@Field(type = FieldType.Keyword, name="freelance")
 	@Enumerated(EnumType.STRING)
 	private FREELANCE 	freelance;
 	
-	//@Field(type = FieldType.Integer, name="years_experience")
+	@Field(type = FieldType.Integer, name="years_experience")
 	private int			yearsExperience;
 	
-	//@Field(type = FieldType.Boolean, name="available")
+	@Field(type = FieldType.Boolean, name="available")
 	private boolean 	available;
 	
-	//@Field(type = FieldType.Date, name="registered")
+	@Field(type = FieldType.Date, name="registered")
 	private LocalDate 	registerd;
 	
-	//@Field(type = FieldType.Date, name="last_availability_check")
+	@Field(type = FieldType.Date, name="last_availability_check")
 	private LocalDate 	lastAvailabilityCheck;
 	
-	//@Field(type = FieldType.Keyword, name="introduction")
+	@Field(type = FieldType.Keyword, name="introduction")
 	private String introduction;
 	
 	@Enumerated(EnumType.STRING)
-	////@Field(type = FieldType.Object, name="rate_contract")
+	//@Field(type = FieldType.Object, name="rate_contract")
 	private RateDocument rateContract;
 	
 	@Enumerated(EnumType.STRING)
-	////@Field(type = FieldType.Object, name="rate_perm")
+	//@Field(type = FieldType.Object, name="rate_perm")
 	private RateDocument ratePerm;
 	
-	//@Field(type = FieldType.Date, name="available_from_date")
+	@Field(type = FieldType.Date, name="available_from_date")
 	private LocalDate 		availableFromDate;
 	
-	//@Field(type = FieldType.Keyword, name="owner_id")
+	@Field(type = FieldType.Keyword, name="owner_id")
 	private String 			ownerId;
 	
-	//@Field(type = FieldType.Keyword, name="candidate_type")
+	@Field(type = FieldType.Keyword, name="candidate_type")
 	@Enumerated(EnumType.STRING)
 	private CANDIDATE_TYPE	candidateType;
 	
-	//@Field(type = FieldType.Keyword, name="comments")
+	@Field(type = FieldType.Keyword, name="comments")
 	private String comments;
 	
-	//@Field(type = FieldType.Keyword, name="days_on_site")
+	@Field(type = FieldType.Keyword, name="days_on_site")
 	@Enumerated(EnumType.STRING)
 	private DAYS_ON_SITE daysOnSite;
     
 	@Enumerated(EnumType.STRING)
-	////@Field(type = FieldType.Object, name="photo")
+	//@Field(type = FieldType.Object, name="photo")
     private PhotoDocument photo;      
     
-	//@Field(type = FieldType.Boolean, name="requires_sponsorship")
+	@Field(type = FieldType.Boolean, name="requires_sponsorship")
     private boolean requiresSponsorship;
     
-	//@Field(type = FieldType.Keyword, name="security_clearance_type")
+	@Field(type = FieldType.Keyword, name="security_clearance_type")
     @Enumerated(EnumType.STRING)
     private SECURITY_CLEARANCE_TYPE securityClearance;
        
-	//@Field(type = FieldType.Keyword, name="skills")
+	@Field(type = FieldType.Keyword, name="skills")
 	private Set<String> 			skills						= new LinkedHashSet<>();
 	
-	////@OneToMany(mappedBy = "id.candidateId", cascade = CascadeType.ALL, orphanRemoval=true, fetch=FetchType.EAGER)
+	//@OneToMany(mappedBy = "id.candidateId", cascade = CascadeType.ALL, orphanRemoval=true, fetch=FetchType.EAGER)
 	private Set<LanguageDocument> 	languages					= new LinkedHashSet<>();
 	
 	/**
