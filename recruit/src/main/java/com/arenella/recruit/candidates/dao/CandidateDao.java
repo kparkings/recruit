@@ -297,8 +297,8 @@ public interface CandidateDao extends CrudRepository<CandidateEntity, Long>, Jpa
 	* per function
 	* @return candidate function stats
 	*/
-	@Query("Select new com.arenella.recruit.candidates.entities.CandidateRoleStatsView(c.function, count(c.function) ) from CandidateEntity c where c.available = true group by c.function order by c.function")
-	public List<CandidateRoleStatsView> getCandidateRoleStats();
+	//@Query("Select new com.arenella.recruit.candidates.entities.CandidateRoleStatsView(c.function, count(c.function) ) from CandidateEntity c where c.available = true group by c.function order by c.function")
+	//public List<CandidateRoleStatsView> getCandidateRoleStats();
 
 	//@Query("from CandidateEntity c where c.available = true and c.registerd > :#{#since} order by c.registerd")
 	//public Set<CandidateEntity> findNewSinceLastDateRaw(@Param(value = "since") LocalDate since);

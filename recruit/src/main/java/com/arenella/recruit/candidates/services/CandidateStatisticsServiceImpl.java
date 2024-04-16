@@ -27,6 +27,8 @@ import com.arenella.recruit.candidates.enums.COUNTRY;
 import com.arenella.recruit.candidates.enums.FUNCTION;
 import com.arenella.recruit.candidates.repos.CandidateRepository;
 
+import co.elastic.clients.elasticsearch.ElasticsearchClient;
+
 /**
 * Services for retrieving statistics relating to Candidates
 * @author K Parkings
@@ -36,6 +38,9 @@ public class CandidateStatisticsServiceImpl implements CandidateStatisticsServic
 
 	@Autowired
 	private CandidateDao 						candidateDao;
+	
+	@Autowired
+	private ElasticsearchClient 				esClient;
 	
 	@Autowired
 	private CandidateSearchStatisticsDao 		statisticsDao;
@@ -60,7 +65,7 @@ public class CandidateStatisticsServiceImpl implements CandidateStatisticsServic
 	@Override
 	public List<CandidateRoleStats> fetchCandidateRoleStats() {
 		
-		return candidateDao.getCandidateRoleStats().stream().map(CandidateRoleStatsView::convertFromView).collect(Collectors.toCollection(LinkedList::new));
+		return candidateRepo.getCandidateRoleStats(esClient).stream().map(CandidateRoleStatsView::convertFromView).collect(Collectors.toCollection(LinkedList::new));
 	}
 
 	/**
