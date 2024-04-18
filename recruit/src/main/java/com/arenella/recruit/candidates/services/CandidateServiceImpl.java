@@ -78,6 +78,9 @@ import com.arenella.recruit.emailservice.beans.Email.Sender;
 import com.arenella.recruit.emailservice.beans.Email.EmailRecipient.ContactType;
 import com.arenella.recruit.emailservice.beans.Email.Sender.SenderType;
 import com.arenella.recruit.newsfeed.beans.NewsFeedItem.NEWSFEED_ITEM_TYPE;
+
+import co.elastic.clients.elasticsearch.ElasticsearchClient;
+
 import com.arenella.recruit.candidates.utils.PasswordUtil;
 import com.arenella.recruit.candidates.dao.CandidateSearchAlertDao;
 import com.arenella.recruit.candidates.dao.CandidateSkillsDao;
@@ -145,6 +148,10 @@ public class CandidateServiceImpl implements CandidateService{
 	@Autowired
 	private CandidateRepository					candidateRepo;
 	
+	@Autowired
+	private ElasticsearchClient 				esClient;
+	
+	
 	/**
 	* Refer to the CandidateService Interface for Details
 	*/
@@ -182,7 +189,7 @@ public class CandidateServiceImpl implements CandidateService{
 		}
 		
 		//IF Recruiter use recruiter email address and dont do this check
-		if (checkHasRole("ROLE_ADMIN") && this.candidateRepo.emailInUse(candidate.getEmail())) {
+		if (checkHasRole("ROLE_ADMIN") && this.candidateRepo.emailInUse(candidate.getEmail(),esClient)) {
 			throw new CandidateValidationException("Canidate with this Email alredy exists.");
 		}
 		
@@ -367,7 +374,7 @@ public class CandidateServiceImpl implements CandidateService{
 		filterOptions.setEnglish(null);
 		filterOptions.setFrench(null);
 		
-		Set<Candidate> results = this.candidateDao.findCandidates(filterOptions);
+		Set<Candidate> results = this.candidateRepo.findCandidates(filterOptions, esClient);
 		
 		if (results.isEmpty()) {
 			return suggestion_accuracy.poor;
@@ -578,7 +585,7 @@ public class CandidateServiceImpl implements CandidateService{
 		
 		while (true) {
 		
-			Page<Candidate> candidates = candidateDao.findAll(filterOptions, pageable).map(CandidateEntity::convertFromEntity);
+			Page<Candidate> candidates = candidateRepo.findAll(filterOptions, this.esClient, pageable);
 			
 			candidates.getContent().stream().filter(c -> !suggestionIds.contains(c.getCandidateId())).forEach(candidate -> {
 		
@@ -850,7 +857,7 @@ public class CandidateServiceImpl implements CandidateService{
 		
 		Candidate existingCandidate = this.candidateRepo.findCandidateById(Long.valueOf(candidate.getCandidateId())).orElseThrow(() -> new IllegalArgumentException("Cannot update Unknown Candidate"));
 		
-		if (!isRecruiter && this.candidateRepo.emailInUseByOtherUser(candidate.getEmail(), Long.valueOf(candidate.getCandidateId()))) {
+		if (!isRecruiter && this.candidateRepo.emailInUseByOtherUser(candidate.getEmail(), Long.valueOf(candidate.getCandidateId()),esClient)) {
 			throw new IllegalStateException("Cannot update. Email address alread in use by anothe user");
 		}
 		

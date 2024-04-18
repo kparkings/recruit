@@ -28,7 +28,7 @@ import com.arenella.recruit.candidates.enums.PERM;
 */
 public class CandidateDocumentTest {
 
-	private static final String						CANDIDATE_ID			= "123";
+	private static final long						CANDIDATE_ID			= 123;
 	private static final String 					FIRSTNAME				= "Kevin";
 	private static final String 					SURNAME					= "Parkings";
 	private static final String 					EMAIL					= "kparkings@gmail.com";
@@ -220,7 +220,7 @@ public class CandidateDocumentTest {
 				.builder()
 					.available(AVAILABLE)
 					.availableFromDate(AVAILABLE_FROM_DATE)
-					.candidateId(CANDIDATE_ID)
+					.candidateId(String.valueOf(CANDIDATE_ID))
 					.candidateType(CANDIDATE_TYPE_VAL)
 					.city(CITY)
 					.comments(COMMENTS)

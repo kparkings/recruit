@@ -12,11 +12,15 @@ import com.arenella.recruit.candidates.beans.Candidate.Photo.PHOTO_FORMAT;
 */
 public class PhotoDocument {
 
-	@Field(type = FieldType.Binary, name="image_bytes")
-	private final byte[] 		imageBytes;
+	@Field(type = FieldType.Binary)
+	private byte[] 		imageBytes;
 	
-	@Field(type = FieldType.Keyword, name="format")
-	private final PHOTO_FORMAT 	format;
+	@Field(type = FieldType.Keyword)
+	private PHOTO_FORMAT 	format;
+	
+	public PhotoDocument() {
+		
+	}
 	
 	/**
 	* Constructor

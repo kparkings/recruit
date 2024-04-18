@@ -20,6 +20,10 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+
 import java.util.Arrays;
 
 @Configuration
@@ -51,6 +55,14 @@ public class WebSecurityConfig {
 	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
 		auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
 	}
+	
+	//@Bean
+    //public ObjectMapper getObjectMapper() {
+     //   ObjectMapper mapper = new ObjectMapper();
+     //   mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+     //   mapper.registerModule(new JavaTimeModule());
+      //  return mapper;
+    //}
 	
 	/**
 	* Bean for encoding Passwords

@@ -13,18 +13,22 @@ import com.arenella.recruit.candidates.beans.Candidate.Rate.PERIOD;
 */
 public class RateDocument {
 		
-	@Field(type = FieldType.Keyword, name="curency")
-	private final CURRENCY 	currency;
+	@Field(type = FieldType.Keyword)
+	private CURRENCY 	currency;
 	
-	@Field(type = FieldType.Keyword, name="period")
-	private final PERIOD 	period;
+	@Field(type = FieldType.Keyword)
+	private PERIOD 	period;
 	
-	@Field(type = FieldType.Float, name="value_min")
-	private final float 	valueMin;
+	@Field(type = FieldType.Float)
+	private float 	valueMin;
 	
-	@Field(type = FieldType.Float, name="value_max")
-	private final float 	valueMax;
+	@Field(type = FieldType.Float)
+	private float 	valueMax;
 
+	public RateDocument() {
+		
+	}
+	
 	/**
 	* Constructor
 	* @param currency	- Currenty

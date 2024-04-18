@@ -1,6 +1,9 @@
 package com.arenella.recruit.candidates.entities;
 
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -22,104 +25,106 @@ import com.arenella.recruit.candidates.enums.COUNTRY;
 import com.arenella.recruit.candidates.enums.FREELANCE;
 import com.arenella.recruit.candidates.enums.FUNCTION;
 import com.arenella.recruit.candidates.enums.PERM;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 /**
 * Elasticasearch Document representation of a Candidate
 * @author K Parkings
 */ 
-@Document(indexName="candidates")
+@Document(indexName="candidates", writeTypeHint = org.springframework.data.elasticsearch.annotations.WriteTypeHint.FALSE)
 public class CandidateDocument {
 
 	@Id
-	@Field(type = FieldType.Keyword, name="candidate_id")
-	private String		candidateId;
+	@Field(type = FieldType.Long)
+	private Long		candidateId;
 	
-	@Field(type = FieldType.Keyword, name="firstname")
+	@Field(type = FieldType.Keyword)
 	private String 		firstname;
 	
-	@Field(type = FieldType.Keyword, name="surname")
+	@Field(type = FieldType.Keyword)
 	private String 		surname;
 	
-	@Field(type = FieldType.Keyword, name="email")
+	@Field(type = FieldType.Keyword)
 	private String 		email;
 	
-	@Field(type = FieldType.Keyword, name="role_sought")
+	@Field(type = FieldType.Keyword)
 	private String roleSought;
 	
-	@Field(type = FieldType.Keyword, name="function")
+	@Field(type = FieldType.Keyword)
 	@Enumerated(EnumType.STRING)
 	private FUNCTION function;
 	
-	@Field(type = FieldType.Keyword, name="country")
+	@Field(type = FieldType.Keyword)
 	@Enumerated(EnumType.STRING)
 	private COUNTRY 	country;
 	
-	@Field(type = FieldType.Keyword, name="city")
+	@Field(type = FieldType.Keyword)
 	private String 		city;
 	
-	@Field(type = FieldType.Keyword, name="perm")
+	@Field(type = FieldType.Keyword)
 	@Enumerated(EnumType.STRING)
 	private PERM 		perm;
 	
-	@Field(type = FieldType.Keyword, name="freelance")
+	@Field(type = FieldType.Keyword)
 	@Enumerated(EnumType.STRING)
 	private FREELANCE 	freelance;
 	
-	@Field(type = FieldType.Integer, name="years_experience")
+	@Field(type = FieldType.Integer)
 	private int			yearsExperience;
 	
-	@Field(type = FieldType.Boolean, name="available")
+	@Field(type = FieldType.Boolean)
 	private boolean 	available;
 	
-	@Field(type = FieldType.Date, name="registered")
-	private LocalDate 	registerd;
+	@Field(type = FieldType.Date)
+	//@JsonFormat(pattern = "yyyy-MM-dd")
+	private Date 	registerd;
 	
-	@Field(type = FieldType.Date, name="last_availability_check")
-	private LocalDate 	lastAvailabilityCheck;
+	@Field(type = FieldType.Date)
+	//@JsonFormat(pattern = "yyyy-MM-dd")
+	private Date 	lastAvailabilityCheck;
 	
-	@Field(type = FieldType.Keyword, name="introduction")
+	@Field(type = FieldType.Keyword)
 	private String introduction;
 	
 	@Enumerated(EnumType.STRING)
-	//@Field(type = FieldType.Object, name="rate_contract")
 	private RateDocument rateContract;
 	
 	@Enumerated(EnumType.STRING)
-	//@Field(type = FieldType.Object, name="rate_perm")
 	private RateDocument ratePerm;
 	
-	@Field(type = FieldType.Date, name="available_from_date")
-	private LocalDate 		availableFromDate;
+	@Field(type = FieldType.Date)
+	//@JsonFormat(pattern = "yyyy-MM-dd")
+	private Date 		availableFromDate;
 	
-	@Field(type = FieldType.Keyword, name="owner_id")
+	@Field(type = FieldType.Keyword)
 	private String 			ownerId;
 	
-	@Field(type = FieldType.Keyword, name="candidate_type")
+	@Field(type = FieldType.Keyword)
 	@Enumerated(EnumType.STRING)
 	private CANDIDATE_TYPE	candidateType;
 	
-	@Field(type = FieldType.Keyword, name="comments")
+	@Field(type = FieldType.Keyword)
 	private String comments;
 	
-	@Field(type = FieldType.Keyword, name="days_on_site")
+	@Field(type = FieldType.Keyword)
 	@Enumerated(EnumType.STRING)
 	private DAYS_ON_SITE daysOnSite;
     
 	@Enumerated(EnumType.STRING)
-	//@Field(type = FieldType.Object, name="photo")
-    private PhotoDocument photo;      
+	private PhotoDocument photo;      
     
-	@Field(type = FieldType.Boolean, name="requires_sponsorship")
+	@Field(type = FieldType.Boolean)
     private boolean requiresSponsorship;
     
-	@Field(type = FieldType.Keyword, name="security_clearance_type")
+	@Field(type = FieldType.Keyword)
     @Enumerated(EnumType.STRING)
     private SECURITY_CLEARANCE_TYPE securityClearance;
        
-	@Field(type = FieldType.Keyword, name="skills")
+	@Field(type = FieldType.Keyword)
 	private Set<String> 			skills						= new LinkedHashSet<>();
 	
-	//@OneToMany(mappedBy = "id.candidateId", cascade = CascadeType.ALL, orphanRemoval=true, fetch=FetchType.EAGER)
 	private Set<LanguageDocument> 	languages					= new LinkedHashSet<>();
 	
 	/**
@@ -132,6 +137,9 @@ public class CandidateDocument {
 	* @param builder - Contains initialization values
 	*/
 	public CandidateDocument(CandidateDocumentBuilder builder) {
+		
+		ZoneId defaultZoneId = ZoneId.systemDefault();
+		
 		this.candidateId 				= builder.candidateId;
 		this.firstname 					= builder.firstname;
 		this.surname 					= builder.surname;
@@ -144,12 +152,12 @@ public class CandidateDocument {
 		this.freelance 					= builder.freelance;
 		this.yearsExperience 			= builder.yearsExperience;
 		this.available 					= builder.available;
-		this.registerd 					= builder.registerd;
-		this.lastAvailabilityCheck 		= builder.lastAvailabilityCheck;
+		this.registerd 					= Date.from(builder.registerd.atStartOfDay(defaultZoneId).toInstant());
+		this.lastAvailabilityCheck 		= Date.from(builder.lastAvailabilityCheck.atStartOfDay(defaultZoneId).toInstant());
 		this.introduction 				= builder.introduction;
 		this.rateContract 				= builder.rateContract;
 		this.ratePerm 					= builder.ratePerm;
-		this.availableFromDate 			= builder.availableFromDate;
+		this.availableFromDate 			= Date.from(builder.availableFromDate.atStartOfDay(defaultZoneId).toInstant());
 		this.ownerId 					= builder.ownerId;
 		this.candidateType 				= builder.candidateType;
 		this.comments 					= builder.comments;
@@ -157,6 +165,7 @@ public class CandidateDocument {
 		this.photo 						= builder.photo;      
 		this.requiresSponsorship 		= builder.requiresSponsorship;
 		this.securityClearance 			= builder.securityClearance;
+		
 		
 		
 		this.skills.clear();
@@ -169,7 +178,7 @@ public class CandidateDocument {
 	* Returns the unique identifier of the Candidate
 	* @return unique Id of the candidate
 	*/
-	public String getCandidateId() {
+	public long getCandidateId() {
 		return this.candidateId;
 	}
 	
@@ -241,11 +250,19 @@ public class CandidateDocument {
 		return this.freelance;
 	}
 	
+	public FREELANCE getFreelance() {
+		return this.freelance;
+	}
+	
 	/**
 	* Returns whether or not the Candidate is interested in permanent roles
 	* @return Whether or not the Candidate is interested in permanent roles
 	*/
 	public PERM isPerm() {
+		return this.perm;
+	}
+	
+	public PERM getPerm() {
 		return this.perm;
 	}
 	
@@ -269,7 +286,14 @@ public class CandidateDocument {
 	* Returns the Date that the Candidate was registered in the System
 	* @return Date the Candidate Registered
 	*/
-	public LocalDate getRegisteredOn() {
+	public Date getRegisteredOn() {
+		//ZoneId defaultZoneId = ZoneId.systemDefault();
+		return this.registerd;
+	}
+	
+	//@JsonFormat(pattern = "yyyy-MM-dd")
+   public Date getRegisterd() {
+		//ZoneId defaultZoneId = ZoneId.systemDefault();
 		return this.registerd;
 	}
 	
@@ -278,7 +302,14 @@ public class CandidateDocument {
 	* that they were still available for a new role
 	* @return Date of last availability check
 	*/
-	public LocalDate getLastAvailabilityCheckOn() {
+	//@JsonFormat(pattern = "yyyy-MM-dd")
+	public Date getLastAvailabilityCheckOn() {
+		//ZoneId defaultZoneId = ZoneId.systemDefault();
+		return this.lastAvailabilityCheck;
+	}
+	
+	public Date getLastAvailabilityCheck() {
+		//ZoneId defaultZoneId = ZoneId.systemDefault();
 		return this.lastAvailabilityCheck;
 	}
 	
@@ -347,7 +378,11 @@ public class CandidateDocument {
 	* @return When the candidate is available from
 	*/
 	public LocalDate getAvailableFromDate(){
-		return Optional.ofNullable(this.availableFromDate).orElse(LocalDate.now());
+		
+		return Optional.ofNullable(this.availableFromDate).isEmpty() ? LocalDate.now() : Instant.ofEpochMilli(this.availableFromDate.getTime())
+			      .atZone(ZoneId.systemDefault())
+			      .toLocalDate();
+			
 	}
 	
 	/**
@@ -413,7 +448,7 @@ public class CandidateDocument {
 	*/
 	public static class CandidateDocumentBuilder{
 		
-		private String					candidateId;
+		private long					candidateId;
 		private String 					firstname;
 		private String 					surname;
 		private String 					email;
@@ -446,7 +481,7 @@ public class CandidateDocument {
 		* @param candidateId - Unique identifier of the Candidate
 		* @return Builder
 		*/
-		public CandidateDocumentBuilder candidateId(String candidateId) {
+		public CandidateDocumentBuilder candidateId(long candidateId) {
 			this.candidateId = candidateId;
 			return this;
 		}
@@ -736,7 +771,7 @@ public class CandidateDocument {
 				.builder()
 					.available(doc.isAvailable())
 					.availableFromDate(doc.getAvailableFromDate())
-					.candidateId(doc.getCandidateId())
+					.candidateId(String.valueOf(doc.getCandidateId()))
 					.candidateType(doc.getCandidateType())
 					.city(doc.getCity())
 					.comments(doc.getComments())
@@ -749,13 +784,17 @@ public class CandidateDocument {
 					.function(doc.getFunction())
 					.introduction(doc.getIntroduction())
 					.languages(doc.getLanguages().stream().map(l ->  LanguageDocument.convertToDomain(l)).collect(Collectors.toCollection(LinkedHashSet::new)))
-					.lastAvailabilityCheck(doc.getLastAvailabilityCheckOn())
+					.lastAvailabilityCheck(doc.getLastAvailabilityCheckOn().toInstant()
+						      .atZone(ZoneId.systemDefault())
+						      .toLocalDate())
 					.ownerId(doc.getOwnerId().isEmpty() ? null : doc.getOwnerId().get())
 					.perm(doc.isPerm())
 					.photo(doc.getPhoto().isEmpty() ? null : PhotoDocument.convertToDomain(doc.getPhoto().get()))
 					.rateContract(doc.getRateContract().isEmpty() ? null : RateDocument.convertToDomain(doc.getRateContract().get()))
 					.ratePerm(doc.getRatePerm().isEmpty() ? null : RateDocument.convertToDomain(doc.getRatePerm().get()))
-					.registerd(doc.getRegisteredOn())
+					.registerd(doc.getRegisteredOn().toInstant()
+						      .atZone(ZoneId.systemDefault())
+						      .toLocalDate())
 					.requiresSponsorship(doc.getRequiresSponsorship())
 					.roleSought(doc.getRoleSought())
 					.securityClearance(doc.getSecurityClearance())
@@ -776,7 +815,7 @@ public class CandidateDocument {
 				.builder()
 					.available(candidate.isAvailable())
 					.availableFromDate(candidate.getAvailableFromDate())
-					.candidateId(candidate.getCandidateId())
+					.candidateId(Long.valueOf(candidate.getCandidateId()))
 					.candidateType(candidate.getCandidateType())
 					.city(candidate.getCity())
 					.comments(candidate.getComments())

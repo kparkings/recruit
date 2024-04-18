@@ -1,5 +1,6 @@
 package com.arenella.recruit.candidates.enums;
 
+
 /**
 * Valid options for a Candidates availability 
 * to perfom perm roles

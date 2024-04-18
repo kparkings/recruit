@@ -17,23 +17,10 @@ import jakarta.persistence.criteria.JoinType;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 
-import org.apache.commons.lang.StringUtils;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
-import com.arenella.recruit.candidates.beans.Candidate;
-import com.arenella.recruit.candidates.beans.CandidateFilterOptions;
-import com.arenella.recruit.candidates.beans.Language.LANGUAGE;
 import com.arenella.recruit.candidates.entities.CandidateEntity;
-import com.arenella.recruit.candidates.entities.CandidateRoleStatsView;
-import com.arenella.recruit.candidates.entities.LanguageEntity;
-import com.arenella.recruit.candidates.enums.FREELANCE;
-import com.arenella.recruit.candidates.enums.PERM;
-import com.arenella.recruit.candidates.enums.RESULT_ORDER;
 
 /**
 * Defines DAO functions for interacting with CandidateEntity objects
@@ -70,9 +57,9 @@ public interface CandidateDao extends CrudRepository<CandidateEntity, Long>, Jpa
 	* @param filterOptions - options to filter Candidates on
 	* @return Candidates matching the filter options
 	*/
-	public default Page<CandidateEntity> findAll(CandidateFilterOptions filterOptions, Pageable pageable) {
-		return this.findAll(new FilterSpecification(filterOptions), pageable);
-	}
+	//public default Page<CandidateEntity> findAll(CandidateFilterOptions filterOptions, Pageable pageable) {
+	//	return this.findAll(new FilterSpecification(filterOptions), pageable);
+	//}
 	
 	/**
 	* If Candidate found return candidate. Otherwise empty
@@ -100,188 +87,188 @@ public interface CandidateDao extends CrudRepository<CandidateEntity, Long>, Jpa
 	* @param filterOptions - options to filter Candidates on
 	* @return Candidates matching the filter options
 	*/
-	public default Iterable<CandidateEntity> findAll(CandidateFilterOptions filterOptions) {
-		return this.findAll(new FilterSpecification(filterOptions));
-	}
+	//public default Iterable<CandidateEntity> findAll(CandidateFilterOptions filterOptions) {
+	//	return this.findAll(new FilterSpecification(filterOptions));
+	//}
 	
-	public default Set<Candidate> findCandidates(CandidateFilterOptions filterOptions){
-		return StreamSupport.stream(this.findAll(filterOptions).spliterator(), false).map(CandidateEntity::convertFromEntity).collect(Collectors.toCollection(LinkedHashSet::new));
-	}
+	//public default Set<Candidate> findCandidates(CandidateFilterOptions filterOptions){
+	//	return StreamSupport.stream(this.findAll(filterOptions).spliterator(), false).map(CandidateEntity::convertFromEntity).collect(Collectors.toCollection(LinkedHashSet::new));
+	//}
 			
 	/**
 	* FilterSpecifiation reflecting the values in the FilterOptiions
 	* @author K Parkings
 	*/
-	public static class FilterSpecification implements Specification<CandidateEntity>{
+	//public static class FilterSpecification implements Specification<CandidateEntity>{
 		
-		private static final long serialVersionUID = -4056828138503774297L;
+	//	private static final long serialVersionUID = -4056828138503774297L;
 
-		private CandidateFilterOptions filterOptions;
+	//	private CandidateFilterOptions filterOptions;
 		
 		/**
 		* Constructor
 		* @param filterOptions - Information on how to set up the FilterSpecification
 		*/
-		public FilterSpecification(CandidateFilterOptions filterOptions){
-			this.filterOptions = filterOptions;
-		}
+	//	public FilterSpecification(CandidateFilterOptions filterOptions){
+	//		this.filterOptions = filterOptions;
+	//	}
 		
 		/**
 		* Refer to the JpaSpecificationExecutor interface for details 
 		*/
-		@Override
-		public Predicate toPredicate(Root<CandidateEntity> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
+	//	@Override
+	//	public Predicate toPredicate(Root<CandidateEntity> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
 			
-			List<Predicate> predicates = new ArrayList<>();
+	//		List<Predicate> predicates = new ArrayList<>();
 			
-			if (!this.filterOptions.getFirstname().isEmpty()) {
-				Expression<String> permExpression 						= root.get("firstname");
-				Expression<String> upperExpression 						= criteriaBuilder.upper(permExpression);
-				predicates.add(criteriaBuilder.like(upperExpression, this.filterOptions.getFirstname().get().toUpperCase()));
-			}
+	//		if (!this.filterOptions.getFirstname().isEmpty()) {
+	//			Expression<String> permExpression 						= root.get("firstname");
+	//			Expression<String> upperExpression 						= criteriaBuilder.upper(permExpression);
+	//			predicates.add(criteriaBuilder.like(upperExpression, this.filterOptions.getFirstname().get().toUpperCase()));
+	//		}
 			
-			if (!this.filterOptions.getSurname().isEmpty()) {
-				Expression<String> permExpression 						= root.get("surname");
-				Expression<String> upperExpression 						= criteriaBuilder.upper(permExpression);
-				predicates.add(criteriaBuilder.like(upperExpression, this.filterOptions.getSurname().get().toUpperCase()));
-			}
+	//		if (!this.filterOptions.getSurname().isEmpty()) {
+	//			Expression<String> permExpression 						= root.get("surname");
+	//			Expression<String> upperExpression 						= criteriaBuilder.upper(permExpression);
+	//			predicates.add(criteriaBuilder.like(upperExpression, this.filterOptions.getSurname().get().toUpperCase()));
+	//		}
 			
 			
-			if (!this.filterOptions.getEmail().isEmpty()) {
-				Expression<String> permExpression 						= root.get("email");
-				Expression<String> upperExpression 						= criteriaBuilder.upper(permExpression);
-				predicates.add(criteriaBuilder.like(upperExpression, this.filterOptions.getEmail().get().toUpperCase()));
-			}
+	//		if (!this.filterOptions.getEmail().isEmpty()) {
+	//			Expression<String> permExpression 						= root.get("email");
+	//			Expression<String> upperExpression 						= criteriaBuilder.upper(permExpression);
+	//			predicates.add(criteriaBuilder.like(upperExpression, this.filterOptions.getEmail().get().toUpperCase()));
+	//		}
 			
-			if (!this.filterOptions.getSkills().isEmpty()) {
+	//		if (!this.filterOptions.getSkills().isEmpty()) {
 				
-				Expression<Collection<String>> skillValues = root.get("skills");
+	//			Expression<Collection<String>> skillValues = root.get("skills");
 				
-				this.filterOptions.getSkills().forEach(skill -> 
-					predicates.add(criteriaBuilder.isMember(skill.toLowerCase().trim(), skillValues))
-				);
+	//			this.filterOptions.getSkills().forEach(skill -> 
+	//				predicates.add(criteriaBuilder.isMember(skill.toLowerCase().trim(), skillValues))
+	//			);
 				
-			}
+	//		}
 			
-			if (!this.filterOptions.getDutch().isEmpty()) {
-				Join<CandidateEntity,LanguageEntity> dutchJoin = root.join("languages", JoinType.INNER);
+	//		if (!this.filterOptions.getDutch().isEmpty()) {
+	//			Join<CandidateEntity,LanguageEntity> dutchJoin = root.join("languages", JoinType.INNER);
 				
-				dutchJoin.on(criteriaBuilder.and(
-							criteriaBuilder.equal(dutchJoin.get("id").get("language"), LANGUAGE.DUTCH),
-							criteriaBuilder.equal(dutchJoin.get("level"), this.filterOptions.getDutch().get())
-						));
-			}
+	//			dutchJoin.on(criteriaBuilder.and(
+	//						criteriaBuilder.equal(dutchJoin.get("id").get("language"), LANGUAGE.DUTCH),
+	//						criteriaBuilder.equal(dutchJoin.get("level"), this.filterOptions.getDutch().get())
+		//				));
+	//		}
 			
-			if (!this.filterOptions.getFrench().isEmpty()) {
-				Join<CandidateEntity,LanguageEntity> frenchJoin = root.join("languages", JoinType.INNER);
+	//		if (!this.filterOptions.getFrench().isEmpty()) {
+	//			Join<CandidateEntity,LanguageEntity> frenchJoin = root.join("languages", JoinType.INNER);
 				
-				frenchJoin.on(criteriaBuilder.and(
-							criteriaBuilder.equal(frenchJoin.get("id").get("language"), LANGUAGE.FRENCH),
-							criteriaBuilder.equal(frenchJoin.get("level"), this.filterOptions.getFrench().get())
-						));
-			}
+	//			frenchJoin.on(criteriaBuilder.and(
+	//						criteriaBuilder.equal(frenchJoin.get("id").get("language"), LANGUAGE.FRENCH),
+	//						criteriaBuilder.equal(frenchJoin.get("level"), this.filterOptions.getFrench().get())
+	//					));
+	//		}
 			
-			if (!this.filterOptions.getEnglish().isEmpty()) {
-				Join<CandidateEntity,LanguageEntity> frenchJoin = root.join("languages", JoinType.INNER);
+	//		if (!this.filterOptions.getEnglish().isEmpty()) {
+	//			Join<CandidateEntity,LanguageEntity> frenchJoin = root.join("languages", JoinType.INNER);
 				
-				frenchJoin.on(criteriaBuilder.and(
-							criteriaBuilder.equal(frenchJoin.get("id").get("language"), LANGUAGE.ENGLISH),
-							criteriaBuilder.equal(frenchJoin.get("level"), this.filterOptions.getEnglish().get())
-						));
-			}
+	//			frenchJoin.on(criteriaBuilder.and(
+	//						criteriaBuilder.equal(frenchJoin.get("id").get("language"), LANGUAGE.ENGLISH),
+	//						criteriaBuilder.equal(frenchJoin.get("level"), this.filterOptions.getEnglish().get())
+	//					));
+	//		}
 			
-			if (!this.filterOptions.getCandidateIds().isEmpty()) {
-				Predicate candidateIdFltr 						= root.get("candidateId").in(filterOptions.getCandidateIds());
+	//		if (!this.filterOptions.getCandidateIds().isEmpty()) {
+	//			Predicate candidateIdFltr 						= root.get("candidateId").in(filterOptions.getCandidateIds());
+	//			
+	//			predicates.add(candidateIdFltr);
+	//		}
+			
+	//		if (!this.filterOptions.getCountries().isEmpty()) {
+	//			Predicate countriesFltr 						= root.get("country").in(filterOptions.getCountries());
+	//			predicates.add(countriesFltr);
+	//		}
+			
+	//		if (!this.filterOptions.getFunctions().isEmpty()) {
+	//			Predicate functionsFltr 						= root.get("function").in(filterOptions.getFunctions());
+	//			predicates.add(functionsFltr);
+	//		}
+			
+	//		if (!this.filterOptions.isFreelance().isEmpty() && this.filterOptions.isFreelance().get()) {
+	//			Expression<String> freelanceExpression 			= root.get("freelance");
+	//			predicates.add(criteriaBuilder.equal(freelanceExpression, 	FREELANCE.TRUE));
+	//		}
+			
+	//		if (!this.filterOptions.isPerm().isEmpty() && this.filterOptions.isPerm().get()) {
+	//			Expression<String> permExpression 				= root.get("perm");
+	//			predicates.add(criteriaBuilder.equal(permExpression, 		PERM.TRUE));
+	//		}
+			
+	//		if (this.filterOptions.getYearsExperienceGtEq() > 0 ) {
+	//			Expression<Integer> yearsExperienceExpression 	= root.get("yearsExperience");
+	//			predicates.add(criteriaBuilder.greaterThanOrEqualTo(yearsExperienceExpression, this.filterOptions.getYearsExperienceGtEq()));
+	//		}
+			
+	//		if (this.filterOptions.getYearsExperienceLtEq() > 0 ) {
+	//			Expression<Integer> yearsExperienceExpression 	= root.get("yearsExperience");
+	//			predicates.add(criteriaBuilder.lessThanOrEqualTo(yearsExperienceExpression, this.filterOptions.getYearsExperienceLtEq()));
+	//		}
+			
+	//		if (this.filterOptions.getDaysSinceLastAvailabilityCheck().isPresent()) {
+	//			Expression<LocalDate>  daysSinceLastAvailabilityCheck	= root.get("lastAvailabilityCheck");
+	//			LocalDate cutOff = LocalDate.now().minusDays(this.filterOptions.getDaysSinceLastAvailabilityCheck().get());
+	//			predicates.add(criteriaBuilder.lessThanOrEqualTo(daysSinceLastAvailabilityCheck, cutOff));
+		//	}
+			
+	//		if (this.filterOptions.getOwnerId().isPresent()) {
+	//			Expression<String> ownerIdExpression 				= root.get("ownerId");
+	//			predicates.add(criteriaBuilder.equal(ownerIdExpression, 		this.filterOptions.getOwnerId().get()));
+	//		}
+			
+	//		if (this.filterOptions.getIncludeRequiresSponsorship().isEmpty() || this.filterOptions.getIncludeRequiresSponsorship().get() == false) {
+	//			Expression<Boolean> includeRequiredSponsorship = root.get("requiresSponsorship");
+	//			predicates.add(criteriaBuilder.notEqual(includeRequiredSponsorship, true));
+	//		}
+			
+	//		Expression<String> sortExpression 				= root.get("candidateId");
+			
+	//		if (this.filterOptions.getOrderAttribute().isPresent()) {
+	//			sortExpression 				= root.get(filterOptions.getOrderAttribute().get());
+	//			if (this.filterOptions.getOrder().get() == RESULT_ORDER.asc) {
+	//				query.orderBy(criteriaBuilder.asc(sortExpression));
+	//			} else {
+	//				query.orderBy(criteriaBuilder.desc(sortExpression));
+	//			}
 				
-				predicates.add(candidateIdFltr);
-			}
+	//		} else {
+	//			query.orderBy(criteriaBuilder.desc(sortExpression));
+	//		}
 			
-			if (!this.filterOptions.getCountries().isEmpty()) {
-				Predicate countriesFltr 						= root.get("country").in(filterOptions.getCountries());
-				predicates.add(countriesFltr);
-			}
-			
-			if (!this.filterOptions.getFunctions().isEmpty()) {
-				Predicate functionsFltr 						= root.get("function").in(filterOptions.getFunctions());
-				predicates.add(functionsFltr);
-			}
-			
-			if (!this.filterOptions.isFreelance().isEmpty() && this.filterOptions.isFreelance().get()) {
-				Expression<String> freelanceExpression 			= root.get("freelance");
-				predicates.add(criteriaBuilder.equal(freelanceExpression, 	FREELANCE.TRUE));
-			}
-			
-			if (!this.filterOptions.isPerm().isEmpty() && this.filterOptions.isPerm().get()) {
-				Expression<String> permExpression 				= root.get("perm");
-				predicates.add(criteriaBuilder.equal(permExpression, 		PERM.TRUE));
-			}
-			
-			if (this.filterOptions.getYearsExperienceGtEq() > 0 ) {
-				Expression<Integer> yearsExperienceExpression 	= root.get("yearsExperience");
-				predicates.add(criteriaBuilder.greaterThanOrEqualTo(yearsExperienceExpression, this.filterOptions.getYearsExperienceGtEq()));
-			}
-			
-			if (this.filterOptions.getYearsExperienceLtEq() > 0 ) {
-				Expression<Integer> yearsExperienceExpression 	= root.get("yearsExperience");
-				predicates.add(criteriaBuilder.lessThanOrEqualTo(yearsExperienceExpression, this.filterOptions.getYearsExperienceLtEq()));
-			}
-			
-			if (this.filterOptions.getDaysSinceLastAvailabilityCheck().isPresent()) {
-				Expression<LocalDate>  daysSinceLastAvailabilityCheck	= root.get("lastAvailabilityCheck");
-				LocalDate cutOff = LocalDate.now().minusDays(this.filterOptions.getDaysSinceLastAvailabilityCheck().get());
-				predicates.add(criteriaBuilder.lessThanOrEqualTo(daysSinceLastAvailabilityCheck, cutOff));
-			}
-			
-			if (this.filterOptions.getOwnerId().isPresent()) {
-				Expression<String> ownerIdExpression 				= root.get("ownerId");
-				predicates.add(criteriaBuilder.equal(ownerIdExpression, 		this.filterOptions.getOwnerId().get()));
-			}
-			
-			if (this.filterOptions.getIncludeRequiresSponsorship().isEmpty() || this.filterOptions.getIncludeRequiresSponsorship().get() == false) {
-				Expression<Boolean> includeRequiredSponsorship = root.get("requiresSponsorship");
-				predicates.add(criteriaBuilder.notEqual(includeRequiredSponsorship, true));
-			}
-			
-			Expression<String> sortExpression 				= root.get("candidateId");
-			
-			if (this.filterOptions.getOrderAttribute().isPresent()) {
-				sortExpression 				= root.get(filterOptions.getOrderAttribute().get());
-				if (this.filterOptions.getOrder().get() == RESULT_ORDER.asc) {
-					query.orderBy(criteriaBuilder.asc(sortExpression));
-				} else {
-					query.orderBy(criteriaBuilder.desc(sortExpression));
-				}
+	//		if (this.filterOptions.getSearchText() != null && this.filterOptions.getSearchText().startsWith("C#")) {
 				
-			} else {
-				query.orderBy(criteriaBuilder.desc(sortExpression));
-			}
-			
-			if (this.filterOptions.getSearchText() != null && this.filterOptions.getSearchText().startsWith("C#")) {
+	//			String candidateId = this.filterOptions.getSearchText().substring(2);
 				
-				String candidateId = this.filterOptions.getSearchText().substring(2);
+	//			if (candidateId != null && !candidateId.equals("") && StringUtils.isNumeric(candidateId)) {
+	//				predicates.clear();
+	//				Expression<Long> candidateIdExpression 						= root.get("candidateId");
+	//				predicates.add(criteriaBuilder.equal(candidateIdExpression, Long.valueOf(candidateId)));
+	//			}
 				
-				if (candidateId != null && !candidateId.equals("") && StringUtils.isNumeric(candidateId)) {
-					predicates.clear();
-					Expression<Long> candidateIdExpression 						= root.get("candidateId");
-					predicates.add(criteriaBuilder.equal(candidateIdExpression, Long.valueOf(candidateId)));
-				}
-				
-			} 
+	//		} 
 			
-			//After CandidateId search so only Admin and paid subscription users can search on unavailable candidates
-			if (this.filterOptions.isAvailable().isEmpty()) {
-				//Predicate isActiveFltr 						= root.get("available").in(true);
-				//predicates.add(isActiveFltr);
-			} else {
-				Predicate isActiveFltr 						= root.get("available").in(filterOptions.isAvailable().get().booleanValue());
-				predicates.add(isActiveFltr);
-			}
+	//		//After CandidateId search so only Admin and paid subscription users can search on unavailable candidates
+	//		if (this.filterOptions.isAvailable().isEmpty()) {
+	//			//Predicate isActiveFltr 						= root.get("available").in(true);
+	//			//predicates.add(isActiveFltr);
+	//		} else {
+	//			Predicate isActiveFltr 						= root.get("available").in(filterOptions.isAvailable().get().booleanValue());
+	//			predicates.add(isActiveFltr);
+	//		}
 			
-			return criteriaBuilder.and(predicates.stream().toArray(n -> new Predicate[n]));
+	//		return criteriaBuilder.and(predicates.stream().toArray(n -> new Predicate[n]));
 			
-		}
+	//	}
 		
-	}
+	//}
 	
 	/**
 	* Returns the number of Candidates that are either

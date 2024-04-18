@@ -26,6 +26,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -85,6 +86,9 @@ import com.arenella.recruit.candidates.utils.CandidateSuggestionUtil;
 import com.arenella.recruit.candidates.utils.SkillsSynonymsUtil;
 import com.arenella.recruit.emailservice.adapters.RequestSendEmailCommand;
 import com.arenella.recruit.newsfeed.beans.NewsFeedItem.NEWSFEED_ITEM_TYPE;
+
+import co.elastic.clients.elasticsearch.ElasticsearchClient;
+
 import com.arenella.recruit.candidates.utils.CandidateSuggestionUtil.suggestion_accuracy;
 
 /**
@@ -148,6 +152,9 @@ public class CandidateServiceImplTest {
 	@Spy
 	private CandidateFunctionExtractorImpl			mockCandidateFunctionExtractor;
 	
+	@Mock
+	private ElasticsearchClient 					mockEsClient;
+	
 	@InjectMocks
 	private CandidateServiceImpl 					service 					= new CandidateServiceImpl();
 	
@@ -171,7 +178,7 @@ public class CandidateServiceImplTest {
 		
 		Mockito.when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
 		Mockito.when(mockAuthentication.getAuthorities()).thenReturn(authorities);
-		Mockito.when(this.mockCandidateRepo.emailInUse(Mockito.anyString())).thenReturn(true);
+		Mockito.when(this.mockCandidateRepo.emailInUse(Mockito.anyString(), Mockito.any())).thenReturn(true);
 		
 		assertThrows(CandidateValidationException.class, () -> {
 			this.service.persistCandidate(Candidate.builder().email("kparkings@gmail.com").build());
@@ -240,7 +247,7 @@ public class CandidateServiceImplTest {
 		Collection authorities = new HashSet<>();
 		authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
 
-		Mockito.when(this.mockCandidateRepo.emailInUse(Mockito.anyString())).thenReturn(false);
+		Mockito.when(this.mockCandidateRepo.emailInUse(Mockito.anyString(), Mockito.any())).thenReturn(false);
 	
 		Mockito.when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
 		Mockito.when(mockAuthentication.getAuthorities()).thenReturn(authorities);
@@ -668,7 +675,7 @@ public class CandidateServiceImplTest {
 		
 		ArgumentCaptor<CandidateFilterOptions> filterArgCaptor = ArgumentCaptor.forClass(CandidateFilterOptions.class);
 		
-		Mockito.when(this.mockCandidateDao.findCandidates(filterArgCaptor.capture())).thenReturn(Set.of());
+		Mockito.when(this.mockCandidateRepo.findCandidates(filterArgCaptor.capture(), Mockito.any())).thenReturn(Set.of());
 		
 		suggestion_accuracy accuracy = this.service.doTestCandidateAlert(candidateId, filterOptions);
 		
@@ -704,7 +711,7 @@ public class CandidateServiceImplTest {
 		ArgumentCaptor<CandidateFilterOptions> filterArgCaptor = ArgumentCaptor.forClass(CandidateFilterOptions.class);
 		
 		Mockito
-			.when(this.mockCandidateDao.findCandidates(filterArgCaptor.capture()))
+			.when(this.mockCandidateRepo.findCandidates(filterArgCaptor.capture(), Mockito.any()))
 			.thenReturn(Set.of(Candidate.builder().candidateId(String.valueOf(candidateId)).build()));
 		
 		Mockito
@@ -747,7 +754,7 @@ public class CandidateServiceImplTest {
 					.build();
 		
 		Mockito
-			.when(this.mockCandidateDao.findCandidates(Mockito.any()))
+			.when(this.mockCandidateRepo.findCandidates(Mockito.any(),Mockito.any()))
 			.thenReturn(Set.of(Candidate.builder().candidateId(String.valueOf(candidateId)).build()));
 		
 		Mockito
@@ -1291,7 +1298,7 @@ public class CandidateServiceImplTest {
 		Mockito.when(mockAuthentication.getAuthorities()).thenReturn(authorities);
 		Mockito.when(mockAuthentication.getPrincipal()).thenReturn("222");
 		Mockito.when(this.mockCandidateRepo.findCandidateById(Mockito.anyLong())).thenReturn(Optional.of(Candidate.builder().build()));
-		Mockito.when(this.mockCandidateRepo.emailInUseByOtherUser(Mockito.anyString(), Mockito.anyLong())).thenReturn(true);
+		Mockito.when(this.mockCandidateRepo.emailInUseByOtherUser(Mockito.anyString(), Mockito.anyLong(), Mockito.any())).thenReturn(true);
 		
 		assertThrows(IllegalStateException.class, () -> {
 			this.service.updateCandidateProfile(CandidateUpdateRequest.builder().email("k@1.nl").candidateId("222").build());
@@ -1395,7 +1402,7 @@ public class CandidateServiceImplTest {
 		Mockito.when(mockAuthentication.getAuthorities()).thenReturn(authorities);
 		Mockito.when(mockAuthentication.getPrincipal()).thenReturn(candidateId);
 		Mockito.when(this.mockCandidateRepo.findCandidateById(Mockito.anyLong())).thenReturn(Optional.of(original));
-		Mockito.when(this.mockCandidateRepo.emailInUseByOtherUser(Mockito.anyString(), Mockito.anyLong())).thenReturn(false);
+		Mockito.when(this.mockCandidateRepo.emailInUseByOtherUser(Mockito.anyString(), Mockito.anyLong(), Mockito.any())).thenReturn(false);
 		Mockito.doNothing().when(this.mockExternalEventPublisher).publishCandidateAccountUpdatedEvent(caEventArgCapt.capture());
 		
 		Mockito.when(this.mockCandidateRepo.saveCandidate(candidateArgCapt.capture())).thenReturn(0L);
@@ -1527,7 +1534,7 @@ public class CandidateServiceImplTest {
 		Mockito.when(mockAuthentication.getAuthorities()).thenReturn(authorities);
 		Mockito.when(mockAuthentication.getPrincipal()).thenReturn(candidateId);
 		Mockito.when(this.mockCandidateRepo.findCandidateById(Mockito.anyLong())).thenReturn(Optional.of(original));
-		Mockito.when(this.mockCandidateRepo.emailInUseByOtherUser(Mockito.anyString(), Mockito.anyLong())).thenReturn(false);
+		Mockito.when(this.mockCandidateRepo.emailInUseByOtherUser(Mockito.anyString(), Mockito.anyLong(), Mockito.any())).thenReturn(false);
 		Mockito.doNothing().when(this.mockExternalEventPublisher).publishCandidateAccountUpdatedEvent(caEventArgCapt.capture());
 		
 		Mockito.when(this.mockCandidateRepo.saveCandidate(candidateArgCapt.capture())).thenReturn(0L);

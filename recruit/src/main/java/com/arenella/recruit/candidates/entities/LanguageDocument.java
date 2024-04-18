@@ -15,13 +15,17 @@ import com.arenella.recruit.candidates.beans.Language;
 */
 public class LanguageDocument {
 
-	@Field(type = FieldType.Keyword, name="language")
+	@Field(type = FieldType.Keyword)
 	@Enumerated(EnumType.STRING)
-	private final Language.LANGUAGE		language;
+	private Language.LANGUAGE		language;
 
-	@Field(type = FieldType.Keyword, name="level")
+	@Field(type = FieldType.Keyword)
 	@Enumerated(EnumType.STRING)
-	private final Language.LEVEL		level;
+	private Language.LEVEL		level;
+	
+	public LanguageDocument() {
+		
+	}
 	
 	/**
 	* Constructor
