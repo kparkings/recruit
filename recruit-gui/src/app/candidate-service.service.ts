@@ -38,9 +38,6 @@ export class CandidateServiceService {
   	*/
 	constructor(private httpClient: HttpClient, private translate:TranslateService) { 
 		this.initializeCountries();
-		//this.initializeSupportedLanguages();
-		//this.initializeGeoZones();
-		//this.initializeSupportedCountries();
 	}
 	
 	/**

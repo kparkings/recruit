@@ -34,7 +34,6 @@ import co.elastic.clients.elasticsearch._types.query_dsl.BoolQuery;
 import co.elastic.clients.elasticsearch._types.query_dsl.MatchQuery;
 import co.elastic.clients.elasticsearch.core.SearchResponse;
 
-import org.apache.commons.lang3.StringUtils;
 
 public interface CandidateRepository extends ElasticsearchRepository<CandidateDocument,Long>{
 
@@ -205,9 +204,6 @@ public interface CandidateRepository extends ElasticsearchRepository<CandidateDo
 	
 	public default Page<Candidate> findAll(CandidateFilterOptions filterOptions, ElasticsearchClient esClient, Pageable pageable) {
 		
-		//TODO: 1 Need to get total available pages based on hts after filters applies. Do with aggregate and set value to FUPage
-		//TODO: 2 Need to 
-		
 		SearchResponse<CandidateDocument> response =  this.fetchWithFilters(filterOptions, esClient);
 		
 		List<Candidate> hits = response
@@ -217,8 +213,13 @@ public interface CandidateRepository extends ElasticsearchRepository<CandidateDo
 				.map(h -> CandidateDocument.convertFromDocument(h.source()))
 				.collect(Collectors.toCollection(ArrayList::new));
 		
-		Page<Candidate> xx =  new FUPage<Candidate>(hits, 1);
-		return xx;
+		long totalHits = response.hits().total().value();
+		int pageSize = pageable.getPageSize();
+		long  pages = (long) Math.ceil(response.hits().total().value() / pageable.getPageSize());
+		
+		int totalPages = (int) (response.hits().total().value() == 0 ? 0 : Math.ceil(response.hits().total().value() / pageable.getPageSize()));
+		
+		return  new FUPage<Candidate>(hits, totalPages+1);
 		
 	}
 	
@@ -386,18 +387,6 @@ public interface CandidateRepository extends ElasticsearchRepository<CandidateDo
 			)._toQuery());
 		}
 		
-		if (filterOptions.getSearchText() != null && filterOptions.getSearchText().startsWith("C#")) {
-			String candidateId = filterOptions.getSearchText().substring(2);
-			if (candidateId != null && !candidateId.equals("") && StringUtils.isNumeric(candidateId)) {
-				mustQueries.clear();
-				mustQueries.add(MatchQuery.of(m -> m
-						.field("candidateId")
-						.query(candidateId)
-				)._toQuery());
-			}
-					
-		} 
-		
 		//if (!this.filterOptions.getSkills().isEmpty()) {
 			
 		//	Expression<Collection<String>> skillValues = root.get("skills");
@@ -512,7 +501,10 @@ public interface CandidateRepository extends ElasticsearchRepository<CandidateDo
 		
 		try {
 			
-	        
+			Aggregation aggregation = new Aggregation.Builder()
+					 .terms(new TermsAggregation.Builder().field("function").build())
+					 .build();
+			
 			return esClient.search(b -> b
 				    .index("candidates")
 				    .size(10000)

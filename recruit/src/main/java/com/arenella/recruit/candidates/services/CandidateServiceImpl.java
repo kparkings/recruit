@@ -53,11 +53,9 @@ import com.arenella.recruit.candidates.beans.Candidate.Rate;
 import com.arenella.recruit.candidates.controllers.CandidateController.CANDIDATE_UPDATE_ACTIONS;
 import com.arenella.recruit.candidates.controllers.CandidateValidationException;
 import com.arenella.recruit.candidates.controllers.SavedCandidate;
-import com.arenella.recruit.candidates.dao.CandidateDao;
 import com.arenella.recruit.candidates.dao.CandidateRecruiterCreditDao;
 import com.arenella.recruit.candidates.dao.PendingCandidateDao;
 import com.arenella.recruit.candidates.dao.RecruiterContactDao;
-import com.arenella.recruit.candidates.entities.CandidateEntity;
 import com.arenella.recruit.candidates.entities.PendingCandidateEntity;
 import com.arenella.recruit.candidates.enums.COUNTRY;
 import com.arenella.recruit.candidates.enums.FUNCTION;
@@ -96,9 +94,6 @@ import com.arenella.recruit.candidates.utils.CandidateImageManipulator;
 */
 @Service
 public class CandidateServiceImpl implements CandidateService{
-	
-	@Autowired
-	private CandidateDao 						candidateDao;
 	
 	@Autowired
 	private CandidateSkillsDao					skillsDao;
@@ -486,6 +481,22 @@ public class CandidateServiceImpl implements CandidateService{
 		Optional<Boolean>							available		 	= filterOptions.isAvailable();
 		
 		/**
+		* Special case. If searching on single candidate by Id, clear other filters and add in 
+		* just the candidate Id with max 1 result
+		*/
+		if (filterOptions.getSearchText() != null && filterOptions.getSearchText().startsWith("C#")) {
+			
+			
+			String candidateId = filterOptions.getSearchText().substring(2);
+			if (candidateId != null && !candidateId.equals("") && org.apache.commons.lang3.StringUtils.isNumeric(candidateId)) {
+				filterOptions.reset();
+				filterOptions.setCandidateIds(Set.of(candidateId));
+				maxSuggestions = 1;
+			}
+					
+		} 
+		
+		/**
 		* Recruiters may only view unavailable candidates if they have a paid subscription 
 		* Candidates need to be able to view their own profile even if their profile is not 
 		* active as do Admin users 
@@ -667,11 +678,10 @@ public class CandidateServiceImpl implements CandidateService{
 	@Override
 	public void updateCandidatesLastAvailabilityCheck(long candidateId) {
 		
-		CandidateEntity candidate = this.candidateDao.findById(candidateId).orElseThrow(() -> new IllegalArgumentException("Unknown candidate Id " + candidateId));
-		
+		Candidate candidate = candidateRepo.findCandidateById(candidateId).orElseThrow(() -> new IllegalArgumentException("Unknown candidate Id " + candidateId));
 		candidate.setCandidateAvailabilityChecked();
 		
-		this.candidateDao.save(candidate);
+		this.candidateRepo.saveCandidate(candidate);
 		
 	}
 
@@ -958,7 +968,7 @@ public class CandidateServiceImpl implements CandidateService{
 			throw new IllegalArgumentException("You cannot delete this Candidate from the System");
 		}
 		
-		this.candidateDao.deleteById(Long.valueOf(candidateId));
+		this.candidateRepo.deleteById(Long.valueOf(candidateId));
 		
 		this.externalEventPublisher.publishCandidateDeletedEvent(new CandidateDeletedEvent(candidateId));
 		

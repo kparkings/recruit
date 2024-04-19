@@ -26,7 +26,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -60,15 +59,12 @@ import com.arenella.recruit.candidates.beans.RecruiterCredit;
 import com.arenella.recruit.candidates.controllers.CandidateController.CANDIDATE_UPDATE_ACTIONS;
 import com.arenella.recruit.candidates.controllers.CandidateValidationException;
 import com.arenella.recruit.candidates.controllers.SavedCandidate;
-import com.arenella.recruit.candidates.dao.CandidateDao;
 import com.arenella.recruit.candidates.dao.CandidateRecruiterCreditDao;
 import com.arenella.recruit.candidates.dao.CandidateSearchAlertDao;
 import com.arenella.recruit.candidates.dao.CandidateSkillsDao;
 import com.arenella.recruit.candidates.dao.PendingCandidateDao;
 import com.arenella.recruit.candidates.dao.RecruiterContactDao;
 import com.arenella.recruit.candidates.dao.SavedCandidateDao;
-import com.arenella.recruit.candidates.entities.CandidateDocument;
-import com.arenella.recruit.candidates.entities.CandidateEntity;
 import com.arenella.recruit.candidates.entities.CandidateSkillEntity.VALIDATION_STATUS;
 import com.arenella.recruit.candidates.entities.PendingCandidateEntity;
 import com.arenella.recruit.candidates.enums.COUNTRY;
@@ -97,9 +93,6 @@ import com.arenella.recruit.candidates.utils.CandidateSuggestionUtil.suggestion_
 */
 @ExtendWith(MockitoExtension.class)
 public class CandidateServiceImplTest {
-
-	@Mock
-	private CandidateDao 							mockCandidateDao;
 
 	@Mock
 	private CandidateRepository 					mockCandidateRepo;
@@ -427,7 +420,7 @@ public class CandidateServiceImplTest {
 	@Test
 	public void testUpdateCandidatesLastAvailabilityCheck_unknownCandidate() throws Exception{
 		
-		Mockito.when(this.mockCandidateDao.findById(Mockito.anyLong())).thenReturn(Optional.empty());
+		Mockito.when(this.mockCandidateRepo.findCandidateById(Mockito.anyLong())).thenReturn(Optional.empty());
 		
 		Assertions.assertThrows(IllegalArgumentException.class, () -> {
 			this.service.updateCandidatesLastAvailabilityCheck(4L);
@@ -442,15 +435,15 @@ public class CandidateServiceImplTest {
 	@Test
 	public void testUpdateCandidatesLastAvailabilityCheck() throws Exception{
 		
-		ArgumentCaptor<CandidateEntity> captor = ArgumentCaptor.forClass(CandidateEntity.class);
-		CandidateEntity candidateEntity = CandidateEntity.builder().build();
+		ArgumentCaptor<Candidate> captor = ArgumentCaptor.forClass(Candidate.class);
+		Candidate candidate = Candidate.builder().build();
 		
-		Mockito.when(this.mockCandidateDao.findById(Mockito.anyLong())).thenReturn(Optional.of(candidateEntity));
-		Mockito.when(this.mockCandidateDao.save(captor.capture())).thenReturn(null);
+		Mockito.when(this.mockCandidateRepo.findCandidateById(Mockito.anyLong())).thenReturn(Optional.of(candidate));
+		Mockito.when(this.mockCandidateRepo.saveCandidate(captor.capture())).thenReturn(0L);
 		
 		this.service.updateCandidatesLastAvailabilityCheck(4L);
 		
-		Mockito.verify(this.mockCandidateDao).save(candidateEntity);
+		Mockito.verify(this.mockCandidateRepo).saveCandidate(candidate);
 		
 	}
 
@@ -1642,7 +1635,7 @@ public class CandidateServiceImplTest {
 		
 		this.service.deleteCandidate(candidateId);
 		
-		Mockito.verify(this.mockCandidateDao).deleteById(Long.valueOf(candidateId));
+		Mockito.verify(this.mockCandidateRepo).deleteById(Long.valueOf(candidateId));
 		Mockito.verify(this.mockExternalEventPublisher).publishCandidateDeletedEvent(Mockito.any(CandidateDeletedEvent.class));
 	
 	}
@@ -1667,7 +1660,7 @@ public class CandidateServiceImplTest {
 		
 		this.service.deleteCandidate(candidateId);
 		
-		Mockito.verify(this.mockCandidateDao).deleteById(Long.valueOf(candidateId));
+		Mockito.verify(this.mockCandidateRepo).deleteById(Long.valueOf(candidateId));
 		Mockito.verify(this.mockExternalEventPublisher).publishCandidateDeletedEvent(Mockito.any(CandidateDeletedEvent.class));
 		
 	}
@@ -1694,7 +1687,7 @@ public class CandidateServiceImplTest {
 		
 		this.service.deleteCandidate(candidateId);
 		
-		Mockito.verify(this.mockCandidateDao).deleteById(Long.valueOf(candidateId));
+		Mockito.verify(this.mockCandidateRepo).deleteById(Long.valueOf(candidateId));
 		Mockito.verify(this.mockExternalEventPublisher).publishCandidateDeletedEvent(Mockito.any(CandidateDeletedEvent.class));
 		
 	}

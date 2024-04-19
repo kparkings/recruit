@@ -3,6 +3,7 @@ package com.arenella.recruit.candidates.entities;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -107,8 +108,8 @@ public class CandidateDocumentTest {
 		assertEquals(FREELANCE_VAL,					doc.isFreelance());
 		assertEquals(YEARS_EXPERIENCE,				doc.getYearsExperience());
 		assertEquals(AVAILABLE,						doc.isAvailable());
-		assertEquals(REGISTERED,					doc.getRegisteredOn());
-		assertEquals(LAST_AVAILABILITY_CHECK,		doc.getLastAvailabilityCheckOn());
+		assertEquals(REGISTERED,					doc.getRegisteredOn().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+		assertEquals(LAST_AVAILABILITY_CHECK,		doc.getLastAvailabilityCheckOn().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
 		assertEquals(INTRODUCTION,					doc.getIntroduction());
 		assertEquals(RATE_CONTRACT,					doc.getRateContract().get());
 		assertEquals(RATE_PERM,						doc.getRatePerm().get());
@@ -166,7 +167,7 @@ public class CandidateDocumentTest {
 		
 		Candidate candidate = CandidateDocument.convertFromDocument(doc);
 		
-		assertEquals(CANDIDATE_ID,					candidate.getCandidateId());
+		assertEquals(String.valueOf(CANDIDATE_ID),	candidate.getCandidateId());
 		assertEquals(FIRSTNAME,						candidate.getFirstname());
 		assertEquals(SURNAME,						candidate.getSurname());
 		assertEquals(EMAIL,							candidate.getEmail());
@@ -261,8 +262,8 @@ public class CandidateDocumentTest {
 		assertEquals(FREELANCE_VAL,					doc.isFreelance());
 		assertEquals(YEARS_EXPERIENCE,				doc.getYearsExperience());
 		assertEquals(AVAILABLE,						doc.isAvailable());
-		assertEquals(REGISTERED,					doc.getRegisteredOn());
-		assertEquals(LAST_AVAILABILITY_CHECK,		doc.getLastAvailabilityCheckOn());
+		assertEquals(REGISTERED,					doc.getRegisteredOn().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+		assertEquals(LAST_AVAILABILITY_CHECK,		doc.getLastAvailabilityCheckOn().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
 		assertEquals(INTRODUCTION,					doc.getIntroduction());
 		assertEquals(AVAILABLE_FROM_DATE,			doc.getAvailableFromDate());
 		assertEquals(OWNER_ID,						doc.getOwnerId().get());

@@ -106,6 +106,95 @@ public class CandidateFilterOptionsTest {
 	}
 	
 	/**
+	* Tests reset sets values to defaults
+	* @throws Exception
+	*/
+	@Test
+	public void testReset() throws Exception{
+		
+		Set<String> 			candidateIds 					= new HashSet<>();
+		Set<GEO_ZONE> 			geoZones 						= new HashSet<>();
+		Set<COUNTRY> 			countries 						= new HashSet<>();
+		Set<FUNCTION> 			functions 						= new HashSet<>();
+		Set<String> 			skills 							= new HashSet<>();
+		Language.LEVEL 			dutch 							= Language.LEVEL.PROFICIENT;
+		Language.LEVEL 			english 						= Language.LEVEL.BASIC;
+		Language.LEVEL 			french 							= Language.LEVEL.BASIC;
+		boolean 				freelance	 					= false;
+		boolean 				perm 							= true;
+		String 					orderAttribute 					= "candidateId";
+		int 					yearsExperienceGtEq 			= 2;
+		String 					candidateId 					= "aCandidateId";
+		String 					skill 							= "aSkill";
+		String					firstname						= "kevin";
+		String					surname							= "Parkings";
+		String					email							= "email";
+		Boolean					flaggedAsUnavailable			= true;	
+		Integer					daysSinceLastAvailabilityCheck 	= 14;
+		String					searchText						= "Java Developer";
+		String					ownerId							= "rec22";
+		boolean 				includeRequiresSponsorship		= true;
+		
+		candidateIds.add(candidateId);
+		skills.add(skill);
+		
+		geoZones.add(GEO_ZONE.BENELUX);
+		countries.add(COUNTRY.NETHERLANDS);
+		functions.add(FUNCTION.PROJECT_MANAGER);
+		
+		CandidateFilterOptions filters = CandidateFilterOptions
+												.builder()
+													.candidateIds(candidateIds)
+													.geoZones(geoZones)
+													.countries(countries)
+													.dutch(dutch)
+													.english(english)
+													.french(french)
+													.freelance(freelance)
+													.perm(perm)
+													.functions(functions)
+													.order(RESULT_ORDER.asc)
+													.orderAttribute(orderAttribute)
+													.skills(skills)
+													.yearsExperienceGtEq(yearsExperienceGtEq)
+													.firstname(firstname)
+													.surname(surname)
+													.email(email)
+													.flaggedAsUnavailable(flaggedAsUnavailable)
+													.daysSinceLastAvailabilityCheck(daysSinceLastAvailabilityCheck)
+													.searchText(searchText)
+													.ownerId(ownerId)
+													.includeRequiresSponsorship(includeRequiresSponsorship)
+													.build();
+		
+		CandidateFilterOptions defaults = CandidateFilterOptions.builder().build();
+		
+		filters.reset();
+		
+		assertEquals(filters.getCandidateIds(), 					defaults.getCandidateIds());
+		assertEquals(filters.getGeoZones(), 						defaults.getGeoZones());
+		assertEquals(filters.getCountries(), 						defaults.getCountries());
+		assertEquals(filters.getDutch(), 							defaults.getDutch());
+		assertEquals(filters.getEnglish(), 							defaults.getEnglish());
+		assertEquals(filters.getFrench(), 							defaults.getFrench());
+		assertEquals(filters.isFreelance(), 						defaults.isFreelance());
+		assertEquals(filters.isPerm(), 								defaults.isPerm());
+		assertEquals(filters.getFunctions(), 						defaults.getFunctions());
+		assertEquals(filters.getOrder(), 							defaults.getOrder());
+		assertEquals(filters.getOrderAttribute(), 					defaults.getOrderAttribute());
+		assertEquals(filters.getSkills(), 							defaults.getSkills());
+		assertEquals(filters.getYearsExperienceGtEq(), 				defaults.getYearsExperienceGtEq());
+		assertEquals(filters.getFirstname(), 						defaults.getFirstname());
+		assertEquals(filters.getSurname(), 							defaults.getSurname());
+		assertEquals(filters.getEmail(), 							defaults.getEmail());
+		assertEquals(filters.isFlaggedAsUnavailable(), 				defaults.isFlaggedAsUnavailable());
+		assertEquals(filters.getDaysSinceLastAvailabilityCheck(), 	defaults.getDaysSinceLastAvailabilityCheck());
+		assertEquals(filters.getSearchText(), 						defaults.getSearchText());
+		assertEquals(filters.getOwnerId(), 							defaults.getOwnerId());
+		assertEquals(filters.getIncludeRequiresSponsorship(), 		defaults.getIncludeRequiresSponsorship());
+	}
+	
+	/**
 	* Tests setter replaces existing FUNCTION's
 	* @throws Exception
 	*/
@@ -116,8 +205,10 @@ public class CandidateFilterOptionsTest {
 		Set<FUNCTION> 	newFunctions 					= Set.of(FUNCTION.JAVA_DEV);
 		Boolean 		active 							= false;
 		Boolean 		includeRequiresSponsorship 		= true;
+		String			candidateId3000					= "3000";
+		String			candidateId3001					= "3001";
 		
-		CandidateFilterOptions filters = CandidateFilterOptions.builder().functions(originalFunctions).includeRequiresSponsorship(includeRequiresSponsorship).build();
+		CandidateFilterOptions filters = CandidateFilterOptions.builder().candidateIds(Set.of(candidateId3000)).functions(originalFunctions).includeRequiresSponsorship(includeRequiresSponsorship).build();
 		
 		assertTrue(filters.getFunctions().contains(FUNCTION.ARCHITECT));
 		assertFalse(filters.getFunctions().contains(FUNCTION.JAVA_DEV));
@@ -127,12 +218,14 @@ public class CandidateFilterOptionsTest {
 		filters.setFunctions(newFunctions);
 		filters.setAvailable(active);
 		filters.setIncludeRequiresSponsorship(false);
+		filters.setCandidateIds(Set.of(candidateId3001));
 		
 		assertFalse(filters.getFunctions().contains(FUNCTION.ARCHITECT));
 		assertTrue(filters.getFunctions().contains(FUNCTION.JAVA_DEV));
 		assertFalse(filters.isAvailable().get());
 		assertFalse(filters.getIncludeRequiresSponsorship().get());
-		
+		assertEquals(candidateId3001, filters.getCandidateIds().toArray()[0]);
+		assertEquals(1, filters.getCandidateIds().size());
 	}
 	
 	/**

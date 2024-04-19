@@ -29,8 +29,8 @@ import com.arenella.recruit.candidates.services.CandidateStatisticsService.NEW_S
 @ExtendWith(MockitoExtension.class)
 public class CandidateStatisticsServiceImplTest {
 
-	@Mock
-	private CandidateDao 						mockCandidateDao;
+	//@Mock
+	//private CandidateDao 						mockCandidateDao;
 	
 	@Mock
 	private CandidateRepository 				mockCandidateRepo;

@@ -45,6 +45,14 @@ public class CandidateFilterOptions {
 	* @param builder
 	*/
 	public CandidateFilterOptions(CandidateFilterOptionsBuilder builder) {
+		this.init(builder);
+	}
+	
+	/**
+	* Sets values based upon builder
+	* @param builder - Contains initialization values
+	*/
+	private void init(CandidateFilterOptionsBuilder builder) {
 		
 		this.orderAttribute 				= builder.orderAttribute;
 		this.order 							= builder.order;
@@ -70,6 +78,13 @@ public class CandidateFilterOptions {
 		this.ownerId						= builder.ownerId;
 		this.includeRequiresSponsorship	 	= builder.includeRequiresSponsorship;
 		
+	}
+	
+	/**
+	* Resets filter values to the defaults 
+	*/
+	public void reset() {
+		this.init(CandidateFilterOptions.builder());
 	}
 	
 	/**
@@ -323,6 +338,16 @@ public class CandidateFilterOptions {
 	*/
 	public void setIncludeRequiresSponsorship(Boolean includeRequiresSponsorship) {
 		this.includeRequiresSponsorship = includeRequiresSponsorship;
+	}
+	
+	/**
+	* Sets the candidate Id's to filter on 
+	* @param candidateIds - Id's to filter on
+	*/
+	public void setCandidateIds(Set<String> candidateIds) {
+		this.candidateIds.clear();
+		this.candidateIds.addAll(candidateIds);
+		
 	}
 	
 	/**

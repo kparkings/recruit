@@ -42,8 +42,8 @@ public class CandidateMonolithExternalEventListenerTest {
 	@Mock
 	private CandidateService 						mockCandidateService;
 	
-	@Mock
-	private CandidateDao 							mockCandidateDao;
+	//@Mock
+	//private CandidateDao 							mockCandidateDao;
 	
 	@Mock
 	private ExternalEventPublisher					mockExternalEventPublisher;

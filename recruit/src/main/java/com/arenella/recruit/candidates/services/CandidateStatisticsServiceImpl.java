@@ -36,8 +36,8 @@ import co.elastic.clients.elasticsearch.ElasticsearchClient;
 @Service
 public class CandidateStatisticsServiceImpl implements CandidateStatisticsService{
 
-	@Autowired
-	private CandidateDao 						candidateDao;
+	//@Autowired
+	//private CandidateDao 						candidateDao;
 	
 	@Autowired
 	private ElasticsearchClient 				esClient;

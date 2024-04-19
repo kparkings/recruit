@@ -414,6 +414,14 @@ public class Candidate {
 	}
 	
 	/**
+	* Updates the last time the Candidate had their availability checked
+	*/
+	public void setCandidateAvailabilityChecked() {
+		this.lastAvailabilityCheck 	= LocalDate.now();
+		this.available 				= true;
+	}
+	
+	/**
 	* Builder for the Candidate class
 	* @return A Builder for the Candidate class
 	*/

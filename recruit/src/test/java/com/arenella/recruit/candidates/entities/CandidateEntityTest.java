@@ -268,28 +268,6 @@ public class CandidateEntityTest {
 	}
 	
 	/**
-	* Tests updating of the last time the Candidates availability was checked
-	* @throws Exception
-	*/
-	@Test
-	public void testSetCandidateAvailabilityChecked() throws Exception {
-		
-		final LocalDate pastDate = LocalDate.of(2000, 10, 5);
-		
-		CandidateEntity candidate = CandidateEntity.builder().available(false).lastAvailabilityCheck(pastDate).build();
-		
-		assertEquals(candidate.getLastAvailabilityCheckOn(), pastDate);
-		
-		candidate.setCandidateAvailabilityChecked();
-		
-		assertNotEquals(candidate.getLastAvailabilityCheckOn(), pastDate);
-		
-		assertTrue(candidate.getLastAvailabilityCheckOn() instanceof LocalDate);
-		assertTrue(candidate.isAvailable());
-		
-	}
-	
-	/**
 	* Test conversion where no ownerId is present
 	* @throws Exception
 	*/

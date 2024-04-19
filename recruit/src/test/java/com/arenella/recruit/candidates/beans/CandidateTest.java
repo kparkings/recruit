@@ -1,10 +1,10 @@
 package com.arenella.recruit.candidates.beans;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDate;
 import java.util.LinkedHashSet;
@@ -198,9 +198,9 @@ public class CandidateTest {
 		
 		Candidate candidate = Candidate.builder().build();
 		
-		assertTrue("Expect empty but instantiated Set", candidate.getSkills().isEmpty());
-		assertTrue("Expect empty but instantiated Set", candidate.getLanguages().isEmpty());
-		assertEquals(0, 								candidate.getYearsExperience());
+		assertTrue(candidate.getSkills().isEmpty());
+		assertTrue(candidate.getLanguages().isEmpty());
+		assertEquals(0, candidate.getYearsExperience());
 		assertNull(candidate.isFreelance());
 		assertNull(candidate.isPerm());
 		assertNull(candidate.getFunction());
@@ -230,6 +230,28 @@ public class CandidateTest {
 		assertEquals(CANDIDATE_TYPE_VAL, 	candidate.getCandidateType());
 		assertEquals(OWNER_ID, 				candidate.getOwnerId().get());
 		assertEquals(EMAIL, 				candidate.getEmail());
+		
+	}
+	
+	/**
+	* Tests updating of the last time the Candidates availability was checked
+	* @throws Exception
+	*/
+	@Test
+	public void testSetCandidateAvailabilityChecked() throws Exception {
+		
+		final LocalDate pastDate = LocalDate.of(2000, 10, 5);
+		
+		Candidate candidate = Candidate.builder().available(false).lastAvailabilityCheck(pastDate).build();
+		
+		assertEquals(candidate.getLastAvailabilityCheckOn(), pastDate);
+		
+		candidate.setCandidateAvailabilityChecked();
+		
+		assertNotEquals(candidate.getLastAvailabilityCheckOn(), pastDate);
+		
+		assertTrue(candidate.getLastAvailabilityCheckOn() instanceof LocalDate);
+		assertTrue(candidate.isAvailable());
 		
 	}
 	
