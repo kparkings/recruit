@@ -18,7 +18,6 @@ import com.arenella.recruit.candidates.beans.CandidateRoleStats;
 import com.arenella.recruit.candidates.beans.CandidateSearchEvent;
 import com.arenella.recruit.candidates.beans.RecruiterStats;
 import com.arenella.recruit.candidates.controllers.CandidateStatisticsController.STAT_PERIOD;
-import com.arenella.recruit.candidates.dao.CandidateDao;
 import com.arenella.recruit.candidates.dao.CandidateSearchStatisticsDao;
 import com.arenella.recruit.candidates.dao.NewCandidateStatsTypeDao;
 import com.arenella.recruit.candidates.entities.CandidateRoleStatsView;
@@ -36,9 +35,6 @@ import co.elastic.clients.elasticsearch.ElasticsearchClient;
 @Service
 public class CandidateStatisticsServiceImpl implements CandidateStatisticsService{
 
-	//@Autowired
-	//private CandidateDao 						candidateDao;
-	
 	@Autowired
 	private ElasticsearchClient 				esClient;
 	
@@ -63,7 +59,7 @@ public class CandidateStatisticsServiceImpl implements CandidateStatisticsServic
 	* Refer to StatisticsService for details
 	*/
 	@Override
-	public List<CandidateRoleStats> fetchCandidateRoleStats() {
+	public List<CandidateRoleStats> fetchCandidateRoleStats() throws Exception{
 		
 		return candidateRepo.getCandidateRoleStats(esClient).stream().map(CandidateRoleStatsView::convertFromView).collect(Collectors.toCollection(LinkedList::new));
 	}

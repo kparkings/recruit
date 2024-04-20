@@ -164,7 +164,7 @@ public class CandidateServiceImplTest {
 	*/
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Test
-	public void testPersistCandidate_emailAlreadyExists() {
+	public void testPersistCandidate_emailAlreadyExists() throws Exception{
 
 		Collection authorities = new HashSet<>();
 		authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
@@ -184,7 +184,7 @@ public class CandidateServiceImplTest {
 	*/
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Test
-	public void testPersistCandidate_NonAdminUserOwnerId() {
+	public void testPersistCandidate_NonAdminUserOwnerId() throws Exception{
 
 		ArgumentCaptor<Candidate> argCapt = ArgumentCaptor.forClass(Candidate.class);
 		
@@ -212,7 +212,7 @@ public class CandidateServiceImplTest {
 	*/
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Test
-	public void testPersistCandidate_adminUserOwnerId() {
+	public void testPersistCandidate_adminUserOwnerId() throws Exception{
 
 		ArgumentCaptor<Candidate> argCapt = ArgumentCaptor.forClass(Candidate.class);
 		
@@ -235,7 +235,7 @@ public class CandidateServiceImplTest {
 	*/
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Test
-	public void testPersistCandidate() {
+	public void testPersistCandidate() throws Exception{
 		
 		Collection authorities = new HashSet<>();
 		authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
@@ -265,7 +265,7 @@ public class CandidateServiceImplTest {
 	*/
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Test
-	public void testPersistCandidate_recruiter() {
+	public void testPersistCandidate_recruiter() throws Exception{
 		
 		Contact contact = Contact.builder().firstname("kevin").surname("parkings").email("kparkings@gmail.com").build();
 		

@@ -1,6 +1,5 @@
 package com.arenella.recruit.candidates.repos;
-
-import java.io.IOException;
+	
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -11,8 +10,8 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import org.apache.poi.openxml4j.exceptions.InvalidOperationException;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.elasticsearch.annotations.CountQuery;
@@ -22,28 +21,33 @@ import org.springframework.data.repository.query.Param;
 
 import com.arenella.recruit.candidates.beans.Candidate;
 import com.arenella.recruit.candidates.beans.CandidateFilterOptions;
+import com.arenella.recruit.candidates.beans.Language.LANGUAGE;
 import com.arenella.recruit.candidates.entities.CandidateDocument;
 import com.arenella.recruit.candidates.entities.CandidateRoleStatsView;
+import com.arenella.recruit.candidates.enums.FREELANCE;
+import com.arenella.recruit.candidates.enums.PERM;
+import com.arenella.recruit.candidates.enums.RESULT_ORDER;
+
 import co.elastic.clients.elasticsearch.ElasticsearchClient;
-import co.elastic.clients.elasticsearch._types.ElasticsearchException;
 import co.elastic.clients.elasticsearch._types.FieldSort;
+import co.elastic.clients.elasticsearch._types.FieldValue;
 import co.elastic.clients.elasticsearch._types.SortOrder;
 import co.elastic.clients.elasticsearch._types.aggregations.Aggregation;
 import co.elastic.clients.elasticsearch._types.aggregations.TermsAggregation;
 import co.elastic.clients.elasticsearch._types.query_dsl.BoolQuery;
 import co.elastic.clients.elasticsearch._types.query_dsl.MatchQuery;
+import co.elastic.clients.elasticsearch._types.query_dsl.RangeQuery;
+import co.elastic.clients.elasticsearch._types.query_dsl.TermsQuery;
+import co.elastic.clients.elasticsearch._types.query_dsl.TermsQueryField;
 import co.elastic.clients.elasticsearch.core.SearchResponse;
+import co.elastic.clients.json.JsonData;
 
-
+/**
+* Repository for Cadidates Data. Elasticsearch implementation
+* @author K Parkings
+*/
 public interface CandidateRepository extends ElasticsearchRepository<CandidateDocument,Long>{
 
-	//TODO: [KP] These will be case sensitive. Better to use fetchWithFilters
-	//@Query("{\"bool\": {\"must\": [{\"match\": {\"email\": \"?0\"}}]}}")
-	//public Set<CandidateDocument> fetchByEmail(String emailId);
-	
-	//@Query("{\"bool\": {\"must\": [{\"match\": {\"email\": \"?0\"}},{\\\"match\\\": {\\\"candidateId\\\": \\\"?1\\\"}}]}}")
-	//public Set<CandidateDocument> fetchByEmail(String emailId, long candidateId);
-	
 	@CountQuery("{\"bool\": {\"must\": [{\"match\": {\"available\": \"?0\"}}]}}")
 	public long getCountByAvailable(boolean available);
 	
@@ -52,8 +56,8 @@ public interface CandidateRepository extends ElasticsearchRepository<CandidateDo
 	* @param email - email address to filter on
 	* @return If Email already used for the Candidate
 	*/
-	default boolean emailInUse(String email, ElasticsearchClient esClient) {
-		SearchResponse<CandidateDocument> response = this.fetchWithFilters(CandidateFilterOptions.builder().email(email).build(), esClient);
+	default boolean emailInUse(String email, ElasticsearchClient esClient) throws Exception{
+		SearchResponse<CandidateDocument> response = this.fetchWithFilters(CandidateFilterOptions.builder().email(email).build(), esClient, 1);
 		return !response.hits().hits().isEmpty();
 	}
 	
@@ -62,11 +66,7 @@ public interface CandidateRepository extends ElasticsearchRepository<CandidateDo
 	* @param email - email address to filter on
 	* @return If Email already used for another Candidate
 	*/
-	default boolean emailInUseByOtherUser(String email, long userId, ElasticsearchClient esClient) {
-		//SearchResponse<CandidateDocument> response = this.fetchWithFilters(CandidateFilterOptions.builder().email(email).candidateIds(Set.of(String.valueOf(userId))).build(), esClient);
-		//return !response.hits().hits().isEmpty();
-		
-		boolean matches = false;
+	default boolean emailInUseByOtherUser(String email, long userId, ElasticsearchClient esClient) throws Exception{
 		
 		co.elastic.clients.elasticsearch._types.query_dsl.Query mustQry = MatchQuery.of(m -> m
 			    .field("email")
@@ -83,27 +83,12 @@ public interface CandidateRepository extends ElasticsearchRepository<CandidateDo
 				.mustNot(mustNotQry)
 		)._toQuery();
 		
-		SearchResponse<CandidateDocument> response;
-		
-		try {
-			response = esClient.search(b -> b
+		return !esClient.search(b -> b
 			    .index("candidates")
 			    .size(1)
 			    .query(boolQuery),
 			    CandidateDocument.class 
-			);
-			
-			matches = response.hits().hits().isEmpty();
-			
-		} catch (ElasticsearchException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		return !matches;
+			).hits().hits().isEmpty();
 	}
 	
 	/**
@@ -131,7 +116,6 @@ public interface CandidateRepository extends ElasticsearchRepository<CandidateDo
 		return Long.valueOf(this.save(CandidateDocument.convertToDocument(candidate)).getCandidateId());
 	}
 	
-	//@Query("from CandidateEntity c where c.available = true and c.registerd > :#{#since} order by c.registerd")
 	@Query("{\"bool\": {\"must\": [{\"term\": {\"available\": true}},{\"range\": {\"registered\": {\"gte\":\"?0\"}}}]}}")
 	public Set<CandidateDocument> findNewSinceLastDateRaw(@Param(value = "since") LocalDate since);
 	
@@ -145,7 +129,7 @@ public interface CandidateRepository extends ElasticsearchRepository<CandidateDo
 		return this.findNewSinceLastDateRaw(since).stream().map(CandidateDocument::convertFromDocument).collect(Collectors.toSet());
 	}
 	
-	public default List<CandidateRoleStatsView> getCandidateRoleStats(ElasticsearchClient esClient){
+	public default List<CandidateRoleStatsView> getCandidateRoleStats(ElasticsearchClient esClient) throws Exception{
 
 		List<CandidateRoleStatsView> stats = new java.util.ArrayList<>();
 		
@@ -158,53 +142,29 @@ public interface CandidateRepository extends ElasticsearchRepository<CandidateDo
 		    .query(true)
 		)._toQuery();
 
-		SearchResponse<CandidateDocument> response;
-		
-		try {
-			response = esClient.search(b -> b
+		esClient.search(b -> b
 			    .index("candidates")
 			    .size(0)
 			    .query(query) 
 			    .aggregations("functions", aggregation),
 			    CandidateDocument.class 
-			);
+			).aggregations().get("functions").sterms().buckets().array().forEach(bucket ->
+			stats.add(new CandidateRoleStatsView(com.arenella.recruit.candidates.enums.FUNCTION.valueOf(bucket.key().stringValue()), bucket.docCount()))
+		);
 			
-			response.aggregations().get("functions").sterms().buckets().array().forEach(bucket ->
-				stats.add(new CandidateRoleStatsView(com.arenella.recruit.candidates.enums.FUNCTION.valueOf(bucket.key().stringValue()), bucket.docCount()))
-			);
-			
-		} catch (ElasticsearchException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
 		return stats;
 	}
 	
 	/**
-	* Returns all Candidates matching the filter options
-	* @param filterOptions - options to filter Candidates on
-	* @return Candidates matching the filter options
+	* Returns a page of filtered Candidate results
+	* @param filterOptions 	- Filters to apply
+	* @param esClient		- Elasticsearch client 
+	* @param pageable		- Pagination information
+	* @return Page of matching results
 	*/
-	//public default Set<Candidate> findAll(CandidateFilterOptions filterOptions, ElasticsearchClient esClient) {
+	public default Page<Candidate> findAll(CandidateFilterOptions filterOptions, ElasticsearchClient esClient, Pageable pageable) throws Exception{
 		
-	//	SearchResponse<CandidateDocument> response =  this.fetchWithFilters(filterOptions, esClient);
-		
-	//	return response
-	//			.hits()
-	//			.hits().
-	//			stream().
-	//			map(h -> CandidateDocument.convertFromDocument(h.source()))
-	//			.collect(Collectors.toCollection(LinkedHashSet::new));
-	//	
-	//}
-	
-	public default Page<Candidate> findAll(CandidateFilterOptions filterOptions, ElasticsearchClient esClient, Pageable pageable) {
-		
-		SearchResponse<CandidateDocument> response =  this.fetchWithFilters(filterOptions, esClient);
+		SearchResponse<CandidateDocument> response =  this.fetchWithFilters(filterOptions, esClient, pageable.getPageSize());
 		
 		List<Candidate> hits = response
 				.hits()
@@ -213,128 +173,21 @@ public interface CandidateRepository extends ElasticsearchRepository<CandidateDo
 				.map(h -> CandidateDocument.convertFromDocument(h.source()))
 				.collect(Collectors.toCollection(ArrayList::new));
 		
-		long totalHits = response.hits().total().value();
-		int pageSize = pageable.getPageSize();
-		long  pages = (long) Math.ceil(response.hits().total().value() / pageable.getPageSize());
+		int totalPages = (int) (response.hits().total().value() == 0 ? 0 : response.hits().total().value() / pageable.getPageSize());
 		
-		int totalPages = (int) (response.hits().total().value() == 0 ? 0 : Math.ceil(response.hits().total().value() / pageable.getPageSize()));
-		
-		return  new FUPage<Candidate>(hits, totalPages+1);
+		return  new FUPage<>(hits, totalPages+1);
 		
 	}
 	
-	class FUPage<T> implements Page<T>{
-
-		List<T> hits = new ArrayList<>();
-		int totalPages = 0;
+	/**
+	* 
+	* @param filterOptions
+	* @param esClient
+	* @return
+	*/
+	public default Set<Candidate> findCandidates(CandidateFilterOptions filterOptions, ElasticsearchClient esClient) throws Exception{
 		
-		public FUPage(List<T> hits, int totalPages) {
-			this.hits = hits;
-			this.totalPages = totalPages;
-		}
-		
-		@Override
-		public int getNumber() {
-			// TODO Auto-generated method stub
-			return 0;
-		}
-
-		@Override
-		public int getSize() {
-			// TODO Auto-generated method stub
-			return 0;
-		}
-
-		@Override
-		public int getNumberOfElements() {
-			// TODO Auto-generated method stub
-			return 0;
-		}
-
-		@Override
-		public List<T> getContent() {
-			// TODO Auto-generated method stub
-			return hits;
-		}
-
-		@Override
-		public boolean hasContent() {
-			// TODO Auto-generated method stub
-			return false;
-		}
-
-		@Override
-		public Sort getSort() {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
-		public boolean isFirst() {
-			// TODO Auto-generated method stub
-			return false;
-		}
-
-		@Override
-		public boolean isLast() {
-			// TODO Auto-generated method stub
-			return false;
-		}
-
-		@Override
-		public boolean hasNext() {
-			// TODO Auto-generated method stub
-			return false;
-		}
-
-		@Override
-		public boolean hasPrevious() {
-			// TODO Auto-generated method stub
-			return false;
-		}
-
-		@Override
-		public Pageable nextPageable() {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
-		public Pageable previousPageable() {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
-		public Iterator<T> iterator() {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
-		public int getTotalPages() {
-			// TODO Auto-generated method stub
-			return this.totalPages;
-		}
-
-		@Override
-		public long getTotalElements() {
-			// TODO Auto-generated method stub
-			return 0;
-		}
-
-		@Override
-		public <U> Page<U> map(Function<? super T, ? extends U> converter) {
-			// TODO Auto-generated method stub
-			return null;
-		}
-		
-	}
-	
-	
-	public default Set<Candidate> findCandidates(CandidateFilterOptions filterOptions, ElasticsearchClient esClient){
-		
-		SearchResponse<CandidateDocument> response =  this.fetchWithFilters(filterOptions, esClient);
+		SearchResponse<CandidateDocument> response =  this.fetchWithFilters(filterOptions, esClient, 10000);
 		
 		return response
 				.hits()
@@ -348,12 +201,14 @@ public interface CandidateRepository extends ElasticsearchRepository<CandidateDo
 	* Refer to the JpaSpecificationExecutor interface for details 
 	*/
 	
-	default SearchResponse<CandidateDocument> fetchWithFilters(CandidateFilterOptions filterOptions, ElasticsearchClient esClient) {
+	default SearchResponse<CandidateDocument> fetchWithFilters(CandidateFilterOptions filterOptions, ElasticsearchClient esClient, int pageSize) throws Exception{
 		
 		List<co.elastic.clients.elasticsearch._types.query_dsl.Query> mustQueries = new ArrayList<>();
+		List<co.elastic.clients.elasticsearch._types.query_dsl.Query> mustNotQueries = new ArrayList<>();
 		
 		co.elastic.clients.elasticsearch._types.query_dsl.Query boolQuery = BoolQuery.of(m -> m
 				.must(mustQueries)	
+				.mustNot(mustNotQueries)
 			)._toQuery();
 		
 		if (!filterOptions.getFirstname().isEmpty()) {
@@ -387,148 +242,246 @@ public interface CandidateRepository extends ElasticsearchRepository<CandidateDo
 			)._toQuery());
 		}
 		
-		//if (!this.filterOptions.getSkills().isEmpty()) {
+		if (!filterOptions.getSkills().isEmpty()) {
+			List<FieldValue> fieldValueList = filterOptions.getSkills().stream().map(FieldValue::of).toList();
+			 
+			 TermsQueryField termsQueryField = new TermsQueryField.Builder()
+                   .value(fieldValueList)
+                   .build();
+			 
+			mustQueries.add(TermsQuery.of(m -> m
+					.field("skills")
+					.terms(termsQueryField)
+					
+			)._toQuery());
 			
-		//	Expression<Collection<String>> skillValues = root.get("skills");
-			
-		//	this.filterOptions.getSkills().forEach(skill -> 
-		//		predicates.add(criteriaBuilder.isMember(skill.toLowerCase().trim(), skillValues))
-		//	);
-			
-		//}
-		
-		//if (!this.filterOptions.getDutch().isEmpty()) {
-		//	Join<CandidateEntity,LanguageEntity> dutchJoin = root.join("languages", JoinType.INNER);
-			
-		//	dutchJoin.on(criteriaBuilder.and(
-		//				criteriaBuilder.equal(dutchJoin.get("id").get("language"), LANGUAGE.DUTCH),
-		//				criteriaBuilder.equal(dutchJoin.get("level"), this.filterOptions.getDutch().get())
-		//			));
-		//}
-		
-		//if (!this.filterOptions.getFrench().isEmpty()) {
-		//	Join<CandidateEntity,LanguageEntity> frenchJoin = root.join("languages", JoinType.INNER);
-			
-		//	frenchJoin.on(criteriaBuilder.and(
-		//				criteriaBuilder.equal(frenchJoin.get("id").get("language"), LANGUAGE.FRENCH),
-		//				criteriaBuilder.equal(frenchJoin.get("level"), this.filterOptions.getFrench().get())
-		//			));
-		//}
-		
-		//if (!this.filterOptions.getEnglish().isEmpty()) {
-		//	Join<CandidateEntity,LanguageEntity> frenchJoin = root.join("languages", JoinType.INNER);
-			
-		//	frenchJoin.on(criteriaBuilder.and(
-		//				criteriaBuilder.equal(frenchJoin.get("id").get("language"), LANGUAGE.ENGLISH),
-		//				criteriaBuilder.equal(frenchJoin.get("level"), this.filterOptions.getEnglish().get())
-		//			));
-		//}
-		
-		
-		
-		//if (!this.filterOptions.getCountries().isEmpty()) {
-		//	Predicate countriesFltr 						= root.get("country").in(filterOptions.getCountries());
-		//	predicates.add(countriesFltr);
-		//}
-		
-		//if (!this.filterOptions.getFunctions().isEmpty()) {
-		//	Predicate functionsFltr 						= root.get("function").in(filterOptions.getFunctions());
-		//	predicates.add(functionsFltr);
-		//}
-		
-		//if (!this.filterOptions.isFreelance().isEmpty() && this.filterOptions.isFreelance().get()) {
-		//	Expression<String> freelanceExpression 			= root.get("freelance");
-		//	predicates.add(criteriaBuilder.equal(freelanceExpression, 	FREELANCE.TRUE));
-		//}
-		
-		//if (!this.filterOptions.isPerm().isEmpty() && this.filterOptions.isPerm().get()) {
-		//	Expression<String> permExpression 				= root.get("perm");
-		//	predicates.add(criteriaBuilder.equal(permExpression, 		PERM.TRUE));
-		//}
-		
-		//if (this.filterOptions.getYearsExperienceGtEq() > 0 ) {
-		//	Expression<Integer> yearsExperienceExpression 	= root.get("yearsExperience");
-		//	predicates.add(criteriaBuilder.greaterThanOrEqualTo(yearsExperienceExpression, this.filterOptions.getYearsExperienceGtEq()));
-		//}
-		
-		//if (this.filterOptions.getYearsExperienceLtEq() > 0 ) {
-		//	Expression<Integer> yearsExperienceExpression 	= root.get("yearsExperience");
-		//	predicates.add(criteriaBuilder.lessThanOrEqualTo(yearsExperienceExpression, this.filterOptions.getYearsExperienceLtEq()));
-		//}
-		
-		//if (this.filterOptions.getDaysSinceLastAvailabilityCheck().isPresent()) {
-		//	Expression<LocalDate>  daysSinceLastAvailabilityCheck	= root.get("lastAvailabilityCheck");
-		//	LocalDate cutOff = LocalDate.now().minusDays(this.filterOptions.getDaysSinceLastAvailabilityCheck().get());
-		//	predicates.add(criteriaBuilder.lessThanOrEqualTo(daysSinceLastAvailabilityCheck, cutOff));
-		//}
-		
-		//if (this.filterOptions.getOwnerId().isPresent()) {
-		//	Expression<String> ownerIdExpression 				= root.get("ownerId");
-		//	predicates.add(criteriaBuilder.equal(ownerIdExpression, 		this.filterOptions.getOwnerId().get()));
-		//}
-		
-		//if (this.filterOptions.getIncludeRequiresSponsorship().isEmpty() || this.filterOptions.getIncludeRequiresSponsorship().get() == false) {
-		//	Expression<Boolean> includeRequiredSponsorship = root.get("requiresSponsorship");
-		//	predicates.add(criteriaBuilder.notEqual(includeRequiredSponsorship, true));
-		//}
-		
-		//Expression<String> sortExpression 				= root.get("candidateId");
-		
-		//if (this.filterOptions.getOrderAttribute().isPresent()) {
-		//	sortExpression 				= root.get(filterOptions.getOrderAttribute().get());
-		//	if (this.filterOptions.getOrder().get() == RESULT_ORDER.asc) {
-		//		query.orderBy(criteriaBuilder.asc(sortExpression));
-		//	} else {
-		//		query.orderBy(criteriaBuilder.desc(sortExpression));
-		//	}
-		//	
-		//} else {
-		//	query.orderBy(criteriaBuilder.desc(sortExpression));
-		//}
-		
-		
-		
-		////After CandidateId search so only Admin and paid subscription users can search on unavailable candidates
-		//if (this.filterOptions.isAvailable().isEmpty()) {
-		//	//Predicate isActiveFltr 						= root.get("available").in(true);
-		//	//predicates.add(isActiveFltr);
-		//} else {
-		//	Predicate isActiveFltr 						= root.get("available").in(filterOptions.isAvailable().get().booleanValue());
-		//	predicates.add(isActiveFltr);
-		//}
-		
-		//return criteriaBuilder.and(predicates.stream().toArray(n -> new Predicate[n]));
-		
-		try {
-			
-			Aggregation aggregation = new Aggregation.Builder()
-					 .terms(new TermsAggregation.Builder().field("function").build())
-					 .build();
-			
-			return esClient.search(b -> b
-				    .index("candidates")
-				    .size(10000)
-				    .sort(f -> f.field(FieldSort.of(a -> a.field("candidateId").order(SortOrder.Desc))))
-				    // .searchAfter(null)
-				    .query(boolQuery) ,
-				    
-				    
-				    //.aggregations("functions", aggregation),
-				    CandidateDocument.class 
-				);
-		} catch (ElasticsearchException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch(Exception e) {
-			e.printStackTrace();
 		}
 		
-		return null;
+		if (!filterOptions.getDutch().isEmpty()) {
+			mustQueries.add(BoolQuery.of(m -> m
+				.must(List.of(
+						MatchQuery.of(m1 -> m1.field("language").query(LANGUAGE.DUTCH.toString()))._toQuery(),
+						MatchQuery.of(m2 -> m2.field("language").query(filterOptions.getDutch().get().toString()))._toQuery())
+			))._toQuery());
+		}
 		
+		if (!filterOptions.getFrench().isEmpty()) {
+			mustQueries.add(BoolQuery.of(m -> m
+					.must(List.of(
+							MatchQuery.of(m1 -> m1.field("language").query(LANGUAGE.FRENCH.toString()))._toQuery(),
+							MatchQuery.of(m2 -> m2.field("language").query(filterOptions.getFrench().get().toString()))._toQuery())
+				))._toQuery());
+		}
+		
+		if (!filterOptions.getEnglish().isEmpty()) {
+			mustQueries.add(BoolQuery.of(m -> m
+					.must(List.of(
+							MatchQuery.of(m1 -> m1.field("language").query(LANGUAGE.ENGLISH.toString()))._toQuery(),
+							MatchQuery.of(m2 -> m2.field("language").query(filterOptions.getEnglish().get().toString()))._toQuery())
+				))._toQuery());
+		}
+		
+		if (!filterOptions.getCountries().isEmpty()) {
+			
+			 List<FieldValue> fieldValueList = filterOptions.getCountries().stream().map(c -> FieldValue.of(c.name())).toList();
+			 
+			 TermsQueryField termsQueryField = new TermsQueryField.Builder()
+                     .value(fieldValueList)
+                     .build();
+			 
+			mustQueries.add(TermsQuery.of(m -> m
+					.field("country")
+					.terms(termsQueryField)
+					
+			)._toQuery());
+		}
+		
+		if (!filterOptions.getFunctions().isEmpty()) {
+			List<FieldValue> fieldValueList = filterOptions.getFunctions().stream().map(c -> FieldValue.of(c.name())).toList();
+			 
+			 TermsQueryField termsQueryField = new TermsQueryField.Builder()
+                    .value(fieldValueList)
+                    .build();
+			 
+			mustQueries.add(TermsQuery.of(m -> m
+					.field("function")
+					.terms(termsQueryField)
+					
+			)._toQuery());
+		}
+		
+		if (!filterOptions.isFreelance().isEmpty() && filterOptions.isFreelance().get()) {
+			mustQueries.add(MatchQuery.of(m -> m
+					.field("freelance")
+					.query(FREELANCE.TRUE.toString())
+			)._toQuery());
+		}
+		
+		if (!filterOptions.isPerm().isEmpty() && filterOptions.isPerm().get()) {
+			mustQueries.add(MatchQuery.of(m -> m
+					.field("perm")
+					.query(PERM.TRUE.toString())
+			)._toQuery());
+		}
+		
+		if (filterOptions.getYearsExperienceGtEq() > 0 ) {
+			mustQueries.add(RangeQuery.of(m -> m
+					.field("yearsExperience")
+					.gte(JsonData.of(filterOptions.getYearsExperienceGtEq()))
+			)._toQuery());
+		}
+		
+		if (filterOptions.getYearsExperienceLtEq() > 0 ) {
+			mustQueries.add(RangeQuery.of(m -> m
+					.field("yearsExperience")
+					.lte(JsonData.of(filterOptions.getYearsExperienceLtEq()))
+			)._toQuery());
+		}
+		
+		if (filterOptions.getDaysSinceLastAvailabilityCheck().isPresent()) {
+			LocalDate cutOff = LocalDate.now().minusDays(filterOptions.getDaysSinceLastAvailabilityCheck().get());
+			mustQueries.add(RangeQuery.of(m -> m
+					.field("lastAvailabilityCheck")
+					.lte(JsonData.of(cutOff))
+			)._toQuery());
+		}
+		
+		if (filterOptions.getOwnerId().isPresent()) {
+			mustQueries.add(MatchQuery.of(m -> m
+					.field("ownerId")
+					.query(filterOptions.getOwnerId().get())
+			)._toQuery());
+		}
+		
+		if (filterOptions.getIncludeRequiresSponsorship().isEmpty() || filterOptions.getIncludeRequiresSponsorship().get() == false) {
+			mustNotQueries.add(MatchQuery.of(m -> m
+					.field("requiresSponsorship")
+					.query(true)
+			)._toQuery());
+		}
+		
+		SortOrder sortOrder;
+		String sortField;
+		if (filterOptions.getOrderAttribute().isPresent()) {
+			sortField = filterOptions.getOrderAttribute().get();
+		} else {
+			sortField = "candidateId";
+		}
+		
+		if (filterOptions.getOrder().isPresent() && filterOptions.getOrder().get() == RESULT_ORDER.asc) {
+			sortOrder = SortOrder.Asc;
+		} else {
+			sortOrder = SortOrder.Desc;
+		}
+		
+		if (filterOptions.isAvailable().isEmpty()) {
+		} else {
+			mustQueries.add(MatchQuery.of(m -> m
+					.field("available")
+					.query(filterOptions.isAvailable().get().booleanValue())
+			)._toQuery());
+		}
+			
+		return esClient.search(b -> b
+			    .index("candidates")
+			    .size(pageSize)
+			    .sort(f -> f.field(FieldSort.of(a -> a.field(sortField).order(sortOrder))))
+			    .query(boolQuery) ,
+			    CandidateDocument.class);
+	
 	}
 	
 
+	class FUPage<T> implements Page<T>{
 
+		List<T> hits = new ArrayList<>();
+		int totalPages = 0;
+		
+		public FUPage(List<T> hits, int totalPages) {
+			this.hits = hits;
+			this.totalPages = totalPages;
+		}
+		
+		@Override
+		public int getNumber() {
+			throw new InvalidOperationException("");
+		}
+
+		@Override
+		public int getSize() {
+			throw new InvalidOperationException("");
+		}
+
+		@Override
+		public int getNumberOfElements() {
+			return 0;
+		}
+
+		@Override
+		public List<T> getContent() {
+			return hits;
+		}
+
+		@Override
+		public boolean hasContent() {
+			throw new InvalidOperationException("");
+		}
+
+		@Override
+		public Sort getSort() {
+			throw new InvalidOperationException("");
+		}
+
+		@Override
+		public boolean isFirst() {
+			throw new InvalidOperationException("");
+		}
+
+		@Override
+		public boolean isLast() {
+			throw new InvalidOperationException("");
+		}
+
+		@Override
+		public boolean hasNext() {
+			throw new InvalidOperationException("");
+		}
+
+		@Override
+		public boolean hasPrevious() {
+			throw new InvalidOperationException("");
+		}
+
+		@Override
+		public Pageable nextPageable() {
+			throw new InvalidOperationException("");
+		}
+
+		@Override
+		public Pageable previousPageable() {
+			throw new InvalidOperationException("");
+		}
+
+		@Override
+		public Iterator<T> iterator() {
+			throw new InvalidOperationException("");
+		}
+
+		@Override
+		public int getTotalPages() {
+			return this.totalPages;
+		}
+
+		@Override
+		public long getTotalElements() {
+			throw new InvalidOperationException("");
+		}
+
+		@Override
+		public <U> Page<U> map(Function<? super T, ? extends U> converter) {
+			throw new InvalidOperationException("");
+		}
+		
+	}
 	
 }

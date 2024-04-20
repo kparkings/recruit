@@ -27,9 +27,10 @@ public interface CandidateStatisticsService {
 	/**
 	* Returns a Summary of the number of candidates available 
 	* per role
+	* @throws Exception
 	* @return
 	*/
-	public List<CandidateRoleStats> fetchCandidateRoleStats();
+	public List<CandidateRoleStats> fetchCandidateRoleStats() throws Exception;
 	
 	/**
 	* Logs details of a Candidate Search performed

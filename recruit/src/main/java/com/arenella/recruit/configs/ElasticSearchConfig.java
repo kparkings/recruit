@@ -12,6 +12,10 @@ public class ElasticSearchConfig extends ElasticsearchConfiguration {
     @Override
     public ClientConfiguration clientConfiguration() {
         return ClientConfiguration.builder()
-                .connectedTo("localhost:9200").build();
+        		
+                .connectedTo("localhost:9200")
+                //.usingSsl()
+                
+                .build();
     }
 }

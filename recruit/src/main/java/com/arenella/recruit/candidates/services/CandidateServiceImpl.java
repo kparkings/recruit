@@ -169,7 +169,7 @@ public class CandidateServiceImpl implements CandidateService{
 	* Refer to the CandidateService Interface for Details
 	*/
 	@Override
-	public void persistCandidate(Candidate candidate) {
+	public void persistCandidate(Candidate candidate) throws Exception{
 		
 		if (checkHasRole("ROLE_RECRUITER")) {
 			
@@ -206,31 +206,14 @@ public class CandidateServiceImpl implements CandidateService{
 			}
 		}
 		
-		//CandidateEntity entity = CandidateEntity.convertToEntity(candidate);
-		
-		//long candidateId = candidateDao.save(entity).getCandidateId();
-		
-		/****
-		* 
-		* START 
-		* 
-		*/
 		long candidateId = candidateRepo.saveCandidate(candidate);
-		/****
-		* 
-		* END 
-		* 
-		*/
-		
-		
 		
 		String password 			= PasswordUtil.generatePassword();
 		String encryptedPassword 	= PasswordUtil.encryptPassword(password);
 		
-		if(!checkHasRole("ROLE_RECRUITER") ) {
+		if (!checkHasRole("ROLE_RECRUITER") ) {
 			this.externalEventPublisher
 				.publishCandidateAccountCreatedEvent(new CandidateAccountCreatedEvent(candidate.getCandidateId(), encryptedPassword));
-	
 			this.externalEventPublisher
 			.publishCandidateCreatedEvent(CandidateCreatedEvent
 					.builder()
@@ -354,7 +337,7 @@ public class CandidateServiceImpl implements CandidateService{
 	* Refer to the CandidateService Interface for Details
 	*/
 	@Override
-	public suggestion_accuracy doTestCandidateAlert(long candidateId, CandidateFilterOptions filterOptions) {
+	public suggestion_accuracy doTestCandidateAlert(long candidateId, CandidateFilterOptions filterOptions) throws Exception{
 		
 		CandidateFilterOptions suggestionFilterOptions = CandidateFilterOptions
 				.builder()
@@ -470,7 +453,7 @@ public class CandidateServiceImpl implements CandidateService{
 	* Refer to the CandidateService Interface for Details
 	*/
 	@Override
-	public Page<CandidateSearchAccuracyWrapper> getCandidateSuggestions(CandidateFilterOptions filterOptions, Integer maxSuggestions) {
+	public Page<CandidateSearchAccuracyWrapper> getCandidateSuggestions(CandidateFilterOptions filterOptions, Integer maxSuggestions) throws Exception{
 		
 		final Set<CandidateSearchAccuracyWrapper> 	suggestions 		= new LinkedHashSet<>();
 		
@@ -850,7 +833,7 @@ public class CandidateServiceImpl implements CandidateService{
 	* Refer to the CandidateService for details 
 	*/
 	@Override
-	public void updateCandidateProfile(CandidateUpdateRequest candidate) {
+	public void updateCandidateProfile(CandidateUpdateRequest candidate) throws Exception{
 		
 		final String 	userId 			= this.getAuthenticatedUserId();
 		final boolean 	isAdmin			= checkHasRole("ROLE_ADMIN");

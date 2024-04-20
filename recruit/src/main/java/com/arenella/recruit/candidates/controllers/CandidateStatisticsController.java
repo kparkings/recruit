@@ -48,7 +48,7 @@ public class CandidateStatisticsController {
 	* @return Stats about available Candidates by role
 	*/
 	@GetMapping(path="candidate/stat/function-count")
-	public ResponseEntity<List<CandidateRoleStatsAPIOutbound>> fetchCandidateRoleStats(){
+	public ResponseEntity<List<CandidateRoleStatsAPIOutbound>> fetchCandidateRoleStats() throws Exception{
 		return ResponseEntity.ok(candidateStatisticsService.fetchCandidateRoleStats().stream().map(CandidateRoleStatsAPIOutbound::convertFromDomain).collect(Collectors.toCollection(LinkedList::new)));
 	}
 	

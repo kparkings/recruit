@@ -19,7 +19,6 @@ import com.arenella.recruit.candidates.adapters.CandidateMonolithExternalEventLi
 import com.arenella.recruit.candidates.adapters.ExternalEventPublisher;
 import com.arenella.recruit.candidates.beans.Candidate;
 import com.arenella.recruit.candidates.beans.RecruiterCredit;
-import com.arenella.recruit.candidates.dao.CandidateDao;
 import com.arenella.recruit.candidates.repos.CandidateRepository;
 import com.arenella.recruit.candidates.services.CandidateService;
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_type;

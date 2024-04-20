@@ -64,7 +64,7 @@ public class CandidateController {
 	*/
 	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_RECRUITER')")
 	@PostMapping(path="candidate",consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-	public void addCandidate(@RequestPart("candidate") CandidateAPIInbound candidate, @RequestPart("profileImage")Optional<MultipartFile> profilePhoto, Principal principal) throws IOException {
+	public void addCandidate(@RequestPart("candidate") CandidateAPIInbound candidate, @RequestPart("profileImage")Optional<MultipartFile> profilePhoto, Principal principal) throws Exception {
 		
 		Optional<Photo> photo = candidateService.convertToPhoto(profilePhoto);
 		
@@ -104,7 +104,7 @@ public class CandidateController {
 	*/
 	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('ROLE_RECRUITER') OR hasRole('ROLE_CANDIDATE')")
 	@PutMapping(path="candidate/{candidateId}/profile",consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-	public ResponseEntity<Void> updateCandidateProfile(@RequestPart("profile") CandidateUpdateRequestAPIInbound updateRequest, @RequestPart("file") Optional<MultipartFile> file, @PathVariable("candidateId") String candidateId, Principal principal) throws IOException {
+	public ResponseEntity<Void> updateCandidateProfile(@RequestPart("profile") CandidateUpdateRequestAPIInbound updateRequest, @RequestPart("file") Optional<MultipartFile> file, @PathVariable("candidateId") String candidateId, Principal principal) throws Exception {
 		
 		CandidateUpdateRequest candidateUpdateRequest = CandidateUpdateRequestAPIInbound.convertToDomain(candidateId, updateRequest, file);
 		
@@ -198,7 +198,7 @@ public class CandidateController {
 													Pageable 			pageable,
 													Principal 			principal,
 													HttpServletResponse response
-													) {
+													) throws Exception{
 		
 		Set<String> candidateIdFilters = new LinkedHashSet<>();
 		

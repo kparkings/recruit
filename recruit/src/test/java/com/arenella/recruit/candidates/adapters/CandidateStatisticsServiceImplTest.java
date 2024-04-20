@@ -15,7 +15,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.arenella.recruit.candidates.beans.Candidate;
 import com.arenella.recruit.candidates.controllers.CandidateStatisticsController.STAT_PERIOD;
-import com.arenella.recruit.candidates.dao.CandidateDao;
 import com.arenella.recruit.candidates.dao.CandidateSearchStatisticsDao;
 import com.arenella.recruit.candidates.dao.NewCandidateStatsTypeDao;
 import com.arenella.recruit.candidates.repos.CandidateRepository;

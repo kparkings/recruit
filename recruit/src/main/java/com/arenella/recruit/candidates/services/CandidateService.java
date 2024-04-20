@@ -35,8 +35,9 @@ public interface CandidateService {
 	* Persists a Candidate. 
 	* @param candidate - Candidate to persist
 	* @return CandidateId
+	* @throws Exception
 	*/
-	public void persistCandidate(Candidate candidate);
+	public void persistCandidate(Candidate candidate) throws Exception;
 	
 	/**
 	* Performs an update on a specific Candidate
@@ -58,8 +59,9 @@ public interface CandidateService {
 	* @param filterOptions  - filters to apply to the results
 	* @param maxSuggestions - maximum number of suggestions to return
 	* @return Candidates
+	* @throws Exception
 	*/
-	public Page<CandidateSearchAccuracyWrapper> getCandidateSuggestions(CandidateFilterOptions filterOptions, Integer maxSuggestions);
+	public Page<CandidateSearchAccuracyWrapper> getCandidateSuggestions(CandidateFilterOptions filterOptions, Integer maxSuggestions) throws Exception;
 
 	/**
 	* Adds a Pending Candidate to the System
@@ -102,7 +104,7 @@ public interface CandidateService {
 	/**
 	* Performs Test of candidate against filter options for accuracy
 	*/
-	public suggestion_accuracy doTestCandidateAlert(long candidateId, CandidateFilterOptions filterOptions);
+	public suggestion_accuracy doTestCandidateAlert(long candidateId, CandidateFilterOptions filterOptions) throws Exception;
 	
 	/**
 	* Extracts Candidate search filters from a document
@@ -149,8 +151,9 @@ public interface CandidateService {
 	/**
 	* Updates details of a Candidates profile
 	* @param candidateUpdateRequest - Contains details of updates Candidate properties
+	* @throws Exception
 	*/
-	public void updateCandidateProfile(CandidateUpdateRequest candidateUpdateRequest);
+	public void updateCandidateProfile(CandidateUpdateRequest candidateUpdateRequest) throws Exception;
 
 	/**
 	* Fully deletes Candidate from the System

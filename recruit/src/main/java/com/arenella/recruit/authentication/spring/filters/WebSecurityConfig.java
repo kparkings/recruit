@@ -20,10 +20,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-
 import java.util.Arrays;
 
 @Configuration
@@ -33,7 +29,6 @@ import java.util.Arrays;
 * Configuration for WebSecurity
 * @author K Parkings
 */
-//public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements WebMvcConfigurer {
 public class WebSecurityConfig {
 
 
