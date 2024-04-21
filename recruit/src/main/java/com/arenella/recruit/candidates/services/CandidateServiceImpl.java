@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -453,7 +454,7 @@ public class CandidateServiceImpl implements CandidateService{
 	* Refer to the CandidateService Interface for Details
 	*/
 	@Override
-	public Page<CandidateSearchAccuracyWrapper> getCandidateSuggestions(CandidateFilterOptions filterOptions, Integer maxSuggestions) throws Exception{
+	public Page<CandidateSearchAccuracyWrapper> getCandidateSuggestions(CandidateFilterOptions filterOptions, Integer maxSuggestions, boolean unfiltered) throws Exception{
 		
 		final Set<CandidateSearchAccuracyWrapper> 	suggestions 		= new LinkedHashSet<>();
 		
@@ -467,7 +468,7 @@ public class CandidateServiceImpl implements CandidateService{
 		* Special case. If searching on single candidate by Id, clear other filters and add in 
 		* just the candidate Id with max 1 result
 		*/
-		if (filterOptions.getSearchText() != null && filterOptions.getSearchText().startsWith("C#")) {
+		if (filterOptions.getSearchText() != null && filterOptions.getSearchText().startsWith("f")) {
 			
 			
 			String candidateId = filterOptions.getSearchText().substring(2);
@@ -576,6 +577,21 @@ public class CandidateServiceImpl implements CandidateService{
 			skillsExtractor.extractFilters(" " + filterOptions.getSearchText().toLowerCase() + " ", searchTermFilter);
 		}
 		Set<String> searchTermKeywords = searchTermFilter.build().getSkills();
+		
+		/**
+		* Not exactly unfiltered. The filters required to implement the business rules will still ba applied. If however the User has 
+		* not specified filters w 
+		*/
+		if (unfiltered) {
+			
+			List<CandidateSearchAccuracyWrapper> canidates = candidateRepo.findAll(filterOptions, this.esClient, pageable).getContent().stream().map(CandidateSearchAccuracyWrapper::new).toList();
+			suggestions.addAll(canidates);
+			suggestions.stream().forEach(s -> {
+				s.setAccuracyLanguages(suggestion_accuracy.perfect);
+				s.setAccuracySkills(suggestion_accuracy.perfect);
+			});
+			return new PageImpl<>(suggestions.stream().limit(maxSuggestions).collect(Collectors.toCollection(LinkedList::new)));			
+		}
 		
 		while (true) {
 		

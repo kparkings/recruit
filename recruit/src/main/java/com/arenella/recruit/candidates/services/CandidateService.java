@@ -58,10 +58,11 @@ public interface CandidateService {
 	* Retrieves a list of Candidates
 	* @param filterOptions  - filters to apply to the results
 	* @param maxSuggestions - maximum number of suggestions to return
+	* @param unfiltered     - Hint to method that no user selected filters have been selected
 	* @return Candidates
 	* @throws Exception
 	*/
-	public Page<CandidateSearchAccuracyWrapper> getCandidateSuggestions(CandidateFilterOptions filterOptions, Integer maxSuggestions) throws Exception;
+	public Page<CandidateSearchAccuracyWrapper> getCandidateSuggestions(CandidateFilterOptions filterOptions, Integer maxSuggestions, boolean unfiltered) throws Exception;
 
 	/**
 	* Adds a Pending Candidate to the System

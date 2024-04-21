@@ -194,6 +194,7 @@ public class CandidateController {
 													@RequestParam(required = false)		Boolean				available,
 													@RequestParam(required = false)		String				ownerId,
 													@RequestParam(required = false)		Boolean				includeRequiresSponsorship,
+													@RequestParam(required = false)		Boolean				unfiltered,
 													Integer				backendRequestId,
 													Pageable 			pageable,
 													Principal 			principal,
@@ -237,10 +238,12 @@ public class CandidateController {
 		
 		response.setHeader("X-Arenella-Request-Id", ""+(backendRequestId == null ? 0 : backendRequestId.intValue()));
 		
+		boolean isUnfilteredRequest = Optional.ofNullable(unfiltered).isEmpty() ? false :  unfiltered;
+		
 		if (this.isRecruiter(principal) && this.isUseCredits(principal) && this.userCreditsExpired(this.getLoggedInUserName(principal))) {
-			return candidateService.getCandidateSuggestions(filterOptions, pageable.getPageSize()).map(CandidateSuggestionAPIOutbound::convertFromCandidateAsCensored);
+			return candidateService.getCandidateSuggestions(filterOptions, pageable.getPageSize(), isUnfilteredRequest).map(CandidateSuggestionAPIOutbound::convertFromCandidateAsCensored);
 		} else {
-			return candidateService.getCandidateSuggestions(filterOptions, pageable.getPageSize()).map(CandidateSuggestionAPIOutbound::convertFromCandidate);
+			return candidateService.getCandidateSuggestions(filterOptions, pageable.getPageSize(), isUnfilteredRequest).map(CandidateSuggestionAPIOutbound::convertFromCandidate);
 		}
 		
 		

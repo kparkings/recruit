@@ -32,7 +32,8 @@ export class SuggestionsService {
 							experienceMax:string, 
 							languages:Array<string>, 
 							skills:Array<string>,
-							includeUnavailableCandidates:string): Observable<any>{
+							includeUnavailableCandidates:string, 
+							isUnfiltered:boolean): Observable<any>{
 		
 		return this.candidateService.getCandidates(this.getCandidateFilterParamString(	backendRequestId,
 																						maxNumberOfSuggestions, 
@@ -46,6 +47,7 @@ export class SuggestionsService {
 																						languages, 
 																						includeUnavailableCandidates,
 																						skills,
+																						isUnfiltered
 																						));
 		
 	}
@@ -64,10 +66,12 @@ export class SuggestionsService {
 											experienceMax:string,
 											languages:Array<string>, 
 											includeUnavailableCandidates:string,
-											skills:Array<string>):string{
+											skills:Array<string>,
+											isUnfiltered:boolean):string{
 
 		const filterParams:string = 'orderAttribute=candidateId&order=desc'
                                                          + '&page=0'
+                                                         + '&unfiltered=' + isUnfiltered
                                                          + '&size=' + maxNumberOfSuggestions
                                                          + '&backendRequestId='+backendRequestId
 														 + '&searchText=' + encodeURIComponent(title)

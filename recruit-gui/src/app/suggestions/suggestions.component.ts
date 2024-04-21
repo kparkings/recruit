@@ -128,7 +128,7 @@ export class SuggestionsComponent implements OnInit {
 		this.resetSearchFilters(true);
 		
 		if (!this.isCandidate()) {
-			this.getSuggestions();	
+			this.getSuggestions(true);	
 		}
 		
 		//Candidate
@@ -304,10 +304,10 @@ export class SuggestionsComponent implements OnInit {
 		}
 		
 		this.subscription = this.suggestionFilterForm.valueChanges.pipe(debounceTime(0)).subscribe(res => {
-		 		this.getSuggestions();	
+		 		this.getSuggestions(false);	
 		}); 
 		
-		this.getSuggestions();	
+		this.getSuggestions(true);	
 	}	
 	
 	public resetSuggestionFilterForm():void{
@@ -366,7 +366,7 @@ export class SuggestionsComponent implements OnInit {
 	ngOnInit(): void {
 		
 		this.subscription = this.suggestionFilterForm.valueChanges.pipe(debounceTime(500)).subscribe(res => {
-			this.getSuggestions();
+			this.getSuggestions(false);
 		});
 		
 		this.candidateService.fetchSavedCandidates().subscribe(response => {
@@ -433,7 +433,7 @@ export class SuggestionsComponent implements OnInit {
 	/**
 	* Sends request for Suggestions to the backend API
 	*/
-	private getSuggestions():void{
+	private getSuggestions(isUnfiltered:boolean):void{
 		
 		const maxSuggestions:number 		= 112;
 		
@@ -454,7 +454,8 @@ export class SuggestionsComponent implements OnInit {
 									params.getMaxExperience(),
 									params.getLanguages(),
 									params.getSkills(),
-									params.getIncludUnavailableCandidates()
+									params.getIncludUnavailableCandidates(),
+									isUnfiltered
 									).pipe(
 										  map((response) => {
 										  
@@ -562,7 +563,7 @@ export class SuggestionsComponent implements OnInit {
 			this.skillFilters.push(skillFormatted);	
 		}
 		
-		this.getSuggestions();
+		this.getSuggestions(false);
 		
 		this.skilFilterForm.get('skill')?.setValue('');
 		
@@ -578,7 +579,7 @@ export class SuggestionsComponent implements OnInit {
 		
 		this.skillFilters = this.skillFilters.filter(s => s  !== skill);
 		
-		this.getSuggestions();	
+		this.getSuggestions(false);	
 	
 	}
 	
@@ -605,7 +606,7 @@ export class SuggestionsComponent implements OnInit {
 		if(this.parentComponent == 'newsfeed') {
 			this.back();		
 		} else {
-			this.getSuggestions();	
+			this.getSuggestions(false);	
 		
 			if (this.isRecruiter() && this.candidateNavService.isRouteActive()) {
 				this.candidateNavService.doNextMove("back",this.candidateNavService.getCandidateId());	

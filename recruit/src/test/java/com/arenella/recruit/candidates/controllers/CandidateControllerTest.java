@@ -93,21 +93,75 @@ public class CandidateControllerTest {
 		org.springframework.data.domain.PageImpl<CandidateSearchAccuracyWrapper> page = new org.springframework.data.domain.PageImpl(List.of(wrapper));
 		Page<CandidateSearchAccuracyWrapper> candidatePage = page;
 		
-		Mockito.when(this.mockCandidateService.getCandidateSuggestions(Mockito.any(), Mockito.any())).thenReturn(candidatePage);
+		Mockito.when(this.mockCandidateService.getCandidateSuggestions(Mockito.any(), Mockito.any(), Mockito.eq(false))).thenReturn(candidatePage);
 		Mockito.when(this.mockUsernamePasswordAuthenticationToken.getAuthorities()).thenReturn(Set.of());
 		
 		PageRequest mockPageRequest = Mockito.mock(PageRequest.class);
 		Mockito.when(mockPageRequest.getPageSize()).thenReturn(1);
 		
-		Page<CandidateAPIOutbound> results = this.controller.getCandidate(null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,true,null,null,null,null,null, 0, mockPageRequest, this.mockUsernamePasswordAuthenticationToken, mockResponse);
+		Page<CandidateAPIOutbound> results = this.controller.getCandidate(null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,true,null,null,null,null,null,null, 0, mockPageRequest, this.mockUsernamePasswordAuthenticationToken, mockResponse);
 		
-		Mockito.verify(this.mockCandidateService).getCandidateSuggestions(Mockito.any(), Mockito.any());
+		Mockito.verify(this.mockCandidateService).getCandidateSuggestions(Mockito.any(), Mockito.any(), Mockito.eq(false));
 	
 		CandidateSuggestionAPIOutbound candidateFirst = (CandidateSuggestionAPIOutbound) results.get().findFirst().get();
 	
 		assertNotEquals(CandidateSuggestionAPIOutbound.CENSORED_ITEM, candidateFirst.getFirstname());
 		assertNotEquals(CandidateSuggestionAPIOutbound.CENSORED_ITEM, candidateFirst.getSurname());
 		assertNotEquals(CandidateSuggestionAPIOutbound.CENSORED_ITEM, candidateFirst.getEmail());
+		
+	}
+	
+	/**
+	* Tests not provided unfiltered argument results in false being passed so full search 
+	* cycle occurs by default
+	* @throws Exception
+	*/
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@Test
+	public void testGetCandidate_suggestions_noUnfilteredArgument() throws Exception{
+	
+		
+		Candidate candidate = Candidate.builder().build();
+		CandidateSearchAccuracyWrapper wrapper = new CandidateSearchAccuracyWrapper(candidate);
+		
+		org.springframework.data.domain.PageImpl<CandidateSearchAccuracyWrapper> page = new org.springframework.data.domain.PageImpl(List.of(wrapper));
+		Page<CandidateSearchAccuracyWrapper> candidatePage = page;
+		
+		Mockito.when(this.mockCandidateService.getCandidateSuggestions(Mockito.any(), Mockito.any(), Mockito.eq(false))).thenReturn(candidatePage);
+		Mockito.when(this.mockUsernamePasswordAuthenticationToken.getAuthorities()).thenReturn(Set.of());
+		
+		PageRequest mockPageRequest = Mockito.mock(PageRequest.class);
+		Mockito.when(mockPageRequest.getPageSize()).thenReturn(1);
+		
+		this.controller.getCandidate(null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,true,null,null,null,null,null,null, 0, mockPageRequest, this.mockUsernamePasswordAuthenticationToken, mockResponse);
+		
+		Mockito.verify(this.mockCandidateService).getCandidateSuggestions(Mockito.any(), Mockito.any(), Mockito.eq(false));
+		
+	}
+	
+	/**
+	* Tests provided unfiltered argument results in options being passed to service
+	* @throws Exception
+	*/
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@Test
+	public void testGetCandidate_suggestions_unfilteredArgumentTrue() throws Exception{
+		
+		Candidate candidate = Candidate.builder().build();
+		CandidateSearchAccuracyWrapper wrapper = new CandidateSearchAccuracyWrapper(candidate);
+		
+		org.springframework.data.domain.PageImpl<CandidateSearchAccuracyWrapper> page = new org.springframework.data.domain.PageImpl(List.of(wrapper));
+		Page<CandidateSearchAccuracyWrapper> candidatePage = page;
+		
+		Mockito.when(this.mockCandidateService.getCandidateSuggestions(Mockito.any(), Mockito.any(), Mockito.eq(true))).thenReturn(candidatePage);
+		Mockito.when(this.mockUsernamePasswordAuthenticationToken.getAuthorities()).thenReturn(Set.of());
+		
+		PageRequest mockPageRequest = Mockito.mock(PageRequest.class);
+		Mockito.when(mockPageRequest.getPageSize()).thenReturn(1);
+		
+		this.controller.getCandidate(null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,true,null,null,null,null,null,true, 0, mockPageRequest, this.mockUsernamePasswordAuthenticationToken, mockResponse);
+		
+		Mockito.verify(this.mockCandidateService).getCandidateSuggestions(Mockito.any(), Mockito.any(), Mockito.eq(true));
 		
 	}
 	
@@ -132,7 +186,7 @@ public class CandidateControllerTest {
 		Collection authorities = new HashSet<>();
 		authorities.add(new SimpleGrantedAuthority("ROLE_RECRUITER"));
 		
-		Mockito.when(this.mockCandidateService.getCandidateSuggestions(Mockito.any(), Mockito.any())).thenReturn(candidatePage);
+		Mockito.when(this.mockCandidateService.getCandidateSuggestions(Mockito.any(), Mockito.any(), Mockito.eq(false))).thenReturn(candidatePage);
 		Mockito.when(this.mockUsernamePasswordAuthenticationToken.getAuthorities()).thenReturn(authorities);
 		Mockito.when(this.mockUsernamePasswordAuthenticationToken.getName()).thenReturn(firstname);
 		
@@ -142,9 +196,9 @@ public class CandidateControllerTest {
 		Mockito.when(this.mockUsernamePasswordAuthenticationToken.getClaim("useCredits")).thenReturn(Optional.of(Boolean.TRUE));
 		Mockito.when(this.mockCandidateService.hasCreditsLeft(Mockito.anyString())).thenReturn(false);
 		
-		Page<CandidateAPIOutbound> results = this.controller.getCandidate(null,null, null, null,null,null,null,null,null,null,null,null,null,null,null,null,null,true,null,null,null,null,null, 0, mockPageRequest, this.mockUsernamePasswordAuthenticationToken, mockResponse);
+		Page<CandidateAPIOutbound> results = this.controller.getCandidate(null,null, null, null,null,null,null,null,null,null,null,null,null,null,null,null,null,true,null,null,null,null,null,null, 0, mockPageRequest, this.mockUsernamePasswordAuthenticationToken, mockResponse);
 		
-		Mockito.verify(this.mockCandidateService).getCandidateSuggestions(Mockito.any(), Mockito.any());
+		Mockito.verify(this.mockCandidateService).getCandidateSuggestions(Mockito.any(), Mockito.any(), Mockito.eq(false));
 	
 		CandidateSuggestionAPIOutbound candidateFirst = (CandidateSuggestionAPIOutbound) results.get().findFirst().get();
 	
@@ -172,7 +226,7 @@ public class CandidateControllerTest {
 		Collection authorities = new HashSet<>();
 		authorities.add(new SimpleGrantedAuthority("ROLE_CANDIDATE"));
 		
-		Mockito.when(this.mockCandidateService.getCandidateSuggestions(filterArgcapt.capture(), Mockito.any())).thenReturn(candidatePage);
+		Mockito.when(this.mockCandidateService.getCandidateSuggestions(filterArgcapt.capture(), Mockito.any(), Mockito.eq(false))).thenReturn(candidatePage);
 		Mockito.when(this.mockUsernamePasswordAuthenticationToken.getAuthorities()).thenReturn(authorities);
 		Mockito.when(this.mockUsernamePasswordAuthenticationToken.getName()).thenReturn(candidateId);
 		
@@ -181,9 +235,9 @@ public class CandidateControllerTest {
 		
 		Set<String> ids = new HashSet<>();
 		ids.add("notOwncandidateId");
-		this.controller.getCandidate(null,null,ids,null,null,null,null,null,null,null,null,null,null,null,null,null,null,true,null,null,null,null,null, 0, mockPageRequest, this.mockUsernamePasswordAuthenticationToken, mockResponse);
+		this.controller.getCandidate(null,null,ids,null,null,null,null,null,null,null,null,null,null,null,null,null,null,true,null,null,null,null,null, null, 0, mockPageRequest, this.mockUsernamePasswordAuthenticationToken, mockResponse);
 		
-		Mockito.verify(this.mockCandidateService).getCandidateSuggestions(Mockito.any(), Mockito.any());
+		Mockito.verify(this.mockCandidateService).getCandidateSuggestions(Mockito.any(), Mockito.any(), Mockito.eq(false));
 		assertEquals(1, filterArgcapt.getValue().getCandidateIds().size());
 		assertEquals(candidateId, filterArgcapt.getValue().getCandidateIds().stream().findFirst().get());
 	}
