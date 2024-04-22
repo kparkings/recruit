@@ -465,22 +465,6 @@ public class CandidateServiceImpl implements CandidateService{
 		Optional<Boolean>							available		 	= filterOptions.isAvailable();
 		
 		/**
-		* Special case. If searching on single candidate by Id, clear other filters and add in 
-		* just the candidate Id with max 1 result
-		*/
-		if (filterOptions.getSearchText() != null && filterOptions.getSearchText().startsWith("f")) {
-			
-			
-			String candidateId = filterOptions.getSearchText().substring(2);
-			if (candidateId != null && !candidateId.equals("") && org.apache.commons.lang3.StringUtils.isNumeric(candidateId)) {
-				filterOptions.reset();
-				filterOptions.setCandidateIds(Set.of(candidateId));
-				maxSuggestions = 1;
-			}
-					
-		} 
-		
-		/**
 		* Recruiters may only view unavailable candidates if they have a paid subscription 
 		* Candidates need to be able to view their own profile even if their profile is not 
 		* active as do Admin users 
@@ -577,6 +561,22 @@ public class CandidateServiceImpl implements CandidateService{
 			skillsExtractor.extractFilters(" " + filterOptions.getSearchText().toLowerCase() + " ", searchTermFilter);
 		}
 		Set<String> searchTermKeywords = searchTermFilter.build().getSkills();
+		
+		/**
+		* Special case. If searching on single candidate by Id, clear other filters and add in 
+		* just the candidate Id with max 1 result
+		*/
+		if (filterOptions.getSearchText() != null && filterOptions.getSearchText().startsWith("C#")) {
+			
+			String candidateId = filterOptions.getSearchText().substring(2);
+
+			if (candidateId != null && !candidateId.equals("") &&  org.apache.commons.lang3.StringUtils.isNumeric(candidateId)) {
+				filterOptions.reset();
+				filterOptions.setCandidateIds(Set.of(candidateId));
+				maxSuggestions = 1;
+			} 
+				
+		} 
 		
 		/**
 		* Not exactly unfiltered. The filters required to implement the business rules will still ba applied. If however the User has 
