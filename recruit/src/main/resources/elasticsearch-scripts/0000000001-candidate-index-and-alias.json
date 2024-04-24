@@ -1,0 +1,210 @@
+PUT /candidates_001
+{
+  "aliases": {},
+  "settings": {
+    "analysis": {
+      "normalizer": {
+        "lowercase_normalizer": {
+          "type": "custom",
+          "filter": [
+            "lowercase"
+          ]
+        }
+      }
+    }
+  },
+  "mappings": {
+    "properties": {
+      "available": {
+        "type": "boolean"
+      },
+      "availableFromDate": {
+        "type": "date",
+        "format": "date_optional_time||epoch_millis"
+      },
+      "candidateId": {
+        "type": "long"
+      },
+      "candidateType": {
+        "type": "keyword"
+      },
+      "city": {
+        "type": "keyword",
+        "normalizer": "lowercase_normalizer"
+      },
+      "comments": {
+        "type": "text"
+      },
+      "country": {
+        "type": "keyword"
+      },
+      "daysOnSite": {
+        "type": "keyword"
+      },
+      "email": {
+        "type": "keyword",
+        "normalizer": "lowercase_normalizer"
+      },
+      "firstname": {
+        "type": "keyword",
+        "normalizer": "lowercase_normalizer"
+      },
+      "freelance": {
+        "type": "keyword"
+      },
+      "function": {
+        "type": "keyword"
+      },
+      "introduction": {
+        "type": "text"
+      },
+      "languages": {
+        "properties": {
+          "language": {
+            "type": "text",
+            "fields": {
+              "keyword": {
+                "type": "keyword",
+                "ignore_above": 256
+              }
+            }
+          },
+          "level": {
+            "type": "text",
+            "fields": {
+              "keyword": {
+                "type": "keyword",
+                "ignore_above": 256
+              }
+            }
+          }
+        }
+      },
+      "lastAvailabilityCheck": {
+        "type": "date",
+        "format": "date_optional_time||epoch_millis"
+      },
+      "ownerId": {
+        "type": "keyword"
+      },
+      "perm": {
+        "type": "keyword"
+      },
+      "photo": {
+        "properties": {
+          "format": {
+            "type": "text",
+            "fields": {
+              "keyword": {
+                "type": "keyword",
+                "ignore_above": 256
+              }
+            }
+          },
+          "imageBytes": {
+            "type": "text",
+            "fields": {
+              "keyword": {
+                "type": "keyword",
+                "ignore_above": 256
+              }
+            }
+          }
+        }
+      },
+      "rateContract": {
+        "properties": {
+          "currency": {
+            "type": "text",
+            "fields": {
+              "keyword": {
+                "type": "keyword",
+                "ignore_above": 256
+              }
+            }
+          },
+          "period": {
+            "type": "text",
+            "fields": {
+              "keyword": {
+                "type": "keyword",
+                "ignore_above": 256
+              }
+            }
+          },
+          "valueMax": {
+            "type": "float"
+          },
+          "valueMin": {
+            "type": "float"
+          }
+        }
+      },
+      "ratePerm": {
+        "properties": {
+          "currency": {
+            "type": "text",
+            "fields": {
+              "keyword": {
+                "type": "keyword",
+                "ignore_above": 256
+              }
+            }
+          },
+          "period": {
+            "type": "text",
+            "fields": {
+              "keyword": {
+                "type": "keyword",
+                "ignore_above": 256
+              }
+            }
+          },
+          "valueMax": {
+            "type": "float"
+          },
+          "valueMin": {
+            "type": "float"
+          }
+        }
+      },
+      "registerd": {
+        "type": "date",
+        "format": "date_optional_time||epoch_millis"
+      },
+      "requiresSponsorship": {
+        "type": "boolean"
+      },
+      "roleSought": {
+        "type": "keyword",
+        "normalizer": "lowercase_normalizer"
+      },
+      "securityClearance": {
+        "type": "keyword"
+      },
+      "skills": {
+        "type": "keyword",
+        "normalizer": "lowercase_normalizer"
+      },
+      "surname": {
+        "type": "keyword",
+        "normalizer": "lowercase_normalizer"
+      },
+      "yearsExperience": {
+        "type": "integer"
+      }
+    }
+  }
+}
+
+POST _aliases
+{
+  "actions": [
+    {
+      "add": {
+        "index": "candidates_001",
+        "alias": "candidates"
+      }
+    }
+  ]
+}

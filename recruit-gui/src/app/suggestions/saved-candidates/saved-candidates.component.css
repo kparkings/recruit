@@ -46,12 +46,16 @@
 	text-align:center;
 	margin-top:10px;
 	font-size:12px;
+	cursor:pointer;
+	height:120px;
 }
 
 .suggestion-icon-body-disabled{
 	text-align:center;
 	margin-top:10px;
 	font-size:12px;
+	cursor:default;
+	height:120px;
 }
 
 @media (max-width:700px)  {
@@ -61,13 +65,14 @@
 		margin-right:2%;
 		margin-bottom:2%;
 		cursor:pointer;
+		height:120px;
 	 }
 
 	 .suggestion-icon-disabled{
 	 	background:darkGrey;
 	 	width:48%;
 		margin-right:2%;
-		margin-bottom:2%;
 		cursor:default;
+		height:120px;
 	 }	
 }

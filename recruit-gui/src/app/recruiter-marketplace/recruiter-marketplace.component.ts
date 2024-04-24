@@ -398,7 +398,7 @@ export class RecruiterMarketplaceComponent implements OnInit {
 				conditionsBlock.addRow(new InfoItemRowKeyValue(this.translate.instant('mp-left-mnu-contract-type'),this.getContractType(this.activeOpenPosition.contractType)));
 			}
 			if (this.activeOpenPosition.startDate) {
-				conditionsBlock.addRow(new InfoItemRowKeyValue(this.translate.instant('mp-left-mnu-rate-salsary'),""+this.activeOpenPosition.startDate));
+				conditionsBlock.addRow(new InfoItemRowKeyValue(this.translate.instant('mp-left-mnu-start-date'),""+this.activeOpenPosition.startDate));
 			}
 			if (this.activeOpenPosition.renumeration) {
 				conditionsBlock.addRow(new InfoItemRowKeyValue(this.translate.instant('mp-left-mnu-renumerationo'),this.activeOpenPosition.renumeration));

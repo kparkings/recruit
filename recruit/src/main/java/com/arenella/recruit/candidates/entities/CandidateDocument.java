@@ -75,11 +75,9 @@ public class CandidateDocument {
 	private boolean 	available;
 	
 	@Field(type = FieldType.Date)
-	//@JsonFormat(pattern = "yyyy-MM-dd")
 	private Date 	registerd;
 	
 	@Field(type = FieldType.Date)
-	//@JsonFormat(pattern = "yyyy-MM-dd")
 	private Date 	lastAvailabilityCheck;
 	
 	@Field(type = FieldType.Keyword)
@@ -92,7 +90,6 @@ public class CandidateDocument {
 	private RateDocument ratePerm;
 	
 	@Field(type = FieldType.Date)
-	//@JsonFormat(pattern = "yyyy-MM-dd")
 	private Date 		availableFromDate;
 	
 	@Field(type = FieldType.Keyword)

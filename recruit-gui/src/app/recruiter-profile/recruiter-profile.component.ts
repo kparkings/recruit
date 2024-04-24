@@ -544,13 +544,13 @@ export class RecruiterProfileComponent {
 		emailRequest.message = this.sendMessageGroup.get('message')?.value;;
 		
 		this.emailService.sendRecruiterContactEmail(emailRequest, this.selectedRecruiterProfile.recruiterId).subscribe(body => {
-			this.contactRecruiterView = this.translate.instant('success');
+			this.contactRecruiterView = 'success';
 			this.sendMessageGroup = new UntypedFormGroup({
 				message: new UntypedFormControl(''),
 				title: new UntypedFormControl(''),
 			});
 		}, err => {
-			this.contactRecruiterView = this.translate.instant('failure');
+			this.contactRecruiterView = 'failure';
 		});
 		
 		
