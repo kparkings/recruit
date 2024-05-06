@@ -461,7 +461,7 @@ public class CandidateServiceImpl implements CandidateService{
 		int 										pageCounter 		= 0;
 		Set<String> 								suggestionIds 		= new HashSet<>();
 		AtomicReference<suggestion_accuracy> 		accuracy 			= new AtomicReference<>(suggestion_accuracy.perfect);
-		Pageable 									pageable 			= PageRequest.of(0,100);
+		Pageable 									pageable 			= PageRequest.of(0,750);
 		Optional<Boolean>							available		 	= filterOptions.isAvailable();
 		
 		/**
