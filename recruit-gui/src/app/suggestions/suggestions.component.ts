@@ -267,7 +267,7 @@ export class SuggestionsComponent implements OnInit {
 		this.candidateService.extractFiltersFromText(jobSpecText).subscribe(extractedFilters=>{
 			this.processJobSpecExtratedFilters(extractedFilters);
 			this.specUploadDialogBox.nativeElement.close();
-			this.addChageListener();
+			this.addChageListener(false);
 		},(failure =>{
 			this.showFilterByJonSpecFailure 	= true;
 			this.showFilterByJobSpec 			= false;
@@ -281,7 +281,7 @@ export class SuggestionsComponent implements OnInit {
   		this.candidateService.extractFiltersFromDocument(this.jobSpecFile).subscribe(extractedFilters=>{
   			this.processJobSpecExtratedFilters(extractedFilters);
   			this.specUploadDialogBox.nativeElement.close();
-			this.addChageListener();
+			this.addChageListener(false);
 		},(failure =>{
 			this.showFilterByJonSpecFailure 	= true;
 			this.showFilterByJobSpec 			= false;
@@ -295,10 +295,10 @@ export class SuggestionsComponent implements OnInit {
 	*/
 	public doReset():void{
 		this.resetSearchFilters(true);
-		this.addChageListener();
+		this.addChageListener(true);
 	}
 	
-	private addChageListener():void{
+	private addChageListener(isUnfiltered:boolean):void{
 		if(this.subscription) {
 			this.subscription.unsubscribe();
 		}
@@ -306,8 +306,8 @@ export class SuggestionsComponent implements OnInit {
 		this.subscription = this.suggestionFilterForm.valueChanges.pipe(debounceTime(0)).subscribe(res => {
 		 		this.getSuggestions(false);	
 		}); 
-		
-		this.getSuggestions(true);	
+
+		this.getSuggestions(isUnfiltered);	
 	}	
 	
 	public resetSuggestionFilterForm():void{

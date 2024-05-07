@@ -4,10 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.booleanThat;
 
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
-
 import org.junit.jupiter.api.Test;
 
 import com.arenella.recruit.candidates.beans.CandidateFilterOptions;
@@ -22,6 +18,7 @@ import co.elastic.clients.elasticsearch._types.query_dsl.RangeQuery;
 import co.elastic.clients.elasticsearch._types.query_dsl.TermsQuery;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.*;
 
 /**
@@ -116,7 +113,10 @@ public class ESFilteredSearchRequestBuilderTest {
 		
 		mustRange.stream().filter(q -> q.queryName().equals("yearsExperienceGte") 		&& q.gte().toString().equals(String.valueOf(YEARS_EXPERIENCE_GTE))).findFirst().orElseThrow();
 		mustRange.stream().filter(q -> q.queryName().equals("yearsExperienceLte") 		&& q.lte().toString().equals(String.valueOf(YEARS_EXPERIENCE_LTE))).findFirst().orElseThrow();
-		mustRange.stream().filter(q -> q.queryName().equals("lastAvailabilityCheck")	&& q.lte().toString().equals(String.valueOf( LocalDate.now().minusDays(DAYS_SINCE_LAST_AVAILABILITY_CHECK)))).findFirst().orElseThrow();
+		
+		LocalDate ld = LocalDate.now().minusDays(DAYS_SINCE_LAST_AVAILABILITY_CHECK);
+				
+		mustRange.stream().filter(q -> q.queryName().equals("lastAvailabilityCheck")	&& q.lte().toString().equals(String.valueOf(Date.from(ld.atStartOfDay(ZoneId.systemDefault()).toInstant())))).findFirst().orElseThrow();
 		
 		mustBool.stream().filter(q -> q.queryName().equals("dutch")).findFirst().orElseThrow();
 		mustBool.stream().filter(q -> q.queryName().equals("french")).findFirst().orElseThrow();

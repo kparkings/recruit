@@ -1,7 +1,9 @@
 package com.arenella.recruit.candidates.repos;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import com.arenella.recruit.candidates.beans.CandidateFilterOptions;
@@ -175,7 +177,7 @@ public class ESFilteredSearchRequestBuilder {
 			mustQueries.add(RangeQuery.of(m -> m
 					.queryName("lastAvailabilityCheck")
 					.field("lastAvailabilityCheck")
-					.lte(JsonData.of(cutOff))
+					.lte(JsonData.of(Date.from(cutOff.atStartOfDay(ZoneId.systemDefault()).toInstant())))
 			)._toQuery());
 		}
 		
