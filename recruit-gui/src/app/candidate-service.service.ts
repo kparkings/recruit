@@ -313,7 +313,7 @@ export class CandidateServiceService {
 	*/
 	public fetchCandidatesDueForAvailabilityCheck(): Observable<any>{
 		
-		const backendUrl:string = environment.backendUrl +'candidate?daysSinceLastAvailabilityCheck=14&orderAttribute=candidateId&order=desc&page=0&size=1000&available=true';
+		const backendUrl:string = environment.backendUrl +'candidate?daysSinceLastAvailabilityCheck=14&orderAttribute=candidateId&order=desc&page=0&size=1000&available=true&unfiltered=true';
   
     	return this.httpClient.get<any>(backendUrl, this.httpOptions);
 
@@ -324,7 +324,7 @@ export class CandidateServiceService {
 	*/
 	public fetchUnavailableCandidatesDueForAvailabilityCheck(): Observable<any>{
 		
-		const backendUrl:string = environment.backendUrl +'candidate?daysSinceLastAvailabilityCheck=30&orderAttribute=candidateId&order=desc&page=0&size=1000&available=false';
+		const backendUrl:string = environment.backendUrl +'candidate?daysSinceLastAvailabilityCheck=30&orderAttribute=candidateId&order=desc&page=0&size=1000&available=false&unfiltered=true';
   
     	return this.httpClient.get<any>(backendUrl, this.httpOptions);
 

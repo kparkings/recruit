@@ -181,6 +181,15 @@ public class ESFilteredSearchRequestBuilder {
 			)._toQuery());
 		}
 		
+		if (filterOptions.getRegisteredAfter().isPresent()) {
+			LocalDate cutOff = filterOptions.getRegisteredAfter().get();
+			mustQueries.add(RangeQuery.of(m -> m
+					.queryName("registeredAfterCheck")
+					.field("registerd")
+					.gte(JsonData.of(Date.from(cutOff.atStartOfDay(ZoneId.systemDefault()).toInstant())))
+			)._toQuery());
+		}
+		
 		if (filterOptions.getOwnerId().isPresent()) {
 			mustQueries.add(MatchQuery.of(m -> m
 					.field("ownerId")

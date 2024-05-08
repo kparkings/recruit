@@ -68,7 +68,7 @@ public class CandidateStatisticsServiceImplTest {
 		
 		final Candidate candidate = Candidate.builder().build();
 		
-		Mockito.when(this.mockCandidateRepo.findNewSinceLastDate(Mockito.any(LocalDate.class))).thenReturn(Set.of(candidate));
+		Mockito.when(this.mockCandidateRepo.findNewSinceLastDate(Mockito.any(LocalDate.class), Mockito.any())).thenReturn(Set.of(candidate));
 		
 		Set<Candidate> candidates =  this.service.fetchNewCandidates(LocalDate.of(2022, 11, 5));
 		

@@ -2,7 +2,6 @@ package com.arenella.recruit.candidates.repos;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.booleanThat;
 
 import org.junit.jupiter.api.Test;
 
@@ -46,6 +45,7 @@ public class ESFilteredSearchRequestBuilderTest {
 	private static final String 			SURNAME								= "parkings";
 	private static final String 			EMAIL								= "kparkings@gmail.com";
 	private static final Integer			DAYS_SINCE_LAST_AVAILABILITY_CHECK 	= 10;
+	private static final LocalDate			REGISTERED_AFTER					= LocalDate.of(2024, 5, 8);
 	private static final String				OWNER_ID							= "6789";
 	private static final Boolean			INCLUDE_REQUIRES_SPONSORSHIP		= true;
 	
@@ -54,25 +54,26 @@ public class ESFilteredSearchRequestBuilderTest {
 	private static final CandidateFilterOptions filters = 
 			CandidateFilterOptions
 				.builder()
-					.available(AVAILABLE)//
-					.candidateIds(CANDIDATE_IDS)//
-					.countries(COUNTRIES)//
-					.daysSinceLastAvailabilityCheck(DAYS_SINCE_LAST_AVAILABILITY_CHECK)//
-					.dutch(DUTCH)//
-					.email(EMAIL)//
-					.english(ENGLISH)//
-					.firstname(FIRSTNAME)//
-					.surname(SURNAME)//
-					.freelance(FREELANCE)//
-					.french(FRENCH)//
-					.functions(FUNCTIONS)//
-					.includeRequiresSponsorship(INCLUDE_REQUIRES_SPONSORSHIP)//
-					.ownerId(OWNER_ID)//
-					.perm(PERM)//
+					.available(AVAILABLE)
+					.candidateIds(CANDIDATE_IDS)
+					.countries(COUNTRIES)
+					.daysSinceLastAvailabilityCheck(DAYS_SINCE_LAST_AVAILABILITY_CHECK)
+					.dutch(DUTCH)
+					.email(EMAIL)
+					.english(ENGLISH)
+					.firstname(FIRSTNAME)
+					.surname(SURNAME)
+					.freelance(FREELANCE)
+					.french(FRENCH)
+					.functions(FUNCTIONS)
+					.includeRequiresSponsorship(INCLUDE_REQUIRES_SPONSORSHIP)
+					.ownerId(OWNER_ID)
+					.perm(PERM)
 					.searchText(SEARCH_TEXT)
-					.skills(SKILLS)//
-					.yearsExperienceGtEq(YEARS_EXPERIENCE_GTE)//
-					.yearsExperienceLtEq(YEARS_EXPERIENCE_LTE)//
+					.skills(SKILLS)
+					.yearsExperienceGtEq(YEARS_EXPERIENCE_GTE)
+					.yearsExperienceLtEq(YEARS_EXPERIENCE_LTE)
+					.registeredAfter(REGISTERED_AFTER)
 				.build();
 	
 	/**
@@ -117,6 +118,7 @@ public class ESFilteredSearchRequestBuilderTest {
 		LocalDate ld = LocalDate.now().minusDays(DAYS_SINCE_LAST_AVAILABILITY_CHECK);
 				
 		mustRange.stream().filter(q -> q.queryName().equals("lastAvailabilityCheck")	&& q.lte().toString().equals(String.valueOf(Date.from(ld.atStartOfDay(ZoneId.systemDefault()).toInstant())))).findFirst().orElseThrow();
+		mustRange.stream().filter(q -> q.queryName().equals("registeredAfterCheck")		&& q.gte().toString().equals(String.valueOf(Date.from(REGISTERED_AFTER.atStartOfDay(ZoneId.systemDefault()).toInstant())))).findFirst().orElseThrow();
 		
 		mustBool.stream().filter(q -> q.queryName().equals("dutch")).findFirst().orElseThrow();
 		mustBool.stream().filter(q -> q.queryName().equals("french")).findFirst().orElseThrow();

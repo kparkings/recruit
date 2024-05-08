@@ -1,5 +1,6 @@
 package com.arenella.recruit.candidates.beans;
 
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -39,6 +40,7 @@ public class CandidateFilterOptions {
 	private Integer				daysSinceLastAvailabilityCheck;
 	private String				ownerId;
 	private Boolean				includeRequiresSponsorship			= null;
+	private LocalDate			registeredAfter						= null;
 	
 	/**
 	* Builder for the  
@@ -77,6 +79,7 @@ public class CandidateFilterOptions {
 		this.available 					 	= builder.available;
 		this.ownerId						= builder.ownerId;
 		this.includeRequiresSponsorship	 	= builder.includeRequiresSponsorship;
+		this.registeredAfter				= builder.registeredAfter;
 		
 	}
 	
@@ -307,6 +310,16 @@ public class CandidateFilterOptions {
 	public Optional<Boolean> getIncludeRequiresSponsorship() {
 		return Optional.ofNullable(this.includeRequiresSponsorship);
 	}
+	
+	/**
+	* Returns filter options for RegistrationDate. Results must be 
+	* GTE than the provided registration Date
+	* @return
+	*/
+	public Optional<LocalDate> getRegisteredAfter() {
+		return Optional.ofNullable(this.registeredAfter);
+	}
+	
 	/**
 	* Replaces existing functions
 	* @param functions - Functions to filter on
@@ -387,6 +400,7 @@ public class CandidateFilterOptions {
 		private String 				searchText							= "";
 		private String 				ownerId;
 		private Boolean				includeRequiresSponsorship			= null;
+		private LocalDate			registeredAfter						= null;
 		
 		/**
 		* Sets the name of the attribute to order on
@@ -643,6 +657,16 @@ public class CandidateFilterOptions {
 		*/
 		public CandidateFilterOptionsBuilder includeRequiresSponsorship(Boolean includeRequiresSponsorship) {
 			this.includeRequiresSponsorship = includeRequiresSponsorship;
+			return this;
+		}
+		
+		/**
+		* Sets registrations Date. Must be GTE date provided 
+		* @param registeredAfter - registeredDate >=
+		* @return Builder
+		*/
+		public CandidateFilterOptionsBuilder registeredAfter(LocalDate registeredAfter) {
+			this.registeredAfter = registeredAfter;
 			return this;
 		}
 		

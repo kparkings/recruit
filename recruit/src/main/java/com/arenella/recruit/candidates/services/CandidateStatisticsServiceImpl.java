@@ -124,7 +124,7 @@ public class CandidateStatisticsServiceImpl implements CandidateStatisticsServic
 	*/
 	@Override
 	public Set<Candidate> fetchNewCandidates(LocalDate since) {
-		return this.candidateRepo.findNewSinceLastDate(since);
+		return this.candidateRepo.findNewSinceLastDate(since, this.esClient);
 	}
 
 	/**

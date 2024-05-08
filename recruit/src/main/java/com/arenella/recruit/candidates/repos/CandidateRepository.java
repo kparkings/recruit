@@ -15,9 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.elasticsearch.annotations.CountQuery;
-import org.springframework.data.elasticsearch.annotations.Query;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
-import org.springframework.data.repository.query.Param;
 
 import com.arenella.recruit.candidates.beans.Candidate;
 import com.arenella.recruit.candidates.beans.CandidateFilterOptions;
@@ -108,8 +106,8 @@ public interface CandidateRepository extends ElasticsearchRepository<CandidateDo
 		return Long.valueOf(this.save(CandidateDocument.convertToDocument(candidate)).getCandidateId());
 	}
 	
-	@Query("{\"bool\": {\"must\": [{\"term\": {\"available\": true}},{\"range\": {\"registered\": {\"gte\":\"?0\"}}}]}}")
-	public Set<CandidateDocument> findNewSinceLastDateRaw(@Param(value = "since") LocalDate since);
+	//@Query("{\"bool\": {\"must\": [{\"term\": {\"available\": true}},{\"range\": {\"registered\": {\"gte\":\"?0\"}}}]}}")
+	//public Set<CandidateDocument> findNewSinceLastDateRaw(@Param(value = "since") Date since);
 	
 	
 	/**
@@ -117,8 +115,16 @@ public interface CandidateRepository extends ElasticsearchRepository<CandidateDo
 	* @param since - data after which candidates must have been registered
 	* @return New candidates
 	*/
-	public default Set<Candidate> findNewSinceLastDate(LocalDate since){
-		return this.findNewSinceLastDateRaw(since).stream().map(CandidateDocument::convertFromDocument).collect(Collectors.toSet());
+	public default Set<Candidate> findNewSinceLastDate(LocalDate since, ElasticsearchClient esClient){
+		
+		try {
+			CandidateFilterOptions filterOptions = CandidateFilterOptions.builder().available(true).registeredAfter(since).build();
+		
+			return this.findCandidates(filterOptions, esClient);
+		
+		} catch(Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 	
 	public default List<CandidateRoleStatsView> getCandidateRoleStats(ElasticsearchClient esClient) throws Exception{

@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -50,6 +51,7 @@ public class CandidateFilterOptionsTest {
 		String					searchText						= "Java Developer";
 		String					ownerId							= "rec22";
 		boolean 				includeRequiresSponsorship		= true;
+		LocalDate				registeredAfter					= LocalDate.of(2024,5,8);
 		
 		candidateIds.add(candidateId);
 		skills.add(skill);
@@ -81,6 +83,7 @@ public class CandidateFilterOptionsTest {
 													.searchText(searchText)
 													.ownerId(ownerId)
 													.includeRequiresSponsorship(includeRequiresSponsorship)
+													.registeredAfter(registeredAfter)
 													.build();
 		
 		assertEquals(filters.getCandidateIds().stream().findAny().get(), 	candidateId);
@@ -102,6 +105,7 @@ public class CandidateFilterOptionsTest {
 		assertEquals(flaggedAsUnavailable, 									filters.isFlaggedAsUnavailable().get());
 		assertEquals(daysSinceLastAvailabilityCheck, 						filters.getDaysSinceLastAvailabilityCheck().get());
 		assertEquals(ownerId,						 						filters.getOwnerId().get());
+		assertEquals(registeredAfter,				 						filters.getRegisteredAfter().get());
 		assertTrue(filters.getIncludeRequiresSponsorship().get());
 	}
 	
@@ -134,6 +138,8 @@ public class CandidateFilterOptionsTest {
 		String					searchText						= "Java Developer";
 		String					ownerId							= "rec22";
 		boolean 				includeRequiresSponsorship		= true;
+		LocalDate				registeredAfter					= LocalDate.of(2024,5,8);
+		
 		
 		candidateIds.add(candidateId);
 		skills.add(skill);
@@ -165,6 +171,7 @@ public class CandidateFilterOptionsTest {
 													.searchText(searchText)
 													.ownerId(ownerId)
 													.includeRequiresSponsorship(includeRequiresSponsorship)
+													.registeredAfter(registeredAfter)
 													.build();
 		
 		CandidateFilterOptions defaults = CandidateFilterOptions.builder().build();
@@ -192,6 +199,7 @@ public class CandidateFilterOptionsTest {
 		assertEquals(filters.getSearchText(), 						defaults.getSearchText());
 		assertEquals(filters.getOwnerId(), 							defaults.getOwnerId());
 		assertEquals(filters.getIncludeRequiresSponsorship(), 		defaults.getIncludeRequiresSponsorship());
+		assertEquals(filters.getRegisteredAfter(),					defaults.getRegisteredAfter());
 	}
 	
 	/**
