@@ -12,6 +12,7 @@ import { NgbModal, NgbModalOptions}				from '@ng-bootstrap/ng-bootstrap';
 import { ViewChild }							from '@angular/core';
 import { CandidateSkill } 						from './candidate-skill';
 import { AppComponent} 							from '../app.component';
+import { SupportedCountry } from '../supported-candidate';
 
 @Component({
   selector: 'app-accounts',
@@ -67,7 +68,16 @@ export class AccountsComponent implements OnInit {
 		this.fetchRecruiters();
 	 }
 
-  	ngOnInit(): void {}
+  	ngOnInit(): void {
+		  this.initSupportedCountries();
+	}
+	
+	private initSupportedCountries():void{
+		
+		this.supportedCountries = this.candidateService.getSupportedCountries();
+		
+		
+	}
 
 	public switchTab(tab:string){
 		
@@ -193,6 +203,28 @@ export class AccountsComponent implements OnInit {
 	private getEmailParamString():string{
 		let value:string = this.candidateFormGroup.get("email")?.value;
 		return value  == '' ? '' : '&email='+value;
+	}
+	
+	/**
+	*  Returns the url to perform the download of the candidates CV
+	*/
+	public getCurriculumDownloadUrl(curriculumId:string){
+		return  environment.backendUrl + 'curriculum/'+ curriculumId;
+	}
+	
+	public supportedCountries:Array<SupportedCountry>			= new Array<SupportedCountry>();
+	
+	
+	/**
+	* Returns the flag css class for the Flag matching
+	* the Country 
+	*/
+	public getFlagClassFromCountry(country:string):string{
+		
+		let sc:SupportedCountry = this.supportedCountries.filter(c => c.name == country)[0];
+		
+		return sc ?  "flag-icon-"+sc.iso2Code : '';
+		
 	}
 	
 	public fetchCandidatesByFilters(filterParams:string, includeUnavailable:boolean):void{

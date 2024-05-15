@@ -275,7 +275,7 @@ export class CandidateProfileComponent {
 		this.creditsService.tokensExhaused();
 	}
 	
-		/**
+	/**
 	*  Returns the url to perform the download of the candidates CV
 	*/
 	public getCurriculumDownloadUrl(curriculumId:string){
