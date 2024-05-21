@@ -35,7 +35,7 @@
 							<td *ngIf="!showGeoZoneFilters">
 								<p class="toggle-filter-option" (click)="switchGeoZoneFilterView('showGeoZoneFilters')">{{'Show' | translate}}..</p>
 							</td>
-							<td *ngIf="showGeoZoneFilters"class="sugg-srch-bdy geo-zone-filters">
+							<td *ngIf="showGeoZoneFilters" class="sugg-srch-bdy geo-zone-filters">
 								<p class="toggle-filter-option" (click)="switchGeoZoneFilterView('')">{{'Hide' | translate}}..</p>
 								<div *ngFor="let geoZone of geoZones" class="geo-code-filter geo-code-selected-{{includeResultsForGeoZone(geoZone)}}" (click)="toggleGeoZoneSelection(geoZone)">
 									{{geoZone.geoZoneId | translate}}
@@ -45,27 +45,18 @@
 						</tr>
 						<tr>
 							<td class="sugg-srch-hdr">{{'arenella-suggestions-country' | translate}}</td>
-							<td class="sugg-srch-bdy country-filters">
-								<span class="country-filter country-selected-{{includeResultsForCountry('nl')}}" (click)="toggleCountrySelection('nl')">
-									<mat-icon>
-										<span class="flag-icon flag-icon-nl flag-icon-med"></span>
-									</mat-icon>
-								</span>
-								<span class="country-filter country-selected-{{includeResultsForCountry('be')}}" (click)="toggleCountrySelection('be')">
-									<mat-icon>
-										<span class="flag-icon flag-icon-be flag-icon-med"></span>
-									</mat-icon>
-								</span>
-								<span class="country-filter country-selected-{{includeResultsForCountry('uk')}}" (click)="toggleCountrySelection('uk')">
-									<mat-icon>
-										<span class="flag-icon flag-icon-gb flag-icon-med"></span>
-									</mat-icon>
-								</span>
-								<span class="country-filter country-selected-{{includeResultsForCountry('ie')}}" (click)="toggleCountrySelection('ie')">
-									<mat-icon>
-										<span class="flag-icon flag-icon-ie flag-icon-med flag-end-countries"></span>
-									</mat-icon>
-								</span>
+							<td *ngIf="!showCountryFilters">
+								<p class="toggle-filter-option" (click)="switchCountriesFilterView('showCountryFilters')">{{'Show' | translate}}..</p>
+							</td>
+							<td *ngIf="showCountryFilters" class="sugg-srch-bdy country-filters">
+								<p class="toggle-filter-option" (click)="switchCountriesFilterView('')">{{'Hide' | translate}}..</p>
+								<div class="country-selections">
+									<span *ngFor="let supportedCountry of supportedCountries" class="country-filter country-selected-{{includeResultsForCountry(supportedCountry.iso2Code)}}" (click)="toggleCountrySelection(supportedCountry.iso2Code)">
+										<mat-icon title="{{supportedCountry.name}}">
+											<span class="flag-icon flag-icon-{{supportedCountry.iso2Code}} flag-icon-med"></span>
+										</mat-icon>
+									</span>
+								</div>
 							</td>
 						</tr>
 					
@@ -81,11 +72,13 @@
 						</tr>
 						<tr>
 							<td class="sugg-srch-hdr">{{'arenella-suggestions-language' | translate}}</td>
-							<td class="sugg-srch-bdy">
+							<td *ngIf="!showLanguageFilters">
+								<p class="toggle-filter-option" (click)="switchLanguageFilterView('showLanguageFilters')">{{'Show' | translate}}..</p>
+							</td>
+							<td class="sugg-srch-bdy" *ngIf="showLanguageFilters">
+								<p class="toggle-filter-option" (click)="switchLanguageFilterView('')">{{'Hide' | translate}}..</p>
 								<ul class="sugg-srch-ctry-ul">
-									<li class="sugg-srch-ctry-chkbox"><input type="checkbox" formControlName="dutchLanguage" class="lang-checkbox">{{'arenella-suggestions-dutch' | translate}}</li>
-									<li class="sugg-srch-ctry-chkbox"><input type="checkbox" formControlName="frenchLanguage" class="lang-checkbox">{{'arenella-suggestions-french' | translate}}</li>
-									<li class="sugg-srch-ctry-chkbox"><input type="checkbox" formControlName="englishLanguage" class="lang-checkbox">{{'arenella-suggestions-english' | translate}}</li>
+									<li class="sugg-srch-ctry-chkbox" *ngFor="let lang of supportedLanguages"><input type="checkbox" [formControlName]="lang.languageCode.toLowerCase()+'Language'" class="lang-checkbox">{{'arenella-suggestions-' + lang.languageCode.toLowerCase() | translate}}</li>
 								</ul>					
 							</td>
 						</tr>
@@ -108,6 +101,7 @@
 						<tr>
 							<td class="sugg-srch-hdr">{{'arenella-suggestions-include' | translate}}</td>
 							<li class="sugg-srch-ctry-chkbox"><input type="checkbox" formControlName="includeUnavailableCandidates" class="lang-checkbox" (click)="doPaidSubscriptionCheckUnavailableCandidates()">{{'arenella-suggestions-include-unavailable-candidates' | translate}}</li>
+							<li class="sugg-srch-ctry-chkbox"><input type="checkbox" formControlName="includeRequiresSponsorshipCandidates" class="lang-checkbox" (click)="doPaidSubscriptionCheckRequiresSponsorshipCandidates()">{{'arenella-suggestions-include-requires-sponsorship-candidates' | translate}}</li>
 						</tr>
 						<tr>
 							<td class="sugg-srch-hdr">{{'arenella-suggestions-skills' | translate}}</td>
@@ -137,11 +131,12 @@
 			
 				<div class="suggestion-icon {{suggestionMobileClass}}" *ngFor="let suggestion of suggestions" (click)="showSuggestedCandidateOverview(suggestion)">
 					<div>
+						
 						<div *ngIf="!isSavedCandidate(suggestion)" class="suggestion-icon-header">	
-						C{{suggestion.candidateId}}
+						<span class=" flag-icon {{getFlagClassFromCountry(suggestion.country)}} suggestion-results-flag-country"></span> <span class="candidate-id"> C{{suggestion.candidateId}}</span>
 						</div>
 						<div *ngIf="isSavedCandidate(suggestion)" class="suggestion-icon-header suggestion-icon-header-saved">	
-						C{{suggestion.candidateId}}
+						<span class=" flag-icon {{getFlagClassFromCountry(suggestion.country)}} suggestion-results-flag-country"></span> <span class="candidate-id"> C{{suggestion.candidateId}}</span>
 						</div>
 					</div>
 					<div title="Accuracy Skills" class="suggestion-perception-result-{{suggestion.accuracySkills}}"></div>

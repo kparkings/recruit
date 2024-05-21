@@ -33,6 +33,7 @@ export class SuggestionsService {
 							languages:Array<string>, 
 							skills:Array<string>,
 							includeUnavailableCandidates:string, 
+							includeRequiresSponsorshipCandidates:string, 
 							isUnfiltered:boolean): Observable<any>{
 		
 		return this.candidateService.getCandidates(this.getCandidateFilterParamString(	backendRequestId,
@@ -46,6 +47,7 @@ export class SuggestionsService {
 																						experienceMax, 
 																						languages, 
 																						includeUnavailableCandidates,
+																						includeRequiresSponsorshipCandidates,
 																						skills,
 																						isUnfiltered
 																						));
@@ -66,6 +68,7 @@ export class SuggestionsService {
 											experienceMax:string,
 											languages:Array<string>, 
 											includeUnavailableCandidates:string,
+											includeRequiresSponsorshipCandidates:string, 
 											skills:Array<string>,
 											isUnfiltered:boolean):string{
 
@@ -80,6 +83,7 @@ export class SuggestionsService {
                                                          + this.getContractTypeParamString(contract, perm)				
                                                          + this.getYearsExperienceFilterParamAsString(experienceMin, experienceMax)
                                                          + this.includeUnavailableCandidates(includeUnavailableCandidates)
+                                                         + this.includeRequiresSponsorshipCandidates(includeRequiresSponsorshipCandidates)
 														 + this.getSkillsParamString(skills)
 														 + this.getLanguagesParamString(languages);
 					                                  
@@ -99,6 +103,20 @@ export class SuggestionsService {
 		
 		return '';
 	}
+	
+	/**
+	* Adds filter if unavailable candidates requiring sponsorship should also be included
+	* By default only those not requiring sponsorsho. 
+	*/
+	public includeRequiresSponsorshipCandidates(includeRequiresSponsorshipCandidates:string):string{
+		
+		if (includeRequiresSponsorshipCandidates.length > 0 || ""+includeRequiresSponsorshipCandidates === 'true') {
+			return '&includeRequiresSponsorship=true';
+		}
+		
+		return '';
+	}
+	
 	
 	/**
 	* Adds filter string if country specifed in Listing
@@ -163,17 +181,21 @@ export class SuggestionsService {
   
 		let paramString:string = '';
 		
-		if (languages.indexOf('DUTCH')  >= 0 ) {
-			paramString = paramString +  '&dutch=' + 'PROFICIENT';
-		}
+		languages.forEach(lang => {
+			paramString = paramString +  '&' + lang.toLowerCase() + '=PROFICIENT';
+		});
 		
-		if (languages.indexOf('FRENCH')  >= 0 ) {
-			paramString = paramString +  '&french=' + 'PROFICIENT';
-		}
+		//if (languages.indexOf('DUTCH')  >= 0 ) {
+		//	paramString = paramString +  '&dutch=' + 'PROFICIENT';
+		//}
 		
-		if (languages.indexOf('ENGLISH')  >= 0 ) {
-			paramString = paramString +  '&english=' + 'PROFICIENT';
-		}  
+		//if (languages.indexOf('FRENCH')  >= 0 ) {
+		//	paramString = paramString +  '&french=' + 'PROFICIENT';
+		//}
+		
+		//if (languages.indexOf('ENGLISH')  >= 0 ) {
+		//	paramString = paramString +  '&english=' + 'PROFICIENT';
+		//}  
 		
 		return paramString;
   

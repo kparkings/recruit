@@ -24,6 +24,15 @@
 	padding:0;
 }
 
+@media (max-width:700px)  {
+	.sugg-srch-ctry-chkbox{
+		display:inline-block;
+		margin:0;
+		padding:0;
+		width:100%;
+	}	
+}
+
 .left-menu h3, h5{
 	margin-top:10px;
 	text-align:center;
@@ -173,23 +182,19 @@
 	margin-left:0px;
 	background-position:0%;
 }
-/**
-.skill-match{
-	margin:2px;
-	padding:5px;
-	border-radius:5px;
-	background:green;
-	display:inline-block;	
+
+suggestion-results-flag-country{
+	height:30px;
+	width:38px;
+	padding-left:0px;
+	margin-left:0px;
+	background-position:0%;
 }
 
-.skill-no-match{
-	margin:2px;
-	padding:5px;
-	border-radius:5px;
-	background:grey;
-	display:inline-block;
+.candidate-id{
+	margin-left:20px;
 }
-*/
+
 .suggestion-perception-perfect{
 	background:green;
 	width:100%;	

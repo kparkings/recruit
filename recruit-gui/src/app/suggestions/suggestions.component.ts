@@ -23,6 +23,7 @@ import { CandidateTotals } 															from '../candidate-totals';
 import { GeoZone } 																	from '../geo-zone';
 import { SupportedCountry } 														from '../supported-candidate';
 import { Subscription } from 'rxjs';
+import { SupportedLanguage } from '../supported-language';
 
 /**
 * Component to suggest suitable Candidates based upon a 
@@ -78,6 +79,8 @@ export class SuggestionsComponent implements OnInit {
 	public showPaidSubscriptinOptions:boolean					= false;
 	public paidFeature:string								 	= '';
 	public showGeoZoneFilters:string							= "";
+	public showCountryFilters:string							= "";
+	public showLanguageFilters:string							= "";
 	public geoZones:Array<GeoZone>								= new Array<GeoZone>();
 	public supportedCountries:Array<SupportedCountry>			= new Array<SupportedCountry>();
 	public publicitySuggestions:Array<Candidate>  				= new Array<Candidate>();
@@ -176,6 +179,21 @@ export class SuggestionsComponent implements OnInit {
 	public switchGeoZoneFilterView(view:string):void{
 		this.initGeoZones();
 		this.showGeoZoneFilters = view;
+	}
+	
+	/**
+	* Swithches between open and closed filter view for GeoZones 
+	*/
+	public switchCountriesFilterView(view:string):void{
+		//this.initGeoZones();
+		this.showCountryFilters = view;
+	}
+	
+	/**
+	* Swithches between open and closed filter view for Languages 
+	*/
+	public switchLanguageFilterView(view:string):void{
+		this.showLanguageFilters = view;
 	}
 	
   	public setJobSepecFile(event:any):void{
@@ -311,28 +329,30 @@ export class SuggestionsComponent implements OnInit {
 	}	
 	
 	public resetSuggestionFilterForm():void{
-		this.suggestionFilterForm = 		new UntypedFormGroup({
-			searchPhrase:					new UntypedFormControl(''),
-			nlResults: 						new UntypedFormControl(true),
-			beResults: 						new UntypedFormControl(true),
-			ukResults: 						new UntypedFormControl(true),
-			ieResults: 						new UntypedFormControl(true),
-			contractType: 					new UntypedFormControl('Both'),
-			dutchLanguage: 					new UntypedFormControl(false),
-			englishLanguage: 				new UntypedFormControl(false),
-			frenchLanguage:					new UntypedFormControl(false),
-			minYearsExperience: 			new UntypedFormControl(''),
-			maxYearsExperience: 			new UntypedFormControl(''),
-			skill: 							new UntypedFormControl(''),
-			includeUnavailableCandidates: 	new UntypedFormControl('')
+		this.suggestionFilterForm = 				new UntypedFormGroup({
+			searchPhrase:							new UntypedFormControl(''),
+			contractType: 							new UntypedFormControl('Both'),
+			minYearsExperience: 					new UntypedFormControl(''),
+			maxYearsExperience: 					new UntypedFormControl(''),
+			skill: 									new UntypedFormControl(''),
+			includeUnavailableCandidates: 			new UntypedFormControl(''),
+			includeRequiresSponsorshipCandidates:	new UntypedFormControl(''),
 		});
 		
-		this.candidateService.getCountries().forEach(c => {
-			this.suggestionFilterForm.addControl(c.countryCode+'Results', new UntypedFormControl(''));
+		this.candidateService.getSupportedCountries().forEach(c => {
+			this.suggestionFilterForm.addControl(c.iso2Code+'Results', new UntypedFormControl(false));
+		});
+		
+		this.supportedLanguages = new Array<SupportedLanguage>();
+		this.candidateService.getLanguages().forEach(lang => {
+			this.suggestionFilterForm.addControl(lang.languageCode.toLowerCase()+'Language', new UntypedFormControl(false));
+			this.supportedLanguages.push(lang);
 		});
 		
 		this.initGeoZones();
 	}
+	
+	public supportedLanguages:Array<SupportedLanguage> = new Array<SupportedLanguage>();
 	
 	/**
 	* Resets the filters
@@ -437,7 +457,7 @@ export class SuggestionsComponent implements OnInit {
 		
 		const maxSuggestions:number 		= 112;
 		
-		let params:SuggestionParams = new SuggestionParams(this.suggestionFilterForm, this.skillFilters, new Array<string>(), this.candidateService.getGeoZones(), this.candidateService.getCountries());
+		let params:SuggestionParams = new SuggestionParams(this.suggestionFilterForm, this.skillFilters, new Array<string>(), this.candidateService.getGeoZones(), this.candidateService.supportedCountries, this.supportedLanguages);
 		
 		let backendRequestId = this.backendRequestCounter + 1;
 		this.backendRequestCounter = backendRequestId;
@@ -455,6 +475,7 @@ export class SuggestionsComponent implements OnInit {
 									params.getLanguages(),
 									params.getSkills(),
 									params.getIncludUnavailableCandidates(),
+									params.getIncludRequiresSponsorshipCandidates(),
 									isUnfiltered
 									).pipe(
 										  map((response) => {
@@ -501,13 +522,13 @@ export class SuggestionsComponent implements OnInit {
 			let geoZoneActive = this.candidateService.getGeoZones().filter(gz => this.suggestionFilterForm.get((gz.geoZoneId.toLowerCase()+'Results'))?.value == true).length > 0;
 		
 			if (!geoZoneActive) {
-				this.candidateService.getCountries().forEach(country => {
-					let key = country.countryCode.toLowerCase() + 'Results';
+				this.candidateService.getSupportedCountries().forEach(country => {
+					let key = country.iso2Code + 'Results';
 					this.suggestionFilterForm.get(key)?.setValue(true);
 				});
 			} else {
-				this.candidateService.getCountries().forEach(country => {
-					let key = country.countryCode.toLowerCase() + 'Results';
+				this.candidateService.getSupportedCountries().forEach(country => {
+					let key = country.iso2Code.toLowerCase() + 'Results';
 					this.suggestionFilterForm.get(key)?.setValue(false);
 				});
 			
@@ -526,6 +547,9 @@ export class SuggestionsComponent implements OnInit {
 	public toggleCountrySelection(country:string):void{
 		
 		let included:boolean = this.suggestionFilterForm.get((country+'Results'))?.value;
+		
+		console.log("----> Included = " + country);
+		
 		this.suggestionFilterForm.get((country+'Results'))?.setValue(!included);
 		
 		this.geoZones.forEach(geoZone => {
@@ -743,7 +767,7 @@ export class SuggestionsComponent implements OnInit {
 	* Returns the flag css class for the Flag matching
 	* the Country 
 	*/
-	private getFlagClassFromCountry(country:string):string{
+	public getFlagClassFromCountry(country:string):string{
 		
 		let sc:SupportedCountry = this.supportedCountries.filter(c => c.name == country)[0];
 		
@@ -810,15 +834,15 @@ export class SuggestionsComponent implements OnInit {
 		this.showSaveAlertBoxSuccess 	= false;
 		this.showSaveAlertBoxFailure 	= false;
 		
-		let params:SuggestionParams 	= new SuggestionParams(this.suggestionFilterForm, this.skillFilters, new Array<string>(), this.candidateService.getGeoZones(), this.candidateService.getCountries());
+		let params:SuggestionParams 	= new SuggestionParams(this.suggestionFilterForm, this.skillFilters, new Array<string>(), this.candidateService.getGeoZones(), this.supportedCountries, this.supportedLanguages);
 		let alert:CandidateSearchAlert 	= new CandidateSearchAlert();
 		
 		alert.alertName 			= this.createAlertForm.get(('alertName'))?.value;
 		alert.countries 			= params.getCountries();
-		alert.dutch 				= params.getDutchLevel();
-		alert.english 				= params.getEnglishLevel();
+		alert.dutch 				= params.getLanguageLevel("DUTCH");
+		alert.english 				= params.getLanguageLevel("ENGLISH");
 		alert.freelance 			= params.getContract();
-		alert.french 				= params.getFrenchLevel();
+		alert.french 				= params.getLanguageLevel("FRENCH");
 		alert.perm 					= params.getPerm();
 		alert.skills 				= params.getSkills();
 		alert.searchText			= params.getTitle();
@@ -1062,6 +1086,12 @@ export class SuggestionsComponent implements OnInit {
 		}
 		return true;
 	}
+	
+	public doPaidSubscriptionCheckRequiresSponsorshipCandidates():void{
+		this.paidFeature = 'paidFeatureRequiresSponsorshipeCandidates';
+		this.doPaidSubscriptionCheck();
+	}
+	
 	
 	public choseSubscription():void{
 		this.creditsService.buySubscription();
