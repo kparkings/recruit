@@ -439,16 +439,16 @@ public class CandidateServiceImpl implements CandidateService{
 	* all available countries
 	* @return whether to restricted results to supported countries
 	*/
-	private boolean limitToSupportedCountries(CandidateFilterOptions filterOptions) {
+	//private boolean limitToSupportedCountries(CandidateFilterOptions filterOptions) {
 	
-		return filterOptions.getGeoZones().isEmpty() 
-				&& filterOptions.getCountries().isEmpty() 
-				&& !this.checkHasRole("ROLE_CANDIDATE")
-				&& !this.checkHasRole("ROLE_ADMIN")
-				&& !(this.checkHasRole("ROLE_RECRUITER") && filterOptions.getOwnerId().isPresent() && filterOptions.getOwnerId().get().contains(this.getAuthenticatedUserId())) //TODO [KP] Low level secruity issue. Possible to add multiple ownerIds to set and with just one get access to candidate they dont own that is not in the standard set of free candidates  
-				&& !(this.checkHasRole("ROLE_RECRUITER") && !filterOptions.getCandidateIds().isEmpty()); //TODO [KP] Low level security risk. Recruiter can give an id of candidate they dont own that is not in the standard set of free candidates
+	//	return filterOptions.getGeoZones().isEmpty() 
+	//			&& filterOptions.getCountries().isEmpty() 
+	//			&& !this.checkHasRole("ROLE_CANDIDATE")
+	//			&& !this.checkHasRole("ROLE_ADMIN")
+	//			&& !(this.checkHasRole("ROLE_RECRUITER") && filterOptions.getOwnerId().isPresent() && filterOptions.getOwnerId().get().contains(this.getAuthenticatedUserId())) //TODO [KP] Low level secruity issue. Possible to add multiple ownerIds to set and with just one get access to candidate they dont own that is not in the standard set of free candidates  
+	//			&& !(this.checkHasRole("ROLE_RECRUITER") && !filterOptions.getCandidateIds().isEmpty()); //TODO [KP] Low level security risk. Recruiter can give an id of candidate they dont own that is not in the standard set of free candidates
 		
-	}
+	//}
 	
 	/**
 	* Refer to the CandidateService Interface for Details
@@ -471,7 +471,8 @@ public class CandidateServiceImpl implements CandidateService{
 		*/
 		if (!hasPaidSubscription() && !this.checkHasRole("ROLE_ADMIN")) {
 			filterOptions.setAvailable(true);
-			filterOptions.removeGeoZones();
+			filterOptions.setIncludeRequiresSponsorship(false);
+			//filterOptions.removeGeoZones();
 		}
 		
 		/**
@@ -512,12 +513,12 @@ public class CandidateServiceImpl implements CandidateService{
 		* In the case there is no filter for either GeoZone or Country we add in All the default 
 		* countries otherwise we end up with everything
 		*/
-		if (limitToSupportedCountries(filterOptions)) {
-			filterOptions.addCountry(COUNTRY.BELGIUM);
-			filterOptions.addCountry(COUNTRY.NETHERLANDS);
-			filterOptions.addCountry(COUNTRY.UK);
-			filterOptions.addCountry(COUNTRY.REPUBLIC_OF_IRELAND);
-		}
+		//if (limitToSupportedCountries(filterOptions)) {
+		//	filterOptions.addCountry(COUNTRY.BELGIUM);
+		//	filterOptions.addCountry(COUNTRY.NETHERLANDS);
+		//	filterOptions.addCountry(COUNTRY.UK);
+		//	filterOptions.addCountry(COUNTRY.REPUBLIC_OF_IRELAND);
+		//}
 		
 		if (!filterOptions.getGeoZones().isEmpty()) {
 			
@@ -542,9 +543,14 @@ public class CandidateServiceImpl implements CandidateService{
 		
 		CandidateFilterOptions suggestionFilterOptions = CandidateFilterOptions
 																		.builder()
-																			.dutch(filterOptions.getDutch().isPresent() 		? filterOptions.getDutch().get() 	: null)
-																			.english(filterOptions.getEnglish().isPresent() 	? filterOptions.getEnglish().get() 	: null)
-																			.french(filterOptions.getFrench().isPresent() 		? filterOptions.getFrench().get() 	: null)
+																			.dutch(filterOptions.getDutch().isPresent() 			? filterOptions.getDutch().get() 		: null)
+																			.english(filterOptions.getEnglish().isPresent() 		? filterOptions.getEnglish().get() 		: null)
+																			.french(filterOptions.getFrench().isPresent() 			? filterOptions.getFrench().get() 		: null)
+																			.german(filterOptions.getGerman().isPresent() 			? filterOptions.getGerman().get() 		: null)
+																			.italian(filterOptions.getItalian().isPresent() 		? filterOptions.getItalian().get() 		: null)
+																			.polish(filterOptions.getPolish().isPresent() 			? filterOptions.getPolish().get() 		: null)
+																			.portuguese(filterOptions.getPortuguese().isPresent() 	? filterOptions.getPortuguese().get() 	: null)
+																			.spanish(filterOptions.getSpanish().isPresent() 		? filterOptions.getSpanish().get() 		: null)
 																			.skills(filterOptions.getSkills())
 																		.build();
 
@@ -554,6 +560,11 @@ public class CandidateServiceImpl implements CandidateService{
 		filterOptions.setDutch(null);
 		filterOptions.setEnglish(null);
 		filterOptions.setFrench(null);
+		filterOptions.setGerman(null);
+		filterOptions.setItalian(null);
+		filterOptions.setPolish(null);
+		filterOptions.setPortuguese(null);
+		filterOptions.setSpanish(null);
 		
 		CandidateExtractedFiltersBuilder searchTermFilter = CandidateExtractedFilters.builder();
 		

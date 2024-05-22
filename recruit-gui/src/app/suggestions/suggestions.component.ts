@@ -350,6 +350,8 @@ export class SuggestionsComponent implements OnInit {
 		});
 		
 		this.initGeoZones();
+		this.showCountryFilters 	= '';
+		this.showLanguageFilters 	= '';
 	}
 	
 	public supportedLanguages:Array<SupportedLanguage> = new Array<SupportedLanguage>();
@@ -510,11 +512,11 @@ export class SuggestionsComponent implements OnInit {
 	*/
 	public toggleGeoZoneSelection(geoZone:GeoZone):void{
 		
-		this.paidFeature = 'paidFeatureGeoZones';
+		//this.paidFeature = 'paidFeatureGeoZones';
 		
-		let valid:boolean = this.doPaidSubscriptionCheck();
+		//let valid:boolean = this.doPaidSubscriptionCheck();
 		
-		if (valid) {
+		//if (valid) {
 		
 			let included:boolean = this.suggestionFilterForm.get((geoZone.geoZoneId.toLowerCase()+'Results'))?.value;
 			this.suggestionFilterForm.get((geoZone.geoZoneId.toLowerCase()+'Results'))?.setValue(!included);
@@ -534,7 +536,7 @@ export class SuggestionsComponent implements OnInit {
 			
 			}
 			
-		}
+		//}
 		
 		
 	}

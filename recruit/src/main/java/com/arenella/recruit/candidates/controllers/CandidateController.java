@@ -184,6 +184,11 @@ public class CandidateController {
 													@RequestParam(required = false) 	Language.LEVEL 		dutch,
 													@RequestParam(required = false) 	Language.LEVEL 		english,
 													@RequestParam(required = false) 	Language.LEVEL 		french,
+													@RequestParam(required = false) 	Language.LEVEL 		german,
+													@RequestParam(required = false) 	Language.LEVEL 		italian,
+													@RequestParam(required = false) 	Language.LEVEL 		polish,
+													@RequestParam(required = false) 	Language.LEVEL 		portuguese,
+													@RequestParam(required = false) 	Language.LEVEL 		spanish,
 													@RequestParam(required = false) 	Set<String>			skills,
 													@RequestParam(required = false) 	String				firstname,
 													@RequestParam(required = false) 	String				surname,
@@ -224,6 +229,11 @@ public class CandidateController {
 																		.dutch(dutch)
 																		.english(english)
 																		.french(french)
+																		.german(german)
+																		.italian(italian)
+																		.polish(polish)
+																		.portuguese(portuguese)
+																		.spanish(spanish)
 																		.skills(skills)
 																		.flaggedAsUnavailable(flaggedAsUnavailable)
 																		.firstname(firstname)

@@ -20,16 +20,16 @@ public class GeoZoneSearchUtil {
 	public enum GEO_ZONE {
 		WORLD, 
 		EUROPE, 
-		//NORTH_AMERICA, 
-		//SOUTHERN_EUROPE, 
-		//EASTERN_EUROPE, 
-		//WESTERN_EUROPE, 
-		//NORTHERN_EUROPE, 
-		//CENTRAL_EUROPE, 
+		NORTH_AMERICA, 
+		SOUTHERN_EUROPE, 
+		EASTERN_EUROPE, 
+		WESTERN_EUROPE, 
+		NORTHERN_EUROPE, 
+		CENTRAL_EUROPE, 
 		BENELUX, 
 		BRITISH_ISLES, 
-		//IRELAND, 
-		//DACH
+		IRELAND, 
+		DACH
 		}
 	
 	private static final Set<COUNTRY> WORLD 			= new HashSet<>();
@@ -59,16 +59,16 @@ public class GeoZoneSearchUtil {
 			switch(geoZone) {
 				case WORLD 				-> countries.addAll(WORLD);
 				case EUROPE 			-> countries.addAll(EUROPE);
-				//case NORTH_AMERICA 		-> countries.addAll(NORTH_AMERICA);
-				//case SOUTHERN_EUROPE 	-> countries.addAll(SOUTHERN_EUROPE);
-				//case EASTERN_EUROPE 	-> countries.addAll(EASTERN_EUROPE);
-				//case WESTERN_EUROPE 	-> countries.addAll(WESTERN_EUROPE);
-				//case NORTHERN_EUROPE 	-> countries.addAll(NORTHERN_EUROPE);
-				//case CENTRAL_EUROPE 	-> countries.addAll(CENTRAL_EUROPE);
+				case NORTH_AMERICA 		-> countries.addAll(NORTH_AMERICA);
+				case SOUTHERN_EUROPE 	-> countries.addAll(SOUTHERN_EUROPE);
+				case EASTERN_EUROPE 	-> countries.addAll(EASTERN_EUROPE);
+				case WESTERN_EUROPE 	-> countries.addAll(WESTERN_EUROPE);
+				case NORTHERN_EUROPE 	-> countries.addAll(NORTHERN_EUROPE);
+				case CENTRAL_EUROPE 	-> countries.addAll(CENTRAL_EUROPE);
 				case BENELUX 			-> countries.addAll(BENELUX);
 				case BRITISH_ISLES 		-> countries.addAll(BRITISH_ISLES);
-				//case IRELAND 			-> countries.addAll(IRELAND);
-				//case DACH				-> countries.addAll(DACH);
+				case IRELAND 			-> countries.addAll(IRELAND);
+				case DACH				-> countries.addAll(DACH);
 			}
 		});
 		

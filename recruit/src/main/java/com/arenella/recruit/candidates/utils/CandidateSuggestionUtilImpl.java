@@ -229,6 +229,26 @@ public class CandidateSuggestionUtilImpl implements CandidateSuggestionUtil{
 			languageRequirements.add(Language.builder().language(LANGUAGE.FRENCH).level(filterOptions.getFrench().get()).build());
 		}
 		
+		if (filterOptions.getGerman().isPresent()) {
+			languageRequirements.add(Language.builder().language(LANGUAGE.GERMAN).level(filterOptions.getGerman().get()).build());
+		}
+		
+		if (filterOptions.getItalian().isPresent()) {
+			languageRequirements.add(Language.builder().language(LANGUAGE.ITALIAN).level(filterOptions.getItalian().get()).build());
+		}
+		
+		if (filterOptions.getPolish().isPresent()) {
+			languageRequirements.add(Language.builder().language(LANGUAGE.POLISH).level(filterOptions.getPolish().get()).build());
+		}
+		
+		if (filterOptions.getPortuguese().isPresent()) {
+			languageRequirements.add(Language.builder().language(LANGUAGE.PORTUGUESE).level(filterOptions.getPortuguese().get()).build());
+		}
+		
+		if (filterOptions.getSpanish().isPresent()) {
+			languageRequirements.add(Language.builder().language(LANGUAGE.SPANISH).level(filterOptions.getSpanish().get()).build());
+		}
+		
 		return languageRequirements;
 		
 	}
