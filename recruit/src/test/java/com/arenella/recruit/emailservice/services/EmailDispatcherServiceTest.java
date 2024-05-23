@@ -22,6 +22,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 import com.arenella.recruit.emailservice.adapters.RequestSendEmailCommand;
 import com.arenella.recruit.emailservice.beans.Contact;
 import com.arenella.recruit.emailservice.beans.Email;
+import com.arenella.recruit.emailservice.beans.Email.EmailRecipient;
 import com.arenella.recruit.emailservice.beans.Email.EmailRecipient.ContactType;
 import com.arenella.recruit.emailservice.beans.Email.EmailTopic;
 import com.arenella.recruit.emailservice.beans.Email.EmailType;
@@ -106,6 +107,32 @@ public class EmailDispatcherServiceTest {
 		this.service.handleSendEmailCommand(RequestSendEmailCommand.builder().sender(mockSender).emailType(EmailType.SYSTEM_EXTERN).recipients(Set.of(recipient1, recipient2)).topic(EmailTopic.ACCOUNT_CREATED).persistable(true).build());
 		
 		Mockito.verify(this.emailDaoMock, Mockito.times(2)).saveEmail(Mockito.any(Email.class));
+		
+	}
+	
+	/**
+	* Test in case unregistered user is recipient the given email address is used
+	* @throws Exception
+	*/
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@Test
+	public void testHandleSendEmailCommand_recipient_unregistered_user() throws Exception{
+		
+		ArgumentCaptor<Email> argCapt = ArgumentCaptor.forClass(Email.class);
+		
+		final String email = "kp@ext-arenella-ict-test.nl";
+		
+		Email.EmailRecipient<UUID> recipient1 = new Email.EmailRecipient("one", email, ContactType.UNREGISTERED_USER);
+		
+		Mockito.doNothing().when(this.emailDaoMock).saveEmail(argCapt.capture());
+		this.service.handleSendEmailCommand(RequestSendEmailCommand.builder().sender(mockSender).emailType(EmailType.SYSTEM_EXTERN).recipients(Set.of(recipient1)).topic(EmailTopic.ACCOUNT_CREATED).persistable(true).build());
+		
+		Mockito.verify(this.emailDaoMock, Mockito.times(1)).saveEmail(Mockito.any(Email.class));
+		Mockito.verify(this.mockContactDao, Mockito.never()).getById(Mockito.any());
+		
+		EmailRecipient emailRecipient = argCapt.getValue().getRecipients().stream().findFirst().get();
+		
+		assertEquals(email, emailRecipient.getEmailAddress());
 		
 	}
 	

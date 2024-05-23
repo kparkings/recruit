@@ -25,6 +25,7 @@ import com.arenella.recruit.emailservice.adapters.RequestSendEmailCommand;
 import com.arenella.recruit.emailservice.beans.Contact;
 import com.arenella.recruit.emailservice.beans.Email;
 import com.arenella.recruit.emailservice.beans.Email.EmailRecipient;
+import com.arenella.recruit.emailservice.beans.Email.EmailRecipient.ContactType;
 import com.arenella.recruit.emailservice.beans.Email.EmailType;
 import com.arenella.recruit.emailservice.beans.Email.Sender;
 import com.arenella.recruit.emailservice.beans.Email.Sender.SenderType;
@@ -134,11 +135,21 @@ public class EmailDispatcherService {
 			
 			recipients.stream().forEach(r -> {
 				
-				Optional<Contact> 	recipientOpt 	= this.contactDao.getById(r.getContactId());
+				Optional<Contact> 	recipientOpt 	= Optional.empty();
+				
+				if (r.getContactType() != ContactType.UNREGISTERED_USER) {
+					this.contactDao.getById(r.getContactId());
+				}
+				
 				Map<String, Object> model 			= new HashMap<>(finalizedModel);
 				
+				
 				//Ugly but just to see if there is an issue until I have time to design proper error handling
-				if (recipientOpt.isEmpty()) {
+				if (r.getContactType() == ContactType.UNREGISTERED_USER) {
+					r.setEmail(r.getContactId());
+					//In this case we the email was provided so we don't want to fetch it 
+				}
+				else if (recipientOpt.isEmpty()) {
 					r.setEmail("kparkings@gmail.com");
 					r.setFirstName("Failed for " + r.getId() + " " + r.getId());
 					model.put("recipientName", "na");
