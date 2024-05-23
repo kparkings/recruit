@@ -100,8 +100,25 @@
 						 
 						<tr>
 							<td class="sugg-srch-hdr">{{'arenella-suggestions-include' | translate}}</td>
-							<li class="sugg-srch-ctry-chkbox"><input type="checkbox" formControlName="includeUnavailableCandidates" class="lang-checkbox" (click)="doPaidSubscriptionCheckUnavailableCandidates()">{{'arenella-suggestions-include-unavailable-candidates' | translate}}</li>
+							<td *ngIf="!showIncludeFilters">
+								<p class="toggle-filter-option" (click)="switchIncludeFilterView('showIncludeFilters')">{{'Show' | translate}}..</p>
+							</td>
+							<div *ngIf="showIncludeFilters">
+								<p class="toggle-filter-option" (click)="switchIncludeFilterView('')">{{'Hide' | translate}}..</p>
+								<div class="geo-code-filter geo-code-selected-{{includeUnavailableCandidatesSelected}}" (click)="doPaidSubscriptionCheckUnavailableCandidates()">
+									{{'arenella-suggestions-include-unavailable-candidates' | translate}}
+							</div>
+							<div class="geo-code-filter geo-code-selected-{{includeRequiresSponsorshipCandidatesSelected}}" (click)="doPaidSubscriptionCheckRequiresSponsorshipCandidates()">
+									{{'arenella-suggestions-include-requires-sponsorship-candidates' | translate}}
+							</div>
+							</div>
+							
+							
+							<!--
+							<li class="sugg-srch-ctry-chkbox"><input type="checkbox" formControlName="includeUnavailableCandidates" class="lang-checkbox" (click)="doPaidSubscriptionCheckUnavailableCandidates()"></li>
 							<li class="sugg-srch-ctry-chkbox"><input type="checkbox" formControlName="includeRequiresSponsorshipCandidates" class="lang-checkbox" (click)="doPaidSubscriptionCheckRequiresSponsorshipCandidates()">{{'arenella-suggestions-include-requires-sponsorship-candidates' | translate}}</li>
+							-->
+							
 						</tr>
 						<tr>
 							<td class="sugg-srch-hdr">{{'arenella-suggestions-skills' | translate}}</td>

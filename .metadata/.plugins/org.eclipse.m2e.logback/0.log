@@ -210,3 +210,5 @@
 2024-05-23 01:07:55,790 [Worker-786: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 0 resource from src\main\resources to target\classes
 2024-05-23 01:07:55,798 [Worker-786: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\eclipse-projects\recruit\recruit\src\test\resources
 2024-05-23 01:08:32,197 [Worker-779: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 0 resource from src\main\resources to target\classes
+2024-05-23 01:08:32,197 [Worker-779: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 0 resource from src\main\resources to target\classes
+2024-05-23 01:08:32,202 [Worker-779: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\eclipse-projects\recruit\recruit\src\test\resources

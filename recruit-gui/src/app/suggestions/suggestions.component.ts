@@ -81,6 +81,7 @@ export class SuggestionsComponent implements OnInit {
 	public showGeoZoneFilters:string							= "";
 	public showCountryFilters:string							= "";
 	public showLanguageFilters:string							= "";
+	public showIncludeFilters:string							= "";
 	public geoZones:Array<GeoZone>								= new Array<GeoZone>();
 	public supportedCountries:Array<SupportedCountry>			= new Array<SupportedCountry>();
 	public publicitySuggestions:Array<Candidate>  				= new Array<Candidate>();
@@ -194,6 +195,13 @@ export class SuggestionsComponent implements OnInit {
 	*/
 	public switchLanguageFilterView(view:string):void{
 		this.showLanguageFilters = view;
+	}
+	
+	/**
+	* Swithches between open and closed filter view for Languages 
+	*/
+	public switchIncludeFilterView(view:string):void{
+		this.showIncludeFilters = view;
 	}
 	
   	public setJobSepecFile(event:any):void{
@@ -370,6 +378,10 @@ export class SuggestionsComponent implements OnInit {
 		this.skillFilters = new Array<string>();
 		
 		this.backendRequestCounter 		= 0;
+		
+		this.includeUnavailableCandidatesSelected = 'false';
+		this.includeRequiresSponsorshipCandidatesSelected = 'false';
+	
 		
 	}
 		
@@ -1075,8 +1087,41 @@ export class SuggestionsComponent implements OnInit {
 	
 	public doPaidSubscriptionCheckUnavailableCandidates():void{
 		this.paidFeature = 'paidFeatureUnavailableCandidates';
-		this.doPaidSubscriptionCheck();
+		if(this.doPaidSubscriptionCheck()){
+			
+			let checked =  this.suggestionFilterForm.get("includeUnavailableCandidates")?.value;
+			
+			if(checked){
+				this.suggestionFilterForm.get("includeUnavailableCandidates")?.setValue('');	
+				this.includeUnavailableCandidatesSelected = 'false';
+			} else {
+				this.suggestionFilterForm.get("includeUnavailableCandidates")?.setValue('true');
+				this.includeUnavailableCandidatesSelected = 'true';
+			}
+			
+			
+		}
 	}
+	
+	public doPaidSubscriptionCheckRequiresSponsorshipCandidates():void{
+		this.paidFeature = 'paidFeatureRequiresSponsorshipeCandidates';
+		if(this.doPaidSubscriptionCheck()){
+			let checked =  this.suggestionFilterForm.get("includeRequiresSponsorshipCandidates")?.value;
+			
+			if(checked){
+				this.suggestionFilterForm.get("includeRequiresSponsorshipCandidates")?.setValue('');	
+				this.includeRequiresSponsorshipCandidatesSelected = 'false';
+			} else {
+				this.suggestionFilterForm.get("includeRequiresSponsorshipCandidates")?.setValue('false');
+				this.includeRequiresSponsorshipCandidatesSelected = 'true';
+			}
+		}
+	}
+	
+	public includeUnavailableCandidatesSelected:string = 'true';
+	public includeRequiresSponsorshipCandidatesSelected:string = 'true';
+	
+	
 	
 	public doPaidSubscriptionCheck():boolean{
 		let hasPaidSubscription:boolean = (sessionStorage.getItem("hasPaidSubscription") === 'true');
@@ -1089,10 +1134,6 @@ export class SuggestionsComponent implements OnInit {
 		return true;
 	}
 	
-	public doPaidSubscriptionCheckRequiresSponsorshipCandidates():void{
-		this.paidFeature = 'paidFeatureRequiresSponsorshipeCandidates';
-		this.doPaidSubscriptionCheck();
-	}
 	
 	
 	public choseSubscription():void{
