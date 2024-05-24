@@ -2169,3 +2169,21 @@ java.util.concurrent.TimeoutException
 	at org.eclipse.lsp4e.operations.hover.LSPTextHover.getHoverInfo(LSPTextHover.java:73)
 	at org.eclipse.ui.internal.genericeditor.hover.CompositeTextHover.getHoverInfo2(CompositeTextHover.java:60)
 	at org.eclipse.jface.text.TextViewerHoverManager$1.run(TextViewerHoverManager.java:155)
+
+!ENTRY org.eclipse.lsp4e 1 0 2024-05-24 00:01:07.480
+!MESSAGE [Info]	Angular project loading started
+
+!ENTRY org.eclipse.lsp4e 1 0 2024-05-24 00:01:07.482
+!MESSAGE [Info]	Angular project loading finished
+
+!ENTRY org.eclipse.lsp4e 1 0 2024-05-24 01:03:01.881
+!MESSAGE [Info]	Angular project loading started
+
+!ENTRY org.eclipse.lsp4e 1 0 2024-05-24 01:03:01.891
+!MESSAGE [Info]	Angular project loading finished
+
+!ENTRY org.eclipse.lsp4e 1 0 2024-05-24 20:10:34.092
+!MESSAGE [Info]	Angular project loading started
+
+!ENTRY org.eclipse.lsp4e 1 0 2024-05-24 20:10:34.101
+!MESSAGE [Info]	Angular project loading finished

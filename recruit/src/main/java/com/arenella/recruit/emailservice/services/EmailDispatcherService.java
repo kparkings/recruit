@@ -138,7 +138,7 @@ public class EmailDispatcherService {
 				Optional<Contact> 	recipientOpt 	= Optional.empty();
 				
 				if (r.getContactType() != ContactType.UNREGISTERED_USER) {
-					this.contactDao.getById(r.getContactId());
+					recipientOpt = this.contactDao.getById(r.getContactId());
 				}
 				
 				Map<String, Object> model 			= new HashMap<>(finalizedModel);
