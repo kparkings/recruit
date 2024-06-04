@@ -108,6 +108,7 @@ public class EmailDispatcherService {
 	public void handleSendEmailCommand(RequestSendEmailCommand command){
 		try {
 			
+			
 			Set<EmailRecipient<UUID>> recipients = new HashSet<>();
 			
 			recipients.addAll(command.getRecipients());

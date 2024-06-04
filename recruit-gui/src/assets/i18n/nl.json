@@ -722,6 +722,7 @@
 	"EASTERN_EUROPE": "Oost-Europa",
 	"ENGLISH": "Engels",
 	"ESTONIA": "Estland",
+	"EU_REMOTE": "Europa - Remote",
 	"EUROPE": "Europa",
 	"failure": "Fout",
 	"FINLAND": "Finland",
@@ -914,5 +915,6 @@
 	"US": "VS",
 	"WESTERN_EUROPE": "West-Europa",
 	"WORLD": "Wereld",
+	"WORLD_REMOTE": "Wereld - Remote",
 	"yes": "Ja"
 }

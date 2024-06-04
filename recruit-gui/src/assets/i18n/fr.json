@@ -722,6 +722,7 @@
 	"EASTERN_EUROPE": "L'Europe de l'Est",
 	"ENGLISH": "Anglais",
 	"ESTONIA": "Estonie",
+	"EU_REMOTE": "Europe - À distance",
 	"EUROPE": "L'Europe",
 	"failure": "Échec",
 	"FINLAND": "Finlande",
@@ -914,5 +915,6 @@
 	"US": "États-Unis",
 	"WESTERN_EUROPE": "Europe de l'Ouest",
 	"WORLD": "Monde",
+	"WORLD_REMOTE": "Monde - À distance",
 	"yes": "Oui"
 }

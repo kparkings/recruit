@@ -4,6 +4,7 @@ import { FunctionType } 		from './shared-domain-object/function-type';
 import { LanguageType } 		from './shared-domain-object/language-type';
 import { ContractType } 		from './suggestions/contract-type';
 import { TranslateService } 	from '@ngx-translate/core';
+import { CandidateServiceService } from './candidate-service.service';
 
 /**
 * Service contains static data. Typically data that maps to the back end APIs
@@ -12,11 +13,11 @@ import { TranslateService } 	from '@ngx-translate/core';
   providedIn: 'root'
 })
 export class StaticDataService {
-
+    
 	/**
 	* Constructor 
 	*/
-	constructor(private translate:TranslateService) { }
+	constructor(private translate:TranslateService, private candidateService:CandidateServiceService) { }
 
 	/**
 	* Returns the types of roles recognised by the system
@@ -51,12 +52,17 @@ export class StaticDataService {
 		
 		let countries:Array<Country> = new Array<Country>();
 		
-		countries.push(new Country("NETHERLANDS", this.translate.instant('static-country-nl')));
-		countries.push(new Country("BELGIUM", this.translate.instant('static-country-be')));
-		countries.push(new Country("UK", this.translate.instant('static-country-uk')));
-		countries.push(new Country("IRELAND", this.translate.instant('static-country-ir')));
-		countries.push(new Country("EU_REMOTE", this.translate.instant('static-country-eu')));
-		countries.push(new Country("WORLD_REMOTE", this.translate.instant('static-country-world')));
+		//.push(new Country("NETHERLANDS", this.translate.instant('static-country-nl')));
+		//countries.push(new Country("BELGIUM", this.translate.instant('static-country-be')));
+		//countries.push(new Country("UK", this.translate.instant('static-country-uk')));
+		//countries.push(new Country("IRELAND", this.translate.instant('static-country-ir')));
+		
+		 this.candidateService.getSupportedCountries().forEach(country => {
+			  countries.push(new Country(country.name, this.translate.instant(country.name), country.iso2Code));
+		  });
+		
+		countries.push(new Country("EU_REMOTE", this.translate.instant('EU_REMOTE'), "eu"));
+		countries.push(new Country("WORLD_REMOTE", this.translate.instant('WORLD_REMOTE'), ""));
 		
 		return countries;
 		

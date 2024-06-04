@@ -244,3 +244,16 @@
 2024-05-24 01:15:53,854 [Worker-950: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\eclipse-projects\recruit\recruit\src\test\resources
 2024-05-24 20:15:45,990 [Worker-993: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 2 resources from src\main\resources to target\classes
 2024-05-24 20:15:47,624 [Worker-993: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 23 resources from src\main\resources to target\classes
+2024-05-24 20:15:47,659 [Worker-993: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\eclipse-projects\recruit\recruit\src\test\resources
+2024-05-31 15:42:45,718 [Worker-1319: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 2 resources from src\main\resources to target\classes
+2024-05-31 15:42:45,754 [Worker-1319: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 23 resources from src\main\resources to target\classes
+2024-05-31 15:42:45,825 [Worker-1319: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\eclipse-projects\recruit\recruit\src\test\resources
+2024-06-04 22:40:01,815 [Worker-23: Loading available Gradle versions] INFO  o.e.b.c.i.u.g.PublishedGradleVersions - Gradle version information cache is out-of-date. Trying to update.
+2024-06-04 22:44:25,428 [Worker-15: Launching RecruitApplication] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 2 resources from src\main\resources to target\classes
+2024-06-04 22:44:25,674 [Worker-15: Launching RecruitApplication] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 23 resources from src\main\resources to target\classes
+2024-06-04 22:44:25,705 [Worker-15: Launching RecruitApplication] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\eclipse-projects\recruit\recruit\src\test\resources
+2024-06-04 23:14:53,658 [Worker-53: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 2 resources from src\main\resources to target\classes
+2024-06-04 23:14:53,727 [Worker-53: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 23 resources from src\main\resources to target\classes
+2024-06-04 23:14:53,750 [Worker-53: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\eclipse-projects\recruit\recruit\src\test\resources
+2024-06-05 00:00:06,330 [Worker-78: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 2 resources from src\main\resources to target\classes
+2024-06-05 00:00:06,585 [Worker-78: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 23 resources from src\main\resources to target\classes

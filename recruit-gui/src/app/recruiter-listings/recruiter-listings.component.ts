@@ -17,9 +17,11 @@ import { FormBeanMarketPlace } 							from '../listing/form-bean-market-place';
 import { FormBeanFilterByJobSpec } 						from '../listing/form-bean-filter-by-jobspec';
 import { HtmlOption } 									from '../html-option';
 import { StaticDataService } 							from '../static-data.service';
-import { InfoItemBlock, InfoItemConfig, InfoItemRowKeyValue, InfoItemRowMultiValues, InfoItemRowSingleValue } from '../candidate-info-box/info-item';
+import { InfoItemBlock, InfoItemConfig, InfoItemRowKeyValue, InfoItemRowKeyValueFlag, InfoItemRowMultiValues, InfoItemRowSingleValue } from '../candidate-info-box/info-item';
 import { ContractType } 								from '../suggestions/contract-type';
 import { TranslateService } 							from '@ngx-translate/core';
+import { SupportedCountry } from '../supported-candidate';
+import { Country } from '../shared-domain-object/country';
 
 
 @Component({
@@ -92,6 +94,8 @@ export class RecruiterListingsComponent implements OnInit {
 				this.countryOptions = this.getCountryOptions();
 				
 				this.doCreditCheck();
+				
+				
 					
 	}
 	
@@ -119,6 +123,9 @@ export class RecruiterListingsComponent implements OnInit {
     	});
 	
 		this.loadYearsExperienceValues();
+		//this.initSupportedCountries();
+		
+		
 	
   	}
 	
@@ -329,6 +336,19 @@ export class RecruiterListingsComponent implements OnInit {
 		this.enabldeDeleteOption 	= false;
 	}
 	
+	
+	/**
+	* Returns the flag css class for the Flag matching
+	* the Country 
+	*/
+	public getFlagClassFromCountry(country:string):string{
+		
+		let sc:Country =  this.staticDataService.fetchCountries().filter(c => c.key == country)[0];
+		
+		return sc ?  "flag-icon-"+sc.iso2Code : '';
+		
+	}
+	
 	/**
 	* Switches to Show Listing view
 	*/
@@ -357,7 +377,9 @@ export class RecruiterListingsComponent implements OnInit {
 				let locationBlock:InfoItemBlock = new InfoItemBlock();
 				locationBlock.setTitle(this.translate.instant('arenella-recruiter-listing-location'));
 				if	(selectedListing!.country) {
-					locationBlock.addRow(new InfoItemRowKeyValue(this.translate.instant('arenella-recruiter-listing-country'),this.getCountryCode(selectedListing!.country)));
+					//locationBlock.addRow(new InfoItemRowKeyValue(this.translate.instant('arenella-recruiter-listing-country'),this.getCountryCode(selectedListing!.country)));
+					recruiterBlock.addRow(new InfoItemRowKeyValueFlag(this.translate.instant('info-item-title-country'),this.getFlagClassFromCountry(this.selectedListing.country)));
+			
 				}
 				if	(selectedListing!.location) {
 					locationBlock.addRow(new InfoItemRowKeyValue(this.translate.instant('arenella-recruiter-listing-city'),selectedListing!.location));
@@ -688,7 +710,6 @@ export class RecruiterListingsComponent implements OnInit {
 	
   	}
   	
-  	
   	/**
 	* Provides HTML Options for country 
 	* Selection 
@@ -696,8 +717,9 @@ export class RecruiterListingsComponent implements OnInit {
   	private getCountryOptions():Array<HtmlOption>{
 		  
 		  let countries:Array<HtmlOption> = new Array<HtmlOption>();
-		  
+		   
 		  countries.push(new HtmlOption("",""));
+		  
 		  this.staticDataService.fetchCountries().forEach( country => {
 			countries.push(new HtmlOption(country.key,country.humanReadable));  
 		  });
