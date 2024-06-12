@@ -54,12 +54,7 @@
 						<div (click)="showListingDetails(listing)">
 							<div class="listing-title">{{getFormattedJobTitle(listing.title)}}</div>
 							<div>
-								<span title="{{listing.listingId}}" *ngIf="listing.country === 'NETHERLANDS'"  	class="flag-icon flag-icon-nl suggestion-flag-country listing-country"></span>
-								<span title="{{listing.listingId}}" *ngIf="listing.country === 'BELGIUM'"		class="flag-icon flag-icon-be suggestion-flag-country listing-country"></span>
-								<span title="{{listing.listingId}}" *ngIf="listing.country === 'UK'"			class="flag-icon flag-icon-gb suggestion-flag-country listing-country"></span>
-								<span title="{{listing.listingId}}" *ngIf="listing.country === 'IRELAND'"		class="flag-icon flag-icon-ie suggestion-flag-country listing-country"></span>
-								<span title="{{listing.listingId}}" *ngIf="listing.country === 'EU_REMOTE'"		class="flag-icon flag-icon-eu suggestion-flag-country listing-country"></span>
-								<span title="{{listing.listingId}}" *ngIf="listing.country === 'WORLD_REMOTE'"	class="flag-icon flag-icon-xx suggestion-flag-country listing-country"></span>	
+								<span title="{{listing.listingId}}" class="flag-icon flag-icon-{{getCountryISO2Code(listing.country)}} suggestion-flag-country listing-country"></span>
 							</div>
 							<div class="job-post-contract-type">
 								{{getFormattedContractType(listing.type)}}

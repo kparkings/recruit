@@ -253,4 +253,70 @@ public class CandidateSuggestionAPIOutboundTest {
 		
 	}
 	
+	/**
+	* Tests convertsion from Domain representatin of Candidate to API Outbound
+	* representation
+	* @throws Exception
+	*/
+	@Test
+	public void testConvertFromCandidateAsCensoredForActiveCredits() throws Exception{
+		
+		Candidate candidate = Candidate
+									.builder()
+										.flaggedAsUnavailable(flaggedAsUnavailable)
+										.available(available)
+										.candidateId(candidateId)
+										.city(city)
+										.email(email)
+										.country(country)
+										.freelance(freelance)
+										.function(function)
+										.languages(languages)
+										.lastAvailabilityCheck(lastAvailabilityCheck)
+										.perm(perm)
+										.roleSought(roleSought)
+										.skills(skills)
+										.yearsExperience(yearsExperience)
+										.firstname(firstname)
+										.registerd(registered)
+										.surname(surname)
+										.available(available)
+										.ownerId(ownerId)
+										.securityClearance(SECURITY_CLEARANCE)
+										.requiresSponsorship(REQUIRES_SPONSORSHIP)
+									.build();
+		
+		CandidateSearchAccuracyWrapper wrapper = new CandidateSearchAccuracyWrapper(candidate);
+		
+		wrapper.setAccuracyLanguages(accuracyLanguages);
+		wrapper.setAccuracySkills(accuracySkills);
+		
+		CandidateSuggestionAPIOutbound candidateAPIOutbound = CandidateSuggestionAPIOutbound.convertFromCandidateAsCensoredForActiveCredits(wrapper);
+		
+		assertEquals(candidateId, 									candidateAPIOutbound.getCandidateId());
+		assertEquals(roleSought, 									candidateAPIOutbound.getRoleSought());
+		assertEquals(function, 										candidateAPIOutbound.getFunction());
+		assertEquals(country, 										candidateAPIOutbound.getCountry());
+		assertEquals(city, 											candidateAPIOutbound.getCity());
+		assertEquals(perm, 											candidateAPIOutbound.getPerm());
+		assertEquals(freelance, 									candidateAPIOutbound.getFreelance());
+		assertEquals(yearsExperience, 								candidateAPIOutbound.getYearsExperience());
+		assertEquals(available, 									candidateAPIOutbound.isAvailable());
+		assertEquals(flaggedAsUnavailable, 							candidateAPIOutbound.isFlaggedAsUnavailable());
+		assertEquals(lastAvailabilityCheck, 						candidateAPIOutbound.getLastAvailabilityCheckOn());
+		assertEquals(firstname, 	candidateAPIOutbound.getFirstname());
+		assertEquals(" ", 	candidateAPIOutbound.getSurname());
+		assertEquals(email, 	candidateAPIOutbound.getEmail());
+		assertEquals(accuracyLanguages, 							candidateAPIOutbound.getAccuracyLanguages());
+		assertEquals(accuracySkills, 								candidateAPIOutbound.getAccuracySkills());
+		assertEquals(SECURITY_CLEARANCE, 							candidateAPIOutbound.getSecurityClearance());
+		assertEquals(REQUIRES_SPONSORSHIP, 							candidateAPIOutbound.getRequiresSponsorship());
+		
+		assertTrue(candidateAPIOutbound.getSkills().contains("Java"));
+		assertTrue(candidateAPIOutbound.getSkills().contains("Angular"));
+		
+		candidateAPIOutbound.getLanguages().stream().filter(l -> l.getLanguage() == LANGUAGE.DUTCH && l.getLevel() == LEVEL.PROFICIENT).findAny().orElseThrow();
+		
+	}
+	
 }

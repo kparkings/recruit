@@ -562,4 +562,38 @@ public class CandidateSuggestionAPIOutbound implements CandidateAPIOutbound{
 		
 	}
 	
+	/**
+	* Returns results with identifying features of the Candidate removed. In this case we just want to 
+	* hide the surname so the recruiter can't find them on other sites and avoid paying the subscription fee
+	* @param candidate - Candidate to be converted
+	* @return converted candidate
+	*/
+	public static CandidateSuggestionAPIOutbound convertFromCandidateAsCensoredForActiveCredits(CandidateSearchAccuracyWrapper candidate) {
+		
+		return CandidateSuggestionAPIOutbound
+				.builder()
+					.candidateId(candidate.get().getCandidateId())
+					.country(candidate.get().getCountry())
+					.function(candidate.get().getFunction())
+					.roleSought(candidate.get().getRoleSought())
+					.city(candidate.get().getCity())
+					.freelance(candidate.get().isFreelance())
+					.perm(candidate.get().isPerm())
+					.languages(candidate.get().getLanguages())
+					.skills(candidate.get().getSkills())
+					.yearsExperience(candidate.get().getYearsExperience())
+					.available(candidate.get().isAvailable())
+					.flaggedAsUnavailable(candidate.get().isFlaggedAsUnavailable())
+					.lastAvailabilityCheck(candidate.get().getLastAvailabilityCheckOn())
+					.firstname(candidate.get().getFirstname())
+					.surname(" ")
+					.email(candidate.get().getEmail())
+					.accuracyLanguages(candidate.getAccuracyLanguages())
+					.accuracySkills(candidate.getAccuracySkills())
+					.requiresSponsorship(candidate.get().getRequiresSponsorship())
+					.securityClearance(candidate.get().getSecurityClearance())
+				.build();
+		
+	}
+	
 }

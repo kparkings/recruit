@@ -349,6 +349,18 @@ export class RecruiterListingsComponent implements OnInit {
 		
 	}
 	
+		/**
+	* Returns the code identifying the country
+	* @param country - Country to get the country code for
+	*/
+	public getCountryCode(country:string):string{
+
+		const matchingCountry = this.staticDataService.fetchCountries().filter(countryObj => countryObj.key == country)[0];
+		
+		return matchingCountry == null ? "NA" : matchingCountry.humanReadable;
+	
+  	}
+	
 	/**
 	* Switches to Show Listing view
 	*/
@@ -377,9 +389,7 @@ export class RecruiterListingsComponent implements OnInit {
 				let locationBlock:InfoItemBlock = new InfoItemBlock();
 				locationBlock.setTitle(this.translate.instant('arenella-recruiter-listing-location'));
 				if	(selectedListing!.country) {
-					//locationBlock.addRow(new InfoItemRowKeyValue(this.translate.instant('arenella-recruiter-listing-country'),this.getCountryCode(selectedListing!.country)));
 					recruiterBlock.addRow(new InfoItemRowKeyValueFlag(this.translate.instant('info-item-title-country'),this.getFlagClassFromCountry(this.selectedListing.country)));
-			
 				}
 				if	(selectedListing!.location) {
 					locationBlock.addRow(new InfoItemRowKeyValue(this.translate.instant('arenella-recruiter-listing-city'),selectedListing!.location));
@@ -697,18 +707,6 @@ export class RecruiterListingsComponent implements OnInit {
 			console.log('Unable to delete Lisring ' + JSON.stringify(err));
 		});
 	}
-
-	/**
-	* Returns the code identifying the country
-	* @param country - Country to get the country code for
-	*/
-	public getCountryCode(country:string):string{
-
-		const matchingCountry = this.staticDataService.fetchCountries().filter(countryObj => countryObj.key == country)[0];
-		
-		return matchingCountry == null ? "NA" : matchingCountry.humanReadable;
-	
-  	}
   	
   	/**
 	* Provides HTML Options for country 

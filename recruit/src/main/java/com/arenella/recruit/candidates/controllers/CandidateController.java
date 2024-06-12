@@ -252,6 +252,8 @@ public class CandidateController {
 		
 		if (this.isRecruiter(principal) && this.isUseCredits(principal) && this.userCreditsExpired(this.getLoggedInUserName(principal))) {
 			return candidateService.getCandidateSuggestions(filterOptions, pageable.getPageSize(), isUnfilteredRequest).map(CandidateSuggestionAPIOutbound::convertFromCandidateAsCensored);
+		}else if (this.isRecruiter(principal) && this.isUseCredits(principal)) {
+			return candidateService.getCandidateSuggestions(filterOptions, pageable.getPageSize(), isUnfilteredRequest).map(CandidateSuggestionAPIOutbound::convertFromCandidateAsCensoredForActiveCredits);
 		} else {
 			return candidateService.getCandidateSuggestions(filterOptions, pageable.getPageSize(), isUnfilteredRequest).map(CandidateSuggestionAPIOutbound::convertFromCandidate);
 		}

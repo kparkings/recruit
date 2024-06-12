@@ -209,6 +209,50 @@ public class CandidateControllerTest {
 	}
 	
 	/**
+	* Tests retrieval of candidate suggestions when User is a credit based user but still 
+	* has credits
+	* @throws Exception
+	*/
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@Test
+	public void testGetCandidate_suggestions_creditUser_withCredits() throws Exception{
+	
+		final String email 		= "kparkings@gmail.com";
+		final String firstname 	= "kevin";
+		final String surname 	= "parkings";
+		
+		Candidate candidate = Candidate.builder().firstname(firstname).surname(surname).email(email).ownerId("c1").build();
+		CandidateSearchAccuracyWrapper wrapper = new CandidateSearchAccuracyWrapper(candidate);
+		
+		org.springframework.data.domain.PageImpl<CandidateSearchAccuracyWrapper> page = new org.springframework.data.domain.PageImpl(List.of(wrapper));
+		Page<CandidateSearchAccuracyWrapper> candidatePage = page;
+		
+		Collection authorities = new HashSet<>();
+		authorities.add(new SimpleGrantedAuthority("ROLE_RECRUITER"));
+		
+		Mockito.when(this.mockCandidateService.getCandidateSuggestions(Mockito.any(), Mockito.any(), Mockito.eq(false))).thenReturn(candidatePage);
+		Mockito.when(this.mockUsernamePasswordAuthenticationToken.getAuthorities()).thenReturn(authorities);
+		Mockito.when(this.mockUsernamePasswordAuthenticationToken.getName()).thenReturn(firstname);
+		
+		PageRequest mockPageRequest = Mockito.mock(PageRequest.class);
+		Mockito.when(mockPageRequest.getPageSize()).thenReturn(1);
+		
+		Mockito.when(this.mockUsernamePasswordAuthenticationToken.getClaim("useCredits")).thenReturn(Optional.of(Boolean.TRUE));
+		Mockito.when(this.mockCandidateService.hasCreditsLeft(Mockito.anyString())).thenReturn(true);
+		
+		Page<CandidateAPIOutbound> results = this.controller.getCandidate(null,null,null,null,null,null,null, null, null,null,null,null,null,null,null,null,null,null,null,null,null,null,true,null,null,null,null,null,null, 0, mockPageRequest, this.mockUsernamePasswordAuthenticationToken, mockResponse);
+		
+		Mockito.verify(this.mockCandidateService).getCandidateSuggestions(Mockito.any(), Mockito.any(), Mockito.eq(false));
+	
+		CandidateSuggestionAPIOutbound candidateFirst = (CandidateSuggestionAPIOutbound) results.get().findFirst().get();
+	
+		assertEquals(firstname, candidateFirst.getFirstname());
+		assertEquals(" ", 		candidateFirst.getSurname());
+		assertEquals(email, 	candidateFirst.getEmail());
+		
+	}
+	
+	/**
 	* Tests retrieval of candidate suggestions when user is Candidate. In which case a filter on CandidateId of just the 
 	* logged in user should be in the filters
 	* @throws Exception
