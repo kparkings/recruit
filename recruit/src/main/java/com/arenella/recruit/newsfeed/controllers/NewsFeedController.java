@@ -40,7 +40,7 @@ public class NewsFeedController {
 		NewsFeedItemFilters filters = 
 				NewsFeedItemFilters
 				.builder()
-					.maxResults(200)
+					.maxResults(75)
 					.types(types)
 				.build();
 		
