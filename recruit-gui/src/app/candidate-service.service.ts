@@ -29,7 +29,7 @@ import { SupportedCountry } from './supported-candidate';
 export class CandidateServiceService {
     
     public geoZones:Array<GeoZone>						= new Array<GeoZone>();
-    public countries:Array<Country> 					= new Array<Country>();
+    //public countries:Array<Country> 					= new Array<Country>();
     public languages:Array<SupportedLanguage> 			= new Array<SupportedLanguage>();
     public supportedCountries:Array<SupportedCountry> 	= new Array<SupportedCountry>();
    
@@ -37,20 +37,20 @@ export class CandidateServiceService {
   	* Constructor
   	*/
 	constructor(private httpClient: HttpClient, private translate:TranslateService) { 
-		this.initializeCountries();
+		//this.initializeCountries();
 	}
 	
 	/**
   	* Sets the available countrues
   	* NB: Needs to come from the backend 
   	*/
-	public initializeCountries():void{
-		this.countries = new Array<Country>();
-		this.countries.push(new Country('NL', 'NETHERLANDS'));
-		this.countries.push(new Country('BE', 'BELGIUM'));
-		this.countries.push(new Country('UK', 'UK'));
-		this.countries.push(new Country('IE', 'REPUBLIC_OF_IRELAND'));
-	}
+	//public initializeCountries():void{
+	//	this.countries = new Array<Country>();
+	//	this.countries.push(new Country('NL', 'NETHERLANDS'));
+	//	this.countries.push(new Country('BE', 'BELGIUM'));
+	//	this.countries.push(new Country('UK', 'UK'));
+	//	this.countries.push(new Country('IE', 'REPUBLIC_OF_IRELAND'));
+	//}
 	
 	/**
   	* Supported countries. This is different to the countries the user can filter on in the 
@@ -512,9 +512,9 @@ export class CandidateServiceService {
 	/**
 	* Returns Countries that can be filtered on 
 	*/
-	public getCountries():Array<Country>{
-		return this.countries;	
-	}
+	//public getCountries():Array<Country>{
+	//	return this.countries;	
+	//}
 	
 	/**
 	* Returns Countries supported by the system 
@@ -536,9 +536,9 @@ export class CandidateServiceService {
 	*/
 	public getCountryCode(country:string):string{
 
-		let result = this.countries.filter(c => c.countryName === country);
+		let result = this.supportedCountries.filter(c => c.name === country);
 		
-		return result[0] ? result[0].countryCode : 'NA';
+		return result[0] ? result[0].iso2Code.toUpperCase() : 'NA';
 
   	}
   			
