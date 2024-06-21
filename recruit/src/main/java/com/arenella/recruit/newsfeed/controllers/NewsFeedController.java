@@ -1,6 +1,7 @@
 package com.arenella.recruit.newsfeed.controllers;
 
 import java.security.Principal;
+import java.time.LocalDateTime;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -40,7 +41,8 @@ public class NewsFeedController {
 		NewsFeedItemFilters filters = 
 				NewsFeedItemFilters
 				.builder()
-					.maxResults(75)
+					.maxResults(50)
+					.createdBefore(LocalDateTime.now().minusWeeks(1))
 					.types(types)
 				.build();
 		

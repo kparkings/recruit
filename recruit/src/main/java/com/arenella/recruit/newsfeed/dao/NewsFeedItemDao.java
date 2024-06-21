@@ -44,9 +44,10 @@ public interface NewsFeedItemDao extends CrudRepository<NewsFeedItemEntity, UUID
 	* @return NewsFeedItems
 	*/
 	default Set<NewsFeedItem> fetchNewsFeedItem(NewsFeedItemFilters filters){
+		
 		return this.findAll(new NewsFeedItemEntitySpecification(filters)).stream()
-				.map(NewsFeedItemEntity::convertFromEntity)
 				.limit(filters.getMaxResults().isEmpty() ? 100 : filters.getMaxResults().get())
+				.map(NewsFeedItemEntity::convertFromEntity)
 				.collect(Collectors.toCollection(LinkedHashSet::new));
 	}
 	
@@ -78,6 +79,8 @@ public interface NewsFeedItemDao extends CrudRepository<NewsFeedItemEntity, UUID
 			
 			if (this.filters.getMaxResults().isPresent()) {
 				//Handle in stream
+				
+				
 			}
 			
 			/**
@@ -85,7 +88,7 @@ public interface NewsFeedItemDao extends CrudRepository<NewsFeedItemEntity, UUID
 			*/
 			if (this.filters.getCreatedBefore().isPresent()) {
 				
-				Expression<LocalDateTime> expression = root.get("createBefore");
+				Expression<LocalDateTime> expression = root.get("created");
 				predicates.add(criteriaBuilder.greaterThan(expression, filters.getCreatedBefore().get()));
 			}
 			
@@ -108,6 +111,7 @@ public interface NewsFeedItemDao extends CrudRepository<NewsFeedItemEntity, UUID
 			Expression<String> sortExpression 				= root.get("created");
 			query.orderBy(criteriaBuilder.desc(sortExpression));
 			
+		
 			return criteriaBuilder.and(predicates.stream().toArray(n -> new Predicate[n]));
 		}
 		
