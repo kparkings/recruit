@@ -434,22 +434,6 @@ public class CandidateServiceImpl implements CandidateService{
 	}
 	
 	/**
-	* Returns whether only the main countries should be returned in the results or 
-	* all available countries
-	* @return whether to restricted results to supported countries
-	*/
-	//private boolean limitToSupportedCountries(CandidateFilterOptions filterOptions) {
-	
-	//	return filterOptions.getGeoZones().isEmpty() 
-	//			&& filterOptions.getCountries().isEmpty() 
-	//			&& !this.checkHasRole("ROLE_CANDIDATE")
-	//			&& !this.checkHasRole("ROLE_ADMIN")
-	//			&& !(this.checkHasRole("ROLE_RECRUITER") && filterOptions.getOwnerId().isPresent() && filterOptions.getOwnerId().get().contains(this.getAuthenticatedUserId())) //TODO [KP] Low level secruity issue. Possible to add multiple ownerIds to set and with just one get access to candidate they dont own that is not in the standard set of free candidates  
-	//			&& !(this.checkHasRole("ROLE_RECRUITER") && !filterOptions.getCandidateIds().isEmpty()); //TODO [KP] Low level security risk. Recruiter can give an id of candidate they dont own that is not in the standard set of free candidates
-		
-	//}
-	
-	/**
 	* Refer to the CandidateService Interface for Details
 	*/
 	@Override
@@ -469,9 +453,8 @@ public class CandidateServiceImpl implements CandidateService{
 		* active as do Admin users 
 		*/
 		if (!hasPaidSubscription() && !this.checkHasRole("ROLE_ADMIN")) {
-			filterOptions.setAvailable(true);
+			filterOptions.setAvailable(null);
 			filterOptions.setIncludeRequiresSponsorship(false);
-			//filterOptions.removeGeoZones();
 		}
 		
 		/**
@@ -507,17 +490,6 @@ public class CandidateServiceImpl implements CandidateService{
 		if (!this.checkHasRole("ROLE_ADMIN") && !this.checkHasRole("ROLE_RECRUITER")) {
 			filterOptions.removeGeoZones();
 		}
-		
-		/**
-		* In the case there is no filter for either GeoZone or Country we add in All the default 
-		* countries otherwise we end up with everything
-		*/
-		//if (limitToSupportedCountries(filterOptions)) {
-		//	filterOptions.addCountry(COUNTRY.BELGIUM);
-		//	filterOptions.addCountry(COUNTRY.NETHERLANDS);
-		//	filterOptions.addCountry(COUNTRY.UK);
-		//	filterOptions.addCountry(COUNTRY.REPUBLIC_OF_IRELAND);
-		//}
 		
 		if (!filterOptions.getGeoZones().isEmpty()) {
 			

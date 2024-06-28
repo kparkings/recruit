@@ -43,6 +43,7 @@ import com.arenella.recruit.candidates.enums.COUNTRY;
 import com.arenella.recruit.candidates.enums.FUNCTION;
 import com.arenella.recruit.candidates.enums.RESULT_ORDER;
 import com.arenella.recruit.candidates.services.CandidateService;
+import com.arenella.recruit.candidates.utils.CandidateSearchUtil;
 import com.arenella.recruit.candidates.utils.GeoZoneSearchUtil.GEO_ZONE;
 import com.arenella.recruit.curriculum.enums.FileType;
 
@@ -55,6 +56,9 @@ public class CandidateController {
 
 	@Autowired
 	private CandidateService			candidateService;
+	
+	@Autowired
+	private CandidateSearchUtil			candidateSearchUtil;
 	
 	/**
 	* Adds a new Candidate
@@ -248,16 +252,7 @@ public class CandidateController {
 		
 		response.setHeader("X-Arenella-Request-Id", ""+(backendRequestId == null ? 0 : backendRequestId.intValue()));
 		
-		boolean isUnfilteredRequest = Optional.ofNullable(unfiltered).isEmpty() ? false :  unfiltered;
-		
-		if (this.isRecruiter(principal) && this.isUseCredits(principal) && this.userCreditsExpired(this.getLoggedInUserName(principal))) {
-			return candidateService.getCandidateSuggestions(filterOptions, pageable.getPageSize(), isUnfilteredRequest).map(CandidateSuggestionAPIOutbound::convertFromCandidateAsCensored);
-		}else if (this.isRecruiter(principal) && this.isUseCredits(principal)) {
-			return candidateService.getCandidateSuggestions(filterOptions, pageable.getPageSize(), isUnfilteredRequest).map(CandidateSuggestionAPIOutbound::convertFromCandidateAsCensoredForActiveCredits);
-		} else {
-			return candidateService.getCandidateSuggestions(filterOptions, pageable.getPageSize(), isUnfilteredRequest).map(CandidateSuggestionAPIOutbound::convertFromCandidate);
-		}
-		
+		return candidateSearchUtil.searchAndPackageForAPIOutput(isRecruiter(principal), isUseCredits(principal), userCreditsExpired(getLoggedInUserName(principal)), filterOptions, pageable, unfiltered);
 		
 	}
 	

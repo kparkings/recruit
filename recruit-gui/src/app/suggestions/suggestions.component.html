@@ -105,12 +105,12 @@
 							</td>
 							<div *ngIf="showIncludeFilters">
 								<p class="toggle-filter-option" (click)="switchIncludeFilterView('')">{{'Hide' | translate}}..</p>
-								<div class="geo-code-filter geo-code-selected-{{includeUnavailableCandidatesSelected}}" (click)="doPaidSubscriptionCheckUnavailableCandidates()">
+								<div class="geo-code-filter geo-code-selected-{{includeUnavailableCandidatesSelected}}" (click)="doPaidSubscriptionCheckUnavailableCandidates()" *ngIf="isAdmin() || hasPaidSubscription()">
 									{{'arenella-suggestions-include-unavailable-candidates' | translate}}
-							</div>
-							<div class="geo-code-filter geo-code-selected-{{includeRequiresSponsorshipCandidatesSelected}}" (click)="doPaidSubscriptionCheckRequiresSponsorshipCandidates()">
+								</div>
+								<div class="geo-code-filter geo-code-selected-{{includeRequiresSponsorshipCandidatesSelected}}" (click)="doPaidSubscriptionCheckRequiresSponsorshipCandidates()">
 									{{'arenella-suggestions-include-requires-sponsorship-candidates' | translate}}
-							</div>
+								</div>
 							</div>
 						</tr>
 						<tr>
@@ -139,7 +139,7 @@
 		
 			<div class="suggestion-result-icons">
 			
-				<div class="suggestion-icon {{suggestionMobileClass}}" *ngFor="let suggestion of suggestions" (click)="showSuggestedCandidateOverview(suggestion)">
+				<div class="suggestion-icon {{suggestionMobileClass}} {{getUnvailableCssClass(suggestion)}}" *ngFor="let suggestion of suggestions" (click)="showSuggestedCandidateOverview(suggestion)">
 					<div>
 						
 						<div *ngIf="!isSavedCandidate(suggestion)" class="suggestion-icon-header">	

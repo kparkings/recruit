@@ -231,6 +231,10 @@ textarea {
 	width:55%;
 }
 
+.candidate-available-false{
+	opacity: 0.5;
+}
+
 @media (max-width:700px)  {
 
 	 .suggestion-icon{

@@ -91,4 +91,7 @@ export class Candidate {
 	securityClearance:string			 	= 'NONE';
 	
 	requiresSponsorship:boolean				= false;
+	
+	available:boolean						= false;
+	
 }

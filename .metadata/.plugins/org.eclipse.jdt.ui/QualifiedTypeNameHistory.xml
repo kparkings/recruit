@@ -2,4 +2,22 @@
 <qualifiedTypeNameHistroy>
     <fullyQualifiedTypeName name="com.arenella.recruit.emailservice.beans.Email.EmailRecipient.ContactType"/>
     <fullyQualifiedTypeName name="com.arenella.recruit.emailservice.beans.Email.EmailRecipient"/>
+    <fullyQualifiedTypeName name="org.joda.time.LocalDate"/>
+    <fullyQualifiedTypeName name="java.time.LocalDateTime"/>
+    <fullyQualifiedTypeName name="com.arenella.recruit.candidates.controllers.CandidateSuggestionAPIOutbound"/>
+    <fullyQualifiedTypeName name="java.security.Principal"/>
+    <fullyQualifiedTypeName name="org.springframework.beans.factory.annotation.Autowired"/>
+    <fullyQualifiedTypeName name="com.arenella.recruit.candidates.services.CandidateService"/>
+    <fullyQualifiedTypeName name="org.springframework.stereotype.Component"/>
+    <fullyQualifiedTypeName name="com.arenella.recruit.candidates.utils.CandidateSearchUtil"/>
+    <fullyQualifiedTypeName name="org.junit.jupiter.api.extension.ExtendWith"/>
+    <fullyQualifiedTypeName name="org.mockito.junit.jupiter.MockitoExtension"/>
+    <fullyQualifiedTypeName name="org.mockito.InjectMocks"/>
+    <fullyQualifiedTypeName name="org.mockito.Mock"/>
+    <fullyQualifiedTypeName name="org.junit.jupiter.api.Test"/>
+    <fullyQualifiedTypeName name="org.mockito.ArgumentCaptor"/>
+    <fullyQualifiedTypeName name="com.arenella.recruit.candidates.beans.CandidateFilterOptions"/>
+    <fullyQualifiedTypeName name="org.springframework.data.domain.Page"/>
+    <fullyQualifiedTypeName name="com.arenella.recruit.candidates.beans.CandidateSearchAccuracyWrapper"/>
+    <fullyQualifiedTypeName name="org.mockito.Mockito"/>
 </qualifiedTypeNameHistroy>

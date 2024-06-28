@@ -524,32 +524,23 @@ export class SuggestionsComponent implements OnInit {
 	*/
 	public toggleGeoZoneSelection(geoZone:GeoZone):void{
 		
-		//this.paidFeature = 'paidFeatureGeoZones';
+		let included:boolean = this.suggestionFilterForm.get((geoZone.geoZoneId.toLowerCase()+'Results'))?.value;
+		this.suggestionFilterForm.get((geoZone.geoZoneId.toLowerCase()+'Results'))?.setValue(!included);
+	
+		let geoZoneActive = this.candidateService.getGeoZones().filter(gz => this.suggestionFilterForm.get((gz.geoZoneId.toLowerCase()+'Results'))?.value == true).length > 0;
+	
+		if (!geoZoneActive) {
+			this.candidateService.getSupportedCountries().forEach(country => {
+				let key = country.iso2Code + 'Results';
+				this.suggestionFilterForm.get(key)?.setValue(true);
+			});
+		} else {
+			this.candidateService.getSupportedCountries().forEach(country => {
+				let key = country.iso2Code.toLowerCase() + 'Results';
+				this.suggestionFilterForm.get(key)?.setValue(false);
+			});
 		
-		//let valid:boolean = this.doPaidSubscriptionCheck();
-		
-		//if (valid) {
-		
-			let included:boolean = this.suggestionFilterForm.get((geoZone.geoZoneId.toLowerCase()+'Results'))?.value;
-			this.suggestionFilterForm.get((geoZone.geoZoneId.toLowerCase()+'Results'))?.setValue(!included);
-		
-			let geoZoneActive = this.candidateService.getGeoZones().filter(gz => this.suggestionFilterForm.get((gz.geoZoneId.toLowerCase()+'Results'))?.value == true).length > 0;
-		
-			if (!geoZoneActive) {
-				this.candidateService.getSupportedCountries().forEach(country => {
-					let key = country.iso2Code + 'Results';
-					this.suggestionFilterForm.get(key)?.setValue(true);
-				});
-			} else {
-				this.candidateService.getSupportedCountries().forEach(country => {
-					let key = country.iso2Code.toLowerCase() + 'Results';
-					this.suggestionFilterForm.get(key)?.setValue(false);
-				});
-			
-			}
-			
-		//}
-		
+		}
 		
 	}
 	
@@ -561,8 +552,6 @@ export class SuggestionsComponent implements OnInit {
 	public toggleCountrySelection(country:string):void{
 		
 		let included:boolean = this.suggestionFilterForm.get((country+'Results'))?.value;
-		
-		console.log("----> Included = " + country);
 		
 		this.suggestionFilterForm.get((country+'Results'))?.setValue(!included);
 		
@@ -673,6 +662,11 @@ export class SuggestionsComponent implements OnInit {
 	* Shows the Suggesion result view
 	*/
 	public showSuggestedCandidateOverview(candidateSuggestion:Candidate):void{
+		
+		if(!candidateSuggestion.available && !this.doPaidSubscriptionCheck()){
+			return;
+		}
+		
 		
 		this.doCreditCheck();
 		
@@ -1030,6 +1024,14 @@ export class SuggestionsComponent implements OnInit {
 	}
 	
 	/**
+	* Whether user has a paid subscription 
+	*/
+	public hasPaidSubscription():boolean{
+		return sessionStorage.getItem('hasPaidSubscription') === 'true';
+	}
+	
+	
+	/**
 	* If the Recruiter is the owner of the selected Candidate
 	*/
 	public isOwner():boolean{
@@ -1151,4 +1153,15 @@ export class SuggestionsComponent implements OnInit {
 			});
 		
 	}
+	
+	public getUnvailableCssClass(candidate:Candidate):string{
+		
+		if(this.isAdmin() || this.hasPaidSubscription()) {
+			return "";
+		}
+		
+		return "candidate-available-" + candidate.available;
+		
+	}
+	
 }
