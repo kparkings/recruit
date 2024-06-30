@@ -664,6 +664,7 @@ export class SuggestionsComponent implements OnInit {
 	public showSuggestedCandidateOverview(candidateSuggestion:Candidate):void{
 		
 		if(!candidateSuggestion.available && !this.doPaidSubscriptionCheck()){
+			this.paidFeature = "paidFeatureUnavailableCandidates";
 			return;
 		}
 		
