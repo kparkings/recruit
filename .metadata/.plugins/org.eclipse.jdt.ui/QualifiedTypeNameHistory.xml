@@ -8,7 +8,6 @@
     <fullyQualifiedTypeName name="java.security.Principal"/>
     <fullyQualifiedTypeName name="org.springframework.beans.factory.annotation.Autowired"/>
     <fullyQualifiedTypeName name="com.arenella.recruit.candidates.services.CandidateService"/>
-    <fullyQualifiedTypeName name="org.springframework.stereotype.Component"/>
     <fullyQualifiedTypeName name="com.arenella.recruit.candidates.utils.CandidateSearchUtil"/>
     <fullyQualifiedTypeName name="org.junit.jupiter.api.extension.ExtendWith"/>
     <fullyQualifiedTypeName name="org.mockito.junit.jupiter.MockitoExtension"/>
@@ -19,5 +18,9 @@
     <fullyQualifiedTypeName name="com.arenella.recruit.candidates.beans.CandidateFilterOptions"/>
     <fullyQualifiedTypeName name="org.springframework.data.domain.Page"/>
     <fullyQualifiedTypeName name="com.arenella.recruit.candidates.beans.CandidateSearchAccuracyWrapper"/>
+    <fullyQualifiedTypeName name="com.arenella.recruit.candidates.beans.Candidate"/>
+    <fullyQualifiedTypeName name="com.arenella.recruit.candidates.controllers.CandidateAPIOutbound"/>
     <fullyQualifiedTypeName name="org.mockito.Mockito"/>
+    <fullyQualifiedTypeName name="org.springframework.stereotype.Component"/>
+    <fullyQualifiedTypeName name="com.arenella.recruit.recruiters.beans.CreditBasedSubscriptionActionHandler"/>
 </qualifiedTypeNameHistroy>

@@ -194,5 +194,14 @@ public class CreditBasedSubscription implements RecruiterSubscription{
 			return new CreditBasedSubscription(this);
 		}
 	}
+
+	/**
+	* Marks whether the Subscription is the Recruiters current subscription
+	* @param whether the Subscription is the Recruiters current subscription
+	*/
+	public void setCurrentSubscription(boolean currentSubscription) {
+		this.currentSubscription = currentSubscription;
+		
+	}
 	
 }

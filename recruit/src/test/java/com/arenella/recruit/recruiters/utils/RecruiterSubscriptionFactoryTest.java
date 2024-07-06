@@ -21,14 +21,13 @@ import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_
 public class RecruiterSubscriptionFactoryTest {
 	
 	@InjectMocks
-	private RecruiterSubscriptionFactory factory = new RecruiterSubscriptionFactory();
+	private RecruiterSubscriptionFactory 			factory = new RecruiterSubscriptionFactory();
 	
 	@Mock
 	private TrialPeriodSubscriptionActionHandler 	trialPeriodActionHander;
 	
 	@Mock
 	private PaidPeriodSubscriptionActionHandler 	paidPeriodSubscriptionActionHandler;
-	
 	
 	/**
 	* Tests exception thrown if type is null
@@ -53,20 +52,7 @@ public class RecruiterSubscriptionFactoryTest {
 		assertNotNull(factory.getActionHandlerByType(subscription_type.FIRST_GEN));
 		assertNotNull(factory.getActionHandlerByType(subscription_type.TRIAL_PERIOD));
 		assertNotNull(factory.getActionHandlerByType(subscription_type.YEAR_SUBSCRIPTION));
-		
+		this.factory.getActionHandlerByType(subscription_type.CREDIT_BASED_SUBSCRIPTION);
 	}
 	
-	/**
-	* Tests Exception is thrown if Action used with CREDIT_BASED_SUBSCRIPTION
-	* @return
-	* @throws Exception
-	*/
-	@Test
-	public void testgetActionHandlerByType_credits() throws Exception{
-		
-		assertThrows(IllegalArgumentException.class, () -> {
-			this.factory.getActionHandlerByType(subscription_type.CREDIT_BASED_SUBSCRIPTION);
-		});
-		
-	}
 }

@@ -294,7 +294,7 @@ export class AccountsComponent implements OnInit {
 		
 		this.recruiters.forEach((r:Recruiter) => {
 			r.subscriptions.forEach((s:Subscription) => {
-				if (s.currentSubscription && s.status === "AWAITING_ACTIVATION" && s.type === "TRIAL_PERIOD") {
+				if (s.currentSubscription && s.status === "AWAITING_ACTIVATION" && s.type === "CREDIT_BASED_SUBSCRIPTION") {
 					
 					let sa:SubscriptionAction = new SubscriptionAction();
 					

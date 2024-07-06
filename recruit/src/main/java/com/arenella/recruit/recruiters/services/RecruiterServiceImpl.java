@@ -178,14 +178,23 @@ public class RecruiterServiceImpl implements RecruiterService{
 			recruiter.setUserId(nextId);
 		}
 	
-		TrialPeriodSubscription subscription = TrialPeriodSubscription
-																.builder()
-																	.created(LocalDateTime.now())
-																	.recruiterId(recruiter.getUserId())
-																	.status(RecruiterSubscription.subscription_status.AWAITING_ACTIVATION)
-																	.subscriptionId(UUID.randomUUID())
-																	.currentSubscription(true)
-																.build();
+		CreditBasedSubscription subscription = CreditBasedSubscription
+				.builder()
+					.created(LocalDateTime.now())
+					.recruiterId(recruiter.getUserId())
+					.status(RecruiterSubscription.subscription_status.AWAITING_ACTIVATION)
+					.subscriptionId(UUID.randomUUID())
+					.currentSubscription(true)
+				.build();
+		
+		//TrialPeriodSubscription subscription = TrialPeriodSubscription
+		//														.builder()
+		//															.created(LocalDateTime.now())
+		//															.recruiterId(recruiter.getUserId())
+		//															.status(RecruiterSubscription.subscription_status.AWAITING_ACTIVATION)
+		//															.subscriptionId(UUID.randomUUID())
+		//															.currentSubscription(true)
+		//														.build();
 		
 		recruiter.addSubscription(subscription); 
 		

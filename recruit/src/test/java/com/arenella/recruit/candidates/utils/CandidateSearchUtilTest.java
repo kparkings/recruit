@@ -77,14 +77,13 @@ public class CandidateSearchUtilTest {
 		CandidateSuggestionAPIOutbound unavailable 	= (CandidateSuggestionAPIOutbound) results.get().filter(a -> ((CandidateSuggestionAPIOutbound) a).isAvailable() == false).findAny().get();
 
 		
-		assertEquals(CandidateSuggestionAPIOutbound.CENSORED_ITEM, available.getFirstname());
+		assertEquals(firstName, available.getFirstname());
 		assertEquals(CandidateSuggestionAPIOutbound.CENSORED_ITEM, 	available.getSurname());
 		assertEquals(CandidateSuggestionAPIOutbound.CENSORED_ITEM, 	available.getEmail());
 		
-		assertEquals(CandidateSuggestionAPIOutbound.CENSORED_ITEM, unavailable.getFirstname());
+		assertEquals(firstName, unavailable.getFirstname());
 		assertEquals(CandidateSuggestionAPIOutbound.CENSORED_ITEM, 	unavailable.getSurname());
 		assertEquals(CandidateSuggestionAPIOutbound.CENSORED_ITEM, 	unavailable.getEmail());
-		
 		
 	}
 	
@@ -127,7 +126,7 @@ public class CandidateSearchUtilTest {
 		assertEquals(" ", 		available.getSurname());
 		assertEquals(email, 	available.getEmail());
 		
-		assertEquals(CandidateSuggestionAPIOutbound.CENSORED_ITEM, unavailable.getFirstname());
+		assertEquals(firstName, unavailable.getFirstname());
 		assertEquals(CandidateSuggestionAPIOutbound.CENSORED_ITEM, unavailable.getSurname());
 		assertEquals(CandidateSuggestionAPIOutbound.CENSORED_ITEM, unavailable.getEmail());
 		

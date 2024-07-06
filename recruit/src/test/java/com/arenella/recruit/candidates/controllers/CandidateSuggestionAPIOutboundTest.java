@@ -238,7 +238,7 @@ public class CandidateSuggestionAPIOutboundTest {
 		assertEquals(available, 									candidateAPIOutbound.isAvailable());
 		assertEquals(flaggedAsUnavailable, 							candidateAPIOutbound.isFlaggedAsUnavailable());
 		assertEquals(lastAvailabilityCheck, 						candidateAPIOutbound.getLastAvailabilityCheckOn());
-		assertEquals(CandidateSuggestionAPIOutbound.CENSORED_ITEM, 	candidateAPIOutbound.getFirstname());
+		assertEquals(firstname, 									candidateAPIOutbound.getFirstname());
 		assertEquals(CandidateSuggestionAPIOutbound.CENSORED_ITEM, 	candidateAPIOutbound.getSurname());
 		assertEquals(CandidateSuggestionAPIOutbound.CENSORED_ITEM, 	candidateAPIOutbound.getEmail());
 		assertEquals(accuracyLanguages, 							candidateAPIOutbound.getAccuracyLanguages());

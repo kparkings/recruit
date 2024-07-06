@@ -21,7 +21,7 @@ import com.arenella.recruit.candidates.utils.CandidateSuggestionUtil.suggestion_
 */
 public class CandidateSuggestionAPIOutbound implements CandidateAPIOutbound{
 
-	public static final String CENSORED_ITEM = "-";
+	public static final String CENSORED_ITEM = "";
 	
 	private String 					candidateId;
 	private FUNCTION				function;
@@ -551,7 +551,7 @@ public class CandidateSuggestionAPIOutbound implements CandidateAPIOutbound{
 					.available(candidate.get().isAvailable())
 					.flaggedAsUnavailable(candidate.get().isFlaggedAsUnavailable())
 					.lastAvailabilityCheck(candidate.get().getLastAvailabilityCheckOn())
-					.firstname(CENSORED_ITEM)
+					.firstname(candidate.get().getFirstname())
 					.surname(CENSORED_ITEM)
 					.email(CENSORED_ITEM)
 					.accuracyLanguages(candidate.getAccuracyLanguages())
