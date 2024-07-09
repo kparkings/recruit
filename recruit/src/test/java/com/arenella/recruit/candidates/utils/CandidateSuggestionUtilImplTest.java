@@ -380,7 +380,13 @@ public class CandidateSuggestionUtilImplTest {
 																				,Language.builder().language(LANGUAGE.FRENCH).level(LEVEL.PROFICIENT).build())
 																			).build();
 		
-		CandidateFilterOptions 	filters 	= CandidateFilterOptions.builder().dutch(LEVEL.PROFICIENT).english(LEVEL.PROFICIENT).french(LEVEL.PROFICIENT).build();
+		CandidateFilterOptions 	filters 	= CandidateFilterOptions.builder()
+				
+				.languages(Set.of(
+						Language.builder().language(LANGUAGE.ENGLISH).level(LEVEL.PROFICIENT).build(),
+						Language.builder().language(LANGUAGE.DUTCH).level(LEVEL.PROFICIENT).build(),
+						Language.builder().language(LANGUAGE.FRENCH).level(LEVEL.PROFICIENT).build())
+				).build();
 		
 		assertTrue(util.isPerfectMatch(new CandidateSearchAccuracyWrapper(candidate), filters, Set.of()));
 		
@@ -399,7 +405,12 @@ public class CandidateSuggestionUtilImplTest {
 																				,Language.builder().language(LANGUAGE.FRENCH).level(LEVEL.PROFICIENT).build())
 																			).build();
 		
-		CandidateFilterOptions 	filters 	= CandidateFilterOptions.builder().dutch(LEVEL.PROFICIENT).english(LEVEL.PROFICIENT).french(LEVEL.PROFICIENT).build();
+		CandidateFilterOptions 	filters 	= CandidateFilterOptions.builder()
+				.languages(Set.of(
+						Language.builder().language(LANGUAGE.ENGLISH).level(LEVEL.PROFICIENT).build(),
+						Language.builder().language(LANGUAGE.DUTCH).level(LEVEL.PROFICIENT).build(),
+						Language.builder().language(LANGUAGE.FRENCH).level(LEVEL.PROFICIENT).build())
+				).build();
 		
 		assertFalse(util.isPerfectMatch(new CandidateSearchAccuracyWrapper(candidate), filters, Set.of()));
 		

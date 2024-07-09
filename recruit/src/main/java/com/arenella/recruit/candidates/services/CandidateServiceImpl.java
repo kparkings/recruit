@@ -341,16 +341,10 @@ public class CandidateServiceImpl implements CandidateService{
 		
 		CandidateFilterOptions suggestionFilterOptions = CandidateFilterOptions
 				.builder()
-					.dutch(filterOptions.getDutch().isPresent() 		? filterOptions.getDutch().get() 	: null)
-					.english(filterOptions.getEnglish().isPresent() 	? filterOptions.getEnglish().get() 	: null)
-					.french(filterOptions.getFrench().isPresent() 		? filterOptions.getFrench().get() 	: null)
 					.skills(filterOptions.getSkills())
 				.build();
 
 		filterOptions.getSkills().clear();
-		filterOptions.setDutch(null);
-		filterOptions.setEnglish(null);
-		filterOptions.setFrench(null);
 		
 		Set<Candidate> results = this.candidateRepo.findCandidates(filterOptions, esClient);
 		
@@ -514,29 +508,14 @@ public class CandidateServiceImpl implements CandidateService{
 		
 		CandidateFilterOptions suggestionFilterOptions = CandidateFilterOptions
 																		.builder()
-																			.dutch(filterOptions.getDutch().isPresent() 			? filterOptions.getDutch().get() 		: null)
-																			.english(filterOptions.getEnglish().isPresent() 		? filterOptions.getEnglish().get() 		: null)
-																			.french(filterOptions.getFrench().isPresent() 			? filterOptions.getFrench().get() 		: null)
-																			.german(filterOptions.getGerman().isPresent() 			? filterOptions.getGerman().get() 		: null)
-																			.italian(filterOptions.getItalian().isPresent() 		? filterOptions.getItalian().get() 		: null)
-																			.polish(filterOptions.getPolish().isPresent() 			? filterOptions.getPolish().get() 		: null)
-																			.portuguese(filterOptions.getPortuguese().isPresent() 	? filterOptions.getPortuguese().get() 	: null)
-																			.spanish(filterOptions.getSpanish().isPresent() 		? filterOptions.getSpanish().get() 		: null)
+																			.languages(filterOptions.getLanguages())
 																			.skills(filterOptions.getSkills())
-																		.build();
+																			.build();
 
 		this.statisticsService.logCandidateSearchEvent(filterOptions);
 		
 		filterOptions.getSkills().clear();
-		filterOptions.setDutch(null);
-		filterOptions.setEnglish(null);
-		filterOptions.setFrench(null);
-		filterOptions.setGerman(null);
-		filterOptions.setItalian(null);
-		filterOptions.setPolish(null);
-		filterOptions.setPortuguese(null);
-		filterOptions.setSpanish(null);
-		
+	
 		CandidateExtractedFiltersBuilder searchTermFilter = CandidateExtractedFilters.builder();
 		
 		if (Optional.ofNullable(filterOptions.getSearchText()).isPresent()) {

@@ -3,6 +3,7 @@ package com.arenella.recruit.candidates.controllers;
 import java.io.IOException;
 import java.security.Principal;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -218,6 +219,43 @@ public class CandidateController {
 			candidateIdFilters.addAll(candidateId);
 		}
 		
+		//REFACTOR - SHOULD COME AS SET FROM FE REQUEST 
+		Set<Language> languages = new HashSet<>();
+		
+		if (Optional.ofNullable(dutch).isPresent()){
+			languages.add(Language.builder().language(LANGUAGE.DUTCH).level(dutch).build());
+		}
+		
+		if (Optional.ofNullable(english).isPresent()){
+			languages.add(Language.builder().language(LANGUAGE.ENGLISH).level(english).build());
+		}
+		
+		if (Optional.ofNullable(french).isPresent()){
+			languages.add(Language.builder().language(LANGUAGE.FRENCH).level(french).build());
+		}
+		
+		if (Optional.ofNullable(german).isPresent()){
+			languages.add(Language.builder().language(LANGUAGE.GERMAN).level(german).build());
+		}
+		
+		if (Optional.ofNullable(italian).isPresent()){
+			languages.add(Language.builder().language(LANGUAGE.ITALIAN).level(italian).build());
+		}
+		
+		if (Optional.ofNullable(polish).isPresent()){
+			languages.add(Language.builder().language(LANGUAGE.POLISH).level(polish).build());
+		}
+		
+		if (Optional.ofNullable(portuguese).isPresent()){
+			languages.add(Language.builder().language(LANGUAGE.PORTUGUESE).level(portuguese).build());
+		}
+		
+		if (Optional.ofNullable(spanish).isPresent()){
+			languages.add(Language.builder().language(LANGUAGE.SPANISH).level(spanish).build());
+		}
+		
+		//END REFACTOR
+		
 		CandidateFilterOptions filterOptions = CandidateFilterOptions
 																	.builder()
 																		.orderAttribute(orderAttribute)
@@ -230,14 +268,7 @@ public class CandidateController {
 																		.perm(perm)
 																		.yearsExperienceGtEq(yearsExperienceGtEq)
 																		.yearsExperienceLtEq(yearsExperienceLtEq)
-																		.dutch(dutch)
-																		.english(english)
-																		.french(french)
-																		.german(german)
-																		.italian(italian)
-																		.polish(polish)
-																		.portuguese(portuguese)
-																		.spanish(spanish)
+																		.languages(languages)
 																		.skills(skills)
 																		.flaggedAsUnavailable(flaggedAsUnavailable)
 																		.firstname(firstname)

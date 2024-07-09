@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import com.arenella.recruit.candidates.beans.CandidateFilterOptions;
 import com.arenella.recruit.candidates.beans.Language;
+import com.arenella.recruit.candidates.beans.Language.LANGUAGE;
 import com.arenella.recruit.candidates.enums.COUNTRY;
 import com.arenella.recruit.candidates.enums.FUNCTION;
 
@@ -49,8 +50,6 @@ public class ESFilteredSearchRequestBuilderTest {
 	private static final String				OWNER_ID							= "6789";
 	private static final Boolean			INCLUDE_REQUIRES_SPONSORSHIP		= true;
 	
-	
-	
 	private static final CandidateFilterOptions filters = 
 			CandidateFilterOptions
 				.builder()
@@ -58,13 +57,15 @@ public class ESFilteredSearchRequestBuilderTest {
 					.candidateIds(CANDIDATE_IDS)
 					.countries(COUNTRIES)
 					.daysSinceLastAvailabilityCheck(DAYS_SINCE_LAST_AVAILABILITY_CHECK)
-					.dutch(DUTCH)
+					.languages(Set.of(
+							Language.builder().language(LANGUAGE.ENGLISH).level(ENGLISH).build(),
+							Language.builder().language(LANGUAGE.DUTCH).level(DUTCH).build(),
+							Language.builder().language(LANGUAGE.FRENCH).level(FRENCH).build())
+					)
 					.email(EMAIL)
-					.english(ENGLISH)
 					.firstname(FIRSTNAME)
 					.surname(SURNAME)
 					.freelance(FREELANCE)
-					.french(FRENCH)
 					.functions(FUNCTIONS)
 					.includeRequiresSponsorship(INCLUDE_REQUIRES_SPONSORSHIP)
 					.ownerId(OWNER_ID)
@@ -85,13 +86,12 @@ public class ESFilteredSearchRequestBuilderTest {
 		
 		Query 					query 		= ESFilteredSearchRequestBuilder.createFilteredQuery(filters);
 		BoolQuery 				boolQuery 	= (BoolQuery) query._get();
-		//MatchQuery				match 		=  (MatchQuery)boolQuery.must().get(0)._get();
 		
-		List<MatchQuery> mustMatch 		= new ArrayList<>();
-		List<RangeQuery> mustRange 		= new ArrayList<>();
-		List<MatchQuery> mustNotMatch 	= new ArrayList<>();
-		List<BoolQuery>  mustBool 		= new ArrayList<>();
-		List<TermsQuery> mustTerms 		= new ArrayList<>();
+		List<MatchQuery> 	mustMatch 		= new ArrayList<>();
+		List<RangeQuery> 	mustRange 		= new ArrayList<>();
+		List<MatchQuery> 	mustNotMatch 	= new ArrayList<>();
+		List<BoolQuery>  	mustBool 		= new ArrayList<>();
+		List<TermsQuery> 	mustTerms 		= new ArrayList<>();
 		
 		boolQuery.must().stream().filter(q -> q.isMatch()).forEach(q -> mustMatch.add((MatchQuery)q._get()));
 		boolQuery.must().stream().filter(q -> q.isRange()).forEach(q -> mustRange.add((RangeQuery)q._get()));
@@ -120,9 +120,7 @@ public class ESFilteredSearchRequestBuilderTest {
 		mustRange.stream().filter(q -> q.queryName().equals("lastAvailabilityCheck")	&& q.lte().toString().equals(String.valueOf(Date.from(ld.atStartOfDay(ZoneId.systemDefault()).toInstant())))).findFirst().orElseThrow();
 		mustRange.stream().filter(q -> q.queryName().equals("registeredAfterCheck")		&& q.gte().toString().equals(String.valueOf(Date.from(REGISTERED_AFTER.atStartOfDay(ZoneId.systemDefault()).toInstant())))).findFirst().orElseThrow();
 		
-		mustBool.stream().filter(q -> q.queryName().equals("dutch")).findFirst().orElseThrow();
-		mustBool.stream().filter(q -> q.queryName().equals("french")).findFirst().orElseThrow();
-		mustBool.stream().filter(q -> q.queryName().equals("english")).findFirst().orElseThrow();
+		mustTerms.stream().filter(q -> q.queryName().equals("languages")).findFirst().orElseThrow();
 		
 		TermsQuery skills = mustTerms.stream().filter(q -> q.field().equals("skills")).findFirst().get();
 		skills.terms().value().stream().filter(f -> f.stringValue().equals("JaVa")).findAny().orElseThrow();

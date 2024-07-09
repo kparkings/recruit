@@ -1,5 +1,7 @@
 package com.arenella.recruit.candidates.services;
 
+import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.Executors;
@@ -17,6 +19,8 @@ import com.arenella.recruit.candidates.adapters.RequestSendAlertDailySummaryEmai
 import com.arenella.recruit.candidates.beans.CandidateFilterOptions;
 import com.arenella.recruit.candidates.beans.CandidateSearchAlert;
 import com.arenella.recruit.candidates.beans.CandidateSearchAlertMatch;
+import com.arenella.recruit.candidates.beans.Language;
+import com.arenella.recruit.candidates.beans.Language.LANGUAGE;
 import com.arenella.recruit.candidates.beans.Language.LEVEL;
 import com.arenella.recruit.candidates.dao.CandidateSearchAlertDao;
 import com.arenella.recruit.candidates.dao.CandidateSearchAlertMatchDao;
@@ -115,15 +119,35 @@ public class AlertTestUtilImpl implements AlertTestUtil{
 			@Override
 			public void run() {
 				
+				//REFACTOR TO USE ALL LANGIAGES
+				Set<Language> languages = new HashSet<>();
+				
+				
+				
+				if (alert.getDutch() != LEVEL.UNKNOWN){
+					languages.add(Language.builder().language(LANGUAGE.DUTCH).level(alert.getDutch()).build());
+				}
+				
+				if (alert.getEnglish() != LEVEL.UNKNOWN){
+					languages.add(Language.builder().language(LANGUAGE.ENGLISH).level(alert.getEnglish()).build());
+				}
+				
+				if (alert.getFrench() != LEVEL.UNKNOWN){
+					languages.add(Language.builder().language(LANGUAGE.FRENCH).level(alert.getFrench()).build());
+				}
+				
+				//END REFACTOR
+				
 				try {
 					CandidateFilterOptions filterOptions = 
 							CandidateFilterOptions
 								.builder()
 									.candidateIds(Set.of(event.getCandidateId()))
 									.countries(alert.getCountries())
-									.dutch(alert.getDutch()		== LEVEL.UNKNOWN ? null : alert.getDutch())
-									.english(alert.getEnglish()	== LEVEL.UNKNOWN ? null : alert.getEnglish())
-									.french(alert.getFrench()	== LEVEL.UNKNOWN ? null : alert.getFrench())
+									.languages(languages)
+									//.dutch(alert.getDutch()		== LEVEL.UNKNOWN ? null : alert.getDutch())
+									//.english(alert.getEnglish()	== LEVEL.UNKNOWN ? null : alert.getEnglish())
+									//.french(alert.getFrench()	== LEVEL.UNKNOWN ? null : alert.getFrench())
 									.freelance(alert.getFreelance().isEmpty() ? null : alert.getFreelance().get())
 									.functions(alert.getFunctions())
 									.perm(alert.getPerm().isEmpty() ? null : alert.getPerm().get())

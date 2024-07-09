@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -16,6 +17,8 @@ import com.arenella.recruit.candidates.beans.Candidate;
 import com.arenella.recruit.candidates.beans.CandidateFilterOptions;
 import com.arenella.recruit.candidates.beans.CandidateRoleStats;
 import com.arenella.recruit.candidates.beans.CandidateSearchEvent;
+import com.arenella.recruit.candidates.beans.Language;
+import com.arenella.recruit.candidates.beans.Language.LANGUAGE;
 import com.arenella.recruit.candidates.beans.RecruiterStats;
 import com.arenella.recruit.candidates.controllers.CandidateStatisticsController.STAT_PERIOD;
 import com.arenella.recruit.candidates.dao.CandidateSearchStatisticsDao;
@@ -331,14 +334,19 @@ public class CandidateStatisticsServiceImpl implements CandidateStatisticsServic
 	*/
 	private CandidateSearchEvent generateEvent(String userId, UUID searchId, String skill, COUNTRY country, FUNCTION function, CandidateFilterOptions filterOptions) {
 		
+		//TODO: [KP ] Refactor for all languages
+		Optional<Language>  dutch = filterOptions.getLanguages().stream().filter(l -> l.getLanguage() == LANGUAGE.DUTCH).findAny();
+		Optional<Language> french = filterOptions.getLanguages().stream().filter(l -> l.getLanguage() == LANGUAGE.FRENCH).findAny();
+		Optional<Language> english = filterOptions.getLanguages().stream().filter(l -> l.getLanguage() == LANGUAGE.ENGLISH).findAny();
+		
 		return CandidateSearchEvent
 							.builder()
 								.searchId(searchId)
 								.country(country)
-								.dutch(filterOptions.getDutch().orElse(null))
-								.english(filterOptions.getEnglish().orElse(null))
+								.dutch(dutch.isPresent() ? dutch.get().getLevel() : null)
+								.english(english.isPresent() ? english.get().getLevel() : null)
+								.french(french.isPresent() ? french.get().getLevel() : null)
 								.freelance(filterOptions.isFreelance().orElse(true))
-								.french(filterOptions.getFrench().orElse(null))
 								.function(function)
 								.perm(filterOptions.isPerm().orElse(true))
 								.skill(skill)

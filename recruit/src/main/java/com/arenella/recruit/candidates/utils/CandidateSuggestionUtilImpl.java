@@ -1,6 +1,5 @@
 package com.arenella.recruit.candidates.utils;
 
-import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
@@ -209,51 +208,6 @@ public class CandidateSuggestionUtilImpl implements CandidateSuggestionUtil{
 	}
 	
 	/**
-	* Extracts the Language required
-	* @param filterOptions - requirements
-	* @return languages required
-	*/
-	private Set<Language> extractLanguageRequirements(CandidateFilterOptions filterOptions) {
-		
-		Set<Language> languageRequirements = new HashSet<>();
-		
-		if (filterOptions.getDutch().isPresent()) {
-			languageRequirements.add(Language.builder().language(LANGUAGE.DUTCH).level(filterOptions.getDutch().get()).build());
-		}
-		
-		if (filterOptions.getEnglish().isPresent()) {
-			languageRequirements.add(Language.builder().language(LANGUAGE.ENGLISH).level(filterOptions.getEnglish().get()).build());
-		}
-		
-		if (filterOptions.getFrench().isPresent()) {
-			languageRequirements.add(Language.builder().language(LANGUAGE.FRENCH).level(filterOptions.getFrench().get()).build());
-		}
-		
-		if (filterOptions.getGerman().isPresent()) {
-			languageRequirements.add(Language.builder().language(LANGUAGE.GERMAN).level(filterOptions.getGerman().get()).build());
-		}
-		
-		if (filterOptions.getItalian().isPresent()) {
-			languageRequirements.add(Language.builder().language(LANGUAGE.ITALIAN).level(filterOptions.getItalian().get()).build());
-		}
-		
-		if (filterOptions.getPolish().isPresent()) {
-			languageRequirements.add(Language.builder().language(LANGUAGE.POLISH).level(filterOptions.getPolish().get()).build());
-		}
-		
-		if (filterOptions.getPortuguese().isPresent()) {
-			languageRequirements.add(Language.builder().language(LANGUAGE.PORTUGUESE).level(filterOptions.getPortuguese().get()).build());
-		}
-		
-		if (filterOptions.getSpanish().isPresent()) {
-			languageRequirements.add(Language.builder().language(LANGUAGE.SPANISH).level(filterOptions.getSpanish().get()).build());
-		}
-		
-		return languageRequirements;
-		
-	}
-
-	/**
 	* Refer to the CandidateSuggestionUtil interface for details 
 	*/
 	@Override
@@ -263,7 +217,7 @@ public class CandidateSuggestionUtilImpl implements CandidateSuggestionUtil{
 			
 			int titleAccuracy		= this.getAccuracyOfTitle(candidate, searchTermKeywords);
 			int skillsAccuracy 		= this.getAccuracyOfSkillsMatch(candidate, filterOptions.getSkills(), !searchTermKeywords.isEmpty());
-			int languageAccuracy 	= this.getAccuracyOfLanguageMatch(candidate, extractLanguageRequirements(filterOptions)) ;
+			int languageAccuracy 	= this.getAccuracyOfLanguageMatch(candidate, filterOptions.getLanguages()) ;
 			
 			if ((skillsAccuracy == THRESHOLD_PERFECT || titleAccuracy == THRESHOLD_PERFECT) && languageAccuracy == 100) {
 				candidate.setAccuracySkills(convertPercentAccuracy(skillsAccuracy));
@@ -288,7 +242,7 @@ public class CandidateSuggestionUtilImpl implements CandidateSuggestionUtil{
 		try {
 			int titleAccuracy		= this.getAccuracyOfTitle(candidate, searchTermKeywords);
 			int skillsAccuracy 		= this.getAccuracyOfSkillsMatch(candidate, filterOptions.getSkills(), !searchTermKeywords.isEmpty());
-			int languageAccuracy 	= this.getAccuracyOfLanguageMatch(candidate, extractLanguageRequirements(filterOptions)) ;
+			int languageAccuracy 	= this.getAccuracyOfLanguageMatch(candidate, filterOptions.getLanguages()) ;
 			
 			if ((skillsAccuracy >= THRESHOLD_EXCELLENT || titleAccuracy >= 60) && languageAccuracy >= 60) {
 				candidate.setAccuracySkills(convertPercentAccuracy(skillsAccuracy));
@@ -311,7 +265,7 @@ public class CandidateSuggestionUtilImpl implements CandidateSuggestionUtil{
 		try {
 			int titleAccuracy		= this.getAccuracyOfTitle(candidate, searchTermKeywords);
 			int skillsAccuracy 		= this.getAccuracyOfSkillsMatch(candidate, filterOptions.getSkills(), !searchTermKeywords.isEmpty());
-			int languageAccuracy 	= this.getAccuracyOfLanguageMatch(candidate, extractLanguageRequirements(filterOptions)) ;
+			int languageAccuracy 	= this.getAccuracyOfLanguageMatch(candidate, filterOptions.getLanguages()) ;
 			
 			if ((skillsAccuracy >= THRESHOLD_GOOD || titleAccuracy >= 50) && languageAccuracy >= 50) {
 				candidate.setAccuracySkills(convertPercentAccuracy(skillsAccuracy));
@@ -334,7 +288,7 @@ public class CandidateSuggestionUtilImpl implements CandidateSuggestionUtil{
 		try {
 			int titleAccuracy		= this.getAccuracyOfTitle(candidate, searchTermKeywords);
 			int skillsAccuracy 		= this.getAccuracyOfSkillsMatch(candidate, filterOptions.getSkills(), !searchTermKeywords.isEmpty());
-			int languageAccuracy 	= this.getAccuracyOfLanguageMatch(candidate, extractLanguageRequirements(filterOptions)) ;
+			int languageAccuracy 	= this.getAccuracyOfLanguageMatch(candidate, filterOptions.getLanguages()) ;
 			
 			if ((skillsAccuracy >= THRESHOLD_AVERAGE || titleAccuracy >= 40) && languageAccuracy >= 40) {
 				candidate.setAccuracySkills(convertPercentAccuracy(skillsAccuracy));
@@ -357,7 +311,7 @@ public class CandidateSuggestionUtilImpl implements CandidateSuggestionUtil{
 		try {
 			int titleAccuracy		= this.getAccuracyOfTitle(candidate, searchTermKeywords);
 			int skillsAccuracy 		= this.getAccuracyOfSkillsMatch(candidate, filterOptions.getSkills(), !searchTermKeywords.isEmpty());
-			int languageAccuracy 	= this.getAccuracyOfLanguageMatch(candidate, extractLanguageRequirements(filterOptions)) ;
+			int languageAccuracy 	= this.getAccuracyOfLanguageMatch(candidate, filterOptions.getLanguages()) ;
 			
 			if ((skillsAccuracy >= THRESHOLD_POOR || titleAccuracy >= 30) && languageAccuracy >= 30) {
 				candidate.setAccuracySkills(convertPercentAccuracy(skillsAccuracy));

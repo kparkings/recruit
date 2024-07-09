@@ -29,14 +29,7 @@ public class CandidateFilterOptions {
 	private Boolean			 	available							= null;
 	private int 				yearsExperienceGtEq;
 	private int					yearsExperienceLtEq;
-	private Language.LEVEL 		dutch;
-	private Language.LEVEL 		english;
-	private Language.LEVEL 		french;
-	private Language.LEVEL 		german;
-	private Language.LEVEL 		italian;
-	private Language.LEVEL 		polish;
-	private Language.LEVEL 		portuguese;
-	private Language.LEVEL 		spanish;
+	private Set<Language>		languages							= new HashSet<>();
 	private Set<String>			skills								= new HashSet<>();
 	private String				firstname;
 	private String 				surname;
@@ -71,14 +64,7 @@ public class CandidateFilterOptions {
 		this.perm 							= builder.perm;
 		this.yearsExperienceGtEq 			= builder.yearsExperienceGtEq;
 		this.yearsExperienceLtEq			= builder.yearsExperienceLtEq;
-		this.dutch							= builder.dutch;
-		this.english						= builder.english;
-		this.french							= builder.french;
-		this.german							= builder.german;
-		this.italian						= builder.italian;
-		this.polish							= builder.polish;
-		this.portuguese						= builder.portuguese;
-		this.spanish						= builder.spanish;
+		this.languages						= builder.languages;
 		this.skills							= builder.skills;
 		this.firstname						= builder.firstname;
 		this.surname						= builder.surname;
@@ -90,6 +76,7 @@ public class CandidateFilterOptions {
 		this.ownerId						= builder.ownerId;
 		this.includeRequiresSponsorship	 	= builder.includeRequiresSponsorship;
 		this.registeredAfter				= builder.registeredAfter;
+		this.languages						= builder.languages;
 		
 	}
 	
@@ -182,111 +169,11 @@ public class CandidateFilterOptions {
 	}
 	
 	/**
-	* Returns the level of Dutch to filter on
-	* @return Candidates level in Dutch
+	* Returns the Languages to filter on
+	* @return languages to filter on
 	*/
-	public Optional<Language.LEVEL> getDutch(){
-		return Optional.ofNullable(this.dutch);
-	}
-	
-	/**
-	* Returns the level of English to filter on
-	* @return Candidate level in English
-	*/
-	public Optional<Language.LEVEL> getEnglish(){
-		return Optional.ofNullable(this.english);
-	}
-	
-	/**
-	* Returns the level of French to filter on
-	* @return Candidate level in French
-	*/
-	public Optional<Language.LEVEL> getFrench(){
-		return Optional.ofNullable(this.french);
-	}
-	
-	//REFACTOR
-	public Optional<Language.LEVEL> getGerman(){
-		return Optional.ofNullable(this.german);
-	}
-	
-	//REFACTOR
-	public Optional<Language.LEVEL> getItalian(){
-		return Optional.ofNullable(this.italian);
-	}
-	
-	//REFACTOR
-	public Optional<Language.LEVEL> getPolish(){
-		return Optional.ofNullable(this.polish);
-	}
-	
-	//REFACTOR
-	public Optional<Language.LEVEL> getPortuguese(){
-		return Optional.ofNullable(this.portuguese);
-	}
-	
-	//REFACTOR
-	public Optional<Language.LEVEL> getSpanish(){
-		return Optional.ofNullable(this.spanish);
-	}
-	
-	/**
-	* Sets the level of Dutch to filter on
-	* @return Candidates level in Dutch
-	*/
-	public void setDutch(Language.LEVEL dutch){
-		this.dutch = dutch;
-	}
-	
-	/**
-	* Sets the level of English to filter on
-	* @return Candidate level in English
-	*/
-	public void setEnglish(Language.LEVEL english){
-		this.english = english;
-	}
-	
-	/**
-	* Sets the level of French to filter on
-	* @return Candidate level in French
-	*/
-	public void setFrench(Language.LEVEL french){
-		this.french = french;
-	}
-	
-	/**
-	* Temp to be refacored
-	*/
-	public void setGerman(Language.LEVEL german){
-		this.german = german;
-	}
-	
-	/**
-	* Temp to be refacored
-	*/
-	public void setItalian(Language.LEVEL italian){
-		this.italian = italian;
-	}
-	
-	/**
-	* Temp to be refacored
-	*/
-	public void setPolish(Language.LEVEL polish){
-		this.polish = polish;
-	}
-	
-	/**
-	* Temp to be refacored
-	*/
-	public void setPortuguese(Language.LEVEL potruguese){
-		this.portuguese = potruguese;
-	}
-	
-	/**
-	* Temp to be refacored
-	*/
-	public void setSpanish(Language.LEVEL spanish){
-		this.spanish = spanish;
+	public Set<Language> getLanguages(){
+		return this.languages;
 	}
 	
 	/**
@@ -457,14 +344,7 @@ public class CandidateFilterOptions {
 		private Optional<Boolean> 	perm								= Optional.empty();
 		private int 				yearsExperienceGtEq;
 		private int					yearsExperienceLtEq;
-		private Language.LEVEL 		dutch;
-		private Language.LEVEL 		english;
-		private Language.LEVEL 		french;
-		private Language.LEVEL 		german;
-		private Language.LEVEL 		italian;
-		private Language.LEVEL 		polish;
-		private Language.LEVEL 		portuguese;
-		private Language.LEVEL 		spanish;
+		private Set<Language>		languages							= new HashSet<>();
 		private Set<String>			skills								= new HashSet<>();
 		private String				firstname;
 		private String 				surname;
@@ -599,63 +479,13 @@ public class CandidateFilterOptions {
 		}
 		
 		/**
-		* Sets the level of Dutch needed to be included in the Search results
-		* @param perm - Level of Dutch needed to be included in the Search results
+		* Adds the Languages to filter on. Candidate must speak at least 1 of the 
+		* Languages to be included in the results
+		* @param languages - Languages to filter on
 		* @return Builder
 		*/
-		public CandidateFilterOptionsBuilder dutch(Language.LEVEL dutch) {
-			this.dutch = dutch;
-			return this;
-		}
-		
-		/**
-		* Sets the level of English needed to be included in the Search results
-		* @param perm - Level of English needed to be included in the Search results
-		* @return Builder
-		*/
-		public CandidateFilterOptionsBuilder english(Language.LEVEL english) {
-			this.english = english;
-			return this;
-		}
-		
-		
-		/**
-		* Sets the level of French needed to be included in the Search results
-		* @param perm - Level of French needed to be included in the Search results
-		* @return Builder
-		*/
-		public CandidateFilterOptionsBuilder french(Language.LEVEL french) {
-			this.french = french;
-			return this;
-		}
-		
-		//REFACTOR
-		public CandidateFilterOptionsBuilder german(Language.LEVEL german) {
-			this.german = german;
-			return this;
-		}
-		
-		//REFACTOR
-		public CandidateFilterOptionsBuilder italian(Language.LEVEL italian) {
-			this.italian = italian;
-			return this;
-		}
-		
-		//REFACTOR
-		public CandidateFilterOptionsBuilder polish(Language.LEVEL polish) {
-			this.polish = polish;
-			return this;
-		}
-		
-		//REFACTOR
-		public CandidateFilterOptionsBuilder portuguese(Language.LEVEL portuguese) {
-			this.portuguese = portuguese;
-			return this;
-		}
-		
-		//REFACTOR
-		public CandidateFilterOptionsBuilder spanish(Language.LEVEL spanish) {
-			this.spanish = spanish;
+		public CandidateFilterOptionsBuilder languages(Set<Language> languages) {
+			this.languages = languages;
 			return this;
 		}
 		

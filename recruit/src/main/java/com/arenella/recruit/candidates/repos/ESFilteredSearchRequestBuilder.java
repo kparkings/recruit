@@ -5,9 +5,9 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.arenella.recruit.candidates.beans.CandidateFilterOptions;
-import com.arenella.recruit.candidates.beans.Language.LANGUAGE;
 import com.arenella.recruit.candidates.enums.FREELANCE;
 import com.arenella.recruit.candidates.enums.PERM;
 
@@ -75,10 +75,11 @@ public class ESFilteredSearchRequestBuilder {
 			List<FieldValue> fieldValueList = filterOptions.getSkills().stream().map(FieldValue::of).toList();
 			 
 			 TermsQueryField termsQueryField = new TermsQueryField.Builder()
-                   .value(fieldValueList)
+				   .value(fieldValueList)
                    .build();
 			 
 			mustQueries.add(TermsQuery.of(m -> m
+					.queryName("skills")
 					.field("skills")
 					.terms(termsQueryField)
 					
@@ -86,32 +87,72 @@ public class ESFilteredSearchRequestBuilder {
 			
 		}
 		
-		if (!filterOptions.getDutch().isEmpty()) {
+		if (!filterOptions.getLanguages().isEmpty()) {
+			
+			
+			List<String> 		languages 		= filterOptions.getLanguages().stream().map(l -> l.getLanguage().toString()).map(l -> l.toUpperCase()).collect(Collectors.toList());
+			List<FieldValue> 	fieldValueList 	= languages.stream().map(FieldValue::of).toList();
+			
+			/**
+			* For speed. Almost all candidates speak English. Therefore we filter on the remaining languages which in most
+			* cases will also return English. The accuracy check in the code above will still be able to take into account
+			* the English language selection.
+			* 
+			* The only risk is if the filters have English and something else and the only language the candidate is English
+			* they will not appear in the results but this should affect so few searches that the performance gain outweights 
+			* the negatives. 
+			*/
+			if (filterOptions.getLanguages().size() >1 ) {
+				languages = languages.stream().filter(l -> !l.equals("ENGLSH")).collect(Collectors.toList());
+			}
+			
+			 TermsQueryField termsQueryField = new TermsQueryField.Builder()
+                  .value(fieldValueList)
+                  .build();
+			 
+			mustQueries.add(TermsQuery.of(m -> m.queryName("languages").field("languages.language.keyword").terms(termsQueryField))._toQuery());
+			
+			
 			mustQueries.add(BoolQuery.of(m -> m
-				.queryName("dutch")
-				.must(List.of(
-						MatchQuery.of(m1 -> m1.field("language").query(LANGUAGE.DUTCH.toString()))._toQuery(),
-						MatchQuery.of(m2 -> m2.field("language").query(filterOptions.getDutch().get().toString()))._toQuery())
-			))._toQuery());
+							.queryName("languages")
+							.must(List.of(
+									TermsQuery.of(t -> t.queryName("language_lang").field("languages.language.keyword").terms(termsQueryField))._toQuery())
+							)
+							.mustNot(List.of(
+									MatchQuery.of(m1 -> m1.field("languages.level.keyword").query("UNKNOWN"))._toQuery())
+							)
+							)._toQuery());
+			
+			//MatchQuery.of(t -> t.queryName("languages").field("languages.level.keyword").equals("UNKNOWN"))._toQuery())
+			
 		}
 		
-		if (!filterOptions.getFrench().isEmpty()) {
-			mustQueries.add(BoolQuery.of(m -> m
-					.queryName("french")
-					.must(List.of(
-							MatchQuery.of(m1 -> m1.field("language").query(LANGUAGE.FRENCH.toString()))._toQuery(),
-							MatchQuery.of(m2 -> m2.field("language").query(filterOptions.getFrench().get().toString()))._toQuery())
-				))._toQuery());
-		}
+		//if (!filterOptions.getDutch().isEmpty()) {
+		//	mustQueries.add(BoolQuery.of(m -> m
+		//		.queryName("dutch")
+		//		.must(List.of(
+		//				MatchQuery.of(m1 -> m1.field("language").query(LANGUAGE.DUTCH.toString()))._toQuery(),
+		//				MatchQuery.of(m2 -> m2.field("language").query(filterOptions.getDutch().get().toString()))._toQuery())
+		//	))._toQuery());
+		//}
 		
-		if (!filterOptions.getEnglish().isEmpty()) {
-			mustQueries.add(BoolQuery.of(m -> m
-					.queryName("english")
-					.must(List.of(
-							MatchQuery.of(m1 -> m1.field("language").query(LANGUAGE.ENGLISH.toString()))._toQuery(),
-							MatchQuery.of(m2 -> m2.field("language").query(filterOptions.getEnglish().get().toString()))._toQuery())
-				))._toQuery());
-		}
+		//if (!filterOptions.getFrench().isEmpty()) {
+		//	mustQueries.add(BoolQuery.of(m -> m
+		//			.queryName("french")
+		//			.must(List.of(
+		//					MatchQuery.of(m1 -> m1.field("language").query(LANGUAGE.FRENCH.toString()))._toQuery(),
+		//					MatchQuery.of(m2 -> m2.field("language").query(filterOptions.getFrench().get().toString()))._toQuery())
+		//		))._toQuery());
+		//}
+		
+		//if (!filterOptions.getEnglish().isEmpty()) {
+		//	mustQueries.add(BoolQuery.of(m -> m
+		//			.queryName("english")
+		//			.must(List.of(
+		//					MatchQuery.of(m1 -> m1.field("language").query(LANGUAGE.ENGLISH.toString()))._toQuery(),
+		//					MatchQuery.of(m2 -> m2.field("language").query(filterOptions.getEnglish().get().toString()))._toQuery())
+		//		))._toQuery());
+		//}
 		
 		if (!filterOptions.getCountries().isEmpty()) {
 			
@@ -122,6 +163,7 @@ public class ESFilteredSearchRequestBuilder {
                      .build();
 			 
 			mustQueries.add(TermsQuery.of(m -> m
+					.queryName("country")
 					.field("country")
 					.terms(termsQueryField)
 					
@@ -136,6 +178,7 @@ public class ESFilteredSearchRequestBuilder {
                     .build();
 			 
 			mustQueries.add(TermsQuery.of(m -> m
+					.queryName("function")
 					.field("function")
 					.terms(termsQueryField)
 					
