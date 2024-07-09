@@ -5567,3 +5567,94 @@ user global configuration and to define the default location to store repositori
 not correct please set the HOME environment variable and restart Eclipse. Otherwise Git for Windows and
 EGit might behave differently since they see different configuration options.
 This warning can be switched off on the Team > Git > Confirmations and Warnings preference page.
+
+!ENTRY org.eclipse.jdt.debug.ui 4 150 2024-07-09 18:06:01.284
+!MESSAGE Internal Error
+!STACK 1
+org.eclipse.debug.core.DebugException: Invalid stack frame
+	at org.eclipse.jdt.internal.debug.core.model.JDIStackFrame.getUnderlyingStackFrame(JDIStackFrame.java:1378)
+	at org.eclipse.jdt.internal.debug.core.model.JDIStackFrame.getUnderlyingVisibleVariables(JDIStackFrame.java:985)
+	at org.eclipse.jdt.internal.debug.core.model.JDIStackFrame.getVariables0(JDIStackFrame.java:388)
+	at org.eclipse.jdt.internal.debug.core.model.JDIStackFrame.getVariables(JDIStackFrame.java:307)
+	at org.eclipse.jdt.internal.debug.ui.JavaDebugHover.containsVariable(JavaDebugHover.java:620)
+	at org.eclipse.jdt.internal.debug.ui.JavaDebugHover.lambda$2(JavaDebugHover.java:639)
+	at org.eclipse.jdt.internal.debug.ui.JavaDebugHover.findFirstFrameForVariable(JavaDebugHover.java:604)
+	at org.eclipse.jdt.internal.debug.ui.JavaDebugHover.getHoverInfo2(JavaDebugHover.java:469)
+	at org.eclipse.jdt.internal.ui.text.java.hover.BestMatchHover.getHoverInfo2(BestMatchHover.java:163)
+	at org.eclipse.jdt.internal.ui.text.java.hover.BestMatchHover.getHoverInfo2(BestMatchHover.java:130)
+	at org.eclipse.jdt.internal.ui.text.java.hover.JavaEditorTextHoverProxy.getHoverInfo2(JavaEditorTextHoverProxy.java:89)
+	at org.eclipse.jface.text.TextViewerHoverManager$1.run(TextViewerHoverManager.java:155)
+Caused by: java.lang.IllegalStateException
+	at org.eclipse.jdt.internal.debug.core.model.JDIStackFrame.getUnderlyingStackFrame(JDIStackFrame.java:1381)
+	... 11 more
+!SUBENTRY 1 org.eclipse.jdt.debug 4 100 2024-07-09 18:06:01.289
+!MESSAGE Invalid stack frame
+!STACK 0
+java.lang.IllegalStateException
+	at org.eclipse.jdt.internal.debug.core.model.JDIStackFrame.getUnderlyingStackFrame(JDIStackFrame.java:1381)
+	at org.eclipse.jdt.internal.debug.core.model.JDIStackFrame.getUnderlyingVisibleVariables(JDIStackFrame.java:985)
+	at org.eclipse.jdt.internal.debug.core.model.JDIStackFrame.getVariables0(JDIStackFrame.java:388)
+	at org.eclipse.jdt.internal.debug.core.model.JDIStackFrame.getVariables(JDIStackFrame.java:307)
+	at org.eclipse.jdt.internal.debug.ui.JavaDebugHover.containsVariable(JavaDebugHover.java:620)
+	at org.eclipse.jdt.internal.debug.ui.JavaDebugHover.lambda$2(JavaDebugHover.java:639)
+	at org.eclipse.jdt.internal.debug.ui.JavaDebugHover.findFirstFrameForVariable(JavaDebugHover.java:604)
+	at org.eclipse.jdt.internal.debug.ui.JavaDebugHover.getHoverInfo2(JavaDebugHover.java:469)
+	at org.eclipse.jdt.internal.ui.text.java.hover.BestMatchHover.getHoverInfo2(BestMatchHover.java:163)
+	at org.eclipse.jdt.internal.ui.text.java.hover.BestMatchHover.getHoverInfo2(BestMatchHover.java:130)
+	at org.eclipse.jdt.internal.ui.text.java.hover.JavaEditorTextHoverProxy.getHoverInfo2(JavaEditorTextHoverProxy.java:89)
+	at org.eclipse.jface.text.TextViewerHoverManager$1.run(TextViewerHoverManager.java:155)
+
+!ENTRY org.eclipse.ui 4 0 2024-07-09 18:23:13.868
+!MESSAGE Unhandled event loop exception
+!STACK 0
+java.lang.IllegalStateException: must specify at least one linked position
+	at org.eclipse.jface.text.link.LinkedModeModel.enforceNotEmpty(LinkedModeModel.java:530)
+	at org.eclipse.jface.text.link.LinkedModeModel.install(LinkedModeModel.java:484)
+	at org.eclipse.jface.text.link.LinkedModeModel.forceInstall(LinkedModeModel.java:441)
+	at org.eclipse.jdt.internal.ui.viewsupport.LinkedProposalModelPresenter.enterLinkedMode(LinkedProposalModelPresenter.java:105)
+	at org.eclipse.jdt.internal.ui.text.correction.proposals.LinkedCorrectionProposal.performChange(LinkedCorrectionProposal.java:161)
+	at org.eclipse.jdt.ui.text.java.correction.CUCorrectionProposal._apply(CUCorrectionProposal.java:167)
+	at org.eclipse.jdt.ui.text.java.correction.CUCorrectionProposal.apply(CUCorrectionProposal.java:154)
+	at org.eclipse.jdt.internal.ui.text.java.hover.AbstractAnnotationHover$AnnotationInformationControl.apply(AbstractAnnotationHover.java:561)
+	at org.eclipse.jdt.internal.ui.text.java.hover.AbstractAnnotationHover$AnnotationInformationControl$4.widgetSelected(AbstractAnnotationHover.java:532)
+	at org.eclipse.swt.widgets.TypedListener.handleEvent(TypedListener.java:252)
+	at org.eclipse.swt.widgets.EventTable.sendEvent(EventTable.java:89)
+	at org.eclipse.swt.widgets.Display.sendEvent(Display.java:4256)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1066)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1090)
+	at org.eclipse.swt.widgets.Widget.sendSelectionEvent(Widget.java:1107)
+	at org.eclipse.swt.widgets.Link.wmNotifyChild(Link.java:725)
+	at org.eclipse.swt.widgets.Control.wmNotify(Control.java:5797)
+	at org.eclipse.swt.widgets.Composite.wmNotify(Composite.java:1961)
+	at org.eclipse.swt.widgets.Control.WM_NOTIFY(Control.java:5365)
+	at org.eclipse.swt.widgets.Control.windowProc(Control.java:4799)
+	at org.eclipse.swt.widgets.Display.windowProc(Display.java:5022)
+	at org.eclipse.swt.internal.win32.OS.CallWindowProc(Native Method)
+	at org.eclipse.swt.widgets.Link.callWindowProc(Link.java:162)
+	at org.eclipse.swt.widgets.Widget.wmLButtonUp(Widget.java:2025)
+	at org.eclipse.swt.widgets.Control.WM_LBUTTONUP(Control.java:5178)
+	at org.eclipse.swt.widgets.Control.windowProc(Control.java:4780)
+	at org.eclipse.swt.widgets.Display.windowProc(Display.java:5022)
+	at org.eclipse.swt.internal.win32.OS.DispatchMessage(Native Method)
+	at org.eclipse.swt.widgets.Display.readAndDispatch(Display.java:3640)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine$5.run(PartRenderingEngine.java:1155)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:338)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine.run(PartRenderingEngine.java:1046)
+	at org.eclipse.e4.ui.internal.workbench.E4Workbench.createAndRunUI(E4Workbench.java:155)
+	at org.eclipse.ui.internal.Workbench.lambda$3(Workbench.java:643)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:338)
+	at org.eclipse.ui.internal.Workbench.createAndRunWorkbench(Workbench.java:550)
+	at org.eclipse.ui.PlatformUI.createAndRunWorkbench(PlatformUI.java:171)
+	at org.eclipse.ui.internal.ide.application.IDEApplication.start(IDEApplication.java:152)
+	at org.eclipse.equinox.internal.app.EclipseAppHandle.run(EclipseAppHandle.java:203)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.runApplication(EclipseAppLauncher.java:136)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.start(EclipseAppLauncher.java:104)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:402)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:255)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.eclipse.equinox.launcher.Main.invokeFramework(Main.java:659)
+	at org.eclipse.equinox.launcher.Main.basicRun(Main.java:596)
+	at org.eclipse.equinox.launcher.Main.run(Main.java:1467)

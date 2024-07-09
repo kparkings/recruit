@@ -106,24 +106,26 @@ public class ESFilteredSearchRequestBuilder {
 				languages = languages.stream().filter(l -> !l.equals("ENGLSH")).collect(Collectors.toList());
 			}
 			
-			 TermsQueryField termsQueryField = new TermsQueryField.Builder()
-                  .value(fieldValueList)
-                  .build();
+			 //TermsQueryField termsQueryField = new TermsQueryField.Builder()
+              //    .value(fieldValueList)
+               //   .build();
 			 
-			mustQueries.add(TermsQuery.of(m -> m.queryName("languages").field("languages.language.keyword").terms(termsQueryField))._toQuery());
+			//mustQueries.add(TermsQuery.of(m -> m.queryName("languages").field("languages.language.keyword").terms(termsQueryField))._toQuery());
 			
+			
+			List<co.elastic.clients.elasticsearch._types.query_dsl.Query> langQueries 		= new ArrayList<>();
+			
+			languages.stream().forEach(l -> {
+				langQueries.add(BoolQuery.of(m -> m
+						.must(List.of(
+								MatchQuery.of(m1 -> m1.field("languages.language.keyword").query(l))._toQuery(),
+								MatchQuery.of(m2 -> m2.field("languages.level.keyword").query("PROFICIENT"))._toQuery()))
+					)._toQuery());
+			});
 			
 			mustQueries.add(BoolQuery.of(m -> m
-							.queryName("languages")
-							.must(List.of(
-									TermsQuery.of(t -> t.queryName("language_lang").field("languages.language.keyword").terms(termsQueryField))._toQuery())
-							)
-							.mustNot(List.of(
-									MatchQuery.of(m1 -> m1.field("languages.level.keyword").query("UNKNOWN"))._toQuery())
-							)
-							)._toQuery());
-			
-			//MatchQuery.of(t -> t.queryName("languages").field("languages.level.keyword").equals("UNKNOWN"))._toQuery())
+					.queryName("languages")
+					.should(langQueries).minimumShouldMatch("1"))._toQuery());
 			
 		}
 		
