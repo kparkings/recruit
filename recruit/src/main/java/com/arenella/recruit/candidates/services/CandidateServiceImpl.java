@@ -554,9 +554,28 @@ public class CandidateServiceImpl implements CandidateService{
 			return new PageImpl<>(suggestions.stream().limit(maxSuggestions).collect(Collectors.toCollection(LinkedList::new)));			
 		}
 		
+		boolean isTotalFilteredResultsLesstThanSinglePage = false;
+		Page<Candidate> candidates = null;
+		
 		while (true) {
 		
-			Page<Candidate> candidates = candidateRepo.findAll(filterOptions, this.esClient, pageable);
+			
+			
+			if (!isTotalFilteredResultsLesstThanSinglePage) {
+				candidates = candidateRepo.findAll(filterOptions, this.esClient, pageable);
+				
+			}
+			
+			//candidates = candidateRepo.findAll(filterOptions, this.esClient, pageable);
+			
+			/**
+			* Will only ever be 1 page so no need to keep fetching from storage 
+			*/
+			if (pageCounter == 0 && candidates.getContent().size() < maxSuggestions) {
+				isTotalFilteredResultsLesstThanSinglePage = true;
+			}
+			
+			
 			
 			candidates.getContent().stream().filter(c -> !suggestionIds.contains(c.getCandidateId())).forEach(candidate -> {
 		
@@ -627,7 +646,7 @@ public class CandidateServiceImpl implements CandidateService{
 			}
 			
 			pageCounter = pageCounter + 1;
-			pageable 	= PageRequest.of(pageCounter,750);
+			pageable 	= PageRequest.of(pageCounter,100);
 		}
 
 	}
