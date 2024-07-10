@@ -627,7 +627,7 @@ public class CandidateServiceImpl implements CandidateService{
 			}
 			
 			pageCounter = pageCounter + 1;
-			pageable 	= PageRequest.of(pageCounter,100);
+			pageable 	= PageRequest.of(pageCounter,750);
 		}
 
 	}
