@@ -29,7 +29,7 @@ public class OpenPositionTest {
 	private ContractType 	contractType			= ContractType.CONTRACT;
 	private String	 		renumeration			= "500 euros per day";
 	private LocalDate 		startDate				= LocalDate.of(2022, 5, 31);
-	private LocalDate 		positionClosingDate		= LocalDate.of(2022, 6, 14);;
+	private LocalDate 		positionClosingDate		= LocalDate.of(2022, 6, 14);
 	private String 			description			 	= "Some long descriptive text";
 	private String 			comments				= "Some comments fromt he Recruiter";
 	private LocalDate		created					= LocalDate.of(2022, 9, 26);
@@ -59,6 +59,7 @@ public class OpenPositionTest {
 					.created(created)
 					.active(active)
 					.skills(skills)
+					.created(created)
 				.build();
 		
 		assertEquals(position.getComments(), 				comments);
@@ -117,6 +118,7 @@ public class OpenPositionTest {
 		
 		assertTrue(position.getId() instanceof UUID);
 		assertEquals(position.getRecruiterId(), recruiterId);
+		assertNotNull(position.getCreated());
 		
 		assertTrue(position.isActive());
 		

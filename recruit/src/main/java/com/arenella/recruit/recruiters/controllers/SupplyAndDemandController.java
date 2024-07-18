@@ -128,24 +128,6 @@ public class SupplyAndDemandController {
 	}
 	
 	/**
-	* Returns all Candidates offered by Recruiters
-	* @return - Offered Candidates
-	*/
-	//@GetMapping(value="/v1/offered-candidate/")
-	//@PreAuthorize("hasRole('ROLE_RECRUITER') or hasRole('ROLE_ADMIN')")
-	//public ResponseEntity<Set<OfferedCandidateAPIOutbound>> fetchOfferedCandidates(Principal principal){
-		
-	//	Set<UUID> viewedPosts = this.supplyAndDemandService.fetchViewedEventsByRecruiter(EventType.OFFERED_CANDIDATE, principal.getName());
-		
-	//	return ResponseEntity
-	//			.ok()
-	//			.body(this.supplyAndDemandService.fetchOfferedCandidates()
-	//					.stream()
-	//					.map(c -> OfferedCandidateAPIOutbound.convertFromDomain(c, this.supplyAndDemandService.fetchRecruiterDetails(c.getRecruiterId()), viewedPosts))
-	//					.collect(Collectors.toCollection(LinkedHashSet::new)));
-	//}
-	
-	/**
 	* Returns all Open Positions from recruiters
 	* @return - Open positions posted by Recruiters
 	*/
@@ -162,23 +144,6 @@ public class SupplyAndDemandController {
 						.map(c -> OpenPositionAPIOutbound.convertFromDomain(c, this.supplyAndDemandService.fetchRecruiterDetails(c.getRecruiterId()), viewedPosts))
 						.collect(Collectors.toCollection(LinkedHashSet::new)));
 	}
-	
-	/**
-	* Returns all Candidates offered by a specific Recruiter
-	* @param recruiterId - Unique id of the Recruiter
-	* @return Candidates offered by the Recruiter
-	*/
-	//@GetMapping(value="/v1/offered-candidate/rectuiter/{id}")
-	//@PreAuthorize("hasRole('ROLE_RECRUITER') or hasRole('ROLE_ADMIN')")
-	//public ResponseEntity<Set<OfferedCandidateAPIOutbound>> fetchOfferedCandidates(@PathVariable("id") String recruiterId, Principal principal){
-	//	Set<UUID> viewedPosts = this.supplyAndDemandService.fetchViewedEventsByRecruiter(EventType.OFFERED_CANDIDATE, principal.getName());
-	//	return ResponseEntity
-	//			.ok()
-	//			.body(this.supplyAndDemandService.fetchOfferedCandidates(recruiterId)
-	//					.stream()
-	//					.map(c -> OfferedCandidateAPIOutbound.convertFromDomain(c, this.supplyAndDemandService.fetchRecruiterDetails(c.getRecruiterId()),viewedPosts))
-	//					.collect(Collectors.toCollection(LinkedHashSet::new)));
-	//}
 	
 	/**
 	* Returns all Positions advertised by a specific Recruiter

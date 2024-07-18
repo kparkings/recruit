@@ -7,6 +7,7 @@
 		    <span class="nav-link tabNav tabNavActive" *ngIf="showDemand  && unseenOpenPositions <= 0" (click)="switchTab('showDemand')"><span style="margin-left:20px;">&nbsp;</span>{{'arenella-recruiter-mp-open-roles' | translate}}</span>
 		    <span class="nav-link tabNav" *ngIf="!showDemand && unseenOpenPositions > 0" (click)="switchTab('showDemand')"><span class="unseen-posts">{{unseenOpenPositions}}</span>{{'arenella-recruiter-mp-open-roles' | translate}}</span>
 		    <span class="nav-link tabNav" *ngIf="!showDemand   && unseenOpenPositions <= 0" (click)="switchTab('showDemand')"><span style="margin-left:20px;">&nbsp;</span>{{'arenella-recruiter-mp-open-roles' | translate}}</span>
+		    
 		  </li>
 		  <li class="nav-item">
 		    <span class="nav-link tabNav tabNavActive" *ngIf="showSupply  && unseenOfferedCandidates >  0"  (click)="switchTab('showSupply')"><span class="unseen-posts">{{unseenOfferedCandidates}}</span>{{'arenella-recruiter-mp-your-candidates' | translate}}</span>
@@ -56,6 +57,8 @@
 				<button class="btn btn-secondary arenella-btn" (click)="fetchOpenPositions()" 		*ngIf="showJustMyOpenPositionsActive">{{'arenella-recruiter-mp-btn-all-roles' | translate}}</button>
 				<button class="btn btn-secondary arenella-btn" (click)="switchTab('addDemand')" 	*ngIf="!isAuthenticatedAsAdmin() && passedCreditCheck">{{'arenella-recruiter-mp-btn-make-request' | translate}}</button>
 				<button class="btn btn-secondary arenella-btn" (click)="showNoCredits()" 			*ngIf="!isAuthenticatedAsAdmin() && !passedCreditCheck">{{'arenella-recruiter-mp-btn-request-candidate' | translate}}</button>
+				<button class="btn btn-secondary arenella-btn" (click)="showPublicity()"			*ngIf="showDemand && isAuthenticatedAsAdmin()">{{'arenella-mp-publicity' | translate}}</button>
+		
 			</div>
 			<p>{{'arenella-recruiter-mp-roles-desc' | translate}}
 			 
@@ -362,5 +365,23 @@
 		<div class="modal-body" *ngIf="showFilterByJonSpecFailure">
 			<p>{{'arenella-recruiter-mp-box-spec-upld-msg-failure' | translate}}</p>
 		</div>
+	</div>
+</dialog> 
+<dialog #mpPublicityBox>
+	<div class="modal-header">
+		<h4 class="modal-title">Publicity</h4>
+ 		<div class="filter-close-box" (click)="closeModal()">X</div>
+	</div>
+	<div class="feedbackBox">
+		<div class="modal-body">
+			<table>
+				<tbody>
+					<tr  *ngFor="let openPosition of openPositions.slice(0,10)" class="as-link">
+						<td class="table-bdy-td-publicity" align="center">{{openPosition.country}}</td>
+						<td class="table-bdy-td-publicity">{{openPosition.positionTitle}}</td>
+					</tr>
+				</tbody>
+			</table>	
+		</div>		
 	</div>
 </dialog> 

@@ -28,6 +28,7 @@ export class RecruiterMarketplaceComponent implements OnInit {
 	@ViewChild('feedbackBox', { static: false }) private feedbackBox:any;
 	@ViewChild('contactBox', { static: false }) private contactBox:any;
 	@ViewChild('specUploadBox', { static: false }) private specUploadBox:any;
+	@ViewChild('mpPublicityBox', { static: false }) private mpPublicityBox:any;
 
 	public unseenOfferedCandidates:number 				= 0;
 	public unseenOpenPositions:number 					= 0;
@@ -615,6 +616,7 @@ export class RecruiterMarketplaceComponent implements OnInit {
 		this.feedbackBox.nativeElement.close();
 		this.contactBox.nativeElement.close();
 		this.specUploadBox.nativeElement.close();
+		this.mpPublicityBox.nativeElement.close();
 		this.validationErrors = new Array<string>();
 	}
 	
@@ -818,6 +820,13 @@ export class RecruiterMarketplaceComponent implements OnInit {
 		this.showFilterByJonSpecFailure  	= false;
 		this.showFilterByJobSpec 			= true;
 		this.specUploadBox.nativeElement.showModal();
+	}
+	
+	/**
+	* Shows the publicity box
+	*/
+	public showPublicity():void{
+		this.mpPublicityBox.nativeElement.showModal();
 	}
 	
 	private jobSpecFile!:File;

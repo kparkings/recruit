@@ -303,3 +303,8 @@ td{
     min-width: 72%;
     max-width: 72%;
 }
+
+.table-bdy-td-publicity{
+	text-align:left;
+	padding-left:100px;
+}
