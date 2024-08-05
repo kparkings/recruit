@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -187,9 +187,9 @@ public class SupplyAndDemandServiceImplTest {
 		final UUID id2 = UUID.randomUUID();
 		final UUID id3 = UUID.randomUUID();
 		
-		final LocalDate created1 = LocalDate.of(2001, 1, 1);
-		final LocalDate created2 = LocalDate.of(2003, 1, 1);
-		final LocalDate created3 = LocalDate.of(2002, 1, 1);
+		final LocalDateTime created1 = LocalDateTime.of(2001, 1, 1, 0, 0, 0);
+		final LocalDateTime created2 = LocalDateTime.of(2003, 1, 1, 0, 0, 0);
+		final LocalDateTime created3 = LocalDateTime.of(2002, 1, 1, 0, 0, 0);
 		
 		OpenPosition c1 = OpenPosition.builder().id(id1).created(created1).build();
 		OpenPosition c2 = OpenPosition.builder().id(id2).created(created2).build();
@@ -216,9 +216,9 @@ public class SupplyAndDemandServiceImplTest {
 		final UUID id2 = UUID.randomUUID();
 		final UUID id3 = UUID.randomUUID();
 		
-		final LocalDate created1 = LocalDate.of(2001, 1, 1);
-		final LocalDate created2 = LocalDate.of(2003, 1, 1);
-		final LocalDate created3 = LocalDate.of(2002, 1, 1);
+		final LocalDateTime created1 = LocalDateTime.of(2001, 1, 1, 0, 0, 0);
+		final LocalDateTime created2 = LocalDateTime.of(2003, 1, 1, 0, 0, 0);
+		final LocalDateTime created3 = LocalDateTime.of(2002, 1, 1, 0, 0, 0);
 		
 		OpenPosition c1 = OpenPosition.builder().id(id1).created(created1).build();
 		OpenPosition c2 = OpenPosition.builder().id(id2).created(created2).build();

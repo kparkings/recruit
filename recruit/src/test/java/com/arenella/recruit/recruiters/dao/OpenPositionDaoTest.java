@@ -2,7 +2,7 @@ package com.arenella.recruit.recruiters.dao;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -21,9 +21,9 @@ public class OpenPositionDaoTest {
 	private static final UUID id2 = UUID.randomUUID();
 	private static final UUID id3 = UUID.randomUUID();
 	
-	private static final LocalDate created1 = LocalDate.of(2001, 1, 1);
-	private static final LocalDate created2 = LocalDate.of(2003, 1, 1);
-	private static final LocalDate created3 = LocalDate.of(2002, 1, 1);
+	private static final LocalDateTime created1 = LocalDateTime.of(2001, 1, 1, 0, 0, 0);
+	private static final LocalDateTime created2 = LocalDateTime.of(2003, 1, 1, 0, 0, 0);
+	private static final LocalDateTime created3 = LocalDateTime.of(2002, 1, 1, 0, 0, 0);
 	
 	/**
 	* Sets up test version of Interface

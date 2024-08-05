@@ -106,10 +106,6 @@ public interface CandidateRepository extends ElasticsearchRepository<CandidateDo
 		return Long.valueOf(this.save(CandidateDocument.convertToDocument(candidate)).getCandidateId());
 	}
 	
-	//@Query("{\"bool\": {\"must\": [{\"term\": {\"available\": true}},{\"range\": {\"registered\": {\"gte\":\"?0\"}}}]}}")
-	//public Set<CandidateDocument> findNewSinceLastDateRaw(@Param(value = "since") Date since);
-	
-	
 	/**
 	* Returns all the new candidates registered after a given date
 	* @param since - data after which candidates must have been registered

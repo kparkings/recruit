@@ -97,8 +97,6 @@ public class NewsFeedItemServiceImpl implements NewsFeedItemService{
 			this.newsFeedItemViewDao.deleteNewsFeedUserView(userId);
 		}
 		
-		
-		
 	}
 	
 }

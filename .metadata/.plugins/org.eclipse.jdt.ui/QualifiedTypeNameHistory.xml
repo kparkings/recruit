@@ -3,7 +3,6 @@
     <fullyQualifiedTypeName name="com.arenella.recruit.emailservice.beans.Email.EmailRecipient.ContactType"/>
     <fullyQualifiedTypeName name="com.arenella.recruit.emailservice.beans.Email.EmailRecipient"/>
     <fullyQualifiedTypeName name="org.joda.time.LocalDate"/>
-    <fullyQualifiedTypeName name="java.time.LocalDateTime"/>
     <fullyQualifiedTypeName name="com.arenella.recruit.candidates.controllers.CandidateSuggestionAPIOutbound"/>
     <fullyQualifiedTypeName name="java.security.Principal"/>
     <fullyQualifiedTypeName name="org.springframework.beans.factory.annotation.Autowired"/>
@@ -40,4 +39,7 @@
     <fullyQualifiedTypeName name="com.arenella.recruit.candidates.beans.Language"/>
     <fullyQualifiedTypeName name="com.arenella.recruit.candidates.beans.Language.LEVEL"/>
     <fullyQualifiedTypeName name="java.util.Optional"/>
+    <fullyQualifiedTypeName name="java.time.ZoneOffset"/>
+    <fullyQualifiedTypeName name="java.util.Comparator"/>
+    <fullyQualifiedTypeName name="java.time.LocalDateTime"/>
 </qualifiedTypeNameHistroy>

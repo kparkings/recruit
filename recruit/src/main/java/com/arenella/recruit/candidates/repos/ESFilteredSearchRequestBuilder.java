@@ -129,33 +129,6 @@ public class ESFilteredSearchRequestBuilder {
 			
 		}
 		
-		//if (!filterOptions.getDutch().isEmpty()) {
-		//	mustQueries.add(BoolQuery.of(m -> m
-		//		.queryName("dutch")
-		//		.must(List.of(
-		//				MatchQuery.of(m1 -> m1.field("language").query(LANGUAGE.DUTCH.toString()))._toQuery(),
-		//				MatchQuery.of(m2 -> m2.field("language").query(filterOptions.getDutch().get().toString()))._toQuery())
-		//	))._toQuery());
-		//}
-		
-		//if (!filterOptions.getFrench().isEmpty()) {
-		//	mustQueries.add(BoolQuery.of(m -> m
-		//			.queryName("french")
-		//			.must(List.of(
-		//					MatchQuery.of(m1 -> m1.field("language").query(LANGUAGE.FRENCH.toString()))._toQuery(),
-		//					MatchQuery.of(m2 -> m2.field("language").query(filterOptions.getFrench().get().toString()))._toQuery())
-		//		))._toQuery());
-		//}
-		
-		//if (!filterOptions.getEnglish().isEmpty()) {
-		//	mustQueries.add(BoolQuery.of(m -> m
-		//			.queryName("english")
-		//			.must(List.of(
-		//					MatchQuery.of(m1 -> m1.field("language").query(LANGUAGE.ENGLISH.toString()))._toQuery(),
-		//					MatchQuery.of(m2 -> m2.field("language").query(filterOptions.getEnglish().get().toString()))._toQuery())
-		//		))._toQuery());
-		//}
-		
 		if (!filterOptions.getCountries().isEmpty()) {
 			
 			 List<FieldValue> fieldValueList = filterOptions.getCountries().stream().map(c -> FieldValue.of(c.name())).toList();

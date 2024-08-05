@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.security.Principal;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Optional;
@@ -188,9 +188,9 @@ public class SupplyAndDemandControllerTest {
 		final UUID id2 = UUID.randomUUID();
 		final UUID id3 = UUID.randomUUID();
 		
-		final LocalDate created1 = LocalDate.of(2001, 1, 1);
-		final LocalDate created2 = LocalDate.of(2003, 1, 1);
-		final LocalDate created3 = LocalDate.of(2002, 1, 1);
+		final LocalDateTime created1 = LocalDateTime.of(2001, 1, 1, 0, 0 ,0);
+		final LocalDateTime created2 = LocalDateTime.of(2003, 1, 1, 0, 0 ,0);
+		final LocalDateTime created3 = LocalDateTime.of(2002, 1, 1, 0, 0, 0);
 		
 		OpenPosition c1 = OpenPosition.builder().id(id1).created(created1).build();
 		OpenPosition c2 = OpenPosition.builder().id(id2).created(created2).build();
@@ -219,9 +219,9 @@ public class SupplyAndDemandControllerTest {
 		final UUID id2 = UUID.randomUUID();
 		final UUID id3 = UUID.randomUUID();
 		
-		final LocalDate created1 = LocalDate.of(2001, 1, 1);
-		final LocalDate created2 = LocalDate.of(2003, 1, 1);
-		final LocalDate created3 = LocalDate.of(2002, 1, 1);
+		final LocalDateTime created1 = LocalDateTime.of(2001, 1, 1, 0, 0, 0);
+		final LocalDateTime created2 = LocalDateTime.of(2003, 1, 1, 0, 0, 0);
+		final LocalDateTime created3 = LocalDateTime.of(2002, 1, 1, 0, 0, 0);
 		
 		OpenPosition c1 = OpenPosition.builder().id(id1).created(created1).build();
 		OpenPosition c2 = OpenPosition.builder().id(id2).created(created2).build();
@@ -370,6 +370,37 @@ public class SupplyAndDemandControllerTest {
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		assertEquals(count, response.getBody());
 	
+	}
+	
+	/**
+	* Tests ordering
+	* @throws Exception
+	*/
+	@Test
+	public void testPostsInReverseCreatedDateOrder() throws Exception{
+		
+		final UUID id1 = UUID.randomUUID();
+		final UUID id2 = UUID.randomUUID();
+		final UUID id3 = UUID.randomUUID();
+		
+		final LocalDateTime created1 = LocalDateTime.of(2001, 1, 1, 0,0,2);
+		final LocalDateTime created2 = LocalDateTime.of(2003, 1, 1, 0,0,1);
+		final LocalDateTime created3 = LocalDateTime.of(2002, 1, 1, 0,0,3);
+		
+		OpenPosition c1 = OpenPosition.builder().id(id1).created(created1).build();
+		OpenPosition c2 = OpenPosition.builder().id(id2).created(created2).build();
+		OpenPosition c3 = OpenPosition.builder().id(id3).created(created3).build();
+		
+		Mockito.when(this.mockSupplyAndDemandService.fetchOpenPositions()).thenReturn(Set.of(c1,c2,c3));
+		
+		ResponseEntity<Set<OpenPositionAPIOutbound>> response = controller.fetchOpenPositions(this.mockUsernamePasswordAuthenticationToken);
+		
+		response.getBody().stream().filter(c -> c.getId()== id1).findAny().orElseThrow();
+		response.getBody().stream().filter(c -> c.getId()== id2).findAny().orElseThrow();
+		response.getBody().stream().filter(c -> c.getId()== id3).findAny().orElseThrow();
+		
+		assertEquals(HttpStatus.OK, response.getStatusCode());
+		
 	}
 	
 }

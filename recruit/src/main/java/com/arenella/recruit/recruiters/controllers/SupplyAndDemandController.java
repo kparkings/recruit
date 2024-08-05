@@ -1,6 +1,7 @@
 package com.arenella.recruit.recruiters.controllers;
 
 import java.security.Principal;
+import java.util.Comparator;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -142,6 +143,7 @@ public class SupplyAndDemandController {
 				.body(this.supplyAndDemandService.fetchOpenPositions()
 						.stream()
 						.map(c -> OpenPositionAPIOutbound.convertFromDomain(c, this.supplyAndDemandService.fetchRecruiterDetails(c.getRecruiterId()), viewedPosts))
+						.sorted(Comparator.comparing(OpenPositionAPIOutbound::getCreated).reversed())
 						.collect(Collectors.toCollection(LinkedHashSet::new)));
 	}
 	

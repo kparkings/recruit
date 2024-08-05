@@ -4260,3 +4260,1107 @@ This warning can be switched off on the Team > Git > Confirmations and Warnings 
 
 !ENTRY org.eclipse.lsp4e 1 0 2024-07-18 13:09:03.414
 !MESSAGE [Info]	Angular project loading finished
+!SESSION 2024-07-18 18:53:14.040 -----------------------------------------------
+eclipse.buildId=4.27.0.20230309-1200
+java.version=17.0.2
+java.vendor=Oracle Corporation
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=nl_NL
+Framework arguments:  -product org.eclipse.epp.package.java.product
+Command-line arguments:  -os win32 -ws win32 -arch x86_64 -product org.eclipse.epp.package.java.product
+
+!ENTRY ch.qos.logback.classic 1 0 2024-07-18 18:53:16.293
+!MESSAGE Activated before the state location was initialized. Retry after the state location is initialized.
+
+!ENTRY ch.qos.logback.classic 1 0 2024-07-18 18:53:28.722
+!MESSAGE Logback config file: C:\eclipse-projects\recruit\.metadata\.plugins\org.eclipse.m2e.logback\logback.2.1.100.20230106-1511.xml
+
+!ENTRY org.eclipse.jface 2 0 2024-07-18 18:53:33.432
+!MESSAGE Keybinding conflicts occurred.  They may interfere with normal accelerator operation.
+!SUBENTRY 1 org.eclipse.jface 2 0 2024-07-18 18:53:33.432
+!MESSAGE A conflict occurred for CTRL+SHIFT+T:
+Binding(CTRL+SHIFT+T,
+	ParameterizedCommand(Command(org.eclipse.jdt.ui.navigate.open.type,Open Type,
+		Open a type in a Java editor,
+		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
+		WorkbenchHandlerServiceHandler("org.eclipse.jdt.ui.navigate.open.type"),
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.ui.contexts.window,,,system)
+Binding(CTRL+SHIFT+T,
+	ParameterizedCommand(Command(org.eclipse.lsp4e.symbolinworkspace,Go to Symbol in Workspace,
+		,
+		Category(org.eclipse.lsp4e.category,Language Servers,null,true),
+		WorkbenchHandlerServiceHandler("org.eclipse.lsp4e.symbolinworkspace"),
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.ui.contexts.window,,,system)
+!SUBENTRY 1 org.eclipse.jface 2 0 2024-07-18 18:53:33.432
+!MESSAGE A conflict occurred for ALT+SHIFT+R:
+Binding(ALT+SHIFT+R,
+	ParameterizedCommand(Command(org.eclipse.jdt.ui.edit.text.java.rename.element,Rename - Refactoring ,
+		Rename the selected element,
+		Category(org.eclipse.jdt.ui.category.refactoring,Refactor - Java,Java Refactoring Actions,true),
+		WorkbenchHandlerServiceHandler("org.eclipse.jdt.ui.edit.text.java.rename.element"),
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.ui.contexts.window,,,system)
+Binding(ALT+SHIFT+R,
+	ParameterizedCommand(Command(org.eclipse.ui.edit.rename,Rename,
+		Rename the selected item,
+		Category(org.eclipse.ui.category.file,File,null,true),
+		WorkbenchHandlerServiceHandler("org.eclipse.ui.edit.rename"),
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.ui.contexts.window,,,system)
+
+!ENTRY org.eclipse.egit.ui 2 0 2024-07-18 18:53:46.694
+!MESSAGE Warning: The environment variable HOME is not set. The following directory will be used to store the Git
+user global configuration and to define the default location to store repositories: 'C:\Users\Hp'. If this is
+not correct please set the HOME environment variable and restart Eclipse. Otherwise Git for Windows and
+EGit might behave differently since they see different configuration options.
+This warning can be switched off on the Team > Git > Confirmations and Warnings preference page.
+
+!ENTRY org.eclipse.lsp4e 1 0 2024-07-18 18:54:25.394
+!MESSAGE [Info]	Angular project loading started
+
+!ENTRY org.eclipse.lsp4e 1 0 2024-07-18 18:54:25.561
+!MESSAGE [Info]	Angular project loading finished
+
+!ENTRY org.eclipse.lsp4e 1 0 2024-07-18 18:54:28.283
+!MESSAGE [Info]	Angular project loading started
+
+!ENTRY org.eclipse.lsp4e 1 0 2024-07-18 18:54:28.284
+!MESSAGE [Info]	Angular project loading finished
+!SESSION 2024-07-24 15:47:44.308 -----------------------------------------------
+eclipse.buildId=4.27.0.20230309-1200
+java.version=17.0.2
+java.vendor=Oracle Corporation
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=nl_NL
+Framework arguments:  -product org.eclipse.epp.package.java.product
+Command-line arguments:  -os win32 -ws win32 -arch x86_64 -product org.eclipse.epp.package.java.product
+
+!ENTRY ch.qos.logback.classic 1 0 2024-07-24 15:47:46.560
+!MESSAGE Activated before the state location was initialized. Retry after the state location is initialized.
+
+!ENTRY ch.qos.logback.classic 1 0 2024-07-24 15:47:56.353
+!MESSAGE Logback config file: C:\eclipse-projects\recruit\.metadata\.plugins\org.eclipse.m2e.logback\logback.2.1.100.20230106-1511.xml
+
+!ENTRY org.eclipse.jface 2 0 2024-07-24 15:48:00.373
+!MESSAGE Keybinding conflicts occurred.  They may interfere with normal accelerator operation.
+!SUBENTRY 1 org.eclipse.jface 2 0 2024-07-24 15:48:00.373
+!MESSAGE A conflict occurred for CTRL+SHIFT+T:
+Binding(CTRL+SHIFT+T,
+	ParameterizedCommand(Command(org.eclipse.jdt.ui.navigate.open.type,Open Type,
+		Open a type in a Java editor,
+		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
+		WorkbenchHandlerServiceHandler("org.eclipse.jdt.ui.navigate.open.type"),
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.ui.contexts.window,,,system)
+Binding(CTRL+SHIFT+T,
+	ParameterizedCommand(Command(org.eclipse.lsp4e.symbolinworkspace,Go to Symbol in Workspace,
+		,
+		Category(org.eclipse.lsp4e.category,Language Servers,null,true),
+		WorkbenchHandlerServiceHandler("org.eclipse.lsp4e.symbolinworkspace"),
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.ui.contexts.window,,,system)
+!SUBENTRY 1 org.eclipse.jface 2 0 2024-07-24 15:48:00.373
+!MESSAGE A conflict occurred for ALT+SHIFT+R:
+Binding(ALT+SHIFT+R,
+	ParameterizedCommand(Command(org.eclipse.jdt.ui.edit.text.java.rename.element,Rename - Refactoring ,
+		Rename the selected element,
+		Category(org.eclipse.jdt.ui.category.refactoring,Refactor - Java,Java Refactoring Actions,true),
+		WorkbenchHandlerServiceHandler("org.eclipse.jdt.ui.edit.text.java.rename.element"),
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.ui.contexts.window,,,system)
+Binding(ALT+SHIFT+R,
+	ParameterizedCommand(Command(org.eclipse.ui.edit.rename,Rename,
+		Rename the selected item,
+		Category(org.eclipse.ui.category.file,File,null,true),
+		WorkbenchHandlerServiceHandler("org.eclipse.ui.edit.rename"),
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.ui.contexts.window,,,system)
+
+!ENTRY org.eclipse.egit.ui 2 0 2024-07-24 15:48:11.927
+!MESSAGE Warning: The environment variable HOME is not set. The following directory will be used to store the Git
+user global configuration and to define the default location to store repositories: 'C:\Users\Hp'. If this is
+not correct please set the HOME environment variable and restart Eclipse. Otherwise Git for Windows and
+EGit might behave differently since they see different configuration options.
+This warning can be switched off on the Team > Git > Confirmations and Warnings preference page.
+
+!ENTRY org.eclipse.lsp4e 1 0 2024-07-24 15:51:30.222
+!MESSAGE [Info]	ESLint server running in node v18.13.0
+
+!ENTRY org.eclipse.lsp4e 2 0 2024-07-24 15:51:31.065
+!MESSAGE [Warning]	Using Typescript version (user-setting) 4.9.5 from path "C:\Users\Hp\.p2\pool\plugins\org.eclipse.wildwebdeveloper_1.0.2.202302250247\node_modules\typescript\lib\tsserver.js"
+
+!ENTRY org.eclipse.lsp4e 1 0 2024-07-24 15:51:31.670
+!MESSAGE [Info]	Typescript Server version info: {version=4.9.5, source=user-setting}
+
+!ENTRY org.eclipse.lsp4e 1 0 2024-07-24 15:51:32.912
+!MESSAGE [Info]	No ES Libary found for file: file:///C:/eclipse-projects/recruit/recruit-gui/src/app/suggestions.service.ts
+
+!ENTRY org.eclipse.lsp4e 2 0 2024-07-24 15:51:34.776
+!MESSAGE Could not get hover region due to timeout after 500 miliseconds
+!STACK 0
+java.util.concurrent.TimeoutException
+	at java.base/java.util.concurrent.CompletableFuture.timedGet(CompletableFuture.java:1960)
+	at java.base/java.util.concurrent.CompletableFuture.get(CompletableFuture.java:2095)
+	at org.eclipse.lsp4e.operations.hover.LSPTextHover.getHoverRegion(LSPTextHover.java:152)
+	at org.eclipse.ui.internal.genericeditor.hover.CompositeTextHover.getHoverRegion(CompositeTextHover.java:101)
+	at org.eclipse.jface.text.TextViewerHoverManager.computeInformation(TextViewerHoverManager.java:128)
+	at org.eclipse.jface.text.AbstractInformationControlManager.doShowInformation(AbstractInformationControlManager.java:1101)
+	at org.eclipse.jface.text.AbstractHoverInformationControlManager$MouseTracker.mouseHover(AbstractHoverInformationControlManager.java:511)
+	at org.eclipse.swt.widgets.TypedListener.handleEvent(TypedListener.java:212)
+	at org.eclipse.swt.widgets.EventTable.sendEvent(EventTable.java:89)
+	at org.eclipse.swt.widgets.Display.sendEvent(Display.java:4256)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1066)
+	at org.eclipse.swt.widgets.Display.runDeferredEvents(Display.java:4054)
+	at org.eclipse.swt.widgets.Display.readAndDispatch(Display.java:3642)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine$5.run(PartRenderingEngine.java:1155)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:338)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine.run(PartRenderingEngine.java:1046)
+	at org.eclipse.e4.ui.internal.workbench.E4Workbench.createAndRunUI(E4Workbench.java:155)
+	at org.eclipse.ui.internal.Workbench.lambda$3(Workbench.java:643)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:338)
+	at org.eclipse.ui.internal.Workbench.createAndRunWorkbench(Workbench.java:550)
+	at org.eclipse.ui.PlatformUI.createAndRunWorkbench(PlatformUI.java:171)
+	at org.eclipse.ui.internal.ide.application.IDEApplication.start(IDEApplication.java:152)
+	at org.eclipse.equinox.internal.app.EclipseAppHandle.run(EclipseAppHandle.java:203)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.runApplication(EclipseAppLauncher.java:136)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.start(EclipseAppLauncher.java:104)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:402)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:255)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.eclipse.equinox.launcher.Main.invokeFramework(Main.java:659)
+	at org.eclipse.equinox.launcher.Main.basicRun(Main.java:596)
+	at org.eclipse.equinox.launcher.Main.run(Main.java:1467)
+
+!ENTRY org.eclipse.lsp4e 2 0 2024-07-24 15:51:35.289
+!MESSAGE Could not get hover information due to timeout after 500 miliseconds
+!STACK 0
+java.util.concurrent.TimeoutException
+	at java.base/java.util.concurrent.CompletableFuture.timedGet(CompletableFuture.java:1960)
+	at java.base/java.util.concurrent.CompletableFuture.get(CompletableFuture.java:2095)
+	at org.eclipse.lsp4e.operations.hover.LSPTextHover.getHoverInfo(LSPTextHover.java:73)
+	at org.eclipse.ui.internal.genericeditor.hover.CompositeTextHover.getHoverInfo2(CompositeTextHover.java:60)
+	at org.eclipse.jface.text.TextViewerHoverManager$1.run(TextViewerHoverManager.java:155)
+
+!ENTRY org.eclipse.lsp4e 4 0 2024-07-24 15:51:46.738
+!MESSAGE TimeoutException
+!STACK 0
+java.util.concurrent.TimeoutException
+	at java.base/java.util.concurrent.CompletableFuture.timedGet(CompletableFuture.java:1960)
+	at java.base/java.util.concurrent.CompletableFuture.get(CompletableFuture.java:2095)
+	at org.eclipse.lsp4e.LanguageServerWrapper.lambda$10(LanguageServerWrapper.java:519)
+	at java.base/java.util.concurrent.CompletableFuture$AsyncRun.run(CompletableFuture.java:1804)
+	at java.base/java.util.concurrent.CompletableFuture$AsyncRun.exec(CompletableFuture.java:1796)
+	at java.base/java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:373)
+	at java.base/java.util.concurrent.ForkJoinPool$WorkQueue.topLevelExec(ForkJoinPool.java:1182)
+	at java.base/java.util.concurrent.ForkJoinPool.scan(ForkJoinPool.java:1655)
+	at java.base/java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1622)
+	at java.base/java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:165)
+
+!ENTRY org.eclipse.core.jobs 2 2 2024-07-25 12:49:19.390
+!MESSAGE Job found still running after platform shutdown.  Jobs should be canceled by the plugin that scheduled them during shutdown: org.eclipse.core.runtime.jobs.Job$2
+!SESSION 2024-07-31 12:03:09.212 -----------------------------------------------
+eclipse.buildId=4.27.0.20230309-1200
+java.version=17.0.2
+java.vendor=Oracle Corporation
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=nl_NL
+Framework arguments:  -product org.eclipse.epp.package.java.product
+Command-line arguments:  -os win32 -ws win32 -arch x86_64 -product org.eclipse.epp.package.java.product
+
+!ENTRY ch.qos.logback.classic 1 0 2024-07-31 12:03:11.238
+!MESSAGE Activated before the state location was initialized. Retry after the state location is initialized.
+
+!ENTRY ch.qos.logback.classic 1 0 2024-07-31 12:03:19.232
+!MESSAGE Logback config file: C:\eclipse-projects\recruit\.metadata\.plugins\org.eclipse.m2e.logback\logback.2.1.100.20230106-1511.xml
+
+!ENTRY org.eclipse.jface 2 0 2024-07-31 12:03:22.914
+!MESSAGE Keybinding conflicts occurred.  They may interfere with normal accelerator operation.
+!SUBENTRY 1 org.eclipse.jface 2 0 2024-07-31 12:03:22.914
+!MESSAGE A conflict occurred for CTRL+SHIFT+T:
+Binding(CTRL+SHIFT+T,
+	ParameterizedCommand(Command(org.eclipse.jdt.ui.navigate.open.type,Open Type,
+		Open a type in a Java editor,
+		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
+		WorkbenchHandlerServiceHandler("org.eclipse.jdt.ui.navigate.open.type"),
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.ui.contexts.window,,,system)
+Binding(CTRL+SHIFT+T,
+	ParameterizedCommand(Command(org.eclipse.lsp4e.symbolinworkspace,Go to Symbol in Workspace,
+		,
+		Category(org.eclipse.lsp4e.category,Language Servers,null,true),
+		WorkbenchHandlerServiceHandler("org.eclipse.lsp4e.symbolinworkspace"),
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.ui.contexts.window,,,system)
+!SUBENTRY 1 org.eclipse.jface 2 0 2024-07-31 12:03:22.914
+!MESSAGE A conflict occurred for ALT+SHIFT+R:
+Binding(ALT+SHIFT+R,
+	ParameterizedCommand(Command(org.eclipse.jdt.ui.edit.text.java.rename.element,Rename - Refactoring ,
+		Rename the selected element,
+		Category(org.eclipse.jdt.ui.category.refactoring,Refactor - Java,Java Refactoring Actions,true),
+		WorkbenchHandlerServiceHandler("org.eclipse.jdt.ui.edit.text.java.rename.element"),
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.ui.contexts.window,,,system)
+Binding(ALT+SHIFT+R,
+	ParameterizedCommand(Command(org.eclipse.ui.edit.rename,Rename,
+		Rename the selected item,
+		Category(org.eclipse.ui.category.file,File,null,true),
+		WorkbenchHandlerServiceHandler("org.eclipse.ui.edit.rename"),
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.ui.contexts.window,,,system)
+
+!ENTRY org.eclipse.egit.ui 2 0 2024-07-31 12:03:33.397
+!MESSAGE Warning: The environment variable HOME is not set. The following directory will be used to store the Git
+user global configuration and to define the default location to store repositories: 'C:\Users\Hp'. If this is
+not correct please set the HOME environment variable and restart Eclipse. Otherwise Git for Windows and
+EGit might behave differently since they see different configuration options.
+This warning can be switched off on the Team > Git > Confirmations and Warnings preference page.
+
+!ENTRY org.eclipse.jdt.debug.ui 4 150 2024-07-31 12:07:13.390
+!MESSAGE Editor annotation with non existing marker found: text: null, type: org.eclipse.ui.workbench.texteditor.task, Marker [on: /recruit/src/main/java/com/arenella/recruit/emailservice/services/EmailDispatcherService.java, not found]
+!STACK 1
+org.eclipse.core.internal.resources.ResourceException: Marker id 181811 not found.
+	at org.eclipse.core.internal.resources.Marker.checkInfo(Marker.java:63)
+	at org.eclipse.core.internal.resources.Marker.getType(Marker.java:214)
+	at org.eclipse.core.internal.resources.Marker.isSubtypeOf(Marker.java:237)
+	at org.eclipse.jdt.internal.debug.ui.actions.ToggleBreakpointAdapter.findExistingBreakpoint(ToggleBreakpointAdapter.java:1518)
+	at org.eclipse.jdt.internal.debug.ui.actions.ToggleBreakpointAdapter.toggleFieldOrMethodBreakpoints(ToggleBreakpointAdapter.java:1547)
+	at org.eclipse.jdt.internal.debug.ui.actions.ToggleBreakpointAdapter.toggleBreakpoints(ToggleBreakpointAdapter.java:1481)
+	at org.eclipse.jdt.internal.debug.ui.actions.ToggleBreakpointAdapter.toggleBreakpointsWithEvent(ToggleBreakpointAdapter.java:1747)
+	at org.eclipse.debug.ui.actions.ToggleBreakpointAction.doIt(ToggleBreakpointAction.java:105)
+	at org.eclipse.debug.ui.actions.ToggleBreakpointAction.runWithEvent(ToggleBreakpointAction.java:83)
+	at org.eclipse.debug.ui.actions.RulerToggleBreakpointActionDelegate.runWithEvent(RulerToggleBreakpointActionDelegate.java:116)
+	at org.eclipse.ui.internal.handlers.ActionDelegateHandlerProxy.execute(ActionDelegateHandlerProxy.java:281)
+	at org.eclipse.core.commands.Command.executeWithChecks(Command.java:488)
+	at org.eclipse.core.commands.ParameterizedCommand.executeWithChecks(ParameterizedCommand.java:485)
+	at org.eclipse.ui.actions.ContributedAction.runWithEvent(ContributedAction.java:176)
+	at org.eclipse.ui.texteditor.AbstractTextEditor$1.triggerAction(AbstractTextEditor.java:3025)
+	at org.eclipse.ui.texteditor.AbstractTextEditor$1.mouseDoubleClick(AbstractTextEditor.java:3051)
+	at org.eclipse.swt.widgets.TypedListener.handleEvent(TypedListener.java:200)
+	at org.eclipse.swt.widgets.EventTable.sendEvent(EventTable.java:89)
+	at org.eclipse.swt.widgets.Display.sendEvent(Display.java:4256)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1066)
+	at org.eclipse.swt.widgets.Display.runDeferredEvents(Display.java:4054)
+	at org.eclipse.swt.widgets.Display.readAndDispatch(Display.java:3642)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine$5.run(PartRenderingEngine.java:1155)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:338)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine.run(PartRenderingEngine.java:1046)
+	at org.eclipse.e4.ui.internal.workbench.E4Workbench.createAndRunUI(E4Workbench.java:155)
+	at org.eclipse.ui.internal.Workbench.lambda$3(Workbench.java:643)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:338)
+	at org.eclipse.ui.internal.Workbench.createAndRunWorkbench(Workbench.java:550)
+	at org.eclipse.ui.PlatformUI.createAndRunWorkbench(PlatformUI.java:171)
+	at org.eclipse.ui.internal.ide.application.IDEApplication.start(IDEApplication.java:152)
+	at org.eclipse.equinox.internal.app.EclipseAppHandle.run(EclipseAppHandle.java:203)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.runApplication(EclipseAppLauncher.java:136)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.start(EclipseAppLauncher.java:104)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:402)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:255)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.eclipse.equinox.launcher.Main.invokeFramework(Main.java:659)
+	at org.eclipse.equinox.launcher.Main.basicRun(Main.java:596)
+	at org.eclipse.equinox.launcher.Main.run(Main.java:1467)
+!SUBENTRY 1 org.eclipse.core.resources 4 376 2024-07-31 12:07:13.391
+!MESSAGE Marker id 181811 not found.
+
+!ENTRY com.genuitec.eclipse.theming.ui 4 0 2024-08-02 14:14:32.109
+!MESSAGE www.genuitec.com
+!STACK 0
+java.net.UnknownHostException: www.genuitec.com
+	at java.base/sun.nio.ch.NioSocketImpl.connect(NioSocketImpl.java:567)
+	at java.base/java.net.SocksSocketImpl.connect(SocksSocketImpl.java:327)
+	at java.base/java.net.Socket.connect(Socket.java:633)
+	at java.base/sun.security.ssl.SSLSocketImpl.connect(SSLSocketImpl.java:299)
+	at java.base/sun.security.ssl.BaseSSLSocketImpl.connect(BaseSSLSocketImpl.java:174)
+	at java.base/sun.net.NetworkClient.doConnect(NetworkClient.java:183)
+	at java.base/sun.net.www.http.HttpClient.openServer(HttpClient.java:498)
+	at java.base/sun.net.www.http.HttpClient.openServer(HttpClient.java:603)
+	at java.base/sun.net.www.protocol.https.HttpsClient.<init>(HttpsClient.java:266)
+	at java.base/sun.net.www.protocol.https.HttpsClient.New(HttpsClient.java:380)
+	at java.base/sun.net.www.protocol.https.AbstractDelegateHttpsURLConnection.getNewHttpClient(AbstractDelegateHttpsURLConnection.java:189)
+	at java.base/sun.net.www.protocol.http.HttpURLConnection.plainConnect0(HttpURLConnection.java:1242)
+	at java.base/sun.net.www.protocol.http.HttpURLConnection.plainConnect(HttpURLConnection.java:1128)
+	at java.base/sun.net.www.protocol.https.AbstractDelegateHttpsURLConnection.connect(AbstractDelegateHttpsURLConnection.java:175)
+	at java.base/sun.net.www.protocol.http.HttpURLConnection.getInputStream0(HttpURLConnection.java:1665)
+	at java.base/sun.net.www.protocol.http.HttpURLConnection.getInputStream(HttpURLConnection.java:1589)
+	at java.base/java.net.HttpURLConnection.getResponseCode(HttpURLConnection.java:529)
+	at java.base/sun.net.www.protocol.https.HttpsURLConnectionImpl.getResponseCode(HttpsURLConnectionImpl.java:308)
+	at com.genuitec.eclipse.theming.ui.IconDownloaderJob.getApprovedDefinitions(IconDownloaderJob.java:86)
+	at com.genuitec.eclipse.theming.ui.IconDownloaderJob.run(IconDownloaderJob.java:52)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+!SESSION 2024-08-06 01:49:42.547 -----------------------------------------------
+eclipse.buildId=4.27.0.20230309-1200
+java.version=17.0.2
+java.vendor=Oracle Corporation
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=nl_NL
+Framework arguments:  -product org.eclipse.epp.package.java.product
+Command-line arguments:  -os win32 -ws win32 -arch x86_64 -product org.eclipse.epp.package.java.product
+
+!ENTRY ch.qos.logback.classic 1 0 2024-08-06 01:49:45.767
+!MESSAGE Activated before the state location was initialized. Retry after the state location is initialized.
+
+!ENTRY org.eclipse.core.resources 2 10035 2024-08-06 01:49:57.579
+!MESSAGE The workspace exited with unsaved changes in the previous session; refreshing workspace to recover changes.
+
+!ENTRY ch.qos.logback.classic 1 0 2024-08-06 01:50:01.166
+!MESSAGE Logback config file: C:\eclipse-projects\recruit\.metadata\.plugins\org.eclipse.m2e.logback\logback.2.1.100.20230106-1511.xml
+
+!ENTRY org.eclipse.jface 2 0 2024-08-06 01:50:07.992
+!MESSAGE Keybinding conflicts occurred.  They may interfere with normal accelerator operation.
+!SUBENTRY 1 org.eclipse.jface 2 0 2024-08-06 01:50:07.992
+!MESSAGE A conflict occurred for CTRL+SHIFT+T:
+Binding(CTRL+SHIFT+T,
+	ParameterizedCommand(Command(org.eclipse.jdt.ui.navigate.open.type,Open Type,
+		Open a type in a Java editor,
+		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
+		WorkbenchHandlerServiceHandler("org.eclipse.jdt.ui.navigate.open.type"),
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.ui.contexts.window,,,system)
+Binding(CTRL+SHIFT+T,
+	ParameterizedCommand(Command(org.eclipse.lsp4e.symbolinworkspace,Go to Symbol in Workspace,
+		,
+		Category(org.eclipse.lsp4e.category,Language Servers,null,true),
+		WorkbenchHandlerServiceHandler("org.eclipse.lsp4e.symbolinworkspace"),
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.ui.contexts.window,,,system)
+!SUBENTRY 1 org.eclipse.jface 2 0 2024-08-06 01:50:07.992
+!MESSAGE A conflict occurred for ALT+SHIFT+R:
+Binding(ALT+SHIFT+R,
+	ParameterizedCommand(Command(org.eclipse.jdt.ui.edit.text.java.rename.element,Rename - Refactoring ,
+		Rename the selected element,
+		Category(org.eclipse.jdt.ui.category.refactoring,Refactor - Java,Java Refactoring Actions,true),
+		WorkbenchHandlerServiceHandler("org.eclipse.jdt.ui.edit.text.java.rename.element"),
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.ui.contexts.window,,,system)
+Binding(ALT+SHIFT+R,
+	ParameterizedCommand(Command(org.eclipse.ui.edit.rename,Rename,
+		Rename the selected item,
+		Category(org.eclipse.ui.category.file,File,null,true),
+		WorkbenchHandlerServiceHandler("org.eclipse.ui.edit.rename"),
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.ui.contexts.window,,,system)
+
+!ENTRY org.eclipse.egit.ui 2 0 2024-08-06 01:50:23.897
+!MESSAGE Warning: The environment variable HOME is not set. The following directory will be used to store the Git
+user global configuration and to define the default location to store repositories: 'C:\Users\Hp'. If this is
+not correct please set the HOME environment variable and restart Eclipse. Otherwise Git for Windows and
+EGit might behave differently since they see different configuration options.
+This warning can be switched off on the Team > Git > Confirmations and Warnings preference page.
+
+!ENTRY org.eclipse.ui 4 4 2024-08-06 01:52:41.331
+!MESSAGE Conflicting handlers for org.eclipse.compare.copyRightToLeft: {ActionHandler(org.eclipse.compare.contentmergeviewer.TextMergeViewer$30@22f2069c)} vs {ActionHandler(org.eclipse.compare.contentmergeviewer.TextMergeViewer$30@8020711)} in: PartImpl (org.eclipse.e4.ui.compatibility.editor)  removeOnHide org.eclipse.compare.CompareEditorContext
+!STACK 0
+java.lang.IllegalStateException: Conflicting handlers: {[ActionHandler(org.eclipse.compare.contentmergeviewer.TextMergeViewer$30@22f2069c),  for 'org.eclipse.compare.copyRightToLeft',  in PartImpl (org.eclipse.e4.ui.compatibility.editor)  removeOnHide org.eclipse.compare.CompareEditorContext, activeWhen=ActivePartExpression(org.eclipse.compare.internal.CompareEditor@c85cbf7), active=true, sourcePriority=1048576, participating=true]} vs {[ActionHandler(org.eclipse.compare.contentmergeviewer.TextMergeViewer$30@8020711),  for 'org.eclipse.compare.copyRightToLeft',  in PartImpl (org.eclipse.e4.ui.compatibility.editor)  removeOnHide org.eclipse.compare.CompareEditorContext, activeWhen=ActivePartExpression(org.eclipse.compare.internal.CompareEditor@c85cbf7), active=true, sourcePriority=1048576, participating=true]} in: PartImpl (org.eclipse.e4.ui.compatibility.editor)  removeOnHide org.eclipse.compare.CompareEditorContext
+	at org.eclipse.ui.internal.handlers.LegacyHandlerService$HandlerSelectionFunction.compute(LegacyHandlerService.java:145)
+	at org.eclipse.e4.core.internal.contexts.ValueComputation.get(ValueComputation.java:70)
+	at org.eclipse.e4.core.internal.contexts.EclipseContext.internalGet(EclipseContext.java:265)
+	at org.eclipse.e4.core.internal.contexts.EclipseContext.get(EclipseContext.java:230)
+	at org.eclipse.e4.core.commands.internal.HandlerServiceImpl.lookUpHandler(HandlerServiceImpl.java:103)
+	at org.eclipse.ui.internal.handlers.E4HandlerProxy.handlerChanged(E4HandlerProxy.java:114)
+	at org.eclipse.core.commands.AbstractHandler.fireHandlerChanged(AbstractHandler.java:77)
+	at org.eclipse.jface.commands.ActionHandler.lambda$0(ActionHandler.java:81)
+	at org.eclipse.jface.action.AbstractAction.firePropertyChange(AbstractAction.java:52)
+	at org.eclipse.jface.action.AbstractAction.firePropertyChange(AbstractAction.java:75)
+	at org.eclipse.jface.action.Action.setEnabled(Action.java:541)
+	at org.eclipse.compare.contentmergeviewer.TextMergeViewer.updateControls(TextMergeViewer.java:3593)
+	at org.eclipse.compare.contentmergeviewer.TextMergeViewer.setCurrentDiff(TextMergeViewer.java:4817)
+	at org.eclipse.compare.contentmergeviewer.TextMergeViewer.setCurrentDiff(TextMergeViewer.java:4772)
+	at org.eclipse.compare.contentmergeviewer.TextMergeViewer.handleSelectionChanged(TextMergeViewer.java:3500)
+	at org.eclipse.compare.contentmergeviewer.TextMergeViewer$21.mouseDown(TextMergeViewer.java:2669)
+	at org.eclipse.swt.widgets.TypedListener.handleEvent(TypedListener.java:196)
+	at org.eclipse.swt.widgets.EventTable.sendEvent(EventTable.java:89)
+	at org.eclipse.swt.widgets.Display.sendEvent(Display.java:4256)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1066)
+	at org.eclipse.swt.widgets.Display.runDeferredEvents(Display.java:4054)
+	at org.eclipse.swt.widgets.Display.readAndDispatch(Display.java:3642)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine$5.run(PartRenderingEngine.java:1155)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:338)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine.run(PartRenderingEngine.java:1046)
+	at org.eclipse.e4.ui.internal.workbench.E4Workbench.createAndRunUI(E4Workbench.java:155)
+	at org.eclipse.ui.internal.Workbench.lambda$3(Workbench.java:643)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:338)
+	at org.eclipse.ui.internal.Workbench.createAndRunWorkbench(Workbench.java:550)
+	at org.eclipse.ui.PlatformUI.createAndRunWorkbench(PlatformUI.java:171)
+	at org.eclipse.ui.internal.ide.application.IDEApplication.start(IDEApplication.java:152)
+	at org.eclipse.equinox.internal.app.EclipseAppHandle.run(EclipseAppHandle.java:203)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.runApplication(EclipseAppLauncher.java:136)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.start(EclipseAppLauncher.java:104)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:402)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:255)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.eclipse.equinox.launcher.Main.invokeFramework(Main.java:659)
+	at org.eclipse.equinox.launcher.Main.basicRun(Main.java:596)
+	at org.eclipse.equinox.launcher.Main.run(Main.java:1467)
+
+!ENTRY org.eclipse.ui 4 4 2024-08-06 01:52:49.975
+!MESSAGE Conflicting handlers for org.eclipse.compare.copyAllLeftToRight: {ActionHandler(org.eclipse.compare.contentmergeviewer.ContentMergeViewer$3@6f6bc1e0)} vs {ActionHandler(org.eclipse.compare.contentmergeviewer.ContentMergeViewer$3@2f59ea2e)} in: PartImpl (org.eclipse.e4.ui.compatibility.editor)  removeOnHide org.eclipse.compare.CompareEditorContext
+!STACK 0
+java.lang.IllegalStateException: Conflicting handlers: {[ActionHandler(org.eclipse.compare.contentmergeviewer.ContentMergeViewer$3@6f6bc1e0),  for 'org.eclipse.compare.copyAllLeftToRight',  in PartImpl (org.eclipse.e4.ui.compatibility.editor)  removeOnHide org.eclipse.compare.CompareEditorContext, activeWhen=ActivePartExpression(org.eclipse.compare.internal.CompareEditor@c85cbf7), active=true, sourcePriority=1048576, participating=true]} vs {[ActionHandler(org.eclipse.compare.contentmergeviewer.ContentMergeViewer$3@2f59ea2e),  for 'org.eclipse.compare.copyAllLeftToRight',  in PartImpl (org.eclipse.e4.ui.compatibility.editor)  removeOnHide org.eclipse.compare.CompareEditorContext, activeWhen=ActivePartExpression(org.eclipse.compare.internal.CompareEditor@c85cbf7), active=true, sourcePriority=1048576, participating=true]} in: PartImpl (org.eclipse.e4.ui.compatibility.editor)  removeOnHide org.eclipse.compare.CompareEditorContext
+	at org.eclipse.ui.internal.handlers.LegacyHandlerService$HandlerSelectionFunction.compute(LegacyHandlerService.java:145)
+	at org.eclipse.e4.core.internal.contexts.ValueComputation.get(ValueComputation.java:70)
+	at org.eclipse.e4.core.internal.contexts.EclipseContext.internalGet(EclipseContext.java:265)
+	at org.eclipse.e4.core.internal.contexts.EclipseContext.get(EclipseContext.java:230)
+	at org.eclipse.e4.core.commands.internal.HandlerServiceImpl.lookUpHandler(HandlerServiceImpl.java:103)
+	at org.eclipse.ui.internal.handlers.E4HandlerProxy.handlerChanged(E4HandlerProxy.java:114)
+	at org.eclipse.core.commands.AbstractHandler.fireHandlerChanged(AbstractHandler.java:77)
+	at org.eclipse.jface.commands.ActionHandler.lambda$0(ActionHandler.java:81)
+	at org.eclipse.jface.action.AbstractAction.firePropertyChange(AbstractAction.java:52)
+	at org.eclipse.jface.action.AbstractAction.firePropertyChange(AbstractAction.java:75)
+	at org.eclipse.jface.action.Action.setEnabled(Action.java:541)
+	at org.eclipse.compare.contentmergeviewer.ContentMergeViewer.updateToolItems(ContentMergeViewer.java:1099)
+	at org.eclipse.compare.contentmergeviewer.TextMergeViewer.updateToolItems(TextMergeViewer.java:4184)
+	at org.eclipse.compare.contentmergeviewer.ContentMergeViewer.initializeToolbars(ContentMergeViewer.java:951)
+	at org.eclipse.compare.contentmergeviewer.ContentMergeViewer.buildControl(ContentMergeViewer.java:873)
+	at org.eclipse.compare.contentmergeviewer.TextMergeViewer.<init>(TextMergeViewer.java:1626)
+	at org.eclipse.jdt.internal.ui.compare.JavaMergeViewer.<init>(JavaMergeViewer.java:101)
+	at org.eclipse.jdt.internal.ui.compare.JavaContentViewerCreator.createViewer(JavaContentViewerCreator.java:32)
+	at org.eclipse.compare.internal.ViewerDescriptor.createViewer(ViewerDescriptor.java:66)
+	at org.eclipse.compare.internal.CompareUIPlugin.getViewer(CompareUIPlugin.java:1107)
+	at org.eclipse.compare.internal.CompareUIPlugin.findContentViewer(CompareUIPlugin.java:1102)
+	at org.eclipse.compare.CompareUI.findContentViewer(CompareUI.java:338)
+	at org.eclipse.compare.CompareEditorInput.findContentViewer(CompareEditorInput.java:916)
+	at org.eclipse.team.ui.synchronize.SaveableCompareEditorInput.findContentViewer(SaveableCompareEditorInput.java:485)
+	at org.eclipse.compare.internal.CompareContentViewerSwitchingPane.getViewer(CompareContentViewerSwitchingPane.java:99)
+	at org.eclipse.compare.CompareViewerSwitchingPane.setInput(CompareViewerSwitchingPane.java:257)
+	at org.eclipse.compare.internal.CompareContentViewerSwitchingPane.setInput(CompareContentViewerSwitchingPane.java:202)
+	at org.eclipse.compare.CompareEditorInput.internalSetContentPaneInput(CompareEditorInput.java:806)
+	at org.eclipse.compare.CompareEditorInput.lambda$8(CompareEditorInput.java:747)
+	at org.eclipse.swt.custom.BusyIndicator.showWhile(BusyIndicator.java:67)
+	at org.eclipse.compare.CompareEditorInput.feed1(CompareEditorInput.java:742)
+	at org.eclipse.compare.CompareEditorInput.feedInput(CompareEditorInput.java:720)
+	at org.eclipse.compare.CompareEditorInput.createContents(CompareEditorInput.java:543)
+	at org.eclipse.compare.internal.CompareEditor.createCompareControl(CompareEditor.java:448)
+	at org.eclipse.compare.internal.CompareEditor$1.lambda$0(CompareEditor.java:366)
+	at org.eclipse.ui.internal.PendingSyncExec.run(PendingSyncExec.java:68)
+	at org.eclipse.ui.internal.UILockListener.doPendingWork(UILockListener.java:172)
+	at org.eclipse.swt.widgets.RunnableLock.run(RunnableLock.java:40)
+	at org.eclipse.swt.widgets.Synchronizer.runAsyncMessages(Synchronizer.java:132)
+	at org.eclipse.swt.widgets.Display.runAsyncMessages(Display.java:4029)
+	at org.eclipse.swt.widgets.Display.readAndDispatch(Display.java:3645)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine$5.run(PartRenderingEngine.java:1155)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:338)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine.run(PartRenderingEngine.java:1046)
+	at org.eclipse.e4.ui.internal.workbench.E4Workbench.createAndRunUI(E4Workbench.java:155)
+	at org.eclipse.ui.internal.Workbench.lambda$3(Workbench.java:643)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:338)
+	at org.eclipse.ui.internal.Workbench.createAndRunWorkbench(Workbench.java:550)
+	at org.eclipse.ui.PlatformUI.createAndRunWorkbench(PlatformUI.java:171)
+	at org.eclipse.ui.internal.ide.application.IDEApplication.start(IDEApplication.java:152)
+	at org.eclipse.equinox.internal.app.EclipseAppHandle.run(EclipseAppHandle.java:203)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.runApplication(EclipseAppLauncher.java:136)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.start(EclipseAppLauncher.java:104)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:402)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:255)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.eclipse.equinox.launcher.Main.invokeFramework(Main.java:659)
+	at org.eclipse.equinox.launcher.Main.basicRun(Main.java:596)
+	at org.eclipse.equinox.launcher.Main.run(Main.java:1467)
+
+!ENTRY org.eclipse.ui 4 4 2024-08-06 01:52:49.976
+!MESSAGE Conflicting handlers for org.eclipse.compare.copyAllRightToLeft: {ActionHandler(org.eclipse.compare.contentmergeviewer.ContentMergeViewer$3@766bb7f)} vs {ActionHandler(org.eclipse.compare.contentmergeviewer.ContentMergeViewer$3@682d2bb3)} in: PartImpl (org.eclipse.e4.ui.compatibility.editor)  removeOnHide org.eclipse.compare.CompareEditorContext
+!STACK 0
+java.lang.IllegalStateException: Conflicting handlers: {[ActionHandler(org.eclipse.compare.contentmergeviewer.ContentMergeViewer$3@766bb7f),  for 'org.eclipse.compare.copyAllRightToLeft',  in PartImpl (org.eclipse.e4.ui.compatibility.editor)  removeOnHide org.eclipse.compare.CompareEditorContext, activeWhen=ActivePartExpression(org.eclipse.compare.internal.CompareEditor@c85cbf7), active=true, sourcePriority=1048576, participating=true]} vs {[ActionHandler(org.eclipse.compare.contentmergeviewer.ContentMergeViewer$3@682d2bb3),  for 'org.eclipse.compare.copyAllRightToLeft',  in PartImpl (org.eclipse.e4.ui.compatibility.editor)  removeOnHide org.eclipse.compare.CompareEditorContext, activeWhen=ActivePartExpression(org.eclipse.compare.internal.CompareEditor@c85cbf7), active=true, sourcePriority=1048576, participating=true]} in: PartImpl (org.eclipse.e4.ui.compatibility.editor)  removeOnHide org.eclipse.compare.CompareEditorContext
+	at org.eclipse.ui.internal.handlers.LegacyHandlerService$HandlerSelectionFunction.compute(LegacyHandlerService.java:145)
+	at org.eclipse.e4.core.internal.contexts.ValueComputation.get(ValueComputation.java:70)
+	at org.eclipse.e4.core.internal.contexts.EclipseContext.internalGet(EclipseContext.java:265)
+	at org.eclipse.e4.core.internal.contexts.EclipseContext.get(EclipseContext.java:230)
+	at org.eclipse.e4.core.commands.internal.HandlerServiceImpl.lookUpHandler(HandlerServiceImpl.java:103)
+	at org.eclipse.ui.internal.handlers.E4HandlerProxy.handlerChanged(E4HandlerProxy.java:114)
+	at org.eclipse.core.commands.AbstractHandler.fireHandlerChanged(AbstractHandler.java:77)
+	at org.eclipse.jface.commands.ActionHandler.lambda$0(ActionHandler.java:81)
+	at org.eclipse.jface.action.AbstractAction.firePropertyChange(AbstractAction.java:52)
+	at org.eclipse.jface.action.AbstractAction.firePropertyChange(AbstractAction.java:75)
+	at org.eclipse.jface.action.Action.setEnabled(Action.java:541)
+	at org.eclipse.compare.contentmergeviewer.ContentMergeViewer.updateToolItems(ContentMergeViewer.java:1105)
+	at org.eclipse.compare.contentmergeviewer.TextMergeViewer.updateToolItems(TextMergeViewer.java:4184)
+	at org.eclipse.compare.contentmergeviewer.ContentMergeViewer.initializeToolbars(ContentMergeViewer.java:951)
+	at org.eclipse.compare.contentmergeviewer.ContentMergeViewer.buildControl(ContentMergeViewer.java:873)
+	at org.eclipse.compare.contentmergeviewer.TextMergeViewer.<init>(TextMergeViewer.java:1626)
+	at org.eclipse.jdt.internal.ui.compare.JavaMergeViewer.<init>(JavaMergeViewer.java:101)
+	at org.eclipse.jdt.internal.ui.compare.JavaContentViewerCreator.createViewer(JavaContentViewerCreator.java:32)
+	at org.eclipse.compare.internal.ViewerDescriptor.createViewer(ViewerDescriptor.java:66)
+	at org.eclipse.compare.internal.CompareUIPlugin.getViewer(CompareUIPlugin.java:1107)
+	at org.eclipse.compare.internal.CompareUIPlugin.findContentViewer(CompareUIPlugin.java:1102)
+	at org.eclipse.compare.CompareUI.findContentViewer(CompareUI.java:338)
+	at org.eclipse.compare.CompareEditorInput.findContentViewer(CompareEditorInput.java:916)
+	at org.eclipse.team.ui.synchronize.SaveableCompareEditorInput.findContentViewer(SaveableCompareEditorInput.java:485)
+	at org.eclipse.compare.internal.CompareContentViewerSwitchingPane.getViewer(CompareContentViewerSwitchingPane.java:99)
+	at org.eclipse.compare.CompareViewerSwitchingPane.setInput(CompareViewerSwitchingPane.java:257)
+	at org.eclipse.compare.internal.CompareContentViewerSwitchingPane.setInput(CompareContentViewerSwitchingPane.java:202)
+	at org.eclipse.compare.CompareEditorInput.internalSetContentPaneInput(CompareEditorInput.java:806)
+	at org.eclipse.compare.CompareEditorInput.lambda$8(CompareEditorInput.java:747)
+	at org.eclipse.swt.custom.BusyIndicator.showWhile(BusyIndicator.java:67)
+	at org.eclipse.compare.CompareEditorInput.feed1(CompareEditorInput.java:742)
+	at org.eclipse.compare.CompareEditorInput.feedInput(CompareEditorInput.java:720)
+	at org.eclipse.compare.CompareEditorInput.createContents(CompareEditorInput.java:543)
+	at org.eclipse.compare.internal.CompareEditor.createCompareControl(CompareEditor.java:448)
+	at org.eclipse.compare.internal.CompareEditor$1.lambda$0(CompareEditor.java:366)
+	at org.eclipse.ui.internal.PendingSyncExec.run(PendingSyncExec.java:68)
+	at org.eclipse.ui.internal.UILockListener.doPendingWork(UILockListener.java:172)
+	at org.eclipse.swt.widgets.RunnableLock.run(RunnableLock.java:40)
+	at org.eclipse.swt.widgets.Synchronizer.runAsyncMessages(Synchronizer.java:132)
+	at org.eclipse.swt.widgets.Display.runAsyncMessages(Display.java:4029)
+	at org.eclipse.swt.widgets.Display.readAndDispatch(Display.java:3645)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine$5.run(PartRenderingEngine.java:1155)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:338)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine.run(PartRenderingEngine.java:1046)
+	at org.eclipse.e4.ui.internal.workbench.E4Workbench.createAndRunUI(E4Workbench.java:155)
+	at org.eclipse.ui.internal.Workbench.lambda$3(Workbench.java:643)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:338)
+	at org.eclipse.ui.internal.Workbench.createAndRunWorkbench(Workbench.java:550)
+	at org.eclipse.ui.PlatformUI.createAndRunWorkbench(PlatformUI.java:171)
+	at org.eclipse.ui.internal.ide.application.IDEApplication.start(IDEApplication.java:152)
+	at org.eclipse.equinox.internal.app.EclipseAppHandle.run(EclipseAppHandle.java:203)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.runApplication(EclipseAppLauncher.java:136)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.start(EclipseAppLauncher.java:104)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:402)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:255)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.eclipse.equinox.launcher.Main.invokeFramework(Main.java:659)
+	at org.eclipse.equinox.launcher.Main.basicRun(Main.java:596)
+	at org.eclipse.equinox.launcher.Main.run(Main.java:1467)
+
+!ENTRY org.eclipse.ui 4 4 2024-08-06 01:52:49.977
+!MESSAGE Conflicting handlers for org.eclipse.compare.switchLeftAndRight: {ActionHandler(org.eclipse.compare.contentmergeviewer.ContentMergeViewer$2@29600405)} vs {ActionHandler(org.eclipse.compare.contentmergeviewer.ContentMergeViewer$2@37aa7ede)} in: PartImpl (org.eclipse.e4.ui.compatibility.editor)  removeOnHide org.eclipse.compare.CompareEditorContext
+!STACK 0
+java.lang.IllegalStateException: Conflicting handlers: {[ActionHandler(org.eclipse.compare.contentmergeviewer.ContentMergeViewer$2@29600405),  for 'org.eclipse.compare.switchLeftAndRight',  in PartImpl (org.eclipse.e4.ui.compatibility.editor)  removeOnHide org.eclipse.compare.CompareEditorContext, activeWhen=ActivePartExpression(org.eclipse.compare.internal.CompareEditor@c85cbf7), active=true, sourcePriority=1048576, participating=true]} vs {[ActionHandler(org.eclipse.compare.contentmergeviewer.ContentMergeViewer$2@37aa7ede),  for 'org.eclipse.compare.switchLeftAndRight',  in PartImpl (org.eclipse.e4.ui.compatibility.editor)  removeOnHide org.eclipse.compare.CompareEditorContext, activeWhen=ActivePartExpression(org.eclipse.compare.internal.CompareEditor@c85cbf7), active=true, sourcePriority=1048576, participating=true]} in: PartImpl (org.eclipse.e4.ui.compatibility.editor)  removeOnHide org.eclipse.compare.CompareEditorContext
+	at org.eclipse.ui.internal.handlers.LegacyHandlerService$HandlerSelectionFunction.compute(LegacyHandlerService.java:145)
+	at org.eclipse.e4.core.internal.contexts.ValueComputation.get(ValueComputation.java:70)
+	at org.eclipse.e4.core.internal.contexts.EclipseContext.internalGet(EclipseContext.java:265)
+	at org.eclipse.e4.core.internal.contexts.EclipseContext.get(EclipseContext.java:230)
+	at org.eclipse.e4.core.commands.internal.HandlerServiceImpl.lookUpHandler(HandlerServiceImpl.java:103)
+	at org.eclipse.ui.internal.handlers.E4HandlerProxy.handlerChanged(E4HandlerProxy.java:114)
+	at org.eclipse.core.commands.AbstractHandler.fireHandlerChanged(AbstractHandler.java:77)
+	at org.eclipse.jface.commands.ActionHandler.lambda$0(ActionHandler.java:81)
+	at org.eclipse.jface.action.AbstractAction.firePropertyChange(AbstractAction.java:52)
+	at org.eclipse.jface.action.AbstractAction.firePropertyChange(AbstractAction.java:75)
+	at org.eclipse.jface.action.Action.setChecked(Action.java:508)
+	at org.eclipse.compare.contentmergeviewer.ContentMergeViewer.updateToolItems(ContentMergeViewer.java:1109)
+	at org.eclipse.compare.contentmergeviewer.TextMergeViewer.updateToolItems(TextMergeViewer.java:4184)
+	at org.eclipse.compare.contentmergeviewer.ContentMergeViewer.initializeToolbars(ContentMergeViewer.java:951)
+	at org.eclipse.compare.contentmergeviewer.ContentMergeViewer.buildControl(ContentMergeViewer.java:873)
+	at org.eclipse.compare.contentmergeviewer.TextMergeViewer.<init>(TextMergeViewer.java:1626)
+	at org.eclipse.jdt.internal.ui.compare.JavaMergeViewer.<init>(JavaMergeViewer.java:101)
+	at org.eclipse.jdt.internal.ui.compare.JavaContentViewerCreator.createViewer(JavaContentViewerCreator.java:32)
+	at org.eclipse.compare.internal.ViewerDescriptor.createViewer(ViewerDescriptor.java:66)
+	at org.eclipse.compare.internal.CompareUIPlugin.getViewer(CompareUIPlugin.java:1107)
+	at org.eclipse.compare.internal.CompareUIPlugin.findContentViewer(CompareUIPlugin.java:1102)
+	at org.eclipse.compare.CompareUI.findContentViewer(CompareUI.java:338)
+	at org.eclipse.compare.CompareEditorInput.findContentViewer(CompareEditorInput.java:916)
+	at org.eclipse.team.ui.synchronize.SaveableCompareEditorInput.findContentViewer(SaveableCompareEditorInput.java:485)
+	at org.eclipse.compare.internal.CompareContentViewerSwitchingPane.getViewer(CompareContentViewerSwitchingPane.java:99)
+	at org.eclipse.compare.CompareViewerSwitchingPane.setInput(CompareViewerSwitchingPane.java:257)
+	at org.eclipse.compare.internal.CompareContentViewerSwitchingPane.setInput(CompareContentViewerSwitchingPane.java:202)
+	at org.eclipse.compare.CompareEditorInput.internalSetContentPaneInput(CompareEditorInput.java:806)
+	at org.eclipse.compare.CompareEditorInput.lambda$8(CompareEditorInput.java:747)
+	at org.eclipse.swt.custom.BusyIndicator.showWhile(BusyIndicator.java:67)
+	at org.eclipse.compare.CompareEditorInput.feed1(CompareEditorInput.java:742)
+	at org.eclipse.compare.CompareEditorInput.feedInput(CompareEditorInput.java:720)
+	at org.eclipse.compare.CompareEditorInput.createContents(CompareEditorInput.java:543)
+	at org.eclipse.compare.internal.CompareEditor.createCompareControl(CompareEditor.java:448)
+	at org.eclipse.compare.internal.CompareEditor$1.lambda$0(CompareEditor.java:366)
+	at org.eclipse.ui.internal.PendingSyncExec.run(PendingSyncExec.java:68)
+	at org.eclipse.ui.internal.UILockListener.doPendingWork(UILockListener.java:172)
+	at org.eclipse.swt.widgets.RunnableLock.run(RunnableLock.java:40)
+	at org.eclipse.swt.widgets.Synchronizer.runAsyncMessages(Synchronizer.java:132)
+	at org.eclipse.swt.widgets.Display.runAsyncMessages(Display.java:4029)
+	at org.eclipse.swt.widgets.Display.readAndDispatch(Display.java:3645)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine$5.run(PartRenderingEngine.java:1155)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:338)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine.run(PartRenderingEngine.java:1046)
+	at org.eclipse.e4.ui.internal.workbench.E4Workbench.createAndRunUI(E4Workbench.java:155)
+	at org.eclipse.ui.internal.Workbench.lambda$3(Workbench.java:643)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:338)
+	at org.eclipse.ui.internal.Workbench.createAndRunWorkbench(Workbench.java:550)
+	at org.eclipse.ui.PlatformUI.createAndRunWorkbench(PlatformUI.java:171)
+	at org.eclipse.ui.internal.ide.application.IDEApplication.start(IDEApplication.java:152)
+	at org.eclipse.equinox.internal.app.EclipseAppHandle.run(EclipseAppHandle.java:203)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.runApplication(EclipseAppLauncher.java:136)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.start(EclipseAppLauncher.java:104)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:402)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:255)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.eclipse.equinox.launcher.Main.invokeFramework(Main.java:659)
+	at org.eclipse.equinox.launcher.Main.basicRun(Main.java:596)
+	at org.eclipse.equinox.launcher.Main.run(Main.java:1467)
+
+!ENTRY org.eclipse.ui 4 4 2024-08-06 01:52:50.424
+!MESSAGE Conflicting handlers for org.eclipse.compare.copyLeftToRight: {ActionHandler(org.eclipse.compare.contentmergeviewer.TextMergeViewer$29@477cd83e)} vs {ActionHandler(org.eclipse.compare.contentmergeviewer.TextMergeViewer$29@69eb668b)} in: PartImpl (org.eclipse.e4.ui.compatibility.editor)  removeOnHide org.eclipse.compare.CompareEditorContext
+!STACK 0
+java.lang.IllegalStateException: Conflicting handlers: {[ActionHandler(org.eclipse.compare.contentmergeviewer.TextMergeViewer$29@477cd83e),  for 'org.eclipse.compare.copyLeftToRight',  in PartImpl (org.eclipse.e4.ui.compatibility.editor)  removeOnHide org.eclipse.compare.CompareEditorContext, activeWhen=ActivePartExpression(org.eclipse.compare.internal.CompareEditor@c85cbf7), active=true, sourcePriority=1048576, participating=true]} vs {[ActionHandler(org.eclipse.compare.contentmergeviewer.TextMergeViewer$29@69eb668b),  for 'org.eclipse.compare.copyLeftToRight',  in PartImpl (org.eclipse.e4.ui.compatibility.editor)  removeOnHide org.eclipse.compare.CompareEditorContext, activeWhen=ActivePartExpression(org.eclipse.compare.internal.CompareEditor@c85cbf7), active=true, sourcePriority=1048576, participating=true]} in: PartImpl (org.eclipse.e4.ui.compatibility.editor)  removeOnHide org.eclipse.compare.CompareEditorContext
+	at org.eclipse.ui.internal.handlers.LegacyHandlerService$HandlerSelectionFunction.compute(LegacyHandlerService.java:145)
+	at org.eclipse.e4.core.internal.contexts.ValueComputation.get(ValueComputation.java:70)
+	at org.eclipse.e4.core.internal.contexts.EclipseContext.internalGet(EclipseContext.java:265)
+	at org.eclipse.e4.core.internal.contexts.EclipseContext.get(EclipseContext.java:230)
+	at org.eclipse.e4.core.commands.internal.HandlerServiceImpl.lookUpHandler(HandlerServiceImpl.java:103)
+	at org.eclipse.ui.internal.handlers.E4HandlerProxy.handlerChanged(E4HandlerProxy.java:114)
+	at org.eclipse.core.commands.AbstractHandler.fireHandlerChanged(AbstractHandler.java:77)
+	at org.eclipse.jface.commands.ActionHandler.lambda$0(ActionHandler.java:81)
+	at org.eclipse.jface.action.AbstractAction.firePropertyChange(AbstractAction.java:52)
+	at org.eclipse.jface.action.AbstractAction.firePropertyChange(AbstractAction.java:75)
+	at org.eclipse.jface.action.Action.setEnabled(Action.java:541)
+	at org.eclipse.compare.contentmergeviewer.TextMergeViewer.updateControls(TextMergeViewer.java:3591)
+	at org.eclipse.compare.contentmergeviewer.TextMergeViewer.setCurrentDiff(TextMergeViewer.java:4817)
+	at org.eclipse.compare.contentmergeviewer.TextMergeViewer.setCurrentDiff(TextMergeViewer.java:4772)
+	at org.eclipse.compare.contentmergeviewer.TextMergeViewer.selectFirstDiff(TextMergeViewer.java:4135)
+	at org.eclipse.compare.contentmergeviewer.TextMergeViewer.updateContent(TextMergeViewer.java:3066)
+	at org.eclipse.compare.contentmergeviewer.ContentMergeViewer.internalRefresh(ContentMergeViewer.java:793)
+	at org.eclipse.compare.contentmergeviewer.ContentMergeViewer.inputChanged(ContentMergeViewer.java:701)
+	at org.eclipse.jface.viewers.ContentViewer.setInput(ContentViewer.java:282)
+	at org.eclipse.jdt.internal.ui.compare.JavaMergeViewer.setInput(JavaMergeViewer.java:154)
+	at org.eclipse.compare.CompareViewerSwitchingPane.setInput(CompareViewerSwitchingPane.java:268)
+	at org.eclipse.compare.internal.CompareContentViewerSwitchingPane.setInput(CompareContentViewerSwitchingPane.java:202)
+	at org.eclipse.compare.CompareEditorInput.internalSetContentPaneInput(CompareEditorInput.java:806)
+	at org.eclipse.compare.CompareEditorInput.lambda$8(CompareEditorInput.java:747)
+	at org.eclipse.swt.custom.BusyIndicator.showWhile(BusyIndicator.java:67)
+	at org.eclipse.compare.CompareEditorInput.feed1(CompareEditorInput.java:742)
+	at org.eclipse.compare.CompareEditorInput.feedInput(CompareEditorInput.java:720)
+	at org.eclipse.compare.CompareEditorInput.createContents(CompareEditorInput.java:543)
+	at org.eclipse.compare.internal.CompareEditor.createCompareControl(CompareEditor.java:448)
+	at org.eclipse.compare.internal.CompareEditor$1.lambda$0(CompareEditor.java:366)
+	at org.eclipse.ui.internal.PendingSyncExec.run(PendingSyncExec.java:68)
+	at org.eclipse.ui.internal.UILockListener.doPendingWork(UILockListener.java:172)
+	at org.eclipse.swt.widgets.RunnableLock.run(RunnableLock.java:40)
+	at org.eclipse.swt.widgets.Synchronizer.runAsyncMessages(Synchronizer.java:132)
+	at org.eclipse.swt.widgets.Display.runAsyncMessages(Display.java:4029)
+	at org.eclipse.swt.widgets.Display.readAndDispatch(Display.java:3645)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine$5.run(PartRenderingEngine.java:1155)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:338)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine.run(PartRenderingEngine.java:1046)
+	at org.eclipse.e4.ui.internal.workbench.E4Workbench.createAndRunUI(E4Workbench.java:155)
+	at org.eclipse.ui.internal.Workbench.lambda$3(Workbench.java:643)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:338)
+	at org.eclipse.ui.internal.Workbench.createAndRunWorkbench(Workbench.java:550)
+	at org.eclipse.ui.PlatformUI.createAndRunWorkbench(PlatformUI.java:171)
+	at org.eclipse.ui.internal.ide.application.IDEApplication.start(IDEApplication.java:152)
+	at org.eclipse.equinox.internal.app.EclipseAppHandle.run(EclipseAppHandle.java:203)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.runApplication(EclipseAppLauncher.java:136)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.start(EclipseAppLauncher.java:104)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:402)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:255)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.eclipse.equinox.launcher.Main.invokeFramework(Main.java:659)
+	at org.eclipse.equinox.launcher.Main.basicRun(Main.java:596)
+	at org.eclipse.equinox.launcher.Main.run(Main.java:1467)
+
+!ENTRY org.eclipse.ui 4 4 2024-08-06 01:52:50.427
+!MESSAGE Conflicting handlers for org.eclipse.compare.selectNextChange: {ActionHandler(org.eclipse.compare.contentmergeviewer.TextMergeViewer$27@357afae1)} vs {ActionHandler(org.eclipse.compare.contentmergeviewer.TextMergeViewer$27@47ca28c1)} in: PartImpl (org.eclipse.e4.ui.compatibility.editor)  removeOnHide org.eclipse.compare.CompareEditorContext
+!STACK 0
+java.lang.IllegalStateException: Conflicting handlers: {[ActionHandler(org.eclipse.compare.contentmergeviewer.TextMergeViewer$27@357afae1),  for 'org.eclipse.compare.selectNextChange',  in PartImpl (org.eclipse.e4.ui.compatibility.editor)  removeOnHide org.eclipse.compare.CompareEditorContext, activeWhen=ActivePartExpression(org.eclipse.compare.internal.CompareEditor@c85cbf7), active=true, sourcePriority=1048576, participating=true]} vs {[ActionHandler(org.eclipse.compare.contentmergeviewer.TextMergeViewer$27@47ca28c1),  for 'org.eclipse.compare.selectNextChange',  in PartImpl (org.eclipse.e4.ui.compatibility.editor)  removeOnHide org.eclipse.compare.CompareEditorContext, activeWhen=ActivePartExpression(org.eclipse.compare.internal.CompareEditor@c85cbf7), active=true, sourcePriority=1048576, participating=true]} in: PartImpl (org.eclipse.e4.ui.compatibility.editor)  removeOnHide org.eclipse.compare.CompareEditorContext
+	at org.eclipse.ui.internal.handlers.LegacyHandlerService$HandlerSelectionFunction.compute(LegacyHandlerService.java:145)
+	at org.eclipse.e4.core.internal.contexts.ValueComputation.get(ValueComputation.java:70)
+	at org.eclipse.e4.core.internal.contexts.EclipseContext.internalGet(EclipseContext.java:265)
+	at org.eclipse.e4.core.internal.contexts.EclipseContext.get(EclipseContext.java:230)
+	at org.eclipse.e4.core.commands.internal.HandlerServiceImpl.lookUpHandler(HandlerServiceImpl.java:103)
+	at org.eclipse.ui.internal.handlers.E4HandlerProxy.handlerChanged(E4HandlerProxy.java:114)
+	at org.eclipse.core.commands.AbstractHandler.fireHandlerChanged(AbstractHandler.java:77)
+	at org.eclipse.jface.commands.ActionHandler.lambda$0(ActionHandler.java:81)
+	at org.eclipse.jface.action.AbstractAction.firePropertyChange(AbstractAction.java:52)
+	at org.eclipse.jface.action.AbstractAction.firePropertyChange(AbstractAction.java:75)
+	at org.eclipse.jface.action.Action.setEnabled(Action.java:541)
+	at org.eclipse.compare.contentmergeviewer.TextMergeViewer.updateControls(TextMergeViewer.java:3605)
+	at org.eclipse.compare.contentmergeviewer.TextMergeViewer.setCurrentDiff(TextMergeViewer.java:4817)
+	at org.eclipse.compare.contentmergeviewer.TextMergeViewer.setCurrentDiff(TextMergeViewer.java:4772)
+	at org.eclipse.compare.contentmergeviewer.TextMergeViewer.selectFirstDiff(TextMergeViewer.java:4135)
+	at org.eclipse.compare.contentmergeviewer.TextMergeViewer.updateContent(TextMergeViewer.java:3066)
+	at org.eclipse.compare.contentmergeviewer.ContentMergeViewer.internalRefresh(ContentMergeViewer.java:793)
+	at org.eclipse.compare.contentmergeviewer.ContentMergeViewer.inputChanged(ContentMergeViewer.java:701)
+	at org.eclipse.jface.viewers.ContentViewer.setInput(ContentViewer.java:282)
+	at org.eclipse.jdt.internal.ui.compare.JavaMergeViewer.setInput(JavaMergeViewer.java:154)
+	at org.eclipse.compare.CompareViewerSwitchingPane.setInput(CompareViewerSwitchingPane.java:268)
+	at org.eclipse.compare.internal.CompareContentViewerSwitchingPane.setInput(CompareContentViewerSwitchingPane.java:202)
+	at org.eclipse.compare.CompareEditorInput.internalSetContentPaneInput(CompareEditorInput.java:806)
+	at org.eclipse.compare.CompareEditorInput.lambda$8(CompareEditorInput.java:747)
+	at org.eclipse.swt.custom.BusyIndicator.showWhile(BusyIndicator.java:67)
+	at org.eclipse.compare.CompareEditorInput.feed1(CompareEditorInput.java:742)
+	at org.eclipse.compare.CompareEditorInput.feedInput(CompareEditorInput.java:720)
+	at org.eclipse.compare.CompareEditorInput.createContents(CompareEditorInput.java:543)
+	at org.eclipse.compare.internal.CompareEditor.createCompareControl(CompareEditor.java:448)
+	at org.eclipse.compare.internal.CompareEditor$1.lambda$0(CompareEditor.java:366)
+	at org.eclipse.ui.internal.PendingSyncExec.run(PendingSyncExec.java:68)
+	at org.eclipse.ui.internal.UILockListener.doPendingWork(UILockListener.java:172)
+	at org.eclipse.swt.widgets.RunnableLock.run(RunnableLock.java:40)
+	at org.eclipse.swt.widgets.Synchronizer.runAsyncMessages(Synchronizer.java:132)
+	at org.eclipse.swt.widgets.Display.runAsyncMessages(Display.java:4029)
+	at org.eclipse.swt.widgets.Display.readAndDispatch(Display.java:3645)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine$5.run(PartRenderingEngine.java:1155)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:338)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine.run(PartRenderingEngine.java:1046)
+	at org.eclipse.e4.ui.internal.workbench.E4Workbench.createAndRunUI(E4Workbench.java:155)
+	at org.eclipse.ui.internal.Workbench.lambda$3(Workbench.java:643)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:338)
+	at org.eclipse.ui.internal.Workbench.createAndRunWorkbench(Workbench.java:550)
+	at org.eclipse.ui.PlatformUI.createAndRunWorkbench(PlatformUI.java:171)
+	at org.eclipse.ui.internal.ide.application.IDEApplication.start(IDEApplication.java:152)
+	at org.eclipse.equinox.internal.app.EclipseAppHandle.run(EclipseAppHandle.java:203)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.runApplication(EclipseAppLauncher.java:136)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.start(EclipseAppLauncher.java:104)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:402)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:255)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.eclipse.equinox.launcher.Main.invokeFramework(Main.java:659)
+	at org.eclipse.equinox.launcher.Main.basicRun(Main.java:596)
+	at org.eclipse.equinox.launcher.Main.run(Main.java:1467)
+
+!ENTRY org.eclipse.ui 4 4 2024-08-06 01:52:50.428
+!MESSAGE Conflicting handlers for org.eclipse.compare.selectPreviousChange: {ActionHandler(org.eclipse.compare.contentmergeviewer.TextMergeViewer$28@1c543742)} vs {ActionHandler(org.eclipse.compare.contentmergeviewer.TextMergeViewer$28@4e5f391c)} in: PartImpl (org.eclipse.e4.ui.compatibility.editor)  removeOnHide org.eclipse.compare.CompareEditorContext
+!STACK 0
+java.lang.IllegalStateException: Conflicting handlers: {[ActionHandler(org.eclipse.compare.contentmergeviewer.TextMergeViewer$28@1c543742),  for 'org.eclipse.compare.selectPreviousChange',  in PartImpl (org.eclipse.e4.ui.compatibility.editor)  removeOnHide org.eclipse.compare.CompareEditorContext, activeWhen=ActivePartExpression(org.eclipse.compare.internal.CompareEditor@c85cbf7), active=true, sourcePriority=1048576, participating=true]} vs {[ActionHandler(org.eclipse.compare.contentmergeviewer.TextMergeViewer$28@4e5f391c),  for 'org.eclipse.compare.selectPreviousChange',  in PartImpl (org.eclipse.e4.ui.compatibility.editor)  removeOnHide org.eclipse.compare.CompareEditorContext, activeWhen=ActivePartExpression(org.eclipse.compare.internal.CompareEditor@c85cbf7), active=true, sourcePriority=1048576, participating=true]} in: PartImpl (org.eclipse.e4.ui.compatibility.editor)  removeOnHide org.eclipse.compare.CompareEditorContext
+	at org.eclipse.ui.internal.handlers.LegacyHandlerService$HandlerSelectionFunction.compute(LegacyHandlerService.java:145)
+	at org.eclipse.e4.core.internal.contexts.ValueComputation.get(ValueComputation.java:70)
+	at org.eclipse.e4.core.internal.contexts.EclipseContext.internalGet(EclipseContext.java:265)
+	at org.eclipse.e4.core.internal.contexts.EclipseContext.get(EclipseContext.java:230)
+	at org.eclipse.e4.core.commands.internal.HandlerServiceImpl.lookUpHandler(HandlerServiceImpl.java:103)
+	at org.eclipse.ui.internal.handlers.E4HandlerProxy.handlerChanged(E4HandlerProxy.java:114)
+	at org.eclipse.core.commands.AbstractHandler.fireHandlerChanged(AbstractHandler.java:77)
+	at org.eclipse.jface.commands.ActionHandler.lambda$0(ActionHandler.java:81)
+	at org.eclipse.jface.action.AbstractAction.firePropertyChange(AbstractAction.java:52)
+	at org.eclipse.jface.action.AbstractAction.firePropertyChange(AbstractAction.java:75)
+	at org.eclipse.jface.action.Action.setEnabled(Action.java:541)
+	at org.eclipse.compare.contentmergeviewer.TextMergeViewer.updateControls(TextMergeViewer.java:3609)
+	at org.eclipse.compare.contentmergeviewer.TextMergeViewer.setCurrentDiff(TextMergeViewer.java:4817)
+	at org.eclipse.compare.contentmergeviewer.TextMergeViewer.setCurrentDiff(TextMergeViewer.java:4772)
+	at org.eclipse.compare.contentmergeviewer.TextMergeViewer.selectFirstDiff(TextMergeViewer.java:4135)
+	at org.eclipse.compare.contentmergeviewer.TextMergeViewer.updateContent(TextMergeViewer.java:3066)
+	at org.eclipse.compare.contentmergeviewer.ContentMergeViewer.internalRefresh(ContentMergeViewer.java:793)
+	at org.eclipse.compare.contentmergeviewer.ContentMergeViewer.inputChanged(ContentMergeViewer.java:701)
+	at org.eclipse.jface.viewers.ContentViewer.setInput(ContentViewer.java:282)
+	at org.eclipse.jdt.internal.ui.compare.JavaMergeViewer.setInput(JavaMergeViewer.java:154)
+	at org.eclipse.compare.CompareViewerSwitchingPane.setInput(CompareViewerSwitchingPane.java:268)
+	at org.eclipse.compare.internal.CompareContentViewerSwitchingPane.setInput(CompareContentViewerSwitchingPane.java:202)
+	at org.eclipse.compare.CompareEditorInput.internalSetContentPaneInput(CompareEditorInput.java:806)
+	at org.eclipse.compare.CompareEditorInput.lambda$8(CompareEditorInput.java:747)
+	at org.eclipse.swt.custom.BusyIndicator.showWhile(BusyIndicator.java:67)
+	at org.eclipse.compare.CompareEditorInput.feed1(CompareEditorInput.java:742)
+	at org.eclipse.compare.CompareEditorInput.feedInput(CompareEditorInput.java:720)
+	at org.eclipse.compare.CompareEditorInput.createContents(CompareEditorInput.java:543)
+	at org.eclipse.compare.internal.CompareEditor.createCompareControl(CompareEditor.java:448)
+	at org.eclipse.compare.internal.CompareEditor$1.lambda$0(CompareEditor.java:366)
+	at org.eclipse.ui.internal.PendingSyncExec.run(PendingSyncExec.java:68)
+	at org.eclipse.ui.internal.UILockListener.doPendingWork(UILockListener.java:172)
+	at org.eclipse.swt.widgets.RunnableLock.run(RunnableLock.java:40)
+	at org.eclipse.swt.widgets.Synchronizer.runAsyncMessages(Synchronizer.java:132)
+	at org.eclipse.swt.widgets.Display.runAsyncMessages(Display.java:4029)
+	at org.eclipse.swt.widgets.Display.readAndDispatch(Display.java:3645)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine$5.run(PartRenderingEngine.java:1155)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:338)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine.run(PartRenderingEngine.java:1046)
+	at org.eclipse.e4.ui.internal.workbench.E4Workbench.createAndRunUI(E4Workbench.java:155)
+	at org.eclipse.ui.internal.Workbench.lambda$3(Workbench.java:643)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:338)
+	at org.eclipse.ui.internal.Workbench.createAndRunWorkbench(Workbench.java:550)
+	at org.eclipse.ui.PlatformUI.createAndRunWorkbench(PlatformUI.java:171)
+	at org.eclipse.ui.internal.ide.application.IDEApplication.start(IDEApplication.java:152)
+	at org.eclipse.equinox.internal.app.EclipseAppHandle.run(EclipseAppHandle.java:203)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.runApplication(EclipseAppLauncher.java:136)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.start(EclipseAppLauncher.java:104)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:402)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:255)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.eclipse.equinox.launcher.Main.invokeFramework(Main.java:659)
+	at org.eclipse.equinox.launcher.Main.basicRun(Main.java:596)
+	at org.eclipse.equinox.launcher.Main.run(Main.java:1467)
+
+!ENTRY org.eclipse.ui 4 4 2024-08-06 01:53:01.220
+!MESSAGE Conflicting handlers for org.eclipse.compare.copyAllLeftToRight: {ActionHandler(org.eclipse.compare.contentmergeviewer.ContentMergeViewer$3@6f6bc1e0)} vs {ActionHandler(org.eclipse.compare.contentmergeviewer.ContentMergeViewer$3@360c88f1)} in: PartImpl (org.eclipse.e4.ui.compatibility.editor)  removeOnHide org.eclipse.compare.CompareEditorContext
+!STACK 0
+java.lang.IllegalStateException: Conflicting handlers: {[ActionHandler(org.eclipse.compare.contentmergeviewer.ContentMergeViewer$3@6f6bc1e0),  for 'org.eclipse.compare.copyAllLeftToRight',  in PartImpl (org.eclipse.e4.ui.compatibility.editor)  removeOnHide org.eclipse.compare.CompareEditorContext, activeWhen=ActivePartExpression(org.eclipse.compare.internal.CompareEditor@c85cbf7), active=true, sourcePriority=1048576, participating=true]} vs {[ActionHandler(org.eclipse.compare.contentmergeviewer.ContentMergeViewer$3@360c88f1),  for 'org.eclipse.compare.copyAllLeftToRight',  in PartImpl (org.eclipse.e4.ui.compatibility.editor)  removeOnHide org.eclipse.compare.CompareEditorContext, activeWhen=ActivePartExpression(org.eclipse.compare.internal.CompareEditor@c85cbf7), active=true, sourcePriority=1048576, participating=true]} in: PartImpl (org.eclipse.e4.ui.compatibility.editor)  removeOnHide org.eclipse.compare.CompareEditorContext
+	at org.eclipse.ui.internal.handlers.LegacyHandlerService$HandlerSelectionFunction.compute(LegacyHandlerService.java:145)
+	at org.eclipse.e4.core.internal.contexts.ValueComputation.get(ValueComputation.java:70)
+	at org.eclipse.e4.core.internal.contexts.EclipseContext.internalGet(EclipseContext.java:265)
+	at org.eclipse.e4.core.internal.contexts.EclipseContext.get(EclipseContext.java:230)
+	at org.eclipse.e4.core.commands.internal.HandlerServiceImpl.lookUpHandler(HandlerServiceImpl.java:103)
+	at org.eclipse.ui.internal.handlers.E4HandlerProxy.handlerChanged(E4HandlerProxy.java:114)
+	at org.eclipse.core.commands.AbstractHandler.fireHandlerChanged(AbstractHandler.java:77)
+	at org.eclipse.jface.commands.ActionHandler.lambda$0(ActionHandler.java:81)
+	at org.eclipse.jface.action.AbstractAction.firePropertyChange(AbstractAction.java:52)
+	at org.eclipse.jface.action.AbstractAction.firePropertyChange(AbstractAction.java:75)
+	at org.eclipse.jface.action.Action.setEnabled(Action.java:541)
+	at org.eclipse.compare.contentmergeviewer.ContentMergeViewer.updateToolItems(ContentMergeViewer.java:1099)
+	at org.eclipse.compare.contentmergeviewer.TextMergeViewer.updateToolItems(TextMergeViewer.java:4184)
+	at org.eclipse.compare.contentmergeviewer.ContentMergeViewer.initializeToolbars(ContentMergeViewer.java:951)
+	at org.eclipse.compare.contentmergeviewer.ContentMergeViewer.buildControl(ContentMergeViewer.java:873)
+	at org.eclipse.compare.contentmergeviewer.TextMergeViewer.<init>(TextMergeViewer.java:1626)
+	at org.eclipse.jdt.internal.ui.compare.JavaMergeViewer.<init>(JavaMergeViewer.java:101)
+	at org.eclipse.jdt.internal.ui.compare.JavaContentViewerCreator.createViewer(JavaContentViewerCreator.java:32)
+	at org.eclipse.compare.internal.ViewerDescriptor.createViewer(ViewerDescriptor.java:66)
+	at org.eclipse.compare.internal.CompareUIPlugin.getViewer(CompareUIPlugin.java:1107)
+	at org.eclipse.compare.internal.CompareUIPlugin.findContentViewer(CompareUIPlugin.java:1102)
+	at org.eclipse.compare.CompareUI.findContentViewer(CompareUI.java:338)
+	at org.eclipse.compare.CompareEditorInput.findContentViewer(CompareEditorInput.java:916)
+	at org.eclipse.team.ui.synchronize.SaveableCompareEditorInput.findContentViewer(SaveableCompareEditorInput.java:485)
+	at org.eclipse.compare.internal.CompareContentViewerSwitchingPane.getViewer(CompareContentViewerSwitchingPane.java:99)
+	at org.eclipse.compare.CompareViewerSwitchingPane.setInput(CompareViewerSwitchingPane.java:257)
+	at org.eclipse.compare.internal.CompareContentViewerSwitchingPane.setInput(CompareContentViewerSwitchingPane.java:202)
+	at org.eclipse.compare.CompareEditorInput.internalSetContentPaneInput(CompareEditorInput.java:806)
+	at org.eclipse.compare.CompareEditorInput.lambda$8(CompareEditorInput.java:747)
+	at org.eclipse.swt.custom.BusyIndicator.showWhile(BusyIndicator.java:67)
+	at org.eclipse.compare.CompareEditorInput.feed1(CompareEditorInput.java:742)
+	at org.eclipse.compare.CompareEditorInput.feedInput(CompareEditorInput.java:720)
+	at org.eclipse.compare.CompareEditorInput.createContents(CompareEditorInput.java:543)
+	at org.eclipse.compare.internal.CompareEditor.createCompareControl(CompareEditor.java:448)
+	at org.eclipse.compare.internal.CompareEditor$1.lambda$0(CompareEditor.java:366)
+	at org.eclipse.ui.internal.PendingSyncExec.run(PendingSyncExec.java:68)
+	at org.eclipse.ui.internal.UILockListener.doPendingWork(UILockListener.java:172)
+	at org.eclipse.swt.widgets.RunnableLock.run(RunnableLock.java:40)
+	at org.eclipse.swt.widgets.Synchronizer.runAsyncMessages(Synchronizer.java:132)
+	at org.eclipse.swt.widgets.Display.runAsyncMessages(Display.java:4029)
+	at org.eclipse.swt.widgets.Display.readAndDispatch(Display.java:3645)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine$5.run(PartRenderingEngine.java:1155)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:338)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine.run(PartRenderingEngine.java:1046)
+	at org.eclipse.e4.ui.internal.workbench.E4Workbench.createAndRunUI(E4Workbench.java:155)
+	at org.eclipse.ui.internal.Workbench.lambda$3(Workbench.java:643)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:338)
+	at org.eclipse.ui.internal.Workbench.createAndRunWorkbench(Workbench.java:550)
+	at org.eclipse.ui.PlatformUI.createAndRunWorkbench(PlatformUI.java:171)
+	at org.eclipse.ui.internal.ide.application.IDEApplication.start(IDEApplication.java:152)
+	at org.eclipse.equinox.internal.app.EclipseAppHandle.run(EclipseAppHandle.java:203)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.runApplication(EclipseAppLauncher.java:136)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.start(EclipseAppLauncher.java:104)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:402)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:255)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.eclipse.equinox.launcher.Main.invokeFramework(Main.java:659)
+	at org.eclipse.equinox.launcher.Main.basicRun(Main.java:596)
+	at org.eclipse.equinox.launcher.Main.run(Main.java:1467)
+
+!ENTRY org.eclipse.ui 4 4 2024-08-06 01:53:01.223
+!MESSAGE Conflicting handlers for org.eclipse.compare.copyAllRightToLeft: {ActionHandler(org.eclipse.compare.contentmergeviewer.ContentMergeViewer$3@766bb7f)} vs {ActionHandler(org.eclipse.compare.contentmergeviewer.ContentMergeViewer$3@5c7b3c82)} in: PartImpl (org.eclipse.e4.ui.compatibility.editor)  removeOnHide org.eclipse.compare.CompareEditorContext
+!STACK 0
+java.lang.IllegalStateException: Conflicting handlers: {[ActionHandler(org.eclipse.compare.contentmergeviewer.ContentMergeViewer$3@766bb7f),  for 'org.eclipse.compare.copyAllRightToLeft',  in PartImpl (org.eclipse.e4.ui.compatibility.editor)  removeOnHide org.eclipse.compare.CompareEditorContext, activeWhen=ActivePartExpression(org.eclipse.compare.internal.CompareEditor@c85cbf7), active=true, sourcePriority=1048576, participating=true]} vs {[ActionHandler(org.eclipse.compare.contentmergeviewer.ContentMergeViewer$3@5c7b3c82),  for 'org.eclipse.compare.copyAllRightToLeft',  in PartImpl (org.eclipse.e4.ui.compatibility.editor)  removeOnHide org.eclipse.compare.CompareEditorContext, activeWhen=ActivePartExpression(org.eclipse.compare.internal.CompareEditor@c85cbf7), active=true, sourcePriority=1048576, participating=true]} in: PartImpl (org.eclipse.e4.ui.compatibility.editor)  removeOnHide org.eclipse.compare.CompareEditorContext
+	at org.eclipse.ui.internal.handlers.LegacyHandlerService$HandlerSelectionFunction.compute(LegacyHandlerService.java:145)
+	at org.eclipse.e4.core.internal.contexts.ValueComputation.get(ValueComputation.java:70)
+	at org.eclipse.e4.core.internal.contexts.EclipseContext.internalGet(EclipseContext.java:265)
+	at org.eclipse.e4.core.internal.contexts.EclipseContext.get(EclipseContext.java:230)
+	at org.eclipse.e4.core.commands.internal.HandlerServiceImpl.lookUpHandler(HandlerServiceImpl.java:103)
+	at org.eclipse.ui.internal.handlers.E4HandlerProxy.handlerChanged(E4HandlerProxy.java:114)
+	at org.eclipse.core.commands.AbstractHandler.fireHandlerChanged(AbstractHandler.java:77)
+	at org.eclipse.jface.commands.ActionHandler.lambda$0(ActionHandler.java:81)
+	at org.eclipse.jface.action.AbstractAction.firePropertyChange(AbstractAction.java:52)
+	at org.eclipse.jface.action.AbstractAction.firePropertyChange(AbstractAction.java:75)
+	at org.eclipse.jface.action.Action.setEnabled(Action.java:541)
+	at org.eclipse.compare.contentmergeviewer.ContentMergeViewer.updateToolItems(ContentMergeViewer.java:1105)
+	at org.eclipse.compare.contentmergeviewer.TextMergeViewer.updateToolItems(TextMergeViewer.java:4184)
+	at org.eclipse.compare.contentmergeviewer.ContentMergeViewer.initializeToolbars(ContentMergeViewer.java:951)
+	at org.eclipse.compare.contentmergeviewer.ContentMergeViewer.buildControl(ContentMergeViewer.java:873)
+	at org.eclipse.compare.contentmergeviewer.TextMergeViewer.<init>(TextMergeViewer.java:1626)
+	at org.eclipse.jdt.internal.ui.compare.JavaMergeViewer.<init>(JavaMergeViewer.java:101)
+	at org.eclipse.jdt.internal.ui.compare.JavaContentViewerCreator.createViewer(JavaContentViewerCreator.java:32)
+	at org.eclipse.compare.internal.ViewerDescriptor.createViewer(ViewerDescriptor.java:66)
+	at org.eclipse.compare.internal.CompareUIPlugin.getViewer(CompareUIPlugin.java:1107)
+	at org.eclipse.compare.internal.CompareUIPlugin.findContentViewer(CompareUIPlugin.java:1102)
+	at org.eclipse.compare.CompareUI.findContentViewer(CompareUI.java:338)
+	at org.eclipse.compare.CompareEditorInput.findContentViewer(CompareEditorInput.java:916)
+	at org.eclipse.team.ui.synchronize.SaveableCompareEditorInput.findContentViewer(SaveableCompareEditorInput.java:485)
+	at org.eclipse.compare.internal.CompareContentViewerSwitchingPane.getViewer(CompareContentViewerSwitchingPane.java:99)
+	at org.eclipse.compare.CompareViewerSwitchingPane.setInput(CompareViewerSwitchingPane.java:257)
+	at org.eclipse.compare.internal.CompareContentViewerSwitchingPane.setInput(CompareContentViewerSwitchingPane.java:202)
+	at org.eclipse.compare.CompareEditorInput.internalSetContentPaneInput(CompareEditorInput.java:806)
+	at org.eclipse.compare.CompareEditorInput.lambda$8(CompareEditorInput.java:747)
+	at org.eclipse.swt.custom.BusyIndicator.showWhile(BusyIndicator.java:67)
+	at org.eclipse.compare.CompareEditorInput.feed1(CompareEditorInput.java:742)
+	at org.eclipse.compare.CompareEditorInput.feedInput(CompareEditorInput.java:720)
+	at org.eclipse.compare.CompareEditorInput.createContents(CompareEditorInput.java:543)
+	at org.eclipse.compare.internal.CompareEditor.createCompareControl(CompareEditor.java:448)
+	at org.eclipse.compare.internal.CompareEditor$1.lambda$0(CompareEditor.java:366)
+	at org.eclipse.ui.internal.PendingSyncExec.run(PendingSyncExec.java:68)
+	at org.eclipse.ui.internal.UILockListener.doPendingWork(UILockListener.java:172)
+	at org.eclipse.swt.widgets.RunnableLock.run(RunnableLock.java:40)
+	at org.eclipse.swt.widgets.Synchronizer.runAsyncMessages(Synchronizer.java:132)
+	at org.eclipse.swt.widgets.Display.runAsyncMessages(Display.java:4029)
+	at org.eclipse.swt.widgets.Display.readAndDispatch(Display.java:3645)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine$5.run(PartRenderingEngine.java:1155)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:338)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine.run(PartRenderingEngine.java:1046)
+	at org.eclipse.e4.ui.internal.workbench.E4Workbench.createAndRunUI(E4Workbench.java:155)
+	at org.eclipse.ui.internal.Workbench.lambda$3(Workbench.java:643)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:338)
+	at org.eclipse.ui.internal.Workbench.createAndRunWorkbench(Workbench.java:550)
+	at org.eclipse.ui.PlatformUI.createAndRunWorkbench(PlatformUI.java:171)
+	at org.eclipse.ui.internal.ide.application.IDEApplication.start(IDEApplication.java:152)
+	at org.eclipse.equinox.internal.app.EclipseAppHandle.run(EclipseAppHandle.java:203)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.runApplication(EclipseAppLauncher.java:136)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.start(EclipseAppLauncher.java:104)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:402)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:255)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.eclipse.equinox.launcher.Main.invokeFramework(Main.java:659)
+	at org.eclipse.equinox.launcher.Main.basicRun(Main.java:596)
+	at org.eclipse.equinox.launcher.Main.run(Main.java:1467)
+
+!ENTRY org.eclipse.ui 4 4 2024-08-06 01:53:01.225
+!MESSAGE Conflicting handlers for org.eclipse.compare.switchLeftAndRight: {ActionHandler(org.eclipse.compare.contentmergeviewer.ContentMergeViewer$2@29600405)} vs {ActionHandler(org.eclipse.compare.contentmergeviewer.ContentMergeViewer$2@6c6f19ac)} in: PartImpl (org.eclipse.e4.ui.compatibility.editor)  removeOnHide org.eclipse.compare.CompareEditorContext
+!STACK 0
+java.lang.IllegalStateException: Conflicting handlers: {[ActionHandler(org.eclipse.compare.contentmergeviewer.ContentMergeViewer$2@29600405),  for 'org.eclipse.compare.switchLeftAndRight',  in PartImpl (org.eclipse.e4.ui.compatibility.editor)  removeOnHide org.eclipse.compare.CompareEditorContext, activeWhen=ActivePartExpression(org.eclipse.compare.internal.CompareEditor@c85cbf7), active=true, sourcePriority=1048576, participating=true]} vs {[ActionHandler(org.eclipse.compare.contentmergeviewer.ContentMergeViewer$2@6c6f19ac),  for 'org.eclipse.compare.switchLeftAndRight',  in PartImpl (org.eclipse.e4.ui.compatibility.editor)  removeOnHide org.eclipse.compare.CompareEditorContext, activeWhen=ActivePartExpression(org.eclipse.compare.internal.CompareEditor@c85cbf7), active=true, sourcePriority=1048576, participating=true]} in: PartImpl (org.eclipse.e4.ui.compatibility.editor)  removeOnHide org.eclipse.compare.CompareEditorContext
+	at org.eclipse.ui.internal.handlers.LegacyHandlerService$HandlerSelectionFunction.compute(LegacyHandlerService.java:145)
+	at org.eclipse.e4.core.internal.contexts.ValueComputation.get(ValueComputation.java:70)
+	at org.eclipse.e4.core.internal.contexts.EclipseContext.internalGet(EclipseContext.java:265)
+	at org.eclipse.e4.core.internal.contexts.EclipseContext.get(EclipseContext.java:230)
+	at org.eclipse.e4.core.commands.internal.HandlerServiceImpl.lookUpHandler(HandlerServiceImpl.java:103)
+	at org.eclipse.ui.internal.handlers.E4HandlerProxy.handlerChanged(E4HandlerProxy.java:114)
+	at org.eclipse.core.commands.AbstractHandler.fireHandlerChanged(AbstractHandler.java:77)
+	at org.eclipse.jface.commands.ActionHandler.lambda$0(ActionHandler.java:81)
+	at org.eclipse.jface.action.AbstractAction.firePropertyChange(AbstractAction.java:52)
+	at org.eclipse.jface.action.AbstractAction.firePropertyChange(AbstractAction.java:75)
+	at org.eclipse.jface.action.Action.setChecked(Action.java:508)
+	at org.eclipse.compare.contentmergeviewer.ContentMergeViewer.updateToolItems(ContentMergeViewer.java:1109)
+	at org.eclipse.compare.contentmergeviewer.TextMergeViewer.updateToolItems(TextMergeViewer.java:4184)
+	at org.eclipse.compare.contentmergeviewer.ContentMergeViewer.initializeToolbars(ContentMergeViewer.java:951)
+	at org.eclipse.compare.contentmergeviewer.ContentMergeViewer.buildControl(ContentMergeViewer.java:873)
+	at org.eclipse.compare.contentmergeviewer.TextMergeViewer.<init>(TextMergeViewer.java:1626)
+	at org.eclipse.jdt.internal.ui.compare.JavaMergeViewer.<init>(JavaMergeViewer.java:101)
+	at org.eclipse.jdt.internal.ui.compare.JavaContentViewerCreator.createViewer(JavaContentViewerCreator.java:32)
+	at org.eclipse.compare.internal.ViewerDescriptor.createViewer(ViewerDescriptor.java:66)
+	at org.eclipse.compare.internal.CompareUIPlugin.getViewer(CompareUIPlugin.java:1107)
+	at org.eclipse.compare.internal.CompareUIPlugin.findContentViewer(CompareUIPlugin.java:1102)
+	at org.eclipse.compare.CompareUI.findContentViewer(CompareUI.java:338)
+	at org.eclipse.compare.CompareEditorInput.findContentViewer(CompareEditorInput.java:916)
+	at org.eclipse.team.ui.synchronize.SaveableCompareEditorInput.findContentViewer(SaveableCompareEditorInput.java:485)
+	at org.eclipse.compare.internal.CompareContentViewerSwitchingPane.getViewer(CompareContentViewerSwitchingPane.java:99)
+	at org.eclipse.compare.CompareViewerSwitchingPane.setInput(CompareViewerSwitchingPane.java:257)
+	at org.eclipse.compare.internal.CompareContentViewerSwitchingPane.setInput(CompareContentViewerSwitchingPane.java:202)
+	at org.eclipse.compare.CompareEditorInput.internalSetContentPaneInput(CompareEditorInput.java:806)
+	at org.eclipse.compare.CompareEditorInput.lambda$8(CompareEditorInput.java:747)
+	at org.eclipse.swt.custom.BusyIndicator.showWhile(BusyIndicator.java:67)
+	at org.eclipse.compare.CompareEditorInput.feed1(CompareEditorInput.java:742)
+	at org.eclipse.compare.CompareEditorInput.feedInput(CompareEditorInput.java:720)
+	at org.eclipse.compare.CompareEditorInput.createContents(CompareEditorInput.java:543)
+	at org.eclipse.compare.internal.CompareEditor.createCompareControl(CompareEditor.java:448)
+	at org.eclipse.compare.internal.CompareEditor$1.lambda$0(CompareEditor.java:366)
+	at org.eclipse.ui.internal.PendingSyncExec.run(PendingSyncExec.java:68)
+	at org.eclipse.ui.internal.UILockListener.doPendingWork(UILockListener.java:172)
+	at org.eclipse.swt.widgets.RunnableLock.run(RunnableLock.java:40)
+	at org.eclipse.swt.widgets.Synchronizer.runAsyncMessages(Synchronizer.java:132)
+	at org.eclipse.swt.widgets.Display.runAsyncMessages(Display.java:4029)
+	at org.eclipse.swt.widgets.Display.readAndDispatch(Display.java:3645)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine$5.run(PartRenderingEngine.java:1155)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:338)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine.run(PartRenderingEngine.java:1046)
+	at org.eclipse.e4.ui.internal.workbench.E4Workbench.createAndRunUI(E4Workbench.java:155)
+	at org.eclipse.ui.internal.Workbench.lambda$3(Workbench.java:643)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:338)
+	at org.eclipse.ui.internal.Workbench.createAndRunWorkbench(Workbench.java:550)
+	at org.eclipse.ui.PlatformUI.createAndRunWorkbench(PlatformUI.java:171)
+	at org.eclipse.ui.internal.ide.application.IDEApplication.start(IDEApplication.java:152)
+	at org.eclipse.equinox.internal.app.EclipseAppHandle.run(EclipseAppHandle.java:203)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.runApplication(EclipseAppLauncher.java:136)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.start(EclipseAppLauncher.java:104)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:402)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:255)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.eclipse.equinox.launcher.Main.invokeFramework(Main.java:659)
+	at org.eclipse.equinox.launcher.Main.basicRun(Main.java:596)
+	at org.eclipse.equinox.launcher.Main.run(Main.java:1467)
+
+!ENTRY org.eclipse.ui 4 4 2024-08-06 01:53:01.716
+!MESSAGE Conflicting handlers for org.eclipse.compare.copyLeftToRight: {ActionHandler(org.eclipse.compare.contentmergeviewer.TextMergeViewer$29@477cd83e)} vs {ActionHandler(org.eclipse.compare.contentmergeviewer.TextMergeViewer$29@eea87c4)} in: PartImpl (org.eclipse.e4.ui.compatibility.editor)  removeOnHide org.eclipse.compare.CompareEditorContext
+!STACK 0
+java.lang.IllegalStateException: Conflicting handlers: {[ActionHandler(org.eclipse.compare.contentmergeviewer.TextMergeViewer$29@477cd83e),  for 'org.eclipse.compare.copyLeftToRight',  in PartImpl (org.eclipse.e4.ui.compatibility.editor)  removeOnHide org.eclipse.compare.CompareEditorContext, activeWhen=ActivePartExpression(org.eclipse.compare.internal.CompareEditor@c85cbf7), active=true, sourcePriority=1048576, participating=true]} vs {[ActionHandler(org.eclipse.compare.contentmergeviewer.TextMergeViewer$29@eea87c4),  for 'org.eclipse.compare.copyLeftToRight',  in PartImpl (org.eclipse.e4.ui.compatibility.editor)  removeOnHide org.eclipse.compare.CompareEditorContext, activeWhen=ActivePartExpression(org.eclipse.compare.internal.CompareEditor@c85cbf7), active=true, sourcePriority=1048576, participating=true]} in: PartImpl (org.eclipse.e4.ui.compatibility.editor)  removeOnHide org.eclipse.compare.CompareEditorContext
+	at org.eclipse.ui.internal.handlers.LegacyHandlerService$HandlerSelectionFunction.compute(LegacyHandlerService.java:145)
+	at org.eclipse.e4.core.internal.contexts.ValueComputation.get(ValueComputation.java:70)
+	at org.eclipse.e4.core.internal.contexts.EclipseContext.internalGet(EclipseContext.java:265)
+	at org.eclipse.e4.core.internal.contexts.EclipseContext.get(EclipseContext.java:230)
+	at org.eclipse.e4.core.commands.internal.HandlerServiceImpl.lookUpHandler(HandlerServiceImpl.java:103)
+	at org.eclipse.ui.internal.handlers.E4HandlerProxy.handlerChanged(E4HandlerProxy.java:114)
+	at org.eclipse.core.commands.AbstractHandler.fireHandlerChanged(AbstractHandler.java:77)
+	at org.eclipse.jface.commands.ActionHandler.lambda$0(ActionHandler.java:81)
+	at org.eclipse.jface.action.AbstractAction.firePropertyChange(AbstractAction.java:52)
+	at org.eclipse.jface.action.AbstractAction.firePropertyChange(AbstractAction.java:75)
+	at org.eclipse.jface.action.Action.setEnabled(Action.java:541)
+	at org.eclipse.compare.contentmergeviewer.TextMergeViewer.updateControls(TextMergeViewer.java:3591)
+	at org.eclipse.compare.contentmergeviewer.TextMergeViewer.setCurrentDiff(TextMergeViewer.java:4817)
+	at org.eclipse.compare.contentmergeviewer.TextMergeViewer.setCurrentDiff(TextMergeViewer.java:4772)
+	at org.eclipse.compare.contentmergeviewer.TextMergeViewer.selectFirstDiff(TextMergeViewer.java:4135)
+	at org.eclipse.compare.contentmergeviewer.TextMergeViewer.updateContent(TextMergeViewer.java:3066)
+	at org.eclipse.compare.contentmergeviewer.ContentMergeViewer.internalRefresh(ContentMergeViewer.java:793)
+	at org.eclipse.compare.contentmergeviewer.ContentMergeViewer.inputChanged(ContentMergeViewer.java:701)
+	at org.eclipse.jface.viewers.ContentViewer.setInput(ContentViewer.java:282)
+	at org.eclipse.jdt.internal.ui.compare.JavaMergeViewer.setInput(JavaMergeViewer.java:154)
+	at org.eclipse.compare.CompareViewerSwitchingPane.setInput(CompareViewerSwitchingPane.java:268)
+	at org.eclipse.compare.internal.CompareContentViewerSwitchingPane.setInput(CompareContentViewerSwitchingPane.java:202)
+	at org.eclipse.compare.CompareEditorInput.internalSetContentPaneInput(CompareEditorInput.java:806)
+	at org.eclipse.compare.CompareEditorInput.lambda$8(CompareEditorInput.java:747)
+	at org.eclipse.swt.custom.BusyIndicator.showWhile(BusyIndicator.java:67)
+	at org.eclipse.compare.CompareEditorInput.feed1(CompareEditorInput.java:742)
+	at org.eclipse.compare.CompareEditorInput.feedInput(CompareEditorInput.java:720)
+	at org.eclipse.compare.CompareEditorInput.createContents(CompareEditorInput.java:543)
+	at org.eclipse.compare.internal.CompareEditor.createCompareControl(CompareEditor.java:448)
+	at org.eclipse.compare.internal.CompareEditor$1.lambda$0(CompareEditor.java:366)
+	at org.eclipse.ui.internal.PendingSyncExec.run(PendingSyncExec.java:68)
+	at org.eclipse.ui.internal.UILockListener.doPendingWork(UILockListener.java:172)
+	at org.eclipse.swt.widgets.RunnableLock.run(RunnableLock.java:40)
+	at org.eclipse.swt.widgets.Synchronizer.runAsyncMessages(Synchronizer.java:132)
+	at org.eclipse.swt.widgets.Display.runAsyncMessages(Display.java:4029)
+	at org.eclipse.swt.widgets.Display.readAndDispatch(Display.java:3645)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine$5.run(PartRenderingEngine.java:1155)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:338)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine.run(PartRenderingEngine.java:1046)
+	at org.eclipse.e4.ui.internal.workbench.E4Workbench.createAndRunUI(E4Workbench.java:155)
+	at org.eclipse.ui.internal.Workbench.lambda$3(Workbench.java:643)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:338)
+	at org.eclipse.ui.internal.Workbench.createAndRunWorkbench(Workbench.java:550)
+	at org.eclipse.ui.PlatformUI.createAndRunWorkbench(PlatformUI.java:171)
+	at org.eclipse.ui.internal.ide.application.IDEApplication.start(IDEApplication.java:152)
+	at org.eclipse.equinox.internal.app.EclipseAppHandle.run(EclipseAppHandle.java:203)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.runApplication(EclipseAppLauncher.java:136)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.start(EclipseAppLauncher.java:104)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:402)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:255)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.eclipse.equinox.launcher.Main.invokeFramework(Main.java:659)
+	at org.eclipse.equinox.launcher.Main.basicRun(Main.java:596)
+	at org.eclipse.equinox.launcher.Main.run(Main.java:1467)

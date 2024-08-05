@@ -1,6 +1,7 @@
 package com.arenella.recruit.recruiters.beans;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -27,7 +28,7 @@ public class OpenPositionAPIOutbound {
 	private LocalDate 					positionClosingDate;
 	private String 						description;
 	private String 						comments;
-	private LocalDate					created;
+	private LocalDateTime				created;
 	private boolean						viewed;
 	private Set<String> 				skills					= new LinkedHashSet<>();
 	
@@ -149,7 +150,7 @@ public class OpenPositionAPIOutbound {
 	* Returns the date the Open Position was created
 	* @return creation date of the Open Position
 	*/
-	public LocalDate getCreated(){
+	public LocalDateTime getCreated(){
 		return this.created;
 	}
 	
@@ -195,7 +196,7 @@ public class OpenPositionAPIOutbound {
 		private LocalDate 					positionClosingDate;
 		private String 						description;
 		private String 						comments;
-		private LocalDate					created;
+		private LocalDateTime				created;
 		private boolean						viewed;
 		private Set<String> 				skills					= new LinkedHashSet<>();
 		
@@ -317,7 +318,7 @@ public class OpenPositionAPIOutbound {
 		* @param created - When the Open Position was created
 		* @return Builder
 		*/
-		public OpenPositionAPIOutboundBuilder created(LocalDate created){
+		public OpenPositionAPIOutboundBuilder created(LocalDateTime created){
 			this.created = created;
 			return this;
 		}

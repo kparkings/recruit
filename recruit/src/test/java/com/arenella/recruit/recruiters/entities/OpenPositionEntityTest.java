@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -34,7 +35,7 @@ public class OpenPositionEntityTest {
 	private LocalDate 		positionClosingDate		= LocalDate.of(2022, 6, 14);;
 	private String 			description			 	= "Some long descriptive text";
 	private String 			comments				= "Some comments fromt he Recruiter";
-	private LocalDate		created					= LocalDate.of(2022, 7, 26);
+	private LocalDateTime	created					= LocalDateTime.of(2022, 7, 26, 1, 1, 1);
 	private boolean			active					= false;
 	private Set<String>		skills					= Set.of("java","c#");
 	
@@ -144,7 +145,7 @@ public class OpenPositionEntityTest {
 		assertEquals(entity.getStartDate(), 			startDate);
 		
 		assertNotNull(entity.getCreated());
-		assertTrue(entity.getCreated() instanceof LocalDate);
+		assertTrue(entity.getCreated() instanceof LocalDateTime);
 		assertFalse(position.isActive());
 		
 		assertTrue(entity.getSkills().contains("java"));
@@ -206,7 +207,7 @@ public class OpenPositionEntityTest {
 					
 				.build();
 		
-		final LocalDate createdOrig = positionEntity.getCreated();
+		final LocalDateTime createdOrig = positionEntity.getCreated();
 		
 		OpenPositionEntity entity = OpenPositionEntity.convertToEntity(position, Optional.of(positionEntity));
 		
@@ -226,7 +227,7 @@ public class OpenPositionEntityTest {
 		assertEquals(entity.getStartDate(), 			startDate);
 		
 		assertNotNull(entity.getCreated());
-		assertTrue(entity.getCreated() instanceof LocalDate);
+		assertTrue(entity.getCreated() instanceof LocalDateTime);
 		assertFalse(entity.isActive());
 		
 		assertTrue(entity.getSkills().contains("java"));

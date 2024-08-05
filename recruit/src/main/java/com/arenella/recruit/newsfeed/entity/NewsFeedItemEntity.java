@@ -46,8 +46,6 @@ public class NewsFeedItemEntity {
 	
 	@OrderBy("order")
 	@OneToMany(mappedBy = "newsItemId", cascade = CascadeType.ALL, orphanRemoval=true, fetch=FetchType.EAGER)
-	//@OneToMany( cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval=true)
-	//@JoinColumn(name = "newsfeed_item_id")
 	private Set<NewsFeedItemLineEntity> lines = new LinkedHashSet<>();
 	
 	/**

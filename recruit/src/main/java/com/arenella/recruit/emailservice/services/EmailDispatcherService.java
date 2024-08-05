@@ -239,7 +239,10 @@ public class EmailDispatcherService {
 		helper.setBcc(recipientEmails);
 		helper.setSubject(email.getTitle());
 
+		//Generate new Gmail app password
+		//https://myaccount.google.com/apppasswords?pli=1&rapt=AEjHL4NqEwStxpG3_Ye_5ddjHxDQ3dQHBBfEvugdd_xfQypTdPbJVHxdTwCmRXgnA-u2Obox9J_8t7jTolfaS-dABUGw8gM5TD9NxDPq0st2Jm4jo--UIXc
 		sender.send(mimeMessage);
+		
 	}
 	
 	/**

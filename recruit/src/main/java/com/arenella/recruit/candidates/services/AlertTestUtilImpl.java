@@ -1,7 +1,6 @@
 package com.arenella.recruit.candidates.services;
 
 import java.util.HashSet;
-import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.Executors;
