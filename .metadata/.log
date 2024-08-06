@@ -11470,3 +11470,9 @@ org.eclipse.core.internal.resources.ResourceException: Marker id 187858 not foun
 
 !ENTRY org.eclipse.lsp4e 1 0 2024-08-06 22:02:54.513
 !MESSAGE [Info]	Angular project loading started
+
+!ENTRY org.eclipse.lsp4e 1 0 2024-08-06 23:04:16.185
+!MESSAGE [Info]	Angular project loading finished
+
+!ENTRY org.eclipse.lsp4e 1 0 2024-08-06 23:04:16.187
+!MESSAGE [Info]	Angular project loading started
