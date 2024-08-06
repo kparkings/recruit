@@ -69,18 +69,22 @@ public class ListingAlertHitTesterUtil {
 		
 		this.listingAlertService.fetchListingAlerts(filters).stream().forEach(hit -> {
 			
-			RequestSendEmailCommand command = RequestSendEmailCommand
-					.builder()
-						.emailType(EmailType.EXTERN)
-						.recipients(Set.of(new EmailRecipient<UUID>(UUID.randomUUID(),hit.getEmail(), ContactType.UNREGISTERED_USER)))
-						.sender(new Sender<>(UUID.randomUUID(), "", SenderType.SYSTEM, "kparkings@gmail.com"))
-						.title("Arenella-ICT - Matching Role")
-						.topic(EmailTopic.LISTING_MATCHING_ROLE)
-						.model(Map.of("listingId",listing.get().getListingId(),"listingTitle",listing.get().getTitle(),"alertId",hit.getId()))
-						.persistable(false)
-					.build();
-			
-			this.eventPublisher.RequestSendListingAlertHitEmailCommand(command);
+			try {
+				RequestSendEmailCommand command = RequestSendEmailCommand
+						.builder()
+							.emailType(EmailType.EXTERN)
+							.recipients(Set.of(new EmailRecipient<UUID>(UUID.randomUUID(),hit.getEmail(), ContactType.UNREGISTERED_USER)))
+							.sender(new Sender<>(UUID.randomUUID(), "", SenderType.SYSTEM, "kparkings@gmail.com"))
+							.title("Arenella-ICT - Matching Role")
+							.topic(EmailTopic.LISTING_MATCHING_ROLE)
+							.model(Map.of("listingId",listing.get().getListingId(),"listingTitle",listing.get().getTitle(),"alertId",hit.getId()))
+							.persistable(false)
+						.build();
+				
+				this.eventPublisher.RequestSendListingAlertHitEmailCommand(command);
+			}catch(Exception e) {
+				e.printStackTrace();
+			}
 		});
 		
 	}
