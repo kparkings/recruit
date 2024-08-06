@@ -180,8 +180,7 @@ public class CandidateSuggestionAPIOutboundTest {
 		assertEquals(SECURITY_CLEARANCE, 		candidateAPIOutbound.getSecurityClearance());
 		assertEquals(REQUIRES_SPONSORSHIP, 		candidateAPIOutbound.getRequiresSponsorship());
 		
-		assertTrue(candidateAPIOutbound.getSkills().contains("Java"));
-		assertTrue(candidateAPIOutbound.getSkills().contains("Angular"));
+		assertTrue(candidateAPIOutbound.getSkills().isEmpty());
 		
 		candidateAPIOutbound.getLanguages().stream().filter(l -> l.getLanguage() == LANGUAGE.DUTCH && l.getLevel() == LEVEL.PROFICIENT).findAny().orElseThrow();
 		
@@ -246,8 +245,7 @@ public class CandidateSuggestionAPIOutboundTest {
 		assertEquals(SECURITY_CLEARANCE, 							candidateAPIOutbound.getSecurityClearance());
 		assertEquals(REQUIRES_SPONSORSHIP, 							candidateAPIOutbound.getRequiresSponsorship());
 		
-		assertTrue(candidateAPIOutbound.getSkills().contains("Java"));
-		assertTrue(candidateAPIOutbound.getSkills().contains("Angular"));
+		assertTrue(candidateAPIOutbound.getSkills().isEmpty());
 		
 		candidateAPIOutbound.getLanguages().stream().filter(l -> l.getLanguage() == LANGUAGE.DUTCH && l.getLevel() == LEVEL.PROFICIENT).findAny().orElseThrow();
 		
@@ -312,8 +310,7 @@ public class CandidateSuggestionAPIOutboundTest {
 		assertEquals(SECURITY_CLEARANCE, 							candidateAPIOutbound.getSecurityClearance());
 		assertEquals(REQUIRES_SPONSORSHIP, 							candidateAPIOutbound.getRequiresSponsorship());
 		
-		assertTrue(candidateAPIOutbound.getSkills().contains("Java"));
-		assertTrue(candidateAPIOutbound.getSkills().contains("Angular"));
+		assertTrue(candidateAPIOutbound.getSkills().isEmpty());
 		
 		candidateAPIOutbound.getLanguages().stream().filter(l -> l.getLanguage() == LANGUAGE.DUTCH && l.getLevel() == LEVEL.PROFICIENT).findAny().orElseThrow();
 		

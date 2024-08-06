@@ -160,7 +160,7 @@ export class CandidateProfileComponent {
 		let formattedSkill:string = skill.trim().toLowerCase();
 		
 		let match:boolean = false;
-		this.suggestedCandidate.skills.forEach(skill => {
+		this.candidateProfile.skills.forEach(skill => {
 			if (skill === formattedSkill) {
 				 match = true;
 			}
