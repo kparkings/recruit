@@ -7,6 +7,7 @@ import { CandidateServiceService } 												from 'src/app/candidate-service.s
 import { Candidate } 															from '../candidate';
 import { SavedCandidate } 														from '../saved-candidate';
 import { TranslateService } 													from '@ngx-translate/core';
+import { SuggestionsComponent } from '../suggestions.component';
 
 /**
 * Component for Candidates saved by a User to allow them 
@@ -31,7 +32,8 @@ export class SavedCandidatesComponent {
 	*/
 	constructor(private candidateService:CandidateServiceService,
 				private router:Router,
-				private translate:TranslateService){
+				private translate:TranslateService,
+				private parentX:SuggestionsComponent){
 					
 	}
 	
@@ -55,6 +57,11 @@ export class SavedCandidatesComponent {
 	}
 	
 	public showSuggestedCandidateOverviewSavedCandidate(savedCandidate:SavedCandidate){
+		//TODO: [KP] Left pane not set. Needs to be updated when candidate is selected. Object available but we don't have the data/methods available to constuct it here
+		//Methods we can extract to service
+		//Data is more complicated - Pass it into tag as input and then pass that to service to construct the InfoItem
+		
+		this.parentX.setLeftInfoPane(savedCandidate.candidateId+"", savedCandidate.candidate);
 		this.currentView 			= 'suggested-canidate-overview';
 		this.suggestedCandidate 	= savedCandidate.candidate;
 		this.suggestedCandidate.removed = this.isNoLongerAvailableSC(savedCandidate);

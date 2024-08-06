@@ -658,25 +658,9 @@ export class SuggestionsComponent implements OnInit {
 		}
 	}
 	
-	/**
-	* Shows the Suggesion result view
-	*/
-	public showSuggestedCandidateOverview(candidateSuggestion:Candidate):void{
+	public setLeftInfoPane(candidateId:string, candidate:Candidate):void{
 		
-		if(!candidateSuggestion.available && !this.doPaidSubscriptionCheck()){
-			this.paidFeature = "paidFeatureUnavailableCandidates";
-			return;
-		}
-		
-		
-		this.doCreditCheck();
-		
-		//Admin
-		if (this.isAdmin()) {
-			this.candidateNavService.startCandidateProfileRouteForAdmin();
-		}
-		
-		this.candidateService.getCandidateProfileById(candidateSuggestion.candidateId).subscribe( candidate => {
+		this.candidateService.getCandidateProfileById(candidateId).subscribe( candidate => {
 			this.candidateProfile 	= candidate;
 			this.infoItemConfig 	= new InfoItemConfig();
 			this.infoItemConfig.setProfilePhoto(this.candidateProfile?.photo?.imageBytes);
@@ -688,14 +672,14 @@ export class SuggestionsComponent implements OnInit {
 			//Location
 			let recruiterBlock:InfoItemBlock = new InfoItemBlock();
 			recruiterBlock.setTitle(this.translate.instant('info-item-title-location'));
-			recruiterBlock.addRow(new InfoItemRowKeyValueFlag(this.translate.instant('info-item-title-country'),this.getFlagClassFromCountry(this.suggestedCandidate.country)));
-			recruiterBlock.addRow(new InfoItemRowKeyValue(this.translate.instant('info-item-title-city'),this.suggestedCandidate.city));
+			recruiterBlock.addRow(new InfoItemRowKeyValueFlag(this.translate.instant('info-item-title-country'),this.getFlagClassFromCountry(candidate.country)));
+			recruiterBlock.addRow(new InfoItemRowKeyValue(this.translate.instant('info-item-title-city'),candidate.city));
 			this.infoItemConfig.addItem(recruiterBlock);
 			
 			//Languages Block
 			let languageBlock:InfoItemBlock = new InfoItemBlock();
 			languageBlock.setTitle(this.translate.instant('info-item-title-languages'));
-			this.suggestedCandidate.languages.forEach(lang => {
+			candidate.languages.forEach(lang => {
 					languageBlock.addRow(new InfoItemRowKeyValueMaterialIcon(this.getLanguage(lang.language),this.getMaterialIconClassFromLangLevel(lang.level)));
 			});
 			
@@ -704,13 +688,13 @@ export class SuggestionsComponent implements OnInit {
 			this.infoItemConfig.addItem(languageBlock);
 			
 			//Contract Type Block
-			if (this.suggestedCandidate.freelance == 'TRUE' || this.suggestedCandidate.perm == 'TRUE') {
+			if (candidate.freelance == 'TRUE' || candidate.perm == 'TRUE') {
 				let contractTypeBlock:InfoItemBlock = new InfoItemBlock();
 				contractTypeBlock.setTitle(this.translate.instant('info-item-title-contract-type'));
-				if (this.suggestedCandidate.freelance == 'TRUE'){		
+				if (candidate.freelance == 'TRUE'){		
 					contractTypeBlock.addRow(new InfoItemRowKeyValueMaterialIcon(this.translate.instant('info-item-title-contract'),"available-check-icon"));
 				}
-				if (this.suggestedCandidate.perm == 'TRUE'){		
+				if (candidate.perm == 'TRUE'){		
 					contractTypeBlock.addRow(new InfoItemRowKeyValueMaterialIcon(this.translate.instant('info-item-title-permanent'),"available-check-icon"));
 				}
 				this.infoItemConfig.addItem(contractTypeBlock);
@@ -735,20 +719,20 @@ export class SuggestionsComponent implements OnInit {
 			//Years Experience 
 			let yearsExperienceBlock:InfoItemBlock = new InfoItemBlock();
 			yearsExperienceBlock.setTitle(this.translate.instant('info-item-title-years-experience'));
-			yearsExperienceBlock.addRow(new InfoItemRowSingleValue(""+this.suggestedCandidate.yearsExperience));
+			yearsExperienceBlock.addRow(new InfoItemRowSingleValue(""+candidate.yearsExperience));
 			this.infoItemConfig.addItem(yearsExperienceBlock);
 			
 			//Secuirty Level
 			let securityClearanceBlock:InfoItemBlock = new InfoItemBlock();
 			securityClearanceBlock.setTitle(this.translate.instant('info-item-title-security-clearance'));
-			securityClearanceBlock.addRow(new InfoItemRowKeyValue(this.translate.instant('info-item-security-clearance'),this.suggestedCandidate.securityClearance));
+			securityClearanceBlock.addRow(new InfoItemRowKeyValue(this.translate.instant('info-item-security-clearance'),candidate.securityClearance));
 			this.infoItemConfig.addItem(securityClearanceBlock);
 			
 			
 			//Requires Sponsorship
 			let requiresSponsorhipBlock:InfoItemBlock = new InfoItemBlock();
 			requiresSponsorhipBlock.setTitle(this.translate.instant('info-item-title-requires-sponsorship'));
-			requiresSponsorhipBlock.addRow(new InfoItemRowKeyValue(this.translate.instant('info-item-requires-sponsorship'),this.suggestedCandidate.requiresSponsorship ? this.translate.instant('yes') : this.translate.instant('no')));
+			requiresSponsorhipBlock.addRow(new InfoItemRowKeyValue(this.translate.instant('info-item-requires-sponsorship'),candidate.requiresSponsorship ? this.translate.instant('yes') : this.translate.instant('no')));
 			this.infoItemConfig.addItem(requiresSponsorhipBlock);
 			
 			
@@ -764,6 +748,28 @@ export class SuggestionsComponent implements OnInit {
 			this.infoItemConfig.addItem(availabilityBlock);
 			
 		});
+		
+	}
+	
+	/**
+	* Shows the Suggesion result view
+	*/
+	public showSuggestedCandidateOverview(candidateSuggestion:Candidate):void{
+		
+		if(!candidateSuggestion.available && !this.doPaidSubscriptionCheck()){
+			this.paidFeature = "paidFeatureUnavailableCandidates";
+			return;
+		}
+		
+		
+		this.doCreditCheck();
+		
+		//Admin
+		if (this.isAdmin()) {
+			this.candidateNavService.startCandidateProfileRouteForAdmin();
+		}
+		
+		this.setLeftInfoPane(candidateSuggestion.candidateId, this.suggestedCandidate);
 		
 		this.currentView 			= 'suggested-canidate-overview';
 		this.suggestedCandidate 	= candidateSuggestion;
