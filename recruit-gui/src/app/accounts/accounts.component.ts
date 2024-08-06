@@ -558,26 +558,78 @@ export class AccountsComponent implements OnInit {
 		
 	}
 	
+	
+	private showAvailable:boolean = true;
+	private showUnavailable:boolean = true;
+	public availableCount:number = 0;
+	public unavailableCount:number = 0;
+	
+	public toggleShowAvailable():void{
+		this.showAvailable = !this.showAvailable;
+		this.fetchCandidatesDueForAvailabilityCheck();
+	}
+	
+	public toggleShowUnavailable():void{
+		this.showUnavailable = !this.showUnavailable;
+		this.fetchCandidatesDueForAvailabilityCheck();
+	}
+	
 	/**
 	* Retrieves all the candidates that are due to have their availability checked
 	*/
 	fetchCandidatesDueForAvailabilityCheck():void{
 		
 		this.candidatesToCheckForAvailability = new Array<Candidate>();
+			
+		if (!this.showAvailable && !this.showUnavailable)	{
+			this.availableCount = 0;
+			this.unavailableCount = 0;
+			return;
+		}
+		
+		if (this.showAvailable && !this.showUnavailable) {
+			this.candidateService.fetchCandidatesDueForAvailabilityCheck().subscribe(data => {
+				this.candidatesToCheckForAvailability = data.content;
+				this.availableCount = data.content.length;
+				this.unavailableCount = 0;
+			}, 
+			err => {
+				console.log(JSON.stringify(err));		
+			});
+		}
+		
+		if (!this.showAvailable && this.showUnavailable) {
+			this.candidateService.fetchUnavailableCandidatesDueForAvailabilityCheck().subscribe(data => {
+				this.candidatesToCheckForAvailability = data.content;
+				this.availableCount = 0;
+				this.unavailableCount = data.content.length;
+			}, 
+			err => {
+				console.log(JSON.stringify(err));		
+			});
+		}
+			
+		if (this.showAvailable && this.showUnavailable) {
 		
 		 this.candidateService.fetchCandidatesDueForAvailabilityCheck().subscribe(data => {
 			
 			this.candidatesToCheckForAvailability = data.content;
 			
+			this.availableCount = data.content.length;
+			
+			
 			this.candidateService.fetchUnavailableCandidatesDueForAvailabilityCheck().subscribe(candidateData => {
 				let candidates  = <Array<Candidate>> candidateData.content;
 				candidates.forEach(c => this.candidatesToCheckForAvailability.push(c));
+				this.unavailableCount = candidateData.content.length;
 			});
 			
-		}, 
-		err => {
-			console.log(JSON.stringify(err));		
-		});
+			}, 
+			err => {
+				console.log(JSON.stringify(err));		
+			});
+		
+		}
 	}
 	
 	
