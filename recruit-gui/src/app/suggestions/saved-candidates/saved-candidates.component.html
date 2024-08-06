@@ -12,7 +12,7 @@
 				</div>
 				<div class="suggestion-icon-body">
 					<div>
-						{{'saved-candidate-no-longer-available' |translate}}
+						{{savedCandidate.candidate.firstname}} {{savedCandidate.candidate.surname}}
 					</div>
 					<div>
 						{{savedCandidate.candidate.roleSought}}
@@ -27,7 +27,7 @@
 					</div>
 					<div class="suggestion-icon-body-disabled">
 						<div>
-							{{savedCandidate.candidate.firstname}} {{savedCandidate.candidate.surname}}
+							{{'saved-candidate-no-longer-available' |translate}}
 						</div>
 						<div>
 							{{savedCandidate.candidate.roleSought}}
