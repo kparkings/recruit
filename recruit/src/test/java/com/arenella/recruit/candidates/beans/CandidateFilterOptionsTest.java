@@ -54,6 +54,7 @@ public class CandidateFilterOptionsTest {
 		String					ownerId							= "rec22";
 		boolean 				includeRequiresSponsorship		= true;
 		LocalDate				registeredAfter					= LocalDate.of(2024,5,8);
+		LocalDate				lastAccountRefreshLtEq			= LocalDate.of(2024,8,8);
 		
 		candidateIds.add(candidateId);
 		skills.add(skill);
@@ -88,6 +89,8 @@ public class CandidateFilterOptionsTest {
 													.ownerId(ownerId)
 													.includeRequiresSponsorship(includeRequiresSponsorship)
 													.registeredAfter(registeredAfter)
+													.lastAccountRefreshLtEq(lastAccountRefreshLtEq)
+													.lastAccountRefreshMissing()
 													.build();
 		
 		assertEquals(filters.getCandidateIds().stream().findAny().get(), 	candidateId);
@@ -110,7 +113,10 @@ public class CandidateFilterOptionsTest {
 		assertEquals(daysSinceLastAvailabilityCheck, 						filters.getDaysSinceLastAvailabilityCheck().get());
 		assertEquals(ownerId,						 						filters.getOwnerId().get());
 		assertEquals(registeredAfter,				 						filters.getRegisteredAfter().get());
+		assertEquals(lastAccountRefreshLtEq, 								filters.getLastAccountRefreshLtEq().get());				
 		assertTrue(filters.getIncludeRequiresSponsorship().get());
+		assertTrue(filters.getLastAccountRefreshMissing().get());
+		
 	}
 	
 	/**
@@ -140,7 +146,7 @@ public class CandidateFilterOptionsTest {
 		String					ownerId							= "rec22";
 		boolean 				includeRequiresSponsorship		= true;
 		LocalDate				registeredAfter					= LocalDate.of(2024,5,8);
-		
+		LocalDate				lastAccountRefreshLtEq			= LocalDate.of(2024,8,8);
 		
 		candidateIds.add(candidateId);
 		skills.add(skill);
@@ -175,6 +181,8 @@ public class CandidateFilterOptionsTest {
 													.ownerId(ownerId)
 													.includeRequiresSponsorship(includeRequiresSponsorship)
 													.registeredAfter(registeredAfter)
+													.lastAccountRefreshLtEq(lastAccountRefreshLtEq)
+													.lastAccountRefreshMissing()
 													.build();
 		
 		CandidateFilterOptions defaults = CandidateFilterOptions.builder().build();
@@ -201,6 +209,8 @@ public class CandidateFilterOptionsTest {
 		assertEquals(filters.getOwnerId(), 							defaults.getOwnerId());
 		assertEquals(filters.getIncludeRequiresSponsorship(), 		defaults.getIncludeRequiresSponsorship());
 		assertEquals(filters.getRegisteredAfter(),					defaults.getRegisteredAfter());
+		assertEquals(filters.getLastAccountRefreshLtEq(), 			defaults.getLastAccountRefreshLtEq());	
+		assertEquals(filters.getLastAccountRefreshMissing(), 		defaults.getLastAccountRefreshMissing());	
 	}
 	
 	/**

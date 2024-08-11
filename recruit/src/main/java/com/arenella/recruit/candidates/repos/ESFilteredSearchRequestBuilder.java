@@ -13,6 +13,7 @@ import com.arenella.recruit.candidates.enums.PERM;
 
 import co.elastic.clients.elasticsearch._types.FieldValue;
 import co.elastic.clients.elasticsearch._types.query_dsl.BoolQuery;
+import co.elastic.clients.elasticsearch._types.query_dsl.ExistsQuery;
 import co.elastic.clients.elasticsearch._types.query_dsl.MatchQuery;
 import co.elastic.clients.elasticsearch._types.query_dsl.RangeQuery;
 import co.elastic.clients.elasticsearch._types.query_dsl.TermsQuery;
@@ -62,6 +63,23 @@ public class ESFilteredSearchRequestBuilder {
 			)._toQuery());
 		}
 		
+		if (!filterOptions.getLastAccountRefreshLtEq().isEmpty()) {
+			LocalDate cutOff = filterOptions.getLastAccountRefreshLtEq().get();
+			mustQueries.add(RangeQuery.of(m -> m
+					.queryName("lastAccountRefresh")
+					.field("lastAccountRefresh")
+					.lte(JsonData.of(Date.from(cutOff.atStartOfDay(ZoneId.systemDefault()).toInstant())))
+			)._toQuery());
+		}
+		
+		if (!filterOptions.getLastAccountRefreshMissing().isEmpty()) {
+			
+			mustNotQueries.add(ExistsQuery.of(m -> m
+					.queryName("lastAccountRefreshMissing")
+					.field("lastAccountRefresh")
+			)._toQuery());
+		}
+		
 		//TODO:[KP] Originally accepts array of CanddiateIds. This impelmentation only 1 Cadidate
 		if (!filterOptions.getCandidateIds().isEmpty()) {
 			String candidateId = (String) filterOptions.getCandidateIds().toArray()[0];
@@ -91,7 +109,7 @@ public class ESFilteredSearchRequestBuilder {
 			
 			
 			List<String> 		languages 		= filterOptions.getLanguages().stream().map(l -> l.getLanguage().toString()).map(l -> l.toUpperCase()).collect(Collectors.toList());
-			List<FieldValue> 	fieldValueList 	= languages.stream().map(FieldValue::of).toList();
+			//List<FieldValue> 	fieldValueList 	= languages.stream().map(FieldValue::of).toList();
 			
 			/**
 			* For speed. Almost all candidates speak English. Therefore we filter on the remaining languages which in most

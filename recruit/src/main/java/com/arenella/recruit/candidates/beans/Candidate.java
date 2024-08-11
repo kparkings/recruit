@@ -53,6 +53,7 @@ public class Candidate {
 	private CANDIDATE_TYPE				candidateType;
 	private boolean 					requiresSponsorship;
 	private SECURITY_CLEARANCE_TYPE 	securityClearance;
+	private LocalDate					lastAccountRefresh;
 	
 	
 	/**
@@ -87,6 +88,7 @@ public class Candidate {
 		this.candidateType				= builder.candidateType;
 		this.requiresSponsorship		= builder.requiresSponsorship;
 		this.securityClearance		 	= builder.securityClearance;
+		this.lastAccountRefresh			= builder.lastAccountRefresh;
 		
 		this.skills.addAll(builder.skills);
 		this.languages.addAll(builder.languages);
@@ -337,6 +339,14 @@ public class Candidate {
 	}
 	
 	/**
+	* Returns the Date the Candidate account was last refreshed
+	* @return Date of last refresh
+	*/
+	public LocalDate getLastAccountRefresh() {
+		return Optional.ofNullable(this.lastAccountRefresh).isEmpty() ? (Optional.ofNullable(this.registerd).isEmpty() ?  LocalDate.now() : this.registerd ) : lastAccountRefresh;
+	}
+	
+	/**
 	* Sets the introduction describing the Candidate
 	* @param introduction - intro
 	*/
@@ -422,6 +432,14 @@ public class Candidate {
 	}
 	
 	/**
+	* Sets the Date of the last time the Candidate account was Refreshed
+	* @param lastAccountRefresh - Date of last refresh
+	*/
+	public void setLastAccountRefresh(LocalDate lastAccountRefresh) {
+		this.lastAccountRefresh = lastAccountRefresh;
+	}
+	
+	/**
 	* Builder for the Candidate class
 	* @return A Builder for the Candidate class
 	*/
@@ -464,6 +482,7 @@ public class Candidate {
 		private CANDIDATE_TYPE				candidateType;
 		private boolean 					requiresSponsorship;
 		private SECURITY_CLEARANCE_TYPE 	securityClearance;
+		private LocalDate					lastAccountRefresh;
 		
 		/**
 		* Sets the candidates Unique identifier in the System
@@ -747,6 +766,16 @@ public class Candidate {
 		*/
 		public CandidateBuilder candidateType(CANDIDATE_TYPE candidateType) {
 			this.candidateType = candidateType;
+			return this;
+		}
+		
+		/**
+		* Sets date of last time Candidate account was refreshed
+		* @param lastAccountRefresh - Date of the last refresh
+		* @return
+		*/
+		public CandidateBuilder lastAccountRefresh(LocalDate lastAccountRefresh) {
+			this.lastAccountRefresh = lastAccountRefresh;
 			return this;
 		}
 		

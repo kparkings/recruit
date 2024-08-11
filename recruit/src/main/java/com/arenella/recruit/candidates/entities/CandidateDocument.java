@@ -112,6 +112,9 @@ public class CandidateDocument {
 	@Field(type = FieldType.Boolean)
     private boolean requiresSponsorship;
     
+	@Field(type = FieldType.Date)
+	private Date 		lastAccountRefresh;
+	
 	@Field(type = FieldType.Keyword)
     @Enumerated(EnumType.STRING)
     private SECURITY_CLEARANCE_TYPE securityClearance;
@@ -160,7 +163,9 @@ public class CandidateDocument {
 		this.requiresSponsorship 		= builder.requiresSponsorship;
 		this.securityClearance 			= builder.securityClearance;
 		
-		
+		if (Optional.ofNullable(builder.lastAccountRefresh).isPresent()) {
+			this.lastAccountRefresh			= Date.from(builder.lastAccountRefresh.atStartOfDay(defaultZoneId).toInstant());
+		}
 		
 		this.skills.clear();
 		this.skills.addAll(builder.skills);
@@ -281,14 +286,19 @@ public class CandidateDocument {
 	* @return Date the Candidate Registered
 	*/
 	public Date getRegisteredOn() {
-		//ZoneId defaultZoneId = ZoneId.systemDefault();
 		return this.registerd;
 	}
 	
-	//@JsonFormat(pattern = "yyyy-MM-dd")
-   public Date getRegisterd() {
-		//ZoneId defaultZoneId = ZoneId.systemDefault();
+	public Date getRegisterd() {
 		return this.registerd;
+	}
+	
+	/**
+	* Returns the Date the Candidates account last had its data refreshed
+	* @return Date of last refresh
+	*/
+	public Date getLastAccountRefresh() {
+		return Optional.ofNullable(this.lastAccountRefresh).isEmpty() ? (Optional.ofNullable(this.registerd).isEmpty() ?  new Date() : this.registerd ) : lastAccountRefresh;
 	}
 	
 	/**
@@ -296,14 +306,11 @@ public class CandidateDocument {
 	* that they were still available for a new role
 	* @return Date of last availability check
 	*/
-	//@JsonFormat(pattern = "yyyy-MM-dd")
 	public Date getLastAvailabilityCheckOn() {
-		//ZoneId defaultZoneId = ZoneId.systemDefault();
 		return this.lastAvailabilityCheck;
 	}
 	
 	public Date getLastAvailabilityCheck() {
-		//ZoneId defaultZoneId = ZoneId.systemDefault();
 		return this.lastAvailabilityCheck;
 	}
 	
@@ -469,6 +476,7 @@ public class CandidateDocument {
 	    private SECURITY_CLEARANCE_TYPE securityClearance;
 	    private Set<String> 			skills						= new LinkedHashSet<>();
 		private Set<LanguageDocument> 	languages					= new LinkedHashSet<>();
+		private LocalDate				lastAccountRefresh;
 		
 		/**
 		* Sets the candidates Unique identifier in the System
@@ -746,6 +754,16 @@ public class CandidateDocument {
 		}
 		
 		/**
+		* Sets the Data the Candidate account was last refreshed
+		* @param lastAccountRefresh - Date of last refreh
+		* @return Builder
+		*/
+		public CandidateDocumentBuilder lastAccountRefresh(LocalDate lastAccountRefresh) {
+			this.lastAccountRefresh = lastAccountRefresh;
+			return this;
+		}
+		
+		/**
 		* Returns an instance of CandidateDocument initialized with the 
 		* values in the builder
 		* @return Initialized instance of CandidateDocument
@@ -795,6 +813,9 @@ public class CandidateDocument {
 					.skills(doc.getSkills())
 					.surname(doc.getSurname())
 					.yearsExperience(doc.getYearsExperience())
+					.lastAccountRefresh(doc.getLastAccountRefresh().toInstant()
+						      .atZone(ZoneId.systemDefault())
+						      .toLocalDate())
 				.build();
 
 	}
@@ -834,6 +855,7 @@ public class CandidateDocument {
 					.skills(candidate.getSkills())
 					.surname(candidate.getSurname())
 					.yearsExperience(candidate.getYearsExperience())
+					.lastAccountRefresh(candidate.getLastAccountRefresh())
 				.build();
 
 	}

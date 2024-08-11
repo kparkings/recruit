@@ -39,6 +39,8 @@ public class CandidateFilterOptions {
 	private String				ownerId;
 	private Boolean				includeRequiresSponsorship			= null;
 	private LocalDate			registeredAfter						= null;
+	private LocalDate			lastAccountRefreshLtEq				= null;
+	private Boolean				lastAccountRefreshMissing		 	= null;
 	
 	/**
 	* Builder for the  
@@ -77,6 +79,8 @@ public class CandidateFilterOptions {
 		this.includeRequiresSponsorship	 	= builder.includeRequiresSponsorship;
 		this.registeredAfter				= builder.registeredAfter;
 		this.languages						= builder.languages;
+		this.lastAccountRefreshLtEq		 	= builder.lastAccountRefreshLtEq;
+		this.lastAccountRefreshMissing		= builder.lastAccountRefreshMissing;
 		
 	}
 	
@@ -174,6 +178,24 @@ public class CandidateFilterOptions {
 	*/
 	public Set<Language> getLanguages(){
 		return this.languages;
+	}
+	
+	/**
+	* Returns whether to apply filter for when accounts last had their 
+	* details refreshed
+	* @return whether to apply filter for when accounts last had their 
+	*/
+	public Optional<LocalDate> getLastAccountRefreshLtEq(){
+		return Optional.ofNullable(this.lastAccountRefreshLtEq);
+	}
+	
+	/**
+	* Returns whether to apply filter for Candidate's who have 
+	* no lastAccountRefresh date
+	* @return  whether to apply filter for Candidate's who have no lastAccountRefresh date
+	*/
+	public Optional<Boolean> getLastAccountRefreshMissing(){
+		return Optional.ofNullable(this.lastAccountRefreshMissing);
 	}
 	
 	/**
@@ -356,6 +378,8 @@ public class CandidateFilterOptions {
 		private String 				ownerId;
 		private Boolean				includeRequiresSponsorship			= null;
 		private LocalDate			registeredAfter						= null;
+		private LocalDate			lastAccountRefreshLtEq				= null;
+		private Boolean				lastAccountRefreshMissing			= null;
 		
 		/**
 		* Sets the name of the attribute to order on
@@ -602,6 +626,26 @@ public class CandidateFilterOptions {
 		*/
 		public CandidateFilterOptionsBuilder registeredAfter(LocalDate registeredAfter) {
 			this.registeredAfter = registeredAfter;
+			return this;
+		}
+		
+		/**
+		* Sets filter for last time the Candidate's account was refreshed
+		* @param lastAccountRefreshLtEq - LTE date of last refrest to include
+		* @return Builder
+		*/
+		public CandidateFilterOptionsBuilder lastAccountRefreshLtEq(LocalDate lastAccountRefreshLtEq) {
+			this.lastAccountRefreshLtEq = lastAccountRefreshLtEq;
+			return this;
+		}
+		
+		/**
+		* Sets filter for whether to include Candidates's that have no lastAccountRefresh value
+		* @param lastAccountRefreshMissing - whether to include Candidates's that have no lastAccountRefresh value
+		* @return Builder
+		*/
+		public CandidateFilterOptionsBuilder lastAccountRefreshMissing() {
+			this.lastAccountRefreshMissing = true;
 			return this;
 		}
 		

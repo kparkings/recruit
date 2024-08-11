@@ -12,6 +12,7 @@ import com.arenella.recruit.candidates.enums.COUNTRY;
 import com.arenella.recruit.candidates.enums.FUNCTION;
 
 import co.elastic.clients.elasticsearch._types.query_dsl.BoolQuery;
+import co.elastic.clients.elasticsearch._types.query_dsl.ExistsQuery;
 import co.elastic.clients.elasticsearch._types.query_dsl.MatchQuery;
 import co.elastic.clients.elasticsearch._types.query_dsl.Query;
 import co.elastic.clients.elasticsearch._types.query_dsl.RangeQuery;
@@ -47,6 +48,7 @@ public class ESFilteredSearchRequestBuilderTest {
 	private static final String 			EMAIL								= "kparkings@gmail.com";
 	private static final Integer			DAYS_SINCE_LAST_AVAILABILITY_CHECK 	= 10;
 	private static final LocalDate			REGISTERED_AFTER					= LocalDate.of(2024, 5, 8);
+	private static final LocalDate			LAST_REFRESH						= LocalDate.of(2024, 8, 11);
 	private static final String				OWNER_ID							= "6789";
 	private static final Boolean			INCLUDE_REQUIRES_SPONSORSHIP		= true;
 	
@@ -75,6 +77,8 @@ public class ESFilteredSearchRequestBuilderTest {
 					.yearsExperienceGtEq(YEARS_EXPERIENCE_GTE)
 					.yearsExperienceLtEq(YEARS_EXPERIENCE_LTE)
 					.registeredAfter(REGISTERED_AFTER)
+					.lastAccountRefreshLtEq(LAST_REFRESH)
+					.lastAccountRefreshMissing()
 				.build();
 	
 	/**
@@ -92,6 +96,7 @@ public class ESFilteredSearchRequestBuilderTest {
 		List<MatchQuery> 	mustNotMatch 	= new ArrayList<>();
 		List<BoolQuery>  	mustBool 		= new ArrayList<>();
 		List<TermsQuery> 	mustTerms 		= new ArrayList<>();
+		List<ExistsQuery> 	mustNotExists 	= new ArrayList<>();
 		
 		boolQuery.must().stream().filter(q -> q.isMatch()).forEach(q -> mustMatch.add((MatchQuery)q._get()));
 		boolQuery.must().stream().filter(q -> q.isRange()).forEach(q -> mustRange.add((RangeQuery)q._get()));
@@ -99,6 +104,7 @@ public class ESFilteredSearchRequestBuilderTest {
 		boolQuery.must().stream().filter(q -> q.isTerms()).forEach(q -> mustTerms.add((TermsQuery)q._get()));
 		
 		boolQuery.mustNot().stream().filter(q -> q.isMatch()).forEach(q -> mustNotMatch.add((MatchQuery)q._get()));
+		boolQuery.mustNot().stream().filter(q -> q.isExists()).forEach(q -> mustNotExists.add((ExistsQuery)q._get()));
 		
 		assertTrue(mustNotMatch.isEmpty());
 		
@@ -112,11 +118,17 @@ public class ESFilteredSearchRequestBuilderTest {
 		assertEquals(OWNER_ID, 								mustMatch.stream().filter(q -> q.field().equals("ownerId")).findFirst().get().query().stringValue());
 		assertEquals(EMAIL, 								mustMatch.stream().filter(q -> q.field().equals("email")).findFirst().get().query().stringValue());
 		
+		Date dateLocal 	= Date.from(LAST_REFRESH.atStartOfDay(ZoneId.systemDefault()).toInstant());
+		Date dateES 	= (Date)mustRange.stream().filter(q -> q.field().equals("lastAccountRefresh")).findFirst().get().lte().to(Date.class);
+		assertEquals(dateLocal, dateES);  				
+		
+		mustNotExists.stream().filter(q -> q.queryName().equals("lastAccountRefreshMissing")).findFirst().orElseThrow();
+		
 		mustRange.stream().filter(q -> q.queryName().equals("yearsExperienceGte") 		&& q.gte().toString().equals(String.valueOf(YEARS_EXPERIENCE_GTE))).findFirst().orElseThrow();
 		mustRange.stream().filter(q -> q.queryName().equals("yearsExperienceLte") 		&& q.lte().toString().equals(String.valueOf(YEARS_EXPERIENCE_LTE))).findFirst().orElseThrow();
 		
 		LocalDate ld = LocalDate.now().minusDays(DAYS_SINCE_LAST_AVAILABILITY_CHECK);
-				
+		
 		mustRange.stream().filter(q -> q.queryName().equals("lastAvailabilityCheck")	&& q.lte().toString().equals(String.valueOf(Date.from(ld.atStartOfDay(ZoneId.systemDefault()).toInstant())))).findFirst().orElseThrow();
 		mustRange.stream().filter(q -> q.queryName().equals("registeredAfterCheck")		&& q.gte().toString().equals(String.valueOf(Date.from(REGISTERED_AFTER.atStartOfDay(ZoneId.systemDefault()).toInstant())))).findFirst().orElseThrow();
 		

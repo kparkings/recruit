@@ -56,6 +56,8 @@ public class CandidateDocumentTest {
     private static final SECURITY_CLEARANCE_TYPE 	SECURITY_CLEARANCE		= SECURITY_CLEARANCE_TYPE.NONE;
     private static final Set<String> 				SKILLS					= Set.of("java","spring");
 	private static final Set<LanguageDocument> 		LANGUAGES				= Set.of(new LanguageDocument(LANGUAGE.ITALIAN, LEVEL.PROFICIENT));
+	private static final LocalDate 					LAST_REFRESH 			= LocalDate.of(2021, 8, 8);
+	
 	
 	/**
 	* Tests construction
@@ -94,6 +96,7 @@ public class CandidateDocumentTest {
 					.skills(SKILLS)
 					.surname(SURNAME)
 					.yearsExperience(YEARS_EXPERIENCE)
+					.lastAccountRefresh(LAST_REFRESH)
 				.build();
 		
 		assertEquals(CANDIDATE_ID,					doc.getCandidateId());
@@ -123,7 +126,7 @@ public class CandidateDocumentTest {
 		assertEquals(SECURITY_CLEARANCE,			doc.getSecurityClearance());
 		assertEquals(SKILLS,						doc.getSkills());
 		assertEquals(LANGUAGES,						doc.getLanguages());
-		
+		assertEquals(LAST_REFRESH,					doc.getLastAccountRefresh().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
 	}
 	
 	/**
@@ -163,6 +166,7 @@ public class CandidateDocumentTest {
 					.skills(SKILLS)
 					.surname(SURNAME)
 					.yearsExperience(YEARS_EXPERIENCE)
+					.lastAccountRefresh(LAST_REFRESH)
 				.build();
 		
 		Candidate candidate = CandidateDocument.convertFromDocument(doc);
@@ -207,6 +211,8 @@ public class CandidateDocumentTest {
 		assertEquals(LANGUAGE.ITALIAN,				candidate.getLanguages().stream().findFirst().get().getLanguage());
 		assertEquals(LEVEL.PROFICIENT,				candidate.getLanguages().stream().findFirst().get().getLevel());
 		
+		assertEquals(LAST_REFRESH,					candidate.getLastAccountRefresh());
+		
 	}
 	
 	/**
@@ -246,6 +252,7 @@ public class CandidateDocumentTest {
 					.skills(SKILLS)
 					.surname(SURNAME)
 					.yearsExperience(YEARS_EXPERIENCE)
+					.lastAccountRefresh(LAST_REFRESH)
 				.build();
 		
 		CandidateDocument doc = CandidateDocument.convertToDocument(candidate);
@@ -289,6 +296,8 @@ public class CandidateDocumentTest {
 		
 		assertEquals(LANGUAGE.ITALIAN,				doc.getLanguages().stream().findFirst().get().getLanguage());
 		assertEquals(LEVEL.PROFICIENT,				doc.getLanguages().stream().findFirst().get().getLevel());
+		
+		assertEquals(LAST_REFRESH,					doc.getLastAccountRefresh().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
 		
 	}
 	

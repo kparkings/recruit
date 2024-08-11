@@ -3,6 +3,7 @@ package com.arenella.recruit.candidates.beans;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -60,6 +61,7 @@ public class CandidateTest {
 	private static final String						OWNER_ID					= "kparkings";
 	private static final CANDIDATE_TYPE				CANDIDATE_TYPE_VAL			= CANDIDATE_TYPE.MARKETPLACE_CANDIDATE;
 	private static final SECURITY_CLEARANCE_TYPE 	SECURITY_LEVEL 				= SECURITY_CLEARANCE_TYPE.NATO;
+	private static final LocalDate 					LAST_REFRESH 				= LocalDate.of(2021, 8, 8);
 	
 	/**
 	* Sets up test environment 
@@ -104,6 +106,7 @@ public class CandidateTest {
 							.ownerId(OWNER_ID)
 							.candidateType(CANDIDATE_TYPE_VAL)
 							.securityClearance(SECURITY_LEVEL)
+							.lastAccountRefresh(LAST_REFRESH)
 							.build();
 		
 		assertEquals(CANDIDATE_ID, 				candidate.getCandidateId());
@@ -130,6 +133,7 @@ public class CandidateTest {
 		assertEquals(OWNER_ID, 					candidate.getOwnerId().get());
 		assertEquals(CANDIDATE_TYPE_VAL, 		candidate.getCandidateType());
 		assertEquals(SECURITY_LEVEL,			candidate.getSecurityClearance());
+		assertEquals(LAST_REFRESH,				candidate.getLastAccountRefresh());
 		
 		assertTrue(candidate.getSkills().contains(SKILL));
 		candidate.getLanguages().stream().filter(l -> l.getLanguage() == LANGUAGE_VAL.getLanguage()).findAny().orElseThrow();
@@ -211,6 +215,24 @@ public class CandidateTest {
 		assertTrue(candidate.getOwnerId().isEmpty());
 		
 		assertEquals(candidate.getAvailableFromDate(), LocalDate.now()); //[KP] Small chance of failure if test run in exactly midnight
+		
+	}
+	
+	/**
+	* If LastRefresh has not yet taken place needs to use registered date
+	* @throws Exception
+	*/
+	@Test
+	public void testLastRefrehIsAccountCreatedIfNotExists() throws Exception{
+	
+		Candidate candidate = Candidate.builder().registerd(REGISTERED).build();
+		
+		assertEquals(REGISTERED, candidate.getLastAccountRefresh());
+		
+		candidate = Candidate.builder().build();
+		
+		assertNotEquals(REGISTERED, candidate.getLastAccountRefresh());
+		assertNotNull(candidate.getLastAccountRefresh());
 		
 	}
 	
