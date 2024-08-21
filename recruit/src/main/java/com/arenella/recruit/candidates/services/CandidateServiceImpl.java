@@ -346,7 +346,7 @@ public class CandidateServiceImpl implements CandidateService{
 
 		filterOptions.getSkills().clear();
 		
-		Set<Candidate> results = this.candidateRepo.findCandidates(filterOptions, esClient);
+		Set<Candidate> results = this.candidateRepo.findCandidates(filterOptions, esClient, 10000);
 		
 		if (results.isEmpty()) {
 			return suggestion_accuracy.poor;

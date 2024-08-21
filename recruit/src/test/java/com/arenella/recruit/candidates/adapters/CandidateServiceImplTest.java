@@ -670,7 +670,7 @@ public class CandidateServiceImplTest {
 		
 		ArgumentCaptor<CandidateFilterOptions> filterArgCaptor = ArgumentCaptor.forClass(CandidateFilterOptions.class);
 		
-		Mockito.when(this.mockCandidateRepo.findCandidates(filterArgCaptor.capture(), Mockito.any())).thenReturn(Set.of());
+		Mockito.when(this.mockCandidateRepo.findCandidates(filterArgCaptor.capture(), Mockito.any(), Mockito.eq(10000))).thenReturn(Set.of());
 		
 		suggestion_accuracy accuracy = this.service.doTestCandidateAlert(candidateId, filterOptions);
 		
@@ -708,7 +708,7 @@ public class CandidateServiceImplTest {
 		ArgumentCaptor<CandidateFilterOptions> filterArgCaptor = ArgumentCaptor.forClass(CandidateFilterOptions.class);
 		
 		Mockito
-			.when(this.mockCandidateRepo.findCandidates(filterArgCaptor.capture(), Mockito.any()))
+			.when(this.mockCandidateRepo.findCandidates(filterArgCaptor.capture(), Mockito.any(), Mockito.eq(10000)))
 			.thenReturn(Set.of(Candidate.builder().candidateId(String.valueOf(candidateId)).build()));
 		
 		Mockito
@@ -753,7 +753,7 @@ public class CandidateServiceImplTest {
 					.build();
 		
 		Mockito
-			.when(this.mockCandidateRepo.findCandidates(Mockito.any(),Mockito.any()))
+			.when(this.mockCandidateRepo.findCandidates(Mockito.any(),Mockito.any(), Mockito.eq(10000)))
 			.thenReturn(Set.of(Candidate.builder().candidateId(String.valueOf(candidateId)).build()));
 		
 		Mockito

@@ -116,7 +116,7 @@ public interface CandidateRepository extends ElasticsearchRepository<CandidateDo
 		try {
 			CandidateFilterOptions filterOptions = CandidateFilterOptions.builder().available(true).registeredAfter(since).build();
 		
-			return this.findCandidates(filterOptions, esClient);
+			return this.findCandidates(filterOptions, esClient, 10000);
 		
 		} catch(Exception e) {
 			throw new RuntimeException(e);
@@ -179,9 +179,9 @@ public interface CandidateRepository extends ElasticsearchRepository<CandidateDo
 	* @param esClient
 	* @return
 	*/
-	public default Set<Candidate> findCandidates(CandidateFilterOptions filterOptions, ElasticsearchClient esClient) throws Exception{
+	public default Set<Candidate> findCandidates(CandidateFilterOptions filterOptions, ElasticsearchClient esClient, int pageSize) throws Exception{
 		
-		SearchResponse<CandidateDocument> response =  this.fetchWithFilters(filterOptions, esClient, 10000);
+		SearchResponse<CandidateDocument> response =  this.fetchWithFilters(filterOptions, esClient, pageSize);
 		
 		return response
 				.hits()

@@ -1,13 +1,13 @@
 package com.arenella.recruit.candidates.utils;
 
-import java.time.LocalDate;
+//import java.time.LocalDate;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import com.arenella.recruit.candidates.beans.CandidateFilterOptions;
+//import com.arenella.recruit.candidates.beans.CandidateFilterOptions;
 import com.arenella.recruit.candidates.repos.CandidateRepository;
 
 import co.elastic.clients.elasticsearch.ElasticsearchClient;
@@ -36,7 +36,7 @@ public class CandidateAccountRefreshUtil {
 	/**
 	* Triggers refresh actions for Candidates that are outdated
 	*/
-	//@Scheduled(cron = "* */1 * * * *")
+	@Scheduled(cron = "* */1 * * * *")
 	public void performRefreshOnOutdatedAccounts() {
 		try {
 			//this.runAssignMissingLastAccountRefreshDates();
@@ -46,24 +46,6 @@ public class CandidateAccountRefreshUtil {
 			e.printStackTrace();
 		}
 	}
-	
-	/**
-	* Task to provide Candidates with an existing account that had no lastAccountRefresh value the 
-	* value of the registration date
-	*/
-	//private void runAssignMissingLastAccountRefreshDates() {
-		
-	//	CandidateFilterOptions filters = CandidateFilterOptions.builder().lastAccountRefreshMissing().build();
-		
-	//	try {
-	//		candidateRepository.findCandidates(filters, esClient).forEach(candidate -> {
-	//			System.out.println("Candidate has no lastAccountRefresh" + candidate.getCandidateId());
-	//		});
-	//	} catch (Exception e) {
-	//		e.printStackTrace();
-	//	}
-		
-	//}
 	
 	/**
 	* Task to periodically update a Candidate's skills
