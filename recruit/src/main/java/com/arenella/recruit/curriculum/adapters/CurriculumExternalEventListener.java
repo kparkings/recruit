@@ -3,6 +3,7 @@ package com.arenella.recruit.curriculum.adapters;
 import java.util.Set;
 import java.util.UUID;
 
+import com.arenella.recruit.adapters.actions.RequestSkillsForCurriculumCommand;
 import com.arenella.recruit.adapters.events.CandidateDeletedEvent;
 import com.arenella.recruit.adapters.events.CandidateNoLongerAvailableEvent;
 import com.arenella.recruit.adapters.events.RecruiterCreatedEvent;
@@ -64,5 +65,10 @@ public interface CurriculumExternalEventListener {
 	*/
 	public void listenForRecruiterCreatedEvent(RecruiterCreatedEvent event);
 
+	/**
+	* Listens for a Command requesting Skills contained in a given Curriculum
+	* @param command - Specifies which Curriculum to extract skills for
+	*/
+	public void listenForRequestSkillsForCurriculumCommand(RequestSkillsForCurriculumCommand command);
 	
 }

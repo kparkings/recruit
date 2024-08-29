@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import com.arenella.recruit.adapters.events.CreditsAssignedEvent;
 import com.arenella.recruit.adapters.events.CreditsUsedEvent;
+import com.arenella.recruit.adapters.events.CurriculumSkillsExtractionEvent;
 import com.arenella.recruit.adapters.events.CurriculumUpdatedEvent;
 
 /**
@@ -35,5 +36,11 @@ public interface ExternalEventPublisher {
 	* @param curriculumId
 	*/
 	public void publishCurriculumUpdates(CurriculumUpdatedEvent curriculumId);
+	
+	/**
+	* Publishes Event informing that skills have been extracted for a Curriculum
+	* @param event - CurriculumSkillsExtractionEvent
+	*/
+	public void publishCurriculumSkillsExtractionEvent(CurriculumSkillsExtractionEvent event);
 	
 }

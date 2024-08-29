@@ -65,6 +65,7 @@ import com.arenella.recruit.candidates.dao.CandidateSkillsDao;
 import com.arenella.recruit.candidates.dao.PendingCandidateDao;
 import com.arenella.recruit.candidates.dao.RecruiterContactDao;
 import com.arenella.recruit.candidates.dao.SavedCandidateDao;
+import com.arenella.recruit.candidates.dao.SkillUpdateStatDao;
 import com.arenella.recruit.candidates.entities.CandidateSkillEntity.VALIDATION_STATUS;
 import com.arenella.recruit.candidates.entities.PendingCandidateEntity;
 import com.arenella.recruit.candidates.enums.COUNTRY;
@@ -147,6 +148,9 @@ public class CandidateServiceImplTest {
 	
 	@Mock
 	private ElasticsearchClient 					mockEsClient;
+	
+	@Mock
+	private SkillUpdateStatDao						mockkillUpdateStatDao;
 	
 	@InjectMocks
 	private CandidateServiceImpl 					service 					= new CandidateServiceImpl();
@@ -679,9 +683,6 @@ public class CandidateServiceImplTest {
 		CandidateFilterOptions  captorResult = filterArgCaptor.getValue();
 		
 		assertTrue(captorResult.getSkills().isEmpty());
-		//assertTrue(captorResult.getDutch().isEmpty());
-		//assertTrue(captorResult.getEnglish().isEmpty());
-		//assertTrue(captorResult.getFrench().isEmpty());
 		
 	}
 
@@ -725,9 +726,6 @@ public class CandidateServiceImplTest {
 		CandidateFilterOptions  captorResult = filterArgCaptor.getValue();
 		
 		assertFalse(captorResult.getSkills().isEmpty());
-		//assertFalse(captorResult.getDutch().isEmpty());
-		//assertFalse(captorResult.getEnglish().isEmpty());
-		//assertFalse(captorResult.getFrench().isEmpty());
 		
 	}
 	
@@ -1643,6 +1641,9 @@ public class CandidateServiceImplTest {
 		
 		Mockito.verify(this.mockCandidateRepo).deleteById(Long.valueOf(candidateId));
 		Mockito.verify(this.mockExternalEventPublisher).publishCandidateDeletedEvent(Mockito.any(CandidateDeletedEvent.class));
+		Mockito.verify(this.mockkillUpdateStatDao).deleteById(Long.valueOf(candidateId));
+		
+		
 	
 	}
 	

@@ -346,6 +346,10 @@ public class Candidate {
 		return Optional.ofNullable(this.lastAccountRefresh).isEmpty() ? (Optional.ofNullable(this.registerd).isEmpty() ?  LocalDate.now() : this.registerd ) : lastAccountRefresh;
 	}
 	
+	public void addSkills(Set<String> skills) {
+		this.skills.addAll(skills);
+	}
+	
 	/**
 	* Sets the introduction describing the Candidate
 	* @param introduction - intro

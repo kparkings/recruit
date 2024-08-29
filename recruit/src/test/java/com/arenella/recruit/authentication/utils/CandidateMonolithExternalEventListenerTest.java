@@ -1,15 +1,21 @@
 package com.arenella.recruit.authentication.utils;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.Optional;
+import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.arenella.recruit.adapters.events.CreditsUsedEvent;
+import com.arenella.recruit.adapters.events.CurriculumSkillsExtractionEvent;
 import com.arenella.recruit.adapters.events.CurriculumUpdatedEvent;
 import com.arenella.recruit.adapters.events.RecruiterCreatedEvent;
 import com.arenella.recruit.adapters.events.RecruiterNoOpenSubscriptionEvent;
@@ -19,6 +25,8 @@ import com.arenella.recruit.candidates.adapters.CandidateMonolithExternalEventLi
 import com.arenella.recruit.candidates.adapters.ExternalEventPublisher;
 import com.arenella.recruit.candidates.beans.Candidate;
 import com.arenella.recruit.candidates.beans.RecruiterCredit;
+import com.arenella.recruit.candidates.beans.SkillUpdateStat;
+import com.arenella.recruit.candidates.dao.SkillUpdateStatDao;
 import com.arenella.recruit.candidates.repos.CandidateRepository;
 import com.arenella.recruit.candidates.services.CandidateService;
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_type;
@@ -41,14 +49,14 @@ public class CandidateMonolithExternalEventListenerTest {
 	@Mock
 	private CandidateService 						mockCandidateService;
 	
-	//@Mock
-	//private CandidateDao 							mockCandidateDao;
-	
 	@Mock
 	private ExternalEventPublisher					mockExternalEventPublisher;
 	
 	@Mock
 	private CandidateRepository 					mockCandidateRepo;
+	
+	@Mock
+	private SkillUpdateStatDao						mockSkillUpdateStatDao;
 	
 	/**
 	* Tests handling of RecruiterCreatedEvent persists contact
@@ -224,6 +232,49 @@ public class CandidateMonolithExternalEventListenerTest {
 	
 		Mockito.verify(this.mockCandidateService).updateCreditsForUser(userId, RecruiterCredit.DISABLED_CREDITS, Optional.of(true));
 	
+	}
+	
+	/**
+	* Tests case in which event is received for an unknown Candidate
+	* @throws Exception
+	*/
+	@Test
+	public void testListenForCurriculumSkillsExtractionEvent_candidateUnknown() throws Exception{
+		
+		Mockito.when(this.mockCandidateRepo.findCandidateById(111L)).thenReturn(Optional.empty());
+		
+		this.listener.listenForCurriculumSkillsExtractionEvent(new CurriculumSkillsExtractionEvent(111L, Set.of()));
+		
+		Mockito.verify(this.mockCandidateRepo, Mockito.never()).saveCandidate(Mockito.any());
+		Mockito.verify(this.mockSkillUpdateStatDao, Mockito.never()).saveSkillUpdateStat(Mockito.any());
+	}
+	
+	/**
+	* Tests case in which event is received for a known Candidate
+	* @throws Exception
+	*/
+	@Test
+	public void testListenForCurriculumSkillsExtractionEvent() throws Exception{
+	
+		ArgumentCaptor<Candidate> 		argCapt 	= ArgumentCaptor.forClass(Candidate.class);
+		ArgumentCaptor<SkillUpdateStat> argStatCapt = ArgumentCaptor.forClass(SkillUpdateStat.class);
+		
+		Mockito.when(this.mockCandidateRepo.findCandidateById(111L)).thenReturn(Optional.of(Candidate.builder().skills(Set.of("java", "php")).build()));
+		
+		this.listener.listenForCurriculumSkillsExtractionEvent(new CurriculumSkillsExtractionEvent(111L, Set.of("c#", "java")));
+		
+		Mockito.verify(this.mockCandidateRepo).saveCandidate(argCapt.capture());
+		
+		assertEquals(3, argCapt.getValue().getSkills().size());
+		assertTrue(argCapt.getValue().getSkills().contains("java"));
+		assertTrue(argCapt.getValue().getSkills().contains("c#"));
+		assertTrue(argCapt.getValue().getSkills().contains("php"));
+		
+		Mockito.verify(this.mockSkillUpdateStatDao).saveSkillUpdateStat(argStatCapt.capture());
+		
+		assertEquals(1, 	argStatCapt.getValue().getAddedSkillsCount());
+		assertEquals(111L, 	argStatCapt.getValue().getCandidateId());
+		
 	}
 
 }

@@ -827,4 +827,38 @@ public class CurriculumServiceImplTest {
 		
 	}
 	
+	/**
+	* Tests Exception thrown if Curriculum not found
+	* @throws Exception
+	*/
+	@Test
+	public void testExtractSkillsFromCurriculum_unknownCurriculum() throws Exception{
+		
+		final long curriculumId = 100;
+		
+		Mockito.when(this.mockCurriculumDao.findCurriculumById(curriculumId)).thenReturn(Optional.empty());
+		
+		assertThrows(RuntimeException.class, () ->
+			service.extractSkillsFromCurriculum(curriculumId)
+		);
+		
+	}
+	
+	/**
+	* Tests No skills returned if file could not be read
+	* @throws Exception
+	*/
+	@Test
+	public void testExtractSkillsFromCurriculum_exceptionDuringExtraction() throws Exception{
+		
+		final long 			curriculumId 		= 100;
+		
+		Curriculum curriculum = Curriculum.builder().fileType(FileType.pdf).id(curriculumId+"").build();
+		
+		Mockito.when(this.mockCurriculumDao.findCurriculumById(curriculumId)).thenReturn(Optional.of(curriculum));
+		
+		assertTrue(service.extractSkillsFromCurriculum(curriculumId).isEmpty());
+		
+	}
+	
 }

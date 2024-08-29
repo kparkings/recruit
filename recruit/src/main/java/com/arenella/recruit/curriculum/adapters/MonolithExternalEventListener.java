@@ -7,8 +7,10 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.arenella.recruit.adapters.actions.RequestSkillsForCurriculumCommand;
 import com.arenella.recruit.adapters.events.CandidateDeletedEvent;
 import com.arenella.recruit.adapters.events.CandidateNoLongerAvailableEvent;
+import com.arenella.recruit.adapters.events.CurriculumSkillsExtractionEvent;
 import com.arenella.recruit.adapters.events.RecruiterCreatedEvent;
 import com.arenella.recruit.adapters.events.RecruiterNoOpenSubscriptionEvent;
 import com.arenella.recruit.adapters.events.SubscriptionAddedEvent;
@@ -40,6 +42,9 @@ public class MonolithExternalEventListener implements CurriculumExternalEventLis
 	
 	@Autowired
 	private AlertTestUtil			alertTestUtil;
+	
+	@Autowired 
+	private ExternalEventPublisher externalEventPublisher;
 	
 	/**
 	* Refer to the ExternalEventListener for details 
@@ -151,6 +156,25 @@ public class MonolithExternalEventListener implements CurriculumExternalEventLis
 	@Override
 	public void listenForRecruiterCreatedEvent(RecruiterCreatedEvent event) {
 		this.curriculumService.addCreditsRecordForUser(event.getRecruiterId());
+	}
+
+	/**
+	* Refer to the ListingsExternalEventListener interface for details
+	*/
+	@Override
+	public void listenForRequestSkillsForCurriculumCommand(RequestSkillsForCurriculumCommand command) {
+		
+		try {
+			
+			Set<String> skills = this.curriculumService.extractSkillsFromCurriculum(command.getCurriculumId());
+		
+			this.externalEventPublisher.publishCurriculumSkillsExtractionEvent(new CurriculumSkillsExtractionEvent(command.getCurriculumId(), skills));
+		
+		}catch(Exception e) {
+			e.printStackTrace();
+			//Log failure and forget. 
+		}
+		
 	}
 
 }

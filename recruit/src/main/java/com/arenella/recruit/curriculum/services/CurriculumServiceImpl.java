@@ -367,5 +367,25 @@ public class CurriculumServiceImpl implements CurriculumService{
 		creditDao.persist(RecruiterCredit.builder().recruiterId(userId).credits(RecruiterCredit.DISABLED_CREDITS).build());
 		
 	}
+
+	/**
+	* Refer to the CandidateService for details 
+	*/
+	@Override
+	public Set<String> extractSkillsFromCurriculum(long curriculumId) {
+		
+		Curriculum curriculum = this.curriculumDao.findCurriculumById(curriculumId).orElseThrow();
+		
+		try {
+			
+			CurriculumUpdloadDetails results = extractDetails(curriculumId+"", curriculum.getFileType(), curriculum.getFile());
+			
+			return results.getSkills();
+			
+		} catch (IOException e) {
+			throw new RuntimeException("Unable to read curriculum file " + curriculumId);
+		}
+		
+	}
 	
 }

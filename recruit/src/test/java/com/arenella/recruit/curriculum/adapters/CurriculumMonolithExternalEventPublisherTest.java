@@ -1,5 +1,6 @@
 package com.arenella.recruit.curriculum.adapters;
 
+import java.util.Set;
 import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
@@ -11,6 +12,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.arenella.recruit.adapters.events.CreditsAssignedEvent;
 import com.arenella.recruit.adapters.events.CreditsUsedEvent;
+import com.arenella.recruit.adapters.events.CurriculumSkillsExtractionEvent;
 import com.arenella.recruit.adapters.events.CurriculumUpdatedEvent;
 import com.arenella.recruit.candidates.adapters.CandidateExternalEventListener;
 
@@ -83,4 +85,18 @@ public class CurriculumMonolithExternalEventPublisherTest {
 		Mockito.verify(this.mockCandiditeExternalEventListener).listenForCurriculumUpdatedEvent(Mockito.any(CurriculumUpdatedEvent.class));
 		
 	}
+	
+	/**
+	* Tests sending of event
+	* @throws Exception
+	*/
+	@Test
+	public void testCurriculumSkillsExtractionEvent() throws Exception{
+		
+		this.publisher.publishCurriculumSkillsExtractionEvent(new CurriculumSkillsExtractionEvent(1222, Set.of()));
+		
+		Mockito.verify(this.mockCandiditeExternalEventListener).listenForCurriculumSkillsExtractionEvent(Mockito.any(CurriculumSkillsExtractionEvent.class));
+		
+	}
+	
 }

@@ -1,5 +1,6 @@
 package com.arenella.recruit.candidates.adapters;
 
+import java.time.LocalDate;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.arenella.recruit.adapters.events.CandidateUpdateEvent;
 import com.arenella.recruit.adapters.events.CreditsAssignedEvent;
 import com.arenella.recruit.adapters.events.CreditsUsedEvent;
+import com.arenella.recruit.adapters.events.CurriculumSkillsExtractionEvent;
 import com.arenella.recruit.adapters.events.CurriculumUpdatedEvent;
 import com.arenella.recruit.adapters.events.RecruiterCreatedEvent;
 import com.arenella.recruit.adapters.events.RecruiterNoOpenSubscriptionEvent;
@@ -15,6 +17,8 @@ import com.arenella.recruit.adapters.events.RecruiterUpdatedEvent;
 import com.arenella.recruit.adapters.events.SubscriptionAddedEvent;
 import com.arenella.recruit.candidates.beans.Candidate;
 import com.arenella.recruit.candidates.beans.RecruiterCredit;
+import com.arenella.recruit.candidates.beans.SkillUpdateStat;
+import com.arenella.recruit.candidates.dao.SkillUpdateStatDao;
 import com.arenella.recruit.candidates.repos.CandidateRepository;
 import com.arenella.recruit.candidates.services.CandidateService;
 import com.arenella.recruit.newsfeed.beans.NewsFeedItem.NEWSFEED_ITEM_TYPE;
@@ -35,6 +39,9 @@ public class CandidateMonolithExternalEventListener implements CandidateExternal
 	
 	@Autowired
 	private CandidateRepository 		canidateRepo;
+	
+	@Autowired
+	private SkillUpdateStatDao			SkillUpdateStatDao;
 	
 	/**
 	* Refer to CandidateExternalEventListener for details 
@@ -105,6 +112,29 @@ public class CandidateMonolithExternalEventListener implements CandidateExternal
 	@Override
 	public void listenForRecruiterNoOpenSubscriptionsEvent(RecruiterNoOpenSubscriptionEvent event) {
 		this.candidateService.updateCreditsForUser(event.geRecruiterId(), RecruiterCredit.DISABLED_CREDITS);
+		
+	}
+	
+	/**
+	* Refer to CandidateExternalEventListener for details 
+	*/
+	@Override
+	public void listenForCurriculumSkillsExtractionEvent(CurriculumSkillsExtractionEvent event) {
+		
+		Optional<Candidate> candidateOpt = this.canidateRepo.findCandidateById(event.getCurriculumId());
+		
+		if (candidateOpt.isEmpty()) {
+			return;
+		}
+		
+		long originalSkillCount = candidateOpt.get().getSkills().size();
+		
+		candidateOpt.get().getSkills().addAll(event.getSkills());
+		
+		long updatedSkillCount = candidateOpt.get().getSkills().size();
+		
+		this.canidateRepo.saveCandidate(candidateOpt.get());
+		this.SkillUpdateStatDao.saveSkillUpdateStat(new SkillUpdateStat(event.getCurriculumId(), LocalDate.now(), updatedSkillCount - originalSkillCount));
 		
 	}
 

@@ -1,6 +1,7 @@
 package com.arenella.recruit.curriculum.services;
 
 import java.io.IOException;
+import java.util.Set;
 import java.util.UUID;
 
 import com.arenella.recruit.curriculum.beans.Curriculum;
@@ -127,5 +128,12 @@ public interface CurriculumService {
 	* for the User
 	*/
 	void addCreditsRecordForUser(String userId);
+
+	/**
+	* Returns a Set of skills extracted from a Curriculum
+	* @param curriculumId - Unique Id of the Curriculum to extract skills for
+	* @return Skills extracted from Curriculum
+	*/
+	public Set<String> extractSkillsFromCurriculum(long curriculumId);
 
 }

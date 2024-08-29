@@ -88,6 +88,8 @@ import com.arenella.recruit.candidates.utils.CandidateFunctionExtractor;
 import com.arenella.recruit.candidates.utils.CandidateImageFileSecurityParser;
 import com.arenella.recruit.candidates.utils.CandidateImageManipulator;
 
+import com.arenella.recruit.candidates.dao.SkillUpdateStatDao;
+
 /**
 * Provides services related to Candidates
 * @author K Parkings
@@ -146,6 +148,8 @@ public class CandidateServiceImpl implements CandidateService{
 	@Autowired
 	private ElasticsearchClient 				esClient;
 	
+	@Autowired
+	private SkillUpdateStatDao					skillUpdateStatDao;
 	
 	/**
 	* Refer to the CandidateService Interface for Details
@@ -948,6 +952,7 @@ public class CandidateServiceImpl implements CandidateService{
 		}
 		
 		this.candidateRepo.deleteById(Long.valueOf(candidateId));
+		this.skillUpdateStatDao.deleteById(Long.valueOf(candidateId));
 		
 		this.externalEventPublisher.publishCandidateDeletedEvent(new CandidateDeletedEvent(candidateId));
 		

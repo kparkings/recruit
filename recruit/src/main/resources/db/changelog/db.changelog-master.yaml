@@ -2354,4 +2354,27 @@ databaseChangeLog:
             - column:
                 name: security_clearance_type
                 type: varchar
-                
+  - changeSet:
+      id: add_tbl_skill_update_stat
+      author: kparkings
+      changes:
+        - createTable:
+            tableName: skills_updated_stats
+            schemaName: candidate
+            columns:
+              - column:
+                  name: candidate_id
+                  type: number
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: last_update
+                  type: timestamp
+                  constraints:
+                    nullable: true
+              - column:
+                  name: added_skills_count
+                  type: number
+                  constraints:
+                    nullable: true
