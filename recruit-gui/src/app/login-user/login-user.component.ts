@@ -7,6 +7,7 @@ import { TemplateRef, ViewChild,ElementRef, AfterViewInit  }		from '@angular/cor
 import { NgbModal, NgbModalOptions, ModalDismissReasons}			from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
 import { CreditsService } from '../credits.service';
+import { CandidateServiceService } from '../candidate-service.service';
 
 @Component({
   selector: 'app-login-user',
@@ -39,6 +40,7 @@ export class LoginUserComponent implements OnInit {
    * @param router      - Angular router
    */
   constructor(	private recruiterService:RecruiterService, 
+  				private candidateService:CandidateServiceService,
   				private authService: AuthService, 
   				private modalService: NgbModal, 
   				private router: Router,
@@ -159,6 +161,11 @@ export class LoginUserComponent implements OnInit {
 	*/
 	public resetPassword():void{
 	
+		//This will work if the user doesnt have both a Recruiter and candidate account with the same email and 
+		//needs to reset the candidates password. Very few cases and this will work almost always. To be improved later
+		//but need this working to get the availability email functionality working so I can cut down on the manual admin time
+		//of checking user availability. Improvement on no candidate reset and can be made perfect in the future
+	
 		let email = this.formBeanForgottenPassword.get("email")?.value;
 		
 		this.recruiterService.resetPassword(email).subscribe(data => {
@@ -171,9 +178,22 @@ export class LoginUserComponent implements OnInit {
 			this.resetDialog.nativeElement.showModal();
 		},
 		err => {
-			this.failureMessage = this.translate.instant('login-user-unable-to-send-email');
-			this.feedbackBox.nativeElement.showModal();
-			this.showForgottenPassword = false;
+			
+			this.candidateService.resetPassword(email).subscribe(data => {
+			
+				this.formBeanForgottenPassword = new UntypedFormGroup({
+					email: new UntypedFormControl()
+				});
+			
+				this.showForgottenPassword = false;
+				this.resetDialog.nativeElement.showModal();
+			},
+			err => {
+				this.failureMessage = this.translate.instant('login-user-unable-to-send-email');
+				this.feedbackBox.nativeElement.showModal();
+				this.showForgottenPassword = false;
+			});
+		
 		});
 		
 	}

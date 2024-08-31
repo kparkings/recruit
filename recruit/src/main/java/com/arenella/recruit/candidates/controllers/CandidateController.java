@@ -549,6 +549,18 @@ public class CandidateController {
 	}
 	
 	/**
+	* Endpoint to handle the password reset of an existing user
+	* @param emailAddress - Users email address
+	*/
+	@PutMapping(path="candidate/reset-password/{email}", consumes="application/json", produces="application/json")
+	public ResponseEntity<Void> resetPassword(@PathVariable("email") String emailAddress) {
+		
+		this.candidateService.resetPassword(emailAddress);
+		
+		return ResponseEntity.ok().build();
+	}
+	
+	/**
 	* Returns whether or not the user is a Candidate
 	* @return whether or not the user is a Candidate
 	*/

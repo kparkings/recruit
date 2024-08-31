@@ -560,4 +560,22 @@ public class CandidateControllerTest {
 		Arrays.stream(COUNTRY.values()).forEach(l -> response.getBody().stream().filter(c -> c.getName() == l).findAny().orElseThrow());
 	}
 	
+	/**
+	* Tests email reset request
+	* @throws Exception
+	*/
+	@Test
+	public void testResetPassword() throws Exception{
+		
+		final String email = "kparkings";
+		
+		Mockito.doNothing().when(this.mockCandidateService).resetPassword(Mockito.anyString());
+		
+		ResponseEntity<Void> response = this.controller.resetPassword(email);
+		
+		Mockito.verify(this.mockCandidateService).resetPassword(Mockito.eq(email));
+		
+		assertEquals(response.getStatusCode(), HttpStatus.OK);
+		
+	}
 }

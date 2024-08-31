@@ -36,6 +36,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.arenella.recruit.adapters.events.CandidateAccountCreatedEvent;
 import com.arenella.recruit.adapters.events.CandidateDeletedEvent;
+import com.arenella.recruit.adapters.events.CandidatePasswordUpdatedEvent;
 import com.arenella.recruit.adapters.events.CandidateUpdateEvent;
 import com.arenella.recruit.adapters.events.CandidateUpdatedEvent;
 import com.arenella.recruit.adapters.events.ContactRequestEvent;
@@ -82,6 +83,7 @@ import com.arenella.recruit.candidates.utils.CandidateImageManipulator;
 import com.arenella.recruit.candidates.utils.CandidateSuggestionUtil;
 import com.arenella.recruit.candidates.utils.SkillsSynonymsUtil;
 import com.arenella.recruit.emailservice.adapters.RequestSendEmailCommand;
+import com.arenella.recruit.emailservice.beans.Email.EmailTopic;
 import com.arenella.recruit.newsfeed.beans.NewsFeedItem.NEWSFEED_ITEM_TYPE;
 
 import co.elastic.clients.elasticsearch.ElasticsearchClient;
@@ -2116,6 +2118,74 @@ public class CandidateServiceImplTest {
 		this.service.getCountByAvailable(true);
 		
 		Mockito.verify(this.mockCandidateRepo).getCountByAvailable(true);
+		
+	}
+	
+	/**
+	* Tests Exception thrown if more than one recruiter with the same email
+	* address exist
+	* @throws Exception
+	*/
+	@Test
+	public void testResetPassword_multipleMatchingRecruiters() throws Exception{
+	
+		final String emailAddress = "kparkings@gmail.com";
+		
+		Mockito.when(this.mockCandidateRepo.findCandidates(Mockito.any(), Mockito.any(), Mockito.eq(2))).thenReturn(Set.of(Candidate.builder().build(), Candidate.builder().build()));
+	
+		Assertions.assertThrows(IllegalArgumentException.class, () ->{
+			this.service.resetPassword(emailAddress);
+		});
+		
+	}
+	
+	/**
+	* Tests Exception thrown if no0 recruiter with the email
+	* address exist
+	* @throws Exception
+	*/
+	@Test
+	public void testResetPassword_noMatchingRecruiters() throws Exception{
+		
+		final String emailAddress = "kparkings@gmail.com";
+		
+		Mockito.when(this.mockCandidateRepo.findCandidates(Mockito.any(), Mockito.any(), Mockito.eq(2))).thenReturn(Set.of());
+		
+		Assertions.assertThrows(IllegalArgumentException.class, () ->{
+			this.service.resetPassword(emailAddress);
+		});
+	}
+
+	/**
+	* Tests Happy Path
+	* 	- Sends Event to notify Auth service of Password change
+	* 	- Sends Email to notify Recruiter of new Password
+	* @throws Exception
+	*/
+	@Test
+	public void testResetPassword() throws Exception{
+		
+		final String 	emailAddress 	= "kparkings@gmail.com";
+		final String 	firstname 		= "kevin";
+		final String	userId 			= "1234";
+		
+		ArgumentCaptor<CandidatePasswordUpdatedEvent> 	pwdUpdtArgCapt 	= ArgumentCaptor.forClass(CandidatePasswordUpdatedEvent.class);
+		ArgumentCaptor<RequestSendEmailCommand>			emailArgCapt	= ArgumentCaptor.forClass(RequestSendEmailCommand.class);
+		
+		Mockito.doNothing().when(this.mockExternalEventPublisher).publishCandidatePasswordUpdated(pwdUpdtArgCapt.capture());
+		Mockito.doNothing().when(this.mockExternalEventPublisher).publishSendEmailCommand(emailArgCapt.capture());
+		Mockito.when(this.mockCandidateRepo.findCandidates(Mockito.any(), Mockito.any(), Mockito.eq(2))).thenReturn(Set.of(Candidate.builder().firstname(firstname).candidateId(userId).build()));
+		
+		this.service.resetPassword(emailAddress);
+		
+		assertEquals(userId, pwdUpdtArgCapt.getValue().getCandidateId());
+		assertEquals(EmailTopic.PASSWORD_RESET, emailArgCapt.getValue().getTopic());
+		
+		Map<String,Object> model = emailArgCapt.getValue().getModel();
+		
+		assertEquals(userId, model.get("userId"));
+		assertEquals(firstname, model.get("firstname"));
+		assertNotNull(model.get("password"));
 		
 	}
 	

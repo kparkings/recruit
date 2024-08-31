@@ -54,4 +54,5 @@
     <fullyQualifiedTypeName name="java.time.LocalDate"/>
     <fullyQualifiedTypeName name="com.arenella.recruit.candidates.beans.SkillUpdateStat"/>
     <fullyQualifiedTypeName name="com.arenella.recruit.candidates.dao.SkillUpdateStatDao"/>
+    <fullyQualifiedTypeName name="com.arenella.recruit.adapters.events.CandidatePasswordUpdatedEvent"/>
 </qualifiedTypeNameHistroy>

@@ -116,7 +116,6 @@ public class RecruitersMonolithExternalEventPublisher implements RecruitersExter
 	@Override
 	public void publishRecruiterPasswordUpdated(RecruiterPasswordUpdatedEvent event) {
 		this.authenticationExternalEventListener.listenForRecruiterPasswordUpdatedEvent(event);
-		
 	}
 
 	/**

@@ -14,7 +14,6 @@ import { UpdateCandidateRequest } 						from './new-candidate/update-candidate-r
 import { CandidateSkill } 								from './accounts/candidate-skill';
 import { TranslateService } 							from '@ngx-translate/core';
 import { CandidateTotals } 								from './candidate-totals';
-import { Country } 										from './country';
 import { SupportedLanguage } from './supported-language';
 import { GeoZone } from './geo-zone';
 import { SupportedCountry } from './supported-candidate';
@@ -29,7 +28,6 @@ import { SupportedCountry } from './supported-candidate';
 export class CandidateServiceService {
     
     public geoZones:Array<GeoZone>						= new Array<GeoZone>();
-    //public countries:Array<Country> 					= new Array<Country>();
     public languages:Array<SupportedLanguage> 			= new Array<SupportedLanguage>();
     public supportedCountries:Array<SupportedCountry> 	= new Array<SupportedCountry>();
    
@@ -39,18 +37,6 @@ export class CandidateServiceService {
 	constructor(private httpClient: HttpClient, private translate:TranslateService) { 
 		//this.initializeCountries();
 	}
-	
-	/**
-  	* Sets the available countrues
-  	* NB: Needs to come from the backend 
-  	*/
-	//public initializeCountries():void{
-	//	this.countries = new Array<Country>();
-	//	this.countries.push(new Country('NL', 'NETHERLANDS'));
-	//	this.countries.push(new Country('BE', 'BELGIUM'));
-	//	this.countries.push(new Country('UK', 'UK'));
-	//	this.countries.push(new Country('IE', 'REPUBLIC_OF_IRELAND'));
-	//}
 	
 	/**
   	* Supported countries. This is different to the countries the user can filter on in the 
@@ -510,13 +496,6 @@ export class CandidateServiceService {
 	}
 	
 	/**
-	* Returns Countries that can be filtered on 
-	*/
-	//public getCountries():Array<Country>{
-	//	return this.countries;	
-	//}
-	
-	/**
 	* Returns Countries supported by the system 
 	*/
 	public getSupportedCountries():Array<SupportedCountry>{
@@ -541,5 +520,17 @@ export class CandidateServiceService {
 		return result[0] ? result[0].iso2Code.toUpperCase() : 'NA';
 
   	}
+  	
+  	/**
+    * Sends request to reset users password. Email will be sent if user exists 
+    * @param email - Email address of the User
+    */
+	public resetPassword(email:string): Observable<void>{
+
+        const backendUrl:string     = environment.backendUrl + 'candidate/reset-password/'+email;
+  
+        return this.httpClient.put<any>(backendUrl, {}, this.httpOptions);
+
+    }
   			
 }

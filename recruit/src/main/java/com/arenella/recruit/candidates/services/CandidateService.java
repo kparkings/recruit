@@ -251,5 +251,11 @@ public interface CandidateService {
 	* @return count
 	*/
 	public long getCountByAvailable(boolean available);
+
+	/**
+	* Resets the users password and emails them the new password
+	* @param emailAddress - Email address of Candidate
+	*/
+	public void resetPassword(String emailAddress);
 	
 }

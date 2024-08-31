@@ -85,6 +85,4 @@ public interface ExternalEventPublisher {
 	*/
 	public void publishCandidateUpdateEvent(CandidateUpdateEvent candidateUpdateEvent);
 	
-	
-	
 }

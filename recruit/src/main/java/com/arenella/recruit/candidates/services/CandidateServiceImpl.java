@@ -30,6 +30,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.arenella.recruit.adapters.events.CandidateAccountCreatedEvent;
 import com.arenella.recruit.adapters.events.CandidateDeletedEvent;
 import com.arenella.recruit.adapters.events.CandidateNoLongerAvailableEvent;
+import com.arenella.recruit.adapters.events.CandidatePasswordUpdatedEvent;
 import com.arenella.recruit.adapters.events.CandidateUpdateEvent;
 import com.arenella.recruit.adapters.events.CandidateUpdatedEvent;
 import com.arenella.recruit.adapters.events.ContactRequestEvent;
@@ -1158,5 +1159,48 @@ public class CandidateServiceImpl implements CandidateService{
 		return this.candidateRepo.getCountByAvailable(available);
 	}
 	
+	/**
+	* Refer to the RecruiterService for details
+	* @throws IllegalAccessException 
+	*/
+	@Override
+	public void resetPassword(String emailAddress) {
+		
+		Set<Candidate> candidates;
+		
+		try {
+			candidates = this.candidateRepo.findCandidates(CandidateFilterOptions.builder().email((""+emailAddress.toLowerCase())).build(), esClient, 2);
+		}catch(Exception e) {
+			throw new RuntimeException("Unable to reset password for candidate");
+		}
+		
+		/**
+		* Can only reset if exactly one recruiter with the email address 
+		*/
+		if (candidates.size() != 1) {
+			throw new IllegalArgumentException("Cannot reset password");
+		}
+		
+		Candidate candidate = candidates.stream().findFirst().get();
+		
+		String rawPassword = PasswordUtil.generatePassword();
+		String encPassword = PasswordUtil.encryptPassword(rawPassword);
+		
+		this.externalEventPublisher.publishCandidatePasswordUpdated(new CandidatePasswordUpdatedEvent(candidate.getCandidateId(), encPassword));
+		
+		RequestSendEmailCommand command = RequestSendEmailCommand
+				.builder()
+					.emailType(EmailType.EXTERN)
+					.recipients(Set.of(new EmailRecipient<UUID>(UUID.randomUUID(),candidate.getCandidateId(), ContactType.CANDIDATE)))
+					.sender(new Sender<>(UUID.randomUUID(), "", SenderType.SYSTEM, "kparkings@gmail.com"))
+					.title("Arenella-ICT - Password Reset")
+					.topic(EmailTopic.PASSWORD_RESET)
+					.model(Map.of("userId", candidate.getCandidateId(), "firstname",candidate.getFirstname(),"password",rawPassword))
+					.persistable(false)
+				.build();
+		
+		this.externalEventPublisher.publishSendEmailCommand(command);
+		
+	}
 	
 }
