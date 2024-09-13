@@ -22,8 +22,10 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.Spy;
 
 import com.arenella.recruit.adapters.events.CreditsAssignedEvent;
+import com.arenella.recruit.authentication.spring.filters.ArenellaRoleManager;
 import com.arenella.recruit.curriculum.adapters.ExternalEventPublisher;
 import com.arenella.recruit.curriculum.beans.Curriculum;
 import com.arenella.recruit.curriculum.beans.PendingCurriculum;
@@ -74,6 +76,9 @@ public class CurriculumServiceImplTest {
 	
 	@Mock
 	private					CurriculumRecruiterCreditDao	mockCreditDao;
+	
+	@Spy
+	private 				ArenellaRoleManager				mockArenellaRoleManager;
 	
 	@InjectMocks
 	private static final 	CurriculumServiceImpl 	service 			= new CurriculumServiceImpl();

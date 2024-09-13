@@ -19,28 +19,29 @@ public class CandidateFilterOptions {
 
 	private String 				orderAttribute;
 	private RESULT_ORDER		order;
-	private String				searchText							= "";
-	private Set<String> 		candidateIds						= new HashSet<>();
-	private Set<GEO_ZONE>		geoZones							= new HashSet<>();
-	private Set<COUNTRY> 		countries							= new HashSet<>();
-	private Set<FUNCTION> 		functions							= new HashSet<>();
-	private Optional<Boolean> 	freelance							= Optional.empty();
-	private Optional<Boolean> 	perm								= Optional.empty();
-	private Boolean			 	available							= null;
+	private String				searchText									= "";
+	private Set<String> 		candidateIds								= new HashSet<>();
+	private Set<GEO_ZONE>		geoZones									= new HashSet<>();
+	private Set<COUNTRY> 		countries									= new HashSet<>();
+	private Set<FUNCTION> 		functions									= new HashSet<>();
+	private Optional<Boolean> 	freelance									= Optional.empty();
+	private Optional<Boolean> 	perm										= Optional.empty();
+	private Boolean			 	available									= null;
 	private int 				yearsExperienceGtEq;
 	private int					yearsExperienceLtEq;
-	private Set<Language>		languages							= new HashSet<>();
-	private Set<String>			skills								= new HashSet<>();
+	private Set<Language>		languages									= new HashSet<>();
+	private Set<String>			skills										= new HashSet<>();
 	private String				firstname;
 	private String 				surname;
 	private String 				email;
-	private Boolean				flaggedAsUnavailable 				= false;
+	private Boolean				flaggedAsUnavailable 						= false;
 	private Integer				daysSinceLastAvailabilityCheck;
 	private String				ownerId;
-	private Boolean				includeRequiresSponsorship			= null;
-	private LocalDate			registeredAfter						= null;
-	private LocalDate			lastAccountRefreshLtEq				= null;
-	private Boolean				lastAccountRefreshMissing		 	= null;
+	private Boolean				includeRequiresSponsorship					= null;
+	private LocalDate			registeredAfter								= null;
+	private LocalDate			lastAccountRefreshLtEq						= null;
+	private Boolean				lastAccountRefreshMissing		 			= null;
+	private Integer				daysSincelastAvailabilityCheckEmailSent		= null;
 	
 	/**
 	* Builder for the  
@@ -56,31 +57,32 @@ public class CandidateFilterOptions {
 	*/
 	private void init(CandidateFilterOptionsBuilder builder) {
 		
-		this.orderAttribute 				= builder.orderAttribute;
-		this.order 							= builder.order;
-		this.candidateIds 					= builder.candidateIds;
-		this.geoZones						= builder.geoZones;
-		this.countries 						= builder.countries;
-		this.functions		 				= builder.functions;
-		this.freelance 						= builder.freelance;
-		this.perm 							= builder.perm;
-		this.yearsExperienceGtEq 			= builder.yearsExperienceGtEq;
-		this.yearsExperienceLtEq			= builder.yearsExperienceLtEq;
-		this.languages						= builder.languages;
-		this.skills							= builder.skills;
-		this.firstname						= builder.firstname;
-		this.surname						= builder.surname;
-		this.email							= builder.email;
-		this.flaggedAsUnavailable			= builder.flaggedAsUnavailable;
-		this.daysSinceLastAvailabilityCheck	= builder.daysSinceLastAvailabilityCheck;
-		this.searchText						= builder.searchText;
-		this.available 					 	= builder.available;
-		this.ownerId						= builder.ownerId;
-		this.includeRequiresSponsorship	 	= builder.includeRequiresSponsorship;
-		this.registeredAfter				= builder.registeredAfter;
-		this.languages						= builder.languages;
-		this.lastAccountRefreshLtEq		 	= builder.lastAccountRefreshLtEq;
-		this.lastAccountRefreshMissing		= builder.lastAccountRefreshMissing;
+		this.orderAttribute 							= builder.orderAttribute;
+		this.order 										= builder.order;
+		this.candidateIds 								= builder.candidateIds;
+		this.geoZones									= builder.geoZones;
+		this.countries 									= builder.countries;
+		this.functions		 							= builder.functions;
+		this.freelance 									= builder.freelance;
+		this.perm 										= builder.perm;
+		this.yearsExperienceGtEq 						= builder.yearsExperienceGtEq;
+		this.yearsExperienceLtEq						= builder.yearsExperienceLtEq;
+		this.languages									= builder.languages;
+		this.skills										= builder.skills;
+		this.firstname									= builder.firstname;
+		this.surname									= builder.surname;
+		this.email										= builder.email;
+		this.flaggedAsUnavailable						= builder.flaggedAsUnavailable;
+		this.daysSinceLastAvailabilityCheck				= builder.daysSinceLastAvailabilityCheck;
+		this.searchText									= builder.searchText;
+		this.available 					 				= builder.available;
+		this.ownerId									= builder.ownerId;
+		this.includeRequiresSponsorship	 				= builder.includeRequiresSponsorship;
+		this.registeredAfter							= builder.registeredAfter;
+		this.languages									= builder.languages;
+		this.lastAccountRefreshLtEq		 				= builder.lastAccountRefreshLtEq;
+		this.lastAccountRefreshMissing					= builder.lastAccountRefreshMissing;
+		this.daysSincelastAvailabilityCheckEmailSent 	= builder.daysSincelastAvailabilityCheckEmailSent;
 		
 	}
 	
@@ -300,6 +302,14 @@ public class CandidateFilterOptions {
 	}
 	
 	/**
+	* Returns filter options for lastAvailabilityCheckEmailSent
+	* @return filter oprions for lastAvailabilityCheckEmailSent
+	*/
+	public Optional<Integer> getDaysSincelastAvailabilityCheckEmailSent() {
+		return Optional.ofNullable(this.daysSincelastAvailabilityCheckEmailSent);
+	}
+	
+	/**
 	* Replaces existing functions
 	* @param functions - Functions to filter on
 	*/
@@ -358,28 +368,29 @@ public class CandidateFilterOptions {
 		
 		private String 				orderAttribute;
 		private RESULT_ORDER		order;
-		private Set<String> 		candidateIds						= new HashSet<>();
-		private Set<GEO_ZONE>		geoZones							= new HashSet<>();
-		private Set<COUNTRY> 		countries							= new HashSet<>();
-		private Set<FUNCTION> 		functions							= new HashSet<>();
-		private Optional<Boolean> 	freelance							= Optional.empty();
-		private Optional<Boolean> 	perm								= Optional.empty();
+		private Set<String> 		candidateIds								= new HashSet<>();
+		private Set<GEO_ZONE>		geoZones									= new HashSet<>();
+		private Set<COUNTRY> 		countries									= new HashSet<>();
+		private Set<FUNCTION> 		functions									= new HashSet<>();
+		private Optional<Boolean> 	freelance									= Optional.empty();
+		private Optional<Boolean> 	perm										= Optional.empty();
 		private int 				yearsExperienceGtEq;
 		private int					yearsExperienceLtEq;
-		private Set<Language>		languages							= new HashSet<>();
-		private Set<String>			skills								= new HashSet<>();
+		private Set<Language>		languages									= new HashSet<>();
+		private Set<String>			skills										= new HashSet<>();
 		private String				firstname;
 		private String 				surname;
 		private String 				email;
-		private Boolean				flaggedAsUnavailable				= null;
-		private Boolean			 	available							= null;
+		private Boolean				flaggedAsUnavailable						= null;
+		private Boolean			 	available									= null;
 		private Integer				daysSinceLastAvailabilityCheck; 
-		private String 				searchText							= "";
+		private String 				searchText									= "";
 		private String 				ownerId;
-		private Boolean				includeRequiresSponsorship			= null;
-		private LocalDate			registeredAfter						= null;
-		private LocalDate			lastAccountRefreshLtEq				= null;
-		private Boolean				lastAccountRefreshMissing			= null;
+		private Boolean				includeRequiresSponsorship					= null;
+		private LocalDate			registeredAfter								= null;
+		private LocalDate			lastAccountRefreshLtEq						= null;
+		private Boolean				lastAccountRefreshMissing					= null;
+		private Integer				daysSincelastAvailabilityCheckEmailSent		= null;
 		
 		/**
 		* Sets the name of the attribute to order on
@@ -646,6 +657,16 @@ public class CandidateFilterOptions {
 		*/
 		public CandidateFilterOptionsBuilder lastAccountRefreshMissing() {
 			this.lastAccountRefreshMissing = true;
+			return this;
+		}
+		
+		/**
+		* Sets filter for days since Candidate was sent an email asking for them to confirm their availability
+		* @param daysSincelastAvailabilityCheckEmailSent - emails sent LtEq dats ago
+		* @return Builder
+		*/
+		public CandidateFilterOptionsBuilder daysSincelastAvailabilityCheckEmailSent(Integer daysSincelastAvailabilityCheckEmailSent) {
+			this.daysSincelastAvailabilityCheckEmailSent = daysSincelastAvailabilityCheckEmailSent;
 			return this;
 		}
 		

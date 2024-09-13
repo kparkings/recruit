@@ -115,6 +115,9 @@ public class CandidateDocument {
 	@Field(type = FieldType.Date)
 	private Date 		lastAccountRefresh;
 	
+	@Field(type = FieldType.Date)
+	private Date lastAvailabilityCheckEmailSent;
+	
 	@Field(type = FieldType.Keyword)
     @Enumerated(EnumType.STRING)
     private SECURITY_CLEARANCE_TYPE securityClearance;
@@ -137,31 +140,32 @@ public class CandidateDocument {
 		
 		ZoneId defaultZoneId = ZoneId.systemDefault();
 		
-		this.candidateId 				= builder.candidateId;
-		this.firstname 					= builder.firstname;
-		this.surname 					= builder.surname;
-		this.email 						= builder.email;
-		this.roleSought 				= builder.roleSought;
-		this.function 					= builder.function;
-		this.country 					= builder.country;
-		this.city 						= builder.city;
-		this.perm 						= builder.perm;
-		this.freelance 					= builder.freelance;
-		this.yearsExperience 			= builder.yearsExperience;
-		this.available 					= builder.available;
-		this.registerd 					= Date.from(builder.registerd.atStartOfDay(defaultZoneId).toInstant());
-		this.lastAvailabilityCheck 		= Date.from(builder.lastAvailabilityCheck.atStartOfDay(defaultZoneId).toInstant());
-		this.introduction 				= builder.introduction;
-		this.rateContract 				= builder.rateContract;
-		this.ratePerm 					= builder.ratePerm;
-		this.availableFromDate 			= Date.from(builder.availableFromDate.atStartOfDay(defaultZoneId).toInstant());
-		this.ownerId 					= builder.ownerId;
-		this.candidateType 				= builder.candidateType;
-		this.comments 					= builder.comments;
-		this.daysOnSite 				= builder.daysOnSite;
-		this.photo 						= builder.photo;      
-		this.requiresSponsorship 		= builder.requiresSponsorship;
-		this.securityClearance 			= builder.securityClearance;
+		this.candidateId 					= builder.candidateId;
+		this.firstname 						= builder.firstname;
+		this.surname 						= builder.surname;
+		this.email 							= builder.email;
+		this.roleSought 					= builder.roleSought;
+		this.function 						= builder.function;
+		this.country 						= builder.country;
+		this.city 							= builder.city;
+		this.perm 							= builder.perm;
+		this.freelance 						= builder.freelance;
+		this.yearsExperience 				= builder.yearsExperience;
+		this.available 						= builder.available;
+		this.registerd 						= Date.from(builder.registerd.atStartOfDay(defaultZoneId).toInstant());
+		this.lastAvailabilityCheck 			= Date.from(builder.lastAvailabilityCheck.atStartOfDay(defaultZoneId).toInstant());
+		this.introduction 					= builder.introduction;
+		this.rateContract 					= builder.rateContract;
+		this.ratePerm 						= builder.ratePerm;
+		this.availableFromDate 				= Date.from(builder.availableFromDate.atStartOfDay(defaultZoneId).toInstant());
+		this.ownerId 						= builder.ownerId;
+		this.candidateType 					= builder.candidateType;
+		this.comments 						= builder.comments;
+		this.daysOnSite 					= builder.daysOnSite;
+		this.photo 							= builder.photo;      
+		this.requiresSponsorship 			= builder.requiresSponsorship;
+		this.securityClearance 				= builder.securityClearance;
+		this.lastAvailabilityCheckEmailSent = Optional.ofNullable(builder.lastAvailabilityCheckEmailSent).isEmpty() ? null : Date.from(builder.lastAvailabilityCheckEmailSent.atStartOfDay(defaultZoneId).toInstant());
 		
 		if (Optional.ofNullable(builder.lastAccountRefresh).isPresent()) {
 			this.lastAccountRefresh			= Date.from(builder.lastAccountRefresh.atStartOfDay(defaultZoneId).toInstant());
@@ -289,6 +293,10 @@ public class CandidateDocument {
 		return this.registerd;
 	}
 	
+	/**
+	* Returns registration date of the Candiadte
+	* @return Registration date
+	*/
 	public Date getRegisterd() {
 		return this.registerd;
 	}
@@ -387,6 +395,21 @@ public class CandidateDocument {
 	}
 	
 	/**
+	* Returns last time email was sent to the Candidate to confirm their availability
+	* @return Date email last sent
+	*/
+	public Optional<LocalDate> getLastAvailabilityCheckEmailSent() {
+		
+		if (Optional.ofNullable(this.lastAvailabilityCheckEmailSent).isEmpty()) {
+			return Optional.empty();
+		}
+		
+		return Optional.of(Instant.ofEpochMilli(this.lastAvailabilityCheckEmailSent.getTime())
+			      .atZone(ZoneId.systemDefault())
+			      .toLocalDate());
+	}
+	
+	/**
 	* Returns the type of the Candidate
 	* @return - Type of the Candidate
 	*/
@@ -477,6 +500,7 @@ public class CandidateDocument {
 	    private Set<String> 			skills						= new LinkedHashSet<>();
 		private Set<LanguageDocument> 	languages					= new LinkedHashSet<>();
 		private LocalDate				lastAccountRefresh;
+		private LocalDate				lastAvailabilityCheckEmailSent;
 		
 		/**
 		* Sets the candidates Unique identifier in the System
@@ -764,6 +788,16 @@ public class CandidateDocument {
 		}
 		
 		/**
+		* Sets when the Candidate was last sent an email asking them to confirm their availability
+		* @param lastAvailabilityCheckEmailSent - date of last email
+		* @return Builder
+		*/
+		public CandidateDocumentBuilder lastAvailabilityCheckEmailSent(LocalDate lastAvailabilityCheckEmailSent) {
+			this.lastAvailabilityCheckEmailSent = lastAvailabilityCheckEmailSent;
+			return this;
+		}
+		
+		/**
 		* Returns an instance of CandidateDocument initialized with the 
 		* values in the builder
 		* @return Initialized instance of CandidateDocument
@@ -816,6 +850,7 @@ public class CandidateDocument {
 					.lastAccountRefresh(doc.getLastAccountRefresh().toInstant()
 						      .atZone(ZoneId.systemDefault())
 						      .toLocalDate())
+					.lastAvailabilityCheckEmailSent(doc.getLastAvailabilityCheckEmailSent().isEmpty()? null : doc.getLastAvailabilityCheckEmailSent().get())
 				.build();
 
 	}
@@ -856,6 +891,7 @@ public class CandidateDocument {
 					.surname(candidate.getSurname())
 					.yearsExperience(candidate.getYearsExperience())
 					.lastAccountRefresh(candidate.getLastAccountRefresh())
+					.lastAvailabilityCheckEmailSent(candidate.getLastAvailabilityCheckEmailSent().isEmpty() ? null : candidate.getLastAvailabilityCheckEmailSent().get())
 				.build();
 
 	}

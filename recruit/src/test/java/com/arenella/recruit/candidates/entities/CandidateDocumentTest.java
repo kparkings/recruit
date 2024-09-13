@@ -1,6 +1,7 @@
 package com.arenella.recruit.candidates.entities;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -29,35 +30,35 @@ import com.arenella.recruit.candidates.enums.PERM;
 */
 public class CandidateDocumentTest {
 
-	private static final long						CANDIDATE_ID			= 123;
-	private static final String 					FIRSTNAME				= "Kevin";
-	private static final String 					SURNAME					= "Parkings";
-	private static final String 					EMAIL					= "kparkings@gmail.com";
-	private static final String 					ROLE_SOUGHT				= "Senior Java Developer";
-	private static final FUNCTION 					FUNCTION_VAL			= FUNCTION.JAVA_DEV;
-	private static final COUNTRY 					COUNTRY_VAL				= COUNTRY.ITALY;
-	private static final String 					CITY					= "Scalea";
-	private static final PERM 						PERM_VAL				= PERM.FALSE;
-	private static final FREELANCE 					FREELANCE_VAL			= FREELANCE.TRUE;
-	private static final int						YEARS_EXPERIENCE		= 25;
-	private static final boolean 					AVAILABLE				= true;
-	private static final LocalDate 					REGISTERED				= LocalDate.of(2024,4,11);
-	private static final LocalDate 					LAST_AVAILABILITY_CHECK = LocalDate.of(2024,4,10);
-	private static final String 					INTRODUCTION			= "Im a Java Dev";
-	private static final RateDocument 				RATE_CONTRACT			= new RateDocument(CURRENCY.EUR, PERIOD.HOUR, 110, 120);
-	private static final RateDocument 				RATE_PERM				= new RateDocument(CURRENCY.EUR, PERIOD.YEAR, 200000, 250000);
-	private static final LocalDate 					AVAILABLE_FROM_DATE		= LocalDate.of(2024,5,11);
-	private static final String 					OWNER_ID				= "456";
-	private static final CANDIDATE_TYPE				CANDIDATE_TYPE_VAL		= CANDIDATE_TYPE.MARKETPLACE_CANDIDATE;
-	private static final String 					COMMENTS				= "boop";
-	private static final DAYS_ON_SITE 				DAYS_ON_SITE_VAL		= DAYS_ON_SITE.ZERO;
-    private static final PhotoDocument	 			PHOTO					= new PhotoDocument(new byte[] {}, PHOTO_FORMAT.jpeg);      
-    private static final boolean 					REQUIRES_SPONSORSHIP	= true;
-    private static final SECURITY_CLEARANCE_TYPE 	SECURITY_CLEARANCE		= SECURITY_CLEARANCE_TYPE.NONE;
-    private static final Set<String> 				SKILLS					= Set.of("java","spring");
-	private static final Set<LanguageDocument> 		LANGUAGES				= Set.of(new LanguageDocument(LANGUAGE.ITALIAN, LEVEL.PROFICIENT));
-	private static final LocalDate 					LAST_REFRESH 			= LocalDate.of(2021, 8, 8);
-	
+	private static final long						CANDIDATE_ID				= 123;
+	private static final String 					FIRSTNAME					= "Kevin";
+	private static final String 					SURNAME						= "Parkings";
+	private static final String 					EMAIL						= "kparkings@gmail.com";
+	private static final String 					ROLE_SOUGHT					= "Senior Java Developer";
+	private static final FUNCTION 					FUNCTION_VAL				= FUNCTION.JAVA_DEV;
+	private static final COUNTRY 					COUNTRY_VAL					= COUNTRY.ITALY;
+	private static final String 					CITY						= "Scalea";
+	private static final PERM 						PERM_VAL					= PERM.FALSE;
+	private static final FREELANCE 					FREELANCE_VAL				= FREELANCE.TRUE;
+	private static final int						YEARS_EXPERIENCE			= 25;
+	private static final boolean 					AVAILABLE					= true;
+	private static final LocalDate 					REGISTERED					= LocalDate.of(2024,4,11);
+	private static final LocalDate 					LAST_AVAILABILITY_CHECK 	= LocalDate.of(2024,4,10);
+	private static final String 					INTRODUCTION				= "Im a Java Dev";
+	private static final RateDocument 				RATE_CONTRACT				= new RateDocument(CURRENCY.EUR, PERIOD.HOUR, 110, 120);
+	private static final RateDocument 				RATE_PERM					= new RateDocument(CURRENCY.EUR, PERIOD.YEAR, 200000, 250000);
+	private static final LocalDate 					AVAILABLE_FROM_DATE			= LocalDate.of(2024,5,11);
+	private static final String 					OWNER_ID					= "456";
+	private static final CANDIDATE_TYPE				CANDIDATE_TYPE_VAL			= CANDIDATE_TYPE.MARKETPLACE_CANDIDATE;
+	private static final String 					COMMENTS					= "boop";
+	private static final DAYS_ON_SITE 				DAYS_ON_SITE_VAL			= DAYS_ON_SITE.ZERO;
+    private static final PhotoDocument	 			PHOTO						= new PhotoDocument(new byte[] {}, PHOTO_FORMAT.jpeg);      
+    private static final boolean 					REQUIRES_SPONSORSHIP		= true;
+    private static final SECURITY_CLEARANCE_TYPE 	SECURITY_CLEARANCE			= SECURITY_CLEARANCE_TYPE.NONE;
+    private static final Set<String> 				SKILLS						= Set.of("java","spring");
+	private static final Set<LanguageDocument> 		LANGUAGES					= Set.of(new LanguageDocument(LANGUAGE.ITALIAN, LEVEL.PROFICIENT));
+	private static final LocalDate 					LAST_REFRESH 				= LocalDate.of(2021, 8, 8);
+	private static final LocalDate 					AVAILABIILTY_CHK_EMAIL_DATE = LocalDate.of(2024, 9, 21);
 	
 	/**
 	* Tests construction
@@ -97,6 +98,7 @@ public class CandidateDocumentTest {
 					.surname(SURNAME)
 					.yearsExperience(YEARS_EXPERIENCE)
 					.lastAccountRefresh(LAST_REFRESH)
+					.lastAvailabilityCheckEmailSent(AVAILABIILTY_CHK_EMAIL_DATE)
 				.build();
 		
 		assertEquals(CANDIDATE_ID,					doc.getCandidateId());
@@ -127,6 +129,7 @@ public class CandidateDocumentTest {
 		assertEquals(SKILLS,						doc.getSkills());
 		assertEquals(LANGUAGES,						doc.getLanguages());
 		assertEquals(LAST_REFRESH,					doc.getLastAccountRefresh().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+		assertEquals(AVAILABIILTY_CHK_EMAIL_DATE,	doc.getLastAvailabilityCheckEmailSent().get());
 	}
 	
 	/**
@@ -167,6 +170,7 @@ public class CandidateDocumentTest {
 					.surname(SURNAME)
 					.yearsExperience(YEARS_EXPERIENCE)
 					.lastAccountRefresh(LAST_REFRESH)
+					.lastAvailabilityCheckEmailSent(AVAILABIILTY_CHK_EMAIL_DATE)
 				.build();
 		
 		Candidate candidate = CandidateDocument.convertFromDocument(doc);
@@ -212,6 +216,26 @@ public class CandidateDocumentTest {
 		assertEquals(LEVEL.PROFICIENT,				candidate.getLanguages().stream().findFirst().get().getLevel());
 		
 		assertEquals(LAST_REFRESH,					candidate.getLastAccountRefresh());
+		assertEquals(AVAILABIILTY_CHK_EMAIL_DATE, 	candidate.getLastAvailabilityCheckEmailSent().get());
+		
+	}
+	
+	/**
+	* Tests case that conversion performed when Builder has only defailts
+	* @throws Exception
+	*/
+	@Test
+	public void testConvertToDomain_defaults() throws Exception{
+		
+		CandidateDocument doc = 
+				CandidateDocument
+				.builder()
+					.registerd(REGISTERED)
+					.lastAvailabilityCheck(LAST_AVAILABILITY_CHECK)
+					.availableFromDate(AVAILABLE_FROM_DATE)
+				.build();
+		
+		assertFalse(CandidateDocument.convertFromDocument(doc).getLastAvailabilityCheckEmailSent().isPresent());
 		
 	}
 	
@@ -253,6 +277,7 @@ public class CandidateDocumentTest {
 					.surname(SURNAME)
 					.yearsExperience(YEARS_EXPERIENCE)
 					.lastAccountRefresh(LAST_REFRESH)
+					.lastAvailabilityCheckEmailSent(AVAILABIILTY_CHK_EMAIL_DATE)
 				.build();
 		
 		CandidateDocument doc = CandidateDocument.convertToDocument(candidate);
@@ -298,6 +323,7 @@ public class CandidateDocumentTest {
 		assertEquals(LEVEL.PROFICIENT,				doc.getLanguages().stream().findFirst().get().getLevel());
 		
 		assertEquals(LAST_REFRESH,					doc.getLastAccountRefresh().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+		assertEquals(AVAILABIILTY_CHK_EMAIL_DATE, 	doc.getLastAvailabilityCheckEmailSent().get());
 		
 	}
 	

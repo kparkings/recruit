@@ -49,6 +49,7 @@ public class ESFilteredSearchRequestBuilderTest {
 	private static final Integer			DAYS_SINCE_LAST_AVAILABILITY_CHECK 	= 10;
 	private static final LocalDate			REGISTERED_AFTER					= LocalDate.of(2024, 5, 8);
 	private static final LocalDate			LAST_REFRESH						= LocalDate.of(2024, 8, 11);
+	private static final Integer			LAST_EMAIL_AVAILABILIY_REQUEST		= 12;
 	private static final String				OWNER_ID							= "6789";
 	private static final Boolean			INCLUDE_REQUIRES_SPONSORSHIP		= true;
 	
@@ -79,6 +80,7 @@ public class ESFilteredSearchRequestBuilderTest {
 					.registeredAfter(REGISTERED_AFTER)
 					.lastAccountRefreshLtEq(LAST_REFRESH)
 					.lastAccountRefreshMissing()
+					.daysSincelastAvailabilityCheckEmailSent(LAST_EMAIL_AVAILABILIY_REQUEST)
 				.build();
 	
 	/**
@@ -127,8 +129,9 @@ public class ESFilteredSearchRequestBuilderTest {
 		mustRange.stream().filter(q -> q.queryName().equals("yearsExperienceGte") 		&& q.gte().toString().equals(String.valueOf(YEARS_EXPERIENCE_GTE))).findFirst().orElseThrow();
 		mustRange.stream().filter(q -> q.queryName().equals("yearsExperienceLte") 		&& q.lte().toString().equals(String.valueOf(YEARS_EXPERIENCE_LTE))).findFirst().orElseThrow();
 		
-		LocalDate ld = LocalDate.now().minusDays(DAYS_SINCE_LAST_AVAILABILITY_CHECK);
+		LocalDate ld 						= LocalDate.now().minusDays(DAYS_SINCE_LAST_AVAILABILITY_CHECK);
 		
+		mustBool.stream().filter(q -> q.queryName().equals("lastAvailabilityCheckEmailSent")).findFirst().orElseThrow();
 		mustRange.stream().filter(q -> q.queryName().equals("lastAvailabilityCheck")	&& q.lte().toString().equals(String.valueOf(Date.from(ld.atStartOfDay(ZoneId.systemDefault()).toInstant())))).findFirst().orElseThrow();
 		mustRange.stream().filter(q -> q.queryName().equals("registeredAfterCheck")		&& q.gte().toString().equals(String.valueOf(Date.from(REGISTERED_AFTER.atStartOfDay(ZoneId.systemDefault()).toInstant())))).findFirst().orElseThrow();
 		

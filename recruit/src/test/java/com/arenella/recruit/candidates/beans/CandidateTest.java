@@ -58,6 +58,7 @@ public class CandidateTest {
 	private static final Rate						RATE_CONTRACT 				= new Rate(CURRENCY.EUR, PERIOD.DAY, 80.50f, 99f);
 	private static final Rate						RATE_PERM 					= new Rate(CURRENCY.EUR, PERIOD.YEAR, 25000f, 30000);
 	private static final LocalDate 					AVAILABLE_FROM_DATE 		= LocalDate.of(2023, 7, 21);
+	private static final LocalDate 					AVAILABIILTY_CHK_EMAIL_DATE = LocalDate.of(2024, 9, 21);
 	private static final String						OWNER_ID					= "kparkings";
 	private static final CANDIDATE_TYPE				CANDIDATE_TYPE_VAL			= CANDIDATE_TYPE.MARKETPLACE_CANDIDATE;
 	private static final SECURITY_CLEARANCE_TYPE 	SECURITY_LEVEL 				= SECURITY_CLEARANCE_TYPE.NATO;
@@ -107,33 +108,36 @@ public class CandidateTest {
 							.candidateType(CANDIDATE_TYPE_VAL)
 							.securityClearance(SECURITY_LEVEL)
 							.lastAccountRefresh(LAST_REFRESH)
+							.lastAvailabilityCheckEmailSent(AVAILABIILTY_CHK_EMAIL_DATE)
 							.build();
 		
-		assertEquals(CANDIDATE_ID, 				candidate.getCandidateId());
-		assertEquals(FUNCTION_VAL, 				candidate.getFunction());
-		assertEquals(COUNTRY_VAL, 				candidate.getCountry());
-		assertEquals(CITY, 						candidate.getCity());
-		assertEquals(EMAIL, 					candidate.getEmail());
-		assertEquals(ROLE_SOUGHT, 				candidate.getRoleSought());
-		assertEquals(AVAILABLE, 				candidate.isAvailable());
-		assertEquals(FLAGGED_AS_UNAVAILABLE, 	candidate.isFlaggedAsUnavailable());
-		assertEquals(FREELANCE_VAL, 			candidate.isFreelance());
-		assertEquals(PERM_VAL, 					candidate.isPerm());
-		assertEquals(LAST_AVAILABILITY_CHECK, 	candidate.getLastAvailabilityCheckOn());
-		assertEquals(REGISTERED, 				candidate.getRegisteredOn());
-		assertEquals(YEARS_EXPERIENCE, 			candidate.getYearsExperience());
-		assertEquals(PROFILE_PHOTO, 			candidate.getPhoto().get());
+		assertEquals(CANDIDATE_ID, 					candidate.getCandidateId());
+		assertEquals(FUNCTION_VAL, 					candidate.getFunction());
+		assertEquals(COUNTRY_VAL, 					candidate.getCountry());
+		assertEquals(CITY, 							candidate.getCity());
+		assertEquals(EMAIL, 						candidate.getEmail());
+		assertEquals(ROLE_SOUGHT, 					candidate.getRoleSought());
+		assertEquals(AVAILABLE, 					candidate.isAvailable());
+		assertEquals(FLAGGED_AS_UNAVAILABLE, 		candidate.isFlaggedAsUnavailable());
+		assertEquals(FREELANCE_VAL, 				candidate.isFreelance());
+		assertEquals(PERM_VAL, 						candidate.isPerm());
+		assertEquals(LAST_AVAILABILITY_CHECK, 		candidate.getLastAvailabilityCheckOn());
+		assertEquals(REGISTERED, 					candidate.getRegisteredOn());
+		assertEquals(YEARS_EXPERIENCE, 				candidate.getYearsExperience());
+		assertEquals(PROFILE_PHOTO, 				candidate.getPhoto().get());
 		
-		assertEquals(INTRODUCTION, 				candidate.getIntroduction());
+		assertEquals(INTRODUCTION, 					candidate.getIntroduction());
 		
-		assertEquals(DAYS_ON_SITE_VAL, 			candidate.getDaysOnSite());
-		assertEquals(RATE_CONTRACT, 			candidate.getRateContract().get());
-		assertEquals(RATE_PERM, 				candidate.getRatePerm().get());
-		assertEquals(AVAILABLE_FROM_DATE, 		candidate.getAvailableFromDate());
-		assertEquals(OWNER_ID, 					candidate.getOwnerId().get());
-		assertEquals(CANDIDATE_TYPE_VAL, 		candidate.getCandidateType());
-		assertEquals(SECURITY_LEVEL,			candidate.getSecurityClearance());
-		assertEquals(LAST_REFRESH,				candidate.getLastAccountRefresh());
+		assertEquals(DAYS_ON_SITE_VAL, 				candidate.getDaysOnSite());
+		assertEquals(RATE_CONTRACT, 				candidate.getRateContract().get());
+		assertEquals(RATE_PERM, 					candidate.getRatePerm().get());
+		assertEquals(AVAILABLE_FROM_DATE, 			candidate.getAvailableFromDate());
+		assertEquals(OWNER_ID, 						candidate.getOwnerId().get());
+		assertEquals(CANDIDATE_TYPE_VAL, 			candidate.getCandidateType());
+		assertEquals(SECURITY_LEVEL,				candidate.getSecurityClearance());
+		assertEquals(LAST_REFRESH,					candidate.getLastAccountRefresh());
+		assertEquals(AVAILABIILTY_CHK_EMAIL_DATE, 	candidate.getLastAvailabilityCheckEmailSent().get());
+		
 		
 		assertTrue(candidate.getSkills().contains(SKILL));
 		candidate.getLanguages().stream().filter(l -> l.getLanguage() == LANGUAGE_VAL.getLanguage()).findAny().orElseThrow();
@@ -245,14 +249,17 @@ public class CandidateTest {
 		
 		Candidate candidate = Candidate.builder().build();
 		
+		assertTrue(candidate.getLastAvailabilityCheckEmailSent().isEmpty());
+		
 		candidate.setCandidateType(CANDIDATE_TYPE_VAL);
 		candidate.setOwnerId(OWNER_ID);
 		candidate.setEmail(EMAIL);
+		candidate.setLastAvailabilityCheckEmailSent(AVAILABIILTY_CHK_EMAIL_DATE);
 		
-		assertEquals(CANDIDATE_TYPE_VAL, 	candidate.getCandidateType());
-		assertEquals(OWNER_ID, 				candidate.getOwnerId().get());
-		assertEquals(EMAIL, 				candidate.getEmail());
-		
+		assertEquals(CANDIDATE_TYPE_VAL, 			candidate.getCandidateType());
+		assertEquals(OWNER_ID, 						candidate.getOwnerId().get());
+		assertEquals(EMAIL, 						candidate.getEmail());
+		assertEquals(AVAILABIILTY_CHK_EMAIL_DATE, 	candidate.getLastAvailabilityCheckEmailSent().get());
 	}
 	
 	/**

@@ -36,6 +36,23 @@ public class CandidateSearchUtil {
 	* @throws Exception
 	*/
 	public Page<CandidateAPIOutbound> searchAndPackageForAPIOutput(boolean isRecruiter, boolean isUseCreditUser, boolean isUserCreditsExpired, CandidateFilterOptions filterOptions, Pageable pageable, Boolean unfiltered) throws Exception{
+		return this.searchAndPackageForAPIOutput(isRecruiter, isUseCreditUser, isUserCreditsExpired, filterOptions, pageable, unfiltered, false);
+	}
+	
+	/**
+	* Fetches Candidates based upon filters and then applies masking to details of results based upon
+	* the current User
+	* @param isRecruiter			- Whether or not the User is a Recruiter
+	* @param isUseCreditUser		- Whether or not the User has a Credit based subscription
+	* @param isUserCreditsExpired	- Whether or not the User has a Credit based Subscription but used all their credits
+	* @param filterOptions			- Filter options to apply
+	* @param pageable				- Pageable object for results size
+	* @param unfiltered				- Whether the Search request is unfiltered ( no filters = faster processing )
+	* @param isSystemRequest		- Identified that request was from system and not an authenticated user of the system
+	* @return Matching Candidates with data masking applied
+	* @throws Exception
+	*/
+	public Page<CandidateAPIOutbound> searchAndPackageForAPIOutput(boolean isRecruiter, boolean isUseCreditUser, boolean isUserCreditsExpired, CandidateFilterOptions filterOptions, Pageable pageable, Boolean unfiltered, boolean isSystemRequest) throws Exception{
 		
 		boolean isUnfilteredRequest = Optional.ofNullable(unfiltered).isEmpty() ? false :  unfiltered;
 		
@@ -66,7 +83,7 @@ public class CandidateSearchUtil {
 		/**
 		* Scenario 4 - All remaining scearios
 		*/
-		return candidateService.getCandidateSuggestions(filterOptions, pageable.getPageSize(), isUnfilteredRequest).map(CandidateSuggestionAPIOutbound::convertFromCandidate);
+		return candidateService.getCandidateSuggestions(filterOptions, pageable.getPageSize(), isUnfilteredRequest, isSystemRequest).map(CandidateSuggestionAPIOutbound::convertFromCandidate);
 		
 	}
 	

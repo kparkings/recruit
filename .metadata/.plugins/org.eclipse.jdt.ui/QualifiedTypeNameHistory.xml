@@ -2,7 +2,6 @@
 <qualifiedTypeNameHistroy>
     <fullyQualifiedTypeName name="com.arenella.recruit.emailservice.beans.Email.EmailRecipient.ContactType"/>
     <fullyQualifiedTypeName name="com.arenella.recruit.emailservice.beans.Email.EmailRecipient"/>
-    <fullyQualifiedTypeName name="com.arenella.recruit.candidates.controllers.CandidateSuggestionAPIOutbound"/>
     <fullyQualifiedTypeName name="java.security.Principal"/>
     <fullyQualifiedTypeName name="org.springframework.beans.factory.annotation.Autowired"/>
     <fullyQualifiedTypeName name="com.arenella.recruit.candidates.services.CandidateService"/>
@@ -11,16 +10,12 @@
     <fullyQualifiedTypeName name="org.springframework.data.domain.Page"/>
     <fullyQualifiedTypeName name="com.arenella.recruit.candidates.beans.CandidateSearchAccuracyWrapper"/>
     <fullyQualifiedTypeName name="com.arenella.recruit.candidates.controllers.CandidateAPIOutbound"/>
-    <fullyQualifiedTypeName name="org.springframework.stereotype.Component"/>
     <fullyQualifiedTypeName name="com.arenella.recruit.recruiters.beans.CreditBasedSubscriptionActionHandler"/>
     <fullyQualifiedTypeName name="com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_type"/>
     <fullyQualifiedTypeName name="com.arenella.recruit.adapters.events.SubscriptionAddedEvent"/>
     <fullyQualifiedTypeName name="com.arenella.recruit.curriculum.beans.RecruiterCredit"/>
     <fullyQualifiedTypeName name="com.arenella.recruit.listings.beans.RecruiterCredit"/>
     <fullyQualifiedTypeName name="com.arenella.recruit.recruiters.beans.RecruiterCredit"/>
-    <fullyQualifiedTypeName name="org.junit.jupiter.api.extension.ExtendWith"/>
-    <fullyQualifiedTypeName name="org.mockito.junit.jupiter.MockitoExtension"/>
-    <fullyQualifiedTypeName name="org.mockito.InjectMocks"/>
     <fullyQualifiedTypeName name="org.mockito.Mock"/>
     <fullyQualifiedTypeName name="org.junit.jupiter.api.Assertions"/>
     <fullyQualifiedTypeName name="com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_status"/>
@@ -47,7 +42,6 @@
     <fullyQualifiedTypeName name="jakarta.persistence.Table"/>
     <fullyQualifiedTypeName name="jakarta.persistence.Id"/>
     <fullyQualifiedTypeName name="jakarta.persistence.Column"/>
-    <fullyQualifiedTypeName name="org.junit.jupiter.api.Test"/>
     <fullyQualifiedTypeName name="org.springframework.data.repository.CrudRepository"/>
     <fullyQualifiedTypeName name="com.arenella.recruit.candidates.entities.SkillUpdateStatEntity"/>
     <fullyQualifiedTypeName name="org.joda.time.LocalDate"/>
@@ -55,4 +49,14 @@
     <fullyQualifiedTypeName name="com.arenella.recruit.candidates.beans.SkillUpdateStat"/>
     <fullyQualifiedTypeName name="com.arenella.recruit.candidates.dao.SkillUpdateStatDao"/>
     <fullyQualifiedTypeName name="com.arenella.recruit.adapters.events.CandidatePasswordUpdatedEvent"/>
+    <fullyQualifiedTypeName name="com.arenella.recruit.candidates.enums.RESULT_ORDER"/>
+    <fullyQualifiedTypeName name="org.springframework.data.domain.PageRequest"/>
+    <fullyQualifiedTypeName name="com.arenella.recruit.candidates.controllers.CandidateSuggestionAPIOutbound"/>
+    <fullyQualifiedTypeName name="org.springframework.stereotype.Component"/>
+    <fullyQualifiedTypeName name="com.arenella.recruit.authentication.spring.filters.ArenellaRoleManager"/>
+    <fullyQualifiedTypeName name="org.mockito.Spy"/>
+    <fullyQualifiedTypeName name="org.junit.jupiter.api.extension.ExtendWith"/>
+    <fullyQualifiedTypeName name="org.mockito.junit.jupiter.MockitoExtension"/>
+    <fullyQualifiedTypeName name="org.junit.jupiter.api.Test"/>
+    <fullyQualifiedTypeName name="org.mockito.InjectMocks"/>
 </qualifiedTypeNameHistroy>

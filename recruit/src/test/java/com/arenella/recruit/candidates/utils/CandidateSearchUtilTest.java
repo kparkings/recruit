@@ -142,7 +142,6 @@ public class CandidateSearchUtilTest {
 		final String firstName 	= "Keivn";
 		final String surname 	= "parkings";
 		final String email 		= "kparkings@gmail.com";
-		
 		final int pageSize = 1;
 		CandidateFilterOptions filters = CandidateFilterOptions.builder().available(true).build();
 		
@@ -156,7 +155,7 @@ public class CandidateSearchUtilTest {
 		ArgumentCaptor<CandidateFilterOptions> filtersArgCapt = ArgumentCaptor.forClass(CandidateFilterOptions.class);
 		
 		Mockito.when(this.mockPageable.getPageSize()).thenReturn(pageSize);
-		Mockito.when(this.mockCandidateService.getCandidateSuggestions(filtersArgCapt.capture(), Mockito.eq(pageSize), Mockito.eq(false))).thenReturn(pageResults);
+		Mockito.when(this.mockCandidateService.getCandidateSuggestions(filtersArgCapt.capture(), Mockito.eq(1), Mockito.eq(false), Mockito.eq(false))).thenReturn(pageResults);
 		
 		Page<CandidateAPIOutbound> results =  this.util.searchAndPackageForAPIOutput(true, false, false, filters, mockPageable, false);
 		

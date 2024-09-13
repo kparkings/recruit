@@ -41,6 +41,7 @@ public class EmailTemplateFactory {
 			case CANDIDATE_ACCOUNT_CREATED 				-> loadTemplate("new-candidate-signup.ftlh", model);
 			case NEW_CREDITS_ASSIGNED					-> loadTemplate("new-credits-assigned.ftlh", model);
 			case LISTING_MATCHING_ROLE					-> loadTemplate("listing-alert-hit.ftlh",model);
+			case CANDIDATE_SUMMARY						-> loadTemplate("candidate-summary.ftlh", model);
 			default -> "Could not process template";
 		};
 		

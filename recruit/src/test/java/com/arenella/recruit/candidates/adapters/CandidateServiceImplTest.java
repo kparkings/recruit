@@ -40,6 +40,7 @@ import com.arenella.recruit.adapters.events.CandidatePasswordUpdatedEvent;
 import com.arenella.recruit.adapters.events.CandidateUpdateEvent;
 import com.arenella.recruit.adapters.events.CandidateUpdatedEvent;
 import com.arenella.recruit.adapters.events.ContactRequestEvent;
+import com.arenella.recruit.authentication.spring.filters.ArenellaRoleManager;
 import com.arenella.recruit.candidates.beans.Candidate;
 import com.arenella.recruit.candidates.beans.Candidate.CANDIDATE_TYPE;
 import com.arenella.recruit.candidates.beans.Candidate.Photo;
@@ -153,6 +154,9 @@ public class CandidateServiceImplTest {
 	
 	@Mock
 	private SkillUpdateStatDao						mockkillUpdateStatDao;
+	
+	@Spy
+	private ArenellaRoleManager						spyRoleManager;
 	
 	@InjectMocks
 	private CandidateServiceImpl 					service 					= new CandidateServiceImpl();

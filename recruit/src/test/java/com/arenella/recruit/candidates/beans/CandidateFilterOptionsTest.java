@@ -31,30 +31,31 @@ public class CandidateFilterOptionsTest {
 	@Test
 	public void testBuilder() throws Exception{
 		
-		Set<String> 			candidateIds 					= new HashSet<>();
-		Set<GEO_ZONE> 			geoZones 						= new HashSet<>();
-		Set<COUNTRY> 			countries 						= new HashSet<>();
-		Set<FUNCTION> 			functions 						= new HashSet<>();
-		Set<String> 			skills 							= new HashSet<>();
-		Language.LEVEL 			dutch 							= Language.LEVEL.PROFICIENT;
-		Language.LEVEL 			english 						= Language.LEVEL.BASIC;
-		Language.LEVEL 			french 							= Language.LEVEL.BASIC;
-		boolean 				freelance	 					= false;
-		boolean 				perm 							= true;
-		String 					orderAttribute 					= "candidateId";
-		int 					yearsExperienceGtEq 			= 2;
-		String 					candidateId 					= "aCandidateId";
-		String 					skill 							= "aSkill";
-		String					firstname						= "kevin";
-		String					surname							= "Parkings";
-		String					email							= "email";
-		Boolean					flaggedAsUnavailable			= true;	
-		Integer					daysSinceLastAvailabilityCheck 	= 14;
-		String					searchText						= "Java Developer";
-		String					ownerId							= "rec22";
-		boolean 				includeRequiresSponsorship		= true;
-		LocalDate				registeredAfter					= LocalDate.of(2024,5,8);
-		LocalDate				lastAccountRefreshLtEq			= LocalDate.of(2024,8,8);
+		Set<String> 			candidateIds 						= new HashSet<>();
+		Set<GEO_ZONE> 			geoZones 							= new HashSet<>();
+		Set<COUNTRY> 			countries 							= new HashSet<>();
+		Set<FUNCTION> 			functions 							= new HashSet<>();
+		Set<String> 			skills 								= new HashSet<>();
+		Language.LEVEL 			dutch 								= Language.LEVEL.PROFICIENT;
+		Language.LEVEL 			english 							= Language.LEVEL.BASIC;
+		Language.LEVEL 			french 								= Language.LEVEL.BASIC;
+		boolean 				freelance	 							= false;
+		boolean 				perm 									= true;
+		String 					orderAttribute 							= "candidateId";
+		int 					yearsExperienceGtEq 					= 2;
+		String 					candidateId 							= "aCandidateId";
+		String 					skill 									= "aSkill";
+		String					firstname								= "kevin";
+		String					surname									= "Parkings";
+		String					email									= "email";
+		Boolean					flaggedAsUnavailable					= true;	
+		Integer					daysSinceLastAvailabilityCheck 			= 14;
+		String					searchText								= "Java Developer";
+		String					ownerId									= "rec22";
+		boolean 				includeRequiresSponsorship				= true;
+		LocalDate				registeredAfter							= LocalDate.of(2024,5,8);
+		LocalDate				lastAccountRefreshLtEq					= LocalDate.of(2024,8,8);
+		Integer 				daysSinceLastavailabilityCheckEmail 	= 2;
 		
 		candidateIds.add(candidateId);
 		skills.add(skill);
@@ -91,6 +92,7 @@ public class CandidateFilterOptionsTest {
 													.registeredAfter(registeredAfter)
 													.lastAccountRefreshLtEq(lastAccountRefreshLtEq)
 													.lastAccountRefreshMissing()
+													.daysSincelastAvailabilityCheckEmailSent(daysSinceLastavailabilityCheckEmail)
 													.build();
 		
 		assertEquals(filters.getCandidateIds().stream().findAny().get(), 	candidateId);
@@ -116,6 +118,7 @@ public class CandidateFilterOptionsTest {
 		assertEquals(lastAccountRefreshLtEq, 								filters.getLastAccountRefreshLtEq().get());				
 		assertTrue(filters.getIncludeRequiresSponsorship().get());
 		assertTrue(filters.getLastAccountRefreshMissing().get());
+		assertEquals(daysSinceLastavailabilityCheckEmail, filters.getDaysSincelastAvailabilityCheckEmailSent().get());
 		
 	}
 	
@@ -126,27 +129,28 @@ public class CandidateFilterOptionsTest {
 	@Test
 	public void testReset() throws Exception{
 		
-		Set<String> 			candidateIds 					= new HashSet<>();
-		Set<GEO_ZONE> 			geoZones 						= new HashSet<>();
-		Set<COUNTRY> 			countries 						= new HashSet<>();
-		Set<FUNCTION> 			functions 						= new HashSet<>();
-		Set<String> 			skills 							= new HashSet<>();
-		boolean 				freelance	 					= false;
-		boolean 				perm 							= true;
-		String 					orderAttribute 					= "candidateId";
-		int 					yearsExperienceGtEq 			= 2;
-		String 					candidateId 					= "aCandidateId";
-		String 					skill 							= "aSkill";
-		String					firstname						= "kevin";
-		String					surname							= "Parkings";
-		String					email							= "email";
-		Boolean					flaggedAsUnavailable			= true;	
-		Integer					daysSinceLastAvailabilityCheck 	= 14;
-		String					searchText						= "Java Developer";
-		String					ownerId							= "rec22";
-		boolean 				includeRequiresSponsorship		= true;
-		LocalDate				registeredAfter					= LocalDate.of(2024,5,8);
-		LocalDate				lastAccountRefreshLtEq			= LocalDate.of(2024,8,8);
+		Set<String> 			candidateIds 							= new HashSet<>();
+		Set<GEO_ZONE> 			geoZones 								= new HashSet<>();
+		Set<COUNTRY> 			countries 								= new HashSet<>();
+		Set<FUNCTION> 			functions 								= new HashSet<>();
+		Set<String> 			skills 									= new HashSet<>();
+		boolean 				freelance	 							= false;
+		boolean 				perm 									= true;
+		String 					orderAttribute 							= "candidateId";
+		int 					yearsExperienceGtEq 					= 2;
+		String 					candidateId 							= "aCandidateId";
+		String 					skill 									= "aSkill";
+		String					firstname								= "kevin";
+		String					surname									= "Parkings";
+		String					email									= "email";
+		Boolean					flaggedAsUnavailable					= true;	
+		Integer					daysSinceLastAvailabilityCheck 			= 14;
+		String					searchText								= "Java Developer";
+		String					ownerId									= "rec22";
+		boolean 				includeRequiresSponsorship				= true;
+		LocalDate				registeredAfter							= LocalDate.of(2024,5,8);
+		LocalDate				lastAccountRefreshLtEq					= LocalDate.of(2024,8,8);
+		Integer 				daysSinceLastavailabilityCheckEmail 	= 2;
 		
 		candidateIds.add(candidateId);
 		skills.add(skill);
@@ -183,34 +187,36 @@ public class CandidateFilterOptionsTest {
 													.registeredAfter(registeredAfter)
 													.lastAccountRefreshLtEq(lastAccountRefreshLtEq)
 													.lastAccountRefreshMissing()
+													.daysSincelastAvailabilityCheckEmailSent(daysSinceLastavailabilityCheckEmail)
 													.build();
 		
 		CandidateFilterOptions defaults = CandidateFilterOptions.builder().build();
 		
 		filters.reset();
 		
-		assertEquals(filters.getCandidateIds(), 					defaults.getCandidateIds());
-		assertEquals(filters.getGeoZones(), 						defaults.getGeoZones());
-		assertEquals(filters.getCountries(), 						defaults.getCountries());
+		assertEquals(filters.getCandidateIds(), 							defaults.getCandidateIds());
+		assertEquals(filters.getGeoZones(), 								defaults.getGeoZones());
+		assertEquals(filters.getCountries(), 								defaults.getCountries());
 		assertTrue(filters.getLanguages().isEmpty());
-		assertEquals(filters.isFreelance(), 						defaults.isFreelance());
-		assertEquals(filters.isPerm(), 								defaults.isPerm());
-		assertEquals(filters.getFunctions(), 						defaults.getFunctions());
-		assertEquals(filters.getOrder(), 							defaults.getOrder());
-		assertEquals(filters.getOrderAttribute(), 					defaults.getOrderAttribute());
-		assertEquals(filters.getSkills(), 							defaults.getSkills());
-		assertEquals(filters.getYearsExperienceGtEq(), 				defaults.getYearsExperienceGtEq());
-		assertEquals(filters.getFirstname(), 						defaults.getFirstname());
-		assertEquals(filters.getSurname(), 							defaults.getSurname());
-		assertEquals(filters.getEmail(), 							defaults.getEmail());
-		assertEquals(filters.isFlaggedAsUnavailable(), 				defaults.isFlaggedAsUnavailable());
-		assertEquals(filters.getDaysSinceLastAvailabilityCheck(), 	defaults.getDaysSinceLastAvailabilityCheck());
-		assertEquals(filters.getSearchText(), 						defaults.getSearchText());
-		assertEquals(filters.getOwnerId(), 							defaults.getOwnerId());
-		assertEquals(filters.getIncludeRequiresSponsorship(), 		defaults.getIncludeRequiresSponsorship());
-		assertEquals(filters.getRegisteredAfter(),					defaults.getRegisteredAfter());
-		assertEquals(filters.getLastAccountRefreshLtEq(), 			defaults.getLastAccountRefreshLtEq());	
-		assertEquals(filters.getLastAccountRefreshMissing(), 		defaults.getLastAccountRefreshMissing());	
+		assertEquals(filters.isFreelance(), 								defaults.isFreelance());
+		assertEquals(filters.isPerm(), 										defaults.isPerm());
+		assertEquals(filters.getFunctions(), 								defaults.getFunctions());
+		assertEquals(filters.getOrder(), 									defaults.getOrder());
+		assertEquals(filters.getOrderAttribute(), 							defaults.getOrderAttribute());
+		assertEquals(filters.getSkills(), 									defaults.getSkills());
+		assertEquals(filters.getYearsExperienceGtEq(), 						defaults.getYearsExperienceGtEq());
+		assertEquals(filters.getFirstname(), 								defaults.getFirstname());
+		assertEquals(filters.getSurname(), 									defaults.getSurname());
+		assertEquals(filters.getEmail(), 									defaults.getEmail());
+		assertEquals(filters.isFlaggedAsUnavailable(), 						defaults.isFlaggedAsUnavailable());
+		assertEquals(filters.getDaysSinceLastAvailabilityCheck(), 			defaults.getDaysSinceLastAvailabilityCheck());
+		assertEquals(filters.getSearchText(), 								defaults.getSearchText());
+		assertEquals(filters.getOwnerId(), 									defaults.getOwnerId());
+		assertEquals(filters.getIncludeRequiresSponsorship(), 				defaults.getIncludeRequiresSponsorship());
+		assertEquals(filters.getRegisteredAfter(),							defaults.getRegisteredAfter());
+		assertEquals(filters.getLastAccountRefreshLtEq(), 					defaults.getLastAccountRefreshLtEq());	
+		assertEquals(filters.getLastAccountRefreshMissing(), 				defaults.getLastAccountRefreshMissing());	
+		assertEquals(filters.getDaysSincelastAvailabilityCheckEmailSent(), 	defaults.getDaysSincelastAvailabilityCheckEmailSent());
 	}
 	
 	/**

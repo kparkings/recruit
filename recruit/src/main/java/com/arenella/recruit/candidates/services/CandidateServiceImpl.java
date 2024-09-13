@@ -34,6 +34,7 @@ import com.arenella.recruit.adapters.events.CandidatePasswordUpdatedEvent;
 import com.arenella.recruit.adapters.events.CandidateUpdateEvent;
 import com.arenella.recruit.adapters.events.CandidateUpdatedEvent;
 import com.arenella.recruit.adapters.events.ContactRequestEvent;
+import com.arenella.recruit.authentication.spring.filters.ArenellaRoleManager;
 import com.arenella.recruit.candidates.adapters.CandidateCreatedEvent;
 import com.arenella.recruit.candidates.adapters.ExternalEventPublisher;
 import com.arenella.recruit.candidates.beans.Candidate;
@@ -152,6 +153,9 @@ public class CandidateServiceImpl implements CandidateService{
 	@Autowired
 	private SkillUpdateStatDao					skillUpdateStatDao;
 	
+	@Autowired
+	private ArenellaRoleManager					roleManager;
+	
 	/**
 	* Refer to the CandidateService Interface for Details
 	*/
@@ -176,7 +180,7 @@ public class CandidateServiceImpl implements CandidateService{
 	@Override
 	public void persistCandidate(Candidate candidate) throws Exception{
 		
-		if (checkHasRole("ROLE_RECRUITER")) {
+		if (roleManager.isRecruiter()) {
 			
 			Optional<Contact> recruiter = this.contactDao.getByTypeAndId(CONTACT_TYPE.RECRUITER, this.getAuthenticatedUserId()); 
 			
@@ -189,7 +193,7 @@ public class CandidateServiceImpl implements CandidateService{
 		}
 		
 		//IF Recruiter use recruiter email address and dont do this check
-		if (checkHasRole("ROLE_ADMIN") && this.candidateRepo.emailInUse(candidate.getEmail(),esClient)) {
+		if (roleManager.isAdmin() && this.candidateRepo.emailInUse(candidate.getEmail(),esClient)) {
 			throw new CandidateValidationException("Canidate with this Email alredy exists.");
 		}
 		
@@ -216,7 +220,7 @@ public class CandidateServiceImpl implements CandidateService{
 		String password 			= PasswordUtil.generatePassword();
 		String encryptedPassword 	= PasswordUtil.encryptPassword(password);
 		
-		if (!checkHasRole("ROLE_RECRUITER") ) {
+		if (!roleManager.isRecruiter()) {
 			this.externalEventPublisher
 				.publishCandidateAccountCreatedEvent(new CandidateAccountCreatedEvent(candidate.getCandidateId(), encryptedPassword));
 			this.externalEventPublisher
@@ -420,9 +424,13 @@ public class CandidateServiceImpl implements CandidateService{
 	* Whether or not the user has a paid subscription
 	* @return Whether or not the user has a paid subscription
 	*/
-	private boolean hasPaidSubscription() {
+	private boolean hasPaidSubscription(boolean isSystemRequest) {
 		
-		if (this.checkHasRole("ROLE_RECRUITER")) {
+		if (isSystemRequest) {
+			return false;
+		}
+		
+		if (this.roleManager.isRecruiter()) {
 			
 			return this.hasPaidSubscription(this.getAuthenticatedUserId());
 			
@@ -436,7 +444,15 @@ public class CandidateServiceImpl implements CandidateService{
 	* Refer to the CandidateService Interface for Details
 	*/
 	@Override
-	public Page<CandidateSearchAccuracyWrapper> getCandidateSuggestions(CandidateFilterOptions filterOptions, Integer maxSuggestions, boolean unfiltered) throws Exception{
+	public Page<CandidateSearchAccuracyWrapper> getCandidateSuggestions(CandidateFilterOptions filterOptions, Integer maxSuggestions, boolean unfiltered)throws Exception{
+		return this.getCandidateSuggestions(filterOptions, maxSuggestions, unfiltered, false);
+	}
+	
+	/**
+	* Refer to the CandidateService Interface for Details
+	*/
+	@Override
+	public Page<CandidateSearchAccuracyWrapper> getCandidateSuggestions(CandidateFilterOptions filterOptions, Integer maxSuggestions, boolean unfiltered, boolean isSystemRequest) throws Exception{
 		
 		final Set<CandidateSearchAccuracyWrapper> 	suggestions 		= new LinkedHashSet<>();
 		
@@ -451,7 +467,7 @@ public class CandidateServiceImpl implements CandidateService{
 		* Candidates need to be able to view their own profile even if their profile is not 
 		* active as do Admin users 
 		*/
-		if (!hasPaidSubscription() && !this.checkHasRole("ROLE_ADMIN")) {
+		if (!hasPaidSubscription(isSystemRequest) && !this.roleManager.isAdmin(isSystemRequest)) {
 			filterOptions.setAvailable(null);
 			filterOptions.setIncludeRequiresSponsorship(false);
 		}
@@ -463,22 +479,22 @@ public class CandidateServiceImpl implements CandidateService{
 		* - The User is Recruiter and the Owner of the Candidates profile
 		* - The User is fetching their own profile
 		*/
-		if(	!this.checkHasRole("ROLE_ADMIN") 
-			&& !hasPaidSubscription()) {
+		if(	!this.roleManager.isAdmin(isSystemRequest) 
+			&& !hasPaidSubscription(isSystemRequest)) {
 				filterOptions.setIncludeRequiresSponsorship(null);
 		}
 		
 		/**
 		* Candidate can view own profiel
 		*/
-		if (this.checkHasRole("ROLE_CANDIDATE")) {
+		if (this.roleManager.isCandidate(isSystemRequest)) {
 			filterOptions.setIncludeRequiresSponsorship(true);
 		}
 		
 		/**
 		* Recruiter can view own candidate
 		*/
-		if (this.checkHasRole("ROLE_RECRUITER") && filterOptions.getOwnerId().isPresent() && this.getAuthenticatedUserId().equals(filterOptions.getOwnerId().get())) {
+		if (this.roleManager.isRecruiter(isSystemRequest) && filterOptions.getOwnerId().isPresent() && this.getAuthenticatedUserId().equals(filterOptions.getOwnerId().get())) {
 			filterOptions.setIncludeRequiresSponsorship(true);
 		}
 		
@@ -486,7 +502,7 @@ public class CandidateServiceImpl implements CandidateService{
 		* Only Admin and recruiters should be able to filter on GEO_ZONES as this is a paid 
 		* feature 
 		*/
-		if (!this.checkHasRole("ROLE_ADMIN") && !this.checkHasRole("ROLE_RECRUITER")) {
+		if (!this.roleManager.isAdmin(isSystemRequest) && !this.roleManager.isRecruiter(isSystemRequest)) {
 			filterOptions.removeGeoZones();
 		}
 		
@@ -499,7 +515,7 @@ public class CandidateServiceImpl implements CandidateService{
 		/**
 		* Admin and Recruiters with a paid subscription can apply an available filter  
 		*/
-		if (this.checkHasRole("ROLE_ADMIN") || (hasPaidSubscription())) { 
+		if (this.roleManager.isAdmin(isSystemRequest) || (hasPaidSubscription(isSystemRequest))) { 
 			filterOptions.setAvailable(available.isEmpty() ? null : available.get());
 		}
 		
@@ -517,7 +533,9 @@ public class CandidateServiceImpl implements CandidateService{
 																			.skills(filterOptions.getSkills())
 																			.build();
 
-		this.statisticsService.logCandidateSearchEvent(filterOptions);
+		if (!isSystemRequest) {
+			this.statisticsService.logCandidateSearchEvent(filterOptions);
+		}
 		
 		filterOptions.getSkills().clear();
 	
@@ -564,14 +582,9 @@ public class CandidateServiceImpl implements CandidateService{
 		
 		while (true) {
 		
-			
-			
 			if (!isTotalFilteredResultsLesstThanSinglePage) {
 				candidates = candidateRepo.findAll(filterOptions, this.esClient, pageable);
-				
 			}
-			
-			//candidates = candidateRepo.findAll(filterOptions, this.esClient, pageable);
 			
 			/**
 			* Will only ever be 1 page so no need to keep fetching from storage 
@@ -579,8 +592,6 @@ public class CandidateServiceImpl implements CandidateService{
 			if (pageCounter == 0 && candidates.getContent().size() < maxSuggestions) {
 				isTotalFilteredResultsLesstThanSinglePage = true;
 			}
-			
-			
 			
 			candidates.getContent().stream().filter(c -> !suggestionIds.contains(c.getCandidateId())).forEach(candidate -> {
 		
@@ -806,6 +817,8 @@ public class CandidateServiceImpl implements CandidateService{
 	@Override
 	public Candidate fetchCandidate(String candidateId, String authernticatedUserId, Collection<GrantedAuthority> authorities) {
 		
+		final boolean systemRequest = false;
+		
 		boolean isAdmin 	= authorities.stream().filter(a -> a.getAuthority().equals("ROLE_ADMIN")).findAny().isPresent();		
 		boolean isCandidate = authorities.stream().filter(a -> a.getAuthority().equals("ROLE_CANDIDATE")).findAny().isPresent();
 		boolean isRecruiter = authorities.stream().filter(a -> a.getAuthority().equals("ROLE_RECRUITER")).findAny().isPresent();
@@ -822,7 +835,7 @@ public class CandidateServiceImpl implements CandidateService{
 			throw new IllegalArgumentException("Unknown Candidate.");
 		}
 		
-		if (!candidate.get().isAvailable() && isRecruiter &&  !hasPaidSubscription()) { // Need to implement right hand check
+		if (!candidate.get().isAvailable() && isRecruiter && !hasPaidSubscription(systemRequest)) { // Need to implement right hand check
 			throw new IllegalArgumentException("Cant view unavailable candidates with unpaid subscriptin type.");
 		}
 		
@@ -837,9 +850,9 @@ public class CandidateServiceImpl implements CandidateService{
 	public void updateCandidateProfile(CandidateUpdateRequest candidate) throws Exception{
 		
 		final String 	userId 			= this.getAuthenticatedUserId();
-		final boolean 	isAdmin			= checkHasRole("ROLE_ADMIN");
-		final boolean 	isRecruiter		= checkHasRole("ROLE_RECRUITER");
-		final boolean 	isCandidate		= checkHasRole("ROLE_CANDIDATE");
+		final boolean 	isAdmin			= roleManager.isAdmin();
+		final boolean 	isRecruiter		= roleManager.isRecruiter();
+		final boolean 	isCandidate		= roleManager.isCandidate();
 			
 		if (isCandidate && !candidate.getCandidateId().equals(userId)) {
 			throw new IllegalArgumentException("Cannot update another Candidates Profile");
@@ -935,20 +948,29 @@ public class CandidateServiceImpl implements CandidateService{
 	* @param roleToCheck - Role to check
 	* @return whether or not the user has the role
 	*/
-	private boolean checkHasRole(String roleToCheck) {
-		return SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream().filter(role -> role.getAuthority().equals(roleToCheck)).findAny().isPresent();
-	}
+	//private boolean checkHasRole(String roleToCheck) {
+	//	return SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream().filter(role -> role.getAuthority().equals(roleToCheck)).findAny().isPresent();
+	//}
+	
+	
+	//TODO: [KP]. Create a component. Component replaces checkHasRole.
+	//1. Write once use anywhere ( Create in Spring project map)
+	//2. We can pass in with the request when there is no user and it is system
+	//3. Keeps spring security implementation outside of the service
+	
+	
+	
 
 	@Override
 	public void deleteCandidate(String candidateId) {
 		
-		if (checkHasRole("ROLE_CANDIDATE") && !this.getAuthenticatedUserId().equals(candidateId)) {
+		if (roleManager.isCandidate() && !this.getAuthenticatedUserId().equals(candidateId)) {
 			throw new IllegalStateException("You cannot delete another Candidate from the System");
 		}
 		
 		Candidate candidate = this.candidateRepo.findCandidateById(Long.valueOf(candidateId)).orElseThrow(() -> new IllegalArgumentException("Cannot delete a non existent Candidate"));
 		
-		if (checkHasRole("ROLE_RECRUITER") && !this.getAuthenticatedUserId().equals(candidate.getOwnerId().get())) {
+		if (roleManager.isRecruiter() && !this.getAuthenticatedUserId().equals(candidate.getOwnerId().get())) {
 			throw new IllegalArgumentException("You cannot delete this Candidate from the System");
 		}
 		

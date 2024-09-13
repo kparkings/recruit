@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import com.arenella.recruit.adapters.events.CreditsAssignedEvent;
 import com.arenella.recruit.adapters.events.CreditsUsedEvent;
+import com.arenella.recruit.authentication.spring.filters.ArenellaRoleManager;
 import com.arenella.recruit.curriculum.adapters.ExternalEventPublisher;
 import com.arenella.recruit.curriculum.beans.Curriculum;
 import com.arenella.recruit.curriculum.beans.CurriculumDownloadedEvent;
@@ -63,17 +64,20 @@ public class CurriculumServiceImpl implements CurriculumService{
 	@Autowired
 	private CurriculumRecruiterCreditDao	creditDao;
 	
+	@Autowired
+	private ArenellaRoleManager				roleManager;
+	
 	/**
 	* Refer to the CurriculumService interface for details
 	*/
 	@Override
 	public String persistCurriculum(Curriculum curriculum) {
 
-		if (checkHasRole("ROLE_RECRUITER")) {
+		if (roleManager.isRecruiter()) {
 			curriculum.setOwnerId(this.getAuthenticatedUserId());
 		}
 		
-		if (checkHasRole("ROLE_ADMIN")) {
+		if (roleManager.isAdmin()) {
 			curriculum.setOwnerId(curriculum.getId().get());
 		}
 		
@@ -229,9 +233,9 @@ public class CurriculumServiceImpl implements CurriculumService{
 		Optional<Curriculum> curriculumOpt = this.curriculumDao.findCurriculumById(curriculumId);
 		
 		final String 	userId 			= this.getAuthenticatedUserId();
-		final boolean 	isAdmin			= checkHasRole("ROLE_ADMIN");
-		final boolean 	isRecruiter		= checkHasRole("ROLE_RECRUITER");
-		final boolean 	isCandidate		= checkHasRole("ROLE_CANDIDATE");
+		final boolean 	isAdmin			= this.roleManager.isAdmin();
+		final boolean 	isRecruiter		= this.roleManager.isRecruiter();
+		final boolean 	isCandidate		= this.roleManager.isCandidate();
 		
 		if (isCandidate || isRecruiter) {
 			String ownerId = curriculumOpt.get().getOwnerId().get();
@@ -267,9 +271,9 @@ public class CurriculumServiceImpl implements CurriculumService{
 	* @param roleToCheck - Role to check
 	* @return whether or not the user has the role
 	*/
-	private boolean checkHasRole(String roleToCheck) {
-		return SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream().filter(role -> role.getAuthority().equals(roleToCheck)).findAny().isPresent();
-	}
+	//private boolean checkHasRole(String roleToCheck) {
+	//	return SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream().filter(role -> role.getAuthority().equals(roleToCheck)).findAny().isPresent();
+	//}
 
 	/**
 	* Refer to the CurriculumService interface for details

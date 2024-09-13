@@ -23,3 +23,19 @@ td{
 	font-style:italic;
 	width:80%;
 }
+
+.btn-arenella{
+	font-weight:bold;
+	width:40%;
+	padding:20px;
+	margin:10px;
+	cursor:pointer;
+}
+
+.btn-arenella-red {
+	background:red;
+}
+
+.btn-arenella-green {
+	background:green;
+}

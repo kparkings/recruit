@@ -54,6 +54,7 @@ public class Candidate {
 	private boolean 					requiresSponsorship;
 	private SECURITY_CLEARANCE_TYPE 	securityClearance;
 	private LocalDate					lastAccountRefresh;
+	private LocalDate					lastAvailabilityCheckEmailSent;
 	
 	
 	/**
@@ -62,33 +63,34 @@ public class Candidate {
 	*/
 	public Candidate(CandidateBuilder builder) {
 		
-		this.candidateId				= builder.candidateId;
-		this.firstname					= builder.firstname;
-		this.surname					= builder.surname;
-		this.email						= builder.email;
-		this.roleSought					= builder.roleSought;
-		this.function				 	= builder.function;
-		this.country					= builder.country;
-		this.city 						= builder.city;
-		this.perm 						= builder.perm;
-		this.freelance 					= builder.freelance;
-		this.yearsExperience 			= builder.yearsExperience;
-		this.available 					= builder.available;
-		this.flaggedAsUnavailable		= builder.flaggedAsUnavailable;
-		this.registerd 					= builder.registerd;
-		this.lastAvailabilityCheck 		= builder.lastAvailabilityCheck;
-		this.introduction				= builder.introduction;
-		this.photo						= builder.photo;
-		this.comments					= builder.comments;
-		this.daysOnSite					= builder.daysOnSite;
-		this.rateContract				= builder.rateContract;
-		this.ratePerm					= builder.ratePerm;
-		this.availableFromDate			= builder.availableFromDate;
-		this.ownerId					= builder.ownerId;
-		this.candidateType				= builder.candidateType;
-		this.requiresSponsorship		= builder.requiresSponsorship;
-		this.securityClearance		 	= builder.securityClearance;
-		this.lastAccountRefresh			= builder.lastAccountRefresh;
+		this.candidateId					= builder.candidateId;
+		this.firstname						= builder.firstname;
+		this.surname						= builder.surname;
+		this.email							= builder.email;
+		this.roleSought						= builder.roleSought;
+		this.function				 		= builder.function;
+		this.country						= builder.country;
+		this.city 							= builder.city;
+		this.perm 							= builder.perm;
+		this.freelance 						= builder.freelance;
+		this.yearsExperience 				= builder.yearsExperience;
+		this.available 						= builder.available;
+		this.flaggedAsUnavailable			= builder.flaggedAsUnavailable;
+		this.registerd 						= builder.registerd;
+		this.lastAvailabilityCheck 			= builder.lastAvailabilityCheck;
+		this.introduction					= builder.introduction;
+		this.photo							= builder.photo;
+		this.comments						= builder.comments;
+		this.daysOnSite						= builder.daysOnSite;
+		this.rateContract					= builder.rateContract;
+		this.ratePerm						= builder.ratePerm;
+		this.availableFromDate				= builder.availableFromDate;
+		this.ownerId						= builder.ownerId;
+		this.candidateType					= builder.candidateType;
+		this.requiresSponsorship			= builder.requiresSponsorship;
+		this.securityClearance		 		= builder.securityClearance;
+		this.lastAccountRefresh				= builder.lastAccountRefresh;
+		this.lastAvailabilityCheckEmailSent = builder.lastAvailabilityCheckEmailSent;
 		
 		this.skills.addAll(builder.skills);
 		this.languages.addAll(builder.languages);
@@ -346,6 +348,19 @@ public class Candidate {
 		return Optional.ofNullable(this.lastAccountRefresh).isEmpty() ? (Optional.ofNullable(this.registerd).isEmpty() ?  LocalDate.now() : this.registerd ) : lastAccountRefresh;
 	}
 	
+	/**
+	* Returns the Date of the last time that an email was sent to the Candidate
+	* asking them to confirm their availability
+	* @return Date of last email
+	*/
+	public Optional<LocalDate> getLastAvailabilityCheckEmailSent(){
+		return Optional.ofNullable(this.lastAvailabilityCheckEmailSent);
+	}
+	
+	/**
+	* Adds skills the Candidate posesses
+	* @param skills - Skills
+	*/
 	public void addSkills(Set<String> skills) {
 		this.skills.addAll(skills);
 	}
@@ -436,6 +451,15 @@ public class Candidate {
 	}
 	
 	/**
+	* Sets Date of the last time an email was sent to the Candidate asking them to 
+	* confirm their availability
+	* @param availabiiltyChkEmailDate - Date last email was sent
+	*/
+	public void setLastAvailabilityCheckEmailSent(LocalDate lastAvailabilityCheckEmailSent) {
+		this.lastAvailabilityCheckEmailSent = lastAvailabilityCheckEmailSent;
+	}
+	
+	/**
 	* Sets the Date of the last time the Candidate account was Refreshed
 	* @param lastAccountRefresh - Date of last refresh
 	*/
@@ -487,6 +511,7 @@ public class Candidate {
 		private boolean 					requiresSponsorship;
 		private SECURITY_CLEARANCE_TYPE 	securityClearance;
 		private LocalDate					lastAccountRefresh;
+		private LocalDate					lastAvailabilityCheckEmailSent;
 		
 		/**
 		* Sets the candidates Unique identifier in the System
@@ -784,6 +809,17 @@ public class Candidate {
 		}
 		
 		/**
+		* Sets the Date of the last time an email was sent to the Candidate asking them
+		* to confirm their availability
+		* @param lastAvailabilityCheckEmailSent - Date email last sent
+		* @return Builder
+		*/
+		public CandidateBuilder lastAvailabilityCheckEmailSent(LocalDate lastAvailabilityCheckEmailSent) {
+			this.lastAvailabilityCheckEmailSent = lastAvailabilityCheckEmailSent;
+			return this;
+		}
+		
+		/**
 		* Returns an instance of Candidate initialized with the 
 		* values in the builder
 		* @return Initialized instance of Candidate
@@ -896,5 +932,5 @@ public class Candidate {
 		}
 		
 	}
-	
+
 }

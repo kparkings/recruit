@@ -5,6 +5,7 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.arenella.recruit.candidates.beans.CandidateFilterOptions;
@@ -15,6 +16,7 @@ import co.elastic.clients.elasticsearch._types.FieldValue;
 import co.elastic.clients.elasticsearch._types.query_dsl.BoolQuery;
 import co.elastic.clients.elasticsearch._types.query_dsl.ExistsQuery;
 import co.elastic.clients.elasticsearch._types.query_dsl.MatchQuery;
+import co.elastic.clients.elasticsearch._types.query_dsl.Query;
 import co.elastic.clients.elasticsearch._types.query_dsl.RangeQuery;
 import co.elastic.clients.elasticsearch._types.query_dsl.TermsQuery;
 import co.elastic.clients.elasticsearch._types.query_dsl.TermsQueryField;
@@ -215,6 +217,51 @@ public class ESFilteredSearchRequestBuilder {
 					.field("lastAvailabilityCheck")
 					.lte(JsonData.of(Date.from(cutOff.atStartOfDay(ZoneId.systemDefault()).toInstant())))
 			)._toQuery());
+		}
+		
+		if (filterOptions.getDaysSincelastAvailabilityCheckEmailSent().isPresent()) {
+			LocalDate cutOff = LocalDate.now().minusDays(filterOptions.getDaysSincelastAvailabilityCheckEmailSent().get());
+			
+			Query daysSinceLastEmail = RangeQuery.of(m -> m
+					.queryName("lastAvailabilityCheckEmailSent")
+					.field("lastAvailabilityCheckEmailSent")
+					.lte(JsonData.of(Date.from(cutOff.atStartOfDay(ZoneId.systemDefault()).toInstant())))
+			)._toQuery();
+			
+			Query lastEmailSentDateExists = ExistsQuery.of(m -> m
+					.queryName("lastAvailabilityCheckEmailSentExists")
+					.field("lastAvailabilityCheckEmailSent")
+			)._toQuery();
+			
+			//
+			List<co.elastic.clients.elasticsearch._types.query_dsl.Query> shouldQueries 		= new ArrayList<>();
+			
+			Query queryCuttoffLastEmailSent = BoolQuery.of(m -> m
+					.must(List.of(
+							daysSinceLastEmail))
+					
+				)._toQuery();
+			
+			Query queryEmailNeverSent = BoolQuery.of(m -> m
+					.mustNot(List.of(
+							lastEmailSentDateExists))
+				)._toQuery();
+			
+			Query queryAdminUpdatedAlready = RangeQuery.of(m -> m
+					.queryName("lastAvailabilityCheck")
+					.field("lastAvailabilityCheck")
+					.gt(JsonData.of(Date.from(cutOff.atStartOfDay(ZoneId.systemDefault()).toInstant())))
+			)._toQuery();
+			
+			shouldQueries.add(queryCuttoffLastEmailSent);
+			shouldQueries.add(queryEmailNeverSent);
+			
+			mustQueries.add(BoolQuery.of(m -> m
+					.queryName("lastAvailabilityCheckEmailSent")
+					.mustNot(queryAdminUpdatedAlready)
+					.should(shouldQueries).minimumShouldMatch("1"))._toQuery());
+			
+			
 		}
 		
 		if (filterOptions.getRegisteredAfter().isPresent()) {
