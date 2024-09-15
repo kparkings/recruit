@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.LinkedHashSet;
 import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
 
 import com.arenella.recruit.candidates.enums.COUNTRY;
 import com.arenella.recruit.candidates.enums.FREELANCE;
@@ -55,7 +56,8 @@ public class Candidate {
 	private SECURITY_CLEARANCE_TYPE 	securityClearance;
 	private LocalDate					lastAccountRefresh;
 	private LocalDate					lastAvailabilityCheckEmailSent;
-	
+	private UUID 						lastAvailabilityCheckIdSent;
+	private LocalDate 					lastAvailabilityCheckConfirmedOn;
 	
 	/**
 	* Constructor based upon a builder
@@ -63,34 +65,36 @@ public class Candidate {
 	*/
 	public Candidate(CandidateBuilder builder) {
 		
-		this.candidateId					= builder.candidateId;
-		this.firstname						= builder.firstname;
-		this.surname						= builder.surname;
-		this.email							= builder.email;
-		this.roleSought						= builder.roleSought;
-		this.function				 		= builder.function;
-		this.country						= builder.country;
-		this.city 							= builder.city;
-		this.perm 							= builder.perm;
-		this.freelance 						= builder.freelance;
-		this.yearsExperience 				= builder.yearsExperience;
-		this.available 						= builder.available;
-		this.flaggedAsUnavailable			= builder.flaggedAsUnavailable;
-		this.registerd 						= builder.registerd;
-		this.lastAvailabilityCheck 			= builder.lastAvailabilityCheck;
-		this.introduction					= builder.introduction;
-		this.photo							= builder.photo;
-		this.comments						= builder.comments;
-		this.daysOnSite						= builder.daysOnSite;
-		this.rateContract					= builder.rateContract;
-		this.ratePerm						= builder.ratePerm;
-		this.availableFromDate				= builder.availableFromDate;
-		this.ownerId						= builder.ownerId;
-		this.candidateType					= builder.candidateType;
-		this.requiresSponsorship			= builder.requiresSponsorship;
-		this.securityClearance		 		= builder.securityClearance;
-		this.lastAccountRefresh				= builder.lastAccountRefresh;
-		this.lastAvailabilityCheckEmailSent = builder.lastAvailabilityCheckEmailSent;
+		this.candidateId						= builder.candidateId;
+		this.firstname							= builder.firstname;
+		this.surname							= builder.surname;
+		this.email								= builder.email;
+		this.roleSought							= builder.roleSought;
+		this.function				 			= builder.function;
+		this.country							= builder.country;
+		this.city 								= builder.city;
+		this.perm 								= builder.perm;
+		this.freelance 							= builder.freelance;
+		this.yearsExperience 					= builder.yearsExperience;
+		this.available 							= builder.available;
+		this.flaggedAsUnavailable				= builder.flaggedAsUnavailable;
+		this.registerd 							= builder.registerd;
+		this.lastAvailabilityCheck 				= builder.lastAvailabilityCheck;
+		this.introduction						= builder.introduction;
+		this.photo								= builder.photo;
+		this.comments							= builder.comments;
+		this.daysOnSite							= builder.daysOnSite;
+		this.rateContract						= builder.rateContract;
+		this.ratePerm							= builder.ratePerm;
+		this.availableFromDate					= builder.availableFromDate;
+		this.ownerId							= builder.ownerId;
+		this.candidateType						= builder.candidateType;
+		this.requiresSponsorship				= builder.requiresSponsorship;
+		this.securityClearance		 			= builder.securityClearance;
+		this.lastAccountRefresh					= builder.lastAccountRefresh;
+		this.lastAvailabilityCheckEmailSent 	= builder.lastAvailabilityCheckEmailSent;
+		this.lastAvailabilityCheckIdSent 		= builder.lastAvailabilityCheckIdSent;
+		this.lastAvailabilityCheckConfirmedOn 	= builder.lastAvailabilityCheckConfirmedOn;
 		
 		this.skills.addAll(builder.skills);
 		this.languages.addAll(builder.languages);
@@ -460,11 +464,44 @@ public class Candidate {
 	}
 	
 	/**
+	* Returns the last ID ( And only currently authorized ) Id/Token for the
+	* Candidate to confirm their availability
+	* @return ID/Token to confirm availability of Candidate
+	*/
+	public Optional<UUID> getLastAvailabilityCheckIdSent() {
+		return Optional.ofNullable(this.lastAvailabilityCheckIdSent);
+	}
+	
+	/**
+	* Returns the Date the Candidate last confirmed their availability 
+	* @return Date the Candidate last confirmed their availability
+	*/
+	public Optional<LocalDate> getLastAvailabilityCheckConfirmedOn() {
+		return Optional.ofNullable(this.lastAvailabilityCheckConfirmedOn);
+	}
+	
+	/**
 	* Sets the Date of the last time the Candidate account was Refreshed
 	* @param lastAccountRefresh - Date of last refresh
 	*/
 	public void setLastAccountRefresh(LocalDate lastAccountRefresh) {
 		this.lastAccountRefresh = lastAccountRefresh;
+	}
+	
+	/**
+	* Sets the current ID/Token the Candidate can use to confirm their availability
+	* @param lastAvailabilityCheckIdSent - Id
+	*/
+	public void setLastAvailabilityCheckIdSent(UUID lastAvailabilityCheckIdSent) {
+		this.lastAvailabilityCheckIdSent = lastAvailabilityCheckIdSent;
+	}
+	
+	/**
+	* Sets the last Date that the Candidate confirmed their own availability
+	* @param lastAvailabilityCheckConfirmed - Date of confirmation
+	*/
+	public void setLastAvailabilityCheckConfirmedOn(LocalDate lastAvailabilityCheckConfirmedOn) {
+		this.lastAvailabilityCheckConfirmedOn = lastAvailabilityCheckConfirmedOn;
 	}
 	
 	/**
@@ -512,6 +549,8 @@ public class Candidate {
 		private SECURITY_CLEARANCE_TYPE 	securityClearance;
 		private LocalDate					lastAccountRefresh;
 		private LocalDate					lastAvailabilityCheckEmailSent;
+		private UUID 						lastAvailabilityCheckIdSent;
+		private LocalDate 					lastAvailabilityCheckConfirmedOn;
 		
 		/**
 		* Sets the candidates Unique identifier in the System
@@ -816,6 +855,27 @@ public class Candidate {
 		*/
 		public CandidateBuilder lastAvailabilityCheckEmailSent(LocalDate lastAvailabilityCheckEmailSent) {
 			this.lastAvailabilityCheckEmailSent = lastAvailabilityCheckEmailSent;
+			return this;
+		}
+		
+		/**
+		* Sets the last UUID ( And now only valid id ) for a request for the Candidate 
+		* to confirm their availability
+		* @param lastAvailabilityCheckIdSent - ID
+		* @return Builder
+		*/
+		public CandidateBuilder lastAvailabilityCheckIdSent(UUID lastAvailabilityCheckIdSent) {
+			this.lastAvailabilityCheckIdSent = lastAvailabilityCheckIdSent;
+			return this;
+		}
+		
+		/**
+		* Sets the Date the Candidate last confirmed their own Availability
+		* @param lastAvailabilityCheckConfirmed
+		* @return Builder
+		*/
+		public CandidateBuilder lastAvailabilityCheckConfirmedOn(LocalDate lastAvailabilityCheckConfirmedOn) {
+			this.lastAvailabilityCheckConfirmedOn = lastAvailabilityCheckConfirmedOn;
 			return this;
 		}
 		

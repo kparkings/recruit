@@ -2,6 +2,7 @@ package com.arenella.recruit.candidates.services;
 
 import java.io.IOException;
 import java.security.Principal;
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -515,7 +516,7 @@ public class CandidateServiceImpl implements CandidateService{
 		/**
 		* Admin and Recruiters with a paid subscription can apply an available filter  
 		*/
-		if (this.roleManager.isAdmin(isSystemRequest) || (hasPaidSubscription(isSystemRequest))) { 
+		if (this.roleManager.isAdmin(isSystemRequest) || (hasPaidSubscription(isSystemRequest)) || isSystemRequest) { 
 			filterOptions.setAvailable(available.isEmpty() ? null : available.get());
 		}
 		
@@ -1224,5 +1225,43 @@ public class CandidateServiceImpl implements CandidateService{
 		this.externalEventPublisher.publishSendEmailCommand(command);
 		
 	}
-	
+
+	/**
+	* Refer to the CandidateService for details 
+	*/
+	@Override
+	public void performConfirmCandidateAvailability(String candidateId, UUID requestToken, Boolean isAvailable) {
+		
+		final 	Candidate 	candidate 	= this.candidateRepo.findCandidateById(Long.valueOf(candidateId)).orElseThrow();
+		final	UUID 		token 		= candidate.getLastAvailabilityCheckIdSent().orElseThrow();
+
+		if (!token.toString().equals(requestToken.toString())) {
+			throw new IllegalArgumentException();
+		}
+		
+		/**
+		* Once a token has been used once it cannot be used again - Need to do specific Exception, catch it using Spring and return a better message instead of 401 error page
+		*/
+		if (candidate.getLastAvailabilityCheckEmailSent().isPresent()&& candidate.getLastAvailabilityCheckConfirmedOn().isPresent() && candidate.getLastAvailabilityCheckConfirmedOn().get().isAfter(candidate.getLastAvailabilityCheckEmailSent().get())){
+			throw new IllegalArgumentException("Availability check Token no longer valid");
+		}
+		
+		/**
+		* Once a token has been used once it cannot be used again
+		*/
+		if( candidate.getLastAvailabilityCheckEmailSent().isPresent() && candidate.getLastAvailabilityCheckConfirmedOn().isPresent() && candidate.getLastAvailabilityCheckConfirmedOn().get().isEqual(candidate.getLastAvailabilityCheckEmailSent().get())){
+			throw new IllegalArgumentException("Availability check Token no longer valid");
+		}
+		
+		candidate.setLastAvailabilityCheckConfirmedOn(LocalDate.now().plusDays(1));
+		
+		if (isAvailable) {
+			candidate.makeAvailable();
+		} else {
+			candidate.noLongerAvailable();
+		}
+		
+		this.candidateRepo.saveCandidate(candidate);
+		
+	}
 }

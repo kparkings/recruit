@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import jakarta.persistence.EnumType;
@@ -33,6 +34,8 @@ import com.arenella.recruit.candidates.enums.PERM;
 @Document(indexName="candidates", writeTypeHint = org.springframework.data.elasticsearch.annotations.WriteTypeHint.FALSE)
 public class CandidateDocument {
 
+	public static final ZoneId DEFAULT_ZONE_ID = ZoneId.systemDefault();
+	
 	@Id
 	@Field(type = FieldType.Long)
 	private Long		candidateId;
@@ -119,6 +122,12 @@ public class CandidateDocument {
 	private Date lastAvailabilityCheckEmailSent;
 	
 	@Field(type = FieldType.Keyword)
+	private UUID lastAvailabilityCheckIdSent;
+	
+	@Field(type = FieldType.Date)
+	private Date lastAvailabilityCheckConfirmedOn;
+	
+	@Field(type = FieldType.Keyword)
     @Enumerated(EnumType.STRING)
     private SECURITY_CLEARANCE_TYPE securityClearance;
        
@@ -132,43 +141,44 @@ public class CandidateDocument {
 	*/
 	public CandidateDocument() {}
 	
+	
 	/**
 	* Constructor based on a Builder
 	* @param builder - Contains initialization values
 	*/
 	public CandidateDocument(CandidateDocumentBuilder builder) {
 		
-		ZoneId defaultZoneId = ZoneId.systemDefault();
-		
-		this.candidateId 					= builder.candidateId;
-		this.firstname 						= builder.firstname;
-		this.surname 						= builder.surname;
-		this.email 							= builder.email;
-		this.roleSought 					= builder.roleSought;
-		this.function 						= builder.function;
-		this.country 						= builder.country;
-		this.city 							= builder.city;
-		this.perm 							= builder.perm;
-		this.freelance 						= builder.freelance;
-		this.yearsExperience 				= builder.yearsExperience;
-		this.available 						= builder.available;
-		this.registerd 						= Date.from(builder.registerd.atStartOfDay(defaultZoneId).toInstant());
-		this.lastAvailabilityCheck 			= Date.from(builder.lastAvailabilityCheck.atStartOfDay(defaultZoneId).toInstant());
-		this.introduction 					= builder.introduction;
-		this.rateContract 					= builder.rateContract;
-		this.ratePerm 						= builder.ratePerm;
-		this.availableFromDate 				= Date.from(builder.availableFromDate.atStartOfDay(defaultZoneId).toInstant());
-		this.ownerId 						= builder.ownerId;
-		this.candidateType 					= builder.candidateType;
-		this.comments 						= builder.comments;
-		this.daysOnSite 					= builder.daysOnSite;
-		this.photo 							= builder.photo;      
-		this.requiresSponsorship 			= builder.requiresSponsorship;
-		this.securityClearance 				= builder.securityClearance;
-		this.lastAvailabilityCheckEmailSent = Optional.ofNullable(builder.lastAvailabilityCheckEmailSent).isEmpty() ? null : Date.from(builder.lastAvailabilityCheckEmailSent.atStartOfDay(defaultZoneId).toInstant());
+		this.candidateId 						= builder.candidateId;
+		this.firstname 							= builder.firstname;
+		this.surname 							= builder.surname;
+		this.email 								= builder.email;
+		this.roleSought 						= builder.roleSought;
+		this.function 							= builder.function;
+		this.country 							= builder.country;
+		this.city 								= builder.city;
+		this.perm 								= builder.perm;
+		this.freelance 							= builder.freelance;
+		this.yearsExperience 					= builder.yearsExperience;
+		this.available 							= builder.available;
+		this.registerd 							= Date.from(builder.registerd.atStartOfDay(DEFAULT_ZONE_ID).toInstant());
+		this.lastAvailabilityCheck 				= Date.from(builder.lastAvailabilityCheck.atStartOfDay(DEFAULT_ZONE_ID).toInstant());
+		this.introduction 						= builder.introduction;
+		this.rateContract 						= builder.rateContract;
+		this.ratePerm 							= builder.ratePerm;
+		this.availableFromDate 					= Date.from(builder.availableFromDate.atStartOfDay(DEFAULT_ZONE_ID).toInstant());
+		this.ownerId 							= builder.ownerId;
+		this.candidateType 						= builder.candidateType;
+		this.comments 							= builder.comments;
+		this.daysOnSite 						= builder.daysOnSite;
+		this.photo 								= builder.photo;      
+		this.requiresSponsorship 				= builder.requiresSponsorship;
+		this.securityClearance 					= builder.securityClearance;
+		this.lastAvailabilityCheckEmailSent 	= Optional.ofNullable(builder.lastAvailabilityCheckEmailSent).isEmpty() ? null : Date.from(builder.lastAvailabilityCheckEmailSent.atStartOfDay(DEFAULT_ZONE_ID).toInstant());
+		this.lastAvailabilityCheckIdSent		= builder.lastAvailabilityCheckIdSent;
+		this.lastAvailabilityCheckConfirmedOn	= builder.lastAvailabilityCheckConfirmedOn;
 		
 		if (Optional.ofNullable(builder.lastAccountRefresh).isPresent()) {
-			this.lastAccountRefresh			= Date.from(builder.lastAccountRefresh.atStartOfDay(defaultZoneId).toInstant());
+			this.lastAccountRefresh			= Date.from(builder.lastAccountRefresh.atStartOfDay(DEFAULT_ZONE_ID).toInstant());
 		}
 		
 		this.skills.clear();
@@ -410,6 +420,26 @@ public class CandidateDocument {
 	}
 	
 	/**
+	* Returns the Id of the last request sent to the Candidate to 
+	* confirm their availability. They need this to identify
+	* the response as legitimate and to ensure only the current 
+	* request can be responded to
+	* @return request id
+	*/
+	public UUID getLastAvailabilityCheckIdSent() {
+		return this.lastAvailabilityCheckIdSent;
+	}
+	
+	/**
+	* Returns the Date the Candidate last confirmed 
+	* their availability 
+	* @return request date of confirmation
+	*/
+	public Date getLastAvailabilityCheckConfirmedOn() {
+		return this.lastAvailabilityCheckConfirmedOn;
+	}
+	
+	/**
 	* Returns the type of the Candidate
 	* @return - Type of the Candidate
 	*/
@@ -501,6 +531,8 @@ public class CandidateDocument {
 		private Set<LanguageDocument> 	languages					= new LinkedHashSet<>();
 		private LocalDate				lastAccountRefresh;
 		private LocalDate				lastAvailabilityCheckEmailSent;
+		private UUID 					lastAvailabilityCheckIdSent;
+		private Date 					lastAvailabilityCheckConfirmedOn;
 		
 		/**
 		* Sets the candidates Unique identifier in the System
@@ -798,6 +830,26 @@ public class CandidateDocument {
 		}
 		
 		/**
+		* Sets the id used for the latest request to the Candidate to confirm their availability
+		* @param lastAvailabilityCheckIdSent - id
+		* @return Builder
+		*/
+		public CandidateDocumentBuilder lastAvailabilityCheckIdSent(UUID lastAvailabilityCheckIdSent) {
+			this.lastAvailabilityCheckIdSent = lastAvailabilityCheckIdSent;
+			return this;
+		}
+		
+		/**
+		* Sets the last time the Candidate confirmed their availability
+		* @param lastAvailabilityCheckConfirmed - Date of last confirmation
+		* @return Builder
+		*/
+		public CandidateDocumentBuilder lastAvailabilityCheckConfirmedOn(Date lastAvailabilityCheckConfirmedOn) {
+			this.lastAvailabilityCheckConfirmedOn = lastAvailabilityCheckConfirmedOn;
+			return this;
+		}
+		
+		/**
 		* Returns an instance of CandidateDocument initialized with the 
 		* values in the builder
 		* @return Initialized instance of CandidateDocument
@@ -851,6 +903,10 @@ public class CandidateDocument {
 						      .atZone(ZoneId.systemDefault())
 						      .toLocalDate())
 					.lastAvailabilityCheckEmailSent(doc.getLastAvailabilityCheckEmailSent().isEmpty()? null : doc.getLastAvailabilityCheckEmailSent().get())
+					.lastAvailabilityCheckConfirmedOn(doc.getLastAvailabilityCheckConfirmedOn() == null ? null : doc.getLastAvailabilityCheckConfirmedOn().toInstant()
+						      .atZone(ZoneId.systemDefault())
+						      .toLocalDate())
+					.lastAvailabilityCheckIdSent(doc.getLastAvailabilityCheckIdSent())
 				.build();
 
 	}
@@ -892,8 +948,10 @@ public class CandidateDocument {
 					.yearsExperience(candidate.getYearsExperience())
 					.lastAccountRefresh(candidate.getLastAccountRefresh())
 					.lastAvailabilityCheckEmailSent(candidate.getLastAvailabilityCheckEmailSent().isEmpty() ? null : candidate.getLastAvailabilityCheckEmailSent().get())
+					.lastAvailabilityCheckConfirmedOn(candidate.getLastAvailabilityCheckConfirmedOn().isEmpty() ? null : Date.from(candidate.getLastAvailabilityCheckConfirmedOn().get().atStartOfDay(DEFAULT_ZONE_ID).toInstant()))
+					.lastAvailabilityCheckIdSent(candidate.getLastAvailabilityCheckIdSent().isEmpty() ? null : candidate.getLastAvailabilityCheckIdSent().get())
 				.build();
-
+		
 	}
 	
 }

@@ -10,6 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.time.LocalDate;
 import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
 
@@ -63,6 +64,9 @@ public class CandidateTest {
 	private static final CANDIDATE_TYPE				CANDIDATE_TYPE_VAL			= CANDIDATE_TYPE.MARKETPLACE_CANDIDATE;
 	private static final SECURITY_CLEARANCE_TYPE 	SECURITY_LEVEL 				= SECURITY_CLEARANCE_TYPE.NATO;
 	private static final LocalDate 					LAST_REFRESH 				= LocalDate.of(2021, 8, 8);
+	private static final LocalDate 					AVAILABIILTY_CHK_RESPONSE 	= LocalDate.of(2024, 9, 13);
+	private static final UUID						AVAILABILITY_CHK_TOKEN_ID	= UUID.randomUUID();
+	
 	
 	/**
 	* Sets up test environment 
@@ -109,6 +113,8 @@ public class CandidateTest {
 							.securityClearance(SECURITY_LEVEL)
 							.lastAccountRefresh(LAST_REFRESH)
 							.lastAvailabilityCheckEmailSent(AVAILABIILTY_CHK_EMAIL_DATE)
+							.lastAvailabilityCheckIdSent(AVAILABILITY_CHK_TOKEN_ID)
+							.lastAvailabilityCheckConfirmedOn(AVAILABIILTY_CHK_RESPONSE)
 							.build();
 		
 		assertEquals(CANDIDATE_ID, 					candidate.getCandidateId());
@@ -137,7 +143,8 @@ public class CandidateTest {
 		assertEquals(SECURITY_LEVEL,				candidate.getSecurityClearance());
 		assertEquals(LAST_REFRESH,					candidate.getLastAccountRefresh());
 		assertEquals(AVAILABIILTY_CHK_EMAIL_DATE, 	candidate.getLastAvailabilityCheckEmailSent().get());
-		
+		assertEquals(AVAILABILITY_CHK_TOKEN_ID,		candidate.getLastAvailabilityCheckIdSent().get());
+		assertEquals(AVAILABIILTY_CHK_RESPONSE,		candidate.getLastAvailabilityCheckConfirmedOn().get());
 		
 		assertTrue(candidate.getSkills().contains(SKILL));
 		candidate.getLanguages().stream().filter(l -> l.getLanguage() == LANGUAGE_VAL.getLanguage()).findAny().orElseThrow();
@@ -218,6 +225,9 @@ public class CandidateTest {
 		assertTrue(candidate.getRatePerm().isEmpty());
 		assertTrue(candidate.getOwnerId().isEmpty());
 		
+		assertTrue(candidate.getLastAvailabilityCheckIdSent().isEmpty());
+		assertTrue(candidate.getLastAvailabilityCheckConfirmedOn().isEmpty());
+		
 		assertEquals(candidate.getAvailableFromDate(), LocalDate.now()); //[KP] Small chance of failure if test run in exactly midnight
 		
 	}
@@ -255,11 +265,16 @@ public class CandidateTest {
 		candidate.setOwnerId(OWNER_ID);
 		candidate.setEmail(EMAIL);
 		candidate.setLastAvailabilityCheckEmailSent(AVAILABIILTY_CHK_EMAIL_DATE);
+		candidate.setLastAvailabilityCheckIdSent(AVAILABILITY_CHK_TOKEN_ID);
+		candidate.setLastAvailabilityCheckConfirmedOn(AVAILABIILTY_CHK_RESPONSE);
 		
 		assertEquals(CANDIDATE_TYPE_VAL, 			candidate.getCandidateType());
 		assertEquals(OWNER_ID, 						candidate.getOwnerId().get());
 		assertEquals(EMAIL, 						candidate.getEmail());
 		assertEquals(AVAILABIILTY_CHK_EMAIL_DATE, 	candidate.getLastAvailabilityCheckEmailSent().get());
+		assertEquals(AVAILABILITY_CHK_TOKEN_ID,		candidate.getLastAvailabilityCheckIdSent().get());
+		assertEquals(AVAILABIILTY_CHK_RESPONSE,		candidate.getLastAvailabilityCheckConfirmedOn().get());
+		
 	}
 	
 	/**

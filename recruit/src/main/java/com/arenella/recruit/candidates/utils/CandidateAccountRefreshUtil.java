@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 import com.arenella.recruit.adapters.actions.RequestSkillsForCurriculumCommand;
 import com.arenella.recruit.candidates.adapters.ExternalEventPublisher;
+import com.arenella.recruit.candidates.beans.Candidate;
 import com.arenella.recruit.candidates.beans.CandidateFilterOptions;
 import com.arenella.recruit.candidates.controllers.CandidateSuggestionAPIOutbound;
 import com.arenella.recruit.candidates.enums.RESULT_ORDER;
@@ -29,6 +30,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Optional;
 
 /**
 * Scheduler to periodically perform tasks to update the a Candidates account. 
@@ -104,8 +106,7 @@ public class CandidateAccountRefreshUtil {
 	* and showing statistics relating to their profile
 	*/
 	private void runEmailCandidateSummary() {
-//need to check both date fields to only send if email wasn't sent and not manually updated by admin
-//If updated bt admin also update email sent date?		
+
 		final CandidateFilterOptions filterOptionsMarkedAsAvailable = CandidateFilterOptions.builder()
 				.daysSincelastAvailabilityCheckEmailSent(14)
 				.available(true)
@@ -136,29 +137,38 @@ public class CandidateAccountRefreshUtil {
 					.stream()
 					.map(c -> ((CandidateSuggestionAPIOutbound) c)).toList());
 				
+			//ISSUE: Each candidate appears in results twice. Looks like the filters are not applying avilable. That I think is because for some reason that 
+			//filter is being ignored. its not in the final ES query. Either not implemented ( sure it is ) or some business logic har removed it
+			
 			candidates.stream().forEach(candidate -> {
 				
-				System.out.println("SEND MAIL FOR C#"+candidate.getCandidateId() + " available: " + candidate.isAvailable());
-			
-				UUID summaryEmailId = UUID.randomUUID();
+				Optional<Candidate> candidateOpt = this.candidateRepository.findCandidateById(Long.valueOf(candidate.getCandidateId()));
 				
-				RequestSendEmailCommand command = RequestSendEmailCommand
-						.builder()
-							.emailType(EmailType.EXTERN)
-							.recipients(Set.of(new EmailRecipient<UUID>(UUID.randomUUID(),candidate.getCandidateId(), ContactType.CANDIDATE)))
-							.sender(new Sender<>(UUID.randomUUID(), "", SenderType.SYSTEM, "kparkings@gmail.com"))
-							.title("Arenella-ICT - Your Availability")
-							.topic(EmailTopic.CANDIDATE_SUMMARY)
-							.model(Map.of("userId", candidate.getCandidateId(), "firstname",candidate.getFirstname(),"available",candidate.isAvailable(), "summaryEmailId", summaryEmailId))
-							.persistable(false)
-						.build();
+				if (candidateOpt.isPresent()) {
 				
-				this.externalEventPublisher.publishSendEmailCommand(command);
+					UUID summaryEmailIdToken = UUID.randomUUID();
 				
-				//Config Email
-				//Register UUID for email ( check both incoming UUID and candidate Id  + date. Only valid x days). // No security for engpoint
-				//Need endpoint which will update candidate status,last availability check and remove UUID from new table
-				//Make availbility in admin console 2 weeks/1 Months --> + 3 days to give candidates time to respond to email
+					Candidate can = candidateOpt.get();
+					
+					can.setLastAvailabilityCheckEmailSent(LocalDate.now().plusDays(1));
+					can.setLastAvailabilityCheckIdSent(summaryEmailIdToken);
+					
+					this.candidateRepository.saveCandidate(can);
+					
+					RequestSendEmailCommand command = RequestSendEmailCommand
+							.builder()
+								.emailType(EmailType.EXTERN)
+								.recipients(Set.of(new EmailRecipient<UUID>(UUID.randomUUID(),candidate.getCandidateId(), ContactType.CANDIDATE)))
+								.sender(new Sender<>(UUID.randomUUID(), "", SenderType.SYSTEM, "kparkings@gmail.com"))
+								.title("Arenella-ICT - Your Availability")
+								.topic(EmailTopic.CANDIDATE_SUMMARY)
+								.model(Map.of("candidateId", candidate.getCandidateId(), "firstname",candidate.getFirstname(),"available",candidate.isAvailable(), "summaryEmailIdToken", summaryEmailIdToken))
+								.persistable(false)
+							.build();
+					
+					this.externalEventPublisher.publishSendEmailCommand(command);
+				}
+				
 			});
 			
 			

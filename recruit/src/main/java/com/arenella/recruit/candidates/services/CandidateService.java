@@ -268,5 +268,13 @@ public interface CandidateService {
 	* @param emailAddress - Email address of Candidate
 	*/
 	public void resetPassword(String emailAddress);
+
+	/**
+	* If the token is valid for the candidate then updates the Canidates availability
+	* @param candidateId	- Unique Id of the Candidate
+	* @param requestToken	- Token used to authoize the update request
+	* @param isAvailable	- Whether or not the candidate is available
+	*/
+	public void performConfirmCandidateAvailability(String candidateId, UUID requestToken, Boolean isAvailable);
 	
 }

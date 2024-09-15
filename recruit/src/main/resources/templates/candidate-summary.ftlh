@@ -19,8 +19,8 @@
 		<p>
 			
 		<div>	
-			<button class="btn-arenella btn-arenella-green" style="cursor:pointer"><a style="display:inline-block;width:100%;height:100%;color:black;" href="https://www.arenella-ict.com/${userId}/true">Available</a></button>
-			<button class="btn-arenella btn-arenella-red" style="cursor:pointer"><a style="display:inline-block;width:100%;height:100%;color:black;" href="https://www.arenella-ict.com/${userId}/false">Unavailable</a></button>
+			<button class="btn-arenella btn-arenella-green" style="cursor:pointer"><a style="display:inline-block;width:100%;height:100%;color:black;" href="https://www.arenella-ict.com/public/candidate/${candidateId}/availabilitytoken/${summaryEmailIdToken}?isAvailable=true">Available</a></button>
+			<button class="btn-arenella btn-arenella-red" style="cursor:pointer"><a style="display:inline-block;width:100%;height:100%;color:black;" href="https://www.arenella-ict.com/public/candidate/${candidateId}/availabilitytoken/${summaryEmailIdToken}?isAvailable=false">Unavailable</a></button>
 		</div>
 		<P>
 			<a href="https://www.arenella-ict.com">https://www.arenella-ict.com</a>

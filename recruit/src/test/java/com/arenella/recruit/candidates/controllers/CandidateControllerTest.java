@@ -578,4 +578,24 @@ public class CandidateControllerTest {
 		assertEquals(response.getStatusCode(), HttpStatus.OK);
 		
 	}
+	
+	/**
+	* Tests text is returned
+	* @throws Exception
+	*/
+	@Test
+	public void testConfirmOwnAvailability() throws Exception{
+		
+		final String candidateId 	= "1234";
+		final UUID requestToken 	= UUID.randomUUID();
+		final Boolean isAvailable 	= true;
+				
+		ResponseEntity<String> response = this.controller.confirmOwnAvailability(candidateId, requestToken, isAvailable);
+		
+		Mockito.verify(this.mockCandidateService).performConfirmCandidateAvailability(candidateId, requestToken, isAvailable);
+		
+		assertEquals("Thanks you. Your'e availability has been updated in the system.", response.getBody());
+		
+	}
+	
 }

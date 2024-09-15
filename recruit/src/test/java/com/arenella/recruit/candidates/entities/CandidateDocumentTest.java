@@ -5,7 +5,9 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.Date;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
@@ -59,6 +61,8 @@ public class CandidateDocumentTest {
 	private static final Set<LanguageDocument> 		LANGUAGES					= Set.of(new LanguageDocument(LANGUAGE.ITALIAN, LEVEL.PROFICIENT));
 	private static final LocalDate 					LAST_REFRESH 				= LocalDate.of(2021, 8, 8);
 	private static final LocalDate 					AVAILABIILTY_CHK_EMAIL_DATE = LocalDate.of(2024, 9, 21);
+	private static final LocalDate 					AVAILABIILTY_CHK_RESPONSE 	= LocalDate.of(2024, 9, 13);
+	private static final UUID						AVAILABILITY_CHK_TOKEN_ID	= UUID.randomUUID();
 	
 	/**
 	* Tests construction
@@ -99,37 +103,42 @@ public class CandidateDocumentTest {
 					.yearsExperience(YEARS_EXPERIENCE)
 					.lastAccountRefresh(LAST_REFRESH)
 					.lastAvailabilityCheckEmailSent(AVAILABIILTY_CHK_EMAIL_DATE)
+					.lastAvailabilityCheckIdSent(AVAILABILITY_CHK_TOKEN_ID)
+					.lastAvailabilityCheckConfirmedOn(Date.from(AVAILABIILTY_CHK_RESPONSE.atStartOfDay(CandidateDocument.DEFAULT_ZONE_ID).toInstant()))
 				.build();
 		
-		assertEquals(CANDIDATE_ID,					doc.getCandidateId());
-		assertEquals(FIRSTNAME,						doc.getFirstname());
-		assertEquals(SURNAME,						doc.getSurname());
-		assertEquals(EMAIL,							doc.getEmail());
-		assertEquals(ROLE_SOUGHT,					doc.getRoleSought());
-		assertEquals(FUNCTION_VAL,					doc.getFunction());
-		assertEquals(COUNTRY_VAL,					doc.getCountry());
-		assertEquals(CITY,							doc.getCity());
-		assertEquals(PERM_VAL,						doc.isPerm());
-		assertEquals(FREELANCE_VAL,					doc.isFreelance());
-		assertEquals(YEARS_EXPERIENCE,				doc.getYearsExperience());
-		assertEquals(AVAILABLE,						doc.isAvailable());
-		assertEquals(REGISTERED,					doc.getRegisteredOn().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
-		assertEquals(LAST_AVAILABILITY_CHECK,		doc.getLastAvailabilityCheckOn().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
-		assertEquals(INTRODUCTION,					doc.getIntroduction());
-		assertEquals(RATE_CONTRACT,					doc.getRateContract().get());
-		assertEquals(RATE_PERM,						doc.getRatePerm().get());
-		assertEquals(AVAILABLE_FROM_DATE,			doc.getAvailableFromDate());
-		assertEquals(OWNER_ID,						doc.getOwnerId().get());
-		assertEquals(CANDIDATE_TYPE_VAL,			doc.candidateType());
-		assertEquals(COMMENTS,						doc.getComments());
-		assertEquals(DAYS_ON_SITE_VAL,				doc.getDaysOnSite());
-		assertEquals(PHOTO,							doc.getPhoto().get());      
-		assertEquals(REQUIRES_SPONSORSHIP,			doc.getRequiresSponsorship());
-		assertEquals(SECURITY_CLEARANCE,			doc.getSecurityClearance());
-		assertEquals(SKILLS,						doc.getSkills());
-		assertEquals(LANGUAGES,						doc.getLanguages());
-		assertEquals(LAST_REFRESH,					doc.getLastAccountRefresh().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
-		assertEquals(AVAILABIILTY_CHK_EMAIL_DATE,	doc.getLastAvailabilityCheckEmailSent().get());
+		assertEquals(CANDIDATE_ID,																		doc.getCandidateId());
+		assertEquals(FIRSTNAME,																			doc.getFirstname());
+		assertEquals(SURNAME,																			doc.getSurname());
+		assertEquals(EMAIL,																				doc.getEmail());
+		assertEquals(ROLE_SOUGHT,																		doc.getRoleSought());
+		assertEquals(FUNCTION_VAL,																		doc.getFunction());
+		assertEquals(COUNTRY_VAL,																		doc.getCountry());
+		assertEquals(CITY,																				doc.getCity());
+		assertEquals(PERM_VAL,																			doc.isPerm());
+		assertEquals(FREELANCE_VAL,																		doc.isFreelance());
+		assertEquals(YEARS_EXPERIENCE,																	doc.getYearsExperience());
+		assertEquals(AVAILABLE,																			doc.isAvailable());
+		assertEquals(REGISTERED,																		doc.getRegisteredOn().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+		assertEquals(LAST_AVAILABILITY_CHECK,															doc.getLastAvailabilityCheckOn().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+		assertEquals(INTRODUCTION,																		doc.getIntroduction());
+		assertEquals(RATE_CONTRACT,																		doc.getRateContract().get());
+		assertEquals(RATE_PERM,																			doc.getRatePerm().get());
+		assertEquals(AVAILABLE_FROM_DATE,																doc.getAvailableFromDate());
+		assertEquals(OWNER_ID,																			doc.getOwnerId().get());
+		assertEquals(CANDIDATE_TYPE_VAL,																doc.candidateType());
+		assertEquals(COMMENTS,																			doc.getComments());
+		assertEquals(DAYS_ON_SITE_VAL,																	doc.getDaysOnSite());
+		assertEquals(PHOTO,																				doc.getPhoto().get());      
+		assertEquals(REQUIRES_SPONSORSHIP,																doc.getRequiresSponsorship());
+		assertEquals(SECURITY_CLEARANCE,																doc.getSecurityClearance());
+		assertEquals(SKILLS,																			doc.getSkills());
+		assertEquals(LANGUAGES,																			doc.getLanguages());
+		assertEquals(LAST_REFRESH,																		doc.getLastAccountRefresh().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+		assertEquals(AVAILABIILTY_CHK_EMAIL_DATE,														doc.getLastAvailabilityCheckEmailSent().get());
+		assertEquals(AVAILABILITY_CHK_TOKEN_ID,															doc.getLastAvailabilityCheckIdSent());
+		assertEquals(Date.from(AVAILABIILTY_CHK_RESPONSE.atStartOfDay(CandidateDocument.DEFAULT_ZONE_ID).toInstant()),	doc.getLastAvailabilityCheckConfirmedOn());
+		
 	}
 	
 	/**
@@ -171,6 +180,8 @@ public class CandidateDocumentTest {
 					.yearsExperience(YEARS_EXPERIENCE)
 					.lastAccountRefresh(LAST_REFRESH)
 					.lastAvailabilityCheckEmailSent(AVAILABIILTY_CHK_EMAIL_DATE)
+					.lastAvailabilityCheckIdSent(AVAILABILITY_CHK_TOKEN_ID)
+					.lastAvailabilityCheckConfirmedOn(Date.from(AVAILABIILTY_CHK_RESPONSE.atStartOfDay(CandidateDocument.DEFAULT_ZONE_ID).toInstant()))
 				.build();
 		
 		Candidate candidate = CandidateDocument.convertFromDocument(doc);
@@ -217,6 +228,8 @@ public class CandidateDocumentTest {
 		
 		assertEquals(LAST_REFRESH,					candidate.getLastAccountRefresh());
 		assertEquals(AVAILABIILTY_CHK_EMAIL_DATE, 	candidate.getLastAvailabilityCheckEmailSent().get());
+		assertEquals(AVAILABILITY_CHK_TOKEN_ID,		candidate.getLastAvailabilityCheckIdSent().get());
+		assertEquals(AVAILABIILTY_CHK_RESPONSE,		candidate.getLastAvailabilityCheckConfirmedOn().get());
 		
 	}
 	
@@ -278,6 +291,8 @@ public class CandidateDocumentTest {
 					.yearsExperience(YEARS_EXPERIENCE)
 					.lastAccountRefresh(LAST_REFRESH)
 					.lastAvailabilityCheckEmailSent(AVAILABIILTY_CHK_EMAIL_DATE)
+					.lastAvailabilityCheckIdSent(AVAILABILITY_CHK_TOKEN_ID)
+					.lastAvailabilityCheckConfirmedOn(AVAILABIILTY_CHK_RESPONSE)
 				.build();
 		
 		CandidateDocument doc = CandidateDocument.convertToDocument(candidate);
@@ -324,6 +339,8 @@ public class CandidateDocumentTest {
 		
 		assertEquals(LAST_REFRESH,					doc.getLastAccountRefresh().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
 		assertEquals(AVAILABIILTY_CHK_EMAIL_DATE, 	doc.getLastAvailabilityCheckEmailSent().get());
+		assertEquals(AVAILABILITY_CHK_TOKEN_ID,		doc.getLastAvailabilityCheckIdSent());
+		assertEquals(AVAILABIILTY_CHK_RESPONSE,		doc.getLastAvailabilityCheckConfirmedOn().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
 		
 	}
 	

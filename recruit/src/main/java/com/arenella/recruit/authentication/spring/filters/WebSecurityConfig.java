@@ -51,14 +51,6 @@ public class WebSecurityConfig {
 		auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
 	}
 	
-	//@Bean
-    //public ObjectMapper getObjectMapper() {
-     //   ObjectMapper mapper = new ObjectMapper();
-     //   mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-     //   mapper.registerModule(new JavaTimeModule());
-      //  return mapper;
-    //}
-	
 	/**
 	* Bean for encoding Passwords
 	* @return Password Encoder

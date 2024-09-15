@@ -517,12 +517,33 @@ public class CandidateController {
 		return ResponseEntity.ok(new CandidateAvailabilityCountAPIOutbound(available, unavailable));
 		
 	}
+
+	/**
+	* Endpoint allows Canidates to update their own availabilty using a token sent 
+	* to them via an Email from the system. The update will only take place if the 
+	* token is a valid token. There is no other security applied as the request is 
+	* triggered from an email. We rely on the fact we are using a clientId in combination with a 
+	* UUID's and the period the token is valid to protect against attacks. The scope of the update is 
+	* also low risk. The most an attacker can do is change the candidates availability 
+	* flag.
+	* @param requestToken - Token sent to Candidate to allow them to confirm their availability
+	* @param isAvailable  - Whether or not the candidate is available
+	* @return Message confirming update
+	*/
+	@GetMapping(path="/public/candidate/{candidateId}/availabilitytoken/{requestToken}")
+	public ResponseEntity<String> confirmOwnAvailability(@PathVariable("candidateId") String candidateId, @PathVariable("requestToken") UUID requestToken, @RequestParam(required=true) Boolean isAvailable) {
+		
+		this.candidateService.performConfirmCandidateAvailability(candidateId, requestToken, isAvailable);
+		//		[KP] Service to check token exists for that candidate and request was sent in past week and candidate not already used token
+		//		[KP] Update Candidate fields and persist
+		//		[KP] Add url to email
+		return ResponseEntity.ok().body("Thanks you. Your'e availability has been updated in the system.");
+	}
 	
 	/**
 	* Returns a list of Supported languages that a candidate can possibly speak
 	* @return supported languages
 	*/
-	//@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_RECRUITER') or hasRole('ROLE_CANDIDATE')")
 	@GetMapping(path="/candidate/languages")
 	public ResponseEntity<Set<LANGUAGE>> fetchSupportedLanguages(){
 		return ResponseEntity.ok(Arrays.stream(LANGUAGE.values()).collect(Collectors.toCollection(LinkedHashSet::new)));
@@ -532,7 +553,6 @@ public class CandidateController {
 	* Returns list of Geo Zones that a candidate can be available for work in
 	* @return Supported GeoZones
 	*/
-	//@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_RECRUITER')")
 	@GetMapping(path="/candidate/geo-zone")
 	public ResponseEntity<Set<GEO_ZONE>> fetchGeoZones(){
 		return ResponseEntity.ok(Arrays.stream(GEO_ZONE.values()).collect(Collectors.toCollection(LinkedHashSet::new)));
@@ -542,7 +562,6 @@ public class CandidateController {
 	* Returns list of Countries that a candidate can be available for work in
 	* @return Supported Countries
 	*/
-	//@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_RECRUITER') or hasRole('ROLE_CANDIDATE')")
 	@GetMapping(path="/candidate/countries")
 	public ResponseEntity<Set<CountryEnumAPIOutbound>> fetchSupportedCountries(){
 		return ResponseEntity.ok(Arrays.stream(COUNTRY.values()).map(c -> new CountryEnumAPIOutbound(c)).collect(Collectors.toCollection(LinkedHashSet::new)));
