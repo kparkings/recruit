@@ -74,7 +74,7 @@ public class CandidateAccountRefreshUtil {
 		}
 		
 		try {
-			this.runEmailCandidateSummary();
+		//	this.runEmailCandidateSummary();
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
