@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import com.arenella.recruit.listings.beans.Listing;
 import com.arenella.recruit.listings.beans.Listing.country;
@@ -419,7 +420,7 @@ public class ListingAPIOutboundPublic {
 									.location(listing.getLocation())
 									.listingId(listing.getListingId())
 									.languages(listing.getLanguages())
-									.skills(listing.getSkills())
+									.skills(listing.getSkills().stream().sorted().collect(Collectors.toCollection(LinkedHashSet::new)))
 									.description(listing.getDescription())
 									.currency(listing.getCurrency())
 									.created(listing.getCreated())

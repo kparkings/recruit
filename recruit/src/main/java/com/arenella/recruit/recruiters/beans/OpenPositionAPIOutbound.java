@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import com.arenella.recruit.recruiters.beans.OfferedCandidateAPIOutbound.RecruiterDetails;
 import com.arenella.recruit.recruiters.beans.OpenPosition.ContractType;
@@ -379,7 +380,7 @@ public class OpenPositionAPIOutbound {
 					.startDate(openPosition.getStartDate())
 					.created(openPosition.getCreated())
 					.viewed(viewedPosts.contains(openPosition.getId()))
-					.skills(openPosition.getSkills())
+					.skills(openPosition.getSkills().stream().sorted().collect(Collectors.toCollection(LinkedHashSet::new)))
 				.build();
 	}
 	

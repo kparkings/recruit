@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit } 					from '@angular/core';
+import { Component, ViewChild, OnInit } 		from '@angular/core';
 import { UntypedFormGroup, UntypedFormControl }	from '@angular/forms';
 import { RecruiterService }						from '../recruiter.service';
 import { CandidateServiceService }				from '../candidate-service.service';
@@ -9,10 +9,9 @@ import { SubscriptionAction }					from './subscription-action';
 import { environment }							from '../../environments/environment';
 import { Router}								from '@angular/router';
 import { NgbModal, NgbModalOptions}				from '@ng-bootstrap/ng-bootstrap';
-import { ViewChild }							from '@angular/core';
 import { CandidateSkill } 						from './candidate-skill';
 import { AppComponent} 							from '../app.component';
-import { SupportedCountry } from '../supported-candidate';
+import { SupportedCountry } 					from '../supported-candidate';
 
 @Component({
   selector: 'app-accounts',
@@ -29,7 +28,7 @@ export class AccountsComponent implements OnInit {
 	showFlaggedAsUnavailableTab:boolean								= false;
 	showSubscriptionActionsTab:boolean								= false;
 	showAvailabilityCheckTab:boolean								= false;
-	showSkillsValidationTab:boolean									= true;
+	showSkillsValidationTab:boolean									= false;
 	createAccountDetailsAvailable:boolean 							= false;
 	recruiterUsername:string										= '';
 	recruiterPassword:string										= '';

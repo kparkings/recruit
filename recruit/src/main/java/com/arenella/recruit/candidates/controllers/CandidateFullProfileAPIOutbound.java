@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang.math.NumberUtils;
 
@@ -655,7 +656,7 @@ public class CandidateFullProfileAPIOutbound implements CandidateAPIOutbound{
 					.daysOnSite(candidate.getDaysOnSite())
 					.availableFromDate(candidate.getAvailableFromDate())
 					.candidateType(candidate.getCandidateType())
-					.skills(candidate.getSkills())
+					.skills(candidate.getSkills().stream().sorted().collect(Collectors.toCollection(LinkedHashSet::new)))
 					.comments(candidate.getComments())
 					.daysOnSite(candidate.getDaysOnSite())
 					.availableFromDate(candidate.getAvailableFromDate())
@@ -699,7 +700,7 @@ public class CandidateFullProfileAPIOutbound implements CandidateAPIOutbound{
 					.daysOnSite(candidate.getDaysOnSite())
 					.availableFromDate(candidate.getAvailableFromDate())
 					.candidateType(candidate.getCandidateType())
-					.skills(candidate.getSkills())
+					.skills(candidate.getSkills().stream().sorted().collect(Collectors.toCollection(LinkedHashSet::new)))
 					.daysOnSite(candidate.getDaysOnSite())
 					.availableFromDate(candidate.getAvailableFromDate())
 					.candidateType(candidate.getCandidateType())
