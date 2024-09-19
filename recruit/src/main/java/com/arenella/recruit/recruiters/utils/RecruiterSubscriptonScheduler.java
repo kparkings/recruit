@@ -15,7 +15,6 @@ import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_status;
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_type;
 import com.arenella.recruit.recruiters.beans.PaidPeriodRecruiterSubscription;
-import com.arenella.recruit.recruiters.beans.TrialPeriodSubscription;
 import com.arenella.recruit.recruiters.dao.RecruiterDao;
 import com.arenella.recruit.recruiters.entities.RecruiterEntity;
 import com.arenella.recruit.recruiters.services.RecruiterService;
@@ -67,27 +66,6 @@ public class RecruiterSubscriptonScheduler {
 							recruiter.getSubscriptions().stream().filter(a -> ACTIVE_STATUSES.contains(a.getStatus())).collect(Collectors.toSet()).stream().forEach(subscription -> {
 								
 								switch(subscription.getType()) {
-									case TRIAL_PERIOD -> {
-										
-										/**
-										* Test if Trial has expired. If so end the subscription
-										*/
-										if (TrialPeriodSubscription.isTrialPeriodExpired((TrialPeriodSubscription)subscription)) {
-											
-											RecruiterSubscriptionActionHandler actionHandler = subscriptionFactory.getActionHandlerByType(subscription_type.TRIAL_PERIOD);
-											
-											try {
-												actionHandler.performAction(recruiter, subscription, subscription_action.END_SUBSCRIPTION, true);
-												
-												recruiterDao.save(RecruiterEntity.convertToEntity(recruiter, recruiterDao.findById(recruiter.getUserId())));
-												
-											} catch (IllegalAccessException e) {
-												throw new RuntimeException(e);
-											}
-										}
-										
-										return;
-									}
 									case YEAR_SUBSCRIPTION, ONE_MONTH_SUBSCRIPTION, THREE_MONTHS_SUBSCRIPTION, SIX_MONTHS_SUBSCRIPTION ->  {
 										
 										/**

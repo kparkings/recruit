@@ -42,7 +42,6 @@ import com.arenella.recruit.recruiters.beans.Recruiter.language;
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_action;
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_status;
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_type;
-import com.arenella.recruit.recruiters.beans.TrialPeriodSubscription;
 import com.arenella.recruit.recruiters.dao.RecruiterDao;
 import com.arenella.recruit.recruiters.entities.RecruiterEntity;
 import com.arenella.recruit.recruiters.entities.RecruiterSubscriptionEntity;
@@ -528,8 +527,8 @@ public class RecruiterServiceImplTest {
 		final subscription_action 	action 				= subscription_action.ACTIVATE_SUBSCRIPTION;
 		final Recruiter				recruiter			= Recruiter
 															.builder()
-																.subscriptions(Set.of(TrialPeriodSubscription.builder().subscriptionId(subscriptionId1).currentSubscription(true).build(),
-																					  TrialPeriodSubscription.builder().subscriptionId(subscriptionId2).currentSubscription(true).build()
+																.subscriptions(Set.of(CreditBasedSubscription.builder().subscriptionId(subscriptionId1).currentSubscription(true).build(),
+																					  CreditBasedSubscription.builder().subscriptionId(subscriptionId2).currentSubscription(true).build()
 																				)
 																				)
 															.build();
@@ -563,8 +562,8 @@ public class RecruiterServiceImplTest {
 		final subscription_action 	action 				= subscription_action.ACTIVATE_SUBSCRIPTION;
 		final Recruiter				recruiter			= Recruiter
 															.builder()
-																.subscriptions(Set.of(TrialPeriodSubscription.builder().subscriptionId(subscriptionId1).currentSubscription(true).build(),
-																					  TrialPeriodSubscription.builder().subscriptionId(subscriptionId2).currentSubscription(false).build()
+																.subscriptions(Set.of(CreditBasedSubscription.builder().subscriptionId(subscriptionId1).currentSubscription(true).build(),
+																					  CreditBasedSubscription.builder().subscriptionId(subscriptionId2).currentSubscription(false).build()
 																				)
 																				)
 															.build();
@@ -599,8 +598,8 @@ public class RecruiterServiceImplTest {
 		final subscription_action 	action 				= subscription_action.ACTIVATE_SUBSCRIPTION;
 		final Recruiter				recruiter			= Recruiter
 															.builder()
-																.subscriptions(Set.of(TrialPeriodSubscription.builder().subscriptionId(subscriptionId1).currentSubscription(true).build(),
-																					  TrialPeriodSubscription.builder().subscriptionId(subscriptionId2).currentSubscription(false).build()
+																.subscriptions(Set.of(CreditBasedSubscription.builder().subscriptionId(subscriptionId1).currentSubscription(true).build(),
+																					  CreditBasedSubscription.builder().subscriptionId(subscriptionId2).currentSubscription(false).build()
 																				)
 																				)
 															.build();
@@ -726,33 +725,6 @@ public class RecruiterServiceImplTest {
 		
 		final String 				recruiterId 		= "kparkings";
 		final Recruiter				recruiter			= Recruiter.builder().userId(recruiterId).subscriptions(Set.of(PaidPeriodRecruiterSubscription.builder().type(subscription_type.YEAR_SUBSCRIPTION).status(subscription_status.SUBSCRIPTION_ENDED).build())).build();
-		
-		SecurityContextHolder.setContext(mockSecurityContext);
-		
-		Mockito.when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
-		Mockito.when(mockAuthentication.getAuthorities()).thenReturn(Set.of());
-		Mockito.when(mockAuthentication.getName()).thenReturn(recruiterId);
-		
-		Mockito.when(this.mockDao.findRecruiterById(recruiterId)).thenReturn(Optional.of(recruiter));
-		
-		this.service.addSubscription(recruiterId, subscription_type.YEAR_SUBSCRIPTION);
-		
-		Mockito.verify(this.mockDao).save(Mockito.any());
-		
-		Mockito.verify(this.mockExternEventPublisher).publishSubscriptionAddedEvent(Mockito.any(SubscriptionAddedEvent.class));
-		
-	}
-	
-	/**
-	* Tests that if there is an existing TRIAL subscription that is still open that it 
-	* gets closed  
-	* @throws Exception
-	*/
-	@Test
-	public void testAddSubscription_yearSubscription_existingTrialSubscription_ended() throws Exception {
-		
-		final String 				recruiterId 		= "kparkings";
-		final Recruiter				recruiter			= Recruiter.builder().userId(recruiterId).subscriptions(Set.of(TrialPeriodSubscription.builder().status(subscription_status.ACTIVE).build())).build();
 		
 		SecurityContextHolder.setContext(mockSecurityContext);
 		

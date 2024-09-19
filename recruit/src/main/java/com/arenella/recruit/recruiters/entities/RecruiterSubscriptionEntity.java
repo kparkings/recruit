@@ -17,7 +17,6 @@ import com.arenella.recruit.recruiters.beans.PaidPeriodRecruiterSubscription;
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription;
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_status;
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_type;
-import com.arenella.recruit.recruiters.beans.TrialPeriodSubscription;
 
 /**
 * Entity Representation of a Recruiters Subscription
@@ -346,18 +345,6 @@ public class RecruiterSubscriptionEntity {
 												.subscriptionId(entity.getSubscriptionId())
 												.currentSubscription(entity.isCurrentSubscription())
 											.build();
-			}
-			case TRIAL_PERIOD -> {
-				return TrialPeriodSubscription
-											.builder()
-												.activateDate(entity.getActivatedDate())
-												.created(entity.getCreated())
-												.recruiterId(entity.getRecruiterId())
-												.status(entity.getStatus())
-												.subscriptionId(entity.getSubscriptionId())
-												.currentSubscription(entity.isCurrentSubscription())
-											.build();
-				
 			}
 			case YEAR_SUBSCRIPTION, ONE_MONTH_SUBSCRIPTION, THREE_MONTHS_SUBSCRIPTION, SIX_MONTHS_SUBSCRIPTION -> {
 				return PaidPeriodRecruiterSubscription

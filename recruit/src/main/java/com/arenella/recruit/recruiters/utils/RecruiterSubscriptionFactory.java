@@ -7,7 +7,6 @@ import com.arenella.recruit.recruiters.beans.CreditBasedSubscriptionActionHandle
 import com.arenella.recruit.recruiters.beans.FirstGenRecruiterSubscription;
 import com.arenella.recruit.recruiters.beans.PaidPeriodSubscriptionActionHandler;
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_type;
-import com.arenella.recruit.recruiters.beans.TrialPeriodSubscriptionActionHandler;
 
 /**
 * Factory for retrieving a RecruiterSubscription 
@@ -16,10 +15,6 @@ import com.arenella.recruit.recruiters.beans.TrialPeriodSubscriptionActionHandle
 */
 @Component
 public class RecruiterSubscriptionFactory {
-	
-	//TODO: Remove all Trial period code
-	@Autowired
-	private TrialPeriodSubscriptionActionHandler 	trialPeriodActionHandler;
 	
 	@Autowired
 	private CreditBasedSubscriptionActionHandler 	creditBasedActionHandler;
@@ -41,7 +36,6 @@ public class RecruiterSubscriptionFactory {
 		
 		return switch(subscriptionType) {
 				case FIRST_GEN -> FirstGenRecruiterSubscription.getActionHandler();
-				case TRIAL_PERIOD -> trialPeriodActionHandler;
 				case ONE_MONTH_SUBSCRIPTION, 
 					 THREE_MONTHS_SUBSCRIPTION, 
 					 SIX_MONTHS_SUBSCRIPTION, 

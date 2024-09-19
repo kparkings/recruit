@@ -41,14 +41,12 @@ export class AccountsComponent implements OnInit {
 	activateRecruiterUserId:string									= '';
 	activateRecruiterUserPassword:string							= '';
 	expiredSubscriptionRecruiters:Array<Recruiter>					= Array<Recruiter>();
-	trialPeriodRecruiters:Array<Recruiter>							= Array<Recruiter>();
 	activePaidSubscription:Array<Recruiter>							= Array<Recruiter>();
 	creditBasedSubscription:Array<Recruiter>						= Array<Recruiter>();
 	firstGenActiveSubscription:Array<Recruiter>						= Array<Recruiter>();
 	candidatesToCheckForAvailability:Array<Candidate>				= Array<Candidate>();
 	
 	showExpiredSubscriptionRecruiters:boolean 						= true;
-	showTrialPeriodRecruiters:boolean								= true;
 	showActivePaidSubscription:boolean								= true;
 	showCreditBasedSubscription:boolean								= true;
 	showFirstGenActiveSubscription:boolean							= true;
@@ -391,7 +389,6 @@ export class AccountsComponent implements OnInit {
 		this.recruiterCount 					= 0;
 		this.recruiters 						= new Array<Recruiter>();
 		this.expiredSubscriptionRecruiters		= new Array<Recruiter>();
-		this.trialPeriodRecruiters				= new Array<Recruiter>();
 		this.activePaidSubscription 			= new Array<Recruiter>();
 		this.creditBasedSubscription			= new Array<Recruiter>();
 		this.firstGenActiveSubscription			= new Array<Recruiter>();
@@ -439,11 +436,6 @@ export class AccountsComponent implements OnInit {
 			return;
 		}
 		
-		if (activeSubscription.type == 'TRIAL_PERIOD') {
-			this.trialPeriodRecruiters.push(recruiter);
-			return;
-		}
-		
 		if (activeSubscription.type == 'CREDIT_BASED_SUBSCRIPTION') {
 			this.creditBasedSubscription.push(recruiter);
 			return;
@@ -469,13 +461,6 @@ export class AccountsComponent implements OnInit {
 	*/
 	toggleShowExpiredSubscriptionRecruiters():void{
 		this.showExpiredSubscriptionRecruiters = !this.showExpiredSubscriptionRecruiters;
-	}
-	
-	/**
-	* Toggles whether recruiters with Trial subscriptions are shown
-	*/
-	toggleShowTrialPeriodRecruiters():void{
-		this.showTrialPeriodRecruiters = !this.showTrialPeriodRecruiters;
 	}
 	
 	/**

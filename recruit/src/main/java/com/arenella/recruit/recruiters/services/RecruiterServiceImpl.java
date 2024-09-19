@@ -34,7 +34,6 @@ import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_status;
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_type;
 import com.arenella.recruit.recruiters.beans.SubscriptionActionFeedback;
-import com.arenella.recruit.recruiters.beans.TrialPeriodSubscription;
 import com.arenella.recruit.recruiters.dao.RecruiterCreditDao;
 import com.arenella.recruit.recruiters.dao.RecruiterDao;
 import com.arenella.recruit.recruiters.entities.RecruiterEntity;
@@ -187,15 +186,6 @@ public class RecruiterServiceImpl implements RecruiterService{
 					.currentSubscription(true)
 				.build();
 		
-		//TrialPeriodSubscription subscription = TrialPeriodSubscription
-		//														.builder()
-		//															.created(LocalDateTime.now())
-		//															.recruiterId(recruiter.getUserId())
-		//															.status(RecruiterSubscription.subscription_status.AWAITING_ACTIVATION)
-		//															.subscriptionId(UUID.randomUUID())
-		//															.currentSubscription(true)
-		//														.build();
-		
 		recruiter.addSubscription(subscription); 
 		
 		this.recruiterDao.save(RecruiterEntity.convertToEntity(recruiter, Optional.empty()));
@@ -322,14 +312,6 @@ public class RecruiterServiceImpl implements RecruiterService{
 								.collect(Collectors.toSet())
 								.stream().forEach(s -> {
 									((FirstGenRecruiterSubscription) s).endSubscription();
-								});
-		
-		recruiter.getSubscriptions()
-								.stream()
-								.filter(s -> s.getType() == subscription_type.TRIAL_PERIOD)
-								.collect(Collectors.toSet())
-								.stream().forEach(s -> {
-									((TrialPeriodSubscription) s).endSubscription();
 								});
 		
 		recruiter.getSubscriptions()

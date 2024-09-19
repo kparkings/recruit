@@ -43,11 +43,6 @@
 						<td><button class="btn btn-secondary" (click)="toggleShowCreditBasedSubscription()">{{'arenella-accounts-tabrecruiters-toggle' | translate}}</button></td>
 					</tr>
 					<tr>
-						<td class="recruiter-trial-subscription">{{'arenella-accounts-tabrecruiters-trial-subscriptions' | translate}}</td>
-						<td class="recruiter-trial-subscription">{{trialPeriodRecruiters.length}}</td>
-						<td><button class="btn btn-secondary" (click)="toggleShowTrialPeriodRecruiters()">{{'arenella-accounts-tabrecruiters-toggle' | translate}}</button></td>
-					</tr>
-					<tr>
 						<td class="recruiter-expired-subscription">{{'arenella-accounts-tabrecruiters-expired-subscriptions' | translate}}</td>
 						<td class="recruiter-expired-subscription">{{expiredSubscriptionRecruiters.length}}</td>
 						<td><button class="btn btn-secondary" (click)="toggleShowExpiredSubscriptionRecruiters()">{{'arenella-accounts-tabrecruiters-toggle' | translate}}</button></td>
@@ -93,13 +88,6 @@
 		            	    <td *ngIf="showCreditBasedSubscription" class="candidate-tab-col medicol">{{recruiter.email}}</td>
 		            	    <td *ngIf="showCreditBasedSubscription" class="candidate-tab-col medicol">{{recruiter.companyName}}</td>
 		            	    <td *ngIf="showCreditBasedSubscription" class="candidate-tab-col medicol">{{recruiter.hasActiveSubscription}}</td>
-		      			</tr>	
-		      			<tr *ngFor="let recruiter of trialPeriodRecruiters" class="recruiter-trial-subscription">
-		      				<td *ngIf="showTrialPeriodRecruiters" class="candidate-tab-col medicol"><span class="candidate-id-prefix"></span>{{recruiter.userId}}</td>
-		            	    <td *ngIf="showTrialPeriodRecruiters" class="candidate-tab-col medicol"> {{recruiter.firstName}} {{recruiter.surname}}</td>
-		            	    <td *ngIf="showTrialPeriodRecruiters" class="candidate-tab-col medicol">{{recruiter.email}}</td>
-		            	    <td *ngIf="showTrialPeriodRecruiters" class="candidate-tab-col medicol">{{recruiter.companyName}}</td>
-		            	    <td *ngIf="showTrialPeriodRecruiters" class="candidate-tab-col medicol">{{recruiter.hasActiveSubscription}}</td>
 		      			</tr>	
 		      			<tr *ngFor="let recruiter of expiredSubscriptionRecruiters" class="recruiter-expired-subscription">
 		      				<td *ngIf="showExpiredSubscriptionRecruiters" class="candidate-tab-col medicol"><span class="candidate-id-prefix"></span>{{recruiter.userId}}</td>

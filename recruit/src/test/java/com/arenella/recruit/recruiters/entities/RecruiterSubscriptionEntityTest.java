@@ -15,7 +15,6 @@ import com.arenella.recruit.recruiters.beans.PaidPeriodRecruiterSubscription;
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription;
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_status;
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_type;
-import com.arenella.recruit.recruiters.beans.TrialPeriodSubscription;
 
 /**
 * Unit tests for the RecruiterSubscriptionEntity class
@@ -245,34 +244,4 @@ public class RecruiterSubscriptionEntityTest {
 		
 	}
 	
-	/**
-	* Tests conversion of Entity representation of RecruiterSubscription to 
-	* Domain representation [type == TRIAL_PERIOD ]
-	* @throws Exception
-	*/
-	@Test
-	public void testConvertFromEntity_TRIAL_PERIOD() throws Exception {
-		
-		RecruiterSubscriptionEntity entity = RecruiterSubscriptionEntity
-				.builder()
-					.activateDate(activatedDate)
-					.created(created)
-					.recruiterId(recruiterId)
-					.subscriptionId(subscriptionId)
-					.status(status)
-					.type(subscription_type.TRIAL_PERIOD)
-					.currentSubscription(true)
-				.build();
-		
-		TrialPeriodSubscription subscription = (TrialPeriodSubscription) RecruiterSubscriptionEntity.convertFromEntity(entity);
-		
-		assertEquals(activatedDate, 										subscription.getActivatedDate());
-		assertEquals(created, 												subscription.getCreated());
-		assertEquals(recruiterId, 											subscription.getRecruiterId());
-		assertEquals(status, 												subscription.getStatus());
-		assertEquals(subscriptionId, 										subscription.getSubscriptionId());
-		assertEquals(RecruiterSubscription.subscription_type.TRIAL_PERIOD, 	subscription.getType());
-		assertTrue(subscription.isCurrentSubscription());
-		
-	}
 }

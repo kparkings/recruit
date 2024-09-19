@@ -9,7 +9,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.arenella.recruit.recruiters.beans.TrialPeriodSubscriptionActionHandler;
 import com.arenella.recruit.recruiters.beans.PaidPeriodSubscriptionActionHandler;
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_type;
 
@@ -22,9 +21,6 @@ public class RecruiterSubscriptionFactoryTest {
 	
 	@InjectMocks
 	private RecruiterSubscriptionFactory 			factory = new RecruiterSubscriptionFactory();
-	
-	@Mock
-	private TrialPeriodSubscriptionActionHandler 	trialPeriodActionHander;
 	
 	@Mock
 	private PaidPeriodSubscriptionActionHandler 	paidPeriodSubscriptionActionHandler;
@@ -50,7 +46,6 @@ public class RecruiterSubscriptionFactoryTest {
 	public void testGetActionHandlers() throws Exception {
 		
 		assertNotNull(factory.getActionHandlerByType(subscription_type.FIRST_GEN));
-		assertNotNull(factory.getActionHandlerByType(subscription_type.TRIAL_PERIOD));
 		assertNotNull(factory.getActionHandlerByType(subscription_type.YEAR_SUBSCRIPTION));
 		this.factory.getActionHandlerByType(subscription_type.CREDIT_BASED_SUBSCRIPTION);
 	}

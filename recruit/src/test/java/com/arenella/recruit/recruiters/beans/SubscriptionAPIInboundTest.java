@@ -19,7 +19,7 @@ public class SubscriptionAPIInboundTest {
 	@Test
 	public void testBuilder() throws Exception {
 		
-		final subscription_type type = subscription_type.TRIAL_PERIOD;
+		final subscription_type type = subscription_type.CREDIT_BASED_SUBSCRIPTION;
 		
 		SubscriptionAPIInbound subscription = SubscriptionAPIInbound.builder().type(type).build();
 		
