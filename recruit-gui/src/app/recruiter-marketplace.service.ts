@@ -6,6 +6,7 @@ import { NewOfferedCandidate } 						from './recruiter-marketplace/new-offered-c
 import { OfferedCandidate } 						from './recruiter-marketplace/offered-candidate';
 import { NewOpenPosition } 							from './recruiter-marketplace/new-open-position';
 import { OpenPosition } 							from './recruiter-marketplace/open-position';
+import { SupportedCountry } 						from './supported-candidate';
 
 @Injectable({
   providedIn: 'root'
@@ -15,6 +16,32 @@ export class RecruiterMarketplaceService {
 	public unseenMpPosts 					= new BehaviorSubject<number>(0);
 	public unseenMpPostsOfferedCandidates 	= new BehaviorSubject<number>(0);
 	public unseenMpPostsOpenPositions 		= new BehaviorSubject<number>(0);
+	public supportedCountries:Array<SupportedCountry> 	= new Array<SupportedCountry>();
+	
+	/**
+  	* Initializes the countries available in the Marketplace
+  	*/
+	public async initializeSupportedCountries():Promise<any>{
+	
+		const backendUrl:string = environment.backendUrl +'candidate/countries';	//TODO: [KP] Create and point to endpoint in marketplace
+		const config 			= await this.httpClient.get<any>(backendUrl,  { observe: 'response', withCredentials: true}).toPromise();
+ 
+ 		config.body.forEach( (country: SupportedCountry) => {
+			this.supportedCountries.push(new SupportedCountry(''+country.name, country.iso2Code));	
+		});
+ 
+ 	   	Object.assign(this, config);
+    	
+    	return config;
+		
+	}
+	
+	/**
+	* Returns Countries supported by the system 
+	*/
+	public getSupportedCountries():Array<SupportedCountry>{
+		return this.supportedCountries;	
+	}
 	
 	/**
 	* Refreshed MP data

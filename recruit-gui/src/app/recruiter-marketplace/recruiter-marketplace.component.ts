@@ -14,9 +14,11 @@ import { RecruiterProfile }								from '../recruiter-profile/recruiter-profile'
 import { Candidate } 																	from '../suggestions/candidate';
 import { CandidateNavService } 															from '../candidate-nav.service';
 import { CreditsService } 																from '../credits.service';
-import { InfoItemBlock, InfoItemConfig, InfoItemRowKeyValue, InfoItemRowMultiValues } 	from '../candidate-info-box/info-item';
+import { InfoItemBlock, InfoItemConfig, InfoItemRowKeyValue, InfoItemRowKeyValueFlag, InfoItemRowMultiValues } 	from '../candidate-info-box/info-item';
 import { TranslateService } from '@ngx-translate/core';
 import { SupportedCountry } from '../supported-candidate';
+import { HtmlOption } from '../html-option';
+import { StaticDataService } from '../static-data.service';
 
 @Component({
   selector: 'app-recruiter-marketplace',
@@ -42,6 +44,7 @@ export class RecruiterMarketplaceComponent implements OnInit {
 	public recruiterProfile:RecruiterProfile 			= new RecruiterProfile();
 	public infoItemConfig:InfoItemConfig 				= new InfoItemConfig();
 	public supportedCountries:Array<SupportedCountry>	= new Array<SupportedCountry>();
+	public countryOptions:Array<HtmlOption> 			= new Array<HtmlOption>();
 
   	constructor(private modalService: 				NgbModal, 
 				private marketplaceService: 		RecruiterMarketplaceService, 
@@ -52,6 +55,7 @@ export class RecruiterMarketplaceComponent implements OnInit {
 				private recruiterProfileService: 	RecruiterProfileService,
 				private candidateNavService: 		CandidateNavService,
 				private creditsService:				CreditsService,
+				private staticDataService:			StaticDataService,
 				private translate:					TranslateService) {
 					
 					this.marketplaceService.fetchUnseenOfferedCandidates().subscribe(val => {
@@ -74,6 +78,8 @@ export class RecruiterMarketplaceComponent implements OnInit {
 					} 
 					
 					this.doCreditCheck();
+					
+					this.countryOptions = this.getCountryOptions();
 					
 	}
 
@@ -116,6 +122,23 @@ export class RecruiterMarketplaceComponent implements OnInit {
 	public openPositions:Array<OpenPosition> 			= new Array<OpenPosition>();
 	public showJustMyOpenPositionsActive:boolean		= false;
 
+	/**
+	* Provides HTML Options for country 
+	* Selection 
+	*/
+  	private getCountryOptions():Array<HtmlOption>{
+		  
+		  let countries:Array<HtmlOption> = new Array<HtmlOption>();
+		   
+		  countries.push(new HtmlOption("",""));
+		  
+		  this.staticDataService.fetchCountries().forEach( country => {
+			countries.push(new HtmlOption(country.key,country.humanReadable));  
+		  });
+		  		  
+		  return countries;
+	}
+	
 	/**
 	* Fetches only candidates offered by the current Recruiter 
 	*/		
@@ -377,7 +400,7 @@ export class RecruiterMarketplaceComponent implements OnInit {
 			let recruiterBlock:InfoItemBlock = new InfoItemBlock();
 			recruiterBlock.setTitle(this.translate.instant('mp-left-mnu-location'));//Location
 			if (this.activeOpenPosition.country) {
-				recruiterBlock.addRow(new InfoItemRowKeyValue(this.translate.instant('mp-left-mnu-country'),this.getCountryCode(this.activeOpenPosition.country)));
+				recruiterBlock.addRow(new InfoItemRowKeyValueFlag(this.translate.instant('info-item-title-country'),"flag-icon-"+this.getCountryCode(this.activeOpenPosition.country)));
 			}
 			if (this.activeOpenPosition.location) {
 				recruiterBlock.addRow(new InfoItemRowKeyValue(this.translate.instant('mp-left-mnu-city'),this.activeOpenPosition.location));
@@ -890,31 +913,23 @@ export class RecruiterMarketplaceComponent implements OnInit {
 	* @param country - Country to get the country code for
 	*/
 	public getCountryCode(country:string):string{
-
-		switch(country){
-			case "NETHERLANDS":{
-				return "The Netherlands";
-			}
-			case "BELGIUM":{
-				return "Belgium";
-			}
-			case "UK":{
-				return "United Kingdom";
-			}
-			case "IRELAND":{
-				return "Ireland";
-			}
-			case "EU_REMOTE":{
-				return "Remote within EU";
-			}
-			case "UK":{
-				return "Remote within World";
-			}
-			default:{
-				return 'NA';
-			}
+		
+		if (country == "EU_REMOTE") {
+			return "eu";
 		}
-
+		
+		if (country == "WORLD_REMOTE") {
+			return "xx";
+		}
+		
+		let supportedCountry =  this.supportedCountries.filter(c => c.name == country)[0];
+		
+		if (!supportedCountry) {
+			return country;
+		}
+		
+		return supportedCountry.iso2Code;
+		
   	}
 
 	/**

@@ -7,7 +7,7 @@ import java.util.Set;
 import java.util.UUID;
 
 import com.arenella.recruit.recruiters.beans.OpenPosition.ContractType;
-import com.arenella.recruit.recruiters.beans.OpenPosition.Country;
+import com.arenella.recruit.recruiters.enums.COUNTRY;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 
 /**
@@ -24,7 +24,7 @@ public class OfferedCandidate {
 	private UUID 						id;
 	private String 						recruiterId;
 	private String 						candidateRoleTitle;
-	private Country	 					country;
+	private COUNTRY	 					country;
 	private String						location;
 	private ContractType 				contractType;
 	private DAYS_ON_SITE				daysOnSite;
@@ -110,7 +110,7 @@ public class OfferedCandidate {
 	* Returns the Country the Candidate is available to work in
 	* @return Country - Country where the Candidate is available to work
 	*/
-	public Country getcountry(){
+	public COUNTRY getcountry(){
 		return this.country;
 	}
 	
@@ -239,7 +239,7 @@ public class OfferedCandidate {
 		private UUID 						id;
 		private String 						recruiterId;
 		private String 						candidateRoleTitle;
-		private Country	 					country;
+		private COUNTRY	 					country;
 		private String						location;
 		private ContractType 				contractType;
 		private DAYS_ON_SITE				daysOnSite;
@@ -294,7 +294,7 @@ public class OfferedCandidate {
 		* @param country - Country Candidate is available in
 		* @return Builder
 		*/
-		public OfferedCandidateAPIInboundBuilder country(Country country) {
+		public OfferedCandidateAPIInboundBuilder country(COUNTRY country) {
 			
 			this.country = country;
 			

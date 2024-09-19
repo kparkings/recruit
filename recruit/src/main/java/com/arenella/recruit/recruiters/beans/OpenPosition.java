@@ -6,6 +6,8 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.UUID;
 
+import com.arenella.recruit.recruiters.enums.COUNTRY;
+
 /**
 * Class represents an Open Position that the Recruiter needs to fill 
 * and is willing to work with other Recruiters to fill it.
@@ -13,13 +15,12 @@ import java.util.UUID;
 */
 public class OpenPosition {
 
-	public enum Country 				{NETHERLANDS, BELGIUM, UK, IRELAND, EU_REMOTE, WORLD_REMOTE}
 	public enum ContractType 			{CONTRACT, PERM, BOTH}
 	
 	private UUID 						id;
 	private String 						recruiterId;
 	private String 						positionTitle;
-	private Country	 					country;
+	private COUNTRY	 					country;
 	private String						location;
 	private ContractType 				contractType;
 	private String	 					renumeration;
@@ -84,7 +85,7 @@ public class OpenPosition {
 	* Returns the Country the Open Position is based in
 	* @return Country of the Open Position
 	*/
-	public Country getCountry(){
+	public COUNTRY getCountry(){
 		return this.country;
 	}
 	
@@ -208,7 +209,7 @@ public class OpenPosition {
 		private UUID 						id;
 		private String 						recruiterId;
 		private String 						positionTitle;
-		private Country	 					country;
+		private COUNTRY	 					country;
 		private String						location;
 		private ContractType 				contractType;
 		private String 						renumeration;
@@ -256,7 +257,7 @@ public class OpenPosition {
 		* @param country - Country where the Position is located
 		* @return Builder
 		*/
-		public OpenPositionBuilder country(Country country){
+		public OpenPositionBuilder country(COUNTRY country){
 			this.country = country;
 			return this;
 		}

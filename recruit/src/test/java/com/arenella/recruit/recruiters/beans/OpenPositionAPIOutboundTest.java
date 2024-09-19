@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 
 import com.arenella.recruit.recruiters.beans.OfferedCandidateAPIOutbound.RecruiterDetails;
 import com.arenella.recruit.recruiters.beans.OpenPosition.ContractType;
-import com.arenella.recruit.recruiters.beans.OpenPosition.Country;
+import com.arenella.recruit.recruiters.enums.COUNTRY;
 
 /**
 * Unit tests for the OpenPositionAPIOutbound class
@@ -26,7 +26,7 @@ public class OpenPositionAPIOutboundTest {
 	private String 				recruiterCompanyName	= "Arenella BV";
 	private String 				recruiterEmail			= "kparkings@gmail.com";
 	private String 				positionTitle			= "Java Developer";
-	private Country	 			country					= Country.EU_REMOTE;
+	private COUNTRY	 			country					= COUNTRY.EU_REMOTE;
 	private String				location				= "Remote in Europe";
 	private ContractType 		contractType			= ContractType.CONTRACT;
 	private String	 			renumeration			= "500 euros per day";

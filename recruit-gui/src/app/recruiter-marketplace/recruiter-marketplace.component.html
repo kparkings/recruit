@@ -83,14 +83,9 @@
 							<td class="table-bdy-td" 		 *ngIf="!openPosition.viewed && isNotMineOP(openPosition)"	(click)="viewOpenPosition(openPosition)"><b>{{openPosition.positionTitle}}</b></td>
 														
 							<td class="table-bdy-td" 		 (click)="viewOpenPosition(openPosition)"align="center" *ngIf="!showJustMyOpenPositionsActive">
-								<span title="{{openPosition.country}}" *ngIf="openPosition.country === 'NETHERLANDS'"  	class="flag-icon flag-icon-nl"></span>
-								<span title="{{openPosition.country}}" *ngIf="openPosition.country === 'BELGIUM'"		class="flag-icon flag-icon-be"></span>
-								<span title="{{openPosition.country}}" *ngIf="openPosition.country === 'UK'"			class="flag-icon flag-icon-gb"></span>
-								<span title="{{openPosition.country}}" *ngIf="openPosition.country === 'IRELAND'"			class="flag-icon flag-icon-ie"></span>
-								<span title="{{openPosition.country}}" *ngIf="openPosition.country === 'EU_REMOTE'"		class="flag-icon flag-icon-eu"></span>
-								<span title="{{openPosition.country}}" *ngIf="openPosition.country === 'WORLD_REMOTE'"	class="flag-icon flag-icon-xx"></span>
-							
+								<span title="{{openPosition.country}}" class="flag-icon flag-icon-{{getCountryCode(openPosition.country)}} suggestion-flag-country listing-country"></span>	
 							</td>
+							
 							<td class="table-bdy-td td-date" (click)="viewOpenPosition(openPosition)" *ngIf="!showJustMyOpenPositionsActive && (openPosition.viewed || !isNotMineOP(openPosition))">{{openPosition.positionClosingDate}}</td>
 							<td class="table-bdy-td td-date" (click)="viewOpenPosition(openPosition)" *ngIf="!showJustMyOpenPositionsActive && !openPosition.viewed && isNotMineOP(openPosition)"><b>{{openPosition.positionClosingDate}}</b></td>
 						</tr>
@@ -118,15 +113,23 @@
 					<tr>
 						<td>{{'arenella-recruiter-mp-add-country' | translate}}</td>
 						<td>
+						<select formControlName="country">
+							<option *ngFor="let opt of countryOptions" [ngValue]="opt.value">{{opt.label}}</option>
+						</select>
+						<!-- 
 							<select formControlName="country">
 								<option></option>
+								<option *ngFor="let country of supportedCountries" value="{{country.name}}">{{country.name}}</option>
+						 -->
+							<!--  
+								
 								<option value="BELGIUM">{{'arenella-recruiter-mp-add-belgium' | translate}}</option>
 								<option value="IRELAND">{{'arenella-recruiter-mp-add-ireland' | translate}}</option>
 								<option value="NETHERLANDS">{{'arenella-recruiter-mp-add-netherlands' | translate}}</option>
 								<option value="UK">{{'arenella-recruiter-mp-add-uk' | translate}}</option>
-								<option value="EU_REMOTE">{{'arenella-recruiter-mp-add-eu' | translate}}</option>
-								<option value="WORLD_REMOTE">{{'arenella-recruiter-mp-add-world' | translate}}</option>
-							</select>
+								
+								-->
+							<!--  </select>-->
 						</td>	
 					</tr>
 					<tr>
@@ -209,6 +212,24 @@
 						<td>{{'arenella-recruiter-mp-update-country' | translate}}</td>
 						<td>
 							<select formControlName="country">
+								<option *ngFor="let opt of countryOptions" [ngValue]="opt.value">{{opt.label}}</option>
+							</select>
+							<!-- 				
+							<select formControlName="country">
+								<option></option>
+								<option *ngFor="let country of supportedCountries" value="{{country.name}}">{{country.name}}</option>
+							<!--  
+								
+								<option value="BELGIUM">{{'arenella-recruiter-mp-add-belgium' | translate}}</option>
+								<option value="IRELAND">{{'arenella-recruiter-mp-add-ireland' | translate}}</option>
+								<option value="NETHERLANDS">{{'arenella-recruiter-mp-add-netherlands' | translate}}</option>
+								<option value="UK">{{'arenella-recruiter-mp-add-uk' | translate}}</option>
+								<option value="EU_REMOTE">{{'arenella-recruiter-mp-add-eu' | translate}}</option>
+								<option value="WORLD_REMOTE">{{'arenella-recruiter-mp-add-world' | translate}}</option>
+								-->
+							<!--  </select>-->
+							<!--  
+							<select formControlName="country">
 								<option></option>
 								<option value="BELGIUM">{{'arenella-recruiter-mp-update-belgium' | translate}}</option>
 								<option value="IRELAND">{{'arenella-recruiter-mp-update-ireland' | translate}}</option>
@@ -217,6 +238,7 @@
 								<option value="EU_REMOTE">{{'arenella-recruiter-mp-update-eu' | translate}}</option>
 								<option value="WORLD_REMOTE">{{'arenella-recruiter-mp-update-world' | translate}}</option>
 							</select>
+							-->
 						</td>	
 					</tr>
 					<tr>

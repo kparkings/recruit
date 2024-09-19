@@ -16,7 +16,7 @@ import org.junit.jupiter.api.Test;
 
 import com.arenella.recruit.recruiters.beans.OpenPosition;
 import com.arenella.recruit.recruiters.beans.OpenPosition.ContractType;
-import com.arenella.recruit.recruiters.beans.OpenPosition.Country;
+import com.arenella.recruit.recruiters.enums.COUNTRY;
 
 /**
 * Unit tests for the OpenPosition class
@@ -27,7 +27,7 @@ public class OpenPositionEntityTest {
 	private UUID 			id						= UUID.randomUUID();
 	private String 			recruiterId				= "recruier1Id";
 	private String 			positionTitle			= "Java Developer";
-	private Country	 		country					= Country.EU_REMOTE;
+	private COUNTRY	 		country					= COUNTRY.EU_REMOTE;
 	private String			location				= "Remote in Europe";
 	private ContractType 	contractType			= ContractType.CONTRACT;
 	private String	 		renumeration			= "500 euros per day";
@@ -164,7 +164,7 @@ public class OpenPositionEntityTest {
 		final UUID 			idOrig						= UUID.randomUUID();
 		final String 		recruiterIdOrig				= "recruier1IdUpdt";
 		final String 		positionTitleOrig			= "Java DeveloperUpdt";
-		final Country	 	countryOrig					= Country.IRELAND;
+		final COUNTRY	 	countryOrig					= COUNTRY.REPUBLIC_OF_IRELAND;
 		final String		locationOrig				= "Remote in EuropeUpdt";
 		final ContractType 	contractTypeOrig			= ContractType.PERM;
 		final String	 	renumerationOrig			= "500 euros per dayUpdt";

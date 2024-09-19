@@ -16,7 +16,7 @@ import org.junit.jupiter.api.Test;
 import com.arenella.recruit.recruiters.beans.OfferedCandidate.DAYS_ON_SITE;
 import com.arenella.recruit.recruiters.beans.OfferedCandidate.LANGUAGE;
 import com.arenella.recruit.recruiters.beans.OpenPosition.ContractType;
-import com.arenella.recruit.recruiters.beans.OpenPosition.Country;
+import com.arenella.recruit.recruiters.enums.COUNTRY;
 
 /**
 * Unit tests for the OfferedCandidate Class
@@ -27,7 +27,7 @@ public class OfferedCandidateTest {
 	private static final UUID 			ID 						= UUID.randomUUID();
 	private static final String 		RECRUITER_ID 			= "aRecruiterId";
 	private static final String 		CANDIDATE_ROLE_TITLE 	= "Java Developer";
-	private static final Country	 	COUNTRY 				= Country.BELGIUM;
+	private static final COUNTRY	 	COUNTRY_VAL				= COUNTRY.BELGIUM;
 	private static final String			LOCATION 				= "Brussels";
 	private static final ContractType 	CONTRACT_TYPE 			= ContractType.CONTRACT;
 	private static final DAYS_ON_SITE	DAYS_ON_SITE_VAL 		= DAYS_ON_SITE.ZERO;
@@ -54,7 +54,7 @@ public class OfferedCandidateTest {
 				.comments(COMMENTS)
 				.contractType(CONTRACT_TYPE)
 				.coreSkills(CORE_SKILLS)
-				.country(COUNTRY)
+				.country(COUNTRY_VAL)
 				.created(CREATED)
 				.daysOnSite(DAYS_ON_SITE_VAL)
 				.description(DESCRIPTION)
@@ -70,7 +70,7 @@ public class OfferedCandidateTest {
 		assertEquals(ID, 					candidate.getId());
 		assertEquals(RECRUITER_ID, 			candidate.getRecruiterId());
 		assertEquals(CANDIDATE_ROLE_TITLE, 	candidate.getcandidateRoleTitle());
-		assertEquals(COUNTRY, 				candidate.getcountry());
+		assertEquals(COUNTRY_VAL,			candidate.getcountry());
 		assertEquals(LOCATION, 				candidate.getlocation());
 		assertEquals(CONTRACT_TYPE,			candidate.getcontractType());
 		assertEquals(DAYS_ON_SITE_VAL, 		candidate.getDaysOnSite());

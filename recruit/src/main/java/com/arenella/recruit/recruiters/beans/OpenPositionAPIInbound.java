@@ -5,7 +5,7 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 import com.arenella.recruit.recruiters.beans.OpenPosition.ContractType;
-import com.arenella.recruit.recruiters.beans.OpenPosition.Country;
+import com.arenella.recruit.recruiters.enums.COUNTRY;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 
@@ -20,7 +20,7 @@ public class OpenPositionAPIInbound {
 	
 	private String 						recruiterId;
 	private String 						positionTitle;
-	private Country	 					country;
+	private COUNTRY	 					country;
 	private String						location;
 	private ContractType 				contractType;
 	private String	 					renumeration;
@@ -71,7 +71,7 @@ public class OpenPositionAPIInbound {
 	* Returns the Country the Open Position is based in
 	* @return Country of the Open Position
 	*/
-	public Country getCountry(){
+	public COUNTRY getCountry(){
 		return this.country;
 	}
 	
@@ -158,7 +158,7 @@ public class OpenPositionAPIInbound {
 		
 		private String 						recruiterId;
 		private String 						positionTitle;
-		private Country	 					country;
+		private COUNTRY	 					country;
 		private String						location;
 		private ContractType 				contractType;
 		private String 						renumeration;
@@ -194,7 +194,7 @@ public class OpenPositionAPIInbound {
 		* @param country - Country where the Position is located
 		* @return Builder
 		*/
-		public OpenPositionAPIInboundBuilder country(Country country){
+		public OpenPositionAPIInboundBuilder country(COUNTRY country){
 			this.country = country;
 			return this;
 		}

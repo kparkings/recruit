@@ -7,7 +7,7 @@ import java.util.Set;
 import com.arenella.recruit.recruiters.beans.OfferedCandidate.DAYS_ON_SITE;
 import com.arenella.recruit.recruiters.beans.OfferedCandidate.LANGUAGE;
 import com.arenella.recruit.recruiters.beans.OpenPosition.ContractType;
-import com.arenella.recruit.recruiters.beans.OpenPosition.Country;
+import com.arenella.recruit.recruiters.enums.COUNTRY;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 
@@ -22,7 +22,7 @@ public class OfferedCandidateAPIInbound {
 	
 	private String 						recruiterId;
 	private String 						candidateRoleTitle;
-	private Country	 					country;
+	private COUNTRY	 					country;
 	private String						location;
 	private ContractType 				contractType;
 	private DAYS_ON_SITE				daysOnSite;
@@ -76,7 +76,7 @@ public class OfferedCandidateAPIInbound {
 	* Returns the Country the Candidate is available to work in
 	* @return Country - Country where the Candidate is available to work
 	*/
-	public Country getCountry(){
+	public COUNTRY getCountry(){
 		return this.country;
 	}
 	
@@ -178,7 +178,7 @@ public class OfferedCandidateAPIInbound {
 		
 		private String 						recruiterId;
 		private String 						candidateRoleTitle;
-		private Country	 					country;
+		private COUNTRY	 					country;
 		private String						location;
 		private ContractType 				contractType;
 		private DAYS_ON_SITE				daysOnSite;
@@ -219,7 +219,7 @@ public class OfferedCandidateAPIInbound {
 		* @param country - Country Candidate is available in
 		* @return Builder
 		*/
-		public OfferedCandidateAPIInboundBuilder country(Country country) {
+		public OfferedCandidateAPIInboundBuilder country(COUNTRY country) {
 			
 			this.country = country;
 			

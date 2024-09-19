@@ -40,6 +40,7 @@ import {TranslateHttpLoader} 				from '@ngx-translate/http-loader';
 import {HttpClient} 						from '@angular/common/http';
 import { MatIconModule } 					from "@angular/material/icon";
 import { CandidateServiceService } from './candidate-service.service';
+import { RecruiterMarketplaceService } from './recruiter-marketplace.service';
 
 @NgModule({
   declarations: [
@@ -87,10 +88,10 @@ import { CandidateServiceService } from './candidate-service.service';
     BrowserAnimationsModule,
 	NgChartsModule.forRoot()
   ],
-  providers: [AuthGuardService, AuthService, CookieService, CandidateServiceService,{
+  providers: [AuthGuardService, AuthService, CookieService, CandidateServiceService,RecruiterMarketplaceService,{
       provide: APP_INITIALIZER,
       useFactory: initCandidateInfoBackendDataCalls,
-      deps: [CandidateServiceService], multi: true
+      deps: [CandidateServiceService, RecruiterMarketplaceService], multi: true
     }],
   bootstrap: [AppComponent]
 })
@@ -105,9 +106,11 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
 * API before service is available to components 
 */
 export function initCandidateInfoBackendDataCalls(
-  candidateService: CandidateServiceService
+  candidateService: CandidateServiceService,
+  recruiterMarketplaceService: RecruiterMarketplaceService
 ) {
   return async () => {
+	await recruiterMarketplaceService.initializeSupportedCountries();
     await candidateService.initializeSupportedCountries();
     await candidateService.initializeSupportedLanguages();
     await candidateService.initializeGeoZones();

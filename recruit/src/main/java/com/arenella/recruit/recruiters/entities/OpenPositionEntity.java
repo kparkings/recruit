@@ -20,7 +20,7 @@ import jakarta.persistence.Table;
 
 import com.arenella.recruit.recruiters.beans.OpenPosition;
 import com.arenella.recruit.recruiters.beans.OpenPosition.ContractType;
-import com.arenella.recruit.recruiters.beans.OpenPosition.Country;
+import com.arenella.recruit.recruiters.enums.COUNTRY;
 
 /**
 * Entity representation of an Open Position
@@ -42,7 +42,7 @@ public class OpenPositionEntity {
 	
 	@Column(name="country")
 	@Enumerated(EnumType.STRING)
-	private Country	 					country;
+	private COUNTRY	 					country;
 	
 	@Column(name="location")
 	private String						location;
@@ -140,7 +140,7 @@ public class OpenPositionEntity {
 	* Returns the Country the Open Position is based in
 	* @return Country of the Open Position
 	*/
-	public Country getCountry(){
+	public COUNTRY getCountry(){
 		return this.country;
 	}
 	
@@ -254,7 +254,7 @@ public class OpenPositionEntity {
 		private UUID 						id;
 		private String 						recruiterId;
 		private String 						positionTitle;
-		private Country	 					country;
+		private COUNTRY	 					country;
 		private String						location;
 		private ContractType 				contractType;
 		private String 						renumeration;
@@ -302,7 +302,7 @@ public class OpenPositionEntity {
 		* @param country - Country where the Position is located
 		* @return Builder
 		*/
-		public OpenPositionEntityBuilder country(Country country){
+		public OpenPositionEntityBuilder country(COUNTRY country){
 			this.country = country;
 			return this;
 		}

@@ -13,9 +13,11 @@ import { SelectableFunctionType } 						from '../shared-domain-object/function-t
 import { SelectableCountry } 							from '../shared-domain-object/country';
 import { StaticDataService } 							from '../static-data.service';
 import { HtmlOption } 									from '../html-option';
-import { InfoItemBlock, InfoItemConfig, InfoItemRowKeyValue, InfoItemRowMultiValues, InfoItemRowSingleValue } 				from '../candidate-info-box/info-item';
+import { InfoItemBlock, InfoItemConfig, InfoItemRowKeyValue, InfoItemRowKeyValueFlag, InfoItemRowMultiValues, InfoItemRowSingleValue } 				from '../candidate-info-box/info-item';
 import { ContractType } 								from '../suggestions/contract-type';
 import { TranslateService } 							from '@ngx-translate/core';
+import { SupportedCountry } from '../supported-candidate';
+import { CandidateServiceService } from '../candidate-service.service';
 
 @Component({
   selector: 'app-listing',
@@ -35,7 +37,7 @@ export class ListingComponent implements OnInit {
 	public createAlertStep:number 									= 0;
 	public listingAlertConfirmDisabled:boolean 						= true;
 	public infoItemConfig:InfoItemConfig 							= new InfoItemConfig();
-	
+	public supportedCountries:Array<SupportedCountry>				= new Array<SupportedCountry>();
 	public contractTypeOptions:Array<HtmlOption> 					= new Array<HtmlOption>();
 	
   	constructor(private listingService:ListingService, 
@@ -43,6 +45,7 @@ export class ListingComponent implements OnInit {
 				private _Activatedroute:ActivatedRoute, 
 				private modalService:NgbModal, 
 				private recruiterProfileService:RecruiterProfileService,
+				public 	candidateService:			CandidateServiceService,
 				private staticDataService:			StaticDataService,
 				private translate:TranslateService) { 
 		
@@ -69,6 +72,7 @@ export class ListingComponent implements OnInit {
   		this.selectableFunctionTypes 	= this.staticDataService.fetchFunctionTypes().map(ft => new SelectableFunctionType(ft, false));
 		this.selectableCountries 		= this.staticDataService.fetchCountries().map(c => new SelectableCountry(c, false));
 		this.contractTypeOptions 		= this.getContractTypeOptions();
+		this.supportedCountries 		= this.candidateService.getSupportedCountries();
   	
   	}
 
@@ -272,7 +276,7 @@ export class ListingComponent implements OnInit {
 				let locationBlock:InfoItemBlock = new InfoItemBlock();
 				locationBlock.setTitle(this.translate.instant('arenella-listing-location'));
 				if	(selectedListing!.country) {
-					locationBlock.addRow(new InfoItemRowKeyValue(this.translate.instant('arenella-listing-country'),this.getCountryCode(selectedListing!.country)));
+					locationBlock.addRow(new InfoItemRowKeyValueFlag(this.translate.instant('info-item-title-country'),"flag-icon-"+this.getCountryCode(selectedListing!.country)));
 				}
 				if	(selectedListing!.location) {
 					locationBlock.addRow(new InfoItemRowKeyValue(this.translate.instant('arenella-listing-city'),selectedListing!.location));
@@ -333,6 +337,30 @@ export class ListingComponent implements OnInit {
 		}
 		
 	}
+	
+	/**
+	* Returns the code identifying the country
+	* @param country - Country to get the country code for
+	*/
+	public getCountryCode(country:string):string{
+		
+		if (country == "EU_REMOTE") {
+			return "eu";
+		}
+		
+		if (country == "WORLD_REMOTE") {
+			return "xx";
+		}
+		
+		let supportedCountry =  this.supportedCountries.filter(c => c.name == country)[0];
+		
+		if (!supportedCountry) {
+			return country;
+		}
+		
+		return supportedCountry.iso2Code;
+		
+  	}
 	
 	/**
 	* Returns human readable version
@@ -439,13 +467,13 @@ export class ListingComponent implements OnInit {
 	* Returns the code identifying the country
 	* @param country - Country to get the country code for
 	*/
-	public getCountryCode(country:string):string{
+//	public getCountryCode(country:string):string{
 
-		const matchingCountry = this.staticDataService.fetchCountries().filter(countryObj => countryObj.key == country)[0];
+//		const matchingCountry = this.staticDataService.fetchCountries().filter(countryObj => countryObj.key == country)[0];
+//		
+//		return matchingCountry == null ? "NA" : matchingCountry.humanReadable;
 		
-		return matchingCountry == null ? "NA" : matchingCountry.humanReadable;
-		
-  	}
+ // 	}
 
 	/**
 	* Returns the code identifying the country

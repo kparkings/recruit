@@ -13,7 +13,7 @@ import com.arenella.recruit.recruiters.beans.OfferedCandidate.DAYS_ON_SITE;
 import com.arenella.recruit.recruiters.beans.OfferedCandidate.LANGUAGE;
 import com.arenella.recruit.recruiters.beans.OfferedCandidateAPIOutbound.RecruiterDetails;
 import com.arenella.recruit.recruiters.beans.OpenPosition.ContractType;
-import com.arenella.recruit.recruiters.beans.OpenPosition.Country;
+import com.arenella.recruit.recruiters.enums.COUNTRY;
 
 /**
 * Unit tests for the OfferedCandidateAPIOutbound class
@@ -24,7 +24,7 @@ public class OfferedCandidateAPIOutboundTest {
 	private static final UUID 			ID 						= UUID.randomUUID();
 	private static final String 		RECRUITER_ID 			= "aRecruiterId";
 	private static final String 		CANDIDATE_ROLE_TITLE 	= "Java Developer";
-	private static final Country	 	COUNTRY 				= Country.BELGIUM;
+	private static final COUNTRY	 	COUNTRY_VAL				= COUNTRY.BELGIUM;
 	private static final String			LOCATION 				= "Brussels";
 	private static final ContractType 	CONTRACT_TYPE 			= ContractType.CONTRACT;
 	private static final DAYS_ON_SITE	DAYS_ON_SITE_VAL 		= DAYS_ON_SITE.ZERO;
@@ -51,7 +51,7 @@ public class OfferedCandidateAPIOutboundTest {
 		final UUID 				id						= UUID.randomUUID();
 		final RecruiterDetails 	recruiter				= new RecruiterDetails(recruiterId, recruiterName, companyName, email);
 		final String 			candidateRoleTitle		= "Java Dev";
-		final Country	 		country					= Country.BELGIUM;
+		final COUNTRY	 		country					= COUNTRY.BELGIUM;
 		final String			location				= "Brusells";
 		final ContractType 		contractType			= ContractType.BOTH;
 		final DAYS_ON_SITE		daysOnSite			 	= DAYS_ON_SITE.FIVE;
@@ -131,7 +131,7 @@ public class OfferedCandidateAPIOutboundTest {
 				.comments(COMMENTS)
 				.contractType(CONTRACT_TYPE)
 				.coreSkills(CORE_SKILLS)
-				.country(COUNTRY)
+				.country(COUNTRY_VAL)
 				.created(CREATED)
 				.daysOnSite(DAYS_ON_SITE_VAL)
 				.description(DESCRIPTION)
@@ -154,7 +154,7 @@ public class OfferedCandidateAPIOutboundTest {
 		assertEquals(ID, 					out.getId());
 		assertEquals(rd,		 			out.getRecruiter());
 		assertEquals(CANDIDATE_ROLE_TITLE, 	out.getCandidateRoleTitle());
-		assertEquals(COUNTRY, 				out.getCountry());
+		assertEquals(COUNTRY_VAL, 			out.getCountry());
 		assertEquals(LOCATION, 				out.getLocation());
 		assertEquals(CONTRACT_TYPE, 		out.getContractType());
 		assertEquals(DAYS_ON_SITE_VAL, 		out.getDaysOnSite());

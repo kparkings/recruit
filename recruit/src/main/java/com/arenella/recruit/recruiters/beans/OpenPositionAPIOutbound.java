@@ -8,7 +8,7 @@ import java.util.UUID;
 
 import com.arenella.recruit.recruiters.beans.OfferedCandidateAPIOutbound.RecruiterDetails;
 import com.arenella.recruit.recruiters.beans.OpenPosition.ContractType;
-import com.arenella.recruit.recruiters.beans.OpenPosition.Country;
+import com.arenella.recruit.recruiters.enums.COUNTRY;
 
 /**
 * Represents an Open Position that needs to be filled and 
@@ -20,7 +20,7 @@ public class OpenPositionAPIOutbound {
 	private UUID 						id;
 	private RecruiterDetails 			recruiter;
 	private String 						positionTitle;
-	private Country	 					country;
+	private COUNTRY	 					country;
 	private String						location;
 	private ContractType 				contractType;
 	private String	 					renumeration;
@@ -84,7 +84,7 @@ public class OpenPositionAPIOutbound {
 	* Returns the Country the Open Position is based in
 	* @return Country of the Open Position
 	*/
-	public Country getCountry(){
+	public COUNTRY getCountry(){
 		return this.country;
 	}
 	
@@ -188,7 +188,7 @@ public class OpenPositionAPIOutbound {
 		private UUID 						id;
 		private RecruiterDetails			recruiter;
 		private String 						positionTitle;
-		private Country	 					country;
+		private COUNTRY	 					country;
 		private String						location;
 		private ContractType 				contractType;
 		private String	 					renumeration;
@@ -236,7 +236,7 @@ public class OpenPositionAPIOutbound {
 		* @param country - Country where the Position is located
 		* @return Builder
 		*/
-		public OpenPositionAPIOutboundBuilder country(Country country){
+		public OpenPositionAPIOutboundBuilder country(COUNTRY country){
 			this.country = country;
 			return this;
 		}

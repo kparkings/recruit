@@ -8,7 +8,7 @@ import java.util.UUID;
 import com.arenella.recruit.recruiters.beans.OfferedCandidate.DAYS_ON_SITE;
 import com.arenella.recruit.recruiters.beans.OfferedCandidate.LANGUAGE;
 import com.arenella.recruit.recruiters.beans.OpenPosition.ContractType;
-import com.arenella.recruit.recruiters.beans.OpenPosition.Country;
+import com.arenella.recruit.recruiters.enums.COUNTRY;
 
 /**
 * Represents an Offered Candidate that needs to be placed and 
@@ -20,7 +20,7 @@ public class OfferedCandidateAPIOutbound {
 	private UUID 						id;
 	private RecruiterDetails 			recruiter;
 	private String 						candidateRoleTitle;
-	private Country	 					country;
+	private COUNTRY	 					country;
 	private String						location;
 	private ContractType 				contractType;
 	private DAYS_ON_SITE				daysOnSite;
@@ -87,7 +87,7 @@ public class OfferedCandidateAPIOutbound {
 	* Returns the Country the Candidate is available to work in
 	* @return Country - Country where the Candidate is available to work
 	*/
-	public Country getCountry(){
+	public COUNTRY getCountry(){
 		return this.country;
 	}
 	
@@ -205,7 +205,7 @@ public class OfferedCandidateAPIOutbound {
 		private UUID 						id;
 		private RecruiterDetails			recruiter;
 		private String 						candidateRoleTitle;
-		private Country	 					country;
+		private COUNTRY	 					country;
 		private String						location;
 		private ContractType 				contractType;
 		private DAYS_ON_SITE				daysOnSite;
@@ -260,7 +260,7 @@ public class OfferedCandidateAPIOutbound {
 		* @param country - Country Candidate is available in
 		* @return Builder
 		*/
-		public OfferedCandidateAPIOutboundBuilder country(Country country) {
+		public OfferedCandidateAPIOutboundBuilder country(COUNTRY country) {
 			
 			this.country = country;
 			

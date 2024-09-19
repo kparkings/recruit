@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 import com.arenella.recruit.recruiters.beans.OfferedCandidate.DAYS_ON_SITE;
 import com.arenella.recruit.recruiters.beans.OfferedCandidate.LANGUAGE;
 import com.arenella.recruit.recruiters.beans.OpenPosition.ContractType;
-import com.arenella.recruit.recruiters.beans.OpenPosition.Country;
+import com.arenella.recruit.recruiters.enums.COUNTRY;
 
 /**
 * Unit tests for the OfferedCandidate Class
@@ -21,7 +21,7 @@ public class OfferedCandidateAPIInboundTest {
 	
 	private static final String 		RECRUITER_ID 			= "aRecruiterId";
 	private static final String 		CANDIDATE_ROLE_TITLE 	= "Java Developer";
-	private static final Country	 	COUNTRY 				= Country.BELGIUM;
+	private static final COUNTRY	 	COUNTRY_VAL				= COUNTRY.BELGIUM;
 	private static final String			LOCATION 				= "Brussels";
 	private static final ContractType 	CONTRACT_TYPE 			= ContractType.CONTRACT;
 	private static final DAYS_ON_SITE	DAYS_ON_SITE_VAL 		= DAYS_ON_SITE.ZERO;
@@ -46,7 +46,7 @@ public class OfferedCandidateAPIInboundTest {
 				.comments(COMMENTS)
 				.contractType(CONTRACT_TYPE)
 				.coreSkills(CORE_SKILLS)
-				.country(COUNTRY)
+				.country(COUNTRY_VAL)
 				.daysOnSite(DAYS_ON_SITE_VAL)
 				.description(DESCRIPTION)
 				.location(LOCATION)
@@ -58,7 +58,7 @@ public class OfferedCandidateAPIInboundTest {
 		
 		assertEquals(RECRUITER_ID, 			candidate.getRecruiterId());
 		assertEquals(CANDIDATE_ROLE_TITLE, 	candidate.getCandidateRoleTitle());
-		assertEquals(COUNTRY, 				candidate.getCountry());
+		assertEquals(COUNTRY_VAL, 			candidate.getCountry());
 		assertEquals(LOCATION, 				candidate.getLocation());
 		assertEquals(CONTRACT_TYPE,			candidate.getContractType());
 		assertEquals(DAYS_ON_SITE_VAL, 		candidate.getDaysOnSite());
@@ -86,7 +86,7 @@ public class OfferedCandidateAPIInboundTest {
 				.comments(COMMENTS)
 				.contractType(CONTRACT_TYPE)
 				.coreSkills(CORE_SKILLS)
-				.country(COUNTRY)
+				.country(COUNTRY_VAL)
 				.daysOnSite(DAYS_ON_SITE_VAL)
 				.description(DESCRIPTION)
 				.location(LOCATION)
@@ -100,7 +100,7 @@ public class OfferedCandidateAPIInboundTest {
 		
 		assertEquals(RECRUITER_ID, 			domain.getRecruiterId());
 		assertEquals(CANDIDATE_ROLE_TITLE, 	domain.getcandidateRoleTitle());
-		assertEquals(COUNTRY, 				domain.getcountry());
+		assertEquals(COUNTRY_VAL, 			domain.getcountry());
 		assertEquals(LOCATION, 				domain.getlocation());
 		assertEquals(CONTRACT_TYPE,			domain.getcontractType());
 		assertEquals(DAYS_ON_SITE_VAL, 		domain.getDaysOnSite());
