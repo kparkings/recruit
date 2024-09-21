@@ -218,7 +218,7 @@ export class SuggestionsComponent implements OnInit {
 		
 		this.resetSearchFilters(false);
 			
-			this.skillFilters 				= extractedFilters.skills;
+			this.skillFilters 				= extractedFilters.skills.sort();
 			
 			if (extractedFilters.jobTitle != ''){
 				this.suggestionFilterForm.get('searchPhrase')?.setValue(extractedFilters.jobTitle);	
@@ -588,6 +588,7 @@ export class SuggestionsComponent implements OnInit {
 		
 		if (skillFormatted.length > 0 && this.skillFilters.indexOf(skillFormatted) == -1) {
 			this.skillFilters.push(skillFormatted);	
+			this.skillFilters.sort();
 		}
 		
 		this.getSuggestions(false);

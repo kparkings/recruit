@@ -173,10 +173,8 @@
 								</thead>
 								<tbody>
 									<tr *ngFor="let search of recruiterStats.uniqueSearches">
-										<td *ngIf="search.country === 'NETHERLANDS'"  			class="flag-icon flag-icon-nl suggestion-flag-country listing-country"></td>
-										<td *ngIf="search.country === 'BELGIUM'"				class="flag-icon flag-icon-be suggestion-flag-country listing-country"></td>
-										<td *ngIf="search.country === 'UK'"						class="flag-icon flag-icon-gb suggestion-flag-country listing-country"></td>
-										<td *ngIf="search.country === 'REPUBLIC_OF_IRELAND'"	class="flag-icon flag-icon-ie suggestion-flag-country listing-country"></td>
+										
+										<td class="flag-icon flag-icon-{{getIso2Code(search.country)}} suggestion-flag-country listing-country"></td>
 										<td>{{getFunctionLabel(search.function)}}</td>
 									</tr>
 								</tbody>

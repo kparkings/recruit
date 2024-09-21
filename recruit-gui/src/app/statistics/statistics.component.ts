@@ -10,6 +10,7 @@ import { CandidateServiceService }							from '../candidate-service.service';
 
 import { Chart } from 'chart.js';
 import { ListingStatistics, ViewItem } from '../listing-statistics';
+import { SupportedCountry } from '../supported-candidate';
 
 @Component({
   selector: 'app-statistics',
@@ -81,6 +82,7 @@ export class StatisticsComponent implements OnInit {
 	private loginsToday:string[] 								= new Array<string>();
 	private loginsUserIdsWeek:string[] 							= new Array<string>();
 	private loginsWeek:string[] 								= new Array<string>();
+	public supportedCountries:Array<SupportedCountry>			= new Array<SupportedCountry>();
 	private marketplaceChartData 								= [{label: "",data: [''],backgroundColor: ''}];
 	private listingsChartData 									= [{label: "",data: [''],backgroundColor: ''}];
 	private availabilityChartData 								= [{label: "",data: [''],backgroundColor: ''}];
@@ -136,7 +138,7 @@ export class StatisticsComponent implements OnInit {
 	}
 
 	ngOnInit(): void {
-		//this.switchTab('logins');
+		this.supportedCountries = this.candidateService.getSupportedCountries();
 	}
 	
 	public recruiterStats:RecruiterSearchStatistics = new RecruiterSearchStatistics();
@@ -612,5 +614,16 @@ export class StatisticsComponent implements OnInit {
 	    });
 	    
   	}
+  	
+  	public getIso2Code(countryCode:string):string{
+		  
+		let country:SupportedCountry = this.supportedCountries.filter(c => c.name == countryCode)[0];
+		
+		if (!country) {
+			return 'xx';
+		}
+		
+		return country.iso2Code;
+	}
 
 }

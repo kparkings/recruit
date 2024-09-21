@@ -76,8 +76,8 @@
 					</thead>
 					<tbody>
 						<tr  *ngFor="let openPosition of openPositions" class="as-link">
-							<td class="table-bdy-td td-date" *ngIf="openPosition.viewed || !isNotMineOP(openPosition)" 	(click)="viewOpenPosition(openPosition)">{{openPosition.created}}</td>
-							<td class="table-bdy-td td-date" *ngIf="!openPosition.viewed && isNotMineOP(openPosition)" 	(click)="viewOpenPosition(openPosition)"><b>{{openPosition.created}}</b></td>
+							<td class="table-bdy-td td-date" *ngIf="openPosition.viewed || !isNotMineOP(openPosition)" 	(click)="viewOpenPosition(openPosition)">{{openPosition.created | date: 'dd/MM/yyyy'}}</td>
+							<td class="table-bdy-td td-date" *ngIf="!openPosition.viewed && isNotMineOP(openPosition)" 	(click)="viewOpenPosition(openPosition)"><b>{{openPosition.created | date: 'dd/MM/yyyy'}}</b></td>
 
 							<td class="table-bdy-td" 		 *ngIf="openPosition.viewed || !isNotMineOP(openPosition)"	(click)="viewOpenPosition(openPosition)">{{openPosition.positionTitle}}</td>
 							<td class="table-bdy-td" 		 *ngIf="!openPosition.viewed && isNotMineOP(openPosition)"	(click)="viewOpenPosition(openPosition)"><b>{{openPosition.positionTitle}}</b></td>
@@ -86,8 +86,8 @@
 								<span title="{{openPosition.country}}" class="flag-icon flag-icon-{{getCountryCode(openPosition.country)}} suggestion-flag-country listing-country"></span>	
 							</td>
 							
-							<td class="table-bdy-td td-date" (click)="viewOpenPosition(openPosition)" *ngIf="!showJustMyOpenPositionsActive && (openPosition.viewed || !isNotMineOP(openPosition))">{{openPosition.positionClosingDate}}</td>
-							<td class="table-bdy-td td-date" (click)="viewOpenPosition(openPosition)" *ngIf="!showJustMyOpenPositionsActive && !openPosition.viewed && isNotMineOP(openPosition)"><b>{{openPosition.positionClosingDate}}</b></td>
+							<td class="table-bdy-td td-date" (click)="viewOpenPosition(openPosition)" *ngIf="!showJustMyOpenPositionsActive && (openPosition.viewed || !isNotMineOP(openPosition))">{{openPosition.positionClosingDate | date: 'dd/MM/yyyy'}}</td>
+							<td class="table-bdy-td td-date" (click)="viewOpenPosition(openPosition)" *ngIf="!showJustMyOpenPositionsActive && !openPosition.viewed && isNotMineOP(openPosition)"><b>{{openPosition.positionClosingDate | date: 'dd/MM/yyyy'}}</b></td>
 						</tr>
 						
 					</tbody>	
