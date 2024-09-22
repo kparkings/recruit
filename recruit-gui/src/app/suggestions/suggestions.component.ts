@@ -41,12 +41,13 @@ export class SuggestionsComponent implements OnInit {
 	@Input()  parentComponent:string = "";
 	@Output() switchViewEvent 						= new EventEmitter<string>();
 	
- 	@ViewChild('specUploadBox', { static: true }) 		specUploadDialogBox!: ElementRef<HTMLDialogElement>;
- 	@ViewChild('feedbackBox', { static: true }) 		feedbackDialogBox!: ElementRef<HTMLDialogElement>;
- 	@ViewChild('publicityModal', {static:true})			publicityDialogBox!: ElementRef<HTMLDialogElement>;
- 	@ViewChild('confirmDeleteModal', {static:true})		confirmDeleteDialogBox!: ElementRef<HTMLDialogElement>;
- 	@ViewChild('contactBox', {static:true})				contactDialogBox!: ElementRef<HTMLDialogElement>;
- 	@ViewChild('paidSubscriptionModal', {static:true})	paidSubscriptionBox!: ElementRef<HTMLDialogElement>;
+ 	@ViewChild('specUploadBox', { static: true }) 				specUploadDialogBox!: ElementRef<HTMLDialogElement>;
+ 	@ViewChild('feedbackBox', { static: true }) 				feedbackDialogBox!: ElementRef<HTMLDialogElement>;
+ 	@ViewChild('publicityModal', {static:true})					publicityDialogBox!: ElementRef<HTMLDialogElement>;
+ 	@ViewChild('confirmDeleteModal', {static:true})				confirmDeleteDialogBox!: ElementRef<HTMLDialogElement>;
+ 	@ViewChild('contactBox', {static:true})						contactDialogBox!: ElementRef<HTMLDialogElement>;
+ 	@ViewChild('paidSubscriptionModal', {static:true})			paidSubscriptionBox!: ElementRef<HTMLDialogElement>;
+ 	@ViewChild('searchTypeFilterSelectionModal', {static:true}) searchTypeFilterSelectionModal!: ElementRef<HTMLDialogElement>;
  	
  	public back():void{
 		this.switchViewEvent.emit();	 
@@ -86,15 +87,19 @@ export class SuggestionsComponent implements OnInit {
 	public supportedCountries:Array<SupportedCountry>			= new Array<SupportedCountry>();
 	public publicitySuggestions:Array<Candidate>  				= new Array<Candidate>();
 	public createAlertForm:UntypedFormGroup 					= new UntypedFormGroup({
-		alertName:			new UntypedFormControl(''),
+		alertName:												new UntypedFormControl(''),
 	});
 	
 	public suggestionFilterForm:UntypedFormGroup 				= new UntypedFormGroup({});
 	public skilFilterForm:UntypedFormGroup 						= new UntypedFormGroup({
-		skill: 					new UntypedFormControl(''),
+		skill: 													new UntypedFormControl(''),
 	});
 	public filterByJobSpecForm:UntypedFormGroup 				= new UntypedFormGroup({
-		specAsText:				new UntypedFormControl('Enter Job specification Text here...'),
+		specAsText:												new UntypedFormControl('Enter Job specification Text here...'),
+	});
+	
+	public filterTypeFormGroup:UntypedFormGroup					= new UntypedFormGroup({
+		searchType:												new UntypedFormControl('FUNCTION'),
 	});
 	
 	/**
@@ -339,12 +344,18 @@ export class SuggestionsComponent implements OnInit {
 	public resetSuggestionFilterForm():void{
 		this.suggestionFilterForm = 				new UntypedFormGroup({
 			searchPhrase:							new UntypedFormControl(''),
+			searchPhraseFirstName:					new UntypedFormControl('First Name'),
+			searchPhraseSurname:					new UntypedFormControl('Surname'),
 			contractType: 							new UntypedFormControl('Both'),
 			minYearsExperience: 					new UntypedFormControl(''),
 			maxYearsExperience: 					new UntypedFormControl(''),
 			skill: 									new UntypedFormControl(''),
 			includeUnavailableCandidates: 			new UntypedFormControl(''),
 			includeRequiresSponsorshipCandidates:	new UntypedFormControl(''),
+		});
+		
+		this.filterTypeFormGroup					= new UntypedFormGroup({
+			searchType:												new UntypedFormControl('FUNCTION'),
 		});
 		
 		this.candidateService.getSupportedCountries().forEach(c => {
@@ -471,7 +482,7 @@ export class SuggestionsComponent implements OnInit {
 		
 		const maxSuggestions:number 		= 112;
 		
-		let params:SuggestionParams = new SuggestionParams(this.suggestionFilterForm, this.skillFilters, new Array<string>(), this.candidateService.getGeoZones(), this.candidateService.supportedCountries, this.supportedLanguages);
+		let params:SuggestionParams = new SuggestionParams(this.filterTypeFormGroup, this.suggestionFilterForm, this.skillFilters, new Array<string>(), this.candidateService.getGeoZones(), this.candidateService.supportedCountries, this.supportedLanguages);
 		
 		let backendRequestId = this.backendRequestCounter + 1;
 		this.backendRequestCounter = backendRequestId;
@@ -490,7 +501,10 @@ export class SuggestionsComponent implements OnInit {
 									params.getSkills(),
 									params.getIncludUnavailableCandidates(),
 									params.getIncludRequiresSponsorshipCandidates(),
-									isUnfiltered
+									isUnfiltered,
+									params.getFirstName(),
+									params.getSurname(),
+									params.getEmail()
 									).pipe(
 										  map((response) => {
 										  
@@ -850,7 +864,7 @@ export class SuggestionsComponent implements OnInit {
 		this.showSaveAlertBoxSuccess 	= false;
 		this.showSaveAlertBoxFailure 	= false;
 		
-		let params:SuggestionParams 	= new SuggestionParams(this.suggestionFilterForm, this.skillFilters, new Array<string>(), this.candidateService.getGeoZones(), this.supportedCountries, this.supportedLanguages);
+		let params:SuggestionParams 	= new SuggestionParams(this.filterTypeFormGroup, this.suggestionFilterForm, this.skillFilters, new Array<string>(), this.candidateService.getGeoZones(), this.supportedCountries, this.supportedLanguages);
 		let alert:CandidateSearchAlert 	= new CandidateSearchAlert();
 		
 		alert.alertName 			= this.createAlertForm.get(('alertName'))?.value;
@@ -1170,6 +1184,59 @@ export class SuggestionsComponent implements OnInit {
 		
 		return "candidate-available-" + candidate.available;
 		
+	}
+	
+	/**
+ 	* Shows search type selection modal 
+	*/
+	public doShowSearchTypeFilterSelectionModal():void{
+		this.resetSearhFields();
+		this.searchTypeFilterSelectionModal.nativeElement.showModal();;
+	}
+	
+	public getCurrentSearchFilterType():string{
+		return this.filterTypeFormGroup.get('searchType')?.value;
+	}
+	
+	public cssSearchNameDefault():string{
+		
+		if (this.getCurrentSearchFilterType() != 'NAME') {
+			return '';
+		}
+		
+		let firstName:string = this.suggestionFilterForm.get('searchPhraseFirstName')?.value;
+		let surname:string = this.suggestionFilterForm.get('searchPhraseSurname')?.value;
+		
+		if (firstName == 'First Name' || surname == 'Surname'){
+			return 'search-name-default';
+		}
+		
+		return '';
+		
+	}
+	
+	public resetSearhFields():void{
+		this.suggestionFilterForm.get('searchPhraseFirstName')?.setValue('First Name');
+		this.suggestionFilterForm.get('searchPhraseSurname')?.setValue('Surname');
+		this.suggestionFilterForm.get('searchPhrase')?.setValue('');
+	} 
+	
+	public activateSearhFields():void{
+		
+		let firstName:string 	= this.suggestionFilterForm.get('searchPhraseFirstName')?.value;
+		let surname:string 		= this.suggestionFilterForm.get('searchPhraseSurname')?.value;
+		
+		if(firstName && firstName == 'First Name'){
+			this.suggestionFilterForm.get('searchPhraseFirstName')?.setValue('');	
+		}
+		
+		if(surname && surname == 'Surname'){
+			this.suggestionFilterForm.get('searchPhraseSurname')?.setValue('');
+		}
+		
+		
+		
+		this.suggestionFilterForm.get('searchPhrase')?.setValue('');
 	}
 	
 }

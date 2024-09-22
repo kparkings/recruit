@@ -71,7 +71,7 @@
 							<th class="bg-tab-hdr">{{'arenella-recruiter-mp-roles-created' | translate}}</th>
 							<th class="bg-tab-hdr">{{'arenella-recruiter-mp-roles-position' | translate}}</th>
 							<th class="bg-tab-hdr" *ngIf="!showJustMyOpenPositionsActive">{{'arenella-recruiter-mp-roles-country' | translate}}</th>
-							<th class="bg-tab-hdr" *ngIf="!showJustMyOpenPositionsActive">{{'arenella-recruiter-mp-roles-closing' | translate}}</th>
+							<th class="bg-tab-hdr closing-date-marketplace" *ngIf="!showJustMyOpenPositionsActive">{{'arenella-recruiter-mp-roles-closing' | translate}}</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -86,8 +86,8 @@
 								<span title="{{openPosition.country}}" class="flag-icon flag-icon-{{getCountryCode(openPosition.country)}} suggestion-flag-country listing-country"></span>	
 							</td>
 							
-							<td class="table-bdy-td td-date" (click)="viewOpenPosition(openPosition)" *ngIf="!showJustMyOpenPositionsActive && (openPosition.viewed || !isNotMineOP(openPosition))">{{openPosition.positionClosingDate | date: 'dd/MM/yyyy'}}</td>
-							<td class="table-bdy-td td-date" (click)="viewOpenPosition(openPosition)" *ngIf="!showJustMyOpenPositionsActive && !openPosition.viewed && isNotMineOP(openPosition)"><b>{{openPosition.positionClosingDate | date: 'dd/MM/yyyy'}}</b></td>
+							<td class="table-bdy-td td-date closing-date-marketplace"  (click)="viewOpenPosition(openPosition)" *ngIf="!showJustMyOpenPositionsActive && (openPosition.viewed || !isNotMineOP(openPosition))">{{openPosition.positionClosingDate | date: 'dd/MM/yyyy'}}</td>
+							<td class="table-bdy-td td-date closing-date-marketplace" (click)="viewOpenPosition(openPosition)" *ngIf="!showJustMyOpenPositionsActive && !openPosition.viewed && isNotMineOP(openPosition)"><b>{{openPosition.positionClosingDate | date: 'dd/MM/yyyy'}}</b></td>
 						</tr>
 						
 					</tbody>	

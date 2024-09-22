@@ -25,9 +25,11 @@
 				<div *ngIf="currentView === 'suggestion-results'">		
 					<table class="mobile-search-box">
 						<tr>
-							<td class="sugg-srch-hdr">{{'arenella-suggestions-job-title' | translate}}</td>
+							<td class="sugg-srch-hdr" >{{'arenella-suggestions-job-title' | translate}}<span style="cursor:pointer; color:green;" (click)='doShowSearchTypeFilterSelectionModal()'> ...</span></td>
 							<td class="sugg-srch-bdy">
-								<input type="text" value="Java Developer" class="sugg-srch-job-title" formControlName="searchPhrase">
+								<input type="text" value="Java Developer" 	class="sugg-srch-job-title" 									formControlName="searchPhrase" 				*ngIf="getCurrentSearchFilterType() === 'FUNCTION' || getCurrentSearchFilterType() == 'EMAIL'">
+								<input type="text" value="First Name" 		class="sugg-srch-job-title-name {{cssSearchNameDefault()}}" 	formControlName="searchPhraseFirstName" 	*ngIf="getCurrentSearchFilterType() === 'NAME'" (click)="activateSearhFields()">
+								<input type="text" value="Surname" 			class="sugg-srch-job-title-name {{cssSearchNameDefault()}}" 	formControlName="searchPhraseSurname" 		*ngIf="getCurrentSearchFilterType() === 'NAME'" (click)="activateSearhFields()">
 							</td>
 						</tr>
 						<tr>
@@ -266,4 +268,32 @@
 		<button class="btn btn-secondary" (click)="choseSubscription()" download>{{'arenella-suggestions-paid-subscription-choose-subscription-btn' | translate}}</button>
 	</div> 
 </dialog>
+<!-- Search box filter type selection -->
+<dialog #searchTypeFilterSelectionModal>
 
+	<!--  Options -->
+	<div class="modal-header">
+		<h4 class="modal-title"></h4>
+		<div class="filter-close-box" (click)="searchTypeFilterSelectionModal.close()">X</div>
+	</div>
+	<div class="modal-body">
+		<form [formGroup]="filterTypeFormGroup">	
+			<table style="width:50%; margin-left:auto; margin-right:auto;">
+			
+				<tr>
+					<td style="padding:10px;"><input type="radio"  value="FUNCTION" formControlName="searchType"></td>
+					<td style="text-align:left;font-weight:bold;"><label class="radio-button_label">Function</label></td>
+				</tr>
+				<tr>
+					<td style="padding:10px;"><input type="radio" value="NAME" formControlName="searchType"></td>
+					<td style="text-align:left;font-weight:bold;"><label class="radio-button_label">Name</label></td>
+				</tr>
+				<tr>
+					<td style="padding:10px;"><input type="radio" value="EMAIL" formControlName="searchType"></td>
+					<td style="text-align:left;font-weight:bold;"><label class="radio-button_label">Email</label></td>
+				</tr>
+			</table>
+		</form>
+		
+	</div> 
+</dialog>

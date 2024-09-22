@@ -34,7 +34,11 @@ export class SuggestionsService {
 							skills:Array<string>,
 							includeUnavailableCandidates:string, 
 							includeRequiresSponsorshipCandidates:string, 
-							isUnfiltered:boolean): Observable<any>{
+							isUnfiltered:boolean,
+							firstName:string,
+							surname:string,
+							email:string): Observable<any>
+							{
 		
 		return this.candidateService.getCandidates(this.getCandidateFilterParamString(	backendRequestId,
 																						maxNumberOfSuggestions, 
@@ -49,7 +53,10 @@ export class SuggestionsService {
 																						includeUnavailableCandidates,
 																						includeRequiresSponsorshipCandidates,
 																						skills,
-																						isUnfiltered
+																						isUnfiltered,
+																						firstName,
+																						surname,
+																						email
 																						));
 		
 	}
@@ -70,7 +77,11 @@ export class SuggestionsService {
 											includeUnavailableCandidates:string,
 											includeRequiresSponsorshipCandidates:string, 
 											skills:Array<string>,
-											isUnfiltered:boolean):string{
+											isUnfiltered:boolean,
+											firstName:string,
+											surname:string,
+											email:string):string
+											{
 
 		const filterParams:string = 'orderAttribute=candidateId&order=desc'
                                                          + '&page=0'
@@ -85,10 +96,47 @@ export class SuggestionsService {
                                                          + this.includeUnavailableCandidates(includeUnavailableCandidates)
                                                          + this.includeRequiresSponsorshipCandidates(includeRequiresSponsorshipCandidates)
 														 + this.getSkillsParamString(skills)
-														 + this.getLanguagesParamString(languages);
+														 + this.getLanguagesParamString(languages)
+														 + this.getFirstName(firstName)
+														 + this.getSurname(surname)
+														 + this.getEmail(email);
+														 
 					                                  
 		return filterParams;
 	
+	}
+	
+	/**
+	* Constructs search param for firstName 
+	*/
+	private getFirstName(firstName:string):string{
+		if (firstName && firstName.length > 0) {
+			return '&firstname='+firstName;
+		}
+		
+		return '';
+	}
+	
+	/**
+	* Constructs search param for surname 
+	*/
+	private getSurname(surname:string):string{
+		if (surname && surname.length > 0) {
+			return '&surname='+surname;
+		}
+		
+		return '';
+	}
+	
+	/**
+	* Constructs search param for email 
+	*/
+	private getEmail(email:string):string{
+		if (email && email.length > 0) {
+			return '&email='+email;
+		}
+		
+		return '';	
 	}
 	
 	/**
@@ -184,18 +232,6 @@ export class SuggestionsService {
 		languages.forEach(lang => {
 			paramString = paramString +  '&' + lang.toLowerCase() + '=PROFICIENT';
 		});
-		
-		//if (languages.indexOf('DUTCH')  >= 0 ) {
-		//	paramString = paramString +  '&dutch=' + 'PROFICIENT';
-		//}
-		
-		//if (languages.indexOf('FRENCH')  >= 0 ) {
-		//	paramString = paramString +  '&french=' + 'PROFICIENT';
-		//}
-		
-		//if (languages.indexOf('ENGLISH')  >= 0 ) {
-		//	paramString = paramString +  '&english=' + 'PROFICIENT';
-		//}  
 		
 		return paramString;
   

@@ -161,6 +161,17 @@ textarea {
 .sugg-srch-job-title{
 	min-width:1000px;
 }
+
+.sugg-srch-job-title-name{
+	margin-right:20px;
+	min-width:500px;
+}
+
+.search-name-default{
+	font-style:italic;
+	color:#6c757d;
+	font-weight:bold;
+}
 /**
 .sugg-srch-job-title-mobile{
 	min-width:0px;
@@ -248,6 +259,11 @@ textarea {
 	 }
 	 	 
 	 .sugg-srch-job-title{
+		min-width:0px;
+	}
+	
+	.sugg-srch-job-title-name{
+		margin-right:20px;
 		min-width:0px;
 	}
 	

@@ -16,7 +16,11 @@ export class SuggestionParams{
 	private skills:Array<string> 						= new Array<string>();
 	private functionTypes:Array<string>					= new Array<string>();
 	private languages:Array<string> 					= new Array<string>();
+	private filterType:string 								= "";
 	private title:string 								= "";
+	private firstName:string 							= "";
+	private surname:string 								= "";
+	private email:string 								= "";
 	private contract:string 							= "";
 	private perm:string 								= "";
 	private minExperience:string 						= "";
@@ -30,8 +34,9 @@ export class SuggestionParams{
 	* @param skillFilters			- contains raw skill filter info 
 	* @param functionTypes			- contains raw function types info
 	*/
-	public constructor(suggestionFilterForm:UntypedFormGroup, skillFilters:Array<string>, functionTypes:Array<string>, public availableGeoZones:Array<GeoZone>, public supportedCountries:Array<SupportedCountry>, supportedLanguages:Array<SupportedLanguage>){
+	public constructor(filterTypeFormGroup:UntypedFormGroup, suggestionFilterForm:UntypedFormGroup, skillFilters:Array<string>, functionTypes:Array<string>, public availableGeoZones:Array<GeoZone>, public supportedCountries:Array<SupportedCountry>, supportedLanguages:Array<SupportedLanguage>){
 		
+		this.filterType 	= filterTypeFormGroup.get('searchType')?.value;
 		this.skills 		= skillFilters.concat();
 		this.functionTypes	= functionTypes;
 		this.title  		= suggestionFilterForm.get('searchPhrase')?.value;
@@ -40,6 +45,21 @@ export class SuggestionParams{
 		
 		this.unavailableCadidates = suggestionFilterForm.get('includeUnavailableCandidates')?.value;
 		this.includeRequiresSponsorship = suggestionFilterForm.get('includeRequiresSponsorshipCandidates')?.value;
+		
+		
+		
+		if (this.filterType != 'FUNCTION') {
+			this.title = '';
+		}
+		
+		if (this.filterType == 'EMAIL') {
+			this.email = suggestionFilterForm.get('searchPhrase')?.value;
+		}
+		
+		if (this.filterType == 'NAME') {
+			this.firstName = suggestionFilterForm.get('searchPhraseFirstName')?.value;
+			this.surname = suggestionFilterForm.get('searchPhraseSurname')?.value;
+		}
 		
 		/**
 		* Add any geoZone filters 	
@@ -70,24 +90,8 @@ export class SuggestionParams{
 		supportedLanguages.forEach(lang => {
 			if (suggestionFilterForm.get(lang.languageCode.toLowerCase()+'Language')?.value) {
 				this.languages.push(lang.languageCode);
-				//this.dutch = "PROFICIENT";
 			}
 		});
-		
-		//if (suggestionFilterForm.get('dutchLanguage')?.value) {
-		//	this.languages.push("DUTCH");
-		//	this.dutch = "PROFICIENT";
-		//}
-		
-		//if (suggestionFilterForm.get('frenchLanguage')?.value) {
-		//	this.languages.push("FRENCH");
-		//	this.french = "PROFICIENT";
-		//}
-		
-		//if (suggestionFilterForm.get('englishLanguage')?.value) {
-		//	this.languages.push("ENGLISH");
-		//	this.english = "PROFICIENT";
-		//}
 				
 		/**
 		* Ccontract type filters
@@ -174,27 +178,6 @@ export class SuggestionParams{
 	}
 	
 	/**
-	* Proficiency level for Dutch
-	*/
-	//public getDutchLevel():string{
-	//	return this.dutch;	
-	//}
-	
-	/**
-	* Proficiency level for French
-	*/
-	//public getFrenchLevel():string{
-	//	return this.french;	
-	//}
-	
-	/**
-	* Proficiency level for English
-	*/
-	//public getEnglishLevel():string{
-	//	return this.english;	
-	//}
-	
-	/**
 	* Whether to include unavailable cadidates
 	*/
 	public getIncludUnavailableCandidates():string {
@@ -203,6 +186,27 @@ export class SuggestionParams{
 	
 	public getIncludRequiresSponsorshipCandidates():string {
 		return this.includeRequiresSponsorship;
+	}
+	
+	/**
+	* firstname filter
+	*/
+	public getFirstName():string {
+		return this.firstName;
+	}
+	
+	/**
+	* surname filter
+	*/
+	public getSurname():string {
+		return this.surname;
+	}
+	
+	/**
+	* email filter
+	*/
+	public getEmail():string {
+		return this.email;
 	}
 
 	
