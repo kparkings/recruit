@@ -25,7 +25,7 @@ public class PendingCandidateAPIOutboudTest {
 		final UUID 		pendingCandidateId 	= UUID.randomUUID();
 		final String 	firstname 			= "Kevin";
 		final String 	surname 			= "Parkings";
-		final String 	email 				= "kparkings@gmail.com";
+		final String 	email 				= "admin@arenella-ict.com";
 		final boolean 	perm 				= true;
 		final boolean 	freelance 			= true;
 		
@@ -58,7 +58,7 @@ public class PendingCandidateAPIOutboudTest {
 		final UUID 		pendingCandidateId 	= UUID.randomUUID();
 		final String 	firstname 			= "Kevin";
 		final String 	surname 			= "Parkings";
-		final String 	email 				= "kparkings@gmail.com";
+		final String 	email 				= "admin@arenella-ict.com";
 		final boolean 	perm 				= true;
 		final boolean 	freelance 			= true;
 		

@@ -38,7 +38,7 @@ public class ListingEntityTest {
 	private final 			String							ownerId				= "kparking";
 	private final 			String							ownerName			= "Kevin Parkings";
 	private final 			String 							ownerCompany		= "Arenella BV";
-	private final 			String							ownerEmail			= "kparkings@gmail.com";
+	private final 			String							ownerEmail			= "admin@arenella-ict.com";
 	private final 			LocalDateTime					created				= LocalDateTime.of(2021, 11, 24, 00, 10, 01);
 	private final 			String 							title				= "aTitle";
 	private final 			String 							description			= "aDesc";

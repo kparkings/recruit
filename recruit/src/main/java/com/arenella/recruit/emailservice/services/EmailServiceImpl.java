@@ -133,7 +133,7 @@ public class EmailServiceImpl implements EmailService{
 							.model(Map.of("recipientName",r.getFirstName() == null ? "na" : r.getFirstName(), "emailTitle", email.getTitle()))
 							.persistable(false)
 							.recipients(Set.of(new EmailRecipient<UUID>(UUID.randomUUID(), r.getContactId(), ContactType.RECRUITER)))
-							.sender(new Sender<>(UUID.randomUUID(), "", SenderType.SYSTEM, "kparkings@gmail.com"))
+							.sender(new Sender<>(UUID.randomUUID(), "", SenderType.SYSTEM, "no-reply@arenella-ict.com"))
 							.title("Arenella-ICT: Reply received for message " + email.getTitle())
 							.topic(EmailTopic.REC_TO_REC_EMAIL_REPLY_NOTICICATION)
 						.build();

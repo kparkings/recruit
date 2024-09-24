@@ -52,7 +52,7 @@ public class CandidateSearchUtilTest {
 		
 		final String 	firstName 	= "Keivn";
 		final String 	surname 	= "parkings";
-		final String 	email 		= "kparkings@gmail.com";
+		final String 	email 		= "admin@arenella-ict.com";
 		final int 		pageSize 	= 1;
 		
 		CandidateFilterOptions filters = CandidateFilterOptions.builder().available(true).build();
@@ -98,7 +98,7 @@ public class CandidateSearchUtilTest {
 	
 		final String firstName 	= "Keivn";
 		final String surname 	= "parkings";
-		final String email 		= "kparkings@gmail.com";
+		final String email 		= "admin@arenella-ict.com";
 		
 		final int pageSize = 1;
 		CandidateFilterOptions filters = CandidateFilterOptions.builder().available(true).build();
@@ -141,7 +141,7 @@ public class CandidateSearchUtilTest {
 	
 		final String firstName 	= "Keivn";
 		final String surname 	= "parkings";
-		final String email 		= "kparkings@gmail.com";
+		final String email 		= "admin@arenella-ict.com";
 		final int pageSize = 1;
 		CandidateFilterOptions filters = CandidateFilterOptions.builder().available(true).build();
 		

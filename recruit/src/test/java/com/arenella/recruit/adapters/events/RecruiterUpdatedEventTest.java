@@ -23,7 +23,7 @@ public class RecruiterUpdatedEventTest {
 		final String 	recruiterId					= "kparkings";
 		final String 	firstName					= "kevin";
 		final String 	surname						= "parkings";	
-		final String 	email						= "kparkings@gmail.com";
+		final String 	email						= "admin@arenella-ict.com";
 		final String	companyName					= "Arenella BV";
 		final language 	language					= Recruiter.language.DUTCH;
 		

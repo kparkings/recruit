@@ -15,7 +15,7 @@ public class ContactEntityTest {
 
 	private static final CONTACT_TYPE 	CONTACT_TYPE_VAL 	= CONTACT_TYPE.RECRUITER;
 	private static final String 		USER_ID 			= "kparkings";
-	private static final String 		EMAIL 				= "kparkings@gmail.com";
+	private static final String 		EMAIL 				= "admin@arenella-ict.com";
 	private static final String 		FIRSTNAME 			= "kevin";
 	private static final String 		SURNAME 			= "parkings";
 	

@@ -33,7 +33,7 @@ public class RequestSendEmailCommandTest {
 		final Map<String,Object> 		model 		= Map.of();
 		final boolean 					persistable = true;
 		final Set<EmailRecipient<UUID>> recipients 	= new HashSet<>();
-		final Sender<String> 			sender 		= new Sender<>("id", "", SenderType.SYSTEM,"kparkings@gmail.com");
+		final Sender<String> 			sender 		= new Sender<>("id", "", SenderType.SYSTEM,"admin@arenella-ict.com");
 		final String 					title 		= "aTitle";
 		final EmailTopic 				topic 		= EmailTopic.ACCOUNT_CREATED;
 		final Set<Attachment>			attachments = Set.of(new Attachment("doc", "aCV", new byte[] {2}));

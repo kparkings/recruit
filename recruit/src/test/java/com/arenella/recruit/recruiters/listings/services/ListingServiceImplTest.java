@@ -511,7 +511,7 @@ public class ListingServiceImplTest {
 		final MultipartFile 	attachment 		= Mockito.mock(MultipartFile.class);
 		final String			message			= "dear recruiter blah blah";
 		final String 			senderName		= "Kevin Parkings";
-		final String			senderEmail		= "kparkings@gmail.com";
+		final String			senderEmail		= "admin@arenella-ict.com";
 		final byte[]			attachmentBytes	= new byte[] {1,22,3};
 		final FileType			fileType		= FileType.doc;
 		

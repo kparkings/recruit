@@ -48,7 +48,7 @@ public class RecruiterControllerTest {
 	
 	
 	final String 		companyName 		= " aCompanyName ";
-	final String 		email 				= " kparkings@gmail.com ";
+	final String 		email 				= " admin@arenella-ict.com ";
 	final String 		firstname 			= " kevin ";
 	final language 		lang	 			= language.DUTCH;
 	final String 		surname 			= " parkings ";

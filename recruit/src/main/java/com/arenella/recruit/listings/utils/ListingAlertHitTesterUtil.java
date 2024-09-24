@@ -74,7 +74,7 @@ public class ListingAlertHitTesterUtil {
 						.builder()
 							.emailType(EmailType.EXTERN)
 							.recipients(Set.of(new EmailRecipient<UUID>(UUID.randomUUID(),hit.getEmail(), ContactType.UNREGISTERED_USER)))
-							.sender(new Sender<>(UUID.randomUUID(), "", SenderType.SYSTEM, "kparkings@gmail.com"))
+							.sender(new Sender<>(UUID.randomUUID(), "", SenderType.SYSTEM, "no-reply@arenella-ict.com"))
 							.title("Arenella-ICT - Matching Role")
 							.topic(EmailTopic.LISTING_MATCHING_ROLE)
 							.model(Map.of("listingId",listing.get().getListingId(),"listingTitle",listing.get().getTitle(),"alertId",hit.getId()))

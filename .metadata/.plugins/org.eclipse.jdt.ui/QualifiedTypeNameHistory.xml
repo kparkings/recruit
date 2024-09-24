@@ -18,7 +18,6 @@
     <fullyQualifiedTypeName name="com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_status"/>
     <fullyQualifiedTypeName name="org.mockito.Mockito"/>
     <fullyQualifiedTypeName name="co.elastic.clients.elasticsearch._types.query_dsl.TermsSetQuery.Builder"/>
-    <fullyQualifiedTypeName name="java.util.stream.Collectors"/>
     <fullyQualifiedTypeName name="co.elastic.clients.elasticsearch._types.query_dsl.TermsSetQuery"/>
     <fullyQualifiedTypeName name="org.apache.catalina.startup.ListenerCreateRule.OptionalListener"/>
     <fullyQualifiedTypeName name="com.arenella.recruit.candidates.beans.Language.LANGUAGE"/>
@@ -60,4 +59,5 @@
     <fullyQualifiedTypeName name="java.time.LocalDate"/>
     <fullyQualifiedTypeName name="com.arenella.recruit.candidates.enums.COUNTRY"/>
     <fullyQualifiedTypeName name="com.arenella.recruit.recruiters.enums.COUNTRY"/>
+    <fullyQualifiedTypeName name="java.util.stream.Collectors"/>
 </qualifiedTypeNameHistroy>

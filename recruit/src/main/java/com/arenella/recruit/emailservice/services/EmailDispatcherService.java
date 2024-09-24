@@ -151,7 +151,7 @@ public class EmailDispatcherService {
 					//In this case we the email was provided so we don't want to fetch it 
 				}
 				else if (recipientOpt.isEmpty()) {
-					r.setEmail("kparkings@gmail.com");
+					r.setEmail("no-reply@arenella-ict.com");
 					r.setFirstName("Failed for " + r.getId() + " " + r.getId());
 					model.put("recipientName", "na");
 				} else {

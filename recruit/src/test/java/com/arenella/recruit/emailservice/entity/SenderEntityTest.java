@@ -16,7 +16,7 @@ import com.arenella.recruit.emailservice.beans.Email.Sender.SenderType;
 */
 public class SenderEntityTest {
 
-	private static final String emailAddress 	= "kparkings@gmail.com";
+	private static final String emailAddress 	= "admin@arenella-ict.com";
 	private static final String id				= "anId";
 	private static final String contactId		= "na";
 	private static final UUID	emailId			= UUID.randomUUID();

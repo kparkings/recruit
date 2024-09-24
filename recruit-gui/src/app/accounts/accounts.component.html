@@ -5,9 +5,7 @@
 		  <li class="nav-item">
 		    <span class="nav-link tabNav" (click)="switchTab('recruiters')">{{'arenella-accounts-menu-recruiters' | translate}}</span>
 		  </li>
-		  <li class="nav-item tabNav">
-		    <span class="nav-link" (click)="switchTab('candidates')">{{'arenella-accounts-menu-candidates' | translate}}</span>
-		  </li>
+		
 		  <li class="nav-item tabNav">
 		    <span class="nav-link" (click)="switchTab('availabilityChecks')">{{'arenella-accounts-menu-availability' | translate}}</span>
 		  </li>
@@ -167,65 +165,6 @@
 		      		</tr>
 		      	</tbody>
 			</table>
-		</div>
-			
-		<!-- Candidates-->
-		<div *ngIf="showCandidatesTab">
-			<form [formGroup]="candidateFormGroup">
-				<h3>Candidates</h3>
-				
-				<div style="float:left">
-					<label 	class="control-spacing candidate-lbl">{{'arenella-accounts-tabacandidates-name' | translate}}</label>
-					<input 	class="control-spacing candidate-input" type="text" formControlName="firstname"/>
-				</div>
-				<div style="float:left">
-					<label 	class="control-spacing candidate-lbl">{{'arenella-accounts-tabacandidates-surname' | translate}}</label>
-					<input 	class="control-spacing candidate-input" type="text" formControlName="surname"/>
-				</div>
-				<div style="float:left">
-					<label 	class="control-spacing candidate-lbl">{{'arenella-accounts-tabacandidates-email' | translate}}</label>
-					<input 	class="control-spacing candidate-input" type="text" formControlName="email"/>
-					
-				</div>
-				<div class="action-buttons">
-					<button	class="control-spacing btn btn-secondary arenella-btn" style="margin-top:10px;" (click)="fetchCandidates()">{{'arenella-accounts-tabacandidates-btn-filter' | translate}}</button>
-				</div>
-			</form>
-		
-			<!-- Candidates table -->  
-			<div style="margin-top: 5px;">
-	      
-				<table class="table candidate-table">
-					<thead>
-		      			<tr>
-		      				<!-- Table Headers -->
-		      				<th class="bg-tab-hdr">{{'arenella-accounts-tabacandidates-id' | translate}}</th>
-		      				<th class="bg-tab-hdr">{{'arenella-accounts-tabacandidates-name' | translate}}</th>
-		                	<th class="bg-tab-hdr">{{'arenella-accounts-tabacandidates-actions' | translate}}</th>
-		              </tr>
-		      		</thead>
-		      		<tbody>
-		      			<!-- Table row -->
-		      			<tr *ngFor="let candidate of candidates">
-		      				<td class="candidate-tab-col"><span class="candidate-id-prefix">C</span>{{candidate.candidateId}}</td>
-		            	    <td class="candidate-tab-col medicol"> {{candidate.firstname}} {{candidate.surname}}</td>
-		            	    <td class="candidate-tab-col medicol">{{candidate.email}}</td>
-		            	    <td class="candidate-tab-col medicol">
-		            	    	<div [ngSwitch]="candidate.available">
-		                			<div  *ngSwitchCase="true">
-		                				<button	class="btn btn-secondary arenella-btn" style="min-width:100px;" (click)="updateCandidateAvailability(candidate.candidateId, 'disable')">{{'arenella-accounts-tabacandidates-btn-disable' | translate}}</button>
-		                			</div>
-		                			<div>
-		                				<button	class="btn btn-secondary arenella-btn" style="min-width:100px;" *ngIf="candidateToDelete == '' || candidateToDelete != candidate.candidateId" (click)="deleteCandidate(candidate.candidateId)">{{'arenella-accounts-tabacandidates-btn-delete' | translate}}</button>
-		                				<button	class="btn btn-secondary arenella-btn" style="min-width:100px;" *ngIf="candidateToDelete == candidate.candidateId" (click)="confirmDeleteCandidate()" style="background:red">{{'arenella-accounts-tabacandidates-btn-confirm' | translate}}</button>
-		                			</div>
-		                		</div>
-		                	</td>
-		      			</tr>	
-		      		</tbody>
-				</table>
-			</div>
-			
 		</div>
 		
 		<!-- Skills table -->

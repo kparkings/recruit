@@ -47,7 +47,7 @@ public class ListingAPIOutboundTest {
 	private final 			Set<ListingViewedEvent>		views				= Set.of(ListingViewedEvent.builder().build());
 	private final 			String						ownerName			= "Kevin Parkings";
 	private final 			String 						ownerCompany		= "Arenella BV";
-	private final 			String						ownerEmail			= "kparkings@gmail.com";
+	private final 			String						ownerEmail			= "admin@arenella-ict.com";
 	
 	/**
 	* Sets up test environment 

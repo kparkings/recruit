@@ -45,7 +45,7 @@ public class ESFilteredSearchRequestBuilderTest {
 	private static final Set<String>		SKILLS								= Set.of("JaVa","Qa");
 	private static final String				FIRSTNAME							= "kevin";
 	private static final String 			SURNAME								= "parkings";
-	private static final String 			EMAIL								= "kparkings@gmail.com";
+	private static final String 			EMAIL								= "admin@arenella-ict.com";
 	private static final Integer			DAYS_SINCE_LAST_AVAILABILITY_CHECK 	= 10;
 	private static final LocalDate			REGISTERED_AFTER					= LocalDate.of(2024, 5, 8);
 	private static final LocalDate			LAST_REFRESH						= LocalDate.of(2024, 8, 11);

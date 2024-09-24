@@ -73,7 +73,7 @@ public class RecruiterServiceImplTest {
 	private static final String 			userId 					= "kparkings";
 	private static final LocalDate 			accountCreated 			= LocalDate.of(2021, 10, 13);
 	private static final String 			companyName 			= "arenella-ict";
-	private static final String 			email 					= "kparkings@gmail.com";
+	private static final String 			email 					= "admin@arenella-ict.com";
 	private static final String 			firstname 				= "kevin";
 	private static final language 			lang 					= language.DUTCH;
 	private static final String 			surname 				= "parkings";
@@ -104,7 +104,7 @@ public class RecruiterServiceImplTest {
 	public void testUpdateRecruiter() throws Exception{
 		
 		final String 	companyNameUpdt 		= "arenella-ictnew";
-		final String 	emailUpdt 				= "kparkings@gmail.comnew";
+		final String 	emailUpdt 				= "admin@arenella-ict.comnew";
 		final String 	firstnameUpdt 			= "kevinnew";
 		final language 	langUpdt 				= language.FRENCH;
 		final String 	surnameUpdt 			= "parkingsnew";
@@ -170,7 +170,7 @@ public class RecruiterServiceImplTest {
 	public void testUpdateRecruiter_compensationEvent() throws Exception{
 		
 		final String 	companyNameUpdt 		= "arenella-ictnew";
-		final String 	emailUpdt 				= "kparkings@gmail.comnew";
+		final String 	emailUpdt 				= "admin@arenella-ict.comnew";
 		final String 	firstnameUpdt 			= "kevinnew";
 		final language 	langUpdt 				= language.FRENCH;
 		final String 	surnameUpdt 			= "parkingsnew";
@@ -237,7 +237,7 @@ public class RecruiterServiceImplTest {
 	public void testUpdateRecruiter_notAdminOrOwnRecruiter() throws Exception{
 		
 		final String 	companyNameUpdt 		= "arenella-ictnew";
-		final String 	emailUpdt 				= "kparkings@gmail.comnew";
+		final String 	emailUpdt 				= "admin@arenella-ict.comnew";
 		final String 	firstnameUpdt 			= "kevinnew";
 		final language 	langUpdt 				= language.FRENCH;
 		final String 	surnameUpdt 			= "parkingsnew";
@@ -863,7 +863,7 @@ public class RecruiterServiceImplTest {
 	@Test
 	public void testResetPassword_multipleMatchingRecruiters() throws Exception{
 	
-		final String emailAddress = "kparkings@gmail.com";
+		final String emailAddress = "admin@arenella-ict.com";
 		
 		Mockito.when(this.mockDao.findRecruitersByEmail(emailAddress)).thenReturn(Set.of(Recruiter.builder().build(), Recruiter.builder().build()));
 		
@@ -881,7 +881,7 @@ public class RecruiterServiceImplTest {
 	@Test
 	public void testResetPassword_noMatchingRecruiters() throws Exception{
 		
-		final String emailAddress = "kparkings@gmail.com";
+		final String emailAddress = "admin@arenella-ict.com";
 		
 		Mockito.when(this.mockDao.findRecruitersByEmail(emailAddress)).thenReturn(Set.of());
 		
@@ -899,7 +899,7 @@ public class RecruiterServiceImplTest {
 	@Test
 	public void testResetPassword() throws Exception{
 		
-		final String emailAddress = "kparkings@gmail.com";
+		final String emailAddress = "admin@arenella-ict.com";
 		
 		ArgumentCaptor<RecruiterPasswordUpdatedEvent> 	pwdUpdtArgCapt 	= ArgumentCaptor.forClass(RecruiterPasswordUpdatedEvent.class);
 		ArgumentCaptor<RequestSendEmailCommand>			emailArgCapt	= ArgumentCaptor.forClass(RequestSendEmailCommand.class);

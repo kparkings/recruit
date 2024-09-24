@@ -51,7 +51,7 @@ public class EmailServiceImplTest {
 	private static final String 				SENDER_ID 					= "1234566788";
 	private static final String 				CONTACT_ID 					= "kparkings";
 	private static final SenderType 			CONTACT_TYPE 				= SenderType.RECRUITER;
-	private static final String 				SENDER_EMAIL 				= "kparkings@gmail.com";
+	private static final String 				SENDER_EMAIL 				= "admin@arenella-ict.com";
 	private static final Sender<String>			SENDER 						= new Sender<>(SENDER_ID, CONTACT_ID, CONTACT_TYPE, SENDER_EMAIL);
 	private static final UUID 					ATTACHMENT_ID 				= UUID.randomUUID();
 	private static final FileType 				FILE_TYPE 					= FileType.doc;
@@ -199,7 +199,7 @@ public class EmailServiceImplTest {
 		final String				contactId				= "kparkings";
 		final String 				contactFirstName		= "kevin";
 		final String 				contactSurname			= "Parkings";
-		final String				contactEmail			= "kparkings@gmail.com";
+		final String				contactEmail			= "admin@arenella-ict.com";
 		final Contact				contact					= new Contact(contactId, ContactType.RECRUITER, contactFirstName, contactSurname, contactEmail);
 		
 		ArgumentCaptor<Email> argCapt = ArgumentCaptor.forClass(Email.class);
@@ -239,7 +239,7 @@ public class EmailServiceImplTest {
 		final String				contactId				= "kparkings";
 		final String 				contactFirstName		= "kevin";
 		final String 				contactSurname			= "Parkings";
-		final String				contactEmail			= "kparkings@gmail.com";
+		final String				contactEmail			= "admin@arenella-ict.com";
 		final Contact				contact					= new Contact(contactId, ContactType.RECRUITER, contactFirstName, contactSurname, contactEmail);
 		
 		ArgumentCaptor<Email> argCapt = ArgumentCaptor.forClass(Email.class);

@@ -35,7 +35,7 @@ public class CandidateDocumentTest {
 	private static final long						CANDIDATE_ID				= 123;
 	private static final String 					FIRSTNAME					= "Kevin";
 	private static final String 					SURNAME						= "Parkings";
-	private static final String 					EMAIL						= "kparkings@gmail.com";
+	private static final String 					EMAIL						= "admin@arenella-ict.com";
 	private static final String 					ROLE_SOUGHT					= "Senior Java Developer";
 	private static final FUNCTION 					FUNCTION_VAL				= FUNCTION.JAVA_DEV;
 	private static final COUNTRY 					COUNTRY_VAL					= COUNTRY.ITALY;

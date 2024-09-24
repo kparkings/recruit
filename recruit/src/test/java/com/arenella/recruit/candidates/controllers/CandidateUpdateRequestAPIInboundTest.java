@@ -35,7 +35,7 @@ public class CandidateUpdateRequestAPIInboundTest {
 	private static final FUNCTION					FUNCTION_VAL			= FUNCTION.JAVA_DEV;
 	private static final COUNTRY 					COUNTRY_VAL 			= COUNTRY.NETHERLANDS;
 	private static final String 					CITY 					= "Den Haag";
-	private static final String 					EMAIL					= "kparkings@gmail.com";
+	private static final String 					EMAIL					= "admin@arenella-ict.com";
 	private static final String 					ROLE_SOUGHT				= "Senior java Dev";
 	private static final FREELANCE 					FREELANCE_VAL 			= FREELANCE.TRUE;
 	private static final PERM 						PERM_VAL 				= PERM.TRUE;

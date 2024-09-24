@@ -81,7 +81,7 @@ public class CreditBasedSubscriptionActionHandler implements RecruiterSubscripti
 							.builder()
 								.emailType(EmailType.EXTERN)
 								.recipients(Set.of(new EmailRecipient<UUID>(UUID.randomUUID(),recruiter.getUserId(), ContactType.RECRUITER)))
-								.sender(new Sender<>(UUID.randomUUID(), "", SenderType.SYSTEM, "kparkings@gmail.com"))
+								.sender(new Sender<>(UUID.randomUUID(), "", SenderType.SYSTEM, "no-reply@arenella-ict.com"))
 								.title("Arenella-ICT - Recruiter Account Approved")
 								.topic(EmailTopic.ACCOUNT_CREATED)
 								.model(Map.of(

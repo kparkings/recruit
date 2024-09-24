@@ -38,7 +38,7 @@ public class ContactServiceImplTest {
 	@Test
 	public void testFetchContacts() throws Exception{
 		
-		Contact contact = new Contact("rec33", ContactType.RECRUITER, "Kevin", "Parkings", "kparkings@gmail.com");
+		Contact contact = new Contact("rec33", ContactType.RECRUITER, "Kevin", "Parkings", "admin@arenella-ict.com");
 		Mockito.when(this.mockContactDao.fetchContacts(Mockito.anySet())).thenReturn(Set.of(contact));
 	
 		Set<Contact> contacts = service.fetchContacts(Set.of("rec11"));

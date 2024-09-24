@@ -20,7 +20,7 @@ public class CandidateUpdatedEventTest {
 		final String candidateId 	= "123";
 		final String firstname 		= "kevin";
 		final String surname 		= "parkings";
-		final String email 			= "kparkings@gmail.com";
+		final String email 			= "admin@arenella-ict.com";
 		
 		CandidateUpdatedEvent event = new CandidateUpdatedEvent(candidateId, firstname, surname, email);
 		

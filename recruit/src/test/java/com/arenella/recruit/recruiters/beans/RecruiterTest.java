@@ -28,7 +28,7 @@ public class RecruiterTest {
 		final String 		userId						= "kparkings";
 		final String 		firstName					= "kevin";
 		final String 		surname						= "parkings";
-		final String 		email						= "kparkings@gmail.com";
+		final String 		email						= "admin@arenella-ict.com";
 		final String		companyName					= "arenella";
 		final String 		companyAddress				= "Julianastraat 16, Noordwijk, 2202KD";
 		final String 		companyCountry				= "Nederland";

@@ -22,7 +22,7 @@ public class PendingCandidateEntityTest {
 	private static final UUID	 		pendingCandidateId 		= UUID.fromString("123e4567-e89b-12d3-a456-426614174000");
 	private static final String 		firstname				= "Kevin";
 	private static final String 		surname					= "Parkings";
-	private static final String 		email					= "kparkings@gmail.com";
+	private static final String 		email					= "admin@arenella-ict.com";
 	private static final boolean 		freelance 				= true;
 	private static final boolean		perm 					= true;
 	private static final String			introduction			= "intro";

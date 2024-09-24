@@ -20,7 +20,7 @@ public class RecruiterAPIOutboundTest {
 	private static final String 		USER_ID						= "kparkings";
 	private static final String 		FIRST_NAME					= "kevin";
 	private static final String 		SURNAME						= "parkings";
-	private static final String 		EMAIL						= "kparkings@gmail.com";
+	private static final String 		EMAIL						= "admin@arenella-ict.com";
 	private static final String			COMPANY_NAME				= "Arenella";
 	private static final String 		COMPANY_ADDRESS				= "Julianastraat 16, Noordwijk, 2202KD";
 	private static final String 		COMPANY_COUNTRY				= "Nederland";

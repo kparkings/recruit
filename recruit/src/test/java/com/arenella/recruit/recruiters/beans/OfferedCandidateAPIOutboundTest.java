@@ -47,7 +47,7 @@ public class OfferedCandidateAPIOutboundTest {
 		final String 			recruiterId 			= "kparkings";
 		final String 			recruiterName 			= "Kevin Parkings";
 		final String 			companyName 			= "Arenella BV";
-		final String 			email					= "kparkings@gmail.com";
+		final String 			email					= "admin@arenella-ict.com";
 		final UUID 				id						= UUID.randomUUID();
 		final RecruiterDetails 	recruiter				= new RecruiterDetails(recruiterId, recruiterName, companyName, email);
 		final String 			candidateRoleTitle		= "Java Dev";
@@ -121,7 +121,7 @@ public class OfferedCandidateAPIOutboundTest {
 		final String recruiterId		= "kparkings";
 		final String recruiterName		= "kevin parkings";	
 		final String companyName		= "Arenella BV";
-		final String email			 	= "kparkings@gmail.com";
+		final String email			 	= "admin@arenella-ict.com";
 		
 		RecruiterDetails rd = new RecruiterDetails(recruiterId, recruiterName, companyName, email);
 			

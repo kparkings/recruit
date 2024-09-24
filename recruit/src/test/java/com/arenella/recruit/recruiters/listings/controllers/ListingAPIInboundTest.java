@@ -39,7 +39,7 @@ public class ListingAPIInboundTest {
 	private final 			currency		currency			= Listing.currency.EUR;
 	private final 			String			ownerName			= "Kevin Parkings";
 	private final 			String 			ownerCompany		= "Arenella BV";
-	private final 			String			ownerEmail			= "kparkings@gmail.com";
+	private final 			String			ownerEmail			= "admin@arenella-ict.com";
 	private final 			Set<String>		skills			 	= Set.of(SKILL_JAVA, SKILL_CSHARP);
 	
 	/**

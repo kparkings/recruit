@@ -18,7 +18,7 @@ public class Wart {
 	@Test
 	public void testAdminUser() throws Exception{
 		
-		final String 	email 		=	"kparkings@gmail.com";
+		final String 	email 		=	"no-reply@arenella-ict.com";
 		final String 	username	=	email.substring(0, email.indexOf("@")); 
 		
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();

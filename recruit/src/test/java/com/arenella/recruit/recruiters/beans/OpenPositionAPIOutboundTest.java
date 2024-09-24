@@ -24,7 +24,7 @@ public class OpenPositionAPIOutboundTest {
 	private String				recruiterId			 	= "kadawdk";
 	private String 				recruiterName			= "Kevin Parkings";
 	private String 				recruiterCompanyName	= "Arenella BV";
-	private String 				recruiterEmail			= "kparkings@gmail.com";
+	private String 				recruiterEmail			= "admin@arenella-ict.com";
 	private String 				positionTitle			= "Java Developer";
 	private COUNTRY	 			country					= COUNTRY.EU_REMOTE;
 	private String				location				= "Remote in Europe";

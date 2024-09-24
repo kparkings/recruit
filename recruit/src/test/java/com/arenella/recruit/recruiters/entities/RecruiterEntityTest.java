@@ -25,7 +25,7 @@ public class RecruiterEntityTest {
 	private static final String 				userId						= "kparkings";
 	private static final String 				firstName					= "kevin";
 	private static final String 				surname						= "parkings";
-	private static final String 				email						= "kparkings@gmail.com";
+	private static final String 				email						= "admin@arenella-ict.com";
 	private static final String					companyName					= "arenella";
 	private static final String 				companyAddress				= "Julianastraat 16, Noordwijk, 2202KD";
 	private static final String 				companyCountry				= "Nederland";

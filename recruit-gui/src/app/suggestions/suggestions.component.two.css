@@ -69,13 +69,6 @@
 	color:blue;
 	font-style:italic;
 }
-/*
-.main-btns{
-	width:155px;
-	margin-right:10px;
-	margin-bottom:10px;
-	margin-top:5px;
-}*/
 
 .saved-candidate-icon-header{
 	background:#6A5ACD;
@@ -126,37 +119,11 @@ textarea {
 	font-weight: bold;
 	text-align: right;
 }
-/**
-.details-right{
-	margin-left:0px;
-	float:left;
-	width:100%;
-	min-width:72%;
-	max-width:750px;
-	padding:0px;
-	margin-left:0px;
-	padding-right:20px;
-	padding-left:20px;
-}
-
-.details-right h1{
-	background:#6A5ACD; 
-	width:100%;
-	margin-bottom:10px;
-	margin-left:0px;
-	padding:10px;
-}*/
 
 .button-panel-mobile{
 	padding-left:10px;
 	padding-right:10px;	
 }
-/**
-.mobile-desc-body{
-	min-width:100%;
-	padding-right:0px;
-	padding-left:0px;
-}*/
 
 .sugg-srch-job-title{
 	min-width:1000px;
@@ -172,10 +139,7 @@ textarea {
 	color:#6c757d;
 	font-weight:bold;
 }
-/**
-.sugg-srch-job-title-mobile{
-	min-width:0px;
-}*/
+
 
 .mobile-search-box{
 	margin-left:1%;

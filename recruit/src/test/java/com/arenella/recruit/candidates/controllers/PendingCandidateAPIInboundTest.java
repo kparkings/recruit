@@ -31,7 +31,7 @@ public class PendingCandidateAPIInboundTest {
 	private static final UUID	 		candidateId 			= UUID.randomUUID();
 	private static final String 		firstname				= "Kevin";
 	private static final String 		surname					= "Parkings";
-	private static final String 		email					= "kparkings@gmail.com";
+	private static final String 		email					= "admin@arenella-ict.com";
 	private static final boolean 		freelance 				= true;
 	private static final boolean 		perm 					= true;
 	private static final Rate			RATE_CONTRACT			= new Rate(CURRENCY.EUR, PERIOD.HOUR, 300, 400);

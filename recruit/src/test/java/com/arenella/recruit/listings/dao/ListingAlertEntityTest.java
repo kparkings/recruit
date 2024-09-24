@@ -21,7 +21,7 @@ public class ListingAlertEntityTest {
 
 	private static final UUID 					ID				= UUID.randomUUID();
 	private static final Long 					USER_ID			= 1L;
-	private static final String 				EMAIL			= "kparkings@gmail.com";
+	private static final String 				EMAIL			= "admin@arenella-ict.com";
 	private static final LocalDate 				CREATED			= LocalDate.of(2023, 12, 9);
 	private static final Listing.listing_type 	CONTRACT_TYPE 	= Listing.listing_type.BOTH;
 	private static final Set<Listing.country> 	COUNTRIES 		= Set.of(Listing.country.NETHERLANDS);

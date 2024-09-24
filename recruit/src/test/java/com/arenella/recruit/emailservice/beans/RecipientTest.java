@@ -16,7 +16,7 @@ public class RecipientTest {
 	final ContactType 		contactType		= ContactType.RECRUITER;
 	final String 			firstName		= "Kevin";
 	final String 			surname			= "Parkings";
-	final String 			email			= "kparkings@gmail.com";
+	final String 			email			= "admin@arenella-ict.com";
 	
 	/**
 	* Tests constructor

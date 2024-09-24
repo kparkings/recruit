@@ -317,7 +317,7 @@ public class SupplyAndDemandServiceImpl implements SupplyAndDemandService{
 						.model(modelExt)
 						.persistable(false)
 						.recipients(Set.of(new EmailRecipient<UUID>(UUID.randomUUID(), credit.getRecruiterId(), ContactType.RECRUITER)))
-						.sender(new Sender<>(UUID.randomUUID(), "", SenderType.SYSTEM, "kparkings@gmail.com"))
+						.sender(new Sender<>(UUID.randomUUID(), "", SenderType.SYSTEM, "no-reply@arenella-ict.com"))
 						.title("Arenella-ICT - New Credits Available")
 						.topic(EmailTopic.NEW_CREDITS_ASSIGNED)
 					.build();

@@ -23,7 +23,6 @@ export class AccountsComponent implements OnInit {
 	@ViewChild('recruiterLoginDetails', { static: false }) private content:any;
 	
 	currentTab:string 												= "recruiters";
-	showCandidatesTab:boolean										= false;
 	showRecruitersTab:boolean										= true;
 	showFlaggedAsUnavailableTab:boolean								= false;
 	showSubscriptionActionsTab:boolean								= false;
@@ -82,17 +81,7 @@ export class AccountsComponent implements OnInit {
 		
 		switch(tab){
 			
-			case "candidates":{
-				this.showCandidatesTab				= true;
-				this.showRecruitersTab				= false;
-				this.showFlaggedAsUnavailableTab	= false;
-				this.showSubscriptionActionsTab		= false;
-				this.showAvailabilityCheckTab		= false;
-				this.showSkillsValidationTab		= false;
-				break;
-			}
 			case "recruiters":{
-				this.showCandidatesTab				= false;
 				this.showRecruitersTab				= true;
 				this.showFlaggedAsUnavailableTab	= false;
 				this.showSubscriptionActionsTab		= false;
@@ -102,7 +91,6 @@ export class AccountsComponent implements OnInit {
 				break;
 			}
 			case "flaggedAsUnavailable":{
-				this.showCandidatesTab				= false;
 				this.showRecruitersTab				= false;
 				this.showFlaggedAsUnavailableTab	= true;
 				this.showSubscriptionActionsTab		= false;
@@ -112,7 +100,6 @@ export class AccountsComponent implements OnInit {
 				break;
 			}
 			case "subscriptionActions":{
-				this.showCandidatesTab				= false;
 				this.showRecruitersTab				= false;
 				this.showFlaggedAsUnavailableTab	= false;
 				this.showSubscriptionActionsTab		= true;
@@ -122,7 +109,6 @@ export class AccountsComponent implements OnInit {
 				break;
 			}
 			case "availabilityChecks":{
-				this.showCandidatesTab				= false;
 				this.showRecruitersTab				= false;
 				this.showFlaggedAsUnavailableTab	= false;
 				this.showSubscriptionActionsTab		= false;
@@ -132,7 +118,6 @@ export class AccountsComponent implements OnInit {
 				break;
 			}			
 			case "skillValidation":{
-				this.showCandidatesTab				= false;
 				this.showRecruitersTab				= false;
 				this.showFlaggedAsUnavailableTab	= false;
 				this.showSubscriptionActionsTab		= false;
@@ -143,24 +128,7 @@ export class AccountsComponent implements OnInit {
 			}
 		}
 	}
-	
-	/**
-	* Builds a query parameter string with the selected filter options
-	*/
-	private getCandidateFilterParamString():string{
-    	
-		const filterParams:string = 
-								'orderAttribute=candidateId'
-                                 + "&order=desc" 
-                                 + '&page=0'
-                                 + '&size=50'
-                                 + this.getFirstnameParamString() 
-                                 + this.getSurnameParamString()
-                                 + this.getEmailParamString();
-		return filterParams;
-	
-	}
-	
+
 	/**
 	* Builds a query parameter string for flaggedAsUnavailable Candidates
 	*/
@@ -492,13 +460,6 @@ export class AccountsComponent implements OnInit {
 	/**
 	* Retrieves candidates from the backend
 	*/
-	public fetchCandidates(): void{
-    	this.fetchCandidatesByFilters(this.getCandidateFilterParamString(), true);
-	}
-	
-	/**
-	* Retrieves candidates from the backend
-	*/
 	public fetchFlaggedAsUnavailableCandidates(): void{
     	this.fetchCandidatesByFilters(this.getCandidateFlaggedAsUnavailableFilterParamString(), false);
 	}
@@ -506,7 +467,6 @@ export class AccountsComponent implements OnInit {
 	public updateCandidateAvailability(candidateId:string, action:string):void{
 		this.candidateService.setCandidateAvailability(candidateId, action).subscribe(data => {
 			this.fetchCandidatesDueForAvailabilityCheck();	
-			this.fetchCandidates();	
 			this.appComponent.refreschUnreadAlerts();
 		});
 	}
@@ -541,7 +501,6 @@ export class AccountsComponent implements OnInit {
 		});
 		
 	}
-	
 	
 	private showAvailable:boolean = true;
 	private showUnavailable:boolean = true;
@@ -664,14 +623,4 @@ export class AccountsComponent implements OnInit {
 		this.candidateToDelete = candidateId;
 	}
 	
-	/**
-	* Confirms delete and sends request to Backend
-	*/
-	public confirmDeleteCandidate():void{
-		this.candidateService.deleteCandidate(this.candidateToDelete).subscribe(res => {
-			this.fetchCandidatesByFilters(this.getCandidateFilterParamString(), true);
-			this.candidateToDelete = '';
-		});
-	}	
-
 }

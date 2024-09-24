@@ -17,7 +17,7 @@ public class ListingContactRequestTest {
 	private static final UUID			LISTING_ID		= UUID.randomUUID();
 	private static final MultipartFile 	ATTACHMENT		= Mockito.mock(MultipartFile.class);
 	private static final String 		SENDER_NAME		= "Kevin Parkings";
-	private static final String 		SENDER_EMAIL	= "kparkings@gmail.com";
+	private static final String 		SENDER_EMAIL	= "admin@arenella-ict.com";
 	private static final String 		MESSAGE			= "some message";
 	
 	/**

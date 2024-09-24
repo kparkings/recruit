@@ -184,7 +184,7 @@ public class CandidateServiceImplTest {
 		Mockito.when(this.mockCandidateRepo.emailInUse(Mockito.anyString(), Mockito.any())).thenReturn(true);
 		
 		assertThrows(CandidateValidationException.class, () -> {
-			this.service.persistCandidate(Candidate.builder().email("kparkings@gmail.com").build());
+			this.service.persistCandidate(Candidate.builder().email("admin@arenella-ict.com").build());
 		});
 		
 	}
@@ -211,7 +211,7 @@ public class CandidateServiceImplTest {
 		
 		Mockito.when(this.mockContactDao.getByTypeAndId(Mockito.any(), Mockito.any())).thenReturn(Optional.of(contact));
 		
-		this.service.persistCandidate(Candidate.builder().candidateId("123").firstname("kevin").email("kparkings@gmail.com").build());
+		this.service.persistCandidate(Candidate.builder().candidateId("123").firstname("kevin").email("admin@arenella-ict.com").build());
 		
 		Assertions.assertEquals(CANDIDATE_TYPE.MARKETPLACE_CANDIDATE, argCapt.getValue().getCandidateType());
 		Assertions.assertEquals("kp1", argCapt.getValue().getOwnerId().get());
@@ -234,7 +234,7 @@ public class CandidateServiceImplTest {
 		Mockito.when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
 		Mockito.when(mockAuthentication.getAuthorities()).thenReturn(authorities);
 		
-		this.service.persistCandidate(Candidate.builder().candidateId("123").firstname("kevin").email("kparkings@gmail.com").build());
+		this.service.persistCandidate(Candidate.builder().candidateId("123").firstname("kevin").email("admin@arenella-ict.com").build());
 		
 		Assertions.assertEquals(CANDIDATE_TYPE.CANDIDATE, argCapt.getValue().getCandidateType());
 		Assertions.assertTrue(argCapt.getValue().getOwnerId().isEmpty());
@@ -258,7 +258,7 @@ public class CandidateServiceImplTest {
 		this.service.persistCandidate(Candidate
 				.builder()
 					.candidateId("1000")
-					.email("kparkings@gmail.com")
+					.email("admin@arenella-ict.com")
 					.firstname("kevin")
 				.build());
 		
@@ -277,7 +277,7 @@ public class CandidateServiceImplTest {
 	@Test
 	public void testPersistCandidate_recruiter() throws Exception{
 		
-		Contact contact = Contact.builder().firstname("kevin").surname("parkings").email("kparkings@gmail.com").build();
+		Contact contact = Contact.builder().firstname("kevin").surname("parkings").email("no-reply@arenella-ict.com").build();
 		
 		Collection authorities = new HashSet<>();
 		authorities.add(new SimpleGrantedAuthority("ROLE_RECRUITER"));
@@ -294,7 +294,7 @@ public class CandidateServiceImplTest {
 		this.service.persistCandidate(Candidate
 				.builder()
 					.candidateId("1000")
-					.email("kparkings@gmail.com")
+					.email("no-reply@arenella-ict.com")
 					.firstname("kevin")
 				.build());
 		
@@ -312,7 +312,7 @@ public class CandidateServiceImplTest {
 		Mockito.when(this.mockPendingCandidateDao.emailInUse(Mockito.anyString())).thenReturn(true);
 		
 		assertThrows(CandidateValidationException.class, () -> {
-			this.service.persistPendingCandidate(PendingCandidate.builder().email("kparkings@gmail.com").build());
+			this.service.persistPendingCandidate(PendingCandidate.builder().email("admin@arenella-ict.com").build());
 		});
 		
 	}
@@ -1119,7 +1119,7 @@ public class CandidateServiceImplTest {
 		final FUNCTION		function				= FUNCTION.JAVA_DEV;
 		final COUNTRY 		country 				= COUNTRY.NETHERLANDS;
 		final String 		city 					= "Den Haag";
-		final String 		email					= "kparkings@gmail.com";
+		final String 		email					= "admin@arenella-ict.com";
 		final String 		roleSought				= "Senior java Dev";
 		final boolean 		available 				= true;
 		final boolean 		flaggedAsUnavailable	= true;
@@ -1323,7 +1323,7 @@ public class CandidateServiceImplTest {
 		final FUNCTION		function				= FUNCTION.JAVA_DEV;
 		final COUNTRY 		country 				= COUNTRY.NETHERLANDS;
 		final String 		city 					= "Den Haag";
-		final String 		email					= "kparkings@gmail.com";
+		final String 		email					= "admin@arenella-ict.com";
 		final String 		roleSought				= "Senior java Dev";
 		final boolean 		available 				= true;
 		final boolean 		flaggedAsUnavailable	= true;
@@ -1454,7 +1454,7 @@ public class CandidateServiceImplTest {
 		final FUNCTION		function				= FUNCTION.JAVA_DEV;
 		final COUNTRY 		country 				= COUNTRY.NETHERLANDS;
 		final String 		city 					= "Den Haag";
-		final String 		email					= "kparkings@gmail.com";
+		final String 		email					= "admin@arenella-ict.com";
 		final String 		roleSought				= "Senior java Dev";
 		final boolean 		available 				= true;
 		final boolean 		flaggedAsUnavailable	= true;
@@ -2133,7 +2133,7 @@ public class CandidateServiceImplTest {
 	@Test
 	public void testResetPassword_multipleMatchingRecruiters() throws Exception{
 	
-		final String emailAddress = "kparkings@gmail.com";
+		final String emailAddress = "admin@arenella-ict.com";
 		
 		Mockito.when(this.mockCandidateRepo.findCandidates(Mockito.any(), Mockito.any(), Mockito.eq(2))).thenReturn(Set.of(Candidate.builder().build(), Candidate.builder().build()));
 	
@@ -2151,7 +2151,7 @@ public class CandidateServiceImplTest {
 	@Test
 	public void testResetPassword_noMatchingRecruiters() throws Exception{
 		
-		final String emailAddress = "kparkings@gmail.com";
+		final String emailAddress = "admin@arenella-ict.com";
 		
 		Mockito.when(this.mockCandidateRepo.findCandidates(Mockito.any(), Mockito.any(), Mockito.eq(2))).thenReturn(Set.of());
 		
@@ -2169,7 +2169,7 @@ public class CandidateServiceImplTest {
 	@Test
 	public void testResetPassword() throws Exception{
 		
-		final String 	emailAddress 	= "kparkings@gmail.com";
+		final String 	emailAddress 	= "admin@arenella-ict.com";
 		final String 	firstname 		= "kevin";
 		final String	userId 			= "1234";
 		

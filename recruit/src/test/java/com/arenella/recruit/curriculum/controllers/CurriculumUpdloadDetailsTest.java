@@ -17,7 +17,7 @@ public class CurriculumUpdloadDetailsTest {
 	private static final String java 			= "Java";
 	private static final String cSharp 			= "C#";
 	private static final String id 				= "100";
-	private static final String emailAddress 	= "kparkings@gmail.com";
+	private static final String emailAddress 	= "admin@arenella-ict.com";
 	
 	/**
 	* Tests builder

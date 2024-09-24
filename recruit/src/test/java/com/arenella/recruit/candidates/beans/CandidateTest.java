@@ -39,7 +39,7 @@ public class CandidateTest {
 	private static final FUNCTION					FUNCTION_VAL				= FUNCTION.JAVA_DEV;
 	private static final COUNTRY 					COUNTRY_VAL 				= COUNTRY.NETHERLANDS;
 	private static final String 					CITY 						= "Den Haag";
-	private static final String 					EMAIL						= "kparkings@gmail.com";
+	private static final String 					EMAIL						= "admin@arenella-ict.com";
 	private static final String 					ROLE_SOUGHT					= "Senior java Dev";
 	private static final boolean 					AVAILABLE 					= true;
 	private static final boolean 					FLAGGED_AS_UNAVAILABLE		= true;
@@ -162,7 +162,7 @@ public class CandidateTest {
 		
 		final String 	firstName 	= "Kevin";
 		final String 	surname 	= "Parkings";
-		final String 	email 		= "kparkings@gmail.com";
+		final String 	email 		= "admin@arenella-ict.com";
 		final LocalDate	lastAvailabilityCheck = LocalDate.of(2000, 01, 01);
 		
 		Candidate candidate = Candidate

@@ -159,7 +159,7 @@ public class CandidateAccountRefreshUtil {
 							.builder()
 								.emailType(EmailType.EXTERN)
 								.recipients(Set.of(new EmailRecipient<UUID>(UUID.randomUUID(),candidate.getCandidateId(), ContactType.CANDIDATE)))
-								.sender(new Sender<>(UUID.randomUUID(), "", SenderType.SYSTEM, "kparkings@gmail.com"))
+								.sender(new Sender<>(UUID.randomUUID(), "", SenderType.SYSTEM, "no-reply@arenella-ict.com"))
 								.title("Arenella-ICT - Your Availability")
 								.topic(EmailTopic.CANDIDATE_SUMMARY)
 								.model(Map.of("candidateId", candidate.getCandidateId(), "firstname",candidate.getFirstname(),"available",candidate.isAvailable(), "summaryEmailIdToken", summaryEmailIdToken))

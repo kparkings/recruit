@@ -102,6 +102,9 @@ export class SuggestionsComponent implements OnInit {
 		searchType:												new UntypedFormControl('FUNCTION'),
 	});
 	
+	private FIRST_NAME_DEFAULT:string 							= 'First Name';
+	private SURNAME_DEFAULT:string 								= 'Surname';
+	
 	/**
 	* Switches between options on how to upload job spec 
 	* to use to perform filtering
@@ -344,8 +347,8 @@ export class SuggestionsComponent implements OnInit {
 	public resetSuggestionFilterForm():void{
 		this.suggestionFilterForm = 				new UntypedFormGroup({
 			searchPhrase:							new UntypedFormControl(''),
-			searchPhraseFirstName:					new UntypedFormControl('First Name'),
-			searchPhraseSurname:					new UntypedFormControl('Surname'),
+			searchPhraseFirstName:					new UntypedFormControl(this.FIRST_NAME_DEFAULT),
+			searchPhraseSurname:					new UntypedFormControl(this.SURNAME_DEFAULT),
 			contractType: 							new UntypedFormControl('Both'),
 			minYearsExperience: 					new UntypedFormControl(''),
 			maxYearsExperience: 					new UntypedFormControl(''),
@@ -1190,6 +1193,10 @@ export class SuggestionsComponent implements OnInit {
  	* Shows search type selection modal 
 	*/
 	public doShowSearchTypeFilterSelectionModal():void{
+		
+		this.FIRST_NAME_DEFAULT 	= this.translate.instant('arenella-suggestions-search-type-name-firstname-default');
+		this.SURNAME_DEFAULT 		= this.translate.instant('arenella-suggestions-search-type-name-surname-default');
+		
 		this.resetSearhFields();
 		this.searchTypeFilterSelectionModal.nativeElement.showModal();;
 	}
@@ -1207,7 +1214,7 @@ export class SuggestionsComponent implements OnInit {
 		let firstName:string = this.suggestionFilterForm.get('searchPhraseFirstName')?.value;
 		let surname:string = this.suggestionFilterForm.get('searchPhraseSurname')?.value;
 		
-		if (firstName == 'First Name' || surname == 'Surname'){
+		if (firstName == this.FIRST_NAME_DEFAULT || surname == this.SURNAME_DEFAULT){
 			return 'search-name-default';
 		}
 		
@@ -1216,8 +1223,8 @@ export class SuggestionsComponent implements OnInit {
 	}
 	
 	public resetSearhFields():void{
-		this.suggestionFilterForm.get('searchPhraseFirstName')?.setValue('First Name');
-		this.suggestionFilterForm.get('searchPhraseSurname')?.setValue('Surname');
+		this.suggestionFilterForm.get('searchPhraseFirstName')?.setValue(this.FIRST_NAME_DEFAULT);
+		this.suggestionFilterForm.get('searchPhraseSurname')?.setValue(this.SURNAME_DEFAULT);
 		this.suggestionFilterForm.get('searchPhrase')?.setValue('');
 	} 
 	
@@ -1226,11 +1233,11 @@ export class SuggestionsComponent implements OnInit {
 		let firstName:string 	= this.suggestionFilterForm.get('searchPhraseFirstName')?.value;
 		let surname:string 		= this.suggestionFilterForm.get('searchPhraseSurname')?.value;
 		
-		if(firstName && firstName == 'First Name'){
+		if(firstName && firstName == this.FIRST_NAME_DEFAULT){
 			this.suggestionFilterForm.get('searchPhraseFirstName')?.setValue('');	
 		}
 		
-		if(surname && surname == 'Surname'){
+		if(surname && surname == this.SURNAME_DEFAULT){
 			this.suggestionFilterForm.get('searchPhraseSurname')?.setValue('');
 		}
 		

@@ -50,7 +50,7 @@ public class CandidateFullProfileAPIOutboundTest {
 	private static final RateAPIOutbound			RATE_PERM				= new RateAPIOutbound(CURRENCY.GBP, PERIOD.YEAR, 10000, 20000);
 	private static final Rate						RATE_CONTRACT_CAN		= new Rate(CURRENCY.EUR, PERIOD.HOUR, 200, 300);
 	private static final Rate						RATE_PERM_CAN			= new Rate(CURRENCY.GBP, PERIOD.YEAR, 20000, 30000);
-	private static final String						EMAIL				 	= "kparkings@gmail.com";
+	private static final String						EMAIL				 	= "admin@arenella-ict.com";
 	private static final String 					COMMENTS				= "A comment";
 	private static final DAYS_ON_SITE				DAYS_ON_SITE_VAL		= DAYS_ON_SITE.FOUR;
 	private static final LocalDate 					AVAILABLE_FROM_DATE		= LocalDate.of(2023, 12, 3);

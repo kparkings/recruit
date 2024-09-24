@@ -27,7 +27,7 @@ public class CandidateStandardAPIOutboundTest {
 	private final String 			candidateId				= "999";
 	private final String 			firstname				= "Kevin";
 	private final String 			surname					= "Parkings";
-	private final String 			email					= "kparkings@gmail.com";
+	private final String 			email					= "admin@arenella-ict.com";
 	private final String			roleSought				= "Senior Java Developer";
 	private final FUNCTION			function				= FUNCTION.JAVA_DEV;
 	private final COUNTRY 			country					= COUNTRY.NETHERLANDS;

@@ -315,7 +315,7 @@ public class ListingControllerTest {
 		final UUID				listingId		= UUID.randomUUID();
 		final MultipartFile 	attachment		= Mockito.mock(MultipartFile.class);
 		final String 			senderName		= "Kevin Parkings";
-		final String 			senderEmail		= "kparkings@gmail.com";
+		final String 			senderEmail		= "admin@arenella-ict.com";
 		final String 			message			= "some message";
 		
 		ArgumentCaptor<ListingContactRequest> argCaptContactRequest = ArgumentCaptor.forClass(ListingContactRequest.class);

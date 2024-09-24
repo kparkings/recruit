@@ -162,7 +162,7 @@ public class RecruitersMonolithExternalEventPublisher implements RecruitersExter
 						.model(modelExt)
 						.persistable(false)
 						.recipients(Set.of(new EmailRecipient<UUID>(UUID.randomUUID(), event.getRecipientId(), ContactType.RECRUITER)))
-						.sender(new Sender<>(UUID.randomUUID(), "", SenderType.SYSTEM, "kparkings@gmail.com"))
+						.sender(new Sender<>(UUID.randomUUID(), "", SenderType.SYSTEM, "no-reply@arenella-ict.com"))
 						.title("Arenella-ICT - Reaction To Requested Candidate on Marketplace")
 						.topic(EmailTopic.OPEN_POSITION_CONTACT_REQUEST)
 					.build();
@@ -206,7 +206,7 @@ public class RecruitersMonolithExternalEventPublisher implements RecruitersExter
 						.model(modelExt)
 						.persistable(false)
 						.recipients(Set.of(new EmailRecipient<UUID>(UUID.randomUUID(), event.getRecipientId(), ContactType.RECRUITER)))
-						.sender(new Sender<>(UUID.randomUUID(), "", SenderType.SYSTEM, "kparkings@gmail.com"))
+						.sender(new Sender<>(UUID.randomUUID(), "", SenderType.SYSTEM, "no-reply@arenella-ict.com"))
 						.title("Arenella-ICT - Reaction To Offered Candidate on Marketplace")
 						.topic(EmailTopic.OFFERED_CANDIDATE_CONTACT_REQUEST)
 					.build();
@@ -250,7 +250,7 @@ public class RecruitersMonolithExternalEventPublisher implements RecruitersExter
 						.model(modelExt)
 						.persistable(false)
 						.recipients(Set.of(new EmailRecipient<UUID>(UUID.randomUUID(), event.getRecipientId(), ContactType.RECRUITER)))
-						.sender(new Sender<>(UUID.randomUUID(), "", SenderType.SYSTEM, "kparkings@gmail.com"))
+						.sender(new Sender<>(UUID.randomUUID(), "", SenderType.SYSTEM, "no-reply@arenella-ict.com"))
 						.title("Arenella-ICT - Contact Request From A Recruiter")
 						.topic(EmailTopic.REC_TO_REC_CONTACT_REQUEST)
 					.build();

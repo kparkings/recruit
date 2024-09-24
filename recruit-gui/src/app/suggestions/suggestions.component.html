@@ -25,11 +25,11 @@
 				<div *ngIf="currentView === 'suggestion-results'">		
 					<table class="mobile-search-box">
 						<tr>
-							<td class="sugg-srch-hdr" >{{'arenella-suggestions-job-title' | translate}}<span style="cursor:pointer; color:green;" (click)='doShowSearchTypeFilterSelectionModal()'> ...</span></td>
+							<td class="sugg-srch-hdr" >{{'arenella-suggestions-job-title' | translate}}<span style="cursor:pointer; color:#6a5acd;" (click)='doShowSearchTypeFilterSelectionModal()'> ...</span></td>
 							<td class="sugg-srch-bdy">
-								<input type="text" value="Java Developer" 	class="sugg-srch-job-title" 									formControlName="searchPhrase" 				*ngIf="getCurrentSearchFilterType() === 'FUNCTION' || getCurrentSearchFilterType() == 'EMAIL'">
-								<input type="text" value="First Name" 		class="sugg-srch-job-title-name {{cssSearchNameDefault()}}" 	formControlName="searchPhraseFirstName" 	*ngIf="getCurrentSearchFilterType() === 'NAME'" (click)="activateSearhFields()">
-								<input type="text" value="Surname" 			class="sugg-srch-job-title-name {{cssSearchNameDefault()}}" 	formControlName="searchPhraseSurname" 		*ngIf="getCurrentSearchFilterType() === 'NAME'" (click)="activateSearhFields()">
+								<input type="text" class="sugg-srch-job-title" 									formControlName="searchPhrase" 				*ngIf="getCurrentSearchFilterType() === 'FUNCTION' || getCurrentSearchFilterType() == 'EMAIL'">
+								<input type="text" class="sugg-srch-job-title-name {{cssSearchNameDefault()}}" 	formControlName="searchPhraseFirstName" 	*ngIf="getCurrentSearchFilterType() === 'NAME'" (click)="activateSearhFields()">
+								<input type="text" class="sugg-srch-job-title-name {{cssSearchNameDefault()}}" 	formControlName="searchPhraseSurname" 		*ngIf="getCurrentSearchFilterType() === 'NAME'" (click)="activateSearhFields()">
 							</td>
 						</tr>
 						<tr>
@@ -282,15 +282,15 @@
 			
 				<tr>
 					<td style="padding:10px;"><input type="radio"  value="FUNCTION" formControlName="searchType"></td>
-					<td style="text-align:left;font-weight:bold;"><label class="radio-button_label">Function</label></td>
+					<td style="text-align:left;font-weight:bold;"><label class="radio-button_label">{{'arenella-suggestions-search-type-function' | translate}}</label></td>
 				</tr>
 				<tr>
 					<td style="padding:10px;"><input type="radio" value="NAME" formControlName="searchType"></td>
-					<td style="text-align:left;font-weight:bold;"><label class="radio-button_label">Name</label></td>
+					<td style="text-align:left;font-weight:bold;"><label class="radio-button_label">{{'arenella-suggestions-search-type-name' | translate}}</label></td>
 				</tr>
 				<tr>
 					<td style="padding:10px;"><input type="radio" value="EMAIL" formControlName="searchType"></td>
-					<td style="text-align:left;font-weight:bold;"><label class="radio-button_label">Email</label></td>
+					<td style="text-align:left;font-weight:bold;"><label class="radio-button_label">{{'arenella-suggestions-search-type-email' | translate}}</label></td>
 				</tr>
 			</table>
 		</form>

@@ -18,7 +18,7 @@ import com.arenella.recruit.listings.beans.ListingAlert;
 */
 public class ListingAlertAPIIncomingTest {
 
-	private static final String 				EMAIL			= "kparkings@gmail.com";
+	private static final String 				EMAIL			= "admin@arenella-ict.com";
 	private static final Listing.listing_type 	CONTRACT_TYPE 	= Listing.listing_type.BOTH;
 	private static final Set<Listing.country> 	COUNTRIES 		= Set.of(Listing.country.NETHERLANDS);
 	private static final Set<Listing.TECH> 		CATEGORIES 		= Set.of(Listing.TECH.ARCHITECT);

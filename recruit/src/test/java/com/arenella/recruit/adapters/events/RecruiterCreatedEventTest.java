@@ -18,7 +18,7 @@ public class RecruiterCreatedEventTest {
 		
 		final String recruiterId 		= "kparkings";
 		final String encryptedPassword 	= "3sefes##@@1!f";
-		final String email				= "kparkings@gmail.com";
+		final String email				= "admin@arenella-ict.com";
 		final String firstName			= "Kevin";
 		final String surname			= "Parkings";
 		

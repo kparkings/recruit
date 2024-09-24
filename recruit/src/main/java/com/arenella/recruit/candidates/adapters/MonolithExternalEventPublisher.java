@@ -103,7 +103,7 @@ public class MonolithExternalEventPublisher implements ExternalEventPublisher{
 						.model(model)
 						.persistable(false)
 						.recipients(Set.of(new EmailRecipient<UUID>(UUID.randomUUID(), command.getRecruiterId(), ContactType.RECRUITER)))
-						.sender(new Sender<>(UUID.randomUUID(), "", SenderType.SYSTEM, "kparkings@gmail.com"))
+						.sender(new Sender<>(UUID.randomUUID(), "", SenderType.SYSTEM, "no-reply@arenella-ict.com"))
 						.title("Arenella-ICT - New Matching Candidates")
 						.topic(EmailTopic.ALERT_MATCHES)
 					.build();
@@ -191,7 +191,7 @@ public class MonolithExternalEventPublisher implements ExternalEventPublisher{
 						.model(modelExt)
 						.persistable(false)
 						.recipients(Set.of(new EmailRecipient<UUID>(UUID.randomUUID(), event.getRecipientId(), ContactType.RECRUITER)))
-						.sender(new Sender<>(UUID.randomUUID(), "", SenderType.SYSTEM, "kparkings@gmail.com"))
+						.sender(new Sender<>(UUID.randomUUID(), "", SenderType.SYSTEM, "no-reply@arenella-ict.com"))
 						.title("Arenella-ICT - Contact Request From A Recruiter")
 						.topic(EmailTopic.REC_TO_REC_CONTACT_REQUEST)
 					.build();

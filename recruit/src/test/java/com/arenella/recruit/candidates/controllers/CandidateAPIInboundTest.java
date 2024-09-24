@@ -28,7 +28,7 @@ public class CandidateAPIInboundTest {
 	private static final String 					candidateId 			= "Candidate1";
 	private static final String 					firstname				= "Kevin";
 	private static final String 					surname					= "Parkings";
-	private static final String 					email					= "kparkings@gmail.com";
+	private static final String 					email					= "admin@arenella-ict.com";
 	private static final String						roleSought				= "Junior C# developer";
 	private static final FUNCTION					function				= FUNCTION.JAVA_DEV;
 	private static final COUNTRY 					country 				= COUNTRY.NETHERLANDS;
