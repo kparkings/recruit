@@ -16,16 +16,22 @@
 		<li  class="li-arenella-nav-pre-login li-arenella-nav-pre-login-std" *ngIf="!isAuthenticated()">
            <a  class="dropdown-item dropdown-item-preauth" routerLink="/faq">{{'arenella-app-menu-faq' | translate}}</a>
         </li>
+        <li  class="li-arenella-nav-pre-login li-arenella-nav-pre-login-std" *ngIf="!isAuthenticated()">
+           <a  class="dropdown-item dropdown-item-preauth" routerLink="/contact">{{'arenella-app-menu-contact' | translate}}</a>
+        </li>
 		<li  class="li-arenella-nav-pre-login li-arenella-nav-pre-login-std" *ngIf="!isAuthenticated()">
            <a  class="dropdown-item dropdown-item-preauth" routerLink="/suggestions">{{'arenella-app-menu-login' | translate}}</a>
-        </li> 
-		<li class="li-arenella-nav-pre-login li-arenella-nav-pre-signup signup-candidate" *ngIf="!isAuthenticated()">
+        </li>
+         <li class="spacer-for-mobile-menu" *ngIf="!isAuthenticated()">
+           	
+ 	    </li> 
+        <li class="li-arenella-nav-pre-login li-arenella-nav-pre-signup signup-candidate" *ngIf="!isAuthenticated()">
            	<a class="dropdown-item dropdown-item-preauth" routerLink="/create-candidate">{{'arenella-app-menu-candidate-signup' | translate}}</a>
  	    </li>
 		<li class="li-arenella-nav-pre-login li-arenella-nav-pre-signup signup-recruiter" *ngIf="!isAuthenticated()">
     		<a class="dropdown-item dropdown-item-preauth" routerLink="/recruiter-signup">{{'arenella-app-menu-recruiter-signup' | translate}}</a>
         </li>
-
+		
 		<!-- Post Authentication -->
 		<li  class="li-arenella-nav {{menuItemMobileCss}}" *ngIf="isAuthenticated() && !isRecruiterNoSubscription() && !hasUnpaidSubscription()" (click)="refreschUnreadAlerts()">
            <a  class="dropdown-item" routerLink="/listing">{{'arenella-app-menu-job-board' | translate}}</a>

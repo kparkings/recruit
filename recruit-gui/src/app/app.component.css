@@ -111,6 +111,13 @@
 		width:48%;
 		margin:1%;
 	}
+	
+	.spacer-for-mobile-menu{
+		margin-bottom:5px;
+		float:left;
+		border-right: none;
+		width:100%;
+	}
 }
 
 .filter-close-box{

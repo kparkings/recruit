@@ -1,0 +1,32 @@
+.intro{
+	width:80%;
+	margin-top:20px;
+	margin-left:10%;
+	margin-right:10%;
+	margin-bottom:50px;
+	text-align:center;
+}
+
+.contact-div{
+	margin: 0 auto;
+	width:600px;
+}
+
+.contact-div table tr th{
+	font-weight:bold;
+	padding:10px;
+}
+
+.contact-div table tr td{
+	font-weight:normal;
+	padding:10px;
+}
+
+/*mobile*/
+@media (max-width: 768px) {
+	.contact-div{
+	margin-left:auto;
+	margin-right:auto;
+	width:90%;
+}
+}

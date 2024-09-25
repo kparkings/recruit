@@ -20,11 +20,13 @@ import { RecruiterAlertsComponent } 					from './recruiter-alerts/recruiter-aler
 import { RecruiterProfileComponent } 					from './recruiter-profile/recruiter-profile.component';
 import { RecruiterStatsComponent } 						from './recruiter-stats/recruiter-stats.component';
 import { NewsfeedComponent } 							from './newsfeed/newsfeed.component';
+import { ContactComponent } 							from './contact/contact.component';
 
 const routes: Routes = [
 	{path: '', 						component: ListingComponent},
 	{path: 'about', 				component: HomeComponent},
 	{path: 'faq', 					component: FaqComponent},
+	{path: 'contact', 				component: ContactComponent},
 	{path: 'new-candidate', 		component: NewCandidateComponent, 			canActivate: [AuthGuardService]},
 	{path: 'suggestions',	 		component: SuggestionsComponent, 			canActivate: [AuthGuardService]},
 	{path: 'email',	 				component: EmailComponent, 					canActivate: [AuthGuardService]},
