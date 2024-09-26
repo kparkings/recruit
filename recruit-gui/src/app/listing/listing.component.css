@@ -244,7 +244,7 @@
 }
 
 .listing-alert-option {
-	padding: 5px;
+	padding: 8px;
 	border-radius: 0%;
 	background: grey;
 	border: black;
@@ -270,12 +270,40 @@
 	color: grey;
 }
 
+.country-filter{
+	margin-left:8px;
+	cursor:pointer;
+}
+
+.country-flag{
+	height:30px;
+	width:55px;
+	padding-left:0px;
+	margin-left:0px;
+	margin-bottom:10px;
+	background-position:0%;
+}
+
+.country-selections{
+	width:100%;
+}
+
+.country-selected-true{
+	opacity:1;
+}
+
+.country-selected-false{
+	opacity:0.35;
+}
+
+
 @media ( max-width :700px) {
 	.listing-pane {
 		width: 100%;
 		padding-left: 0%;
 		margin-left: 0%;
 	}
+	
 	.filters {
 		margin-left: 0%;
 	}
@@ -286,5 +314,24 @@
 		min-width: 98%;
 		padding-right: 0px;
 		padding-left: 5px;
+	}
+	
+	.listing-alert-option {
+		padding: 5px;
+		border-radius: 0%;
+		border: black;
+		margin-right: 5px;
+		margin-bottom: 5px;
+		white-space: nowrap;
+		float: left;
+	}
+	
+	.country-flag{
+		height:25px;
+		width:30px;
+		padding-left:0px;
+		margin-left:0px;
+		margin-bottom:5px;
+		background-position:0%;
 	}
 }

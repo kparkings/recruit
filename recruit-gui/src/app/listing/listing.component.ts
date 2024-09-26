@@ -691,11 +691,19 @@ export class ListingComponent implements OnInit {
 		}
 	}
 	
+	//public selectedCountryCss(ft:SelectableCountry):string{
+	//	if(this.selectableCountries.filter(ftItem => ftItem == ft)[0].selected){
+	//		return "listing-alert-option-selected";
+	//	} else {
+	//		return "";
+	//	}
+	//}
+	
 	public selectedCountryCss(ft:SelectableCountry):string{
 		if(this.selectableCountries.filter(ftItem => ftItem == ft)[0].selected){
-			return "listing-alert-option-selected";
+			return "true";
 		} else {
-			return "";
+			return "false";
 		}
 	}
 	

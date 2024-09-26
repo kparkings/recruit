@@ -209,10 +209,18 @@
 					</div>
 				</div>
 				<div *ngIf="createAlertStep == 2">
+				
+				
 					<P>{{'arenella-listing-email-alert-3' | translate}}</P>
+					
 					<div class="alert-options center">
-						<div class="listing-alert-option {{selectedCountryCss(sc)}}" *ngFor="let sc of selectableCountries" (click)="toggleCountry(sc)">{{sc.country.humanReadable}}</div>
+						<div class="country-selections">
+							<span class="country-filter country-selected-{{selectedCountryCss(sc)}}" *ngFor="let sc of selectableCountries" (click)="toggleCountry(sc)">
+								<span class="country-flag flag-icon flag-icon-{{sc.country.iso2Code}} " title="{{sc.country.humanReadable}}"></span>
+							</span>
+						</div>
 					</div>
+					
 				</div>
 				<div *ngIf="createAlertStep == 3">
 					<P>{{'arenella-listing-email-alert-confirm' | translate}}</P>
