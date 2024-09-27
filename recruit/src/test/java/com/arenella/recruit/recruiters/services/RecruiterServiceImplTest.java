@@ -5,6 +5,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.mockito.Mockito.mockitoSession;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -28,21 +29,27 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import com.arenella.recruit.adapters.events.RecruiterDeletedEvent;
 import com.arenella.recruit.adapters.events.RecruiterPasswordUpdatedEvent;
 import com.arenella.recruit.adapters.events.RecruiterUpdatedEvent;
 import com.arenella.recruit.adapters.events.SubscriptionAddedEvent;
 import com.arenella.recruit.emailservice.adapters.RequestSendEmailCommand;
 import com.arenella.recruit.emailservice.beans.Email.EmailTopic;
+import com.arenella.recruit.recruiters.beans.RecruiterCredit;
 import com.arenella.recruit.recruiters.adapters.RecruitersExternalEventPublisher;
 import com.arenella.recruit.recruiters.beans.CreditBasedSubscription;
 import com.arenella.recruit.recruiters.beans.FirstGenRecruiterSubscription;
+import com.arenella.recruit.recruiters.beans.OpenPosition;
 import com.arenella.recruit.recruiters.beans.PaidPeriodRecruiterSubscription;
 import com.arenella.recruit.recruiters.beans.Recruiter;
 import com.arenella.recruit.recruiters.beans.Recruiter.language;
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_action;
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_status;
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_type;
+import com.arenella.recruit.recruiters.dao.OpenPositionDao;
+import com.arenella.recruit.recruiters.dao.RecruiterCreditDao;
 import com.arenella.recruit.recruiters.dao.RecruiterDao;
+import com.arenella.recruit.recruiters.dao.RecruiterProfileDao;
 import com.arenella.recruit.recruiters.entities.RecruiterEntity;
 import com.arenella.recruit.recruiters.entities.RecruiterSubscriptionEntity;
 import com.arenella.recruit.recruiters.utils.RecruiterSubscriptionActionHandler;
@@ -69,6 +76,15 @@ public class RecruiterServiceImplTest {
 	
 	@Mock
 	private RecruitersExternalEventPublisher	mockExternEventPublisher;
+
+	@Mock
+	private RecruiterCreditDao					mockCreditDao;
+	
+	@Mock
+	private RecruiterProfileDao					mockRecruiterProfileDao;
+	
+	@Mock
+	private OpenPositionDao						mockOpenPositionDao;
 	
 	private static final String 			userId 					= "kparkings";
 	private static final LocalDate 			accountCreated 			= LocalDate.of(2021, 10, 13);
@@ -919,6 +935,33 @@ public class RecruiterServiceImplTest {
 		assertEquals(userId, model.get("userId"));
 		assertEquals(firstname, model.get("firstname"));
 		assertNotNull(model.get("password"));
+		
+	}
+	
+	/**
+	* Tests successful deletion of Recruiter
+	* @throws Exception
+	*/
+	@Test
+	public void deleteRecruiter_happyPath() throws Exception {
+		
+		ArgumentCaptor<RecruiterDeletedEvent> argCaptEvent = ArgumentCaptor.forClass(RecruiterDeletedEvent.class);
+		
+		final String recruiterId = "aRecId";
+		
+		Mockito.when(this.mockOpenPositionDao.findAllOpenPositionsByRecruiterId(recruiterId)).thenReturn(Set.of(OpenPosition.builder().id(UUID.randomUUID()).build(),OpenPosition.builder().id(UUID.randomUUID()).build()));
+		Mockito.when(this.mockCreditDao.getByRecruiterId(recruiterId)).thenReturn(Optional.of(RecruiterCredit.builder().credits(1).recruiterId(recruiterId).build()));
+		Mockito.doNothing().when(this.mockExternEventPublisher).publishRecruiterAccountDeleted(argCaptEvent.capture());
+		
+		this.service.deleteRecruiter(recruiterId);
+		
+		Mockito.verify(this.mockOpenPositionDao, Mockito.times(2)).deleteById(Mockito.any());
+		Mockito.verify(this.mockCreditDao).deleteById(recruiterId);
+		Mockito.verify(this.mockRecruiterProfileDao).deleteById(recruiterId);
+		Mockito.verify(this.mockDao).deleteById(recruiterId);
+		Mockito.verify(this.mockExternEventPublisher).publishRecruiterAccountDeleted(Mockito.any());
+		
+		assertEquals(recruiterId, argCaptEvent.getValue().getRecruiterId());
 		
 	}
 	

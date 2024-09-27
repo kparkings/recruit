@@ -1,6 +1,7 @@
 package com.arenella.recruit.recruiters.controllers;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.security.Principal;
@@ -260,5 +261,24 @@ public class RecruiterControllerTest {
 		assertTrue(response.getBody());
 		
 	}
+	
+	/**
+	* Tests handling of recruiter deletions request
+	* @throws Exception
+	*/
+	@Test
+	public void testDeleteRecruiter() throws Exception {
+		
+		final String recruiterId = "kparkings";
+		
+		ResponseEntity<Void> response = this.recruiterController.deleteRecruiter(recruiterId);
+		
+		assertEquals(HttpStatus.OK, response.getStatusCode());
+		assertFalse(response.hasBody());
+		
+		Mockito.verify(this.mockRecruiterService).deleteRecruiter(recruiterId);
+		
+	}
+	
 
 }

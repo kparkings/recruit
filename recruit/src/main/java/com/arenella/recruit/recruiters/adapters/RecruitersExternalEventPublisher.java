@@ -4,6 +4,7 @@ import com.arenella.recruit.adapters.events.ContactRequestEvent;
 import com.arenella.recruit.adapters.events.OfferedCandidateContactRequestEvent;
 import com.arenella.recruit.adapters.events.OpenPositionContactRequestEvent;
 import com.arenella.recruit.adapters.events.RecruiterCreatedEvent;
+import com.arenella.recruit.adapters.events.RecruiterDeletedEvent;
 import com.arenella.recruit.adapters.events.RecruiterPasswordUpdatedEvent;
 import com.arenella.recruit.adapters.events.RecruiterUpdatedEvent;
 import com.arenella.recruit.adapters.events.SubscriptionAddedEvent;
@@ -71,5 +72,11 @@ public interface RecruitersExternalEventPublisher {
 	* @param event - Event informing of contact request
 	*/
 	public void publishRecruiterContactRequestEvent(ContactRequestEvent event);
+
+	/**
+	* Sends an Event informing other services that a Recruiters account was deleted
+	* @param recruiterDeletedEvent - Event informing of Recruiter account deleton
+	*/
+	public void publishRecruiterAccountDeleted(RecruiterDeletedEvent recruiterDeletedEvent);
 	
 }

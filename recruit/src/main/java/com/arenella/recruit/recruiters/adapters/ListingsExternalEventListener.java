@@ -1,6 +1,7 @@
 package com.arenella.recruit.recruiters.adapters;
 
 import com.arenella.recruit.adapters.events.RecruiterCreatedEvent;
+import com.arenella.recruit.adapters.events.RecruiterDeletedEvent;
 import com.arenella.recruit.adapters.events.RecruiterNoOpenSubscriptionEvent;
 import com.arenella.recruit.adapters.events.SubscriptionAddedEvent;
 
@@ -28,4 +29,10 @@ public interface ListingsExternalEventListener {
 	*/
 	void listenForRecruiterCreatedEvent(RecruiterCreatedEvent event);
 
+	/**
+	* Listens for Event informing that a Recruiter has been deleted
+	* @param event
+	*/
+	public void listenForRecruiterAccountDeletedEvent(RecruiterDeletedEvent recruiterDeletedEvent);
+	
 }

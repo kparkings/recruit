@@ -82,5 +82,12 @@ public interface RecruiterService {
 	* @return whether the user has a paid subscription
 	*/
 	boolean hasPaidSubscription(String userId);
+
+	/**
+	* Deletes recruiter and sends events to trigger removal of data relating 
+	* to the recruiter
+	* @param recruiterId - Unique identifier of the Recruiter
+	*/
+	public void deleteRecruiter(String recruiterId);
 	
 }

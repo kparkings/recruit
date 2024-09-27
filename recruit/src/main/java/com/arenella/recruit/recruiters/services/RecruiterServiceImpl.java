@@ -36,10 +36,14 @@ import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_
 import com.arenella.recruit.recruiters.beans.SubscriptionActionFeedback;
 import com.arenella.recruit.recruiters.dao.RecruiterCreditDao;
 import com.arenella.recruit.recruiters.dao.RecruiterDao;
+import com.arenella.recruit.recruiters.dao.RecruiterProfileDao;
 import com.arenella.recruit.recruiters.entities.RecruiterEntity;
 import com.arenella.recruit.recruiters.utils.PasswordUtil;
 import com.arenella.recruit.recruiters.utils.RecruiterSubscriptionActionHandler;
 import com.arenella.recruit.recruiters.utils.RecruiterSubscriptionFactory;
+
+import com.arenella.recruit.recruiters.dao.OpenPositionDao;
+import com.arenella.recruit.adapters.events.RecruiterDeletedEvent;
 
 /**
 * Servcies relating to Recruiters
@@ -59,6 +63,12 @@ public class RecruiterServiceImpl implements RecruiterService{
 	
 	@Autowired
 	private RecruiterCreditDao					creditDao;
+	
+	@Autowired
+	private RecruiterProfileDao					recruiterProfileDao;
+	
+	@Autowired
+	private OpenPositionDao						OpenPositionDao;
 	
 	/**
 	* Refer to the RecruiterService for details
@@ -354,7 +364,7 @@ public class RecruiterServiceImpl implements RecruiterService{
 	}
 	
 	/**
-	* Refer to the CandidateService for details 
+	* Refer to the RecruiterService for details 
 	*/
 	@Override
 	public boolean hasPaidSubscription(String userId) {
@@ -366,6 +376,21 @@ public class RecruiterServiceImpl implements RecruiterService{
 		}
 		
 		return credits.get().hasPaidSubscription();
+	}
+	
+	/**
+	* Refer to the RecruiterService for details 
+	*/
+	@Override
+	public void deleteRecruiter(String recruiterId) {
+		
+		this.OpenPositionDao.findAllOpenPositionsByRecruiterId(recruiterId).forEach(openPosition -> OpenPositionDao.deleteById(openPosition.getId()));
+		this.recruiterProfileDao.deleteById(recruiterId);
+		this.creditDao.getByRecruiterId(recruiterId).ifPresent(creditCredit -> this.creditDao.deleteById(creditCredit.getRecruiterId()));
+		this.recruiterDao.deleteById(recruiterId);
+		//- Subscriptions - TODO: Test these are deleted as part of parent Recruiter deletions
+		this.externEventPublisher.publishRecruiterAccountDeleted(new RecruiterDeletedEvent(recruiterId));
+			
 	}
 	
 	//MOVE TO FACTORY

@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -134,12 +135,27 @@ public class RecruiterController {
 	//TOD): [My are the credits which are recruiter based in Candodate service. Need to move the whole lot to for now I will add this hear to keep it consistent
 	/**
 	* Returns if the recruiter has paid subscription
-	* @return
+	* @return ResponseEntity
 	*/
 	@PreAuthorize("hasRole('RECRUITER')")
 	@GetMapping(path="recruiter/_paid_subscription")
 	public ResponseEntity<Boolean> hasPaidSubscription(Principal principal){
 		return ResponseEntity.ok(recruiterService.hasPaidSubscription(principal.getName()));
+	}
+	
+	/**
+	* Deletes a recruiter and initiates process of removing data related to the 
+	* Recruiter from the system
+	* @param recruiterId - Id of recruiter to be deleted
+	* @return ResponseEntity
+	*/
+	@PreAuthorize("hasRole('RECRUITER') OR hasRole('ADMIN')")
+	@DeleteMapping(path="recruiter/{recruiterId}")
+	public ResponseEntity<Void> deleteRecruiter(String recruiterId){
+
+		this.recruiterService.deleteRecruiter(recruiterId);
+		
+		return ResponseEntity.ok().build();
 	}
 	
 }

@@ -3,6 +3,7 @@ package com.arenella.recruit.emailservice.adapters;
 import com.arenella.recruit.adapters.events.CandidateDeletedEvent;
 import com.arenella.recruit.adapters.events.CandidateUpdatedEvent;
 import com.arenella.recruit.adapters.events.RecruiterCreatedEvent;
+import com.arenella.recruit.adapters.events.RecruiterDeletedEvent;
 import com.arenella.recruit.adapters.events.RecruiterUpdatedEvent;
 import com.arenella.recruit.candidates.adapters.CandidateCreatedEvent;
 
@@ -47,5 +48,11 @@ public interface EmailServiceExternalEventListener {
 	* @param candidateDeletedEvent - Candidate Deleted
 	*/
 	public void listenForCandidteDeletedEvent(CandidateDeletedEvent candidateDeletedEvent);
+
+	/**
+	* Listens for Event informing that a Recruiter has been deleted
+	* @param event
+	*/
+	public void listenForRecruiterAccountDeletedEvent(RecruiterDeletedEvent recruiterDeletedEvent);
 
 }

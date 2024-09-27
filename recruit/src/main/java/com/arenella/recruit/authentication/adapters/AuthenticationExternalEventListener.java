@@ -4,6 +4,7 @@ import com.arenella.recruit.adapters.events.CandidateAccountCreatedEvent;
 import com.arenella.recruit.adapters.events.CandidateDeletedEvent;
 import com.arenella.recruit.adapters.events.CandidatePasswordUpdatedEvent;
 import com.arenella.recruit.adapters.events.RecruiterCreatedEvent;
+import com.arenella.recruit.adapters.events.RecruiterDeletedEvent;
 import com.arenella.recruit.adapters.events.RecruiterNoOpenSubscriptionEvent;
 import com.arenella.recruit.adapters.events.RecruiterPasswordUpdatedEvent;
 import com.arenella.recruit.adapters.events.SubscriptionAddedEvent;
@@ -55,5 +56,11 @@ public interface AuthenticationExternalEventListener {
 	* @param event
 	*/
 	public void listenForCandidteDeletedEvent(CandidateDeletedEvent candidateDeletedEvent);
+
+	/**
+	* Listens for Event informing that a Recruiter has been deleted
+	* @param event
+	*/
+	public void listenForRecruiterAccountDeletedEvent(RecruiterDeletedEvent recruiterDeletedEvent);
 
 }

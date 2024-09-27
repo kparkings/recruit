@@ -5,6 +5,7 @@ import com.arenella.recruit.adapters.events.CreditsUsedEvent;
 import com.arenella.recruit.adapters.events.CurriculumSkillsExtractionEvent;
 import com.arenella.recruit.adapters.events.CurriculumUpdatedEvent;
 import com.arenella.recruit.adapters.events.RecruiterCreatedEvent;
+import com.arenella.recruit.adapters.events.RecruiterDeletedEvent;
 import com.arenella.recruit.adapters.events.RecruiterNoOpenSubscriptionEvent;
 import com.arenella.recruit.adapters.events.RecruiterUpdatedEvent;
 import com.arenella.recruit.adapters.events.SubscriptionAddedEvent;
@@ -62,5 +63,11 @@ public interface CandidateExternalEventListener {
 	* @param event - Contains details of the Extracted Skills
 	*/
 	public void listenForCurriculumSkillsExtractionEvent(CurriculumSkillsExtractionEvent event);
+
+	/**
+	* Listens for Event informing that a Recruiter has been deleted
+	* @param event
+	*/
+	public void listenForRecruiterAccountDeletedEvent(RecruiterDeletedEvent recruiterDeletedEvent);
 	
 }

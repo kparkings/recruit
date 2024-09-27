@@ -12,6 +12,7 @@ import com.arenella.recruit.adapters.events.ContactRequestEvent;
 import com.arenella.recruit.adapters.events.OfferedCandidateContactRequestEvent;
 import com.arenella.recruit.adapters.events.OpenPositionContactRequestEvent;
 import com.arenella.recruit.adapters.events.RecruiterCreatedEvent;
+import com.arenella.recruit.adapters.events.RecruiterDeletedEvent;
 import com.arenella.recruit.adapters.events.RecruiterNoOpenSubscriptionEvent;
 import com.arenella.recruit.adapters.events.RecruiterPasswordUpdatedEvent;
 import com.arenella.recruit.adapters.events.RecruiterUpdatedEvent;
@@ -257,6 +258,17 @@ public class RecruitersMonolithExternalEventPublisher implements RecruitersExter
 		
 		this.emailServiceExternalEventListener.listenForSendEmailCommand(cExt);
 		
+	}
+
+	/**
+	* Refer to the ExternalEventPublisher interface for details 
+	*/
+	@Override
+	public void publishRecruiterAccountDeleted(RecruiterDeletedEvent recruiterDeletedEvent) {
+		this.authenticationExternalEventListener.listenForRecruiterAccountDeletedEvent(recruiterDeletedEvent);
+		this.emailServiceExternalEventListener.listenForRecruiterAccountDeletedEvent(recruiterDeletedEvent);
+		this.listingExternalEventListener.listenForRecruiterAccountDeletedEvent(recruiterDeletedEvent);
+		this.candidateExternalEventListener.listenForRecruiterAccountDeletedEvent(recruiterDeletedEvent);
 	}
 
 }
