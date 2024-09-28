@@ -774,7 +774,16 @@ export class SuggestionsComponent implements OnInit {
 	*/
 	public showSuggestedCandidateOverview(candidateSuggestion:Candidate):void{
 		
-		if(!candidateSuggestion.available && !this.doPaidSubscriptionCheck()){
+		if (this.isCandidate()) {
+			this.setLeftInfoPane(candidateSuggestion.candidateId, this.suggestedCandidate);
+		
+			this.currentView 			= 'suggested-canidate-overview';
+			this.suggestedCandidate 	= candidateSuggestion;
+			
+			this.doScrollTop();
+		}
+		
+		if(!candidateSuggestion.available && !this.doPaidSubscriptionCheck() || this.isCandidate()){
 			this.paidFeature = "paidFeatureUnavailableCandidates";
 			return;
 		}
@@ -1153,7 +1162,7 @@ export class SuggestionsComponent implements OnInit {
 	public doPaidSubscriptionCheck():boolean{
 		let hasPaidSubscription:boolean = (sessionStorage.getItem("hasPaidSubscription") === 'true');
 		
-		if (!this.isAdmin() && !hasPaidSubscription) {
+		if (!this.isAdmin() && !this.isCandidate() && !hasPaidSubscription) {
 			this.suggestionFilterForm.get("includeUnavailableCandidates")?.setValue('');
 			this.paidSubscriptionBox.nativeElement.showModal();
 			return false;
@@ -1181,7 +1190,7 @@ export class SuggestionsComponent implements OnInit {
 	
 	public getUnvailableCssClass(candidate:Candidate):string{
 		
-		if(this.isAdmin() || this.hasPaidSubscription()) {
+		if(this.isAdmin() || this.isCandidate() || this.hasPaidSubscription()) {
 			return "";
 		}
 		
