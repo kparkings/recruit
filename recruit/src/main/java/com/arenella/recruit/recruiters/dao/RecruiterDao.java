@@ -66,5 +66,15 @@ public interface RecruiterDao extends CrudRepository<RecruiterEntity, String>{
 	}
 	
 	
+	default void saveRecruiter(Recruiter recruiter) {
+		this.save(RecruiterEntity.convertToEntity(recruiter, Optional.empty()));
+	}
+	
+	default void deleteRecruiter(Recruiter recruiter) {
+		RecruiterEntity entity = RecruiterEntity.convertToEntity(recruiter, Optional.empty());
+		this.save(entity);
+		this.delete(entity);
+		
+	}
 	
 }

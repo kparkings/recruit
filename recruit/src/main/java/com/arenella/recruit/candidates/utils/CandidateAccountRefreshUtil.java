@@ -3,6 +3,7 @@ package com.arenella.recruit.candidates.utils;
 import java.time.LocalDate;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -47,6 +48,9 @@ public class CandidateAccountRefreshUtil {
 
 	//TODO: [KP] Setting this out for the time being because I want the new candidates to already start getting their lastAccountRefresh values assigned
 	
+	@Value("${arenella.ict.candidate.email.availability}")
+	public String candidateAvailabilityEmailEnabled = "true";
+	
 	@Autowired
 	private CandidateRepository 				candidateRepository;
 	
@@ -74,7 +78,9 @@ public class CandidateAccountRefreshUtil {
 		}
 		
 		try {
-			this.runEmailCandidateSummary();
+			if (candidateAvailabilityEmailEnabled.equals("true")) {
+				this.runEmailCandidateSummary();
+			}
 		}catch(Exception e) {
 			e.printStackTrace();
 		}

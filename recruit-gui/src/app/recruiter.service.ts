@@ -11,7 +11,7 @@ import { RecruiterUpdateRequest }					from './recruiter-account/recruiter-update
   providedIn: 'root'
 })
 export class RecruiterService {
-
+  
 	/**
 	* Constructor
 	* @param httpClient - for sending httpRequests to backend
@@ -34,6 +34,16 @@ export class RecruiterService {
     	return this.httpClient.get<any>(backendUrl, this.httpOptions);
   	}
 
+	/**
+  	* Sends request to delete Recruiter and all related data 
+  	*/
+  	public deleteRecruiter(recruiterToDelete: string) {
+        
+        const backendUrl:string = environment.backendUrl +'recruiter/' + recruiterToDelete;
+  
+    	return this.httpClient.delete<any>(backendUrl, this.httpOptions);
+    }
+    
   	/**
   	* Returns a list of available Recruiters 
   	*/

@@ -2193,4 +2193,67 @@ public class CandidateServiceImplTest {
 		
 	}
 	
+	/**
+	* Tests deletion of Candidates owned by a given Recruiter
+	* @throws Exception
+	*/
+	@Test
+	public void testDeleteCandidatesForOwnedByRecruiter() throws Exception{
+		
+		final String recruiterId = "rec1";
+		
+		Mockito.when(this.mockCandidateRepo.findCandidates(Mockito.any(), Mockito.any(), Mockito.eq(750))).thenReturn(Set.of(Candidate.builder().build(), Candidate.builder().build()));
+		
+		this.service.deleteCandidatesForOwnedByRecruiter(recruiterId);
+		
+		//Cant verift x 2 Candidate deletes called as service is not a mock
+	}
+	
+	/**
+	* Tests removal of a Recruiter's saved Candidates
+	* @throws Exception
+	*/
+	@Test
+	public void testDeleteSavedCandidatesForRecruiter() throws Exception{
+		
+		final String recId = "aRecId";
+		
+		Mockito.when(this.mockSavedCandidateDao.fetchSavedCandidatesByUserId(recId)).thenReturn(Set.of(SavedCandidate.builder().candidateId(1).build(),SavedCandidate.builder().candidateId(2).build()));
+		
+		this.service.deleteSavedCandidatesForRecruiter(recId);
+		
+		Mockito.verify(this.mockSavedCandidateDao, Mockito.times(2)).delete(Mockito.eq(recId), Mockito.anyLong());
+		
+	}
+	
+	/**
+	* Tests Recruiter Credit deletion
+	* @throws Exception
+	*/
+	@Test
+	public void testDeleteCreditsForRecruiter() throws Exception{
+		
+		final String recruiterId = "aRecId1";
+		
+		this.service.deleteCreditsForRecruiter(recruiterId);
+		
+		Mockito.verify(this.mockCreditDao).deleteById(recruiterId);
+		
+	}
+	
+	/**
+	* Tests Recruiter Credit deletion
+	* @throws Exception
+	*/
+	@Test
+	public void testDeleteContactForRecruiter() throws Exception{
+		
+		final String recruiterId = "aRecId1";
+		
+		this.service.deleteContactForRecruiter(recruiterId);
+		
+		Mockito.verify(this.mockContactDao).deleteByRecruiterId(recruiterId);
+		
+	}
+	
 }

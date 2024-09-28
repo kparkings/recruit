@@ -12,6 +12,7 @@ import com.arenella.recruit.adapters.events.CreditsUsedEvent;
 import com.arenella.recruit.adapters.events.CurriculumSkillsExtractionEvent;
 import com.arenella.recruit.adapters.events.CurriculumUpdatedEvent;
 import com.arenella.recruit.adapters.events.RecruiterCreatedEvent;
+import com.arenella.recruit.adapters.events.RecruiterDeletedEvent;
 import com.arenella.recruit.adapters.events.RecruiterNoOpenSubscriptionEvent;
 import com.arenella.recruit.adapters.events.RecruiterUpdatedEvent;
 import com.arenella.recruit.adapters.events.SubscriptionAddedEvent;
@@ -167,6 +168,17 @@ public class CandidateMonolithExternalEventListener implements CandidateExternal
 		}
 		
 		
+	}
+
+	/**
+	* Refer to CandidateExternalEventListener for details 
+	*/
+	@Override
+	public void listenForRecruiterAccountDeletedEvent(RecruiterDeletedEvent recruiterDeletedEvent) {
+		this.candidateService.deleteCandidatesForOwnedByRecruiter(recruiterDeletedEvent.getRecruiterId());
+		this.candidateService.deleteSavedCandidatesForRecruiter(recruiterDeletedEvent.getRecruiterId());	
+		this.candidateService.deleteCreditsForRecruiter(recruiterDeletedEvent.getRecruiterId());
+		this.candidateService.deleteContactForRecruiter(recruiterDeletedEvent.getRecruiterId());
 	}
 
 }

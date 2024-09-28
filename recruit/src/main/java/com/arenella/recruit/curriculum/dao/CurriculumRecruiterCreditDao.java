@@ -58,4 +58,18 @@ public interface CurriculumRecruiterCreditDao extends CrudRepository<CurriculumR
 		credits.stream().map(recruiterCredit -> CurriculumRecruiterCreditEntity.convertToEntity(recruiterCredit)).forEach(entity -> this.save(entity));
 	}
 	
+	/**
+	* Deletes Contact Record for Recruiter
+	* @param recruiterId - Unique Id of the recruiter
+	*/
+	default void deleteCreditsForRecruiter(String recruiterId) {
+		
+		Optional<CurriculumRecruiterCreditEntity> contactEntity = this.findById(recruiterId);
+		
+		if (contactEntity.isPresent()) {
+			this.delete(contactEntity.get());
+		}
+		
+	}
+	
 }

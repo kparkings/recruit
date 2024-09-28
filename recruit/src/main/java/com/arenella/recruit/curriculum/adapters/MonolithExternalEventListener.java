@@ -12,11 +12,13 @@ import com.arenella.recruit.adapters.events.CandidateDeletedEvent;
 import com.arenella.recruit.adapters.events.CandidateNoLongerAvailableEvent;
 import com.arenella.recruit.adapters.events.CurriculumSkillsExtractionEvent;
 import com.arenella.recruit.adapters.events.RecruiterCreatedEvent;
+import com.arenella.recruit.adapters.events.RecruiterDeletedEvent;
 import com.arenella.recruit.adapters.events.RecruiterNoOpenSubscriptionEvent;
 import com.arenella.recruit.adapters.events.SubscriptionAddedEvent;
 import com.arenella.recruit.candidates.adapters.CandidateCreatedEvent;
 import com.arenella.recruit.candidates.dao.PendingCandidateDao;
 import com.arenella.recruit.candidates.services.AlertTestUtil;
+import com.arenella.recruit.curriculum.dao.CurriculumRecruiterCreditDao;
 import com.arenella.recruit.curriculum.dao.CurriculumSkillsDao;
 import com.arenella.recruit.curriculum.services.CurriculumService;
 import com.arenella.recruit.curriculum.beans.RecruiterCredit;
@@ -32,19 +34,22 @@ import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_
 public class MonolithExternalEventListener implements CurriculumExternalEventListener{
 
 	@Autowired
-	private CurriculumSkillsDao 	skillsDao;
+	private CurriculumSkillsDao 			skillsDao;
 	
 	@Autowired
-	private PendingCandidateDao 	pendingCandidateDao;
+	private CurriculumRecruiterCreditDao 	creditDao;
 	
 	@Autowired
-	private CurriculumService 		curriculumService;
+	private PendingCandidateDao 			pendingCandidateDao;
 	
 	@Autowired
-	private AlertTestUtil			alertTestUtil;
+	private CurriculumService 				curriculumService;
+	
+	@Autowired
+	private AlertTestUtil					alertTestUtil;
 	
 	@Autowired 
-	private ExternalEventPublisher externalEventPublisher;
+	private ExternalEventPublisher 			externalEventPublisher;
 	
 	/**
 	* Refer to the ExternalEventListener for details 
@@ -177,4 +182,12 @@ public class MonolithExternalEventListener implements CurriculumExternalEventLis
 		
 	}
 
+	/**
+	* Refer to CandidateExternalEventListener for details 
+	*/
+	@Override
+	public void listenForRecruiterAccountDeletedEvent(RecruiterDeletedEvent recruiterDeletedEvent) {
+		this.creditDao.deleteCreditsForRecruiter(recruiterDeletedEvent.getRecruiterId());
+	}
+	
 }

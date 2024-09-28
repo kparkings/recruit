@@ -7,6 +7,7 @@ import com.arenella.recruit.adapters.actions.RequestSkillsForCurriculumCommand;
 import com.arenella.recruit.adapters.events.CandidateDeletedEvent;
 import com.arenella.recruit.adapters.events.CandidateNoLongerAvailableEvent;
 import com.arenella.recruit.adapters.events.RecruiterCreatedEvent;
+import com.arenella.recruit.adapters.events.RecruiterDeletedEvent;
 import com.arenella.recruit.adapters.events.RecruiterNoOpenSubscriptionEvent;
 import com.arenella.recruit.adapters.events.SubscriptionAddedEvent;
 import com.arenella.recruit.candidates.adapters.CandidateCreatedEvent;
@@ -70,5 +71,10 @@ public interface CurriculumExternalEventListener {
 	* @param command - Specifies which Curriculum to extract skills for
 	*/
 	public void listenForRequestSkillsForCurriculumCommand(RequestSkillsForCurriculumCommand command);
+
+	/**
+	* Refer to CandidateExternalEventListener for details 
+	*/
+	void listenForRecruiterAccountDeletedEvent(RecruiterDeletedEvent recruiterDeletedEvent);
 	
 }

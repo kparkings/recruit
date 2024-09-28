@@ -268,7 +268,8 @@ public class RecruitersMonolithExternalEventPublisher implements RecruitersExter
 		this.authenticationExternalEventListener.listenForRecruiterAccountDeletedEvent(recruiterDeletedEvent);
 		this.emailServiceExternalEventListener.listenForRecruiterAccountDeletedEvent(recruiterDeletedEvent);
 		this.listingExternalEventListener.listenForRecruiterAccountDeletedEvent(recruiterDeletedEvent);
-		this.candidateExternalEventListener.listenForRecruiterAccountDeletedEvent(recruiterDeletedEvent); //TODO: Implement this
+		this.candidateExternalEventListener.listenForRecruiterAccountDeletedEvent(recruiterDeletedEvent); 
+		this.curriculumExternalEventListener.listenForRecruiterAccountDeletedEvent(recruiterDeletedEvent);
 	}
 
 }

@@ -960,18 +960,21 @@ public class CandidateServiceImpl implements CandidateService{
 	//3. Keeps spring security implementation outside of the service
 	
 	
-	
-
 	@Override
 	public void deleteCandidate(String candidateId) {
+		this.deleteCandidate(candidateId, false);
+	}
+
+	@Override
+	public void deleteCandidate(String candidateId, boolean isSystemRequest) {
 		
-		if (roleManager.isCandidate() && !this.getAuthenticatedUserId().equals(candidateId)) {
+		if (!isSystemRequest && roleManager.isCandidate() && !this.getAuthenticatedUserId().equals(candidateId)) {
 			throw new IllegalStateException("You cannot delete another Candidate from the System");
 		}
 		
 		Candidate candidate = this.candidateRepo.findCandidateById(Long.valueOf(candidateId)).orElseThrow(() -> new IllegalArgumentException("Cannot delete a non existent Candidate"));
 		
-		if (roleManager.isRecruiter() && !this.getAuthenticatedUserId().equals(candidate.getOwnerId().get())) {
+		if (!isSystemRequest && roleManager.isRecruiter() && !this.getAuthenticatedUserId().equals(candidate.getOwnerId().get())) {
 			throw new IllegalArgumentException("You cannot delete this Candidate from the System");
 		}
 		
@@ -1225,6 +1228,28 @@ public class CandidateServiceImpl implements CandidateService{
 		this.externalEventPublisher.publishSendEmailCommand(command);
 		
 	}
+	
+	/**
+	* Refer to the CandidateService for details 
+	*/
+	@Override
+	public void deleteCandidatesForOwnedByRecruiter(String recruiterId) {
+		
+		CandidateFilterOptions filters = CandidateFilterOptions.builder().ownerId(recruiterId).build();
+		
+		try {
+			this.candidateRepo.findCandidates(filters, esClient, 750).forEach(candidate -> {
+				
+				try {
+					this.deleteCandidate(candidate.getCandidateId(), true);
+				} catch(Exception e) {
+					//Continue with the rest
+				}
+			});
+		}catch(Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
 
 	/**
 	* Refer to the CandidateService for details 
@@ -1264,4 +1289,31 @@ public class CandidateServiceImpl implements CandidateService{
 		this.candidateRepo.saveCandidate(candidate);
 		
 	}
+
+	/**
+	* Refer to the CandidateService for details 
+	*/
+	@Override
+	public void deleteSavedCandidatesForRecruiter(String recruiterId) {
+		this.savedCandidateDao.fetchSavedCandidatesByUserId(recruiterId).stream().forEach(sc -> this.savedCandidateDao.delete(recruiterId, sc.getCandidateId()));
+	}
+
+	/**
+	* Refer to the CandidateService for details 
+	*/
+	@Override
+	public void deleteCreditsForRecruiter(String recruiterId) {
+		this.creditDao.deleteById(recruiterId);
+		
+	}
+
+	/**
+	* Refer to the CandidateService for details 
+	*/
+	@Override
+	public void deleteContactForRecruiter(String recruiterId) {
+		this.contactDao.deleteByRecruiterId(recruiterId);
+		
+	}
+	
 }

@@ -383,14 +383,11 @@ public class RecruiterServiceImpl implements RecruiterService{
 	*/
 	@Override
 	public void deleteRecruiter(String recruiterId) {
-		
 		this.OpenPositionDao.findAllOpenPositionsByRecruiterId(recruiterId).forEach(openPosition -> OpenPositionDao.deleteById(openPosition.getId()));
 		this.recruiterProfileDao.deleteById(recruiterId);
 		this.creditDao.getByRecruiterId(recruiterId).ifPresent(creditCredit -> this.creditDao.deleteById(creditCredit.getRecruiterId()));
 		this.recruiterDao.deleteById(recruiterId);
-		//- Subscriptions - TODO: Test these are deleted as part of parent Recruiter deletions
 		this.externEventPublisher.publishRecruiterAccountDeleted(new RecruiterDeletedEvent(recruiterId));
-			
 	}
 	
 	//MOVE TO FACTORY

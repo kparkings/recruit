@@ -18,6 +18,7 @@ import com.arenella.recruit.adapters.events.CreditsUsedEvent;
 import com.arenella.recruit.adapters.events.CurriculumSkillsExtractionEvent;
 import com.arenella.recruit.adapters.events.CurriculumUpdatedEvent;
 import com.arenella.recruit.adapters.events.RecruiterCreatedEvent;
+import com.arenella.recruit.adapters.events.RecruiterDeletedEvent;
 import com.arenella.recruit.adapters.events.RecruiterNoOpenSubscriptionEvent;
 import com.arenella.recruit.adapters.events.RecruiterUpdatedEvent;
 import com.arenella.recruit.adapters.events.SubscriptionAddedEvent;
@@ -274,6 +275,24 @@ public class CandidateMonolithExternalEventListenerTest {
 		
 		assertEquals(1, 	argStatCapt.getValue().getAddedSkillsCount());
 		assertEquals(111L, 	argStatCapt.getValue().getCandidateId());
+		
+	}
+	
+	/**
+	* Tests handling even sends instruction to delete candidates owned by the Recruiter
+	* @throws Exception
+	*/
+	@Test
+	public void testListenForRecruiterAccountDeletedEvent() throws Exception{
+		
+		final String recruiterId = "rec1";
+		
+		this.listener.listenForRecruiterAccountDeletedEvent(new RecruiterDeletedEvent(recruiterId));
+		
+		Mockito.verify(this.mockCandidateService).deleteCandidatesForOwnedByRecruiter(recruiterId);
+		Mockito.verify(this.mockCandidateService).deleteSavedCandidatesForRecruiter(recruiterId);
+		Mockito.verify(this.mockCandidateService).deleteCreditsForRecruiter(recruiterId);
+		Mockito.verify(this.mockCandidateService).deleteContactForRecruiter(recruiterId);
 		
 	}
 

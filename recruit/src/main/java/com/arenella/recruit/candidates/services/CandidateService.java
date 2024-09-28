@@ -170,6 +170,14 @@ public interface CandidateService {
 	/**
 	* Fully deletes Candidate from the System
 	* @param candidateId - id of Candidate to delete
+	* @param isSystemRequest - Allows sytem to perform action without User rights issues
+	*/
+	
+	public void deleteCandidate(String candidateId, boolean isSystemRequest);
+	
+	/**
+	* Fully deletes Candidate from the System
+	* @param candidateId - id of Candidate to delete
 	*/
 	public void deleteCandidate(String candidateId);
 
@@ -276,5 +284,29 @@ public interface CandidateService {
 	* @param isAvailable	- Whether or not the candidate is available
 	*/
 	public void performConfirmCandidateAvailability(String candidateId, UUID requestToken, Boolean isAvailable);
+
+	/**
+	* Deletes all candidates that are owned by a Recruiter
+	* @param recruiterId - Id of owning Recruiter
+	*/
+	public void deleteCandidatesForOwnedByRecruiter(String recruiterId);
+
+	/**
+	* Deletes all saved candidates belonging to the Recruiter
+	* @param recruiterId - Id of  Recruiter
+	*/
+	public void deleteSavedCandidatesForRecruiter(String recruiterId);
+	
+	/**
+	* Delete Credits for Recruiter
+	* @param recrutierId - Id of the Recruiter
+	*/
+	public void deleteCreditsForRecruiter(String recruiterId);
+	
+	/**
+	* Delete Contact Entity
+	* @param recrutierId - Id of the Recruiter
+	*/
+	public void deleteContactForRecruiter(String recruiterId);
 	
 }

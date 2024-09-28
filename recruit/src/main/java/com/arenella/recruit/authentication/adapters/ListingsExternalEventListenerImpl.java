@@ -8,6 +8,7 @@ import com.arenella.recruit.adapters.events.RecruiterDeletedEvent;
 import com.arenella.recruit.adapters.events.RecruiterNoOpenSubscriptionEvent;
 import com.arenella.recruit.adapters.events.SubscriptionAddedEvent;
 import com.arenella.recruit.listings.beans.RecruiterCredit;
+import com.arenella.recruit.listings.dao.ListingRecruiterCreditDao;
 import com.arenella.recruit.listings.services.ListingService;
 import com.arenella.recruit.recruiters.adapters.ListingsExternalEventListener;
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_type;
@@ -20,7 +21,10 @@ import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_
 public class ListingsExternalEventListenerImpl implements ListingsExternalEventListener{
 
 	@Autowired
-	private ListingService listingService;
+	private ListingService 				listingService;
+	
+	@Autowired
+	private ListingRecruiterCreditDao 	creditDao;
 	
 	/**
 	* Refer to the ListingsExternalEventListener interface for details
@@ -61,6 +65,7 @@ public class ListingsExternalEventListenerImpl implements ListingsExternalEventL
 	@Override
 	public void listenForRecruiterAccountDeletedEvent(RecruiterDeletedEvent recruiterDeletedEvent) {
 		this.listingService.deleteRecruiterListings(recruiterDeletedEvent.getRecruiterId());
+		this.creditDao.deleteById(recruiterDeletedEvent.getRecruiterId());
 	}
 
 }

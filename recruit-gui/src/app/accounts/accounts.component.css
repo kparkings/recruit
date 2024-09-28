@@ -82,3 +82,24 @@ h3{
 .skillRejected{
 	color:red;	
 }
+
+.delete-btn{
+	width:100px;
+}
+.delete-confirm{
+	 background:red;
+	 margin-right:2px;
+}
+
+@media (max-width:700px)  {
+	
+.delete-btn{
+	width:55px;
+}
+.delete-confirm{
+	 background:red;
+	 margin-right:0px;
+	 margin-bottom:5px;
+}
+	
+}

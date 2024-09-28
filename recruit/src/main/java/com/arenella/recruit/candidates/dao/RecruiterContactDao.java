@@ -54,5 +54,19 @@ public interface RecruiterContactDao extends CrudRepository<RecruiterContactEnti
 		this.save(entity);
 		
 	}
+	
+	/**
+	* Deletes Contact Record for Recruiter
+	* @param recruiterId - Unique Id of the recruiter
+	*/
+	default void deleteByRecruiterId(String recruiterId) {
+		
+		Optional<RecruiterContactEntity> contactEntity = this.getEntityByTypeAndId(CONTACT_TYPE.RECRUITER, recruiterId);
+		
+		if (contactEntity.isPresent()) {
+			this.delete(contactEntity.get());
+		}
+		
+	}
 
 }

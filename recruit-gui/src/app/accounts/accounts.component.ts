@@ -623,4 +623,30 @@ export class AccountsComponent implements OnInit {
 		this.candidateToDelete = candidateId;
 	}
 	
+	public recruiterToDelete:string = '';
+	
+	/**
+	* Set recruiter to delete ready for confirmation
+	*/
+	public deleteRecruiter(recruiterId:string):void{
+		this.recruiterToDelete = recruiterId;
+	}
+	
+	/**
+	* Send definitive request to delete recruiter
+	*/
+	public confirmDeleteRecruiter():void{
+		this.recruiterService.deleteRecruiter(this.recruiterToDelete).subscribe(res => {
+			this.fetchRecruiters();
+			this.recruiterToDelete = '';
+		})
+	}
+	
+	/**
+	* Deselect recruiter to be deleted
+	*/
+	public cancelDeleteRecruiter():void{
+		this.recruiterToDelete = '';
+	}
+	
 }
