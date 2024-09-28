@@ -407,6 +407,18 @@ public class ListingServiceImpl implements ListingService{
 	}
 	
 	/**
+	* Refer to the CandidateService for details 
+	*/
+	@Override
+	public void deleteRecruiterListings(String recruiterId) {
+		
+		ListingFilter filters = ListingFilter.builder().ownerId(recruiterId).build();
+		
+		this.listingDao.findAllListings(filters).forEach(listing -> this.listingDao.deleteById(listing.getListingId()));
+		
+	}
+	
+	/**
 	* Checks safety of File
 	* @param attachment
 	*/

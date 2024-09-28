@@ -740,4 +740,21 @@ public class ListingServiceImplTest {
 		
 	}
 	
+	/**
+	* Tests deletion of Listing of a specific recruiter
+	* @throws Exception
+	*/
+	@Test
+	public void testDeleteRecruiterListings() throws Exception {
+		
+		final String recruiterId = "anId";
+		
+		Mockito.when(this.mockListingDao.findAllListings(Mockito.any())).thenReturn(Set.of(Listing.builder().listingId(UUID.randomUUID()).build(), Listing.builder().listingId(UUID.randomUUID()).build()));
+		
+		this.service.deleteRecruiterListings(recruiterId);
+		
+		Mockito.verify(this.mockListingDao, Mockito.times(2)).deleteById(Mockito.any());
+		
+	}
+	
 }

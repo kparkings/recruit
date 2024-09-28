@@ -9,6 +9,7 @@ import com.arenella.recruit.adapters.events.CandidateAccountCreatedEvent;
 import com.arenella.recruit.adapters.events.CandidateDeletedEvent;
 import com.arenella.recruit.adapters.events.CandidatePasswordUpdatedEvent;
 import com.arenella.recruit.adapters.events.RecruiterCreatedEvent;
+import com.arenella.recruit.adapters.events.RecruiterDeletedEvent;
 import com.arenella.recruit.adapters.events.RecruiterNoOpenSubscriptionEvent;
 import com.arenella.recruit.adapters.events.RecruiterPasswordUpdatedEvent;
 import com.arenella.recruit.adapters.events.SubscriptionAddedEvent;
@@ -91,6 +92,15 @@ public class AuthenticationMonolithExternalEventListener implements Authenticati
 	@Override
 	public void listenForCandidteDeletedEvent(CandidateDeletedEvent candidateDeletedEvent) {
 		this.accountService.deleteAccount(candidateDeletedEvent.getCandidateId());
+		
+	}
+
+	/**
+	* Refer to ExternalEventListener interface for details 
+	*/
+	@Override
+	public void listenForRecruiterAccountDeletedEvent(RecruiterDeletedEvent recruiterDeletedEvent) {
+		this.accountService.deleteAccount(recruiterDeletedEvent.getRecruiterId());
 		
 	}
 

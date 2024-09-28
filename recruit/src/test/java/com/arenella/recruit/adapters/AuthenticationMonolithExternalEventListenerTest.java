@@ -17,6 +17,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.arenella.recruit.adapters.events.CandidateAccountCreatedEvent;
 import com.arenella.recruit.adapters.events.CandidatePasswordUpdatedEvent;
 import com.arenella.recruit.adapters.events.RecruiterCreatedEvent;
+import com.arenella.recruit.adapters.events.RecruiterDeletedEvent;
 import com.arenella.recruit.adapters.events.RecruiterNoOpenSubscriptionEvent;
 import com.arenella.recruit.adapters.events.RecruiterPasswordUpdatedEvent;
 import com.arenella.recruit.adapters.events.SubscriptionAddedEvent;
@@ -154,6 +155,23 @@ public class AuthenticationMonolithExternalEventListenerTest {
 		this.eventListener.listenForCandidatePasswordUpdatedEvent(event);
 		
 		Mockito.verify(this.mockAccountService).updateUserPassword(event.getCandidateId(), event.getNewPassword());
+		
+	}
+	
+	/**
+	* Tests listener for AccountDeletedEvent 
+	* @throws Exception 
+	*/
+	@Test
+	public void testListenForRecruiterAccountDeletedEvent() throws Exception{
+		
+		final String recruiterId = "aRecId";
+		
+		RecruiterDeletedEvent event = new RecruiterDeletedEvent(recruiterId);
+		
+		this.eventListener.listenForRecruiterAccountDeletedEvent(event);
+		
+		Mockito.verify(this.mockAccountService).deleteAccount(recruiterId);
 		
 	}
 	

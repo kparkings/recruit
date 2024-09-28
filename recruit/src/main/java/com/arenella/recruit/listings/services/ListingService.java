@@ -46,6 +46,12 @@ public interface ListingService {
 	public Page<Listing> fetchListings(ListingFilter filters, Pageable pageable);
 
 	/**
+	* Deletes all Listings belonging to the Recruiter
+	* @param recruiterId - Unique id of the Recruiter
+	*/
+	public void deleteRecruiterListings(String recruiterId);
+	
+	/**
 	* Registers that a Listing was Viewed
 	* @param event - Contains details of the viewing of the Listing
 	*/
