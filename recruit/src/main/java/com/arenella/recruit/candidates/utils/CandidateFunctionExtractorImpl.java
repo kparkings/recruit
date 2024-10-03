@@ -26,7 +26,7 @@ public class CandidateFunctionExtractorImpl implements CandidateFunctionExtracto
 	*/
 	@PostConstruct
 	public void init() {
-		all.put(FUNCTION.CSHARP_DEV, 				(Set<String>)Set.of("c# developer","c# ",".net","dotnet","wpf","asp","vb.net","csharp","asp.net"));
+		all.put(FUNCTION.CSHARP_DEV, 				(Set<String>)Set.of("c# developer","c#",".net","dotnet","wpf","asp","vb.net","csharp","asp.net"));
 		all.put(FUNCTION.SUPPORT, 					(Set<String>)Set.of("it support analyst","support","helpdesk","service desk"));
 		all.put(FUNCTION.BA, 						(Set<String>)Set.of("business analyst","ba"));
 		all.put(FUNCTION.UI_UX, 					(Set<String>) Set.of("ui/ux designer","ui\\ux","designer","ui","ux"));

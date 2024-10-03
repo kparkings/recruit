@@ -548,22 +548,6 @@ public class CandidateServiceImpl implements CandidateService{
 		Set<String> searchTermKeywords = searchTermFilter.build().getSkills();
 		
 		/**
-		* Special case. If searching on single candidate by Id, clear other filters and add in 
-		* just the candidate Id with max 1 result
-		*/
-		if (filterOptions.getSearchText() != null && filterOptions.getSearchText().startsWith("C#")) {
-			
-			String candidateId = filterOptions.getSearchText().substring(2);
-
-			if (candidateId != null && !candidateId.equals("") &&  org.apache.commons.lang3.StringUtils.isNumeric(candidateId)) {
-				filterOptions.reset();
-				filterOptions.setCandidateIds(Set.of(candidateId));
-				maxSuggestions = 1;
-			} 
-				
-		} 
-		
-		/**
 		* Not exactly unfiltered. The filters required to implement the business rules will still ba applied. If however the User has 
 		* not specified filters w 
 		*/

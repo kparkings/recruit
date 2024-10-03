@@ -27,7 +27,7 @@
 						<tr>
 							<td class="sugg-srch-hdr" >{{'arenella-suggestions-job-title' | translate}}<span style="cursor:pointer; color:#6a5acd;" (click)='doShowSearchTypeFilterSelectionModal()'> ...</span></td>
 							<td class="sugg-srch-bdy">
-								<input type="text" class="sugg-srch-job-title" 									formControlName="searchPhrase" 				*ngIf="getCurrentSearchFilterType() === 'FUNCTION' || getCurrentSearchFilterType() == 'EMAIL'">
+								<input type="text" class="sugg-srch-job-title" 									formControlName="searchPhrase" 				*ngIf="getCurrentSearchFilterType() === 'FUNCTION' || getCurrentSearchFilterType() == 'EMAIL' || getCurrentSearchFilterType() == 'CANDIDATE_ID'">
 								<input type="text" class="sugg-srch-job-title-name {{cssSearchNameDefault()}}" 	formControlName="searchPhraseFirstName" 	*ngIf="getCurrentSearchFilterType() === 'NAME'" (click)="activateSearhFields()">
 								<input type="text" class="sugg-srch-job-title-name {{cssSearchNameDefault()}}" 	formControlName="searchPhraseSurname" 		*ngIf="getCurrentSearchFilterType() === 'NAME'" (click)="activateSearhFields()">
 							</td>
@@ -280,17 +280,21 @@
 		<form [formGroup]="filterTypeFormGroup">	
 			<table style="width:50%; margin-left:auto; margin-right:auto;">
 			
-				<tr>
+				<tr class="filter-type-opt" (click)="closeSearchTypeBox()">
 					<td style="padding:10px;"><input type="radio"  value="FUNCTION" formControlName="searchType"></td>
 					<td style="text-align:left;font-weight:bold;"><label class="radio-button_label">{{'arenella-suggestions-search-type-function' | translate}}</label></td>
 				</tr>
-				<tr>
+				<tr class="filter-type-opt" (click)="closeSearchTypeBox()">
 					<td style="padding:10px;"><input type="radio" value="NAME" formControlName="searchType"></td>
 					<td style="text-align:left;font-weight:bold;"><label class="radio-button_label">{{'arenella-suggestions-search-type-name' | translate}}</label></td>
 				</tr>
-				<tr>
+				<tr class="filter-type-opt" (click)="closeSearchTypeBox()">
 					<td style="padding:10px;"><input type="radio" value="EMAIL" formControlName="searchType"></td>
 					<td style="text-align:left;font-weight:bold;"><label class="radio-button_label">{{'arenella-suggestions-search-type-email' | translate}}</label></td>
+				</tr>
+				<tr class="filter-type-opt" (click)="closeSearchTypeBox()">
+					<td style="padding:10px;"><input type="radio" value="CANDIDATE_ID" formControlName="searchType"></td>
+					<td style="text-align:left;font-weight:bold;"><label class="radio-button_label">{{'arenella-suggestions-search-type-candidate_id' | translate}}</label></td>
 				</tr>
 			</table>
 		</form>

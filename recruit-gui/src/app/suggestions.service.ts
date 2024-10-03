@@ -37,7 +37,8 @@ export class SuggestionsService {
 							isUnfiltered:boolean,
 							firstName:string,
 							surname:string,
-							email:string): Observable<any>
+							email:string,
+							candidateId:string): Observable<any>
 							{
 		
 		return this.candidateService.getCandidates(this.getCandidateFilterParamString(	backendRequestId,
@@ -56,7 +57,8 @@ export class SuggestionsService {
 																						isUnfiltered,
 																						firstName,
 																						surname,
-																						email
+																						email,
+																						candidateId,
 																						));
 		
 	}
@@ -80,7 +82,8 @@ export class SuggestionsService {
 											isUnfiltered:boolean,
 											firstName:string,
 											surname:string,
-											email:string):string
+											email:string,
+											candidateId:string):string
 											{
 
 		const filterParams:string = 'orderAttribute=candidateId&order=desc'
@@ -99,7 +102,8 @@ export class SuggestionsService {
 														 + this.getLanguagesParamString(languages)
 														 + this.getFirstName(firstName)
 														 + this.getSurname(surname)
-														 + this.getEmail(email);
+														 + this.getEmail(email)
+														 + this.getCandidateId(candidateId);
 														 
 					                                  
 		return filterParams;
@@ -134,6 +138,17 @@ export class SuggestionsService {
 	private getEmail(email:string):string{
 		if (email && email.length > 0) {
 			return '&email='+email;
+		}
+		
+		return '';	
+	}
+	
+	/**
+	* Constructs search param for candidateId 
+	*/
+	private getCandidateId(candidateId:string):string{
+		if (candidateId && candidateId.length > 0) {
+			return '&candidateId='+candidateId;
 		}
 		
 		return '';	

@@ -1,6 +1,4 @@
 import { UntypedFormGroup }				from '@angular/forms';
-import { CandidateFunction }		from '../candidate-function';
-import { Country } from '../country';
 import { GeoZone } from '../geo-zone';
 import { SupportedCountry } from '../supported-candidate';
 import { SupportedLanguage } from '../supported-language';
@@ -21,6 +19,7 @@ export class SuggestionParams{
 	private firstName:string 							= "";
 	private surname:string 								= "";
 	private email:string 								= "";
+	private candidateId:string							= "";
 	private contract:string 							= "";
 	private perm:string 								= "";
 	private minExperience:string 						= "";
@@ -54,6 +53,18 @@ export class SuggestionParams{
 		
 		if (this.filterType == 'EMAIL') {
 			this.email = suggestionFilterForm.get('searchPhrase')?.value;
+		}
+		
+		if (this.filterType == 'CANDIDATE_ID') {
+			
+			const candidateId =  suggestionFilterForm.get('searchPhrase')?.value;
+			
+			const isNumeric = /^[+-]?\d+(\.\d+)?$/.test(candidateId);
+			
+			if (isNumeric){
+				this.candidateId = candidateId;
+			}
+			
 		}
 		
 		if (this.filterType == 'NAME') {
@@ -207,6 +218,13 @@ export class SuggestionParams{
 	*/
 	public getEmail():string {
 		return this.email;
+	}
+	
+	/**
+	* Candidate Id filter
+	*/
+	public getCandidateId():string{
+		return this.candidateId;
 	}
 
 	

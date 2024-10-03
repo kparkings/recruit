@@ -296,6 +296,38 @@
 	opacity:0.35;
 }
 
+.share-post{
+	height:150px;	
+}
+
+.share-post-url{
+	color:blue; 
+	font-size:10px;
+	margin:20px;
+}
+
+.share-post-clipboard{
+	margin: 0 auto;
+	width:250px;
+	height:100px;
+}
+
+.share-post-clipboard-text{
+	margin: 0 auto;
+	color:blue; 
+	font-size:10px;
+	width:150px;
+	text-align:center;
+}
+
+.share-post-clipboard button{ 
+	margin-bottom:20px;
+	margin-top:20px;
+}
+
+.clipboard-btn{
+		width:100%;
+	}
 
 @media ( max-width :700px) {
 	.listing-pane {
@@ -334,4 +366,15 @@
 		margin-bottom:5px;
 		background-position:0%;
 	}
+	
+	.share-post{
+		height:200px;	
+	}
+	
+	.share-post-clipboard{
+	margin: 0 auto;
+	width:250px;
+	height:100px;
+	}
+	
 }

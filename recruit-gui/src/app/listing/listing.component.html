@@ -72,7 +72,7 @@
 			<div  *ngSwitchCase="'show'">
 	       		<!-- Action buttons -->
 				<div class="action-buttons">
-					<button class="btn btn-secondary arenella-btn" *ngIf="isAuthenticated() && isAuthenticatedAsAdmin()" (click)="showPublicity()">{{'arenella-listing-btn-publicity' | translate}}</button>
+					<button class="btn btn-secondary arenella-btn" (click)="showPublicity()">{{'arenella-listing-btn-publicity' | translate}}</button>
 					<button (click)="showList()" class="btn btn-secondary arenella-btn">{{'arenella-listing-btn-back' | translate}}</button>
 				</div>
 				
@@ -169,21 +169,37 @@
  		<div class="filter-close-box" (click)="publicityBox.close()">X</div>
 	</div>
 	<div class="feedbackBox;">
-		<div class="modal-body"  style="height:400px;">
-			<p>{{'arenella-listing-publicity-open-position' | translate}}: {{selectedListing.title}}</p>
-			<br>
-			<p>{{'arenella-listing-publicity-location' | translate}}: {{selectedListing.country}}</p>
-			<br>
-			<p>https://www.arenella-ict.com/listing/{{selectedListing.listingId}}</p>
-			<br>
-			<span>#openposition </span>
-			<span>#itjob </span>
-			<span>#itjobs </span>
-			<span>#ictbaan </span>
-			<span>#ictbanen </span>
-			<span>#itjobboard </span>
-			<span>#cvdatabase </span>
-			<span *ngFor="let skill of selectedListing.skills">#{{skill}} </span>
+	
+		<div *ngIf="isAuthenticated() && (isAuthenticatedAsRecruiter() || isAuthenticatedAsAdmin())">
+			<div class="modal-body"  style="height:400px;">
+				<p>{{'arenella-listing-publicity-open-position' | translate}}: {{selectedListing.title}}</p>
+				<br>
+				<p>{{'arenella-listing-publicity-location' | translate}}: {{selectedListing.country}}</p>
+				<br>
+				<p>https://www.arenella-ict.com/listing/{{selectedListing.listingId}}</p>
+				<br>
+				<span>#openposition </span>
+				<span>#itjob </span>
+				<span>#itjobs </span>
+				<span>#ictbaan </span>
+				<span>#ictbanen </span>
+				<span>#itjobboard </span>
+				<span>#cvdatabase </span>
+				<span *ngFor="let skill of selectedListing.skills">#{{stripSkillWhitepace(skill)}} </span>
+			</div>
+		</div>
+		
+		<div *ngIf="!isAuthenticated() || isAuthenticatedAsCandidate()">
+			<div class="modal-body share-post">
+				<h2>URL</h2>
+				
+				<p>{{'arenella-listing-share-popup-text' | translate}}</p>
+				<p class="share-post-url">https://www.arenella-ict.com/listing/{{selectedListing.listingId}}</p>
+			</div>
+			<div class="share-post-clipboard"> 
+				<button class="btn btn-secondary arenella-btn clipboard-btn" (click)="copyURLToClipboard(selectedListing.listingId)">{{'arenella-listing-share-copy-to-clipboard' | translate}}</button>
+				<p *ngIf="postPublicityUrlCopiedTClipbard" class="share-post-clipboard-text">{{'arenella-listing-share-copied-to-clipboard' | translate}}</p>
+			</div>	
 		</div>
 	</div>
 </dialog>
@@ -239,7 +255,6 @@
 					<button *ngIf="createAlertStep != 3 && createAlertStep != 4" class="btn btn-secondary arenella-btn" (click)="createListingAlertNextStep()">{{'arenella-listing-email-alert-btn-next' | translate}}</button>
 					<button *ngIf="createAlertStep == 3" 						 class="btn btn-secondary arenella-btn" [disabled]="listingAlertConfirmDisabled" (click)="createListingAlert()">{{'arenella-listing-email-alert-btn-confirm' | translate}}</button>
 				</div>
-			
 			</div>	
 		</form>
 	</div>

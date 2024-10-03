@@ -41,8 +41,10 @@ import {TranslateLoader, TranslateModule} 	from '@ngx-translate/core';
 import {TranslateHttpLoader} 				from '@ngx-translate/http-loader';
 import {HttpClient} 						from '@angular/common/http';
 import { MatIconModule } 					from "@angular/material/icon";
-import { CandidateServiceService } from './candidate-service.service';
-import { RecruiterMarketplaceService } from './recruiter-marketplace.service';
+import { CandidateServiceService } 			from './candidate-service.service';
+import { RecruiterMarketplaceService } 		from './recruiter-marketplace.service';
+
+import { ClipboardModule } 					from '@angular/cdk/clipboard'
 
 @NgModule({
   declarations: [

@@ -507,7 +507,8 @@ export class SuggestionsComponent implements OnInit {
 									isUnfiltered,
 									params.getFirstName(),
 									params.getSurname(),
-									params.getEmail()
+									params.getEmail(),
+									params.getCandidateId(),
 									).pipe(
 										  map((response) => {
 										  
@@ -1253,6 +1254,13 @@ export class SuggestionsComponent implements OnInit {
 		
 		
 		this.suggestionFilterForm.get('searchPhrase')?.setValue('');
+	}
+	
+	/**
+	* Closes the searchTypeFilterSelectionModal modal box 
+	*/
+	public closeSearchTypeBox():void{
+		this.searchTypeFilterSelectionModal.nativeElement.close();
 	}
 	
 }

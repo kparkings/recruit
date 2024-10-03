@@ -18,7 +18,7 @@ import { ContractType } 								from '../suggestions/contract-type';
 import { TranslateService } 							from '@ngx-translate/core';
 import { SupportedCountry } from '../supported-candidate';
 import { CandidateServiceService } from '../candidate-service.service';
-
+import { Clipboard } from '@angular/cdk/clipboard';
 @Component({
   selector: 'app-listing',
   templateUrl: './listing.component.html',
@@ -47,7 +47,8 @@ export class ListingComponent implements OnInit {
 				private recruiterProfileService:RecruiterProfileService,
 				public 	candidateService:			CandidateServiceService,
 				private staticDataService:			StaticDataService,
-				private translate:TranslateService) { 
+				private translate:TranslateService,
+				private clipboard: Clipboard) { 
 		
 		
 	
@@ -98,7 +99,8 @@ export class ListingComponent implements OnInit {
 	public mobileListingLeftPaneContainer:string 	= '';
 	public mobileDescBody:string					= '';
 	public mobileListingViewDiv:string				= '';
-	public mobileButton:string						= '';					
+	public mobileButton:string						= '';	
+	public postPublicityUrlCopiedTClipbard:boolean	= false;				
 	
 	/**
 	* Toggoles whether or not a FunctionType has been selected by the User
@@ -626,6 +628,27 @@ export class ListingComponent implements OnInit {
     	return sessionStorage.getItem('isAdmin') === 'true';
   	}
 	
+	/**
+  	* Whether or not the user has authenticated as an Admin user 
+  	*/
+  	public isAuthenticatedAsRecruiter():boolean {
+    	return sessionStorage.getItem('isRecruiter') === 'true';
+  	}
+  	
+  	/**
+  	* Whether or not the user has authenticated as an Candidate user 
+  	*/
+  	public isAuthenticatedAsCandidate():boolean {
+    	return sessionStorage.getItem('isCandidate') === 'true';
+  	}
+  	
+  	/**
+	* Removes whitespace from skills 
+	*/
+  	public stripSkillWhitepace(skill:string):string{
+		  return skill.replace(/ /g, "");
+	  }
+  	
 	private pageYPos = 0;
 	
 	@HostListener('window:scroll', ['$event']) onWindowScroll(e:any) {
@@ -653,6 +676,7 @@ export class ListingComponent implements OnInit {
 	* post on other websites
 	*/
 	public showPublicity():void{
+		this.postPublicityUrlCopiedTClipbard = false;
 		this.publicityDialogBox.nativeElement.showModal();
 	}
 	
@@ -736,5 +760,13 @@ export class ListingComponent implements OnInit {
 		return matchingCountry == null ? "NA" : matchingCountry.iso2Code;
 	
   	}
+  	
+  	/**
+	* Copies url to Clipboard 
+	*/
+  	public copyURLToClipboard(url:string):void{
+		this.postPublicityUrlCopiedTClipbard = true;
+		navigator.clipboard.writeText('https://www.arenella-ict.com/listing/'+url);
+	}
 	
 }

@@ -90,7 +90,7 @@
 		            	    <td *ngIf="showCreditBasedSubscription" class="candidate-tab-col medicol"> {{recruiter.firstName}} {{recruiter.surname}}</td>
 		            	    <td *ngIf="showCreditBasedSubscription" class="candidate-tab-col medicol">{{recruiter.email}}</td>
 		            	    <td *ngIf="showCreditBasedSubscription" class="candidate-tab-col medicol">{{recruiter.companyName}}</td>
-		            	    <td *ngIf="creditBasedSubscription" class="candidate-tab-col medicol">
+		            	    <td *ngIf="showCreditBasedSubscription" class="candidate-tab-col medicol">
 		            	    	<button class="btn btn-secondary delete-btn" (click)="deleteRecruiter(recruiter.userId)" 		*ngIf="recruiterToDelete == ''">Del</button>
 		            	    	<button class="btn btn-secondary delete-btn delete-confirm" (click)="confirmDeleteRecruiter()" 	*ngIf="recruiterToDelete != '' && recruiterToDelete == recruiter.userId">Yes</button>
 		            	    	<button class="btn btn-secondary delete-btn" (click)="cancelDeleteRecruiter()" 					*ngIf="recruiterToDelete != '' && recruiterToDelete == recruiter.userId">No</button>
@@ -112,7 +112,7 @@
 		            	    <td *ngIf="showFirstGenActiveSubscription" class="candidate-tab-col medicol"> {{recruiter.firstName}} {{recruiter.surname}}</td>
 		            	    <td *ngIf="showFirstGenActiveSubscription" class="candidate-tab-col medicol">{{recruiter.email}}</td>
 		            	    <td *ngIf="showFirstGenActiveSubscription" class="candidate-tab-col medicol">{{recruiter.companyName}}</td>
-		            	    <td *ngIf="firstGenActiveSubscription" class="candidate-tab-col medicol">
+		            	    <td *ngIf="showFirstGenActiveSubscription" class="candidate-tab-col medicol">
 		            	    	<button class="btn btn-secondary delete-btn" (click)="deleteRecruiter(recruiter.userId)" 	*ngIf="recruiterToDelete == ''">Del</button>
 		            	    	<button class="btn btn-secondary delete-btn delete-confirm" (click)="confirmDeleteRecruiter()" 			*ngIf="recruiterToDelete != '' && recruiterToDelete == recruiter.userId">Yes</button>
 		            	    	<button class="btn btn-secondary delete-btn" (click)="cancelDeleteRecruiter()" 			*ngIf="recruiterToDelete != '' && recruiterToDelete == recruiter.userId">No</button>
