@@ -39,8 +39,8 @@ public class RecruiterController {
 	@Autowired
 	private RecruiterService recruiterService;
 	
-	@Autowired
-	private RecruiterDao recruiterDao;
+	//@Autowired
+	//private RecruiterDao recruiterDao;
 	
 	/**
 	* Adds a new Recruiter
