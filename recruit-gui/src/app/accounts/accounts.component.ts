@@ -38,10 +38,8 @@ export class AccountsComponent implements OnInit {
 	recruiterCount:number											= 0;
 	activateRecruiterUserId:string									= '';
 	activateRecruiterUserPassword:string							= '';
-	expiredSubscriptionRecruiters:Array<Recruiter>					= Array<Recruiter>();
 	activePaidSubscription:Array<Recruiter>							= Array<Recruiter>();
 	creditBasedSubscription:Array<Recruiter>						= Array<Recruiter>();
-	firstGenActiveSubscription:Array<Recruiter>						= Array<Recruiter>();
 	candidatesToCheckForAvailability:Array<Candidate>				= Array<Candidate>();
 	
 	showExpiredSubscriptionRecruiters:boolean 						= true;
@@ -355,10 +353,8 @@ export class AccountsComponent implements OnInit {
 		
 		this.recruiterCount 					= 0;
 		this.recruiters 						= new Array<Recruiter>();
-		this.expiredSubscriptionRecruiters		= new Array<Recruiter>();
 		this.activePaidSubscription 			= new Array<Recruiter>();
 		this.creditBasedSubscription			= new Array<Recruiter>();
-		this.firstGenActiveSubscription			= new Array<Recruiter>();
 		
     	this.recruiterService.getRecruiters().subscribe( data => {
   
@@ -393,16 +389,6 @@ export class AccountsComponent implements OnInit {
 		
 		let activeSubscription = recruiter.subscriptions.filter(s => s.currentSubscription == true)[0];
 		
-		if (!activeSubscription) {
-			this.expiredSubscriptionRecruiters.push(recruiter);
-			return;
-		}
-		
-		if (activeSubscription.type == 'FIRST_GEN') {
-			this.firstGenActiveSubscription.push(recruiter);
-			return;
-		}
-		
 		if (activeSubscription.type == 'CREDIT_BASED_SUBSCRIPTION') {
 			this.creditBasedSubscription.push(recruiter);
 			return;
@@ -410,24 +396,12 @@ export class AccountsComponent implements OnInit {
 		
 		if (	activeSubscription.status == 'AWAITING_ACTIVATION'
 			|| 	activeSubscription.status == 'ACTIVE_PENDING_PAYMENT'
-			|| 	activeSubscription.status == 'ACTIVE'){
+			|| 	activeSubscription.status == 'ACTIVE'
+			|| activeSubscription.status == 'DISABLED_PENDING_PAYMENT'){
 			this.activePaidSubscription.push(recruiter);
 			return;
 		}
-		
-		if (	activeSubscription.status == 'DISABLED_PENDING_PAYMENT'
-			|| 	activeSubscription.status == 'SUBSCRIPTION_ENDED'){
-			this.expiredSubscriptionRecruiters.push(recruiter);
-			return;
-		}
 		 
-	}
-	
-	/**
-	* Toggles whether recruiters with expired subscriptions are shown
-	*/
-	toggleShowExpiredSubscriptionRecruiters():void{
-		this.showExpiredSubscriptionRecruiters = !this.showExpiredSubscriptionRecruiters;
 	}
 	
 	/**
@@ -449,12 +423,7 @@ export class AccountsComponent implements OnInit {
 	}		
 	
 	public getTotalActiveRecruiters():number{
-		
-		if (this.recruiterCount == 0) {
-			return 0;
-		}
-		
-		return this.recruiterCount - this.expiredSubscriptionRecruiters.length
+		return this.recruiterCount; // - this.expiredSubscriptionRecruiters.length
 	}					
 	
 	/**
