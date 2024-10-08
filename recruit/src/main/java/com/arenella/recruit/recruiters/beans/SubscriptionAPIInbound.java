@@ -1,5 +1,6 @@
 package com.arenella.recruit.recruiters.beans;
 
+import com.arenella.recruit.recruiters.beans.RecruiterSubscription.INVOICE_TYPE;
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_type;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
@@ -12,14 +13,16 @@ import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 @JsonDeserialize(builder=SubscriptionAPIInbound.SubscriptionAPIInboundBuilder.class)
 public class SubscriptionAPIInbound {
 
-	public subscription_type type;
+	public subscription_type 	type;
+	public INVOICE_TYPE 		invoiceType;
 	
 	/**
 	* Constructor based upon a Buider
 	* @param builder - Contains initialization values
 	*/
 	public SubscriptionAPIInbound(SubscriptionAPIInboundBuilder builder) {
-		this.type = builder.type;
+		this.type 			= builder.type;
+		this.invoiceType 	= builder.invoiceType;
 	}
 	
 	/**
@@ -28,6 +31,14 @@ public class SubscriptionAPIInbound {
 	*/
 	public subscription_type getType() {
 		return type;
+	}
+	
+	/**
+	* Returns the type of Invoice to send to the Recruiter
+	* @return Invoice type
+	*/
+	public INVOICE_TYPE getInvoiceType() {
+		return this.invoiceType;
 	}
 	
 	/**
@@ -45,7 +56,8 @@ public class SubscriptionAPIInbound {
 	@JsonPOJOBuilder(buildMethodName="build", withPrefix="")
 	public static class SubscriptionAPIInboundBuilder {
 	
-		public subscription_type type;
+		public subscription_type 	type;
+		public INVOICE_TYPE 		invoiceType;
 		
 		/**
 		* Sets the type of Subscription being requested
@@ -54,6 +66,16 @@ public class SubscriptionAPIInbound {
 		*/
 		public SubscriptionAPIInboundBuilder type(subscription_type type) {
 			this.type = type;
+			return this;
+		}
+		
+		/**
+		* Sets the type of Invoice to send to the Recruiter
+		* @param invoiceType - Invoice type
+		* @return Builder
+		*/
+		public SubscriptionAPIInboundBuilder invoiceType(INVOICE_TYPE invoiceType) {
+			this.invoiceType = invoiceType;
 			return this;
 		}
 		

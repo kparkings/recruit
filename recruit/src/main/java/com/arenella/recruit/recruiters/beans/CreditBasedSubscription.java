@@ -1,6 +1,7 @@
 package com.arenella.recruit.recruiters.beans;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -79,6 +80,14 @@ public class CreditBasedSubscription implements RecruiterSubscription{
 	@Override
 	public subscription_type getType() {
 		return subscription_type.CREDIT_BASED_SUBSCRIPTION;
+	}
+	
+	/**
+	* Refer to the RecruiterSubscription interface for details 
+	*/
+	@Override
+	public Optional<INVOICE_TYPE> getInvoiceType() {
+		return Optional.empty();
 	}
 
 	/**

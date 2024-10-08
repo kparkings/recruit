@@ -144,7 +144,7 @@ public class RecruiterTest {
 		
 		assertTrue(recruiter.getSubscriptions().isEmpty());
 		
-		recruiter.addSubscription(FirstGenRecruiterSubscription.builder().build());
+		recruiter.addSubscription(CreditBasedSubscription.builder().build());
 		
 		assertFalse(recruiter.getSubscriptions().isEmpty());
 		

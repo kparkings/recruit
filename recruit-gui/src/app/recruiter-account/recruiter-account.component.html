@@ -105,12 +105,12 @@
 	<!-- Subscriptions -->
 	<div class="container-div container-div-high" *ngIf="showSubscriptions">
 		
-		<div *ngIf="isBuyingSubscription && !showBillingDetails" class="no-sub-warn">
+		<div *ngIf="isBuyingSubscription && !showBillingDetails && !showBillingInvoiceType && !showBillingDetailsPrivatePerson" class="no-sub-warn">
 		
 			<h1>{{'arenella-recruiter-account-details-sub-options' | translate}}</h1>
 			
 			<div>
-				<div class="subs-opt-box {{subscriptionSelectionMobCss}}" (click)="doShowBillingDetails('CREDIT_BASED_SUBSCRIPTION')" *ngIf="!isCreditBasedSubscription && !isTrialOrFirstGen">
+				<div class="subs-opt-box {{subscriptionSelectionMobCss}}" (click)="doShowBillingInvoiceType('CREDIT_BASED_SUBSCRIPTION')" *ngIf="!isCreditBasedSubscription && !isTrialOrFirstGen">
 					<h3>{{'arenella-recruiter-account-details-sub-credit' | translate}}</h3>
 					<p>{{'arenella-recruiter-account-details-sub-credit-cost' | translate}}</p>
 				</div>
@@ -118,24 +118,40 @@
 					<h3>{{'arenella-recruiter-account-details-sub-credit' | translate}}</h3>
 					<p>{{'arenella-recruiter-account-details-sub-credit-cost' | translate}}</p>
 				</div>
-				<div class="subs-opt-box {{subscriptionSelectionMobCss}}" (click)="doShowBillingDetails('ONE_MONTH_SUBSCRIPTION')">
+				<div class="subs-opt-box {{subscriptionSelectionMobCss}}" (click)="doShowBillingInvoiceType('ONE_MONTH_SUBSCRIPTION')">
 					<h3>{{'arenella-recruiter-account-details-month-1' | translate}}</h3>
 					<p>{{'arenella-recruiter-account-details-month-1-cost' | translate}}</p>
 				</div>
-				<div class="subs-opt-box {{subscriptionSelectionMobCss}}" (click)="doShowBillingDetails('THREE_MONTHS_SUBSCRIPTION')">
+				<div class="subs-opt-box {{subscriptionSelectionMobCss}}" (click)="doShowBillingInvoiceType('THREE_MONTHS_SUBSCRIPTION')">
 					<h3>{{'arenella-recruiter-account-details-month-3' | translate}}</h3>
 					<p>{{'arenella-recruiter-account-details-month-3-cost' | translate}}</p>
 				</div>
-				<div class="subs-opt-box {{subscriptionSelectionMobCss}}" (click)="doShowBillingDetails('SIX_MONTHS_SUBSCRIPTION')">
+				<div class="subs-opt-box {{subscriptionSelectionMobCss}}" (click)="doShowBillingInvoiceType('SIX_MONTHS_SUBSCRIPTION')">
 					<h3>{{'arenella-recruiter-account-details-month-6' | translate}}</h3>
 					<p>{{'arenella-recruiter-account-details-month-6-cost' | translate}}</p>
 				</div>
-				<div class="subs-opt-box {{subscriptionSelectionMobCss}}" (click)="doShowBillingDetails('YEAR_SUBSCRIPTION')">
+				<div class="subs-opt-box {{subscriptionSelectionMobCss}}" (click)="doShowBillingInvoiceType('YEAR_SUBSCRIPTION')">
 					<h3>{{'arenella-recruiter-account-details-month-12' | translate}}</h3>
 					<p>{{'arenella-recruiter-account-details-month-12-cost' | translate}}</p>
 				</div>
 			</div>
 			<div class="spacer"></div>
+		</div>
+		
+		<div *ngIf="showBillingInvoiceType">
+			<div class="invoice-type">
+				<h3>{{'arenella-recruiter-account-detail-payment-invoice-type-header' | translate}}</h3>
+				<p>{{'arenella-recruiter-account-detail-payment-invoice-type-message' | translate}}</p>
+				<div>
+					<div class="subs-opt-box invoice-type-option" (click)="doShowBillingDetails()">
+						<b>{{'arenella-recruiter-account-detail-payment-invoice-type-business' | translate}}</b>
+					</div>
+					<div class="subs-opt-box invoice-type-option" (click)="doShowBillingDetailsPrivatePerson()">
+						<b>{{'arenella-recruiter-account-detail-payment-invoice-type-private-person' | translate}}</b>
+					</div>
+				</div>
+				
+			</div>
 		</div>
 		
 		<div class="no-sub-warn" *ngIf="showBillingDetails">
@@ -154,7 +170,7 @@
 					
 					
 							<tr>
-								<td class="label">{{'arenella-recruiter-account-detail-payment-company-name' | translate}}Company Address</td>
+								<td class="label">{{'arenella-recruiter-account-detail-payment-company-address' | translate}}</td>
 							</tr>
 							<tr>
 								<td><textarea formControlName="companyAddress"></textarea></td>
@@ -187,11 +203,22 @@
 					
 							<tr>
 								<td>
-									<button class="btn btn-secondary arenella-btn btnSubscribe" (click)="confirmSwitchToOtherSubscription()">{{'arenella-recruiter-account-detail-payment-btn-confirm' | translate}}</button>
+									<button class="btn btn-secondary arenella-btn btnSubscribe" (click)="confirmSwitchToOtherSubscriptionCancel()">{{'arenella-recruiter-account-detail-payment-btn-back' | translate}}</button>
+									<button class="btn btn-secondary arenella-btn btnSubscribe" (click)="confirmSwitchToOtherSubscription(INVOICE_TYPE.BUSINESS)" [disabled]="!businessDetailsValidated()">{{'arenella-recruiter-account-detail-payment-btn-confirm' | translate}}</button>
 								</td>
 							</tr>
 						</table>
 					</form>
+				</div>
+			</div>
+			
+			<div class="no-sub-warn" *ngIf="showBillingDetailsPrivatePerson">
+		
+				<h1>{{'arenella-recruiter-account-detail-payment-confirm-purchase' | translate}}</h1>
+				
+				<div class="account-details {{accountDetailsMobCss}}" style="text-align:center;">
+					<button class="btn btn-secondary arenella-btn btnSubscribe" (click)="confirmSwitchToOtherSubscriptionCancel()">{{'arenella-recruiter-account-detail-payment-btn-back' | translate}}</button>
+					<button class="btn btn-secondary arenella-btn btnSubscribe" (click)="confirmSwitchToOtherSubscription(INVOICE_TYPE.PERSON)">{{'arenella-recruiter-account-detail-payment-btn-confirm' | translate}}</button>
 				</div>
 			</div>
 			

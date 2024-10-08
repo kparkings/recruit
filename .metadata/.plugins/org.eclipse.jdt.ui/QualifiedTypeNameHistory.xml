@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <qualifiedTypeNameHistroy>
-    <fullyQualifiedTypeName name="org.springframework.beans.factory.annotation.Autowired"/>
     <fullyQualifiedTypeName name="com.arenella.recruit.candidates.services.CandidateService"/>
     <fullyQualifiedTypeName name="com.arenella.recruit.candidates.utils.CandidateSearchUtil"/>
     <fullyQualifiedTypeName name="com.arenella.recruit.candidates.beans.CandidateFilterOptions"/>
@@ -55,9 +54,10 @@
     <fullyQualifiedTypeName name="java.util.UUID"/>
     <fullyQualifiedTypeName name="com.arenella.recruit.candidates.entities.CandidateDocument"/>
     <fullyQualifiedTypeName name="com.arenella.recruit.candidates.beans.Candidate"/>
-    <fullyQualifiedTypeName name="java.util.Optional"/>
     <fullyQualifiedTypeName name="java.time.LocalDate"/>
     <fullyQualifiedTypeName name="com.arenella.recruit.candidates.enums.COUNTRY"/>
     <fullyQualifiedTypeName name="com.arenella.recruit.recruiters.enums.COUNTRY"/>
     <fullyQualifiedTypeName name="java.util.stream.Collectors"/>
+    <fullyQualifiedTypeName name="java.util.Optional"/>
+    <fullyQualifiedTypeName name="com.arenella.recruit.recruiters.beans.RecruiterSubscription.INVOICE_TYPE"/>
 </qualifiedTypeNameHistroy>

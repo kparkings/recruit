@@ -11,6 +11,7 @@ import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
 
+import com.arenella.recruit.recruiters.beans.RecruiterSubscription.INVOICE_TYPE;
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_status;
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_type;
 
@@ -33,6 +34,7 @@ public class PaidPeriodRecruiterSubscriptionTest {
 		final UUID					subscriptionId		= UUID.randomUUID();
 		final subscription_type		type				= subscription_type.SIX_MONTHS_SUBSCRIPTION;
 		final subscription_status 	status 				= subscription_status.ACTIVE;
+		final INVOICE_TYPE			invoiceType			= INVOICE_TYPE.PERSON;
 		
 		PaidPeriodRecruiterSubscription subscription = PaidPeriodRecruiterSubscription
 																			.builder()
@@ -42,6 +44,7 @@ public class PaidPeriodRecruiterSubscriptionTest {
 																				.subscriptionId(subscriptionId)
 																				.status(status)
 																				.type(type)
+																				.invoiceType(invoiceType)
 																				.currentSubscription(true)
 																			.build();
 		
@@ -50,6 +53,7 @@ public class PaidPeriodRecruiterSubscriptionTest {
 		assertEquals(recruiterId, 												subscription.getRecruiterId());
 		assertEquals(status, 													subscription.getStatus());
 		assertEquals(type, 														subscription.getType());
+		assertEquals(invoiceType, 												subscription.getInvoiceType().get());
 		assertEquals(subscriptionId, 											subscription.getSubscriptionId());
 		assertEquals(type, 														subscription.getType());
 		assertTrue(subscription.isCurrentSubscription());

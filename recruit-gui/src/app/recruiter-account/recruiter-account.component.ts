@@ -8,6 +8,7 @@ import { UntypedFormGroup, UntypedFormControl }	from '@angular/forms';
 import {RecruiterUpdateRequest }				from './recruiter-update-request';
 import { CreditsService } 						from '../credits.service';
 import { TranslateService } 					from '@ngx-translate/core';
+import { INVOICE_TYPE } from './subscription-api-inbound';
 
 /**
 * Component to allow the Recruiter to aministrate their 
@@ -20,14 +21,18 @@ import { TranslateService } 					from '@ngx-translate/core';
 })
 export class RecruiterAccountComponent implements OnInit {
 
-	public isMobile:boolean 					= false;
-	public mobCss:string 						= "";
-	public subscriptionSelectionMobCss 			= "";
-	public accountDetailsMobCss 				= "";
-	public showBillingDetails:boolean 			= false;
-	public selectedSubscriptionOption:string 	= "";
-	public isCreditBasedSubscription:boolean 	= false;
-	public isTrialOrFirstGen 					= false;
+	INVOICE_TYPE = INVOICE_TYPE;	
+
+	public isMobile:boolean 						= false;
+	public mobCss:string 							= "";
+	public subscriptionSelectionMobCss 				= "";
+	public accountDetailsMobCss 					= "";
+	public showBillingInvoiceType:boolean			= false;
+	public showBillingDetails:boolean 				= false;
+	public showBillingDetailsPrivatePerson:boolean 	= false;
+	public selectedSubscriptionOption:string 		= "";
+	public isCreditBasedSubscription:boolean 		= false;
+	public isTrialOrFirstGen 						= false;
 	
 	/**
 	* Constructor
@@ -63,13 +68,32 @@ export class RecruiterAccountComponent implements OnInit {
 	* Recruiter
 	*/
 	public selectCreditBasedSubscription():void{
+		var notApplicatble:INVOICE_TYPE;
 		this.addAlternateSubscription("CREDIT_BASED_SUBSCRIPTION");
 	}
-  	
-  	public doShowBillingDetails(subscriptionOption:string):void{
-		  this.showBillingDetails 			= true;
+	
+	public doShowBillingInvoiceType(subscriptionOption:string):void{
+		  this.showBillingInvoiceType 			= true;
 		  this.selectedSubscriptionOption 	= subscriptionOption;
 	}
+  	
+  	public doShowBillingDetails():void{
+		  this.showBillingInvoiceType		= false;
+		  this.showBillingDetails 			= true;
+	}
+	
+	public doShowBillingDetailsPrivatePerson():void{
+		this.showBillingInvoiceType				= false;
+		this.showBillingDetailsPrivatePerson 	= true;
+	}
+	
+	public confirmSwitchToOtherSubscriptionCancel():void{
+		this.showBillingDetails 				= false; 
+		this.showBillingInvoiceType 			= false; 
+		this.showBillingDetailsPrivatePerson 	= false;
+	}
+	
+	
   	
   	public setSubscriptionOption():void{
 		  
@@ -140,15 +164,15 @@ export class RecruiterAccountComponent implements OnInit {
 			}
 			
 			this.accoundDetailsForm = new UntypedFormGroup({
-				firstName:					new UntypedFormControl(this.recruiter.firstName),
-				surname:					new UntypedFormControl(this.recruiter.surname),
-				companyName:				new UntypedFormControl(this.recruiter.companyName),
-				companyCountry:				new UntypedFormControl(this.recruiter.companyCountry),
-				companyAddress:				new UntypedFormControl(this.recruiter.companyAddress),
-				companyVatNumber:			new UntypedFormControl(this.recruiter.companyVatNumber),
-				companyRegistrationNumber:	new UntypedFormControl(this.recruiter.companyRegistrationNumber),
-				email:						new UntypedFormControl(this.recruiter.email),
-				language:					new UntypedFormControl(this.recruiter.language),
+				firstName:					new UntypedFormControl(""+this.recruiter.firstName),
+				surname:					new UntypedFormControl(""+this.recruiter.surname),
+				companyName:				new UntypedFormControl(""+this.recruiter.companyName),
+				companyCountry:				new UntypedFormControl(""+this.recruiter.companyCountry),
+				companyAddress:				new UntypedFormControl(""+this.recruiter.companyAddress),
+				companyVatNumber:			new UntypedFormControl(""+this.recruiter.companyVatNumber),
+				companyRegistrationNumber:	new UntypedFormControl(""+this.recruiter.companyRegistrationNumber),
+				email:						new UntypedFormControl(""+this.recruiter.email),
+				language:					new UntypedFormControl(""+this.recruiter.language),
 				subscriptionOption:			new UntypedFormControl('CREDIT_BASED_ACCESS'),
 			});
 				
@@ -277,9 +301,9 @@ export class RecruiterAccountComponent implements OnInit {
 	/**
  	* Confirms the swithch to Yearly subscription button
 	*/
-	public confirmSwitchToOtherSubscription():void{
+	public confirmSwitchToOtherSubscription(invoiceType:INVOICE_TYPE):void{
 		this.cancelAlterSubscriptionOptions();
-		this.addAlternateSubscription(this.selectedSubscriptionOption);
+		this.addAlternateSubscription(this.selectedSubscriptionOption, invoiceType);	
 	}
 	
 	/**
@@ -323,25 +347,33 @@ export class RecruiterAccountComponent implements OnInit {
 	/**
  	* Ends the subscription
 	*/
-	public addAlternateSubscription(subscriptionType:string):void{
-		console.log("..................4");
+	public addAlternateSubscription(subscriptionType:string, invoiceType?:INVOICE_TYPE):void{
+		console.log("aaaaaaaaaaaa1");
 		this.showSwitchToYearlySubscriptionConfirmButtons	= false;
 		
-		try{
-			this.persistAccountDetails();
-		} catch (ex){
-			console.log("Failed to update Account details ");
+		if (invoiceType && invoiceType == INVOICE_TYPE.BUSINESS){
+			try{
+					this.persistAccountDetails();
+				
+			} catch (ex){
+				console.log("Failed to update Account details ");
+			}
 		}
-		
-		console.log("XXXXXXXXXXXXXXx " + JSON.stringify(this.recruiter));
-		this.recruiterService.requestNewSubscription(this.recruiter.userId, subscriptionType).subscribe(data => {
-			sessionStorage.clear();
-			sessionStorage.setItem("new-subscription", "true");
-			this.router.navigate(['login-user']);
-		}, 
-		err => {
-			console.log(JSON.stringify(err));		
-		});
+		console.log("aaaaaaaaaaaa2 " + invoiceType);
+		//TODO: Add invoiceType to request and implement in backend'
+		if (invoiceType == INVOICE_TYPE.BUSINESS || invoiceType == INVOICE_TYPE.PERSON) {
+			console.log("aaaaaaaaaaaa3");
+			this.recruiterService.requestNewSubscription(this.recruiter.userId, subscriptionType, invoiceType).subscribe(data => {
+				sessionStorage.clear();
+				sessionStorage.setItem("new-subscription", "true");
+				this.router.navigate(['login-user']);
+				console.log("aaaaaaaaaaaa4");
+			}, 
+			err => {
+				console.log("aaaaaaaaaaaa5");
+				console.log(JSON.stringify(err));		
+			});
+		}
 	}
 	
 	/**
@@ -425,6 +457,28 @@ export class RecruiterAccountComponent implements OnInit {
 	*/
 	public isRecruiter():boolean{
 		return sessionStorage.getItem('isRecruiter') === 'true';
+	}
+	
+	/**
+	* Front end validation to prompt Recruiter to add all the billing details 
+	*/
+	public businessDetailsValidated():boolean{
+		
+		const companyName:string  				= "" +String(this.accoundDetailsForm.get('companyName')?.value);
+		const companyCountry:string				= "" +String(this.accoundDetailsForm.get('companyCountry')?.value);
+		const companyAddress:string				= "" +String(this.accoundDetailsForm.get('companyAddress')?.value);
+		const companyVatNumber:string			= "" +String(this.accoundDetailsForm.get('companyVatNumber')?.value);
+		const companyRegistrationNumber:string	= "" +String(this.accoundDetailsForm.get('companyRegistrationNumber')?.value);
+		
+		if (	companyName.length < 2 
+			||  companyCountry.length < 2
+			|| companyAddress.length < 2
+			|| companyVatNumber.length < 2
+			|| companyRegistrationNumber.length < 2) {
+				return false;
+			}
+		
+		return true;
 	}
 	
 }

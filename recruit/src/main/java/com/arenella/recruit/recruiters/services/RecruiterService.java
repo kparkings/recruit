@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import com.arenella.recruit.recruiters.beans.Recruiter;
 import com.arenella.recruit.recruiters.beans.SubscriptionActionFeedback;
+import com.arenella.recruit.recruiters.beans.RecruiterSubscription.INVOICE_TYPE;
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_action;
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_type;
 
@@ -66,9 +67,10 @@ public interface RecruiterService {
 	* Adds / switches the Recruiters subscription type. 
 	* @param recruiterId - Unique identifier of the Recruiter the Subscription is for
 	* @param type 		 - type of the Subscription
+	* @param invoiceType - Type of Invoice to send to the Recruiter for the subscription
 	* @throws  IllegalAccessException
 	*/
-	public void addSubscription(String recruiterId, subscription_type type)  throws IllegalAccessException;
+	public void addSubscription(String recruiterId, subscription_type type, INVOICE_TYPE invoiceType)  throws IllegalAccessException;
 
 	/**
 	* Resets the users password and emails them the new password

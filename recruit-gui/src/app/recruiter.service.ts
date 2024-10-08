@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders }  				from '@angular/common/http';
 import { Observable }                 				from 'rxjs';
 import { environment }								from './../environments/environment';
 import { RecruiterSignup }							from './recruiter-signup/signup-recruiter';
-import { SubscriptionAPIInbound }					from './recruiter-account/subscription-api-inbound';
+import { INVOICE_TYPE, SubscriptionAPIInbound }					from './recruiter-account/subscription-api-inbound';
 import { RecruiterUpdateRequest }					from './recruiter-account/recruiter-update-request';
 
 
@@ -90,14 +90,15 @@ export class RecruiterService {
 	/**
 	* Requests a new Subscription of the given type for the Recruiter
 	*/
-	public requestNewSubscription(recruiterId:string, type:string):Observable<any>{
+	public requestNewSubscription(recruiterId:string, type:string, invoiceType:INVOICE_TYPE):Observable<any>{
 		
 		const backendUrl:string = environment.backendUrl +'recruiter/' + recruiterId + '/subscription/';
 		
 		let subscription:SubscriptionAPIInbound = new SubscriptionAPIInbound();
 		
 		subscription.type = type;
-		
+		subscription.invoiceType = invoiceType;
+	
 		return this.httpClient.post<any>(backendUrl, JSON.stringify(subscription), this.httpOptions);
 		
 	}

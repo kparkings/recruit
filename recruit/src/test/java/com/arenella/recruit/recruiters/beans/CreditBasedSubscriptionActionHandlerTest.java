@@ -1,6 +1,7 @@
 package com.arenella.recruit.recruiters.beans;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -57,6 +58,16 @@ public class CreditBasedSubscriptionActionHandlerTest {
 			handler.performAction(recruiter, subscription, subscription_action.REJECT_SUBSCRIPTION, false);
 		});
 		
+	}
+	
+	/**
+	* Tests no Invoice type for credit based subscription type
+	*/
+	@Test
+	public void testGetInvoiceType() {
+		
+		RecruiterSubscription 	subscription 	= CreditBasedSubscription.builder().status(subscription_status.AWAITING_ACTIVATION).build();
+		assertTrue(subscription.getInvoiceType().isEmpty());
 	}
 	
 	/**

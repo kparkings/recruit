@@ -2378,3 +2378,14 @@ databaseChangeLog:
                   type: number
                   constraints:
                     nullable: true
+  - changeSet:
+      id: addColumn-subscription_invoice_type
+      author: kevin
+      changes:
+        - addColumn:
+            tableName: recruiter_subscriptions
+            schemaName: recruiter
+            columns:
+            - column:
+                name: invoice_type
+                type: varchar

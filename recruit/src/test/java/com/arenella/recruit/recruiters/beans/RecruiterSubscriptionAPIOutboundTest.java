@@ -9,6 +9,7 @@ import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
 
+import com.arenella.recruit.recruiters.beans.RecruiterSubscription.INVOICE_TYPE;
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_status;
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_type;
 
@@ -23,7 +24,8 @@ public class RecruiterSubscriptionAPIOutboundTest {
 	private static final LocalDateTime 			created				= LocalDateTime.of(2022, 01, 01, 19, 31);
 	private static final LocalDateTime 			activatedDate		= LocalDateTime.of(2022, 02, 01, 19, 31);
 	private static final subscription_status	status				= subscription_status.ACTIVE;
-	private static final subscription_type		type				= subscription_type.FIRST_GEN;
+	private static final subscription_type		type				= subscription_type.CREDIT_BASED_SUBSCRIPTION;
+	private static final INVOICE_TYPE			invoiceType			= INVOICE_TYPE.BUSINESS;
 	
 	/**
 	* Tests construction via the builder
@@ -41,6 +43,7 @@ public class RecruiterSubscriptionAPIOutboundTest {
 				.subscriptionId(subscriptionId)
 				.type(type)
 				.currentSubscription(true)
+				.invoiceType(invoiceType)
 			.build();
 		
 		assertEquals(activatedDate, 	subscription.getActivatedDate());
@@ -49,6 +52,7 @@ public class RecruiterSubscriptionAPIOutboundTest {
 		assertEquals(status, 			subscription.getStatus());
 		assertEquals(subscriptionId, 	subscription.getSubscriptionId());
 		assertEquals(type, 				subscription.getType());
+		assertEquals(invoiceType, 		subscription.getInvoiceType());
 		assertTrue(subscription.isCurrentSubscription());
 		
 	}
@@ -91,7 +95,7 @@ public class RecruiterSubscriptionAPIOutboundTest {
 	@Test
 	public void testConvertFromSubscription() throws Exception {
 		
-		FirstGenRecruiterSubscription subscription = FirstGenRecruiterSubscription
+		CreditBasedSubscription subscription = CreditBasedSubscription
 																			.builder()
 																				.activateDate(activatedDate)
 																				.created(created)
@@ -109,8 +113,34 @@ public class RecruiterSubscriptionAPIOutboundTest {
 		assertEquals(status, 			outbound.getStatus());
 		assertEquals(subscriptionId, 	outbound.getSubscriptionId());
 		assertEquals(type, 				outbound.getType());
+		
 		assertTrue(outbound.isCurrentSubscription());
+		assertTrue(subscription.getInvoiceType().isEmpty());
 		
 	}
-	
+
+	/**
+	* Tests conversion of RecruiterSubscription (domain representation) to 
+	* API Outbound representation
+	* @throws Exception
+	*/
+	@Test
+	public void testConvertFromSubscription_paidSubscription() throws Exception {
+		
+		PaidPeriodRecruiterSubscription subscription = PaidPeriodRecruiterSubscription
+																			.builder()
+																				.activateDate(activatedDate)
+																				.created(created)
+																				.recruiterId(recruiterId)
+																				.status(status)
+																				.subscriptionId(subscriptionId)
+																				.currentSubscription(true)
+																				.invoiceType(invoiceType)
+																			.build();
+		
+		RecruiterSubscriptionAPIOutbound outbound = RecruiterSubscriptionAPIOutbound.convertFromSubscription(subscription);		
+				
+		assertEquals(invoiceType, 				outbound.getInvoiceType().get());
+		
+	}
 }

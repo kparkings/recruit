@@ -1,6 +1,7 @@
 package com.arenella.recruit.recruiters.beans;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -17,6 +18,7 @@ public class PaidPeriodRecruiterSubscription implements RecruiterSubscription{
 	private LocalDateTime 			activatedDate;
 	private subscription_status		status;
 	private subscription_type		type;
+	private INVOICE_TYPE			invoiceType;
 	private boolean					currentSubscription;
 	
 	/**
@@ -31,6 +33,7 @@ public class PaidPeriodRecruiterSubscription implements RecruiterSubscription{
 		this.recruiterId			= builder.recruiterId;
 		this.status					= builder.status;
 		this.type					= builder.type;
+		this.invoiceType			= builder.invoiceType;
 		this.currentSubscription 	= builder.currentSubscription;
 		
 	}
@@ -81,6 +84,14 @@ public class PaidPeriodRecruiterSubscription implements RecruiterSubscription{
 	@Override
 	public subscription_type getType() {
 		return this.type;
+	}
+	
+	/**
+	* Refer to the RecruiterSubscription interface for details 
+	*/
+	@Override
+	public Optional<INVOICE_TYPE> getInvoiceType() {
+		return Optional.ofNullable(this.invoiceType);
 	}
 
 	/**
@@ -144,6 +155,7 @@ public class PaidPeriodRecruiterSubscription implements RecruiterSubscription{
 		private LocalDateTime 			activatedDate;
 		private subscription_status		status;
 		private subscription_type		type;
+		private INVOICE_TYPE			invoiceType;
 		private boolean					currentSubscription;
 		
 		/**
@@ -193,6 +205,16 @@ public class PaidPeriodRecruiterSubscription implements RecruiterSubscription{
 		*/
 		public PaidPeriodRecruiterSubscriptionBuilder type(subscription_type type) {
 			this.type = type;
+			return this;
+		}
+		
+		/**
+		* Sets Invoice type to send to Recruiter
+		* @param type - type of invoice
+		* @return Builder
+		*/
+		public PaidPeriodRecruiterSubscriptionBuilder invoiceType(INVOICE_TYPE invoiceType) {
+			this.invoiceType = invoiceType;
 			return this;
 		}
 		
@@ -259,4 +281,5 @@ public class PaidPeriodRecruiterSubscription implements RecruiterSubscription{
 		};
 		
 	}
+
 }

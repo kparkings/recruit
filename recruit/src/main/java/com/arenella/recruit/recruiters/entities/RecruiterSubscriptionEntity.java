@@ -12,9 +12,9 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 import com.arenella.recruit.recruiters.beans.CreditBasedSubscription;
-import com.arenella.recruit.recruiters.beans.FirstGenRecruiterSubscription;
 import com.arenella.recruit.recruiters.beans.PaidPeriodRecruiterSubscription;
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription;
+import com.arenella.recruit.recruiters.beans.RecruiterSubscription.INVOICE_TYPE;
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_status;
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_type;
 
@@ -36,6 +36,10 @@ public class RecruiterSubscriptionEntity {
 	@Column(name="type")
 	@Enumerated(EnumType.STRING)
 	private subscription_type		type;
+	
+	@Column(name="invoice_type")
+	@Enumerated(EnumType.STRING)
+	private INVOICE_TYPE			invoiceType;
 	
 	@Column(name="status")
 	@Enumerated(EnumType.STRING)
@@ -71,6 +75,7 @@ public class RecruiterSubscriptionEntity {
 		this.type					= builder.type;
 		this.status					= builder.status;
 		this.currentSubscription 	= builder.currentSubscription;
+		this.invoiceType			= builder.invoiceType;
 		
 	}
 	
@@ -114,6 +119,14 @@ public class RecruiterSubscriptionEntity {
 	public subscription_type getType() {
 		return this.type;
 	}
+	
+	/**
+	* If present the type of Invoice to send to the Recruiter
+	* @return type of Invoice
+	*/
+	public Optional<INVOICE_TYPE> getInvoiceType() {
+		return Optional.ofNullable(this.invoiceType);
+	}
 
 	/**
 	* Returns the current status of the Subscription
@@ -153,6 +166,14 @@ public class RecruiterSubscriptionEntity {
 	*/
 	public void setType(subscription_type type) {
 		this.type = type;
+	}
+	
+	/**
+	* Sets the type of the Invoice to send to the Recruiter for this Subscription
+	* @param invoiceType - Type of Invoice
+	*/
+	public void setInvoiceType(INVOICE_TYPE invoiceType) {
+		this.invoiceType = invoiceType;
 	}
 	
 	/**
@@ -208,6 +229,7 @@ public class RecruiterSubscriptionEntity {
 		private subscription_status		status;
 		private subscription_type		type;
 		private boolean					currentSubscription;
+		private INVOICE_TYPE			invoiceType;
 		
 		/**
 		* Sets the Unique Id of the subscription
@@ -251,11 +273,21 @@ public class RecruiterSubscriptionEntity {
 		
 		/**
 		* Sets the Type of the Subscriptions
-		* @param created - Status of the Subscription
+		* @param type - Type of the Subscription
 		* @return Builder
 		*/
 		public RecruiterSubscriptionEntityBuilder type(subscription_type type) {
 			this.type = type;
+			return this;
+		}
+		
+		/**
+		* Sets the Type of the Invoice to send the Recruiter for the Subscription
+		* @param invoiceType - Type of invoice to send
+		* @return Builder
+		*/
+		public RecruiterSubscriptionEntityBuilder invoiceType(INVOICE_TYPE invoiceType) {
+			this.invoiceType = invoiceType;
 			return this;
 		}
 		
@@ -309,6 +341,7 @@ public class RecruiterSubscriptionEntity {
 											.subscriptionId(subscription.getSubscriptionId())
 											.type(subscription.getType())
 											.currentSubscription(subscription.isCurrentSubscription())
+											.invoiceType(subscription.getInvoiceType().isEmpty() ? null : subscription.getInvoiceType().get())
 										.build();
 			
 		}
@@ -322,6 +355,7 @@ public class RecruiterSubscriptionEntity {
 		entity.setSubscriptionId(subscription.getSubscriptionId());
 		entity.setType(subscription.getType());
 		entity.setCurrentSubscription(subscription.isCurrentSubscription());
+		entity.setInvoiceType(subscription.getInvoiceType().isEmpty() ? null : subscription.getInvoiceType().get());
 		
 		return entity;
 		
@@ -335,17 +369,6 @@ public class RecruiterSubscriptionEntity {
 	*/
 	public static RecruiterSubscription convertFromEntity(RecruiterSubscriptionEntity entity) {
 		switch(entity.getType()) {
-			case FIRST_GEN -> {
-				return FirstGenRecruiterSubscription
-											.builder()
-												.activateDate(entity.getActivatedDate())
-												.created(entity.getCreated())
-												.recruiterId(entity.getRecruiterId())
-												.status(entity.getStatus())
-												.subscriptionId(entity.getSubscriptionId())
-												.currentSubscription(entity.isCurrentSubscription())
-											.build();
-			}
 			case YEAR_SUBSCRIPTION, ONE_MONTH_SUBSCRIPTION, THREE_MONTHS_SUBSCRIPTION, SIX_MONTHS_SUBSCRIPTION -> {
 				return PaidPeriodRecruiterSubscription
 											.builder()
@@ -356,6 +379,7 @@ public class RecruiterSubscriptionEntity {
 												.subscriptionId(entity.getSubscriptionId())
 												.currentSubscription(entity.isCurrentSubscription())
 												.type(entity.getType())
+												.invoiceType(entity.getInvoiceType().isEmpty() ? null : entity.getInvoiceType().get())
 											.build();
 				
 			}

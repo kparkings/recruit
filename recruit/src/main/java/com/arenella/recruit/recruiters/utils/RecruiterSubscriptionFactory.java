@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.arenella.recruit.recruiters.beans.CreditBasedSubscriptionActionHandler;
-import com.arenella.recruit.recruiters.beans.FirstGenRecruiterSubscription;
 import com.arenella.recruit.recruiters.beans.PaidPeriodSubscriptionActionHandler;
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_type;
 
@@ -35,7 +34,6 @@ public class RecruiterSubscriptionFactory {
 		}
 		
 		return switch(subscriptionType) {
-				case FIRST_GEN -> FirstGenRecruiterSubscription.getActionHandler();
 				case ONE_MONTH_SUBSCRIPTION, 
 					 THREE_MONTHS_SUBSCRIPTION, 
 					 SIX_MONTHS_SUBSCRIPTION, 

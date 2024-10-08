@@ -1,6 +1,7 @@
 package com.arenella.recruit.recruiters.beans;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -10,9 +11,10 @@ import java.util.UUID;
 */
 public interface RecruiterSubscription {
 
-	public static enum subscription_type 	{FIRST_GEN, CREDIT_BASED_SUBSCRIPTION, ONE_MONTH_SUBSCRIPTION, THREE_MONTHS_SUBSCRIPTION, SIX_MONTHS_SUBSCRIPTION, YEAR_SUBSCRIPTION}
-	public static enum subscription_status 	{AWAITING_ACTIVATION, ACTIVE_PENDING_PAYMENT, ACTIVE, DISABLED_PENDING_PAYMENT, SUBSCRIPTION_ENDED}
-	public static enum subscription_action 	{ACTIVATE_SUBSCRIPTION, REJECT_SUBSCRIPTION, DISABLE_PENDING_PAYMENT, RENEW_SUBSCRIPTION, END_SUBSCRIPTION}
+	public enum subscription_type 	{FIRST_GEN, CREDIT_BASED_SUBSCRIPTION, ONE_MONTH_SUBSCRIPTION, THREE_MONTHS_SUBSCRIPTION, SIX_MONTHS_SUBSCRIPTION, YEAR_SUBSCRIPTION}
+	public enum subscription_status {AWAITING_ACTIVATION, ACTIVE_PENDING_PAYMENT, ACTIVE, DISABLED_PENDING_PAYMENT, SUBSCRIPTION_ENDED}
+	public enum subscription_action {ACTIVATE_SUBSCRIPTION, REJECT_SUBSCRIPTION, DISABLE_PENDING_PAYMENT, RENEW_SUBSCRIPTION, END_SUBSCRIPTION}
+	public enum INVOICE_TYPE 		{BUSINESS, PERSON}
 	
 	/**
 	* Returns the unique Id of the Subscription
@@ -50,6 +52,12 @@ public interface RecruiterSubscription {
 	* @return Type of Subscription
 	*/
 	public subscription_type getType();
+	
+	/**
+	* What type of Invoice to send
+	* @return Invoice Type
+	*/
+	public Optional<INVOICE_TYPE> getInvoiceType();
 	
 	/**
 	* Returns the current status of the Subscription

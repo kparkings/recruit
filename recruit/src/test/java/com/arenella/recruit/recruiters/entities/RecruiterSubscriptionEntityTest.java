@@ -1,6 +1,7 @@
 package com.arenella.recruit.recruiters.entities;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDateTime;
@@ -10,9 +11,9 @@ import java.util.UUID;
 import org.junit.jupiter.api.Test;
 
 import com.arenella.recruit.recruiters.beans.CreditBasedSubscription;
-import com.arenella.recruit.recruiters.beans.FirstGenRecruiterSubscription;
 import com.arenella.recruit.recruiters.beans.PaidPeriodRecruiterSubscription;
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription;
+import com.arenella.recruit.recruiters.beans.RecruiterSubscription.INVOICE_TYPE;
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_status;
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_type;
 
@@ -28,6 +29,7 @@ public class RecruiterSubscriptionEntityTest {
 	private static final UUID					subscriptionId		= UUID.randomUUID();
 	private static final subscription_status 	status 				= subscription_status.ACTIVE;
 	private static final subscription_type		type				= subscription_type.FIRST_GEN;
+	private static final INVOICE_TYPE			invoiceType			= INVOICE_TYPE.BUSINESS;
 	
 	/**
 	* Tests creation via the Builder
@@ -45,6 +47,7 @@ public class RecruiterSubscriptionEntityTest {
 																				.status(status)
 																				.type(type)
 																				.currentSubscription(true)
+																				.invoiceType(invoiceType)
 																			.build();
 		
 		assertEquals(activatedDate, 									subscription.getActivatedDate());
@@ -53,6 +56,7 @@ public class RecruiterSubscriptionEntityTest {
 		assertEquals(status, 											subscription.getStatus());
 		assertEquals(subscriptionId, 									subscription.getSubscriptionId());
 		assertEquals(RecruiterSubscription.subscription_type.FIRST_GEN, subscription.getType());
+		assertEquals(invoiceType, 										subscription.getInvoiceType().get());
 		assertTrue(subscription.isCurrentSubscription());
 	
 	}
@@ -75,6 +79,7 @@ public class RecruiterSubscriptionEntityTest {
 		subscription.setSubscriptionId(subscriptionId);
 		subscription.setType(type);
 		subscription.setCurrentSubscription(true);
+		subscription.setInvoiceType(invoiceType);
 
 		assertEquals(activatedDate, 									subscription.getActivatedDate());
 		assertEquals(created, 											subscription.getCreated());
@@ -82,6 +87,7 @@ public class RecruiterSubscriptionEntityTest {
 		assertEquals(status, 											subscription.getStatus());
 		assertEquals(subscriptionId, 									subscription.getSubscriptionId());
 		assertEquals(RecruiterSubscription.subscription_type.FIRST_GEN, subscription.getType());
+		assertEquals(invoiceType, 										subscription.getInvoiceType().get());
 		assertTrue(subscription.isCurrentSubscription());
 		
 	}
@@ -94,7 +100,7 @@ public class RecruiterSubscriptionEntityTest {
 	@Test
 	public void testConvertToEntity_noExistingEntity() throws Exception {
 		
-		FirstGenRecruiterSubscription subscription = FirstGenRecruiterSubscription
+		CreditBasedSubscription subscription = CreditBasedSubscription
 				.builder()
 					.activateDate(activatedDate)
 					.created(created)
@@ -106,13 +112,14 @@ public class RecruiterSubscriptionEntityTest {
 		
 		RecruiterSubscriptionEntity entity = RecruiterSubscriptionEntity.convertToEntity(subscription, Optional.empty());
 		
-		assertEquals(activatedDate, 									entity.getActivatedDate());
-		assertEquals(created, 											entity.getCreated());
-		assertEquals(recruiterId, 										entity.getRecruiterId());
-		assertEquals(status, 											entity.getStatus());
-		assertEquals(subscriptionId, 									entity.getSubscriptionId());
-		assertEquals(RecruiterSubscription.subscription_type.FIRST_GEN, entity.getType());
+		assertEquals(activatedDate, 													entity.getActivatedDate());
+		assertEquals(created, 															entity.getCreated());
+		assertEquals(recruiterId, 														entity.getRecruiterId());
+		assertEquals(status, 															entity.getStatus());
+		assertEquals(subscriptionId, 													entity.getSubscriptionId());
+		assertEquals(RecruiterSubscription.subscription_type.CREDIT_BASED_SUBSCRIPTION, entity.getType());
 		assertTrue(entity.isCurrentSubscription());
+		assertTrue(entity.getInvoiceType().isEmpty());
 		
 	}
 	
@@ -124,7 +131,7 @@ public class RecruiterSubscriptionEntityTest {
 	@Test
 	public void testConvertToEntity_existingEntity() throws Exception {
 		
-		FirstGenRecruiterSubscription subscription = FirstGenRecruiterSubscription
+		CreditBasedSubscription subscription = CreditBasedSubscription
 				.builder()
 					.activateDate(activatedDate)
 					.created(created)
@@ -140,14 +147,15 @@ public class RecruiterSubscriptionEntityTest {
 		
 		RecruiterSubscriptionEntity entity = RecruiterSubscriptionEntity.convertToEntity(subscription, Optional.of(existingEntity));
 		
-		assertEquals(activatedDate, 									entity.getActivatedDate());
-		assertEquals(created, 											entity.getCreated());
-		assertEquals(recruiterId, 										entity.getRecruiterId());
-		assertEquals(status, 											entity.getStatus());
-		assertEquals(subscriptionId, 									entity.getSubscriptionId());
-		assertEquals(RecruiterSubscription.subscription_type.FIRST_GEN, entity.getType());
+		assertEquals(activatedDate, 													entity.getActivatedDate());
+		assertEquals(created, 															entity.getCreated());
+		assertEquals(recruiterId, 														entity.getRecruiterId());
+		assertEquals(status, 															entity.getStatus());
+		assertEquals(subscriptionId, 													entity.getSubscriptionId());
+		assertEquals(RecruiterSubscription.subscription_type.CREDIT_BASED_SUBSCRIPTION, entity.getType());
 		assertTrue(entity.isCurrentSubscription());
-		assertTrue(entity == existingEntity); 
+		assertSame(entity, existingEntity); 
+		assertTrue(entity.getInvoiceType().isEmpty());
 		
 	}
 	
@@ -166,18 +174,18 @@ public class RecruiterSubscriptionEntityTest {
 					.recruiterId(recruiterId)
 					.subscriptionId(subscriptionId)
 					.status(status)
-					.type(subscription_type.FIRST_GEN)
+					.type(subscription_type.CREDIT_BASED_SUBSCRIPTION)
 					.currentSubscription(true)
 				.build();
 		
-		FirstGenRecruiterSubscription subscription = (FirstGenRecruiterSubscription) RecruiterSubscriptionEntity.convertFromEntity(entity);
+		CreditBasedSubscription subscription = (CreditBasedSubscription) RecruiterSubscriptionEntity.convertFromEntity(entity);
 		
 		assertEquals(activatedDate, 									subscription.getActivatedDate());
 		assertEquals(created, 											subscription.getCreated());
 		assertEquals(recruiterId, 										subscription.getRecruiterId());
 		assertEquals(status, 											subscription.getStatus());
 		assertEquals(subscriptionId, 									subscription.getSubscriptionId());
-		assertEquals(RecruiterSubscription.subscription_type.FIRST_GEN, subscription.getType());
+		assertEquals(RecruiterSubscription.subscription_type.CREDIT_BASED_SUBSCRIPTION, subscription.getType());
 		assertTrue(subscription.isCurrentSubscription());
 		
 	}
@@ -199,6 +207,7 @@ public class RecruiterSubscriptionEntityTest {
 					.status(status)
 					.type(subscription_type.YEAR_SUBSCRIPTION)
 					.currentSubscription(true)
+					.invoiceType(invoiceType)
 				.build();
 		
 		PaidPeriodRecruiterSubscription subscription = (PaidPeriodRecruiterSubscription) RecruiterSubscriptionEntity.convertFromEntity(entity);
@@ -210,6 +219,7 @@ public class RecruiterSubscriptionEntityTest {
 		assertEquals(subscriptionId, 											subscription.getSubscriptionId());
 		assertEquals(RecruiterSubscription.subscription_type.YEAR_SUBSCRIPTION, subscription.getType());
 		assertTrue(subscription.isCurrentSubscription());
+		assertEquals(invoiceType, 												subscription.getInvoiceType().get());
 		
 	}
 	

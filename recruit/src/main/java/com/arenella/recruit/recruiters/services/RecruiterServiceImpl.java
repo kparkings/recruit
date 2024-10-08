@@ -25,11 +25,11 @@ import com.arenella.recruit.emailservice.beans.Email.EmailRecipient.ContactType;
 import com.arenella.recruit.emailservice.beans.Email.Sender.SenderType;
 import com.arenella.recruit.recruiters.adapters.RecruitersExternalEventPublisher;
 import com.arenella.recruit.recruiters.beans.CreditBasedSubscription;
-import com.arenella.recruit.recruiters.beans.FirstGenRecruiterSubscription;
 import com.arenella.recruit.recruiters.beans.PaidPeriodRecruiterSubscription;
 import com.arenella.recruit.recruiters.beans.Recruiter;
 import com.arenella.recruit.recruiters.beans.RecruiterCredit;
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription;
+import com.arenella.recruit.recruiters.beans.RecruiterSubscription.INVOICE_TYPE;
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_action;
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_status;
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_type;
@@ -240,13 +240,13 @@ public class RecruiterServiceImpl implements RecruiterService{
 	* @throws IllegalAccessException 
 	*/
 	@Override
-	public void addSubscription(String recruiterId, subscription_type type) throws IllegalAccessException{
+	public void addSubscription(String recruiterId, subscription_type type, INVOICE_TYPE invoiceType) throws IllegalAccessException{
 		
 		this.performIsAdminOrRecruiterAccessingOwnAccountCheck(recruiterId);
 		
 		Recruiter recruiter = this.recruiterDao.findRecruiterById(recruiterId).orElseThrow(() -> new IllegalArgumentException("Unable to retrieve recruiter: " + recruiterId));
 		
-		switchSubscription(recruiter, type);
+		switchSubscription(recruiter, type, invoiceType);
 		
 	}
 	
@@ -294,7 +294,7 @@ public class RecruiterServiceImpl implements RecruiterService{
 	* @param recruiterId
 	* @param type
 	*/
-	private void switchSubscription(Recruiter recruiter, subscription_type type) {
+	private void switchSubscription(Recruiter recruiter, subscription_type type, INVOICE_TYPE invoiceType) {
 		
 		Set<subscription_type> paidSubscriptionTypes 
 			= Set.of(subscription_type.YEAR_SUBSCRIPTION, 
@@ -308,29 +308,12 @@ public class RecruiterServiceImpl implements RecruiterService{
 		if (recruiter.getSubscriptions().stream().filter(s -> paidSubscriptionTypes.contains(s.getType()) && s.getStatus() != subscription_status.SUBSCRIPTION_ENDED).findAny().isPresent()) {
 			throw new IllegalStateException("Subscription already exists. Cannot add a second time.");
 		}
-		 
-		/**
-		* Can't have both FIRST_GEN_SUBSCRIPTION and YEAR_SUBSCRIPTION so end any currently open
-		* FirstGen subscriptions. 
-		* 
-		* We also do the same for trial as now it is possible for a recruiter to end the trial earlier to 
-		* have access to premium features
-		*/
-		recruiter.getSubscriptions()
-								.stream()
-								.filter(s -> s.getType() == subscription_type.FIRST_GEN)
-								.collect(Collectors.toSet())
-								.stream().forEach(s -> {
-									((FirstGenRecruiterSubscription) s).endSubscription();
-								});
 		
 		recruiter.getSubscriptions()
 							.stream()
 							.filter(s -> s.getType() == subscription_type.CREDIT_BASED_SUBSCRIPTION)
 							.collect(Collectors.toSet())
-							.stream().forEach(s -> {
-								((CreditBasedSubscription) s).endSubscription();
-							});
+							.stream().forEach(s -> ((CreditBasedSubscription) s).endSubscription());
 		/**
 		* If TRIAL_SUBSCRIPTION is not finished then make the start date of the subscription todays date plus the outstanding number 
 		* of days from the Trial subscription. Otherwise use todays date
@@ -342,7 +325,7 @@ public class RecruiterServiceImpl implements RecruiterService{
 			case ONE_MONTH_SUBSCRIPTION, 
 				 THREE_MONTHS_SUBSCRIPTION, 
 				 SIX_MONTHS_SUBSCRIPTION, 
-				 YEAR_SUBSCRIPTION -> recruiter.addSubscription(paidPeriodRecruiterSubscription(recruiter, type, activationDate, createdDate));
+				 YEAR_SUBSCRIPTION -> recruiter.addSubscription(paidPeriodRecruiterSubscription(recruiter, type, invoiceType, activationDate, createdDate));
 			case CREDIT_BASED_SUBSCRIPTION -> {
 				
 				Optional<RecruiterSubscription> subscription = recruiter.getSubscriptions().stream().filter(s -> s.getStatus() == subscription_status.ACTIVE).findFirst();
@@ -391,7 +374,7 @@ public class RecruiterServiceImpl implements RecruiterService{
 	}
 	
 	//MOVE TO FACTORY
-	private PaidPeriodRecruiterSubscription paidPeriodRecruiterSubscription(Recruiter recruiter, subscription_type type, LocalDateTime activationDate, LocalDateTime createdDate) {
+	private PaidPeriodRecruiterSubscription paidPeriodRecruiterSubscription(Recruiter recruiter, subscription_type type, INVOICE_TYPE invoiceType, LocalDateTime activationDate, LocalDateTime createdDate) {
 		return PaidPeriodRecruiterSubscription
 				.builder()
 				.activateDate(activationDate)
@@ -399,6 +382,7 @@ public class RecruiterServiceImpl implements RecruiterService{
 				.currentSubscription(true)
 				.recruiterId(recruiter.getUserId())
 				.type(type)
+				.invoiceType(null)
 				.status(subscription_status.ACTIVE_PENDING_PAYMENT)
 				.subscriptionId(UUID.randomUUID())
 			.build();

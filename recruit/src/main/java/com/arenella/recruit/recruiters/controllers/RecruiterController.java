@@ -19,14 +19,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.arenella.recruit.recruiters.beans.Recruiter;
 import com.arenella.recruit.recruiters.beans.RecruiterAPIInbound;
 import com.arenella.recruit.recruiters.beans.RecruiterAPIOutbound;
 import com.arenella.recruit.recruiters.beans.RecruiterAccountRequestAPIInbound;
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_action;
 import com.arenella.recruit.recruiters.beans.SubscriptionAPIInbound;
 import com.arenella.recruit.recruiters.beans.SubscriptionActionFeedback;
-import com.arenella.recruit.recruiters.dao.RecruiterDao;
 import com.arenella.recruit.recruiters.services.RecruiterService;
 
 /**
@@ -38,10 +36,7 @@ public class RecruiterController {
 
 	@Autowired
 	private RecruiterService recruiterService;
-	
-	//@Autowired
-	//private RecruiterDao recruiterDao;
-	
+
 	/**
 	* Adds a new Recruiter
 	* @param recruiter
@@ -108,7 +103,7 @@ public class RecruiterController {
 	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('RECRUITER')  OR hasRole('ROLE_RECRUITERNOSUBSCRITION')")
 	@PostMapping(value="/recruiter/{recruiterId}/subscription/")
 	public ResponseEntity<Void> addSubscription(@PathVariable("recruiterId") String recruiterId, @RequestBody SubscriptionAPIInbound subscription)  throws IllegalAccessException{
-		this.recruiterService.addSubscription(recruiterId, subscription.getType());
+		this.recruiterService.addSubscription(recruiterId, subscription.getType(), subscription.getInvoiceType());
 		return ResponseEntity.ok().build();
 	}
 	

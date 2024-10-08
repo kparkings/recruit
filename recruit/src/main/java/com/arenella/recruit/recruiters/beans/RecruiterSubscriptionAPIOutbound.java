@@ -1,6 +1,7 @@
 package com.arenella.recruit.recruiters.beans;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -16,6 +17,7 @@ public class RecruiterSubscriptionAPIOutbound implements RecruiterSubscription{
 	private subscription_status		status;
 	private boolean					currentSubscription;
 	private subscription_type		type;
+	private INVOICE_TYPE			invoiceType;
 	
 	/**
 	* Constructor based upon a Builder
@@ -30,6 +32,7 @@ public class RecruiterSubscriptionAPIOutbound implements RecruiterSubscription{
 		this.status					= builder.status;
 		this.currentSubscription	= builder.currentSubscription;
 		this.type					= builder.type;
+		this.invoiceType			= builder.invoiceType;
 		
 	}
 	
@@ -80,6 +83,14 @@ public class RecruiterSubscriptionAPIOutbound implements RecruiterSubscription{
 	public subscription_type getType() {
 		return this.type;
 	}
+	
+	/**
+	* Refer to the RecruiterSubscription interface for details 
+	*/
+	@Override
+	public Optional<INVOICE_TYPE> getInvoiceType() {
+		return Optional.ofNullable(this.invoiceType);
+	}
 
 	/**
 	* Refer to the RecruiterSubscription interface for details 
@@ -110,6 +121,7 @@ public class RecruiterSubscriptionAPIOutbound implements RecruiterSubscription{
 		private subscription_status		status;
 		private boolean					currentSubscription;
 		private subscription_type		type;
+		private INVOICE_TYPE			invoiceType;
 		
 		/**
 		* Sets the Unique Id of the subscription
@@ -172,6 +184,16 @@ public class RecruiterSubscriptionAPIOutbound implements RecruiterSubscription{
 		}
 		
 		/**
+		* Sets the type of Invoice to send the Recruiter
+		* @param invoiceType - type of Invoice
+		* @return Builder
+		*/
+		public RecruiterSubscriptionAPIOutboundBuilder invoiceType(INVOICE_TYPE invoiceType) {
+			this.invoiceType = invoiceType;
+			return this;
+		}
+		
+		/**
 		* Sets whether or not the subscription is the current Subscription
 		* @param currentSubscrition -  whether or not the subscription is the current Subscription
 		* @return Builder
@@ -208,6 +230,7 @@ public class RecruiterSubscriptionAPIOutbound implements RecruiterSubscription{
 											.subscriptionId(subscription.getSubscriptionId())
 											.type(subscription.getType())
 											.currentSubscription(subscription.isCurrentSubscription())
+											.invoiceType(subscription.getInvoiceType().isEmpty() ? null : subscription.getInvoiceType().get())
 										.build();
 		
 	}

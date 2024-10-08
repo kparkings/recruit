@@ -25,6 +25,7 @@ import com.arenella.recruit.recruiters.beans.Recruiter.language;
 import com.arenella.recruit.recruiters.beans.RecruiterAPIInbound;
 import com.arenella.recruit.recruiters.beans.RecruiterAPIOutbound;
 import com.arenella.recruit.recruiters.beans.RecruiterAccountRequestAPIInbound;
+import com.arenella.recruit.recruiters.beans.RecruiterSubscription.INVOICE_TYPE;
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_action;
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_type;
 import com.arenella.recruit.recruiters.beans.SubscriptionAPIInbound;
@@ -46,7 +47,6 @@ public class RecruiterControllerTest {
 	
 	@Mock
 	private Principal				mockPrincipal;
-	
 	
 	final String 		companyName 		= " aCompanyName ";
 	final String 		email 				= " admin@arenella-ict.com ";
@@ -214,13 +214,13 @@ public class RecruiterControllerTest {
 	public void testAddSubscription() throws Exception {
 		
 		final String 					recruiterId 	= "kparkings";
-		final SubscriptionAPIInbound 	type		 	= SubscriptionAPIInbound.builder().type(subscription_type.YEAR_SUBSCRIPTION).build();
+		final SubscriptionAPIInbound 	type		 	= SubscriptionAPIInbound.builder().type(subscription_type.YEAR_SUBSCRIPTION).invoiceType(INVOICE_TYPE.BUSINESS).build();
 		
-		Mockito.doNothing().when(this.mockRecruiterService).addSubscription(recruiterId, type.getType());
+		Mockito.doNothing().when(this.mockRecruiterService).addSubscription(recruiterId, type.getType(), INVOICE_TYPE.BUSINESS);
 		
 		ResponseEntity<Void> response = this.recruiterController.addSubscription(recruiterId, type);
 		
-		Mockito.verify(this.mockRecruiterService).addSubscription(recruiterId, type.getType());
+		Mockito.verify(this.mockRecruiterService).addSubscription(recruiterId, type.getType(), INVOICE_TYPE.BUSINESS);
 		
 		assertEquals(response.getStatusCode(), HttpStatus.OK);
 		

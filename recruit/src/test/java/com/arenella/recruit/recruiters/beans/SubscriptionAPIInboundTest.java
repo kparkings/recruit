@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
+import com.arenella.recruit.recruiters.beans.RecruiterSubscription.INVOICE_TYPE;
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_type;
 
 /**
@@ -19,11 +20,13 @@ public class SubscriptionAPIInboundTest {
 	@Test
 	public void testBuilder() throws Exception {
 		
-		final subscription_type type = subscription_type.CREDIT_BASED_SUBSCRIPTION;
+		final subscription_type type 		= subscription_type.CREDIT_BASED_SUBSCRIPTION;
+		final INVOICE_TYPE 		invoiceType = INVOICE_TYPE.BUSINESS;
 		
-		SubscriptionAPIInbound subscription = SubscriptionAPIInbound.builder().type(type).build();
+		SubscriptionAPIInbound subscription = SubscriptionAPIInbound.builder().type(type).invoiceType(invoiceType).build();
 		
-		assertEquals(subscription.getType(), type);
+		assertEquals(type, 			subscription.getType());
+		assertEquals(invoiceType, 	subscription.getInvoiceType());
 		
 	}
 	

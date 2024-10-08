@@ -7,7 +7,6 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
@@ -37,11 +36,11 @@ import com.arenella.recruit.emailservice.beans.Email.EmailTopic;
 import com.arenella.recruit.recruiters.beans.RecruiterCredit;
 import com.arenella.recruit.recruiters.adapters.RecruitersExternalEventPublisher;
 import com.arenella.recruit.recruiters.beans.CreditBasedSubscription;
-import com.arenella.recruit.recruiters.beans.FirstGenRecruiterSubscription;
 import com.arenella.recruit.recruiters.beans.OpenPosition;
 import com.arenella.recruit.recruiters.beans.PaidPeriodRecruiterSubscription;
 import com.arenella.recruit.recruiters.beans.Recruiter;
 import com.arenella.recruit.recruiters.beans.Recruiter.language;
+import com.arenella.recruit.recruiters.beans.RecruiterSubscription.INVOICE_TYPE;
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_action;
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_status;
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_type;
@@ -678,7 +677,7 @@ public class RecruiterServiceImplTest {
 		Mockito.when(mockAuthentication.getName()).thenReturn("userAttemptingToChangeOtherUsersSubscription");
 		
 		assertThrows(IllegalAccessException.class, () -> {
-			this.service.addSubscription(recruiterId, subscription_type.YEAR_SUBSCRIPTION);
+			this.service.addSubscription(recruiterId, subscription_type.YEAR_SUBSCRIPTION, INVOICE_TYPE.PERSON);
 		});
 		
 	}
@@ -701,7 +700,7 @@ public class RecruiterServiceImplTest {
 		Mockito.when(this.mockDao.findRecruiterById(recruiterId)).thenReturn(Optional.empty());
 		
 		assertThrows(IllegalArgumentException.class, () -> {
-			this.service.addSubscription(recruiterId, subscription_type.YEAR_SUBSCRIPTION);
+			this.service.addSubscription(recruiterId, subscription_type.YEAR_SUBSCRIPTION, INVOICE_TYPE.PERSON);
 		});
 		
 	} 
@@ -725,7 +724,7 @@ public class RecruiterServiceImplTest {
 		Mockito.when(this.mockDao.findRecruiterById(recruiterId)).thenReturn(Optional.of(recruiter));
 		
 		assertThrows(IllegalStateException.class, () -> {
-			this.service.addSubscription(recruiterId, subscription_type.YEAR_SUBSCRIPTION);
+			this.service.addSubscription(recruiterId, subscription_type.YEAR_SUBSCRIPTION, INVOICE_TYPE.PERSON);
 		});
 		
 	}
@@ -749,7 +748,7 @@ public class RecruiterServiceImplTest {
 		
 		Mockito.when(this.mockDao.findRecruiterById(recruiterId)).thenReturn(Optional.of(recruiter));
 		
-		this.service.addSubscription(recruiterId, subscription_type.YEAR_SUBSCRIPTION);
+		this.service.addSubscription(recruiterId, subscription_type.YEAR_SUBSCRIPTION, INVOICE_TYPE.PERSON);
 		
 		Mockito.verify(this.mockDao).save(Mockito.any());
 		
@@ -776,7 +775,7 @@ public class RecruiterServiceImplTest {
 		
 		Mockito.when(this.mockDao.findRecruiterById(recruiterId)).thenReturn(Optional.of(recruiter));
 		
-		this.service.addSubscription(recruiterId, subscription_type.YEAR_SUBSCRIPTION);
+		this.service.addSubscription(recruiterId, subscription_type.YEAR_SUBSCRIPTION, INVOICE_TYPE.PERSON);
 		
 		Mockito.verify(this.mockDao).save(Mockito.any());
 		
@@ -807,7 +806,7 @@ public class RecruiterServiceImplTest {
 		
 		Mockito.when(this.mockDao.save(entityArgCapt.capture())).thenReturn(null);
 		
-		this.service.addSubscription(recruiterId, subscription_type.YEAR_SUBSCRIPTION);
+		this.service.addSubscription(recruiterId, subscription_type.YEAR_SUBSCRIPTION, INVOICE_TYPE.PERSON);
 		
 		Mockito.verify(this.mockDao).save(Mockito.any());
 		
@@ -821,46 +820,6 @@ public class RecruiterServiceImplTest {
 		assertTrue(subEntity.isCurrentSubscription());
 		assertEquals(subscription_status.ACTIVE_PENDING_PAYMENT, subEntity.getStatus());
 		
-		
-		RecruiterSubscriptionEntity subEntityExisting = savedEntity.getSubscriptions().stream().filter(se -> se.getSubscriptionId() == existingSubscriptionId).findFirst().get();
-		assertFalse(subEntityExisting.isCurrentSubscription());
-		assertEquals(subscription_status.SUBSCRIPTION_ENDED, subEntityExisting.getStatus());
-		
-		Mockito.verify(this.mockExternEventPublisher).publishSubscriptionAddedEvent(Mockito.any(SubscriptionAddedEvent.class));
-		
-	}
-	
-	/**
-	* Tests that any currently open FIRST_GEN subscriptions are ended
-	* @throws Exception
-	*/
-	@Test
-	public void testAddSubscription_yearSubscription_success_OpenFirstGen() throws Exception {
-		
-		final String 				recruiterId 				= "kparkings";
-		final UUID					existingSubscriptionId	 	= UUID.randomUUID();
-		final LocalDateTime			existingCreatedActivated	= LocalDateTime.now().minusDays(1);
-		final Recruiter				recruiter					= Recruiter.builder().userId(recruiterId).subscriptions(Set.of(FirstGenRecruiterSubscription.builder().subscriptionId(existingSubscriptionId).created(existingCreatedActivated).activateDate(existingCreatedActivated).currentSubscription(true).status(subscription_status.ACTIVE).build())).build();
-		
-		SecurityContextHolder.setContext(mockSecurityContext);
-		
-		Mockito.when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
-		Mockito.when(mockAuthentication.getAuthorities()).thenReturn(Set.of());
-		Mockito.when(mockAuthentication.getName()).thenReturn(recruiterId);
-		
-		Mockito.when(this.mockDao.findRecruiterById(recruiterId)).thenReturn(Optional.of(recruiter));
-		
-		ArgumentCaptor<RecruiterEntity> entityArgCapt = ArgumentCaptor.forClass(RecruiterEntity.class);
-		
-		Mockito.when(this.mockDao.save(entityArgCapt.capture())).thenReturn(null);
-		
-		this.service.addSubscription(recruiterId, subscription_type.YEAR_SUBSCRIPTION);
-		
-		Mockito.verify(this.mockDao).save(Mockito.any());
-		
-		RecruiterEntity savedEntity = entityArgCapt.getValue();
-		
-		assertEquals(2, savedEntity.getSubscriptions().size()); 
 		
 		RecruiterSubscriptionEntity subEntityExisting = savedEntity.getSubscriptions().stream().filter(se -> se.getSubscriptionId() == existingSubscriptionId).findFirst().get();
 		assertFalse(subEntityExisting.isCurrentSubscription());
