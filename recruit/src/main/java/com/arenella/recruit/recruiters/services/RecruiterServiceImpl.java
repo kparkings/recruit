@@ -382,7 +382,7 @@ public class RecruiterServiceImpl implements RecruiterService{
 				.currentSubscription(true)
 				.recruiterId(recruiter.getUserId())
 				.type(type)
-				.invoiceType(null)
+				.invoiceType(invoiceType)
 				.status(subscription_status.ACTIVE_PENDING_PAYMENT)
 				.subscriptionId(UUID.randomUUID())
 			.build();

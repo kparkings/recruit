@@ -348,7 +348,6 @@ export class RecruiterAccountComponent implements OnInit {
  	* Ends the subscription
 	*/
 	public addAlternateSubscription(subscriptionType:string, invoiceType?:INVOICE_TYPE):void{
-		console.log("aaaaaaaaaaaa1");
 		this.showSwitchToYearlySubscriptionConfirmButtons	= false;
 		
 		if (invoiceType && invoiceType == INVOICE_TYPE.BUSINESS){
@@ -359,18 +358,15 @@ export class RecruiterAccountComponent implements OnInit {
 				console.log("Failed to update Account details ");
 			}
 		}
-		console.log("aaaaaaaaaaaa2 " + invoiceType);
+		
 		//TODO: Add invoiceType to request and implement in backend'
 		if (invoiceType == INVOICE_TYPE.BUSINESS || invoiceType == INVOICE_TYPE.PERSON) {
-			console.log("aaaaaaaaaaaa3");
 			this.recruiterService.requestNewSubscription(this.recruiter.userId, subscriptionType, invoiceType).subscribe(data => {
 				sessionStorage.clear();
 				sessionStorage.setItem("new-subscription", "true");
 				this.router.navigate(['login-user']);
-				console.log("aaaaaaaaaaaa4");
 			}, 
 			err => {
-				console.log("aaaaaaaaaaaa5");
 				console.log(JSON.stringify(err));		
 			});
 		}

@@ -4,8 +4,8 @@
 */
 
 export enum INVOICE_TYPE {
-	PERSON,
-	BUSINESS			
+	PERSON = 'PERSON',
+	BUSINESS = 'BUSINESS'			
 };
 	
 export class SubscriptionAPIInbound{

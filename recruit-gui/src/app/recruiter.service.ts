@@ -96,8 +96,8 @@ export class RecruiterService {
 		
 		let subscription:SubscriptionAPIInbound = new SubscriptionAPIInbound();
 		
-		subscription.type = type;
-		subscription.invoiceType = invoiceType;
+		subscription.type 			= type;
+		subscription.invoiceType 	= invoiceType;
 	
 		return this.httpClient.post<any>(backendUrl, JSON.stringify(subscription), this.httpOptions);
 		
