@@ -164,15 +164,15 @@ export class RecruiterAccountComponent implements OnInit {
 			}
 			
 			this.accoundDetailsForm = new UntypedFormGroup({
-				firstName:					new UntypedFormControl(""+this.recruiter.firstName),
-				surname:					new UntypedFormControl(""+this.recruiter.surname),
-				companyName:				new UntypedFormControl(""+this.recruiter.companyName),
-				companyCountry:				new UntypedFormControl(""+this.recruiter.companyCountry),
-				companyAddress:				new UntypedFormControl(""+this.recruiter.companyAddress),
-				companyVatNumber:			new UntypedFormControl(""+this.recruiter.companyVatNumber),
-				companyRegistrationNumber:	new UntypedFormControl(""+this.recruiter.companyRegistrationNumber),
-				email:						new UntypedFormControl(""+this.recruiter.email),
-				language:					new UntypedFormControl(""+this.recruiter.language),
+				firstName:					new UntypedFormControl(this.recruiter.firstName),
+				surname:					new UntypedFormControl(this.recruiter.surname),
+				companyName:				new UntypedFormControl(this.recruiter.companyName),
+				companyCountry:				new UntypedFormControl(this.recruiter.companyCountry),
+				companyAddress:				new UntypedFormControl(this.recruiter.companyAddress),
+				companyVatNumber:			new UntypedFormControl(this.recruiter.companyVatNumber),
+				companyRegistrationNumber:	new UntypedFormControl(this.recruiter.companyRegistrationNumber),
+				email:						new UntypedFormControl(this.recruiter.email),
+				language:					new UntypedFormControl(this.recruiter.language),
 				subscriptionOption:			new UntypedFormControl('CREDIT_BASED_ACCESS'),
 			});
 				
@@ -411,17 +411,15 @@ export class RecruiterAccountComponent implements OnInit {
 		
 		let recruiter:RecruiterUpdateRequest = new RecruiterUpdateRequest();
 		
-		const firstName:string = String(this.accoundDetailsForm.get('firstName')); 
-		
 		recruiter.userId 					= this.recruiter.userId;
-		recruiter.firstName 				= String(this.accoundDetailsForm.get('firstName')?.value);
-		recruiter.surname 					= String(this.accoundDetailsForm.get('surname')?.value);
-		recruiter.email 					= String(this.accoundDetailsForm.get('email')?.value);
-		recruiter.companyName 				= String(this.accoundDetailsForm.get('companyName')?.value);
-		recruiter.companyCountry			= String(this.accoundDetailsForm.get('companyCountry')?.value);
-		recruiter.companyAddress			= String(this.accoundDetailsForm.get('companyAddress')?.value);
-		recruiter.companyVatNumber			= String(this.accoundDetailsForm.get('companyVatNumber')?.value);
-		recruiter.companyRegistrationNumber	= String(this.accoundDetailsForm.get('companyRegistrationNumber')?.value);
+		recruiter.firstName 				= this.accoundDetailsForm.get('firstName')?.value;
+		recruiter.surname 					= this.accoundDetailsForm.get('surname')?.value;
+		recruiter.email 					= this.accoundDetailsForm.get('email')?.value;
+		recruiter.companyName 				= this.accoundDetailsForm.get('companyName')?.value;
+		recruiter.companyCountry			= this.accoundDetailsForm.get('companyCountry')?.value;
+		recruiter.companyAddress			= this.accoundDetailsForm.get('companyAddress')?.value;
+		recruiter.companyVatNumber			= this.accoundDetailsForm.get('companyVatNumber')?.value;
+		recruiter.companyRegistrationNumber	= this.accoundDetailsForm.get('companyRegistrationNumber')?.value;
 		
 		recruiter.language 		= String(this.accoundDetailsForm.get('language')?.value);
 		

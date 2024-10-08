@@ -22,6 +22,7 @@ export class AccountsComponent implements OnInit {
 	
 	@ViewChild('recruiterLoginDetails', { static: false }) private content:any;
 	
+	recruiters:Array<Recruiter>										= new Array<Recruiter>();
 	currentTab:string 												= "recruiters";
 	showRecruitersTab:boolean										= true;
 	showFlaggedAsUnavailableTab:boolean								= false;
@@ -32,23 +33,12 @@ export class AccountsComponent implements OnInit {
 	recruiterUsername:string										= '';
 	recruiterPassword:string										= '';
 	candidates:Array<Candidate>										= new Array<Candidate>();
-	recruiters:Array<Recruiter>										= new Array<Recruiter>();
-	recruitersWithSubscriptionActions:Array<SubscriptionAction>		= new Array<SubscriptionAction>();
 	skillsToValidate:Array<CandidateSkill>							= new Array<CandidateSkill>();
-	recruiterCount:number											= 0;
 	activateRecruiterUserId:string									= '';
 	activateRecruiterUserPassword:string							= '';
 	expiredSubscriptionRecruiters:Array<Recruiter>					= Array<Recruiter>();
-	activePaidSubscription:Array<Recruiter>							= Array<Recruiter>();
-	creditBasedSubscription:Array<Recruiter>						= Array<Recruiter>();
-	firstGenActiveSubscription:Array<Recruiter>						= Array<Recruiter>();
 	candidatesToCheckForAvailability:Array<Candidate>				= Array<Candidate>();
-	
-	showExpiredSubscriptionRecruiters:boolean 						= true;
-	showActivePaidSubscription:boolean								= true;
-	showCreditBasedSubscription:boolean								= true;
-	showFirstGenActiveSubscription:boolean							= true;
-	
+	recruitersWithSubscriptionActions:Array<SubscriptionAction>		= new Array<SubscriptionAction>();
 	
 	public candidateFormGroup:UntypedFormGroup = new UntypedFormGroup({
 		firstname:	new UntypedFormControl(''),
@@ -61,7 +51,6 @@ export class AccountsComponent implements OnInit {
 				private modalService: NgbModal, 
 				private router: Router,
 				private appComponent:AppComponent) {
-		this.fetchRecruiters();
 	 }
 
   	ngOnInit(): void {
@@ -87,7 +76,6 @@ export class AccountsComponent implements OnInit {
 				this.showSubscriptionActionsTab		= false;
 				this.showAvailabilityCheckTab		= false;
 				this.showSkillsValidationTab		= false;
-				this.fetchRecruiters();
 				break;
 			}
 			case "flaggedAsUnavailable":{
@@ -353,20 +341,13 @@ export class AccountsComponent implements OnInit {
 	*/
 	public fetchRecruiters(): void{
 		
-		this.recruiterCount 					= 0;
 		this.recruiters 						= new Array<Recruiter>();
 		this.expiredSubscriptionRecruiters		= new Array<Recruiter>();
-		this.activePaidSubscription 			= new Array<Recruiter>();
-		this.creditBasedSubscription			= new Array<Recruiter>();
-		this.firstGenActiveSubscription			= new Array<Recruiter>();
 		
     	this.recruiterService.getRecruiters().subscribe( data => {
-  
-				data.forEach((r:Recruiter) => {
-					this.recruiters.push(r);
-					this.addRecruiterToSubscriptionBucker(r);
-					this.recruiterCount = this.recruiterCount +1;
-										
+  			data.forEach((r:Recruiter) => {
+				this.recruiters.push(r);
+				this.addRecruiterToSubscriptionBucker(r);
 			});
 			
 			this.extractRecruitersWithSubscriptionActions();
@@ -398,20 +379,20 @@ export class AccountsComponent implements OnInit {
 			return;
 		}
 		
-		if (activeSubscription.type == 'FIRST_GEN') {
-			this.firstGenActiveSubscription.push(recruiter);
-			return;
-		}
+		//if (activeSubscription.type == 'FIRST_GEN') {
+		//	//this.firstGenActiveSubscription.push(recruiter);
+		//	return;
+		//}
 		
 		if (activeSubscription.type == 'CREDIT_BASED_SUBSCRIPTION') {
-			this.creditBasedSubscription.push(recruiter);
+			//this.creditBasedSubscription.push(recruiter);
 			return;
 		}
 		
 		if (	activeSubscription.status == 'AWAITING_ACTIVATION'
 			|| 	activeSubscription.status == 'ACTIVE_PENDING_PAYMENT'
 			|| 	activeSubscription.status == 'ACTIVE'){
-			this.activePaidSubscription.push(recruiter);
+			//this.activePaidSubscription.push(recruiter);
 			return;
 		}
 		
@@ -422,40 +403,6 @@ export class AccountsComponent implements OnInit {
 		}
 		 
 	}
-	
-	/**
-	* Toggles whether recruiters with expired subscriptions are shown
-	*/
-	toggleShowExpiredSubscriptionRecruiters():void{
-		this.showExpiredSubscriptionRecruiters = !this.showExpiredSubscriptionRecruiters;
-	}
-	
-	/**
-	* Toggles whether recruiters with active paid subscriptions are shown
-	*/
-	toggleShowActivePaidSubscription():void{
-		this.showActivePaidSubscription = !this.showActivePaidSubscription;
-	}
-	
-	toggleShowCreditBasedSubscription():void{
-		this.showCreditBasedSubscription = !this.showCreditBasedSubscription;
-	}
-	
-	/**
-	* Toggles whether recruiters with First-gen subscriptions are shown
-	*/
-	toggleShowFirstGenActiveSubscription():void{
-		this.showFirstGenActiveSubscription = !this.showFirstGenActiveSubscription;
-	}		
-	
-	public getTotalActiveRecruiters():number{
-		
-		if (this.recruiterCount == 0) {
-			return 0;
-		}
-		
-		return this.recruiterCount - this.expiredSubscriptionRecruiters.length
-	}					
 	
 	/**
 	* Retrieves candidates from the backend
@@ -575,8 +522,6 @@ export class AccountsComponent implements OnInit {
 		}
 	}
 	
-	
-	
 	/**
 	* Update Recruiters subscription
 	*/
@@ -621,32 +566,6 @@ export class AccountsComponent implements OnInit {
 	*/
 	public deleteCandidate(candidateId:string):void{
 		this.candidateToDelete = candidateId;
-	}
-	
-	public recruiterToDelete:string = '';
-	
-	/**
-	* Set recruiter to delete ready for confirmation
-	*/
-	public deleteRecruiter(recruiterId:string):void{
-		this.recruiterToDelete = recruiterId;
-	}
-	
-	/**
-	* Send definitive request to delete recruiter
-	*/
-	public confirmDeleteRecruiter():void{
-		this.recruiterService.deleteRecruiter(this.recruiterToDelete).subscribe(res => {
-			this.fetchRecruiters();
-			this.recruiterToDelete = '';
-		})
-	}
-	
-	/**
-	* Deselect recruiter to be deleted
-	*/
-	public cancelDeleteRecruiter():void{
-		this.recruiterToDelete = '';
 	}
 	
 }

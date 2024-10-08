@@ -1,0 +1,68 @@
+<div *ngIf="showRecruitersTabDetails">
+</div>
+<div *ngIf="showRecruitersTabSummary">
+	<table>
+		<thead>
+			<tr>
+				<th>{{'arenella-accounts-tabrecruiters-subscription-type' | translate}}</th>
+				<th>{{'arenella-accounts-tabrecruiters-count' | translate}}</th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td class="recruiter-active-subscription">{{'arenella-accounts-tabrecruiters-paid-subscriptions' | translate}}</td>
+				<td class="recruiter-active-subscription">{{activePaidSubscription.length}}</td>
+				<td><button class="btn btn-secondary" (click)="toggleShowActivePaidSubscription()">{{'arenella-accounts-tabrecruiters-toggle' | translate}}</button></td>
+			</tr>
+			<tr>
+				<td class="recruiter-credit-based-subscription">{{'arenella-accounts-tabrecruiters-credit-based' | translate}}</td>
+				<td class="recruiter-credit-based-subscription">{{creditBasedSubscription.length}}</td>
+				<td><button class="btn btn-secondary" (click)="toggleShowCreditBasedSubscription()">{{'arenella-accounts-tabrecruiters-toggle' | translate}}</button></td>
+			</tr>
+			<tr>
+			<td>{{'arenella-accounts-tabrecruiters-subscriptions-totals' | translate}}</td>
+				<td>{{getTotalActiveRecruiters()}}</td>
+			</tr>
+		</tbody>
+	</table>
+	<div >
+		<table class="table candidate-table">
+			<thead>
+	      		<tr>
+      				<!-- Table Headers -->
+      				<th class="bg-tab-hdr">{{'arenella-accounts-tabcandidates-id' | translate}}</th>
+      				<th class="bg-tab-hdr">{{'arenella-accounts-tabcandidates-name' | translate}}</th>
+            	    <th class="bg-tab-hdr">{{'arenella-accounts-tabcandidates-email' | translate}}</th>
+                	<th class="bg-tab-hdr">{{'arenella-accounts-tabcandidates-company' | translate}}</th>
+                	<th class="bt-tab-hdr">Actions</th>
+      			</tr>
+	      	</thead>
+	      	<tbody>
+	      		<!-- Table row -->
+      			<tr *ngFor="let recruiter of activePaidSubscription" class="recruiter-active-subscription">
+      				<td *ngIf="showActivePaidSubscription" class="candidate-tab-col medicol"><span class="candidate-id-prefix"></span>{{recruiter.userId}}</td>
+            	    <td *ngIf="showActivePaidSubscription" class="candidate-tab-col medicol"> {{recruiter.firstName}} {{recruiter.surname}}</td>
+            	    <td *ngIf="showActivePaidSubscription" class="candidate-tab-col medicol" >{{recruiter.email}}</td>
+            	    <td *ngIf="showActivePaidSubscription" class="candidate-tab-col medicol">{{recruiter.companyName}}</td>
+            	    <td *ngIf="showActivePaidSubscription" class="candidate-tab-col medicol">
+            	    	<button class="btn btn-secondary delete-btn" (click)="deleteRecruiter(recruiter.userId)" 	*ngIf="recruiterToDelete == ''">Del</button>
+            	    	<button class="btn btn-secondary delete-btn delete-confirm" (click)="confirmDeleteRecruiter()" 			*ngIf="recruiterToDelete != '' && recruiterToDelete == recruiter.userId">Yes</button>
+            	    	<button class="btn btn-secondary delete-btn" (click)="cancelDeleteRecruiter()" 			*ngIf="recruiterToDelete != '' && recruiterToDelete == recruiter.userId">No</button>
+            	    </td>	
+      			</tr>
+      			<tr *ngFor="let recruiter of creditBasedSubscription" class="recruiter-credit-based-subscription">
+      				<td *ngIf="showCreditBasedSubscription" class="candidate-tab-col medicol"><span class="candidate-id-prefix"></span>{{recruiter.userId}}</td>
+            	    <td *ngIf="showCreditBasedSubscription" class="candidate-tab-col medicol"> {{recruiter.firstName}} {{recruiter.surname}}</td>
+            	    <td *ngIf="showCreditBasedSubscription" class="candidate-tab-col medicol">{{recruiter.email}}</td>
+            	    <td *ngIf="showCreditBasedSubscription" class="candidate-tab-col medicol">{{recruiter.companyName}}</td>
+            	    <td *ngIf="showCreditBasedSubscription" class="candidate-tab-col medicol">
+            	    	<button class="btn btn-secondary delete-btn" (click)="deleteRecruiter(recruiter.userId)" 		*ngIf="recruiterToDelete == ''">Del</button>
+            	    	<button class="btn btn-secondary delete-btn delete-confirm" (click)="confirmDeleteRecruiter()" 	*ngIf="recruiterToDelete != '' && recruiterToDelete == recruiter.userId">Yes</button>
+            	    	<button class="btn btn-secondary delete-btn" (click)="cancelDeleteRecruiter()" 					*ngIf="recruiterToDelete != '' && recruiterToDelete == recruiter.userId">No</button>
+            	    </td>	
+      			</tr>	
+      		</tbody>
+		</table>	
+	</div>
+</div>
