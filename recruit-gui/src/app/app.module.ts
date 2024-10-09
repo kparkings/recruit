@@ -37,6 +37,7 @@ import { InlineCvComponent}					from './suggestions/inline-cv/inline-cv.componen
 import { SavedCandidatesComponent}			from './suggestions/saved-candidates/saved-candidates.component';
 import { CandidateProfileComponent}			from './suggestions/candidate-profile/candidate-profile.component';
 import { RecruitersComponent}				from './accounts/recruiters/recruiters.component';
+import { SubscriptionsComponent }			from './accounts/subscriptions/subscriptions.component';
 
 import {TranslateLoader, TranslateModule} 	from '@ngx-translate/core';
 import {TranslateHttpLoader} 				from '@ngx-translate/http-loader';
@@ -76,7 +77,8 @@ import { ClipboardModule } 					from '@angular/cdk/clipboard'
  	InlineCvComponent,
  	SavedCandidatesComponent,
  	CandidateProfileComponent,
- 	RecruitersComponent
+ 	RecruitersComponent,
+ 	SubscriptionsComponent
   ],
   imports: [
     BrowserModule,

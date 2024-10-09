@@ -40,7 +40,7 @@ public class RecruiterEntityTest {
 	private static final String					recruiterId					= "kparkings";
 	private static final UUID					subscriptionId				= UUID.randomUUID();
 	private static final subscription_status 	status 						= subscription_status.ACTIVE;
-	private static final subscription_type		type						= subscription_type.FIRST_GEN;
+	private static final subscription_type		type						= subscription_type.ONE_MONTH_SUBSCRIPTION;
 	
 	/**
 	* Tests Builder and Getters
@@ -166,12 +166,12 @@ public class RecruiterEntityTest {
 		
 		RecruiterSubscription subscription = recruiter.getSubscriptions().stream().findFirst().get();
 		
-		assertEquals(activatedDate, 									subscription.getActivatedDate());
-		assertEquals(created, 											subscription.getCreated());
-		assertEquals(recruiterId, 										subscription.getRecruiterId());
-		assertEquals(status, 											subscription.getStatus());
-		assertEquals(subscriptionId, 									subscription.getSubscriptionId());
-		assertEquals(RecruiterSubscription.subscription_type.FIRST_GEN, subscription.getType());
+		assertEquals(activatedDate, 													subscription.getActivatedDate());
+		assertEquals(created, 															subscription.getCreated());
+		assertEquals(recruiterId, 														subscription.getRecruiterId());
+		assertEquals(status, 															subscription.getStatus());
+		assertEquals(subscriptionId, 													subscription.getSubscriptionId());
+		assertEquals(RecruiterSubscription.subscription_type.ONE_MONTH_SUBSCRIPTION, 	subscription.getType());
 
 	}
 

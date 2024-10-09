@@ -21,32 +21,26 @@
 	</div>
 	
 	<div class="page-body">	
-	<!-- Recruiters-->
-		<div *ngIf="showRecruitersTab">
-		
-			<!--  
-			<app-recruiters [savedCandidates]="savedCandidates" (switchViewEvent)="showSuggestionsResults()" [infoItemConfig]="infoItemConfig" [skillFilters]="skillFilters"></app-saved-candidates>
-			-->
+		<!-- Recruiters-->
+		<div *ngIf="showRecruitersTab" class="accounts-tab-top">
 			<app-recruiters>dd</app-recruiters>
-			
-			
 		</div>
 		
 		<!--  -->
-		<div *ngIf="showAvailabilityCheckTab">
+		<div *ngIf="showAvailabilityCheckTab" class="accounts-tab-top">
 		
-			<div style="margin-top:10px; margin-bottom:10px;">
-				<table>
+			<div>
+				<table style="width:300px;">
 					<tbody>
 						<tr>
 							<td class="recruiter-active-subscription">{{'arenella-accounts-tabavailability-available' | translate}}</td>
 							<td class="recruiter-active-subscription" style="padding-right:10px">{{availableCount}}</td>
-							<td><button class="btn btn-secondary"  (click)="toggleShowAvailable()">{{'arenella-accounts-tabrecruiters-toggle' | translate}}</button></td>
+							<td><button class="btn btn-secondary acc-rec-tog-btn"  (click)="toggleShowAvailable()">{{'arenella-accounts-tabrecruiters-toggle' | translate}}</button></td>
 						</tr>
 						<tr>
 							<td class="recruiter-credit-based-subscription">{{'arenella-accounts-tabavailability-unavailable' | translate}}</td>
 							<td class="recruiter-credit-based-subscription" style="padding-right:30px">{{unavailableCount}}</td>
-							<td><button class="btn btn-secondary" (click)="toggleShowUnavailable()">{{'arenella-accounts-tabrecruiters-toggle' | translate}}</button></td>
+							<td><button class="btn btn-secondary acc-rec-tog-btn" (click)="toggleShowUnavailable()">{{'arenella-accounts-tabrecruiters-toggle' | translate}}</button></td>
 						</tr>
 					</tbody>
 				</table>
@@ -94,7 +88,7 @@
 		</div>
 		
 		<!-- Skills table -->
-		<div *ngIf="showSkillsValidationTab">
+		<div *ngIf="showSkillsValidationTab"  class="accounts-tab-top">
 		
 			<div class="action-buttons">
 				<button	class="btn btn-secondary arenella-btn" (click)="persistValidatedSkills()">{{'arenella-accounts-tabskills-btn-udpate' | translate}}</button>
@@ -125,37 +119,8 @@
 		</div>
 		 
 		<!-- Subscriptions requiring actions -->
-		<div *ngIf="showSubscriptionActionsTab">
-			<div class="sub-title">
-				<h3>{{'arenella-accounts-tabsubscriptions-title' | translate}}</h3>
-			</div>
-			
-			<table class="table candidate-table">
-				<thead>
-					<tr>
-						<th class="medicol">{{'arenella-accounts-tabsubscriptions-id' | translate}}</th>
-						<th class="medicol">{{'arenella-accounts-tabsubscriptions-name' | translate}}</th>
-						<th class="medicol">{{'arenella-accounts-tabsubscriptions-email' | translate}}</th>
-						<th class="medicol">{{'arenella-accounts-tabsubscriptions-lang' | translate}}</th>
-						<th class="medicol">{{'arenella-accounts-tabsubscriptions-type' | translate}}</th>
-						<th class="medicol">{{'arenella-accounts-tabsubscriptions-status' | translate}}</th>
-						<th class="medicol">{{'arenella-accounts-tabsubscriptions-actions' | translate}}</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr *ngFor="let subscriptionAction of recruitersWithSubscriptionActions">
-						<td class="medicol">{{subscriptionAction.userId}}</td>
-						<td class="medicol">{{subscriptionAction.firstName}} {{subscriptionAction.surname}}</td>
-						<td class="medicol">{{subscriptionAction.email}}</td>
-						<td class="medicol">{{subscriptionAction.language}}</td>
-						<td class="medicol">{{subscriptionAction.type}}</td>
-						<td class="medicol">{{subscriptionAction.status}}</td>
-						<td>
-							<button class="btn btn-secondary arenella-btn" style="min-width:100px;"  *ngFor="let action of subscriptionAction.actions" (click)="performAction(subscriptionAction, action)">{{frmtSubscriptionAction(action)}}</button>
-						</td>
-					</tr>
-				</tbody>
-			</table>
+		<div *ngIf="showSubscriptionActionsTab"  class="accounts-tab-top">
+			<app-subscriptions></app-subscriptions>
 		<div>
 	</div>
 	

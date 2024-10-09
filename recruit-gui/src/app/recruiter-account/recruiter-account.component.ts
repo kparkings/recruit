@@ -453,16 +453,27 @@ export class RecruiterAccountComponent implements OnInit {
 		return sessionStorage.getItem('isRecruiter') === 'true';
 	}
 	
+	private formInitialized:boolean = false;
+	
 	/**
 	* Front end validation to prompt Recruiter to add all the billing details 
 	*/
 	public businessDetailsValidated():boolean{
 		
-		const companyName:string  				= "" +String(this.accoundDetailsForm.get('companyName')?.value);
-		const companyCountry:string				= "" +String(this.accoundDetailsForm.get('companyCountry')?.value);
-		const companyAddress:string				= "" +String(this.accoundDetailsForm.get('companyAddress')?.value);
-		const companyVatNumber:string			= "" +String(this.accoundDetailsForm.get('companyVatNumber')?.value);
-		const companyRegistrationNumber:string	= "" +String(this.accoundDetailsForm.get('companyRegistrationNumber')?.value);
+		
+		
+		let companyName:string  				= "" +String(this.accoundDetailsForm.get('companyName')?.value);
+		let companyCountry:string				= "" +String(this.accoundDetailsForm.get('companyCountry')?.value);
+		let companyAddress:string				= "" +String(this.accoundDetailsForm.get('companyAddress')?.value);
+		let companyVatNumber:string				= "" +String(this.accoundDetailsForm.get('companyVatNumber')?.value);
+		let companyRegistrationNumber:string	= "" +String(this.accoundDetailsForm.get('companyRegistrationNumber')?.value);
+		
+		companyName 				= companyName.replace("null","");
+		companyCountry 				= companyCountry.replace("null","");
+		companyAddress 				= companyAddress.replace("null","");
+		companyVatNumber 			= companyVatNumber.replace("null","");
+		companyRegistrationNumber 	= companyRegistrationNumber.replace("null","");
+		
 		
 		if (	companyName.length < 2 
 			||  companyCountry.length < 2

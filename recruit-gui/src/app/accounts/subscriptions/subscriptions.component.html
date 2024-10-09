@@ -1,0 +1,28 @@
+<div>
+	<table class="table candidate-table">
+		<thead>
+			<tr>
+				<th class="medicol">{{'arenella-accounts-tabsubscriptions-id' | translate}}</th>
+				<th class="medicol">{{'arenella-accounts-tabsubscriptions-name' | translate}}</th>
+				<th class="medicol">{{'arenella-accounts-tabsubscriptions-email' | translate}}</th>
+				<th class="medicol">{{'arenella-accounts-tabsubscriptions-lang' | translate}}</th>
+				<th class="medicol">{{'arenella-accounts-tabsubscriptions-type' | translate}}</th>
+				<th class="medicol">{{'arenella-accounts-tabsubscriptions-status' | translate}}</th>
+				<th class="medicol">{{'arenella-accounts-tabsubscriptions-actions' | translate}}</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr *ngFor="let subscriptionAction of recruitersWithSubscriptionActions">
+				<td class="medicol">{{subscriptionAction.userId}}</td>
+				<td class="medicol">{{subscriptionAction.firstName}} {{subscriptionAction.surname}}</td>
+				<td class="medicol">{{subscriptionAction.email}}</td>
+				<td class="medicol">{{subscriptionAction.language}}</td>
+				<td class="medicol">{{subscriptionAction.type}}</td>
+				<td class="medicol">{{subscriptionAction.status}}</td>
+				<td>
+					<button class="btn btn-secondary arenella-btn" style="min-width:100px;"  *ngFor="let action of subscriptionAction.actions" (click)="performAction(subscriptionAction, action)">{{frmtSubscriptionAction(action)}}</button>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</div>

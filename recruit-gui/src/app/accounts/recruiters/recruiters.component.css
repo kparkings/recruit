@@ -93,6 +93,10 @@ h3{
 	 margin-top:5px;
 }
 
+.acc-rec-tog-btn{
+	margin-left:10px;
+}
+
 @media (max-width:700px)  {
 	
 .delete-btn{

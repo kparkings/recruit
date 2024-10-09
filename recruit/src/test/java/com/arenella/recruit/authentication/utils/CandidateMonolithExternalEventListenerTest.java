@@ -206,21 +206,6 @@ public class CandidateMonolithExternalEventListenerTest {
 	}
 	
 	/**
-	* Tests case that the Subscription is a non paid Subscription
-	* @throws Exception
-	*/
-	@Test
-	public void testSubscriptionAddedEvent_unaidSubscription() throws Exception{
-		
-		final String userId = "user1";
-		
-		this.listener.listenForSubscriptionAddedEvent(new SubscriptionAddedEvent(userId, subscription_type.FIRST_GEN));
-		
-		Mockito.verify(this.mockCandidateService).updateCreditsForUser(userId, RecruiterCredit.DISABLED_CREDITS, Optional.of(false));
-		
-	}
-	
-	/**
 	* Tests case that the Subscription is a paid Subscription
 	* @throws Exception
 	*/

@@ -52,7 +52,7 @@ public class RecruiterSubscriptionAPIOutboundTest {
 		assertEquals(status, 			subscription.getStatus());
 		assertEquals(subscriptionId, 	subscription.getSubscriptionId());
 		assertEquals(type, 				subscription.getType());
-		assertEquals(invoiceType, 		subscription.getInvoiceType());
+		assertEquals(invoiceType, 		subscription.getInvoiceType().get());
 		assertTrue(subscription.isCurrentSubscription());
 		
 	}

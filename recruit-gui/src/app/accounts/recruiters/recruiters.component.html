@@ -1,24 +1,18 @@
 <div *ngIf="showRecruitersTabDetails">
 </div>
 <div *ngIf="showRecruitersTabSummary">
-	<table>
-		<thead>
-			<tr>
-				<th>{{'arenella-accounts-tabrecruiters-subscription-type' | translate}}</th>
-				<th>{{'arenella-accounts-tabrecruiters-count' | translate}}</th>
-				<th></th>
-			</tr>
-		</thead>
+	<table style="width:300px;">
+		
 		<tbody>
 			<tr>
 				<td class="recruiter-active-subscription">{{'arenella-accounts-tabrecruiters-paid-subscriptions' | translate}}</td>
 				<td class="recruiter-active-subscription">{{activePaidSubscription.length}}</td>
-				<td><button class="btn btn-secondary" (click)="toggleShowActivePaidSubscription()">{{'arenella-accounts-tabrecruiters-toggle' | translate}}</button></td>
+				<td><button class="btn btn-secondary acc-rec-tog-btn" (click)="toggleShowActivePaidSubscription()">{{'arenella-accounts-tabrecruiters-toggle' | translate}}</button></td>
 			</tr>
 			<tr>
 				<td class="recruiter-credit-based-subscription">{{'arenella-accounts-tabrecruiters-credit-based' | translate}}</td>
 				<td class="recruiter-credit-based-subscription">{{creditBasedSubscription.length}}</td>
-				<td><button class="btn btn-secondary" (click)="toggleShowCreditBasedSubscription()">{{'arenella-accounts-tabrecruiters-toggle' | translate}}</button></td>
+				<td><button class="btn btn-secondary acc-rec-tog-btn" (click)="toggleShowCreditBasedSubscription()">{{'arenella-accounts-tabrecruiters-toggle' | translate}}</button></td>
 			</tr>
 			<tr>
 			<td>{{'arenella-accounts-tabrecruiters-subscriptions-totals' | translate}}</td>

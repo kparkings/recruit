@@ -28,7 +28,7 @@ public class RecruiterSubscriptionEntityTest {
 	private static final String					recruiterId			= "kparkings";
 	private static final UUID					subscriptionId		= UUID.randomUUID();
 	private static final subscription_status 	status 				= subscription_status.ACTIVE;
-	private static final subscription_type		type				= subscription_type.FIRST_GEN;
+	private static final subscription_type		type				= subscription_type.ONE_MONTH_SUBSCRIPTION;
 	private static final INVOICE_TYPE			invoiceType			= INVOICE_TYPE.BUSINESS;
 	
 	/**
@@ -50,13 +50,13 @@ public class RecruiterSubscriptionEntityTest {
 																				.invoiceType(invoiceType)
 																			.build();
 		
-		assertEquals(activatedDate, 									subscription.getActivatedDate());
-		assertEquals(created, 											subscription.getCreated());
-		assertEquals(recruiterId, 										subscription.getRecruiterId());
-		assertEquals(status, 											subscription.getStatus());
-		assertEquals(subscriptionId, 									subscription.getSubscriptionId());
-		assertEquals(RecruiterSubscription.subscription_type.FIRST_GEN, subscription.getType());
-		assertEquals(invoiceType, 										subscription.getInvoiceType().get());
+		assertEquals(activatedDate, 													subscription.getActivatedDate());
+		assertEquals(created, 															subscription.getCreated());
+		assertEquals(recruiterId, 														subscription.getRecruiterId());
+		assertEquals(status, 															subscription.getStatus());
+		assertEquals(subscriptionId, 													subscription.getSubscriptionId());
+		assertEquals(RecruiterSubscription.subscription_type.ONE_MONTH_SUBSCRIPTION, 	subscription.getType());
+		assertEquals(invoiceType, 														subscription.getInvoiceType().get());
 		assertTrue(subscription.isCurrentSubscription());
 	
 	}
@@ -81,13 +81,13 @@ public class RecruiterSubscriptionEntityTest {
 		subscription.setCurrentSubscription(true);
 		subscription.setInvoiceType(invoiceType);
 
-		assertEquals(activatedDate, 									subscription.getActivatedDate());
-		assertEquals(created, 											subscription.getCreated());
-		assertEquals(recruiterId, 										subscription.getRecruiterId());
-		assertEquals(status, 											subscription.getStatus());
-		assertEquals(subscriptionId, 									subscription.getSubscriptionId());
-		assertEquals(RecruiterSubscription.subscription_type.FIRST_GEN, subscription.getType());
-		assertEquals(invoiceType, 										subscription.getInvoiceType().get());
+		assertEquals(activatedDate, 													subscription.getActivatedDate());
+		assertEquals(created, 															subscription.getCreated());
+		assertEquals(recruiterId, 														subscription.getRecruiterId());
+		assertEquals(status, 															subscription.getStatus());
+		assertEquals(subscriptionId, 													subscription.getSubscriptionId());
+		assertEquals(RecruiterSubscription.subscription_type.ONE_MONTH_SUBSCRIPTION, 	subscription.getType());
+		assertEquals(invoiceType, 														subscription.getInvoiceType().get());
 		assertTrue(subscription.isCurrentSubscription());
 		
 	}

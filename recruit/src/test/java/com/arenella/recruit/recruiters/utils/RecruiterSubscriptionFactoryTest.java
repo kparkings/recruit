@@ -30,12 +30,10 @@ public class RecruiterSubscriptionFactoryTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testNoTypeSpecified() throws Exception {
-		
+	public void testNoTypeSpecified() throws Exception {	
 		assertThrows(IllegalArgumentException.class, () -> {
 			factory.getActionHandlerByType(null);
 		});
-		
 	}
 	
 	/**
@@ -44,8 +42,6 @@ public class RecruiterSubscriptionFactoryTest {
 	*/
 	@Test
 	public void testGetActionHandlers() throws Exception {
-		
-		assertNotNull(factory.getActionHandlerByType(subscription_type.FIRST_GEN));
 		assertNotNull(factory.getActionHandlerByType(subscription_type.YEAR_SUBSCRIPTION));
 		this.factory.getActionHandlerByType(subscription_type.CREDIT_BASED_SUBSCRIPTION);
 	}
