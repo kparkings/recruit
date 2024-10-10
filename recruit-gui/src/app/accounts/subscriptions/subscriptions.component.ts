@@ -13,8 +13,14 @@ import { Subscription }							from './../subscription';
 })
 export class SubscriptionsComponent {
 
+	public SUBSCRIPTION_VIEW = SUBSCRIPTION_VIEW;
+	
+	public currentView:SUBSCRIPTION_VIEW = SUBSCRIPTION_VIEW.SELECT_SUBSCRIPTION_STATUS; 
+
 	recruiters:Array<Recruiter>										= new Array<Recruiter>();
 	recruitersWithSubscriptionActions:Array<SubscriptionAction>		= new Array<SubscriptionAction>();
+	
+	
 	
 	/**
 	* Constructor
@@ -146,6 +152,22 @@ export class SubscriptionsComponent {
 		this.recruitersWithSubscriptionActions = this.recruitersWithSubscriptionActions.sort((a,b) => a.type.localeCompare(b.type) || a.userId.localeCompare(b.userId));
 	}
 	
+	public getRecruitersWithSubscriptionActions():Array<SubscriptionAction>{
+		return this.recruitersWithSubscriptionActions.filter(s => s.status == this.currentView);	
+	}
+	
+	public getRecruitersWithSubscriptionActionsStatusCount(status:SUBSCRIPTION_VIEW):number{
+		return this.recruitersWithSubscriptionActions.filter(s => s.status == status).length;	
+	}
+	
+	public selectSubscriptionStatus(status:SUBSCRIPTION_VIEW):void{
+		this.currentView = status;
+	}
+	
+	public showStatusOptions():void{
+		this.currentView = SUBSCRIPTION_VIEW.SELECT_SUBSCRIPTION_STATUS;
+	}
+	
 	/**
 	* Returns human readable version of Id
 	*/
@@ -169,3 +191,10 @@ export class SubscriptionsComponent {
 	}
 		
 }
+
+enum SUBSCRIPTION_VIEW {
+	SELECT_SUBSCRIPTION_STATUS 				= "",
+	SUBSCRIPTION_STATUS_AWAITING_ACTIVATION = "AWAITING_ACTIVATION",
+	SUBSCRIPTION_STATUS_AWAITING_PAYMENT 	= "ACTIVE_PENDING_PAYMENT",
+	SUBSCRIPTION_STATUS_DISABLED 			= "DISABLED_PENDING_PAYMENT"
+};

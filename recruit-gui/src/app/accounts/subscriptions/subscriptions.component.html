@@ -1,28 +1,61 @@
-<div>
-	<table class="table candidate-table">
-		<thead>
-			<tr>
-				<th class="medicol">{{'arenella-accounts-tabsubscriptions-id' | translate}}</th>
-				<th class="medicol">{{'arenella-accounts-tabsubscriptions-name' | translate}}</th>
-				<th class="medicol">{{'arenella-accounts-tabsubscriptions-email' | translate}}</th>
-				<th class="medicol">{{'arenella-accounts-tabsubscriptions-lang' | translate}}</th>
-				<th class="medicol">{{'arenella-accounts-tabsubscriptions-type' | translate}}</th>
-				<th class="medicol">{{'arenella-accounts-tabsubscriptions-status' | translate}}</th>
-				<th class="medicol">{{'arenella-accounts-tabsubscriptions-actions' | translate}}</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr *ngFor="let subscriptionAction of recruitersWithSubscriptionActions">
-				<td class="medicol">{{subscriptionAction.userId}}</td>
-				<td class="medicol">{{subscriptionAction.firstName}} {{subscriptionAction.surname}}</td>
-				<td class="medicol">{{subscriptionAction.email}}</td>
-				<td class="medicol">{{subscriptionAction.language}}</td>
-				<td class="medicol">{{subscriptionAction.type}}</td>
-				<td class="medicol">{{subscriptionAction.status}}</td>
-				<td>
-					<button class="btn btn-secondary arenella-btn" style="min-width:100px;"  *ngFor="let action of subscriptionAction.actions" (click)="performAction(subscriptionAction, action)">{{frmtSubscriptionAction(action)}}</button>
-				</td>
-			</tr>
-		</tbody>
-	</table>
+<div class="page">
+
+	<!-- Panel showing types of Status -->
+	<div class="account-subscription-status-panels" *ngIf="currentView == SUBSCRIPTION_VIEW.SELECT_SUBSCRIPTION_STATUS">
+	
+		<div class="account-subscription-panel subscriptions-awaiting-activation" (click)="selectSubscriptionStatus(SUBSCRIPTION_VIEW.SUBSCRIPTION_STATUS_AWAITING_ACTIVATION)">
+			<h1>Awaiting Activation</h1>
+			<p>{{getRecruitersWithSubscriptionActionsStatusCount(SUBSCRIPTION_VIEW.SUBSCRIPTION_STATUS_AWAITING_ACTIVATION)}}</p>
+		</div>
+		<div class="account-subscription-panel subscriptions-awaiting-payment" (click)="selectSubscriptionStatus(SUBSCRIPTION_VIEW.SUBSCRIPTION_STATUS_AWAITING_PAYMENT)">
+			<h1>Awaiting Payment</h1>
+			<p>{{getRecruitersWithSubscriptionActionsStatusCount(SUBSCRIPTION_VIEW.SUBSCRIPTION_STATUS_AWAITING_PAYMENT)}}</p>
+		</div>
+		<div class="account-subscription-panel subscriptions-disabled" (click)="selectSubscriptionStatus(SUBSCRIPTION_VIEW.SUBSCRIPTION_STATUS_DISABLED)">
+			<h1>Disabled</h1>
+			<p>{{getRecruitersWithSubscriptionActionsStatusCount(SUBSCRIPTION_VIEW.SUBSCRIPTION_STATUS_DISABLED)}}</p>
+		</div>	
+		
+	</div>
+	
+	<!-- Panel showing subscriptions of selected Status -->
+	<div class="account-subscription-status-panelsXX" *ngIf="currentView == SUBSCRIPTION_VIEW.SUBSCRIPTION_STATUS_AWAITING_ACTIVATION || currentView == SUBSCRIPTION_VIEW.SUBSCRIPTION_STATUS_AWAITING_PAYMENT || currentView == SUBSCRIPTION_VIEW.SUBSCRIPTION_STATUS_DISABLED">
+		<div class="action-buttons">
+				<button	class="btn btn-secondary arenella-btn" (click)="showStatusOptions()">Back</button>
+			</div>
+		<table class="table candidate-tableXX">
+			<thead>
+				<tr>
+					<th class="medicol">{{'arenella-accounts-tabsubscriptions-id' | translate}}</th>
+					<th class="medicol">{{'arenella-accounts-tabsubscriptions-name' | translate}}</th>
+					<th class="medicol">{{'arenella-accounts-tabsubscriptions-email' | translate}}</th>
+					<th class="medicol">{{'arenella-accounts-tabsubscriptions-lang' | translate}}</th>
+					<th class="medicol">{{'arenella-accounts-tabsubscriptions-type' | translate}}</th>
+					<th class="medicol">{{'arenella-accounts-tabsubscriptions-status' | translate}}</th>
+					<th class="medicol">{{'arenella-accounts-tabsubscriptions-actions' | translate}}</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr *ngFor="let subscriptionAction of getRecruitersWithSubscriptionActions()">
+					<td class="medicol">{{subscriptionAction.userId}}</td>
+					<td class="medicol">{{subscriptionAction.firstName}} {{subscriptionAction.surname}}</td>
+					<td class="medicol">{{subscriptionAction.email}}</td>
+					<td class="medicol">{{subscriptionAction.language}}</td>
+					<td class="medicol">{{subscriptionAction.type}}</td>
+					<td class="medicol">{{subscriptionAction.status}}</td>
+					<td>
+						<button class="btn btn-secondary arenella-btn" style="min-width:100px;"  *ngFor="let action of subscriptionAction.actions" (click)="performAction(subscriptionAction, action)">{{frmtSubscriptionAction(action)}}</button>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	
+	<div class="clear-float"></div>
+	
 </div>
+
+<!--  
+	
+</div>
+-->
