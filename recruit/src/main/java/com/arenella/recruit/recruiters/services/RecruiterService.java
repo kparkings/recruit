@@ -1,8 +1,11 @@
 package com.arenella.recruit.recruiters.services;
 
+import java.time.LocalDate;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
+
+import org.springframework.core.io.ByteArrayResource;
 
 import com.arenella.recruit.recruiters.beans.Recruiter;
 import com.arenella.recruit.recruiters.beans.SubscriptionActionFeedback;
@@ -91,5 +94,15 @@ public interface RecruiterService {
 	* @param recruiterId - Unique identifier of the Recruiter
 	*/
 	public void deleteRecruiter(String recruiterId);
+
+	/**
+	* Generates Invoice for given Subscription 
+	* @param subscriptionId	 - Unique id of the subscription
+	* @param invoiceNumber	 - Unique invoice number
+	* @param invoiceDate     - Date to use for the invoice
+	* @param unitDescription - description of unit of service provided
+	* @return Invoice as File
+	*/
+	public ByteArrayResource generateInvoiceForSubscription(UUID subscriptionId, String invoiceNumber, Optional<LocalDate> invoiceDate, Optional<String> unitDescription);
 	
 }

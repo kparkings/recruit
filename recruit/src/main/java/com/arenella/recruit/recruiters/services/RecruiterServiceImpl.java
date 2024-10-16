@@ -1,5 +1,8 @@
 package com.arenella.recruit.recruiters.services;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.LinkedHashSet;
 import java.util.Map;
@@ -9,7 +12,13 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.font.PDFont;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -38,6 +47,7 @@ import com.arenella.recruit.recruiters.dao.RecruiterCreditDao;
 import com.arenella.recruit.recruiters.dao.RecruiterDao;
 import com.arenella.recruit.recruiters.dao.RecruiterProfileDao;
 import com.arenella.recruit.recruiters.entities.RecruiterEntity;
+import com.arenella.recruit.recruiters.utils.InvoiceBuilderUtil;
 import com.arenella.recruit.recruiters.utils.PasswordUtil;
 import com.arenella.recruit.recruiters.utils.RecruiterSubscriptionActionHandler;
 import com.arenella.recruit.recruiters.utils.RecruiterSubscriptionFactory;
@@ -69,6 +79,9 @@ public class RecruiterServiceImpl implements RecruiterService{
 	
 	@Autowired
 	private OpenPositionDao						OpenPositionDao;
+	
+	@Autowired	
+	private InvoiceBuilderUtil					invoiceBuilderUtil;
 	
 	/**
 	* Refer to the RecruiterService for details
@@ -371,6 +384,14 @@ public class RecruiterServiceImpl implements RecruiterService{
 		this.creditDao.getByRecruiterId(recruiterId).ifPresent(creditCredit -> this.creditDao.deleteById(creditCredit.getRecruiterId()));
 		this.recruiterDao.deleteById(recruiterId);
 		this.externEventPublisher.publishRecruiterAccountDeleted(new RecruiterDeletedEvent(recruiterId));
+	}
+	
+	/**
+	* Refer to the RecruiterService for details 
+	*/
+	@Override
+	public ByteArrayResource generateInvoiceForSubscription(UUID subscriptionId, String invoiceNumber, Optional<LocalDate> invoiceDate, Optional<String> unitDescription) {
+		return this.invoiceBuilderUtil.generateInvoice(subscriptionId, invoiceNumber, invoiceDate, unitDescription);
 	}
 	
 	//MOVE TO FACTORY

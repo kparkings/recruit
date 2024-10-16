@@ -46,6 +46,40 @@
 	margin-bottom:10px;
 }
 
+.subscription-action-item{
+	cursor:pointer;
+}
+
+.subscription-action-item:hover{
+	background:grey;
+}
+
+.subscription-details{
+	margin:0px;	
+	float:left;
+}
+
+.subscription-details{	
+	width:100%;	
+	
+}
+.subscription-details table{
+	margin:0 auto;
+	width:80%;
+	border:green solid 1px;
+}
+
+.subscription-details table th{
+	width:350px;
+	font-weight:bold;
+	background:grey;
+	padding:5px;
+}
+
+.subscription-details table td{
+	padding:5px;
+}
+
 @media (max-width:700px)  {
 	
 	.account-subscription-status-panels{
@@ -65,5 +99,41 @@
 		margin-bottom:10px;
 	}
 
+	.subscription-details table{
+		margin:0 auto;
+		width:100%;	
+	}
+	
+	.subscription-list-table{
+		width:100%;
+		padding:0px;
+	}
+	
+	.subscription-list-recruiter-name{
+		display:none;
+	}
+	
+	.subscription-list-table thead th{
+		width:30%;
+		font-weight:bold;
+		padding:5px;
+	}
+	
+	.subscription-list-table td{
+		width:30%;
+		padding:5px;
+	}
+	
+	.subscription-details table th{
+		width:30%;
+		font-weight:bold;
+		background:grey;
+		padding:10px;
+	}
+
+	.subscription-details table td{
+		width:30%;
+		padding:10px;
+	}
 	
 }

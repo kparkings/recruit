@@ -27,7 +27,7 @@ export class Recruiter {
 	email:string 		= "";
 	
 	/**
-	* Recruiters current Company
+	* Country the Company is registered in
 	*/
 	companyName:string 	= "";
 	
@@ -46,6 +46,27 @@ export class Recruiter {
 	* access to the sites features
 	*/
 	hasActiveSubscription:boolean = false;
+	
+	/**
+	* Subscriptions associated with the Recruiter
+	*/
+	companyAddress:string = "";
+	
+	/**
+	* Subscriptions associated with the Recruiter
+	*/
+	companyCountry:string = "";
+	
+	/**
+	* Name of the company
+	*/
+	companyVatNumber:string = "";
+	
+	/**
+	* Registrtion number of company with Chamber or commerce
+	*/
+	companyRegistrationNumber:string = "";
+	
 
 
 }

@@ -38,6 +38,8 @@ export class SubscriptionsComponent {
 			
 			this.fetchRecruiters();
 			
+			this.backFromSubscriptionDetails();
+			
 		}, 
 		err => {
 			console.log(JSON.stringify(err));		
@@ -95,6 +97,7 @@ export class SubscriptionsComponent {
 					sa.language 		= r.language;
 					sa.userId 			= r.userId;
 					sa.type 			= s.type;
+					sa.invoiceType	 	= s.invoiceType;
 					sa.actions.push("ACTIVATE_SUBSCRIPTION");
 					sa.actions.push("REJECT_SUBSCRIPTION");
 					
@@ -118,6 +121,7 @@ export class SubscriptionsComponent {
 					sa.language 		= r.language;
 					sa.userId 			= r.userId;
 					sa.type 			= s.type;
+					sa.invoiceType	 	= s.invoiceType;
 					sa.actions.push("ACTIVATE_SUBSCRIPTION");
 					sa.actions.push("DISABLE_PENDING_PAYMENT");
 					
@@ -141,6 +145,7 @@ export class SubscriptionsComponent {
 					sa.language 		= r.language;
 					sa.userId 			= r.userId;
 					sa.type 			= s.type;
+					sa.invoiceType	 	= s.invoiceType;
 					sa.actions.push("ACTIVATE_SUBSCRIPTION");
 					
 					this.recruitersWithSubscriptionActions.push(sa);
@@ -168,6 +173,24 @@ export class SubscriptionsComponent {
 		this.currentView = SUBSCRIPTION_VIEW.SELECT_SUBSCRIPTION_STATUS;
 	}
 	
+	public selectedSubscriptionAction:SubscriptionAction 	= new SubscriptionAction;
+	public selectedRecruiter:Recruiter 						= new Recruiter();
+	public lastCurrentView:SUBSCRIPTION_VIEW 				= SUBSCRIPTION_VIEW.SELECT_SUBSCRIPTION_STATUS;
+	
+	public backFromSubscriptionDetails():void{
+		this.currentView 					= this.lastCurrentView;
+		this.lastCurrentView 				= SUBSCRIPTION_VIEW.SELECT_SUBSCRIPTION_STATUS;
+		this.selectedSubscriptionAction 	= new SubscriptionAction();
+		this.selectedRecruiter 				= new Recruiter();
+	}
+	
+	public setSelectSubscriptionAction(subscriptionAction:SubscriptionAction):void{
+		this.selectedSubscriptionAction = subscriptionAction;
+		this.lastCurrentView 			= this.currentView;
+		this.currentView 				= SUBSCRIPTION_VIEW.SUBSCRIPTION_DETAILS;
+		this.selectedRecruiter 			= this.getRecruiterForSubscriptionAction(subscriptionAction);
+	}
+	
 	/**
 	* Returns human readable version of Id
 	*/
@@ -189,6 +212,13 @@ export class SubscriptionsComponent {
 		}
 		
 	}
+	
+	/**
+	* Returns details of Recruiter that owns the Subscription
+	*/
+	public getRecruiterForSubscriptionAction(subscriptionAction:SubscriptionAction):Recruiter{
+		return this.recruiters.filter(r => r.userId == subscriptionAction.userId)[0];
+	}
 		
 }
 
@@ -196,5 +226,6 @@ enum SUBSCRIPTION_VIEW {
 	SELECT_SUBSCRIPTION_STATUS 				= "",
 	SUBSCRIPTION_STATUS_AWAITING_ACTIVATION = "AWAITING_ACTIVATION",
 	SUBSCRIPTION_STATUS_AWAITING_PAYMENT 	= "ACTIVE_PENDING_PAYMENT",
-	SUBSCRIPTION_STATUS_DISABLED 			= "DISABLED_PENDING_PAYMENT"
+	SUBSCRIPTION_STATUS_DISABLED 			= "DISABLED_PENDING_PAYMENT",
+	SUBSCRIPTION_DETAILS			  		= "SUBSCRIPTION_DETAILS"
 };

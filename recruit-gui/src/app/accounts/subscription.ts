@@ -39,4 +39,9 @@ export class Subscription{
 	*/
 	type:string 						= "";
 	
+	/**
+	* Whether the Recruiter wants to be invoiced as a Company or a Person
+	*/
+	invoiceType:string				 	= "";
+	
 }

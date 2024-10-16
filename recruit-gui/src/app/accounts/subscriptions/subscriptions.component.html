@@ -19,43 +19,93 @@
 	</div>
 	
 	<!-- Panel showing subscriptions of selected Status -->
-	<div class="account-subscription-status-panelsXX" *ngIf="currentView == SUBSCRIPTION_VIEW.SUBSCRIPTION_STATUS_AWAITING_ACTIVATION || currentView == SUBSCRIPTION_VIEW.SUBSCRIPTION_STATUS_AWAITING_PAYMENT || currentView == SUBSCRIPTION_VIEW.SUBSCRIPTION_STATUS_DISABLED">
+	<div *ngIf="currentView == SUBSCRIPTION_VIEW.SUBSCRIPTION_STATUS_AWAITING_ACTIVATION || currentView == SUBSCRIPTION_VIEW.SUBSCRIPTION_STATUS_AWAITING_PAYMENT || currentView == SUBSCRIPTION_VIEW.SUBSCRIPTION_STATUS_DISABLED ">
 		<div class="action-buttons">
-				<button	class="btn btn-secondary arenella-btn" (click)="showStatusOptions()">Back</button>
-			</div>
-		<table class="table candidate-tableXX">
+			<button	class="btn btn-secondary arenella-btn" (click)="showStatusOptions()">Back</button>
+		</div>
+		<table class="table subscription-list-table">
 			<thead>
 				<tr>
 					<th class="medicol">{{'arenella-accounts-tabsubscriptions-id' | translate}}</th>
-					<th class="medicol">{{'arenella-accounts-tabsubscriptions-name' | translate}}</th>
-					<th class="medicol">{{'arenella-accounts-tabsubscriptions-email' | translate}}</th>
-					<th class="medicol">{{'arenella-accounts-tabsubscriptions-lang' | translate}}</th>
+					<th class="medicol subscription-list-recruiter-name">{{'arenella-accounts-tabsubscriptions-name' | translate}}</th>
 					<th class="medicol">{{'arenella-accounts-tabsubscriptions-type' | translate}}</th>
-					<th class="medicol">{{'arenella-accounts-tabsubscriptions-status' | translate}}</th>
-					<th class="medicol">{{'arenella-accounts-tabsubscriptions-actions' | translate}}</th>
 				</tr>
 			</thead>
 			<tbody>
-				<tr *ngFor="let subscriptionAction of getRecruitersWithSubscriptionActions()">
+				<tr *ngFor="let subscriptionAction of getRecruitersWithSubscriptionActions()" class="subscription-action-item" (click)="setSelectSubscriptionAction(subscriptionAction)">
 					<td class="medicol">{{subscriptionAction.userId}}</td>
-					<td class="medicol">{{subscriptionAction.firstName}} {{subscriptionAction.surname}}</td>
-					<td class="medicol">{{subscriptionAction.email}}</td>
-					<td class="medicol">{{subscriptionAction.language}}</td>
+					<td class="medicol subscription-list-recruiter-name">{{subscriptionAction.firstName}} {{subscriptionAction.surname}}</td>
 					<td class="medicol">{{subscriptionAction.type}}</td>
-					<td class="medicol">{{subscriptionAction.status}}</td>
-					<td>
-						<button class="btn btn-secondary arenella-btn" style="min-width:100px;"  *ngFor="let action of subscriptionAction.actions" (click)="performAction(subscriptionAction, action)">{{frmtSubscriptionAction(action)}}</button>
-					</td>
 				</tr>
 			</tbody>
 		</table>
 	</div>
 	
+	<!-- Panel showing selected subscription -->
+	<div *ngIf="currentView == SUBSCRIPTION_VIEW.SUBSCRIPTION_DETAILS" class="subscription-details">
+		<div class="action-buttons">
+			<button	class="btn btn-secondary arenella-btn" (click)="backFromSubscriptionDetails()">Back</button>
+		</div>
+		<div class="subscription-details">
+			<table class="subscription-details-table">
+				<tr>
+					<th>Recruiter Id</th>
+					<td>{{selectedSubscriptionAction.userId}}</td>
+				</tr>
+				<tr>
+					<th>Name</th>
+					<td>{{selectedSubscriptionAction.firstName + "" + selectedSubscriptionAction.surname}}</td>
+				</tr>
+				<tr>
+					<th>Email</th>
+					<td>{{selectedSubscriptionAction.email}}</td>
+				</tr>
+				<tr>
+					<th>Language</th>
+					<td>{{selectedSubscriptionAction.language}}</td>
+				</tr>
+				<tr>
+					<th>Subscription Id</th>
+					<td>{{selectedSubscriptionAction.subscriptionId}}</td>
+				</tr>
+				<tr>
+					<th>Invoice Type</th>
+					<td>{{selectedSubscriptionAction.invoiceType}}</td>
+				</tr>
+				<tr *ngIf="selectedSubscriptionAction.invoiceType && selectedSubscriptionAction.invoiceType == 'BUSINESS'">
+					<th colspan="2">Company Details</th>
+				</tr>
+				<tr *ngIf="selectedSubscriptionAction.invoiceType && selectedSubscriptionAction.invoiceType == 'BUSINESS'">
+					<th>Name</th>
+					<td>{{selectedRecruiter.companyName}}</td>
+				</tr>
+				<tr *ngIf="selectedSubscriptionAction.invoiceType && selectedSubscriptionAction.invoiceType == 'BUSINESS'">
+					<th>Address</th>
+					<td>{{selectedRecruiter.companyAddress}}</td>
+				</tr>
+				<tr *ngIf="selectedSubscriptionAction.invoiceType && selectedSubscriptionAction.invoiceType == 'BUSINESS'">
+					<th>Country</th>
+					<td>{{selectedRecruiter.companyCountry}}</td>
+				</tr>
+				<tr *ngIf="selectedSubscriptionAction.invoiceType && selectedSubscriptionAction.invoiceType == 'BUSINESS'">
+					<th>Registration Number</th>
+					<td>{{selectedRecruiter.companyRegistrationNumber}}</td>
+				</tr>
+				<tr *ngIf="selectedSubscriptionAction.invoiceType && selectedSubscriptionAction.invoiceType == 'BUSINESS'">
+					<th>VAT Number</th>
+					<td>{{selectedRecruiter.companyVatNumber}}</td>
+				</tr>
+				<tr>
+					<th>Actions</th>
+					<td>
+						<button class="btn btn-secondary arenella-btn" style="min-width:100px;"  *ngFor="let action of selectedSubscriptionAction.actions" (click)="performAction(selectedSubscriptionAction, action)">{{frmtSubscriptionAction(action)}}</button>	
+					</td>
+				</tr>
+			</table>
+		</div>
+		
+	</div>
+	
 	<div class="clear-float"></div>
 	
 </div>
-
-<!--  
-	
-</div>
--->

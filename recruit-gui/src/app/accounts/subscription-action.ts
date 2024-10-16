@@ -46,6 +46,11 @@ export class SubscriptionAction {
 	type:string 								= "";
 	
 	/**
+	* Type of Invoice to send
+	*/
+	invoiceType:string							= "";
+	
+	/**
 	* Ids of actions that can be carried out for the subscription
 	*/
 	actions:Array<string>			 			= new Array<string>();
