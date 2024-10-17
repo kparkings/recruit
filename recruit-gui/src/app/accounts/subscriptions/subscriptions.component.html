@@ -99,6 +99,7 @@
 					<th>Actions</th>
 					<td>
 						<button class="btn btn-secondary arenella-btn" style="min-width:100px;"  *ngFor="let action of selectedSubscriptionAction.actions" (click)="performAction(selectedSubscriptionAction, action)">{{frmtSubscriptionAction(action)}}</button>	
+						<button class="btn btn-secondary arenella-btn mobile" (click)="showGenerateInvoiceOptions()">Invoice</button>
 					</td>
 				</tr>
 			</table>
@@ -106,6 +107,52 @@
 		
 	</div>
 	
+	<!-- Inline Invoice view -->
+	<div *ngIf="currentView == SUBSCRIPTION_VIEW.SUBSCRIPTION_INVOICE_INLINE">
+		<div class="action-buttons">
+			<button	class="btn btn-secondary arenella-btn" (click)="showSubscriptionDetails()">Back</button>
+		</div>
+		<object id="content"  class="cv-inline" [attr.data]="trustedResourceUrl" type="application/pdf"></object>
+	</div>
+	
 	<div class="clear-float"></div>
 	
 </div>
+<!-- Invoice Details Box -->
+<dialog #invoiceDetailsBox>
+	<div class="modal-header">
+		<h4 class="modal-title">Invoice Details</h4>
+ 		<div class="filter-close-box" (click)="invoiceDetailsBox.close()">X</div>
+	</div>
+	<div class="invoiceDetailsBox">
+		<form [formGroup]="invoiceDetailsForm">
+			<table>
+				<tr>
+					<th>Invoice Number</th>
+					<td>
+						<input type="text" formControlName="invoiceNumber"/>
+					</td>
+				</tr>
+				<tr>
+					<th>Invoice Date</th>
+					<td>
+						<input type="date" formControlName="invoiceDate"/>
+					</td>
+				</tr>
+				<tr>
+					<th>Service Description</th>
+					<td>
+						<textarea formControlName="unitDescription"></textarea>
+					</td>
+				</tr>
+				<tr>
+					<td></td>
+					<td>
+						<button class="btn btn-secondary invoice-box-btn-generate" [disabled]="!isInvoiceButtonEnabled()" (click)="generateInvoice()" >Generate</button> 		
+					</td>
+				</tr>
+			</table>
+			         
+		</form>
+	</div>
+</dialog>

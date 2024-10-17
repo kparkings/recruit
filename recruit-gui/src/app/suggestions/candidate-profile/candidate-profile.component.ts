@@ -53,6 +53,7 @@ export class CandidateProfileComponent {
 	public savedCandidateNotesForm:UntypedFormGroup 	= new UntypedFormGroup({
 		notes:			new UntypedFormControl(''),
 	});
+	
 	/**
 	* Constructor 
 	*/

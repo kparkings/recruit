@@ -391,7 +391,11 @@ public class RecruiterServiceImpl implements RecruiterService{
 	*/
 	@Override
 	public ByteArrayResource generateInvoiceForSubscription(UUID subscriptionId, String invoiceNumber, Optional<LocalDate> invoiceDate, Optional<String> unitDescription) {
-		return this.invoiceBuilderUtil.generateInvoice(subscriptionId, invoiceNumber, invoiceDate, unitDescription);
+		
+		Recruiter 				recruiter 		= this.recruiterDao.findRecruitersBySubscriptionId(subscriptionId).orElseThrow();
+		RecruiterSubscription 	subscription 	= recruiter.getSubscriptions().stream().filter(s -> s.getSubscriptionId().equals(subscriptionId)).findAny().orElseThrow();
+		
+		return this.invoiceBuilderUtil.generateInvoice(recruiter, subscription, invoiceNumber, invoiceDate, unitDescription);
 	}
 	
 	//MOVE TO FACTORY

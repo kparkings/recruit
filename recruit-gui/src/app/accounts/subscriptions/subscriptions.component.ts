@@ -1,9 +1,14 @@
-import { Component } 							from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, ElementRef, ViewChild } 	from '@angular/core';
+import { Router } 								from '@angular/router';
 import { RecruiterService } 					from 'src/app/recruiter.service';
 import { SubscriptionAction } 					from '../subscription-action';
 import { Recruiter }							from './../recruiter';
 import { Subscription }							from './../subscription';
+import { environment }							from '../../../environments/environment';
+import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
+import { GenerateInvoiceRequest } 				from 'src/app/generate-invoice-request';
+import { CurriculumService }					from '../../curriculum.service';
+import { DomSanitizer, SafeResourceUrl } 		from '@angular/platform-browser';
 
 @Component({
   selector: 'app-subscriptions',
@@ -12,20 +17,36 @@ import { Subscription }							from './../subscription';
   styleUrl: './subscriptions.component.css'
 })
 export class SubscriptionsComponent {
+	
+	@ViewChild('invoiceDetailsBox', { static: true }) 			invoiceDetailsBox!: ElementRef<HTMLDialogElement>;
+	
 
 	public SUBSCRIPTION_VIEW = SUBSCRIPTION_VIEW;
 	
 	public currentView:SUBSCRIPTION_VIEW = SUBSCRIPTION_VIEW.SELECT_SUBSCRIPTION_STATUS; 
 
+	public invoiceDetailsForm:UntypedFormGroup 	= new UntypedFormGroup({
+		invoiceNumber:			new UntypedFormControl(''),
+		invoiceDate:			new UntypedFormControl(''),
+		unitDescription:		new UntypedFormControl(''),
+	});
+	
 	recruiters:Array<Recruiter>										= new Array<Recruiter>();
 	recruitersWithSubscriptionActions:Array<SubscriptionAction>		= new Array<SubscriptionAction>();
+	public selectedSubscriptionAction:SubscriptionAction 	= new SubscriptionAction;
+	public selectedRecruiter:Recruiter 						= new Recruiter();
+	public lastCurrentView:SUBSCRIPTION_VIEW 				= SUBSCRIPTION_VIEW.SELECT_SUBSCRIPTION_STATUS;
 	
-	
+	private invoiceRequest:GenerateInvoiceRequest = new GenerateInvoiceRequest();
+	public 	trustedResourceUrl:SafeResourceUrl;
+	public 	invoiceData:any;
 	
 	/**
 	* Constructor
 	*/
-	constructor(private router: Router, private recruiterService:RecruiterService){
+	constructor(private router: Router, private recruiterService:RecruiterService, public curriculumService:CurriculumService, private sanitizer: 				DomSanitizer,){
+		this.trustedResourceUrl = this.sanitizer.bypassSecurityTrustResourceUrl('');
+		
 		this.fetchRecruiters();
 	}
 
@@ -173,9 +194,84 @@ export class SubscriptionsComponent {
 		this.currentView = SUBSCRIPTION_VIEW.SELECT_SUBSCRIPTION_STATUS;
 	}
 	
-	public selectedSubscriptionAction:SubscriptionAction 	= new SubscriptionAction;
-	public selectedRecruiter:Recruiter 						= new Recruiter();
-	public lastCurrentView:SUBSCRIPTION_VIEW 				= SUBSCRIPTION_VIEW.SELECT_SUBSCRIPTION_STATUS;
+	public showSubscriptionDetails():void{
+		this.currentView = SUBSCRIPTION_VIEW.SUBSCRIPTION_DETAILS;
+	}
+	
+	public showGenerateInvoiceOptions():void{
+		
+		this.invoiceDetailsForm 	= new UntypedFormGroup({
+			invoiceNumber:			new UntypedFormControl(''),
+			invoiceDate:			new UntypedFormControl(''),
+			unitDescription:		new UntypedFormControl(''),
+		});
+		
+		this.invoiceDetailsBox.nativeElement.showModal();
+		
+	}
+	
+	/**
+	*  Sets URL to generate and return Invoice for a subscription
+	*/
+	public getInvoiceUrlForInlinePdf(invoiceId:string):void{
+		let params:string 			= '?invoiceNumber='+this.invoiceRequest.invoiceNumber+'&invoiceDate='+this.invoiceRequest.invoiceDate+'&unitDescription='+this.invoiceRequest.unitDescription;
+		let url 					=  environment.backendUrl + 'recruiter/invoice/'+this.invoiceRequest.subscriptionId+"/"+params;
+		this.trustedResourceUrl 	= this.sanitizer.bypassSecurityTrustResourceUrl(url);
+		
+	}
+	
+	public isInvoiceButtonEnabled():boolean{
+		
+		let invoiceNumber 		= this.invoiceDetailsForm.get('invoiceNumber')?.value;
+		let unitDescription 	= this.invoiceDetailsForm.get('unitDescription')?.value;
+		
+		console.log("aa = " + invoiceNumber);
+		console.log("bb = " + unitDescription);
+		
+		if (!invoiceNumber || invoiceNumber.length <2){
+			console.log("cc");
+			return false;
+		}
+		
+		if (!unitDescription || unitDescription.length <2){
+			console.log("dd");
+			return false;
+		}
+		console.log("ee");
+		return true;
+		
+	}
+	
+	/**
+	*  Returns the url to perform the download of the candidates CV
+	*/
+	public generateInvoice():void{
+		
+		this.invoiceRequest.subscriptionId 		= this.selectedSubscriptionAction.subscriptionId;
+		this.invoiceRequest.invoiceNumber 		= this.invoiceDetailsForm.get('invoiceNumber')?.value;
+		this.invoiceRequest.invoiceDate 		= this.invoiceDetailsForm.get('invoiceDate')?.value;
+		this.invoiceRequest.unitDescription 	= this.invoiceDetailsForm.get('unitDescription')?.value;
+		
+		this.getInvoiceUrlForInlinePdf(this.selectedSubscriptionAction.subscriptionId);
+			
+		this.invoiceDetailsForm 	= new UntypedFormGroup({
+			invoiceNumber:			new UntypedFormControl(''),
+			invoiceDate:			new UntypedFormControl(''),
+			unitDescrition:			new UntypedFormControl(''),
+		});
+			
+		this.invoiceDetailsBox.nativeElement.close();
+		
+		this.currentView = SUBSCRIPTION_VIEW.SUBSCRIPTION_INVOICE_INLINE;
+		
+	}
+	
+	public showBtnDownloadCV():boolean{
+		return this.selectedSubscriptionAction.type == 'ONE_MONTH_SUBSCRIPTION' 
+			|| this.selectedSubscriptionAction.type == 'THREE_MONTHS_SUBSCRIPTION' 
+			|| this.selectedSubscriptionAction.type == 'SIX_MONTHS_SUBSCRIPTION' 
+			|| this.selectedSubscriptionAction.type == 'YEAR_SUBSCRIPTION';
+	}
 	
 	public backFromSubscriptionDetails():void{
 		this.currentView 					= this.lastCurrentView;
@@ -227,5 +323,6 @@ enum SUBSCRIPTION_VIEW {
 	SUBSCRIPTION_STATUS_AWAITING_ACTIVATION = "AWAITING_ACTIVATION",
 	SUBSCRIPTION_STATUS_AWAITING_PAYMENT 	= "ACTIVE_PENDING_PAYMENT",
 	SUBSCRIPTION_STATUS_DISABLED 			= "DISABLED_PENDING_PAYMENT",
-	SUBSCRIPTION_DETAILS			  		= "SUBSCRIPTION_DETAILS"
+	SUBSCRIPTION_DETAILS			  		= "SUBSCRIPTION_DETAILS",
+	SUBSCRIPTION_INVOICE_INLINE 			= "SUBSCRIPTION_INVOICE_INLINE"
 };

@@ -95,6 +95,9 @@ export class CurriculumService {
 		return environment.backendUrl + 'curriculum-test/' + candidateId + '.pdf';
 	}
 	
+	
+	
+	
 	/**
 	* Performs a check to see if the User has access to the Curriculum either
 	* because they do not use credt based acces or beause they have remaining 

@@ -2,8 +2,10 @@ package com.arenella.recruit.recruiters.dao;
 
 import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 import com.arenella.recruit.recruiters.beans.OfferedCandidateAPIOutbound.RecruiterDetails;
@@ -42,6 +44,15 @@ public interface RecruiterDao extends CrudRepository<RecruiterEntity, String>{
 	* @return If found the associated Recruiter
 	*/
 	Set<RecruiterEntity> findByEmail(String email);
+	
+	/**
+	* Attempts to find a Recruiter by its SubscriptionId
+	* @param id - id of the Subscription
+	* @return If found the associated Recruiter
+	*/
+	@Query("FROM RecruiterEntity e left join e.subscriptions s where s.subscriptionId = :subscriptionId " )
+	Optional<RecruiterEntity> getSubscriptionById(UUID subscriptionId);
+	
 
 	/**
 	* Retrieves Recruiter details based upon the id of the Recruiter
@@ -63,6 +74,22 @@ public interface RecruiterDao extends CrudRepository<RecruiterEntity, String>{
 	*/
 	default Set<Recruiter> findRecruitersByEmail(String email){
 		return this.findByEmail(email).stream().map(RecruiterEntity::convertFromEntity).collect(Collectors.toSet());
+	}
+	
+	/**
+	* If present returns the Recruiter who owns the given subscription
+	* @param subscriptionId - Unique Id of Subscription
+	* @return owning Recruiter
+	*/
+	default Optional<Recruiter> findRecruitersBySubscriptionId(UUID subscriptionId){
+		
+		Optional<RecruiterEntity> entity = this.getSubscriptionById(subscriptionId);
+		
+		if(entity.isEmpty()) {
+			return Optional.empty();
+		}
+		
+		return Optional.of(RecruiterEntity.convertFromEntity(entity.get()));
 	}
 	
 	
