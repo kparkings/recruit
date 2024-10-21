@@ -9,5 +9,6 @@ export class GenerateInvoiceRequest{
 	public invoiceNumber:string 		= '';
 	public invoiceDate:Date 			= new Date();
 	public unitDescription:string 		= 'SS';
+	public btwApplies:boolean			= false;
 	
 }

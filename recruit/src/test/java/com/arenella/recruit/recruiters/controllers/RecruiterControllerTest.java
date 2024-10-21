@@ -294,11 +294,11 @@ public class RecruiterControllerTest {
 		final LocalDate							invoiceDate			= LocalDate.of(2024, 10, 13);
 		final ByteArrayResource 				invoiceFile 		= new ByteArrayResource(new byte[] {});
 		
-		Mockito.when(this.mockRecruiterService.generateInvoiceForSubscription(subscriptionId, invoiceNumber, Optional.of(invoiceDate), Optional.of(unitDescription))).thenReturn(invoiceFile);
+		Mockito.when(this.mockRecruiterService.generateInvoiceForSubscription(subscriptionId, invoiceNumber, Optional.empty(), Optional.of(invoiceDate), Optional.of(unitDescription))).thenReturn(invoiceFile);
 		
-		byte[] response = this.recruiterController.getInvoiceForRecruiterSubscription(subscriptionId, invoiceNumber, unitDescription, invoiceDate);
+		byte[] response = this.recruiterController.getInvoiceForRecruiterSubscription(subscriptionId, invoiceNumber, unitDescription,Optional.empty(), invoiceDate);
 		
-		Mockito.verify(this.mockRecruiterService).generateInvoiceForSubscription(subscriptionId, invoiceNumber, Optional.of(invoiceDate), Optional.of(unitDescription));
+		Mockito.verify(this.mockRecruiterService).generateInvoiceForSubscription(subscriptionId, invoiceNumber, Optional.empty(), Optional.of(invoiceDate), Optional.of(unitDescription));
 		
 		assertEquals(invoiceFile.getByteArray(), response);
 		

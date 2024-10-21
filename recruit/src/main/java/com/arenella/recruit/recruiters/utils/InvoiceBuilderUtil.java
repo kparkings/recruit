@@ -4,7 +4,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Optional;
-import java.util.UUID;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
@@ -38,6 +37,8 @@ public class InvoiceBuilderUtil {
 	private float 					currentPos = TOP_POS;
 	private Recruiter 				recruiter;
 	private RecruiterSubscription 	subscription;
+	private Optional<String>		unitDescription;
+	private Optional<Boolean>		btwApplies;
 	
 	/**
 	* Generates a PDF invoice for the Subscription
@@ -47,11 +48,13 @@ public class InvoiceBuilderUtil {
 	* @param unitDescription	- Unit of work being invoiced description
 	* @return Invoice 
 	*/
-	public ByteArrayResource generateInvoice(Recruiter recruiter, RecruiterSubscription subscription, String invoiceNumber, Optional<LocalDate> invoiceDate, Optional<String> unitDescription) {
+	public ByteArrayResource generateInvoice(Recruiter recruiter, RecruiterSubscription subscription, String invoiceNumber, Optional<Boolean> btwApplies, Optional<LocalDate> invoiceDate, Optional<String> unitDescription) {
 		
 		ByteArrayResource byteArrayResource = null;
-		this.recruiter 		= recruiter;
-		this.subscription 	= subscription;
+		this.recruiter 			= recruiter;
+		this.subscription 		= subscription;
+		this.unitDescription	= unitDescription;
+		this.btwApplies 		= btwApplies;
 		
 		try {
 			
@@ -147,12 +150,118 @@ public class InvoiceBuilderUtil {
 	* @param contentStream - Stream to add Sections to
 	*/
 	private void unitDetails(PDPageContentStream contentStream) {
+		
+		boolean btwApplies = this.btwApplies.isEmpty() ? false : this.btwApplies.get();
+		SubscriptionSummary summary = new SubscriptionSummary(this.subscription, btwApplies,this.unitDescription);
+		
 		addSectionHeader(contentStream, "Description");
-		addLineWithLabel(contentStream, "Arenella-ICT 1 Month subscription", "");
-		addLineWithLabel(contentStream, "Price ( Euros ) ", "10");
-		addLineWithLabel(contentStream, "BTW ( Euros ) 21%", "2.1");
-		addLineWithLabel(contentStream, "Total to pay ( Euros )", "12.1");
+		addLineWithLabel(contentStream, summary.getDescription(), "");
+		addLineWithLabel(contentStream, "Price ( Euros )",		summary.getPrice());
+		addLineWithLabel(contentStream, summary.getBtwLabel(), 		summary.getBtwPrice());
+		addLineWithLabel(contentStream, "Total to pay ( Euros )", summary.getTotal());
 	}
+	
+	/**
+	* Class constructs the text to use for the 
+	* part of the Invoice that describes the 
+	* service and costs
+	* @author K Parkings
+	*/
+	private class SubscriptionSummary{
+		
+		private float 	price;
+		private String 	description;
+		private String 	btwLabelNL		= "BTW ( Euros ) 21%";
+		private String 	btwLabelNonNL	= "BTW NOT APPLICABLE";
+		private float 	btwPrice	 	= 0f;
+		private boolean btwApplies;
+		
+		/**
+		* Returns text for description
+		* @return description of service
+		*/
+		public String getDescription() {
+			return this.description;
+		}
+		
+		/**
+		* Returns the price to pay
+		* @return price of the service
+		*/
+		public String getPrice() {
+			return ""+this.price;
+		}
+		
+		/**
+		* Reutns text for lable of price to pay
+		* @return label for price
+		*/
+		public String getBtwLabel() {
+			return btwApplies ? this.btwLabelNL : this.btwLabelNonNL;
+		}
+		
+		/**
+		* Returns the amount of BTW tax to be paid
+		* @return BTW tax
+		*/
+		public String getBtwPrice() {
+			return btwApplies ? String.format("%.2f",btwPrice) : "";
+		}
+		
+		/**
+		* Returns the total price to be paid
+		* @return total price for service being invoiced
+		*/
+		public String getTotal() {
+			return String.format("%.2f", this.price + this.btwPrice);
+		}
+	
+		/**
+		* Construcor 
+		* @param subscription		- Subscription being invoiced
+		* @param btwApplies			- Whether or not BTW needs to be added
+		* @param unitDescription	- Description of the service being invoiced
+		 */
+		public SubscriptionSummary(RecruiterSubscription subscription, boolean btwApplies, Optional<String> unitDescription) {
+			
+			this.btwApplies = btwApplies;
+			
+			switch(subscription.getType()) {
+				case ONE_MONTH_SUBSCRIPTION:{
+					this.price =  10f;
+					this.description 	= "Arenella-ICT 1 month subscription";
+					break;
+				}
+				case THREE_MONTHS_SUBSCRIPTION:{
+					this.price =  30f;
+					this.description = "Arenella-ICT 3 month subscription";
+					break;
+				}
+				case SIX_MONTHS_SUBSCRIPTION:{
+					this.price =  60f;
+					this.description = "Arenella-ICT 6 month subscription";
+					break;
+				}
+				case YEAR_SUBSCRIPTION:{
+					this.price =  120f;
+					this.description = "Arenella-ICT 1 year subscription";
+					break;
+				}
+				default:{
+					throw new IllegalArgumentException("Cannot invoice for this subscription type " + subscription.getType());
+				}
+			
+			}
+			
+			if (unitDescription.isPresent()) {
+				this.description = unitDescription.get();
+			}
+			
+			this.btwPrice = (btwApplies ? ((this.price / 100) * 21) :  0f);
+		}
+	}
+	
+	
 
 	/**
 	* Banking Info Section

@@ -29,6 +29,7 @@ export class SubscriptionsComponent {
 		invoiceNumber:			new UntypedFormControl(''),
 		invoiceDate:			new UntypedFormControl(''),
 		unitDescription:		new UntypedFormControl(''),
+		btwApplies:				new UntypedFormControl(''),
 	});
 	
 	recruiters:Array<Recruiter>										= new Array<Recruiter>();
@@ -204,6 +205,8 @@ export class SubscriptionsComponent {
 			invoiceNumber:			new UntypedFormControl(''),
 			invoiceDate:			new UntypedFormControl(''),
 			unitDescription:		new UntypedFormControl(''),
+			btwApplies:				new UntypedFormControl(''),
+		
 		});
 		
 		this.invoiceDetailsBox.nativeElement.showModal();
@@ -214,30 +217,30 @@ export class SubscriptionsComponent {
 	*  Sets URL to generate and return Invoice for a subscription
 	*/
 	public getInvoiceUrlForInlinePdf(invoiceId:string):void{
-		let params:string 			= '?invoiceNumber='+this.invoiceRequest.invoiceNumber+'&invoiceDate='+this.invoiceRequest.invoiceDate+'&unitDescription='+this.invoiceRequest.unitDescription;
+		
+		let params:string 			= '?invoiceNumber='+this.invoiceRequest.invoiceNumber+'&invoiceDate='+this.invoiceRequest.invoiceDate+''+this.addUnitDescriptionString()+"&btwApplies="+this.invoiceRequest.btwApplies;
 		let url 					=  environment.backendUrl + 'recruiter/invoice/'+this.invoiceRequest.subscriptionId+"/"+params;
 		this.trustedResourceUrl 	= this.sanitizer.bypassSecurityTrustResourceUrl(url);
 		
 	}
 	
+	private addUnitDescriptionString():string{
+		
+		if (!this.invoiceRequest.unitDescription || this.invoiceRequest.unitDescription == ""){
+			return "";
+		}
+		
+		return '&unitDescription='+this.invoiceRequest.unitDescription;
+	}
+	
 	public isInvoiceButtonEnabled():boolean{
 		
 		let invoiceNumber 		= this.invoiceDetailsForm.get('invoiceNumber')?.value;
-		let unitDescription 	= this.invoiceDetailsForm.get('unitDescription')?.value;
-		
-		console.log("aa = " + invoiceNumber);
-		console.log("bb = " + unitDescription);
 		
 		if (!invoiceNumber || invoiceNumber.length <2){
-			console.log("cc");
 			return false;
 		}
 		
-		if (!unitDescription || unitDescription.length <2){
-			console.log("dd");
-			return false;
-		}
-		console.log("ee");
 		return true;
 		
 	}
@@ -251,6 +254,7 @@ export class SubscriptionsComponent {
 		this.invoiceRequest.invoiceNumber 		= this.invoiceDetailsForm.get('invoiceNumber')?.value;
 		this.invoiceRequest.invoiceDate 		= this.invoiceDetailsForm.get('invoiceDate')?.value;
 		this.invoiceRequest.unitDescription 	= this.invoiceDetailsForm.get('unitDescription')?.value;
+		this.invoiceRequest.btwApplies			= this.invoiceDetailsForm.get('btwApplies')?.value;
 		
 		this.getInvoiceUrlForInlinePdf(this.selectedSubscriptionAction.subscriptionId);
 			
@@ -258,6 +262,7 @@ export class SubscriptionsComponent {
 			invoiceNumber:			new UntypedFormControl(''),
 			invoiceDate:			new UntypedFormControl(''),
 			unitDescrition:			new UntypedFormControl(''),
+			btwApplies:				new UntypedFormControl(''),
 		});
 			
 		this.invoiceDetailsBox.nativeElement.close();

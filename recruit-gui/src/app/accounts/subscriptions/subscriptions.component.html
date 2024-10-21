@@ -146,6 +146,12 @@
 					</td>
 				</tr>
 				<tr>
+					<th>Apply BTW</th>
+					<td>
+						<input type="checkbox" formControlName="btwApplies"/>
+					</td>
+				</tr>
+				<tr>
 					<td></td>
 					<td>
 						<button class="btn btn-secondary invoice-box-btn-generate" [disabled]="!isInvoiceButtonEnabled()" (click)="generateInvoice()" >Generate</button> 		

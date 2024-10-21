@@ -172,12 +172,13 @@ public class RecruiterController {
 	*/
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@GetMapping(value = "recruiter/invoice/{subscriptionId}/", produces = MediaType.APPLICATION_PDF_VALUE)
-	public @ResponseBody byte[] getInvoiceForRecruiterSubscription(	@PathVariable("subscriptionId") UUID 		subscriptionId,  
-																	@RequestParam(required=true) 	String 		invoiceNumber, 
-																	@RequestParam(required=false) 	String 		unitDescription,
-																	@RequestParam(required=false) 	LocalDate 	invoiceDate) throws Exception{
+	public @ResponseBody byte[] getInvoiceForRecruiterSubscription(	@PathVariable("subscriptionId") UUID 				subscriptionId,  
+																	@RequestParam(required=true) 	String 				invoiceNumber, 
+																	@RequestParam(required=false) 	String 				unitDescription,
+																	@RequestParam(required=false) 	Optional<Boolean>	btwApplies,
+																	@RequestParam(required=false) 	LocalDate 			invoiceDate) throws Exception{
 		
-		return recruiterService.generateInvoiceForSubscription(subscriptionId, invoiceNumber, Optional.ofNullable(invoiceDate), Optional.ofNullable(unitDescription)).getByteArray();
+		return recruiterService.generateInvoiceForSubscription(subscriptionId, invoiceNumber, btwApplies, Optional.ofNullable(invoiceDate), Optional.ofNullable(unitDescription)).getByteArray();
 		
 	}
 	

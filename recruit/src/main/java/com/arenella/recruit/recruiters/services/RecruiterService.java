@@ -99,10 +99,11 @@ public interface RecruiterService {
 	* Generates Invoice for given Subscription 
 	* @param subscriptionId	 - Unique id of the subscription
 	* @param invoiceNumber	 - Unique invoice number
+	* @param btwApplies		 - Whether BTW needs to be applied to invoice
 	* @param invoiceDate     - Date to use for the invoice
 	* @param unitDescription - description of unit of service provided
 	* @return Invoice as File
 	*/
-	public ByteArrayResource generateInvoiceForSubscription(UUID subscriptionId, String invoiceNumber, Optional<LocalDate> invoiceDate, Optional<String> unitDescription);
+	public ByteArrayResource generateInvoiceForSubscription(UUID subscriptionId, String invoiceNumber, Optional<Boolean> btwApplies, Optional<LocalDate> invoiceDate, Optional<String> unitDescription);
 	
 }
