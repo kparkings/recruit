@@ -747,6 +747,7 @@
 	"create-candidate-cv-format": "Le CV doit être Word ou PDF et moins de 1 Mo",
 	"create-candidate-failure": "Impossible d'ajouter un candidat",
 	"create-candidate-success": "Vos données ont été téléchargées avec succès. Elles vont maintenant être examinées puis ajoutées au système.",
+	"CREDIT_BASED_SUBSCRIPTION": "Credit Based",
 	"CROATIA": "Croatie",
 	"CYPRUS": "Chypre",
 	"CZECH_REPUBLIC": "République tchèque",
@@ -851,6 +852,7 @@
 	"NORTHERN_EUROPE": "Europe du Nord",
 	"NORTHERN_IRELAND": "Irlande du Nord",
 	"NORWAY": "Norvège",
+	"ONE_MONTH_SUBSCRIPTION": "1 mois",
 	"PAKISTAN": "Pakistan",
 	"POLAND": "Pologne",
 	"POLISH": "Polonais",
@@ -901,6 +903,7 @@
 	"ROMANIA": "Roumanie",
 	"saved-candidate-no-longer-available": "Le candidat n'est plus disponible",
 	"Show": "Montre",
+	"SIX_MONTHS_SUBSCRIPTION": "6 mois",
 	"SLOVAKIA": "Slovaquie",
 	"SLOVENIA": "La Slovénie",
 	"SOUTHERN_EUROPE": "Europe du sud",
@@ -943,6 +946,7 @@
 	"suggestions-lang-na": "NA",
 	"SWEDEN": "Suède",
 	"SWITZERLAND": "Suisse",
+	"THREE_MONTHS_SUBSCRIPTION": "3 mois",
 	"TURKEY": "Dinde",
 	"UK": "Royaume-Uni",
 	"UKRAINE": "Ukraine",
@@ -950,5 +954,6 @@
 	"WESTERN_EUROPE": "Europe de l'Ouest",
 	"WORLD": "Monde",
 	"WORLD_REMOTE": "Monde - À distance",
+	"YEAR_SUBSCRIPTION": "1 an",
 	"yes": "Oui"
 }

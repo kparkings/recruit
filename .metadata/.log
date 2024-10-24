@@ -10382,3 +10382,396 @@ This warning can be switched off on the Team > Git > Confirmations and Warnings 
 
 !ENTRY org.eclipse.lsp4e 1 0 2024-10-21 22:16:41.083
 !MESSAGE [Info]	Angular project loading finished
+
+!ENTRY com.genuitec.eclipse.theming.ui 4 0 2024-10-22 23:41:58.360
+!MESSAGE www.genuitec.com
+!STACK 0
+java.net.UnknownHostException: www.genuitec.com
+	at java.base/sun.nio.ch.NioSocketImpl.connect(NioSocketImpl.java:567)
+	at java.base/java.net.SocksSocketImpl.connect(SocksSocketImpl.java:327)
+	at java.base/java.net.Socket.connect(Socket.java:633)
+	at java.base/sun.security.ssl.SSLSocketImpl.connect(SSLSocketImpl.java:299)
+	at java.base/sun.security.ssl.BaseSSLSocketImpl.connect(BaseSSLSocketImpl.java:174)
+	at java.base/sun.net.NetworkClient.doConnect(NetworkClient.java:183)
+	at java.base/sun.net.www.http.HttpClient.openServer(HttpClient.java:498)
+	at java.base/sun.net.www.http.HttpClient.openServer(HttpClient.java:603)
+	at java.base/sun.net.www.protocol.https.HttpsClient.<init>(HttpsClient.java:266)
+	at java.base/sun.net.www.protocol.https.HttpsClient.New(HttpsClient.java:380)
+	at java.base/sun.net.www.protocol.https.AbstractDelegateHttpsURLConnection.getNewHttpClient(AbstractDelegateHttpsURLConnection.java:189)
+	at java.base/sun.net.www.protocol.http.HttpURLConnection.plainConnect0(HttpURLConnection.java:1242)
+	at java.base/sun.net.www.protocol.http.HttpURLConnection.plainConnect(HttpURLConnection.java:1128)
+	at java.base/sun.net.www.protocol.https.AbstractDelegateHttpsURLConnection.connect(AbstractDelegateHttpsURLConnection.java:175)
+	at java.base/sun.net.www.protocol.http.HttpURLConnection.getInputStream0(HttpURLConnection.java:1665)
+	at java.base/sun.net.www.protocol.http.HttpURLConnection.getInputStream(HttpURLConnection.java:1589)
+	at java.base/java.net.HttpURLConnection.getResponseCode(HttpURLConnection.java:529)
+	at java.base/sun.net.www.protocol.https.HttpsURLConnectionImpl.getResponseCode(HttpsURLConnectionImpl.java:308)
+	at com.genuitec.eclipse.theming.ui.IconDownloaderJob.getApprovedDefinitions(IconDownloaderJob.java:86)
+	at com.genuitec.eclipse.theming.ui.IconDownloaderJob.run(IconDownloaderJob.java:52)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+!SESSION 2024-10-24 11:10:20.691 -----------------------------------------------
+eclipse.buildId=4.27.0.20230309-1200
+java.version=17.0.2
+java.vendor=Oracle Corporation
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=nl_NL
+Framework arguments:  -product org.eclipse.epp.package.java.product
+Command-line arguments:  -os win32 -ws win32 -arch x86_64 -product org.eclipse.epp.package.java.product
+
+!ENTRY ch.qos.logback.classic 1 0 2024-10-24 11:10:22.709
+!MESSAGE Activated before the state location was initialized. Retry after the state location is initialized.
+
+!ENTRY ch.qos.logback.classic 1 0 2024-10-24 11:11:34.910
+!MESSAGE Logback config file: C:\eclipse-projects\recruit\.metadata\.plugins\org.eclipse.m2e.logback\logback.2.1.100.20230106-1511.xml
+
+!ENTRY org.eclipse.jface 2 0 2024-10-24 11:11:41.094
+!MESSAGE Keybinding conflicts occurred.  They may interfere with normal accelerator operation.
+!SUBENTRY 1 org.eclipse.jface 2 0 2024-10-24 11:11:41.094
+!MESSAGE A conflict occurred for CTRL+SHIFT+T:
+Binding(CTRL+SHIFT+T,
+	ParameterizedCommand(Command(org.eclipse.jdt.ui.navigate.open.type,Open Type,
+		Open a type in a Java editor,
+		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
+		WorkbenchHandlerServiceHandler("org.eclipse.jdt.ui.navigate.open.type"),
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.ui.contexts.window,,,system)
+Binding(CTRL+SHIFT+T,
+	ParameterizedCommand(Command(org.eclipse.lsp4e.symbolinworkspace,Go to Symbol in Workspace,
+		,
+		Category(org.eclipse.lsp4e.category,Language Servers,null,true),
+		WorkbenchHandlerServiceHandler("org.eclipse.lsp4e.symbolinworkspace"),
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.ui.contexts.window,,,system)
+!SUBENTRY 1 org.eclipse.jface 2 0 2024-10-24 11:11:41.094
+!MESSAGE A conflict occurred for ALT+SHIFT+R:
+Binding(ALT+SHIFT+R,
+	ParameterizedCommand(Command(org.eclipse.jdt.ui.edit.text.java.rename.element,Rename - Refactoring ,
+		Rename the selected element,
+		Category(org.eclipse.jdt.ui.category.refactoring,Refactor - Java,Java Refactoring Actions,true),
+		WorkbenchHandlerServiceHandler("org.eclipse.jdt.ui.edit.text.java.rename.element"),
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.ui.contexts.window,,,system)
+Binding(ALT+SHIFT+R,
+	ParameterizedCommand(Command(org.eclipse.ui.edit.rename,Rename,
+		Rename the selected item,
+		Category(org.eclipse.ui.category.file,File,null,true),
+		WorkbenchHandlerServiceHandler("org.eclipse.ui.edit.rename"),
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.ui.contexts.window,,,system)
+
+!ENTRY org.eclipse.lsp4e 1 0 2024-10-24 11:11:48.237
+!MESSAGE [Info]	ESLint server running in node v18.13.0
+
+!ENTRY org.eclipse.lsp4e 2 0 2024-10-24 11:11:48.399
+!MESSAGE [Warning]	Using Typescript version (user-setting) 4.9.5 from path "C:\Users\Hp\.p2\pool\plugins\org.eclipse.wildwebdeveloper_1.0.2.202302250247\node_modules\typescript\lib\tsserver.js"
+
+!ENTRY org.eclipse.lsp4e 1 0 2024-10-24 11:11:48.513
+!MESSAGE [Info]	Typescript Server version info: {version=4.9.5, source=user-setting}
+
+!ENTRY org.eclipse.egit.ui 2 0 2024-10-24 11:11:58.910
+!MESSAGE Warning: The environment variable HOME is not set. The following directory will be used to store the Git
+user global configuration and to define the default location to store repositories: 'C:\Users\Hp'. If this is
+not correct please set the HOME environment variable and restart Eclipse. Otherwise Git for Windows and
+EGit might behave differently since they see different configuration options.
+This warning can be switched off on the Team > Git > Confirmations and Warnings preference page.
+
+!ENTRY org.eclipse.lsp4e 1 0 2024-10-24 11:12:00.443
+!MESSAGE [Info]	No ES Libary found for file: file:///C:/eclipse-projects/recruit/recruit-gui/src/app/generate-invoice-request.ts
+
+!ENTRY org.eclipse.lsp4e 1 0 2024-10-24 11:12:28.212
+!MESSAGE [Info]	Angular project loading started
+
+!ENTRY org.eclipse.lsp4e 1 0 2024-10-24 11:12:28.215
+!MESSAGE [Info]	Angular project loading finished
+!SESSION 2024-10-24 11:55:57.173 -----------------------------------------------
+eclipse.buildId=4.27.0.20230309-1200
+java.version=17.0.2
+java.vendor=Oracle Corporation
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=nl_NL
+Framework arguments:  -product org.eclipse.epp.package.java.product
+Command-line arguments:  -os win32 -ws win32 -arch x86_64 -product org.eclipse.epp.package.java.product
+
+!ENTRY ch.qos.logback.classic 1 0 2024-10-24 11:55:59.543
+!MESSAGE Activated before the state location was initialized. Retry after the state location is initialized.
+
+!ENTRY ch.qos.logback.classic 1 0 2024-10-24 11:56:09.642
+!MESSAGE Logback config file: C:\eclipse-projects\recruit\.metadata\.plugins\org.eclipse.m2e.logback\logback.2.1.100.20230106-1511.xml
+
+!ENTRY org.eclipse.jface 2 0 2024-10-24 11:56:16.397
+!MESSAGE Keybinding conflicts occurred.  They may interfere with normal accelerator operation.
+!SUBENTRY 1 org.eclipse.jface 2 0 2024-10-24 11:56:16.398
+!MESSAGE A conflict occurred for CTRL+SHIFT+T:
+Binding(CTRL+SHIFT+T,
+	ParameterizedCommand(Command(org.eclipse.jdt.ui.navigate.open.type,Open Type,
+		Open a type in a Java editor,
+		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
+		WorkbenchHandlerServiceHandler("org.eclipse.jdt.ui.navigate.open.type"),
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.ui.contexts.window,,,system)
+Binding(CTRL+SHIFT+T,
+	ParameterizedCommand(Command(org.eclipse.lsp4e.symbolinworkspace,Go to Symbol in Workspace,
+		,
+		Category(org.eclipse.lsp4e.category,Language Servers,null,true),
+		WorkbenchHandlerServiceHandler("org.eclipse.lsp4e.symbolinworkspace"),
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.ui.contexts.window,,,system)
+!SUBENTRY 1 org.eclipse.jface 2 0 2024-10-24 11:56:16.398
+!MESSAGE A conflict occurred for ALT+SHIFT+R:
+Binding(ALT+SHIFT+R,
+	ParameterizedCommand(Command(org.eclipse.jdt.ui.edit.text.java.rename.element,Rename - Refactoring ,
+		Rename the selected element,
+		Category(org.eclipse.jdt.ui.category.refactoring,Refactor - Java,Java Refactoring Actions,true),
+		WorkbenchHandlerServiceHandler("org.eclipse.jdt.ui.edit.text.java.rename.element"),
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.ui.contexts.window,,,system)
+Binding(ALT+SHIFT+R,
+	ParameterizedCommand(Command(org.eclipse.ui.edit.rename,Rename,
+		Rename the selected item,
+		Category(org.eclipse.ui.category.file,File,null,true),
+		WorkbenchHandlerServiceHandler("org.eclipse.ui.edit.rename"),
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.ui.contexts.window,,,system)
+
+!ENTRY org.eclipse.lsp4e 1 0 2024-10-24 11:56:24.394
+!MESSAGE [Info]	ESLint server running in node v18.13.0
+
+!ENTRY org.eclipse.lsp4e 2 0 2024-10-24 11:56:24.619
+!MESSAGE [Warning]	Using Typescript version (user-setting) 4.9.5 from path "C:\Users\Hp\.p2\pool\plugins\org.eclipse.wildwebdeveloper_1.0.2.202302250247\node_modules\typescript\lib\tsserver.js"
+
+!ENTRY org.eclipse.lsp4e 1 0 2024-10-24 11:56:24.699
+!MESSAGE [Info]	Typescript Server version info: {version=4.9.5, source=user-setting}
+
+!ENTRY org.eclipse.egit.ui 2 0 2024-10-24 11:56:27.017
+!MESSAGE Warning: The environment variable HOME is not set. The following directory will be used to store the Git
+user global configuration and to define the default location to store repositories: 'C:\Users\Hp'. If this is
+not correct please set the HOME environment variable and restart Eclipse. Otherwise Git for Windows and
+EGit might behave differently since they see different configuration options.
+This warning can be switched off on the Team > Git > Confirmations and Warnings preference page.
+
+!ENTRY org.eclipse.lsp4e 1 0 2024-10-24 11:56:29.422
+!MESSAGE [Info]	No ES Libary found for file: file:///C:/eclipse-projects/recruit/recruit-gui/src/app/generate-invoice-request.ts
+
+!ENTRY org.eclipse.lsp4e 1 0 2024-10-24 11:57:30.551
+!MESSAGE [Info]	Angular project loading started
+
+!ENTRY org.eclipse.lsp4e 1 0 2024-10-24 11:57:30.554
+!MESSAGE [Info]	Angular project loading finished
+
+!ENTRY org.eclipse.equinox.p2.repository 2 0 2024-10-24 11:58:09.954
+!MESSAGE Using unsafe http transport to retrieve http://download.eclipse.org/usssdk/updates/release/latest, see CVE-2021-41033. Consider using https instead.
+
+!ENTRY org.eclipse.equinox.p2.repository 2 0 2024-10-24 11:58:10.966
+!MESSAGE Using unsafe http transport to retrieve http://download.eclipse.org/usssdk/updates/release/latest, see CVE-2021-41033. Consider using https instead.
+
+!ENTRY org.eclipse.equinox.p2.repository 2 0 2024-10-24 11:58:12.585
+!MESSAGE Using unsafe http transport to retrieve http://download.eclipse.org/usssdk/drops/release/1.2.2/content.xml.xz, see CVE-2021-41033. Consider using https instead.
+
+!ENTRY org.eclipse.equinox.p2.repository 2 0 2024-10-24 11:58:14.195
+!MESSAGE Using unsafe http transport to retrieve http://downloads.genuitec.com/downloads/products/devstyle/updates/ds20230615, see CVE-2021-41033. Consider using https instead.
+
+!ENTRY org.eclipse.equinox.p2.repository 2 0 2024-10-24 11:58:24.713
+!MESSAGE Using unsafe http transport to retrieve http://www.genuitec.com/updates/devstyle/ci/, see CVE-2021-41033. Consider using https instead.
+
+!ENTRY org.eclipse.equinox.p2.repository 2 0 2024-10-24 11:58:48.522
+!MESSAGE Using unsafe http transport to retrieve http://download.eclipse.org/tools/orbit/downloads/drops/R20150821153341/repository/, see CVE-2021-41033. Consider using https instead.
+
+!ENTRY org.eclipse.equinox.p2.operations 4 0 2024-10-24 11:59:12.795
+!MESSAGE Operation details
+!SUBENTRY 1 org.eclipse.equinox.p2.director 4 10054 2024-10-24 11:59:12.795
+!MESSAGE Cannot complete the install because of a conflicting dependency.
+!SUBENTRY 2 org.eclipse.equinox.p2.director 4 0 2024-10-24 11:59:12.795
+!MESSAGE Software being installed: DevStyle with CodeTogether Bundle 2024.3.0.202409191846 (com.genuitec.eclipse.theming.feature.feature.group 2024.3.0.202409191846)
+!SUBENTRY 2 org.eclipse.equinox.p2.director 4 0 2024-10-24 11:59:12.795
+!MESSAGE Software currently installed: DevStyle (includes Darkest Dark Theme) 1.11.0.202306151725 (com.genuitec.eclipse.theming.core.feature.feature.group 1.11.0.202306151725)
+!SUBENTRY 2 org.eclipse.equinox.p2.director 4 1 2024-10-24 11:59:12.795
+!MESSAGE Only one of the following can be installed at once: 
+!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2024-10-24 11:59:12.795
+!MESSAGE DevStyle Theming - Scrollbar for Windows and Linux 2024.3.0.202409191846 (com.genuitec.eclipse.theming.scrollbar.win 2024.3.0.202409191846)
+!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2024-10-24 11:59:12.795
+!MESSAGE Flat Scrollbar - Windows and Linux 1.11.0.202306151725 (com.genuitec.eclipse.theming.scrollbar.win 1.11.0.202306151725)
+!SUBENTRY 2 org.eclipse.equinox.p2.director 4 1 2024-10-24 11:59:12.795
+!MESSAGE Cannot satisfy dependency:
+!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2024-10-24 11:59:12.795
+!MESSAGE From: DevStyle (includes Darkest Dark Theme) 1.11.0.202306151725 (com.genuitec.eclipse.theming.core.feature.feature.group 1.11.0.202306151725)
+!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2024-10-24 11:59:12.795
+!MESSAGE To: org.eclipse.equinox.p2.iu; com.genuitec.eclipse.theming.scrollbar.win [1.11.0.202306151725,1.11.0.202306151725]
+!SUBENTRY 2 org.eclipse.equinox.p2.director 4 1 2024-10-24 11:59:12.795
+!MESSAGE Cannot satisfy dependency:
+!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2024-10-24 11:59:12.795
+!MESSAGE From: DevStyle (includes Darkest Dark Theme) 2024.3.0.202409191846 (com.genuitec.eclipse.theming.core.feature.feature.group 2024.3.0.202409191846)
+!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2024-10-24 11:59:12.795
+!MESSAGE To: org.eclipse.equinox.p2.iu; com.genuitec.eclipse.theming.scrollbar.win [2024.3.0.202409191846,2024.3.0.202409191846]
+!SUBENTRY 2 org.eclipse.equinox.p2.director 4 1 2024-10-24 11:59:12.795
+!MESSAGE Cannot satisfy dependency:
+!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2024-10-24 11:59:12.795
+!MESSAGE From: DevStyle with CodeTogether Bundle 2024.3.0.202409191846 (com.genuitec.eclipse.theming.feature.feature.group 2024.3.0.202409191846)
+!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2024-10-24 11:59:12.795
+!MESSAGE To: org.eclipse.equinox.p2.iu; com.genuitec.eclipse.theming.core.feature.feature.group [2024.3.0.202409191846,2024.3.0.202409191846]
+
+!ENTRY org.eclipse.equinox.p2.operations 4 0 2024-10-24 11:59:12.944
+!MESSAGE Operation details
+!SUBENTRY 1 org.eclipse.equinox.p2.director 4 10054 2024-10-24 11:59:12.944
+!MESSAGE Cannot complete the install because of a conflicting dependency.
+!SUBENTRY 2 org.eclipse.equinox.p2.director 4 0 2024-10-24 11:59:12.944
+!MESSAGE Software being installed: DevStyle with CodeTogether Bundle 2024.3.0.202409191846 (com.genuitec.eclipse.theming.feature.feature.group 2024.3.0.202409191846)
+!SUBENTRY 2 org.eclipse.equinox.p2.director 4 0 2024-10-24 11:59:12.944
+!MESSAGE Software currently installed: DevStyle (includes Darkest Dark Theme) 1.11.0.202306151725 (com.genuitec.eclipse.theming.core.feature.feature.group 1.11.0.202306151725)
+!SUBENTRY 2 org.eclipse.equinox.p2.director 4 1 2024-10-24 11:59:12.944
+!MESSAGE Only one of the following can be installed at once: 
+!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2024-10-24 11:59:12.944
+!MESSAGE DevStyle Theming - Scrollbar for Windows and Linux 2024.3.0.202409191846 (com.genuitec.eclipse.theming.scrollbar.win 2024.3.0.202409191846)
+!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2024-10-24 11:59:12.944
+!MESSAGE Flat Scrollbar - Windows and Linux 1.11.0.202306151725 (com.genuitec.eclipse.theming.scrollbar.win 1.11.0.202306151725)
+!SUBENTRY 2 org.eclipse.equinox.p2.director 4 1 2024-10-24 11:59:12.944
+!MESSAGE Cannot satisfy dependency:
+!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2024-10-24 11:59:12.944
+!MESSAGE From: DevStyle (includes Darkest Dark Theme) 1.11.0.202306151725 (com.genuitec.eclipse.theming.core.feature.feature.group 1.11.0.202306151725)
+!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2024-10-24 11:59:12.944
+!MESSAGE To: org.eclipse.equinox.p2.iu; com.genuitec.eclipse.theming.scrollbar.win [1.11.0.202306151725,1.11.0.202306151725]
+!SUBENTRY 2 org.eclipse.equinox.p2.director 4 1 2024-10-24 11:59:12.944
+!MESSAGE Cannot satisfy dependency:
+!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2024-10-24 11:59:12.944
+!MESSAGE From: DevStyle (includes Darkest Dark Theme) 2024.3.0.202409191846 (com.genuitec.eclipse.theming.core.feature.feature.group 2024.3.0.202409191846)
+!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2024-10-24 11:59:12.944
+!MESSAGE To: org.eclipse.equinox.p2.iu; com.genuitec.eclipse.theming.scrollbar.win [2024.3.0.202409191846,2024.3.0.202409191846]
+!SUBENTRY 2 org.eclipse.equinox.p2.director 4 1 2024-10-24 11:59:12.944
+!MESSAGE Cannot satisfy dependency:
+!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2024-10-24 11:59:12.944
+!MESSAGE From: DevStyle with CodeTogether Bundle 2024.3.0.202409191846 (com.genuitec.eclipse.theming.feature.feature.group 2024.3.0.202409191846)
+!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2024-10-24 11:59:12.944
+!MESSAGE To: org.eclipse.equinox.p2.iu; com.genuitec.eclipse.theming.core.feature.feature.group [2024.3.0.202409191846,2024.3.0.202409191846]
+
+!ENTRY org.eclipse.equinox.p2.operations 4 0 2024-10-24 11:59:18.502
+!MESSAGE Operation details
+!SUBENTRY 1 org.eclipse.equinox.p2.director 4 10054 2024-10-24 11:59:18.502
+!MESSAGE Cannot complete the install because of a conflicting dependency.
+!SUBENTRY 2 org.eclipse.equinox.p2.director 4 0 2024-10-24 11:59:18.502
+!MESSAGE Software being installed: DevStyle with CodeTogether Bundle 2024.3.0.202409191846 (com.genuitec.eclipse.theming.feature.feature.group 2024.3.0.202409191846)
+!SUBENTRY 2 org.eclipse.equinox.p2.director 4 0 2024-10-24 11:59:18.502
+!MESSAGE Software currently installed: DevStyle (includes Darkest Dark Theme) 1.11.0.202306151725 (com.genuitec.eclipse.theming.core.feature.feature.group 1.11.0.202306151725)
+!SUBENTRY 2 org.eclipse.equinox.p2.director 4 1 2024-10-24 11:59:18.502
+!MESSAGE Only one of the following can be installed at once: 
+!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2024-10-24 11:59:18.502
+!MESSAGE DevStyle Theming - Scrollbar for Windows and Linux 2024.3.0.202409191846 (com.genuitec.eclipse.theming.scrollbar.win 2024.3.0.202409191846)
+!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2024-10-24 11:59:18.502
+!MESSAGE Flat Scrollbar - Windows and Linux 1.11.0.202306151725 (com.genuitec.eclipse.theming.scrollbar.win 1.11.0.202306151725)
+!SUBENTRY 2 org.eclipse.equinox.p2.director 4 1 2024-10-24 11:59:18.502
+!MESSAGE Cannot satisfy dependency:
+!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2024-10-24 11:59:18.502
+!MESSAGE From: DevStyle (includes Darkest Dark Theme) 1.11.0.202306151725 (com.genuitec.eclipse.theming.core.feature.feature.group 1.11.0.202306151725)
+!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2024-10-24 11:59:18.502
+!MESSAGE To: org.eclipse.equinox.p2.iu; com.genuitec.eclipse.theming.scrollbar.win [1.11.0.202306151725,1.11.0.202306151725]
+!SUBENTRY 2 org.eclipse.equinox.p2.director 4 1 2024-10-24 11:59:18.502
+!MESSAGE Cannot satisfy dependency:
+!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2024-10-24 11:59:18.502
+!MESSAGE From: DevStyle (includes Darkest Dark Theme) 2024.3.0.202409191846 (com.genuitec.eclipse.theming.core.feature.feature.group 2024.3.0.202409191846)
+!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2024-10-24 11:59:18.502
+!MESSAGE To: org.eclipse.equinox.p2.iu; com.genuitec.eclipse.theming.scrollbar.win [2024.3.0.202409191846,2024.3.0.202409191846]
+!SUBENTRY 2 org.eclipse.equinox.p2.director 4 1 2024-10-24 11:59:18.502
+!MESSAGE Cannot satisfy dependency:
+!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2024-10-24 11:59:18.502
+!MESSAGE From: DevStyle with CodeTogether Bundle 2024.3.0.202409191846 (com.genuitec.eclipse.theming.feature.feature.group 2024.3.0.202409191846)
+!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2024-10-24 11:59:18.502
+!MESSAGE To: org.eclipse.equinox.p2.iu; com.genuitec.eclipse.theming.core.feature.feature.group [2024.3.0.202409191846,2024.3.0.202409191846]
+
+!ENTRY org.eclipse.equinox.p2.operations 4 0 2024-10-24 11:59:18.507
+!MESSAGE Operation details
+!SUBENTRY 1 org.eclipse.equinox.p2.director 4 10054 2024-10-24 11:59:18.507
+!MESSAGE Cannot complete the install because of a conflicting dependency.
+!SUBENTRY 2 org.eclipse.equinox.p2.director 4 0 2024-10-24 11:59:18.507
+!MESSAGE Software being installed: DevStyle with CodeTogether Bundle 2024.3.0.202409191846 (com.genuitec.eclipse.theming.feature.feature.group 2024.3.0.202409191846)
+!SUBENTRY 2 org.eclipse.equinox.p2.director 4 0 2024-10-24 11:59:18.507
+!MESSAGE Software currently installed: DevStyle (includes Darkest Dark Theme) 1.11.0.202306151725 (com.genuitec.eclipse.theming.core.feature.feature.group 1.11.0.202306151725)
+!SUBENTRY 2 org.eclipse.equinox.p2.director 4 1 2024-10-24 11:59:18.507
+!MESSAGE Only one of the following can be installed at once: 
+!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2024-10-24 11:59:18.507
+!MESSAGE DevStyle Theming - Scrollbar for Windows and Linux 2024.3.0.202409191846 (com.genuitec.eclipse.theming.scrollbar.win 2024.3.0.202409191846)
+!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2024-10-24 11:59:18.507
+!MESSAGE Flat Scrollbar - Windows and Linux 1.11.0.202306151725 (com.genuitec.eclipse.theming.scrollbar.win 1.11.0.202306151725)
+!SUBENTRY 2 org.eclipse.equinox.p2.director 4 1 2024-10-24 11:59:18.507
+!MESSAGE Cannot satisfy dependency:
+!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2024-10-24 11:59:18.507
+!MESSAGE From: DevStyle (includes Darkest Dark Theme) 1.11.0.202306151725 (com.genuitec.eclipse.theming.core.feature.feature.group 1.11.0.202306151725)
+!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2024-10-24 11:59:18.507
+!MESSAGE To: org.eclipse.equinox.p2.iu; com.genuitec.eclipse.theming.scrollbar.win [1.11.0.202306151725,1.11.0.202306151725]
+!SUBENTRY 2 org.eclipse.equinox.p2.director 4 1 2024-10-24 11:59:18.507
+!MESSAGE Cannot satisfy dependency:
+!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2024-10-24 11:59:18.507
+!MESSAGE From: DevStyle (includes Darkest Dark Theme) 2024.3.0.202409191846 (com.genuitec.eclipse.theming.core.feature.feature.group 2024.3.0.202409191846)
+!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2024-10-24 11:59:18.507
+!MESSAGE To: org.eclipse.equinox.p2.iu; com.genuitec.eclipse.theming.scrollbar.win [2024.3.0.202409191846,2024.3.0.202409191846]
+!SUBENTRY 2 org.eclipse.equinox.p2.director 4 1 2024-10-24 11:59:18.507
+!MESSAGE Cannot satisfy dependency:
+!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2024-10-24 11:59:18.507
+!MESSAGE From: DevStyle with CodeTogether Bundle 2024.3.0.202409191846 (com.genuitec.eclipse.theming.feature.feature.group 2024.3.0.202409191846)
+!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2024-10-24 11:59:18.507
+!MESSAGE To: org.eclipse.equinox.p2.iu; com.genuitec.eclipse.theming.core.feature.feature.group [2024.3.0.202409191846,2024.3.0.202409191846]
+
+!ENTRY org.eclipse.equinox.p2.repository 2 0 2024-10-24 11:59:37.897
+!MESSAGE Using unsafe http transport to retrieve http://download.eclipse.org/usssdk/updates/release/latest, see CVE-2021-41033. Consider using https instead.
+
+!ENTRY org.eclipse.equinox.p2.repository 2 0 2024-10-24 11:59:38.946
+!MESSAGE Using unsafe http transport to retrieve http://download.eclipse.org/usssdk/drops/release/1.2.2/artifacts.xml.xz, see CVE-2021-41033. Consider using https instead.
+
+!ENTRY org.eclipse.equinox.p2.repository 2 0 2024-10-24 11:59:40.239
+!MESSAGE Using unsafe http transport to retrieve http://downloads.genuitec.com/downloads/products/devstyle/updates/ds20230615, see CVE-2021-41033. Consider using https instead.
+
+!ENTRY org.eclipse.equinox.p2.repository 2 0 2024-10-24 11:59:46.528
+!MESSAGE Using unsafe http transport to retrieve http://www.genuitec.com/updates/devstyle/ci/, see CVE-2021-41033. Consider using https instead.
+
+!ENTRY org.eclipse.equinox.p2.repository 2 0 2024-10-24 11:59:58.532
+!MESSAGE Using unsafe http transport to retrieve http://download.eclipse.org/tools/orbit/downloads/drops/R20150821153341/repository/, see CVE-2021-41033. Consider using https instead.
+
+!ENTRY org.eclipse.equinox.p2.repository 2 0 2024-10-24 12:01:36.652
+!MESSAGE Using unsafe http transport to retrieve http://download.jboss.org/jbosstools/targetplatforms/jbosstoolstarget/4.63.0.Final/REPO/, see CVE-2021-41033. Consider using https instead.
+
+!ENTRY org.eclipse.equinox.p2.repository 2 0 2024-10-24 12:01:37.440
+!MESSAGE Using unsafe http transport to retrieve http://download.jboss.org/jbosstools/static/targetplatforms/jbosstoolstarget/4.63.0.Final/REPO/, see CVE-2021-41033. Consider using https instead.
+
+!ENTRY org.eclipse.equinox.p2.repository 2 0 2024-10-24 12:01:37.820
+!MESSAGE Using unsafe http transport to retrieve http://download.jboss.org/jbosstools/static/neon/stable/updates/core/4.4.4.Final/artifacts.xml.xz, see CVE-2021-41033. Consider using https instead.
+
+!ENTRY org.eclipse.equinox.p2.repository 2 0 2024-10-24 12:01:38.265
+!MESSAGE Using unsafe http transport to retrieve http://download.jboss.org/jbosstools/static/neon/stable/updates/central/4.4.4.Final/artifacts.xml.xz, see CVE-2021-41033. Consider using https instead.
+
+!ENTRY org.eclipse.equinox.p2.repository 2 0 2024-10-24 12:01:38.457
+!MESSAGE Using unsafe http transport to retrieve http://download.jboss.org/jbosstools/targetplatforms/jbtcentraltarget/4.63.0.Final-SNAPSHOT/REPO/, see CVE-2021-41033. Consider using https instead.
+
+!ENTRY org.eclipse.equinox.p2.repository 2 0 2024-10-24 12:01:38.665
+!MESSAGE Using unsafe http transport to retrieve http://download.jboss.org/jbosstools/neon/stable/updates/integration-stack/, see CVE-2021-41033. Consider using https instead.
+
+!ENTRY org.eclipse.equinox.p2.repository 2 0 2024-10-24 12:01:39.256
+!MESSAGE Using unsafe http transport to retrieve http://download.jboss.org/jbosstools/neon/stable/updates/integration-stack/4.4.3.Final/artifacts.xml.xz, see CVE-2021-41033. Consider using https instead.
+
+!ENTRY org.eclipse.equinox.p2.repository 2 0 2024-10-24 12:01:39.496
+!MESSAGE Using unsafe http transport to retrieve http://download.jboss.org/jbosstools/targetplatforms/jbtistarget/4.4.3.Final/jbtis/REPO/, see CVE-2021-41033. Consider using https instead.
+
+!ENTRY org.eclipse.equinox.p2.repository 2 0 2024-10-24 12:01:40.101
+!MESSAGE Using unsafe http transport to retrieve http://download.jboss.org/jbosstools/targetplatforms/jbosstoolstarget/4.63.0.Final/REPO/, see CVE-2021-41033. Consider using https instead.
+
+!ENTRY org.eclipse.equinox.p2.repository 2 0 2024-10-24 12:01:40.725
+!MESSAGE Using unsafe http transport to retrieve http://download.jboss.org/jbosstools/static/targetplatforms/jbosstoolstarget/4.63.0.Final/REPO/, see CVE-2021-41033. Consider using https instead.
+
+!ENTRY org.eclipse.equinox.p2.repository 2 0 2024-10-24 12:01:41.313
+!MESSAGE Using unsafe http transport to retrieve http://download.jboss.org/jbosstools/static/neon/stable/updates/core/4.4.4.Final/content.xml.xz, see CVE-2021-41033. Consider using https instead.
+
+!ENTRY org.eclipse.equinox.p2.repository 2 0 2024-10-24 12:01:41.920
+!MESSAGE Using unsafe http transport to retrieve http://download.jboss.org/jbosstools/static/neon/stable/updates/central/4.4.4.Final/content.xml.xz, see CVE-2021-41033. Consider using https instead.
+
+!ENTRY org.eclipse.equinox.p2.repository 2 0 2024-10-24 12:01:42.134
+!MESSAGE Using unsafe http transport to retrieve http://download.jboss.org/jbosstools/targetplatforms/jbtcentraltarget/4.63.0.Final-SNAPSHOT/REPO/, see CVE-2021-41033. Consider using https instead.
+
+!ENTRY org.eclipse.equinox.p2.repository 2 0 2024-10-24 12:01:42.374
+!MESSAGE Using unsafe http transport to retrieve http://download.jboss.org/jbosstools/neon/stable/updates/integration-stack/, see CVE-2021-41033. Consider using https instead.
+
+!ENTRY org.eclipse.equinox.p2.repository 2 0 2024-10-24 12:01:43.028
+!MESSAGE Using unsafe http transport to retrieve http://download.jboss.org/jbosstools/neon/stable/updates/integration-stack/4.4.3.Final/content.xml.xz, see CVE-2021-41033. Consider using https instead.
+
+!ENTRY org.eclipse.equinox.p2.repository 2 0 2024-10-24 12:01:43.303
+!MESSAGE Using unsafe http transport to retrieve http://download.jboss.org/jbosstools/targetplatforms/jbtistarget/4.4.3.Final/jbtis/REPO/, see CVE-2021-41033. Consider using https instead.

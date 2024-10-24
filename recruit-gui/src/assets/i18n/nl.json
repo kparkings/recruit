@@ -747,6 +747,7 @@
 	"create-candidate-cv-format": "CV moet Word of PDF zijn en minder dan 1 MB groot",
 	"create-candidate-failure": "Kan kandidaat niet toevoegen",
 	"create-candidate-success": "Uw gegevens zijn succesvol geüpload. Ze worden nu beoordeeld en aan het systeem toegevoegd",
+	"CREDIT_BASED_SUBSCRIPTION": "Credit Based",
 	"CROATIA": "Kroatie",
 	"CYPRUS": "Cyprus",
 	"CZECH_REPUBLIC": "Tsjechische Republiek",
@@ -851,6 +852,7 @@
 	"NORTHERN_EUROPE": "Noord-Europa",
 	"NORTHERN_IRELAND": "Noord-Ierland",
 	"NORWAY": "Noorwegen",
+	"ONE_MONTH_SUBSCRIPTION": "1 maand",
 	"PAKISTAN": "Pakistan",
 	"POLAND": "Polen",
 	"POLISH": "Pools",
@@ -901,6 +903,7 @@
 	"ROMANIA": "Roemenië",
 	"saved-candidate-no-longer-available": "Kandidaat niet langer beschikbaar",
 	"Show": "Laten zien",
+	"SIX_MONTHS_SUBSCRIPTION": "6 maanden",
 	"SLOVAKIA": "Slowakije",
 	"SLOVENIA": "Slovenië",
 	"SOUTHERN_EUROPE": "Zuid-Europa",
@@ -943,6 +946,7 @@
 	"suggestions-lang-na": "NA",
 	"SWEDEN": "Zweden",
 	"SWITZERLAND": "Zwitserland",
+	"THREE_MONTHS_SUBSCRIPTION": "3 maanden",
 	"TURKEY": "Kalkoen",
 	"UK": "Verenigd Koninkrijk",
 	"UKRAINE": "Oekraïne",
@@ -950,5 +954,6 @@
 	"WESTERN_EUROPE": "West-Europa",
 	"WORLD": "Wereld",
 	"WORLD_REMOTE": "Wereld - Remote",
+	"YEAR_SUBSCRIPTION": "1 jaar",
 	"yes": "Ja"
 }

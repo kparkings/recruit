@@ -278,21 +278,21 @@
 	</div>
 	<div class="modal-body">
 		<form [formGroup]="filterTypeFormGroup">	
+		
 			<table style="width:50%; margin-left:auto; margin-right:auto;">
-			
-				<tr class="filter-type-opt" (click)="closeSearchTypeBox()">
+				<tr class="filter-type-opt" (click)="closeSearchTypeBox('FUNCTION')">
 					<td style="padding:10px;"><input type="radio"  value="FUNCTION" formControlName="searchType"></td>
 					<td style="text-align:left;font-weight:bold;"><label class="radio-button_label">{{'arenella-suggestions-search-type-function' | translate}}</label></td>
 				</tr>
-				<tr class="filter-type-opt" (click)="closeSearchTypeBox()">
+				<tr class="filter-type-opt" (click)="closeSearchTypeBox('NAME')">
 					<td style="padding:10px;"><input type="radio" value="NAME" formControlName="searchType"></td>
 					<td style="text-align:left;font-weight:bold;"><label class="radio-button_label">{{'arenella-suggestions-search-type-name' | translate}}</label></td>
 				</tr>
-				<tr class="filter-type-opt" (click)="closeSearchTypeBox()">
+				<tr class="filter-type-opt" (click)="closeSearchTypeBox('EMAIL')">
 					<td style="padding:10px;"><input type="radio" value="EMAIL" formControlName="searchType"></td>
 					<td style="text-align:left;font-weight:bold;"><label class="radio-button_label">{{'arenella-suggestions-search-type-email' | translate}}</label></td>
 				</tr>
-				<tr class="filter-type-opt" (click)="closeSearchTypeBox()">
+				<tr class="filter-type-opt" (click)="closeSearchTypeBox('CANDIDATE_ID')">
 					<td style="padding:10px;"><input type="radio" value="CANDIDATE_ID" formControlName="searchType"></td>
 					<td style="text-align:left;font-weight:bold;"><label class="radio-button_label">{{'arenella-suggestions-search-type-candidate_id' | translate}}</label></td>
 				</tr>

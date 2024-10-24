@@ -160,6 +160,7 @@
 	.subscription-details table td{
 		width:30%;
 		padding:10px;
+		word-break: break-all;
 	}
 	
 	.mobile{

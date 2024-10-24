@@ -1207,7 +1207,8 @@ export class SuggestionsComponent implements OnInit {
 		this.FIRST_NAME_DEFAULT 	= this.translate.instant('arenella-suggestions-search-type-name-firstname-default');
 		this.SURNAME_DEFAULT 		= this.translate.instant('arenella-suggestions-search-type-name-surname-default');
 		
-		this.resetSearhFields();
+		
+		
 		this.searchTypeFilterSelectionModal.nativeElement.showModal();;
 	}
 	
@@ -1259,7 +1260,9 @@ export class SuggestionsComponent implements OnInit {
 	/**
 	* Closes the searchTypeFilterSelectionModal modal box 
 	*/
-	public closeSearchTypeBox():void{
+	public closeSearchTypeBox(type:string):void{
+		this.resetSearhFields();
+		this.filterTypeFormGroup.get('searchType')?.setValue(type);
 		this.searchTypeFilterSelectionModal.nativeElement.close();
 	}
 	

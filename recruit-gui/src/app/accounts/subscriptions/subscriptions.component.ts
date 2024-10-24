@@ -9,6 +9,7 @@ import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { GenerateInvoiceRequest } 				from 'src/app/generate-invoice-request';
 import { CurriculumService }					from '../../curriculum.service';
 import { DomSanitizer, SafeResourceUrl } 		from '@angular/platform-browser';
+import { TranslateService } 					from '@ngx-translate/core';
 
 @Component({
   selector: 'app-subscriptions',
@@ -45,11 +46,13 @@ export class SubscriptionsComponent {
 	/**
 	* Constructor
 	*/
-	constructor(private router: Router, private recruiterService:RecruiterService, public curriculumService:CurriculumService, private sanitizer: 				DomSanitizer,){
+	constructor(private router: Router, private recruiterService:RecruiterService, public curriculumService:CurriculumService, private sanitizer:DomSanitizer,private translate:TranslateService){
 		this.trustedResourceUrl = this.sanitizer.bypassSecurityTrustResourceUrl('');
 		
 		this.fetchRecruiters();
+		
 	}
+	
 
 	/**
 	* Update Recruiters subscription

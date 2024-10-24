@@ -747,6 +747,7 @@
 	"create-candidate-cv-format": "CV must be Word or PDF and less than 1MB",
 	"create-candidate-failure": "Unable to add Candidate",
 	"create-candidate-success": "Your details have been successfully uploaded. They will now be reviewed and added to the system",
+	"CREDIT_BASED_SUBSCRIPTION": "Credit Based",
 	"CROATIA": "Croatia",
 	"CYPRUS": "Cyprus",
 	"CZECH_REPUBLIC": "Czech Republic",
@@ -851,6 +852,7 @@
 	"NORTHERN_EUROPE": "Northern Europe",
 	"NORTHERN_IRELAND": "Northern Ireland",
 	"NORWAY": "Norway",
+	"ONE_MONTH_SUBSCRIPTION": "1 Month",
 	"PAKISTAN": "Pakistan",
 	"POLAND": "Poland",
 	"POLISH": "Polish",
@@ -901,6 +903,7 @@
 	"ROMANIA": "Romania",
 	"saved-candidate-no-longer-available": "Candidate No Longer Available",
 	"Show": "Show",
+	"SIX_MONTHS_SUBSCRIPTION": "6 Months",
 	"SLOVAKIA": "Slovakia",
 	"SLOVENIA": "Slovenia",
 	"SOUTHERN_EUROPE": "Southern Europe",
@@ -943,6 +946,7 @@
 	"suggestions-lang-na": "NA",
 	"SWEDEN": "Sweeden",
 	"SWITZERLAND": "Switzerland",
+	"THREE_MONTHS_SUBSCRIPTION": "3 Months",
 	"TURKEY": "Turkey",
 	"UK": "United Kingdom",
 	"UKRAINE": "Ucraine",
@@ -950,5 +954,6 @@
 	"WESTERN_EUROPE": "Western Europe",
 	"WORLD": "World",
 	"WORLD_REMOTE": "World - Remote",
+	"YEAR_SUBSCRIPTION": "1 Year",
 	"yes": "Yes"
 }

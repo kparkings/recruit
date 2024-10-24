@@ -35,7 +35,7 @@
 				<tr *ngFor="let subscriptionAction of getRecruitersWithSubscriptionActions()" class="subscription-action-item" (click)="setSelectSubscriptionAction(subscriptionAction)">
 					<td class="medicol">{{subscriptionAction.userId}}</td>
 					<td class="medicol subscription-list-recruiter-name">{{subscriptionAction.firstName}} {{subscriptionAction.surname}}</td>
-					<td class="medicol">{{subscriptionAction.type}}</td>
+					<td class="medicol">{{subscriptionAction.type | translate}}</td>
 				</tr>
 			</tbody>
 		</table>
@@ -54,7 +54,7 @@
 				</tr>
 				<tr>
 					<th>Name</th>
-					<td>{{selectedSubscriptionAction.firstName + "" + selectedSubscriptionAction.surname}}</td>
+					<td>{{selectedSubscriptionAction.firstName + " " + selectedSubscriptionAction.surname}}</td>
 				</tr>
 				<tr>
 					<th>Email</th>
@@ -99,7 +99,7 @@
 					<th>Actions</th>
 					<td>
 						<button class="btn btn-secondary arenella-btn" style="min-width:100px;"  *ngFor="let action of selectedSubscriptionAction.actions" (click)="performAction(selectedSubscriptionAction, action)">{{frmtSubscriptionAction(action)}}</button>	
-						<button class="btn btn-secondary arenella-btn mobile" (click)="showGenerateInvoiceOptions()">Invoice</button>
+						<button class="btn btn-secondary arenella-btn mobile" *ngIf="selectedSubscriptionAction.type != 'CREDIT_BASED_SUBSCRIPTION' && selectedSubscriptionAction.type != 'CREDIT_BASED_SUBSCRIPTION'" (click)="showGenerateInvoiceOptions()">Invoice</button>
 					</td>
 				</tr>
 			</table>

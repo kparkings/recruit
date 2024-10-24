@@ -16,6 +16,7 @@ import org.springframework.web.context.annotation.RequestScope;
 
 import com.arenella.recruit.recruiters.beans.Recruiter;
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription;
+import com.arenella.recruit.recruiters.beans.RecruiterSubscription.INVOICE_TYPE;
 
 /**
 * Utility to build an Invoice for a Recruiter Subscription
@@ -70,7 +71,15 @@ public class InvoiceBuilderUtil {
 			builder.addSection(contentSection -> this.title(contentStream));
 			builder.addSection(contentSection -> this.invoiceRefInfo(contentStream, invoiceNumber, invoiceDate));
 			builder.addSection(contentSection -> this.companyInfo(contentStream));
-			builder.addSection(contentSection -> this.clientInfo(contentStream));
+			
+			if (subscription.getInvoiceType().isPresent() &&  subscription.getInvoiceType().get() == INVOICE_TYPE.BUSINESS) {
+				builder.addSection(contentSection -> this.clientInfo(contentStream));
+			}
+			
+			if (subscription.getInvoiceType().isPresent() &&  subscription.getInvoiceType().get() == INVOICE_TYPE.PERSON) {
+				builder.addSection(contentSection -> this.personInfo(contentStream));
+			}
+			
 			builder.addSection(contentSection -> this.unitDetails(contentStream));
 			builder.addSection(contentSection -> this.bankInfo(contentStream));
 			
@@ -143,6 +152,16 @@ public class InvoiceBuilderUtil {
 		addLineWithLabel(contentStream, "Address", 		this.recruiter.getCompanyAddress());
 		addLineWithLabel(contentStream, "KVK Nummer", 	this.recruiter.getCompanyRegistrationNumber());
 		addLineWithLabel(contentStream, "BTW Nummer", 	this.recruiter.getCompanyVatNumber());
+	}
+	
+	/**
+	*  Company Info Section ( Customer )
+	* @param contentStream - Stream to add Sections to
+	*/
+	private void personInfo(PDPageContentStream contentStream) {
+		addSectionHeader(contentStream, this.recruiter.getFirstName() + " " + this.recruiter.getSurname());
+		addLineWithLabel(contentStream, "Private non business entity", 		"");
+		
 	}
 	
 	/**
@@ -352,6 +371,7 @@ public class InvoiceBuilderUtil {
 	* @param text - Text to add to the invloice
 	*/
 	private void addLineWithLabel(PDPageContentStream contentStream, String label, String text) {
+		
 		try {
 			contentStream.beginText();
 			contentStream.newLineAtOffset(LEFT_MARGIN, setPos(LINE_HEIGHT));
