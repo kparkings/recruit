@@ -17,10 +17,14 @@
 		   <li class="nav-item tabNav">
 		    <span class="nav-link" (click)="switchTab('subscriptionActions')">{{'arenella-accounts-menu-subscription' | translate}}</span>
 		  </li>
+		  <li class="nav-item tabNav">
+		    <span class="nav-link" (click)="switchTab('cities')">{{'arenella-accounts-menu-cities' | translate}}</span>
+		  </li>
 		</ul>
 	</div>
 	
 	<div class="page-body">	
+	
 		<!-- Recruiters-->
 		<div *ngIf="showRecruitersTab" class="accounts-tab-top">
 			<app-recruiters>dd</app-recruiters>
@@ -87,6 +91,11 @@
 			</table>
 		</div>
 		
+		<!-- Cities-->
+		<div *ngIf="showCitiesTab" class="accounts-tab-top">
+			<app-cities></app-cities>
+		</div>
+		
 		<!-- Skills table -->
 		<div *ngIf="showSkillsValidationTab"  class="accounts-tab-top">
 		
@@ -122,6 +131,7 @@
 		<div *ngIf="showSubscriptionActionsTab"  class="accounts-tab-top">
 			<app-subscriptions></app-subscriptions>
 		<div>
+		
 	</div>
-	
+		
 </div>

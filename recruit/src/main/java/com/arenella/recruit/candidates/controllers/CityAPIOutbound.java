@@ -1,13 +1,14 @@
 package com.arenella.recruit.candidates.controllers;
 
 import com.arenella.recruit.candidates.beans.City;
+import com.arenella.recruit.candidates.enums.COUNTRY;
 
 /**
 * API Outbound representation of a City 
 */
 public class CityAPIOutbound {
 	
-	private final String country;
+	private final COUNTRY country;
 	private final String name;
 	private final float lat;
 	private final float lon;
@@ -17,8 +18,8 @@ public class CityAPIOutbound {
 	* @param builder - Contains initialization values
 	*/
 	public CityAPIOutbound(CityAPIOutboundBuilder builder) {
-		this.country 	= builder.country.toUpperCase();
-		this.name 		= builder.name.toLowerCase();
+		this.country 	= builder.country;
+		this.name 		= builder.name;
 		this.lat 		= builder.lat;
 		this.lon 		= builder.lon;
 	}
@@ -27,7 +28,7 @@ public class CityAPIOutbound {
 	* Returns 2 digit code for coutry
 	* @return country city belongs to
 	*/
-	public String getCountry() {
+	public COUNTRY getCountry() {
 		return this.country;
 	}
 	
@@ -68,10 +69,10 @@ public class CityAPIOutbound {
 	*/
 	public static class CityAPIOutboundBuilder{
 	
-		private String 	country;
-		private String 	name;
-		private float 	lat;
-		private float 	lon;
+		private COUNTRY 	country;
+		private String 		name;
+		private float 		lat;
+		private float 		lon;
 		
 		/**
 		* Sets the 2 digit Country code of the Country 
@@ -79,7 +80,7 @@ public class CityAPIOutbound {
 		* @param country - 2 digit country code
 		* @return Builder
 		*/
-		public CityAPIOutboundBuilder country(String country) {
+		public CityAPIOutboundBuilder country(COUNTRY country) {
 			this.country = country;
 			return this;
 		}

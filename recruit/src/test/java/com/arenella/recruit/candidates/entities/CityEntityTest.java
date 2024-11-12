@@ -2,7 +2,7 @@ package com.arenella.recruit.candidates.entities;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-
+import com.arenella.recruit.candidates.enums.COUNTRY;
 import org.junit.jupiter.api.Test;
 
 import com.arenella.recruit.candidates.beans.City;
@@ -12,7 +12,7 @@ import com.arenella.recruit.candidates.beans.City;
 */
 class CityEntityTest {
 
-	private static final String 	COUNTRY 	= "IT";
+	private static final COUNTRY 	COUNTRY_VAL = null;
 	private static final String 	NAME		= "rome";
 	private static final float 		LAT 		=  19.9f;
 	private static final float 		LON 		= -5.78f;
@@ -21,9 +21,9 @@ class CityEntityTest {
 	@Test
 	void testConstructor() {
 		
-		CityEntity entity = new CityEntity(COUNTRY, NAME, LAT, LON, ACTIVE);
+		CityEntity entity = new CityEntity(COUNTRY_VAL, NAME, LAT, LON, ACTIVE);
 		
-		assertEquals(COUNTRY, 	entity.getCountry());
+		assertEquals(COUNTRY_VAL, 	entity.getCountry());
 		assertEquals(NAME, 		entity.getName());
 		assertEquals(LAT, 		entity.getLat());
 		assertEquals(LON, 		entity.getLon());
@@ -39,9 +39,9 @@ class CityEntityTest {
 	@Test
 	void testFromEntity() {
 		
-		CityEntity entity = new CityEntity(COUNTRY, NAME, LAT, LON, ACTIVE);
+		CityEntity entity = new CityEntity(COUNTRY_VAL, NAME, LAT, LON, ACTIVE);
 
-		assertEquals(COUNTRY, 	entity.getCountry());
+		assertEquals(COUNTRY_VAL, 	entity.getCountry());
 		assertEquals(NAME, 		entity.getName());
 		assertEquals(LAT, 		entity.getLat());
 		assertEquals(LON, 		entity.getLon());
@@ -50,7 +50,7 @@ class CityEntityTest {
 		
 		City city = CityEntity.fromEntity(entity);
 		
-		assertEquals(COUNTRY, 	city.getCountry());
+		assertEquals(COUNTRY_VAL, 	city.getCountry());
 		assertEquals(NAME, 		city.getName());
 		assertEquals(LAT, 		city.getLat());
 		assertEquals(LON, 		city.getLon());
@@ -66,9 +66,9 @@ class CityEntityTest {
 	@Test
 	void testToEntity() {
 		
-		City city = City.builder().country(COUNTRY).name(NAME).lat(LAT).lon(LON).active(true).build();
+		City city = City.builder().country(COUNTRY_VAL).name(NAME).lat(LAT).lon(LON).active(true).build();
 
-		assertEquals(COUNTRY, 	city.getCountry());
+		assertEquals(COUNTRY_VAL, 	city.getCountry());
 		assertEquals(NAME, 		city.getName());
 		assertEquals(LAT, 		city.getLat());
 		assertEquals(LON, 		city.getLon());
@@ -77,7 +77,7 @@ class CityEntityTest {
 		
 		CityEntity entity = CityEntity.toEntity(city);
 		
-		assertEquals(COUNTRY, 	entity.getCountry());
+		assertEquals(COUNTRY_VAL, 	entity.getCountry());
 		assertEquals(NAME, 		entity.getName());
 		assertEquals(LAT, 		entity.getLat());
 		assertEquals(LON, 		entity.getLon());

@@ -2389,3 +2389,42 @@ databaseChangeLog:
             - column:
                 name: invoice_type
                 type: varchar
+  - changeSet:
+      id: add_tbl_city
+      author: kparkings
+      changes:
+        - createTable:
+            tableName: city
+            schemaName: candidate
+            columns:
+              - column:
+                  name: country
+                  type: varchar
+                  constraints:
+                    nullable: false
+              - column:
+                  name: city
+                  type: varchar
+                  constraints:
+                    nullable: false
+              - column:
+                  name: lat
+                  type: number
+                  constraints:
+                    nullable: true
+              - column:
+                  name: lon
+                  type: number
+                  constraints:
+                    nullable: true
+              - column:
+                  name: active
+                  type: boolean
+                  constraints:
+                    nullable: false
+                    default: false
+        - addPrimaryKey:  
+            columnNames:  country, city  
+            constraintName:  pk_city  
+            tableName:  city  
+            schemaName: candidate

@@ -10,6 +10,7 @@ import org.springframework.data.repository.ListCrudRepository;
 
 import com.arenella.recruit.candidates.beans.City;
 import com.arenella.recruit.candidates.entities.CityEntity;
+import com.arenella.recruit.candidates.enums.COUNTRY;
 
 /**
 * Repository for City Entities
@@ -17,7 +18,7 @@ import com.arenella.recruit.candidates.entities.CityEntity;
 public interface CityDao extends ListCrudRepository<CityEntity, CityEntity.CityId>{
 
 	@Query("from CityEntity where id.country = :countryId")
-	List<CityEntity> fetchCountries(String country);
+	List<CityEntity> fetchCountries(COUNTRY country);
 	
 	/**
 	* Persists / updates a City 
@@ -32,7 +33,7 @@ public interface CityDao extends ListCrudRepository<CityEntity, CityEntity.CityI
 	* @param country - country of interest
 	* @return Cities
 	*/
-	default Set<City> fetchCitiesForCountry(String country){
+	default Set<City> fetchCitiesForCountry(COUNTRY country){
 		return this.fetchCountries(country).stream().map(CityEntity::fromEntity).collect(Collectors.toSet());
 	}
 	

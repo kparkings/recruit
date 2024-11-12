@@ -15,6 +15,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.arenella.recruit.candidates.beans.City;
 import com.arenella.recruit.candidates.dao.CityDao;
 import com.arenella.recruit.candidates.entities.CityEntity.CityId;
+import com.arenella.recruit.candidates.enums.COUNTRY;
 
 /**
 * Unit tests for the CityServiceImpl class
@@ -34,20 +35,20 @@ class CityServiceImplTest {
 	@Test
 	void testFetchCitiesForCountry() {
 		
-		City cosenza 	= City.builder().country("It").name("Cosenza").lat(1f).lon(5f).active(true).build();
-		City roma 		= City.builder().country("it").name("Rome").lat(2f).lon(6f).active(true).build();
-		City firenze 	= City.builder().country("IT").name("Florence").lat(3f).lon(7f).active(true).build();
-		City napoli 	= City.builder().country("IT").name("Naples").lat(4f).lon(8f).build();
+		City cosenza 	= City.builder().country(COUNTRY.ITALY).name("Cosenza").lat(1f).lon(5f).active(true).build();
+		City roma 		= City.builder().country(COUNTRY.ITALY).name("Rome").lat(2f).lon(6f).active(true).build();
+		City firenze 	= City.builder().country(COUNTRY.ITALY).name("Florence").lat(3f).lon(7f).active(true).build();
+		City napoli 	= City.builder().country(COUNTRY.ITALY).name("Naples").lat(4f).lon(8f).build();
 		
-		Mockito.when(this.mockCityDao.fetchCitiesForCountry("it")).thenReturn(Set.of(cosenza, roma, firenze, napoli));
+		Mockito.when(this.mockCityDao.fetchCitiesForCountry(COUNTRY.ITALY)).thenReturn(Set.of(cosenza, roma, firenze, napoli));
 		
-		Set<City> italianCities = this.service.fetchCitiesForCountry("IT");
+		Set<City> italianCities = this.service.fetchCitiesForCountry(COUNTRY.ITALY);
 		
-		italianCities.stream().filter(c -> c.getCountry().equals("IT") && c.getName().equals("cosenza")).findAny().orElseThrow();
-		italianCities.stream().filter(c -> c.getCountry().equals("IT") && c.getName().equals("rome")).findAny().orElseThrow();
-		italianCities.stream().filter(c -> c.getCountry().equals("IT") && c.getName().equals("florence")).findAny().orElseThrow();
+		italianCities.stream().filter(c -> c.getCountry() == COUNTRY.ITALY && c.getName().equals("Cosenza")).findAny().orElseThrow();
+		italianCities.stream().filter(c -> c.getCountry() == COUNTRY.ITALY && c.getName().equals("Rome")).findAny().orElseThrow();
+		italianCities.stream().filter(c -> c.getCountry() == COUNTRY.ITALY && c.getName().equals("Florence")).findAny().orElseThrow();
 		
-		assertTrue(italianCities.stream().filter(c -> c.getCountry().equals("IT") && c.getName().equals("naples")).findAny().isEmpty());
+		assertTrue(italianCities.stream().filter(c -> c.getCountry() == COUNTRY.ITALY && c.getName().equals("Naples")).findAny().isEmpty());
 		
 	}
 	
@@ -57,7 +58,7 @@ class CityServiceImplTest {
 	@Test
 	void testAddCity_existingCity() {
 
-		City city = City.builder().country("it").name("cosenza").lat(1f).lon(2f).build();
+		City city = City.builder().country(COUNTRY.BELGIUM).name("cosenza").lat(1f).lon(2f).build();
 		
 		Mockito.when(this.mockCityDao.existsById(Mockito.any(CityId.class))).thenReturn(true);
 		
@@ -74,7 +75,7 @@ class CityServiceImplTest {
 	@Test
 	void testAddCity() {
 
-		City city = City.builder().country("it").name("cosenza").lat(1f).lon(2f).build();
+		City city = City.builder().country(COUNTRY.BELGIUM).name("cosenza").lat(1f).lon(2f).build();
 		
 		Mockito.when(this.mockCityDao.existsById(Mockito.any(CityId.class))).thenReturn(false);
 		
@@ -90,7 +91,7 @@ class CityServiceImplTest {
 	@Test
 	void testUpdateCity_noExistingCity() {
 
-		City city = City.builder().country("it").name("cosenza").lat(1f).lon(2f).build();
+		City city = City.builder().country(COUNTRY.BELGIUM).name("cosenza").lat(1f).lon(2f).build();
 		
 		Mockito.when(this.mockCityDao.existsById(Mockito.any(CityId.class))).thenReturn(false);
 		
@@ -107,7 +108,7 @@ class CityServiceImplTest {
 	@Test
 	void testUpdateCity() {
 
-		City city = City.builder().country("it").name("cosenza").lat(1f).lon(2f).active(true).build();
+		City city = City.builder().country(COUNTRY.BELGIUM).name("cosenza").lat(1f).lon(2f).active(true).build();
 		
 		Mockito.when(this.mockCityDao.existsById(Mockito.any(CityId.class))).thenReturn(true);
 		

@@ -78,6 +78,7 @@ import com.arenella.recruit.candidates.extractors.DocumentFilterExtractionUtil;
 import com.arenella.recruit.candidates.repos.CandidateRepository;
 import com.arenella.recruit.candidates.services.CandidateServiceImpl;
 import com.arenella.recruit.candidates.services.CandidateStatisticsService;
+import com.arenella.recruit.candidates.services.CityService;
 import com.arenella.recruit.candidates.utils.CandidateFunctionExtractorImpl;
 import com.arenella.recruit.candidates.utils.CandidateImageFileSecurityParser;
 import com.arenella.recruit.candidates.utils.CandidateImageManipulator;
@@ -96,7 +97,7 @@ import com.arenella.recruit.candidates.utils.CandidateSuggestionUtil.suggestion_
 * @author K Parkings
 */
 @ExtendWith(MockitoExtension.class)
-public class CandidateServiceImplTest {
+class CandidateServiceImplTest {
 
 	@Mock
 	private CandidateRepository 					mockCandidateRepo;
@@ -158,6 +159,9 @@ public class CandidateServiceImplTest {
 	@Spy
 	private ArenellaRoleManager						spyRoleManager;
 	
+	@Mock
+	private CityService								mockCityService;
+	
 	@InjectMocks
 	private CandidateServiceImpl 					service 					= new CandidateServiceImpl();
 	
@@ -165,7 +169,7 @@ public class CandidateServiceImplTest {
 	* Sets up test environment 
 	*/
 	@BeforeEach
-	public void init() throws Exception{
+	public void init() {
 		SecurityContextHolder.setContext(mockSecurityContext);
 	}
 	
@@ -174,7 +178,7 @@ public class CandidateServiceImplTest {
 	*/
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Test
-	public void testPersistCandidate_emailAlreadyExists() throws Exception{
+	void testPersistCandidate_emailAlreadyExists() throws Exception{
 
 		Collection authorities = new HashSet<>();
 		authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
@@ -194,7 +198,7 @@ public class CandidateServiceImplTest {
 	*/
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Test
-	public void testPersistCandidate_NonAdminUserOwnerId() throws Exception{
+	void testPersistCandidate_NonAdminUserOwnerId() throws Exception{
 
 		ArgumentCaptor<Candidate> argCapt = ArgumentCaptor.forClass(Candidate.class);
 		
@@ -222,7 +226,7 @@ public class CandidateServiceImplTest {
 	*/
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Test
-	public void testPersistCandidate_adminUserOwnerId() throws Exception{
+	void testPersistCandidate_adminUserOwnerId() throws Exception{
 
 		ArgumentCaptor<Candidate> argCapt = ArgumentCaptor.forClass(Candidate.class);
 		
@@ -245,7 +249,7 @@ public class CandidateServiceImplTest {
 	*/
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Test
-	public void testPersistCandidate() throws Exception{
+	void testPersistCandidate() throws Exception{
 		
 		Collection authorities = new HashSet<>();
 		authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
@@ -260,12 +264,15 @@ public class CandidateServiceImplTest {
 					.candidateId("1000")
 					.email("admin@arenella-ict.com")
 					.firstname("kevin")
+					.country(COUNTRY.BELGIUM)
+					.city("Brussels")
 				.build());
 		
 		Mockito.verify(this.mockExternalEventPublisher).publishCandidateAccountCreatedEvent(Mockito.any(CandidateAccountCreatedEvent.class));
 		Mockito.verify(this.mockExternalEventPublisher).publishSendEmailCommand(Mockito.any(RequestSendEmailCommand.class));
 		Mockito.verify(this.mockExternalEventPublisher).publishCandidateCreatedEvent(Mockito.any(CandidateCreatedEvent.class));
 		Mockito.verify(this.mockExternalEventPublisher).publishCandidateUpdateEvent(Mockito.any(CandidateUpdateEvent.class));
+		Mockito.verify(this.mockCityService).performNewCityCheck(COUNTRY.BELGIUM, "Brussels");
 		
 	}
 	
@@ -275,15 +282,12 @@ public class CandidateServiceImplTest {
 	*/
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Test
-	public void testPersistCandidate_recruiter() throws Exception{
+	void testPersistCandidate_recruiter() throws Exception{
 		
 		Contact contact = Contact.builder().firstname("kevin").surname("parkings").email("no-reply@arenella-ict.com").build();
 		
 		Collection authorities = new HashSet<>();
 		authorities.add(new SimpleGrantedAuthority("ROLE_RECRUITER"));
-
-		//Mockito.when(this.mockCandidateDao.emailInUse(Mockito.anyString())).thenReturn(false);
-		//Mockito.when(this.mockCandidateRepo.save(Mockito.any())).thenReturn(CandidateDocument.builder().candidateId("1000").build());
 
 		Mockito.when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
 		Mockito.when(mockAuthentication.getAuthorities()).thenReturn(authorities);
@@ -307,7 +311,7 @@ public class CandidateServiceImplTest {
 	* Tests exception is thrown if Email not used for the Pending Candidate 
 	*/
 	@Test
-	public void testPersistPendingCandidate_emailAlreadyExists() {
+	void testPersistPendingCandidate_emailAlreadyExists() {
 		
 		Mockito.when(this.mockPendingCandidateDao.emailInUse(Mockito.anyString())).thenReturn(true);
 		
@@ -323,7 +327,7 @@ public class CandidateServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testUpdateCandidate_unknownCandidate() throws Exception {
+	void testUpdateCandidate_unknownCandidate() {
 		
 		Mockito.when(mockCandidateRepo.findCandidateById(0)).thenReturn(Optional.empty());
 		
@@ -340,7 +344,7 @@ public class CandidateServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testUpdateCandidate_enable() throws Exception {
+	void testUpdateCandidate_enable() {
 		
 		ArgumentCaptor<Candidate> 				captor 				= ArgumentCaptor.forClass(Candidate.class);
 		ArgumentCaptor<CandidateUpdateEvent> 	newsFeedCaptor 		= ArgumentCaptor.forClass(CandidateUpdateEvent.class);
@@ -366,7 +370,7 @@ public class CandidateServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testUpdateCandidate_enable_alreadyEnabled() throws Exception {
+	void testUpdateCandidate_enable_alreadyEnabled() {
 		
 		ArgumentCaptor<CandidateUpdateEvent> 	newsFeedCaptor 		= ArgumentCaptor.forClass(CandidateUpdateEvent.class);
 		Candidate 								candidate 			= Candidate.builder().available(true).build();
@@ -384,7 +388,7 @@ public class CandidateServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testUpdateCandidate_enable_alreadyDisabled() throws Exception {
+	void testUpdateCandidate_enable_alreadyDisabled() {
 		
 		ArgumentCaptor<CandidateUpdateEvent> 	newsFeedCaptor 		= ArgumentCaptor.forClass(CandidateUpdateEvent.class);
 		Candidate 								candidate 			= Candidate.builder().candidateId("1").available(false).build();
@@ -402,7 +406,7 @@ public class CandidateServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testUpdateCandidate_disable() throws Exception {
+	void testUpdateCandidate_disable() {
 		
 		ArgumentCaptor<Candidate> 				captor 				= ArgumentCaptor.forClass(Candidate.class);
 		ArgumentCaptor<CandidateUpdateEvent> 	newsFeedCaptor 		= ArgumentCaptor.forClass(CandidateUpdateEvent.class);
@@ -428,7 +432,7 @@ public class CandidateServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testUpdateCandidatesLastAvailabilityCheck_unknownCandidate() throws Exception{
+	void testUpdateCandidatesLastAvailabilityCheck_unknownCandidate() {
 		
 		Mockito.when(this.mockCandidateRepo.findCandidateById(Mockito.anyLong())).thenReturn(Optional.empty());
 		
@@ -443,7 +447,7 @@ public class CandidateServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testUpdateCandidatesLastAvailabilityCheck() throws Exception{
+	void testUpdateCandidatesLastAvailabilityCheck() {
 		
 		ArgumentCaptor<Candidate> captor = ArgumentCaptor.forClass(Candidate.class);
 		Candidate candidate = Candidate.builder().build();
@@ -463,7 +467,7 @@ public class CandidateServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testPersistPendingCandidate_noId() throws Exception {
+	void testPersistPendingCandidate_noId() {
 		
 		PendingCandidate pendingCandidate = PendingCandidate.builder().build();
 		
@@ -479,7 +483,7 @@ public class CandidateServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testPersistPendingCandidate_existingId() throws Exception {
+	void testPersistPendingCandidate_existingId() {
 		
 		PendingCandidate pendingCandidate = PendingCandidate.builder().build();
 		
@@ -494,7 +498,7 @@ public class CandidateServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testPersistPendingCandidate() throws Exception {
+	void testPersistPendingCandidate() {
 		
 		PendingCandidate pendingCandidate = PendingCandidate
 													.builder()
@@ -514,7 +518,7 @@ public class CandidateServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testAddSearchAlert() throws Exception{
+	void testAddSearchAlert() {
 		
 		ReflectionTestUtils.invokeMethod(mockCandidateFunctionExtractor, "init");
 		
@@ -545,7 +549,7 @@ public class CandidateServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testAddSearchAlert_hasSearchText() throws Exception{
+	void testAddSearchAlert_hasSearchText() {
 		
 		ReflectionTestUtils.invokeMethod(mockCandidateFunctionExtractor, "init");
 		
@@ -577,7 +581,7 @@ public class CandidateServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testGetAlertsForCurrentUser() throws Exception{
+	void testGetAlertsForCurrentUser() {
 		
 		final String recruiterId = "recruiter1";
 		
@@ -603,7 +607,7 @@ public class CandidateServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testDeleteCandidateSearchAlert_unknownId() throws Exception{
+	void testDeleteCandidateSearchAlert_unknownId() {
 		
 		UUID id = UUID.randomUUID();
 		
@@ -620,7 +624,7 @@ public class CandidateServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testDeleteCandidateSearchAlert_owner() throws Exception{
+	void testDeleteCandidateSearchAlert_owner() {
 		
 		Mockito.when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
 		
@@ -641,7 +645,7 @@ public class CandidateServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testDeleteCandidateSearchAlert_isNotOwner() throws Exception{
+	void testDeleteCandidateSearchAlert_isNotOwner() {
 		
 		Mockito.when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
 		
@@ -663,7 +667,7 @@ public class CandidateServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testDoTestCandidateAlert_noMatchingCandidate() throws Exception{
+	void testDoTestCandidateAlert_noMatchingCandidate() throws Exception{
 		
 		final long candidateId = 404;
 		
@@ -697,7 +701,7 @@ public class CandidateServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testDoTestCandidateAlert_MatchingCandidate() throws Exception{
+	void testDoTestCandidateAlert_MatchingCandidate() throws Exception{
 		
 		final long candidateId = 404;
 		
@@ -741,7 +745,7 @@ public class CandidateServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testDoTestCandidateAlert_MatchingCandidate_no_positive_accuracy() throws Exception{
+	void testDoTestCandidateAlert_MatchingCandidate_no_positive_accuracy() throws Exception{
 		
 		final long candidateId = 404;
 		
@@ -786,7 +790,7 @@ public class CandidateServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testExtractFiltersFromDocument_failure() throws Exception{
+	void testExtractFiltersFromDocument_failure() throws Exception{
 		
 		Mockito.doThrow(RuntimeException.class).when(this.mockDocumentFilterExtractionUtil).extractFilters(null, null);
 		
@@ -802,7 +806,7 @@ public class CandidateServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testAddSavedCanidate_already_exists() throws Exception{
+	void testAddSavedCanidate_already_exists() {
 		
 		Mockito.when(this.mockSavedCandidateDao.exists(Mockito.anyString(), Mockito.anyLong())).thenReturn(true);
 		
@@ -817,7 +821,7 @@ public class CandidateServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testAddSavedCanidate() throws Exception{
+	void testAddSavedCanidate() {
 		
 		Mockito.when(this.mockSavedCandidateDao.exists(Mockito.anyString(), Mockito.anyLong())).thenReturn(false);
 		
@@ -832,7 +836,7 @@ public class CandidateServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testFetchSavedCandidatesForUser() throws Exception{
+	void testFetchSavedCandidatesForUser() {
 		
 		final String 	userId 		= "kparkings";
 		final long 		candidate1 	= 1001;
@@ -866,7 +870,7 @@ public class CandidateServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testRemoveSavedCanidate_doesnt_exist() throws Exception{
+	void testRemoveSavedCanidate_doesnt_exist() {
 		
 		final long savedCandidate1 	= 1001;
 		
@@ -884,7 +888,7 @@ public class CandidateServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testRemoveSavedCanidate() throws Exception{
+	void testRemoveSavedCanidate() {
 		
 		final long savedCandidate1 	= 1001;
 		
@@ -903,7 +907,7 @@ public class CandidateServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testUpdateSavedCanidate_doesnt_exist() throws Exception{
+	void testUpdateSavedCanidate_doesnt_exist() {
 		
 		final long savedCandidate1 	= 1001;
 		
@@ -920,7 +924,7 @@ public class CandidateServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testUpdateSavedCanidate() throws Exception{
+	void testUpdateSavedCanidate() {
 		
 		final long savedCandidate1 	= 1001;
 		
@@ -938,7 +942,7 @@ public class CandidateServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testFetchCandidate_candidate_other_candidate() throws Exception{
+	void testFetchCandidate_candidate_other_candidate() {
 		
 		GrantedAuthority 				mockGA = Mockito.mock(GrantedAuthority.class);
 		Collection<GrantedAuthority> 	authorities = Set.of(mockGA);
@@ -958,7 +962,7 @@ public class CandidateServiceImplTest {
 	*/
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Test
-	public void testFetchCandidate_candidate_is_not_avaialble_and_recruiter_no_paid_subscription() throws Exception{
+	void testFetchCandidate_candidate_is_not_avaialble_and_recruiter_no_paid_subscription() {
 		
 		Collection authorities = new HashSet<>();
 		authorities.add(new SimpleGrantedAuthority("ROLE_RECRUITER"));
@@ -969,7 +973,7 @@ public class CandidateServiceImplTest {
 		
 		Mockito.when(this.mockCandidateRepo.findCandidateById(Mockito.anyLong())).thenReturn(Optional.of(Candidate.builder().available(false).build()));
 		Mockito.when(this.mockCreditDao.getByRecruiterId(Mockito.anyString())).thenReturn(Optional.of(RecruiterCredit.builder().paidSubscription(false).build()));
-		//Optional<RecruiterCredit> credits =  this.creditDao.getByRecruiterId(userId);
+		
 		Assertions.assertThrows(IllegalArgumentException.class, () -> {
 			this.service.fetchCandidate("1960", "1961", authorities);
 		});
@@ -983,7 +987,7 @@ public class CandidateServiceImplTest {
 	*/
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Test
-	public void testFetchCandidate_candidate_is_not_avaialble_and_recruiter_has_paid_subscription() throws Exception{
+	void testFetchCandidate_candidate_is_not_avaialble_and_recruiter_has_paid_subscription() {
 		
 		Collection authorities = new HashSet<>();
 		authorities.add(new SimpleGrantedAuthority("ROLE_RECRUITER"));
@@ -1006,7 +1010,7 @@ public class CandidateServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testFetchCandidate_candidate_own_candidate_not_found() throws Exception{
+	void testFetchCandidate_candidate_own_candidate_not_found() {
 		
 		GrantedAuthority 				mockGA = Mockito.mock(GrantedAuthority.class);
 		Collection<GrantedAuthority> 	authorities = Set.of(mockGA);
@@ -1027,7 +1031,7 @@ public class CandidateServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testFetchCandidate_candidate_own_candidate_found() throws Exception{
+	void testFetchCandidate_candidate_own_candidate_found() {
 		
 		GrantedAuthority 				mockGA = Mockito.mock(GrantedAuthority.class);
 		Collection<GrantedAuthority> 	authorities = Set.of(mockGA);
@@ -1046,7 +1050,7 @@ public class CandidateServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testFetchCandidate_admin_candidate_found() throws Exception{
+	void testFetchCandidate_admin_candidate_found() {
 		
 		GrantedAuthority 				mockGA = Mockito.mock(GrantedAuthority.class);
 		Collection<GrantedAuthority> 	authorities = Set.of(mockGA);
@@ -1066,7 +1070,7 @@ public class CandidateServiceImplTest {
 	*/
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Test
-	public void testFetchCandidate_recruiter_candidate_found() throws Exception{
+	void testFetchCandidate_recruiter_candidate_found() {
 		
 		Collection authorities = new HashSet<>();
 		authorities.add(new SimpleGrantedAuthority("ROLE_RECRUITER"));
@@ -1090,7 +1094,7 @@ public class CandidateServiceImplTest {
 	*/
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Test
-	public void testUpdateCandidateProfile_other_candidate() throws Exception{
+	void testUpdateCandidateProfile_other_candidate() {
 		
 		Collection authorities = new HashSet<>();
 		authorities.add(new SimpleGrantedAuthority("ROLE_CANDIDATE"));
@@ -1113,7 +1117,7 @@ public class CandidateServiceImplTest {
 	*/
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Test
-	public void testUpdateCandidateProfile_recruiter_sameEmail() throws Exception{
+	void testUpdateCandidateProfile_recruiter_sameEmail() throws Exception{
 		
 		final String 		candidateId 			= "123";
 		final FUNCTION		function				= FUNCTION.JAVA_DEV;
@@ -1201,7 +1205,6 @@ public class CandidateServiceImplTest {
 		Mockito.when(mockAuthentication.getAuthorities()).thenReturn(authorities);
 		Mockito.when(mockAuthentication.getPrincipal()).thenReturn(candidateId);
 		Mockito.when(this.mockCandidateRepo.findCandidateById(Mockito.anyLong())).thenReturn(Optional.of(original));
-		//Mockito.when(this.mockCandidateDao.emailInUseByOtherUser(Mockito.anyString(), Mockito.anyLong())).thenReturn(true);
 		Mockito.doNothing().when(this.mockExternalEventPublisher).publishCandidateAccountUpdatedEvent(caEventArgCapt.capture());
 		
 		Mockito.when(this.mockCandidateRepo.saveCandidate(candidateArgCapt.capture())).thenReturn(0L);
@@ -1244,7 +1247,7 @@ public class CandidateServiceImplTest {
 	*/
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Test
-	public void testUpdateCandidateProfile_non_candidate_or_recruiter() throws Exception{
+	void testUpdateCandidateProfile_non_candidate_or_recruiter() {
 		
 		Collection authorities = new HashSet<>();
 		authorities.add(new SimpleGrantedAuthority("ROLE_RECRUITER"));
@@ -1267,7 +1270,7 @@ public class CandidateServiceImplTest {
 	*/
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Test
-	public void testUpdateCandidateProfile_unknown_candidate() throws Exception{
+	void testUpdateCandidateProfile_unknown_candidate() {
 		
 		Collection authorities = new HashSet<>();
 		authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
@@ -1292,7 +1295,7 @@ public class CandidateServiceImplTest {
 	*/
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Test
-	public void testUpdateCandidateProfile_update_email_to_already_in_use_email() throws Exception{
+	void testUpdateCandidateProfile_update_email_to_already_in_use_email() throws Exception{
 		
 		Collection authorities = new HashSet<>();
 		authorities.add(new SimpleGrantedAuthority("ROLE_CANDIDATE"));
@@ -1317,7 +1320,7 @@ public class CandidateServiceImplTest {
 	*/
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Test
-	public void testUpdateCandidateProfile() throws Exception{
+	void testUpdateCandidateProfile() throws Exception{
 		
 		final String 		candidateId 			= "123";
 		final FUNCTION		function				= FUNCTION.JAVA_DEV;
@@ -1448,7 +1451,7 @@ public class CandidateServiceImplTest {
 	*/
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Test
-	public void testUpdateCandidateProfile_skillsChanged() throws Exception{
+	void testUpdateCandidateProfile_skillsChanged() throws Exception{
 		
 		final String 		candidateId 			= "123";
 		final FUNCTION		function				= FUNCTION.JAVA_DEV;
@@ -1582,7 +1585,7 @@ public class CandidateServiceImplTest {
 	*/
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Test
-	public void testDeleteProfile_canidate_deleting_other_candidate() throws Exception{
+	void testDeleteProfile_canidate_deleting_other_candidate() {
 		
 		final String candidateId = "1234";
 		
@@ -1605,7 +1608,7 @@ public class CandidateServiceImplTest {
 	*/
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Test
-	public void testDeleteProfile_canidate_doesnt_exist() throws Exception{
+	void testDeleteProfile_canidate_doesnt_exist() {
 		
 		final String candidateId = "1234";
 		
@@ -1630,7 +1633,7 @@ public class CandidateServiceImplTest {
 	*/
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Test
-	public void testDeleteProfile_happy_path_candidate() throws Exception{
+	void testDeleteProfile_happy_path_candidate() throws Exception{
 		
 		final String candidateId = "1234";
 		
@@ -1659,7 +1662,7 @@ public class CandidateServiceImplTest {
 	*/
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Test
-	public void testDeleteProfile_happy_path_admin() throws Exception{
+	void testDeleteProfile_happy_path_admin() throws Exception{
 		
 		final String candidateId = "1234";
 		
@@ -1684,7 +1687,7 @@ public class CandidateServiceImplTest {
 	*/
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Test
-	public void testDeleteProfile_happy_path_recruiter() throws Exception{
+	void testDeleteProfile_happy_path_recruiter() throws Exception{
 		
 		final String candidateId = "1234";
 		final String recruiterId = "7777";
@@ -1711,7 +1714,7 @@ public class CandidateServiceImplTest {
 	*/
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Test
-	public void testDeleteProfile_not_owned_by_recruiter() throws Exception{
+	void testDeleteProfile_not_owned_by_recruiter() {
 		
 		final String candidateId = "1234";
 		final String recruiterId = "7777";
@@ -1736,7 +1739,7 @@ public class CandidateServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testConvertToPhoto() throws Exception{
+	void testConvertToPhoto() throws Exception{
 		
 		MultipartFile mpf = null;
 		
@@ -1749,7 +1752,7 @@ public class CandidateServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testConvertToPhoto_unsafeFile() throws Exception{
+	void testConvertToPhoto_unsafeFile() throws Exception{
 		
 		MultipartFile mockMpf = Mockito.mock(MultipartFile.class);
 		
@@ -1767,7 +1770,7 @@ public class CandidateServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testConvertToPhoto_happypath() throws Exception{
+	void testConvertToPhoto_happypath() throws Exception{
 		
 		MultipartFile mockMpf = Mockito.mock(MultipartFile.class);
 		
@@ -1787,7 +1790,7 @@ public class CandidateServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testsendEmailToCandidate_standardCandidate() throws Exception{
+	void testsendEmailToCandidate_standardCandidate() throws Exception{
 		
 		ArgumentCaptor<ContactRequestEvent> argCapt = ArgumentCaptor.forClass(ContactRequestEvent.class); 
 		
@@ -1817,7 +1820,7 @@ public class CandidateServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testsendEmailToCandidate_candidateOwnedByRecruiter() throws Exception{
+	void testsendEmailToCandidate_candidateOwnedByRecruiter() throws Exception{
 		
 		ArgumentCaptor<ContactRequestEvent> argCapt = ArgumentCaptor.forClass(ContactRequestEvent.class); 
 		
@@ -1847,7 +1850,7 @@ public class CandidateServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testHasCreditsLeft_userNotFound() throws Exception{
+	void testHasCreditsLeft_userNotFound() {
 		
 		final String userId = "kparkings";
 		
@@ -1861,7 +1864,7 @@ public class CandidateServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testHasCreditsLeft_true() throws Exception{
+	void testHasCreditsLeft_true() {
 		
 		final String userId = "kparkings";
 		
@@ -1877,7 +1880,7 @@ public class CandidateServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testHasCreditsLeft_false() throws Exception{
+	void testHasCreditsLeft_false() {
 		
 		final String userId = "kparkings";
 		
@@ -1894,7 +1897,7 @@ public class CandidateServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testUpdateCreditsForUser() throws Exception{
+	void testUpdateCreditsForUser() {
 		
 		final String 	userId 		= "kparkings";
 		final int 		credits 	= 20;
@@ -1919,7 +1922,7 @@ public class CandidateServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testUpdateCreditsForUser_paidSubscriptin_specified() throws Exception{
+	void testUpdateCreditsForUser_paidSubscriptin_specified() {
 		
 		final String 	userId 		= "kparkings";
 		final int 		credits 	= 20;
@@ -1944,7 +1947,7 @@ public class CandidateServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testUpdateCreditsForUser_unknownRecruiter() throws Exception{
+	void testUpdateCreditsForUser_unknownRecruiter() {
 		
 		final String 	userId 		= "kparkings";
 		final int 		credits 	= 20;
@@ -1962,7 +1965,7 @@ public class CandidateServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testGetCreditCountForUser_unknownUser() throws Exception{
+	void testGetCreditCountForUser_unknownUser() {
 		
 		Mockito.when(this.mockCreditDao.getByRecruiterId(Mockito.anyString())).thenReturn(Optional.empty());
 		
@@ -1977,7 +1980,7 @@ public class CandidateServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testGetCreditCountForUser() throws Exception{
+	void testGetCreditCountForUser() {
 		
 		final int credits = 5;
 		
@@ -1994,7 +1997,7 @@ public class CandidateServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testExtractFiltersFromText() throws Exception{
+	void testExtractFiltersFromText() {
 	
 		Mockito.when(this.mockDocumentFilterExtractionUtil.extractFilters("")).thenReturn(CandidateExtractedFilters.builder().build());
 		
@@ -2009,7 +2012,7 @@ public class CandidateServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testFetchPendingCandidateSkills() throws Exception {
+	void testFetchPendingCandidateSkills() {
 		
 		this.service.fetchPendingCandidateSkills();
 		
@@ -2023,7 +2026,7 @@ public class CandidateServiceImplTest {
 	*/
 	@SuppressWarnings("unchecked")
 	@Test
-	public void testUpdateCandidateSkills() throws Exception{
+	void testUpdateCandidateSkills() {
 		
 		final CandidateSkill java 	= CandidateSkill.builder().skill("java").validationStatus(VALIDATION_STATUS.ACCEPTED).build();
 		final CandidateSkill nutmeg = CandidateSkill.builder().skill("nutmeg").validationStatus(VALIDATION_STATUS.REJECTED).build();
@@ -2054,7 +2057,7 @@ public class CandidateServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testUpdateCandidateSkills_unknownSkill() throws Exception{
+	void testUpdateCandidateSkills_unknownSkill() {
 		
 		final CandidateSkill java 	= CandidateSkill.builder().skill("java").validationStatus(VALIDATION_STATUS.ACCEPTED).build();
 		final CandidateSkill nutmeg = CandidateSkill.builder().skill("nutmeg").validationStatus(VALIDATION_STATUS.REJECTED).build();
@@ -2078,7 +2081,7 @@ public class CandidateServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testHasPaidSubscription_true() throws Exception{
+	void testHasPaidSubscription_true() {
 		
 		Mockito.when(this.mockCreditDao.getByRecruiterId(Mockito.anyString())).thenReturn(Optional.of(RecruiterCredit.builder().paidSubscription(true).build()));
 		
@@ -2091,7 +2094,7 @@ public class CandidateServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testHasPaidSubscription_false() throws Exception{
+	void testHasPaidSubscription_false() {
 		
 		Mockito.when(this.mockCreditDao.getByRecruiterId(Mockito.anyString())).thenReturn(Optional.of(RecruiterCredit.builder().paidSubscription(false).build()));
 		
@@ -2104,7 +2107,7 @@ public class CandidateServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testGetAccountByAvailable_available() throws Exception{
+	void testGetAccountByAvailable_available() {
 		
 		this.service.getCountByAvailable(true);
 		
@@ -2117,7 +2120,7 @@ public class CandidateServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testGetAccountByAvailable_unavailable() throws Exception{
+	void testGetAccountByAvailable_unavailable() {
 		
 		this.service.getCountByAvailable(true);
 		
@@ -2131,7 +2134,7 @@ public class CandidateServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testResetPassword_multipleMatchingRecruiters() throws Exception{
+	void testResetPassword_multipleMatchingRecruiters() throws Exception{
 	
 		final String emailAddress = "admin@arenella-ict.com";
 		
@@ -2149,7 +2152,7 @@ public class CandidateServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testResetPassword_noMatchingRecruiters() throws Exception{
+	void testResetPassword_noMatchingRecruiters() throws Exception{
 		
 		final String emailAddress = "admin@arenella-ict.com";
 		
@@ -2167,7 +2170,7 @@ public class CandidateServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testResetPassword() throws Exception{
+	void testResetPassword() throws Exception{
 		
 		final String 	emailAddress 	= "admin@arenella-ict.com";
 		final String 	firstname 		= "kevin";
@@ -2198,7 +2201,7 @@ public class CandidateServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testDeleteCandidatesForOwnedByRecruiter() throws Exception{
+	void testDeleteCandidatesForOwnedByRecruiter() throws Exception{
 		
 		final String recruiterId = "rec1";
 		
@@ -2214,7 +2217,7 @@ public class CandidateServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testDeleteSavedCandidatesForRecruiter() throws Exception{
+	void testDeleteSavedCandidatesForRecruiter() {
 		
 		final String recId = "aRecId";
 		
@@ -2231,7 +2234,7 @@ public class CandidateServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testDeleteCreditsForRecruiter() throws Exception{
+	void testDeleteCreditsForRecruiter() {
 		
 		final String recruiterId = "aRecId1";
 		
@@ -2246,7 +2249,7 @@ public class CandidateServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testDeleteContactForRecruiter() throws Exception{
+	void testDeleteContactForRecruiter() {
 		
 		final String recruiterId = "aRecId1";
 		

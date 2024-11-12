@@ -27,6 +27,7 @@ export class AccountsComponent implements OnInit {
 	showSubscriptionActionsTab:boolean								= false;
 	showAvailabilityCheckTab:boolean								= false;
 	showSkillsValidationTab:boolean									= false;
+	showCitiesTab:boolean											= false;
 	createAccountDetailsAvailable:boolean 							= false;
 	recruiterUsername:string										= '';
 	recruiterPassword:string										= '';
@@ -64,10 +65,11 @@ export class AccountsComponent implements OnInit {
 	public switchTab(tab:string){
 		
 		this.currentTab = tab;
-		
+		console.log(">>> " + tab);
 		switch(tab){
 			
 			case "recruiters":{
+				this.showCitiesTab					= false;
 				this.showRecruitersTab				= true;
 				this.showFlaggedAsUnavailableTab	= false;
 				this.showSubscriptionActionsTab		= false;
@@ -76,6 +78,7 @@ export class AccountsComponent implements OnInit {
 				break;
 			}
 			case "flaggedAsUnavailable":{
+				this.showCitiesTab					= false;
 				this.showRecruitersTab				= false;
 				this.showFlaggedAsUnavailableTab	= true;
 				this.showSubscriptionActionsTab		= false;
@@ -85,6 +88,7 @@ export class AccountsComponent implements OnInit {
 				break;
 			}
 			case "subscriptionActions":{
+				this.showCitiesTab					= false;
 				this.showRecruitersTab				= false;
 				this.showFlaggedAsUnavailableTab	= false;
 				this.showSubscriptionActionsTab		= true;
@@ -93,6 +97,7 @@ export class AccountsComponent implements OnInit {
 				break;
 			}
 			case "availabilityChecks":{
+				this.showCitiesTab					= false;
 				this.showRecruitersTab				= false;
 				this.showFlaggedAsUnavailableTab	= false;
 				this.showSubscriptionActionsTab		= false;
@@ -102,12 +107,22 @@ export class AccountsComponent implements OnInit {
 				break;
 			}			
 			case "skillValidation":{
+				this.showCitiesTab					= false;
 				this.showRecruitersTab				= false;
 				this.showFlaggedAsUnavailableTab	= false;
 				this.showSubscriptionActionsTab		= false;
 				this.showAvailabilityCheckTab		= false;
 				this.showSkillsValidationTab		= true;
 				this.fetchPendingSkills();
+				break;
+			}
+			case "cities":{
+				this.showCitiesTab					= true;
+				this.showRecruitersTab				= false;
+				this.showFlaggedAsUnavailableTab	= false;
+				this.showSubscriptionActionsTab		= false;
+				this.showAvailabilityCheckTab		= false;
+				this.showSkillsValidationTab		= false;
 				break;
 			}
 		}

@@ -5,16 +5,18 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
 
 import com.arenella.recruit.candidates.beans.City;
+import com.arenella.recruit.candidates.enums.COUNTRY;
 
 /**
 * Unit tests for the CityAPIInbound class
 */
 class CityAPIInboundTest {
 
-	private static final String 	COUNTRY 	= "it";
-	private static final String 	NAME 		= "Rome";
-	private static final float 		LAT 		= -1.99f;
-	private static final float 		LON 		= 1.99f;
+	private static final COUNTRY 	COUNTRY_VAL 	= COUNTRY.BELGIUM;
+	private static final String 	NAME 			= "Rome";
+	private static final float 		LAT 			= -1.99f;
+	private static final float 		LON 			= 1.99f;
+	private static final boolean	ACTIVE			= true;
 	
 	/**
 	* Tests construction via Builder
@@ -24,16 +26,18 @@ class CityAPIInboundTest {
 	void testConstruction() {
 		
 		CityAPIInbound city = CityAPIInbound.builder()
-							.country(COUNTRY)
+							.country(COUNTRY_VAL)
 							.name(NAME)
 							.lat(LAT)
 							.lon(LON)
+							.active(ACTIVE)
 						.build();
 		
-		assertEquals(COUNTRY.toUpperCase(), city.getCountry());
-		assertEquals(NAME.toLowerCase(), 	city.getName());
-		assertEquals(LAT, 					city.getLat());
-		assertEquals(LON, 					city.getLon());
+		assertEquals(COUNTRY_VAL, 	city.getCountry());
+		assertEquals(NAME, 			city.getName());
+		assertEquals(LAT, 			city.getLat());
+		assertEquals(LON, 			city.getLon());
+		assertEquals(ACTIVE, 		city.isActive());
 		
 	}
 	
@@ -46,19 +50,20 @@ class CityAPIInboundTest {
 	void testConvertFromAPIInbound() {
 		
 		CityAPIInbound city = CityAPIInbound.builder()
-				.country(COUNTRY)
+				.country(COUNTRY_VAL)
 				.name(NAME)
 				.lat(LAT)
 				.lon(LON)
+				.active(ACTIVE)
 			.build();
 
 		City entity = CityAPIInbound.convertFromAPIInbound(city);
 		
-		assertEquals(COUNTRY.toUpperCase(), 	entity.getCountry());
-		assertEquals(NAME.toLowerCase(), 		entity.getName());
-		assertEquals(LAT, 						entity.getLat());
-		assertEquals(LON, 						entity.getLon());
-	
+		assertEquals(COUNTRY_VAL, 	entity.getCountry());
+		assertEquals(NAME, 			entity.getName());
+		assertEquals(LAT, 			entity.getLat());
+		assertEquals(LON, 			entity.getLon());
+		assertEquals(ACTIVE, 			entity.isActive());
 	}
 	
 }

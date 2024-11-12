@@ -12,8 +12,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.arenella.recruit.candidates.enums.COUNTRY;
 import com.arenella.recruit.candidates.services.CityService;
 
 /**
@@ -31,9 +33,9 @@ public class CityController {
 	* @return Cities for Country
 	*/
 	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('ROLE_RECRUITER')")
-	@GetMapping("/city/{countryCode}")
-	public ResponseEntity<Set<CityAPIOutbound>>  fetchCitiesForCountry(@PathVariable("countryCode") String countryCode){
-		return ResponseEntity.ok(this.cityService.fetchCitiesForCountry(countryCode).stream().map(CityAPIOutbound::convertToAPIOutbound).collect(Collectors.toCollection(LinkedHashSet::new)));
+	@GetMapping("/city/{country}")
+	public ResponseEntity<Set<CityAPIOutbound>>  fetchCitiesForCountry(@PathVariable("country") COUNTRY country){
+		return ResponseEntity.ok(this.cityService.fetchCitiesForCountry(country).stream().map(CityAPIOutbound::convertToAPIOutbound).collect(Collectors.toCollection(LinkedHashSet::new)));
 	}
 	
 	/**
@@ -52,7 +54,7 @@ public class CityController {
 	*/
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@PostMapping("/city")
-	public ResponseEntity<Void> addCity(CityAPIInbound cityAPIInbound) {
+	public ResponseEntity<Void> addCity(@RequestBody CityAPIInbound cityAPIInbound) {
 		
 		this.cityService.addCity(CityAPIInbound.convertFromAPIInbound(cityAPIInbound));
 		
@@ -65,7 +67,7 @@ public class CityController {
 	*/
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@PutMapping("/city")
-	public ResponseEntity<Void> updateCity(CityAPIInbound cityAPIInbound) {
+	public ResponseEntity<Void> updateCity(@RequestBody CityAPIInbound cityAPIInbound) {
 		
 		this.cityService.updateCity(CityAPIInbound.convertFromAPIInbound(cityAPIInbound));
 		

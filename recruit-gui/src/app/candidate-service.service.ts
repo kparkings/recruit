@@ -14,9 +14,11 @@ import { UpdateCandidateRequest } 						from './new-candidate/update-candidate-r
 import { CandidateSkill } 								from './accounts/candidate-skill';
 import { TranslateService } 							from '@ngx-translate/core';
 import { CandidateTotals } 								from './candidate-totals';
-import { SupportedLanguage } from './supported-language';
-import { GeoZone } from './geo-zone';
-import { SupportedCountry } from './supported-candidate';
+import { SupportedLanguage } 							from './supported-language';
+import { GeoZone } 										from './geo-zone';
+import { SupportedCountry } 							from './supported-candidate';
+import { City } 										from './accounts/city';
+import { UpdateCityRequest } 							from './accounts/update-city-request';
 
 /**
 * Services for new Candidates
@@ -118,7 +120,29 @@ export class CandidateServiceService {
       headers: new HttpHeaders({ }), withCredentials: true
     };
     
-
+	/**
+	* Returns Cities that have been added to the System as part to a Candidate profile
+	* that need to be processed and activated by the admin 
+	*/
+	public getCities(): Observable<Array<City>>{
+		const backendUrl:string = environment.backendUrl +'city/awaiting-activation';
+		
+		return this.httpClient.get<Array<City>>(backendUrl, this.httpOptions);
+	}
+	
+	/**
+	* Updtaes and activates a City
+	*/
+	public updateCity(city:City,lat:number, lon:number):Observable<any>{
+					
+		let updateRequest:UpdateCityRequest = new UpdateCityRequest(city.country, city.name, lat, lon, true);
+	
+		const backendUrl:string = environment.backendUrl +'city';
+		
+		return this.httpClient.put<any>(backendUrl, JSON.stringify(updateRequest), this.httpOptions);
+		
+	}
+	
   	/**
   	* Returns a list of available Candidates 
   	*/

@@ -1,33 +1,39 @@
 package com.arenella.recruit.candidates.controllers;
 
 import com.arenella.recruit.candidates.beans.City;
+import com.arenella.recruit.candidates.enums.COUNTRY;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 
 /**
 * API Inbound representation of a City 
 */
+@JsonDeserialize(builder=CityAPIInbound.CityAPIInboundBuilder.class)
 public class CityAPIInbound {
 	
-	private final String country;
-	private final String name;
-	private final float lat;
-	private final float lon;
+	private final COUNTRY 	country;
+	private final String 	name;
+	private final float 	lat;
+	private final float 	lon;
+	private final boolean 	active;
 	
 	/**
 	* Constructor
 	* @param builder - Contains initialization values
 	*/
 	public CityAPIInbound(CityAPIInboundBuilder builder) {
-		this.country 	= builder.country.toUpperCase();
-		this.name 		= builder.name.toLowerCase();
+		this.country 	= builder.country;
+		this.name 		= builder.name;
 		this.lat 		= builder.lat;
 		this.lon 		= builder.lon;
+		this.active		= builder.active;
 	}
 	
 	/**
 	* Returns 2 digit code for coutry
 	* @return country city belongs to
 	*/
-	public String getCountry() {
+	public COUNTRY getCountry() {
 		return this.country;
 	}
 	
@@ -56,6 +62,14 @@ public class CityAPIInbound {
 	}
 	
 	/**
+	* Whether the City is active or disabled
+	* @return Whether the City is active
+	*/
+	public boolean isActive() {
+		return this.active;
+	}
+	
+	/**
 	* Returns a Builder for the City class
 	* @return Builder
 	*/
@@ -66,12 +80,14 @@ public class CityAPIInbound {
 	/**
 	* Builder for the City class 
 	*/
+	@JsonPOJOBuilder(buildMethodName="build", withPrefix="")
 	public static class CityAPIInboundBuilder{
 	
-		private String 	country;
+		private COUNTRY country;
 		private String 	name;
 		private float 	lat;
 		private float 	lon;
+		private boolean active;
 		
 		/**
 		* Sets the 2 digit Country code of the Country 
@@ -79,7 +95,7 @@ public class CityAPIInbound {
 		* @param country - 2 digit country code
 		* @return Builder
 		*/
-		public CityAPIInboundBuilder country(String country) {
+		public CityAPIInboundBuilder country(COUNTRY country) {
 			this.country = country;
 			return this;
 		}
@@ -115,6 +131,16 @@ public class CityAPIInbound {
 		}
 		
 		/**
+		* Sets whether or not the City is active
+		* @param active - whether the city is active
+		* @return Builder
+		*/
+		public CityAPIInboundBuilder active(boolean active) {
+			this.active = active;
+			return this;
+		}
+		
+		/**
 		* Reutrns initialized instance of the City
 		* @return City
 		*/
@@ -130,7 +156,7 @@ public class CityAPIInbound {
 	* @return API Inbound representation
 	*/
 	public static City convertFromAPIInbound(CityAPIInbound city) {
-		return City.builder().country(city.getCountry()).name(city.getName()).lat(city.getLat()).lon(city.getLon()).build();
+		return City.builder().country(city.getCountry()).name(city.getName()).lat(city.getLat()).lon(city.getLon()).active(city.isActive()).build();
 	}
 	
 }

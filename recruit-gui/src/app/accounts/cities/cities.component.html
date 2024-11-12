@@ -1,0 +1,29 @@
+<div>
+	<div class="action-buttons">
+	</div>
+	<form [formGroup]="cityForm">
+		<table class="table candidate-table availability">
+			<thead>
+	     			<tr>
+	     				<th class="bg-tab-hdr">{{'arenella-accounts-tabscities-country' | translate}}</th>
+	     				<th class="bg-tab-hdr">{{'arenella-accounts-tabscities-city' | translate}}</th>
+	     				<th class="bg-tab-hdr">{{'arenella-accounts-tabscities-lat' | translate}}</th>
+	     				<th class="bg-tab-hdr">{{'arenella-accounts-tabscities-lon' | translate}}</th>
+	     				<th class="bg-tab-hdr">{{'arenella-accounts-tabscities-actions' | translate}}</th>
+	     		     </tr>
+	     		</thead>
+	     		<tbody>
+	     		<tr *ngFor="let city of citiesAwaitingActivation">
+	      			<td>{{city.country}}</td>
+	      			<td>{{city.name}}</td>
+	      			<td><input type="number" formControlName=lat></td>
+	      			<td><input type="number" formControlName="lon"/></td>
+	      			<td>
+	      				<button	class="btn btn-secondary arenella-btn" style="min-width:100px;" (click)="updateCity(city)">{{'arenella-accounts-tabcitties-btn-activate' | translate}}</button>
+	      				<button	class="btn btn-secondary arenella-btn" style="min-width:100px;" (click)="deleteCity(city)">{{'arenella-accounts-tabcitties-btn-delete' | translate}}</button>
+	      			</td>
+	      		</tr>
+	      	</tbody>
+		</table>
+	</form>
+</div>

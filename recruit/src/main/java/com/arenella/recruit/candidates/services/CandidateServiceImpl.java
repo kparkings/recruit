@@ -157,6 +157,9 @@ public class CandidateServiceImpl implements CandidateService{
 	@Autowired
 	private ArenellaRoleManager					roleManager;
 	
+	@Autowired
+	private	CityService 						cityService;
+	
 	/**
 	* Refer to the CandidateService Interface for Details
 	*/
@@ -254,6 +257,8 @@ public class CandidateServiceImpl implements CandidateService{
 					.build(); 
 			
 			externalEventPublisher.publishCandidateUpdateEvent(event);
+			
+			cityService.performNewCityCheck(candidate.getCountry(), candidate.getCity());
 		}
 				
 	}
@@ -925,24 +930,9 @@ public class CandidateServiceImpl implements CandidateService{
 		
 		externalEventPublisher.publishCandidateUpdateEvent(event);
 		
+		cityService.performNewCityCheck(candidate.getCountry(), candidate.getCity());
+		
 	}
-	
-	/**
-	* Checks if the currently authenticated user has 
-	* a specific role
-	* @param roleToCheck - Role to check
-	* @return whether or not the user has the role
-	*/
-	//private boolean checkHasRole(String roleToCheck) {
-	//	return SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream().filter(role -> role.getAuthority().equals(roleToCheck)).findAny().isPresent();
-	//}
-	
-	
-	//TODO: [KP]. Create a component. Component replaces checkHasRole.
-	//1. Write once use anywhere ( Create in Spring project map)
-	//2. We can pass in with the request when there is no user and it is system
-	//3. Keeps spring security implementation outside of the service
-	
 	
 	@Override
 	public void deleteCandidate(String candidateId) {

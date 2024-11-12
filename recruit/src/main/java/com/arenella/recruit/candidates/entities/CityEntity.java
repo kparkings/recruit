@@ -3,11 +3,14 @@ package com.arenella.recruit.candidates.entities;
 import java.io.Serializable;
 
 import com.arenella.recruit.candidates.beans.City;
+import com.arenella.recruit.candidates.enums.COUNTRY;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Table;
 
 /**
@@ -30,6 +33,13 @@ public class CityEntity {
 	public boolean active;
 	
 	/**
+	* Default Constructor 
+	*/
+	public CityEntity() {
+		//Hibernate
+	}
+	
+	/**
 	* Constructor
 	* @param country - Name of the country the City belongs to
 	* @param name	 - Name of the City
@@ -37,7 +47,7 @@ public class CityEntity {
 	* @param lon	 - Longitude position to 2 decimal places
 	* @param active	 - If the City has been activated or is awaiting activation
 	*/
-	public CityEntity(String country, String name, float lat, float lon, boolean active) {
+	public CityEntity(COUNTRY country, String name, float lat, float lon, boolean active) {
 		this.id 			= new CityId(country, name);
 		this.lat 			= lat;
 		this.lon 			= lon;
@@ -48,7 +58,7 @@ public class CityEntity {
 	* Returns the name of the Country the City belongs to
 	* @return Name of the Country
 	*/
-	public String getCountry() {
+	public COUNTRY getCountry() {
 		return this.id.country;
 	}
 	
@@ -92,15 +102,26 @@ public class CityEntity {
 
 		private static final long serialVersionUID = 615419116493228418L;
 		
-		private String country;
+		@Column(name="country")
+		@Enumerated(EnumType.STRING)
+		private COUNTRY country;
+		
+		@Column(name="city")
 		private String name;
 		
 		/**
+		* Default constructor 
+		*/
+		public CityId() {
+			//Hibernate
+		}
+		
+		/**
 		* Constructor
-		* @param country - 2 char countryId
+		* @param country - country
 		* @param name	 - City name
 		*/
-		public CityId(String country, String name) {
+		public CityId(COUNTRY country, String name) {
 			this.country 	= country;
 			this.name 		= name;
 		}
@@ -109,7 +130,7 @@ public class CityEntity {
 		* Returns the country code
 		* @return country code
 		*/
-		public String getCountry() {
+		public COUNTRY getCountry() {
 			return this.country;
 		}
 		
@@ -125,7 +146,7 @@ public class CityEntity {
 		* Sets the country
 		* @param country - country code
 		*/
-		public void setCountry(String country) {
+		public void setCountry(COUNTRY country) {
 			this.country = country;
 		}
 		

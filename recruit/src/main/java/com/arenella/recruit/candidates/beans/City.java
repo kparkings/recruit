@@ -1,11 +1,13 @@
 package com.arenella.recruit.candidates.beans;
 
+import com.arenella.recruit.candidates.enums.COUNTRY;
+
 /**
 * Class to represent a City in a Country 
 */
 public class City {
 
-	private final String 	country;
+	private final COUNTRY 	country;
 	private final String 	name;
 	private final float 	lat;
 	private final float 	lon;
@@ -16,8 +18,8 @@ public class City {
 	* @param builder - Contains initialization values
 	*/
 	public City(CityBuilder builder) {
-		this.country 	= builder.country.toUpperCase();
-		this.name 		= builder.name.toLowerCase();
+		this.country 	= builder.country;
+		this.name 		= builder.name;
 		this.lat 		= builder.lat;
 		this.lon 		= builder.lon;
 		this.active		= builder.active;
@@ -27,7 +29,7 @@ public class City {
 	* Returns 2 digit code for coutry
 	* @return country city belongs to
 	*/
-	public String getCountry() {
+	public COUNTRY getCountry() {
 		return this.country;
 	}
 	
@@ -77,7 +79,7 @@ public class City {
 	*/
 	public static class CityBuilder{
 	
-		private String 	country;
+		private COUNTRY country;
 		private String 	name;
 		private float 	lat;
 		private float 	lon;
@@ -89,7 +91,7 @@ public class City {
 		* @param country - 2 digit country code
 		* @return Builder
 		*/
-		public CityBuilder country(String country) {
+		public CityBuilder country(COUNTRY country) {
 			this.country = country;
 			return this;
 		}

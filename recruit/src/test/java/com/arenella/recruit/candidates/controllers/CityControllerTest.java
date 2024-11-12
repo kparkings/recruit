@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import com.arenella.recruit.candidates.beans.City;
+import com.arenella.recruit.candidates.enums.COUNTRY;
 import com.arenella.recruit.candidates.services.CityService;
 
 /**
@@ -36,9 +37,9 @@ class CityControllerTest {
 		
 		final String cityName = "rome";
 		
-		Mockito.when(this.mockCityService.fetchCitiesForCountry("it")).thenReturn(Set.of(City.builder().country("it").name(cityName).build()));
+		Mockito.when(this.mockCityService.fetchCitiesForCountry(COUNTRY.BELGIUM)).thenReturn(Set.of(City.builder().country(COUNTRY.BELGIUM).name(cityName).build()));
 		
-		ResponseEntity<Set<CityAPIOutbound>> cities = this.cityController.fetchCitiesForCountry("it");
+		ResponseEntity<Set<CityAPIOutbound>> cities = this.cityController.fetchCitiesForCountry(COUNTRY.BELGIUM);
 		
 		assertEquals(HttpStatus.OK, cities.getStatusCode());
 		
@@ -52,7 +53,7 @@ class CityControllerTest {
 	@Test
 	void testAddCoity() {
 		
-		ResponseEntity<Void> response = this.cityController.addCity(CityAPIInbound.builder().country("It").name("Rome").build());
+		ResponseEntity<Void> response = this.cityController.addCity(CityAPIInbound.builder().country(COUNTRY.BELGIUM).name("Rome").build());
 		
 		Mockito.verify(this.mockCityService).addCity(Mockito.any(City.class));
 		
@@ -68,7 +69,7 @@ class CityControllerTest {
 		
 		final String cityName = "rome";
 		
-		Mockito.when(this.mockCityService.fetchCitiesAwaitingActivation()).thenReturn(Set.of(City.builder().country("it").name(cityName).build()));
+		Mockito.when(this.mockCityService.fetchCitiesAwaitingActivation()).thenReturn(Set.of(City.builder().country(COUNTRY.BELGIUM).name(cityName).build()));
 		
 		ResponseEntity<Set<CityAPIOutbound>> cities = this.cityController.fetchCitiesAwaitingActivation();
 		
@@ -83,7 +84,7 @@ class CityControllerTest {
 	@Test
 	void testUpdateCity() {
 		
-		ResponseEntity<Void> response = this.cityController.updateCity(CityAPIInbound.builder().country("It").name("Rome").build());
+		ResponseEntity<Void> response = this.cityController.updateCity(CityAPIInbound.builder().country(COUNTRY.BELGIUM).name("Rome").build());
 		
 		Mockito.verify(this.mockCityService).updateCity(Mockito.any(City.class));
 		

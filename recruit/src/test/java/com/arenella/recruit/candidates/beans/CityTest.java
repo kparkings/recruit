@@ -6,13 +6,14 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
 import com.arenella.recruit.candidates.entities.CityEntity;
+import com.arenella.recruit.candidates.enums.COUNTRY;
 
 /**
 * Unit tests for the City class
 */
 class CityTest {
 
-	private static final String 	COUNTRY 	= "it";
+	private static final COUNTRY 	COUNTRY_VAL = COUNTRY.AUSTRIA;
 	private static final String 	NAME 		= "Rome";
 	private static final float 		LAT 		= -1.99f;
 	private static final float 		LON 		= 1.99f;
@@ -26,17 +27,17 @@ class CityTest {
 	void testConstruction() {
 		
 		City city = City.builder()
-							.country(COUNTRY)
+							.country(COUNTRY_VAL)
 							.name(NAME)
 							.lat(LAT)
 							.lon(LON)
 							.active(ACTIVE)
 						.build();
 		
-		assertEquals(COUNTRY.toUpperCase(), city.getCountry());
-		assertEquals(NAME.toLowerCase(), 	city.getName());
-		assertEquals(LAT, 					city.getLat());
-		assertEquals(LON, 					city.getLon());
+		assertEquals(COUNTRY_VAL, 	city.getCountry());
+		assertEquals(NAME, 			city.getName());
+		assertEquals(LAT, 			city.getLat());
+		assertEquals(LON, 			city.getLon());
 		
 		assertTrue(city.isActive());
 		
@@ -51,7 +52,7 @@ class CityTest {
 	void testToEntity() {
 		
 		City city = City.builder()
-				.country(COUNTRY)
+				.country(COUNTRY_VAL)
 				.name(NAME)
 				.lat(LAT)
 				.lon(LON)
@@ -62,10 +63,10 @@ class CityTest {
 
 		CityEntity entity = CityEntity.toEntity(city);
 		
-		assertEquals(COUNTRY.toUpperCase(), 	entity.getCountry());
-		assertEquals(NAME.toLowerCase(), 		entity.getName());
-		assertEquals(LAT, 						entity.getLat());
-		assertEquals(LON, 						entity.getLon());
+		assertEquals(COUNTRY_VAL,	 	entity.getCountry());
+		assertEquals(NAME,		 		entity.getName());
+		assertEquals(LAT, 				entity.getLat());
+		assertEquals(LON, 				entity.getLon());
 	
 		assertTrue(entity.isActive());
 		
@@ -79,14 +80,14 @@ class CityTest {
 	@Test
 	void testFromEntity() {
 		
-		CityEntity entity = new CityEntity(COUNTRY, NAME, LAT, LON, ACTIVE);
+		CityEntity entity = new CityEntity(COUNTRY_VAL, NAME, LAT, LON, ACTIVE);
 		
 		City city = CityEntity.fromEntity(entity);
 		
-		assertEquals(COUNTRY.toUpperCase(), 	city.getCountry());
-		assertEquals(NAME.toLowerCase(), 		city.getName());
-		assertEquals(LAT, 						city.getLat());
-		assertEquals(LON, 						city.getLon());
+		assertEquals(COUNTRY_VAL, 	city.getCountry());
+		assertEquals(NAME, 			city.getName());
+		assertEquals(LAT, 			city.getLat());
+		assertEquals(LON, 			city.getLon());
 		
 		assertTrue(city.isActive());
 		
