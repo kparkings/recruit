@@ -14,9 +14,11 @@ import com.arenella.recruit.adapters.actions.RequestSkillsForCurriculumCommand;
 import com.arenella.recruit.candidates.adapters.ExternalEventPublisher;
 import com.arenella.recruit.candidates.beans.Candidate;
 import com.arenella.recruit.candidates.beans.CandidateFilterOptions;
+import com.arenella.recruit.candidates.beans.City;
 import com.arenella.recruit.candidates.controllers.CandidateSuggestionAPIOutbound;
 import com.arenella.recruit.candidates.enums.RESULT_ORDER;
 import com.arenella.recruit.candidates.repos.CandidateRepository;
+import com.arenella.recruit.candidates.services.CityService;
 import com.arenella.recruit.curriculum.adapters.CurriculumExternalEventListener;
 import com.arenella.recruit.emailservice.adapters.RequestSendEmailCommand;
 import com.arenella.recruit.emailservice.beans.Email.EmailRecipient;
@@ -66,6 +68,9 @@ public class CandidateAccountRefreshUtil {
 	@Autowired
 	private ExternalEventPublisher				externalEventPublisher;
 	
+	@Autowired
+	private CityService							cityService;
+	
 	/**
 	* Triggers refresh actions for Candidates that are outdated
 	*/
@@ -84,6 +89,7 @@ public class CandidateAccountRefreshUtil {
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
+	
 	}
 	
 	/**
@@ -91,13 +97,18 @@ public class CandidateAccountRefreshUtil {
 	*/
 	private void runSkillUpdateRefresh() {
 		
-		//TODO: 1 - Admin available screen to change from 2 weeks to 2 weeks and 3 days to give candidates chance to react to email
-		
 		CandidateFilterOptions filters = CandidateFilterOptions.builder().lastAccountRefreshLtEq(LocalDate.now().minusWeeks(2)).build();
 		
 		try {
 			candidateRepository.findCandidates(filters, esClient, 10).forEach(candidate -> {
+				
+				//Hijacking the skills update to also update the geopos info
+				City city = cityService.findCityById(candidate.getCountry(), candidate.getCity()).orElse(City.builder().build());
+				candidate.setLatitude(city.getLat());
+				candidate.setLongitude(city.getLon());
+				
 				candidate.setLastAccountRefresh(LocalDate.now().plusDays(1));
+				
 				this.candidateRepository.saveCandidate(candidate);
 				eventPublisher.listenForRequestSkillsForCurriculumCommand(new RequestSkillsForCurriculumCommand(Long.valueOf(candidate.getCandidateId())));
 			});

@@ -11,6 +11,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.data.elasticsearch.core.geo.GeoPoint;
 
 import com.arenella.recruit.candidates.beans.Candidate;
 import com.arenella.recruit.candidates.beans.Candidate.CANDIDATE_TYPE;
@@ -30,7 +31,7 @@ import com.arenella.recruit.candidates.enums.PERM;
 * Unit tests for the CandidateDocument class
 * @author K Parkings
 */
-public class CandidateDocumentTest {
+class CandidateDocumentTest {
 
 	private static final long						CANDIDATE_ID				= 123;
 	private static final String 					FIRSTNAME					= "Kevin";
@@ -63,13 +64,16 @@ public class CandidateDocumentTest {
 	private static final LocalDate 					AVAILABIILTY_CHK_EMAIL_DATE = LocalDate.of(2024, 9, 21);
 	private static final LocalDate 					AVAILABIILTY_CHK_RESPONSE 	= LocalDate.of(2024, 9, 13);
 	private static final UUID						AVAILABILITY_CHK_TOKEN_ID	= UUID.randomUUID();
+	private static final double						LATITUDE					= -2;
+	private static final double						LONGITUDE					= 1;
+	
 	
 	/**
 	* Tests construction
 	* @throws Exception
 	*/
 	@Test
-	public void testConstruction() throws Exception {
+	void testConstruction() {
 		
 		CandidateDocument doc = 
 				CandidateDocument
@@ -79,6 +83,7 @@ public class CandidateDocumentTest {
 					.candidateId(CANDIDATE_ID)
 					.candidateType(CANDIDATE_TYPE_VAL)
 					.city(CITY)
+					.cityPos(new GeoPoint(LATITUDE, LONGITUDE))
 					.comments(COMMENTS)
 					.country(COUNTRY_VAL)
 					.daysOnSite(DAYS_ON_SITE_VAL)
@@ -115,6 +120,8 @@ public class CandidateDocumentTest {
 		assertEquals(FUNCTION_VAL,																		doc.getFunction());
 		assertEquals(COUNTRY_VAL,																		doc.getCountry());
 		assertEquals(CITY,																				doc.getCity());
+		assertEquals(LATITUDE,																			doc.getCityPos().getLat());
+		assertEquals(LONGITUDE,																			doc.getCityPos().getLon());
 		assertEquals(PERM_VAL,																			doc.isPerm());
 		assertEquals(FREELANCE_VAL,																		doc.isFreelance());
 		assertEquals(YEARS_EXPERIENCE,																	doc.getYearsExperience());
@@ -146,7 +153,7 @@ public class CandidateDocumentTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testConvertToDomain() throws Exception{
+	void testConvertToDomain() {
 		
 		CandidateDocument doc = 
 				CandidateDocument
@@ -156,6 +163,7 @@ public class CandidateDocumentTest {
 					.candidateId(CANDIDATE_ID)
 					.candidateType(CANDIDATE_TYPE_VAL)
 					.city(CITY)
+					.cityPos(new GeoPoint(LATITUDE, LONGITUDE))
 					.comments(COMMENTS)
 					.country(COUNTRY_VAL)
 					.daysOnSite(DAYS_ON_SITE_VAL)
@@ -194,6 +202,9 @@ public class CandidateDocumentTest {
 		assertEquals(FUNCTION_VAL,					candidate.getFunction());
 		assertEquals(COUNTRY_VAL,					candidate.getCountry());
 		assertEquals(CITY,							candidate.getCity());
+		assertEquals(LATITUDE,						candidate.getLatitude());
+		assertEquals(LONGITUDE,						candidate.getLongitude());
+		
 		assertEquals(PERM_VAL,						candidate.isPerm());
 		assertEquals(FREELANCE_VAL,					candidate.isFreelance());
 		assertEquals(YEARS_EXPERIENCE,				candidate.getYearsExperience());
@@ -238,7 +249,7 @@ public class CandidateDocumentTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testConvertToDomain_defaults() throws Exception{
+	void testConvertToDomain_defaults() {
 		
 		CandidateDocument doc = 
 				CandidateDocument
@@ -257,7 +268,7 @@ public class CandidateDocumentTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testConvertFromDomain() throws Exception{
+	void testConvertFromDomain() {
 		
 		Candidate candidate = 
 				Candidate
@@ -267,6 +278,8 @@ public class CandidateDocumentTest {
 					.candidateId(String.valueOf(CANDIDATE_ID))
 					.candidateType(CANDIDATE_TYPE_VAL)
 					.city(CITY)
+					.latitude(LATITUDE)
+					.longitude(LONGITUDE)
 					.comments(COMMENTS)
 					.country(COUNTRY_VAL)
 					.daysOnSite(DAYS_ON_SITE_VAL)
@@ -305,6 +318,9 @@ public class CandidateDocumentTest {
 		assertEquals(FUNCTION_VAL,					doc.getFunction());
 		assertEquals(COUNTRY_VAL,					doc.getCountry());
 		assertEquals(CITY,							doc.getCity());
+		assertEquals(LATITUDE,						doc.getCityPos().getLat());
+		assertEquals(LONGITUDE,						doc.getCityPos().getLon());
+		
 		assertEquals(PERM_VAL,						doc.isPerm());
 		assertEquals(FREELANCE_VAL,					doc.isFreelance());
 		assertEquals(YEARS_EXPERIENCE,				doc.getYearsExperience());

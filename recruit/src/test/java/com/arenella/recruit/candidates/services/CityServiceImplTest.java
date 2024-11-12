@@ -118,4 +118,32 @@ class CityServiceImplTest {
 		
 	}
 	
+	/**
+	* Tests deletion of existing City 
+	*/
+	@Test
+	void testDeleteCityExists() {
+		
+		Mockito.when(this.mockCityDao.existsById(Mockito.any(CityId.class))).thenReturn(true);
+		
+		service.deleteCity(COUNTRY.ITALY, "Cosenza");
+		
+		Mockito.verify(this.mockCityDao).deleteById(Mockito.any(CityId.class));
+		
+	}
+	
+	/**
+	* Tests attempt to delete a non  existent City 
+	*/
+	@Test
+	void testDeleteCityDoesNotExists() {
+	
+		Mockito.when(this.mockCityDao.existsById(Mockito.any(CityId.class))).thenReturn(false);
+		
+		service.deleteCity(COUNTRY.ITALY, "Cosenza");
+		
+		Mockito.verify(this.mockCityDao, Mockito.never()).deleteById(Mockito.any(CityId.class));
+		
+	}
+	
 }

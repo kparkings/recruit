@@ -2,6 +2,7 @@ package com.arenella.recruit.candidates.dao;
 
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -10,6 +11,7 @@ import org.springframework.data.repository.ListCrudRepository;
 
 import com.arenella.recruit.candidates.beans.City;
 import com.arenella.recruit.candidates.entities.CityEntity;
+import com.arenella.recruit.candidates.entities.CityEntity.CityId;
 import com.arenella.recruit.candidates.enums.COUNTRY;
 
 /**
@@ -43,6 +45,24 @@ public interface CityDao extends ListCrudRepository<CityEntity, CityEntity.CityI
 	*/
 	default Set<City> fetchCitiesAwaitingActivation() {
 		return this.findAll().stream().filter(c -> !c.active).map(CityEntity::fromEntity).collect(Collectors.toCollection(LinkedHashSet::new));
+	}
+	
+	/**
+	* If available returns the City
+	* @param country - Country City is in
+	* @param city	 - name of the City
+	* @return
+	*/
+	default Optional<City> findCityById(COUNTRY country, String city) {
+		
+		Optional<CityEntity> cityEntity = this.findById(new CityId(country, city));
+		
+		if (cityEntity.isEmpty()) {
+			return Optional.empty();
+		}
+		
+		return Optional.of(CityEntity.fromEntity(cityEntity.get()));
+		
 	}
 	
 }

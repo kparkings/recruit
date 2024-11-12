@@ -92,4 +92,18 @@ class CityControllerTest {
 		
 	}
 	
+	/**
+	* Tests deletion of City
+	*/
+	@Test
+	void testDeleteCity() {
+		
+		ResponseEntity<Void> response = this.cityController.deleteCity(COUNTRY.BELGIUM, "Rome");
+		
+		Mockito.verify(this.mockCityService).deleteCity(COUNTRY.BELGIUM, "Rome");
+		
+		assertEquals(HttpStatus.OK, response.getStatusCode());
+		
+	}
+	
 }

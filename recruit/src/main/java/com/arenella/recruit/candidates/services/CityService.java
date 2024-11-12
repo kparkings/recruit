@@ -1,5 +1,6 @@
 package com.arenella.recruit.candidates.services;
 
+import java.util.Optional;
 import java.util.Set;
 
 import com.arenella.recruit.candidates.beans.City;
@@ -50,5 +51,14 @@ public interface CityService {
 	* @param city	 - name of the City
 	*/
 	void deleteCity(COUNTRY country, String city);
+
+	/**
+	* If city is found returns a City. If not returns a default city
+	* for 
+	* @param country - Country the City belongs to
+	* @param city	 - name of the City
+	* @return City
+	*/
+	Optional<City> findCityById(COUNTRY country, String city);
 	
 }

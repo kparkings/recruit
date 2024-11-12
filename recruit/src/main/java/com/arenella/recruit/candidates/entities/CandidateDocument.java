@@ -17,6 +17,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
+import org.springframework.data.elasticsearch.core.geo.GeoPoint;
 
 import com.arenella.recruit.candidates.beans.Candidate;
 import com.arenella.recruit.candidates.beans.Candidate.CANDIDATE_TYPE;
@@ -62,6 +63,9 @@ public class CandidateDocument {
 	
 	@Field(type = FieldType.Keyword)
 	private String 		city;
+	
+	@Field(type = FieldType.Auto)
+	private GeoPoint cityPos = new GeoPoint(0,0);
 	
 	@Field(type = FieldType.Keyword)
 	@Enumerated(EnumType.STRING)
@@ -156,6 +160,7 @@ public class CandidateDocument {
 		this.function 							= builder.function;
 		this.country 							= builder.country;
 		this.city 								= builder.city;
+		this.cityPos							= builder.cityPos;
 		this.perm 								= builder.perm;
 		this.freelance 							= builder.freelance;
 		this.yearsExperience 					= builder.yearsExperience;
@@ -252,6 +257,14 @@ public class CandidateDocument {
 	*/
 	public String getCity() {
 		return this.city;
+	}
+	
+	/**
+	* Returns the position of the City
+	* @return position of the City
+	*/
+	public GeoPoint getCityPos() {
+		return this.cityPos;
 	}
 	
 	/**
@@ -510,6 +523,7 @@ public class CandidateDocument {
 		private FUNCTION 				function;
 		private COUNTRY 				country;
 		private String 					city;
+		private GeoPoint				cityPos = new GeoPoint(0,0);
 		private PERM 					perm;
 		private FREELANCE 				freelance;
 		private int						yearsExperience;
@@ -611,6 +625,16 @@ public class CandidateDocument {
 		*/
 		public CandidateDocumentBuilder city(String city) {
 			this.city = city;
+			return this;
+		}
+		
+		/**
+		* Sets the position of the City 
+		* @param cityPos - Position of the City
+		* @return Builder
+		*/
+		public CandidateDocumentBuilder cityPos(GeoPoint cityPos) {
+			this.cityPos = cityPos;
 			return this;
 		}
 		
@@ -872,6 +896,8 @@ public class CandidateDocument {
 					.candidateId(String.valueOf(doc.getCandidateId()))
 					.candidateType(doc.getCandidateType())
 					.city(doc.getCity())
+					.latitude(doc.getCityPos().getLat())
+					.longitude(doc.getCityPos().getLon())
 					.comments(doc.getComments())
 					.country(doc.getCountry())
 					.daysOnSite(doc.getDaysOnSite())
@@ -881,7 +907,7 @@ public class CandidateDocument {
 					.freelance(doc.isFreelance())
 					.function(doc.getFunction())
 					.introduction(doc.getIntroduction())
-					.languages(doc.getLanguages().stream().map(l ->  LanguageDocument.convertToDomain(l)).collect(Collectors.toCollection(LinkedHashSet::new)))
+					.languages(doc.getLanguages().stream().map(LanguageDocument::convertToDomain).collect(Collectors.toCollection(LinkedHashSet::new)))
 					.lastAvailabilityCheck(doc.getLastAvailabilityCheckOn().toInstant()
 						      .atZone(ZoneId.systemDefault())
 						      .toLocalDate())
@@ -924,6 +950,7 @@ public class CandidateDocument {
 					.candidateId(Long.valueOf(candidate.getCandidateId()))
 					.candidateType(candidate.getCandidateType())
 					.city(candidate.getCity())
+					.cityPos(new GeoPoint(candidate.getLatitude(), candidate.getLongitude()))
 					.comments(candidate.getComments())
 					.country(candidate.getCountry())
 					.daysOnSite(candidate.getDaysOnSite())

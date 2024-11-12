@@ -32,6 +32,8 @@ public class Candidate {
 	private FUNCTION					function;
 	private COUNTRY 					country;
 	private String 						city;
+	private double						latitude;
+	private double						longitude;
 	private PERM 						perm;
 	private FREELANCE 					freelance;
 	private int							yearsExperience;
@@ -73,6 +75,8 @@ public class Candidate {
 		this.function				 			= builder.function;
 		this.country							= builder.country;
 		this.city 								= builder.city;
+		this.longitude							= builder.longitude;
+		this.latitude							= builder.latitude;
 		this.perm 								= builder.perm;
 		this.freelance 							= builder.freelance;
 		this.yearsExperience 					= builder.yearsExperience;
@@ -166,6 +170,24 @@ public class Candidate {
 	*/
 	public String getCity() {
 		return this.city;
+	}
+	
+	/**
+	* Returns the Longitude for the position of the 
+	* Candidates City
+	* @return longitude position
+	*/
+	public double getLongitude() {
+		return this.longitude;
+	}
+	
+	/**
+	* Returns the Latitude for the position of the 
+	* Candidates City
+	* @return latitude position
+	*/
+	public double getLatitude() {
+		return this.latitude;
 	}
 	
 	/**
@@ -411,6 +433,22 @@ public class Candidate {
 		this.email = email;
 		
 	}
+	
+	/**
+	* Sets the latitude of the City of the Candidate
+	* @param latitude - candidates position
+	*/
+	public void setLatitude(double latitude) {
+		this.latitude = latitude;
+	}
+	
+	/**
+	* Sets the longitude of the City of the Candidate
+	* @param longitude - candidates position
+	*/
+	public void setLongitude(double longitude) {
+		this.longitude = longitude;
+	}
 
 	/**
 	* Sets the type of Candidate
@@ -526,6 +564,8 @@ public class Candidate {
 		private FUNCTION					function;
 		private COUNTRY 					country;
 		private String 						city;
+		private double						longitude;
+		private double						latitude;
 		private PERM 						perm;
 		private FREELANCE 					freelance;
 		private int							yearsExperience;
@@ -629,6 +669,26 @@ public class Candidate {
 		*/
 		public CandidateBuilder city(String city) {
 			this.city = city;
+			return this;
+		}
+		
+		/**
+		* Sets the longitude of the candidates city
+		* @param longitude - longitude of candidates city
+		* @return Builder
+		*/
+		public CandidateBuilder longitude(double longitude) {
+			this.longitude = longitude;
+			return this;
+		}
+		
+		/**
+		* Sets the latitude of the candidates city
+		* @param latitude - latitude of candidates city
+		* @return Builder
+		*/
+		public CandidateBuilder latitude(double latitude) {
+			this.latitude = latitude;
 			return this;
 		}
 		

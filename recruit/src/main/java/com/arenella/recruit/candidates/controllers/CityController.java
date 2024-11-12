@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -74,5 +75,18 @@ public class CityController {
 		return ResponseEntity.status(HttpStatus.OK).build();
 	}
 	
+	/**
+	* Deletes a City 
+	* @param country - Country the City belongs to
+	* @param city	 - Name of the City
+	*/
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@DeleteMapping("/city/country/{country}/city/{city}")
+	public ResponseEntity<Void> deleteCity(@PathVariable("country") COUNTRY country, @PathVariable("city") String city) {
+		
+		this.cityService.deleteCity(country, city);
+		
+		return ResponseEntity.status(HttpStatus.OK).build();
+	}
 		
 }

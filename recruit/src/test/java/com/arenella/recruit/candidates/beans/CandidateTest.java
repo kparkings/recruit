@@ -33,7 +33,7 @@ import com.arenella.recruit.candidates.enums.PERM;
 * Unit test for the Candidate Class
 * @author K Parkings
 */
-public class CandidateTest {
+class CandidateTest {
 
 	private static final String 					CANDIDATE_ID 				= "Candidate1";
 	private static final FUNCTION					FUNCTION_VAL				= FUNCTION.JAVA_DEV;
@@ -66,7 +66,8 @@ public class CandidateTest {
 	private static final LocalDate 					LAST_REFRESH 				= LocalDate.of(2021, 8, 8);
 	private static final LocalDate 					AVAILABIILTY_CHK_RESPONSE 	= LocalDate.of(2024, 9, 13);
 	private static final UUID						AVAILABILITY_CHK_TOKEN_ID	= UUID.randomUUID();
-	
+	private static final double						LONGITUDE					= 1;
+	private static final double						LATITUDE					= -2;
 	
 	/**
 	* Sets up test environment 
@@ -82,7 +83,7 @@ public class CandidateTest {
 	* Test Builder values used to initialize instance of the Candidate Class 
 	*/
 	@Test
-	public void testInitializationFromBuilder() {
+	void testInitializationFromBuilder() {
 		
 		Candidate candidate = Candidate
 						.builder()
@@ -90,6 +91,8 @@ public class CandidateTest {
 							.function(FUNCTION_VAL)
 							.country(COUNTRY_VAL)
 							.city(CITY)
+							.longitude(LONGITUDE)
+							.latitude(LATITUDE)
 							.email(EMAIL)
 							.roleSought(ROLE_SOUGHT)
 							.available(AVAILABLE)
@@ -121,6 +124,8 @@ public class CandidateTest {
 		assertEquals(FUNCTION_VAL, 					candidate.getFunction());
 		assertEquals(COUNTRY_VAL, 					candidate.getCountry());
 		assertEquals(CITY, 							candidate.getCity());
+		assertEquals(LONGITUDE, 					candidate.getLongitude());
+		assertEquals(LATITUDE, 						candidate.getLatitude());
 		assertEquals(EMAIL, 						candidate.getEmail());
 		assertEquals(ROLE_SOUGHT, 					candidate.getRoleSought());
 		assertEquals(AVAILABLE, 					candidate.isAvailable());
@@ -158,7 +163,7 @@ public class CandidateTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testNoLongerAvailable() throws Exception {
+	void testNoLongerAvailable() {
 		
 		final String 	firstName 	= "Kevin";
 		final String 	surname 	= "Parkings";
@@ -192,7 +197,7 @@ public class CandidateTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testMakeAvailable() throws Exception{
+	void testMakeAvailable() {
 		
 		Candidate candidate = Candidate.builder().build();
 				
@@ -209,7 +214,7 @@ public class CandidateTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testBuilder_defaults() throws Exception {
+	void testBuilder_defaults() {
 		
 		Candidate candidate = Candidate.builder().build();
 		
@@ -237,7 +242,7 @@ public class CandidateTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testLastRefrehIsAccountCreatedIfNotExists() throws Exception{
+	void testLastRefrehIsAccountCreatedIfNotExists() {
 	
 		Candidate candidate = Candidate.builder().registerd(REGISTERED).build();
 		
@@ -255,7 +260,7 @@ public class CandidateTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testSetters() throws Exception{
+	void testSetters() {
 		
 		Candidate candidate = Candidate.builder().build();
 		
@@ -267,6 +272,8 @@ public class CandidateTest {
 		candidate.setLastAvailabilityCheckEmailSent(AVAILABIILTY_CHK_EMAIL_DATE);
 		candidate.setLastAvailabilityCheckIdSent(AVAILABILITY_CHK_TOKEN_ID);
 		candidate.setLastAvailabilityCheckConfirmedOn(AVAILABIILTY_CHK_RESPONSE);
+		candidate.setLatitude(LATITUDE);
+		candidate.setLongitude(LONGITUDE);
 		
 		assertEquals(CANDIDATE_TYPE_VAL, 			candidate.getCandidateType());
 		assertEquals(OWNER_ID, 						candidate.getOwnerId().get());
@@ -274,7 +281,8 @@ public class CandidateTest {
 		assertEquals(AVAILABIILTY_CHK_EMAIL_DATE, 	candidate.getLastAvailabilityCheckEmailSent().get());
 		assertEquals(AVAILABILITY_CHK_TOKEN_ID,		candidate.getLastAvailabilityCheckIdSent().get());
 		assertEquals(AVAILABIILTY_CHK_RESPONSE,		candidate.getLastAvailabilityCheckConfirmedOn().get());
-		
+		assertEquals(LATITUDE, 						candidate.getLatitude());
+		assertEquals(LONGITUDE, 					candidate.getLongitude());
 	}
 	
 	/**
@@ -282,7 +290,7 @@ public class CandidateTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testSetCandidateAvailabilityChecked() throws Exception {
+	void testSetCandidateAvailabilityChecked() {
 		
 		final LocalDate pastDate = LocalDate.of(2000, 10, 5);
 		

@@ -46,6 +46,7 @@ import com.arenella.recruit.candidates.beans.CandidateSearchAccuracyWrapper;
 import com.arenella.recruit.candidates.beans.CandidateSearchAlert;
 import com.arenella.recruit.candidates.beans.CandidateSkill;
 import com.arenella.recruit.candidates.beans.CandidateUpdateRequest;
+import com.arenella.recruit.candidates.beans.City;
 import com.arenella.recruit.candidates.beans.Contact;
 import com.arenella.recruit.candidates.beans.Contact.CONTACT_TYPE;
 import com.arenella.recruit.candidates.beans.PendingCandidate;
@@ -218,6 +219,11 @@ public class CandidateServiceImpl implements CandidateService{
 				candidate.setRatePerm(pendingCandidate.getRatePerm().get());
 			}
 		}
+		
+		City city = this.cityService.findCityById(candidate.getCountry(), candidate.getCity()).orElse(City.builder().build()); 
+		
+		candidate.setLatitude(city.getLat());
+		candidate.setLongitude(city.getLon());
 		
 		long candidateId = candidateRepo.saveCandidate(candidate);
 		
@@ -886,10 +892,16 @@ public class CandidateServiceImpl implements CandidateService{
 			photo = existingCandidate.getPhoto().get();
 		}
 		
+		//TODO:[KP] If city exists add lat/lon to the candidate
+		
+		City city = this.cityService.findCityById(candidate.getCountry(), candidate.getCity()).orElse(City.builder().build()); 
+		
 		Candidate updatedCandidate = Candidate
 				.builder()
 					.candidateId(existingCandidate.getCandidateId())
 					.city(candidate.getCity())
+					.latitude(city.getLat())
+					.longitude(city.getLon())
 					.country(candidate.getCountry())
 					.email(candidate.getEmail())
 					.firstname(candidate.getFirstname())

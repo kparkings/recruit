@@ -1,6 +1,7 @@
 package com.arenella.recruit.candidates.services;
 
 import java.util.LinkedHashSet;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -85,8 +86,13 @@ public class CityServiceImpl implements CityService {
 	* Refer to the CityService interface
 	*/
 	@Override
-	public void deleteCity(COUNTRY  country, String city) {
-		// TODO Auto-generated method stub
+	public void deleteCity(COUNTRY country, String city) {
+
+		CityId id = new CityId(country, city);
+		
+		if(cityDao.existsById(id)) {
+			this.cityDao.deleteById(id);
+		}
 		
 	}
 
@@ -107,6 +113,14 @@ public class CityServiceImpl implements CityService {
 		
 		return cleanedString;
 		
+	}
+
+	/**
+	* Refer to the CityService interface
+	*/
+	@Override
+	public Optional<City> findCityById(COUNTRY country, String city) {
+		return this.cityDao.findCityById(country, cleanCityName(city));
 	}
 	
 }
