@@ -60,9 +60,9 @@ export class CitiesComponent {
 	*/
 	public deleteCity(city:City):void{
 		
-		//this.candidateService.deleteCity(city).subscribe(c => {
-		//	this.loadCitiesAwaitingActivation();
-		//});
+		this.candidateService.deleteCity(city).subscribe(c => {
+			this.loadCitiesAwaitingActivation();
+		});
 	}	
 	
 }

@@ -143,6 +143,16 @@ export class CandidateServiceService {
 		
 	}
 	
+	/**
+	* Deletes an existing CIty
+	*/
+	public deleteCity(city:City): Observable<void>{
+		const backendUrl:string = environment.backendUrl +'city/country/' + city.country+ '/city/'+city.name;
+
+		return this.httpClient.delete<any>(backendUrl, this.httpOptions);
+
+	}
+	
   	/**
   	* Returns a list of available Candidates 
   	*/
@@ -461,7 +471,6 @@ export class CandidateServiceService {
 	* Deletes an existing Candidate for a User
 	*/
 	public deleteCandidate(candidateId:string): Observable<void>{
-		console.log("SENDING DELTE FROM HERE ");
 		const backendUrl:string = environment.backendUrl +'candidate/' + candidateId;
 	
 		return this.httpClient.delete<any>(backendUrl, this.httpOptions);
