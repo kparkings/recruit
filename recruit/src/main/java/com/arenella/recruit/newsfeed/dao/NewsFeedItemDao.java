@@ -15,10 +15,11 @@ import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import jakarta.persistence.criteria.CriteriaBuilder.In;
 
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.ListCrudRepository;
 
 import com.arenella.recruit.newsfeed.beans.NewsFeedItem;
 import com.arenella.recruit.newsfeed.beans.NewsFeedItemFilters;
@@ -28,7 +29,7 @@ import com.arenella.recruit.newsfeed.entity.NewsFeedItemEntity;
 * Repository for working with NewsFeedItemEntity objects
 * @author K Parkings
 */
-public interface NewsFeedItemDao extends CrudRepository<NewsFeedItemEntity, UUID>, JpaSpecificationExecutor<NewsFeedItemEntity>{
+public interface NewsFeedItemDao extends ListCrudRepository<NewsFeedItemEntity, UUID>, JpaSpecificationExecutor<NewsFeedItemEntity>{
 
 	/**
 	* Persists a NewsFeedItem
@@ -44,9 +45,7 @@ public interface NewsFeedItemDao extends CrudRepository<NewsFeedItemEntity, UUID
 	* @return NewsFeedItems
 	*/
 	default Set<NewsFeedItem> fetchNewsFeedItem(NewsFeedItemFilters filters){
-		
-		return this.findAll(new NewsFeedItemEntitySpecification(filters)).stream()
-				.limit(filters.getMaxResults().isEmpty() ? 100 : filters.getMaxResults().get())
+		return this.findAll(new NewsFeedItemEntitySpecification(filters), PageRequest.of(0, filters.getMaxResults().isEmpty() ? 100 : filters.getMaxResults().get())).stream()
 				.map(NewsFeedItemEntity::convertFromEntity)
 				.collect(Collectors.toCollection(LinkedHashSet::new));
 	}
