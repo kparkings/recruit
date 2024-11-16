@@ -35,7 +35,7 @@ import com.arenella.recruit.recruiters.services.SupplyAndDemandService;
 * @author K Parkings
 */
 @ExtendWith(MockitoExtension.class)
-public class SupplyAndDemandControllerTest {
+class SupplyAndDemandControllerTest {
 
 	@InjectMocks
 	private SupplyAndDemandController 							controller 									= new SupplyAndDemandController();
@@ -58,7 +58,7 @@ public class SupplyAndDemandControllerTest {
 	*/
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Test
-	public void testAddOpenPosition() throws Exception{
+	void testAddOpenPosition() {
 		
 		Collection authorities = new HashSet<>();
 		authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
@@ -70,7 +70,7 @@ public class SupplyAndDemandControllerTest {
 		
 		Mockito.verify(mockSupplyAndDemandService).addOpenPosition(Mockito.any(OpenPosition.class));
 		
-		assertEquals(response.getStatusCode(), HttpStatus.CREATED);
+		assertEquals(HttpStatus.CREATED, response.getStatusCode());
 	}
 	
 	/**
@@ -79,7 +79,7 @@ public class SupplyAndDemandControllerTest {
 	*/
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Test
-	public void testAddOpenPosition_recruiter_has_credits() throws Exception{
+	void testAddOpenPosition_recruiter_has_credits() {
 		
 		Collection authorities = new HashSet<>();
 		authorities.add(new SimpleGrantedAuthority("ROLE_RECRUITER"));
@@ -93,7 +93,7 @@ public class SupplyAndDemandControllerTest {
 		
 		Mockito.verify(mockSupplyAndDemandService).addOpenPosition(Mockito.any(OpenPosition.class));
 		
-		assertEquals(response.getStatusCode(), HttpStatus.CREATED);
+		assertEquals(HttpStatus.CREATED, response.getStatusCode());
 	}
 	
 	/**
@@ -102,7 +102,7 @@ public class SupplyAndDemandControllerTest {
 	*/
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Test
-	public void testAddOpenPosition_recruiter_no_credits() throws Exception{
+	void testAddOpenPosition_recruiter_no_credits() {
 		
 		Collection authorities = new HashSet<>();
 		authorities.add(new SimpleGrantedAuthority("ROLE_RECRUITER"));
@@ -110,11 +110,12 @@ public class SupplyAndDemandControllerTest {
 		Mockito.when(this.mockUsernamePasswordAuthenticationToken.getAuthorities()).thenReturn(authorities);
 		Mockito.when(this.mockUsernamePasswordAuthenticationToken.getName()).thenReturn("kevin");
 		Mockito.when(this.mockUsernamePasswordAuthenticationToken.getClaim("useCredits")).thenReturn(Optional.of(Boolean.TRUE));
-//		Mockito.when(this.mockListingService.hasCreditsLeft(Mockito.anyString())).thenReturn(false);
 		Mockito.doThrow(new IllegalStateException("")).when(mockSupplyAndDemandService).useCredit("kevin");
 	
+		OpenPositionAPIInbound op = OpenPositionAPIInbound.builder().positionTitle("Java Dev").build();
+		
 		assertThrows(IllegalStateException.class, () -> {
-			controller.addOpenPosition(OpenPositionAPIInbound.builder().positionTitle("Java Dev").build(), mockUsernamePasswordAuthenticationToken);
+			controller.addOpenPosition(op, mockUsernamePasswordAuthenticationToken);
 		});
 		
 	}
@@ -126,13 +127,13 @@ public class SupplyAndDemandControllerTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testDeleteOpenPosition() throws Exception{
+	void testDeleteOpenPosition() throws Exception{
 		
 		ResponseEntity<Void> response = controller.deleteOpenPosition(UUID.randomUUID());
 		
 		Mockito.verify(mockSupplyAndDemandService).deleteOpenPosition(Mockito.any(UUID.class));
 		
-		assertEquals(response.getStatusCode(), HttpStatus.OK);
+		assertEquals(HttpStatus.OK, response.getStatusCode());
 	}
 	
 	
@@ -141,7 +142,7 @@ public class SupplyAndDemandControllerTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testUpdateOpenPosition() throws Exception{
+	void testUpdateOpenPosition() throws Exception{
 		ResponseEntity<Void> response = controller.updateOpenPosition(UUID.randomUUID(), OpenPositionAPIInbound.builder().positionTitle("Java Dev").build());
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		Mockito.verify(mockSupplyAndDemandService).updateOpenPosition(Mockito.any(UUID.class), Mockito.any(OpenPosition.class));
@@ -152,7 +153,7 @@ public class SupplyAndDemandControllerTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testAddRecruiterToGlobalBlacklist() throws Exception{
+	void testAddRecruiterToGlobalBlacklist() {
 		ResponseEntity<Void> response = controller.addRecruiterToGlobalBlacklist("recruiter1Id");
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 	}
@@ -162,7 +163,7 @@ public class SupplyAndDemandControllerTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testDeleteRecruiterFromGlobalBlacklist() throws Exception{
+	void testDeleteRecruiterFromGlobalBlacklist() {
 		ResponseEntity<Void> response = controller.deleteRecruiterFromGlobalBlacklist("recruiter1Id");
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 	}
@@ -172,9 +173,9 @@ public class SupplyAndDemandControllerTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testFetchBlacklistForRecruiter() throws Exception{
+	void testFetchBlacklistForRecruiter() {
 		ResponseEntity<Set<BlacklistedRecruiterAPIOutbound>> response = controller.fetchBlacklistForRecruiter("recruiter1Id");
-		assertEquals(response.getStatusCode(), HttpStatus.OK);
+		assertEquals(HttpStatus.OK, response.getStatusCode());
 	}
 	
 	/**
@@ -182,7 +183,7 @@ public class SupplyAndDemandControllerTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testFetchAdvertisedPositions() throws Exception{
+	void testFetchAdvertisedPositions() {
 		
 		final UUID id1 = UUID.randomUUID();
 		final UUID id2 = UUID.randomUUID();
@@ -213,7 +214,7 @@ public class SupplyAndDemandControllerTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testFetchAdvertisedPositions_forRecruiter() throws Exception{
+	void testFetchAdvertisedPositions_forRecruiter() {
 		
 		final UUID id1 = UUID.randomUUID();
 		final UUID id2 = UUID.randomUUID();
@@ -240,12 +241,42 @@ public class SupplyAndDemandControllerTest {
 	}
 	
 	/**
+	* Tests retrieval of unseen open position count for authenticated user
+	* @throws Exception
+	*/
+	@Test
+	void testFetchOpenPositionsCount_() {
+		
+		final UUID id1 = UUID.randomUUID();
+		final UUID id2 = UUID.randomUUID();
+		final UUID id3 = UUID.randomUUID();
+		
+		final LocalDateTime created1 = LocalDateTime.of(2001, 1, 1, 0, 0, 0);
+		final LocalDateTime created2 = LocalDateTime.of(2003, 1, 1, 0, 0, 0);
+		final LocalDateTime created3 = LocalDateTime.of(2002, 1, 1, 0, 0, 0);
+		
+		OpenPosition c1 = OpenPosition.builder().id(id1).created(created1).build();
+		OpenPosition c2 = OpenPosition.builder().id(id2).created(created2).build();
+		OpenPosition c3 = OpenPosition.builder().id(id3).created(created3).build();
+		
+		Mockito.when(this.mockSupplyAndDemandService.fetchViewedEventsByRecruiter(Mockito.any(), Mockito.any())).thenReturn(Set.of(c2.getId()));
+		
+		Mockito.when(this.mockSupplyAndDemandService.fetchOpenPositions()).thenReturn(Set.of(c1,c2,c3));
+		Mockito.when(this.mockUsernamePasswordAuthenticationToken.getName()).thenReturn("kevin");
+		ResponseEntity<Long> response = controller.fetchOpenPositionsCount(this.mockUsernamePasswordAuthenticationToken);
+		
+		assertEquals(2, response.getBody());
+		assertEquals(HttpStatus.OK, response.getStatusCode());
+		
+	}
+	
+	/**
 	* Tests if request is received event is passed to service and correct 
 	* status code returned
 	* @throws Exception
 	*/
 	@Test
-	public void testRegisterOpenPositionViewedEvent() throws Exception {
+	void testRegisterOpenPositionViewedEvent() {
 		
 		ResponseEntity<Void> response = this.controller.registerOpenPositionViewedEvent(UUID.randomUUID());
 		
@@ -261,7 +292,7 @@ public class SupplyAndDemandControllerTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testRegisterOfferedCandidateViewedEvent() throws Exception {
+	void testRegisterOfferedCandidateViewedEvent() {
 		
 		ResponseEntity<Void> response = this.controller.registerOfferedCandidateViewedEvent(UUID.randomUUID());
 		
@@ -277,7 +308,7 @@ public class SupplyAndDemandControllerTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testContactRecruiterForOpenPosition() throws Exception{
+	void testContactRecruiterForOpenPosition() {
 		
 		ResponseEntity<Void> response = this.controller.contactRecruiterForOpenPosition(UUID.randomUUID(), "message", mockUsernamePasswordAuthenticationToken);
 		
@@ -291,7 +322,7 @@ public class SupplyAndDemandControllerTest {
 	*/
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Test
-	public void testPassesCreditCheck_admin() throws Exception{
+	void testPassesCreditCheck_admin() {
 		
 		Collection authorities = new HashSet<>();
 		authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
@@ -313,7 +344,7 @@ public class SupplyAndDemandControllerTest {
 	*/
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Test
-	public void testPassesCreditCheck_recruiter_not_creditbased() throws Exception{
+	void testPassesCreditCheck_recruiter_not_creditbased() {
 		
 		Collection authorities = new HashSet<>();
 		authorities.add(new SimpleGrantedAuthority("ROLE_RECRUITER"));
@@ -335,7 +366,7 @@ public class SupplyAndDemandControllerTest {
 	*/
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Test
-	public void testPassesCreditCheck_recruiter_creditbased() throws Exception{
+	void testPassesCreditCheck_recruiter_creditbased() {
 		
 		Collection authorities = new HashSet<>();
 		authorities.add(new SimpleGrantedAuthority("ROLE_RECRUITER"));
@@ -358,7 +389,7 @@ public class SupplyAndDemandControllerTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testFetchRemainingCreditCount() throws Exception{
+	void testFetchRemainingCreditCount() {
 	
 		final int count = 6;
 		
@@ -377,7 +408,7 @@ public class SupplyAndDemandControllerTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testPostsInReverseCreatedDateOrder() throws Exception{
+	void testPostsInReverseCreatedDateOrder() {
 		
 		final UUID id1 = UUID.randomUUID();
 		final UUID id2 = UUID.randomUUID();

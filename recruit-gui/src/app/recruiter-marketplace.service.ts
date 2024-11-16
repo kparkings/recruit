@@ -74,6 +74,12 @@ export class RecruiterMarketplaceService {
 		return this.unseenMpPostsOpenPositions;
 	}
 	
+	public fetchUnseenOpenPositionCount():Observable<number>{
+		const backendUrl:string = environment.backendUrl +'v1/open-position/count';
+				
+		return this.httpClient.get<any>(backendUrl, this.httpOptions);
+	}
+	
 	/**
 	* Fetchs MP post info
 	*/
@@ -107,7 +113,7 @@ export class RecruiterMarketplaceService {
 		headers: new HttpHeaders({ 'Content-Type': 'application/json' }), withCredentials: true
 	};
 
-	headers = { 'content-type': 'application/json'};
+	headers = { 'content-type': 'application/json', 'Cache-Control': 'no-cache, no-store', 'Pragma': 'no-cache'};
 	
 	/**
 	* Fetches Candidates being offered by Recruiters

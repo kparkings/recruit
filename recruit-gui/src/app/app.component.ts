@@ -111,7 +111,8 @@ export class AppComponent {
 			}
 		
 			this.mpService.updateUnseenMpPosts();
-			this.mpService.fetchUnseenMPPosts().subscribe(val => {
+			this.mpService.fetchUnseenOpenPositionCount().subscribe(val => {
+			//this.mpService.fetchUnseenMPPosts().subscribe(val => {
 				this.unseenMpPosts = val;
 			});
 			this.emailService.updateUnseenEmails();

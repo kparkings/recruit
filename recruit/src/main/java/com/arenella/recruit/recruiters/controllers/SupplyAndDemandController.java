@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.arenella.recruit.authentication.spring.filters.ClaimsUsernamePasswordAuthenticationToken;
 import com.arenella.recruit.recruiters.beans.BlacklistedRecruiterAPIOutbound;
+import com.arenella.recruit.recruiters.beans.OpenPosition;
 import com.arenella.recruit.recruiters.beans.OpenPositionAPIInbound;
 import com.arenella.recruit.recruiters.beans.OpenPositionAPIOutbound;
 import com.arenella.recruit.recruiters.beans.SupplyAndDemandEvent.EventType;
@@ -146,6 +147,18 @@ public class SupplyAndDemandController {
 						.sorted(Comparator.comparing(OpenPositionAPIOutbound::getCreated).reversed())
 						.collect(Collectors.toCollection(LinkedHashSet::new)));
 	}
+	
+	/**
+	* Returns the number of unseen open positions for the user
+	* @param principal - AuthenticatedUser
+	* @return umber of unseen open positions
+	*/
+	@GetMapping(value="/v1/open-position/count")
+	@PreAuthorize("hasRole('ROLE_RECRUITER') or hasRole('ROLE_ADMIN')")
+	public ResponseEntity<Long> fetchOpenPositionsCount(Principal principal){
+		return ResponseEntity.ok(fetchOpenPositions(principal).getBody().stream().filter(op -> !op.isViewed()).count());
+	}
+	
 	
 	/**
 	* Returns all Positions advertised by a specific Recruiter
