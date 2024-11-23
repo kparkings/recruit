@@ -104,13 +104,16 @@ h3{
 
 @media (max-width:700px)  {
 	
-.delete-btn{
-	width:55px;
-}
-.delete-confirm{
-	 background:red;
-	 margin-right:0px;
-	 margin-bottom:5px;
-}
+	.delete-btn{
+		width:55px;
+	}
+	.delete-confirm{
+		 background:red;
+		 margin-right:0px;
+		 margin-bottom:5px;
+	}
+	.hideForMob{
+		display:none;
+	}
 	
 }

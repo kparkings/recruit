@@ -109,6 +109,10 @@ public class CandidateAccountRefreshUtil {
 				
 				candidate.setLastAccountRefresh(LocalDate.now().plusDays(1));
 				
+				if (Optional.ofNullable(city.getCountry()).isEmpty()) {
+					cityService.performNewCityCheck(candidate.getCountry(), candidate.getCity());
+				}
+				
 				this.candidateRepository.saveCandidate(candidate);
 				eventPublisher.listenForRequestSkillsForCurriculumCommand(new RequestSkillsForCurriculumCommand(Long.valueOf(candidate.getCandidateId())));
 			});

@@ -82,6 +82,8 @@ export class AppComponent {
 				this.popupsService.openModal(this.validationExBox);
 			}
 		});
+		
+		this.refreschUnreadAlerts();
 	}
 	
 	private lastAlertRefresh!:Date;
@@ -110,7 +112,7 @@ export class AppComponent {
 				});
 			}
 		
-			this.mpService.updateUnseenMpPosts();
+			//this.mpService.updateUnseenMpPosts();
 			this.mpService.fetchUnseenOpenPositionCount().subscribe(val => {
 			//this.mpService.fetchUnseenMPPosts().subscribe(val => {
 				this.unseenMpPosts = val;

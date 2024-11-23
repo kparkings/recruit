@@ -120,8 +120,8 @@ class CandidateDocumentTest {
 		assertEquals(FUNCTION_VAL,																		doc.getFunction());
 		assertEquals(COUNTRY_VAL,																		doc.getCountry());
 		assertEquals(CITY,																				doc.getCity());
-		assertEquals(LATITUDE,																			doc.getCityPos().getLat());
-		assertEquals(LONGITUDE,																			doc.getCityPos().getLon());
+		assertEquals(LATITUDE,																			doc.getCityPosGeoPoint().getLat());
+		assertEquals(LONGITUDE,																			doc.getCityPosGeoPoint().getLon());
 		assertEquals(PERM_VAL,																			doc.isPerm());
 		assertEquals(FREELANCE_VAL,																		doc.isFreelance());
 		assertEquals(YEARS_EXPERIENCE,																	doc.getYearsExperience());
@@ -318,8 +318,8 @@ class CandidateDocumentTest {
 		assertEquals(FUNCTION_VAL,					doc.getFunction());
 		assertEquals(COUNTRY_VAL,					doc.getCountry());
 		assertEquals(CITY,							doc.getCity());
-		assertEquals(LATITUDE,						doc.getCityPos().getLat());
-		assertEquals(LONGITUDE,						doc.getCityPos().getLon());
+		assertEquals(LATITUDE,						doc.getCityPosGeoPoint().getLat());
+		assertEquals(LONGITUDE,						doc.getCityPosGeoPoint().getLon());
 		
 		assertEquals(PERM_VAL,						doc.isPerm());
 		assertEquals(FREELANCE_VAL,					doc.isFreelance());

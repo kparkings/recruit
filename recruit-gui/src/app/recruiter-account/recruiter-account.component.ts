@@ -68,8 +68,7 @@ export class RecruiterAccountComponent implements OnInit {
 	* Recruiter
 	*/
 	public selectCreditBasedSubscription():void{
-		var notApplicatble:INVOICE_TYPE;
-		this.addAlternateSubscription("CREDIT_BASED_SUBSCRIPTION");
+		this.addAlternateSubscription("CREDIT_BASED_SUBSCRIPTION", INVOICE_TYPE.BUSINESS);
 	}
 	
 	public doShowBillingInvoiceType(subscriptionOption:string):void{

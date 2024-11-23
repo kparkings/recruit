@@ -106,7 +106,7 @@ export class RecruiterMarketplaceService {
 	* @param httpClient - for sending httpRequests to backend
 	*/
 	constructor(private httpClient: HttpClient) { 
-		this.fetchMPPosts();
+		//this.fetchMPPosts();
 	}
 
 	httpOptions = {

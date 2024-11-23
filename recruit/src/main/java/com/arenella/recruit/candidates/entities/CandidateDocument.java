@@ -64,8 +64,13 @@ public class CandidateDocument {
 	@Field(type = FieldType.Keyword)
 	private String 		city;
 	
+	//Not used as library ceated wrong mapping type. Superceeded byt CityPostGePoint but
+	//Cant delete it withough re-indexing or ES will bitch and moan
 	@Field(type = FieldType.Auto)
 	private GeoPoint cityPos = new GeoPoint(0,0);
+	
+	@Field(type = FieldType.Auto)
+	private GeoPoint cityPosGeoPoint = new GeoPoint(0,0);
 	
 	@Field(type = FieldType.Keyword)
 	@Enumerated(EnumType.STRING)
@@ -160,7 +165,7 @@ public class CandidateDocument {
 		this.function 							= builder.function;
 		this.country 							= builder.country;
 		this.city 								= builder.city;
-		this.cityPos							= builder.cityPos;
+		this.cityPosGeoPoint					= builder.cityPos;
 		this.perm 								= builder.perm;
 		this.freelance 							= builder.freelance;
 		this.yearsExperience 					= builder.yearsExperience;
@@ -263,6 +268,11 @@ public class CandidateDocument {
 	* Returns the position of the City
 	* @return position of the City
 	*/
+	public GeoPoint getCityPosGeoPoint() {
+		return this.cityPosGeoPoint;
+	}
+	
+	//Do not use
 	public GeoPoint getCityPos() {
 		return this.cityPos;
 	}
@@ -896,8 +906,8 @@ public class CandidateDocument {
 					.candidateId(String.valueOf(doc.getCandidateId()))
 					.candidateType(doc.getCandidateType())
 					.city(doc.getCity())
-					.latitude(doc.getCityPos().getLat())
-					.longitude(doc.getCityPos().getLon())
+					.latitude(doc.getCityPosGeoPoint().getLat())
+					.longitude(doc.getCityPosGeoPoint().getLon())
 					.comments(doc.getComments())
 					.country(doc.getCountry())
 					.daysOnSite(doc.getDaysOnSite())
