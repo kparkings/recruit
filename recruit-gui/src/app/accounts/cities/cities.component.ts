@@ -1,7 +1,7 @@
 import { Component } 							from '@angular/core';
 import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { CandidateServiceService } 				from 'src/app/candidate-service.service';
-import { City } 								from '../city';
+import { City } 								from './../../city';
 
 /**
 * Component to adminster City's  

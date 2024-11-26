@@ -16,12 +16,16 @@ import com.arenella.recruit.candidates.utils.GeoZoneSearchUtil.GEO_ZONE;
 * @author K Parkings
 */
 public class CandidateFilterOptions {
-
+	
 	private String 				orderAttribute;
 	private RESULT_ORDER		order;
 	private String				searchText									= "";
 	private Set<String> 		candidateIds								= new HashSet<>();
 	private Set<GEO_ZONE>		geoZones									= new HashSet<>();
+	private GeoPosFilter		geoPosFilter							 	= null;
+	private COUNTRY				locCountry								 	= null;
+	private String 				locCity										= null;
+	private Integer				locDistance									= null;
 	private Set<COUNTRY> 		countries									= new HashSet<>();
 	private Set<FUNCTION> 		functions									= new HashSet<>();
 	private Optional<Boolean> 	freelance									= Optional.empty();
@@ -61,6 +65,7 @@ public class CandidateFilterOptions {
 		this.order 										= builder.order;
 		this.candidateIds 								= builder.candidateIds;
 		this.geoZones									= builder.geoZones;
+		this.geoPosFilter							 	= builder.geoPosFilter;
 		this.countries 									= builder.countries;
 		this.functions		 							= builder.functions;
 		this.freelance 									= builder.freelance;
@@ -83,7 +88,9 @@ public class CandidateFilterOptions {
 		this.lastAccountRefreshLtEq		 				= builder.lastAccountRefreshLtEq;
 		this.lastAccountRefreshMissing					= builder.lastAccountRefreshMissing;
 		this.daysSincelastAvailabilityCheckEmailSent 	= builder.daysSincelastAvailabilityCheckEmailSent;
-		
+		this.locCountry									= builder.locCountry;
+		this.locCity									= builder.locCity;
+		this.locDistance								= builder.locDistance;
 	}
 	
 	/**
@@ -124,6 +131,30 @@ public class CandidateFilterOptions {
 	public Set<GEO_ZONE> getGeoZones(){
 		return this.geoZones;
 	}	
+	
+	/**
+	* If GeoPos filter has been specified returns 
+	* informaiton about filtering within a radius of 
+	* a given position
+	* @return GeoPos filter
+	*/
+	public Optional<GeoPosFilter> getGeoPosFilter(){
+		return Optional.ofNullable(this.geoPosFilter);
+	}
+	//TODO: [KP] Ugly but want it working so I can refactor the whole Suggestions from FE to BE
+	public Optional<COUNTRY> getLocCountry(){
+		return Optional.ofNullable(this.locCountry);
+	}
+	public Optional<String> getLocCity(){
+		return Optional.ofNullable(this.locCity);
+	}
+	public Optional<Integer> getLocDistance(){
+		return Optional.ofNullable(this.locDistance);
+	}
+	public void setGeoPosFilter(float lat, float lon, int distance) {
+		this.geoPosFilter = new GeoPosFilter("cityPosGeoPoint", distance, lat, lon);
+	}
+	
 	
 	/**
 	* Returns the countries to filter on
@@ -370,6 +401,7 @@ public class CandidateFilterOptions {
 		private RESULT_ORDER		order;
 		private Set<String> 		candidateIds								= new HashSet<>();
 		private Set<GEO_ZONE>		geoZones									= new HashSet<>();
+		private GeoPosFilter		geoPosFilter							 	= null;
 		private Set<COUNTRY> 		countries									= new HashSet<>();
 		private Set<FUNCTION> 		functions									= new HashSet<>();
 		private Optional<Boolean> 	freelance									= Optional.empty();
@@ -391,6 +423,9 @@ public class CandidateFilterOptions {
 		private LocalDate			lastAccountRefreshLtEq						= null;
 		private Boolean				lastAccountRefreshMissing					= null;
 		private Integer				daysSincelastAvailabilityCheckEmailSent		= null;
+		private COUNTRY				locCountry								 	= null;
+		private String 				locCity									 	= null;
+		private Integer				locDistance									= null;
 		
 		/**
 		* Sets the name of the attribute to order on
@@ -450,6 +485,24 @@ public class CandidateFilterOptions {
 			}
 			return this;
 		}
+		
+		/**
+		* Sets filter information relating to a radius search for a distance from 
+		* a given location
+		* @param geoPosFilter - Filter information
+		* @return Builder
+		*/
+		public CandidateFilterOptionsBuilder geoPosFilter(GeoPosFilter geoPosFilter) {
+			this.geoPosFilter = geoPosFilter;
+			return this;
+		}
+		public CandidateFilterOptionsBuilder geoPosFilter(COUNTRY locCountry, String locCity, Integer locDistance) {
+			this.locCountry 	= locCountry;
+			this.locCity 		= locCity;
+			this.locDistance 	= locDistance;
+			return this;
+		}
+		
 		
 		/**
 		* Sets the Functions to filter on. The Candidate must have at least one of the 
@@ -680,5 +733,11 @@ public class CandidateFilterOptions {
 		}
 		
 	}
+	
+	/**
+	* Record containing the filter information for filtering on Candidates within a certain 
+	* radius of a given GeoPoint 
+	*/
+	public static record GeoPosFilter(String field, int distance, float lat, float lon) {}
 
 }

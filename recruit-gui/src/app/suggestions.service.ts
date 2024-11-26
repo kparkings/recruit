@@ -38,7 +38,10 @@ export class SuggestionsService {
 							firstName:string,
 							surname:string,
 							email:string,
-							candidateId:string): Observable<any>
+							candidateId:string,
+							locCountry:string,
+							locCity:string,
+							locDistance:number): Observable<any>
 							{
 		
 		return this.candidateService.getCandidates(this.getCandidateFilterParamString(	backendRequestId,
@@ -59,6 +62,9 @@ export class SuggestionsService {
 																						surname,
 																						email,
 																						candidateId,
+																						locCountry,
+																						locCity,
+																						locDistance
 																						));
 		
 	}
@@ -83,7 +89,10 @@ export class SuggestionsService {
 											firstName:string,
 											surname:string,
 											email:string,
-											candidateId:string):string
+											candidateId:string,
+											locCountry:string,
+											locCity:string,
+											locDistance:number):string
 											{
 
 		const filterParams:string = 'orderAttribute=candidateId&order=desc'
@@ -103,7 +112,8 @@ export class SuggestionsService {
 														 + this.getFirstName(firstName)
 														 + this.getSurname(surname)
 														 + this.getEmail(email)
-														 + this.getCandidateId(candidateId);
+														 + this.getCandidateId(candidateId)
+														 + this.getLocation(locCountry, locCity, locDistance);
 														 
 					                                  
 		return filterParams;
@@ -191,6 +201,14 @@ export class SuggestionsService {
 		}
 		
 		return '&countries=' + countries;
+	}
+	
+	public getLocation(country:string, city:string, distance:number):string{
+		if (country.length === 0 || city.length === 0 || distance === 0 || !distance ) {
+			return "";
+		}
+		return '&locCountry='+country.toUpperCase()+'&locCity='+city+'&locDistance='+distance;
+		
 	}
 	
 	/**

@@ -10,6 +10,7 @@ import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 
+import com.arenella.recruit.candidates.beans.CandidateFilterOptions.GeoPosFilter;
 import com.arenella.recruit.candidates.beans.Language.LANGUAGE;
 import com.arenella.recruit.candidates.beans.Language.LEVEL;
 import com.arenella.recruit.candidates.enums.COUNTRY;
@@ -21,7 +22,7 @@ import com.arenella.recruit.candidates.utils.GeoZoneSearchUtil.GEO_ZONE;
 * Unit tests for the CandidateFilterOptions class
 * @author K Parkings
 */
-public class CandidateFilterOptionsTest {
+class CandidateFilterOptionsTest {
 	
 	/**
 	* Tests the instance built by the Builder has been initialized
@@ -29,7 +30,7 @@ public class CandidateFilterOptionsTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testBuilder() throws Exception{
+	void testBuilder() {
 		
 		Set<String> 			candidateIds 						= new HashSet<>();
 		Set<GEO_ZONE> 			geoZones 							= new HashSet<>();
@@ -127,7 +128,7 @@ public class CandidateFilterOptionsTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testReset() throws Exception{
+	void testReset() {
 		
 		Set<String> 			candidateIds 							= new HashSet<>();
 		Set<GEO_ZONE> 			geoZones 								= new HashSet<>();
@@ -224,7 +225,7 @@ public class CandidateFilterOptionsTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testSetters() throws Exception{
+	void testSetters() {
 		
 		Set<FUNCTION> 	originalFunctions 				= Set.of(FUNCTION.ARCHITECT);
 		Set<FUNCTION> 	newFunctions 					= Set.of(FUNCTION.JAVA_DEV);
@@ -258,7 +259,7 @@ public class CandidateFilterOptionsTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testRemoveGeoZones() throws Exception{
+	void testRemoveGeoZones() {
 		
 		CandidateFilterOptions filters = CandidateFilterOptions
 				.builder()
@@ -278,7 +279,7 @@ public class CandidateFilterOptionsTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testAddCountry() throws Exception{
+	void testAddCountry() {
 		
 		CandidateFilterOptions filters = CandidateFilterOptions
 				.builder()
@@ -297,4 +298,25 @@ public class CandidateFilterOptionsTest {
 	
 	}
 	
+	/**
+	* Tests adding GeoPos filter
+	*/
+	@Test
+	void testAddGeoPosFIlter() {
+		
+		GeoPosFilter geoPosFilter = new GeoPosFilter("cityPosGeoCode", 100, 55.0f, 1.5f); 
+		
+		assertTrue(CandidateFilterOptions.builder().build().getGeoPosFilter().isEmpty());
+		
+		CandidateFilterOptions filters = CandidateFilterOptions
+				.builder()
+					.geoPosFilter(geoPosFilter)
+				.build();
+		
+		assertEquals(geoPosFilter.field(), 		filters.getGeoPosFilter().get().field());
+		assertEquals(geoPosFilter.distance(), 	filters.getGeoPosFilter().get().distance());
+		assertEquals(geoPosFilter.lat(), 		filters.getGeoPosFilter().get().lat(), 0);
+		assertEquals(geoPosFilter.lon(), 		filters.getGeoPosFilter().get().lon(), 0);
+		
+	}
 }

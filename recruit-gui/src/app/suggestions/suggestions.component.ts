@@ -24,6 +24,7 @@ import { GeoZone } 																	from '../geo-zone';
 import { SupportedCountry } 														from '../supported-candidate';
 import { Subscription } from 'rxjs';
 import { SupportedLanguage } from '../supported-language';
+import { City } 								from '../city';
 
 /**
 * Component to suggest suitable Candidates based upon a 
@@ -80,11 +81,13 @@ export class SuggestionsComponent implements OnInit {
 	public showPaidSubscriptinOptions:boolean					= false;
 	public paidFeature:string								 	= '';
 	public showGeoZoneFilters:string							= "";
+	public showLocationFilters:string							= "";
 	public showCountryFilters:string							= "";
 	public showLanguageFilters:string							= "";
 	public showIncludeFilters:string							= "";
 	public geoZones:Array<GeoZone>								= new Array<GeoZone>();
 	public supportedCountries:Array<SupportedCountry>			= new Array<SupportedCountry>();
+	public citiesForSelectedCountry:Array<City>					= new Array<City>();
 	public publicitySuggestions:Array<Candidate>  				= new Array<Candidate>();
 	public createAlertForm:UntypedFormGroup 					= new UntypedFormGroup({
 		alertName:												new UntypedFormControl(''),
@@ -188,6 +191,13 @@ export class SuggestionsComponent implements OnInit {
 	public switchGeoZoneFilterView(view:string):void{
 		this.initGeoZones();
 		this.showGeoZoneFilters = view;
+	}
+	
+	/**
+	* Swithches between open and closed filter view for Location 
+	*/
+	public switchLocationFilterView(view:string):void{
+		this.showLocationFilters = view;
 	}
 	
 	/**
@@ -355,6 +365,10 @@ export class SuggestionsComponent implements OnInit {
 			skill: 									new UntypedFormControl(''),
 			includeUnavailableCandidates: 			new UntypedFormControl(''),
 			includeRequiresSponsorshipCandidates:	new UntypedFormControl(''),
+			locationCountry:						new UntypedFormControl(''),
+			locationCity:							new UntypedFormControl(''),
+			locationDistance:						new UntypedFormControl(''),
+			
 		});
 		
 		this.filterTypeFormGroup					= new UntypedFormGroup({
@@ -443,7 +457,8 @@ export class SuggestionsComponent implements OnInit {
 			this.suggestionFilterForm.addControl(gz.geoZoneId.toLowerCase()+'Results', new UntypedFormControl(false));
 		});
 		
-		this.showGeoZoneFilters = "";
+		this.showGeoZoneFilters 	= "";
+		this.showLocationFilters 	= "";
 		
 	}
 	
@@ -509,6 +524,9 @@ export class SuggestionsComponent implements OnInit {
 									params.getSurname(),
 									params.getEmail(),
 									params.getCandidateId(),
+									params.getLocCountry(),
+									params.getLocCity(),
+									params.getLocDistance(),
 									).pipe(
 										  map((response) => {
 										  
@@ -1255,6 +1273,16 @@ export class SuggestionsComponent implements OnInit {
 		
 		
 		this.suggestionFilterForm.get('searchPhrase')?.setValue('');
+	}
+	
+	public switchLocationCountry():void{
+		
+		//TODO: [KP] need to setup form and use the selectd value
+		let country = this.suggestionFilterForm.get('locationCountry')?.value;
+		this.citiesForSelectedCountry = new Array<City>();
+		this.candidateService.getCitiesForCountry(country).subscribe(b => {
+			this.citiesForSelectedCountry = b;	
+		});
 	}
 	
 	/**

@@ -214,6 +214,10 @@ textarea {
 	cursor:pointer;
 }
 
+.loc-table tr td{
+	padding-right:10px;
+}
+
 @media (max-width:700px)  {
 
 	 .suggestion-icon{

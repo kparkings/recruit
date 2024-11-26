@@ -17,8 +17,8 @@ import { CandidateTotals } 								from './candidate-totals';
 import { SupportedLanguage } 							from './supported-language';
 import { GeoZone } 										from './geo-zone';
 import { SupportedCountry } 							from './supported-candidate';
-import { City } 										from './accounts/city';
 import { UpdateCityRequest } 							from './accounts/update-city-request';
+import { City } 										from './city';
 
 /**
 * Services for new Candidates
@@ -126,6 +126,15 @@ export class CandidateServiceService {
 	*/
 	public getCities(): Observable<Array<City>>{
 		const backendUrl:string = environment.backendUrl +'city/awaiting-activation';
+		
+		return this.httpClient.get<Array<City>>(backendUrl, this.httpOptions);
+	}
+	
+	/**
+	* Returns Cities of a given country 
+	*/
+	public getCitiesForCountry(country:string): Observable<Array<City>>{
+		const backendUrl:string = environment.backendUrl +'city/'+country;
 		
 		return this.httpClient.get<Array<City>>(backendUrl, this.httpOptions);
 	}

@@ -44,6 +44,42 @@
 								</div>
 								
 							</td>
+							
+						</tr>
+						<tr *ngIf="isAuthenticatedAsAdmin()">
+							<td class="sugg-srch-hdr">{{'arenella-suggestions-location' | translate}}</td>
+							<td *ngIf="!showLocationFilters">
+								<p class="toggle-filter-option" (click)="switchLocationFilterView('showLocationFilters')">{{'Show' | translate}}..</p>
+							</td>
+							<td *ngIf="showLocationFilters" class="sugg-srch-bdy location-filters">
+								<p class="toggle-filter-option" (click)="switchLocationFilterView('')">{{'Hide' | translate}}..</p>
+								<div>
+									<table class="loc-table">
+										<tr>
+											<td>{{'arenella-suggestions-location-country' | translate}}</td>
+											<td>
+												<select (change)="switchLocationCountry()" formControlName="locationCountry">
+													<option value="{{supportedCountry.name}}" *ngFor="let supportedCountry of supportedCountries">{{supportedCountry.name}}<option>
+												</select>
+											</td>
+										</tr>
+										<tr>
+											<td>{{'arenella-suggestions-location-city' | translate}}</td>
+											<td>
+												<select formControlName="locationCity">
+													<option *ngFor="let city of citiesForSelectedCountry">{{city.name}}<option>
+												</select>
+											</td>
+										</tr>
+										<tr>
+											<td>{{'arenella-suggestions-location-distance' | translate}}</td>
+											<td><input type="number" formControlName="locationDistance"/></td>
+										</tr>
+									</table>
+								</div>
+								
+							</td>
+							
 						</tr>
 						<tr>
 							<td class="sugg-srch-hdr">{{'arenella-suggestions-country' | translate}}</td>

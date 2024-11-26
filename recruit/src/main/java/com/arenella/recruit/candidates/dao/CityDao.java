@@ -20,7 +20,7 @@ import com.arenella.recruit.candidates.enums.COUNTRY;
 public interface CityDao extends ListCrudRepository<CityEntity, CityEntity.CityId>{
 
 	@Query("from CityEntity where id.country = :countryId")
-	List<CityEntity> fetchCountries(COUNTRY country);
+	List<CityEntity> fetchCountries(COUNTRY countryId);
 	
 	/**
 	* Persists / updates a City 

@@ -26,6 +26,9 @@ export class SuggestionParams{
 	private maxExperience:string 						= "";
 	private unavailableCadidates:string					= "";
 	private includeRequiresSponsorship:string			= "";	
+	private locCountry:string 							= "";
+	private locCity:string 								= "";
+	private locDistance:number 							= 0;
 		
 	/**
 	* Constructor
@@ -45,6 +48,14 @@ export class SuggestionParams{
 		this.unavailableCadidates = suggestionFilterForm.get('includeUnavailableCandidates')?.value;
 		this.includeRequiresSponsorship = suggestionFilterForm.get('includeRequiresSponsorshipCandidates')?.value;
 		
+		
+		//START DISTANCE
+		this.locCountry 	= suggestionFilterForm.get('locationCountry')?.value;
+		this.locCity 		= suggestionFilterForm.get('locationCity')?.value;
+		this.locDistance 	= suggestionFilterForm.get('locationDistance')?.value;
+		
+		
+		//END DISTANCE
 		
 		
 		if (this.filterType != 'FUNCTION') {
@@ -226,6 +237,16 @@ export class SuggestionParams{
 	public getCandidateId():string{
 		return this.candidateId;
 	}
-
+	
+	public getLocCountry():string{
+		return this.locCountry;
+	}	
+	
+	public getLocCity():string{
+		return this.locCity;	
+	}
+	public getLocDistance():number{
+		return this.locDistance;
+	}
 	
 }

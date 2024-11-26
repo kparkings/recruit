@@ -36,6 +36,7 @@ import com.arenella.recruit.candidates.beans.Candidate;
 import com.arenella.recruit.candidates.beans.Candidate.Photo;
 import com.arenella.recruit.candidates.beans.CandidateExtractedFilters;
 import com.arenella.recruit.candidates.beans.CandidateFilterOptions;
+import com.arenella.recruit.candidates.beans.CandidateFilterOptions.GeoPosFilter;
 import com.arenella.recruit.candidates.beans.CandidateSearchAccuracyWrapper;
 import com.arenella.recruit.candidates.beans.CandidateUpdateRequest;
 import com.arenella.recruit.candidates.beans.Language;
@@ -156,6 +157,8 @@ public class CandidateController {
 		
 	}
 	
+	//TODO: THis is getting to big. Change to body and separate out the GeoPosFilter that should not be being referenced
+	//      from the service layer. Allowing for now as I want to refactor this entire requestParam list
 	/**
 	* Fetches Candidates
 	* @param orderAttribute			- Optional attribute to order the results on
@@ -205,6 +208,10 @@ public class CandidateController {
 													@RequestParam(required = false)		String				ownerId,
 													@RequestParam(required = false)		Boolean				includeRequiresSponsorship,
 													@RequestParam(required = false)		Boolean				unfiltered,
+													@RequestParam(required = false)		COUNTRY				locCountry,
+													@RequestParam(required = false)		String				locCity,
+													@RequestParam(required = false)		Integer				locDistance,
+													
 													Integer				backendRequestId,
 													Pageable 			pageable,
 													Principal 			principal,
@@ -279,6 +286,7 @@ public class CandidateController {
 																		.available(available)
 																		.ownerId(ownerId)
 																		.includeRequiresSponsorship(includeRequiresSponsorship)
+																		.geoPosFilter(locCountry, locCity, locDistance)
 																	.build();
 		
 		response.setHeader("X-Arenella-Request-Id", ""+(backendRequestId == null ? 0 : backendRequestId.intValue()));

@@ -109,7 +109,7 @@ public class CandidateControllerTest {
 		
 		Mockito.when(this.mockCandidateSearchUtil.searchAndPackageForAPIOutput(Mockito.anyBoolean(),Mockito.anyBoolean(),Mockito.anyBoolean(), filterArgcapt.capture(), Mockito.any(),Mockito.isNull())).thenReturn(candidatePage);
 		
-		this.controller.getCandidate(null,null,ids,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,true,null,null,null,null,null, null, 0, mockPageRequest, this.mockUsernamePasswordAuthenticationToken, mockResponse);
+		this.controller.getCandidate(null,null,ids,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,true,null,null,null,null,null, null, null, candidateId, 0, null, mockPageRequest, this.mockUsernamePasswordAuthenticationToken, mockResponse);
 		
 		assertEquals(1, filterArgcapt.getValue().getCandidateIds().size());
 		assertEquals(candidateId, filterArgcapt.getValue().getCandidateIds().stream().findFirst().get());
@@ -144,7 +144,7 @@ public class CandidateControllerTest {
 		
 		Mockito.when(this.mockCandidateSearchUtil.searchAndPackageForAPIOutput(Mockito.anyBoolean(),Mockito.anyBoolean(),Mockito.anyBoolean(), filterArgcapt.capture(), Mockito.any(),Mockito.isNull())).thenReturn(candidatePage);
 		
-		this.controller.getCandidate(null,null,ids,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,true,null,null,null,null,null, null, 0, mockPageRequest, this.mockUsernamePasswordAuthenticationToken, mockResponse);
+		this.controller.getCandidate(null,null,ids,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,true,null,null,null,null,null, null, null, null, 0, null, mockPageRequest, this.mockUsernamePasswordAuthenticationToken, mockResponse);
 		
 		assertEquals(2, filterArgcapt.getValue().getCandidateIds().size());
 	

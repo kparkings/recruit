@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.arenella.recruit.authentication.spring.filters.ClaimsUsernamePasswordAuthenticationToken;
 import com.arenella.recruit.recruiters.beans.BlacklistedRecruiterAPIOutbound;
-import com.arenella.recruit.recruiters.beans.OpenPosition;
 import com.arenella.recruit.recruiters.beans.OpenPositionAPIInbound;
 import com.arenella.recruit.recruiters.beans.OpenPositionAPIOutbound;
 import com.arenella.recruit.recruiters.beans.SupplyAndDemandEvent.EventType;

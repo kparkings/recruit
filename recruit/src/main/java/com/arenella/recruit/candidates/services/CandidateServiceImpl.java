@@ -525,6 +525,16 @@ public class CandidateServiceImpl implements CandidateService{
 		}
 		
 		/**
+		* Convert Location values into GeoPoint 
+		*/
+		if (!filterOptions.getLocCountry().isEmpty() && !filterOptions.getLocCity().isEmpty() && !filterOptions.getLocDistance().isEmpty()) {
+			Optional<City> city = this.cityService.findCityById(filterOptions.getLocCountry().get(), filterOptions.getLocCity().get());
+			if(city.isPresent()) {
+				filterOptions.setGeoPosFilter(city.get().getLat(), city.get().getLon(), filterOptions.getLocDistance().get());
+			}
+		}
+		
+		/**
 		* Admin and Recruiters with a paid subscription can apply an available filter  
 		*/
 		if (this.roleManager.isAdmin(isSystemRequest) || (hasPaidSubscription(isSystemRequest)) || isSystemRequest) { 

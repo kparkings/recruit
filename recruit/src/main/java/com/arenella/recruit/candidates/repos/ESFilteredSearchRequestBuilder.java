@@ -12,10 +12,14 @@ import com.arenella.recruit.candidates.enums.FREELANCE;
 import com.arenella.recruit.candidates.enums.PERM;
 
 import co.elastic.clients.elasticsearch._types.FieldValue;
+import co.elastic.clients.elasticsearch._types.GeoDistanceType;
+import co.elastic.clients.elasticsearch._types.GeoLocation;
 import co.elastic.clients.elasticsearch._types.query_dsl.BoolQuery;
 import co.elastic.clients.elasticsearch._types.query_dsl.ExistsQuery;
+import co.elastic.clients.elasticsearch._types.query_dsl.GeoDistanceQuery;
 import co.elastic.clients.elasticsearch._types.query_dsl.MatchQuery;
 import co.elastic.clients.elasticsearch._types.query_dsl.Query;
+import co.elastic.clients.elasticsearch._types.query_dsl.QueryBuilders;
 import co.elastic.clients.elasticsearch._types.query_dsl.RangeQuery;
 import co.elastic.clients.elasticsearch._types.query_dsl.TermsQuery;
 import co.elastic.clients.elasticsearch._types.query_dsl.TermsQueryField;
@@ -71,6 +75,27 @@ public class ESFilteredSearchRequestBuilder {
 					.field("lastAccountRefresh")
 					.lte(JsonData.of(Date.from(cutOff.atStartOfDay(ZoneId.systemDefault()).toInstant())))
 			)._toQuery());
+		}
+		
+		if (!filterOptions.getGeoPosFilter().isEmpty()) {
+			
+			GeoLocation loc = new GeoLocation.Builder()
+            .latlon(l -> l
+                    .lat(filterOptions.getGeoPosFilter().get().lat())
+                    .lon(filterOptions.getGeoPosFilter().get().lon())
+            ).build();
+            
+			System.out.println("DISTANCE VALUE = " + filterOptions.getGeoPosFilter().get().distance());
+			
+			GeoDistanceQuery gdq = QueryBuilders
+			            .geoDistance()
+			            .distanceType(GeoDistanceType.Plane)
+			            .location(loc)
+			            .field(filterOptions.getGeoPosFilter().get().field())
+			            .distance(filterOptions.getGeoPosFilter().get().distance()+"km").build();
+			
+			mustQueries.add(gdq._toQuery());
+		
 		}
 		
 		if (!filterOptions.getLastAccountRefreshMissing().isEmpty()) {
