@@ -1,0 +1,183 @@
+.sugg-srch-hdr{
+	width:120px;
+	font-weight:bold;
+}
+
+.sugg-srch-bdy{
+	margin-top:10px;
+}
+
+.sugg-srch-job-title{
+	min-width:0px;
+}
+	
+.sugg-srch-job-title-name{
+	margin-right:20px;
+	min-width:0px;
+}
+
+.toggle-filter-option{
+	margin:0px;
+	cursor:pointer;
+	color:#6a5acd;	
+}
+
+.geo-zone-filters{
+	padding:5px;
+	margin-top:5px;
+}
+
+.loc-table tr td{
+	padding-right:10px;
+}
+
+.country-selections{
+	width:100%;
+}
+	 
+.country-filter{
+	margin-left:8px;
+}
+
+.country-selected-true{
+	opacity:1;
+}
+
+.country-selected-false{
+	opacity:0.25;
+}
+
+.flag-icon-med{
+	width:30px;
+	height:30px;
+	margin:10px;
+	margin-top:0px;
+	margin-left:0px;
+	cursor:pointer;
+}
+
+.contract-type{
+	width:195px;
+}
+
+.sugg-srch-ctry-ul{
+	margin:0;
+	padding:0;
+	margin-top:10px;
+}
+
+.sugg-srch-ctry-chkbox{
+	display:inline;
+	margin:0;
+	padding:0;
+}
+
+.min{
+	width:75px;
+ 	margin-right:13px;
+}
+
+.max{
+ 	width:75px;
+ 	margin-left:13px;
+}
+
+.skill-field{
+	width:140px;
+}
+
+.selected-skill{
+	margin:2px;
+	padding:5px;
+	border-radius:5px;
+	background:grey;
+	display:inline-block;
+}
+ 
+.selected-skill:hover{
+	margin:2px;
+	padding:5px;
+	border-radius:5px;
+	background:red;
+	cursor:pointer;
+	display:inline-block;
+}
+
+.modal-header{
+	background:#181414;
+	color:#6A5ACD;
+	font-weight:bold;
+}
+
+.filter-close-box{
+	padding:10px;
+	cursor:pointer;
+	font-size:20px;
+	font-weight: bold;
+	text-align: right;
+}
+
+.filter-type-opt{
+	cursor:pointer;
+}
+
+.radio-button_label{
+	cursor:pointer;
+}
+
+.hide-for-mobile{
+	display:inline;
+}
+
+.geo-zone-filters{
+	padding:5px;
+	margin-top:5px;
+}
+
+.geo-code-filter{
+	float:left;
+	border-radius: 0.25rem;
+	margin:5px;
+	background:#6a5acd;
+	color:white;
+	padding:5px;
+	width:300px;	
+	cursor:pointer;
+	text-align:center;
+}
+
+.geo-code-selected-true{
+	opacity:1;
+}
+
+.geo-code-selected-false{
+	opacity:0.25;
+}
+
+.sugg-srch-hdr{
+	width:120px;
+	font-weight:bold;
+}
+
+.sugg-srch-job-title{
+	width:100%;
+	font-weight:bold;
+}
+
+.mobile-search-box{
+	margin-left:1%;
+	margin-right:1%;
+	width:98%;
+}
+
+@media (max-width:700px)  {
+	.sugg-srch-ctry-chkbox{
+		display:inline-block;
+		margin:0;
+		padding:0;
+		width:100%;
+	}	
+	.geo-code-filter{
+		width:100%;	
+	}
+}

@@ -15,6 +15,8 @@
 	        <button class="btn btn-secondary arenella-btn" (click)="doReset()">{{'arenella-suggestions-btn-reset' | translate}}</button>
 	     </div>
 		
+		<app-searchbar (newSuggestionResults)="handleNewSearchRequest($event)" *ngIf="currentView === 'suggestion-results'"></app-searchbar>
+		
 		<div *ngIf="currentView === 'saved-candidates'">
 			<app-saved-candidates [savedCandidates]="savedCandidates" (switchViewEvent)="showSuggestionsResults()" [infoItemConfig]="infoItemConfig" [skillFilters]="skillFilters"></app-saved-candidates>
 		</div>
@@ -177,7 +179,7 @@
 		
 			<div class="suggestion-result-icons">
 			
-				<div class="suggestion-icon {{suggestionMobileClass}} {{getUnvailableCssClass(suggestion)}}" *ngFor="let suggestion of suggestions" (click)="showSuggestedCandidateOverview(suggestion)">
+				<div class="suggestion-icon {{suggestionMobileClass}} {{getUnvailableCssClass(suggestion)}}" *ngFor="let suggestion of this.suggestions" (click)="showSuggestedCandidateOverview(suggestion)">
 					<div>
 						
 						<div *ngIf="!isSavedCandidate(suggestion)" class="suggestion-icon-header">	

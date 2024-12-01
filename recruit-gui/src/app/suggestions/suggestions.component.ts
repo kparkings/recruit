@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } 	from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild, ViewChildren } 	from '@angular/core';
 import { UntypedFormGroup, UntypedFormControl }										from '@angular/forms';
 import { CandidateServiceService }													from '../candidate-service.service';
 import { SuggestionsService }														from '../suggestions.service';
@@ -25,6 +25,7 @@ import { SupportedCountry } 														from '../supported-candidate';
 import { Subscription } from 'rxjs';
 import { SupportedLanguage } from '../supported-language';
 import { City } 								from '../city';
+import { SearchbarComponent } 														from './searchbar/searchbar.component';
 
 /**
 * Component to suggest suitable Candidates based upon a 
@@ -40,6 +41,7 @@ export class SuggestionsComponent implements OnInit {
 
 	@Input()  externalProvileViewCandidateId:string = "";
 	@Input()  parentComponent:string = "";
+	
 	@Output() switchViewEvent 						= new EventEmitter<string>();
 	
  	@ViewChild('specUploadBox', { static: true }) 				specUploadDialogBox!: ElementRef<HTMLDialogElement>;
@@ -49,9 +51,10 @@ export class SuggestionsComponent implements OnInit {
  	@ViewChild('contactBox', {static:true})						contactDialogBox!: ElementRef<HTMLDialogElement>;
  	@ViewChild('paidSubscriptionModal', {static:true})			paidSubscriptionBox!: ElementRef<HTMLDialogElement>;
  	@ViewChild('searchTypeFilterSelectionModal', {static:true}) searchTypeFilterSelectionModal!: ElementRef<HTMLDialogElement>;
- 	
+
  	public back():void{
-		this.switchViewEvent.emit();	 
+		this.switchViewEvent.emit();
+			 
 	}
 	
 	public candidateTotals:CandidateTotals					 	= new CandidateTotals(0,0,0);
@@ -134,7 +137,21 @@ export class SuggestionsComponent implements OnInit {
 		this.trustedResourceUrl = this.sanitizer.bypassSecurityTrustResourceUrl('');
 		
 		this.init();
+		
+		
+		
+		
 	}
+	
+	public handleNewSearchRequest(newSuggestions:Array<Candidate>){
+		
+		
+		
+		
+		console.log("I booped");
+		this.suggestions = newSuggestions;
+	}
+	
 	
 	private subscription?:Subscription;
 	
@@ -338,20 +355,20 @@ export class SuggestionsComponent implements OnInit {
 	* Resets the filters
 	*/
 	public doReset():void{
-		this.resetSearchFilters(true);
-		this.addChageListener(true);
+	//	this.resetSearchFilters(true);
+	//	this.addChageListener(true);
 	}
 	
 	private addChageListener(isUnfiltered:boolean):void{
-		if(this.subscription) {
-			this.subscription.unsubscribe();
-		}
+	//	if(this.subscription) {
+	//		this.subscription.unsubscribe();
+	//	}
 		
-		this.subscription = this.suggestionFilterForm.valueChanges.pipe(debounceTime(0)).subscribe(res => {
-		 		this.getSuggestions(false);	
-		}); 
+	//	this.subscription = this.suggestionFilterForm.valueChanges.pipe(debounceTime(0)).subscribe(res => {
+	//	 		this.getSuggestions(false);	
+	//	}); 
 
-		this.getSuggestions(isUnfiltered);	
+	//	this.getSuggestions(isUnfiltered);	
 	}	
 	
 	public resetSuggestionFilterForm():void{
@@ -505,53 +522,53 @@ export class SuggestionsComponent implements OnInit {
 		let backendRequestId = this.backendRequestCounter + 1;
 		this.backendRequestCounter = backendRequestId;
 		
-		this.suggestionsService.getSuggestons(	
-									backendRequestId,
-									maxSuggestions,
-									params.getTitle(),
-									params.getGeoZones(),
-									params.getCountries(),
-									params.getContract(),
-									params.getPerm(),
-									params.getMinExperience(),
-									params.getMaxExperience(),
-									params.getLanguages(),
-									params.getSkills(),
-									params.getIncludUnavailableCandidates(),
-									params.getIncludRequiresSponsorshipCandidates(),
-									isUnfiltered,
-									params.getFirstName(),
-									params.getSurname(),
-									params.getEmail(),
-									params.getCandidateId(),
-									params.getLocCountry(),
-									params.getLocCity(),
-									params.getLocDistance(),
-									).pipe(
-										  map((response) => {
+		//this.suggestionsService.getSuggestons(	
+		//							backendRequestId,
+		//							maxSuggestions,
+		//							params.getTitle(),
+		//							params.getGeoZones(),
+		//							params.getCountries(),
+		//							params.getContract(),
+		//							params.getPerm(),
+		//							params.getMinExperience(),
+		//							params.getMaxExperience(),
+		//							params.getLanguages(),
+		//							params.getSkills(),
+		//							params.getIncludUnavailableCandidates(),
+		//							params.getIncludRequiresSponsorshipCandidates(),
+		//							isUnfiltered,
+		//							params.getFirstName(),
+		//							params.getSurname(),
+		//							params.getEmail(),
+		//							params.getCandidateId(),
+		//							params.getLocCountry(),
+		//							params.getLocCity(),
+		//							params.getLocDistance(),
+		//							).pipe(
+		//								  map((response) => {
 										  
-											const responseRequestId = response.headers.get('X-Arenella-Request-Id');
+		//									const responseRequestId = response.headers.get('X-Arenella-Request-Id');
 											
-											if (this.backendRequestCounter == responseRequestId) {
-												this.suggestions =  new Array<Candidate>();
-												response.body.content.forEach((s:Candidate) => {
-													this.suggestions.push(s);	
-												});	
-											}
+		//									if (this.backendRequestCounter == responseRequestId) {
+		//										this.suggestions =  new Array<Candidate>();
+		//										response.body.content.forEach((s:Candidate) => {
+		//											this.suggestions.push(s);	
+		//										});	
+		//									}
 										
-										    return response ;
+		//								    return response ;
 										
-										  })).subscribe((data: HttpResponse<any>) => {}, 
-										  err => {
-											if (err.status === 401 || err.status === 0) {
-												sessionStorage.removeItem('isAdmin');
-												sessionStorage.removeItem('isRecruter');
-												sessionStorage.removeItem('isCandidate');
-												sessionStorage.removeItem('loggedIn');
-												sessionStorage.setItem('beforeAuthPage', 'suggestions');
-												this.router.navigate(['login-user']);
-											}
-    									});
+		//								  })).subscribe((data: HttpResponse<any>) => {}, 
+		//								  err => {
+		//									if (err.status === 401 || err.status === 0) {
+		//										sessionStorage.removeItem('isAdmin');
+		//										sessionStorage.removeItem('isRecruter');
+		//										sessionStorage.removeItem('isCandidate');
+		//										sessionStorage.removeItem('loggedIn');
+		//										sessionStorage.setItem('beforeAuthPage', 'suggestions');
+		//										this.router.navigate(['login-user']);
+		//									}
+    	//								});
 											
 	}
 	

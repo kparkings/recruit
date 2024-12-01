@@ -34,6 +34,7 @@ import { RecruiterStatsComponent } 			from './recruiter-stats/recruiter-stats.co
 import { CandidateInfoBoxComponent } 		from './candidate-info-box/candidate-info-box.component';
 import { NewsfeedComponent } 				from './newsfeed/newsfeed.component';
 import { InlineCvComponent}					from './suggestions/inline-cv/inline-cv.component';
+import { SearchbarComponent}				from './suggestions/searchbar/searchbar.component';
 import { SavedCandidatesComponent}			from './suggestions/saved-candidates/saved-candidates.component';
 import { CandidateProfileComponent}			from './suggestions/candidate-profile/candidate-profile.component';
 import { RecruitersComponent}				from './accounts/recruiters/recruiters.component';
@@ -76,6 +77,7 @@ import { ClipboardModule } 					from '@angular/cdk/clipboard'
  	SuggestionsComponent,
  	NewsfeedComponent,
  	InlineCvComponent,
+	SearchbarComponent,
  	SavedCandidatesComponent,
  	CandidateProfileComponent,
  	RecruitersComponent,

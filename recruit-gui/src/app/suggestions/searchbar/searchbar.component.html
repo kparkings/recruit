@@ -1,0 +1,204 @@
+<div>	
+	<form [formGroup]="suggestionFilterForm" >	
+	
+		<div>		
+			<table class="mobile-search-box">
+				<tr>
+					<td class="sugg-srch-hdr">{{'arenella-suggestions-job-title' | translate}}<span style="cursor:pointer; color:#6a5acd;" (click)='doShowSearchTypeFilterSelectionModal()'> ...</span></td>
+					<td class="sugg-srch-bdy">
+						<input type="text" class="sugg-srch-job-title" 									formControlName="searchPhrase" 				*ngIf="getCurrentSearchFilterType() === 'FUNCTION' || getCurrentSearchFilterType() == 'EMAIL' || getCurrentSearchFilterType() == 'CANDIDATE_ID'">
+						<input type="text" class="sugg-srch-job-title-name {{cssSearchNameDefault()}}" 	formControlName="searchPhraseFirstName" 	*ngIf="getCurrentSearchFilterType() === 'NAME'" (click)="activateSearhFields()">
+						<input type="text" class="sugg-srch-job-title-name {{cssSearchNameDefault()}}" 	formControlName="searchPhraseSurname" 		*ngIf="getCurrentSearchFilterType() === 'NAME'" (click)="activateSearhFields()">
+					</td>
+				</tr>
+				<tr>
+					<td class="sugg-srch-hdr">{{'arenella-suggestions-geoZones' | translate}}</td>
+					<td *ngIf="!showGeoZoneFilters">
+						<p class="toggle-filter-option" (click)="switchGeoZoneFilterView('showGeoZoneFilters')">{{'Show' | translate}}..</p>
+					</td>
+					<td *ngIf="showGeoZoneFilters" class="sugg-srch-bdy geo-zone-filters">
+						<p class="toggle-filter-option" (click)="switchGeoZoneFilterView('')">{{'Hide' | translate}}..</p>
+						<div *ngFor="let geoZone of geoZones" class="geo-code-filter geo-code-selected-{{includeResultsForGeoZone(geoZone)}}" (click)="toggleGeoZoneSelection(geoZone)">
+							{{geoZone.geoZoneId | translate}}
+						</div>
+						
+					</td>
+					
+				</tr>
+				<tr *ngIf="isAuthenticatedAsAdmin()">
+					<td class="sugg-srch-hdr">{{'arenella-suggestions-location' | translate}}</td>
+					<td *ngIf="!showLocationFilters">
+						<p class="toggle-filter-option" (click)="switchLocationFilterView('showLocationFilters')">{{'Show' | translate}}..</p>
+					</td>
+					<td *ngIf="showLocationFilters" class="sugg-srch-bdy location-filters">
+						<p class="toggle-filter-option" (click)="switchLocationFilterView('')">{{'Hide' | translate}}..</p>
+						<div>
+							<table class="loc-table">
+								<tr>
+									<td>{{'arenella-suggestions-location-country' | translate}}</td>
+									<td>
+										<select (change)="switchLocationCountry()" formControlName="locationCountry">
+											<option value="{{supportedCountry.name}}" *ngFor="let supportedCountry of supportedCountries">{{supportedCountry.name}}<option>
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<td>{{'arenella-suggestions-location-city' | translate}}</td>
+									<td>
+										<select formControlName="locationCity">
+											<option *ngFor="let city of citiesForSelectedCountry">{{city.name}}<option>
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<td>{{'arenella-suggestions-location-distance' | translate}}</td>
+									<td><input type="number" formControlName="locationDistance"/></td>
+								</tr>
+							</table>
+						</div>
+						
+					</td>
+					
+				</tr>
+				<tr>
+					<td class="sugg-srch-hdr">{{'arenella-suggestions-country' | translate}}</td>
+					<td *ngIf="!showCountryFilters">
+						<p class="toggle-filter-option" (click)="switchCountriesFilterView('showCountryFilters')">{{'Show' | translate}}..</p>
+					</td>
+					<td *ngIf="showCountryFilters" class="sugg-srch-bdy country-filters">
+						<p class="toggle-filter-option" (click)="switchCountriesFilterView('')">{{'Hide' | translate}}..</p>
+						<div class="country-selections">
+							<span *ngFor="let supportedCountry of supportedCountries" class="country-filter country-selected-{{includeResultsForCountry(supportedCountry.iso2Code)}}" (click)="toggleCountrySelection(supportedCountry.iso2Code)">
+								<mat-icon title="{{supportedCountry.name}}">
+									<span class="flag-icon flag-icon-{{supportedCountry.iso2Code}} flag-icon-med"></span>
+								</mat-icon>
+							</span>
+						</div>
+					</td>
+				</tr>
+			
+				<tr>
+					<td class="sugg-srch-hdr">{{'arenella-suggestions-contract' | translate}}</td>
+					<td class="sugg-srch-bdy">
+						<select class="contract-type" formControlName="contractType">
+							<option value="BOTH">{{'arenella-suggestions-both' | translate}}</option>
+							<option value="CONTRACT">{{'arenella-suggestions-contract' | translate}}</option>
+							<option value="PERM">{{'arenella-suggestions-permanent' | translate}}</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td class="sugg-srch-hdr">{{'arenella-suggestions-language' | translate}}</td>
+					<td *ngIf="!showLanguageFilters">
+						<p class="toggle-filter-option" (click)="switchLanguageFilterView('showLanguageFilters')">{{'Show' | translate}}..</p>
+					</td>
+					<td class="sugg-srch-bdy" *ngIf="showLanguageFilters">
+						<p class="toggle-filter-option" (click)="switchLanguageFilterView('')">{{'Hide' | translate}}..</p>
+						<ul class="sugg-srch-ctry-ul">
+							<li class="sugg-srch-ctry-chkbox" *ngFor="let lang of supportedLanguages"><input type="checkbox" [formControlName]="lang.languageCode.toLowerCase()+'Language'" class="lang-checkbox">{{'arenella-suggestions-' + lang.languageCode.toLowerCase() | translate}}</li>
+						</ul>					
+					</td>
+				</tr>
+			
+				<tr>
+					<td class="sugg-srch-hdr">{{'arenella-suggestions-experience' | translate}}</td>
+					<td class="sugg-srch-bdy">
+						<div>
+							<select class="min" formControlName="minYearsExperience">
+								<option *ngFor="let opt of minMaxOptions" value="{{opt}}">{{opt}}</option>
+							</select>
+							<span> <B>{{'arenella-suggestions-to' | translate}}</B> </span>
+							<select class="max" formControlName="maxYearsExperience">
+								<option *ngFor="let opt of minMaxOptions" value="{{opt}}">{{opt}}</option>
+							</select>
+						</div>
+					</td>
+				</tr>
+				 
+				<tr>
+					<td class="sugg-srch-hdr">{{'arenella-suggestions-include' | translate}}</td>
+					<td *ngIf="!showIncludeFilters">
+						<p class="toggle-filter-option" (click)="switchIncludeFilterView('showIncludeFilters')">{{'Show' | translate}}..</p>
+					</td>
+					<div *ngIf="showIncludeFilters">
+						<p class="toggle-filter-option" (click)="switchIncludeFilterView('')">{{'Hide' | translate}}..</p>
+						<div class="geo-code-filter geo-code-selected-{{includeUnavailableCandidatesSelected}}" (click)="doPaidSubscriptionCheckUnavailableCandidates()" *ngIf="isAdmin() || hasPaidSubscription()">
+							{{'arenella-suggestions-include-unavailable-candidates' | translate}}
+						</div>
+						<div class="geo-code-filter geo-code-selected-{{includeRequiresSponsorshipCandidatesSelected}}" (click)="doPaidSubscriptionCheckRequiresSponsorshipCandidates()">
+							{{'arenella-suggestions-include-requires-sponsorship-candidates' | translate}}
+						</div>
+					</div>
+				</tr>
+				<tr>
+					<td class="sugg-srch-hdr">{{'arenella-suggestions-skills' | translate}}</td>
+					<td class="sugg-srch-bdy">
+						<form [formGroup]="skilFilterForm">
+							<input class="skill-field" type="text" formControlName="skill"><button (click)="addSkill()" class="btnX btn-secondary add-skill-btn">{{'arenella-suggestions-add' | translate}}</button>
+						</form>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2">
+						<div style="min-height:40px;">
+							<div class="selected-skill" *ngFor="let skill of skillFilters" (click)="removeSkill(skill)">{{skill}}</div>
+						</div>
+					</td>
+				</tr>
+			
+			</table>
+		</div>
+	</form>
+</div>
+		
+		
+<!-- Search box filter type selection -->
+<dialog #searchTypeFilterSelectionModal>
+
+	<!--  Options -->
+	<div class="modal-header">
+		<h4 class="modal-title"></h4>
+		<div class="filter-close-box" (click)="searchTypeFilterSelectionModal.close()">X</div>
+	</div>
+	<div class="modal-body">
+		<form [formGroup]="filterTypeFormGroup">	
+		
+			<table style="width:50%; margin-left:auto; margin-right:auto;">
+				<tr class="filter-type-opt" (click)="closeSearchTypeBox('FUNCTION')">
+					<td style="padding:10px;"><input type="radio"  value="FUNCTION" formControlName="searchType"></td>
+					<td style="text-align:left;font-weight:bold;"><label class="radio-button_label">{{'arenella-suggestions-search-type-function' | translate}}</label></td>
+				</tr>
+				<tr class="filter-type-opt" (click)="closeSearchTypeBox('NAME')">
+					<td style="padding:10px;"><input type="radio" value="NAME" formControlName="searchType"></td>
+					<td style="text-align:left;font-weight:bold;"><label class="radio-button_label">{{'arenella-suggestions-search-type-name' | translate}}</label></td>
+				</tr>
+				<tr class="filter-type-opt" (click)="closeSearchTypeBox('EMAIL')">
+					<td style="padding:10px;"><input type="radio" value="EMAIL" formControlName="searchType"></td>
+					<td style="text-align:left;font-weight:bold;"><label class="radio-button_label">{{'arenella-suggestions-search-type-email' | translate}}</label></td>
+				</tr>
+				<tr class="filter-type-opt" (click)="closeSearchTypeBox('CANDIDATE_ID')">
+					<td style="padding:10px;"><input type="radio" value="CANDIDATE_ID" formControlName="searchType"></td>
+					<td style="text-align:left;font-weight:bold;"><label class="radio-button_label">{{'arenella-suggestions-search-type-candidate_id' | translate}}</label></td>
+				</tr>
+			</table>
+		</form>
+		
+	</div> 
+</dialog>
+<!-- Paid subscription only -->
+<dialog #paidSubscriptionModal>
+
+	<!--  Options -->
+	<div class="modal-header">
+		<h4 class="modal-title">{{'arenella-suggestions-paid-subscription-option' | translate}}</h4>
+		<div class="filter-close-box" (click)="paidSubscriptionModal.close()">X</div>
+	</div>
+	<div class="modal-body">
+		<p>{{'arenella-suggestions-paid-subscription-text-1' | translate}}</p>
+		<p *ngIf="paidFeature == 'paidFeatureUnavailableCandidates'">{{'arenella-suggestions-paid-subscription-text-3' | translate}}</p>
+		<p *ngIf="paidFeature == 'paidFeatureUnavailableCandidates'">{{'arenella-suggestions-paid-subscription-text-4' | translate}} : {{candidateTotals.unavailable}}</p>
+		<p *ngIf="paidFeature == 'paidFeatureGeoZones'">{{'arenella-suggestions-paid-subscription-text-2-geozone' | translate}}</p>
+		<p>{{'arenella-suggestions-paid-subscription-text-2' | translate}}</p>
+		<button class="btn btn-secondary" (click)="choseSubscription()" download>{{'arenella-suggestions-paid-subscription-choose-subscription-btn' | translate}}</button>
+	</div> 
+</dialog>
