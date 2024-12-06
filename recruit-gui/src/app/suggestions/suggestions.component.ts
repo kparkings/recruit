@@ -22,6 +22,7 @@ import { GeoZone } 																	from '../geo-zone';
 import { SupportedCountry } 														from '../supported-candidate';
 import { Subscription } 															from 'rxjs';
 import { SupportedLanguage } 														from '../supported-language';
+import { CurrentUserAuth }															from '../current-user-auth';
 import { City } 																	from '../city';
 import { SearchbarComponent } 														from '../suggestions/searchbar/searchbar.component';
 import { debounceTime, map } 														from "rxjs/operators";
@@ -139,8 +140,6 @@ export class SuggestionsComponent implements OnInit {
 		
 		this.init();
 		
-		
-		
 	}
 	
 	public searchBarCss = this.currentView === 'suggestion-results' ? 'showChild' : 'hideChild';
@@ -153,9 +152,6 @@ export class SuggestionsComponent implements OnInit {
 	private subscription?:Subscription;
 	
 	private init():void{
-				
-		this.resetSearchFilters(true);
-		
 		
 		//Candidate
 		if (this.isCandidate()) {
@@ -228,186 +224,16 @@ export class SuggestionsComponent implements OnInit {
   		
   	}
 	
-	private processJobSpecExtratedFilters(extractedFilters:ExtractedFilters):void{
-		
-		this.resetSearchFilters(false);
-			
-			this.skillFilters 				= extractedFilters.skills.sort();
-			
-			if (extractedFilters.jobTitle != ''){
-				this.suggestionFilterForm.get('searchPhrase')?.setValue(extractedFilters.jobTitle);	
-			}
-		
-			if (extractedFilters.netherlands || extractedFilters.belgium || extractedFilters.uk || extractedFilters.ireland){
-				this.suggestionFilterForm.get('nlResults')?.setValue(false);
-				this.suggestionFilterForm.get('beResults')?.setValue(false);
-				this.suggestionFilterForm.get('ukResults')?.setValue(false);
-				this.suggestionFilterForm.get('ieResults')?.setValue(false);
-			
-				if (extractedFilters.netherlands)  {
-					this.suggestionFilterForm.get('nlResults')?.setValue(extractedFilters.netherlands);
-				}
-				
-				if (extractedFilters.belgium) {
-					this.suggestionFilterForm.get('beResults')?.setValue(extractedFilters.belgium);
-				}
-				
-				if (extractedFilters.uk) {
-					this.suggestionFilterForm.get('ukResults')?.setValue(extractedFilters.uk);
-				}
-				
-				if (extractedFilters.ireland) {
-					this.suggestionFilterForm.get('ieResults')?.setValue(extractedFilters.ireland);
-				}
-				
-			}	
-			
-			if (extractedFilters.perm != 'TRUE' && extractedFilters.freelance != 'TRUE') {
-				this.suggestionFilterForm.get('contractType')?.setValue("BOTH");
-			} else if (extractedFilters.perm == 'TRUE' && extractedFilters.freelance == 'TRUE') {
-				this.suggestionFilterForm.get('contractType')?.setValue("BOTH");
-			} else if (extractedFilters.perm != 'TRUE'){
-				this.suggestionFilterForm.get('contractType')?.setValue("CONTRACT");
-			} else if (extractedFilters.freelance != 'TRUE'){
-				this.suggestionFilterForm.get('contractType')?.setValue("PERM");
-			}
-		
-			if (extractedFilters.dutch) {
-				this.suggestionFilterForm.get('dutchLanguage')?.setValue(extractedFilters.dutch);
-			}
-		
-			if (extractedFilters.english) {
-				this.suggestionFilterForm.get('englishLanguage')?.setValue(extractedFilters.english);
-			}
-		
-			if (extractedFilters.french) {
-				this.suggestionFilterForm.get('frenchLanguage')?.setValue(extractedFilters.french);
-			}
-			
-			if (extractedFilters.experienceGTE != '') {
-				if (this.minMaxOptions.indexOf(extractedFilters.experienceGTE) != -1){
-					this.suggestionFilterForm.get('minYearsExperience')?.setValue(extractedFilters.experienceGTE);	
-				}	
-			}
-			
-			if (extractedFilters.experienceLTE != '') {
-				if (this.minMaxOptions.indexOf(extractedFilters.experienceLTE) != -1){
-					this.suggestionFilterForm.get('maxYearsExperience')?.setValue(extractedFilters.experienceLTE);	
-				}
-			}
-			
-			this.closeModal();
-			
-	}
-	
-	public extractFiltersFromJobSpecText():void{
-		
-		let jobSpecText = this.filterByJobSpecForm.get('specAsText')?.value; 
-		
-		this.candidateService.extractFiltersFromText(jobSpecText).subscribe(extractedFilters=>{
-			this.searchBar.processJobSpecExtratedFilters(extractedFilters);
-			this.specUploadDialogBox.nativeElement.close();
-			this.searchBar.addChageListener(false);
-			this.closeModal();
-		},(failure =>{
-			this.showFilterByJonSpecFailure 	= true;
-			this.showFilterByJobSpec 			= false;
-		}));
-	}
-	
-	/**
- 	* Extracts filters from job specification file
-	*/	
-  	public extractFiltersFromJobSpec():void{
-  		this.candidateService.extractFiltersFromDocument(this.jobSpecFile).subscribe(extractedFilters=>{
-  			this.searchBar.processJobSpecExtratedFilters(extractedFilters);
-  			this.specUploadDialogBox.nativeElement.close();
-			this.searchBar.addChageListener(false);
-			this.closeModal();
-		},(failure =>{
-			this.showFilterByJonSpecFailure 	= true;
-			this.showFilterByJobSpec 			= false;
-		}));
-		
-  		
-  	}
-	
 	/**
 	* Resets the filters
 	*/
 	public doReset():void{
 		this.searchBar.resetSearchFilters(true)
-		//this.resetSearchFilters(true);
 		this.searchBar.addChageListener(true);
-	}
-	
-	//private addChageListener(isUnfiltered:boolean):void{
-	//	if(this.subscription) {
-	//		this.subscription.unsubscribe();
-	//	}
-		
-	//	this.subscription = this.suggestionFilterForm.valueChanges.pipe(debounceTime(0)).subscribe(res => {
-	//	 		this.searchBar.getSuggestions(false);	
-	//	}); 
-
-	//	this.searchBar.getSuggestions(isUnfiltered);	
-	//}	
-	
-	public resetSuggestionFilterForm():void{
-		this.suggestionFilterForm = 				new UntypedFormGroup({
-			searchPhrase:							new UntypedFormControl(''),
-			searchPhraseFirstName:					new UntypedFormControl(this.FIRST_NAME_DEFAULT),
-			searchPhraseSurname:					new UntypedFormControl(this.SURNAME_DEFAULT),
-			contractType: 							new UntypedFormControl('Both'),
-			minYearsExperience: 					new UntypedFormControl(''),
-			maxYearsExperience: 					new UntypedFormControl(''),
-			skill: 									new UntypedFormControl(''),
-			includeUnavailableCandidates: 			new UntypedFormControl(''),
-			includeRequiresSponsorshipCandidates:	new UntypedFormControl(''),
-			locationCountry:						new UntypedFormControl(''),
-			locationCity:							new UntypedFormControl(''),
-			locationDistance:						new UntypedFormControl(''),
-			
-		});
-		
-		this.filterTypeFormGroup					= new UntypedFormGroup({
-			searchType:												new UntypedFormControl('FUNCTION'),
-		});
-		
-		this.candidateService.getSupportedCountries().forEach(c => {
-			this.suggestionFilterForm.addControl(c.iso2Code+'Results', new UntypedFormControl(false));
-		});
-		
-		this.supportedLanguages = new Array<SupportedLanguage>();
-		this.candidateService.getLanguages().forEach(lang => {
-			this.suggestionFilterForm.addControl(lang.languageCode.toLowerCase()+'Language', new UntypedFormControl(false));
-			this.supportedLanguages.push(lang);
-		});
-		
 	}
 	
 	public supportedLanguages:Array<SupportedLanguage> = new Array<SupportedLanguage>();
 	
-	/**
-	* Resets the filters
-	*/
-	private resetSearchFilters(attachValueChangeListener:boolean):void{
-		
-		this.resetSuggestionFilterForm();
-		
-		this.skilFilterForm = new UntypedFormGroup({
-			skill: 					new UntypedFormControl(''),
-		});
-	
-		this.skillFilters = new Array<string>();
-		
-		this.backendRequestCounter 		= 0;
-		
-		this.includeUnavailableCandidatesSelected = 'false';
-		this.includeRequiresSponsorshipCandidatesSelected = 'false';
-	
-		
-	}
 		
 	public showCVInline(candidateId:string):void{
 		
@@ -1016,19 +842,6 @@ export class SuggestionsComponent implements OnInit {
 		return true;
 	}
 	
-	
-	
-	//START
-	
-	// - Add skills no longer working. At least not showing in the profile view of macthing/not matching
-	// - reset not working
-	// - Search by file wont be working
-	
-	//END
-	
-	
-	
-	
 	public choseSubscription():void{
 		this.creditsService.buySubscription();
 		this.router.navigate(['recruiter-account']);
@@ -1055,4 +868,51 @@ export class SuggestionsComponent implements OnInit {
 		
 	}
 	
+	
+	//1. Extract filters code [ Logic ]
+	/**
+	* Extracts filters from job specification text
+	*/
+	public extractFiltersFromJobSpecText():void{
+		
+		let jobSpecText = this.filterByJobSpecForm.get('specAsText')?.value; 
+		
+		this.candidateService.extractFiltersFromText(jobSpecText).subscribe(extractedFilters=>{
+			this.extractFiltersSuccess(extractedFilters);
+		},(failure =>{
+			this.extractFiltersFailure();
+		}));
+	}
+
+	/**
+	* Extracts filters from job specification file
+	*/	
+	public extractFiltersFromJobSpec():void{
+		this.candidateService.extractFiltersFromDocument(this.jobSpecFile).subscribe(extractedFilters=>{
+			this.extractFiltersSuccess(extractedFilters);
+		},(failure =>{
+			this.extractFiltersFailure();
+		}));
+	}
+
+	/**
+	* Handles failure case where filters where 
+	* not able to be extracted 
+	*/
+	private extractFiltersFailure():void{
+		this.showFilterByJonSpecFailure 	= true;
+		this.showFilterByJobSpec 			= false;
+	}
+
+	/**
+	* Handles success case where filters where 
+	* able to be extracted 
+	*/
+	private extractFiltersSuccess(extractedFilters:any):void{
+		this.searchBar.processJobSpecExtratedFilters(extractedFilters);
+		this.specUploadDialogBox.nativeElement.close();
+		this.searchBar.addChageListener(false);
+		this.closeModal();
+	}
+
 }

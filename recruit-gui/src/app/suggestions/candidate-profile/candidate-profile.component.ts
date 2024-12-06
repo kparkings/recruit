@@ -14,6 +14,7 @@ import { CandidateNavService } 												from 'src/app/candidate-nav.service';
 import { CandidateServiceService } 											from 'src/app/candidate-service.service';
 import { Router } 															from '@angular/router';
 import { AppComponent } 													from 'src/app/app.component';
+import { CurrentUserAuth } 													from 'src/app/current-user-auth';
 
 /**
 * Candidate profile showing canidates details and options to interact with 
@@ -40,13 +41,14 @@ export class CandidateProfileComponent {
  	@ViewChild('confirmDeleteModal', {static:true})		confirmDeleteDialogBox!: ElementRef<HTMLDialogElement>;
  	@ViewChild('notesBox', { static: true }) 			notesDialogBox!: ElementRef<HTMLDialogElement>;
 	
+	public currentUserAuth:CurrentUserAuth 				= new CurrentUserAuth();
 	public candidateIsRemoved:boolean					= false;
 	public contactCandidateView:string 					= 'message';
 	public currentView:string 							= 'suggestion-results';
 	public dangerousUrl 								= 'http://127.0.0.1:8080/curriculum-test/1623.pdf';
 	public savedCandidates:Array<SavedCandidate> 		= new Array<SavedCandidate>();
 	public lastView:string 								= '';
-	public passedCreditCheck:boolean 					= this.isAdmin();
+	public passedCreditCheck:boolean 					= this.currentUserAuth.isAdmin();
 	public trustedResourceUrl:SafeResourceUrl;
 	public updatedSavedCandidate:boolean 				= false; 
 	public currentSavedCandidate:SavedCandidate 		= new SavedCandidate();
@@ -57,14 +59,14 @@ export class CandidateProfileComponent {
 	/**
 	* Constructor 
 	*/
-	constructor(private emailService:EmailService, 
-				private curriculumService:CurriculumService,
-				private creditsService:CreditsService,
-				private sanitizer: DomSanitizer,
-				private candidateNavService:CandidateNavService,
-				public candidateService:CandidateServiceService,
-				private router:Router,
-				private appComponent:AppComponent,){
+	constructor(private emailService:				EmailService, 
+				private curriculumService:			CurriculumService,
+				private creditsService:				CreditsService,
+				private sanitizer: 					DomSanitizer,
+				private candidateNavService:		CandidateNavService,
+				public candidateService:			CandidateServiceService,
+				private router:						Router,
+				private appComponent:				AppComponent){
 					
 		this.trustedResourceUrl = this.sanitizer.bypassSecurityTrustResourceUrl('');
 		
@@ -244,7 +246,7 @@ export class CandidateProfileComponent {
 	
 	public doCreditCheckByCount():void{
 		
-		if(this.isAdmin()){
+		if(this.currentUserAuth.isAdmin()){
 			this.passedCreditCheck = true;
 		} else {
 			this.curriculumService.getCreditCount().subscribe(count => {
@@ -256,7 +258,7 @@ export class CandidateProfileComponent {
 	
 	public doCreditCheck():void{
 		
-		if(this.isAdmin()){
+		if(this.currentUserAuth.isAdmin()){
 			this.passedCreditCheck = true;
 		} else {
 			this.curriculumService.getCreditCount().subscribe(count => {
@@ -265,12 +267,7 @@ export class CandidateProfileComponent {
 		}
 	}
 	
-	/**
-	* Whether or not the User is a Admin
-	*/
-	public isAdmin():boolean{
-		return sessionStorage.getItem('isAdmin') === 'true';
-	}
+	
 	
 	public handleNoCredit():void{
 		this.creditsService.tokensExhaused();
@@ -288,7 +285,7 @@ export class CandidateProfileComponent {
 	*/
 	public showInlineCVView():void{
 		
-		if(!this.isAdmin()) {
+		if(!this.currentUserAuth.isAdmin()) {
 			if (this.passedCreditCheck) {
 				this.currentView = 'inline-cv';
 				this.showCVInline(this.suggestedCandidate.candidateId);
@@ -463,7 +460,7 @@ export class CandidateProfileComponent {
 			return false;
 		}
 		
-		return this.isCandidate() || this.isAdmin() || this.isOwner();
+		return this.isCandidate() || this.currentUserAuth.isAdmin() || this.isOwner();
 	}
 	
 	public showBtnEdit():boolean{
@@ -475,7 +472,7 @@ export class CandidateProfileComponent {
 			return false;
 		}
 		
-		return this.isCandidate() || this.isAdmin() || this.isOwner();
+		return this.isCandidate() || this.currentUserAuth.isAdmin() || this.isOwner();
 	}
 	
 	public showBtnShowCV():boolean{

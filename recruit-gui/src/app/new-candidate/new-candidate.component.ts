@@ -14,9 +14,10 @@ import { CandidateNavService } 							from '../candidate-nav.service';
 import { LanguageOption } 								from './language-option';
 import { AppComponent} 									from '../app.component';
 import { TranslateService } 							from '@ngx-translate/core';
-import { Country } from '../country';
-import { SupportedLanguage } from '../supported-language';
-import { SupportedCountry } from '../supported-candidate';
+import { Country } 										from '../country';
+import { SupportedLanguage } 							from '../supported-language';
+import { SupportedCountry } 							from '../supported-candidate';
+import { CurrentUserAuth } 								from '../current-user-auth';
 
 @Component({
   selector: 'app-new-candidate',
@@ -49,6 +50,8 @@ export class NewCandidateComponent implements OnInit {
 	public showBackBtn:boolean = false;
 	public countries:Array<SupportedCountry> 			= new Array<SupportedCountry>();
 	public supportedLanguages:Array<SupportedLanguage> 	= new Array<SupportedLanguage>();
+	
+	public currentUserAuth:CurrentUserAuth = new CurrentUserAuth();
 	
 	/**
   	* Constructor
@@ -88,7 +91,7 @@ export class NewCandidateComponent implements OnInit {
                     this.pendingCandidates.push(pc);
             	});
 			
-				if (this.isPendingCandidates() && this.isAuthenticatedAsAdmin()) {
+				if (this.isPendingCandidates() && this.currentUserAuth.isAdmin()) {
 					this.openPendingCandidatesBox();
 				}
 			});
@@ -227,7 +230,7 @@ export class NewCandidateComponent implements OnInit {
 			candidate.languages.push(new Language(lang.languageCode, this.offeredCandidateFormBean.get(lang.languageCode)!.value));
 		});
 		
-		if (this.isRecruiter()) {
+		if (this.currentUserAuth.isRecruiter()) {
 			candidate.email = "useRecruiters";
 		}
 		
@@ -560,14 +563,6 @@ export class NewCandidateComponent implements OnInit {
 	public removeOfferedCandidateSkill(skill:string):void{
 		this.coreSkills = this.coreSkills.filter(s => s != skill);
 	}
-
-	/**
-  	* Whether or not the user has authenticated as an Admin user 
-  	*/
-  	public isAuthenticatedAsAdmin():boolean {
-    	return sessionStorage.getItem('isAdmin') === 'true';
-  	}
-  	
   	
   	public permRoleClass = "hide-row";
   	public permOnChange(newValue:any):void{
@@ -585,20 +580,6 @@ export class NewCandidateComponent implements OnInit {
 		} else {
 			this.contractRoleClass = "hide-row";
 		}
-	}
-	
-	/**
-	* Whether or not the User is a Admin
-	*/
-	public isAdmin():boolean{
-		return sessionStorage.getItem('isAdmin') === 'true';
-	}
-	
-	/**
-	* Whether or not User is a Recruiter
-	*/
-	public isRecruiter():boolean{
-		return sessionStorage.getItem('isRecruiter') === 'true';
 	}
 	
 	public setLanguageFormValue(langCode:string, langSelection:string):void{

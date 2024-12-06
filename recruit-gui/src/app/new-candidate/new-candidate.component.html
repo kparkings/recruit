@@ -41,7 +41,7 @@
 							<td class="hdr-label">{{'arenella-new-candidate-surname' | translate}}</td>
 							<input formControlName="surname" type="text"/>
 						</tr>
-						<tr *ngIf="!isRecruiter()">
+						<tr *ngIf="!currentUserAuth.isRecruiter()">
 							<td class="hdr-label">{{'arenella-new-candidate-email' | translate}}</td>
 							<td class="hdr-value">
 								<input formControlName="email" type="text"/>
