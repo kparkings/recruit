@@ -10,7 +10,6 @@ import { NgbModal }																	from '@ng-bootstrap/ng-bootstrap';
 import { CandidateSearchAlert }														from './candidate-search-alert';
 import { DomSanitizer, SafeResourceUrl } 											from '@angular/platform-browser';
 import { Router}																	from '@angular/router';
-import { debounceTime, map } 														from "rxjs/operators";
 import { CandidateProfile } 														from '../candidate-profile';
 import { CandidateNavService } 														from '../candidate-nav.service';
 import { CreditsService } 															from '../credits.service';
@@ -18,14 +17,14 @@ import { ExtractedFilters } 														from './extracted-filters';
 import { InfoItemBlock, InfoItemConfig, InfoItemRowKeyValue, InfoItemRowKeyValueFlag, InfoItemRowKeyValueMaterialIcon, InfoItemRowSingleValue } from '../candidate-info-box/info-item';
 import {AppComponent} 																from '../app.component';
 import { TranslateService } 														from '@ngx-translate/core';
-import { HttpResponse } 															from '@angular/common/http';
 import { CandidateTotals } 															from '../candidate-totals';
 import { GeoZone } 																	from '../geo-zone';
 import { SupportedCountry } 														from '../supported-candidate';
-import { Subscription } from 'rxjs';
-import { SupportedLanguage } from '../supported-language';
-import { City } 								from '../city';
-import { SearchbarComponent } 														from './searchbar/searchbar.component';
+import { Subscription } 															from 'rxjs';
+import { SupportedLanguage } 														from '../supported-language';
+import { City } 																	from '../city';
+import { SearchbarComponent } 														from '../suggestions/searchbar/searchbar.component';
+import { debounceTime, map } 														from "rxjs/operators";
 
 /**
 * Component to suggest suitable Candidates based upon a 
@@ -52,6 +51,8 @@ export class SuggestionsComponent implements OnInit {
  	@ViewChild('paidSubscriptionModal', {static:true})			paidSubscriptionBox!: ElementRef<HTMLDialogElement>;
  	@ViewChild('searchTypeFilterSelectionModal', {static:true}) searchTypeFilterSelectionModal!: ElementRef<HTMLDialogElement>;
 
+	@ViewChild(SearchbarComponent) searchBar!:SearchbarComponent;
+	
  	public back():void{
 		this.switchViewEvent.emit();
 			 
@@ -140,15 +141,11 @@ export class SuggestionsComponent implements OnInit {
 		
 		
 		
-		
 	}
 	
+	public searchBarCss = this.currentView === 'suggestion-results' ? 'showChild' : 'hideChild';
+	
 	public handleNewSearchRequest(newSuggestions:Array<Candidate>){
-		
-		
-		
-		
-		console.log("I booped");
 		this.suggestions = newSuggestions;
 	}
 	
@@ -156,12 +153,9 @@ export class SuggestionsComponent implements OnInit {
 	private subscription?:Subscription;
 	
 	private init():void{
-		
+				
 		this.resetSearchFilters(true);
 		
-		if (!this.isCandidate()) {
-			this.getSuggestions(true);	
-		}
 		
 		//Candidate
 		if (this.isCandidate()) {
@@ -189,7 +183,7 @@ export class SuggestionsComponent implements OnInit {
 			this.showPaidSubscriptinOptions = true;
 		} 
 		
-		this.initGeoZones();
+		//this.initGeoZones();
 		this.initSupportedCountries();
 		
 		this.candidateService.fetchCandidateTotals().subscribe(totals => this.candidateTotals = totals);
@@ -200,21 +194,6 @@ export class SuggestionsComponent implements OnInit {
 			this.subscription.unsubscribe();
 		}
 		
-	}
-	
-	/**
-	* Swithches between open and closed filter view for GeoZones 
-	*/
-	public switchGeoZoneFilterView(view:string):void{
-		this.initGeoZones();
-		this.showGeoZoneFilters = view;
-	}
-	
-	/**
-	* Swithches between open and closed filter view for Location 
-	*/
-	public switchLocationFilterView(view:string):void{
-		this.showLocationFilters = view;
 	}
 	
 	/**
@@ -326,9 +305,10 @@ export class SuggestionsComponent implements OnInit {
 		let jobSpecText = this.filterByJobSpecForm.get('specAsText')?.value; 
 		
 		this.candidateService.extractFiltersFromText(jobSpecText).subscribe(extractedFilters=>{
-			this.processJobSpecExtratedFilters(extractedFilters);
+			this.searchBar.processJobSpecExtratedFilters(extractedFilters);
 			this.specUploadDialogBox.nativeElement.close();
-			this.addChageListener(false);
+			this.searchBar.addChageListener(false);
+			this.closeModal();
 		},(failure =>{
 			this.showFilterByJonSpecFailure 	= true;
 			this.showFilterByJobSpec 			= false;
@@ -340,9 +320,10 @@ export class SuggestionsComponent implements OnInit {
 	*/	
   	public extractFiltersFromJobSpec():void{
   		this.candidateService.extractFiltersFromDocument(this.jobSpecFile).subscribe(extractedFilters=>{
-  			this.processJobSpecExtratedFilters(extractedFilters);
+  			this.searchBar.processJobSpecExtratedFilters(extractedFilters);
   			this.specUploadDialogBox.nativeElement.close();
-			this.addChageListener(false);
+			this.searchBar.addChageListener(false);
+			this.closeModal();
 		},(failure =>{
 			this.showFilterByJonSpecFailure 	= true;
 			this.showFilterByJobSpec 			= false;
@@ -355,21 +336,22 @@ export class SuggestionsComponent implements OnInit {
 	* Resets the filters
 	*/
 	public doReset():void{
-	//	this.resetSearchFilters(true);
-	//	this.addChageListener(true);
+		this.searchBar.resetSearchFilters(true)
+		//this.resetSearchFilters(true);
+		this.searchBar.addChageListener(true);
 	}
 	
-	private addChageListener(isUnfiltered:boolean):void{
+	//private addChageListener(isUnfiltered:boolean):void{
 	//	if(this.subscription) {
 	//		this.subscription.unsubscribe();
 	//	}
 		
 	//	this.subscription = this.suggestionFilterForm.valueChanges.pipe(debounceTime(0)).subscribe(res => {
-	//	 		this.getSuggestions(false);	
+	//	 		this.searchBar.getSuggestions(false);	
 	//	}); 
 
-	//	this.getSuggestions(isUnfiltered);	
-	}	
+	//	this.searchBar.getSuggestions(isUnfiltered);	
+	//}	
 	
 	public resetSuggestionFilterForm():void{
 		this.suggestionFilterForm = 				new UntypedFormGroup({
@@ -402,9 +384,6 @@ export class SuggestionsComponent implements OnInit {
 			this.supportedLanguages.push(lang);
 		});
 		
-		this.initGeoZones();
-		this.showCountryFilters 	= '';
-		this.showLanguageFilters 	= '';
 	}
 	
 	public supportedLanguages:Array<SupportedLanguage> = new Array<SupportedLanguage>();
@@ -443,11 +422,7 @@ export class SuggestionsComponent implements OnInit {
 	* Initializes Component`
 	*/
 	ngOnInit(): void {
-		
-		this.subscription = this.suggestionFilterForm.valueChanges.pipe(debounceTime(500)).subscribe(res => {
-			this.getSuggestions(false);
-		});
-		
+
 		this.candidateService.fetchSavedCandidates().subscribe(response => {
 			this.savedCandidates = response;
 		})
@@ -461,29 +436,16 @@ export class SuggestionsComponent implements OnInit {
 	}
 	
 	ngAfterViewChecked(){
+		
+		this.searchBarCss = this.currentView === 'suggestion-results' ? 'showChild' : 'hideChild';
+			
 		if (sessionStorage.getItem("news-item-div")){
 			this.doScrollTop();	
 		}
 	}
 	
-	private initGeoZones():void{
-		
-		this.geoZones = this.candidateService.getGeoZones();
-		
-		this.geoZones.forEach(gz => {
-			this.suggestionFilterForm.addControl(gz.geoZoneId.toLowerCase()+'Results', new UntypedFormControl(false));
-		});
-		
-		this.showGeoZoneFilters 	= "";
-		this.showLocationFilters 	= "";
-		
-	}
-	
-	private initSupportedCountries():void{
-		
+	private initSupportedCountries():void{		
 		this.supportedCountries = this.candidateService.getSupportedCountries();
-		
-		
 	}
 	
 	/**
@@ -511,160 +473,6 @@ export class SuggestionsComponent implements OnInit {
 	}
 
 	/**
-	* Sends request for Suggestions to the backend API
-	*/
-	private getSuggestions(isUnfiltered:boolean):void{
-		
-		const maxSuggestions:number 		= 112;
-		
-		let params:SuggestionParams = new SuggestionParams(this.filterTypeFormGroup, this.suggestionFilterForm, this.skillFilters, new Array<string>(), this.candidateService.getGeoZones(), this.candidateService.supportedCountries, this.supportedLanguages);
-		
-		let backendRequestId = this.backendRequestCounter + 1;
-		this.backendRequestCounter = backendRequestId;
-		
-		//this.suggestionsService.getSuggestons(	
-		//							backendRequestId,
-		//							maxSuggestions,
-		//							params.getTitle(),
-		//							params.getGeoZones(),
-		//							params.getCountries(),
-		//							params.getContract(),
-		//							params.getPerm(),
-		//							params.getMinExperience(),
-		//							params.getMaxExperience(),
-		//							params.getLanguages(),
-		//							params.getSkills(),
-		//							params.getIncludUnavailableCandidates(),
-		//							params.getIncludRequiresSponsorshipCandidates(),
-		//							isUnfiltered,
-		//							params.getFirstName(),
-		//							params.getSurname(),
-		//							params.getEmail(),
-		//							params.getCandidateId(),
-		//							params.getLocCountry(),
-		//							params.getLocCity(),
-		//							params.getLocDistance(),
-		//							).pipe(
-		//								  map((response) => {
-										  
-		//									const responseRequestId = response.headers.get('X-Arenella-Request-Id');
-											
-		//									if (this.backendRequestCounter == responseRequestId) {
-		//										this.suggestions =  new Array<Candidate>();
-		//										response.body.content.forEach((s:Candidate) => {
-		//											this.suggestions.push(s);	
-		//										});	
-		//									}
-										
-		//								    return response ;
-										
-		//								  })).subscribe((data: HttpResponse<any>) => {}, 
-		//								  err => {
-		//									if (err.status === 401 || err.status === 0) {
-		//										sessionStorage.removeItem('isAdmin');
-		//										sessionStorage.removeItem('isRecruter');
-		//										sessionStorage.removeItem('isCandidate');
-		//										sessionStorage.removeItem('loggedIn');
-		//										sessionStorage.setItem('beforeAuthPage', 'suggestions');
-		//										this.router.navigate(['login-user']);
-		//									}
-    	//								});
-											
-	}
-	
-	/**
-	* Toggles GeoCpde
-	*/
-	public toggleGeoZoneSelection(geoZone:GeoZone):void{
-		
-		let included:boolean = this.suggestionFilterForm.get((geoZone.geoZoneId.toLowerCase()+'Results'))?.value;
-		this.suggestionFilterForm.get((geoZone.geoZoneId.toLowerCase()+'Results'))?.setValue(!included);
-	
-		let geoZoneActive = this.candidateService.getGeoZones().filter(gz => this.suggestionFilterForm.get((gz.geoZoneId.toLowerCase()+'Results'))?.value == true).length > 0;
-	
-		if (!geoZoneActive) {
-			this.candidateService.getSupportedCountries().forEach(country => {
-				let key = country.iso2Code + 'Results';
-				this.suggestionFilterForm.get(key)?.setValue(true);
-			});
-		} else {
-			this.candidateService.getSupportedCountries().forEach(country => {
-				let key = country.iso2Code.toLowerCase() + 'Results';
-				this.suggestionFilterForm.get(key)?.setValue(false);
-			});
-		
-		}
-		
-	}
-	
-	/**
-	* Toggles whether Candidates from selected country 
-	* should be included in the Suggestions 
-	* @param country - Country to toggle
-	*/
-	public toggleCountrySelection(country:string):void{
-		
-		let included:boolean = this.suggestionFilterForm.get((country+'Results'))?.value;
-		
-		this.suggestionFilterForm.get((country+'Results'))?.setValue(!included);
-		
-		this.geoZones.forEach(geoZone => {
-			let key = geoZone.geoZoneId.toLowerCase() + 'Results';
-			this.suggestionFilterForm.get(key)?.setValue(false);
-		});
-				
-	}
-	
-	/**
-	* Returns whether Candidates from the selected country are currently
-	* included in the Suggestion results
-	*/
-	public includeResultsForCountry(country:string):boolean{
-		return this.suggestionFilterForm.get((country+'Results'))?.value;
-	}
-	
-	/**
-	* Returns whether Candidates from the selected GeoZone are currently
-	* included in the Suggestion results
-	*/
-	public includeResultsForGeoZone(geoZone:GeoZone):boolean{
-		return this.suggestionFilterForm.get((geoZone.geoZoneId.toLowerCase()+'Results'))?.value;
-	}
-	
-	/**
-	* Adds a skill to the list of Skills to filter on
-	*/
-	public addSkill():void{
-		
-		let skillFormatted:string 	= this.skilFilterForm.get('skill')?.value.trim();
-		skillFormatted 				= skillFormatted.toLocaleLowerCase();
-		
-		if (skillFormatted.length > 0 && this.skillFilters.indexOf(skillFormatted) == -1) {
-			this.skillFilters.push(skillFormatted);	
-			this.skillFilters.sort();
-		}
-		
-		this.getSuggestions(false);
-		
-		this.skilFilterForm.get('skill')?.setValue('');
-		
-	}
-	
-	/**
-	* Removes a skill and calls for new suggestions
-	*/
-	public removeSkill(skill:string):void{
-		
-		skill = skill.trim();
-		skill = skill.toLocaleLowerCase();
-		
-		this.skillFilters = this.skillFilters.filter(s => s  !== skill);
-		
-		this.getSuggestions(false);	
-	
-	}
-	
-	/**
 	* Shows the Saved Candidates view
 	*/
 	public showSavedCandidates():void{
@@ -687,7 +495,7 @@ export class SuggestionsComponent implements OnInit {
 		if(this.parentComponent == 'newsfeed') {
 			this.back();		
 		} else {
-			this.getSuggestions(false);	
+			//this.getSuggestions(false);	
 		
 			if (this.isRecruiter() && this.candidateNavService.isRouteActive()) {
 				this.candidateNavService.doNextMove("back",this.candidateNavService.getCandidateId());	
@@ -809,6 +617,8 @@ export class SuggestionsComponent implements OnInit {
 	* Shows the Suggesion result view
 	*/
 	public showSuggestedCandidateOverview(candidateSuggestion:Candidate):void{
+		
+		this.skillFilters = this.searchBar.skillFilters;
 		
 		if (this.isCandidate()) {
 			this.setLeftInfoPane(candidateSuggestion.candidateId, this.suggestedCandidate);
@@ -1208,6 +1018,17 @@ export class SuggestionsComponent implements OnInit {
 	
 	
 	
+	//START
+	
+	// - Add skills no longer working. At least not showing in the profile view of macthing/not matching
+	// - reset not working
+	// - Search by file wont be working
+	
+	//END
+	
+	
+	
+	
 	public choseSubscription():void{
 		this.creditsService.buySubscription();
 		this.router.navigate(['recruiter-account']);
@@ -1232,83 +1053,6 @@ export class SuggestionsComponent implements OnInit {
 		
 		return "candidate-available-" + candidate.available;
 		
-	}
-	
-	/**
- 	* Shows search type selection modal 
-	*/
-	public doShowSearchTypeFilterSelectionModal():void{
-		
-		this.FIRST_NAME_DEFAULT 	= this.translate.instant('arenella-suggestions-search-type-name-firstname-default');
-		this.SURNAME_DEFAULT 		= this.translate.instant('arenella-suggestions-search-type-name-surname-default');
-		
-		
-		
-		this.searchTypeFilterSelectionModal.nativeElement.showModal();;
-	}
-	
-	public getCurrentSearchFilterType():string{
-		return this.filterTypeFormGroup.get('searchType')?.value;
-	}
-	
-	public cssSearchNameDefault():string{
-		
-		if (this.getCurrentSearchFilterType() != 'NAME') {
-			return '';
-		}
-		
-		let firstName:string = this.suggestionFilterForm.get('searchPhraseFirstName')?.value;
-		let surname:string = this.suggestionFilterForm.get('searchPhraseSurname')?.value;
-		
-		if (firstName == this.FIRST_NAME_DEFAULT || surname == this.SURNAME_DEFAULT){
-			return 'search-name-default';
-		}
-		
-		return '';
-		
-	}
-	
-	public resetSearhFields():void{
-		this.suggestionFilterForm.get('searchPhraseFirstName')?.setValue(this.FIRST_NAME_DEFAULT);
-		this.suggestionFilterForm.get('searchPhraseSurname')?.setValue(this.SURNAME_DEFAULT);
-		this.suggestionFilterForm.get('searchPhrase')?.setValue('');
-	} 
-	
-	public activateSearhFields():void{
-		
-		let firstName:string 	= this.suggestionFilterForm.get('searchPhraseFirstName')?.value;
-		let surname:string 		= this.suggestionFilterForm.get('searchPhraseSurname')?.value;
-		
-		if(firstName && firstName == this.FIRST_NAME_DEFAULT){
-			this.suggestionFilterForm.get('searchPhraseFirstName')?.setValue('');	
-		}
-		
-		if(surname && surname == this.SURNAME_DEFAULT){
-			this.suggestionFilterForm.get('searchPhraseSurname')?.setValue('');
-		}
-		
-		
-		
-		this.suggestionFilterForm.get('searchPhrase')?.setValue('');
-	}
-	
-	public switchLocationCountry():void{
-		
-		//TODO: [KP] need to setup form and use the selectd value
-		let country = this.suggestionFilterForm.get('locationCountry')?.value;
-		this.citiesForSelectedCountry = new Array<City>();
-		this.candidateService.getCitiesForCountry(country).subscribe(b => {
-			this.citiesForSelectedCountry = b;	
-		});
-	}
-	
-	/**
-	* Closes the searchTypeFilterSelectionModal modal box 
-	*/
-	public closeSearchTypeBox(type:string):void{
-		this.resetSearhFields();
-		this.filterTypeFormGroup.get('searchType')?.setValue(type);
-		this.searchTypeFilterSelectionModal.nativeElement.close();
 	}
 	
 }

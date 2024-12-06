@@ -15,12 +15,17 @@
 	        <button class="btn btn-secondary arenella-btn" (click)="doReset()">{{'arenella-suggestions-btn-reset' | translate}}</button>
 	     </div>
 		
-		<app-searchbar (newSuggestionResults)="handleNewSearchRequest($event)" *ngIf="currentView === 'suggestion-results'"></app-searchbar>
+		
+		<div class="{{searchBarCss}}">
+			<app-searchbar #searchbar (newSuggestionResults)="handleNewSearchRequest($event)" ></app-searchbar>
+		</div>
+		
 		
 		<div *ngIf="currentView === 'saved-candidates'">
 			<app-saved-candidates [savedCandidates]="savedCandidates" (switchViewEvent)="showSuggestionsResults()" [infoItemConfig]="infoItemConfig" [skillFilters]="skillFilters"></app-saved-candidates>
 		</div>
 	
+	<!--  
 		<div>	
 			<form [formGroup]="suggestionFilterForm" *ngIf="currentView === 'suggestion-results'">	
 			
@@ -173,7 +178,7 @@
 				</div>
 			</form>
 		</div>
-	
+	-->
 		<!-- Suggestion Results -->
 		<div *ngIf="currentView === 'suggestion-results'">
 		
@@ -307,9 +312,11 @@
 	</div> 
 </dialog>
 <!-- Search box filter type selection -->
+<!--  
 <dialog #searchTypeFilterSelectionModal>
-
+-->
 	<!--  Options -->
+	<!--  
 	<div class="modal-header">
 		<h4 class="modal-title"></h4>
 		<div class="filter-close-box" (click)="searchTypeFilterSelectionModal.close()">X</div>
@@ -339,3 +346,4 @@
 		
 	</div> 
 </dialog>
+-->

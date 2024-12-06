@@ -12,6 +12,8 @@ import { CandidateServiceService }									from './../../candidate-service.servi
 import { CandidateTotals } 											from './../../candidate-totals';
 import { CandidateNavService } 										from './../../candidate-nav.service';
 import {AppComponent} 												from './../../app.component';
+import { ExtractedFilters } 														from './../extracted-filters';
+
 import { Subscription } 											from 'rxjs';
 import { SuggestionParams}											from './.././suggestion-param-generator';
 import { SuggestionsService }										from './../../suggestions.service';
@@ -77,8 +79,13 @@ export class SearchbarComponent {
 		private appComponent:			AppComponent,
 		private router:					Router,
 	){
-		this.init();
+		
+		console.log("INIT");
+	
+		this.init();	
+			
 	}
+	
 	
 	/**
 		* Initializes Component`
@@ -102,7 +109,14 @@ export class SearchbarComponent {
 	*/
 	public init():void{
 		
-		this.resetSearchFilters(true);
+		console.log("rrttINIT");
+		
+		
+		//if(sessionStorage.getItem("suggestionSearchBarInitializes") != 'true'){
+			this.resetSearchFilters(true);	
+			//sessionStorage.setItem("suggestionSearchBarInitializes", 'true');
+		//}
+		
 				
 		if (!this.isCandidate()) {
 			this.getSuggestions(true);	
@@ -119,11 +133,16 @@ export class SearchbarComponent {
 				
 	}
 	
+	
+	
+
+	
+	
 	/**
 	* Resets the filters
 	*/
-	private resetSearchFilters(attachValueChangeListener:boolean):void{
-		
+	public resetSearchFilters(attachValueChangeListener:boolean):void{
+		console.log("rrrrrrrrr");
 		this.resetSuggestionFilterForm();
 		
 		this.skilFilterForm = new UntypedFormGroup({
@@ -513,7 +532,7 @@ export class SearchbarComponent {
 	/**
 	* Sends request for Suggestions to the backend API
 	*/
-	private getSuggestions(isUnfiltered:boolean):void{
+	public getSuggestions(isUnfiltered:boolean):void{
 		
 		const maxSuggestions:number 		= 112;
 		
@@ -575,6 +594,78 @@ export class SearchbarComponent {
 											
 	}	
 	
+	public  processJobSpecExtratedFilters(extractedFilters:ExtractedFilters):void{
+			
+			this.resetSearchFilters(false);
+				
+				this.skillFilters 				= extractedFilters.skills.sort();
+				
+				if (extractedFilters.jobTitle != ''){
+					this.suggestionFilterForm.get('searchPhrase')?.setValue(extractedFilters.jobTitle);	
+				}
+			
+				if (extractedFilters.netherlands || extractedFilters.belgium || extractedFilters.uk || extractedFilters.ireland){
+					this.suggestionFilterForm.get('nlResults')?.setValue(false);
+					this.suggestionFilterForm.get('beResults')?.setValue(false);
+					this.suggestionFilterForm.get('ukResults')?.setValue(false);
+					this.suggestionFilterForm.get('ieResults')?.setValue(false);
+				
+					if (extractedFilters.netherlands)  {
+						this.suggestionFilterForm.get('nlResults')?.setValue(extractedFilters.netherlands);
+					}
+					
+					if (extractedFilters.belgium) {
+						this.suggestionFilterForm.get('beResults')?.setValue(extractedFilters.belgium);
+					}
+					
+					if (extractedFilters.uk) {
+						this.suggestionFilterForm.get('ukResults')?.setValue(extractedFilters.uk);
+					}
+					
+					if (extractedFilters.ireland) {
+						this.suggestionFilterForm.get('ieResults')?.setValue(extractedFilters.ireland);
+					}
+					
+				}	
+				
+				if (extractedFilters.perm != 'TRUE' && extractedFilters.freelance != 'TRUE') {
+					this.suggestionFilterForm.get('contractType')?.setValue("BOTH");
+				} else if (extractedFilters.perm == 'TRUE' && extractedFilters.freelance == 'TRUE') {
+					this.suggestionFilterForm.get('contractType')?.setValue("BOTH");
+				} else if (extractedFilters.perm != 'TRUE'){
+					this.suggestionFilterForm.get('contractType')?.setValue("CONTRACT");
+				} else if (extractedFilters.freelance != 'TRUE'){
+					this.suggestionFilterForm.get('contractType')?.setValue("PERM");
+				}
+			
+				if (extractedFilters.dutch) {
+					this.suggestionFilterForm.get('dutchLanguage')?.setValue(extractedFilters.dutch);
+				}
+			
+				if (extractedFilters.english) {
+					this.suggestionFilterForm.get('englishLanguage')?.setValue(extractedFilters.english);
+				}
+			
+				if (extractedFilters.french) {
+					this.suggestionFilterForm.get('frenchLanguage')?.setValue(extractedFilters.french);
+				}
+				
+				if (extractedFilters.experienceGTE != '') {
+					if (this.minMaxOptions.indexOf(extractedFilters.experienceGTE) != -1){
+						this.suggestionFilterForm.get('minYearsExperience')?.setValue(extractedFilters.experienceGTE);	
+					}	
+				}
+				
+				if (extractedFilters.experienceLTE != '') {
+					if (this.minMaxOptions.indexOf(extractedFilters.experienceLTE) != -1){
+						this.suggestionFilterForm.get('maxYearsExperience')?.setValue(extractedFilters.experienceLTE);	
+					}
+				}
+				
+				//this.closeModal();
+				
+		}
+	
 	/**
 	* Resets the filters
 	*/
@@ -582,6 +673,7 @@ export class SearchbarComponent {
 		this.resetSearchFilters(true);
 		this.addChageListener(true);
 	}
+	
 	
 	/**
 	* Scrolls to top of page
@@ -594,7 +686,7 @@ export class SearchbarComponent {
 		
 	}
 	
-	private addChageListener(isUnfiltered:boolean):void{
+	public addChageListener(isUnfiltered:boolean):void{
 			if(this.subscription) {
 				this.subscription.unsubscribe();
 			}

@@ -218,6 +218,14 @@ textarea {
 	padding-right:10px;
 }
 
+.hideChild{
+	visibility:collapse;
+}
+
+.showChild{
+	visibility:visible;
+}
+
 @media (max-width:700px)  {
 
 	 .suggestion-icon{
