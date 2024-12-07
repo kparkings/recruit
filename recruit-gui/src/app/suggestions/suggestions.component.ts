@@ -110,8 +110,8 @@ export class SuggestionsComponent implements OnInit {
 		searchType:												new UntypedFormControl('FUNCTION'),
 	});
 	
-	private FIRST_NAME_DEFAULT:string 							= 'First Name';
-	private SURNAME_DEFAULT:string 								= 'Surname';
+	//private FIRST_NAME_DEFAULT:string 							= 'First Name';
+	//private SURNAME_DEFAULT:string 								= 'Surname';
 	
 	/**
 	* Switches between options on how to upload job spec 
@@ -228,8 +228,8 @@ export class SuggestionsComponent implements OnInit {
 	* Resets the filters
 	*/
 	public doReset():void{
-		this.searchBar.resetSearchFilters(true)
-		this.searchBar.addChageListener(true);
+		this.searchBar.resetSearchFilters();
+		this.searchBar.addChangeListener(true);
 	}
 	
 	public supportedLanguages:Array<SupportedLanguage> = new Array<SupportedLanguage>();
@@ -313,8 +313,8 @@ export class SuggestionsComponent implements OnInit {
 	* Shows the Suggesion result view
 	*/
 	public showSuggestionsResults():void{
-		
-		 this.candidateService.fetchSavedCandidates().subscribe(response => {
+	
+		this.candidateService.fetchSavedCandidates().subscribe(response => {
 			this.savedCandidates = response;
 		});
 		
@@ -911,7 +911,7 @@ export class SuggestionsComponent implements OnInit {
 	private extractFiltersSuccess(extractedFilters:any):void{
 		this.searchBar.processJobSpecExtratedFilters(extractedFilters);
 		this.specUploadDialogBox.nativeElement.close();
-		this.searchBar.addChageListener(false);
+		this.searchBar.addChangeListener(false);
 		this.closeModal();
 	}
 

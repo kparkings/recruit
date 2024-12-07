@@ -10,13 +10,14 @@ import { SupportedCountry } 										from './../../supported-candidate';
 import { GeoZone } 													from './../../geo-zone';
 import { CandidateServiceService }									from './../../candidate-service.service';
 import { CandidateTotals } 											from './../../candidate-totals';
-import { ExtractedFilters } 														from './../extracted-filters';
+import { ExtractedFilters } 										from './../extracted-filters';
 
 import { Subscription } 											from 'rxjs';
 import { SuggestionParams}											from './.././suggestion-param-generator';
 import { SuggestionsService }										from './../../suggestions.service';
 import { debounceTime, map } 										from "rxjs/operators";
-import { CurrentUserAuth }															from './../../current-user-auth';
+import { CurrentUserAuth }											from './../../current-user-auth';
+import { SearchBarFilterFormHelper } 								from './search-fiter-form-helper';
 
 @Component({
   selector: 'app-searchbar',
@@ -68,7 +69,7 @@ export class SearchbarComponent {
 	});
 	
 	/**
-	* 
+	* Constructor
 	*/
 	public constructor(
 		private translate:				TranslateService,
@@ -81,30 +82,30 @@ export class SearchbarComponent {
 			
 	}
 	
+	/**
+	* Angular lifecycyle: Initializes Component
+	*/
+	ngOnInit(): void {
+		this.subscription = this.suggestionFilterForm.valueChanges.pipe(debounceTime(500)).subscribe(() => {
+			this.getSuggestions(false);
+		});
+	}
 	
 	/**
-		* Initializes Component`
-		*/
-		ngOnInit(): void {
-			
-			this.subscription = this.suggestionFilterForm.valueChanges.pipe(debounceTime(500)).subscribe(() => {
-				this.getSuggestions(false);
-			});
-			
+	* Angular lifecycyle: After view exists
+	*/	
+	ngAfterViewChecked(){
+		if (sessionStorage.getItem("news-item-div")){
+			this.doScrollTop();	
 		}
-		
-		ngAfterViewChecked(){
-			if (sessionStorage.getItem("news-item-div")){
-				this.doScrollTop();	
-			}
-		}
+	}
 	
 	/**
-	* 
+	* Initializes the component
 	*/
 	public init():void{
 		
-		this.resetSearchFilters(true);	
+		this.resetSearchFilters();	
 				
 		if (!this.currentUserAuth.isCandidate()) {
 			this.getSuggestions(true);	
@@ -122,27 +123,6 @@ export class SearchbarComponent {
 	}
 	
 	/**
-	* Resets the filters
-	*/
-	public resetSearchFilters(attachValueChangeListener:boolean):void{
-		
-		this.resetSuggestionFilterForm();
-		
-		this.skilFilterForm = new UntypedFormGroup({
-			skill: 					new UntypedFormControl(''),
-		});
-	
-		this.skillFilters = new Array<string>();
-		
-		this.backendRequestCounter 		= 0;
-		
-		this.includeUnavailableCandidatesSelected = 'false';
-		this.includeRequiresSponsorshipCandidatesSelected = 'false';
-	
-		
-	}
-	
-	/**
 	* Shows search type selection modal 
 	*/
 	public doShowSearchTypeFilterSelectionModal():void{
@@ -154,7 +134,8 @@ export class SearchbarComponent {
 	}
 	
 	/**
-	* 
+	* Sets the default values in the firstname/surname fields of the search form
+	* when a User selects to search on names
 	*/
 	public cssSearchNameDefault():string{
 		
@@ -162,8 +143,8 @@ export class SearchbarComponent {
 			return '';
 		}
 		
-		let firstName:string = this.suggestionFilterForm.get('searchPhraseFirstName')?.value;
-		let surname:string = this.suggestionFilterForm.get('searchPhraseSurname')?.value;
+		let firstName:string 	= this.suggestionFilterForm.get('searchPhraseFirstName')?.value;
+		let surname:string 		= this.suggestionFilterForm.get('searchPhraseSurname')?.value;
 		
 		if (firstName == this.FIRST_NAME_DEFAULT || surname == this.SURNAME_DEFAULT){
 			return 'search-name-default';
@@ -174,9 +155,10 @@ export class SearchbarComponent {
 	}
 	
 	/**
-	*
+	* When a User clicks in the firstname/surname search fields, removes the default 
+	* value ready for the User to enter the values they want to seearch on
 	*/	
-	public activateSearhFields():void{
+	public activateFirstnameSurnameFields():void{
 				
 		let firstName:string 	= this.suggestionFilterForm.get('searchPhraseFirstName')?.value;
 		let surname:string 		= this.suggestionFilterForm.get('searchPhraseSurname')?.value;
@@ -196,12 +178,15 @@ export class SearchbarComponent {
 	* Closes the searchTypeFilterSelectionModal modal box 
 	*/
 	public closeSearchTypeBox(type:string):void{
-		this.resetSearhFields();
+		this.resetSearhFirstnameSurnameFields();
 		this.filterTypeFormGroup.get('searchType')?.setValue(type);
 		this.searchTypeFilterSelectionModal.nativeElement.close();
 	}
-			
-	public resetSearhFields():void{
+	
+	/**
+	* Resets the default values of thte firstname/surname search fields
+	*/		
+	public resetSearhFirstnameSurnameFields():void{
 		this.suggestionFilterForm.get('searchPhraseFirstName')?.setValue(this.FIRST_NAME_DEFAULT);
 		this.suggestionFilterForm.get('searchPhraseSurname')?.setValue(this.SURNAME_DEFAULT);
 		this.suggestionFilterForm.get('searchPhrase')?.setValue('');
@@ -259,12 +244,7 @@ export class SearchbarComponent {
 		}
 	}
 	
-	/**
-	* Whether user has a paid subscription 
-	*/
-	public hasPaidSubscription():boolean{
-		return sessionStorage.getItem('hasPaidSubscription') === 'true';
-	}
+	
 	
 	/**
 	* Swithches between open and closed filter view for Languages 
@@ -296,9 +276,7 @@ export class SearchbarComponent {
 	}
 						
 	public doPaidSubscriptionCheck():boolean{
-		let hasPaidSubscription:boolean = (sessionStorage.getItem("hasPaidSubscription") === 'true');
-		
-		if (!this.currentUserAuth.isAdmin() && !this.currentUserAuth.isCandidate() && !hasPaidSubscription) {
+		if (!this.currentUserAuth.isAdmin() && !this.currentUserAuth.isCandidate() && !this.currentUserAuth.hasPaidSubscription()) {
 			this.suggestionFilterForm.get("includeUnavailableCandidates")?.setValue('');
 			this.paidSubscriptionBox.nativeElement.showModal();
 			return false;
@@ -429,64 +407,46 @@ export class SearchbarComponent {
 		return this.suggestionFilterForm.get((geoZone.geoZoneId.toLowerCase()+'Results'))?.value;
 	}
 											
-	/**
-	* Whether or not the Use is a Candidate
-	*/
-	public getLoggedInUserId():string{
-		return ""+sessionStorage.getItem("userId");
-	}
-											
 	private initSupportedCountries():void{
 		this.supportedCountries = this.candidateService.getSupportedCountries();
 	}
-										
+	
 	/**
-	* Whether or not the User is a Recruiter
+	* Resets the filters
 	*/
-	public isRecruiter():boolean{
-		return sessionStorage.getItem('isRecruiter') === 'true';
-	}
+	public resetSearchFilters():void{
 			
-	/**
-	* 
-	*/								
-	public resetSuggestionFilterForm():void{
-		this.suggestionFilterForm = 				new UntypedFormGroup({
-			searchPhrase:							new UntypedFormControl(''),
-			searchPhraseFirstName:					new UntypedFormControl(this.FIRST_NAME_DEFAULT),
-			searchPhraseSurname:					new UntypedFormControl(this.SURNAME_DEFAULT),
-			contractType: 							new UntypedFormControl('Both'),
-			minYearsExperience: 					new UntypedFormControl(''),
-			maxYearsExperience: 					new UntypedFormControl(''),
-			skill: 									new UntypedFormControl(''),
-			includeUnavailableCandidates: 			new UntypedFormControl(''),
-			includeRequiresSponsorshipCandidates:	new UntypedFormControl(''),
-			locationCountry:						new UntypedFormControl(''),
-			locationCity:							new UntypedFormControl(''),
-			locationDistance:						new UntypedFormControl(''),
-			
-		});
-		
-		this.filterTypeFormGroup					= new UntypedFormGroup({
-			searchType:												new UntypedFormControl('FUNCTION'),
-		});
-				
+		this.suggestionFilterForm 	= SearchBarFilterFormHelper.resetSuggestionFilterForm(this.suggestionFilterForm);
+		this.filterTypeFormGroup 	= SearchBarFilterFormHelper.resetSearchTytpeFilterForm(this.filterTypeFormGroup);
+						
 		this.candidateService.getSupportedCountries().forEach(c => {
 			this.suggestionFilterForm.addControl(c.iso2Code+'Results', new UntypedFormControl(false));
 		});
-				
+						
 		this.supportedLanguages = new Array<SupportedLanguage>();
-		
+				
 		this.candidateService.getLanguages().forEach(lang => {
 			this.suggestionFilterForm.addControl(lang.languageCode.toLowerCase()+'Language', new UntypedFormControl(false));
 			this.supportedLanguages.push(lang);
 		});
-				
+						
 		this.initGeoZones();
 		this.showCountryFilters 	= '';
 		this.showLanguageFilters 	= '';
-	
-	}	
+		this.showIncludeFilters 	= '';
+			
+		this.skilFilterForm = new UntypedFormGroup({
+			skill: new UntypedFormControl(''),
+		});
+		
+		this.skillFilters = new Array<string>();
+			
+		this.backendRequestCounter 		= 0;
+			
+		this.includeUnavailableCandidatesSelected = 'false';
+		this.includeRequiresSponsorshipCandidatesSelected = 'false';
+				
+	}
 	
 	/**
 	* Sends request for Suggestions to the backend API
@@ -542,85 +502,21 @@ export class SearchbarComponent {
 										  })).subscribe(() => {}, 
 										  err => {
 											if (err.status === 401 || err.status === 0) {
-												sessionStorage.removeItem('isAdmin');
-												sessionStorage.removeItem('isRecruter');
-												sessionStorage.removeItem('isCandidate');
-												sessionStorage.removeItem('loggedIn');
+												this.currentUserAuth.doLogout(this.router);
 												sessionStorage.setItem('beforeAuthPage', 'suggestions');
-												this.router.navigate(['login-user']);
+												//this.router.navigate(['login-user']);
 											}
     									});
 											
 	}	
 	
+	/**
+	* Applies a set of previously extracted filter values to the 
+	* filters form
+	*/
 	public  processJobSpecExtratedFilters(extractedFilters:ExtractedFilters):void{
-			
-		this.resetSearchFilters(false);
-				
-		this.skillFilters 				= extractedFilters.skills.sort();
-				
-		if (extractedFilters.jobTitle != ''){
-			this.suggestionFilterForm.get('searchPhrase')?.setValue(extractedFilters.jobTitle);	
-		}
-			
-		if (extractedFilters.netherlands || extractedFilters.belgium || extractedFilters.uk || extractedFilters.ireland){
-			this.suggestionFilterForm.get('nlResults')?.setValue(false);
-			this.suggestionFilterForm.get('beResults')?.setValue(false);
-			this.suggestionFilterForm.get('ukResults')?.setValue(false);
-			this.suggestionFilterForm.get('ieResults')?.setValue(false);
-				
-			if (extractedFilters.netherlands)  {
-				this.suggestionFilterForm.get('nlResults')?.setValue(extractedFilters.netherlands);
-			}
-					
-			if (extractedFilters.belgium) {
-				this.suggestionFilterForm.get('beResults')?.setValue(extractedFilters.belgium);
-			}
-					
-			if (extractedFilters.uk) {
-				this.suggestionFilterForm.get('ukResults')?.setValue(extractedFilters.uk);
-			}
-					
-			if (extractedFilters.ireland) {
-				this.suggestionFilterForm.get('ieResults')?.setValue(extractedFilters.ireland);
-			}
-					
-		}	
-				
-		if (extractedFilters.perm != 'TRUE' && extractedFilters.freelance != 'TRUE') {
-			this.suggestionFilterForm.get('contractType')?.setValue("BOTH");
-		} else if (extractedFilters.perm == 'TRUE' && extractedFilters.freelance == 'TRUE') {
-			this.suggestionFilterForm.get('contractType')?.setValue("BOTH");
-		} else if (extractedFilters.perm != 'TRUE'){
-			this.suggestionFilterForm.get('contractType')?.setValue("CONTRACT");
-		} else if (extractedFilters.freelance != 'TRUE'){
-			this.suggestionFilterForm.get('contractType')?.setValue("PERM");
-		}
-			
-		if (extractedFilters.dutch) {
-			this.suggestionFilterForm.get('dutchLanguage')?.setValue(extractedFilters.dutch);
-		}
-			
-		if (extractedFilters.english) {
-			this.suggestionFilterForm.get('englishLanguage')?.setValue(extractedFilters.english);
-		}
-			
-		if (extractedFilters.french) {
-			this.suggestionFilterForm.get('frenchLanguage')?.setValue(extractedFilters.french);
-		}
-				
-		if (extractedFilters.experienceGTE != '') {
-			if (this.minMaxOptions.indexOf(extractedFilters.experienceGTE) != -1){
-				this.suggestionFilterForm.get('minYearsExperience')?.setValue(extractedFilters.experienceGTE);	
-			}	
-		}
-				
-		if (extractedFilters.experienceLTE != '') {
-			if (this.minMaxOptions.indexOf(extractedFilters.experienceLTE) != -1){
-				this.suggestionFilterForm.get('maxYearsExperience')?.setValue(extractedFilters.experienceLTE);	
-			}
-		}
-				
+		this.resetSearchFilters();
+		SearchBarFilterFormHelper.applyExtractedFiltersToForm(extractedFilters, this.skillFilters, this.suggestionFilterForm);				
 	}
 	
 	/**
@@ -634,7 +530,12 @@ export class SearchbarComponent {
 		
 	}
 	
-	public addChageListener(isUnfiltered:boolean):void{
+	/**
+	* Listens for changes to the values in the Search bar filters, 
+	* waits a period and then sends a request to the backend to 
+	* update the search results 
+	*/
+	public addChangeListener(isUnfiltered:boolean):void{
 		if (this.subscription) {
 			this.subscription.unsubscribe();
 		}

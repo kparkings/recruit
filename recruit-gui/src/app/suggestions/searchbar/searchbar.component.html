@@ -7,8 +7,8 @@
 					<td class="sugg-srch-hdr">{{'arenella-suggestions-job-title' | translate}}<span style="cursor:pointer; color:#6a5acd;" (click)='doShowSearchTypeFilterSelectionModal()'> ...</span></td>
 					<td class="sugg-srch-bdy">
 						<input type="text" class="sugg-srch-job-title" 									formControlName="searchPhrase" 				*ngIf="getCurrentSearchFilterType() === 'FUNCTION' || getCurrentSearchFilterType() == 'EMAIL' || getCurrentSearchFilterType() == 'CANDIDATE_ID'">
-						<input type="text" class="sugg-srch-job-title-name {{cssSearchNameDefault()}}" 	formControlName="searchPhraseFirstName" 	*ngIf="getCurrentSearchFilterType() === 'NAME'" (click)="activateSearhFields()">
-						<input type="text" class="sugg-srch-job-title-name {{cssSearchNameDefault()}}" 	formControlName="searchPhraseSurname" 		*ngIf="getCurrentSearchFilterType() === 'NAME'" (click)="activateSearhFields()">
+						<input type="text" class="sugg-srch-job-title-name {{cssSearchNameDefault()}}" 	formControlName="searchPhraseFirstName" 	*ngIf="getCurrentSearchFilterType() === 'NAME'" (click)="activateFirstnameSurnameFields()">
+						<input type="text" class="sugg-srch-job-title-name {{cssSearchNameDefault()}}" 	formControlName="searchPhraseSurname" 		*ngIf="getCurrentSearchFilterType() === 'NAME'" (click)="activateFirstnameSurnameFields()">
 					</td>
 				</tr>
 				<tr>
@@ -122,7 +122,7 @@
 					</td>
 					<div *ngIf="showIncludeFilters">
 						<p class="toggle-filter-option" (click)="switchIncludeFilterView('')">{{'Hide' | translate}}..</p>
-						<div class="geo-code-filter geo-code-selected-{{includeUnavailableCandidatesSelected}}" (click)="doPaidSubscriptionCheckUnavailableCandidates()" *ngIf="currentUserAuth.isAdmin() || hasPaidSubscription()">
+						<div class="geo-code-filter geo-code-selected-{{includeUnavailableCandidatesSelected}}" (click)="doPaidSubscriptionCheckUnavailableCandidates()" *ngIf="currentUserAuth.isAdmin() || currentUserAuth.hasPaidSubscription()">
 							{{'arenella-suggestions-include-unavailable-candidates' | translate}}
 						</div>
 						<div class="geo-code-filter geo-code-selected-{{includeRequiresSponsorshipCandidatesSelected}}" (click)="doPaidSubscriptionCheckRequiresSponsorshipCandidates()">
