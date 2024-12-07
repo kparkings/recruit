@@ -1,9 +1,11 @@
 import { Component, ViewChild, ElementRef, Output, EventEmitter } 	from '@angular/core';
 import { UntypedFormGroup, UntypedFormControl }						from '@angular/forms';
+import { Router}													from '@angular/router';
 import { TranslateService } 										from '@ngx-translate/core';
+import { Subscription } 											from 'rxjs';
+import { debounceTime, map } 										from "rxjs/operators";
 import { Candidate}													from './../candidate';
 import { CreditsService } 											from './../../credits.service';
-import { Router}													from '@angular/router';
 import { SupportedLanguage } 										from './../../supported-language';
 import { City } 													from './../../city';
 import { SupportedCountry } 										from './../../supported-candidate';
@@ -11,11 +13,8 @@ import { GeoZone } 													from './../../geo-zone';
 import { CandidateServiceService }									from './../../candidate-service.service';
 import { CandidateTotals } 											from './../../candidate-totals';
 import { ExtractedFilters } 										from './../extracted-filters';
-
-import { Subscription } 											from 'rxjs';
 import { SuggestionParams}											from './.././suggestion-param-generator';
 import { SuggestionsService }										from './../../suggestions.service';
-import { debounceTime, map } 										from "rxjs/operators";
 import { CurrentUserAuth }											from './../../current-user-auth';
 import { SearchBarFilterFormHelper } 								from './search-fiter-form-helper';
 
@@ -33,7 +32,6 @@ export class SearchbarComponent {
 	
 	private FIRST_NAME_DEFAULT:string 							= 'First Name';
 	private SURNAME_DEFAULT:string 								= 'Surname';
-		
 	
 	public showGeoZoneFilters:string							= "";
 	public includeUnavailableCandidatesSelected:string = 'true';
@@ -205,7 +203,6 @@ export class SearchbarComponent {
 			this.skillFilters.sort();
 		}
 		
-		
 		this.getSuggestions(false);
 							
 		this.skilFilterForm.get('skill')?.setValue('');
@@ -243,8 +240,6 @@ export class SearchbarComponent {
 			}
 		}
 	}
-	
-	
 	
 	/**
 	* Swithches between open and closed filter view for Languages 
@@ -362,7 +357,11 @@ export class SearchbarComponent {
 	}
 	
 	/**
+	* Used for Range query. When country is selected loads Cities
+	* for that country. 
 	* 
+	* TODO: [0]KP] Needs to change to pick lost of major cities
+	* not all cities for country as part of refactor
 	*/
 	public switchLocationCountry():void{
 		

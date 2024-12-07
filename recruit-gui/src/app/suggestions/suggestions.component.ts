@@ -1,32 +1,30 @@
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild, ViewChildren } 	from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } 	from '@angular/core';
 import { UntypedFormGroup, UntypedFormControl }										from '@angular/forms';
+import { TranslateService } 														from '@ngx-translate/core';
+import { NgbModal }																	from '@ng-bootstrap/ng-bootstrap';
+import { DomSanitizer, SafeResourceUrl } 											from '@angular/platform-browser';
+import { Router}																	from '@angular/router';
+import { Subscription } 															from 'rxjs';
 import { CandidateServiceService }													from '../candidate-service.service';
 import { SuggestionsService }														from '../suggestions.service';
 import { CurriculumService }														from '../curriculum.service';
 import { Candidate}																	from './candidate';
 import { SavedCandidate}															from './saved-candidate';
 import { SuggestionParams}															from './suggestion-param-generator';
-import { NgbModal }																	from '@ng-bootstrap/ng-bootstrap';
 import { CandidateSearchAlert }														from './candidate-search-alert';
-import { DomSanitizer, SafeResourceUrl } 											from '@angular/platform-browser';
-import { Router}																	from '@angular/router';
 import { CandidateProfile } 														from '../candidate-profile';
 import { CandidateNavService } 														from '../candidate-nav.service';
 import { CreditsService } 															from '../credits.service';
-import { ExtractedFilters } 														from './extracted-filters';
-import { InfoItemBlock, InfoItemConfig, InfoItemRowKeyValue, InfoItemRowKeyValueFlag, InfoItemRowKeyValueMaterialIcon, InfoItemRowSingleValue } from '../candidate-info-box/info-item';
-import {AppComponent} 																from '../app.component';
-import { TranslateService } 														from '@ngx-translate/core';
+import { InfoItemConfig } 															from '../candidate-info-box/info-item';
+import { AppComponent} 																from '../app.component';
 import { CandidateTotals } 															from '../candidate-totals';
 import { GeoZone } 																	from '../geo-zone';
 import { SupportedCountry } 														from '../supported-candidate';
-import { Subscription } 															from 'rxjs';
 import { SupportedLanguage } 														from '../supported-language';
 import { CurrentUserAuth }															from '../current-user-auth';
 import { City } 																	from '../city';
 import { InfoPaneUtil } 															from './info-pane-util';
 import { SearchbarComponent } 														from '../suggestions/searchbar/searchbar.component';
-import { debounceTime, map } 														from "rxjs/operators";
 
 /**
 * Component to suggest suitable Candidates based upon a 
@@ -52,13 +50,7 @@ export class SuggestionsComponent implements OnInit {
  	@ViewChild('contactBox', {static:true})						contactDialogBox!: ElementRef<HTMLDialogElement>;
  	@ViewChild('paidSubscriptionModal', {static:true})			paidSubscriptionBox!: ElementRef<HTMLDialogElement>;
  	@ViewChild('searchTypeFilterSelectionModal', {static:true}) searchTypeFilterSelectionModal!: ElementRef<HTMLDialogElement>;
-
-	@ViewChild(SearchbarComponent) searchBar!:SearchbarComponent;
-	
- 	public back():void{
-		this.switchViewEvent.emit();
-			 
-	}
+	@ViewChild(SearchbarComponent) 								searchBar!:SearchbarComponent;
 	
 	public currentUserAuth:CurrentUserAuth 						= new CurrentUserAuth();
 	public candidateTotals:CandidateTotals					 	= new CandidateTotals(0,0,0);
@@ -100,6 +92,10 @@ export class SuggestionsComponent implements OnInit {
 	private subscription?:Subscription;
 	public supportedLanguages:Array<SupportedLanguage> 			= new Array<SupportedLanguage>();
 	public infoPaneUtil:InfoPaneUtil; 				
+	public filename:string 										= '';
+	public includeUnavailableCandidatesSelected:string 			= 'true';
+	public includeRequiresSponsorshipCandidatesSelected:string 	= 'true';
+	safeUrl:any;
 			
 	public createAlertForm:UntypedFormGroup 					= new UntypedFormGroup({
 		alertName:												new UntypedFormControl(''),
@@ -188,6 +184,10 @@ export class SuggestionsComponent implements OnInit {
 			this.subscription.unsubscribe();
 		}
 		
+	}
+	
+	public back():void{
+		this.switchViewEvent.emit();
 	}
 	
   	public setJobSepecFile(event:any):void{
@@ -325,89 +325,7 @@ export class SuggestionsComponent implements OnInit {
 			this.infoPaneUtil = new InfoPaneUtil(candidate, this.translate, this.supportedCountries); 
 			this.infoItemConfig = this.infoPaneUtil.generateInfoPane();
 		
-			//this.infoItemConfig.setProfilePhoto(this.candidateProfile?.photo?.imageBytes);
-		
-			//if (!this.currentUserAuth.isCandidate()){
-			//	this.infoItemConfig.setShowContactButton(true);
-			//}
-		
-			//Location
-			//let recruiterBlock:InfoItemBlock = new InfoItemBlock();
-			//recruiterBlock.setTitle(this.translate.instant('info-item-title-location'));
-			//recruiterBlock.addRow(new InfoItemRowKeyValueFlag(this.translate.instant('info-item-title-country'),this.getFlagClassFromCountry(candidate.country)));
-			//recruiterBlock.addRow(new InfoItemRowKeyValue(this.translate.instant('info-item-title-city'),candidate.city));
-			//this.infoItemConfig.addItem(recruiterBlock);
 			
-			//Languages Block
-			//let languageBlock:InfoItemBlock = new InfoItemBlock();
-			//languageBlock.setTitle(this.translate.instant('info-item-title-languages'));
-			//candidate.languages.forEach(lang => {
-			//		languageBlock.addRow(new InfoItemRowKeyValueMaterialIcon(this.getLanguage(lang.language),this.getMaterialIconClassFromLangLevel(lang.level)));
-			//});
-			
-			//languageBlock.sort();
-			
-			//this.infoItemConfig.addItem(languageBlock);
-			
-			//Contract Type Block
-			//if (candidate.freelance == 'TRUE' || candidate.perm == 'TRUE') {
-			//	let contractTypeBlock:InfoItemBlock = new InfoItemBlock();
-			//	contractTypeBlock.setTitle(this.translate.instant('info-item-title-contract-type'));
-			//	if (candidate.freelance == 'TRUE'){		
-			//		contractTypeBlock.addRow(new InfoItemRowKeyValueMaterialIcon(this.translate.instant('info-item-title-contract'),"available-check-icon"));
-			//	}
-			//	if (candidate.perm == 'TRUE'){		
-			//		contractTypeBlock.addRow(new InfoItemRowKeyValueMaterialIcon(this.translate.instant('info-item-title-permanent'),"available-check-icon"));
-			//	}
-			//	this.infoItemConfig.addItem(contractTypeBlock);
-			//}
-			
-			//Contract Rate 
-			//if(this.hasContractRate()) {
-			//	let contractRateBlock:InfoItemBlock = new InfoItemBlock();
-			//	contractRateBlock.setTitle(this.translate.instant('info-item-contract-rate'));
-			//	contractRateBlock.addRow(new InfoItemRowSingleValue(this.getContractRate()));
-			//	this.infoItemConfig.addItem(contractRateBlock);
-			//}
-		
-			//Perm Rate 
-			//if(this.hasPermRate()) {
-			//	let permRateBlock:InfoItemBlock = new InfoItemBlock();
-			//	permRateBlock.setTitle(this.translate.instant('info-item-title-perm-rate'));
-			//	permRateBlock.addRow(new InfoItemRowSingleValue(this.getPermRate()));
-			//	this.infoItemConfig.addItem(permRateBlock);
-			//}
-		
-			//Years Experience 
-			//let yearsExperienceBlock:InfoItemBlock = new InfoItemBlock();
-			//yearsExperienceBlock.setTitle(this.translate.instant('info-item-title-years-experience'));
-			//yearsExperienceBlock.addRow(new InfoItemRowSingleValue(""+candidate.yearsExperience));
-			//this.infoItemConfig.addItem(yearsExperienceBlock);
-			
-			//Secuirty Level
-			//let securityClearanceBlock:InfoItemBlock = new InfoItemBlock();
-			//securityClearanceBlock.setTitle(this.translate.instant('info-item-title-security-clearance'));
-			//securityClearanceBlock.addRow(new InfoItemRowKeyValue(this.translate.instant('info-item-security-clearance'),candidate.securityClearance));
-			//this.infoItemConfig.addItem(securityClearanceBlock);
-			
-			
-			//Requires Sponsorship
-			//let requiresSponsorhipBlock:InfoItemBlock = new InfoItemBlock();
-			//requiresSponsorhipBlock.setTitle(this.translate.instant('info-item-title-requires-sponsorship'));
-			//requiresSponsorhipBlock.addRow(new InfoItemRowKeyValue(this.translate.instant('info-item-requires-sponsorship'),candidate.requiresSponsorship ? this.translate.instant('yes') : this.translate.instant('no')));
-			//this.infoItemConfig.addItem(requiresSponsorhipBlock);
-			
-			
-			//Availability
-			//let availabilityBlock:InfoItemBlock = new InfoItemBlock();
-			//availabilityBlock.setTitle(this.translate.instant('info-item-title-availability'));
-			//if (this.candidateProfile.daysOnSite) {
-			//	availabilityBlock.addRow(new InfoItemRowKeyValue(this.translate.instant('info-item-title-max-days-on-site'),this.formatHumanReadableDaysOnsite(this.candidateProfile.daysOnSite)));
-			//}
-			//if (this.candidateProfile.availableFromDate) {
-			//	availabilityBlock.addRow(new InfoItemRowKeyValue(this.translate.instant('info-item-title-available-from'),""+this.candidateProfile.availableFromDate));
-			//}
-			//this.infoItemConfig.addItem(availabilityBlock);
 			
 		});
 		
@@ -450,21 +368,6 @@ export class SuggestionsComponent implements OnInit {
 		this.doScrollTop();
 		
 	}
-	
-	
-	
-	
-	
-	safeUrl:any;
-	public filename:string = '';
-	
-	/**
-	* Returns the Humand readable version of the Language
-	* @param country - Language to get the readable version for
-	*/
-	//public getLanguage(lang:string):string{
-	//	return this.translate.instant(lang);
-  	//}	
 
 	public hasSkill(skill:string):boolean {
 		
@@ -509,7 +412,7 @@ export class SuggestionsComponent implements OnInit {
 		alert.yearsExperienceLtEq 	= params.getMinExperience();
 		alert.yearsExperienceGtEq 	= params.getMaxExperience();
 		
-		this.candidateService.createCandidateSearchAlert(alert).subscribe(data => {
+		this.candidateService.createCandidateSearchAlert(alert).subscribe(() => {
 			
 			this.showSaveAlertBox 			= false;
 			this.showSaveAlertBoxSuccess 	= true;
@@ -519,7 +422,7 @@ export class SuggestionsComponent implements OnInit {
 				alertName:			new UntypedFormControl(''),
 			});
 			
-		}, err => {
+		}, () => {
 			this.showSaveAlertBox 		= false;
 			this.showSaveAlertBoxSuccess 	= false;
 			this.showSaveAlertBoxFailure 	= true;
@@ -591,76 +494,6 @@ export class SuggestionsComponent implements OnInit {
   	}
 	
 	/**
-	* Whether Contract Rate info is available 
-	*/
-	//public hasContractRate():boolean{
-	//	return this.candidateProfile.rateContract && (this.candidateProfile.rateContract.valueMin != 0 || this.candidateProfile.rateContract.valueMax != 0);
-	//}
-	
-	/**
-	* Contract Rate info 
-	*/
-	//public getContractRate():string{
-		
-	//	if(this.candidateProfile.rateContract.valueMin != 0 && this.candidateProfile.rateContract.valueMax != 0){
-	//		return this.translate.instant('info-item-title-rate') + this.candidateProfile.rateContract.currency + " "
-	//		+ this.candidateProfile.rateContract.valueMin 
-	//		+ this.translate.instant('info-item-title-to') + this.candidateProfile.rateContract.valueMax 
-	//		+ this.translate.instant('info-item-title-per') + this.candidateProfile.rateContract.period.toLowerCase() ;
-	//	}
-		
-	//	if(this.candidateProfile.rateContract.valueMin == 0 && this.candidateProfile.rateContract.valueMax != 0){
-	//		return this.translate.instant('info-item-title-rate') + this.candidateProfile.rateContract.currency 
-	//		+ " " + this.candidateProfile.rateContract.valueMax 
-	//		+ this.translate.instant('info-item-title-per') + this.candidateProfile.rateContract.period.toLowerCase() ;
-	//	}
-		
-	//	if(this.candidateProfile.rateContract.valueMin != 0 && this.candidateProfile.rateContract.valueMax == 0){
-	//		return this.translate.instant('info-item-title-rate') + this.candidateProfile.rateContract.currency 
-	//		+ " " + this.candidateProfile.rateContract.valueMin 
-	//		+ this.translate.instant('info-item-title-per') + this.candidateProfile.rateContract.period.toLowerCase() ;
-	//	}
-		
-	//	return "";
-		
-	//}
-
-	/**
-	* Whether Perm Rate info is available 
-	*/
-	//public hasPermRate():boolean{
-	//	return this.candidateProfile.ratePerm && (this.candidateProfile.ratePerm.valueMin != 0 || this.candidateProfile.ratePerm.valueMax != 0);
-	//}
-	
-	/**
-	* Contract Rate info 
-	*/
-	//public getPermRate():string{
-		
-	//	if(this.candidateProfile.ratePerm.valueMin != 0 && this.candidateProfile.ratePerm.valueMax != 0){
-	//		return this.translate.instant('info-item-title-rate') + this.candidateProfile.ratePerm.currency + " "
-	//		+ this.candidateProfile.ratePerm.valueMin 
-	//		+ this.translate.instant('info-item-title-to') + this.candidateProfile.ratePerm.valueMax 
-	//		+ this.translate.instant('info-item-title-per') + this.candidateProfile.ratePerm.period.toLowerCase() ;
-	//	}
-		
-	//	if(this.candidateProfile.ratePerm.valueMin == 0 && this.candidateProfile.ratePerm.valueMax != 0){
-	//		return this.translate.instant('info-item-title-rate') + this.candidateProfile.ratePerm.currency 
-	//		+ " " + this.candidateProfile.ratePerm.valueMax 
-	//		+ this.translate.instant('info-item-title-location-per') + this.candidateProfile.ratePerm.period.toLowerCase() ;
-	//	}
-		
-	//	if(this.candidateProfile.ratePerm.valueMin != 0 && this.candidateProfile.ratePerm.valueMax == 0){
-	//		return this.translate.instant('info-item-title-rate') + this.candidateProfile.ratePerm.currency 
-	//		+ " " + this.candidateProfile.ratePerm.valueMin 
-	//		+ this.translate.instant('info-item-title-per') + this.candidateProfile.ratePerm.period.toLowerCase() ;
-	//	}
-		
-	//	return "";
-		
-	//}
-	
-	/**
 	* If the Recruiter is the owner of the selected Candidate
 	*/
 	public isOwner():boolean{
@@ -685,74 +518,7 @@ export class SuggestionsComponent implements OnInit {
 		}
 		 
 	}
-	
-	/**
-	* Returns human readable version of days onsite
-	*/
-	//public formatHumanReadableDaysOnsite(value:string):string{
-	//	switch(value){
-	//		case 'ZERO': 	return this.translate.instant('info-item-days-onsite-fully-remote');//"Fully Remote";
-	//		case 'ONE': 	return "1";
-	//		case 'TWO': 	return "2";
-	//		case 'THREE': 	return "3";
-	//		case 'FOUR': 	return "4";
-	//		case 'FIVE':	return "5";
-	//		default: 		return "";
-	//	}
-	//}
-	
-	public doPaidSubscriptionCheckUnavailableCandidates():void{
-		this.paidFeature = 'paidFeatureUnavailableCandidates';
-		if(this.doPaidSubscriptionCheck()){
-			
-			let checked =  this.suggestionFilterForm.get("includeUnavailableCandidates")?.value;
-			
-			if(checked){
-				this.suggestionFilterForm.get("includeUnavailableCandidates")?.setValue('');	
-				this.includeUnavailableCandidatesSelected = 'false';
-			} else {
-				this.suggestionFilterForm.get("includeUnavailableCandidates")?.setValue('true');
-				this.includeUnavailableCandidatesSelected = 'true';
-			}
-			
-			
-		}
-	}
-	
-	public doPaidSubscriptionCheckRequiresSponsorshipCandidates():void{
-		this.paidFeature = 'paidFeatureRequiresSponsorshipeCandidates';
-		if(this.doPaidSubscriptionCheck()){
-			let checked =  this.suggestionFilterForm.get("includeRequiresSponsorshipCandidates")?.value;
-			
-			if(checked){
-				this.suggestionFilterForm.get("includeRequiresSponsorshipCandidates")?.setValue('');	
-				this.includeRequiresSponsorshipCandidatesSelected = 'false';
-			} else {
-				this.suggestionFilterForm.get("includeRequiresSponsorshipCandidates")?.setValue('false');
-				this.includeRequiresSponsorshipCandidatesSelected = 'true';
-			}
-		}
-	}
-	
-	public includeUnavailableCandidatesSelected:string = 'true';
-	public includeRequiresSponsorshipCandidatesSelected:string = 'true';
-	
-	
-	
-	public doPaidSubscriptionCheck():boolean{
-		if (!this.currentUserAuth.isAdmin() && !this.currentUserAuth.isCandidate() && !this.currentUserAuth.hasPaidSubscription()) {
-			this.suggestionFilterForm.get("includeUnavailableCandidates")?.setValue('');
-			this.paidSubscriptionBox.nativeElement.showModal();
-			return false;
-		}
-		return true;
-	}
-	
-	public choseSubscription():void{
-		this.creditsService.buySubscription();
-		this.router.navigate(['recruiter-account']);
-	}
-	
+		
 	/**
 	* Scrolls to top of page
 	*/
@@ -764,6 +530,11 @@ export class SuggestionsComponent implements OnInit {
 		
 	}
 	
+	/**
+	* Depending upon a Users role and subscriptiton options a User will not be able to view
+	* certain suggested Candidates. This method return the name of a CSS class which will 
+	* either make the Candidate appar available or unavailable are required
+	*/
 	public getUnvailableCssClass(candidate:Candidate):string{
 		
 		if (this.currentUserAuth.isAdmin() || this.currentUserAuth.isCandidate() || this.currentUserAuth.hasPaidSubscription()) {
@@ -773,7 +544,6 @@ export class SuggestionsComponent implements OnInit {
 		return "candidate-available-" + candidate.available;
 		
 	}
-	
 	
 	//1. Extract filters code [ Logic ]
 	/**
@@ -785,7 +555,7 @@ export class SuggestionsComponent implements OnInit {
 		
 		this.candidateService.extractFiltersFromText(jobSpecText).subscribe(extractedFilters=>{
 			this.extractFiltersSuccess(extractedFilters);
-		},(failure =>{
+		},(() =>{
 			this.extractFiltersFailure();
 		}));
 	}
@@ -796,7 +566,7 @@ export class SuggestionsComponent implements OnInit {
 	public extractFiltersFromJobSpec():void{
 		this.candidateService.extractFiltersFromDocument(this.jobSpecFile).subscribe(extractedFilters=>{
 			this.extractFiltersSuccess(extractedFilters);
-		},(failure =>{
+		},(() =>{
 			this.extractFiltersFailure();
 		}));
 	}
@@ -820,5 +590,65 @@ export class SuggestionsComponent implements OnInit {
 		this.searchBar.addChangeListener(false);
 		this.closeModal();
 	}
+	
+	//2. Subscriptions
+	/**
+	* If the User attempts an action that is only available to Admin or Recruiters with a subscription 
+	* and the User is a Recruiter without a subscription, shows a modal informing them they must
+	* select a subscriptiton if they want to perform the action 
+	*/
+	public doPaidSubscriptionCheck():boolean{
+		if (!this.currentUserAuth.isAdmin() && !this.currentUserAuth.isCandidate() && !this.currentUserAuth.hasPaidSubscription()) {
+			this.suggestionFilterForm.get("includeUnavailableCandidates")?.setValue('');
+			this.paidSubscriptionBox.nativeElement.showModal();
+			return false;
+		}
+		return true;
+	}
+
+	/**
+	* Navigates to the Subscription selection page
+	*/
+	public choseSubscription():void{
+		this.creditsService.buySubscription();
+		this.router.navigate(['recruiter-account']);
+	}
+	
+	/**
+	* 
+	*/
+	//public doPaidSubscriptionCheckUnavailableCandidatesXXXX():void{
+		
+	//	this.paidFeature = 'paidFeatureUnavailableCandidates';
+		
+	//	if (this.doPaidSubscriptionCheck()) {
+			
+	//		let checked =  this.suggestionFilterForm.get("includeUnavailableCandidates")?.value;
+			
+	//		if (checked) {
+	//			this.suggestionFilterForm.get("includeUnavailableCandidates")?.setValue('');	
+	//			this.includeUnavailableCandidatesSelected = 'false';
+	//		} else {
+	//			this.suggestionFilterForm.get("includeUnavailableCandidates")?.setValue('true');
+	//			this.includeUnavailableCandidatesSelected = 'true';
+	//		}
+	//		
+	//	}
+	//}
+		
+	//	public doPaidSubscriptionCheckRequiresSponsorshipCandidatesXX():void{
+	//		this.paidFeature = 'paidFeatureRequiresSponsorshipeCandidates';
+	//		if(this.doPaidSubscriptionCheck()){
+	//			let checked =  this.suggestionFilterForm.get("includeRequiresSponsorshipCandidates")?.value;
+				
+	//			if(checked){
+	//				this.suggestionFilterForm.get("includeRequiresSponsorshipCandidates")?.setValue('');	
+	//				this.includeRequiresSponsorshipCandidatesSelected = 'false';
+	//			} else {
+	//				this.suggestionFilterForm.get("includeRequiresSponsorshipCandidates")?.setValue('false');
+	//				this.includeRequiresSponsorshipCandidatesSelected = 'true';
+	//			}
+	//		}
+	//	}
 
 }
