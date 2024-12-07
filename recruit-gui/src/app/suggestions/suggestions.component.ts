@@ -24,6 +24,7 @@ import { Subscription } 															from 'rxjs';
 import { SupportedLanguage } 														from '../supported-language';
 import { CurrentUserAuth }															from '../current-user-auth';
 import { City } 																	from '../city';
+import { InfoPaneUtil } 															from './info-pane-util';
 import { SearchbarComponent } 														from '../suggestions/searchbar/searchbar.component';
 import { debounceTime, map } 														from "rxjs/operators";
 
@@ -59,6 +60,7 @@ export class SuggestionsComponent implements OnInit {
 			 
 	}
 	
+	public currentUserAuth:CurrentUserAuth 						= new CurrentUserAuth();
 	public candidateTotals:CandidateTotals					 	= new CandidateTotals(0,0,0);
 	public backendRequestCounter:number							= 0;
 	public candidateProfile:CandidateProfile 					= new CandidateProfile();
@@ -94,6 +96,11 @@ export class SuggestionsComponent implements OnInit {
 	public supportedCountries:Array<SupportedCountry>			= new Array<SupportedCountry>();
 	public citiesForSelectedCountry:Array<City>					= new Array<City>();
 	public publicitySuggestions:Array<Candidate>  				= new Array<Candidate>();
+	public searchBarCss 										= this.currentView === 'suggestion-results' ? 'showChild' : 'hideChild';
+	private subscription?:Subscription;
+	public supportedLanguages:Array<SupportedLanguage> 			= new Array<SupportedLanguage>();
+	public infoPaneUtil:InfoPaneUtil; 				
+			
 	public createAlertForm:UntypedFormGroup 					= new UntypedFormGroup({
 		alertName:												new UntypedFormControl(''),
 	});
@@ -109,9 +116,6 @@ export class SuggestionsComponent implements OnInit {
 	public filterTypeFormGroup:UntypedFormGroup					= new UntypedFormGroup({
 		searchType:												new UntypedFormControl('FUNCTION'),
 	});
-	
-	//private FIRST_NAME_DEFAULT:string 							= 'First Name';
-	//private SURNAME_DEFAULT:string 								= 'Surname';
 	
 	/**
 	* Switches between options on how to upload job spec 
@@ -140,78 +144,50 @@ export class SuggestionsComponent implements OnInit {
 		
 		this.init();
 		
+		this.infoPaneUtil = new InfoPaneUtil(this.candidateProfile, this.translate, this.supportedCountries);
+		
 	}
-	
-	public searchBarCss = this.currentView === 'suggestion-results' ? 'showChild' : 'hideChild';
-	
+		
 	public handleNewSearchRequest(newSuggestions:Array<Candidate>){
 		this.suggestions = newSuggestions;
 	}
 	
-	
-	private subscription?:Subscription;
-	
 	private init():void{
 		
 		//Candidate
-		if (this.isCandidate()) {
+		if (this.currentUserAuth.isCandidate()) {
 			this.candidateNavService.startCandidateProfileRouteForCandidate();
-			this.candidateService.getCandidateById(this.getLoggedInUserId()).subscribe(candidate => {
+			this.candidateService.getCandidateById(this.currentUserAuth.getLoggedInUserId()).subscribe(candidate => {
 				this.showSuggestedCandidateOverview(candidate.content[0]);	
 			});
 		}
 		
 		//Recruiter
-		if (this.isRecruiter() && this.candidateNavService.isRouteActive()) {
-			this.candidateService.getCandidateByIdWithRecruiterAsOwner(this.candidateNavService.getCandidateId(), this.getLoggedInUserId()).subscribe(candidate => {
+		if (this.currentUserAuth.isRecruiter() && this.candidateNavService.isRouteActive()) {
+			this.candidateService.getCandidateByIdWithRecruiterAsOwner(this.candidateNavService.getCandidateId(), this.currentUserAuth.getLoggedInUserId()).subscribe(candidate => {
 				this.showSuggestedCandidateOverview(candidate.content[0]);	
 			});
 		}
 
 		//Admin
-		if (this.isAdmin() && this.candidateNavService.isRouteActive()) {
+		if (this.currentUserAuth.isAdmin() && this.candidateNavService.isRouteActive()) {
 			this.candidateService.getCandidateById(this.candidateNavService.getCandidateId()).subscribe(candidate => {
 				this.showSuggestedCandidateOverview(candidate.content[0]);	
 			});
 		}		
 		
-		if (this.isAdmin() || sessionStorage.getItem("hasPaidSubscription") === 'true') {
+		if (this.currentUserAuth.isAdmin() || this.currentUserAuth.hasPaidSubscription()) {
 			this.showPaidSubscriptinOptions = true;
 		} 
 		
-		//this.initGeoZones();
 		this.initSupportedCountries();
-		
 		this.candidateService.fetchCandidateTotals().subscribe(totals => this.candidateTotals = totals);
-		
 		this.appComponent.refreschUnreadAlerts();
 		
-		if(this.subscription) {
+		if (this.subscription) {
 			this.subscription.unsubscribe();
 		}
 		
-	}
-	
-	/**
-	* Swithches between open and closed filter view for GeoZones 
-	*/
-	public switchCountriesFilterView(view:string):void{
-		//this.initGeoZones();
-		this.showCountryFilters = view;
-	}
-	
-	/**
-	* Swithches between open and closed filter view for Languages 
-	*/
-	public switchLanguageFilterView(view:string):void{
-		this.showLanguageFilters = view;
-	}
-	
-	/**
-	* Swithches between open and closed filter view for Languages 
-	*/
-	public switchIncludeFilterView(view:string):void{
-		this.showIncludeFilters = view;
 	}
 	
   	public setJobSepecFile(event:any):void{
@@ -231,9 +207,6 @@ export class SuggestionsComponent implements OnInit {
 		this.searchBar.resetSearchFilters();
 		this.searchBar.addChangeListener(true);
 	}
-	
-	public supportedLanguages:Array<SupportedLanguage> = new Array<SupportedLanguage>();
-	
 		
 	public showCVInline(candidateId:string):void{
 		
@@ -321,9 +294,7 @@ export class SuggestionsComponent implements OnInit {
 		if(this.parentComponent == 'newsfeed') {
 			this.back();		
 		} else {
-			//this.getSuggestions(false);	
-		
-			if (this.isRecruiter() && this.candidateNavService.isRouteActive()) {
+			if (this.currentUserAuth.isRecruiter() && this.candidateNavService.isRouteActive()) {
 				this.candidateNavService.doNextMove("back",this.candidateNavService.getCandidateId());	
 			} else {
 				this.currentView 		= 'suggestion-results';
@@ -337,7 +308,7 @@ export class SuggestionsComponent implements OnInit {
 	
 	public doCreditCheck():void{
 		
-		if(this.isAdmin()){
+		if(this.currentUserAuth.isAdmin()){
 			this.passedCreditCheck = true;
 		} else {
 			this.curriculumService.getCreditCount().subscribe(count => {
@@ -346,94 +317,97 @@ export class SuggestionsComponent implements OnInit {
 		}
 	}
 	
-	public setLeftInfoPane(candidateId:string, candidate:Candidate):void{
+	public setLeftInfoPane(candidateId:string):void{
 		
 		this.candidateService.getCandidateProfileById(candidateId).subscribe( candidate => {
 			this.candidateProfile 	= candidate;
-			this.infoItemConfig 	= new InfoItemConfig();
-			this.infoItemConfig.setProfilePhoto(this.candidateProfile?.photo?.imageBytes);
+			
+			this.infoPaneUtil = new InfoPaneUtil(candidate, this.translate, this.supportedCountries); 
+			this.infoItemConfig = this.infoPaneUtil.generateInfoPane();
 		
-			if (!this.isCandidate()){
-				this.infoItemConfig.setShowContactButton(true);
-			}
+			//this.infoItemConfig.setProfilePhoto(this.candidateProfile?.photo?.imageBytes);
+		
+			//if (!this.currentUserAuth.isCandidate()){
+			//	this.infoItemConfig.setShowContactButton(true);
+			//}
 		
 			//Location
-			let recruiterBlock:InfoItemBlock = new InfoItemBlock();
-			recruiterBlock.setTitle(this.translate.instant('info-item-title-location'));
-			recruiterBlock.addRow(new InfoItemRowKeyValueFlag(this.translate.instant('info-item-title-country'),this.getFlagClassFromCountry(candidate.country)));
-			recruiterBlock.addRow(new InfoItemRowKeyValue(this.translate.instant('info-item-title-city'),candidate.city));
-			this.infoItemConfig.addItem(recruiterBlock);
+			//let recruiterBlock:InfoItemBlock = new InfoItemBlock();
+			//recruiterBlock.setTitle(this.translate.instant('info-item-title-location'));
+			//recruiterBlock.addRow(new InfoItemRowKeyValueFlag(this.translate.instant('info-item-title-country'),this.getFlagClassFromCountry(candidate.country)));
+			//recruiterBlock.addRow(new InfoItemRowKeyValue(this.translate.instant('info-item-title-city'),candidate.city));
+			//this.infoItemConfig.addItem(recruiterBlock);
 			
 			//Languages Block
-			let languageBlock:InfoItemBlock = new InfoItemBlock();
-			languageBlock.setTitle(this.translate.instant('info-item-title-languages'));
-			candidate.languages.forEach(lang => {
-					languageBlock.addRow(new InfoItemRowKeyValueMaterialIcon(this.getLanguage(lang.language),this.getMaterialIconClassFromLangLevel(lang.level)));
-			});
+			//let languageBlock:InfoItemBlock = new InfoItemBlock();
+			//languageBlock.setTitle(this.translate.instant('info-item-title-languages'));
+			//candidate.languages.forEach(lang => {
+			//		languageBlock.addRow(new InfoItemRowKeyValueMaterialIcon(this.getLanguage(lang.language),this.getMaterialIconClassFromLangLevel(lang.level)));
+			//});
 			
-			languageBlock.sort();
+			//languageBlock.sort();
 			
-			this.infoItemConfig.addItem(languageBlock);
+			//this.infoItemConfig.addItem(languageBlock);
 			
 			//Contract Type Block
-			if (candidate.freelance == 'TRUE' || candidate.perm == 'TRUE') {
-				let contractTypeBlock:InfoItemBlock = new InfoItemBlock();
-				contractTypeBlock.setTitle(this.translate.instant('info-item-title-contract-type'));
-				if (candidate.freelance == 'TRUE'){		
-					contractTypeBlock.addRow(new InfoItemRowKeyValueMaterialIcon(this.translate.instant('info-item-title-contract'),"available-check-icon"));
-				}
-				if (candidate.perm == 'TRUE'){		
-					contractTypeBlock.addRow(new InfoItemRowKeyValueMaterialIcon(this.translate.instant('info-item-title-permanent'),"available-check-icon"));
-				}
-				this.infoItemConfig.addItem(contractTypeBlock);
-			}
+			//if (candidate.freelance == 'TRUE' || candidate.perm == 'TRUE') {
+			//	let contractTypeBlock:InfoItemBlock = new InfoItemBlock();
+			//	contractTypeBlock.setTitle(this.translate.instant('info-item-title-contract-type'));
+			//	if (candidate.freelance == 'TRUE'){		
+			//		contractTypeBlock.addRow(new InfoItemRowKeyValueMaterialIcon(this.translate.instant('info-item-title-contract'),"available-check-icon"));
+			//	}
+			//	if (candidate.perm == 'TRUE'){		
+			//		contractTypeBlock.addRow(new InfoItemRowKeyValueMaterialIcon(this.translate.instant('info-item-title-permanent'),"available-check-icon"));
+			//	}
+			//	this.infoItemConfig.addItem(contractTypeBlock);
+			//}
 			
 			//Contract Rate 
-			if(this.hasContractRate()) {
-				let contractRateBlock:InfoItemBlock = new InfoItemBlock();
-				contractRateBlock.setTitle(this.translate.instant('info-item-contract-rate'));
-				contractRateBlock.addRow(new InfoItemRowSingleValue(this.getContractRate()));
-				this.infoItemConfig.addItem(contractRateBlock);
-			}
+			//if(this.hasContractRate()) {
+			//	let contractRateBlock:InfoItemBlock = new InfoItemBlock();
+			//	contractRateBlock.setTitle(this.translate.instant('info-item-contract-rate'));
+			//	contractRateBlock.addRow(new InfoItemRowSingleValue(this.getContractRate()));
+			//	this.infoItemConfig.addItem(contractRateBlock);
+			//}
 		
 			//Perm Rate 
-			if(this.hasPermRate()) {
-				let permRateBlock:InfoItemBlock = new InfoItemBlock();
-				permRateBlock.setTitle(this.translate.instant('info-item-title-perm-rate'));
-				permRateBlock.addRow(new InfoItemRowSingleValue(this.getPermRate()));
-				this.infoItemConfig.addItem(permRateBlock);
-			}
+			//if(this.hasPermRate()) {
+			//	let permRateBlock:InfoItemBlock = new InfoItemBlock();
+			//	permRateBlock.setTitle(this.translate.instant('info-item-title-perm-rate'));
+			//	permRateBlock.addRow(new InfoItemRowSingleValue(this.getPermRate()));
+			//	this.infoItemConfig.addItem(permRateBlock);
+			//}
 		
 			//Years Experience 
-			let yearsExperienceBlock:InfoItemBlock = new InfoItemBlock();
-			yearsExperienceBlock.setTitle(this.translate.instant('info-item-title-years-experience'));
-			yearsExperienceBlock.addRow(new InfoItemRowSingleValue(""+candidate.yearsExperience));
-			this.infoItemConfig.addItem(yearsExperienceBlock);
+			//let yearsExperienceBlock:InfoItemBlock = new InfoItemBlock();
+			//yearsExperienceBlock.setTitle(this.translate.instant('info-item-title-years-experience'));
+			//yearsExperienceBlock.addRow(new InfoItemRowSingleValue(""+candidate.yearsExperience));
+			//this.infoItemConfig.addItem(yearsExperienceBlock);
 			
 			//Secuirty Level
-			let securityClearanceBlock:InfoItemBlock = new InfoItemBlock();
-			securityClearanceBlock.setTitle(this.translate.instant('info-item-title-security-clearance'));
-			securityClearanceBlock.addRow(new InfoItemRowKeyValue(this.translate.instant('info-item-security-clearance'),candidate.securityClearance));
-			this.infoItemConfig.addItem(securityClearanceBlock);
+			//let securityClearanceBlock:InfoItemBlock = new InfoItemBlock();
+			//securityClearanceBlock.setTitle(this.translate.instant('info-item-title-security-clearance'));
+			//securityClearanceBlock.addRow(new InfoItemRowKeyValue(this.translate.instant('info-item-security-clearance'),candidate.securityClearance));
+			//this.infoItemConfig.addItem(securityClearanceBlock);
 			
 			
 			//Requires Sponsorship
-			let requiresSponsorhipBlock:InfoItemBlock = new InfoItemBlock();
-			requiresSponsorhipBlock.setTitle(this.translate.instant('info-item-title-requires-sponsorship'));
-			requiresSponsorhipBlock.addRow(new InfoItemRowKeyValue(this.translate.instant('info-item-requires-sponsorship'),candidate.requiresSponsorship ? this.translate.instant('yes') : this.translate.instant('no')));
-			this.infoItemConfig.addItem(requiresSponsorhipBlock);
+			//let requiresSponsorhipBlock:InfoItemBlock = new InfoItemBlock();
+			//requiresSponsorhipBlock.setTitle(this.translate.instant('info-item-title-requires-sponsorship'));
+			//requiresSponsorhipBlock.addRow(new InfoItemRowKeyValue(this.translate.instant('info-item-requires-sponsorship'),candidate.requiresSponsorship ? this.translate.instant('yes') : this.translate.instant('no')));
+			//this.infoItemConfig.addItem(requiresSponsorhipBlock);
 			
 			
 			//Availability
-			let availabilityBlock:InfoItemBlock = new InfoItemBlock();
-			availabilityBlock.setTitle(this.translate.instant('info-item-title-availability'));
-			if (this.candidateProfile.daysOnSite) {
-				availabilityBlock.addRow(new InfoItemRowKeyValue(this.translate.instant('info-item-title-max-days-on-site'),this.formatHumanReadableDaysOnsite(this.candidateProfile.daysOnSite)));
-			}
-			if (this.candidateProfile.availableFromDate) {
-				availabilityBlock.addRow(new InfoItemRowKeyValue(this.translate.instant('info-item-title-available-from'),""+this.candidateProfile.availableFromDate));
-			}
-			this.infoItemConfig.addItem(availabilityBlock);
+			//let availabilityBlock:InfoItemBlock = new InfoItemBlock();
+			//availabilityBlock.setTitle(this.translate.instant('info-item-title-availability'));
+			//if (this.candidateProfile.daysOnSite) {
+			//	availabilityBlock.addRow(new InfoItemRowKeyValue(this.translate.instant('info-item-title-max-days-on-site'),this.formatHumanReadableDaysOnsite(this.candidateProfile.daysOnSite)));
+			//}
+			//if (this.candidateProfile.availableFromDate) {
+			//	availabilityBlock.addRow(new InfoItemRowKeyValue(this.translate.instant('info-item-title-available-from'),""+this.candidateProfile.availableFromDate));
+			//}
+			//this.infoItemConfig.addItem(availabilityBlock);
 			
 		});
 		
@@ -446,8 +420,8 @@ export class SuggestionsComponent implements OnInit {
 		
 		this.skillFilters = this.searchBar.skillFilters;
 		
-		if (this.isCandidate()) {
-			this.setLeftInfoPane(candidateSuggestion.candidateId, this.suggestedCandidate);
+		if (this.currentUserAuth.isCandidate()) {
+			this.setLeftInfoPane(candidateSuggestion.candidateId);
 		
 			this.currentView 			= 'suggested-canidate-overview';
 			this.suggestedCandidate 	= candidateSuggestion;
@@ -455,7 +429,7 @@ export class SuggestionsComponent implements OnInit {
 			this.doScrollTop();
 		}
 		
-		if(!candidateSuggestion.available && !this.doPaidSubscriptionCheck() || this.isCandidate()){
+		if(!candidateSuggestion.available && !this.doPaidSubscriptionCheck() || this.currentUserAuth.isCandidate()){
 			this.paidFeature = "paidFeatureUnavailableCandidates";
 			return;
 		}
@@ -464,11 +438,11 @@ export class SuggestionsComponent implements OnInit {
 		this.doCreditCheck();
 		
 		//Admin
-		if (this.isAdmin()) {
+		if (this.currentUserAuth.isAdmin()) {
 			this.candidateNavService.startCandidateProfileRouteForAdmin();
 		}
 		
-		this.setLeftInfoPane(candidateSuggestion.candidateId, this.suggestedCandidate);
+		this.setLeftInfoPane(candidateSuggestion.candidateId);
 		
 		this.currentView 			= 'suggested-canidate-overview';
 		this.suggestedCandidate 	= candidateSuggestion;
@@ -477,49 +451,20 @@ export class SuggestionsComponent implements OnInit {
 		
 	}
 	
-	/**
-	* Returns the flag css class for the Flag matching
-	* the Country 
-	*/
-	public getFlagClassFromCountry(country:string):string{
-		
-		let sc:SupportedCountry = this.supportedCountries.filter(c => c.name == country)[0];
-		
-		return sc ?  "flag-icon-"+sc.iso2Code : '';
-		
-	}
 	
-	/**
-	* Returns the materialIcon css class for the Flag matching
-	* the Country 
-	*/
-	private getMaterialIconClassFromLangLevel(langLevel:string):string{
-		
-		switch(langLevel){
-			case "PROFICIENT":{return "lang-proficient-check-icon"}
-			case "BASIC":{return "lang-basic-check-icon"}
-			default: return "";
-		}
-			
-	}
+	
+	
 	
 	safeUrl:any;
 	public filename:string = '';
 	
 	/**
-  	* Whether or not the user has authenticated as an Admin user 
-  	*/
-  	public isAuthenticatedAsAdmin():boolean {
-    	return sessionStorage.getItem('isAdmin') === 'true';
-  	}
-	
-	/**
 	* Returns the Humand readable version of the Language
 	* @param country - Language to get the readable version for
 	*/
-	public getLanguage(lang:string):string{
-		return this.translate.instant(lang);
-  	}	
+	//public getLanguage(lang:string):string{
+	//	return this.translate.instant(lang);
+  	//}	
 
 	public hasSkill(skill:string):boolean {
 		
@@ -648,94 +593,72 @@ export class SuggestionsComponent implements OnInit {
 	/**
 	* Whether Contract Rate info is available 
 	*/
-	public hasContractRate():boolean{
-		return this.candidateProfile.rateContract && (this.candidateProfile.rateContract.valueMin != 0 || this.candidateProfile.rateContract.valueMax != 0);
-	}
+	//public hasContractRate():boolean{
+	//	return this.candidateProfile.rateContract && (this.candidateProfile.rateContract.valueMin != 0 || this.candidateProfile.rateContract.valueMax != 0);
+	//}
 	
 	/**
 	* Contract Rate info 
 	*/
-	public getContractRate():string{
+	//public getContractRate():string{
 		
-		if(this.candidateProfile.rateContract.valueMin != 0 && this.candidateProfile.rateContract.valueMax != 0){
-			return this.translate.instant('info-item-title-rate') + this.candidateProfile.rateContract.currency + " "
-			+ this.candidateProfile.rateContract.valueMin 
-			+ this.translate.instant('info-item-title-to') + this.candidateProfile.rateContract.valueMax 
-			+ this.translate.instant('info-item-title-per') + this.candidateProfile.rateContract.period.toLowerCase() ;
-		}
+	//	if(this.candidateProfile.rateContract.valueMin != 0 && this.candidateProfile.rateContract.valueMax != 0){
+	//		return this.translate.instant('info-item-title-rate') + this.candidateProfile.rateContract.currency + " "
+	//		+ this.candidateProfile.rateContract.valueMin 
+	//		+ this.translate.instant('info-item-title-to') + this.candidateProfile.rateContract.valueMax 
+	//		+ this.translate.instant('info-item-title-per') + this.candidateProfile.rateContract.period.toLowerCase() ;
+	//	}
 		
-		if(this.candidateProfile.rateContract.valueMin == 0 && this.candidateProfile.rateContract.valueMax != 0){
-			return this.translate.instant('info-item-title-rate') + this.candidateProfile.rateContract.currency 
-			+ " " + this.candidateProfile.rateContract.valueMax 
-			+ this.translate.instant('info-item-title-per') + this.candidateProfile.rateContract.period.toLowerCase() ;
-		}
+	//	if(this.candidateProfile.rateContract.valueMin == 0 && this.candidateProfile.rateContract.valueMax != 0){
+	//		return this.translate.instant('info-item-title-rate') + this.candidateProfile.rateContract.currency 
+	//		+ " " + this.candidateProfile.rateContract.valueMax 
+	//		+ this.translate.instant('info-item-title-per') + this.candidateProfile.rateContract.period.toLowerCase() ;
+	//	}
 		
-		if(this.candidateProfile.rateContract.valueMin != 0 && this.candidateProfile.rateContract.valueMax == 0){
-			return this.translate.instant('info-item-title-rate') + this.candidateProfile.rateContract.currency 
-			+ " " + this.candidateProfile.rateContract.valueMin 
-			+ this.translate.instant('info-item-title-per') + this.candidateProfile.rateContract.period.toLowerCase() ;
-		}
+	//	if(this.candidateProfile.rateContract.valueMin != 0 && this.candidateProfile.rateContract.valueMax == 0){
+	//		return this.translate.instant('info-item-title-rate') + this.candidateProfile.rateContract.currency 
+	//		+ " " + this.candidateProfile.rateContract.valueMin 
+	//		+ this.translate.instant('info-item-title-per') + this.candidateProfile.rateContract.period.toLowerCase() ;
+	//	}
 		
-		return "";
+	//	return "";
 		
-	}
+	//}
 
 	/**
 	* Whether Perm Rate info is available 
 	*/
-	public hasPermRate():boolean{
-		return this.candidateProfile.ratePerm && (this.candidateProfile.ratePerm.valueMin != 0 || this.candidateProfile.ratePerm.valueMax != 0);
-	}
+	//public hasPermRate():boolean{
+	//	return this.candidateProfile.ratePerm && (this.candidateProfile.ratePerm.valueMin != 0 || this.candidateProfile.ratePerm.valueMax != 0);
+	//}
 	
 	/**
 	* Contract Rate info 
 	*/
-	public getPermRate():string{
+	//public getPermRate():string{
 		
-		if(this.candidateProfile.ratePerm.valueMin != 0 && this.candidateProfile.ratePerm.valueMax != 0){
-			return this.translate.instant('info-item-title-rate') + this.candidateProfile.ratePerm.currency + " "
-			+ this.candidateProfile.ratePerm.valueMin 
-			+ this.translate.instant('info-item-title-to') + this.candidateProfile.ratePerm.valueMax 
-			+ this.translate.instant('info-item-title-per') + this.candidateProfile.ratePerm.period.toLowerCase() ;
-		}
+	//	if(this.candidateProfile.ratePerm.valueMin != 0 && this.candidateProfile.ratePerm.valueMax != 0){
+	//		return this.translate.instant('info-item-title-rate') + this.candidateProfile.ratePerm.currency + " "
+	//		+ this.candidateProfile.ratePerm.valueMin 
+	//		+ this.translate.instant('info-item-title-to') + this.candidateProfile.ratePerm.valueMax 
+	//		+ this.translate.instant('info-item-title-per') + this.candidateProfile.ratePerm.period.toLowerCase() ;
+	//	}
 		
-		if(this.candidateProfile.ratePerm.valueMin == 0 && this.candidateProfile.ratePerm.valueMax != 0){
-			return this.translate.instant('info-item-title-rate') + this.candidateProfile.ratePerm.currency 
-			+ " " + this.candidateProfile.ratePerm.valueMax 
-			+ this.translate.instant('info-item-title-location-per') + this.candidateProfile.ratePerm.period.toLowerCase() ;
-		}
+	//	if(this.candidateProfile.ratePerm.valueMin == 0 && this.candidateProfile.ratePerm.valueMax != 0){
+	//		return this.translate.instant('info-item-title-rate') + this.candidateProfile.ratePerm.currency 
+	//		+ " " + this.candidateProfile.ratePerm.valueMax 
+	//		+ this.translate.instant('info-item-title-location-per') + this.candidateProfile.ratePerm.period.toLowerCase() ;
+	//	}
 		
-		if(this.candidateProfile.ratePerm.valueMin != 0 && this.candidateProfile.ratePerm.valueMax == 0){
-			return this.translate.instant('info-item-title-rate') + this.candidateProfile.ratePerm.currency 
-			+ " " + this.candidateProfile.ratePerm.valueMin 
-			+ this.translate.instant('info-item-title-per') + this.candidateProfile.ratePerm.period.toLowerCase() ;
-		}
+	//	if(this.candidateProfile.ratePerm.valueMin != 0 && this.candidateProfile.ratePerm.valueMax == 0){
+	//		return this.translate.instant('info-item-title-rate') + this.candidateProfile.ratePerm.currency 
+	//		+ " " + this.candidateProfile.ratePerm.valueMin 
+	//		+ this.translate.instant('info-item-title-per') + this.candidateProfile.ratePerm.period.toLowerCase() ;
+	//	}
 		
-		return "";
+	//	return "";
 		
-	}
-	
-	/**
-	* Whether or not the User is a Candidate
-	*/
-	public isCandidate():boolean{
-		return sessionStorage.getItem('isCandidate') === 'true';
-	}
-	
-	/**
-	* Whether or not the User is a Admin
-	*/
-	public isAdmin():boolean{
-		return sessionStorage.getItem('isAdmin') === 'true';
-	}
-	
-	/**
-	* Whether user has a paid subscription 
-	*/
-	public hasPaidSubscription():boolean{
-		return sessionStorage.getItem('hasPaidSubscription') === 'true';
-	}
-	
+	//}
 	
 	/**
 	* If the Recruiter is the owner of the selected Candidate
@@ -746,22 +669,7 @@ export class SuggestionsComponent implements OnInit {
 			return false;
 		}
 		
-		return this.candidateProfile.ownerId == this.getLoggedInUserId();
-	}
-	
-	
-	/**
-	* Whether or not the User is a Recruiter
-	*/
-	public isRecruiter():boolean{
-		return sessionStorage.getItem('isRecruiter') === 'true';
-	}
-	
-	/**
-	* Whether or not the Use is a Candidate
-	*/
-	public getLoggedInUserId():string{
-		return ""+sessionStorage.getItem("userId");
+		return this.candidateProfile.ownerId == this.currentUserAuth.getLoggedInUserId();
 	}
 	
 	/**
@@ -781,17 +689,17 @@ export class SuggestionsComponent implements OnInit {
 	/**
 	* Returns human readable version of days onsite
 	*/
-	public formatHumanReadableDaysOnsite(value:string):string{
-		switch(value){
-			case 'ZERO': 	return this.translate.instant('info-item-days-onsite-fully-remote');//"Fully Remote";
-			case 'ONE': 	return "1";
-			case 'TWO': 	return "2";
-			case 'THREE': 	return "3";
-			case 'FOUR': 	return "4";
-			case 'FIVE':	return "5";
-			default: 		return "";
-		}
-	}
+	//public formatHumanReadableDaysOnsite(value:string):string{
+	//	switch(value){
+	//		case 'ZERO': 	return this.translate.instant('info-item-days-onsite-fully-remote');//"Fully Remote";
+	//		case 'ONE': 	return "1";
+	//		case 'TWO': 	return "2";
+	//		case 'THREE': 	return "3";
+	//		case 'FOUR': 	return "4";
+	//		case 'FIVE':	return "5";
+	//		default: 		return "";
+	//	}
+	//}
 	
 	public doPaidSubscriptionCheckUnavailableCandidates():void{
 		this.paidFeature = 'paidFeatureUnavailableCandidates';
@@ -832,9 +740,7 @@ export class SuggestionsComponent implements OnInit {
 	
 	
 	public doPaidSubscriptionCheck():boolean{
-		let hasPaidSubscription:boolean = (sessionStorage.getItem("hasPaidSubscription") === 'true');
-		
-		if (!this.isAdmin() && !this.isCandidate() && !hasPaidSubscription) {
+		if (!this.currentUserAuth.isAdmin() && !this.currentUserAuth.isCandidate() && !this.currentUserAuth.hasPaidSubscription()) {
 			this.suggestionFilterForm.get("includeUnavailableCandidates")?.setValue('');
 			this.paidSubscriptionBox.nativeElement.showModal();
 			return false;
@@ -860,7 +766,7 @@ export class SuggestionsComponent implements OnInit {
 	
 	public getUnvailableCssClass(candidate:Candidate):string{
 		
-		if(this.isAdmin() || this.isCandidate() || this.hasPaidSubscription()) {
+		if (this.currentUserAuth.isAdmin() || this.currentUserAuth.isCandidate() || this.currentUserAuth.hasPaidSubscription()) {
 			return "";
 		}
 		

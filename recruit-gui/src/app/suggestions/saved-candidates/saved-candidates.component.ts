@@ -57,7 +57,7 @@ export class SavedCandidatesComponent {
 	}
 	
 	public showSuggestedCandidateOverviewSavedCandidate(savedCandidate:SavedCandidate){
-		this.parentX.setLeftInfoPane(savedCandidate.candidateId+"", savedCandidate.candidate);
+		this.parentX.setLeftInfoPane(savedCandidate.candidateId+"");
 		this.currentView 			= 'suggested-canidate-overview';
 		this.suggestedCandidate 	= savedCandidate.candidate;
 		this.suggestedCandidate.removed = this.isNoLongerAvailableSC(savedCandidate);

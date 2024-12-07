@@ -10,7 +10,7 @@
 			<button class="btn btn-secondary arenella-btn" (click)="showCreateAlertDialog()" download>{{'arenella-suggestions-btn-create-alert' | translate}}</button>
 			<button class="btn btn-secondary arenella-btn" routerLink="/recruiter-alerts" download>{{'arenella-suggestions-btn-manage-alert' | translate}}</button>
 	        <button class="btn btn-secondary arenella-btn" (click)="showSavedCandidates()" download>{{'arenella-suggestions-btn-my-candidates' | translate}}</button>
-	        <button class="btn btn-secondary arenella-btn" (click)="openPublicityDialog()" *ngIf="isAuthenticatedAsAdmin()" download>{{'arenella-suggestions-btn-copy' | translate}}</button>
+	        <button class="btn btn-secondary arenella-btn" (click)="openPublicityDialog()" *ngIf="currentUserAuth.isAdmin()" download>{{'arenella-suggestions-btn-copy' | translate}}</button>
 	        <button class="btn btn-secondary arenella-btn" (click)="showFilterByJobSpecDialog(specUploadBox)" download>{{'arenella-suggestions-btn-filter-by-spec' | translate}}</button>
 	        <button class="btn btn-secondary arenella-btn" (click)="doReset()">{{'arenella-suggestions-btn-reset' | translate}}</button>
 	     </div>
@@ -34,10 +34,10 @@
 					<div>
 						
 						<div *ngIf="!isSavedCandidate(suggestion)" class="suggestion-icon-header">	
-						<span class=" flag-icon {{getFlagClassFromCountry(suggestion.country)}} suggestion-results-flag-country"></span> <span class="candidate-id"> C{{suggestion.candidateId}}</span>
+						<span class=" flag-icon {{infoPaneUtil.getFlagClassFromCountry(suggestion.country)}} suggestion-results-flag-country"></span> <span class="candidate-id"> C{{suggestion.candidateId}}</span>
 						</div>
 						<div *ngIf="isSavedCandidate(suggestion)" class="suggestion-icon-header suggestion-icon-header-saved">	
-						<span class=" flag-icon {{getFlagClassFromCountry(suggestion.country)}} suggestion-results-flag-country"></span> <span class="candidate-id"> C{{suggestion.candidateId}}</span>
+						<span class=" flag-icon {{infoPaneUtil.getFlagClassFromCountry(suggestion.country)}} suggestion-results-flag-country"></span> <span class="candidate-id"> C{{suggestion.candidateId}}</span>
 						</div>
 					</div>
 					<div title="Accuracy Skills" class="suggestion-perception-result-{{suggestion.accuracySkills}}"></div>
