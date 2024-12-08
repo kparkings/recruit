@@ -1,7 +1,10 @@
 import { Injectable } 									from '@angular/core';
 import { CandidateServiceService }						from './candidate-service.service';
-import { Candidate }									from './candidate';
 import { Observable, throwError }                 		from 'rxjs';
+import { CandidateProfile } 							from './candidate-profile';
+import { SuggestionsSearchRequest } 					from './suggestions/suggestion-search-request';
+import { HttpResponse } 								from '@angular/common/http';
+import { Candidate } 									from './suggestions/candidate';
 
 /**
 * Service relating to filtering on and retrieving 
@@ -16,6 +19,13 @@ export class SuggestionsService {
 	* Constructor 
 	*/
 	constructor(private candidateService:CandidateServiceService) {
+	}
+	
+	/**
+	* Makes a SearchRequest for retrieving Candidates matching the Filters selected by the User
+	*/
+	public getCandidateSuggestions(searchRequest:SuggestionsSearchRequest): Observable<HttpResponse<Array<Candidate>>>{
+		return this.candidateService.getCandidateSuggestions(searchRequest);
 	}
 	
 	/**

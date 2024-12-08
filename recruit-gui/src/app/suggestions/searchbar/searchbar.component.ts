@@ -17,6 +17,7 @@ import { SuggestionParams}											from './.././suggestion-param-generator';
 import { SuggestionsService }										from './../../suggestions.service';
 import { CurrentUserAuth }											from './../../current-user-auth';
 import { SearchBarFilterFormHelper } 								from './search-fiter-form-helper';
+import { SuggestionsSearchRequest } 								from '../suggestion-search-request';
 
 @Component({
   selector: 'app-searchbar',
@@ -459,6 +460,73 @@ export class SearchbarComponent {
 		let backendRequestId = this.backendRequestCounter + 1;
 		this.backendRequestCounter = backendRequestId;
 		
+		//START
+		
+		//TODO: [KP] 1. Implement backend call to perform sSearchbarComponent
+		//TODO: [KP] 2. Change logic to only set available params
+		//TODO: [KP] 3. Mce logic into separate class like SuggestionParams
+		
+		let ssReq:SuggestionsSearchRequest = new SuggestionsSearchRequest();
+		
+		ssReq.requestFilters.backendRequestId 						= backendRequestId;
+		ssReq.requestFilters.isUnfiltered 							= isUnfiltered;
+		ssReq.requestFilters.maxNumberOfSuggestions 				= maxSuggestions;
+		
+		ssReq.contractFilters.contract 								= params.getContract();
+		ssReq.contractFilters.perm 									= params.getPerm();
+		
+		ssReq.experienceFilters.experienceMin 						= params.getMinExperience();
+		ssReq.experienceFilters.experienceMax 						= params.getMaxExperience();
+		
+		ssReq.includeFilters.includeRequiresSponsorshipCandidates 	= params.getIncludRequiresSponsorshipCandidates(),
+		ssReq.includeFilters.includeUnavailableCandidates			= params.getIncludUnavailableCandidates();
+		
+		ssReq.languageFilters.languages 							= params.getLanguages();
+		
+		ssReq.locationFilters.countries 							= params.getCountries();
+		ssReq.locationFilters.geoZones 								= params.getGeoZones();
+		ssReq.locationFilters.range.locCountry 						= params.getLocCity();
+		ssReq.locationFilters.range.locCity 						= params.getLocCity();
+		ssReq.locationFilters.range.locDistance 					= params.getLocDistance();
+		
+		ssReq.skillFilters.skills 									= params.getSkills();
+		
+		ssReq.termFilters.candidateId 								= params.getCandidateId();
+		ssReq.termFilters.email 									= params.getEmail();
+		ssReq.termFilters.title 									= params.getTitle();
+		ssReq.termFilters.firstName 								= params.getFirstName();
+		ssReq.termFilters.surname 									= params.getSurname();
+		
+		/**
+		this.suggestionsService
+			.getCandidateSuggestions(ssReq).pipe(
+				map((response) => {
+												  
+					const responseRequestId = response.headers.get('X-Arenella-Request-Id');
+													
+					if (""+this.backendRequestCounter == responseRequestId) {
+														
+						this.suggestions =  new Array<Candidate>();
+														
+						response.body?.forEach(suggestedCandidate => {
+							this.suggestions.push(suggestedCandidate);
+						});
+														
+					}
+
+					this.newSuggestionResults.emit(this.suggestions);
+					return response ;
+												
+				})).subscribe(() => {}, 
+				err => {
+					if (err.status === 401 || err.status === 0) {
+						this.currentUserAuth.doLogout(this.router);
+						sessionStorage.setItem('beforeAuthPage', 'suggestions');
+					}
+		    	});
+		*/
+		//END
+		
 		this.suggestionsService.getSuggestons(	
 									backendRequestId,
 									maxSuggestions,
@@ -478,7 +546,7 @@ export class SearchbarComponent {
 									params.getSurname(),
 									params.getEmail(),
 									params.getCandidateId(),
-									params.getLocCountry(),
+									params.getLocCity(),
 									params.getLocCity(),
 									params.getLocDistance(),
 									).pipe(

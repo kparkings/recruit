@@ -1,5 +1,5 @@
 import { Injectable }                             		from '@angular/core';
-import { HttpClient, HttpHeaders }  					from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpResponse }  		from '@angular/common/http';
 import { Observable }        		         			from 'rxjs';
 import { NewPendingCandidate }                   		from './create-candidate/new-pending-candidate';
 import { CandidateFunction }                      		from './candidate-function';
@@ -19,6 +19,8 @@ import { GeoZone } 										from './geo-zone';
 import { SupportedCountry } 							from './supported-candidate';
 import { UpdateCityRequest } 							from './accounts/update-city-request';
 import { City } 										from './city';
+import { SuggestionsSearchRequest } 					from './suggestions/suggestion-search-request';
+import { Candidate } 									from './suggestions/candidate';
 
 /**
 * Services for new Candidates
@@ -172,6 +174,17 @@ export class CandidateServiceService {
     	return this.httpClient.get<any>(backendUrl,  { observe: 'response', withCredentials: true});//
     	
   	}
+	
+	/**
+	* Makes a SearchRequest for retrieving Candidates matching the Filters selected by the User
+	*/
+	public getCandidateSuggestions(searchRequest:SuggestionsSearchRequest): Observable<HttpResponse<Array<Candidate>>>{
+		
+		const backendUrl:string = environment.backendUrl +'candidate';
+				
+		return this.httpClient.post<any>(backendUrl, JSON.stringify(searchRequest), this.httpOptions);
+		
+	}
   	
 	/**
   	* Returns a Candidate by its Id 
