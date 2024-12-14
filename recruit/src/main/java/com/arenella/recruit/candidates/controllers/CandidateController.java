@@ -40,6 +40,7 @@ import com.arenella.recruit.candidates.beans.CandidateSearchAccuracyWrapper;
 import com.arenella.recruit.candidates.beans.CandidateUpdateRequest;
 import com.arenella.recruit.candidates.beans.Language;
 import com.arenella.recruit.candidates.beans.Language.LANGUAGE;
+import com.arenella.recruit.candidates.controllers.CandidateSearchRequest.RequestFilters;
 import com.arenella.recruit.candidates.enums.COUNTRY;
 import com.arenella.recruit.candidates.enums.FUNCTION;
 import com.arenella.recruit.candidates.enums.RESULT_ORDER;
@@ -153,6 +154,58 @@ public class CandidateController {
 			return ResponseEntity.ok(CandidateFullProfileAPIOutbound.convertFromDomain(candidate));
 		}
 		
+		
+	}
+	
+	/**
+	* Returns Candidates matching the filters
+	* @param searchRequest - Contains filter information
+	* @return Candidates matching the filters
+	*/
+	@PostMapping(path="submitCandidateSearchRequest")
+	public Page<CandidateAPIOutbound> getCandidates(
+			@RequestBody CandidateSearchRequest 	searchRequest, 
+			@RequestParam("orderAttribute") 		String 				orderAttribute,
+			@RequestParam("order") 					RESULT_ORDER		order,
+			@RequestParam(required = false) 		Set<FUNCTION> 		functions,
+			@RequestParam(required = false)			String				ownerId,
+			@RequestParam(required = false)			Integer				daysSinceLastAvailabilityCheck,
+						 Pageable 					pageable,
+						 Principal 					principal,
+						 HttpServletResponse	 	response) throws Exception{
+		
+			Set<String> candidateIdFilters = new LinkedHashSet<>();
+			
+			if (this.isCandidate(principal)) {
+				candidateIdFilters.add(getLoggedInUserName(principal));
+			} else  {
+				searchRequest.termFilters().ifPresent(tf -> {
+					candidateIdFilters.add(tf.getCandidateId().get());
+				});
+			}
+		
+			CandidateFilterOptions filterOptions = 
+				CandidateSearchRequest
+					.convertToCandidateFilterOptions(
+							searchRequest, 
+							orderAttribute, 
+							order, 
+							candidateIdFilters, 
+							functions, 
+							ownerId, 
+							daysSinceLastAvailabilityCheck);
+		
+		int 		backendRequestId 	= searchRequest.requestFilters().map(RequestFilters::getBackendRequestId).orElse(Optional.of(0)).get();
+		Boolean 	unfiltered 			= searchRequest.requestFilters().map(RequestFilters::getUnfiltered).orElse(Optional.empty()).orElse(null);
+		
+		/**
+		* Set headers to avoid older requests overriding 
+		* older requests responses. Implementation carries 
+		* out in front end  
+		*/
+		response.setHeader("X-Arenella-Request-Id", ""+backendRequestId);
+		
+		return candidateSearchUtil.searchAndPackageForAPIOutput(isRecruiter(principal), isUseCredits(principal), userCreditsExpired(getLoggedInUserName(principal)), filterOptions, pageable, unfiltered);
 		
 	}
 	

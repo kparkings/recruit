@@ -2,10 +2,15 @@ package com.arenella.recruit.candidates.controllers;
 
 import java.util.Set;
 
+import com.arenella.recruit.candidates.beans.CandidateFilterOptions;
+import com.arenella.recruit.candidates.beans.CandidateFilterOptions.CandidateFilterOptionsBuilder;
 import com.arenella.recruit.candidates.beans.Language;
 import com.arenella.recruit.candidates.enums.COUNTRY;
 import com.arenella.recruit.candidates.enums.FREELANCE;
+import com.arenella.recruit.candidates.enums.FUNCTION;
 import com.arenella.recruit.candidates.enums.PERM;
+import com.arenella.recruit.candidates.enums.RESULT_ORDER;
+import com.arenella.recruit.candidates.utils.GeoZoneSearchUtil.GEO_ZONE;
 
 import java.util.HashSet;
 import java.util.Optional;
@@ -45,7 +50,7 @@ public class CandidateSearchRequest {
 	* level
 	* @return Request level filters
 	*/
-	public Optional<RequestFilters> requestFilter(){
+	public Optional<RequestFilters> requestFilters(){
 		return Optional.ofNullable(this.requestFilters);
 	}
 	
@@ -54,7 +59,7 @@ public class CandidateSearchRequest {
 	* of the Candidates
 	* @return Location filters
 	*/
-	public Optional<LocationFilters> locationFilter(){
+	public Optional<LocationFilters> locationFilters(){
 		return Optional.ofNullable(this.locationFilters);
 	}
 	
@@ -63,7 +68,7 @@ public class CandidateSearchRequest {
 	* type the candidate is searching for
 	* @return Contract Filters
 	*/
-	public Optional<ContractFilters> contractFilter(){
+	public Optional<ContractFilters> contractFilters(){
 		return Optional.ofNullable(this.contractFilters);
 	}
 	
@@ -90,7 +95,7 @@ public class CandidateSearchRequest {
 	* Candidate has
 	* @return Skill filters
 	*/
-	public Optional<SkillFilters> skillsFilters(){
+	public Optional<SkillFilters> skillFilters(){
 		return Optional.ofNullable(this.skillFilters);
 	}
 	
@@ -338,7 +343,7 @@ public class CandidateSearchRequest {
 	*/
 	public static class LocationFilters{
 		
-		private Set<String> 			geoZones = new HashSet<>(); 
+		private Set<GEO_ZONE> 			geoZones = new HashSet<>(); 
 		private Set<COUNTRY> 			countries = new HashSet<>();
 		private LocationRangeFilters 	locationFilters;
 		
@@ -360,7 +365,7 @@ public class CandidateSearchRequest {
 		* Returns GeoZone's to filter on
 		* @return GeoZones
 		*/
-		public Set<String> getGeoZones(){
+		public Set<GEO_ZONE> getGeoZones(){
 			return this.geoZones;
 		} 
 		
@@ -394,7 +399,7 @@ public class CandidateSearchRequest {
 		*/
 		public static class LocationFiltersBuilder {
 			
-			private Set<String> 			geoZones = new HashSet<>(); 
+			private Set<GEO_ZONE> 			geoZones = new HashSet<>(); 
 			private Set<COUNTRY> 			countries = new HashSet<>();
 			private LocationRangeFilters 	locationFilters;
 			
@@ -403,7 +408,7 @@ public class CandidateSearchRequest {
 			* @param geoZones - GeoZone's to filter on
 			* @return Builder
 			*/
-			public LocationFiltersBuilder geoZones(Set<String> geoZones) {
+			public LocationFiltersBuilder geoZones(Set<GEO_ZONE> geoZones) {
 				this.geoZones.clear();
 				this.geoZones.addAll(geoZones);
 				return this;
@@ -518,6 +523,24 @@ public class CandidateSearchRequest {
 		}
 		
 		/**
+		* Returns where applicable filter information 
+		* relating to Candidate perm preferences 
+		* @return perm filter
+		*/
+		public Optional<PERM> getPerm(){
+			return Optional.ofNullable(this.perm);
+		}
+		
+		/**
+		* Returns where applicable filter information 
+		* relating to Candidate contract preferences 
+		* @return contract filter
+		*/
+		public Optional<FREELANCE> getContract(){
+			return Optional.ofNullable(this.contract);
+		}
+		
+		/**
 		* Builder for Class
 		*/
 		public static class ContractFiltersBuilder{
@@ -571,8 +594,10 @@ public class CandidateSearchRequest {
 		* @param languages - Languages to filter on
 		*/
 		public LanguageFilters(Set<Language> languages) {
-			this.languages.clear();
-			this.languages.addAll(languages);
+			if (Optional.ofNullable(languages).isPresent()) {
+				this.languages.clear();
+				this.languages.addAll(languages);
+			}
 		}
 		
 		/**
@@ -633,8 +658,10 @@ public class CandidateSearchRequest {
 		* @param skills - Skills to filter on
 		*/
 		public SkillFilters(Set<String> skills) {
-			this.skills.clear();
-			this.skills.addAll(skills);
+			if (Optional.ofNullable(skills).isPresent()) {
+				this.skills.clear();
+				this.skills.addAll(skills);
+			}
 		}
 		
 		/**
@@ -872,6 +899,72 @@ public class CandidateSearchRequest {
 			}
 			
 		}
+	}
+	
+	/**
+	* Converts from API Inboud representation to internal filter
+	* structure
+	* @param req								- To be converted
+	* @param orderAttribute						- Result order attribute
+	* @param order								- Direction to filter results n
+	* @param candidateIdFilters					- Candidate Id's to filter on
+	* @param functions							- Functions to filter on
+	* @param ownerId							- Owner Id to filter on
+	* @param daysSinceLastAvailabilityCheck		- Days since candidate availability check
+	* @return
+	*/
+	public static CandidateFilterOptions convertToCandidateFilterOptions(
+			CandidateSearchRequest 	req, 
+			String 					orderAttribute, 
+			RESULT_ORDER 			order,
+			Set<String> 			candidateIdFilters, 
+			Set<FUNCTION> 			functions,
+			String 					ownerId,
+			Integer					daysSinceLastAvailabilityCheck) {
+		
+		CandidateFilterOptionsBuilder builder = CandidateFilterOptions.builder();
+		
+		builder.orderAttribute(orderAttribute);
+		builder.order(order);
+		builder.candidateIds(candidateIdFilters);
+		builder.daysSinceLastAvailabilityCheck(daysSinceLastAvailabilityCheck);
+		builder.functions(functions);
+		builder.ownerId(ownerId);
+		
+		req.contractFilters().ifPresent(f -> {
+			f.getContract().ifPresent(c 	-> builder.freelance(true));
+			f.getPerm().ifPresent(p 		-> builder.freelance(true));
+		});
+		
+		req.experienceFilters().ifPresent(f -> f.getExperienceMax().ifPresent(builder::yearsExperienceLtEq));
+		req.experienceFilters().ifPresent(f -> f.getExperienceMin().ifPresent(builder::yearsExperienceGtEq));
+		
+		req.includeFilters().ifPresent(f ->{
+			f.includeUnavailableCandidates().ifPresent(builder::available);
+			f.includeRequiresSponsorshipCandidates().ifPresent(builder::includeRequiresSponsorship);
+		});
+		
+		req.languageFilters().ifPresent(f -> {
+			builder.languages(f.getLanguages());
+		});
+		
+		req.locationFilters().ifPresent(f -> {
+			builder.countries(f.getCountries());
+			builder.geoZones(f.getGeoZones());
+			f.getLocationFilters().ifPresent(loc -> builder.geoPosFilter(loc.country(), loc.city(), loc.distanceInKm()));
+		});
+		
+		req.skillFilters().ifPresent(f -> builder.skills(f.getSkills()));
+		
+		req.termFilters().ifPresent(f -> {
+			f.getEmail().ifPresent(builder::email);
+			f.getFirstName().ifPresent(builder::firstname);
+			f.getSurname().ifPresent(builder::surname);
+			f.getTitle().ifPresent(builder::searchText);
+		});
+		
+		return builder.build();
+		
 	}
 	
 }
