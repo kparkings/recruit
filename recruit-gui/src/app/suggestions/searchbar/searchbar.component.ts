@@ -496,21 +496,22 @@ export class SearchbarComponent {
 		ssReq.termFilters.title 									= params.getTitle();
 		ssReq.termFilters.firstName 								= params.getFirstName();
 		ssReq.termFilters.surname 									= params.getSurname();
+		console.log("AAA");
 		
-		/**
 		this.suggestionsService
 			.getCandidateSuggestions(ssReq).pipe(
 				map((response) => {
-												  
+					
 					const responseRequestId = response.headers.get('X-Arenella-Request-Id');
-													
-					if (""+this.backendRequestCounter == responseRequestId) {
+
+					
+					if (this.backendRequestCounter == responseRequestId) {
 														
 						this.suggestions =  new Array<Candidate>();
-														
-						response.body?.forEach(suggestedCandidate => {
-							this.suggestions.push(suggestedCandidate);
-						});
+								
+						response.body.content.forEach((s:Candidate) => {
+							this.suggestions.push(s);	
+						});	
 														
 					}
 
@@ -524,56 +525,55 @@ export class SearchbarComponent {
 						sessionStorage.setItem('beforeAuthPage', 'suggestions');
 					}
 		    	});
-		*/
-		//END
+
 		
-		this.suggestionsService.getSuggestons(	
-									backendRequestId,
-									maxSuggestions,
-									params.getTitle(),
-									params.getGeoZones(),
-									params.getCountries(),
-									params.getContract(),
-									params.getPerm(),
-									params.getMinExperience(),
-									params.getMaxExperience(),
-									params.getLanguages(),
-									params.getSkills(),
-									params.getIncludUnavailableCandidates(),
-									params.getIncludRequiresSponsorshipCandidates(),
-									isUnfiltered,
-									params.getFirstName(),
-									params.getSurname(),
-									params.getEmail(),
-									params.getCandidateId(),
-									params.getLocCity(),
-									params.getLocCity(),
-									params.getLocDistance(),
-									).pipe(
-										  map((response) => {
-										  
-											const responseRequestId = response.headers.get('X-Arenella-Request-Id');
+		//this.suggestionsService.getSuggestons(	
+		//							backendRequestId,
+		//							maxSuggestions,
+		//							params.getTitle(),
+		//							params.getGeoZones(),
+		//							params.getCountries(),
+		//							params.getContract(),
+		//							params.getPerm(),
+		//							params.getMinExperience(),
+		//							params.getMaxExperience(),
+		//							params.getLanguages(),
+		//							params.getSkills(),
+		//							params.getIncludUnavailableCandidates(),
+		//							params.getIncludRequiresSponsorshipCandidates(),
+		//							isUnfiltered,
+		//							params.getFirstName(),
+		//							params.getSurname(),
+		//							params.getEmail(),
+		//							params.getCandidateId(),
+		//							params.getLocCity(),
+		//							params.getLocCity(),
+		//							params.getLocDistance(),
+		//							).pipe(
+		//								  map((response) => {
+		//								  
+		//									const responseRequestId = response.headers.get('X-Arenella-Request-Id');
 											
-											if (this.backendRequestCounter == responseRequestId) {
-												this.suggestions =  new Array<Candidate>();
-												response.body.content.forEach((s:Candidate) => {
-													this.suggestions.push(s);	
-												});	
-											}
+		//									if (this.backendRequestCounter == responseRequestId) {
+		//										this.suggestions =  new Array<Candidate>();
+		//										response.body.content.forEach((s:Candidate) => {
+		//											this.suggestions.push(s);	
+		//										});	
+		//									}
 
 											//START
-											this.newSuggestionResults.emit(this.suggestions);
+		//									this.newSuggestionResults.emit(this.suggestions);
 											//END
-										    return response ;
+		//								    return response ;
 										
-										  })).subscribe(() => {}, 
-										  err => {
-											if (err.status === 401 || err.status === 0) {
-												this.currentUserAuth.doLogout(this.router);
-												sessionStorage.setItem('beforeAuthPage', 'suggestions');
-												//this.router.navigate(['login-user']);
-											}
-    									});
+			//							  })).subscribe(() => {}, 
+			//							  err => {
+			//								if (err.status === 401 || err.status === 0) {
+			//									this.currentUserAuth.doLogout(this.router);
+			//									sessionStorage.setItem('beforeAuthPage', 'suggestions');
+			//									//this.router.navigate(['login-user']);
+			//								}
+    		//							});
 											
 	}	
 	

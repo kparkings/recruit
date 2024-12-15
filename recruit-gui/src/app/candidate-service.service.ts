@@ -115,7 +115,7 @@ export class CandidateServiceService {
 	}
 		
 	httpOptions = {
-      headers: new HttpHeaders({ 'Content-Type': 'application/json' }), withCredentials: true
+      headers: new HttpHeaders({ 'Content-Type': 'application/json' }), withCredentials: true, 
     };
 
 	httpOptionsFileUpload = {
@@ -178,11 +178,11 @@ export class CandidateServiceService {
 	/**
 	* Makes a SearchRequest for retrieving Candidates matching the Filters selected by the User
 	*/
-	public getCandidateSuggestions(searchRequest:SuggestionsSearchRequest): Observable<HttpResponse<Array<Candidate>>>{
+	public getCandidateSuggestions(searchRequest:SuggestionsSearchRequest): Observable<any>{
 		
-		const backendUrl:string = environment.backendUrl +'candidate';
+		const backendUrl:string = environment.backendUrl +'submitCandidateSearchRequest/?orderAttribute=candidateId&order=desc&page=0&unfiltered=true&size=112&backendRequestId=1&searchText=&available=true';
 				
-		return this.httpClient.post<any>(backendUrl, JSON.stringify(searchRequest), this.httpOptions);
+		return this.httpClient.post<any>(backendUrl, JSON.stringify(searchRequest), {headers: new HttpHeaders({ 'Content-Type': 'application/json' }),  withCredentials: true, responseType: "json", observe: "response"});
 		
 	}
   	

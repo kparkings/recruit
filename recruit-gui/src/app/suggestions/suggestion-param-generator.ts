@@ -14,20 +14,20 @@ export class SuggestionParams{
 	private skills:Array<string> 						= new Array<string>();
 	private functionTypes:Array<string>					= new Array<string>();
 	private languages:Array<string> 					= new Array<string>();
-	private filterType:string 								= "";
-	private title:string 								= "";
-	private firstName:string 							= "";
-	private surname:string 								= "";
-	private email:string 								= "";
-	private candidateId:string							= "";
-	private contract:string 							= "";
-	private perm:string 								= "";
-	private minExperience:string 						= "";
-	private maxExperience:string 						= "";
-	private unavailableCadidates:string					= "";
-	private includeRequiresSponsorship:string			= "";	
-	private locCountry:string 							= "";
-	private locCity:string 								= "";
+	private filterType:string | null | undefined;
+	private title:string | null;
+	private firstName:string | null | undefined;
+	private surname:string | null | undefined;
+	private email:string | null | undefined;
+	private candidateId:string | null | undefined;
+	private contract:string | null | undefined;
+	private perm:string | null | undefined;
+	private minExperience:string | null | undefined;
+	private maxExperience:string | null | undefined;
+	private unavailableCadidates:string | null | undefined;
+	private includeRequiresSponsorship:string | null | undefined;	
+	private locCountry:string | null | undefined;
+	private locCity:string | null | undefined;
 	private locDistance:number 							= 0;
 		
 	/**
@@ -167,31 +167,31 @@ export class SuggestionParams{
 	/**
 	* Returns title to filter on
 	*/	
-	public getTitle():string{
+	public getTitle():string | null | undefined{
 		return this.title;
 	}
 	/**
 	* Returns contract option to filter on
 	*/
-	public getContract():string{
+	public getContract():string | null | undefined{
 		return this.contract;
 	}
 	/**
 	* Returns perm option to filter on
 	*/
-	public getPerm():string{
+	public getPerm():string | null | undefined{
 		return this.perm;
 	}
 	/**
 	* Returns minimum number of years to filter on
 	*/
-	public getMinExperience():string{
+	public getMinExperience():string | null | undefined{
 		return this.minExperience
 	}
 	/**
 	* Returns max number of years to filter on
 	*/
-	public getMaxExperience():string {
+	public getMaxExperience():string | null | undefined {
 		return this.maxExperience
 	}
 	
@@ -202,47 +202,47 @@ export class SuggestionParams{
 	/**
 	* Whether to include unavailable cadidates
 	*/
-	public getIncludUnavailableCandidates():string {
+	public getIncludUnavailableCandidates():string | null | undefined {
 		return this.unavailableCadidates;
 	}
 	
-	public getIncludRequiresSponsorshipCandidates():string {
+	public getIncludRequiresSponsorshipCandidates():string | null | undefined {
 		return this.includeRequiresSponsorship;
 	}
 	
 	/**
 	* firstname filter
 	*/
-	public getFirstName():string {
+	public getFirstName():string | null | undefined {
 		return this.firstName;
 	}
 	
 	/**
 	* surname filter
 	*/
-	public getSurname():string {
+	public getSurname():string | null | undefined {
 		return this.surname;
 	}
 	
 	/**
 	* email filter
 	*/
-	public getEmail():string {
+	public getEmail():string | null | undefined {
 		return this.email;
 	}
 	
 	/**
 	* Candidate Id filter
 	*/
-	public getCandidateId():string{
+	public getCandidateId():string | null | undefined{
 		return this.candidateId;
 	}
 	
-	public getLocCountry():string{
+	public getLocCountry():string | null | undefined{
 		return this.locCountry;
 	}	
 	
-	public getLocCity():string{
+	public getLocCity():string | null | undefined{
 		return this.locCity;	
 	}
 	public getLocDistance():number{

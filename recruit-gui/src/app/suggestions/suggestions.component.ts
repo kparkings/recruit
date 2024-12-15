@@ -403,14 +403,14 @@ export class SuggestionsComponent implements OnInit {
 		alert.countries 			= params.getCountries();
 		alert.dutch 				= params.getLanguageLevel("DUTCH");
 		alert.english 				= params.getLanguageLevel("ENGLISH");
-		alert.freelance 			= params.getContract();
+		alert.freelance 			= ""+params.getContract();
 		alert.french 				= params.getLanguageLevel("FRENCH");
-		alert.perm 					= params.getPerm();
+		alert.perm 					= ""+params.getPerm();
 		alert.skills 				= params.getSkills();
-		alert.searchText			= params.getTitle();
+		alert.searchText			= ""+params.getTitle();
 		
-		alert.yearsExperienceLtEq 	= params.getMinExperience();
-		alert.yearsExperienceGtEq 	= params.getMaxExperience();
+		alert.yearsExperienceLtEq 	= ""+params.getMinExperience();
+		alert.yearsExperienceGtEq 	= ""+params.getMaxExperience();
 		
 		this.candidateService.createCandidateSearchAlert(alert).subscribe(() => {
 			

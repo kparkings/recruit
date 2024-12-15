@@ -30,21 +30,21 @@ export class LocationFilters{
 
 export class LocationRangeFilters{
 	
-	constructor(public locCountry?:string, public locCity?:string, public locDistance?:number){
+	constructor(public locCountry?:string | null | undefined, public locCity?:string | null | undefined, public locDistance?:number){
 		
 	}
 			
 }
 
 export class ExperienceFilters{
-	constructor(public experienceMin?:string, public experienceMax?:string){
+	constructor(public experienceMin?:string | null | undefined, public experienceMax?:string | null | undefined){
 		
 	}
 }
 
 export class ContractFilters{
-	contract?:string;
-		perm?:string; 
+	contract?:string | null | undefined;
+		perm?:string | null | undefined; 
 }
 
 export class LanguageFilters{
@@ -58,16 +58,16 @@ export class SkillFilters{
 }
 
 export class IncludeFilters{
-	includeUnavailableCandidates?:string;
-	includeRequiresSponsorshipCandidates?:string; 	
+	includeUnavailableCandidates?:string | null | undefined;
+	includeRequiresSponsorshipCandidates?:string | null | undefined; 	
 }
 
 export class TermFilters{
-	title?:string; 
-	candidateId?:string;
-	firstName?:string;
-	surname?:string;
-	email?:string;	
+	title?:string | null | undefined; 
+	candidateId?:string | null | undefined;
+	firstName?:string | null | undefined;
+	surname?:string | null | undefined;
+	email?:string | null | undefined;	
 }
 
 

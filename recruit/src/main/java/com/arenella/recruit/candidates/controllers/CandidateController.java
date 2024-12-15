@@ -162,7 +162,8 @@ public class CandidateController {
 	* @param searchRequest - Contains filter information
 	* @return Candidates matching the filters
 	*/
-	@PostMapping(path="submitCandidateSearchRequest")
+	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('RECRUITER') OR hasRole('CANDIDATE')")
+	@PostMapping(path="submitCandidateSearchRequest/")
 	public Page<CandidateAPIOutbound> getCandidates(
 			@RequestBody CandidateSearchRequest 	searchRequest, 
 			@RequestParam("orderAttribute") 		String 				orderAttribute,
@@ -179,9 +180,9 @@ public class CandidateController {
 			if (this.isCandidate(principal)) {
 				candidateIdFilters.add(getLoggedInUserName(principal));
 			} else  {
-				searchRequest.termFilters().ifPresent(tf -> {
-					candidateIdFilters.add(tf.getCandidateId().get());
-				});
+				searchRequest.termFilters().ifPresent(tf ->
+					tf.getCandidateId().ifPresent(candidateId -> candidateIdFilters.add(tf.getCandidateId().get()))
+				);
 			}
 		
 			CandidateFilterOptions filterOptions = 

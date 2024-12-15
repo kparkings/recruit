@@ -24,7 +24,7 @@ export class SuggestionsService {
 	/**
 	* Makes a SearchRequest for retrieving Candidates matching the Filters selected by the User
 	*/
-	public getCandidateSuggestions(searchRequest:SuggestionsSearchRequest): Observable<HttpResponse<Array<Candidate>>>{
+	public getCandidateSuggestions(searchRequest:SuggestionsSearchRequest): Observable<any>{
 		return this.candidateService.getCandidateSuggestions(searchRequest);
 	}
 	

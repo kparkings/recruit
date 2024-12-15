@@ -11,6 +11,8 @@ import com.arenella.recruit.candidates.enums.FUNCTION;
 import com.arenella.recruit.candidates.enums.PERM;
 import com.arenella.recruit.candidates.enums.RESULT_ORDER;
 import com.arenella.recruit.candidates.utils.GeoZoneSearchUtil.GEO_ZONE;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 
 import java.util.HashSet;
 import java.util.Optional;
@@ -19,6 +21,7 @@ import java.util.Optional;
 * Class represents a Request for candidates matching
 * search parameters
 */
+@JsonDeserialize(builder=CandidateSearchRequest.CandidateSearchRequestBuilder.class)
 public class CandidateSearchRequest {
 
 	private RequestFilters 		requestFilters;
@@ -128,6 +131,7 @@ public class CandidateSearchRequest {
 	/**
 	* Builder for the class 
 	*/
+	@JsonPOJOBuilder(buildMethodName="build", withPrefix="")
 	public static class CandidateSearchRequestBuilder {
 		
 		private RequestFilters 		requestFilters;
@@ -233,6 +237,7 @@ public class CandidateSearchRequest {
 	* Filters at the request level f a CandidateSearchRequest. These are 
 	* non Candidates specific filters such as max number of results etc
 	*/
+	@JsonDeserialize(builder=RequestFilters.RequestFiltersBuilder.class)
 	public static class RequestFilters{
 	
 		private Integer	backendRequestId;
@@ -290,6 +295,7 @@ public class CandidateSearchRequest {
 		/**
 		* Builder for the Class 
 		*/
+		@JsonPOJOBuilder(buildMethodName="build", withPrefix="")
 		public static class RequestFiltersBuilder {
 			
 			private Integer	backendRequestId;
@@ -341,6 +347,7 @@ public class CandidateSearchRequest {
 	/**
 	* Filters relating to the Candidates location 
 	*/
+	@JsonDeserialize(builder=LocationFilters.LocationFiltersBuilder.class)
 	public static class LocationFilters{
 		
 		private Set<GEO_ZONE> 			geoZones = new HashSet<>(); 
@@ -397,6 +404,7 @@ public class CandidateSearchRequest {
 		/**
 		* Builder for the class 
 		*/
+		@JsonPOJOBuilder(buildMethodName="build", withPrefix="")
 		public static class LocationFiltersBuilder {
 			
 			private Set<GEO_ZONE> 			geoZones = new HashSet<>(); 
@@ -500,6 +508,7 @@ public class CandidateSearchRequest {
 	* Filters relating to the type of Contract the Candidate 
 	* is open to
 	*/
+	@JsonDeserialize(builder=ContractFilters.ContractFiltersBuilder.class)
 	public static class ContractFilters{
 		
 		private PERM 		perm;
@@ -543,6 +552,7 @@ public class CandidateSearchRequest {
 		/**
 		* Builder for Class
 		*/
+		@JsonPOJOBuilder(buildMethodName="build", withPrefix="")
 		public static class ContractFiltersBuilder{
 			
 			private PERM 		perm;
@@ -590,6 +600,13 @@ public class CandidateSearchRequest {
 		private Set<Language> languages = new HashSet<>();
 		
 		/**
+		* Default constructor 
+		*/
+		public LanguageFilters() {
+			//Jackson
+		}
+		
+		/**
 		* Constructor
 		* @param languages - Languages to filter on
 		*/
@@ -618,6 +635,12 @@ public class CandidateSearchRequest {
 		private Integer experienceMin;
 		private Integer experienceMax;
 	
+		/**
+		* Default constructor 
+		*/
+		public ExperienceFilters() {
+			//Jackson
+		}
 		/**
 		* Constructor
 		* @param experienceMin - minimum (gte) years of experience to filter on
@@ -654,6 +677,13 @@ public class CandidateSearchRequest {
 		private Set<String> skills = new HashSet<>();
 		
 		/**
+		* Default constructor 
+		*/
+		public SkillFilters() {
+			//Jackson
+		}
+		
+		/**
 		* Constructor
 		* @param skills - Skills to filter on
 		*/
@@ -679,6 +709,7 @@ public class CandidateSearchRequest {
 	* of candidates that by default are ommitted from the 
 	* search results
 	*/
+	@JsonDeserialize(builder=IncludeFilters.IncludeFiltersBuilder.class)
 	public static class IncludeFilters{
 	
 		private Boolean includeUnavailableCandidates;
@@ -721,6 +752,7 @@ public class CandidateSearchRequest {
 		/**
 		* Builder for the IncludeFiltters
 		*/
+		@JsonPOJOBuilder(buildMethodName="build", withPrefix="")
 		public static class IncludeFiltersBuilder{
 		
 			private Boolean includeUnavailableCandidates;
@@ -761,6 +793,7 @@ public class CandidateSearchRequest {
 	/**
 	* Filters relating to search terms of various types
 	*/
+	@JsonDeserialize(builder=TermFilters.TermFiltersBuilder.class)
 	public static class TermFilters{
 		
 		private String title; 
@@ -832,6 +865,7 @@ public class CandidateSearchRequest {
 		/**
 		* Builder for the class 
 		*/
+		@JsonPOJOBuilder(buildMethodName="build", withPrefix="")
 		public static class TermFiltersBuilder{
 			
 			public  String title; 
