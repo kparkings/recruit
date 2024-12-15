@@ -171,6 +171,7 @@ public class CandidateController {
 			@RequestParam(required = false) 		Set<FUNCTION> 		functions,
 			@RequestParam(required = false)			String				ownerId,
 			@RequestParam(required = false)			Integer				daysSinceLastAvailabilityCheck,
+			
 						 Pageable 					pageable,
 						 Principal 					principal,
 						 HttpServletResponse	 	response) throws Exception{
@@ -192,11 +193,9 @@ public class CandidateController {
 							orderAttribute, 
 							order, 
 							candidateIdFilters, 
-							functions, 
-							ownerId, 
-							daysSinceLastAvailabilityCheck);
+							functions);
 		
-		int 		backendRequestId 	= searchRequest.requestFilters().map(RequestFilters::getBackendRequestId).orElse(Optional.of(0)).get();
+		
 		Boolean 	unfiltered 			= searchRequest.requestFilters().map(RequestFilters::getUnfiltered).orElse(Optional.empty()).orElse(null);
 		
 		/**
@@ -204,7 +203,13 @@ public class CandidateController {
 		* older requests responses. Implementation carries 
 		* out in front end  
 		*/
-		response.setHeader("X-Arenella-Request-Id", ""+backendRequestId);
+		searchRequest.requestFilters().ifPresent(f -> {
+			f.getBackendRequestId().ifPresent(id ->{
+				int backendRequestId = searchRequest.requestFilters().map(RequestFilters::getBackendRequestId).orElse(Optional.of(0)).get();
+				response.setHeader("X-Arenella-Request-Id", ""+backendRequestId);
+			});
+		});
+		
 		
 		return candidateSearchUtil.searchAndPackageForAPIOutput(isRecruiter(principal), isUseCredits(principal), userCreditsExpired(getLoggedInUserName(principal)), filterOptions, pageable, unfiltered);
 		

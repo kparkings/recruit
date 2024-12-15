@@ -167,7 +167,7 @@ export class CandidateServiceService {
   	/**
   	* Returns a list of available Candidates 
   	*/
-  	public getCandidates(filterParams:string): Observable<any>{
+  	public getCandidatesXXXXXXXXXXXXX(filterParams:string): Observable<any>{
       
 		const backendUrl:string = environment.backendUrl +'candidate?'+filterParams;
     	

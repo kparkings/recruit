@@ -32,6 +32,7 @@ public class CandidateSearchRequest {
 	private SkillFilters 		skillFilters;
 	private IncludeFilters 		includeFilters;
 	private TermFilters 		termFilters;
+	private CandidateFilters	candidateFilters;
 	
 	/**
 	* Constructor based upon a builder
@@ -46,6 +47,7 @@ public class CandidateSearchRequest {
 		this.skillFilters 			= builder.skillFilters;
 		this.includeFilters 		= builder.includeFilters;
 		this.termFilters 			= builder.termFilters;
+		this.candidateFilters		= builder.candidateFilters;
 	}
 	
 	/**
@@ -121,6 +123,10 @@ public class CandidateSearchRequest {
 		return Optional.ofNullable(this.includeFilters);
 	}
 	
+	public Optional<CandidateFilters> candidateFilters(){
+		return Optional.ofNullable(this.candidateFilters);
+	}
+	
 	/**
 	* Returns a builder for the class 
 	*/
@@ -142,6 +148,7 @@ public class CandidateSearchRequest {
 		private SkillFilters 		skillFilters;
 		private IncludeFilters 		includeFilters;
 		private TermFilters 		termFilters;
+		private CandidateFilters	candidateFilters;
 		
 		/**
 		* Sets the Term Request to apply to the search request
@@ -220,6 +227,16 @@ public class CandidateSearchRequest {
 		*/
 		public CandidateSearchRequestBuilder termFilters(TermFilters termFilters){
 			this.termFilters = termFilters;
+			return this;
+		}
+		
+		/**
+		* Sets the Candidate filters to apply to the search request
+		* @param candidateFilters - Filters to apply to search request
+		* @return Builder
+		*/
+		public CandidateSearchRequestBuilder candidateFilters(CandidateFilters candidateFilters){
+			this.candidateFilters = candidateFilters;
 			return this;
 		}
 		
@@ -936,6 +953,122 @@ public class CandidateSearchRequest {
 	}
 	
 	/**
+	* Filters relating to types of candidates to filter on
+	*/
+	@JsonDeserialize(builder=CandidateFilters.CandidateFiltersBuilder.class)
+	public static class CandidateFilters{
+		
+		private Boolean available;
+		private String 	ownerId;
+		private Integer daysSinceLastAvailabilityCheck;
+		
+		/**
+		* Default constructor 
+		*/
+		public CandidateFilters() {
+			//Jackson
+		}
+		
+		/**
+		* Constructor based upon a Builder 
+		* @param builder - Contains initialization values
+		*/
+		public CandidateFilters(CandidateFiltersBuilder builder) {
+			this.available 						= builder.available;
+			this.ownerId 						= builder.ownerId;
+			this.daysSinceLastAvailabilityCheck = builder.daysSinceLastAvailabilityCheck;
+		}
+		
+		/**
+		* Returns if applicable the availability of the Candidate 
+		* to filter on
+		* @return availability of the Candidate
+		*/
+		public Optional<Boolean> isAvailable(){
+			return Optional.ofNullable(this.available);
+		}
+		
+		/**
+		* Returns if applicable the recruiter owning the Candidate
+		* to fitle on
+		* @return Id of the owning Recruiter
+		*/
+		public Optional<String> getOwnerId(){
+			return Optional.ofNullable(this.ownerId);
+		}
+		
+		/**
+		* Returns is applicable number of days since last availability 
+		* check was performed to filter on
+		* @return days since last check
+		*/
+		public Optional<Integer> getDaysSinceLastAvailabilityCheck(){
+			return Optional.ofNullable(this.daysSinceLastAvailabilityCheck);
+		}
+		
+		/**
+		* Returns a builder for the calss
+		* @return Builder
+		*/
+		public static CandidateFiltersBuilder builder() {
+			return new CandidateFiltersBuilder();
+		}
+		
+		/**
+		* Builder for the clas 
+		*/
+		@JsonPOJOBuilder(buildMethodName="build", withPrefix="")
+		public static class CandidateFiltersBuilder{
+			
+			private Boolean available;
+			private String 	ownerId;
+			private Integer daysSinceLastAvailabilityCheck;
+			
+			/**
+			* Sets whether to filter specifically on available/unavailable
+			* Candidates
+			* @param available - Availability option
+			* @return Builder
+			*/
+			public CandidateFiltersBuilder available(Boolean available) {
+				this.available = available;
+				return this;
+			}
+			
+			/**
+			* Sets whether to filter on Candidates belonging to a 
+			* specific recruiter
+			* @param ownerId - unique Id of the owning Recruiter
+			* @return Builder
+			*/
+			public CandidateFiltersBuilder ownerId(String ownerId) {
+				this.ownerId = ownerId;
+				return this;
+			}
+			
+			/**
+			* Sets filter to only include Candidates that have not had an 
+			* availability check since the specific number of days ago
+			* @param daysSinceLastAvailabilityCheck - Days since last check
+			* @return Builder
+			*/
+			public CandidateFiltersBuilder daysSinceLastAvailabilityCheck(Integer daysSinceLastAvailabilityCheck) {
+				this.daysSinceLastAvailabilityCheck = daysSinceLastAvailabilityCheck;
+				return this;
+			}
+			
+			/**
+			* Returns initialized instance  
+			* @return Initialized instance
+			*/
+			public CandidateFilters build() {
+				return new CandidateFilters(this);
+			}
+		}
+		
+	}
+	
+	/**
 	* Converts from API Inboud representation to internal filter
 	* structure
 	* @param req								- To be converted
@@ -952,18 +1085,21 @@ public class CandidateSearchRequest {
 			String 					orderAttribute, 
 			RESULT_ORDER 			order,
 			Set<String> 			candidateIdFilters, 
-			Set<FUNCTION> 			functions,
-			String 					ownerId,
-			Integer					daysSinceLastAvailabilityCheck) {
+			Set<FUNCTION> 			functions) {
 		
 		CandidateFilterOptionsBuilder builder = CandidateFilterOptions.builder();
 		
 		builder.orderAttribute(orderAttribute);
 		builder.order(order);
 		builder.candidateIds(candidateIdFilters);
-		builder.daysSinceLastAvailabilityCheck(daysSinceLastAvailabilityCheck);
 		builder.functions(functions);
-		builder.ownerId(ownerId);
+		
+		
+		req.candidateFilters().ifPresent(f -> {
+			f.getOwnerId().ifPresent(builder::ownerId);
+			f.isAvailable().ifPresent(builder::available);
+			f.getDaysSinceLastAvailabilityCheck().ifPresent(builder::daysSinceLastAvailabilityCheck);
+		});
 		
 		req.contractFilters().ifPresent(f -> {
 			f.getContract().ifPresent(c 	-> builder.freelance(true));
@@ -995,6 +1131,12 @@ public class CandidateSearchRequest {
 			f.getFirstName().ifPresent(builder::firstname);
 			f.getSurname().ifPresent(builder::surname);
 			f.getTitle().ifPresent(builder::searchText);
+		});
+		
+		req.candidateFilters().ifPresent(f -> {
+			f.isAvailable().ifPresent(builder::available);
+			f.getOwnerId().ifPresent(builder::ownerId);
+			f.getDaysSinceLastAvailabilityCheck().ifPresent(builder::daysSinceLastAvailabilityCheck);
 		});
 		
 		return builder.build();

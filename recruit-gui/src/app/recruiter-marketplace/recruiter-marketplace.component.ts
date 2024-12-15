@@ -11,14 +11,15 @@ import { Router}										from '@angular/router';
 import { CandidateServiceService }						from '../candidate-service.service';
 import { RecruiterProfileService} 						from '../recruiter-profile.service';
 import { RecruiterProfile }								from '../recruiter-profile/recruiter-profile';
-import { Candidate } 																	from '../suggestions/candidate';
-import { CandidateNavService } 															from '../candidate-nav.service';
-import { CreditsService } 																from '../credits.service';
+import { Candidate } 									from '../suggestions/candidate';
+import { CandidateNavService } 							from '../candidate-nav.service';
+import { CreditsService } 								from '../credits.service';
+import { TranslateService } 							from '@ngx-translate/core';
+import { SupportedCountry } 							from '../supported-candidate';
+import { HtmlOption } 									from '../html-option';
+import { StaticDataService } 							from '../static-data.service';
+import { SuggestionsSearchRequest } 					from '../suggestions/suggestion-search-request';
 import { InfoItemBlock, InfoItemConfig, InfoItemRowKeyValue, InfoItemRowKeyValueFlag, InfoItemRowMultiValues } 	from '../candidate-info-box/info-item';
-import { TranslateService } from '@ngx-translate/core';
-import { SupportedCountry } from '../supported-candidate';
-import { HtmlOption } from '../html-option';
-import { StaticDataService } from '../static-data.service';
 
 @Component({
   selector: 'app-recruiter-marketplace',
@@ -147,7 +148,14 @@ export class RecruiterMarketplaceComponent implements OnInit {
 			this.offeredCandidates = new Array<Candidate>();
 			this.showJustMyCandidatesActive = true;
 			this.recruiterService.getOwnRecruiterAccount().subscribe(data => {
-				this.candidateService.getCandidates("orderAttribute=candidateId&order=desc&ownerId="+sessionStorage.getItem("userId")).subscribe(candidates =>{
+				
+				
+				let searchRequest:SuggestionsSearchRequest = new SuggestionsSearchRequest();
+				searchRequest.candidateFilters.ownerId = sessionStorage.getItem("userId");
+				
+				//TODO: [KP] Add order filters tp SearchRequest and add ordering back in
+				this.candidateService.getCandidateSuggestions(searchRequest).subscribe(candidates => {
+				//this.candidateService.getCandidates("orderAttribute=candidateId&order=desc&ownerId="+sessionStorage.getItem("userId")).subscribe(candidates =>{
 					this.offeredCandidates = candidates.body.content;
 				});
 			});	

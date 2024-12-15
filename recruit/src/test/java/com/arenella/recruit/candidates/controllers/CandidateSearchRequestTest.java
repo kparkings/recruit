@@ -6,6 +6,7 @@ import com.arenella.recruit.candidates.beans.CandidateFilterOptions;
 import com.arenella.recruit.candidates.beans.Language;
 import com.arenella.recruit.candidates.beans.Language.LANGUAGE;
 import com.arenella.recruit.candidates.beans.Language.LEVEL;
+import com.arenella.recruit.candidates.controllers.CandidateSearchRequest.CandidateFilters;
 import com.arenella.recruit.candidates.controllers.CandidateSearchRequest.IncludeFilters;
 import com.arenella.recruit.candidates.controllers.CandidateSearchRequest.LanguageFilters;
 import com.arenella.recruit.candidates.enums.COUNTRY;
@@ -61,6 +62,9 @@ class CandidateSearchRequestTest {
 	private static final String					TERM_FIRSTNAME							= "Kevin";
 	private static final String					TERM_SURNAME							= "Parkings";
 	
+	private static final Boolean 				AVAILABLE 								= true;
+	private static final String 				OWNER_ID 								= "1234";
+	private static final Integer 				DAYS_SINCE_LAST_AVAILABILITY_CHECK 		= 5;
 	
 	/**
 	* Tests construction via the Builder 
@@ -103,6 +107,12 @@ class CandidateSearchRequestTest {
 								.firstname(TERM_FIRSTNAME)
 								.surname(TERM_SURNAME)
 							.build())
+					.candidateFilters(CandidateFilters
+							.builder()
+								.available(AVAILABLE)
+								.ownerId(OWNER_ID)
+								.daysSinceLastAvailabilityCheck(DAYS_SINCE_LAST_AVAILABILITY_CHECK)
+							.build())
 				.build();
 		
 		assertTrue(csr.contractFilters().isPresent());
@@ -113,6 +123,7 @@ class CandidateSearchRequestTest {
 		assertTrue(csr.requestFilters().isPresent());
 		assertTrue(csr.skillFilters().isPresent());
 		assertTrue(csr.termFilters().isPresent());
+		assertTrue(csr.candidateFilters().isPresent());
 		
 		csr.contractFilters().ifPresent(f -> {
 			assertEquals(CONTRACT, f.getContract().get());
@@ -166,6 +177,13 @@ class CandidateSearchRequestTest {
 			f.getTitle().ifPresent(title 			-> assertEquals(TERM_TITLE, title));
 			
 		});
+		
+		csr.candidateFilters().ifPresent(f -> {
+			f.isAvailable().ifPresent(available 					-> assertEquals(AVAILABLE, available));
+			f.getOwnerId().ifPresent(ownerId 						-> assertEquals(OWNER_ID, ownerId));
+			f.getDaysSinceLastAvailabilityCheck().ifPresent(days 	-> assertEquals(DAYS_SINCE_LAST_AVAILABILITY_CHECK, days));
+		});
+		
 	}
 	
 	/**
@@ -188,6 +206,7 @@ class CandidateSearchRequestTest {
 		assertFalse(csr.requestFilters().isPresent());
 		assertFalse(csr.skillFilters().isPresent());
 		assertFalse(csr.termFilters().isPresent());
+		assertFalse(csr.candidateFilters().isPresent());
 		
 		csr = CandidateSearchRequest
 				.builder()
@@ -199,6 +218,7 @@ class CandidateSearchRequestTest {
 					.requestFilters(RequestFilters.builder().build())
 					.skillFilters(new SkillFilters(null))
 					.termFilters(TermFilters.builder().build())
+					.candidateFilters(CandidateFilters.builder().build())
 				.build();
 		
 		csr.contractFilters().ifPresent(f -> {
@@ -244,6 +264,12 @@ class CandidateSearchRequestTest {
 			assertTrue(f.getTitle().isEmpty());
 		});
 		
+		csr.candidateFilters().ifPresent(f -> {
+			assertTrue(f.isAvailable().isEmpty());
+			assertTrue(f.getOwnerId().isEmpty());
+			assertTrue(f.getDaysSinceLastAvailabilityCheck().isEmpty());
+		});
+		
 	}
 	
 	/**
@@ -253,7 +279,6 @@ class CandidateSearchRequestTest {
 	@Test
 	void testConvertToCandidateFilterOptions() {
 		
-		final String ownerId = "123";
 		final String orderAttribute = "candidateId";
 		
 		CandidateSearchRequest csr = CandidateSearchRequest
@@ -291,9 +316,15 @@ class CandidateSearchRequestTest {
 								.firstname(TERM_FIRSTNAME)
 								.surname(TERM_SURNAME)
 							.build())
+					.candidateFilters(CandidateFilters
+							.builder()
+								.available(AVAILABLE)
+								.ownerId(OWNER_ID)
+								.daysSinceLastAvailabilityCheck(DAYS_SINCE_LAST_AVAILABILITY_CHECK)
+							.build())
 				.build();
 		
-		CandidateFilterOptions filters = CandidateSearchRequest.convertToCandidateFilterOptions(csr, orderAttribute, RESULT_ORDER.desc, Set.of(), Set.of(FUNCTION.ARCHITECT), ownerId, 99);
+		CandidateFilterOptions filters = CandidateSearchRequest.convertToCandidateFilterOptions(csr, orderAttribute, RESULT_ORDER.desc, Set.of(), Set.of(FUNCTION.ARCHITECT));
 	
 		assertTrue(filters.getFunctions().contains(FUNCTION.ARCHITECT));
 		
@@ -317,9 +348,8 @@ class CandidateSearchRequestTest {
 		assertEquals(TERM_FIRSTNAME, 				filters.getFirstname().get());
 		assertEquals(TERM_SURNAME, 					filters.getSurname().get());
 		assertEquals(TERM_EMAIL, 					filters.getEmail().get());
-		assertEquals(ownerId, 						filters.getOwnerId().get());
+		assertEquals(OWNER_ID, 						filters.getOwnerId().get());
 		
 	}
-	
 	
 }

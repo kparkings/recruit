@@ -10,6 +10,7 @@ import { NgbModal, NgbModalOptions}				from '@ng-bootstrap/ng-bootstrap';
 import { CandidateSkill } 						from './candidate-skill';
 import { AppComponent} 							from '../app.component';
 import { SupportedCountry } 					from '../supported-candidate';
+import { RequestFilters, SuggestionsSearchRequest } 			from '../suggestions/suggestion-search-request';
 
 @Component({
   selector: 'app-accounts',
@@ -171,7 +172,11 @@ export class AccountsComponent implements OnInit {
 		
 		this.candidates = new Array<Candidate>();
 
-    	this.candidateService.getCandidates(filterParams+ "&available=true").subscribe( data => {
+		let searchRequest:SuggestionsSearchRequest = new SuggestionsSearchRequest();
+		searchRequest.candidateFilters.available = true;
+		
+		this.candidateService.getCandidateSuggestions(searchRequest).subscribe(data => {
+    	//this.candidateService.getCandidates(filterParams+ "&available=true").subscribe( data => {
   
       		data.body.content.forEach((c:Candidate) => {
         
@@ -188,11 +193,15 @@ export class AccountsComponent implements OnInit {
 			});
 
 			if (includeUnavailable) {
+				
+				searchRequest.candidateFilters.available = false;
+				
 				/**
 				* Quick and dirty as this is only a temp feature until the anonymized accounts
 				* are removed
 				*/
-				this.candidateService.getCandidates(filterParams + "&available=false").subscribe( data => {
+				this.candidateService.getCandidateSuggestions(searchRequest).subscribe(data => {
+				//this.candidateService.getCandidates(filterParams + "&available=false").subscribe( data => {
 			
 		      		data.body.content.forEach((c:Candidate) => {
 		        

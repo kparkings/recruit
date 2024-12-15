@@ -13,7 +13,13 @@ export class SuggestionsSearchRequest{
 	public skillFilters:SkillFilters 			= new SkillFilters();
 	public includeFilters:IncludeFilters 		= new IncludeFilters();
 	public termFilters:TermFilters 				= new TermFilters();
-	
+	public candidateFilters:CandidateFilters 	= new CandidateFilters();
+}
+
+export class CandidateFilters{
+	public available?:boolean | null | undefined;
+	public ownerId?:string | null | undefined;
+	public daysSinceLastAvailabilityCheck?:number | null | undefined;
 }
 
 export class RequestFilters{
