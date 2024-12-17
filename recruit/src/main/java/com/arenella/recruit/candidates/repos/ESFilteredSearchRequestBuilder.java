@@ -134,8 +134,7 @@ public class ESFilteredSearchRequestBuilder {
 		if (!filterOptions.getLanguages().isEmpty()) {
 			
 			
-			List<String> 		languages 		= filterOptions.getLanguages().stream().map(l -> l.getLanguage().toString()).map(l -> l.toUpperCase()).collect(Collectors.toList());
-			//List<FieldValue> 	fieldValueList 	= languages.stream().map(FieldValue::of).toList();
+			List<String> 		languages 		= filterOptions.getLanguages().stream().map(l -> l.toString()).map(l -> l.toUpperCase()).collect(Collectors.toList());
 			
 			/**
 			* For speed. Almost all candidates speak English. Therefore we filter on the remaining languages which in most
@@ -149,13 +148,6 @@ public class ESFilteredSearchRequestBuilder {
 			if (filterOptions.getLanguages().size() >1 ) {
 				languages = languages.stream().filter(l -> !l.equals("ENGLSH")).collect(Collectors.toList());
 			}
-			
-			 //TermsQueryField termsQueryField = new TermsQueryField.Builder()
-              //    .value(fieldValueList)
-               //   .build();
-			 
-			//mustQueries.add(TermsQuery.of(m -> m.queryName("languages").field("languages.language.keyword").terms(termsQueryField))._toQuery());
-			
 			
 			List<co.elastic.clients.elasticsearch._types.query_dsl.Query> langQueries 		= new ArrayList<>();
 			

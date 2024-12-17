@@ -10,7 +10,7 @@ import { NgbModal, NgbModalOptions}				from '@ng-bootstrap/ng-bootstrap';
 import { CandidateSkill } 						from './candidate-skill';
 import { AppComponent} 							from '../app.component';
 import { SupportedCountry } 					from '../supported-candidate';
-import { RequestFilters, SuggestionsSearchRequest } 			from '../suggestions/suggestion-search-request';
+import { SuggestionsSearchRequest } 			from '../suggestions/suggestion-search-request';
 
 @Component({
   selector: 'app-accounts',
@@ -132,19 +132,19 @@ export class AccountsComponent implements OnInit {
 	/**
 	* Builds a query parameter string for flaggedAsUnavailable Candidates
 	*/
-	private getCandidateFlaggedAsUnavailableFilterParamString():string{
+	//private getCandidateFlaggedAsUnavailableFilterParamString():string{
     	
-		const filterParams:string = 
-								'orderAttribute=candidateId'
-                                 + "&order=desc" 
-                                 + '&page=0'
-                                 + '&size=5000'
-								 + '&available=true'
-                                 + '&flaggedAsUnavailable=true';
+	//	const filterParams:string = 
+	//							'orderAttribute=candidateId'
+     //                            + "&order=desc" 
+    //                             + '&page=0'
+    //                             + '&size=5000'
+	//							 + '&available=true'
+//    / /                            + '&flaggedAsUnavailable=true';
 
-		return filterParams;
+//		return filterParams;
 	
-	}
+//	}
 	
 	/**
 	*  Returns the url to perform the download of the candidates CV
@@ -168,7 +168,7 @@ export class AccountsComponent implements OnInit {
 		
 	}
 	
-	public fetchCandidatesByFilters(filterParams:string, includeUnavailable:boolean):void{
+	public fetchCandidatesByFilters(includeUnavailable:boolean):void{
 		
 		this.candidates = new Array<Candidate>();
 
@@ -237,7 +237,7 @@ export class AccountsComponent implements OnInit {
 	* Retrieves candidates from the backend
 	*/
 	public fetchFlaggedAsUnavailableCandidates(): void{
-    	this.fetchCandidatesByFilters(this.getCandidateFlaggedAsUnavailableFilterParamString(), false);
+    	this.fetchCandidatesByFilters(false);
 	}
 	
 	public updateCandidateAvailability(candidateId:string, action:string):void{

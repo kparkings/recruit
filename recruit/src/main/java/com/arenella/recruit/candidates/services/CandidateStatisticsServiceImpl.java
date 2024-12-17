@@ -335,17 +335,17 @@ public class CandidateStatisticsServiceImpl implements CandidateStatisticsServic
 	private CandidateSearchEvent generateEvent(String userId, UUID searchId, String skill, COUNTRY country, FUNCTION function, CandidateFilterOptions filterOptions) {
 		
 		//TODO: [KP ] Refactor for all languages
-		Optional<Language>  dutch = filterOptions.getLanguages().stream().filter(l -> l.getLanguage() == LANGUAGE.DUTCH).findAny();
-		Optional<Language> french = filterOptions.getLanguages().stream().filter(l -> l.getLanguage() == LANGUAGE.FRENCH).findAny();
-		Optional<Language> english = filterOptions.getLanguages().stream().filter(l -> l.getLanguage() == LANGUAGE.ENGLISH).findAny();
+		Optional<Language.LANGUAGE>  dutch = filterOptions.getLanguages().stream().filter(l -> l == LANGUAGE.DUTCH).findAny();
+		Optional<Language.LANGUAGE> french = filterOptions.getLanguages().stream().filter(l -> l == LANGUAGE.FRENCH).findAny();
+		Optional<Language.LANGUAGE> english = filterOptions.getLanguages().stream().filter(l -> l == LANGUAGE.ENGLISH).findAny();
 		
 		return CandidateSearchEvent
 							.builder()
 								.searchId(searchId)
 								.country(country)
-								.dutch(dutch.isPresent() ? dutch.get().getLevel() : null)
-								.english(english.isPresent() ? english.get().getLevel() : null)
-								.french(french.isPresent() ? french.get().getLevel() : null)
+								.dutch(dutch.isPresent() ? Language.LEVEL.PROFICIENT : null)
+								.english(english.isPresent() ? Language.LEVEL.PROFICIENT : null)
+								.french(french.isPresent() ? Language.LEVEL.PROFICIENT : null)
 								.freelance(filterOptions.isFreelance().orElse(true))
 								.function(function)
 								.perm(filterOptions.isPerm().orElse(true))

@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
 import com.arenella.recruit.candidates.beans.CandidateFilterOptions;
-import com.arenella.recruit.candidates.beans.Language;
 import com.arenella.recruit.candidates.beans.Language.LANGUAGE;
 import com.arenella.recruit.candidates.enums.COUNTRY;
 import com.arenella.recruit.candidates.enums.FUNCTION;
@@ -39,9 +38,6 @@ public class ESFilteredSearchRequestBuilderTest {
 	private static final boolean 			AVAILABLE 							= true;
 	private static final int 				YEARS_EXPERIENCE_GTE				= 3;
 	private static final int				YEARS_EXPERIENCE_LTE				= 5;
-	private static final Language.LEVEL 	DUTCH								= Language.LEVEL.PROFICIENT;
-	private static final Language.LEVEL 	ENGLISH								= Language.LEVEL.BASIC;;	
-	private static final Language.LEVEL 	FRENCH								= Language.LEVEL.UNKNOWN;
 	private static final Set<String>		SKILLS								= Set.of("JaVa","Qa");
 	private static final String				FIRSTNAME							= "kevin";
 	private static final String 			SURNAME								= "parkings";
@@ -61,9 +57,9 @@ public class ESFilteredSearchRequestBuilderTest {
 					.countries(COUNTRIES)
 					.daysSinceLastAvailabilityCheck(DAYS_SINCE_LAST_AVAILABILITY_CHECK)
 					.languages(Set.of(
-							Language.builder().language(LANGUAGE.ENGLISH).level(ENGLISH).build(),
-							Language.builder().language(LANGUAGE.DUTCH).level(DUTCH).build(),
-							Language.builder().language(LANGUAGE.FRENCH).level(FRENCH).build())
+							LANGUAGE.ENGLISH,
+							LANGUAGE.DUTCH,
+							LANGUAGE.FRENCH)
 					)
 					.email(EMAIL)
 					.firstname(FIRSTNAME)

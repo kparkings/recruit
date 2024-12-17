@@ -12,7 +12,6 @@ import org.junit.jupiter.api.Test;
 
 import com.arenella.recruit.candidates.beans.CandidateFilterOptions.GeoPosFilter;
 import com.arenella.recruit.candidates.beans.Language.LANGUAGE;
-import com.arenella.recruit.candidates.beans.Language.LEVEL;
 import com.arenella.recruit.candidates.enums.COUNTRY;
 import com.arenella.recruit.candidates.enums.FUNCTION;
 import com.arenella.recruit.candidates.enums.RESULT_ORDER;
@@ -32,14 +31,11 @@ class CandidateFilterOptionsTest {
 	@Test
 	void testBuilder() {
 		
-		Set<String> 			candidateIds 						= new HashSet<>();
-		Set<GEO_ZONE> 			geoZones 							= new HashSet<>();
-		Set<COUNTRY> 			countries 							= new HashSet<>();
-		Set<FUNCTION> 			functions 							= new HashSet<>();
-		Set<String> 			skills 								= new HashSet<>();
-		Language.LEVEL 			dutch 								= Language.LEVEL.PROFICIENT;
-		Language.LEVEL 			english 							= Language.LEVEL.BASIC;
-		Language.LEVEL 			french 								= Language.LEVEL.BASIC;
+		Set<String> 			candidateIds 							= new HashSet<>();
+		Set<GEO_ZONE> 			geoZones 								= new HashSet<>();
+		Set<COUNTRY> 			countries 								= new HashSet<>();
+		Set<FUNCTION> 			functions 								= new HashSet<>();
+		Set<String> 			skills 									= new HashSet<>();
 		boolean 				freelance	 							= false;
 		boolean 				perm 									= true;
 		String 					orderAttribute 							= "candidateId";
@@ -71,9 +67,9 @@ class CandidateFilterOptionsTest {
 													.geoZones(geoZones)
 													.countries(countries)
 													.languages(Set.of(
-															Language.builder().language(LANGUAGE.ENGLISH).level(english).build(),
-															Language.builder().language(LANGUAGE.DUTCH).level(dutch).build(),
-															Language.builder().language(LANGUAGE.FRENCH).level(french).build())
+															LANGUAGE.ENGLISH,
+															LANGUAGE.DUTCH,
+															LANGUAGE.FRENCH)
 													)
 													.freelance(freelance)
 													.perm(perm)
@@ -102,9 +98,9 @@ class CandidateFilterOptionsTest {
 		assertEquals(filters.getFunctions().stream().findAny().get(), 		FUNCTION.PROJECT_MANAGER);
 		assertEquals(filters.getSkills().stream().findAny().get(), 			skill);
 		
-		assertEquals(filters.getLanguages().stream().filter(l -> l.getLanguage() == LANGUAGE.DUTCH).findFirst().get().getLevel(), dutch);
-		assertEquals(filters.getLanguages().stream().filter(l -> l.getLanguage() == LANGUAGE.FRENCH).findFirst().get().getLevel(), french);
-		assertEquals(filters.getLanguages().stream().filter(l -> l.getLanguage() == LANGUAGE.ENGLISH).findFirst().get().getLevel(), english);
+		assertTrue(filters.getLanguages().stream().filter(l -> l == LANGUAGE.DUTCH).findFirst().isPresent());
+		assertTrue(filters.getLanguages().stream().filter(l -> l == LANGUAGE.FRENCH).findFirst().isPresent());
+		assertTrue(filters.getLanguages().stream().filter(l -> l == LANGUAGE.ENGLISH).findFirst().isPresent());
 		assertEquals(filters.getOrder().get(), 								RESULT_ORDER.asc);
 		assertEquals(filters.getOrderAttribute().get(), 					orderAttribute);
 		assertEquals(filters.getYearsExperienceGtEq(), 						yearsExperienceGtEq);
@@ -166,9 +162,9 @@ class CandidateFilterOptionsTest {
 													.geoZones(geoZones)
 													.countries(countries)
 													.languages(Set.of(
-															Language.builder().language(LANGUAGE.ENGLISH).level(LEVEL.PROFICIENT).build(),
-															Language.builder().language(LANGUAGE.DUTCH).level(LEVEL.BASIC).build(),
-															Language.builder().language(LANGUAGE.FRENCH).level(LEVEL.BASIC).build())
+															LANGUAGE.ENGLISH,
+															LANGUAGE.DUTCH,
+															LANGUAGE.FRENCH)
 													)
 													.freelance(freelance)
 													.perm(perm)

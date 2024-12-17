@@ -383,9 +383,9 @@ public class CandidateSuggestionUtilImplTest {
 		CandidateFilterOptions 	filters 	= CandidateFilterOptions.builder()
 				
 				.languages(Set.of(
-						Language.builder().language(LANGUAGE.ENGLISH).level(LEVEL.PROFICIENT).build(),
-						Language.builder().language(LANGUAGE.DUTCH).level(LEVEL.PROFICIENT).build(),
-						Language.builder().language(LANGUAGE.FRENCH).level(LEVEL.PROFICIENT).build())
+						LANGUAGE.ENGLISH,
+						LANGUAGE.DUTCH,
+						LANGUAGE.FRENCH)
 				).build();
 		
 		assertTrue(util.isPerfectMatch(new CandidateSearchAccuracyWrapper(candidate), filters, Set.of()));
@@ -407,9 +407,9 @@ public class CandidateSuggestionUtilImplTest {
 		
 		CandidateFilterOptions 	filters 	= CandidateFilterOptions.builder()
 				.languages(Set.of(
-						Language.builder().language(LANGUAGE.ENGLISH).level(LEVEL.PROFICIENT).build(),
-						Language.builder().language(LANGUAGE.DUTCH).level(LEVEL.PROFICIENT).build(),
-						Language.builder().language(LANGUAGE.FRENCH).level(LEVEL.PROFICIENT).build())
+						LANGUAGE.ENGLISH,
+						LANGUAGE.DUTCH,
+						LANGUAGE.FRENCH)
 				).build();
 		
 		assertFalse(util.isPerfectMatch(new CandidateSearchAccuracyWrapper(candidate), filters, Set.of()));

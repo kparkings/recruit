@@ -107,7 +107,7 @@ public class CandidateSuggestionUtilImpl implements CandidateSuggestionUtil{
 	* @param languages	- Languages required
 	* @return
 	*/
-	private int getAccuracyOfLanguageMatch(CandidateSearchAccuracyWrapper candidate, Set<Language> languages) {
+	private int getAccuracyOfLanguageMatch(CandidateSearchAccuracyWrapper candidate, Set<Language.LANGUAGE> languages) {
 		
 		int 			totalPossibleLanguagePoints = getMaxAvailableLanguagePoints(languages);
 		AtomicInteger 	points 						= new AtomicInteger(0);
@@ -120,7 +120,7 @@ public class CandidateSuggestionUtilImpl implements CandidateSuggestionUtil{
 		}
 		
 		languages.stream().forEach(language -> {
-			points.addAndGet(getCandidateLanguagePoints(language.getLanguage(), language.getLevel(), candidate));
+			points.addAndGet(getCandidateLanguagePoints(language, Language.LEVEL.PROFICIENT, candidate));
 		});
 		
 		if (points.get() == 0) {
@@ -139,22 +139,22 @@ public class CandidateSuggestionUtilImpl implements CandidateSuggestionUtil{
 	* @param languages - Required languages
 	* @return Max obtainable score that a Candidate can reach in relation to languages
 	*/
-	private int getMaxAvailableLanguagePoints(Set<Language> languages) {
+	private int getMaxAvailableLanguagePoints(Set<Language.LANGUAGE> languages) {
 
 		AtomicInteger totalPossibleLanguagePoints = new AtomicInteger(0);
 		
 		languages.stream().forEach(language -> {
-			switch(language.getLevel()) {
-				case BASIC:{
-					totalPossibleLanguagePoints.addAndGet(POINTS_FOR_BASIC);
-				}
-				case PROFICIENT:{
+			//switch(language.getLevel()) {
+			//	case BASIC:{
+			//		totalPossibleLanguagePoints.addAndGet(POINTS_FOR_BASIC);
+			//	}
+			//	case PROFICIENT:{
 					totalPossibleLanguagePoints.addAndGet(POINTS_FOR_PROFICIENT);
-				}
-				default:{
-					
-				}
-			}
+			//	}
+			//	default:{
+			//		
+			//	}
+			//}
 		});
 			
 		return totalPossibleLanguagePoints.get();

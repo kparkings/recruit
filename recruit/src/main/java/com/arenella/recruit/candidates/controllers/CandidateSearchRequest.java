@@ -7,7 +7,6 @@ import com.arenella.recruit.candidates.beans.CandidateFilterOptions.CandidateFil
 import com.arenella.recruit.candidates.beans.Language;
 import com.arenella.recruit.candidates.enums.COUNTRY;
 import com.arenella.recruit.candidates.enums.FREELANCE;
-import com.arenella.recruit.candidates.enums.FUNCTION;
 import com.arenella.recruit.candidates.enums.PERM;
 import com.arenella.recruit.candidates.enums.RESULT_ORDER;
 import com.arenella.recruit.candidates.utils.GeoZoneSearchUtil.GEO_ZONE;
@@ -614,7 +613,7 @@ public class CandidateSearchRequest {
 	*/
 	public static class LanguageFilters{
 		
-		private Set<Language> languages = new HashSet<>();
+		private Set<Language.LANGUAGE> languages = new HashSet<>();
 		
 		/**
 		* Default constructor 
@@ -627,7 +626,7 @@ public class CandidateSearchRequest {
 		* Constructor
 		* @param languages - Languages to filter on
 		*/
-		public LanguageFilters(Set<Language> languages) {
+		public LanguageFilters(Set<Language.LANGUAGE> languages) {
 			if (Optional.ofNullable(languages).isPresent()) {
 				this.languages.clear();
 				this.languages.addAll(languages);
@@ -638,7 +637,7 @@ public class CandidateSearchRequest {
 		* Returns Languages to filter on
 		* @return
 		*/
-		public Set<Language> getLanguages(){
+		public Set<Language.LANGUAGE> getLanguages(){
 			return this.languages;
 		}
 		
@@ -1084,16 +1083,13 @@ public class CandidateSearchRequest {
 			CandidateSearchRequest 	req, 
 			String 					orderAttribute, 
 			RESULT_ORDER 			order,
-			Set<String> 			candidateIdFilters, 
-			Set<FUNCTION> 			functions) {
+			Set<String> 			candidateIdFilters) {
 		
 		CandidateFilterOptionsBuilder builder = CandidateFilterOptions.builder();
 		
 		builder.orderAttribute(orderAttribute);
 		builder.order(order);
 		builder.candidateIds(candidateIdFilters);
-		builder.functions(functions);
-		
 		
 		req.candidateFilters().ifPresent(f -> {
 			f.getOwnerId().ifPresent(builder::ownerId);
@@ -1103,7 +1099,7 @@ public class CandidateSearchRequest {
 		
 		req.contractFilters().ifPresent(f -> {
 			f.getContract().ifPresent(c 	-> builder.freelance(true));
-			f.getPerm().ifPresent(p 		-> builder.freelance(true));
+			f.getPerm().ifPresent(p 		-> builder.perm(true));
 		});
 		
 		req.experienceFilters().ifPresent(f -> f.getExperienceMax().ifPresent(builder::yearsExperienceLtEq));

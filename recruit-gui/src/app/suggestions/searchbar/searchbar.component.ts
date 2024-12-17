@@ -472,8 +472,8 @@ export class SearchbarComponent {
 		ssReq.requestFilters.isUnfiltered 							= isUnfiltered;
 		ssReq.requestFilters.maxNumberOfSuggestions 				= maxSuggestions;
 		
-		ssReq.contractFilters.contract 								= params.getContract();
-		ssReq.contractFilters.perm 									= params.getPerm();
+		ssReq.contractFilters.contract 								= params.getContract()?.toUpperCase();
+		ssReq.contractFilters.perm 									= params.getPerm()?.toUpperCase();
 		
 		ssReq.experienceFilters.experienceMin 						= params.getMinExperience();
 		ssReq.experienceFilters.experienceMax 						= params.getMaxExperience();

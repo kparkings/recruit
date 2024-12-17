@@ -119,20 +119,18 @@ public class AlertTestUtilImpl implements AlertTestUtil{
 			public void run() {
 				
 				//REFACTOR TO USE ALL LANGIAGES
-				Set<Language> languages = new HashSet<>();
-				
-				
+				Set<Language.LANGUAGE> languages = new HashSet<>();
 				
 				if (alert.getDutch() != LEVEL.UNKNOWN){
-					languages.add(Language.builder().language(LANGUAGE.DUTCH).level(alert.getDutch()).build());
+					languages.add(LANGUAGE.DUTCH);
 				}
 				
 				if (alert.getEnglish() != LEVEL.UNKNOWN){
-					languages.add(Language.builder().language(LANGUAGE.ENGLISH).level(alert.getEnglish()).build());
+					languages.add(LANGUAGE.ENGLISH);
 				}
 				
 				if (alert.getFrench() != LEVEL.UNKNOWN){
-					languages.add(Language.builder().language(LANGUAGE.FRENCH).level(alert.getFrench()).build());
+					languages.add(LANGUAGE.FRENCH);
 				}
 				
 				//END REFACTOR

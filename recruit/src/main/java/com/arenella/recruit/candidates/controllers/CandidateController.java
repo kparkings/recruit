@@ -3,7 +3,6 @@ package com.arenella.recruit.candidates.controllers;
 import java.io.IOException;
 import java.security.Principal;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -38,11 +37,9 @@ import com.arenella.recruit.candidates.beans.CandidateExtractedFilters;
 import com.arenella.recruit.candidates.beans.CandidateFilterOptions;
 import com.arenella.recruit.candidates.beans.CandidateSearchAccuracyWrapper;
 import com.arenella.recruit.candidates.beans.CandidateUpdateRequest;
-import com.arenella.recruit.candidates.beans.Language;
 import com.arenella.recruit.candidates.beans.Language.LANGUAGE;
 import com.arenella.recruit.candidates.controllers.CandidateSearchRequest.RequestFilters;
 import com.arenella.recruit.candidates.enums.COUNTRY;
-import com.arenella.recruit.candidates.enums.FUNCTION;
 import com.arenella.recruit.candidates.enums.RESULT_ORDER;
 import com.arenella.recruit.candidates.services.CandidateService;
 import com.arenella.recruit.candidates.utils.CandidateSearchUtil;
@@ -168,10 +165,7 @@ public class CandidateController {
 			@RequestBody CandidateSearchRequest 	searchRequest, 
 			@RequestParam("orderAttribute") 		String 				orderAttribute,
 			@RequestParam("order") 					RESULT_ORDER		order,
-			@RequestParam(required = false) 		Set<FUNCTION> 		functions,
-			@RequestParam(required = false)			String				ownerId,
-			@RequestParam(required = false)			Integer				daysSinceLastAvailabilityCheck,
-			
+			//@RequestParam(required = false) 		Set<FUNCTION> 		functions,
 						 Pageable 					pageable,
 						 Principal 					principal,
 						 HttpServletResponse	 	response) throws Exception{
@@ -192,8 +186,7 @@ public class CandidateController {
 							searchRequest, 
 							orderAttribute, 
 							order, 
-							candidateIdFilters, 
-							functions);
+							candidateIdFilters);
 		
 		
 		Boolean 	unfiltered 			= searchRequest.requestFilters().map(RequestFilters::getUnfiltered).orElse(Optional.empty()).orElse(null);
@@ -235,123 +228,123 @@ public class CandidateController {
 	* @param skills					- Optional Skills to filter on
 	* @return Page of results
 	*/
-	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('RECRUITER') OR hasRole('CANDIDATE')")
-	@GetMapping(path="candidate")
-	public Page<CandidateAPIOutbound> getCandidate( @RequestParam("orderAttribute") 	String 				orderAttribute,
-													@RequestParam("order") 				RESULT_ORDER		order,
-													@RequestParam(required = false) 	Set<String> 		candidateId,
-													@RequestParam(required = false) 	Set<GEO_ZONE>		geoZones,
-													@RequestParam(required = false) 	Set<COUNTRY> 		countries,
-													@RequestParam(required = false) 	Set<FUNCTION> 		functions,
-													@RequestParam(required = false) 	Boolean 			freelance,
-													@RequestParam(required = false) 	Boolean 			perm,
-													@RequestParam(required = false) 	Integer				yearsExperienceGtEq,
-													@RequestParam(required = false) 	Integer				yearsExperienceLtEq,
-													@RequestParam(required = false) 	Language.LEVEL 		dutch,
-													@RequestParam(required = false) 	Language.LEVEL 		english,
-													@RequestParam(required = false) 	Language.LEVEL 		french,
-													@RequestParam(required = false) 	Language.LEVEL 		german,
-													@RequestParam(required = false) 	Language.LEVEL 		italian,
-													@RequestParam(required = false) 	Language.LEVEL 		polish,
-													@RequestParam(required = false) 	Language.LEVEL 		portuguese,
-													@RequestParam(required = false) 	Language.LEVEL 		spanish,
-													@RequestParam(required = false) 	Set<String>			skills,
-													@RequestParam(required = false) 	String				firstname,
-													@RequestParam(required = false) 	String				surname,
-													@RequestParam(required = false) 	String				email,
-													@RequestParam(required = false) 	Boolean				flaggedAsUnavailable,
-													@RequestParam(required = false)		Integer				daysSinceLastAvailabilityCheck,
-													@RequestParam(required = false)		String				searchText,
-													@RequestParam(required = false)		Boolean				available,
-													@RequestParam(required = false)		String				ownerId,
-													@RequestParam(required = false)		Boolean				includeRequiresSponsorship,
-													@RequestParam(required = false)		Boolean				unfiltered,
-													@RequestParam(required = false)		COUNTRY				locCountry,
-													@RequestParam(required = false)		String				locCity,
-													@RequestParam(required = false)		Integer				locDistance,
-													
-													Integer				backendRequestId,
-													Pageable 			pageable,
-													Principal 			principal,
-													HttpServletResponse response
-													) throws Exception{
+	//@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('RECRUITER') OR hasRole('CANDIDATE')")
+	//@GetMapping(path="candidate")
+	//public Page<CandidateAPIOutbound> getCandidate( @RequestParam("orderAttribute") 	String 				orderAttribute,
+	//												@RequestParam("order") 				RESULT_ORDER		order,
+	//												@RequestParam(required = false) 	Set<String> 		candidateId,
+	//												@RequestParam(required = false) 	Set<GEO_ZONE>		geoZones,
+	//												@RequestParam(required = false) 	Set<COUNTRY> 		countries,
+	//												@RequestParam(required = false) 	Set<FUNCTION> 		functions,
+	//												@RequestParam(required = false) 	Boolean 			freelance,
+	//												@RequestParam(required = false) 	Boolean 			perm,
+	//												@RequestParam(required = false) 	Integer				yearsExperienceGtEq,
+	//												@RequestParam(required = false) 	Integer				yearsExperienceLtEq,
+	//												@RequestParam(required = false) 	Language.LEVEL 		dutch,
+	//												@RequestParam(required = false) 	Language.LEVEL 		english,
+	//												@RequestParam(required = false) 	Language.LEVEL 		french,
+	//												@RequestParam(required = false) 	Language.LEVEL 		german,
+	//												@RequestParam(required = false) 	Language.LEVEL 		italian,
+	//												@RequestParam(required = false) 	Language.LEVEL 		polish,
+	//												@RequestParam(required = false) 	Language.LEVEL 		portuguese,
+	//												@RequestParam(required = false) 	Language.LEVEL 		spanish,
+	//												@RequestParam(required = false) 	Set<String>			skills,
+	//												@RequestParam(required = false) 	String				firstname,
+	//												@RequestParam(required = false) 	String				surname,
+	//												@RequestParam(required = false) 	String				email,
+	//												@RequestParam(required = false) 	Boolean				flaggedAsUnavailable,
+	//												@RequestParam(required = false)		Integer				daysSinceLastAvailabilityCheck,
+	//												@RequestParam(required = false)		String				searchText,
+	//												@RequestParam(required = false)		Boolean				available,
+	//												@RequestParam(required = false)		String				ownerId,
+	//												@RequestParam(required = false)		Boolean				includeRequiresSponsorship,
+	//												@RequestParam(required = false)		Boolean				unfiltered,
+	//												@RequestParam(required = false)		COUNTRY				locCountry,
+	//												@RequestParam(required = false)		String				locCity,
+	//												@RequestParam(required = false)		Integer				locDistance,
+	//												
+	//												Integer				backendRequestId,
+	//												Pageable 			pageable,
+	//												Principal 			principal,
+	//												HttpServletResponse response
+	//												) throws Exception{
+	//	
+	//	Set<String> candidateIdFilters = new LinkedHashSet<>();
+	//	
+	//	if (this.isCandidate(principal)) {
+	//		candidateIdFilters.add(getLoggedInUserName(principal));
+	//	} else if(Optional.ofNullable(candidateId).isPresent()) {
+	//		candidateIdFilters.addAll(candidateId);
+	//	}
+	//	
+	//	//REFACTOR - SHOULD COME AS SET FROM FE REQUEST 
+	//	Set<Language> languages = new HashSet<>();
+	//	
+	//	if (Optional.ofNullable(dutch).isPresent()){
+	//		languages.add(Language.builder().language(LANGUAGE.DUTCH).level(dutch).build());
+	//	}
+	//	
+	//	if (Optional.ofNullable(english).isPresent()){
+	//		languages.add(Language.builder().language(LANGUAGE.ENGLISH).level(english).build());
+	//	}
+	//	
+	//	if (Optional.ofNullable(french).isPresent()){
+	//		languages.add(Language.builder().language(LANGUAGE.FRENCH).level(french).build());
+	//	}
+	//	
+	//	if (Optional.ofNullable(german).isPresent()){
+	//		languages.add(Language.builder().language(LANGUAGE.GERMAN).level(german).build());
+	//	}
+	//	
+	//	if (Optional.ofNullable(italian).isPresent()){
+	//		languages.add(Language.builder().language(LANGUAGE.ITALIAN).level(italian).build());
+	//	}
+	//	
+	//	if (Optional.ofNullable(polish).isPresent()){
+	//		languages.add(Language.builder().language(LANGUAGE.POLISH).level(polish).build());
+	//	}
+	//	
+	//	if (Optional.ofNullable(portuguese).isPresent()){
+	//		languages.add(Language.builder().language(LANGUAGE.PORTUGUESE).level(portuguese).build());
+	//	}
+	//	
+	//	if (Optional.ofNullable(spanish).isPresent()){
+	//		languages.add(Language.builder().language(LANGUAGE.SPANISH).level(spanish).build());
+	//	}
 		
-		Set<String> candidateIdFilters = new LinkedHashSet<>();
+	//	//END REFACTOR
 		
-		if (this.isCandidate(principal)) {
-			candidateIdFilters.add(getLoggedInUserName(principal));
-		} else if(Optional.ofNullable(candidateId).isPresent()) {
-			candidateIdFilters.addAll(candidateId);
-		}
-		
-		//REFACTOR - SHOULD COME AS SET FROM FE REQUEST 
-		Set<Language> languages = new HashSet<>();
-		
-		if (Optional.ofNullable(dutch).isPresent()){
-			languages.add(Language.builder().language(LANGUAGE.DUTCH).level(dutch).build());
-		}
-		
-		if (Optional.ofNullable(english).isPresent()){
-			languages.add(Language.builder().language(LANGUAGE.ENGLISH).level(english).build());
-		}
-		
-		if (Optional.ofNullable(french).isPresent()){
-			languages.add(Language.builder().language(LANGUAGE.FRENCH).level(french).build());
-		}
-		
-		if (Optional.ofNullable(german).isPresent()){
-			languages.add(Language.builder().language(LANGUAGE.GERMAN).level(german).build());
-		}
-		
-		if (Optional.ofNullable(italian).isPresent()){
-			languages.add(Language.builder().language(LANGUAGE.ITALIAN).level(italian).build());
-		}
-		
-		if (Optional.ofNullable(polish).isPresent()){
-			languages.add(Language.builder().language(LANGUAGE.POLISH).level(polish).build());
-		}
-		
-		if (Optional.ofNullable(portuguese).isPresent()){
-			languages.add(Language.builder().language(LANGUAGE.PORTUGUESE).level(portuguese).build());
-		}
-		
-		if (Optional.ofNullable(spanish).isPresent()){
-			languages.add(Language.builder().language(LANGUAGE.SPANISH).level(spanish).build());
-		}
-		
-		//END REFACTOR
-		
-		CandidateFilterOptions filterOptions = CandidateFilterOptions
-																	.builder()
-																		.orderAttribute(orderAttribute)
-																		.order(order)
-																		.candidateIds(candidateIdFilters)
-																		.geoZones(geoZones)
-																		.countries(countries)
-																		.functions(functions)
-																		.freelance(freelance)
-																		.perm(perm)
-																		.yearsExperienceGtEq(yearsExperienceGtEq)
-																		.yearsExperienceLtEq(yearsExperienceLtEq)
-																		.languages(languages)
-																		.skills(skills)
-																		.flaggedAsUnavailable(flaggedAsUnavailable)
-																		.firstname(firstname)
-																		.surname(surname)
-																		.email(email)
-																		.daysSinceLastAvailabilityCheck(daysSinceLastAvailabilityCheck)
-																		.searchText(searchText)
-																		.available(available)
-																		.ownerId(ownerId)
-																		.includeRequiresSponsorship(includeRequiresSponsorship)
-																		.geoPosFilter(locCountry, locCity, locDistance)
-																	.build();
-		
-		response.setHeader("X-Arenella-Request-Id", ""+(backendRequestId == null ? 0 : backendRequestId.intValue()));
-		
-		return candidateSearchUtil.searchAndPackageForAPIOutput(isRecruiter(principal), isUseCredits(principal), userCreditsExpired(getLoggedInUserName(principal)), filterOptions, pageable, unfiltered);
-		
-	}
+	//	CandidateFilterOptions filterOptions = CandidateFilterOptions
+	//																.builder()
+	//																	.orderAttribute(orderAttribute)
+	//																	.order(order)
+	//																	.candidateIds(candidateIdFilters)
+	//																	.geoZones(geoZones)
+	//																	.countries(countries)
+	//																	.functions(functions)
+	//																	.freelance(freelance)
+	//																	.perm(perm)
+	//																	.yearsExperienceGtEq(yearsExperienceGtEq)
+	//																	.yearsExperienceLtEq(yearsExperienceLtEq)
+	//																	.languages(languages)
+	//																	.skills(skills)
+	//																	.flaggedAsUnavailable(flaggedAsUnavailable)
+	//																	.firstname(firstname)
+	//																	.surname(surname)
+	//																	.email(email)
+	//																	.daysSinceLastAvailabilityCheck(daysSinceLastAvailabilityCheck)
+	//																	.searchText(searchText)
+	//																	.available(available)
+	//																	.ownerId(ownerId)
+	//																	.includeRequiresSponsorship(includeRequiresSponsorship)
+	//																	.geoPosFilter(locCountry, locCity, locDistance)
+	//																.build();
+	//	
+	//	response.setHeader("X-Arenella-Request-Id", ""+(backendRequestId == null ? 0 : backendRequestId.intValue()));
+	//	
+	//	return candidateSearchUtil.searchAndPackageForAPIOutput(isRecruiter(principal), isUseCredits(principal), userCreditsExpired(getLoggedInUserName(principal)), filterOptions, pageable, unfiltered);
+	//	
+	//}
 	
 	/**
 	* Returns the number of credits the Candidate has left

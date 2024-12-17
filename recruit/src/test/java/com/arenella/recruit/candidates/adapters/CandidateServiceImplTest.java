@@ -676,9 +676,9 @@ class CandidateServiceImplTest {
 					.builder()
 						.skills(Set.of("JAVA"))
 						.languages(Set.of(
-								Language.builder().language(LANGUAGE.ENGLISH).level(LEVEL.PROFICIENT).build(),
-								Language.builder().language(LANGUAGE.DUTCH).level(LEVEL.PROFICIENT).build(),
-								Language.builder().language(LANGUAGE.FRENCH).level(LEVEL.PROFICIENT).build())
+								LANGUAGE.ENGLISH,
+								LANGUAGE.DUTCH,
+								LANGUAGE.FRENCH)
 						)
 					.build();
 		
@@ -710,9 +710,9 @@ class CandidateServiceImplTest {
 					.builder()
 						.skills(Set.of("JAVA"))
 						.languages(Set.of(
-								Language.builder().language(LANGUAGE.ENGLISH).level(LEVEL.PROFICIENT).build(),
-								Language.builder().language(LANGUAGE.DUTCH).level(LEVEL.PROFICIENT).build(),
-								Language.builder().language(LANGUAGE.FRENCH).level(LEVEL.PROFICIENT).build())
+								LANGUAGE.ENGLISH,
+								LANGUAGE.DUTCH,
+								LANGUAGE.FRENCH)
 						)
 					.build();
 		
@@ -754,9 +754,9 @@ class CandidateServiceImplTest {
 					.builder()
 						.skills(Set.of("JAVA"))
 						.languages(Set.of(
-								Language.builder().language(LANGUAGE.ENGLISH).level(LEVEL.PROFICIENT).build(),
-								Language.builder().language(LANGUAGE.DUTCH).level(LEVEL.PROFICIENT).build(),
-								Language.builder().language(LANGUAGE.FRENCH).level(LEVEL.PROFICIENT).build())
+								LANGUAGE.ENGLISH,
+								LANGUAGE.DUTCH,
+								LANGUAGE.FRENCH)
 						)
 					.build();
 		

@@ -46,7 +46,7 @@ public class CandidateSearchUtilTest {
 	* Tests all candidates have appropriate details masked
 	* @throws Exception
 	*/
-	@SuppressWarnings({ "unused", "unchecked", "rawtypes" })
+	@SuppressWarnings({"unchecked", "rawtypes" })
 	@Test
 	public void testRecriterWithExpiredCredits() throws Exception{
 		

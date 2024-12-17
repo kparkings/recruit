@@ -17,35 +17,35 @@ import com.arenella.recruit.candidates.utils.GeoZoneSearchUtil.GEO_ZONE;
 */
 public class CandidateFilterOptions {
 	
-	private String 				orderAttribute;
-	private RESULT_ORDER		order;
-	private String				searchText									= "";
-	private Set<String> 		candidateIds								= new HashSet<>();
-	private Set<GEO_ZONE>		geoZones									= new HashSet<>();
-	private GeoPosFilter		geoPosFilter							 	= null;
-	private COUNTRY				locCountry								 	= null;
-	private String 				locCity										= null;
-	private Integer				locDistance									= null;
-	private Set<COUNTRY> 		countries									= new HashSet<>();
-	private Set<FUNCTION> 		functions									= new HashSet<>();
-	private Optional<Boolean> 	freelance									= Optional.empty();
-	private Optional<Boolean> 	perm										= Optional.empty();
-	private Boolean			 	available									= null;
-	private int 				yearsExperienceGtEq;
-	private int					yearsExperienceLtEq;
-	private Set<Language>		languages									= new HashSet<>();
-	private Set<String>			skills										= new HashSet<>();
-	private String				firstname;
-	private String 				surname;
-	private String 				email;
-	private Boolean				flaggedAsUnavailable 						= false;
-	private Integer				daysSinceLastAvailabilityCheck;
-	private String				ownerId;
-	private Boolean				includeRequiresSponsorship					= null;
-	private LocalDate			registeredAfter								= null;
-	private LocalDate			lastAccountRefreshLtEq						= null;
-	private Boolean				lastAccountRefreshMissing		 			= null;
-	private Integer				daysSincelastAvailabilityCheckEmailSent		= null;
+	private String 						orderAttribute;
+	private RESULT_ORDER				order;
+	private String						searchText									= "";
+	private Set<String> 				candidateIds								= new HashSet<>();
+	private Set<GEO_ZONE>				geoZones									= new HashSet<>();
+	private GeoPosFilter				geoPosFilter							 	= null;
+	private COUNTRY						locCountry								 	= null;
+	private String 						locCity										= null;
+	private Integer						locDistance									= null;
+	private Set<COUNTRY> 				countries									= new HashSet<>();
+	private Set<FUNCTION> 				functions									= new HashSet<>();
+	private Optional<Boolean> 			freelance									= Optional.empty();
+	private Optional<Boolean> 			perm										= Optional.empty();
+	private Boolean			 			available									= null;
+	private int 						yearsExperienceGtEq;
+	private int							yearsExperienceLtEq;
+	private Set<Language.LANGUAGE>		languages									= new HashSet<>();
+	private Set<String>					skills										= new HashSet<>();
+	private String						firstname;
+	private String 						surname;
+	private String 						email;
+	private Boolean						flaggedAsUnavailable 						= false;
+	private Integer						daysSinceLastAvailabilityCheck;
+	private String						ownerId;
+	private Boolean						includeRequiresSponsorship					= null;
+	private LocalDate					registeredAfter								= null;
+	private LocalDate					lastAccountRefreshLtEq						= null;
+	private Boolean						lastAccountRefreshMissing		 			= null;
+	private Integer						daysSincelastAvailabilityCheckEmailSent		= null;
 	
 	/**
 	* Builder for the  
@@ -209,7 +209,7 @@ public class CandidateFilterOptions {
 	* Returns the Languages to filter on
 	* @return languages to filter on
 	*/
-	public Set<Language> getLanguages(){
+	public Set<Language.LANGUAGE> getLanguages(){
 		return this.languages;
 	}
 	
@@ -397,35 +397,35 @@ public class CandidateFilterOptions {
 	*/
 	public static class CandidateFilterOptionsBuilder {
 		
-		private String 				orderAttribute;
-		private RESULT_ORDER		order;
-		private Set<String> 		candidateIds								= new HashSet<>();
-		private Set<GEO_ZONE>		geoZones									= new HashSet<>();
-		private GeoPosFilter		geoPosFilter							 	= null;
-		private Set<COUNTRY> 		countries									= new HashSet<>();
-		private Set<FUNCTION> 		functions									= new HashSet<>();
-		private Optional<Boolean> 	freelance									= Optional.empty();
-		private Optional<Boolean> 	perm										= Optional.empty();
-		private int 				yearsExperienceGtEq;
-		private int					yearsExperienceLtEq;
-		private Set<Language>		languages									= new HashSet<>();
-		private Set<String>			skills										= new HashSet<>();
-		private String				firstname;
-		private String 				surname;
-		private String 				email;
-		private Boolean				flaggedAsUnavailable						= null;
-		private Boolean			 	available									= null;
-		private Integer				daysSinceLastAvailabilityCheck; 
-		private String 				searchText									= "";
-		private String 				ownerId;
-		private Boolean				includeRequiresSponsorship					= null;
-		private LocalDate			registeredAfter								= null;
-		private LocalDate			lastAccountRefreshLtEq						= null;
-		private Boolean				lastAccountRefreshMissing					= null;
-		private Integer				daysSincelastAvailabilityCheckEmailSent		= null;
-		private COUNTRY				locCountry								 	= null;
-		private String 				locCity									 	= null;
-		private Integer				locDistance									= null;
+		private String 						orderAttribute;
+		private RESULT_ORDER				order;
+		private Set<String> 				candidateIds								= new HashSet<>();
+		private Set<GEO_ZONE>				geoZones									= new HashSet<>();
+		private GeoPosFilter				geoPosFilter							 	= null;
+		private Set<COUNTRY> 				countries									= new HashSet<>();
+		private Set<FUNCTION> 				functions									= new HashSet<>();
+		private Optional<Boolean> 			freelance									= Optional.empty();
+		private Optional<Boolean> 			perm										= Optional.empty();
+		private int 						yearsExperienceGtEq;
+		private int							yearsExperienceLtEq;
+		private Set<Language.LANGUAGE>		languages									= new HashSet<>();
+		private Set<String>					skills										= new HashSet<>();
+		private String						firstname;
+		private String 						surname;
+		private String 						email;
+		private Boolean						flaggedAsUnavailable						= null;
+		private Boolean			 			available									= null;
+		private Integer						daysSinceLastAvailabilityCheck; 
+		private String 						searchText									= "";
+		private String 						ownerId;
+		private Boolean						includeRequiresSponsorship					= null;
+		private LocalDate					registeredAfter								= null;
+		private LocalDate					lastAccountRefreshLtEq						= null;
+		private Boolean						lastAccountRefreshMissing					= null;
+		private Integer						daysSincelastAvailabilityCheckEmailSent		= null;
+		private COUNTRY						locCountry								 	= null;
+		private String 						locCity									 	= null;
+		private Integer						locDistance									= null;
 		
 		/**
 		* Sets the name of the attribute to order on
@@ -572,7 +572,7 @@ public class CandidateFilterOptions {
 		* @param languages - Languages to filter on
 		* @return Builder
 		*/
-		public CandidateFilterOptionsBuilder languages(Set<Language> languages) {
+		public CandidateFilterOptionsBuilder languages(Set<Language.LANGUAGE> languages) {
 			this.languages = languages;
 			return this;
 		}

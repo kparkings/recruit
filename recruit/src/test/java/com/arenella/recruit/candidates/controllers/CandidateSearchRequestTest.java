@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 import com.arenella.recruit.candidates.beans.CandidateFilterOptions;
 import com.arenella.recruit.candidates.beans.Language;
 import com.arenella.recruit.candidates.beans.Language.LANGUAGE;
-import com.arenella.recruit.candidates.beans.Language.LEVEL;
 import com.arenella.recruit.candidates.controllers.CandidateSearchRequest.CandidateFilters;
 import com.arenella.recruit.candidates.controllers.CandidateSearchRequest.IncludeFilters;
 import com.arenella.recruit.candidates.controllers.CandidateSearchRequest.LanguageFilters;
@@ -39,8 +38,8 @@ class CandidateSearchRequestTest {
 	private static final int 					MAX_EXPERIENCE 							= 5;
 	private static final boolean 				INCLUDE_REQUIRES_SPONSORSHIP 			= true;
 	private static final boolean 				INCLUDE_UNAVAILABLE 					= false;
-	private static final Language				LANG_NL									= Language.builder().language(LANGUAGE.DUTCH).level(LEVEL.BASIC).build();
-	private static final Language				LANG_IT									= Language.builder().language(LANGUAGE.ITALIAN).level(LEVEL.PROFICIENT).build();
+	private static final Language.LANGUAGE		LANG_NL									= LANGUAGE.DUTCH;
+	private static final Language.LANGUAGE		LANG_IT									= LANGUAGE.ITALIAN;
 	private static final COUNTRY				NETHERLANDS							 	= COUNTRY.NETHERLANDS;
 	private static final COUNTRY				ITALY								 	= COUNTRY.ITALY;
 	private static final GEO_ZONE				EUROPE									= GEO_ZONE.EUROPE;
@@ -146,8 +145,8 @@ class CandidateSearchRequestTest {
 		
 		csr.languageFilters().ifPresent(f -> {
 			assertEquals(2, f.getLanguages().size());
-			assertTrue(f.getLanguages().stream().filter(l -> l.getLanguage() == LANG_NL.getLanguage()).findAny().isPresent());
-			assertTrue(f.getLanguages().stream().filter(l -> l.getLanguage() == LANG_IT.getLanguage()).findAny().isPresent());
+			assertTrue(f.getLanguages().stream().filter(l -> l == LANG_NL).findAny().isPresent());
+			assertTrue(f.getLanguages().stream().filter(l -> l == LANG_IT).findAny().isPresent());
 		});
 
 		csr.locationFilters().ifPresent(f -> {
@@ -324,9 +323,10 @@ class CandidateSearchRequestTest {
 							.build())
 				.build();
 		
-		CandidateFilterOptions filters = CandidateSearchRequest.convertToCandidateFilterOptions(csr, orderAttribute, RESULT_ORDER.desc, Set.of(), Set.of(FUNCTION.ARCHITECT));
+		CandidateFilterOptions filters = CandidateSearchRequest.convertToCandidateFilterOptions(csr, orderAttribute, RESULT_ORDER.desc, Set.of());
 	
-		assertTrue(filters.getFunctions().contains(FUNCTION.ARCHITECT));
+		//TOOO: [KP] See if we still need functions
+		//assertTrue(filters.getFunctions().contains(FUNCTION.ARCHITECT));
 		
 		assertTrue(filters.getSkills().contains(SKILL_CSHARP));
 		assertTrue(filters.getSkills().contains(SKILL_JAVA));
