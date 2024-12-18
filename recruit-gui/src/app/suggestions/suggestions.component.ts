@@ -25,6 +25,7 @@ import { CurrentUserAuth }															from '../current-user-auth';
 import { City } 																	from '../city';
 import { InfoPaneUtil } 															from './info-pane-util';
 import { SearchbarComponent } 														from '../suggestions/searchbar/searchbar.component';
+import { SuggestionsSearchRequest } 												from './suggestion-search-request';
 
 /**
 * Component to suggest suitable Candidates based upon a 
@@ -153,22 +154,35 @@ export class SuggestionsComponent implements OnInit {
 		//Candidate
 		if (this.currentUserAuth.isCandidate()) {
 			this.candidateNavService.startCandidateProfileRouteForCandidate();
-			this.candidateService.getCandidateById(this.currentUserAuth.getLoggedInUserId()).subscribe(candidate => {
-				this.showSuggestedCandidateOverview(candidate.content[0]);	
+			
+			let searchRequest:SuggestionsSearchRequest = new SuggestionsSearchRequest();
+			searchRequest.candidateFilters.candidateIds.push(this.currentUserAuth.getLoggedInUserId());
+						
+			this.candidateService.getCandidateSuggestions(searchRequest).subscribe(candidate => {			
+				this.showSuggestedCandidateOverview(candidate.body.content[0]);	
 			});
 		}
 		
 		//Recruiter
 		if (this.currentUserAuth.isRecruiter() && this.candidateNavService.isRouteActive()) {
-			this.candidateService.getCandidateByIdWithRecruiterAsOwner(this.candidateNavService.getCandidateId(), this.currentUserAuth.getLoggedInUserId()).subscribe(candidate => {
-				this.showSuggestedCandidateOverview(candidate.content[0]);	
+			
+			let searchRequest:SuggestionsSearchRequest = new SuggestionsSearchRequest();
+			searchRequest.candidateFilters.ownerId = this.currentUserAuth.getLoggedInUserId();
+			searchRequest.candidateFilters.candidateIds.push(this.candidateNavService.getCandidateId());
+												
+			this.candidateService.getCandidateSuggestions(searchRequest).subscribe(candidate => {
+			//this.candidateService.getCandidateByIdWithRecruiterAsOwner(this.candidateNavService.getCandidateId(), this.currentUserAuth.getLoggedInUserId()).subscribe(candidate => {
+				this.showSuggestedCandidateOverview(candidate.body.content[0]);	
 			});
 		}
 
 		//Admin
 		if (this.currentUserAuth.isAdmin() && this.candidateNavService.isRouteActive()) {
-			this.candidateService.getCandidateById(this.candidateNavService.getCandidateId()).subscribe(candidate => {
-				this.showSuggestedCandidateOverview(candidate.content[0]);	
+			let searchRequest:SuggestionsSearchRequest = new SuggestionsSearchRequest();
+			searchRequest.candidateFilters.candidateIds.push(this.candidateNavService.getCandidateId());
+									
+			this.candidateService.getCandidateSuggestions(searchRequest).subscribe(candidate => {
+				this.showSuggestedCandidateOverview(candidate.body.content[0]);	
 			});
 		}		
 		
@@ -227,8 +241,12 @@ export class SuggestionsComponent implements OnInit {
 		})
 		
 		if (this.externalProvileViewCandidateId.length > 0) {
-			this.candidateService.getCandidateById(this.externalProvileViewCandidateId).subscribe(result => {
-				this.showSuggestedCandidateOverview(result.content[0]);
+			
+			let searchRequest:SuggestionsSearchRequest = new SuggestionsSearchRequest();
+			searchRequest.candidateFilters.candidateIds.push(this.externalProvileViewCandidateId);
+			
+			this.candidateService.getCandidateSuggestions(searchRequest).subscribe(result => {
+					this.showSuggestedCandidateOverview(result.body.content[0]);
 			});
 		}
 		
@@ -303,7 +321,6 @@ export class SuggestionsComponent implements OnInit {
 			}	
 		}
 		
-	
 	}
 	
 	public doCreditCheck():void{
@@ -321,12 +338,8 @@ export class SuggestionsComponent implements OnInit {
 		
 		this.candidateService.getCandidateProfileById(candidateId).subscribe( candidate => {
 			this.candidateProfile 	= candidate;
-			
-			this.infoPaneUtil = new InfoPaneUtil(candidate, this.translate, this.supportedCountries); 
-			this.infoItemConfig = this.infoPaneUtil.generateInfoPane();
-		
-			
-			
+			this.infoPaneUtil 		= new InfoPaneUtil(candidate, this.translate, this.supportedCountries); 
+			this.infoItemConfig 	= this.infoPaneUtil.generateInfoPane();
 		});
 		
 	}
@@ -613,42 +626,5 @@ export class SuggestionsComponent implements OnInit {
 		this.creditsService.buySubscription();
 		this.router.navigate(['recruiter-account']);
 	}
-	
-	/**
-	* 
-	*/
-	//public doPaidSubscriptionCheckUnavailableCandidatesXXXX():void{
-		
-	//	this.paidFeature = 'paidFeatureUnavailableCandidates';
-		
-	//	if (this.doPaidSubscriptionCheck()) {
-			
-	//		let checked =  this.suggestionFilterForm.get("includeUnavailableCandidates")?.value;
-			
-	//		if (checked) {
-	//			this.suggestionFilterForm.get("includeUnavailableCandidates")?.setValue('');	
-	//			this.includeUnavailableCandidatesSelected = 'false';
-	//		} else {
-	//			this.suggestionFilterForm.get("includeUnavailableCandidates")?.setValue('true');
-	//			this.includeUnavailableCandidatesSelected = 'true';
-	//		}
-	//		
-	//	}
-	//}
-		
-	//	public doPaidSubscriptionCheckRequiresSponsorshipCandidatesXX():void{
-	//		this.paidFeature = 'paidFeatureRequiresSponsorshipeCandidates';
-	//		if(this.doPaidSubscriptionCheck()){
-	//			let checked =  this.suggestionFilterForm.get("includeRequiresSponsorshipCandidates")?.value;
-				
-	//			if(checked){
-	//				this.suggestionFilterForm.get("includeRequiresSponsorshipCandidates")?.setValue('');	
-	//				this.includeRequiresSponsorshipCandidatesSelected = 'false';
-	//			} else {
-	//				this.suggestionFilterForm.get("includeRequiresSponsorshipCandidates")?.setValue('false');
-	//				this.includeRequiresSponsorshipCandidatesSelected = 'true';
-	//			}
-	//		}
-	//	}
 
 }

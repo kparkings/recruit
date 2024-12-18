@@ -165,7 +165,6 @@ public class CandidateController {
 			@RequestBody CandidateSearchRequest 	searchRequest, 
 			@RequestParam("orderAttribute") 		String 				orderAttribute,
 			@RequestParam("order") 					RESULT_ORDER		order,
-			//@RequestParam(required = false) 		Set<FUNCTION> 		functions,
 						 Pageable 					pageable,
 						 Principal 					principal,
 						 HttpServletResponse	 	response) throws Exception{
@@ -185,9 +184,7 @@ public class CandidateController {
 					.convertToCandidateFilterOptions(
 							searchRequest, 
 							orderAttribute, 
-							order, 
-							candidateIdFilters);
-		
+							order);
 		
 		Boolean 	unfiltered 			= searchRequest.requestFilters().map(RequestFilters::getUnfiltered).orElse(Optional.empty()).orElse(null);
 		

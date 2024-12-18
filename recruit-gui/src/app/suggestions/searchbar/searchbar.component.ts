@@ -296,7 +296,6 @@ export class SearchbarComponent {
 	* Swithches between open and closed filter view for GeoZones 
 	*/
 	public switchCountriesFilterView(view:string):void{
-		//this.initGeoZones();
 		this.showCountryFilters = view;
 	}
 
@@ -485,9 +484,9 @@ export class SearchbarComponent {
 		
 		ssReq.locationFilters.countries 							= params.getCountries();
 		ssReq.locationFilters.geoZones 								= params.getGeoZones();
-		ssReq.locationFilters.range.locCountry 						= params.getLocCity();
-		ssReq.locationFilters.range.locCity 						= params.getLocCity();
-		ssReq.locationFilters.range.locDistance 					= params.getLocDistance();
+		ssReq.locationFilters.range.country 						= params.getLocCountry();
+		ssReq.locationFilters.range.city 							= params.getLocCity();
+		ssReq.locationFilters.range.distanceInKm 					= params.getLocDistance();
 		
 		ssReq.skillFilters.skills 									= params.getSkills();
 		
@@ -496,7 +495,6 @@ export class SearchbarComponent {
 		ssReq.termFilters.title 									= params.getTitle();
 		ssReq.termFilters.firstName 								= params.getFirstName();
 		ssReq.termFilters.surname 									= params.getSurname();
-		console.log("AAA");
 		
 		this.suggestionsService
 			.getCandidateSuggestions(ssReq).pipe(
@@ -525,56 +523,6 @@ export class SearchbarComponent {
 						sessionStorage.setItem('beforeAuthPage', 'suggestions');
 					}
 		    	});
-
-		
-		//this.suggestionsService.getSuggestons(	
-		//							backendRequestId,
-		//							maxSuggestions,
-		//							params.getTitle(),
-		//							params.getGeoZones(),
-		//							params.getCountries(),
-		//							params.getContract(),
-		//							params.getPerm(),
-		//							params.getMinExperience(),
-		//							params.getMaxExperience(),
-		//							params.getLanguages(),
-		//							params.getSkills(),
-		//							params.getIncludUnavailableCandidates(),
-		//							params.getIncludRequiresSponsorshipCandidates(),
-		//							isUnfiltered,
-		//							params.getFirstName(),
-		//							params.getSurname(),
-		//							params.getEmail(),
-		//							params.getCandidateId(),
-		//							params.getLocCity(),
-		//							params.getLocCity(),
-		//							params.getLocDistance(),
-		//							).pipe(
-		//								  map((response) => {
-		//								  
-		//									const responseRequestId = response.headers.get('X-Arenella-Request-Id');
-											
-		//									if (this.backendRequestCounter == responseRequestId) {
-		//										this.suggestions =  new Array<Candidate>();
-		//										response.body.content.forEach((s:Candidate) => {
-		//											this.suggestions.push(s);	
-		//										});	
-		//									}
-
-											//START
-		//									this.newSuggestionResults.emit(this.suggestions);
-											//END
-		//								    return response ;
-										
-			//							  })).subscribe(() => {}, 
-			//							  err => {
-			//								if (err.status === 401 || err.status === 0) {
-			//									this.currentUserAuth.doLogout(this.router);
-			//									sessionStorage.setItem('beforeAuthPage', 'suggestions');
-			//									//this.router.navigate(['login-user']);
-			//								}
-    		//							});
-											
 	}	
 	
 	/**

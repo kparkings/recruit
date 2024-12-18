@@ -111,7 +111,7 @@ export class SearchBarFilterFormHelper{
 			skill: 									new UntypedFormControl(''),
 			includeUnavailableCandidates: 			new UntypedFormControl(''),
 			includeRequiresSponsorshipCandidates:	new UntypedFormControl(''),
-			locationCountry:						new UntypedFormControl(''),
+			locationCountry:						new UntypedFormControl(),
 			locationCity:							new UntypedFormControl(''),
 			locationDistance:						new UntypedFormControl(''),
 		});

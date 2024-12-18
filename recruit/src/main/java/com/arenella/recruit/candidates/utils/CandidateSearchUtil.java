@@ -81,7 +81,7 @@ public class CandidateSearchUtil {
 		}
 		
 		/**
-		* Scenario 4 - All remaining scearios
+		* Scenario 4 - All remaining scenarios
 		*/
 		return candidateService.getCandidateSuggestions(filterOptions, pageable.getPageSize(), isUnfilteredRequest, isSystemRequest).map(CandidateSuggestionAPIOutbound::convertFromCandidate);
 		

@@ -95,6 +95,11 @@
 	text-align: right;
 }
 
+.sugg-srch-job-title-name{
+	margin-right:20px;
+	min-width:500px;
+}
+
 textarea {
     width:100%;
     height:200px;

@@ -13,8 +13,6 @@ export class InfoPaneUtil{
 	public generateInfoPane():InfoItemConfig{
 	
 		let infoItemConfig 	= new InfoItemConfig();
-		
-		console.log(JSON.stringify(this.candidateProfile));
 			
 		infoItemConfig.setProfilePhoto(this.candidateProfile?.photo?.imageBytes);
 		
@@ -100,8 +98,6 @@ export class InfoPaneUtil{
 			}
 			infoItemConfig.addItem(availabilityBlock);
 	
-			console.log(JSON.stringify(infoItemConfig));
-			
 		return infoItemConfig;
 	
 	}
@@ -154,9 +150,6 @@ export class InfoPaneUtil{
 	* the Country 
 	*/
 	public getFlagClassFromCountry(country:string):string{
-		
-		
-		console.log("-------> " + country + " : " + this.supportedCountries.length);
 		
 		let sc:SupportedCountry = this.supportedCountries.filter(c => c.name == country)[0];
 		
@@ -228,5 +221,4 @@ export class InfoPaneUtil{
 		return this.translate.instant(lang);
 	}	
 	
-		
 }

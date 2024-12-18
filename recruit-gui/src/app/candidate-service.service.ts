@@ -20,7 +20,6 @@ import { SupportedCountry } 							from './supported-candidate';
 import { UpdateCityRequest } 							from './accounts/update-city-request';
 import { City } 										from './city';
 import { SuggestionsSearchRequest } 					from './suggestions/suggestion-search-request';
-import { Candidate } 									from './suggestions/candidate';
 
 /**
 * Services for new Candidates
@@ -39,7 +38,7 @@ export class CandidateServiceService {
   	* Constructor
   	*/
 	constructor(private httpClient: HttpClient, private translate:TranslateService) { 
-		//this.initializeCountries();
+
 	}
 	
 	/**
@@ -164,16 +163,6 @@ export class CandidateServiceService {
 
 	}
 	
-  	/**
-  	* Returns a list of available Candidates 
-  	*/
-  	public getCandidatesXXXXXXXXXXXXX(filterParams:string): Observable<any>{
-      
-		const backendUrl:string = environment.backendUrl +'candidate?'+filterParams;
-    	
-    	return this.httpClient.get<any>(backendUrl,  { observe: 'response', withCredentials: true});//
-    	
-  	}
 	
 	/**
 	* Makes a SearchRequest for retrieving Candidates matching the Filters selected by the User
@@ -186,25 +175,15 @@ export class CandidateServiceService {
 		
 	}
   	
-	/**
-  	* Returns a Candidate by its Id 
-  	*/
-  	public getCandidateById(candidateId:string): Observable<any>{
-      
-		const backendUrl:string = environment.backendUrl +'candidate?orderAttribute=candidateId&order=desc&candidateId='+candidateId
-  
-    	return this.httpClient.get<any>(backendUrl, this.httpOptions);
-  	}
-  	
   	/**
   	* Returns a Candidate by its Id where the ownerId is specified
   	*/
-  	public getCandidateByIdWithRecruiterAsOwner(candidateId:string, ownerId:string): Observable<any>{
+  	//public getCandidateByIdWithRecruiterAsOwner(candidateId:string, ownerId:string): Observable<any>{
       
-		const backendUrl:string = environment.backendUrl +'candidate?orderAttribute=candidateId&order=desc&candidateId='+candidateId+ "&ownerId=" + ownerId
+	//	const backendUrl:string = environment.backendUrl +'candidate?orderAttribute=candidateId&order=desc&candidateId='+candidateId+ "&ownerId=" + ownerId
   
-    	return this.httpClient.get<any>(backendUrl, this.httpOptions);
-  	}
+    //	return this.httpClient.get<any>(backendUrl, this.httpOptions);
+  	//}
   	
 	/**
   	* Returns a Candidate by its Id 
@@ -349,29 +328,6 @@ export class CandidateServiceService {
 		return this.httpClient.put<any>(backendUrl, "{}", this.httpOptions);
 	
 	}
-	
-	/**
-	* Returns Candidates that are due to have their availability checked
-	*/
-	public fetchCandidatesDueForAvailabilityCheck(): Observable<any>{
-		
-		const backendUrl:string = environment.backendUrl +'candidate?daysSinceLastAvailabilityCheck=17&orderAttribute=candidateId&order=desc&page=0&size=1000&available=true&unfiltered=true';
-  
-    	return this.httpClient.get<any>(backendUrl, this.httpOptions);
-
-	}
-	
-	/**
-	* Returns Candidates that have been marked as unavailable but are due to have their availability checked
-	*/
-	public fetchUnavailableCandidatesDueForAvailabilityCheck(): Observable<any>{
-		
-		const backendUrl:string = environment.backendUrl +'candidate?daysSinceLastAvailabilityCheck=33&orderAttribute=candidateId&order=desc&page=0&size=1000&available=false&unfiltered=true';
-  
-    	return this.httpClient.get<any>(backendUrl, this.httpOptions);
-
-	}
-	
 	
 	/**
 	* Sends a request to mark the Candidate as having been checked and found to still be 

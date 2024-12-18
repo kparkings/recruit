@@ -20,6 +20,7 @@ export class CandidateFilters{
 	public available?:boolean | null | undefined;
 	public ownerId?:string | null | undefined;
 	public daysSinceLastAvailabilityCheck?:number | null | undefined;
+	public candidateIds:Array<string> = new Array<string>();
 }
 
 export class RequestFilters{
@@ -36,7 +37,7 @@ export class LocationFilters{
 
 export class LocationRangeFilters{
 	
-	constructor(public locCountry?:string | null | undefined, public locCity?:string | null | undefined, public locDistance?:number){
+	constructor(public country?:string | null | undefined, public city?:string | null | undefined, public distanceInKm?:number){
 		
 	}
 			

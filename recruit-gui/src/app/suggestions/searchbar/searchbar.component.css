@@ -10,11 +10,6 @@
 .sugg-srch-job-title{
 	min-width:0px;
 }
-	
-.sugg-srch-job-title-name{
-	margin-right:20px;
-	min-width:0px;
-}
 
 .toggle-filter-option{
 	margin:0px;
@@ -170,6 +165,11 @@
 	width:98%;
 }
 
+.sugg-srch-job-title-name{
+	margin-right:20px;
+	min-width:500px;
+}
+
 @media (max-width:700px)  {
 	.sugg-srch-ctry-chkbox{
 		display:inline-block;
@@ -177,6 +177,12 @@
 		padding:0;
 		width:100%;
 	}	
+	
+	.sugg-srch-job-title-name{
+		margin-right:20px;
+		min-width:0px;
+	}
+
 	.geo-code-filter{
 		width:100%;	
 	}

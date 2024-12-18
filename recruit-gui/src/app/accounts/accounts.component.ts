@@ -130,23 +130,6 @@ export class AccountsComponent implements OnInit {
 	}
 
 	/**
-	* Builds a query parameter string for flaggedAsUnavailable Candidates
-	*/
-	//private getCandidateFlaggedAsUnavailableFilterParamString():string{
-    	
-	//	const filterParams:string = 
-	//							'orderAttribute=candidateId'
-     //                            + "&order=desc" 
-    //                             + '&page=0'
-    //                             + '&size=5000'
-	//							 + '&available=true'
-//    / /                            + '&flaggedAsUnavailable=true';
-
-//		return filterParams;
-	
-//	}
-	
-	/**
 	*  Returns the url to perform the download of the candidates CV
 	*/
 	public getCurriculumDownloadUrl(curriculumId:string){
@@ -176,9 +159,8 @@ export class AccountsComponent implements OnInit {
 		searchRequest.candidateFilters.available = true;
 		
 		this.candidateService.getCandidateSuggestions(searchRequest).subscribe(data => {
-    	//this.candidateService.getCandidates(filterParams+ "&available=true").subscribe( data => {
-  
-      		data.body.content.forEach((c:Candidate) => {
+   
+			data.body.content.forEach((c:Candidate) => {
         
         		const candidate:Candidate = new Candidate();
 
@@ -201,7 +183,6 @@ export class AccountsComponent implements OnInit {
 				* are removed
 				*/
 				this.candidateService.getCandidateSuggestions(searchRequest).subscribe(data => {
-				//this.candidateService.getCandidates(filterParams + "&available=false").subscribe( data => {
 			
 		      		data.body.content.forEach((c:Candidate) => {
 		        
@@ -306,10 +287,22 @@ export class AccountsComponent implements OnInit {
 			return;
 		}
 		
+		let availableRequest:SuggestionsSearchRequest = new SuggestionsSearchRequest();
+		availableRequest.candidateFilters.daysSinceLastAvailabilityCheck = 17;
+		availableRequest.requestFilters.maxNumberOfSuggestions=1000;
+		availableRequest.candidateFilters.available = true;
+		availableRequest.requestFilters.isUnfiltered=true;
+		
+		let unavailableRequest:SuggestionsSearchRequest = new SuggestionsSearchRequest();
+		unavailableRequest.candidateFilters.daysSinceLastAvailabilityCheck = 33;
+		unavailableRequest.requestFilters.maxNumberOfSuggestions=1000;
+		unavailableRequest.candidateFilters.available = false;
+		unavailableRequest.requestFilters.isUnfiltered=true;
+		
 		if (this.showAvailable && !this.showUnavailable) {
-			this.candidateService.fetchCandidatesDueForAvailabilityCheck().subscribe(data => {
-				this.candidatesToCheckForAvailability = data.content;
-				this.availableCount = data.content.length;
+			this.candidateService.getCandidateSuggestions(availableRequest).subscribe(data => {
+				this.candidatesToCheckForAvailability = data.body.content;
+				this.availableCount = data.body.content.length;
 				this.unavailableCount = 0;
 			}, 
 			err => {
@@ -318,30 +311,29 @@ export class AccountsComponent implements OnInit {
 		}
 		
 		if (!this.showAvailable && this.showUnavailable) {
-			this.candidateService.fetchUnavailableCandidatesDueForAvailabilityCheck().subscribe(data => {
-				this.candidatesToCheckForAvailability = data.content;
+			this.candidateService.getCandidateSuggestions(unavailableRequest).subscribe(data => {
+				this.candidatesToCheckForAvailability = data.body.content;
 				this.availableCount = 0;
-				this.unavailableCount = data.content.length;
+				this.unavailableCount = data.body.content.length;
 			}, 
 			err => {
 				console.log(JSON.stringify(err));		
 			});
 		}
 			
+		
 		if (this.showAvailable && this.showUnavailable) {
 		
-		 this.candidateService.fetchCandidatesDueForAvailabilityCheck().subscribe(data => {
+			this.candidateService.getCandidateSuggestions(availableRequest).subscribe(data => {
+				
+				this.candidatesToCheckForAvailability 	= data.body.content;
+				this.availableCount 					= data.body.content.length;
 			
-			this.candidatesToCheckForAvailability = data.content;
-			
-			this.availableCount = data.content.length;
-			
-			
-			this.candidateService.fetchUnavailableCandidatesDueForAvailabilityCheck().subscribe(candidateData => {
-				let candidates  = <Array<Candidate>> candidateData.content;
-				candidates.forEach(c => this.candidatesToCheckForAvailability.push(c));
-				this.unavailableCount = candidateData.content.length;
-			});
+				this.candidateService.getCandidateSuggestions(unavailableRequest).subscribe(candidateData => {
+					let candidates  = <Array<Candidate>> candidateData.body.content;
+					candidates.forEach(c => this.candidatesToCheckForAvailability.push(c));
+					this.unavailableCount = candidateData.body.content.length;
+				});
 			
 			}, 
 			err => {
@@ -371,7 +363,6 @@ export class AccountsComponent implements OnInit {
 
   		this.modalService.open(this.content, options);
   	};
-
 
 	public candidateToDelete:string = '';
 

@@ -368,7 +368,7 @@ public class CandidateSearchRequest {
 		
 		private Set<GEO_ZONE> 			geoZones = new HashSet<>(); 
 		private Set<COUNTRY> 			countries = new HashSet<>();
-		private LocationRangeFilters 	locationFilters;
+		private LocationRangeFilters 	range;
 		
 		/**
 		* Constructor based upon a Builder
@@ -381,7 +381,7 @@ public class CandidateSearchRequest {
 			this.geoZones.addAll(builder.geoZones);
 			this.countries.addAll(builder.countries);
 			
-			this.locationFilters 	= builder.locationFilters;
+			this.range 	= builder.range;
 		}
 		
 		/**
@@ -405,8 +405,8 @@ public class CandidateSearchRequest {
 		* to filter on
 		* @return Range information
 		*/
-		public Optional<LocationRangeFilters> getLocationFilters() {
-			return Optional.ofNullable(this.locationFilters);
+		public Optional<LocationRangeFilters> getRange() {
+			return Optional.ofNullable(this.range);
 		}
 		
 		/**
@@ -425,7 +425,7 @@ public class CandidateSearchRequest {
 			
 			private Set<GEO_ZONE> 			geoZones = new HashSet<>(); 
 			private Set<COUNTRY> 			countries = new HashSet<>();
-			private LocationRangeFilters 	locationFilters;
+			private LocationRangeFilters 	range;
 			
 			/**
 			* Sets the GeoZones to filter on
@@ -454,8 +454,8 @@ public class CandidateSearchRequest {
 			* @param locationFilters - Location filters
 			* @return Builder
 			*/
-			public LocationFiltersBuilder locationFilters(LocationRangeFilters locationFilters) {
-				this.locationFilters = locationFilters;
+			public LocationFiltersBuilder range(LocationRangeFilters range) {
+				this.range = range;
 				return this;
 			}
 			
@@ -513,7 +513,7 @@ public class CandidateSearchRequest {
 			* @return max distance (lte)
 			*/
 			public int distanceInKm() {
-				return this.distanceInKm;
+				return this.distanceInKm < 1 ? 1 : this.distanceInKm;  
 			}
 			
 		}
@@ -851,7 +851,13 @@ public class CandidateSearchRequest {
 		* @return firstname to filter on
 		*/
 		public Optional<String> getFirstName() {
-			return Optional.ofNullable(this.firstName);
+			
+			if (Optional.ofNullable(this.firstName).isEmpty()) {
+				return Optional.empty();
+			}
+			
+			return this.firstName.length() == 0 ? Optional.empty() : Optional.ofNullable(this.firstName);
+			
 		}
 		
 		/**
@@ -859,7 +865,13 @@ public class CandidateSearchRequest {
 		* @return Surname to filter on
 		*/
 		public Optional<String> getSurname() {
-			return Optional.ofNullable(this.surname);
+			
+			if (Optional.ofNullable(this.surname).isEmpty()) {
+				return Optional.empty();
+			}
+			
+			return this.surname.length() == 0 ? Optional.empty() : Optional.ofNullable(this.surname);
+			
 		}
 		
 		/**
@@ -915,7 +927,7 @@ public class CandidateSearchRequest {
 			* @param firstName - First name of the Candidate
 			* @return Builder
 			*/
-			public TermFiltersBuilder firstname(String firstName) {
+			public TermFiltersBuilder firstName(String firstName) {
 				this.firstName = firstName;
 				return this;
 			}
@@ -957,9 +969,10 @@ public class CandidateSearchRequest {
 	@JsonDeserialize(builder=CandidateFilters.CandidateFiltersBuilder.class)
 	public static class CandidateFilters{
 		
-		private Boolean available;
-		private String 	ownerId;
-		private Integer daysSinceLastAvailabilityCheck;
+		private Boolean 	available;
+		private String 		ownerId;
+		private Set<String>	candidateIds						= new HashSet<>();
+		private Integer 	daysSinceLastAvailabilityCheck;
 		
 		/**
 		* Default constructor 
@@ -976,6 +989,10 @@ public class CandidateSearchRequest {
 			this.available 						= builder.available;
 			this.ownerId 						= builder.ownerId;
 			this.daysSinceLastAvailabilityCheck = builder.daysSinceLastAvailabilityCheck;
+		
+			this.candidateIds.clear();
+			this.candidateIds.addAll(builder.candidateIds);
+			
 		}
 		
 		/**
@@ -989,11 +1006,20 @@ public class CandidateSearchRequest {
 		
 		/**
 		* Returns if applicable the recruiter owning the Candidate
-		* to fitle on
+		* to filter on
 		* @return Id of the owning Recruiter
 		*/
 		public Optional<String> getOwnerId(){
 			return Optional.ofNullable(this.ownerId);
+		}
+		
+		/**
+		* Returns if applicable the candidate Id's
+		* to filter on
+		* @return Id's of the candidates
+		*/
+		public Set<String> getCandidateIds(){
+			return this.candidateIds;
 		}
 		
 		/**
@@ -1019,9 +1045,10 @@ public class CandidateSearchRequest {
 		@JsonPOJOBuilder(buildMethodName="build", withPrefix="")
 		public static class CandidateFiltersBuilder{
 			
-			private Boolean available;
-			private String 	ownerId;
-			private Integer daysSinceLastAvailabilityCheck;
+			private Boolean 		available;
+			private String 			ownerId;
+			private Set<String>  	candidateIds						= new HashSet<>();
+			private Integer 		daysSinceLastAvailabilityCheck;
 			
 			/**
 			* Sets whether to filter specifically on available/unavailable
@@ -1042,6 +1069,17 @@ public class CandidateSearchRequest {
 			*/
 			public CandidateFiltersBuilder ownerId(String ownerId) {
 				this.ownerId = ownerId;
+				return this;
+			}
+			
+			/**
+			* Sets where applicable the Id's of the candidates to filter n
+			* @param candidateIds - Candidate Id's
+			* @return Builder
+			*/
+			public CandidateFiltersBuilder candidateIds(Set<String> candidateIds) {
+				this.candidateIds.clear();
+				this.candidateIds.addAll(candidateIds);
 				return this;
 			}
 			
@@ -1082,14 +1120,12 @@ public class CandidateSearchRequest {
 	public static CandidateFilterOptions convertToCandidateFilterOptions(
 			CandidateSearchRequest 	req, 
 			String 					orderAttribute, 
-			RESULT_ORDER 			order,
-			Set<String> 			candidateIdFilters) {
+			RESULT_ORDER 			order) {
 		
 		CandidateFilterOptionsBuilder builder = CandidateFilterOptions.builder();
 		
 		builder.orderAttribute(orderAttribute);
 		builder.order(order);
-		builder.candidateIds(candidateIdFilters);
 		
 		req.candidateFilters().ifPresent(f -> {
 			f.getOwnerId().ifPresent(builder::ownerId);
@@ -1117,7 +1153,11 @@ public class CandidateSearchRequest {
 		req.locationFilters().ifPresent(f -> {
 			builder.countries(f.getCountries());
 			builder.geoZones(f.getGeoZones());
-			f.getLocationFilters().ifPresent(loc -> builder.geoPosFilter(loc.country(), loc.city(), loc.distanceInKm()));
+			f.getRange().ifPresent(loc ->{
+				if (Optional.ofNullable(loc.country()).isPresent() &&  Optional.ofNullable(loc.city()).isPresent()) {
+					builder.geoPosFilter(loc.country(), loc.city(), loc.distanceInKm());
+				}
+			} );
 		});
 		
 		req.skillFilters().ifPresent(f -> builder.skills(f.getSkills()));
@@ -1133,6 +1173,7 @@ public class CandidateSearchRequest {
 			f.isAvailable().ifPresent(builder::available);
 			f.getOwnerId().ifPresent(builder::ownerId);
 			f.getDaysSinceLastAvailabilityCheck().ifPresent(builder::daysSinceLastAvailabilityCheck);
+			builder.candidateIds(f.getCandidateIds());
 		});
 		
 		return builder.build();

@@ -10,7 +10,6 @@ import com.arenella.recruit.candidates.controllers.CandidateSearchRequest.Includ
 import com.arenella.recruit.candidates.controllers.CandidateSearchRequest.LanguageFilters;
 import com.arenella.recruit.candidates.enums.COUNTRY;
 import com.arenella.recruit.candidates.enums.FREELANCE;
-import com.arenella.recruit.candidates.enums.FUNCTION;
 import com.arenella.recruit.candidates.enums.PERM;
 import com.arenella.recruit.candidates.enums.RESULT_ORDER;
 import com.arenella.recruit.candidates.utils.GeoZoneSearchUtil.GEO_ZONE;
@@ -64,6 +63,7 @@ class CandidateSearchRequestTest {
 	private static final Boolean 				AVAILABLE 								= true;
 	private static final String 				OWNER_ID 								= "1234";
 	private static final Integer 				DAYS_SINCE_LAST_AVAILABILITY_CHECK 		= 5;
+	private static final String					CANDIDATE_ID_1027						= "1027";			
 	
 	/**
 	* Tests construction via the Builder 
@@ -89,7 +89,7 @@ class CandidateSearchRequestTest {
 							.builder()
 								.countries(Set.of(NETHERLANDS, ITALY))
 								.geoZones(Set.of(EUROPE, BENELUX))
-								.locationFilters(new LocationRangeFilters(RANGE_COUNTRY_IT, RANGE_CITY_COSENZA, RANGE_DISANCE_KM))
+								.range(new LocationRangeFilters(RANGE_COUNTRY_IT, RANGE_CITY_COSENZA, RANGE_DISANCE_KM))
 							.build())
 					.requestFilters(RequestFilters
 							.builder()
@@ -103,7 +103,7 @@ class CandidateSearchRequestTest {
 								.candidateId(TERM_CANDIDATE_ID)
 								.email(TERM_EMAIL)
 								.title(TERM_TITLE)
-								.firstname(TERM_FIRSTNAME)
+								.firstName(TERM_FIRSTNAME)
 								.surname(TERM_SURNAME)
 							.build())
 					.candidateFilters(CandidateFilters
@@ -111,6 +111,7 @@ class CandidateSearchRequestTest {
 								.available(AVAILABLE)
 								.ownerId(OWNER_ID)
 								.daysSinceLastAvailabilityCheck(DAYS_SINCE_LAST_AVAILABILITY_CHECK)
+								.candidateIds(Set.of(CANDIDATE_ID_1027))
 							.build())
 				.build();
 		
@@ -152,7 +153,7 @@ class CandidateSearchRequestTest {
 		csr.locationFilters().ifPresent(f -> {
 			f.getCountries();
 			f.getGeoZones();
-			f.getLocationFilters();
+			f.getRange();
 		});
 		
 		csr.requestFilters().ifPresent(f -> {
@@ -181,6 +182,7 @@ class CandidateSearchRequestTest {
 			f.isAvailable().ifPresent(available 					-> assertEquals(AVAILABLE, available));
 			f.getOwnerId().ifPresent(ownerId 						-> assertEquals(OWNER_ID, ownerId));
 			f.getDaysSinceLastAvailabilityCheck().ifPresent(days 	-> assertEquals(DAYS_SINCE_LAST_AVAILABILITY_CHECK, days));
+			assertTrue(f.getCandidateIds().contains(CANDIDATE_ID_1027));
 		});
 		
 	}
@@ -242,7 +244,7 @@ class CandidateSearchRequestTest {
 		csr.locationFilters().ifPresent(f -> {
 			assertTrue(f.getCountries().isEmpty());
 			assertTrue(f.getGeoZones().isEmpty());
-			assertTrue(f.getLocationFilters().isEmpty());
+			assertTrue(f.getRange().isEmpty());
 		});
 		
 		csr.requestFilters().ifPresent(f -> {
@@ -267,6 +269,7 @@ class CandidateSearchRequestTest {
 			assertTrue(f.isAvailable().isEmpty());
 			assertTrue(f.getOwnerId().isEmpty());
 			assertTrue(f.getDaysSinceLastAvailabilityCheck().isEmpty());
+			assertTrue(f.getCandidateIds().isEmpty());
 		});
 		
 	}
@@ -298,7 +301,7 @@ class CandidateSearchRequestTest {
 							.builder()
 								.countries(Set.of(NETHERLANDS, ITALY))
 								.geoZones(Set.of(EUROPE, BENELUX))
-								.locationFilters(new LocationRangeFilters(RANGE_COUNTRY_IT, RANGE_CITY_COSENZA, RANGE_DISANCE_KM))
+								.range(new LocationRangeFilters(RANGE_COUNTRY_IT, RANGE_CITY_COSENZA, RANGE_DISANCE_KM))
 							.build())
 					.requestFilters(RequestFilters
 							.builder()
@@ -312,7 +315,7 @@ class CandidateSearchRequestTest {
 								.candidateId(TERM_CANDIDATE_ID)
 								.email(TERM_EMAIL)
 								.title(TERM_TITLE)
-								.firstname(TERM_FIRSTNAME)
+								.firstName(TERM_FIRSTNAME)
 								.surname(TERM_SURNAME)
 							.build())
 					.candidateFilters(CandidateFilters
@@ -320,10 +323,11 @@ class CandidateSearchRequestTest {
 								.available(AVAILABLE)
 								.ownerId(OWNER_ID)
 								.daysSinceLastAvailabilityCheck(DAYS_SINCE_LAST_AVAILABILITY_CHECK)
+								.candidateIds(Set.of(CANDIDATE_ID_1027))
 							.build())
 				.build();
 		
-		CandidateFilterOptions filters = CandidateSearchRequest.convertToCandidateFilterOptions(csr, orderAttribute, RESULT_ORDER.desc, Set.of());
+		CandidateFilterOptions filters = CandidateSearchRequest.convertToCandidateFilterOptions(csr, orderAttribute, RESULT_ORDER.desc);
 	
 		//TOOO: [KP] See if we still need functions
 		//assertTrue(filters.getFunctions().contains(FUNCTION.ARCHITECT));
@@ -336,6 +340,7 @@ class CandidateSearchRequestTest {
 		assertTrue(filters.getGeoZones().contains(BENELUX));		
 		assertTrue(filters.getCountries().contains(NETHERLANDS));
 		assertTrue(filters.getCountries().contains(ITALY));
+		assertTrue(filters.getCandidateIds().contains(CANDIDATE_ID_1027));
 		assertEquals(orderAttribute, filters.getOrderAttribute().get());
 		assertEquals(INCLUDE_REQUIRES_SPONSORSHIP, 	filters.getIncludeRequiresSponsorship().get());
 		assertEquals(RESULT_ORDER.desc, 			filters.getOrder().get());
