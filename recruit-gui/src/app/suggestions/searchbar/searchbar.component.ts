@@ -468,7 +468,7 @@ export class SearchbarComponent {
 		let ssReq:SuggestionsSearchRequest = new SuggestionsSearchRequest();
 		
 		ssReq.requestFilters.backendRequestId 						= backendRequestId;
-		ssReq.requestFilters.isUnfiltered 							= isUnfiltered;
+		ssReq.requestFilters.unfiltered 							= isUnfiltered;
 		ssReq.requestFilters.maxNumberOfSuggestions 				= maxSuggestions;
 		
 		ssReq.contractFilters.contract 								= params.getContract()?.toUpperCase();

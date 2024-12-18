@@ -25,7 +25,7 @@ export class CandidateFilters{
 
 export class RequestFilters{
 	public backendRequestId?:number;
-	public isUnfiltered?:boolean;
+	public unfiltered?:boolean;
 	public maxNumberOfSuggestions?:number;
 }
 

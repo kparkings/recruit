@@ -291,13 +291,13 @@ export class AccountsComponent implements OnInit {
 		availableRequest.candidateFilters.daysSinceLastAvailabilityCheck = 17;
 		availableRequest.requestFilters.maxNumberOfSuggestions=1000;
 		availableRequest.candidateFilters.available = true;
-		availableRequest.requestFilters.isUnfiltered=true;
+		availableRequest.requestFilters.unfiltered=true;
 		
 		let unavailableRequest:SuggestionsSearchRequest = new SuggestionsSearchRequest();
 		unavailableRequest.candidateFilters.daysSinceLastAvailabilityCheck = 33;
 		unavailableRequest.requestFilters.maxNumberOfSuggestions=1000;
 		unavailableRequest.candidateFilters.available = false;
-		unavailableRequest.requestFilters.isUnfiltered=true;
+		unavailableRequest.requestFilters.unfiltered=true;
 		
 		if (this.showAvailable && !this.showUnavailable) {
 			this.candidateService.getCandidateSuggestions(availableRequest).subscribe(data => {
