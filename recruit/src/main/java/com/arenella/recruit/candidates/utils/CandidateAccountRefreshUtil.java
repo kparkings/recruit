@@ -4,8 +4,6 @@ import java.time.LocalDate;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -133,6 +131,7 @@ public class CandidateAccountRefreshUtil {
 				.available(true)
 				.order(RESULT_ORDER.desc)
 				.orderAttribute("candidateId")
+				.maxResults(20)
 				.build();
 		
 		final CandidateFilterOptions filterOptionsMarkedAsUnAvailable = CandidateFilterOptions.builder()
@@ -140,20 +139,19 @@ public class CandidateAccountRefreshUtil {
 				.available(false)
 				.order(RESULT_ORDER.desc)
 				.orderAttribute("candidateId")
+				.maxResults(20)
 				.build();
-		
-		final Pageable pageable = PageRequest.of(0, 20);
 		
 		Set<CandidateSuggestionAPIOutbound> candidates = new HashSet<>();
 		
 		try {
 			
-			candidates.addAll(this.candidateSearchUtil.searchAndPackageForAPIOutput(false, false, false, filterOptionsMarkedAsAvailable, pageable, false, true)
+			candidates.addAll(this.candidateSearchUtil.searchAndPackageForAPIOutput(false, false, false, filterOptionsMarkedAsAvailable, false, true)
 				.getContent()
 				.stream()
 				.map(c -> ((CandidateSuggestionAPIOutbound) c)).toList());
 			
-			candidates.addAll(this.candidateSearchUtil.searchAndPackageForAPIOutput(false, false, false, filterOptionsMarkedAsUnAvailable, pageable, false, true)
+			candidates.addAll(this.candidateSearchUtil.searchAndPackageForAPIOutput(false, false, false, filterOptionsMarkedAsUnAvailable, false, true)
 					.getContent()
 					.stream()
 					.map(c -> ((CandidateSuggestionAPIOutbound) c)).toList());

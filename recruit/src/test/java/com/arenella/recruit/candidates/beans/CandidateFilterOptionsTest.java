@@ -53,6 +53,7 @@ class CandidateFilterOptionsTest {
 		LocalDate				registeredAfter							= LocalDate.of(2024,5,8);
 		LocalDate				lastAccountRefreshLtEq					= LocalDate.of(2024,8,8);
 		Integer 				daysSinceLastavailabilityCheckEmail 	= 2;
+		int						maxResults								= 500;
 		
 		candidateIds.add(candidateId);
 		skills.add(skill);
@@ -90,6 +91,7 @@ class CandidateFilterOptionsTest {
 													.lastAccountRefreshLtEq(lastAccountRefreshLtEq)
 													.lastAccountRefreshMissing()
 													.daysSincelastAvailabilityCheckEmailSent(daysSinceLastavailabilityCheckEmail)
+													.maxResults(maxResults)
 													.build();
 		
 		assertEquals(filters.getCandidateIds().stream().findAny().get(), 	candidateId);
@@ -104,6 +106,7 @@ class CandidateFilterOptionsTest {
 		assertEquals(filters.getOrder().get(), 								RESULT_ORDER.asc);
 		assertEquals(filters.getOrderAttribute().get(), 					orderAttribute);
 		assertEquals(filters.getYearsExperienceGtEq(), 						yearsExperienceGtEq);
+		assertEquals(maxResults, 											filters.getMaxResults());
 		assertEquals(firstname, 											filters.getFirstname().get());
 		assertEquals(surname, 												filters.getSurname().get());
 		assertEquals(email, 												filters.getEmail().get());

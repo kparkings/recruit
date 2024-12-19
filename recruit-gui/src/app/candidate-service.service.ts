@@ -1,5 +1,5 @@
 import { Injectable }                             		from '@angular/core';
-import { HttpClient, HttpHeaders, HttpResponse }  		from '@angular/common/http';
+import { HttpClient, HttpHeaders }  					from '@angular/common/http';
 import { Observable }        		         			from 'rxjs';
 import { NewPendingCandidate }                   		from './create-candidate/new-pending-candidate';
 import { CandidateFunction }                      		from './candidate-function';

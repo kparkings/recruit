@@ -559,13 +559,15 @@ public class CandidateServiceImpl implements CandidateService{
 			this.statisticsService.logCandidateSearchEvent(filterOptions);
 		}
 		
-		filterOptions.getSkills().clear();
-	
 		CandidateExtractedFiltersBuilder searchTermFilter = CandidateExtractedFilters.builder();
 		
-		if (Optional.ofNullable(filterOptions.getSearchText()).isPresent()) {
-			skillsExtractor.extractFilters(" " + filterOptions.getSearchText().toLowerCase() + " ", searchTermFilter);
+		if(!filterOptions.getSkills().isEmpty()) {
+			filterOptions.getSkills().clear();
+			if (Optional.ofNullable(filterOptions.getSearchText()).isPresent() && !unfiltered) {
+				skillsExtractor.extractFilters(" " + filterOptions.getSearchText().toLowerCase() + " ", searchTermFilter);
+			}
 		}
+	
 		Set<String> searchTermKeywords = searchTermFilter.build().getSkills();
 		
 		/**

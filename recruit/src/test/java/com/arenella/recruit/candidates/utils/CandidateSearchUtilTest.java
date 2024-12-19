@@ -53,9 +53,9 @@ public class CandidateSearchUtilTest {
 		final String 	firstName 	= "Keivn";
 		final String 	surname 	= "parkings";
 		final String 	email 		= "admin@arenella-ict.com";
-		final int 		pageSize 	= 1;
+		final int 		pageSize 	= 750;
 		
-		CandidateFilterOptions filters = CandidateFilterOptions.builder().available(true).build();
+		CandidateFilterOptions filters = CandidateFilterOptions.builder().available(true).maxResults(pageSize).build();
 		
 		List<CandidateSearchAccuracyWrapper> pageItems = List.of(
 				new CandidateSearchAccuracyWrapper(Candidate.builder().available(true).firstname(firstName).surname(surname).email(email).build()),
@@ -66,10 +66,10 @@ public class CandidateSearchUtilTest {
 		
 		ArgumentCaptor<CandidateFilterOptions> filtersArgCapt = ArgumentCaptor.forClass(CandidateFilterOptions.class);
 		
-		Mockito.when(this.mockPageable.getPageSize()).thenReturn(pageSize);
+		//Mockito.when(this.mockPageable.getPageSize()).thenReturn(pageSize);
 		Mockito.when(this.mockCandidateService.getCandidateSuggestions(filtersArgCapt.capture(), Mockito.eq(pageSize), Mockito.eq(false))).thenReturn(pageResults);
 		
-		Page<CandidateAPIOutbound> results = this.util.searchAndPackageForAPIOutput(true, true, true, filters, mockPageable, false);
+		Page<CandidateAPIOutbound> results = this.util.searchAndPackageForAPIOutput(true, true, true, filters, false);
 		
 		assertTrue(filtersArgCapt.getValue().isAvailable().isEmpty());
 		
@@ -100,8 +100,8 @@ public class CandidateSearchUtilTest {
 		final String surname 	= "parkings";
 		final String email 		= "admin@arenella-ict.com";
 		
-		final int pageSize = 1;
-		CandidateFilterOptions filters = CandidateFilterOptions.builder().available(true).build();
+		final int pageSize = 750;
+		CandidateFilterOptions filters = CandidateFilterOptions.builder().available(true).maxResults(pageSize).build();
 		
 		List<CandidateSearchAccuracyWrapper> pageItems = List.of(
 				new CandidateSearchAccuracyWrapper(Candidate.builder().available(true).firstname(firstName).surname(surname).email(email).build()),
@@ -112,10 +112,9 @@ public class CandidateSearchUtilTest {
 		
 		ArgumentCaptor<CandidateFilterOptions> filtersArgCapt = ArgumentCaptor.forClass(CandidateFilterOptions.class);
 		
-		Mockito.when(this.mockPageable.getPageSize()).thenReturn(pageSize);
 		Mockito.when(this.mockCandidateService.getCandidateSuggestions(filtersArgCapt.capture(), Mockito.eq(pageSize), Mockito.eq(false))).thenReturn(pageResults);
 		
-		Page<CandidateAPIOutbound> results = this.util.searchAndPackageForAPIOutput(true, true, false, filters, mockPageable, false);
+		Page<CandidateAPIOutbound> results = this.util.searchAndPackageForAPIOutput(true, true, false, filters, false);
 		
 		assertTrue(filtersArgCapt.getValue().isAvailable().isEmpty());
 		
@@ -142,8 +141,8 @@ public class CandidateSearchUtilTest {
 		final String firstName 	= "Keivn";
 		final String surname 	= "parkings";
 		final String email 		= "admin@arenella-ict.com";
-		final int pageSize = 1;
-		CandidateFilterOptions filters = CandidateFilterOptions.builder().available(true).build();
+		final int pageSize = 750;
+		CandidateFilterOptions filters = CandidateFilterOptions.builder().available(true).maxResults(pageSize).build();
 		
 		List<CandidateSearchAccuracyWrapper> pageItems = List.of(
 				new CandidateSearchAccuracyWrapper(Candidate.builder().available(true).firstname(firstName).surname(surname).email(email).build()),
@@ -154,10 +153,9 @@ public class CandidateSearchUtilTest {
 		
 		ArgumentCaptor<CandidateFilterOptions> filtersArgCapt = ArgumentCaptor.forClass(CandidateFilterOptions.class);
 		
-		Mockito.when(this.mockPageable.getPageSize()).thenReturn(pageSize);
-		Mockito.when(this.mockCandidateService.getCandidateSuggestions(filtersArgCapt.capture(), Mockito.eq(1), Mockito.eq(false), Mockito.eq(false))).thenReturn(pageResults);
+		Mockito.when(this.mockCandidateService.getCandidateSuggestions(filtersArgCapt.capture(), Mockito.eq(pageSize), Mockito.eq(false), Mockito.eq(false))).thenReturn(pageResults);
 		
-		Page<CandidateAPIOutbound> results =  this.util.searchAndPackageForAPIOutput(true, false, false, filters, mockPageable, false);
+		Page<CandidateAPIOutbound> results =  this.util.searchAndPackageForAPIOutput(true, false, false, filters, false);
 		
 		assertTrue(filtersArgCapt.getValue().isAvailable().get());
 		

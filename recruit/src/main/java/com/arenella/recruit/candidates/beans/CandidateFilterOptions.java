@@ -19,6 +19,7 @@ public class CandidateFilterOptions {
 	
 	private String 						orderAttribute;
 	private RESULT_ORDER				order;
+	private int							maxResults										= 750;
 	private String						searchText									= "";
 	private Set<String> 				candidateIds								= new HashSet<>();
 	private Set<GEO_ZONE>				geoZones									= new HashSet<>();
@@ -63,6 +64,7 @@ public class CandidateFilterOptions {
 		
 		this.orderAttribute 							= builder.orderAttribute;
 		this.order 										= builder.order;
+		this.maxResults									= builder.maxResults;
 		this.candidateIds 								= builder.candidateIds;
 		this.geoZones									= builder.geoZones;
 		this.geoPosFilter							 	= builder.geoPosFilter;
@@ -117,6 +119,14 @@ public class CandidateFilterOptions {
 	}
 	
 	/**
+	* Returns the Max number of results
+	* @return Max number of results to return
+	*/
+	public int getMaxResults() {
+		return this.maxResults;
+	}
+	
+	/**
 	* Returns the candidateIds if any to filter on
 	* @return candidateIds to filteron
 	*/
@@ -134,7 +144,7 @@ public class CandidateFilterOptions {
 	
 	/**
 	* If GeoPos filter has been specified returns 
-	* informaiton about filtering within a radius of 
+	* information about filtering within a radius of 
 	* a given position
 	* @return GeoPos filter
 	*/
@@ -160,7 +170,7 @@ public class CandidateFilterOptions {
 	* Returns the countries to filter on
 	* @return countries to filter on
 	*/
-	public Set<COUNTRY> 	getCountries(){
+	public Set<COUNTRY> getCountries(){
 		return this.countries;
 	}	
 	
@@ -399,6 +409,7 @@ public class CandidateFilterOptions {
 		
 		private String 						orderAttribute;
 		private RESULT_ORDER				order;
+		private int							maxResults									= 750;
 		private Set<String> 				candidateIds								= new HashSet<>();
 		private Set<GEO_ZONE>				geoZones									= new HashSet<>();
 		private GeoPosFilter				geoPosFilter							 	= null;
@@ -444,6 +455,16 @@ public class CandidateFilterOptions {
 		*/
 		public CandidateFilterOptionsBuilder order(RESULT_ORDER order) {
 			this.order = order;
+			return this;
+		}
+		
+		/**
+		* Sets the maximum number of results to return
+		* @param maxResults - Max number of results
+		* @return Builder
+		*/
+		public CandidateFilterOptionsBuilder maxResults(int maxResults) {
+			this.maxResults = maxResults;
 			return this;
 		}
 		

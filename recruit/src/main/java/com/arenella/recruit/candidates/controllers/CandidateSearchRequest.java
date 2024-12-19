@@ -1127,6 +1127,8 @@ public class CandidateSearchRequest {
 		builder.orderAttribute(orderAttribute);
 		builder.order(order);
 		
+		req.requestFilters.getMaxNumberOfSuggestions().ifPresent(builder::maxResults);
+		
 		req.candidateFilters().ifPresent(f -> {
 			f.getOwnerId().ifPresent(builder::ownerId);
 			f.isAvailable().ifPresent(builder::available);

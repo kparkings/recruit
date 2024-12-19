@@ -4,7 +4,6 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import com.arenella.recruit.candidates.beans.CandidateFilterOptions;
@@ -35,8 +34,8 @@ public class CandidateSearchUtil {
 	* @return Matching Candidates with data masking applied
 	* @throws Exception
 	*/
-	public Page<CandidateAPIOutbound> searchAndPackageForAPIOutput(boolean isRecruiter, boolean isUseCreditUser, boolean isUserCreditsExpired, CandidateFilterOptions filterOptions, Pageable pageable, Boolean unfiltered) throws Exception{
-		return this.searchAndPackageForAPIOutput(isRecruiter, isUseCreditUser, isUserCreditsExpired, filterOptions, pageable, unfiltered, false);
+	public Page<CandidateAPIOutbound> searchAndPackageForAPIOutput(boolean isRecruiter, boolean isUseCreditUser, boolean isUserCreditsExpired, CandidateFilterOptions filterOptions, Boolean unfiltered) throws Exception{
+		return this.searchAndPackageForAPIOutput(isRecruiter, isUseCreditUser, isUserCreditsExpired, filterOptions, unfiltered, false);
 	}
 	
 	/**
@@ -52,7 +51,7 @@ public class CandidateSearchUtil {
 	* @return Matching Candidates with data masking applied
 	* @throws Exception
 	*/
-	public Page<CandidateAPIOutbound> searchAndPackageForAPIOutput(boolean isRecruiter, boolean isUseCreditUser, boolean isUserCreditsExpired, CandidateFilterOptions filterOptions, Pageable pageable, Boolean unfiltered, boolean isSystemRequest) throws Exception{
+	public Page<CandidateAPIOutbound> searchAndPackageForAPIOutput(boolean isRecruiter, boolean isUseCreditUser, boolean isUserCreditsExpired, CandidateFilterOptions filterOptions, Boolean unfiltered, boolean isSystemRequest) throws Exception{
 		
 		boolean isUnfilteredRequest = Optional.ofNullable(unfiltered).isEmpty() ? false :  unfiltered;
 		
@@ -68,7 +67,7 @@ public class CandidateSearchUtil {
 		* Scenario 1 - User is recruiter with a credit subscription whose credits for the week have expired 
 		*/
 		if (isRecruiter && isUseCreditUser && isUserCreditsExpired) {
-			return candidateService.getCandidateSuggestions(filterOptions, pageable.getPageSize(), isUnfilteredRequest).map(CandidateSuggestionAPIOutbound::convertFromCandidateAsCensored);
+			return candidateService.getCandidateSuggestions(filterOptions, filterOptions.getMaxResults(), isUnfilteredRequest).map(CandidateSuggestionAPIOutbound::convertFromCandidateAsCensored);
 		}
 		
 		/**
@@ -76,14 +75,14 @@ public class CandidateSearchUtil {
 		*/
 		if (isRecruiter && isUseCreditUser) {
 			return candidateService
-					.getCandidateSuggestions(filterOptions, pageable.getPageSize(), isUnfilteredRequest)
+					.getCandidateSuggestions(filterOptions, filterOptions.getMaxResults(), isUnfilteredRequest)
 					.map(c -> c.get().isAvailable() ? CandidateSuggestionAPIOutbound.convertFromCandidateAsCensoredForActiveCredits(c) : CandidateSuggestionAPIOutbound.convertFromCandidateAsCensored(c));
 		}
 		
 		/**
 		* Scenario 4 - All remaining scenarios
 		*/
-		return candidateService.getCandidateSuggestions(filterOptions, pageable.getPageSize(), isUnfilteredRequest, isSystemRequest).map(CandidateSuggestionAPIOutbound::convertFromCandidate);
+		return candidateService.getCandidateSuggestions(filterOptions, filterOptions.getMaxResults(), isUnfilteredRequest, isSystemRequest).map(CandidateSuggestionAPIOutbound::convertFromCandidate);
 		
 	}
 	
