@@ -191,8 +191,8 @@ export class SuggestionsComponent implements OnInit {
 		} 
 		
 		this.initSupportedCountries();
-		this.candidateService.fetchCandidateTotals().subscribe(totals => this.candidateTotals = totals);
-		this.appComponent.refreschUnreadAlerts();
+		//this.candidateService.fetchCandidateTotals().subscribe(totals => this.candidateTotals = totals);
+		//this.appComponent.refreschUnreadAlerts();
 		
 		if (this.subscription) {
 			this.subscription.unsubscribe();
@@ -235,10 +235,6 @@ export class SuggestionsComponent implements OnInit {
 	* Initializes Component`
 	*/
 	ngOnInit(): void {
-
-		this.candidateService.fetchSavedCandidates().subscribe(response => {
-			this.savedCandidates = response;
-		})
 		
 		if (this.externalProvileViewCandidateId.length > 0) {
 			
@@ -252,12 +248,21 @@ export class SuggestionsComponent implements OnInit {
 		
 	}
 	
+	public savedCandidatesLoaded:boolean = false;
+	
 	ngAfterViewChecked(){
 		
 		this.searchBarCss = this.currentView === 'suggestion-results' ? 'showChild' : 'hideChild';
 			
 		if (sessionStorage.getItem("news-item-div")){
 			this.doScrollTop();	
+		}
+		
+		if (!this.savedCandidatesLoaded) {
+			this.savedCandidatesLoaded = true;
+			this.candidateService.fetchSavedCandidates().subscribe(response => {
+				this.savedCandidates = response;
+			});
 		}
 	}
 	
@@ -295,9 +300,9 @@ export class SuggestionsComponent implements OnInit {
 	public showSavedCandidates():void{
 		this.currentView 	= 'saved-candidates';
 		this.lastView 		= 'saved-candidates';
-		this.candidateService.fetchSavedCandidates().subscribe(response => {
-			this.savedCandidates = response;
-		});
+		//this.candidateService.fetchSavedCandidates().subscribe(response => {
+		//	this.savedCandidates = response;
+		//});
 	}
 	
 	/**

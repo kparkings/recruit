@@ -127,7 +127,7 @@ export class SearchbarComponent {
 		this.initGeoZones();
 		this.initSupportedCountries();
 				
-		this.candidateService.fetchCandidateTotals().subscribe(totals => this.candidateTotals = totals);
+		//this.candidateService.fetchCandidateTotals().subscribe(totals => this.candidateTotals = totals);
 				
 		if (this.subscription) {
 			this.subscription.unsubscribe();

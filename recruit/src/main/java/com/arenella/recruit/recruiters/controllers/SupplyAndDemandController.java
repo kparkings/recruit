@@ -155,7 +155,10 @@ public class SupplyAndDemandController {
 	@GetMapping(value="/v1/open-position/count")
 	@PreAuthorize("hasRole('ROLE_RECRUITER') or hasRole('ROLE_ADMIN')")
 	public ResponseEntity<Long> fetchOpenPositionsCount(Principal principal){
-		return ResponseEntity.ok(fetchOpenPositions(principal).getBody().stream().filter(op -> !op.isViewed()).count());
+		
+		Set<UUID> viewedPosts = this.supplyAndDemandService.fetchViewedEventsByRecruiter(EventType.OPEN_POSITION, principal.getName());
+	
+		return ResponseEntity.ok(this.supplyAndDemandService.fetchOpenPositions().stream().filter(op -> !viewedPosts.contains(op.getId())).count());
 	}
 	
 	

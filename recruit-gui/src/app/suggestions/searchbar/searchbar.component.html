@@ -35,7 +35,7 @@
 					</td>
 					
 				</tr>
-				<tr *ngIf="currentUserAuth.isAdmin()">
+				<tr>
 					<td class="sugg-srch-hdr">{{'arenella-suggestions-location' | translate}}</td>
 					<td *ngIf="!showLocationFilters">
 						<p class="toggle-filter-option" (click)="switchLocationFilterView('showLocationFilters')">{{'Show' | translate}}..</p>
