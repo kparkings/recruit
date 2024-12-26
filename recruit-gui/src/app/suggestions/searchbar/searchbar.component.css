@@ -162,12 +162,36 @@
 .mobile-search-box{
 	margin-left:1%;
 	margin-right:1%;
-	width:98%;
+	width:94%;
 }
 
 .sugg-srch-job-title-name{
 	margin-right:20px;
 	min-width:500px;
+}
+
+.filters-collapse-options{
+	margin-left:40px;
+	color:#6A5ACD;
+	font-weight:bold;
+	cursor:pointer;
+}
+
+.search-filter-pane{
+	margin-left:40px;
+}
+
+.loc-item{
+	float:left;
+	margin-left:10px;
+}
+
+.loc-item-input{
+	width:150px;
+}
+
+.loc-item-left{
+	margin-left:1px;
 }
 
 @media (max-width:700px)  {
@@ -186,4 +210,31 @@
 	.geo-code-filter{
 		width:100%;	
 	}
+	
+	.search-filter-pane{
+		margin-left:1%;
+		margin-right:1%;
+		width:98%;
+	}
+	
+	.filters-collapse-options{
+		margin-left:5px;
+		color:#6A5ACD;
+		font-weight:bold;
+		cursor:pointer;
+	}
+	
+	.loc-table{
+		background:red;
+		width:200px;
+	}
+	
+	.loc-item{
+		width:100%;
+	}
+	
+	.loc-item-left{
+		margin-left:10px;
+	}
+	
 }

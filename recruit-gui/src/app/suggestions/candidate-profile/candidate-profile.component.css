@@ -128,3 +128,7 @@ suggestion-perception-excellent{
 	overflow: auto;
 	min-height:130px;
 }
+
+.profile-container{
+	margin-top:20px;
+}

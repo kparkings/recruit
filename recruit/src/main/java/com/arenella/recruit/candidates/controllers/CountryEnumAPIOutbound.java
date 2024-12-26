@@ -9,6 +9,7 @@ import com.arenella.recruit.candidates.enums.COUNTRY;
 public class CountryEnumAPIOutbound {
 
 	private final COUNTRY 	country;
+	private final String 	humanReadable;
 	private final String 	iso2Code;
 	
 	/**
@@ -17,8 +18,9 @@ public class CountryEnumAPIOutbound {
 	* @param iso2Code	- iso2Code of the Country
 	*/
 	public CountryEnumAPIOutbound(COUNTRY country) {
-		this.country 	= country;
-		this.iso2Code 	= country.getIsoCode();
+		this.country 		= country;
+		this.iso2Code 		= country.getIsoCode();
+		this.humanReadable 	= country.getHumanReadableName();
 	}
 	
 	/**
@@ -29,6 +31,14 @@ public class CountryEnumAPIOutbound {
 		return this.country;
 	}
 
+	/**
+	* Returns human readable Name
+	* @return human readable Name
+	*/
+	public String getHumanReadable() {
+		return this.humanReadable;
+	}
+	
 	/**
 	* Returns 2 digit iso code
 	* @return iso 2 code

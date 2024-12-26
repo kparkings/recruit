@@ -35,14 +35,15 @@ export class SearchbarComponent {
 	private SURNAME_DEFAULT:string 								= 'Surname';
 	
 	public showGeoZoneFilters:string							= "";
-	public includeUnavailableCandidatesSelected:string = 'true';
-	public includeRequiresSponsorshipCandidatesSelected:string = 'true';
+	public includeUnavailableCandidatesSelected:string 			= 'true';
+	public filterView:string									= 'collapsed';
+	public includeRequiresSponsorshipCandidatesSelected:string  = 'true';
 	public paidFeature:string								 	= '';
 	public showIncludeFilters:string							= "";
 	public skillFilters:Array<string>							= new Array<string>();
 	public minMaxOptions:Array<string> 							= new Array<string>('','1','2','3','4','5','8','10','15','20','25','30');
 	public showLanguageFilters:string							= "";
-	public supportedLanguages:Array<SupportedLanguage> = new Array<SupportedLanguage>();
+	public supportedLanguages:Array<SupportedLanguage> 			= new Array<SupportedLanguage>();
 	public showCountryFilters:string							= "";
 	public supportedCountries:Array<SupportedCountry>			= new Array<SupportedCountry>();
 	public suggestionFilterForm:UntypedFormGroup 				= new UntypedFormGroup({});
@@ -80,7 +81,20 @@ export class SearchbarComponent {
 		this.init();	
 			
 	}
-	
+
+	/**
+	* Toggles between displaying and hiding of the filters
+	*/
+	public toggleFilters():void{
+		
+		if (this.filterView == 'collapsed'){
+			this.filterView = 'expanded';
+		} else {
+			this.filterView = 'collapsed';
+		}
+		
+	}
+		
 	/**
 	* Angular lifecycyle: Initializes Component
 	*/

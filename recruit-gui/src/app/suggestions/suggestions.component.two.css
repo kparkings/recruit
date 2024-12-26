@@ -225,6 +225,7 @@ textarea {
 
 .hideChild{
 	visibility:collapse;
+	height:0px;
 }
 
 .showChild{

@@ -163,7 +163,7 @@ public interface CandidateRepository extends ElasticsearchRepository<CandidateDo
 		List<Candidate> hits = response
 				.hits()
 				.hits()
-				.stream()
+				.parallelStream()
 				.map(h -> CandidateDocument.convertFromDocument(h.source()))
 				.collect(Collectors.toCollection(ArrayList::new));
 		

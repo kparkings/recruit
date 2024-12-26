@@ -27,7 +27,7 @@ export class RecruiterMarketplaceService {
 		const config 			= await this.httpClient.get<any>(backendUrl,  { observe: 'response', withCredentials: true}).toPromise();
  
  		config.body.forEach( (country: SupportedCountry) => {
-			this.supportedCountries.push(new SupportedCountry(''+country.name, country.iso2Code));	
+			this.supportedCountries.push(new SupportedCountry(''+country.name, country.iso2Code, country.humanReadable));	
 		});
  
  	   	Object.assign(this, config);

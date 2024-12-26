@@ -105,11 +105,11 @@ public class CityServiceImpl implements CityService {
 		
 		
 		String cleanedString = ""+name.trim();
-		cleanedString = cleanedString.toLowerCase();
+	//	cleanedString = cleanedString.toLowerCase();
 		
-		if (cleanedString.length() > 0) {
-			cleanedString = cleanedString.substring(0,1).toUpperCase() + cleanedString.substring(1);
-		}
+		//if (cleanedString.length() > 0) {
+		//	cleanedString = cleanedString.substring(0,1).toUpperCase() + cleanedString.substring(1);
+		//}
 		
 		return cleanedString;
 		

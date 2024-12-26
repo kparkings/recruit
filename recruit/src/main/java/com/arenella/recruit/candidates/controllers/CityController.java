@@ -36,7 +36,11 @@ public class CityController {
 	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('ROLE_RECRUITER')")
 	@GetMapping("/city/{country}")
 	public ResponseEntity<Set<CityAPIOutbound>>  fetchCitiesForCountry(@PathVariable("country") COUNTRY country){
-		return ResponseEntity.ok(this.cityService.fetchCitiesForCountry(country).stream().map(CityAPIOutbound::convertToAPIOutbound).collect(Collectors.toCollection(LinkedHashSet::new)));
+		return ResponseEntity.ok(this.cityService.fetchCitiesForCountry(country)
+				.stream()
+				.map(CityAPIOutbound::convertToAPIOutbound)
+				.sorted((c1,c2) -> c1.getName().compareTo(c2.getName()))
+				.collect(Collectors.toCollection(LinkedHashSet::new)));
 	}
 	
 	/**

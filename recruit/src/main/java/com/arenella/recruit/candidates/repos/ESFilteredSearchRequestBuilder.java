@@ -85,8 +85,6 @@ public class ESFilteredSearchRequestBuilder {
                     .lon(filterOptions.getGeoPosFilter().get().lon())
             ).build();
             
-			System.out.println("DISTANCE VALUE = " + filterOptions.getGeoPosFilter().get().distance());
-			
 			GeoDistanceQuery gdq = QueryBuilders
 			            .geoDistance()
 			            .distanceType(GeoDistanceType.Plane)

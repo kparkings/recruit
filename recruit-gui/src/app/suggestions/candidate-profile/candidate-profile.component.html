@@ -16,74 +16,77 @@
 	<button class="btn btn-secondary arenella-btn" 					(click)="showNotesDialog(notesBox,suggestedCandidate)" 	*ngIf="showBtnNotes()">{{'arenella-suggestions-profile-btn-notes' | translate}}</button>
 	<button class="btn btn-secondary arenella-btn" 					(click)="back()"										*ngIf="!isCandidate()">{{'arenella-suggestions-profile-btn-back' | translate}}</button>
 </div>
-			
-<!-- Left Pane -->
-<div *ngIf="currentView === 'suggestion-results' || currentView === 'saved-candidates'">
-	<app-candidate-info-box [config]="infoItemConfig" (openContactBoxEvent)="contactCandidate(contactBox)" *ngIf="!this.suggestedCandidate.removed"></app-candidate-info-box>
-				
-	<!-- div class="details-right" -->
-	<div class="right-body-pane details-right" *ngIf="!this.suggestedCandidate.removed">
-		<div style="width:100%"><h1>{{suggestedCandidate.roleSought}}</h1></div>
 	
-		<div *ngIf="candidateProfile.introduction && candidateProfile.introduction.length != 0" style="margin-top:50px;margin-bottom:50px;">
-			<div>
-				<h1 style="background:#e8e8e8">{{'arenella-suggestions-profile-introduction' | translate}}</h1>
-			</div>
-			<div style="width:100%;">
-				<pre style="white-space:pre-line;font-family: Roboto, 'Helvetica Neue', sans-serif;">{{candidateProfile.introduction}}</pre>
-			</div>
-		</div>		
-		<div *ngIf="!candidateProfile.introduction || candidateProfile.introduction.length == 0" style="margin-top:50px;margin-bottom:50px;">
-			<div><h1 style="background:#e8e8e8">{{'arenella-suggestions-profile-introduction' | translate}}</h1></div>
-			<div style="width:100%;">
-				<div style="white-space:pre-line;font-family: Roboto, 'Helvetica Neue', sans-serif;">
-				{{'arenella-suggestions-profile-intro-text' | translate}} {{this.suggestedCandidate.firstname}} 
-				{{'arenella-suggestions-profile-intro-text-2' | translate}} {{this.suggestedCandidate.yearsExperience}} {{'arenella-suggestions-profile-intro-text-3' | translate}}
-			
-				{{'arenella-suggestions-profile-intro-text-4' | translate}} {{this.suggestedCandidate.country | enumToHumanReadableValue}} 
+<div class="profile-container">		
+
+	<!-- Left Pane -->
+	<div *ngIf="currentView === 'suggestion-results' || currentView === 'saved-candidates'">
+		<app-candidate-info-box [config]="infoItemConfig" (openContactBoxEvent)="contactCandidate(contactBox)" *ngIf="!this.suggestedCandidate.removed"></app-candidate-info-box>
+					
+		<!-- div class="details-right" -->
+		<div class="right-body-pane details-right" *ngIf="!this.suggestedCandidate.removed">
+			<div style="width:100%"><h1>{{suggestedCandidate.roleSought}}</h1></div>
+		
+			<div *ngIf="candidateProfile.introduction && candidateProfile.introduction.length != 0" style="margin-top:50px;margin-bottom:50px;">
+				<div>
+					<h1 style="background:#e8e8e8">{{'arenella-suggestions-profile-introduction' | translate}}</h1>
 				</div>
+				<div style="width:100%;">
+					<pre style="white-space:pre-line;font-family: Roboto, 'Helvetica Neue', sans-serif;">{{candidateProfile.introduction}}</pre>
+				</div>
+			</div>		
+			<div *ngIf="!candidateProfile.introduction || candidateProfile.introduction.length == 0" style="margin-top:50px;margin-bottom:50px;">
+				<div><h1 style="background:#e8e8e8">{{'arenella-suggestions-profile-introduction' | translate}}</h1></div>
+				<div style="width:100%;">
+					<div style="white-space:pre-line;font-family: Roboto, 'Helvetica Neue', sans-serif;">
+					{{'arenella-suggestions-profile-intro-text' | translate}} {{this.suggestedCandidate.firstname}} 
+					{{'arenella-suggestions-profile-intro-text-2' | translate}} {{this.suggestedCandidate.yearsExperience}} {{'arenella-suggestions-profile-intro-text-3' | translate}}
+				
+					{{'arenella-suggestions-profile-intro-text-4' | translate}} {{this.suggestedCandidate.country | enumToHumanReadableValue}} 
+					</div>
+				</div>
+			</div>		
+		
+			<div>
+				<table class="table candidate-suggestion-table">
+					<tr>
+						<td class="candidate-suggestion-table-hdr">{{'arenella-suggestions-profile-candidate-number' | translate}}</td>
+						<td>{{suggestedCandidate.candidateId}}</td>
+					</tr>
+					<tr>
+						<td class="candidate-suggestion-table-hdr">{{'arenella-suggestions-profile-candidate-name' | translate}}</td>
+						<td>{{suggestedCandidate.firstname}} {{suggestedCandidate.surname}}</td>
+					</tr>
+					<tr *ngIf="!isCandidate()">
+						<td class="candidate-suggestion-table-hdr">{{'arenella-suggestions-profile-candidate-skill-accuracy' | translate}}</td>
+						<td>
+							<div class="suggestion-perception-{{suggestedCandidate.accuracySkills}}"></div>
+						</td>
+					</tr>
+					<tr *ngIf="!isCandidate()">
+						<td class="candidate-suggestion-table-hdr">{{'arenella-suggestions-profile-candidate-lang-accuracy' | translate}}</td>
+						<td>
+							<div class="suggestion-perception-{{suggestedCandidate.accuracyLanguages}}"></div>
+						</td>
+					</tr>
+					<tr *ngIf="!isCandidate()">
+						<td class="candidate-suggestion-table-hdr">{{'arenella-suggestions-profile-candidate-matching-skills' | translate}}</td>
+						<td>
+							<div style="float:center" *ngFor="let skill of skillsFiltersMatch()" class="{{hasRequiredSkill(skill)}}">
+								{{skill}}
+							</div>
+						</td>
+					</tr>
+					<tr *ngIf="!isCandidate()">
+						<td class="candidate-suggestion-table-hdr">{{'arenella-suggestions-profile-candidate-missing-skills' | translate}}</td>
+						<td>
+							<div style="float:center" *ngFor="let skill of skillsFiltersNoMatch()" class="{{hasRequiredSkill(skill)}}">
+								{{skill}}
+							</div>
+						</td>
+					</tr>
+				</table>
 			</div>
-		</div>		
-	
-		<div>
-			<table class="table candidate-suggestion-table">
-				<tr>
-					<td class="candidate-suggestion-table-hdr">{{'arenella-suggestions-profile-candidate-number' | translate}}</td>
-					<td>{{suggestedCandidate.candidateId}}</td>
-				</tr>
-				<tr>
-					<td class="candidate-suggestion-table-hdr">{{'arenella-suggestions-profile-candidate-name' | translate}}</td>
-					<td>{{suggestedCandidate.firstname}} {{suggestedCandidate.surname}}</td>
-				</tr>
-				<tr *ngIf="!isCandidate()">
-					<td class="candidate-suggestion-table-hdr">{{'arenella-suggestions-profile-candidate-skill-accuracy' | translate}}</td>
-					<td>
-						<div class="suggestion-perception-{{suggestedCandidate.accuracySkills}}"></div>
-					</td>
-				</tr>
-				<tr *ngIf="!isCandidate()">
-					<td class="candidate-suggestion-table-hdr">{{'arenella-suggestions-profile-candidate-lang-accuracy' | translate}}</td>
-					<td>
-						<div class="suggestion-perception-{{suggestedCandidate.accuracyLanguages}}"></div>
-					</td>
-				</tr>
-				<tr *ngIf="!isCandidate()">
-					<td class="candidate-suggestion-table-hdr">{{'arenella-suggestions-profile-candidate-matching-skills' | translate}}</td>
-					<td>
-						<div style="float:center" *ngFor="let skill of skillsFiltersMatch()" class="{{hasRequiredSkill(skill)}}">
-							{{skill}}
-						</div>
-					</td>
-				</tr>
-				<tr *ngIf="!isCandidate()">
-					<td class="candidate-suggestion-table-hdr">{{'arenella-suggestions-profile-candidate-missing-skills' | translate}}</td>
-					<td>
-						<div style="float:center" *ngFor="let skill of skillsFiltersNoMatch()" class="{{hasRequiredSkill(skill)}}">
-							{{skill}}
-						</div>
-					</td>
-				</tr>
-			</table>
 		</div>
 	</div>
 </div>

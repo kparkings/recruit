@@ -228,6 +228,7 @@ textarea {
 	padding:5px;
 	padding-left:20px;
 	max-width:72%;
+	padding-top:0px;
 }
 
 @media (max-width:700px)  {

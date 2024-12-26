@@ -1,16 +1,26 @@
 <div>	
 	<form [formGroup]="suggestionFilterForm" >	
-	
-		<div>		
-			<table class="mobile-search-box">
-				<tr>
-					<td class="sugg-srch-hdr">{{'arenella-suggestions-job-title' | translate}}<span style="cursor:pointer; color:#6a5acd;" (click)='doShowSearchTypeFilterSelectionModal()'> ...</span></td>
-					<td class="sugg-srch-bdy">
-						<input type="text" class="sugg-srch-job-title" 									formControlName="searchPhrase" 				*ngIf="getCurrentSearchFilterType() === 'FUNCTION' || getCurrentSearchFilterType() == 'EMAIL' || getCurrentSearchFilterType() == 'CANDIDATE_ID'">
-						<input type="text" class="sugg-srch-job-title-name {{cssSearchNameDefault()}}" 	formControlName="searchPhraseFirstName" 	*ngIf="getCurrentSearchFilterType() === 'NAME'" (click)="activateFirstnameSurnameFields()">
-						<input type="text" class="sugg-srch-job-title-name {{cssSearchNameDefault()}}" 	formControlName="searchPhraseSurname" 		*ngIf="getCurrentSearchFilterType() === 'NAME'" (click)="activateFirstnameSurnameFields()">
-					</td>
-				</tr>
+
+		<div >
+		  
+		  	<div>
+				<table class="mobile-search-box search-filter-pane">
+					<tr>
+						<td class="sugg-srch-hdr">{{'arenella-suggestions-job-title' | translate}}<span style="cursor:pointer; color:#6a5acd;" (click)='doShowSearchTypeFilterSelectionModal()'> ...</span></td>
+						<td class="sugg-srch-bdy">
+							<input type="text" class="sugg-srch-job-title" 									formControlName="searchPhrase" 				*ngIf="getCurrentSearchFilterType() === 'FUNCTION' || getCurrentSearchFilterType() == 'EMAIL' || getCurrentSearchFilterType() == 'CANDIDATE_ID'">
+							<input type="text" class="sugg-srch-job-title-name {{cssSearchNameDefault()}}" 	formControlName="searchPhraseFirstName" 	*ngIf="getCurrentSearchFilterType() === 'NAME'" (click)="activateFirstnameSurnameFields()">
+							<input type="text" class="sugg-srch-job-title-name {{cssSearchNameDefault()}}" 	formControlName="searchPhraseSurname" 		*ngIf="getCurrentSearchFilterType() === 'NAME'" (click)="activateFirstnameSurnameFields()">
+						</td>
+					</tr>
+				</table>
+			</div>
+			
+			<span class="filters-collapse-options" *ngIf="filterView == 'expanded'" (click)=toggleFilters()>Hide filters...</span>	
+			<span class="filters-collapse-options" *ngIf="filterView != 'expanded'" (click)=toggleFilters()>Show filters...</span>
+			
+			<table class="mobile-search-box search-filter-pane" *ngIf="filterView == 'expanded'">
+		
 				<tr>
 					<td class="sugg-srch-hdr">{{'arenella-suggestions-geoZones' | translate}}</td>
 					<td *ngIf="!showGeoZoneFilters">
@@ -32,29 +42,28 @@
 					</td>
 					<td *ngIf="showLocationFilters" class="sugg-srch-bdy location-filters">
 						<p class="toggle-filter-option" (click)="switchLocationFilterView('')">{{'Hide' | translate}}..</p>
-						<div>
-							<table class="loc-table">
-								<tr>
-									<td>{{'arenella-suggestions-location-country' | translate}}</td>
-									<td>
-										<select (change)="switchLocationCountry()" formControlName="locationCountry">
-											<option value="{{supportedCountry.name}}" *ngFor="let supportedCountry of supportedCountries">{{supportedCountry.name}}<option>
+						<div style="max-width:100%;">
+							
+							<div>
+								<div>
+									<div class="loc-item loc-item-left">{{'arenella-suggestions-location-country' | translate}}</div>
+									<div class="loc-item">
+										<select (change)="switchLocationCountry()" formControlName="locationCountry" class="loc-item-input">
+											<option value="{{supportedCountry.name}}" *ngFor="let supportedCountry of supportedCountries">{{supportedCountry.humanReadable}}<option>
 										</select>
-									</td>
-								</tr>
-								<tr>
-									<td>{{'arenella-suggestions-location-city' | translate}}</td>
-									<td>
-										<select formControlName="locationCity">
+									</div>
+									<div class="loc-item">{{'arenella-suggestions-location-city' | translate}}</div>
+									<div class="loc-item">
+										<select formControlName="locationCity" class="loc-item-input">
 											<option *ngFor="let city of citiesForSelectedCountry">{{city.name}}<option>
 										</select>
-									</td>
-								</tr>
-								<tr>
-									<td>{{'arenella-suggestions-location-distance' | translate}}</td>
-									<td><input type="number" formControlName="locationDistance"/></td>
-								</tr>
-							</table>
+									</div>
+									<div class="loc-item">{{'arenella-suggestions-location-distance' | translate}}</div>
+									<div class="loc-item loc-item-input"><input type="number" formControlName="locationDistance"/></div>
+								</div>
+							
+							</div>
+							
 						</div>
 						
 					</td>
