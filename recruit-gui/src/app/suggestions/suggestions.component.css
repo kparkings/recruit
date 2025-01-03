@@ -18,23 +18,25 @@
 	margin-top:10px;
 }
 
+/**
 .sugg-srch-ctry-chkbox{
 	display:inline;
 	margin:0;
 	padding:0;
-}
+}*/
 
 .radio-button_label{
 	cursor:pointer;
 }
 
 @media (max-width:700px)  {
+	/**
 	.sugg-srch-ctry-chkbox{
 		display:inline-block;
 		margin:0;
 		padding:0;
 		width:100%;
-	}	
+	}	*/
 }
 
 .left-menu h3, h5{

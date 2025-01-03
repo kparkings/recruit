@@ -30,8 +30,8 @@ export class InfoPaneUtil{
 			//Languages Block
 			let languageBlock:InfoItemBlock = new InfoItemBlock();
 			languageBlock.setTitle(this.translate.instant('info-item-title-languages'));
-			this.candidateProfile.languages.forEach(lang => {
-					languageBlock.addRow(new InfoItemRowKeyValueMaterialIcon(this.getLanguage(lang.language),this.getMaterialIconClassFromLangLevel(lang.level)));
+			this.candidateProfile.languages.filter(l => l.level && l.level != 'UNKNOWN').forEach(lang => {
+				languageBlock.addRow(new InfoItemRowKeyValueMaterialIcon(this.getLanguage(lang.language),this.getMaterialIconClassFromLangLevel(lang.level)));
 			});
 			
 			languageBlock.sort();
