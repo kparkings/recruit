@@ -57,7 +57,8 @@
 								</thead>
 								<tbody>  
 									<tr *ngFor="let user of recruiterLoginsChartLabels" (click)="switchUserStatsView('table', user)">
-										<td>{{user}}</td>
+										<td *ngIf="searchsSelectedUser == user" class="searchSelectedUser">{{user}}</td>
+										<td *ngIf="searchsSelectedUser != user">{{user}}</td>
 									</tr>
 								</tbody>
 							</table>

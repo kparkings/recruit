@@ -92,9 +92,9 @@ export class StatisticsComponent implements OnInit {
 	private downloadsChartData 									= [{label: "",data: [''], backgroundColor: ''}];
 	private recruiterDownloadsChartData 						= [{label: "", data: [''], backgroundColor: ''}];
 
-	public statChartDivMobile:string = '';
-	public isMobile:boolean 					= false;
-	
+	public statChartDivMobile:string 							= '';
+	public isMobile:boolean 									= false;
+	public searchsSelectedUser:string							= "";
 	public getFunctionLabel(type:string){
 		
 		if(type == null){
@@ -115,6 +115,7 @@ export class StatisticsComponent implements OnInit {
 	*/
   	public switchUserStatsView(view:string, selectedUserId:any = ""):void{
 		  this.loginChartViewUser 	= selectedUserId.toString();
+		  this.searchsSelectedUser 	= selectedUserId;
 		  this.fetchReruiterSearchStats();
 	}
 
@@ -280,25 +281,25 @@ export class StatisticsComponent implements OnInit {
 	
 	public switchSearchStats(period:string):void{
 			
-			if(period === 'today') {
-				this.recruiterLoginsChartData = [{ data: this.loginsToday, label: 'Todays logins', backgroundColor: this.chartColor  }]; 
-		        this.recruiterLoginsChartLabels  = this.loginsUserIdsToday; 
-		        this.loginCountRecruiter = this.loginCountRecruiterToday;
-				this.loginCountCandidate = this.loginCountCandidateToday;
-				this.recruiterStatPeriod = "DAY";
-			//	this.createLeftChart(this.recruiterLoginsChartLabels, this.recruiterLoginsChartData);	
-			}
-			
-			if(period === 'week') {
-				this.recruiterLoginsChartData = [{ data: this.loginsWeek, label: 'Weeks logins' ,backgroundColor: this.chartColor  }]; 
-		        this.recruiterLoginsChartLabels  = this.loginsUserIdsWeek; 	
-		        this.loginCountRecruiter = this.loginCountRecruiterWeek;
-				this.loginCountCandidate = this.loginCountCandidateWeek;
-				this.recruiterStatPeriod = "WEEK";
-			//	this.createLeftChart(this.recruiterLoginsChartLabels, this.recruiterLoginsChartData);
-			}
-			
+		this.searchsSelectedUser = "";
+	
+		if (period === 'today') {
+			this.recruiterLoginsChartData = [{ data: this.loginsToday, label: 'Todays logins', backgroundColor: this.chartColor  }]; 
+	        this.recruiterLoginsChartLabels  = this.loginsUserIdsToday; 
+	        this.loginCountRecruiter = this.loginCountRecruiterToday;
+			this.loginCountCandidate = this.loginCountCandidateToday;
+			this.recruiterStatPeriod = "DAY";
 		}
+		
+		if (period === 'week') {
+			this.recruiterLoginsChartData = [{ data: this.loginsWeek, label: 'Weeks logins' ,backgroundColor: this.chartColor  }]; 
+	        this.recruiterLoginsChartLabels  = this.loginsUserIdsWeek; 	
+	        this.loginCountRecruiter = this.loginCountRecruiterWeek;
+			this.loginCountCandidate = this.loginCountCandidateWeek;
+			this.recruiterStatPeriod = "WEEK";
+		}
+		
+	}
 	
 	public fetchStatus():void{
 		
@@ -561,6 +562,7 @@ export class StatisticsComponent implements OnInit {
   				if(this.rightChart){
   					this.rightChart.destroy();
   				}
+				this.searchsSelectedUser 	= "";
 				break;
 			}
 		}

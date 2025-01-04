@@ -1,3 +1,7 @@
+.searchSelectedUser{
+	background:green;	
+}
+
 .stats-table{
 	margin-left:20px;
 	margin-right:20px;
@@ -54,7 +58,7 @@ chart-wrapper-page{
 
 .login-table-view table tbody tr:hover{
 	cursor:pointer;
-	background:green;
+	background:grey;
 	padding:10px;
 }
 
@@ -97,6 +101,20 @@ chart-wrapper-page{
 	margin-left:5px;
 }
 
-.stat-cart-div-mobile{
-	width:100%;
+@media (max-width:700px)  {
+	
+	.stat-canvas{
+		width:90%;
+		min-width:370px;
+		max-width:90%;
+		float:left;
+		padding:5px;
+		padding-right:0px;
+		margin-bottom:40px;
+	}
+
+	.statChartDiv{
+		width:90%;
+	}
+	
 }
