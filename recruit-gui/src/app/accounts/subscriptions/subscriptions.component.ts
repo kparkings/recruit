@@ -123,6 +123,7 @@ export class SubscriptionsComponent {
 					sa.userId 			= r.userId;
 					sa.type 			= s.type;
 					sa.invoiceType	 	= s.invoiceType;
+					sa.created			= s.created;
 					sa.actions.push("ACTIVATE_SUBSCRIPTION");
 					sa.actions.push("REJECT_SUBSCRIPTION");
 					
@@ -147,6 +148,7 @@ export class SubscriptionsComponent {
 					sa.userId 			= r.userId;
 					sa.type 			= s.type;
 					sa.invoiceType	 	= s.invoiceType;
+					sa.created			= s.created;
 					sa.actions.push("ACTIVATE_SUBSCRIPTION");
 					sa.actions.push("DISABLE_PENDING_PAYMENT");
 					
@@ -171,6 +173,7 @@ export class SubscriptionsComponent {
 					sa.userId 			= r.userId;
 					sa.type 			= s.type;
 					sa.invoiceType	 	= s.invoiceType;
+					sa.created			= s.created;
 					sa.actions.push("ACTIVATE_SUBSCRIPTION");
 					
 					this.recruitersWithSubscriptionActions.push(sa);

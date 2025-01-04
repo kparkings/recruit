@@ -29,6 +29,7 @@ export class StatisticsComponent implements OnInit {
 	public showStatsListings:boolean					= false;
 	public showNewCandidates:boolean					= false;
 	public showMarketplaceStats:boolean					= false;
+	public showSearches:boolean							= false;
 	public recruiterDownloads:string[] 					= [];
 	public recruiterDownloadsDaily:string[] 			= [];
 	public recruiterDownloadsWeekly:string[] 			= [];
@@ -86,7 +87,7 @@ export class StatisticsComponent implements OnInit {
 	private marketplaceChartData 								= [{label: "",data: [''],backgroundColor: ''}];
 	private listingsChartData 									= [{label: "",data: [''],backgroundColor: ''}];
 	private availabilityChartData 								= [{label: "",data: [''],backgroundColor: ''}];
-	private loginChartData 										= [{label: "",data: [''],backgroundColor: ''}];
+	//private loginChartData 										= [{label: "",data: [''],backgroundColor: ''}];
 	private recruiterLoginsChartData 							= [{label: "",data: [''],backgroundColor: ''}];
 	private downloadsChartData 									= [{label: "",data: [''], backgroundColor: ''}];
 	private recruiterDownloadsChartData 						= [{label: "", data: [''], backgroundColor: ''}];
@@ -230,30 +231,30 @@ export class StatisticsComponent implements OnInit {
 		this.fetchStatus();
 		this.fetchMarketplaceStats();
 		this.switchTab('logins');
-		this.switchLoginStats('year');
+		//this.switchLoginStats('year');
 	}
 			
-	public switchLoginStats(period:string):void{
+	//public switchLoginStats(period:string):void{
 		
-		if(period === 'year') {
-			this.loginChartData = [{ data: this.yearValues, label: 'Logins', backgroundColor: this.chartColor },];
-			this.loginChartLabels = this.yearKeys;
-			this.createLeftChartAsLine(this.loginChartLabels, this.loginChartData);
-		}
+	//	if(period === 'year') {
+	//		this.loginChartData = [{ data: this.yearValues, label: 'Logins', backgroundColor: this.chartColor },];
+	//		this.loginChartLabels = this.yearKeys;
+	//		this.createLeftChartAsLine(this.loginChartLabels, this.loginChartData);
+	//	}
 		
-		if(period === '3months') {
-			this.loginChartData = [{ data: this.threeMonthValues, label: 'Logins', backgroundColor: this.chartColor },];
-			this.loginChartLabels = this.threeMonthKeys;
-			this.createLeftChartAsLine(this.loginChartLabels, this.loginChartData);	
-		}
+	//	if(period === '3months') {
+	////		this.loginChartData = [{ data: this.threeMonthValues, label: 'Logins', backgroundColor: this.chartColor },];
+	//		this.loginChartLabels = this.threeMonthKeys;
+	//		this.createLeftChartAsLine(this.loginChartLabels, this.loginChartData);	
+	//	}
 		
-		if(period === 'week') {
-			this.loginChartData = [{ data: this.weekValues, label: 'Logins', backgroundColor: this.chartColor },];
-			this.loginChartLabels = this.weekKeys;
-			this.createLeftChartAsLine(this.loginChartLabels, this.loginChartData);
-		}
+	//	if(period === 'week') {
+	//		this.loginChartData = [{ data: this.weekValues, label: 'Logins', backgroundColor: this.chartColor },];
+	//		this.loginChartLabels = this.weekKeys;
+	//		this.createLeftChartAsLine(this.loginChartLabels, this.loginChartData);
+	//	}
 		
-	}
+	//}
 
 	public switchUserStats(period:string):void{
 		
@@ -263,7 +264,7 @@ export class StatisticsComponent implements OnInit {
 	        this.loginCountRecruiter = this.loginCountRecruiterToday;
 			this.loginCountCandidate = this.loginCountCandidateToday;
 			this.recruiterStatPeriod = "DAY";
-			this.createRightChart(this.recruiterLoginsChartLabels, this.recruiterLoginsChartData);	
+			this.createLeftChart(this.recruiterLoginsChartLabels, this.recruiterLoginsChartData);	
 		}
 		
 		if(period === 'week') {
@@ -272,10 +273,32 @@ export class StatisticsComponent implements OnInit {
 	        this.loginCountRecruiter = this.loginCountRecruiterWeek;
 			this.loginCountCandidate = this.loginCountCandidateWeek;
 			this.recruiterStatPeriod = "WEEK";
-			this.createRightChart(this.recruiterLoginsChartLabels, this.recruiterLoginsChartData);
+			this.createLeftChart(this.recruiterLoginsChartLabels, this.recruiterLoginsChartData);
 		}
 		
 	}
+	
+	public switchSearchStats(period:string):void{
+			
+			if(period === 'today') {
+				this.recruiterLoginsChartData = [{ data: this.loginsToday, label: 'Todays logins', backgroundColor: this.chartColor  }]; 
+		        this.recruiterLoginsChartLabels  = this.loginsUserIdsToday; 
+		        this.loginCountRecruiter = this.loginCountRecruiterToday;
+				this.loginCountCandidate = this.loginCountCandidateToday;
+				this.recruiterStatPeriod = "DAY";
+			//	this.createLeftChart(this.recruiterLoginsChartLabels, this.recruiterLoginsChartData);	
+			}
+			
+			if(period === 'week') {
+				this.recruiterLoginsChartData = [{ data: this.loginsWeek, label: 'Weeks logins' ,backgroundColor: this.chartColor  }]; 
+		        this.recruiterLoginsChartLabels  = this.loginsUserIdsWeek; 	
+		        this.loginCountRecruiter = this.loginCountRecruiterWeek;
+				this.loginCountCandidate = this.loginCountCandidateWeek;
+				this.recruiterStatPeriod = "WEEK";
+			//	this.createLeftChart(this.recruiterLoginsChartLabels, this.recruiterLoginsChartData);
+			}
+			
+		}
 	
 	public fetchStatus():void{
 		
@@ -312,8 +335,8 @@ export class StatisticsComponent implements OnInit {
 			this.loginsUserIdsWeek 			= Array.from(statsObj.getEventsWeekKeys());
 			this.loginsWeek 				= statsObj.getEventsWeekValues();
 			
-			this.yearKeys 					= Array.from(statsObj.getYearStatsKeysAsStrings());
-			this.yearValues 				= statsObj.getYearStatsValues();
+			//this.yearKeys 					= Array.from(statsObj.getYearStatsKeysAsStrings());
+			//this.yearValues 				= statsObj.getYearStatsValues();
 			
 			this.threeMonthKeys 			= Array.from(statsObj.getThreeMonthStatsKeysAsStrings());
 			this.threeMonthValues 			= statsObj.getThreeMonthStatsValues();
@@ -321,13 +344,18 @@ export class StatisticsComponent implements OnInit {
 			this.weekKeys 					= Array.from(statsObj.getWeekStatsKeysAsStrings());
 			this.weekValues 				= statsObj.getWeekStatsValues();
 			
-			this.loginChartData = [{label: "Logins", data: this.yearValues, backgroundColor: this.chartColor}];
-			this.loginChartLabels = this.yearKeys;
-			this.createLeftChartAsLine(this.loginChartLabels, this.loginChartData);
+			//this.loginChartData = [{label: "Logins", data: this.yearValues, backgroundColor: this.chartColor}];
+			//this.loginChartLabels = this.yearKeys;
+			//this.createLeftChartAsLine(this.loginChartLabels, this.loginChartData);
 			
 			this.recruiterLoginsChartData = [{label: "Todays Logins", data: this.loginsToday, backgroundColor: this.chartColor}];
 			this.recruiterLoginsChartLabels = this.loginsUserIdsToday; 
-			this.createRightChart(this.recruiterLoginsChartLabels, this.recruiterLoginsChartData);
+			//this.createRightChart(this.recruiterLoginsChartLabels, this.recruiterLoginsChartData);
+			
+			this.createLeftChart(this.recruiterLoginsChartLabels, this.recruiterLoginsChartData);
+			if (this.rightChart){
+				this.rightChart.destroy();
+			}
 			
 	        this.loginCountRecruiterToday = new Set(stats.eventsToday.filter(e => e.recruiter).map(e => e.userId)).size;
 			this.loginCountCandidateToday = new Set(stats.eventsToday.filter(e => e.candidate).map(e => e.userId)).size;
@@ -380,7 +408,7 @@ export class StatisticsComponent implements OnInit {
 				
 			});
 			
-			this.availabilityChartData = [{label: "Todays Logins", data: functionStatCount, backgroundColor: this.chartColor}];
+			this.availabilityChartData = [{label: "Candidates available by function", data: functionStatCount, backgroundColor: this.chartColor}];
 			this.availabilityChartLabels = functionStatName; 
 			
     	});
@@ -425,11 +453,15 @@ export class StatisticsComponent implements OnInit {
 				this.showStatsListings=false;
 				this.showNewCandidates=false;
 				this.showMarketplaceStats=false;
-				
-				this.loginChartData = [{ data: this.yearValues, label: 'Logins', backgroundColor: this.chartColor },];
-				this.loginChartLabels = this.yearKeys;
-				this.createLeftChartAsLine(this.loginChartLabels, this.loginChartData);
-				this.createRightChart(this.recruiterLoginsChartLabels, this.recruiterLoginsChartData);
+				this.showSearches=false;
+				//this.loginChartData = [{ data: this.yearValues, label: 'Logins', backgroundColor: this.chartColor },];
+				//this.loginChartLabels = this.yearKeys;
+				//this.createLeftChartAsLine(this.loginChartLabels, this.loginChartData);
+				//this.createRightChart(this.recruiterLoginsChartLabels, this.recruiterLoginsChartData);
+				this.createLeftChart(this.recruiterLoginsChartLabels, this.recruiterLoginsChartData);
+				if (this.rightChart){
+					this.rightChart.destroy();
+				}
 				break;
 			}
 			case "downloads":{
@@ -439,7 +471,7 @@ export class StatisticsComponent implements OnInit {
 				this.showStatsListings=false;
 				this.showNewCandidates=false;
 				this.showMarketplaceStats=false;
-				 
+				this.showSearches=false;
 				this.createLeftChartAsLine(this.downloadsChartLabels, this.downloadsChartData);
 				this.createRightChart(this.recruiterDownloadsChartLabels, this.recruiterDownloadsChartData);
 			
@@ -452,7 +484,7 @@ export class StatisticsComponent implements OnInit {
 				this.showStatsListings=true;
 				this.showNewCandidates=false;
 				this.showMarketplaceStats=false;
-				
+				this.showSearches=false;
 				this.createLeftChartAsLine(this.listingsChartLabels, this.listingsChartData);
 				
 				if(this.rightChart){
@@ -481,6 +513,7 @@ export class StatisticsComponent implements OnInit {
 				this.showStatsAvailability=false;
 				this.showNewCandidates=false;
 				this.showMarketplaceStats=false;
+				this.showSearches=false;
 				break;
 			}
 			case "newCandidateStats":{
@@ -490,6 +523,7 @@ export class StatisticsComponent implements OnInit {
 				this.showStatsAvailability=false;
 				this.showNewCandidates=true;
 				this.showMarketplaceStats=false;
+				this.showSearches=false;
 				if(this.leftChart){
   					this.leftChart.destroy();
   				}
@@ -505,10 +539,26 @@ export class StatisticsComponent implements OnInit {
 				this.showStatsAvailability=false;
 				this.showNewCandidates=false;
 				this.showMarketplaceStats=true;
-				
+				this.showSearches=false;
 				this.createLeftChart(this.marketplaceChartLabels, this.marketplaceChartData);
 				
 				if(this.rightChart){
+  					this.rightChart.destroy();
+  				}
+				break;
+			}
+			case "searches":{
+				this.showStatsLogins=false;
+				this.showStatsDownloads=false;
+				this.showStatsListings=false;
+				this.showStatsAvailability=false;
+				this.showNewCandidates=false;
+				this.showMarketplaceStats=false;
+				this.showSearches=true;
+				if(this.leftChart){
+  					this.leftChart.destroy();
+  				}
+  				if(this.rightChart){
   					this.rightChart.destroy();
   				}
 				break;
