@@ -51,6 +51,11 @@ export class SubscriptionAction {
 	invoiceType:string							= "";
 	
 	/**
+	* Date the Subscription was created 
+	*/
+	created:Date 								= new Date();
+	
+	/**
 	* Ids of actions that can be carried out for the subscription
 	*/
 	actions:Array<string>			 			= new Array<string>();

@@ -1005,5 +1005,16 @@ export class RecruiterMarketplaceComponent implements OnInit {
 	public isRecruiter():boolean{
 		return sessionStorage.getItem('isRecruiter') === 'true';
 	}
+	
+	/**
+	* If the recruiter has a closing date before the creation date it makes 
+	* no sense to the Recruiters. Probably should add validation but for now
+	* as a quick fix we use this method to hide the closing date
+	*/
+	public hasValidClosingDate(openPosition:OpenPosition):boolean{
+		
+		return (openPosition.created < openPosition.positionClosingDate);		
+		
+	}
 
 }
