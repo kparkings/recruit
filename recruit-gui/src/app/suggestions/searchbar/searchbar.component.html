@@ -16,8 +16,8 @@
 				</table>
 			</div>
 			
-			<span class="filters-collapse-options" *ngIf="filterView == 'expanded'" (click)=toggleFilters()>Hide filters...</span>	
-			<span class="filters-collapse-options" *ngIf="filterView != 'expanded'" (click)=toggleFilters()>Show filters...</span>
+			<span class="filters-collapse-options" *ngIf="filterView == 'expanded'" (click)=toggleFilters()>{{'hide-filters' | translate}}...</span>	
+			<span class="filters-collapse-options" *ngIf="filterView != 'expanded'" (click)=toggleFilters()>{{'show-filters' | translate}}...</span>
 			
 			<table class="mobile-search-box search-filter-pane" *ngIf="filterView == 'expanded'">
 		
