@@ -77,5 +77,14 @@ public class CandidateSearchAccuracyWrapper {
 	public suggestion_accuracy getAccuracyLanguages() {
 		return this.accuracyLanguages;
 	}
+	
+	/**
+	* Returns numeric representation of the language accuracy which can be useful
+	* for sorting
+	* @return accuracy as number
+	*/
+	public Integer getAccuracyLanguagesAsNumber() {
+		return this.accuracyLanguages.asNumber;
+	}
 
 }

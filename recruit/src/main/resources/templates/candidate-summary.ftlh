@@ -15,7 +15,7 @@
 		
 		<p>
 		To reduce the number of calls you receive from recruiters we kindly ask you to confirm your current availability. We send this email once per two weeks when you 
-		are activelly looking and once a month when you have indicated that you are on a project. 
+		are actively looking and once a month when you have indicated that you are on a project. 
 		<p>
 			
 		<div>	

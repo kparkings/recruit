@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.security.Principal;
 import java.time.LocalDate;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -13,15 +14,12 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -367,7 +365,7 @@ public class CandidateServiceImpl implements CandidateService{
 
 		filterOptions.getSkills().clear();
 		
-		Set<Candidate> results = this.candidateRepo.findCandidates(filterOptions, esClient, 10000);
+		Set<Candidate> results = this.candidateRepo.findCandidates(filterOptions, esClient, 0, 10000);
 		
 		if (results.isEmpty()) {
 			return suggestion_accuracy.poor;
@@ -466,12 +464,10 @@ public class CandidateServiceImpl implements CandidateService{
 	@Override
 	public Page<CandidateSearchAccuracyWrapper> getCandidateSuggestions(CandidateFilterOptions filterOptions, Integer maxSuggestions, boolean unfiltered, boolean isSystemRequest) throws Exception{
 		
+		final int 									pageFetchSize		= 750;	
 		final Set<CandidateSearchAccuracyWrapper> 	suggestions 		= new LinkedHashSet<>();
 		
 		int 										pageCounter 		= 0;
-		Set<String> 								suggestionIds 		= new HashSet<>();
-		AtomicReference<suggestion_accuracy> 		accuracy 			= new AtomicReference<>(suggestion_accuracy.perfect);
-		Pageable 									pageable 			= PageRequest.of(0,750);
 		Optional<Boolean>							available		 	= filterOptions.isAvailable();
 		
 		/**
@@ -567,7 +563,7 @@ public class CandidateServiceImpl implements CandidateService{
 				skillsExtractor.extractFilters(" " + filterOptions.getSearchText().toLowerCase() + " ", searchTermFilter);
 			}
 		}
-	
+		
 		Set<String> searchTermKeywords = searchTermFilter.build().getSkills();
 		
 		/**
@@ -576,7 +572,7 @@ public class CandidateServiceImpl implements CandidateService{
 		*/
 		if (unfiltered) {
 			
-			List<CandidateSearchAccuracyWrapper> canidates = candidateRepo.findAll(filterOptions, this.esClient, pageable).getContent().stream().map(CandidateSearchAccuracyWrapper::new).toList();
+			List<CandidateSearchAccuracyWrapper> canidates = candidateRepo.findAll(filterOptions, this.esClient, 0, pageFetchSize).getContent().stream().map(CandidateSearchAccuracyWrapper::new).toList();
 			suggestions.addAll(canidates);
 			suggestions.stream().forEach(s -> {
 				s.setAccuracyLanguages(suggestion_accuracy.perfect);
@@ -585,94 +581,26 @@ public class CandidateServiceImpl implements CandidateService{
 			return new PageImpl<>(suggestions.stream().limit(maxSuggestions).collect(Collectors.toCollection(LinkedList::new)));			
 		}
 		
-		boolean isTotalFilteredResultsLesstThanSinglePage = false;
-		Page<Candidate> candidates = null;
+		CandidateResultAccumulatorUtil accumulator = new CandidateResultAccumulatorUtil(suggestionUtil, suggestionFilterOptions, searchTermKeywords, filterOptions.getMaxResults());
 		
 		while (true) {
-		
-			if (!isTotalFilteredResultsLesstThanSinglePage) {
-				candidates = candidateRepo.findAll(filterOptions, this.esClient, pageable);
-			}
-			
-			/**
-			* Will only ever be 1 page so no need to keep fetching from storage 
-			*/
-			if (pageCounter == 0 && candidates.getContent().size() < maxSuggestions) {
-				isTotalFilteredResultsLesstThanSinglePage = true;
-			}
-			
-			candidates.getContent().stream().filter(c -> !suggestionIds.contains(c.getCandidateId())).forEach(candidate -> {
-		
-				this.skillsSynonymsUtil.addSynonymsForSkills(candidate.getSkills(), candidate.getSkills());
 				
-				CandidateSearchAccuracyWrapper 	wrappedCandidate 	= new CandidateSearchAccuracyWrapper(candidate);
-				boolean 						isMatch 			= false;
-				
-				switch(accuracy.get()) {
-					case perfect:{
-						isMatch = suggestionUtil.isPerfectMatch(wrappedCandidate, suggestionFilterOptions, searchTermKeywords);
-						break;
-					}
-					case excellent:{
-						isMatch = suggestionUtil.isExcellentMatch(wrappedCandidate, suggestionFilterOptions, searchTermKeywords);
-						break;
-					}
-					case good:{
-						isMatch = suggestionUtil.isGoodMatch(wrappedCandidate, suggestionFilterOptions, searchTermKeywords);
-						break;
-					}
-					case average:{
-						isMatch = suggestionUtil.isAverageMatch(wrappedCandidate, suggestionFilterOptions, searchTermKeywords);
-						break;
-					}
-					case poor:{
-						isMatch = suggestionUtil.isPoorMatch(wrappedCandidate, suggestionFilterOptions, searchTermKeywords);
-						break;
-					}
-				}
+			Page<Candidate> candidates = candidateRepo.findAll(filterOptions, this.esClient, pageCounter, pageFetchSize);
+			List<Candidate> toProcess = candidates.getContent();
 			
-				if (isMatch) {
-					suggestions.add(wrappedCandidate);
-					suggestionIds.add(candidate.getCandidateId());
-				}
-				
+			candidates.getContent().stream().forEach(candidate -> {
+				accumulator.processCandidate(candidate);
 			});
-		
-			if (suggestions.size() >= maxSuggestions) {
-				return new PageImpl<>(suggestions.stream().limit(maxSuggestions).sorted((CandidateSearchAccuracyWrapper s1, CandidateSearchAccuracyWrapper s2) -> s1.getAccuracySkillsAsNumber().compareTo(s2.getAccuracySkillsAsNumber())).collect(Collectors.toCollection(LinkedList::new)));
-			} else if (!(candidates.getTotalPages() >= pageCounter)) {
 			
-				pageCounter = -1;
-				
-				switch(accuracy.get()) {
-					case perfect:{
-						accuracy.set(suggestion_accuracy.excellent);
-						break;
-					}
-					case excellent:{
-						accuracy.set(suggestion_accuracy.good);
-						break;
-					}
-					case good:{
-						accuracy.set(suggestion_accuracy.average);
-						break;
-					}
-					case average:{
-						accuracy.set(suggestion_accuracy.poor);
-						break;
-					}
-					case poor:{
-						return new PageImpl<>(suggestions.stream().limit(maxSuggestions).sorted((CandidateSearchAccuracyWrapper s1, CandidateSearchAccuracyWrapper s2) -> s1.getAccuracySkillsAsNumber().compareTo(s2.getAccuracySkillsAsNumber())).collect(Collectors.toCollection(LinkedList::new)));
-					}
-					
-				} 
-					
+			if (toProcess.isEmpty() || toProcess.size() < pageFetchSize || accumulator.obtainedPerfectResults()) {
+				return new PageImpl<>(accumulator.getAccumulatedCandidates().stream().limit(maxSuggestions).sorted(Comparator.comparing(CandidateSearchAccuracyWrapper::getAccuracySkillsAsNumber)
+					       .thenComparing(CandidateSearchAccuracyWrapper::getAccuracyLanguagesAsNumber)).collect(Collectors.toCollection(LinkedList::new)));
 			}
 			
 			pageCounter = pageCounter + 1;
-			pageable 	= PageRequest.of(pageCounter,100);
+			
 		}
-
+		
 	}
 
 	/**
@@ -1193,7 +1121,7 @@ public class CandidateServiceImpl implements CandidateService{
 		Set<Candidate> candidates;
 		
 		try {
-			candidates = this.candidateRepo.findCandidates(CandidateFilterOptions.builder().email((""+emailAddress.toLowerCase())).build(), esClient, 2);
+			candidates = this.candidateRepo.findCandidates(CandidateFilterOptions.builder().email((""+emailAddress.toLowerCase())).build(), esClient, 0, 2);
 		}catch(Exception e) {
 			throw new RuntimeException("Unable to reset password for candidate");
 		}
@@ -1236,7 +1164,7 @@ public class CandidateServiceImpl implements CandidateService{
 		CandidateFilterOptions filters = CandidateFilterOptions.builder().ownerId(recruiterId).build();
 		
 		try {
-			this.candidateRepo.findCandidates(filters, esClient, 750).forEach(candidate -> {
+			this.candidateRepo.findCandidates(filters, esClient, 0, 750).forEach(candidate -> {
 				
 				try {
 					this.deleteCandidate(candidate.getCandidateId(), true);

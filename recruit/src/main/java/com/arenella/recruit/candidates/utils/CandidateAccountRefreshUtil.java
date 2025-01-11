@@ -98,7 +98,7 @@ public class CandidateAccountRefreshUtil {
 		CandidateFilterOptions filters = CandidateFilterOptions.builder().lastAccountRefreshLtEq(LocalDate.now().minusWeeks(2)).build();
 		
 		try {
-			candidateRepository.findCandidates(filters, esClient, 10).forEach(candidate -> {
+			candidateRepository.findCandidates(filters, esClient, 0, 10).forEach(candidate -> {
 				
 				//Hijacking the skills update to also update the geopos info
 				City city = cityService.findCityById(candidate.getCountry(), candidate.getCity()).orElse(City.builder().build());

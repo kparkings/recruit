@@ -100,6 +100,7 @@ public class CandidateSearchAccuracyWrapperTest {
 			assertEquals(accuracyLanguages, 						wrapper.getAccuracyLanguages());
 			assertEquals(accuracySkills, 							wrapper.getAccuracySkills());
 			assertEquals(suggestion_accuracy.perfect.asNumber(), 	wrapper.getAccuracySkillsAsNumber());
+			assertEquals(suggestion_accuracy.poor.asNumber(), 		wrapper.getAccuracyLanguagesAsNumber());
 			
 			assertTrue(wrapper.get().getSkills().contains(skill));
 			wrapper.get().getLanguages().stream().filter(l -> l.getLanguage() == language.getLanguage()).findAny().orElseThrow();

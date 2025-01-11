@@ -47,7 +47,7 @@ public interface CandidateRepository extends ElasticsearchRepository<CandidateDo
 	* @return If Email already used for the Candidate
 	*/
 	default boolean emailInUse(String email, ElasticsearchClient esClient) throws Exception{
-		SearchResponse<CandidateDocument> response = this.fetchWithFilters(CandidateFilterOptions.builder().email(email).build(), esClient, 1);
+		SearchResponse<CandidateDocument> response = this.fetchWithFilters(CandidateFilterOptions.builder().email(email).build(), esClient, 0, 1);
 		return !response.hits().hits().isEmpty();
 	}
 	
@@ -116,7 +116,7 @@ public interface CandidateRepository extends ElasticsearchRepository<CandidateDo
 		try {
 			CandidateFilterOptions filterOptions = CandidateFilterOptions.builder().available(true).registeredAfter(since).build();
 		
-			return this.findCandidates(filterOptions, esClient, 10000);
+			return this.findCandidates(filterOptions, esClient, 0, 10000);
 		
 		} catch(Exception e) {
 			throw new RuntimeException(e);
@@ -156,9 +156,9 @@ public interface CandidateRepository extends ElasticsearchRepository<CandidateDo
 	* @param pageable		- Pagination information
 	* @return Page of matching results
 	*/
-	public default Page<Candidate> findAll(CandidateFilterOptions filterOptions, ElasticsearchClient esClient, Pageable pageable) throws Exception{
+	public default Page<Candidate> findAll(CandidateFilterOptions filterOptions, ElasticsearchClient esClient, int firstRecordInPage, int maxRecordsInPage) throws Exception{
 		
-		SearchResponse<CandidateDocument> response =  this.fetchWithFilters(filterOptions, esClient, pageable.getPageSize());
+		SearchResponse<CandidateDocument> response =  this.fetchWithFilters(filterOptions, esClient, firstRecordInPage, maxRecordsInPage);
 		
 		List<Candidate> hits = response
 				.hits()
@@ -167,7 +167,7 @@ public interface CandidateRepository extends ElasticsearchRepository<CandidateDo
 				.map(h -> CandidateDocument.convertFromDocument(h.source()))
 				.collect(Collectors.toCollection(ArrayList::new));
 		
-		int totalPages = (int) (response.hits().total().value() == 0 ? 0 : response.hits().total().value() / pageable.getPageSize());
+		int totalPages = (int) (response.hits().total().value() == 0 ? 0 : response.hits().total().value() / maxRecordsInPage);
 		
 		return  new FUPage<>(hits, totalPages+1);
 		
@@ -179,9 +179,9 @@ public interface CandidateRepository extends ElasticsearchRepository<CandidateDo
 	* @param esClient
 	* @return
 	*/
-	public default Set<Candidate> findCandidates(CandidateFilterOptions filterOptions, ElasticsearchClient esClient, int pageSize) throws Exception{
+	public default Set<Candidate> findCandidates(CandidateFilterOptions filterOptions, ElasticsearchClient esClient, int firstRecordInPage, int maxRecordsInPage) throws Exception{
 		
-		SearchResponse<CandidateDocument> response =  this.fetchWithFilters(filterOptions, esClient, pageSize);
+		SearchResponse<CandidateDocument> response =  this.fetchWithFilters(filterOptions, esClient, firstRecordInPage, maxRecordsInPage);
 		
 		return response
 				.hits()
@@ -195,7 +195,7 @@ public interface CandidateRepository extends ElasticsearchRepository<CandidateDo
 	* Refer to the JpaSpecificationExecutor interface for details 
 	*/
 	
-	default SearchResponse<CandidateDocument> fetchWithFilters(CandidateFilterOptions filterOptions, ElasticsearchClient esClient, int pageSize) throws Exception{
+	default SearchResponse<CandidateDocument> fetchWithFilters(CandidateFilterOptions filterOptions, ElasticsearchClient esClient, int firstRecordInPage, int maxRecordsInPage) throws Exception{
 		
 		co.elastic.clients.elasticsearch._types.query_dsl.Query boolQuery = ESFilteredSearchRequestBuilder.createFilteredQuery(filterOptions);
 		
@@ -215,7 +215,8 @@ public interface CandidateRepository extends ElasticsearchRepository<CandidateDo
 		
 		return esClient.search(b -> b
 			    .index("candidates")
-			    .size(pageSize)
+			    .from(firstRecordInPage)
+			    .size(maxRecordsInPage)
 			    .sort(f -> f.field(FieldSort.of(a -> a.field(sortField).order(sortOrder))))
 			    .query(boolQuery) ,
 			    CandidateDocument.class);

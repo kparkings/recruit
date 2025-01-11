@@ -684,7 +684,7 @@ class CandidateServiceImplTest {
 		
 		ArgumentCaptor<CandidateFilterOptions> filterArgCaptor = ArgumentCaptor.forClass(CandidateFilterOptions.class);
 		
-		Mockito.when(this.mockCandidateRepo.findCandidates(filterArgCaptor.capture(), Mockito.any(), Mockito.eq(10000))).thenReturn(Set.of());
+		Mockito.when(this.mockCandidateRepo.findCandidates(filterArgCaptor.capture(), Mockito.any(), Mockito.eq(0), Mockito.eq(10000))).thenReturn(Set.of());
 		
 		suggestion_accuracy accuracy = this.service.doTestCandidateAlert(candidateId, filterOptions);
 		
@@ -719,7 +719,7 @@ class CandidateServiceImplTest {
 		ArgumentCaptor<CandidateFilterOptions> filterArgCaptor = ArgumentCaptor.forClass(CandidateFilterOptions.class);
 		
 		Mockito
-			.when(this.mockCandidateRepo.findCandidates(filterArgCaptor.capture(), Mockito.any(), Mockito.eq(10000)))
+			.when(this.mockCandidateRepo.findCandidates(filterArgCaptor.capture(), Mockito.any(), Mockito.eq(0), Mockito.eq(10000)))
 			.thenReturn(Set.of(Candidate.builder().candidateId(String.valueOf(candidateId)).build()));
 		
 		Mockito
@@ -761,7 +761,7 @@ class CandidateServiceImplTest {
 					.build();
 		
 		Mockito
-			.when(this.mockCandidateRepo.findCandidates(Mockito.any(),Mockito.any(), Mockito.eq(10000)))
+			.when(this.mockCandidateRepo.findCandidates(Mockito.any(),Mockito.any(), Mockito.eq(0), Mockito.eq(10000)))
 			.thenReturn(Set.of(Candidate.builder().candidateId(String.valueOf(candidateId)).build()));
 		
 		Mockito
@@ -2138,7 +2138,7 @@ class CandidateServiceImplTest {
 	
 		final String emailAddress = "admin@arenella-ict.com";
 		
-		Mockito.when(this.mockCandidateRepo.findCandidates(Mockito.any(), Mockito.any(), Mockito.eq(2))).thenReturn(Set.of(Candidate.builder().build(), Candidate.builder().build()));
+		Mockito.when(this.mockCandidateRepo.findCandidates(Mockito.any(), Mockito.any(), Mockito.eq(0), Mockito.eq(2))).thenReturn(Set.of(Candidate.builder().build(), Candidate.builder().build()));
 	
 		Assertions.assertThrows(IllegalArgumentException.class, () ->{
 			this.service.resetPassword(emailAddress);
@@ -2156,7 +2156,7 @@ class CandidateServiceImplTest {
 		
 		final String emailAddress = "admin@arenella-ict.com";
 		
-		Mockito.when(this.mockCandidateRepo.findCandidates(Mockito.any(), Mockito.any(), Mockito.eq(2))).thenReturn(Set.of());
+		Mockito.when(this.mockCandidateRepo.findCandidates(Mockito.any(), Mockito.any(), Mockito.eq(0), Mockito.eq(2))).thenReturn(Set.of());
 		
 		Assertions.assertThrows(IllegalArgumentException.class, () ->{
 			this.service.resetPassword(emailAddress);
@@ -2181,7 +2181,7 @@ class CandidateServiceImplTest {
 		
 		Mockito.doNothing().when(this.mockExternalEventPublisher).publishCandidatePasswordUpdated(pwdUpdtArgCapt.capture());
 		Mockito.doNothing().when(this.mockExternalEventPublisher).publishSendEmailCommand(emailArgCapt.capture());
-		Mockito.when(this.mockCandidateRepo.findCandidates(Mockito.any(), Mockito.any(), Mockito.eq(2))).thenReturn(Set.of(Candidate.builder().firstname(firstname).candidateId(userId).build()));
+		Mockito.when(this.mockCandidateRepo.findCandidates(Mockito.any(), Mockito.any(), Mockito.eq(0), Mockito.eq(2))).thenReturn(Set.of(Candidate.builder().firstname(firstname).candidateId(userId).build()));
 		
 		this.service.resetPassword(emailAddress);
 		
@@ -2205,7 +2205,7 @@ class CandidateServiceImplTest {
 		
 		final String recruiterId = "rec1";
 		
-		Mockito.when(this.mockCandidateRepo.findCandidates(Mockito.any(), Mockito.any(), Mockito.eq(750))).thenReturn(Set.of(Candidate.builder().build(), Candidate.builder().build()));
+		Mockito.when(this.mockCandidateRepo.findCandidates(Mockito.any(), Mockito.any(), Mockito.eq(0), Mockito.eq(750))).thenReturn(Set.of(Candidate.builder().build(), Candidate.builder().build()));
 		
 		this.service.deleteCandidatesForOwnedByRecruiter(recruiterId);
 		
