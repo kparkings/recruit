@@ -1143,8 +1143,11 @@ public class CandidateSearchRequest {
 		req.experienceFilters().ifPresent(f -> f.getExperienceMax().ifPresent(builder::yearsExperienceLtEq));
 		req.experienceFilters().ifPresent(f -> f.getExperienceMin().ifPresent(builder::yearsExperienceGtEq));
 		
+		builder.available(true);
 		req.includeFilters().ifPresent(f ->{
-			f.includeUnavailableCandidates().ifPresent(builder::available);
+			if (f.includeUnavailableCandidates().isPresent()) {
+				builder.available(null);
+			}
 			f.includeRequiresSponsorshipCandidates().ifPresent(builder::includeRequiresSponsorship);
 		});
 		
