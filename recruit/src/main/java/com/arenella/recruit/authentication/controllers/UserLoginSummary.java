@@ -7,5 +7,5 @@ public record UserLoginSummary(
 		long loginsThisWeeek,
 		long loginsLast30Days,
 		long loginsLast60Days,
-		long loginsLats90Days) {
+		long loginsLast90Days) {
 }

@@ -15,19 +15,19 @@ export class RecruitersComponent {
 
 	showRecruitersTabSummary:boolean								= true;
 	showRecruitersTabDetails:boolean								= false;
-	
-	recruiters:Array<Recruiter>										= new Array<Recruiter>();
 
-	activePaidSubscription:Array<Recruiter>							= Array<Recruiter>();
-	creditBasedSubscription:Array<Recruiter>						= Array<Recruiter>();
+	activePaidSubscription:Map<Recruiter, LoginSummary>				= new Map<Recruiter,LoginSummary>();
+	creditBasedSubscription:Map<Recruiter, LoginSummary>			= new Map<Recruiter,LoginSummary>();
 	
 	showActivePaidSubscription:boolean								= true;
 	showCreditBasedSubscription:boolean								= true;
 	
 	recruiterCount:number											= 0;
 	
+	activeCount:number												= 0;
+		
 	showDetailsForRecruiter:Recruiter								= new Recruiter();
-	private recruiterStats:Map<Recruiter, LoginSummary> = new Map<Recruiter, LoginSummary>();
+	//private recruiterStats:Map<Recruiter, LoginSummary> = new Map<Recruiter, LoginSummary>();
 	
 	public recruiterToDelete:string = '';
 	
@@ -47,7 +47,7 @@ export class RecruitersComponent {
 	}
 	
 	public getTotalActiveRecruiters():number{
-		return this.activePaidSubscription.length + this.creditBasedSubscription.length;
+		return this.activePaidSubscription.keys.length + this.creditBasedSubscription.keys.length;
 	}
 	
 	/**
@@ -56,17 +56,18 @@ export class RecruitersComponent {
 	public fetchRecruiters(): void{
 		
 		this.recruiterCount 					= 0;
-		this.recruiters 						= new Array<Recruiter>();
-		this.activePaidSubscription 			= new Array<Recruiter>();
-		this.creditBasedSubscription			= new Array<Recruiter>();
+		//this.recruiters 						= new Array<Recruiter>();
+		this.activePaidSubscription 			= new Map<Recruiter,LoginSummary>();
+		this.creditBasedSubscription			= new Map<Recruiter,LoginSummary>();
 		
     	this.recruiterService.getRecruiters().subscribe( data => {
   			data.forEach((r:Recruiter) => {
-				this.recruiters.push(r);
-				this.addRecruiterToSubscriptionBucker(r);
-				this.recruiterCount = this.recruiterCount +1;
+				//this.recruiters.push(r);
+				
+				//this.recruiterCount = this.recruiterCount +1;
 				this.recruiterService.getLoginSummary(r.userId).subscribe(loginSummary => {
-					this.recruiterStats.set(r, loginSummary);			
+						this.addRecruiterToSubscriptionBucker(r, loginSummary);
+						//this.recruiterStats.set(r, loginSummary);			
 				});
 			});
 			
@@ -84,20 +85,48 @@ export class RecruitersComponent {
 	}	
 
 	/**
+	* Returns a score indicating how actively a Recruiter has 
+	* been logging into the system 
+	*/
+	private getActivityScore(loginSummary:LoginSummary):number{
+		
+		console.log(loginSummary.loginsThisWeeek);
+		console.log(loginSummary.loginsLast30Days);
+		console.log(loginSummary.loginsLast60Days);
+		console.log(loginSummary.loginsLast90Days);
+		
+		return loginSummary.loginsThisWeeek 
+			+ loginSummary.loginsLast30Days
+			+ loginSummary.loginsLast60Days
+			+ loginSummary.loginsLast90Days;
+	}
+	
+	/**
 	* Examins the Recruiters current subscription and assigns them to 
 	* a corresponding bucket
 	* recruiter - Recruiter to be added to the appropriate Subscrition bucket
 	*/
-	private addRecruiterToSubscriptionBucker(recruiter:Recruiter):void{
+	private addRecruiterToSubscriptionBucker(recruiter:Recruiter, loginSummary:LoginSummary):void{
 		
 		let activeSubscription = recruiter.subscriptions.filter(s => s.currentSubscription == true)[0];
 		
 		if (!activeSubscription) {
 			return;
 		}
+
+		this.recruiterCount = this.recruiterCount+1;
+		
+		console.log("ActivityCount == " + this.getActivityScore(loginSummary));
+		
+		if(this.getActivityScore(loginSummary) > 0){
+			this.activeCount = this.activeCount +1;
+		}
 		
 		if (activeSubscription.type == 'CREDIT_BASED_SUBSCRIPTION') {
-			this.creditBasedSubscription.push(recruiter);
+			console.log("ADDING 1");
+			this.creditBasedSubscription.set(recruiter, loginSummary);
+			this.creditBasedSubscription = new Map([...this.creditBasedSubscription.entries()]
+						.sort((a, b) => this.getActivityScore(b[1]) - this.getActivityScore(a[1])));
 			return;
 		}
 		
@@ -105,7 +134,10 @@ export class RecruitersComponent {
 			|| 	activeSubscription.status == 'ACTIVE_PENDING_PAYMENT'
 			|| 	activeSubscription.status == 'ACTIVE'
 			||  activeSubscription.status == 'DISABLED_PENDING_PAYMENT'){
-			this.activePaidSubscription.push(recruiter);
+				console.log("ADDING 2");
+				this.activePaidSubscription.set(recruiter, loginSummary);
+			this.activePaidSubscription = new Map([...this.activePaidSubscription.entries()]
+						.sort((a, b) => this.getActivityScore(b[1]) - this.getActivityScore(a[1])));
 			return;
 		}
 		 
@@ -148,8 +180,9 @@ export class RecruitersComponent {
 		
 	}
 	
-	
-	
+	public getPercentActiveInactive():string{
+		return " ( " + this.activeCount + "/ "+this.recruiterCount+" )";
+	}
 	
 	/**
 	* Provides an indication of how active the Recruiter is. 
@@ -161,43 +194,47 @@ export class RecruitersComponent {
 	* who is consistently using the site
 	*/
 	public getRecruiterActivity(recruiter:Recruiter):string{
+	
+		//let allRecruiters:Map<Recruiter, LoginSummary> = new Map<Recruiter, LoginSummary>();
+		
+		let allRecruiters:Map<Recruiter, LoginSummary> = new Map([...this.activePaidSubscription, ...this.creditBasedSubscription]);
 			
-		if (!this.recruiterStats.has(recruiter)) {
+		if (!allRecruiters.has(recruiter)) {
 			return 'No record for recruiter';
 		}
 		
-		let loginSummary = this.recruiterStats?.get(recruiter);
+		let loginSummary = allRecruiters?.get(recruiter);
+		let count:number = 0;
 		
-			let count:number = 0;
-			
-			if (loginSummary!.loginsThisWeeek > 0) {
-				count = count+1;
-			}
-			
-			if (loginSummary!.loginsLast30Days > 0) {
-				count = count+1;
-			}
-			if (loginSummary!.loginsLast60Days > 0) {
-				count = count+1;
-			}
-			if (loginSummary!.loginsLats90Day > 0) {
-				count = count+1;
-			}
-			
-			if (count == 4) {
-				return '-High';
-			}
-			
-			if (count > 2) {
-				return '-Medium';
-			}
-			
-			if (count > 1) {
-				return '-Low';
-			}
-			
-			return '-None';	
-			
+		if (loginSummary!.loginsThisWeeek > 0) {
+			count = count+1;
+		}
+		
+		if (loginSummary!.loginsLast30Days > 0) {
+			count = count+1;
+		}
+	
+		if (loginSummary!.loginsLast60Days > 0) {
+			count = count+1;
+		}
+		
+		if (loginSummary!.loginsLast90Days > 0) {
+			count = count+1;
+		}
+		
+		if (count == 4) {
+			return '-High';
+		}
+		
+		if (count > 2) {
+			return '-Medium';
+		}
+		
+		if (count >= 1) {
+			return '-Low';
+		}
+		
+		return '-None';	
 
 	}
 	

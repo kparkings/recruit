@@ -164,7 +164,7 @@ public class AuthenticationStatisticsServiceImplTest {
 		assertEquals(2, summary.loginsThisWeeek());
 		assertEquals(4, summary.loginsLast30Days());
 		assertEquals(6, summary.loginsLast60Days());
-		assertEquals(9, summary.loginsLats90Days());
+		assertEquals(9, summary.loginsLast90Days());
 		
 	}
 	

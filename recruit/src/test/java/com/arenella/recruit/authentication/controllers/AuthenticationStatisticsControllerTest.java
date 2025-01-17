@@ -129,7 +129,7 @@ public class AuthenticationStatisticsControllerTest {
 		assertEquals(1, response.getBody().loginsThisWeeek());
 		assertEquals(2, response.getBody().loginsLast30Days());
 		assertEquals(3, response.getBody().loginsLast60Days());
-		assertEquals(4, response.getBody().loginsLats90Days());
+		assertEquals(4, response.getBody().loginsLast90Days());
 		
 	}
 }
