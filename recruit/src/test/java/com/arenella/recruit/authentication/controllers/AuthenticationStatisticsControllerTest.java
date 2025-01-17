@@ -1,5 +1,6 @@
 package com.arenella.recruit.authentication.controllers;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDateTime;
@@ -109,6 +110,26 @@ public class AuthenticationStatisticsControllerTest {
 		assertTrue(((AuthenticatedEvent)response.getBody().getEventsWeek().toArray()[5]).isCandidate());
 		assertTrue(((AuthenticatedEvent)response.getBody().getEventsWeek().toArray()[6]).isCandidate());
 		assertTrue(((AuthenticatedEvent)response.getBody().getEventsWeek().toArray()[7]).isCandidate());
+		
+	}
+	
+	/**
+	* Tests successful call to endpoint to fetch user login 
+	* statistics
+	*/
+	@Test
+	void testFetchLoginSummaryForUser() {
+		
+		Mockito.when(this.mockAuthStatservice.fetchUserLoginSummary("kparkings")).thenReturn(new UserLoginSummary(1,2,3,4));
+		
+		ResponseEntity<UserLoginSummary> response = controller.fetchLoginSummaryForUser("kparkings");
+		
+		Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+		
+		assertEquals(1, response.getBody().loginsThisWeeek());
+		assertEquals(2, response.getBody().loginsLast30Days());
+		assertEquals(3, response.getBody().loginsLast60Days());
+		assertEquals(4, response.getBody().loginsLats90Days());
 		
 	}
 }

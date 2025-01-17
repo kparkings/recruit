@@ -451,9 +451,7 @@ public class CandidateController {
 	public ResponseEntity<String> confirmOwnAvailability(@PathVariable("candidateId") String candidateId, @PathVariable("requestToken") UUID requestToken, @RequestParam(required=true) Boolean isAvailable) {
 		
 		this.candidateService.performConfirmCandidateAvailability(candidateId, requestToken, isAvailable);
-		//		[KP] Service to check token exists for that candidate and request was sent in past week and candidate not already used token
-		//		[KP] Update Candidate fields and persist
-		//		[KP] Add url to email
+
 		return ResponseEntity.ok().body("Thanks you. Your'e availability has been updated in the system.");
 	}
 	

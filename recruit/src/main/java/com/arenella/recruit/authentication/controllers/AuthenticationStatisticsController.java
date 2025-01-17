@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.arenella.recruit.authentication.beans.AuthenticatedEvent;
@@ -28,6 +29,17 @@ public class AuthenticationStatisticsController {
 	
 	@Autowired
 	private AuthenticationStatisticsService authenticationStatisticsService;
+	
+	/**
+	* Returns a summary of the Users login history
+	* @param userId - Id of User to fetch summary for
+	* @return Summary of Users login history
+	*/
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@GetMapping(path="authentication/stats/logins/{userId}")
+	public ResponseEntity<UserLoginSummary> fetchLoginSummaryForUser(@PathVariable("userId") String userId){
+		return ResponseEntity.ok().body(this.authenticationStatisticsService.fetchUserLoginSummary(userId));
+	}
 	
 	/**
 	* Returns statisitc's of logins related to users

@@ -572,7 +572,7 @@ public class CandidateServiceImpl implements CandidateService{
 		*/
 		if (unfiltered) {
 			
-			List<CandidateSearchAccuracyWrapper> canidates = candidateRepo.findAll(filterOptions, this.esClient, 0, pageFetchSize).getContent().stream().map(CandidateSearchAccuracyWrapper::new).toList();
+			List<CandidateSearchAccuracyWrapper> canidates = candidateRepo.findAll(filterOptions, this.esClient, 0, maxSuggestions).getContent().stream().map(CandidateSearchAccuracyWrapper::new).toList();
 			suggestions.addAll(canidates);
 			suggestions.stream().forEach(s -> {
 				s.setAccuracyLanguages(suggestion_accuracy.perfect);

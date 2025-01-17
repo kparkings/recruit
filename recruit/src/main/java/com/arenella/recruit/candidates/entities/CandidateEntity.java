@@ -164,8 +164,6 @@ public class CandidateEntity {
 	private Set<String> 			skills						= new LinkedHashSet<>();
 	
 	@OneToMany(mappedBy = "id.candidateId", cascade = CascadeType.ALL, orphanRemoval=true, fetch=FetchType.EAGER)
-	//@OneToMany( cascade = CascadeType.ALL, orphanRemoval=true, fetch=FetchType.EAGER)
-	//@JoinColumn(name = "candidate_id")
 	private Set<LanguageEntity> 	languages					= new LinkedHashSet<>();
 	
 	/**

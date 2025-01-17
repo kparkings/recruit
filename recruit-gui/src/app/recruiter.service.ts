@@ -6,7 +6,7 @@ import { RecruiterSignup }							from './recruiter-signup/signup-recruiter';
 import { INVOICE_TYPE, SubscriptionAPIInbound }					from './recruiter-account/subscription-api-inbound';
 import { RecruiterUpdateRequest }					from './recruiter-account/recruiter-update-request';
 import { GenerateInvoiceRequest } from './generate-invoice-request';
-
+import {LoginSummary} from './login-summary';
 
 @Injectable({
   providedIn: 'root'
@@ -53,6 +53,17 @@ export class RecruiterService {
 		const backendUrl:string = environment.backendUrl +'recruiter/me';
   
     	return this.httpClient.get<any>(backendUrl, this.httpOptions);
+  	}
+	
+	/**
+  	* Returns summary of selected Recruiter's login history 
+  	*/
+  	public getLoginSummary(userId:string): Observable<LoginSummary>{
+      
+		const backendUrl:string = environment.backendUrl +'authentication/stats/logins/'+userId;
+    
+		return this.httpClient.get<any>(backendUrl, this.httpOptions);
+		
   	}
 
 	/**

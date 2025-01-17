@@ -2,6 +2,7 @@ import { Component } 									from '@angular/core';
 import { Router } 										from '@angular/router';
 import { RecruiterService } 							from 'src/app/recruiter.service';
 import { Recruiter } 									from '../recruiter';
+import { LoginSummary } from 'src/app/login-summary';
 
 @Component({
   selector: 'app-recruiters',
@@ -24,6 +25,9 @@ export class RecruitersComponent {
 	showCreditBasedSubscription:boolean								= true;
 	
 	recruiterCount:number											= 0;
+	
+	showDetailsForRecruiter:Recruiter								= new Recruiter();
+	private recruiterStats:Map<Recruiter, LoginSummary> = new Map<Recruiter, LoginSummary>();
 	
 	public recruiterToDelete:string = '';
 	
@@ -61,8 +65,11 @@ export class RecruitersComponent {
 				this.recruiters.push(r);
 				this.addRecruiterToSubscriptionBucker(r);
 				this.recruiterCount = this.recruiterCount +1;
+				this.recruiterService.getLoginSummary(r.userId).subscribe(loginSummary => {
+					this.recruiterStats.set(r, loginSummary);			
+				});
 			});
-		  
+			
 		}, err => {
 			
 			if (err.status === 401 || err.status === 0) {
@@ -127,5 +134,72 @@ export class RecruitersComponent {
 	public cancelDeleteRecruiter():void{
 		this.recruiterToDelete = '';
 	}
+	
+	/**
+	* Toggles the display section of the selected Recruiter row 
+	*/
+	public toggleRecruiterDetails(recruiter:Recruiter):void{
+		
+		if (this.showDetailsForRecruiter == recruiter) {
+			this.showDetailsForRecruiter = new Recruiter();	
+		} else {
+			this.showDetailsForRecruiter = recruiter;
+		}
+		
+	}
+	
+	
+	
+	
+	/**
+	* Provides an indication of how active the Recruiter is. 
+	* Returns the postfic for a css class to show the activity.
+	* If a recruiter has logged in at least once in each timeframe
+	* it means they have been active. If they have only been active 
+	* in one or none then they have not been active. This is to 
+	* provided an at a glance look at Recruiters activity to see 
+	* who is consistently using the site
+	*/
+	public getRecruiterActivity(recruiter:Recruiter):string{
+			
+		if (!this.recruiterStats.has(recruiter)) {
+			return 'No record for recruiter';
+		}
+		
+		let loginSummary = this.recruiterStats?.get(recruiter);
+		
+			let count:number = 0;
+			
+			if (loginSummary!.loginsThisWeeek > 0) {
+				count = count+1;
+			}
+			
+			if (loginSummary!.loginsLast30Days > 0) {
+				count = count+1;
+			}
+			if (loginSummary!.loginsLast60Days > 0) {
+				count = count+1;
+			}
+			if (loginSummary!.loginsLats90Day > 0) {
+				count = count+1;
+			}
+			
+			if (count == 4) {
+				return '-High';
+			}
+			
+			if (count > 2) {
+				return '-Medium';
+			}
+			
+			if (count > 1) {
+				return '-Low';
+			}
+			
+			return '-None';	
+			
+
+	}
+	
 
 }
