@@ -41,9 +41,7 @@ public class RecruiterListingStatistics {
 			
 			if (stat.isPresent()) { //TODO: [KP] Currently pulling all events out DB, even for deleted Listings. Could cause performance issue. 
 				stat.get().addToBucket(evt);
-			} else {
-				System.out.println("TEST -> NOT PRESENT: " + evt.getListingId() + " : " + evt.getTitleOrLisingId());
-			}
+			} 
 			
 		});
 		

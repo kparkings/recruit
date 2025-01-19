@@ -21,16 +21,16 @@ public interface AuthenticatedEventDao extends CrudRepository<AuthenticatedEvent
 	@Query("from AuthenticatedEventEntity where loggedInAt >= :since")
 	public Set<AuthenticatedEventEntity> fetchInternalEventsSince(LocalDateTime since);
 	
-	@Query("from AuthenticatedEventEntity where userId = :userId")
-	public Set<AuthenticatedEventEntity> fetchLoginEventsForUser(String userId);
+	@Query("from AuthenticatedEventEntity where recruiter = true")
+	public Set<AuthenticatedEventEntity> fetchLoginEventsForRecruiters();
 	
 	/**
 	* Returns all the login events for a given User
 	* @param userId - Id of User to fetch Login events for
 	* @return Login Events for the User
 	*/
-	public default Set<AuthenticatedEvent> fetchUserLoginEvents(String userId) {
-		return this.fetchLoginEventsForUser(userId).stream().map(AuthenticatedEventEntity::convertFromEntity).collect(Collectors.toSet());
+	public default Set<AuthenticatedEvent> fetchLoginEventsForAllRecruiter() {
+		return this.fetchLoginEventsForRecruiters().stream().map(AuthenticatedEventEntity::convertFromEntity).collect(Collectors.toSet());
 	}
 	
 	/**

@@ -3,10 +3,10 @@ import { HttpClient, HttpHeaders }  				from '@angular/common/http';
 import { Observable }                 				from 'rxjs';
 import { environment }								from './../environments/environment';
 import { RecruiterSignup }							from './recruiter-signup/signup-recruiter';
-import { INVOICE_TYPE, SubscriptionAPIInbound }					from './recruiter-account/subscription-api-inbound';
+import { INVOICE_TYPE, SubscriptionAPIInbound }		from './recruiter-account/subscription-api-inbound';
 import { RecruiterUpdateRequest }					from './recruiter-account/recruiter-update-request';
-import { GenerateInvoiceRequest } from './generate-invoice-request';
-import {LoginSummary} from './login-summary';
+import { GenerateInvoiceRequest } 					from './generate-invoice-request';
+import {LoginSummary, UserLoginStats} 				from './login-summary';
 
 @Injectable({
   providedIn: 'root'
@@ -56,11 +56,11 @@ export class RecruiterService {
   	}
 	
 	/**
-  	* Returns summary of selected Recruiter's login history 
+  	* Returns summary of Recruiter login history 
   	*/
-  	public getLoginSummary(userId:string): Observable<LoginSummary>{
+  	public getLoginSummary(): Observable<UserLoginStats>{
       
-		const backendUrl:string = environment.backendUrl +'authentication/stats/logins/'+userId;
+		const backendUrl:string = environment.backendUrl +'authentication/stats/logins/';
     
 		return this.httpClient.get<any>(backendUrl, this.httpOptions);
 		

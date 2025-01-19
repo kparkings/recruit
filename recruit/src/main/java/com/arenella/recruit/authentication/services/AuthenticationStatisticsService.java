@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 import java.util.Set;
 
 import com.arenella.recruit.authentication.beans.AuthenticatedEvent;
-import com.arenella.recruit.authentication.controllers.UserLoginSummary;
+import com.arenella.recruit.authentication.controllers.UserLoginStats;
 
 /**
 * Defines services for Authentication statistics
@@ -20,9 +20,9 @@ public interface AuthenticationStatisticsService {
 	public Set<AuthenticatedEvent> fetchAuthenticatedEventsSince(LocalDateTime since);
 	
 	/**
-	* Returns a summary of the Users login behaviour
-	* @return
+	* Returns a summary of the Recruiters login behavior
+	* @return Summary of the Recruiters login behavior
 	*/
-	public UserLoginSummary fetchUserLoginSummary(String userId);
+	public UserLoginStats fetchRecruiterLoginStats();
 	
 }

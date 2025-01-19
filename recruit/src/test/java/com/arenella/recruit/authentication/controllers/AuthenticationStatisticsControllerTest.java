@@ -118,18 +118,23 @@ public class AuthenticationStatisticsControllerTest {
 	* statistics
 	*/
 	@Test
-	void testFetchLoginSummaryForUser() {
+	void testFetchLoginSummary() {
 		
-		Mockito.when(this.mockAuthStatservice.fetchUserLoginSummary("kparkings")).thenReturn(new UserLoginSummary(1,2,3,4));
+		UserLoginStats stats = UserLoginStats
+			.builder()
+				.loginSummaries(Set.of(new UserLoginSummary("rec1",1,2,3,4))).build();
 		
-		ResponseEntity<UserLoginSummary> response = controller.fetchLoginSummaryForUser("kparkings");
+		Mockito.when(this.mockAuthStatservice.fetchRecruiterLoginStats()).thenReturn(stats);
+		
+		ResponseEntity<UserLoginStats> response = controller.fetchRecruitersLoginSummary();
 		
 		Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
 		
-		assertEquals(1, response.getBody().loginsThisWeeek());
-		assertEquals(2, response.getBody().loginsLast30Days());
-		assertEquals(3, response.getBody().loginsLast60Days());
-		assertEquals(4, response.getBody().loginsLast90Days());
+		UserLoginSummary summary = response.getBody().getLoginSummaries().stream().findAny().orElseThrow();
+		assertEquals(1, summary.getLoginsThisWeeek());
+		assertEquals(2, summary.getLoginsLast30Days());
+		assertEquals(3, summary.getLoginsLast60Days());
+		assertEquals(4, summary.getLoginsLast90Days());
 		
 	}
 }

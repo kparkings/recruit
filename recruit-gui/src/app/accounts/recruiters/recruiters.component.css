@@ -99,7 +99,7 @@ h3{
 	margin-left:10px;
 }
 
-.recruiter-activity-level-High{
+.recruiter-activity-level-HIGH{
 	background:green; 
 	border:2px solid grey; 
 	padding:5px;
@@ -107,7 +107,7 @@ h3{
 	display:block;	
 }
 
-.recruiter-activity-level-Medium{
+.recruiter-activity-level-MEDIUM{
 	background:orange; 
 	border:2px solid grey; 
 	padding:5px;
@@ -115,7 +115,7 @@ h3{
 	display:block;	
 }
 
-.recruiter-activity-level-Low{
+.recruiter-activity-level-LOW{
 	background:red; 
 	border:2px solid grey; 
 	padding:5px;
@@ -123,12 +123,16 @@ h3{
 	display:block;	
 }
 
-.recruiter-activity-level-Nne{
+.recruiter-activity-level-NONE{
 	background:grey; 
 	border:2px solid grey; 
 	padding:5px;
 	width:50px;
 	display:block;	
+}
+
+.activityBreakdownRow{
+	cursor:pointer;
 }
 
 @media (max-width:700px)  {

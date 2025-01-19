@@ -22,6 +22,7 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import com.arenella.recruit.authentication.beans.AuthenticatedEvent;
+import com.arenella.recruit.authentication.controllers.UserLoginStats;
 import com.arenella.recruit.authentication.controllers.UserLoginSummary;
 import com.arenella.recruit.authentication.dao.AuthenticatedEventDao;
 
@@ -146,7 +147,7 @@ public class AuthenticationStatisticsServiceImplTest {
 		LocalDateTime startOf60DaysAgo 	= endOfToday.minusDays(60).withHour(0).withMinute(0).withSecond(0);
 		LocalDateTime startOf90DaysAgo 	= endOfToday.minusDays(90).withHour(0).withMinute(0).withSecond(0);
 		
-		Mockito.when(this.mockAuthenticatedEventDao.fetchUserLoginEvents("user1"))
+		Mockito.when(this.mockAuthenticatedEventDao.fetchLoginEventsForAllRecruiter())
 			.thenReturn(Set.of(
 					new AuthenticatedEvent("user1", true, false, endOfToday.minusSeconds(1)),
 					new AuthenticatedEvent("user1", true, false, startOfWeek.plusDays(2)),
@@ -159,12 +160,14 @@ public class AuthenticationStatisticsServiceImplTest {
 					new AuthenticatedEvent("user1", true, false, startOf90DaysAgo.plusDays(1))
 				));
 		
-		UserLoginSummary summary = this.service.fetchUserLoginSummary("user1");
+		UserLoginStats stats = this.service.fetchRecruiterLoginStats();
 		
-		assertEquals(2, summary.loginsThisWeeek());
-		assertEquals(4, summary.loginsLast30Days());
-		assertEquals(6, summary.loginsLast60Days());
-		assertEquals(9, summary.loginsLast90Days());
+		UserLoginSummary summary = stats.getLoginSummaries().stream().findFirst().orElseThrow();
+		
+		assertEquals(2, summary.getLoginsThisWeeek());
+		assertEquals(4, summary.getLoginsLast30Days());
+		assertEquals(6, summary.getLoginsLast60Days());
+		assertEquals(9, summary.getLoginsLast90Days());
 		
 	}
 	
