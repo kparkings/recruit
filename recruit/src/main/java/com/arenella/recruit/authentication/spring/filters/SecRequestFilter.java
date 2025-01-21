@@ -64,6 +64,16 @@ public class SecRequestFilter extends OncePerRequestFilter {
 		}
 		
 		/**
+		* We want to allow the stats url to be accessed before authentication
+		*/
+		if (request.getRequestURI().equals("/candidate/public/search-history")) {
+			filterChain.doFilter(request, response);
+			return;
+		}
+		
+		
+		
+		/**
 		* We want to allow the listings url to be accessed before authentication
 		*/
 		if (request.getRequestURI().startsWith("/public/listing-alert")) {

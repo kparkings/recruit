@@ -357,4 +357,12 @@ public class CandidateStatisticsServiceImpl implements CandidateStatisticsServic
 		
 	}
 
+	/**
+	* Refer to StatisticsService for details
+	*/
+	@Override
+	public Set<CandidateSearchEvent> fetchCandidateSearchEvents(int inPastDays) {
+		return this.statisticsDao.fetchEventsSince(LocalDate.now().minusDays(inPastDays));
+	}
+	
 }

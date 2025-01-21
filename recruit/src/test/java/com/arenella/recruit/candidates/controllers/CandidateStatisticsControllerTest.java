@@ -113,4 +113,19 @@ public class CandidateStatisticsControllerTest {
 	
 	}
 	
+	/**
+	* Tests endpoint for retrieving search history statistics 
+	*/
+	@Test
+	public void testfetchSearchHistory() {
+		
+		Mockito.when(this.mockCandidateStatisticsService.fetchCandidateSearchEvents(30)).thenReturn(Set.of());
+		
+		ResponseEntity<SearchStats> response = this.controller.fetchSearchHistory();
+		
+		assertEquals(HttpStatus.OK, response.getStatusCode());
+		assertTrue(response.getBody() instanceof SearchStats);
+		
+	}
+	
 }

@@ -21,6 +21,9 @@ public interface CandidateSearchStatisticsDao extends CrudRepository<CandidateSe
 	@Query("from CandidateSearchEventEntity where userId = :recruiterId and timestamp >= :since")
 	Set<CandidateSearchEventEntity> fetchEventForRecruiterAsEntities(String recruiterId, LocalDate since);
 
+	@Query("from CandidateSearchEventEntity where timestamp >= :since")
+	Set<CandidateSearchEventEntity> fetchEventSinceAsEntities(LocalDate since);
+
 	/**
 	* Returns the Search events of a Recruiter
 	* @param recruiterId - Unique id of the recruiter
@@ -29,6 +32,15 @@ public interface CandidateSearchStatisticsDao extends CrudRepository<CandidateSe
 	*/
 	default Set<CandidateSearchEvent> fetchEventForRecruiter(String recruiterId, LocalDate since){
 		return this.fetchEventForRecruiterAsEntities(recruiterId, since).stream().map(CandidateSearchEventEntity::fromEntity).collect(Collectors.toCollection(LinkedHashSet::new));
+	}
+	
+	/**
+	* Returns events created since a specified date
+	* @param since - Date events need to have occurred after
+	* @return matching events
+	*/
+	default Set<CandidateSearchEvent> fetchEventsSince(LocalDate since) {
+		return this.fetchEventSinceAsEntities(since).stream().map(CandidateSearchEventEntity::fromEntity).collect(Collectors.toSet());
 	}
 	
 }

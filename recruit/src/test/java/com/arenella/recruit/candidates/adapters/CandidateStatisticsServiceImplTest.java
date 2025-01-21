@@ -112,4 +112,13 @@ public class CandidateStatisticsServiceImplTest {
 		
 	}
 	
+	/**
+	* Test call to retrieve Events 
+	*/
+	@Test
+	void testFetchCandidateSearchEvents() {
+		this.service.fetchCandidateSearchEvents(30);
+		Mockito.verify(this.mockStatisticsDao).fetchEventsSince(Mockito.any(LocalDate.class));
+	}
+	
 }

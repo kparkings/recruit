@@ -43,6 +43,16 @@ public class CandidateStatisticsController {
 	}
 	
 	/**
+	* Returns statistics relating to search behavior 
+	* by the recruiters
+	* @return Search statistics
+	*/
+	@GetMapping(path="/candidate/public/search-history")
+	public ResponseEntity<SearchStats> fetchSearchHistory(){
+		return ResponseEntity.ok(new SearchStats(candidateStatisticsService.fetchCandidateSearchEvents(30)));
+	}
+	
+	/**
 	* Returns a breakdown of the number of available candidates
 	* per Function
 	* @return Stats about available Candidates by role
