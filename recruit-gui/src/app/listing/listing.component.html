@@ -19,8 +19,8 @@
 					<h5>{{'arenella-listing-intro' | translate}}</h5>
 				</div>
 				<div class="filters">
-					<div class="filters-title" *ngIf="displayFilters"  (click)="toggleFilters()">{{'arenella-listing-filters' | translate}}:<span style="float:right; margin-right:20px;cursor:pointer"> {{'arenella-listing-filters-hide' | translate}} </span></div>
-					<div class="filters-title" *ngIf="!displayFilters" (click)="toggleFilters()">{{'arenella-listing-filters' | translate}}:<span style="float:right; margin-right:20px;cursor:pointer"> {{'arenella-listing-filters-shw' | translate}} </span></div>
+					<div class="filters-title" style="cursor:pointer" *ngIf="displayFilters"  (click)="toggleFilters()">{{'arenella-listing-filters' | translate}}:<span style="float:right; margin-right:20px;cursor:pointer"> {{'arenella-listing-filters-hide' | translate}} </span></div>
+					<div class="filters-title" style="cursor:pointer" *ngIf="!displayFilters" (click)="toggleFilters()">{{'arenella-listing-filters' | translate}}:<span style="float:right; margin-right:20px;cursor:pointer"> {{'arenella-listing-filters-shw' | translate}} </span></div>
 					<table *ngIf="displayFilters">
 						<tr>
 							<th>{{'arenella-listing-contract-type' | translate}}</th>
@@ -49,6 +49,66 @@
 						</tr>
 					</table>
 				</div>
+				<div>
+					<div class="filters-title"  style="cursor:pointer" *ngIf="displayStatistics"  (click)="toggleStatistics()">Statistics:<span class="toggle-options"> {{'arenella-listing-filters-hide' | translate}} </span></div>
+					<div class="filters-title"  style="cursor:pointer" *ngIf="!displayStatistics" (click)="toggleStatistics()">Statistics:<span class="toggle-options"> {{'arenella-listing-filters-shw' | translate}} </span></div>
+					<table *ngIf="displayStatistics" class="statistics-table">
+						<tr>
+							<td>
+								<div class="statistics-table-pane-left">
+								<table>
+									<tr>
+										<tr>
+											<td colspan="2">
+												<span style="font-weight:bold;">{{'arenella-listing-most-searched-countries' | translate}}</span>
+											</td>
+										<td>
+									</tr>
+									<tr *ngFor="let stat of stats.countryStats">
+										<td>{{stat.country | translate}}</td>
+										<td style="padding-left:5px;">
+											<div class="stat-option-bar" [ngStyle]="{'width':(stat.percentageOfTotal *5)+'px','background':'green'}">
+												
+											</div>
+										</td>
+										
+									</tr>
+									
+								</table>
+								</div>
+								<div class="statistics-table-pane">
+								<table>
+									<tr>
+										<tr>
+											<td colspan="2">
+												<span style="font-weight:bold;">{{'arenella-listing-most-searched-functions' | translate}}</span>
+											</td>
+										<td>
+									</tr>
+									<tr *ngFor="let stat of stats.functionStats">
+										<td>{{stat.function | translate}}</td>
+										<td style="padding-left:5px;">
+											<div class="stat-option-bar" [ngStyle]="{'width':(stat.percentageOfTotal *5)+'px','background':'orange'}">
+											</div>
+										</td>
+										
+									</tr>
+									
+								</table>
+							</div>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="2" style="padding:10px">
+								<p>
+								{{'arenella-listing-most-searched-summary' | translate}}
+								</p>
+							</td>
+						</tr>
+						
+					</table>
+					
+				</div>
 				<div class="listing-pane">
 					<div class="job-post" *ngFor="let listing of listings">
 						<div (click)="showListingDetails(listing)">
@@ -66,7 +126,9 @@
 					</div>
 				</div>
 			</div>
+			
 		</div>
+		
 		<!-- Show Selected Listing View -->
 		<div>
 			<div  *ngSwitchCase="'show'">

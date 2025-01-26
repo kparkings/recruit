@@ -92,6 +92,7 @@ public class WebSecurityConfig {
             	.requestMatchers(new AntPathRequestMatcher("/candidate/geo-zone")).permitAll()
             	.requestMatchers(new AntPathRequestMatcher("/candidate/languages")).permitAll()
             	.requestMatchers(new AntPathRequestMatcher("/public/listing-alert/**")).permitAll()
+            	.requestMatchers(new AntPathRequestMatcher("/candidate/public/search-history")).permitAll()
             	.anyRequest().authenticated()
         	);
 		

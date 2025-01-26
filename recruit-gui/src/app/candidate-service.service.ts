@@ -20,6 +20,7 @@ import { SupportedCountry } 							from './supported-candidate';
 import { UpdateCityRequest } 							from './accounts/update-city-request';
 import { City } 										from './city';
 import { SuggestionsSearchRequest } 					from './suggestions/suggestion-search-request';
+import { SearchStats } 									from './search-stats';
 
 /**
 * Services for new Candidates
@@ -375,7 +376,18 @@ export class CandidateServiceService {
     	return this.httpClient.get<any>(backendUrl, this.httpOptions);
 
 	}
-	
+
+	/**
+	* Returns Recruiter search statistics
+	*/
+	public fetchSearchStats(): Observable<SearchStats>{
+		
+		const backendUrl:string = environment.backendUrl +'candidate/public/search-history';
+
+	  	return this.httpClient.get<any>(backendUrl, this.httpOptions);
+
+	}
+		
 	/**
   	* Uploads a Job description so that its search filters can be extracted 
   	*/

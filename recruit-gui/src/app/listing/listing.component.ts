@@ -16,9 +16,10 @@ import { HtmlOption } 									from '../html-option';
 import { InfoItemBlock, InfoItemConfig, InfoItemRowKeyValue, InfoItemRowKeyValueFlag, InfoItemRowMultiValues, InfoItemRowSingleValue } 				from '../candidate-info-box/info-item';
 import { ContractType } 								from '../suggestions/contract-type';
 import { TranslateService } 							from '@ngx-translate/core';
-import { SupportedCountry } from '../supported-candidate';
-import { CandidateServiceService } from '../candidate-service.service';
-import { Clipboard } from '@angular/cdk/clipboard';
+import { SupportedCountry } 							from '../supported-candidate';
+import { CandidateServiceService } 						from '../candidate-service.service';
+import { Clipboard } 									from '@angular/cdk/clipboard';
+import { SearchStatCountry, SearchStats } 				from '../search-stats';
 @Component({
   selector: 'app-listing',
   templateUrl: './listing.component.html',
@@ -39,6 +40,7 @@ export class ListingComponent implements OnInit {
 	public infoItemConfig:InfoItemConfig 							= new InfoItemConfig();
 	public supportedCountries:Array<SupportedCountry>				= new Array<SupportedCountry>();
 	public contractTypeOptions:Array<HtmlOption> 					= new Array<HtmlOption>();
+	public stats:SearchStats 										= new SearchStats();
 	
   	constructor(private listingService:ListingService, 
 				private emailService:EmailService, 
@@ -74,6 +76,12 @@ export class ListingComponent implements OnInit {
 		this.selectableCountries 		= this.staticDataService.fetchCountries().map(c => new SelectableCountry(c, false));
 		this.contractTypeOptions 		= this.getContractTypeOptions();
 		this.supportedCountries 		= this.candidateService.getSupportedCountries();
+		
+		this.candidateService.fetchSearchStats().subscribe(stats => {
+			this.stats = stats;
+			this.stats.countryStats.sort((a,b) => b.percentageOfTotal - a.percentageOfTotal);
+			this.stats.functionStats.sort((a,b) => b.percentageOfTotal - a.percentageOfTotal);
+		});
   	
   	}
 
@@ -91,6 +99,7 @@ export class ListingComponent implements OnInit {
   	public curriculumFile!:File| any;
 
 	public displayFilters:boolean				= false;
+	public displayStatistics:boolean			= false;
 	
 	public isMobile:boolean = false;
 	public mobileListingclass:string 				= '';
@@ -101,6 +110,9 @@ export class ListingComponent implements OnInit {
 	public mobileListingViewDiv:string				= '';
 	public mobileButton:string						= '';	
 	public postPublicityUrlCopiedTClipbard:boolean	= false;				
+	
+	showSendAlertBoxSuccess:boolean 		= false;
+	showSendAlertBoxFailure:boolean 		= false;
 	
 	/**
 	* Toggoles whether or not a FunctionType has been selected by the User
@@ -137,9 +149,6 @@ export class ListingComponent implements OnInit {
   		this.curriculumFile = event.target.files[0];
 		
 	}
-	
-	showSendAlertBoxSuccess:boolean 		= false;
-	showSendAlertBoxFailure:boolean 		= false;
 	
 	/**
 	* Form for job alert 
@@ -190,6 +199,14 @@ export class ListingComponent implements OnInit {
 	*/
 	public toggleFilters():void{
 		this.displayFilters = !this.displayFilters;
+	
+	}
+	
+	/**
+	* Toggles Statistics
+	*/
+	public toggleStatistics():void{
+		this.displayStatistics = !this.displayStatistics;
 	
 	}
 	
@@ -469,18 +486,6 @@ export class ListingComponent implements OnInit {
 	* Returns the code identifying the country
 	* @param country - Country to get the country code for
 	*/
-//	public getCountryCode(country:string):string{
-
-//		const matchingCountry = this.staticDataService.fetchCountries().filter(countryObj => countryObj.key == country)[0];
-//		
-//		return matchingCountry == null ? "NA" : matchingCountry.humanReadable;
-		
- // 	}
-
-	/**
-	* Returns the code identifying the country
-	* @param country - Country to get the country code for
-	*/
 	public getContractType(type:string):string{
 
 		const matchingType = this.staticDataService.fetchContractTypes().filter(contractTypeObj => contractTypeObj.contractType == type)[0];
@@ -662,7 +667,7 @@ export class ListingComponent implements OnInit {
 			
 		}
 
-  }
+  	}
 
 	/**
 	* Whether or not the Use is a Candidate
@@ -714,14 +719,6 @@ export class ListingComponent implements OnInit {
 			return "";
 		}
 	}
-	
-	//public selectedCountryCss(ft:SelectableCountry):string{
-	//	if(this.selectableCountries.filter(ftItem => ftItem == ft)[0].selected){
-	//		return "listing-alert-option-selected";
-	//	} else {
-	//		return "";
-	//	}
-	//}
 	
 	public selectedCountryCss(ft:SelectableCountry):string{
 		if(this.selectableCountries.filter(ftItem => ftItem == ft)[0].selected){

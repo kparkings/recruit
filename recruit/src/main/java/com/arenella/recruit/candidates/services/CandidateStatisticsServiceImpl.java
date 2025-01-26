@@ -100,24 +100,8 @@ public class CandidateStatisticsServiceImpl implements CandidateStatisticsServic
 		UUID						searchId	= UUID.randomUUID();
 		Set<CandidateSearchEvent> 	events 		= new HashSet<>();
 		
-		if (isAllOptionsAvailable(filterOptions)) {
-			events = this.allOptionsAvailable(userId, searchId, filterOptions);
-		} else if (isCountryAndFunctionAvailable(filterOptions)) {
-			events = this.countryAndFunctionAvailable(userId, searchId, filterOptions);
-		} else if (isCountryAndSkillAvailable(filterOptions)) {
-			events = this.countryAndSkillAvailable(userId, searchId, filterOptions);
-		} else if (isSkillAndFunctionAvailable(filterOptions)) {
-			events = this.skillAndFunctionAvailable(userId, searchId, filterOptions);
-		} else if (isOnlySkillAvailable(filterOptions)) {
-			events = this.onlySkillAvailable(userId, searchId, filterOptions);
-		} else if (isOnlyFunctionAvailable(filterOptions)) {
-			events = this.onlyFunctionAvailable(userId, searchId, filterOptions);
-		} else if (isOnlyCountryAvailable(filterOptions)) {
-			events = this.onlyCountryAvailable(userId, searchId, filterOptions);
-		} else {
-			events.add(this.onlyGeneralValuesAvailable(userId, searchId, filterOptions));
-		}
-			
+		events = this.allOptionsAvailable(userId, searchId, filterOptions);
+		
 		statisticsDao.saveAll(events.stream().map(CandidateSearchEventEntity::toEntity).collect(Collectors.toSet()));
 		
 	}
@@ -139,69 +123,6 @@ public class CandidateStatisticsServiceImpl implements CandidateStatisticsServic
 	}
 	
 	/**
-	* Whether or not all values present in Search (And general search attributes)
-	* @param filterOptions - Contains all search values
-	* @return Whether or not all values available
-	*/
-	public boolean isAllOptionsAvailable(CandidateFilterOptions filterOptions) {
-		return !filterOptions.getCountries().isEmpty() && !filterOptions.getFunctions().isEmpty() && !filterOptions.getSkills().isEmpty();
-	}
-	
-	/**
-	* Whether or not only Country and Function values present in Search (And general search attributes)
-	* @param filterOptions - Contains all search values
-	* @return Whether or not only Country and Function values available
-	*/
-	public boolean isCountryAndFunctionAvailable(CandidateFilterOptions filterOptions) {
-		return !filterOptions.getCountries().isEmpty() && !filterOptions.getFunctions().isEmpty() && filterOptions.getSkills().isEmpty();
-	}
-	
-	/**
-	* Whether or not only Skill and Country values present in Search (And general search attributes)
-	* @param filterOptions - Contains all search values
-	* @return Whether or not only Skill and Country values available
-	*/
-	public boolean isCountryAndSkillAvailable(CandidateFilterOptions filterOptions) {
-		return !filterOptions.getCountries().isEmpty() && filterOptions.getFunctions().isEmpty() && !filterOptions.getSkills().isEmpty();
-	}
-	
-	/**
-	* Whether or not only Skill and Function values present in Search (And general search attributes)
-	* @param filterOptions - Contains all search values
-	* @return Whether or not only Skill and Function values available
-	*/
-	public boolean isSkillAndFunctionAvailable(CandidateFilterOptions filterOptions) {
-		return filterOptions.getCountries().isEmpty() && filterOptions.getFunctions().isEmpty() && !filterOptions.getSkills().isEmpty();
-	}
-	
-	/**
-	* Whether or not only Skill values present in Search (And general search attributes)
-	* @param filterOptions - Contains all search values
-	* @return Whether or not only Skill values available
-	*/
-	public boolean isOnlySkillAvailable(CandidateFilterOptions filterOptions) {
-		return filterOptions.getCountries().isEmpty() && filterOptions.getFunctions().isEmpty() && !filterOptions.getSkills().isEmpty();
-	}
-	
-	/**
-	* Whether or not only Function values present in Search (And general search attributes)
-	* @param filterOptions - Contains all search values
-	* @return Whether or not only Function values available
-	*/
-	public boolean isOnlyFunctionAvailable(CandidateFilterOptions filterOptions) {
-		return filterOptions.getCountries().isEmpty() && !filterOptions.getFunctions().isEmpty() && !filterOptions.getSkills().isEmpty();
-	}
-	
-	/**
-	* Whether or not only Country values present in Search (And general search attributes)
-	* @param filterOptions - Contains all search values
-	* @return Whether or not only county values available
-	*/
-	public boolean isOnlyCountryAvailable(CandidateFilterOptions filterOptions) {
-		return !filterOptions.getCountries().isEmpty() && filterOptions.getFunctions().isEmpty() && filterOptions.getSkills().isEmpty();
-	}
-	
-	/**
 	* Process Event for Search where only Options selected (And general search attributes)
 	* @param userId			- Unique Id of user who performed the Search
 	* @param filterOptions	- General search attributes
@@ -211,13 +132,29 @@ public class CandidateStatisticsServiceImpl implements CandidateStatisticsServic
 		
 		Set<CandidateSearchEvent> events = new HashSet<>();
 		
-		filterOptions.getSkills().stream().forEach(skill -> 
-			filterOptions.getCountries().stream().forEach(country -> 
-				filterOptions.getFunctions().stream().forEach(function -> 
-					events.add(this.generateEvent(userId, searchId ,skill, country, function, filterOptions))
-				)
-			)
-		);
+		/**
+		* Revised functionality. Now we only care about country and function. For each combination we generate
+		* a separate search event
+		*/
+		if (filterOptions.getCountries().isEmpty()) {
+			if (filterOptions.getFunctions().isEmpty()) {
+				events.add(this.generateEvent(userId, searchId ,null, null, null, filterOptions));
+			} else {
+				filterOptions.getFunctions().stream().forEach(function -> {
+					events.add(this.generateEvent(userId, searchId ,null, null, function, filterOptions));
+				});
+			}
+		} else {
+			filterOptions.getCountries().stream().forEach(country -> {
+				if (filterOptions.getFunctions().isEmpty()) {
+					events.add(this.generateEvent(userId, searchId ,null, country, null, filterOptions));
+				} else {
+					filterOptions.getFunctions().stream().forEach(function -> {
+						events.add(this.generateEvent(userId, searchId ,null, country, function, filterOptions));
+					});
+				}
+			});
+		}
 		
 		return events;
 		

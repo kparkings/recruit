@@ -5,6 +5,7 @@ import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.stream.Collectors;
 
 import com.arenella.recruit.candidates.beans.CandidateSearchEvent;
 import com.arenella.recruit.candidates.enums.COUNTRY;
@@ -75,7 +76,7 @@ public class SearchStats {
 	* @return statistics relating to Searches on Functions
 	*/
 	public Set<SearchStatFunction> getFunctionStats(){
-		return this.functionStats;
+		return this.functionStats.stream().limit(10).collect(Collectors.toCollection(LinkedHashSet::new));
 	}
 	
 	/**
@@ -83,7 +84,7 @@ public class SearchStats {
 	* @return statistics relating to Searches on Countries
 	*/
 	public Set<SearchStatCountry> getCountryStats(){
-		return this.countryStats;
+		return this.countryStats.stream().limit(10).collect(Collectors.toCollection(LinkedHashSet::new));
 	}
 	
 	/**
