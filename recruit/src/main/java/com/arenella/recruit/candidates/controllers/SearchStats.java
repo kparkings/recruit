@@ -1,5 +1,6 @@
 package com.arenella.recruit.candidates.controllers;
 
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
@@ -59,6 +60,8 @@ public class SearchStats {
 		functions.keySet().forEach(function -> this.functionStats.add(new SearchStatFunction(function, functions.get(function), getPercentAsInt(functions.get(function), totalFunctions.get()))));
 		countries.keySet().forEach(country -> this.countryStats.add(new SearchStatCountry(country, countries.get(country), getPercentAsInt(countries.get(country), totalCountries.get()))));
 		
+		
+		
 	}
 	
 	/**
@@ -76,7 +79,7 @@ public class SearchStats {
 	* @return statistics relating to Searches on Functions
 	*/
 	public Set<SearchStatFunction> getFunctionStats(){
-		return this.functionStats.stream().limit(10).collect(Collectors.toCollection(LinkedHashSet::new));
+		return this.functionStats.stream().sorted(Comparator.comparing(SearchStatFunction::percentageOfTotal).reversed()).limit(10).collect(Collectors.toCollection(LinkedHashSet::new));
 	}
 	
 	/**
@@ -84,7 +87,7 @@ public class SearchStats {
 	* @return statistics relating to Searches on Countries
 	*/
 	public Set<SearchStatCountry> getCountryStats(){
-		return this.countryStats.stream().limit(10).collect(Collectors.toCollection(LinkedHashSet::new));
+		return this.countryStats.stream().sorted(Comparator.comparing(SearchStatCountry::percentageOfTotal).reversed()).limit(10).collect(Collectors.toCollection(LinkedHashSet::new));
 	}
 	
 	/**
