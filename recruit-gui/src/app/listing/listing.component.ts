@@ -751,11 +751,7 @@ export class ListingComponent implements OnInit {
 	* Returns the flag for a given country 
 	*/
 	public getCountryISO2Code(country:string):string{
-
-		const matchingCountry = this.staticDataService.fetchCountries().filter(countryObj => countryObj.key == country)[0];
-		
-		return matchingCountry == null ? "NA" : matchingCountry.iso2Code;
-	
+		return this.staticDataService.getCountryISO2Code(country);
   	}
   	
   	/**

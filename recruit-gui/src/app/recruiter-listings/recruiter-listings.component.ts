@@ -44,7 +44,7 @@ export class RecruiterListingsComponent implements OnInit {
 	public skills:Array<string> 						= new Array<string>();
 	public listings:Array<Listing>						= new Array<Listing>();
 	public activeView:string							= 'list';
-	public activeSubView:string							= 'none';
+	//public activeSubView:string							= 'none';
 	public selectedListing:Listing						= new Listing();
 	public feedbackBoxClass:string          			= '';
   	public feedbackBoxTitle                 			= '';
@@ -170,6 +170,7 @@ export class RecruiterListingsComponent implements OnInit {
   	}
   	
   	public extractFiltersFromJobSpecText():void{
+				
 		let jobSpecText = this.filterByJobSpecForm.get('specAsText')?.value; 
 		this.candidateService.extractFiltersFromText(jobSpecText).subscribe(extractedFilters=>{
 			this.processJobSpecExtratedFilters(extractedFilters);
@@ -208,6 +209,18 @@ export class RecruiterListingsComponent implements OnInit {
 			this.newListingFormBean.get("description")?.setValue(extractedFilters.extractedText);
 			
 			this.closeModal();
+			
+			this.activeView 			= 'add';
+			//this.activeSubView 			= 'step1';
+			this.selectedListing		= new Listing();
+			this.enabldeDeleteOption 	= false;
+			
+			/**	
+			* Default values
+			*/
+			this.newListingFormBean.get("contactName")?.setValue(this.recruiterFirstName + ' ' + this.recruiterSurname);
+			this.newListingFormBean.get("contactEmail")?.setValue(this.recruiterEmail);
+			this.newListingFormBean.get("contactCompany")?.setValue(this.recruiterCompany);
 			
 	}
 
@@ -265,6 +278,7 @@ export class RecruiterListingsComponent implements OnInit {
 		this.specUploadBox.nativeElement.close();
 		this.marketplaceBox.nativeElement.close();
 		this.validationErrors = new Array<string>();
+		
 	}
 
 	
@@ -301,9 +315,9 @@ export class RecruiterListingsComponent implements OnInit {
 	/**
 	* Navigates to the specified step
 	*/
-	public updateSubviewStep(step:string):void{
-		this.activeSubView = step;
-	}
+	//public updateSubviewStep(step:string):void{
+	//	this.activeSubView = step;
+	//}
 	
 	/**
 	* Switches to Add Listing view
@@ -313,7 +327,7 @@ export class RecruiterListingsComponent implements OnInit {
 		this.reset();
 		
 		this.activeView 			= 'add';
-		this.activeSubView 			= 'step1';
+		//this.activeSubView 			= 'step1';
 		this.selectedListing		= new Listing();
 		this.enabldeDeleteOption 	= false;
 		
@@ -331,7 +345,7 @@ export class RecruiterListingsComponent implements OnInit {
 	*/
 	public showList():void{
 		this.activeView 			= 'list';
-		this.activeSubView 			= 'none';
+		//this.activeSubView 			= 'none';
 		this.selectedListing		= new Listing();
 		this.enabldeDeleteOption 	= false;
 	}
@@ -367,7 +381,7 @@ export class RecruiterListingsComponent implements OnInit {
 	public showListingDetails(selectedListing?:Listing):void{
 		
 		this.activeView 			= 'show';
-		this.activeSubView 			= 'none';
+		//this.activeSubView 			= 'none';
 		this.enabldeDeleteOption 	= false;
 		
 		if (selectedListing) {
@@ -444,7 +458,6 @@ export class RecruiterListingsComponent implements OnInit {
 	public showEditListing():void{
 		
 		this.activeView 			= 'edit';
-		this.activeSubView 			= 'step1';
 		this.enabldeDeleteOption 	= false;
 		
 		/**	
@@ -917,6 +930,20 @@ export class RecruiterListingsComponent implements OnInit {
 			this.filterByJobSpecForm.get('specAsText')?.setValue(''); 
 		}
 		 
+	}
+	
+	/**
+	* Returns the flag for a given country 
+	*/
+	public getCountryISO2Code(country:string):string{
+		return this.staticDataService.getCountryISO2Code(country);
+  	}
+	
+	/**
+	* Returns size limited version
+	*/
+	public getFormattedJobTitle(title:string):string{
+		return title.length < 50 ? title : title.substring(0,49) + "...";
 	}
 	
 }

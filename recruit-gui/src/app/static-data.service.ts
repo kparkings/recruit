@@ -97,4 +97,15 @@ export class StaticDataService {
 		return languageTypes;
 		
 	}
+	
+	/**
+	* Returns the flag for a given country 
+	*/
+	public getCountryISO2Code(country:string):string{
+
+		const matchingCountry = this.fetchCountries().filter(countryObj => countryObj.key == country)[0];
+		
+		return matchingCountry == null ? "NA" : matchingCountry.iso2Code;
+
+	}
 }

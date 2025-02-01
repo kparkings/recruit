@@ -7,7 +7,7 @@ import java.util.UUID;
 
 /**
 * Class represents a Listing made by a recruiter for some type of 
-* adevertised role
+* advertised role
 * @author K Parkings
 */
 public class Listing {
@@ -56,8 +56,38 @@ public class Listing {
 		EU_REMOTE, 
 		WORLD_REMOTE}
 	
-	public enum language 		{DUTCH, FRENCH, ENGLISH}
-	public enum currency		{EUR, GBP}
+	public enum language 		{
+		BULGARIAN, 
+		CROATIAN,
+		CZECH, 
+		DANISH, 
+		DUTCH, 
+		ENGLISH, 
+		ESTONIAN,
+		FRENCH, 
+		FINNISH, 
+		GERMAN, 
+		GREEK, 
+		HUNGARIAN,
+		HINDI,
+		ITALIAN, 
+		LATVIAN,
+		LITHUANIAN,
+		MALTESE,
+		NORWEGEN,
+		POLISH, 
+		PORTUGUESE, 
+		ROMANIAN, 
+		RUSSIAN,
+		SWEDISH,
+		SPANISH, 
+		SLOVAKIAN,
+		SLOVENIAN,
+		TURKISH,
+		UKRAINIAN,
+		URDU}
+	
+	public enum currency		{EUR, GBP, BGN, CAD, CHF, CZK, DKK, HUF, INR, PLN, PKR, RON, SEK, USD}
 	public enum TECH			{JAVA, DOT_NET, DEV_OPS, NETWORKS, CLOUD, WEB, UI_UX, PROJECT_NANAGMENT, TESTING, BUSINESS_ANALYSTS, SECURITY, IT_SUPPORT, ARCHITECT, BI, REC2REC }
 	
 	private UUID 						listingId;

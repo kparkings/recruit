@@ -5,50 +5,48 @@
 	
 	<div class="page-body">
 		<div [ngSwitch]="activeView">
-			<div  *ngSwitchCase="'list'">
-				<div>
-					<div class="action-buttons">
-						<button *ngIf="passedCreditCheck" 	(click)="showAdd()" 		class="btn btn-secondary arenella-btn">{{'arenella-recruiter-listing-btn-add-job' | translate}}</button>
-						<button *ngIf="!passedCreditCheck" 	(click)="showNoCredits()" 	class="btn btn-secondary arenella-btn">{{'arenella-recruiter-listing-btn-add-job' | translate}}</button>
-						<button routerLink="/listing" 									class="btn btn-secondary arenella-btn">{{'arenella-recruiter-listing-btn-back' | translate}}</button>
-					</div>
-					<div class="recruiter-listing-main-text">
-						<p>{{'arenella-recruiter-listing-desc1' | translate}}</p>
-						<p>{{'arenella-recruiter-listing-desc2' | translate}}</p>
-					</div>
-					<div class="pagination-options">
-				    	<span [ngSwitch]="showNavPrev()">
-							<span *ngSwitchCase="true"  class="listing-nav" (click)="previousPage()"><<<<<</span>
-							<span *ngSwitchCase="false" class="listing-nav-disabled"><<<<<</span>
-						</span>
-						<span>{{currentPage+1}}</span>
-						<span [ngSwitch]="showNavNext()">
-							<span *ngSwitchCase="true"class="listing-nav" (click)="nextPage()">>>>>></span>
-							<span *ngSwitchCase="false"class="listing-nav-disabled">>>>>></span>
-						</span>
-					</div>
+			<div *ngSwitchCase="'list'">
+				<div class="action-buttons">
+					<button *ngIf="passedCreditCheck" 	(click)="showAdd()" 					class="btn btn-secondary arenella-btn">{{'arenella-recruiter-listing-btn-add-job' | translate}}</button>
+					<button *ngIf="!passedCreditCheck" 	(click)="showNoCredits()" 				class="btn btn-secondary arenella-btn">{{'arenella-recruiter-listing-btn-add-job' | translate}}</button>
+					<button *ngIf="passedCreditCheck"   (click)="showFilterByJobSpecDialog()"	class="btn btn-secondary arenella-btn">{{'arenella-recruiter-listing-btn-create-from-spec' | translate}}</button>
+					<button *ngIf="!passedCreditCheck"  (click)="showNoCredits()"				class="btn btn-secondary arenella-btn">{{'arenella-recruiter-listing-btn-create-from-spec' | translate}}</button>
+					<button routerLink="/listing" 												class="btn btn-secondary arenella-btn">{{'arenella-recruiter-listing-btn-back' | translate}}</button>
 				</div>
-				<div class="listings">
-	      			<table class="table listing-table">
-						<thead>
-					    	<tr>
-					      		<th>{{'arenella-recruiter-listing-created' | translate}}</th>
-								<th>{{'arenella-recruiter-listing-title' | translate}}</th>
-					            <th>{{'arenella-recruiter-listing-views' | translate}}</th>
-					      	</tr>
-						</thead>
-						<tbody>
-					    	<tr class="listing-tab-row" *ngFor="let listing of listings" >
-					      		<td (click)="showListingDetails(listing)">{{listing.created | date:'yyyy-MM-dd hh:mm'}}</td>
-					      		<td (click)="showListingDetails(listing)">{{listing.title}}</td>
-					        	<td (click)="showListingDetails(listing)">{{listing.views}}</td>
-					      	</tr>	
-						</tbody>
-					</table>
+				<div class="listing-pane">
+					<div class="job-post" *ngFor="let listing of listings">
+						<div (click)="showListingDetails(listing)">
+							<div class="listing-title">{{getFormattedJobTitle(listing.title)}}</div>
+							<div>
+								<span title="{{listing.listingId}}" class="flag-icon flag-icon-{{getCountryISO2Code(listing.country)}} suggestion-flag-country listing-country"></span>
+							</div>
+							<div class="listing-views" title="views">
+								{{listing.views}}
+							</div>
+							<div>
+								<a href="{{listing.listingId}}"></a>
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
-			
+	
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+
 		<div [ngSwitch]="activeView">
 			<div *ngSwitchCase="'show'">
 	   			<div class="action-buttons">
@@ -78,27 +76,25 @@
 			<!-- List Listings -->
 			<div  *ngSwitchCase="['add', 'edit'].includes(activeView) ? activeView : !activeView">
 				<div class="action-buttons">
-					<button (click)="showFilterByJobSpecDialog()"	class="btn btn-secondary arenella-btn" download>{{'arenella-recruiter-listing-btn-create-from-spec' | translate}}</button>
+					<!-- <button (click)="showFilterByJobSpecDialog()"	class="btn btn-secondary arenella-btn" download>{{'arenella-recruiter-listing-btn-create-from-spec' | translate}}</button>-->
 					<button (click)="publishListing()" 				class="btn btn-secondary arenella-btn">{{'arenella-recruiter-listing-btn-publish' | translate}}</button>
 					<button (click)="showPreviousShowOption()" 		class="btn btn-secondary arenella-btn">{{'arenella-recruiter-listing-btn-back' | translate}}</button>
 				</div>
 				<form [formGroup]="newListingFormBean">
-					<div [ngSwitch]="activeSubView" class="steps">
-						<div  *ngSwitchCase="'step1'">
+						<div class="add-container">
 							<h2>{{'arenella-recruiter-listing-step1' | translate}}</h2>
-							<span class="listing-nav" >{{'arenella-recruiter-listing-previous' | translate}}</span>
-							<span class="listing-nav" (click)="updateSubviewStep('step2')">{{'arenella-recruiter-listing-next' | translate}}</span>
-							<div class="table listing-step-content">
+							<!--  <span class="listing-nav" >{{'arenella-recruiter-listing-previous' | translate}}</span>-->
+							<div class="table content-container">
 								<table>
 									<tr>
-										<td>{{'arenella-recruiter-listing-title' | translate}}Title</td>
+										<td>{{'arenella-recruiter-listing-title' | translate}}</td>
 										<td><input type="text" formControlName="title"></td>
 									</tr>
 									<tr>
 										<td>{{'arenella-recruiter-listing-type' | translate}}</td>
 										<td>
 											<select formControlName="type">
-												<option *ngFor="let type of contractTypeOptions" [ngValue]="type.value">{{type.label}}</option>
+												<option *ngFor="let type of contractTypeOptions" [ngValue]="type.value">{{type.label | translate}}</option>
 											</select>
 										</td>
 									</tr>
@@ -134,32 +130,10 @@
 								</table>
 							</div>
 						</div>
-						<div  *ngSwitchCase="'step2'">
-							<h2>{{'arenella-recruiter-listing-step2' | translate}}</h2>
-							<span class="listing-nav" (click)="updateSubviewStep('step1')">{{'arenella-recruiter-listing-previous' | translate}}</span>
-							<span class="listing-nav" (click)="updateSubviewStep('step3')">{{'arenella-recruiter-listing-next' | translate}}</span>
-							<div class="table listing-step-content">
-								<table class="table">
-									<thead>
-										<tr>
-											<th>{{'arenella-recruiter-listing-description' | translate}}</th>
-										</tr>
-									</thead>
-									<tbody>
-										<tr>
-											<td>
-												<textarea class="text-area-listing" formControlName="description"></textarea>	
-											</td>	
-										</tr>
-									</tbody>
-								</table>
-							</div>
-						</div>
-						<div  *ngSwitchCase="'step3'">
-							<h3>{{'arenella-recruiter-listing-step3' | translate}}</h3>
-							<span class="listing-nav" (click)="updateSubviewStep('step2')">{{'arenella-recruiter-listing-previous' | translate}}</span>
-							<span class="listing-nav" (click)="updateSubviewStep('step4')">{{'arenella-recruiter-listing-next' | translate}}</span>
-							<div class="table listing-step-content">
+						
+						<div  class="add-container">
+							<h2>{{'arenella-recruiter-listing-step3' | translate}}</h2>
+							<div class="table content-container">
 								<table>
 									<tr>
 										<td>{{'arenella-recruiter-listing-contact-name' | translate}}</td>
@@ -176,24 +150,27 @@
 								</table>
 							</div>
 						</div>
-						<div  *ngSwitchCase="'step4'">
+						<div  class="add-container description-container">
+							<h2>{{'arenella-recruiter-listing-step2' | translate}}</h2>
+							<div class="content-container">
+								<textarea class="addListingDesc" formControlName="description"></textarea>	
+								
+							</div>
+						</div>
+						<div  class="add-container add-container-mini">
 							<h2>{{'arenella-recruiter-listing-step4' | translate}}</h2>
-							<span class="listing-nav" (click)="updateSubviewStep('step3')">{{'arenella-recruiter-listing-previous' | translate}}</span>
-							<span class="listing-nav" (click)="updateSubviewStep('step5')">{{'arenella-recruiter-listing-ext' | translate}}</span>
-							<div class="listing-step-content">
+							<div class="content-container">
 								<div><input type="checkbox" name="language" value="Dutch" class="checkbox-ctrl" formControlName="langDutch"><label>{{'arenella-recruiter-listing-dutch' | translate}}</label></div>
 								<div><input type="checkbox" name="language" value="English" class="checkbox-ctrl" formControlName="langEnglish"><label>{{'arenella-recruiter-listing-englsh' | translate}}</label></div>	
 								<div><input type="checkbox" name="language" value="French" class="checkbox-ctrl" formControlName="langFrench"><label>{{'arenella-recruiter-listing-french' | translate}}</label></div>
 							</div>
 						</div>
-						<div  *ngSwitchCase="'step5'">
+						<div  class="add-container add-container-mini">
 							<h2>{{'arenella-recruiter-listing-step5' | translate}}</h2>
-							<span class="listing-nav" (click)="updateSubviewStep('step4')">{{'arenella-recruiter-listing-previous' | translate}}</span>
-							<span class="listing-nav">{{'arenella-recruiter-listing-next' | translate}}</span>
-							<div class="listing-step-content">
+							<div class="content-container">
 							<div>
 									<input type="text" formControlName="skill">
-									<button (click)="addSkill()">{{'arenella-recruiter-listing-add-skill' | translate}}</button>
+									<button class="btn btn-secondary arenella-btn addSkillBtn" (click)="addSkill()">{{'arenella-recruiter-listing-add-skill' | translate}}</button>
 							</div>
 							<div class="selected-skills-filter">
 								<span *ngFor="let skill of skills" class="selected-skill" (click)="removeSkill(skill)">
@@ -202,8 +179,8 @@
 							</div>
 						</div>
 					</div>
-					</div>
 				</form>
+				<div class="listing-add-footer"></div>
 			</div>
 		</div>			
 	</div>
