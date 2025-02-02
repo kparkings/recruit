@@ -47,8 +47,10 @@ import {HttpClient} 						from '@angular/common/http';
 import { MatIconModule } 					from "@angular/material/icon";
 import { CandidateServiceService } 			from './candidate-service.service';
 import { RecruiterMarketplaceService } 		from './recruiter-marketplace.service';
+import { ListingService } 					from './listing.service';
 
 import { ClipboardModule } 					from '@angular/cdk/clipboard'
+
 
 @NgModule({
   declarations: [
@@ -101,10 +103,10 @@ import { ClipboardModule } 					from '@angular/cdk/clipboard'
     BrowserAnimationsModule,
 	NgChartsModule.forRoot()
   ],
-  providers: [AuthGuardService, AuthService, CookieService, CandidateServiceService,RecruiterMarketplaceService,{
+  providers: [AuthGuardService, AuthService, CookieService, CandidateServiceService,RecruiterMarketplaceService,ListingService,{
       provide: APP_INITIALIZER,
       useFactory: initCandidateInfoBackendDataCalls,
-      deps: [CandidateServiceService, RecruiterMarketplaceService], multi: true
+      deps: [CandidateServiceService, RecruiterMarketplaceService, ListingService], multi: true
     }],
   bootstrap: [AppComponent]
 })
@@ -120,13 +122,15 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
 */
 export function initCandidateInfoBackendDataCalls(
   candidateService: CandidateServiceService,
-  recruiterMarketplaceService: RecruiterMarketplaceService
+  recruiterMarketplaceService: RecruiterMarketplaceService,
+  listingService: ListingService
 ) {
   return async () => {
 	await recruiterMarketplaceService.initializeSupportedCountries();
     await candidateService.initializeSupportedCountries();
     await candidateService.initializeSupportedLanguages();
     await candidateService.initializeGeoZones();
+	await listingService.initializeSupportedLanguages();
   };
 }
 

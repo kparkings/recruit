@@ -13,6 +13,8 @@ import { ListingAlertAddRequest } from './listing/listing-alert-add-request';
 })
 export class ListingService {
 
+	private supportedLanguages:Array<string> = new Array<string>();
+	
 	/**
 	* Constructor
 	* @param httpClient - for sending httpRequests to backend
@@ -186,6 +188,27 @@ export class ListingService {
 	
 	}
 	
+	public getSupportedLanguagesAfterLoading():Array<string>{
+		return this.supportedLanguages;
+	}
+
+	/**
+	* Returns languages supported for Listings 
+	*/	
+	public async initializeSupportedLanguages():Promise<any>{
+		
+		const backendUrl:string = environment.backendUrl +'listing/languages';
+		const config = await this.httpClient.get<any>(backendUrl, this.httpOptions).toPromise();
+		
+		config.forEach( (lang: string) => {
+			this.supportedLanguages.push(lang);
+		});
+				
+		Object.assign(this, config);
+		    	
+		return config;
+	
+	}
 	
 
 }

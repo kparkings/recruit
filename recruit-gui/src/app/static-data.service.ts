@@ -1,10 +1,11 @@
-import { Injectable } 			from '@angular/core';
-import { Country } 				from './shared-domain-object/country';
-import { FunctionType } 		from './shared-domain-object/function-type';
-import { LanguageType } 		from './shared-domain-object/language-type';
-import { ContractType } 		from './suggestions/contract-type';
-import { TranslateService } 	from '@ngx-translate/core';
-import { CandidateServiceService } from './candidate-service.service';
+import { Injectable } 				from '@angular/core';
+import { Country } 					from './shared-domain-object/country';
+import { FunctionType } 			from './shared-domain-object/function-type';
+import { LanguageType } 			from './shared-domain-object/language-type';
+import { ContractType } 			from './suggestions/contract-type';
+import { TranslateService } 		from '@ngx-translate/core';
+import { CandidateServiceService } 	from './candidate-service.service';
+import { ListingService } 			from './listing.service';
 
 /**
 * Service contains static data. Typically data that maps to the back end APIs
@@ -17,7 +18,7 @@ export class StaticDataService {
 	/**
 	* Constructor 
 	*/
-	constructor(private translate:TranslateService, private candidateService:CandidateServiceService) { }
+	constructor(private translate:TranslateService, private candidateService:CandidateServiceService, private listingService:ListingService) { }
 
 	/**
 	* Returns the types of roles recognised by the system
@@ -52,11 +53,6 @@ export class StaticDataService {
 		
 		let countries:Array<Country> = new Array<Country>();
 		
-		//.push(new Country("NETHERLANDS", this.translate.instant('static-country-nl')));
-		//countries.push(new Country("BELGIUM", this.translate.instant('static-country-be')));
-		//countries.push(new Country("UK", this.translate.instant('static-country-uk')));
-		//countries.push(new Country("IRELAND", this.translate.instant('static-country-ir')));
-		
 		 this.candidateService.getSupportedCountries().forEach(country => {
 			  countries.push(new Country(country.name, this.translate.instant(country.name), country.iso2Code));
 		  });
@@ -67,7 +63,7 @@ export class StaticDataService {
 		return countries;
 		
 	}
-	
+		
 	/**
 	* Returns ContractTypes a listing can be for
 	*/

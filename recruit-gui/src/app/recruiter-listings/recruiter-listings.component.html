@@ -32,21 +32,6 @@
 			</div>
 		</div>
 	
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-
 		<div [ngSwitch]="activeView">
 			<div *ngSwitchCase="'show'">
 	   			<div class="action-buttons">
@@ -160,17 +145,15 @@
 						<div  class="add-container add-container-mini">
 							<h2>{{'arenella-recruiter-listing-step4' | translate}}</h2>
 							<div class="content-container">
-								<div><input type="checkbox" name="language" value="Dutch" class="checkbox-ctrl" formControlName="langDutch"><label>{{'arenella-recruiter-listing-dutch' | translate}}</label></div>
-								<div><input type="checkbox" name="language" value="English" class="checkbox-ctrl" formControlName="langEnglish"><label>{{'arenella-recruiter-listing-englsh' | translate}}</label></div>	
-								<div><input type="checkbox" name="language" value="French" class="checkbox-ctrl" formControlName="langFrench"><label>{{'arenella-recruiter-listing-french' | translate}}</label></div>
+							<div style="float:left; width:150px; margin:2px;" *ngFor="let language of languages"><input type="checkbox" name="language" value="Dutch" class="checkbox-ctrl" formControlName="{{language}}"><label>{{language | translate}}</label></div>
 							</div>
 						</div>
 						<div  class="add-container add-container-mini">
 							<h2>{{'arenella-recruiter-listing-step5' | translate}}</h2>
 							<div class="content-container">
 							<div>
-									<input type="text" formControlName="skill">
-									<button class="btn btn-secondary arenella-btn addSkillBtn" (click)="addSkill()">{{'arenella-recruiter-listing-add-skill' | translate}}</button>
+								<input type="text" formControlName="skill">
+								<button class="btn btn-secondary arenella-btn addSkillBtn" (click)="addSkill()">{{'arenella-recruiter-listing-add-skill' | translate}}</button>
 							</div>
 							<div class="selected-skills-filter">
 								<span *ngFor="let skill of skills" class="selected-skill" (click)="removeSkill(skill)">

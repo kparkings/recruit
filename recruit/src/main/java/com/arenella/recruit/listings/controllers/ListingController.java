@@ -1,8 +1,12 @@
 package com.arenella.recruit.listings.controllers;
 
 import java.security.Principal;
+import java.util.Arrays;
+import java.util.LinkedHashSet;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -24,8 +28,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.arenella.recruit.listings.beans.Listing;
 import com.arenella.recruit.listings.beans.Listing.LISTING_AGE;
+import com.arenella.recruit.listings.beans.Listing.language;
 import com.arenella.recruit.listings.beans.Listing.listing_type;
 import com.arenella.recruit.authentication.spring.filters.ClaimsUsernamePasswordAuthenticationToken;
+
 import com.arenella.recruit.listings.beans.ListingFilter;
 import com.arenella.recruit.listings.beans.ListingViewedEvent;
 import com.arenella.recruit.listings.controllers.CandidateListingContactRequest.CandidateListingContactRequestBuilder;
@@ -242,6 +248,16 @@ public class ListingController {
 		return ResponseEntity.ok(this.service.getCreditCountForUser(principal.getName()));
 	}
 	
+	/**
+	* Returns a list of Supported languages that a role can require the candiadte 
+	* to speak
+	* @return supported languages
+	*/
+	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('RECRUITER')")
+	@GetMapping(path="/listing/languages")
+	public ResponseEntity<Set<language>> fetchSupportedLanguages(){
+		return ResponseEntity.ok(Arrays.stream(language.values()).collect(Collectors.toCollection(LinkedHashSet::new)));
+	}
 	/**
 	* Performs check to ensure user either doesnt use credit based access or 
 	* has enough credits to perform an operation

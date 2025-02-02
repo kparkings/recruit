@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -31,6 +32,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.arenella.recruit.listings.beans.Listing;
 import com.arenella.recruit.listings.beans.Listing.LISTING_AGE;
+import com.arenella.recruit.listings.beans.Listing.language;
 import com.arenella.recruit.listings.beans.Listing.listing_type;
 import com.arenella.recruit.authentication.spring.filters.ClaimsUsernamePasswordAuthenticationToken;
 import com.arenella.recruit.listings.beans.ListingFilter;
@@ -451,6 +453,20 @@ public class ListingControllerTest {
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		assertEquals(count, response.getBody());
 	
+	}
+	
+	/**
+	* Tests retrieval of languages
+	*/
+	@Test
+	void testFetchSupportedLanguages() {
+		
+		ResponseEntity<Set<language>> response = this.controller.fetchSupportedLanguages();
+		
+		assertEquals(HttpStatus.OK, 			response.getStatusCode());
+		assertEquals(language.values().length, 	response.getBody().size());
+	
+		
 	}
 		
 }

@@ -18,10 +18,9 @@ import { FormBeanFilterByJobSpec } 						from '../listing/form-bean-filter-by-jo
 import { HtmlOption } 									from '../html-option';
 import { StaticDataService } 							from '../static-data.service';
 import { InfoItemBlock, InfoItemConfig, InfoItemRowKeyValue, InfoItemRowKeyValueFlag, InfoItemRowMultiValues, InfoItemRowSingleValue } from '../candidate-info-box/info-item';
-import { ContractType } 								from '../suggestions/contract-type';
 import { TranslateService } 							from '@ngx-translate/core';
-import { SupportedCountry } from '../supported-candidate';
-import { Country } from '../shared-domain-object/country';
+import { Country } 										from '../shared-domain-object/country';
+import { UntypedFormControl } 							from "@angular/forms";
 
 
 @Component({
@@ -63,6 +62,7 @@ export class RecruiterListingsComponent implements OnInit {
 	public infoItemConfig:InfoItemConfig 				= new InfoItemConfig();
 	public contractTypeOptions:Array<HtmlOption> 		= new Array<HtmlOption>();
 	public countryOptions:Array<HtmlOption> 			= new Array<HtmlOption>();
+	public languages:Array<string> 						= new Array<string>();
   	
 	private	pageSize:number								= 8;
   	private jobSpecFile!:File;
@@ -71,6 +71,13 @@ export class RecruiterListingsComponent implements OnInit {
 	private  recruiterSurname:string					= '';
 	private  recruiterEmail:string 						= '';
 	private  recruiterCompany:string					= '';
+	
+	/**
+	* Forms 
+	*/
+	public filterByJobSpecForm 					= FormBeanFilterByJobSpec.getInstance();
+	public newListingFormBean:UntypedFormGroup 	= FormBeanNewListing.getInstance();
+	public mpFormBean:UntypedFormGroup 			= FormBeanMarketPlace.getInstance();
 	
 	/**
 	* Constructor 
@@ -90,9 +97,9 @@ export class RecruiterListingsComponent implements OnInit {
 					this.recruiterProfile = rec;
 				});
 				
-				this.contractTypeOptions = this.getContractTypeOptions();
-				this.countryOptions = this.getCountryOptions();
-				
+				this.contractTypeOptions 	= this.getContractTypeOptions();
+				this.countryOptions 		= this.getCountryOptions();
+				this.getLanguageOptions();
 				this.doCreditCheck();
 				
 				
@@ -110,7 +117,8 @@ export class RecruiterListingsComponent implements OnInit {
 			this.recruiterSurname				= data.surname;
 			this.recruiterEmail					= data.email;
 			this.recruiterCompany				= data.companyName;
-			this.fetchListings();			
+			this.fetchListings();		
+			//this.getLanguageOptions();	
 		}, err => {
 			if (err.status === 401 || err.status === 0) {
 				sessionStorage.removeItem('isAdmin');
@@ -130,13 +138,6 @@ export class RecruiterListingsComponent implements OnInit {
   	}
 	
 	/**
-	* Forms 
-	*/
-	public filterByJobSpecForm = FormBeanFilterByJobSpec.getInstance();
-	public newListingFormBean:UntypedFormGroup 	= FormBeanNewListing.getInstance();
-	public mpFormBean:UntypedFormGroup 			= FormBeanMarketPlace.getInstance();
-	
-	/**
 	* Resets the page 
 	*/
 	public reset():void{
@@ -148,6 +149,12 @@ export class RecruiterListingsComponent implements OnInit {
 		this.validationErrors 		= new Array<string>();
 		this.enabldeDeleteOption	= false;
 		this.doCreditCheck();
+		this.getLanguageOptions();
+		
+		//this.languages.forEach(lang => {
+		//	this.newListingFormBean.addControl(lang, new UntypedFormControl(''));	
+		//})
+		//
 		
 	}
 	
@@ -435,7 +442,7 @@ export class RecruiterListingsComponent implements OnInit {
 				let languagesBlock:InfoItemBlock = new InfoItemBlock();
 				languagesBlock.setTitle(this.translate.instant('arenella-recruiter-listing-languages'));
 				selectedListing!.languages.forEach(lang => {
-					languagesBlock.addRow(new InfoItemRowSingleValue(this.getLanguage(lang)));	
+					languagesBlock.addRow(new InfoItemRowSingleValue(this.translate.instant(lang)));	
 				});
 				this.infoItemConfig.addItem(languagesBlock);
 			}
@@ -476,9 +483,14 @@ export class RecruiterListingsComponent implements OnInit {
 		this.newListingFormBean.get("rateCurrency")?.setValue(this.selectedListing.currency);
 		this.newListingFormBean.get("description")?.setValue(this.selectedListing.description);
 		
-		this.newListingFormBean.get("langDutch")?.setValue(this.selectedListing.languages.includes('DUTCH'));
-		this.newListingFormBean.get("langEnglish")?.setValue(this.selectedListing.languages.includes('ENGLISH'));
-		this.newListingFormBean.get("langFrench")?.setValue(this.selectedListing.languages.includes('FRENCH'));
+		//this.newListingFormBean.get("langDutch")?.setValue(this.selectedListing.languages.includes('DUTCH'));
+		//this.newListingFormBean.get("langEnglish")?.setValue(this.selectedListing.languages.includes('ENGLISH'));
+		//this.newListingFormBean.get("langFrench")?.setValue(this.selectedListing.languages.includes('FRENCH'));
+		
+		this.languages.forEach(lang => {
+			this.newListingFormBean.get(lang)?.setValue(this.selectedListing.languages.includes(lang));
+			
+		});
 		
 		this.skills = this.selectedListing.skills;
 
@@ -518,25 +530,14 @@ export class RecruiterListingsComponent implements OnInit {
 		let rate:number 				= this.newListingFormBean.get('rate')?.value; 			
 		let currency:string 			= this.newListingFormBean.get('rateCurrency')?.value; 		
 		
-		let langDutch:boolean 			= this.newListingFormBean.get('langDutch')?.value;
-		let langEnglish:boolean 		= this.newListingFormBean.get('langEnglish')?.value;
-		let langFrench:boolean 			= this.newListingFormBean.get('langFrench')?.value;
-		
 		let languages:Array<string> = new Array<string>();
+		this.languages.forEach(lang => {
+			if (this.newListingFormBean.get(lang)?.value === true) {
+				languages.push(lang);
+			}
+		});
 		
-		if (langDutch === true) {
-			languages.push('DUTCH');
-		}
-		
-		if (langEnglish === true) {
-			languages.push('ENGLISH');
-		}
-		
-		if (langFrench === true) {
-			languages.push('FRENCH');
-		}
-		
-		type = type == "" ? "BOTH" : type; // == "CONTRACT_ROLE" ? "CONTRACT" : type == "PERM_ROLE" ? "PERM" : "BOTH";
+		type = type == "" ? "BOTH" : type;
 		
 		this.validationErrors	= new Array<string>();
 		
@@ -739,6 +740,18 @@ export class RecruiterListingsComponent implements OnInit {
 	}
 	
 	/**
+	* Supported for Listings
+	*/
+	private getLanguageOptions():void{
+		this.languages = new Array<string>();
+		this.listingService.getSupportedLanguagesAfterLoading().forEach(language => {
+			this.languages.push(language);	
+			this.newListingFormBean.addControl(language, new UntypedFormControl(''));	
+		})	;
+		
+  	}
+	
+	/**
 	* Provides HTML Options for country 
 	* Selection 
 	*/
@@ -825,7 +838,6 @@ export class RecruiterListingsComponent implements OnInit {
 	* Persists and Published the OfferedCandidate	
 	*/
 	public publishOpenPosition():void{
-
 		let title:string 				= this.newListingFormBean.get('title')?.value;
 		let description:string 			= this.newListingFormBean.get('description')?.value;
 		let type:string 				= this.newListingFormBean.get('type')?.value;
@@ -834,27 +846,17 @@ export class RecruiterListingsComponent implements OnInit {
 		let rate:number 				= this.newListingFormBean.get('rate')?.value; 			
 		let currency:string 			= this.newListingFormBean.get('rateCurrency')?.value; 		
 		
-		let langDutch:boolean 			= this.newListingFormBean.get('langDutch')?.value;
-		let langEnglish:boolean 		= this.newListingFormBean.get('langEnglish')?.value;
-		let langFrench:boolean 			= this.newListingFormBean.get('langFrench')?.value;
-		
-		let languages:Array<string> = new Array<string>();
-		
 		let startDate:Date 				= this.mpFormBean.get('startDate')?.value;
 		let lastSubmissionDate:Date 	= this.mpFormBean.get('lastSubmissionDate')?.value;
 		let comments:string 			= this.mpFormBean.get('comments')?.value;
 		
-		if (langDutch === true) {
-			languages.push('DUTCH');
-		}
-		
-		if (langEnglish === true) {
-			languages.push('ENGLISH');
-		}
-		
-		if (langFrench === true) {
-			languages.push('FRENCH');
-		}
+		let languages:Array<string> = new Array<string>();
+				
+		this.languages.forEach(lang => {
+			if (this.newListingFormBean.get(lang)?.value === true) {
+				languages.push(lang);
+			}
+		});
 		
 		type = type == "" ? "BOTH" : type == "CONTRACT_ROLE" ? "CONTRACT" : type == "PERM_ROLE" ? "PERM" : "BOTH";
 		
