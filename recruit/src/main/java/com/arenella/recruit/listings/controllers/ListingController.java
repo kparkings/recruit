@@ -253,11 +253,11 @@ public class ListingController {
 	* to speak
 	* @return supported languages
 	*/
-	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('RECRUITER')")
-	@GetMapping(path="/listing/languages")
+	@GetMapping(path="/listing/public/languages")
 	public ResponseEntity<Set<language>> fetchSupportedLanguages(){
 		return ResponseEntity.ok(Arrays.stream(language.values()).collect(Collectors.toCollection(LinkedHashSet::new)));
 	}
+	
 	/**
 	* Performs check to ensure user either doesnt use credit based access or 
 	* has enough credits to perform an operation

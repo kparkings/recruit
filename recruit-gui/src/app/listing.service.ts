@@ -197,7 +197,7 @@ export class ListingService {
 	*/	
 	public async initializeSupportedLanguages():Promise<any>{
 		
-		const backendUrl:string = environment.backendUrl +'listing/languages';
+		const backendUrl:string = environment.backendUrl +'listing/public/languages';
 		const config = await this.httpClient.get<any>(backendUrl, this.httpOptions).toPromise();
 		
 		config.forEach( (lang: string) => {

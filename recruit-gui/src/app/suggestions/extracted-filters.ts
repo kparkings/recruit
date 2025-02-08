@@ -10,9 +10,7 @@ export class ExtractedFilters{
 	public experienceLTE:string 		= "";
 	public freelance:string 			= '';
 	public perm:string 					= '';
-	public dutch:boolean				= false;
-	public english:boolean				= false;
-	public french:boolean				= false;
+	public languages:Array<string>		= new Array<string>();
 	public netherlands:boolean			= false;
 	public uk:boolean					= false;
 	public belgium:boolean				= false;

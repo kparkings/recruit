@@ -61,18 +61,23 @@ export class SearchBarFilterFormHelper{
 		} else if (extractedFilters.freelance != 'TRUE'){
 			filterForm.get('contractType')?.setValue("PERM");
 		}
+		
 					
-		if (extractedFilters.dutch) {
-			filterForm.get('dutchLanguage')?.setValue(extractedFilters.dutch);
-		}
+		//if (extractedFilters.dutch) {
+		//	filterForm.get('dutchLanguage')?.setValue(extractedFilters.dutch);
+		//}
 					
-		if (extractedFilters.english) {
-			filterForm.get('englishLanguage')?.setValue(extractedFilters.english);
-		}
+		//if (extractedFilters.english) {
+		//	filterForm.get('englishLanguage')?.setValue(extractedFilters.english);
+		//}
 					
-		if (extractedFilters.french) {
-			filterForm.get('frenchLanguage')?.setValue(extractedFilters.french);
-		}
+		//if (extractedFilters.french) {
+		//	filterForm.get('frenchLanguage')?.setValue(extractedFilters.french);
+		//}
+		
+		extractedFilters.languages.forEach(lang => {
+			filterForm.get(lang.toLowerCase()+'Language')?.setValue(lang);
+		});
 						
 		if (extractedFilters.experienceGTE != '') {
 			if (SearchBarFilterFormHelper.minMaxOptions.indexOf(extractedFilters.experienceGTE) != -1){

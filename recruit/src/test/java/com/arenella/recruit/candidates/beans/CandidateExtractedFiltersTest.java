@@ -23,30 +23,26 @@ public class CandidateExtractedFiltersTest {
 	@Test
 	public void testConstructor() throws Exception{
 		
-		final String 		jobTitle			= "Java developer";
-		final Set<String> 	skills 				= Set.of("java", "angular");
-		final String 		experienceGTE 		= "2";
-		final String 		experienceLTE 		= "5";
-		final boolean		dutch				= true;
-		final boolean		english				= true;
-		final boolean		french			 	= true;
-		final boolean		netherlands			= true;
-		final boolean		uk				 	= true;
-		final boolean		belgium				= true;
-		final boolean		ireland				= true;
-		final FREELANCE 	freelance			= FREELANCE.TRUE;
-		final PERM 			perm				= PERM.TRUE;
-		final String		extractedText		= "some text";
+		final String 					jobTitle			= "Java developer";
+		final Set<String> 				skills 				= Set.of("java", "angular");
+		final Set<Language.LANGUAGE> 	languages 			= Set.of(Language.LANGUAGE.ENGLISH, Language.LANGUAGE.CROATIAN);
+		final String 					experienceGTE 		= "2";
+		final String 					experienceLTE 		= "5";
+		final boolean					netherlands			= true;
+		final boolean					uk				 	= true;
+		final boolean					belgium				= true;
+		final boolean					ireland				= true;
+		final FREELANCE 				freelance			= FREELANCE.TRUE;
+		final PERM 						perm				= PERM.TRUE;
+		final String					extractedText		= "some text";
 		
 		CandidateExtractedFilters filters = 
 				CandidateExtractedFilters.builder()
 					.belgium(belgium)
-					.dutch(dutch)
-					.english(english)
+					.languages(languages)
 					.experienceGTE(experienceGTE)
 					.experienceLTE(experienceLTE)
 					.freelance(freelance)
-					.french(french)
 					.ireland(ireland)
 					.jobTitle(jobTitle)
 					.netherlands(netherlands)
@@ -59,9 +55,6 @@ public class CandidateExtractedFiltersTest {
 		assertEquals(jobTitle, 		filters.getJobTitle());
 		assertEquals(experienceGTE, filters.getExperienceGTE());
 		assertEquals(experienceLTE, filters.getExperienceLTE());
-		assertEquals(dutch, 		filters.getDutch());
-		assertEquals(english, 		filters.getEnglish());
-		assertEquals(french, 		filters.getFrench());
 		assertEquals(netherlands, 	filters.getNetherlands());
 		assertEquals(uk, 			filters.getUK());
 		assertEquals(belgium, 		filters.getBelgium());
@@ -69,9 +62,12 @@ public class CandidateExtractedFiltersTest {
 		assertEquals(freelance, 	filters.getFreelance());
 		assertEquals(perm, 			filters.getPerm());
 		assertEquals(extractedText, filters.getExtractedText());
+		assertEquals(2, 			filters.getLanguages().size());
 		
 		assertTrue(filters.getSkills().contains("java"));
 		assertTrue(filters.getSkills().contains("angular"));
+		assertTrue(filters.getLanguages().contains(Language.LANGUAGE.CROATIAN));
+		assertTrue(filters.getLanguages().contains(Language.LANGUAGE.ENGLISH));
 		
 	}
 	
@@ -85,9 +81,6 @@ public class CandidateExtractedFiltersTest {
 		final String 		jobTitle			= "";
 		final String 		experienceGTE 		= "";
 		final String 		experienceLTE 		= "";
-		final boolean		dutch				= false;
-		final boolean		english				= false;
-		final boolean		french			 	= false;
 		final boolean		netherlands			= false;
 		final boolean		uk				 	= false;
 		final boolean		belgium				= false;
@@ -100,9 +93,6 @@ public class CandidateExtractedFiltersTest {
 		assertEquals(jobTitle, 		filters.getJobTitle());
 		assertEquals(experienceGTE, filters.getExperienceGTE());
 		assertEquals(experienceLTE, filters.getExperienceLTE());
-		assertEquals(dutch, 		filters.getDutch());
-		assertEquals(english, 		filters.getEnglish());
-		assertEquals(french, 		filters.getFrench());
 		assertEquals(netherlands, 	filters.getNetherlands());
 		assertEquals(uk, 			filters.getUK());
 		assertEquals(belgium, 		filters.getBelgium());
@@ -111,7 +101,7 @@ public class CandidateExtractedFiltersTest {
 		assertEquals(perm, 			filters.getPerm());
 		
 		assertTrue(filters.getSkills().isEmpty());
-		
+		assertTrue(filters.getLanguages().isEmpty());
 	}
 	
 }

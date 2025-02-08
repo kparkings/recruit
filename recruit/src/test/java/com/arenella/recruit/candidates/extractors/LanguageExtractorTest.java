@@ -8,6 +8,7 @@ import java.util.Set;
 import org.junit.jupiter.api.Test;
 
 import com.arenella.recruit.candidates.beans.CandidateExtractedFilters;
+import com.arenella.recruit.candidates.beans.Language;
 import com.arenella.recruit.candidates.beans.CandidateExtractedFilters.CandidateExtractedFiltersBuilder;
 
 /**
@@ -22,7 +23,7 @@ public class LanguageExtractorTest {
 	*/
 	@Test
 	public void testForEnglish() throws Exception {
-		runTest(LanguageExtractor.ENGLISH, "EN");
+		runTest(LanguageExtractor.ENGLISH, Language.LANGUAGE.ENGLISH);
 	}
 	
 	/**
@@ -31,7 +32,7 @@ public class LanguageExtractorTest {
 	*/
 	@Test
 	public void testForDutch() throws Exception {
-		runTest(LanguageExtractor.DUTCH, "NL");
+		runTest(LanguageExtractor.DUTCH, Language.LANGUAGE.DUTCH);
 	}
 	
 	/**
@@ -40,7 +41,7 @@ public class LanguageExtractorTest {
 	*/
 	@Test
 	public void testForFrench() throws Exception {
-		runTest(LanguageExtractor.FRENCH, "FR");
+		runTest(LanguageExtractor.FRENCH, Language.LANGUAGE.FRENCH);
 	}
 	
 	/**
@@ -57,9 +58,13 @@ public class LanguageExtractorTest {
 		
 		extractor.extractFilters("adadad adad", filterBuilder);
 		
-		assertFalse(filterBuilder.build().getEnglish());
-		assertFalse(filterBuilder.build().getDutch());
-		assertFalse(filterBuilder.build().getFrench());
+		//assertFalse(filterBuilder.build().getEnglish());
+		//assertFalse(filterBuilder.build().getDutch());
+		//assertFalse(filterBuilder.build().getFrench());
+		
+		assertFalse(filterBuilder.build().getLanguages().contains(Language.LANGUAGE.ENGLISH));
+		assertFalse(filterBuilder.build().getLanguages().contains(Language.LANGUAGE.DUTCH));
+		assertFalse(filterBuilder.build().getLanguages().contains(Language.LANGUAGE.FRENCH));
 		
 	}
 	
@@ -77,7 +82,7 @@ public class LanguageExtractorTest {
 		
 		extractor.extractFilters("adadad london adad", filterBuilder);
 		
-		assertTrue(filterBuilder.build().getEnglish());
+		assertTrue(filterBuilder.build().getLanguages().contains(Language.LANGUAGE.ENGLISH));
 		
 		
 	}
@@ -96,9 +101,13 @@ public class LanguageExtractorTest {
 		
 		extractor.extractFilters("adadad english french adad", filterBuilder);
 		
-		assertTrue(filterBuilder.build().getEnglish());
-		assertFalse(filterBuilder.build().getDutch());
-		assertTrue(filterBuilder.build().getFrench());
+		//assertTrue(filterBuilder.build().getEnglish());
+		//assertFalse(filterBuilder.build().getDutch());
+		//assertTrue(filterBuilder.build().getFrench());
+		
+		assertTrue(filterBuilder.build().getLanguages().contains(Language.LANGUAGE.ENGLISH));
+		assertFalse(filterBuilder.build().getLanguages().contains(Language.LANGUAGE.DUTCH));
+		assertTrue(filterBuilder.build().getLanguages().contains(Language.LANGUAGE.FRENCH));
 		
 		filterBuilder = CandidateExtractedFilters.builder();
 		
@@ -106,23 +115,26 @@ public class LanguageExtractorTest {
 		
 		extractor.extractFilters("adadad english dutch adad", filterBuilder);
 		
-		assertTrue(filterBuilder.build().getEnglish());
-		assertTrue(filterBuilder.build().getDutch());
-		assertFalse(filterBuilder.build().getFrench());
+		//assertTrue(filterBuilder.build().getEnglish());
+		//assertTrue(filterBuilder.build().getDutch());
+		//assertFalse(filterBuilder.build().getFrench());
+		
+		assertTrue(filterBuilder.build().getLanguages().contains(Language.LANGUAGE.ENGLISH));
+		assertTrue(filterBuilder.build().getLanguages().contains(Language.LANGUAGE.DUTCH));
+		assertFalse(filterBuilder.build().getLanguages().contains(Language.LANGUAGE.FRENCH));
 		
 		filterBuilder = CandidateExtractedFilters.builder();
 		
 		extractor = new LanguageExtractor();
 		
 		extractor.extractFilters("adadad francais dutch adad", filterBuilder);
-		
-		assertFalse(filterBuilder.build().getEnglish());
-		assertTrue(filterBuilder.build().getDutch());
-		assertTrue(filterBuilder.build().getFrench());
+	
+		assertFalse(filterBuilder.build().getLanguages().contains(Language.LANGUAGE.ENGLISH));
+		assertTrue(filterBuilder.build().getLanguages().contains(Language.LANGUAGE.DUTCH));
+		assertTrue(filterBuilder.build().getLanguages().contains(Language.LANGUAGE.FRENCH));
 		
 		
 	}
-	
 	
 	/**
 	* Tests if all languages could be identified no filters for languages
@@ -138,19 +150,18 @@ public class LanguageExtractorTest {
 		
 		extractor.extractFilters("adadad english dutch french adad", filterBuilder);
 		
-		assertFalse(filterBuilder.build().getEnglish());
-		assertFalse(filterBuilder.build().getDutch());
-		assertFalse(filterBuilder.build().getFrench());
+		assertTrue(filterBuilder.build().getLanguages().contains(Language.LANGUAGE.ENGLISH));
+		assertTrue(filterBuilder.build().getLanguages().contains(Language.LANGUAGE.DUTCH));
+		assertTrue(filterBuilder.build().getLanguages().contains(Language.LANGUAGE.FRENCH));
 		
 	}
-	
-	
+
 	/**
 	* Utility method to check if correct language is being identified
 	* @param words - Words to use to generate test job specification text
 	* @param lang  - Expected langy
 	*/
-	private void runTest(Set<String> words, String lang) {
+	private void runTest(Set<String> words, Language.LANGUAGE lang) {
 		
 		words.stream().forEach(word -> {
 			
@@ -160,21 +171,23 @@ public class LanguageExtractorTest {
 			
 			extractor.extractFilters("adadad \n " + word + " adad", filterBuilder);
 			
-			switch(lang) {
-				case "EN":{
-					assertTrue(filterBuilder.build().getEnglish());
-					break;
-				}
-				case "NL":{
-					assertTrue(filterBuilder.build().getDutch());
-					break;
-				}
-				case "FR":{
-					assertTrue(filterBuilder.build().getFrench());
-					break;
-				}
-			}
+			assertTrue(filterBuilder.build().getLanguages().contains(lang));
 			
+			//switch(lang) {
+			//	case "EN":{
+			//		assertTrue(filterBuilder.build().getEnglish());
+		//			break;
+		//		}
+		//		case "NL":{
+		//			assertTrue(filterBuilder.build().getDutch());
+		//			break;
+		//		}
+		//		case "FR":{
+		//			assertTrue(filterBuilder.build().getFrench());
+		//			break;
+		//		}
+		//	}
+		//	
 		});
 		
 	}
@@ -195,13 +208,13 @@ public class LanguageExtractorTest {
 		
 		extractor.extractFilters("", filterBuilder);
 		
-		assertFalse(filterBuilder.build().getEnglish());
+		assertFalse(filterBuilder.build().getLanguages().contains(Language.LANGUAGE.ENGLISH));
 		
 		filterBuilder.uk(true);
 		
 		extractor.extractFilters("", filterBuilder);
 		
-		assertTrue(filterBuilder.build().getEnglish());
+		assertTrue(filterBuilder.build().getLanguages().contains(Language.LANGUAGE.ENGLISH));
 		
 	}
 	

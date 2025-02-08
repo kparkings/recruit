@@ -3,6 +3,7 @@ package com.arenella.recruit.candidates.beans;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.arenella.recruit.candidates.enums.COUNTRY;
 import com.arenella.recruit.candidates.enums.FREELANCE;
 import com.arenella.recruit.candidates.enums.PERM;
 
@@ -12,20 +13,19 @@ import com.arenella.recruit.candidates.enums.PERM;
 */
 public class CandidateExtractedFilters {
 
-	private String 			jobTitle			= "";
-	private Set<String> 	skills 				= new HashSet<>();
-	private String 			experienceGTE 		= "";
-	private String 			experienceLTE 		= "";
-	private boolean			dutch;
-	private boolean			english;
-	private boolean			french;
-	private boolean			netherlands;
-	private boolean			uk;
-	private boolean			belgium;
-	private boolean			ireland;
-	private FREELANCE 		freelance;
-	private PERM 			perm;
-	private String			extractedText;
+	private String 					jobTitle			= "";
+	private Set<String> 			skills 				= new HashSet<>();
+	private String 					experienceGTE 		= "";
+	private String 					experienceLTE 		= "";
+	private Set<Language.LANGUAGE> 	languages = new HashSet<>();
+	private Set<COUNTRY>			countries;
+	private boolean					netherlands;
+	private boolean					uk;
+	private boolean					belgium;
+	private boolean					ireland;
+	private FREELANCE 				freelance;
+	private PERM 					perm;
+	private String					extractedText;
 	
 	/**
 	* Constructor based on a Builder
@@ -36,9 +36,7 @@ public class CandidateExtractedFilters {
 		this.skills 		= builder.skills;
 		this.experienceGTE 	= builder.experienceGTE;
 		this.experienceLTE 	= builder.experienceLTE;
-		this.dutch 			= builder.dutch;
-		this.english 		= builder.english;
-		this.french 		= builder.french;
+		this.languages 		= builder.languages;
 		this.netherlands	= builder.netherlands;
 		this.uk				= builder.uk;
 		this.belgium		= builder.belgium;
@@ -81,27 +79,11 @@ public class CandidateExtractedFilters {
 	}
 	
 	/**
-	* Returns whether to filter on Dutch language
-	* @return dutch language
+	* Returns languages to filter on
+	* @return languages
 	*/
-	public boolean getDutch(){
-		return this.dutch;
-	}
-	
-	/**
-	* Returns whether to filter on English language
-	* @return english language
-	*/
-	public boolean getEnglish(){
-		return this.english;
-	}
-	
-	/**
-	* Returns whether to filter on French language
-	* @return french language
-	*/
-	public boolean getFrench(){
-		return this.french;
+	public Set<Language.LANGUAGE> getLanguages(){
+		return this.languages;
 	}
 	
 	/**
@@ -174,20 +156,18 @@ public class CandidateExtractedFilters {
 	*/
 	public static class CandidateExtractedFiltersBuilder{
 		
-		private String 			jobTitle			= "";
-		private Set<String> 	skills 				= new HashSet<>();
-		private String 			experienceGTE 		= "";
-		private String 			experienceLTE 		= "";
-		private boolean			dutch;
-		private boolean			english;
-		private boolean			french;
-		private boolean			netherlands;
-		private boolean			uk;
-		private boolean			belgium;
-		private boolean			ireland;
-		private FREELANCE 		freelance;
-		private PERM 			perm;
-		private String			extractedText;
+		private String 					jobTitle			= "";
+		private Set<String> 			skills 				= new HashSet<>();
+		private String 					experienceGTE 		= "";
+		private String 					experienceLTE 		= "";
+		private boolean					netherlands;
+		private Set<Language.LANGUAGE> 	languages 			= new HashSet<>();
+		private boolean					uk;
+		private boolean					belgium;
+		private boolean					ireland;
+		private FREELANCE 				freelance;
+		private PERM 					perm;
+		private String					extractedText;
 		
 		/**
 		* Sets the Job title to filter on
@@ -231,42 +211,23 @@ public class CandidateExtractedFilters {
 		}
 		
 		/**
-		* Sets whether to filter on Dutch speaking candidates
-		* @param dutch - language filter option
-		* @return Builder
-		*/
-		public CandidateExtractedFiltersBuilder dutch(boolean dutch) {
-			this.dutch = dutch;
-			return this;
-		}
-		
-		/**
-		* Sets whether to filter on English speaking candidates
-		* @param english - language filter option
-		* @return Builder
-		*/
-		public CandidateExtractedFiltersBuilder english(boolean english) {
-			this.english = english;
-			return this;
-		}
-		
-		/**
-		* Sets whether to filter on French speaking candidates
-		* @param french - language filter option
-		* @return Builder
-		*/
-		public CandidateExtractedFiltersBuilder french(boolean french) {
-			this.french = french;
-			return this;
-		}
-		
-		/**
 		* Sets whether to filter on candidates in the Netherlands
 		* @param dutch - language filter option
 		* @return Builder
 		*/
 		public CandidateExtractedFiltersBuilder netherlands(boolean netherlands) {
 			this.netherlands = netherlands;
+			return this;
+		}
+		
+		/**
+		* Sets the languages to filter on
+		* @param languages - Languages to filter on
+		* @return Builder
+		*/
+		public CandidateExtractedFiltersBuilder languages(Set<Language.LANGUAGE> languages) {
+			this.languages.clear();
+			this.languages.addAll(languages);
 			return this;
 		}
 		

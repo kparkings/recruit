@@ -151,10 +151,10 @@ export class RecruiterListingsComponent implements OnInit {
 		this.doCreditCheck();
 		this.getLanguageOptions();
 		
-		//this.languages.forEach(lang => {
-		//	this.newListingFormBean.addControl(lang, new UntypedFormControl(''));	
-		//})
-		//
+		this.languages.forEach(lang => {
+			this.newListingFormBean.addControl(lang, new UntypedFormControl(''));	
+		})
+		
 		
 	}
 	
@@ -209,16 +209,16 @@ export class RecruiterListingsComponent implements OnInit {
 			this.newListingFormBean.get("experienceYears")?.setValue(extractedFilters.experienceGTE);
 			this.newListingFormBean.get("country")?.setValue(country);
 			
-			this.newListingFormBean.get("langDutch")?.setValue(extractedFilters.dutch);
-			this.newListingFormBean.get("langEnglish")?.setValue(extractedFilters.english);
-			this.newListingFormBean.get("langFrench")?.setValue(extractedFilters.french);
+			extractedFilters.languages.forEach(lang => {
+				this.newListingFormBean.get(lang)?.setValue(lang);
+			});
 			
 			this.newListingFormBean.get("description")?.setValue(extractedFilters.extractedText);
 			
 			this.closeModal();
 			
 			this.activeView 			= 'add';
-			//this.activeSubView 			= 'step1';
+			//this.activeSubView 		= 'step1';
 			this.selectedListing		= new Listing();
 			this.enabldeDeleteOption 	= false;
 			
@@ -320,13 +320,6 @@ export class RecruiterListingsComponent implements OnInit {
 	} 
 	
 	/**
-	* Navigates to the specified step
-	*/
-	//public updateSubviewStep(step:string):void{
-	//	this.activeSubView = step;
-	//}
-	
-	/**
 	* Switches to Add Listing view
 	*/
 	public showAdd():void{
@@ -352,11 +345,9 @@ export class RecruiterListingsComponent implements OnInit {
 	*/
 	public showList():void{
 		this.activeView 			= 'list';
-		//this.activeSubView 			= 'none';
 		this.selectedListing		= new Listing();
 		this.enabldeDeleteOption 	= false;
 	}
-	
 	
 	/**
 	* Returns the flag css class for the Flag matching
@@ -370,7 +361,7 @@ export class RecruiterListingsComponent implements OnInit {
 		
 	}
 	
-		/**
+	/**
 	* Returns the code identifying the country
 	* @param country - Country to get the country code for
 	*/
@@ -482,10 +473,6 @@ export class RecruiterListingsComponent implements OnInit {
 		this.newListingFormBean.get("rate")?.setValue(this.selectedListing.rate);
 		this.newListingFormBean.get("rateCurrency")?.setValue(this.selectedListing.currency);
 		this.newListingFormBean.get("description")?.setValue(this.selectedListing.description);
-		
-		//this.newListingFormBean.get("langDutch")?.setValue(this.selectedListing.languages.includes('DUTCH'));
-		//this.newListingFormBean.get("langEnglish")?.setValue(this.selectedListing.languages.includes('ENGLISH'));
-		//this.newListingFormBean.get("langFrench")?.setValue(this.selectedListing.languages.includes('FRENCH'));
 		
 		this.languages.forEach(lang => {
 			this.newListingFormBean.get(lang)?.setValue(this.selectedListing.languages.includes(lang));

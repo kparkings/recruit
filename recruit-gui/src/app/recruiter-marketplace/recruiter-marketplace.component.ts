@@ -900,9 +900,12 @@ export class RecruiterMarketplaceComponent implements OnInit {
 			this.requestedCandidateFormBean.get("experienceYears")?.setValue(extractedFilters.experienceGTE);
 			this.requestedCandidateFormBean.get("country")?.setValue(country);
 			
-			this.requestedCandidateFormBean.get("langDutch")?.setValue(extractedFilters.dutch);
-			this.requestedCandidateFormBean.get("langEnglish")?.setValue(extractedFilters.english);
-			this.requestedCandidateFormBean.get("langFrench")?.setValue(extractedFilters.french);
+			extractedFilters.languages.forEach(lang => {
+				this.requestedCandidateFormBean.get(lang.toLowerCase()+'Language')?.setValue(lang);
+			});
+			//this.requestedCandidateFormBean.get("langDutch")?.setValue(extractedFilters.dutch);
+			//this.requestedCandidateFormBean.get("langEnglish")?.setValue(extractedFilters.english);
+			//this.requestedCandidateFormBean.get("langFrench")?.setValue(extractedFilters.french);
 			
 			this.requestedCandidateFormBean.get("description")?.setValue(extractedFilters.extractedText);
 			
