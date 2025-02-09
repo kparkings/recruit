@@ -886,13 +886,7 @@ export class RecruiterMarketplaceComponent implements OnInit {
 			let freelance 	= extractedFilters.freelance 	== 'TRUE' ? true : false;
 			let perm 		= extractedFilters.perm 		== 'TRUE' ? true : false;
 			
-			let netherlands = extractedFilters.netherlands;
-			let uk 			= extractedFilters.uk;
-			let belgium 	= extractedFilters.belgium;
-			let ireland 	= extractedFilters.ireland;
-			
-			let country = netherlands ? "NETHERLANDS" : uk ? "UK" : belgium ? "BELGIUM" : ireland ? "IRELAND" : "";
-			
+			let country = extractedFilters.countries.length > 0 ? extractedFilters.countries[0] : "";
 			let type = (freelance && perm) ? "BOTH" : freelance ? "CONTRACT" : "PERM";
 			
 			this.requestedCandidateFormBean.get("positionTitle")?.setValue(extractedFilters.jobTitle);
@@ -903,10 +897,7 @@ export class RecruiterMarketplaceComponent implements OnInit {
 			extractedFilters.languages.forEach(lang => {
 				this.requestedCandidateFormBean.get(lang.toLowerCase()+'Language')?.setValue(lang);
 			});
-			//this.requestedCandidateFormBean.get("langDutch")?.setValue(extractedFilters.dutch);
-			//this.requestedCandidateFormBean.get("langEnglish")?.setValue(extractedFilters.english);
-			//this.requestedCandidateFormBean.get("langFrench")?.setValue(extractedFilters.french);
-			
+	
 			this.requestedCandidateFormBean.get("description")?.setValue(extractedFilters.extractedText);
 			
 			this.closeModal();

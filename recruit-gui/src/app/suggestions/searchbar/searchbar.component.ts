@@ -126,9 +126,7 @@ export class SearchbarComponent {
 				
 		this.initGeoZones();
 		this.initSupportedCountries();
-				
-		//this.candidateService.fetchCandidateTotals().subscribe(totals => this.candidateTotals = totals);
-				
+		
 		if (this.subscription) {
 			this.subscription.unsubscribe();
 		}
@@ -351,9 +349,9 @@ export class SearchbarComponent {
 	*/
 	public toggleCountrySelection(country:string):void{
 		
-		let included:boolean = this.suggestionFilterForm.get((country+'Results'))?.value;
+		let included:boolean = this.suggestionFilterForm.get((country))?.value;
 		
-		this.suggestionFilterForm.get((country+'Results'))?.setValue(!included);
+		this.suggestionFilterForm.get((country))?.setValue(!included);
 		
 		this.geoZones.forEach(geoZone => {
 			let key = geoZone.geoZoneId.toLowerCase() + 'Results';
@@ -367,7 +365,7 @@ export class SearchbarComponent {
 	* included in the Suggestion results
 	*/
 	public includeResultsForCountry(country:string):boolean{
-		return this.suggestionFilterForm.get((country+'Results'))?.value;
+		return this.suggestionFilterForm.get((country))?.value;
 	}
 	
 	/**
@@ -399,13 +397,13 @@ export class SearchbarComponent {
 	
 		if (!geoZoneActive) {
 			this.candidateService.getSupportedCountries().forEach(country => {
-				let key = country.iso2Code + 'Results';
-				this.suggestionFilterForm.get(key)?.setValue(true);
+				//let key = country.iso2Code + 'Results';
+				this.suggestionFilterForm.get(country.name)?.setValue(true);
 			});
 		} else {
 			this.candidateService.getSupportedCountries().forEach(country => {
-				let key = country.iso2Code.toLowerCase() + 'Results';
-				this.suggestionFilterForm.get(key)?.setValue(false);
+				//let key = country.iso2Code.toLowerCase() + 'Results';
+				this.suggestionFilterForm.get(country.name)?.setValue(false);
 			});
 		
 		}
@@ -433,7 +431,8 @@ export class SearchbarComponent {
 		this.filterTypeFormGroup 	= SearchBarFilterFormHelper.resetSearchTytpeFilterForm(this.filterTypeFormGroup);
 						
 		this.candidateService.getSupportedCountries().forEach(c => {
-			this.suggestionFilterForm.addControl(c.iso2Code+'Results', new UntypedFormControl(false));
+			//this.suggestionFilterForm.addControl(c.iso2Code+'Results', new UntypedFormControl(false));
+			this.suggestionFilterForm.addControl(c.name, new UntypedFormControl(false));
 		});
 						
 		this.supportedLanguages = new Array<SupportedLanguage>();

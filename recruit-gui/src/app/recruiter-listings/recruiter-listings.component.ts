@@ -195,12 +195,15 @@ export class RecruiterListingsComponent implements OnInit {
 			let freelance 	= extractedFilters.freelance 	== 'TRUE' ? true : false;
 			let perm 		= extractedFilters.perm 		== 'TRUE' ? true : false;
 			
-			let netherlands = extractedFilters.netherlands;
-			let uk 			= extractedFilters.uk;
-			let belgium 	= extractedFilters.belgium;
-			let ireland 	= extractedFilters.ireland;
+			//let netherlands = extractedFilters.netherlands;
+			//let uk 			= extractedFilters.uk;
+			//let belgium 	= extractedFilters.belgium;
+			//let ireland 	= extractedFilters.ireland;
 			
-			let country = netherlands ? "NETHERLANDS" : uk ? "UK" : belgium ? "BELGIUM" : ireland ? "IRELAND" : "";
+			//let country = netherlands ? "NETHERLANDS" : uk ? "UK" : belgium ? "BELGIUM" : ireland ? "IRELAND" : "";
+			
+			
+			let country = extractedFilters.countries.length > 0 ? extractedFilters.countries[0] : "";
 			
 			let type = (freelance && perm) ? "BOTH" : freelance ? "CONTRACT_ROLE" : "PERM_ROLE";
 			

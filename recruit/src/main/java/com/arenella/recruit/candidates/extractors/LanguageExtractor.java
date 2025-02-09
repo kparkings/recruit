@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 import com.arenella.recruit.candidates.beans.CandidateExtractedFilters.CandidateExtractedFiltersBuilder;
 import com.arenella.recruit.candidates.beans.Language;
+import com.arenella.recruit.candidates.enums.COUNTRY;
 
 /**
 * Extractor to determine languages to filter on
@@ -87,7 +88,7 @@ public class LanguageExtractor implements JobSpecifcationFilterExtractor{
 		
 			
 			
-			if (!extractedLanguages.contains(Language.LANGUAGE.ENGLISH) && filterBuilder.build().getUK()) {
+			if (!extractedLanguages.contains(Language.LANGUAGE.ENGLISH) && filterBuilder.build().getCountries().contains(COUNTRY.UK)) {
 				extractedLanguages.add(Language.LANGUAGE.ENGLISH);
 			}
 			

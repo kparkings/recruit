@@ -164,7 +164,6 @@ export class CandidateServiceService {
 
 	}
 	
-	
 	/**
 	* Makes a SearchRequest for retrieving Candidates matching the Filters selected by the User
 	*/
@@ -175,16 +174,6 @@ export class CandidateServiceService {
 		return this.httpClient.post<any>(backendUrl, JSON.stringify(searchRequest), {headers: new HttpHeaders({ 'Content-Type': 'application/json' }),  withCredentials: true, responseType: "json", observe: "response"});
 		
 	}
-  	
-  	/**
-  	* Returns a Candidate by its Id where the ownerId is specified
-  	*/
-  	//public getCandidateByIdWithRecruiterAsOwner(candidateId:string, ownerId:string): Observable<any>{
-      
-	//	const backendUrl:string = environment.backendUrl +'candidate?orderAttribute=candidateId&order=desc&candidateId='+candidateId+ "&ownerId=" + ownerId
-  
-    //	return this.httpClient.get<any>(backendUrl, this.httpOptions);
-  	//}
   	
 	/**
   	* Returns a Candidate by its Id 

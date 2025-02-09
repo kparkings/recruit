@@ -11,10 +11,7 @@ export class ExtractedFilters{
 	public freelance:string 			= '';
 	public perm:string 					= '';
 	public languages:Array<string>		= new Array<string>();
-	public netherlands:boolean			= false;
-	public uk:boolean					= false;
-	public belgium:boolean				= false;
-	public ireland:boolean				= false;
+	public countries:Array<string>		= new Array<string>();
 	public eu:boolean					= false;
 	public world:boolean				= false;
 	public extractedText:string | any;

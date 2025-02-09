@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import com.arenella.recruit.candidates.beans.CandidateExtractedFilters;
 import com.arenella.recruit.candidates.beans.CandidateExtractedFilters.CandidateExtractedFiltersBuilder;
+import com.arenella.recruit.candidates.enums.COUNTRY;
 
 /**
 * Unit tests for the CountryExtractor class
@@ -26,10 +27,10 @@ public class CountryExtractorTest {
 		
 		extractor.extractFilters("", filterBuilder);
 		
-		assertFalse(filterBuilder.build().getUK());
-		assertFalse(filterBuilder.build().getIreland());
-		assertFalse(filterBuilder.build().getNetherlands());
-		assertFalse(filterBuilder.build().getBelgium());
+		assertFalse(filterBuilder.build().getCountries().contains(COUNTRY.UK));
+		assertFalse(filterBuilder.build().getCountries().contains(COUNTRY.REPUBLIC_OF_IRELAND));
+		assertFalse(filterBuilder.build().getCountries().contains(COUNTRY.NETHERLANDS));
+		assertFalse(filterBuilder.build().getCountries().contains(COUNTRY.BELGIUM));
 		
 	}
 	
@@ -45,10 +46,10 @@ public class CountryExtractorTest {
 		
 		extractor.extractFilters(" england ireland netherlands belgium.", filterBuilder);
 		
-		assertFalse(filterBuilder.build().getUK());
-		assertFalse(filterBuilder.build().getIreland());
-		assertFalse(filterBuilder.build().getNetherlands());
-		assertFalse(filterBuilder.build().getBelgium());
+		assertTrue(filterBuilder.build().getCountries().contains(COUNTRY.UK));
+		assertTrue(filterBuilder.build().getCountries().contains(COUNTRY.REPUBLIC_OF_IRELAND));
+		assertTrue(filterBuilder.build().getCountries().contains(COUNTRY.NETHERLANDS));
+		assertTrue(filterBuilder.build().getCountries().contains(COUNTRY.BELGIUM));
 		
 	}
 	
@@ -64,10 +65,10 @@ public class CountryExtractorTest {
 		
 		extractor.extractFilters(" england ", filterBuilder);
 		
-		assertTrue(filterBuilder.build().getUK());
-		assertFalse(filterBuilder.build().getIreland());
-		assertFalse(filterBuilder.build().getNetherlands());
-		assertFalse(filterBuilder.build().getBelgium());
+		assertTrue(filterBuilder.build().getCountries().contains(COUNTRY.UK));
+		assertFalse(filterBuilder.build().getCountries().contains(COUNTRY.REPUBLIC_OF_IRELAND));
+		assertFalse(filterBuilder.build().getCountries().contains(COUNTRY.NETHERLANDS));
+		assertFalse(filterBuilder.build().getCountries().contains(COUNTRY.BELGIUM));
 		
 	}
 	
@@ -83,10 +84,10 @@ public class CountryExtractorTest {
 		
 		extractor.extractFilters(" belgium ", filterBuilder);
 		
-		assertFalse(filterBuilder.build().getUK());
-		assertFalse(filterBuilder.build().getIreland());
-		assertFalse(filterBuilder.build().getNetherlands());
-		assertTrue(filterBuilder.build().getBelgium());
+		assertFalse(filterBuilder.build().getCountries().contains(COUNTRY.UK));
+		assertFalse(filterBuilder.build().getCountries().contains(COUNTRY.REPUBLIC_OF_IRELAND));
+		assertFalse(filterBuilder.build().getCountries().contains(COUNTRY.NETHERLANDS));
+		assertTrue(filterBuilder.build().getCountries().contains(COUNTRY.BELGIUM));
 		
 	}
 	
@@ -102,10 +103,10 @@ public class CountryExtractorTest {
 		
 		extractor.extractFilters(" ireland ", filterBuilder);
 		
-		assertFalse(filterBuilder.build().getUK());
-		assertTrue(filterBuilder.build().getIreland());
-		assertFalse(filterBuilder.build().getNetherlands());
-		assertFalse(filterBuilder.build().getBelgium());
+		assertFalse(filterBuilder.build().getCountries().contains(COUNTRY.UK));
+		assertTrue(filterBuilder.build().getCountries().contains(COUNTRY.REPUBLIC_OF_IRELAND));
+		assertFalse(filterBuilder.build().getCountries().contains(COUNTRY.NETHERLANDS));
+		assertFalse(filterBuilder.build().getCountries().contains(COUNTRY.BELGIUM));
 		
 	}
 	
@@ -121,10 +122,10 @@ public class CountryExtractorTest {
 		
 		extractor.extractFilters(" nederland ", filterBuilder);
 		
-		assertFalse(filterBuilder.build().getUK());
-		assertFalse(filterBuilder.build().getIreland());
-		assertTrue(filterBuilder.build().getNetherlands());
-		assertFalse(filterBuilder.build().getBelgium());
+		assertFalse(filterBuilder.build().getCountries().contains(COUNTRY.UK));
+		assertFalse(filterBuilder.build().getCountries().contains(COUNTRY.REPUBLIC_OF_IRELAND));
+		assertTrue(filterBuilder.build().getCountries().contains(COUNTRY.NETHERLANDS));
+		assertFalse(filterBuilder.build().getCountries().contains(COUNTRY.BELGIUM));
 		
 	}
 	

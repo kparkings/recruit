@@ -26,31 +26,11 @@ export class SearchBarFilterFormHelper{
 		if (extractedFilters.jobTitle != ''){
 			filterForm.get('searchPhrase')?.setValue(extractedFilters.jobTitle);	
 		}
-					
-		if (extractedFilters.netherlands || extractedFilters.belgium || extractedFilters.uk || extractedFilters.ireland){
-			
-			filterForm.get('nlResults')?.setValue(false);
-			filterForm.get('beResults')?.setValue(false);
-			filterForm.get('ukResults')?.setValue(false);
-			filterForm.get('ieResults')?.setValue(false);
-						
-			if (extractedFilters.netherlands)  {
-				filterForm.get('nlResults')?.setValue(extractedFilters.netherlands);
-			}
-							
-			if (extractedFilters.belgium) {
-				filterForm.get('beResults')?.setValue(extractedFilters.belgium);
-			}
-							
-			if (extractedFilters.uk) {
-				filterForm.get('ukResults')?.setValue(extractedFilters.uk);
-			}
-							
-			if (extractedFilters.ireland) {
-				filterForm.get('ieResults')?.setValue(extractedFilters.ireland);
-			}
-							
-		}	
+		
+		extractedFilters.countries.forEach(country => {
+			filterForm.get(country)?.setValue(country);
+		});			
+	
 						
 		if (extractedFilters.perm != 'TRUE' && extractedFilters.freelance != 'TRUE') {
 			filterForm.get('contractType')?.setValue("BOTH");
@@ -61,20 +41,7 @@ export class SearchBarFilterFormHelper{
 		} else if (extractedFilters.freelance != 'TRUE'){
 			filterForm.get('contractType')?.setValue("PERM");
 		}
-		
-					
-		//if (extractedFilters.dutch) {
-		//	filterForm.get('dutchLanguage')?.setValue(extractedFilters.dutch);
-		//}
-					
-		//if (extractedFilters.english) {
-		//	filterForm.get('englishLanguage')?.setValue(extractedFilters.english);
-		//}
-					
-		//if (extractedFilters.french) {
-		//	filterForm.get('frenchLanguage')?.setValue(extractedFilters.french);
-		//}
-		
+
 		extractedFilters.languages.forEach(lang => {
 			filterForm.get(lang.toLowerCase()+'Language')?.setValue(lang);
 		});

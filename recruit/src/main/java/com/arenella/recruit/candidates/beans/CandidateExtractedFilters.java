@@ -17,12 +17,8 @@ public class CandidateExtractedFilters {
 	private Set<String> 			skills 				= new HashSet<>();
 	private String 					experienceGTE 		= "";
 	private String 					experienceLTE 		= "";
-	private Set<Language.LANGUAGE> 	languages = new HashSet<>();
-	private Set<COUNTRY>			countries;
-	private boolean					netherlands;
-	private boolean					uk;
-	private boolean					belgium;
-	private boolean					ireland;
+	private Set<Language.LANGUAGE> 	languages 			= new HashSet<>();
+	private Set<COUNTRY>			countries 			= new HashSet<>();
 	private FREELANCE 				freelance;
 	private PERM 					perm;
 	private String					extractedText;
@@ -37,10 +33,7 @@ public class CandidateExtractedFilters {
 		this.experienceGTE 	= builder.experienceGTE;
 		this.experienceLTE 	= builder.experienceLTE;
 		this.languages 		= builder.languages;
-		this.netherlands	= builder.netherlands;
-		this.uk				= builder.uk;
-		this.belgium		= builder.belgium;
-		this.ireland		= builder.ireland;
+		this.countries		= builder.countries;
 		this.freelance 		= builder.freelance;
 		this.perm 			= builder.perm;
 		this.extractedText	= builder.extractedText;
@@ -87,36 +80,43 @@ public class CandidateExtractedFilters {
 	}
 	
 	/**
+	* Returns the countries extracted from the source
+	* @return extracted countries
+	*/
+	public Set<COUNTRY> getCountries(){
+		return this.countries;
+	}
+	/**
 	* Returns whether to filter on candidates in the Netherlands
 	* @return whether to filter on candidates in the Netherlands
 	*/
-	public boolean getNetherlands(){
-		return this.netherlands;
-	}
+	//public boolean getNetherlands(){
+	//	return this.netherlands;
+	//}
 	
 	/**
 	* Returns whether to filter on candidates in Belgium
 	* @return whether to filter on candidates in Belgium
 	*/
-	public boolean getBelgium(){
-		return this.belgium;
-	}
+	//public boolean getBelgium(){
+	//	return this.belgium;
+	//}
 	
 	/**
 	* Returns whether to filter on candidates in the UK
 	* @return whether to filter on candidates in the UK
 	*/
-	public boolean getUK(){
-		return this.uk;
-	}
+	//public boolean getUK(){
+	//	return this.uk;
+	//}
 	
 	/**
 	* Returns whether to filter on candidates in Ireland
 	* @return whether to filter on candidates in Ireland
 	*/
-	public boolean getIreland(){
-		return this.ireland;
-	}
+	//public boolean getIreland(){
+	//	return this.ireland;
+	//}
 	
 	/**
 	* Returns whether to filter on freelance roles
@@ -160,11 +160,8 @@ public class CandidateExtractedFilters {
 		private Set<String> 			skills 				= new HashSet<>();
 		private String 					experienceGTE 		= "";
 		private String 					experienceLTE 		= "";
-		private boolean					netherlands;
 		private Set<Language.LANGUAGE> 	languages 			= new HashSet<>();
-		private boolean					uk;
-		private boolean					belgium;
-		private boolean					ireland;
+		private Set<COUNTRY>			countries 			= new HashSet<>();
 		private FREELANCE 				freelance;
 		private PERM 					perm;
 		private String					extractedText;
@@ -211,12 +208,13 @@ public class CandidateExtractedFilters {
 		}
 		
 		/**
-		* Sets whether to filter on candidates in the Netherlands
-		* @param dutch - language filter option
+		* Sets countries to filter on
+		* @param countries - country filter option
 		* @return Builder
 		*/
-		public CandidateExtractedFiltersBuilder netherlands(boolean netherlands) {
-			this.netherlands = netherlands;
+		public CandidateExtractedFiltersBuilder countries(Set<COUNTRY> countries) {
+			this.countries.clear();
+			this.countries.addAll(countries);
 			return this;
 		}
 		
@@ -228,36 +226,6 @@ public class CandidateExtractedFilters {
 		public CandidateExtractedFiltersBuilder languages(Set<Language.LANGUAGE> languages) {
 			this.languages.clear();
 			this.languages.addAll(languages);
-			return this;
-		}
-		
-		/**
-		* Sets whether to filter on candidates in Belgium
-		* @param english - language filter option
-		* @return Builder
-		*/
-		public CandidateExtractedFiltersBuilder belgium(boolean belgium) {
-			this.belgium = belgium;
-			return this;
-		}
-		
-		/**
-		* Sets whether to filter on candidates in the UK
-		* @param french - language filter option
-		* @return Builder
-		*/
-		public CandidateExtractedFiltersBuilder uk(boolean uk) {
-			this.uk = uk;
-			return this;
-		}
-		
-		/**
-		* Sets whether to filter on candidates in the Ireland
-		* @param french - language filter option
-		* @return Builder
-		*/
-		public CandidateExtractedFiltersBuilder ireland(boolean ireland) {
-			this.ireland = ireland;
 			return this;
 		}
 		

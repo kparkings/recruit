@@ -99,8 +99,7 @@ export class SuggestionParams{
 		* Add any country filters 	
 		*/
 		this.supportedCountries.forEach(country => {
-			let key = country.iso2Code + 'Results';
-			if (suggestionFilterForm.get(key)?.value) {
+			if (suggestionFilterForm.get(country.name)?.value) {
 				this.countries.push(country.name);
 			}
 			
