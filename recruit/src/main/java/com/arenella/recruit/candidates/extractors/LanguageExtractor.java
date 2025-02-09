@@ -16,35 +16,35 @@ import com.arenella.recruit.candidates.enums.COUNTRY;
 @Component
 public class LanguageExtractor implements JobSpecifcationFilterExtractor{
 	
-	public static final Set<String> ENGLISH 	= Set.of("english", "engels", "anglais");
-	public static final Set<String> DUTCH 		= Set.of("dutch", "nederlands", "néerlandais", "neerlandais","nederlandse");
-	public static final Set<String> FRENCH 		= Set.of("french", "francais", "français","franse");
-	public static final Set<String> BULGARIAN 	= Set.of("bulgarian"); 
-	public static final Set<String> CROATIAN 	= Set.of("croatian");
-	public static final Set<String> CZECH 		= Set.of("czech"); 
-	public static final Set<String> DANISH 		= Set.of("danish");
-	public static final Set<String> ESTONIAN 	= Set.of("estonian");
-	public static final Set<String> FINNISH 	= Set.of("finnish"); 
-	public static final Set<String> GERMAN 		= Set.of("german"); 
-	public static final Set<String> GREEK 		= Set.of("greek"); 
-	public static final Set<String> HUNGARIAN 	= Set.of("hungarian");
+	public static final Set<String> ENGLISH 	= Set.of("engels","inglese","anglais","inglés","englisch","english", "engels", "anglais");
+	public static final Set<String> DUTCH 		= Set.of("olandese","holandés","niederländisch","dutch", "nederlands", "néerlandais", "neerlandais","nederlandse");
+	public static final Set<String> FRENCH 		= Set.of("frans","francese","francés","französisch","french", "francais", "français","franse");
+	public static final Set<String> BULGARIAN 	= Set.of("bulgaars","bulgaro","bulgare","búlgaro","bulgarisch","bulgarian"); 
+	public static final Set<String> CROATIAN 	= Set.of("kroatisch","croato","croate","croata","kroatisch","croatian");
+	public static final Set<String> CZECH 		= Set.of("tsjechisch","ceco","tchèque","checo","tschechisch","czech"); 
+	public static final Set<String> DANISH 		= Set.of("deens","danese","danois","danés","dänisch","danish");
+	public static final Set<String> ESTONIAN 	= Set.of("estisch","estone","estonien","estonio","estnisch","estonian");
+	public static final Set<String> FINNISH 	= Set.of("fins","finlandese","finlandais","finlandés","finnisch","finnish"); 
+	public static final Set<String> GERMAN 		= Set.of("duits","tedesco","allemand","alemán","deutsch","german"); 
+	public static final Set<String> GREEK 		= Set.of("grieks","greco","grec","griego","griechisch","greek"); 
+	public static final Set<String> HUNGARIAN 	= Set.of("hongaars","ungherese","hongrois","húngaro","ungarisch","hungarian");
 	public static final Set<String> HINDI 		= Set.of("hindi");
-	public static final Set<String> ITALIAN 	= Set.of("italian");
-	public static final Set<String> LATVIAN 	= Set.of("latvian");
-	public static final Set<String> LITHUANIAN 	= Set.of("lithuanian");
-	public static final Set<String> MALTESE 	= Set.of("maltese");
-	public static final Set<String> NORWEGEN 	= Set.of("norwegen");
-	public static final Set<String> POLISH 		= Set.of("polish"); 
-	public static final Set<String> PORTUGUESE 	= Set.of("portuguese");
-	public static final Set<String> ROMANIAN 	= Set.of("romanian"); 
-	public static final Set<String> RUSSIAN 	= Set.of("russian");
-	public static final Set<String> SWEDISH 	= Set.of("swedish");
-	public static final Set<String> SPANISH 	= Set.of("spanish"); 
-	public static final Set<String> SLOVAKIAN 	= Set.of("slovakian");
-	public static final Set<String> SLOVENIAN 	= Set.of("slovenian");
-	public static final Set<String> TURKISH 	= Set.of("turkish");
-	public static final Set<String> UKRAINIAN 	= Set.of("ukrainian");
-	public static final Set<String> URDU 		= Set.of("urdi");
+	public static final Set<String> ITALIAN 	= Set.of("italiaans","italien","italiano","italienisch","italian");
+	public static final Set<String> LATVIAN 	= Set.of("lets","lettone","letton","letón","lettisch","latvian");
+	public static final Set<String> LITHUANIAN 	= Set.of("litouws","lituano","lituanien","lituano","litauisch","lithuanian");
+	public static final Set<String> MALTESE 	= Set.of("maltees","maltese","maltais","maltés","maltesisch","maltese");
+	public static final Set<String> NORWEGEN 	= Set.of("noorwegen","norvegia","norvégien","Noruega","norwegen");
+	public static final Set<String> POLISH 		= Set.of("pools","polacco","polonais","polaco","polieren","polish"); 
+	public static final Set<String> PORTUGUESE 	= Set.of("portugees","portoghese","portugais","portugués","portugiesisch","portuguese");
+	public static final Set<String> ROMANIAN 	= Set.of("roemeense","rumeno","roumain","rumano","rumänisch","romanian"); 
+	public static final Set<String> RUSSIAN 	= Set.of("russisch","russo","russe","ruso","russisch","russian");
+	public static final Set<String> SWEDISH 	= Set.of("zweeds","svedese","suédois","sueco","schwedisch","swedish");
+	public static final Set<String> SPANISH 	= Set.of("spaans","spagnolo","espagnol","español","spanisch","spanish"); 
+	public static final Set<String> SLOVAKIAN 	= Set.of("slowaaks","slovacco","slovaque","eslovaco","slowakisch","slovakian");
+	public static final Set<String> SLOVENIAN 	= Set.of("sloveens","sloveno","slovène","esloveno","slowenisch","slovenian");
+	public static final Set<String> TURKISH 	= Set.of("turks","Turc","turco","türkisch","turkish");
+	public static final Set<String> UKRAINIAN 	= Set.of("oekraïens","ukrainien","ucranio","ukrainisch","ukrainian");
+	public static final Set<String> URDU 		= Set.of("ourdou","urdu");
 	
 	/**
 	* Refer to JobSpecifcationFilterExtractor interface for details
@@ -82,12 +82,6 @@ public class LanguageExtractor implements JobSpecifcationFilterExtractor{
 			UKRAINIAN.stream().filter(documentText::contains).findAny().ifPresent(l 	-> extractedLanguages.add(Language.LANGUAGE.UKRAINIAN));
 			URDU.stream().filter(documentText::contains).findAny().ifPresent(l 		-> extractedLanguages.add(Language.LANGUAGE.URDU));
 			
-			//boolean includeEN = ENGLISH.stream().filter(documentText::contains).count() 	> 0;
-			//boolean includeNL = DUTCH.stream().filter(documentText::contains).count() 	> 0;
-			//boolean includeFR = FRENCH.stream().filter(documentText::contains).count() 	> 0;
-		
-			
-			
 			if (!extractedLanguages.contains(Language.LANGUAGE.ENGLISH) && filterBuilder.build().getCountries().contains(COUNTRY.UK)) {
 				extractedLanguages.add(Language.LANGUAGE.ENGLISH);
 			}
@@ -97,19 +91,6 @@ public class LanguageExtractor implements JobSpecifcationFilterExtractor{
 			}
 			
 			filterBuilder.languages(extractedLanguages);
-			
-			
-			//if (!includeEN && !includeNL && !includeFR) {
-			//	return;
-			//}
-			
-			//f (includeEN && includeNL && includeFR) {
-			//	return;
-			//}
-			
-			//filterBuilder.english(includeEN);
-			//filterBuilder.dutch(includeNL);
-			//filterBuilder.french(includeFR);
-			
+		
 	}
 }

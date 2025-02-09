@@ -5,7 +5,6 @@ import java.util.Set;
 
 import org.springframework.stereotype.Component;
 
-import com.arenella.recruit.candidates.beans.Language;
 import com.arenella.recruit.candidates.beans.CandidateExtractedFilters.CandidateExtractedFiltersBuilder;
 import com.arenella.recruit.candidates.enums.COUNTRY;
 
@@ -17,43 +16,43 @@ import com.arenella.recruit.candidates.enums.COUNTRY;
 public class CountryExtractor implements JobSpecifcationFilterExtractor{
 	
 	public static final Set<String> UK 					= DocumentFilterExtractionUtil.UK;
-	public static final Set<String> NETHERLANDS 		= Set.of("'s-gravenhage","groningen","brabant","zuid-holland","arnhem","nieuwegein","schiphol", "zwolle","netherlands","nederland", "amsterdam", "apeldoorn", "utrecht", "rotterdam", "randstad", "amstelveen", "woerden", "amersfoort", "soest", "den haag", "the hague", "overijssel", "gelderland", "almere", "eindhoven", "enschede", "limburg", "flevoland", "alkmaar");
-	public static final Set<String> BELGIUM 			= Set.of("belgium", "brussels", "leuven","mechelen", "bruxelles", "gand", "courtrai", "antwerp", "antwerpen", "flemish", "flams", "wallon", "Mechelen", "Liege", " gent", "Charleoi", "Meeuwen","Kortrijk", "Namur"); 
-	public static final Set<String> LUXEMBOURG 			= Set.of("luxembourg");
-	public static final Set<String> REPUBLIC_OF_IRELAND = Set.of("ireland", "dublin", "galway", "letterkenny", "limerick", "kildare");
-	public static final Set<String> NORTHERN_IRELAND 	= Set.of("ireland");
-	public static final Set<String> GERMANY 			= Set.of("germany");
-	public static final Set<String> POLAND 				= Set.of("poland");
-	public static final Set<String> FRANCE 				= Set.of("france");
-	public static final Set<String> SPAIN 				= Set.of("spain");
-	public static final Set<String> ITALY 				= Set.of("italy");
-	public static final Set<String> PORTUGAL 			= Set.of("portugal");
-	public static final Set<String> AUSTRIA 			= Set.of("austria");
-	public static final Set<String> ROMANIA 			= Set.of("romania");
-	public static final Set<String> GREECE 				= Set.of("greece");
-	public static final Set<String> UKRAINE 			= Set.of("ukraine","ucraine");
-	public static final Set<String> SWITZERLAND 		= Set.of("zwitzerland");
-	public static final Set<String> CZECH_REPUBLIC 		= Set.of("czech republic");
-	public static final Set<String> SWEDEN 				= Set.of("sweden");
-	public static final Set<String> HUNGARY 			= Set.of("hungary");
-	public static final Set<String> BULGARIA 			= Set.of("bulgaria");
-	public static final Set<String> DENMARK 			= Set.of("denmark");
-	public static final Set<String> FINLAND 			= Set.of("finland");
-	public static final Set<String> SLOVAKIA	 		= Set.of("slovakia");
-	public static final Set<String> CROATIA 			= Set.of("croatia");
-	public static final Set<String> LITHUANIA 			= Set.of("lithuania");
-	public static final Set<String> SLOVENIA 			= Set.of("slovenia");
-	public static final Set<String> LATVIA 				= Set.of("latvia");
-	public static final Set<String> ESTONIA 			= Set.of("estonia");
-	public static final Set<String> CYPRUS 				= Set.of("cyprus");
-	public static final Set<String> MALTA 				= Set.of("malta");
-	public static final Set<String> NORWAY 				= Set.of("norway");
+	public static final Set<String> NETHERLANDS 		= Set.of("olanda","pays-bas","países bajos","niederlande","'s-gravenhage","groningen","brabant","zuid-holland","arnhem","nieuwegein","schiphol", "zwolle","netherlands","nederland", "amsterdam", "apeldoorn", "utrecht", "rotterdam", "randstad", "amstelveen", "woerden", "amersfoort", "soest", "den haag", "the hague", "overijssel", "gelderland", "almere", "eindhoven", "enschede", "limburg", "flevoland", "alkmaar");
+	public static final Set<String> BELGIUM 			= Set.of("bruge","antwerp","liège","belgië","belgio","belgique","bélgica","belgien","belgium", "brussels", "leuven","mechelen", "bruxelles", "gand", "courtrai", "antwerp", "antwerpen", "flemish", "flams", "wallon", "mechelen", " gent", "charleoi", "meeuwen","Kortrijk", "namur"); 
+	public static final Set<String> LUXEMBOURG 			= Set.of("lussemburgo","luxembourg","luxemburgo","luxemburg","luxembourg","luxemburg","luxembourgish");
+	public static final Set<String> REPUBLIC_OF_IRELAND = Set.of("navan","drogheda","swords","waterford","dundalk","cork","irlande","irlanda","irland","ireland", "dublin", "galway", "letterkenny", "limerick", "kildare");
+	public static final Set<String> NORTHERN_IRELAND 	= Set.of("country armagh","country antrim","country down","newry","lisburn","bangor","londonderry","newtownabbey","craigavon","derry","belfast","irlande","irlanda","irland","ireland");
+	public static final Set<String> GERMANY 			= Set.of("duitsland","germania","allemagne","alemania","deutschland","germany","berlin","hamburg","munich","münchen","cologne","köln","frankfurt","stuttgart","düsseldorf","leipzig","dortmund","essen","bremen","hanover","hannover","nuremberg","duisburg","bochum","wuppertal","bielefeld","bonn","münster","mannheim","karlsruhe","augsburg","wiesbaden","mönchengladbach","gelsenkirchen","aachen","braunschweig","kiel","chemnitz","halle","saale","magdeburg","freiburg im breisgau","krefeld","mainz","lübeck","erfurt","oberhausen","rostock","kassel","hagen","potsdam","saarbrücken","hamm","ludwigshafen am rhein","mülheim an der ruhr","oldenburg","osnabrück","leverkusen","darmstadt","heidelberg","solingen","herne","regensburg","neuss","paderborn","offenbach am main","fürth","ulm","würzburg","heilbronn","pforzheim","wolfsburg","bottrop","göttingen","reutlingen","koblenz","erlangen","bremerhaven","remscheid","bergisch gladbach","recklinghausen","trier","jena","moers","salzgitter","siegen","gütersloh","hildesheim");
+	public static final Set<String> POLAND 				= Set.of("pologne","polonia","polen","poland","warsaw","wrocław","kraków","łódź","poznań","gdańsk","szczecin","bydgoszcz","lublin","białystok");
+	public static final Set<String> FRANCE 				= Set.of("lille","bordeaux ","Strasbourg","montpellier","nantes","toulouse","lyon","marseille","paris","frankrijk","francia","frankreich","france");
+	public static final Set<String> SPAIN 				= Set.of("spanje","spagna","espagne","españa","spanien","spain");
+	public static final Set<String> ITALY 				= Set.of("prato","brescia","verona","bari","genova","genoa","napoli","naples","parma","trieste","venezia","venice","firenze","florence","palermo","milano","roma","milan","modena","taranto","messina","catania","bologna","turin","rome","italië","italie","italia","italien","italy");
+	public static final Set<String> PORTUGAL 			= Set.of("portogallo","le portugal","portugal");
+	public static final Set<String> AUSTRIA 			= Set.of("oostenrijk","l'autriche","österreich","austria");
+	public static final Set<String> ROMANIA 			= Set.of("roemenië","roumanie","rumania","rumänien","romania");
+	public static final Set<String> GREECE 				= Set.of("griekenland","grèce","grecia","griechenland","greece");
+	public static final Set<String> UKRAINE 			= Set.of("oekraïne","ucrania","ukraine","ucraine","ucraina");
+	public static final Set<String> SWITZERLAND 		= Set.of("zwitserland","svizzera","suisse","suiza","Schweiz","zwitzerland");
+	public static final Set<String> CZECH_REPUBLIC 		= Set.of("tsjechische republiek","repubblica ceca","république tchèque","república checa","tschechische republik","czech republic");
+	public static final Set<String> SWEDEN 				= Set.of("zweden","svezia","suède","suecia","schweden","sweden");
+	public static final Set<String> HUNGARY 			= Set.of("esztergom","siófok","győr","miskolc","eger","szeged","pécs","debrecen","budapest","hongarije","ungheria","hongrie","hungría","ungarn","hungary");
+	public static final Set<String> BULGARIA 			= Set.of("bulgarije","bulgarie","bulgarien","bulgaria");
+	public static final Set<String> DENMARK 			= Set.of("denemarken","danimarca","danemark","dinamarca","dänemark","denmark");
+	public static final Set<String> FINLAND 			= Set.of("finlandia","finlande","finlandia","finnland","finland");
+	public static final Set<String> SLOVAKIA	 		= Set.of("slowakije","slovaquie","eslovaquia","slowakei","slovakia");
+	public static final Set<String> CROATIA 			= Set.of("croazia","kroatie","croatie","croacia","kroatien","croatia");
+	public static final Set<String> LITHUANIA 			= Set.of("litouwen","lituania","lituanie","lituania","litauen","lithuania");
+	public static final Set<String> SLOVENIA 			= Set.of("slovenië","slovénie","eslovenia","slowenien","slovenia");
+	public static final Set<String> LATVIA 				= Set.of("letland","lettonia","lettonie","letonia","lettland","latvia");
+	public static final Set<String> ESTONIA 			= Set.of("estonie","estonia","estland","estonia");
+	public static final Set<String> CYPRUS 				= Set.of("cipro","chypre","chipre","zypern","cyprus");
+	public static final Set<String> MALTA 				= Set.of("malte","malta");
+	public static final Set<String> NORWAY 				= Set.of("noorwegen","norvegia","norvège","noruega","norwegen","norway");
 	public static final Set<String> LIECHTENSTEIN 		= Set.of("liechtenstein");
-	public static final Set<String> TURKEY 				= Set.of("turkey");
-	public static final Set<String> INDIA 				= Set.of("india");
-	public static final Set<String> PAKISTAN 			= Set.of("pakistan");
-	public static final Set<String> US 					= Set.of("united states", "usa");
-	public static final Set<String> CANADA 				= Set.of("canada");
+	public static final Set<String> TURKEY 				= Set.of("turkije","turchia","turquie","turquía","türkei","turkey");
+	public static final Set<String> INDIA 				= Set.of("indië","inde","indien","india");
+	public static final Set<String> PAKISTAN 			= Set.of("pakistán","pakistan");
+	public static final Set<String> US 					= Set.of("verenigde staten","stati uniti","états-unis","vereinigte staaten","vereinigte staaten","united states", "usa");
+	public static final Set<String> CANADA 				= Set.of("canadá","kanada","canada");
 	
 	/**
 	* Refer to JobSpecifcationFilterExtractor interface for details
@@ -101,24 +100,7 @@ public class CountryExtractor implements JobSpecifcationFilterExtractor{
 		US.stream().filter(documentText::contains).findAny().ifPresent(l 					-> extractedCountries.add(COUNTRY.US));
 		CANADA.stream().filter(documentText::contains).findAny().ifPresent(l 				-> extractedCountries.add(COUNTRY.CANADA));
 		
-			//boolean includeNL = nl.stream().filter(documentText::contains).count() > 0;
-			//boolean includeIE = ie.stream().filter(documentText::contains).count() > 0;
-			//boolean includeBE = be.stream().filter(documentText::contains).count() > 0;
-			//boolean includeUK = DocumentFilterExtractionUtil.UK.stream().filter(documentText::contains).count() > 0;
-		
-			//if (!includeNL && !includeIE && !includeBE && !includeUK) {
-			//	return;
-			//}
-			
-			//if (includeNL && includeIE && includeBE && includeUK) {
-			//	return;
-			//}
-			
-			//filterBuilder.netherlands(includeNL);
-			//filterBuilder.belgium(includeBE);
-			//filterBuilder.uk(includeUK);
-			//filterBuilder.ireland(includeIE);
-			filterBuilder.countries(extractedCountries);
+		filterBuilder.countries(extractedCountries);
 			
 	}
 }
