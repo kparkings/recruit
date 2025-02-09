@@ -327,7 +327,9 @@ export class ListingComponent implements OnInit {
 				let languagesBlock:InfoItemBlock = new InfoItemBlock();
 				languagesBlock.setTitle(this.translate.instant('arenella-listing-language'));
 				selectedListing!.languages.forEach(lang => {
-					languagesBlock.addRow(new InfoItemRowSingleValue(this.getLanguage(lang)));	
+					//languagesBlock.addRow(new InfoItemRowSingleValue(this.getLanguage(lang)));
+					languagesBlock.addRow(new InfoItemRowSingleValue(this.translate.instant(lang)));
+					
 				});
 				this.infoItemConfig.addItem(languagesBlock);
 			}
@@ -493,18 +495,6 @@ export class ListingComponent implements OnInit {
 		return matchingType == null ? "NA" : matchingType.humanReadable;
 		
   	}
-
-	/**
-	* Returns the Humand readable version of the Language
-	* @param country - Language to get the readable version for
-	*/
-	public getLanguage(lang:string):string{
-
-		const matchingType = this.staticDataService.fetchLanguageTypes().filter(langTypeObj => langTypeObj.value == lang)[0];
-		
-		return matchingType == null ? "NA" : matchingType.humanReadable;
-		
-  	}	
 
 	/**
 	* Sets which contract type filters have been selected
