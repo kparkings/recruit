@@ -16,11 +16,11 @@ import com.arenella.recruit.candidates.enums.COUNTRY;
 @Component
 public class LanguageExtractor implements JobSpecifcationFilterExtractor{
 	
-	public static final Set<String> ENGLISH 	= Set.of("engels","inglese","anglais","inglés","englisch","english", "engels", "anglais");
+	public static final Set<String> ENGLISH 	= Set.of("inglese","inglés","englisch","english", "engels", "anglais");
 	public static final Set<String> DUTCH 		= Set.of("olandese","holandés","niederländisch","dutch", "nederlands", "néerlandais", "neerlandais","nederlandse");
 	public static final Set<String> FRENCH 		= Set.of("frans","francese","francés","französisch","french", "francais", "français","franse");
 	public static final Set<String> BULGARIAN 	= Set.of("bulgaars","bulgaro","bulgare","búlgaro","bulgarisch","bulgarian"); 
-	public static final Set<String> CROATIAN 	= Set.of("kroatisch","croato","croate","croata","kroatisch","croatian");
+	public static final Set<String> CROATIAN 	= Set.of("croato","croate","croata","kroatisch","croatian");
 	public static final Set<String> CZECH 		= Set.of("tsjechisch","ceco","tchèque","checo","tschechisch","czech"); 
 	public static final Set<String> DANISH 		= Set.of("deens","danese","danois","danés","dänisch","danish");
 	public static final Set<String> ESTONIAN 	= Set.of("estisch","estone","estonien","estonio","estnisch","estonian");
@@ -30,14 +30,14 @@ public class LanguageExtractor implements JobSpecifcationFilterExtractor{
 	public static final Set<String> HUNGARIAN 	= Set.of("hongaars","ungherese","hongrois","húngaro","ungarisch","hungarian");
 	public static final Set<String> HINDI 		= Set.of("hindi");
 	public static final Set<String> ITALIAN 	= Set.of("italiaans","italien","italiano","italienisch","italian");
-	public static final Set<String> LATVIAN 	= Set.of("lets","lettone","letton","letón","lettisch","latvian");
-	public static final Set<String> LITHUANIAN 	= Set.of("litouws","lituano","lituanien","lituano","litauisch","lithuanian");
-	public static final Set<String> MALTESE 	= Set.of("maltees","maltese","maltais","maltés","maltesisch","maltese");
+	public static final Set<String> LATVIAN 	= Set.of("lettone","letton","letón","lettisch","latvian");
+	public static final Set<String> LITHUANIAN 	= Set.of("litouws","lituanien","lituano","litauisch","lithuanian");
+	public static final Set<String> MALTESE 	= Set.of("maltees","maltais","maltés","maltesisch","maltese");
 	public static final Set<String> NORWEGEN 	= Set.of("noorwegen","norvegia","norvégien","Noruega","norwegen");
 	public static final Set<String> POLISH 		= Set.of("pools","polacco","polonais","polaco","polieren","polish"); 
 	public static final Set<String> PORTUGUESE 	= Set.of("portugees","portoghese","portugais","portugués","portugiesisch","portuguese");
 	public static final Set<String> ROMANIAN 	= Set.of("roemeense","rumeno","roumain","rumano","rumänisch","romanian"); 
-	public static final Set<String> RUSSIAN 	= Set.of("russisch","russo","russe","ruso","russisch","russian");
+	public static final Set<String> RUSSIAN 	= Set.of(" russo "," russe "," ruso ","russisch","russian");
 	public static final Set<String> SWEDISH 	= Set.of("zweeds","svedese","suédois","sueco","schwedisch","swedish");
 	public static final Set<String> SPANISH 	= Set.of("spaans","spagnolo","espagnol","español","spanisch","spanish"); 
 	public static final Set<String> SLOVAKIAN 	= Set.of("slowaaks","slovacco","slovaque","eslovaco","slowakisch","slovakian");

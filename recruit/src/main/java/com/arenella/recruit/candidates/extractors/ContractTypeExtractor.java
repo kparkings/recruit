@@ -15,8 +15,8 @@ import com.arenella.recruit.candidates.enums.PERM;
 @Component
 public class ContractTypeExtractor implements JobSpecifcationFilterExtractor{
 
-	final Set<String> perm 		= Set.of("annual bonus", "vast contract","vakantiedagen","reiskostenvergoeding", "% bonus", "jaarsalaris","+ bonus", "bruto per jaar","bruto per maand", "wat bieden we", "permanent", "perm", "vast", "vaste", "per year", "per anum", "days holiday", "vakantie dagen", "vacation days", "salary");
-	final Set<String> contract 	= Set.of("optie tot verlenging","6 month", "3 month", "interim", "ir35","freelance", "per hour", "per uur", "uurtarief", "hourly rate", "day rate");
+	final Set<String> perm 		= Set.of("annual bonus", "vast contract","vakantiedagen","reiskostenvergoeding", "% bonus", "jaarsalaris","+ bonus", "bruto per jaar","bruto per maand", "wat bieden we", "maandsalaris", "permanent", "perm", "vast", "vaste", "per year", "per anum", "days holiday", "vakantie dagen", "vacation days", "salary");
+	final Set<String> contract 	= Set.of("b2b","optie tot verlenging","6 month", "3 month", "interim", "ir35","freelance", "per hour", "per uur", "uurtarief", "hourly rate", "day rate","month contract","per day");
 	
 	/**
 	* Refer to JobSpecifcationFilterExtractor interface for details

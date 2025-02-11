@@ -37,7 +37,7 @@ public class DocumentFilterExtractionUtil {
 	@Autowired
 	private ContractTypeExtractor 	contractTypeExtractor;
 	
-	public static final Set<String> UK = Set.of("bristol","gbp","stockport","£"," uk ", "uk.","uk\\t", "inside ir35", "milton keynes", "england", "midlands", "derby", "wales", "scotland", "edinburgh","glasgow", "london", "liverpool", "manchester", "oxford", "glousester", "surrey", "Buckinghamshire", "Berkshire", "hounslow", "Milton Keynes", "edgware", "Leicester", "bracknell", "barking", "Colchester", "cardiff", "Brentford", "Stoke-on-Trent", "maidenhead", "guildford", "reading", "leeds");
+	public static final Set<String> UK = Set.of("cambridge","bristol","gbp","stockport","£"," uk ", "uk.","uk\\t", "inside ir35", "milton keynes", "england", "midlands", "derby", "wales", "scotland", "edinburgh","glasgow", "london", "liverpool", "manchester", "oxford", "glousester", "surrey", "Buckinghamshire", "Berkshire", "hounslow", "Milton Keynes", "edgware", "Leicester", "bracknell", "barking", "Colchester", "cardiff", "Brentford", "Stoke-on-Trent", "maidenhead", "guildford", "reading", "leeds");
 	
 	/**
 	* Extracts Filters from a document

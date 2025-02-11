@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import com.arenella.recruit.candidates.beans.CandidateExtractedFilters;
 import com.arenella.recruit.candidates.beans.Language;
+import com.arenella.recruit.candidates.enums.COUNTRY;
 import com.arenella.recruit.candidates.beans.CandidateExtractedFilters.CandidateExtractedFiltersBuilder;
 
 /**
@@ -172,22 +173,7 @@ public class LanguageExtractorTest {
 			extractor.extractFilters("adadad \n " + word + " adad", filterBuilder);
 			
 			assertTrue(filterBuilder.build().getLanguages().contains(lang));
-			
-			//switch(lang) {
-			//	case "EN":{
-			//		assertTrue(filterBuilder.build().getEnglish());
-		//			break;
-		//		}
-		//		case "NL":{
-		//			assertTrue(filterBuilder.build().getDutch());
-		//			break;
-		//		}
-		//		case "FR":{
-		//			assertTrue(filterBuilder.build().getFrench());
-		//			break;
-		//		}
-		//	}
-		//	
+
 		});
 		
 	}
@@ -202,15 +188,13 @@ public class LanguageExtractorTest {
 		
 		CandidateExtractedFiltersBuilder filterBuilder = CandidateExtractedFilters.builder();
 		
-		filterBuilder.uk(false);
-		
 		LanguageExtractor extractor = new LanguageExtractor();
 		
 		extractor.extractFilters("", filterBuilder);
 		
 		assertFalse(filterBuilder.build().getLanguages().contains(Language.LANGUAGE.ENGLISH));
 		
-		filterBuilder.uk(true);
+		filterBuilder.countries(Set.of(COUNTRY.UK));
 		
 		extractor.extractFilters("", filterBuilder);
 		
