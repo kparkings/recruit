@@ -8,7 +8,7 @@ import java.util.UUID;
 import org.junit.jupiter.api.Test;
 
 import com.arenella.recruit.listings.beans.Listing.LISTING_AGE;
-import com.arenella.recruit.listings.beans.Listing.country;
+import com.arenella.recruit.listings.beans.Listing.Country;
 import com.arenella.recruit.listings.beans.Listing.listing_type;
 import com.arenella.recruit.listings.beans.ListingFilter;
 
@@ -28,7 +28,7 @@ public class ListingFilterTest {
 		final UUID 				listingId		= UUID.randomUUID();
 		final String			ownerId			= "abc123";
 		final listing_type 		type			= listing_type.CONTRACT_ROLE;
-		final country 			countryVal		= country.BELGIUM;
+		final Country 			countryVal		= Country.BELGIUM;
 		final LISTING_AGE		listingAge		= LISTING_AGE.THIS_WEEK;
 		final boolean			active			= false;
 		

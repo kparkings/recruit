@@ -20,6 +20,8 @@ import { SupportedCountry } 							from '../supported-candidate';
 import { CandidateServiceService } 						from '../candidate-service.service';
 import { Clipboard } 									from '@angular/cdk/clipboard';
 import { SearchStatCountry, SearchStats } 				from '../search-stats';
+import { ListingSearchRequest }							from './../listing-search-request';
+
 @Component({
   selector: 'app-listing',
   templateUrl: './listing.component.html',
@@ -401,19 +403,19 @@ export class ListingComponent implements OnInit {
 	* Generated the filter sring to filter results by. Can be empty
 	* String if no filters required
 	*/
-	private generateFilterString(): string{
+	private generateFilters(): ListingSearchRequest{
 		
-		let filterString: string = "";
+		let filters:ListingSearchRequest = new ListingSearchRequest();
 		
 		if (this.contractTypeFilter != "") {
-			filterString = filterString + '&listingType=' + this.contractTypeFilter;
+			filters.contractType = this.contractTypeFilter;
 		}
 		
 		if (this.ageFilter != "ALL") {
-			filterString = filterString + '&listingAge=' + this.ageFilter;
+			filters.maxAgeOfPost = this.ageFilter;
 		}
 		
-		return filterString;
+		return filters;
 	}
 	
 	/**
@@ -433,7 +435,7 @@ export class ListingComponent implements OnInit {
 		}
 		
 		this.listingService
-			.fetchAllListings('created',"desc", this.currentPage, this.pageSize, this.generateFilterString())
+			.fetchAllListings('created',"desc", this.currentPage, this.pageSize, this.generateFilters())
 				.subscribe(data => {
 					this.totalPages = data.totalPages;
 					

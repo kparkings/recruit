@@ -21,7 +21,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 import com.arenella.recruit.listings.beans.Listing;
-import com.arenella.recruit.listings.beans.Listing.country;
+import com.arenella.recruit.listings.beans.Listing.Country;
 import com.arenella.recruit.listings.beans.Listing.currency;
 import com.arenella.recruit.listings.beans.Listing.language;
 import com.arenella.recruit.listings.beans.Listing.listing_type;
@@ -64,7 +64,7 @@ public class ListingEntity {
 	
 	@Column(name="country")
 	@Enumerated(EnumType.STRING)
-	private country 			country;
+	private Country 			country;
 	
 	@Column(name="location")
 	private String 				location;
@@ -217,7 +217,7 @@ public class ListingEntity {
 	* Returns the country the Listing is for
 	* @return Country listing is for
 	*/
-	public country getCountry() {
+	public Country getCountry() {
 		return this.country;
 	}
 	
@@ -365,7 +365,7 @@ public class ListingEntity {
 	* Sets the country the Listing is for
 	* @return Country listing is for
 	*/
-	public void setCountry(country country) {
+	public void setCountry(Country country) {
 		this.country = country;
 	}
 	
@@ -457,7 +457,7 @@ public class ListingEntity {
 		private String 							title;
 		private String 							description;
 		private listing_type 					type;
-		private country 						country;
+		private Country 						country;
 		private String 							location;
 		private int 							yearsExperience;
 		private Set<language> 					languages			= new LinkedHashSet<>();
@@ -563,7 +563,7 @@ public class ListingEntity {
 		* @param country - Country the Listing relates to
 		* @return Builder
 		*/
-		public ListingEntityBuilder country(country country){
+		public ListingEntityBuilder country(Country country){
 			this.country = country;
 			return this;
 		}

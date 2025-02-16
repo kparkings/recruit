@@ -15,7 +15,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.arenella.recruit.listings.beans.Listing;
 import com.arenella.recruit.listings.beans.ListingViewedEvent;
-import com.arenella.recruit.listings.beans.Listing.country;
+import com.arenella.recruit.listings.beans.Listing.Country;
 import com.arenella.recruit.listings.beans.Listing.currency;
 import com.arenella.recruit.listings.beans.Listing.language;
 import com.arenella.recruit.listings.beans.Listing.listing_type;
@@ -37,7 +37,7 @@ public class ListingAPIOutboundPublicTest {
 	private final 			String 						title				= "aTitle";
 	private final 			String 						description			= "aDesc";
 	private final 			listing_type 				type		 		= listing_type.CONTRACT_ROLE;
-	private final 			country 					country				= Listing.country.NETHERLANDS;
+	private final 			Country 					country				= Listing.Country.NETHERLANDS;
 	private final 			String 						location			= "Den Haag";
 	private final 			int 						yearsExperience		= 10;
 	private final 			Set<language> 				languages			= new LinkedHashSet<>();

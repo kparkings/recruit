@@ -89,7 +89,7 @@ public interface ListingAlertDao extends CrudRepository<ListingAlertEntity, UUID
 			/*Countries*/
 			if (!this.filterOptions.getCountries().isEmpty()) {
 				
-				Expression<Collection<Listing.country>> countryValues = root.get("countries");
+				Expression<Collection<Listing.Country>> countryValues = root.get("countries");
 				
 				this.filterOptions.getCountries().forEach(country -> 
 					predicates.add(criteriaBuilder.isMember(country, countryValues))

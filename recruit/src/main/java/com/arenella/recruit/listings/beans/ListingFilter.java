@@ -4,7 +4,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import com.arenella.recruit.listings.beans.Listing.LISTING_AGE;
-import com.arenella.recruit.listings.beans.Listing.country;
+import com.arenella.recruit.listings.beans.Listing.Country;
 import com.arenella.recruit.listings.beans.Listing.listing_type;
 
 /**
@@ -16,7 +16,7 @@ public class ListingFilter {
 	private UUID 				listingId;
 	private String				ownerId;
 	private listing_type 		type;
-	private country 			country;
+	private Country 			country;
 	private LISTING_AGE			listingAge;
 	private Boolean				active;
 	
@@ -61,7 +61,7 @@ public class ListingFilter {
 	* Returns the country to filter on
 	* @return country to filter on
 	*/
-	public Optional<country> getCountry(){
+	public Optional<Country> getCountry(){
 		return Optional.ofNullable(country);
 	}
 	
@@ -98,7 +98,7 @@ public class ListingFilter {
 		private UUID 				listingId;
 		private String				ownerId;
 		private listing_type 		type;
-		private country 			country;
+		private Country 			country;
 		private LISTING_AGE			listingAge;
 		private Boolean				active;
 		
@@ -137,7 +137,7 @@ public class ListingFilter {
 		* @param country - country to filter on
 		* @return Builder
 		*/
-		public ListingFilterBuilder country(country country) {
+		public ListingFilterBuilder country(Country country) {
 			this.country = country;
 			return this;
 		}

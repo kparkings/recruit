@@ -5,7 +5,7 @@ import java.util.Set;
 import java.util.UUID;
 
 import com.arenella.recruit.listings.beans.Listing;
-import com.arenella.recruit.listings.beans.Listing.country;
+import com.arenella.recruit.listings.beans.Listing.Country;
 import com.arenella.recruit.listings.beans.Listing.currency;
 import com.arenella.recruit.listings.beans.Listing.language;
 import com.arenella.recruit.listings.beans.Listing.listing_type;
@@ -27,7 +27,7 @@ public class ListingAPIInbound {
 	private String 				title;
 	private String 				description;
 	private listing_type 		type;
-	private country 			country;
+	private Country 			country;
 	private String 				location;
 	private int 				yearsExperience;
 	private Set<language> 		languages			= new LinkedHashSet<>();
@@ -124,7 +124,7 @@ public class ListingAPIInbound {
 	* Returns the Country the Listing is for
 	* @return Country location of the Listing
 	*/
-	public country getCountry() {
+	public Country getCountry() {
 		return this.country;
 	}
 	
@@ -208,7 +208,7 @@ public class ListingAPIInbound {
 		private String 				title;
 		private String 				description;
 		private listing_type 		type;
-		private country 			country;
+		private Country 			country;
 		private String 				location;
 		private int 				yearsExperience;
 		private Set<language> 		languages			= new LinkedHashSet<>();
@@ -294,7 +294,7 @@ public class ListingAPIInbound {
 		* @param country - Where the Listing is for
 		* @return Builder
 		*/
-		public ListingAPIInboundBuilder country(country country) {
+		public ListingAPIInboundBuilder country(Country country) {
 			this.country = country;
 			return this;
 		}

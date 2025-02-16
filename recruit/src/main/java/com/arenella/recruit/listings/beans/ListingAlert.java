@@ -18,7 +18,7 @@ public class ListingAlert {
 	private String email;
 	private LocalDate created;
 	private Listing.listing_type contractType;
-	private Set<Listing.country> countries = new LinkedHashSet<>();
+	private Set<Listing.Country> countries = new LinkedHashSet<>();
 	private Set<Listing.TECH> categories = new LinkedHashSet<>();
 	
 	/**
@@ -102,7 +102,7 @@ public class ListingAlert {
 	* hearing about
 	* @return countries of interest
 	*/
-	public Set<Listing.country> getCountries() {
+	public Set<Listing.Country> getCountries() {
 		return this.countries;
 	}
 	
@@ -134,7 +134,7 @@ public class ListingAlert {
 		private String 					email;
 		private LocalDate 				created;
 		private Listing.listing_type 	contractType;
-		private Set<Listing.country> 	countries 		= new LinkedHashSet<>();
+		private Set<Listing.Country> 	countries 		= new LinkedHashSet<>();
 		private Set<Listing.TECH> 		categories 		= new LinkedHashSet<>();
 		
 		/**
@@ -192,7 +192,7 @@ public class ListingAlert {
 		* @param countries - countries to receive Alerts for
 		* @return Builder
 		*/
-		public ListingAlertBuilder countries(Set<Listing.country> countries) {
+		public ListingAlertBuilder countries(Set<Listing.Country> countries) {
 			this.countries.clear();
 			this.countries.addAll(countries);
 			return this;

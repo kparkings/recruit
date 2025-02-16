@@ -12,7 +12,7 @@ public class ListingAlertFilterOptions {
 
 	private String			 				searchTerm;
 	private Listing.listing_type		 	contractType;
-	private Set<Listing.country> 			countries 		= new HashSet<>();
+	private Set<Listing.Country> 			countries 		= new HashSet<>();
 	private Set<Listing.TECH> 				categories	 	= new HashSet<>();
 	
 	/**
@@ -46,7 +46,7 @@ public class ListingAlertFilterOptions {
 	* Returns any countries to filter on
 	* @return Countries to filter on
 	*/
-	public Set<Listing.country> 			getCountries(){
+	public Set<Listing.Country> 			getCountries(){
 		return this.countries;
 	}
 	
@@ -74,7 +74,7 @@ public class ListingAlertFilterOptions {
 	
 		private String 					searchTerm;
 		private Listing.listing_type 	contractType;
-		private Set<Listing.country> 	countries 		= new HashSet<>();
+		private Set<Listing.Country> 	countries 		= new HashSet<>();
 		private Set<Listing.TECH> 		categories	 	= new HashSet<>();
 		
 		/**
@@ -108,7 +108,7 @@ public class ListingAlertFilterOptions {
 		* @param countries - Countries to filter n
 		* @return Builder
 		*/
-		public ListingAlertFilterOptionsBuilder countries(Set<Listing.country> countries) {
+		public ListingAlertFilterOptionsBuilder countries(Set<Listing.Country> countries) {
 			this.countries.clear();
 			this.countries.addAll(countries);
 			return this;

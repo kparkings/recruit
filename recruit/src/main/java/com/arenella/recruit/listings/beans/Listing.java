@@ -14,7 +14,7 @@ public class Listing {
 
 	public static enum listing_type 	{CONTRACT_ROLE, PERM_ROLE, BOTH}
 	public static enum LISTING_AGE		{TODAY, THIS_WEEK, THIS_MONTH, ALL}
-	public static enum country 			{
+	public static enum Country 			{
 		NETHERLANDS, 
 		BELGIUM, 
 		LUXEMBOURG,
@@ -99,7 +99,7 @@ public class Listing {
 	private String 						title;
 	private String 						description;
 	private listing_type 				type;
-	private country 					country;
+	private Country 					country;
 	private String 						location;
 	private int 						yearsExperience;
 	private Set<language> 				languages			= new LinkedHashSet<>();
@@ -215,7 +215,7 @@ public class Listing {
 	* Returns the Country the Listing is for
 	* @return Country location of the Listing
 	*/
-	public country getCountry() {
+	public Country getCountry() {
 		return this.country;
 	}
 	
@@ -342,7 +342,7 @@ public class Listing {
 		private String 						title;
 		private String 						description;
 		private listing_type 				type;
-		private country 					country;
+		private Country 					country;
 		private String 						location;
 		private int 						yearsExperience;
 		private Set<language> 				languages			= new LinkedHashSet<>();
@@ -449,7 +449,7 @@ public class Listing {
 		* @param country - Where the Listing is for
 		* @return Builder
 		*/
-		public ListingBuilder country(country country) {
+		public ListingBuilder country(Country country) {
 			this.country = country;
 			return this;
 		}

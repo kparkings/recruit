@@ -3,7 +3,8 @@ import { HttpClient, HttpHeaders }  				from '@angular/common/http';
 import { Observable }                 				from 'rxjs';
 import { environment }								from './../environments/environment';
 import { NewListingRequest } 						from './recruiter-listings/new-listing-request';
-import { ListingAlertAddRequest } from './listing/listing-alert-add-request';
+import { ListingAlertAddRequest } 					from './listing/listing-alert-add-request';
+import { ListingSearchRequest }						from './listing-search-request';
 
 /**
 * Service relating to the management of listings
@@ -125,11 +126,9 @@ export class ListingService {
 	/**
 	* Returns the listings owned by any recruiter
 	*/	
-	public fetchAllListings(sortColumn:string, order:string, pageNum:number, pageSize:number, filterString:string):Observable<any>{
-		
-		const backendUrl:string = environment.backendUrl +'listing/public/?orderAttribute='+  sortColumn +  '&order=' + order + '&page=' + pageNum + '&size=' + pageSize + filterString;
-		
-		return this.httpClient.get<any>(backendUrl, this.httpOptions);
+	public fetchAllListings(sortColumn:string, order:string, pageNum:number, pageSize:number, filters:ListingSearchRequest):Observable<any>{	
+		const backendUrl:string = environment.backendUrl +'listing/public/?orderAttribute='+  sortColumn +  '&order=' + order + '&page=' + pageNum + '&size=' + pageSize;
+		return this.httpClient.post<any>(backendUrl, filters, this.httpOptions);
 	}
 		
 	/**

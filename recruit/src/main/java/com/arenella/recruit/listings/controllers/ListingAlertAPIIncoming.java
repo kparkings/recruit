@@ -17,7 +17,7 @@ public class ListingAlertAPIIncoming {
 
 	private String email;
 	private Listing.listing_type contractType;
-	private Set<Listing.country> countries = new LinkedHashSet<>();
+	private Set<Listing.Country> countries = new LinkedHashSet<>();
 	private Set<Listing.TECH> categories = new LinkedHashSet<>();
 	
 	/**
@@ -53,7 +53,7 @@ public class ListingAlertAPIIncoming {
 	* hearing about
 	* @return countries of interest
 	*/
-	public Set<Listing.country> getCountries() {
+	public Set<Listing.Country> getCountries() {
 		return this.countries;
 	}
 	
@@ -83,7 +83,7 @@ public class ListingAlertAPIIncoming {
 	
 		private String 					email;
 		private Listing.listing_type 	contractType;
-		private Set<Listing.country> 	countries 		= new LinkedHashSet<>();
+		private Set<Listing.Country> 	countries 		= new LinkedHashSet<>();
 		private Set<Listing.TECH> 		categories 		= new LinkedHashSet<>();
 		
 		/**
@@ -111,7 +111,7 @@ public class ListingAlertAPIIncoming {
 		* @param countries - countries to receive Alerts for
 		* @return Builder
 		*/
-		public ListingAlertAPIIncomingBuilder countries(Set<Listing.country> countries) {
+		public ListingAlertAPIIncomingBuilder countries(Set<Listing.Country> countries) {
 			this.countries.clear();
 			this.countries.addAll(countries);
 			return this;
@@ -142,7 +142,7 @@ public class ListingAlertAPIIncoming {
 	* Converts from Incoming API representation of the ListingAltert to 
 	* the Domain representation
 	* @param alert - Alert to convert
-	* @return Domain reresentation
+	* @return Domain representation
 	*/
 	public static ListingAlert convertToDomain(ListingAlertAPIIncoming alert) {
 		return ListingAlert

@@ -25,7 +25,7 @@ public class ListingAlertTest {
 	private static final String 				EMAIL			= "admin@arenella-ict.com";
 	private static final LocalDate 				CREATED			= LocalDate.of(2023, 12, 9);
 	private static final Listing.listing_type 	CONTRACT_TYPE 	= Listing.listing_type.BOTH;
-	private static final Set<Listing.country> 	COUNTRIES 		= Set.of(Listing.country.NETHERLANDS);
+	private static final Set<Listing.Country> 	COUNTRIES 		= Set.of(Listing.Country.NETHERLANDS);
 	private static final Set<Listing.TECH> 		CATEGORIES 		= Set.of(Listing.TECH.ARCHITECT);
 	
 	/**
@@ -54,7 +54,7 @@ public class ListingAlertTest {
 		assertEquals(USER_ID, 		alert.getUserId().get());
 		
 		alert.getCategories().stream().filter(c -> c == Listing.TECH.ARCHITECT).findAny().orElseThrow();
-		alert.getCountries().stream().filter(c -> c == Listing.country.NETHERLANDS).findAny().orElseThrow();
+		alert.getCountries().stream().filter(c -> c == Listing.Country.NETHERLANDS).findAny().orElseThrow();
 		
 	}
 	

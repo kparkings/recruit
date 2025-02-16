@@ -43,6 +43,7 @@ import com.arenella.recruit.listings.controllers.ListingAPIOutbound;
 import com.arenella.recruit.listings.controllers.ListingAPIOutboundPublic;
 import com.arenella.recruit.listings.controllers.ListingContactRequest;
 import com.arenella.recruit.listings.controllers.ListingController;
+import com.arenella.recruit.listings.controllers.ListingSearchRequestAPIInbound;
 import com.arenella.recruit.listings.services.ListingService;
 import com.arenella.recruit.listings.utils.ListingAlertHitTesterUtil;
 
@@ -234,7 +235,7 @@ public class ListingControllerTest {
 		
 		Mockito.when(this.mockListingService.fetchListings(filterArgCapt.capture(), Mockito.any())).thenReturn(Page.empty());
 		
-		Page<ListingAPIOutboundPublic> response = controller.fetchListingsPubilc(null, LISTING_AGE.ALL, mockPageable);
+		Page<ListingAPIOutboundPublic> response = controller.fetchListingsPubilc(ListingSearchRequestAPIInbound.builder().build(), mockPageable);
 	
 		assertTrue(response instanceof Page);
 		
@@ -254,7 +255,7 @@ public class ListingControllerTest {
 		
 		Mockito.when(this.mockListingService.fetchListings(filterArgCapt.capture(), Mockito.any())).thenReturn(Page.empty());
 		
-		Page<ListingAPIOutboundPublic> response = controller.fetchListingsPubilc(listingType, LISTING_AGE.ALL, mockPageable);
+		Page<ListingAPIOutboundPublic> response = controller.fetchListingsPubilc(ListingSearchRequestAPIInbound.builder().contractType(listingType).build(), mockPageable);
 	
 		assertTrue(response instanceof Page);
 		

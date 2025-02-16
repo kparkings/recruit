@@ -29,7 +29,6 @@ import org.springframework.web.multipart.MultipartFile;
 import com.arenella.recruit.listings.beans.Listing;
 import com.arenella.recruit.listings.beans.Listing.LISTING_AGE;
 import com.arenella.recruit.listings.beans.Listing.language;
-import com.arenella.recruit.listings.beans.Listing.listing_type;
 import com.arenella.recruit.authentication.spring.filters.ClaimsUsernamePasswordAuthenticationToken;
 
 import com.arenella.recruit.listings.beans.ListingFilter;
@@ -132,16 +131,15 @@ public class ListingController {
 	* unregistered users
 	* @return All available listings
 	*/
-	@GetMapping(value="/listing/public/")
-	public Page<ListingAPIOutboundPublic> fetchListingsPubilc(	@RequestParam(required = false) listing_type listingType, 
-			 													@RequestParam(required=false)LISTING_AGE listingAge,
+	@PostMapping(value="/listing/public/")
+	public Page<ListingAPIOutboundPublic> fetchListingsPubilc(	@RequestBody(required = false) ListingSearchRequestAPIInbound searchRequest, 
 																Pageable pageable){
 		
 		ListingFilter filters = 
 				ListingFilter
 				.builder()
-					.type(listingType)
-					.listingAge(listingAge)
+					.type(searchRequest.getContractType().orElse(null))
+					.listingAge(searchRequest.getMaxAgeOfPost().orElse(null))
 					.active(true)
 				.build();
 

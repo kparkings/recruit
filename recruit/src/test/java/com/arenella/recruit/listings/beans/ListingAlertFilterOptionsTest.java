@@ -17,7 +17,7 @@ public class ListingAlertFilterOptionsTest {
 
 	public static String 					SEARCH_TERM 	= "java";
 	public static Listing.listing_type 		CONTRACT_TYPE 	= Listing.listing_type.CONTRACT_ROLE;
-	public static Set<Listing.country> 		COUNTRIES		= Set.of(Listing.country.NETHERLANDS);
+	public static Set<Listing.Country> 		COUNTRIES		= Set.of(Listing.Country.NETHERLANDS);
 	public static  Set<Listing.TECH> 		CATEGORIES	 	= Set.of(Listing.TECH.ARCHITECT);
 	
 	/**
@@ -38,7 +38,7 @@ public class ListingAlertFilterOptionsTest {
 		assertEquals(SEARCH_TERM, filters.getSearchTerm().get());
 		assertEquals(CONTRACT_TYPE, filters.getContractType().get());
 		
-		filters.getCountries().stream().filter(c  -> c == Listing.country.NETHERLANDS).findAny().orElseThrow();
+		filters.getCountries().stream().filter(c  -> c == Listing.Country.NETHERLANDS).findAny().orElseThrow();
 		filters.getCategories().stream().filter(c -> c == Listing.TECH.ARCHITECT).findAny().orElseThrow();
 	}
 	

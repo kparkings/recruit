@@ -48,12 +48,12 @@ public class ListingAlertEntity {
 	private Listing.listing_type contractType;
 	
 	@Column(name="country")
-	@ElementCollection(targetClass=Listing.country.class, fetch = FetchType.EAGER)
+	@ElementCollection(targetClass=Listing.Country.class, fetch = FetchType.EAGER)
 	@CollectionTable(schema="listings", name="listing_alerts_countries", joinColumns=@JoinColumn(name="listing_alert_id"))
 	@Enumerated(EnumType.STRING) 
 	//@OnDelete(action = OnDeleteAction.CASCADE)
 	//@JoinColumn(name = "listing_alert_id")
-	private Set<Listing.country> countries = new LinkedHashSet<>();
+	private Set<Listing.Country> countries = new LinkedHashSet<>();
 	
 	@Column(name="category")
 	@ElementCollection(targetClass=Listing.TECH.class, fetch = FetchType.EAGER)
@@ -124,7 +124,7 @@ public class ListingAlertEntity {
 	* hearing about
 	* @return countries of interest
 	*/
-	public Set<Listing.country> getCountries() {
+	public Set<Listing.Country> getCountries() {
 		return this.countries;
 	}
 	
@@ -163,7 +163,7 @@ public class ListingAlertEntity {
 		private String 					email;
 		private LocalDate 				created;
 		private Listing.listing_type 	contractType;
-		private Set<Listing.country> 	countries 		= new LinkedHashSet<>();
+		private Set<Listing.Country> 	countries 		= new LinkedHashSet<>();
 		private Set<Listing.TECH> 		categories 		= new LinkedHashSet<>();
 		
 		/**
@@ -221,7 +221,7 @@ public class ListingAlertEntity {
 		* @param countries - countries to receive Alerts for
 		* @return Builder
 		*/
-		public ListingAlertEntityBuilder countries(Set<Listing.country> countries) {
+		public ListingAlertEntityBuilder countries(Set<Listing.Country> countries) {
 			this.countries.clear();
 			this.countries.addAll(countries);
 			return this;
