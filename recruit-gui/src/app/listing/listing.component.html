@@ -12,12 +12,23 @@
 				<button class="btn btn-secondary arenella-btn" (click)="openCreateAlertDialog()" *ngIf="!isAuthenticated() || isAuthenticated() && isCandidate()">{{'arenella-listing-btn-create' | translate}}</button>
 				<button class="btn btn-secondary arenella-btn" routerLink="/recruiter-listings" *ngIf="isAuthenticated() && !isAuthenticatedAsAdmin() && !isCandidate()">{{'arenella-listing-btn-your-posts' | translate}}</button>
 			</div>
+			
+			<div class="site-header" *ngIf="!isLoggedIn()">
+				<h1>{{'arenella-listing-title' | translate}}</h1>
+				<h5>{{'arenella-listing-intro' | translate}}</h5>
+			</div>
+				
+			<app-searchbarlisting #searchbar></app-searchbarlisting>
+			
 	       	<!-- Listings Table -->
 			<div>
+				<!--  
 				<div class="site-header" *ngIf="!isLoggedIn()">
 					<h1>{{'arenella-listing-title' | translate}}</h1>
 					<h5>{{'arenella-listing-intro' | translate}}</h5>
 				</div>
+				-->
+				<!--  
 				<div class="filters">
 					<div class="filters-title" style="cursor:pointer" *ngIf="displayFilters"  (click)="toggleFilters()">{{'arenella-listing-filters' | translate}}:<span style="float:right; margin-right:20px;cursor:pointer"> {{'arenella-listing-filters-hide' | translate}} </span></div>
 					<div class="filters-title" style="cursor:pointer" *ngIf="!displayFilters" (click)="toggleFilters()">{{'arenella-listing-filters' | translate}}:<span style="float:right; margin-right:20px;cursor:pointer"> {{'arenella-listing-filters-shw' | translate}} </span></div>
@@ -49,6 +60,8 @@
 						</tr>
 					</table>
 				</div>
+				-->
+				<!-- 
 				<div>
 					<div class="filters-title"  style="cursor:pointer" *ngIf="displayStatistics"  (click)="toggleStatistics()">Statistics:<span class="toggle-options"> {{'arenella-listing-filters-hide' | translate}} </span></div>
 					<div class="filters-title"  style="cursor:pointer" *ngIf="!displayStatistics" (click)="toggleStatistics()">Statistics:<span class="toggle-options"> {{'arenella-listing-filters-shw' | translate}} </span></div>
@@ -109,21 +122,85 @@
 					</table>
 					
 				</div>
-				<div class="listing-pane">
-					<div class="job-post" *ngFor="let listing of listings">
-						<div (click)="showListingDetails(listing)">
-							<div class="listing-title">{{getFormattedJobTitle(listing.title)}}</div>
-							<div>
-								<span title="{{listing.listingId}}" class="flag-icon flag-icon-{{getCountryISO2Code(listing.country)}} suggestion-flag-country listing-country"></span>
-							</div>
-							<div class="job-post-contract-type">
-								{{getFormattedContractType(listing.type)}}
-							</div>
-							<div>
-								<a href="{{getExternalUrl(listing.listingId)}}"></a>
-							</div>
+				 -->
+				<div class="listing-pane" >
+				
+					<div class="listing-pane-left">
+						<table>
+							<tr>
+								<td>
+									<div>
+									<table class="listing-stats-pane">
+										<tr>
+											<tr>
+												<td colspan="2">
+													<span style="font-weight:bold;">{{'arenella-listing-most-searched-countries' | translate}}</span>
+												</td>
+											<td>
+										</tr>
+										<tr *ngFor="let stat of stats.countryStats">
+											<td>{{stat.country | translate}}</td>
+											<td style="padding-left:5px;">
+												<div class="stat-option-bar" [ngStyle]="{'width':(stat.percentageOfTotal *4)+'px','background':'green'}">
+													
+												</div>
+											</td>
+											
+										</tr>
+										
+									</table>
+									</div>
+									<div>
+									<table class="listing-stats-pane">
+										<tr>
+											<tr>
+												<td colspan="2">
+													<span style="font-weight:bold;">{{'arenella-listing-most-searched-functions' | translate}}</span>
+												</td>
+											<td>
+										</tr>
+										<tr *ngFor="let stat of stats.functionStats">
+											<td>{{stat.function | translate}}</td>
+											<td style="padding-left:5px;">
+												<div class="stat-option-bar" [ngStyle]="{'width':(stat.percentageOfTotal *3)+'px','background':'orange'}">
+												</div>
+											</td>
+											
+										</tr>
+										
+									</table>
+								</div>
+								</td>
+							</tr>
+							<tr class="listing-stats-pane">
+								<td colspan="2" style="padding:10px">
+									<p>
+									{{'arenella-listing-most-searched-summary' | translate}}
+									</p>
+								</td>
+							</tr>
+							
+						</table>
+					</div>
+					
+					<div class="listing-pane-right">
+						<div class="job-post" *ngFor="let listing of listings">
+							<div (click)="showListingDetails(listing)">
+								<div class="listing-title">{{getFormattedJobTitle(listing.title)}}</div>
+								<div>
+									<span title="{{listing.listingId}}" class="flag-icon flag-icon-{{getCountryISO2Code(listing.country)}} suggestion-flag-country listing-country"></span>
+								</div>
+								<div class="job-post-contract-type">
+									{{getFormattedContractType(listing.type)}}
+								</div>
+								<div>
+									<a href="{{getExternalUrl(listing.listingId)}}"></a>
+								</div>
+						`	</div>
 						</div>
 					</div>
+					
+					
 				</div>
 			</div>
 			

@@ -1,0 +1,76 @@
+<div>	
+	<form [formGroup]="listingsFilterForm" >	
+
+		<div >
+		  
+		  	<div>
+				<table class="mobile-search-box search-filter-pane">
+					<tr>
+						<td class="sugg-srch-hdr">{{'arenella-suggestions-job-title' | translate}}</td>
+						<td class="sugg-srch-bdy">
+							<input type="text" class="sugg-srch-job-title" formControlName="searchPhrase">
+						</td>
+					</tr>
+				</table>
+			</div>
+			
+			<span class="filters-collapse-options" *ngIf="filterView == 'expanded'" (click)=toggleFilters()>{{'hide-filters' | translate}}...</span>	
+			<span class="filters-collapse-options" *ngIf="filterView != 'expanded'" (click)=toggleFilters()>{{'show-filters' | translate}}...</span>
+			
+			<table class="mobile-search-box search-filter-pane" *ngIf="filterView == 'expanded'">
+				
+				<tr>
+					<td class="sugg-srch-hdr">{{'arenella-suggestions-geoZones' | translate}}</td>
+					<td *ngIf="!showGeoZoneFilters">
+						<p class="toggle-filter-option" (click)="switchGeoZoneFilterView('showGeoZoneFilters')">{{'Show' | translate}}..</p>
+					</td>
+					<td *ngIf="showGeoZoneFilters" class="sugg-srch-bdy geo-zone-filters">
+						<p class="toggle-filter-option" (click)="switchGeoZoneFilterView('')">{{'Hide' | translate}}..</p>
+						<div *ngFor="let geoZone of geoZones" class="geo-code-filter geo-code-selected-{{includeResultsForGeoZone(geoZone)}}" (click)="toggleGeoZoneSelection(geoZone)">
+							{{geoZone.geoZoneId | translate}}
+						</div>
+						
+					</td>
+					
+				</tr>
+				<tr>
+					<td class="sugg-srch-hdr">{{'arenella-suggestions-country' | translate}}</td>
+					<td *ngIf="!showCountryFilters">
+						<p class="toggle-filter-option" (click)="switchCountriesFilterView('showCountryFilters')">{{'Show' | translate}}..</p>
+					</td>
+					<td *ngIf="showCountryFilters" class="sugg-srch-bdy country-filters">
+						<p class="toggle-filter-option" (click)="switchCountriesFilterView('')">{{'Hide' | translate}}..</p>
+						<div class="country-selections">
+							<span *ngFor="let supportedCountry of supportedCountries" class="country-filter country-selected-{{includeResultsForCountry(supportedCountry.name)}}" (click)="toggleCountrySelection(supportedCountry.name)">
+								<mat-icon title="{{supportedCountry.name}}">
+									<span class="flag-icon flag-icon-{{supportedCountry.iso2Code}} flag-icon-med"></span>
+								</mat-icon>
+							</span>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td class="sugg-srch-hdr">{{'arenella-suggestions-contract' | translate}}</td>
+					<td class="sugg-srch-bdy">
+						<select class="contract-type" formControlName="contractType">
+							<option value="BOTH">{{'arenella-suggestions-both' | translate}}</option>
+							<option value="CONTRACT">{{'arenella-suggestions-contract' | translate}}</option>
+							<option value="PERM">{{'arenella-suggestions-permanent' | translate}}</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td class="sugg-srch-hdr">{{'arenella-listing-contract-age' | translate}}</td>
+					<td class="sugg-srch-bdy">
+						<select class="contract-type" formControlName="contractType">
+							<option value="BOTH">{{'arenella-listing-contract-all' | translate}}</option>
+							<option value="CONTRACT">{{'arenella-listing-contract-today' | translate}}</option>
+							<option value="PERM">{{'arenella-listing-contract-week' | translate}}</option>
+							<option value="PERM">{{'arenella-listing-contract-month' | translate}}</option>
+						</select>
+					</td>
+				</tr>		
+			</table>
+		</div>
+	</form>
+</div>

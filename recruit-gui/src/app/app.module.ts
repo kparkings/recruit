@@ -35,6 +35,9 @@ import { CandidateInfoBoxComponent } 		from './candidate-info-box/candidate-info
 import { NewsfeedComponent } 				from './newsfeed/newsfeed.component';
 import { InlineCvComponent}					from './suggestions/inline-cv/inline-cv.component';
 import { SearchbarComponent}				from './suggestions/searchbar/searchbar.component';
+import { SearchbarComponentListing}			from './listing/searchbar/searchbar.component';
+
+
 import { SavedCandidatesComponent}			from './suggestions/saved-candidates/saved-candidates.component';
 import { CandidateProfileComponent}			from './suggestions/candidate-profile/candidate-profile.component';
 import { RecruitersComponent}				from './accounts/recruiters/recruiters.component';
@@ -80,6 +83,7 @@ import { ClipboardModule } 					from '@angular/cdk/clipboard'
  	NewsfeedComponent,
  	InlineCvComponent,
 	SearchbarComponent,
+	SearchbarComponentListing,
  	SavedCandidatesComponent,
  	CandidateProfileComponent,
  	RecruitersComponent,
