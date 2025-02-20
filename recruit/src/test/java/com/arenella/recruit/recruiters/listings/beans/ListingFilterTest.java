@@ -2,7 +2,9 @@ package com.arenella.recruit.recruiters.listings.beans;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.Set;
 import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
@@ -26,6 +28,7 @@ public class ListingFilterTest {
 	public void testBuilder() throws Exception {
 		
 		final UUID 				listingId		= UUID.randomUUID();
+		final String			searchTerm		= "Java";
 		final String			ownerId			= "abc123";
 		final listing_type 		type			= listing_type.CONTRACT_ROLE;
 		final Country 			countryVal		= Country.BELGIUM;
@@ -35,19 +38,21 @@ public class ListingFilterTest {
 		ListingFilter filter = ListingFilter
 									.builder()
 										.listingId(listingId)
+										.searchTerm(searchTerm)
 										.ownerId(ownerId)
 										.type(type)
-										.country(countryVal)
+										.countries(Set.of(countryVal))
 										.listingAge(listingAge)
 										.active(active)
 									.build();
 		
-		assertEquals(filter.getListingId().get(), 	listingId);
-		assertEquals(filter.getOwnerId().get(), 	ownerId);
-		assertEquals(filter.getType().get(), 		type);
-		assertEquals(filter.getCountry().get(), 	countryVal);
-		assertEquals(filter.getListingAge().get(), 	listingAge);
-		assertEquals(filter.getActive().get(), 		active);
+		assertEquals(filter.getListingId().get(), 				listingId);
+		assertEquals(filter.getSearchTerm().get(), 				searchTerm);
+		assertEquals(filter.getOwnerId().get(), 				ownerId);
+		assertEquals(filter.getType().get(), 					type);
+		assertEquals(filter.getCountries().toArray()[0], 		countryVal);
+		assertEquals(filter.getListingAge().get(), 				listingAge);
+		assertEquals(filter.getActive().get(), 					active);
 		
 	}
 
@@ -63,9 +68,10 @@ public class ListingFilterTest {
 									.build();
 		
 		assertFalse(filter.getListingId().isPresent());
+		assertFalse(filter.getSearchTerm().isPresent());
 		assertFalse(filter.getOwnerId().isPresent());
 		assertFalse(filter.getType().isPresent());
-		assertFalse(filter.getCountry().isPresent());
+		assertTrue(filter.getCountries().isEmpty());
 		assertFalse(filter.getListingAge().isPresent());
 		assertFalse(filter.getActive().isPresent());
 	}

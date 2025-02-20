@@ -2,6 +2,7 @@ package com.arenella.recruit.listings.dao;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -101,6 +102,15 @@ public interface ListingDao extends CrudRepository<ListingEntity, UUID>, JpaSpec
 			
 			List<Predicate> predicates = new ArrayList<>();
 			
+			if (this.filterOptions.getSearchTerm().isPresent()) {
+				
+				Expression<String> ownerIdExpression 	= root.get("title");
+				Expression<String> upperExpression 		= criteriaBuilder.upper(ownerIdExpression);
+				
+				predicates.add(criteriaBuilder.like(upperExpression, this.filterOptions.getSearchTerm().orElse("").toUpperCase()));
+				
+			}
+			
 			/**
 			* Apply ownerId filter if value present 
 			*/
@@ -168,9 +178,14 @@ public interface ListingDao extends CrudRepository<ListingEntity, UUID>, JpaSpec
 			/**
 			* Apply country filter if value present 
 			*/
-			if (this.filterOptions.getCountry().isPresent()) {
-				Expression<String> countryExpression = root.get("country");
-				predicates.add(criteriaBuilder.equal(countryExpression, this.filterOptions.getCountry().get()));
+			if (!this.filterOptions.getCountries().isEmpty()) {
+				
+				Expression<Collection<Listing.Country>> countryValues = root.get("country");
+				
+				this.filterOptions.getCountries().forEach(country -> 
+					predicates.add(criteriaBuilder.isMember(country, countryValues))
+				);
+				
 			}
 			
 			/**

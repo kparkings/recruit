@@ -138,8 +138,10 @@ public class ListingController {
 		ListingFilter filters = 
 				ListingFilter
 				.builder()
+					.searchTerm(searchRequest.getSearchTerm().orElse(null))
 					.type(searchRequest.getContractType().orElse(null))
 					.listingAge(searchRequest.getMaxAgeOfPost().orElse(null))
+					.countries(searchRequest.getCountries())
 					.active(true)
 				.build();
 

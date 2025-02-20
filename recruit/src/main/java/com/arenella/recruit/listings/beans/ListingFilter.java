@@ -1,6 +1,8 @@
 package com.arenella.recruit.listings.beans;
 
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 import com.arenella.recruit.listings.beans.Listing.LISTING_AGE;
@@ -14,9 +16,10 @@ import com.arenella.recruit.listings.beans.Listing.listing_type;
 public class ListingFilter {
 
 	private UUID 				listingId;
+	private String				searchTerm;
 	private String				ownerId;
 	private listing_type 		type;
-	private Country 			country;
+	private Set<Country> 		countries		= new HashSet<>();
 	private LISTING_AGE			listingAge;
 	private Boolean				active;
 	
@@ -26,9 +29,10 @@ public class ListingFilter {
 	*/
 	public ListingFilter(ListingFilterBuilder builder) {
 		this.listingId 		= builder.listingId;
+		this.searchTerm		= builder.searchTerm;
 		this.ownerId 		= builder.ownerId;
 		this.type 			= builder.type;
-		this.country 		= builder.country;
+		this.countries 		= builder.countries;
 		this.listingAge		= builder.listingAge;
 		this.active			= builder.active;
 	}
@@ -39,6 +43,14 @@ public class ListingFilter {
 	*/
 	public Optional<UUID> getListingId(){
 		return Optional.ofNullable(this.listingId);
+	}
+	
+	/**
+	* Returns search terms to filter on
+	* @return Keyword / term to filter on
+	*/
+	public Optional<String> getSearchTerm(){
+		return Optional.ofNullable(this.searchTerm);
 	}
 	
 	/**
@@ -58,11 +70,11 @@ public class ListingFilter {
 	}
 	
 	/**
-	* Returns the country to filter on
+	* Returns the countries to filter on
 	* @return country to filter on
 	*/
-	public Optional<Country> getCountry(){
-		return Optional.ofNullable(country);
+	public Set<Country> getCountries(){
+		return countries;
 	}
 	
 	/**
@@ -96,9 +108,10 @@ public class ListingFilter {
 	public static class ListingFilterBuilder {
 	
 		private UUID 				listingId;
+		private String				searchTerm;
 		private String				ownerId;
 		private listing_type 		type;
-		private Country 			country;
+		private Set<Country> 		countries 	= new HashSet<>();
 		private LISTING_AGE			listingAge;
 		private Boolean				active;
 		
@@ -109,6 +122,16 @@ public class ListingFilter {
 		*/
 		public ListingFilterBuilder listingId(UUID listingId) {
 			this.listingId = listingId;
+			return this;
+		}
+		
+		/**
+		* Sets search term to filter on
+		* @param searchTerm - To identify type of role
+		* @return Builder
+		*/
+		public ListingFilterBuilder searchTerm(String searchTerm) {
+			this.searchTerm = searchTerm;
 			return this;
 		}
 		
@@ -137,8 +160,9 @@ public class ListingFilter {
 		* @param country - country to filter on
 		* @return Builder
 		*/
-		public ListingFilterBuilder country(Country country) {
-			this.country = country;
+		public ListingFilterBuilder countries(Set<Country> countries) {
+			this.countries.clear();
+			this.countries.addAll(countries);
 			return this;
 		}
 		
