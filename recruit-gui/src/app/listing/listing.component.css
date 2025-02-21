@@ -5,7 +5,6 @@
 }
 
 .listing-view-title {
-	margin-top: 20px;
 	color: #6A5ACD;
 }
 
@@ -250,6 +249,15 @@
 	float:left;
 	padding:10px;
 	width:75%;
+}
+
+.hideChild{
+	visibility:collapse;
+	height:0px;
+}
+
+.showChild{
+	visibility:visible;
 }
 
 @media ( max-width :700px) {

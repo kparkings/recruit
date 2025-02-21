@@ -1,11 +1,13 @@
-import { Component } 												from '@angular/core';
+import { Component, EventEmitter, Output } 												from '@angular/core';
 import { UntypedFormGroup,UntypedFormControl } 						from '@angular/forms';
 import { TranslateService } 										from '@ngx-translate/core';
 import { CandidateServiceService }									from './../../candidate-service.service';
 import { SuggestionsService }										from './../../suggestions.service';
+import { ListingService }											from './../../listing.service';
 import { GeoZone } 													from './../../geo-zone';
 import { SupportedCountry } 										from './../../supported-candidate';
-
+import { Listing } 													from '../listing';
+import { ListingSearchRequest }										from './../../listing-search-request';
 
 @Component({
   selector: 'app-searchbarlisting',
@@ -15,8 +17,15 @@ import { SupportedCountry } 										from './../../supported-candidate';
 })
 export class SearchbarComponentListing {
 
+	@Output() newListingResults 								= new EventEmitter<Array<Listing>>();
+	
+	private	pageSize:number						= 20;
+	public	totalPages:number					= 0;
+	public	currentPage:number					= 0;
+
 	public geoZones:Array<GeoZone>								= new Array<GeoZone>();
 	public supportedCountries:Array<SupportedCountry>			= new Array<SupportedCountry>();
+	public listings:Array<Listing>								= new Array<Listing>();
 		
 	public listingsFilterForm:UntypedFormGroup 					= new UntypedFormGroup({});
 	public filterView:string									= 'collapsed';
@@ -30,7 +39,8 @@ export class SearchbarComponentListing {
 	public constructor(
 		private translate:				TranslateService,
 		public candidateService:		CandidateServiceService,
-		private suggestionsService:		SuggestionsService){
+		private suggestionsService:		SuggestionsService,
+		private listingService:ListingService,){
 
 		this.init();	
 		
@@ -43,6 +53,8 @@ export class SearchbarComponentListing {
 		//this.subscription = this.suggestionFilterForm.valueChanges.pipe(debounceTime(500)).subscribe(() => {
 		//		this.getSuggestions(false);
 		//});
+		console.log("xxxxxxxxxxxxx1");
+		//this.resetSearchFilters();
 	}
 	
 	/**
@@ -50,7 +62,7 @@ export class SearchbarComponentListing {
 	*/
 	public init():void{
 		
-		this.resetSearchFilters();	
+		//this.resetSearchFilters();	
 				
 		this.initGeoZones();
 		this.initSupportedCountries();
@@ -65,12 +77,15 @@ export class SearchbarComponentListing {
 	* Resets the filters
 	*/
 	public resetSearchFilters():void{
-			
+		console.log("xxxxxxxxxxxxx2");	
 		//this.suggestionFilterForm 	= SearchBarFilterFormHelper.resetSuggestionFilterForm(this.suggestionFilterForm);
 		
 		this.listingsFilterForm.addControl('searchPhrase', new UntypedFormControl(''));
+		console.log("xxxxxxxxxxxxx3");	
+				
 		this.listingsFilterForm.addControl('contractType', new UntypedFormControl(''));
-		
+		console.log("xxxxxxxxxxxxx4");	
+				
 		this.candidateService.getSupportedCountries().forEach(c => {
 			this.listingsFilterForm.addControl(c.name, new UntypedFormControl(false));
 		});
@@ -80,7 +95,9 @@ export class SearchbarComponentListing {
 		this.showCountryFilters 	= '';
 			
 		this.backendRequestCounter 		= 0;
-				
+		
+		console.log("RESET triggered " + 0 + " : " + this.pageSize);
+		this.fetchListingsFull("", false, 0, this.pageSize);
 	}
 		
 	/**
@@ -187,6 +204,50 @@ export class SearchbarComponentListing {
 	
 	private initSupportedCountries():void{
 		this.supportedCountries = this.candidateService.getSupportedCountries();
+	}
+	
+	/**
+	* Generated the filter sring to filter results by. Can be empty
+	* String if no filters required
+	*/
+	private generateFilters(): ListingSearchRequest{
+		
+		let filters:ListingSearchRequest = new ListingSearchRequest();
+		
+		//if (this.contractTypeFilter != "") {
+		//	filters.contractType = this.contractTypeFilter;
+		//}
+		
+		//if (this.ageFilter != "ALL") {
+		//	filters.maxAgeOfPost = this.ageFilter;
+		//}
+		
+		return filters;
+	}
+	
+	/**
+	* Retrieves listings belonging to the Recruiter
+	*/
+	public fetchListingsFull(id:string, resetSelectedListing:boolean, currentPage:number, pageSize:number):void{
+	console.log("boop ==  " + currentPage);
+		this.listingService
+			.fetchAllListings('created',"desc", currentPage, pageSize, this.generateFilters())
+				.subscribe(data => {
+					this.totalPages = data.totalPages;
+					
+					let lis:Array<Listing> = data.content;
+					
+					lis.forEach(l =>{
+						this.listings.push(l);	
+					});
+					
+					this.newListingResults.emit(this.listings);
+								
+				}, 
+				err => {
+					console.log("Error retrieving listings for all recruiters" + JSON.stringify(err));			
+				});
+		
 	}
 	
 }

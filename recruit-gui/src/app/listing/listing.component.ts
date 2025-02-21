@@ -21,6 +21,7 @@ import { CandidateServiceService } 						from '../candidate-service.service';
 import { Clipboard } 									from '@angular/cdk/clipboard';
 import { SearchStatCountry, SearchStats } 				from '../search-stats';
 import { ListingSearchRequest }							from './../listing-search-request';
+import { SearchbarComponentListing } from 				'./searchbar/searchbar.component';
 
 @Component({
   selector: 'app-listing',
@@ -29,9 +30,10 @@ import { ListingSearchRequest }							from './../listing-search-request';
 })
 export class ListingComponent implements OnInit {
 
-	@ViewChild('feedbackBox',  		{static:true}) feedbackDialogBox!:  ElementRef<HTMLDialogElement>;
-	@ViewChild('publicityBox', 		{static:true}) publicityDialogBox!: ElementRef<HTMLDialogElement>;
-	@ViewChild('listingAlertBox', 	{static:true}) listingAlertDialogBox!: ElementRef<HTMLDialogElement>;
+	@ViewChild('feedbackBox',  				{static:true}) 	feedbackDialogBox!:  ElementRef<HTMLDialogElement>;
+	@ViewChild('publicityBox', 				{static:true}) 	publicityDialogBox!: ElementRef<HTMLDialogElement>;
+	@ViewChild('listingAlertBox', 			{static:true}) 	listingAlertDialogBox!: ElementRef<HTMLDialogElement>;
+	@ViewChild(SearchbarComponentListing) 					searchBar!:SearchbarComponentListing;
 	
 	public recruiterProfiles:Array<RecruiterProfile> 				= new Array<RecruiterProfile>();
 	public recruiterProfile:RecruiterProfile 						= new RecruiterProfile();
@@ -43,6 +45,34 @@ export class ListingComponent implements OnInit {
 	public supportedCountries:Array<SupportedCountry>				= new Array<SupportedCountry>();
 	public contractTypeOptions:Array<HtmlOption> 					= new Array<HtmlOption>();
 	public stats:SearchStats 										= new SearchStats();
+	public activeView:string					= 'list';
+	public searchBarCss 						= this.activeView === 'list' ? 'showChild' : 'hideChild';
+	private	pageSize:number						= 20;
+  	public	totalPages:number					= 0;
+  	public	currentPage:number					= 0;
+
+	public listings:Array<Listing>				= new Array<Listing>();
+	public selectedListing:Listing				= new Listing();
+	public contractTypeFilter					= '';
+	public ageFilter							= 'ALL';
+
+  	public curriculumFile!:File| any;
+
+	public displayFilters:boolean				= false;
+	public displayStatistics:boolean			= false;
+	
+	public isMobile:boolean = false;
+	public mobileListingclass:string 				= '';
+	public mobileListingclassPane:string 			= '';
+	public mobileListingclassFilters:string 		= '';
+	public mobileListingLeftPaneContainer:string 	= '';
+	public mobileDescBody:string					= '';
+	public mobileListingViewDiv:string				= '';
+	public mobileButton:string						= '';	
+	public postPublicityUrlCopiedTClipbard:boolean	= false;				
+	
+	showSendAlertBoxSuccess:boolean 		= false;
+	showSendAlertBoxFailure:boolean 		= false;
 	
   	constructor(private listingService:ListingService, 
 				private emailService:EmailService, 
@@ -86,35 +116,14 @@ export class ListingComponent implements OnInit {
 		});
   	
   	}
-
-	public activeView:string					= 'list';
 	
-	private	pageSize:number						= 20;
-  	public	totalPages:number					= 0;
-  	public	currentPage:number					= 0;
-
-	public listings:Array<Listing>				= new Array<Listing>();
-	public selectedListing:Listing				= new Listing();
-	public contractTypeFilter					= '';
-	public ageFilter							= 'ALL';
-
-  	public curriculumFile!:File| any;
-
-	public displayFilters:boolean				= false;
-	public displayStatistics:boolean			= false;
+	ngAfterViewInit(){
+		this.searchBar.resetSearchFilters();
+	}
 	
-	public isMobile:boolean = false;
-	public mobileListingclass:string 				= '';
-	public mobileListingclassPane:string 			= '';
-	public mobileListingclassFilters:string 		= '';
-	public mobileListingLeftPaneContainer:string 	= '';
-	public mobileDescBody:string					= '';
-	public mobileListingViewDiv:string				= '';
-	public mobileButton:string						= '';	
-	public postPublicityUrlCopiedTClipbard:boolean	= false;				
-	
-	showSendAlertBoxSuccess:boolean 		= false;
-	showSendAlertBoxFailure:boolean 		= false;
+	public handleNewSearchRequest(newListings:Array<Listing>){
+		this.listings = newListings;
+	}
 	
 	/**
 	* Toggoles whether or not a FunctionType has been selected by the User
@@ -269,6 +278,7 @@ export class ListingComponent implements OnInit {
 	public showList():void{
 		this.activeView 			= 'list';
 		this.selectedListing		= new Listing();
+		this.searchBarCss = this.activeView === 'list' ? 'showChild' : 'hideChild';
 	}
 	
 	/**
@@ -277,7 +287,7 @@ export class ListingComponent implements OnInit {
 	public showListingDetails(selectedListing?:Listing):void{
 	
 		this.activeView 			= 'show';
-		
+		this.searchBarCss = this.activeView === 'list' ? 'showChild' : 'hideChild';
 		if (selectedListing) {
 		
 			this.recruiterProfile = this.recruiterProfiles.filter(p => p.recruiterId == selectedListing.ownerId)[0];
@@ -403,67 +413,67 @@ export class ListingComponent implements OnInit {
 	* Generated the filter sring to filter results by. Can be empty
 	* String if no filters required
 	*/
-	private generateFilters(): ListingSearchRequest{
+	//private generateFilters(): ListingSearchRequest{
 		
-		let filters:ListingSearchRequest = new ListingSearchRequest();
+	//	let filters:ListingSearchRequest = new ListingSearchRequest();
 		
-		if (this.contractTypeFilter != "") {
-			filters.contractType = this.contractTypeFilter;
-		}
+	//	if (this.contractTypeFilter != "") {
+	//		filters.contractType = this.contractTypeFilter;
+	//	}
 		
-		if (this.ageFilter != "ALL") {
-			filters.maxAgeOfPost = this.ageFilter;
-		}
+	//	if (this.ageFilter != "ALL") {
+	//		filters.maxAgeOfPost = this.ageFilter;
+	//	}
 		
-		return filters;
-	}
+	//	return filters;
+	//}
 	
 	/**
 	* Overloaded version
 	*/
 	public fetchListings(id:string):void{
-		this.fetchListingsFull(id, false);
+		//this.searchBar.fetchListingsFull(id, false);
 	}
 	
 	/**
 	* Retrieves listings belonging to the Recruiter
 	*/
-	public fetchListingsFull(id:string, resetSelectedListing:boolean):void{
+	//public fetchListingsFull(id:string, resetSelectedListing:boolean):void{
 	
-		if (resetSelectedListing) {
-			this.selectedListing	= new Listing();
-		}
+	//	if (resetSelectedListing) {
+	//		this.selectedListing	= new Listing();
+	//	}
 		
-		this.listingService
-			.fetchAllListings('created',"desc", this.currentPage, this.pageSize, this.generateFilters())
-				.subscribe(data => {
-					this.totalPages = data.totalPages;
+	//	this.listingService
+	//		.fetchAllListings('created',"desc", this.currentPage, this.pageSize, this.generateFilters())
+	//			.subscribe(data => {
+	//				this.totalPages = data.totalPages;
 					
-					let lis:Array<Listing> = data.content;
+	//				let lis:Array<Listing> = data.content;
 					
-					lis.forEach(l =>{
-						this.listings.push(l);	
-					});
+	//				lis.forEach(l =>{
+	//					this.listings.push(l);	
+	//				});
 					
-					if (id !== "") {
+	//				if (id !== "") {
 		
-						var results: Array<Listing> = this.listings.filter(listing => listing.listingId === id);
+	//					var results: Array<Listing> = this.listings.filter(listing => listing.listingId === id);
 		
-						if (results.length > -1) {
-							let listing: Listing = results[0];
+	//					if (results.length > -1) {
+	//						let listing: Listing = results[0];
+	//			
+	//						this.showListingDetails(listing)
 				
-							this.showListingDetails(listing)
-				
-						}
+	//					}
 		
-					}
+	//				}
 					
-				}, 
-				err => {
-					console.log("Error retrieving listings for all recruiters" + JSON.stringify(err));			
-				});
+	//			}, 
+	//			err => {
+	//				console.log("Error retrieving listings for all recruiters" + JSON.stringify(err));			
+	//			});
 		
-	}
+	//}
 	
 	/**
 	* Registers that a Listing has been viewed
@@ -501,33 +511,33 @@ export class ListingComponent implements OnInit {
 	/**
 	* Sets which contract type filters have been selected
 	*/
-	public updateContractTypeFilter(contractType:string){
+	//public updateContractTypeFilter(contractType:string){
 		
-		this.listings			= new Array<Listing>();
-		this.pageYPos = 0;
+	//	this.listings			= new Array<Listing>();
+	//	this.pageYPos = 0;
 		
 		
-		switch(contractType){
-			case "Contract": {
-				this.currentPage		= 0;
-				this.contractTypeFilter = "CONTRACT_ROLE"
-				this.fetchListings("");
-				return;
-			}
-			case "Perm": {
-				this.currentPage		= 0;
-				this.contractTypeFilter = "PERM_ROLE"
-				this.fetchListings("");
-				return;
-			}
-			default: {
-				this.currentPage		= 0;
-				this.contractTypeFilter = ""
-				this.fetchListings("");
-				return;
-			}
-		}	
-	}
+	//	switch(contractType){
+	//		case "Contract": {
+	//			this.currentPage		= 0;
+	//			this.contractTypeFilter = "CONTRACT_ROLE"
+	//			this.fetchListings("");
+	//			return;
+	//		}
+	//		case "Perm": {
+	//			this.currentPage		= 0;
+	//			this.contractTypeFilter = "PERM_ROLE"
+	//			this.fetchListings("");
+	//			return;
+	//		}
+	//		default: {
+	//			this.currentPage		= 0;
+	//			this.contractTypeFilter = ""
+	//			this.fetchListings("");
+	//			return;
+	//		}
+	//	}	
+	//}
 	
 	/**
 	* Returns the appropriate css class to indicate if the filter 
@@ -544,39 +554,39 @@ export class ListingComponent implements OnInit {
 	/**
 	* Sets which post age filter have been selected
 	*/
-	public updatePostAgeFilter(contractType:string){
+	//public updatePostAgeFilter(contractType:string){
 		
-		this.listings			= new Array<Listing>();
-		this.pageYPos = 0;
+	//	this.listings			= new Array<Listing>();
+	//	this.pageYPos = 0;
 		
-		switch(contractType){
+	//	switch(contractType){
 			
-			case "TODAY": {
-				this.currentPage		= 0;
-				this.ageFilter = "TODAY"
-				this.fetchListings("");
-				return;
-			}
-			case "THIS_WEEK": {
-				this.currentPage		= 0;
-				this.ageFilter = "THIS_WEEK"
-				this.fetchListings("");
-				return;
-			}
-			case "THIS_MONTH": {
-				this.currentPage		= 0;
-				this.ageFilter = "THIS_MONTH";
-				this.fetchListings("");
-				return;
-			}
-			default: {
-				this.currentPage		= 0;
-				this.ageFilter = "ALL";
-				this.fetchListings("");
-				return;
-			}
-		}	
-	}
+	//		case "TODAY": {
+	//			this.currentPage		= 0;
+	//			this.ageFilter = "TODAY"
+	//			this.fetchListings("");
+	//			return;
+	//		}
+	//		case "THIS_WEEK": {
+	//			this.currentPage		= 0;
+	//			this.ageFilter = "THIS_WEEK"
+	//			this.fetchListings("");
+	//			return;
+	//		}
+	//		case "THIS_MONTH": {
+	//			this.currentPage		= 0;
+	//			this.ageFilter = "THIS_MONTH";
+	//			this.fetchListings("");
+	//			return;
+	//		}
+	//		default: {
+	//			this.currentPage		= 0;
+	//			this.ageFilter = "ALL";
+	//			this.fetchListings("");
+	//			return;
+	//		}
+	//	}	
+	//}
 	
 	/**
 	* Returns the appropriate css class to indicate if the filter 
@@ -655,7 +665,8 @@ export class ListingComponent implements OnInit {
 		if (yPos > this.pageYPos) {
 			this.pageYPos = yPos + (this.isMobile ? 50 : 500); 
 			this.currentPage = this.currentPage + 1;
-			this.fetchListingsFull("", false);
+			console.log("SCROLL triggered " + this.currentPage + " : " + this.pageSize);
+			this.searchBar.fetchListingsFull("", false, this.currentPage, this.pageSize);
 			
 		}
 

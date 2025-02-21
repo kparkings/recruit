@@ -6,19 +6,24 @@
 	<div class="page-body">
 		<div [ngSwitch]="activeView">
 		
-	    <!-- List View -->
-	    <div *ngSwitchCase="'list'">
-	    	<div class="action-buttons" >
+		<div class="action-buttons" *ngSwitchCase="'list'">
 				<button class="btn btn-secondary arenella-btn" (click)="openCreateAlertDialog()" *ngIf="!isAuthenticated() || isAuthenticated() && isCandidate()">{{'arenella-listing-btn-create' | translate}}</button>
 				<button class="btn btn-secondary arenella-btn" routerLink="/recruiter-listings" *ngIf="isAuthenticated() && !isAuthenticatedAsAdmin() && !isCandidate()">{{'arenella-listing-btn-your-posts' | translate}}</button>
-			</div>
+		</div>
+	
+		<div class="{{searchBarCss}}">
+			<app-searchbarlisting #searchbar (newListingResults)="handleNewSearchRequest($event)"></app-searchbarlisting>
+		</div>
+			
+	    <!-- List View -->
+	    <div *ngSwitchCase="'list'">
+	    	
 			
 			<div class="site-header" *ngIf="!isLoggedIn()">
 				<h1>{{'arenella-listing-title' | translate}}</h1>
 				<h5>{{'arenella-listing-intro' | translate}}</h5>
 			</div>
 				
-			<app-searchbarlisting #searchbar></app-searchbarlisting>
 			
 	       	<!-- Listings Table -->
 			<div>
@@ -218,13 +223,9 @@
 				<app-candidate-info-box [config]="infoItemConfig"></app-candidate-info-box>
 				
 				<div>
-	       			<div>
-	       				<h1 class="listing-view-title">{{selectedListing.title}}</h1>
-	       				
-	       			</div>
 	       			
 	       			<div class="desc-body">
-			       		
+			       		<h1 class="listing-view-title">{{selectedListing.title}}</h1>	
 						<div>
 							<div>
 								<pre style="white-space:pre-line;font-family: Roboto, 'Helvetica Neue', sans-serif;">{{selectedListing.description}}</pre>
