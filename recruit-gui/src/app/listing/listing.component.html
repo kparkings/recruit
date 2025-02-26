@@ -18,174 +18,54 @@
 	    <!-- List View -->
 	    <div *ngSwitchCase="'list'">
 	    	
-			
+			<!--  
 			<div class="site-header" *ngIf="!isLoggedIn()">
 				<h1>{{'arenella-listing-title' | translate}}</h1>
 				<h5>{{'arenella-listing-intro' | translate}}</h5>
 			</div>
-				
+				-->
 			
 	       	<!-- Listings Table -->
 			<div>
-				<!--  
-				<div class="site-header" *ngIf="!isLoggedIn()">
-					<h1>{{'arenella-listing-title' | translate}}</h1>
-					<h5>{{'arenella-listing-intro' | translate}}</h5>
-				</div>
-				-->
-				<!--  
-				<div class="filters">
-					<div class="filters-title" style="cursor:pointer" *ngIf="displayFilters"  (click)="toggleFilters()">{{'arenella-listing-filters' | translate}}:<span style="float:right; margin-right:20px;cursor:pointer"> {{'arenella-listing-filters-hide' | translate}} </span></div>
-					<div class="filters-title" style="cursor:pointer" *ngIf="!displayFilters" (click)="toggleFilters()">{{'arenella-listing-filters' | translate}}:<span style="float:right; margin-right:20px;cursor:pointer"> {{'arenella-listing-filters-shw' | translate}} </span></div>
-					<table *ngIf="displayFilters">
-						<tr>
-							<th>{{'arenella-listing-contract-type' | translate}}</th>
-							<td>
-								<div>
-									<ul class="contract-type-filter">
-										<li><span class="{{getFilterTypeClass('')}}" 		 		(click)="updateContractTypeFilter('')"></span>{{'arenella-listing-contract-type-both' | translate}}</li>
-										<li><span class="{{getFilterTypeClass('CONTRACT_ROLE')}}" 	(click)="updateContractTypeFilter('Contract')"></span>{{'arenella-listing-contract-type-contract' | translate}}</li>
-										<li><span class="{{getFilterTypeClass('PERM_ROLE')}}" 	 	(click)="updateContractTypeFilter('Perm')"></span>{{'arenella-listing-contract-type-perm' | translate}}</li>
-									</ul>
-								</div>
-							</td>
-						</tr>
-						<tr>
-							<th>{{'arenella-listing-contract-age' | translate}}</th>
-							<td>
-								<div>
-									<ul class="contract-type-filter">
-										<li><span class="{{getPostAgeClass('ALL')}}"	 	 	(click)="updatePostAgeFilter('ALL')"></span>{{'arenella-listing-contract-all' | translate}}</li>
-										<li><span class="{{getPostAgeClass('TODAY')}}" 	 		(click)="updatePostAgeFilter('TODAY')"></span>{{'arenella-listing-contract-today' | translate}}</li>
-										<li><span class="{{getPostAgeClass('THIS_WEEK')}}" 		(click)="updatePostAgeFilter('THIS_WEEK')"></span>{{'arenella-listing-contract-week' | translate}}</li>
-										<li><span class="{{getPostAgeClass('THIS_MONTH')}}" 	(click)="updatePostAgeFilter('THIS_MONTH')"></span>{{'arenella-listing-contract-month' | translate}}</li>
-									</ul>
-								</div>
-							</td>
-						</tr>
-					</table>
-				</div>
-				-->
-				<!-- 
-				<div>
-					<div class="filters-title"  style="cursor:pointer" *ngIf="displayStatistics"  (click)="toggleStatistics()">Statistics:<span class="toggle-options"> {{'arenella-listing-filters-hide' | translate}} </span></div>
-					<div class="filters-title"  style="cursor:pointer" *ngIf="!displayStatistics" (click)="toggleStatistics()">Statistics:<span class="toggle-options"> {{'arenella-listing-filters-shw' | translate}} </span></div>
-					<table *ngIf="displayStatistics" class="statistics-table">
-						<tr>
-							<td>
-								<div class="statistics-table-pane-left">
-								<table>
-									<tr>
-										<tr>
-											<td colspan="2">
-												<span style="font-weight:bold;">{{'arenella-listing-most-searched-countries' | translate}}</span>
-											</td>
-										<td>
-									</tr>
-									<tr *ngFor="let stat of stats.countryStats">
-										<td>{{stat.country | translate}}</td>
-										<td style="padding-left:5px;">
-											<div class="stat-option-bar" [ngStyle]="{'width':(stat.percentageOfTotal *5)+'px','background':'green'}">
-												
-											</div>
-										</td>
-										
-									</tr>
-									
-								</table>
-								</div>
-								<div class="statistics-table-pane">
-								<table>
-									<tr>
-										<tr>
-											<td colspan="2">
-												<span style="font-weight:bold;">{{'arenella-listing-most-searched-functions' | translate}}</span>
-											</td>
-										<td>
-									</tr>
-									<tr *ngFor="let stat of stats.functionStats">
-										<td>{{stat.function | translate}}</td>
-										<td style="padding-left:5px;">
-											<div class="stat-option-bar" [ngStyle]="{'width':(stat.percentageOfTotal *5)+'px','background':'orange'}">
-											</div>
-										</td>
-										
-									</tr>
-									
-								</table>
-							</div>
-							</td>
-						</tr>
-						<tr>
-							<td colspan="2" style="padding:10px">
-								<p>
-								{{'arenella-listing-most-searched-summary' | translate}}
-								</p>
-							</td>
-						</tr>
-						
-					</table>
-					
-				</div>
-				 -->
+			
 				<div class="listing-pane" >
 				
 					<div class="listing-pane-left">
-						<table>
-							<tr>
-								<td>
-									<div>
-									<table class="listing-stats-pane">
-										<tr>
-											<tr>
-												<td colspan="2">
-													<span style="font-weight:bold;">{{'arenella-listing-most-searched-countries' | translate}}</span>
-												</td>
-											<td>
-										</tr>
-										<tr *ngFor="let stat of stats.countryStats">
-											<td>{{stat.country | translate}}</td>
-											<td style="padding-left:5px;">
-												<div class="stat-option-bar" [ngStyle]="{'width':(stat.percentageOfTotal *4)+'px','background':'green'}">
-													
-												</div>
-											</td>
-											
-										</tr>
-										
-									</table>
-									</div>
-									<div>
-									<table class="listing-stats-pane">
-										<tr>
-											<tr>
-												<td colspan="2">
-													<span style="font-weight:bold;">{{'arenella-listing-most-searched-functions' | translate}}</span>
-												</td>
-											<td>
-										</tr>
-										<tr *ngFor="let stat of stats.functionStats">
-											<td>{{stat.function | translate}}</td>
-											<td style="padding-left:5px;">
-												<div class="stat-option-bar" [ngStyle]="{'width':(stat.percentageOfTotal *3)+'px','background':'orange'}">
-												</div>
-											</td>
-											
-										</tr>
-										
-									</table>
-								</div>
+						
+						<table class="listing-stats-pane" style="table-layout: fixed">
+							<tr style="padding-bottom:20px;">
+								<td colspan="2" style="padding-top:20px;padding-bottom:20px;">
+									<span style="font-weight:bold;">{{'arenella-listing-most-searched-countries' | translate}}</span>
 								</td>
 							</tr>
-							<tr class="listing-stats-pane">
-								<td colspan="2" style="padding:10px">
-									<p>
-									{{'arenella-listing-most-searched-summary' | translate}}
-									</p>
+							<tr *ngFor="let stat of stats.countryStats">
+								<td style="width:150px;font-size:14px;">{{stat.country | translate}}</td>
+								<td style="padding-left:5px;width:180px;">
+									<div class="stat-option-bar" [ngStyle]="{'width':(stat.percentageOfTotal *5)+'px','background':'green', 'max-width':'180px'}">
+									</div>
 								</td>
+							</tr>
+							<tr>
+								<td colspan="2" style="padding-top:20px;padding-bottom:20px;">
+									<span style="font-weight:bold;padding-top:20px;">{{'arenella-listing-most-searched-functions' | translate}}</span>
+								</td>
+							</tr>
+							<tr *ngFor="let stat of stats.functionStats">
+								<td style="width:150px;font-size:14px;">{{(stat.function+"_SHORT") | translate}}</td>
+								<td style="padding-left:5px;width:180px;">
+									<div class="stat-option-bar" [ngStyle]="{'width':(stat.percentageOfTotal *4)+'px','background':'orange', 'max-width':'180px'}">
+									</div>
+								</td>
+								
 							</tr>
 							
 						</table>
+						
+						<div class="listing-stats-pane">
+							<p>
+							{{'arenella-listing-most-searched-summary' | translate}}
+							</p>
+						</div>
 					</div>
 					
 					<div class="listing-pane-right">

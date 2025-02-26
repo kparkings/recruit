@@ -229,7 +229,7 @@
 }
 
 .stat-option-bar{
-	max-width:80%;
+	max-width:200px;
 	padding:5px;
 }
 
@@ -347,8 +347,6 @@
 	.search-filter-pane{
 		margin-left:0px;
 	}
-	
-	
 	
 	.sugg-srch-ctry-chkbox{
 		display:inline-block;

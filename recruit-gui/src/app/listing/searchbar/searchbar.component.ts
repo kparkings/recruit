@@ -1,4 +1,6 @@
-import { Component, EventEmitter, Output } 												from '@angular/core';
+import { Component, EventEmitter, Output } 							from '@angular/core';
+import { Subscription } 											from 'rxjs';
+import { debounceTime, map } 										from "rxjs/operators";
 import { UntypedFormGroup,UntypedFormControl } 						from '@angular/forms';
 import { TranslateService } 										from '@ngx-translate/core';
 import { CandidateServiceService }									from './../../candidate-service.service';
@@ -33,6 +35,8 @@ export class SearchbarComponentListing {
 	public showGeoZoneFilters:string							= "";
 	public backendRequestCounter:number							= 0;
 	
+	private subscription?:Subscription;
+	
 	/**
 	* Constructor
 	*/
@@ -50,26 +54,22 @@ export class SearchbarComponentListing {
 	* Angular lifecycyle: Initializes Component
 	*/
 	ngOnInit(): void {
-		//this.subscription = this.suggestionFilterForm.valueChanges.pipe(debounceTime(500)).subscribe(() => {
-		//		this.getSuggestions(false);
-		//});
-		console.log("xxxxxxxxxxxxx1");
-		//this.resetSearchFilters();
+		this.subscription = this.listingsFilterForm.valueChanges.pipe(debounceTime(500)).subscribe(() => {
+				this.fetchListingsFull("", true, 0, this.pageSize);
+		});
 	}
 	
 	/**
 	* Initializes the component
 	*/
 	public init():void{
-		
-		//this.resetSearchFilters();	
-				
+			
 		this.initGeoZones();
 		this.initSupportedCountries();
 		
-		//if (this.subscription) {
-		//	this.subscription.unsubscribe();
-		//}
+		if (this.subscription) {
+			this.subscription.unsubscribe();
+		}
 				
 	}
 	
@@ -77,26 +77,20 @@ export class SearchbarComponentListing {
 	* Resets the filters
 	*/
 	public resetSearchFilters():void{
-		console.log("xxxxxxxxxxxxx2");	
-		//this.suggestionFilterForm 	= SearchBarFilterFormHelper.resetSuggestionFilterForm(this.suggestionFilterForm);
 		
 		this.listingsFilterForm.addControl('searchPhrase', new UntypedFormControl(''));
-		console.log("xxxxxxxxxxxxx3");	
-				
-		this.listingsFilterForm.addControl('contractType', new UntypedFormControl(''));
-		console.log("xxxxxxxxxxxxx4");	
-				
+		this.listingsFilterForm.addControl('contractType', new UntypedFormControl('BOTH'));
+		this.listingsFilterForm.addControl('maxAgeOfPost', new UntypedFormControl('ALL'));
+	
 		this.candidateService.getSupportedCountries().forEach(c => {
 			this.listingsFilterForm.addControl(c.name, new UntypedFormControl(false));
 		});
-						
 		
 		this.initGeoZones();
 		this.showCountryFilters 	= '';
 			
 		this.backendRequestCounter 		= 0;
 		
-		console.log("RESET triggered " + 0 + " : " + this.pageSize);
 		this.fetchListingsFull("", false, 0, this.pageSize);
 	}
 		
@@ -124,7 +118,6 @@ export class SearchbarComponentListing {
 	* Swithches between open and closed filter view for GeoZones 
 	*/
 	public switchGeoZoneFilterView(view:string):void{
-		//this.initGeoZones();
 		this.showGeoZoneFilters = view;
 	}
 	
@@ -156,12 +149,10 @@ export class SearchbarComponentListing {
 
 		if (!geoZoneActive) {
 			this.candidateService.getSupportedCountries().forEach(country => {
-				//let key = country.iso2Code + 'Results';
 				this.listingsFilterForm.get(country.name)?.setValue(true);
 			});
 		} else {
 			this.candidateService.getSupportedCountries().forEach(country => {
-				//let key = country.iso2Code.toLowerCase() + 'Results';
 				this.listingsFilterForm.get(country.name)?.setValue(false);
 			});
 		
@@ -214,6 +205,44 @@ export class SearchbarComponentListing {
 		
 		let filters:ListingSearchRequest = new ListingSearchRequest();
 		
+		//if (this.listingsFilterForm.get('searchPhrase')) {
+		//	filters.searchTerm  = this.listingsFilterForm.get('searchPhrase')?.value;
+		//}
+		
+		if (this.listingsFilterForm.get('contractType')) {
+			filters.contractType  = this.listingsFilterForm.get('contractType')?.value;		
+		} else {
+			filters.contractType = 'BOTH';
+		}
+		
+		let countries:Array<string> = new Array<string>();
+		this.supportedCountries.forEach(country => {
+			if(this.listingsFilterForm.get((country.name))?.value == true) {
+				countries.push(country.name);
+			}
+		});
+		
+		filters.countries = countries;
+			
+		let geoZonesSelected:Array<string> = new Array<string>();
+		this.geoZones.forEach(geoZone => {
+			if (this.listingsFilterForm.get((geoZone.geoZoneId.toLowerCase()+'Results'))?.value == true) {
+				geoZonesSelected.push(geoZone.geoZoneId);	
+			}
+		});
+		
+		filters.geoZones = geoZonesSelected;
+		
+		if (this.listingsFilterForm.get('maxAgeOfPost')) {
+			filters.maxAgeOfPost = 	this.listingsFilterForm.get("maxAgeOfPost")?.value;				
+		}
+		
+		
+		//public searchTerm:string|null 		= null;
+		//	public contractType:string|null 	= null;
+		//	public countries:Array<string> 		= new Array<string>();
+		//	public maxAgeOfPost:string|null 	= null;
+		
 		//if (this.contractTypeFilter != "") {
 		//	filters.contractType = this.contractTypeFilter;
 		//}
@@ -225,11 +254,19 @@ export class SearchbarComponentListing {
 		return filters;
 	}
 	
+	public signalResetOfSearch:boolean = false;
 	/**
 	* Retrieves listings belonging to the Recruiter
 	*/
 	public fetchListingsFull(id:string, resetSelectedListing:boolean, currentPage:number, pageSize:number):void{
-	console.log("boop ==  " + currentPage);
+		if (resetSelectedListing) {
+			this.listings.splice(0);
+			this.currentPage = 0;
+			this.pageSize = 20;
+			this.signalResetOfSearch = true;
+		}
+		
+		
 		this.listingService
 			.fetchAllListings('created',"desc", currentPage, pageSize, this.generateFilters())
 				.subscribe(data => {

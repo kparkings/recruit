@@ -8,6 +8,8 @@ import java.util.UUID;
 import com.arenella.recruit.listings.beans.Listing.LISTING_AGE;
 import com.arenella.recruit.listings.beans.Listing.Country;
 import com.arenella.recruit.listings.beans.Listing.listing_type;
+import com.arenella.recruit.listings.enums.COUNTRY;
+import com.arenella.recruit.listings.utils.ListingGeoZoneSearchUtil.GEO_ZONE;
 
 /**
 * Filters to apply to a Search for Listing objects
@@ -19,6 +21,7 @@ public class ListingFilter {
 	private String				searchTerm;
 	private String				ownerId;
 	private listing_type 		type;
+	private Set<GEO_ZONE> 		geoZones 		= new HashSet<>();
 	private Set<Country> 		countries		= new HashSet<>();
 	private LISTING_AGE			listingAge;
 	private Boolean				active;
@@ -32,6 +35,7 @@ public class ListingFilter {
 		this.searchTerm		= builder.searchTerm;
 		this.ownerId 		= builder.ownerId;
 		this.type 			= builder.type;
+		this.geoZones		= builder.geoZones;
 		this.countries 		= builder.countries;
 		this.listingAge		= builder.listingAge;
 		this.active			= builder.active;
@@ -70,11 +74,27 @@ public class ListingFilter {
 	}
 	
 	/**
+	* Returns the geoZones to filter on
+	* @return geoZones to filter on
+	*/
+	public Set<GEO_ZONE> getGeoZones(){
+		return geoZones;
+	}
+	
+	/**
 	* Returns the countries to filter on
 	* @return country to filter on
 	*/
 	public Set<Country> getCountries(){
 		return countries;
+	}
+	
+	/**
+	* Adds a country to include in search results
+	* @param country - country to be included
+	*/
+	public void addCountry(Country country) {
+		this.countries.add(country);
 	}
 	
 	/**
@@ -111,6 +131,7 @@ public class ListingFilter {
 		private String				searchTerm;
 		private String				ownerId;
 		private listing_type 		type;
+		private Set<GEO_ZONE> 		geoZones 	= new HashSet<>();
 		private Set<Country> 		countries 	= new HashSet<>();
 		private LISTING_AGE			listingAge;
 		private Boolean				active;
@@ -152,6 +173,17 @@ public class ListingFilter {
 		*/
 		public ListingFilterBuilder type(listing_type type) {
 			this.type = type;
+			return this;
+		}
+
+		/**
+		* Sets the geoZones to filter on 
+		* @param geoZones - geoZones to filter on
+		* @return Builder
+		*/
+		public ListingFilterBuilder geoZones(Set<GEO_ZONE> geoZones) {
+			this.geoZones.clear();
+			this.geoZones.addAll(geoZones);
 			return this;
 		}
 		

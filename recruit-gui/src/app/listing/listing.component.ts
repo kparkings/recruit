@@ -123,7 +123,15 @@ export class ListingComponent implements OnInit {
 	
 	public handleNewSearchRequest(newListings:Array<Listing>){
 		this.listings = newListings;
+		if (this.searchBar.signalResetOfSearch == true) {
+			this.currentPage=0;
+			this.pageYPos=0;
+			this.searchBar.signalResetOfSearch=false;
+		}
+		
 	}
+	
+	
 	
 	/**
 	* Toggoles whether or not a FunctionType has been selected by the User
@@ -665,7 +673,6 @@ export class ListingComponent implements OnInit {
 		if (yPos > this.pageYPos) {
 			this.pageYPos = yPos + (this.isMobile ? 50 : 500); 
 			this.currentPage = this.currentPage + 1;
-			console.log("SCROLL triggered " + this.currentPage + " : " + this.pageSize);
 			this.searchBar.fetchListingsFull("", false, this.currentPage, this.pageSize);
 			
 		}

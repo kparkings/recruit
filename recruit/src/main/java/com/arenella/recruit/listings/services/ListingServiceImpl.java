@@ -15,6 +15,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.arenella.recruit.adapters.actions.GrantCreditCommand;
+import com.arenella.recruit.listings.utils.ListingGeoZoneSearchUtil.GEO_ZONE;
 import com.arenella.recruit.listings.adapters.CandidateRequestListingContactEmailCommand;
 import com.arenella.recruit.listings.adapters.CandidateRequestListingContactEmailCommand.CandidateRequestListingContactEmailCommandBuilder;
 import com.arenella.recruit.listings.adapters.ExternalEventPublisher;
@@ -33,6 +34,7 @@ import com.arenella.recruit.listings.dao.ListingViewedEventEntity;
 import com.arenella.recruit.listings.exceptions.ListingValidationException;
 import com.arenella.recruit.listings.exceptions.ListingValidationException.ListingValidationExceptionBuilder;
 import com.arenella.recruit.listings.services.FileSecurityParser.FileType;
+import com.arenella.recruit.listings.utils.ListingGeoZoneSearchUtil;
 
 /**
 * Services for working with Listings
@@ -52,6 +54,9 @@ public class ListingServiceImpl implements ListingService{
 	
 	@Autowired
 	private ListingRecruiterCreditDao 		creditDao;
+	
+	@Autowired
+	private ListingGeoZoneSearchUtil		listingGeoZoneSearchUtil;
 	
 	/**
 	* Refer to the Listing interface for details
@@ -115,8 +120,13 @@ public class ListingServiceImpl implements ListingService{
 	/**
 	* Refer to the Listing interface for details
 	*/
+	@SuppressWarnings("static-access")
 	@Override
 	public Page<Listing> fetchListings(ListingFilter filters, Pageable pageable) {
+		
+		GEO_ZONE[] geoZones = filters.getGeoZones().toArray(new GEO_ZONE[] {});
+		listingGeoZoneSearchUtil.fetchCountriesFor(geoZones).stream().forEach(country -> filters.addCountry(country));
+		
 		return listingDao.findAll(filters, pageable).map(ListingEntity::convertFromEntity);
 	}
 	

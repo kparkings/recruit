@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
+import com.arenella.recruit.listings.utils.ListingGeoZoneSearchUtil.GEO_ZONE;
 import com.arenella.recruit.listings.beans.Listing.Country;
 import com.arenella.recruit.listings.beans.Listing.LISTING_AGE;
 import com.arenella.recruit.listings.beans.Listing.listing_type;
@@ -18,6 +19,7 @@ public class ListingSearchRequestAPIInbound {
 
 	private String 				searchTerm;
 	private listing_type 		contractType;
+	private Set<GEO_ZONE> 		geoZones 		= new HashSet<>();
 	private Set<Country> 		countries		= new HashSet<>();
 	private LISTING_AGE			maxAgeOfPost;
 	
@@ -29,6 +31,7 @@ public class ListingSearchRequestAPIInbound {
 
 		this.searchTerm 	= builder.searchTerm;
 		this.contractType 	= builder.contractType;
+		this.geoZones	 	= builder.geoZones;
 		this.countries 		= builder.countries;
 		this.maxAgeOfPost 	= builder.maxAgeOfPost;
 		
@@ -59,6 +62,14 @@ public class ListingSearchRequestAPIInbound {
 	}
 	
 	/**
+	* Returns the geoZones to search on
+	* @return GeoZones to search on
+	*/
+	public Set<GEO_ZONE> getGeoZones(){
+		return this.geoZones;
+	}
+	
+	/**
 	* Returns the max age of the post to search on
 	* @return max age
 	*/
@@ -82,6 +93,7 @@ public class ListingSearchRequestAPIInbound {
 
 		private String 				searchTerm;
 		private listing_type 		contractType;
+		private Set<GEO_ZONE> 		geoZones 		= new HashSet<>();
 		private Set<Country> 		countries		= new HashSet<>();
 		private LISTING_AGE			maxAgeOfPost;
 
@@ -102,6 +114,17 @@ public class ListingSearchRequestAPIInbound {
 		*/
 		public ListingSearchRequestAPIInboundBuilder contractType(listing_type contractType) {
 			this.contractType = contractType;
+			return this;
+		}
+		
+		/**
+		* Sets, if provided the GeoZones to filter on
+		* @param geoZones - geoZones to filter on
+		* @return Builder
+		*/
+		public ListingSearchRequestAPIInboundBuilder geoZones(Set<GEO_ZONE> countries) {
+			this.geoZones.clear();
+			this.geoZones.addAll(countries);
 			return this;
 		}
 		

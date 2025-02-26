@@ -180,11 +180,9 @@ public interface ListingDao extends CrudRepository<ListingEntity, UUID>, JpaSpec
 			*/
 			if (!this.filterOptions.getCountries().isEmpty()) {
 				
-				Expression<Collection<Listing.Country>> countryValues = root.get("country");
+				Expression<Collection<Listing.Country>> country = root.get("country");
 				
-				this.filterOptions.getCountries().forEach(country -> 
-					predicates.add(criteriaBuilder.isMember(country, countryValues))
-				);
+				predicates.add(country.in(this.filterOptions.getCountries()));
 				
 			}
 			

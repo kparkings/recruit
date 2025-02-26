@@ -13,6 +13,7 @@ import com.arenella.recruit.listings.beans.Listing.LISTING_AGE;
 import com.arenella.recruit.listings.beans.Listing.Country;
 import com.arenella.recruit.listings.beans.Listing.listing_type;
 import com.arenella.recruit.listings.beans.ListingFilter;
+import com.arenella.recruit.listings.utils.ListingGeoZoneSearchUtil.GEO_ZONE;
 
 /**
 * Unit tests for the ListingFilter class
@@ -31,6 +32,7 @@ public class ListingFilterTest {
 		final String			searchTerm		= "Java";
 		final String			ownerId			= "abc123";
 		final listing_type 		type			= listing_type.CONTRACT_ROLE;
+		final GEO_ZONE			geoZone			= GEO_ZONE.BENELUX;
 		final Country 			countryVal		= Country.BELGIUM;
 		final LISTING_AGE		listingAge		= LISTING_AGE.THIS_WEEK;
 		final boolean			active			= false;
@@ -41,6 +43,7 @@ public class ListingFilterTest {
 										.searchTerm(searchTerm)
 										.ownerId(ownerId)
 										.type(type)
+										.geoZones(Set.of(geoZone))
 										.countries(Set.of(countryVal))
 										.listingAge(listingAge)
 										.active(active)
@@ -50,10 +53,15 @@ public class ListingFilterTest {
 		assertEquals(filter.getSearchTerm().get(), 				searchTerm);
 		assertEquals(filter.getOwnerId().get(), 				ownerId);
 		assertEquals(filter.getType().get(), 					type);
+		assertEquals(filter.getGeoZones().toArray()[0], 		geoZone);
 		assertEquals(filter.getCountries().toArray()[0], 		countryVal);
 		assertEquals(filter.getListingAge().get(), 				listingAge);
 		assertEquals(filter.getActive().get(), 					active);
 		
+		filter.addCountry(Country.CYPRUS);
+		
+		assertTrue(filter.getCountries().stream().filter(c -> c == countryVal).findAny().isPresent());
+		assertTrue(filter.getCountries().stream().filter(c -> c == Country.CYPRUS).findAny().isPresent());
 	}
 
 	/**
@@ -71,6 +79,7 @@ public class ListingFilterTest {
 		assertFalse(filter.getSearchTerm().isPresent());
 		assertFalse(filter.getOwnerId().isPresent());
 		assertFalse(filter.getType().isPresent());
+		assertTrue(filter.getGeoZones().isEmpty());
 		assertTrue(filter.getCountries().isEmpty());
 		assertFalse(filter.getListingAge().isPresent());
 		assertFalse(filter.getActive().isPresent());
