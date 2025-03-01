@@ -135,10 +135,12 @@ public class ListingController {
 	public Page<ListingAPIOutboundPublic> fetchListingsPubilc(	@RequestBody(required = false) ListingSearchRequestAPIInbound searchRequest, 
 																Pageable pageable){
 		
+		Set<String> searchTerms = searchRequest.getSearchTerm().isEmpty() ? Set.of() : Set.of(searchRequest.getSearchTerm().get());
+		
 		ListingFilter filters = 
 				ListingFilter
 				.builder()
-					.searchTerm(searchRequest.getSearchTerm().orElse(null))
+					.searchTerms(searchTerms)
 					.type(searchRequest.getContractType().orElse(null))
 					.listingAge(searchRequest.getMaxAgeOfPost().orElse(null))
 					.geoZones(searchRequest.getGeoZones())

@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.arenella.recruit.listings.enums.COUNTRY;
+import com.arenella.recruit.listings.beans.Listing;
 import com.arenella.recruit.listings.utils.ListingGeoZoneSearchUtil.GEO_ZONE;
 
 /**
@@ -30,14 +30,14 @@ public class ListingGeoZoneSearchUtilTest {
 		
 		ListingGeoZoneSearchUtil.initGeoZoneSearchUtil();
 		
-		Set<COUNTRY> countries = ListingGeoZoneSearchUtil.fetchCountriesFor(GEO_ZONE.BENELUX, GEO_ZONE.BRITISH_ISLES);
+		Set<Listing.Country> countries = ListingGeoZoneSearchUtil.fetchCountriesFor(GEO_ZONE.BENELUX, GEO_ZONE.BRITISH_ISLES);
 		
-		assertTrue(countries.contains(COUNTRY.NETHERLANDS));
-		assertTrue(countries.contains(COUNTRY.BELGIUM));
-		assertTrue(countries.contains(COUNTRY.LUXEMBOURG));
-		assertTrue(countries.contains(COUNTRY.UK));
-		assertTrue(countries.contains(COUNTRY.NORTHERN_IRELAND));
-		assertTrue(countries.contains(COUNTRY.REPUBLIC_OF_IRELAND));
+		assertTrue(countries.contains(Listing.Country.NETHERLANDS));
+		assertTrue(countries.contains(Listing.Country.BELGIUM));
+		assertTrue(countries.contains(Listing.Country.LUXEMBOURG));
+		assertTrue(countries.contains(Listing.Country.UK));
+		assertTrue(countries.contains(Listing.Country.NORTHERN_IRELAND));
+		assertTrue(countries.contains(Listing.Country.REPUBLIC_OF_IRELAND));
 		
 		assertEquals(expectedCountryCount, countries.size());
 		

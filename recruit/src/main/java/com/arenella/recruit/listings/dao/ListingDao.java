@@ -102,14 +102,17 @@ public interface ListingDao extends CrudRepository<ListingEntity, UUID>, JpaSpec
 			
 			List<Predicate> predicates = new ArrayList<>();
 			
-			if (this.filterOptions.getSearchTerm().isPresent()) {
+			//this.filterOptions.getSearchTerm().ifPresent(searchTerm -> {
 				
-				Expression<String> ownerIdExpression 	= root.get("title");
-				Expression<String> upperExpression 		= criteriaBuilder.upper(ownerIdExpression);
+			//	if (!searchTerm.isBlank()) {
 				
-				predicates.add(criteriaBuilder.like(upperExpression, this.filterOptions.getSearchTerm().orElse("").toUpperCase()));
+			//		Expression<String> ownerIdExpression 	= root.get("title");
+			//		Expression<String> upperExpression 		= criteriaBuilder.upper(ownerIdExpression);
 				
-			}
+			//		predicates.add(criteriaBuilder.like(upperExpression, this.filterOptions.getSearchTerm().orElse("").toUpperCase()));
+				
+			//	}
+			//});
 			
 			/**
 			* Apply ownerId filter if value present 

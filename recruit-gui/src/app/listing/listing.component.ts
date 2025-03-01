@@ -84,8 +84,6 @@ export class ListingComponent implements OnInit {
 				private translate:TranslateService,
 				private clipboard: Clipboard) { 
 		
-		
-	
 		if (sessionStorage.getItem("userId")) {		
 			this.recruiterProfileService.fetchRecruiterProfiles("RECRUITERS").subscribe(rps => {
 				this.recruiterProfiles = rps
@@ -131,10 +129,8 @@ export class ListingComponent implements OnInit {
 		
 	}
 	
-	
-	
 	/**
-	* Toggoles whether or not a FunctionType has been selected by the User
+	* Toggles whether or not a FunctionType has been selected by the User
 	*/
 	public toggleFunctionType(ft:SelectableFunctionType):void{
 		

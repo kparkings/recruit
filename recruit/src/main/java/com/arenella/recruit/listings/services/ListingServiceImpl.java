@@ -34,6 +34,7 @@ import com.arenella.recruit.listings.dao.ListingViewedEventEntity;
 import com.arenella.recruit.listings.exceptions.ListingValidationException;
 import com.arenella.recruit.listings.exceptions.ListingValidationException.ListingValidationExceptionBuilder;
 import com.arenella.recruit.listings.services.FileSecurityParser.FileType;
+import com.arenella.recruit.listings.utils.ListingFunctionSynonymUtil;
 import com.arenella.recruit.listings.utils.ListingGeoZoneSearchUtil;
 
 /**
@@ -57,6 +58,9 @@ public class ListingServiceImpl implements ListingService{
 	
 	@Autowired
 	private ListingGeoZoneSearchUtil		listingGeoZoneSearchUtil;
+	
+	@Autowired
+	private ListingFunctionSynonymUtil		functionSynonymUil;
 	
 	/**
 	* Refer to the Listing interface for details
@@ -125,7 +129,14 @@ public class ListingServiceImpl implements ListingService{
 	public Page<Listing> fetchListings(ListingFilter filters, Pageable pageable) {
 		
 		GEO_ZONE[] geoZones = filters.getGeoZones().toArray(new GEO_ZONE[] {});
+		
 		listingGeoZoneSearchUtil.fetchCountriesFor(geoZones).stream().forEach(country -> filters.addCountry(country));
+		
+		if (!filters.getSearchTerms().isEmpty()) {
+			this.functionSynonymUil.extractAllFunctionAndSynonyms((String)filters.getSearchTerms().toArray()[0]).forEach(synonym -> {
+				filters.addSearchTerm(synonym);
+			});
+		}
 		
 		return listingDao.findAll(filters, pageable).map(ListingEntity::convertFromEntity);
 	}
@@ -313,21 +324,6 @@ public class ListingServiceImpl implements ListingService{
 		creditDao.saveAll(credits);
 		
 	}
-	
-	/**
-	* Refer to the CandidateService for details 
-	*/
-	//@Override
-	//public boolean hasCreditsLeft(String userName) {
-		
-	//	Optional<RecruiterCredit> credits = this.creditDao.getByRecruiterId(userName);
-		
-	//	if (credits.isEmpty()) {
-	//		return false;
-	//	}
-		
-	//	return credits.get().getCredits() > 0;
-	//}
 
 	/**
 	* Refer to the ListingsService for details 

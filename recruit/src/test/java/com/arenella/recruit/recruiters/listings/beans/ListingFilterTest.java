@@ -40,7 +40,7 @@ public class ListingFilterTest {
 		ListingFilter filter = ListingFilter
 									.builder()
 										.listingId(listingId)
-										.searchTerm(searchTerm)
+										.searchTerms(Set.of(searchTerm))
 										.ownerId(ownerId)
 										.type(type)
 										.geoZones(Set.of(geoZone))
@@ -50,7 +50,7 @@ public class ListingFilterTest {
 									.build();
 		
 		assertEquals(filter.getListingId().get(), 				listingId);
-		assertEquals(filter.getSearchTerm().get(), 				searchTerm);
+		assertEquals(filter.getSearchTerms().toArray()[0], 		searchTerm);
 		assertEquals(filter.getOwnerId().get(), 				ownerId);
 		assertEquals(filter.getType().get(), 					type);
 		assertEquals(filter.getGeoZones().toArray()[0], 		geoZone);
@@ -65,6 +65,25 @@ public class ListingFilterTest {
 	}
 
 	/**
+	* Tests adding of search terms to filers
+	*/
+	@Test
+	void testAddSearchTerms() {
+		
+		ListingFilter filter = ListingFilter
+				.builder()
+				.build();
+		
+		filter.addSearchTerm("java");
+		filter.addSearchTerm("C#");
+		
+		assertEquals(2, filter.getSearchTerms().size());
+		assertTrue(filter.getSearchTerms().contains("java"));
+		assertTrue(filter.getSearchTerms().contains("C#"));
+		
+	}
+	
+	/**
 	* Test construction of Filters with Builder
 	* @throws Exception
 	*/
@@ -76,7 +95,7 @@ public class ListingFilterTest {
 									.build();
 		
 		assertFalse(filter.getListingId().isPresent());
-		assertFalse(filter.getSearchTerm().isPresent());
+		assertTrue(filter.getSearchTerms().isEmpty());
 		assertFalse(filter.getOwnerId().isPresent());
 		assertFalse(filter.getType().isPresent());
 		assertTrue(filter.getGeoZones().isEmpty());

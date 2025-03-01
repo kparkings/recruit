@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 import com.arenella.recruit.listings.beans.Listing.Country;
 import com.arenella.recruit.listings.beans.Listing.LISTING_AGE;
 import com.arenella.recruit.listings.beans.Listing.listing_type;
-import com.arenella.recruit.listings.utils.GeoZoneSearchUtil.GEO_ZONE;
+import com.arenella.recruit.listings.utils.ListingGeoZoneSearchUtil.GEO_ZONE;
 
 /**
 * Unit tests for the ListingSearchRequestAPIInbound class 

@@ -54,6 +54,7 @@ export class SearchbarComponentListing {
 	* Angular lifecycyle: Initializes Component
 	*/
 	ngOnInit(): void {
+		this.listingsFilterForm.addControl('searchPhrase', new UntypedFormControl());
 		this.subscription = this.listingsFilterForm.valueChanges.pipe(debounceTime(500)).subscribe(() => {
 				this.fetchListingsFull("", true, 0, this.pageSize);
 		});
@@ -205,9 +206,9 @@ export class SearchbarComponentListing {
 		
 		let filters:ListingSearchRequest = new ListingSearchRequest();
 		
-		//if (this.listingsFilterForm.get('searchPhrase')) {
-		//	filters.searchTerm  = this.listingsFilterForm.get('searchPhrase')?.value;
-		//}
+		if (this.listingsFilterForm.get('searchPhrase')) {
+			filters.searchTerm  = this.listingsFilterForm.get('searchPhrase')?.value;
+		}
 		
 		if (this.listingsFilterForm.get('contractType')) {
 			filters.contractType  = this.listingsFilterForm.get('contractType')?.value;		
@@ -236,20 +237,6 @@ export class SearchbarComponentListing {
 		if (this.listingsFilterForm.get('maxAgeOfPost')) {
 			filters.maxAgeOfPost = 	this.listingsFilterForm.get("maxAgeOfPost")?.value;				
 		}
-		
-		
-		//public searchTerm:string|null 		= null;
-		//	public contractType:string|null 	= null;
-		//	public countries:Array<string> 		= new Array<string>();
-		//	public maxAgeOfPost:string|null 	= null;
-		
-		//if (this.contractTypeFilter != "") {
-		//	filters.contractType = this.contractTypeFilter;
-		//}
-		
-		//if (this.ageFilter != "ALL") {
-		//	filters.maxAgeOfPost = this.ageFilter;
-		//}
 		
 		return filters;
 	}

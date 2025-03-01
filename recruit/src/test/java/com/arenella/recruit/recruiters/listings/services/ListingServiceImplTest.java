@@ -39,6 +39,7 @@ import com.arenella.recruit.listings.services.FileSecurityParser.FileType;
 import com.arenella.recruit.listings.beans.RecruiterCredit;
 import com.arenella.recruit.listings.dao.ListingRecruiterCreditDao;
 import com.arenella.recruit.listings.services.ListingServiceImpl;
+import com.arenella.recruit.listings.utils.ListingFunctionSynonymUtil;
 
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.multipart.MultipartFile;
@@ -67,6 +68,9 @@ public class ListingServiceImplTest {
 	
 	@Mock
 	private ListingRecruiterCreditDao 		mockCreditDao;
+	
+	@Mock
+	private ListingFunctionSynonymUtil		mockListingFunctionSynonymUtil;
 	
 	/**
 	* Sets up test environment

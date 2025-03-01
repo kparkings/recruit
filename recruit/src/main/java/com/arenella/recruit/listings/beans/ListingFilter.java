@@ -8,7 +8,6 @@ import java.util.UUID;
 import com.arenella.recruit.listings.beans.Listing.LISTING_AGE;
 import com.arenella.recruit.listings.beans.Listing.Country;
 import com.arenella.recruit.listings.beans.Listing.listing_type;
-import com.arenella.recruit.listings.enums.COUNTRY;
 import com.arenella.recruit.listings.utils.ListingGeoZoneSearchUtil.GEO_ZONE;
 
 /**
@@ -18,7 +17,7 @@ import com.arenella.recruit.listings.utils.ListingGeoZoneSearchUtil.GEO_ZONE;
 public class ListingFilter {
 
 	private UUID 				listingId;
-	private String				searchTerm;
+	private Set<String>			searchTerms		= new HashSet<>();
 	private String				ownerId;
 	private listing_type 		type;
 	private Set<GEO_ZONE> 		geoZones 		= new HashSet<>();
@@ -32,7 +31,7 @@ public class ListingFilter {
 	*/
 	public ListingFilter(ListingFilterBuilder builder) {
 		this.listingId 		= builder.listingId;
-		this.searchTerm		= builder.searchTerm;
+		this.searchTerms	= builder.searchTerms;
 		this.ownerId 		= builder.ownerId;
 		this.type 			= builder.type;
 		this.geoZones		= builder.geoZones;
@@ -53,8 +52,8 @@ public class ListingFilter {
 	* Returns search terms to filter on
 	* @return Keyword / term to filter on
 	*/
-	public Optional<String> getSearchTerm(){
-		return Optional.ofNullable(this.searchTerm);
+	public Set<String> getSearchTerms(){
+		return this.searchTerms;
 	}
 	
 	/**
@@ -98,6 +97,14 @@ public class ListingFilter {
 	}
 	
 	/**
+	* Adds a searchTerm to search on
+	* @param searchTerm - new search term
+	*/
+	public void addSearchTerm(String searchTerm) {
+		this.searchTerms.add(searchTerm);
+	}
+	
+	/**
 	* Returns the age to filter on
 	* @return period the listing was posted in
 	*/
@@ -128,7 +135,7 @@ public class ListingFilter {
 	public static class ListingFilterBuilder {
 	
 		private UUID 				listingId;
-		private String				searchTerm;
+		private Set<String>			searchTerms	= new HashSet<>();
 		private String				ownerId;
 		private listing_type 		type;
 		private Set<GEO_ZONE> 		geoZones 	= new HashSet<>();
@@ -147,12 +154,12 @@ public class ListingFilter {
 		}
 		
 		/**
-		* Sets search term to filter on
-		* @param searchTerm - To identify type of role
+		* Sets search terms to filter on
+		* @param searchTerms - To identify type of role
 		* @return Builder
 		*/
-		public ListingFilterBuilder searchTerm(String searchTerm) {
-			this.searchTerm = searchTerm;
+		public ListingFilterBuilder searchTerms(Set<String> searchTerms) {
+			this.searchTerms = searchTerms;
 			return this;
 		}
 		
