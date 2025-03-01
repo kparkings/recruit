@@ -94,8 +94,6 @@ public class ListingEntity {
 	private currency			currency;
 
 	@OneToMany(mappedBy = "listingId", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval=true)
-	//@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval=true)
-	//@JoinColumn(name = "listing_id")
 	private Set<ListingViewedEventEntity> 		views			= new LinkedHashSet<>();
 	
 	/**
