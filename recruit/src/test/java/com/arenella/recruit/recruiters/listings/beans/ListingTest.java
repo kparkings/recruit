@@ -156,5 +156,22 @@ public class ListingTest {
 		assertFalse(listing.isActive());
 		
 	}
+	
+	/**
+	* Tests adding view events
+	*/
+	@Test
+	void testAddView() {
+		
+		Listing listing = Listing.builder().build();
+		
+		assertTrue(listing.getViews().isEmpty());
+		
+		listing.addView(ListingViewedEvent.builder().build());
+		listing.addView(ListingViewedEvent.builder().build());
+		
+		assertEquals(2, listing.getViews().size());
+		
+	}
 		
 }

@@ -277,6 +277,15 @@ public class Listing {
 	}
 	
 	/**
+	* Adds a new event to show the Listing was viewed by
+	* a User.
+	* @param event - Details of viewing of the Listing
+	*/
+	public void addView(ListingViewedEvent event) {
+		this.views.add(event);
+	}
+	
+	/**
 	* Returns whether the listing is active. A listing will be active
 	* if the owning recruiter has an active account and disabled if the 
 	* listing is not active

@@ -34,12 +34,15 @@ import com.arenella.recruit.listings.controllers.ListingContactRequest;
 import com.arenella.recruit.listings.dao.ListingDao;
 import com.arenella.recruit.listings.dao.ListingEntity;
 import com.arenella.recruit.listings.exceptions.ListingValidationException;
+import com.arenella.recruit.listings.repos.ListingRepository;
 import com.arenella.recruit.listings.services.FileSecurityParser;
 import com.arenella.recruit.listings.services.FileSecurityParser.FileType;
 import com.arenella.recruit.listings.beans.RecruiterCredit;
 import com.arenella.recruit.listings.dao.ListingRecruiterCreditDao;
 import com.arenella.recruit.listings.services.ListingServiceImpl;
 import com.arenella.recruit.listings.utils.ListingFunctionSynonymUtil;
+
+import co.elastic.clients.elasticsearch.ElasticsearchClient;
 
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.multipart.MultipartFile;
@@ -55,7 +58,10 @@ public class ListingServiceImplTest {
 	private ListingServiceImpl 	service = new ListingServiceImpl();
 	
 	@Mock
-	private ListingDao 						mockListingDao;
+	private ElasticsearchClient				mockEsClient;
+	
+	@Mock
+	private ListingRepository 				mockListingRepository;
 	
 	@Mock
 	private	Authentication					mockAuthentication;
@@ -103,7 +109,7 @@ public class ListingServiceImplTest {
 			throw new RuntimeException();
 		}
 		
-		Mockito.verify(mockListingDao).save(Mockito.any(ListingEntity.class));
+		Mockito.verify(mockListingRepository).saveListings(Mockito.anySet());
 		
 	}
 	
@@ -116,7 +122,7 @@ public class ListingServiceImplTest {
 		
 		final UUID listingId = UUID.randomUUID();
 		
-		Mockito.when(this.mockListingDao.findById(listingId)).thenReturn(Optional.empty());
+		//Mockito.when(this.mockListingRepository.findById(listingId)).thenReturn(Optional.empty());
 		
 		Assertions.assertThrows(IllegalArgumentException.class, () -> {
 			this.service.updateListing(listingId, null);
@@ -134,10 +140,31 @@ public class ListingServiceImplTest {
 		
 		final UUID 				listingId 		= UUID.randomUUID();
 		final Listing			listing			= Listing.builder().ownerId("kevin").title("a").description("b").ownerCompany("c").ownerName("d").ownerEmail("e").build();
-		final ListingEntity 	existingEntity 	= ListingEntity.builder().ownerId("kevin").title("a").description("b").ownerCompany("c").ownerName("d").ownerEmail("e").build();
+		final Listing 			existingListing = Listing.builder().ownerId("kevin").title("a").description("b").ownerCompany("c").ownerName("d").ownerEmail("e").build();
 		
-		Mockito.when(this.mockListingDao.findById(listingId)).thenReturn(Optional.of(existingEntity));
+		Mockito.when(this.mockListingRepository.findListingById(listingId)).thenReturn(Optional.of(existingListing));
 		Mockito.when(mockAuthentication.getPrincipal()).thenReturn("notKevin");
+		
+		Assertions.assertThrows(AccessDeniedException.class, () -> {
+			this.service.updateListing(listingId, listing);
+		});
+		
+	}
+	
+	/**
+	* Asserts Exception is thrown if the original owner of the listing tries
+	* to update the owner to someone else
+	* @throws Exception
+	*/
+	@Test
+	public void testUpdateListing_changeOwnerOfListing() throws Exception{
+		
+		final UUID 				listingId 		= UUID.randomUUID();
+		final Listing			listing			= Listing.builder().ownerId("kevin2").title("a").description("b").ownerCompany("c").ownerName("d").ownerEmail("e").build();
+		final Listing 			existingListing = Listing.builder().ownerId("kevin").title("a").description("b").ownerCompany("c").ownerName("d").ownerEmail("e").build();
+		
+		Mockito.when(this.mockListingRepository.findListingById(listingId)).thenReturn(Optional.of(existingListing));
+		Mockito.when(mockAuthentication.getPrincipal()).thenReturn("kevin");
 		
 		Assertions.assertThrows(AccessDeniedException.class, () -> {
 			this.service.updateListing(listingId, listing);
@@ -154,7 +181,7 @@ public class ListingServiceImplTest {
 		
 		final UUID listingId = UUID.randomUUID();
 		
-		Mockito.when(this.mockListingDao.findById(listingId)).thenReturn(Optional.empty());
+		//Mockito.when(this.mockListingRepository.findById(listingId)).thenReturn(Optional.empty());
 		
 		Assertions.assertThrows(IllegalArgumentException.class, () -> {
 			this.service.deleteListing(listingId);
@@ -171,9 +198,9 @@ public class ListingServiceImplTest {
 	public void testDeleteListing_notOwnerOfListing() throws Exception{
 		
 		final UUID 				listingId 		= UUID.randomUUID();
-		final ListingEntity 	existingEntity 	= ListingEntity.builder().ownerId("kevin").title("a").description("b").ownerCompany("c").ownerName("d").ownerEmail("e").build();
+		final Listing 			listing 		= Listing.builder().ownerId("kevin").title("a").description("b").ownerCompany("c").ownerName("d").ownerEmail("e").build();
 		
-		Mockito.when(this.mockListingDao.findById(listingId)).thenReturn(Optional.of(existingEntity));
+		Mockito.when(this.mockListingRepository.findListingById(listingId)).thenReturn(Optional.of(listing));
 		Mockito.when(mockAuthentication.getPrincipal()).thenReturn("notKevin");
 		
 		Assertions.assertThrows(AccessDeniedException.class, () -> {
@@ -189,17 +216,17 @@ public class ListingServiceImplTest {
 	@Test
 	public void testUpdateListing() throws Exception {
 		
-		final UUID 				listingId 		= UUID.randomUUID();
-		final String			ownerId			= "kevin";
-		final Listing			listing			= Listing.builder().ownerId("kevin").title("a").description("b").ownerCompany("c").ownerName("d").ownerEmail("e").build();
-		final ListingEntity 	existingEntity 	= ListingEntity.builder().ownerId(ownerId).title("a").description("b").ownerCompany("c").ownerName("d").ownerEmail("e").build();
+		final UUID 				listingId 			= UUID.randomUUID();
+		final String			ownerId				= "kevin";
+		final Listing			listing				= Listing.builder().ownerId("kevin").title("a").description("b").ownerCompany("c").ownerName("d").ownerEmail("e").build();
+		final Listing 			existingListing 	= Listing.builder().ownerId(ownerId).title("a").description("b").ownerCompany("c").ownerName("d").ownerEmail("e").build();
 		
-		Mockito.when(this.mockListingDao.findById(listingId)).thenReturn(Optional.of(existingEntity));
+		Mockito.when(this.mockListingRepository.findListingById(listingId)).thenReturn(Optional.of(existingListing));
 		Mockito.when(mockAuthentication.getPrincipal()).thenReturn(ownerId);
 		
 		this.service.updateListing(listingId, listing);
 		
-		Mockito.verify(this.mockListingDao).save(Mockito.any(ListingEntity.class));
+		Mockito.verify(this.mockListingRepository).saveListings(Mockito.anySet());
 	}
 	
 	/**
@@ -211,14 +238,14 @@ public class ListingServiceImplTest {
 		
 		final UUID 				listingId 		= UUID.randomUUID();
 		final String			ownerId			= "kevin";
-		final ListingEntity 	existingEntity 	= ListingEntity.builder().ownerId(ownerId).title("a").description("b").ownerCompany("c").ownerName("d").ownerEmail("e").build();
+		final Listing 			existingListing = Listing.builder().ownerId(ownerId).title("a").description("b").ownerCompany("c").ownerName("d").ownerEmail("e").build();
 		
-		Mockito.when(this.mockListingDao.findById(listingId)).thenReturn(Optional.of(existingEntity));
+		Mockito.when(this.mockListingRepository.findListingById(listingId)).thenReturn(Optional.of(existingListing));
 		Mockito.when(mockAuthentication.getPrincipal()).thenReturn(ownerId);
 		
 		this.service.deleteListing(listingId);
 		
-		Mockito.verify(this.mockListingDao).delete(existingEntity);
+		Mockito.verify(this.mockListingRepository).deleteById(listingId);
 		
 	}
 	
@@ -409,7 +436,7 @@ public class ListingServiceImplTest {
 		final LocalDateTime created = LocalDateTime.of(2022, 1, 14, 10, 11, 12);
 		ListingViewedEvent event = ListingViewedEvent.builder().eventId(eventId).created(created).listingId(listingId).build();
 				
-		Mockito.when(this.mockListingDao.findById(event.getListingId())).thenReturn(Optional.empty());
+		//Mockito.when(this.mockListingRepository.findById(event.getListingId())).thenReturn(Optional.empty());
 		
 		Assertions.assertThrows(IllegalArgumentException.class, () -> {
 			this.service.registerListingViewedEvent(event);
@@ -435,13 +462,13 @@ public class ListingServiceImplTest {
 		final LocalDateTime created = LocalDateTime.of(2022, 1, 14, 10, 11, 12);
 		
 		ListingViewedEvent 	event 		= ListingViewedEvent.builder().eventId(eventId).created(created).listingId(listingId).build();
-		ListingEntity 		eventEntity = ListingEntity.builder().created(created).listingId(listingId).build();
+		Listing 			listingObj  = Listing.builder().created(created).listingId(listingId).build();
 				
-		Mockito.when(this.mockListingDao.findById(event.getListingId())).thenReturn(Optional.of(eventEntity));
+		Mockito.when(this.mockListingRepository.findListingById(event.getListingId())).thenReturn(Optional.of(listingObj));
 		
 		this.service.registerListingViewedEvent(event);
 		
-		Mockito.verify(this.mockListingDao, Mockito.times(1)).save(Mockito.any());
+		Mockito.verify(this.mockListingRepository, Mockito.times(1)).saveListings(Mockito.anySet());
 		
 	}
 	
@@ -466,7 +493,7 @@ public class ListingServiceImplTest {
 		
 		this.service.registerListingViewedEvent(event);
 		
-		Mockito.verify(this.mockListingDao, Mockito.times(0)).save(Mockito.any());
+		Mockito.verify(this.mockListingRepository, Mockito.times(0)).save(Mockito.any());
 		
 	}
 	
@@ -494,7 +521,7 @@ public class ListingServiceImplTest {
 	public void testSendContactRequestToListingOwner_unknownListing() throws Exception{
 		
 		Mockito.when(this.mockFileSecurityParser.isSafe(Mockito.any())).thenReturn(true);
-		Mockito.when(this.mockListingDao.findListingById(Mockito.any(UUID.class))).thenReturn(Optional.empty());
+		Mockito.when(this.mockListingRepository.findListingById(Mockito.any(UUID.class))).thenReturn(Optional.empty());
 		
 		Assertions.assertThrows(RuntimeException.class, () -> {
 			this.service.sendContactRequestToListingOwner(ListingContactRequest.builder().build());
@@ -524,7 +551,7 @@ public class ListingServiceImplTest {
 		final Listing listing = Listing.builder().title(title).ownerId(ownerId).build();
 		
 		Mockito.when(this.mockFileSecurityParser.isSafe(Mockito.any())).thenReturn(true);
-		Mockito.when(this.mockListingDao.findListingById(Mockito.any(UUID.class))).thenReturn(Optional.of(listing));
+		Mockito.when(this.mockListingRepository.findListingById(Mockito.any(UUID.class))).thenReturn(Optional.of(listing));
 		Mockito.when(this.mockFileSecurityParser.getFileType(Mockito.any())).thenReturn(fileType);
 		Mockito.when(attachment.getBytes()).thenReturn(attachmentBytes);
 		
@@ -566,12 +593,12 @@ public class ListingServiceImplTest {
 		@SuppressWarnings("unchecked")
 		ArgumentCaptor<Set<Listing>> listingArgCapt = ArgumentCaptor.forClass(Set.class);
 		
-		Mockito.when(this.mockListingDao.findAllListings(Mockito.any())).thenReturn(listings);
-		Mockito.doNothing().when(this.mockListingDao).saveListings(listingArgCapt.capture());
+		Mockito.when(this.mockListingRepository.findAllListings(Mockito.any(), Mockito.any())).thenReturn(listings);
+		Mockito.doNothing().when(this.mockListingRepository).saveListings(listingArgCapt.capture());
 		
 		this.service.enableListingsForRecruiter(recruiterId);
 		
-		Mockito.verify(this.mockListingDao).saveListings(Mockito.anySet());
+		Mockito.verify(this.mockListingRepository).saveListings(Mockito.anySet());
 		
 		listingArgCapt.getValue().stream().forEach(l -> Assertions.assertTrue(l.isActive()));
 		
@@ -591,12 +618,12 @@ public class ListingServiceImplTest {
 		@SuppressWarnings("unchecked")
 		ArgumentCaptor<Set<Listing>> listingArgCapt = ArgumentCaptor.forClass(Set.class);
 		
-		Mockito.when(this.mockListingDao.findAllListings(Mockito.any())).thenReturn(listings);
-		Mockito.doNothing().when(this.mockListingDao).saveListings(listingArgCapt.capture());
+		Mockito.when(this.mockListingRepository.findAllListings(Mockito.any(), Mockito.any())).thenReturn(listings);
+		Mockito.doNothing().when(this.mockListingRepository).saveListings(listingArgCapt.capture());
 		
 		this.service.disableListingsForRecruiter(recruiterId);
 		
-		Mockito.verify(this.mockListingDao).saveListings(Mockito.anySet());
+		Mockito.verify(this.mockListingRepository).saveListings(Mockito.anySet());
 		
 		listingArgCapt.getValue().stream().forEach(l -> Assertions.assertFalse(l.isActive()));
 		
@@ -753,11 +780,11 @@ public class ListingServiceImplTest {
 		
 		final String recruiterId = "anId";
 		
-		Mockito.when(this.mockListingDao.findAllListings(Mockito.any())).thenReturn(Set.of(Listing.builder().listingId(UUID.randomUUID()).build(), Listing.builder().listingId(UUID.randomUUID()).build()));
+		Mockito.when(this.mockListingRepository.findAllListings(Mockito.any(), Mockito.any())).thenReturn(Set.of(Listing.builder().listingId(UUID.randomUUID()).build(), Listing.builder().listingId(UUID.randomUUID()).build()));
 		
 		this.service.deleteRecruiterListings(recruiterId);
 		
-		Mockito.verify(this.mockListingDao, Mockito.times(2)).deleteById(Mockito.any());
+		Mockito.verify(this.mockListingRepository, Mockito.times(2)).deleteById(Mockito.any());
 		
 	}
 	
