@@ -101,7 +101,17 @@ public class ListingFilter {
 	* @param searchTerm - new search term
 	*/
 	public void addSearchTerm(String searchTerm) {
-		this.searchTerms.add(searchTerm);
+		
+		//Don't ask. In short life is too short to try and figure
+		//out why it was throwing an immutable set unsupprted exception
+		//Im sure somehow is become set size but that is an issue for 
+		//another day
+		Set<String> updated = new HashSet<>();
+		
+		updated.addAll(this.searchTerms);
+		updated.add(searchTerm);
+		
+		this.searchTerms = updated;
 	}
 	
 	/**

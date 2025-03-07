@@ -1,0 +1,87 @@
+PUT /listings_001
+{
+  "aliases": {},
+  "mappings": {
+    "properties": {
+      "active": {
+        "type": "boolean"
+      },
+      "country": {
+        "type": "keyword"
+      },
+      "created": {
+        "type": "date",
+        "format": "date_optional_time||epoch_millis"
+      },
+      "currency": {
+        "type": "keyword"
+      },
+      "description": {
+        "type": "keyword"
+      },
+      "languages": {
+        "type": "keyword"
+      },
+      "listingId": {
+        "type": "keyword"
+      },
+      "location": {
+        "type": "keyword"
+      },
+      "ownerCompany": {
+        "type": "keyword"
+      },
+      "ownerEmail": {
+        "type": "keyword"
+      },
+      "ownerId": {
+        "type": "keyword"
+      },
+      "ownerName": {
+        "type": "keyword"
+      },
+      "rate": {
+        "type": "keyword"
+      },
+      "skills": {
+        "type": "keyword"
+      },
+      "title": {
+        "type": "keyword"
+      },
+      "type": {
+        "type": "keyword"
+      },
+      "views": {
+        "type": "keyword"
+      },
+      "yearsExperience": {
+        "type": "integer"
+      }
+    }
+  },
+    "settings": {
+    "analysis": {
+      "normalizer": {
+        "lowercase_normalizer": {
+          "type": "custom",
+          "filter": [
+            "lowercase"
+          ]
+        }
+      }
+    }
+  }
+}
+
+POST _aliases
+{
+  "actions": [
+    {
+      "add": {
+        "index": "listings_001",
+        "alias": "listings"
+      }
+    }
+  ]
+}

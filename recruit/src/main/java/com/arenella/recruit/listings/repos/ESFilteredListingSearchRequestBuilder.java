@@ -1,29 +1,27 @@
 package com.arenella.recruit.listings.repos;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Optional;
+import java.util.Set;
 
-import com.arenella.recruit.candidates.beans.CandidateFilterOptions;
-import com.arenella.recruit.candidates.enums.FREELANCE;
-import com.arenella.recruit.candidates.enums.PERM;
 import com.arenella.recruit.listings.beans.ListingFilter;
+import com.arenella.recruit.listings.beans.Listing.LISTING_AGE;
+import com.arenella.recruit.listings.beans.Listing.listing_type;
 
 import co.elastic.clients.elasticsearch._types.FieldValue;
-import co.elastic.clients.elasticsearch._types.GeoDistanceType;
-import co.elastic.clients.elasticsearch._types.GeoLocation;
 import co.elastic.clients.elasticsearch._types.query_dsl.BoolQuery;
-import co.elastic.clients.elasticsearch._types.query_dsl.ExistsQuery;
-import co.elastic.clients.elasticsearch._types.query_dsl.GeoDistanceQuery;
+import co.elastic.clients.elasticsearch._types.query_dsl.MatchPhraseQuery;
 import co.elastic.clients.elasticsearch._types.query_dsl.MatchQuery;
-import co.elastic.clients.elasticsearch._types.query_dsl.Query;
-import co.elastic.clients.elasticsearch._types.query_dsl.QueryBuilders;
 import co.elastic.clients.elasticsearch._types.query_dsl.RangeQuery;
 import co.elastic.clients.elasticsearch._types.query_dsl.TermsQuery;
 import co.elastic.clients.elasticsearch._types.query_dsl.TermsQueryField;
+import co.elastic.clients.elasticsearch._types.query_dsl.WildcardQuery;
 import co.elastic.clients.json.JsonData;
 
 /**
@@ -47,268 +45,114 @@ public class ESFilteredListingSearchRequestBuilder {
 				.mustNot(mustNotQueries)
 			)._toQuery();
 		
-		//if (!filterOptions.getFirstname().isEmpty()) {
-		//	mustQueries.add(MatchQuery.of(m -> m
-		//			.field("firstname")
-		//			.query(filterOptions.getFirstname().get())
-		//	)._toQuery());
-		//}
+		filterOptions.getActive().ifPresent(value -> {
+			mustQueries.add(MatchQuery.of(m -> m
+					.field("active")
+					.query(value)
+			)._toQuery());
+		});
 		
-		//if (!filterOptions.getSurname().isEmpty()) {
-		//	mustQueries.add(MatchQuery.of(m -> m
-		//			.field("surname")
-		//			.query(filterOptions.getSurname().get())
-		//	)._toQuery());
-		//}
-		
-		
-		//if (!filterOptions.getEmail().isEmpty()) {
-		//	mustQueries.add(MatchQuery.of(m -> m
-		//			.field("email")
-		//			.query(filterOptions.getEmail().get())
-		//	)._toQuery());
-		//}
-		
-		//if (!filterOptions.getLastAccountRefreshLtEq().isEmpty()) {
-		//	LocalDate cutOff = filterOptions.getLastAccountRefreshLtEq().get();
-		//	mustQueries.add(RangeQuery.of(m -> m
-		//			.queryName("lastAccountRefresh")
-		//			.field("lastAccountRefresh")
-		//			.lte(JsonData.of(Date.from(cutOff.atStartOfDay(ZoneId.systemDefault()).toInstant())))
-		//	)._toQuery());
-		//}
-		
-		//if (!filterOptions.getGeoPosFilter().isEmpty()) {
+		if (!filterOptions.getCountries().isEmpty()) {
+			List<FieldValue> fieldValueList = filterOptions.getCountries().stream().map(c -> FieldValue.of(c.name())).toList();
 			
-		//	GeoLocation loc = new GeoLocation.Builder()
-         //   .latlon(l -> l
-         //           .lat(filterOptions.getGeoPosFilter().get().lat())
-        //            .lon(filterOptions.getGeoPosFilter().get().lon())
-        //    ).build();
-            
-		//	GeoDistanceQuery gdq = QueryBuilders
-		//	            .geoDistance()
-		//	            .distanceType(GeoDistanceType.Plane)
-		//	            .location(loc)
-		//	            .field(filterOptions.getGeoPosFilter().get().field())
-		//	            .distance(filterOptions.getGeoPosFilter().get().distance()+"km").build();
-			
-		//	mustQueries.add(gdq._toQuery());
+			TermsQueryField termsQueryField = new TermsQueryField.Builder()
+					.value(fieldValueList)
+	                .build();
+				 
+			mustQueries.add(TermsQuery.of(m -> m
+					.queryName("country")
+					.field("country")
+					.terms(termsQueryField)
+					
+			)._toQuery());
+		}
 		
-		//}
-		
-		//if (!filterOptions.getLastAccountRefreshMissing().isEmpty()) {
+		//if (!filterOptions.getGeoZones().isEmpty()) {
 		//	
-		//	mustNotQueries.add(ExistsQuery.of(m -> m
-		//			.queryName("lastAccountRefreshMissing")
-		//			.field("lastAccountRefresh")
-		//	)._toQuery());
 		//}
 		
-		//TODO:[KP] Originally accepts array of CanddiateIds. This impelmentation only 1 Cadidate
-		//if (!filterOptions.getCandidateIds().isEmpty()) {
-		//	String candidateId = (String) filterOptions.getCandidateIds().toArray()[0];
-		//	mustQueries.add(MatchQuery.of(m -> m
-		//			.field("candidateId")
-		//			.query(candidateId)
-		//	)._toQuery());
-		//}
+		filterOptions.getListingAge().ifPresent(value -> {
+			
+			LocalDateTime todayStart 		= LocalDateTime.now().minusHours(24);
+			LocalDateTime thisWeekStart 	= todayStart.minusDays(7);
+			LocalDateTime thisMonthStart 	= todayStart.minusDays(31);
+			
+			final Optional<LocalDate> cutOff; 
+			
+			if (value == LISTING_AGE.TODAY){
+				cutOff =  Optional.of(todayStart.toLocalDate());
+			} else if (value == LISTING_AGE.THIS_WEEK){
+				cutOff = Optional.of(thisWeekStart.toLocalDate());
+			} else if (value == LISTING_AGE.THIS_MONTH){
+				cutOff = Optional.of(thisMonthStart.toLocalDate());
+			} else {
+				cutOff = Optional.empty();
+			}
+			
+			cutOff.ifPresent(cutOffDate -> {
+				mustQueries.add(RangeQuery.of(m -> m
+						.queryName("created")
+						.field("created")
+						.gte(JsonData.of(Date.from(cutOffDate.atStartOfDay(ZoneId.systemDefault()).toInstant())))
+						)._toQuery());
+			});
+			
+			
+		});
 		
-		//if (!filterOptions.getSkills().isEmpty()) {
-		//	List<FieldValue> fieldValueList = filterOptions.getSkills().stream().map(FieldValue::of).toList();
+		filterOptions.getListingId().ifPresent(value -> {
+			mustQueries.add(MatchQuery.of(m -> m
+					.field("listingId")
+					.query(value.toString())
+					)._toQuery());
+		});
+		
+		filterOptions.getOwnerId().ifPresent(value -> {
+			mustQueries.add(MatchQuery.of(m -> m
+					.field("ownerId")
+					.query(value.toString())
+					)._toQuery());
+		});
+		
+		if (!filterOptions.getSearchTerms().isEmpty()) {
 			 
-		//	 TermsQueryField termsQueryField = new TermsQueryField.Builder()
-		//		   .value(fieldValueList)
-         //          .build();
-			 
-		//	mustQueries.add(TermsQuery.of(m -> m
-		//			.queryName("skills")
-		//			.field("skills")
-		//			.terms(termsQueryField)
+			List<co.elastic.clients.elasticsearch._types.query_dsl.Query> shouldQueries 		= new ArrayList<>();
+			
+			filterOptions.getSearchTerms().stream().forEach(term -> {
+				//shouldQueries.add(new MatchPhraseQuery.Builder().field("tile").query(term).build()._toQuery());
+				shouldQueries.add(new WildcardQuery.Builder().field("title").value("*"+term+"*").caseInsensitive(true).build()._toQuery());
+			});
+			
+			mustQueries.add(BoolQuery.of(m -> m
+			.queryName("atLeastOneTerm")
+			.should(shouldQueries).minimumShouldMatch("1"))._toQuery());
+			
+		}
+		
+		filterOptions.getType().ifPresent(value -> {
+		
+			
+			List<FieldValue> fieldValueList = new ArrayList<>();
+			
+			if (value == listing_type.BOTH) {
+				fieldValueList.add(FieldValue.of((listing_type.PERM_ROLE.toString())));
+				fieldValueList.add(FieldValue.of((listing_type.CONTRACT_ROLE.toString())));
+			} else {
+				fieldValueList.add(FieldValue.of((value.toString())));
+			}
+			
+			TermsQueryField termsQueryField = new TermsQueryField.Builder()
+					.value(fieldValueList)
+					.build();
+		 
+			mustQueries.add(TermsQuery.of(m -> m
+					.queryName("type")
+					.field("type")
+					.terms(termsQueryField)
 					
-		//	)._toQuery());
-			
-		//}
+			)._toQuery());
 		
-		//if (!filterOptions.getLanguages().isEmpty()) {
-			
-			
-		//	List<String> 		languages 		= filterOptions.getLanguages().stream().map(l -> l.toString()).map(l -> l.toUpperCase()).collect(Collectors.toList());
-			
-			/**
-			* For speed. Almost all candidates speak English. Therefore we filter on the remaining languages which in most
-			* cases will also return English. The accuracy check in the code above will still be able to take into account
-			* the English language selection.
-			* 
-			* The only risk is if the filters have English and something else and the only language the candidate is English
-			* they will not appear in the results but this should affect so few searches that the performance gain outweights 
-			* the negatives. 
-			*/
-		//	if (filterOptions.getLanguages().size() >1 ) {
-		//		languages = languages.stream().filter(l -> !l.equals("ENGLSH")).collect(Collectors.toList());
-		//	}
-			
-		//	List<co.elastic.clients.elasticsearch._types.query_dsl.Query> langQueries 		= new ArrayList<>();
-			
-		//	languages.stream().forEach(l -> {
-		//		langQueries.add(BoolQuery.of(m -> m
-		//				.must(List.of(
-		//						MatchQuery.of(m1 -> m1.field("languages.language.keyword").query(l))._toQuery(),
-		//						MatchQuery.of(m2 -> m2.field("languages.level.keyword").query("PROFICIENT"))._toQuery()))
-		//			)._toQuery());
-		//	});
-			
-		//	mustQueries.add(BoolQuery.of(m -> m
-		//			.queryName("languages")
-		//			.should(langQueries).minimumShouldMatch("1"))._toQuery());
-			
-		//}
-		
-		//if (!filterOptions.getCountries().isEmpty()) {
-			
-		//	 List<FieldValue> fieldValueList = filterOptions.getCountries().stream().map(c -> FieldValue.of(c.name())).toList();
-			 
-		//	 TermsQueryField termsQueryField = new TermsQueryField.Builder()
-         //            .value(fieldValueList)
-         //            .build();
-			 
-		//	mustQueries.add(TermsQuery.of(m -> m
-		//			.queryName("country")
-		//			.field("country")
-		//			.terms(termsQueryField)
-					
-		//	)._toQuery());
-		//}
-		
-		//if (!filterOptions.getFunctions().isEmpty()) {
-		//	List<FieldValue> fieldValueList = filterOptions.getFunctions().stream().map(c -> FieldValue.of(c.name())).toList();
-			 
-		//	 TermsQueryField termsQueryField = new TermsQueryField.Builder()
-         //           .value(fieldValueList)
-        //            .build();
-			 
-		//	mustQueries.add(TermsQuery.of(m -> m
-		//			.queryName("function")
-		//			.field("function")
-		//			.terms(termsQueryField)
-					
-		//	)._toQuery());
-		//}
-		
-		//if (!filterOptions.isFreelance().isEmpty() && filterOptions.isFreelance().get()) {
-		//	mustQueries.add(MatchQuery.of(m -> m
-		//			.field("freelance")
-		//			.query(FREELANCE.TRUE.toString())
-		//	)._toQuery());
-		//}
-		
-		//if (!filterOptions.isPerm().isEmpty() && filterOptions.isPerm().get()) {
-		//	mustQueries.add(MatchQuery.of(m -> m
-		//			.field("perm")
-		//			.query(PERM.TRUE.toString())
-		//	)._toQuery());
-		//}
-		
-		//if (filterOptions.getYearsExperienceGtEq() > 0 ) {
-		//	mustQueries.add(RangeQuery.of(m -> m
-		//			.queryName("yearsExperienceGte")
-		//			.field("yearsExperience")
-		//			.gte(JsonData.of(filterOptions.getYearsExperienceGtEq()))
-		//	)._toQuery());
-		//}
-		
-		//if (filterOptions.getYearsExperienceLtEq() > 0 ) {
-		//	mustQueries.add(RangeQuery.of(m -> m
-		//			.queryName("yearsExperienceLte")
-		//			.field("yearsExperience")
-		//			.lte(JsonData.of(filterOptions.getYearsExperienceLtEq()))
-		//	)._toQuery());
-		//}
-		
-		//if (filterOptions.getDaysSinceLastAvailabilityCheck().isPresent()) {
-		//	LocalDate cutOff = LocalDate.now().minusDays(filterOptions.getDaysSinceLastAvailabilityCheck().get());
-		//	mustQueries.add(RangeQuery.of(m -> m
-		//			.queryName("lastAvailabilityCheck")
-		//			.field("lastAvailabilityCheck")
-		//			.lte(JsonData.of(Date.from(cutOff.atStartOfDay(ZoneId.systemDefault()).toInstant())))
-		//	)._toQuery());
-		//}
-		
-		//if (filterOptions.getDaysSincelastAvailabilityCheckEmailSent().isPresent()) {
-		//	LocalDate cutOff = LocalDate.now().minusDays(filterOptions.getDaysSincelastAvailabilityCheckEmailSent().get());
-			
-		//	Query daysSinceLastEmail = RangeQuery.of(m -> m
-		//			.queryName("lastAvailabilityCheckEmailSent")
-		//			.field("lastAvailabilityCheckEmailSent")
-		//			.lte(JsonData.of(Date.from(cutOff.atStartOfDay(ZoneId.systemDefault()).toInstant())))
-		//	)._toQuery();
-			
-		//	Query lastEmailSentDateExists = ExistsQuery.of(m -> m
-		//			.queryName("lastAvailabilityCheckEmailSentExists")
-		//			.field("lastAvailabilityCheckEmailSent")
-		//	)._toQuery();
-			
-			//
-		//	List<co.elastic.clients.elasticsearch._types.query_dsl.Query> shouldQueries 		= new ArrayList<>();
-			
-		//	Query queryCuttoffLastEmailSent = BoolQuery.of(m -> m
-		//			.must(List.of(
-		//					daysSinceLastEmail))
-		//			
-		//		)._toQuery();
-			
-		//	Query queryEmailNeverSent = BoolQuery.of(m -> m
-		//			.mustNot(List.of(
-		//					lastEmailSentDateExists))
-		//		)._toQuery();
-			
-		//	Query queryAdminUpdatedAlready = RangeQuery.of(m -> m
-		//			.queryName("lastAvailabilityCheck")
-		//			.field("lastAvailabilityCheck")
-		//			.gt(JsonData.of(Date.from(cutOff.atStartOfDay(ZoneId.systemDefault()).toInstant())))
-		//	)._toQuery();
-			
-		//	shouldQueries.add(queryCuttoffLastEmailSent);
-		//	shouldQueries.add(queryEmailNeverSent);
-			
-		//	mustQueries.add(BoolQuery.of(m -> m
-		//			.queryName("lastAvailabilityCheckEmailSent")
-		//			.mustNot(queryAdminUpdatedAlready)
-		//			.should(shouldQueries).minimumShouldMatch("1"))._toQuery());
-			
-			
-		//}
-		
-		//if (filterOptions.getRegisteredAfter().isPresent()) {
-		//	LocalDate cutOff = filterOptions.getRegisteredAfter().get();
-		//	mustQueries.add(RangeQuery.of(m -> m
-		//			.queryName("registeredAfterCheck")
-		//			.field("registerd")
-		//			.gte(JsonData.of(Date.from(cutOff.atStartOfDay(ZoneId.systemDefault()).toInstant())))
-		//	)._toQuery());
-		//}
-		
-		//if (filterOptions.getOwnerId().isPresent()) {
-		//	mustQueries.add(MatchQuery.of(m -> m
-		//			.field("ownerId")
-		//			.query(filterOptions.getOwnerId().get())
-		//	)._toQuery());
-		//}
-		
-		//if (filterOptions.getIncludeRequiresSponsorship().isEmpty() || filterOptions.getIncludeRequiresSponsorship().get() == false) {
-		//	mustNotQueries.add(MatchQuery.of(m -> m
-		//			.field("requiresSponsorship")
-		//			.query(true)
-		//	)._toQuery());
-		//}
-		
-		//if (filterOptions.isAvailable().isEmpty()) {
-		//} else {
-		//	mustQueries.add(MatchQuery.of(m -> m
-		//			.field("available")
-		//			.query(filterOptions.isAvailable().get().booleanValue())
-		//	)._toQuery());
-		//}
+		});
 		
 		return boolQuery;
 		

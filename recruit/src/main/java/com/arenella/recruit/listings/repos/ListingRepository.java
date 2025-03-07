@@ -1,8 +1,6 @@
 package com.arenella.recruit.listings.repos;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -15,29 +13,17 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
-import org.springframework.data.jpa.domain.Specification;
 
-import com.arenella.recruit.candidates.beans.CandidateFilterOptions;
-import com.arenella.recruit.candidates.entities.CandidateDocument;
-import com.arenella.recruit.candidates.enums.RESULT_ORDER;
-import com.arenella.recruit.candidates.repos.ESFilteredSearchRequestBuilder;
 import com.arenella.recruit.listings.beans.Listing;
 import com.arenella.recruit.listings.beans.ListingFilter;
-import com.arenella.recruit.listings.beans.Listing.LISTING_AGE;
-import com.arenella.recruit.listings.beans.Listing.listing_type;
-import com.arenella.recruit.listings.dao.ListingEntity;
-import com.arenella.recruit.listings.dao.ListingDao.FilterSpecification;
 import com.arenella.recruit.listings.repos.entities.ListingDocument;
 
 import co.elastic.clients.elasticsearch.ElasticsearchClient;
 import co.elastic.clients.elasticsearch._types.FieldSort;
 import co.elastic.clients.elasticsearch._types.SortOrder;
 import co.elastic.clients.elasticsearch.core.SearchResponse;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.CriteriaQuery;
-import jakarta.persistence.criteria.Expression;
 import jakarta.persistence.criteria.Predicate;
-import jakarta.persistence.criteria.Root;
+
 
 public interface ListingRepository extends ElasticsearchRepository<ListingDocument,UUID>{
 
@@ -52,14 +38,14 @@ public interface ListingRepository extends ElasticsearchRepository<ListingDocume
 		try {
 		SearchResponse<ListingDocument> response =  this.fetchWithFilters(filterOptions, esClient, pageable.getPageNumber(), pageable.getPageSize());
 		
-		response
+		LinkedList<Listing> listings = response
 				.hits()
 				.hits()
 				.stream()
 				.map(h -> ListingDocument.fromEntity(h.source()))
 				.collect(Collectors.toCollection(LinkedList::new));
 		
-		return new PageImpl<Listing>(null);
+		return new PageImpl<Listing>(listings);
 		}catch(Exception e) {
 			throw new RuntimeException();
 		}
@@ -119,12 +105,12 @@ public interface ListingRepository extends ElasticsearchRepository<ListingDocume
 		
 		co.elastic.clients.elasticsearch._types.query_dsl.Query boolQuery = ESFilteredListingSearchRequestBuilder.createFilteredQuery(filterOptions);
 		
-		SortOrder sortOrder = null;
-		String sortField = null;;
+		SortOrder sortOrder = SortOrder.Desc;
+		String sortField = "listingId";
 		//if (filterOptions.getOrderAttribute().isPresent()) {
 		//	sortField = filterOptions.getOrderAttribute().get();
 		//} else {
-		//	sortField = "candidateId";
+			//sortField = "listingId";
 		//}
 		
 		//if (filterOptions.getOrder().isPresent() && filterOptions.getOrder().get() == RESULT_ORDER.asc) {
@@ -133,8 +119,10 @@ public interface ListingRepository extends ElasticsearchRepository<ListingDocume
 		//	sortOrder = SortOrder.Desc;
 	//	}
 		
+		
+		
 		return esClient.search(b -> b
-			    .index("candidates")
+			    .index("listings")
 			    .from(firstRecordInPage)
 			    .size(maxRecordsInPage)
 			    .sort(f -> f.field(FieldSort.of(a -> a.field(sortField).order(sortOrder))))

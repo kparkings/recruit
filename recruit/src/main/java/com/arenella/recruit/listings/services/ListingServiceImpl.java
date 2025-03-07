@@ -1,6 +1,7 @@
 package com.arenella.recruit.listings.services;
 
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -30,14 +31,11 @@ import com.arenella.recruit.listings.beans.ListingViewedEvent;
 import com.arenella.recruit.listings.beans.RecruiterCredit;
 import com.arenella.recruit.listings.controllers.CandidateListingContactRequest;
 import com.arenella.recruit.listings.controllers.ListingContactRequest;
-import com.arenella.recruit.listings.dao.ListingDao;
-import com.arenella.recruit.listings.dao.ListingEntity;
+
 import com.arenella.recruit.listings.dao.ListingRecruiterCreditDao;
-import com.arenella.recruit.listings.dao.ListingViewedEventEntity;
 import com.arenella.recruit.listings.exceptions.ListingValidationException;
 import com.arenella.recruit.listings.exceptions.ListingValidationException.ListingValidationExceptionBuilder;
 import com.arenella.recruit.listings.repos.ListingRepository;
-import com.arenella.recruit.listings.repos.entities.ListingDocument;
 import com.arenella.recruit.listings.services.FileSecurityParser.FileType;
 import com.arenella.recruit.listings.utils.ListingFunctionSynonymUtil;
 import com.arenella.recruit.listings.utils.ListingGeoZoneSearchUtil;
@@ -152,9 +150,18 @@ public class ListingServiceImpl implements ListingService{
 		listingGeoZoneSearchUtil.fetchCountriesFor(geoZones).stream().forEach(country -> filters.addCountry(country));
 		
 		if (!filters.getSearchTerms().isEmpty()) {
-			this.functionSynonymUil.extractAllFunctionAndSynonyms((String)filters.getSearchTerms().toArray()[0]).forEach(synonym -> {
+			String originalTerm = (String)filters.getSearchTerms().toArray()[0];
+			
+		//	Set<String> allTerms = new HashSet<>();
+			
+			this.functionSynonymUil.extractAllFunctionAndSynonyms(originalTerm).stream().forEach(synonym -> {
 				filters.addSearchTerm(synonym);
+				//allTerms.add(synonym);
 			});
+			
+			//allTerms.forEach(t -> filters.addSearchTerm(t));
+			
+			//System.out.println("boop");
 		}
 		
 		//return listingDao.findAll(filters, pageable).map(ListingEntity::convertFromEntity);
@@ -409,7 +416,7 @@ public class ListingServiceImpl implements ListingService{
 	}
 	
 	/**
-	* Refer to the CandidateService for details 
+	* Refer to the Listings service for details 
 	*/
 	@Override
 	public int getCreditCountForUser(String userId) {
@@ -425,7 +432,7 @@ public class ListingServiceImpl implements ListingService{
 	}
 	
 	/**
-	* Refer to the CandidateService for details 
+	* Refer to the ListingsService for details 
 	*/
 	@Override
 	public void addCreditsRecordForUser(String userId) {
@@ -441,7 +448,7 @@ public class ListingServiceImpl implements ListingService{
 	}
 	
 	/**
-	* Refer to the CandidateService for details 
+	* Refer to the ListingsService for details 
 	*/
 	@Override
 	public void deleteRecruiterListings(String recruiterId) {

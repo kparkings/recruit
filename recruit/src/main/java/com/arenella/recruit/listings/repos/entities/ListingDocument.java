@@ -1,11 +1,15 @@
 package com.arenella.recruit.listings.repos.entities;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.LinkedHashSet;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
@@ -19,7 +23,6 @@ import com.arenella.recruit.listings.dao.ListingViewedEventEntity;
 
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.Id;
 
 /**
 * Elasticsearch document representing a Listing 
@@ -27,6 +30,8 @@ import jakarta.persistence.Id;
 @Document(indexName="listings", writeTypeHint = org.springframework.data.elasticsearch.annotations.WriteTypeHint.FALSE)
 public class ListingDocument {
 
+	public static final ZoneId DEFAULT_ZONE_ID = ZoneId.systemDefault();
+	
 	@Id
 	@Field(type = FieldType.Keyword)
 	private UUID listingId;
@@ -44,7 +49,7 @@ public class ListingDocument {
 	private String				ownerEmail;
 	
 	@Field(type = FieldType.Date)
-	private LocalDateTime		created;
+	private Date			created;
 	
 	@Field(type = FieldType.Keyword)
 	private String 				title;
@@ -86,18 +91,21 @@ public class ListingDocument {
 	@Field(type = FieldType.Keyword)
 	private Set<ListingViewedEventEntity> 		views			= new LinkedHashSet<>();
 
+	public ListingDocument() {}
+	
 	/**
 	* Constructor based upon a Builder
 	* @param builder - Contains initialization values
 	*/
 	public ListingDocument(ListingDocumentBuilder builder) {
 		
+		
 		this.listingId 				= builder.listingId;
 		this.ownerId 				= builder.ownerId;
 		this.ownerName 				= builder.ownerName;
 		this.ownerCompany 			= builder.ownerCompany;
 		this.ownerEmail 			= builder.ownerEmail;
-		this.created				= builder.created;
+		this.created				= Optional.ofNullable(builder.created).isEmpty() ? null : Date.from(builder.created.atZone(ZoneId.systemDefault()).toInstant());
 		this.title 					= builder.title;
 		this.description 			= builder.description;
 		this.type 					= builder.type;
@@ -164,7 +172,7 @@ public class ListingDocument {
 	* @return when the Listing was created
 	*/
 	public LocalDateTime getCreated() {
-		return this.created;
+		return LocalDateTime.ofInstant(this.created.toInstant(), ZoneId.systemDefault());
 	}
 	
 	/**

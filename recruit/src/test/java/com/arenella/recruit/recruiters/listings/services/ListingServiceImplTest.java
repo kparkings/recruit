@@ -31,8 +31,6 @@ import com.arenella.recruit.listings.adapters.RequestListingContactEmailCommand;
 import com.arenella.recruit.listings.beans.Listing;
 import com.arenella.recruit.listings.beans.ListingViewedEvent;
 import com.arenella.recruit.listings.controllers.ListingContactRequest;
-import com.arenella.recruit.listings.dao.ListingDao;
-import com.arenella.recruit.listings.dao.ListingEntity;
 import com.arenella.recruit.listings.exceptions.ListingValidationException;
 import com.arenella.recruit.listings.repos.ListingRepository;
 import com.arenella.recruit.listings.services.FileSecurityParser;
