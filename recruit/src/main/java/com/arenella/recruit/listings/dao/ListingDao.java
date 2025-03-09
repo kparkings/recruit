@@ -164,17 +164,19 @@ public interface ListingDao extends CrudRepository<ListingEntity, UUID>, JpaSpec
 				LocalDateTime thisMonthEnd 		= todayEnd;
 				
 				
-				if (this.filterOptions.getListingAge().get() == LISTING_AGE.TODAY){
-					predicates.add(criteriaBuilder.between(typeExpression, todayStart, todayEnd));
-				}
+				//if (this.filterOptions.getListingAge().get() == LISTING_AGE.TODAY){
+				//	predicates.add(criteriaBuilder.between(typeExpression, todayStart, todayEnd));
+				//}
 				
-				if (this.filterOptions.getListingAge().get() == LISTING_AGE.THIS_WEEK){
-					predicates.add(criteriaBuilder.between(typeExpression, thisWeekStart, thisWeekEnd));
-				}
+				//if (this.filterOptions.getListingAge().get() == LISTING_AGE.THIS_WEEK){
+				//	predicates.add(criteriaBuilder.between(typeExpression, thisWeekStart, thisWeekEnd));
+				//}
 
-				if (this.filterOptions.getListingAge().get() == LISTING_AGE.THIS_MONTH){
-					predicates.add(criteriaBuilder.between(typeExpression, thisMonthStart, thisMonthEnd));
-				}
+				//if (this.filterOptions.getListingAge().get() == LISTING_AGE.THIS_MONTH){
+				//	predicates.add(criteriaBuilder.between(typeExpression, thisMonthStart, thisMonthEnd));
+				//}
+				
+				predicates.add(criteriaBuilder.between(typeExpression, todayStart.minusDays(360), todayEnd));
 				
 			}
 			
