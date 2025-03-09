@@ -159,7 +159,7 @@ public class ListingServiceImplTest {
 		
 		final UUID 				listingId 		= UUID.randomUUID();
 		final Listing			listing			= Listing.builder().ownerId("kevin2").title("a").description("b").ownerCompany("c").ownerName("d").ownerEmail("e").build();
-		final Listing 			existingListing = Listing.builder().ownerId("kevin").title("a").description("b").ownerCompany("c").ownerName("d").ownerEmail("e").build();
+		final Listing 			existingListing = Listing.builder().ownerId("kevin2").title("a").description("b").ownerCompany("c").ownerName("d").ownerEmail("e").build();
 		
 		Mockito.when(this.mockListingRepository.findListingById(listingId)).thenReturn(Optional.of(existingListing));
 		Mockito.when(mockAuthentication.getPrincipal()).thenReturn("kevin");

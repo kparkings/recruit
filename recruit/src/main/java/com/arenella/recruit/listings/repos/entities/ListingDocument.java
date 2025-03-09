@@ -19,7 +19,6 @@ import com.arenella.recruit.listings.beans.Listing.Country;
 import com.arenella.recruit.listings.beans.Listing.currency;
 import com.arenella.recruit.listings.beans.Listing.language;
 import com.arenella.recruit.listings.beans.Listing.listing_type;
-import com.arenella.recruit.listings.dao.ListingViewedEventEntity;
 
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -88,8 +87,7 @@ public class ListingDocument {
 	@Enumerated(EnumType.STRING)
 	private Set<language> 						languages		= new LinkedHashSet<>();
 	
-	@Field(type = FieldType.Keyword)
-	private Set<ListingViewedEventEntity> 		views			= new LinkedHashSet<>();
+	private Set<ListingViewedEventDocument> 	views			= new LinkedHashSet<>();
 
 	public ListingDocument() {}
 	
@@ -98,7 +96,6 @@ public class ListingDocument {
 	* @param builder - Contains initialization values
 	*/
 	public ListingDocument(ListingDocumentBuilder builder) {
-		
 		
 		this.listingId 				= builder.listingId;
 		this.ownerId 				= builder.ownerId;
@@ -269,7 +266,7 @@ public class ListingDocument {
 	* Returns the number of times the Listing has been viewed
 	* @return number of views
 	*/
-	public Set<ListingViewedEventEntity> getViews() {
+	public Set<ListingViewedEventDocument> getViews() {
 		return this.views;
 	}
 	
@@ -303,7 +300,7 @@ public class ListingDocument {
 		private currency						currency;
 		private Set<String> 					skills			= new LinkedHashSet<>();
 		private Set<language> 					languages		= new LinkedHashSet<>();
-		private Set<ListingViewedEventEntity> 	views			= new LinkedHashSet<>();
+		private Set<ListingViewedEventDocument> views			= new LinkedHashSet<>();
 
 		/**
 		* Sets the unique id of te Listing
@@ -484,7 +481,7 @@ public class ListingDocument {
 		* @param views - Number of times the Listing has been viewed
 		* @return Builder
 		*/
-		public ListingDocumentBuilder views(Set<ListingViewedEventEntity> views) {
+		public ListingDocumentBuilder views(Set<ListingViewedEventDocument> views) {
 			this.views.clear();
 			this.views.addAll(views);
 			return this;
@@ -524,7 +521,7 @@ public class ListingDocument {
 					.skills(listing.getSkills())
 					.title(listing.getTitle())
 					.type(listing.getType())
-					.views(listing.getViews().stream().map(ListingViewedEventEntity::convertToEntity).collect(Collectors.toSet()))
+					.views(listing.getViews().stream().map(ListingViewedEventDocument::toDocument).collect(Collectors.toSet()))
 					.yearsExperience(listing.getYearsExperience())
 				.build();
 	}
@@ -553,7 +550,7 @@ public class ListingDocument {
 					.skills(listing.getSkills())
 					.title(listing.getTitle())
 					.type(listing.getType())
-					.views(listing.getViews().stream().map(ListingViewedEventEntity::convertFromEntity).collect(Collectors.toSet()))
+					.views(listing.getViews().stream().map(ListingViewedEventDocument::fromDocument).collect(Collectors.toSet()))
 					.yearsExperience(listing.getYearsExperience())
 				.build();
 	}

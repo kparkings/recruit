@@ -1,7 +1,6 @@
 package com.arenella.recruit.listings.services;
 
 import java.io.IOException;
-import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -48,7 +47,6 @@ import com.arenella.recruit.listings.utils.ListingGeoZoneSearchUtil;
 public class ListingServiceImpl implements ListingService{
 
 	@Autowired
-	//private ListingDao 						listingDao;
 	private ListingRepository				listingRepository;
 	
 	@Autowired
@@ -80,10 +78,7 @@ public class ListingServiceImpl implements ListingService{
 		
 		this.performValidation(listing);
 		
-		//ListingEntity entity = ListingEntity.convertToEntity(listing, Optional.empty()); 
 		this.listingRepository.saveListings(Set.of(listing));
-		
-		//this.listingDao.save(entity);
 		
 		if (postToSocialMedia) {
 			//TODO: Post on LinkedIN 
@@ -98,7 +93,6 @@ public class ListingServiceImpl implements ListingService{
 	@Override
 	public void updateListing(UUID listingId, Listing listing) {
 		
-		//ListingEntity 	entity 			= this.listingDao.findById(listingId).orElseThrow(() -> new IllegalArgumentException("Cannot update unknown listing: " + listingId));
 		Listing 		originalListing 	= this.listingRepository.findListingById(listingId).orElseThrow(() -> new IllegalArgumentException("Cannot update unknown listing: " + listingId));
 		String 			currentUser			= SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
 		
@@ -108,14 +102,13 @@ public class ListingServiceImpl implements ListingService{
 		* 1. Only the owner can perform an update
 		* 2. The owner cannot change the owner from themselves to another recruiter 
 		*/
-		if (!originalListing.getOwnerId().toString().equals(currentUser) || !listing.getOwnerId().toString().equals(currentUser)) {
+		if (!originalListing.getOwnerId().toString().equals(currentUser)) {
 			throw new AccessDeniedException("Not authroised to alter this Listing");
 		}
 		
-		//ListingEntity entityUpdated = ListingEntity.convertToEntity(listing, Optional.of(entity)); 
-		
-		//this.listingDao.save(entityUpdated);
-		
+		listing.setOwnerId(originalListing.getOwnerId());
+		listing.setListingId(originalListing.getListingId());
+		listing.setCreated(originalListing.getCreated());
 		this.listingRepository.saveListings(Set.of(listing));
 		
 	}
@@ -126,7 +119,6 @@ public class ListingServiceImpl implements ListingService{
 	@Override
 	public void deleteListing(UUID listingId) {
 		
-		//ListingEntity 	entity 			= this.listingDao.findById(listingId).orElseThrow(() -> new IllegalArgumentException("Cannot delete unknown listing: " + listingId));
 		Listing 	listing 			= this.listingRepository.findListingById(listingId).orElseThrow(() -> new IllegalArgumentException("Cannot delete unknown listing: " + listingId));
 		String 			currentUser		= SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
 		
@@ -135,7 +127,7 @@ public class ListingServiceImpl implements ListingService{
 		}
 		
 		this.listingRepository.deleteById(listingId);
-		//this.listingDao.delete(entity);
+	
 	}
 
 	/**
@@ -152,19 +144,12 @@ public class ListingServiceImpl implements ListingService{
 		if (!filters.getSearchTerms().isEmpty()) {
 			String originalTerm = (String)filters.getSearchTerms().toArray()[0];
 			
-		//	Set<String> allTerms = new HashSet<>();
-			
 			this.functionSynonymUil.extractAllFunctionAndSynonyms(originalTerm).stream().forEach(synonym -> {
 				filters.addSearchTerm(synonym);
-				//allTerms.add(synonym);
 			});
 			
-			//allTerms.forEach(t -> filters.addSearchTerm(t));
-			
-			//System.out.println("boop");
 		}
 		
-		//return listingDao.findAll(filters, pageable).map(ListingEntity::convertFromEntity);
 		return listingRepository.findAll(filters, this.esClient, pageable);
 	}
 	
@@ -218,16 +203,10 @@ public class ListingServiceImpl implements ListingService{
 			return;
 		}
 		
-		//ListingEntity listingEntity = this.listingDao.findById(event.getListingId()).orElseThrow(() -> new IllegalArgumentException("Cannot update unknown listing: " + event.getListingId()));
 		Listing listing  = this.listingRepository.findListingById(event.getListingId()).orElseThrow(() -> new IllegalArgumentException("Cannot update unknown listing: " + event.getListingId()));
 		
-		//ListingViewedEventEntity viewEntity = ListingViewedEventEntity.convertToEntity(event);
-		
-		//listingEntity.addView(viewEntity);
 		listing.addView(event);
-		
-		
-		//this.listingDao.save(listingEntity);
+	
 		this.listingRepository.saveListings(Set.of(listing));
 	}
 
@@ -239,7 +218,6 @@ public class ListingServiceImpl implements ListingService{
 		
 		performFileSafetyCheck(contactRequest.getAttachment());
 		
-		//Listing listing = this.listingDao.findListingById(contactRequest.getListingId()).orElseThrow(() -> new RuntimeException("Unknown Listing"));
 		Listing listing = this.listingRepository.findListingById(contactRequest.getListingId()).orElseThrow(() -> new RuntimeException("Unknown Listing"));
 		
 		try {
@@ -278,12 +256,10 @@ public class ListingServiceImpl implements ListingService{
 		
 		ListingFilter filters = ListingFilter.builder().ownerId(recruiterId).build();
 		
-		//Set<Listing> listings = this.listingDao.findAllListings(filters);
 		Set<Listing> listings = this.listingRepository.findAllListings(filters, this.esClient);
 		
 		listings.stream().forEach(l -> l.setActive(false));
 		
-		//this.listingDao.saveListings(listings);
 		this.listingRepository.saveListings(listings);
 	}
 
@@ -295,12 +271,10 @@ public class ListingServiceImpl implements ListingService{
 		
 		ListingFilter filters = ListingFilter.builder().ownerId(recruiterId).build();
 		
-		//Set<Listing> listings = this.listingDao.findAllListings(filters);
 		Set<Listing> listings = this.listingRepository.findAllListings(filters, this.esClient);
 		
 		listings.stream().forEach(l -> l.setActive(true));
 		
-		//this.listingDao.saveListings(listings);
 		this.listingRepository.saveListings(listings);
 		
 	}
@@ -315,7 +289,6 @@ public class ListingServiceImpl implements ListingService{
 			performFileSafetyCheck(contactRequest.getAttachment().get());
 		}
 		
-		//Listing listing = this.listingDao.findListingById(contactRequest.getListingId()).orElseThrow(() -> new RuntimeException("Unknown Listing"));
 		Listing listing = this.listingRepository.findListingById(contactRequest.getListingId()).orElseThrow(() -> new RuntimeException("Unknown Listing"));
 		
 		try {
@@ -455,7 +428,6 @@ public class ListingServiceImpl implements ListingService{
 		
 		ListingFilter filters = ListingFilter.builder().ownerId(recruiterId).build();
 		
-		//this.listingDao.findAllListings(filters).forEach(listing -> this.listingDao.deleteById(listing.getListingId()));
 		this.listingRepository.findAllListings(filters, this.esClient).forEach(listing -> this.listingRepository.deleteById(listing.getListingId()));
 		
 	}

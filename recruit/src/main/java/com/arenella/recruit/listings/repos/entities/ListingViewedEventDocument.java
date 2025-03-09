@@ -1,15 +1,15 @@
 package com.arenella.recruit.listings.repos.entities;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 
 import com.arenella.recruit.listings.beans.ListingViewedEvent;
-
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 
 /**
 * Representation of an event where a User has viewed the 
@@ -21,8 +21,14 @@ public class ListingViewedEventDocument {
 	private UUID 			eventId;
 	
 	@Field(type = FieldType.Date)
-	@Enumerated(EnumType.STRING)
-	private LocalDateTime 	created;
+	private Date 	created;
+	
+	/**
+	* Default Constructor 
+	*/
+	public ListingViewedEventDocument() {
+		
+	}
 	
 	/**
 	* Constructor based upon a builder
@@ -30,7 +36,7 @@ public class ListingViewedEventDocument {
 	*/
 	public ListingViewedEventDocument(ListingViewedEventDocumentBuilder builder) {
 		this.eventId = builder.eventId;
-		this.created = builder.created;
+		this.created = Optional.ofNullable(builder.created).isEmpty() ? null : Date.from(builder.created.atZone(ZoneId.systemDefault()).toInstant());
 	}
 	
 	/**
@@ -46,7 +52,7 @@ public class ListingViewedEventDocument {
 	* @return When the Event was created
 	*/
 	public LocalDateTime getCreated() {
-		return this.created;
+		return LocalDateTime.ofInstant(this.created.toInstant(), ZoneId.systemDefault());
 	}
 	
 	/**
@@ -100,7 +106,7 @@ public class ListingViewedEventDocument {
 	* @param document - To be converted
 	* @return Domain representation
 	*/
-	public static ListingViewedEvent fromEntity(ListingViewedEventDocument document) {
+	public static ListingViewedEvent fromDocument(ListingViewedEventDocument document) {
 		return ListingViewedEvent
 				.builder()
 					.eventId(document.getEventId())

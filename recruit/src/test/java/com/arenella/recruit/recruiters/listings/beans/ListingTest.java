@@ -138,6 +138,8 @@ public class ListingTest {
 	@Test
 	public void testSetters() throws Exception {
 		
+		final LocalDateTime updatedCreated = LocalDateTime.of(2025, 3, 9, 19, 11);
+		
 		Listing listing = Listing.builder().build();
 		
 		assertNull(listing.getListingId());
@@ -155,6 +157,9 @@ public class ListingTest {
 		assertTrue(listing.getCreated() 	instanceof LocalDateTime);
 		assertFalse(listing.isActive());
 		
+		listing.setCreated(updatedCreated);
+		
+		assertEquals(updatedCreated, listing.getCreated());
 	}
 	
 	/**

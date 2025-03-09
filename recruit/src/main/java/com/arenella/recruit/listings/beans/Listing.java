@@ -253,6 +253,14 @@ public class Listing {
 	}
 	
 	/**
+	* Sets when the Listing was created
+	* @param created - When the listing was created
+	*/
+	public void setCreated(LocalDateTime created) {
+		this.created = created;
+	}
+	
+	/**
 	* Returns the rate being offered
 	* @return rate offered for the Listing
 	*/

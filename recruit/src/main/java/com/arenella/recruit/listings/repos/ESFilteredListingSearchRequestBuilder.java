@@ -5,10 +5,8 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 import com.arenella.recruit.listings.beans.ListingFilter;
 import com.arenella.recruit.listings.beans.Listing.LISTING_AGE;
@@ -16,7 +14,6 @@ import com.arenella.recruit.listings.beans.Listing.listing_type;
 
 import co.elastic.clients.elasticsearch._types.FieldValue;
 import co.elastic.clients.elasticsearch._types.query_dsl.BoolQuery;
-import co.elastic.clients.elasticsearch._types.query_dsl.MatchPhraseQuery;
 import co.elastic.clients.elasticsearch._types.query_dsl.MatchQuery;
 import co.elastic.clients.elasticsearch._types.query_dsl.RangeQuery;
 import co.elastic.clients.elasticsearch._types.query_dsl.TermsQuery;
@@ -119,7 +116,6 @@ public class ESFilteredListingSearchRequestBuilder {
 			List<co.elastic.clients.elasticsearch._types.query_dsl.Query> shouldQueries 		= new ArrayList<>();
 			
 			filterOptions.getSearchTerms().stream().forEach(term -> {
-				//shouldQueries.add(new MatchPhraseQuery.Builder().field("tile").query(term).build()._toQuery());
 				shouldQueries.add(new WildcardQuery.Builder().field("title").value("*"+term+"*").caseInsensitive(true).build()._toQuery());
 			});
 			

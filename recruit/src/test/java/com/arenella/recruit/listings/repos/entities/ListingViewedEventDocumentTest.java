@@ -73,7 +73,7 @@ class ListingViewedEventDocumentTest {
 		assertEquals(ID, document.getEventId());
 		assertEquals(CREATED, document.getCreated());
 		
-		ListingViewedEvent event = ListingViewedEventDocument.fromEntity(document); 
+		ListingViewedEvent event = ListingViewedEventDocument.fromDocument(document); 
 		
 		assertEquals(ID, event.getEventId());
 		assertEquals(CREATED, event.getCreated());

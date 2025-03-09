@@ -53,22 +53,23 @@ PUT /listings_001
         "type": "keyword"
       },
       "views": {
-        "type": "keyword"
+        "properties": {
+          "created": {
+            "type": "date"
+          },
+          "eventId": {
+            "type": "text",
+            "fields": {
+              "keyword": {
+                "type": "keyword",
+                "ignore_above": 256
+              }
+            }
+          }
+        }
       },
       "yearsExperience": {
         "type": "integer"
-      }
-    }
-  },
-    "settings": {
-    "analysis": {
-      "normalizer": {
-        "lowercase_normalizer": {
-          "type": "custom",
-          "filter": [
-            "lowercase"
-          ]
-        }
       }
     }
   }

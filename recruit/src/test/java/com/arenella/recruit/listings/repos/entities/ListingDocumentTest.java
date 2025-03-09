@@ -16,32 +16,31 @@ import com.arenella.recruit.listings.beans.Listing.currency;
 import com.arenella.recruit.listings.beans.Listing.language;
 import com.arenella.recruit.listings.beans.Listing.listing_type;
 import com.arenella.recruit.listings.beans.ListingViewedEvent;
-import com.arenella.recruit.listings.dao.ListingViewedEventEntity;
 
 /**
 * Unit tests for the ListingDocument class 
 */
 public class ListingDocumentTest {
 
-	private static final UUID 							LISTING_ID			= UUID.randomUUID();
-	private static final String							OWNER_ID			= "123";
-	private static final String							OWNER_NAME			= "Kevin Parkings";
-	private static final String 						OWNER_COMPANY		= "Arenella BV";
-	private static final String							OWNER_EMAIL			= "kparkings@gmail.com";
-	private static final LocalDateTime					CREATED				= LocalDateTime.of(2025, 3, 2, 17, 17);
-	private static final String 						TITLE				= "Java Developer";
-	private static final String 						DESCRIPTION			= "Senior Jav Developer needed";
-	private static final listing_type 					TYPE				= listing_type.CONTRACT_ROLE;
-	private static final Country 						COUNTRY				= Country.BELGIUM;
-	private static final String 						LOCATION			= "Brussels";
-	private static final int 							YEARS_EXPERIENCE	= 10;
-	private static final boolean						ACTIVE				= true; 
-	private static final String 						RATE				= "100 p/d ex tax";
-	private static final currency						CURRENCY			= currency.EUR;
-	private static final Set<String> 					SKILLS				= Set.of("JAVA");
-	private static final Set<language> 					LANGUAGES			= Set.of(language.CZECH);
-	private static final ListingViewedEventEntity		VIEW_ENTITY			= ListingViewedEventEntity.builder().build();
-	private static final Set<ListingViewedEventEntity> 	VIEWS				= Set.of(VIEW_ENTITY);
+	private static final UUID 								LISTING_ID			= UUID.randomUUID();
+	private static final String								OWNER_ID			= "123";
+	private static final String								OWNER_NAME			= "Kevin Parkings";
+	private static final String 							OWNER_COMPANY		= "Arenella BV";
+	private static final String								OWNER_EMAIL			= "kparkings@gmail.com";
+	private static final LocalDateTime						CREATED				= LocalDateTime.of(2025, 3, 2, 17, 17);
+	private static final String 							TITLE				= "Java Developer";
+	private static final String 							DESCRIPTION			= "Senior Jav Developer needed";
+	private static final listing_type 						TYPE				= listing_type.CONTRACT_ROLE;
+	private static final Country 							COUNTRY				= Country.BELGIUM;
+	private static final String 							LOCATION			= "Brussels";
+	private static final int 								YEARS_EXPERIENCE	= 10;
+	private static final boolean							ACTIVE				= true; 
+	private static final String 							RATE				= "100 p/d ex tax";
+	private static final currency							CURRENCY			= currency.EUR;
+	private static final Set<String> 						SKILLS				= Set.of("JAVA");
+	private static final Set<language> 						LANGUAGES			= Set.of(language.CZECH);
+	private static final ListingViewedEventDocument			VIEW_DOC			= ListingViewedEventDocument.builder().created(LocalDateTime.of(2025, 3, 8, 19, 47)).build();
+	private static final Set<ListingViewedEventDocument> 	VIEWS				= Set.of(VIEW_DOC);
 	
 	/**
 	* Tests construction via a Builder
@@ -89,7 +88,7 @@ public class ListingDocumentTest {
 		assertEquals(YEARS_EXPERIENCE, listing.getYearsExperience());
 		
 		assertTrue(listing.getSkills().contains("JAVA"));
-		assertTrue(listing.getViews().contains(VIEW_ENTITY));
+		assertTrue(listing.getViews().contains(VIEW_DOC));
 		assertTrue(listing.getLanguages().contains(language.CZECH));
 		
 	}
@@ -156,7 +155,7 @@ public class ListingDocumentTest {
 			assertEquals(YEARS_EXPERIENCE, 	document.getYearsExperience());
 			
 			assertTrue(document.getSkills().contains("JAVA"));
-			assertTrue(document.getViews().contains(VIEW_ENTITY));
+			assertTrue(document.getViews().contains(VIEW_DOC));
 			assertTrue(document.getLanguages().contains(language.CZECH));
 			
 			Listing listing = ListingDocument.fromEntity(document);
