@@ -410,27 +410,8 @@ export class ListingComponent implements OnInit {
 	* Returns size limited version
 	*/
 	public getFormattedJobTitle(title:string):string{
-		return title.length < 50 ? title : title.substring(0,49) + "...";
+		return title.length < 35 ? title : title.substring(0,35) + "...";
 	}
-	
-	/**
-	* Generated the filter sring to filter results by. Can be empty
-	* String if no filters required
-	*/
-	//private generateFilters(): ListingSearchRequest{
-		
-	//	let filters:ListingSearchRequest = new ListingSearchRequest();
-		
-	//	if (this.contractTypeFilter != "") {
-	//		filters.contractType = this.contractTypeFilter;
-	//	}
-		
-	//	if (this.ageFilter != "ALL") {
-	//		filters.maxAgeOfPost = this.ageFilter;
-	//	}
-		
-	//	return filters;
-	//}
 	
 	/**
 	* Overloaded version
@@ -439,45 +420,7 @@ export class ListingComponent implements OnInit {
 		//this.searchBar.fetchListingsFull(id, false);
 	}
 	
-	/**
-	* Retrieves listings belonging to the Recruiter
-	*/
-	//public fetchListingsFull(id:string, resetSelectedListing:boolean):void{
 	
-	//	if (resetSelectedListing) {
-	//		this.selectedListing	= new Listing();
-	//	}
-		
-	//	this.listingService
-	//		.fetchAllListings('created',"desc", this.currentPage, this.pageSize, this.generateFilters())
-	//			.subscribe(data => {
-	//				this.totalPages = data.totalPages;
-					
-	//				let lis:Array<Listing> = data.content;
-					
-	//				lis.forEach(l =>{
-	//					this.listings.push(l);	
-	//				});
-					
-	//				if (id !== "") {
-		
-	//					var results: Array<Listing> = this.listings.filter(listing => listing.listingId === id);
-		
-	//					if (results.length > -1) {
-	//						let listing: Listing = results[0];
-	//			
-	//						this.showListingDetails(listing)
-				
-	//					}
-		
-	//				}
-					
-	//			}, 
-	//			err => {
-	//				console.log("Error retrieving listings for all recruiters" + JSON.stringify(err));			
-	//			});
-		
-	//}
 	
 	/**
 	* Registers that a Listing has been viewed
@@ -511,37 +454,6 @@ export class ListingComponent implements OnInit {
 		return matchingType == null ? "NA" : matchingType.humanReadable;
 		
   	}
-
-	/**
-	* Sets which contract type filters have been selected
-	*/
-	//public updateContractTypeFilter(contractType:string){
-		
-	//	this.listings			= new Array<Listing>();
-	//	this.pageYPos = 0;
-		
-		
-	//	switch(contractType){
-	//		case "Contract": {
-	//			this.currentPage		= 0;
-	//			this.contractTypeFilter = "CONTRACT_ROLE"
-	//			this.fetchListings("");
-	//			return;
-	//		}
-	//		case "Perm": {
-	//			this.currentPage		= 0;
-	//			this.contractTypeFilter = "PERM_ROLE"
-	//			this.fetchListings("");
-	//			return;
-	//		}
-	//		default: {
-	//			this.currentPage		= 0;
-	//			this.contractTypeFilter = ""
-	//			this.fetchListings("");
-	//			return;
-	//		}
-	//	}	
-	//}
 	
 	/**
 	* Returns the appropriate css class to indicate if the filter 
@@ -554,43 +466,6 @@ export class ListingComponent implements OnInit {
 		
 		return "inactive-filter";
 	}
-	
-	/**
-	* Sets which post age filter have been selected
-	*/
-	//public updatePostAgeFilter(contractType:string){
-		
-	//	this.listings			= new Array<Listing>();
-	//	this.pageYPos = 0;
-		
-	//	switch(contractType){
-			
-	//		case "TODAY": {
-	//			this.currentPage		= 0;
-	//			this.ageFilter = "TODAY"
-	//			this.fetchListings("");
-	//			return;
-	//		}
-	//		case "THIS_WEEK": {
-	//			this.currentPage		= 0;
-	//			this.ageFilter = "THIS_WEEK"
-	//			this.fetchListings("");
-	//			return;
-	//		}
-	//		case "THIS_MONTH": {
-	//			this.currentPage		= 0;
-	//			this.ageFilter = "THIS_MONTH";
-	//			this.fetchListings("");
-	//			return;
-	//		}
-	//		default: {
-	//			this.currentPage		= 0;
-	//			this.ageFilter = "ALL";
-	//			this.fetchListings("");
-	//			return;
-	//		}
-	//	}	
-	//}
 	
 	/**
 	* Returns the appropriate css class to indicate if the filter 

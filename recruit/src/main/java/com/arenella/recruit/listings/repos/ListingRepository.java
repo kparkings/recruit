@@ -98,7 +98,16 @@ public interface ListingRepository extends ElasticsearchRepository<ListingDocume
 		
 	}
 	
-	default SearchResponse<ListingDocument> fetchWithFilters(ListingFilter filterOptions, ElasticsearchClient esClient, int firstRecordInPage, int maxRecordsInPage) throws Exception{
+	private int computeFromRecord(int pageNumber, int maxRecordsInPage) {
+		
+		if (pageNumber == 0) {
+			return 0;
+		}
+		
+		return ((pageNumber * maxRecordsInPage) + maxRecordsInPage ) - (maxRecordsInPage + 1)+1;
+	}
+	
+	default SearchResponse<ListingDocument> fetchWithFilters(ListingFilter filterOptions, ElasticsearchClient esClient, int pageNumber, int maxRecordsInPage) throws Exception{
 		
 		co.elastic.clients.elasticsearch._types.query_dsl.Query boolQuery = ESFilteredListingSearchRequestBuilder.createFilteredQuery(filterOptions);
 		
@@ -107,9 +116,9 @@ public interface ListingRepository extends ElasticsearchRepository<ListingDocume
 		
 		return esClient.search(b -> b
 			    .index("listings")
-			    .from(firstRecordInPage)
-			    .size(maxRecordsInPage)
 			    .sort(f -> f.field(FieldSort.of(a -> a.field(sortField).order(sortOrder))))
+			    .from(computeFromRecord(pageNumber, (maxRecordsInPage-1)))
+			    .size(maxRecordsInPage)
 			    .query(boolQuery) ,
 			    ListingDocument.class);
 	}

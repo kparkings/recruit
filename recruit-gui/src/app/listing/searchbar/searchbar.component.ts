@@ -92,7 +92,10 @@ export class SearchbarComponentListing {
 			
 		this.backendRequestCounter 		= 0;
 		
-		this.fetchListingsFull("", false, 0, this.pageSize);
+		
+		if (this.currentPage != 0) {
+			this.fetchListingsFull("", false, 0, this.pageSize);
+		}
 	}
 		
 	/**
@@ -253,7 +256,7 @@ export class SearchbarComponentListing {
 			this.signalResetOfSearch = true;
 		}
 		
-		
+		console.log("FETCHING CURRENTPAGE" + currentPage + " PAGESIZE " + pageSize);
 		this.listingService
 			.fetchAllListings('created',"desc", currentPage, pageSize, this.generateFilters())
 				.subscribe(data => {

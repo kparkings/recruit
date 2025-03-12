@@ -25,7 +25,7 @@ public class ListingViewedEvent {
 		this.eventId 		= builder.eventId;
 		this.listingId 		= builder.listingId;
 		this.created 		= builder.created;
-		
+		this.title			= builder.title;
 	}
 	
 	/**
@@ -43,6 +43,14 @@ public class ListingViewedEvent {
 	*/
 	public UUID getListingId() {
 		return this.listingId;
+	}
+	
+	/**
+	* Returns the title of the Listing
+	* @return Listing title
+	*/
+	public String getTite() {
+		return this.title;
 	}
 	
 	/**
@@ -87,7 +95,8 @@ public class ListingViewedEvent {
 		private UUID 			eventId			= UUID.randomUUID();
 		private UUID 			listingId;
 		private LocalDateTime 	created			= LocalDateTime.now();
-	
+		private String			title;
+		
 		/**
 		* Sets the unique Id of the Event 
 		* @param eventId - Unique Id of the Event
@@ -105,6 +114,16 @@ public class ListingViewedEvent {
 		*/
 		public ListingViewedEventBuilder listingId(UUID listingId) {
 			this.listingId = listingId;
+			return this;
+		}
+		
+		/**
+		* Sets the title of the Listing
+		* @param title - Title of listing view event belongs to
+		* @return
+		*/
+		public ListingViewedEventBuilder title(String title) {
+			this.title = title;
 			return this;
 		}
 		

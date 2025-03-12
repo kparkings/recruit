@@ -64,6 +64,8 @@ class ListingViewedEventDocumentTest {
 	@Test
 	void testFromEntity() {
 		
+		ListingDocument listing = ListingDocument.builder().build();
+		
 		ListingViewedEventDocument document = ListingViewedEventDocument
 				.builder()
 					.eventId(ID)
@@ -73,7 +75,7 @@ class ListingViewedEventDocumentTest {
 		assertEquals(ID, document.getEventId());
 		assertEquals(CREATED, document.getCreated());
 		
-		ListingViewedEvent event = ListingViewedEventDocument.fromDocument(document); 
+		ListingViewedEvent event = ListingViewedEventDocument.fromDocument(listing, document); 
 		
 		assertEquals(ID, event.getEventId());
 		assertEquals(CREATED, event.getCreated());

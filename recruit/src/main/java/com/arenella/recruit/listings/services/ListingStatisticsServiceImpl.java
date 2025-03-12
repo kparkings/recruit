@@ -1,6 +1,7 @@
 package com.arenella.recruit.listings.services;
 
 import java.security.Principal;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -17,6 +18,9 @@ import com.arenella.recruit.listings.controllers.ListingStatistics;
 import com.arenella.recruit.listings.dao.ListingDao;
 import com.arenella.recruit.listings.dao.ListingStatisticsDao;
 import com.arenella.recruit.listings.dao.ListingViewedEventEntity;
+import com.arenella.recruit.listings.repos.ListingRepository;
+
+import co.elastic.clients.elasticsearch.ElasticsearchClient;
 
 /**
 * Services relating to Listing statistics
@@ -25,19 +29,21 @@ import com.arenella.recruit.listings.dao.ListingViewedEventEntity;
 @Service
 public class ListingStatisticsServiceImpl implements ListingStatisticsService{
 
-	@Autowired
-	private ListingStatisticsDao listingStatsDao;
+	@Autowired 
+	private ListingRepository	listingRepo;
 	
 	@Autowired
-	private ListingDao 			listingDao;
-	
+	private ElasticsearchClient	esClient;
 	/**
 	* Refer to the StatisticsService interface for details 
 	*/
 	@Override
 	public ListingStatistics fetchListingStatistics() {
 		
-		List<ListingViewedEvent> events = StreamSupport.stream(listingStatsDao.findAll().spliterator(), false).map(ListingViewedEventEntity::convertFromEntity).collect(Collectors.toList());
+		
+		List<ListingViewedEvent> events = this.listingRepo.findAllListings(ListingFilter.builder().build(), this.esClient)
+		.stream()
+		.map(Listing::getViews).flatMap(Collection::stream).toList();
 		
 		return new ListingStatistics(events);
 		
@@ -53,17 +59,10 @@ public class ListingStatisticsServiceImpl implements ListingStatisticsService{
 			throw new IllegalArgumentException("You cannot view another Recruiters Statistic's");
 		}
 		
-		Set<Listing> 				listings 	= this.listingDao.findAllListings(ListingFilter.builder().ownerId(recruiterId).build());
-		Set<ListingViewedEvent> 	events 		= listingStatsDao.fetchEventsForRecruiter(recruiterId);
+		return this.listingRepo.findAllListings(ListingFilter.builder().ownerId(recruiterId).build(), this.esClient)
+				.stream()
+				.map(Listing::getViews).flatMap(Collection::stream).collect(Collectors.toSet());
 		
-		events.stream().forEach(e -> {
-			Optional<Listing> listing = listings.stream().filter(l -> l.getListingId().toString().equals(e.getListingId().toString())).findFirst();
-			if (listing.isPresent()) {
-				e.setTitle(listing.get().getTitle());
-			}
-		});
-		
-		return events;
 	}
 
 }

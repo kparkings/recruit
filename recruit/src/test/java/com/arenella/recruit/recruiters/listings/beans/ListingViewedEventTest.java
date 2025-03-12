@@ -14,7 +14,7 @@ import com.arenella.recruit.listings.beans.ListingViewedEvent;
 * Unit tests for the ListingViewedEventClass
 * @author K Parkings
 */
-public class ListingViewedEventTest {
+class ListingViewedEventTest {
 
 	/**
 	* Tests that by default if not eventId is provided 
@@ -22,7 +22,7 @@ public class ListingViewedEventTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testBuilder_defaults() throws Exception{
+	void testBuilder_defaults() {
 		
 		ListingViewedEvent event = ListingViewedEvent.builder().build();
 		
@@ -36,16 +36,17 @@ public class ListingViewedEventTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testBuilder() throws Exception{
+	void testBuilder() {
 		
 		final UUID 				eventId 		= UUID.randomUUID();
 		final UUID 				listingId 		= UUID.randomUUID();
 		final LocalDateTime 	created 		= LocalDateTime.of(2021,12,12, 00,00,01);
-		
+		final String			title			= "aTitle";
 		ListingViewedEvent event = ListingViewedEvent
 												.builder()
 													.eventId(eventId)
 													.listingId(listingId)
+													.title(title)
 													.created(created)
 												.build();
 		
@@ -54,7 +55,8 @@ public class ListingViewedEventTest {
 		assertEquals(eventId, 		event.getEventId());
 		assertEquals(listingId, 	event.getListingId());
 		assertEquals(created, 		event.getCreated());
-		
+		assertEquals(title, 		event.getTitleOrLisingId());
+			
 	}
 	
 	/**
@@ -63,7 +65,7 @@ public class ListingViewedEventTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testGetTitle() throws Exception {
+	void testGetTitle() {
 		
 		final String 			title 			= "Java Developer";
 		final UUID 				eventId 		= UUID.randomUUID();

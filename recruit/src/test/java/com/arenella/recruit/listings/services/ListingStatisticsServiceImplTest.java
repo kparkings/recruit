@@ -13,35 +13,37 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.arenella.recruit.listings.beans.Listing;
 import com.arenella.recruit.listings.beans.ListingViewedEvent;
-import com.arenella.recruit.listings.dao.ListingDao;
-import com.arenella.recruit.listings.dao.ListingStatisticsDao;
+import com.arenella.recruit.listings.repos.ListingRepository;
+
+import co.elastic.clients.elasticsearch.ElasticsearchClient;
 
 /**
 * Unit tests for the ListingStatisticsServiceImpl class 
 * @author K Parkings
 */
 @ExtendWith(MockitoExtension.class)
-public class ListingStatisticsServiceImplTest {
+class ListingStatisticsServiceImplTest {
 
 	@Mock
-	private Principal				mockPrincipal;
+	private Principal						mockPrincipal;
+	
+	@Mock 
+	private ListingRepository				mockListingRepo;
 	
 	@Mock
-	private ListingStatisticsDao 	mockListingStatsDao;
-	
-	@Mock
-	private ListingDao 				listingDao;
+	private ElasticsearchClient				esClient;
 	
 	@InjectMocks
-	private ListingStatisticsServiceImpl service = new ListingStatisticsServiceImpl();
+	private ListingStatisticsServiceImpl 	service = new ListingStatisticsServiceImpl();
 	
 	/**
-	* Test that Recruiter can only ontain their own statistics
+	* Test that Recruiter can only obtain their own statistics
 	* @throws Exception
 	*/
 	@Test
-	public void testFetchListingStatsForRecruiter_otherRecruitersEvents() throws Exception {
+	void testFetchListingStatsForRecruiter_otherRecruitersEvents() {
 		
 		Mockito.when(mockPrincipal.getName()).thenReturn("recruiter1");
 		
@@ -56,12 +58,17 @@ public class ListingStatisticsServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testFetchListingStatsForRecruiter() throws Exception {
+	void testFetchListingStatsForRecruiter() {
 		
 		final String recruiter = "recruiter1";
 		
 		Mockito.when(mockPrincipal.getName()).thenReturn(recruiter);
-		Mockito.when(this.mockListingStatsDao.fetchEventsForRecruiter(recruiter)).thenReturn(Set.of(ListingViewedEvent.builder().build(), ListingViewedEvent.builder().build()));
+		Mockito.when(this.mockListingRepo
+				.findAllListings(Mockito.any(),Mockito.any()))
+			.thenReturn(Set.of(
+					Listing.builder().views(Set.of(ListingViewedEvent.builder().build())).build(),
+					Listing.builder().views(Set.of(ListingViewedEvent.builder().build())).build()
+					));	
 		
 		Set<ListingViewedEvent> results = this.service.fetchListingStatsForRecruiter(recruiter, mockPrincipal);
 		

@@ -106,9 +106,11 @@ public class ListingViewedEventDocument {
 	* @param document - To be converted
 	* @return Domain representation
 	*/
-	public static ListingViewedEvent fromDocument(ListingViewedEventDocument document) {
+	public static ListingViewedEvent fromDocument(ListingDocument listing, ListingViewedEventDocument document) {
 		return ListingViewedEvent
 				.builder()
+					.listingId(listing.getListingId())
+					.title(listing.getTitle())
 					.eventId(document.getEventId())
 					.created(document.getCreated())
 				.build();

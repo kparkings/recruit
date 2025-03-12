@@ -550,7 +550,7 @@ public class ListingDocument {
 					.skills(listing.getSkills())
 					.title(listing.getTitle())
 					.type(listing.getType())
-					.views(listing.getViews().stream().map(ListingViewedEventDocument::fromDocument).collect(Collectors.toSet()))
+					.views(listing.getViews().stream().map(event -> ListingViewedEventDocument.fromDocument(listing, event)).collect(Collectors.toSet()))
 					.yearsExperience(listing.getYearsExperience())
 				.build();
 	}
