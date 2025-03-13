@@ -1172,6 +1172,7 @@ public class CandidateSearchRequest {
 			f.getFirstName().ifPresent(builder::firstname);
 			f.getSurname().ifPresent(builder::surname);
 			f.getTitle().ifPresent(builder::searchText);
+			f.getCandidateId().ifPresent(id -> builder.candidateIds(Set.of(String.valueOf(""+id))));
 		});
 		
 		req.candidateFilters().ifPresent(f -> {

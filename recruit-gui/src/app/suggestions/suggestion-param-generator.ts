@@ -65,14 +65,15 @@ export class SuggestionParams{
 		if (this.filterType == 'EMAIL') {
 			this.email = suggestionFilterForm.get('searchPhrase')?.value;
 		}
-		
+		console.log("----> Start >> " + this.filterType );
 		if (this.filterType == 'CANDIDATE_ID') {
-			
+			console.log("----> Candidate ID")
 			const candidateId =  suggestionFilterForm.get('searchPhrase')?.value;
-			
+			console.log("----> as " + candidateId)
 			const isNumeric = /^[+-]?\d+(\.\d+)?$/.test(candidateId);
 			
 			if (isNumeric){
+				console.log("----> set " )
 				this.candidateId = candidateId;
 			}
 			

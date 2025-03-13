@@ -170,7 +170,7 @@ export class CandidateServiceService {
 	public getCandidateSuggestions(searchRequest:SuggestionsSearchRequest): Observable<any>{
 		
 		const backendUrl:string = environment.backendUrl +'submitCandidateSearchRequest/?orderAttribute=candidateId&order=desc&page=0&unfiltered=true&size=112&backendRequestId=1&searchText=&available=true';
-				
+				console.log(":::: " + JSON.stringify(searchRequest))
 		return this.httpClient.post<any>(backendUrl, JSON.stringify(searchRequest), {headers: new HttpHeaders({ 'Content-Type': 'application/json' }),  withCredentials: true, responseType: "json", observe: "response"});
 		
 	}
