@@ -22,7 +22,7 @@ import com.arenella.recruit.candidates.enums.PERM;
 * Unit tests for the CandidateAPIInboundTest class
 * @author K Parkings
 */
-public class CandidateAPOutboundTest {
+class CandidateAPOutboundTest {
 
 	private static final String 		candidateId 			= "Candidate1";
 	private static final FUNCTION		function				= FUNCTION.JAVA_DEV;
@@ -53,12 +53,12 @@ public class CandidateAPOutboundTest {
 	* Test Builder values used to initialize instance of the Candidate Class 
 	*/
 	@Test
-	public void testInitializationFromBuilder() {
+	void testInitializationFromBuilder() {
 		
 		Candidate candidate = Candidate
 						.builder()
 							.candidateId(candidateId)
-							.function(function)
+							.functions(Set.of(function))
 							.country(country)
 							.city(city)
 							.available(available)
@@ -72,8 +72,8 @@ public class CandidateAPOutboundTest {
 							.build();
 		
 		assertEquals(candidateId, 			candidate.getCandidateId());
-		assertEquals(function, 				candidate.getFunction());
-		assertEquals(country, 			candidate.getCountry());
+		assertEquals(function, 				candidate.getFunctions().toArray()[0]);
+		assertEquals(country, 				candidate.getCountry());
 		assertEquals(city, 					candidate.getCity());
 		assertEquals(available, 			candidate.isAvailable());
 		assertEquals(freelance, 			candidate.isFreelance());

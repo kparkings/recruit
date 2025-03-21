@@ -66,7 +66,7 @@ public class CandidateUpdateRequestTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testBuilder_defaults() throws Exception {
+	void testBuilder_defaults() throws Exception {
 		
 		CandidateUpdateRequest candidate = CandidateUpdateRequest.builder().build();
 		
@@ -75,11 +75,11 @@ public class CandidateUpdateRequestTest {
 		assertEquals(0, 								candidate.getYearsExperience());
 		assertNull(candidate.isFreelance());
 		assertNull(candidate.isPerm());
-		assertNull(candidate.getFunction());
 		assertNull(candidate.getCountry());
 		
 		assertTrue(candidate.getRateContract().isEmpty());
 		assertTrue(candidate.getRatePerm().isEmpty());
+		assertTrue(candidate.getFunctions().isEmpty());
 		
 		assertEquals(candidate.getAvailableFromDate(), LocalDate.now()); //[KP] Small chance of failure if test run in exactly midnight
 		
@@ -89,12 +89,12 @@ public class CandidateUpdateRequestTest {
 	* Test Builder values used to initialize instance of the Candidate Class 
 	*/
 	@Test
-	public void testInitializationFromBuilder() {
+	void testInitializationFromBuilder() {
 		
 		CandidateUpdateRequest candidate = CandidateUpdateRequest
 						.builder()
 							.candidateId(CANDIDATE_ID)
-							.function(FUNCTION_VAL)
+							.functions(Set.of(FUNCTION_VAL))
 							.country(COUNTRY_VAL)
 							.city(CITY)
 							.email(EMAIL)
@@ -116,7 +116,7 @@ public class CandidateUpdateRequestTest {
 							.build();
 		
 		assertEquals(CANDIDATE_ID, 			candidate.getCandidateId());
-		assertEquals(FUNCTION_VAL, 			candidate.getFunction());
+		assertEquals(FUNCTION_VAL, 			candidate.getFunctions().toArray()[0]);
 		assertEquals(COUNTRY_VAL, 			candidate.getCountry());
 		assertEquals(CITY, 					candidate.getCity());
 		assertEquals(EMAIL, 				candidate.getEmail());

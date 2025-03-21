@@ -24,7 +24,7 @@ public class CandidateUpdateRequest {
 	private String 					surname;
 	private String 					email;
 	private String					roleSought;
-	private FUNCTION				function;
+	private Set<FUNCTION>			functions					= new LinkedHashSet<>();
 	private COUNTRY 				country;
 	private String 					city;
 	private PERM 					perm;
@@ -53,7 +53,6 @@ public class CandidateUpdateRequest {
 		this.surname					= builder.surname;
 		this.email						= builder.email;
 		this.roleSought					= builder.roleSought;
-		this.function				 	= builder.function;
 		this.country					= builder.country;
 		this.city 						= builder.city;
 		this.perm 						= builder.perm;
@@ -70,7 +69,7 @@ public class CandidateUpdateRequest {
 		this.requiresSponsorship		= builder.requiresSponsorship;
 		this.securityClearance			= builder.securityClearance;
 		this.languages.addAll(builder.languages);
-	
+		this.functions.addAll(builder.functions);
 	}
 	
 	/**
@@ -107,7 +106,7 @@ public class CandidateUpdateRequest {
 	
 	/**
 	* Returns the title on the role the user is looking for. This can be a more 
-	* specific description of the users role that provided by the function 
+	* specific description of the users role that provided by the functions 
 	* attribute
 	* @return Role sought my the Candidate
 	*/
@@ -116,11 +115,11 @@ public class CandidateUpdateRequest {
 	}
 	
 	/**
-	* Returns the function the Candidate performs
-	* @return function the Candidate performs
+	* Returns the functions the Candidate performs
+	* @return functions the Candidate performs
 	*/
-	public FUNCTION getFunction() {
-		return this.function;
+	public Set<FUNCTION> getFunctions() {
+		return this.functions;
 	}
 	
 	/**
@@ -277,13 +276,13 @@ public class CandidateUpdateRequest {
 		private String					surname;
 		private String 					email;
 		private String					roleSought;
-		private FUNCTION				function;
+		private Set<FUNCTION>			functions				= new LinkedHashSet<>();
 		private COUNTRY 				country;
 		private String 					city;
 		private PERM 					perm;
 		private FREELANCE 				freelance;
 		private int						yearsExperience;
-		private Set<Language> 			languages					= new LinkedHashSet<>();
+		private Set<Language> 			languages				= new LinkedHashSet<>();
 		private String					introduction;
 		private byte[]					photoBytes;
 		private Set<String> 			skills					= new LinkedHashSet<>();
@@ -346,12 +345,13 @@ public class CandidateUpdateRequest {
 		}
 		
 		/**
-		* Sets the function the candidate performs
-		* @param function - Function performed by the Candidate
+		* Sets the functions the candidate performs
+		* @param functions - Function performed by the Candidate
 		* @return Builder
 		*/
-		public CandidateUpdateRequestBuilder function(FUNCTION function) {
-			this.function = function;
+		public CandidateUpdateRequestBuilder functions(Set<FUNCTION> functions) {
+			this.functions.clear();
+			this.functions.addAll(functions);
 			return this;
 		}
 		

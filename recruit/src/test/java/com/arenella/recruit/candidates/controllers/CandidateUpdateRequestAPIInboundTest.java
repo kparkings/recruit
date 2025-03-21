@@ -29,7 +29,7 @@ import com.arenella.recruit.candidates.enums.PERM;
 * Unit tests for the CandidateUpdateRequestAPIInbound class
 * @author K Parkings
 */
-public class CandidateUpdateRequestAPIInboundTest {
+class CandidateUpdateRequestAPIInboundTest {
 
 	private static final String 					CANDIDATE_ID 			= "Candidate1";
 	private static final FUNCTION					FUNCTION_VAL			= FUNCTION.JAVA_DEV;
@@ -53,6 +53,7 @@ public class CandidateUpdateRequestAPIInboundTest {
 	private static final LocalDate 					AVAILABLE_FROM_DATE 	= LocalDate.of(2023, 7, 21);
 	private static final SECURITY_CLEARANCE_TYPE 	SECURITY_CLEARANCE		= SECURITY_CLEARANCE_TYPE.DV;
 	private static final boolean					REQUIRES_SPONSORSHIP = true;
+	
 	/**
 	* Sets up test environment 
 	*/
@@ -75,11 +76,11 @@ public class CandidateUpdateRequestAPIInboundTest {
 		assertEquals(0, 								candidate.getYearsExperience());
 		assertNull(candidate.isFreelance());
 		assertNull(candidate.isPerm());
-		assertNull(candidate.getFunction());
 		assertNull(candidate.getCountry());
 		
 		assertTrue(candidate.getRateContract().isEmpty());
 		assertTrue(candidate.getRatePerm().isEmpty());
+		assertTrue(candidate.getFunctions().isEmpty());
 		
 		assertEquals(candidate.getAvailableFromDate(), LocalDate.now()); //[KP] Small chance of failure if test run in exactly midnight
 		
@@ -94,7 +95,7 @@ public class CandidateUpdateRequestAPIInboundTest {
 		
 		CandidateUpdateRequestAPIInbound candidate = CandidateUpdateRequestAPIInbound
 						.builder()
-							.function(FUNCTION_VAL)
+							.functions(Set.of(FUNCTION_VAL))
 							.country(COUNTRY_VAL)
 							.city(CITY)
 							.email(EMAIL)
@@ -114,7 +115,7 @@ public class CandidateUpdateRequestAPIInboundTest {
 							.securityClearance(SECURITY_CLEARANCE)
 							.build();
 		
-		assertEquals(FUNCTION_VAL, 			candidate.getFunction());
+		assertEquals(FUNCTION_VAL, 			candidate.getFunctions().toArray()[0]);
 		assertEquals(COUNTRY_VAL, 			candidate.getCountry());
 		assertEquals(CITY, 					candidate.getCity());
 		assertEquals(EMAIL, 				candidate.getEmail());
@@ -138,14 +139,14 @@ public class CandidateUpdateRequestAPIInboundTest {
 	}
 	
 	/**
-	* Tests API Inbound to Domain Converstion 
+	* Tests API Inbound to Domain Conversion 
 	*/
 	@Test
-	public void testConvertToDomain() throws Exception{
+	void testConvertToDomain() throws Exception{
 		
 		CandidateUpdateRequestAPIInbound candidateAPIInboumd = CandidateUpdateRequestAPIInbound
 				.builder()
-					.function(FUNCTION_VAL)
+					.functions(Set.of(FUNCTION_VAL))
 					.country(COUNTRY_VAL)
 					.city(CITY)
 					.email(EMAIL)
@@ -167,7 +168,7 @@ public class CandidateUpdateRequestAPIInboundTest {
 		CandidateUpdateRequest domain = CandidateUpdateRequestAPIInbound.convertToDomain(CANDIDATE_ID, candidateAPIInboumd, Optional.empty());
 
 		assertEquals(CANDIDATE_ID,						domain.getCandidateId());
-		assertEquals(FUNCTION_VAL, 						domain.getFunction());
+		assertEquals(FUNCTION_VAL, 						domain.getFunctions().toArray()[0]);
 		assertEquals(COUNTRY_VAL, 						domain.getCountry());
 		assertEquals(CITY, 								domain.getCity());
 		assertEquals(EMAIL, 							domain.getEmail());

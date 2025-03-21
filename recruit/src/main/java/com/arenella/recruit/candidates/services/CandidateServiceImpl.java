@@ -847,7 +847,7 @@ public class CandidateServiceImpl implements CandidateService{
 					.firstname(candidate.getFirstname())
 					.flaggedAsUnavailable(existingCandidate.isFlaggedAsUnavailable())
 					.freelance(candidate.isFreelance())
-					.function(candidate.getFunction())
+					.functions(candidate.getFunctions())
 					.languages(candidate.getLanguages())
 					.lastAvailabilityCheck(existingCandidate.getLastAvailabilityCheckOn())
 					.perm(candidate.isPerm())

@@ -27,7 +27,7 @@ import com.arenella.recruit.candidates.services.CandidateStatisticsService.NEW_S
 * @author K Parkings
 */
 @ExtendWith(MockitoExtension.class)
-public class CandidateStatisticsControllerTest {
+class CandidateStatisticsControllerTest {
 
 	@Mock
 	private CandidateStatisticsService			mockCandidateStatisticsService;
@@ -40,7 +40,7 @@ public class CandidateStatisticsControllerTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testFetchNumberOfCandidates() throws Exception{
+	void testFetchNumberOfCandidates() {
 		
 		final Long numberOfAvailableCandidates = 88L;
 		
@@ -58,7 +58,7 @@ public class CandidateStatisticsControllerTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testFetchNewCandidates() throws Exception{
+	void testFetchNewCandidates() {
 		
 		final String 		ROLE_SOUGHT 	= "Java Developer";
 		final LocalDate		newSinceDate	= LocalDate.of(2022, 11, 5);
@@ -79,11 +79,11 @@ public class CandidateStatisticsControllerTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testFetchNewCandidatesBreakdown() throws Exception{
+	void testFetchNewCandidatesBreakdown() {
 		
-		final FUNCTION 		ROLE_SOUGHT 	= FUNCTION.JAVA_DEV;
+		final FUNCTION 		roleSought 		= FUNCTION.JAVA_DEV;
 		final LocalDate		newSinceDate	= LocalDate.of(2022, 11, 5);
-		final Candidate 	candidate 		= Candidate.builder().function(ROLE_SOUGHT).build();
+		final Candidate 	candidate 		= Candidate.builder().functions(Set.of(roleSought)).build();
 			
 		Mockito.when(mockCandidateStatisticsService.fetchNewCandidates(newSinceDate)).thenReturn(Set.of(candidate));
 		Mockito.when(mockCandidateStatisticsService.getLastRunDateNewCandidateStats(NEW_STATS_TYPE.NEW_CANDIDATE_BREAKDOWN)).thenReturn(newSinceDate);
@@ -91,7 +91,7 @@ public class CandidateStatisticsControllerTest {
 		ResponseEntity<NewCandidateSummaryAPIOutbound> response = controller.fetchNewCandidatesBreakdown();
 		
 		assertEquals(HttpStatus.OK, response.getStatusCode());
-		assertEquals(ROLE_SOUGHT, 	response.getBody().getCandidatesSummary().stream().findFirst().get().getFunctionType());
+		assertEquals(roleSought, 	response.getBody().getCandidatesSummary().stream().findFirst().get().getFunctionType());
 		
 		
 	}
@@ -101,7 +101,7 @@ public class CandidateStatisticsControllerTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testFetchSearchStatsForRecruiter() throws Exception{
+	void testFetchSearchStatsForRecruiter() {
 		
 		final String recruiterId = "recruiter1";
 		
@@ -114,10 +114,10 @@ public class CandidateStatisticsControllerTest {
 	}
 	
 	/**
-	* Tests endpoint for retrieving search history statistics 
+	* Tests end-point for retrieving search history statistics 
 	*/
 	@Test
-	public void testfetchSearchHistory() {
+	void testfetchSearchHistory() {
 		
 		Mockito.when(this.mockCandidateStatisticsService.fetchCandidateSearchEvents(30)).thenReturn(Set.of());
 		

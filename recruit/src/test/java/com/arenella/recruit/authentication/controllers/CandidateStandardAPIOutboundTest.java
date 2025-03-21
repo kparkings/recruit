@@ -47,7 +47,7 @@ public class CandidateStandardAPIOutboundTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testBuilder() throws Exception{
+	void testBuilder() throws Exception{
 		
 		CandidateStandardAPIOutbound candidate = CandidateStandardAPIOutbound
 														.builder()
@@ -56,7 +56,7 @@ public class CandidateStandardAPIOutboundTest {
 															.city(city)
 															.country(country)
 															.freelance(freelance)
-															.function(function)
+															.functions(Set.of(function))
 															.languages(languages)
 															.flaggedAsUnavailable(flaggedAsUnavailable)
 															.lastAvailabilityCheck(lastAvailabilityCheck)
@@ -71,7 +71,7 @@ public class CandidateStandardAPIOutboundTest {
 		
 		assertEquals(candidateId, 				candidate.getCandidateId());
 		assertEquals(roleSought, 				candidate.getRoleSought());
-		assertEquals(function, 					candidate.getFunction());
+		assertEquals(function, 					candidate.getFunctions().toArray()[0]);
 		assertEquals(country, 					candidate.getCountry());
 		assertEquals(city, 						candidate.getCity());
 		assertEquals(perm, 						candidate.getPerm());
@@ -113,7 +113,7 @@ public class CandidateStandardAPIOutboundTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testConvertFromCandidate() throws Exception{
+	void testConvertFromCandidate() throws Exception{
 		
 		Candidate candidate = Candidate
 									.builder()
@@ -124,7 +124,7 @@ public class CandidateStandardAPIOutboundTest {
 										.email(email)
 										.country(country)
 										.freelance(freelance)
-										.function(function)
+										.functions(Set.of(function))
 										.languages(languages)
 										.lastAvailabilityCheck(lastAvailabilityCheck)
 										.perm(perm)
@@ -141,7 +141,7 @@ public class CandidateStandardAPIOutboundTest {
 		
 		assertEquals(candidateId, 				candidateAPIOutbound.getCandidateId());
 		assertEquals(roleSought, 				candidateAPIOutbound.getRoleSought());
-		assertEquals(function, 					candidateAPIOutbound.getFunction());
+		assertEquals(function, 					candidateAPIOutbound.getFunctions().toArray()[0]);
 		assertEquals(country, 					candidateAPIOutbound.getCountry());
 		assertEquals(city, 						candidateAPIOutbound.getCity());
 		assertEquals(perm, 						candidateAPIOutbound.getPerm());

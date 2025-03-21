@@ -23,7 +23,7 @@ import com.arenella.recruit.candidates.enums.PERM;
 * Unit tests for the CandidateAPOutnboundTest
 * @author K Parkings
 */
-public class CandidateAPIInboundTest {
+class CandidateAPIInboundTest {
 
 	private static final String 					candidateId 			= "Candidate1";
 	private static final String 					firstname				= "Kevin";
@@ -58,7 +58,7 @@ public class CandidateAPIInboundTest {
 	* Test Builder values used to initialize instance of the Candidate Class 
 	*/
 	@Test
-	public void testInitializationFromBuilder() {
+	void testInitializationFromBuilder() {
 		
 		CandidateAPIInbound candidate = CandidateAPIInbound
 						.builder()
@@ -67,7 +67,7 @@ public class CandidateAPIInboundTest {
 							.surname(surname)
 							.email(email)
 							.roleSought(roleSought)
-							.function(function)
+							.functions(Set.of(function))
 							.country(country)
 							.city(city)
 							.available(available)
@@ -84,7 +84,7 @@ public class CandidateAPIInboundTest {
 		assertEquals(firstname, 			candidate.getFirstname());
 		assertEquals(surname, 				candidate.getSurname());
 		assertEquals(email, 				candidate.getEmail());
-		assertEquals(function, 				candidate.getFunction());
+		assertEquals(function, 				candidate.getFunctions().toArray()[0]);
 		assertEquals(roleSought, 			candidate.getRoleSought());
 		assertEquals(country, 				candidate.getCountry());
 		assertEquals(city, 					candidate.getCity());
@@ -106,7 +106,7 @@ public class CandidateAPIInboundTest {
 	* successfully 
 	*/
 	@Test
-	public void testConversionToCandidate() {
+	void testConversionToCandidate() {
 		
 		CandidateAPIInbound candidateEntity = CandidateAPIInbound
 				.builder()
@@ -115,7 +115,7 @@ public class CandidateAPIInboundTest {
 					.surname(surname)
 					.email(email)
 					.roleSought(roleSought)
-					.function(function)
+					.functions(Set.of(function))
 					.country(country)
 					.city(city)
 					.available(available)
@@ -135,7 +135,7 @@ public class CandidateAPIInboundTest {
 		assertEquals(surname, 				candidate.getSurname());
 		assertEquals(email, 				candidate.getEmail());
 		assertEquals(roleSought, 			candidate.getRoleSought());
-		assertEquals(function, 				candidate.getFunction());
+		assertEquals(function, 				candidate.getFunctions().toArray()[0]);
 		assertEquals(country, 				candidate.getCountry());
 		assertEquals(city, 					candidate.getCity());
 		assertEquals(available, 			candidate.isAvailable());
@@ -155,7 +155,7 @@ public class CandidateAPIInboundTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testAvailableByDefault() throws Exception {
+	void testAvailableByDefault() {
 		
 		CandidateAPIInbound candidate = CandidateAPIInbound.builder().build();
 		

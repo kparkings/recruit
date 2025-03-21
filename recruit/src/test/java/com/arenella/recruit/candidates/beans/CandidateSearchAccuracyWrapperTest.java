@@ -21,7 +21,7 @@ import com.arenella.recruit.candidates.utils.CandidateSuggestionUtil.suggestion_
 * Unit tests for the CandidateSearchAccuracyWrapper class
 * @author K Parkings
 */
-public class CandidateSearchAccuracyWrapperTest {
+class CandidateSearchAccuracyWrapperTest {
 
 	private static final String 				candidateId 			= "Candidate1";
 	private static final FUNCTION				function				= FUNCTION.JAVA_DEV;
@@ -63,7 +63,7 @@ public class CandidateSearchAccuracyWrapperTest {
 		Candidate candidate = Candidate
 				.builder()
 					.candidateId(candidateId)
-					.function(function)
+					.functions(Set.of(function))
 					.country(country)
 					.city(city)
 					.email(email)
@@ -85,7 +85,7 @@ public class CandidateSearchAccuracyWrapperTest {
 			wrapper.setAccuracySkills(accuracySkills);
 			
 			assertEquals(candidateId, 								wrapper.get().getCandidateId());
-			assertEquals(function, 									wrapper.get().getFunction());
+			assertEquals(function, 									wrapper.get().getFunctions().toArray()[0]);
 			assertEquals(country, 									wrapper.get().getCountry());
 			assertEquals(city, 										wrapper.get().getCity());
 			assertEquals(email, 									wrapper.get().getEmail());

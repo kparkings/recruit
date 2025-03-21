@@ -29,7 +29,7 @@ public class Candidate {
 	private String 						surname;
 	private String 						email;
 	private String						roleSought;
-	private FUNCTION					function;
+	private Set<FUNCTION>				functions					= new LinkedHashSet<>();
 	private COUNTRY 					country;
 	private String 						city;
 	private double						latitude;
@@ -72,7 +72,6 @@ public class Candidate {
 		this.surname							= builder.surname;
 		this.email								= builder.email;
 		this.roleSought							= builder.roleSought;
-		this.function				 			= builder.function;
 		this.country							= builder.country;
 		this.city 								= builder.city;
 		this.longitude							= builder.longitude;
@@ -102,7 +101,7 @@ public class Candidate {
 		
 		this.skills.addAll(builder.skills);
 		this.languages.addAll(builder.languages);
-	
+		this.functions.addAll(builder.functions);
 	}
 	
 	/**
@@ -139,7 +138,7 @@ public class Candidate {
 	
 	/**
 	* Returns the title on the role the user is looking for. This can be a more 
-	* specific description of the users role that provided by the function 
+	* specific description of the users role that provided by the functions 
 	* attribute
 	* @return Role sought my the Candidate
 	*/
@@ -148,11 +147,11 @@ public class Candidate {
 	}
 	
 	/**
-	* Returns the function the Candidate performs
+	* Returns the functions the Candidate performs
 	* @return function the Candidate performs
 	*/
-	public FUNCTION getFunction() {
-		return this.function;
+	public Set<FUNCTION> getFunctions() {
+		return this.functions;
 	}
 	
 	/**
@@ -561,7 +560,7 @@ public class Candidate {
 		private String						surname;
 		private String 						email;
 		private String						roleSought;
-		private FUNCTION					function;
+		private Set<FUNCTION>				functions					= new LinkedHashSet<>();
 		private COUNTRY 					country;
 		private String 						city;
 		private double						longitude;
@@ -643,12 +642,13 @@ public class Candidate {
 		}
 		
 		/**
-		* Sets the function the candidate performs
-		* @param function - Function performed by the Candidate
+		* Sets the functions the candidate performs
+		* @param function - Functions performed by the Candidate
 		* @return Builder
 		*/
-		public CandidateBuilder function(FUNCTION function) {
-			this.function = function;
+		public CandidateBuilder functions(Set<FUNCTION> functions) {
+			this.functions.clear();
+			this.functions.addAll(functions);
 			return this;
 		}
 		

@@ -30,7 +30,7 @@ public class CandidateFullProfileAPIOutbound implements CandidateAPIOutbound{
 	public static final String CENSORED_ITEM = "-";
 	
 	private String 					candidateId;
-	private FUNCTION				function;
+	private Set<FUNCTION>			functions					= new LinkedHashSet<>();
 	private String					roleSought;
 	private COUNTRY 				country;
 	private String 					city;
@@ -64,7 +64,6 @@ public class CandidateFullProfileAPIOutbound implements CandidateAPIOutbound{
 	public CandidateFullProfileAPIOutbound(CandidateFullProfileAPIOutboundBuilder builder) {
 		
 		this.candidateId				= builder.candidateId;
-		this.function				 	= builder.function;
 		this.roleSought					= builder.roleSought;
 		this.country					= builder.country;
 		this.city 						= builder.city;
@@ -90,6 +89,7 @@ public class CandidateFullProfileAPIOutbound implements CandidateAPIOutbound{
 		
 		this.skills.addAll(builder.skills);
 		this.languages.addAll(builder.languages);
+		this.functions.addAll(builder.functions);
 	
 	}
 	
@@ -102,11 +102,11 @@ public class CandidateFullProfileAPIOutbound implements CandidateAPIOutbound{
 	}
 
 	/**
-	* Returns the function the Candidate performs
+	* Returns the functions the Candidate performs
 	* @return function the Candidate performs
 	*/
-	public FUNCTION getFunction() {
-		return this.function;
+	public Set<FUNCTION> getFunctions() {
+		return this.functions;
 	}
 	
 	/**
@@ -322,7 +322,7 @@ public class CandidateFullProfileAPIOutbound implements CandidateAPIOutbound{
 	public static class CandidateFullProfileAPIOutboundBuilder {
 		
 		private String 					candidateId;
-		private FUNCTION				function;
+		private Set<FUNCTION>			functions					= new LinkedHashSet<>();
 		private String					roleSought;
 		private COUNTRY 				country;
 		private String 					city;
@@ -359,12 +359,13 @@ public class CandidateFullProfileAPIOutbound implements CandidateAPIOutbound{
 		}
 		
 		/**
-		* Sets the function the candidate performs
-		* @param function - Function performed by the Candidate
+		* Sets the functions the candidate performs
+		* @param functions - Functions performed by the Candidate
 		* @return Builder
 		*/
-		public CandidateFullProfileAPIOutboundBuilder function(FUNCTION function) {
-			this.function = function;
+		public CandidateFullProfileAPIOutboundBuilder functions(Set<FUNCTION> functions) {
+			this.functions.clear();
+			this.functions.addAll(functions);
 			return this;
 		}
 		
@@ -635,7 +636,7 @@ public class CandidateFullProfileAPIOutbound implements CandidateAPIOutbound{
 				.builder()
 					.candidateId(candidate.getCandidateId())
 					.country(candidate.getCountry())
-					.function(candidate.getFunction())
+					.functions(candidate.getFunctions())
 					.roleSought(candidate.getRoleSought())
 					.city(candidate.getCity())
 					.freelance(candidate.isFreelance())
@@ -679,7 +680,7 @@ public class CandidateFullProfileAPIOutbound implements CandidateAPIOutbound{
 				.builder()
 					.candidateId(candidate.getCandidateId())
 					.country(candidate.getCountry())
-					.function(candidate.getFunction())
+					.functions(candidate.getFunctions())
 					.roleSought(candidate.getRoleSought())
 					.city(candidate.getCity())
 					.freelance(candidate.isFreelance())

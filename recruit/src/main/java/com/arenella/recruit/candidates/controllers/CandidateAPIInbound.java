@@ -34,7 +34,7 @@ public class CandidateAPIInbound {
 	private String 					surname;
 	private String 					email;
 	private String					roleSought;
-	private FUNCTION				function;
+	private Set<FUNCTION>			functions					= new LinkedHashSet<>();
 	private COUNTRY 				country;
 	private String 					city;
 	private PERM 					perm;
@@ -62,7 +62,6 @@ public class CandidateAPIInbound {
 		this.firstname					= builder.firstname;
 		this.surname					= builder.surname;
 		this.email						= builder.email;
-		this.function				 	= builder.function;
 		this.roleSought					= builder.roleSought;
 		this.country					= builder.country;
 		this.city 						= builder.city;
@@ -81,7 +80,8 @@ public class CandidateAPIInbound {
 		
 		this.skills.addAll(builder.skills);
 		this.languages.addAll(builder.languages);
-	
+		this.functions.addAll(builder.functions);
+		
 	}
 	
 	/**
@@ -125,11 +125,11 @@ public class CandidateAPIInbound {
 	}
 		
 	/**
-	* Returns the function the Candidate performs
-	* @return function the Candidate performs
+	* Returns the functions the Candidate performs
+	* @return functions the Candidate performs
 	*/
-	public FUNCTION getFunction() {
-		return this.function;
+	public Set<FUNCTION> getFunctions() {
+		return this.functions;
 	}
 	
 	/**
@@ -286,7 +286,7 @@ public class CandidateAPIInbound {
 		private String					surname;
 		private String 					email;
 		private String					roleSought;
-		private FUNCTION				function;
+		private Set<FUNCTION>			functions				 	= new LinkedHashSet<>();
 		private COUNTRY 				country;
 		private String 					city;
 		private PERM 					perm;
@@ -355,12 +355,13 @@ public class CandidateAPIInbound {
 		}
 		
 		/**
-		* Sets the function the candidate performs
+		* Sets the functions the candidate performs
 		* @param function - Function performed by the Candidate
 		* @return Builder
 		*/
-		public CandidateAPIInboundBuilder function(FUNCTION function) {
-			this.function = function;
+		public CandidateAPIInboundBuilder functions(Set<FUNCTION> functions) {
+			this.functions.clear();
+			this.functions.addAll(functions);
 			return this;
 		}
 		
@@ -553,7 +554,7 @@ public class CandidateAPIInbound {
 					.surname(candiateAPIInbound.getSurname())
 					.email(candiateAPIInbound.getEmail())
 					.roleSought(candiateAPIInbound.roleSought)
-					.function(candiateAPIInbound.getFunction())
+					.functions(candiateAPIInbound.getFunctions())
 					.city(candiateAPIInbound.getCity())
 					.country(candiateAPIInbound.getCountry())
 					.freelance(candiateAPIInbound.isFreelance())

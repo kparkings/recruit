@@ -24,7 +24,7 @@ import com.arenella.recruit.candidates.utils.CandidateSuggestionUtil.suggestion_
 * Unit tests for the CandidateAPIInboundTest class
 * @author K Parkings
 */
-public class CandidateSuggestionAPIOutboundTest {
+class CandidateSuggestionAPIOutboundTest {
 
 	private static final String 					candidateId				= "999";
 	private static final String 					firstname				= "Kevin";
@@ -54,7 +54,7 @@ public class CandidateSuggestionAPIOutboundTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testBuilder() throws Exception{
+	void testBuilder() throws Exception{
 		
 		CandidateSuggestionAPIOutbound candidate =  CandidateSuggestionAPIOutbound
 														.builder()
@@ -63,7 +63,7 @@ public class CandidateSuggestionAPIOutboundTest {
 															.city(city)
 															.country(country)
 															.freelance(freelance)
-															.function(function)
+															.functions(Set.of(function))
 															.languages(languages)
 															.flaggedAsUnavailable(flaggedAsUnavailable)
 															.lastAvailabilityCheck(lastAvailabilityCheck)
@@ -82,7 +82,7 @@ public class CandidateSuggestionAPIOutboundTest {
 		
 		assertEquals(candidateId, 				candidate.getCandidateId());
 		assertEquals(roleSought, 				candidate.getRoleSought());
-		assertEquals(function, 					candidate.getFunction());
+		assertEquals(function, 					candidate.getFunctions().toArray()[0]);
 		assertEquals(country, 					candidate.getCountry());
 		assertEquals(city, 						candidate.getCity());
 		assertEquals(perm, 						candidate.getPerm());
@@ -138,7 +138,7 @@ public class CandidateSuggestionAPIOutboundTest {
 										.email(email)
 										.country(country)
 										.freelance(freelance)
-										.function(function)
+										.functions(Set.of(function))
 										.languages(languages)
 										.lastAvailabilityCheck(lastAvailabilityCheck)
 										.perm(perm)
@@ -163,7 +163,7 @@ public class CandidateSuggestionAPIOutboundTest {
 		
 		assertEquals(candidateId, 				candidateAPIOutbound.getCandidateId());
 		assertEquals(roleSought, 				candidateAPIOutbound.getRoleSought());
-		assertEquals(function, 					candidateAPIOutbound.getFunction());
+		assertEquals(function, 					candidateAPIOutbound.getFunctions().toArray()[0]);
 		assertEquals(country, 					candidateAPIOutbound.getCountry());
 		assertEquals(city, 						candidateAPIOutbound.getCity());
 		assertEquals(perm, 						candidateAPIOutbound.getPerm());
@@ -203,7 +203,7 @@ public class CandidateSuggestionAPIOutboundTest {
 										.email(email)
 										.country(country)
 										.freelance(freelance)
-										.function(function)
+										.functions(Set.of(function))
 										.languages(languages)
 										.lastAvailabilityCheck(lastAvailabilityCheck)
 										.perm(perm)
@@ -228,7 +228,7 @@ public class CandidateSuggestionAPIOutboundTest {
 		
 		assertEquals(candidateId, 									candidateAPIOutbound.getCandidateId());
 		assertEquals(roleSought, 									candidateAPIOutbound.getRoleSought());
-		assertEquals(function, 										candidateAPIOutbound.getFunction());
+		assertEquals(function, 										candidateAPIOutbound.getFunctions().toArray()[0]);
 		assertEquals(country, 										candidateAPIOutbound.getCountry());
 		assertEquals(city, 											candidateAPIOutbound.getCity());
 		assertEquals(perm, 											candidateAPIOutbound.getPerm());
@@ -268,7 +268,7 @@ public class CandidateSuggestionAPIOutboundTest {
 										.email(email)
 										.country(country)
 										.freelance(freelance)
-										.function(function)
+										.functions(Set.of(function))
 										.languages(languages)
 										.lastAvailabilityCheck(lastAvailabilityCheck)
 										.perm(perm)
@@ -293,7 +293,7 @@ public class CandidateSuggestionAPIOutboundTest {
 		
 		assertEquals(candidateId, 									candidateAPIOutbound.getCandidateId());
 		assertEquals(roleSought, 									candidateAPIOutbound.getRoleSought());
-		assertEquals(function, 										candidateAPIOutbound.getFunction());
+		assertEquals(function, 										candidateAPIOutbound.getFunctions().toArray()[0]);
 		assertEquals(country, 										candidateAPIOutbound.getCountry());
 		assertEquals(city, 											candidateAPIOutbound.getCity());
 		assertEquals(perm, 											candidateAPIOutbound.getPerm());

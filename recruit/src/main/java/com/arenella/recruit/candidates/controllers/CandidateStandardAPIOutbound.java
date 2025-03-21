@@ -18,7 +18,7 @@ import com.arenella.recruit.candidates.enums.PERM;
 public class CandidateStandardAPIOutbound implements CandidateAPIOutbound{
 
 	private String 			candidateId;
-	private FUNCTION		function;
+	private Set<FUNCTION>	functions					= new LinkedHashSet<>();
 	private String			roleSought;
 	private COUNTRY 		country;
 	private String 			city;
@@ -41,7 +41,6 @@ public class CandidateStandardAPIOutbound implements CandidateAPIOutbound{
 	public CandidateStandardAPIOutbound(CandidateAPIOutboundBuilder builder) {
 		
 		this.candidateId				= builder.candidateId;
-		this.function				 	= builder.function;
 		this.roleSought					= builder.roleSought;
 		this.country					= builder.country;
 		this.city 						= builder.city;
@@ -57,7 +56,8 @@ public class CandidateStandardAPIOutbound implements CandidateAPIOutbound{
 	
 		this.skills.addAll(builder.skills);
 		this.languages.addAll(builder.languages);
-	
+		this.functions.addAll(builder.functions);
+		
 	}
 	
 	/**
@@ -69,11 +69,11 @@ public class CandidateStandardAPIOutbound implements CandidateAPIOutbound{
 	}
 
 	/**
-	* Returns the function the Candidate performs
+	* Returns the functions the Candidate performs
 	* @return function the Candidate performs
 	*/
-	public FUNCTION getFunction() {
-		return this.function;
+	public Set<FUNCTION> getFunctions() {
+		return this.functions;
 	}
 	
 	/**
@@ -207,7 +207,7 @@ public class CandidateStandardAPIOutbound implements CandidateAPIOutbound{
 	public static class CandidateAPIOutboundBuilder {
 		
 		private String 			candidateId;
-		private FUNCTION		function;
+		private Set<FUNCTION>	functions					= new LinkedHashSet<>();
 		private String			roleSought;
 		private COUNTRY 		country;
 		private String 			city;
@@ -234,12 +234,13 @@ public class CandidateStandardAPIOutbound implements CandidateAPIOutbound{
 		}
 		
 		/**
-		* Sets the function the candidate performs
-		* @param function - Function performed by the Candidate
+		* Sets the functions the candidate performs
+		* @param functions - Function performed by the Candidate
 		* @return Builder
 		*/
-		public CandidateAPIOutboundBuilder function(FUNCTION function) {
-			this.function = function;
+		public CandidateAPIOutboundBuilder functions(Set<FUNCTION> functions) {
+			this.functions.clear();
+			this.functions.addAll(functions);
 			return this;
 		}
 		
@@ -409,7 +410,7 @@ public class CandidateStandardAPIOutbound implements CandidateAPIOutbound{
 				.builder()
 					.candidateId(candidate.getCandidateId())
 					.country(candidate.getCountry())
-					.function(candidate.getFunction())
+					.functions(candidate.getFunctions())
 					.roleSought(candidate.getRoleSought())
 					.city(candidate.getCity())
 					.freelance(candidate.isFreelance())

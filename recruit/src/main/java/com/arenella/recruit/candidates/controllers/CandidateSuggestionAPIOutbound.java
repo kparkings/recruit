@@ -24,7 +24,7 @@ public class CandidateSuggestionAPIOutbound implements CandidateAPIOutbound{
 	public static final String CENSORED_ITEM = "";
 	
 	private String 					candidateId;
-	private FUNCTION				function;
+	private Set<FUNCTION>			functions				 	= new LinkedHashSet<>();
 	private String					roleSought;
 	private COUNTRY 				country;
 	private String 					city;
@@ -51,7 +51,6 @@ public class CandidateSuggestionAPIOutbound implements CandidateAPIOutbound{
 	public CandidateSuggestionAPIOutbound(CandidateAPIOutboundBuilder builder) {
 		
 		this.candidateId				= builder.candidateId;
-		this.function				 	= builder.function;
 		this.roleSought					= builder.roleSought;
 		this.country					= builder.country;
 		this.city 						= builder.city;
@@ -71,7 +70,8 @@ public class CandidateSuggestionAPIOutbound implements CandidateAPIOutbound{
 		
 		this.skills.addAll(builder.skills);
 		this.languages.addAll(builder.languages);
-	
+		this.functions.addAll(builder.functions);
+		
 	}
 	
 	/**
@@ -83,11 +83,11 @@ public class CandidateSuggestionAPIOutbound implements CandidateAPIOutbound{
 	}
 
 	/**
-	* Returns the function the Candidate performs
+	* Returns the functions the Candidate performs
 	* @return function the Candidate performs
 	*/
-	public FUNCTION getFunction() {
-		return this.function;
+	public Set<FUNCTION> getFunctions() {
+		return this.functions;
 	}
 	
 	/**
@@ -258,7 +258,7 @@ public class CandidateSuggestionAPIOutbound implements CandidateAPIOutbound{
 	public static class CandidateAPIOutboundBuilder {
 		
 		private String 					candidateId;
-		private FUNCTION				function;
+		private Set<FUNCTION>			functions					= new LinkedHashSet<>();
 		private String					roleSought;
 		private COUNTRY 				country;
 		private String 					city;
@@ -289,12 +289,13 @@ public class CandidateSuggestionAPIOutbound implements CandidateAPIOutbound{
 		}
 		
 		/**
-		* Sets the function the candidate performs
-		* @param function - Function performed by the Candidate
+		* Sets the functions the candidate performs
+		* @param function - Functions performed by the Candidate
 		* @return Builder
 		*/
-		public CandidateAPIOutboundBuilder function(FUNCTION function) {
-			this.function = function;
+		public CandidateAPIOutboundBuilder functions(Set<FUNCTION> functions) {
+			this.functions.clear();
+			this.functions.addAll(functions);
 			return this;
 		}
 		
@@ -507,7 +508,7 @@ public class CandidateSuggestionAPIOutbound implements CandidateAPIOutbound{
 				.builder()
 					.candidateId(candidate.get().getCandidateId())
 					.country(candidate.get().getCountry())
-					.function(candidate.get().getFunction())
+					.functions(candidate.get().getFunctions())
 					.roleSought(candidate.get().getRoleSought())
 					.city(candidate.get().getCity())
 					.freelance(candidate.get().isFreelance())
@@ -540,7 +541,7 @@ public class CandidateSuggestionAPIOutbound implements CandidateAPIOutbound{
 				.builder()
 					.candidateId(candidate.get().getCandidateId())
 					.country(candidate.get().getCountry())
-					.function(candidate.get().getFunction())
+					.functions(candidate.get().getFunctions())
 					.roleSought(candidate.get().getRoleSought())
 					.city(candidate.get().getCity())
 					.freelance(candidate.get().isFreelance())
@@ -574,7 +575,7 @@ public class CandidateSuggestionAPIOutbound implements CandidateAPIOutbound{
 				.builder()
 					.candidateId(candidate.get().getCandidateId())
 					.country(candidate.get().getCountry())
-					.function(candidate.get().getFunction())
+					.functions(candidate.get().getFunctions())
 					.roleSought(candidate.get().getRoleSought())
 					.city(candidate.get().getCity())
 					.freelance(candidate.get().isFreelance())

@@ -2,6 +2,8 @@ package com.arenella.recruit.candidates.controllers;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.util.Set;
+
 import org.junit.jupiter.api.Test;
 
 import com.arenella.recruit.candidates.beans.Candidate;
@@ -12,21 +14,21 @@ import com.arenella.recruit.candidates.enums.FUNCTION;
 * Unit tests for the NewCandidateSummaryAPIOutbound class
 * @author K Parkings
 */
-public class NewCandidateSummaryAPIOutboundTest {
+class NewCandidateSummaryAPIOutboundTest {
 
 	/**
 	* Tests construction of summary
 	* @throws Exception
 	*/
 	@Test
-	public void testBuilder() throws Exception{
+	void testBuilder() {
 		
-		Candidate c1 = Candidate.builder().function(FUNCTION.TESTER).build();
-		Candidate c2 = Candidate.builder().function(FUNCTION.CSHARP_DEV).build();
-		Candidate c3 = Candidate.builder().function(FUNCTION.JAVA_DEV).build();
-		Candidate c4 = Candidate.builder().function(FUNCTION.TESTER).build();
-		Candidate c5 = Candidate.builder().function(FUNCTION.JAVA_DEV).build();
-		Candidate c6 = Candidate.builder().function(FUNCTION.JAVA_DEV).build();
+		Candidate c1 = Candidate.builder().functions(Set.of(FUNCTION.TESTER)).build();
+		Candidate c2 = Candidate.builder().functions(Set.of(FUNCTION.CSHARP_DEV)).build();
+		Candidate c3 = Candidate.builder().functions(Set.of(FUNCTION.JAVA_DEV)).build();
+		Candidate c4 = Candidate.builder().functions(Set.of(FUNCTION.TESTER)).build();
+		Candidate c5 = Candidate.builder().functions(Set.of(FUNCTION.JAVA_DEV)).build();
+		Candidate c6 = Candidate.builder().functions(Set.of(FUNCTION.JAVA_DEV)).build();
 		
 		NewCandidateSummaryAPIOutbound summary = NewCandidateSummaryAPIOutbound
 				.builder()

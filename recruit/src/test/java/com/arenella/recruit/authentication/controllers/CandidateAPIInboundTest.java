@@ -67,11 +67,11 @@ public class CandidateAPIInboundTest {
 		assertTrue(candidate.isAvailable());
 		assertNull(candidate.isFreelance());
 		assertNull(candidate.isPerm());
-		assertNull(candidate.getFunction());
 		assertNull(candidate.getCountry());
 		
 		assertTrue(candidate.getRateContract().isEmpty());
 		assertTrue(candidate.getRatePerm().isEmpty());
+		assertTrue(candidate.getFunctions().isEmpty());
 		
 		assertEquals(candidate.getAvailableFromDate(), LocalDate.now()); //[KP] Small chance of failure if test run in exactly midnight
 		
@@ -94,7 +94,7 @@ public class CandidateAPIInboundTest {
 														.email(email)
 														.firstname(firstname)
 														.freelance(freelance)
-														.function(function)
+														.functions(Set.of(function))
 														.languages(languages)
 														.perm(perm)
 														.roleSought(roleSought)
@@ -114,7 +114,7 @@ public class CandidateAPIInboundTest {
 		assertEquals(surname, 				candidate.getSurname());
 		assertEquals(email, 				candidate.getEmail());
 		assertEquals(roleSought, 			candidate.getRoleSought());
-		assertEquals(function, 				candidate.getFunction());
+		assertEquals(function, 				candidate.getFunctions().toArray()[0]);
 		assertEquals(country, 				candidate.getCountry());
 		assertEquals(city, 					candidate.getCity());
 		assertEquals(perm, 					candidate.isPerm());
@@ -146,7 +146,7 @@ public class CandidateAPIInboundTest {
 					.email(email)
 					.firstname(firstname)
 					.freelance(freelance)
-					.function(function)
+					.functions(Set.of(function))
 					.languages(languages)
 					.perm(perm)
 					.roleSought(roleSought)
@@ -168,7 +168,7 @@ public class CandidateAPIInboundTest {
 		assertEquals(candidate.getSurname(), 		candidate.getSurname());
 		assertEquals(candidate.getEmail(), 			candidate.getEmail());
 		assertEquals(candidate.getRoleSought(), 	candidate.getRoleSought());
-		assertEquals(candidate.getFunction(), 		candidate.getFunction());
+		assertEquals(candidate.getFunctions(), 		candidate.getFunctions().toArray()[0]);
 		assertEquals(candidate.getCountry(), 		candidate.getCountry());
 		assertEquals(candidate.getCity(), 			candidate.getCity());
 		assertEquals(candidate.isPerm(), 			candidate.isPerm());

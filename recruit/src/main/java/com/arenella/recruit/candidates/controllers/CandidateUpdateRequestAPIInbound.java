@@ -34,7 +34,7 @@ public class CandidateUpdateRequestAPIInbound {
 	private String 					surname;
 	private String 					email;
 	private String					roleSought;
-	private FUNCTION				function;
+	private Set<FUNCTION>			functions				 	= new LinkedHashSet<>();
 	private COUNTRY 				country;
 	private String 					city;
 	private PERM 					perm;
@@ -61,7 +61,6 @@ public class CandidateUpdateRequestAPIInbound {
 		this.surname					= builder.surname;
 		this.email						= builder.email;
 		this.roleSought					= builder.roleSought;
-		this.function				 	= builder.function;
 		this.country					= builder.country;
 		this.city 						= builder.city;
 		this.perm 						= builder.perm;
@@ -79,7 +78,8 @@ public class CandidateUpdateRequestAPIInbound {
 		this.securityClearance			= builder.securityClearance;
 		
 		this.languages.addAll(builder.languages);
-	
+		this.functions.addAll(functions);
+		
 	}
 
 	/***
@@ -117,11 +117,11 @@ public class CandidateUpdateRequestAPIInbound {
 	}
 	
 	/**
-	* Returns the function the Candidate performs
-	* @return function the Candidate performs
+	* Returns the functions the Candidate performs
+	* @return functions the Candidate performs
 	*/
-	public FUNCTION getFunction() {
-		return this.function;
+	public Set<FUNCTION> getFunctions() {
+		return this.functions;
 	}
 	
 	/**
@@ -269,7 +269,7 @@ public class CandidateUpdateRequestAPIInbound {
 		private String					surname;
 		private String 					email;
 		private String					roleSought;
-		private FUNCTION				function;
+		private Set<FUNCTION>			functions				 	= new LinkedHashSet<>();
 		private COUNTRY 				country;
 		private String 					city;
 		private PERM 					perm;
@@ -327,12 +327,13 @@ public class CandidateUpdateRequestAPIInbound {
 		}
 		
 		/**
-		* Sets the function the candidate performs
+		* Sets the functions the candidate performs
 		* @param function - Function performed by the Candidate
 		* @return Builder
 		*/
-		public CandidateUpdateRequestAPIInboundBuilder function(FUNCTION function) {
-			this.function = function;
+		public CandidateUpdateRequestAPIInboundBuilder functions(Set<FUNCTION> functions) {
+			this.functions.clear();
+			this.functions.addAll(functions);
 			return this;
 		}
 		
@@ -517,7 +518,7 @@ public class CandidateUpdateRequestAPIInbound {
 			.email(updateRequest.getEmail())
 			.firstname(updateRequest.getFirstname())
 			.freelance(updateRequest.isFreelance())
-			.function(updateRequest.getFunction())
+			.functions(updateRequest.getFunctions())
 			.languages(updateRequest.getLanguages())
 			.perm(updateRequest.isPerm())
 			.roleSought(updateRequest.roleSought)

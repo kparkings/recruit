@@ -28,7 +28,7 @@ import com.arenella.recruit.candidates.enums.PERM;
 * Unit tests for the CandidateFullProfileAPIOutbound class
 * @author K Parkings
 */
-public class CandidateFullProfileAPIOutboundTest {
+class CandidateFullProfileAPIOutboundTest {
 
 	private static final String 					CANDIDATE_ID 			= "Candidate1";
 	private static final FUNCTION					FUNCTIONVAL				= FUNCTION.JAVA_DEV;
@@ -74,12 +74,12 @@ public class CandidateFullProfileAPIOutboundTest {
 	* Test Builder values used to initialize instance of the Candidate Class 
 	*/
 	@Test
-	public void testInitializationFromBuilder() {
+	void testInitializationFromBuilder() {
 		
 		CandidateFullProfileAPIOutbound candidate = CandidateFullProfileAPIOutbound
 						.builder()
 							.candidateId(CANDIDATE_ID)
-							.function(FUNCTIONVAL)
+							.functions(Set.of(FUNCTIONVAL))
 							.country(COUNTRYVAL)
 							.city(CITY)
 							.available(AVAILABLE)
@@ -105,7 +105,7 @@ public class CandidateFullProfileAPIOutboundTest {
 							.build();
 		
 		assertEquals(CANDIDATE_ID, 						candidate.getCandidateId());
-		assertEquals(FUNCTIONVAL,						candidate.getFunction());
+		assertEquals(FUNCTIONVAL,						candidate.getFunctions().toArray()[0]);
 		assertEquals(COUNTRYVAL, 						candidate.getCountry());
 		assertEquals(CITY, 								candidate.getCity());
 		assertEquals(AVAILABLE, 						candidate.isAvailable());
@@ -136,12 +136,12 @@ public class CandidateFullProfileAPIOutboundTest {
 	* Test conversion from Domain representation
 	*/
 	@Test
-	public void testConvertFromDomain() {
+	void testConvertFromDomain() {
 		
 		Candidate candidate = Candidate
 						.builder()
 							.candidateId(CANDIDATE_ID)
-							.function(FUNCTIONVAL)
+							.functions(Set.of(FUNCTIONVAL))
 							.country(COUNTRYVAL)
 							.city(CITY)
 							.available(AVAILABLE)
@@ -167,7 +167,7 @@ public class CandidateFullProfileAPIOutboundTest {
 							.build();
 		
 		assertEquals(CANDIDATE_ID, 				candidate.getCandidateId());
-		assertEquals(FUNCTIONVAL,				candidate.getFunction());
+		assertEquals(FUNCTIONVAL,				candidate.getFunctions().toArray()[0]);
 		assertEquals(COUNTRYVAL, 				candidate.getCountry());
 		assertEquals(CITY, 						candidate.getCity());
 		assertEquals(AVAILABLE, 				candidate.isAvailable());
@@ -194,7 +194,7 @@ public class CandidateFullProfileAPIOutboundTest {
 		CandidateFullProfileAPIOutbound candidateProfile = CandidateFullProfileAPIOutbound.convertFromDomain(candidate);
 		
 		assertEquals(CANDIDATE_ID, 							candidateProfile.getCandidateId());
-		assertEquals(FUNCTIONVAL,							candidateProfile.getFunction());
+		assertEquals(FUNCTIONVAL,							candidateProfile.getFunctions().toArray()[0]);
 		assertEquals(COUNTRYVAL, 							candidateProfile.getCountry());
 		assertEquals(CITY, 									candidateProfile.getCity());
 		assertEquals(AVAILABLE, 							candidateProfile.isAvailable());
@@ -228,7 +228,7 @@ public class CandidateFullProfileAPIOutboundTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testCensored_null_values() throws Exception{
+	void testCensored_null_values() {
 		
 		Candidate candidate = Candidate.builder().build();
 		
@@ -241,7 +241,7 @@ public class CandidateFullProfileAPIOutboundTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testCensored() throws Exception{
+	void testCensored() {
 		
 		final String comments 			= "My name is " + FIRST_NAME + " " + SURNAME + " my email is " + EMAIL + " Number 0031 643 220 866" + " 1 years experience";
 		final String commentsCensored 	= "My name is " + CandidateFullProfileAPIOutbound.CENSORED_ITEM + " " + CandidateFullProfileAPIOutbound.CENSORED_ITEM + " my email is " + CandidateFullProfileAPIOutbound.CENSORED_ITEM + " Number " + CandidateFullProfileAPIOutbound.CENSORED_ITEM + " " + CandidateFullProfileAPIOutbound.CENSORED_ITEM + " " + CandidateFullProfileAPIOutbound.CENSORED_ITEM + " " + CandidateFullProfileAPIOutbound.CENSORED_ITEM + " 1 years experience";
@@ -252,7 +252,7 @@ public class CandidateFullProfileAPIOutboundTest {
 		Candidate candidate = Candidate
 				.builder()
 					.candidateId(CANDIDATE_ID)
-					.function(FUNCTIONVAL)
+					.functions(Set.of(FUNCTIONVAL))
 					.country(COUNTRYVAL)
 					.city(CITY)
 					.available(AVAILABLE)
@@ -279,7 +279,7 @@ public class CandidateFullProfileAPIOutboundTest {
 					.build();
 
 		assertEquals(CANDIDATE_ID, 				candidate.getCandidateId());
-		assertEquals(FUNCTIONVAL,				candidate.getFunction());
+		assertEquals(FUNCTIONVAL,				candidate.getFunctions().toArray()[0]);
 		assertEquals(COUNTRYVAL, 				candidate.getCountry());
 		assertEquals(CITY, 						candidate.getCity());
 		assertEquals(AVAILABLE, 				candidate.isAvailable());
@@ -306,7 +306,7 @@ public class CandidateFullProfileAPIOutboundTest {
 		CandidateFullProfileAPIOutbound candidateProfile = CandidateFullProfileAPIOutbound.convertFromCandidateAsCensored(candidate);
 		
 		assertEquals(CANDIDATE_ID, 							candidateProfile.getCandidateId());
-		assertEquals(FUNCTIONVAL,							candidateProfile.getFunction());
+		assertEquals(FUNCTIONVAL,							candidateProfile.getFunctions().toArray()[0]);
 		assertEquals(COUNTRYVAL, 							candidateProfile.getCountry());
 		assertEquals(CITY, 									candidateProfile.getCity());
 		assertEquals(AVAILABLE, 							candidateProfile.isAvailable());

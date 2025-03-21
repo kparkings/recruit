@@ -1169,7 +1169,7 @@ class CandidateServiceImplTest {
 					.firstname(firstName)
 					.flaggedAsUnavailable(flaggedAsUnavailable)
 					.freelance(freelance)
-					.function(function)
+					.functions(Set.of(function))
 					.languages(languages)
 					.lastAvailabilityCheck(lastAvailabilityCheck)
 					.perm(perm)
@@ -1190,7 +1190,7 @@ class CandidateServiceImplTest {
 					.email(emailUpdt)
 					.firstname(firstNameUpdt)
 					.freelance(freelanceUpdt)
-					.function(functionUpdt)
+					.functions(Set.of(functionUpdt))
 					.languages(languagesUpdt)
 					.perm(permUpdt)
 					.roleSought(roleSoughtUpdt)
@@ -1214,7 +1214,7 @@ class CandidateServiceImplTest {
 		Candidate persisted = candidateArgCapt.getValue();
 		
 		assertEquals(candidateId, 			persisted.getCandidateId());
-		assertEquals(functionUpdt, 			persisted.getFunction());
+		assertEquals(functionUpdt, 			persisted.getFunctions().toArray()[0]);
 		assertEquals(countryUpdt, 			persisted.getCountry());
 		assertEquals(cityUpdt, 				persisted.getCity());
 		assertEquals(emailUpdt, 			persisted.getEmail());
@@ -1372,7 +1372,7 @@ class CandidateServiceImplTest {
 					.firstname(firstName)
 					.flaggedAsUnavailable(flaggedAsUnavailable)
 					.freelance(freelance)
-					.function(function)
+					.functions(Set.of(function))
 					.languages(languages)
 					.lastAvailabilityCheck(lastAvailabilityCheck)
 					.perm(perm)
@@ -1393,7 +1393,7 @@ class CandidateServiceImplTest {
 					.email(emailUpdt)
 					.firstname(firstNameUpdt)
 					.freelance(freelanceUpdt)
-					.function(functionUpdt)
+					.functions(Set.of(functionUpdt))
 					.languages(languagesUpdt)
 					.perm(permUpdt)
 					.roleSought(roleSoughtUpdt)
@@ -1418,7 +1418,7 @@ class CandidateServiceImplTest {
 		Candidate persisted = candidateArgCapt.getValue();
 		
 		assertEquals(candidateId, 			persisted.getCandidateId());
-		assertEquals(functionUpdt, 			persisted.getFunction());
+		assertEquals(functionUpdt, 			persisted.getFunctions().toArray()[0]);
 		assertEquals(countryUpdt, 			persisted.getCountry());
 		assertEquals(cityUpdt, 				persisted.getCity());
 		assertEquals(emailUpdt, 			persisted.getEmail());
@@ -1503,7 +1503,7 @@ class CandidateServiceImplTest {
 					.firstname(firstName)
 					.flaggedAsUnavailable(flaggedAsUnavailable)
 					.freelance(freelance)
-					.function(function)
+					.functions(Set.of(function))
 					.languages(languages)
 					.lastAvailabilityCheck(lastAvailabilityCheck)
 					.perm(perm)
@@ -1524,7 +1524,7 @@ class CandidateServiceImplTest {
 					.email(emailUpdt)
 					.firstname(firstNameUpdt)
 					.freelance(freelanceUpdt)
-					.function(functionUpdt)
+					.functions(Set.of(functionUpdt))
 					.languages(languagesUpdt)
 					.perm(permUpdt)
 					.roleSought(roleSoughtUpdt)
@@ -1550,7 +1550,7 @@ class CandidateServiceImplTest {
 		Candidate persisted = candidateArgCapt.getValue();
 		
 		assertEquals(candidateId, 			persisted.getCandidateId());
-		assertEquals(functionUpdt, 			persisted.getFunction());
+		assertEquals(functionUpdt, 			persisted.getFunctions().toArray()[0]);
 		assertEquals(countryUpdt, 			persisted.getCountry());
 		assertEquals(cityUpdt, 				persisted.getCity());
 		assertEquals(emailUpdt, 			persisted.getEmail());

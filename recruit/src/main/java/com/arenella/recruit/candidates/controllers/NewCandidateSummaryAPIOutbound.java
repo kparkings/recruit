@@ -56,11 +56,16 @@ public class NewCandidateSummaryAPIOutbound {
 		*/
 		public NewCandidateSummaryAPIOutboundBuilder addCandidate(Candidate candidate) {
 			
-			SummaryItem summaryItem = summary.stream().filter(f -> f.getFunctionType() == candidate.getFunction()).findFirst().orElse(new SummaryItem(candidate.getFunction()));
+			candidate.getFunctions().stream().forEach(func -> {
+				
+				SummaryItem summaryItem = summary.stream().filter(f -> f.getFunctionType() == func).findFirst().orElse(new SummaryItem(func));
+				
+				summaryItem.increment();
+				
+				this.summary.add(summaryItem);
+				
+			});
 			
-			summaryItem.increment();
-			
-			this.summary.add(summaryItem);
 			
 			return this;
 		}

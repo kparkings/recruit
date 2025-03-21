@@ -88,7 +88,7 @@ class CandidateTest {
 		Candidate candidate = Candidate
 						.builder()
 							.candidateId(CANDIDATE_ID)
-							.function(FUNCTION_VAL)
+							.functions(Set.of(FUNCTION_VAL))
 							.country(COUNTRY_VAL)
 							.city(CITY)
 							.longitude(LONGITUDE)
@@ -121,7 +121,7 @@ class CandidateTest {
 							.build();
 		
 		assertEquals(CANDIDATE_ID, 					candidate.getCandidateId());
-		assertEquals(FUNCTION_VAL, 					candidate.getFunction());
+		assertEquals(FUNCTION_VAL, 					candidate.getFunctions().toArray()[0]);
 		assertEquals(COUNTRY_VAL, 					candidate.getCountry());
 		assertEquals(CITY, 							candidate.getCity());
 		assertEquals(LONGITUDE, 					candidate.getLongitude());
@@ -219,11 +219,12 @@ class CandidateTest {
 		Candidate candidate = Candidate.builder().build();
 		
 		assertTrue(candidate.getSkills().isEmpty());
+		assertTrue(candidate.getFunctions().isEmpty());
 		assertTrue(candidate.getLanguages().isEmpty());
 		assertEquals(0, candidate.getYearsExperience());
 		assertNull(candidate.isFreelance());
 		assertNull(candidate.isPerm());
-		assertNull(candidate.getFunction());
+		assertNull(candidate.getFunctions());
 		assertNull(candidate.getCountry());
 		
 		assertTrue(candidate.getRateContract().isEmpty());
