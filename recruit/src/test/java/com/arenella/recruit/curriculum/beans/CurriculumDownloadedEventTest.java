@@ -24,14 +24,14 @@ import com.arenella.recruit.curriculum.entity.CurriculumDownloadedEventEntity;
 * @author K Parkings
 */
 @ExtendWith(MockitoExtension.class)
-public class CurriculumDownloadedEventTest {
+class CurriculumDownloadedEventTest {
 
 	@Mock
 	private					Authentication					mockAuthentication;
 	
-	private static final String 			curriculumId 		= "anId";
-	private static final String 			userId 				= "kparkings";
-	private static final boolean 			isAdminUser 		= true;
+	private static final String 			CURRICULUM_ID 		= "anId";
+	private static final String 			USER_ID 			= "kparkings";
+	private static final boolean 			IS_ADMIN_USER 		= true;
 	private static final LocalDateTime 		timestamp 			= LocalDateTime.of(2021, 5, 28, 12, 05);
 	
 	/**
@@ -41,21 +41,21 @@ public class CurriculumDownloadedEventTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testManualBuilder() throws Exception{
+	void testManualBuilder() {
 		
 		CurriculumDownloadedEvent event = CurriculumDownloadedEvent
 														.manualBuilder()
-															.curriculumId(curriculumId)
-															.userId(userId)
-															.isAdminUser(isAdminUser)
+															.curriculumId(CURRICULUM_ID)
+															.userId(USER_ID)
+															.isAdminUser(IS_ADMIN_USER)
 															.timestamp(timestamp)
 														.build();
 
 		CurriculumDownloadedEventEntity entity = CurriculumDownloadedEventEntity.toEntity(event);
 		
-		assertEquals(curriculumId, 		entity.getCurriculumId());
-		assertEquals(userId, 			entity.getUserId());
-		assertEquals(isAdminUser, 		entity.isAdminUser());
+		assertEquals(CURRICULUM_ID, 	entity.getCurriculumId());
+		assertEquals(USER_ID, 			entity.getUserId());
+		assertEquals(IS_ADMIN_USER, 	entity.isAdminUser());
 		assertEquals(timestamp, 		entity.getTimestamp());
 
 	}
@@ -66,26 +66,26 @@ public class CurriculumDownloadedEventTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testBuilder() throws Exception{
+	void testBuilder() {
 		
 		SecurityContextHolder.getContext().setAuthentication(mockAuthentication);
 		
 		GrantedAuthority mockGrantedAuthority = Mockito.mock(GrantedAuthority.class);
 		
-		Mockito.when(mockAuthentication.getPrincipal()).thenReturn(userId);
+		Mockito.when(mockAuthentication.getPrincipal()).thenReturn(USER_ID);
 		
 		Mockito.doReturn(List.of(mockGrantedAuthority)).when(mockAuthentication).getAuthorities();
 		Mockito.when(mockGrantedAuthority.getAuthority()).thenReturn("ROLE_ADMIN");
 		
 		CurriculumDownloadedEvent event = CurriculumDownloadedEvent
 														.builder()
-															.curriculumId(curriculumId)
+															.curriculumId(CURRICULUM_ID)
 														.build();
 
 		CurriculumDownloadedEventEntity entity = CurriculumDownloadedEventEntity.toEntity(event);
 		
-		assertEquals(curriculumId, 		entity.getCurriculumId());
-		assertEquals(userId, 			entity.getUserId());
+		assertEquals(CURRICULUM_ID, 	entity.getCurriculumId());
+		assertEquals(USER_ID, 			entity.getUserId());
 		assertTrue(entity.isAdminUser());
 		assertNotNull(entity.getTimestamp());
 
@@ -98,26 +98,26 @@ public class CurriculumDownloadedEventTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testBuilder_nonAdminUser() throws Exception{
+	void testBuilder_nonAdminUser() {
 		
 		SecurityContextHolder.getContext().setAuthentication(mockAuthentication);
 		
 		GrantedAuthority mockGrantedAuthority = Mockito.mock(GrantedAuthority.class);
 		
-		Mockito.when(mockAuthentication.getPrincipal()).thenReturn(userId);
+		Mockito.when(mockAuthentication.getPrincipal()).thenReturn(USER_ID);
 		
 		Mockito.doReturn(List.of(mockGrantedAuthority)).when(mockAuthentication).getAuthorities();
 		Mockito.when(mockGrantedAuthority.getAuthority()).thenReturn("ROLE_RECRUITER");
 		
 		CurriculumDownloadedEvent event = CurriculumDownloadedEvent
 														.builder()
-															.curriculumId(curriculumId)
+															.curriculumId(CURRICULUM_ID)
 														.build();
 
 		CurriculumDownloadedEventEntity entity = CurriculumDownloadedEventEntity.toEntity(event);
 		
-		assertEquals(curriculumId, 		entity.getCurriculumId());
-		assertEquals(userId, 			entity.getUserId());
+		assertEquals(CURRICULUM_ID, 	entity.getCurriculumId());
+		assertEquals(USER_ID, 			entity.getUserId());
 		assertFalse(entity.isAdminUser());
 		assertNotNull(entity.getTimestamp());
 

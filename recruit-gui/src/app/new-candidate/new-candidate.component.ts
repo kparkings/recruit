@@ -70,9 +70,15 @@ export class NewCandidateComponent implements OnInit {
     	this.initializeOfferedCandidateForm();
     
     	this.candidateService.loadFunctionTypes().forEach(funcType => {
-      		this.functionTypes.push(funcType);
-    	});
+			if(funcType) {
+      			this.functionTypes.push(funcType);
+    		}
+		});
     	
+		this.functionTypes = this.functionTypes.sort((a,b)=> {
+			return this.translate.instant(a.id) < this.translate.instant(b.id) ? -1 : 0;
+		});
+		
     	this.languageOptions.push(new LanguageOption("UNKNOWN", 	this.translate.instant('new-candidate-no')));
     	this.languageOptions.push(new LanguageOption("BASIC", 		this.translate.instant('new-candidate-basic')));
     	this.languageOptions.push(new LanguageOption("PROFICIENT", 	this.translate.instant('new-candidate-yes')));
@@ -109,7 +115,6 @@ export class NewCandidateComponent implements OnInit {
 		this.offeredCandidateFormBean.get('country')?.setValue(candidate.country);
 		this.offeredCandidateFormBean.get('firstName')?.setValue(candidate.firstname);
 		this.offeredCandidateFormBean.get('surname')?.setValue(candidate.surname);
-      	this.offeredCandidateFormBean.get('function')?.setValue(candidate.function);
        	this.offeredCandidateFormBean.get('roleSought')?.setValue(candidate.roleSought);
        	this.offeredCandidateFormBean.get('city')?.setValue(candidate.city);
        	this.offeredCandidateFormBean.get('perm')?.setValue(candidate.perm);
@@ -129,9 +134,22 @@ export class NewCandidateComponent implements OnInit {
 		this.offeredCandidateFormBean.get('securityClearance')?.setValue(candidate.securityClearance);
 		this.offeredCandidateFormBean.get('requiresSponsorship')?.setValue(candidate.requiresSponsorship);
 		
-		this.coreSkills = candidate.skills;
-		this.languages = candidate.languages;
-
+		this.coreSkills 		= candidate.skills;
+		this.languages 			= candidate.languages;
+		this.selectedFunctions 	= candidate.functions;
+		
+		this.functionTypes.forEach(ft => {
+			candidate.functions.forEach(f => {
+				if (f) {
+					let y:string = ""+f;
+					let z:string = ""+ft.id;
+					if (y == z) {
+						this.selectedFunctions.push(ft);
+					}
+				}
+			});
+		});
+		
 		this.languages.forEach(lang => {
 			this.offeredCandidateFormBean.get(lang.language)?.setValue(lang.level);
 			(<HTMLInputElement>document.getElementById('langOpt'+lang.language)).value = lang.level;	
@@ -211,7 +229,7 @@ export class NewCandidateComponent implements OnInit {
 		candidate.surname							= this.offeredCandidateFormBean.get('surname')!.value;
 		candidate.email								= this.offeredCandidateFormBean.get('email')!.value;
 		candidate.roleSought						= this.offeredCandidateFormBean.get('roleSought')!.value;
-		candidate.function							= this.offeredCandidateFormBean.get('function')!.value;
+		//candidate.function							= this.offeredCandidateFormBean.get('function')!.value;
 		candidate.country							= this.offeredCandidateFormBean.get('country')!.value;
 		candidate.city								= this.offeredCandidateFormBean.get('city')!.value;
 		candidate.perm								= this.offeredCandidateFormBean.get('perm')!.value;
@@ -226,6 +244,13 @@ export class NewCandidateComponent implements OnInit {
 		candidate.requiresSponsorship 				= this.offeredCandidateFormBean.get('requiresSponsorship')!.value;
 		
 		candidate.languages = new Array<Language>();
+		
+		this.selectedFunctions.forEach(f => {
+			if (f) {
+				candidate.functions.push(f.id);
+			}
+		});
+		
 		this.supportedLanguages.forEach(lang => {
 			candidate.languages.push(new Language(lang.languageCode, this.offeredCandidateFormBean.get(lang.languageCode)!.value));
 		});
@@ -275,8 +300,6 @@ export class NewCandidateComponent implements OnInit {
     	  		this.appComponent.refreschUnreadAlerts();			
     		});
 		} else {
-			
-			console.log("AAAAA === " + JSON.stringify(candidate));
 			
 			this.candidateService.addCandidate(candidate, this.profileImageFile).subscribe(d=>{
 				this.appComponent.refreschUnreadAlerts();
@@ -529,6 +552,7 @@ export class NewCandidateComponent implements OnInit {
 			requiresSponsorship:	new UntypedFormControl(false),
 		});
 		
+		
 		this.supportedLanguages = this.supportedLanguages.sort((a,b)=> {
 			return this.translate.instant(a.languageCode) < this.translate.instant(b.languageCode) ? -1 : 0;
 		});
@@ -541,6 +565,7 @@ export class NewCandidateComponent implements OnInit {
 	
 	public languageOptions:Array<LanguageOption> = new Array<LanguageOption>();
 	public languages:Array<Language> = new Array<Language>();
+	public selectedFunctions:Array<CandidateFunction> = new Array<CandidateFunction>();
 	
 	/**
 	* Adds a Skill to the Candidates list of Skills
@@ -555,6 +580,26 @@ export class NewCandidateComponent implements OnInit {
 		
 		this.offeredCandidateFormBean.get('skill')?.setValue('');
 	
+	}
+	
+	public toggleSelectedFunction(func:CandidateFunction):void{
+		
+		if (this.selectedFunctions.indexOf(func) < 0 ) {
+			this.selectedFunctions.push(func);
+		} else {
+			this.selectedFunctions = this.selectedFunctions.filter(f => f !== func);
+		}
+		
+	}
+	
+	public isSelectedFunction(func:CandidateFunction):boolean {
+		
+		if (this.selectedFunctions.indexOf(func) < 0 ) {
+			return false;
+		} else {
+			return true;
+		}
+		
 	}
 	
 	/**

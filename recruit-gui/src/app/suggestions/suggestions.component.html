@@ -15,7 +15,7 @@
 	        <button class="btn btn-secondary arenella-btn" (click)="doReset()">{{'arenella-suggestions-btn-reset' | translate}}</button>
 	     </div>
 		
-		<div class="{{searchBarCss}}">
+		<div class="{{searchBarCss}}" *ngIf="currentView != 'saved-candidates'">
 			<app-searchbar #searchbar (newSuggestionResults)="handleNewSearchRequest($event)" ></app-searchbar>
 		</div>
 		

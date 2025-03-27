@@ -54,7 +54,6 @@ export class SuggestionParams{
 		this.locCity 		= suggestionFilterForm.get('locationCity')?.value;
 		this.locDistance 	= suggestionFilterForm.get('locationDistance')?.value;
 		
-		
 		//END DISTANCE
 		
 		
@@ -65,15 +64,12 @@ export class SuggestionParams{
 		if (this.filterType == 'EMAIL') {
 			this.email = suggestionFilterForm.get('searchPhrase')?.value;
 		}
-		console.log("----> Start >> " + this.filterType );
+		
 		if (this.filterType == 'CANDIDATE_ID') {
-			console.log("----> Candidate ID")
 			const candidateId =  suggestionFilterForm.get('searchPhrase')?.value;
-			console.log("----> as " + candidateId)
 			const isNumeric = /^[+-]?\d+(\.\d+)?$/.test(candidateId);
 			
 			if (isNumeric){
-				console.log("----> set " )
 				this.candidateId = candidateId;
 			}
 			
@@ -155,7 +151,7 @@ export class SuggestionParams{
 		/**
 	* Returns function types to filter on
 	*/	
-	public getFunctionTYpes():Array<string>{
+	public getFunctionTypes():Array<string>{
 		return this.functionTypes;
 	}
 	/**

@@ -14,8 +14,11 @@ import com.arenella.recruit.candidates.beans.Candidate;
 import com.arenella.recruit.candidates.beans.CandidateFilterOptions;
 import com.arenella.recruit.candidates.beans.City;
 import com.arenella.recruit.candidates.controllers.CandidateSuggestionAPIOutbound;
+import com.arenella.recruit.candidates.entities.CandidateDocument;
+import com.arenella.recruit.candidates.enums.FUNCTION;
 import com.arenella.recruit.candidates.enums.RESULT_ORDER;
 import com.arenella.recruit.candidates.repos.CandidateRepository;
+import com.arenella.recruit.candidates.services.CandidateService;
 import com.arenella.recruit.candidates.services.CityService;
 import com.arenella.recruit.curriculum.adapters.CurriculumExternalEventListener;
 import com.arenella.recruit.emailservice.adapters.RequestSendEmailCommand;
@@ -69,10 +72,15 @@ public class CandidateAccountRefreshUtil {
 	@Autowired
 	private CityService							cityService;
 	
+	@Autowired
+	private CandidateFunctionExtractorBOOPUPDATE functionExtractor;
+	
+	
 	/**
 	* Triggers refresh actions for Candidates that are outdated
 	*/
-	@Scheduled(cron = "0 */10 * ? * *")
+	//@Scheduled(cron = "0 */10 * ? * *")
+	@Scheduled(cron = "0 */1 * ? * *")
 	public void performRefreshOnOutdatedAccounts() {
 		try {
 			this.runSkillUpdateRefresh();	
@@ -87,7 +95,35 @@ public class CandidateAccountRefreshUtil {
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
+		
+		try {
+			this.runFunctionUpdate();
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
 	
+	}
+	
+	private void runFunctionUpdate() {
+		
+		try {
+		
+			//CandidateFilterOptions filters = CandidateFilterOptions.builder().lastAccountRefreshLtEq(LocalDate.now().minusWeeks(2)).build();
+			CandidateFilterOptions filters = CandidateFilterOptions.builder().build();
+			candidateRepository.findCandidates(filters, esClient, 0, 10).forEach(candidate -> {
+				
+			
+				functionExtractor.extractFunctions(candidate.getRoleSought()).stream().forEach(function -> {
+					candidate.addFunction(function);
+					this.candidateRepository.save(CandidateDocument.convertToDocument(candidate));
+				});	
+				
+				
+			});
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 	}
 	
 	/**
@@ -155,10 +191,7 @@ public class CandidateAccountRefreshUtil {
 					.getContent()
 					.stream()
 					.map(c -> ((CandidateSuggestionAPIOutbound) c)).toList());
-				
-			//ISSUE: Each candidate appears in results twice. Looks like the filters are not applying avilable. That I think is because for some reason that 
-			//filter is being ignored. its not in the final ES query. Either not implemented ( sure it is ) or some business logic har removed it
-			
+		
 			candidates.stream().forEach(candidate -> {
 				
 				Optional<Candidate> candidateOpt = this.candidateRepository.findCandidateById(Long.valueOf(candidate.getCandidateId()));

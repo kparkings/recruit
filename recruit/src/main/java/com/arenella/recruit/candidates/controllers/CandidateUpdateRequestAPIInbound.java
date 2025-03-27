@@ -78,7 +78,7 @@ public class CandidateUpdateRequestAPIInbound {
 		this.securityClearance			= builder.securityClearance;
 		
 		this.languages.addAll(builder.languages);
-		this.functions.addAll(functions);
+		this.functions.addAll(builder.functions);
 		
 	}
 

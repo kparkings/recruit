@@ -90,7 +90,7 @@ class CandidateDocumentTest {
 					.email(EMAIL)
 					.firstname(FIRSTNAME)
 					.freelance(FREELANCE_VAL)
-					.function(FUNCTION_VAL)
+					.functions(Set.of(FUNCTION_VAL))
 					.introduction(INTRODUCTION)
 					.languages(LANGUAGES)
 					.lastAvailabilityCheck(LAST_AVAILABILITY_CHECK)
@@ -117,7 +117,7 @@ class CandidateDocumentTest {
 		assertEquals(SURNAME,																			doc.getSurname());
 		assertEquals(EMAIL,																				doc.getEmail());
 		assertEquals(ROLE_SOUGHT,																		doc.getRoleSought());
-		assertEquals(FUNCTION_VAL,																		doc.getFunction());
+		assertEquals(FUNCTION_VAL,																		doc.getFunction().toArray()[0]);
 		assertEquals(COUNTRY_VAL,																		doc.getCountry());
 		assertEquals(CITY,																				doc.getCity());
 		assertEquals(LATITUDE,																			doc.getCityPosGeoPoint().getLat());
@@ -170,7 +170,7 @@ class CandidateDocumentTest {
 					.email(EMAIL)
 					.firstname(FIRSTNAME)
 					.freelance(FREELANCE_VAL)
-					.function(FUNCTION_VAL)
+					.functions(Set.of(FUNCTION_VAL))
 					.introduction(INTRODUCTION)
 					.languages(LANGUAGES)
 					.lastAvailabilityCheck(LAST_AVAILABILITY_CHECK)
@@ -199,7 +199,7 @@ class CandidateDocumentTest {
 		assertEquals(SURNAME,						candidate.getSurname());
 		assertEquals(EMAIL,							candidate.getEmail());
 		assertEquals(ROLE_SOUGHT,					candidate.getRoleSought());
-		assertEquals(FUNCTION_VAL,					candidate.getFunction());
+		assertEquals(FUNCTION_VAL,					candidate.getFunctions().toArray()[0]);
 		assertEquals(COUNTRY_VAL,					candidate.getCountry());
 		assertEquals(CITY,							candidate.getCity());
 		assertEquals(LATITUDE,						candidate.getLatitude());
@@ -286,9 +286,9 @@ class CandidateDocumentTest {
 					.email(EMAIL)
 					.firstname(FIRSTNAME)
 					.freelance(FREELANCE_VAL)
-					.function(FUNCTION_VAL)
+					.functions(Set.of(FUNCTION_VAL))
 					.introduction(INTRODUCTION)
-					.languages(LANGUAGES.stream().map(l -> LanguageDocument.convertToDomain(l)).collect(Collectors.toSet()))
+					.languages(LANGUAGES.stream().map(LanguageDocument::convertToDomain).collect(Collectors.toSet()))
 					.lastAvailabilityCheck(LAST_AVAILABILITY_CHECK)
 					.ownerId(OWNER_ID)
 					.perm(PERM_VAL)
@@ -315,7 +315,7 @@ class CandidateDocumentTest {
 		assertEquals(SURNAME,						doc.getSurname());
 		assertEquals(EMAIL,							doc.getEmail());
 		assertEquals(ROLE_SOUGHT,					doc.getRoleSought());
-		assertEquals(FUNCTION_VAL,					doc.getFunction());
+		assertEquals(FUNCTION_VAL,					doc.getFunction().toArray()[0]);
 		assertEquals(COUNTRY_VAL,					doc.getCountry());
 		assertEquals(CITY,							doc.getCity());
 		assertEquals(LATITUDE,						doc.getCityPosGeoPoint().getLat());

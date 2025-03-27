@@ -224,7 +224,7 @@ class CandidateTest {
 		assertEquals(0, candidate.getYearsExperience());
 		assertNull(candidate.isFreelance());
 		assertNull(candidate.isPerm());
-		assertNull(candidate.getFunctions());
+		assertTrue(candidate.getFunctions().isEmpty());
 		assertNull(candidate.getCountry());
 		
 		assertTrue(candidate.getRateContract().isEmpty());
@@ -306,6 +306,22 @@ class CandidateTest {
 		assertTrue(candidate.getLastAvailabilityCheckOn() instanceof LocalDate);
 		assertTrue(candidate.isAvailable());
 		
+	}
+	
+	/**
+	* Tests adding a function to an existing Candidate
+	*/
+	@Test
+	void testAddFunction() {
+		
+		Candidate candidate = Candidate.builder().build();
+		
+		assertTrue(candidate.getFunctions().isEmpty());
+		
+		candidate.addFunction(FUNCTION.ANDROID);
+	
+		assertTrue(candidate.getFunctions().contains(FUNCTION.ANDROID));
+	
 	}
 	
 }

@@ -27,11 +27,13 @@ import com.arenella.recruit.candidates.enums.COUNTRY;
 import com.arenella.recruit.candidates.enums.FREELANCE;
 import com.arenella.recruit.candidates.enums.FUNCTION;
 import com.arenella.recruit.candidates.enums.PERM;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 /**
 * Elasticasearch Document representation of a Candidate
 * @author K Parkings
 */ 
+@JsonIgnoreProperties(ignoreUnknown = true)
 @Document(indexName="candidates", writeTypeHint = org.springframework.data.elasticsearch.annotations.WriteTypeHint.FALSE)
 public class CandidateDocument {
 
@@ -54,8 +56,9 @@ public class CandidateDocument {
 	private String roleSought;
 	
 	@Field(type = FieldType.Keyword)
+	//@JsonProperty("function")
 	@Enumerated(EnumType.STRING)
-	private FUNCTION function;
+	private Set<FUNCTION> function								= new LinkedHashSet<>();
 	
 	@Field(type = FieldType.Keyword)
 	@Enumerated(EnumType.STRING)
@@ -162,7 +165,6 @@ public class CandidateDocument {
 		this.surname 							= builder.surname;
 		this.email 								= builder.email;
 		this.roleSought 						= builder.roleSought;
-		this.function 							= builder.function;
 		this.country 							= builder.country;
 		this.city 								= builder.city;
 		this.cityPosGeoPoint					= builder.cityPos;
@@ -195,6 +197,8 @@ public class CandidateDocument {
 		this.skills.addAll(builder.skills);
 		this.languages.clear();
 		this.languages.addAll(builder.languages);
+		this.function.clear();
+		this.function.addAll(builder.function);
 	}
 	
 	/**
@@ -240,10 +244,10 @@ public class CandidateDocument {
 	}
 	
 	/**
-	* Returns the function the Candidate performs
+	* Returns the functions the Candidate performs
 	* @return function the Candidate performs
 	*/
-	public FUNCTION getFunction() {
+	public Set<FUNCTION> getFunction() {
 		return this.function;
 	}
 	
@@ -530,7 +534,7 @@ public class CandidateDocument {
 		private String 					surname;
 		private String 					email;
 		private String 					roleSought;
-		private FUNCTION 				function;
+		private Set<FUNCTION> 			function					= new LinkedHashSet<>();
 		private COUNTRY 				country;
 		private String 					city;
 		private GeoPoint				cityPos = new GeoPoint(0,0);
@@ -609,12 +613,13 @@ public class CandidateDocument {
 		}
 		
 		/**
-		* Sets the function the candidate performs
-		* @param function - Function performed by the Candidate
+		* Sets the functions the candidate performs
+		* @param functions - Functions performed by the Candidate
 		* @return Builder
 		*/
-		public CandidateDocumentBuilder function(FUNCTION function) {
-			this.function = function;
+		public CandidateDocumentBuilder functions(Set<FUNCTION> functions) {
+			this.function.clear();
+			this.function.addAll(functions);
 			return this;
 		}
 		
@@ -915,7 +920,7 @@ public class CandidateDocument {
 					.firstname(doc.getFirstname())
 					.flaggedAsUnavailable(false)
 					.freelance(doc.isFreelance())
-					.function(doc.getFunction())
+					.functions(doc.getFunction())
 					.introduction(doc.getIntroduction())
 					.languages(doc.getLanguages().stream().map(LanguageDocument::convertToDomain).collect(Collectors.toCollection(LinkedHashSet::new)))
 					.lastAvailabilityCheck(doc.getLastAvailabilityCheckOn().toInstant()
@@ -967,7 +972,7 @@ public class CandidateDocument {
 					.email(candidate.getEmail())
 					.firstname(candidate.getFirstname())
 					.freelance(candidate.isFreelance())
-					.function(candidate.getFunction())
+					.functions(candidate.getFunctions())
 					.introduction(candidate.getIntroduction())
 					.languages(candidate.getLanguages().stream().map(l ->  LanguageDocument.convertFromDomain(l)).collect(Collectors.toCollection(LinkedHashSet::new)))
 					.lastAvailabilityCheck(candidate.getLastAvailabilityCheckOn())

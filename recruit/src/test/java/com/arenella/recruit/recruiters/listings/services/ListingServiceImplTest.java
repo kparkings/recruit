@@ -50,7 +50,7 @@ import org.springframework.web.multipart.MultipartFile;
 * @author K Parkings
 */
 @ExtendWith(MockitoExtension.class)
-public class ListingServiceImplTest {
+class ListingServiceImplTest {
 
 	@InjectMocks
 	private ListingServiceImpl 	service = new ListingServiceImpl();
@@ -81,7 +81,7 @@ public class ListingServiceImplTest {
 	* @throws Exception
 	*/
 	@BeforeEach
-	public void init() throws Exception {
+	void init() {
 		SecurityContextHolder.getContext().setAuthentication(mockAuthentication);
 	}
 	
@@ -90,16 +90,16 @@ public class ListingServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testAddListing() throws Exception {
+	void testAddListing() throws Exception {
 		
-		final Listing 			listing 		= Listing
-													.builder()
-														.title("aTitle")
-														.description("aDesc")
-														.ownerName("anOwnerName")
-														.ownerEmail("anEmail")
-														.ownerCompany("aCompany")
-													.build();
+		final Listing listing = Listing
+									.builder()
+										.title("aTitle")
+										.description("aDesc")
+										.ownerName("anOwnerName")
+										.ownerEmail("anEmail")
+										.ownerCompany("aCompany")
+									.build();
 		
 		UUID listingId = service.addListing(listing, true);
 		
@@ -116,11 +116,9 @@ public class ListingServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testUpdateListing_unknownListing() throws Exception{
+	void testUpdateListing_unknownListing() {
 		
 		final UUID listingId = UUID.randomUUID();
-		
-		//Mockito.when(this.mockListingRepository.findById(listingId)).thenReturn(Optional.empty());
 		
 		Assertions.assertThrows(IllegalArgumentException.class, () -> {
 			this.service.updateListing(listingId, null);
@@ -134,7 +132,7 @@ public class ListingServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testUpdateListing_notOwnerOfListing() throws Exception{
+	void testUpdateListing_notOwnerOfListing() {
 		
 		final UUID 				listingId 		= UUID.randomUUID();
 		final Listing			listing			= Listing.builder().ownerId("kevin").title("a").description("b").ownerCompany("c").ownerName("d").ownerEmail("e").build();
@@ -155,7 +153,7 @@ public class ListingServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testUpdateListing_changeOwnerOfListing() throws Exception{
+	void testUpdateListing_changeOwnerOfListing() {
 		
 		final UUID 				listingId 		= UUID.randomUUID();
 		final Listing			listing			= Listing.builder().ownerId("kevin2").title("a").description("b").ownerCompany("c").ownerName("d").ownerEmail("e").build();
@@ -175,11 +173,9 @@ public class ListingServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testDeleteListing_unknownListing() throws Exception{
+	void testDeleteListing_unknownListing() {
 		
 		final UUID listingId = UUID.randomUUID();
-		
-		//Mockito.when(this.mockListingRepository.findById(listingId)).thenReturn(Optional.empty());
 		
 		Assertions.assertThrows(IllegalArgumentException.class, () -> {
 			this.service.deleteListing(listingId);
@@ -193,7 +189,7 @@ public class ListingServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testDeleteListing_notOwnerOfListing() throws Exception{
+	void testDeleteListing_notOwnerOfListing() {
 		
 		final UUID 				listingId 		= UUID.randomUUID();
 		final Listing 			listing 		= Listing.builder().ownerId("kevin").title("a").description("b").ownerCompany("c").ownerName("d").ownerEmail("e").build();
@@ -212,7 +208,7 @@ public class ListingServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testUpdateListing() throws Exception {
+	void testUpdateListing() {
 		
 		final UUID 				listingId 			= UUID.randomUUID();
 		final String			ownerId				= "kevin";
@@ -232,11 +228,11 @@ public class ListingServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testDeleteListing() throws Exception {
+	void testDeleteListing() {
 		
-		final UUID 				listingId 		= UUID.randomUUID();
-		final String			ownerId			= "kevin";
-		final Listing 			existingListing = Listing.builder().ownerId(ownerId).title("a").description("b").ownerCompany("c").ownerName("d").ownerEmail("e").build();
+		final UUID 		listingId 		= UUID.randomUUID();
+		final String	ownerId			= "kevin";
+		final Listing 	existingListing = Listing.builder().ownerId(ownerId).title("a").description("b").ownerCompany("c").ownerName("d").ownerEmail("e").build();
 		
 		Mockito.when(this.mockListingRepository.findListingById(listingId)).thenReturn(Optional.of(existingListing));
 		Mockito.when(mockAuthentication.getPrincipal()).thenReturn(ownerId);
@@ -253,11 +249,11 @@ public class ListingServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testAddListingValidation_missingValue() throws Exception {
+	void testAddListingValidation_missingValue() {
 		
 		Assertions.assertThrows(ListingValidationException.class, () -> {
 			
-			Listing 			listing 		= Listing
+			Listing listing = Listing
 					.builder()
 						.title(null)
 						.description("aDesc")
@@ -338,7 +334,7 @@ public class ListingServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testAddListingValidation_emptyStringValue() throws Exception {
+	void testAddListingValidation_emptyStringValue() {
 
 		Assertions.assertThrows(ListingValidationException.class, () -> {
 			
@@ -422,7 +418,7 @@ public class ListingServiceImplTest {
 	*/
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Test
-	public void testRegisterListingViewedEvent_unknownListing() throws Exception {
+	void testRegisterListingViewedEvent_unknownListing() {
 		
 		Collection authorities = new HashSet<>();
 		authorities.add(new SimpleGrantedAuthority("ROLE_RECRUITER"));
@@ -433,8 +429,6 @@ public class ListingServiceImplTest {
 		final UUID listingId 	= UUID.randomUUID();
 		final LocalDateTime created = LocalDateTime.of(2022, 1, 14, 10, 11, 12);
 		ListingViewedEvent event = ListingViewedEvent.builder().eventId(eventId).created(created).listingId(listingId).build();
-				
-		//Mockito.when(this.mockListingRepository.findById(event.getListingId())).thenReturn(Optional.empty());
 		
 		Assertions.assertThrows(IllegalArgumentException.class, () -> {
 			this.service.registerListingViewedEvent(event);
@@ -448,7 +442,7 @@ public class ListingServiceImplTest {
 	*/
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Test
-	public void testRegisterListingViewedEvent() throws Exception {
+	void testRegisterListingViewedEvent() {
 		
 		Collection authorities = new HashSet<>();
 		authorities.add(new SimpleGrantedAuthority("ROLE_RECRUITER"));
@@ -476,7 +470,7 @@ public class ListingServiceImplTest {
 	*/
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Test
-	public void testRegisterListingViewedEvent_admin() throws Exception {
+	void testRegisterListingViewedEvent_admin() {
 		
 		Collection authorities = new HashSet<>();
 		authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
@@ -500,7 +494,7 @@ public class ListingServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testSendContactRequestToListingOwner_unsafeFile() throws Exception{
+	void testSendContactRequestToListingOwner_unsafeFile() {
 		
 		Mockito.when(this.mockFileSecurityParser.isSafe(Mockito.any())).thenReturn(false);
 		MultipartFile mockMultipartFile = Mockito.mock(MultipartFile.class);
@@ -516,7 +510,7 @@ public class ListingServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testSendContactRequestToListingOwner_unknownListing() throws Exception{
+	void testSendContactRequestToListingOwner_unknownListing() {
 		
 		Mockito.when(this.mockFileSecurityParser.isSafe(Mockito.any())).thenReturn(true);
 		Mockito.when(this.mockListingRepository.findListingById(Mockito.any(UUID.class))).thenReturn(Optional.empty());
@@ -532,7 +526,7 @@ public class ListingServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testSendContactRequestToListingOwner_success() throws Exception{
+	void testSendContactRequestToListingOwner_success() throws Exception{
 		
 		final UUID				listingId		= UUID.randomUUID();
 		final String 			title 			= "Java Developer";
@@ -582,7 +576,7 @@ public class ListingServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testEnableListingsForRecruiter() throws Exception{
+	void testEnableListingsForRecruiter() {
 		
 		final String recruiterId = "kparkings01";
 		
@@ -607,7 +601,7 @@ public class ListingServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testDisableListingsForRecruiter() throws Exception{
+	void testDisableListingsForRecruiter() {
 		
 		final String recruiterId = "kparkings01";
 		
@@ -633,7 +627,7 @@ public class ListingServiceImplTest {
 	*/
 	@SuppressWarnings("unchecked")
 	@Test
-	public void testUpdateCredits() throws Exception{
+	void testUpdateCredits() {
 		
 		ArgumentCaptor<Set<RecruiterCredit>> argCapt = ArgumentCaptor.forClass(Set.class);
 		
@@ -656,7 +650,7 @@ public class ListingServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testDoCreditsCheck_unknownUser() throws Exception{
+	void testDoCreditsCheck_unknownUser() {
 		
 		Mockito.when(this.mockCreditDao.getByRecruiterId(Mockito.anyString())).thenReturn(Optional.empty());
 		
@@ -669,7 +663,7 @@ public class ListingServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testDoCreditsCheck_knownUser_no_credits() throws Exception{
+	void testDoCreditsCheck_knownUser_no_credits() {
 		
 		RecruiterCredit rc = RecruiterCredit.builder().credits(0).build();
 		
@@ -684,7 +678,7 @@ public class ListingServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testDoCreditsCheck_knownUser_has_credits() throws Exception{
+	void testDoCreditsCheck_knownUser_has_credits() {
 		
 		RecruiterCredit rc = RecruiterCredit.builder().credits(1).build();
 		
@@ -699,7 +693,7 @@ public class ListingServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testUpdateCreditsForUser() throws Exception{
+	void testUpdateCreditsForUser() {
 		
 		final String 	userId 		= "kparkings";
 		final int 		credits 	= 20;
@@ -724,7 +718,7 @@ public class ListingServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testUpdateCreditsForUser_unknownRecruiter() throws Exception{
+	void testUpdateCreditsForUser_unknownRecruiter() {
 		
 		final String 	userId 		= "kparkings";
 		final int 		credits 	= 20;
@@ -742,7 +736,7 @@ public class ListingServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testGetCreditCountForUser_unknownUser() throws Exception{
+	void testGetCreditCountForUser_unknownUser() {
 		
 		Mockito.when(this.mockCreditDao.getByRecruiterId(Mockito.anyString())).thenReturn(Optional.empty());
 		
@@ -757,7 +751,7 @@ public class ListingServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testGetCreditCountForUser() throws Exception{
+	void testGetCreditCountForUser() {
 		
 		final int credits = 5;
 		
@@ -774,7 +768,7 @@ public class ListingServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testDeleteRecruiterListings() throws Exception {
+	void testDeleteRecruiterListings() {
 		
 		final String recruiterId = "anId";
 		

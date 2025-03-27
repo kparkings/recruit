@@ -534,6 +534,14 @@ public class Candidate {
 	}
 	
 	/**
+	* Adds an additional Function that the candidate is available for
+	* @param function
+	*/
+	public void addFunction(FUNCTION function) {
+		this.functions.add(function);
+	}
+	
+	/**
 	* Sets the last Date that the Candidate confirmed their own availability
 	* @param lastAvailabilityCheckConfirmed - Date of confirmation
 	*/

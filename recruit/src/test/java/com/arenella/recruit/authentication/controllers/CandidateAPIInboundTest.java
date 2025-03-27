@@ -28,7 +28,7 @@ import com.arenella.recruit.candidates.enums.PERM;
 * Unit tests for the CandidateAPIInbound class 
 * @author K Parkings
 */
-public class CandidateAPIInboundTest {
+class CandidateAPIInboundTest {
 
 	private static final String 			candidateId				= "C100";
 	private static final  String 			firstname				= "Kevin";
@@ -57,7 +57,7 @@ public class CandidateAPIInboundTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testBuilder_defaults() throws Exception {
+	void testBuilder_defaults() {
 		
 		CandidateAPIInbound candidate = CandidateAPIInbound.builder().build();
 		
@@ -83,7 +83,7 @@ public class CandidateAPIInboundTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testBuilder() throws Exception{
+	void testBuilder() {
 		
 		CandidateAPIInbound candidate = CandidateAPIInbound
 													.builder()
@@ -135,7 +135,7 @@ public class CandidateAPIInboundTest {
 	}
 	
 	@Test
-	public void testConvertToCandidate() throws Exception{
+	void testConvertToCandidate() throws Exception{
 		
 		CandidateAPIInbound candidateAPIInbound = CandidateAPIInbound
 				.builder()
@@ -163,31 +163,30 @@ public class CandidateAPIInboundTest {
 		
 		Candidate candidate = CandidateAPIInbound.convertToCandidate(candidateAPIInbound, Optional.empty());
 		
-		assertEquals(candidate.getCandidateId(), 	candidate.getCandidateId());
-		assertEquals(candidate.getFirstname(), 		candidate.getFirstname());
-		assertEquals(candidate.getSurname(), 		candidate.getSurname());
-		assertEquals(candidate.getEmail(), 			candidate.getEmail());
-		assertEquals(candidate.getRoleSought(), 	candidate.getRoleSought());
-		assertEquals(candidate.getFunctions(), 		candidate.getFunctions().toArray()[0]);
-		assertEquals(candidate.getCountry(), 		candidate.getCountry());
-		assertEquals(candidate.getCity(), 			candidate.getCity());
-		assertEquals(candidate.isPerm(), 			candidate.isPerm());
+		assertEquals(candidateAPIInbound.getCandidateId(), 				candidate.getCandidateId());
+		assertEquals(candidateAPIInbound.getFirstname(), 				candidate.getFirstname());
+		assertEquals(candidateAPIInbound.getSurname(), 					candidate.getSurname());
+		assertEquals(candidateAPIInbound.getEmail(), 					candidate.getEmail());
+		assertEquals(candidateAPIInbound.getRoleSought(), 				candidate.getRoleSought());
+		assertEquals(candidateAPIInbound.getFunctions().toArray()[0], 	candidate.getFunctions().toArray()[0]);
+		assertEquals(candidateAPIInbound.getCountry(), 					candidate.getCountry());
+		assertEquals(candidateAPIInbound.getCity(), 					candidate.getCity());
+		assertEquals(candidateAPIInbound.isPerm(), 						candidate.isPerm());
 		
-		assertEquals(DAYS_ON_SITE_VAL, 				candidate.getDaysOnSite());
-		assertEquals(RATE_CONTRACT, 				candidate.getRateContract().get());
-		assertEquals(RATE_PERM, 					candidate.getRatePerm().get());
-		assertEquals(AVAILABLE_FROM_DATE, 			candidate.getAvailableFromDate());
-		assertEquals(COMMENTS, 						candidate.getComments());
-		assertEquals(INTRODUCTION, 					candidate.getIntroduction());
+		assertEquals(DAYS_ON_SITE_VAL, 									candidate.getDaysOnSite());
+		assertEquals(RATE_CONTRACT, 									candidate.getRateContract().get());
+		assertEquals(RATE_PERM, 										candidate.getRatePerm().get());
+		assertEquals(AVAILABLE_FROM_DATE, 								candidate.getAvailableFromDate());
+		assertEquals(COMMENTS, 											candidate.getComments());
+		assertEquals(INTRODUCTION, 										candidate.getIntroduction());
 		
-		assertEquals(freelance, 					candidate.isFreelance());
-		assertEquals(yearsExperience, 				candidate.getYearsExperience());
-		assertEquals(available, 					candidate.isAvailable());
+		assertEquals(freelance, 										candidate.isFreelance());
+		assertEquals(yearsExperience, 									candidate.getYearsExperience());
+		assertEquals(available, 										candidate.isAvailable());
 		
 		assertTrue(skills.contains("Java"));
 		assertTrue(skills.contains("Angular"));
 		assertTrue(languages.stream().filter(l ->l.getLanguage() == LANGUAGE.DUTCH).findAny().isPresent());
-		
 		
 	}
 	

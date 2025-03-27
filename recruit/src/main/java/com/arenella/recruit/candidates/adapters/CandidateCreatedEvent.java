@@ -21,7 +21,7 @@ public class CandidateCreatedEvent {
 
 	private String 			candidateId;
 	private String			roleSought;
-	private FUNCTION		function;
+	private Set<FUNCTION>	functions					= new LinkedHashSet<>();
 	private COUNTRY 		country;
 	private String 			city;
 	private PERM 			perm;
@@ -41,7 +41,6 @@ public class CandidateCreatedEvent {
 		
 		this.candidateId 		= builder.candidateId;
 		this.roleSought 		= builder.roleSought;
-		this.function 			= builder.function;
 		this.country 			= builder.country;
 		this.city 				= builder.city;
 		this.perm 				= builder.perm;
@@ -53,6 +52,8 @@ public class CandidateCreatedEvent {
 		this.surname			= builder.surname;
 		this.email				= builder.email;
 		
+		this.functions.clear();
+		this.functions.addAll(builder.functions);
 	}
 	
 	/**
@@ -72,11 +73,11 @@ public class CandidateCreatedEvent {
 	}
 	
 	/**
-	* Return the Function type sort by the Candidate
+	* Return the Functions type sort by the Candidate
 	* @return Function type
 	*/
-	public FUNCTION	getFunction() {
-		return this.function;
+	public Set<FUNCTION> getFunctions() {
+		return this.functions;
 	}
 	
 	/**
@@ -175,7 +176,7 @@ public class CandidateCreatedEvent {
 		
 		private String 			candidateId;
 		private String			roleSought;
-		private FUNCTION		function;
+		private Set<FUNCTION>	functions					= new LinkedHashSet<>();
 		private COUNTRY 		country;
 		private String 			city;
 		private PERM 			perm;
@@ -200,7 +201,7 @@ public class CandidateCreatedEvent {
 			
 			this.candidateId 		= candidate.getCandidateId();
 			this.roleSought 		= candidate.getRoleSought();
-			this.function 			= candidate.getFunction();
+			this.functions 			= candidate.getFunctions();
 			this.country 			= candidate.getCountry();
 			this.city 				= candidate.getCity();
 			this.perm 				= candidate.isPerm();

@@ -291,8 +291,26 @@ export class CandidateServiceService {
 		functionTypes.push(new CandidateFunction('TESTER',					this.translate.instant('func-tester')));//'Test Analyst'));
 		functionTypes.push(new CandidateFunction('UI_UX',					this.translate.instant('func-uiux')));//'UI \ UX'));
 	    functionTypes.push(new CandidateFunction('WEB_DEV',					this.translate.instant('func-web-dev')));//'Web Developer'));
-	    
-	    return functionTypes;
+		functionTypes.push(new CandidateFunction('RUBY',					this.translate.instant('func-support')));//'Support analyst'));
+		
+		functionTypes.push(new CandidateFunction('RUBY_ON_RAILS',			this.translate.instant('ruby-on-rails')));
+		functionTypes.push(new CandidateFunction('GO',						this.translate.instant('go')));
+		functionTypes.push(new CandidateFunction('REACT',					this.translate.instant('react')));
+		functionTypes.push(new CandidateFunction('VUE',						this.translate.instant('vue')));//'Support analyst'));
+		functionTypes.push(new CandidateFunction('NEXT',					this.translate.instant('next')));//'Support analyst'));
+		functionTypes.push(new CandidateFunction('EXPRES',					this.translate.instant('expres')));//'Support analyst'));
+		functionTypes.push(new CandidateFunction('RUST',					this.translate.instant('rust')));//'Support analyst'));
+		functionTypes.push(new CandidateFunction('TEST_MANAGER',			this.translate.instant('test-manager')));//'Support analyst'));
+		functionTypes.push(new CandidateFunction('PRODUCT_OWNER',			this.translate.instant('product-owner')));//'Support analyst'));
+		functionTypes.push(new CandidateFunction('NODE',					this.translate.instant('node')));//'Support analyst'));
+		functionTypes.push(new CandidateFunction('PYTHON',					this.translate.instant('python')));//'Support analyst'));
+		functionTypes.push(new CandidateFunction('PHP',						this.translate.instant('php')));//'Support analyst'));
+		functionTypes.push(new CandidateFunction('ANGULAR',					this.translate.instant('angular')));//'Support analyst'));
+		functionTypes.push(new CandidateFunction('ANDROID',					this.translate.instant('android')));//'Support analyst'));
+		functionTypes.push(new CandidateFunction('IOS',						this.translate.instant('ios')));//'Support analyst'));
+		functionTypes.push(new CandidateFunction('KOTLIN',					this.translate.instant('kotlin')));//'Support analyst'));
+			    
+		return functionTypes;
 	
 	}
 

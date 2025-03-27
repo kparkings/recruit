@@ -5,7 +5,6 @@ package com.arenella.recruit.candidates.enums;
 * @author K Parkings
 */
 public enum FUNCTION {
-	
 	JAVA_DEV("Java Developer"), 
 	CSHARP_DEV("C# Developer"), 
 	SUPPORT("Support analyst"), 
@@ -21,7 +20,24 @@ public enum FUNCTION {
 	SOFTWARE_DEVELOPER("Software Developer"),
 	IT_SECURITY("IT Security"),
 	IT_RECRUITER("IT Recruiter"),
-	SOFTWARE_DEV_IN_TEST("Software Dev In Test");
+	SOFTWARE_DEV_IN_TEST("Software Dev In Test"),
+	RUBY("Ruby"),
+	RUBY_ON_RAILS("Ruby On Rails"),
+	GO("Go"),
+	REACT("React"),
+	VUE("Vue"),
+	NEXT("Next"),
+	EXPRES("Expres"),
+	RUST("Rust"),
+	TEST_MANAGER("Test Manager"),
+	PRODUCT_OWNER("Product Owner"),
+	NODE("Node"),
+	PYTHON("Python"),
+	ANGULAR("Angular"),
+	PHP("Php"),
+	ANDROID("Android"),
+	IOS("IOS"),
+	KOTLIN("Kotlin");
 	
 	private String desc;
 	

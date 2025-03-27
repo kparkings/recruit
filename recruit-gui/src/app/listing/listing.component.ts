@@ -14,14 +14,12 @@ import { SelectableCountry } 							from '../shared-domain-object/country';
 import { StaticDataService } 							from '../static-data.service';
 import { HtmlOption } 									from '../html-option';
 import { InfoItemBlock, InfoItemConfig, InfoItemRowKeyValue, InfoItemRowKeyValueFlag, InfoItemRowMultiValues, InfoItemRowSingleValue } 				from '../candidate-info-box/info-item';
-import { ContractType } 								from '../suggestions/contract-type';
 import { TranslateService } 							from '@ngx-translate/core';
 import { SupportedCountry } 							from '../supported-candidate';
 import { CandidateServiceService } 						from '../candidate-service.service';
 import { Clipboard } 									from '@angular/cdk/clipboard';
-import { SearchStatCountry, SearchStats } 				from '../search-stats';
-import { ListingSearchRequest }							from './../listing-search-request';
-import { SearchbarComponentListing } from 				'./searchbar/searchbar.component';
+import { SearchStats } 									from '../search-stats';
+import { SearchbarComponentListing }	 				from './searchbar/searchbar.component';
 
 @Component({
   selector: 'app-listing',
@@ -410,7 +408,7 @@ export class ListingComponent implements OnInit {
 	* Returns size limited version
 	*/
 	public getFormattedJobTitle(title:string):string{
-		return title.length < 35 ? title : title.substring(0,35) + "...";
+		return title.length < 25 ? title : title.substring(0,25) + "...";
 	}
 	
 	/**

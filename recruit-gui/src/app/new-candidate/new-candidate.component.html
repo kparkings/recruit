@@ -49,12 +49,12 @@
 						</tr>
 						<tr>
 							<td class="hdr-label">{{'arenella-new-candidate-function-group' | translate}}</td>
-							<td class="hdr-value">
-								<select formControlName="function">
-									<option></option>
-									<option value="{{func.id}}" *ngFor="let func of functionTypes">{{func.desc | translate}}</option>
-								</select>
-							</td>	
+							<td>
+								<div style="min-height:35px;">
+									<div *ngFor="let function of functionTypes" class="function-selectable function-selected-{{isSelectedFunction(function)}}" (click)="toggleSelectedFunction(function)">{{function.desc | translate}}
+									</div>
+								</div>
+							</td>
 						</tr>
 						<tr>
 							<td class="hdr-label">{{'arenella-new-candidate-role-sought' | translate}}</td>
@@ -194,12 +194,17 @@
 						<tr>
 							<td class="hdr-label" colspan="2">{{'arenella-new-candidate-spoken-languages' | translate}}</td>
 						</tr>
-						<tr *ngFor="let language of supportedLanguages">
-							<td>{{language.languageCode | translate}}</td>
-							<td>
-								<select id="langOpt{{language.languageCode}}" #langLevelSelect (change)="setLanguageFormValue(language.languageCode, langLevelSelect.value)" >
-									<option  *ngFor="let level of languageOptions" value="{{level.value}}">{{level.label | translate}}</option>
-								</select>
+						<tr>
+							<td colspan="2">
+								<div *ngFor="let language of supportedLanguages" class="new-candidate-lang">
+									<b class="new-candidate-lang-name">{{language.languageCode | translate}}</b>
+									<span class="new-candidate-lang-options">
+										<select id="langOpt{{language.languageCode}}" #langLevelSelect (change)="setLanguageFormValue(language.languageCode, langLevelSelect.value)" >
+											<option  *ngFor="let level of languageOptions" value="{{level.value}}">{{level.label | translate}}</option>
+										</select>
+									</span> 	
+							 	</div>
+							 		
 							</td>
 						</tr>
 					</table>

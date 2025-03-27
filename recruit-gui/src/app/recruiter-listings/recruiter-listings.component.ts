@@ -131,9 +131,6 @@ export class RecruiterListingsComponent implements OnInit {
     	});
 	
 		this.loadYearsExperienceValues();
-		//this.initSupportedCountries();
-		
-		
 	
   	}
 	
@@ -194,18 +191,8 @@ export class RecruiterListingsComponent implements OnInit {
 			
 			let freelance 	= extractedFilters.freelance 	== 'TRUE' ? true : false;
 			let perm 		= extractedFilters.perm 		== 'TRUE' ? true : false;
-			
-			//let netherlands = extractedFilters.netherlands;
-			//let uk 			= extractedFilters.uk;
-			//let belgium 	= extractedFilters.belgium;
-			//let ireland 	= extractedFilters.ireland;
-			
-			//let country = netherlands ? "NETHERLANDS" : uk ? "UK" : belgium ? "BELGIUM" : ireland ? "IRELAND" : "";
-			
-			
-			let country = extractedFilters.countries.length > 0 ? extractedFilters.countries[0] : "";
-			
-			let type = (freelance && perm) ? "BOTH" : freelance ? "CONTRACT_ROLE" : "PERM_ROLE";
+			let country 	= extractedFilters.countries.length > 0 ? extractedFilters.countries[0] : "";
+			let type 		= (freelance && perm) ? "BOTH" : freelance ? "CONTRACT_ROLE" : "PERM_ROLE";
 			
 			this.newListingFormBean.get("title")?.setValue(extractedFilters.jobTitle);
 			this.newListingFormBean.get("type")?.setValue(type);
@@ -221,7 +208,6 @@ export class RecruiterListingsComponent implements OnInit {
 			this.closeModal();
 			
 			this.activeView 			= 'add';
-			//this.activeSubView 		= 'step1';
 			this.selectedListing		= new Listing();
 			this.enabldeDeleteOption 	= false;
 			
@@ -382,7 +368,6 @@ export class RecruiterListingsComponent implements OnInit {
 	public showListingDetails(selectedListing?:Listing):void{
 		
 		this.activeView 			= 'show';
-		//this.activeSubView 			= 'none';
 		this.enabldeDeleteOption 	= false;
 		
 		if (selectedListing) {
@@ -935,7 +920,7 @@ export class RecruiterListingsComponent implements OnInit {
 	* Returns size limited version
 	*/
 	public getFormattedJobTitle(title:string):string{
-		return title.length < 50 ? title : title.substring(0,49) + "...";
+		return title.length < 25 ? title : title.substring(0,25) + "...";
 	}
 	
 }

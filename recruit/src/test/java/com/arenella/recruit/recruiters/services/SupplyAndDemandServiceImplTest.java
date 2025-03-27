@@ -39,7 +39,7 @@ import com.arenella.recruit.recruiters.dao.SupplyAndDemandEventDao;
 * @author K Parkings
 */
 @ExtendWith(MockitoExtension.class)
-public class SupplyAndDemandServiceImplTest {
+class SupplyAndDemandServiceImplTest {
 
 	private static final String RECRUITER_ID = "recruiterId1";
 	
@@ -66,7 +66,7 @@ public class SupplyAndDemandServiceImplTest {
 	* @throws Exception
 	*/
 	@BeforeEach
-	public void init() throws Exception {
+	void init() {
 		SecurityContextHolder.getContext().setAuthentication(mockAuthentication);
 	}
 	
@@ -75,7 +75,7 @@ public class SupplyAndDemandServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testAddOpenPosition() throws Exception{
+	void testAddOpenPosition() {
 		
 		Mockito.when(mockAuthentication.getPrincipal()).thenReturn(RECRUITER_ID);
 		
@@ -93,10 +93,11 @@ public class SupplyAndDemandServiceImplTest {
 	
 	/**
 	* Happy path for deleting an OpenPosition
+	 * @throws IllegalAccessException 
 	* @throws Exception
 	*/
 	@Test
-	public void testDeleteOpenPosition() throws Exception{
+	void testDeleteOpenPosition() throws IllegalAccessException {
 		
 		Mockito.when(mockAuthentication.getPrincipal()).thenReturn(RECRUITER_ID);
 		
@@ -114,7 +115,7 @@ public class SupplyAndDemandServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testDeleteOpenPosition_unknownOpenPosition() throws Exception{
+	void testDeleteOpenPosition_unknownOpenPosition() {
 		
 		UUID 			openPositionId 	= UUID.randomUUID();
 		
@@ -130,7 +131,7 @@ public class SupplyAndDemandServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testDeleteOpenPosition_wrongUser() throws Exception{
+	void testDeleteOpenPosition_wrongUser() {
 		
 		Mockito.when(mockAuthentication.getPrincipal()).thenReturn(RECRUITER_ID);
 		
@@ -146,7 +147,7 @@ public class SupplyAndDemandServiceImplTest {
 	}
 	
 	@Test
-	public void testUpdateOpenPosition() throws Exception{
+	void testUpdateOpenPosition() throws IllegalAccessException {
 		
 		Mockito.when(mockAuthentication.getPrincipal()).thenReturn(RECRUITER_ID);
 		
@@ -161,7 +162,7 @@ public class SupplyAndDemandServiceImplTest {
 	}
 	
 	@Test
-	public void testUpdateOpenPosition_wrongUser() throws Exception{
+	void testUpdateOpenPosition_wrongUser() {
 		
 		Mockito.when(mockAuthentication.getPrincipal()).thenReturn(RECRUITER_ID);
 		
@@ -181,7 +182,7 @@ public class SupplyAndDemandServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testFetchOpenPositions() throws Exception{
+	void testFetchOpenPositions() {
 		
 		final UUID id1 = UUID.randomUUID();
 		final UUID id2 = UUID.randomUUID();
@@ -210,7 +211,7 @@ public class SupplyAndDemandServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testFetchOpenPositionsByRecruiter() throws Exception{
+	void testFetchOpenPositionsByRecruiter() {
 		
 		final UUID id1 = UUID.randomUUID();
 		final UUID id2 = UUID.randomUUID();
@@ -240,7 +241,7 @@ public class SupplyAndDemandServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testSendOpenPositionContactEmail_unknownOPenPosition() throws Exception{
+	void testSendOpenPositionContactEmail_unknownOPenPosition() {
 		
 		final UUID 		openPositionId 		= UUID.randomUUID();
 		final String 	message				= "aMessage";
@@ -259,7 +260,7 @@ public class SupplyAndDemandServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testSendOpenPositionContactEmail() throws Exception{
+	void testSendOpenPositionContactEmail() {
 		
 		final UUID 			openPositionId 		= UUID.randomUUID();
 		final String 		message				= "aMessage";
@@ -298,7 +299,7 @@ public class SupplyAndDemandServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testFetchViewedEventsByRecruiter() throws Exception{
+	void testFetchViewedEventsByRecruiter() {
 		
 		final String 	recruiterId 	= "kparkings";
 		final UUID		id1 			= UUID.randomUUID();
@@ -319,7 +320,7 @@ public class SupplyAndDemandServiceImplTest {
 	*/
 	@SuppressWarnings("unchecked")
 	@Test
-	public void testDisableSupplyAndDemandPostsForRecruiter() throws Exception{
+	void testDisableSupplyAndDemandPostsForRecruiter() {
 		
 		final String recruiterId = "rec222";
 		final Set<OpenPosition> 	ops = Set.of(OpenPosition.builder().active(true).build(), OpenPosition.builder().active(true).build(), OpenPosition.builder().active(true).build());
@@ -345,7 +346,7 @@ public class SupplyAndDemandServiceImplTest {
 	*/
 	@SuppressWarnings("unchecked")
 	@Test
-	public void testEnableSupplyAndDemandPostsForRecruiter() throws Exception{
+	void testEnableSupplyAndDemandPostsForRecruiter() {
 		
 		final String recruiterId = "rec222";
 		final Set<OpenPosition> 	ops = Set.of(OpenPosition.builder().active(false).build(), OpenPosition.builder().active(false).build(), OpenPosition.builder().active(false).build());
@@ -370,7 +371,7 @@ public class SupplyAndDemandServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testUpdateCredits() throws Exception{
+	void testUpdateCredits() {
 		
 		@SuppressWarnings("unchecked")
 		ArgumentCaptor<Set<RecruiterCredit>> argCapt = ArgumentCaptor.forClass(Set.class);
@@ -396,7 +397,7 @@ public class SupplyAndDemandServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testDoCreditsCheck_unknownUser() throws Exception{
+	void testDoCreditsCheck_unknownUser() {
 		
 		Mockito.when(this.mockCreditDao.getByRecruiterId(Mockito.anyString())).thenReturn(Optional.empty());
 		
@@ -409,7 +410,7 @@ public class SupplyAndDemandServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testDoCreditsCheck_knownUser_no_credits() throws Exception{
+	void testDoCreditsCheck_knownUser_no_credits() {
 		
 		RecruiterCredit rc = RecruiterCredit.builder().credits(0).build();
 		
@@ -424,7 +425,7 @@ public class SupplyAndDemandServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testDoCreditsCheck_knownUser_has_credits() throws Exception{
+	void testDoCreditsCheck_knownUser_has_credits() {
 		
 		RecruiterCredit rc = RecruiterCredit.builder().credits(1).build();
 		
@@ -439,7 +440,7 @@ public class SupplyAndDemandServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testUpdateCreditsForUser() throws Exception{
+	void testUpdateCreditsForUser() {
 		
 		final String 	userId 		= "kparkings";
 		final int 		credits 	= 20;
@@ -465,7 +466,7 @@ public class SupplyAndDemandServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testUpdateCreditsForUser_paidSubscriptin_specified() throws Exception{
+	void testUpdateCreditsForUser_paidSubscriptin_specified() {
 		
 		final String 	userId 		= "kparkings";
 		final int 		credits 	= 20;
@@ -490,7 +491,7 @@ public class SupplyAndDemandServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testUpdateCreditsForUser_unknownRecruiter() throws Exception{
+	void testUpdateCreditsForUser_unknownRecruiter() {
 		
 		final String 	userId 		= "kparkings";
 		final int 		credits 	= 20;
@@ -508,7 +509,7 @@ public class SupplyAndDemandServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testGetCreditCountForUser_unknownUser() throws Exception{
+	void testGetCreditCountForUser_unknownUser() {
 		
 		Mockito.when(this.mockCreditDao.getByRecruiterId(Mockito.anyString())).thenReturn(Optional.empty());
 		
@@ -523,7 +524,7 @@ public class SupplyAndDemandServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testGetCreditCountForUser() throws Exception{
+	void testGetCreditCountForUser() {
 		
 		final int credits = 5;
 		

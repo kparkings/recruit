@@ -33,9 +33,9 @@ export class NewCandidate {
 	roleSought: 		string 			= "";
 
 	/**
-	* Function the candidate performs
+	* Functions the candidate performs
 	*/
-	function: 		string 				= "";
+	functions: 		Array<string> 		= new Array<string>();
 
 	/**
 	* Country where the candidate is located 

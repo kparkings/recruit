@@ -99,19 +99,6 @@
 	margin:20px;
 	margin-top:10px;
 }
-/*
-.btn-right{
-	float:right;
-}
-
-.main-btns{
-	width:200px;
-	max-width:48%;
-	margin-right:10px;
-	margin-bottom:10px;
-	margin-top:0px;
-	
-}*/
 
 .selected-skill{
 	margin:2px;
@@ -179,6 +166,40 @@ input{
 	margin:0px;
 }
 
+.new-candidate-lang{
+	float:left;
+	width:300px;
+}
+
+.new-candidate-lang-name{
+	display:inline-block;
+	width:150px;
+}
+
+.new-candidate-lang-options{
+	width:150px;
+}
+
+.function-selectable{
+	float:left;
+	border-radius: 0.25rem;
+	margin:5px;
+	background:#6a5acd;
+	color:white;
+	padding:5px;
+	width:300px;	
+	cursor:pointer;
+	text-align:center;
+}
+
+.function-selected-true{
+	opacity:1;
+}
+
+.function-selected-false{
+	opacity:0.25;
+}
+
 @media (max-width: 700px) {
 	.arenella-btn-popup-action {
 	    width: 100%;
@@ -193,5 +214,18 @@ input{
 		width:100%;
 		max-width:100%;
 	}
+	
+	.new-candidate-lang{
+		width:100%;
+	}
+
+	.new-candidate-lang-name{
+		width:50%;
+	}
+
+	.new-candidate-lang-options{
+		width:50%;
+	}
+
 }
  

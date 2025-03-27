@@ -46,7 +46,7 @@ public class CandidateCreatedEventTest {
 	private static final Candidate 		candidate 				= Candidate
 																		.builder()
 																			.candidateId(candidateId)
-																			.function(function)
+																			.functions(Set.of(function))
 																			.country(country)
 																			.city(city)
 																			.email(email)
@@ -75,7 +75,7 @@ public class CandidateCreatedEventTest {
 		
 		assertEquals(candidateId, 		event.getCandidateId());
 		assertEquals(roleSought, 		event.getRoleSought());
-		assertEquals(function, 			event.getFunction());
+		assertEquals(function, 			event.getFunctions().toArray()[0]);
 		assertEquals(country,			event.getCountry());
 		assertEquals(city, 				event.getCity());
 		assertEquals(perm, 				event.isPerm());
