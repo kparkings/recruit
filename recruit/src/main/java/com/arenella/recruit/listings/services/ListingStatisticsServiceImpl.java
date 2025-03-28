@@ -3,10 +3,8 @@ package com.arenella.recruit.listings.services;
 import java.security.Principal;
 import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,9 +13,6 @@ import com.arenella.recruit.listings.beans.Listing;
 import com.arenella.recruit.listings.beans.ListingFilter;
 import com.arenella.recruit.listings.beans.ListingViewedEvent;
 import com.arenella.recruit.listings.controllers.ListingStatistics;
-import com.arenella.recruit.listings.dao.ListingDao;
-import com.arenella.recruit.listings.dao.ListingStatisticsDao;
-import com.arenella.recruit.listings.dao.ListingViewedEventEntity;
 import com.arenella.recruit.listings.repos.ListingRepository;
 
 import co.elastic.clients.elasticsearch.ElasticsearchClient;
