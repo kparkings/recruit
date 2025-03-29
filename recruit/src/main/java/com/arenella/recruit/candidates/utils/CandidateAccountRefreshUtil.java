@@ -72,10 +72,6 @@ public class CandidateAccountRefreshUtil {
 	@Autowired
 	private CityService							cityService;
 	
-	@Autowired
-	private CandidateFunctionExtractorBOOPUPDATE functionExtractor;
-	
-	
 	/**
 	* Triggers refresh actions for Candidates that are outdated
 	*/

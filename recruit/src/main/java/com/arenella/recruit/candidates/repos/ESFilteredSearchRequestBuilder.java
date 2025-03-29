@@ -180,18 +180,20 @@ public class ESFilteredSearchRequestBuilder {
 		}
 		
 		if (!filterOptions.getFunctions().isEmpty()) {
-			List<FieldValue> fieldValueList = filterOptions.getFunctions().stream().map(c -> FieldValue.of(c.name())).toList();
-			 
-			 TermsQueryField termsQueryField = new TermsQueryField.Builder()
-                    .value(fieldValueList)
-                    .build();
-			 
-			mustQueries.add(TermsQuery.of(m -> m
+			
+			List<co.elastic.clients.elasticsearch._types.query_dsl.Query> langQueries 		= new ArrayList<>();
+			
+			filterOptions.getFunctions().stream().forEach(l -> {
+				langQueries.add(BoolQuery.of(m -> m
+						.must(List.of(
+								MatchQuery.of(m1 -> m1.field("functions").query(l.toString()))._toQuery()))
+					)._toQuery());
+			});
+			
+			mustQueries.add(BoolQuery.of(m -> m
 					.queryName("functions")
-					.field("functions")
-					.terms(termsQueryField)
-					
-			)._toQuery());
+					.should(langQueries).minimumShouldMatch("1"))._toQuery());
+			
 		}
 		
 		if (!filterOptions.isFreelance().isEmpty() && filterOptions.isFreelance().get()) {

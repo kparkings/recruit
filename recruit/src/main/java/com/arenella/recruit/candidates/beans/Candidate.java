@@ -30,6 +30,7 @@ public class Candidate {
 	private String 						email;
 	private String						roleSought;
 	private Set<FUNCTION>				functions					= new LinkedHashSet<>();
+	//private FUNCTION					function;
 	private COUNTRY 					country;
 	private String 						city;
 	private double						latitude;
@@ -98,7 +99,7 @@ public class Candidate {
 		this.lastAvailabilityCheckEmailSent 	= builder.lastAvailabilityCheckEmailSent;
 		this.lastAvailabilityCheckIdSent 		= builder.lastAvailabilityCheckIdSent;
 		this.lastAvailabilityCheckConfirmedOn 	= builder.lastAvailabilityCheckConfirmedOn;
-		
+		//this.function							= builder.function;
 		this.skills.addAll(builder.skills);
 		this.languages.addAll(builder.languages);
 		this.functions.addAll(builder.functions);
@@ -153,6 +154,10 @@ public class Candidate {
 	public Set<FUNCTION> getFunctions() {
 		return this.functions;
 	}
+	
+	//public FUNCTION getFunction() {
+	//	return this.function;
+	//}
 	
 	/**
 	* Returns the Country in which the candidate is 
@@ -569,6 +574,7 @@ public class Candidate {
 		private String 						email;
 		private String						roleSought;
 		private Set<FUNCTION>				functions					= new LinkedHashSet<>();
+		private FUNCTION					function;
 		private COUNTRY 					country;
 		private String 						city;
 		private double						longitude;
@@ -657,6 +663,16 @@ public class Candidate {
 		public CandidateBuilder functions(Set<FUNCTION> functions) {
 			this.functions.clear();
 			this.functions.addAll(functions);
+			return this;
+		}
+		
+		/**
+		* Sets the functions the candidate performs
+		* @param function - Functions performed by the Candidate
+		* @return Builder
+		*/
+		public CandidateBuilder functions(FUNCTION function) {
+			this.function = function;
 			return this;
 		}
 		

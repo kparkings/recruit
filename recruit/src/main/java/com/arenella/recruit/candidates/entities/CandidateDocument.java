@@ -546,7 +546,7 @@ public class CandidateDocument {
 		private String 					email;
 		private String 					roleSought;
 		private Set<FUNCTION> 			functions					= new LinkedHashSet<>();
-		//private FUNCTION				function;
+		private FUNCTION				function;
 		private COUNTRY 				country;
 		private String 					city;
 		private GeoPoint				cityPos = new GeoPoint(0,0);
@@ -633,7 +633,7 @@ public class CandidateDocument {
 			this.functions.clear();
 			this.functions.addAll(functions);
 			
-			//functions.stream().filter(f -> f!= null).findAny().ifPresent(f -> this.function = f);
+			functions.stream().filter(f -> f!= null).findAny().ifPresent(f -> this.function = f);
 			return this;
 		}
 		
