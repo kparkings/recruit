@@ -25,7 +25,7 @@ import java.util.*;
 * Unit tests for the ESFilteredSearchRequestBuilder class
 * @author K Parkings
 */
-public class ESFilteredSearchRequestBuilderTest {
+class ESFilteredSearchRequestBuilderTest {
 	
 	
 	private static final String 			CANDIDATE_ID 						= "1234";
@@ -84,7 +84,7 @@ public class ESFilteredSearchRequestBuilderTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testFilters() throws Exception{
+	void testFilters() {
 		
 		Query 					query 		= ESFilteredSearchRequestBuilder.createFilteredQuery(filters);
 		BoolQuery 				boolQuery 	= (BoolQuery) query._get();
@@ -138,22 +138,22 @@ public class ESFilteredSearchRequestBuilderTest {
 		skills.terms().value().stream().filter(f -> f.stringValue().equals("JaVa")).findAny().orElseThrow();
 		skills.terms().value().stream().filter(f -> f.stringValue().equals("Qa")).findAny().orElseThrow();
 		
-		TermsQuery functions = mustTerms.stream().filter(q -> q.field().equals("functions")).findFirst().get();
-		functions.terms().value().stream().filter(f -> f.stringValue().equals(FUNCTION.CSHARP_DEV.toString())).findAny().orElseThrow();
-		functions.terms().value().stream().filter(f -> f.stringValue().equals(FUNCTION.IT_RECRUITER.toString())).findAny().orElseThrow();
+		BoolQuery functions = mustBool.stream().filter(q -> q.queryName().equals("functions")).findFirst().get();
+		functions.should().toString().contains("CSHARP_DEV");
+		functions.should().toString().contains("IT_RECRUITER");
 		
 		TermsQuery countries = mustTerms.stream().filter(q -> q.field().equals("country")).findFirst().get();
 		countries.terms().value().stream().filter(f -> f.stringValue().equals(COUNTRY.AUSTRIA.toString())).findAny().orElseThrow();
 		countries.terms().value().stream().filter(f -> f.stringValue().equals(COUNTRY.CANADA.toString())).findAny().orElseThrow();
 		
-	} 
+	}
 
 	/**
 	* Tests filter - firstname
 	* @throws Exception
 	*/
 	@Test
-	public void testEmptyFilters() throws Exception{
+	void testEmptyFilters() {
 		
 		Query 					query 		= ESFilteredSearchRequestBuilder.createFilteredQuery(CandidateFilterOptions.builder().build());
 		BoolQuery 				boolQuery 	= (BoolQuery) query._get();
