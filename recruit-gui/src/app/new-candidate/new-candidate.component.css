@@ -226,6 +226,18 @@ input{
 	.new-candidate-lang-options{
 		width:50%;
 	}
+	
+	.function-selectable{
+	float:left;
+	border-radius: 0.25rem;
+	margin:5px;
+	background:#6a5acd;
+	color:white;
+	padding:5px;
+	width:200px;	
+	cursor:pointer;
+	text-align:center;
+}
 
 }
  
