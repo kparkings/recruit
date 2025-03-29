@@ -79,8 +79,7 @@ public class CandidateAccountRefreshUtil {
 	/**
 	* Triggers refresh actions for Candidates that are outdated
 	*/
-	//@Scheduled(cron = "0 */10 * ? * *")
-	@Scheduled(cron = "0 */1 * ? * *")
+	@Scheduled(cron = "0 */10 * ? * *")
 	public void performRefreshOnOutdatedAccounts() {
 		try {
 			this.runSkillUpdateRefresh();	
@@ -95,35 +94,7 @@ public class CandidateAccountRefreshUtil {
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
-		
-		try {
-			this.runFunctionUpdate();
-		}catch(Exception e) {
-			e.printStackTrace();
-		}
 	
-	}
-	
-	private void runFunctionUpdate() {
-		
-		try {
-		
-			//CandidateFilterOptions filters = CandidateFilterOptions.builder().lastAccountRefreshLtEq(LocalDate.now().minusWeeks(2)).build();
-			CandidateFilterOptions filters = CandidateFilterOptions.builder().build();
-			candidateRepository.findCandidates(filters, esClient, 0, 10).forEach(candidate -> {
-				
-			
-				functionExtractor.extractFunctions(candidate.getRoleSought()).stream().forEach(function -> {
-					candidate.addFunction(function);
-					this.candidateRepository.save(CandidateDocument.convertToDocument(candidate));
-				});	
-				
-				
-			});
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
 	}
 	
 	/**
@@ -149,6 +120,7 @@ public class CandidateAccountRefreshUtil {
 				
 				this.candidateRepository.saveCandidate(candidate);
 				eventPublisher.listenForRequestSkillsForCurriculumCommand(new RequestSkillsForCurriculumCommand(Long.valueOf(candidate.getCandidateId())));
+				
 			});
 		} catch (Exception e) {
 			e.printStackTrace();

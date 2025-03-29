@@ -58,7 +58,9 @@ public class CandidateDocument {
 	@Field(type = FieldType.Keyword)
 	//@JsonProperty("function")
 	@Enumerated(EnumType.STRING)
-	private Set<FUNCTION> function								= new LinkedHashSet<>();
+	private Set<FUNCTION> functions								= new LinkedHashSet<>();
+	
+	//private FUNCTION function;
 	
 	@Field(type = FieldType.Keyword)
 	@Enumerated(EnumType.STRING)
@@ -197,8 +199,13 @@ public class CandidateDocument {
 		this.skills.addAll(builder.skills);
 		this.languages.clear();
 		this.languages.addAll(builder.languages);
-		this.function.clear();
-		this.function.addAll(builder.function);
+	
+		this.functions.clear();
+		this.functions.addAll(builder.functions);
+		//if(this.function != null) {
+		//	this.functions.add(this.function);
+		//}
+		//this.function = builder.function;
 	}
 	
 	/**
@@ -247,9 +254,13 @@ public class CandidateDocument {
 	* Returns the functions the Candidate performs
 	* @return function the Candidate performs
 	*/
-	public Set<FUNCTION> getFunction() {
-		return this.function;
+	public Set<FUNCTION> getFunctions() {
+		return this.functions;
 	}
+	
+	//public FUNCTION getFunction() {
+	//	return this.function;
+	//}
 	
 	/**
 	* Returns the Country in which the candidate is 
@@ -534,7 +545,8 @@ public class CandidateDocument {
 		private String 					surname;
 		private String 					email;
 		private String 					roleSought;
-		private Set<FUNCTION> 			function					= new LinkedHashSet<>();
+		private Set<FUNCTION> 			functions					= new LinkedHashSet<>();
+		//private FUNCTION				function;
 		private COUNTRY 				country;
 		private String 					city;
 		private GeoPoint				cityPos = new GeoPoint(0,0);
@@ -618,8 +630,10 @@ public class CandidateDocument {
 		* @return Builder
 		*/
 		public CandidateDocumentBuilder functions(Set<FUNCTION> functions) {
-			this.function.clear();
-			this.function.addAll(functions);
+			this.functions.clear();
+			this.functions.addAll(functions);
+			
+			//functions.stream().filter(f -> f!= null).findAny().ifPresent(f -> this.function = f);
 			return this;
 		}
 		
@@ -904,6 +918,17 @@ public class CandidateDocument {
 	* @return Domain representation
 	*/
 	public static Candidate convertFromDocument(CandidateDocument doc) {
+		
+		//WART START
+		//if(doc.function != null) {
+		//	try {
+		//		doc.functions.add(doc.function);
+		//	}catch(Exception e) {
+		//		
+		//	}
+		//}
+		//WART END
+		
 		return Candidate
 				.builder()
 					.available(doc.isAvailable())
@@ -920,7 +945,7 @@ public class CandidateDocument {
 					.firstname(doc.getFirstname())
 					.flaggedAsUnavailable(false)
 					.freelance(doc.isFreelance())
-					.functions(doc.getFunction())
+					.functions(doc.getFunctions())
 					.introduction(doc.getIntroduction())
 					.languages(doc.getLanguages().stream().map(LanguageDocument::convertToDomain).collect(Collectors.toCollection(LinkedHashSet::new)))
 					.lastAvailabilityCheck(doc.getLastAvailabilityCheckOn().toInstant()
@@ -994,6 +1019,11 @@ public class CandidateDocument {
 					.lastAvailabilityCheckIdSent(candidate.getLastAvailabilityCheckIdSent().isEmpty() ? null : candidate.getLastAvailabilityCheckIdSent().get())
 				.build();
 		
+	}
+
+
+	public void addFunction(FUNCTION function) {
+		this.functions.add(function);
 	}
 	
 }

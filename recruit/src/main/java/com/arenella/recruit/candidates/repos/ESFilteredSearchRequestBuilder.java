@@ -187,8 +187,8 @@ public class ESFilteredSearchRequestBuilder {
                     .build();
 			 
 			mustQueries.add(TermsQuery.of(m -> m
-					.queryName("function")
-					.field("function")
+					.queryName("functions")
+					.field("functions")
 					.terms(termsQueryField)
 					
 			)._toQuery());

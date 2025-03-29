@@ -117,7 +117,7 @@ class CandidateDocumentTest {
 		assertEquals(SURNAME,																			doc.getSurname());
 		assertEquals(EMAIL,																				doc.getEmail());
 		assertEquals(ROLE_SOUGHT,																		doc.getRoleSought());
-		assertEquals(FUNCTION_VAL,																		doc.getFunction().toArray()[0]);
+		assertEquals(FUNCTION_VAL,																		doc.getFunctions().toArray()[0]);
 		assertEquals(COUNTRY_VAL,																		doc.getCountry());
 		assertEquals(CITY,																				doc.getCity());
 		assertEquals(LATITUDE,																			doc.getCityPosGeoPoint().getLat());
@@ -315,7 +315,7 @@ class CandidateDocumentTest {
 		assertEquals(SURNAME,						doc.getSurname());
 		assertEquals(EMAIL,							doc.getEmail());
 		assertEquals(ROLE_SOUGHT,					doc.getRoleSought());
-		assertEquals(FUNCTION_VAL,					doc.getFunction().toArray()[0]);
+		assertEquals(FUNCTION_VAL,					doc.getFunctions().toArray()[0]);
 		assertEquals(COUNTRY_VAL,					doc.getCountry());
 		assertEquals(CITY,							doc.getCity());
 		assertEquals(LATITUDE,						doc.getCityPosGeoPoint().getLat());

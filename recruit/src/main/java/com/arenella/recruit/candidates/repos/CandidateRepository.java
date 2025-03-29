@@ -128,7 +128,7 @@ public interface CandidateRepository extends ElasticsearchRepository<CandidateDo
 		List<CandidateRoleStatsView> stats = new java.util.ArrayList<>();
 		
 		Aggregation aggregation = new Aggregation.Builder()
-				 .terms(new TermsAggregation.Builder().field("function").build())
+				 .terms(new TermsAggregation.Builder().field("functions").build())
 				 .build();
 		
 		co.elastic.clients.elasticsearch._types.query_dsl.Query query = MatchQuery.of(m -> m

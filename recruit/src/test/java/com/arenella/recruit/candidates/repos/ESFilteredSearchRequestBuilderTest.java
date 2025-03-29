@@ -138,7 +138,7 @@ public class ESFilteredSearchRequestBuilderTest {
 		skills.terms().value().stream().filter(f -> f.stringValue().equals("JaVa")).findAny().orElseThrow();
 		skills.terms().value().stream().filter(f -> f.stringValue().equals("Qa")).findAny().orElseThrow();
 		
-		TermsQuery functions = mustTerms.stream().filter(q -> q.field().equals("function")).findFirst().get();
+		TermsQuery functions = mustTerms.stream().filter(q -> q.field().equals("functions")).findFirst().get();
 		functions.terms().value().stream().filter(f -> f.stringValue().equals(FUNCTION.CSHARP_DEV.toString())).findAny().orElseThrow();
 		functions.terms().value().stream().filter(f -> f.stringValue().equals(FUNCTION.IT_RECRUITER.toString())).findAny().orElseThrow();
 		

@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.util.LinkedHashSet;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.web.multipart.MultipartFile;
 
@@ -121,7 +122,7 @@ public class CandidateUpdateRequestAPIInbound {
 	* @return functions the Candidate performs
 	*/
 	public Set<FUNCTION> getFunctions() {
-		return this.functions;
+		return this.functions.stream().filter(f -> f != null).collect(Collectors.toSet());
 	}
 	
 	/**
@@ -333,7 +334,7 @@ public class CandidateUpdateRequestAPIInbound {
 		*/
 		public CandidateUpdateRequestAPIInboundBuilder functions(Set<FUNCTION> functions) {
 			this.functions.clear();
-			this.functions.addAll(functions);
+			this.functions.addAll(functions.stream().filter(f -> f != null).collect(Collectors.toSet()));
 			return this;
 		}
 		
