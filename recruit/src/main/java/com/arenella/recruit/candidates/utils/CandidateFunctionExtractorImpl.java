@@ -52,7 +52,7 @@ public class CandidateFunctionExtractorImpl implements CandidateFunctionExtracto
 		all.put(FUNCTION.EXPRES, 					Set.of("expres","expresjs","expres.js"));
 		all.put(FUNCTION.RUST, 						Set.of("rust"));
 		all.put(FUNCTION.TEST_MANAGER, 				Set.of("test manager","qa manager"));
-		all.put(FUNCTION.PRODUCT_OWNER,				Set.of("product owner","pmo"));
+		all.put(FUNCTION.PRODUCT_OWNER,				Set.of("product owner"));
 		all.put(FUNCTION.NODE, 						Set.of("node","nodejs","node.js"));
 		all.put(FUNCTION.PYTHON, 					Set.of("python"));
 		all.put(FUNCTION.ANGULAR, 					Set.of("angular","angularjs","angular.js"));
