@@ -118,6 +118,48 @@
 		border-right: none;
 		width:100%;
 	}
+	
+	.terms-and-conditions-box{
+			right:0;
+			bottom:0;
+			margin:15px;
+			background-color: white;
+			border:5px solid #6A5ACD;
+			width:90%;
+			height:250px;
+			border-radius:25px;
+	}
+	
+	.cookie-policy-hdr{
+		height:85px;
+		background:#E8E8E8;
+		border-radius:25px 25px 0px 0px;
+		text-align:center;
+	}
+
+	.cookie-policy-btn{
+		margin-top:10px;
+		margin-right:10px;
+		width:90%;
+		text-align:center;
+	}
+
+	.cookie-policy-title{
+		font-size:24px;
+		font-weight:bold;
+		margin-top:10px;
+		position:relative;
+		top:5px;
+		margin-left:10px;
+	}
+
+	.cookie-policy-text{
+		overflow-y:scroll; 
+		height:150px;
+		margin:10px;
+		font-size:12px;
+	}
+
 }
 
 .filter-close-box{
