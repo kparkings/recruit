@@ -324,7 +324,7 @@ export class ListingComponent implements OnInit {
 				if	(selectedListing!.type) {
 					currencyBlock.addRow(new InfoItemRowKeyValue(this.translate.instant('arenella-listing-contract-type'),this.getContractType(selectedListing!.type)));
 				}
-				if	(selectedListing!.currency) {
+				if	(selectedListing!.currency && selectedListing!.rate) {
 					currencyBlock.addRow(new InfoItemRowKeyValue(this.translate.instant('arenella-listing-reumeration'),selectedListing!.currency + " : " + selectedListing!.rate));
 				}
 				this.infoItemConfig.addItem(currencyBlock);
