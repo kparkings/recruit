@@ -53,6 +53,7 @@ import { RecruiterMarketplaceService } 		from './recruiter-marketplace.service';
 import { ListingService } 					from './listing.service';
 
 import { ClipboardModule } 					from '@angular/cdk/clipboard'
+import { CandidateStatisticsComponent } 	from './candidate-statistics/candidate-statistics.component';
 
 
 @NgModule({
@@ -89,6 +90,7 @@ import { ClipboardModule } 					from '@angular/cdk/clipboard'
  	RecruitersComponent,
  	SubscriptionsComponent,
 	CitiesComponent,
+	CandidateStatisticsComponent,
   ],
   imports: [
     BrowserModule,

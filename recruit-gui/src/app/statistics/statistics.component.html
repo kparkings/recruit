@@ -10,6 +10,9 @@
 			  <li class="nav-item">
 			    <span class="nav-link statsChartTab" (click)="switchTab('downloads')">{{'arenella-stats-downloads' | translate}}</span>
 			  </li>
+			   <li class="nav-item">
+			    <span class="nav-link statsChartTab" (click)="switchTab('views')">{{'arenella-stats-views' | translate}}</span>
+			  </li>
 			   <li class="nav-item statsChartTab">
 			    <span class="nav-link" (click)="switchTab('listings')">{{'arenella-stats-listings' | translate}}</span>
 			  </li>
@@ -102,6 +105,10 @@
 					<div *ngIf="showStatsDownloads" style="margin-bottom:45px;">
 						<h3>{{'arenella-stats-daily-downloads' | translate}}</h3>
 					</div>
+					<!-- Views -->
+					<div *ngIf="showStatsViews" style="margin-bottom:45px;">
+						<h3>{{'arenella-stats-views' | translate}}</h3>
+					</div>
 					<!-- Marketplace -->
 					<div class="chart-wrapper" *ngIf="showMarketplaceStats">			
 						<h3>{{'arenella-stats-candidate-views' | translate}}: {{requestedCandidateViewsTotal}}</h3>
@@ -129,6 +136,10 @@
 						<h3>{{'arenella-stats-recruiter-downloads' | translate}}: {{chartDownloadsTotal}}</h3>
 						<button (click)="switchChartData('week')">{{'arenella-stats-recruiter-downloads-btn-week' | translate}}</button>
 						<button (click)="switchChartData('day')">{{'arenella-stats-recruiter-downloads-btn-today' | translate}}</button>
+					</div>
+					<!-- Views -->
+					<div *ngIf="showStatsViews">
+					
 					</div>
 					<!-- Listings -->
 					<div *ngIf="showStatsListings">

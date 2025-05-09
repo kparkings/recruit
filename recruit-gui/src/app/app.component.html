@@ -46,6 +46,9 @@
         <li  class="li-arenella-nav {{menuItemMobileCss}}" *ngIf="isAuthenticatedAsAdmin()" (click)="refreschUnreadAlerts()">
            <a  class="dropdown-item" routerLink="/statistics">{{'arenella-app-menu-statistics' | translate}}</a>
         </li>
+ 		<li  class="li-arenella-nav {{menuItemMobileCss}}" *ngIf="isCandidate()" (click)="refreschUnreadAlerts()">
+           <a  class="dropdown-item" routerLink="/candidate-statistics">{{'arenella-app-menu-statistics' | translate}}</a>
+        </li>
  		<li  class="li-arenella-nav {{menuItemMobileCss}}" *ngIf="isAuthenticatedAsAdmin()" (click)="refreschUnreadAlerts()">
            <a  class="dropdown-item" (click)="navToNewCandidate()">{{'arenella-app-menu-new' | translate}}</a>
         </li>

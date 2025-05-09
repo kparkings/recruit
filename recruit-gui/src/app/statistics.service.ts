@@ -8,6 +8,7 @@ import { LoginStats}  								from './login-event-stats';
 import { RecruiterListingStatistics } 				from './recruiter-listing-statistics';
 import { RecruiterSearchStatistics } from './recruiter-search-stats';
 import { ListingStatistics } from './listing-statistics';
+import { BucketAPIOutbound } from './bucket';
 
 @Injectable({
   providedIn: 'root'
@@ -36,7 +37,29 @@ export class StatisticsService {
 		return this.httpClient.get<any>(backendUrl, this.httpOptions);
 
 	}
+	
+	/**
+	* Returns a list of available Candidates 
+	*/
+	public getProfileViewsStatistics(): Observable<Array<BucketAPIOutbound>>{
+	    
+		const backendUrl:string = environment.backendUrl +'candidate/stat/views/years/5';
 
+		return this.httpClient.get<any>(backendUrl, this.httpOptions);
+
+	}
+
+	/**
+	* Returns a list of available Candidates 
+	*/
+	public getProfileViewsStatisticsForCandidate(candidateId:string): Observable<Array<BucketAPIOutbound>>{
+	    
+		const backendUrl:string = environment.backendUrl +'candidate/stat/candidate-views/'+candidateId;
+
+		return this.httpClient.get<any>(backendUrl, this.httpOptions);
+
+	}
+	
 	/**
 	* Returns a list of available Candidates 
 	*/

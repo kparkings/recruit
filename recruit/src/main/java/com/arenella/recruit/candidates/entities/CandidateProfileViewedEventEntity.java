@@ -15,7 +15,7 @@ import com.arenella.recruit.candidates.beans.CandidateProfileViewedEvent;
 * of a Candidate 
 */
 @Entity
-@Table(name = "event_candidate_profile_views")
+@Table(schema="candidate", name = "event_candidate_profile_views")
 public class CandidateProfileViewedEventEntity {
 
 	@Id

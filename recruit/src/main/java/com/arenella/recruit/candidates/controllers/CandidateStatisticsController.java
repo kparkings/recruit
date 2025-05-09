@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -166,7 +167,7 @@ public class CandidateStatisticsController {
 	* @return Status
 	*/
 	@PreAuthorize("hasRole('ROLE_RECRUITER')")
-	@GetMapping(path="candidate/stat/views/{candidateId}")
+	@PostMapping(path="candidate/stat/views/{candidateId}")
 	public ResponseEntity<Void> registerCandidateProfileView(@PathVariable("candidateId") String candidateId, Principal principal) {
 		this.candidateStatisticsService.registerCandidateProfileView(candidateId, principal.getName());
 		return  ResponseEntity.ok().build();

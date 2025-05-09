@@ -25,6 +25,7 @@ export class StatisticsComponent implements OnInit {
 	public currentTab:string 							= "downloads";
 	public showStatsLogins:boolean						= true;
 	public showStatsDownloads:boolean					= false;
+	public showStatsViews:boolean						= false;
 	public showStatsAvailability:boolean				= false;
 	public showStatsListings:boolean					= false;
 	public showNewCandidates:boolean					= false;
@@ -62,6 +63,7 @@ export class StatisticsComponent implements OnInit {
 	public recruiterLoginsChartLabels 					= [''];
 	public downloadsChartLabels 						= [''];
 	public recruiterDownloadsChartLabels 				= [''];
+	public profileViewChartLabels 						= [''];
 	
 	private listingViewsWeekKeys:string[] 						= new Array<string>();
 	private listingViewWeekValues:string[] 						= new Array<string>();
@@ -74,6 +76,7 @@ export class StatisticsComponent implements OnInit {
 	private yearKeys:string[] 									= new Array<string>();
 	private yearValues:string[] 								= new Array<string>();
 	private downloads:string[] 									= new Array<string>();
+	private profileViews:string[] 								= new Array<string>();
 	private downloadKeys:string[]								= new Array<string>();
 	private threeMonthKeys:string[] 							= new Array<string>();
 	private threeMonthValues:string[] 							= new Array<string>();
@@ -83,13 +86,14 @@ export class StatisticsComponent implements OnInit {
 	private loginsToday:string[] 								= new Array<string>();
 	private loginsUserIdsWeek:string[] 							= new Array<string>();
 	private loginsWeek:string[] 								= new Array<string>();
+	
 	public supportedCountries:Array<SupportedCountry>			= new Array<SupportedCountry>();
 	private marketplaceChartData 								= [{label: "",data: [''],backgroundColor: ''}];
 	private listingsChartData 									= [{label: "",data: [''],backgroundColor: ''}];
 	private availabilityChartData 								= [{label: "",data: [''],backgroundColor: ''}];
-	//private loginChartData 										= [{label: "",data: [''],backgroundColor: ''}];
 	private recruiterLoginsChartData 							= [{label: "",data: [''],backgroundColor: ''}];
 	private downloadsChartData 									= [{label: "",data: [''], backgroundColor: ''}];
+	private viewsChartData 										= [{label: "",data: [''], backgroundColor: ''}];
 	private recruiterDownloadsChartData 						= [{label: "", data: [''], backgroundColor: ''}];
 
 	public statChartDivMobile:string 							= '';
@@ -232,30 +236,7 @@ export class StatisticsComponent implements OnInit {
 		this.fetchStatus();
 		this.fetchMarketplaceStats();
 		this.switchTab('logins');
-		//this.switchLoginStats('year');
 	}
-			
-	//public switchLoginStats(period:string):void{
-		
-	//	if(period === 'year') {
-	//		this.loginChartData = [{ data: this.yearValues, label: 'Logins', backgroundColor: this.chartColor },];
-	//		this.loginChartLabels = this.yearKeys;
-	//		this.createLeftChartAsLine(this.loginChartLabels, this.loginChartData);
-	//	}
-		
-	//	if(period === '3months') {
-	////		this.loginChartData = [{ data: this.threeMonthValues, label: 'Logins', backgroundColor: this.chartColor },];
-	//		this.loginChartLabels = this.threeMonthKeys;
-	//		this.createLeftChartAsLine(this.loginChartLabels, this.loginChartData);	
-	//	}
-		
-	//	if(period === 'week') {
-	//		this.loginChartData = [{ data: this.weekValues, label: 'Logins', backgroundColor: this.chartColor },];
-	//		this.loginChartLabels = this.weekKeys;
-	//		this.createLeftChartAsLine(this.loginChartLabels, this.loginChartData);
-	//	}
-		
-	//}
 
 	public switchUserStats(period:string):void{
 		
@@ -336,22 +317,14 @@ export class StatisticsComponent implements OnInit {
 			this.loginsUserIdsWeek 			= Array.from(statsObj.getEventsWeekKeys());
 			this.loginsWeek 				= statsObj.getEventsWeekValues();
 			
-			//this.yearKeys 					= Array.from(statsObj.getYearStatsKeysAsStrings());
-			//this.yearValues 				= statsObj.getYearStatsValues();
-			
 			this.threeMonthKeys 			= Array.from(statsObj.getThreeMonthStatsKeysAsStrings());
 			this.threeMonthValues 			= statsObj.getThreeMonthStatsValues();
 			
 			this.weekKeys 					= Array.from(statsObj.getWeekStatsKeysAsStrings());
 			this.weekValues 				= statsObj.getWeekStatsValues();
 			
-			//this.loginChartData = [{label: "Logins", data: this.yearValues, backgroundColor: this.chartColor}];
-			//this.loginChartLabels = this.yearKeys;
-			//this.createLeftChartAsLine(this.loginChartLabels, this.loginChartData);
-			
 			this.recruiterLoginsChartData = [{label: "Todays Logins", data: this.loginsToday, backgroundColor: this.chartColor}];
 			this.recruiterLoginsChartLabels = this.loginsUserIdsToday; 
-			//this.createRightChart(this.recruiterLoginsChartLabels, this.recruiterLoginsChartData);
 			
 			this.createLeftChart(this.recruiterLoginsChartLabels, this.recruiterLoginsChartData);
 			if (this.rightChart){
@@ -394,6 +367,24 @@ export class StatisticsComponent implements OnInit {
 			this.totalNumberActiveCandidates = count;
 
     	});
+		
+		
+		//START
+		this.statisticsService.getProfileViewsStatistics().subscribe(stats => {
+			
+			let labels:Array<string> 			= new Array<string>();
+			let data:Array<string> 				= new Array<string>();
+			stats.forEach(stat => {
+				labels.push(stat.bucketId);
+				data.push(""+stat.count);
+			});
+		
+			this.profileViewChartLabels 		= labels;
+			this.profileViews 			= data;
+			this.viewsChartData = [{label: "Candidate Profile Views", data: this.profileViews, backgroundColor: this.chartColor}];
+		});
+		//profileViewChartLabels
+		//END
 
 		this.statisticsService.getAvailableCandidatesByFunctionStatistics().forEach(data => {
 		
@@ -450,15 +441,12 @@ export class StatisticsComponent implements OnInit {
 			case "logins":{
 				this.showStatsLogins=true;
 				this.showStatsDownloads=false;
+				this.showStatsViews=false;
 				this.showStatsAvailability=false;
 				this.showStatsListings=false;
 				this.showNewCandidates=false;
 				this.showMarketplaceStats=false;
 				this.showSearches=false;
-				//this.loginChartData = [{ data: this.yearValues, label: 'Logins', backgroundColor: this.chartColor },];
-				//this.loginChartLabels = this.yearKeys;
-				//this.createLeftChartAsLine(this.loginChartLabels, this.loginChartData);
-				//this.createRightChart(this.recruiterLoginsChartLabels, this.recruiterLoginsChartData);
 				this.createLeftChart(this.recruiterLoginsChartLabels, this.recruiterLoginsChartData);
 				if (this.rightChart){
 					this.rightChart.destroy();
@@ -468,6 +456,7 @@ export class StatisticsComponent implements OnInit {
 			case "downloads":{
 				this.showStatsLogins=false;
 				this.showStatsDownloads=true;
+				this.showStatsViews=false;
 				this.showStatsAvailability=false;
 				this.showStatsListings=false;
 				this.showNewCandidates=false;
@@ -478,9 +467,26 @@ export class StatisticsComponent implements OnInit {
 			
 				break;
 			}
+			case "views":{
+							this.showStatsLogins=false;
+							this.showStatsDownloads=false;
+							this.showStatsViews=true;
+							this.showStatsAvailability=false;
+							this.showStatsListings=false;
+							this.showNewCandidates=false;
+							this.showMarketplaceStats=false;
+							this.showSearches=false;
+							this.createLeftChartAsLine(this.profileViewChartLabels, this.viewsChartData);
+							if (this.rightChart){
+								this.rightChart.destroy();
+							}
+
+							break;
+						}
 			case "listings":{
 				this.showStatsLogins=false;
 				this.showStatsDownloads=false;
+				this.showStatsViews=false;
 				this.showStatsAvailability=false;
 				this.showStatsListings=true;
 				this.showNewCandidates=false;
@@ -496,6 +502,7 @@ export class StatisticsComponent implements OnInit {
 			case "availability":{
 				this.showStatsLogins=false;
 				this.showStatsDownloads=false;
+				this.showStatsViews=false;
 				this.showStatsListings=false;
 				this.showStatsAvailability=true;
 				this.showNewCandidates=false;
@@ -510,6 +517,7 @@ export class StatisticsComponent implements OnInit {
 			case "email":{
 				this.showStatsLogins=false;
 				this.showStatsDownloads=false;
+				this.showStatsViews=false;
 				this.showStatsListings=false;
 				this.showStatsAvailability=false;
 				this.showNewCandidates=false;
@@ -520,6 +528,7 @@ export class StatisticsComponent implements OnInit {
 			case "newCandidateStats":{
 				this.showStatsLogins=false;
 				this.showStatsDownloads=false;
+				this.showStatsViews=false;
 				this.showStatsListings=false;
 				this.showStatsAvailability=false;
 				this.showNewCandidates=true;
@@ -536,6 +545,7 @@ export class StatisticsComponent implements OnInit {
 			case "marketplace":{
 				this.showStatsLogins=false;
 				this.showStatsDownloads=false;
+				this.showStatsViews=false;
 				this.showStatsListings=false;
 				this.showStatsAvailability=false;
 				this.showNewCandidates=false;
@@ -551,6 +561,7 @@ export class StatisticsComponent implements OnInit {
 			case "searches":{
 				this.showStatsLogins=false;
 				this.showStatsDownloads=false;
+				this.showStatsViews=false;
 				this.showStatsListings=false;
 				this.showStatsAvailability=false;
 				this.showNewCandidates=false;

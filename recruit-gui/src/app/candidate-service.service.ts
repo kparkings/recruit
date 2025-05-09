@@ -362,6 +362,17 @@ export class CandidateServiceService {
 	}
 	
 	/**
+	* Registers an event showing a candidates profile was viewed
+	*/
+	public registerCandidateProfileViewed(candidateId:string): Observable<any> {
+		
+		const backendUrl:string = environment.backendUrl +'candidate/stat/views/'+candidateId;
+
+		return this.httpClient.post<any>(backendUrl, "{}", this.httpOptions);
+		
+	}
+	
+	/**
 	* Sends a request to mark the Candidate as having been checked and found to still be 
 	* available
 	*/

@@ -383,6 +383,10 @@ export class SuggestionsComponent implements OnInit {
 		this.currentView 			= 'suggested-canidate-overview';
 		this.suggestedCandidate 	= candidateSuggestion;
 		
+		if(this.currentUserAuth.isRecruiter()) {
+			this.candidateService.registerCandidateProfileViewed(candidateSuggestion.candidateId).subscribe();
+		}
+		
 		this.doScrollTop();
 		
 	}
