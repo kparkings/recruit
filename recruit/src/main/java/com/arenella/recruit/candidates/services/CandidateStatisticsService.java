@@ -1,11 +1,13 @@
 package com.arenella.recruit.candidates.services;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
 import com.arenella.recruit.candidates.beans.Candidate;
 import com.arenella.recruit.candidates.beans.CandidateFilterOptions;
+import com.arenella.recruit.candidates.beans.CandidateProfileViewedEvent;
 import com.arenella.recruit.candidates.beans.CandidateRoleStats;
 import com.arenella.recruit.candidates.beans.CandidateSearchEvent;
 import com.arenella.recruit.candidates.beans.RecruiterStats;
@@ -62,8 +64,37 @@ public interface CandidateStatisticsService {
 
 	/**
 	* Returns a breakdown of Search behavior
-	* @return Stats relating to Search behavior
+	* @return Stat's relating to Search behavior
 	*/
 	public Set<CandidateSearchEvent> fetchCandidateSearchEvents(int inPastDays);
+	
+	/**
+	* Returns all Candidate profile viewed events for a specific candidate
+	* @param candidateId - Unique id of Candidate
+	* @return events
+	*/
+	public Set<CandidateProfileViewedEvent> fetchCandidateProfileViewedEventForCandidate(String candidateId) throws IllegalAccessException;
+	
+	/**
+	* Returns all Candidate profile viewed events for a specific recruiter
+	* @param recruiterId - Unique id of Recruiter
+	* @return events
+	 * @throws IllegalAccessException 
+	*/
+	public Set<CandidateProfileViewedEvent> fetchCandidateProfileViewedEventForRecruiter(String recruiterId) throws IllegalAccessException;
+	
+	/**
+	* Returns all Candidate profile viewed events since specific date/time
+	* @param candidateId - GTE time
+	* @return events
+	*/
+	public Set<CandidateProfileViewedEvent> fetchCandidateProfileViewedEventNewerThat(LocalDateTime since);
+
+	/**
+	* Registers that a Recruiter has viewd the profile of a specific Candidate
+	* @param candidateId - Id of Candidate whose profile was viewed
+	* @param recruiterId - Id of Recruiter who viewed the Candidates profile 
+	*/
+	public void registerCandidateProfileView(String candidateId, String recruiterId);
 	
 }

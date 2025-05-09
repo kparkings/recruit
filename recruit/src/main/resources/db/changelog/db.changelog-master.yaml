@@ -2428,3 +2428,32 @@ databaseChangeLog:
             constraintName:  pk_city  
             tableName:  city  
             schemaName: candidate
+  - changeSet:
+      id: candidate_profile_view
+      author: kparkings
+      changes:
+        - createTable:
+            tableName: event_candidate_profile_views
+            schemaName: candidate
+            columns:
+              - column:
+                  name: id
+                  type: UUID
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: recruiter_id
+                  type: varchar
+                  constraints:
+                    nullable: false
+              - column:
+                  name: candidate_id
+                  type: varchar
+                  constraints:
+                    nullable: false
+              - column:
+                  name: viewed
+                  type: timestamp
+                  constraints:
+                    nullable: false

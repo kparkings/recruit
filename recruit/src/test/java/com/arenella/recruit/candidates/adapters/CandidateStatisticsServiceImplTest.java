@@ -1,9 +1,11 @@
 package com.arenella.recruit.candidates.adapters;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -20,37 +22,48 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 import com.arenella.recruit.candidates.beans.Candidate;
 import com.arenella.recruit.candidates.beans.CandidateFilterOptions;
+import com.arenella.recruit.candidates.beans.CandidateProfileViewedEvent;
 import com.arenella.recruit.candidates.controllers.CandidateStatisticsController.STAT_PERIOD;
+import com.arenella.recruit.candidates.dao.CandidateProfileViewedEventEntityDao;
 import com.arenella.recruit.candidates.dao.CandidateSearchStatisticsDao;
 import com.arenella.recruit.candidates.dao.NewCandidateStatsTypeDao;
 import com.arenella.recruit.candidates.entities.CandidateSearchEventEntity;
 import com.arenella.recruit.candidates.repos.CandidateRepository;
 import com.arenella.recruit.candidates.services.CandidateStatisticsServiceImpl;
+import com.arenella.recruit.candidates.utils.ArenellaSecurityUtil;
 import com.arenella.recruit.candidates.enums.COUNTRY;
 import com.arenella.recruit.candidates.enums.FUNCTION;
 import com.arenella.recruit.candidates.services.CandidateStatisticsService.NEW_STATS_TYPE;
+
+import static org.mockito.Mockito.*;
 
 /**
 * Unit tests for the CandidateStatisticsServiceImpl class
 * @author K Parkings
 */
 @ExtendWith(MockitoExtension.class)
-public class CandidateStatisticsServiceImplTest {
+class CandidateStatisticsServiceImplTest {
 
 	@Mock
-	private CandidateRepository 				mockCandidateRepo;
+	private CandidateRepository 					mockCandidateRepo;
 	
 	@Mock
-	private SecurityContext 					mockSecurityContext;
+	private SecurityContext 						mockSecurityContext;
 	
 	@Mock
-	private	Authentication						mockAuthentication;
+	private	Authentication							mockAuthentication;
 	
 	@Mock
-	private NewCandidateStatsTypeDao			mockNewCandidateStatsTypeDao;
+	private NewCandidateStatsTypeDao				mockNewCandidateStatsTypeDao;
 	
 	@Mock
-	private CandidateSearchStatisticsDao 		mockStatisticsDao;
+	private CandidateSearchStatisticsDao 			mockStatisticsDao;
+	
+	@Mock
+	private CandidateProfileViewedEventEntityDao 	mockCandidateProfileViewedEventEntityDao;
+	
+	@Mock
+	private ArenellaSecurityUtil					mockSecUtil;
 	
 	@InjectMocks
 	private CandidateStatisticsServiceImpl 	service	= new CandidateStatisticsServiceImpl();
@@ -59,7 +72,7 @@ public class CandidateStatisticsServiceImplTest {
 	* Sets up test environment 
 	*/
 	@BeforeEach
-	public void init() throws Exception{
+	void init() {
 		SecurityContextHolder.setContext(mockSecurityContext);
 		SecurityContextHolder.getContext().setAuthentication(mockAuthentication);
 		
@@ -70,7 +83,7 @@ public class CandidateStatisticsServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testFetchNumberOfAvailableCandidates() throws Exception {
+	void testFetchNumberOfAvailableCandidates() {
 		
 		final Long availableCandidates = 787L;
 		
@@ -85,7 +98,7 @@ public class CandidateStatisticsServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testFetchNewCandidates() throws Exception{
+	void testFetchNewCandidates() {
 		
 		final Candidate candidate = Candidate.builder().build();
 		
@@ -102,7 +115,7 @@ public class CandidateStatisticsServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testGetLastRunDateNewCandidateStats() throws Exception {
+	void testGetLastRunDateNewCandidateStats() {
 		
 		final LocalDate since = LocalDate.of(2022, 11, 5);
 		
@@ -119,7 +132,7 @@ public class CandidateStatisticsServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void fetchSearchStatsForRecruiter() throws Exception{
+	void fetchSearchStatsForRecruiter() {
 		
 		final String recruiterId = "recruiter1";
 		
@@ -255,7 +268,168 @@ public class CandidateStatisticsServiceImplTest {
 		assertTrue(results.stream().filter(e -> e.getCountry().get() == COUNTRY.BELGIUM && e.getFunction().get() == FUNCTION.ARCHITECT).findAny().isPresent());
 		assertTrue(results.stream().filter(e -> e.getCountry().get() == COUNTRY.BELGIUM && e.getFunction().get() == FUNCTION.BA).findAny().isPresent());
 		
+	}
+
+	/**
+	* Tests retrieval of events
+	* @throws IllegalAccessException 
+	*/
+	@Test
+	void testFetchCandidateProfileViewedEventForCandidate_happyPath() throws IllegalAccessException {
+		
+		final String candidatedId = "100";
+		
+		when(this.mockCandidateProfileViewedEventEntityDao.fetchCandidateProfileViewedEventsByCandidateId(candidatedId))
+		.thenReturn(Set.of(CandidateProfileViewedEvent.builder().build(), CandidateProfileViewedEvent.builder().build()));
+		
+		when(this.mockSecUtil.isRecruiter()).thenReturn(false);
+		when(this.mockSecUtil.isCandidate()).thenReturn(false);
+		
+		assertEquals(2, this.service.fetchCandidateProfileViewedEventForCandidate(candidatedId).size());
 		
 	}
 	
+	/**
+	* Tests if user is recruiter they do not have access
+	* @throws IllegalAccessException 
+	*/
+	@Test
+	void testFetchCandidateProfileViewedEventForCandidate_isRecruiter() {
+		
+		final String candidatedId = "100";
+		
+		when(this.mockSecUtil.isRecruiter()).thenReturn(true);
+		
+		IllegalAccessException ex = assertThrows(IllegalAccessException.class, () -> {
+			this.service.fetchCandidateProfileViewedEventForCandidate(candidatedId);
+		});
+		
+		assertEquals(CandidateStatisticsServiceImpl.ERR_MSG_NOT_AVAILABLE_RECRUITERS, ex.getMessage());
+		
+	}
+
+	/**
+	* Tests if user is candidate tries to view another Candidates information they do not have access
+	* @throws IllegalAccessException 
+	*/
+	@Test
+	void testFetchCandidateProfileViewedEventForCandidate_isADifferentCandidate() {
+		
+		final String candidatedId = "100";
+		
+		when(this.mockSecUtil.isRecruiter()).thenReturn(false);
+		when(this.mockSecUtil.isCandidate()).thenReturn(true);
+		when(this.mockSecUtil.getUserId()).thenReturn("SomeOtherCandidateId");
+		
+		IllegalAccessException ex = assertThrows(IllegalAccessException.class, () -> {
+			this.service.fetchCandidateProfileViewedEventForCandidate(candidatedId);
+		});
+		
+		assertEquals(CandidateStatisticsServiceImpl.ERR_MSG_NOT_AVAILABLE_OTHER_CANDIDATE, ex.getMessage());
+		
+	}
+	
+	/**
+	* Tests retrieval of events
+	* @throws IllegalAccessException 
+	*/
+	@Test
+	void testFetchCandidateProfileViewedEventForRecruiter_isCandidate() {
+		
+		final String recruiterId = "rec1";
+			
+		when(this.mockSecUtil.isCandidate()).thenReturn(true);
+		
+		IllegalAccessException ex = assertThrows(IllegalAccessException.class, () -> {
+			this.service.fetchCandidateProfileViewedEventForRecruiter(recruiterId);
+		});
+		
+		assertEquals(CandidateStatisticsServiceImpl.ERR_MSG_NOT_AVAILABLE_CANDIDATES, ex.getMessage());
+		
+	}
+	
+	/**
+	* Tests retrieval of events
+	* @throws IllegalAccessException 
+	*/
+	@Test
+	void testFetchCandidateProfileViewedEventForRecruiter_isAnotherRecruiter() {
+		
+		final String recruiterId = "rec1";
+			
+		when(this.mockSecUtil.isRecruiter()).thenReturn(true);
+		when(this.mockSecUtil.getUserId()).thenReturn("SomeOtherRecruiterId");
+		
+		IllegalAccessException ex = assertThrows(IllegalAccessException.class, () -> {
+			this.service.fetchCandidateProfileViewedEventForRecruiter(recruiterId);
+		});
+		
+		assertEquals(CandidateStatisticsServiceImpl.ERR_MSG_NOT_AVAILABLE_OTHER_RECRUITERS, ex.getMessage());
+		
+	}
+	
+	/**
+	* Tests retrieval of events
+	* @throws IllegalAccessException 
+	*/
+	@Test
+	void testFetchCandidateProfileViewedEventForRecruiter() throws IllegalAccessException {
+		
+		final String recruiterId = "rec1";
+		
+		when(this.mockCandidateProfileViewedEventEntityDao.fetchCandidateProfileViewedEventsByRecruiterId(recruiterId))
+		.thenReturn(Set.of(CandidateProfileViewedEvent.builder().build(), CandidateProfileViewedEvent.builder().build()));
+		
+		when(this.mockSecUtil.isRecruiter()).thenReturn(false);
+		when(this.mockSecUtil.isCandidate()).thenReturn(false);
+		
+		assertEquals(2, this.service.fetchCandidateProfileViewedEventForRecruiter(recruiterId).size());
+		
+	}
+
+	/**
+	* Tests retrieval of events
+	*/
+	@Test
+	void testFetchCandidateProfileViewedEventNewerThat() {
+		
+		final LocalDateTime since = LocalDateTime.of(2025, 5, 2, 14, 14);
+		
+		when(this.mockCandidateProfileViewedEventEntityDao.fetchCandidateProfileViewedEvents(since))
+		.thenReturn(Set.of(CandidateProfileViewedEvent.builder().build(), CandidateProfileViewedEvent.builder().build()));
+		
+		assertEquals(2, this.service.fetchCandidateProfileViewedEventNewerThat(since).size());
+		
+	}
+	
+	/**
+	* In the case a Candidate exists, tests that the event was 
+	* logged
+	*/
+	@Test
+	void testRegisterCandidateProfileView_knownCandidate() {
+		
+		when(this.mockCandidateRepo.existsById(anyLong())).thenReturn(true);
+		
+		this.service.registerCandidateProfileView("1", "recruiterId");
+		
+		verify(this.mockCandidateProfileViewedEventEntityDao, times(1)).save(any(CandidateProfileViewedEvent.class));
+		
+	}
+	
+	/**
+	* In the case a Candidate does not exists, tests that the event was 
+	* not logged
+	*/
+	@Test
+	void testRegisterCandidateProfileView_unknownCandidate() {
+		
+		when(this.mockCandidateRepo.existsById(anyLong())).thenReturn(false);
+		
+		this.service.registerCandidateProfileView("1", "recruiterId");
+		
+		verify(this.mockCandidateProfileViewedEventEntityDao, never()).save(any(CandidateProfileViewedEvent.class));
+		
+	}
+ 	
 }

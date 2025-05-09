@@ -1,6 +1,7 @@
 package com.arenella.recruit.candidates.services;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -15,12 +16,14 @@ import org.springframework.stereotype.Service;
 
 import com.arenella.recruit.candidates.beans.Candidate;
 import com.arenella.recruit.candidates.beans.CandidateFilterOptions;
+import com.arenella.recruit.candidates.beans.CandidateProfileViewedEvent;
 import com.arenella.recruit.candidates.beans.CandidateRoleStats;
 import com.arenella.recruit.candidates.beans.CandidateSearchEvent;
 import com.arenella.recruit.candidates.beans.Language;
 import com.arenella.recruit.candidates.beans.Language.LANGUAGE;
 import com.arenella.recruit.candidates.beans.RecruiterStats;
 import com.arenella.recruit.candidates.controllers.CandidateStatisticsController.STAT_PERIOD;
+import com.arenella.recruit.candidates.dao.CandidateProfileViewedEventEntityDao;
 import com.arenella.recruit.candidates.dao.CandidateSearchStatisticsDao;
 import com.arenella.recruit.candidates.dao.NewCandidateStatsTypeDao;
 import com.arenella.recruit.candidates.entities.CandidateRoleStatsView;
@@ -28,6 +31,7 @@ import com.arenella.recruit.candidates.entities.CandidateSearchEventEntity;
 import com.arenella.recruit.candidates.enums.COUNTRY;
 import com.arenella.recruit.candidates.enums.FUNCTION;
 import com.arenella.recruit.candidates.repos.CandidateRepository;
+import com.arenella.recruit.candidates.utils.ArenellaSecurityUtil;
 
 import co.elastic.clients.elasticsearch.ElasticsearchClient;
 
@@ -38,17 +42,28 @@ import co.elastic.clients.elasticsearch.ElasticsearchClient;
 @Service
 public class CandidateStatisticsServiceImpl implements CandidateStatisticsService{
 
-	@Autowired
-	private ElasticsearchClient 				esClient;
+	public static final String ERR_MSG_NOT_AVAILABLE_RECRUITERS 		= "Requested information not available to Recruiters.";
+	public static final String ERR_MSG_NOT_AVAILABLE_CANDIDATES 		= "Requested information not available to Candidates.";
+	public static final String ERR_MSG_NOT_AVAILABLE_OTHER_CANDIDATE 	= "Candidates may not view other Candidates information";
+	public static final String ERR_MSG_NOT_AVAILABLE_OTHER_RECRUITERS 	= "Recruiters may not view other Recruiters information";
 	
 	@Autowired
-	private CandidateSearchStatisticsDao 		statisticsDao;
+	private ElasticsearchClient 					esClient;
 	
 	@Autowired
-	private NewCandidateStatsTypeDao			newCandidateStatsTypeDao;
+	private CandidateSearchStatisticsDao 			statisticsDao;
 	
 	@Autowired
-	private CandidateRepository					candidateRepo;
+	private NewCandidateStatsTypeDao				newCandidateStatsTypeDao;
+	
+	@Autowired
+	private CandidateRepository						candidateRepo;
+	
+	@Autowired
+	private CandidateProfileViewedEventEntityDao 	candidateProfileViewedEventEntityDao;
+	
+	@Autowired
+	private ArenellaSecurityUtil					secUtil;
 	
 	/**
 	* Refer to StatisticsService for details 
@@ -300,6 +315,73 @@ public class CandidateStatisticsServiceImpl implements CandidateStatisticsServic
 	@Override
 	public Set<CandidateSearchEvent> fetchCandidateSearchEvents(int inPastDays) {
 		return this.statisticsDao.fetchEventsSince(LocalDate.now().minusDays(inPastDays));
+	}
+	
+	/**
+	* Refer to StatisticsService for details
+	 * @throws IllegalAccessException 
+	*/
+	@Override
+	public Set<CandidateProfileViewedEvent> fetchCandidateProfileViewedEventForCandidate(String candidateId) throws IllegalAccessException {
+		
+		if (secUtil.isRecruiter()) {
+			throw new IllegalAccessException(ERR_MSG_NOT_AVAILABLE_RECRUITERS);
+		}
+		
+		if (secUtil.isCandidate() && !secUtil.getUserId().equals(candidateId)) {
+			throw new IllegalAccessException(ERR_MSG_NOT_AVAILABLE_OTHER_CANDIDATE);
+		}
+		
+		return candidateProfileViewedEventEntityDao.fetchCandidateProfileViewedEventsByCandidateId(candidateId);
+	}
+
+	/**
+	* Refer to StatisticsService for details
+	 * @throws IllegalAccessException 
+	*/
+	@Override
+	public Set<CandidateProfileViewedEvent> fetchCandidateProfileViewedEventForRecruiter(String recruiterId) throws IllegalAccessException {
+		
+		if (secUtil.isCandidate()) {
+			throw new IllegalAccessException(ERR_MSG_NOT_AVAILABLE_CANDIDATES);
+		}
+		
+		if (secUtil.isRecruiter() && !secUtil.getUserId().equals(recruiterId)) {
+			throw new IllegalAccessException(ERR_MSG_NOT_AVAILABLE_OTHER_RECRUITERS);
+		}
+		
+		return candidateProfileViewedEventEntityDao.fetchCandidateProfileViewedEventsByRecruiterId(recruiterId);
+	}
+
+	/**
+	* Refer to StatisticsService for details
+	*/
+	@Override
+	public Set<CandidateProfileViewedEvent> fetchCandidateProfileViewedEventNewerThat(LocalDateTime since) {
+		return candidateProfileViewedEventEntityDao.fetchCandidateProfileViewedEvents(since);
+	}
+
+	/**
+	* Refer to StatisticsService for details
+	*/
+	@Override
+	public void registerCandidateProfileView(String candidateId, String recruiterId) {
+		
+		/**
+		* Not using an exception as no benefit provided to Candidate and simply not registering the event
+		* removes a potential attack vector for a user to discover what candidates are in the system
+		*/
+		if(!this.candidateRepo.existsById(Long.valueOf(candidateId))) {
+			return;
+		}
+		
+		this.candidateProfileViewedEventEntityDao.save(CandidateProfileViewedEvent
+				.builder()
+				.id(UUID.randomUUID())
+				.candidateId(candidateId)
+				.recruiterId(recruiterId)
+				.viewed(LocalDateTime.now())
+				.build());
 	}
 	
 }

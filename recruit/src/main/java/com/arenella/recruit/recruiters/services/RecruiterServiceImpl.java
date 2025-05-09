@@ -429,7 +429,7 @@ public class RecruiterServiceImpl implements RecruiterService{
 	private void performIsAdminOrRecruiterAccessingOwnAccountCheck(String recruiterId) throws IllegalAccessException{
 		
 		if (!isAdmin() && !recruiterId.equalsIgnoreCase(SecurityContextHolder.getContext().getAuthentication().getName())) {
-			throw new IllegalAccessException("A Recruiter can only view their own accout");
+			throw new IllegalAccessException("A Recruiter can only view their own account");
 		}
 		
 	}
