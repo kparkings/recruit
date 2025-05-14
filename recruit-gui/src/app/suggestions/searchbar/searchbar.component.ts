@@ -508,7 +508,7 @@ export class SearchbarComponent {
 		ssReq.termFilters.title 									= params.getTitle();
 		ssReq.termFilters.firstName 								= params.getFirstName();
 		ssReq.termFilters.surname 									= params.getSurname();
-		console.log("-------------> " + ssReq.termFilters.candidateId);
+		
 		this.suggestionsService
 			.getCandidateSuggestions(ssReq).pipe(
 				map((response) => {

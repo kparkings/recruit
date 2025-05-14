@@ -20,6 +20,7 @@ import { CandidateServiceService } 						from '../candidate-service.service';
 import { Clipboard } 									from '@angular/cdk/clipboard';
 import { SearchStats } 									from '../search-stats';
 import { SearchbarComponentListing }	 				from './searchbar/searchbar.component';
+import { ListingSearchRequest }							from './../listing-search-request';
 
 @Component({
   selector: 'app-listing',
@@ -95,9 +96,30 @@ export class ListingComponent implements OnInit {
 		var id = this._Activatedroute.snapshot.paramMap.get("id");
 		
 		if (id ) {
-			this.fetchListings(id);
+			//this.fetchListings(id);
+			
+
+			//START - Possibility of duplicate
+					
+			if (id ) {
+				let filters:ListingSearchRequest = new ListingSearchRequest();
+				filters.listingId = id;
+					this.listingService
+						.fetchAllListings('created',"desc", 0, 1, filters)
+							.subscribe(data => {
+								let lis:Array<Listing> = data.content;
+								if(lis[0]) {
+									this.showListingDetails(lis[0]);
+								}
+							}, 
+							err => {
+								console.log("Error retrieving listings for all recruiters" + JSON.stringify(err));			
+							});
+					}
+			//END
+	
 		} else {
-			this.fetchListings("");
+			//this.fetchListings("");
 		}
   	
   		this.selectableFunctionTypes 	= this.staticDataService.fetchFunctionTypes().map(ft => new SelectableFunctionType(ft, false));

@@ -66,7 +66,7 @@ export class AccountsComponent implements OnInit {
 	public switchTab(tab:string){
 		
 		this.currentTab = tab;
-		console.log(">>> " + tab);
+		
 		switch(tab){
 			
 			case "recruiters":{

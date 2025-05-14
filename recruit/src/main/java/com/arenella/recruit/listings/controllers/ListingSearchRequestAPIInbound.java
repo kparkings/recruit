@@ -3,6 +3,7 @@ package com.arenella.recruit.listings.controllers;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
 
 import com.arenella.recruit.listings.utils.ListingGeoZoneSearchUtil.GEO_ZONE;
 import com.arenella.recruit.listings.beans.Listing.Country;
@@ -21,6 +22,7 @@ public class ListingSearchRequestAPIInbound {
 	private listing_type 		contractType;
 	private Set<GEO_ZONE> 		geoZones 		= new HashSet<>();
 	private Set<Country> 		countries		= new HashSet<>();
+	private UUID				listingId;
 	private LISTING_AGE			maxAgeOfPost;
 	
 	/**
@@ -34,9 +36,18 @@ public class ListingSearchRequestAPIInbound {
 		this.geoZones	 	= builder.geoZones;
 		this.countries 		= builder.countries;
 		this.maxAgeOfPost 	= builder.maxAgeOfPost;
+		this.listingId		= builder.listingId;
 		
 	}
 
+	/**
+	* Returns the Listing Id to filter on
+	* @return
+	*/
+	public Optional<UUID> getListingId() {
+		return Optional.ofNullable(this.listingId);
+	}	
+	
 	/**
 	* Returns the search term to search on
 	* @return Search term
@@ -96,7 +107,18 @@ public class ListingSearchRequestAPIInbound {
 		private Set<GEO_ZONE> 		geoZones 		= new HashSet<>();
 		private Set<Country> 		countries		= new HashSet<>();
 		private LISTING_AGE			maxAgeOfPost;
+		private UUID				listingId;
 
+		/**
+		* Sets the listingId to filter on
+		* @param listingId - Id of listing to filter on
+		* @return BUilder
+		*/
+		public ListingSearchRequestAPIInboundBuilder listingId(UUID listingId) {
+			this.listingId = listingId;
+			return this;
+		}
+		
 		/**
 		* Sets, if provided the search term to filter on
 		* @param searchTerm - term to filter on

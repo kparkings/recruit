@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Set;
+import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
 
@@ -15,8 +16,7 @@ import com.arenella.recruit.listings.utils.ListingGeoZoneSearchUtil.GEO_ZONE;
 /**
 * Unit tests for the ListingSearchRequestAPIInbound class 
 */
-
-public class ListingSearchRequestAPIInboundTest {
+class ListingSearchRequestAPIInboundTest {
 
 	/**
 	* Tests defaults return empty
@@ -31,6 +31,7 @@ public class ListingSearchRequestAPIInboundTest {
 		assertTrue(request.getCountries().isEmpty());
 		assertTrue(request.getMaxAgeOfPost().isEmpty());
 		assertTrue(request.getGeoZones().isEmpty());
+		assertTrue(request.getListingId().isEmpty());
 			
 	}
 		
@@ -45,6 +46,8 @@ public class ListingSearchRequestAPIInboundTest {
 		final Country 		country			= Country.BULGARIA;
 		final LISTING_AGE 	maxAgeOfPost 	= LISTING_AGE.THIS_WEEK;
 		final GEO_ZONE		benelux			= GEO_ZONE.BENELUX;
+		final UUID			listingId		= UUID.randomUUID();
+		
 		
 		ListingSearchRequestAPIInbound request = 
 				ListingSearchRequestAPIInbound
@@ -54,6 +57,7 @@ public class ListingSearchRequestAPIInboundTest {
 					.geoZones(Set.of(benelux))
 					.countries(Set.of(country))
 					.maxAgeOfPost(maxAgeOfPost)
+					.listingId(listingId)
 				.build();
 		
 		assertEquals(searchTerm, 	request.getSearchTerm().orElseThrow());
@@ -61,6 +65,8 @@ public class ListingSearchRequestAPIInboundTest {
 		assertEquals(benelux, 		request.getGeoZones().stream().filter(g -> g == benelux).findAny().orElseThrow());
 		assertEquals(country, 		request.getCountries().stream().filter(c -> c == country).findAny().orElseThrow());
 		assertEquals(maxAgeOfPost, 	request.getMaxAgeOfPost().orElseThrow());
+		assertEquals(listingId, 	request.getListingId().orElseThrow());
+		
 	}
 	
 }

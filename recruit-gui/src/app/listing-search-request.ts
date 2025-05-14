@@ -9,5 +9,6 @@ export class ListingSearchRequest{
 	public geoZones:Array<string>		= new Array<string>();
 	public countries:Array<string> 		= new Array<string>();
 	public maxAgeOfPost:string|null 	= null;
+	public listingId:string|null		= null;
 	
 }

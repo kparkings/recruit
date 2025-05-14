@@ -145,6 +145,7 @@ public class ListingController {
 					.listingAge(searchRequest.getMaxAgeOfPost().orElse(null))
 					.geoZones(searchRequest.getGeoZones())
 					.countries(searchRequest.getCountries())
+					.listingId(searchRequest.getListingId().orElse(null))
 					.active(true)
 				.build();
 

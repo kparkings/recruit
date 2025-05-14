@@ -10,6 +10,7 @@ import { GeoZone } 													from './../../geo-zone';
 import { SupportedCountry } 										from './../../supported-candidate';
 import { Listing } 													from '../listing';
 import { ListingSearchRequest }										from './../../listing-search-request';
+import { ActivatedRoute } 											from '@angular/router';
 
 @Component({
   selector: 'app-searchbarlisting',
@@ -44,7 +45,8 @@ export class SearchbarComponentListing {
 		private translate:				TranslateService,
 		public candidateService:		CandidateServiceService,
 		private suggestionsService:		SuggestionsService,
-		private listingService:ListingService,){
+		private listingService:ListingService,
+		private _Activatedroute:ActivatedRoute){
 
 		this.init();	
 		
@@ -55,8 +57,12 @@ export class SearchbarComponentListing {
 	*/
 	ngOnInit(): void {
 		this.listingsFilterForm.addControl('searchPhrase', new UntypedFormControl());
+		
+		var id = this._Activatedroute.snapshot.paramMap.get("id");
+		
+		
 		this.subscription = this.listingsFilterForm.valueChanges.pipe(debounceTime(500)).subscribe(() => {
-				this.fetchListingsFull("", true, 0, this.pageSize);
+			this.fetchListingsFull("", true, 0, this.pageSize);
 		});
 	}
 	
@@ -256,7 +262,6 @@ export class SearchbarComponentListing {
 			this.signalResetOfSearch = true;
 		}
 		
-		console.log("FETCHING CURRENTPAGE" + currentPage + " PAGESIZE " + pageSize);
 		this.listingService
 			.fetchAllListings('created',"desc", currentPage, pageSize, this.generateFilters())
 				.subscribe(data => {
