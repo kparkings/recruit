@@ -33,14 +33,52 @@ public class JobTitleExtractor implements JobSpecifcationFilterExtractor{
 	public static final JobType uiux				= new JobType(JobType.Type.uiux, 				Set.of("ui/ux designer", "ui designer", "ui engineer", "product designer"));
 	public static final JobType projectManager		= new JobType(JobType.Type.projectManager, 		Set.of("project manager", "program manager", "it manager", "procurement manager", "control manager", "operations manager", "ops manager", "head of it", "infrastructure manager", "infra manager", "development manager", "engineering manager", "security manager", "services manager", "delivery manager", "service manager", "asset manager"));
 	public static final JobType architect			= new JobType(JobType.Type.architect, 			Set.of("solution architect", "solutions architect", "enterprise architect", "application architect", "infrastructure architect", "security architect", "domain architect", "service now architect", "system architect", "systems architect","technical architect"));
-	public static final JobType webDeveloper		= new JobType(JobType.Type.webDeveloper, 		Set.of("web developer","front end developer", "frontend developer", "front-end developer", "web ontwikkelaar", "FE developer", "front-end ontwikkelaar"));
+	public static final JobType webDeveloper		= new JobType(JobType.Type.webDeveloper, 		Set.of("angular", "react", "vue", "next", "expres","node", "web developer","front end developer", "frontend developer", "front-end developer", "web ontwikkelaar", "FE developer", "front-end ontwikkelaar"));
 	public static final JobType scrumMaster			= new JobType(JobType.Type.scrumMaster, 		Set.of("scrum master","scrummaster"));
 	public static final JobType dataScientist		= new JobType(JobType.Type.dataScientist, 		Set.of("data engineer","data scientist", "data analyst", "data science"));
 	public static final JobType networkAdmin		= new JobType(JobType.Type.networkAdmin, 		Set.of("linux systems engineer", "aws devops", "cloud devops", "azure devops", "platform engineer", "cloud engineer", "devops engineer","dev-ops engineer", "network admin", "network administrator", "network engineer", "network specialist", "system admin", "system administrator"));
-	public static final JobType softwareDeveloper	= new JobType(JobType.Type.softwareDeveloper, 	Set.of("php developer", "software ontwikkelaar", "php ontwikkelaar", "software developer", "software engineer", "software engineers", "application engineer", "application developer"));
+	public static final JobType softwareDeveloper	= new JobType(JobType.Type.softwareDeveloper, 	Set.of("ruby on rails","ruby", "go", "python", "ios", "android", "kotlin", "rust", "php developer", "software ontwikkelaar", "php ontwikkelaar", "software developer", "software engineer", "software engineers", "application engineer", "application developer"));
 	public static final JobType itSecurity			= new JobType(JobType.Type.itSecurity, 			Set.of("security engineer", "ethical hacker", "security officer", "security consultant", "security specialist", "security engineering", "security lead", "cyber consultant", "security advisor", "security manager", "security operations"));
 	public static final JobType itRecruiter			= new JobType(JobType.Type.itRecruiter, 		Set.of("it-recruitment","recruitment specialist", "recruitmentcampagne", "it recruiter ", "it recruiters", "recruitment consultant", "recruiter"));
 	public static final JobType sdet 				= new JobType(JobType.Type.sdet, 				Set.of("engineer in test", "developer in test", "sdet"));
+	
+	
+	//START
+	//JAVA_DEV("Java Developer"), 
+	//CSHARP_DEV("C# Developer"), 
+	//SUPPORT("Support analyst"), 
+	//BA("Business Analyst"), 
+	//UI_UX("UI UX"), 
+	//PROJECT_MANAGER("Project Manager"), 
+	//ARCHITECT("Software Architect"), 
+	//TESTER("Test Analyset"), 
+	//WEB_DEV("Web Developer"),
+	//SCRUM_MASTER("Scrum Master"),
+	//DATA_SCIENTIST("Data Scientist"),
+	//NETWORK_ADMINISTRATOR("Network Administrator"),
+	//SOFTWARE_DEVELOPER("Software Developer"),
+	//IT_SECURITY("IT Security"),
+	//IT_RECRUITER("IT Recruiter"),
+	//SOFTWARE_DEV_IN_TEST("Software Dev In Test"),
+	//RUBY("Ruby"),
+	//RUBY_ON_RAILS("Ruby On Rails"),
+	//GO("Go"),
+	//REACT("React"),
+	//VUE("Vue"),
+	//NEXT("Next"),
+	//EXPRES("Expres"),
+	//RUST("Rust"),
+	//TEST_MANAGER("Test Manager"),
+	//PRODUCT_OWNER("Product Owner"),
+	//NODE("Node"),
+	//PYTHON("Python"),
+	//ANGULAR("Angular"),
+	//PHP("Php"),
+	//ANDROID("Android"),
+	//IOS("IOS"),
+	//KOTLIN("Kotlin");
+	//END
+	
 	
 	/**
 	* Refer to JobSpecifcationFilterExtractor interface for details
