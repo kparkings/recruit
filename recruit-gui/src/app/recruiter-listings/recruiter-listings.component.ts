@@ -404,18 +404,19 @@ export class RecruiterListingsComponent implements OnInit {
 				if	(selectedListing!.type) {
 					currencyBlock.addRow(new InfoItemRowKeyValue(this.translate.instant('arenella-recruiter-listing-contract-type'),this.getContractType(selectedListing!.type)));
 				}
-				if	(selectedListing!.currency) {
+				if	(selectedListing!.currency && selectedListing!.rate && selectedListing!.rate != "0" ) {
 					currencyBlock.addRow(new InfoItemRowKeyValue(this.translate.instant('arenella-recruiter-listing-renumeration'),selectedListing!.currency + " : " + selectedListing!.rate));
 				}
 				this.infoItemConfig.addItem(currencyBlock);
 			}
 		
 			//Recruiter Block
-			let experienceBlock:InfoItemBlock = new InfoItemBlock();
-			experienceBlock.setTitle(this.translate.instant('arenella-recruiter-listing-years-experience'));
-			experienceBlock.addRow(new InfoItemRowSingleValue(selectedListing!.yearsExperience));
-			this.infoItemConfig.addItem(experienceBlock);
-		
+			if (selectedListing!.yearsExperience && selectedListing!.yearsExperience != 0) {
+				let experienceBlock:InfoItemBlock = new InfoItemBlock();
+				experienceBlock.setTitle(this.translate.instant('arenella-recruiter-listing-years-experience'));
+				experienceBlock.addRow(new InfoItemRowSingleValue(selectedListing!.yearsExperience));
+				this.infoItemConfig.addItem(experienceBlock);
+			}
 			//Languages Block
 			if (selectedListing!.languages.length > 0) {
 				let languagesBlock:InfoItemBlock = new InfoItemBlock();

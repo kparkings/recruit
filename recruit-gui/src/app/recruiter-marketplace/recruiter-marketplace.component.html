@@ -385,3 +385,21 @@
 		</div>		
 	</div>
 </dialog> 
+<!-- Recruiter Listing Box -->
+<dialog #marketplaceBox style="max-width:500px">
+	<div class="modal-header">
+		<h4 class="modal-title">{{'arenella-recruiter-mp-listing' | translate}}</h4>
+ 		<div class="filter-close-box" (click)="closeModal()">X</div>
+	</div>
+	<div class="feedbackBox;">
+		<div class="modal-body"  style="min-height:400px;">
+			<h3>{{'arenella-recruiter-mp-listing-add' | translate}}</h3>
+			<p>{{'arenella-recruiter-mp-listing-add-text' | translate}}</p>
+			<div>
+				<button class="btn btn-secondary arenella-btn suggestion-button" (click)="declineListing()">{{'arenella-recruiter-listing-mp-btn-decline' | translate}}</button>
+				<button class="btn btn-secondary arenella-btn suggestion-button" (click)="publishListing()">{{'arenella-recruiter-listing-mp-btn-agree' | translate}}</button>
+			</div>
+			
+		</div>
+	</div>
+</dialog>

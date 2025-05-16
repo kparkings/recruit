@@ -20,6 +20,8 @@ import { HtmlOption } 									from '../html-option';
 import { StaticDataService } 							from '../static-data.service';
 import { SuggestionsSearchRequest } 					from '../suggestions/suggestion-search-request';
 import { InfoItemBlock, InfoItemConfig, InfoItemRowKeyValue, InfoItemRowKeyValueFlag, InfoItemRowMultiValues } 	from '../candidate-info-box/info-item';
+import { ListingService }								from '../listing.service';
+
 
 @Component({
   selector: 'app-recruiter-marketplace',
@@ -32,7 +34,8 @@ export class RecruiterMarketplaceComponent implements OnInit {
 	@ViewChild('contactBox', { static: false }) private contactBox:any;
 	@ViewChild('specUploadBox', { static: false }) private specUploadBox:any;
 	@ViewChild('mpPublicityBox', { static: false }) private mpPublicityBox:any;
-
+	@ViewChild('marketplaceBox', { static: false }) 		private marketplaceBox:any;
+		
 	public unseenOfferedCandidates:number 				= 0;
 	public unseenOpenPositions:number 					= 0;
 	public isMobile:boolean 							= false;
@@ -57,7 +60,9 @@ export class RecruiterMarketplaceComponent implements OnInit {
 				private candidateNavService: 		CandidateNavService,
 				private creditsService:				CreditsService,
 				private staticDataService:			StaticDataService,
-				private translate:					TranslateService) {
+				private translate:					TranslateService,
+				private listingService:				ListingService
+			) {
 					
 					this.marketplaceService.fetchUnseenOfferedCandidates().subscribe(val => {
 						this.unseenOfferedCandidates = val;
@@ -648,6 +653,7 @@ export class RecruiterMarketplaceComponent implements OnInit {
 		this.contactBox.nativeElement.close();
 		this.specUploadBox.nativeElement.close();
 		this.mpPublicityBox.nativeElement.close();
+		this.marketplaceBox.nativeElement.close();
 		this.validationErrors = new Array<string>();
 	}
 	
@@ -708,9 +714,11 @@ export class RecruiterMarketplaceComponent implements OnInit {
 				skills
 			).subscribe( data => {
 				this.doCreditCheck();
-				this.resetOpenPositionsForm();
+				this.showMPBox();
+				//this.resetOpenPositionsForm();
 				this.switchTab('showDemand');
 				this.refreshOpenPositionList();
+				
 			}, err => {
 				console.log(err);
 				if (err.status === 400) {
@@ -1010,5 +1018,78 @@ export class RecruiterMarketplaceComponent implements OnInit {
 		return (openPosition.created < openPosition.positionClosingDate);		
 		
 	}
+	
+	public declineListing():void{
+		this.closeModal();
+	}
+	
+	/**
+		* Creates a new Listing. 
+		*/
+		public publishListing():void{
+			
+			this.recruiterService.getOwnRecruiterAccount().subscribe(rec => {
+				
+				let positionTitle:string 		= this.requestedCandidateFormBean.get('positionTitle')?.value; 
+				let country:string 				= this.requestedCandidateFormBean.get('country')?.value;
+				let location:string 			= this.requestedCandidateFormBean.get('location')?.value;
+				let contractType:string 		= this.requestedCandidateFormBean.get('contractType')?.value;
+				let description:string 			= this.requestedCandidateFormBean.get('description')?.value;
+				let languages:Array<string> 	= this.requestedCandidateSpokenLanguages;
+				let skills:Array<string> 		= this.requestedCandidateCoreSkills;		
+				
+				let ownerName:string = rec.firstName + " " + rec.surname ;
+				let ownerCompany:string = rec.companyName;
+				let ownerEmail:string = rec.email;
+				
+				let yearsExperience:number = 0;
+				let rate:number = 0;
+				let currency:string = "EUR";
+				
+				this.validationErrors	= new Array<string>();
+				
+				if (contractType == "PERM") {
+					contractType = "PERM_ROLE";	
+				}
+				else if(contractType == "CONTRACT") {
+					contractType = "CONTRACT_ROLE";	
+				} else {
+					contractType = "BOTH";
+				}
+							
+				this.listingService
+									.registerListing(ownerName, 
+													ownerCompany,
+													ownerEmail,
+													positionTitle,
+													description,
+													contractType,	
+													country,	
+													location,	
+													yearsExperience,
+													languages,
+													skills,	
+													rate, 			
+													currency, 		
+													false).subscribe( data => {
+														this.closeModal();
+														this.resetOpenPositionsForm();
+													}, err => {
+														this.resetOpenPositionsForm();
+														if (err.status === 400) {
+															console.log("Failed to add Listing " + JSON.stringify(err.error));
+														}
+																													
+													});
+			})
+			
+				
+				
+									
+			}
+		
+			public showMPBox():void{
+				this.marketplaceBox.nativeElement.showModal();
+			}
 
 }
