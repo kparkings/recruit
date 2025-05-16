@@ -32,6 +32,9 @@ public class CityEntity {
 	@Column(name="active")
 	public boolean active;
 	
+	@Column(name="ignore")
+	public boolean ignore;
+	
 	/**
 	* Default Constructor 
 	*/
@@ -46,12 +49,14 @@ public class CityEntity {
 	* @param lat	 - Latitude position to 2 decimal places 
 	* @param lon	 - Longitude position to 2 decimal places
 	* @param active	 - If the City has been activated or is awaiting activation
+	* @param ignore  - If the City was determined to not be applicable and we dont want it appearing in the results 
 	*/
-	public CityEntity(COUNTRY country, String name, float lat, float lon, boolean active) {
+	public CityEntity(COUNTRY country, String name, float lat, float lon, boolean active, boolean ignore) {
 		this.id 			= new CityId(country, name);
 		this.lat 			= lat;
 		this.lon 			= lon;
 		this.active			= active;
+		this.ignore 		= ignore;
 	}
 
 	/**
@@ -92,6 +97,15 @@ public class CityEntity {
 	*/
 	public boolean isActive() {
 		return this.active;
+	}
+	
+	/**
+	* Returns whether the City was determined to be non applicable and
+	* we want to prevent it from being returned in the search results
+	* @return whether to ignore city
+	*/
+	public boolean isIgnore() {
+		return this.ignore;
 	}
 	
 	/**
@@ -173,6 +187,7 @@ public class CityEntity {
 					.lat(entity.getLat())
 					.lon(entity.getLon())
 					.active(entity.isActive())
+					.ignore(entity.isIgnore())
 				.build();
 	}
 	
@@ -182,7 +197,7 @@ public class CityEntity {
 	* @return Entity representation of City
 	*/
 	public static CityEntity toEntity(City city) {
-		return new CityEntity(city.getCountry(), city.getName(), city.getLat(), city.getLon(), city.isActive());
+		return new CityEntity(city.getCountry(), city.getName(), city.getLat(), city.getLon(), city.isActive(), city.isIgnore());
 	}
 	
 }

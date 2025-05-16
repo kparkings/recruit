@@ -87,13 +87,10 @@ public class CityServiceImpl implements CityService {
 	*/
 	@Override
 	public void deleteCity(COUNTRY country, String city) {
-
-		CityId id = new CityId(country, city);
-		
-		if(cityDao.existsById(id)) {
-			this.cityDao.deleteById(id);
-		}
-		
+		cityDao.findCityById(country, city).ifPresent(cityToUpdate -> {
+			cityToUpdate.markAsIgnored();
+			this.cityDao.saveCity(cityToUpdate);
+		});
 	}
 
 	/**
@@ -102,17 +99,7 @@ public class CityServiceImpl implements CityService {
 	* @return formatted City name
 	*/
 	private String cleanCityName(String name) {
-		
-		
-		String cleanedString = ""+name.trim();
-	//	cleanedString = cleanedString.toLowerCase();
-		
-		//if (cleanedString.length() > 0) {
-		//	cleanedString = cleanedString.substring(0,1).toUpperCase() + cleanedString.substring(1);
-		//}
-		
-		return cleanedString;
-		
+		return ""+name.trim();
 	}
 
 	/**

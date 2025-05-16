@@ -2457,3 +2457,16 @@ databaseChangeLog:
                   type: timestamp
                   constraints:
                     nullable: false
+  - changeSet:
+      id: addColumn-ignore
+      author: kevin
+      changes:
+        - addColumn:
+            tableName: city
+            schemaName: candidate
+            columns:
+            - column:
+                name: ignore
+                type: boolean
+                constraints:
+                  default: false

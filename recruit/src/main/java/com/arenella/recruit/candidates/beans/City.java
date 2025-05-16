@@ -12,6 +12,7 @@ public class City {
 	private final float 	lat;
 	private final float 	lon;
 	private final boolean 	active;
+	private boolean			ignore;
 	
 	/**
 	* Constructor
@@ -23,6 +24,7 @@ public class City {
 		this.lat 		= builder.lat;
 		this.lon 		= builder.lon;
 		this.active		= builder.active;
+		this.ignore		= builder.ignore;
 	}
 	
 	/**
@@ -67,6 +69,23 @@ public class City {
 	}
 	
 	/**
+	* Returns whether the City was determined to be non applicable and
+	* we want to prevent it from being returned in the search results
+	* @return whether to ignore city
+	*/
+	public boolean isIgnore() {
+		return this.ignore;
+	}
+	
+	/**
+	* Marks the city as being processed and found to be irrelevant
+	* so can be ignored
+	*/
+	public void markAsIgnored() {
+		this.ignore = true;
+	}
+	
+	/**
 	* Returns a Builder for the City class
 	* @return Builder
 	*/
@@ -84,6 +103,7 @@ public class City {
 		private float 	lat;
 		private float 	lon;
 		private boolean  active;
+		private boolean ignore;
 		
 		/**
 		* Sets the 2 digit Country code of the Country 
@@ -138,6 +158,17 @@ public class City {
 		}
 		
 		/**
+		* Whether the City is irrelevant and should be 
+		* ignored
+		* @param ignore - Whether to ignore the City
+		* @return Builder
+		*/
+		public CityBuilder ignore(boolean ignore) {
+			this.ignore = ignore;
+			return this;
+		}
+		
+		/**
 		* Reutrns initialized instance of the City
 		* @return City
 		*/
@@ -146,5 +177,5 @@ public class City {
 		}
 		
 	}
-	
+
 }

@@ -44,7 +44,7 @@ public interface CityDao extends ListCrudRepository<CityEntity, CityEntity.CityI
 	* @return
 	*/
 	default Set<City> fetchCitiesAwaitingActivation() {
-		return this.findAll().stream().filter(c -> !c.active).map(CityEntity::fromEntity).collect(Collectors.toCollection(LinkedHashSet::new));
+		return this.findAll().stream().filter(c -> !c.active && !c.ignore).map(CityEntity::fromEntity).collect(Collectors.toCollection(LinkedHashSet::new));
 	}
 	
 	/**

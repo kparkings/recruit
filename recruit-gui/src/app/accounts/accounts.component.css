@@ -57,6 +57,7 @@ h3{
 
 .medicol{
 	word-break: break-word;
+	min-width:80px;
 }
 
 .suggestion-flag-country{
@@ -116,4 +117,7 @@ h3{
 		display:none;
 	}
 	
+	.medicol{
+		word-break: break-word;
+	}
 }

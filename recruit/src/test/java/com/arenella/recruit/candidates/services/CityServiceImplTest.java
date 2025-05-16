@@ -3,10 +3,12 @@ package com.arenella.recruit.candidates.services;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.Optional;
 import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -124,11 +126,16 @@ class CityServiceImplTest {
 	@Test
 	void testDeleteCityExists() {
 		
-		Mockito.when(this.mockCityDao.existsById(Mockito.any(CityId.class))).thenReturn(true);
+		ArgumentCaptor<City> cityArgCapt = ArgumentCaptor.forClass(City.class);
+		
+		Mockito.when(this.mockCityDao.findCityById(COUNTRY.ITALY, "Cosenza"))
+			.thenReturn(Optional.of(City.builder().country(COUNTRY.ITALY).name("Cosenza").ignore(false).build()));
 		
 		service.deleteCity(COUNTRY.ITALY, "Cosenza");
 		
-		Mockito.verify(this.mockCityDao).deleteById(Mockito.any(CityId.class));
+		Mockito.verify(this.mockCityDao).saveCity(cityArgCapt.capture());
+		
+		assertTrue(cityArgCapt.getValue().isIgnore());
 		
 	}
 	
@@ -138,8 +145,6 @@ class CityServiceImplTest {
 	@Test
 	void testDeleteCityDoesNotExists() {
 	
-		Mockito.when(this.mockCityDao.existsById(Mockito.any(CityId.class))).thenReturn(false);
-		
 		service.deleteCity(COUNTRY.ITALY, "Cosenza");
 		
 		Mockito.verify(this.mockCityDao, Mockito.never()).deleteById(Mockito.any(CityId.class));

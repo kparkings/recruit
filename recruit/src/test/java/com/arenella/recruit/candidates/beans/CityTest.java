@@ -18,6 +18,7 @@ class CityTest {
 	private static final float 		LAT 		= -1.99f;
 	private static final float 		LON 		= 1.99f;
 	private static final boolean	ACTIVE		= true;
+	private static final boolean 	IGNORE		= true;
 	
 	/**
 	* Tests construction via Builder
@@ -32,6 +33,7 @@ class CityTest {
 							.lat(LAT)
 							.lon(LON)
 							.active(ACTIVE)
+							.ignore(IGNORE)
 						.build();
 		
 		assertEquals(COUNTRY_VAL, 	city.getCountry());
@@ -40,6 +42,7 @@ class CityTest {
 		assertEquals(LON, 			city.getLon());
 		
 		assertTrue(city.isActive());
+		assertTrue(city.isIgnore());
 		
 	}
 	
@@ -57,10 +60,12 @@ class CityTest {
 				.lat(LAT)
 				.lon(LON)
 				.active(ACTIVE)
+				.ignore(IGNORE)
 			.build();
 		
 		assertTrue(city.isActive());
-
+		assertTrue(city.isIgnore());
+		
 		CityEntity entity = CityEntity.toEntity(city);
 		
 		assertEquals(COUNTRY_VAL,	 	entity.getCountry());
@@ -69,6 +74,7 @@ class CityTest {
 		assertEquals(LON, 				entity.getLon());
 	
 		assertTrue(entity.isActive());
+		assertTrue(entity.isIgnore());
 		
 	}
 	
@@ -80,7 +86,7 @@ class CityTest {
 	@Test
 	void testFromEntity() {
 		
-		CityEntity entity = new CityEntity(COUNTRY_VAL, NAME, LAT, LON, ACTIVE);
+		CityEntity entity = new CityEntity(COUNTRY_VAL, NAME, LAT, LON, ACTIVE, IGNORE);
 		
 		City city = CityEntity.fromEntity(entity);
 		
@@ -90,6 +96,7 @@ class CityTest {
 		assertEquals(LON, 			city.getLon());
 		
 		assertTrue(city.isActive());
+		assertTrue(city.isIgnore());
 		
 	}
 	
