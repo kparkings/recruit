@@ -43,7 +43,7 @@
 			
 				<!-- Logins -->
 				<div>
-					<h3>{{'arenella-stats-logins-recruiters' | translate}} {{loginCountRecruiter}} {{'arenella-stats-logins-candidates' | translate}}: {{loginCountCandidate}}</h3>
+					<h3><span class="statChartTotalHdr">{{'arenella-stats-logins-recruiters' | translate}}:</span> {{loginCountRecruiter}} <span class="statChartTotalHdr">{{'arenella-stats-logins-candidates' | translate}}:</span> {{loginCountCandidate}}</h3>
 					<button (click)="switchSearchStats('week')">{{'arenella-stats-logins-btn-this-week' | translate}}</button>
 					<button (click)="switchSearchStats('today')">{{'arenella-stats-logins-btn-today' | translate}}</button>
 				</div>	
@@ -97,13 +97,18 @@
 				<div class="stat-canvas">
 					<!-- Logins -->
 					<div *ngIf="showStatsLogins">
-						<h3>{{'arenella-stats-logins-recruiters' | translate}} {{loginCountRecruiter}} {{'arenella-stats-logins-candidates' | translate}}: {{loginCountCandidate}}</h3>
+						<h3>
+							<span class="statChartTotalHdr">{{'arenella-stats-logins-recruiters' | translate}}:</span> {{loginCountRecruiter}}
+							<span class="statChartTotalHdr">{{'arenella-stats-logins-candidates' | translate}}:</span> {{loginCountCandidate}}
+						</h3>
 						<button (click)="switchUserStats('week')">{{'arenella-stats-logins-btn-this-week' | translate}}</button>
 						<button (click)="switchUserStats('today')">{{'arenella-stats-logins-btn-today' | translate}}</button>
 					</div>
 					<!-- Downloads -->
-					<div *ngIf="showStatsDownloads" style="margin-bottom:45px;">
-						<h3>{{'arenella-stats-daily-downloads' | translate}}</h3>
+					<div *ngIf="showStatsDownloads">
+						<h3>{{'arenella-stats-recruiter-downloads' | translate}}: {{chartDownloadsTotal}}</h3>
+						<button (click)="switchChartData('week')">{{'arenella-stats-recruiter-downloads-btn-week' | translate}}</button>
+						<button (click)="switchChartData('day')">{{'arenella-stats-recruiter-downloads-btn-today' | translate}}</button>
 					</div>
 					<!-- Views -->
 					<div *ngIf="showStatsViews" style="margin-bottom:45px;">
@@ -127,15 +132,14 @@
 					<div class="statChartDiv {{statChartDivMobile}}">
 						<canvas  id="leftChart" >{{ leftChart }}</canvas>	
 					</div>
+					
 				</div>
 				
 				<div class="stat-canvas">
 					
 					<!-- Downloads -->
-					<div *ngIf="showStatsDownloads">
-						<h3>{{'arenella-stats-recruiter-downloads' | translate}}: {{chartDownloadsTotal}}</h3>
-						<button (click)="switchChartData('week')">{{'arenella-stats-recruiter-downloads-btn-week' | translate}}</button>
-						<button (click)="switchChartData('day')">{{'arenella-stats-recruiter-downloads-btn-today' | translate}}</button>
+					<div *ngIf="showStatsDownloads" style="margin-bottom:45px;">
+						<h3>{{'arenella-stats-daily-downloads' | translate}}</h3>
 					</div>
 					<!-- Views -->
 					<div *ngIf="showStatsViews">

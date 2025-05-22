@@ -5,8 +5,10 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -26,7 +28,11 @@ import com.arenella.recruit.candidates.enums.RESULT_ORDER;
 import co.elastic.clients.elasticsearch.ElasticsearchClient;
 import co.elastic.clients.elasticsearch._types.FieldSort;
 import co.elastic.clients.elasticsearch._types.SortOrder;
+import co.elastic.clients.elasticsearch._types.aggregations.Aggregate;
 import co.elastic.clients.elasticsearch._types.aggregations.Aggregation;
+import co.elastic.clients.elasticsearch._types.aggregations.Buckets;
+import co.elastic.clients.elasticsearch._types.aggregations.LongTermsBucket;
+import co.elastic.clients.elasticsearch._types.aggregations.StringTermsBucket;
 import co.elastic.clients.elasticsearch._types.aggregations.TermsAggregation;
 import co.elastic.clients.elasticsearch._types.query_dsl.BoolQuery;
 import co.elastic.clients.elasticsearch._types.query_dsl.MatchQuery;
@@ -126,24 +132,40 @@ public interface CandidateRepository extends ElasticsearchRepository<CandidateDo
 	public default List<CandidateRoleStatsView> getCandidateRoleStats(ElasticsearchClient esClient) throws Exception{
 
 		List<CandidateRoleStatsView> stats = new java.util.ArrayList<>();
-		
+
+		Aggregation aggregationAvailable = new Aggregation.Builder()
+				 .terms(new TermsAggregation.Builder().field("available").build())
+				 .build();
+
 		Aggregation aggregation = new Aggregation.Builder()
 				 .terms(new TermsAggregation.Builder().field("functions.keyword").build())
+				 .aggregations("availability", aggregationAvailable)
 				 .build();
-		
-		co.elastic.clients.elasticsearch._types.query_dsl.Query query = MatchQuery.of(m -> m
-		    .field("available")
-		    .query(true)
-		)._toQuery();
 
 		esClient.search(b -> b
 			    .index("candidates")
 			    .size(0)
-			    .query(query) 
 			    .aggregations("functions", aggregation),
 			    CandidateDocument.class 
-			).aggregations().get("functions").sterms().buckets().array().forEach(bucket ->
-			stats.add(new CandidateRoleStatsView(com.arenella.recruit.candidates.enums.FUNCTION.valueOf(bucket.key().stringValue()), bucket.docCount()))
+			).aggregations().get("functions").sterms().buckets().array().forEach(bucket -> {
+			
+				String 		role 			= bucket.key().stringValue();
+				AtomicLong 	available 		= new AtomicLong(0);
+				AtomicLong 	unavailable 	= new AtomicLong(0);
+				
+				List<LongTermsBucket> availability = bucket.aggregations().get("availability").lterms().buckets().array();
+				
+				availability.stream().filter(a -> a.keyAsString().equals("true")).findFirst().ifPresent(count -> {
+					available.set(count.docCount());
+				});
+				
+				availability.stream().filter(a -> a.keyAsString().equals("false")).findFirst().ifPresent(count -> {
+					unavailable.set(count.docCount());
+				});
+				
+				stats.add(new CandidateRoleStatsView(com.arenella.recruit.candidates.enums.FUNCTION.valueOf(role), available.get(), unavailable.get()));
+				
+			}
 		);
 			
 		return stats;

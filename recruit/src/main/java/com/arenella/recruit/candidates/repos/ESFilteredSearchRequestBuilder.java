@@ -276,8 +276,6 @@ public class ESFilteredSearchRequestBuilder {
 					.queryName("lastAvailabilityCheckEmailSent")
 					.mustNot(queryAdminUpdatedAlready)
 					.should(shouldQueries).minimumShouldMatch("1"))._toQuery());
-			
-			
 		}
 		
 		if (filterOptions.getRegisteredAfter().isPresent()) {

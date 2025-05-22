@@ -7,6 +7,7 @@ public class CandidateRoleStatsAPIOutbound {
 
 	private String	 		function;
 	private long 			availableCandidates;
+	private long			unavailableCandidates;
 	
 	/**
 	* Constructor based upon a builder
@@ -15,6 +16,7 @@ public class CandidateRoleStatsAPIOutbound {
 	public CandidateRoleStatsAPIOutbound(CandidateRoleStatsAPIOutboundBuilder builder) {
 		this.function 				= builder.function.getDesc();
 		this.availableCandidates 	= builder.availableCandidates;
+		this.unavailableCandidates	= builder.unavailableCandidates;
 	}
 	
 	/**
@@ -33,6 +35,15 @@ public class CandidateRoleStatsAPIOutbound {
 	public long getAvailableCandidates() {
 		return this.availableCandidates;
 	}
+
+	/**
+	* Returns the number of unavailable candidates that 
+	* perform the function
+	* @return available Candidates
+	*/
+	public long getUnavailableCandidates() {
+		return this.unavailableCandidates;
+	}
 	
 	/**
 	* Returns a Builder for the CandidateRoleStats class 
@@ -50,6 +61,7 @@ public class CandidateRoleStatsAPIOutbound {
 	
 		private FUNCTION 		function;
 		private long 			availableCandidates;
+		private long			unavailableCandidates;
 		
 		/**
 		* Sets the function
@@ -68,6 +80,16 @@ public class CandidateRoleStatsAPIOutbound {
 		*/
 		public CandidateRoleStatsAPIOutboundBuilder availableCandidates(long availableCandidates) {
 			this.availableCandidates  = availableCandidates;
+			return this;
+		}
+		
+		/**
+		* Sets the number of candidates unavailable for the function
+		* @param unavailableCandidates
+		* @return Builder
+		*/
+		public CandidateRoleStatsAPIOutboundBuilder unavailableCandidates(long unavailableCandidates) {
+			this.unavailableCandidates  = unavailableCandidates;
 			return this;
 		}
 		
@@ -92,6 +114,7 @@ public class CandidateRoleStatsAPIOutbound {
 							.builder()
 								.function(stat.getFunction())
 								.availableCandidates(stat.getAvailableCandidates())
+								.unavailableCandidates(stat.getUnavailableCandidates())
 							.build();
 		
 	}

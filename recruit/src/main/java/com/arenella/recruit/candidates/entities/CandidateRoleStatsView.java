@@ -13,14 +13,16 @@ public class CandidateRoleStatsView {
 
 	private FUNCTION 		function;
 	private long 			availableCandidates;
+	private long			unavailableCandidates;
 	
 	/**
 	* Constructor based upon a builder
 	* @param builder - contains initialization values
 	*/
-	public CandidateRoleStatsView(FUNCTION 		function, long 			availableCandidates) {
-		this.function = function;
-		this.availableCandidates = availableCandidates;
+	public CandidateRoleStatsView(FUNCTION function, long availableCandidates, long unavailableCandidates) {
+		this.function 				= function;
+		this.availableCandidates 	= availableCandidates;
+		this.unavailableCandidates 	= unavailableCandidates;
 	}
 	
 	/**
@@ -38,6 +40,15 @@ public class CandidateRoleStatsView {
 	*/
 	public long getAvailableCandidates() {
 		return this.availableCandidates;
+	}
+	
+	/**
+	* Returns the number of unavailable candidates that 
+	* perform the function
+	* @return unavailable Candidates
+	*/
+	public long getUnavailableCandidates() {
+		return this.unavailableCandidates;
 	}
 	
 	/**
@@ -59,6 +70,7 @@ public class CandidateRoleStatsView {
 							.builder()
 								.function(view.getFunction())
 								.availableCandidates(view.getAvailableCandidates())
+								.unavailableCandidates(view.getUnavailableCandidates())
 							.build();
 		
 	}

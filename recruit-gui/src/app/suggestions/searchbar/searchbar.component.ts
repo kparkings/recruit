@@ -37,7 +37,7 @@ export class SearchbarComponent {
 	public showGeoZoneFilters:string							= "";
 	public includeUnavailableCandidatesSelected:string 			= 'true';
 	public filterView:string									= 'collapsed';
-	public includeRequiresSponsorshipCandidatesSelected:string  = 'true';
+	public includeRequiresSponsorshipCandidatesSelected:string  = 'false';
 	public paidFeature:string								 	= '';
 	public showIncludeFilters:string							= "";
 	public skillFilters:Array<string>							= new Array<string>();
@@ -244,11 +244,11 @@ export class SearchbarComponent {
 		if(this.doPaidSubscriptionCheck()){
 			let checked =  this.suggestionFilterForm.get("includeRequiresSponsorshipCandidates")?.value;
 			
-			if(checked){
+			if (checked) {
 				this.suggestionFilterForm.get("includeRequiresSponsorshipCandidates")?.setValue('');	
 				this.includeRequiresSponsorshipCandidatesSelected = 'false';
 			} else {
-				this.suggestionFilterForm.get("includeRequiresSponsorshipCandidates")?.setValue('false');
+				this.suggestionFilterForm.get("includeRequiresSponsorshipCandidates")?.setValue('true');
 				this.includeRequiresSponsorshipCandidatesSelected = 'true';
 			}
 		}

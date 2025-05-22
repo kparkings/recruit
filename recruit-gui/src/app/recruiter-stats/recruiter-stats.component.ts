@@ -58,22 +58,21 @@ export class RecruiterStatsComponent implements OnInit{
 		
 			let stats:any[] = data;
 			
-			let functionStatCount:Array<string> 		= new Array<string>(); 
-			let functionStatName:Array<string> 			= new Array<string>(); 
+			let functionStatCount:Array<string> 			= new Array<string>(); 
+			let unavailableFunctionStatCount:Array<string> 	= new Array<string>(); 
+			let functionStatName:Array<string> 				= new Array<string>(); 
 				
 			stats.forEach(functonStat => {
 				
 				functionStatName.push(functonStat.function);
 				functionStatCount.push(functonStat.availableCandidates);
+				unavailableFunctionStatCount.push(functonStat.unavailableCandidates);
 				
 			});
 			
 			this.availabilityChartData = [
-	           	{
-	            label: this.translate.instant('stat-todays-logins'),
-	       	    data: functionStatCount,
-	            backgroundColor: this.chartColor
-	          },
+	           	{label: "Candidates available by function", data: functionStatCount, backgroundColor: this.chartColor},
+				{label: "Candidates unavailable by function", data: unavailableFunctionStatCount, backgroundColor:"purple"}
 	        	];
 			this.availabilityChartLabels = functionStatName; 
 			

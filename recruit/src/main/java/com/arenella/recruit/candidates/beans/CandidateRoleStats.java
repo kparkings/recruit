@@ -11,6 +11,7 @@ public class CandidateRoleStats {
 
 	private FUNCTION 		function;
 	private long 			availableCandidates;
+	private long			unavailableCandidates;
 	
 	/**
 	* Constructor based upon a builder
@@ -19,6 +20,7 @@ public class CandidateRoleStats {
 	public CandidateRoleStats(CandidateRoleStatsBuilder builder) {
 		this.function 				= builder.function;
 		this.availableCandidates 	= builder.availableCandidates;
+		this.unavailableCandidates	= builder.unavailableCandidates;
 	}
 	
 	/**
@@ -39,6 +41,15 @@ public class CandidateRoleStats {
 	}
 	
 	/**
+	* Returns the number of unavailable candidates that 
+	* perform the function
+	* @return unavailable Candidates
+	*/
+	public long getUnavailableCandidates() {
+		return this.unavailableCandidates;
+	}
+	
+	/**
 	* Returns a Builder for the CandidateRoleStats class 
 	* @return Builder
 	*/
@@ -54,6 +65,7 @@ public class CandidateRoleStats {
 	
 		private FUNCTION 		function;
 		private long 			availableCandidates;
+		private long 			unavailableCandidates;
 		
 		/**
 		* Sets the function
@@ -72,6 +84,16 @@ public class CandidateRoleStats {
 		*/
 		public CandidateRoleStatsBuilder availableCandidates(long availableCandidates) {
 			this.availableCandidates  = availableCandidates;
+			return this;
+		}
+	
+		/**
+		* Sets the number of candidates unavailable for the function
+		* @param unavailableCandidates
+		* @return Builder
+		*/
+		public CandidateRoleStatsBuilder unavailableCandidates(long unavailableCandidates) {
+			this.unavailableCandidates  = unavailableCandidates;
 			return this;
 		}
 		

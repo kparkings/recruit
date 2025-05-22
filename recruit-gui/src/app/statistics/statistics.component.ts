@@ -20,6 +20,7 @@ import { SupportedCountry } from '../supported-candidate';
 export class StatisticsComponent implements OnInit {
 
 	public chartColor:string = 'grey';
+	public unavailableChartColor:string = 'purple';
 	public totalNumberActiveCandidates:number 			= 0;
 	public candidatesByFunction:Map<string,number> 		= new Map<string,number>();
 	public currentTab:string 							= "downloads";
@@ -218,8 +219,8 @@ export class StatisticsComponent implements OnInit {
 			this.marketpalceViewsWeekValues 	= viewsByRecruiterWeekly;
 			this.marketplaceViewsDayKeys 		= recruiterIdsDaily;
 			this.marketpalceViewsDayValues 		= viewsByRecruiterDaily;
-			this.marketplaceViewsKeys			= this.marketplaceViewsWeekKeys
-			this.marketpalceViewsValues 		= this.marketpalceViewsWeekValues;
+			this.marketplaceViewsKeys			= this.marketplaceViewsDayKeys
+			this.marketpalceViewsValues 		= this.marketpalceViewsDayValues;
 				
 			this.marketplaceChartData = [{label: "Marketplace Views", data: this.marketpalceViewsValues, backgroundColor: this.chartColor}];
 			this.marketplaceChartLabels = this.marketplaceViewsKeys; 
@@ -391,16 +392,17 @@ export class StatisticsComponent implements OnInit {
 			let stats:any[] = data;
 			
 			let functionStatCount:Array<string> 		= new Array<string>(); 
+			let unavailablefunctionStatCount:Array<string> 		= new Array<string>(); 
 			let functionStatName:Array<string> 			= new Array<string>(); 
 				
 			stats.forEach(functonStat => {
 				
 				functionStatName.push(functonStat.function);
 				functionStatCount.push(functonStat.availableCandidates);
-				
+				unavailablefunctionStatCount.push(functonStat.unavailableCandidates);
 			});
 			
-			this.availabilityChartData = [{label: "Candidates available by function", data: functionStatCount, backgroundColor: this.chartColor}];
+			this.availabilityChartData = [{label: "Candidates available by function", data: functionStatCount, backgroundColor: this.chartColor}, {label: "Candidates unavailable by function", data: unavailablefunctionStatCount, backgroundColor: this.unavailableChartColor}];
 			this.availabilityChartLabels = functionStatName; 
 			
     	});
@@ -418,14 +420,14 @@ export class StatisticsComponent implements OnInit {
 				this.recruiterDownloadsChartData = [{ data: this.recruiterDownloadsDaily, label: 'Todays downloads' ,backgroundColor: this.chartColor   }];
 				this.recruiterDownloadsChartLabels = this.recruiterDownloadsDailyCols;
 				this.chartDownloadsTotal = this.recruiterDownloadsDaily.length;
-				this.createRightChart(this.recruiterDownloadsChartLabels, this.recruiterDownloadsChartData);
+				this.createLeftChart(this.recruiterDownloadsChartLabels, this.recruiterDownloadsChartData);
 				return;
 			}
 			case "week":{
 				this.recruiterDownloadsChartData = [{ data: this.recruiterDownloadsWeekly, label: 'This Weeks downloads' ,backgroundColor: this.chartColor   }];
 				this.recruiterDownloadsChartLabels = this.recruiterDownloadsWeeklyCols;
 				this.chartDownloadsTotal = this.recruiterDownloadsWeekly.length;
-				this.createRightChart(this.recruiterDownloadsChartLabels, this.recruiterDownloadsChartData);
+				this.createLeftChart(this.recruiterDownloadsChartLabels, this.recruiterDownloadsChartData);
 				return;
 			}
 		}
@@ -462,9 +464,9 @@ export class StatisticsComponent implements OnInit {
 				this.showNewCandidates=false;
 				this.showMarketplaceStats=false;
 				this.showSearches=false;
-				this.createLeftChartAsLine(this.downloadsChartLabels, this.downloadsChartData);
-				this.createRightChart(this.recruiterDownloadsChartLabels, this.recruiterDownloadsChartData);
-			
+				this.createLeftChart(this.recruiterDownloadsChartLabels, this.recruiterDownloadsChartData);
+				this.createRightChartAsLine(this.downloadsChartLabels, this.downloadsChartData);
+				
 				break;
 			}
 			case "views":{
@@ -626,7 +628,7 @@ export class StatisticsComponent implements OnInit {
 		       datasets: leftChartData
 	      },
 	      options: {
-	        aspectRatio:2.5
+	        aspectRatio:1.75
 	      }
 	      
 	    });
@@ -656,6 +658,30 @@ export class StatisticsComponent implements OnInit {
 	    });
 	   
   	}
+	
+	/**
+	* I know but ive had enough of charts. I will refactor it later. 
+	*/
+	createRightChartAsLine(rightChartLabels:string[], rightChartData:any){
+		
+		if (this.rightChart) {
+			this.rightChart.destroy();
+		}
+		
+	    this.rightChart = new Chart("rightChart", {
+	      type: 'line',
+
+	      data: {
+	        labels: rightChartLabels, 
+		       datasets: rightChartData
+	      },
+	      options: {
+	        aspectRatio:1.75
+	      }
+	      
+	    });
+	   
+	}
 
 	createRightChart(chartLabels:string[], chartData:any){
 		
