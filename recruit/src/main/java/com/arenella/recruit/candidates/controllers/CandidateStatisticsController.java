@@ -16,12 +16,14 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.arenella.recruit.candidates.beans.RecruiterStats;
 import com.arenella.recruit.candidates.controllers.NewCandidateSummaryAPIOutbound.NewCandidateSummaryAPIOutboundBuilder;
 import com.arenella.recruit.candidates.controllers.NewCandidatesAPIOutbound.NewCandidatesAPIOutboundBuilder;
+import com.arenella.recruit.candidates.enums.FUNCTION;
 import com.arenella.recruit.candidates.services.CandidateStatisticsService;
 import com.arenella.recruit.candidates.services.CandidateStatisticsService.NEW_STATS_TYPE;
 
@@ -62,9 +64,19 @@ public class CandidateStatisticsController {
 	* per Function
 	* @return Stats about available Candidates by role
 	*/
-	@GetMapping(path="candidate/stat/function-count")
-	public ResponseEntity<List<CandidateRoleStatsAPIOutbound>> fetchCandidateRoleStats() throws Exception{
-		return ResponseEntity.ok(candidateStatisticsService.fetchCandidateRoleStats().stream().map(CandidateRoleStatsAPIOutbound::convertFromDomain).collect(Collectors.toCollection(LinkedList::new)));
+	@PostMapping(path="candidate/public/function-count")
+	public ResponseEntity<List<CandidateRoleStatsAPIOutbound>> fetchCandidateRoleStats(@RequestBody RoleTotalsFiltersAPIInbound filters) throws Exception{
+		return ResponseEntity.ok(candidateStatisticsService.fetchCandidateRoleStats(RoleTotalsFiltersAPIInbound.toDomain(filters)).stream().map(CandidateRoleStatsAPIOutbound::convertFromDomain).collect(Collectors.toCollection(LinkedList::new)));
+	}
+	
+	/**
+	* Endpoint for retrievens a breakdown of available/unavailable candidates by country
+	* for a give function
+	* @return
+	*/
+	@GetMapping(path="candidate/public/country-breakdown/{function}")
+	public ResponseEntity<Set<RoleTotalsAPIOutbound>> fetchCountryAvailabilityBreakdownForFunction(@PathVariable("function")FUNCTION function) throws Exception{
+		return ResponseEntity.ok(candidateStatisticsService.fetchCountryAvailabilityBreakdownForFunction(function).stream().map(RoleTotalsAPIOutbound::convertFromDomain).collect(Collectors.toCollection(LinkedHashSet::new)));
 	}
 	
 	/**

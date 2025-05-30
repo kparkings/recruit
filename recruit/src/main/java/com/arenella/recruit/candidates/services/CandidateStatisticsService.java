@@ -11,7 +11,10 @@ import com.arenella.recruit.candidates.beans.CandidateProfileViewedEvent;
 import com.arenella.recruit.candidates.beans.CandidateRoleStats;
 import com.arenella.recruit.candidates.beans.CandidateSearchEvent;
 import com.arenella.recruit.candidates.beans.RecruiterStats;
+import com.arenella.recruit.candidates.beans.RoleTotals;
+import com.arenella.recruit.candidates.beans.RoleTotalsFilters;
 import com.arenella.recruit.candidates.controllers.CandidateStatisticsController.STAT_PERIOD;
+import com.arenella.recruit.candidates.enums.FUNCTION;
 
 /**
 * Defines services relating to Candidate statistics
@@ -30,10 +33,11 @@ public interface CandidateStatisticsService {
 	/**
 	* Returns a Summary of the number of candidates available 
 	* per role
+	* @Param filters - Filters to apply to search
 	* @throws Exception
 	* @return
 	*/
-	public List<CandidateRoleStats> fetchCandidateRoleStats() throws Exception;
+	public List<CandidateRoleStats> fetchCandidateRoleStats(RoleTotalsFilters filters) throws Exception;
 	
 	/**
 	* Logs details of a Candidate Search performed
@@ -96,5 +100,13 @@ public interface CandidateStatisticsService {
 	* @param recruiterId - Id of Recruiter who viewed the Candidates profile 
 	*/
 	public void registerCandidateProfileView(String candidateId, String recruiterId);
+
+	/**
+	* Returns a breakdown of by country of Candidate availability for a give Function
+	* @param function - Type of Role/Function performed by a Candidate
+	* @return Breakdown
+	* @throws Exception 
+	*/
+	public Set<RoleTotals> fetchCountryAvailabilityBreakdownForFunction(FUNCTION function) throws Exception;
 	
 }

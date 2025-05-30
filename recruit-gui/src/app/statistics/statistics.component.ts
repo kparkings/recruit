@@ -7,10 +7,9 @@ import { LoginStats } 										from '../login-event-stats';
 import { RecruiterSearchStatistics } 						from '../recruiter-search-stats';
 import { CandidateFunction } 								from '../candidate-function';
 import { CandidateServiceService }							from '../candidate-service.service';
-
-import { Chart } from 'chart.js';
-import { ListingStatistics, ViewItem } from '../listing-statistics';
-import { SupportedCountry } from '../supported-candidate';
+import { GeoZone } 											from '../geo-zone';
+import { Chart } 											from 'chart.js';
+import { SupportedCountry } 								from '../supported-candidate';
 
 @Component({
   selector: 'app-statistics',
@@ -28,6 +27,7 @@ export class StatisticsComponent implements OnInit {
 	public showStatsDownloads:boolean					= false;
 	public showStatsViews:boolean						= false;
 	public showStatsAvailability:boolean				= false;
+	public showStatsAvailabilityByFunction				=false;
 	public showStatsListings:boolean					= false;
 	public showNewCandidates:boolean					= false;
 	public showMarketplaceStats:boolean					= false;
@@ -60,6 +60,7 @@ export class StatisticsComponent implements OnInit {
 	public marketplaceChartLabels 						= [''];
 	public listingsChartLabels 							= [''];
 	public availabilityChartLabels 						= [''];
+	public availabilityByFunctionChartLabels				= [''];
 	public loginChartLabels 							= [''];
 	public recruiterLoginsChartLabels 					= [''];
 	public downloadsChartLabels 						= [''];
@@ -92,6 +93,7 @@ export class StatisticsComponent implements OnInit {
 	private marketplaceChartData 								= [{label: "",data: [''],backgroundColor: ''}];
 	private listingsChartData 									= [{label: "",data: [''],backgroundColor: ''}];
 	private availabilityChartData 								= [{label: "",data: [''],backgroundColor: ''}];
+	private availabilityByFunctionChartData 					= [{label: "",data: [''],backgroundColor: ''}];
 	private recruiterLoginsChartData 							= [{label: "",data: [''],backgroundColor: ''}];
 	private downloadsChartData 									= [{label: "",data: [''], backgroundColor: ''}];
 	private viewsChartData 										= [{label: "",data: [''], backgroundColor: ''}];
@@ -146,6 +148,8 @@ export class StatisticsComponent implements OnInit {
 
 	ngOnInit(): void {
 		this.supportedCountries = this.candidateService.getSupportedCountries();
+		this.initGeoZones();
+		this.initSupportedCountries();
 	}
 	
 	public recruiterStats:RecruiterSearchStatistics = new RecruiterSearchStatistics();
@@ -285,6 +289,9 @@ export class StatisticsComponent implements OnInit {
 	
 	public fetchStatus():void{
 		
+		this.getCandidatesByFunction();
+		this.getCandidatesFunctionAvailabilityByCountry();
+		
 		this.statisticsService.getListingStats().subscribe(listingData => {
 					
 					this.listingViewsToday 		= listingData.viewsToday;
@@ -384,29 +391,76 @@ export class StatisticsComponent implements OnInit {
 			this.profileViews 			= data;
 			this.viewsChartData = [{label: "Candidate Profile Views", data: this.profileViews, backgroundColor: this.chartColor}];
 		});
-		//profileViewChartLabels
 		//END
 
-		this.statisticsService.getAvailableCandidatesByFunctionStatistics().forEach(data => {
 		
-			let stats:any[] = data;
-			
-			let functionStatCount:Array<string> 		= new Array<string>(); 
-			let unavailablefunctionStatCount:Array<string> 		= new Array<string>(); 
-			let functionStatName:Array<string> 			= new Array<string>(); 
+	}
+	
+	private getCandidatesByFunction() {
+		
+		this.statisticsService.getAvailableCandidatesByFunctionStatisticsWithFilters(this.selectedFilterGeoZone,this.selectedFilterCountry).forEach(data => {
+		
+					let stats:any[] = data;
+					
+					let functionStatCount:Array<string> 		= new Array<string>(); 
+					let unavailablefunctionStatCount:Array<string> 		= new Array<string>(); 
+					let functionStatName:Array<string> 			= new Array<string>(); 
+						
+					stats.forEach(functonStat => {
+						
+						functionStatName.push(functonStat.function);
+						functionStatCount.push(functonStat.availableCandidates);
+						unavailablefunctionStatCount.push(functonStat.unavailableCandidates);
+					});
+					
+					this.availabilityChartData = [{label: "Candidates available by function", data: functionStatCount, backgroundColor: this.chartColor}, {label: "Candidates unavailable by function", data: unavailablefunctionStatCount, backgroundColor: this.unavailableChartColor}];
+					this.availabilityChartLabels = functionStatName; 
+					
+					if (this.currentTab == "availability") {
+						if (this.leftChart) {
+							this.leftChart.destroy();
+						}
+						
+						this.createLeftChart(this.availabilityChartLabels, this.availabilityChartData);
+					}
+		    	});
 				
-			stats.forEach(functonStat => {
+	}
+	
+	private getCandidatesFunctionAvailabilityByCountry() {
+			
+		let functionFilter:string = "JAVA_DEV";
+		
+		if(this.selectedFunction) {
+			functionFilter = this.selectedFunction.id;
+		}
+		
+		this.statisticsService.getCandidateAvailabilityByCountryForFunction(functionFilter).forEach(data => {
+		
+					let stats:any[] = data;
+					
+					let countryStatCount:Array<string> 				= new Array<string>(); 
+					let unavailableCountryStatCount:Array<string> 	= new Array<string>(); 
+					let countryStatName:Array<string> 				= new Array<string>(); 
+						
+					stats.forEach(countryStat => {
+						countryStatName.push(countryStat.id);
+						countryStatCount.push(countryStat.available);
+						unavailableCountryStatCount.push(countryStat.unavailable);
+					});
+					
+					this.availabilityByFunctionChartData = [{label: "Candidates available by country", data: countryStatCount, backgroundColor: this.chartColor}, {label: "Candidates unavailable by country", data: unavailableCountryStatCount, backgroundColor: this.unavailableChartColor}];
+					this.availabilityByFunctionChartLabels = countryStatName; 
 				
-				functionStatName.push(functonStat.function);
-				functionStatCount.push(functonStat.availableCandidates);
-				unavailablefunctionStatCount.push(functonStat.unavailableCandidates);
-			});
-			
-			this.availabilityChartData = [{label: "Candidates available by function", data: functionStatCount, backgroundColor: this.chartColor}, {label: "Candidates unavailable by function", data: unavailablefunctionStatCount, backgroundColor: this.unavailableChartColor}];
-			this.availabilityChartLabels = functionStatName; 
-			
-    	});
-
+						if (this.currentTab == "availability-by-function") {
+						if (this.leftChart) {
+							this.leftChart.destroy();
+						}
+						this.createLeftChartHorizontal(this.availabilityByFunctionChartLabels, this.availabilityByFunctionChartData);
+					}
+					
+		    	});
+				
 	}
 	
 	/**
@@ -445,6 +499,7 @@ export class StatisticsComponent implements OnInit {
 				this.showStatsDownloads=false;
 				this.showStatsViews=false;
 				this.showStatsAvailability=false;
+				this.showStatsAvailabilityByFunction=false;
 				this.showStatsListings=false;
 				this.showNewCandidates=false;
 				this.showMarketplaceStats=false;
@@ -460,6 +515,7 @@ export class StatisticsComponent implements OnInit {
 				this.showStatsDownloads=true;
 				this.showStatsViews=false;
 				this.showStatsAvailability=false;
+				this.showStatsAvailabilityByFunction=false;
 				this.showStatsListings=false;
 				this.showNewCandidates=false;
 				this.showMarketplaceStats=false;
@@ -474,6 +530,7 @@ export class StatisticsComponent implements OnInit {
 							this.showStatsDownloads=false;
 							this.showStatsViews=true;
 							this.showStatsAvailability=false;
+							this.showStatsAvailabilityByFunction=false;
 							this.showStatsListings=false;
 							this.showNewCandidates=false;
 							this.showMarketplaceStats=false;
@@ -490,6 +547,7 @@ export class StatisticsComponent implements OnInit {
 				this.showStatsDownloads=false;
 				this.showStatsViews=false;
 				this.showStatsAvailability=false;
+				this.showStatsAvailabilityByFunction=false;
 				this.showStatsListings=true;
 				this.showNewCandidates=false;
 				this.showMarketplaceStats=false;
@@ -507,9 +565,26 @@ export class StatisticsComponent implements OnInit {
 				this.showStatsViews=false;
 				this.showStatsListings=false;
 				this.showStatsAvailability=true;
+				this.showStatsAvailabilityByFunction=false;
 				this.showNewCandidates=false;
 				this.showMarketplaceStats=false;
 				this.createLeftChart(this.availabilityChartLabels, this.availabilityChartData);
+				
+				if(this.rightChart){
+  					this.rightChart.destroy();
+  				}
+				break;
+			}
+			case "availability-by-function": {
+				this.showStatsLogins=false;
+				this.showStatsDownloads=false;
+				this.showStatsViews=false;
+				this.showStatsListings=false;
+				this.showStatsAvailability=false;
+				this.showStatsAvailabilityByFunction=true;
+				this.showNewCandidates=false;
+				this.showMarketplaceStats=false;
+				this.createLeftChartHorizontal(this.availabilityByFunctionChartLabels, this.availabilityByFunctionChartData);
 				
 				if(this.rightChart){
   					this.rightChart.destroy();
@@ -522,6 +597,7 @@ export class StatisticsComponent implements OnInit {
 				this.showStatsViews=false;
 				this.showStatsListings=false;
 				this.showStatsAvailability=false;
+				this.showStatsAvailabilityByFunction=false;
 				this.showNewCandidates=false;
 				this.showMarketplaceStats=false;
 				this.showSearches=false;
@@ -533,6 +609,7 @@ export class StatisticsComponent implements OnInit {
 				this.showStatsViews=false;
 				this.showStatsListings=false;
 				this.showStatsAvailability=false;
+				this.showStatsAvailabilityByFunction=false;
 				this.showNewCandidates=true;
 				this.showMarketplaceStats=false;
 				this.showSearches=false;
@@ -550,6 +627,7 @@ export class StatisticsComponent implements OnInit {
 				this.showStatsViews=false;
 				this.showStatsListings=false;
 				this.showStatsAvailability=false;
+				this.showStatsAvailabilityByFunction=false;
 				this.showNewCandidates=false;
 				this.showMarketplaceStats=true;
 				this.showSearches=false;
@@ -566,6 +644,7 @@ export class StatisticsComponent implements OnInit {
 				this.showStatsViews=false;
 				this.showStatsListings=false;
 				this.showStatsAvailability=false;
+				this.showStatsAvailabilityByFunction=false;
 				this.showNewCandidates=false;
 				this.showMarketplaceStats=false;
 				this.showSearches=true;
@@ -634,6 +713,28 @@ export class StatisticsComponent implements OnInit {
 	    });
 	   
   	}
+	
+	createLeftChartHorizontal(leftChartLabels:string[], leftChartData:any){
+			
+	  		if (this.leftChart) {
+	  			this.leftChart.destroy();
+	  		}
+	  		
+		    this.leftChart = new Chart("leftChart", {
+		      type: 'bar',
+		
+		      data: {
+		        labels: leftChartLabels, 
+			       datasets: leftChartData
+		      },
+		      options: {
+		        aspectRatio:1.75,
+				indexAxis: 'y',
+		      }
+		      
+		    });
+		   
+	  	}
   	
   	/**
 	* I know but ive had enough of charts. I will refactor it later. 
@@ -714,5 +815,129 @@ export class StatisticsComponent implements OnInit {
 		
 		return country.iso2Code;
 	}
+	
+	//START AVAILABILITY CHART TO PORT TO NEW COMPONENT
+	public showGeoZoneFilters:string							= "";
+	public filterView:string									= 'collapsed';
+	public geoZones:Array<GeoZone>								= new Array<GeoZone>();
+	public showCountryFilters:string							= "";
+	public showLocationFilters:string							= "";
+	
+	
+	/**
+	* Swithches between open and closed filter view for GeoZones 
+	*/
+	public switchGeoZoneFilterView(view:string):void{
+		this.showGeoZoneFilters = view;
+	}
+	
+	/**
+	* Returns whether Candidates from the selected GeoZone are currently
+	* included in the Suggestion results
+	*/
+	public includeResultsForGeoZone(geoZone:GeoZone):boolean{
+		return this.selectedFilterGeoZone == geoZone.geoZoneId;
+	}
+	
+	/**
+	* Toggles GeoCode
+	*/
+	public toggleGeoZoneSelection(geoZone:GeoZone):void{
+		
+		if (this.selectedFilterGeoZone == geoZone.geoZoneId) {
+			this.selectedFilterGeoZone = "";
+			this.getCandidatesByFunction();
+			return;
+		}
+		
+		this.selectedFilterGeoZone = geoZone.geoZoneId;
+		this.selectedFilterCountry = "";
+		this.getCandidatesByFunction();
+		
+	}	
+	
+	/**
+	*  
+	*/
+	private initGeoZones():void{
+		
+		this.geoZones = this.candidateService.getGeoZones();
+	
+		this.showGeoZoneFilters 	= "";
+		this.showLocationFilters 	= "";
+		
+	}
+	
+	public selectedFilterCountry:string = "";
+	public selectedFilterGeoZone:string = "";
+	
+	/**
+	* Toggles whether Candidates from selected country 
+	* should be included in the Suggestions 
+	* @param country - Country to toggle
+	*/
+	public toggleCountrySelection(country:string):void{
+		
+		if (this.selectedFilterCountry == country) {
+			this.selectedFilterCountry = "";
+			this.getCandidatesByFunction();
+			return;
+		}
+		
+		this.selectedFilterCountry = country;
+		this.selectedFilterGeoZone = "";
+		this.getCandidatesByFunction();
+				
+	}
+	
+	/**
+	* Swithches between open and closed filter view for GeoZones 
+	*/
+	public switchCountriesFilterView(view:string):void{
+		this.showCountryFilters = view;
+	}
+	
+	/**
+	* Returns whether Candidates from the selected country are currently
+	* included in the Suggestion results
+	*/
+	public includeResultsForCountry(country:string):boolean{
+		return this.selectedFilterCountry == country;
+	}
+	
+	private initSupportedCountries():void{
+		this.supportedCountries = this.candidateService.getSupportedCountries();
+	}
+	
+	/**
+	* Toggles between displaying and hiding of the filters
+	*/
+	public toggleFilters():void{
+		
+		if (this.filterView == 'collapsed'){
+			this.filterView = 'expanded';
+		} else {
+			this.filterView = 'collapsed';
+		}
+		
+	}
+	//END
 
+	public selectedFunction:CandidateFunction|null = new CandidateFunction("JAVA_DEV", "na");
+	
+	public setFunctionType(functionType:CandidateFunction):void{
+		this.selectedFunction = functionType;
+		this.getCandidatesFunctionAvailabilityByCountry();
+	}
+
+	public isSelectedFunction(funcType:CandidateFunction):boolean {
+		
+		if (this.selectedFunction && this.selectedFunction == funcType) {
+			return true;
+		} else  {
+			return false;	
+		}
+		
+	}
+	
 }

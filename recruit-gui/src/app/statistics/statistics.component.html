@@ -23,6 +23,9 @@
 			    <span class="nav-link" (click)="switchTab('availability')">{{'arenella-stats-availability' | translate}}</span>
 			  </li>
 			  <li class="nav-item statsChartTab">
+			    <span class="nav-link" (click)="switchTab('availability-by-function')">Availability by Function</span>
+			  </li>
+			  <li class="nav-item statsChartTab">
 			    <span class="nav-link" (click)="switchTab('newCandidateStats')">{{'arenella-stats-new-candidates' | translate}}</span>
 			  </li>
 			  <li class="nav-item statsChartTab">
@@ -124,6 +127,10 @@
 					<div class="chart-wrapper" *ngIf="showStatsAvailability">
 						<h5>{{'arenella-stats-by-function' | translate}}</h5>
 					</div>
+					<!-- Availability By Function -->
+					<div class="chart-wrapper" *ngIf="showStatsAvailabilityByFunction">
+						<h5>{{'arenella-stats-by-function' | translate}}</h5>
+					</div>
 					<!-- New Candidate Stats -->
 					<div class="action-buttons" *ngIf="showNewCandidates" style="float:left">
 						<button class="btn btn-secondary arenella-btn" (click)="loadNewCandidates()" 		download>{{'arenella-stats-by-function-btn-todays' | translate}}</button>
@@ -170,7 +177,53 @@
 								<td>{{totalNumberActiveCandidates}}</td>
 							</tr>
 						</table>
+						<br>
+						<h5>Filters:</h5>
+						<div>	
+							<span class="filters-collapse-options" *ngIf="filterView == 'expanded'" (click)=toggleFilters()>{{'hide-filters' | translate}}...</span>	
+							<span class="filters-collapse-options" *ngIf="filterView != 'expanded'" (click)=toggleFilters()>{{'show-filters' | translate}}...</span>
+						</div>
+						<div>
+							<table class="mobile-search-box search-filter-pane" *ngIf="filterView == 'expanded'">
+								<tr>
+									<td class="sugg-srch-hdr">{{'arenella-suggestions-geoZones' | translate}}</td>
+									<td *ngIf="!showGeoZoneFilters">
+										<p class="toggle-filter-option" (click)="switchGeoZoneFilterView('showGeoZoneFilters')">{{'Show' | translate}}..</p>
+									</td>
+									<td *ngIf="showGeoZoneFilters" class="sugg-srch-bdy geo-zone-filters">
+										<p class="toggle-filter-option" (click)="switchGeoZoneFilterView('')">{{'Hide' | translate}}..</p>
+										<div *ngFor="let geoZone of geoZones" class="geo-code-filter geo-code-selected-{{includeResultsForGeoZone(geoZone)}}" (click)="toggleGeoZoneSelection(geoZone)">
+											{{geoZone.geoZoneId | translate}}
+										</div>
+										
+									</td>
+									
+								</tr>
+				
+								<tr>
+									<td class="sugg-srch-hdr">{{'arenella-suggestions-country' | translate}}</td>
+									<td *ngIf="!showCountryFilters">
+										<p class="toggle-filter-option" (click)="switchCountriesFilterView('showCountryFilters')">{{'Show' | translate}}..</p>
+									</td>
+									<td *ngIf="showCountryFilters" class="sugg-srch-bdy country-filters">
+										<p class="toggle-filter-option" (click)="switchCountriesFilterView('')">{{'Hide' | translate}}..</p>
+										<div class="country-selections">
+											<span *ngFor="let supportedCountry of supportedCountries" class="country-filter country-selected-{{includeResultsForCountry(supportedCountry.name)}}" (click)="toggleCountrySelection(supportedCountry.name)">
+												<mat-icon title="{{supportedCountry.name}}">
+													<span class="flag-icon flag-icon-{{supportedCountry.iso2Code}} flag-icon-med"></span>
+												</mat-icon>
+											</span>
+										</div>
+									</td>
+								</tr>
+							</table>
+						</div>
+						
 					</div>
+					<div class="chart-wrapper" *ngIf="showStatsAvailabilityByFunction">
+						<span class="function-selectable function-selected-{{isSelectedFunction(functionType)}}" (click)="setFunctionType(functionType)" *ngFor="let functionType of candidateFunctions">{{functionType.id | translate}}</span>
+					</div>
+					
 					<!-- Weekly Stats -->
 					<div *ngIf="showNewCandidates && showNewCandidatesDiv">
 					<p>{{'arenella-stats-new-candidates' | translate}}

@@ -3,6 +3,7 @@ package com.arenella.recruit.candidates.services;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -22,6 +23,8 @@ import com.arenella.recruit.candidates.beans.CandidateSearchEvent;
 import com.arenella.recruit.candidates.beans.Language;
 import com.arenella.recruit.candidates.beans.Language.LANGUAGE;
 import com.arenella.recruit.candidates.beans.RecruiterStats;
+import com.arenella.recruit.candidates.beans.RoleTotals;
+import com.arenella.recruit.candidates.beans.RoleTotalsFilters;
 import com.arenella.recruit.candidates.controllers.CandidateStatisticsController.STAT_PERIOD;
 import com.arenella.recruit.candidates.dao.CandidateProfileViewedEventEntityDao;
 import com.arenella.recruit.candidates.dao.CandidateSearchStatisticsDao;
@@ -32,6 +35,7 @@ import com.arenella.recruit.candidates.enums.COUNTRY;
 import com.arenella.recruit.candidates.enums.FUNCTION;
 import com.arenella.recruit.candidates.repos.CandidateRepository;
 import com.arenella.recruit.candidates.utils.ArenellaSecurityUtil;
+import com.arenella.recruit.candidates.utils.GeoZoneSearchUtil;
 
 import co.elastic.clients.elasticsearch.ElasticsearchClient;
 
@@ -46,6 +50,9 @@ public class CandidateStatisticsServiceImpl implements CandidateStatisticsServic
 	public static final String ERR_MSG_NOT_AVAILABLE_CANDIDATES 		= "Requested information not available to Candidates.";
 	public static final String ERR_MSG_NOT_AVAILABLE_OTHER_CANDIDATE 	= "Candidates may not view other Candidates information";
 	public static final String ERR_MSG_NOT_AVAILABLE_OTHER_RECRUITERS 	= "Recruiters may not view other Recruiters information";
+	public static final String ERR_MSG_ROLE_TOTAL_MISSING_BREAKDOWNTYPE = "BreakdownType filter is mandatory";
+	public static final String ERR_MSG_ROLE_TOTAL_COUNTRY_AND_ZONE 		= "Country and GeoZone filters are mutually exclusive";
+	
 	
 	@Autowired
 	private ElasticsearchClient 					esClient;
@@ -71,15 +78,6 @@ public class CandidateStatisticsServiceImpl implements CandidateStatisticsServic
 	@Override
 	public Long fetchNumberOfAvailableCandidates() {
 		return candidateRepo.getCountByAvailable(true);
-	}
-
-	/**
-	* Refer to StatisticsService for details
-	*/
-	@Override
-	public List<CandidateRoleStats> fetchCandidateRoleStats() throws Exception{
-		
-		return candidateRepo.getCandidateRoleStats(esClient).stream().map(CandidateRoleStatsView::convertFromView).collect(Collectors.toCollection(LinkedList::new));
 	}
 
 	/**
@@ -382,6 +380,29 @@ public class CandidateStatisticsServiceImpl implements CandidateStatisticsServic
 				.recruiterId(recruiterId)
 				.viewed(LocalDateTime.now())
 				.build());
+	}
+	
+	/**
+	* Refer to StatisticsService for details
+	*/
+	@Override
+	public List<CandidateRoleStats> fetchCandidateRoleStats(RoleTotalsFilters filters) throws Exception{
+		
+		Set<COUNTRY> countrysToFilterOn = new HashSet<>();
+		
+		filters.getZone().ifPresent(geoZone -> countrysToFilterOn.addAll(GeoZoneSearchUtil.fetchCountriesFor(geoZone)));
+		filters.getCountry().ifPresent(countrysToFilterOn::add);
+		
+		return candidateRepo.getCandidateRoleStats(esClient, countrysToFilterOn).stream().map(CandidateRoleStatsView::convertFromView).collect(Collectors.toCollection(LinkedList::new));
+	}
+
+	/**
+	* Refer to StatisticsService for details
+	*/
+	@Override
+	public Set<RoleTotals> fetchCountryAvailabilityBreakdownForFunction(FUNCTION function) throws Exception{
+		return candidateRepo.getCandidateAvailabilityByCountryForFunction(this.esClient, function)
+				.stream().sorted((a,b) -> b.available().compareTo(a.available())).collect(Collectors.toCollection(LinkedHashSet::new));
 	}
 	
 }

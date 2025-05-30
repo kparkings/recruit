@@ -432,4 +432,23 @@ class CandidateStatisticsServiceImplTest {
 		
 	}
  	
+	/**
+	* Tests 
+	* @throws Exception
+	*/
+	@Test
+	void testFetchCountryAvailabilityBreakdownForFunction() throws Exception {
+		
+		ArgumentCaptor<FUNCTION> argCapt = ArgumentCaptor.forClass(FUNCTION.class);
+		
+		when(mockCandidateRepo.getCandidateAvailabilityByCountryForFunction(any(),argCapt.capture())).thenReturn(Set.of());
+		
+		this.service.fetchCountryAvailabilityBreakdownForFunction(FUNCTION.CSHARP_DEV);
+		
+		verify(this.mockCandidateRepo).getCandidateAvailabilityByCountryForFunction(any(),any());
+		
+		assertEquals(FUNCTION.CSHARP_DEV, argCapt.getValue());
+		
+	}
+	
 }

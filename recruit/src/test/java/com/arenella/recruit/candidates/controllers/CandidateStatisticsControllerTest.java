@@ -235,4 +235,16 @@ class CandidateStatisticsControllerTest {
 		
 	}
 	
+	/**
+	* Test endpoint for Candidate availability per country for a give Function 
+	 * @throws Exception 
+	*/
+	@Test
+	void testFetchCountryAvailabilityBreakdownForFunction() throws Exception {
+		
+		ResponseEntity<Set<RoleTotalsAPIOutbound>> response = this.controller.fetchCountryAvailabilityBreakdownForFunction(FUNCTION.DATA_SCIENTIST);
+		
+		assertEquals(HttpStatus.OK, response.getStatusCode());
+	}
+	
 }

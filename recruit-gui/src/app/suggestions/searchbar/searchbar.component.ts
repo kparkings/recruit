@@ -322,7 +322,7 @@ export class SearchbarComponent {
 	* Swithches between open and closed filter view for GeoZones 
 	*/
 	public switchGeoZoneFilterView(view:string):void{
-		//this.initGeoZones();
+		//this.initGeoZones();includeResultsForGeoZone
 		this.showGeoZoneFilters = view;
 	}
 

@@ -6,9 +6,11 @@ import { environment }								from './../environments/environment';
 import { MarketplaceRecruiterViewStatResponse }		from './statistics/marketplace-recruiter-view-stat';
 import { LoginStats}  								from './login-event-stats';
 import { RecruiterListingStatistics } 				from './recruiter-listing-statistics';
-import { RecruiterSearchStatistics } from './recruiter-search-stats';
-import { ListingStatistics } from './listing-statistics';
-import { BucketAPIOutbound } from './bucket';
+import { RecruiterSearchStatistics } 				from './recruiter-search-stats';
+import { ListingStatistics } 						from './listing-statistics';
+import { BucketAPIOutbound } 						from './bucket';
+import { RoleStatFilter } 							from './role-filters';
+import { CountryAvailabilityStat }					from './country-availability-stat';
 
 @Injectable({
   providedIn: 'root'
@@ -68,20 +70,47 @@ export class StatisticsService {
 		const backendUrl:string = environment.backendUrl +'candidate/stats/total-active';
   
 		return this.httpClient.get<any>(backendUrl, this.httpOptions);
-
+		
+	}
+	
+	
+	public getAvailableCandidatesByFunctionStatistics(): Observable<any>{
+		return this.getAvailableCandidatesByFunctionStatisticsWithFilters("", "");
 	}
 	
 	/**
 	* Returns a list of functions and available candidates 
 	*/
-	public getAvailableCandidatesByFunctionStatistics(): Observable<any>{
-      
-		const backendUrl:string = environment.backendUrl +'candidate/stat/function-count';
+	public getAvailableCandidatesByFunctionStatisticsWithFilters(geoZone:string, country:string): Observable<any>{
+    	
+		const backendUrl:string = environment.backendUrl +'candidate/public/function-count';
   
-		return this.httpClient.get<any>(backendUrl, this.httpOptions);
+		let filters:RoleStatFilter = new RoleStatFilter();
+				
+		if (geoZone != "") {
+			filters.zone = geoZone;	
+		}
+		
+		if (country != "") {
+			filters.country = country;	
+		}
+		
+		return this.httpClient.post<any>(backendUrl, JSON.stringify(filters), this.httpOptions);
 
 	}
-	
+
+	/**
+	* Returns relating number of available/unavailable candidates in each country 
+	* for a given Function
+	*/
+	public getCandidateAvailabilityByCountryForFunction(functionFilter:string):Observable<Array<CountryAvailabilityStat>>{
+		
+		const backendUrl:string = environment.backendUrl +'candidate/public/country-breakdown/'+functionFilter;
+
+		return this.httpClient.get<any>(backendUrl, this.httpOptions);
+		
+	}
+		
 	/**
 	* Returns status relating to Listings
 	*/
