@@ -1,10 +1,10 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-arenella-primary nav-primary" id="page-top">
+<nav class="navbar navbar-expand-lg navbar-light bg-arenella-primary nav-primary arenella-primary-background arenella-primary-colour" id="page-top">
   <h1>Arenella ICT</h1>
 </nav>
 
 <div>
 
-	<ul class="arenella-navbar">
+	<ul class="arenella-navbar arenella-secondary-background arenella-secondary-colour">
       
 		<!-- Pre Authentication -->
 		<li  class="li-arenella-nav-pre-login li-arenella-nav-pre-login-std" *ngIf="!isAuthenticated()">
@@ -25,10 +25,10 @@
          <li class="spacer-for-mobile-menu" *ngIf="!isAuthenticated()">
            	
  	    </li> 
-        <li class="li-arenella-nav-pre-login li-arenella-nav-pre-signup signup-candidate" *ngIf="!isAuthenticated()">
+        <li class="li-arenella-nav-pre-login li-arenella-nav-pre-signup signup-candidate arenella-fourth-background arenella-fourth-colour" *ngIf="!isAuthenticated()">
            	<a class="dropdown-item dropdown-item-preauth" routerLink="/create-candidate">{{'arenella-app-menu-candidate-signup' | translate}}</a>
  	    </li>
-		<li class="li-arenella-nav-pre-login li-arenella-nav-pre-signup signup-recruiter" *ngIf="!isAuthenticated()">
+		<li class="li-arenella-nav-pre-login li-arenella-nav-pre-signup signup-recruiter arenella-fourth-background arenella-fourth-colour" *ngIf="!isAuthenticated()">
     		<a class="dropdown-item dropdown-item-preauth" routerLink="/recruiter-signup">{{'arenella-app-menu-recruiter-signup' | translate}}</a>
         </li>
 		

@@ -49,8 +49,9 @@
 }
 
 .person-span{
-	font-size:300px;
-	color:green;
+	font-size:350px;
+	color:grey;
+	margin-left:20px;
 }
 
 .country-flag{

@@ -1,6 +1,6 @@
 .center {
 	margin: auto;
-	width: 50%;
+	width: 100%;
 	padding: 10px;
 }
 
@@ -139,12 +139,15 @@
 .listing-alert-option {
 	padding: 8px;
 	border-radius: 0%;
-	background: grey;
+	background: #dee2e6;
 	border: black;
-	margin-right: 5px;
 	margin-bottom: 5px;
 	white-space: nowrap;
 	float: left;
+	margin-left:5px;
+	width:175px;
+	color:#002549;
+	border-radius:5px 5px 5px 5px;
 }
 
 .listing-alert-option:hover {
@@ -261,6 +264,7 @@
 }
 
 @media ( max-width :700px) {
+
 	.listing-pane {
 		width: 100%;
 		padding-left: 0%;
@@ -280,13 +284,13 @@
 	}
 	
 	.listing-alert-option {
-		padding: 5px;
 		border-radius: 0%;
 		border: black;
-		margin-right: 5px;
 		margin-bottom: 5px;
 		white-space: nowrap;
 		float: left;
+		width:85px;
+		font-size:12px;
 	}
 	
 	.country-flag{
@@ -328,22 +332,7 @@
 	.listing-pane-right{
 		width:100%;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
 	.search-filter-pane{
 		margin-left:0px;
 	}

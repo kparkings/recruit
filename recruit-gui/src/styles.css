@@ -2,19 +2,38 @@
 @import 'https://fonts.googleapis.com/icon?family=Material+Icons';
 @import 'material-symbols';
 
+.modal-header-text{
+    text-align:center;
+    margin-top:10px;
+    width:500px;
+}
+ .modal-header{
+     background:#002549;
+     color:white;
+     font-weight:bold;
+ }
+
+ .filter-close-box{
+     cursor:pointer;
+     margin-right:10px;
+     margin-top:10px;  
+}
+
 .bg-arenella-primary {
 	background: #181414;
-	/*background:#ffffff;*/
 }
 
 body{
-	background: #F5F5F5;
+	background: white;
 }
 
 .nav-primary{
 	color:#6A5ACD;
 }
 
+.arenella-whole-width-page{
+	margin-top:20px;
+}
 
 .li-arenella-nav{
 	float:left;
@@ -22,7 +41,7 @@ body{
 }
 
 .dropdown-item{
-	color:#ffffff;
+	color:#002549;
 	padding-left:5px;
 	padding-right:5px;
 	min-width:160px;
@@ -30,11 +49,6 @@ body{
 
 .dropdown-item-preauth{
 	min-width:80px;
-}
-
-.dropdown-item:hover{
-	background: #D3D3D3;	
-
 }
 
 .nav-secondary{
@@ -118,18 +132,12 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .modal-body{
 	font-size: large;
 	text-align: center;
+	width:600px;
 }
 
 .modal-body-text{
 	vertical-align: middle;
 	font-weight: bold;
-}
-
-.modal-header{
-	background:#181414;
-	color:#6A5ACD;
-	font-weight:bold;
-	min-width: 326px;
 }
 
 dialog {
@@ -188,7 +196,6 @@ dialog {
 
 .action-buttons{
 	text-align:right;
-	margin-bottom:20px;
 }
 
 .page{
@@ -199,16 +206,17 @@ dialog {
 
 .nav-tabs-bar{
 	min-height:40px;
-	background:darkgreen;
+	background:#dee2e6;
 }
 
 .nav-tabs{
-	color:white;
+	color:#6d6969;
 }
 
 .page-body{
 	width:98%;
 	margin: auto;
+	margin-top:10px;
 }
 
 textarea {
@@ -232,9 +240,17 @@ textarea {
 }
 
 @media (max-width:700px)  {
+	dialog {
+		overflow: hidden;
+		padding:0px;
+		border:none;
+		min-width:90%;
+	}
+
 	.page-body{
 		width:96%;
 		margin: auto;
+		margin-top:10px;
 	}
 	.arenella-btn{
 	    width: 48%;
@@ -251,6 +267,12 @@ textarea {
 	
 	.hide-for-mobile{
 		display:none;
+	}
+	
+	.modal-body{
+		font-size: large;
+		text-align: center;
+		width:100%;
 	}
 	
 }

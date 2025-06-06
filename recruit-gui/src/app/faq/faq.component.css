@@ -11,22 +11,34 @@ centerdiv{
 }
 
 .faqs{
-	width:80%;
+	width:100%;
+}
+
+.faq{
+	width:48%;
+	float:left;	
 	margin-top:20px;
-	margin-left:10%;
-	margin-right:10%;
-	margin-bottom:50px;
+	margin-left:1%;
+	margin-right:1%;
+	padding-left:10px;
+	min-height:240px;
 	
 }
 
+
+
 .faq h3{
-	color:black;
+	color:#002549;
+	background:#d2d2d2;
+	padding:10px;
+	border-radius:0px 0px 50px 0px;
+
 }
 
 .subject-header{
 	width:100%;
 	padding:20px;
-	border-bottom:grey;
+	color:#002549;
 	margin-bottom:10px;
 	text-align:center;
 	 
@@ -34,4 +46,19 @@ centerdiv{
 
 .aboutpage h5{
 	color:grey;
+}
+
+@media (max-width:1370px)  {
+	
+	.faq{
+		width:90%;
+		float:left;	
+		margin-top:20px;
+		border-left:solid 1px purple;
+		margin-left:2%;
+		margin-right:2%;
+		padding-left:20px;
+		min-height:10px;
+	}
+	
 }

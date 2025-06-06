@@ -19,23 +19,7 @@ input{
 	float:right;
 }
 
-.modal-header-text{
-    text-align:center;
-    color:#6f42c1;
-    margin-top:10px;
-    width:500px;
-}
- .modal-header{
-     background:#181414;
-     color:#6A5ACD;
-     font-weight:bold;
- }
 
- .filter-close-box{
-     cursor:pointer;
-     margin-right:10px;
-     margin-top:10px;  
-}
 
 .wholepagerow {
     margin: 0 auto;

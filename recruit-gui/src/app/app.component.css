@@ -1,3 +1,35 @@
+.arenella-primary-background{
+	background:#002549;	
+}
+
+.arenella-primary-colour{
+	color:white;
+}
+
+.arenella-secondary-background{
+	background:#d2d2d2;		
+}
+
+.arenella-secondary-colour{
+	color:#002549;
+}
+
+.arenella-third-background{
+		background:#dee2e6;	
+}
+
+.arenella-third-colour{
+	color:#6d6969;
+}
+
+.arenella-fourth-background{
+		background:#a0aca0;	
+}
+
+.arenella-fourth-colour{
+	color:#002549;
+}
+
 .terms-and-conditions-box{
 	position:absolute;
 	float:right;
@@ -78,13 +110,7 @@
 	border-right: solid 1px grey;
 }
 
-.li-arenella-nav-pre-login-std:hover{
-	min-width:80px;
-	max-width:85px;
-}
-
 .li-arenella-nav-pre-signup{
-	background:orange;
 	width:190px;
 	text-align:center;
 	margin-left:10px;
@@ -93,12 +119,10 @@
 }
 
 .signup-recruiter{
-	background:orange;
 	width:200px;
 }
 
 .signup-candidate{
-	background:darkgreen;
 	width:200px;
 }
 

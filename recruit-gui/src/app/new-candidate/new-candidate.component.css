@@ -15,22 +15,6 @@
 .validationBox{
     height:280px;
 }
-/*
-.modal-header{
-    background: #303030;
-    font-size: medium;
-    height: 50px;
-    text-align:center;
-    padding:0px;
-    margin:0px;
-    
-}
-*/
-.modal-header-text{
-    text-align:center;
-    color:#6f42c1;
-    margin-top:10px;
-}
 
 .pendingCandidateRow:hover{
 	background:#6f42c1;
@@ -42,12 +26,6 @@
     width:200px;
     height:350px;
 }
-/*
-.modal-title{
-	margin-left:20px;
-}
-*/
-
 
 .pendingCandidateBox-td{
     font-size:12px;

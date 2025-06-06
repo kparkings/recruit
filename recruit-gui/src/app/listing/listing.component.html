@@ -11,74 +11,76 @@
 				<button class="btn btn-secondary arenella-btn" routerLink="/recruiter-listings" *ngIf="isAuthenticated() && !isAuthenticatedAsAdmin() && !isCandidate()">{{'arenella-listing-btn-your-posts' | translate}}</button>
 		</div>
 	
-		<div class="{{searchBarCss}}">
-			<app-searchbarlisting #searchbar (newListingResults)="handleNewSearchRequest($event)"></app-searchbarlisting>
-		</div>
-			
-	    <!-- List View -->
-	    <div *ngSwitchCase="'list'">
-			
-	       	<!-- Listings Table -->
-			<div>
-			
-				<div class="listing-pane" >
+		<div>
+			<div class="{{searchBarCss}} arenella-whole-width-page">
+				<app-searchbarlisting #searchbar (newListingResults)="handleNewSearchRequest($event)"></app-searchbarlisting>
+			</div>
 				
-					<div class="listing-pane-left">
-						
-						<table class="listing-stats-pane" style="table-layout: fixed">
-							<tr style="padding-bottom:20px;">
-								<td colspan="2" style="padding-top:20px;padding-bottom:20px;">
-									<span style="font-weight:bold;">{{'arenella-listing-most-searched-countries' | translate}}</span>
-								</td>
-							</tr>
-							<tr *ngFor="let stat of stats.countryStats">
-								<td style="width:150px;font-size:14px;">{{stat.country | translate}}</td>
-								<td style="padding-left:5px;width:180px;">
-									<div class="stat-option-bar" [ngStyle]="{'width':(stat.percentageOfTotal *5)+'px','background':'green', 'max-width':'180px'}">
-									</div>
-								</td>
-							</tr>
-							<tr>
-								<td colspan="2" style="padding-top:20px;padding-bottom:20px;">
-									<span style="font-weight:bold;padding-top:20px;">{{'arenella-listing-most-searched-functions' | translate}}</span>
-								</td>
-							</tr>
-							<tr *ngFor="let stat of stats.functionStats">
-								<td style="width:150px;font-size:14px;">{{(stat.function) | translate}}</td>
-								<td style="padding-left:5px;width:180px;">
-									<div class="stat-option-bar" [ngStyle]="{'width':(stat.percentageOfTotal *4)+'px','background':'orange', 'max-width':'180px'}">
-									</div>
-								</td>
-								
-							</tr>
-							
-						</table>
-						
-						<div class="listing-stats-pane">
-							<p>
-							{{'arenella-listing-most-searched-summary' | translate}}
-							</p>
-						</div>
-					</div>
+		    <!-- List View -->
+		    <div *ngSwitchCase="'list'">
+				
+		       	<!-- Listings Table -->
+				<div>
+				
+					<div class="listing-pane" >
 					
-					<div class="listing-pane-right">
-						<div class="job-post" *ngFor="let listing of listings">
-							<div (click)="showListingDetails(listing)">
-								<div class="listing-title">{{getFormattedJobTitle(listing.title)}}</div>
-								<div>
-									<span title="{{listing.listingId}}" class="flag-icon flag-icon-{{getCountryISO2Code(listing.country)}} suggestion-flag-country listing-country"></span>
-								</div>
-								<div class="job-post-contract-type">
-									{{getFormattedContractType(listing.type)}}
-								</div>
-								<div>
-									<a href="{{getExternalUrl(listing.listingId)}}"></a>
+						<div class="listing-pane-left">
+							
+							<table class="listing-stats-pane" style="table-layout: fixed">
+								<tr style="padding-bottom:20px;">
+									<td colspan="2" style="padding-top:20px;padding-bottom:20px;">
+										<span style="font-weight:bold;">{{'arenella-listing-most-searched-countries' | translate}}</span>
+									</td>
+								</tr>
+								<tr *ngFor="let stat of stats.countryStats">
+									<td style="width:150px;font-size:14px;">{{stat.country | translate}}</td>
+									<td style="padding-left:5px;width:180px;">
+										<div class="stat-option-bar" [ngStyle]="{'width':(stat.percentageOfTotal *5)+'px','background':'green', 'max-width':'180px'}">
+										</div>
+									</td>
+								</tr>
+								<tr>
+									<td colspan="2" style="padding-top:20px;padding-bottom:20px;">
+										<span style="font-weight:bold;padding-top:20px;">{{'arenella-listing-most-searched-functions' | translate}}</span>
+									</td>
+								</tr>
+								<tr *ngFor="let stat of stats.functionStats">
+									<td style="width:150px;font-size:14px;">{{(stat.function) | translate}}</td>
+									<td style="padding-left:5px;width:180px;">
+										<div class="stat-option-bar" [ngStyle]="{'width':(stat.percentageOfTotal *4)+'px','background':'orange', 'max-width':'180px'}">
+										</div>
+									</td>
+									
+								</tr>
+								
+							</table>
+							
+							<div class="listing-stats-pane">
+								<p>
+								{{'arenella-listing-most-searched-summary' | translate}}
+								</p>
+							</div>
+						</div>
+						
+						<div class="listing-pane-right">
+							<div class="job-post" *ngFor="let listing of listings">
+								<div (click)="showListingDetails(listing)">
+									<div class="listing-title">{{getFormattedJobTitle(listing.title)}}</div>
+									<div>
+										<span title="{{listing.listingId}}" class="flag-icon flag-icon-{{getCountryISO2Code(listing.country)}} suggestion-flag-country listing-country"></span>
+									</div>
+									<div class="job-post-contract-type">
+										{{getFormattedContractType(listing.type)}}
+									</div>
+									<div>
+										<a href="{{getExternalUrl(listing.listingId)}}"></a>
+									</div>
 								</div>
 							</div>
 						</div>
+						
+						
 					</div>
-					
-					
 				</div>
 			</div>
 			
@@ -260,7 +262,7 @@
 						<h1>{{'arenella-listing-email-alert-created' | translate}}</h1>
 					</div>
 				</div>
-				<div style="clear:both;margin-top:50px;" >
+				<div style="clear:both; padding-top:20px;" >
 					<button *ngIf="createAlertStep != 0 && createAlertStep != 4" class="btn btn-secondary arenella-btn" (click)="createListingAlertLastStep()">{{'arenella-listing-email-alert-btn-back' | translate}}</button>
 					<button *ngIf="createAlertStep != 3 && createAlertStep != 4" class="btn btn-secondary arenella-btn" (click)="createListingAlertNextStep()">{{'arenella-listing-email-alert-btn-next' | translate}}</button>
 					<button *ngIf="createAlertStep == 3" 						 class="btn btn-secondary arenella-btn" [disabled]="listingAlertConfirmDisabled" (click)="createListingAlert()">{{'arenella-listing-email-alert-btn-confirm' | translate}}</button>
