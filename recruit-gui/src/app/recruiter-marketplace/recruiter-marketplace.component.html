@@ -116,23 +116,9 @@
 					<tr>
 						<td>{{'arenella-recruiter-mp-add-country' | translate}}</td>
 						<td>
-						<select formControlName="country">
-							<option *ngFor="let opt of countryOptions" [ngValue]="opt.value">{{opt.label}}</option>
-						</select>
-						<!-- 
 							<select formControlName="country">
-								<option></option>
-								<option *ngFor="let country of supportedCountries" value="{{country.name}}">{{country.name}}</option>
-						 -->
-							<!--  
-								
-								<option value="BELGIUM">{{'arenella-recruiter-mp-add-belgium' | translate}}</option>
-								<option value="IRELAND">{{'arenella-recruiter-mp-add-ireland' | translate}}</option>
-								<option value="NETHERLANDS">{{'arenella-recruiter-mp-add-netherlands' | translate}}</option>
-								<option value="UK">{{'arenella-recruiter-mp-add-uk' | translate}}</option>
-								
-								-->
-							<!--  </select>-->
+								<option *ngFor="let opt of countryOptions" [ngValue]="opt.value">{{opt.label}}</option>
+							</select>
 						</td>	
 					</tr>
 					<tr>

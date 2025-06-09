@@ -4,14 +4,83 @@
 	<div class="nav-tabs-bar"></div>
 	
     <div class="page-body">
-    	<div class="intro">
-      	
-    		<h1>{{ "arenella-homepage-title-intro" | translate }}</h1>
-    		<p>{{ "arenella-homepage-title-intro-text" | translate }}
-    		</p>
-    		
-    		<h1>{{"arenella-homepage-title-pricing" | translate }}</h1>
-    		<table class="pricing">
+    
+
+    <!-- Column1 -->
+    <div  id="aboutcolumn1" class="about-column">
+    
+    	<div class="statChartDiv {{statChartDivMobile}}">
+			<canvas  id="leftChart" >{{ leftChart }}</canvas>	
+		</div>
+    
+    	<!-- Candidates -->
+    	<div id="leftColumn" class="about-box">	
+   			<h1 class="public-hdr">{{ "arenella-homepage-title-candidates" | translate }}</h1>
+			<div>
+				<h4>{{"arenella-homepage-title-candidates-availability" | translate }}</h4>
+				<table>
+					<tr>
+						<th>{{"arenella-homepage-title-candidates-availability-available" | translate }}</th>
+						<td>{{candidateTotals.available}}</td>
+					</tr>
+					<tr>
+						<th>{{"arenella-homepage-title-candidates-availability-unavailable" | translate }}</th>
+						<td>{{candidateTotals.unavailable}}</td>
+					</tr>
+					<tr>
+						<th>{{"arenella-homepage-title-candidates-availability-registered" | translate }}</th>
+						<td>{{candidateTotals.totalRegisteredCandidates}}</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+		
+		<!-- Functions -->
+		<div class="about-box">	
+    		<h1 class="public-hdr">{{ "arenella-homepage-title-functionality" | translate }}</h1>
+    		<div>
+    			<h5>{{"arenella-homepage-func-suggestions-title" | translate }}</h5>
+    			<p>{{"arenella-homepage-func-suggestions-desc" | translate }}</p>	
+    		</div>
+    		<div>
+    			<h5>{{"arenella-homepage-func-jb-title" | translate }}</h5>
+    			<p>{{"arenella-homepage-func-jb-desc" | translate }}</p>	
+    		</div>
+    		<div>
+    			<h5>{{"arenella-homepage-func-market-title" | translate }}</h5>
+    			<p>{{"arenella-homepage-func-market-desc" | translate }}</p>	
+    		</div>
+    		<div>
+    			<h5>{{"arenella-homepage-func-news-title" | translate }}</h5>
+    			<p>{{"arenella-homepage-func-news-desc" | translate }}</p>	
+    		</div>
+    	</div>
+    </div>
+    
+    <!-- Column2 -->
+    <div class="about-column-right">
+    
+    	<!-- Intro -->
+    	<div class="about-box">
+	     	<h1 class="public-hdr">{{ "arenella-homepage-title-intro" | translate }}</h1>
+	   		<p>
+	   			{{ "arenella-homepage-title-intro-text" | translate }}
+	   		</p>
+	   		<p>
+			{{"arenella-homepage-candidates-1" | translate }}
+			</p>
+			<p>
+			{{"arenella-homepage-candidates-2" | translate }}
+			</p>
+			<p>
+			{{"arenella-homepage-candidates-4" | translate }}
+			</p>
+ 	  	</div>
+ 		
+    	<!-- Pricing -->
+    	<div class="about-box">	
+    		<h1 class="public-hdr">{{"arenella-homepage-title-pricing" | translate }}</h1>
+    		<table>
     			<thead>
     				<tr>
     					<th>{{"arenella-homepage-title-pricing-plan-name" | translate }}</th>
@@ -32,34 +101,35 @@
     				</tr>
     			</tbody>
     		</table>
-    		
-    		<h1>{{ "arenella-homepage-title-functionality" | translate }}</h1>
-    		<table class="functions">
-    			<tbody>
-    				<tr>
-    					<th>{{"arenella-homepage-func-suggestions-title" | translate }}</th>
-    					<td>{{"arenella-homepage-func-suggestions-desc" | translate }}</td>
-    				</tr>
-    				<tr>
-    					<th>{{"arenella-homepage-func-jb-title" | translate }}</th>
-    					<td>{{"arenella-homepage-func-jb-desc" | translate }}</td>
-    				</tr>
-    				<tr>
-    					<th>{{"arenella-homepage-func-market-title" | translate }}</th>
-    					<td>{{"arenella-homepage-func-market-desc" | translate }}</td>
-    				</tr>
-    				<tr>
-    					<th>{{"arenella-homepage-func-news-title" | translate }}</th>
-    					<td>{{"arenella-homepage-func-news-desc" | translate }}</td>
-    				</tr>
-    			</tbody>
-    		</table>
-    		
-    		<h1>{{ "arenella-homepage-title-candidates" | translate }}</h1>
-			
+    	</div>
+    	
+    	<div class="about-box">
+			<h1 class="public-hdr">{{ "arenella-homepage-title-fees" | translate }}</h1>
+				<p>
+				{{ "arenella-homepage-fees-1" | translate }}
+				</p>
+				<p>
+				{{ "arenella-homepage-fees-2" | translate }}
+				</p>
+			</div>
+				
+			<div class="about-box">	
+				<h1 class="public-hdr">{{ "arenella-homepage-title-getting-started" | translate }}</h1>
+				<p>
+				{{ "arenella-homepage-getting-started" | translate }}
+				</p>
+			</div>	
+    	</div>
+    </div>
+    
+    <div  id="aboutcolumn1mobile" class="about-column">
+    
+    	<!-- Candidates -->
+    	<div id="leftColumn" class="about-box">	
+   			<h1 class="public-hdr">{{ "arenella-homepage-title-candidates" | translate }}</h1>
 			<div>
 				<h4>{{"arenella-homepage-title-candidates-availability" | translate }}</h4>
-				<table class="candidate-availability">
+				<table>
 					<tr>
 						<th>{{"arenella-homepage-title-candidates-availability-available" | translate }}</th>
 						<td>{{candidateTotals.available}}</td>
@@ -74,31 +144,30 @@
 					</tr>
 				</table>
 			</div>
-			
-			<p>
-			{{"arenella-homepage-candidates-1" | translate }}
-			</p>
-			<p>
-			{{"arenella-homepage-candidates-2" | translate }}
-			</p>
-			<p>
-			{{"arenella-homepage-candidates-4" | translate }}
-			</p>
-		
-			<h1>{{ "arenella-homepage-title-fees" | translate }}</h1>
-			<p>
-			{{ "arenella-homepage-fees-1" | translate }}
-			</p>
-			<p>
-			{{ "arenella-homepage-fees-2" | translate }}
-			</p>
-			
-			<h1>{{ "arenella-homepage-title-getting-started" | translate }}</h1>
-			<p>
-			{{ "arenella-homepage-getting-started" | translate }}
-			</p>
-    		
 		</div>
-		<div class="footer"></div>
+		
+		<!-- Functions -->
+		<div class="about-box">	
+    		<h1 class="public-hdr">{{ "arenella-homepage-title-functionality" | translate }}</h1>
+    		<div>
+    			<h5>{{"arenella-homepage-func-suggestions-title" | translate }}</h5>
+    			<p>{{"arenella-homepage-func-suggestions-desc" | translate }}</p>	
+    		</div>
+    		<div>
+    			<h5>{{"arenella-homepage-func-jb-title" | translate }}</h5>
+    			<p>{{"arenella-homepage-func-jb-desc" | translate }}</p>	
+    		</div>
+    		<div>
+    			<h5>{{"arenella-homepage-func-market-title" | translate }}</h5>
+    			<p>{{"arenella-homepage-func-market-desc" | translate }}</p>	
+    		</div>
+    		<div>
+    			<h5>{{"arenella-homepage-func-news-title" | translate }}</h5>
+    			<p>{{"arenella-homepage-func-news-desc" | translate }}</p>	
+    		</div>
+    	</div>
     </div>
+	
+	<div class="footer"></div>
+    
 </div>

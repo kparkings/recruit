@@ -25,8 +25,13 @@
 /*mobile*/
 @media (max-width: 768px) {
 	.contact-div{
-	margin-left:auto;
-	margin-right:auto;
-	width:90%;
+		margin-left:auto;
+		margin-right:auto;
+		width:90%;
+	}
+	
+	.contact-div table tr td{
+	font-weight:normal;
+	padding:0px;
 }
 }

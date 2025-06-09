@@ -10,29 +10,34 @@
     margin-top:25px;
 }
 
+h1{
+	color:#002549;
+	background:#d2d2d2;
+	padding:10px;
+	border-radius:0px 0px 50px 0px;
+	
+}
+
 h2{
     margin-bottom: 20px;
 }
 
+h5{
+	color:#303030;
+}
+
 .skill {
     font-weight: bold;
-    color:#6f42c1;
+    color:#002549;
 }
 
 table{
 	width:100%;
-	border:2px solid black;
 	margin-top:20px;
 	margin-bottom:20px;
 }
 table th{
-	color:#6f42c1;
-	border:solid 1px black;
-}
-
-table td{
-	padding-left:10px;
-	border:solid 1px black;
+	color:#002549;
 }
 
 .pricing td{
@@ -100,4 +105,55 @@ table td{
 
 .footer{
 	padding-bottom:20px;
+}
+
+.about-box{
+	float:left;
+	padding:5px;
+	margin:1%;
+	width:100%;
+}
+
+.about-column{
+	float:left;
+	width:40%;
+	margin:1%;
+}
+
+.about-column-right{
+	float:left;
+	width:55%;
+}
+
+.statChartDiv{
+	margin-bottom:20px;
+}
+
+#aboutcolumn1mobile{
+	display:none;
+}
+
+@media (max-width:700px)  {
+	
+	#aboutcolumn1{
+		display:none;
+	}
+	
+	#aboutcolumn1mobile{
+		display:block;
+	}
+	
+	.about-column{
+		float:left;
+		width:98%;
+		margin:1%;
+	}
+	
+	.about-column-right{
+		float:left;
+		width:98%;
+		margin:1%;
+	}
+	
+	
 }

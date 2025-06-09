@@ -2,6 +2,10 @@
 @import 'https://fonts.googleapis.com/icon?family=Material+Icons';
 @import 'material-symbols';
 
+.arenella-whole-width-page{
+	margin-top:20px;
+}
+
 .modal-header-text{
     text-align:center;
     margin-top:10px;
@@ -29,10 +33,6 @@ body{
 
 .nav-primary{
 	color:#6A5ACD;
-}
-
-.arenella-whole-width-page{
-	margin-top:20px;
 }
 
 .li-arenella-nav{

@@ -76,6 +76,13 @@
 	max-width:720px;
 }
 
+h3 {
+    color: #002549;
+    background: #d2d2d2;
+    padding: 10px;
+    border-radius: 0 0 50px;
+}
+
 @media ( max-width :700px) {
 	.recruiter-signup-panel{
 		width:100%;
@@ -88,4 +95,9 @@
 		margin-top:20px;
 		width:200px
 	}
+	
+	.recruiter-info-box{
+		margin-top:20px;
+	}
+	
 }

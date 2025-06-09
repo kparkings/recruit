@@ -8,11 +8,6 @@
 }
 
 .feedbackBox{
-    width:300px;
-    height:500px;
-}
-
-.feedbackBox{
     width:200px;
     height:350px;
 }
@@ -35,12 +30,11 @@
 
 .center-table{
     margin:0 auto;
-    margin-top:25px;
     max-width:800px;
 }
 
 .tb-lbl{
-	padding-right:20px;
+	padding-right:10px;
 }
 
 .tb-lbl-checkbox{
@@ -48,20 +42,28 @@
 }
 
 .inpt-tab-std{
-	max-width:220px;
+	max-width:190px;
+	margin-right:20px;
 }
 
 .div-spacing{
-	margin-top:40px;
-}
-
-.additional-info{
-	margin-top:40px;
+	margin-top:15px;
 }
 
 table th{
-	width:220px;
+	max-width:220px;
 }
+
+.hdr-label{
+	font-weight:bold;
+	margin-left:10px;
+	margin-right:10px;
+}
+
+.salaryInput{
+	margin-left:10px;
+}
+
 
 textarea{
 	width:100%;
@@ -76,15 +78,12 @@ textarea{
 	display:none;
 }
 
-.creat-candidate-intro{
-	color:grey;
+.candidate-signup-page{
+	width:100%;
 }
 
-
-.candidate-signup-page{
-	margin-top:20px;
-	width:100%;
-	text-align:center;
+.createcanidate-intro-text{
+	min-height:100px;	
 }
 
 .candidate-signup-page h5{
@@ -92,24 +91,76 @@ textarea{
 }
 
 .candidate-signup-panel{
-	width:80%;
-	margin-top:20px;
-	margin-left:10%;
-	margin-right:10%;
 	margin-bottom:50px;
 }
 
-@media ( max-width :700px) {
+.create-candidatepane{
+	width:60%;
+	float:left;
+	margin:10px;
+	padding:20px;
+	min-height:550px;
+}
+
+.create-candidateleftpane{
+	width:48%;
+	float:left;
+	margin:10px;
+	min-height:500px;
+}
+
+h1 {
+    color: #002549;
+    background: #d2d2d2;
+    padding: 10px;
+    border-radius: 0px 0px 50px 0px;
+}
+
+.create-candidaterightpane{
+	width:48%;
+	float:left;
+	margin:10px;
+}
+
+
+@media ( max-width :1350px) {
 	.candidate-signup-panel{
+		float:left;
 		width:100%;
 		margin-top:50px;
 		margin-left:0%;
 		margin-right:0%;
 		margin-bottom:50px;
 	}
+	
 	.arenella-btn{
 		margin-top:20px;
 		margin-bottom:20px;
 		width:200px
 	}
+	
+	.create-candidatepane{
+		width:100%;
+		max-height:950px;
+		float:left;
+		margin:0px;
+		padding:0px;
+		padding-left:10px;
+		padding-right:10px;
+		
+	}
+	
+	.salaryInput{
+		width:65px;
+		margin-left:10px;
+	}
+	
+	.create-candidateleftpane{
+		width:100%;
+	}
+
+	.create-candidaterightpane{
+		width:100%;
+	}
+	
 }

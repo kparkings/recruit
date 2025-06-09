@@ -1,7 +1,7 @@
 <div class="page">
 
 	<!-- Nav options -->
-	<div class="nav-tabs-bar"></div>
+	<div class="nav-tabs-bar" ></div>
 		
 	<div class="page-body">	
 		
@@ -15,15 +15,14 @@
 	        <button class="btn btn-secondary arenella-btn" (click)="doReset()">{{'arenella-suggestions-btn-reset' | translate}}</button>
 	     </div>
 		 
-		 
-		 <div class="arenella-whole-width-page" *ngIf="currentView != 'saved-candidates' && currentView != 'suggested-canidate-overview'">
+		 <div class="arenella-whole-width-page"  *ngIf="currentView != 'saved-candidates' && currentView != 'suggested-canidate-overview'">
 		 
 		 </div>
-		 
+		
 		 <div class="{{searchBarCss}}" *ngIf="currentView != 'saved-candidates'">
 		 	<app-searchbar #searchbar (newSuggestionResults)="handleNewSearchRequest($event)" ></app-searchbar>
 		 </div>
-		
+		 
 		<div *ngIf="currentView === 'saved-candidates'">
 			<app-saved-candidates [savedCandidates]="savedCandidates" (switchViewEvent)="showSuggestionsResults()" [infoItemConfig]="infoItemConfig" [skillFilters]="skillFilters"></app-saved-candidates>
 		</div>
