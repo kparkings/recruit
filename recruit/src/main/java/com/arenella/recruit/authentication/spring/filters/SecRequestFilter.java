@@ -97,6 +97,15 @@ public class SecRequestFilter extends OncePerRequestFilter {
 			return;
 		}
 		
+
+		/**
+		* We want to allow the chart for candidates function url to be accessed before authentication
+		*/
+		if (request.getRequestURI().startsWith("/candidate/public/function-count")) {
+			filterChain.doFilter(request, response);
+			return;
+		}
+		
 		/**
 		* TODO: [KP] Static data. Though not a big concern ideally this should 
 		* be called only after authentication but we are initializing the service 

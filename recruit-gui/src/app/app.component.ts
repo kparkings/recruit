@@ -1,6 +1,6 @@
 import { Component, ViewChild }				from '@angular/core';
 import { Router}							from '@angular/router';
-import { CookieService } from 'ngx-cookie-service';
+import { CookieService } 					from 'ngx-cookie-service';
 import { NgbModal, NgbModalOptions}			from '@ng-bootstrap/ng-bootstrap'
 import { RecruiterMarketplaceService }		from './recruiter-marketplace.service';
 import { EmailService }						from './email.service';
@@ -8,8 +8,9 @@ import { PopupsService }					from './popups.service';
 import { CandidateNavService } 				from './candidate-nav.service';
 import { CreditsService } 					from './credits.service';
 import { NewsfeedService } 					from './newsfeed.service';
-
-import {TranslateService} from "@ngx-translate/core";
+import { ListingService }					from './listing.service';
+import {TranslateService} 					from "@ngx-translate/core";
+import { CurrentUserAuth }					from './current-user-auth';
 
 @Component({
   selector: 'app-root',
@@ -20,6 +21,9 @@ export class AppComponent {
 
 	@ViewChild('validationExBox', { static: false }) private validationExBox:any;
 	@ViewChild('noCreditsBox', { static: false }) 	 private noCreditsBox:any;
+	@ViewChild('quickActionsBox', { static: false }) 	 private quickActionsBox:any;
+	
+	public currentUserAuth:CurrentUserAuth 						= new CurrentUserAuth();
 	
 	private readonly termsAndConditionsCookieVersion:string = '3';
 
@@ -54,7 +58,9 @@ export class AppComponent {
 				private candidateNavService: 	CandidateNavService,
 				public  creditsService:			CreditsService,
 				private newsfeedService:		NewsfeedService,
-				private translate: 				TranslateService){
+				private translate: 				TranslateService,
+				private listingService:			ListingService,
+			){
 		
 		translate.setDefaultLang('en');
     	translate.use(""+translate.getBrowserLang());
@@ -232,11 +238,84 @@ export class AppComponent {
 	public isRecruiterNoSubscription():boolean{
 		return sessionStorage.getItem('isRecruiterNoSubscription') === 'true';
 	}
+	
 	/**
 	* Whether or not the recruiter that has no open Subscriptiion
 	*/
 	public hasUnpaidSubscription():boolean{
 		return sessionStorage.getItem('hasUnpaidSubscription') === 'true';
 	}
+	
+	/**
+	* Returns whether to show the quick action option button
+	*/
+	public isShowQuickActionButton():boolean{
+		if (this.router.url != '/suggestions') {
+			return false;
+		} 
+		
+		if (this.isRecruiter()) {
+			return true;
+		}
+		
+		return false;
+	}
+	
+	public isShowGoPro():boolean{
+		if (!this.currentUserAuth.hasPaidSubscription()) {
+			return true;
+		}
+		return false;
+	}
+	
+	/**
+	* Opens the quick actions dialog
+	*/
+	public openQuickActions():void{
+		this.popupsService.openModal(this.quickActionsBox);
+		this.doListingCreditCheck();
+		this.doMarketplaceCreditCheck();
+	}
+	
+	public quickActionGoPro():void{
+		this.quickActionsBox.nativeElement.close();
+		this.creditsService.buySubscription();
+		this.router.navigate(['recruiter-account']);
+		
+	}
+	
+	public quickActionJobboardPost():void{
+		this.quickActionsBox.nativeElement.close();
+		localStorage.setItem("quick-action-activated","on")
+		this.router.navigate(['recruiter-listings']);		
+	}
+		
+	public quickActionMarketplacePost():void{
+		this.quickActionsBox.nativeElement.close();
+		localStorage.setItem("quick-action-activated","on")
+		this.router.navigate(['recruiter-marketplace']);
+	}	
+	
+	public passedListingCreditCheck:boolean = false;
+	
+	public doListingCreditCheck():void{
+		this.listingService.doCreditCheck().subscribe(passed => {
+			this.passedListingCreditCheck = passed;
+		});
+	}
+	
+	public showNoCredits():void{
+		this.creditsService.tokensExhaused();
+	}
+	
+	public passedMarketplaceCreditCheck:boolean = false;
+
+
+	public doMarketplaceCreditCheck():void{
+		this.mpService.doCreditCheck().subscribe(passed => {
+			this.passedMarketplaceCreditCheck = passed;
+		});
+	}
+	
 	
 }

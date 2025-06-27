@@ -88,6 +88,17 @@ export class RecruiterMarketplaceComponent implements OnInit {
 					this.countryOptions = this.getCountryOptions();
 					
 	}
+	
+	ngAfterViewInit():void{
+		/**
+		* If arriving from quickactions go straight to add Role 
+		*/
+		if (localStorage.getItem("quick-action-activated")) {
+			localStorage.removeItem("quick-action-activated");
+			this.switchTab("addDemand");
+			this.showFilterByJobSpecDialog();
+		}
+	}
 
 	/**
 	* Sets up initial component

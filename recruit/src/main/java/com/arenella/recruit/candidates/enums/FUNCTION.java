@@ -12,7 +12,7 @@ public enum FUNCTION {
 	UI_UX("UI UX"), 
 	PROJECT_MANAGER("Project Manager"), 
 	ARCHITECT("Software Architect"), 
-	TESTER("Test Analyset"), 
+	TESTER("Test Analyst"), 
 	WEB_DEV("Web Developer"),
 	SCRUM_MASTER("Scrum Master"),
 	DATA_SCIENTIST("Data Scientist"),

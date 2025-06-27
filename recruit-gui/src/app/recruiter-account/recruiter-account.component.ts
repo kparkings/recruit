@@ -62,6 +62,16 @@ export class RecruiterAccountComponent implements OnInit {
 		}
 		
   	}
+	
+	ngAfterViewInit():void{
+		/**
+		* If arriving from quickactions go straight to add Role 
+		*/
+		if (localStorage.getItem("quick-action-activated")) {
+			localStorage.removeItem("quick-action-activated");
+			this.switchTab("showSubscriptions");
+		}
+	}
   	
   	/**
 	* Requests a Credit based subscription to the site for the

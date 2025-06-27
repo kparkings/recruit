@@ -1,5 +1,6 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-arenella-primary nav-primary arenella-primary-background arenella-primary-colour" id="page-top">
-  <h1>Arenella ICT</h1>
+<nav class="navbar navbar-expand-lg navbar-light bg-arenella-primary nav-primary arenella-primary-background arenella-primary-colour" id="page-top" style="scrollbar-gutter: stable;">
+  <h1 style="width:100%">Arenella ICT</h1>
+  <button *ngIf="isShowQuickActionButton()" class="btn btn-secondary main-btn no-quick-actions-for-mobile" style="float:right;width:200px;background:green;" (click)="openQuickActions()">Quick Actions</button>
 </nav>
 
 <div>
@@ -138,5 +139,26 @@
 			<button class="btn btn-secondary main-btn" style="margin-left:5px; margin-top:5px;min-width:200px;" (click)="navToSubscriptions()">{{'arenella-app-credits-btn-choose-subscription' | translate}}</button>
 			<button class="btn btn-secondary main-btn" style="margin-left:5px; margin-top:5px;min-width:200px;" (click)="noCreditsBox.close()">{{'arenella-app-credits-wait-for-credits' | translate}}</button>
 		</div>
+	</div>
+</dialog>
+<dialog #quickActionsBox>
+	<div class="modal-header">
+		<h4 class="modal-title">{{'quick-actions-title' | translate}}</h4>
+ 		<div class="filter-close-box" (click)="quickActionsBox.close()">X</div>
+	</div>
+	<div class="quick-actions-box">
+		<div>
+			<button *ngIf="isShowGoPro()"  class="btn btn-secondary main-btn" (click)="quickActionGoPro()"><b>Go Pro</b> {{'quick-action-text-gopro' | translate}}</button>
+			<button *ngIf="!isShowGoPro()" class="btn btn-secondary main-btn" disabled><b>Go Pro</b> {{'quick-action-text-gopro' | translate}}</button>
+		</div>
+		<div>
+			<button *ngIf="passedListingCreditCheck"  class="btn btn-secondary main-btn" (click)="quickActionJobboardPost()"><b>{{'arenella-app-menu-job-board' | translate}}</b> {{'quick-action-text-jobboard' | translate}}</button>
+			<button *ngIf="!passedListingCreditCheck" class="btn btn-secondary main-btn" (click)="showNoCredits()"><b>{{'arenella-app-menu-job-board' | translate}}</b> {{'quick-action-text-jobboard' | translate}}</button>
+		</div>
+		<div>
+			<button *ngIf="passedMarketplaceCreditCheck" class="btn btn-secondary main-btn" (click)="quickActionMarketplacePost()"><b>{{'arenella-app-menu-mp' | translate}}</b> {{'quick-action-text-mp' | translate}}</button>
+			<button *ngIf="!passedMarketplaceCreditCheck" class="btn btn-secondary main-btn" (click)="showNoCredits()"><b>{{'arenella-app-menu-mp' | translate}}</b> {{'quick-action-text-mp' | translate}}</button>
+		</div>
+		
 	</div>
 </dialog>

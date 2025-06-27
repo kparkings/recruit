@@ -101,8 +101,6 @@ export class RecruiterListingsComponent implements OnInit {
 				this.countryOptions 		= this.getCountryOptions();
 				this.getLanguageOptions();
 				this.doCreditCheck();
-				
-				
 					
 	}
 	
@@ -131,8 +129,18 @@ export class RecruiterListingsComponent implements OnInit {
     	});
 	
 		this.loadYearsExperienceValues();
-	
+		
   	}
+	
+	ngAfterViewInit():void{
+		/**
+		* If arriving from quickactions go straight to add Role 
+		*/
+		if (localStorage.getItem("quick-action-activated")) {
+			localStorage.removeItem("quick-action-activated");
+			this.showFilterByJobSpecDialog();
+		}
+	}
 	
 	/**
 	* Resets the page 

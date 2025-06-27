@@ -128,6 +128,9 @@
 }
 
 @media (max-width:700px)  {
+	.no-quick-actions-for-mobile{
+		display:none;
+	}
 	.signup-candidate{
 		width:99%;
 		margin:1%;
@@ -215,4 +218,20 @@
 
 .credits-available{
 	color:green;
+}
+
+.quick-actions-box{
+	margin:20px;
+	text-align:center;
+	width:600px;
+}
+
+.quick-actions-box button {
+	margin:10px;
+	width:90%;
+}
+
+.quick-actions-box b{
+	color:white;
+	margin-right:20px;
 }
