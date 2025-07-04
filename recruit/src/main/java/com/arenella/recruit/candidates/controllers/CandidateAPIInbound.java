@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 import com.arenella.recruit.candidates.beans.Candidate;
 import com.arenella.recruit.candidates.beans.Candidate.CandidateBuilder;
 import com.arenella.recruit.candidates.beans.Candidate.DAYS_ON_SITE;
+import com.arenella.recruit.candidates.beans.Candidate.Industry;
 import com.arenella.recruit.candidates.beans.Candidate.Photo;
 import com.arenella.recruit.candidates.beans.Candidate.Rate;
 import com.arenella.recruit.candidates.beans.Candidate.SECURITY_CLEARANCE_TYPE;
@@ -51,6 +52,7 @@ public class CandidateAPIInbound {
 	private LocalDate 				availableFromDate;
 	private SECURITY_CLEARANCE_TYPE securityClearance;
 	private boolean					requiresSponsorship;
+	private Set<Industry> 			industries					= new LinkedHashSet<>();
 	
 	/**
 	* Constructor based upon a builder
@@ -81,6 +83,7 @@ public class CandidateAPIInbound {
 		this.skills.addAll(builder.skills);
 		this.languages.addAll(builder.languages);
 		this.functions.addAll(builder.functions);
+		this.industries.addAll(builder.industries);
 		
 	}
 	
@@ -267,6 +270,14 @@ public class CandidateAPIInbound {
 	}
 	
 	/**
+	* Returns the industries the Candidate has worked in
+	* @return Industries
+	*/
+	public Set<Industry> getIndustries() {
+		return this.industries;
+	}
+	
+	/**
 	* Builder for the Candidate class
 	* @return A Builder for the Candidate class
 	*/
@@ -303,6 +314,7 @@ public class CandidateAPIInbound {
 		private LocalDate 				availableFromDate;
 		private SECURITY_CLEARANCE_TYPE securityClearance;
 		private boolean					requiresSponsorship;
+		private Set<Industry> 			industries					= new LinkedHashSet<>();
 		
 		/**
 		* Sets the candidates Unique identifier in the System
@@ -528,6 +540,17 @@ public class CandidateAPIInbound {
 		}		
 		
 		/**
+		* Sets the Industries the candidate has worked in
+		* @param industries - Industries worked in
+		* @return Builder
+		*/
+		public CandidateAPIInboundBuilder industries (Set<Industry> industries) {
+			this.industries.clear();
+			this.industries.addAll(industries);
+			return this;
+		}
+		
+		/**
 		* Returns an instance of Candidate initialized with the 
 		* values in the builder
 		* @return Initialized instance of Candidate
@@ -568,7 +591,8 @@ public class CandidateAPIInbound {
 					.daysOnSite(candiateAPIInbound.getDaysOnSite())
 					.securityClearance(candiateAPIInbound.getSecurityClearance())
 					.requiresSponsorship(candiateAPIInbound.getRequiresSponsorship())
-					.photo(profileImage.isEmpty() ? null : profileImage.get());
+					.photo(profileImage.isEmpty() ? null : profileImage.get())
+					.industries(candiateAPIInbound.getIndustries());
 					
 					if (candiateAPIInbound.getRateContract().isPresent()) {
 						builder.rateContract(candiateAPIInbound.getRateContract().get());

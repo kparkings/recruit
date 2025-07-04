@@ -33,6 +33,7 @@ export class CandidateProfile{
 	public ownerId:string						= '';
 	public requiresSponsorship:boolean			= false;
 	public securityClearance:string				= 'NONE';
+	public industries:Array<string>				= new Array<string>();
 
 }
 

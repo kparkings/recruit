@@ -6,6 +6,7 @@ import java.util.Optional;
 import java.util.Set;
 
 import com.arenella.recruit.candidates.beans.Candidate.DAYS_ON_SITE;
+import com.arenella.recruit.candidates.beans.Candidate.Industry;
 import com.arenella.recruit.candidates.beans.Candidate.Rate;
 import com.arenella.recruit.candidates.beans.Candidate.SECURITY_CLEARANCE_TYPE;
 import com.arenella.recruit.candidates.enums.COUNTRY;
@@ -41,6 +42,7 @@ public class CandidateUpdateRequest {
 	private LocalDate 				availableFromDate;
 	private SECURITY_CLEARANCE_TYPE securityClearance;
 	private boolean					requiresSponsorship;
+	private Set<Industry> 			industries					= new LinkedHashSet<>();
 	
 	/**
 	* Constructor based upon a builder
@@ -70,6 +72,7 @@ public class CandidateUpdateRequest {
 		this.securityClearance			= builder.securityClearance;
 		this.languages.addAll(builder.languages);
 		this.functions.addAll(builder.functions);
+		this.industries.addAll(builder.industries);
 	}
 	
 	/**
@@ -258,6 +261,14 @@ public class CandidateUpdateRequest {
 	}
 	
 	/**
+	* Returns the industries the Candidate has worked in
+	* @return Industries
+	*/
+	public Set<Industry> getIndustries() {
+		return this.industries;
+	}
+	
+	/**
 	* Builder for the Candidate class
 	* @return A Builder for the Candidate class
 	*/
@@ -293,6 +304,7 @@ public class CandidateUpdateRequest {
 		private LocalDate 				availableFromDate;
 		private SECURITY_CLEARANCE_TYPE securityClearance;
 		private boolean					requiresSponsorship;
+		private Set<Industry> 			industries					= new LinkedHashSet<>();
 		
 		/**
 		* Sets the candidates Unique identifier in the System
@@ -514,6 +526,17 @@ public class CandidateUpdateRequest {
 		*/
 		public CandidateUpdateRequestBuilder requiresSponsorship(boolean requiresSponsorship) {
 			this.requiresSponsorship = requiresSponsorship;
+			return this;
+		}
+		
+		/**
+		* Sets the Industries the Candidate has worked in
+		* @param industries - Industries worked in
+		* @return Builder
+		*/
+		public CandidateUpdateRequestBuilder industries(Set<Industry> industries) {
+			this.industries.clear();
+			this.industries.addAll(industries);
 			return this;
 		}
 		

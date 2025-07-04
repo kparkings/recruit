@@ -22,6 +22,7 @@ import org.springframework.data.elasticsearch.core.geo.GeoPoint;
 import com.arenella.recruit.candidates.beans.Candidate;
 import com.arenella.recruit.candidates.beans.Candidate.CANDIDATE_TYPE;
 import com.arenella.recruit.candidates.beans.Candidate.DAYS_ON_SITE;
+import com.arenella.recruit.candidates.beans.Candidate.Industry;
 import com.arenella.recruit.candidates.beans.Candidate.SECURITY_CLEARANCE_TYPE;
 import com.arenella.recruit.candidates.enums.COUNTRY;
 import com.arenella.recruit.candidates.enums.FREELANCE;
@@ -56,11 +57,8 @@ public class CandidateDocument {
 	private String roleSought;
 	
 	@Field(type = FieldType.Keyword)
-	//@JsonProperty("function")
 	@Enumerated(EnumType.STRING)
 	private Set<FUNCTION> functions								= new LinkedHashSet<>();
-	
-	//private FUNCTION function;
 	
 	@Field(type = FieldType.Keyword)
 	@Enumerated(EnumType.STRING)
@@ -150,6 +148,17 @@ public class CandidateDocument {
 	
 	private Set<LanguageDocument> 	languages					= new LinkedHashSet<>();
 	
+	@Field(type = FieldType.Keyword)
+	private Set<Industry> 		industries					= new LinkedHashSet<>();
+	
+	//@Field(type = FieldType.Keyword)
+	//private Set<String> 			topSkills					= new LinkedHashSet<>();
+	
+	//@Field(type = FieldType.Keyword)
+	//private Set<String> 			certifications				= new LinkedHashSet<>();
+	
+	
+	
 	/**
 	* Check if we need this. with Hibernate yes but with ES maybe not
 	*/
@@ -190,6 +199,7 @@ public class CandidateDocument {
 		this.lastAvailabilityCheckEmailSent 	= Optional.ofNullable(builder.lastAvailabilityCheckEmailSent).isEmpty() ? null : Date.from(builder.lastAvailabilityCheckEmailSent.atStartOfDay(DEFAULT_ZONE_ID).toInstant());
 		this.lastAvailabilityCheckIdSent		= builder.lastAvailabilityCheckIdSent;
 		this.lastAvailabilityCheckConfirmedOn	= builder.lastAvailabilityCheckConfirmedOn;
+		this.industries							= builder.industries;
 		
 		if (Optional.ofNullable(builder.lastAccountRefresh).isPresent()) {
 			this.lastAccountRefresh			= Date.from(builder.lastAccountRefresh.atStartOfDay(DEFAULT_ZONE_ID).toInstant());
@@ -202,10 +212,7 @@ public class CandidateDocument {
 	
 		this.functions.clear();
 		this.functions.addAll(builder.functions);
-		//if(this.function != null) {
-		//	this.functions.add(this.function);
-		//}
-		//this.function = builder.function;
+
 	}
 	
 	/**
@@ -257,11 +264,7 @@ public class CandidateDocument {
 	public Set<FUNCTION> getFunctions() {
 		return this.functions;
 	}
-	
-	//public FUNCTION getFunction() {
-	//	return this.function;
-	//}
-	
+
 	/**
 	* Returns the Country in which the candidate is 
 	* located
@@ -347,6 +350,15 @@ public class CandidateDocument {
 	*/
 	public Date getRegisterd() {
 		return this.registerd;
+	}
+	
+	/**
+	* Returns the industries that the Candidate has 
+	* worked in 
+	* @return Inductries Candidate has experience in
+	*/
+	public Set<Industry> getIndustries() {
+		return this.industries;
 	}
 	
 	/**
@@ -573,6 +585,7 @@ public class CandidateDocument {
 		private LocalDate				lastAvailabilityCheckEmailSent;
 		private UUID 					lastAvailabilityCheckIdSent;
 		private Date 					lastAvailabilityCheckConfirmedOn;
+		private Set<Industry> 			industries					= new LinkedHashSet<>();
 		
 		/**
 		* Sets the candidates Unique identifier in the System
@@ -903,6 +916,17 @@ public class CandidateDocument {
 		}
 		
 		/**
+		* Sets the industries the Candidate has worked in
+		* @param industries - worked in by the Candidate	
+		* @return Builder
+		*/
+		public CandidateDocumentBuilder industries(Set<Industry> industries) {
+			this.industries.clear();
+			this.industries.addAll(industries);
+			return this;
+		}
+		
+		/**
 		* Returns an instance of CandidateDocument initialized with the 
 		* values in the builder
 		* @return Initialized instance of CandidateDocument
@@ -918,16 +942,6 @@ public class CandidateDocument {
 	* @return Domain representation
 	*/
 	public static Candidate convertFromDocument(CandidateDocument doc) {
-		
-		//WART START
-		//if(doc.function != null) {
-		//	try {
-		//		doc.functions.add(doc.function);
-		//	}catch(Exception e) {
-		//		
-		//	}
-		//}
-		//WART END
 		
 		return Candidate
 				.builder()
@@ -973,6 +987,7 @@ public class CandidateDocument {
 						      .atZone(ZoneId.systemDefault())
 						      .toLocalDate())
 					.lastAvailabilityCheckIdSent(doc.getLastAvailabilityCheckIdSent())
+					.industries(doc.getIndustries())
 				.build();
 
 	}
@@ -1017,6 +1032,7 @@ public class CandidateDocument {
 					.lastAvailabilityCheckEmailSent(candidate.getLastAvailabilityCheckEmailSent().isEmpty() ? null : candidate.getLastAvailabilityCheckEmailSent().get())
 					.lastAvailabilityCheckConfirmedOn(candidate.getLastAvailabilityCheckConfirmedOn().isEmpty() ? null : Date.from(candidate.getLastAvailabilityCheckConfirmedOn().get().atStartOfDay(DEFAULT_ZONE_ID).toInstant()))
 					.lastAvailabilityCheckIdSent(candidate.getLastAvailabilityCheckIdSent().isEmpty() ? null : candidate.getLastAvailabilityCheckIdSent().get())
+					.industries(candidate.getIndustries())
 				.build();
 		
 	}

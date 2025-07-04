@@ -21,6 +21,29 @@ public class Candidate {
 	public enum DAYS_ON_SITE 				{ZERO,ONE,TWO,THREE,FOUR,FIVE}
 	public enum CANDIDATE_TYPE 				{CANDIDATE, MARKETPLACE_CANDIDATE}
 	public enum SECURITY_CLEARANCE_TYPE 	{NONE, SC, DV, NATO}
+	public enum Industry					{
+		AGRICULTURE,
+		AUTOMOTIVE,
+		AVIATION,
+		CONSTRUCTION, 
+		CYBER_SECURITY, 
+		EDUCATION,
+		EUROPEAN_COMMISSION, 
+		ENERGY, 
+		FINTECH, 
+		GAMBLING,
+		GAMING, 
+		GOVERNMENT, 
+		HEALTHCARE,
+		HOSPITALITY,
+		INSURANCE,
+		LOGISTICS,
+		MILITARY, 
+		POLICE, 
+		SPACE, 
+		TELECOMS,
+		TOURISM
+		}
 	
 	public static final String ANONYMOUS_USER_ATTR_VALUE = "unknown";
 			
@@ -61,6 +84,7 @@ public class Candidate {
 	private LocalDate					lastAvailabilityCheckEmailSent;
 	private UUID 						lastAvailabilityCheckIdSent;
 	private LocalDate 					lastAvailabilityCheckConfirmedOn;
+	private Set<Industry> 				industries					= new LinkedHashSet<>();
 	
 	/**
 	* Constructor based upon a builder
@@ -99,6 +123,7 @@ public class Candidate {
 		this.lastAvailabilityCheckEmailSent 	= builder.lastAvailabilityCheckEmailSent;
 		this.lastAvailabilityCheckIdSent 		= builder.lastAvailabilityCheckIdSent;
 		this.lastAvailabilityCheckConfirmedOn 	= builder.lastAvailabilityCheckConfirmedOn;
+		this.industries							= builder.industries;
 		//this.function							= builder.function;
 		this.skills.addAll(builder.skills);
 		this.languages.addAll(builder.languages);
@@ -388,6 +413,15 @@ public class Candidate {
 	}
 	
 	/**
+	* Returns the industries the Candidate has experience
+	* working in
+	* @return
+	*/
+	public Set<Industry> getIndustries() {
+		return this.industries;
+	}
+	
+	/**
 	* Adds skills the Candidate posesses
 	* @param skills - Skills
 	*/
@@ -604,6 +638,7 @@ public class Candidate {
 		private LocalDate					lastAvailabilityCheckEmailSent;
 		private UUID 						lastAvailabilityCheckIdSent;
 		private LocalDate 					lastAvailabilityCheckConfirmedOn;
+		private Set<Industry> 				industries					= new LinkedHashSet<>();
 		
 		/**
 		* Sets the candidates Unique identifier in the System
@@ -960,6 +995,17 @@ public class Candidate {
 		*/
 		public CandidateBuilder lastAvailabilityCheckConfirmedOn(LocalDate lastAvailabilityCheckConfirmedOn) {
 			this.lastAvailabilityCheckConfirmedOn = lastAvailabilityCheckConfirmedOn;
+			return this;
+		}
+		
+		/**
+		* Sets the Industries the Candidate has worked in
+		* @param industries - Industries the candidate has worked in
+		* @return Builder
+		*/
+		public CandidateBuilder industries(Set<Industry> industries) {
+			this.industries.clear();
+			this.industries.addAll(industries);
 			return this;
 		}
 		

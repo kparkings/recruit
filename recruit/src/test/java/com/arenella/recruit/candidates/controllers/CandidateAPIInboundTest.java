@@ -1,7 +1,7 @@
 package com.arenella.recruit.candidates.controllers;
 
-import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.LinkedHashSet;
 import java.util.Optional;
@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import com.arenella.recruit.candidates.beans.Candidate;
 import com.arenella.recruit.candidates.beans.Language;
+import com.arenella.recruit.candidates.beans.Candidate.Industry;
 import com.arenella.recruit.candidates.beans.Candidate.SECURITY_CLEARANCE_TYPE;
 import com.arenella.recruit.candidates.beans.Language.LANGUAGE;
 import com.arenella.recruit.candidates.beans.Language.LEVEL;
@@ -43,6 +44,7 @@ class CandidateAPIInboundTest {
 	private static final Language					language				= Language.builder().language(LANGUAGE.DUTCH).level(LEVEL.PROFICIENT).build();
 	private static final SECURITY_CLEARANCE_TYPE 	SECURITY_CLEARANCE		= SECURITY_CLEARANCE_TYPE.DV;
 	private static final boolean					REQUIRES_SPONSORSHIP	= false;;
+	private static final Set<Industry> 				INDUSTRIES				= Set.of(Industry.AGRICULTURE, Industry.CYBER_SECURITY);
 	
 	/**
 	* Sets up test environment 
@@ -78,6 +80,7 @@ class CandidateAPIInboundTest {
 							.languages(languages)
 							.requiresSponsorship(REQUIRES_SPONSORSHIP)
 							.securityClearance(SECURITY_CLEARANCE)
+							.industries(INDUSTRIES)
 							.build();
 		
 		assertEquals(candidateId, 			candidate.getCandidateId());
@@ -98,6 +101,9 @@ class CandidateAPIInboundTest {
 		assertTrue(candidate.getSkills().contains(skill));
 		candidate.getLanguages().stream().filter(l -> l.getLanguage() == language.getLanguage()).findAny().orElseThrow();
 		
+		assertTrue(candidate.getIndustries().contains(Industry.AGRICULTURE));
+		assertTrue(candidate.getIndustries().contains(Industry.CYBER_SECURITY));
+		assertEquals(2, candidate.getIndustries().size());
 	}
 	
 	/**
@@ -126,6 +132,7 @@ class CandidateAPIInboundTest {
 					.languages(languages)
 					.requiresSponsorship(REQUIRES_SPONSORSHIP)
 					.securityClearance(SECURITY_CLEARANCE)
+					.industries(INDUSTRIES)
 					.build();
 		
 		Candidate candidate = CandidateAPIInbound.convertToCandidate(candidateEntity, Optional.empty());
@@ -147,6 +154,10 @@ class CandidateAPIInboundTest {
 		
 		assertTrue(candidate.getSkills().contains(skill));
 		assertEquals(candidate.getLanguages().stream().findFirst().get().getLanguage(), language.getLanguage());
+		
+		assertTrue(candidate.getIndustries().contains(Industry.AGRICULTURE));
+		assertTrue(candidate.getIndustries().contains(Industry.CYBER_SECURITY));
+		assertEquals(2, candidate.getIndustries().size());
 	
 	}
 	

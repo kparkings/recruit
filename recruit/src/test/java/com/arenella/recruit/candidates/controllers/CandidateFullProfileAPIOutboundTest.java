@@ -1,7 +1,7 @@
 package com.arenella.recruit.candidates.controllers;
 
-import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDate;
 import java.util.LinkedHashSet;
@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import com.arenella.recruit.candidates.beans.Candidate;
 import com.arenella.recruit.candidates.beans.Candidate.CANDIDATE_TYPE;
 import com.arenella.recruit.candidates.beans.Candidate.DAYS_ON_SITE;
+import com.arenella.recruit.candidates.beans.Candidate.Industry;
 import com.arenella.recruit.candidates.beans.Candidate.Rate;
 import com.arenella.recruit.candidates.beans.Candidate.SECURITY_CLEARANCE_TYPE;
 import com.arenella.recruit.candidates.beans.Candidate.Rate.CURRENCY;
@@ -58,7 +59,7 @@ class CandidateFullProfileAPIOutboundTest {
 	private static final String						OWNER_ID				= "rec33";
 	private static final SECURITY_CLEARANCE_TYPE 	SECURITY_CLEARANCE 		= SECURITY_CLEARANCE_TYPE.DV;
 	private static final boolean					REQUIRES_SPONSORSHIP 	= true;
-	
+	private static final Set<Industry> 				INDUSTRIES				= Set.of(Industry.AGRICULTURE, Industry.CYBER_SECURITY);
 	
 	/**
 	* Sets up test environment 
@@ -102,6 +103,7 @@ class CandidateFullProfileAPIOutboundTest {
 							.ownerId(OWNER_ID)
 							.securityClearance(SECURITY_CLEARANCE)
 							.requiresSponsorship(REQUIRES_SPONSORSHIP)
+							.industries(INDUSTRIES)
 							.build();
 		
 		assertEquals(CANDIDATE_ID, 						candidate.getCandidateId());
@@ -129,6 +131,10 @@ class CandidateFullProfileAPIOutboundTest {
 		
 		assertTrue(candidate.getSkills().contains(SKILL));
 		candidate.getLanguages().stream().filter(l -> l.getLanguage() == LANGUAGEVAL.getLanguage()).findAny().orElseThrow();
+		
+		assertTrue(candidate.getIndustries().contains(Industry.AGRICULTURE));
+		assertTrue(candidate.getIndustries().contains(Industry.CYBER_SECURITY));
+		assertEquals(2, candidate.getIndustries().size());
 		
 	}
 	
@@ -164,6 +170,7 @@ class CandidateFullProfileAPIOutboundTest {
 							.ownerId(OWNER_ID)
 							.securityClearance(SECURITY_CLEARANCE)
 							.requiresSponsorship(REQUIRES_SPONSORSHIP)
+							.industries(INDUSTRIES)
 							.build();
 		
 		assertEquals(CANDIDATE_ID, 				candidate.getCandidateId());
@@ -221,6 +228,9 @@ class CandidateFullProfileAPIOutboundTest {
 		assertEquals(OWNER_ID,			 					candidateProfile.getOwnerId());
 		assertEquals(SECURITY_CLEARANCE, 					candidateProfile.getSecurityClearance());
 		assertEquals(REQUIRES_SPONSORSHIP, 					candidateProfile.getRequiresSponsorship());
+		
+		assertTrue(candidateProfile.getIndustries().contains(Industry.AGRICULTURE));
+		assertTrue(candidateProfile.getIndustries().contains(Industry.CYBER_SECURITY));
 	}
 	
 	/**
@@ -276,6 +286,7 @@ class CandidateFullProfileAPIOutboundTest {
 					.introduction(intro)
 					.securityClearance(SECURITY_CLEARANCE)
 					.requiresSponsorship(REQUIRES_SPONSORSHIP)
+					.industries(INDUSTRIES)
 					.build();
 
 		assertEquals(CANDIDATE_ID, 				candidate.getCandidateId());
@@ -335,6 +346,8 @@ class CandidateFullProfileAPIOutboundTest {
 		assertEquals(SECURITY_CLEARANCE, 					candidateProfile.getSecurityClearance());
 		assertEquals(REQUIRES_SPONSORSHIP, 					candidateProfile.getRequiresSponsorship());
 		
+		assertTrue(candidateProfile.getIndustries().contains(Industry.AGRICULTURE));
+		assertTrue(candidateProfile.getIndustries().contains(Industry.CYBER_SECURITY));
 		
 	}
 	

@@ -170,11 +170,32 @@ input{
 	text-align:center;
 }
 
+
 .function-selected-true{
 	opacity:1;
 }
 
 .function-selected-false{
+	opacity:0.25;
+}
+
+.industry-selectable{
+	float:left;
+	border-radius: 0.25rem;
+	margin:5px;
+	background:#6a5acd;
+	color:white;
+	padding:5px;
+	width:300px;	
+	cursor:pointer;
+	text-align:center;
+}
+
+.industry-selected-true{
+	opacity:1;
+}
+
+.industry-selected-false{
 	opacity:0.25;
 }
 
@@ -206,16 +227,28 @@ input{
 	}
 	
 	.function-selectable{
-	float:left;
-	border-radius: 0.25rem;
-	margin:5px;
-	background:#6a5acd;
-	color:white;
-	padding:5px;
-	width:200px;	
-	cursor:pointer;
-	text-align:center;
-}
+		float:left;
+		border-radius: 0.25rem;
+		margin:5px;
+		background:#6a5acd;
+		color:white;
+		padding:5px;
+		width:200px;	
+		cursor:pointer;
+		text-align:center;
+	}
+	
+	.industry-selectable{
+		float:left;
+		border-radius: 0.25rem;
+		margin:5px;
+		background:#6a5acd;
+		color:white;
+		padding:5px;
+		width:200px;	
+		cursor:pointer;
+		text-align:center;
+	}
 
 }
  

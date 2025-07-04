@@ -57,6 +57,15 @@
 							</td>
 						</tr>
 						<tr>
+							<td class="hdr-label">{{'arenella-new-candidate-industries-group' | translate}}</td>
+							<td>
+								<div style="min-height:35px;">
+									<div *ngFor="let industry of industries" class="industry-selectable industry-selected-{{isSelectedIndustry(industry)}}" (click)="toggleSelectedIndustry(industry)">{{industry | translate}}
+									</div>
+								</div>
+							</td>
+						</tr>
+						<tr>
 							<td class="hdr-label">{{'arenella-new-candidate-role-sought' | translate}}</td>
 							<td class="hdr-value">
 								<input formControlName="roleSought" type="text"/>

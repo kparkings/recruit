@@ -866,6 +866,7 @@ public class CandidateServiceImpl implements CandidateService{
 					.availableFromDate(candidate.getAvailableFromDate())
 					.requiresSponsorship(candidate.getRequiresSponsorship())
 					.securityClearance(candidate.getSecurityClearance())
+					.industries(candidate.getIndustries())
 				.build();
 		
 		this.candidateRepo.saveCandidate(updatedCandidate);

@@ -16,6 +16,7 @@ import org.junit.jupiter.api.Test;
 
 import com.arenella.recruit.candidates.beans.Candidate.CANDIDATE_TYPE;
 import com.arenella.recruit.candidates.beans.Candidate.DAYS_ON_SITE;
+import com.arenella.recruit.candidates.beans.Candidate.Industry;
 import com.arenella.recruit.candidates.beans.Candidate.Photo;
 import com.arenella.recruit.candidates.beans.Candidate.Photo.PHOTO_FORMAT;
 import com.arenella.recruit.candidates.beans.Candidate.Rate;
@@ -68,6 +69,7 @@ class CandidateTest {
 	private static final UUID						AVAILABILITY_CHK_TOKEN_ID	= UUID.randomUUID();
 	private static final double						LONGITUDE					= 1;
 	private static final double						LATITUDE					= -2;
+	private static final Set<Industry> 				INDUSTRIES					= Set.of(Industry.AGRICULTURE, Industry.CYBER_SECURITY);
 	
 	/**
 	* Sets up test environment 
@@ -118,6 +120,7 @@ class CandidateTest {
 							.lastAvailabilityCheckEmailSent(AVAILABIILTY_CHK_EMAIL_DATE)
 							.lastAvailabilityCheckIdSent(AVAILABILITY_CHK_TOKEN_ID)
 							.lastAvailabilityCheckConfirmedOn(AVAILABIILTY_CHK_RESPONSE)
+							.industries(INDUSTRIES)
 							.build();
 		
 		assertEquals(CANDIDATE_ID, 					candidate.getCandidateId());
@@ -153,6 +156,10 @@ class CandidateTest {
 		
 		assertTrue(candidate.getSkills().contains(SKILL));
 		candidate.getLanguages().stream().filter(l -> l.getLanguage() == LANGUAGE_VAL.getLanguage()).findAny().orElseThrow();
+		
+		assertTrue(candidate.getIndustries().contains(Industry.AGRICULTURE));
+		assertTrue(candidate.getIndustries().contains(Industry.CYBER_SECURITY));
+		assertEquals(2, candidate.getIndustries().size());
 		
 	}
 	

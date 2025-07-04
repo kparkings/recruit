@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.arenella.recruit.candidates.beans.Candidate;
 import com.arenella.recruit.candidates.beans.Candidate.DAYS_ON_SITE;
+import com.arenella.recruit.candidates.beans.Candidate.Industry;
 import com.arenella.recruit.candidates.beans.Candidate.SECURITY_CLEARANCE_TYPE;
 import com.arenella.recruit.candidates.beans.Candidate.Rate.CURRENCY;
 import com.arenella.recruit.candidates.beans.Candidate.Rate.PERIOD;
@@ -51,6 +52,7 @@ public class CandidateUpdateRequestAPIInbound {
 	private LocalDate 				availableFromDate;
 	private SECURITY_CLEARANCE_TYPE securityClearance;
 	private boolean					requiresSponsorship;
+	private Set<Industry> 			industries					= new LinkedHashSet<>();
 	
 	/**
 	* Constructor based upon a builder
@@ -80,6 +82,7 @@ public class CandidateUpdateRequestAPIInbound {
 		
 		this.languages.addAll(builder.languages);
 		this.functions.addAll(builder.functions);
+		this.industries.addAll(builder.industries);
 		
 	}
 
@@ -252,6 +255,13 @@ public class CandidateUpdateRequestAPIInbound {
 	}
 	
 	/**
+	* Returns the industries the Candidate has experience in
+	*/
+	public Set<Industry> getIndustries() {
+		return this.industries;
+	}
+	
+	/**
 	* Builder for the Candidate class
 	* @return A Builder for the Candidate class
 	*/
@@ -286,6 +296,7 @@ public class CandidateUpdateRequestAPIInbound {
 		private LocalDate 				availableFromDate;
 		private SECURITY_CLEARANCE_TYPE securityClearance;
 		private boolean					requiresSponsorship;
+		private Set<Industry> 			industries					= new LinkedHashSet<>();
 		
 		/**
 		* Sets the First name of the Candidate
@@ -492,6 +503,17 @@ public class CandidateUpdateRequestAPIInbound {
 		}	
 		
 		/**
+		* Sets the industries the candidates have experience in
+		* @param industries - Industries candidates have experience in 
+		* @return Builder
+		*/
+		public CandidateUpdateRequestAPIInboundBuilder industries(Set<Industry> industries) {
+			this.industries.clear();
+			this.industries.addAll(industries);
+			return this;
+		}
+		
+		/**
 		* Returns an instance of Candidate initialized with the 
 		* values in the builder
 		* @return Initialized instance of Candidate
@@ -533,7 +555,8 @@ public class CandidateUpdateRequestAPIInbound {
 			.availableFromDate(updateRequest.getAvailableFromDate())
 			.securityClearance(updateRequest.getSecurityClearance())
 			.requiresSponsorship(updateRequest.getRequiresSponsorship())
-			.daysOnSite(updateRequest.getDaysOnSite());
+			.daysOnSite(updateRequest.getDaysOnSite())
+			.industries(updateRequest.getIndustries());
 			
 			if (updateRequest.getRateContract().isPresent()) {
 				builder.rateContract(new Candidate.Rate(updateRequest.getRateContract().get().getCurrency(), updateRequest.getRateContract().get().getPeriod(), updateRequest.getRateContract().get().getValueMin(), updateRequest.getRateContract().get().getValueMax()));

@@ -18,6 +18,7 @@ import { Country } 										from '../country';
 import { SupportedLanguage } 							from '../supported-language';
 import { SupportedCountry } 							from '../supported-candidate';
 import { CurrentUserAuth } 								from '../current-user-auth';
+import { Industry } 									from '../industry';
 
 @Component({
   selector: 'app-new-candidate',
@@ -26,12 +27,13 @@ import { CurrentUserAuth } 								from '../current-user-auth';
 })
 export class NewCandidateComponent implements OnInit {
 
-@ViewChild('feedbackBox', 			{ static: false }) private feedbackBox:any;
-@ViewChild('validationBox', 		{ static: false }) private validationBox:any;
-@ViewChild('pendingCandidateBox', 	{ static: false }) private pendingCandidateBoxChild:any;
+	@ViewChild('feedbackBox', 			{ static: false }) private feedbackBox:any;
+	@ViewChild('validationBox', 		{ static: false }) private validationBox:any;
+	@ViewChild('pendingCandidateBox', 	{ static: false }) private pendingCandidateBoxChild:any;
 
-    public functionTypes:	 	Array<CandidateFunction> 	= new Array<CandidateFunction>();
-	public pendingCandidates: 	Array<PendingCandidate> 	= new Array<PendingCandidate>();
+    public functionTypes:Array<CandidateFunction> 		= new Array<CandidateFunction>();
+	public pendingCandidates:Array<PendingCandidate> 	= new Array<PendingCandidate>();
+	public industries:Array<string> = new Array<string>();
 	
 	public currentPendingCandidate:PendingCandidate | null = null;
    
@@ -102,6 +104,8 @@ export class NewCandidateComponent implements OnInit {
 				}
 			});
 		}
+		
+		this.industries =  Object.keys(Industry).filter((v) => isNaN(Number(v))) as string[];
 
   	}
   	
@@ -137,6 +141,7 @@ export class NewCandidateComponent implements OnInit {
 		this.coreSkills 		= candidate.skills;
 		this.languages 			= candidate.languages;
 		this.selectedFunctions 	= candidate.functions;
+		this.selectedIndustries = candidate.industries;
 		
 		this.functionTypes.forEach(ft => {
 			candidate.functions.forEach(f => {
@@ -229,7 +234,6 @@ export class NewCandidateComponent implements OnInit {
 		candidate.surname							= this.offeredCandidateFormBean.get('surname')!.value;
 		candidate.email								= this.offeredCandidateFormBean.get('email')!.value;
 		candidate.roleSought						= this.offeredCandidateFormBean.get('roleSought')!.value;
-		//candidate.function							= this.offeredCandidateFormBean.get('function')!.value;
 		candidate.country							= this.offeredCandidateFormBean.get('country')!.value;
 		candidate.city								= this.offeredCandidateFormBean.get('city')!.value;
 		candidate.perm								= this.offeredCandidateFormBean.get('perm')!.value;
@@ -251,6 +255,12 @@ export class NewCandidateComponent implements OnInit {
 			}
 		});
 		
+		this.selectedIndustries.forEach(i => {
+					if (i) {
+						candidate.industries.push(i);
+					}
+				});
+				
 		this.supportedLanguages.forEach(lang => {
 			candidate.languages.push(new Language(lang.languageCode, this.offeredCandidateFormBean.get(lang.languageCode)!.value));
 		});
@@ -563,9 +573,10 @@ export class NewCandidateComponent implements OnInit {
 		
 	}
 	
-	public languageOptions:Array<LanguageOption> = new Array<LanguageOption>();
-	public languages:Array<Language> = new Array<Language>();
-	public selectedFunctions:Array<CandidateFunction> = new Array<CandidateFunction>();
+	public languageOptions:Array<LanguageOption> 		= new Array<LanguageOption>();
+	public languages:Array<Language>	 				= new Array<Language>();
+	public selectedFunctions:Array<CandidateFunction> 	= new Array<CandidateFunction>();
+	public selectedIndustries:Array<string> 			= new Array<string>();
 	
 	/**
 	* Adds a Skill to the Candidates list of Skills
@@ -592,6 +603,16 @@ export class NewCandidateComponent implements OnInit {
 		
 	}
 	
+	public toggleSelectedIndustry(selectedIndustry:string):void{
+			
+			if (this.selectedIndustries.indexOf(selectedIndustry) < 0 ) {
+				this.selectedIndustries.push(selectedIndustry);
+			} else {
+				this.selectedIndustries = this.selectedIndustries.filter(i => i !== selectedIndustry);
+			}
+			
+		}
+	
 	public isSelectedFunction(func:CandidateFunction):boolean {
 		
 		if (this.selectedFunctions.indexOf(func) < 0 ) {
@@ -601,6 +622,16 @@ export class NewCandidateComponent implements OnInit {
 		}
 		
 	}
+	
+	public isSelectedIndustry(industrySelected:string):boolean {
+			
+			if (this.selectedIndustries.indexOf(industrySelected) < 0 ) {
+				return false;
+			} else {
+				return true;
+			}
+			
+		}
 	
 	/**
 	* Removes a Skill to the Candidates list of Skills

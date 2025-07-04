@@ -1,4 +1,5 @@
 import { Language}                            from './language';
+import { Industry}                            from '../industry';
 
 /**
 * Represnets a candidate
@@ -93,5 +94,7 @@ export class Candidate {
 	requiresSponsorship:boolean				= false;
 	
 	available:boolean						= false;
+	
+	industries:Array<Industry> 				= new Array<Industry>();
 	
 }

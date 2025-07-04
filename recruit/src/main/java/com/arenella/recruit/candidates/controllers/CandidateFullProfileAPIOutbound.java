@@ -12,6 +12,7 @@ import org.apache.commons.lang.math.NumberUtils;
 import com.arenella.recruit.candidates.beans.Candidate;
 import com.arenella.recruit.candidates.beans.Candidate.CANDIDATE_TYPE;
 import com.arenella.recruit.candidates.beans.Candidate.DAYS_ON_SITE;
+import com.arenella.recruit.candidates.beans.Candidate.Industry;
 import com.arenella.recruit.candidates.beans.Candidate.Photo;
 import com.arenella.recruit.candidates.beans.Candidate.SECURITY_CLEARANCE_TYPE;
 import com.arenella.recruit.candidates.beans.Candidate.Photo.PHOTO_FORMAT;
@@ -55,6 +56,7 @@ public class CandidateFullProfileAPIOutbound implements CandidateAPIOutbound{
 	private String					ownerId;
 	private SECURITY_CLEARANCE_TYPE securityClearance;
 	private boolean					requiresSponsorship;
+	private Set<Industry> 			industries					= new LinkedHashSet<>();
 	
 	
 	/**
@@ -87,10 +89,12 @@ public class CandidateFullProfileAPIOutbound implements CandidateAPIOutbound{
 		this.securityClearance			= builder.securityClearance;
 		this.requiresSponsorship		= builder.requiresSponsorship;
 		
+		
 		this.skills.addAll(builder.skills);
 		this.languages.addAll(builder.languages);
 		this.functions.addAll(builder.functions);
-	
+		this.industries.addAll(builder.industries);
+		
 	}
 	
 	/**
@@ -306,6 +310,13 @@ public class CandidateFullProfileAPIOutbound implements CandidateAPIOutbound{
 		return this.candidateType;
 	}
 	
+	/**
+	* Returns the industries the Candidates have experience in
+	* @return Industries
+	*/
+	public Set<Industry> getIndustries() {
+		return this.industries;
+	}
 	
 	/**
 	* Builder for the  class
@@ -347,6 +358,7 @@ public class CandidateFullProfileAPIOutbound implements CandidateAPIOutbound{
 		private String					ownerId;
 		private SECURITY_CLEARANCE_TYPE securityClearance;
 		private boolean					requiresSponsorship;
+		private Set<Industry> 			industries					= new LinkedHashSet<>();
 		
 		/**
 		* Sets the candidates Unique identifier in the System
@@ -512,7 +524,6 @@ public class CandidateFullProfileAPIOutbound implements CandidateAPIOutbound{
 			return this;
 		}
 		
-		
 		/**
 		* Sets the perm salary the Candidate will accept
 		* @param ratePerm - salary
@@ -612,6 +623,17 @@ public class CandidateFullProfileAPIOutbound implements CandidateAPIOutbound{
 		public CandidateFullProfileAPIOutboundBuilder requiresSponsorship(boolean requiresSponsorship) {
 			this.requiresSponsorship = requiresSponsorship;
 			return this;
+		} 
+		
+		/**
+		* Sets the Insustries the Candidate has worked in
+		* @param industries - Industries worked in
+		* @return Builder
+		*/
+		public CandidateFullProfileAPIOutboundBuilder industries(Set<Industry> industries) {
+			this.industries.clear();
+			this.industries.addAll(industries);
+			return this;
 		}
 		
 		/**
@@ -665,6 +687,7 @@ public class CandidateFullProfileAPIOutbound implements CandidateAPIOutbound{
 					.ownerId(candidate.getOwnerId().isPresent() ? candidate.getOwnerId().get() : null)
 					.requiresSponsorship(candidate.getRequiresSponsorship())
 					.securityClearance(candidate.getSecurityClearance())
+					.industries(candidate.getIndustries())
 				.build();
 		
 	}
@@ -708,6 +731,7 @@ public class CandidateFullProfileAPIOutbound implements CandidateAPIOutbound{
 					.ownerId(candidate.getOwnerId().isPresent() ? candidate.getOwnerId().get() : null)
 					.requiresSponsorship(candidate.getRequiresSponsorship())
 					.securityClearance(candidate.getSecurityClearance())
+					.industries(candidate.getIndustries())
 				.build();
 	}
 	

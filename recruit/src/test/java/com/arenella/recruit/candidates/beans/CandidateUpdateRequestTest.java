@@ -1,8 +1,8 @@
 package com.arenella.recruit.candidates.beans;
 
-import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDate;
 import java.util.LinkedHashSet;
@@ -11,6 +11,7 @@ import java.util.Set;
 import org.junit.jupiter.api.Test;
 
 import com.arenella.recruit.candidates.beans.Candidate.DAYS_ON_SITE;
+import com.arenella.recruit.candidates.beans.Candidate.Industry;
 import com.arenella.recruit.candidates.beans.Candidate.Rate;
 import com.arenella.recruit.candidates.beans.Candidate.SECURITY_CLEARANCE_TYPE;
 import com.arenella.recruit.candidates.beans.Candidate.Rate.CURRENCY;
@@ -50,6 +51,7 @@ public class CandidateUpdateRequestTest {
 	private static final LocalDate 					AVAILABLE_FROM_DATE 	= LocalDate.of(2023, 7, 21);
 	private static final SECURITY_CLEARANCE_TYPE 	SECURITY_CLEARANCE		= SECURITY_CLEARANCE_TYPE.NONE;
 	private static final boolean					REQUIRES_SPONSORSHIP	= true;
+	private static final Set<Industry> 				INDUSTRIES					= Set.of(Industry.AGRICULTURE, Industry.CYBER_SECURITY);
 	
 	/**
 	* Sets up test environment 
@@ -70,8 +72,8 @@ public class CandidateUpdateRequestTest {
 		
 		CandidateUpdateRequest candidate = CandidateUpdateRequest.builder().build();
 		
-		assertTrue("Expect empty but instantiated Set", candidate.getSkills().isEmpty());
-		assertTrue("Expect empty but instantiated Set", candidate.getLanguages().isEmpty());
+		assertTrue(candidate.getSkills().isEmpty());
+		assertTrue(candidate.getLanguages().isEmpty());
 		assertEquals(0, 								candidate.getYearsExperience());
 		assertNull(candidate.isFreelance());
 		assertNull(candidate.isPerm());
@@ -80,7 +82,6 @@ public class CandidateUpdateRequestTest {
 		assertTrue(candidate.getRateContract().isEmpty());
 		assertTrue(candidate.getRatePerm().isEmpty());
 		assertTrue(candidate.getFunctions().isEmpty());
-		
 		assertEquals(candidate.getAvailableFromDate(), LocalDate.now()); //[KP] Small chance of failure if test run in exactly midnight
 		
 	}
@@ -113,6 +114,7 @@ public class CandidateUpdateRequestTest {
 							.availableFromDate(AVAILABLE_FROM_DATE)
 							.requiresSponsorship(REQUIRES_SPONSORSHIP)
 							.securityClearance(SECURITY_CLEARANCE)
+							.industries(INDUSTRIES)
 							.build();
 		
 		assertEquals(CANDIDATE_ID, 			candidate.getCandidateId());
@@ -138,6 +140,11 @@ public class CandidateUpdateRequestTest {
 		
 		candidate.getLanguages().stream().filter(l -> l.getLanguage() == LANGUAGE_VAL.getLanguage()).findAny().orElseThrow();
 		candidate.getSkills().stream().filter(s -> s.equals(SKILL)).findAny().orElseThrow();
+		
+		assertTrue(candidate.getIndustries().contains(Industry.AGRICULTURE));
+		assertTrue(candidate.getIndustries().contains(Industry.CYBER_SECURITY));
+		assertEquals(2, candidate.getIndustries().size());
+		
 	}
 	
 }
