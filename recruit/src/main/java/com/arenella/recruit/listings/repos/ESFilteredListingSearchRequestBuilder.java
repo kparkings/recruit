@@ -133,8 +133,14 @@ public class ESFilteredListingSearchRequestBuilder {
 			if (value == listing_type.BOTH) {
 				fieldValueList.add(FieldValue.of((listing_type.PERM_ROLE.toString())));
 				fieldValueList.add(FieldValue.of((listing_type.CONTRACT_ROLE.toString())));
-			} else {
-				fieldValueList.add(FieldValue.of((value.toString())));
+				fieldValueList.add(FieldValue.of((listing_type.BOTH.toString())));
+			} else if (value == listing_type.CONTRACT_ROLE){
+				fieldValueList.add(FieldValue.of((listing_type.CONTRACT_ROLE.toString())));
+				fieldValueList.add(FieldValue.of((listing_type.BOTH.toString())));
+			}
+			else if (value == listing_type.PERM_ROLE) {
+				fieldValueList.add(FieldValue.of((listing_type.PERM_ROLE.toString())));
+				fieldValueList.add(FieldValue.of((listing_type.BOTH.toString())));
 			}
 			
 			TermsQueryField termsQueryField = new TermsQueryField.Builder()
