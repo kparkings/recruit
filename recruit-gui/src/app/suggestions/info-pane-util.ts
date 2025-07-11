@@ -73,19 +73,22 @@ export class InfoPaneUtil{
 			yearsExperienceBlock.addRow(new InfoItemRowSingleValue(""+this.candidateProfile.yearsExperience));
 			infoItemConfig.addItem(yearsExperienceBlock);
 			
+			//Industries
+			if(this.candidateProfile.industries.length > 0) {
+				let industriesBlock:InfoItemBlock = new InfoItemBlock();
+				industriesBlock.setTitle(this.translate.instant('info-item-title-industries'));
+				this.candidateProfile.industries.forEach(industry => {
+					industriesBlock.addRow(new InfoItemRowSingleValue(this.translate.instant(industry)));
+				});
+				industriesBlock.sort();
+				infoItemConfig.addItem(industriesBlock);
+			}						
+			
 			//Secuirty Level
 			let securityClearanceBlock:InfoItemBlock = new InfoItemBlock();
 			securityClearanceBlock.setTitle(this.translate.instant('info-item-title-security-clearance'));
 			securityClearanceBlock.addRow(new InfoItemRowKeyValue(this.translate.instant('info-item-security-clearance'),this.candidateProfile.securityClearance));
 			infoItemConfig.addItem(securityClearanceBlock);
-			
-			
-			//Requires Sponsorship
-			let requiresSponsorhipBlock:InfoItemBlock = new InfoItemBlock();
-			requiresSponsorhipBlock.setTitle(this.translate.instant('info-item-title-requires-sponsorship'));
-			requiresSponsorhipBlock.addRow(new InfoItemRowKeyValue(this.translate.instant('info-item-requires-sponsorship'),this.candidateProfile.requiresSponsorship ? this.translate.instant('yes') : this.translate.instant('no')));
-			infoItemConfig.addItem(requiresSponsorhipBlock);
-			
 			
 			//Availability
 			let availabilityBlock:InfoItemBlock = new InfoItemBlock();
