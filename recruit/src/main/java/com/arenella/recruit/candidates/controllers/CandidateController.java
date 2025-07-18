@@ -494,6 +494,62 @@ public class CandidateController {
 		return ResponseEntity.ok().build();
 	}
 	
+	
+	
+	/**
+	* Creates a new Saved Search Request
+	* @param savedSearchRequestInbound	- Contains details of the Search
+	* @param principal					- Currently authenticated User
+	* @return Status
+	*/
+	@PostMapping("/candidate/saved-search-request")
+	@PreAuthorize("hasRole('ROLE_RECRUITER') OR hasRole('ROLE_ADMIN')")
+	public ResponseEntity<Void> createSavedCandidateSearchRequest(SavedCandidateSearchRequestCreateAPIInbound savedSearchRequestInbound, Principal principal) {
+		candidateService.createSavedCandidateSearchRequest(SavedCandidateSearchRequestCreateAPIInbound.toDomain(savedSearchRequestInbound, UUID.randomUUID(),principal.getName()));
+		return ResponseEntity.status(HttpStatus.CREATED).build();
+	}
+	
+	/**
+	* Updates an existing Saved Search Request
+	* @param id							- Unique Id of Search to be updates
+	* @param savedSearchRequestInbound	- New version of Search
+	* @param principal					- Currently authenticated User
+	* @return Status
+	*/
+	@PutMapping("/candidate/saved-search-request/{id}")
+	@PreAuthorize("hasRole('ROLE_RECRUITER') OR hasRole('ROLE_ADMIN')")
+	public ResponseEntity<Void> updateSavedCandidateSearchRequest(@PathVariable("id") UUID id, SavedCandidateSearchRequestUpdateAPIInbound savedSearchRequestInbound, Principal principal) {
+		candidateService.updateSavedCandidateSearchRequest(SavedCandidateSearchRequestUpdateAPIInbound.toDomain(savedSearchRequestInbound, id, principal.getName()));
+		return ResponseEntity.ok().build();
+	}
+	
+	/**
+	* Fetches Saved Searched for authenticated User
+	* @param principal - Current authenticated USer
+	* @return Users saved search requests
+	*/
+	@GetMapping("/candidate/saved-search-request")
+	@PreAuthorize("hasRole('ROLE_RECRUITER') OR hasRole('ROLE_ADMIN')")
+	public ResponseEntity<Set<SavedCandidateSearchRequestAPIOutbound>> fetchSavedCandidateSearchRequest(Principal principal) {
+		return ResponseEntity
+				.status(HttpStatus.OK)
+				.body(candidateService.fetchSavedCandidateSearches(principal.getName())
+					.stream().map(SavedCandidateSearchRequestAPIOutbound::fromDomain).collect(Collectors.toCollection(LinkedHashSet::new)));
+	}
+	
+	/**
+	* Deletes an existing saved search request
+	* @param id			- Unique id of search to delete
+	* @param principal	- currently authenticated User
+	* @return Status
+	*/
+	@DeleteMapping("/candidate/saved-search-request/{id}")
+	@PreAuthorize("hasRole('ROLE_RECRUITER') OR hasRole('ROLE_ADMIN')")
+	public ResponseEntity<Void> deleteSavedCandidateSearchRequest(@PathVariable("id") UUID id, Principal principal) {
+		this.candidateService.deleteSavedCandidateSearch(id, principal.getName());
+		return ResponseEntity.ok().build();
+	}
+	
 	/**
 	* Returns whether or not the user is a Candidate
 	* @return whether or not the user is a Candidate

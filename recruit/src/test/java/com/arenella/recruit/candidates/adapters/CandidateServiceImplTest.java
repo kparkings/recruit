@@ -22,8 +22,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
+
+import static org.mockito.Mockito.*;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.Authentication;
@@ -58,6 +59,7 @@ import com.arenella.recruit.candidates.beans.Language.LANGUAGE;
 import com.arenella.recruit.candidates.beans.Language.LEVEL;
 import com.arenella.recruit.candidates.beans.PendingCandidate;
 import com.arenella.recruit.candidates.beans.RecruiterCredit;
+import com.arenella.recruit.candidates.beans.SavedCandidateSearch;
 import com.arenella.recruit.candidates.controllers.CandidateController.CANDIDATE_UPDATE_ACTIONS;
 import com.arenella.recruit.candidates.controllers.CandidateValidationException;
 import com.arenella.recruit.candidates.controllers.SavedCandidate;
@@ -67,6 +69,7 @@ import com.arenella.recruit.candidates.dao.CandidateSkillsDao;
 import com.arenella.recruit.candidates.dao.PendingCandidateDao;
 import com.arenella.recruit.candidates.dao.RecruiterContactDao;
 import com.arenella.recruit.candidates.dao.SavedCandidateDao;
+import com.arenella.recruit.candidates.dao.SavedCandidateSearchEntityDao;
 import com.arenella.recruit.candidates.dao.SkillUpdateStatDao;
 import com.arenella.recruit.candidates.entities.CandidateSkillEntity.VALIDATION_STATUS;
 import com.arenella.recruit.candidates.entities.PendingCandidateEntity;
@@ -162,6 +165,9 @@ class CandidateServiceImplTest {
 	@Mock
 	private CityService								mockCityService;
 	
+	@Mock
+	private SavedCandidateSearchEntityDao			mockSavedCandidateSearchEntityDao;
+	
 	@InjectMocks
 	private CandidateServiceImpl 					service 					= new CandidateServiceImpl();
 	
@@ -169,7 +175,7 @@ class CandidateServiceImplTest {
 	* Sets up test environment 
 	*/
 	@BeforeEach
-	public void init() {
+	void init() {
 		SecurityContextHolder.setContext(mockSecurityContext);
 	}
 	
@@ -183,9 +189,9 @@ class CandidateServiceImplTest {
 		Collection authorities = new HashSet<>();
 		authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
 		
-		Mockito.when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
-		Mockito.when(mockAuthentication.getAuthorities()).thenReturn(authorities);
-		Mockito.when(this.mockCandidateRepo.emailInUse(Mockito.anyString(), Mockito.any())).thenReturn(true);
+		when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
+		when(mockAuthentication.getAuthorities()).thenReturn(authorities);
+		when(this.mockCandidateRepo.emailInUse(anyString(), any())).thenReturn(true);
 		
 		assertThrows(CandidateValidationException.class, () -> {
 			this.service.persistCandidate(Candidate.builder().email("admin@arenella-ict.com").build());
@@ -207,13 +213,13 @@ class CandidateServiceImplTest {
 		Collection authorities = new HashSet<>();
 		authorities.add(new SimpleGrantedAuthority("ROLE_RECRUITER"));
 		
-		Mockito.when(mockCandidateRepo.saveCandidate(argCapt.capture())).thenReturn(0L);
+		when(mockCandidateRepo.saveCandidate(argCapt.capture())).thenReturn(0L);
 		
-		Mockito.when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
-		Mockito.when(mockAuthentication.getAuthorities()).thenReturn(authorities);
-		Mockito.when(mockAuthentication.getPrincipal()).thenReturn("kp1");
+		when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
+		when(mockAuthentication.getAuthorities()).thenReturn(authorities);
+		when(mockAuthentication.getPrincipal()).thenReturn("kp1");
 		
-		Mockito.when(this.mockContactDao.getByTypeAndId(Mockito.any(), Mockito.any())).thenReturn(Optional.of(contact));
+		when(this.mockContactDao.getByTypeAndId(any(), any())).thenReturn(Optional.of(contact));
 		
 		this.service.persistCandidate(Candidate.builder().candidateId("123").firstname("kevin").email("admin@arenella-ict.com").build());
 		
@@ -233,10 +239,10 @@ class CandidateServiceImplTest {
 		Collection authorities = new HashSet<>();
 		authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
 		
-		Mockito.when(mockCandidateRepo.saveCandidate(argCapt.capture())).thenReturn(0L);
+		when(mockCandidateRepo.saveCandidate(argCapt.capture())).thenReturn(0L);
 		
-		Mockito.when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
-		Mockito.when(mockAuthentication.getAuthorities()).thenReturn(authorities);
+		when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
+		when(mockAuthentication.getAuthorities()).thenReturn(authorities);
 		
 		this.service.persistCandidate(Candidate.builder().candidateId("123").firstname("kevin").email("admin@arenella-ict.com").build());
 		
@@ -254,10 +260,10 @@ class CandidateServiceImplTest {
 		Collection authorities = new HashSet<>();
 		authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
 
-		Mockito.when(this.mockCandidateRepo.emailInUse(Mockito.anyString(), Mockito.any())).thenReturn(false);
+		when(this.mockCandidateRepo.emailInUse(anyString(), any())).thenReturn(false);
 	
-		Mockito.when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
-		Mockito.when(mockAuthentication.getAuthorities()).thenReturn(authorities);
+		when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
+		when(mockAuthentication.getAuthorities()).thenReturn(authorities);
 
 		this.service.persistCandidate(Candidate
 				.builder()
@@ -268,11 +274,11 @@ class CandidateServiceImplTest {
 					.city("Brussels")
 				.build());
 		
-		Mockito.verify(this.mockExternalEventPublisher).publishCandidateAccountCreatedEvent(Mockito.any(CandidateAccountCreatedEvent.class));
-		Mockito.verify(this.mockExternalEventPublisher).publishSendEmailCommand(Mockito.any(RequestSendEmailCommand.class));
-		Mockito.verify(this.mockExternalEventPublisher).publishCandidateCreatedEvent(Mockito.any(CandidateCreatedEvent.class));
-		Mockito.verify(this.mockExternalEventPublisher).publishCandidateUpdateEvent(Mockito.any(CandidateUpdateEvent.class));
-		Mockito.verify(this.mockCityService).performNewCityCheck(COUNTRY.BELGIUM, "Brussels");
+		verify(this.mockExternalEventPublisher).publishCandidateAccountCreatedEvent(any(CandidateAccountCreatedEvent.class));
+		verify(this.mockExternalEventPublisher).publishSendEmailCommand(any(RequestSendEmailCommand.class));
+		verify(this.mockExternalEventPublisher).publishCandidateCreatedEvent(any(CandidateCreatedEvent.class));
+		verify(this.mockExternalEventPublisher).publishCandidateUpdateEvent(any(CandidateUpdateEvent.class));
+		verify(this.mockCityService).performNewCityCheck(COUNTRY.BELGIUM, "Brussels");
 		
 	}
 	
@@ -289,11 +295,11 @@ class CandidateServiceImplTest {
 		Collection authorities = new HashSet<>();
 		authorities.add(new SimpleGrantedAuthority("ROLE_RECRUITER"));
 
-		Mockito.when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
-		Mockito.when(mockAuthentication.getAuthorities()).thenReturn(authorities);
-		Mockito.when(mockAuthentication.getPrincipal()).thenReturn("kp1");
+		when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
+		when(mockAuthentication.getAuthorities()).thenReturn(authorities);
+		when(mockAuthentication.getPrincipal()).thenReturn("kp1");
 		
-		Mockito.when(this.mockContactDao.getByTypeAndId(CONTACT_TYPE.RECRUITER, "kp1")).thenReturn(Optional.of(contact)); 
+		when(this.mockContactDao.getByTypeAndId(CONTACT_TYPE.RECRUITER, "kp1")).thenReturn(Optional.of(contact)); 
 
 		this.service.persistCandidate(Candidate
 				.builder()
@@ -302,9 +308,9 @@ class CandidateServiceImplTest {
 					.firstname("kevin")
 				.build());
 		
-		Mockito.verify(this.mockExternalEventPublisher, Mockito.times(0)).publishCandidateAccountCreatedEvent(Mockito.any(CandidateAccountCreatedEvent.class));
-		Mockito.verify(this.mockExternalEventPublisher, Mockito.times(0)).publishSendEmailCommand(Mockito.any(RequestSendEmailCommand.class));
-		Mockito.verify(this.mockExternalEventPublisher, Mockito.times(0)).publishCandidateCreatedEvent(Mockito.any(CandidateCreatedEvent.class));
+		verify(this.mockExternalEventPublisher, times(0)).publishCandidateAccountCreatedEvent(any(CandidateAccountCreatedEvent.class));
+		verify(this.mockExternalEventPublisher, times(0)).publishSendEmailCommand(any(RequestSendEmailCommand.class));
+		verify(this.mockExternalEventPublisher, times(0)).publishCandidateCreatedEvent(any(CandidateCreatedEvent.class));
 		
 	}
 	/**
@@ -313,7 +319,7 @@ class CandidateServiceImplTest {
 	@Test
 	void testPersistPendingCandidate_emailAlreadyExists() {
 		
-		Mockito.when(this.mockPendingCandidateDao.emailInUse(Mockito.anyString())).thenReturn(true);
+		when(this.mockPendingCandidateDao.emailInUse(anyString())).thenReturn(true);
 		
 		assertThrows(CandidateValidationException.class, () -> {
 			this.service.persistPendingCandidate(PendingCandidate.builder().email("admin@arenella-ict.com").build());
@@ -329,13 +335,13 @@ class CandidateServiceImplTest {
 	@Test
 	void testUpdateCandidate_unknownCandidate() {
 		
-		Mockito.when(mockCandidateRepo.findCandidateById(0)).thenReturn(Optional.empty());
+		when(mockCandidateRepo.findCandidateById(0)).thenReturn(Optional.empty());
 		
 		Assertions.assertThrows(RuntimeException.class , () -> {
 			service.updateCandidate("1", CANDIDATE_UPDATE_ACTIONS.disable);
 		});
 		
-		Mockito.verify(this.mockExternalEventPublisher, Mockito.never()).publishCandidateUpdateEvent(Mockito.any());
+		verify(this.mockExternalEventPublisher, never()).publishCandidateUpdateEvent(any());
 		
 	}
 	
@@ -350,16 +356,16 @@ class CandidateServiceImplTest {
 		ArgumentCaptor<CandidateUpdateEvent> 	newsFeedCaptor 		= ArgumentCaptor.forClass(CandidateUpdateEvent.class);
 		Candidate 								candidate 			= Candidate.builder().available(false).build();
 		
-		Mockito.when(mockCandidateRepo.findCandidateById(1L)).thenReturn(Optional.of(candidate));
+		when(mockCandidateRepo.findCandidateById(1L)).thenReturn(Optional.of(candidate));
 		
 		this.service.updateCandidate("1", CANDIDATE_UPDATE_ACTIONS.enable);
 		
-		Mockito.verify(mockCandidateRepo).saveCandidate(captor.capture());
-		Mockito.verify(this.mockExternalEventPublisher, Mockito.never()).publishCandidateNoLongerAvailableEvent(Mockito.any());
+		verify(mockCandidateRepo).saveCandidate(captor.capture());
+		verify(this.mockExternalEventPublisher, never()).publishCandidateNoLongerAvailableEvent(any());
 		
 		assertTrue(captor.getValue().isAvailable());
 		
-		Mockito.verify(this.mockExternalEventPublisher).publishCandidateUpdateEvent(newsFeedCaptor.capture());
+		verify(this.mockExternalEventPublisher).publishCandidateUpdateEvent(newsFeedCaptor.capture());
 		
 		assertEquals(NEWSFEED_ITEM_TYPE.CANDIDATE_BECAME_AVAILABLE, newsFeedCaptor.getValue().getItemType());
 		
@@ -375,11 +381,11 @@ class CandidateServiceImplTest {
 		ArgumentCaptor<CandidateUpdateEvent> 	newsFeedCaptor 		= ArgumentCaptor.forClass(CandidateUpdateEvent.class);
 		Candidate 								candidate 			= Candidate.builder().available(true).build();
 		
-		Mockito.when(mockCandidateRepo.findCandidateById(1L)).thenReturn(Optional.of(candidate));
+		when(mockCandidateRepo.findCandidateById(1L)).thenReturn(Optional.of(candidate));
 		
 		this.service.updateCandidate("1", CANDIDATE_UPDATE_ACTIONS.enable);
 		
-		Mockito.verify(this.mockExternalEventPublisher, Mockito.never()).publishCandidateUpdateEvent(newsFeedCaptor.capture());
+		verify(this.mockExternalEventPublisher, never()).publishCandidateUpdateEvent(newsFeedCaptor.capture());
 		
 	}
 	
@@ -393,11 +399,11 @@ class CandidateServiceImplTest {
 		ArgumentCaptor<CandidateUpdateEvent> 	newsFeedCaptor 		= ArgumentCaptor.forClass(CandidateUpdateEvent.class);
 		Candidate 								candidate 			= Candidate.builder().candidateId("1").available(false).build();
 		
-		Mockito.when(mockCandidateRepo.findCandidateById(1L)).thenReturn(Optional.of(candidate));
+		when(mockCandidateRepo.findCandidateById(1L)).thenReturn(Optional.of(candidate));
 		
 		this.service.updateCandidate("1", CANDIDATE_UPDATE_ACTIONS.disable);
 		
-		Mockito.verify(this.mockExternalEventPublisher, Mockito.never()).publishCandidateUpdateEvent(newsFeedCaptor.capture());
+		verify(this.mockExternalEventPublisher, never()).publishCandidateUpdateEvent(newsFeedCaptor.capture());
 		
 	}
 	
@@ -412,16 +418,16 @@ class CandidateServiceImplTest {
 		ArgumentCaptor<CandidateUpdateEvent> 	newsFeedCaptor 		= ArgumentCaptor.forClass(CandidateUpdateEvent.class);
 		Candidate 								candidate 			= Candidate.builder().candidateId("123").available(true).build();
 		
-		Mockito.when(mockCandidateRepo.findCandidateById(1L)).thenReturn(Optional.of(candidate));
+		when(mockCandidateRepo.findCandidateById(1L)).thenReturn(Optional.of(candidate));
 		
 		this.service.updateCandidate("1", CANDIDATE_UPDATE_ACTIONS.disable);
 		
-		Mockito.verify(mockCandidateRepo).saveCandidate(captor.capture());
-		Mockito.verify(this.mockExternalEventPublisher).publishCandidateNoLongerAvailableEvent(Mockito.any());
+		verify(mockCandidateRepo).saveCandidate(captor.capture());
+		verify(this.mockExternalEventPublisher).publishCandidateNoLongerAvailableEvent(any());
 		
 		assertFalse(captor.getValue().isAvailable());
 		
-		Mockito.verify(this.mockExternalEventPublisher).publishCandidateUpdateEvent(newsFeedCaptor.capture());
+		verify(this.mockExternalEventPublisher).publishCandidateUpdateEvent(newsFeedCaptor.capture());
 		
 		assertEquals(NEWSFEED_ITEM_TYPE.CANDIDATE_BECAME_UNAVAILABLE, newsFeedCaptor.getValue().getItemType());
 		
@@ -434,7 +440,7 @@ class CandidateServiceImplTest {
 	@Test
 	void testUpdateCandidatesLastAvailabilityCheck_unknownCandidate() {
 		
-		Mockito.when(this.mockCandidateRepo.findCandidateById(Mockito.anyLong())).thenReturn(Optional.empty());
+		when(this.mockCandidateRepo.findCandidateById(anyLong())).thenReturn(Optional.empty());
 		
 		Assertions.assertThrows(IllegalArgumentException.class, () -> {
 			this.service.updateCandidatesLastAvailabilityCheck(4L);
@@ -452,12 +458,12 @@ class CandidateServiceImplTest {
 		ArgumentCaptor<Candidate> captor = ArgumentCaptor.forClass(Candidate.class);
 		Candidate candidate = Candidate.builder().build();
 		
-		Mockito.when(this.mockCandidateRepo.findCandidateById(Mockito.anyLong())).thenReturn(Optional.of(candidate));
-		Mockito.when(this.mockCandidateRepo.saveCandidate(captor.capture())).thenReturn(0L);
+		when(this.mockCandidateRepo.findCandidateById(anyLong())).thenReturn(Optional.of(candidate));
+		when(this.mockCandidateRepo.saveCandidate(captor.capture())).thenReturn(0L);
 		
 		this.service.updateCandidatesLastAvailabilityCheck(4L);
 		
-		Mockito.verify(this.mockCandidateRepo).saveCandidate(candidate);
+		verify(this.mockCandidateRepo).saveCandidate(candidate);
 		
 	}
 
@@ -505,11 +511,11 @@ class CandidateServiceImplTest {
 														.pendingCandidateId(UUID.randomUUID())
 													.build();
 		
-		Mockito.when(mockPendingCandidateDao.existsById(Mockito.any())).thenReturn(false);
+		when(mockPendingCandidateDao.existsById(any())).thenReturn(false);
 		
 		this.service.persistPendingCandidate(pendingCandidate);
 		
-		Mockito.verify(mockPendingCandidateDao).save(Mockito.any(PendingCandidateEntity.class));
+		verify(mockPendingCandidateDao).save(any(PendingCandidateEntity.class));
 		
 	}
 	
@@ -524,11 +530,11 @@ class CandidateServiceImplTest {
 		
 		ArgumentCaptor<CandidateSearchAlert> argCapt = ArgumentCaptor.forClass(CandidateSearchAlert.class);
 		
-		Mockito.when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
+		when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
 		
-		Mockito.when(mockAuthentication.getPrincipal()).thenReturn("recruiter1");
+		when(mockAuthentication.getPrincipal()).thenReturn("recruiter1");
 
-		Mockito.doNothing().when(this.mockSkillAlertDao).saveAlert(argCapt.capture());
+		doNothing().when(this.mockSkillAlertDao).saveAlert(argCapt.capture());
 		
 		CandidateSearchAlert alert = CandidateSearchAlert.builder().functions(Set.of(FUNCTION.IT_RECRUITER)).build();
 		
@@ -536,7 +542,7 @@ class CandidateServiceImplTest {
 		
 		assertNotNull(alert.getAlertId());
 		
-		Mockito.verify(this.mockSkillAlertDao).saveAlert(alert);
+		verify(this.mockSkillAlertDao).saveAlert(alert);
 		
 		assertEquals(1, argCapt.getValue().getFunctions().size());
 		assertTrue(argCapt.getValue().getFunctions().contains(FUNCTION.IT_RECRUITER));
@@ -555,9 +561,9 @@ class CandidateServiceImplTest {
 		
 		ArgumentCaptor<CandidateSearchAlert> argCapt = ArgumentCaptor.forClass(CandidateSearchAlert.class);
 		
-		Mockito.when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
-		Mockito.when(mockAuthentication.getPrincipal()).thenReturn("recruiter1");
-		Mockito.doNothing().when(this.mockSkillAlertDao).saveAlert(argCapt.capture());
+		when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
+		when(mockAuthentication.getPrincipal()).thenReturn("recruiter1");
+		doNothing().when(this.mockSkillAlertDao).saveAlert(argCapt.capture());
 				
 		CandidateSearchAlert alert = 
 				CandidateSearchAlert
@@ -569,7 +575,7 @@ class CandidateServiceImplTest {
 		
 		assertNotNull(alert.getAlertId());
 		
-		Mockito.verify(this.mockSkillAlertDao).saveAlert(alert);
+		verify(this.mockSkillAlertDao).saveAlert(alert);
 		
 		assertEquals(1, argCapt.getValue().getFunctions().size());
 		assertTrue(argCapt.getValue().getFunctions().contains(FUNCTION.JAVA_DEV));
@@ -585,12 +591,12 @@ class CandidateServiceImplTest {
 		
 		final String recruiterId = "recruiter1";
 		
-		Mockito.when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
+		when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
 		
-		Mockito.when(mockAuthentication.getPrincipal()).thenReturn(recruiterId);
+		when(mockAuthentication.getPrincipal()).thenReturn(recruiterId);
 		
-		Mockito.when(this.mockSkillAlertDao
-				.fetchAlertsByRecruiterId(Mockito.anyString()))
+		when(this.mockSkillAlertDao
+				.fetchAlertsByRecruiterId(anyString()))
 				.thenReturn(Set.of(CandidateSearchAlert.builder().build(),
 						CandidateSearchAlert.builder().build()));
 		
@@ -598,7 +604,7 @@ class CandidateServiceImplTest {
 		
 		assertEquals(2, alerts.size());
 		
-		Mockito.verify(this.mockSkillAlertDao).fetchAlertsByRecruiterId(recruiterId);
+		verify(this.mockSkillAlertDao).fetchAlertsByRecruiterId(recruiterId);
 		
 	}
 	
@@ -611,7 +617,7 @@ class CandidateServiceImplTest {
 		
 		UUID id = UUID.randomUUID();
 		
-		Mockito.when(this.mockSkillAlertDao.getchAlertById(id)).thenReturn(Optional.empty());
+		when(this.mockSkillAlertDao.getchAlertById(id)).thenReturn(Optional.empty());
 		
 		assertThrows(IllegalArgumentException.class, () -> {
 			this.service.deleteSearchAlert(id);
@@ -626,17 +632,17 @@ class CandidateServiceImplTest {
 	@Test
 	void testDeleteCandidateSearchAlert_owner() {
 		
-		Mockito.when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
+		when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
 		
-		Mockito.when(mockAuthentication.getPrincipal()).thenReturn("recruiter1");
+		when(mockAuthentication.getPrincipal()).thenReturn("recruiter1");
 		
 		UUID id = UUID.randomUUID();
 		
-		Mockito.when(this.mockSkillAlertDao.getchAlertById(id)).thenReturn(Optional.of(CandidateSearchAlert.builder().recruiterId("recruiter1").build()));
+		when(this.mockSkillAlertDao.getchAlertById(id)).thenReturn(Optional.of(CandidateSearchAlert.builder().recruiterId("recruiter1").build()));
 		
 		this.service.deleteSearchAlert(id);
 		
-		Mockito.verify(this.mockSkillAlertDao).deleteById(id);
+		verify(this.mockSkillAlertDao).deleteById(id);
 		
 	}
 	
@@ -647,13 +653,13 @@ class CandidateServiceImplTest {
 	@Test
 	void testDeleteCandidateSearchAlert_isNotOwner() {
 		
-		Mockito.when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
+		when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
 		
-		Mockito.when(mockAuthentication.getPrincipal()).thenReturn("recruiter1");
+		when(mockAuthentication.getPrincipal()).thenReturn("recruiter1");
 		
 		UUID id = UUID.randomUUID();
 		
-		Mockito.when(this.mockSkillAlertDao.getchAlertById(id)).thenReturn(Optional.of(CandidateSearchAlert.builder().recruiterId("r1").build()));
+		when(this.mockSkillAlertDao.getchAlertById(id)).thenReturn(Optional.of(CandidateSearchAlert.builder().recruiterId("r1").build()));
 		
 		assertThrows(IllegalArgumentException.class, () -> {
 			this.service.deleteSearchAlert(id);
@@ -684,7 +690,7 @@ class CandidateServiceImplTest {
 		
 		ArgumentCaptor<CandidateFilterOptions> filterArgCaptor = ArgumentCaptor.forClass(CandidateFilterOptions.class);
 		
-		Mockito.when(this.mockCandidateRepo.findCandidates(filterArgCaptor.capture(), Mockito.any(), Mockito.eq(0), Mockito.eq(10000))).thenReturn(Set.of());
+		when(this.mockCandidateRepo.findCandidates(filterArgCaptor.capture(), any(), eq(0), eq(10000))).thenReturn(Set.of());
 		
 		suggestion_accuracy accuracy = this.service.doTestCandidateAlert(candidateId, filterOptions);
 		
@@ -718,16 +724,13 @@ class CandidateServiceImplTest {
 		
 		ArgumentCaptor<CandidateFilterOptions> filterArgCaptor = ArgumentCaptor.forClass(CandidateFilterOptions.class);
 		
-		Mockito
-			.when(this.mockCandidateRepo.findCandidates(filterArgCaptor.capture(), Mockito.any(), Mockito.eq(0), Mockito.eq(10000)))
+		when(this.mockCandidateRepo.findCandidates(filterArgCaptor.capture(), any(), eq(0), eq(10000)))
 			.thenReturn(Set.of(Candidate.builder().candidateId(String.valueOf(candidateId)).build()));
 		
-		Mockito
-			.when(this.mockSuggestionUtil.isPerfectMatch(Mockito.any(CandidateSearchAccuracyWrapper.class), filterArgCaptor.capture(), Mockito.any()))
+		when(this.mockSuggestionUtil.isPerfectMatch(any(CandidateSearchAccuracyWrapper.class), filterArgCaptor.capture(), any()))
 			.thenReturn(true);
 		
-		Mockito
-			.doNothing().when(this.mockSkillsSynonymsUtil).addSynonymsForSkills(Mockito.anySet(), Mockito.anySet());
+		doNothing().when(this.mockSkillsSynonymsUtil).addSynonymsForSkills(anySet(), anySet());
 		
 		suggestion_accuracy accuracy = this.service.doTestCandidateAlert(candidateId, filterOptions);
 		
@@ -760,24 +763,19 @@ class CandidateServiceImplTest {
 						)
 					.build();
 		
-		Mockito
-			.when(this.mockCandidateRepo.findCandidates(Mockito.any(),Mockito.any(), Mockito.eq(0), Mockito.eq(10000)))
+		when(this.mockCandidateRepo.findCandidates(any(),any(), eq(0), eq(10000)))
 			.thenReturn(Set.of(Candidate.builder().candidateId(String.valueOf(candidateId)).build()));
 		
-		Mockito
-			.when(this.mockSuggestionUtil.isPerfectMatch(Mockito.any(CandidateSearchAccuracyWrapper.class), Mockito.any(), Mockito.any()))
+		when(this.mockSuggestionUtil.isPerfectMatch(any(CandidateSearchAccuracyWrapper.class), any(), any()))
 			.thenReturn(false);
 		
-		Mockito
-		.when(this.mockSuggestionUtil.isExcellentMatch(Mockito.any(CandidateSearchAccuracyWrapper.class), Mockito.any(), Mockito.any()))
-		.thenReturn(false);
+		when(this.mockSuggestionUtil.isExcellentMatch(any(CandidateSearchAccuracyWrapper.class), any(), any()))
+			.thenReturn(false);
 	
-		Mockito
-		.when(this.mockSuggestionUtil.isGoodMatch(Mockito.any(CandidateSearchAccuracyWrapper.class), Mockito.any(), Mockito.any()))
-		.thenReturn(false);
+		when(this.mockSuggestionUtil.isGoodMatch(any(CandidateSearchAccuracyWrapper.class), any(), any()))
+			.thenReturn(false);
 	
-		Mockito
-			.doNothing().when(this.mockSkillsSynonymsUtil).addSynonymsForSkills(Mockito.anySet(), Mockito.anySet());
+		doNothing().when(this.mockSkillsSynonymsUtil).addSynonymsForSkills(anySet(), anySet());
 		
 		suggestion_accuracy accuracy = this.service.doTestCandidateAlert(candidateId, filterOptions);
 		
@@ -792,7 +790,7 @@ class CandidateServiceImplTest {
 	@Test
 	void testExtractFiltersFromDocument_failure() throws Exception{
 		
-		Mockito.doThrow(RuntimeException.class).when(this.mockDocumentFilterExtractionUtil).extractFilters(null, null);
+		doThrow(RuntimeException.class).when(this.mockDocumentFilterExtractionUtil).extractFilters(null, null);
 		
 		Assertions.assertThrows(RuntimeException.class, () ->{
 			this.service.extractFiltersFromDocument(null, null);
@@ -808,9 +806,9 @@ class CandidateServiceImplTest {
 	@Test
 	void testAddSavedCanidate_already_exists() {
 		
-		Mockito.when(this.mockSavedCandidateDao.exists(Mockito.anyString(), Mockito.anyLong())).thenReturn(true);
+		when(this.mockSavedCandidateDao.exists(anyString(), anyLong())).thenReturn(true);
 		
-		Assertions.assertThrows(IllegalArgumentException.class, () -> {
+		assertThrows(IllegalArgumentException.class, () -> {
 			this.service.addSavedCanidate(SavedCandidate.builder().candidateId(1001).userId("kparkings").build());
 		});
 		
@@ -823,11 +821,11 @@ class CandidateServiceImplTest {
 	@Test
 	void testAddSavedCanidate() {
 		
-		Mockito.when(this.mockSavedCandidateDao.exists(Mockito.anyString(), Mockito.anyLong())).thenReturn(false);
+		when(this.mockSavedCandidateDao.exists(anyString(), anyLong())).thenReturn(false);
 		
 		this.service.addSavedCanidate(SavedCandidate.builder().candidateId(1001).userId("kparkings").build());
 		
-		Mockito.verify(this.mockSavedCandidateDao).persistSavedCandidate(Mockito.any(SavedCandidate.class));
+		verify(this.mockSavedCandidateDao).persistSavedCandidate(any(SavedCandidate.class));
 		
 	}
 	
@@ -847,11 +845,11 @@ class CandidateServiceImplTest {
 		savedCandidates.add(SavedCandidate.builder().candidateId(1001).userId(userId).build());
 		savedCandidates.add(SavedCandidate.builder().candidateId(1007).userId(userId).build());
 		
-		Mockito.when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
-		Mockito.when(mockAuthentication.getPrincipal()).thenReturn(userId);
-		Mockito.when(this.mockCandidateRepo.findCandidateById(candidate1)).thenReturn(Optional.empty());
-		Mockito.when(this.mockCandidateRepo.findCandidateById(candidate2)).thenReturn(Optional.of(Candidate.builder().available(true).firstname("Boop").candidateId(String.valueOf(candidate2)).build()));
-		Mockito.when(this.mockSavedCandidateDao.fetchSavedCandidatesByUserId(Mockito.anyString())).thenReturn(savedCandidates);
+		when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
+		when(mockAuthentication.getPrincipal()).thenReturn(userId);
+		when(this.mockCandidateRepo.findCandidateById(candidate1)).thenReturn(Optional.empty());
+		when(this.mockCandidateRepo.findCandidateById(candidate2)).thenReturn(Optional.of(Candidate.builder().available(true).firstname("Boop").candidateId(String.valueOf(candidate2)).build()));
+		when(this.mockSavedCandidateDao.fetchSavedCandidatesByUserId(anyString())).thenReturn(savedCandidates);
 		Map<SavedCandidate, Candidate> result = this.service.fetchSavedCandidatesForUser();
 		
 		SavedCandidate sc1 = result.keySet().stream().filter(c -> c.getCandidateId() == candidate1).findAny().orElseThrow();
@@ -874,8 +872,8 @@ class CandidateServiceImplTest {
 		
 		final long savedCandidate1 	= 1001;
 		
-		Mockito.when(this.mockSavedCandidateDao.exists(Mockito.anyString(), Mockito.anyLong())).thenReturn(false);
-		Mockito.when(mockAuthentication.getName()).thenReturn("kparkings");
+		when(this.mockSavedCandidateDao.exists(anyString(), anyLong())).thenReturn(false);
+		when(mockAuthentication.getName()).thenReturn("kparkings");
 		
 		Assertions.assertThrows(IllegalArgumentException.class, () -> {
 			this.service.removeSavedCandidate(savedCandidate1, mockAuthentication);
@@ -892,12 +890,12 @@ class CandidateServiceImplTest {
 		
 		final long savedCandidate1 	= 1001;
 		
-		Mockito.when(this.mockSavedCandidateDao.exists(Mockito.anyString(), Mockito.anyLong())).thenReturn(true);
-		Mockito.when(mockAuthentication.getName()).thenReturn("kparkings");
+		when(this.mockSavedCandidateDao.exists(anyString(), anyLong())).thenReturn(true);
+		when(mockAuthentication.getName()).thenReturn("kparkings");
 		
 		this.service.removeSavedCandidate(savedCandidate1, mockAuthentication);
 		
-		Mockito.verify(this.mockSavedCandidateDao).delete(Mockito.anyString(), Mockito.anyLong());
+		verify(this.mockSavedCandidateDao).delete(anyString(), anyLong());
 		
 	}
 	
@@ -911,9 +909,9 @@ class CandidateServiceImplTest {
 		
 		final long savedCandidate1 	= 1001;
 		
-		Mockito.when(this.mockSavedCandidateDao.exists(Mockito.anyString(), Mockito.anyLong())).thenReturn(false);
+		when(this.mockSavedCandidateDao.exists(anyString(), anyLong())).thenReturn(false);
 		
-		Assertions.assertThrows(IllegalArgumentException.class, () -> {
+		assertThrows(IllegalArgumentException.class, () -> {
 			this.service.updateSavedCandidate(SavedCandidate.builder().userId("kparkings").candidateId(savedCandidate1).build());
 		});
 		
@@ -928,11 +926,11 @@ class CandidateServiceImplTest {
 		
 		final long savedCandidate1 	= 1001;
 		
-		Mockito.when(this.mockSavedCandidateDao.exists(Mockito.anyString(), Mockito.anyLong())).thenReturn(true);
+		when(this.mockSavedCandidateDao.exists(anyString(), anyLong())).thenReturn(true);
 		
 		this.service.updateSavedCandidate(SavedCandidate.builder().userId("kparkings").candidateId(savedCandidate1).build());
 		
-		Mockito.verify(this.mockSavedCandidateDao).updateSavedCandidate(Mockito.any(SavedCandidate.class));
+		verify(this.mockSavedCandidateDao).updateSavedCandidate(any(SavedCandidate.class));
 		
 	}
 	
@@ -944,10 +942,10 @@ class CandidateServiceImplTest {
 	@Test
 	void testFetchCandidate_candidate_other_candidate() {
 		
-		GrantedAuthority 				mockGA = Mockito.mock(GrantedAuthority.class);
+		GrantedAuthority 				mockGA = mock(GrantedAuthority.class);
 		Collection<GrantedAuthority> 	authorities = Set.of(mockGA);
 		
-		Mockito.when(mockGA.getAuthority()).thenReturn("ROLE_CANDIDATE");
+		when(mockGA.getAuthority()).thenReturn("ROLE_CANDIDATE");
 		
 		Assertions.assertThrows(IllegalArgumentException.class, () -> {
 			this.service.fetchCandidate("1960", "1961", authorities);
@@ -967,12 +965,12 @@ class CandidateServiceImplTest {
 		Collection authorities = new HashSet<>();
 		authorities.add(new SimpleGrantedAuthority("ROLE_RECRUITER"));
 
-		Mockito.when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
-		Mockito.when(mockAuthentication.getAuthorities()).thenReturn(authorities);
-		Mockito.when(mockAuthentication.getPrincipal()).thenReturn("user1");
+		when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
+		when(mockAuthentication.getAuthorities()).thenReturn(authorities);
+		when(mockAuthentication.getPrincipal()).thenReturn("user1");
 		
-		Mockito.when(this.mockCandidateRepo.findCandidateById(Mockito.anyLong())).thenReturn(Optional.of(Candidate.builder().available(false).build()));
-		Mockito.when(this.mockCreditDao.getByRecruiterId(Mockito.anyString())).thenReturn(Optional.of(RecruiterCredit.builder().paidSubscription(false).build()));
+		when(this.mockCandidateRepo.findCandidateById(anyLong())).thenReturn(Optional.of(Candidate.builder().available(false).build()));
+		when(this.mockCreditDao.getByRecruiterId(anyString())).thenReturn(Optional.of(RecruiterCredit.builder().paidSubscription(false).build()));
 		
 		Assertions.assertThrows(IllegalArgumentException.class, () -> {
 			this.service.fetchCandidate("1960", "1961", authorities);
@@ -992,12 +990,12 @@ class CandidateServiceImplTest {
 		Collection authorities = new HashSet<>();
 		authorities.add(new SimpleGrantedAuthority("ROLE_RECRUITER"));
 
-		Mockito.when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
-		Mockito.when(mockAuthentication.getAuthorities()).thenReturn(authorities);
-		Mockito.when(mockAuthentication.getPrincipal()).thenReturn("user1");
+		when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
+		when(mockAuthentication.getAuthorities()).thenReturn(authorities);
+		when(mockAuthentication.getPrincipal()).thenReturn("user1");
 		
-		Mockito.when(this.mockCandidateRepo.findCandidateById(Mockito.anyLong())).thenReturn(Optional.of(Candidate.builder().available(false).build()));
-		Mockito.when(this.mockCreditDao.getByRecruiterId(Mockito.anyString())).thenReturn(Optional.of(RecruiterCredit.builder().paidSubscription(true).build()));
+		when(this.mockCandidateRepo.findCandidateById(anyLong())).thenReturn(Optional.of(Candidate.builder().available(false).build()));
+		when(this.mockCreditDao.getByRecruiterId(anyString())).thenReturn(Optional.of(RecruiterCredit.builder().paidSubscription(true).build()));
 		
 		Candidate candidate = 	this.service.fetchCandidate("1960", "1961", authorities);
 		
@@ -1012,17 +1010,17 @@ class CandidateServiceImplTest {
 	@Test
 	void testFetchCandidate_candidate_own_candidate_not_found() {
 		
-		GrantedAuthority 				mockGA = Mockito.mock(GrantedAuthority.class);
+		GrantedAuthority 				mockGA = mock(GrantedAuthority.class);
 		Collection<GrantedAuthority> 	authorities = Set.of(mockGA);
 		
-		Mockito.when(mockGA.getAuthority()).thenReturn("ROLE_CANDIDATE");
-		Mockito.when(this.mockCandidateRepo.findCandidateById(Mockito.anyLong())).thenReturn(Optional.empty());
+		when(mockGA.getAuthority()).thenReturn("ROLE_CANDIDATE");
+		when(this.mockCandidateRepo.findCandidateById(anyLong())).thenReturn(Optional.empty());
 		
 		Assertions.assertThrows(IllegalArgumentException.class, () -> {
 			this.service.fetchCandidate("1961", "1961", authorities);
 		});
 		
-		Mockito.verify(this.mockCandidateRepo).findCandidateById(Mockito.anyLong());
+		verify(this.mockCandidateRepo).findCandidateById(anyLong());
 		
 	}
 
@@ -1033,11 +1031,11 @@ class CandidateServiceImplTest {
 	@Test
 	void testFetchCandidate_candidate_own_candidate_found() {
 		
-		GrantedAuthority 				mockGA = Mockito.mock(GrantedAuthority.class);
+		GrantedAuthority 				mockGA = mock(GrantedAuthority.class);
 		Collection<GrantedAuthority> 	authorities = Set.of(mockGA);
 		
-		Mockito.when(mockGA.getAuthority()).thenReturn("ROLE_CANDIDATE");
-		Mockito.when(this.mockCandidateRepo.findCandidateById(Mockito.anyLong())).thenReturn(Optional.of(Candidate.builder().build()));
+		when(mockGA.getAuthority()).thenReturn("ROLE_CANDIDATE");
+		when(this.mockCandidateRepo.findCandidateById(anyLong())).thenReturn(Optional.of(Candidate.builder().build()));
 		
 		Candidate candidate = this.service.fetchCandidate("1961", "1961", authorities);
 		
@@ -1052,11 +1050,11 @@ class CandidateServiceImplTest {
 	@Test
 	void testFetchCandidate_admin_candidate_found() {
 		
-		GrantedAuthority 				mockGA = Mockito.mock(GrantedAuthority.class);
+		GrantedAuthority 				mockGA = mock(GrantedAuthority.class);
 		Collection<GrantedAuthority> 	authorities = Set.of(mockGA);
 		
-		Mockito.when(mockGA.getAuthority()).thenReturn("ROLE_ADMIN");
-		Mockito.when(this.mockCandidateRepo.findCandidateById(Mockito.anyLong())).thenReturn(Optional.of(Candidate.builder().build()));
+		when(mockGA.getAuthority()).thenReturn("ROLE_ADMIN");
+		when(this.mockCandidateRepo.findCandidateById(anyLong())).thenReturn(Optional.of(Candidate.builder().build()));
 		
 		Candidate candidate = this.service.fetchCandidate("1961", "1961", authorities);
 		
@@ -1075,12 +1073,12 @@ class CandidateServiceImplTest {
 		Collection authorities = new HashSet<>();
 		authorities.add(new SimpleGrantedAuthority("ROLE_RECRUITER"));
 
-		Mockito.when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
-		Mockito.when(mockAuthentication.getAuthorities()).thenReturn(authorities);
-		Mockito.when(mockAuthentication.getPrincipal()).thenReturn("user1");
+		when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
+		when(mockAuthentication.getAuthorities()).thenReturn(authorities);
+		when(mockAuthentication.getPrincipal()).thenReturn("user1");
 		
-		Mockito.when(this.mockCandidateRepo.findCandidateById(Mockito.anyLong())).thenReturn(Optional.of(Candidate.builder().build()));
-		Mockito.when(this.mockCreditDao.getByRecruiterId(Mockito.anyString())).thenReturn(Optional.of(RecruiterCredit.builder().paidSubscription(true).build()));
+		when(this.mockCandidateRepo.findCandidateById(anyLong())).thenReturn(Optional.of(Candidate.builder().build()));
+		when(this.mockCreditDao.getByRecruiterId(anyString())).thenReturn(Optional.of(RecruiterCredit.builder().paidSubscription(true).build()));
 		
 		Candidate candidate = this.service.fetchCandidate("1961", "1961", authorities);
 		
@@ -1099,15 +1097,15 @@ class CandidateServiceImplTest {
 		Collection authorities = new HashSet<>();
 		authorities.add(new SimpleGrantedAuthority("ROLE_CANDIDATE"));
 
-		Mockito.when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
-		Mockito.when(mockAuthentication.getAuthorities()).thenReturn(authorities);
-		Mockito.when(mockAuthentication.getPrincipal()).thenReturn("222");
+		when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
+		when(mockAuthentication.getAuthorities()).thenReturn(authorities);
+		when(mockAuthentication.getPrincipal()).thenReturn("222");
 		
 		assertThrows(IllegalArgumentException.class, () -> {
 			this.service.updateCandidateProfile(CandidateUpdateRequest.builder().candidateId("111").build());
 		});
 		
-		Mockito.verify(this.mockExternalEventPublisher, Mockito.never()).publishCandidateUpdateEvent(Mockito.any());
+		verify(this.mockExternalEventPublisher, never()).publishCandidateUpdateEvent(any());
 		
 	}
 
@@ -1201,13 +1199,13 @@ class CandidateServiceImplTest {
 		Collection authorities = new HashSet<>();
 		authorities.add(new SimpleGrantedAuthority("ROLE_RECRUITER"));
 
-		Mockito.when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
-		Mockito.when(mockAuthentication.getAuthorities()).thenReturn(authorities);
-		Mockito.when(mockAuthentication.getPrincipal()).thenReturn(candidateId);
-		Mockito.when(this.mockCandidateRepo.findCandidateById(Mockito.anyLong())).thenReturn(Optional.of(original));
-		Mockito.doNothing().when(this.mockExternalEventPublisher).publishCandidateAccountUpdatedEvent(caEventArgCapt.capture());
+		when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
+		when(mockAuthentication.getAuthorities()).thenReturn(authorities);
+		when(mockAuthentication.getPrincipal()).thenReturn(candidateId);
+		when(this.mockCandidateRepo.findCandidateById(anyLong())).thenReturn(Optional.of(original));
+		doNothing().when(this.mockExternalEventPublisher).publishCandidateAccountUpdatedEvent(caEventArgCapt.capture());
 		
-		Mockito.when(this.mockCandidateRepo.saveCandidate(candidateArgCapt.capture())).thenReturn(0L);
+		when(this.mockCandidateRepo.saveCandidate(candidateArgCapt.capture())).thenReturn(0L);
 		
 		this.service.updateCandidateProfile(update);
 		
@@ -1230,14 +1228,14 @@ class CandidateServiceImplTest {
 		assertTrue(persisted.getSkills().contains(skill));
 		persisted.getLanguages().stream().filter(l -> l.getLanguage() == languageUpdt.getLanguage()).findAny().orElseThrow();
 		
-		Mockito.verify(this.mockExternalEventPublisher).publishCandidateAccountUpdatedEvent(Mockito.any(CandidateUpdatedEvent.class));
+		verify(this.mockExternalEventPublisher).publishCandidateAccountUpdatedEvent(any(CandidateUpdatedEvent.class));
 		
 		assertEquals(candidateId, 			persisted.getCandidateId());
 		assertEquals(firstNameUpdt, 		persisted.getFirstname());
 		assertEquals(surnameUpdt, 			persisted.getSurname());
 		assertEquals(emailUpdt, 			persisted.getEmail());
 		
-		Mockito.verify(this.mockExternalEventPublisher).publishCandidateUpdateEvent(Mockito.any());
+		verify(this.mockExternalEventPublisher).publishCandidateUpdateEvent(any());
 		
 	}
 	
@@ -1252,15 +1250,15 @@ class CandidateServiceImplTest {
 		Collection authorities = new HashSet<>();
 		authorities.add(new SimpleGrantedAuthority("ROLE_RECRUITER"));
 
-		Mockito.when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
-		Mockito.when(mockAuthentication.getAuthorities()).thenReturn(authorities);
-		Mockito.when(mockAuthentication.getPrincipal()).thenReturn("222");
+		when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
+		when(mockAuthentication.getAuthorities()).thenReturn(authorities);
+		when(mockAuthentication.getPrincipal()).thenReturn("222");
 		
 		assertThrows(IllegalArgumentException.class, () -> {
 			this.service.updateCandidateProfile(CandidateUpdateRequest.builder().candidateId("222").build());
 		});
 		
-		Mockito.verify(this.mockExternalEventPublisher, Mockito.never()).publishCandidateUpdateEvent(Mockito.any());
+		verify(this.mockExternalEventPublisher, never()).publishCandidateUpdateEvent(any());
 		
 	}
 
@@ -1275,16 +1273,16 @@ class CandidateServiceImplTest {
 		Collection authorities = new HashSet<>();
 		authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
 
-		Mockito.when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
-		Mockito.when(mockAuthentication.getAuthorities()).thenReturn(authorities);
-		Mockito.when(mockAuthentication.getPrincipal()).thenReturn("222");
-		Mockito.when(this.mockCandidateRepo.findCandidateById(Mockito.anyLong())).thenReturn(Optional.empty());
+		when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
+		when(mockAuthentication.getAuthorities()).thenReturn(authorities);
+		when(mockAuthentication.getPrincipal()).thenReturn("222");
+		when(this.mockCandidateRepo.findCandidateById(anyLong())).thenReturn(Optional.empty());
 		
 		assertThrows(IllegalArgumentException.class, () -> {
 			this.service.updateCandidateProfile(CandidateUpdateRequest.builder().candidateId("222").build());
 		});
 		
-		Mockito.verify(this.mockExternalEventPublisher, Mockito.never()).publishCandidateUpdateEvent(Mockito.any());
+		verify(this.mockExternalEventPublisher, never()).publishCandidateUpdateEvent(any());
 		
 	}
 	
@@ -1300,17 +1298,17 @@ class CandidateServiceImplTest {
 		Collection authorities = new HashSet<>();
 		authorities.add(new SimpleGrantedAuthority("ROLE_CANDIDATE"));
 
-		Mockito.when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
-		Mockito.when(mockAuthentication.getAuthorities()).thenReturn(authorities);
-		Mockito.when(mockAuthentication.getPrincipal()).thenReturn("222");
-		Mockito.when(this.mockCandidateRepo.findCandidateById(Mockito.anyLong())).thenReturn(Optional.of(Candidate.builder().build()));
-		Mockito.when(this.mockCandidateRepo.emailInUseByOtherUser(Mockito.anyString(), Mockito.anyLong(), Mockito.any())).thenReturn(true);
+		when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
+		when(mockAuthentication.getAuthorities()).thenReturn(authorities);
+		when(mockAuthentication.getPrincipal()).thenReturn("222");
+		when(this.mockCandidateRepo.findCandidateById(anyLong())).thenReturn(Optional.of(Candidate.builder().build()));
+		when(this.mockCandidateRepo.emailInUseByOtherUser(anyString(), anyLong(), any())).thenReturn(true);
 		
 		assertThrows(IllegalStateException.class, () -> {
 			this.service.updateCandidateProfile(CandidateUpdateRequest.builder().email("k@1.nl").candidateId("222").build());
 		});
 		
-		Mockito.verify(this.mockExternalEventPublisher, Mockito.never()).publishCandidateUpdateEvent(Mockito.any());
+		verify(this.mockExternalEventPublisher, never()).publishCandidateUpdateEvent(any());
 		
 	}
 	
@@ -1404,14 +1402,14 @@ class CandidateServiceImplTest {
 		Collection authorities = new HashSet<>();
 		authorities.add(new SimpleGrantedAuthority("ROLE_CANDIDATE"));
 
-		Mockito.when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
-		Mockito.when(mockAuthentication.getAuthorities()).thenReturn(authorities);
-		Mockito.when(mockAuthentication.getPrincipal()).thenReturn(candidateId);
-		Mockito.when(this.mockCandidateRepo.findCandidateById(Mockito.anyLong())).thenReturn(Optional.of(original));
-		Mockito.when(this.mockCandidateRepo.emailInUseByOtherUser(Mockito.anyString(), Mockito.anyLong(), Mockito.any())).thenReturn(false);
-		Mockito.doNothing().when(this.mockExternalEventPublisher).publishCandidateAccountUpdatedEvent(caEventArgCapt.capture());
+		when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
+		when(mockAuthentication.getAuthorities()).thenReturn(authorities);
+		when(mockAuthentication.getPrincipal()).thenReturn(candidateId);
+		when(this.mockCandidateRepo.findCandidateById(anyLong())).thenReturn(Optional.of(original));
+		when(this.mockCandidateRepo.emailInUseByOtherUser(anyString(), anyLong(), any())).thenReturn(false);
+		doNothing().when(this.mockExternalEventPublisher).publishCandidateAccountUpdatedEvent(caEventArgCapt.capture());
 		
-		Mockito.when(this.mockCandidateRepo.saveCandidate(candidateArgCapt.capture())).thenReturn(0L);
+		when(this.mockCandidateRepo.saveCandidate(candidateArgCapt.capture())).thenReturn(0L);
 		
 		this.service.updateCandidateProfile(update);
 		
@@ -1434,14 +1432,14 @@ class CandidateServiceImplTest {
 		assertTrue(persisted.getSkills().contains(skill));
 		persisted.getLanguages().stream().filter(l -> l.getLanguage() == languageUpdt.getLanguage()).findAny().orElseThrow();
 		
-		Mockito.verify(this.mockExternalEventPublisher).publishCandidateAccountUpdatedEvent(Mockito.any(CandidateUpdatedEvent.class));
+		verify(this.mockExternalEventPublisher).publishCandidateAccountUpdatedEvent(any(CandidateUpdatedEvent.class));
 		
 		assertEquals(candidateId, 			persisted.getCandidateId());
 		assertEquals(firstNameUpdt, 		persisted.getFirstname());
 		assertEquals(surnameUpdt, 			persisted.getSurname());
 		assertEquals(emailUpdt, 			persisted.getEmail());
 		
-		Mockito.verify(this.mockExternalEventPublisher).publishCandidateUpdateEvent(Mockito.any());
+		verify(this.mockExternalEventPublisher).publishCandidateUpdateEvent(any());
 	}
 	
 	/**
@@ -1536,14 +1534,14 @@ class CandidateServiceImplTest {
 		Collection authorities = new HashSet<>();
 		authorities.add(new SimpleGrantedAuthority("ROLE_CANDIDATE"));
 
-		Mockito.when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
-		Mockito.when(mockAuthentication.getAuthorities()).thenReturn(authorities);
-		Mockito.when(mockAuthentication.getPrincipal()).thenReturn(candidateId);
-		Mockito.when(this.mockCandidateRepo.findCandidateById(Mockito.anyLong())).thenReturn(Optional.of(original));
-		Mockito.when(this.mockCandidateRepo.emailInUseByOtherUser(Mockito.anyString(), Mockito.anyLong(), Mockito.any())).thenReturn(false);
-		Mockito.doNothing().when(this.mockExternalEventPublisher).publishCandidateAccountUpdatedEvent(caEventArgCapt.capture());
+		when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
+		when(mockAuthentication.getAuthorities()).thenReturn(authorities);
+		when(mockAuthentication.getPrincipal()).thenReturn(candidateId);
+		when(this.mockCandidateRepo.findCandidateById(anyLong())).thenReturn(Optional.of(original));
+		when(this.mockCandidateRepo.emailInUseByOtherUser(anyString(), anyLong(), any())).thenReturn(false);
+		doNothing().when(this.mockExternalEventPublisher).publishCandidateAccountUpdatedEvent(caEventArgCapt.capture());
 		
-		Mockito.when(this.mockCandidateRepo.saveCandidate(candidateArgCapt.capture())).thenReturn(0L);
+		when(this.mockCandidateRepo.saveCandidate(candidateArgCapt.capture())).thenReturn(0L);
 		
 		this.service.updateCandidateProfile(update);
 		
@@ -1565,7 +1563,7 @@ class CandidateServiceImplTest {
 		
 		persisted.getLanguages().stream().filter(l -> l.getLanguage() == languageUpdt.getLanguage()).findAny().orElseThrow();
 		
-		Mockito.verify(this.mockExternalEventPublisher).publishCandidateAccountUpdatedEvent(Mockito.any(CandidateUpdatedEvent.class));
+		verify(this.mockExternalEventPublisher).publishCandidateAccountUpdatedEvent(any(CandidateUpdatedEvent.class));
 		
 		assertEquals(candidateId, 			persisted.getCandidateId());
 		assertEquals(firstNameUpdt, 		persisted.getFirstname());
@@ -1575,7 +1573,7 @@ class CandidateServiceImplTest {
 		
 		persisted.getSkills().stream().filter(s -> s.equals("css")).findAny().orElseThrow();
 		
-		Mockito.verify(this.mockExternalEventPublisher).publishCandidateUpdateEvent(Mockito.any());
+		verify(this.mockExternalEventPublisher).publishCandidateUpdateEvent(any());
 		
 	}
 	
@@ -1592,9 +1590,9 @@ class CandidateServiceImplTest {
 		Collection authorities = new HashSet<>();
 		authorities.add(new SimpleGrantedAuthority("ROLE_CANDIDATE"));
 
-		Mockito.when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
-		Mockito.when(mockAuthentication.getAuthorities()).thenReturn(authorities);
-		Mockito.when(mockAuthentication.getPrincipal()).thenReturn("8888");
+		when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
+		when(mockAuthentication.getAuthorities()).thenReturn(authorities);
+		when(mockAuthentication.getPrincipal()).thenReturn("8888");
 
 		assertThrows(IllegalStateException.class, () -> {
 			this.service.deleteCandidate(candidateId);
@@ -1615,11 +1613,11 @@ class CandidateServiceImplTest {
 		Collection authorities = new HashSet<>();
 		authorities.add(new SimpleGrantedAuthority("ROLE_CANDIDATE"));
 
-		Mockito.when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
-		Mockito.when(mockAuthentication.getAuthorities()).thenReturn(authorities);
-		Mockito.when(mockAuthentication.getPrincipal()).thenReturn(candidateId);
+		when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
+		when(mockAuthentication.getAuthorities()).thenReturn(authorities);
+		when(mockAuthentication.getPrincipal()).thenReturn(candidateId);
 
-		Mockito.when(this.mockCandidateRepo.findCandidateById(Mockito.anyLong())).thenReturn(Optional.empty());
+		when(this.mockCandidateRepo.findCandidateById(anyLong())).thenReturn(Optional.empty());
 		
 		assertThrows(IllegalArgumentException.class, () -> {
 			this.service.deleteCandidate(candidateId);
@@ -1640,17 +1638,17 @@ class CandidateServiceImplTest {
 		Collection authorities = new HashSet<>();
 		authorities.add(new SimpleGrantedAuthority("ROLE_CANDIDATE"));
 
-		Mockito.when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
-		Mockito.when(mockAuthentication.getAuthorities()).thenReturn(authorities);
-		Mockito.when(mockAuthentication.getPrincipal()).thenReturn(candidateId);
+		when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
+		when(mockAuthentication.getAuthorities()).thenReturn(authorities);
+		when(mockAuthentication.getPrincipal()).thenReturn(candidateId);
 
-		Mockito.when(this.mockCandidateRepo.findCandidateById(Mockito.anyLong())).thenReturn(Optional.of(Candidate.builder().build()));
+		when(this.mockCandidateRepo.findCandidateById(anyLong())).thenReturn(Optional.of(Candidate.builder().build()));
 		
 		this.service.deleteCandidate(candidateId);
 		
-		Mockito.verify(this.mockCandidateRepo).deleteById(Long.valueOf(candidateId));
-		Mockito.verify(this.mockExternalEventPublisher).publishCandidateDeletedEvent(Mockito.any(CandidateDeletedEvent.class));
-		Mockito.verify(this.mockkillUpdateStatDao).deleteById(Long.valueOf(candidateId));
+		verify(this.mockCandidateRepo).deleteById(Long.valueOf(candidateId));
+		verify(this.mockExternalEventPublisher).publishCandidateDeletedEvent(any(CandidateDeletedEvent.class));
+		verify(this.mockkillUpdateStatDao).deleteById(Long.valueOf(candidateId));
 		
 		
 	
@@ -1669,15 +1667,15 @@ class CandidateServiceImplTest {
 		Collection authorities = new HashSet<>();
 		authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
 
-		Mockito.when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
-		Mockito.when(mockAuthentication.getAuthorities()).thenReturn(authorities);
+		when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
+		when(mockAuthentication.getAuthorities()).thenReturn(authorities);
 
-		Mockito.when(this.mockCandidateRepo.findCandidateById(Mockito.anyLong())).thenReturn(Optional.of(Candidate.builder().build()));
+		when(this.mockCandidateRepo.findCandidateById(anyLong())).thenReturn(Optional.of(Candidate.builder().build()));
 		
 		this.service.deleteCandidate(candidateId);
 		
-		Mockito.verify(this.mockCandidateRepo).deleteById(Long.valueOf(candidateId));
-		Mockito.verify(this.mockExternalEventPublisher).publishCandidateDeletedEvent(Mockito.any(CandidateDeletedEvent.class));
+		verify(this.mockCandidateRepo).deleteById(Long.valueOf(candidateId));
+		verify(this.mockExternalEventPublisher).publishCandidateDeletedEvent(any(CandidateDeletedEvent.class));
 		
 	}
 	
@@ -1695,16 +1693,16 @@ class CandidateServiceImplTest {
 		Collection authorities = new HashSet<>();
 		authorities.add(new SimpleGrantedAuthority("ROLE_RECRUITER"));
 
-		Mockito.when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
-		Mockito.when(mockAuthentication.getAuthorities()).thenReturn(authorities);
-		Mockito.when(mockAuthentication.getPrincipal()).thenReturn(recruiterId);
+		when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
+		when(mockAuthentication.getAuthorities()).thenReturn(authorities);
+		when(mockAuthentication.getPrincipal()).thenReturn(recruiterId);
 
-		Mockito.when(this.mockCandidateRepo.findCandidateById(Mockito.anyLong())).thenReturn(Optional.of(Candidate.builder().ownerId(recruiterId).build()));
+		when(this.mockCandidateRepo.findCandidateById(anyLong())).thenReturn(Optional.of(Candidate.builder().ownerId(recruiterId).build()));
 		
 		this.service.deleteCandidate(candidateId);
 		
-		Mockito.verify(this.mockCandidateRepo).deleteById(Long.valueOf(candidateId));
-		Mockito.verify(this.mockExternalEventPublisher).publishCandidateDeletedEvent(Mockito.any(CandidateDeletedEvent.class));
+		verify(this.mockCandidateRepo).deleteById(Long.valueOf(candidateId));
+		verify(this.mockExternalEventPublisher).publishCandidateDeletedEvent(any(CandidateDeletedEvent.class));
 		
 	}
 
@@ -1722,11 +1720,11 @@ class CandidateServiceImplTest {
 		Collection authorities = new HashSet<>();
 		authorities.add(new SimpleGrantedAuthority("ROLE_RECRUITER"));
 
-		Mockito.when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
-		Mockito.when(mockAuthentication.getAuthorities()).thenReturn(authorities);
-		Mockito.when(mockAuthentication.getPrincipal()).thenReturn(recruiterId);
+		when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
+		when(mockAuthentication.getAuthorities()).thenReturn(authorities);
+		when(mockAuthentication.getPrincipal()).thenReturn(recruiterId);
 
-		Mockito.when(this.mockCandidateRepo.findCandidateById(Mockito.anyLong())).thenReturn(Optional.of(Candidate.builder().ownerId("999").build()));
+		when(this.mockCandidateRepo.findCandidateById(anyLong())).thenReturn(Optional.of(Candidate.builder().ownerId("999").build()));
 		
 		assertThrows(IllegalArgumentException.class, () -> {
 			this.service.deleteCandidate(candidateId);
@@ -1754,10 +1752,10 @@ class CandidateServiceImplTest {
 	@Test
 	void testConvertToPhoto_unsafeFile() throws Exception{
 		
-		MultipartFile mockMpf = Mockito.mock(MultipartFile.class);
+		MultipartFile mockMpf = mock(MultipartFile.class);
 		
-		Mockito.when(mockMpf.getBytes()).thenReturn(new byte[]{});
-		Mockito.when(this.mockImageFileSecurityParser.isSafe(new byte[]{})).thenReturn(false);
+		when(mockMpf.getBytes()).thenReturn(new byte[]{});
+		when(this.mockImageFileSecurityParser.isSafe(new byte[]{})).thenReturn(false);
 		
 		assertThrows(RuntimeException.class, () -> {
 			this.service.convertToPhoto(Optional.ofNullable(mockMpf));
@@ -1772,11 +1770,11 @@ class CandidateServiceImplTest {
 	@Test
 	void testConvertToPhoto_happypath() throws Exception{
 		
-		MultipartFile mockMpf = Mockito.mock(MultipartFile.class);
+		MultipartFile mockMpf = mock(MultipartFile.class);
 		
-		Mockito.when(mockMpf.getBytes()).thenReturn(new byte[]{});
-		Mockito.when(this.mockImageFileSecurityParser.isSafe(new byte[]{})).thenReturn(true);
-		Mockito.when(this.mockImageManipulator.toProfileImage(new byte[]{}, PHOTO_FORMAT.jpeg)).thenReturn(new byte[]{});
+		when(mockMpf.getBytes()).thenReturn(new byte[]{});
+		when(this.mockImageFileSecurityParser.isSafe(new byte[]{})).thenReturn(true);
+		when(this.mockImageManipulator.toProfileImage(new byte[]{}, PHOTO_FORMAT.jpeg)).thenReturn(new byte[]{});
 		
 		Optional<Photo> photo = this.service.convertToPhoto(Optional.ofNullable(mockMpf));
 		
@@ -1801,8 +1799,8 @@ class CandidateServiceImplTest {
 		
 		Candidate candidate = Candidate.builder().candidateId("124").build();
 		
-		Mockito.when(this.mockCandidateRepo.findCandidateById(Long.valueOf(candidateId))).thenReturn(Optional.of(candidate));
-		Mockito.doNothing().when(this.mockExternalEventPublisher).publishContactRequestEvent(argCapt.capture());
+		when(this.mockCandidateRepo.findCandidateById(Long.valueOf(candidateId))).thenReturn(Optional.of(candidate));
+		doNothing().when(this.mockExternalEventPublisher).publishContactRequestEvent(argCapt.capture());
 		
 		this.service.sendEmailToCandidate(message, candidateId, title, userId);
 		
@@ -1832,8 +1830,8 @@ class CandidateServiceImplTest {
 		
 		Candidate candidate = Candidate.builder().candidateId("124").firstname("kevn").surname("parkings").ownerId(ownerId).build();
 		
-		Mockito.when(this.mockCandidateRepo.findCandidateById(Long.valueOf(candidateId))).thenReturn(Optional.of(candidate));
-		Mockito.doNothing().when(this.mockExternalEventPublisher).publishContactRequestEvent(argCapt.capture());
+		when(this.mockCandidateRepo.findCandidateById(Long.valueOf(candidateId))).thenReturn(Optional.of(candidate));
+		doNothing().when(this.mockExternalEventPublisher).publishContactRequestEvent(argCapt.capture());
 		
 		this.service.sendEmailToCandidate(message, candidateId, title, userId);
 		
@@ -1854,7 +1852,7 @@ class CandidateServiceImplTest {
 		
 		final String userId = "kparkings";
 		
-		Mockito.when(this.mockCreditDao.getByRecruiterId(userId)).thenReturn(Optional.empty());
+		when(this.mockCreditDao.getByRecruiterId(userId)).thenReturn(Optional.empty());
 		
 		assertFalse(this.service.hasCreditsLeft(userId));
 	}
@@ -1870,7 +1868,7 @@ class CandidateServiceImplTest {
 		
 		RecruiterCredit rc = RecruiterCredit.builder().credits(1).recruiterId(userId).build();
 		
-		Mockito.when(this.mockCreditDao.getByRecruiterId(userId)).thenReturn(Optional.of(rc));
+		when(this.mockCreditDao.getByRecruiterId(userId)).thenReturn(Optional.of(rc));
 		
 		assertTrue(this.service.hasCreditsLeft(userId));
 	}
@@ -1886,7 +1884,7 @@ class CandidateServiceImplTest {
 		
 		RecruiterCredit rc = RecruiterCredit.builder().credits(0).recruiterId(userId).build();
 		
-		Mockito.when(this.mockCreditDao.getByRecruiterId(userId)).thenReturn(Optional.of(rc));
+		when(this.mockCreditDao.getByRecruiterId(userId)).thenReturn(Optional.of(rc));
 		
 		assertFalse(this.service.hasCreditsLeft(userId));
 	}
@@ -1906,12 +1904,12 @@ class CandidateServiceImplTest {
 		
 		RecruiterCredit recCredits = RecruiterCredit.builder().recruiterId(userId).credits(30).paidSubscription(true).build();
 		
-		Mockito.when(this.mockCreditDao.getByRecruiterId(userId)).thenReturn(Optional.of(recCredits));
-		Mockito.doNothing().when(this.mockCreditDao).persist(argCapt.capture());
+		when(this.mockCreditDao.getByRecruiterId(userId)).thenReturn(Optional.of(recCredits));
+		doNothing().when(this.mockCreditDao).persist(argCapt.capture());
 		
 		this.service.updateCreditsForUser(userId, credits);
 	
-		Mockito.verify(this.mockCreditDao).persist(Mockito.any());
+		verify(this.mockCreditDao).persist(any());
 		
 		assertEquals(credits, argCapt.getValue().getCredits());
 		assertTrue(argCapt.getValue().hasPaidSubscription());
@@ -1931,12 +1929,12 @@ class CandidateServiceImplTest {
 		
 		RecruiterCredit recCredits = RecruiterCredit.builder().recruiterId(userId).credits(30).paidSubscription(true).build();
 		
-		Mockito.when(this.mockCreditDao.getByRecruiterId(userId)).thenReturn(Optional.of(recCredits));
-		Mockito.doNothing().when(this.mockCreditDao).persist(argCapt.capture());
+		when(this.mockCreditDao.getByRecruiterId(userId)).thenReturn(Optional.of(recCredits));
+		doNothing().when(this.mockCreditDao).persist(argCapt.capture());
 		
 		this.service.updateCreditsForUser(userId, credits, Optional.of(false));
 	
-		Mockito.verify(this.mockCreditDao).persist(Mockito.any());
+		verify(this.mockCreditDao).persist(any());
 		
 		assertEquals(credits, argCapt.getValue().getCredits());
 		assertFalse(argCapt.getValue().hasPaidSubscription());
@@ -1952,11 +1950,11 @@ class CandidateServiceImplTest {
 		final String 	userId 		= "kparkings";
 		final int 		credits 	= 20;
 
-		Mockito.when(this.mockCreditDao.getByRecruiterId(userId)).thenReturn(Optional.empty());
+		when(this.mockCreditDao.getByRecruiterId(userId)).thenReturn(Optional.empty());
 		
 		this.service.updateCreditsForUser(userId, credits);
 	
-		Mockito.verify(this.mockCreditDao, Mockito.never()).persist(Mockito.any());
+		verify(this.mockCreditDao, never()).persist(any());
 		
 	}
 	
@@ -1967,7 +1965,7 @@ class CandidateServiceImplTest {
 	@Test
 	void testGetCreditCountForUser_unknownUser() {
 		
-		Mockito.when(this.mockCreditDao.getByRecruiterId(Mockito.anyString())).thenReturn(Optional.empty());
+		when(this.mockCreditDao.getByRecruiterId(anyString())).thenReturn(Optional.empty());
 		
 		assertThrows(IllegalArgumentException.class, () -> {
 			this.service.getCreditCountForUser("rec22");
@@ -1986,7 +1984,7 @@ class CandidateServiceImplTest {
 		
 		RecruiterCredit rc = RecruiterCredit.builder().credits(credits).build();
 		
-		Mockito.when(this.mockCreditDao.getByRecruiterId(Mockito.anyString())).thenReturn(Optional.of(rc));
+		when(this.mockCreditDao.getByRecruiterId(anyString())).thenReturn(Optional.of(rc));
 		
 		assertEquals(credits, this.service.getCreditCountForUser("rec22"));
 		
@@ -1999,7 +1997,7 @@ class CandidateServiceImplTest {
 	@Test
 	void testExtractFiltersFromText() {
 	
-		Mockito.when(this.mockDocumentFilterExtractionUtil.extractFilters("")).thenReturn(CandidateExtractedFilters.builder().build());
+		when(this.mockDocumentFilterExtractionUtil.extractFilters("")).thenReturn(CandidateExtractedFilters.builder().build());
 		
 		CandidateExtractedFilters filters = this.service.extractFiltersFromText("");
 	
@@ -2016,7 +2014,7 @@ class CandidateServiceImplTest {
 		
 		this.service.fetchPendingCandidateSkills();
 		
-		Mockito.verify(this.mockSkillDao).getValidationPendingSkills();
+		verify(this.mockSkillDao).getValidationPendingSkills();
 		
 	}
 	
@@ -2036,10 +2034,10 @@ class CandidateServiceImplTest {
 		
 		Set<CandidateSkill> skills = Set.of(java, nutmeg, dog);
 		
-		Mockito.doNothing().when(this.mockSkillDao).persistExistingSkills(skillCaptor.capture());
-		Mockito.when(this.mockSkillDao.existsById("java")).thenReturn(true);
-		Mockito.when(this.mockSkillDao.existsById("nutmeg")).thenReturn(true);
-		Mockito.when(this.mockSkillDao.existsById("dog")).thenReturn(true);
+		doNothing().when(this.mockSkillDao).persistExistingSkills(skillCaptor.capture());
+		when(this.mockSkillDao.existsById("java")).thenReturn(true);
+		when(this.mockSkillDao.existsById("nutmeg")).thenReturn(true);
+		when(this.mockSkillDao.existsById("dog")).thenReturn(true);
 		
 		this.service.updateCandidateSkills(skills);
 		
@@ -2065,14 +2063,14 @@ class CandidateServiceImplTest {
 		
 		Set<CandidateSkill> skills = Set.of(java, nutmeg, dog);
 		
-		Mockito.when(this.mockSkillDao.existsById(Mockito.anyString())).thenReturn(false);
+		when(this.mockSkillDao.existsById(anyString())).thenReturn(false);
 		
 		assertThrows(IllegalStateException.class, () -> {
 			this.service.updateCandidateSkills(skills);
 			
 		});
 		
-		Mockito.verify(this.mockSkillDao, Mockito.never()).persistExistingSkills(Mockito.anySet());
+		verify(this.mockSkillDao, never()).persistExistingSkills(anySet());
 
 	}
 	
@@ -2083,7 +2081,7 @@ class CandidateServiceImplTest {
 	@Test
 	void testHasPaidSubscription_true() {
 		
-		Mockito.when(this.mockCreditDao.getByRecruiterId(Mockito.anyString())).thenReturn(Optional.of(RecruiterCredit.builder().paidSubscription(true).build()));
+		when(this.mockCreditDao.getByRecruiterId(anyString())).thenReturn(Optional.of(RecruiterCredit.builder().paidSubscription(true).build()));
 		
 		assertTrue(this.service.hasPaidSubscription("userId"));
 		
@@ -2096,7 +2094,7 @@ class CandidateServiceImplTest {
 	@Test
 	void testHasPaidSubscription_false() {
 		
-		Mockito.when(this.mockCreditDao.getByRecruiterId(Mockito.anyString())).thenReturn(Optional.of(RecruiterCredit.builder().paidSubscription(false).build()));
+		when(this.mockCreditDao.getByRecruiterId(anyString())).thenReturn(Optional.of(RecruiterCredit.builder().paidSubscription(false).build()));
 		
 		assertFalse(this.service.hasPaidSubscription("userId"));
 		
@@ -2111,7 +2109,7 @@ class CandidateServiceImplTest {
 		
 		this.service.getCountByAvailable(true);
 		
-		Mockito.verify(this.mockCandidateRepo).getCountByAvailable(true);
+		verify(this.mockCandidateRepo).getCountByAvailable(true);
 		
 	}
 	
@@ -2124,7 +2122,7 @@ class CandidateServiceImplTest {
 		
 		this.service.getCountByAvailable(true);
 		
-		Mockito.verify(this.mockCandidateRepo).getCountByAvailable(true);
+		verify(this.mockCandidateRepo).getCountByAvailable(true);
 		
 	}
 	
@@ -2138,7 +2136,7 @@ class CandidateServiceImplTest {
 	
 		final String emailAddress = "admin@arenella-ict.com";
 		
-		Mockito.when(this.mockCandidateRepo.findCandidates(Mockito.any(), Mockito.any(), Mockito.eq(0), Mockito.eq(2))).thenReturn(Set.of(Candidate.builder().build(), Candidate.builder().build()));
+		when(this.mockCandidateRepo.findCandidates(any(), any(), eq(0), eq(2))).thenReturn(Set.of(Candidate.builder().build(), Candidate.builder().build()));
 	
 		Assertions.assertThrows(IllegalArgumentException.class, () ->{
 			this.service.resetPassword(emailAddress);
@@ -2156,7 +2154,7 @@ class CandidateServiceImplTest {
 		
 		final String emailAddress = "admin@arenella-ict.com";
 		
-		Mockito.when(this.mockCandidateRepo.findCandidates(Mockito.any(), Mockito.any(), Mockito.eq(0), Mockito.eq(2))).thenReturn(Set.of());
+		when(this.mockCandidateRepo.findCandidates(any(), any(), eq(0), eq(2))).thenReturn(Set.of());
 		
 		Assertions.assertThrows(IllegalArgumentException.class, () ->{
 			this.service.resetPassword(emailAddress);
@@ -2179,9 +2177,9 @@ class CandidateServiceImplTest {
 		ArgumentCaptor<CandidatePasswordUpdatedEvent> 	pwdUpdtArgCapt 	= ArgumentCaptor.forClass(CandidatePasswordUpdatedEvent.class);
 		ArgumentCaptor<RequestSendEmailCommand>			emailArgCapt	= ArgumentCaptor.forClass(RequestSendEmailCommand.class);
 		
-		Mockito.doNothing().when(this.mockExternalEventPublisher).publishCandidatePasswordUpdated(pwdUpdtArgCapt.capture());
-		Mockito.doNothing().when(this.mockExternalEventPublisher).publishSendEmailCommand(emailArgCapt.capture());
-		Mockito.when(this.mockCandidateRepo.findCandidates(Mockito.any(), Mockito.any(), Mockito.eq(0), Mockito.eq(2))).thenReturn(Set.of(Candidate.builder().firstname(firstname).candidateId(userId).build()));
+		doNothing().when(this.mockExternalEventPublisher).publishCandidatePasswordUpdated(pwdUpdtArgCapt.capture());
+		doNothing().when(this.mockExternalEventPublisher).publishSendEmailCommand(emailArgCapt.capture());
+		when(this.mockCandidateRepo.findCandidates(any(), any(), eq(0), eq(2))).thenReturn(Set.of(Candidate.builder().firstname(firstname).candidateId(userId).build()));
 		
 		this.service.resetPassword(emailAddress);
 		
@@ -2205,7 +2203,7 @@ class CandidateServiceImplTest {
 		
 		final String recruiterId = "rec1";
 		
-		Mockito.when(this.mockCandidateRepo.findCandidates(Mockito.any(), Mockito.any(), Mockito.eq(0), Mockito.eq(750))).thenReturn(Set.of(Candidate.builder().build(), Candidate.builder().build()));
+		when(this.mockCandidateRepo.findCandidates(any(), any(), eq(0), eq(750))).thenReturn(Set.of(Candidate.builder().build(), Candidate.builder().build()));
 		
 		this.service.deleteCandidatesForOwnedByRecruiter(recruiterId);
 		
@@ -2221,11 +2219,11 @@ class CandidateServiceImplTest {
 		
 		final String recId = "aRecId";
 		
-		Mockito.when(this.mockSavedCandidateDao.fetchSavedCandidatesByUserId(recId)).thenReturn(Set.of(SavedCandidate.builder().candidateId(1).build(),SavedCandidate.builder().candidateId(2).build()));
+		when(this.mockSavedCandidateDao.fetchSavedCandidatesByUserId(recId)).thenReturn(Set.of(SavedCandidate.builder().candidateId(1).build(),SavedCandidate.builder().candidateId(2).build()));
 		
 		this.service.deleteSavedCandidatesForRecruiter(recId);
 		
-		Mockito.verify(this.mockSavedCandidateDao, Mockito.times(2)).delete(Mockito.eq(recId), Mockito.anyLong());
+		verify(this.mockSavedCandidateDao, times(2)).delete(eq(recId), anyLong());
 		
 	}
 	
@@ -2240,7 +2238,7 @@ class CandidateServiceImplTest {
 		
 		this.service.deleteCreditsForRecruiter(recruiterId);
 		
-		Mockito.verify(this.mockCreditDao).deleteById(recruiterId);
+		verify(this.mockCreditDao).deleteById(recruiterId);
 		
 	}
 	
@@ -2255,7 +2253,250 @@ class CandidateServiceImplTest {
 		
 		this.service.deleteContactForRecruiter(recruiterId);
 		
-		Mockito.verify(this.mockContactDao).deleteByRecruiterId(recruiterId);
+		verify(this.mockContactDao).deleteByRecruiterId(recruiterId);
+		
+	}
+
+	/**
+	* Tests case where Search already exists and is being 
+	* persisted for the second time
+	*/
+	@Test
+	void testCreateSavedCandidateSearchRequestExist() {
+		
+		final UUID 					searchId 		= UUID.randomUUID(); 
+		final SavedCandidateSearch 	existingSearch 	= 
+				SavedCandidateSearch
+				.builder()
+					.id(searchId)
+					.userId("rec2")
+				.build();
+		
+		when(this.mockSavedCandidateSearchEntityDao.existsById(searchId)).thenReturn(true);
+		
+		
+		IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> {
+			this.service.createSavedCandidateSearchRequest(existingSearch);
+		});
+		
+		assertEquals(CandidateServiceImpl.ERR_MSG_SAVED_SEARCH_CREATE_TWICE, ex.getMessage());
+		
+	}
+	
+	/**
+	* Tests case where Search already exists and is being 
+	* persisted for the second time
+	*/
+	@Test
+	void testCreateSavedCandidateSearchRequestDoesntExist() {
+		
+		final UUID 					searchId 		= UUID.randomUUID(); 
+		final SavedCandidateSearch 	existingSearch 	= 
+				SavedCandidateSearch
+				.builder()
+					.id(searchId)
+					.userId("rec2")
+				.build();
+		
+		when(this.mockSavedCandidateSearchEntityDao.existsById(searchId)).thenReturn(false);
+		
+		
+		this.service.createSavedCandidateSearchRequest(existingSearch);
+		
+		verify(this.mockSavedCandidateSearchEntityDao).saveSearch(any());
+		
+	}
+	
+	/**
+	* Tests case where Search doesn't already exists and is being 
+	* persisted for the first time
+	*/
+	@Test
+	void testUpdateSavedCandidateSearchRequestDoesntExist() {
+		
+		final String 				userId = "rec1";
+		final SavedCandidateSearch 	search = 
+				SavedCandidateSearch
+				.builder()
+					.id(UUID.randomUUID())
+					.userId(userId)
+				.build();
+		
+		when(this.mockSavedCandidateSearchEntityDao.fetchSavedCandidateSearchById(any())).thenReturn(Optional.empty());
+		
+		this.service.updateSavedCandidateSearchRequest(search);
+		
+		verify(this.mockSavedCandidateSearchEntityDao).saveSearch(any(SavedCandidateSearch.class));
+		
+	}
+	
+	/**
+	* Tests case where Search already exists and is being updated
+	*/
+	@Test
+	void testUPdateSavedCandidateSearchRequestExists() {
+		
+		final UUID 					searchId 		= UUID.randomUUID(); 
+		final String 				userId 			= "rec1";
+		final SavedCandidateSearch 	existingSearch 	= 
+				SavedCandidateSearch
+				.builder()
+					.id(searchId)
+					.userId(userId)
+				.build();
+		final SavedCandidateSearch 	search 			= 
+				SavedCandidateSearch
+				.builder()
+					.id(searchId)
+					.userId(userId)
+				.build();
+		
+		when(this.mockSavedCandidateSearchEntityDao.fetchSavedCandidateSearchById(any())).thenReturn(Optional.of(existingSearch));
+		
+		this.service.updateSavedCandidateSearchRequest(search);
+		
+		verify(this.mockSavedCandidateSearchEntityDao).saveSearch(any(SavedCandidateSearch.class));
+		
+	}
+	
+	/**
+	* Tests case where an attempt is made to update an existing Search
+	* that belongs to another user
+	*/
+	@Test
+	void testUpdateSavedCandidateSearchRequestBelongsToAnotherUser() {
+		
+		final UUID 					searchId 		= UUID.randomUUID(); 
+		final String 				userId 			= "rec1";
+		final SavedCandidateSearch 	existingSearch 	= 
+				SavedCandidateSearch
+				.builder()
+					.id(searchId)
+					.userId("rec2")
+				.build();
+		final SavedCandidateSearch 	search 			= 
+				SavedCandidateSearch
+				.builder()
+					.id(searchId)
+					.userId(userId)
+				.build();
+		
+		when(this.mockSavedCandidateSearchEntityDao.fetchSavedCandidateSearchById(any())).thenReturn(Optional.of(existingSearch));
+		
+		
+		IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> {
+			this.service.updateSavedCandidateSearchRequest(search);
+		});
+		
+		assertEquals(CandidateServiceImpl.ERR_MSG_SAVED_SEARCH_SAVE_OTHER_USERS, ex.getMessage());
+		
+	}
+	
+	/**
+	* Tests fetching of saved searches for the current authenticated user
+	*/
+	@Test
+	void testFetchSavedCandidatrSearches() {
+		
+		final String 				userId = "rec1";
+		final SavedCandidateSearch 	search = SavedCandidateSearch.builder().build();
+		
+		when(this.mockSavedCandidateSearchEntityDao.fetchSavedCandidateSearchs(userId)).thenReturn(Set.of(search));
+		
+		Set<SavedCandidateSearch> results = this.service.fetchSavedCandidateSearches(userId);
+		
+		assertTrue(results.contains(search));
+		
+	}
+	
+	/**
+	* Tests deletion happy path
+	*/
+	@Test
+	void testDeleteSavedCandidateSearchSuccess() {
+		
+		final UUID 					searchId 		= UUID.randomUUID(); 
+		final String 				userId 			= "rec1";
+		final SavedCandidateSearch 	existingSearch 	= 
+				SavedCandidateSearch
+				.builder()
+					.id(searchId)
+					.userId(userId)
+				.build();
+		
+		when(this.mockSavedCandidateSearchEntityDao.fetchSavedCandidateSearchById(any())).thenReturn(Optional.of(existingSearch));
+		
+		this.service.deleteSavedCandidateSearch(searchId, userId);
+		
+		verify(this.mockSavedCandidateSearchEntityDao).deleteById(searchId);
+		
+		
+	}
+	
+	/**
+	* Tests failure path where the Search to delete does not 
+	* exist
+	*/
+	@Test
+	void testDeleteSavedCandidateSearchDoesNotExists() {
+		
+		final UUID 					searchId 		= UUID.randomUUID(); 
+		final String 				userId 			= "rec1";
+		
+		when(this.mockSavedCandidateSearchEntityDao.fetchSavedCandidateSearchById(any())).thenReturn(Optional.empty());
+		
+		IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> {
+			this.service.deleteSavedCandidateSearch(searchId, userId);
+		});
+		
+		assertEquals(CandidateServiceImpl.ERR_MSG_SAVED_SEARCH_DELETE_NON_EXISTENT, ex.getMessage());
+	}
+	
+	/**
+	* Tests failure path where the Search to delete belongs to 
+	* another user
+	*/
+	@Test
+	void testDeleteSavedCandidateSearchBelongsToOtherUser() {
+		
+		final UUID 					searchId 		= UUID.randomUUID(); 
+		final String 				userId 			= "rec1";
+		final SavedCandidateSearch 	search 			= 
+				SavedCandidateSearch
+				.builder()
+					.id(searchId)
+					.userId("rec2")
+				.build();
+		
+		when(this.mockSavedCandidateSearchEntityDao.fetchSavedCandidateSearchById(any())).thenReturn(Optional.of(search));
+		
+		
+		IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> {
+			this.service.deleteSavedCandidateSearch(searchId, userId);
+		});
+		
+		assertEquals(CandidateServiceImpl.ERR_MSG_SAVED_SEARCH_DELETE_OTHER_USERS, ex.getMessage());
+		
+	}
+	
+	/**
+	* Test all Saved searched belonging to a user are deleted
+	*/
+	@Test
+	void testDeleteSavedCandidateSearchesForUser() {
+		
+		final String userId = "rec1";
+		final SavedCandidateSearch s1 = SavedCandidateSearch.builder().userId(userId).id(UUID.randomUUID()).build();
+		final SavedCandidateSearch s2 = SavedCandidateSearch.builder().userId(userId).id(UUID.randomUUID()).build();
+		
+		when(this.mockSavedCandidateSearchEntityDao.fetchSavedCandidateSearchs(userId)).thenReturn(Set.of(s1,s2));
+		
+		this.service.deleteSavedCandidateSearchesForUser(userId);
+		
+		verify(this.mockSavedCandidateSearchEntityDao).deleteById(s1.getId());
+		verify(this.mockSavedCandidateSearchEntityDao).deleteById(s2.getId());
+		
+		verify(this.mockSavedCandidateSearchEntityDao, times(2)).deleteById(any());
 		
 	}
 	

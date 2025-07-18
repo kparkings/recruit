@@ -49,6 +49,7 @@ import com.arenella.recruit.candidates.beans.Contact;
 import com.arenella.recruit.candidates.beans.Contact.CONTACT_TYPE;
 import com.arenella.recruit.candidates.beans.PendingCandidate;
 import com.arenella.recruit.candidates.beans.RecruiterCredit;
+import com.arenella.recruit.candidates.beans.SavedCandidateSearch;
 import com.arenella.recruit.candidates.beans.Candidate.CANDIDATE_TYPE;
 import com.arenella.recruit.candidates.beans.Candidate.Photo;
 import com.arenella.recruit.candidates.beans.Candidate.Photo.PHOTO_FORMAT;
@@ -85,7 +86,7 @@ import com.arenella.recruit.candidates.utils.PasswordUtil;
 import com.arenella.recruit.candidates.dao.CandidateSearchAlertDao;
 import com.arenella.recruit.candidates.dao.CandidateSkillsDao;
 import com.arenella.recruit.candidates.dao.SavedCandidateDao;
-
+import com.arenella.recruit.candidates.dao.SavedCandidateSearchEntityDao;
 import com.arenella.recruit.candidates.utils.CandidateFunctionExtractor;
 import com.arenella.recruit.candidates.utils.CandidateImageFileSecurityParser;
 import com.arenella.recruit.candidates.utils.CandidateImageManipulator;
@@ -158,6 +159,15 @@ public class CandidateServiceImpl implements CandidateService{
 	
 	@Autowired
 	private	CityService 						cityService;
+	
+	@Autowired
+	private SavedCandidateSearchEntityDao		savedCandidateSearchEntityDao;
+	
+	public static final String ERR_MSG_SAVED_SEARCH_SAVE_OTHER_USERS 	= "You cannot update another Users Search Requests";
+	public static final String ERR_MSG_SAVED_SEARCH_DELETE_NON_EXISTENT = "You cannot delete a non existing Search Request";
+	public static final String ERR_MSG_SAVED_SEARCH_CREATE_TWICE 		= "You cannot create an eexisting Search Request";
+	public static final String ERR_MSG_SAVED_SEARCH_DELETE_OTHER_USERS 	= "You cannot delete another Users Search requests";
+	
 	
 	/**
 	* Refer to the CandidateService Interface for Details
@@ -1241,6 +1251,77 @@ public class CandidateServiceImpl implements CandidateService{
 	public void deleteContactForRecruiter(String recruiterId) {
 		this.contactDao.deleteByRecruiterId(recruiterId);
 		
+	}
+
+	/**
+	* Refer to the CandidateService for details 
+	*/
+	@Override
+	public void createSavedCandidateSearchRequest(SavedCandidateSearch savedCandidateSearch) {
+
+		if (this.savedCandidateSearchEntityDao.existsById(savedCandidateSearch.getId())) {
+			throw new IllegalArgumentException(ERR_MSG_SAVED_SEARCH_CREATE_TWICE);
+		}
+		
+		this.savedCandidateSearchEntityDao.saveSearch(savedCandidateSearch);
+	}
+
+	/**
+	* Refer to the CandidateService for details 
+	*/
+	@Override
+	public void updateSavedCandidateSearchRequest(SavedCandidateSearch savedCandidateSearch) {
+		
+		Optional<SavedCandidateSearch> existing = this.savedCandidateSearchEntityDao.fetchSavedCandidateSearchById(savedCandidateSearch.getId());
+		
+		existing.ifPresent(existingSearchRequest -> {
+			if (!existingSearchRequest.getUserId().equals(savedCandidateSearch.getUserId())) {
+				throw new IllegalArgumentException(ERR_MSG_SAVED_SEARCH_SAVE_OTHER_USERS);
+			}
+		});
+		
+		this.savedCandidateSearchEntityDao.saveSearch(savedCandidateSearch);
+	}
+	
+	/**
+	* Refer to the CandidateService for details 
+	*/
+	@Override
+	public Set<SavedCandidateSearch> fetchSavedCandidateSearches(String userId) {
+		return savedCandidateSearchEntityDao.fetchSavedCandidateSearchs(userId);
+	}
+
+	/**
+	* Refer to the CandidateService for details 
+	*/
+	@Override
+	public void deleteSavedCandidateSearch(UUID savedCandidateSearchId, String authenticatedUserId) {
+		
+		Optional<SavedCandidateSearch> existing = this.savedCandidateSearchEntityDao.fetchSavedCandidateSearchById(savedCandidateSearchId);
+		
+		if (existing.isEmpty()) {
+			throw new IllegalArgumentException(ERR_MSG_SAVED_SEARCH_DELETE_NON_EXISTENT);
+		}
+		
+		existing.ifPresent(existingSearchRequest -> {
+			if (!existingSearchRequest.getUserId().equals(authenticatedUserId)) {
+				throw new IllegalArgumentException(ERR_MSG_SAVED_SEARCH_DELETE_OTHER_USERS);
+			}
+		});
+		
+		this.savedCandidateSearchEntityDao.deleteById(savedCandidateSearchId);
+		
+	}
+
+	/**
+	* Refer to the CandidateService for details 
+	* !! For internal system use only. Do not expose via API !!
+	*/
+	@Override
+	public void deleteSavedCandidateSearchesForUser(String userId) {
+		this.fetchSavedCandidateSearches(userId).forEach(search -> {
+			this.savedCandidateSearchEntityDao.deleteById(search.getId());
+		});
 	}
 	
 }

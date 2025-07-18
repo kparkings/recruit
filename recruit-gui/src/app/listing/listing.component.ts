@@ -21,6 +21,7 @@ import { Clipboard } 									from '@angular/cdk/clipboard';
 import { SearchStats } 									from '../search-stats';
 import { SearchbarComponentListing }	 				from './searchbar/searchbar.component';
 import { ListingSearchRequest }							from './../listing-search-request';
+import { ViewportScroller } from '@angular/common';
 
 @Component({
   selector: 'app-listing',
@@ -76,6 +77,7 @@ export class ListingComponent implements OnInit {
   	constructor(private listingService:ListingService, 
 				private emailService:EmailService, 
 				private _Activatedroute:ActivatedRoute, 
+				private scroller: ViewportScroller,
 				private modalService:NgbModal, 
 				private recruiterProfileService:RecruiterProfileService,
 				public 	candidateService:			CandidateServiceService,
@@ -91,6 +93,10 @@ export class ListingComponent implements OnInit {
 	
 	}
 	
+	ngAfterViewChecked(): void {
+		this.scrollToLastPost();
+	}
+
   	ngOnInit(): void {
 		
 		var id = this._Activatedroute.snapshot.paramMap.get("id");
@@ -295,7 +301,16 @@ export class ListingComponent implements OnInit {
 		
 		return true;
 	}
+	
+	private scrollListingId:string = "";
 		
+	scrollToLastPost() {
+		if (this.activeView == "list" && this.scrollListingId !== "") {
+			this.scroller.scrollToAnchor(this.scrollListingId);
+			this.scrollListingId = "";
+		} 
+	}
+		 
 	/**
 	* Switches to Add Listing view
 	*/
@@ -310,6 +325,8 @@ export class ListingComponent implements OnInit {
 	*/
 	public showListingDetails(selectedListing?:Listing):void{
 	
+		this.scrollListingId = ""+selectedListing?.listingId;
+		
 		this.activeView 			= 'show';
 		this.searchBarCss = this.activeView === 'list' ? 'showChild' : 'hideChild';
 		if (selectedListing) {

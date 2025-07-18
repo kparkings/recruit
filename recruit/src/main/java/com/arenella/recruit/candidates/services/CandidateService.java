@@ -20,6 +20,7 @@ import com.arenella.recruit.candidates.beans.CandidateSearchAlert;
 import com.arenella.recruit.candidates.beans.CandidateSkill;
 import com.arenella.recruit.candidates.beans.CandidateUpdateRequest;
 import com.arenella.recruit.candidates.beans.PendingCandidate;
+import com.arenella.recruit.candidates.beans.SavedCandidateSearch;
 import com.arenella.recruit.candidates.controllers.CandidateController.CANDIDATE_UPDATE_ACTIONS;
 import com.arenella.recruit.candidates.controllers.SavedCandidate;
 import com.arenella.recruit.candidates.utils.CandidateSuggestionUtil.suggestion_accuracy;
@@ -308,5 +309,42 @@ public interface CandidateService {
 	* @param recrutierId - Id of the Recruiter
 	*/
 	public void deleteContactForRecruiter(String recruiterId);
+	
+	/**
+	* Adds a SavedCandidateSearch
+	* @param savedCandidateSearch - SavedCandidateSearch to persist
+	* @param authenticatedUserId - Id of currently authenticated user
+	*/
+	public void createSavedCandidateSearchRequest(SavedCandidateSearch savedCandidateSearch);
+	
+	/**
+	* Updates a SavedCandidateSearch
+	* @param savedCandidateSearch - SavedCandidateSearch to persist
+	* @param authenticatedUserId - Id of currently authenticated user
+	*/
+	public void updateSavedCandidateSearchRequest(SavedCandidateSearch savedCandidateSearch);
+	
+	
+	/**
+	* Returns all SavedCandidateSearch's for a user
+	* @param userId - Id of the User
+	* @return SavedCandidateSearch's belonging to the User
+	*/
+	public Set<SavedCandidateSearch> fetchSavedCandidateSearches(String userId);
+	
+	/**
+	* Deletes an existing SavedCandidateSearch
+	* @param savedCandidateSearchId - Id of SavedCandidateSearch to delete
+	* @param authenticatedUserId    - Id of currently authenticated User
+	 */
+	public void deleteSavedCandidateSearch(UUID savedCandidateSearchId, String authenticatedUserId);
+
+	/**
+	* !! Internal System method only !!
+	* Deletes all Saved Candidate searched for a given User. Service for the system to use.
+	* This should not be available via the API as there is no check for current user.
+	* @param userId - Id of candidate
+	*/
+	public void deleteSavedCandidateSearchesForUser(String userId);
 	
 }

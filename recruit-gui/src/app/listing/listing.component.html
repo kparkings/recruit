@@ -63,7 +63,8 @@
 						</div>
 						
 						<div class="listing-pane-right">
-							<div class="job-post" *ngFor="let listing of listings">
+						
+							<div class="job-post" *ngFor="let listing of listings" id="{{listing.listingId}}">
 								<div (click)="showListingDetails(listing)">
 									<div class="listing-title">{{getFormattedJobTitle(listing.title)}}</div>
 									<div>

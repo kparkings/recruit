@@ -64,7 +64,7 @@ export class RecruiterListingsComponent implements OnInit {
 	public countryOptions:Array<HtmlOption> 			= new Array<HtmlOption>();
 	public languages:Array<string> 						= new Array<string>();
   	
-	private	pageSize:number								= 8;
+	private	pageSize:number								= 1000;
   	private jobSpecFile!:File;
 	private  recruiterId:string							= '';
 	private  recruiterFirstName:string 					= '';

@@ -167,7 +167,6 @@ public class CandidateMonolithExternalEventListener implements CandidateExternal
 			
 		}
 		
-		
 	}
 
 	/**
@@ -179,6 +178,7 @@ public class CandidateMonolithExternalEventListener implements CandidateExternal
 		this.candidateService.deleteSavedCandidatesForRecruiter(recruiterDeletedEvent.getRecruiterId());	
 		this.candidateService.deleteCreditsForRecruiter(recruiterDeletedEvent.getRecruiterId());
 		this.candidateService.deleteContactForRecruiter(recruiterDeletedEvent.getRecruiterId());
+		this.candidateService.deleteSavedCandidateSearchesForUser(recruiterDeletedEvent.getRecruiterId());
 	}
 
 }

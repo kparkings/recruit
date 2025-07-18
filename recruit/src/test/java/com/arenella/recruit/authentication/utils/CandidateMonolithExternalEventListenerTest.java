@@ -11,7 +11,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
+import static org.mockito.Mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.arenella.recruit.adapters.events.CreditsUsedEvent;
@@ -37,7 +37,7 @@ import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_
 * @author K Parkings
 */
 @ExtendWith(MockitoExtension.class)
-public class CandidateMonolithExternalEventListenerTest {
+class CandidateMonolithExternalEventListenerTest {
 
 	private static final String EMAIL 			= "a@b.cd";
 	private static final String FIRSTNAME 		= "fred";
@@ -64,7 +64,7 @@ public class CandidateMonolithExternalEventListenerTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testListenForRecruiterCreatedEvent() throws Exception{
+	void testListenForRecruiterCreatedEvent() {
 		
 		RecruiterCreatedEvent event = RecruiterCreatedEvent
 			.builder()
@@ -76,7 +76,7 @@ public class CandidateMonolithExternalEventListenerTest {
 		
 		listener.listenForRecruiterCreatedEvent(event);
 		
-		Mockito.verify(mockCandidateService).updateContact(RECRUITER_ID, EMAIL, FIRSTNAME, SURNAME);
+		verify(mockCandidateService).updateContact(RECRUITER_ID, EMAIL, FIRSTNAME, SURNAME);
 		
 	}
 	
@@ -85,7 +85,7 @@ public class CandidateMonolithExternalEventListenerTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testListenForRecruiterUpdatedEvent() throws Exception{
+	void testListenForRecruiterUpdatedEvent() {
 		
 		RecruiterUpdatedEvent event = RecruiterUpdatedEvent
 			.builder()
@@ -97,7 +97,7 @@ public class CandidateMonolithExternalEventListenerTest {
 		
 		listener.listenForRecruiterUpdatedEvent(event);
 		
-		Mockito.verify(mockCandidateService).updateContact(RECRUITER_ID, EMAIL, FIRSTNAME, SURNAME);
+		verify(mockCandidateService).updateContact(RECRUITER_ID, EMAIL, FIRSTNAME, SURNAME);
 		
 	}
 	
@@ -106,19 +106,18 @@ public class CandidateMonolithExternalEventListenerTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testListenForCreditsUsedEvent() throws Exception{
+	void testListenForCreditsUsedEvent() {
 		
 		final String 	userId 		= "kparkings";
 		final int 		credits 	= 20;
 		
 		CreditsUsedEvent event = new CreditsUsedEvent(userId, credits);
 		
-		
-		Mockito.doNothing().when(this.mockCandidateService).updateCreditsForUser(userId, credits);
+		doNothing().when(this.mockCandidateService).updateCreditsForUser(userId, credits);
 		
 		this.listener.listenForCreditsUsedEvent(event);
 		
-		Mockito.verify(this.mockCandidateService).updateCreditsForUser(userId, credits);
+		verify(this.mockCandidateService).updateCreditsForUser(userId, credits);
 		
 	}
 	
@@ -127,7 +126,7 @@ public class CandidateMonolithExternalEventListenerTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testListenForRecruiterHasOpenSubscriptionEvent() throws Exception {
+	void testListenForRecruiterHasOpenSubscriptionEvent() {
 	
 		final String 			recruiterId 		= "kparkings";
 		
@@ -135,7 +134,7 @@ public class CandidateMonolithExternalEventListenerTest {
 		
 		this.listener.listenForSubscriptionAddedEvent(event);
 	
-		Mockito.verify(this.mockCandidateService).updateCreditsForUser(event.getRecruiterId(), RecruiterCredit.DISABLED_CREDITS, Optional.of(true));
+		verify(this.mockCandidateService).updateCreditsForUser(event.getRecruiterId(), RecruiterCredit.DISABLED_CREDITS, Optional.of(true));
 		
 	}
 
@@ -144,13 +143,13 @@ public class CandidateMonolithExternalEventListenerTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testListenForRecruiterNoOpenSubscriptionsEvent() throws Exception{
+	void testListenForRecruiterNoOpenSubscriptionsEvent() {
 		
 		final String recruiterId = "r55";
 		
 		this.listener.listenForRecruiterNoOpenSubscriptionsEvent(new RecruiterNoOpenSubscriptionEvent(recruiterId));
 	
-		Mockito.verify(this.mockCandidateService).updateCreditsForUser(recruiterId, RecruiterCredit.DISABLED_CREDITS);
+		verify(this.mockCandidateService).updateCreditsForUser(recruiterId, RecruiterCredit.DISABLED_CREDITS);
 		
 	}
 	
@@ -160,15 +159,15 @@ public class CandidateMonolithExternalEventListenerTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testListenForCurriculumUpdatedEvent_no_corresponding_candidate() throws Exception{
+	void testListenForCurriculumUpdatedEvent_no_corresponding_candidate() throws Exception{
 		
 		final String id = "1000";
 		
-		Mockito.when(this.mockCandidateRepo.findCandidateById(Long.valueOf(id))).thenReturn(Optional.empty());
+		when(this.mockCandidateRepo.findCandidateById(Long.valueOf(id))).thenReturn(Optional.empty());
 		
 		this.listener.listenForCurriculumUpdatedEvent(new CurriculumUpdatedEvent(id));
 		
-		Mockito.verify(this.mockExternalEventPublisher, Mockito.never()).publishCandidateUpdateEvent(Mockito.any());
+		verify(this.mockExternalEventPublisher, never()).publishCandidateUpdateEvent(any());
 		
 	}
 	
@@ -178,17 +177,17 @@ public class CandidateMonolithExternalEventListenerTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testListenForCurriculumUpdatedEvent_corresponding_candidate() throws Exception{
+	void testListenForCurriculumUpdatedEvent_corresponding_candidate() throws Exception{
 		
 		final String id = "1000";
 		
-		Mockito.when(this.mockCandidateRepo.findCandidateById(Long.valueOf(id))).thenReturn(Optional.of(Candidate.builder()
+		when(this.mockCandidateRepo.findCandidateById(Long.valueOf(id))).thenReturn(Optional.of(Candidate.builder()
 				.candidateId(id)
 				.build()));
 		
 		this.listener.listenForCurriculumUpdatedEvent(new CurriculumUpdatedEvent(id));
 		
-		Mockito.verify(this.mockExternalEventPublisher).publishCandidateUpdateEvent(Mockito.any());
+		verify(this.mockExternalEventPublisher).publishCandidateUpdateEvent(any());
 		
 	}
 	
@@ -197,7 +196,7 @@ public class CandidateMonolithExternalEventListenerTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testSubscriptionAddedEvent_creditBased() throws Exception{
+	void testSubscriptionAddedEvent_creditBased() {
 	
 		final String userId = "user1";
 		
@@ -210,13 +209,13 @@ public class CandidateMonolithExternalEventListenerTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testSubscriptionAddedEvent_paidSubscription() throws Exception{
+	void testSubscriptionAddedEvent_paidSubscription() {
 		
 		final String userId = "user1";
 		
 		this.listener.listenForSubscriptionAddedEvent(new SubscriptionAddedEvent(userId, subscription_type.ONE_MONTH_SUBSCRIPTION));
 	
-		Mockito.verify(this.mockCandidateService).updateCreditsForUser(userId, RecruiterCredit.DISABLED_CREDITS, Optional.of(true));
+		verify(this.mockCandidateService).updateCreditsForUser(userId, RecruiterCredit.DISABLED_CREDITS, Optional.of(true));
 	
 	}
 	
@@ -225,14 +224,14 @@ public class CandidateMonolithExternalEventListenerTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testListenForCurriculumSkillsExtractionEvent_candidateUnknown() throws Exception{
+	void testListenForCurriculumSkillsExtractionEvent_candidateUnknown() {
 		
-		Mockito.when(this.mockCandidateRepo.findCandidateById(111L)).thenReturn(Optional.empty());
+		when(this.mockCandidateRepo.findCandidateById(111L)).thenReturn(Optional.empty());
 		
 		this.listener.listenForCurriculumSkillsExtractionEvent(new CurriculumSkillsExtractionEvent(111L, Set.of()));
 		
-		Mockito.verify(this.mockCandidateRepo, Mockito.never()).saveCandidate(Mockito.any());
-		Mockito.verify(this.mockSkillUpdateStatDao, Mockito.never()).saveSkillUpdateStat(Mockito.any());
+		verify(this.mockCandidateRepo, never()).saveCandidate(any());
+		verify(this.mockSkillUpdateStatDao, never()).saveSkillUpdateStat(any());
 	}
 	
 	/**
@@ -240,23 +239,23 @@ public class CandidateMonolithExternalEventListenerTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testListenForCurriculumSkillsExtractionEvent() throws Exception{
+	void testListenForCurriculumSkillsExtractionEvent() {
 	
 		ArgumentCaptor<Candidate> 		argCapt 	= ArgumentCaptor.forClass(Candidate.class);
 		ArgumentCaptor<SkillUpdateStat> argStatCapt = ArgumentCaptor.forClass(SkillUpdateStat.class);
 		
-		Mockito.when(this.mockCandidateRepo.findCandidateById(111L)).thenReturn(Optional.of(Candidate.builder().skills(Set.of("java", "php")).build()));
+		when(this.mockCandidateRepo.findCandidateById(111L)).thenReturn(Optional.of(Candidate.builder().skills(Set.of("java", "php")).build()));
 		
 		this.listener.listenForCurriculumSkillsExtractionEvent(new CurriculumSkillsExtractionEvent(111L, Set.of("c#", "java")));
 		
-		Mockito.verify(this.mockCandidateRepo).saveCandidate(argCapt.capture());
+		verify(this.mockCandidateRepo).saveCandidate(argCapt.capture());
 		
 		assertEquals(3, argCapt.getValue().getSkills().size());
 		assertTrue(argCapt.getValue().getSkills().contains("java"));
 		assertTrue(argCapt.getValue().getSkills().contains("c#"));
 		assertTrue(argCapt.getValue().getSkills().contains("php"));
 		
-		Mockito.verify(this.mockSkillUpdateStatDao).saveSkillUpdateStat(argStatCapt.capture());
+		verify(this.mockSkillUpdateStatDao).saveSkillUpdateStat(argStatCapt.capture());
 		
 		assertEquals(1, 	argStatCapt.getValue().getAddedSkillsCount());
 		assertEquals(111L, 	argStatCapt.getValue().getCandidateId());
@@ -268,16 +267,17 @@ public class CandidateMonolithExternalEventListenerTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testListenForRecruiterAccountDeletedEvent() throws Exception{
+	void testListenForRecruiterAccountDeletedEvent() {
 		
 		final String recruiterId = "rec1";
 		
 		this.listener.listenForRecruiterAccountDeletedEvent(new RecruiterDeletedEvent(recruiterId));
 		
-		Mockito.verify(this.mockCandidateService).deleteCandidatesForOwnedByRecruiter(recruiterId);
-		Mockito.verify(this.mockCandidateService).deleteSavedCandidatesForRecruiter(recruiterId);
-		Mockito.verify(this.mockCandidateService).deleteCreditsForRecruiter(recruiterId);
-		Mockito.verify(this.mockCandidateService).deleteContactForRecruiter(recruiterId);
+		verify(this.mockCandidateService).deleteCandidatesForOwnedByRecruiter(recruiterId);
+		verify(this.mockCandidateService).deleteSavedCandidatesForRecruiter(recruiterId);
+		verify(this.mockCandidateService).deleteCreditsForRecruiter(recruiterId);
+		verify(this.mockCandidateService).deleteContactForRecruiter(recruiterId);
+		verify(this.mockCandidateService).deleteSavedCandidatesForRecruiter(recruiterId);
 		
 	}
 
