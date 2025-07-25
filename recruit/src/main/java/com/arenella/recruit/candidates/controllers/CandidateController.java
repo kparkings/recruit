@@ -504,7 +504,7 @@ public class CandidateController {
 	*/
 	@PostMapping("/candidate/saved-search-request")
 	@PreAuthorize("hasRole('ROLE_RECRUITER') OR hasRole('ROLE_ADMIN')")
-	public ResponseEntity<Void> createSavedCandidateSearchRequest(SavedCandidateSearchRequestCreateAPIInbound savedSearchRequestInbound, Principal principal) {
+	public ResponseEntity<Void> createSavedCandidateSearchRequest(@RequestBody SavedCandidateSearchRequestCreateAPIInbound savedSearchRequestInbound, Principal principal) {
 		candidateService.createSavedCandidateSearchRequest(SavedCandidateSearchRequestCreateAPIInbound.toDomain(savedSearchRequestInbound, UUID.randomUUID(),principal.getName()));
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
@@ -518,7 +518,7 @@ public class CandidateController {
 	*/
 	@PutMapping("/candidate/saved-search-request/{id}")
 	@PreAuthorize("hasRole('ROLE_RECRUITER') OR hasRole('ROLE_ADMIN')")
-	public ResponseEntity<Void> updateSavedCandidateSearchRequest(@PathVariable("id") UUID id, SavedCandidateSearchRequestUpdateAPIInbound savedSearchRequestInbound, Principal principal) {
+	public ResponseEntity<Void> updateSavedCandidateSearchRequest(@PathVariable("id") UUID id, @RequestBody SavedCandidateSearchRequestUpdateAPIInbound savedSearchRequestInbound, Principal principal) {
 		candidateService.updateSavedCandidateSearchRequest(SavedCandidateSearchRequestUpdateAPIInbound.toDomain(savedSearchRequestInbound, id, principal.getName()));
 		return ResponseEntity.ok().build();
 	}

@@ -7,10 +7,6 @@
 	margin-top:10px;
 }
 
-.sugg-srch-job-title{
-	min-width:0px;
-}
-
 .toggle-filter-option{
 	margin:0px;
 	cursor:pointer;
@@ -158,6 +154,11 @@
 	font-weight:bold;
 }
 
+.sugg-srch-job-title-queries{
+	font-weight:bold;
+	cursor:pointer;
+}
+
 .mobile-search-box{
 	margin-left:1%;
 	margin-right:1%;
@@ -191,6 +192,38 @@
 
 .loc-item-left{
 	margin-left:1px;
+}
+
+.saved-searched-modal-body{
+	text-align:left;
+	width:100%;
+	margin:0xp;
+	padding:0px;
+}
+
+.saved-searched-modal-body table{
+	width:100%;
+	font-weight:normal;
+}
+
+.saved-searched-modal-body table tr td{
+	padding:5px;
+	padding-left:20px;
+}
+
+.saved-searched-modal-body table tr th{
+	padding:5px;
+	text-align:center;
+	padding-left:20px;
+}
+
+.saved-searched-modal-body button{
+	margin-left:5px;
+	margin-bottom:5px;
+}
+
+.clickable{
+	cursor:pointer;
 }
 
 @media (max-width:700px)  {

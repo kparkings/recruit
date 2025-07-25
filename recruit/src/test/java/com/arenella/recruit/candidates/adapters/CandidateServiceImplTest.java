@@ -2410,6 +2410,22 @@ class CandidateServiceImplTest {
 	}
 	
 	/**
+	* Tests fetching of saved searches for the current authenticated user
+	*/
+	@Test
+	void testFetchSavedCandidateSearchAlerts() {
+		
+		final SavedCandidateSearch 	search = SavedCandidateSearch.builder().build();
+		
+		when(this.mockSavedCandidateSearchEntityDao.fetchSavedCandidateSearchWithEmailAlert()).thenReturn(Set.of(search));
+		
+		Set<SavedCandidateSearch> results = this.service.fetchSavedCandidateSearchAlerts();
+		
+		assertTrue(results.contains(search));
+		
+	}
+	
+	/**
 	* Tests deletion happy path
 	*/
 	@Test

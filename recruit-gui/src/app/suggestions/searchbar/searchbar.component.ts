@@ -18,7 +18,8 @@ import { SuggestionsService }										from './../../suggestions.service';
 import { CurrentUserAuth }											from './../../current-user-auth';
 import { SearchBarFilterFormHelper } 								from './search-fiter-form-helper';
 import { SuggestionsSearchRequest } 								from '../suggestion-search-request';
-
+import { SavedCandidateSearch } 									from '../saved-search';
+	
 @Component({
   selector: 'app-searchbar',
   standalone: false,
@@ -29,6 +30,9 @@ export class SearchbarComponent {
 
 	@ViewChild('searchTypeFilterSelectionModal', {static:true}) searchTypeFilterSelectionModal!: ElementRef<HTMLDialogElement>;
 	@ViewChild('paidSubscriptionModal', {static:true})			paidSubscriptionBox!: ElementRef<HTMLDialogElement>;
+	@ViewChild('savedSearchQueriesModal', {static:true})		savedSearchQueriesBox!: ElementRef<HTMLDialogElement>;
+		
+	
 	@Output() newSuggestionResults 								= new EventEmitter<Array<Candidate>>();
 	
 	private FIRST_NAME_DEFAULT:string 							= 'First Name';
@@ -59,6 +63,11 @@ export class SearchbarComponent {
 	public skilFilterForm:UntypedFormGroup 						= new UntypedFormGroup({
 		skill: 													new UntypedFormControl(''),
 	});
+	
+	public newSavedSearchForm:UntypedFormGroup 						= new UntypedFormGroup({
+			title: 													new UntypedFormControl(''),
+			enableEmails: 											new UntypedFormControl(false)
+		});
 	
 	public getCurrentSearchFilterType():string{
 		return this.filterTypeFormGroup.get('searchType')?.value;
@@ -101,7 +110,8 @@ export class SearchbarComponent {
 	ngOnInit(): void {
 		this.subscription = this.suggestionFilterForm.valueChanges.pipe(debounceTime(500)).subscribe(() => {
 			this.getSuggestions(false);
-		});
+		})
+		this.fetchSavedSearches();
 	}
 	
 	/**
@@ -291,6 +301,10 @@ export class SearchbarComponent {
 		}
 		return true;
 	}
+	
+	public showSavedSearchQueriesBox():void{
+		this.savedSearchQueriesBox.nativeElement.showModal();
+	}
 						
 	public choseSubscription():void{
 		this.creditsService.buySubscription();
@@ -397,12 +411,10 @@ export class SearchbarComponent {
 	
 		if (!geoZoneActive) {
 			this.candidateService.getSupportedCountries().forEach(country => {
-				//let key = country.iso2Code + 'Results';
 				this.suggestionFilterForm.get(country.name)?.setValue(true);
 			});
 		} else {
 			this.candidateService.getSupportedCountries().forEach(country => {
-				//let key = country.iso2Code.toLowerCase() + 'Results';
 				this.suggestionFilterForm.get(country.name)?.setValue(false);
 			});
 		
@@ -431,7 +443,6 @@ export class SearchbarComponent {
 		this.filterTypeFormGroup 	= SearchBarFilterFormHelper.resetSearchTytpeFilterForm(this.filterTypeFormGroup);
 						
 		this.candidateService.getSupportedCountries().forEach(c => {
-			//this.suggestionFilterForm.addControl(c.iso2Code+'Results', new UntypedFormControl(false));
 			this.suggestionFilterForm.addControl(c.name, new UntypedFormControl(false));
 		});
 						
@@ -451,64 +462,76 @@ export class SearchbarComponent {
 			skill: new UntypedFormControl(''),
 		});
 		
+		this.newSavedSearchForm = new UntypedFormGroup({
+			title: 				new UntypedFormControl(''),
+			enableEmails: 		new UntypedFormControl(false)
+		});
+		
 		this.skillFilters = new Array<string>();
 			
 		this.backendRequestCounter 		= 0;
 			
 		this.includeUnavailableCandidatesSelected = 'false';
 		this.includeRequiresSponsorshipCandidatesSelected = 'false';
+		this.acitveSavedCandidateSearch = new SavedCandidateSearch();
 				
+	}
+	
+	private generateSuggestionsSearchRequest(isUnfiltered:boolean):SuggestionsSearchRequest{
+		
+		const maxSuggestions:number 		= 112;
+				
+			let params:SuggestionParams = new SuggestionParams(this.filterTypeFormGroup, this.suggestionFilterForm, this.skillFilters, new Array<string>(), this.candidateService.getGeoZones(), this.candidateService.supportedCountries, this.supportedLanguages);
+			
+			let backendRequestId = this.backendRequestCounter + 1;
+			this.backendRequestCounter = backendRequestId;
+			
+			//START
+			
+			//TODO: [KP] 1. Implement backend call to perform sSearchbarComponent
+			//TODO: [KP] 2. Change logic to only set available params
+			//TODO: [KP] 3. Mce logic into separate class like SuggestionParams
+			
+			let ssReq:SuggestionsSearchRequest = new SuggestionsSearchRequest();
+			
+			ssReq.requestFilters.backendRequestId 						= backendRequestId;
+			ssReq.requestFilters.unfiltered 							= isUnfiltered;
+			ssReq.requestFilters.maxNumberOfSuggestions 				= maxSuggestions;
+			
+			ssReq.contractFilters.contract 								= params.getContract()?.toUpperCase();
+			ssReq.contractFilters.perm 									= params.getPerm()?.toUpperCase();
+			
+			ssReq.experienceFilters.experienceMin 						= params.getMinExperience();
+			ssReq.experienceFilters.experienceMax 						= params.getMaxExperience();
+			
+			ssReq.includeFilters.includeRequiresSponsorshipCandidates 	= params.getIncludRequiresSponsorshipCandidates(),
+			ssReq.includeFilters.includeUnavailableCandidates			= params.getIncludUnavailableCandidates();
+			
+			ssReq.languageFilters.languages 							= params.getLanguages();
+			
+			ssReq.locationFilters.countries 							= params.getCountries();
+			ssReq.locationFilters.geoZones 								= params.getGeoZones();
+			ssReq.locationFilters.range.country 						= params.getLocCountry();
+			ssReq.locationFilters.range.city 							= params.getLocCity();
+			ssReq.locationFilters.range.distanceInKm 					= params.getLocDistance();
+			
+			ssReq.skillFilters.skills 									= params.getSkills();
+			
+			ssReq.termFilters.candidateId 								= params.getCandidateId();
+			ssReq.termFilters.email 									= params.getEmail();
+			ssReq.termFilters.title 									= params.getTitle();
+			ssReq.termFilters.firstName 								= params.getFirstName();
+			ssReq.termFilters.surname 									= params.getSurname();
+				
+			return ssReq;
 	}
 	
 	/**
 	* Sends request for Suggestions to the backend API
 	*/
 	public getSuggestions(isUnfiltered:boolean):void{
-		
-		const maxSuggestions:number 		= 112;
-		
-		let params:SuggestionParams = new SuggestionParams(this.filterTypeFormGroup, this.suggestionFilterForm, this.skillFilters, new Array<string>(), this.candidateService.getGeoZones(), this.candidateService.supportedCountries, this.supportedLanguages);
-		
-		let backendRequestId = this.backendRequestCounter + 1;
-		this.backendRequestCounter = backendRequestId;
-		
-		//START
-		
-		//TODO: [KP] 1. Implement backend call to perform sSearchbarComponent
-		//TODO: [KP] 2. Change logic to only set available params
-		//TODO: [KP] 3. Mce logic into separate class like SuggestionParams
-		
-		let ssReq:SuggestionsSearchRequest = new SuggestionsSearchRequest();
-		
-		ssReq.requestFilters.backendRequestId 						= backendRequestId;
-		ssReq.requestFilters.unfiltered 							= isUnfiltered;
-		ssReq.requestFilters.maxNumberOfSuggestions 				= maxSuggestions;
-		
-		ssReq.contractFilters.contract 								= params.getContract()?.toUpperCase();
-		ssReq.contractFilters.perm 									= params.getPerm()?.toUpperCase();
-		
-		ssReq.experienceFilters.experienceMin 						= params.getMinExperience();
-		ssReq.experienceFilters.experienceMax 						= params.getMaxExperience();
-		
-		ssReq.includeFilters.includeRequiresSponsorshipCandidates 	= params.getIncludRequiresSponsorshipCandidates(),
-		ssReq.includeFilters.includeUnavailableCandidates			= params.getIncludUnavailableCandidates();
-		
-		ssReq.languageFilters.languages 							= params.getLanguages();
-		
-		ssReq.locationFilters.countries 							= params.getCountries();
-		ssReq.locationFilters.geoZones 								= params.getGeoZones();
-		ssReq.locationFilters.range.country 						= params.getLocCountry();
-		ssReq.locationFilters.range.city 							= params.getLocCity();
-		ssReq.locationFilters.range.distanceInKm 					= params.getLocDistance();
-		
-		ssReq.skillFilters.skills 									= params.getSkills();
-		
-		ssReq.termFilters.candidateId 								= params.getCandidateId();
-		ssReq.termFilters.email 									= params.getEmail();
-		ssReq.termFilters.title 									= params.getTitle();
-		ssReq.termFilters.firstName 								= params.getFirstName();
-		ssReq.termFilters.surname 									= params.getSurname();
-		
+	
+		let ssReq:SuggestionsSearchRequest = this.generateSuggestionsSearchRequest(isUnfiltered);
 		this.suggestionsService
 			.getCandidateSuggestions(ssReq).pipe(
 				map((response) => {
@@ -574,4 +597,82 @@ export class SearchbarComponent {
 
 		this.getSuggestions(isUnfiltered);	
 	}			
+	
+	
+	/** Start Saved Searches */
+	public savedSearches:Array<SavedCandidateSearch> = new Array<SavedCandidateSearch>();
+	public acitveSavedCandidateSearch:SavedCandidateSearch = new SavedCandidateSearch();
+	
+	public doSaveSearch():void{
+		
+		let title:string 			= this.newSavedSearchForm.get('title')?.value;
+		let enableEmails:boolean 	= this.newSavedSearchForm.get('enableEmails')?.value;
+		
+		this.candidateService.saveSearchQuery(title, enableEmails, this.generateSuggestionsSearchRequest(false)).subscribe(res =>{
+			
+			this.newSavedSearchForm = new UntypedFormGroup({
+				title: 				new UntypedFormControl(''),
+				enableEmails: 		new UntypedFormControl(false)
+			});
+			
+			this.savedSearchQueriesBox.nativeElement.close();
+			
+			this.fetchSavedSearches();
+			
+		});
+	}
+	
+	public selectSavedSearch(savedSearch:SavedCandidateSearch):void{
+		this.acitveSavedCandidateSearch = savedSearch;
+	}
+	
+	public fetchSavedSearches():void{
+		this.savedSearches 				= new Array<SavedCandidateSearch>();
+		this.acitveSavedCandidateSearch = new SavedCandidateSearch();
+		this.candidateService.getSavedSearchQueries().subscribe(res => {
+			res.forEach(a =>  {
+				this.savedSearches.push(a);
+			})
+		});
+	}
+	
+	public updateSavedSearch():void{
+		
+		//TODO: Also need to update email option
+		
+		this.acitveSavedCandidateSearch.searchRequest = this.generateSuggestionsSearchRequest(false);
+		
+		this.candidateService.updateSearchQuery(this.acitveSavedCandidateSearch.id, this.acitveSavedCandidateSearch).subscribe(res =>{
+					
+					this.newSavedSearchForm = new UntypedFormGroup({
+						title: 				new UntypedFormControl(''),
+						enableEmails: 		new UntypedFormControl(false)
+					});
+					
+					this.savedSearchQueriesBox.nativeElement.close();
+					
+					this.fetchSavedSearches();
+					
+				});
+	}
+	
+	public deleteSavedSearch(savedCandidateSearch:SavedCandidateSearch):void{
+		this.candidateService.deleteSearchQuery(savedCandidateSearch.id).subscribe(res => {
+			this.fetchSavedSearches();
+		});
+			
+	}
+	
+	public runSavedSearch(savedCandidateSearch:SavedCandidateSearch):void{
+		this.extractSavedCandidateSearchToFilters();
+		this.acitveSavedCandidateSearch = savedCandidateSearch;
+	}
+	
+	private extractSavedCandidateSearchToFilters():void{
+		this.resetSearchFilters();
+	}
+	
+	/** End Saved Searches */
+		
+	
 }

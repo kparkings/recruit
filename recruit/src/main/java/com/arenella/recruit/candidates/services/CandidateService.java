@@ -333,6 +333,12 @@ public interface CandidateService {
 	public Set<SavedCandidateSearch> fetchSavedCandidateSearches(String userId);
 	
 	/**
+	* Returns all SavedCandidateSearches that have email alerts activated
+	* @return with email alerts activated
+	*/
+	public Set<SavedCandidateSearch> fetchSavedCandidateSearchAlerts();
+	
+	/**
 	* Deletes an existing SavedCandidateSearch
 	* @param savedCandidateSearchId - Id of SavedCandidateSearch to delete
 	* @param authenticatedUserId    - Id of currently authenticated User

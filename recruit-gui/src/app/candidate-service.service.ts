@@ -20,6 +20,9 @@ import { SupportedCountry } 							from './supported-candidate';
 import { UpdateCityRequest } 							from './accounts/update-city-request';
 import { City } 										from './city';
 import { SuggestionsSearchRequest } 					from './suggestions/suggestion-search-request';
+import { NewSavedSearchRequest } 						from './suggestions/new-saved-search-req';
+import { SavedCandidateSearch } 						from './suggestions/saved-search';
+import { UpdateSavedSearchRequest }						from './suggestions/update-saved-search-req';
 import { SearchStats } 									from './search-stats';
 
 /**
@@ -573,5 +576,54 @@ export class CandidateServiceService {
         return this.httpClient.put<any>(backendUrl, {}, this.httpOptions);
 
     }
+	
+	/** START Saved Searches */
+	public saveSearchQuery(title:string, enableEmails:boolean, searchRequest:SuggestionsSearchRequest):Observable<void>{
+		
+		const backendUrl:string = environment.backendUrl +'candidate/saved-search-request';
+			
+		let req:NewSavedSearchRequest = new NewSavedSearchRequest();
+		req.emailAlert = enableEmails;
+		req.searchName = title;
+		req.searchRequest = searchRequest;
+		
+		return this.httpClient.post<any>(backendUrl, JSON.stringify(req), this.httpOptions);
+				
+	}
+	
+	public getSavedSearchQueries(): Observable<Array<SavedCandidateSearch>>{
+		const backendUrl:string = environment.backendUrl +'candidate/saved-search-request';
+		
+		return this.httpClient.get<Array<SavedCandidateSearch>>(backendUrl, this.httpOptions);
+	}
+	
+	/**
+	* Deletes Saved Query
+	*/
+	public deleteSearchQuery(id:string): Observable<void>{
+		const backendUrl:string = environment.backendUrl +'candidate/saved-search-request/' + id;
+
+		return this.httpClient.delete<any>(backendUrl, this.httpOptions);
+
+	}
+	
+	/**
+	* Updates Saved Query
+	* @param action: enable | disable 
+	*/
+	public updateSearchQuery(id:string, savedCandidateSearch:SavedCandidateSearch): Observable<any> {
+
+		const backendUrl:string = environment.backendUrl +'candidate/saved-search-request/' + id;
+			
+		let req:UpdateSavedSearchRequest = new UpdateSavedSearchRequest();
+				req.emailAlert = savedCandidateSearch.emailAlert;
+				req.searchName = savedCandidateSearch.searchName;
+				req.searchRequest = savedCandidateSearch.searchRequest;
+				
+		return this.httpClient.put<any>(backendUrl,  JSON.stringify(req), this.httpOptions);
+
+	}
+	
+	/** End Saved Searches */
   			
 }

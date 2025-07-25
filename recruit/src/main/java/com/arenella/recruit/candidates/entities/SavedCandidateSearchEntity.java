@@ -39,6 +39,13 @@ public class SavedCandidateSearchEntity {
 	private JsonNode 	searchRequest;
 	
 	/**
+	* Default constructor 
+	*/
+	public SavedCandidateSearchEntity() {
+		//Hibernate
+	}
+	
+	/**
 	* Constructor based on a builder
 	* @param builder - Contains initialization values
 	*/

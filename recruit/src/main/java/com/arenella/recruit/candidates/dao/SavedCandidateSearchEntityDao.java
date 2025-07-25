@@ -17,8 +17,11 @@ import com.arenella.recruit.candidates.entities.SavedCandidateSearchEntity;
 */
 public interface SavedCandidateSearchEntityDao extends ListCrudRepository<SavedCandidateSearchEntity, UUID>{
 	
-	@Query("from SavedCandidateSearchEntity where userId = :userId")
-	Optional<SavedCandidateSearchEntity> getEntityByUserId(String userId);
+	@Query("from SavedCandidateSearchEntity where userId = :userId order by searchName asc")
+	Set<SavedCandidateSearchEntity> getEntityByUserId(String userId);
+	
+	@Query("from SavedCandidateSearchEntity where emailAlert = true")
+	Optional<SavedCandidateSearchEntity> getEntitiesWithEmailAlertEnables();
 	
 	/**
 	* Persists a Saved Search
@@ -33,7 +36,7 @@ public interface SavedCandidateSearchEntityDao extends ListCrudRepository<SavedC
 	* @return Users saved searches
 	*/
 	default Set<SavedCandidateSearch> fetchSavedCandidateSearchs(String userId) {
-		return this.getEntityByUserId(userId).stream().map(SavedCandidateSearchEntity::fromEntity).sorted().collect(Collectors.toCollection(LinkedHashSet::new));
+		return this.getEntityByUserId(userId).stream().map(SavedCandidateSearchEntity::fromEntity).collect(Collectors.toCollection(LinkedHashSet::new));
 	}
 	
 	/**
@@ -44,6 +47,15 @@ public interface SavedCandidateSearchEntityDao extends ListCrudRepository<SavedC
 	*/
 	default Optional<SavedCandidateSearch> fetchSavedCandidateSearchById(UUID savedCandidateSearchId) {
 		return this.findById(savedCandidateSearchId).map(SavedCandidateSearchEntity::fromEntity);
+	}
+
+	/**
+	* Returns a Collection of all SavedCandidateSearches where the email alert has been 
+	* enabled
+	* @return with Enabled email alerts
+	*/
+	default Set<SavedCandidateSearch> fetchSavedCandidateSearchWithEmailAlert() {
+		return this.getEntitiesWithEmailAlertEnables().stream().map(SavedCandidateSearchEntity::fromEntity).sorted().collect(Collectors.toCollection(LinkedHashSet::new));
 	}
 	
 	

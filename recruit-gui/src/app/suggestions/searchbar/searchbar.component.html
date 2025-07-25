@@ -11,6 +11,12 @@
 							<input type="text" class="sugg-srch-job-title" 									formControlName="searchPhrase" 				*ngIf="getCurrentSearchFilterType() === 'FUNCTION' || getCurrentSearchFilterType() == 'EMAIL' || getCurrentSearchFilterType() == 'CANDIDATE_ID'">
 							<input type="text" class="sugg-srch-job-title-name {{cssSearchNameDefault()}}" 	formControlName="searchPhraseFirstName" 	*ngIf="getCurrentSearchFilterType() === 'NAME'" (click)="activateFirstnameSurnameFields()">
 							<input type="text" class="sugg-srch-job-title-name {{cssSearchNameDefault()}}" 	formControlName="searchPhraseSurname" 		*ngIf="getCurrentSearchFilterType() === 'NAME'" (click)="activateFirstnameSurnameFields()">
+							
+						</td>
+						<td *ngIf="getCurrentSearchFilterType() === 'FUNCTION'"> 
+							<div (click)="showSavedSearchQueriesBox()" class="material-icons sugg-srch-job-title-queries">
+								list
+							</div>
 						</td>
 					</tr>
 				</table>
@@ -209,5 +215,63 @@
 		<p *ngIf="paidFeature == 'paidFeatureGeoZones'">{{'arenella-suggestions-paid-subscription-text-2-geozone' | translate}}</p>
 		<p>{{'arenella-suggestions-paid-subscription-text-2' | translate}}</p>
 		<button class="btn btn-secondary" (click)="choseSubscription()" download>{{'arenella-suggestions-paid-subscription-choose-subscription-btn' | translate}}</button>
+	</div> 
+</dialog>
+
+<!-- Saved Search Queries -->
+<dialog #savedSearchQueriesModal style="min-width:50%">
+
+	<!--  Options -->
+	<div class="modal-header">
+		<h4 class="modal-title">{{'saved-candidate-search-queries' | translate}}</h4>
+		<div class="filter-close-box" (click)="savedSearchQueriesModal.close()">X</div>
+	</div>
+	<div class="modal-body saved-searched-modal-body" style="text-align:left;">
+	
+		<div>
+			<form [formGroup]="newSavedSearchForm" >
+				<table>
+					<tr style="background:#d2d2d2;">
+						<th>Name</th>
+						<th>Enable email alert</th>
+						<th></th>
+					</tr>
+					<tr style="background:#dee2e6;border-bottom:2px black solid;">
+						<td><input type="text" class="sugg-srch-job-title" formControlName="title" ></td>
+						<td><input type="checkbox" class="sugg-srch-job-title" formControlName="enableEmails" ></td>
+						<td>
+							<button class="btn btn-secondary" (click)="doSaveSearch()" download>Create</button>
+						</td>
+						
+					</tr>
+					<tr *ngFor="let ss of savedSearches" (click)="selectSavedSearch(ss)" class="clickable">
+					
+						<td>{{ss.searchName}}</td>
+						
+						<td>
+							<input type="checkbox" class="sugg-srch-job-title" *ngIf="ss != acitveSavedCandidateSearch" disabled>
+							<input type="checkbox" class="sugg-srch-job-title" *ngIf="ss == acitveSavedCandidateSearch">
+						</td>
+						
+						<td>
+							
+							<button *ngIf="ss == acitveSavedCandidateSearch" class="btn btn-secondary" (click)="runSavedSearch(ss)"		 download>Run</button>
+							<button *ngIf="ss == acitveSavedCandidateSearch" class="btn btn-secondary" (click)="updateSavedSearch()" 	 download>Update</button>
+							<button *ngIf="ss == acitveSavedCandidateSearch" class="btn btn-secondary" (click)="deleteSavedSearch(ss)" 	 download>Delete</button>	
+							
+							<button *ngIf="ss != acitveSavedCandidateSearch" class="btn btn-secondary" (click)="runSavedSearch(ss)"		 download disabled>Run</button>
+							<button *ngIf="ss != acitveSavedCandidateSearch" class="btn btn-secondary" (click)="updateSavedSearch()" 	 download disabled>Update</button>
+							<button *ngIf="ss != acitveSavedCandidateSearch" class="btn btn-secondary" (click)="deleteSavedSearch(ss)" 	 download disabled>Delete</button>	
+							
+						</td>
+						
+					</tr>
+				</table>
+			</form>
+		</div>
+	
+		<div>
+		</div>
+	
 	</div> 
 </dialog>

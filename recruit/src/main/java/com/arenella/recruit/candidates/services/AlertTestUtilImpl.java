@@ -1,6 +1,5 @@
 package com.arenella.recruit.candidates.services;
 
-import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.Executors;
@@ -10,20 +9,21 @@ import java.util.concurrent.TimeUnit;
 import jakarta.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import com.arenella.recruit.candidates.adapters.CandidateCreatedEvent;
 import com.arenella.recruit.candidates.adapters.ExternalEventPublisher;
 import com.arenella.recruit.candidates.adapters.RequestSendAlertDailySummaryEmailCommand;
 import com.arenella.recruit.candidates.beans.CandidateFilterOptions;
-import com.arenella.recruit.candidates.beans.CandidateSearchAlert;
+import com.arenella.recruit.candidates.beans.CandidateSearchAccuracyWrapper;
 import com.arenella.recruit.candidates.beans.CandidateSearchAlertMatch;
-import com.arenella.recruit.candidates.beans.Language;
-import com.arenella.recruit.candidates.beans.Language.LANGUAGE;
-import com.arenella.recruit.candidates.beans.Language.LEVEL;
-import com.arenella.recruit.candidates.dao.CandidateSearchAlertDao;
+import com.arenella.recruit.candidates.beans.SavedCandidateSearch;
+import com.arenella.recruit.candidates.controllers.CandidateSearchRequest;
 import com.arenella.recruit.candidates.dao.CandidateSearchAlertMatchDao;
+import com.arenella.recruit.candidates.enums.RESULT_ORDER;
 import com.arenella.recruit.candidates.utils.CandidateSuggestionUtil.suggestion_accuracy;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
 * Utility for performing tests of CandidateSearchEvents against 
@@ -36,8 +36,8 @@ public class AlertTestUtilImpl implements AlertTestUtil{
 	private final ScheduledExecutorService 		scheduler 			= Executors.newScheduledThreadPool(5);
 	private final ScheduledExecutorService		endOfDayScheduler 	= Executors.newScheduledThreadPool(1);
 	
-	@Autowired
-	private CandidateSearchAlertDao 			alertDao;
+	//@Autowired
+	//private CandidateSearchAlertDao 			alertDao;
 	
 	@Autowired
 	private CandidateService 					candidateService;
@@ -47,6 +47,9 @@ public class AlertTestUtilImpl implements AlertTestUtil{
 	
 	@Autowired
 	private ExternalEventPublisher				commandPublisher;
+	
+	@Autowired
+	private ObjectMapper						objectMapper;
 	
 	/**
 	* Kicks off the Scheduler to package Matches 
@@ -101,9 +104,16 @@ public class AlertTestUtilImpl implements AlertTestUtil{
 	@Override
 	public void testAgainstCandidateSearchAlerts(CandidateCreatedEvent event) {
 		
-		this.alertDao.fetchAlerts().forEach(alert -> 
+		//1. Need method to get all SavedCandidateSearches that have email enabled
+		Set<SavedCandidateSearch>  alerts = this.candidateService.fetchSavedCandidateSearchAlerts();
+		
+		alerts.forEach(alert -> 
 			scheduler.execute(packageTest(event,alert))
 		);
+		
+		//this.alertDao.fetchAlerts().forEach(alert -> 
+		//	scheduler.execute(packageTest(event,alert))
+		//);
 		
 	}
 	
@@ -111,68 +121,103 @@ public class AlertTestUtilImpl implements AlertTestUtil{
 	* Creates a Test for the CandidateSearchEvent / CandidateSearchAlert combination
 	* @return
 	*/
-	private Runnable packageTest(CandidateCreatedEvent event, CandidateSearchAlert alert) {
+	private Runnable packageTest(CandidateCreatedEvent event, SavedCandidateSearch alert) {
 		
 		return new Runnable(){
 
 			@Override
 			public void run() {
 				
-				//REFACTOR TO USE ALL LANGIAGES
-				Set<Language.LANGUAGE> languages = new HashSet<>();
-				
-				if (alert.getDutch() != LEVEL.UNKNOWN){
-					languages.add(LANGUAGE.DUTCH);
-				}
-				
-				if (alert.getEnglish() != LEVEL.UNKNOWN){
-					languages.add(LANGUAGE.ENGLISH);
-				}
-				
-				if (alert.getFrench() != LEVEL.UNKNOWN){
-					languages.add(LANGUAGE.FRENCH);
-				}
-				
-				//END REFACTOR
-				
 				try {
+					
+					CandidateSearchRequest searchRequest = objectMapper.treeToValue(alert.getSearchRequest(), CandidateSearchRequest.class);
+					
 					CandidateFilterOptions filterOptions = 
-							CandidateFilterOptions
-								.builder()
-									.candidateIds(Set.of(event.getCandidateId()))
-									.countries(alert.getCountries())
-									.languages(languages)
-									//.dutch(alert.getDutch()		== LEVEL.UNKNOWN ? null : alert.getDutch())
-									//.english(alert.getEnglish()	== LEVEL.UNKNOWN ? null : alert.getEnglish())
-									//.french(alert.getFrench()	== LEVEL.UNKNOWN ? null : alert.getFrench())
-									.freelance(alert.getFreelance().isEmpty() ? null : alert.getFreelance().get())
-									.functions(alert.getFunctions())
-									.perm(alert.getPerm().isEmpty() ? null : alert.getPerm().get())
-									.skills(alert.getSkills())
-									.yearsExperienceGtEq(alert.getYearsExperienceGtEq())
-									.yearsExperienceLtEq(alert.getyearsExperienceLtEq())
-								.build();
+							CandidateSearchRequest
+								.convertToCandidateFilterOptions(
+										searchRequest, 
+										"candidateId", 
+										RESULT_ORDER.asc);
 					
-					suggestion_accuracy accuracy = null;
+					filterOptions.setCandidateIds(Set.of(event.getCandidateId()));
 					
-					accuracy = candidateService.doTestCandidateAlert(Long.valueOf(event.getCandidateId()), filterOptions);
-				
-					if (accuracy !=suggestion_accuracy.poor) {
+					Page<CandidateSearchAccuracyWrapper> results =  candidateService.getCandidateSuggestions(filterOptions, 1, false, true);
+					
+					results.stream().filter(r -> r.getAccuracySkills() != suggestion_accuracy.poor).forEach(match -> {
 						matchDao.saveMatch(CandidateSearchAlertMatch
-								.builder()
-									.id(UUID.randomUUID())
-									.alertName(alert.getAlertName())
-									.candidateId(Long.valueOf(event.getCandidateId()))
-									.recruiterId(alert.getRecruiterId())
-									.roleSought(event.getRoleSought())
-									.accuracy(accuracy)
-									.alertId(alert.getAlertId())
-								.build());
-					}
+												.builder()
+													.id(UUID.randomUUID())
+													.alertName(alert.getSearchName())
+													.candidateId(Long.valueOf(event.getCandidateId()))
+													.recruiterId(alert.getUserId())
+													.roleSought("")
+													.accuracy(match.getAccuracySkills())
+													.alertId(alert.getId())
+												.build());
+					});
 					
 				}catch(Exception e) {
 					e.printStackTrace();
 				}
+				
+				
+				//TODO [KP] remove doTestCandidateAlert
+				//TODO [KP] remove API for creating 
+				//TODO [KP] remove alertDao.fetchAlerts() functionality 
+				//TODO [KP] Test alert emails still send after refactor
+				
+				//REFACTOR TO USE ALL LANGIAGES
+				//Set<Language.LANGUAGE> languages = new HashSet<>();
+				
+				//if (alert.getDutch() != LEVEL.UNKNOWN){
+				//	languages.add(LANGUAGE.DUTCH);
+				//}
+				
+				//if (alert.getEnglish() != LEVEL.UNKNOWN){
+				//	languages.add(LANGUAGE.ENGLISH);
+				//}
+				
+				//if (alert.getFrench() != LEVEL.UNKNOWN){
+				//	languages.add(LANGUAGE.FRENCH);
+				//}
+				
+				//END REFACTOR
+				
+				//try {
+				//	CandidateFilterOptions filterOptions = 
+				//			CandidateFilterOptions
+				//				.builder()
+				//					.candidateIds(Set.of(event.getCandidateId()))
+				//					.countries(alert.getCountries())
+				//					.languages(languages)
+				//					.freelance(alert.getFreelance().isEmpty() ? null : alert.getFreelance().get())
+				//					.functions(alert.getFunctions())
+				//					.perm(alert.getPerm().isEmpty() ? null : alert.getPerm().get())
+				//					.skills(alert.getSkills())
+				//					.yearsExperienceGtEq(alert.getYearsExperienceGtEq())
+				//					.yearsExperienceLtEq(alert.getyearsExperienceLtEq())
+				//				.build();
+					
+				//	suggestion_accuracy accuracy = null;
+					
+				//	accuracy = candidateService.doTestCandidateAlert(Long.valueOf(event.getCandidateId()), filterOptions);
+				
+				//	if (accuracy !=suggestion_accuracy.poor) {
+				//		matchDao.saveMatch(CandidateSearchAlertMatch
+				//				.builder()
+				//					.id(UUID.randomUUID())
+				//					.alertName(alert.getAlertName())
+				//					.candidateId(Long.valueOf(event.getCandidateId()))
+				//					.recruiterId(alert.getRecruiterId())
+				//					.roleSought(event.getRoleSought())
+				//					.accuracy(accuracy)
+				//					.alertId(alert.getAlertId())
+				//				.build());
+				//	}
+					
+				//}catch(Exception e) {
+				//	e.printStackTrace();
+				//}
 				
 			}
 			

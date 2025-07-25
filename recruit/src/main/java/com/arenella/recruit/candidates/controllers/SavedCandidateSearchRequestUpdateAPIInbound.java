@@ -14,7 +14,7 @@ import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 @JsonDeserialize(builder=SavedCandidateSearchRequestUpdateAPIInbound.SavedCandidateSearchRequestUpdateAPIInboundBuilder.class)
 public class SavedCandidateSearchRequestUpdateAPIInbound {
 
-	private UUID 		id;
+	private UUID 		id;			//Why is this here. We pass it in the path
 	private boolean 	emailAlert;
 	private String 		searchName;
 	private JsonNode 	searchRequest;

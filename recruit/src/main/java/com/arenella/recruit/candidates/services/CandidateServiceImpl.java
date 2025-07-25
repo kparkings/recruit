@@ -1295,6 +1295,14 @@ public class CandidateServiceImpl implements CandidateService{
 	* Refer to the CandidateService for details 
 	*/
 	@Override
+	public Set<SavedCandidateSearch> fetchSavedCandidateSearchAlerts() {
+		return savedCandidateSearchEntityDao.fetchSavedCandidateSearchWithEmailAlert();
+	}
+	
+	/**
+	* Refer to the CandidateService for details 
+	*/
+	@Override
 	public void deleteSavedCandidateSearch(UUID savedCandidateSearchId, String authenticatedUserId) {
 		
 		Optional<SavedCandidateSearch> existing = this.savedCandidateSearchEntityDao.fetchSavedCandidateSearchById(savedCandidateSearchId);
