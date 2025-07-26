@@ -41,7 +41,7 @@ public class SavedCandidateSearchRequestAPIOutbound {
 	* parameters
 	* @return Whether to email User
 	*/
-	public boolean hasEmailAlert() {
+	public boolean isEmailAlert() {
 		return this.emailAlert;
 	}
 	

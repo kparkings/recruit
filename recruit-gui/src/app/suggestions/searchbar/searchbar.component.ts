@@ -31,7 +31,6 @@ export class SearchbarComponent {
 	@ViewChild('searchTypeFilterSelectionModal', {static:true}) searchTypeFilterSelectionModal!: ElementRef<HTMLDialogElement>;
 	@ViewChild('paidSubscriptionModal', {static:true})			paidSubscriptionBox!: ElementRef<HTMLDialogElement>;
 	@ViewChild('savedSearchQueriesModal', {static:true})		savedSearchQueriesBox!: ElementRef<HTMLDialogElement>;
-		
 	
 	@Output() newSuggestionResults 								= new EventEmitter<Array<Candidate>>();
 	
@@ -336,7 +335,6 @@ export class SearchbarComponent {
 	* Swithches between open and closed filter view for GeoZones 
 	*/
 	public switchGeoZoneFilterView(view:string):void{
-		//this.initGeoZones();includeResultsForGeoZone
 		this.showGeoZoneFilters = view;
 	}
 
@@ -636,6 +634,10 @@ export class SearchbarComponent {
 		});
 	}
 	
+	public enableSavedSearchEmails():void{
+		this.acitveSavedCandidateSearch.emailAlert = !this.acitveSavedCandidateSearch.emailAlert;
+	}
+	
 	public updateSavedSearch():void{
 		
 		//TODO: Also need to update email option
@@ -664,12 +666,99 @@ export class SearchbarComponent {
 	}
 	
 	public runSavedSearch(savedCandidateSearch:SavedCandidateSearch):void{
-		this.extractSavedCandidateSearchToFilters();
+		this.extractSavedCandidateSearchToFilters(savedCandidateSearch);
 		this.acitveSavedCandidateSearch = savedCandidateSearch;
 	}
 	
-	private extractSavedCandidateSearchToFilters():void{
+	private extractSavedCandidateSearchToFilters(savedCandidateSearch:SavedCandidateSearch):void{
 		this.resetSearchFilters();
+		
+		let searchRequest:SuggestionsSearchRequest = savedCandidateSearch.searchRequest;
+		
+		if (searchRequest.termFilters.title) {
+			this.filterTypeFormGroup.get('searchType')?.setValue("FUNCTION");
+			this.suggestionFilterForm.get('searchPhrase')?.setValue(searchRequest.termFilters.title);
+		}
+		
+		if (searchRequest.termFilters.candidateId) {
+			this.filterTypeFormGroup.get('searchType')?.setValue("CANDIDATE_ID");
+			this.suggestionFilterForm.get('searchPhrase')?.setValue(searchRequest.termFilters.candidateId);
+		}
+				
+		if (searchRequest.termFilters.firstName || searchRequest.termFilters.surname) {
+			this.filterTypeFormGroup.get('searchType')?.setValue("NAME");
+			this.suggestionFilterForm.get('searchPhraseFirstName')?.setValue(searchRequest.termFilters.firstName);
+			this.suggestionFilterForm.get('searchPhraseSurname')?.setValue(searchRequest.termFilters.surname);			
+		}
+		
+		if (searchRequest.termFilters.email) {
+			this.filterTypeFormGroup.get('searchType')?.setValue("EMAIL");
+			this.suggestionFilterForm.get('searchPhrase')?.setValue(searchRequest.termFilters.email);				
+		}
+		
+		searchRequest.skillFilters?.skills?.forEach(skill => {
+			this.skillFilters.push(skill);
+		});
+		
+		searchRequest.locationFilters.geoZones.forEach(geoZone => {
+			this.toggleGeoZoneSelection(new GeoZone(geoZone.toUpperCase()));
+		});
+		
+		searchRequest.locationFilters.countries?.forEach(country => {
+			this.toggleCountrySelection(country);
+		});
+		
+		this.supportedLanguages = new Array<SupportedLanguage>();
+		this.candidateService.getLanguages().forEach(lang => {
+			
+			let languages = searchRequest?.languageFilters?.languages;
+			
+			if (languages && languages.indexOf(lang.languageCode) > -1) {
+				this.suggestionFilterForm.addControl(lang.languageCode.toLowerCase()+'Language', new UntypedFormControl(true));	
+				this.suggestionFilterForm?.get(lang.languageCode.toLowerCase()+'Language')?.setValue("true");
+			} else {
+				this.suggestionFilterForm.addControl(lang.languageCode.toLowerCase()+'Language', new UntypedFormControl(false));
+			}
+			this.supportedLanguages.push(lang);
+		});
+		
+		if (searchRequest.contractFilters.contract == "TRUE") {
+			this.suggestionFilterForm.get("contractType")?.setValue("CONTRACT");
+		} else if (searchRequest.contractFilters.perm == "TRUE") {
+			this.suggestionFilterForm.get("contractType")?.setValue("PERM");
+		} else {
+			this.suggestionFilterForm.get("contractType")?.setValue("BOTH");
+		}
+		
+		if (searchRequest.locationFilters.range.country) {
+			this.suggestionFilterForm.get('locationCountry')?.setValue(searchRequest.locationFilters.range.country);
+			this.suggestionFilterForm.get('locationCity')?.setValue(searchRequest.locationFilters.range.city);
+			this.suggestionFilterForm.get('locationDistance')?.setValue(searchRequest.locationFilters.range.distanceInKm);
+		}
+		
+		if (searchRequest.includeFilters.includeUnavailableCandidates == "true") {
+			this.suggestionFilterForm.get('includeUnavailableCandidates')?.setValue("true");
+			this.includeUnavailableCandidatesSelected = "true";
+		}
+		if (searchRequest.includeFilters.includeRequiresSponsorshipCandidates == "true") {
+			this.suggestionFilterForm.get('includeRequiresSponsorshipCandidates')?.setValue("true");
+			this.includeRequiresSponsorshipCandidatesSelected = "true";
+		}
+		
+		
+		if (searchRequest.experienceFilters.experienceMin) {
+			this.suggestionFilterForm.get('minYearsExperience')?.setValue(searchRequest.experienceFilters.experienceMin);
+			
+		}
+		
+		if (searchRequest.experienceFilters.experienceMax) {
+			this.suggestionFilterForm.get('maxYearsExperience')?.setValue(searchRequest.experienceFilters.experienceMax);
+		}
+		
+		this.addChangeListener(false);
+		
+		this.savedSearchQueriesBox.nativeElement.close();
+		
 	}
 	
 	/** End Saved Searches */

@@ -36,7 +36,7 @@ class SavedCandidateSearchRequestAPIOutboundTest {
 				.build();
 		
 		assertEquals(ID, 				search.getId());
-		assertEquals(EMAIL_ALERT, 		search.hasEmailAlert());
+		assertEquals(EMAIL_ALERT, 		search.isEmailAlert());
 		assertEquals(SEARCH_NAME, 		search.getSearchName());
 		assertEquals(SEARCH_REQUEST, 	search.getSearchRequest());
 		
@@ -65,7 +65,7 @@ class SavedCandidateSearchRequestAPIOutboundTest {
 		
 		SavedCandidateSearchRequestAPIOutbound inbound = SavedCandidateSearchRequestAPIOutbound.fromDomain(search);
 		
-		assertEquals(EMAIL_ALERT, 		inbound.hasEmailAlert());
+		assertEquals(EMAIL_ALERT, 		inbound.isEmailAlert());
 		assertEquals(SEARCH_NAME, 		inbound.getSearchName());
 		assertEquals(SEARCH_REQUEST, 	inbound.getSearchRequest());
 		

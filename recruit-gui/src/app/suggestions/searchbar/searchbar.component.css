@@ -199,6 +199,9 @@
 	width:100%;
 	margin:0xp;
 	padding:0px;
+	min-height:200px;
+	max-height:400px;
+	overflow-y:auto;
 }
 
 .saved-searched-modal-body table{
