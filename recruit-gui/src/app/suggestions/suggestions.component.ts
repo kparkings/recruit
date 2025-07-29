@@ -11,7 +11,6 @@ import { CurriculumService }														from '../curriculum.service';
 import { Candidate}																	from './candidate';
 import { SavedCandidate}															from './saved-candidate';
 import { SuggestionParams}															from './suggestion-param-generator';
-import { CandidateSearchAlert }														from './candidate-search-alert';
 import { CandidateProfile } 														from '../candidate-profile';
 import { CandidateNavService } 														from '../candidate-nav.service';
 import { CreditsService } 															from '../credits.service';
@@ -66,9 +65,6 @@ export class SuggestionsComponent implements OnInit {
 	public skillFilters:Array<string>							= new Array<string>();
 	public minMaxOptions:Array<string> 							= new Array<string>('','1','2','3','4','5','8','10','15','20','25','30');
 	public suggestedCandidate:Candidate							= new Candidate();
-	public showSaveAlertBoxFailure:boolean  					= false;
-	public showSaveAlertBoxSuccess:boolean  					= false;
-	public showSaveAlertBox:boolean 							= false;
 	public showFilterByJonSpecFailure:boolean  					= false;
 	public showFilterByJobSpec:boolean 							= false;
 	public dangerousUrl 										= 'http://127.0.0.1:8080/curriculum-test/1623.pdf';
@@ -408,62 +404,6 @@ export class SuggestionsComponent implements OnInit {
 		
 		return false;
 	}
-		
-	/**
- 	* Saves the alert
-	*/
-	public saveAlert():void{
-		
-		this.showSaveAlertBox 			= true;
-		this.showSaveAlertBoxSuccess 	= false;
-		this.showSaveAlertBoxFailure 	= false;
-		
-		let params:SuggestionParams 	= new SuggestionParams(this.filterTypeFormGroup, this.suggestionFilterForm, this.skillFilters, new Array<string>(), this.candidateService.getGeoZones(), this.supportedCountries, this.supportedLanguages);
-		let alert:CandidateSearchAlert 	= new CandidateSearchAlert();
-		
-		alert.alertName 			= this.createAlertForm.get(('alertName'))?.value;
-		alert.countries 			= params.getCountries();
-		alert.dutch 				= params.getLanguageLevel("DUTCH");
-		alert.english 				= params.getLanguageLevel("ENGLISH");
-		alert.freelance 			= ""+params.getContract();
-		alert.french 				= params.getLanguageLevel("FRENCH");
-		alert.perm 					= ""+params.getPerm();
-		alert.skills 				= params.getSkills();
-		alert.searchText			= ""+params.getTitle();
-		
-		alert.yearsExperienceLtEq 	= ""+params.getMinExperience();
-		alert.yearsExperienceGtEq 	= ""+params.getMaxExperience();
-		
-		this.candidateService.createCandidateSearchAlert(alert).subscribe(() => {
-			
-			this.showSaveAlertBox 			= false;
-			this.showSaveAlertBoxSuccess 	= true;
-			this.showSaveAlertBoxFailure 	= false;
-			
-			this.createAlertForm = new UntypedFormGroup({
-				alertName:			new UntypedFormControl(''),
-			});
-			
-		}, () => {
-			this.showSaveAlertBox 		= false;
-			this.showSaveAlertBoxSuccess 	= false;
-			this.showSaveAlertBoxFailure 	= true;
-		});
-		
-	}
-	
-	/**
-	* Displays dialog to create an alert for the current search critera
-	*/
-	public showCreateAlertDialog():void{
-		
-		this.showSaveAlertBox 			= true;
-		this.showSaveAlertBoxSuccess 	= false;
-		this.showSaveAlertBoxFailure 	= false;
-		
-		this.feedbackDialogBox.nativeElement.showModal();
-		
-	}
 	
 	/**
 	* Displays dialog to create an alert for the current search critera
@@ -488,9 +428,6 @@ export class SuggestionsComponent implements OnInit {
 	*/
 	public closeModal(): void {
 		
-		this.showSaveAlertBox 				= false;
-		this.showSaveAlertBoxSuccess 		= false;
-		this.showSaveAlertBoxFailure 		= false;
 		this.showFilterByJonSpecFailure  	= false;
 		this.showFilterByJobSpec 			= true;
 		

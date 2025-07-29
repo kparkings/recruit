@@ -41,7 +41,6 @@ import com.arenella.recruit.candidates.beans.CandidateExtractedFilters;
 import com.arenella.recruit.candidates.beans.CandidateExtractedFilters.CandidateExtractedFiltersBuilder;
 import com.arenella.recruit.candidates.beans.CandidateFilterOptions;
 import com.arenella.recruit.candidates.beans.CandidateSearchAccuracyWrapper;
-import com.arenella.recruit.candidates.beans.CandidateSearchAlert;
 import com.arenella.recruit.candidates.beans.CandidateSkill;
 import com.arenella.recruit.candidates.beans.CandidateUpdateRequest;
 import com.arenella.recruit.candidates.beans.City;
@@ -83,7 +82,6 @@ import com.arenella.recruit.newsfeed.beans.NewsFeedItem.NEWSFEED_ITEM_TYPE;
 import co.elastic.clients.elasticsearch.ElasticsearchClient;
 
 import com.arenella.recruit.candidates.utils.PasswordUtil;
-import com.arenella.recruit.candidates.dao.CandidateSearchAlertDao;
 import com.arenella.recruit.candidates.dao.CandidateSkillsDao;
 import com.arenella.recruit.candidates.dao.SavedCandidateDao;
 import com.arenella.recruit.candidates.dao.SavedCandidateSearchEntityDao;
@@ -114,12 +112,6 @@ public class CandidateServiceImpl implements CandidateService{
 	
 	@Autowired
 	private CandidateSuggestionUtil				suggestionUtil;
-	
-	@Autowired
-	private SkillsSynonymsUtil					skillsSynonymsUtil;
-	
-	@Autowired
-	private CandidateSearchAlertDao				skillAlertDao;
 	
 	@Autowired
 	private DocumentFilterExtractionUtil		documentFilterExtractionUtil;
@@ -363,47 +355,6 @@ public class CandidateServiceImpl implements CandidateService{
 	}
 	
 	/**
-	* Refer to the CandidateService Interface for Details
-	*/
-	@Override
-	public suggestion_accuracy doTestCandidateAlert(long candidateId, CandidateFilterOptions filterOptions) throws Exception{
-		
-		CandidateFilterOptions suggestionFilterOptions = CandidateFilterOptions
-				.builder()
-					.skills(filterOptions.getSkills())
-				.build();
-
-		filterOptions.getSkills().clear();
-		
-		Set<Candidate> results = this.candidateRepo.findCandidates(filterOptions, esClient, 0, 10000);
-		
-		if (results.isEmpty()) {
-			return suggestion_accuracy.poor;
-		}
-		
-		Candidate candidate = results.stream().findFirst().get();
-		
-		this.skillsSynonymsUtil.addSynonymsForSkills(candidate.getSkills(), candidate.getSkills());
-		
-		CandidateSearchAccuracyWrapper 	wrappedCandidate 	= new CandidateSearchAccuracyWrapper(candidate);
-		
-		if (suggestionUtil.isPerfectMatch(wrappedCandidate, suggestionFilterOptions, Set.of())) {
-			return suggestion_accuracy.perfect;
-		}
-		
-		if (suggestionUtil.isExcellentMatch(wrappedCandidate, suggestionFilterOptions, Set.of())) {
-			return suggestion_accuracy.excellent;
-		}
-		
-		if (suggestionUtil.isGoodMatch(wrappedCandidate, suggestionFilterOptions, Set.of())) {
-			return suggestion_accuracy.good;
-		}
-		
-		return suggestion_accuracy.poor;
-		
-	}
-	
-	/**
 	* Adds any new skills searched on to the DB
 	* @param skills - Skills from current search
 	*/
@@ -624,49 +575,6 @@ public class CandidateServiceImpl implements CandidateService{
 		
 		this.candidateRepo.saveCandidate(candidate);
 		
-	}
-
-	/**
-	* Refer to the CandidateService for details 
-	*/
-	@Override
-	public void addSearchAlert(CandidateSearchAlert alert, String searchText) {
-		
-		alert.initAsNewAlert(this.getAuthenticatedUserId());
-		
-		if (!searchText.isBlank()) {
-			Set<FUNCTION> functionToFilterOn = this.candidateFunctionExtractor.extractFunctions(searchText);
-			alert.setFunctions(functionToFilterOn);
-		}
-		
-		this.skillAlertDao.saveAlert(alert);
-		
-	}
-	
-	/**
-	* Refer to the CandidateService for details 
-	*/
-	@Override
-	public void deleteSearchAlert(UUID id) {
-		
-		Optional<CandidateSearchAlert> alertOpt = this.skillAlertDao.getchAlertById(id);
-		
-		CandidateSearchAlert alert = alertOpt.orElseThrow(() -> new IllegalArgumentException("Unknown SearchAlert Id " + id));
-		
-		if (!this.getAuthenticatedUserId().equals(alert.getRecruiterId())) {
-			throw new IllegalArgumentException("Unable to delete SearchAlert");
-		}
-		
-		this.skillAlertDao.deleteById(id);
-		
-	}
-
-	/**
-	* Refer to the CandidateService for details 
-	*/
-	@Override
-	public Set<CandidateSearchAlert> getAlertsForCurrentUser() {
-		return this.skillAlertDao.fetchAlertsByRecruiterId(getAuthenticatedUserId());
 	}
 	
 	/**

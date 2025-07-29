@@ -1,5 +1,6 @@
 package com.arenella.recruit.candidates.adapters;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -32,7 +33,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.arenella.recruit.adapters.events.CandidateAccountCreatedEvent;
@@ -48,9 +48,6 @@ import com.arenella.recruit.candidates.beans.Candidate.Photo;
 import com.arenella.recruit.candidates.beans.Candidate.Photo.PHOTO_FORMAT;
 import com.arenella.recruit.candidates.beans.CandidateExtractedFilters;
 import com.arenella.recruit.candidates.beans.Contact.CONTACT_TYPE;
-import com.arenella.recruit.candidates.beans.CandidateFilterOptions;
-import com.arenella.recruit.candidates.beans.CandidateSearchAccuracyWrapper;
-import com.arenella.recruit.candidates.beans.CandidateSearchAlert;
 import com.arenella.recruit.candidates.beans.CandidateSkill;
 import com.arenella.recruit.candidates.beans.CandidateUpdateRequest;
 import com.arenella.recruit.candidates.beans.Contact;
@@ -64,7 +61,6 @@ import com.arenella.recruit.candidates.controllers.CandidateController.CANDIDATE
 import com.arenella.recruit.candidates.controllers.CandidateValidationException;
 import com.arenella.recruit.candidates.controllers.SavedCandidate;
 import com.arenella.recruit.candidates.dao.CandidateRecruiterCreditDao;
-import com.arenella.recruit.candidates.dao.CandidateSearchAlertDao;
 import com.arenella.recruit.candidates.dao.CandidateSkillsDao;
 import com.arenella.recruit.candidates.dao.PendingCandidateDao;
 import com.arenella.recruit.candidates.dao.RecruiterContactDao;
@@ -93,8 +89,6 @@ import com.arenella.recruit.newsfeed.beans.NewsFeedItem.NEWSFEED_ITEM_TYPE;
 
 import co.elastic.clients.elasticsearch.ElasticsearchClient;
 
-import com.arenella.recruit.candidates.utils.CandidateSuggestionUtil.suggestion_accuracy;
-
 /**
 * Unit tests for the CandidateServiceImpl class
 * @author K Parkings
@@ -113,9 +107,6 @@ class CandidateServiceImplTest {
 	
 	@Mock
 	private CandidateStatisticsService 				mockStatisticsService;
-	
-	@Mock
-	private CandidateSearchAlertDao					mockSkillAlertDao;
 	
 	@Mock
 	private SecurityContext							mockSecurityContext;
@@ -193,8 +184,10 @@ class CandidateServiceImplTest {
 		when(mockAuthentication.getAuthorities()).thenReturn(authorities);
 		when(this.mockCandidateRepo.emailInUse(anyString(), any())).thenReturn(true);
 		
+		Candidate candidate = Candidate.builder().email("admin@arenella-ict.com").build();
+		
 		assertThrows(CandidateValidationException.class, () -> {
-			this.service.persistCandidate(Candidate.builder().email("admin@arenella-ict.com").build());
+			this.service.persistCandidate(candidate);
 		});
 		
 	}
@@ -321,8 +314,9 @@ class CandidateServiceImplTest {
 		
 		when(this.mockPendingCandidateDao.emailInUse(anyString())).thenReturn(true);
 		
+		PendingCandidate pendingCandidate = PendingCandidate.builder().email("admin@arenella-ict.com").build();
 		assertThrows(CandidateValidationException.class, () -> {
-			this.service.persistPendingCandidate(PendingCandidate.builder().email("admin@arenella-ict.com").build());
+			this.service.persistPendingCandidate(pendingCandidate);
 		});
 		
 	}
@@ -520,270 +514,6 @@ class CandidateServiceImplTest {
 	}
 	
 	/**
-	* Tests persisting of Alert
-	* @throws Exception
-	*/
-	@Test
-	void testAddSearchAlert() {
-		
-		ReflectionTestUtils.invokeMethod(mockCandidateFunctionExtractor, "init");
-		
-		ArgumentCaptor<CandidateSearchAlert> argCapt = ArgumentCaptor.forClass(CandidateSearchAlert.class);
-		
-		when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
-		
-		when(mockAuthentication.getPrincipal()).thenReturn("recruiter1");
-
-		doNothing().when(this.mockSkillAlertDao).saveAlert(argCapt.capture());
-		
-		CandidateSearchAlert alert = CandidateSearchAlert.builder().functions(Set.of(FUNCTION.IT_RECRUITER)).build();
-		
-		this.service.addSearchAlert(alert, "");
-		
-		assertNotNull(alert.getAlertId());
-		
-		verify(this.mockSkillAlertDao).saveAlert(alert);
-		
-		assertEquals(1, argCapt.getValue().getFunctions().size());
-		assertTrue(argCapt.getValue().getFunctions().contains(FUNCTION.IT_RECRUITER));
-		
-	}
-
-	/**
-	* Tests persisting of Alert when searchText is available. In this case FUNCTIONS 
-	* must be defined from the searchText and override any existing defined FUNCTIONS
-	* @throws Exception
-	*/
-	@Test
-	void testAddSearchAlert_hasSearchText() {
-		
-		ReflectionTestUtils.invokeMethod(mockCandidateFunctionExtractor, "init");
-		
-		ArgumentCaptor<CandidateSearchAlert> argCapt = ArgumentCaptor.forClass(CandidateSearchAlert.class);
-		
-		when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
-		when(mockAuthentication.getPrincipal()).thenReturn("recruiter1");
-		doNothing().when(this.mockSkillAlertDao).saveAlert(argCapt.capture());
-				
-		CandidateSearchAlert alert = 
-				CandidateSearchAlert
-				.builder()
-					.functions(Set.of(FUNCTION.ARCHITECT))
-				.build();
-		
-		this.service.addSearchAlert(alert, "java developer");
-		
-		assertNotNull(alert.getAlertId());
-		
-		verify(this.mockSkillAlertDao).saveAlert(alert);
-		
-		assertEquals(1, argCapt.getValue().getFunctions().size());
-		assertTrue(argCapt.getValue().getFunctions().contains(FUNCTION.JAVA_DEV));
-		
-	}
-	
-	/**
-	* Tests retrieval of Alerts for current Recruiter
-	* @throws Exception
-	*/
-	@Test
-	void testGetAlertsForCurrentUser() {
-		
-		final String recruiterId = "recruiter1";
-		
-		when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
-		
-		when(mockAuthentication.getPrincipal()).thenReturn(recruiterId);
-		
-		when(this.mockSkillAlertDao
-				.fetchAlertsByRecruiterId(anyString()))
-				.thenReturn(Set.of(CandidateSearchAlert.builder().build(),
-						CandidateSearchAlert.builder().build()));
-		
-		Set<CandidateSearchAlert> alerts = this.service.getAlertsForCurrentUser();
-		
-		assertEquals(2, alerts.size());
-		
-		verify(this.mockSkillAlertDao).fetchAlertsByRecruiterId(recruiterId);
-		
-	}
-	
-	/**
-	* Tests attempt made to delete unknown Alert
-	* @throws Exception
-	*/
-	@Test
-	void testDeleteCandidateSearchAlert_unknownId() {
-		
-		UUID id = UUID.randomUUID();
-		
-		when(this.mockSkillAlertDao.getchAlertById(id)).thenReturn(Optional.empty());
-		
-		assertThrows(IllegalArgumentException.class, () -> {
-			this.service.deleteSearchAlert(id);
-		});
-		
-	}
-	
-	/**
-	* Tests if User is owner of Alert the Alert is Deleted
-	* @throws Exception
-	*/
-	@Test
-	void testDeleteCandidateSearchAlert_owner() {
-		
-		when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
-		
-		when(mockAuthentication.getPrincipal()).thenReturn("recruiter1");
-		
-		UUID id = UUID.randomUUID();
-		
-		when(this.mockSkillAlertDao.getchAlertById(id)).thenReturn(Optional.of(CandidateSearchAlert.builder().recruiterId("recruiter1").build()));
-		
-		this.service.deleteSearchAlert(id);
-		
-		verify(this.mockSkillAlertDao).deleteById(id);
-		
-	}
-	
-	/**
-	* Tests if User is not the owner of Alert the Alert is not Deleted
-	* @throws Exception
-	*/
-	@Test
-	void testDeleteCandidateSearchAlert_isNotOwner() {
-		
-		when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
-		
-		when(mockAuthentication.getPrincipal()).thenReturn("recruiter1");
-		
-		UUID id = UUID.randomUUID();
-		
-		when(this.mockSkillAlertDao.getchAlertById(id)).thenReturn(Optional.of(CandidateSearchAlert.builder().recruiterId("r1").build()));
-		
-		assertThrows(IllegalArgumentException.class, () -> {
-			this.service.deleteSearchAlert(id);
-			
-		});
-		
-	}
-	
-	/**
-	* Tests poor rating is returned if no Candidate was found
-	* @throws Exception
-	*/
-	@Test
-	void testDoTestCandidateAlert_noMatchingCandidate() throws Exception{
-		
-		final long candidateId = 404;
-		
-		CandidateFilterOptions filterOptions = 
-				CandidateFilterOptions
-					.builder()
-						.skills(Set.of("JAVA"))
-						.languages(Set.of(
-								LANGUAGE.ENGLISH,
-								LANGUAGE.DUTCH,
-								LANGUAGE.FRENCH)
-						)
-					.build();
-		
-		ArgumentCaptor<CandidateFilterOptions> filterArgCaptor = ArgumentCaptor.forClass(CandidateFilterOptions.class);
-		
-		when(this.mockCandidateRepo.findCandidates(filterArgCaptor.capture(), any(), eq(0), eq(10000))).thenReturn(Set.of());
-		
-		suggestion_accuracy accuracy = this.service.doTestCandidateAlert(candidateId, filterOptions);
-		
-		assertEquals(suggestion_accuracy.poor, accuracy);
-		
-		CandidateFilterOptions  captorResult = filterArgCaptor.getValue();
-		
-		assertTrue(captorResult.getSkills().isEmpty());
-		
-	}
-
-	/**
-	* Tests rating is returned if Candidate was found
-	* @throws Exception
-	*/
-	@Test
-	void testDoTestCandidateAlert_MatchingCandidate() throws Exception{
-		
-		final long candidateId = 404;
-		
-		CandidateFilterOptions filterOptions = 
-				CandidateFilterOptions
-					.builder()
-						.skills(Set.of("JAVA"))
-						.languages(Set.of(
-								LANGUAGE.ENGLISH,
-								LANGUAGE.DUTCH,
-								LANGUAGE.FRENCH)
-						)
-					.build();
-		
-		ArgumentCaptor<CandidateFilterOptions> filterArgCaptor = ArgumentCaptor.forClass(CandidateFilterOptions.class);
-		
-		when(this.mockCandidateRepo.findCandidates(filterArgCaptor.capture(), any(), eq(0), eq(10000)))
-			.thenReturn(Set.of(Candidate.builder().candidateId(String.valueOf(candidateId)).build()));
-		
-		when(this.mockSuggestionUtil.isPerfectMatch(any(CandidateSearchAccuracyWrapper.class), filterArgCaptor.capture(), any()))
-			.thenReturn(true);
-		
-		doNothing().when(this.mockSkillsSynonymsUtil).addSynonymsForSkills(anySet(), anySet());
-		
-		suggestion_accuracy accuracy = this.service.doTestCandidateAlert(candidateId, filterOptions);
-		
-		assertEquals(suggestion_accuracy.perfect, accuracy);
-		
-		CandidateFilterOptions  captorResult = filterArgCaptor.getValue();
-		
-		assertFalse(captorResult.getSkills().isEmpty());
-		
-	}
-	
-	/**
-	* Tests poor rating is returned if Candidate was found but the accuracy was less than
-	* good.
-	* @throws Exception
-	*/
-	@Test
-	void testDoTestCandidateAlert_MatchingCandidate_no_positive_accuracy() throws Exception{
-		
-		final long candidateId = 404;
-		
-		CandidateFilterOptions filterOptions = 
-				CandidateFilterOptions
-					.builder()
-						.skills(Set.of("JAVA"))
-						.languages(Set.of(
-								LANGUAGE.ENGLISH,
-								LANGUAGE.DUTCH,
-								LANGUAGE.FRENCH)
-						)
-					.build();
-		
-		when(this.mockCandidateRepo.findCandidates(any(),any(), eq(0), eq(10000)))
-			.thenReturn(Set.of(Candidate.builder().candidateId(String.valueOf(candidateId)).build()));
-		
-		when(this.mockSuggestionUtil.isPerfectMatch(any(CandidateSearchAccuracyWrapper.class), any(), any()))
-			.thenReturn(false);
-		
-		when(this.mockSuggestionUtil.isExcellentMatch(any(CandidateSearchAccuracyWrapper.class), any(), any()))
-			.thenReturn(false);
-	
-		when(this.mockSuggestionUtil.isGoodMatch(any(CandidateSearchAccuracyWrapper.class), any(), any()))
-			.thenReturn(false);
-	
-		doNothing().when(this.mockSkillsSynonymsUtil).addSynonymsForSkills(anySet(), anySet());
-		
-		suggestion_accuracy accuracy = this.service.doTestCandidateAlert(candidateId, filterOptions);
-		
-		assertEquals(suggestion_accuracy.poor, accuracy);
-		
-	}
-	
-	/**
 	* Test exception thrown if filters could not be extracted
 	* @throws Exception
 	*/
@@ -808,8 +538,9 @@ class CandidateServiceImplTest {
 		
 		when(this.mockSavedCandidateDao.exists(anyString(), anyLong())).thenReturn(true);
 		
+		SavedCandidate savedCandidate = SavedCandidate.builder().candidateId(1001).userId("kparkings").build();
 		assertThrows(IllegalArgumentException.class, () -> {
-			this.service.addSavedCanidate(SavedCandidate.builder().candidateId(1001).userId("kparkings").build());
+			this.service.addSavedCanidate(savedCandidate);
 		});
 		
 	}
@@ -911,8 +642,9 @@ class CandidateServiceImplTest {
 		
 		when(this.mockSavedCandidateDao.exists(anyString(), anyLong())).thenReturn(false);
 		
+		SavedCandidate savedCandidate = SavedCandidate.builder().userId("kparkings").candidateId(savedCandidate1).build();
 		assertThrows(IllegalArgumentException.class, () -> {
-			this.service.updateSavedCandidate(SavedCandidate.builder().userId("kparkings").candidateId(savedCandidate1).build());
+			this.service.updateSavedCandidate(savedCandidate);
 		});
 		
 	}
@@ -1101,8 +833,9 @@ class CandidateServiceImplTest {
 		when(mockAuthentication.getAuthorities()).thenReturn(authorities);
 		when(mockAuthentication.getPrincipal()).thenReturn("222");
 		
+		CandidateUpdateRequest candidateUpdateRequest = CandidateUpdateRequest.builder().candidateId("111").build();
 		assertThrows(IllegalArgumentException.class, () -> {
-			this.service.updateCandidateProfile(CandidateUpdateRequest.builder().candidateId("111").build());
+			this.service.updateCandidateProfile(candidateUpdateRequest);
 		});
 		
 		verify(this.mockExternalEventPublisher, never()).publishCandidateUpdateEvent(any());
@@ -1254,8 +987,9 @@ class CandidateServiceImplTest {
 		when(mockAuthentication.getAuthorities()).thenReturn(authorities);
 		when(mockAuthentication.getPrincipal()).thenReturn("222");
 		
+		CandidateUpdateRequest candidateUpdateRequest = CandidateUpdateRequest.builder().candidateId("222").build();
 		assertThrows(IllegalArgumentException.class, () -> {
-			this.service.updateCandidateProfile(CandidateUpdateRequest.builder().candidateId("222").build());
+			this.service.updateCandidateProfile(candidateUpdateRequest);
 		});
 		
 		verify(this.mockExternalEventPublisher, never()).publishCandidateUpdateEvent(any());
@@ -1278,8 +1012,9 @@ class CandidateServiceImplTest {
 		when(mockAuthentication.getPrincipal()).thenReturn("222");
 		when(this.mockCandidateRepo.findCandidateById(anyLong())).thenReturn(Optional.empty());
 		
+		CandidateUpdateRequest candidateUpdateRequest = CandidateUpdateRequest.builder().candidateId("222").build();
 		assertThrows(IllegalArgumentException.class, () -> {
-			this.service.updateCandidateProfile(CandidateUpdateRequest.builder().candidateId("222").build());
+			this.service.updateCandidateProfile(candidateUpdateRequest);
 		});
 		
 		verify(this.mockExternalEventPublisher, never()).publishCandidateUpdateEvent(any());
@@ -1304,8 +1039,9 @@ class CandidateServiceImplTest {
 		when(this.mockCandidateRepo.findCandidateById(anyLong())).thenReturn(Optional.of(Candidate.builder().build()));
 		when(this.mockCandidateRepo.emailInUseByOtherUser(anyString(), anyLong(), any())).thenReturn(true);
 		
+		CandidateUpdateRequest candidateUpdateRequest = CandidateUpdateRequest.builder().email("k@1.nl").candidateId("222").build();
 		assertThrows(IllegalStateException.class, () -> {
-			this.service.updateCandidateProfile(CandidateUpdateRequest.builder().email("k@1.nl").candidateId("222").build());
+			this.service.updateCandidateProfile(candidateUpdateRequest);
 		});
 		
 		verify(this.mockExternalEventPublisher, never()).publishCandidateUpdateEvent(any());
@@ -1778,7 +1514,9 @@ class CandidateServiceImplTest {
 		
 		Optional<Photo> photo = this.service.convertToPhoto(Optional.ofNullable(mockMpf));
 		
-		photo.orElseThrow();
+		assertDoesNotThrow(() -> 
+			photo.orElseThrow()
+		);
 		
 	}
 	

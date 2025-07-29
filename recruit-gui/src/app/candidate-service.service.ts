@@ -4,8 +4,6 @@ import { Observable }        		         			from 'rxjs';
 import { NewPendingCandidate }                   		from './create-candidate/new-pending-candidate';
 import { CandidateFunction }                      		from './candidate-function';
 import { environment }									from './../environments/environment';
-import { SearchAlert }		 	                    	from './recruiter-alerts/search-alert';
-import { CandidateSearchAlert }                     	from './suggestions/candidate-search-alert';
 import { ExtractedFilters }                     		from './suggestions/extracted-filters';
 import { SavedCandidate }		 	                	from './suggestions/saved-candidate';
 import { NewCandidateRequest } 							from './new-candidate/new-candidate-request';
@@ -353,18 +351,6 @@ export class CandidateServiceService {
 	}
 	
 	/**
-	* Sends a request to mark the Candidate as having been checked and found to still be 
-	* available
-	*/
-	public createCandidateSearchAlert(alert:CandidateSearchAlert): Observable<any> {
-		
-		const backendUrl:string = environment.backendUrl +'candidate/alert';
-	
-		return this.httpClient.post<any>(backendUrl, JSON.stringify(alert), this.httpOptions);
-		
-	}
-	
-	/**
 	* Registers an event showing a candidates profile was viewed
 	*/
 	public registerCandidateProfileViewed(candidateId:string): Observable<any> {
@@ -373,29 +359,6 @@ export class CandidateServiceService {
 
 		return this.httpClient.post<any>(backendUrl, "{}", this.httpOptions);
 		
-	}
-	
-	/**
-	* Sends a request to mark the Candidate as having been checked and found to still be 
-	* available
-	*/
-	public deleteCandidateSearchAlert(alert:SearchAlert): Observable<any> {
-		
-		const backendUrl:string = environment.backendUrl +'candidate/alert/' + alert.alertId;
-	
-		return this.httpClient.delete<any>(backendUrl, this.httpOptions);
-		
-	}
-
-	/**
-	* Returns Alerts for authenticated Recruiter
-	*/
-	public fetchCandidateSearchAlerts(): Observable<Array<SearchAlert>>{
-		
-		const backendUrl:string = environment.backendUrl +'candidate/alert';
-  
-    	return this.httpClient.get<any>(backendUrl, this.httpOptions);
-
 	}
 
 	/**

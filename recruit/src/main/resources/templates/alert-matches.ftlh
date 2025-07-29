@@ -22,7 +22,6 @@
 				<tr>
 					<th>Alert Name</th>
 					<th>Candidate Id</th>
-					<th>Role Sought</th>
 					<th>Accuracy</th>
 				</tr>
 				<#list alerts as alertId, alert>
@@ -30,7 +29,6 @@
 		    			<tr>
 		  					<td>${match.alertName}</td>
 		  					<td class="td-centered">${''+match.candidateId}</td>
-		  					<td>${match.roleSought}</td>
 		  					<td class="td-centered">${match.accuracy}</td>
 		  				</tr>
 	    			</#list>

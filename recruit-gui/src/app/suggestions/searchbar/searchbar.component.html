@@ -13,7 +13,7 @@
 							<input type="text" class="sugg-srch-job-title-name {{cssSearchNameDefault()}}" 	formControlName="searchPhraseSurname" 		*ngIf="getCurrentSearchFilterType() === 'NAME'" (click)="activateFirstnameSurnameFields()">
 							
 						</td>
-						<td *ngIf="getCurrentSearchFilterType() === 'FUNCTION'"> 
+						<td *ngIf="getCurrentSearchFilterType() === 'FUNCTION'" class="hide-me-mobile-candidates-page"> 
 							<div (click)="showSavedSearchQueriesBox()" class="material-icons sugg-srch-job-title-queries">
 								list
 							</div>
@@ -237,15 +237,15 @@
 			<form [formGroup]="newSavedSearchForm" >
 				<table>
 					<tr style="background:#d2d2d2;">
-						<th>Name</th>
-						<th>Enable email alert</th>
+						<th>{{'saved-qry-name' | translate}}</th>
+						<th>{{'saved-qry-email-alert' | translate}}</th>
 						<th></th>
 					</tr>
 					<tr style="background:#dee2e6;border-bottom:2px black solid;">
 						<td><input type="text" class="sugg-srch-job-title" formControlName="title" ></td>
 						<td><input type="checkbox" class="sugg-srch-job-title" formControlName="enableEmails" ></td>
 						<td>
-							<button class="btn btn-secondary" (click)="doSaveSearch()" download>Create</button>
+							<button class="btn btn-secondary" (click)="doSaveSearch()" download>{{'saved-qry-btn-create' | translate}}</button>
 						</td>
 						
 					</tr>
@@ -265,13 +265,13 @@
 						
 						<td> 
 							
-							<button *ngIf="ss == acitveSavedCandidateSearch" class="btn btn-secondary" (click)="runSavedSearch(ss)"		 download>Run</button>
-							<button *ngIf="ss == acitveSavedCandidateSearch" class="btn btn-secondary" (click)="updateSavedSearch()" 	 download>Update</button>
-							<button *ngIf="ss == acitveSavedCandidateSearch" class="btn btn-secondary" (click)="deleteSavedSearch(ss)" 	 download>Delete</button>	
+							<button *ngIf="ss == acitveSavedCandidateSearch" class="btn btn-secondary" (click)="runSavedSearch(ss)"		 download>{{'saved-qry-btn-run' | translate}}</button>
+							<button *ngIf="ss == acitveSavedCandidateSearch" class="btn btn-secondary" (click)="updateSavedSearch()" 	 download>{{'saved-qry-btn-update' | translate}}</button>
+							<button *ngIf="ss == acitveSavedCandidateSearch" class="btn btn-secondary" (click)="deleteSavedSearch(ss)" 	 download>{{'saved-qry-btn-delete' | translate}}</button>	
 							
-							<button *ngIf="ss != acitveSavedCandidateSearch" class="btn btn-secondary" (click)="runSavedSearch(ss)"		 download disabled>Run</button>
-							<button *ngIf="ss != acitveSavedCandidateSearch" class="btn btn-secondary" (click)="updateSavedSearch()" 	 download disabled>Update</button>
-							<button *ngIf="ss != acitveSavedCandidateSearch" class="btn btn-secondary" (click)="deleteSavedSearch(ss)" 	 download disabled>Delete</button>	
+							<button *ngIf="ss != acitveSavedCandidateSearch" class="btn btn-secondary" (click)="runSavedSearch(ss)"		 download disabled>{{'saved-qry-btn-run' | translate}}</button>
+							<button *ngIf="ss != acitveSavedCandidateSearch" class="btn btn-secondary" (click)="updateSavedSearch()" 	 download disabled>{{'saved-qry-btn-update' | translate}}</button>
+							<button *ngIf="ss != acitveSavedCandidateSearch" class="btn btn-secondary" (click)="deleteSavedSearch(ss)" 	 download disabled>{{'saved-qry-btn-delete' | translate}}</button>	
 							
 						</td>
 						

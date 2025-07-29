@@ -36,9 +36,6 @@ public class AlertTestUtilImpl implements AlertTestUtil{
 	private final ScheduledExecutorService 		scheduler 			= Executors.newScheduledThreadPool(5);
 	private final ScheduledExecutorService		endOfDayScheduler 	= Executors.newScheduledThreadPool(1);
 	
-	//@Autowired
-	//private CandidateSearchAlertDao 			alertDao;
-	
 	@Autowired
 	private CandidateService 					candidateService;
 	
@@ -111,10 +108,6 @@ public class AlertTestUtilImpl implements AlertTestUtil{
 			scheduler.execute(packageTest(event,alert))
 		);
 		
-		//this.alertDao.fetchAlerts().forEach(alert -> 
-		//	scheduler.execute(packageTest(event,alert))
-		//);
-		
 	}
 	
 	/**
@@ -159,65 +152,6 @@ public class AlertTestUtilImpl implements AlertTestUtil{
 				}catch(Exception e) {
 					e.printStackTrace();
 				}
-				
-				
-				//TODO [KP] remove doTestCandidateAlert
-				//TODO [KP] remove API for creating 
-				//TODO [KP] remove alertDao.fetchAlerts() functionality 
-				//TODO [KP] Test alert emails still send after refactor
-				
-				//REFACTOR TO USE ALL LANGIAGES
-				//Set<Language.LANGUAGE> languages = new HashSet<>();
-				
-				//if (alert.getDutch() != LEVEL.UNKNOWN){
-				//	languages.add(LANGUAGE.DUTCH);
-				//}
-				
-				//if (alert.getEnglish() != LEVEL.UNKNOWN){
-				//	languages.add(LANGUAGE.ENGLISH);
-				//}
-				
-				//if (alert.getFrench() != LEVEL.UNKNOWN){
-				//	languages.add(LANGUAGE.FRENCH);
-				//}
-				
-				//END REFACTOR
-				
-				//try {
-				//	CandidateFilterOptions filterOptions = 
-				//			CandidateFilterOptions
-				//				.builder()
-				//					.candidateIds(Set.of(event.getCandidateId()))
-				//					.countries(alert.getCountries())
-				//					.languages(languages)
-				//					.freelance(alert.getFreelance().isEmpty() ? null : alert.getFreelance().get())
-				//					.functions(alert.getFunctions())
-				//					.perm(alert.getPerm().isEmpty() ? null : alert.getPerm().get())
-				//					.skills(alert.getSkills())
-				//					.yearsExperienceGtEq(alert.getYearsExperienceGtEq())
-				//					.yearsExperienceLtEq(alert.getyearsExperienceLtEq())
-				//				.build();
-					
-				//	suggestion_accuracy accuracy = null;
-					
-				//	accuracy = candidateService.doTestCandidateAlert(Long.valueOf(event.getCandidateId()), filterOptions);
-				
-				//	if (accuracy !=suggestion_accuracy.poor) {
-				//		matchDao.saveMatch(CandidateSearchAlertMatch
-				//				.builder()
-				//					.id(UUID.randomUUID())
-				//					.alertName(alert.getAlertName())
-				//					.candidateId(Long.valueOf(event.getCandidateId()))
-				//					.recruiterId(alert.getRecruiterId())
-				//					.roleSought(event.getRoleSought())
-				//					.accuracy(accuracy)
-				//					.alertId(alert.getAlertId())
-				//				.build());
-				//	}
-					
-				//}catch(Exception e) {
-				//	e.printStackTrace();
-				//}
 				
 			}
 			

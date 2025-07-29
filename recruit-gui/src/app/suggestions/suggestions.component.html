@@ -7,9 +7,7 @@
 		
 		<!-- Action buttons -->
 		<div *ngIf="currentView === 'suggestion-results'" class="action-buttons">
-			<button class="btn btn-secondary arenella-btn" (click)="showCreateAlertDialog()" download>{{'arenella-suggestions-btn-create-alert' | translate}}</button>
-			<button class="btn btn-secondary arenella-btn" routerLink="/recruiter-alerts" download>{{'arenella-suggestions-btn-manage-alert' | translate}}</button>
-	        <button class="btn btn-secondary arenella-btn" (click)="showSavedCandidates()" download>{{'arenella-suggestions-btn-my-candidates' | translate}}</button>
+		    <button class="btn btn-secondary arenella-btn" (click)="showSavedCandidates()" download>{{'arenella-suggestions-btn-my-candidates' | translate}}</button>
 	        <button class="btn btn-secondary arenella-btn" (click)="openPublicityDialog()" *ngIf="currentUserAuth.isAdmin()" download>{{'arenella-suggestions-btn-copy' | translate}}</button>
 	        <button class="btn btn-secondary arenella-btn" (click)="showFilterByJobSpecDialog(specUploadBox)" download>{{'arenella-suggestions-btn-filter-by-spec' | translate}}</button>
 	        <button class="btn btn-secondary arenella-btn" (click)="doReset()">{{'arenella-suggestions-btn-reset' | translate}}</button>
@@ -104,29 +102,6 @@
 	</div>
 </dialog> 
 
-<dialog #feedbackBox >
-	<div class="modal-header">
-		<h4 class="modal-title">{{'arenella-suggestions-box-alert-hdr' | translate}}</h4>
- 		<div class="filter-close-box" (click)="feedbackBox.close()">X</div>
-	</div>
-	<div class="feedbackBox;">
-		<form [formGroup]="createAlertForm">
-			<div class="modal-body" *ngIf="showSaveAlertBox">
-				<p class="info-text">{{'arenella-suggestions-box-alert-text' | translate}}</p>
-				{{'arenella-suggestions-box-alert-name' | translate}}: <input type="text" formControlName="alertName">
-				<br/><br/>
-				<button class="btn btn-secondary" (click)="saveAlert()" download>{{'arenella-suggestions-box-alert-btn-save' | translate}}</button>
-			</div>       
-			<div class="modal-body" *ngIf="showSaveAlertBoxSuccess">
-				<p>{{'arenella-suggestions-box-alert-success-1' | translate}}</p>
-				<p>{{'arenella-suggestions-box-alert-success-2' | translate}}</p>
-			</div>
-			<div class="modal-body" *ngIf="showSaveAlertBoxFailure">
-				<p>{{'arenella-suggestions-box-alert-failure' | translate}}</p>
-			</div>
-		</form>
-	</div>
-</dialog>
 <!-- publicity -->
 <dialog #publicityModal>
 

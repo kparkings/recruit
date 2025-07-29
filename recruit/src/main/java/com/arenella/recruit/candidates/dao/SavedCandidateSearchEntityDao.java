@@ -21,7 +21,7 @@ public interface SavedCandidateSearchEntityDao extends ListCrudRepository<SavedC
 	Set<SavedCandidateSearchEntity> getEntityByUserId(String userId);
 	
 	@Query("from SavedCandidateSearchEntity where emailAlert = true")
-	Optional<SavedCandidateSearchEntity> getEntitiesWithEmailAlertEnables();
+	Set<SavedCandidateSearchEntity> getEntitiesWithEmailAlertEnabled();
 	
 	/**
 	* Persists a Saved Search
@@ -55,7 +55,7 @@ public interface SavedCandidateSearchEntityDao extends ListCrudRepository<SavedC
 	* @return with Enabled email alerts
 	*/
 	default Set<SavedCandidateSearch> fetchSavedCandidateSearchWithEmailAlert() {
-		return this.getEntitiesWithEmailAlertEnables().stream().map(SavedCandidateSearchEntity::fromEntity).sorted().collect(Collectors.toCollection(LinkedHashSet::new));
+		return this.getEntitiesWithEmailAlertEnabled().stream().map(SavedCandidateSearchEntity::fromEntity).collect(Collectors.toCollection(LinkedHashSet::new));
 	}
 	
 	

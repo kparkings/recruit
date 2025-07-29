@@ -22,7 +22,6 @@ import { RecruiterSignupComponent } 		from './recruiter-signup/recruiter-signup.
 import { SuggestionsComponent } 			from './suggestions/suggestions.component';
 import { CookieService} 					from 'ngx-cookie-service';
 import { RecruiterMarketplaceComponent } 	from './recruiter-marketplace/recruiter-marketplace.component';
-import { RecruiterAlertsComponent } 		from './recruiter-alerts/recruiter-alerts.component';
 import { FaqComponent } 					from './faq/faq.component';
 import { ContactComponent } 				from './contact/contact.component';
 
@@ -72,7 +71,6 @@ import { CandidateStatisticsComponent } 	from './candidate-statistics/candidate-
     RecruiterSignupComponent,
     SuggestionsComponent,
     RecruiterMarketplaceComponent,
-    RecruiterAlertsComponent,
     FaqComponent,
     ContactComponent,
     EmailComponent,

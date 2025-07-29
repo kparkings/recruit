@@ -249,45 +249,6 @@ public class CandidateController {
 	}
 	
 	/**
-	* Adds a new Candidate Search Alert
-	* @param alert
-	* @return
-	*/
-	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('RECRUITER')")
-	@PostMapping(path="candidate/alert")
-	public ResponseEntity<Void> addSearchAlert(@RequestBody CandidateSearchAlertAPIInbound alert){
-		this.candidateService.addSearchAlert(CandidateSearchAlertAPIInbound.convertToDomain(alert), alert.getSearchText());
-		return ResponseEntity.ok().build();
-	}
-	
-	/**
-	* Deletes a Candidate Search Alert
-	* @param id
-	* @return
-	*/
-	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('RECRUITER')")
-	@DeleteMapping(path="candidate/alert/{id}")
-	public ResponseEntity<Void> deleteSearchAlert(@PathVariable UUID id){
-		this.candidateService.deleteSearchAlert(id);
-		return ResponseEntity.ok().build();
-	}
-	
-	/**
-	* Returns Alerts for currently logged in Recruiter
-	* @return Alerts for Recruiter
-	*/
-	@PreAuthorize("hasRole('RECRUITER') OR hasRole('ADMIN')")
-	@GetMapping(path="candidate/alert")
-	public ResponseEntity<Set<CandidateSearchAlertAPIOutbound>> getRecruiterAlerts(){
-		return ResponseEntity.ok(candidateService
-				.getAlertsForCurrentUser()
-				.stream()
-				.map(CandidateSearchAlertAPIOutbound::convertFromDomain)
-				.collect(Collectors.toCollection(LinkedHashSet::new))
-				);
-	}
-	
-	/**
 	* Processes a file and returns potential candidate filters based upon the contents of the
 	* file. The purpose is to parse a job specification and return the filter values to 
 	* allow the FE to make a request for candidates matching the job spec

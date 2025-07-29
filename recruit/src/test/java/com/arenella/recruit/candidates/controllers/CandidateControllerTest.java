@@ -32,7 +32,6 @@ import org.springframework.web.multipart.MultipartFile;
 import com.arenella.recruit.authentication.spring.filters.ClaimsUsernamePasswordAuthenticationToken;
 import com.arenella.recruit.candidates.beans.Candidate;
 import com.arenella.recruit.candidates.beans.CandidateExtractedFilters;
-import com.arenella.recruit.candidates.beans.CandidateSearchAlert;
 import com.arenella.recruit.candidates.beans.CandidateSkill;
 import com.arenella.recruit.candidates.beans.CandidateUpdateRequest;
 import com.arenella.recruit.candidates.beans.Language.LANGUAGE;
@@ -158,40 +157,7 @@ class CandidateControllerTest {
 		response.getBody().stream().filter(pc -> pc.getPendingCandidateId().toString().equals(c1Id)).findAny().orElseThrow();
 		
 	}
-	
-	/**
-	* Tests fetch of Alerts for Recruiter
-	* @throws Exception
-	*/
-	@Test
-	void testGetRecruiterAlerts() {
-		
-		when(this.mockCandidateService.getAlertsForCurrentUser()).thenReturn(Set.of(
-			CandidateSearchAlert.builder().build(),
-			CandidateSearchAlert.builder().build(),
-			CandidateSearchAlert.builder().build()
-		));
-		
-		ResponseEntity<Set<CandidateSearchAlertAPIOutbound>> response = this.controller.getRecruiterAlerts();
-		
-		assertEquals(HttpStatus.OK, response.getStatusCode());
-		assertEquals(3, response.getBody().size());
-		
-	}
-	
-	/**
-	* Test deletion of SearchAlert
-	* @throws Exception
-	*/
-	@Test
-	void testDeleteSearchAlert() {
-		
-		ResponseEntity<Void> response = this.controller.deleteSearchAlert(UUID.randomUUID());
-		
-		assertEquals(HttpStatus.OK, response.getStatusCode());
-		
-	}
-	
+
 	/**
 	* Test extraction of search filters end point
 	* @throws Exception

@@ -272,5 +272,9 @@
 		margin-left:10px;
 	}
 	
+	.hide-me-mobile-candidates-page{
+		display:none;
+	}
+	
 	
 }

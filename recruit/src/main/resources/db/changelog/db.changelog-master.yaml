@@ -2505,3 +2505,23 @@ databaseChangeLog:
                   type: varchar
                   constraints:
                     nullable: false
+  - changeSet:
+      id: drop_old_candidate_alert_table
+      author: kparkings
+      changes:
+      -  dropTable:  
+            cascadeConstraints:  true  
+            schemaName: candidate  
+            tableName: candidate_search_alert_skill
+      -  dropTable:  
+            cascadeConstraints:  true  
+            schemaName: candidate  
+            tableName: candidate_search_alert_function
+      -  dropTable:  
+            cascadeConstraints:  true  
+            schemaName: candidate  
+            tableName: candidate_search_alert_country
+      -  dropTable:  
+            cascadeConstraints:  true  
+            schemaName: candidate  
+            tableName: candidate_search_alert
