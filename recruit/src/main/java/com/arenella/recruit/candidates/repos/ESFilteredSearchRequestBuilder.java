@@ -46,6 +46,23 @@ public class ESFilteredSearchRequestBuilder {
 				.mustNot(mustNotQueries)
 			)._toQuery();
 		
+		if (!filterOptions.getSecurityLevels().isEmpty()) {
+			
+			List<co.elastic.clients.elasticsearch._types.query_dsl.Query> scLevelQueries = new ArrayList<>();
+			
+			filterOptions.getSecurityLevels().stream().forEach(l -> {
+				scLevelQueries.add(BoolQuery.of(m -> m
+						.must(List.of(
+								MatchQuery.of(m1 -> m1.field("securityClearance").query(l.toString()))._toQuery()))
+					)._toQuery());
+			});
+			
+			mustQueries.add(BoolQuery.of(m -> m
+					.queryName("scLevelQueries")
+					.should(scLevelQueries).minimumShouldMatch("1"))._toQuery());
+			
+		}
+		
 		if (!filterOptions.getFirstname().isEmpty()) {
 			mustQueries.add(MatchQuery.of(m -> m
 					.field("firstname")

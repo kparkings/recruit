@@ -10,6 +10,7 @@ import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 
+import com.arenella.recruit.candidates.beans.Candidate.SECURITY_CLEARANCE_TYPE;
 import com.arenella.recruit.candidates.beans.CandidateFilterOptions.GeoPosFilter;
 import com.arenella.recruit.candidates.beans.Language.LANGUAGE;
 import com.arenella.recruit.candidates.enums.COUNTRY;
@@ -31,29 +32,30 @@ class CandidateFilterOptionsTest {
 	@Test
 	void testBuilder() {
 		
-		Set<String> 			candidateIds 							= new HashSet<>();
-		Set<GEO_ZONE> 			geoZones 								= new HashSet<>();
-		Set<COUNTRY> 			countries 								= new HashSet<>();
-		Set<FUNCTION> 			functions 								= new HashSet<>();
-		Set<String> 			skills 									= new HashSet<>();
-		boolean 				freelance	 							= false;
-		boolean 				perm 									= true;
-		String 					orderAttribute 							= "candidateId";
-		int 					yearsExperienceGtEq 					= 2;
-		String 					candidateId 							= "aCandidateId";
-		String 					skill 									= "aSkill";
-		String					firstname								= "kevin";
-		String					surname									= "Parkings";
-		String					email									= "email";
-		Boolean					flaggedAsUnavailable					= true;	
-		Integer					daysSinceLastAvailabilityCheck 			= 14;
-		String					searchText								= "Java Developer";
-		String					ownerId									= "rec22";
-		boolean 				includeRequiresSponsorship				= true;
-		LocalDate				registeredAfter							= LocalDate.of(2024,5,8);
-		LocalDate				lastAccountRefreshLtEq					= LocalDate.of(2024,8,8);
-		Integer 				daysSinceLastavailabilityCheckEmail 	= 2;
-		int						maxResults								= 500;
+		Set<String> 					candidateIds 							= new HashSet<>();
+		Set<GEO_ZONE> 					geoZones 								= new HashSet<>();
+		Set<COUNTRY> 					countries 								= new HashSet<>();
+		Set<FUNCTION> 					functions 								= new HashSet<>();
+		Set<String> 					skills 									= new HashSet<>();
+		Set<SECURITY_CLEARANCE_TYPE>	securityLevels							= new HashSet<>();
+		boolean 						freelance	 							= false;
+		boolean 						perm 									= true;
+		String 							orderAttribute 							= "candidateId";
+		int 							yearsExperienceGtEq 					= 2;
+		String 							candidateId 							= "aCandidateId";
+		String 							skill 									= "aSkill";
+		String							firstname								= "kevin";
+		String							surname									= "Parkings";
+		String							email									= "email";
+		Boolean							flaggedAsUnavailable					= true;	
+		Integer							daysSinceLastAvailabilityCheck 			= 14;
+		String							searchText								= "Java Developer";
+		String							ownerId									= "rec22";
+		boolean 						includeRequiresSponsorship				= true;
+		LocalDate						registeredAfter							= LocalDate.of(2024,5,8);
+		LocalDate						lastAccountRefreshLtEq					= LocalDate.of(2024,8,8);
+		Integer 						daysSinceLastavailabilityCheckEmail 	= 2;
+		int								maxResults								= 500;
 		
 		candidateIds.add(candidateId);
 		skills.add(skill);
@@ -61,9 +63,11 @@ class CandidateFilterOptionsTest {
 		geoZones.add(GEO_ZONE.BENELUX);
 		countries.add(COUNTRY.NETHERLANDS);
 		functions.add(FUNCTION.PROJECT_MANAGER);
+		securityLevels.add(SECURITY_CLEARANCE_TYPE.NATO);
 		
 		CandidateFilterOptions filters = CandidateFilterOptions
 												.builder()
+													.securityLevels(securityLevels)
 													.candidateIds(candidateIds)
 													.geoZones(geoZones)
 													.countries(countries)
@@ -98,6 +102,7 @@ class CandidateFilterOptionsTest {
 		assertEquals(filters.getGeoZones().stream().findAny().get(), 		GEO_ZONE.BENELUX);
 		assertEquals(filters.getCountries().stream().findAny().get(), 		COUNTRY.NETHERLANDS);
 		assertEquals(filters.getFunctions().stream().findAny().get(), 		FUNCTION.PROJECT_MANAGER);
+		assertEquals(filters.getSecurityLevels().stream().findAny().get(), 	SECURITY_CLEARANCE_TYPE.NATO);
 		assertEquals(filters.getSkills().stream().findAny().get(), 			skill);
 		
 		assertTrue(filters.getLanguages().stream().filter(l -> l == LANGUAGE.DUTCH).findFirst().isPresent());
@@ -129,28 +134,29 @@ class CandidateFilterOptionsTest {
 	@Test
 	void testReset() {
 		
-		Set<String> 			candidateIds 							= new HashSet<>();
-		Set<GEO_ZONE> 			geoZones 								= new HashSet<>();
-		Set<COUNTRY> 			countries 								= new HashSet<>();
-		Set<FUNCTION> 			functions 								= new HashSet<>();
-		Set<String> 			skills 									= new HashSet<>();
-		boolean 				freelance	 							= false;
-		boolean 				perm 									= true;
-		String 					orderAttribute 							= "candidateId";
-		int 					yearsExperienceGtEq 					= 2;
-		String 					candidateId 							= "aCandidateId";
-		String 					skill 									= "aSkill";
-		String					firstname								= "kevin";
-		String					surname									= "Parkings";
-		String					email									= "email";
-		Boolean					flaggedAsUnavailable					= true;	
-		Integer					daysSinceLastAvailabilityCheck 			= 14;
-		String					searchText								= "Java Developer";
-		String					ownerId									= "rec22";
-		boolean 				includeRequiresSponsorship				= true;
-		LocalDate				registeredAfter							= LocalDate.of(2024,5,8);
-		LocalDate				lastAccountRefreshLtEq					= LocalDate.of(2024,8,8);
-		Integer 				daysSinceLastavailabilityCheckEmail 	= 2;
+		Set<String> 					candidateIds 							= new HashSet<>();
+		Set<GEO_ZONE> 					geoZones 								= new HashSet<>();
+		Set<COUNTRY> 					countries 								= new HashSet<>();
+		Set<FUNCTION> 					functions 								= new HashSet<>();
+		Set<String> 					skills 									= new HashSet<>();
+		Set<SECURITY_CLEARANCE_TYPE>	securityLevels							= new HashSet<>();
+		boolean 						freelance	 							= false;
+		boolean 						perm 									= true;
+		String 							orderAttribute 							= "candidateId";
+		int 							yearsExperienceGtEq 					= 2;
+		String 							candidateId 							= "aCandidateId";
+		String 							skill 									= "aSkill";
+		String							firstname								= "kevin";
+		String							surname									= "Parkings";
+		String							email									= "email";
+		Boolean							flaggedAsUnavailable					= true;	
+		Integer							daysSinceLastAvailabilityCheck 			= 14;
+		String							searchText								= "Java Developer";
+		String							ownerId									= "rec22";
+		boolean 						includeRequiresSponsorship				= true;
+		LocalDate						registeredAfter							= LocalDate.of(2024,5,8);
+		LocalDate						lastAccountRefreshLtEq					= LocalDate.of(2024,8,8);
+		Integer 						daysSinceLastavailabilityCheckEmail 	= 2;
 		
 		candidateIds.add(candidateId);
 		skills.add(skill);
@@ -164,6 +170,7 @@ class CandidateFilterOptionsTest {
 													.candidateIds(candidateIds)
 													.geoZones(geoZones)
 													.countries(countries)
+													.securityLevels(securityLevels)
 													.languages(Set.of(
 															LANGUAGE.ENGLISH,
 															LANGUAGE.DUTCH,
@@ -198,6 +205,7 @@ class CandidateFilterOptionsTest {
 		assertEquals(filters.getGeoZones(), 								defaults.getGeoZones());
 		assertEquals(filters.getCountries(), 								defaults.getCountries());
 		assertTrue(filters.getLanguages().isEmpty());
+		assertTrue(filters.getSecurityLevels().isEmpty());
 		assertEquals(filters.isFreelance(), 								defaults.isFreelance());
 		assertEquals(filters.isPerm(), 										defaults.isPerm());
 		assertEquals(filters.getFunctions(), 								defaults.getFunctions());
@@ -285,14 +293,14 @@ class CandidateFilterOptionsTest {
 					.countries(Set.of(COUNTRY.BELGIUM))
 				.build();
 		
-		assertEquals(filters.getCountries().stream().filter(c -> c == COUNTRY.BELGIUM).findAny().get(), COUNTRY.BELGIUM);
+		assertEquals(COUNTRY.BELGIUM, filters.getCountries().stream().filter(c -> c == COUNTRY.BELGIUM).findAny().get());
 		assertEquals(1, filters.getCountries().size());
 		
 		
 		filters.addCountry(COUNTRY.BULGARIA);
 		
-		assertEquals(filters.getCountries().stream().filter(c -> c == COUNTRY.BELGIUM).findAny().get(), COUNTRY.BELGIUM);
-		assertEquals(filters.getCountries().stream().filter(c -> c == COUNTRY.BULGARIA).findAny().get(), COUNTRY.BULGARIA);
+		assertEquals(COUNTRY.BELGIUM, filters.getCountries().stream().filter(c -> c == COUNTRY.BELGIUM).findAny().get());
+		assertEquals(COUNTRY.BULGARIA, filters.getCountries().stream().filter(c -> c == COUNTRY.BULGARIA).findAny().get());
 		assertEquals(2, filters.getCountries().size());
 	
 	}

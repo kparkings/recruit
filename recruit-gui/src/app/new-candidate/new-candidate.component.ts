@@ -77,10 +77,6 @@ export class NewCandidateComponent implements OnInit {
     		}
 		});
     	
-		this.functionTypes = this.functionTypes.sort((a,b)=> {
-			return this.translate.instant(a.id) < this.translate.instant(b.id) ? -1 : 0;
-		});
-		
     	this.languageOptions.push(new LanguageOption("UNKNOWN", 	this.translate.instant('new-candidate-no')));
     	this.languageOptions.push(new LanguageOption("BASIC", 		this.translate.instant('new-candidate-basic')));
     	this.languageOptions.push(new LanguageOption("PROFICIENT", 	this.translate.instant('new-candidate-yes')));
@@ -162,12 +158,39 @@ export class NewCandidateComponent implements OnInit {
 		
 	}
 	
+	private sortsPerformed:number = 0;
+	
   	/**
   	*  Init 
   	*/
   	ngOnInit(): void {
 
   	}
+	
+	ngAfterViewChecked():void {
+		
+		if (this.sortsPerformed <= 2) {
+		
+				this.functionTypes = this.functionTypes.sort((a,b)=> {
+				
+				
+				let a1 = ""+this.translate.instant(a.id);
+				let b1 = ""+this.translate.instant(b.id);
+					
+				return a1 < b1 ? -1 : 0;
+			});
+		
+			this.industries = this.industries.sort((a,b)=> {
+				let a1 = ""+this.translate.instant(a);
+				let b1 = ""+this.translate.instant(b);
+				return a1 < b1 ? -1 : 0;
+			});
+			
+			
+			this.sortsPerformed = this.sortsPerformed+1;
+		}
+				
+	}
 
 	/**
 	* Returns whether or not there are pending candidayes 

@@ -135,6 +135,21 @@
 					</td>
 				</tr>
 				 
+				 
+				<tr>
+					<td class="sugg-srch-hdr">{{'arenella-suggestions-security' | translate}}</td>
+					<td *ngIf="!showSecurityFilters">
+						<p class="toggle-filter-option" (click)="switchSecurityFilterView('showSecurityFilters')">{{'Show' | translate}}..</p>
+					</td>
+					<div *ngIf="showSecurityFilters">
+						<p class="toggle-filter-option" (click)="switchSecurityFilterView('')">{{'Hide' | translate}}..</p>
+						<div class="geo-code-filter geo-code-selected-{{includeResultsForSC(sc)}}" *ngFor="let sc of securityFilters" (click)="toggleSecurityFilterOptions(sc)">
+							{{sc | translate}}
+						</div>
+						
+					</div>
+				</tr>
+				 
 				<tr>
 					<td class="sugg-srch-hdr">{{'arenella-suggestions-include' | translate}}</td>
 					<td *ngIf="!showIncludeFilters">

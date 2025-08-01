@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
+import com.arenella.recruit.candidates.beans.Candidate.SECURITY_CLEARANCE_TYPE;
 import com.arenella.recruit.candidates.enums.COUNTRY;
 import com.arenella.recruit.candidates.enums.FUNCTION;
 import com.arenella.recruit.candidates.enums.RESULT_ORDER;
@@ -17,36 +18,37 @@ import com.arenella.recruit.candidates.utils.GeoZoneSearchUtil.GEO_ZONE;
 */
 public class CandidateFilterOptions {
 	
-	private String 						orderAttribute;
-	private RESULT_ORDER				order;
-	private int							maxResults										= 750;
-	private String						searchText									= "";
-	private Set<String> 				candidateIds								= new HashSet<>();
-	private Set<GEO_ZONE>				geoZones									= new HashSet<>();
-	private GeoPosFilter				geoPosFilter							 	= null;
-	private COUNTRY						locCountry								 	= null;
-	private String 						locCity										= null;
-	private Integer						locDistance									= null;
-	private Set<COUNTRY> 				countries									= new HashSet<>();
-	private Set<FUNCTION> 				functions									= new HashSet<>();
-	private Optional<Boolean> 			freelance									= Optional.empty();
-	private Optional<Boolean> 			perm										= Optional.empty();
-	private Boolean			 			available									= null;
-	private int 						yearsExperienceGtEq;
-	private int							yearsExperienceLtEq;
-	private Set<Language.LANGUAGE>		languages									= new HashSet<>();
-	private Set<String>					skills										= new HashSet<>();
-	private String						firstname;
-	private String 						surname;
-	private String 						email;
-	private Boolean						flaggedAsUnavailable 						= false;
-	private Integer						daysSinceLastAvailabilityCheck;
-	private String						ownerId;
-	private Boolean						includeRequiresSponsorship					= null;
-	private LocalDate					registeredAfter								= null;
-	private LocalDate					lastAccountRefreshLtEq						= null;
-	private Boolean						lastAccountRefreshMissing		 			= null;
-	private Integer						daysSincelastAvailabilityCheckEmailSent		= null;
+	private String 							orderAttribute;
+	private RESULT_ORDER					order;
+	private int								maxResults										= 750;
+	private String							searchText									= "";
+	private Set<String> 					candidateIds								= new HashSet<>();
+	private Set<GEO_ZONE>					geoZones									= new HashSet<>();
+	private GeoPosFilter					geoPosFilter							 	= null;
+	private COUNTRY							locCountry								 	= null;
+	private String 							locCity										= null;
+	private Integer							locDistance									= null;
+	private Set<COUNTRY> 					countries									= new HashSet<>();
+	private Set<FUNCTION> 					functions									= new HashSet<>();
+	private Optional<Boolean> 				freelance									= Optional.empty();
+	private Optional<Boolean> 				perm										= Optional.empty();
+	private Boolean			 				available									= null;
+	private int 							yearsExperienceGtEq;
+	private int								yearsExperienceLtEq;
+	private Set<Language.LANGUAGE>			languages									= new HashSet<>();
+	private Set<String>						skills										= new HashSet<>();
+	private String							firstname;
+	private String 							surname;
+	private String 							email;
+	private Boolean							flaggedAsUnavailable 						= false;
+	private Integer							daysSinceLastAvailabilityCheck;
+	private String							ownerId;
+	private Boolean							includeRequiresSponsorship					= null;
+	private LocalDate						registeredAfter								= null;
+	private LocalDate						lastAccountRefreshLtEq						= null;
+	private Boolean							lastAccountRefreshMissing		 			= null;
+	private Integer							daysSincelastAvailabilityCheckEmailSent		= null;
+	private Set<SECURITY_CLEARANCE_TYPE>	securityLevels								= new HashSet<>();
 	
 	/**
 	* Builder for the  
@@ -93,6 +95,8 @@ public class CandidateFilterOptions {
 		this.locCountry									= builder.locCountry;
 		this.locCity									= builder.locCity;
 		this.locDistance								= builder.locDistance;
+		this.securityLevels.clear();
+		this.securityLevels.addAll(builder.securityLevels);
 	}
 	
 	/**
@@ -351,6 +355,15 @@ public class CandidateFilterOptions {
 	}
 	
 	/**
+	* Returns any security levels to filter on. Candidates with at least one 
+	* if the clearance types will be included in the results
+	* @return Security clearance types
+	*/
+	public Set<SECURITY_CLEARANCE_TYPE> getSecurityLevels() {
+		return this.securityLevels;
+	}
+	
+	/**
 	* Replaces existing functions
 	* @param functions - Functions to filter on
 	*/
@@ -407,36 +420,37 @@ public class CandidateFilterOptions {
 	*/
 	public static class CandidateFilterOptionsBuilder {
 		
-		private String 						orderAttribute;
-		private RESULT_ORDER				order;
-		private int							maxResults									= 750;
-		private Set<String> 				candidateIds								= new HashSet<>();
-		private Set<GEO_ZONE>				geoZones									= new HashSet<>();
-		private GeoPosFilter				geoPosFilter							 	= null;
-		private Set<COUNTRY> 				countries									= new HashSet<>();
-		private Set<FUNCTION> 				functions									= new HashSet<>();
-		private Optional<Boolean> 			freelance									= Optional.empty();
-		private Optional<Boolean> 			perm										= Optional.empty();
-		private int 						yearsExperienceGtEq;
-		private int							yearsExperienceLtEq;
-		private Set<Language.LANGUAGE>		languages									= new HashSet<>();
-		private Set<String>					skills										= new HashSet<>();
-		private String						firstname;
-		private String 						surname;
-		private String 						email;
-		private Boolean						flaggedAsUnavailable						= null;
-		private Boolean			 			available									= null;
-		private Integer						daysSinceLastAvailabilityCheck; 
-		private String 						searchText									= "";
-		private String 						ownerId;
-		private Boolean						includeRequiresSponsorship					= null;
-		private LocalDate					registeredAfter								= null;
-		private LocalDate					lastAccountRefreshLtEq						= null;
-		private Boolean						lastAccountRefreshMissing					= null;
-		private Integer						daysSincelastAvailabilityCheckEmailSent		= null;
-		private COUNTRY						locCountry								 	= null;
-		private String 						locCity									 	= null;
-		private Integer						locDistance									= null;
+		private String 							orderAttribute;
+		private RESULT_ORDER					order;
+		private int								maxResults									= 750;
+		private Set<String> 					candidateIds								= new HashSet<>();
+		private Set<GEO_ZONE>					geoZones									= new HashSet<>();
+		private GeoPosFilter					geoPosFilter							 	= null;
+		private Set<COUNTRY> 					countries									= new HashSet<>();
+		private Set<FUNCTION> 					functions									= new HashSet<>();
+		private Optional<Boolean> 				freelance									= Optional.empty();
+		private Optional<Boolean> 				perm										= Optional.empty();
+		private int 							yearsExperienceGtEq;
+		private int								yearsExperienceLtEq;
+		private Set<Language.LANGUAGE>			languages									= new HashSet<>();
+		private Set<String>						skills										= new HashSet<>();
+		private String							firstname;
+		private String 							surname;
+		private String 							email;
+		private Boolean							flaggedAsUnavailable						= null;
+		private Boolean			 				available									= null;
+		private Integer							daysSinceLastAvailabilityCheck; 
+		private String 							searchText									= "";
+		private String 							ownerId;
+		private Boolean							includeRequiresSponsorship					= null;
+		private LocalDate						registeredAfter								= null;
+		private LocalDate						lastAccountRefreshLtEq						= null;
+		private Boolean							lastAccountRefreshMissing					= null;
+		private Integer							daysSincelastAvailabilityCheckEmailSent		= null;
+		private COUNTRY							locCountry								 	= null;
+		private String 							locCity									 	= null;
+		private Integer							locDistance									= null;
+		private Set<SECURITY_CLEARANCE_TYPE>	securityLevels								= new HashSet<>();
 		
 		/**
 		* Sets the name of the attribute to order on
@@ -741,6 +755,17 @@ public class CandidateFilterOptions {
 		*/
 		public CandidateFilterOptionsBuilder daysSincelastAvailabilityCheckEmailSent(Integer daysSincelastAvailabilityCheckEmailSent) {
 			this.daysSincelastAvailabilityCheckEmailSent = daysSincelastAvailabilityCheckEmailSent;
+			return this;
+		}
+		
+		/**
+		* Sets the security levels to filter on
+		* @param securityLevels - levels to filter on
+		* @return Builder
+		*/
+		public CandidateFilterOptionsBuilder securityLevels(Set<SECURITY_CLEARANCE_TYPE> securityLevels) {
+			this.securityLevels.clear();
+			this.securityLevels.addAll(securityLevels);
 			return this;
 		}
 		

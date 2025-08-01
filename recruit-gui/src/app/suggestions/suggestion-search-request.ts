@@ -14,6 +14,7 @@ export class SuggestionsSearchRequest{
 	public includeFilters:IncludeFilters 		= new IncludeFilters();
 	public termFilters:TermFilters 				= new TermFilters();
 	public candidateFilters:CandidateFilters 	= new CandidateFilters();
+	public securityFilters:SecurityFilters		= new SecurityFilters();
 }
 
 export class CandidateFilters{
@@ -57,6 +58,10 @@ export class ContractFilters{
 export class LanguageFilters{
 	languages?:Array<string> = new Array<string>();
 		
+}
+
+export class SecurityFilters{
+	securityLevels?:Array<string> = new Array<string>();
 }
 
 export class SkillFilters{

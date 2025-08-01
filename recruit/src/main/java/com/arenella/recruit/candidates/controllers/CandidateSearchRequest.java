@@ -2,6 +2,7 @@ package com.arenella.recruit.candidates.controllers;
 
 import java.util.Set;
 
+import com.arenella.recruit.candidates.beans.Candidate.SECURITY_CLEARANCE_TYPE;
 import com.arenella.recruit.candidates.beans.CandidateFilterOptions;
 import com.arenella.recruit.candidates.beans.CandidateFilterOptions.CandidateFilterOptionsBuilder;
 import com.arenella.recruit.candidates.beans.Language;
@@ -22,7 +23,7 @@ import java.util.Optional;
 */
 @JsonDeserialize(builder=CandidateSearchRequest.CandidateSearchRequestBuilder.class)
 public class CandidateSearchRequest {
-
+	
 	private RequestFilters 		requestFilters;
 	private LocationFilters 	locationFilters;
 	private ContractFilters 	contractFilters;
@@ -32,6 +33,7 @@ public class CandidateSearchRequest {
 	private IncludeFilters 		includeFilters;
 	private TermFilters 		termFilters;
 	private CandidateFilters	candidateFilters;
+	private SecurityFilters		securityFilters;
 	
 	/**
 	* Constructor based upon a builder
@@ -47,6 +49,7 @@ public class CandidateSearchRequest {
 		this.includeFilters 		= builder.includeFilters;
 		this.termFilters 			= builder.termFilters;
 		this.candidateFilters		= builder.candidateFilters;
+		this.securityFilters		= builder.securityFilters;
 	}
 	
 	/**
@@ -127,6 +130,14 @@ public class CandidateSearchRequest {
 	}
 	
 	/**
+	* If provided returns security levels to filter on
+	* @return filters
+	*/
+	public Optional<SecurityFilters> securityFilters(){
+		return Optional.ofNullable(this.securityFilters);
+	}
+	
+	/**
 	* Returns a builder for the class 
 	*/
 	public static CandidateSearchRequestBuilder builder() {
@@ -148,6 +159,7 @@ public class CandidateSearchRequest {
 		private IncludeFilters 		includeFilters;
 		private TermFilters 		termFilters;
 		private CandidateFilters	candidateFilters;
+		private SecurityFilters		securityFilters;
 		
 		/**
 		* Sets the Term Request to apply to the search request
@@ -218,6 +230,17 @@ public class CandidateSearchRequest {
 			this.includeFilters = includeFilters;
 			return this;
 		}
+		
+		/**
+		* Sets optionla security levels to filter on
+		* @param securityFilters - Security related filters
+		* @return Builder
+		*/
+		public CandidateSearchRequestBuilder securityFilters(SecurityFilters securityFilters){
+			this.securityFilters = securityFilters;
+			return this;
+		}
+		
 		
 		/**
 		* Sets the Term filters to apply to the search request
@@ -963,6 +986,66 @@ public class CandidateSearchRequest {
 		}
 	}
 	
+	@JsonDeserialize(builder=SecurityFilters.SecurityFiltersBuilder.class)
+	public static class SecurityFilters { 
+		
+		private Set<SECURITY_CLEARANCE_TYPE> securityLevels = new HashSet<>();
+		
+		/**
+		* Constructor based on a builder
+		* @param builder - Contains initialization values
+		*/
+		public SecurityFilters(SecurityFiltersBuilder builder) {
+			this.securityLevels.addAll(builder.securityLevels);
+		}
+		
+		/**
+		* Returns the security levels to filter on if any
+		* @return Security levels
+		*/
+		public Set<SECURITY_CLEARANCE_TYPE> getSecurityLevels() {
+			return this.securityLevels;
+		}
+		
+		/**
+		* Returns an instance of the builder for the class
+		* @return Builder
+		*/
+		public static SecurityFiltersBuilder builder() {
+			return new SecurityFiltersBuilder();
+		}
+		
+		/**
+		* Builder for the calss 
+		*/
+		@JsonPOJOBuilder(buildMethodName="build", withPrefix="")
+		public static class SecurityFiltersBuilder {
+			
+			private Set<SECURITY_CLEARANCE_TYPE> securityLevels = new HashSet<>();
+		
+			/**
+			* Sets Security levels to filter on
+			* @param securityLevels - security levels 
+			* @return Builder
+			*/
+			public SecurityFiltersBuilder securityLevels(Set<SECURITY_CLEARANCE_TYPE> securityLevels) {
+				this.securityLevels.clear();
+				this.securityLevels.addAll(securityLevels);
+				return this;
+			}
+			
+			/**
+			* Returns an initialized instance of the class
+			* @return Initialized instance
+			*/
+			public SecurityFilters build() {
+				return new SecurityFilters(this);
+			}
+			
+		}
+		
+	}
+	
 	/**
 	* Filters relating to types of candidates to filter on
 	*/
@@ -1180,6 +1263,10 @@ public class CandidateSearchRequest {
 			f.getOwnerId().ifPresent(builder::ownerId);
 			f.getDaysSinceLastAvailabilityCheck().ifPresent(builder::daysSinceLastAvailabilityCheck);
 			builder.candidateIds(f.getCandidateIds());
+		});
+		
+		req.securityFilters().ifPresent(s ->{
+			builder.securityLevels(s.getSecurityLevels());
 		});
 		
 		return builder.build();

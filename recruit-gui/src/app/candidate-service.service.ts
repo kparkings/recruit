@@ -35,6 +35,7 @@ export class CandidateServiceService {
     public geoZones:Array<GeoZone>						= new Array<GeoZone>();
     public languages:Array<SupportedLanguage> 			= new Array<SupportedLanguage>();
     public supportedCountries:Array<SupportedCountry> 	= new Array<SupportedCountry>();
+	public securityLevels:Array<string>					= new Array<string>();
    
     /**
   	* Constructor
@@ -58,6 +59,10 @@ export class CandidateServiceService {
  		config.body.forEach( (country: SupportedCountry) => {
 			this.supportedCountries.push(new SupportedCountry(''+country.name, country.iso2Code, country.humanReadable));	
 		});
+		
+		this.securityLevels.push("SC");
+		this.securityLevels.push("DV");
+		this.securityLevels.push("NATO");
  
  	   	Object.assign(this, config);
     	
@@ -514,6 +519,10 @@ export class CandidateServiceService {
 	*/
 	public getLanguages():Array<SupportedLanguage>{
 		return this.languages;	
+	}
+	
+	public getSecurityLevels():Array<string>{
+		return this.securityLevels;
 	}
 	
 	/**

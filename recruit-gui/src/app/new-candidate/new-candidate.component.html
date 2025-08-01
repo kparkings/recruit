@@ -51,7 +51,7 @@
 							<td class="hdr-label">{{'arenella-new-candidate-function-group' | translate}}</td>
 							<td>
 								<div style="min-height:35px;">
-									<div *ngFor="let function of functionTypes" class="function-selectable function-selected-{{isSelectedFunction(function)}}" (click)="toggleSelectedFunction(function)">{{function.desc | translate}}
+									<div *ngFor="let function of functionTypes" class="function-selectable function-selected-{{isSelectedFunction(function)}}" (click)="toggleSelectedFunction(function)">{{function.id | translate}}
 									</div>
 								</div>
 							</td>

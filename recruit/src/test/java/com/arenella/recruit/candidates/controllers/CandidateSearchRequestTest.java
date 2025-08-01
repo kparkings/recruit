@@ -2,12 +2,14 @@ package com.arenella.recruit.candidates.controllers;
 
 import org.junit.jupiter.api.Test;
 
+import com.arenella.recruit.candidates.beans.Candidate.SECURITY_CLEARANCE_TYPE;
 import com.arenella.recruit.candidates.beans.CandidateFilterOptions;
 import com.arenella.recruit.candidates.beans.Language;
 import com.arenella.recruit.candidates.beans.Language.LANGUAGE;
 import com.arenella.recruit.candidates.controllers.CandidateSearchRequest.CandidateFilters;
 import com.arenella.recruit.candidates.controllers.CandidateSearchRequest.IncludeFilters;
 import com.arenella.recruit.candidates.controllers.CandidateSearchRequest.LanguageFilters;
+import com.arenella.recruit.candidates.controllers.CandidateSearchRequest.SecurityFilters;
 import com.arenella.recruit.candidates.enums.COUNTRY;
 import com.arenella.recruit.candidates.enums.FREELANCE;
 import com.arenella.recruit.candidates.enums.PERM;
@@ -73,6 +75,9 @@ class CandidateSearchRequestTest {
 		
 		CandidateSearchRequest csr = CandidateSearchRequest
 				.builder()
+				.securityFilters(SecurityFilters.builder()
+						.securityLevels(Set.of(SECURITY_CLEARANCE_TYPE.DV))
+						.build())
 					.contractFilters(ContractFilters
 								.builder()
 									.contract(CONTRACT)
@@ -185,6 +190,11 @@ class CandidateSearchRequestTest {
 			assertTrue(f.getCandidateIds().contains(CANDIDATE_ID_1027));
 		});
 		
+		csr.securityFilters().ifPresent(s -> {
+			assertEquals(1, s.getSecurityLevels().size());
+			assertEquals(SECURITY_CLEARANCE_TYPE.DV, s.getSecurityLevels().toArray()[0]);
+		});
+		
 	}
 	
 	/**
@@ -208,6 +218,7 @@ class CandidateSearchRequestTest {
 		assertFalse(csr.skillFilters().isPresent());
 		assertFalse(csr.termFilters().isPresent());
 		assertFalse(csr.candidateFilters().isPresent());
+		assertFalse(csr.securityFilters().isPresent());
 		
 		csr = CandidateSearchRequest
 				.builder()
@@ -220,6 +231,7 @@ class CandidateSearchRequestTest {
 					.skillFilters(new SkillFilters(null))
 					.termFilters(TermFilters.builder().build())
 					.candidateFilters(CandidateFilters.builder().build())
+					.securityFilters(SecurityFilters.builder().build())
 				.build();
 		
 		csr.contractFilters().ifPresent(f -> {
@@ -272,6 +284,10 @@ class CandidateSearchRequestTest {
 			assertTrue(f.getCandidateIds().isEmpty());
 		});
 		
+		csr.securityFilters().ifPresent(s -> {
+			assertTrue(s.getSecurityLevels().isEmpty());
+		});
+		
 	}
 	
 	/**
@@ -285,6 +301,10 @@ class CandidateSearchRequestTest {
 		
 		CandidateSearchRequest csr = CandidateSearchRequest
 				.builder()
+					.securityFilters(SecurityFilters
+							.builder()
+								.securityLevels(Set.of(SECURITY_CLEARANCE_TYPE.SC))
+							.build())
 					.contractFilters(ContractFilters
 								.builder()
 									.contract(CONTRACT)
@@ -354,6 +374,7 @@ class CandidateSearchRequestTest {
 		assertEquals(TERM_SURNAME, 					filters.getSurname().get());
 		assertEquals(TERM_EMAIL, 					filters.getEmail().get());
 		assertEquals(OWNER_ID, 						filters.getOwnerId().get());
+		assertEquals(SECURITY_CLEARANCE_TYPE.SC, 	filters.getSecurityLevels().toArray()[0]);
 		
 	}
 	

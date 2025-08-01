@@ -48,6 +48,7 @@ export class SearchbarComponent {
 	public showLanguageFilters:string							= "";
 	public supportedLanguages:Array<SupportedLanguage> 			= new Array<SupportedLanguage>();
 	public showCountryFilters:string							= "";
+	public showSecurityFilters:string							= "";
 	public supportedCountries:Array<SupportedCountry>			= new Array<SupportedCountry>();
 	public suggestionFilterForm:UntypedFormGroup 				= new UntypedFormGroup({});
 	public citiesForSelectedCountry:Array<City>					= new Array<City>();
@@ -75,6 +76,8 @@ export class SearchbarComponent {
 	public filterTypeFormGroup:UntypedFormGroup					= new UntypedFormGroup({
 		searchType:												new UntypedFormControl('FUNCTION'),
 	});
+	
+	public securityFilters:Array<string> = new Array<string>();
 	
 	/**
 	* Constructor
@@ -140,6 +143,15 @@ export class SearchbarComponent {
 			this.subscription.unsubscribe();
 		}
 				
+	}
+	
+	public toggleSecurityFilterOptions(sc:string):void {
+		let included:boolean = this.suggestionFilterForm.get((sc))?.value;
+		this.suggestionFilterForm.get((sc))?.setValue(!included);
+	}
+	
+	public includeResultsForSC(sc:string):string{
+		return this.suggestionFilterForm.get((sc))?.value;
 	}
 	
 	/**
@@ -318,10 +330,17 @@ export class SearchbarComponent {
 	}
 							
 	/**
-	* Swithches between open and closed filter view for GeoZones 
+	* Swithches between open and closed filter view for Countries 
 	*/
 	public switchCountriesFilterView(view:string):void{
 		this.showCountryFilters = view;
+	}
+	
+	/**
+	* Swithches between open and closed filter view for Security options 
+	*/
+	public showSecurityFiltersView(view:string):void{
+		this.showSecurityFilters = view;
 	}
 
 	/**
@@ -329,6 +348,13 @@ export class SearchbarComponent {
 	*/
 	public switchLocationFilterView(view:string):void{
 		this.showLocationFilters = view;
+	}
+	
+	/**
+ 	* Swithches between open and closed filter view for Security Options 
+	*/
+	public switchSecurityFilterView(view:string):void{
+		this.showSecurityFilters = view;
 	}
 	
 	/**
@@ -450,9 +476,12 @@ export class SearchbarComponent {
 			this.suggestionFilterForm.addControl(lang.languageCode.toLowerCase()+'Language', new UntypedFormControl(false));
 			this.supportedLanguages.push(lang);
 		});
-						
+		
+		
+		this.initSecurityLevels();	
 		this.initGeoZones();
 		this.showCountryFilters 	= '';
+		this.showSecurityFilters	= '';
 		this.showLanguageFilters 	= '';
 		this.showIncludeFilters 	= '';
 			
@@ -473,6 +502,18 @@ export class SearchbarComponent {
 		this.includeRequiresSponsorshipCandidatesSelected = 'false';
 		this.acitveSavedCandidateSearch = new SavedCandidateSearch();
 				
+	}
+	
+	private initSecurityLevels():void{
+		
+		this.securityFilters = this.candidateService.getSecurityLevels();
+	
+		this.securityFilters.forEach(sc => {
+				this.suggestionFilterForm.addControl(sc, new UntypedFormControl(false));
+		});
+			
+		this.showSecurityFilters 	= "";
+			
 	}
 	
 	private generateSuggestionsSearchRequest(isUnfiltered:boolean):SuggestionsSearchRequest{
@@ -520,6 +561,10 @@ export class SearchbarComponent {
 			ssReq.termFilters.title 									= params.getTitle();
 			ssReq.termFilters.firstName 								= params.getFirstName();
 			ssReq.termFilters.surname 									= params.getSurname();
+			
+			this.securityFilters.filter(sc => this.suggestionFilterForm.get(sc)?.value == true).forEach(sc => {
+				ssReq.securityFilters.securityLevels?.push(sc);
+			});
 				
 			return ssReq;
 	}
@@ -706,6 +751,10 @@ export class SearchbarComponent {
 		
 		searchRequest.locationFilters.countries?.forEach(country => {
 			this.toggleCountrySelection(country);
+		});
+		
+		searchRequest.securityFilters.securityLevels?.forEach(sc => {
+			this.toggleSecurityFilterOptions(sc);
 		});
 		
 		this.supportedLanguages = new Array<SupportedLanguage>();
