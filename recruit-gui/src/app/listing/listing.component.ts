@@ -21,7 +21,9 @@ import { Clipboard } 									from '@angular/cdk/clipboard';
 import { SearchStats } 									from '../search-stats';
 import { SearchbarComponentListing }	 				from './searchbar/searchbar.component';
 import { ListingSearchRequest }							from './../listing-search-request';
-import { ViewportScroller } from '@angular/common';
+import { ViewportScroller } 							from '@angular/common';
+import { Router}										from '@angular/router';
+
 
 @Component({
   selector: 'app-listing',
@@ -83,7 +85,8 @@ export class ListingComponent implements OnInit {
 				public 	candidateService:			CandidateServiceService,
 				private staticDataService:			StaticDataService,
 				private translate:TranslateService,
-				private clipboard: Clipboard) { 
+				private clipboard: Clipboard,
+				private router:					Router,) { 
 		
 		if (sessionStorage.getItem("userId")) {		
 			this.recruiterProfileService.fetchRecruiterProfiles("RECRUITERS").subscribe(rps => {
@@ -318,6 +321,7 @@ export class ListingComponent implements OnInit {
 		this.activeView 			= 'list';
 		this.selectedListing		= new Listing();
 		this.searchBarCss = this.activeView === 'list' ? 'showChild' : 'hideChild';
+		this.router.navigate(["listing"]);
 	}
 	
 	/**
@@ -401,7 +405,11 @@ export class ListingComponent implements OnInit {
 			this.recruiterProfile = new RecruiterProfile();
 			this.recruiterProfile = this.recruiterProfiles.filter(p => p.recruiterId == selectedListing.ownerId)[0];
 	
-			this.registerListingViewedEvent();
+			//Need to save last position and use navigate to before we can use this. But
+			//it will allow users to use the back button
+			//this.registerListingViewedEvent();
+			
+			//this.router.navigate(["listing/"+selectedListing.listingId]);
 			
 			window.scroll({ 
       			top: 0, 
@@ -449,7 +457,7 @@ export class ListingComponent implements OnInit {
 	* Returns size limited version
 	*/
 	public getFormattedJobTitle(title:string):string{
-		return title.length < 25 ? title : title.substring(0,25) + "...";
+		return title.length < 35 ? title : title.substring(0,35) + "...";
 	}
 	
 	/**

@@ -66,7 +66,11 @@
 						
 							<div class="job-post" *ngFor="let listing of listings" id="{{listing.listingId}}">
 								<div (click)="showListingDetails(listing)">
-									<div class="listing-title">{{getFormattedJobTitle(listing.title)}}</div>
+									<div class="listing-title">
+									<a style="color:#002549;" href="{{getExternalUrl(listing.listingId)}}" id="{{getFormattedJobTitle(listing.title)}}" title="{{getFormattedJobTitle(listing.title)}}">
+										{{getFormattedJobTitle(listing.title)}}
+									</a>
+									</div>
 									<div>
 										<span title="{{listing.listingId}}" class="flag-icon flag-icon-{{getCountryISO2Code(listing.country)}} suggestion-flag-country listing-country"></span>
 									</div>
