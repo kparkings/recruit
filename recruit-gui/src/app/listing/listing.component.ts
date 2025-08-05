@@ -140,6 +140,11 @@ export class ListingComponent implements OnInit {
 			this.stats = stats;
 			this.stats.countryStats.sort((a,b) => b.percentageOfTotal - a.percentageOfTotal);
 			this.stats.functionStats.sort((a,b) => b.percentageOfTotal - a.percentageOfTotal);
+			
+			this.highestCountryPerc = this.stats.countryStats[0].percentageOfTotal;
+			this.highestFunctionPerc= this.stats.functionStats[0].percentageOfTotal;
+			
+			
 		});
   	
   	}
@@ -192,6 +197,10 @@ export class ListingComponent implements OnInit {
   	
   		this.curriculumFile = event.target.files[0];
 		
+	}
+	
+	public handleClick(event:any):void{
+		event.preventDefault();
 	}
 	
 	/**
@@ -407,7 +416,7 @@ export class ListingComponent implements OnInit {
 	
 			//Need to save last position and use navigate to before we can use this. But
 			//it will allow users to use the back button
-			//this.registerListingViewedEvent();
+			this.registerListingViewedEvent();
 			
 			//this.router.navigate(["listing/"+selectedListing.listingId]);
 			
@@ -457,8 +466,11 @@ export class ListingComponent implements OnInit {
 	* Returns size limited version
 	*/
 	public getFormattedJobTitle(title:string):string{
-		return title.length < 35 ? title : title.substring(0,35) + "...";
+		return title.length< 35 ? title : title.substring(0,35) + "...";
 	}
+	
+	public highestCountryPerc:number = 0;
+	public highestFunctionPerc:number = 0;
 	
 	/**
 	* Overloaded version

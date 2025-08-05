@@ -28,6 +28,8 @@
 	width: 22%;
 	height: 150px;
 	padding: 20px;
+	padding-left:2px;
+	padding-right:2px;
 	background: #e8e8e8;
 	margin-top: 15px;
 	margin-right: 3%;
@@ -43,17 +45,19 @@
     padding-bottom: 0;
     min-width: 100%;
     text-align: center;
+    margin-bottom:5px;
+    height:50px;
 }
 
 .listing-country {
 	display: table;
 	margin: 0 auto;
-	padding-top: 30px;
+	margin-top:0px;
 }
 
 .job-post-contract-type {
 	text-align: center;
-	margin-top: 10px;
+	margin-top: 20px;
 }
 
 .listing-table-td-date {

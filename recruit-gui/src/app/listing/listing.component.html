@@ -35,7 +35,7 @@
 								<tr *ngFor="let stat of stats.countryStats">
 									<td style="width:150px;font-size:14px;">{{stat.country | translate}}</td>
 									<td style="padding-left:5px;width:180px;">
-										<div class="stat-option-bar" [ngStyle]="{'width':(stat.percentageOfTotal *5)+'px','background':'green', 'max-width':'180px'}">
+										<div class="stat-option-bar" [ngStyle]="{'width':(stat.percentageOfTotal/highestCountryPerc*100)+'%','background':'green', 'max-width':'180px'}">
 										</div>
 									</td>
 								</tr>
@@ -47,7 +47,7 @@
 								<tr *ngFor="let stat of stats.functionStats">
 									<td style="width:150px;font-size:14px;">{{(stat.function) | translate}}</td>
 									<td style="padding-left:5px;width:180px;">
-										<div class="stat-option-bar" [ngStyle]="{'width':(stat.percentageOfTotal *4)+'px','background':'orange', 'max-width':'180px'}">
+										<div class="stat-option-bar" [ngStyle]="{'width':(stat.percentageOfTotal/highestFunctionPerc*100)+'%','background':'orange', 'max-width':'180px'}">
 										</div>
 									</td>
 									
@@ -67,11 +67,11 @@
 							<div class="job-post" *ngFor="let listing of listings" id="{{listing.listingId}}">
 								<div (click)="showListingDetails(listing)">
 									<div class="listing-title">
-									<a style="color:#002549;" href="{{getExternalUrl(listing.listingId)}}" id="{{getFormattedJobTitle(listing.title)}}" title="{{getFormattedJobTitle(listing.title)}}">
-										{{getFormattedJobTitle(listing.title)}}
-									</a>
+										<a style="color:#002549;" href="{{getExternalUrl(listing.listingId)}}" (click)="handleClick($event)" id="{{getFormattedJobTitle(listing.title)}}" title="{{getFormattedJobTitle(listing.title)}}">
+											{{getFormattedJobTitle(listing.title)}}
+										</a>
 									</div>
-									<div>
+									<div class="listing-country">
 										<span title="{{listing.listingId}}" class="flag-icon flag-icon-{{getCountryISO2Code(listing.country)}} suggestion-flag-country listing-country"></span>
 									</div>
 									<div class="job-post-contract-type">
