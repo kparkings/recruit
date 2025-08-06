@@ -315,7 +315,11 @@ export class CandidateServiceService {
 		functionTypes.push(new CandidateFunction('ANDROID',					this.translate.instant('android')));//'Support analyst'));
 		functionTypes.push(new CandidateFunction('IOS',						this.translate.instant('ios')));//'Support analyst'));
 		functionTypes.push(new CandidateFunction('KOTLIN',					this.translate.instant('kotlin')));//'Support analyst'));
-			    
+		
+		functionTypes.push(new CandidateFunction('CCPLUSPLUS',				this.translate.instant('ccplusplus')));//'c/c++'));
+		functionTypes.push(new CandidateFunction('COBOL',					this.translate.instant('cobol')));//'cobol'));
+		functionTypes.push(new CandidateFunction('SAP',						this.translate.instant('sap')));//'sap'));
+				
 		return functionTypes;
 	
 	}

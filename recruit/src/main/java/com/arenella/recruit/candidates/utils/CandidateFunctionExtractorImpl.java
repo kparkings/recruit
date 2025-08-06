@@ -61,6 +61,10 @@ public class CandidateFunctionExtractorImpl implements CandidateFunctionExtracto
 		all.put(FUNCTION.IOS, 						Set.of("ios","mobile"));
 		all.put(FUNCTION.KOTLIN, 					Set.of("kotlin"));
 	
+		all.put(FUNCTION.CCPLUSPLUS, 				Set.of("c++","c/c++"));
+		all.put(FUNCTION.COBOL, 					Set.of("cobol"));
+		all.put(FUNCTION.SAP, 						Set.of("sap"));
+		
 	}
 	
 	/**

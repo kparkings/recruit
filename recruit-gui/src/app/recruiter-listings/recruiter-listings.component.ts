@@ -72,6 +72,8 @@ export class RecruiterListingsComponent implements OnInit {
 	private  recruiterEmail:string 						= '';
 	private  recruiterCompany:string					= '';
 	
+	public currencies:Array<string> 		  = new Array<string>();
+	
 	/**
 	* Forms 
 	*/
@@ -127,6 +129,24 @@ export class RecruiterListingsComponent implements OnInit {
 				this.router.navigate(['login-user']);
 			}
     	});
+		
+		this.currencies.push("EUR");
+		this.currencies.push("GBP");
+		this.currencies.push("BGN");
+		this.currencies.push("CAD");
+		this.currencies.push("CHF");
+		this.currencies.push("CZK");
+		this.currencies.push("DKK");
+		this.currencies.push("HUF");
+		this.currencies.push("INR");
+		this.currencies.push("PLN");
+		this.currencies.push("PKR");
+		this.currencies.push("RON");	
+		this.currencies.push("RUB");	
+		this.currencies.push("SEK");	
+		this.currencies.push("TRY");	
+		this.currencies.push("UAH");	
+		this.currencies.push("USD");
 	
 		this.loadYearsExperienceValues();
 		

@@ -37,7 +37,11 @@ public enum FUNCTION {
 	PHP("Php"),
 	ANDROID("Android"),
 	IOS("IOS"),
-	KOTLIN("Kotlin");
+	KOTLIN("Kotlin"),
+	CCPLUSPLUS("C/C++"),
+	SAP("SAP"),
+	COBOL("COBOL")
+	;
 	
 	private String desc;
 	

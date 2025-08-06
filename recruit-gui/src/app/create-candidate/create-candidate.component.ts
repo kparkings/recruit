@@ -27,14 +27,32 @@ export class CreateCandidateComponent implements OnInit {
 					
 				 }
 
- 	ngOnInit(): void {
-  	}
+ 	ngOnInit(): void {		
+  		this.currencies.push("EUR");
+		this.currencies.push("GBP");
+		this.currencies.push("BGN");
+		this.currencies.push("CAD");
+		this.currencies.push("CHF");
+		this.currencies.push("CZK");
+		this.currencies.push("DKK");
+		this.currencies.push("HUF");
+		this.currencies.push("INR");
+		this.currencies.push("PLN");
+		this.currencies.push("PKR");
+		this.currencies.push("RON");	
+		this.currencies.push("RUB");	
+		this.currencies.push("SEK");	
+		this.currencies.push("TRY");	
+		this.currencies.push("UAH");	
+		this.currencies.push("USD");	
+	}
 	
 	private imageFile!:File| any;
 	
 	public feedbackBoxClass:string            = '';
   	public feedbackBoxTitle                   = '';
   	public feedbackBoxText:string             = '';
+	public currencies:Array<string> 		  = new Array<string>();
 
 	public formBean:UntypedFormGroup = new UntypedFormGroup({
      
@@ -299,4 +317,5 @@ export class CreateCandidateComponent implements OnInit {
 	public updatePerm():void{
 		this.permOnChange(!this.formBean.get('perm')?.value);
 	}
+	
 }

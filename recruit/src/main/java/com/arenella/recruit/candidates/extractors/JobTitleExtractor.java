@@ -42,44 +42,6 @@ public class JobTitleExtractor implements JobSpecifcationFilterExtractor{
 	public static final JobType itRecruiter			= new JobType(JobType.Type.itRecruiter, 		Set.of("it-recruitment","recruitment specialist", "recruitmentcampagne", "it recruiter ", "it recruiters", "recruitment consultant", "recruiter"));
 	public static final JobType sdet 				= new JobType(JobType.Type.sdet, 				Set.of("engineer in test", "developer in test", "sdet"));
 	
-	
-	//START
-	//JAVA_DEV("Java Developer"), 
-	//CSHARP_DEV("C# Developer"), 
-	//SUPPORT("Support analyst"), 
-	//BA("Business Analyst"), 
-	//UI_UX("UI UX"), 
-	//PROJECT_MANAGER("Project Manager"), 
-	//ARCHITECT("Software Architect"), 
-	//TESTER("Test Analyset"), 
-	//WEB_DEV("Web Developer"),
-	//SCRUM_MASTER("Scrum Master"),
-	//DATA_SCIENTIST("Data Scientist"),
-	//NETWORK_ADMINISTRATOR("Network Administrator"),
-	//SOFTWARE_DEVELOPER("Software Developer"),
-	//IT_SECURITY("IT Security"),
-	//IT_RECRUITER("IT Recruiter"),
-	//SOFTWARE_DEV_IN_TEST("Software Dev In Test"),
-	//RUBY("Ruby"),
-	//RUBY_ON_RAILS("Ruby On Rails"),
-	//GO("Go"),
-	//REACT("React"),
-	//VUE("Vue"),
-	//NEXT("Next"),
-	//EXPRES("Expres"),
-	//RUST("Rust"),
-	//TEST_MANAGER("Test Manager"),
-	//PRODUCT_OWNER("Product Owner"),
-	//NODE("Node"),
-	//PYTHON("Python"),
-	//ANGULAR("Angular"),
-	//PHP("Php"),
-	//ANDROID("Android"),
-	//IOS("IOS"),
-	//KOTLIN("Kotlin");
-	//END
-	
-	
 	/**
 	* Refer to JobSpecifcationFilterExtractor interface for details
 	*/

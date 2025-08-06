@@ -54,6 +54,7 @@ export class NewCandidateComponent implements OnInit {
 	public supportedLanguages:Array<SupportedLanguage> 	= new Array<SupportedLanguage>();
 	
 	public currentUserAuth:CurrentUserAuth = new CurrentUserAuth();
+	public currencies:Array<string> 		  = new Array<string>();
 	
 	/**
   	* Constructor
@@ -165,6 +166,24 @@ export class NewCandidateComponent implements OnInit {
   	*/
   	ngOnInit(): void {
 
+		this.currencies.push("EUR");
+		this.currencies.push("GBP");
+		this.currencies.push("BGN");
+		this.currencies.push("CAD");
+		this.currencies.push("CHF");
+		this.currencies.push("CZK");
+		this.currencies.push("DKK");
+		this.currencies.push("HUF");
+		this.currencies.push("INR");
+		this.currencies.push("PLN");
+		this.currencies.push("PKR");
+		this.currencies.push("RON");	
+		this.currencies.push("RUB");	
+		this.currencies.push("SEK");	
+		this.currencies.push("TRY");	
+		this.currencies.push("UAH");	
+		this.currencies.push("USD");	
+		
   	}
 	
 	ngAfterViewChecked():void {

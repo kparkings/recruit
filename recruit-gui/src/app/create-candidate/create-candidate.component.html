@@ -52,8 +52,7 @@
 								<tr class="{{contractRoleClass}} ">
 									<td>
 										<select formControlName="contractCurrency">
-											<option value="EUR">{{'arenella-create-candidate-eur' | translate}}</option>
-											<option value="GBP">{{'arenella-create-candidate-gbp' | translate}}</option>
+											<option *ngFor="let currency of currencies" value="{{currency}}">{{currency | translate}}</option>
 										</select>
 										<select formControlName="contractTimeUnit">
 											<option value="HOUR">{{'arenella-create-candidate-hour' | translate}}</option>
@@ -69,8 +68,7 @@
 								<tr class="{{permRoleClass}} ">	
 									<td>
 										<select formControlName="permCurrency">
-											<option value="EUR">{{'arenella-create-candidate-eur' | translate}}</option>
-											<option value="GBP">{{'arenella-create-candidate-gbp' | translate}}</option>
+											<option *ngFor="let currency of currencies" value="{{currency}}">{{currency | translate}}</option>
 										</select>
 										<select formControlName="permTimeUnit">
 											<option value="HOUR">{{'arenella-create-candidate-hour' | translate}}</option>

@@ -19,5 +19,8 @@ export enum Industry{
 	POLICE=17, 
 	SPACE=18, 
 	TELECOMS=19,
-	TOURISM=20	
+	TOURISM=20,
+	MEDIA=21,
+	ECOMMERCE=22,
+	RETAIL=23	
 }

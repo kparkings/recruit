@@ -106,10 +106,10 @@
 									<tr>
 										<td>{{'arenella-recruiter-listing-rate' | translate}}</td>
 										<td>
-											<input type="radio" name="rateCurrency" value="EUR" class="radio-button" formControlName="rateCurrency"><label class="radio-button_label">{{'arenella-recruiter-listing-eur' | translate}}</label>
-											<input type="radio" name="rateCurrency" value="GBP" class="radio-button" formControlName="rateCurrency"><label class="radio-button_label">{{'arenella-recruiter-listing-gbp' | translate}}</label>
-											<br>
-											<input type="text" formControlName="rate">
+											<select formControlName="rateCurrency"  style="width:100px">
+												<option *ngFor="let currency of currencies" value="{{currency}}">{{currency | translate}}</option>
+											</select>
+											<input type="text" formControlName="rate" style="width:200px;margin-left:10px;">
 										</td>
 									</tr>
 								</table>

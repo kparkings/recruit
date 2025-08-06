@@ -28,6 +28,7 @@ public class Candidate {
 		CONSTRUCTION, 
 		CYBER_SECURITY, 
 		EDUCATION,
+		ECOMMERCE,
 		EUROPEAN_COMMISSION, 
 		ENERGY, 
 		FINTECH, 
@@ -38,8 +39,10 @@ public class Candidate {
 		HOSPITALITY,
 		INSURANCE,
 		LOGISTICS,
+		MEDIA,
 		MILITARY, 
 		POLICE, 
+		RETAIL,
 		SPACE, 
 		TELECOMS,
 		TOURISM
@@ -1026,7 +1029,7 @@ public class Candidate {
 	*/
 	public static class Rate{
 		
-		public enum CURRENCY{EUR,GBP}
+		public enum CURRENCY{EUR,GBP,BGN,CAD,CHF,CZK,DKK,HUF,INR,PLN,PKR,RON,RUB,SEK,TRY,UAH,USD}
 		public enum PERIOD{HOUR,DAY,YEAR}
 		
 		private final CURRENCY 	currency;

@@ -102,8 +102,7 @@
 							<td class="hdr-label">{{'arenella-new-candidate-rate' | translate}}</td>
 							<td>
 								<select formControlName="permCurrency"  class='select-mini'>
-									<option>{{'arenella-new-candidate-eur' | translate}}</option>
-									<option>{{'arenella-new-candidate-gbp' | translate}}</option>
+									<option *ngFor="let currency of currencies" value="{{currency}}">{{currency | translate}}</option>
 								</select>
 							
 								<select formControlName="permTimeUnit"  class='select-mini'>
@@ -128,8 +127,7 @@
 							<td class="hdr-label">{{'arenella-new-candidate-rate' | translate}}</td>
 							<td>
 								<select formControlName="contractCurrency" class='select-mini'>
-									<option>{{'arenella-new-candidate-eur' | translate}}</option>
-									<option>{{'arenella-new-candidate-gbp' | translate}}</option>
+									<option *ngFor="let currency of currencies" value="{{currency}}">{{currency | translate}}</option>
 								</select>
 								<select formControlName="contractTimeUnit" class='select-mini'>
 									<option value="HOUR">{{'arenella-new-candidate-hour' | translate}}</option>

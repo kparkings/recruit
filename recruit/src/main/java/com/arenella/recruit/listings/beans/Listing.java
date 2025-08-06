@@ -87,7 +87,7 @@ public class Listing {
 		UKRAINIAN,
 		URDU}
 	
-	public enum currency		{EUR, GBP, BGN, CAD, CHF, CZK, DKK, HUF, INR, PLN, PKR, RON, SEK, USD}
+	public enum currency		{EUR, GBP, BGN, CAD, CHF, CZK, DKK, HUF, INR, PLN, PKR, RON, RUB, SEK, TRY, UAH, USD}
 	public enum TECH			{JAVA, DOT_NET, DEV_OPS, NETWORKS, CLOUD, WEB, UI_UX, PROJECT_NANAGMENT, TESTING, BUSINESS_ANALYSTS, SECURITY, IT_SUPPORT, ARCHITECT, BI, REC2REC }
 	
 	private UUID 						listingId;
