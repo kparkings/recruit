@@ -16,7 +16,7 @@ import com.arenella.recruit.candidates.enums.COUNTRY;
 @Component
 public class LanguageExtractor implements JobSpecifcationFilterExtractor{
 	
-	public static final Set<String> ENGLISH 	= Set.of("inglese","inglés","englisch","english", "engels", "anglais");
+	public static final Set<String> ENGLISH 	= Set.of("inglese","inglés","englisch","english", "engels", "anglais", "angielsk");
 	public static final Set<String> DUTCH 		= Set.of("olandese","holandés","niederländisch","dutch", "nederlands", "néerlandais", "neerlandais","nederlandse");
 	public static final Set<String> FRENCH 		= Set.of("frans","francese","francés","französisch","french", "francais", "français","franse");
 	public static final Set<String> BULGARIAN 	= Set.of("bulgaars","bulgaro","bulgare","búlgaro","bulgarisch","bulgarian"); 

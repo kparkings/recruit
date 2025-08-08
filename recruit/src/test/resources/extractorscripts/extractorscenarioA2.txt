@@ -1,0 +1,50 @@
+About the job
+This position offers you the opportunity to join a fast-growing technology organization that is redefining productivity paradigms in the software engineering industry. 
+
+If you are passionate about technology and want to learn about new trends that are shaping human behavior, this opportunity is for you.
+
+
+We are looking for a Senior Java Engineer to join a focused engineering initiative centered on payment gateway integration. The work will be mostly independent and ring-fenced from other teams for rapid ramp-up and execution.
+
+
+What you'll do:
+
+Integrate with multiple payment gateways (Worldpay preferred)
+Implement encryption/decryption logic with strong security standards
+Translate formats and forward gateway communication
+Read and apply API documentation without heavy supervision
+Assist with light administrative tasks as needed
+Work in a cloud-hosted environment (Azure)
+ 
+
+
+What we're looking for: 
+6/7+ years of experience in software development.
+Strong proficiency in Java
+Experience with payment gateways
+Proven experience in cloud platforms (Azure is a plus)
+Hands-on knowledge of encryption/decryption techniques
+Comfortable solving network-level challenges
+Able to navigate and implement based on API specs
+Experience with observability tools (Grafana, Open Telemetry)
+Strong problem-solving skills and attention to detail.
+Excellent communication skills for collaborating with internal teams and external partners.
+
+
+Location: Spain or Portugal (flexible remote)
+The position requires travel to the UK for project-related activities.
+ 
+
+
+ Some of the benefits you’ll enjoy working with us:
+
+The chance to join an organization with triple-digit growth that is changing the paradigm on how software products are built.
+The opportunity to form part of an amazing, multicultural community of tech experts.
+A highly competitive compensation package.
+A flexible and remote working environment.
+Medical insurance.
+
+
+Come and join our #ParserCommunity. 
+
+Follow us on Linkedin

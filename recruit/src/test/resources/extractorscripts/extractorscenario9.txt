@@ -1,0 +1,23 @@
+🚀 Freelance Opportunity: Senior Software engineer 
+ 📍 Location: Netherlands (Hybrid)
+ 🕒 Start: ASAP | Duration: 6 months | 32–40 hrs/week
+
+We’re looking for an experienced backend engineer to design, build, and scale systems that power high-impact marketing operations. You’ll work with cutting-edge tools like Java, Python, Kubernetes, Spark, BigQuery, MySQL, Kafka, Google Cloud, and AWS to deliver data-driven solutions that make a real difference.
+
+💼 What you’ll be doing
+ • Develop and maintain scalable, high-performance marketing systems
+ • Ensure reliability through monitoring and health indicators
+ • Collaborate with engineers, data scientists, and marketers
+ • Take full ownership from design to deployment
+
+🎯 What you bring
+ • 5+ years in software development (2+ with Java)
+ • Experience with distributed, highly available systems
+ • Knowledge of SOA, microservices, and relational databases
+ • Strong communication and problem-solving skills
+ • GCP, BigQuery, Spark, MySQL
+ • Pre: Snowflake, Perl
+
+📩 Ready to make an impact?
+
+💡 P.S. Almost weekend — wouldn’t it be great to start it with a new challenge lined up?

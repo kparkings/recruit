@@ -1,0 +1,19 @@
+Hej, 
+
+Szukam Senior Platform Software Engineera (Java/Kotlin) w Warszawie!
+
+Wymagania: 
+- Bardzo dobra znajomość Java i/lub Kotlin
+- Doświadczenie w systemach rozproszonych, Docker, Kubernetes
+- Praca z chmurą (najlepiej Azure)
+- Znajomość GitOps (Istio, ArgoCD, Helm)
+- Skrypty (Bash, PowerShell)
+- Angielski minimum B2
+
+Praca hybrydowa w Warszawie ( 1-2 dni w biurze w tygodniu)
+Długofalowa współpraca!
+Widły do 170 PLN/h/B2B
+
+Po więcej informacji zapraszam do kontaktu!
+
+Miłego :)

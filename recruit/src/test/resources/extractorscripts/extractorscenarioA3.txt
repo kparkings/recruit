@@ -1,0 +1,11 @@
+Beste netwerk,
+
+Ik ben op zoek naar een ervaren back-end & full-stack .NET developer (36–40 uur) in Alphen aan den Rijn voor in vaste dienst.
+
+Je bouwt schaalbare .NET Core oplossingen, denkt mee over architectuur, security, performance en koppelingen met externe systemen.
+
+Tech stack: .NET Core, C#, Azure, SQL Server, Git, CI/CD, xUnit, Playwright, Angular.
+
+Het startsalaris ligt tussen de €4.000 en 6.500 bruto per maand, afhankelijk van je ervaring. Je krijgt daarnaast 25 vakantiedagen, 8% vakantiegeld, een volledig betaalde pensioenregeling, reiskostenvergoeding, een laptop en uitzicht op een vast dienstverband.
+
+Een rol met maatschappelijke impact, binnen een informeel en ervaren scrumteam. Interesse? Stuur mij dan een privé bericht, email of bereik mij op:

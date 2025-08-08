@@ -1,0 +1,40 @@
+           Functieomschrijving
+Voor onze opdrachtgever de Belastingdienst zijn wij op zoek naar een Medior developer
+
+Aan uitdagingen geen gebrek. Enerzijds door de toename van het aantal klanten en gekoppelde applicaties en anderzijds door nieuwe ontwikkelingen op het gebied van applicatie integratie en de continue aandacht voor aspecten als performance en security. Bij het Integratie Competence Center in Apeldoorn komt dit allemaal bij elkaar. Je werkt nauw samen binnen een professioneel team waarbij het werk zich bevindt op het grensvlak van applicatie en infrastructuur. Je ontwikkelt en test (geautomatiseerd) de Belastingdienst Service Bus (BSB), waarmee het berichtenverkeer ondersteund wordt op basis van MQ en (web)services met SOAP en REST. Zo ben je betrokken bij meer dan één miljard interacties per jaar. Daarnaast help je mee Centrale Service Regisry applicatie verder te ontwikkelen met nieuwe functionaliteiten en krijg je de mogelijkheid om mee te helpen bij het ontwikkelen van een API-Management voorziening en/of een Event Streaming voorziening. Je komt te werken in een jong en enthousiast team van T-shaped engineers.
+
+Achtergrond opdracht
+De ontwikkelingen op het gebied van applicatie integratie gaan snel. Naast het bestaande landschap dat continue onderhoudt vraagt doen op dit moment API-Management en Event Streaming hun intrede. Daarbij vraagt de organisatie steeds meer om DevOps werken en containerisatie. Er gebeurd dus veel en om dat goed op te kunnen vangen hebben we behoefte aan uitbreiding van ons team.
+           Functie eisen
+    • ervaring met het ontwikkelen van Java applicaties
+    • HBO werk- en denkniveau
+    • Ervaring met het programmeren van Java (Minimaal 5 jaar)
+    • Ervaring met het werken voor/bij klanten (Minimaal 3 jaar)
+    • Kennis van integratie producten zoals MQ, DB2, API-Management, SOAP, REST (Minimaal 3 jaar)
+Wensen
+Overige functiewensen:
+    • Je bent leergierig en wil je kennis verbreden;
+    • Je bent als T-shaped developer inzetbaar voor alle disciplines binnen het development team;
+    • Ervaring met Robot Framework is een pre
+Aanvullende kennis:
+    • Je hebt kennis van XML en JSON.
+    • Je hebt ervaring met Jenkins, Jira, Git en Confluence.
+Competenties:
+    • analyseren
+    • mondelinge uitdrukkingsvaardigheid
+    • samenwerken
+    • omgevingsbewustzijn
+    • resultaatgerichtheid
+Overige eisen
+Startdatum: 1 februari 2023
+Inzet: 36 uur/week
+Duur: t/m 31 december 2023 met optie op verlenging
+Locatie: Apeldoorn
+           Interesse?
+Als jij interesse hebt in deze opdracht dan ontvangen wij graag de volgende gegevens van je:
+    • Een recent CV (in Word-format)
+    • Een korte motivatie
+    • Datum beschikbaar
+    • Bijzonderheden en de status van elders lopende aanbiedingen/intakes
+    • Jouw uurtarief
+Door te reageren op deze vacature ga je akkoord met ons privacy statement.

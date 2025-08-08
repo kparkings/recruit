@@ -1,0 +1,53 @@
+Introduction
+
+Introduction to the job
+
+Java developers at ASML are passionate about engineering. They create software crucial to the development of next-generation microchips. People often refer to ASML lithography systems as ‘the most complex machines in the world’, and these unique machines need unique software engineering solutions. There are no borrowed patterns or published designs to use: every line of code is a result of technical conversations and brainstorming between colleagues with diverse engineering backgrounds.
+
+The work of our software developers combines extreme complexity and large volumes of data to find solutions to correct nanometer-sized inaccuracies in the chipmaking process. They work in multi-skilled teams alongside physicists and mathematicians, to determine the best combination of parameter adjustments to meet customer’s goals.
+
+Role And Responsibilities
+
+You and your team are responsible for requirement engineering, design, implementation, testing and integration. Each team consists of software development engineers, tester, functional experts, product owner and scrum master.
+
+In ASML, we mainly use Java to develop Litho InSight, software with a user-friendly interface that our customers use to optimize the chip manufacturing process. Our software takes the vast amount of metrology data produced by YieldStar systems and translates it into instructions that the chip manufacturing equipment can use to correct for production inaccuracies.
+
+Java is also used for our diagnostic tools. You’ll use Java to further develop these tools that analyze the logs and data produced by ASML lithography systems. Diagnostic tools help our customer support engineers get insights in the cause of distortions in the chipmaking process.
+
+As a Java developer, you’ll:
+    • Work in a team of highly skilled software engineers responsible for developing software that enables the ever-increasing miniaturization of semiconductor technology
+    • Use Agile methodology to develop the software
+    • Create designs that are modular, scalable, robust and meet customer requirements
+    • Perform unit testing and on target testing to ensure the software meets the high-quality standards our customers expect
+    • Communicate with customers and other stakeholders to gather a complete understanding of their requirements
+    • Verify stability, interoperability, portability, security, or scalability of system architecture
+    • Participate in continuous process improvement activities
+
+Education and experience
+    • Bachelor’s or master’s degree in a technical background
+    • 0 - 5 years of experience with Java. Backend development is a pre!
+Technology stack:
+    • Git repository and Git workflow
+    • CI/CD DevOps tools (e.g. Bitbucket, Bamboo or similar)
+    • Microservice architecture
+
+Skills
+
+Working at the cutting edge of tech, you’ll always have new challenges and new problems to solve – and working together is the only way to do that. You won’t work in a silo. Instead, you’ll be part of a creative, dynamic work environment where you’ll collaborate with supportive colleagues. There is always space for creative and unique points of view. You’ll have the flexibility and trust to choose how best to tackle tasks and solve problems.
+
+To thrive in this job, you’ll need the following skills:
+    • Ability to perform effectively in a demanding environment with changing workloads and deadlines
+    • Ability to take ownership and focus on results
+    • Ability to identify bottlenecks and improvements
+    • Good communications skills
+    • Affinity with coding is a must!
+
+Diversity & Inclusion
+
+ASML is an Equal Opportunity Employer that values and respects the importance of a diverse and inclusive workforce. It is the policy of the company to recruit, hire, train and promote persons in all job titles without regard to race, color, religion, sex, age, national origin, veteran status, disability, sexual orientation, or gender identity. We recognize that diversity and inclusion is a driving force in the success of our company.
+
+Other Information
+
+Need to know more about applying for a job at ASML? Read our frequently asked questions .
+
+About the company

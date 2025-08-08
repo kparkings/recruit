@@ -37,7 +37,7 @@ public class DocumentFilterExtractionUtil {
 	@Autowired
 	private ContractTypeExtractor 	contractTypeExtractor;
 	
-	public static final Set<String> UK = Set.of("cambridge","bristol","gbp","stockport","£"," uk ", "uk.","uk\\t", "inside ir35", "milton keynes", "england", "midlands", "derby", "wales", "scotland", "edinburgh","glasgow", "london", "liverpool", "manchester", "oxford", "glousester", "surrey", "Buckinghamshire", "Berkshire", "hounslow", "Milton Keynes", "edgware", "Leicester", "bracknell", "barking", "Colchester", "cardiff", "Brentford", "Stoke-on-Trent", "maidenhead", "guildford", "reading", "leeds");
+	public static final Set<String> UK = Set.of("cambridge","bristol","gbp","stockport","£"," uk ", "uk.","uk\\t", "ir35", "milton keynes", "england", "midlands", "derby", "wales", "scotland", "edinburgh","glasgow", "london", "liverpool", "manchester", "oxford", "glousester", "surrey", "Buckinghamshire", "Berkshire", "hounslow", "Milton Keynes", "edgware", "Leicester", "bracknell", "barking", "Colchester", "cardiff", "Brentford", "Stoke-on-Trent", "maidenhead", "guildford", "reading", "leeds");
 	
 	/**
 	* Extracts Filters from a document
@@ -100,6 +100,8 @@ public class DocumentFilterExtractionUtil {
 		final AtomicBoolean 			hitFirstParagraph 	= new AtomicBoolean(false);
 		final AtomicReference<String> 	previousLine 		= new AtomicReference<>("");
 		
+		documentText = documentText.replaceAll("[()]", "");
+		
 		Arrays.asList(lines).forEach(line -> {
 			
 			if (hitFirstParagraph.get()) {
@@ -151,6 +153,7 @@ public class DocumentFilterExtractionUtil {
 		
 		this.getExtractedText(documentText, filterBuilder);
 		
+		documentText = documentText.replaceAll("[()]", "");
 		documentText = documentText.toLowerCase();
 		
 		jobTitleExtractor.extractFilters(documentText, filterBuilder);

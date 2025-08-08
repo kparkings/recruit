@@ -26,7 +26,29 @@ public class JobType{
 		softwareDeveloper("Software Developer"),
 		itSecurity("IT Security"),
 		itRecruiter("IT Recruiter"),
-		sdet("SDET");
+		sdet("SDET"),
+		
+		
+		ruby("Ruby Developer"),
+		rubyOnRails("Ruby On Rails Developer"),
+		go("Golang Developer"),
+		react("React Developer"),
+		vue("Vue Developer"),
+		next("NextDeveloper"),
+		expres("Expres Developer"),
+		rust("Rust Developer"),
+		testManager("Test Manager"),
+		productOwner("Product Owner"),
+		node("Node Developer"),
+		python("Python Developer"),
+		angular("Angular Developer"),
+		php("PHP Developer"),
+		android("Android Developer"),
+		ios("IOS Developer"),
+		ccplusplus("C/C++ Developer"),
+		cobol("Cobol Developer"),
+		sap("SAP Developer"),
+		kotlin("Kotlin Developer");
 	
 		public final String role;
 		

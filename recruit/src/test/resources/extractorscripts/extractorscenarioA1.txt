@@ -1,0 +1,33 @@
+📍 UK-based, Remote | 💼 Outside IR35 Contract | 💰 Negotiable rate
+
+
+We're exclusively partnering with a globally recognised, award-winning consultancy to help them scale their high-performing Digital team. This is a rare opportunity to work in a start-up-style environment backed by the stability, reputation, and security of a company with over 50 years of delivering excellence.
+
+
+🚀 Why Join?
+Start-up mentality, global scale: You’ll join a cross-functional team operating with the agility of a start-up while embedded within a 50-year-old consultancy trusted worldwide. The digital team has grown by 45 engineers of the last 36 months!
+Proven impact: Their digital platforms have already transformed how clients are served, and they continue to invest heavily in innovation.
+People-first culture: Expect lean/kanban ways of working, true shared ownership, and a strong focus on continuous learning and development.
+
+
+🧠 What You'll Work On
+You’ll be part of a multi-disciplinary team including frontend and backend developers, product owners, designers, and platform engineers – collaborating to build modern, scalable digital services using the latest technologies and practices.
+
+
+🛠 Tech Stack
+Languages & Frameworks: Python 3 (Flask/FastAPI) & opportunity to work with Golang
+Infrastructure: Docker, Kubernetes
+Cloud & Tooling: Google Cloud Platform (GCP), GitHub Enterprise Cloud, Datadog, Slack
+Database: PostgreSQL
+
+
+👤 About You
+We’re looking for someone who:
+Has commercial experience with Python (Flask and FastAPI ideally)
+Understands scalable backend design and modern DevOps practices (Docker, Kubernetes, CI/CD)
+Values clean code, strong testing practices, and collaborative working
+Enjoys working in lean, agile teams and contributing to product thinking
+Bonus if you’ve worked with Golang or in cloud-native environments (AWS also accepted).
+
+
+Sound like a fit? Hit apply! This is a truly exciting role for someone ready to take the next step in a forward-thinking digital environment.

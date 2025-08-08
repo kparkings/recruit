@@ -1,0 +1,25 @@
+Hi Network, 
+ 
+I'm looking for a Backend Software Engineer for a freelance position at a large company in the travel industry. 
+ 
+Requirments: 
+- Java 
+- Python
+- Spring Boot 
+- MySQL 
+- Kubernetes 
+- Kafka 
+- AWS or GCP
+
+Nice to have 
+- Perl
+- Spark
+- BigQuery
+- Harness 
+- Snowflake 
+
+Practical information: 
+- 40h/week, contract until 31-12-2025, Amsterdam 1 day onsite, Freelance/Interim, start: ASAP 
+
+ 
+Please respond to this role if you meet all the requirements and you are located in The Netherlands.

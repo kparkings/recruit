@@ -1,0 +1,49 @@
+About the job
+SNI is serving as a trusted IT Outsourcing partner in line with the needs of World's most prestigious firms and carried out successful projects worldwide.
+
+
+For one of our clients based in Poland, we are currently looking for a Senior Full-Stack Developer (.NET + React).
+
+
+
+Details:
+
+
+
+Permanent position
+Full-time
+Start date: ASAP
+Hybrid work model based in Wroclaw
+
+
+Project Description:
+
+
+
+The project aims to develop a platform that facilitates the product registration process and provides users with fast and easy access to critical information about products, parts, and related documentation. It will ensure secure storage and management of both historical and current data, including parts, repairs, and warranties. The platform will empower users, such as dealers, to efficiently manage their daily tasks, ultimately enhancing service quality and customer satisfaction.
+
+
+Skills:
+
+
+
+Over 5 years of professional experience with .NET
+Proven expertise in ASP.NET and Web API development
+Strong front-end development skills with React, Redux, JavaScript, and TypeScript
+Hands-on experience with Azure cloud services
+Committed to writing unit tests and producing reliable, maintainable code
+
+
+Preferred Qualifications:
+
+
+
+Experience with integration testing
+Knowledge of DevOps methodologies and tools
+
+
+
+
+
+
+SNI sp. z o.o. will process personal data for the purpose of the recruitment process in accordance with Data Privacy Policy. The data may also be stored and processed for future recruitment purposes, in accordance with the given consent.

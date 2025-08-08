@@ -9,14 +9,14 @@ import com.arenella.recruit.candidates.enums.FUNCTION;
 * Unit tests for the CandidateFunctionExtractorImpl class
 * @author K Parkings
 */
-public class CandidateFunctionExtractorImplTest {
+class CandidateFunctionExtractorImplTest {
 
 	/**
 	* Tests correct FUNCTION returned 
 	* @throws Exception
 	*/
 	@Test
-	public void testExtraction() throws Exception{
+	void testExtraction() {
 		
 		CandidateFunctionExtractorImpl extractor = new CandidateFunctionExtractorImpl();
 		

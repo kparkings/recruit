@@ -1,0 +1,39 @@
+About the job
+Job Title: Senior Java/Kotlin Developer – Microservices Architecture
+
+Location: Amsterdam, Netherlands
+
+
+
+Role Overview:
+
+We are seeking a highly experienced and hands-on Senior Java/Kotlin Developer with 8–10+ years of experience in designing and delivering robust microservices-based solutions using modern cloud-native technologies. The ideal candidate will possess a strong technical foundation in Spring Boot, Java/Kotlin, Kubernetes (AKS), and Azure IaaS, with additional exposure to MongoDB, GitHub Actions, Kafka, and GraphQL being a plus.
+
+
+Key Responsibilities:
+
+Design, build, and deploy scalable microservices using Java/Kotlin and Spring Boot.
+Drive the end-to-end software development lifecycle, from design through delivery and operations.
+Architect and implement cloud-native solutions using Kubernetes (AKS) and Azure IaaS.
+Develop CI/CD pipelines using GitHub Actions and ensure high-quality, automated deployments.
+Perform hands-on coding and conduct thorough code reviews to ensure clean, maintainable code.
+Collaborate closely with product owners, architects, and cross-functional teams to align technology with business objectives.
+Secure quality and delivery speed within Agile Scrum frameworks.
+Influence technical direction, prioritize workloads, and help mentor team members.
+
+
+Required Skills and Experience:
+
+8–10+ years of hands-on development experience with Java/Kotlin and Spring Boot.
+Expertise in designing and deploying microservices architectures.
+Strong experience with Azure IaaS, Kubernetes (AKS), and GitHub Actions.
+Proficiency in NoSQL databases, particularly MongoDB.
+Experience in agile software development methodologies (Scrum).
+Proven ability to collaborate effectively with technical and non-technical stakeholders.
+
+
+Desirable Skills:
+
+Familiarity with Kafka for messaging and stream processing.
+Understanding of GraphQL for API design.
+Prior experience leading or influencing solution architecture decisions.

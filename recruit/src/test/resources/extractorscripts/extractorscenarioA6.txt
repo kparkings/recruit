@@ -1,0 +1,45 @@
+Freelance 𝐅𝐮𝐥𝐥𝐬𝐭𝐚𝐜𝐤 𝐝𝐞𝐯𝐞𝐥𝐨𝐩𝐞𝐫: 𝐀𝐳𝐮𝐫𝐞 𝐁𝐢𝐜𝐞𝐩 | 𝐂#/.𝐍𝐄𝐓 | 𝐀𝐧𝐠𝐮𝐥𝐚𝐫 (𝐌𝐚𝐭𝐞𝐫𝐢𝐚𝐥) gezocht voor mijn klant (grote verzekeraar) in 𝐔𝐭𝐫𝐞𝐜𝐡𝐭. 
+
+- Start: zsm
+- 4 maanden + optie tot verlenging
+- 38 tot 40 uur
+- Hybride werken
+
+-----Wij kunnen niet samenwerken met andere detacheerders. Enkel en alleen direct met freelancers-----
+
+
+𝑶𝒑𝒅𝒓𝒂𝒄𝒉𝒕
+Automatiseren handmatige controles schade IT beheer. Inrichting schade beheer tool in Azure (deel is al gebouwd) hier is voor nodig:
+
+𝒄#
+• .NET 8 en hoger
+• email bouwen met azure resources in dit geval gaat het expliciet om Microsoft graph.
+• loket moet uitgelezen worden maar ook emails versturen en emails verplaatsen en inhoud lezen.
+
+𝑨𝒏𝒈𝒖𝒍𝒂𝒓
+• angular material (geen must, enkel handig)
+• error afhandeling kunnen toevoegen
+• azure deployment
+• 𝐢𝐧𝐟𝐫𝐚𝐬𝐭𝐫𝐮𝐜𝐭𝐮𝐫𝐞 𝐯𝐢𝐚 𝐛𝐢𝐜𝐞𝐩𝐬 (𝐦𝐮𝐬𝐭).
+• Error logging opzetten en monitoring
+
+𝑩𝒊𝒄𝒆𝒑𝒔 𝒗𝒐𝒐𝒓 𝒐𝒑𝒛𝒆𝒕𝒕𝒆𝒏 𝒐𝒎𝒈𝒆𝒗𝒊𝒏𝒈𝒆𝒏
+• dit moet modulair gebeuren (dus via parameters).
+• parameters opzetten zodat het gekoppeld kan worden aan yml pipeline in git
+• commandline gebruik AZ
+
+𝑩𝒊𝒄𝒆𝒑𝒔 𝒎𝒂𝒌𝒆𝒏 𝒗𝒐𝒐𝒓:
+• managed identity
+• virtueel netwerk
+• timer based server (batch, maar dan als azure function)
+• web applicatie angular frontend, c# backend
+• database waarbij er een manier bedacht moet worden om de tabellen te genereren vanuit migrations
+• alles geparameteriseerd om via de yml pipeline de programmatuur te kunnen deployen over meerdere omgevingen waarbij ook bv endpoint url aangepast wordt. Programmatuur neemt contact op met externe website.
+• Azure APIm (geen must enkel en alleen handig). Wij moeten namelijk via apim werken en deze moet ingeregeld worden door gebruik te maken van json swagger definitie
+• Yml pipelines
+• vanuit git CI/CD pipeline bouwen geparameteriseerd de biceps starten
+• Handleiding schrijven uitbreiden (geen must, maar we willen kennis delen, dus wel heel handig).
+
+
+
+Interesse? Neem contact met ons op: 

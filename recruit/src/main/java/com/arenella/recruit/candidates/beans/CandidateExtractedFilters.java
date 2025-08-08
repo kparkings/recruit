@@ -86,37 +86,6 @@ public class CandidateExtractedFilters {
 	public Set<COUNTRY> getCountries(){
 		return this.countries;
 	}
-	/**
-	* Returns whether to filter on candidates in the Netherlands
-	* @return whether to filter on candidates in the Netherlands
-	*/
-	//public boolean getNetherlands(){
-	//	return this.netherlands;
-	//}
-	
-	/**
-	* Returns whether to filter on candidates in Belgium
-	* @return whether to filter on candidates in Belgium
-	*/
-	//public boolean getBelgium(){
-	//	return this.belgium;
-	//}
-	
-	/**
-	* Returns whether to filter on candidates in the UK
-	* @return whether to filter on candidates in the UK
-	*/
-	//public boolean getUK(){
-	//	return this.uk;
-	//}
-	
-	/**
-	* Returns whether to filter on candidates in Ireland
-	* @return whether to filter on candidates in Ireland
-	*/
-	//public boolean getIreland(){
-	//	return this.ireland;
-	//}
 	
 	/**
 	* Returns whether to filter on freelance roles

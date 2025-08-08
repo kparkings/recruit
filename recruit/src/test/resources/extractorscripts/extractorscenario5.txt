@@ -1,0 +1,29 @@
+Role: Senior BackEnd Developer (Java)
+Location: Helsinki, Finland (Hybrid/Flexible)
+Position: Full-time
+
+The Role:
+Design, develop, and maintain backend services using Java (Spring Boot)
+Collaborate with cross-functional teams to shape software architecture and system integrations
+
+Work on RESTful APIs, microservices, and cloud-native platforms
+Optimize performance, scalability, and reliability of backend systems
+Contribute to code reviews, testing strategies, and CI/CD pipelines
+
+Tech Stack
+Java, Spring Boot
+PostgreSQL, Redis, Kafka (or similar message brokers)
+Docker, Kubernetes, CI/CD pipelines
+AWS, GCP, or Azure (depending on the project)
+Git, Jira, and modern DevOps tools
+
+Requirements: 
+-Hands-on experience with Java backend development
+-Strong understanding of REST APIs, databases, and microservice architecture
+-Experience with unit testing, integration testing, and CI/CD workflows
+-Familiarity with Docker, Kubernetes, and cloud infrastructure is a plus
+-Excellent problem-solving skills and a proactive mindset
+
+Reach out to learn more.... 
+✉ Email: g.heron@tenthrevolution.com
+☎ Contact Number: +44(0)000000 (1587) / +358 000 0000

@@ -184,6 +184,126 @@ public class SkillExtractor implements JobSpecifcationFilterExtractor{
 				
 				break;
 			}
+			case kotlin: {
+				jobTypeBlacklist.addAll(Set.of("hardware", "backend", "engineer (java","developer (java","java developer", "java software engineer", "java engineer", "java software ontwikkelaar", "java ontwikkelaar", "fullstack java", "java backend developer"));
+				jobTypeBlacklist.addAll(blackDevelopers);
+				jobTypeBlacklist.addAll(blackListNonRecruiter);
+				break;
+			}
+			case ruby: {
+				jobTypeBlacklist.addAll(Set.of());
+				jobTypeBlacklist.addAll(blackTesters);
+				jobTypeBlacklist.addAll(blackListNonRecruiter);
+				break;
+			}
+			case rubyOnRails: {
+				jobTypeBlacklist.addAll(Set.of());
+				jobTypeBlacklist.addAll(blackTesters);
+				jobTypeBlacklist.addAll(blackListNonRecruiter);
+				break;
+			}
+			case go: {
+				jobTypeBlacklist.addAll(Set.of());
+				jobTypeBlacklist.addAll(blackTesters);
+				jobTypeBlacklist.addAll(blackListNonRecruiter);
+				break;
+			}
+			case react: {
+				jobTypeBlacklist.addAll(Set.of());
+				jobTypeBlacklist.addAll(blackTesters);
+				jobTypeBlacklist.addAll(blackListNonRecruiter);
+				break;
+			}
+			case vue: {
+				jobTypeBlacklist.addAll(Set.of());
+				jobTypeBlacklist.addAll(blackTesters);
+				jobTypeBlacklist.addAll(blackListNonRecruiter);
+				break;
+			}
+			case next: {
+				jobTypeBlacklist.addAll(Set.of());
+				jobTypeBlacklist.addAll(blackTesters);
+				jobTypeBlacklist.addAll(blackListNonRecruiter);
+				break;
+			}
+			case expres: {
+				jobTypeBlacklist.addAll(Set.of());
+				jobTypeBlacklist.addAll(blackTesters);
+				jobTypeBlacklist.addAll(blackListNonRecruiter);
+				break;
+			}
+			case rust: {
+				jobTypeBlacklist.addAll(Set.of());
+				jobTypeBlacklist.addAll(blackTesters);
+				jobTypeBlacklist.addAll(blackListNonRecruiter);
+				break;
+			}
+			case testManager: {
+				jobTypeBlacklist.addAll(Set.of());
+				jobTypeBlacklist.addAll(blackTesters);
+				jobTypeBlacklist.addAll(blackListNonRecruiter);
+				break;
+			}
+			case productOwner: {
+				jobTypeBlacklist.addAll(Set.of());
+				jobTypeBlacklist.addAll(blackTesters);
+				jobTypeBlacklist.addAll(blackListNonRecruiter);
+				break;
+			}
+			case node: {
+				jobTypeBlacklist.addAll(Set.of());
+				jobTypeBlacklist.addAll(blackTesters);
+				jobTypeBlacklist.addAll(blackListNonRecruiter);
+				break;
+			}
+			case python: {
+				jobTypeBlacklist.addAll(Set.of());
+				jobTypeBlacklist.addAll(blackTesters);
+				jobTypeBlacklist.addAll(blackListNonRecruiter);
+				break;
+			}
+			case angular: {
+				jobTypeBlacklist.addAll(Set.of());
+				jobTypeBlacklist.addAll(blackTesters);
+				jobTypeBlacklist.addAll(blackListNonRecruiter);
+				break;
+			}
+			case php: {
+				jobTypeBlacklist.addAll(Set.of());
+				jobTypeBlacklist.addAll(blackTesters);
+				jobTypeBlacklist.addAll(blackListNonRecruiter);
+				break;
+			}
+			case android: {
+				jobTypeBlacklist.addAll(Set.of());
+				jobTypeBlacklist.addAll(blackTesters);
+				jobTypeBlacklist.addAll(blackListNonRecruiter);
+				break;
+			}
+			case ios: {
+				jobTypeBlacklist.addAll(Set.of());
+				jobTypeBlacklist.addAll(blackTesters);
+				jobTypeBlacklist.addAll(blackListNonRecruiter);
+				break;
+			}
+			case ccplusplus: {
+				jobTypeBlacklist.addAll(Set.of());
+				jobTypeBlacklist.addAll(blackTesters);
+				jobTypeBlacklist.addAll(blackListNonRecruiter);
+				break;
+			}
+			case cobol: {
+				jobTypeBlacklist.addAll(Set.of());
+				jobTypeBlacklist.addAll(blackTesters);
+				jobTypeBlacklist.addAll(blackListNonRecruiter);
+				break;
+			}
+			case sap: {
+				jobTypeBlacklist.addAll(Set.of());
+				jobTypeBlacklist.addAll(blackTesters);
+				jobTypeBlacklist.addAll(blackListNonRecruiter);
+				break;
+			}
 			default:{
 				throw new RuntimeException("SkillExtractor not configred for " + JobType.Type.valueOf(filterBuilder.build().getJobTitle()));
 			}

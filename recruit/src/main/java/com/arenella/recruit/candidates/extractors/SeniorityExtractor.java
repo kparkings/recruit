@@ -1,5 +1,7 @@
 package com.arenella.recruit.candidates.extractors;
 
+import java.util.Set;
+
 import org.springframework.stereotype.Component;
 
 import com.arenella.recruit.candidates.beans.CandidateExtractedFilters.CandidateExtractedFiltersBuilder;
@@ -26,10 +28,15 @@ public class SeniorityExtractor implements JobSpecifcationFilterExtractor{
 		//6 jaar ervaring - Add these checking for all common levels also in english and french
 		
 		
-		boolean senior = documentText.contains("senior") || documentText.contains("expérimenté");
-		boolean medior = documentText.contains("medior");
+		boolean senior = documentText.contains("senior") || documentText.contains("expérimenté") || documentText.contains("ervaren") || documentText.contains("minimum 5") || documentText.contains("minimum 10");
+		boolean medior = documentText.contains("medior") || documentText.contains("3+") || documentText.contains("+3 ") || documentText.contains(">3") || documentText.contains("4+") || documentText.contains("+4 ") || documentText.contains(">4");
 		boolean junior = documentText.contains("junior") || documentText.contains("entry level") || documentText.contains("graduate ");
 		
+		Set<String> years = Set.of("+5 ","+6 ","+7 ","+8 ","+9 ","+10 ","+20 ","5+","6+","7+","8+","9+","10+","20+",">5 ",">6 ",">7 ",">8 ",">9 ",">10 ",">20");
+		
+		if (!senior) {
+			senior = years.stream().filter(y -> documentText.contains(y)).findAny().isPresent();
+		}
 		
 		if (!senior && !medior && !junior) {
 			return;
