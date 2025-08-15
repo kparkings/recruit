@@ -19,6 +19,7 @@ public class CandidateExtractedFilters {
 	private String 					experienceLTE 		= "";
 	private Set<Language.LANGUAGE> 	languages 			= new HashSet<>();
 	private Set<COUNTRY>			countries 			= new HashSet<>();
+	private String					city				= "";
 	private FREELANCE 				freelance;
 	private PERM 					perm;
 	private String					extractedText;
@@ -34,6 +35,7 @@ public class CandidateExtractedFilters {
 		this.experienceLTE 	= builder.experienceLTE;
 		this.languages 		= builder.languages;
 		this.countries		= builder.countries;
+		this.city			= builder.city;
 		this.freelance 		= builder.freelance;
 		this.perm 			= builder.perm;
 		this.extractedText	= builder.extractedText;
@@ -88,6 +90,14 @@ public class CandidateExtractedFilters {
 	}
 	
 	/**
+	* Returns the city to filter on
+	* @return City where candidate should be located
+	*/
+	public String getCity() {
+		return this.city;
+	}
+	
+	/**
 	* Returns whether to filter on freelance roles
 	* @return whether to filter on freelane roles
 	*/
@@ -131,6 +141,7 @@ public class CandidateExtractedFilters {
 		private String 					experienceLTE 		= "";
 		private Set<Language.LANGUAGE> 	languages 			= new HashSet<>();
 		private Set<COUNTRY>			countries 			= new HashSet<>();
+		private String					city				= "";
 		private FREELANCE 				freelance;
 		private PERM 					perm;
 		private String					extractedText;
@@ -184,6 +195,16 @@ public class CandidateExtractedFilters {
 		public CandidateExtractedFiltersBuilder countries(Set<COUNTRY> countries) {
 			this.countries.clear();
 			this.countries.addAll(countries);
+			return this;
+		}
+		
+		/**
+		* Sets the city where the candidate should be located
+		* @param city - city
+		* @return Builder
+		*/
+		public CandidateExtractedFiltersBuilder city(String city) {
+			this.city = city;
 			return this;
 		}
 		

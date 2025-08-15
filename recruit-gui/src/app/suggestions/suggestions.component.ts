@@ -254,7 +254,7 @@ export class SuggestionsComponent implements OnInit {
 			this.doScrollTop();	
 		}
 		
-		if (!this.savedCandidatesLoaded) {
+		if (!this.savedCandidatesLoaded && !this.isAuthenticatedAsCandidate()) {
 			this.savedCandidatesLoaded = true;
 			this.candidateService.fetchSavedCandidates().subscribe(response => {
 				this.savedCandidates = response;
@@ -306,6 +306,10 @@ export class SuggestionsComponent implements OnInit {
 	*/
 	public showSuggestionsResults():void{
 	
+		if (this.isAuthenticatedAsCandidate()) {
+			return;
+		}
+		
 		this.candidateService.fetchSavedCandidates().subscribe(response => {
 			this.savedCandidates = response;
 		});
@@ -571,6 +575,13 @@ export class SuggestionsComponent implements OnInit {
 	public choseSubscription():void{
 		this.creditsService.buySubscription();
 		this.router.navigate(['recruiter-account']);
+	}
+	
+	/**
+	* Whether or not the user has authenticated as an Candidate user 
+	*/
+	public isAuthenticatedAsCandidate():boolean {
+		return sessionStorage.getItem('isCandidate') === 'true';
 	}
 
 }

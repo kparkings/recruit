@@ -26,7 +26,10 @@ public class DocumentFilterExtractionUtil {
 	private SeniorityExtractor 		seniorityExtractor;
 	
 	@Autowired
-	CountryExtractor 				countryExtractor;
+	private CountryExtractor 		countryExtractor;
+	
+	@Autowired
+	private CityExtractor			cityExtractor;
 	
 	@Autowired
 	private LanguageExtractor 		languageExtractor;
@@ -159,6 +162,7 @@ public class DocumentFilterExtractionUtil {
 		jobTitleExtractor.extractFilters(documentText, filterBuilder);
 		seniorityExtractor.extractFilters(documentText, filterBuilder);
 		countryExtractor.extractFilters(documentText, filterBuilder);
+		cityExtractor.extractFilters(documentText, filterBuilder);
 		languageExtractor.extractFilters(documentText, filterBuilder);
 		skillExtractor.extractFilters(documentText, filterBuilder);
 		contractTypeExtractor.extractFilters(documentText, filterBuilder);	

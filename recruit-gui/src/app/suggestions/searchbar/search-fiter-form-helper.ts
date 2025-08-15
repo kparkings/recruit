@@ -58,6 +58,14 @@ export class SearchBarFilterFormHelper{
 			}
 		}
 		
+		if(extractedFilters.city != "") {
+		
+			extractedFilters.countries.forEach(country => {
+				filterForm.get(country)?.setValue(false);
+			});	
+		
+		}
+		
 	}
 	
 	/**

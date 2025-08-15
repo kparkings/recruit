@@ -34,7 +34,7 @@ public class JobType{
 		go("Golang Developer"),
 		react("React Developer"),
 		vue("Vue Developer"),
-		next("NextDeveloper"),
+		next("Next Developer"),
 		expres("Expres Developer"),
 		rust("Rust Developer"),
 		testManager("Test Manager"),

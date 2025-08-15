@@ -15,14 +15,14 @@ import com.arenella.recruit.candidates.enums.PERM;
 * Unit tests for the CandidateExtractedFilters class
 * @author K Parkings
 */
-public class CandidateExtractedFiltersTest {
+class CandidateExtractedFiltersTest {
 
 	/**
 	* Tests construction via the Builder
 	* @throws Exception
 	*/
 	@Test
-	public void testConstructor() throws Exception{
+	void testConstructor() {
 		
 		final String 					jobTitle			= "Java developer";
 		final Set<String> 				skills 				= Set.of("java", "angular");
@@ -30,6 +30,7 @@ public class CandidateExtractedFiltersTest {
 		final String 					experienceGTE 		= "2";
 		final String 					experienceLTE 		= "5";
 		final Set<COUNTRY>				countries			= Set.of(COUNTRY.ITALY, COUNTRY.BELGIUM);
+		final String					city				= "amsterdam";
 		final FREELANCE 				freelance			= FREELANCE.TRUE;
 		final PERM 						perm				= PERM.TRUE;
 		final String					extractedText		= "some text";
@@ -44,6 +45,7 @@ public class CandidateExtractedFiltersTest {
 					.perm(perm)
 					.skills(skills)
 					.countries(countries)
+					.city(city)
 					.extractedText(extractedText)
 				.build();
 		
@@ -53,6 +55,7 @@ public class CandidateExtractedFiltersTest {
 		assertEquals(freelance, 	filters.getFreelance());
 		assertEquals(perm, 			filters.getPerm());
 		assertEquals(extractedText, filters.getExtractedText());
+		assertEquals(city, 			filters.getCity());
 		assertEquals(2, 			filters.getLanguages().size());
 		
 		assertTrue(filters.getSkills().contains("java"));
@@ -69,8 +72,9 @@ public class CandidateExtractedFiltersTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testConstructorDefaults() throws Exception{
+	void testConstructorDefaults() {
 		
+		final String 		city				= "";
 		final String 		jobTitle			= "";
 		final String 		experienceGTE 		= "";
 		final String 		experienceLTE 		= "";
@@ -80,6 +84,7 @@ public class CandidateExtractedFiltersTest {
 		CandidateExtractedFilters filters = CandidateExtractedFilters.builder().build();
 					
 		assertEquals(jobTitle, 		filters.getJobTitle());
+		assertEquals(city, 			filters.getCity());
 		assertEquals(experienceGTE, filters.getExperienceGTE());
 		assertEquals(experienceLTE, filters.getExperienceLTE());
 		assertEquals(freelance, 	filters.getFreelance());

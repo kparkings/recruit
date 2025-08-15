@@ -15,8 +15,8 @@ import com.arenella.recruit.candidates.enums.PERM;
 @Component
 public class ContractTypeExtractor implements JobSpecifcationFilterExtractor{
 
-	final Set<String> perm 		= Set.of("0k","5k","annual bonus", "vast contract","vakantiedagen","reiskostenvergoeding", "% bonus", "jaarsalaris","+ bonus", "bruto per jaar","bruto per maand", "wat bieden we", "maandsalaris", "permanent", "perm", "vast", "vaste", "per year", "per anum", "days holiday", "vakantie dagen", "vacation days", "salary", "full-time", "full time");
-	final Set<String> contract 	= Set.of("b2b","optie tot verlenging","6 month", "3 month", "interim", "ir35","freelance", "per hour", "per uur", "uurtarief", "hourly rate", "day rate","month contract","per day");
+	final Set<String> perm 		= Set.of("altersvorsorge ","5,000","0,000","5.000","0.000", "0k","5k","annual bonus", "vast contract","vakantiedagen","reiskostenvergoeding", "% bonus", "jaarsalaris","+ bonus", "bruto per jaar","bruto per maand", "wat bieden we", "maandsalaris", "permanent", "perm", "vast", "vaste", "per year", "per anum", "days holiday", "vakantie dagen", "vacation days", "salary", "full-time", "full time");
+	final Set<String> contract 	= Set.of("euros/day","daily rate","b2b","optie tot verlenging","6 month", "3 month", "interim", "ir35","freelance", "per hour", "per uur", "uurtarief", "hourly rate", "day rate","month contract","per day");
 	
 	/**
 	* Refer to JobSpecifcationFilterExtractor interface for details
@@ -26,7 +26,7 @@ public class ContractTypeExtractor implements JobSpecifcationFilterExtractor{
 		
 		boolean isPerm 		= perm.stream().filter(documentText::contains).count() > 0;
 		boolean isContract 	= contract.stream().filter(documentText::contains).count() > 0;
-		
+			
 		if (isPerm && isContract) {
 			return;
 		}

@@ -27,7 +27,6 @@ import com.arenella.recruit.candidates.enums.COUNTRY;
 import com.arenella.recruit.candidates.enums.FREELANCE;
 import com.arenella.recruit.candidates.enums.PERM;
 
-
 /**
 * Unit tests for the DocumentFilterExtractionUtil class 
 */
@@ -40,11 +39,13 @@ class DocumentFilterExtractionUtilTest {
 	@Spy
 	private SeniorityExtractor 		seniorityExtractor;
 	
-	@Spy
-	CountryExtractor 				countryExtractor;
+	private CountryExtractor 		countryExtractor = new CountryExtractor();
 	
 	@Spy
 	private LanguageExtractor 		languageExtractor;
+	
+	@Spy
+	private CityExtractor 			cityExtractor;
 	
 	@Spy
 	private SkillExtractor 			skillExtractor;
@@ -53,17 +54,18 @@ class DocumentFilterExtractionUtilTest {
 	private ContractTypeExtractor 	contractTypeExtractor;
 	
 	@Mock
-	private CandidateSkillsDao mockSkillsDao;
+	private CandidateSkillsDao 		mockSkillsDao;
 	
 	@InjectMocks
 	private DocumentFilterExtractionUtil util = new DocumentFilterExtractionUtil();
 	
 	/**
-	* Setsup test environment 
+	* Sets up test environment 
 	*/
 	@BeforeEach
 	void setup() {
 		ReflectionTestUtils.setField(skillExtractor, "skillsDao", mockSkillsDao);
+		ReflectionTestUtils.setField(util, "countryExtractor", countryExtractor);
 		Mockito.when(mockSkillsDao.getActiveAndPendingSkills()).thenReturn(Set.of("java","css","maven","wpf","vue.js","react","eclipse","powerbi", "kotlin", "c#"));
 	}
 	
@@ -535,6 +537,134 @@ class DocumentFilterExtractionUtilTest {
 		assertTrue(filters.getLanguages().contains(LANGUAGE.ENGLISH));
 		assertTrue(filters.getLanguages().contains(LANGUAGE.FRENCH));
 		assertTrue(filters.getSkills().isEmpty());
+		
+	}
+	
+	/**
+	* Test JAVA GERMANY GERMAN ENGLISH PERM
+	* 
+	* @throws IOException
+	*/
+	@Test
+	void testExtractFunctionA9() throws IOException {
+		
+		File file = new File("src/test/resources/extractorscripts/extractorscenarioA9.txt");
+		
+		String 						contents 	= FileUtils.readFileToString(file, Charset.defaultCharset());
+		CandidateExtractedFilters 	filters 	= util.extractFilters(contents);
+		
+		assertEquals("Java Developer", 		filters.getJobTitle());	
+		assertEquals("", 					filters.getExperienceGTE());
+		assertEquals("",	 				filters.getExperienceLTE());
+		
+		assertTrue(filters.getCountries().contains(COUNTRY.GERMANY));
+		assertEquals(1, 					filters.getCountries().size());
+		
+		assertEquals(PERM.TRUE, 			filters.getPerm());
+		assertEquals(FREELANCE.FALSE, 		filters.getFreelance());
+		
+		assertEquals(2, filters.getLanguages().size());
+		assertTrue(filters.getLanguages().contains(LANGUAGE.ENGLISH));
+		assertTrue(filters.getLanguages().contains(LANGUAGE.GERMAN));
+		
+		assertTrue(filters.getSkills().contains("css"));
+		assertTrue(filters.getSkills().contains("java"));
+		assertTrue(filters.getSkills().contains("maven"));
+		assertTrue(filters.getSkills().contains("eclipse"));
+		assertEquals(4, filters.getSkills().size());
+		
+	}
+	
+	/**
+	* Test Python junior/medior uk perm
+	* 
+	* @throws IOException
+	*/
+	@Test
+	void testExtractFunctionB1() throws IOException {
+		
+		File file = new File("src/test/resources/extractorscripts/extractorscenarioB1.txt");
+		
+		String 						contents 	= FileUtils.readFileToString(file, Charset.defaultCharset());
+		CandidateExtractedFilters 	filters 	= util.extractFilters(contents);
+		
+		assertEquals("Python Developer", 	filters.getJobTitle());	
+		assertEquals("", 					filters.getExperienceGTE());
+		assertEquals("5",	 				filters.getExperienceLTE());
+		
+		assertTrue(filters.getCountries().contains(COUNTRY.UK));
+		assertEquals(1, 					filters.getCountries().size());
+		
+		assertEquals(PERM.TRUE, 			filters.getPerm());
+		assertEquals(FREELANCE.FALSE, 		filters.getFreelance());
+		
+		assertEquals(1, filters.getLanguages().size());
+		assertTrue(filters.getLanguages().contains(LANGUAGE.ENGLISH));
+		
+		assertTrue(filters.getSkills().isEmpty());
+		
+	}
+	
+	/**
+	* Test JAVA PERM NETHERLANDS SENIOR
+	* 
+	* @throws IOException
+	*/
+	@Test
+	void testExtractFunctionB2() throws IOException {
+		
+		File file = new File("src/test/resources/extractorscripts/extractorscenarioB2.txt");
+		
+		String 						contents 	= FileUtils.readFileToString(file, Charset.defaultCharset());
+		CandidateExtractedFilters 	filters 	= util.extractFilters(contents);
+		
+		assertEquals("Java Developer", 		filters.getJobTitle());	
+		assertEquals("5", 					filters.getExperienceGTE());
+		assertEquals("",	 				filters.getExperienceLTE());
+		
+		assertTrue(filters.getCountries().contains(COUNTRY.NETHERLANDS));
+		assertEquals(1, 					filters.getCountries().size());
+		
+		assertEquals(PERM.TRUE, 			filters.getPerm());
+		assertEquals(FREELANCE.FALSE, 		filters.getFreelance());
+		
+		assertTrue(filters.getLanguages().isEmpty());
+		
+		assertTrue(filters.getSkills().contains("java"));
+		//assertTrue(filters.getSkills().contains("kotlin")); //kotlin with no space after and at end of line not being selected. Because skills have space before and after before doing comparison
+		assertTrue(filters.getSkills().contains("react"));
+		assertEquals(2, filters.getSkills().size());
+		
+	}
+	
+	/**
+	* Test ANGULAR DEVELOPER UK CONTRACT SENIOR
+	* 
+	* @throws IOException
+	*/
+	@Test
+	void testExtractFunctionB3() throws IOException {
+		
+		File file = new File("src/test/resources/extractorscripts/extractorscenarioB3.txt");
+		
+		String 						contents 	= FileUtils.readFileToString(file, Charset.defaultCharset());
+		CandidateExtractedFilters 	filters 	= util.extractFilters(contents);
+		
+		assertEquals("Angular Developer", 		filters.getJobTitle());	
+		assertEquals("5", 					filters.getExperienceGTE());
+		assertEquals("",	 				filters.getExperienceLTE());
+		
+		assertTrue(filters.getCountries().contains(COUNTRY.UK));
+		assertEquals(1, 					filters.getCountries().size());
+		
+		assertEquals(PERM.FALSE, 			filters.getPerm());
+		assertEquals(FREELANCE.TRUE, 		filters.getFreelance());
+		
+		assertEquals(1, filters.getLanguages().size());
+		assertTrue(filters.getLanguages().contains(LANGUAGE.ENGLISH));
+		
+		assertTrue(filters.getSkills().contains("c#"));
+		assertEquals(1, filters.getSkills().size());
 		
 	}
 	

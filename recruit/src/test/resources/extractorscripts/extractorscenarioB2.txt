@@ -1,0 +1,40 @@
+About the job
+Over Profit4Cloud
+
+Wij zijn sinds 2015 gespecialiseerd in (Cloud-native) softwareontwikkeling, consultancy en training. Onze projecten voeren wij zowel in-huis als op locatie uit voor opdrachtgevers die actief zijn in Fintech, HealthTech, Retail, Industrie of Overheid. Bij Profit4Cloud kom je terecht in een inspirerende, leergierige en sociale omgeving. Je wordt bij ons goed begeleid en beloond, je ontwikkelt je in een tempo dat bij je past en in de richting die je het meeste uitdaagt. Oog voor het individu noemen wij dat.
+
+
+Over de rol
+
+Als Full-stack Java Software Engineer bij Profit4Cloud sta jijzelf aan het roer van je carrière. Je wilt beter worden in je vak en bent hongerig naar kennis. Ons grootste goed: betrokken en slimme collega’s. Daarom bieden wij je frequente coachingsgesprekken met je Peoplemanager, een onbeperkt opleidingsbudget, leuke sociale events en wij luisteren vooral goed naar je wensen. Welk ontwikkelpad heb je voor ogen? Wat wil je leren? Hoe word je geprikkeld? Dit is voor ons voeding richting bepaalde opdrachtgevers en zo sluiten de projecten aan op jouw ambities. Onze missie is om collega’s te verwennen met gave en uitdagende projecten en om toegevoegde waarde te leveren aan onze opdrachtgevers. 
+
+
+
+Jij neemt mee:
+
+Een afgeronde Bachelor- of Masterstudie in bijvoorbeeld Informatica of Software Engineering
+Minimaal 8 jaar back-end ervaring in Java of Kotlin
+Front-end ervaring met Angular, React en/of Vue
+Ervaring met Agile/Scrum, Design Patterns en enterprise Java frameworks zoals Spring Boot of JavaEE
+
+
+Vereiste vaardigheden:
+
+Spring (Boot), Quarkus of een ander JVM (microservice) framework
+CI/CD & DevOps (testautomatisering, geautomatiseerde deployments, monitoring)
+Cloudinfrastructuur: AWS, Azure, Docker, Kubernetes, OpenShift
+Event driven architecturen: Kafka, Redis, Vert.x
+
+
+Arbeidsvoorwaarden
+
+Bij Profit4Cloud ontvang je een salaris, passend bij je kennis en ervaring, tussen de € 5.000,- en € 7.000,- bruto per maand met hiernaast een vaste 13e maand, 8% vakantiegeld, vrije keuze met betrekking tot een laptop en een lease-auto of mobiliteitsbudget. We gaan investeren in jouw professionele ontwikkeling en daarom krijg je van ons ook:
+
+
+Meestal een vast contract;
+26 vakantiedagen;
+Collectieve pensioenregeling;
+Gave social events;
+Gratis Tech Updates;
+E-boekenbudget of welzijnsbudget van €225,- per jaar;
+Onbeperkt opleidingsbudget.

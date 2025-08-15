@@ -28,8 +28,8 @@ public class SeniorityExtractor implements JobSpecifcationFilterExtractor{
 		//6 jaar ervaring - Add these checking for all common levels also in english and french
 		
 		
-		boolean senior = documentText.contains("senior") || documentText.contains("expérimenté") || documentText.contains("ervaren") || documentText.contains("minimum 5") || documentText.contains("minimum 10");
-		boolean medior = documentText.contains("medior") || documentText.contains("3+") || documentText.contains("+3 ") || documentText.contains(">3") || documentText.contains("4+") || documentText.contains("+4 ") || documentText.contains(">4");
+		boolean senior = documentText.contains("lead engineer") || documentText.contains("lead developer") || documentText.contains("senior") || documentText.contains("expérimenté") || documentText.contains("expert ") || documentText.contains("ervaren") || documentText.contains("minimum 5") || documentText.contains("minimum 10") || documentText.contains("8 years") || documentText.contains("8 jaar")|| documentText.contains("10 years") || documentText.contains("10 jaar");
+		boolean medior = documentText.contains("medior") || documentText.contains("midweight") || documentText.contains("3+") || documentText.contains("+3 ") || documentText.contains(">3") || documentText.contains("4+") || documentText.contains("+4 ") || documentText.contains(">4");
 		boolean junior = documentText.contains("junior") || documentText.contains("entry level") || documentText.contains("graduate ");
 		
 		Set<String> years = Set.of("+5 ","+6 ","+7 ","+8 ","+9 ","+10 ","+20 ","5+","6+","7+","8+","9+","10+","20+",">5 ",">6 ",">7 ",">8 ",">9 ",">10 ",">20");

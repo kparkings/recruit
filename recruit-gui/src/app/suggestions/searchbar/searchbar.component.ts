@@ -611,6 +611,13 @@ export class SearchbarComponent {
 	public  processJobSpecExtratedFilters(extractedFilters:ExtractedFilters):void{
 		this.resetSearchFilters();
 		SearchBarFilterFormHelper.applyExtractedFiltersToForm(extractedFilters, this.skillFilters, this.suggestionFilterForm);				
+	
+		if(	extractedFilters.city != "") {		
+			console.log("TTTTTTTTTTTTTTTTT");
+				this.boop(extractedFilters);
+				
+		//	});
+		}
 	}
 	
 	/**
@@ -670,6 +677,11 @@ export class SearchbarComponent {
 	}
 	
 	public fetchSavedSearches():void{
+		
+		if (this.isAuthenticatedAsCandidate()) {
+			return;
+		}
+		
 		this.savedSearches 				= new Array<SavedCandidateSearch>();
 		this.acitveSavedCandidateSearch = new SavedCandidateSearch();
 		this.candidateService.getSavedSearchQueries().subscribe(res => {
@@ -811,6 +823,28 @@ export class SearchbarComponent {
 	}
 	
 	/** End Saved Searches */
+	
+	/**
+	* Whether or not the user has authenticated as an Candidate user 
+	*/
+	public isAuthenticatedAsCandidate():boolean {
+		return sessionStorage.getItem('isCandidate') === 'true';
+	}
 		
+	
+	public boop(extractedFilters:ExtractedFilters):void{
+		console.log("xxxxxxxxxxxxxx");
+		let country:string = extractedFilters.countries[0];
+		this.suggestionFilterForm.get('locationCountry')?.setValue(country);
+		this.citiesForSelectedCountry = new Array<City>();
+		this.candidateService.getCitiesForCountry(country).subscribe(b => {
+			this.citiesForSelectedCountry = b;	
+			this.suggestionFilterForm.get('locationCity')?.setValue(extractedFilters.city);
+			this.suggestionFilterForm.get('locationDistance')?.setValue("50");
+		});
+		
+		
+		
+	}
 	
 }

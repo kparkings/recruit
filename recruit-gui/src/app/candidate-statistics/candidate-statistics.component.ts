@@ -29,7 +29,9 @@ export class CandidateStatisticsComponent {
 	*/
 	public refreshStats():void {
 		
-		this.statisticsService.getProfileViewsStatisticsForCandidate("10").subscribe(stats => {
+		let candidateId:string = ""+sessionStorage.getItem("userId");
+		
+		this.statisticsService.getProfileViewsStatisticsForCandidate(candidateId).subscribe(stats => {
 			let labels:Array<string> 			= new Array<string>();
 			let data:Array<string> 				= new Array<string>();
 			stats.forEach(stat => {

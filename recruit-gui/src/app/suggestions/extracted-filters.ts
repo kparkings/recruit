@@ -12,6 +12,7 @@ export class ExtractedFilters{
 	public perm:string 					= '';
 	public languages:Array<string>		= new Array<string>();
 	public countries:Array<string>		= new Array<string>();
+	public city:string					= "";
 	public eu:boolean					= false;
 	public world:boolean				= false;
 	public extractedText:string | any;

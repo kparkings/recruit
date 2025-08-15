@@ -76,15 +76,22 @@ export class CandidateProfileComponent {
 	* Lifecycle - Init 
 	*/	
 	ngOnInit():void{
-		this.candidateService.fetchSavedCandidates().subscribe(response => {
-			this.savedCandidates = response;
-		})
+		
+		if (!this.isAuthenticatedAsCandidate()) {
+			this.candidateService.fetchSavedCandidates().subscribe(response => {
+				this.savedCandidates = response;
+			})	
+		}
+		
+		
 		
 		if (this.parentComponent == 'savedCandidates') {
 			this.currentView = 'saved-candidates';
 		}
 		
-		this.doCreditCheck();
+		if (!this.isAuthenticatedAsCandidate()) {
+			this.doCreditCheck();
+		}
 		
 	}
 	
@@ -246,7 +253,11 @@ export class CandidateProfileComponent {
 	
 	public doCreditCheckByCount():void{
 		
-		if(this.currentUserAuth.isAdmin()){
+		if (this.isAuthenticatedAsCandidate()) {
+			return;
+		}
+		
+		if (this.currentUserAuth.isAdmin()){
 			this.passedCreditCheck = true;
 		} else {
 			this.curriculumService.getCreditCount().subscribe(count => {
@@ -258,7 +269,11 @@ export class CandidateProfileComponent {
 	
 	public doCreditCheck():void{
 		
-		if(this.currentUserAuth.isAdmin()){
+		if (this.isAuthenticatedAsCandidate()) {
+			return;
+		}
+				
+		if (this.currentUserAuth.isAdmin()){
 			this.passedCreditCheck = true;
 		} else {
 			this.curriculumService.getCreditCount().subscribe(count => {
@@ -500,6 +515,13 @@ export class CandidateProfileComponent {
 		}
 		
 		return this.passedCreditCheck && (!this.isCandidate());
+	}
+	
+	/**
+	* Whether or not the user has authenticated as an Candidate user 
+	*/
+	public isAuthenticatedAsCandidate():boolean {
+		return sessionStorage.getItem('isCandidate') === 'true';
 	}
 	
 }

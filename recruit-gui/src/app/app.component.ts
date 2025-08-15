@@ -89,12 +89,18 @@ export class AppComponent {
 			}
 		});
 		
-		this.refreschUnreadAlerts();
+		if(!this.isAuthenticatedAsCandidate()){
+			this.refreschUnreadAlerts();
+		}
 	}
 	
 	private lastAlertRefresh!:Date;
 	
 	public refreschUnreadAlerts():void{
+		
+		if (this.isAuthenticatedAsCandidate()){
+			return;
+		}
 		
 		let now:Date = new Date();
 		
@@ -118,11 +124,10 @@ export class AppComponent {
 				});
 			}
 		
-			//this.mpService.updateUnseenMpPosts();
 			this.mpService.fetchUnseenOpenPositionCount().subscribe(val => {
-			//this.mpService.fetchUnseenMPPosts().subscribe(val => {
 				this.unseenMpPosts = val;
 			});
+			
 			this.emailService.updateUnseenEmails();
 			this.emailService.fetchUnseenEmailsCount().subscribe(val => {
 				this.unseenEmails = val;
@@ -132,6 +137,13 @@ export class AppComponent {
 		
 	}
 	
+	/**
+	* Whether or not the user has authenticated as an Candidate user 
+	*/
+	public isAuthenticatedAsCandidate():boolean {
+		return sessionStorage.getItem('isCandidate') === 'true';
+	}
+		
 	/**
 	* Returns the name of the current T&C acceptance cookie
 	*/

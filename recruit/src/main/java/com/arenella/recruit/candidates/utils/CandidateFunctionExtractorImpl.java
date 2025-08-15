@@ -37,7 +37,7 @@ public class CandidateFunctionExtractorImpl implements CandidateFunctionExtracto
 		all.put(FUNCTION.SCRUM_MASTER, 				Set.of("scrum master","scrum","master"));
 		all.put(FUNCTION.DATA_SCIENTIST, 			Set.of("data scientist","data", "data analyst","bi","business intelligence"));
 		all.put(FUNCTION.NETWORK_ADMINISTRATOR, 	Set.of("network administrator","devops","network","admin","administrator","ops","operations", "cisco", "cloud", "windows", "ansible", "kubernetes", "salesforce","docker", "citrix", "servicenow", "tibco", "warehouse", "terraform", "dns", "o365", "vmware", "scripting", "firewall", "wireshark", "azure"));
-		all.put(FUNCTION.SOFTWARE_DEVELOPER, 		Set.of("software developer","wordpress","software engineer", "vb", "pl-sql","t-sql", "r developer", "groovy", "sql", "swift",  "scala", "microservices", "oracle", "plsql", "bdd", "dba", "embedded", "oauth", "liferay"));
+		all.put(FUNCTION.SOFTWARE_DEVELOPER, 		Set.of("software developer","wordpress","software engineer", "vb", "pl-sql","t-sql", "groovy", "sql", "swift",  "scala", "microservices", "oracle", "plsql", "bdd", "dba", "embedded", "oauth", "liferay"));
 		all.put(FUNCTION.IT_SECURITY, 				Set.of("it security","security","cyber","malware","owasp", "pen"));
 		all.put(FUNCTION.IT_RECRUITER, 				Set.of("it recruiter","recruiter","account manager"));
 		all.put(FUNCTION.SOFTWARE_DEV_IN_TEST, 		Set.of("sdet","tester", "developer in test","qa","automation tester", "selenium", "cucumber","testing"));
@@ -85,8 +85,6 @@ public class CandidateFunctionExtractorImpl implements CandidateFunctionExtracto
 		searchText = searchText + " ";
 		
 		final String sanitizedSearchText = searchText.toLowerCase();
-		
-		
 		
 		all.keySet().forEach(function -> {
 			if (all.get(function).stream().filter(value -> sanitizedSearchText.contains(value + " ")).count() > 0) {

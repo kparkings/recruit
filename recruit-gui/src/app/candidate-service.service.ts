@@ -568,6 +568,7 @@ export class CandidateServiceService {
 	}
 	
 	public getSavedSearchQueries(): Observable<Array<SavedCandidateSearch>>{
+		
 		const backendUrl:string = environment.backendUrl +'candidate/saved-search-request';
 		
 		return this.httpClient.get<Array<SavedCandidateSearch>>(backendUrl, this.httpOptions);
@@ -601,5 +602,5 @@ export class CandidateServiceService {
 	}
 	
 	/** End Saved Searches */
-  			
+			
 }

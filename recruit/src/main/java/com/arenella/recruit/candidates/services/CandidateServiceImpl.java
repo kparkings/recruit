@@ -68,7 +68,6 @@ import com.arenella.recruit.candidates.utils.CandidateSuggestionUtil;
 import com.arenella.recruit.candidates.utils.CandidateSuggestionUtil.suggestion_accuracy;
 import com.arenella.recruit.candidates.utils.GeoZoneSearchUtil;
 import com.arenella.recruit.candidates.utils.GeoZoneSearchUtil.GEO_ZONE;
-import com.arenella.recruit.candidates.utils.SkillsSynonymsUtil;
 import com.arenella.recruit.curriculum.enums.FileType;				//TODO: [KP] Why are we referencing other service
 import com.arenella.recruit.emailservice.adapters.RequestSendEmailCommand;
 import com.arenella.recruit.emailservice.beans.Email.EmailRecipient;
