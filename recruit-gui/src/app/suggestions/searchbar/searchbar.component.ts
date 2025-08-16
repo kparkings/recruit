@@ -31,7 +31,8 @@ export class SearchbarComponent {
 	@ViewChild('searchTypeFilterSelectionModal', {static:true}) searchTypeFilterSelectionModal!: ElementRef<HTMLDialogElement>;
 	@ViewChild('paidSubscriptionModal', {static:true})			paidSubscriptionBox!: ElementRef<HTMLDialogElement>;
 	@ViewChild('savedSearchQueriesModal', {static:true})		savedSearchQueriesBox!: ElementRef<HTMLDialogElement>;
-	
+	@ViewChild('extractedFiltersModal', {static:true})			extractedFiltersModal!: ElementRef<HTMLDialogElement>;
+	 	
 	@Output() newSuggestionResults 								= new EventEmitter<Array<Candidate>>();
 	
 	private FIRST_NAME_DEFAULT:string 							= 'First Name';
@@ -348,6 +349,19 @@ export class SearchbarComponent {
 	*/
 	public switchLocationFilterView(view:string):void{
 		this.showLocationFilters = view;
+		setTimeout(()=>{ 
+			if (this.extractedFilters.city != "") {
+				this.suggestionFilterForm.get('locationCity')?.setValue(this.extractedFilters.city);
+			}	
+		 }, 50)
+		
+	}
+	
+	public getIso2CodeByCountryName(country:string):string {
+		
+		let countries:Array<SupportedCountry> = this.supportedCountries.filter(sc => sc.name == country);
+		
+		return countries[0].iso2Code;
 	}
 	
 	/**
@@ -463,6 +477,7 @@ export class SearchbarComponent {
 	*/
 	public resetSearchFilters():void{
 			
+		this.extractedFilters = new ExtractedFilters();
 		this.suggestionFilterForm 	= SearchBarFilterFormHelper.resetSuggestionFilterForm(this.suggestionFilterForm);
 		this.filterTypeFormGroup 	= SearchBarFilterFormHelper.resetSearchTytpeFilterForm(this.filterTypeFormGroup);
 						
@@ -604,20 +619,22 @@ export class SearchbarComponent {
 		    	});
 	}	
 	
+	public extractedFilters:ExtractedFilters = new ExtractedFilters();
 	/**
 	* Applies a set of previously extracted filter values to the 
 	* filters form
 	*/
 	public  processJobSpecExtratedFilters(extractedFilters:ExtractedFilters):void{
+		
 		this.resetSearchFilters();
+		this.extractedFilters = extractedFilters;
+		
 		SearchBarFilterFormHelper.applyExtractedFiltersToForm(extractedFilters, this.skillFilters, this.suggestionFilterForm);				
 	
-		if(	extractedFilters.city != "") {		
-			console.log("TTTTTTTTTTTTTTTTT");
-				this.boop(extractedFilters);
-				
-		//	});
-		}
+		this.showExtractedFiltersModal();
+		
+		this.boop(extractedFilters);
+		
 	}
 	
 	/**
@@ -833,7 +850,6 @@ export class SearchbarComponent {
 		
 	
 	public boop(extractedFilters:ExtractedFilters):void{
-		console.log("xxxxxxxxxxxxxx");
 		let country:string = extractedFilters.countries[0];
 		this.suggestionFilterForm.get('locationCountry')?.setValue(country);
 		this.citiesForSelectedCountry = new Array<City>();
@@ -845,6 +861,18 @@ export class SearchbarComponent {
 		
 		
 		
+	}
+	
+	public boopPart2():void{
+		this.suggestionFilterForm.get('locationCity')?.setValue(this.extractedFilters.city);
+			
+	}
+	
+	/**
+	* Displays the extraced filters dialog box
+	*/
+	private showExtractedFiltersModal():void{
+		this.extractedFiltersModal.nativeElement.showModal();
 	}
 	
 }

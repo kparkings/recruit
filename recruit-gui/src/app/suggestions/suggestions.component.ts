@@ -49,7 +49,7 @@ export class SuggestionsComponent implements OnInit {
  	@ViewChild('confirmDeleteModal', {static:true})				confirmDeleteDialogBox!: ElementRef<HTMLDialogElement>;
  	@ViewChild('contactBox', {static:true})						contactDialogBox!: ElementRef<HTMLDialogElement>;
  	@ViewChild('paidSubscriptionModal', {static:true})			paidSubscriptionBox!: ElementRef<HTMLDialogElement>;
- 	@ViewChild('searchTypeFilterSelectionModal', {static:true}) searchTypeFilterSelectionModal!: ElementRef<HTMLDialogElement>;
+	@ViewChild('searchTypeFilterSelectionModal', {static:true}) searchTypeFilterSelectionModal!: ElementRef<HTMLDialogElement>;
 	@ViewChild(SearchbarComponent) 								searchBar!:SearchbarComponent;
 	
 	public currentUserAuth:CurrentUserAuth 						= new CurrentUserAuth();
@@ -187,8 +187,6 @@ export class SuggestionsComponent implements OnInit {
 		} 
 		
 		this.initSupportedCountries();
-		//this.candidateService.fetchCandidateTotals().subscribe(totals => this.candidateTotals = totals);
-		//this.appComponent.refreschUnreadAlerts();
 		
 		if (this.subscription) {
 			this.subscription.unsubscribe();
