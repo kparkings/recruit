@@ -170,4 +170,13 @@ public class SkillsSynonymsUtilImpl implements SkillsSynonymsUtil{
 	
 	}
 
+	@Override
+	public Set<String> extractSynonymsForSkills(Set<String> skills) {
+		
+		Set<String> synonyms = new HashSet<>();
+		this.addSynonymsForSkills(synonyms, skills);
+		return synonyms;
+		
+	}
+
 }

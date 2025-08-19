@@ -1,9 +1,11 @@
 package com.arenella.recruit.candidates.utils;
 
+import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.arenella.recruit.candidates.beans.CandidateFilterOptions;
@@ -19,6 +21,10 @@ import com.arenella.recruit.candidates.beans.Language.LEVEL;
 */
 @Component
 public class CandidateSuggestionUtilImpl implements CandidateSuggestionUtil{
+	
+	@Autowired
+	private SkillsSynonymsUtil skillsSynonymsUtil;
+
 
 	public static final int POINTS_FOR_PROFICIENT 	= 2;
 	public static final int POINTS_FOR_BASIC 		= 1;
@@ -80,7 +86,10 @@ public class CandidateSuggestionUtilImpl implements CandidateSuggestionUtil{
 		}
 		
 		final Set<String> requiredSkills = skills.stream().map(String::toLowerCase).collect(Collectors.toSet());
-		final Set<String> candidateSkills = candidate.get().getSkills().stream().map(String::toLowerCase).collect(Collectors.toSet());
+		
+		Set<String> skillsWithSynonyms = this.skillsSynonymsUtil.extractSynonymsForSkills(candidate.get().getSkills().stream().map(String::toLowerCase).collect(Collectors.toSet()));
+		
+		final Set<String> candidateSkills = skillsWithSynonyms;
 		
 		AtomicInteger matchingSkillCount = new AtomicInteger(0);
 		
@@ -144,17 +153,7 @@ public class CandidateSuggestionUtilImpl implements CandidateSuggestionUtil{
 		AtomicInteger totalPossibleLanguagePoints = new AtomicInteger(0);
 		
 		languages.stream().forEach(language -> {
-			//switch(language.getLevel()) {
-			//	case BASIC:{
-			//		totalPossibleLanguagePoints.addAndGet(POINTS_FOR_BASIC);
-			//	}
-			//	case PROFICIENT:{
-					totalPossibleLanguagePoints.addAndGet(POINTS_FOR_PROFICIENT);
-			//	}
-			//	default:{
-			//		
-			//	}
-			//}
+			totalPossibleLanguagePoints.addAndGet(POINTS_FOR_PROFICIENT);
 		});
 			
 		return totalPossibleLanguagePoints.get();

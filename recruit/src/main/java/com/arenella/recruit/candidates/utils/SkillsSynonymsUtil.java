@@ -19,4 +19,11 @@ public interface SkillsSynonymsUtil {
 	*/
 	public void addSynonymsForSkills(Set<String> extractedSkills, Set<String> skills);
 	
+	/**
+	* Extracts synonyms for skills
+	* @param skills - Skills to checked for synonyms
+	* @return synonyms
+	*/
+	public Set<String> extractSynonymsForSkills(Set<String> skills);
+	
 }

@@ -52,7 +52,7 @@ public class JobTitleExtractor implements JobSpecifcationFilterExtractor{
 	public static final JobType vue 				= new JobType(JobType.Type.vue, 				Set.of("vue","vuejs","vue.js"));
 	public static final JobType next 				= new JobType(JobType.Type.next, 				Set.of("next","nextjs","next.js"));
 	public static final JobType expres 				= new JobType(JobType.Type.expres, 				Set.of("expres","expresjs","expres.js"));
-	public static final JobType rust 				= new JobType(JobType.Type.rust, 				Set.of("rust"));
+	public static final JobType rust 				= new JobType(JobType.Type.rust, 				Set.of(" rust "));
 	public static final JobType testManager 		= new JobType(JobType.Type.testManager, 		Set.of("test manager","qa manager"));
 	public static final JobType productOwner 		= new JobType(JobType.Type.productOwner, 		Set.of("product owner"));
 	public static final JobType node 				= new JobType(JobType.Type.node, 				Set.of("node","nodejs","node.js"));

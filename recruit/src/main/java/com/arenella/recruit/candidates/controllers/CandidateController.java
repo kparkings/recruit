@@ -199,7 +199,7 @@ public class CandidateController {
 				response.setHeader("X-Arenella-Request-Id", ""+backendRequestId);
 			});
 		});
-		
+	
 		return candidateSearchUtil.searchAndPackageForAPIOutput(isRecruiter(principal), isUseCredits(principal), userCreditsExpired(getLoggedInUserName(principal)), filterOptions, unfiltered);
 		
 	}

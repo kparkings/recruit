@@ -81,6 +81,7 @@ import com.arenella.recruit.newsfeed.beans.NewsFeedItem.NEWSFEED_ITEM_TYPE;
 import co.elastic.clients.elasticsearch.ElasticsearchClient;
 
 import com.arenella.recruit.candidates.utils.PasswordUtil;
+import com.arenella.recruit.candidates.utils.SkillsSynonymsUtil;
 import com.arenella.recruit.candidates.dao.CandidateSkillsDao;
 import com.arenella.recruit.candidates.dao.SavedCandidateDao;
 import com.arenella.recruit.candidates.dao.SavedCandidateSearchEntityDao;
@@ -153,6 +154,9 @@ public class CandidateServiceImpl implements CandidateService{
 	
 	@Autowired
 	private SavedCandidateSearchEntityDao		savedCandidateSearchEntityDao;
+	
+	@Autowired
+	private SkillsSynonymsUtil skillsSynonymsUtil;
 	
 	public static final String ERR_MSG_SAVED_SEARCH_SAVE_OTHER_USERS 	= "You cannot update another Users Search Requests";
 	public static final String ERR_MSG_SAVED_SEARCH_DELETE_NON_EXISTENT = "You cannot delete a non existing Search Request";
@@ -554,7 +558,7 @@ public class CandidateServiceImpl implements CandidateService{
 			
 			if (toProcess.isEmpty() || toProcess.size() < pageFetchSize || accumulator.obtainedPerfectResults()) {
 				return new PageImpl<>(accumulator.getAccumulatedCandidates().stream().limit(maxSuggestions).sorted(Comparator.comparing(CandidateSearchAccuracyWrapper::getAccuracySkillsAsNumber)
-					       .thenComparing(CandidateSearchAccuracyWrapper::getAccuracyLanguagesAsNumber)).collect(Collectors.toCollection(LinkedList::new)));
+						.thenComparing(CandidateSearchAccuracyWrapper::getAccuracyLanguagesAsNumber)).collect(Collectors.toCollection(LinkedList::new)));
 			}
 			
 			pageCounter = pageCounter + 1;
@@ -691,6 +695,8 @@ public class CandidateServiceImpl implements CandidateService{
 		if (!candidate.get().isAvailable() && isRecruiter && !hasPaidSubscription(systemRequest)) { // Need to implement right hand check
 			throw new IllegalArgumentException("Cant view unavailable candidates with unpaid subscriptin type.");
 		}
+		
+		candidate.get().addSkills(this.skillsSynonymsUtil.extractSynonymsForSkills(candidate.get().getSkills()));
 		
 		
 		return candidate.get();

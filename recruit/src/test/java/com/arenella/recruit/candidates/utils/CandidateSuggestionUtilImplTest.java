@@ -4,8 +4,14 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mockito;
+import org.mockito.Spy;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.arenella.recruit.candidates.beans.Candidate;
 import com.arenella.recruit.candidates.beans.CandidateFilterOptions;
@@ -18,20 +24,25 @@ import com.arenella.recruit.candidates.beans.Language.LEVEL;
 * Unit tests for the CandidateSuggestionUtilImpl class
 * @author K Parkings
 */
-public class CandidateSuggestionUtilImplTest {
-
-	CandidateSuggestionUtilImpl util = new CandidateSuggestionUtilImpl();
+@ExtendWith(MockitoExtension.class)
+class CandidateSuggestionUtilImplTest {
+	
+	@Spy
+	private SkillsSynonymsUtil spySkillsSynonymsUtil;
+	
+	@InjectMocks
+	private CandidateSuggestionUtilImpl util = new CandidateSuggestionUtilImpl();
 	
 	/**
 	* If no skills requirements then expect perfect match
 	* @throws Exception
 	*/
 	@Test
-	public void testIsPerfectMatch_emptySkills() throws Exception{
+	void testIsPerfectMatch_emptySkills() {
 	
 		Candidate 				candidate 	= Candidate.builder().skills(Set.of("JAVA","SPRING")).build();
 		CandidateFilterOptions 	filters 	= CandidateFilterOptions.builder().skills(Set.of()).build();
-		
+	
 		assertTrue(util.isPerfectMatch(new CandidateSearchAccuracyWrapper(candidate), filters, Set.of()));
 		
 	}
@@ -41,7 +52,7 @@ public class CandidateSuggestionUtilImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testIsPerfectMatch_emptyCandidateSkills_emptySkills() throws Exception{
+	void testIsPerfectMatch_emptyCandidateSkills_emptySkills() {
 		
 		Candidate 				candidate 	= Candidate.builder().skills(Set.of()).build();
 		CandidateFilterOptions 	filters 	= CandidateFilterOptions.builder().skills(Set.of()).build();
@@ -54,10 +65,12 @@ public class CandidateSuggestionUtilImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testIsPerfectMatch_perfectMatch() throws Exception{
+	void testIsPerfectMatch_perfectMatch() {
 		
 		Candidate 				candidate 	= Candidate.builder().skills(Set.of("JAVA","SPRING")).build();
 		CandidateFilterOptions 	filters 	= CandidateFilterOptions.builder().skills(Set.of("Java","Spring")).build();
+		
+		Mockito.when(this.spySkillsSynonymsUtil.extractSynonymsForSkills(Mockito.anySet())).thenReturn(candidate.getSkills().stream().map(String::toLowerCase).collect(Collectors.toSet()));
 		
 		assertTrue(util.isPerfectMatch(new CandidateSearchAccuracyWrapper(candidate), filters, Set.of()));
 		
@@ -68,10 +81,12 @@ public class CandidateSuggestionUtilImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testIsPerfectMatch_tooPerfectMatch() throws Exception{
+	void testIsPerfectMatch_tooPerfectMatch() {
 		
 		Candidate 				candidate 	= Candidate.builder().skills(Set.of("JAVA","SPRING","HIBERNATE")).build();
 		CandidateFilterOptions 	filters 	= CandidateFilterOptions.builder().skills(Set.of("Java","Spring")).build();
+		
+		Mockito.when(this.spySkillsSynonymsUtil.extractSynonymsForSkills(Mockito.anySet())).thenReturn(candidate.getSkills().stream().map(String::toLowerCase).collect(Collectors.toSet()));
 		
 		assertTrue(util.isPerfectMatch(new CandidateSearchAccuracyWrapper(candidate), filters, Set.of()));
 		
@@ -82,10 +97,12 @@ public class CandidateSuggestionUtilImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testIsPerfectMatch_not_perfectMatch() throws Exception{
+	void testIsPerfectMatch_not_perfectMatch() {
 		
 		Candidate 				candidate 	= Candidate.builder().skills(Set.of("JAVA")).build();
 		CandidateFilterOptions 	filters 	= CandidateFilterOptions.builder().skills(Set.of("Java","Spring")).build();
+		
+		Mockito.when(this.spySkillsSynonymsUtil.extractSynonymsForSkills(Mockito.anySet())).thenReturn(candidate.getSkills());
 		
 		assertFalse(util.isPerfectMatch(new CandidateSearchAccuracyWrapper(candidate), filters, Set.of()));
 		
@@ -96,7 +113,7 @@ public class CandidateSuggestionUtilImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testIsExcellentMatch_emptySkills() throws Exception{
+	void testIsExcellentMatch_emptySkills() {
 	
 		Candidate 				candidate 	= Candidate.builder().skills(Set.of("1","2","3","4","5","6","7","8","9","10")).build();
 		CandidateFilterOptions 	filters 	= CandidateFilterOptions.builder().skills(Set.of()).build();
@@ -110,7 +127,7 @@ public class CandidateSuggestionUtilImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testIsExcellentMatch_emptyCandidateSkills_emptySkills() throws Exception{
+	void testIsExcellentMatch_emptyCandidateSkills_emptySkills() {
 		
 		Candidate 				candidate 	= Candidate.builder().skills(Set.of()).build();
 		CandidateFilterOptions 	filters 	= CandidateFilterOptions.builder().skills(Set.of()).build();
@@ -123,10 +140,12 @@ public class CandidateSuggestionUtilImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testIsExcellentMatch_perfectMatch() throws Exception{
+	void testIsExcellentMatch_perfectMatch() {
 		
 		Candidate 				candidate 	= Candidate.builder().skills(Set.of("1","2","3","4","5","6","7","8","9")).build();
 		CandidateFilterOptions 	filters 	= CandidateFilterOptions.builder().skills(Set.of("1","2","3","4","5","6","7","8","9","10")).build();
+		
+		Mockito.when(this.spySkillsSynonymsUtil.extractSynonymsForSkills(Mockito.anySet())).thenReturn(candidate.getSkills());
 		
 		assertTrue(util.isExcellentMatch(new CandidateSearchAccuracyWrapper(candidate), filters, Set.of()));
 		
@@ -137,10 +156,12 @@ public class CandidateSuggestionUtilImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testIsExcellentMatch_tooPerfectMatch() throws Exception{
+	void testIsExcellentMatch_tooPerfectMatch() {
 		
 		Candidate 				candidate 	= Candidate.builder().skills(Set.of("1","2","3","4","5","6","7","8","9","10")).build();
 		CandidateFilterOptions 	filters 	= CandidateFilterOptions.builder().skills(Set.of("1","2","3","4","5","6","7","8","9")).build();
+		
+		Mockito.when(this.spySkillsSynonymsUtil.extractSynonymsForSkills(Mockito.anySet())).thenReturn(candidate.getSkills());
 		
 		assertTrue(util.isExcellentMatch(new CandidateSearchAccuracyWrapper(candidate), filters, Set.of()));
 		
@@ -151,10 +172,12 @@ public class CandidateSuggestionUtilImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testIsExcellentMatch_not_perfectMatch() throws Exception{
+	void testIsExcellentMatch_not_perfectMatch() {
 		
 		Candidate 				candidate 	= Candidate.builder().skills(Set.of("1","2","3","4","5","6","7")).build();
 		CandidateFilterOptions 	filters 	= CandidateFilterOptions.builder().skills(Set.of("1","2","3","4","5","6","7","8","9","10")).build();
+		
+		Mockito.when(this.spySkillsSynonymsUtil.extractSynonymsForSkills(Mockito.anySet())).thenReturn(candidate.getSkills());
 		
 		assertFalse(util.isExcellentMatch(new CandidateSearchAccuracyWrapper(candidate), filters, Set.of()));
 		
@@ -165,7 +188,7 @@ public class CandidateSuggestionUtilImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testIsGoodMatch_emptySkills() throws Exception{
+	void testIsGoodMatch_emptySkills() {
 	
 		Candidate 				candidate 	= Candidate.builder().skills(Set.of("1","2","3","4","5","6","7","8","9","10")).build();
 		CandidateFilterOptions 	filters 	= CandidateFilterOptions.builder().skills(Set.of()).build();
@@ -179,7 +202,7 @@ public class CandidateSuggestionUtilImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testIsGoodMatch_emptyCandidateSkills_emptySkills() throws Exception{
+	void testIsGoodMatch_emptyCandidateSkills_emptySkills() {
 		
 		Candidate 				candidate 	= Candidate.builder().skills(Set.of()).build();
 		CandidateFilterOptions 	filters 	= CandidateFilterOptions.builder().skills(Set.of()).build();
@@ -192,10 +215,12 @@ public class CandidateSuggestionUtilImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testIsGoodMatch_perfectMatch() throws Exception{
+	void testIsGoodMatch_perfectMatch() {
 		
 		Candidate 				candidate 	= Candidate.builder().skills(Set.of("1","2","3","4","5","6","7","8")).build();
 		CandidateFilterOptions 	filters 	= CandidateFilterOptions.builder().skills(Set.of("1","2","3","4","5","6","7","8")).build();
+		
+		Mockito.when(this.spySkillsSynonymsUtil.extractSynonymsForSkills(Mockito.anySet())).thenReturn(candidate.getSkills());
 		
 		assertTrue(util.isGoodMatch(new CandidateSearchAccuracyWrapper(candidate), filters, Set.of()));
 		
@@ -206,10 +231,12 @@ public class CandidateSuggestionUtilImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testIsGoodMatch_tooPerfectMatch() throws Exception{
+	void testIsGoodMatch_tooPerfectMatch() {
 		
 		Candidate 				candidate 	= Candidate.builder().skills(Set.of("1","2","3","4","5","6","7","8","9","10")).build();
 		CandidateFilterOptions 	filters 	= CandidateFilterOptions.builder().skills(Set.of("1","2","3","4","5","6","7","8","9")).build();
+		
+		Mockito.when(this.spySkillsSynonymsUtil.extractSynonymsForSkills(Mockito.anySet())).thenReturn(candidate.getSkills());
 		
 		assertTrue(util.isGoodMatch(new CandidateSearchAccuracyWrapper(candidate), filters, Set.of()));
 		
@@ -220,10 +247,12 @@ public class CandidateSuggestionUtilImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testIsGoodMatch_not_perfectMatch() throws Exception{
+	void testIsGoodMatch_not_perfectMatch() {
 		
 		Candidate 				candidate 	= Candidate.builder().skills(Set.of("1","2","3","4")).build();
 		CandidateFilterOptions 	filters 	= CandidateFilterOptions.builder().skills(Set.of("1","2","3","4","5","6","7","8","9","10")).build();
+		
+		Mockito.when(this.spySkillsSynonymsUtil.extractSynonymsForSkills(Mockito.anySet())).thenReturn(candidate.getSkills());
 		
 		assertFalse(util.isGoodMatch(new CandidateSearchAccuracyWrapper(candidate), filters, Set.of()));
 		
@@ -234,7 +263,7 @@ public class CandidateSuggestionUtilImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testIsAverageMatch_emptySkills() throws Exception{
+	void testIsAverageMatch_emptySkills() {
 	
 		Candidate 				candidate 	= Candidate.builder().skills(Set.of("1","2","3","4","5","6","7","8","9","10")).build();
 		CandidateFilterOptions 	filters 	= CandidateFilterOptions.builder().skills(Set.of()).build();
@@ -248,7 +277,7 @@ public class CandidateSuggestionUtilImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testIsAverageMatch_emptyCandidateSkills_emptySkills() throws Exception{
+	void testIsAverageMatch_emptyCandidateSkills_emptySkills() {
 		
 		Candidate 				candidate 	= Candidate.builder().skills(Set.of()).build();
 		CandidateFilterOptions 	filters 	= CandidateFilterOptions.builder().skills(Set.of()).build();
@@ -261,10 +290,12 @@ public class CandidateSuggestionUtilImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testIsAverageMatch_perfectMatch() throws Exception{
+	void testIsAverageMatch_perfectMatch() {
 		
 		Candidate 				candidate 	= Candidate.builder().skills(Set.of("1","2","3","4","5","6")).build();
 		CandidateFilterOptions 	filters 	= CandidateFilterOptions.builder().skills(Set.of("1","2","3","4","5","6","7","8")).build();
+		
+		Mockito.when(this.spySkillsSynonymsUtil.extractSynonymsForSkills(Mockito.anySet())).thenReturn(candidate.getSkills());
 		
 		assertTrue(util.isAverageMatch(new CandidateSearchAccuracyWrapper(candidate), filters, Set.of()));
 		
@@ -275,10 +306,12 @@ public class CandidateSuggestionUtilImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testIsAverageMatch_tooPerfectMatch() throws Exception{
+	void testIsAverageMatch_tooPerfectMatch() {
 		
 		Candidate 				candidate 	= Candidate.builder().skills(Set.of("1","2","3","4","5","6","7")).build();
 		CandidateFilterOptions 	filters 	= CandidateFilterOptions.builder().skills(Set.of("1","2","3","4","5","6")).build();
+		
+		Mockito.when(this.spySkillsSynonymsUtil.extractSynonymsForSkills(Mockito.anySet())).thenReturn(candidate.getSkills());
 		
 		assertTrue(util.isAverageMatch(new CandidateSearchAccuracyWrapper(candidate), filters, Set.of()));
 		
@@ -289,10 +322,12 @@ public class CandidateSuggestionUtilImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testIsAverageMatch_not_perfectMatch() throws Exception{
+	void testIsAverageMatch_not_perfectMatch() {
 		
 		Candidate 				candidate 	= Candidate.builder().skills(Set.of("1","2","3")).build();
 		CandidateFilterOptions 	filters 	= CandidateFilterOptions.builder().skills(Set.of("1","2","3","4","5","6","7","8","9","10")).build();
+		
+		Mockito.when(this.spySkillsSynonymsUtil.extractSynonymsForSkills(Mockito.anySet())).thenReturn(candidate.getSkills());
 		
 		assertFalse(util.isAverageMatch(new CandidateSearchAccuracyWrapper(candidate), filters, Set.of()));
 		
@@ -303,7 +338,7 @@ public class CandidateSuggestionUtilImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testIsPoorMatch_emptySkills() throws Exception{
+	void testIsPoorMatch_emptySkills() {
 	
 		Candidate 				candidate 	= Candidate.builder().skills(Set.of("1","2","3","4","5","6","7","8","9","10")).build();
 		CandidateFilterOptions 	filters 	= CandidateFilterOptions.builder().skills(Set.of()).build();
@@ -317,7 +352,7 @@ public class CandidateSuggestionUtilImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testIsPoorMatch_emptyCandidateSkills_emptySkills() throws Exception{
+	void testIsPoorMatch_emptyCandidateSkills_emptySkills() {
 		
 		Candidate 				candidate 	= Candidate.builder().skills(Set.of()).build();
 		CandidateFilterOptions 	filters 	= CandidateFilterOptions.builder().skills(Set.of()).build();
@@ -330,10 +365,12 @@ public class CandidateSuggestionUtilImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testIsPoorMatch_perfectMatch() throws Exception{
+	void testIsPoorMatch_perfectMatch() {
 		
 		Candidate 				candidate 	= Candidate.builder().skills(Set.of("1","2","3","4","5")).build();
 		CandidateFilterOptions 	filters 	= CandidateFilterOptions.builder().skills(Set.of("1","2","3","4","5","6","7","8")).build();
+		
+		Mockito.when(this.spySkillsSynonymsUtil.extractSynonymsForSkills(Mockito.anySet())).thenReturn(candidate.getSkills());
 		
 		assertTrue(util.isPoorMatch(new CandidateSearchAccuracyWrapper(candidate), filters, Set.of()));
 		
@@ -344,10 +381,12 @@ public class CandidateSuggestionUtilImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testIsPoorMatch_tooPerfectMatch() throws Exception{
+	void testIsPoorMatch_tooPerfectMatch() {
 		
 		Candidate 				candidate 	= Candidate.builder().skills(Set.of("1","2","3","4","5","6","7")).build();
 		CandidateFilterOptions 	filters 	= CandidateFilterOptions.builder().skills(Set.of("1","2","3","4","5","6")).build();
+		
+		Mockito.when(this.spySkillsSynonymsUtil.extractSynonymsForSkills(Mockito.anySet())).thenReturn(candidate.getSkills());
 		
 		assertTrue(util.isPoorMatch(new CandidateSearchAccuracyWrapper(candidate), filters, Set.of()));
 		
@@ -358,10 +397,12 @@ public class CandidateSuggestionUtilImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testIsPoorMatch_not_perfectMatch() throws Exception{
+	void testIsPoorMatch_not_perfectMatch() {
 		
 		Candidate 				candidate 	= Candidate.builder().skills(Set.of("1","2")).build();
 		CandidateFilterOptions 	filters 	= CandidateFilterOptions.builder().skills(Set.of("1","2","3","4","5","6","7","8","9","10")).build();
+		
+		Mockito.when(this.spySkillsSynonymsUtil.extractSynonymsForSkills(Mockito.anySet())).thenReturn(candidate.getSkills());
 		
 		assertFalse(util.isPoorMatch(new CandidateSearchAccuracyWrapper(candidate), filters, Set.of()));
 		
@@ -372,7 +413,7 @@ public class CandidateSuggestionUtilImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testIsPerfectMatch_languages_perfectMatch() throws Exception {
+	void testIsPerfectMatch_languages_perfectMatch() {
 		
 		Candidate 				candidate 	= Candidate.builder().languages(Set.of(
 																				 Language.builder().language(LANGUAGE.DUTCH).level(LEVEL.PROFICIENT).build()
@@ -397,7 +438,7 @@ public class CandidateSuggestionUtilImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testIsPerfectMatch_languages_not_perfectMatch() throws Exception {
+	void testIsPerfectMatch_languages_not_perfectMatch() {
 		
 		Candidate 				candidate 	= Candidate.builder().languages(Set.of(
 																				 Language.builder().language(LANGUAGE.DUTCH).level(LEVEL.BASIC).build()

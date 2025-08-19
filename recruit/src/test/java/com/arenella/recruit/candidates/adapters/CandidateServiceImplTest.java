@@ -28,6 +28,7 @@ import static org.mockito.Mockito.*;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -786,7 +787,7 @@ class CandidateServiceImplTest {
 		Collection<GrantedAuthority> 	authorities = Set.of(mockGA);
 		
 		when(mockGA.getAuthority()).thenReturn("ROLE_ADMIN");
-		when(this.mockCandidateRepo.findCandidateById(anyLong())).thenReturn(Optional.of(Candidate.builder().build()));
+		when(this.mockCandidateRepo.findCandidateById(anyLong())).thenReturn(Optional.of(Candidate.builder().skills(Set.of("c#")).build()));
 		
 		Candidate candidate = this.service.fetchCandidate("1961", "1961", authorities);
 		
