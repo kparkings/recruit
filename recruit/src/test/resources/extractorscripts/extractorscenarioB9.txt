@@ -1,0 +1,5 @@
+Hello! I am looking for a Principal Engineer for a leading payments firm based in Dublin. You’ll lead the design, architecture and development on a new platform. 
+
+You need to have solid experience with Java, SpringBoot, Microservices, Angular and AWS/Azure. 
+
+It's a 12 month rolling contract paying €915 p/d.

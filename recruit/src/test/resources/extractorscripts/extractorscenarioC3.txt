@@ -1,0 +1,29 @@
+NOT PICKING UP CONTRACT!!
+
+Title: SC Cleared AWS Engineer 
+Location: Manchester 
+Salary: £400 per day 
+Sector: IT 
+Apply here: https://lnkd.in/ehH-bU5j 
+ 
+I am working with a consultancy feeding into the public sector who are on the lookout for an SC cleared AWS DevOps engineer. 
+ 
+Weekly travel to Manchester/ Leeds/ Newcastle 
+Inside IR35 
+6 month 
+Active SC 
+£400 per day 
+Immediate start 
+ 
+The skillset 
+ ·       Support the standing up multiple environments on AWS 
+ ·       Support the management of the AWS stack / Git pipelines across mix of React front-end, microservices, lambda functions, 
+ 
+Kafka integration, possible mix of Transit Gateway / Private Link, use of Kong EE 
+ ·       MFA / IAM role management for team of developers 
+ ·       Correctly tagging cloud resources per DWP central FinOps standards 
+ 
+ Skills required: 
+ REQUIRED/NON-NEGOTIABLE: Full AWS stack (inc. Lambda, SQS, SNS), IAM management for pipelines and users, blue/green deployment experience, Terraform or Cloud Formation, Prometheus, CloudWatch 
+ NICE TO HAVE: SonarQube, Wiz, FinOps tagging experience (apptio), Kafka, Kong EE, Dynatrace, micro-UI patterns (jwt tokenisation and passthrough)
+

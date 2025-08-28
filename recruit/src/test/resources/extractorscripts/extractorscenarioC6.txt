@@ -1,0 +1,19 @@
+🚨 🚨 Hiring ALERT 📢 
+
+🚨 We're Hiring: Senior Java Developer 🚨
+ 📍 Location: Warsaw, Poland (Remote)
+ 📄 Contract Type: B2B
+ 🧠 Experience: 5+ years
+ 🌍 Eligibility: Must reside in Poland with valid visa & work permit
+ 🚫 Note: Sponsorship is not availabl
+
+🔧 Tech Stack & Must-Have Skills
+Languages: Java 17+, JVM-based languages
+Frameworks: Spring Boot, Spring WebFlux, Vert.x
+Cloud & Containers: AWS (S3, SQS, SNS), Docker, Kubernetes, Minikube
+Messaging: Kafka or RabbitMQ
+DevOps: Jenkins, GitHub Actions
+APIs: REST, gRPC, contract-first development
+Monitoring & Logging: Prometheus, CloudWatch, Datadog, Splunk, Kibana
+Databases: MySQL, PostgreSQL, Redis, ElasticSearch, Caffeine
+Architecture: Microservices, asynchronous communication, reactive programming

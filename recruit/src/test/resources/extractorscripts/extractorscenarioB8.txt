@@ -1,0 +1,14 @@
+Voor een vaste klant ben ik op zoek naar een Senior Java Developer die graag wilt werken aan een nieuw groot enterprise systeem. Dit betreft een event-driven architectuur om een toekomstbestendig systeem te bouwen. 
+
+Technische vereisten:
+- Java, Spring Boot. Hibernate
+- Frontend met JavaScript/Typescript
+- Enterprise systeem development
+- Pre's: Kafka, Axon, OpenAPI
+
+Praktisch:
+- Locatie Zuid-Holland, 2 p/w op kantoor
+- Starten september/oktober
+- Initieel contract 12 maanden, intentie voor langer
+- Voorkeur voor Payroll constructie
+- Nederlandstalig (!)

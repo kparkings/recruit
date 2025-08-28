@@ -1,5 +1,6 @@
 package com.arenella.recruit.candidates.extractors;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import org.springframework.stereotype.Component;
@@ -27,56 +28,103 @@ public class SeniorityExtractor implements JobSpecifcationFilterExtractor{
 		
 		//6 jaar ervaring - Add these checking for all common levels also in english and french
 		
+		Set<String> senior = new HashSet<>();
+		Set<String> medior = new HashSet<>();
+		Set<String> junior = new HashSet<>();
+				
+		senior.addAll(Set.of("principal developer","principal engineer","lead engineer","lead developer","senior","expérimenté","expert ","ervaren"));
+		medior.addAll(Set.of("medior","midweight"," - 5 year"," - 5 jaar"));
+		junior.addAll(Set.of("junior","entry level","graduate "," - 3 year"," - 3 jaar"));
 		
-		boolean senior = documentText.contains("lead engineer") || documentText.contains("lead developer") || documentText.contains("senior") || documentText.contains("expérimenté") || documentText.contains("expert ") || documentText.contains("ervaren") || documentText.contains("minimum 5") || documentText.contains("minimum 10") || documentText.contains("8 years") || documentText.contains("8 jaar")|| documentText.contains("10 years") || documentText.contains("10 jaar");
-		boolean medior = documentText.contains("medior") || documentText.contains("midweight") || documentText.contains("3+") || documentText.contains("+3 ") || documentText.contains(">3") || documentText.contains("4+") || documentText.contains("+4 ") || documentText.contains(">4");
-		boolean junior = documentText.contains("junior") || documentText.contains("entry level") || documentText.contains("graduate ");
-		
-		Set<String> years = Set.of("+5 ","+6 ","+7 ","+8 ","+9 ","+10 ","+20 ","5+","6+","7+","8+","9+","10+","20+",">5 ",">6 ",">7 ",">8 ",">9 ",">10 ",">20");
-		
-		if (!senior) {
-			senior = years.stream().filter(y -> documentText.contains(y)).findAny().isPresent();
+		for (int i=1 ; i <= 3; i++) {
+			junior.add("minimum "+i +" year");
+			junior.add(i+" years");
+			junior.add(i+"+ years");
+			junior.add("minimaal "+i + " jaar");
+			junior.add(i+" jaar");
+			junior.add(i+"+ jaar");
+			
+			junior.add(i+" ans");
+			junior.add(i+"+ ans");
+			
+			
 		}
 		
-		if (!senior && !medior && !junior) {
+		for (int i=3 ; i <= 4; i++) {
+			medior.add("minimum "+i+" year");
+			medior.add(i+" years");
+			medior.add(i+"+ years");
+			medior.add("minimaal "+i + " jaar");
+			medior.add(i+" jaar");
+			medior.add(i+"+ jaar");
+			medior.add("+"+i + " ");
+			medior.add(">"+i + " ");
+		
+			medior.add(i+" ans");
+			medior.add(i+"+ ans");
+		}
+		
+		for (int i=5 ; i <= 30; i++) {
+			senior.add("minimum "+i+" year");
+			senior.add(i+" years");
+			senior.add(i+"+ years");
+			senior.add("minimaal "+i + " jaar");
+			senior.add(i+" jaar");
+			senior.add(i+"+ jaar");
+			senior.add("+"+i + " ");
+			senior.add(">"+i + " ");
+			
+			senior.add(i+" ans");
+			senior.add(i+"+ ans");
+		}
+		
+		boolean juniorMatches = junior.stream().anyMatch(documentText.replaceAll(" - 5", "")::contains);
+		boolean mediorMatches = medior.stream().anyMatch(documentText.replaceAll(" - 5", "")::contains);
+		boolean seniorMatches = senior.stream().anyMatch(documentText.replaceAll(" - 5", "")::contains);
+		
+		//List<String> debugJunior = junior.stream().filter(documentText.replaceAll(" - 5", "")::contains).toList();
+		//List<String> debugMedior = medior.stream().filter(documentText.replaceAll(" - 5", "")::contains).toList();
+		//List<String> debugSenior = senior.stream().filter(documentText.replaceAll(" - 5", "")::contains).toList();
+		
+		if (!seniorMatches && !mediorMatches && !juniorMatches) {
 			return;
 		}
 		
-		if (senior && medior && junior) {
+		if (seniorMatches && mediorMatches && juniorMatches) {
 			return;
 		}
 		
-		if (junior && medior) {
+		if (juniorMatches && mediorMatches) {
 			filterBuilder.experienceGTE(JUNIOR_EDGE_MIN);
 			filterBuilder.experienceLTE(MEDIOR_EDGE_MAX);
 			return;
 		}
 		
-		if (medior && senior) {
+		if (mediorMatches && seniorMatches) {
 			filterBuilder.experienceGTE(MEDIOR_EDGE_MIN);
 			filterBuilder.experienceLTE(SENIOR_EDGE_MAX);
 			return;
 		}
 		
-		if (junior && senior) {
+		if (juniorMatches && seniorMatches) {
 			filterBuilder.experienceGTE(JUNIOR_EDGE_MIN);
 			filterBuilder.experienceLTE(SENIOR_EDGE_MAX);
 			return;
 		}
 		
-		if (junior && !senior && !medior) {
+		if (juniorMatches && !seniorMatches && !mediorMatches) {
 			filterBuilder.experienceGTE(JUNIOR_EDGE_MIN);
 			filterBuilder.experienceLTE(JUNIOR_EDGE_MAX);
 			return;
 		}
 		
-		if (medior && !senior && !junior) {
+		if (mediorMatches && !seniorMatches && !juniorMatches) {
 			filterBuilder.experienceGTE(MEDIOR_EDGE_MIN);
 			filterBuilder.experienceLTE(MEDIOR_EDGE_MAX);
 			return;
 		}
 		
-		if (senior && !medior && !junior) {
+		if (seniorMatches && !mediorMatches && !juniorMatches) {
 			filterBuilder.experienceGTE(SENIOR_EDGE_MIN);
 			filterBuilder.experienceLTE(SENIOR_EDGE_MAX);
 			return;

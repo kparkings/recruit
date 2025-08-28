@@ -1,0 +1,18 @@
+I'm looking for 3 x Software Engineers in Amsterdam 🪙📈🇳🇱
+
+You'll be joining a Crypto Exchange who have gone through true hyper growth in the past few years. 
+
+Think modern product company combined with all the performance engineering challenges you experience within HFT, low-latency being the most critical. 
+
+𝐑𝐞𝐪𝐮𝐢𝐫𝐞𝐦𝐞𝐧𝐭𝐬 - 
+- experience building low latency software, milliseconds is the minimum, microseconds even better, nanoseconds you have my attention! 
+- ideally Java or Kotlin experience however we can consider other programming languages like C++ or Rust as long as you are happy to complete a technical test in Java / Kotlin and work with this language daily
+
+𝐓𝐋;𝐃𝐑 
+𝐑𝐨𝐥𝐞 - 3 x Software Engineer - Mid-level, Senior or Staff
+𝐂𝐨𝐦𝐩𝐚𝐧𝐲 - Crypto Exchange, FinTech, 450 people, hyper growth
+𝐋𝐨𝐜𝐚𝐭𝐢𝐨𝐧 - Amsterdam, hybrid model
+𝐒𝐚𝐥𝐚𝐫𝐲 - up to €150K base plus bonus & equity
+𝐓𝐞𝐜𝐡 𝐒𝐭𝐚𝐜𝐤 - Kotlin | AWS | Kafka
+
+Please get in touch if you fit the bill 🤝

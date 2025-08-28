@@ -22,7 +22,7 @@ public class JobType{
 		webDeveloper("Web Developer"),
 		scrumMaster("Scrum Master"),
 		dataScientist("Data Scientist"),
-		networkAdmin("Network Administrator"),
+		networkAdmin("DevOps Engineer"),
 		softwareDeveloper("Software Developer"),
 		itSecurity("IT Security"),
 		itRecruiter("IT Recruiter"),

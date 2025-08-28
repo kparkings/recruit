@@ -3,18 +3,21 @@ package com.arenella.recruit.candidates.extractors;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.OptionalInt;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Component;
 
 import com.arenella.recruit.candidates.beans.CandidateExtractedFilters.CandidateExtractedFiltersBuilder;
-import com.arenella.recruit.candidates.enums.FUNCTION;
+
 import com.arenella.recruit.candidates.extractors.JobType.Type;
 
 /**
@@ -26,12 +29,12 @@ import com.arenella.recruit.candidates.extractors.JobType.Type;
 @Component
 public class JobTitleExtractor implements JobSpecifcationFilterExtractor{
 	
-	public static final JobType java 				= new JobType(JobType.Type.java, 				Set.of("ontwikkelen van java", "programmeren van java", "engineer (java","developer java","java developer", "java software engineer", "java engineer", "java software ontwikkelaar", "java ontwikkelaar", "fullstack java", "java backend developer", "ontwikkelaar java", "développeur java", " java ","java ", " java,","dropwizard","struts","quarkus","jsp","spring","springboot","spring boot"));
+	public static final JobType java 				= new JobType(JobType.Type.java, 				Set.of (" java","java,","java/","ontwikkelen van java", "programmeren van java", "engineer (java","developer java","java developer", "java software engineer", "java engineer", "java software ontwikkelaar", "java ontwikkelaar", "fullstack java", "java backend developer", "ontwikkelaar java", "développeur java", " java ","java ", " java,","dropwizard","struts","quarkus","jsp","spring","springboot","spring boot"));
 	public static final JobType csharp 				= new JobType(JobType.Type.csharp, 				Set.of("c#/.net","c#.net", ".net software engineer", "c# developer", "c# software engineer", "c# engineer", "c# software ontwikkelaar", "c# ontwikkelaar", "fullstack c#", "c# backend developer", "c#", "entity framework", ".net", "asp.net"));
 	public static final JobType ba 					= new JobType(JobType.Type.ba, 					Set.of("business analyst","business analist"));
-	public static final JobType qa 					= new JobType(JobType.Type.qa, 					Set.of("quality assurance","testautomation specialist", "qa engineer","test engineer", "test automation engineer", "test specialist", "test analyst", "performance tester", "automation tester", "qa tester", "software tester", "penetration tester", "software testers", "test lead"));
+	public static final JobType qa 					= new JobType(JobType.Type.qa, 					Set.of("/qa","quality assurance","testautomation specialist", "qa engineer","test engineer", "test automation engineer", "test specialist", "test analyst", "performance tester", "automation tester", "qa tester", "software tester", "penetration tester", "software testers", "test lead", "auality engineer"));
 	public static final JobType itSupport			= new JobType(JobType.Type.itSupport, 			Set.of("helpdeskmedewerker","supportmedewerker","servicedeskmedewerker", "it support", "it helpdesk","helpdesk support", "support engineer", "support developer", "support analyst", "tech support", "service agent", "support manager", "1st line support", "2nd line support", "3rd line support", "support specialist", "support technician"));
-	public static final JobType uiux				= new JobType(JobType.Type.uiux, 				Set.of("ui/ux designer", "ui designer", "ui engineer", "product designer"));
+	public static final JobType uiux				= new JobType(JobType.Type.uiux, 				Set.of("interaction design","ui/ux designer", "ui designer", "ui engineer", "product designer"));
 	public static final JobType projectManager		= new JobType(JobType.Type.projectManager, 		Set.of("pmo","project manager", "program manager", "it manager", "procurement manager", "control manager", "operations manager", "ops manager", "head of it", "infrastructure manager", "infra manager", "development manager", "engineering manager", "security manager", "services manager", "delivery manager", "service manager", "asset manager"));
 	public static final JobType architect			= new JobType(JobType.Type.architect, 			Set.of("solution architect", "solutions architect", "enterprise architect", "application architect", "infrastructure architect", "security architect", "domain architect", "service now architect", "system architect", "systems architect","technical architect"));
 	public static final JobType webDeveloper		= new JobType(JobType.Type.webDeveloper, 		Set.of("web developer","front end developer", "frontend developer", "front-end developer", "web ontwikkelaar", "FE developer", "front-end ontwikkelaar"));
@@ -42,7 +45,7 @@ public class JobTitleExtractor implements JobSpecifcationFilterExtractor{
 	public static final JobType itSecurity			= new JobType(JobType.Type.itSecurity, 			Set.of("security engineer", "ethical hacker", "security officer", "security consultant", "security specialist", "security engineering", "security lead", "cyber consultant", "security advisor", "security manager", "security operations"));
 	public static final JobType itRecruiter			= new JobType(JobType.Type.itRecruiter, 		Set.of("it-recruitment","recruitment specialist", "recruitmentcampagne", "it recruiter ", "it recruiters", "recruitment consultant", "recruiter"));
 	public static final JobType sdet 				= new JobType(JobType.Type.sdet, 				Set.of("engineer in test", "developer in test", "sdet"));
-	public static final JobType kotlin 				= new JobType(JobType.Type.kotlin, 				Set.of("kotlin"));
+	public static final JobType kotlin 				= new JobType(JobType.Type.kotlin, 				Set.of("kotlin","spring","springboot","spring boot"));
 	
 	
 	public static final JobType ruby 				= new JobType(JobType.Type.ruby, 				Set.of("ruby"));
@@ -151,19 +154,51 @@ public class JobTitleExtractor implements JobSpecifcationFilterExtractor{
 		jobs.add(cobol);
 		jobs.add(sap);
 		
-		jobs.stream().forEach(jobType -> 
+		Set<JobType.Type> softwareDevelopmentTypes = new HashSet<>();
+		softwareDevelopmentTypes.add(java.getType());
+		softwareDevelopmentTypes.add(csharp.getType());
+		softwareDevelopmentTypes.add(webDeveloper.getType());
+		softwareDevelopmentTypes.add(softwareDeveloper.getType());
+		softwareDevelopmentTypes.add(kotlin.getType());
+		softwareDevelopmentTypes.add(ruby.getType());
+		softwareDevelopmentTypes.add(rubyOnRails.getType());
+		softwareDevelopmentTypes.add(go.getType());
+		softwareDevelopmentTypes.add(react.getType());
+		softwareDevelopmentTypes.add(vue.getType());
+		softwareDevelopmentTypes.add(next.getType());
+		softwareDevelopmentTypes.add(expres.getType());
+		softwareDevelopmentTypes.add(rust.getType());
+		softwareDevelopmentTypes.add(node.getType());
+		softwareDevelopmentTypes.add(python.getType());
+		softwareDevelopmentTypes.add(angular.getType());
+		softwareDevelopmentTypes.add(php.getType());
+		softwareDevelopmentTypes.add(android.getType());
+		softwareDevelopmentTypes.add(ios.getType());
+		softwareDevelopmentTypes.add(ccplusplus.getType());
+		softwareDevelopmentTypes.add(cobol.getType());
+		softwareDevelopmentTypes.add(sap.getType());
+		
+		jobs.stream().forEach(jobType -> {
+		
+			AtomicReference<String>  tmpDocumentText = new AtomicReference<>();
+			tmpDocumentText.set(documentText);
+		
 			jobType.getTitles().stream().forEach(title -> {
-				if (documentText.contains(title)) {
-					scored.get(jobType.getType()).addAndGet(getNumOccurrencesOfMatchingTitle(documentText, title));
+				//System.out.println(jobType.getType() + ": Processing title " + title);
+				if (tmpDocumentText.get().contains(title)) {
+					WeightResult result = getNumOccurrencesOfMatchingTitle(tmpDocumentText.get(), title);
+					tmpDocumentText.set(result.documentText) ;
+					//System.out.println("SCORE " + jobType.getType() + " using title " + title + " score now " + result.count);
+					scored.get(jobType.getType()).addAndGet(result.count);
 				}
-			})
-		);
+			});
+		});
 		
 		Comparator<AtomicInteger> comparator = Comparator.comparing(o1 -> o1.get());
 		
 		JobType.Type type = Collections.max(scored.entrySet(), Map.Entry.comparingByValue(comparator)).getKey();
 		
-		if (type == JobType.Type.softwareDeveloper) {
+		if (softwareDevelopmentTypes.contains(type)) {
 			type = applySoftwareDeveloperWeighting(scored, filterBuilder, comparator);
 		}
 		
@@ -191,6 +226,30 @@ public class JobTitleExtractor implements JobSpecifcationFilterExtractor{
 		
 		filterBuilder.jobTitle(type.role);
 		
+		/**
+		* If there is a tie. Use first occurrence of 
+		*/
+		OptionalInt tieScore 		= scored.values().stream().mapToInt(v -> v.get()).max();
+		Set<Type> 	tiedJobTypes 	= scored.entrySet().stream().filter(a -> a.getValue().get() == tieScore.getAsInt()).map(k -> k.getKey()).collect(Collectors.toSet());
+		
+		if(tieScore.isPresent() && tieScore.getAsInt() != 0 && tiedJobTypes.size() > 1) {
+			
+			AtomicReference<Type> 	xType 		= new AtomicReference<>();
+			AtomicInteger 			xFirstPos 	= new AtomicInteger(1000000);
+			
+			jobs.stream().filter(jt -> tiedJobTypes.contains(jt.getType())).forEach(jobType -> {
+				
+				jobType.getTitles().stream().forEach(title -> {
+					if(documentText.contains(title) && documentText.indexOf(title) < xFirstPos.get()) {
+						xType.set(jobType.getType());
+						xFirstPos.set(documentText.indexOf(title));
+					}
+				});
+			});
+			
+			filterBuilder.jobTitle(xType.get().role);
+		}
+		
 	}
 	
 	/**
@@ -207,25 +266,32 @@ public class JobTitleExtractor implements JobSpecifcationFilterExtractor{
 		weighted.remove(JobType.Type.softwareDeveloper);
 		
 		JobType.Type type = Collections.max(weighted.entrySet(), Map.Entry.comparingByValue(comparator)).getKey();
-		
+	
 		return switch(type) {
-			case csharp, java, kotlin, ruby, rubyOnRails, go, react, vue, next, expres, rust, node, python, angular, php, android, ios, ccplusplus, cobol, sap -> type;
+			case webDeveloper, csharp, java, kotlin, ruby, rubyOnRails, go, react, vue, next, expres, rust, node, python, angular, php, android, ios, ccplusplus, cobol, sap -> type;
 			default -> JobType.Type.softwareDeveloper;
 		};
 		
 	}
 	
-	private int getNumOccurrencesOfMatchingTitle(String documentText, String title) {
+	private WeightResult getNumOccurrencesOfMatchingTitle(String documentText, String title) {
 		
 		int 	count 	= 0;
-		String 	tmp 	= new String(documentText);
 		
-		while(tmp.contains(title)) {
-			tmp 	= tmp.replaceFirst(title, "");
+		while(documentText.contains(title)) {
+			
+			if(title.equals("c++")) {
+				documentText 	= documentText.replaceFirst("c\\+\\+", "");
+			} else {
+				documentText 	= documentText.replaceFirst(title, "");
+			}
+			
 			count 	= count +1;
 		}
 		
-		return count;
+		return new WeightResult(documentText, count);
 	}
+	
+	private record WeightResult(String documentText, Integer count) {}
 	
 }

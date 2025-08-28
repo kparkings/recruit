@@ -39,12 +39,16 @@ sugg-srch-hdr.sugg-srch-hdr{
 }
 
 .flag-icon-med{
-	width:30px;
+	width:25px;
 	height:30px;
 	margin:10px;
 	margin-top:0px;
 	margin-left:0px;
 	cursor:pointer;
+}
+
+.extra-option-count{
+	margin-top:10px;
 }
 
 .contract-type{
@@ -259,7 +263,7 @@ sugg-srch-hdr.sugg-srch-hdr{
 	background:#6a5acd;
 	color:white;
 	padding:5px;
-	max-width:100px;	
+	min-width:100px;	
 	cursor:pointer;
 	text-align:center;
 }

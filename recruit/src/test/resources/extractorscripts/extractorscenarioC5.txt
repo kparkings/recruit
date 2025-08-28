@@ -1,0 +1,24 @@
+Hi Netwerk, 
+
+Voor mijn klant zoek ik een Senior Java Developer die binnen een agile team werkt aan complexe informatiesystemen. Je bent betrokken bij het ontwikkeltraject, testen, beheer en procesverbetering van applicaties en deelt actief kennis met je team. De rol is hybride: deels op locatie in Almelo, deels op afstand.
+
+Taken:
+- Ontwikkelen van applicaties – backend (Java/Spring Boot) en frontend (Angular, basiservaring is voldoende).
+- Testen en beheren – uitvoeren van functionele en technische tests en bijdragen aan applicatiebeheer.
+- DevOps-werkzaamheden – ondersteunen van het ontwikkelproces, inclusief CI/CD en procesoptimalisatie.
+- Samenwerking – deelnemen aan refinement, planning, sprintwerk en demonstraties, en collega’s ondersteunen waar nodig.
+
+Eisen:
+- Minimaal 3 jaar ervaring in softwareontwikkeling.
+- Java en Spring Boot; basiskennis van Angular is een pré.
+- Ervaring met microservices en moderne architecturen; kennis van Docker/Kubernetes is een pré.
+- Teamplayer die goed communiceert, feedback geeft en ontvangt, en proactief anderen ondersteunt.
+- Ervaring met agile werken en focus op ontwikkeling, testen en procesverbetering.
+
+Projectinformatie:
+Start: 1 oktober
+Duur: 12 maanden +
+Werkweek: 36 uur
+Locatie: Almelo (1 dag per week op kantoor)
+
+Herken jij jezelf in deze rol? Stuur dan je CV en 06-nummer, dan neem ik contact met je op.

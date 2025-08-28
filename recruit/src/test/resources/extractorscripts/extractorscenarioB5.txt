@@ -1,0 +1,14 @@
+I’m currently looking to connect with DevOps Engineers / SREs interested in a new opportunity in Dublin.
+
+The role focuses on:
+ 🔹 Driving automation to reduce manual effort and improve service reliability
+ 🔹 Enhancing monitoring, observability, and alerting across systems
+ 🔹 Building APIs, integrations, and infrastructure-as-code
+ 🔹 Supporting cloud platforms (AWS / Azure) and performance tuning
+ 🔹 Contributing to a strong DevOps / SRE culture and mentoring teammates
+
+It’s a hybrid Dublin-based role with a strong emphasis on automation, observability, and scalability.
+
+Would you be open to a chat to see if this could be a good fit for you (or someone in your network)?
+
+hashtag#DevOps hashtag#SRE hashtag#SiteReliabilityEngineering hashtag#CloudEngineering hashtag#Automation hashtag#InfrastructureAsCode hashtag#Observability hashtag#Monitoring hashtag#CloudJobs hashtag#AWS hashtag#Azure hashtag#PlatformEngineering hashtag#TechJobs hashtag#DublinJobs hashtag#HiringNow hashtag#TechForceTalent hashtag#IrishJobs

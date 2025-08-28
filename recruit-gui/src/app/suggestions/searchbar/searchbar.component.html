@@ -335,7 +335,7 @@
 					<mat-icon *ngFor="let country of extractedFilters.countries.slice(0,5)" title="country" style="margin-right:10px">
 						<span class="flag-icon flag-icon-{{getIso2CodeByCountryName(country)}} flag-icon-med" ></span>
 					</mat-icon>
-					<span *ngIf="extractedFilters.countries.length >= 6 " style="font-weight:bold">....</span>
+					<span *ngIf="extractedFilters.countries.length >= 6 " style="font-weight:bold">+ {{extractedFilters.countries.length - 6}}</span>
 				</td>	
 			<tr>
 			<tr>
@@ -362,7 +362,7 @@
 				<th>{{'arenella-suggestions-skills' | translate}}</th>
 				<td>
 					<span *ngFor="let skill of extractedFilters.skills.slice(0,3) " class="function-selectable function-selected-true">{{skill}}</span>
-					<span *ngIf="extractedFilters.skills.length >= 4 " style="font-weight:bold">....</span>
+					<span class="extra-option-count" *ngIf="extractedFilters.skills.length >= 4 " style="font-weight:bold">+ {{extractedFilters.skills.length - 4}}</span>
 				</td>
 				
 					

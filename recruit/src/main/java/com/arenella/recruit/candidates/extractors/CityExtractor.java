@@ -2,6 +2,7 @@ package com.arenella.recruit.candidates.extractors;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.springframework.stereotype.Component;
@@ -15,8 +16,8 @@ import com.arenella.recruit.candidates.beans.CandidateExtractedFilters.Candidate
 @Component
 public class CityExtractor implements JobSpecifcationFilterExtractor{
 	
-	public static final Set<String> CITIES_UK 					= Set.of("oxford", " reading ","london","birmingham","glasgow","manchester","sheffield","leeds","edinburgh","liverpool","bristol","cardiff","leicester","bradford");
-	public static final Set<String> CITIES_NETHERLANDS 			= Set.of(" leiden ", "alkmaar", "alphen", "amsterdam","rotterdam","the hague","den haag","Utrecht","Groningen","eindhoven","tilburg","almere","breda","nijmegen","enschede","haarlem", "amstelveen", "woerden", "amersfoort", "soest","arnhem","nieuwegein","zwolle","apeldoorn", "utrecht");
+	public static final Set<String> CITIES_UK 					= Set.of("newcastle","oxford", " reading."," reading,", " reading ","london","birmingham","glasgow","manchester","sheffield","leeds","edinburgh","liverpool","bristol","cardiff","leicester","bradford");
+	public static final Set<String> CITIES_NETHERLANDS 			= Set.of("almelo"," leiden ", "alkmaar", "alphen", "amsterdam","rotterdam","the hague","den haag","Utrecht","Groningen","eindhoven","tilburg","almere","breda","nijmegen","enschede","haarlem", "amstelveen", "woerden", "amersfoort", "soest","arnhem","nieuwegein","zwolle","apeldoorn", "utrecht");
 	public static final Set<String> CITIES_BELGIUM 				= Set.of("brussels","bruxelles","antwerp","antwerpen","ghent","gand"," gent","charleroi","courtrai","liège","liege","anderlecht","schaarbeek","bruges","bruge","brugge","namur","leuven","molenbeek"," mons "," mons","kortrijk","mechelen","meeuwen"); 
 	public static final Set<String> CITIES_LUXEMBOURG 			= Set.of("dudelange","belvaux", "schifflange","walferdange","rodange","bettembourg","diekirch","pétange","soleuvre","ettelbruck","esch-sur-alzette");
 	public static final Set<String> CITIES_REPUBLIC_OF_IRELAND 	= Set.of("navan","dublin","cork","limerick","galway","tallaght","Waterford","swords","drogheda","dundalk","bray","douglas","laoghaire","letterkenny","kildare");
@@ -71,44 +72,44 @@ public class CityExtractor implements JobSpecifcationFilterExtractor{
 		
 		Set<String> extractedCities = new HashSet<>();
 		
-		CITIES_UK.stream().filter(documentText::contains).findAny().ifPresent(extractedCities::add);
-		CITIES_NETHERLANDS.stream().filter(documentText::contains).findAny().ifPresent(extractedCities::add);
-		CITIES_BELGIUM.stream().filter(documentText::contains).findAny().ifPresent(extractedCities::add); 
-		CITIES_LUXEMBOURG.stream().filter(documentText::contains).findAny().ifPresent(extractedCities::add);
-		CITIES_REPUBLIC_OF_IRELAND.stream().filter(documentText::contains).findAny().ifPresent(extractedCities::add);
-		CITIES_NORTHERN_IRELAND.stream().filter(documentText::contains).findAny().ifPresent(extractedCities::add);
-		CITIES_GERMANY.stream().filter(documentText::contains).findAny().ifPresent(extractedCities::add);
-		CITIES_POLAND.stream().filter(documentText::contains).findAny().ifPresent(extractedCities::add);
-		CITIES_FRANCE.stream().filter(documentText::contains).findAny().ifPresent(extractedCities::add);
-		CITIES_SPAIN.stream().filter(documentText::contains).findAny().ifPresent(extractedCities::add);
-		CITIES_ITALY.stream().filter(documentText::contains).findAny().ifPresent(extractedCities::add);
-		CITIES_PORTUGAL.stream().filter(documentText::contains).findAny().ifPresent(extractedCities::add);
-		CITIES_AUSTRIA.stream().filter(documentText::contains).findAny().ifPresent(extractedCities::add);
-		CITIES_ROMANIA.stream().filter(documentText::contains).findAny().ifPresent(extractedCities::add);
-		CITIES_GREECE.stream().filter(documentText::contains).findAny().ifPresent(extractedCities::add);
-		CITIES_UKRAINE.stream().filter(documentText::contains).findAny().ifPresent(extractedCities::add);
-		CITIES_SWITZERLAND.stream().filter(documentText::contains).findAny().ifPresent(extractedCities::add);
-		CITIES_CZECH_REPUBLIC.stream().filter(documentText::contains).findAny().ifPresent(extractedCities::add);
-		CITIES_SWEDEN.stream().filter(documentText::contains).findAny().ifPresent(extractedCities::add);
-		CITIES_HUNGARY.stream().filter(documentText::contains).findAny().ifPresent(extractedCities::add);
-		CITIES_BULGARIA.stream().filter(documentText::contains).findAny().ifPresent(extractedCities::add);
-		CITIES_DENMARK.stream().filter(documentText::contains).findAny().ifPresent(extractedCities::add);
-		CITIES_FINLAND.stream().filter(documentText::contains).findAny().ifPresent(extractedCities::add);
-		CITIES_SLOVAKIA.stream().filter(documentText::contains).findAny().ifPresent(extractedCities::add);
-		CITIES_CROATIA.stream().filter(documentText::contains).findAny().ifPresent(extractedCities::add);
-		CITIES_LITHUANIA.stream().filter(documentText::contains).findAny().ifPresent(extractedCities::add);
-		CITIES_SLOVENIA.stream().filter(documentText::contains).findAny().ifPresent(extractedCities::add);
-		CITIES_LATVIA.stream().filter(documentText::contains).findAny().ifPresent(extractedCities::add);
-		CITIES_ESTONIA.stream().filter(documentText::contains).findAny().ifPresent(extractedCities::add);
-		CITIES_CYPRUS.stream().filter(documentText::contains).findAny().ifPresent(extractedCities::add);
-		CITIES_MALTA.stream().filter(documentText::contains).findAny().ifPresent(extractedCities::add);
-		CITIES_NORWAY.stream().filter(documentText::contains).findAny().ifPresent(extractedCities::add);
-		CITIES_LIECHTENSTEIN.stream().filter(documentText::contains).findAny().ifPresent(extractedCities::add);
-		CITIES_TURKEY.stream().filter(documentText::contains).findAny().ifPresent(extractedCities::add);
-		CITIES_INDIA.stream().filter(documentText::contains).findAny().ifPresent(extractedCities::add);
-		CITIES_PAKISTAN.stream().filter(documentText::contains).findAny().ifPresent(extractedCities::add);
-		CITIES_US.stream().filter(documentText::contains).findAny().ifPresent(extractedCities::add);
-		CITIES_CANADA.stream().filter(documentText::contains).findAny().ifPresent(extractedCities::add);
+		CITIES_UK.stream().filter(documentText::contains).forEach(extractedCities::add);
+		CITIES_NETHERLANDS.stream().filter(documentText::contains).forEach(extractedCities::add);
+		CITIES_BELGIUM.stream().filter(documentText::contains).forEach(extractedCities::add);
+		CITIES_LUXEMBOURG.stream().filter(documentText::contains).forEach(extractedCities::add);
+		CITIES_REPUBLIC_OF_IRELAND.stream().filter(documentText::contains).forEach(extractedCities::add);
+		CITIES_NORTHERN_IRELAND.stream().filter(documentText::contains).forEach(extractedCities::add);
+		CITIES_GERMANY.stream().filter(documentText::contains).forEach(extractedCities::add);
+		CITIES_POLAND.stream().filter(documentText::contains).forEach(extractedCities::add);
+		CITIES_FRANCE.stream().filter(documentText::contains).forEach(extractedCities::add);
+		CITIES_SPAIN.stream().filter(documentText::contains).forEach(extractedCities::add);
+		CITIES_ITALY.stream().filter(documentText::contains).forEach(extractedCities::add);
+		CITIES_PORTUGAL.stream().filter(documentText::contains).forEach(extractedCities::add);
+		CITIES_AUSTRIA.stream().filter(documentText::contains).forEach(extractedCities::add);
+		CITIES_ROMANIA.stream().filter(documentText::contains).forEach(extractedCities::add);
+		CITIES_GREECE.stream().filter(documentText::contains).forEach(extractedCities::add);
+		CITIES_UKRAINE.stream().filter(documentText::contains).forEach(extractedCities::add);
+		CITIES_SWITZERLAND.stream().filter(documentText::contains).forEach(extractedCities::add);
+		CITIES_CZECH_REPUBLIC.stream().filter(documentText::contains).forEach(extractedCities::add);
+		CITIES_SWEDEN.stream().filter(documentText::contains).forEach(extractedCities::add);
+		CITIES_HUNGARY.stream().filter(documentText::contains).forEach(extractedCities::add);
+		CITIES_BULGARIA.stream().filter(documentText::contains).forEach(extractedCities::add);
+		CITIES_DENMARK.stream().filter(documentText::contains).forEach(extractedCities::add);
+		CITIES_FINLAND.stream().filter(documentText::contains).forEach(extractedCities::add);
+		CITIES_SLOVAKIA.stream().filter(documentText::contains).forEach(extractedCities::add);
+		CITIES_CROATIA.stream().filter(documentText::contains).forEach(extractedCities::add);
+		CITIES_LITHUANIA.stream().filter(documentText::contains).forEach(extractedCities::add);
+		CITIES_SLOVENIA.stream().filter(documentText::contains).forEach(extractedCities::add);
+		CITIES_LATVIA.stream().filter(documentText::contains).forEach(extractedCities::add);
+		CITIES_ESTONIA.stream().filter(documentText::contains).forEach(extractedCities::add);
+		CITIES_CYPRUS.stream().filter(documentText::contains).forEach(extractedCities::add);
+		CITIES_MALTA.stream().filter(documentText::contains).forEach(extractedCities::add);
+		CITIES_NORWAY.stream().filter(documentText::contains).forEach(extractedCities::add);
+		CITIES_LIECHTENSTEIN.stream().filter(documentText::contains).forEach(extractedCities::add);
+		CITIES_TURKEY.stream().filter(documentText::contains).forEach(extractedCities::add);
+		CITIES_INDIA.stream().filter(documentText::contains).forEach(extractedCities::add);
+		CITIES_PAKISTAN.stream().filter(documentText::contains).forEach(extractedCities::add);
+		CITIES_US.stream().filter(documentText::contains).forEach(extractedCities::add);
+		CITIES_CANADA.stream().filter(documentText::contains).forEach(extractedCities::add);
 		
 		/**
 		* We can only set a location if there is a single result. Otherwise we have no way to 
@@ -126,7 +127,10 @@ public class CityExtractor implements JobSpecifcationFilterExtractor{
 		Stream<String> words = Stream.of(city.split(" ")).map(this::applyFormat);
 		
 		city = String.join(" ", words.toList());	
-	
+		city = city.replaceAll("\\.", "");
+		city = city.replaceAll(",", "");
+		city = city.replaceAll(";", "");
+		
 		filterBuilder.city(city);
 			
 	}
