@@ -314,7 +314,7 @@
 			<tr>
 				<th>{{'arenella-suggestions-job-title' | translate}}</th>
 				<td>{{extractedFilters.jobTitle}}</td>	
-			<tr>
+			</tr>
 			<tr>
 				<th>{{'arenella-suggestions-contract' | translate}}</th>
 				<td>
@@ -322,7 +322,7 @@
 					<span *ngIf="extractedFilters.perm 		== 'TRUE'" 	class="function-selectable function-selected-true">{{'arenella-suggestions-permanent' | translate}}</span>
 					<span *ngIf="extractedFilters.perm == 'FALSE' && extractedFilters.freelance == 'FALSE'" style="text-align:center;">-</span>
 				</td>	
-			<tr>
+			</tr>
 			<tr>
 				<th>{{'arenella-suggestions-location-country' | translate}}</th>
 				<td *ngIf="extractedFilters.city != ''">
@@ -337,18 +337,18 @@
 					</mat-icon>
 					<span *ngIf="extractedFilters.countries.length >= 6 " style="font-weight:bold">+ {{extractedFilters.countries.length - 6}}</span>
 				</td>	
-			<tr>
+			</tr>
 			<tr>
 				<th>{{'arenella-suggestions-location-city' | translate}}</th>
 				<td>{{extractedFilters.city}}</td>	
-			<tr>
+			</tr>
 			<tr>
 				<th>{{'arenella-suggestions-language' | translate}}</th>
 				<td>
 					<span *ngFor="let language of extractedFilters.languages.slice(0,3)" class="function-selectable function-selected-true">{{language | translate}}</span>
 					<span *ngIf="extractedFilters.languages.length >= 4 " style="font-weight:bold">....</span>
 				</td>	
-			<tr>
+			</tr>
 			<tr>
 				<th>{{'arenella-suggestions-experience' | translate}}</th>
 				<td>
@@ -357,16 +357,14 @@
 					<span *ngIf="extractedFilters.experienceGTE != '' && extractedFilters.experienceLTE != '' "> {{extractedFilters.experienceGTE}} - {{extractedFilters.experienceLTE}}</span>
 					
 				</td>	
-			<tr>
+			</tr>
 			<tr>
 				<th>{{'arenella-suggestions-skills' | translate}}</th>
 				<td>
 					<span *ngFor="let skill of extractedFilters.skills.slice(0,3) " class="function-selectable function-selected-true">{{skill}}</span>
 					<span class="extra-option-count" *ngIf="extractedFilters.skills.length >= 4 " style="font-weight:bold">+ {{extractedFilters.skills.length - 4}}</span>
 				</td>
-				
-					
-			<tr>
+			</tr>
 		</table>
 		
 	</div> 

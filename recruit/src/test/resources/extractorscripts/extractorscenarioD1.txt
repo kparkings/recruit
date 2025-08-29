@@ -1,0 +1,43 @@
+We have an opening for a Lead Software Engineer in Lisbon, Portugal. Interested candidates, kindly share your resume with Priyankac@falconsamrtit.com.
+
+Job Title: Lead Software Engineer
+Location: Lisbon, Portugal (Hybrid – 3 days travel to office)
+Job Type: 12 Months Contract
+
+Mandatory skills - Java, J2EE, Springboot, JUnit, Oracle, Microservices architecture with design patterns emphasising latency, scalability and resiliency.
+
+Overview 
+Client is seeking a Lead Software Engineer (Back-End) to help shape the future of payment technologies. In this role, you will drive the development of cutting-edge applications that are transforming the way payments are made. We're looking for a passionate engineer who is customer-obsessed, deeply analytical, and thrives in fast-paced environments. The ideal candidate brings an entrepreneurial mindset, a strong grasp of front-end technologies, and a commitment to building intuitive, secure, and high-performance user experiences. Our team embraces Agile methodologies, modern design principles, and a relentless focus on delivering exceptional solutions that delight our customers.
+
+Role: 
+• Act as a hands-on developer, writing high-quality, secure, modular, and 
+testable back-end code.
+• Lead the design, implementation, and successful delivery of complex 
+engineering initiatives within the program.
+• Take full ownership of your team’s software, with deep understanding of its 
+runtime behavior, dependencies, and infrastructure, including operating 
+systems and build processes.
+• Evaluate, introduce, and deploy emerging technologies to optimize 
+performance, scalability, and maintainability.
+• Architect and maintain technical roadmaps while mentoring development 
+teams on best practices and new technology adoption.
+• Contribute across the full software development lifecycle—including 
+architecture, coding, testing, documentation, and deployment.
+• Collaborate effectively with global teams through clear communication and 
+cross-functional engagement.
+
+All About You:
+• Strong foundation in algorithms, data structures, and core computer 
+science principles.
+• Proven experience with object-oriented programming and software design 
+patterns.
+• Proficiency in multiple modern back-end and full-stack technologies such 
+as Java, J2EE, Springboot, JUnit, Oracle, Microservices architecture with design patterns emphasizing on latency, scalability and resiliency.
+• Exceptional written and verbal communication skills in English.
+• Strong analytical and problem-solving capabilities.
+• Hands-on experience in Agile software development environments.
+• Skilled in CI/CD pipelines, and DevOps practices.
+• Experience designing scalable, fault-tolerant platforms resilient to 
+infrastructure-level failures.
+• Practical experience using strangulation patterns and anti-corruption layers 
+to refactor and migrate monolithic systems into decoupled services.

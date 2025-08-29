@@ -168,7 +168,7 @@ class DocumentFilterExtractionUtilTest {
 		
 		assertEquals("C# Developer", 		filters.getJobTitle());	
 		assertEquals(COUNTRY.UK, 			filters.getCountries().toArray()[0]);
-		assertEquals("", 					filters.getExperienceGTE());
+		assertEquals("5", 					filters.getExperienceGTE());
 		assertEquals("",	 				filters.getExperienceLTE());
 		assertEquals(PERM.TRUE, 			filters.getPerm());
 		assertEquals(FREELANCE.FALSE, 		filters.getFreelance());
@@ -196,6 +196,7 @@ class DocumentFilterExtractionUtilTest {
 		assertEquals(COUNTRY.FINLAND, 		filters.getCountries().toArray()[0]);
 		assertEquals("5", 					filters.getExperienceGTE());
 		assertEquals("",	 				filters.getExperienceLTE());
+		
 		assertEquals(PERM.TRUE, 			filters.getPerm());
 		assertEquals(FREELANCE.FALSE, 		filters.getFreelance());
 
@@ -1050,6 +1051,136 @@ class DocumentFilterExtractionUtilTest {
 		assertEquals(FREELANCE.TRUE, 		filters.getFreelance());
 
 		assertTrue(filters.getLanguages().isEmpty());
+		
+		assertTrue(filters.getSkills().contains("java"));
+		assertEquals(1, filters.getSkills().size());
+		
+	}
+	
+	/**
+	* Test CONTRACT SENIOR JAVA BE BRUSSELS
+	* 
+	* @throws IOException
+	*/
+	@Test
+	void testExtractFunctionC7() throws IOException {
+		
+		File file = new File("src/test/resources/extractorscripts/extractorscenarioC7.txt");
+		
+		String 						contents 	= FileUtils.readFileToString(file, Charset.defaultCharset());
+		CandidateExtractedFilters 	filters 	= util.extractFilters(contents);
+		
+		assertEquals("Java Developer", 	filters.getJobTitle());	
+		assertEquals("5", 					filters.getExperienceGTE());
+		assertEquals("",	 				filters.getExperienceLTE());
+		
+		assertTrue(filters.getCountries().contains(COUNTRY.BELGIUM));
+		assertEquals(1, 					filters.getCountries().size());
+		
+		assertEquals("Brussels",filters.getCity());
+		
+		assertNull(filters.getPerm());
+		assertNull(filters.getFreelance());
+
+		assertTrue(filters.getLanguages().isEmpty());
+		
+		assertTrue(filters.getSkills().contains("java"));
+		assertEquals(1, filters.getSkills().size());
+		
+	}
+	
+	/**
+	* Test DATA ANALYST PERM UK
+	* 
+	* @throws IOException
+	*/
+	@Test
+	void testExtractFunctionC8() throws IOException {
+		
+		File file = new File("src/test/resources/extractorscripts/extractorscenarioC8.txt");
+		
+		String 						contents 	= FileUtils.readFileToString(file, Charset.defaultCharset());
+		CandidateExtractedFilters 	filters 	= util.extractFilters(contents);
+		
+		assertEquals("Data Scientist", 		filters.getJobTitle());	
+		assertEquals("", 					filters.getExperienceGTE());
+		assertEquals("",	 				filters.getExperienceLTE());
+		
+		assertTrue(filters.getCountries().contains(COUNTRY.UK));
+		assertEquals(1, 					filters.getCountries().size());
+		
+		assertEquals("",filters.getCity());
+		
+		assertEquals(PERM.TRUE, 			filters.getPerm());
+		assertEquals(FREELANCE.FALSE, 		filters.getFreelance());
+
+		assertEquals(1, filters.getLanguages().size());
+		assertTrue(filters.getLanguages().contains(LANGUAGE.ENGLISH));
+		
+		assertTrue(filters.getSkills().isEmpty());
+		
+	}
+	
+	/**
+	* Test UK C# PERM SENIOR
+	* 
+	* @throws IOException
+	*/
+	@Test
+	void testExtractFunctionC9() throws IOException {
+		
+		File file = new File("src/test/resources/extractorscripts/extractorscenarioC9.txt");
+		
+		String 						contents 	= FileUtils.readFileToString(file, Charset.defaultCharset());
+		CandidateExtractedFilters 	filters 	= util.extractFilters(contents);
+		
+		assertEquals("C# Developer", 		filters.getJobTitle());	
+		assertEquals("5", 					filters.getExperienceGTE());
+		assertEquals("",	 				filters.getExperienceLTE());
+		
+		assertTrue(filters.getCountries().contains(COUNTRY.UK));
+		assertEquals(1, 					filters.getCountries().size());
+		
+		assertEquals("",filters.getCity());
+		
+		assertEquals(PERM.TRUE, 			filters.getPerm());
+		assertEquals(FREELANCE.FALSE, 		filters.getFreelance());
+
+		assertEquals(1, filters.getLanguages().size());
+		assertTrue(filters.getLanguages().contains(LANGUAGE.ENGLISH));
+		
+		assertTrue(filters.getSkills().contains("c#"));
+		assertEquals(1, filters.getSkills().size());
+		
+	}
+
+	/**
+	* Test PORTUGAL JAVA SENIOR CONTRACT LISBON
+	* 
+	* @throws IOException
+	*/
+	@Test
+	void testExtractFunctionD1() throws IOException {
+		
+		File file = new File("src/test/resources/extractorscripts/extractorscenarioD1.txt");
+		
+		String 						contents 	= FileUtils.readFileToString(file, Charset.defaultCharset());
+		CandidateExtractedFilters 	filters 	= util.extractFilters(contents);
+		
+		assertEquals("Java Developer", 		filters.getJobTitle());	
+		assertEquals("5", 					filters.getExperienceGTE());
+		assertEquals("",	 				filters.getExperienceLTE());
+		
+		assertTrue(filters.getCountries().contains(COUNTRY.PORTUGAL));
+		assertEquals(1, 					filters.getCountries().size());
+		
+		assertEquals("Lisbon",filters.getCity());
+		
+		assertEquals(PERM.FALSE, 			filters.getPerm());
+		assertEquals(FREELANCE.TRUE, 		filters.getFreelance());
+
+		assertEquals(1, filters.getLanguages().size());
+		assertTrue(filters.getLanguages().contains(LANGUAGE.ENGLISH));
 		
 		assertTrue(filters.getSkills().contains("java"));
 		assertEquals(1, filters.getSkills().size());

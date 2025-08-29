@@ -92,7 +92,8 @@ export class SuggestionsComponent implements OnInit {
 	public filename:string 										= '';
 	public includeUnavailableCandidatesSelected:string 			= 'true';
 	public includeRequiresSponsorshipCandidatesSelected:string 	= 'true';
-	safeUrl:any;
+	safeUrl:any
+	public publicityView:string									= 'basic';
 			
 	public createAlertForm:UntypedFormGroup 					= new UntypedFormGroup({
 		alertName:												new UntypedFormControl(''),
@@ -438,6 +439,8 @@ export class SuggestionsComponent implements OnInit {
 	
 	public openPublicityDialog() {
 		
+		this.publicityView = 'basic';
+		
 		this.publicitySuggestions = this.suggestions.slice();
 		
 		
@@ -582,4 +585,18 @@ export class SuggestionsComponent implements OnInit {
 		return sessionStorage.getItem('isCandidate') === 'true';
 	}
 
+	/**
+	* Shows basic view in publicity popup 
+	*/
+	public showPublicityBasic():void {
+		this.publicityView = 'basic';
+	}
+	
+	/**
+	* Shows advanced view in publicity popup 
+	*/
+	public showPublicityAdvanced():void {
+		this.publicityView = 'advanced';
+	}
+	
 }

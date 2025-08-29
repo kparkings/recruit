@@ -57,8 +57,8 @@ public class CountryExtractor implements JobSpecifcationFilterExtractor{
 	protected Set<String> canada 				= Set.of("canadá","kanada","canada");
 	
 	
-	public static final Set<String> CITIES_UK 					= Set.of(" reading."," reading,", " reading ","london","birmingham","glasgow","manchester","sheffield","leeds","edinburgh","liverpool","bristol","cardiff","leicester","bradford");
-	public static final Set<String> CITIES_NETHERLANDS 			= Set.of("almelo","alkmaar", "alphen", "amsterdam","rotterdam","the hague","den haag","Utrecht","Groningen","eindhoven","tilburg","almere","breda","nijmegen","enschede","haarlem", "amstelveen", "woerden", "amersfoort", "soest","arnhem","nieuwegein","zwolle","apeldoorn", "utrecht");
+	public static final Set<String> CITIES_UK 					= Set.of("nottingham"," reading."," reading,", " reading ","london","birmingham","glasgow","manchester","sheffield","leeds","edinburgh","liverpool","bristol","cardiff","leicester","bradford");
+	public static final Set<String> CITIES_NETHERLANDS 			= Set.of("maastricht","almelo","alkmaar", "alphen", "amsterdam","rotterdam","the hague","den haag","Utrecht","Groningen","eindhoven","tilburg","almere","breda","nijmegen","enschede","haarlem", "amstelveen", "woerden", "amersfoort", "soest","arnhem","nieuwegein","zwolle","apeldoorn", "utrecht");
 	public static final Set<String> CITIES_BELGIUM 				= Set.of("brussels","bruxelles","antwerp","antwerpen","ghent","gand"," gent","charleroi","courtrai","liège","liege","anderlecht","schaarbeek","bruges","bruge","brugge","namur","leuven","molenbeek"," mons "," mons","kortrijk","mechelen","meeuwen"); 
 	public static final Set<String> CITIES_LUXEMBOURG 			= Set.of("dudelange","belvaux", "schifflange","walferdange","rodange","bettembourg","diekirch","pétange","soleuvre","ettelbruck","esch-sur-alzette");
 	public static final Set<String> CITIES_REPUBLIC_OF_IRELAND 	= Set.of("navan","dublin","cork","limerick","galway","tallaght","Waterford","swords","drogheda","dundalk","bray","douglas","laoghaire","letterkenny","kildare");

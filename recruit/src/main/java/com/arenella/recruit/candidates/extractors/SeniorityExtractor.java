@@ -32,7 +32,7 @@ public class SeniorityExtractor implements JobSpecifcationFilterExtractor{
 		Set<String> medior = new HashSet<>();
 		Set<String> junior = new HashSet<>();
 				
-		senior.addAll(Set.of("principal developer","principal engineer","lead engineer","lead developer","senior","expérimenté","expert ","ervaren"));
+		senior.addAll(Set.of("principal developer","principal engineer","lead engineer","lead developer","senior","expérimenté","expert ","ervaren", " lead "));
 		medior.addAll(Set.of("medior","midweight"," - 5 year"," - 5 jaar"));
 		junior.addAll(Set.of("junior","entry level","graduate "," - 3 year"," - 3 jaar"));
 		

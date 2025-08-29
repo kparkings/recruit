@@ -1,0 +1,66 @@
+Job Title: Data Analyst 
+
+Company: Fumb Games Ltd. 
+
+Location: Fully Remote, ideally based within ±1-3 hours of GMT. 
+
+
+
+About Fumb Games: 
+
+Fumb Games is a rapidly growing company with over 20 million downloads and counting. As one of the fastest-growing UK-registered companies in the gaming industry, we’re on a mission to build incredible products that connect with players around the world. Our team is fully remote, and we are looking for a talented Data Scientist to join us and help shape the future of gaming. 
+
+ 
+Job Overview: 
+
+As a Data Analyst at Fumb Games, you’ll play a pivotal role in engineering infrastructure, building ML models, interacting directly with the wider team and optimising our games. We succeed by understanding how our products interact with players. From building your own ML pipelines to analysing A/B tests, you'll be at the heart of driving data-driven decisions and growing revenue. You’ll be someone who thrives in a fast-paced, self-guided environment and isn't afraid to explore every corner of the data to uncover valuable insights. 
+
+
+
+ Key Responsibilities: 
+
+Build and Deploy: Author and deploy your own data pipelines and models to meet specific measurable objectives.
+Experimentation & Game Balancing: Work closely with the team to evaluate game balancing and design experiments, ensuring our games are finely tuned and engaging. 
+Data-Driven Recommendations: Provide real-time game tuning via segmentations and APIs from your model outputs. Discuss AB test findings with the team and hypothesise about the future together.
+Communication: Clearly present findings, visualisations, and insights to the team, ensuring everyone understands the data and its implications. Never be too shy to say “I don’t know”.
+Self-Driven Exploration: Take the initiative to dive into the data without waiting for direction, always looking for ways to improve and refine our products. 
+
+
+Required Skills: 
+
+Motivated and Self-Organising: You take ownership of your work, guiding your data explorations and problem-solving without constant direction, but be unafraid to ask for help.
+Interest in Gaming: Understand our products so you can make relevant decisions and recommendations.
+SQL Expertise: Proficient with PostgreSQL or similar SQL variants used in cloud platforms (e.g., Amazon Redshift, Google BigQuery, or Azure Synapse).
+Programming Knowledge: Familiarity with Python and/or R.
+Statistical Understanding: A solid understanding of statistics.
+Strong Communicator: Able to present data findings in a clear and engaging manner, with attention to nuance and in good humour, no corporate ‘decks’.
+Data Visualisation: A love for creating beautiful, easy-to-understand findings that make complex data come to life. 
+Curiosity: You’re always asking questions and looking for deeper insights, especially when it comes to how our games interact with players. 
+
+
+Desirable Skills: 
+
+Data Analytics: Not above providing dashboarding tools and ad-hoc reports for the wider team to use on a daily basis.
+Data Pipelines & Software Engineering Principles: Knowledge of data pipelines and basic data engineering principles, comfortable with Git CLI.
+Mobile Game Advertising Ecosystem: Familiarity with key metrics such as CPMs, CPIs, ROAS, and other related advertising concepts. 
+
+
+Why Fumb Games? 
+
+23 days of annual paid leave to recharge and relax. 
+Private Health Insurance (UK residents only) for your peace of mind.
+Additional paid leave for your birthday, or you can choose another day that suits you. 
+Paid leave for all UK bank holidays or other religious celebrations. 
+Award-winning pension plan through Nest to secure your future. 
+Exclusive discounts at over 3,000 high-street stores, thanks to our membership with Charlie HR. 
+Performance-based bonuses – when we succeed, so do you. 
+Flexible working – we’re happy to accommodate your individual needs and preferences. 
+
+
+Join Us! 
+
+If you’re a curious, self-motivated Data Analyst who loves gaming and data, we’d love to hear from you. Apply now, and be part of a company that’s changing the game! 
+
+
+
+Fumb Games Ltd. is an equal opportunity employer. We celebrate diversity and are committed to creating an inclusive environment for all employees.
