@@ -66,7 +66,7 @@ public class JobTitleExtractor implements JobSpecifcationFilterExtractor{
 	public static final JobType ios 				= new JobType(JobType.Type.ios, 				Set.of("ios","mobile"));
 	public static final JobType ccplusplus 			= new JobType(JobType.Type.ccplusplus, 			Set.of("c++","c/c++"));
 	public static final JobType cobol 				= new JobType(JobType.Type.cobol, 				Set.of("cobol"));
-	public static final JobType sap 				= new JobType(JobType.Type.sap, 				Set.of("sap"));
+	public static final JobType sap 				= new JobType(JobType.Type.sap, 				Set.of(" sap "));
 	
 	/**
 	* Refer to JobSpecifcationFilterExtractor interface for details

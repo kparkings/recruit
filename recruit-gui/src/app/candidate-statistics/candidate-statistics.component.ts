@@ -13,6 +13,7 @@ export class CandidateStatisticsComponent {
 	public chartColor:string 						= 'grey';
 	public leftChart: any;
 	public profileViewChartLabels 					= [''];
+	public todaysDate:Date							= new Date();
 	private profileViews:string[] 					= new Array<string>();
 	private viewsChartData 							= [{label: "",data: [''], backgroundColor: ''}];
 	

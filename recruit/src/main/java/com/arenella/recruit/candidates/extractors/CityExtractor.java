@@ -2,7 +2,6 @@ package com.arenella.recruit.candidates.extractors;
 
 import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.springframework.stereotype.Component;
@@ -24,12 +23,12 @@ public class CityExtractor implements JobSpecifcationFilterExtractor{
 	public static final Set<String> CITIES_NORTHERN_IRELAND 	= Set.of("belfast","armagh","ballymena","bangor","derry","carrickfergus","lisburn","newry","antrim","newtownabbey","londonderry","craigavon");
 	public static final Set<String> CITIES_GERMANY 				= Set.of("berlin","hamburg","munich","cologne","frankfurt","stuttgart","düsseldorf","dusseldorf"," essen ","dortmund","dresden","bremen","nuremberg","münchen","munchen","köln","koln","leipzig","hannover","hanover","nürnberg","nurenberg","münster","munster"," bonn ","koblenz","erlangen","duisburg","bochum","wuppertal","bielefeld","mannheim","karlsruhe","augsburg","wiesbaden","mönchengladbach","gelsenkirchen","aachen","braunschweig"," kiel ","chemnitz"," halle ","saale","magdeburg","freiburg im breisgau","krefeld","mainz","lübeck","erfurt","oberhausen","rostock","kassel","hagen","potsdam","saarbrücken","hamm ","ludwigshafen am rhein","mülheim an der ruhr","oldenburg","osnabrück","leverkusen","darmstadt","heidelberg","solingen","herne ","regensburg","neuss ","paderborn","offenbach am main","fürth"," ulm ","würzburg","heilbronn","pforzheim","wolfsburg","bottrop","göttingen","reutlingen "," erlangen ","bremerhaven","remscheid","bergisch gladbach ","recklinghausen"," trier "," jena "," moers ","salzgitter"," siegen ","gütersloh","hildesheim");
 	public static final Set<String> CITIES_POLAND 				= Set.of("warsaw","lodz","łódź","krakow","wroclaw","wrocław","poznan","poznań","gdansk","gdańsk","szczecin","bydgoszcz","lublin","katowice","kraków","bialystok","białystok","gdynia");
-	public static final Set<String> CITIES_FRANCE 				= Set.of("paris","marseille","lyon","toulouse","nantes","marne","strasbourg","bordeaux","montpellier","rouen","lille");
+	public static final Set<String> CITIES_FRANCE 				= Set.of("île-de-france","paris","marseille","lyon","toulouse","nantes","marne","strasbourg","bordeaux","montpellier","rouen","lille");
 	public static final Set<String> CITIES_SPAIN 				= Set.of("madrid", "barcelona","valencia","seville","Zaragoza","málaga","malaga","murcia","palma","las Palmas","alicante","bilbao", "córdoba","cordoba");
-	public static final Set<String> CITIES_ITALY 				= Set.of("prato","brescia","bari","genova","genoa","napoli","naples","parma","trieste","venezia","venice","firenze","florence","palermo","milano"," roma","milan","modena","taranto","catania","bologna"," turin"," rome","verona","messina","cosenza");
+	public static final Set<String> CITIES_ITALY 				= Set.of("prato","brescia","bari","genova","genoa","napoli","naples","parma","trieste","venezia","venice","firenze","florence","palermo","milano"," roma,"," roma."," roma ","milan","modena","taranto","catania","bologna"," turin"," rome","verona","messina","cosenza");
 	public static final Set<String> CITIES_PORTUGAL 			= Set.of("lisbon","porto","Amadora","braga","setúbal","setubal","coimbra","queluz","Funchal","cacém","cacem","vila nova","algueirão","algueirao","loures");
 	public static final Set<String> CITIES_AUSTRIA 				= Set.of("vienna","wien","graz","linz","innsbruck","klagenfurt","villach","dornbirn","neustadt", "steyr","feldkirch","Bregenz","salzburg","wels","polten","pölten");
-	public static final Set<String> CITIES_ROMANIA 				= Set.of("bucharest","iași","iaso","constanța", "cluj","napoca","brasov","timișoara","timisoara","craiova","galati","târgu","targu","oradea","ploieşti","ploiesti","arad");
+	public static final Set<String> CITIES_ROMANIA 				= Set.of("bucharest","iași","iaso","constanța", "cluj","cluj-napoca","brasov","timișoara","timisoara","craiova","galati","târgu","targu","oradea","ploieşti","ploiesti","arad");
 	public static final Set<String> CITIES_GREECE 				= Set.of("athens","thessaloniki","pátrai","patrai","Piraeus","larissa","peristeri","heraklion","kallithe","acharnes","kalamaria","nikaia","glyfada");
 	public static final Set<String> CITIES_UKRAINE 				= Set.of("kyiv","Kharkiv","odesa","dnipro","donetsk","lviv","Zaporizhzhya","kryvyi Rih","sebastopol","mykolaiv","luhansk","vinnytsia");
 	public static final Set<String> CITIES_SWITZERLAND 			= Set.of("fribourg","st. gallen","zurich","geneva","basel","lausanne"," bern "," bern.","Winterthur","lucerne","saint gallen","lugano"," biel "," bienne ","thun ","bellinzona");

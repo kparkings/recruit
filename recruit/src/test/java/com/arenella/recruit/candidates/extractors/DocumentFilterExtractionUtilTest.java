@@ -1187,4 +1187,71 @@ class DocumentFilterExtractionUtilTest {
 		
 	}
 	
+	/**
+	* Test BELGIUM BRUSSELS ( SENIOR cant pickup because also junior ) JAVA 
+	* 
+	* @throws IOException
+	*/
+	@Test
+	void testExtractFunctionD2() throws IOException {
+		
+		File file = new File("src/test/resources/extractorscripts/extractorscenarioD2.txt");
+		
+		String 						contents 	= FileUtils.readFileToString(file, Charset.defaultCharset());
+		CandidateExtractedFilters 	filters 	= util.extractFilters(contents);
+		
+		assertEquals("Java Developer", 		filters.getJobTitle());	
+		assertEquals("", 					filters.getExperienceGTE());
+		assertEquals("",	 				filters.getExperienceLTE());
+		
+		assertTrue(filters.getCountries().contains(COUNTRY.BELGIUM));
+		assertEquals(1, 					filters.getCountries().size());
+		
+		assertEquals("Brussels",filters.getCity());
+		
+		assertNull(filters.getPerm());
+		assertNull(filters.getFreelance());
+
+		assertTrue(filters.getLanguages().isEmpty());
+		
+		assertTrue(filters.getSkills().contains("java"));
+		assertTrue(filters.getSkills().contains("css"));
+		assertEquals(2, filters.getSkills().size());
+		
+	}
+	
+	/**
+	* Test UK IRELAND CONTRACT NEXT
+	* 
+	* @throws IOException
+	*/
+	@Test
+	void testExtractFunctionD3() throws IOException {
+		
+		File file = new File("src/test/resources/extractorscripts/extractorscenarioD3.txt");
+		
+		String 						contents 	= FileUtils.readFileToString(file, Charset.defaultCharset());
+		CandidateExtractedFilters 	filters 	= util.extractFilters(contents);
+		
+		assertEquals("Next Developer", 		filters.getJobTitle());	
+		assertEquals("", 					filters.getExperienceGTE());
+		assertEquals("",	 				filters.getExperienceLTE());
+		
+		assertTrue(filters.getCountries().contains(COUNTRY.UK));
+		assertTrue(filters.getCountries().contains(COUNTRY.REPUBLIC_OF_IRELAND));
+		assertEquals(2, 					filters.getCountries().size());
+		
+		assertEquals("",filters.getCity());
+		
+		assertNull(filters.getPerm());
+		assertNull(filters.getFreelance());
+
+		assertEquals(1, filters.getLanguages().size());
+		assertTrue(filters.getLanguages().contains(LANGUAGE.ENGLISH));
+		
+		assertTrue(filters.getSkills().contains("react"));
+		assertEquals(1, filters.getSkills().size());
+		
+	}
+	
 }

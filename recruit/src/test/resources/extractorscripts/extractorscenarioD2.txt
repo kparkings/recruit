@@ -1,0 +1,33 @@
+AlmavivA de Belgique · Brussels Region, Belgium (On-site) 
+
+Job Description: Lead Full Stack Java Developer
+Position Summary:
+
+We are seeking an experienced Lead Full Stack Java Developer to design, develop, and deliver scalable enterprise applications. The ideal candidate has over 15 years of IT experience, with deep expertise in Java/J2EE, Spring Boot, Microservices, Cloud platforms, RESTful APIs, and modern front-end frameworks (Angular/JavaScript/HTML5/CSS). This role requires both strong technical capabilities and proven leadership skills to guide distributed teams in delivering high-quality software solutions.
+Key Responsibilities:
+Lead the design, development, and maintenance of enterprise-grade applications using Java, Spring Boot, Microservices, and REST APIs.
+Oversee full stack development across front-end (Angular, HTML5, CSS, JavaScript) and back-end (Java, Spring, Hibernate, Oracle, PostgreSQL, MongoDB, NoSQL).
+Architect and implement cloud-based and hybrid solutions leveraging AWS, Kubernetes, Docker, and Jenkins.
+Manage software development lifecycle in Agile/Scrum environments, ensuring timely delivery of features.
+Perform code reviews, enforce clean coding standards, and mentor junior developers across geographies.
+Ensure best practices in security, performance, scalability, and reliability of applications.
+Collaborate with product owners, business stakeholders, and cross-functional teams to align technical solutions with business objectives.
+Drive innovation by adopting modern technologies and microservices-based architectures.
+Provide production support, debugging, and issue resolution for critical applications.
+Required Skills & Experience:
+15+ years of professional experience in software development.
+Strong proficiency in Java/J2EE, Spring, Spring Boot, Hibernate, and REST APIs.
+Hands-on experience with cloud platforms (AWS, Azure), Docker, Kubernetes, Jenkins CI/CD pipelines.
+Database expertise: Oracle, PostgreSQL, MySQL, MongoDB, NoSQL.
+Front-end development experience with Angular (up to v14), HTML5, CSS, Bootstrap, JavaScript.
+Solid knowledge of Microservices architecture, SOA, and API integrations.
+Familiarity with Kafka, Agile methodology, Git, Jira.
+Proven track record in leading and mentoring development teams.
+Strong problem-solving, debugging, and analytical skills.
+Excellent communication and collaboration abilities.
+Nice-to-Have:
+Experience in Hybrid Cloud Management applications.
+Exposure to financial, retail, and enterprise-grade software systems.
+Certifications in Java, Spring, Cloud technologies, or Agile practices.
+Education:
+Bachelor’s or master’s degree in computer science, Information Technology, or related field.
