@@ -413,7 +413,7 @@ public class CandidateController {
 		
 		this.candidateService.performConfirmCandidateAvailability(candidateId, requestToken, isAvailable);
 
-		return ResponseEntity.ok().body("Thanks you. Your'e availability has been updated in the system.");
+		return ResponseEntity.ok().body("Thank you. Your availability has been updated in the system.");
 	}
 	
 	/**

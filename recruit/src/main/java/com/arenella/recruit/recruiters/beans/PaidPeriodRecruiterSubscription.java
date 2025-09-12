@@ -136,6 +136,14 @@ public class PaidPeriodRecruiterSubscription implements RecruiterSubscription{
 	}
 	
 	/**
+	* Marks subscription as being active and indicates that the invoice
+	* was sent to the recruiter
+	*/
+	public void invoiceSent() {
+		this.status = subscription_status.ACTIVE_INVOICE_SENT;
+	}
+	
+	/**
 	* Returns an instance of a builder for the YearlyRecruiterSubscription class
 	* @return Builder
 	*/

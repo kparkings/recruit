@@ -32,7 +32,6 @@ import com.arenella.recruit.candidates.enums.PERM;
 */
 @ExtendWith(MockitoExtension.class)
 class DocumentFilterExtractionUtilTest {
-
 	
 	private JobTitleExtractor 		jobTitleExtractor 			= new JobTitleExtractor();
 	
@@ -87,8 +86,8 @@ class DocumentFilterExtractionUtilTest {
 		assertEquals("Java Developer", 		filters.getJobTitle());		
 		assertEquals(COUNTRY.NETHERLANDS, 	filters.getCountries().toArray()[0]);
 		assertEquals(1, 					filters.getCountries().size());
-		assertEquals("", 					filters.getExperienceGTE());
-		assertEquals("",	 				filters.getExperienceLTE());
+		assertEquals("3", 					filters.getExperienceGTE());
+		assertEquals("5",	 				filters.getExperienceLTE());
 		assertEquals(FREELANCE.TRUE, 		filters.getFreelance());
 		assertEquals(PERM.FALSE, 			filters.getPerm());
 		assertEquals(1, 					filters.getSkills().size());
@@ -512,7 +511,7 @@ class DocumentFilterExtractionUtilTest {
 	}
 	
 	/**
-	* Test SCRUM MASTER SWITZERLAND SENIOR ENGLISH FRENCH
+	* Test SCRUM MASTER SWITZERLAND (SENIOR selecting medior as minumum 3 years present) ENGLISH FRENCH
 	* 
 	* @throws IOException
 	*/
@@ -530,7 +529,7 @@ class DocumentFilterExtractionUtilTest {
 		* It is senior but there is also a match on junior so we cant determine
 		* the level 
 		*/
-		assertEquals("", 					filters.getExperienceGTE());
+		assertEquals("3", 					filters.getExperienceGTE());
 		assertEquals("",	 				filters.getExperienceLTE());
 		
 		assertTrue(filters.getCountries().contains(COUNTRY.SWITZERLAND));
@@ -977,7 +976,7 @@ class DocumentFilterExtractionUtilTest {
 		CandidateExtractedFilters 	filters 	= util.extractFilters(contents);
 		
 		assertEquals("C# Developer", 	filters.getJobTitle());	
-		assertEquals("5", 					filters.getExperienceGTE());
+		assertEquals("", 					filters.getExperienceGTE());
 		assertEquals("",	 				filters.getExperienceLTE());
 		
 		assertTrue(filters.getCountries().contains(COUNTRY.UK));
@@ -994,7 +993,11 @@ class DocumentFilterExtractionUtilTest {
 	}
 	
 	/**
-	* Test CONTRACT SENIOR (Cant determine because mentions both 3 years and senior) JAVA NL Almelo
+	* Test CONTRACT SENIOR 
+	* 
+	* (Cant determine because mentions both 3 years and senior. Selects medior because) 
+	* 
+	* JAVA NL Almelo
 	* 
 	* @throws IOException
 	*/
@@ -1007,7 +1010,7 @@ class DocumentFilterExtractionUtilTest {
 		CandidateExtractedFilters 	filters 	= util.extractFilters(contents);
 		
 		assertEquals("Java Developer", 	filters.getJobTitle());	
-		assertEquals("", 					filters.getExperienceGTE());
+		assertEquals("3", 					filters.getExperienceGTE());
 		assertEquals("",	 				filters.getExperienceLTE());
 		
 		assertTrue(filters.getCountries().contains(COUNTRY.NETHERLANDS));
@@ -1254,4 +1257,35 @@ class DocumentFilterExtractionUtilTest {
 		
 	}
 	
+	/**
+	* Test UK LONDON TESTER PERM
+	* 
+	* @throws IOException
+	*/
+	@Test
+	void testExtractFunctionD4() throws IOException {
+		
+		File file = new File("src/test/resources/extractorscripts/extractorscenarioD4.txt");
+		
+		String 						contents 	= FileUtils.readFileToString(file, Charset.defaultCharset());
+		CandidateExtractedFilters 	filters 	= util.extractFilters(contents);
+		
+		assertEquals("Test Analyst", 		filters.getJobTitle());	
+		assertEquals("", 					filters.getExperienceGTE());
+		assertEquals("3",	 				filters.getExperienceLTE());
+		
+		assertTrue(filters.getCountries().contains(COUNTRY.UK));
+		assertEquals(1, 					filters.getCountries().size());
+		
+		assertEquals("London",filters.getCity());
+		
+		assertEquals(PERM.TRUE, 			filters.getPerm());
+		assertEquals(FREELANCE.FALSE, 		filters.getFreelance());
+
+		assertEquals(1, filters.getLanguages().size());
+		assertTrue(filters.getLanguages().contains(LANGUAGE.ENGLISH));
+		
+		assertTrue(filters.getSkills().isEmpty());
+		
+	}
 }

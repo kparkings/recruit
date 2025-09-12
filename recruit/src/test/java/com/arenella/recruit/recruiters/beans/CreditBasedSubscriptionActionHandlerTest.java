@@ -20,7 +20,7 @@ import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_
 * @author K Parkings
 */
 @ExtendWith(MockitoExtension.class)
-public class CreditBasedSubscriptionActionHandlerTest {
+class CreditBasedSubscriptionActionHandlerTest {
 
 	@InjectMocks
 	private CreditBasedSubscriptionActionHandler 	handler 					= new CreditBasedSubscriptionActionHandler();
@@ -33,7 +33,7 @@ public class CreditBasedSubscriptionActionHandlerTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testPermformAction_unsupportedAction() throws Exception{
+	void testPermformAction_unsupportedAction() {
 		
 		Recruiter 				recruiter 		= Recruiter.builder().build();
 		RecruiterSubscription 	subscription 	= CreditBasedSubscription.builder().build();
@@ -49,7 +49,7 @@ public class CreditBasedSubscriptionActionHandlerTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testPermformAction_rejectSubscription_notAdmin() throws Exception{
+	void testPermformAction_rejectSubscription_notAdmin() {
 		
 		Recruiter 				recruiter 		= Recruiter.builder().build();
 		RecruiterSubscription 	subscription 	= CreditBasedSubscription.builder().status(subscription_status.AWAITING_ACTIVATION).build();
@@ -64,7 +64,7 @@ public class CreditBasedSubscriptionActionHandlerTest {
 	* Tests no Invoice type for credit based subscription type
 	*/
 	@Test
-	public void testGetInvoiceType() {
+	void testGetInvoiceType() {
 		
 		RecruiterSubscription 	subscription 	= CreditBasedSubscription.builder().status(subscription_status.AWAITING_ACTIVATION).build();
 		assertTrue(subscription.getInvoiceType().isEmpty());
@@ -75,7 +75,7 @@ public class CreditBasedSubscriptionActionHandlerTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testPermformAction_acceptSubscription_notAdmin() throws Exception{
+	void testPermformAction_acceptSubscription_notAdmin() {
 		
 		Recruiter 				recruiter 		= Recruiter.builder().build();
 		RecruiterSubscription 	subscription 	= CreditBasedSubscription.builder().status(subscription_status.AWAITING_ACTIVATION).build();
@@ -88,10 +88,11 @@ public class CreditBasedSubscriptionActionHandlerTest {
 	
 	/**
 	* Tests Success for Activate subscription
+	 * @throws IllegalAccessException 
 	* @throws Exception
 	*/
 	@Test
-	public void testPermformAction_activareSubscription_success() throws Exception{
+	void testPermformAction_activareSubscription_success() throws IllegalAccessException {
 		
 		Recruiter 				recruiter 		= Recruiter.builder().firstName("").surname("").userId("").build();
 		RecruiterSubscription 	subscription 	= CreditBasedSubscription.builder().status(subscription_status.AWAITING_ACTIVATION).build();
@@ -105,10 +106,11 @@ public class CreditBasedSubscriptionActionHandlerTest {
 	
 	/**
 	* Tests Success for Activate subscription
+	 * @throws IllegalAccessException 
 	* @throws Exception
 	*/
 	@Test
-	public void testPermformAction_rejectSubscription_success() throws Exception{
+	void testPermformAction_rejectSubscription_success() throws IllegalAccessException {
 		
 		Recruiter 				recruiter 		= Recruiter.builder().build();
 		RecruiterSubscription 	subscription 	= CreditBasedSubscription.builder().status(subscription_status.AWAITING_ACTIVATION).build();

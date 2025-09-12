@@ -2,10 +2,15 @@
 	width:100%;
 }
 
+.action-buttons {
+    text-align: right;
+    margin-bottom: 10px;
+}
+
 .account-subscription-status-panels{
 	margin:0 auto;	
 	margin-top:100px;
-	width:1000px;
+	width:1350px;
 	margin-bottom:20px;
 }
 
@@ -37,6 +42,10 @@
 	color:#6A5ACD;
 }
 
+.subscriptions-invoice-sent{
+	color:purple;
+}
+
 .subscriptions-disabled{
 	color:red;
 }
@@ -55,6 +64,7 @@
 }
 
 .subscription-details{
+	margin-top:10px;
 	margin:0px;	
 	float:left;
 }

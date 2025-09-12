@@ -1,6 +1,7 @@
 package com.arenella.recruit.candidates.extractors;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.springframework.stereotype.Component;
@@ -27,7 +28,9 @@ public class SeniorityExtractor implements JobSpecifcationFilterExtractor{
 	public void extractFilters(String documentText, CandidateExtractedFiltersBuilder filterBuilder) {
 		
 		//6 jaar ervaring - Add these checking for all common levels also in english and french
-		
+		 
+		documentText = documentText.replaceAll(".5", "");
+		 
 		Set<String> senior = new HashSet<>();
 		Set<String> medior = new HashSet<>();
 		Set<String> junior = new HashSet<>();
@@ -36,7 +39,7 @@ public class SeniorityExtractor implements JobSpecifcationFilterExtractor{
 		medior.addAll(Set.of("medior","midweight"," - 5 year"," - 5 jaar"));
 		junior.addAll(Set.of("junior","entry level","graduate "," - 3 year"," - 3 jaar"));
 		
-		for (int i=1 ; i <= 3; i++) {
+		for (int i=1 ; i < 3; i++) {
 			junior.add("minimum "+i +" year");
 			junior.add(i+" years");
 			junior.add(i+"+ years");
@@ -82,9 +85,9 @@ public class SeniorityExtractor implements JobSpecifcationFilterExtractor{
 		boolean mediorMatches = medior.stream().anyMatch(documentText.replaceAll(" - 5", "")::contains);
 		boolean seniorMatches = senior.stream().anyMatch(documentText.replaceAll(" - 5", "")::contains);
 		
-		//List<String> debugJunior = junior.stream().filter(documentText.replaceAll(" - 5", "")::contains).toList();
-		//List<String> debugMedior = medior.stream().filter(documentText.replaceAll(" - 5", "")::contains).toList();
-		//List<String> debugSenior = senior.stream().filter(documentText.replaceAll(" - 5", "")::contains).toList();
+		List<String> debugJunior = junior.stream().filter(documentText.replaceAll(" - 5", "")::contains).toList();
+		List<String> debugMedior = medior.stream().filter(documentText.replaceAll(" - 5", "")::contains).toList();
+		List<String> debugSenior = senior.stream().filter(documentText.replaceAll(" - 5", "")::contains).toList();
 		
 		if (!seniorMatches && !mediorMatches && !juniorMatches) {
 			return;

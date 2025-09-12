@@ -488,7 +488,7 @@ class CandidateControllerTest {
 		
 		verify(this.mockCandidateService).performConfirmCandidateAvailability(candidateId, requestToken, isAvailable);
 		
-		assertEquals("Thanks you. Your'e availability has been updated in the system.", response.getBody());
+		assertEquals("Thank you. Your availability has been updated in the system.", response.getBody());
 		
 	}
 	

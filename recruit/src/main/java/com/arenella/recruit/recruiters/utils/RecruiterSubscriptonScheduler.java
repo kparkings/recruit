@@ -34,7 +34,7 @@ import com.arenella.recruit.recruiters.services.RecruiterService;
 @Component
 public class RecruiterSubscriptonScheduler {
 	
-	private static final Set<subscription_status> ACTIVE_STATUSES = Set.of(subscription_status.ACTIVE_PENDING_PAYMENT, subscription_status.ACTIVE, subscription_status.DISABLED_PENDING_PAYMENT);
+	private static final Set<subscription_status> ACTIVE_STATUSES = Set.of(subscription_status.ACTIVE_INVOICE_SENT,subscription_status.ACTIVE_PENDING_PAYMENT, subscription_status.ACTIVE, subscription_status.DISABLED_PENDING_PAYMENT);
 	
 	@Autowired
 	private RecruiterService 				recruiterService;

@@ -11,6 +11,10 @@
 			<h1>Awaiting Payment</h1>
 			<p>{{getRecruitersWithSubscriptionActionsStatusCount(SUBSCRIPTION_VIEW.SUBSCRIPTION_STATUS_AWAITING_PAYMENT)}}</p>
 		</div>
+		<div class="account-subscription-panel subscriptions-invoice-sent" (click)="selectSubscriptionStatus(SUBSCRIPTION_VIEW.ACTIVE_INVOICE_SENT)">
+			<h1>Invoice Sent</h1>
+			<p>{{getRecruitersWithSubscriptionActionsStatusCount(SUBSCRIPTION_VIEW.ACTIVE_INVOICE_SENT)}}</p>
+		</div>
 		<div class="account-subscription-panel subscriptions-disabled" (click)="selectSubscriptionStatus(SUBSCRIPTION_VIEW.SUBSCRIPTION_STATUS_DISABLED)">
 			<h1>Disabled</h1>
 			<p>{{getRecruitersWithSubscriptionActionsStatusCount(SUBSCRIPTION_VIEW.SUBSCRIPTION_STATUS_DISABLED)}}</p>
@@ -19,7 +23,7 @@
 	</div>
 	
 	<!-- Panel showing subscriptions of selected Status -->
-	<div *ngIf="currentView == SUBSCRIPTION_VIEW.SUBSCRIPTION_STATUS_AWAITING_ACTIVATION || currentView == SUBSCRIPTION_VIEW.SUBSCRIPTION_STATUS_AWAITING_PAYMENT || currentView == SUBSCRIPTION_VIEW.SUBSCRIPTION_STATUS_DISABLED ">
+	<div *ngIf="currentView == SUBSCRIPTION_VIEW.SUBSCRIPTION_STATUS_AWAITING_ACTIVATION || currentView == SUBSCRIPTION_VIEW.SUBSCRIPTION_STATUS_AWAITING_PAYMENT || currentView == SUBSCRIPTION_VIEW.SUBSCRIPTION_STATUS_DISABLED || currentView == SUBSCRIPTION_VIEW.ACTIVE_INVOICE_SENT">
 		<div class="action-buttons">
 			<button	class="btn btn-secondary arenella-btn" (click)="showStatusOptions()">Back</button>
 		</div>
@@ -99,7 +103,7 @@
 					<th>Actions</th>
 					<td>
 						<button class="btn btn-secondary arenella-btn" style="min-width:100px;"  *ngFor="let action of selectedSubscriptionAction.actions" (click)="performAction(selectedSubscriptionAction, action)">{{frmtSubscriptionAction(action)}}</button>	
-						<button class="btn btn-secondary arenella-btn mobile" *ngIf="selectedSubscriptionAction.type != 'CREDIT_BASED_SUBSCRIPTION' && selectedSubscriptionAction.type != 'CREDIT_BASED_SUBSCRIPTION'" (click)="showGenerateInvoiceOptions()">Invoice</button>
+						<button class="btn btn-secondary arenella-btn mobile" *ngIf="selectedSubscriptionAction.type != 'CREDIT_BASED_SUBSCRIPTION' && selectedSubscriptionAction.status == 'ACTIVE_PENDING_PAYMENT'" (click)="showGenerateInvoiceOptions()">Generate Invoice</button>
 					</td>
 				</tr>
 			</table>

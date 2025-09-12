@@ -190,12 +190,12 @@ public class YearlySubscriptionActionHandlerTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testActionHAndler_disableSubscriptionInActivePendingPayement_admin() throws Exception {
+	public void testActionHAndler_disableSubscriptionInActiveInvoiceSent_admin() throws Exception {
 		
 		final LocalDateTime 		created 			= LocalDateTime.of(2021, 12, 18, 10, 10);
 		final String				recruiterId			= "kparkings";
 		final UUID					subscriptionId		= UUID.randomUUID();
-		final subscription_status 	status 				= subscription_status.ACTIVE_PENDING_PAYMENT;
+		final subscription_status 	status 				= subscription_status.ACTIVE_INVOICE_SENT;
 		
 		PaidPeriodRecruiterSubscription subscription = PaidPeriodRecruiterSubscription
 																		.builder()

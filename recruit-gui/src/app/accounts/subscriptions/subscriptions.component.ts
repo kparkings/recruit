@@ -35,9 +35,9 @@ export class SubscriptionsComponent {
 	
 	recruiters:Array<Recruiter>										= new Array<Recruiter>();
 	recruitersWithSubscriptionActions:Array<SubscriptionAction>		= new Array<SubscriptionAction>();
-	public selectedSubscriptionAction:SubscriptionAction 	= new SubscriptionAction;
-	public selectedRecruiter:Recruiter 						= new Recruiter();
-	public lastCurrentView:SUBSCRIPTION_VIEW 				= SUBSCRIPTION_VIEW.SELECT_SUBSCRIPTION_STATUS;
+	public selectedSubscriptionAction:SubscriptionAction 			= new SubscriptionAction;
+	public selectedRecruiter:Recruiter 								= new Recruiter();
+	public lastCurrentView:SUBSCRIPTION_VIEW 						= SUBSCRIPTION_VIEW.SELECT_SUBSCRIPTION_STATUS;
 	
 	private invoiceRequest:GenerateInvoiceRequest = new GenerateInvoiceRequest();
 	public 	trustedResourceUrl:SafeResourceUrl;
@@ -149,12 +149,33 @@ export class SubscriptionsComponent {
 					sa.type 			= s.type;
 					sa.invoiceType	 	= s.invoiceType;
 					sa.created			= s.created;
+					
+					sa.actions.push("INVOICE_SENT");
+					
+					this.recruitersWithSubscriptionActions.push(sa);
+				}
+				
+				if (s.currentSubscription && s.status === "ACTIVE_INVOICE_SENT") {
+					
+					let sa:SubscriptionAction = new SubscriptionAction();
+										
+					sa.firstName 		= r.firstName;
+					sa.surname 			= r.surname;
+					sa.email 			= r.email;
+					sa.subscriptionId 	= s.subscriptionId;
+					sa.status 			= s.status;
+					sa.language 		= r.language;
+					sa.userId 			= r.userId;
+					sa.type 			= s.type;
+					sa.invoiceType	 	= s.invoiceType;
+					sa.created			= s.created;
+										
 					sa.actions.push("ACTIVATE_SUBSCRIPTION");
 					sa.actions.push("DISABLE_PENDING_PAYMENT");
 					
 					this.recruitersWithSubscriptionActions.push(sa);
 				}
-				
+
 				if (s.currentSubscription && s.status === "DISABLED_PENDING_PAYMENT" && 
 					(	s.type === "YEAR_SUBSCRIPTION"
 						|| s.type === "ONE_MONTH_SUBSCRIPTION"
@@ -313,6 +334,9 @@ export class SubscriptionsComponent {
 			case "DISABLE_PENDING_PAYMENT": {
 				return "Disable";
 			}
+			case "INVOICE_SENT": {
+				return "Invoiced";
+			}
 			default:{
 				return actionId;
 			}
@@ -333,6 +357,7 @@ enum SUBSCRIPTION_VIEW {
 	SELECT_SUBSCRIPTION_STATUS 				= "",
 	SUBSCRIPTION_STATUS_AWAITING_ACTIVATION = "AWAITING_ACTIVATION",
 	SUBSCRIPTION_STATUS_AWAITING_PAYMENT 	= "ACTIVE_PENDING_PAYMENT",
+	ACTIVE_INVOICE_SENT						= "ACTIVE_INVOICE_SENT",
 	SUBSCRIPTION_STATUS_DISABLED 			= "DISABLED_PENDING_PAYMENT",
 	SUBSCRIPTION_DETAILS			  		= "SUBSCRIPTION_DETAILS",
 	SUBSCRIPTION_INVOICE_INLINE 			= "SUBSCRIPTION_INVOICE_INLINE"

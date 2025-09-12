@@ -21,7 +21,7 @@ public class PaidPeriodSubscriptionActionHandler implements RecruiterSubscriptio
 	
 	@Autowired
 	private RecruitersExternalEventPublisher 	externEventPublisher;
-
+	
 	/**
 	* Refer to RecruiterSubscriptionActionHandler for details 
 	*/
@@ -29,14 +29,31 @@ public class PaidPeriodSubscriptionActionHandler implements RecruiterSubscriptio
 	public Optional<SubscriptionActionFeedback> performAction(Recruiter recruiter, RecruiterSubscription subscription, subscription_action action, Boolean isAdminUser) throws IllegalAccessException {
 		
 		switch(action) {
+			case INVOICE_SENT:{
+			
+				if (!isAdminUser) {
+					throw new IllegalAccessException("You are not authorized to carry out this action");
+				}
+				
+				if (subscription.getStatus() != subscription_status.ACTIVE_PENDING_PAYMENT) {
+					throw new IllegalStateException("Can only activate subscritions in state ACTIVE_PENDING_PAYMENT: " + subscription.getSubscriptionId());
+				}
+				
+				((PaidPeriodRecruiterSubscription)subscription).invoiceSent();
+				
+				this.externEventPublisher.publishSubscriptionAddedEvent(new SubscriptionAddedEvent(recruiter.getUserId(), subscription.getType()));
+				
+				return Optional.empty();
+				
+			}
 			case ACTIVATE_SUBSCRIPTION:{
 			
 				if (!isAdminUser) {
 					throw new IllegalAccessException("You are not authorized to carry out this action");
 				}
 				
-				if (subscription.getStatus() != subscription_status.ACTIVE_PENDING_PAYMENT && subscription.getStatus() != subscription_status.DISABLED_PENDING_PAYMENT) {
-					throw new IllegalStateException("Can only activate subscritions in state ACTIVE_PENDING_PAYMENT or DISABLED_PENDING_PAYMENT: " + subscription.getSubscriptionId());
+				if (subscription.getStatus() != subscription_status.ACTIVE_PENDING_PAYMENT && subscription.getStatus() != subscription_status.ACTIVE_INVOICE_SENT && subscription.getStatus() != subscription_status.DISABLED_PENDING_PAYMENT) {
+					throw new IllegalStateException("Can only activate subscritions in state ACTIVE_PENDING_PAYMENT or ACTIVE_INVOICE_SENT or DISABLED_PENDING_PAYMENT: " + subscription.getSubscriptionId());
 				}
 				
 				((PaidPeriodRecruiterSubscription)subscription).activateSubscription();
@@ -51,8 +68,8 @@ public class PaidPeriodSubscriptionActionHandler implements RecruiterSubscriptio
 					throw new IllegalAccessException("You are not authorized to carry out this action");
 				}
 				
-				if (subscription.getStatus() != subscription_status.ACTIVE_PENDING_PAYMENT) {
-					throw new IllegalStateException("Can only activate subscritions in state ACTIVE_PENDING_PAYMENT: " + subscription.getSubscriptionId());
+				if (subscription.getStatus() != subscription_status.ACTIVE_INVOICE_SENT) {
+					throw new IllegalStateException("Can only activate subscritions in state ACTIVE_INVOICE_SENT: " + subscription.getSubscriptionId());
 				}
 				
 				((PaidPeriodRecruiterSubscription)subscription).disablePendingPayment();

@@ -32,7 +32,7 @@ public class JobTitleExtractor implements JobSpecifcationFilterExtractor{
 	public static final JobType java 				= new JobType(JobType.Type.java, 				Set.of (" java","java,","java/","ontwikkelen van java", "programmeren van java", "engineer (java","developer java","java developer", "java software engineer", "java engineer", "java software ontwikkelaar", "java ontwikkelaar", "fullstack java", "java backend developer", "ontwikkelaar java", "développeur java", " java ","java ", " java,","dropwizard","struts","quarkus","jsp","spring","springboot","spring boot"));
 	public static final JobType csharp 				= new JobType(JobType.Type.csharp, 				Set.of("c#/.net","c#.net", ".net software engineer", "c# developer", "c# software engineer", "c# engineer", "c# software ontwikkelaar", "c# ontwikkelaar", "fullstack c#", "c# backend developer", "c#", "entity framework", ".net", "asp.net"));
 	public static final JobType ba 					= new JobType(JobType.Type.ba, 					Set.of("business analyst","business analist"));
-	public static final JobType qa 					= new JobType(JobType.Type.qa, 					Set.of("/qa","quality assurance","testautomation specialist", "qa engineer","test engineer", "test automation engineer", "test specialist", "test analyst", "performance tester", "automation tester", "qa tester", "software tester", "penetration tester", "software testers", "test lead", "auality engineer"));
+	public static final JobType qa 					= new JobType(JobType.Type.qa, 					Set.of("quality engineer","/qa","quality assurance","testautomation specialist", "qa engineer","test engineer", "test automation engineer", "test specialist", "test analyst", "performance tester", "automation tester", "qa tester", "software tester", "penetration tester", "software testers", "test lead", "auality engineer"));
 	public static final JobType itSupport			= new JobType(JobType.Type.itSupport, 			Set.of("helpdeskmedewerker","supportmedewerker","servicedeskmedewerker", "it support", "it helpdesk","helpdesk support", "support engineer", "support developer", "support analyst", "tech support", "service agent", "support manager", "1st line support", "2nd line support", "3rd line support", "support specialist", "support technician"));
 	public static final JobType uiux				= new JobType(JobType.Type.uiux, 				Set.of("interaction design","ui/ux designer", "ui designer", "ui engineer", "product designer"));
 	public static final JobType projectManager		= new JobType(JobType.Type.projectManager, 		Set.of("pmo","project manager", "program manager", "it manager", "procurement manager", "control manager", "operations manager", "ops manager", "head of it", "infrastructure manager", "infra manager", "development manager", "engineering manager", "security manager", "services manager", "delivery manager", "service manager", "asset manager"));
@@ -184,11 +184,9 @@ public class JobTitleExtractor implements JobSpecifcationFilterExtractor{
 			tmpDocumentText.set(documentText);
 		
 			jobType.getTitles().stream().forEach(title -> {
-				//System.out.println(jobType.getType() + ": Processing title " + title);
 				if (tmpDocumentText.get().contains(title)) {
 					WeightResult result = getNumOccurrencesOfMatchingTitle(tmpDocumentText.get(), title);
 					tmpDocumentText.set(result.documentText) ;
-					//System.out.println("SCORE " + jobType.getType() + " using title " + title + " score now " + result.count);
 					scored.get(jobType.getType()).addAndGet(result.count);
 				}
 			});

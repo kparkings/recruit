@@ -19,14 +19,14 @@ import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_
 * Unit tests for the PaidPeriodRecruiterSubscription class
 * @author K Parkings
 */
-public class PaidPeriodRecruiterSubscriptionTest {
+class PaidPeriodRecruiterSubscriptionTest {
 
 	/**
 	* Tests creation via the Builder
 	* @throws Exception
 	*/
 	@Test
-	public void testBuilder() throws Exception {
+	void testBuilder() {
 		
 		final LocalDateTime 		created 			= LocalDateTime.of(2021, 12, 18, 10, 10);
 		final LocalDateTime 		activatedDate 		= LocalDateTime.of(2021, 12, 24, 10, 10);
@@ -65,7 +65,7 @@ public class PaidPeriodRecruiterSubscriptionTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testActivateSubscription() throws Exception {
+	void testActivateSubscription() {
 		
 		final LocalDateTime 		created 			= LocalDateTime.of(2021, 12, 18, 10, 10);
 		final String				recruiterId			= "kparkings";
@@ -96,7 +96,7 @@ public class PaidPeriodRecruiterSubscriptionTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testDisablePendingPayment() throws Exception {
+	void testDisablePendingPayment() {
 		
 		final LocalDateTime 		created 			= LocalDateTime.of(2021, 12, 18, 10, 10);
 		final String				recruiterId			= "kparkings";
@@ -125,7 +125,7 @@ public class PaidPeriodRecruiterSubscriptionTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testEndSubscription() throws Exception {
+	void testEndSubscription() {
 		
 		final LocalDateTime 		created 			= LocalDateTime.of(2021, 12, 18, 10, 10);
 		final String				recruiterId			= "kparkings";
@@ -157,7 +157,7 @@ public class PaidPeriodRecruiterSubscriptionTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testRenewSubscription() throws Exception {
+	void testRenewSubscription() {
 		
 		final LocalDateTime 		created 			= LocalDateTime.of(2021, 12, 18, 10, 10);
 		final String				recruiterId			= "kparkings";
@@ -186,10 +186,28 @@ public class PaidPeriodRecruiterSubscriptionTest {
 	}
 	
 	/**
+	* Tests updating of Subscription status to having sent the invoice 
+	* to the recruiters
+	*/
+	@Test
+	void testInvoiceSent() {
+		PaidPeriodRecruiterSubscription subscription = PaidPeriodRecruiterSubscription
+				.builder()
+				.build();
+		
+		assertNull(subscription.getStatus());
+		
+		subscription.invoiceSent();
+		
+		assertEquals(subscription_status.ACTIVE_INVOICE_SENT, subscription.getStatus());
+		
+	}
+	
+	/**
 	* Tests check to see if the subscription period has elapsed since the last activation date
 	*/
 	@Test
-	public void testPeriodElapsedSinceActivation() throws Exception {
+	void testPeriodElapsedSinceActivation() {
 
 		assertTrue(PaidPeriodRecruiterSubscription.hasPeriodElapsedSinceActivation(PaidPeriodRecruiterSubscription.builder().type(subscription_type.YEAR_SUBSCRIPTION).activateDate(LocalDateTime.now().minusMonths(13)).build()));
 		assertFalse(PaidPeriodRecruiterSubscription.hasPeriodElapsedSinceActivation(PaidPeriodRecruiterSubscription.builder().type(subscription_type.YEAR_SUBSCRIPTION).activateDate(LocalDateTime.now().minusMonths(1)).build()));
