@@ -156,6 +156,7 @@ export class RecruitersComponent {
 			rec.recruiter = recruiter;
 			rec.loginSummary = loginSummary;
 			rec.isPaidSubscription = false;
+			rec.subscriptionStatus = ''
 			
 			this.recruiters.push(rec);
 			return;
@@ -164,12 +165,14 @@ export class RecruitersComponent {
 		if (	activeSubscription.status == 'AWAITING_ACTIVATION'
 			|| 	activeSubscription.status == 'ACTIVE_PENDING_PAYMENT'
 			|| 	activeSubscription.status == 'ACTIVE'
+			|| 	activeSubscription.status == 'ACTIVE_INVOICE_SENT'
 			||  activeSubscription.status == 'DISABLED_PENDING_PAYMENT'){
 			this.recruiters.push()
 				let rec:RecruiterDetails = new RecruiterDetails();
 							rec.recruiter = recruiter;
 							rec.loginSummary = loginSummary;
 							rec.isPaidSubscription = true;
+							rec.subscriptionStatus = activeSubscription.status;
 							this.recruiters.push(rec);
 			return;
 		}
@@ -237,4 +240,5 @@ export class RecruiterDetails{
 	public recruiter:Recruiter 			= new Recruiter();
 	public loginSummary:LoginSummary 	= new LoginSummary();
 	public isPaidSubscription:boolean 	= false;
+	public subscriptionStatus:string	= '';
 }

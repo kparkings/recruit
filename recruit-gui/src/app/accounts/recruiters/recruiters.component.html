@@ -80,7 +80,10 @@
 	      		<!-- Table row -->
 	      		<ng-container *ngFor="let recruiter of getSubscriptionRecruiters()" class="recruiter-active-subscription">
 	      			<tr  class="recruiter-active-subscription" (click)="toggleRecruiterDetails(recruiter.recruiter)">
-	      				<td *ngIf="showActivePaidSubscription" class="candidate-tab-col medicol"><span class="candidate-id-prefix"></span>{{recruiter.recruiter.userId}}</td>
+	      				<td *ngIf="showActivePaidSubscription" class="candidate-tab-col medicol">
+	      					<span class="subscription{{recruiter.subscriptionStatus}}"></span>
+	      					{{recruiter.recruiter.userId}}
+	      				</td>
 	            	    <td *ngIf="showActivePaidSubscription" class="candidate-tab-col medicol"> {{recruiter.recruiter.firstName}} {{recruiter.recruiter.surname}}</td>
 	            	    <td *ngIf="showActivePaidSubscription" class="candidate-tab-col medicol">
 	            	    	<span class="recruiter-activity-level-{{recruiter.loginSummary.activityLevel}}">
@@ -117,7 +120,10 @@
       			</ng-container>
       			<ng-container *ngFor="let recruiter of getCreditBasedRecruiters()">
 	      			<tr  class="recruiter-credit-based-subscription" (click)="toggleRecruiterDetails(recruiter.recruiter)">
-	      				<td *ngIf="showCreditBasedSubscription" class="candidate-tab-col medicol"><span class="candidate-id-prefix"></span>{{recruiter.recruiter.userId}}</td>
+	      				<td *ngIf="showCreditBasedSubscription" class="candidate-tab-col medicol"><span class="candidate-id-prefix">
+	      					<span class="subscription{{recruiter.subscriptionStatus}}"></span>
+	      					</span>{{recruiter.recruiter.userId}}
+	      				</td>
 	            	    <td *ngIf="showCreditBasedSubscription" class="candidate-tab-col medicol"> {{recruiter.recruiter.firstName}} {{recruiter.recruiter.surname}}</td>
 	            	    <td *ngIf="showCreditBasedSubscription" class="candidate-tab-col medicol">
 	            	    	<span class="recruiter-activity-level-{{recruiter.loginSummary.activityLevel}}">

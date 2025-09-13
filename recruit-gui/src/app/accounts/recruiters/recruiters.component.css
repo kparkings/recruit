@@ -135,15 +135,59 @@ h3{
 	cursor:pointer;
 }
 
+.subscription:before{
+	color:grey;
+	content: '* ';
+	font-size:25px;
+	padding-left:10px;
+}
+
+.subscriptionAWAITING_ACTIVATION:before{
+	color:grey;
+	content: '* ';
+	font-size:25px;
+	padding-left:10px;
+}
+
+.subscriptionACTIVE_PENDING_PAYMENT:before{
+	color:grey;
+	content: '* ';
+	font-size:25px;
+	padding-left:10px;
+}
+
+.subscriptionACTIVE_INVOICE_SENT:before{
+	color:purple;
+	content: '* ';
+	font-size:25px;
+	padding-left:10px;
+}
+
+.subscriptionDISABLED_PENDING_PAYMENT:before{
+	color:red;
+	content: '* ';
+	font-size:25px;
+	padding-left:10px;
+}
+
+.subscriptionACTIVE:before{
+	color:yellow;
+	content: '* ';
+	font-size:25px;
+	padding-left:10px;
+}
+
+
+
 @media (max-width:700px)  {
 	
-.delete-btn{
-	width:55px;
-}
-.delete-confirm{
-	 background:red;
-	 margin-right:0px;
-	 margin-bottom:5px;
-}
+	.delete-btn{
+		width:55px;
+	}
+	.delete-confirm{
+		 background:red;
+		 margin-right:0px;
+		 margin-bottom:5px;
+	}
 	
 }
