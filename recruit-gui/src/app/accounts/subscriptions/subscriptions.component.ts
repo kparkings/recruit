@@ -175,6 +175,26 @@ export class SubscriptionsComponent {
 					
 					this.recruitersWithSubscriptionActions.push(sa);
 				}
+				
+				
+				if (s.status === "SUBSCRIPTION_INVOICE_UNPAID") 	{
+			
+					let sa:SubscriptionAction = new SubscriptionAction();
+					
+					sa.firstName 		= r.firstName;
+					sa.surname 			= r.surname;
+					sa.email 			= r.email;
+					sa.subscriptionId 	= s.subscriptionId;
+					sa.status 			= s.status;
+					sa.language 		= r.language;
+					sa.userId 			= r.userId;
+					sa.type 			= s.type;
+					sa.invoiceType	 	= s.invoiceType;
+					sa.created			= s.created;
+					sa.actions.push("ACTIVATE_SUBSCRIPTION");
+					sa.actions.push("DISABLE_PENDING_PAYMENT");
+					this.recruitersWithSubscriptionActions.push(sa);
+				}
 
 				if (s.currentSubscription && s.status === "DISABLED_PENDING_PAYMENT" && 
 					(	s.type === "YEAR_SUBSCRIPTION"
@@ -337,6 +357,9 @@ export class SubscriptionsComponent {
 			case "INVOICE_SENT": {
 				return "Invoiced";
 			}
+			case "SUBSCRIPTION_INVOICE_UNPAID": {
+				return "Unpaid Invoices";
+			}
 			default:{
 				return actionId;
 			}
@@ -360,5 +383,6 @@ enum SUBSCRIPTION_VIEW {
 	ACTIVE_INVOICE_SENT						= "ACTIVE_INVOICE_SENT",
 	SUBSCRIPTION_STATUS_DISABLED 			= "DISABLED_PENDING_PAYMENT",
 	SUBSCRIPTION_DETAILS			  		= "SUBSCRIPTION_DETAILS",
-	SUBSCRIPTION_INVOICE_INLINE 			= "SUBSCRIPTION_INVOICE_INLINE"
+	SUBSCRIPTION_INVOICE_INLINE 			= "SUBSCRIPTION_INVOICE_INLINE",
+	SUBSCRIPTION_INVOICE_UNPAID				= "SUBSCRIPTION_INVOICE_UNPAID"
 };

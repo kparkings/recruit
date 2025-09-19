@@ -34,7 +34,7 @@ import com.arenella.recruit.recruiters.services.RecruiterService;
 @Component
 public class RecruiterSubscriptonScheduler {
 	
-	private static final Set<subscription_status> ACTIVE_STATUSES = Set.of(subscription_status.ACTIVE_INVOICE_SENT,subscription_status.ACTIVE_PENDING_PAYMENT, subscription_status.ACTIVE, subscription_status.DISABLED_PENDING_PAYMENT);
+	private static final Set<subscription_status> ACTIVE_STATUSES = Set.of(subscription_status.ACTIVE, subscription_status.ACTIVE_INVOICE_SENT);
 	
 	@Autowired
 	private RecruiterService 				recruiterService;
@@ -87,6 +87,34 @@ public class RecruiterSubscriptonScheduler {
 											}
 											
 										}
+										
+										/**
+										* For paid subscription running more than one month. If a subscription has been invoiced more than an month ago but still not
+										* paid its status updated to SUBSCRIPTION_INVOICE_UNPAID so that the admin can see there is an outstanding invoice and manually 
+										* block the invoice is required
+										*/
+										switch(subscription.getType()) {
+											case YEAR_SUBSCRIPTION, THREE_MONTHS_SUBSCRIPTION, SIX_MONTHS_SUBSCRIPTION -> {
+												if (PaidPeriodRecruiterSubscription.hasOneMonthElapsedSinceActivation((PaidPeriodRecruiterSubscription) subscription)) {
+													RecruiterSubscriptionActionHandler actionHandler = subscriptionFactory.getActionHandlerByType(subscription_type.YEAR_SUBSCRIPTION);
+													
+													try {
+														
+														if (subscription.getStatus() ==  subscription_status.ACTIVE_INVOICE_SENT) {
+															actionHandler.performAction(recruiter, subscription, subscription_action.END_SUBSCRIPTION, true);
+															recruiterDao.save(RecruiterEntity.convertToEntity(recruiter, recruiterDao.findById(recruiter.getUserId())));
+														}
+														
+													} catch (IllegalAccessException e) {
+														throw new RuntimeException(e);
+													};
+												}
+											} default ->{
+												//Only need to deal with subscription longer than 1 month. This switch is to update the status of 
+												//subscriptions that have passed the 1 month payment window and 
+											}
+										}
+										//END
 										
 										return;
 									}

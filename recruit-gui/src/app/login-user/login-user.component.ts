@@ -71,6 +71,8 @@ export class LoginUserComponent implements OnInit {
      
 			const roles:Array<string> = data;
 			
+			console.log(JSON.stringify(roles));
+			
 			if (roles.includes('ROLE_RECRUITERNOSUBSCRITION')) {
 				sessionStorage.setItem('isRecruiterNoSubscription',		'true');
 				sessionStorage.setItem('beforeAuthPage', '/recruiter-account');

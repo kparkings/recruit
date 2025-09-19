@@ -152,6 +152,37 @@ class PaidPeriodRecruiterSubscriptionTest {
 	}
 	
 	/**
+	* Tests disabling of description due to an unpaid invoice
+	* @throws Exception
+	*/
+	@Test
+	void testEndSubscriptionWithUnpaidInvoice() {
+		
+		final LocalDateTime 		created 			= LocalDateTime.of(2021, 12, 18, 10, 10);
+		final String				recruiterId			= "kparkings";
+		final UUID					subscriptionId		= UUID.randomUUID();
+		final subscription_status 	status 				= subscription_status.ACTIVE;
+		
+		PaidPeriodRecruiterSubscription subscription = PaidPeriodRecruiterSubscription
+				.builder()
+					.created(created)
+					.recruiterId(recruiterId)
+					.subscriptionId(subscriptionId)
+					.status(status)
+					.currentSubscription(true)
+				.build();
+		
+		assertEquals(status, subscription.getStatus());
+		assertTrue(subscription.isCurrentSubscription());
+		
+		subscription.endSubscriptionWithUnpaidInvoice();
+		
+		assertEquals(subscription_status.SUBSCRIPTION_INVOICE_UNPAID, subscription.getStatus());
+		assertTrue(subscription.isCurrentSubscription());
+		
+	}
+	
+	/**
 	* Tests renewal of a Subscription. This occurs when the end of the 
 	* subscription period has arrived and a new payment is required
 	* @throws Exception

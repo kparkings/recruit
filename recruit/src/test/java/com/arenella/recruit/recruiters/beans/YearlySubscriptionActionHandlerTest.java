@@ -27,7 +27,7 @@ import com.arenella.recruit.recruiters.utils.RecruiterSubscriptionActionHandler;
 * @author K Parkings
 */
 @ExtendWith(MockitoExtension.class)
-public class YearlySubscriptionActionHandlerTest {
+class YearlySubscriptionActionHandlerTest {
 	
 	@InjectMocks
 	private RecruiterSubscriptionActionHandler actionHandler = new PaidPeriodSubscriptionActionHandler();
@@ -43,7 +43,7 @@ public class YearlySubscriptionActionHandlerTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testActionHAndler_activateSubscription_nonAdmin() throws Exception {
+	void testActionHAndler_activateSubscription_nonAdmin() {
 		
 		assertThrows(IllegalAccessException.class, () -> {
 			actionHandler.performAction(recruiter, null, subscription_action.ACTIVATE_SUBSCRIPTION, false);
@@ -57,7 +57,7 @@ public class YearlySubscriptionActionHandlerTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testActionHAndler_disableSubscription_nonAdmin() throws Exception {
+	void testActionHAndler_disableSubscription_nonAdmin() {
 		
 		assertThrows(IllegalAccessException.class, () -> {
 			actionHandler.performAction(recruiter, null, subscription_action.DISABLE_PENDING_PAYMENT, false);
@@ -71,7 +71,7 @@ public class YearlySubscriptionActionHandlerTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testActionHAndler_activateSubscription_admin_invalidState() throws Exception {
+	void testActionHAndler_activateSubscription_admin_invalidState() {
 		
 		final LocalDateTime 		created 			= LocalDateTime.of(2021, 12, 18, 10, 10);
 		final String				recruiterId			= "kparkings";
@@ -99,7 +99,7 @@ public class YearlySubscriptionActionHandlerTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testActionHAndler_activateSubscriptionInActivePendingPayement_admin() throws Exception {
+	void testActionHAndler_activateSubscriptionInActivePendingPayement_admin() throws Exception {
 		
 		final LocalDateTime 		created 			= LocalDateTime.of(2021, 12, 18, 10, 10);
 		final String				recruiterId			= "kparkings";
@@ -130,9 +130,10 @@ public class YearlySubscriptionActionHandlerTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testActionHAndler_activateSubscriptionInDisabledPendingPayement_admin() throws Exception {
+	void testActionHAndler_activateSubscriptionInDisabledPendingPayement_admin() throws Exception {
 		
 		final LocalDateTime 		created 			= LocalDateTime.of(2021, 12, 18, 10, 10);
+		final LocalDateTime 		activated 			= LocalDateTime.of(2021, 12, 18, 10, 10);
 		final String				recruiterId			= "kparkings";
 		final UUID					subscriptionId		= UUID.randomUUID();
 		final subscription_status 	status 				= subscription_status.DISABLED_PENDING_PAYMENT;
@@ -143,13 +144,14 @@ public class YearlySubscriptionActionHandlerTest {
 																			.recruiterId(recruiterId)
 																			.subscriptionId(subscriptionId)
 																			.status(status)
+																			.activateDate(activated)
 																			.currentSubscription(true)
 																			.type(subscription_type.YEAR_SUBSCRIPTION)
 																		.build();
 		
 		actionHandler.performAction(recruiter, subscription, subscription_action.ACTIVATE_SUBSCRIPTION, true);
 		
-		assertNotNull(subscription.getActivatedDate());
+		assertEquals(activated, subscription.getActivatedDate());
 		assertEquals(subscription_status.ACTIVE, subscription.getStatus());
 		
 		Mockito.verify(this.mockRecruitersExternalEventPublisher).publishSubscriptionAddedEvent(Mockito.any(SubscriptionAddedEvent.class));
@@ -162,7 +164,7 @@ public class YearlySubscriptionActionHandlerTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testActionHAndler_disablePendingPayment_admin_invalidState() throws Exception {
+	void testActionHAndler_disablePendingPayment_admin_invalidState() throws Exception {
 		
 		final LocalDateTime 		created 			= LocalDateTime.of(2021, 12, 18, 10, 10);
 		final String				recruiterId			= "kparkings";
@@ -190,7 +192,7 @@ public class YearlySubscriptionActionHandlerTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testActionHAndler_disableSubscriptionInActiveInvoiceSent_admin() throws Exception {
+	void testActionHAndler_disableSubscriptionInActiveInvoiceSent_admin() throws Exception {
 		
 		final LocalDateTime 		created 			= LocalDateTime.of(2021, 12, 18, 10, 10);
 		final String				recruiterId			= "kparkings";
@@ -220,7 +222,7 @@ public class YearlySubscriptionActionHandlerTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testEndSubscription_nonAdmin_disabledPendingPayment() throws Exception {
+	void testEndSubscription_nonAdmin_disabledPendingPayment() {
 		
 		final LocalDateTime 		created 			= LocalDateTime.of(2021, 12, 18, 10, 10);
 		final String				recruiterId			= "kparkings";
@@ -248,7 +250,7 @@ public class YearlySubscriptionActionHandlerTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testEndSubscription_alreadyEndedt() throws Exception {
+	void testEndSubscription_alreadyEndedt() {
 		
 		final LocalDateTime 		created 			= LocalDateTime.of(2021, 12, 18, 10, 10);
 		final String				recruiterId			= "kparkings";
@@ -273,10 +275,11 @@ public class YearlySubscriptionActionHandlerTest {
 
 	/**
 	* Happy Path
+	 * @throws IllegalAccessException 
 	* @throws Exception
 	*/
 	@Test
-	public void testActionHAndler_endSubscription_admin() throws Exception {
+	void testActionHAndler_endSubscription_admin() throws IllegalAccessException {
 		
 		final LocalDateTime 		created 			= LocalDateTime.of(2021, 12, 18, 10, 10);
 		final String				recruiterId			= "kparkings";
@@ -308,7 +311,7 @@ public class YearlySubscriptionActionHandlerTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testActionHandler_renewSubscription_nonAdmin() throws Exception {
+	void testActionHandler_renewSubscription_nonAdmin() {
 		
 		final LocalDateTime 		created 			= LocalDateTime.of(2021, 12, 18, 10, 10);
 		final String				recruiterId			= "kparkings";
@@ -336,7 +339,7 @@ public class YearlySubscriptionActionHandlerTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testActionHandler_renewSubscription_notActive() throws Exception {
+	void testActionHandler_renewSubscription_notActive() {
 		
 		final LocalDateTime 		created 			= LocalDateTime.of(2021, 12, 18, 10, 10);
 		final String				recruiterId			= "kparkings";
@@ -364,7 +367,7 @@ public class YearlySubscriptionActionHandlerTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testActionHandler_renewSubscription() throws Exception {
+	void testActionHandler_renewSubscription() throws Exception {
 		
 		final LocalDateTime 		created 			= LocalDateTime.of(2021, 12, 18, 10, 10);
 		final LocalDateTime 		activateDate		= LocalDateTime.of(2021, 12, 18, 10, 11);

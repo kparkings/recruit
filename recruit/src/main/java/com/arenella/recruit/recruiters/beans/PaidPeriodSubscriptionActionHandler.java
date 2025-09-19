@@ -52,11 +52,20 @@ public class PaidPeriodSubscriptionActionHandler implements RecruiterSubscriptio
 					throw new IllegalAccessException("You are not authorized to carry out this action");
 				}
 				
-				if (subscription.getStatus() != subscription_status.ACTIVE_PENDING_PAYMENT && subscription.getStatus() != subscription_status.ACTIVE_INVOICE_SENT && subscription.getStatus() != subscription_status.DISABLED_PENDING_PAYMENT) {
-					throw new IllegalStateException("Can only activate subscritions in state ACTIVE_PENDING_PAYMENT or ACTIVE_INVOICE_SENT or DISABLED_PENDING_PAYMENT: " + subscription.getSubscriptionId());
+				if (subscription.getStatus() != subscription_status.ACTIVE_PENDING_PAYMENT 
+						&& subscription.getStatus() != subscription_status.ACTIVE_INVOICE_SENT 
+						&& subscription.getStatus() != subscription_status.DISABLED_PENDING_PAYMENT
+						&& subscription.getStatus() != subscription_status.SUBSCRIPTION_INVOICE_UNPAID) {
+					throw new IllegalStateException("Can only activate subscritions in state ACTIVE_PENDING_PAYMENT or ACTIVE_INVOICE_SENT or DISABLED_PENDING_PAYMENT or SUBSCRIPTION_INVOICE_UNPAID: " + subscription.getSubscriptionId());
 				}
 				
-				((PaidPeriodRecruiterSubscription)subscription).activateSubscription();
+				if (subscription.getStatus() == subscription_status.DISABLED_PENDING_PAYMENT
+						|| subscription.getStatus() == subscription_status.SUBSCRIPTION_INVOICE_UNPAID
+						|| subscription.getStatus() == subscription_status.ACTIVE_INVOICE_SENT) {
+					((PaidPeriodRecruiterSubscription)subscription).activateExistingSubscription();					
+				} else {
+					((PaidPeriodRecruiterSubscription)subscription).activateSubscription();
+				}
 				
 				this.externEventPublisher.publishSubscriptionAddedEvent(new SubscriptionAddedEvent(recruiter.getUserId(), subscription.getType()));
 				
@@ -68,8 +77,8 @@ public class PaidPeriodSubscriptionActionHandler implements RecruiterSubscriptio
 					throw new IllegalAccessException("You are not authorized to carry out this action");
 				}
 				
-				if (subscription.getStatus() != subscription_status.ACTIVE_INVOICE_SENT) {
-					throw new IllegalStateException("Can only activate subscritions in state ACTIVE_INVOICE_SENT: " + subscription.getSubscriptionId());
+				if (subscription.getStatus() != subscription_status.ACTIVE_INVOICE_SENT && subscription.getStatus() != subscription_status.SUBSCRIPTION_INVOICE_UNPAID) {
+					throw new IllegalStateException("Can only activate subscritions in state ACTIVE_INVOICE_SENT or SUBSCRIPTION_INVOICE_UNPAID: " + subscription.getSubscriptionId());
 				}
 				
 				((PaidPeriodRecruiterSubscription)subscription).disablePendingPayment();
@@ -84,14 +93,25 @@ public class PaidPeriodSubscriptionActionHandler implements RecruiterSubscriptio
 					throw new IllegalAccessException("You are not authorized to carry out this action");
 				}
 				
+				if (!isAdminUser && subscription.getStatus() == subscription_status.ACTIVE_INVOICE_SENT) {
+					throw new IllegalAccessException("You are not authorized to carry out this action");
+				}
+				
+				if (!isAdminUser && subscription.getStatus() == subscription_status.SUBSCRIPTION_INVOICE_UNPAID) {
+					throw new IllegalAccessException("You are not authorized to carry out this action");
+				}
+				
 				if (subscription.getStatus() == subscription_status.SUBSCRIPTION_ENDED) {
 					throw new IllegalStateException("Subscription is already ended. Cant end a second time: " + subscription.getSubscriptionId());
 				}
 				
-				((PaidPeriodRecruiterSubscription)subscription).endSubscription();
-				
-				this.externEventPublisher.publishRecruiterNoOpenSubscriptionsEvent(recruiter.getUserId());
-				
+				if (subscription.getStatus() == subscription_status.ACTIVE_INVOICE_SENT) {
+					((PaidPeriodRecruiterSubscription)subscription).endSubscriptionWithUnpaidInvoice();					
+				} else {
+					((PaidPeriodRecruiterSubscription)subscription).endSubscription();			
+					this.externEventPublisher.publishRecruiterNoOpenSubscriptionsEvent(recruiter.getUserId());
+				}
+			
 				return Optional.empty();
 				
 			}

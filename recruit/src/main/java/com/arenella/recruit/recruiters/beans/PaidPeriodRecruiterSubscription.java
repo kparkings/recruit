@@ -111,6 +111,13 @@ public class PaidPeriodRecruiterSubscription implements RecruiterSubscription{
 	}
 	
 	/**
+	* Activates the existing subscription
+	*/
+	public void activateExistingSubscription() {
+		this.status 		= subscription_status.ACTIVE;
+	}
+	
+	/**
 	* Disables the subscription due to unpaid invoice 
 	*/
 	public void disablePendingPayment() {
@@ -123,6 +130,14 @@ public class PaidPeriodRecruiterSubscription implements RecruiterSubscription{
 	public void endSubscription() {
 		this.currentSubscription 	= false;
 		this.status 				= subscription_status.SUBSCRIPTION_ENDED;
+	}
+	
+	/**
+	* Ends the current Subscription but marks it as having an unpaid invoice. 
+	*/
+	public void endSubscriptionWithUnpaidInvoice() {
+		this.status 				= subscription_status.SUBSCRIPTION_INVOICE_UNPAID;
+		this.currentSubscription 	= true;
 	}
 	
 	/**
@@ -267,6 +282,20 @@ public class PaidPeriodRecruiterSubscription implements RecruiterSubscription{
 		
 		LocalDateTime 	now 		= LocalDateTime.now();
 		LocalDateTime 	expiryDate 	= calculateExpiryDate(subscription.getType(), subscription.getActivatedDate());
+		
+		return expiryDate.isBefore(now);
+		
+	}
+	
+	/**
+	* Returns whether or not a month has passed since the subscription was activated.
+	* @param subscription
+	* @return
+	*/
+	public static boolean hasOneMonthElapsedSinceActivation(PaidPeriodRecruiterSubscription subscription) {
+		
+		LocalDateTime 	now 		= LocalDateTime.now();
+		LocalDateTime 	expiryDate 	= subscription.getActivatedDate().plusMonths(1);
 		
 		return expiryDate.isBefore(now);
 		
