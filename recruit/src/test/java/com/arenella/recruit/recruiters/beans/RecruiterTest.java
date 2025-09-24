@@ -16,14 +16,14 @@ import com.arenella.recruit.recruiters.beans.Recruiter.language;
 * Unit tests for the Recruiter class
 * @author K Parkings
 */
-public class RecruiterTest {
+class RecruiterTest {
 
 	/**
 	* Tests creation via Builder
 	* @throws Exception
 	*/
 	@Test
-	public void testBuilder() throws Exception {
+	void testBuilder() {
 		
 		final String 		userId						= "kparkings";
 		final String 		firstName					= "kevin";
@@ -76,7 +76,7 @@ public class RecruiterTest {
 	* active flag and the accountCreated Date are set
 	*/
 	@Test
-	public void testActivateAccount_initial() throws Exception{
+	void testActivateAccount_initial() {
 		
 		Recruiter recruiter = Recruiter.builder().build();
 		
@@ -97,7 +97,7 @@ public class RecruiterTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testDisableAccount() throws Exception{
+	void testDisableAccount() {
 		
 		Recruiter recruiter = Recruiter.builder().build();
 		
@@ -118,7 +118,7 @@ public class RecruiterTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testReactivationOfAccount() throws Exception{
+	void testReactivationOfAccount() {
 		
 		Recruiter recruiter = Recruiter.builder().build();
 		
@@ -138,7 +138,7 @@ public class RecruiterTest {
 	* Tests adding a subscription for the Recruiter 
 	*/
 	@Test
-	public void testAddInitialSubscription() {
+	void testAddInitialSubscription() {
 		
 		Recruiter recruiter = Recruiter.builder().build();
 		
@@ -156,7 +156,7 @@ public class RecruiterTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testUpdateIsVisibleToOtherRecruiters() throws Exception {
+	void testUpdateIsVisibleToOtherRecruiters() {
 		
 		Recruiter recruiter = Recruiter.builder().build();
 		

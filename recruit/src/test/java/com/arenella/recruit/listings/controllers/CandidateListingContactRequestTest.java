@@ -16,7 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 * @author K Parkings
 */
 @ExtendWith(MockitoExtension.class)
-public class CandidateListingContactRequestTest {
+class CandidateListingContactRequestTest {
 
 	private static final String CANDIDATE_ID 	= "kparkg33";
 	private static final UUID	LISTING_ID 		= UUID.randomUUID();
@@ -30,7 +30,7 @@ public class CandidateListingContactRequestTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testBuilder() throws Exception{
+	void testBuilder() {
 		
 		CandidateListingContactRequest request = 
 				CandidateListingContactRequest
@@ -53,7 +53,7 @@ public class CandidateListingContactRequestTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testBuilder_noFile() throws Exception{
+	void testBuilder_noFile() {
 		
 		CandidateListingContactRequest request = 
 				CandidateListingContactRequest

@@ -27,7 +27,7 @@ import com.arenella.recruit.newsfeed.dao.NewsFeedUserViewsDao;
 * @author K Parkings
 */
 @ExtendWith(MockitoExtension.class)
-public class NewsFeedItemServiceImplTest {
+class NewsFeedItemServiceImplTest {
 
 	@Mock
 	private NewsFeedItemDao 		mockDao;
@@ -46,7 +46,7 @@ public class NewsFeedItemServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testAddNewsFeedItem() throws Exception{
+	void testAddNewsFeedItem() {
 		
 		final UUID 				id 		= UUID.randomUUID();
 		final NewsFeedItem 		item 	= NewsFeedItem.builder().id(id).build();
@@ -64,14 +64,16 @@ public class NewsFeedItemServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testAddNewsFeedItem_already_exists() throws Exception{
+	void testAddNewsFeedItem_already_exists() {
 		
 		final UUID id = UUID.randomUUID();
 		
 		Mockito.when(this.mockDao.existsById(id)).thenReturn(true);
 		
+		NewsFeedItem newsFeedItem = NewsFeedItem.builder().id(id).build();
+		
 		assertThrows(IllegalArgumentException.class, () -> {
-			this.service.addNewsFeedItem(NewsFeedItem.builder().id(id).build());
+			this.service.addNewsFeedItem(newsFeedItem);
 		});
 				
 	}
@@ -81,7 +83,7 @@ public class NewsFeedItemServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testFetchNewsFeedItems() throws Exception{
+	void testFetchNewsFeedItems() {
 		
 		final Set<NewsFeedItem> items = Set.of(NewsFeedItem.builder().build(), NewsFeedItem.builder().build());
 		
@@ -98,7 +100,7 @@ public class NewsFeedItemServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testDeleteNewsFeedItem() throws Exception {
+	void testDeleteNewsFeedItem() {
 		
 		final UUID id = UUID.randomUUID();
 		
@@ -113,7 +115,7 @@ public class NewsFeedItemServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testDeleteAllNewsFeedItemsForReferencedUserId() throws Exception{
+	void testDeleteAllNewsFeedItemsForReferencedUserId() {
 		
 		final String userId = "123";
 		
@@ -128,7 +130,7 @@ public class NewsFeedItemServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testSaveNewsFeedUserView() throws Exception{
+	void testSaveNewsFeedUserView() {
 		
 		Mockito.when(this.mockPrincipal.getName()).thenReturn("1234");
 		
@@ -143,7 +145,7 @@ public class NewsFeedItemServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testGetNewsFeedUserView() throws Exception{
+	void testGetNewsFeedUserView() {
 		
 		final LocalDateTime 	lastView 	= LocalDateTime.of(2024, 2, 8, 10,11);
 		final String 			userId 		= "1234";
@@ -168,7 +170,7 @@ public class NewsFeedItemServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testGetNewsFeedUserView_unknownUser() throws Exception{
+	void testGetNewsFeedUserView_unknownUser() {
 		
 		final String 			userId 		= "1234";
 		
@@ -187,7 +189,7 @@ public class NewsFeedItemServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testDeleteNewsFeedUserView() throws Exception{
+	void testDeleteNewsFeedUserView() {
 		
 		final String 			userId 		= "1234";
 		
@@ -200,11 +202,11 @@ public class NewsFeedItemServiceImplTest {
 	}
 	
 	/**
-	* Tests that deletion is only carried out if recrd for User exists
+	* Tests that deletion is only carried out if record for User exists
 	* @throws Exception
 	*/
 	@Test
-	public void testDeleteNewsFeedUserView_no_recrd() throws Exception{
+	void testDeleteNewsFeedUserView_no_recrd() {
 		
 		final String 			userId 		= "1234";
 		

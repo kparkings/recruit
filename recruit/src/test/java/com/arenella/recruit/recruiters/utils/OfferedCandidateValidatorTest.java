@@ -11,13 +11,13 @@ import com.arenella.recruit.recruiters.utils.OfferedCandidateValidator.Attribute
 * Unit tests for the OfferedCandidateValidator class
 * @author K Parkings
 */
-public class OfferedCandidateValidatorTest {
+class OfferedCandidateValidatorTest {
 
 	/**
 	* Tests no Exception thrown when no issues found
 	*/
 	@Test
-	public void testValidate_noIssues() {
+	void testValidate_noIssues() {
 		
 		OfferedCandidateAPIInbound candidate = OfferedCandidateAPIInbound.builder().candidateRoleTitle("Java Developer").build(); 
 		
@@ -29,13 +29,13 @@ public class OfferedCandidateValidatorTest {
 	* Tests Exception thrown when an empty candidateRoleTitle is  provided
 	*/
 	@Test
-	public void testValidate_emptyCandidateRoleTitle() {
+	void testValidate_emptyCandidateRoleTitle() {
 		
 		OfferedCandidateAPIInbound candidate = OfferedCandidateAPIInbound.builder().candidateRoleTitle(" ").build(); 
 		
-		assertThrows(AttributesValidationException.class, () ->{
-			OfferedCandidateValidator.validate(candidate);
-		});
+		assertThrows(AttributesValidationException.class, () ->
+			OfferedCandidateValidator.validate(candidate)
+		);
 		
 		
 	}
@@ -44,14 +44,13 @@ public class OfferedCandidateValidatorTest {
 	* Tests Exception thrown when an candidateRoleTitle is over 150 chars
 	*/
 	@Test
-	public void testValidate_tooLongCandidateRoleTitle() {
+	void testValidate_tooLongCandidateRoleTitle() {
 		
 		OfferedCandidateAPIInbound candidate = OfferedCandidateAPIInbound.builder().candidateRoleTitle("12345678901254A12345678901254A12345678901254A12345678901254A12345678901254A12345678901254A12345678901254A12345678901254A12345678901254A12345678901254AB").build(); 
 		
-		assertThrows(AttributesValidationException.class, () ->{
-			OfferedCandidateValidator.validate(candidate);
-		});
-		
+		assertThrows(AttributesValidationException.class, () -> 
+			OfferedCandidateValidator.validate(candidate)
+		);
 		
 	}
 	
@@ -59,14 +58,13 @@ public class OfferedCandidateValidatorTest {
 	* Tests Exception thrown when an Renumeration is over 150 chars
 	*/
 	@Test
-	public void testValidate_tooLongRenumeration() {
+	void testValidate_tooLongRenumeration() {
 		
 		OfferedCandidateAPIInbound candidate = OfferedCandidateAPIInbound.builder().renumeration("12345678901254A12345678901254A12345678901254A12345678901254A12345678901254A12345678901254A12345678901254A12345678901254A12345678901254A12345678901254AB").build(); 
 		
-		assertThrows(AttributesValidationException.class, () ->{
-			OfferedCandidateValidator.validate(candidate);
-		});
-		
+		assertThrows(AttributesValidationException.class, () ->
+			OfferedCandidateValidator.validate(candidate)
+		);
 		
 	}
 	
@@ -78,10 +76,9 @@ public class OfferedCandidateValidatorTest {
 		
 		OfferedCandidateAPIInbound candidate = OfferedCandidateAPIInbound.builder().location("12345678901254A12345678901254A12345678901254A12345678901254A12345678901254A12345678901254A12345678901254A12345678901254A12345678901254A12345678901254AB").build(); 
 		
-		assertThrows(AttributesValidationException.class, () ->{
-			OfferedCandidateValidator.validate(candidate);
-		});
-		
+		assertThrows(AttributesValidationException.class, () ->
+			OfferedCandidateValidator.validate(candidate)
+		);
 		
 	}
 	
@@ -89,13 +86,13 @@ public class OfferedCandidateValidatorTest {
 	* Tests Exception thrown when candidateRoleTitle is not provided
 	*/
 	@Test
-	public void testValidate_noCandidateRoleTitle() {
+	void testValidate_noCandidateRoleTitle() {
 		
 		OfferedCandidateAPIInbound candidate = OfferedCandidateAPIInbound.builder().build(); 
 		
-		assertThrows(AttributesValidationException.class, () ->{
-			OfferedCandidateValidator.validate(candidate);
-		});
+		assertThrows(AttributesValidationException.class, () -> 
+			OfferedCandidateValidator.validate(candidate)
+		);
 		
 	}
 	

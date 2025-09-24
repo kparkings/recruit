@@ -24,7 +24,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 * @author K Parkings
 */
 @ExtendWith(MockitoExtension.class)
-public class SupplyAndDemandStatisticsContollerTest {
+class SupplyAndDemandStatisticsContollerTest {
 
 	final String recruiterId = "kparkings";
 	
@@ -39,7 +39,7 @@ public class SupplyAndDemandStatisticsContollerTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testGetOpenPositionsWeeklyStats() throws Exception{
+	void testGetOpenPositionsWeeklyStats() {
 		
 		Mockito.when(this.supplyAndDemandService.fetchOpenPositionViewStats()).thenReturn(Set.of(SupplyAndDemandEvent
 				.builder()

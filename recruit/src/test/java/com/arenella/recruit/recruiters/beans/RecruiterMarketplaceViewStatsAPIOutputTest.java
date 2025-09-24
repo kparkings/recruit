@@ -15,7 +15,7 @@ import com.arenella.recruit.recruiters.beans.SupplyAndDemandEvent.EventType;
 * Unit tests for the RecruiterOpenPositionStatsAPIOutput class
 * @author K Parkings
 */
-public class RecruiterMarketplaceViewStatsAPIOutputTest {
+class RecruiterMarketplaceViewStatsAPIOutputTest {
 
 	final String recruiterId1 = "rec1";
 	final String recruiterId2 = "rec2";
@@ -38,7 +38,7 @@ public class RecruiterMarketplaceViewStatsAPIOutputTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testConstructor() throws Exception{
+	void testConstructor() {
 		
 		RecruiterMarketplaceViewStatsAPIOutput stats = new RecruiterMarketplaceViewStatsAPIOutput(events);
 		

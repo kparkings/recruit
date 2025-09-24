@@ -14,36 +14,36 @@ import com.arenella.recruit.emailservice.beans.Email.Sender.SenderType;
 * Unit tests for the SenderEntity class
 * @author K Parkings
 */
-public class SenderEntityTest {
+class SenderEntityTest {
 
-	private static final String emailAddress 	= "admin@arenella-ict.com";
-	private static final String id				= "anId";
-	private static final String contactId		= "na";
-	private static final UUID	emailId			= UUID.randomUUID();
-	private static final SenderType type		= SenderType.SYSTEM;
+	private static final String EMAIL_ADDRESS 	= "admin@arenella-ict.com";
+	private static final String ID				= "anId";
+	private static final String CONTACT_ID		= "na";
+	private static final UUID	EMAIL_ID		= UUID.randomUUID();
+	private static final SenderType TYPE		= SenderType.SYSTEM;
 	
 	/**
 	* Test construction via a Builder
 	* @throws Exception
 	*/
 	@Test
-	public void testBuilder() throws Exception {
+	void testBuilder() {
 		
 		SenderEntity entity = 
 				SenderEntity
 					.builder()
-						.emailAddress(emailAddress)
-						.emailId(emailId)
-						.id(id)
-						.contactType(type)
-						.contactId(contactId)
+						.emailAddress(EMAIL_ADDRESS)
+						.emailId(EMAIL_ID)
+						.id(ID)
+						.contactType(TYPE)
+						.contactId(CONTACT_ID)
 					.build();
 		
-		assertEquals(emailAddress, 	entity.getEmailAddress());
-		assertEquals(id, 			entity.getId());
-		assertEquals(emailId, 		entity.getEmailId());
-		assertEquals(type, 			entity.getContactType());
-		assertEquals(contactId, 	entity.getContactId());
+		assertEquals(EMAIL_ADDRESS, entity.getEmailAddress());
+		assertEquals(ID, 			entity.getId());
+		assertEquals(EMAIL_ID, 		entity.getEmailId());
+		assertEquals(TYPE, 			entity.getContactType());
+		assertEquals(CONTACT_ID, 	entity.getContactId());
 		
 	}
 	
@@ -52,24 +52,24 @@ public class SenderEntityTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testConvertFromEntity() throws Exception{
+	void testConvertFromEntity() {
 		
 		SenderEntity entity = 
 				SenderEntity
 					.builder()
-						.emailAddress(emailAddress)
-						.emailId(emailId)
-						.id(id)
-						.contactType(type)
-						.contactId(contactId)
+						.emailAddress(EMAIL_ADDRESS)
+						.emailId(EMAIL_ID)
+						.id(ID)
+						.contactType(TYPE)
+						.contactId(CONTACT_ID)
 					.build();
 		
 		Sender<String> sender = SenderEntity.convertFromEntity(entity);
 		
-		assertEquals(emailAddress, 	sender.getEmail());
-		assertEquals(id, 			sender.getId());
-		assertEquals(type, 			sender.getContactType());
-		assertEquals(contactId, 	sender.getContactId());
+		assertEquals(EMAIL_ADDRESS, sender.getEmail());
+		assertEquals(ID, 			sender.getId());
+		assertEquals(TYPE, 			sender.getContactType());
+		assertEquals(CONTACT_ID, 	sender.getContactId());
 		
 	}
 	
@@ -78,17 +78,17 @@ public class SenderEntityTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testConvertToEntity() throws Exception{
+	void testConvertToEntity() {
 		
-		final Sender<String> 	sender 	= new Sender<>(id, contactId, type, emailAddress); 
+		final Sender<String> 	sender 	= new Sender<>(ID, CONTACT_ID, TYPE, EMAIL_ADDRESS); 
 		final Email 			email 	= Email.builder().id(UUID.randomUUID()).build();
 		
 		SenderEntity entity = SenderEntity.convertToEntity(sender, email);
 		
-		assertEquals(emailAddress, 		entity.getEmailAddress());
-		assertEquals(id, 				entity.getId());
-		assertEquals(type, 				entity.getContactType());
-		assertEquals(contactId, 		entity.getContactId());
+		assertEquals(EMAIL_ADDRESS, 	entity.getEmailAddress());
+		assertEquals(ID, 				entity.getId());
+		assertEquals(TYPE, 				entity.getContactType());
+		assertEquals(CONTACT_ID, 		entity.getContactId());
 		assertEquals(email.getId(), 	entity.getEmailId());
 	}
 	

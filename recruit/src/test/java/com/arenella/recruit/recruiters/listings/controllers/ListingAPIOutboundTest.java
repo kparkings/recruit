@@ -26,7 +26,7 @@ import com.arenella.recruit.listings.controllers.ListingAPIOutbound;
 * @author K Parkings
 */
 @ExtendWith(MockitoExtension.class)
-public class ListingAPIOutboundTest {
+class ListingAPIOutboundTest {
 
 	private static final 	String 			SKILL_JAVA 			= "java";
 	private static final 	String 			SKILL_CSHARP 		= "c#";
@@ -53,7 +53,7 @@ public class ListingAPIOutboundTest {
 	* Sets up test environment 
 	*/
 	@BeforeEach
-	public void init() {
+	void init() {
 		this.languages.add(language.DUTCH);
 		this.languages.add(language.FRENCH);
 	}
@@ -63,7 +63,7 @@ public class ListingAPIOutboundTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testBuilder() throws Exception {
+	void testBuilder() {
 		
 		ListingAPIOutbound listing = ListingAPIOutbound
 												.builder()
@@ -104,11 +104,11 @@ public class ListingAPIOutboundTest {
 		
 		assertTrue(listing.getLanguages().contains(Listing.language.DUTCH));
 		assertTrue(listing.getLanguages().contains(Listing.language.FRENCH));
-		assertEquals(listing.getLanguages().size(), 2);
+		assertEquals(2, listing.getLanguages().size());
 		
 		assertTrue(listing.getSkills().contains(SKILL_JAVA));
 		assertTrue(listing.getSkills().contains(SKILL_CSHARP));
-		assertEquals(listing.getSkills().size(), 2);
+		assertEquals(2, listing.getSkills().size());
 		
 	}
 	
@@ -118,7 +118,7 @@ public class ListingAPIOutboundTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testBuilder_defaults() throws Exception {
+	void testBuilder_defaults() {
 		
 		ListingAPIOutbound listing = ListingAPIOutbound.builder().build();
 		
@@ -133,7 +133,7 @@ public class ListingAPIOutboundTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testConvertFromListing() throws Exception {
+	void testConvertFromListing() {
 	
 		Listing listing = Listing
 				.builder()
@@ -176,11 +176,11 @@ public class ListingAPIOutboundTest {
 		
 		assertTrue(outbound.getLanguages().contains(Listing.language.DUTCH));
 		assertTrue(outbound.getLanguages().contains(Listing.language.FRENCH));
-		assertEquals(outbound.getLanguages().size(), 2);
+		assertEquals(2, outbound.getLanguages().size());
 		
 		assertTrue(outbound.getSkills().contains(SKILL_JAVA));
 		assertTrue(outbound.getSkills().contains(SKILL_CSHARP));
-		assertEquals(outbound.getSkills().size(), 2);
+		assertEquals(2, outbound.getSkills().size());
 		
 	}
 		

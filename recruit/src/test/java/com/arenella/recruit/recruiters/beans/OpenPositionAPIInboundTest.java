@@ -16,7 +16,7 @@ import com.arenella.recruit.recruiters.enums.COUNTRY;
 * Unit tests for the OpenPositionAPIInbound class
 * @author K Parkings
 */
-public class OpenPositionAPIInboundTest {
+class OpenPositionAPIInboundTest {
 
 	private String 			recruiterId				= "recruier1Id";
 	private String 			positionTitle			= "Java Developer";
@@ -35,7 +35,7 @@ public class OpenPositionAPIInboundTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testBuilder() throws Exception {
+	void testBuilder() {
 		
 		OpenPositionAPIInbound position = OpenPositionAPIInbound
 				.builder()
@@ -74,7 +74,7 @@ public class OpenPositionAPIInboundTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testConvertToDomain() throws Exception{
+	void testConvertToDomain() {
 		
 		OpenPositionAPIInbound position = OpenPositionAPIInbound
 				.builder()

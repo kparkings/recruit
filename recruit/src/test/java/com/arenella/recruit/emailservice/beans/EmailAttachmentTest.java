@@ -12,13 +12,13 @@ import com.arenella.recruit.emailservice.beans.EmailAttachment.FileType;
 * Unit tests for the EmailAttachment class
 * @author K Parkings
 */
-public class EmailAttachmentTest {
+class EmailAttachmentTest {
 
 	/**
 	* Tests construction via Builder 
 	*/
 	@Test
-	public void testBuilder() throws Exception{
+	void testBuilder() {
 		
 		final UUID 		attachmentId 	= UUID.randomUUID();
 		final UUID 		emailId 		= UUID.randomUUID();
@@ -41,7 +41,6 @@ public class EmailAttachmentTest {
 		assertEquals(name,	 		attachment.getName());
 		assertEquals(fileType, 		attachment.getFileType());
 		assertEquals(fileBytes, 	attachment.getFileBytes());
-				
 		
 	}
 	

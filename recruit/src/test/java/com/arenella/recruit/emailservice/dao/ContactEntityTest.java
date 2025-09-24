@@ -13,7 +13,7 @@ import com.arenella.recruit.emailservice.entities.ContactEntityPK;
 * Unit tests for the ContactEntity class
 * @author K Parkings
 */
-public class ContactEntityTest {
+class ContactEntityTest {
 
 	private final ContactType 		type 			= ContactType.RECRUITER;
 	private final String 			contactId 		= "1234";
@@ -26,7 +26,7 @@ public class ContactEntityTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testBuilder() throws Exception{
+	void testBuilder() {
 		
 		ContactEntity entity = 
 				ContactEntity
@@ -50,7 +50,7 @@ public class ContactEntityTest {
 	* @throws Exception
 	*/
 	@Test
-	public void convertToEntity() throws Exception{
+	void convertToEntity() {
 		
 		Contact 		contact 	= new Contact(contactId, type, firstName, surname, email);
 		ContactEntity 	entity 		= ContactEntity.convertToEntity(contact);
@@ -68,7 +68,7 @@ public class ContactEntityTest {
 	* @throws Exception
 	*/
 	@Test
-	public void convertFromEntity() throws Exception{
+	void convertFromEntity() {
 		
 		ContactEntity entity = 
 				ContactEntity
@@ -94,7 +94,7 @@ public class ContactEntityTest {
 	* @throws Exception
 	*/
 	@Test
-	public void convertFromEntity_updateMethods() throws Exception{
+	void convertFromEntity_updateMethods() {
 		
 		final String updtFirstName 	= "updtFirstName";
 		final String updtSurname 	= "updtSurname";

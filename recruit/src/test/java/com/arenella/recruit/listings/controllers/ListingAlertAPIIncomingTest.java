@@ -16,7 +16,7 @@ import com.arenella.recruit.listings.beans.ListingAlert;
 * Unit tests for the ListingAlertAPIIncomming class
 * @author K Parkings
 */
-public class ListingAlertAPIIncomingTest {
+class ListingAlertAPIIncomingTest {
 
 	private static final String 				EMAIL			= "admin@arenella-ict.com";
 	private static final Listing.listing_type 	CONTRACT_TYPE 	= Listing.listing_type.BOTH;
@@ -28,7 +28,7 @@ public class ListingAlertAPIIncomingTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testConstructor() throws Exception{
+	void testConstructor() {
 		
 		ListingAlertAPIIncoming alert = 
 				ListingAlertAPIIncoming
@@ -52,7 +52,7 @@ public class ListingAlertAPIIncomingTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testDefaults() throws Exception {
+	void testDefaults() {
 		
 		ListingAlertAPIIncoming alert = 
 				ListingAlertAPIIncoming
@@ -69,7 +69,7 @@ public class ListingAlertAPIIncomingTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testConvertToDomain() throws Exception{
+	void testConvertToDomain() {
 	
 		ListingAlertAPIIncoming alert = 
 				ListingAlertAPIIncoming

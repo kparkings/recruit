@@ -37,7 +37,7 @@ import com.arenella.recruit.emailservice.dao.EmailServiceDao;
 * @author K Parkings
 */
 @ExtendWith(MockitoExtension.class)
-public class EmailDispatcherServiceTest {
+class EmailDispatcherServiceTest {
 
 	@InjectMocks
 	private EmailDispatcherService 		service 			= new EmailDispatcherService();
@@ -65,7 +65,7 @@ public class EmailDispatcherServiceTest {
 	* @throws Exception
 	*/
 	@BeforeEach
-	public void init() throws Exception{
+	void init() {
 		ReflectionTestUtils.setField(service, "scheduler", schedulerMock);
 	}
 	
@@ -75,7 +75,7 @@ public class EmailDispatcherServiceTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testSendingOfPreviouslyPersistedButUnsendEmails() throws Exception{
+	void testSendingOfPreviouslyPersistedButUnsendEmails() {
 		
 		final Set<Email> emails = 
 				Set.of(
@@ -97,7 +97,7 @@ public class EmailDispatcherServiceTest {
 	*/
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Test
-	public void testHandleSendEmailCommand_system_external() throws Exception{
+	void testHandleSendEmailCommand_system_external() {
 		
 		Email.EmailRecipient<UUID> recipient1 = new Email.EmailRecipient("one", "rec1", ContactType.RECRUITER);
 		Email.EmailRecipient<UUID> recipient2 = new Email.EmailRecipient("two", "rec2", ContactType.RECRUITER);
@@ -116,7 +116,7 @@ public class EmailDispatcherServiceTest {
 	*/
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Test
-	public void testHandleSendEmailCommand_recipient_unregistered_user() throws Exception{
+	void testHandleSendEmailCommand_recipient_unregistered_user() {
 		
 		ArgumentCaptor<Email> argCapt = ArgumentCaptor.forClass(Email.class);
 		
@@ -142,7 +142,7 @@ public class EmailDispatcherServiceTest {
 	*/
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Test
-	public void testHandleSendEmailCommand_system_Internal() throws Exception{
+	void testHandleSendEmailCommand_system_Internal() {
 		
 		Email.EmailRecipient<UUID> recipient1 = new Email.EmailRecipient("one", "rec1", ContactType.RECRUITER);
 		Email.EmailRecipient<UUID> recipient2 = new Email.EmailRecipient("two", "rec2", ContactType.RECRUITER);
@@ -161,7 +161,7 @@ public class EmailDispatcherServiceTest {
 	*/
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Test
-	public void testHandleSendEmailCommand_external() throws Exception{
+	void testHandleSendEmailCommand_external() {
 		
 		Email.EmailRecipient<UUID> recipient1 = new Email.EmailRecipient("one", "rec1", ContactType.RECRUITER);
 		Email.EmailRecipient<UUID> recipient2 = new Email.EmailRecipient("two", "rec2", ContactType.RECRUITER);
@@ -181,7 +181,7 @@ public class EmailDispatcherServiceTest {
 	*/
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Test
-	public void testHandleSendEmailCommand_external_not_persisted() throws Exception{
+	void testHandleSendEmailCommand_external_not_persisted() {
 		
 		Email.EmailRecipient<UUID> recipient1 = new Email.EmailRecipient("one", "rec1", ContactType.RECRUITER);
 		Email.EmailRecipient<UUID> recipient2 = new Email.EmailRecipient("two", "rec2", ContactType.RECRUITER);
@@ -200,7 +200,7 @@ public class EmailDispatcherServiceTest {
 	*/
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Test
-	public void testHandleSendEmailCommand_Internal() throws Exception{
+	void testHandleSendEmailCommand_Internal() {
 		
 		Email.EmailRecipient<UUID> recipient1 = new Email.EmailRecipient("one", "rec1", ContactType.RECRUITER);
 		Email.EmailRecipient<UUID> recipient2 = new Email.EmailRecipient("two", "rec2", ContactType.RECRUITER);
@@ -219,7 +219,7 @@ public class EmailDispatcherServiceTest {
 	*/
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Test
-	public void testHandleSendEmailCommand_status_extern() throws Exception{
+	void testHandleSendEmailCommand_status_extern() {
 		
 		ArgumentCaptor<Email> emailAc = ArgumentCaptor.forClass(Email.class);
 		
@@ -240,7 +240,7 @@ public class EmailDispatcherServiceTest {
 	*/
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Test
-	public void testHandleSendEmailCommand_status_system_extern() throws Exception{
+	void testHandleSendEmailCommand_status_system_extern() {
 		
 		ArgumentCaptor<Email> emailAc = ArgumentCaptor.forClass(Email.class);
 		
@@ -261,7 +261,7 @@ public class EmailDispatcherServiceTest {
 	*/
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Test
-	public void testHandleSendEmailCommand_status_system_intern() throws Exception{
+	void testHandleSendEmailCommand_status_system_intern() {
 		
 		ArgumentCaptor<Email> emailAc = ArgumentCaptor.forClass(Email.class);
 		
@@ -282,7 +282,7 @@ public class EmailDispatcherServiceTest {
 	*/
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Test
-	public void testHandleSendEmailCommand_status_intern() throws Exception{
+	void testHandleSendEmailCommand_status_intern() {
 		
 		ArgumentCaptor<Email> emailAc = ArgumentCaptor.forClass(Email.class);
 		
@@ -303,7 +303,7 @@ public class EmailDispatcherServiceTest {
 	*/
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Test
-	public void testHandleSendEmailCommand_CandidateRequest_intern() throws Exception{
+	void testHandleSendEmailCommand_CandidateRequest_intern() {
 		
 		final String id 		= "id1";
 		final String firstname 	= "fn";

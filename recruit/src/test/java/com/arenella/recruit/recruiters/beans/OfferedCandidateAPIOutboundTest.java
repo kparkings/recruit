@@ -19,7 +19,7 @@ import com.arenella.recruit.recruiters.enums.COUNTRY;
 * Unit tests for the OfferedCandidateAPIOutbound class
 * @author K Parkings
 */
-public class OfferedCandidateAPIOutboundTest {
+class OfferedCandidateAPIOutboundTest {
 	
 	private static final UUID 			ID 						= UUID.randomUUID();
 	private static final String 		RECRUITER_ID 			= "aRecruiterId";
@@ -42,7 +42,7 @@ public class OfferedCandidateAPIOutboundTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testBuilder() throws Exception{
+	void testBuilder() {
 
 		final String 			recruiterId 			= "kparkings";
 		final String 			recruiterName 			= "Kevin Parkings";
@@ -64,7 +64,6 @@ public class OfferedCandidateAPIOutboundTest {
 		final String 			comments				= "A coment";
 		final LocalDate			created					= LocalDate.of(2023, 4, 30);
 		final boolean			viewed					= true;			
-		
 		
 		OfferedCandidateAPIOutbound oc = 
 				OfferedCandidateAPIOutbound
@@ -115,8 +114,7 @@ public class OfferedCandidateAPIOutboundTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testConvertFromDomain() throws Exception{
-		
+	void testConvertFromDomain() {
 		
 		final String recruiterId		= "kparkings";
 		final String recruiterName		= "kevin parkings";	

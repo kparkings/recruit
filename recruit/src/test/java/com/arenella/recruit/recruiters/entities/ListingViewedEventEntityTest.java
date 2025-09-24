@@ -14,14 +14,14 @@ import com.arenella.recruit.listings.dao.ListingViewedEventEntity;
 * Unit tests for the ListingViewedEventEntity Class
 * @author K Parkings
 */
-public class ListingViewedEventEntityTest {
+class ListingViewedEventEntityTest {
 
 	/**
 	* Tests instantiation via Builder
 	* @throws Exception
 	*/
 	@Test
-	public void testBuilder() throws Exception{
+	void testBuilder() {
 		
 		final UUID 				eventId 		= UUID.randomUUID();
 		final UUID 				listingId 		= UUID.randomUUID();
@@ -34,7 +34,6 @@ public class ListingViewedEventEntityTest {
 													.created(created)
 												.build();
 		
-		
 		assertEquals(eventId, 		entity.getEventId());
 		assertEquals(listingId, 	entity.getListingId());
 		assertEquals(created, 		entity.getCreated());
@@ -46,7 +45,7 @@ public class ListingViewedEventEntityTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testConvertToEntity() throws Exception {
+	void testConvertToEntity() {
 		
 		final UUID 				eventId 		= UUID.randomUUID();
 		final UUID 				listingId 		= UUID.randomUUID();
@@ -72,7 +71,7 @@ public class ListingViewedEventEntityTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testConvertFromEntity() throws Exception {
+	void testConvertFromEntity() {
 		
 		final UUID 				eventId 		= UUID.randomUUID();
 		final UUID 				listingId 		= UUID.randomUUID();

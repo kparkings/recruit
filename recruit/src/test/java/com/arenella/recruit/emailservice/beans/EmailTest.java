@@ -22,36 +22,36 @@ import com.arenella.recruit.emailservice.beans.Email.Status;
 * Unit tests for the Email class
 * @author K Parkings
 */
-public class EmailTest {
+class EmailTest {
 
-	final private String					recip1Address				= "norepy1@renella-ict.com";
-	final private String					recip2Address				= "norepy2@renella-ict.com";
-	final private UUID 						recip1Id 					= UUID.randomUUID();
-	final private UUID 						recip2Id 					= UUID.randomUUID();
-	final private UUID 						id							= UUID.randomUUID();
-	final private String 					title						= "aTitle";
-	final private EmailType 				emailType					= EmailType.EXTERN;
-	final private String					firstNameRecip1				= "Kevin1";
-	final private String					firstNameRecip2				= "Kevin2";
-	final private String					senderContactId				= "scid1";
-	final private Sender<?> 				sender						= new Sender<UUID>(UUID.randomUUID(), senderContactId, SenderType.SYSTEM, "norepy@renella-ict.com"); 
-	final private LocalDateTime 			created						= LocalDateTime.of(2022,11,17, 19,11,00);
-	final private LocalDateTime 			scheduledToBeSentAfter		= LocalDateTime.of(2022,11,17, 19,11,10);;
-	final private LocalDateTime 			sent						= LocalDateTime.of(2022,11,17, 19,11,20);;
-	final private String 					body						= "aBody";
-	final private Status 					status						= Status.DRAFT;
-	final private String					contactId1					= "cid1";
-	final private String					contactId2					= "cid2";
-	final private EmailRecipient<UUID>		emailRecip1					= new EmailRecipient<UUID>(recip1Id,   contactId1, ContactType.RECRUITER);
-	final private EmailRecipient<UUID>		emailRecip2					= new EmailRecipient<UUID>(recip2Id, contactId2, ContactType.SYSTEM);
-	final private Set<EmailRecipient<UUID>> recipients					= Set.of(emailRecip1,emailRecip2);
-	final private Set<EmailAttachment>		attachments					= Set.of(EmailAttachment.builder().build());
+	private final String					recip1Address				= "norepy1@renella-ict.com";
+	private final String					recip2Address				= "norepy2@renella-ict.com";
+	private final UUID 						recip1Id 					= UUID.randomUUID();
+	private final UUID 						recip2Id 					= UUID.randomUUID();
+	private final UUID 						id							= UUID.randomUUID();
+	private final String 					title						= "aTitle";
+	private final EmailType 				emailType					= EmailType.EXTERN;
+	private final String					firstNameRecip1				= "Kevin1";
+	private final String					firstNameRecip2				= "Kevin2";
+	private final String					senderContactId				= "scid1";
+	private final Sender<?> 				sender						= new Sender<UUID>(UUID.randomUUID(), senderContactId, SenderType.SYSTEM, "norepy@renella-ict.com"); 
+	private final LocalDateTime 			created						= LocalDateTime.of(2022,11,17, 19,11,00);
+	private final LocalDateTime 			scheduledToBeSentAfter		= LocalDateTime.of(2022,11,17, 19,11,10);;
+	private final LocalDateTime 			sent						= LocalDateTime.of(2022,11,17, 19,11,20);;
+	private final String 					body						= "aBody";
+	private final Status 					status						= Status.DRAFT;
+	private final String					contactId1					= "cid1";
+	private final String					contactId2					= "cid2";
+	private final EmailRecipient<UUID>		emailRecip1					= new EmailRecipient<UUID>(recip1Id,   contactId1, ContactType.RECRUITER);
+	private final EmailRecipient<UUID>		emailRecip2					= new EmailRecipient<UUID>(recip2Id, contactId2, ContactType.SYSTEM);
+	private final Set<EmailRecipient<UUID>> recipients					= Set.of(emailRecip1,emailRecip2);
+	private final Set<EmailAttachment>		attachments					= Set.of(EmailAttachment.builder().build());
 	
 	/**
 	* Sets up test env
 	*/
 	@BeforeEach
-	public void init() {
+	void init() {
 		emailRecip1.setEmail(recip1Address);
 		emailRecip1.setFirstName(firstNameRecip1);
 		emailRecip2.setEmail(recip2Address);
@@ -63,7 +63,7 @@ public class EmailTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testConstructor() throws Exception{
+	void testConstructor() {
 		
 		Email email = Email
 				.builder()
@@ -122,7 +122,7 @@ public class EmailTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testMarkAsSentExternal() throws Exception{
+	void testMarkAsSentExternal() {
 		
 		Email email = Email
 				.builder()
@@ -141,7 +141,7 @@ public class EmailTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testSetBody() throws Exception{
+	void testSetBody() {
 		
 		final String body 			= "Some text";
 		final String updatedBody 	= "Some new text";
@@ -164,7 +164,7 @@ public class EmailTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testSetRecipients() throws Exception{
+	void testSetRecipients() {
 		
 		final EmailRecipient<UUID> 		recipient1 	= new EmailRecipient<>(UUID.randomUUID(), "", ContactType.RECRUITER);
 		final EmailRecipient<UUID> 		recipient2 	= new EmailRecipient<>(UUID.randomUUID(), "", ContactType.RECRUITER);
@@ -189,7 +189,7 @@ public class EmailTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testMarkAsSentFailure() throws Exception{
+	void testMarkAsSentFailure() {
 		
 		Email email = Email
 				.builder()
@@ -210,7 +210,7 @@ public class EmailTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testIsPersistable() throws Exception{
+	void testIsPersistable() {
 		
 		Email email = Email
 				.builder()

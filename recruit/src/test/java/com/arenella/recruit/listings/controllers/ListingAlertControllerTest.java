@@ -18,7 +18,7 @@ import com.arenella.recruit.listings.services.ListingAlertService;
 * @author K Parkings
 */
 @ExtendWith(MockitoExtension.class)
-public class ListingAlertControllerTest {
+class ListingAlertControllerTest {
 
 	@Mock
 	private ListingAlertService 	mockListingAlertService;
@@ -34,7 +34,7 @@ public class ListingAlertControllerTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testAddListingAlert() throws Exception{
+	void testAddListingAlert() {
 	
 		ListingAlertAPIIncoming alert = ListingAlertAPIIncoming.builder().build();
 		
@@ -49,7 +49,7 @@ public class ListingAlertControllerTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testDeleteListing() throws Exception{
+	void testDeleteListing() {
 		
 		final UUID id = UUID.randomUUID();
 		

@@ -15,18 +15,18 @@ import com.arenella.recruit.newsfeed.beans.NewsFeedItem.NEWSFEED_ITEM_TYPE;
 * Unit tests for the NewsFeedItem class
 * @author K Parkings
 */
-public class NewsFeedItemTest {
+class NewsFeedItemTest {
 
 	private static final UUID 					ID 				= UUID.randomUUID();
 	private static final LocalDateTime 			CREATED 		= LocalDateTime.of(2024, 1, 31, 23, 06);
-	private static final NEWSFEED_ITEM_TYPE 		ITEM_TYPE 		= NEWSFEED_ITEM_TYPE.CANDIDATE_BECAME_AVAILABLE;
+	private static final NEWSFEED_ITEM_TYPE 	ITEM_TYPE 		= NEWSFEED_ITEM_TYPE.CANDIDATE_BECAME_AVAILABLE;
 	private static final Set<NewsFeedItemLine> 	LINES 			= new LinkedHashSet<>();
 	
 	/**
 	* Tests construction via Builder 
 	*/
 	@Test
-	public void testBuilder() {
+	void testBuilder() {
 		
 		NewsFeedItem item = NewsFeedItem.builder().id(ID).created(CREATED).itemType(ITEM_TYPE).lines(LINES).build();
 		

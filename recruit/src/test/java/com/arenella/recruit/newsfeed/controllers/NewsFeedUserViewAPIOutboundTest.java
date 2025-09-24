@@ -12,7 +12,7 @@ import com.arenella.recruit.newsfeed.beans.NewsFeedUserView;
 * Unit tests for the NewsFeedUserViewAPIOutbound class
 * @author K Parkings
 */
-public class NewsFeedUserViewAPIOutboundTest {
+class NewsFeedUserViewAPIOutboundTest {
 
 	private static final String 			USER_ID = "kparkings";
 	private static final LocalDateTime 		LAST_VIEWED = LocalDateTime.of(2024, 2, 7, 0, 4, 5, 4);
@@ -22,7 +22,7 @@ public class NewsFeedUserViewAPIOutboundTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testConstructor() throws Exception{
+	void testConstructor() {
 	
 		NewsFeedUserViewAPIOutbound view = new NewsFeedUserViewAPIOutbound(USER_ID, LAST_VIEWED);
 		
@@ -36,7 +36,7 @@ public class NewsFeedUserViewAPIOutboundTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testConvertFromDomain() throws Exception{
+	void testConvertFromDomain() {
 	
 		NewsFeedUserView view = new NewsFeedUserView(USER_ID, LAST_VIEWED);
 		

@@ -20,7 +20,7 @@ import com.arenella.recruit.recruiters.enums.COUNTRY;
 * Unit tests for the OpenPosition class
 * @author K Parkings
 */
-public class OpenPositionTest {
+class OpenPositionTest {
 
 	private UUID 			id						= UUID.randomUUID();
 	private String 			recruiterId				= "recruier1Id";
@@ -42,7 +42,7 @@ public class OpenPositionTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testBuilder() throws Exception {
+	void testBuilder() {
 		
 		OpenPosition position = OpenPosition
 				.builder()
@@ -87,7 +87,7 @@ public class OpenPositionTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testSetters() throws Exception{
+	void testSetters() {
 		
 		OpenPosition position = OpenPosition
 				.builder()
@@ -106,7 +106,7 @@ public class OpenPositionTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testInitializeAsNewObject() throws Exception{
+	void testInitializeAsNewObject() {
 		
 	OpenPosition position = OpenPosition
 				.builder()

@@ -27,7 +27,7 @@ import com.arenella.recruit.listings.beans.ListingViewedEvent;
 * @author K Parkings
 */
 @ExtendWith(MockitoExtension.class)
-public class ListingTest {
+class ListingTest {
 
 	private static final 	String 			SKILL_JAVA 			= "java";
 	private static final 	String 			SKILL_CSHARP 		= "c#";
@@ -55,7 +55,7 @@ public class ListingTest {
 	* Sets up test environment 
 	*/
 	@BeforeEach
-	public void init() {
+	void init() {
 		this.languages.add(language.DUTCH);
 		this.languages.add(language.FRENCH);
 	}
@@ -65,7 +65,7 @@ public class ListingTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testBuilder() throws Exception {
+	void testBuilder() {
 		
 		Listing listing = Listing
 							.builder()
@@ -107,12 +107,12 @@ public class ListingTest {
 		
 		assertTrue(listing.getLanguages().contains(Listing.language.DUTCH));
 		assertTrue(listing.getLanguages().contains(Listing.language.FRENCH));
-		assertEquals(listing.getLanguages().size(), 2);
+		assertEquals(2, listing.getLanguages().size());
 		assertTrue(listing.isActive());
 		
 		assertTrue(listing.getSkills().contains(SKILL_JAVA));
 		assertTrue(listing.getSkills().contains(SKILL_CSHARP));
-		assertEquals(listing.getSkills().size(), 2);
+		assertEquals(2, listing.getSkills().size());
 		
 	}
 	
@@ -122,7 +122,7 @@ public class ListingTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testBuilder_defaults() throws Exception {
+	void testBuilder_defaults() {
 		
 		Listing listing = Listing.builder().build();
 		
@@ -136,7 +136,7 @@ public class ListingTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testSetters() throws Exception {
+	void testSetters() {
 		
 		final LocalDateTime updatedCreated = LocalDateTime.of(2025, 3, 9, 19, 11);
 		

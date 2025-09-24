@@ -17,7 +17,7 @@ import com.arenella.recruit.listings.beans.ListingAlert;
 * Unit tests for the ListingAlertEntity class
 * @author K Parkings
 */
-public class ListingAlertEntityTest {
+class ListingAlertEntityTest {
 
 	private static final UUID 					ID				= UUID.randomUUID();
 	private static final Long 					USER_ID			= 1L;
@@ -32,7 +32,7 @@ public class ListingAlertEntityTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testConstructor() throws Exception{
+	void testConstructor() {
 		
 		ListingAlertEntity entity = 
 				ListingAlertEntity
@@ -62,7 +62,7 @@ public class ListingAlertEntityTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testConvertFromEntity() throws Exception{
+	void testConvertFromEntity() {
 		
 		ListingAlertEntity entity = 
 				ListingAlertEntity
@@ -96,7 +96,7 @@ public class ListingAlertEntityTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testConvertToEntity() throws Exception{
+	void testConvertToEntity() {
 	
 		ListingAlert alert = 
 				ListingAlert
@@ -129,7 +129,7 @@ public class ListingAlertEntityTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testDefaults() throws Exception {
+	void testDefaults() {
 		
 		ListingAlertEntity entity = 
 				ListingAlertEntity

@@ -21,7 +21,7 @@ import com.arenella.recruit.recruiters.beans.RecruiterProfile.Photo.PHOTO_FORMAT
 * Unit tests for the RecruiterProfileAPIInbound class
 * @author K Parkings
 */
-public class RecruiterProfileAPIInboundTest {
+class RecruiterProfileAPIInboundTest {
 
 	private static final Set<COUNTRY> 		RECRUITS_IN 				= Set.of(COUNTRY.BELGIUM, COUNTRY.IRELAND);
 	private static final Set<LANGUAGE>		LANGUAGES_SPOKEN 			= Set.of(LANGUAGE.ENGLISH);
@@ -43,7 +43,7 @@ public class RecruiterProfileAPIInboundTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testBuilder() throws Exception{
+	void testBuilder() {
 		
 		RecruiterProfileAPIInbound profile = 
 				RecruiterProfileAPIInbound
@@ -92,7 +92,7 @@ public class RecruiterProfileAPIInboundTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testConvertToDomain() throws Exception{
+	void testConvertToDomain() {
 		
 		final PhotoAPIInbound photo = new PhotoAPIInbound(FILE_BYTES, PHOTO_FORMAT.jpeg);
 		

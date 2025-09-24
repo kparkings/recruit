@@ -21,7 +21,7 @@ import com.arenella.recruit.recruiters.beans.RecruiterProfile.Photo.PHOTO_FORMAT
 * Unit tests for the RecruiterProfileAPIOutbound class
 * @author K Parkings
 */
-public class RecruiterProfileAPIOutboundTest {
+class RecruiterProfileAPIOutboundTest {
 
 	private static final String 			RECRUITER_ID				= "kparkingS";
 	private static final String				FIRST_NAME 					= "kevin";
@@ -47,7 +47,7 @@ public class RecruiterProfileAPIOutboundTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testBuilder() throws Exception{
+	void testBuilder() {
 		
 		RecruiterProfileAPIOutbound profile = 
 				RecruiterProfileAPIOutbound
@@ -104,7 +104,7 @@ public class RecruiterProfileAPIOutboundTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testConvertFromDomain() throws Exception{
+	void testConvertFromDomain() {
 		
 		final Photo photo = new Photo(FILE_BYTES, PHOTO_FORMAT.jpeg);
 		
@@ -182,6 +182,4 @@ public class RecruiterProfileAPIOutboundTest {
 		
 	}
 
-
 }
-

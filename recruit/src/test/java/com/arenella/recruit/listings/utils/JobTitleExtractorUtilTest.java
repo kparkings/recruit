@@ -12,14 +12,14 @@ import com.arenella.recruit.listings.beans.ListingAlertFilterOptions;
 * Unit test for JobTitleExtractor class
 * @author K Parkings
 */
-public class JobTitleExtractorUtilTest {
+class JobTitleExtractorUtilTest {
 
 	/**
 	* Tests that if no category was determined no category will be given
 	* @throws Exception
 	*/
 	@Test
-	public void testNoJobTitlesFound() throws Exception{
+	void testNoJobTitlesFound() {
 		
 		final ListingAlertFilterOptions.ListingAlertFilterOptionsBuilder 	filterBuilder 	= ListingAlertFilterOptions.builder();
 		final CategoryExtractorUtil 										extractor 		= new CategoryExtractorUtil();
@@ -36,7 +36,7 @@ public class JobTitleExtractorUtilTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testSingleJobTitlesFound() throws Exception{
+	void testSingleJobTitlesFound() {
 		
 		final ListingAlertFilterOptions.ListingAlertFilterOptionsBuilder 	filterBuilder 	= ListingAlertFilterOptions.builder();
 		final CategoryExtractorUtil 										extractor 		= new CategoryExtractorUtil();
@@ -53,7 +53,7 @@ public class JobTitleExtractorUtilTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testMultipleJobTitlesFoundSingleHasHighestWeight() throws Exception{
+	void testMultipleJobTitlesFoundSingleHasHighestWeight() {
 		
 		final ListingAlertFilterOptions.ListingAlertFilterOptionsBuilder 	filterBuilder 	= ListingAlertFilterOptions.builder();
 		final CategoryExtractorUtil 										extractor 		= new CategoryExtractorUtil();

@@ -18,7 +18,7 @@ import com.arenella.recruit.listings.beans.ListingAlert;
 * Unit tests for the ListingAlert class
 * @author K Parkings
 */
-public class ListingAlertTest {
+class ListingAlertTest {
 
 	private static final UUID 					ID				= UUID.randomUUID();
 	private static final Long 					USER_ID			= 1L;
@@ -33,7 +33,7 @@ public class ListingAlertTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testConstructor() throws Exception{
+	void testConstructor() {
 		
 		ListingAlert alert = 
 				ListingAlert
@@ -63,7 +63,7 @@ public class ListingAlertTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testSetUserId() throws Exception{
+	void testSetUserId() {
 		
 		final long userIdOld = 1L;
 		final long userIdNew = 2L;
@@ -86,7 +86,7 @@ public class ListingAlertTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testInitializeAlert_idPresent() throws Exception{
+	void testInitializeAlert_idPresent() {
 		
 		ListingAlert alert = 
 				ListingAlert
@@ -99,9 +99,7 @@ public class ListingAlertTest {
 						.userId(USER_ID)
 					.build();
 		
-		Assertions.assertThrows(IllegalStateException.class, () ->{
-			alert.initializeAlert();
-		});
+		Assertions.assertThrows(IllegalStateException.class, () -> alert.initializeAlert());
 		
 	}
 	
@@ -110,7 +108,7 @@ public class ListingAlertTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testInitializeAlert_createdPresent() throws Exception{
+	void testInitializeAlert_createdPresent() {
 		
 		ListingAlert alert = 
 				ListingAlert
@@ -123,9 +121,7 @@ public class ListingAlertTest {
 						.userId(USER_ID)
 					.build();
 		
-		Assertions.assertThrows(IllegalStateException.class, () ->{
-			alert.initializeAlert();
-		});
+		Assertions.assertThrows(IllegalStateException.class, () -> alert.initializeAlert());
 		
 	}
 	
@@ -134,7 +130,7 @@ public class ListingAlertTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testDefaults() throws Exception {
+	void testDefaults() {
 		
 		ListingAlert alert = 
 				ListingAlert

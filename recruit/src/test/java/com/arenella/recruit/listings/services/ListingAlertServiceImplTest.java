@@ -28,7 +28,7 @@ import com.arenella.recruit.listings.dao.ListingAlertDao;
 * @author K Parkings
 */
 @ExtendWith(MockitoExtension.class)
-public class ListingAlertServiceImplTest {
+class ListingAlertServiceImplTest {
 
 	@Mock
 	private ListingAlertDao 										mockListingAlertDao; 
@@ -44,7 +44,7 @@ public class ListingAlertServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testAddListingAlert() throws Exception{
+	void testAddListingAlert() {
 	
 		ArgumentCaptor<ListingAlert> argCapt = ArgumentCaptor.forClass(ListingAlert.class);
 		
@@ -64,7 +64,7 @@ public class ListingAlertServiceImplTest {
 	*/
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Test
-	public void testAddListingAlert_isCandidate() throws Exception{
+	void testAddListingAlert_isCandidate() {
 		
 		final String candidateId = "123";
 		
@@ -92,7 +92,7 @@ public class ListingAlertServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testFetchListingAlerts() throws Exception{
+	void testFetchListingAlerts() {
 		
 		ListingAlertFilterOptions filters = ListingAlertFilterOptions.builder().build();
 		
@@ -111,7 +111,7 @@ public class ListingAlertServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testDeleteListingAlert() throws Exception{
+	void testDeleteListingAlert() {
 		
 		final UUID alertId = UUID.randomUUID();
 		

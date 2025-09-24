@@ -20,7 +20,7 @@ import com.arenella.recruit.recruiters.beans.RecruiterProfile.TECH;
 * Unit tests for the RecruiterProfile class
 * @author K Parkings
 */
-public class RecruiterProfileTest {
+class RecruiterProfileTest {
 
 	private static final String 			RECRUITER_ID				= "kparkingS";
 	private static final Set<COUNTRY> 		RECRUITS_IN 				= Set.of(COUNTRY.BELGIUM, COUNTRY.IRELAND);
@@ -43,7 +43,7 @@ public class RecruiterProfileTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testBuilder() throws Exception{
+	void testBuilder() {
 		
 		RecruiterProfile profile = 
 				RecruiterProfile
@@ -86,7 +86,6 @@ public class RecruiterProfileTest {
 		assertTrue(profile.getSectors().contains(SECTOR.FINTECH));
 		assertTrue(profile.getSectors().contains(SECTOR.CYBER_INTEL));
 		
-		
 	}
 	
 	/**
@@ -94,7 +93,7 @@ public class RecruiterProfileTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testSetters() throws Exception{
+	void testSetters() {
 		
 		RecruiterProfile profile = 
 				RecruiterProfile

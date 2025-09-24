@@ -13,19 +13,19 @@ import com.arenella.recruit.listings.beans.Listing.listing_type;
 * Unit tests for the ListingAlertFilterOptions class
 * @author K Parkings
 */
-public class ListingAlertFilterOptionsTest {
+class ListingAlertFilterOptionsTest {
 
-	public static String 					SEARCH_TERM 	= "java";
-	public static Listing.listing_type 		CONTRACT_TYPE 	= Listing.listing_type.CONTRACT_ROLE;
-	public static Set<Listing.Country> 		COUNTRIES		= Set.of(Listing.Country.NETHERLANDS);
-	public static  Set<Listing.TECH> 		CATEGORIES	 	= Set.of(Listing.TECH.ARCHITECT);
+	public static final String 					SEARCH_TERM 	= "java";
+	public static final Listing.listing_type 	CONTRACT_TYPE 	= Listing.listing_type.CONTRACT_ROLE;
+	public static final Set<Listing.Country> 	COUNTRIES		= Set.of(Listing.Country.NETHERLANDS);
+	public static final Set<Listing.TECH> 		CATEGORIES	 	= Set.of(Listing.TECH.ARCHITECT);
 	
 	/**
 	* Tests construction via the Builder
 	* @throws Exception
 	*/
 	@Test
-	public void testConstructor() throws Exception{
+	void testConstructor() {
 		
 		ListingAlertFilterOptions filters = 
 				ListingAlertFilterOptions.builder()
@@ -47,7 +47,7 @@ public class ListingAlertFilterOptionsTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testDefaults() throws Exception{
+	void testDefaults() {
 		ListingAlertFilterOptions filters = 
 				ListingAlertFilterOptions.builder().build();
 		
@@ -64,7 +64,7 @@ public class ListingAlertFilterOptionsTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testContractTypeBoth() throws Exception{
+	void testContractTypeBoth() {
 		
 		ListingAlertFilterOptions filters = 
 				ListingAlertFilterOptions

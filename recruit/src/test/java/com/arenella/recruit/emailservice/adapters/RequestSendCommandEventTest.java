@@ -24,22 +24,22 @@ import com.arenella.recruit.emailservice.beans.Email.Sender.SenderType;
 */
 public class RequestSendCommandEventTest {
 
-	final private UUID 						recip1Id 					= UUID.randomUUID();
-	final private UUID 						recip2Id 					= UUID.randomUUID();
-	final private String 					title						= "aTitle";
-	final private EmailType 				emailType					= EmailType.EXTERN;
-	final private Sender<?> 				sender						= new Sender<UUID>(UUID.randomUUID(), "", SenderType.SYSTEM, "norepy@renella-ict.com"); 
-	final private Set<EmailRecipient<UUID>> recipients					= Set.of(new EmailRecipient<UUID>(recip1Id, "rec1", ContactType.RECRUITER),
+	private final UUID 						recip1Id 					= UUID.randomUUID();
+	private final UUID 						recip2Id 					= UUID.randomUUID();
+	private final String 					title						= "aTitle";
+	private final EmailType 				emailType					= EmailType.EXTERN;
+	private final Sender<?> 				sender						= new Sender<UUID>(UUID.randomUUID(), "", SenderType.SYSTEM, "norepy@renella-ict.com"); 
+	private final Set<EmailRecipient<UUID>> recipients					= Set.of(new EmailRecipient<UUID>(recip1Id, "rec1", ContactType.RECRUITER),
 																	 	new EmailRecipient<UUID>(recip2Id, "rec2", ContactType.SYSTEM));
-	final private EmailTopic				topic						= EmailTopic.ACCOUNT_CREATED;
-	final private Map<String,Object>		model						= new HashMap<>();
+	private final EmailTopic				topic						= EmailTopic.ACCOUNT_CREATED;
+	private final Map<String,Object>		model						= new HashMap<>();
 	
 	/**
 	* Tests construction via the Builder
 	* @throws Exception
 	*/
 	@Test
-	public void testBuilder() throws Exception{
+	void testBuilder() {
 		
 		RequestSendEmailCommand command = RequestSendEmailCommand
 				.builder()
@@ -72,7 +72,7 @@ public class RequestSendCommandEventTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testDefaultIsPersistable() throws Exception{
+	void testDefaultIsPersistable() {
 		
 		RequestSendEmailCommand command = RequestSendEmailCommand
 				.builder()

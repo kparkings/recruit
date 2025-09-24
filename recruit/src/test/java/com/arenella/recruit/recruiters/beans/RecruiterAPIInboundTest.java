@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import com.arenella.recruit.recruiters.beans.Recruiter.language;
 
-public class RecruiterAPIInboundTest {
+class RecruiterAPIInboundTest {
 
 	private static final String 		USER_ID						= "kparkings";
 	private static final String 		FIRST_NAME					= "kevin";
@@ -24,7 +24,7 @@ public class RecruiterAPIInboundTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testBuilder() throws Exception {
+	void testBuilder() {
 		
 		RecruiterAPIInbound recruiter = RecruiterAPIInbound
 													.builder()
@@ -59,7 +59,7 @@ public class RecruiterAPIInboundTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testConvertToDomain() throws Exception{
+	void testConvertToDomain() {
 		
 		RecruiterAPIInbound recruiterAPIOutbound = RecruiterAPIInbound
 				.builder()

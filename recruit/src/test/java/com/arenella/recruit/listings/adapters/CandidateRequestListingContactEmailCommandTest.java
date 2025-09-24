@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 * Unit tests for the CandidateRequestListingContactEmailCommand class
 * @author K Parkings
 */
-public class CandidateRequestListingContactEmailCommandTest {
+class CandidateRequestListingContactEmailCommandTest {
 
 	private static final String	RECRUITER_ID	= "acb124";
 	private static final String	LISTING_NAME	= "Java Developer";
@@ -22,7 +22,7 @@ public class CandidateRequestListingContactEmailCommandTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testBuilder() throws Exception{
+	void testBuilder() {
 		
 		CandidateRequestListingContactEmailCommand command = 
 				CandidateRequestListingContactEmailCommand

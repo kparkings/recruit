@@ -13,7 +13,7 @@ import com.arenella.recruit.newsfeed.beans.NewsFeedItemLine.NEWS_FEED_ITEM_LINE_
 * Unit tests for the NewsFeedItemLine class
 * @author K Parkings
 */
-public class NewsFeedItemLineTest {
+class NewsFeedItemLineTest {
 
 	private static final UUID 						ID				= UUID.randomUUID();
 	private static final UUID 						NEWS_ITEM_ID	= UUID.randomUUID();
@@ -27,7 +27,7 @@ public class NewsFeedItemLineTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testBuilder() throws Exception{
+	void testBuilder() {
 		
 		NewsFeedItemLine line = NewsFeedItemLine
 				.builder()
@@ -53,7 +53,7 @@ public class NewsFeedItemLineTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testBuilder_defaults() throws Exception{
+	void testBuilder_defaults() {
 		
 		NewsFeedItemLine line = NewsFeedItemLine
 				.builder()

@@ -11,7 +11,7 @@ import com.arenella.recruit.recruiters.dao.CreditEntity;
 * Unit tests for the RecruiterCreditEntity class
 * @author K Parkings
 */
-public class RecruiterCreditEntityTest {
+class RecruiterCreditEntityTest {
 
 	private static final String 	RECRUITER_ID 	= "recruiter44";
 	private static final int 		CREDITS 		= 4;
@@ -22,7 +22,7 @@ public class RecruiterCreditEntityTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testBuilder() throws Exception{
+	void testBuilder() {
 		
 		CreditEntity entity = 
 				CreditEntity
@@ -43,7 +43,7 @@ public class RecruiterCreditEntityTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testConvertFromEntity() throws Exception{
+	void testConvertFromEntity() {
 		
 		CreditEntity entity = 
 				CreditEntity
@@ -70,7 +70,7 @@ public class RecruiterCreditEntityTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testConvertToEntity() throws Exception{
+	void testConvertToEntity() {
 		
 		RecruiterCredit domain = 
 				RecruiterCredit

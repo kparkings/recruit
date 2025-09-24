@@ -52,7 +52,7 @@ import com.arenella.recruit.listings.utils.ListingAlertHitTesterUtil;
 * @author K Parkings
 */
 @ExtendWith(MockitoExtension.class)
-public class ListingControllerTest {
+class ListingControllerTest {
 	
 	@Mock
 	private Pageable 									mockPageable;
@@ -80,7 +80,7 @@ public class ListingControllerTest {
 	* @throws Exception
 	*/
 	@BeforeEach
-	public void init() throws Exception {
+	void init() {
 		SecurityContextHolder.getContext().setAuthentication(mockAuthentication);
 	}
 	
@@ -90,7 +90,7 @@ public class ListingControllerTest {
 	*/
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Test
-	public void testAddListing() throws Exception{
+	void testAddListing() throws Exception{
 		
 		Collection authorities = new HashSet<>();
 		authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
@@ -108,7 +108,7 @@ public class ListingControllerTest {
 			throw new RuntimeException("Expected UUID");
 		}
 		
-		assertEquals(response.getStatusCode(), HttpStatus.CREATED);
+		assertEquals(HttpStatus.CREATED, response.getStatusCode());
 		
 		Mockito.verify(this.mockListingAlertHitUtil).registerListing(Mockito.any(Listing.class));
 		
@@ -120,7 +120,7 @@ public class ListingControllerTest {
 	*/
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Test
-	public void testAddListing_recruiter_has_credits() throws Exception{
+	void testAddListing_recruiter_has_credits() throws Exception{
 		
 		Collection authorities = new HashSet<>();
 		authorities.add(new SimpleGrantedAuthority("ROLE_RECRUITER"));
@@ -139,7 +139,7 @@ public class ListingControllerTest {
 			throw new RuntimeException("Expected UUID");
 		}
 		
-		assertEquals(response.getStatusCode(), HttpStatus.CREATED);
+		assertEquals(HttpStatus.CREATED, response.getStatusCode());
 		
 		Mockito.verify(this.mockListingAlertHitUtil).registerListing(Mockito.any(Listing.class));
 		
@@ -151,7 +151,7 @@ public class ListingControllerTest {
 	*/
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Test
-	public void testAddListing_recruiter_has_no_credits() throws Exception{
+	void testAddListing_recruiter_has_no_credits() {
 		
 		Collection authorities = new HashSet<>();
 		authorities.add(new SimpleGrantedAuthority("ROLE_RECRUITER"));
@@ -175,14 +175,14 @@ public class ListingControllerTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testUpdateListing() throws Exception{
+	void testUpdateListing() {
 		
 		UUID				listingId		= UUID.randomUUID();
 		ListingAPIInbound 	listing 		= ListingAPIInbound.builder().build();
 		
 		ResponseEntity<Void> response = controller.updateListing(listingId, listing);
 		
-		assertEquals(response.getStatusCode(), HttpStatus.OK);
+		assertEquals(HttpStatus.OK, response.getStatusCode());
 		
 		Mockito.verify(mockListingService).updateListing(Mockito.eq(listingId), Mockito.any());
 		
@@ -193,15 +193,15 @@ public class ListingControllerTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testDeleteListing() throws Exception{
+	void testDeleteListing() {
 		
 		UUID				listingId		= UUID.randomUUID();
 		
 		ResponseEntity<Void> response = controller.deleteListing(listingId);
 		
-		assertEquals(response.getStatusCode(), HttpStatus.OK);
+		assertEquals(HttpStatus.OK, response.getStatusCode());
 		
-		Mockito.verify(mockListingService).deleteListing(Mockito.eq(listingId));
+		Mockito.verify(mockListingService).deleteListing(listingId);
 		
 	}
 	
@@ -210,7 +210,7 @@ public class ListingControllerTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testFetchListing_noRecruiterId() throws Exception{
+	void testFetchListing_noRecruiterId() {
 		
 		ArgumentCaptor<ListingFilter> filterArgCapt = ArgumentCaptor.forClass(ListingFilter.class);
 		
@@ -229,7 +229,7 @@ public class ListingControllerTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testFetchListingPublic() throws Exception{
+	void testFetchListingPublic() {
 		
 		ArgumentCaptor<ListingFilter> filterArgCapt = ArgumentCaptor.forClass(ListingFilter.class);
 		
@@ -247,7 +247,7 @@ public class ListingControllerTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testFetchListingPublic_withContractTypeFilter() throws Exception{
+	void testFetchListingPublic_withContractTypeFilter() {
 		
 		final listing_type listingType = listing_type.CONTRACT_ROLE;
 		
@@ -268,7 +268,7 @@ public class ListingControllerTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testFetchListingWithRecruiterFilter() throws Exception{
+	void testFetchListingWithRecruiterFilter() {
 	
 		ArgumentCaptor<ListingFilter> filterArgCapt = ArgumentCaptor.forClass(ListingFilter.class);
 		
@@ -290,7 +290,7 @@ public class ListingControllerTest {
 	*/
 	@Test
 	@WithAnonymousUser
-	public void testRegisterListingViewedEvent()  throws Exception {
+	void testRegisterListingViewedEvent() {
 		
 		final UUID listingId	= UUID.randomUUID();
 		
@@ -313,7 +313,7 @@ public class ListingControllerTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testSendContactRequestToListingOwner()  throws Exception {
+	void testSendContactRequestToListingOwner() {
 		
 		final UUID				listingId		= UUID.randomUUID();
 		final MultipartFile 	attachment		= Mockito.mock(MultipartFile.class);
@@ -344,7 +344,7 @@ public class ListingControllerTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testSndContactRequestToListingOwnerFromCandidate() throws Exception{
+	void testSndContactRequestToListingOwnerFromCandidate() {
 		
 		final UUID				listingId		= UUID.randomUUID();
 		final MultipartFile 	attachment		= Mockito.mock(MultipartFile.class);
@@ -375,7 +375,7 @@ public class ListingControllerTest {
 	*/
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Test
-	public void testPassesCreditCheck_admin() throws Exception{
+	void testPassesCreditCheck_admin() {
 		
 		Collection authorities = new HashSet<>();
 		authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
@@ -397,7 +397,7 @@ public class ListingControllerTest {
 	*/
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Test
-	public void testPassesCreditCheck_recruiter_not_creditbased() throws Exception{
+	void testPassesCreditCheck_recruiter_not_creditbased() {
 		
 		Collection authorities = new HashSet<>();
 		authorities.add(new SimpleGrantedAuthority("ROLE_RECRUITER"));
@@ -419,7 +419,7 @@ public class ListingControllerTest {
 	*/
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Test
-	public void testPassesCreditCheck_recruiter_creditbased() throws Exception{
+	void testPassesCreditCheck_recruiter_creditbased() {
 		
 		Collection authorities = new HashSet<>();
 		authorities.add(new SimpleGrantedAuthority("ROLE_RECRUITER"));
@@ -442,7 +442,7 @@ public class ListingControllerTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testFetchRemainingCreditCount() throws Exception{
+	void testFetchRemainingCreditCount() {
 	
 		final int count = 6;
 		
@@ -467,7 +467,6 @@ public class ListingControllerTest {
 		assertEquals(HttpStatus.OK, 			response.getStatusCode());
 		assertEquals(language.values().length, 	response.getBody().size());
 	
-		
 	}
 		
 }

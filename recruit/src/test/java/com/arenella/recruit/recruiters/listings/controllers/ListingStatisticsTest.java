@@ -15,7 +15,7 @@ import com.arenella.recruit.listings.controllers.ListingStatistics;
 * Unit tests for the ListingStatistics class
 * @author K Parkings
 */
-public class ListingStatisticsTest {
+class ListingStatisticsTest {
 
 	/**
 	* Tests that if no events for the current week the week and day view
@@ -23,7 +23,7 @@ public class ListingStatisticsTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testNoEventsForCurrentWeek() throws Exception {
+	void testNoEventsForCurrentWeek() {
 		
 		List<ListingViewedEvent> events = new LinkedList<>();
 		
@@ -40,26 +40,13 @@ public class ListingStatisticsTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testDefaults() throws Exception {
+	void testDefaults() {
 		
 		List<ListingViewedEvent> events = new LinkedList<>();
 		
 		ListingStatistics stats = new ListingStatistics(events);
 		
 		assertTrue(stats.getViewsPerWeek().isEmpty());
-		
-	}
-	
-	/**
-	* Tests after processing that the day and week totals are correct and 
-	* the viewsPerWeek has the correct keys and values
-	* @throws Exception
-	*/
-	@Test
-	public void testEventProcessing() throws Exception {
-		
-		//TODO: [KP] Class uses current day and current week. Need to decide how to test
-		//		that
 		
 	}
 	

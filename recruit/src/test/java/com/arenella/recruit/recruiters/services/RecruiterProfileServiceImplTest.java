@@ -24,7 +24,7 @@ import com.arenella.recruit.recruiters.utils.ImageManipulator;
 * @author K Parkings
 */
 @ExtendWith(MockitoExtension.class)
-public class RecruiterProfileServiceImplTest {
+class RecruiterProfileServiceImplTest {
 
 	@Mock
 	private RecruiterProfileDao					mockRecruiterProfileDao;
@@ -47,13 +47,13 @@ public class RecruiterProfileServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testAddRecruiterProfile_alreadyExists() throws Exception{
+	void testAddRecruiterProfile_alreadyExists() {
 		
 		Mockito.when(mockRecruiterProfileDao.existsById(Mockito.anyString())).thenReturn(true);
 		
-		assertThrows(IllegalStateException.class, () -> {
-			service.addRecruiterProfile(RecruiterProfile.builder().recruiterId("kparkings").build());
-		});
+		RecruiterProfile recruiterProfile = RecruiterProfile.builder().recruiterId("kparkings").build();
+		
+		assertThrows(IllegalStateException.class, () -> service.addRecruiterProfile(recruiterProfile));
 		
 	}
 	
@@ -63,14 +63,13 @@ public class RecruiterProfileServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testAddRecruiterProfile_unsafeFileType() throws Exception{
+	void testAddRecruiterProfile_unsafeFileType() {
 	
 		Mockito.when(mockRecruiterProfileDao.existsById(Mockito.anyString())).thenReturn(false);
 		Mockito.when(mockImageFileSecruityParser.isSafe(Mockito.any())).thenReturn(false);
 		
-		assertThrows(RuntimeException.class, () -> {
-			service.addRecruiterProfile(RecruiterProfile.builder().recruiterId("kparkings").profilePhoto(new Photo(new byte[]{}, PHOTO_FORMAT.jpeg)).build());
-		});
+		RecruiterProfile recruiterProfile = RecruiterProfile.builder().recruiterId("kparkings").profilePhoto(new Photo(new byte[]{}, PHOTO_FORMAT.jpeg)).build();
+		assertThrows(RuntimeException.class, () -> service.addRecruiterProfile(recruiterProfile));
 		
 	}
 	
@@ -79,7 +78,7 @@ public class RecruiterProfileServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testAddRecruiterProfile_photoPresent() throws Exception{
+	void testAddRecruiterProfile_photoPresent() {
 	
 		final byte[] resizedImage = new byte[] {17,18};
 		
@@ -101,13 +100,12 @@ public class RecruiterProfileServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testAddRecruiterProfile_doesNotalreadyExists() throws Exception{
+	void testAddRecruiterProfile_doesNotalreadyExists() {
 		
 		Mockito.when(mockRecruiterProfileDao.existsById(Mockito.anyString())).thenReturn(false);
 		
-		assertThrows(IllegalStateException.class, () -> {
-			service.updateRecruiterProfile(RecruiterProfile.builder().recruiterId("kparkings").build());
-		});
+		RecruiterProfile recruiterProfile = RecruiterProfile.builder().recruiterId("kparkings").build(); 
+		assertThrows(IllegalStateException.class, () -> service.updateRecruiterProfile(recruiterProfile));
 		
 	}
 	
@@ -117,14 +115,14 @@ public class RecruiterProfileServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testUpdateRecruiterProfile_unsafeFileType() throws Exception{
+	void testUpdateRecruiterProfile_unsafeFileType() {
 	
 		Mockito.when(mockRecruiterProfileDao.existsById(Mockito.anyString())).thenReturn(true);
 		Mockito.when(mockImageFileSecruityParser.isSafe(Mockito.any())).thenReturn(false);
 		
-		assertThrows(RuntimeException.class, () -> {
-			service.updateRecruiterProfile(RecruiterProfile.builder().recruiterId("kparkings").profilePhoto(new Photo(new byte[]{}, PHOTO_FORMAT.jpeg)).build());
-		});
+		RecruiterProfile recruiterProfile= RecruiterProfile.builder().recruiterId("kparkings").profilePhoto(new Photo(new byte[]{}, PHOTO_FORMAT.jpeg)).build();
+		
+		assertThrows(RuntimeException.class, () -> service.updateRecruiterProfile(recruiterProfile));
 		
 	}
 	
@@ -133,7 +131,7 @@ public class RecruiterProfileServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testUpdateRecruiterProfile_photoPresent() throws Exception{
+	void testUpdateRecruiterProfile_photoPresent() {
 	
 		final byte[] resizedImage = new byte[] {17,18};
 		
@@ -155,7 +153,7 @@ public class RecruiterProfileServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testSendEmailToRecruiter() throws Exception{
+	void testSendEmailToRecruiter() {
 		
 		final String message 			= "aMessage";
 		final String title 				= "aTitle";

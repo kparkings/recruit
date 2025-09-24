@@ -12,7 +12,7 @@ import com.arenella.recruit.newsfeed.beans.NewsFeedUserView;
 * Unit tests for the NewsFeedUserView class
 * @author K Parkings
 */
-public class NewsFeedUserViewEntityTest {
+class NewsFeedUserViewEntityTest {
 
 	private static final String 			USER_ID = "kparkings";
 	private static final LocalDateTime 		LAST_VIEWED = LocalDateTime.of(2024, 2, 7, 0, 4, 5, 4);
@@ -22,7 +22,7 @@ public class NewsFeedUserViewEntityTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testConstructor() throws Exception{
+	void testConstructor() {
 	
 		NewsFeedUserViewEntity viewEvent = new NewsFeedUserViewEntity(USER_ID, LAST_VIEWED);
 		
@@ -36,7 +36,7 @@ public class NewsFeedUserViewEntityTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testConvertFromEntity() throws Exception{
+	void testConvertFromEntity() {
 	
 		NewsFeedUserViewEntity entity = new NewsFeedUserViewEntity(USER_ID, LAST_VIEWED);
 		
@@ -55,7 +55,7 @@ public class NewsFeedUserViewEntityTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testConvertToEntity() throws Exception{
+	void testConvertToEntity() {
 		
 		NewsFeedUserView view = new NewsFeedUserView(USER_ID, LAST_VIEWED);
 		

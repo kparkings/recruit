@@ -27,7 +27,7 @@ import com.arenella.recruit.newsfeed.services.NewsFeedItemService;
 * @author K Parkings
 */
 @ExtendWith(MockitoExtension.class)
-public class NewsFeedControllerTest {
+class NewsFeedControllerTest {
 
 	@Mock
 	private NewsFeedItemService 	mockService;
@@ -43,7 +43,7 @@ public class NewsFeedControllerTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testFetchNewsItems() throws Exception{
+	void testFetchNewsItems() {
 	
 		final Set<NewsFeedItem.NEWSFEED_ITEM_TYPE> types = Set.of(NewsFeedItem.NEWSFEED_ITEM_TYPE.CANDIDATE_ADDED, NewsFeedItem.NEWSFEED_ITEM_TYPE.CANDIDATE_DELETED);
 		final NewsFeedItem item1 = NewsFeedItem.builder().build();
@@ -70,7 +70,7 @@ public class NewsFeedControllerTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testUpdateNewsFeedUserViewLastViewed() throws Exception{
+	void testUpdateNewsFeedUserViewLastViewed() {
 		
 		ResponseEntity<Void> response = this.controller.updateNewsFeedUserViewLastViewed(this.mockPrincipal);
 		
@@ -85,7 +85,7 @@ public class NewsFeedControllerTest {
 	* @throws Exception
 	*/
 	@Test
-	public void fetchNewsFeedUserView() throws Exception {
+	void fetchNewsFeedUserView() {
 		
 		final String userId = "4455";
 		

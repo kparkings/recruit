@@ -9,18 +9,18 @@ import org.junit.jupiter.api.Test;
 * Unit tests for the RecruiterCredit class
 * @author K Parkings
 */
-public class RecruiterCreditTest {
+class RecruiterCreditTest {
 
-	final String 	RECRUITER_ID 	= "recruiter44";
-	final int 		CREDITS 		= 4;
-	final boolean 	PAID_SUBSCRIPTION 	= true;
+	private static final String 	RECRUITER_ID 	= "recruiter44";
+	private static final int 		CREDITS 		= 4;
+	private static final boolean 	PAID_SUBSCRIPTION 	= true;
 	
 	/**
 	* Tests credit default values
 	* @throws Exception
 	*/
 	@Test
-	public void testDefaultCredits() throws Exception{
+	void testDefaultCredits() {
 		
 		RecruiterCredit recruiterCredit = 
 			RecruiterCredit
@@ -36,7 +36,7 @@ public class RecruiterCreditTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testBuilder() throws Exception{
+	void testBuilder() {
 		
 		RecruiterCredit recruiterCredit = 
 				RecruiterCredit
@@ -57,7 +57,7 @@ public class RecruiterCreditTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testIncrementDecrementCredits() throws Exception{
+	void testIncrementDecrementCredits() {
 		
 		final int newCreditsAmount = 2;
 		
@@ -94,7 +94,7 @@ public class RecruiterCreditTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testSetters() throws Exception{
+	void testSetters() {
 		
 		RecruiterCredit recruiterCredit = 
 				RecruiterCredit

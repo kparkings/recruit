@@ -15,7 +15,7 @@ import com.arenella.recruit.recruiters.beans.OpenPosition;
 import com.arenella.recruit.recruiters.entities.OpenPositionEntity;
 
 @ExtendWith(MockitoExtension.class)
-public class OpenPositionDaoTest {
+class OpenPositionDaoTest {
 	
 	private static final UUID id1 = UUID.randomUUID();
 	private static final UUID id2 = UUID.randomUUID();
@@ -122,7 +122,7 @@ public class OpenPositionDaoTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testFetchOOpenPositions() throws Exception{
+	void testFetchOOpenPositions() {
 		
 		Set<OpenPosition> openPositions = this.dao.findAllOpenPositions();
 		
@@ -137,7 +137,7 @@ public class OpenPositionDaoTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testFetchOOpenPositionsByRecruiterId() throws Exception{
+	void testFetchOOpenPositionsByRecruiterId() {
 		
 		Set<OpenPosition> openPositions = this.dao.findAllOpenPositionsByRecruiterId("aRecruiterId");
 		

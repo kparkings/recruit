@@ -16,7 +16,7 @@ import com.arenella.recruit.newsfeed.services.NewsFeedItemService;
 * @author Hp
 */
 @ExtendWith(MockitoExtension.class)
-public class NewsFeedExternalEventListenerImplTest {
+class NewsFeedExternalEventListenerImplTest {
 
 	@Mock
 	private NewsFeedItemService mockService;
@@ -28,7 +28,7 @@ public class NewsFeedExternalEventListenerImplTest {
 	* Tests handling of CandidateUpdateEvent 
 	*/
 	@Test
-	public void testListenForEventCandidateUpdate() {
+	void testListenForEventCandidateUpdate() {
 		
 		final String id = "1234";
 		
@@ -48,7 +48,7 @@ public class NewsFeedExternalEventListenerImplTest {
 	* on Users who no longer want to be in the system
 	*/
 	@Test
-	public void testListenForEventCandidateUpdate_candidate_deleted() {
+	void testListenForEventCandidateUpdate_candidate_deleted() {
 		
 		final int id = 1234;
 		

@@ -15,14 +15,14 @@ import com.arenella.recruit.recruiters.beans.RecruiterProfile.TECH;
 * Unit tests for the RecruiterProfileFilter class
 * @author K Parkings
 */
-public class RecruiterProfileFilterTest {
+class RecruiterProfileFilterTest {
 
 	/**
 	* Test construction via builder
 	* @throws Exception
 	*/
 	@Test
-	public void testBuilder_defaults() throws Exception{
+	void testBuilder_defaults() {
 		
 		RecruiterProfileFilter filters = RecruiterProfileFilter.builder().build();
 		
@@ -40,7 +40,7 @@ public class RecruiterProfileFilterTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testBuilder() throws Exception{
+	void testBuilder() {
 		
 		final Set<TECH> 			tech 					= Set.of(TECH.ARCHITECT, TECH.CLOUD);
 		final Set<CONTRACT_TYPE> 	contractTypes 			= Set.of(CONTRACT_TYPE.FREELANCE);

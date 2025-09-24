@@ -12,14 +12,14 @@ import com.arenella.recruit.listings.exceptions.ListingValidationException;
 * Unit tests for the ListingValidationException class
 * @author K Parkings
 */
-public class ListingValidationExceptionTest {
+class ListingValidationExceptionTest {
 
 	/**
 	* Tests creation of Exception via Builder
 	* @throws Exception
 	*/
 	@Test
-	public void testBuilder() throws Exception {
+	void testBuilder() {
 		
 		final String field1 				= "f1";
 		final String field1MessageOrKey 	= "f1Key";
@@ -45,7 +45,7 @@ public class ListingValidationExceptionTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testHasFailedFields() throws Exception {
+	void testHasFailedFields() {
 		
 		final String field1 				= "f1";
 		final String field1MessageOrKey 	= "f1Key";

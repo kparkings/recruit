@@ -19,14 +19,14 @@ import com.arenella.recruit.listings.utils.ListingGeoZoneSearchUtil.GEO_ZONE;
 * Unit tests for the ListingFilter class
 * @author K Parkings
 */
-public class ListingFilterTest {
+class ListingFilterTest {
 
 	/**
 	* Test construction of Filters with Builder
 	* @throws Exception
 	*/
 	@Test
-	public void testBuilder() throws Exception {
+	void testBuilder() {
 		
 		final UUID 				listingId		= UUID.randomUUID();
 		final String			searchTerm		= "Java";
@@ -88,7 +88,7 @@ public class ListingFilterTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testBuilderWithDefaultValues() throws Exception {
+	void testBuilderWithDefaultValues() {
 		
 		ListingFilter filter = ListingFilter
 									.builder()

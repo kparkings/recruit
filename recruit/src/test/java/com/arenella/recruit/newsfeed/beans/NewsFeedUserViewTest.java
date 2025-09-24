@@ -10,17 +10,17 @@ import org.junit.jupiter.api.Test;
 * Unit tests for the NewsFeedUserView class
 * @author K Parkings
 */
-public class NewsFeedUserViewTest {
+class NewsFeedUserViewTest {
 
-	private static final String 			USER_ID = "kparkings";
-	private static final LocalDateTime 		LAST_VIEWED = LocalDateTime.of(2024, 2, 7, 0, 4, 5, 4);
+	private static final String 		USER_ID 	= "kparkings";
+	private static final LocalDateTime 	LAST_VIEWED = LocalDateTime.of(2024, 2, 7, 0, 4, 5, 4);
 	
 	/**
 	* Tests construction
 	* @throws Exception
 	*/
 	@Test
-	public void testConstructor() throws Exception{
+	void testConstructor() {
 	
 		NewsFeedUserView viewEvent = new NewsFeedUserView(USER_ID, LAST_VIEWED);
 		
@@ -28,7 +28,5 @@ public class NewsFeedUserViewTest {
 		assertEquals(LAST_VIEWED, 	viewEvent.getLastViewed());
 		
 	}
-	
-	
 	
 }

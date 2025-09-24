@@ -1,5 +1,7 @@
 package com.arenella.recruit.emailservice.services;
 
+import static org.mockito.ArgumentMatchers.eq;
+
 import java.util.Map;
 
 import org.junit.jupiter.api.Test;
@@ -20,7 +22,7 @@ import freemarker.template.Template;
 * @author K Parkings
 */
 @ExtendWith(MockitoExtension.class)
-public class EmailTemplateFactoryTest {
+class EmailTemplateFactoryTest {
 
 	@Mock
 	private Configuration 			freemarkerTemplateConfigMock;
@@ -32,15 +34,15 @@ public class EmailTemplateFactoryTest {
 	private EmailTemplateFactory 	factory 						= new EmailTemplateFactory();
 	
 	@Test
-	public void testEmailTemplateFactory() throws Exception{
+	void testEmailTemplateFactory() throws Exception{
 		
 		RequestSendEmailCommand command = RequestSendEmailCommand.builder().topic(EmailTopic.ACCOUNT_CREATED).build();
 		
-		Mockito.when(this.freemarkerTemplateConfigMock.getTemplate(Mockito.eq("new-recruiter-signup.ftlh"))).thenReturn(templateMock);
+		Mockito.when(this.freemarkerTemplateConfigMock.getTemplate(eq("new-recruiter-signup.ftlh"))).thenReturn(templateMock);
 		
 		factory.fetchTemplate(command, Map.of());
 		
-		Mockito.verify(this.freemarkerTemplateConfigMock).getTemplate(Mockito.eq("new-recruiter-signup.ftlh"));
+		Mockito.verify(this.freemarkerTemplateConfigMock).getTemplate(eq("new-recruiter-signup.ftlh"));
 		
 		
 	}

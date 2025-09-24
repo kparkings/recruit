@@ -22,7 +22,7 @@ import com.arenella.recruit.recruiters.enums.COUNTRY;
 * Unit tests for the OfferedCandidate Class
 * @author K Parkings
 */
-public class OfferedCandidateTest {
+class OfferedCandidateTest {
 	
 	private static final UUID 			ID 						= UUID.randomUUID();
 	private static final String 		RECRUITER_ID 			= "aRecruiterId";
@@ -46,7 +46,7 @@ public class OfferedCandidateTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testBuilder() throws Exception{
+	void testBuilder() {
 		
 		OfferedCandidate candidate = OfferedCandidate.builder()
 				.availableFromDate(AVAILABLE_FROM)
@@ -92,7 +92,7 @@ public class OfferedCandidateTest {
 	* instance twice 
 	*/
 	@Test
-	public void testInitalizeObject_alreadyInitialized() {
+	void testInitalizeObject_alreadyInitialized() {
 		
 		OfferedCandidate candidate = OfferedCandidate.builder().build();
 		
@@ -108,7 +108,7 @@ public class OfferedCandidateTest {
 	* Tests the setters
 	*/
 	@Test
-	public void testSetters() throws Exception{
+	void testSetters() {
 		
 		OfferedCandidate candidate = OfferedCandidate.builder().build();
 		
@@ -124,7 +124,7 @@ public class OfferedCandidateTest {
 	* Tests the successful initialization of an OfferedCandidate
 	*/
 	@Test
-	public void testInitalizeObject() {
+	void testInitalizeObject() {
 	
 		OfferedCandidate candidate = OfferedCandidate.builder().build();
 		

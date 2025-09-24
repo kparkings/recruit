@@ -43,7 +43,7 @@ import com.arenella.recruit.recruiters.services.RecruiterService;
 * @author K Parkings
 */
 @ExtendWith(MockitoExtension.class)
-public class RecruiterProfileControllerTest {
+class RecruiterProfileControllerTest {
 
 	private static final String 			RECRUITER_ID				= "kparkingS";
 	private static final Set<COUNTRY> 		RECRUITS_IN 				= Set.of(COUNTRY.BELGIUM, COUNTRY.IRELAND);
@@ -81,7 +81,7 @@ public class RecruiterProfileControllerTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testAddRecruiterProfile() throws Exception{
+	void testAddRecruiterProfile() throws Exception{
 		
 		Mockito.when(this.mockPrincipal.getName()).thenReturn("kparkings");
 		Mockito.when(this.mockMultipartFile.getBytes()).thenReturn(new byte[]{});
@@ -97,7 +97,7 @@ public class RecruiterProfileControllerTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testUpdateRecruiterProfile() throws Exception{
+	void testUpdateRecruiterProfile() throws Exception{
 	
 		Mockito.when(this.mockPrincipal.getName()).thenReturn("kparkings");
 		Mockito.when(this.mockMultipartFile.getBytes()).thenReturn(new byte[]{});
@@ -113,7 +113,7 @@ public class RecruiterProfileControllerTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testFetchRecruiterProfile() throws Exception{
+	void testFetchRecruiterProfile() throws Exception{
 		
 		Recruiter recruiter = Recruiter.builder().companyName("arenella bv").firstName("kevin").surname("parkings").build();
 		
@@ -153,7 +153,7 @@ public class RecruiterProfileControllerTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testFetchRecruiterProfile_profile_doesnt_exist() throws Exception{
+	void testFetchRecruiterProfile_profile_doesnt_exist() throws Exception{
 		
 		Recruiter recruiter = Recruiter.builder().companyName("arenella bv").firstName("kevin").surname("parkings").build();
 	
@@ -173,7 +173,7 @@ public class RecruiterProfileControllerTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testFetchRecruiterProfiles() throws Exception{
+	void testFetchRecruiterProfiles() {
 		
 		Recruiter recruiter1 = Recruiter.builder().userId("bparkings").companyName("arenella bv").firstName("kevin").surname("parkings").build();
 		
@@ -250,7 +250,7 @@ public class RecruiterProfileControllerTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testFetchRecruiterProfiles_isCandidate() throws Exception{
+	void testFetchRecruiterProfiles_isCandidate() {
 		
 		Recruiter recruiter1 = Recruiter.builder().userId("bparkings").companyName("arenella bv").firstName("kevin").surname("parkings").build();
 		
@@ -259,7 +259,6 @@ public class RecruiterProfileControllerTest {
 		
 		Mockito.when(this.mockPrincipal.getAuthorities()).thenReturn(authorities);
 		Mockito.when(mockGA.getAuthority()).thenReturn("ROLE_CANDIDATE");
-		
 		
 		RecruiterProfile rp1 = 
 				RecruiterProfile
@@ -301,7 +300,6 @@ public class RecruiterProfileControllerTest {
 						.yearsExperience(YEARS_EXPERIENCE)
 					.build();
 		
-		
 		ArgumentCaptor<RecruiterProfileFilter> filterCapt = ArgumentCaptor.forClass(RecruiterProfileFilter.class);
 		
 		Mockito.when(this.mockRPService.fetchRecruiterProfiles(filterCapt.capture())).thenReturn(Set.of(rp1,rp2));
@@ -327,7 +325,7 @@ public class RecruiterProfileControllerTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testFetchRecruiterProfiles_isPublic() throws Exception{
+	void testFetchRecruiterProfiles_isPublic() {
 		
 		Recruiter recruiter1 = Recruiter.builder().userId("bparkings").companyName("arenella bv").firstName("kevin").surname("parkings").build();
 		
@@ -400,7 +398,7 @@ public class RecruiterProfileControllerTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testContactRecruiterForOpenPosition() throws Exception{
+	void testContactRecruiterForOpenPosition() {
 		
 		final String message = "aMessage";
 

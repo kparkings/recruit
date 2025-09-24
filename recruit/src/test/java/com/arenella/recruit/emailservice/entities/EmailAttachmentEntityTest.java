@@ -14,13 +14,13 @@ import com.arenella.recruit.emailservice.entity.EmailAttachmentEntity;
 * Unit tests for the EmailAttachmentEntity class
 * @author K Parkings
 */
-public class EmailAttachmentEntityTest {
+class EmailAttachmentEntityTest {
 
 	/**
 	* Tests construction via Builder 
 	*/
 	@Test
-	public void testBuilder() throws Exception{
+	void testBuilder() {
 		
 		final UUID 		attachmentId 	= UUID.randomUUID();
 		final UUID 		emailId 		= UUID.randomUUID();
@@ -52,7 +52,7 @@ public class EmailAttachmentEntityTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testConvertToDomain() throws Exception{
+	void testConvertToDomain() {
 		
 		final UUID 		attachmentId 	= UUID.randomUUID();
 		final UUID 		emailId 		= UUID.randomUUID();

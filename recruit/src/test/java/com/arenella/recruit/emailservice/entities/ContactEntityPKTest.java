@@ -11,7 +11,7 @@ import com.arenella.recruit.emailservice.beans.Email.EmailRecipient.ContactType;
 * Unit tests for the RecipientEntityPK class
 * @author K Parkings
 */
-public class ContactEntityPKTest {
+class ContactEntityPKTest {
 
 	private final ContactType 	contactType		= ContactType.RECRUITER;
 	private final String 		contactId		= "kparkings";
@@ -21,7 +21,7 @@ public class ContactEntityPKTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testConstructor() throws Exception {
+	void testConstructor() {
 
 		ContactEntityPK pk = new ContactEntityPK(contactType, contactId);
 		

@@ -12,14 +12,14 @@ import com.arenella.recruit.listings.beans.Listing;
 * Unit tests for the ListingCategory class 
 * @author K Parkings
 */
-public class ListingCategoryTest {
+class ListingCategoryTest {
 
 	/**
 	* Tests construction
 	* @throws Exception
 	*/
 	@Test
-	public void testConstructor() throws Exception{
+	void testConstructor() {
 		
 		ListingCategory lc = new ListingCategory(Listing.TECH.JAVA, Set.of("java","j2ee"));
 		

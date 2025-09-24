@@ -15,7 +15,7 @@ import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_
 * Unit tests for the RecruiterAPIOutbound class
 * @author K Parkings
 */
-public class RecruiterAPIOutboundTest {
+class RecruiterAPIOutboundTest {
 
 	private static final String 		USER_ID						= "kparkings";
 	private static final String 		FIRST_NAME					= "kevin";
@@ -33,7 +33,7 @@ public class RecruiterAPIOutboundTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testBuilder() throws Exception {
+	void testBuilder() {
 		
 		final RecruiterSubscriptionAPIOutbound 			subscription 				= RecruiterSubscriptionAPIOutbound.builder().build();
 		final Set<RecruiterSubscriptionAPIOutbound> 	subscriptions 				=	Set.of(subscription);
@@ -76,7 +76,7 @@ public class RecruiterAPIOutboundTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testConvertToDomain() throws Exception{
+	void testConvertToDomain() {
 		
 		Recruiter recruiter = Recruiter
 				.builder()
@@ -112,7 +112,7 @@ public class RecruiterAPIOutboundTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testBuilderDefaults() throws Exception {
+	void testBuilderDefaults() {
 		
 		RecruiterAPIOutbound recruiter = RecruiterAPIOutbound.builder().build();
 		
@@ -126,7 +126,7 @@ public class RecruiterAPIOutboundTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testBuilder_subsriptionStatus_awaiting_activation() throws Exception{
+	void testBuilder_subsriptionStatus_awaiting_activation() {
 		
 		RecruiterAPIOutbound recruiter = 
 				RecruiterAPIOutbound
@@ -143,7 +143,7 @@ public class RecruiterAPIOutboundTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testBuilder_subsriptionStatus_active_pending_payment() throws Exception{
+	void testBuilder_subsriptionStatus_active_pending_payment() {
 		
 		RecruiterAPIOutbound recruiter = 
 				RecruiterAPIOutbound
@@ -160,7 +160,7 @@ public class RecruiterAPIOutboundTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testBuilder_subsriptionStatus_active() throws Exception{
+	void testBuilder_subsriptionStatus_active() {
 		
 		RecruiterAPIOutbound recruiter = 
 				RecruiterAPIOutbound
@@ -177,7 +177,7 @@ public class RecruiterAPIOutboundTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testBuilder_subsriptionStatus_disabled_pending_payment() throws Exception{
+	void testBuilder_subsriptionStatus_disabled_pending_payment() {
 		
 		RecruiterAPIOutbound recruiter = 
 				RecruiterAPIOutbound
@@ -194,7 +194,7 @@ public class RecruiterAPIOutboundTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testBuilder_subsriptionStatus_subscription_ended() throws Exception{
+	void testBuilder_subsriptionStatus_subscription_ended() {
 		
 		RecruiterAPIOutbound recruiter = 
 				RecruiterAPIOutbound

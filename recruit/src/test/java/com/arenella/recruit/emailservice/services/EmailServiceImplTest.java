@@ -37,7 +37,7 @@ import com.arenella.recruit.emailservice.dao.EmailServiceDao;
 * @author K Parkings
 */
 @ExtendWith(MockitoExtension.class)
-public class EmailServiceImplTest {
+class EmailServiceImplTest {
 
 	private static final String 				BODY 						= "body";
 	private static final LocalDateTime 			CREATED 					= LocalDateTime.of(2023,03,03, 10,10,10);
@@ -87,7 +87,7 @@ public class EmailServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testFetchEmailsByRecipientId() throws Exception{
+	void testFetchEmailsByRecipientId() {
 	
 		Mockito.when(this.mockEmailServiceDao.fetchEmailsByRecipientId(RECIPIENT_CONTACT_ID)).thenReturn(Set.of(Email
 				.builder()
@@ -116,7 +116,7 @@ public class EmailServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testfetchAttachment_unknownAttachment() throws Exception{
+	void testfetchAttachment_unknownAttachment() {
 		Mockito.when(this.mockEmailServiceDao
 				.fetchAttachment(ID, ATTACHMENT_ID, RECIPIENT_CONTACT_ID)).thenReturn(Optional.empty());
 	
@@ -131,7 +131,7 @@ public class EmailServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testfetchAttachment() throws Exception{
+	void testfetchAttachment() {
 		Mockito.when(this.mockEmailServiceDao
 				.fetchAttachment(ID, ATTACHMENT_ID, RECIPIENT_CONTACT_ID)).thenReturn(Optional.of(EMAIL_ATTACHMENT));
 	
@@ -144,7 +144,7 @@ public class EmailServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testHandleReply_unknownEmail() throws Exception{
+	void testHandleReply_unknownEmail() {
 		
 		final UUID 		emailId 				= UUID.randomUUID();
 		final String 	message 				= "replyTest";
@@ -163,7 +163,7 @@ public class EmailServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testHandleReply_no_contact_for_authenticated_user() throws Exception{
+	void testHandleReply_no_contact_for_authenticated_user() {
 		
 		final UUID 		emailId 				= UUID.randomUUID();
 		final String 	message 				= "replyTest";
@@ -185,7 +185,7 @@ public class EmailServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testHandleReply_sender_already_recipient() throws Exception{
+	void testHandleReply_sender_already_recipient() {
 		
 		final UUID 					emailId 				= UUID.randomUUID();
 		final String 				message 				= "replyTest";
@@ -226,7 +226,7 @@ public class EmailServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testHandleReply_sender_not_already_recipient() throws Exception{
+	void testHandleReply_sender_not_already_recipient() {
 		
 		final UUID 					emailId 				= UUID.randomUUID();
 		final String 				message 				= "replyTest";

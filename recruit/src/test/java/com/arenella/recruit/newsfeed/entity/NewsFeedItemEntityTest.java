@@ -19,7 +19,7 @@ import com.arenella.recruit.newsfeed.beans.NewsFeedItemLine;
 * Unit tests for the NewsFeedItem class
 * @author K Parkings
 */
-public class NewsFeedItemEntityTest {
+class NewsFeedItemEntityTest {
 
 	private static final UUID 							ID 					= UUID.randomUUID();
 	private static final String							REFERENCED_USER_ID 	= "122";
@@ -31,7 +31,7 @@ public class NewsFeedItemEntityTest {
 	* Tests construction via Builder 
 	*/
 	@Test
-	public void testBuilder() {
+	void testBuilder() {
 		
 		NewsFeedItemEntity item = NewsFeedItemEntity.builder().id(ID).referencedUserId(REFERENCED_USER_ID).created(CREATED).itemType(ITEM_TYPE).lines(LINES).build();
 		
@@ -47,7 +47,7 @@ public class NewsFeedItemEntityTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testConvertFromEntity() throws Exception{
+	void testConvertFromEntity() {
 		
 		final Set<NewsFeedItemLineEntity> lines = Set.of(NewsFeedItemLineEntity.builder().build(), NewsFeedItemLineEntity.builder().build());
 		
@@ -72,7 +72,7 @@ public class NewsFeedItemEntityTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testConvertToEntity() throws Exception{
+	void testConvertToEntity() {
 		
 		final Set<NewsFeedItemLine> lines = Set.of(NewsFeedItemLine.builder().build(), NewsFeedItemLine.builder().build());
 		
@@ -92,12 +92,11 @@ public class NewsFeedItemEntityTest {
 		
 	}
 	
-	
 	/**
 	* Tests construction via Builder when no referenced user
 	*/
 	@Test
-	public void testBuilder_no_referenced_user() {
+	void testBuilder_no_referenced_user() {
 		
 		NewsFeedItemEntity item = NewsFeedItemEntity.builder().build();
 		
@@ -109,7 +108,7 @@ public class NewsFeedItemEntityTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testConvertFromEntity_no_referenced_user() throws Exception{
+	void testConvertFromEntity_no_referenced_user() {
 		
 		NewsFeedItemEntity entity = NewsFeedItemEntity.builder().build();
 		
@@ -124,7 +123,7 @@ public class NewsFeedItemEntityTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testConvertToEntity_no_referenced_user() throws Exception{
+	void testConvertToEntity_no_referenced_user() {
 		
 		NewsFeedItem item = NewsFeedItem.builder().build();
 		

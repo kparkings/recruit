@@ -13,8 +13,8 @@ import com.arenella.recruit.curriculum.beans.RecruiterCredit;
 */
 class CurriculumRecruiterCreditEntityTest {
 
-	final String 	RECRUITER_ID 	= "recruiter44";
-	final int 		CREDITS 		= 4;
+	private static final String 	RECRUITER_ID 	= "recruiter44";
+	private static final int 		CREDITS 		= 4;
 	
 	/**
 	* Tests construction via the Builder

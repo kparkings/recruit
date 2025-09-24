@@ -36,7 +36,7 @@ import org.springframework.http.ResponseEntity;
 * @author K Parkings
 */
 @ExtendWith(MockitoExtension.class)
-public class EmailControllerTest {
+class EmailControllerTest {
 
 	private static final String 				BODY 						= "body";
 	private static final LocalDateTime 			CREATED 					= LocalDateTime.of(2023,03,03, 10,10,10);
@@ -86,7 +86,7 @@ public class EmailControllerTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testGetEmailsForUser() throws Exception{
+	void testGetEmailsForUser() {
 		
 		Mockito.when(this.mockPrincipal.getName()).thenReturn(RECIPIENT_CONTACT_ID);
 		
@@ -130,7 +130,7 @@ public class EmailControllerTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testGetEmailAttachment() throws Exception{
+	void testGetEmailAttachment() throws Exception{
 		
 		Mockito.when(this.mockPrincipal.getName()).thenReturn(RECIPIENT_CONTACT_ID);
 		Mockito.when(this.mockEmailService.fetchAttachment(ID, ATTACHMENT_ID, RECIPIENT_CONTACT_ID)).thenReturn(EMAIL_ATTACHMENT);
@@ -151,7 +151,7 @@ public class EmailControllerTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testMarkAsRead() throws Exception{
+	void testMarkAsRead() {
 		
 		final UUID emailId = UUID.randomUUID();
 		
@@ -169,7 +169,7 @@ public class EmailControllerTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testMarkAsUnRead() throws Exception{
+	void testMarkAsUnRead() {
 		
 		final UUID emailId = UUID.randomUUID();
 		
@@ -186,7 +186,7 @@ public class EmailControllerTest {
 	* Tests end point for replying to a message 
 	*/
 	@Test
-	public void testReplyToEmail() {
+	void testReplyToEmail() {
 		
 		final UUID 				emailId 		= UUID.randomUUID();
 		final String 			replyMessage 	= "response to original email";

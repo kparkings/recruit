@@ -91,7 +91,7 @@ public class CurriculumServiceImplTest {
 	* Sets up test environment 
 	*/
 	@BeforeEach
-	public void init() throws Exception{
+	void init() {
 		SecurityContextHolder.setContext(mockSecurityContext);
 	}
 	
@@ -101,7 +101,7 @@ public class CurriculumServiceImplTest {
 	*/
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Test
-	public void testPersistCurriculum_admin() throws Exception{
+	void testPersistCurriculum_admin() throws Exception{
 		
 		ArgumentCaptor<CurriculumEntity> captorEntity = ArgumentCaptor.forClass(CurriculumEntity.class);
 		
@@ -137,7 +137,7 @@ public class CurriculumServiceImplTest {
 	*/
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Test
-	public void testPersistCurriculum_candidate() throws Exception{
+	void testPersistCurriculum_candidate() throws Exception{
 		
 		ArgumentCaptor<CurriculumEntity> captorEntity = ArgumentCaptor.forClass(CurriculumEntity.class);
 		
@@ -173,7 +173,7 @@ public class CurriculumServiceImplTest {
 	*/
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Test
-	public void testPersistCurriculum_recruiter() throws Exception{
+	void testPersistCurriculum_recruiter() throws Exception{
 		
 		ArgumentCaptor<CurriculumEntity> captorEntity = ArgumentCaptor.forClass(CurriculumEntity.class);
 		
@@ -212,7 +212,7 @@ public class CurriculumServiceImplTest {
 	*/
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Test
-	public void testPersistCurriculum_candidate_own_curriculum() throws Exception{
+	void testPersistCurriculum_candidate_own_curriculum() throws Exception{
 		
 		ArgumentCaptor<CurriculumEntity> captorEntity = ArgumentCaptor.forClass(CurriculumEntity.class);
 		
@@ -247,7 +247,7 @@ public class CurriculumServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testFetchCurriculum() throws Exception {
+	void testFetchCurriculum() throws Exception {
 		
 		CurriculumEntity curriculumEntity = CurriculumEntity
 				.builder()
@@ -273,7 +273,7 @@ public class CurriculumServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testGetNextCurriculumId_noCurriculums() throws Exception{
+	void testGetNextCurriculumId_noCurriculums() {
 		
 		Mockito.when(mockCurriculumDao.findTopByOrderByCurriculumIdDesc()).thenReturn(Optional.empty());
 		
@@ -287,7 +287,7 @@ public class CurriculumServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testGetNextCurriculumId_existingCurriculums() throws Exception{
+	void testGetNextCurriculumId_existingCurriculums() {
 		
 		final long lastCurriculumId = 500;
 		
@@ -303,7 +303,7 @@ public class CurriculumServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testLogCurriculumDownloadedEvent() throws Exception{
+	void testLogCurriculumDownloadedEvent() {
 		
 		final String curriculumId = "100";
 	
@@ -329,7 +329,7 @@ public class CurriculumServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testExtractDetails_failure_returnsMinumum() throws Exception {
+	void testExtractDetails_failure_returnsMinumum() throws Exception {
 		
 		final String 		curriculumId 	= "897";
 		final FileType 		fileType 		= FileType.pdf;
@@ -346,7 +346,7 @@ public class CurriculumServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testPersistPendingCurriculum() throws Exception {
+	void testPersistPendingCurriculum() {
 		
 		ArgumentCaptor<PendingCurriculumEntity> pendingCurriculumCaptor = ArgumentCaptor.forClass(PendingCurriculumEntity.class);
 		
@@ -379,10 +379,11 @@ public class CurriculumServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testFetchPendingCurriculum_unknownCurriculumId() throws Exception {
+	void testFetchPendingCurriculum_unknownCurriculumId() {
 		
+		final UUID uuid = UUID.randomUUID();
 		assertThrows(IllegalArgumentException.class, () -> {
-	        service.fetchPendingCurriculum(UUID.randomUUID());
+	        service.fetchPendingCurriculum(uuid);
 	    });
 		
 	}
@@ -392,7 +393,7 @@ public class CurriculumServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testFetchPendingCurriculum_knownCurriculumId() throws Exception {
+	void testFetchPendingCurriculum_knownCurriculumId() {
 		
 		UUID id = UUID.randomUUID();
 		
@@ -418,7 +419,7 @@ public class CurriculumServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testDeletePendingCurriculum() throws Exception {
+	void testDeletePendingCurriculum() {
 		
 		UUID id = UUID.randomUUID();
 		
@@ -437,7 +438,7 @@ public class CurriculumServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testDeleteCurriculum() throws Exception {
+	void testDeleteCurriculum() {
 		
 		final long curriculumId = 123L;
 		
@@ -454,7 +455,7 @@ public class CurriculumServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testDeleteCurriculum_non_existen_curriculum() throws Exception {
+	void testDeleteCurriculum_non_existen_curriculum() {
 		
 		final long curriculumId = 123L;
 		
@@ -471,7 +472,7 @@ public class CurriculumServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testUpdateCurriculum_does_not_exist() throws Exception {
+	void testUpdateCurriculum_does_not_exist() {
 		
 		Curriculum curriculum = Curriculum
 				.builder()
@@ -480,8 +481,10 @@ public class CurriculumServiceImplTest {
 					.file(file)
 				.build();
 		
+		long id = Long.valueOf(curriculumId);
+		
 		Assertions.assertThrows(IllegalArgumentException.class, () -> {
-			service.updateCurriculum(Long.valueOf(curriculumId), curriculum);
+			service.updateCurriculum(id, curriculum);
 		});
 		
 	}
@@ -493,7 +496,7 @@ public class CurriculumServiceImplTest {
 	*/
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Test
-	public void testUpdateCurriculum_candidate_user_other_candidates_curriculum() throws Exception {
+	void testUpdateCurriculum_candidate_user_other_candidates_curriculum() throws Exception {
 		
 		Curriculum curriculum = Curriculum
 				.builder()
@@ -526,7 +529,7 @@ public class CurriculumServiceImplTest {
 	*/
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Test
-	public void testUpdateCurriculum_recruiter_user_other_candidates_curriculum() throws Exception {
+	void testUpdateCurriculum_recruiter_user_other_candidates_curriculum() throws Exception {
 		
 		Curriculum curriculum = Curriculum
 				.builder()
@@ -559,7 +562,7 @@ public class CurriculumServiceImplTest {
 	*/
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Test
-	public void testUpdateCurriculum_not_candidate_not_admin() throws Exception {
+	void testUpdateCurriculum_not_candidate_not_admin() throws Exception {
 		
 		Curriculum curriculum = Curriculum
 				.builder()
@@ -589,7 +592,7 @@ public class CurriculumServiceImplTest {
 	*/
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Test
-	public void testUpdateCurriculum_owning_canidate() throws Exception {
+	void testUpdateCurriculum_owning_canidate() throws Exception {
 		
 		Curriculum curriculum = Curriculum
 				.builder()
@@ -622,7 +625,7 @@ public class CurriculumServiceImplTest {
 	*/
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Test
-	public void testUpdateCurriculum_admin() throws Exception {
+	void testUpdateCurriculum_admin() throws Exception {
 		
 		Curriculum curriculum = Curriculum
 				.builder()
@@ -650,7 +653,7 @@ public class CurriculumServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testUpdateCredits() throws Exception{
+	void testUpdateCredits() {
 		
 		RecruiterCredit rc1 = RecruiterCredit.builder().recruiterId("rec1").credits(1).build();
 		RecruiterCredit rc2 = RecruiterCredit.builder().recruiterId("rec2").credits(2).build();
@@ -671,7 +674,7 @@ public class CurriculumServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testUseCredit_unknownUser() throws Exception{
+	void testUseCredit_unknownUser() {
 		
 		Mockito.when(this.mockCreditDao.getByRecruiterId(Mockito.anyString())).thenReturn(Optional.empty());
 		
@@ -686,7 +689,7 @@ public class CurriculumServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testUseCredit_noCredits() throws Exception{
+	void testUseCredit_noCredits() {
 		
 		RecruiterCredit rc = RecruiterCredit.builder().recruiterId("r1").credits(0).build();
 		
@@ -703,7 +706,7 @@ public class CurriculumServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testUseCredit() throws Exception{
+	void testUseCredit() {
 		
 		ArgumentCaptor<RecruiterCredit> rcCapt = ArgumentCaptor.forClass(RecruiterCredit.class);
 		
@@ -723,7 +726,7 @@ public class CurriculumServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testDoCreditsCheck_unknownUser() throws Exception{
+	void testDoCreditsCheck_unknownUser() {
 		
 		Mockito.when(this.mockCreditDao.getByRecruiterId(Mockito.anyString())).thenReturn(Optional.empty());
 		
@@ -736,7 +739,7 @@ public class CurriculumServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testDoCreditsCheck_knownUser_no_credits() throws Exception{
+	void testDoCreditsCheck_knownUser_no_credits() {
 		
 		RecruiterCredit rc = RecruiterCredit.builder().credits(0).build();
 		
@@ -751,7 +754,7 @@ public class CurriculumServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testDoCreditsCheck_knownUser_has_credits() throws Exception{
+	void testDoCreditsCheck_knownUser_has_credits() {
 		
 		RecruiterCredit rc = RecruiterCredit.builder().credits(1).build();
 		
@@ -766,7 +769,7 @@ public class CurriculumServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testGetCreditCountForUser_unknownUser() throws Exception{
+	void testGetCreditCountForUser_unknownUser() {
 	
 		Mockito.when(this.mockCreditDao.getByRecruiterId(Mockito.anyString())).thenReturn(Optional.empty());
 		
@@ -781,7 +784,7 @@ public class CurriculumServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testGetCreditCountForUser_knownUser() throws Exception{
+	void testGetCreditCountForUser_knownUser() {
 	
 		Mockito.when(this.mockCreditDao.getByRecruiterId(Mockito.anyString())).thenReturn(Optional.of(RecruiterCredit.builder().credits(1).build()));
 		
@@ -794,7 +797,7 @@ public class CurriculumServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testUpdateCreditsForUser() throws Exception{
+	void testUpdateCreditsForUser() {
 		
 		final String 	userId 		= "kparkings";
 		final int 		credits 	= 20;
@@ -819,7 +822,7 @@ public class CurriculumServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testUpdateCreditsForUser_unknownRecruiter() throws Exception{
+	void testUpdateCreditsForUser_unknownRecruiter() {
 		
 		final String 	userId 		= "kparkings";
 		final int 		credits 	= 20;
@@ -837,7 +840,7 @@ public class CurriculumServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testExtractSkillsFromCurriculum_unknownCurriculum() throws Exception{
+	void testExtractSkillsFromCurriculum_unknownCurriculum() {
 		
 		final long curriculumId = 100;
 		
@@ -854,7 +857,7 @@ public class CurriculumServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testExtractSkillsFromCurriculum_exceptionDuringExtraction() throws Exception{
+	void testExtractSkillsFromCurriculum_exceptionDuringExtraction() {
 		
 		final long 			curriculumId 		= 100;
 		

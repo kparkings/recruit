@@ -22,7 +22,7 @@ import com.arenella.recruit.listings.controllers.ListingAPIInbound;
 * Unit tests for the ListingAPIInbound class
 * @author K Parkings
 */
-public class ListingAPIInboundTest {
+class ListingAPIInboundTest {
 
 	private static final 	String 			SKILL_JAVA 			= "java";
 	private static final 	String 			SKILL_CSHARP 		= "c#";
@@ -46,7 +46,7 @@ public class ListingAPIInboundTest {
 	* Sets up test environment 
 	*/
 	@BeforeEach
-	public void init() {
+	void init() {
 		this.languages.add(language.DUTCH);
 		this.languages.add(language.FRENCH);
 	}
@@ -56,7 +56,7 @@ public class ListingAPIInboundTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testBuilder() throws Exception {
+	void testBuilder() {
 		
 		ListingAPIInbound listing = ListingAPIInbound
 							.builder()
@@ -92,11 +92,11 @@ public class ListingAPIInboundTest {
 		
 		assertTrue(listing.getLanguages().contains(Listing.language.DUTCH));
 		assertTrue(listing.getLanguages().contains(Listing.language.FRENCH));
-		assertEquals(listing.getLanguages().size(), 2);
+		assertEquals(2, listing.getLanguages().size());
 		
 		assertTrue(listing.getSkills().contains(SKILL_JAVA));
 		assertTrue(listing.getSkills().contains(SKILL_CSHARP));
-		assertEquals(listing.getSkills().size(), 2);
+		assertEquals(2, listing.getSkills().size());
 		
 		assertTrue(listing.isPostToSocialMedia());
 	
@@ -108,7 +108,7 @@ public class ListingAPIInboundTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testBuilder_defaults() throws Exception {
+	void testBuilder_defaults() {
 		
 		ListingAPIInbound listing = ListingAPIInbound.builder().build();
 		
@@ -120,11 +120,11 @@ public class ListingAPIInboundTest {
 	}
 	
 	/**
-	* Tests conversion from API Inbound version of Listing to Domain representaion
+	* Tests conversion from API Inbound version of Listing to Domain representation
 	* @throws Exception
 	*/
 	@Test
-	public void testConvertFromListing() throws Exception {
+	void testConvertFromListing() {
 	
 		ListingAPIInbound inbound = ListingAPIInbound
 												.builder()
@@ -164,11 +164,11 @@ public class ListingAPIInboundTest {
 		
 		assertTrue(listing.getLanguages().contains(Listing.language.DUTCH));
 		assertTrue(listing.getLanguages().contains(Listing.language.FRENCH));
-		assertEquals(listing.getLanguages().size(), 2);
+		assertEquals(2, listing.getLanguages().size());
 		
 		assertTrue(listing.getSkills().contains(SKILL_JAVA));
 		assertTrue(listing.getSkills().contains(SKILL_CSHARP));
-		assertEquals(listing.getSkills().size(), 2);
+		assertEquals(2, listing.getSkills().size());
 		
 	}
 	

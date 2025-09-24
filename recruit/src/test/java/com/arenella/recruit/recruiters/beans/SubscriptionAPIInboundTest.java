@@ -11,14 +11,14 @@ import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_
 * Unit tests for the SubscriptionAPIInbound class
 * @author K Parkings
 */
-public class SubscriptionAPIInboundTest {
+class SubscriptionAPIInboundTest {
 
 	/**
 	* Tests construction via the Builder
 	* @throws Exception
 	*/
 	@Test
-	public void testBuilder() throws Exception {
+	void testBuilder() {
 		
 		final subscription_type type 		= subscription_type.CREDIT_BASED_SUBSCRIPTION;
 		final INVOICE_TYPE 		invoiceType = INVOICE_TYPE.BUSINESS;

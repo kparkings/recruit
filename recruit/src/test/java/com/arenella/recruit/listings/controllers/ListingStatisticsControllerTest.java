@@ -24,7 +24,7 @@ import com.arenella.recruit.listings.services.ListingStatisticsService;
 * @author K Parkings
 */
 @ExtendWith(MockitoExtension.class)
-public class ListingStatisticsControllerTest {
+class ListingStatisticsControllerTest {
 
 	@Mock
 	private Principal						mockPrincipal;
@@ -40,7 +40,7 @@ public class ListingStatisticsControllerTest {
 	* @throws Exception
 	*/
 	//@Test
-	public void testFetchListingStatsForRecruiter() throws Exception{
+	void testFetchListingStatsForRecruiter() {
 		
 		ListingViewedEvent eventOldYear = ListingViewedEvent.builder().created(LocalDateTime.now().minusYears(2)).eventId(UUID.fromString("acde070d-8c4c-4f0d-9d8a-162843c10333")).listingId(UUID.fromString("acde070d-8c4c-4f0d-9d8a-162843c10331")).build(); 
 		ListingViewedEvent eventOne 	= ListingViewedEvent.builder().created(LocalDateTime.now().minusWeeks(1)).eventId(UUID.fromString("acde070d-8c4c-4f0d-9d8a-162843c10444")).listingId(UUID.fromString("acde070d-8c4c-4f0d-9d8a-162843c10441")).build(); 

@@ -10,7 +10,7 @@ import com.arenella.recruit.emailservice.beans.Email.EmailRecipient.ContactType;
 * Unit tests for the Contact class
 * @author K Parkings
 */
-public class RecipientTest {
+class RecipientTest {
 
 	final String 			id				= "rec1";
 	final ContactType 		contactType		= ContactType.RECRUITER;
@@ -22,7 +22,7 @@ public class RecipientTest {
 	* Tests constructor
 	*/
 	@Test
-	public void testConstructor() throws Exception {
+	void testConstructor() {
 		
 		Contact contact = new Contact(id, contactType, firstName, surname, email);
 		

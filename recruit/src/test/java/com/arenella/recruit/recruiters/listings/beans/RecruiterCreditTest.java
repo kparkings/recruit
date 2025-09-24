@@ -6,17 +6,17 @@ import org.junit.jupiter.api.Test;
 
 import com.arenella.recruit.listings.beans.RecruiterCredit;
 
-public class RecruiterCreditTest {
+class RecruiterCreditTest {
 
-	final String 	RECRUITER_ID 	= "recruiter44";
-	final int 		CREDITS 		= 4;
+	private static final String 	RECRUITER_ID 	= "recruiter44";
+	private static final int 		CREDITS 		= 4;
 	
 	/**
 	* Tests credit default values
 	* @throws Exception
 	*/
 	@Test
-	public void testDefaultCredits() throws Exception{
+	void testDefaultCredits() {
 		
 		RecruiterCredit recruiterCredit = 
 			RecruiterCredit
@@ -32,7 +32,7 @@ public class RecruiterCreditTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testBuilder() throws Exception{
+	void testBuilder() {
 		
 		RecruiterCredit recruiterCredit = 
 				RecruiterCredit
@@ -51,7 +51,7 @@ public class RecruiterCreditTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testIncrementDecrementCredits() throws Exception{
+	void testIncrementDecrementCredits() {
 		
 		final int newCreditsAmount = 2;
 		

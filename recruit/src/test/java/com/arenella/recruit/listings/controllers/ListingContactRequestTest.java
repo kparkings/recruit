@@ -12,7 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 * Unit tests for the ListingContactRequest class
 * @author K Parkings
 */
-public class ListingContactRequestTest {
+class ListingContactRequestTest {
 
 	private static final UUID			LISTING_ID		= UUID.randomUUID();
 	private static final MultipartFile 	ATTACHMENT		= Mockito.mock(MultipartFile.class);
@@ -25,7 +25,7 @@ public class ListingContactRequestTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testBuilder() throws Exception{
+	void testBuilder() {
 		
 		ListingContactRequest request = 
 				ListingContactRequest

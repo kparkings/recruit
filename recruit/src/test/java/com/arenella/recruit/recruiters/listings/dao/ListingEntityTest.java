@@ -333,7 +333,7 @@ class ListingEntityTest {
 			
 			Set<ListingViewedEventEntity> finalViews = entity.getViews();
 			
-			finalViews.forEach(v -> entityViews.contains(v));
+			finalViews.forEach(entityViews::contains);
 			finalViews.stream().filter(v -> v.getEventId() == nonExistingEntityViewID).findAny().orElseThrow(() -> new RuntimeException("Expected view event to have been added"));
 			finalViews.stream().filter(v -> v.getEventId() == existingEntityViewIdUpdated && v.getCreated() == created).findAny().orElseThrow(() -> new RuntimeException("Expected existing view event remain unchanged"));
 	

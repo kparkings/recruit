@@ -20,7 +20,7 @@ import com.arenella.recruit.listings.beans.ListingViewedEvent;
 /**
 * Unit tests for the ListingDocument class 
 */
-public class ListingDocumentTest {
+class ListingDocumentTest {
 
 	private static final UUID 								LISTING_ID			= UUID.randomUUID();
 	private static final String								OWNER_ID			= "123";

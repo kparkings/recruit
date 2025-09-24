@@ -22,7 +22,7 @@ import com.arenella.recruit.recruiters.enums.COUNTRY;
 * Unit tests for the OpenPosition class
 * @author K Parkings
 */
-public class OpenPositionEntityTest {
+class OpenPositionEntityTest {
 
 	private UUID 			id						= UUID.randomUUID();
 	private String 			recruiterId				= "recruier1Id";
@@ -32,7 +32,7 @@ public class OpenPositionEntityTest {
 	private ContractType 	contractType			= ContractType.CONTRACT;
 	private String	 		renumeration			= "500 euros per day";
 	private LocalDate 		startDate				= LocalDate.of(2022, 5, 31);
-	private LocalDate 		positionClosingDate		= LocalDate.of(2022, 6, 14);;
+	private LocalDate 		positionClosingDate		= LocalDate.of(2022, 6, 14);
 	private String 			description			 	= "Some long descriptive text";
 	private String 			comments				= "Some comments fromt he Recruiter";
 	private LocalDateTime	created					= LocalDateTime.of(2022, 7, 26, 1, 1, 1);
@@ -44,7 +44,7 @@ public class OpenPositionEntityTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testBuilder() throws Exception {
+	void testBuilder() {
 		
 		OpenPositionEntity position = OpenPositionEntity
 				.builder()
@@ -88,7 +88,7 @@ public class OpenPositionEntityTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testInitializeAsNewObject() throws Exception{
+	void testInitializeAsNewObject() {
 		
 		OpenPositionEntity position = OpenPositionEntity
 										.builder()
@@ -111,7 +111,7 @@ public class OpenPositionEntityTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testConvertToEntity() throws Exception{
+	void testConvertToEntity() {
 		
 		OpenPosition position = OpenPosition
 				.builder()
@@ -159,7 +159,7 @@ public class OpenPositionEntityTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testConvertToEntity_updateExistingEntity() throws Exception{
+	void testConvertToEntity_updateExistingEntity() {
 		
 		final UUID 			idOrig						= UUID.randomUUID();
 		final String 		recruiterIdOrig				= "recruier1IdUpdt";
@@ -169,7 +169,7 @@ public class OpenPositionEntityTest {
 		final ContractType 	contractTypeOrig			= ContractType.PERM;
 		final String	 	renumerationOrig			= "500 euros per dayUpdt";
 		final LocalDate 	startDateOrig				= LocalDate.of(2022, 6, 28);
-		final LocalDate 	positionClosingDateOrig		= LocalDate.of(2022, 7, 14);;
+		final LocalDate 	positionClosingDateOrig		= LocalDate.of(2022, 7, 14);
 		final String 		descriptionOrig			 	= "Some long descriptive textUpdt";
 		final String 		commentsOrig				= "Some comments fromt he RecruiterUpdt";
 		
@@ -240,7 +240,7 @@ public class OpenPositionEntityTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testConvertFromEntity() throws Exception{
+	void testConvertFromEntity() {
 		
 		OpenPositionEntity entity = OpenPositionEntity
 				.builder()

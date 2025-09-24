@@ -12,7 +12,7 @@ import com.arenella.recruit.newsfeed.beans.NewsFeedItemLine.NEWS_FEED_ITEM_LINE_
 * Unit tests for the NewsFeedItemLineAPIOutbound class
 * @author K Parkings
 */
-public class NewsFeedItemLineAPIOutboundTest {
+class NewsFeedItemLineAPIOutboundTest {
 
 	private static final NEWS_FEED_ITEM_LINE_TYPE 	TYPE 	= NEWS_FEED_ITEM_LINE_TYPE.TEXT;
 	private static final String 					TEXT	= "text";
@@ -25,7 +25,7 @@ public class NewsFeedItemLineAPIOutboundTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testConstruction() throws Exception{
+	void testConstruction() {
 		
 		NewsFeedItemLineAPIOutbound line = NewsFeedItemLineAPIOutbound.builder().order(ORDER).type(TYPE).text(TEXT).image(IMAGE).url(URL).build();
 		
@@ -41,7 +41,7 @@ public class NewsFeedItemLineAPIOutboundTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testConstruction_defaults() throws Exception{
+	void testConstruction_defaults() {
 		
 		NewsFeedItemLineAPIOutbound line = NewsFeedItemLineAPIOutbound.builder().build();
 		
@@ -56,7 +56,7 @@ public class NewsFeedItemLineAPIOutboundTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testConvertFromDomain() throws Exception{
+	void testConvertFromDomain() {
 	
 		NewsFeedItemLine line = NewsFeedItemLine.builder().order(ORDER).type(TYPE).text(TEXT).image(IMAGE).url(URL).build();
 		
@@ -75,11 +75,10 @@ public class NewsFeedItemLineAPIOutboundTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testConvertFromDomain_defaults() throws Exception{
+	void testConvertFromDomain_defaults() {
 	
-		NewsFeedItemLine line = NewsFeedItemLine.builder().type(TYPE).build();
-		
-		NewsFeedItemLineAPIOutbound outbound = NewsFeedItemLineAPIOutbound.convertFromDomain(line);
+		NewsFeedItemLine 			line 		= NewsFeedItemLine.builder().type(TYPE).build();
+		NewsFeedItemLineAPIOutbound outbound 	= NewsFeedItemLineAPIOutbound.convertFromDomain(line);
 		
 		assertEquals(TYPE, 	outbound.getType());
 		

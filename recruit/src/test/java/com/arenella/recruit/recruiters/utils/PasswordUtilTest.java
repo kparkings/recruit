@@ -9,14 +9,14 @@ import org.junit.jupiter.api.Test;
 * Unit tests for the PasswordUtil class
 * @author K Parkings
 */
-public class PasswordUtilTest {
+class PasswordUtilTest {
 
 	/**
 	* Tests creation of Password
 	* @throws Exception
 	*/
 	@Test
-	public void testGeneratePassword() throws Exception{
+	void testGeneratePassword() {
 		assertEquals(PasswordUtil.PASSWORD_LENGTH, PasswordUtil.generatePassword().length());
 	}
 	
@@ -25,7 +25,7 @@ public class PasswordUtilTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testEncryptPassword() throws Exception{
+	void testEncryptPassword() {
 		assertNotNull(PasswordUtil.encryptPassword(""));
 	}
 	

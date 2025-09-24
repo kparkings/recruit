@@ -59,7 +59,7 @@ class CurriculumEntityTest {
 		
 		Curriculum curriculum = CurriculumEntity.convertFromEntity(entity);
 		
-		assertEquals(curriculumId, 	Long.valueOf(curriculum.getId().get()).longValue());
+		assertEquals(curriculumId, 	Long.parseLong(curriculum.getId().get()));
 		assertEquals(fileBytes, 	curriculum.getFile());
 		assertEquals(fileType, 		curriculum.getFileType());
 		

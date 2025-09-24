@@ -17,7 +17,7 @@ import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_
 * @author K Parkings
 */
 @ExtendWith(MockitoExtension.class)
-public class RecruiterSubscriptionFactoryTest {
+class RecruiterSubscriptionFactoryTest {
 	
 	@InjectMocks
 	private RecruiterSubscriptionFactory 			factory = new RecruiterSubscriptionFactory();
@@ -30,10 +30,10 @@ public class RecruiterSubscriptionFactoryTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testNoTypeSpecified() throws Exception {	
-		assertThrows(IllegalArgumentException.class, () -> {
-			factory.getActionHandlerByType(null);
-		});
+	void testNoTypeSpecified() {	
+		assertThrows(IllegalArgumentException.class, () -> 
+			factory.getActionHandlerByType(null)
+		);
 	}
 	
 	/**
@@ -41,7 +41,7 @@ public class RecruiterSubscriptionFactoryTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testGetActionHandlers() throws Exception {
+	void testGetActionHandlers() {
 		assertNotNull(factory.getActionHandlerByType(subscription_type.YEAR_SUBSCRIPTION));
 		this.factory.getActionHandlerByType(subscription_type.CREDIT_BASED_SUBSCRIPTION);
 	}

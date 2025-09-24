@@ -22,7 +22,7 @@ import com.arenella.recruit.recruiters.beans.RecruiterProfile.Photo.PHOTO_FORMAT
 * Unit tests for the RecruiterProfileEntity class
 * @author K Parkings
 */
-public class RecruiterProfileEntityTest {
+class RecruiterProfileEntityTest {
 
 	private static final String 			RECRUITER_ID				= "kparkingS";
 	private static final Set<COUNTRY> 		RECRUITS_IN 				= Set.of(COUNTRY.BELGIUM, COUNTRY.IRELAND);
@@ -45,7 +45,7 @@ public class RecruiterProfileEntityTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testBuilder() throws Exception{
+	void testBuilder() {
 		
 		RecruiterProfileEntity entity = 
 				RecruiterProfileEntity
@@ -97,7 +97,7 @@ public class RecruiterProfileEntityTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testConvertToEntity() throws Exception{
+	void testConvertToEntity() {
 		
 		RecruiterProfile profile = 
 				RecruiterProfile
@@ -148,7 +148,7 @@ public class RecruiterProfileEntityTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testConvertFromEntity() throws Exception{
+	void testConvertFromEntity() {
 		
 		final String companyName 	= "arenella ict";
 		final String firstname 		= "kevin";
@@ -212,7 +212,7 @@ public class RecruiterProfileEntityTest {
 	* set. Other values need to be filled later
 	*/
 	@Test
-	public void testConvertFromEntity_noRecruiter() throws Exception{
+	 void testConvertFromEntity_noRecruiter() {
 		
 		RecruiterProfileEntity entity = 
 				RecruiterProfileEntity

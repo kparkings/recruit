@@ -23,7 +23,7 @@ import com.arenella.recruit.emailservice.entities.ContactEntityPK;
 * @author K Parkings
 */
 @ExtendWith(MockitoExtension.class)
-public class ContactServiceImplTest {
+class ContactServiceImplTest {
 
 	@InjectMocks
 	private ContactServiceImpl 	service 		= new ContactServiceImpl();
@@ -36,7 +36,7 @@ public class ContactServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testFetchContacts() throws Exception{
+	void testFetchContacts() {
 		
 		Contact contact = new Contact("rec33", ContactType.RECRUITER, "Kevin", "Parkings", "admin@arenella-ict.com");
 		Mockito.when(this.mockContactDao.fetchContacts(Mockito.anySet())).thenReturn(Set.of(contact));
@@ -52,7 +52,7 @@ public class ContactServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testDeleteContact() throws Exception{
+	void testDeleteContact() {
 		
 		final String contactId = "1234";
 		
@@ -75,7 +75,7 @@ public class ContactServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testDeleteContact_doesntExist() throws Exception{
+	void testDeleteContact_doesntExist() {
 		
 		final String contactId = "1234";
 		

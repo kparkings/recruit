@@ -17,14 +17,14 @@ import com.arenella.recruit.listings.utils.ListingGeoZoneSearchUtil.GEO_ZONE;
 * @author K Parkings
 */
 @ExtendWith(MockitoExtension.class)
-public class ListingGeoZoneSearchUtilTest {
+class ListingGeoZoneSearchUtilTest {
 
 	/**
 	* Tests retrieving countries for multiple GeoZones
 	* @throws Exception
 	*/
 	@Test
-	public void testFetchBeneluxAndBritishIsles() throws Exception{
+	void testFetchBeneluxAndBritishIsles() {
 	
 		final int expectedCountryCount = 6;
 		

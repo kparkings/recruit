@@ -17,7 +17,7 @@ import com.arenella.recruit.recruiters.enums.COUNTRY;
 * Unit tests for the OfferedCandidate Class
 * @author K Parkings
 */
-public class OfferedCandidateAPIInboundTest {
+class OfferedCandidateAPIInboundTest {
 	
 	private static final String 		RECRUITER_ID 			= "aRecruiterId";
 	private static final String 		CANDIDATE_ROLE_TITLE 	= "Java Developer";
@@ -38,7 +38,7 @@ public class OfferedCandidateAPIInboundTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testBuilder() throws Exception{
+	void testBuilder() {
 		
 		OfferedCandidateAPIInbound candidate = OfferedCandidateAPIInbound.builder()
 				.availableFromDate(AVAILABLE_FROM)
@@ -78,7 +78,7 @@ public class OfferedCandidateAPIInboundTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testConvertToDomain() throws Exception{
+	void testConvertToDomain() {
 		
 		OfferedCandidateAPIInbound candidate = OfferedCandidateAPIInbound.builder()
 				.availableFromDate(AVAILABLE_FROM)

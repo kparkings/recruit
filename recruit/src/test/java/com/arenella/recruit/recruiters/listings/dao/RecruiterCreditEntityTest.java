@@ -11,17 +11,17 @@ import com.arenella.recruit.listings.dao.ListingRecruiterCreditEntity;
 * Unit tests for the RecruiterCreditEntity class
 * @author K Parkings
 */
-public class RecruiterCreditEntityTest {
+class RecruiterCreditEntityTest {
 
-	final String 	RECRUITER_ID 	= "recruiter44";
-	final int 		CREDITS 		= 4;
+	private static final String 	RECRUITER_ID 	= "recruiter44";
+	private static final int 		CREDITS 		= 4;
 	
 	/**
 	* Tests construction via the Builder
 	* @throws Exception
 	*/
 	@Test
-	public void testBuilder() throws Exception{
+	void testBuilder() {
 		
 		ListingRecruiterCreditEntity entity = 
 				ListingRecruiterCreditEntity
@@ -40,7 +40,7 @@ public class RecruiterCreditEntityTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testConvertFromEntity() throws Exception{
+	void testConvertFromEntity() {
 		
 		ListingRecruiterCreditEntity entity = 
 				ListingRecruiterCreditEntity
@@ -64,7 +64,7 @@ public class RecruiterCreditEntityTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testConvertToEntity() throws Exception{
+	 void testConvertToEntity() {
 		
 		RecruiterCredit domain = 
 				RecruiterCredit

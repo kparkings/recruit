@@ -15,10 +15,10 @@ import com.arenella.recruit.curriculum.entity.CurriculumDownloadedEventEntity;
 */
 class CurriculumDownloadedEventEntityTest {
 
-	private static final String 			curriculumId 		= "anId";
-	private static final String 			userId 				= "kparkings";
-	private static final boolean 			isAdminUser 		= true;
-	private static final LocalDateTime 		timestamp 			= LocalDateTime.of(2021, 5, 28, 12, 05);
+	private static final String 			CURRICULUM_ID 		= "anId";
+	private static final String 			USER_ID 				= "kparkings";
+	private static final boolean 			IS_ADMIN_USER 		= true;
+	private static final LocalDateTime 		TIMESTAMP 			= LocalDateTime.of(2021, 5, 28, 12, 05);
 	
 	/**
 	* Tests construction via Builder
@@ -29,16 +29,16 @@ class CurriculumDownloadedEventEntityTest {
 		
 		CurriculumDownloadedEventEntity entity = CurriculumDownloadedEventEntity
 																		.builder()
-																			.curriculumId(curriculumId)
-																			.userId(userId)
-																			.isAdminUser(isAdminUser)
-																			.timestamp(timestamp)
+																			.curriculumId(CURRICULUM_ID)
+																			.userId(USER_ID)
+																			.isAdminUser(IS_ADMIN_USER)
+																			.timestamp(TIMESTAMP)
 																		.build();
 	
-		assertEquals(curriculumId, 		entity.getCurriculumId());
-		assertEquals(userId, 			entity.getUserId());
-		assertEquals(isAdminUser, 		entity.isAdminUser());
-		assertEquals(timestamp, 		entity.getTimestamp());
+		assertEquals(CURRICULUM_ID, 	entity.getCurriculumId());
+		assertEquals(USER_ID, 			entity.getUserId());
+		assertEquals(IS_ADMIN_USER, 	entity.isAdminUser());
+		assertEquals(TIMESTAMP, 		entity.getTimestamp());
 		
 	}
 
@@ -51,18 +51,18 @@ class CurriculumDownloadedEventEntityTest {
 	void testConvertToEntity() {
 		
 		CurriculumDownloadedEvent event = CurriculumDownloadedEvent.manualBuilder()
-																			.curriculumId(curriculumId)
-																			.userId(userId)
-																			.isAdminUser(isAdminUser)
-																			.timestamp(timestamp)
+																			.curriculumId(CURRICULUM_ID)
+																			.userId(USER_ID)
+																			.isAdminUser(IS_ADMIN_USER)
+																			.timestamp(TIMESTAMP)
 																		.build();
 		
 		CurriculumDownloadedEventEntity entity = CurriculumDownloadedEventEntity.toEntity(event);
 		
-		assertEquals(curriculumId, 		entity.getCurriculumId());
-		assertEquals(userId, 			entity.getUserId());
-		assertEquals(isAdminUser, 		entity.isAdminUser());
-		assertEquals(timestamp, 		entity.getTimestamp());
+		assertEquals(CURRICULUM_ID, 	entity.getCurriculumId());
+		assertEquals(USER_ID, 			entity.getUserId());
+		assertEquals(IS_ADMIN_USER, 	entity.isAdminUser());
+		assertEquals(TIMESTAMP, 		entity.getTimestamp());
 		
 	}
 	
@@ -76,18 +76,18 @@ class CurriculumDownloadedEventEntityTest {
 		
 		CurriculumDownloadedEventEntity entity = CurriculumDownloadedEventEntity
 				.builder()
-					.curriculumId(curriculumId)
-					.userId(userId)
-					.isAdminUser(isAdminUser)
-					.timestamp(timestamp)
+					.curriculumId(CURRICULUM_ID)
+					.userId(USER_ID)
+					.isAdminUser(IS_ADMIN_USER)
+					.timestamp(TIMESTAMP)
 				.build();
 
 		CurriculumDownloadedEvent event = CurriculumDownloadedEventEntity.fromEntity(entity);
 		
-		assertEquals(curriculumId, 		event.getCurriculumId());
-		assertEquals(userId, 			event.getUserId());
-		assertEquals(isAdminUser, 		event.isAdminUser());
-		assertEquals(timestamp, 		event.getTimestamp());
+		assertEquals(CURRICULUM_ID, 	event.getCurriculumId());
+		assertEquals(USER_ID, 			event.getUserId());
+		assertEquals(IS_ADMIN_USER, 	event.isAdminUser());
+		assertEquals(TIMESTAMP, 		event.getTimestamp());
 
 	}
 	

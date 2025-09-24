@@ -18,7 +18,7 @@ import com.arenella.recruit.newsfeed.beans.NewsFeedItemLine.NEWS_FEED_ITEM_LINE_
 * Unit tests for the NewsFeedItemAPIOutbound class
 * @author K Parkings
 */
-public class NewsFeedItemAPIOutboundTest {
+class NewsFeedItemAPIOutboundTest {
 
 	private static final LocalDateTime 						CREATED 		= LocalDateTime.of(2024, 2, 3, 17, 14);
 	private static final NEWSFEED_ITEM_TYPE 				ITEM_TYPE 		= NEWSFEED_ITEM_TYPE.CANDIDATE_ADDED;
@@ -29,7 +29,7 @@ public class NewsFeedItemAPIOutboundTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testConstruction() throws Exception{
+	void testConstruction() {
 		
 		NewsFeedItemAPIOutbound item = NewsFeedItemAPIOutbound.builder().itemType(ITEM_TYPE).created(CREATED).lines(LINES).build();
 		
@@ -45,7 +45,7 @@ public class NewsFeedItemAPIOutboundTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testConstruction_defaults() throws Exception{
+	void testConstruction_defaults() {
 		
 		NewsFeedItemAPIOutbound item = NewsFeedItemAPIOutbound.builder().build();
 		
@@ -58,7 +58,7 @@ public class NewsFeedItemAPIOutboundTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testConvertFromDomain() throws Exception{
+	void testConvertFromDomain() {
 		
 		final Set<NewsFeedItemLine> 	lines 			= Set.of(NewsFeedItemLine.builder().text("").type(NEWS_FEED_ITEM_LINE_TYPE.TEXT).build(),
 																 NewsFeedItemLine.builder().image(new byte[] {}).type(NEWS_FEED_ITEM_LINE_TYPE.TEXT).build(),

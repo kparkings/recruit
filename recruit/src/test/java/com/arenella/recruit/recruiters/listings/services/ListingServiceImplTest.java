@@ -251,80 +251,71 @@ class ListingServiceImplTest {
 	@Test
 	void testAddListingValidation_missingValue() {
 		
-		Assertions.assertThrows(ListingValidationException.class, () -> {
-			
-			Listing listing = Listing
-					.builder()
-						.title(null)
-						.description("aDesc")
-						.ownerName("anOwnerName")
-						.ownerEmail("anEmail")
-						.ownerCompany("aCompany")
-					.build();
-
-			service.addListing(listing, true);
-
-			
-		});
+		Listing listing1 = Listing
+				.builder()
+					.title(null)
+					.description("aDesc")
+					.ownerName("anOwnerName")
+					.ownerEmail("anEmail")
+					.ownerCompany("aCompany")
+				.build();
+		
+		Assertions.assertThrows(ListingValidationException.class, () -> 
+			service.addListing(listing1, true)
+		);
 		
 
-		Assertions.assertThrows(ListingValidationException.class, () -> {
-			Listing 			listing 		= Listing
-					.builder()
-						.title("aTitle")
-						.description(null)
-						.ownerName("anOwnerName")
-						.ownerEmail("anEmail")
-						.ownerCompany("aCompany")
-					.build();
-
-			service.addListing(listing, true);
-
-		});
-
-		Assertions.assertThrows(ListingValidationException.class, () -> {
-			Listing 			listing 		= Listing
-					.builder()
-						.title("aTitle")
-						.description("aDesc")
-						.ownerName(null)
-						.ownerEmail("anEmail")
-						.ownerCompany("aCompany")
-					.build();
-
-			service.addListing(listing, true);
-
-		});
+		Listing listing2 = Listing
+				.builder()
+					.title("aTitle")
+					.description(null)
+					.ownerName("anOwnerName")
+					.ownerEmail("anEmail")
+					.ownerCompany("aCompany")
+				.build();
 		
-		Assertions.assertThrows(ListingValidationException.class, () -> {
-			
-			Listing 			listing 		= Listing
-					.builder()
-						.title("aTitle")
-						.description("aDesc")
-						.ownerName("anOwnerName")
-						.ownerEmail(null)
-						.ownerCompany("aCompany")
-					.build();
+		Assertions.assertThrows(ListingValidationException.class, () -> 
+			service.addListing(listing2, true)
+		);
 
-			service.addListing(listing, true);
+		Listing listing3 = Listing
+				.builder()
+					.title("aTitle")
+					.description("aDesc")
+					.ownerName(null)
+					.ownerEmail("anEmail")
+					.ownerCompany("aCompany")
+				.build();
+		
+		Assertions.assertThrows(ListingValidationException.class, () -> 
+			service.addListing(listing3, true)
+		);
+		
+		Listing listing4 = Listing
+				.builder()
+					.title("aTitle")
+					.description("aDesc")
+					.ownerName("anOwnerName")
+					.ownerEmail(null)
+					.ownerCompany("aCompany")
+				.build();
+		
+		Assertions.assertThrows(ListingValidationException.class, () -> 
+			service.addListing(listing4, true)
+		);
 
-		});
-
-		Assertions.assertThrows(ListingValidationException.class, () -> {
-			
-			Listing 			listing 		= Listing
-					.builder()
-						.title(null)
-						.description("aDesc")
-						.ownerName("anOwnerName")
-						.ownerEmail("anEmail")
-						.ownerCompany(null)
-					.build();
-
-			service.addListing(listing, true);
-			
-		});
+		Listing listing5 = Listing
+				.builder()
+					.title(null)
+					.description("aDesc")
+					.ownerName("anOwnerName")
+					.ownerEmail("anEmail")
+					.ownerCompany(null)
+				.build();
+		
+		Assertions.assertThrows(ListingValidationException.class, () -> 
+			service.addListing(listing5, true)
+		);
 
 	}
 	

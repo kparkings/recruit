@@ -19,7 +19,7 @@ import com.arenella.recruit.listings.services.FileSecurityParser.FileType;
 * @author K Parkings
 */
 @ExtendWith(MockitoExtension.class)
-public class MonolithListingExternalEventPublisherTest{
+class MonolithListingExternalEventPublisherTest{
 
 	@Mock
 	private CurriculumExternalEventListener 			mockCurriculumEventListener;
@@ -34,7 +34,7 @@ public class MonolithListingExternalEventPublisherTest{
 	* Tests both and External and Internal command are sent 
 	*/
 	@Test
-	public void testPublicRequestSendListingContactEmailCommand() throws Exception{
+	void testPublicRequestSendListingContactEmailCommand() {
 		
 		final String 			title 			= "Java Developer";
 		final String 			ownerId			= "kparkings001";

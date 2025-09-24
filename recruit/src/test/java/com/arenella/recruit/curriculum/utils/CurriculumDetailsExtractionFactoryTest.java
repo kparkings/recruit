@@ -12,14 +12,14 @@ import com.arenella.recruit.curriculum.utils.CurriculumDetailsExtractionFactory.
 * Unit tests for the CurriculumDetailsExtractionFactory class
 * @author K Parkings
 */
-public class CurriculumDetailsExtractionFactoryTest {
+class CurriculumDetailsExtractionFactoryTest {
 
 	/**
 	* Tests factory returns correct Extractor for a PDF document
 	* @throws Exception
 	*/
 	@Test
-	public void testGetPDFExtractor() throws Exception {
+	void testGetPDFExtractor() {
 		
 		assertTrue(CurriculumDetailsExtractionFactory.getInstance(FileType.pdf) instanceof PDFCurriculumDetailsExtractor);
 		
@@ -30,7 +30,7 @@ public class CurriculumDetailsExtractionFactoryTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testGetWordExtractor() throws Exception {
+	void testGetWordExtractor() {
 		
 		assertTrue(CurriculumDetailsExtractionFactory.getInstance(FileType.doc)  instanceof WordCurriculumDetailsExtractor);
 		assertTrue(CurriculumDetailsExtractionFactory.getInstance(FileType.docx) instanceof WordCurriculumDetailsExtractor);

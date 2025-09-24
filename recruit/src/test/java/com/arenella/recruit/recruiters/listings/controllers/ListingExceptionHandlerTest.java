@@ -17,7 +17,7 @@ import com.arenella.recruit.listings.exceptions.ListingValidationException.Faile
 * Unit tests for the ListingExceptionHandler class
 * @author K Parkings
 */
-public class ListingExceptionHandlerTest {
+class ListingExceptionHandlerTest {
 
 	private ListingExceptionHandler handler = new ListingExceptionHandler();
 	
@@ -27,7 +27,7 @@ public class ListingExceptionHandlerTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testHandleListingValidationException() throws Exception{
+	void testHandleListingValidationException() {
 		
 		final String field1 				= "f1";
 		final String field1MessageOrKey 	= "f1Key";

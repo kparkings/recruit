@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 * Unit tests for the NewsFeedItemFilters class
 * @author K Parkings
 */
-public class NewsFeedItemFiltersTest {
+class NewsFeedItemFiltersTest {
 
 	private static final Integer								MAX_RESULTS = 40;
 	private static final Set<NewsFeedItem.NEWSFEED_ITEM_TYPE> 	types 		= Set.of(NewsFeedItem.NEWSFEED_ITEM_TYPE.CANDIDATE_BECAME_AVAILABLE, 
@@ -24,7 +24,7 @@ public class NewsFeedItemFiltersTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testBuilder() throws Exception{
+	void testBuilder() {
 		
 		NewsFeedItemFilters filters = NewsFeedItemFilters.builder().maxResults(MAX_RESULTS).types(types).createdBefore(BEFORE).build();
 		
@@ -41,7 +41,7 @@ public class NewsFeedItemFiltersTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testBuilder_defaults() throws Exception{
+	void testBuilder_defaults() {
 		
 		NewsFeedItemFilters filters = NewsFeedItemFilters.builder().build();
 		
@@ -56,7 +56,7 @@ public class NewsFeedItemFiltersTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testSetters() throws Exception{
+	void testSetters() {
 		
 		NewsFeedItemFilters filters = NewsFeedItemFilters.builder().build();
 		

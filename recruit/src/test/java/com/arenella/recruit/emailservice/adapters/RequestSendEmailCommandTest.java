@@ -20,14 +20,14 @@ import com.arenella.recruit.emailservice.beans.Email.Sender.SenderType;
 * Unit tests for the RequestSendEmailCommand class
 * @author K Parkings
 */
-public class RequestSendEmailCommandTest {
+class RequestSendEmailCommandTest {
 
 	/**
 	* Tests construction via Builder
 	* @throws Exception
 	*/
 	@Test
-	public void testConstructionViaBuilder() throws Exception{
+	void testConstructionViaBuilder() {
 		
 		final EmailType 				emailType 	= EmailType.EXTERN;
 		final Map<String,Object> 		model 		= Map.of();
