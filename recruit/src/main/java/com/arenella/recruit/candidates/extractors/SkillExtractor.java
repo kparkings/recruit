@@ -21,15 +21,15 @@ public class SkillExtractor implements JobSpecifcationFilterExtractor{
 	
 	private String sanitizeDocumentText(String documentText) {
 		
-		String sanitizedDocumentText = documentText.replaceAll("\\t", " ");
-		sanitizedDocumentText = sanitizedDocumentText.replaceAll("\\.", " ");
-		sanitizedDocumentText = sanitizedDocumentText.replaceAll(",", " ");
-		sanitizedDocumentText = sanitizedDocumentText.replaceAll(";", " ");
-		sanitizedDocumentText = sanitizedDocumentText.replaceAll("/", " ");
-		sanitizedDocumentText = sanitizedDocumentText.replaceAll("-", " ");
-		sanitizedDocumentText = sanitizedDocumentText.replaceAll("\\n", " ");
-		sanitizedDocumentText = sanitizedDocumentText.replaceAll(" ", " ");
-		
+		String sanitizedDocumentText = documentText.replace("\\t", " ");
+		sanitizedDocumentText = sanitizedDocumentText.replace("\\.", " ");
+		sanitizedDocumentText = sanitizedDocumentText.replace(",", " ");
+		sanitizedDocumentText = sanitizedDocumentText.replace(";", " ");
+		sanitizedDocumentText = sanitizedDocumentText.replace("/", " ");
+		sanitizedDocumentText = sanitizedDocumentText.replace("-", " ");
+		sanitizedDocumentText = sanitizedDocumentText.replace("\\n", " ");
+		sanitizedDocumentText = sanitizedDocumentText.replace("(", " ");
+		sanitizedDocumentText = sanitizedDocumentText.replace(")", " ");
 		return sanitizedDocumentText;
 	}
 

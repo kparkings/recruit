@@ -467,7 +467,7 @@ class CandidateControllerTest {
 		
 		ResponseEntity<Void> response = this.controller.resetPassword(email);
 		
-		verify(this.mockCandidateService).resetPassword(eq(email));
+		verify(this.mockCandidateService).resetPassword(email);
 		
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		

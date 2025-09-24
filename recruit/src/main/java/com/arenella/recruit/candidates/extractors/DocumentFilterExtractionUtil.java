@@ -156,11 +156,11 @@ public class DocumentFilterExtractionUtil {
 		
 		this.getExtractedText(documentText, filterBuilder);
 		
-		documentText = documentText.replaceAll("[()]", "");
+		documentText = documentText.replace("[()]", "");
 		documentText = documentText.toLowerCase();
-		documentText = documentText.replaceAll("!", " ");
-		documentText = documentText.replaceAll("\\(", " ");
-		documentText = documentText.replaceAll("\\)", " ");
+		documentText = documentText.replace("!", " ");
+		documentText = documentText.replace("\\(", " ");
+		documentText = documentText.replace("\\)", " ");
 		
 		jobTitleExtractor.extractFilters(documentText, filterBuilder);
 		seniorityExtractor.extractFilters(documentText, filterBuilder);

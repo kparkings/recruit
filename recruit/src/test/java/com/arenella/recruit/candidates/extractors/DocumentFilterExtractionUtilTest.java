@@ -44,8 +44,7 @@ class DocumentFilterExtractionUtilTest {
 	
 	private CityExtractor 			cityExtractor				= new CityExtractor();
 	
-	@Spy
-	private SkillExtractor 			skillExtractor;
+	private SkillExtractor 			skillExtractor				= new SkillExtractor();
 	
 	private ContractTypeExtractor 	contractTypeExtractor 		= new ContractTypeExtractor();
 	
@@ -66,6 +65,7 @@ class DocumentFilterExtractionUtilTest {
 		ReflectionTestUtils.setField(util, 				"seniorityExtractor", 		seniorityExtractor);
 		ReflectionTestUtils.setField(skillExtractor, 	"skillsDao", 				mockSkillsDao);
 		ReflectionTestUtils.setField(util, 				"countryExtractor", 		countryExtractor);
+		ReflectionTestUtils.setField(util, 				"skillExtractor", 			skillExtractor);
 		Mockito.when(mockSkillsDao.getActiveAndPendingSkills()).thenReturn(Set.of("java","css","maven","wpf","vue.js","react","eclipse","powerbi", "kotlin", "c#"));
 	}
 	

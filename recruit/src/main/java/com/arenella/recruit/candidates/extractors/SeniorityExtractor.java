@@ -81,13 +81,13 @@ public class SeniorityExtractor implements JobSpecifcationFilterExtractor{
 			senior.add(i+"+ ans");
 		}
 		
-		boolean juniorMatches = junior.stream().anyMatch(documentText.replaceAll(" - 5", "")::contains);
-		boolean mediorMatches = medior.stream().anyMatch(documentText.replaceAll(" - 5", "")::contains);
-		boolean seniorMatches = senior.stream().anyMatch(documentText.replaceAll(" - 5", "")::contains);
+		boolean juniorMatches = junior.stream().anyMatch(documentText.replace(" - 5", "")::contains);
+		boolean mediorMatches = medior.stream().anyMatch(documentText.replace(" - 5", "")::contains);
+		boolean seniorMatches = senior.stream().anyMatch(documentText.replace(" - 5", "")::contains);
 		
-		List<String> debugJunior = junior.stream().filter(documentText.replaceAll(" - 5", "")::contains).toList();
-		List<String> debugMedior = medior.stream().filter(documentText.replaceAll(" - 5", "")::contains).toList();
-		List<String> debugSenior = senior.stream().filter(documentText.replaceAll(" - 5", "")::contains).toList();
+		//List<String> debugJunior = junior.stream().filter(documentText.replaceAll(" - 5", "")::contains).toList();
+		//List<String> debugMedior = medior.stream().filter(documentText.replaceAll(" - 5", "")::contains).toList();
+		//List<String> debugSenior = senior.stream().filter(documentText.replaceAll(" - 5", "")::contains).toList();
 		
 		if (!seniorMatches && !mediorMatches && !juniorMatches) {
 			return;

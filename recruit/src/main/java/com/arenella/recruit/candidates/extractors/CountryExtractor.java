@@ -1,5 +1,6 @@
 package com.arenella.recruit.candidates.extractors;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -33,7 +34,7 @@ public class CountryExtractor implements JobSpecifcationFilterExtractor{
 	protected Set<String> romania 				= Set.of("roemenië","roumanie","rumania","rumänien","r𝗼𝗺𝗮𝗻𝗶𝗮","romania","bucharest");
 	protected Set<String> greece 				= Set.of("griekenland","grèce","grecia","griechenland","greece");
 	protected Set<String> ukraine 				= Set.of("oekraïne","ucrania","ukraine","ucraine","ucraina");
-	protected Set<String> switzerland 			= Set.of("zwitserland","svizzera","suisse","suiza","Schweiz","zwitzerland");
+	protected Set<String> switzerland 			= Set.of("switzerland ","zwitserland","svizzera","suisse","suiza","Schweiz","zwitzerland");
 	protected Set<String> czechRepublic 		= Set.of("tsjechische republiek","repubblica ceca","république tchèque","república checa","tschechische republik","czech republic");
 	protected Set<String> sweden 				= Set.of("stockholm","zweden","svezia","suède","suecia","schweden","sweden");
 	protected Set<String> hungary 				= Set.of("esztergom","siófok","győr","miskolc","eger","szeged","pécs","debrecen","budapest","hongarije","ungheria","hongrie","hungría","ungarn","hungary");
@@ -100,42 +101,42 @@ public class CountryExtractor implements JobSpecifcationFilterExtractor{
 	* Constructor 
 	*/
 	public CountryExtractor() {
-		uk 					= Stream.of(uk, 				CITIES_UK).flatMap(x -> 					x.stream()).collect(Collectors.toSet());
-		netherlands			= Stream.of(netherlands, 		CITIES_NETHERLANDS).flatMap(x -> 			x.stream()).collect(Collectors.toSet());
-		belgium				= Stream.of(belgium, 			CITIES_BELGIUM).flatMap(x -> 				x.stream()).collect(Collectors.toSet()); 
-		luxembourg			= Stream.of(luxembourg, 		CITIES_LUXEMBOURG).flatMap(x -> 			x.stream()).collect(Collectors.toSet());
-		republicOfIreland	= Stream.of(republicOfIreland, 	CITIES_REPUBLIC_OF_IRELAND).flatMap(x -> 	x.stream()).collect(Collectors.toSet());
-		northernIreland		= Stream.of(northernIreland, 	CITIES_NORTHERN_IRELAND).flatMap(x -> 		x.stream()).collect(Collectors.toSet());
-		germany				= Stream.of(germany, 			CITIES_GERMANY).flatMap(x -> 				x.stream()).collect(Collectors.toSet());
-		poland				= Stream.of(poland, 			CITIES_POLAND).flatMap(x -> 				x.stream()).collect(Collectors.toSet());
-		france				= Stream.of(france, 			CITIES_FRANCE).flatMap(x -> 				x.stream()).collect(Collectors.toSet());
-		spain				= Stream.of(spain, 				CITIES_SPAIN).flatMap(x -> 					x.stream()).collect(Collectors.toSet());
-		italy				= Stream.of(italy, 				CITIES_ITALY).flatMap(x -> 					x.stream()).collect(Collectors.toSet());
-		portugal			= Stream.of(portugal, 			CITIES_PORTUGAL).flatMap(x -> 				x.stream()).collect(Collectors.toSet());
-		austria				= Stream.of(austria, 			CITIES_AUSTRIA).flatMap(x -> 				x.stream()).collect(Collectors.toSet());
-		romania				= Stream.of(romania, 			CITIES_ROMANIA).flatMap(x -> 				x.stream()).collect(Collectors.toSet());
-		greece				= Stream.of(greece, 			CITIES_GREECE).flatMap(x -> 				x.stream()).collect(Collectors.toSet());
-		ukraine				= Stream.of(ukraine,	 		CITIES_UKRAINE).flatMap(x -> 				x.stream()).collect(Collectors.toSet());
-		switzerland			= Stream.of(switzerland, 		CITIES_SWITZERLAND).flatMap(x -> 			x.stream()).collect(Collectors.toSet());
-		czechRepublic		= Stream.of(czechRepublic, 		CITIES_CZECH_REPUBLIC).flatMap(x -> 		x.stream()).collect(Collectors.toSet());
-		sweden				= Stream.of(sweden, 			CITIES_SWEDEN).flatMap(x -> 				x.stream()).collect(Collectors.toSet());
-		hungary				= Stream.of(hungary, 			CITIES_HUNGARY).flatMap(x -> 				x.stream()).collect(Collectors.toSet());
-		bulgaria			= Stream.of(bulgaria, 			CITIES_BULGARIA).flatMap(x -> 				x.stream()).collect(Collectors.toSet());
-		denmark				= Stream.of(denmark, 			CITIES_DENMARK).flatMap(x -> 				x.stream()).collect(Collectors.toSet());
-		finland				= Stream.of(finland, 			CITIES_FINLAND).flatMap(x -> 				x.stream()).collect(Collectors.toSet());
-		slovakia			= Stream.of(slovakia, 			CITIES_SLOVAKIA).flatMap(x -> 				x.stream()).collect(Collectors.toSet());
-		croatia				= Stream.of(croatia, 			CITIES_CROATIA).flatMap(x -> 				x.stream()).collect(Collectors.toSet());
-		lithuania			= Stream.of(lithuania, 			CITIES_LITHUANIA).flatMap(x -> 				x.stream()).collect(Collectors.toSet());
-		slovenia			= Stream.of(slovenia, 			CITIES_SLOVENIA).flatMap(x -> 				x.stream()).collect(Collectors.toSet());
-		latvia				= Stream.of(latvia, 			CITIES_LATVIA).flatMap(x -> 				x.stream()).collect(Collectors.toSet());
-		estonia				= Stream.of(estonia, 			CITIES_ESTONIA).flatMap(x -> 				x.stream()).collect(Collectors.toSet());
-		cyprus				= Stream.of(cyprus, 			CITIES_CYPRUS).flatMap(x -> 				x.stream()).collect(Collectors.toSet());
-		malta				= Stream.of(malta, 				CITIES_MALTA).flatMap(x -> 					x.stream()).collect(Collectors.toSet());
-		norway				= Stream.of(norway, 			CITIES_NORWAY).flatMap(x -> 				x.stream()).collect(Collectors.toSet());
-		liechtenstein		= Stream.of(liechtenstein, 		CITIES_LIECHTENSTEIN).flatMap(x -> 			x.stream()).collect(Collectors.toSet());
-		pakistan			= Stream.of(pakistan, 			CITIES_PAKISTAN).flatMap(x -> 				x.stream()).collect(Collectors.toSet());
-		us					= Stream.of(us, 				CITIES_US).flatMap(x -> 					x.stream()).collect(Collectors.toSet());
-		canada				= Stream.of(canada, 			CITIES_CANADA).flatMap(x -> 				x.stream()).collect(Collectors.toSet());
+		uk 					= Stream.of(uk, 				CITIES_UK).flatMap(Collection::stream).collect(Collectors.toSet());
+		netherlands			= Stream.of(netherlands, 		CITIES_NETHERLANDS).flatMap(Collection::stream).collect(Collectors.toSet());
+		belgium				= Stream.of(belgium, 			CITIES_BELGIUM).flatMap(Collection::stream).collect(Collectors.toSet()); 
+		luxembourg			= Stream.of(luxembourg, 		CITIES_LUXEMBOURG).flatMap(Collection::stream).collect(Collectors.toSet());
+		republicOfIreland	= Stream.of(republicOfIreland, 	CITIES_REPUBLIC_OF_IRELAND).flatMap(Collection::stream).collect(Collectors.toSet());
+		northernIreland		= Stream.of(northernIreland, 	CITIES_NORTHERN_IRELAND).flatMap(Collection::stream).collect(Collectors.toSet());
+		germany				= Stream.of(germany, 			CITIES_GERMANY).flatMap(Collection::stream).collect(Collectors.toSet());
+		poland				= Stream.of(poland, 			CITIES_POLAND).flatMap(Collection::stream).collect(Collectors.toSet());
+		france				= Stream.of(france, 			CITIES_FRANCE).flatMap(Collection::stream).collect(Collectors.toSet());
+		spain				= Stream.of(spain, 				CITIES_SPAIN).flatMap(Collection::stream).collect(Collectors.toSet());
+		italy				= Stream.of(italy, 				CITIES_ITALY).flatMap(Collection::stream).collect(Collectors.toSet());
+		portugal			= Stream.of(portugal, 			CITIES_PORTUGAL).flatMap(Collection::stream).collect(Collectors.toSet());
+		austria				= Stream.of(austria, 			CITIES_AUSTRIA).flatMap(Collection::stream).collect(Collectors.toSet());
+		romania				= Stream.of(romania, 			CITIES_ROMANIA).flatMap(Collection::stream).collect(Collectors.toSet());
+		greece				= Stream.of(greece, 			CITIES_GREECE).flatMap(Collection::stream).collect(Collectors.toSet());
+		ukraine				= Stream.of(ukraine,	 		CITIES_UKRAINE).flatMap(Collection::stream).collect(Collectors.toSet());
+		switzerland			= Stream.of(switzerland, 		CITIES_SWITZERLAND).flatMap(Collection::stream).collect(Collectors.toSet());
+		czechRepublic		= Stream.of(czechRepublic, 		CITIES_CZECH_REPUBLIC).flatMap(Collection::stream).collect(Collectors.toSet());
+		sweden				= Stream.of(sweden, 			CITIES_SWEDEN).flatMap(Collection::stream).collect(Collectors.toSet());
+		hungary				= Stream.of(hungary, 			CITIES_HUNGARY).flatMap(Collection::stream).collect(Collectors.toSet());
+		bulgaria			= Stream.of(bulgaria, 			CITIES_BULGARIA).flatMap(Collection::stream).collect(Collectors.toSet());
+		denmark				= Stream.of(denmark, 			CITIES_DENMARK).flatMap(Collection::stream).collect(Collectors.toSet());
+		finland				= Stream.of(finland, 			CITIES_FINLAND).flatMap(Collection::stream).collect(Collectors.toSet());
+		slovakia			= Stream.of(slovakia, 			CITIES_SLOVAKIA).flatMap(Collection::stream).collect(Collectors.toSet());
+		croatia				= Stream.of(croatia, 			CITIES_CROATIA).flatMap(Collection::stream).collect(Collectors.toSet());
+		lithuania			= Stream.of(lithuania, 			CITIES_LITHUANIA).flatMap(Collection::stream).collect(Collectors.toSet());
+		slovenia			= Stream.of(slovenia, 			CITIES_SLOVENIA).flatMap(Collection::stream).collect(Collectors.toSet());
+		latvia				= Stream.of(latvia, 			CITIES_LATVIA).flatMap(Collection::stream).collect(Collectors.toSet());
+		estonia				= Stream.of(estonia, 			CITIES_ESTONIA).flatMap(Collection::stream).collect(Collectors.toSet());
+		cyprus				= Stream.of(cyprus, 			CITIES_CYPRUS).flatMap(Collection::stream).collect(Collectors.toSet());
+		malta				= Stream.of(malta, 				CITIES_MALTA).flatMap(Collection::stream).collect(Collectors.toSet());
+		norway				= Stream.of(norway, 			CITIES_NORWAY).flatMap(Collection::stream).collect(Collectors.toSet());
+		liechtenstein		= Stream.of(liechtenstein, 		CITIES_LIECHTENSTEIN).flatMap(Collection::stream).collect(Collectors.toSet());
+		pakistan			= Stream.of(pakistan, 			CITIES_PAKISTAN).flatMap(Collection::stream).collect(Collectors.toSet());
+		us					= Stream.of(us, 				CITIES_US).flatMap(Collection::stream).collect(Collectors.toSet());
+		canada				= Stream.of(canada, 			CITIES_CANADA).flatMap(Collection::stream).collect(Collectors.toSet());
 		
 	}
 	

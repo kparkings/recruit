@@ -30,20 +30,20 @@ import com.arenella.recruit.candidates.enums.PERM;
 */
 class CandidateAPIInboundTest {
 
-	private static final String 			candidateId				= "C100";
-	private static final  String 			firstname				= "Kevin";
-	private static final  String 			surname				 	= "Parkings";
-	private static final  String 			email					= "admin@arenella-ict.com";
-	private static final  String			roleSought				= "Java develper";
-	private static final  FUNCTION			function				= FUNCTION.JAVA_DEV;
-	private static final  COUNTRY 			country					= COUNTRY.NETHERLANDS;
-	private static final  String 			city					= "Noordwijk";
-	private static final  PERM 				perm					= PERM.FALSE;
-	private static final  FREELANCE 		freelance				= FREELANCE.TRUE;
-	private static final  int				yearsExperience			= 22;
-	private static final  boolean 			available				= true;
-	private static final  Set<String> 		skills					= Set.of("Java","Angular");
-	private static final  Set<Language> 	languages				= Set.of(Language.builder().language(LANGUAGE.DUTCH).level(LEVEL.PROFICIENT).build());
+	private static final String 			CANDIDATE_ID			= "C100";
+	private static final  String 			FIRST_NAME				= "Kevin";
+	private static final  String 			SURNAME				 	= "Parkings";
+	private static final  String 			EMAIL					= "admin@arenella-ict.com";
+	private static final  String			ROLE_SOUGHT				= "Java develper";
+	private static final  FUNCTION			FUNCTION_VAL			= FUNCTION.JAVA_DEV;
+	private static final  COUNTRY 			COUNTRY_VAL				= COUNTRY.NETHERLANDS;
+	private static final  String 			CITY					= "Noordwijk";
+	private static final  PERM 				PERM_VAL				= PERM.FALSE;
+	private static final  FREELANCE 		FREELANCE_VAL			= FREELANCE.TRUE;
+	private static final  int				YEARS_EXPERIENCE		= 22;
+	private static final  boolean 			AVAILABLE				= true;
+	private static final  Set<String> 		SKILLS					= Set.of("Java","Angular");
+	private static final  Set<Language> 	LANGUAGES				= Set.of(Language.builder().language(LANGUAGE.DUTCH).level(LEVEL.PROFICIENT).build());
 	
 	private static final String 			COMMENTS				= "aComment";
 	private static final String 			INTRODUCTION 			= "anIntro";
@@ -87,20 +87,20 @@ class CandidateAPIInboundTest {
 		
 		CandidateAPIInbound candidate = CandidateAPIInbound
 													.builder()
-														.available(available)
-														.candidateId(candidateId)
-														.city(city)
-														.country(country)
-														.email(email)
-														.firstname(firstname)
-														.freelance(freelance)
-														.functions(Set.of(function))
-														.languages(languages)
-														.perm(perm)
-														.roleSought(roleSought)
-														.skills(skills)
-														.surname(surname)
-														.yearsExperience(yearsExperience)
+														.available(AVAILABLE)
+														.candidateId(CANDIDATE_ID)
+														.city(CITY)
+														.country(COUNTRY_VAL)
+														.email(EMAIL)
+														.firstname(FIRST_NAME)
+														.freelance(FREELANCE_VAL)
+														.functions(Set.of(FUNCTION_VAL))
+														.languages(LANGUAGES)
+														.perm(PERM_VAL)
+														.roleSought(ROLE_SOUGHT)
+														.skills(SKILLS)
+														.surname(SURNAME)
+														.yearsExperience(YEARS_EXPERIENCE)
 														.comments(COMMENTS)
 														.introduction(INTRODUCTION)
 														.daysOnSite(DAYS_ON_SITE_VAL)
@@ -109,18 +109,18 @@ class CandidateAPIInboundTest {
 														.availableFromDate(AVAILABLE_FROM_DATE)
 													.build();
 		
-		assertEquals(candidateId, 			candidate.getCandidateId());
-		assertEquals(firstname, 			candidate.getFirstname());
-		assertEquals(surname, 				candidate.getSurname());
-		assertEquals(email, 				candidate.getEmail());
-		assertEquals(roleSought, 			candidate.getRoleSought());
-		assertEquals(function, 				candidate.getFunctions().toArray()[0]);
-		assertEquals(country, 				candidate.getCountry());
-		assertEquals(city, 					candidate.getCity());
-		assertEquals(perm, 					candidate.isPerm());
-		assertEquals(freelance, 			candidate.isFreelance());
-		assertEquals(yearsExperience, 		candidate.getYearsExperience());
-		assertEquals(available, 			candidate.isAvailable());
+		assertEquals(CANDIDATE_ID, 			candidate.getCandidateId());
+		assertEquals(FIRST_NAME, 			candidate.getFirstname());
+		assertEquals(SURNAME, 				candidate.getSurname());
+		assertEquals(EMAIL, 				candidate.getEmail());
+		assertEquals(ROLE_SOUGHT, 			candidate.getRoleSought());
+		assertEquals(FUNCTION_VAL, 			candidate.getFunctions().toArray()[0]);
+		assertEquals(COUNTRY_VAL, 			candidate.getCountry());
+		assertEquals(CITY, 					candidate.getCity());
+		assertEquals(PERM_VAL, 				candidate.isPerm());
+		assertEquals(FREELANCE_VAL, 			candidate.isFreelance());
+		assertEquals(YEARS_EXPERIENCE, 		candidate.getYearsExperience());
+		assertEquals(AVAILABLE, 			candidate.isAvailable());
 		assertEquals(DAYS_ON_SITE_VAL, 		candidate.getDaysOnSite());
 		assertEquals(RATE_CONTRACT, 		candidate.getRateContract().get());
 		assertEquals(RATE_PERM, 			candidate.getRatePerm().get());
@@ -128,31 +128,31 @@ class CandidateAPIInboundTest {
 		assertEquals(COMMENTS, 				candidate.getComments());
 		assertEquals(INTRODUCTION, 			candidate.getIntroduction());
 		
-		assertTrue(skills.contains("Java"));
-		assertTrue(skills.contains("Angular"));
-		assertTrue(languages.stream().filter(l ->l.getLanguage() == LANGUAGE.DUTCH).findAny().isPresent());
+		assertTrue(SKILLS.contains("Java"));
+		assertTrue(SKILLS.contains("Angular"));
+		assertTrue(LANGUAGES.stream().filter(l ->l.getLanguage() == LANGUAGE.DUTCH).findAny().isPresent());
 		
 	}
 	
 	@Test
-	void testConvertToCandidate() throws Exception{
+	void testConvertToCandidate() {
 		
 		CandidateAPIInbound candidateAPIInbound = CandidateAPIInbound
 				.builder()
-					.available(available)
-					.candidateId(candidateId)
-					.city(city)
-					.country(country)
-					.email(email)
-					.firstname(firstname)
-					.freelance(freelance)
-					.functions(Set.of(function))
-					.languages(languages)
-					.perm(perm)
-					.roleSought(roleSought)
-					.skills(skills)
-					.surname(surname)
-					.yearsExperience(yearsExperience)
+					.available(AVAILABLE)
+					.candidateId(CANDIDATE_ID)
+					.city(CITY)
+					.country(COUNTRY_VAL)
+					.email(EMAIL)
+					.firstname(FIRST_NAME)
+					.freelance(FREELANCE_VAL)
+					.functions(Set.of(FUNCTION_VAL))
+					.languages(LANGUAGES)
+					.perm(PERM_VAL)
+					.roleSought(ROLE_SOUGHT)
+					.skills(SKILLS)
+					.surname(SURNAME)
+					.yearsExperience(YEARS_EXPERIENCE)
 					.comments(COMMENTS)
 					.introduction(INTRODUCTION)
 					.daysOnSite(DAYS_ON_SITE_VAL)
@@ -180,13 +180,13 @@ class CandidateAPIInboundTest {
 		assertEquals(COMMENTS, 											candidate.getComments());
 		assertEquals(INTRODUCTION, 										candidate.getIntroduction());
 		
-		assertEquals(freelance, 										candidate.isFreelance());
-		assertEquals(yearsExperience, 									candidate.getYearsExperience());
-		assertEquals(available, 										candidate.isAvailable());
+		assertEquals(FREELANCE_VAL,										candidate.isFreelance());
+		assertEquals(YEARS_EXPERIENCE, 									candidate.getYearsExperience());
+		assertEquals(AVAILABLE, 										candidate.isAvailable());
 		
-		assertTrue(skills.contains("Java"));
-		assertTrue(skills.contains("Angular"));
-		assertTrue(languages.stream().filter(l ->l.getLanguage() == LANGUAGE.DUTCH).findAny().isPresent());
+		assertTrue(SKILLS.contains("Java"));
+		assertTrue(SKILLS.contains("Angular"));
+		assertTrue(LANGUAGES.stream().filter(l ->l.getLanguage() == LANGUAGE.DUTCH).findAny().isPresent());
 		
 	}
 	

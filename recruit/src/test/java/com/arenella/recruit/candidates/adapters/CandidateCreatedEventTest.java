@@ -22,46 +22,46 @@ import com.arenella.recruit.candidates.enums.PERM;
 * Unit tests for the CandidateCreatedEvent class
 * @author K Parkings
 */
-public class CandidateCreatedEventTest {
+class CandidateCreatedEventTest {
 
-	private static final String 		candidateId 			= "Candidate1";
-	private static final String 		firstname 				= "kevin";
-	private static final String 		surname 				= "parkings";
-	private static final FUNCTION		function				= FUNCTION.JAVA_DEV;
-	private static final COUNTRY 		country 				= COUNTRY.NETHERLANDS;
-	private static final String 		city 					= "Den Haag";
-	private static final String 		email					= "admin@arenella-ict.com";
-	private static final String 		roleSought				= "Senior java Dev";
-	private static final boolean 		available 				= true;
-	private static final boolean 		flaggedAsUnavailable	= true;
-	private static final FREELANCE 		freelance 				= FREELANCE.TRUE;
-	private static final PERM 			perm 					= PERM.TRUE;
-	private static final LocalDate 		lastAvailabilityCheck 	= LocalDate.of(1980, 12, 3);
-	private static final LocalDate 		registerd 				= LocalDate.of(2021, 02, 20);
-	private static final int 			yearsExperience 		= 21;
-	private static final String			skill					= "Java";
-	private static final Language		language				= Language.builder().language(LANGUAGE.DUTCH).level(LEVEL.PROFICIENT).build();
-	private static final Set<String>	skills					= Set.of(skill);
-	private static final Set<Language>	languages				= Set.of(language);
-	private static final Candidate 		candidate 				= Candidate
+	private static final String 		CANDIDATE_ID 			= "Candidate1";
+	private static final String 		FIRST_NAME 				= "kevin";
+	private static final String 		SURNAME 				= "parkings";
+	private static final FUNCTION		FUNCTION_VAL			= FUNCTION.JAVA_DEV;
+	private static final COUNTRY 		COUNTRY_VAL				= COUNTRY.NETHERLANDS;
+	private static final String 		CITY 					= "Den Haag";
+	private static final String 		EMAIL					= "admin@arenella-ict.com";
+	private static final String 		ROLE_SOUGHT				= "Senior java Dev";
+	private static final boolean 		AVAILABLE 				= true;
+	private static final boolean 		FLAGGED_AS_UNAVAILABLE	= true;
+	private static final FREELANCE 		FREELANCE_VAL 			= FREELANCE.TRUE;
+	private static final PERM 			PERM_VAL 				= PERM.TRUE;
+	private static final LocalDate 		LAST_AVAILABILITY_CHECK	= LocalDate.of(1980, 12, 3);
+	private static final LocalDate 		REGISTERED 				= LocalDate.of(2021, 02, 20);
+	private static final int 			YEARS_EXPERIENCE 		= 21;
+	private static final String			SKILL					= "Java";
+	private static final Language		LANGUAGE_VAL			= Language.builder().language(LANGUAGE.DUTCH).level(LEVEL.PROFICIENT).build();
+	private static final Set<String>	SKILLS					= Set.of(SKILL);
+	private static final Set<Language>	LANGUAGES				= Set.of(LANGUAGE_VAL);
+	private static final Candidate 		CANDIDATE 				= Candidate
 																		.builder()
-																			.candidateId(candidateId)
-																			.functions(Set.of(function))
-																			.country(country)
-																			.city(city)
-																			.email(email)
-																			.roleSought(roleSought)
-																			.available(available)
-																			.flaggedAsUnavailable(flaggedAsUnavailable)
-																			.freelance(freelance)
-																			.perm(perm)
-																			.lastAvailabilityCheck(lastAvailabilityCheck)
-																			.registerd(registerd)
-																			.yearsExperience(yearsExperience)
-																			.skills(skills)
-																			.languages(languages)
-																			.firstname(firstname)
-																			.surname(surname)
+																			.candidateId(CANDIDATE_ID)
+																			.functions(Set.of(FUNCTION_VAL))
+																			.country(COUNTRY_VAL)
+																			.city(CITY)
+																			.email(EMAIL)
+																			.roleSought(ROLE_SOUGHT)
+																			.available(AVAILABLE)
+																			.flaggedAsUnavailable(FLAGGED_AS_UNAVAILABLE)
+																			.freelance(FREELANCE_VAL)
+																			.perm(PERM_VAL)
+																			.lastAvailabilityCheck(LAST_AVAILABILITY_CHECK)
+																			.registerd(REGISTERED)
+																			.yearsExperience(YEARS_EXPERIENCE)
+																			.skills(SKILLS)
+																			.languages(LANGUAGES)
+																			.firstname(FIRST_NAME)
+																			.surname(SURNAME)
 																			.build();
 																
 	/**
@@ -71,21 +71,21 @@ public class CandidateCreatedEventTest {
 	@Test
 	void testBuilder() {
 		
-		CandidateCreatedEvent event = CandidateCreatedEvent.builder().candidate(candidate).build();
+		CandidateCreatedEvent event = CandidateCreatedEvent.builder().candidate(CANDIDATE).build();
 		
-		assertEquals(candidateId, 		event.getCandidateId());
-		assertEquals(roleSought, 		event.getRoleSought());
-		assertEquals(function, 			event.getFunctions().toArray()[0]);
-		assertEquals(country,			event.getCountry());
-		assertEquals(city, 				event.getCity());
-		assertEquals(perm, 				event.isPerm());
-		assertEquals(freelance, 		event.isFreelance());
-		assertEquals(yearsExperience, 	event.getYearsExperience());
-		assertEquals(firstname, 		event.getFirstname());
-		assertEquals(surname, 			event.getSurname());
-		assertEquals(email, 			event.getEmail());
-		assertTrue(event.getSkills().contains(skill));
-		event.getLanguages().stream().filter(l -> l.getLanguage() == language.getLanguage()).findAny().orElseThrow();
+		assertEquals(CANDIDATE_ID, 		event.getCandidateId());
+		assertEquals(ROLE_SOUGHT, 		event.getRoleSought());
+		assertEquals(FUNCTION_VAL, 		event.getFunctions().toArray()[0]);
+		assertEquals(COUNTRY_VAL,		event.getCountry());
+		assertEquals(CITY, 				event.getCity());
+		assertEquals(PERM_VAL,			event.isPerm());
+		assertEquals(FREELANCE_VAL,		event.isFreelance());
+		assertEquals(YEARS_EXPERIENCE, 	event.getYearsExperience());
+		assertEquals(FIRST_NAME, 		event.getFirstname());
+		assertEquals(SURNAME, 			event.getSurname());
+		assertEquals(EMAIL, 			event.getEmail());
+		assertTrue(event.getSkills().contains(SKILL));
+		event.getLanguages().stream().filter(l -> l.getLanguage() == LANGUAGE_VAL.getLanguage()).findAny().orElseThrow();
 		
 	}
 	
@@ -95,9 +95,7 @@ public class CandidateCreatedEventTest {
 	*/
 	@Test
 	void testAttemptToSetPreviouslySetCandidateIdViaCandiate() throws Exception{
-		Assertions.assertThrows(IllegalArgumentException.class, () -> {
-			CandidateCreatedEvent.builder().candidateId("aCandidateID").candidate(candidate).build();
-		});
+		Assertions.assertThrows(IllegalArgumentException.class, () -> CandidateCreatedEvent.builder().candidateId("aCandidateID").candidate(CANDIDATE).build());
 	}
 	
 }

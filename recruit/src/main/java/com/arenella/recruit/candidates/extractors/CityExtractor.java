@@ -124,9 +124,9 @@ public class CityExtractor implements JobSpecifcationFilterExtractor{
 		Stream<String> words = Stream.of(city.split(" ")).map(this::applyFormat);
 		
 		city = String.join(" ", words.toList());	
-		city = city.replaceAll("\\.", "");
-		city = city.replaceAll(",", "");
-		city = city.replaceAll(";", "");
+		city = city.replace("\\.", "");
+		city = city.replace(",", "");
+		city = city.replace(";", "");
 		
 		filterBuilder.city(city);
 			
