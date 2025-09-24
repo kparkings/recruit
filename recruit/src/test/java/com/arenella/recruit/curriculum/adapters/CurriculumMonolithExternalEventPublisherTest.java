@@ -21,7 +21,7 @@ import com.arenella.recruit.candidates.adapters.CandidateExternalEventListener;
 * @author K Parkings
 */
 @ExtendWith(MockitoExtension.class)
-public class CurriculumMonolithExternalEventPublisherTest {
+class CurriculumMonolithExternalEventPublisherTest {
 
 	@Mock
 	private CandidateExternalEventListener 				mockCandiditeExternalEventListener;
@@ -37,7 +37,7 @@ public class CurriculumMonolithExternalEventPublisherTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testPublishCreditsAssignedEvent() throws Exception{
+	void testPublishCreditsAssignedEvent() {
 		
 		this.publisher.publishCreditsAssignedEvent(new CreditsAssignedEvent("kparkings", 3));	
 		
@@ -50,7 +50,7 @@ public class CurriculumMonolithExternalEventPublisherTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testPublishPendingCurriculumDeletedEvent() throws Exception {
+	void testPublishPendingCurriculumDeletedEvent() {
 		
 		Mockito.doNothing().when(mockCurriculumEventListener).listenForPendingCurriculumDeletedEvent(Mockito.any());
 		
@@ -65,7 +65,7 @@ public class CurriculumMonolithExternalEventPublisherTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testPublishCreditsUsedEvent() throws Exception{
+	void testPublishCreditsUsedEvent() {
 		
 		this.publisher.publishCreditsUsedEvent(new CreditsUsedEvent("kparkings", 20));	
 		
@@ -78,7 +78,7 @@ public class CurriculumMonolithExternalEventPublisherTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testPublishCurriculumUpdates() throws Exception{
+	void testPublishCurriculumUpdates() {
 		
 		this.publisher.publishCurriculumUpdates(new CurriculumUpdatedEvent("1222"));
 		
@@ -91,7 +91,7 @@ public class CurriculumMonolithExternalEventPublisherTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testCurriculumSkillsExtractionEvent() throws Exception{
+	void testCurriculumSkillsExtractionEvent() {
 		
 		this.publisher.publishCurriculumSkillsExtractionEvent(new CurriculumSkillsExtractionEvent(1222, Set.of()));
 		

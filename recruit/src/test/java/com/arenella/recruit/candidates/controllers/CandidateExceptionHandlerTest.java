@@ -19,7 +19,7 @@ public class CandidateExceptionHandlerTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testHandleCandidateValidationException() throws Exception {
+	public void testHandleCandidateValidationException() {
 		
 		final String msg = "Exception details messaeg";
 		

@@ -21,6 +21,13 @@ import com.arenella.recruit.curriculum.enums.FileType;
 public class CurriculumDetailsExtractionFactory {
 
 	/**
+	* Default constructor hidden 
+	*/
+	private CurriculumDetailsExtractionFactory() {
+		
+	}
+	
+	/**
 	* Returns an implementation of the Extractor suitable for
 	* the FileType of the Curriculum
 	* @param fileType - FileType of the Curriculum
@@ -85,11 +92,13 @@ public class CurriculumDetailsExtractionFactory {
 		public CurriculumUpdloadDetails extract(Set<String> skills, String curriculumId, byte[] curriculumFileBytes) throws Exception {
 			
 			InputStream 		is 				= new ByteArrayInputStream(curriculumFileBytes);
-			OPCPackage 			docPackage 		= OPCPackage.open(is);
-			XWPFWordExtractor 	extractor 		= new XWPFWordExtractor(docPackage);
-			String 				text 			= extractor.getText();
+			String 				text = "";
 			
-			extractor.close();
+			try (OPCPackage docPackage = OPCPackage.open(is)){
+				XWPFWordExtractor extractor = new XWPFWordExtractor(docPackage);
+				text = extractor.getText();
+				extractor.close();
+			}
 			
 			return CurriculumUpdloadDetails.builder().id(curriculumId).emailAddress(extractEmailAddress(text)).skills(extractSkills(skills, text)).build();
 		}

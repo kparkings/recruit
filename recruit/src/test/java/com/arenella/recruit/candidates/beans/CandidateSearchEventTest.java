@@ -16,14 +16,14 @@ import com.arenella.recruit.candidates.enums.FUNCTION;
 * Unit tests for the CandidateSearchEvent class
 * @author K Parkings
 */
-public class CandidateSearchEventTest {
+class CandidateSearchEventTest {
 
 	/**
 	* Tests the builder with default values
 	* @throws Exception
 	*/
 	@Test
-	public void testBuilder_no_optional_args() throws Exception {
+	void testBuilder_no_optional_args() {
 		
 		CandidateSearchEvent event = CandidateSearchEvent.builder().build();
 		
@@ -50,7 +50,7 @@ public class CandidateSearchEventTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testBuilder_with_args() throws Exception {
+	void testBuilder_with_args() {
 		
 		final UUID				searchId				= UUID.fromString("123e4567-e89b-12d3-a456-426655440000");
 		final String 			userId					= "kparkings";

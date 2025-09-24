@@ -24,7 +24,7 @@ import com.arenella.recruit.curriculum.services.CurriculumService;
 * @author K Parkings
 */
 @ExtendWith(MockitoExtension.class)
-public class MonolithExternalEventListenerTest {
+class MonolithExternalEventListenerTest {
 
 	@Mock
 	private CurriculumSkillsDao 			mockSkillsDao;
@@ -40,7 +40,7 @@ public class MonolithExternalEventListenerTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testListenForSearchedSkillsEvent() throws Exception {
+	void testListenForSearchedSkillsEvent() {
 		
 		final String skill1 = " aSkill1";
 		final String skill2 = "aSkill2 ";
@@ -65,7 +65,7 @@ public class MonolithExternalEventListenerTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testListenForCandidateNoLongerAvailableEvent() throws Exception {
+	void testListenForCandidateNoLongerAvailableEvent() {
 		
 		final long candidateId = 123L;
 		
@@ -82,7 +82,7 @@ public class MonolithExternalEventListenerTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testOnlyNewSkillsAdded() throws Exception{
+	void testOnlyNewSkillsAdded() {
 		
 		final String skill1 = "JAVA";
 		final String skill2 = "c#";
@@ -113,7 +113,7 @@ public class MonolithExternalEventListenerTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testOnlyNewSkillsAdded_noNewSkills() throws Exception{
+	void testOnlyNewSkillsAdded_noNewSkills() {
 		
 		final String skill1 = "JAVA";
 		final String skill2 = "c#";
@@ -136,7 +136,7 @@ public class MonolithExternalEventListenerTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testListenForCandidteDeletedEvent() throws Exception {
+	void testListenForCandidteDeletedEvent() {
 		
 		final String candidateId = "1222";
 		
@@ -153,7 +153,7 @@ public class MonolithExternalEventListenerTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testListenForRecruiterCreatedEvent() throws Exception{
+	void testListenForRecruiterCreatedEvent() {
 		
 		this.listener.listenForRecruiterCreatedEvent(RecruiterCreatedEvent.builder().recruiterId("rec22").build());
 		

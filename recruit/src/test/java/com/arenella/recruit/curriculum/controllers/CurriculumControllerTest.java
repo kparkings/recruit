@@ -35,7 +35,7 @@ import com.arenella.recruit.curriculum.services.CurriculumService;
 * @author K Parkings
 */
 @ExtendWith(MockitoExtension.class)
-public class CurriculumControllerTest {
+class CurriculumControllerTest {
 
 	@InjectMocks
 	private CurriculumController 						curriculumController		= new CurriculumController();
@@ -61,7 +61,7 @@ public class CurriculumControllerTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testUploadPendingCurriculum() throws Exception {
+	void testUploadPendingCurriculum() throws Exception {
 		
 		final byte[] curriculumBytes 		= new byte[] {};
 		final String originalFileName		= "cv.PDF";
@@ -90,7 +90,7 @@ public class CurriculumControllerTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testUploadPendingCurriculum_unsafe_file() throws Exception {
+	void testUploadPendingCurriculum_unsafe_file() {
 		
 		Mockito.when(this.mockFileSecurityParser.isSafe(Mockito.any())).thenReturn(false);
 		
@@ -105,7 +105,7 @@ public class CurriculumControllerTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testUploadCurriculum_unsafe_file() throws Exception {
+	void testUploadCurriculum_unsafe_file() {
 		
 		Mockito.when(this.mockFileSecurityParser.isSafe(Mockito.any())).thenReturn(false);
 		
@@ -120,7 +120,7 @@ public class CurriculumControllerTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testUpdateCurriculum_unsafe_file() throws Exception {
+	void testUpdateCurriculum_unsafe_file() {
 		
 		Mockito.when(this.mockFileSecurityParser.isSafe(Mockito.any())).thenReturn(false);
 		
@@ -137,7 +137,7 @@ public class CurriculumControllerTest {
 	*/
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Test
-	public void testGetCurriculumAsPDF() throws Exception {
+	void testGetCurriculumAsPDF() throws Exception {
 		
 		final String 	curriculumId 	= "1";
 		final byte[] 	pdfBytes 		=  new byte[]{};
@@ -164,7 +164,7 @@ public class CurriculumControllerTest {
 	*/
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Test
-	public void testGetCurriculumAsPDF_recruiter_non_creditbased() throws Exception {
+	void testGetCurriculumAsPDF_recruiter_non_creditbased() throws Exception {
 		
 		final String 	curriculumId 	= "1";
 		final byte[] 	pdfBytes 		=  new byte[]{};
@@ -192,7 +192,7 @@ public class CurriculumControllerTest {
 	*/
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Test
-	public void testGetCurriculumAsPDF_recruiter_creditbased() throws Exception {
+	void testGetCurriculumAsPDF_recruiter_creditbased() throws Exception {
 		
 		final String 	curriculumId 	= "1";
 		final byte[] 	pdfBytes 		=  new byte[]{};
@@ -221,7 +221,7 @@ public class CurriculumControllerTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testDeletePendingCurriculum() throws Exception{
+	void testDeletePendingCurriculum() {
 		
 		ResponseEntity<Void> response = this.curriculumController.deletePendingCurriculum(UUID.randomUUID());
 		
@@ -237,7 +237,7 @@ public class CurriculumControllerTest {
 	*/
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Test
-	public void testPassesCreditCheck_admin() throws Exception{
+	void testPassesCreditCheck_admin() {
 		
 		Collection authorities = new HashSet<>();
 		authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
@@ -259,14 +259,13 @@ public class CurriculumControllerTest {
 	*/
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Test
-	public void testPassesCreditCheck_recruiter_not_creditbased() throws Exception{
+	void testPassesCreditCheck_recruiter_not_creditbased() {
 		
 		Collection authorities = new HashSet<>();
 		authorities.add(new SimpleGrantedAuthority("ROLE_RECRUITER"));
 		
 		Mockito.when(this.mockPrincipal.getAuthorities()).thenReturn(authorities);
 		Mockito.when(this.mockPrincipal.getClaim("useCredits")).thenReturn(Optional.of(Boolean.FALSE));
-		//Mockito.when(this.mockPrincipal.getName()).thenReturn("userId");
 		
 		ResponseEntity<Boolean> response = this.curriculumController.passesCreditCheck(mockPrincipal);
 		
@@ -282,7 +281,7 @@ public class CurriculumControllerTest {
 	*/
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Test
-	public void testPassesCreditCheck_recruiter_creditbased() throws Exception{
+	void testPassesCreditCheck_recruiter_creditbased() {
 		
 		Collection authorities = new HashSet<>();
 		authorities.add(new SimpleGrantedAuthority("ROLE_RECRUITER"));
@@ -306,7 +305,7 @@ public class CurriculumControllerTest {
 	*/
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Test
-	public void testGetCreditCount_creditBased() throws Exception{
+	void testGetCreditCount_creditBased() {
 		
 		Collection authorities = new HashSet<>();
 		authorities.add(new SimpleGrantedAuthority("ROLE_RECRUITER"));
@@ -330,7 +329,7 @@ public class CurriculumControllerTest {
 	*/
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Test
-	public void testGetCreditCount_notCreditBasedhasCredits() throws Exception{
+	void testGetCreditCount_notCreditBasedhasCredits() {
 		
 		Collection authorities = new HashSet<>();
 		authorities.add(new SimpleGrantedAuthority("ROLE_RECRUITER"));
@@ -353,7 +352,7 @@ public class CurriculumControllerTest {
 	*/
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Test
-	public void testGetCreditCount_adminDoesNotUseCredits() throws Exception{
+	void testGetCreditCount_adminDoesNotUseCredits() {
 		
 		Collection authorities = new HashSet<>();
 		authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));

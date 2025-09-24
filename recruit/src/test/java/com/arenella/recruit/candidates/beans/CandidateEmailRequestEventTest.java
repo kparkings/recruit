@@ -13,7 +13,7 @@ import com.arenella.recruit.curriculum.beans.CandidateEmailRequestEvent;
 * Unit tests for the CandidateEmailRequestEvent class
 * @author K Parkings
 */
-public class CandidateEmailRequestEventTest {
+class CandidateEmailRequestEventTest {
 
 	private static final UUID 				eventId 		= UUID.randomUUID();
 	private static final LocalDateTime 		created 		= LocalDateTime.of(2022, 01, 28, 16,35,00);
@@ -25,7 +25,7 @@ public class CandidateEmailRequestEventTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testConstructor() throws Exception {
+	void testConstructor() {
 		
 		CandidateEmailRequestEvent event = new CandidateEmailRequestEvent(eventId, created, recruiterId, candidateId);
 	

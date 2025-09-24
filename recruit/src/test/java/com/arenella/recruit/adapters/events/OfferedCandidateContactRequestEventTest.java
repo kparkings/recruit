@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 * Unit tests for the OfferedCandidateContactRequestEvent class
 * @author K Parkings
 */
-public class OfferedCandidateContactRequestEventTest {
+ class OfferedCandidateContactRequestEventTest {
 
 	private static final String 	MESSAGE 				= "A Message";
 	private static final String 	RECIPIENT_ID 			= "rparkings";
@@ -24,7 +24,7 @@ public class OfferedCandidateContactRequestEventTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testBuilder() throws Exception{
+	void testBuilder() {
 		
 		OfferedCandidateContactRequestEvent event = 
 				OfferedCandidateContactRequestEvent

@@ -18,7 +18,7 @@ import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_
 * @author K Parkings
 */
 @ExtendWith(MockitoExtension.class)
-public class ListingsExternalEventListenerTest {
+class ListingsExternalEventListenerTest {
 
 	@Mock
 	private ListingService	mockListingService;
@@ -30,7 +30,7 @@ public class ListingsExternalEventListenerTest {
 	* Tests handling of RecruiterOpenSubscriptionEvent event 
 	*/
 	@Test
-	public void testListenForRecruiterHasOpenSubscriptionsEvent() {
+	void testListenForRecruiterHasOpenSubscriptionsEvent() {
 		
 		final String recruiterId = "kparkings";
 		
@@ -44,7 +44,7 @@ public class ListingsExternalEventListenerTest {
 	* Tests handling of RecruiterNoOpenSubscriptionEvent event 
 	*/
 	@Test
-	public void testListenForRecruiterHasNoOpenSubscriptionEvent() {
+	void testListenForRecruiterHasNoOpenSubscriptionEvent() {
 		
 		final String recruiterId = "kparkings";
 		

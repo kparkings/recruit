@@ -15,14 +15,14 @@ import com.arenella.recruit.candidates.beans.Candidate.Rate.PERIOD;
 * Unit tests for the RateAPIOutbound class
 * @author K Parkings
 */
-public class RateAPIOutboundTest {
+class RateAPIOutboundTest {
 
 	/**
 	* Tests construction
 	* @throws Exception
 	*/
 	@Test
-	public void testConstructor() throws Exception{
+	void testConstructor() {
 		
 		final float valueMin = 110.50f;
 		final float valueMax = 210.50f;
@@ -41,7 +41,7 @@ public class RateAPIOutboundTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testConvertFromDomain_exists() throws Exception{
+	void testConvertFromDomain_exists() {
 		
 		Rate rate = new Rate(CURRENCY.EUR, PERIOD.DAY, 100, 200);
 		
@@ -59,7 +59,7 @@ public class RateAPIOutboundTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testConvertFromDomain_does_not_exists() throws Exception{
+	void testConvertFromDomain_does_not_exists() {
 		
 		RateAPIOutbound rateAPIOutbound = RateAPIOutbound.convertFromDomain(Optional.empty());
 		

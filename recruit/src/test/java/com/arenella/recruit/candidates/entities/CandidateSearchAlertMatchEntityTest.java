@@ -13,7 +13,7 @@ import com.arenella.recruit.candidates.utils.CandidateSuggestionUtil.suggestion_
 * Unit tests for the CandidateSearchAlertMatchEntity class
 * @author K Parkings
 */
-public class CandidateSearchAlertMatchEntityTest {
+class CandidateSearchAlertMatchEntityTest {
 
 	private static final String 				ALERT_NAME 		= "alertName";
 	private static final Long 					CANDIDATE_ID 	= 101L;
@@ -28,7 +28,7 @@ public class CandidateSearchAlertMatchEntityTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testBuilder() throws Exception{
+	void testBuilder() {
 		
 		CandidateSearchAlertMatchEntity match 
 			= CandidateSearchAlertMatchEntity
@@ -57,7 +57,7 @@ public class CandidateSearchAlertMatchEntityTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testConvertFromEntity() throws Exception{
+	void testConvertFromEntity() {
 
 		CandidateSearchAlertMatchEntity entity 
 			= CandidateSearchAlertMatchEntity
@@ -87,7 +87,7 @@ public class CandidateSearchAlertMatchEntityTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testConvertToEntity() throws Exception{
+	void testConvertToEntity() {
 
 		CandidateSearchAlertMatch match 
 			= CandidateSearchAlertMatch

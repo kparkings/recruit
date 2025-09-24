@@ -21,7 +21,14 @@ public class PasswordUtil{
 	public static final int PASSWORD_LENGTH = 16;
 	
 	private static Set<Character> chars = Set.of('!','@','$','%','-','W','D','S','s',':','1','8','9','+');
-	
+
+	/**
+	* Hide private constructor 
+	*/
+	private PasswordUtil() {
+		
+	}
+
 	/**
 	* Generates a password for the user
 	* @param username - username of the user
@@ -33,7 +40,7 @@ public class PasswordUtil{
 		
 		while(passwordUnencoded.length() < PASSWORD_LENGTH) {
 			passwordUnencoded = passwordUnencoded + getRandom();
-		};
+		}
 		
 		return passwordUnencoded;
 		

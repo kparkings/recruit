@@ -14,14 +14,14 @@ import com.arenella.recruit.candidates.enums.PERM;
 * Unit tests for the ContractTypeExtractor class
 * @author K Parkings
 */
-public class ContractTypeExtractorTest {
+class ContractTypeExtractorTest {
 
 	/**
 	* If both contract types identified no need to set filters
 	* @throws Exception
 	*/
 	@Test
-	public void testBothContractTypesIdentified() throws Exception{
+	void testBothContractTypesIdentified() {
 		
 		CandidateExtractedFiltersBuilder 	filterBuilder 	= CandidateExtractedFilters.builder();
 		ContractTypeExtractor 				extractor 		= new ContractTypeExtractor();
@@ -38,7 +38,7 @@ public class ContractTypeExtractorTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testNeitherContractTypesIdentified() throws Exception{
+	void testNeitherContractTypesIdentified() {
 		
 		CandidateExtractedFiltersBuilder 	filterBuilder 	= CandidateExtractedFilters.builder();
 		ContractTypeExtractor 				extractor 		= new ContractTypeExtractor();
@@ -55,7 +55,7 @@ public class ContractTypeExtractorTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testContractTypeIdentified() throws Exception{
+	void testContractTypeIdentified() {
 		
 		CandidateExtractedFiltersBuilder 	filterBuilder 	= CandidateExtractedFilters.builder();
 		ContractTypeExtractor 				extractor 		= new ContractTypeExtractor();
@@ -72,7 +72,7 @@ public class ContractTypeExtractorTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testPermTypeIdentified() throws Exception{
+	void testPermTypeIdentified() {
 		
 		CandidateExtractedFiltersBuilder 	filterBuilder 	= CandidateExtractedFilters.builder();
 		ContractTypeExtractor 				extractor 		= new ContractTypeExtractor();

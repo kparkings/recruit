@@ -33,7 +33,7 @@ import com.arenella.recruit.newsfeed.adapters.NewsFeedExternalEventListener;
 * @author K Parkings
 */
 @ExtendWith(MockitoExtension.class)
-public class MonolithExternalEventPublisherTest {
+class MonolithExternalEventPublisherTest {
 	
 	@Mock
 	private CurriculumExternalEventListener 	mockCurriculumEventListener;
@@ -53,7 +53,7 @@ public class MonolithExternalEventPublisherTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testPublishSearchedSkillsEvent() throws Exception {
+	void testPublishSearchedSkillsEvent() {
 		
 		final String skill1 = "aSkill1";
 		final String skill2 = "aSkill2";
@@ -82,7 +82,7 @@ public class MonolithExternalEventPublisherTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testPublishSearchedSkillsEvent_admin() throws Exception {
+	void testPublishSearchedSkillsEvent_admin() {
 		
 		final String skill1 = "aSkill1";
 		final String skill2 = "aSkill2";
@@ -104,7 +104,7 @@ public class MonolithExternalEventPublisherTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testPublishCandidateNoLongerAvailableEvent() throws Exception {
+	void testPublishCandidateNoLongerAvailableEvent() {
 		
 		final long candidateId = 123L;
 		
@@ -123,7 +123,7 @@ public class MonolithExternalEventPublisherTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testPublishCandidateCreatedEvent() throws Exception{
+	void testPublishCandidateCreatedEvent() {
 		
 		CandidateCreatedEvent event = CandidateCreatedEvent.builder().build();
 		
@@ -141,7 +141,7 @@ public class MonolithExternalEventPublisherTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testPublishRequestSendAlertDailySummaryEmailCommand() throws Exception{
+	void testPublishRequestSendAlertDailySummaryEmailCommand() {
 		
 		final String 							recruiterId 	= "recruiter21";
 		final Set<CandidateSearchAlertMatch> 	matches 		= Set.of(CandidateSearchAlertMatch.builder().alertId(UUID.randomUUID()).build()
@@ -160,7 +160,7 @@ public class MonolithExternalEventPublisherTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testPublishContactRequestEvent() throws Exception{
+	void testPublishContactRequestEvent() {
 		
 		final String senderRecruiterId 	= "rec33"; 
 		final String recipientId		= "123"; 
@@ -180,7 +180,7 @@ public class MonolithExternalEventPublisherTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testPublishCandidateUpdateEvent() throws Exception{
+	void testPublishCandidateUpdateEvent() {
 		
 		CandidateUpdateEvent candidateUpdateEvent = CandidateUpdateEvent.builder().build();
 		
@@ -189,6 +189,5 @@ public class MonolithExternalEventPublisherTest {
 		Mockito.verify(this.mockNewsFeedExternalEventListener).listenForEventCandidateUpdate(candidateUpdateEvent);
 		
 	}
-	
 	
 }

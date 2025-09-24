@@ -31,7 +31,7 @@ import com.arenella.recruit.authentication.dao.AuthenticatedEventDao;
 * @author K Parkings
 */
 @ExtendWith(MockitoExtension.class)
-public class AuthenticationStatisticsServiceImplTest {
+class AuthenticationStatisticsServiceImplTest {
 
 	@InjectMocks 
 	private AuthenticationStatisticsServiceImpl service						= new AuthenticationStatisticsServiceImpl();
@@ -45,22 +45,22 @@ public class AuthenticationStatisticsServiceImplTest {
 	@Mock
 	private AuthenticatedEventDao 				mockAuthenticatedEventDao;
 	
-	private static final String 				userId1 		= "recruiter1";
-	private static final boolean 				recruiter1 		= true;
-	private static final boolean 				candidate1 		= false;
-	private static final LocalDateTime 			loggedInAt1 	= LocalDateTime.now();
-	private static final AuthenticatedEvent 	event1 			= new AuthenticatedEvent(userId1, recruiter1, candidate1, loggedInAt1);
-	private static final String 				userId2 		= "candidate1";
-	private static final boolean 				recruiter2 		= false;
-	private static final boolean 				candidate2 		= true;
-	private static final LocalDateTime 			loggedInAt2 	= LocalDateTime.now();
-	private static final AuthenticatedEvent 	event2 			= new AuthenticatedEvent(userId2, recruiter2, candidate2, loggedInAt2);
+	private static final String 				USER_ID_1 		= "recruiter1";
+	private static final boolean 				RECRUITER_ID_1 		= true;
+	private static final boolean 				CANDIDATE_1 		= false;
+	private static final LocalDateTime 			LOGGED_IN_AT_1 	= LocalDateTime.now();
+	private static final AuthenticatedEvent 	EVENT_1 			= new AuthenticatedEvent(USER_ID_1, RECRUITER_ID_1, CANDIDATE_1, LOGGED_IN_AT_1);
+	private static final String 				USER_ID_2 		= "candidate1";
+	private static final boolean 				RECRUITER_2 		= false;
+	private static final boolean 				CANDIDATE_2 		= true;
+	private static final LocalDateTime 			LOGGED_IN_AT_2 	= LocalDateTime.now();
+	private static final AuthenticatedEvent 	EVENT_2 			= new AuthenticatedEvent(USER_ID_2, RECRUITER_2, CANDIDATE_2, LOGGED_IN_AT_2);
 	
 	/**
 	* Sets up test environment 
 	*/
 	@BeforeEach
-	public void init() throws Exception{
+	void init() {
 		SecurityContextHolder.setContext(mockSecurityContext);
 	}
 	
@@ -70,7 +70,7 @@ public class AuthenticationStatisticsServiceImplTest {
 	*/
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Test
-	public void testFetchAuthenticatedEventsSince_candidate() throws Exception{
+	void testFetchAuthenticatedEventsSince_candidate() {
 		
 		Collection authorities = new HashSet<>();
 		authorities.add(new SimpleGrantedAuthority("ROLE_CANDIDATE"));
@@ -78,7 +78,7 @@ public class AuthenticationStatisticsServiceImplTest {
 		Mockito.when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
 		Mockito.when(mockAuthentication.getName()).thenReturn("candidate1");
 		Mockito.when(mockAuthentication.getAuthorities()).thenReturn(authorities);
-		Mockito.when(mockAuthenticatedEventDao.fetchEventsSince(Mockito.any())).thenReturn(Set.of(event1,event2));
+		Mockito.when(mockAuthenticatedEventDao.fetchEventsSince(Mockito.any())).thenReturn(Set.of(EVENT_1,EVENT_2));
 		
 		Set<AuthenticatedEvent> events = this.service.fetchAuthenticatedEventsSince(LocalDateTime.of(2023, 6, 20, 10, 11, 12));
 
@@ -93,7 +93,7 @@ public class AuthenticationStatisticsServiceImplTest {
 	*/
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Test
-	public void testFetchAuthenticatedEventsSince_recruiter() throws Exception{
+	void testFetchAuthenticatedEventsSince_recruiter() {
 
 		Collection authorities = new HashSet<>();
 		authorities.add(new SimpleGrantedAuthority("ROLE_RECRUITER"));
@@ -101,7 +101,7 @@ public class AuthenticationStatisticsServiceImplTest {
 		Mockito.when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
 		Mockito.when(mockAuthentication.getName()).thenReturn("recruiter1");
 		Mockito.when(mockAuthentication.getAuthorities()).thenReturn(authorities);
-		Mockito.when(mockAuthenticatedEventDao.fetchEventsSince(Mockito.any())).thenReturn(Set.of(event1,event2));
+		Mockito.when(mockAuthenticatedEventDao.fetchEventsSince(Mockito.any())).thenReturn(Set.of(EVENT_1,EVENT_2));
 		
 		Set<AuthenticatedEvent> events = this.service.fetchAuthenticatedEventsSince(LocalDateTime.of(2023, 6, 20, 10, 11, 12));
 		
@@ -116,14 +116,14 @@ public class AuthenticationStatisticsServiceImplTest {
 	*/
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Test
-	public void testFetchAuthenticatedEventsSince_admin() throws Exception{
+	void testFetchAuthenticatedEventsSince_admin() {
 		
 		Collection authorities = new HashSet<>();
 		authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
 
 		Mockito.when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
 		Mockito.when(mockAuthentication.getAuthorities()).thenReturn(authorities);
-		Mockito.when(mockAuthenticatedEventDao.fetchEventsSince(Mockito.any())).thenReturn(Set.of(event1,event2));
+		Mockito.when(mockAuthenticatedEventDao.fetchEventsSince(Mockito.any())).thenReturn(Set.of(EVENT_1,EVENT_2));
 		
 		Set<AuthenticatedEvent> events = this.service.fetchAuthenticatedEventsSince(LocalDateTime.of(2023, 6, 20, 10, 11, 12));
 		

@@ -26,6 +26,13 @@ public class OpenPositionValidator {
 	public static final String 	LOCATION_GT_MAX	 					= "Location must not exceed ";
 	
 	/**
+	* Hide private constructor 
+	*/
+	private OpenPositionValidator() {
+		
+	}
+	
+	/**
 	* Performs validation of an OpenPosition
 	* @param candidate - To be validated
 	*/

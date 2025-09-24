@@ -16,7 +16,7 @@ import com.arenella.recruit.candidates.utils.CandidateSuggestionUtil.suggestion_
 * Unit tests for the RequestSendAlertDailySummaryEmailCommand class
 * @author K Parkings
 */
-public class RequestSendAlertDailySummaryEmailCommandTest {
+class RequestSendAlertDailySummaryEmailCommandTest {
 
 	/**
 	* Tests the command is setup correctly with a summary of matches 
@@ -24,7 +24,7 @@ public class RequestSendAlertDailySummaryEmailCommandTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testConstructor() throws Exception{
+	void testConstructor() {
 		
 		final UUID 		alertId1 		= UUID.randomUUID();
 		final UUID 		alertId2 		= UUID.randomUUID();

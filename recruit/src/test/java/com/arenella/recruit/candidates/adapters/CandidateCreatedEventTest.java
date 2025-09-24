@@ -69,7 +69,7 @@ public class CandidateCreatedEventTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testBuilder() throws Exception{
+	void testBuilder() {
 		
 		CandidateCreatedEvent event = CandidateCreatedEvent.builder().candidate(candidate).build();
 		
@@ -94,7 +94,7 @@ public class CandidateCreatedEventTest {
 	* @throws Excption
 	*/
 	@Test
-	public void testAttemptToSetPreviouslySetCandidateIdViaCandiate() throws Exception{
+	void testAttemptToSetPreviouslySetCandidateIdViaCandiate() throws Exception{
 		Assertions.assertThrows(IllegalArgumentException.class, () -> {
 			CandidateCreatedEvent.builder().candidateId("aCandidateID").candidate(candidate).build();
 		});

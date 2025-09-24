@@ -8,13 +8,13 @@ import org.junit.jupiter.api.Test;
 * Unit tests for the RecruiterCreatedEvent class
 * @author K Parkings
 */
-public class RecruiterCreatedEventTest {
+class RecruiterCreatedEventTest {
 
 	/**
 	* Tests creation via Builder 
 	*/
 	@Test
-	public void testBuilder() {
+	void testBuilder() {
 		
 		final String recruiterId 		= "kparkings";
 		final String encryptedPassword 	= "3sefes##@@1!f";

@@ -26,6 +26,13 @@ public class OfferedCandidateValidator {
 	public static final String 	LOCATION_GT_MAX	 				= "Location must not exceed ";
 	
 	/**
+	* Hide default constructor
+	*/
+	private OfferedCandidateValidator() {
+		
+	}
+	
+	/**
 	* Performs validation of an Offered Candidate
 	* @param candidate - To be validated
 	*/

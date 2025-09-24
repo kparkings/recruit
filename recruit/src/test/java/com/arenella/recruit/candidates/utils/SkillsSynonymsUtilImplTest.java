@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 * Unit tests for SkillsSynonymsUtilImpl class
 * @author K Parkings
 */
-public class SkillsSynonymsUtilImplTest {
+class SkillsSynonymsUtilImplTest {
 
 	/**
 	* Runs an individual test case
@@ -33,7 +33,7 @@ public class SkillsSynonymsUtilImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testAddtSynonymsForSkills() throws Exception {
+	void testAddtSynonymsForSkills() {
 		
 		//JS
 		run("javascript", 				Set.of("js"));

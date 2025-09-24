@@ -11,7 +11,7 @@ import com.arenella.recruit.candidates.beans.CandidateExtractedFilters.Candidate
 * Unit tests for the SeniorityExtractor class
 * @author K Parkings
 */
-public class SeniorityExtractorTest {
+class SeniorityExtractorTest {
 
 	/**
 	* Tests that if none of the three seniority types can be found 
@@ -19,7 +19,7 @@ public class SeniorityExtractorTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testUnableToDetermineSeniority_none() throws Exception{
+	void testUnableToDetermineSeniority_none() {
 		
 		final SeniorityExtractor 				extractor 	= new SeniorityExtractor();
 		final CandidateExtractedFiltersBuilder	filters 	= CandidateExtractedFilters.builder();
@@ -37,7 +37,7 @@ public class SeniorityExtractorTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testUnableToDetermineSeniority_all() throws Exception{
+	void testUnableToDetermineSeniority_all() {
 		
 		final SeniorityExtractor 				extractor 	= new SeniorityExtractor();
 		final CandidateExtractedFiltersBuilder	filters 	= CandidateExtractedFilters.builder();
@@ -55,7 +55,7 @@ public class SeniorityExtractorTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testMediorAndJunior() throws Exception{
+	void testMediorAndJunior() {
 		
 		final SeniorityExtractor 				extractor 	= new SeniorityExtractor();
 		final CandidateExtractedFiltersBuilder	filters 	= CandidateExtractedFilters.builder();
@@ -73,7 +73,7 @@ public class SeniorityExtractorTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testMediorAndSenior() throws Exception{
+	void testMediorAndSenior() {
 		
 		final SeniorityExtractor 				extractor 	= new SeniorityExtractor();
 		final CandidateExtractedFiltersBuilder	filters 	= CandidateExtractedFilters.builder();
@@ -91,7 +91,7 @@ public class SeniorityExtractorTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testJuniorAndSenior() throws Exception{
+	void testJuniorAndSenior() {
 		
 		final SeniorityExtractor 				extractor 	= new SeniorityExtractor();
 		final CandidateExtractedFiltersBuilder	filters 	= CandidateExtractedFilters.builder();
@@ -109,7 +109,7 @@ public class SeniorityExtractorTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testOnlyMedior() throws Exception{
+	void testOnlyMedior() {
 		
 		final SeniorityExtractor 				extractor 	= new SeniorityExtractor();
 		final CandidateExtractedFiltersBuilder	filters 	= CandidateExtractedFilters.builder();
@@ -127,7 +127,7 @@ public class SeniorityExtractorTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testOnlyJunior() throws Exception{
+	void testOnlyJunior() {
 		
 		final SeniorityExtractor 				extractor 	= new SeniorityExtractor();
 		final CandidateExtractedFiltersBuilder	filters 	= CandidateExtractedFilters.builder();
@@ -145,7 +145,7 @@ public class SeniorityExtractorTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testOnlySenior() throws Exception{
+	void testOnlySenior() {
 		
 		final SeniorityExtractor 				extractor 	= new SeniorityExtractor();
 		final CandidateExtractedFiltersBuilder	filters 	= CandidateExtractedFilters.builder();

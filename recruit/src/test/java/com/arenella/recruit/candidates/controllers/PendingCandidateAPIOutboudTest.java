@@ -13,14 +13,14 @@ import com.arenella.recruit.candidates.beans.PendingCandidate;
 * Unit tests for the PendingCandidateAPIOutboud class
 * @author K Parkings
 */
-public class PendingCandidateAPIOutboudTest {
+class PendingCandidateAPIOutboudTest {
 
 	/**
 	* Tests creation of class via Builder 
 	* @throws Exception
 	*/
 	@Test
-	public void testBuilder() throws Exception {
+	void testBuilder() {
 		
 		final UUID 		pendingCandidateId 	= UUID.randomUUID();
 		final String 	firstname 			= "Kevin";
@@ -53,7 +53,7 @@ public class PendingCandidateAPIOutboudTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testConvertFromPendingCandidate() throws Exception {
+	void testConvertFromPendingCandidate() {
 		
 		final UUID 		pendingCandidateId 	= UUID.randomUUID();
 		final String 	firstname 			= "Kevin";

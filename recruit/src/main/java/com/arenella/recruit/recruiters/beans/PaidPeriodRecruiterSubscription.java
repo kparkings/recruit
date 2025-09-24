@@ -278,8 +278,6 @@ public class PaidPeriodRecruiterSubscription implements RecruiterSubscription{
 	*/
 	public static boolean hasPeriodElapsedSinceActivation(PaidPeriodRecruiterSubscription subscription) {
 		
-		//final int lengthOfSubcriptionPeriodInYears = 1;
-		
 		LocalDateTime 	now 		= LocalDateTime.now();
 		LocalDateTime 	expiryDate 	= calculateExpiryDate(subscription.getType(), subscription.getActivatedDate());
 		

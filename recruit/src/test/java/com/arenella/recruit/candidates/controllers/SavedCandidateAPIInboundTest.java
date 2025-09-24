@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 * Unit tests for the SavedCandidateAPIInbound class
 * @author K Parkings
 */
-public class SavedCandidateAPIInboundTest {
+class SavedCandidateAPIInboundTest {
 
 	private static final String 	USER_ID 		= "kparkings";
 	private static final long 		CANDIDATE_ID 	= 123;
@@ -19,7 +19,7 @@ public class SavedCandidateAPIInboundTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testConstructor() throws Exception{
+	void testConstructor() {
 		
 		SavedCandidateAPIInbound savedCandidate = 
 				SavedCandidateAPIInbound
@@ -39,7 +39,7 @@ public class SavedCandidateAPIInboundTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testConvertToDomain() throws Exception {
+	void testConvertToDomain() {
 		
 		SavedCandidate savedCandidate = SavedCandidateAPIInbound.convertToDomain(SavedCandidateAPIInbound
 				.builder()

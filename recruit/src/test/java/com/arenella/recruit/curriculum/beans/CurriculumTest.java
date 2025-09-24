@@ -11,7 +11,7 @@ import com.arenella.recruit.curriculum.enums.FileType;
 * Unit tests for the Curriculum class
 * @author K Parkings
 */
-public class CurriculumTest {
+class CurriculumTest {
 
 	private static final String 		id 				= "100";
 	private static final FileType 		fileType 		= FileType.doc;
@@ -22,7 +22,7 @@ public class CurriculumTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testBuilder() throws Exception{
+	void testBuilder() {
 		
 		Curriculum curriculum = 
 				Curriculum.builder()
@@ -42,7 +42,7 @@ public class CurriculumTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testBuilderNoId() throws Exception{
+	void testBuilderNoId() {
 		
 		Curriculum curriculum = 
 				Curriculum.builder()
@@ -59,7 +59,7 @@ public class CurriculumTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testSetters() throws Exception{
+	void testSetters() {
 		
 		final String ownerId = "a1";
 		

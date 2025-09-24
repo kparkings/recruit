@@ -8,14 +8,14 @@ import org.junit.jupiter.api.Test;
 * Unit tests for the CandidateAvailabilityCountAPIOutbound class
 * @author K Parkings
 */
-public class CandidateAvailabilityCountAPIOutboundTest {
+class CandidateAvailabilityCountAPIOutboundTest {
 
 	/**
 	* Tests construction of object
 	* @throws Exception
 	*/
 	@Test
-	public void testConstructor() throws Exception{
+	void testConstructor() {
 		
 		
 		final long available 	= 10;

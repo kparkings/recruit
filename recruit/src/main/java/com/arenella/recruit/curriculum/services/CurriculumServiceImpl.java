@@ -266,16 +266,6 @@ public class CurriculumServiceImpl implements CurriculumService{
 	}
 	
 	/**
-	* Checks if the currently authenticated user has 
-	* a specific role
-	* @param roleToCheck - Role to check
-	* @return whether or not the user has the role
-	*/
-	//private boolean checkHasRole(String roleToCheck) {
-	//	return SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream().filter(role -> role.getAuthority().equals(roleToCheck)).findAny().isPresent();
-	//}
-
-	/**
 	* Refer to the CurriculumService interface for details
 	*/
 	@Override

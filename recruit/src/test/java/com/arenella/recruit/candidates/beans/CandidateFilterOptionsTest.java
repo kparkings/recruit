@@ -99,16 +99,16 @@ class CandidateFilterOptionsTest {
 													.build();
 		
 		assertEquals(filters.getCandidateIds().stream().findAny().get(), 	candidateId);
-		assertEquals(filters.getGeoZones().stream().findAny().get(), 		GEO_ZONE.BENELUX);
-		assertEquals(filters.getCountries().stream().findAny().get(), 		COUNTRY.NETHERLANDS);
-		assertEquals(filters.getFunctions().stream().findAny().get(), 		FUNCTION.PROJECT_MANAGER);
-		assertEquals(filters.getSecurityLevels().stream().findAny().get(), 	SECURITY_CLEARANCE_TYPE.NATO);
+		assertEquals(GEO_ZONE.BENELUX, 				filters.getGeoZones().stream().findAny().get());
+		assertEquals(COUNTRY.NETHERLANDS, 			filters.getCountries().stream().findAny().get());
+		assertEquals(FUNCTION.PROJECT_MANAGER, 		filters.getFunctions().stream().findAny().get());
+		assertEquals(SECURITY_CLEARANCE_TYPE.NATO, filters.getSecurityLevels().stream().findAny().get());
 		assertEquals(filters.getSkills().stream().findAny().get(), 			skill);
 		
 		assertTrue(filters.getLanguages().stream().filter(l -> l == LANGUAGE.DUTCH).findFirst().isPresent());
 		assertTrue(filters.getLanguages().stream().filter(l -> l == LANGUAGE.FRENCH).findFirst().isPresent());
 		assertTrue(filters.getLanguages().stream().filter(l -> l == LANGUAGE.ENGLISH).findFirst().isPresent());
-		assertEquals(filters.getOrder().get(), 								RESULT_ORDER.asc);
+		assertEquals(RESULT_ORDER.asc, 										filters.getOrder().get());
 		assertEquals(filters.getOrderAttribute().get(), 					orderAttribute);
 		assertEquals(filters.getYearsExperienceGtEq(), 						yearsExperienceGtEq);
 		assertEquals(maxResults, 											filters.getMaxResults());
@@ -273,7 +273,7 @@ class CandidateFilterOptionsTest {
 					.geoZones(Set.of(GEO_ZONE.BRITISH_ISLES))
 				.build();
 		
-		assertEquals(filters.getGeoZones().stream().findAny().get(), GEO_ZONE.BRITISH_ISLES);
+		assertEquals(GEO_ZONE.BRITISH_ISLES, filters.getGeoZones().stream().findAny().get());
 				
 		filters.removeGeoZones();
 		

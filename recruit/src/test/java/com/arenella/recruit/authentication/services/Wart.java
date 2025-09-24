@@ -8,7 +8,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-public class Wart {
+class Wart {
 
 
 	/**
@@ -16,7 +16,7 @@ public class Wart {
 	* @throws Exception
 	*/
 	@Test
-	public void testAdminUser() throws Exception{
+	void testAdminUser() {
 		
 		final String 	email 		=	"no-reply@arenella-ict.com";
 		final String 	username	=	email.substring(0, email.indexOf("@")); 
@@ -42,7 +42,7 @@ public class Wart {
 	* @throws Exception
 	*/
 	@Test
-	public void testSingleUser() throws Exception{
+	void testSingleUser() {
 		
 		Random x = new Random();
 		
@@ -71,7 +71,7 @@ public class Wart {
 	* @throws Exception
 	*/
 	@Test
-	public void testMultiUsers() throws Exception{
+	void testMultiUsers() {
 		
 		System.out.println("/* Start script */");
 		System.out.println("");

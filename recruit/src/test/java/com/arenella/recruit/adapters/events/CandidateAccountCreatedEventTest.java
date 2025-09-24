@@ -8,14 +8,14 @@ import org.junit.jupiter.api.Test;
 * Unit tests for the CandidateAccountCreatedEvent class
 * @author K Parkings
 */
-public class CandidateAccountCreatedEventTest {
+class CandidateAccountCreatedEventTest {
 
 	/**
 	* Test construction of the Event
 	* @throws Exception
 	*/
 	@Test
-	public void testConstructor() throws Exception{
+	void testConstructor() {
 		
 		final String candidateId 	= "can1";
 		final String encryptedPass 	= "@ddawd333@@";

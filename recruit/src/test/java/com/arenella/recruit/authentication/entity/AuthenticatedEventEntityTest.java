@@ -15,7 +15,7 @@ import com.arenella.recruit.authentication.beans.AuthenticatedEvent;
 * Unit tests for the AuthenticatedEventEntity class
 * @author Hp
 */
-public class AuthenticatedEventEntityTest {
+class AuthenticatedEventEntityTest {
 
 	private static final UUID 			ID 				= UUID.randomUUID();
 	private static final String 		USER_ID 		= "kparkings";
@@ -28,7 +28,7 @@ public class AuthenticatedEventEntityTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testBuilder() throws Exception{
+	void testBuilder() {
 		
 		AuthenticatedEventEntity entity = 
 				AuthenticatedEventEntity
@@ -53,7 +53,7 @@ public class AuthenticatedEventEntityTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testConvertFromDomain() throws Exception {
+	void testConvertFromDomain() {
 		
 		AuthenticatedEvent event = new AuthenticatedEvent(USER_ID, RECRUITER, CANDIDATE, LOGGED_IN_AT);
 		
@@ -72,7 +72,7 @@ public class AuthenticatedEventEntityTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testConvertToFromDomain() throws Exception {
+	void testConvertToFromDomain() {
 		
 		AuthenticatedEventEntity entity = 
 				AuthenticatedEventEntity

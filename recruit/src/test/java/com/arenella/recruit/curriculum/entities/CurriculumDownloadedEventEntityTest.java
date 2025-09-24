@@ -13,7 +13,7 @@ import com.arenella.recruit.curriculum.entity.CurriculumDownloadedEventEntity;
 * Unit tests for the CurriculumDownloadedEventEntity class
 * @author K Parkings
 */
-public class CurriculumDownloadedEventEntityTest {
+class CurriculumDownloadedEventEntityTest {
 
 	private static final String 			curriculumId 		= "anId";
 	private static final String 			userId 				= "kparkings";
@@ -25,7 +25,7 @@ public class CurriculumDownloadedEventEntityTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testBuilder() throws Exception{
+	void testBuilder() {
 		
 		CurriculumDownloadedEventEntity entity = CurriculumDownloadedEventEntity
 																		.builder()
@@ -48,7 +48,7 @@ public class CurriculumDownloadedEventEntityTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testConvertToEntity() throws Exception{
+	void testConvertToEntity() {
 		
 		CurriculumDownloadedEvent event = CurriculumDownloadedEvent.manualBuilder()
 																			.curriculumId(curriculumId)
@@ -72,7 +72,7 @@ public class CurriculumDownloadedEventEntityTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testConvertFromEntity() throws Exception{
+	void testConvertFromEntity() {
 		
 		CurriculumDownloadedEventEntity entity = CurriculumDownloadedEventEntity
 				.builder()

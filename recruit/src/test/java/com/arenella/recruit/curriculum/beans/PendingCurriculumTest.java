@@ -13,43 +13,43 @@ import com.arenella.recruit.curriculum.enums.FileType;
 * Unit tests for the PendingCurriculum class
 * @author K Parkings
 */
-public class PendingCurriculumTest {
+class PendingCurriculumTest {
 
-	private static final UUID	 		id 				= UUID.fromString("123e4567-e89b-12d3-a456-426614174000");
-	private static final FileType 		fileType 		= FileType.doc;
-	private static final byte[] 		file 			= new byte[1];
+	private static final UUID	 		ID 				= UUID.fromString("123e4567-e89b-12d3-a456-426614174000");
+	private static final FileType 		FILE_TYPE 		= FileType.doc;
+	private static final byte[] 		FILE 			= new byte[1];
 	
 	/**
 	* Test Getters return values set in the Builder
 	* @throws Exception
 	*/
 	@Test
-	public void testBuilder() throws Exception{
+	void testBuilder() {
 		
 		PendingCurriculum curriculum = PendingCurriculum
 												.builder()
-													.id(id)
-													.fileType(fileType)
-													.file(file)
+													.id(ID)
+													.fileType(FILE_TYPE)
+													.file(FILE)
 												.build();
 		
-		assertEquals(curriculum.getId().get(), 	id);
-		assertEquals(curriculum.getFileType(), 	fileType);
-		assertEquals(curriculum.getFile(), 		file);
+		assertEquals(ID, 		curriculum.getId().get());
+		assertEquals(FILE_TYPE, curriculum.getFileType());
+		assertEquals(FILE, 		curriculum.getFile());
 		
 	}
 	
 	/**
-	* Test id is empty if no id specificed
+	* Test id is empty if no id specified
 	* @throws Exception
 	*/
 	@Test
-	public void testBuilderNoId() throws Exception{
+	void testBuilderNoId() {
 		
 		PendingCurriculum curriculum = PendingCurriculum
 												.builder()
-													.fileType(fileType)
-													.file(file)
+													.fileType(FILE_TYPE)
+													.file(FILE)
 												.build();
 		
 		assertTrue(curriculum.getId().isEmpty());

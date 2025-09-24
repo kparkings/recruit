@@ -71,7 +71,7 @@ public class RecruiterServiceImpl implements RecruiterService{
 	private RecruiterProfileDao					recruiterProfileDao;
 	
 	@Autowired
-	private OpenPositionDao						OpenPositionDao;
+	private OpenPositionDao						openPositionDao;
 	
 	@Autowired	
 	private InvoiceBuilderUtil					invoiceBuilderUtil;
@@ -182,7 +182,7 @@ public class RecruiterServiceImpl implements RecruiterService{
 		
 		String temporaryRecruiterId = PasswordUtil.generateUsername(recruiter);
 		
-		recruiter.setUserId(temporaryRecruiterId.toString());
+		recruiter.setUserId(temporaryRecruiterId);
 		recruiter.activateAccount();
 		
 		int counter = 1;
@@ -372,7 +372,7 @@ public class RecruiterServiceImpl implements RecruiterService{
 	*/
 	@Override
 	public void deleteRecruiter(String recruiterId) {
-		this.OpenPositionDao.findAllOpenPositionsByRecruiterId(recruiterId).forEach(openPosition -> OpenPositionDao.deleteById(openPosition.getId()));
+		this.openPositionDao.findAllOpenPositionsByRecruiterId(recruiterId).forEach(openPosition -> openPositionDao.deleteById(openPosition.getId()));
 		this.recruiterProfileDao.deleteById(recruiterId);
 		this.creditDao.getByRecruiterId(recruiterId).ifPresent(creditCredit -> this.creditDao.deleteById(creditCredit.getRecruiterId()));
 		this.recruiterDao.deleteById(recruiterId);

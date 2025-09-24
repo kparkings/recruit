@@ -11,6 +11,13 @@ import com.arenella.recruit.candidates.beans.Candidate;
 */
 public class PasswordUtil{
 
+	/**
+	* Hide private constructor 
+	*/
+	private PasswordUtil() {
+		
+	}
+	
 	public static final int PASSWORD_LENGTH = 16;
 	
 	private static Set<Character> chars = Set.of('!','@','$','%','-','W','D','S','s',':','1','8','9','+');

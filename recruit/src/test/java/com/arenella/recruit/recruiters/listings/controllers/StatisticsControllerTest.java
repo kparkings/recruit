@@ -22,7 +22,7 @@ import com.arenella.recruit.listings.services.ListingStatisticsService;
 * @author K Parkings
 */
 @ExtendWith(MockitoExtension.class)
-public class StatisticsControllerTest {
+class StatisticsControllerTest {
 
 	@InjectMocks
 	private ListingStatisticsController controller = new ListingStatisticsController();
@@ -35,7 +35,7 @@ public class StatisticsControllerTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testFetchDownloadStats() throws Exception {
+	void testFetchDownloadStats() {
 		
 		ListingStatistics stats = new ListingStatistics(List.of());
 		
@@ -43,8 +43,8 @@ public class StatisticsControllerTest {
 		
 		ResponseEntity<ListingStatistics> result = controller.fetchDownloadStats();
 		
-		assertEquals(result.getBody(), stats);
-		assertEquals(result.getStatusCode(), HttpStatus.OK);
+		assertEquals(result.getBody(),  stats);
+		assertEquals(HttpStatus.OK, 	result.getStatusCode());
 		
 	}
 	

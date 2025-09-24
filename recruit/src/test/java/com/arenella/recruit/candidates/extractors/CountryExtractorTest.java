@@ -13,14 +13,14 @@ import com.arenella.recruit.candidates.enums.COUNTRY;
 * Unit tests for the CountryExtractor class
 * @author K Parkings
 */
-public class CountryExtractorTest {
+class CountryExtractorTest {
 
 	/**
 	* If no countries identified no need to set filter
 	* @throws Exception
 	*/
 	@Test
-	public void testNoCountriesIdentified() throws Exception{
+	void testNoCountriesIdentified() {
 		
 		final CandidateExtractedFiltersBuilder 	filterBuilder 	= CandidateExtractedFilters.builder();
 		final CountryExtractor 					extractor 		= new CountryExtractor();
@@ -39,7 +39,7 @@ public class CountryExtractorTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testAllIdentified() throws Exception{
+	void testAllIdentified() {
 	
 		final CandidateExtractedFiltersBuilder 	filterBuilder 	= CandidateExtractedFilters.builder();
 		final CountryExtractor 					extractor 		= new CountryExtractor();
@@ -58,7 +58,7 @@ public class CountryExtractorTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testEngland() throws Exception{
+	void testEngland() {
 	
 		final CandidateExtractedFiltersBuilder 	filterBuilder 	= CandidateExtractedFilters.builder();
 		final CountryExtractor 					extractor 		= new CountryExtractor();
@@ -77,7 +77,7 @@ public class CountryExtractorTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testBelgium() throws Exception{
+	void testBelgium() {
 	
 		final CandidateExtractedFiltersBuilder 	filterBuilder 	= CandidateExtractedFilters.builder();
 		final CountryExtractor 					extractor 		= new CountryExtractor();
@@ -96,7 +96,7 @@ public class CountryExtractorTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testIreland() throws Exception{
+	void testIreland() {
 	
 		final CandidateExtractedFiltersBuilder 	filterBuilder 	= CandidateExtractedFilters.builder();
 		final CountryExtractor 					extractor 		= new CountryExtractor();
@@ -115,7 +115,7 @@ public class CountryExtractorTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testNetherlands() throws Exception{
+	void testNetherlands() {
 	
 		final CandidateExtractedFiltersBuilder 	filterBuilder 	= CandidateExtractedFilters.builder();
 		final CountryExtractor 					extractor 		= new CountryExtractor();

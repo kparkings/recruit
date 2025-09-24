@@ -75,17 +75,6 @@ public class PendingCandidateEntity {
 	@Column(name="rate_perm_value_max")
 	private float ratePermValueMax;
 	
-	//@Enumerated(EnumType.STRING)
-	//@Column(name="rate_currency")
-	//private CURRENCY rateCurrency;
-	
-	//@Enumerated(EnumType.STRING)
-    //@Column(name="rate_period")
-    //private PERIOD ratePeriod;
-    
-    //@Column(name="rate_value")
-    //private float rateValue;      
-    
     @Enumerated(EnumType.STRING)
     @Column(name="photo_format")
     private PHOTO_FORMAT photoFormat;      
@@ -106,10 +95,6 @@ public class PendingCandidateEntity {
 		this.perm 						= builder.perm;
 		this.freelance 					= builder.freelance;
 		this.introduction				= builder.introduction;
-		//this.rateCurrency				= builder.rateCurrency;
-		//this.ratePeriod					= builder.ratePeriod;
-		//this.rateValue					= builder.rateValue;      
-		
 		this.rateContractCurrency 		= builder.rateContractCurrency;
 		this.rateContractPeriod 		= builder.rateContractPeriod;
 		this.rateContractValueMin 		= builder.rateContractValueMin;   
@@ -188,33 +173,6 @@ public class PendingCandidateEntity {
 	public String getIntroduction() {
 		return this.introduction;
 	}
-	
-	/**
-	* Returns the Currency the Candidate 
-	* charges in
-	* @return currency
-	*/
-	//public CURRENCY getRateCurrency() {
-	//	return this.rateCurrency;
-	//}
-	
-	/**
-	* Returns the period the Candidate 
-	* charges in
-	* @return Period
-	*/
-	//public PERIOD getRatePeriod() {
-	//	return this.ratePeriod;
-	//}
-	
-	/**
-	* Returns the value per period
-	* the Candidate charges
-	* @return value
-	*/
-	//public float getRateValue() {
-	//	return this.rateValue;
-	//}
 	
 	/**
 	* Returns the Currency for the contract rate
@@ -317,9 +275,6 @@ public class PendingCandidateEntity {
 		private boolean	 		perm;
 		private boolean 		freelance;
 		private String 			introduction;
-		//private CURRENCY 		rateCurrency;
-		//private PERIOD 			ratePeriod;
-		//private float 			rateValue;      
 		private CURRENCY 		rateContractCurrency;
 		private PERIOD 			rateContractPeriod;
 		private float 			rateContractValueMin;   
@@ -400,36 +355,6 @@ public class PendingCandidateEntity {
 			this.introduction = introduction;
 			return this;
 		}
-		
-		/**
-		* Sets the Currency the Candidate charges in
-		* @param rateCurrency - Currency
-		* @return Builder
-		*/
-		//public PendingCandidateEntityBuilder rateCurrency(CURRENCY rateCurrency) {
-		//	this.rateCurrency = rateCurrency;
-		//	return this;
-		//}
-		
-		/**
-		* Sets the unit the Rate is in
-		* @param ratePeriod - Unit of the Rate
-		* @return Builder
-		*/
-		//public PendingCandidateEntityBuilder ratePeriod(PERIOD ratePeriod) {
-		//	this.ratePeriod = ratePeriod;
-		//	return this;
-		//}
-		
-		/**
-		* Sets the amount the Candidate charges per period
-		* @param rateValue - amount per period
-		* @return Builder
-		*/
-		//public PendingCandidateEntityBuilder rateValue(float rateValue) {
-		//	this.rateValue = rateValue;
-		//	return this;
-		//}
 		
 		/**
 		* Sets the currency to use 

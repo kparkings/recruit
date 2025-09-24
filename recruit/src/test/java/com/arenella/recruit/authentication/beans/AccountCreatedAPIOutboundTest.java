@@ -8,14 +8,14 @@ import org.junit.jupiter.api.Test;
 * Unit tests for the AccountCreatedAPIOutbound class
 * @author K Parkings
 */
-public class AccountCreatedAPIOutboundTest {
+class AccountCreatedAPIOutboundTest {
 
 	/**
 	* Tests creation via Builder
 	* @throws Exception
 	*/
 	@Test
-	public void testBuilder() throws Exception {
+	void testBuilder() {
 		
 		final String username = "kparkings";
 		final String password = "aPassword";
@@ -36,7 +36,7 @@ public class AccountCreatedAPIOutboundTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testConverFromUser() throws Exception {
+	void testConverFromUser() {
 		
 		final String username = "kparkings";
 		final String password = "aPassword";

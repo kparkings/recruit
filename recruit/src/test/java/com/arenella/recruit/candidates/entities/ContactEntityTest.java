@@ -11,7 +11,7 @@ import com.arenella.recruit.candidates.beans.Contact.CONTACT_TYPE;
 * Unit tests for the ContactEntity class
 * @author K Parkings
 */
-public class ContactEntityTest {
+class ContactEntityTest {
 
 	private static final CONTACT_TYPE 	CONTACT_TYPE_VAL 	= CONTACT_TYPE.RECRUITER;
 	private static final String 		USER_ID 			= "kparkings";
@@ -24,7 +24,7 @@ public class ContactEntityTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testBuilder() throws Exception{
+	void testBuilder() {
 		
 		RecruiterContactEntity entity = RecruiterContactEntity
 				.builder()
@@ -47,7 +47,7 @@ public class ContactEntityTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testConvertFromEntity() throws Exception {
+	void testConvertFromEntity() {
 		
 		RecruiterContactEntity entity = RecruiterContactEntity
 				.builder()

@@ -118,8 +118,6 @@ public class CityExtractor implements JobSpecifcationFilterExtractor{
 			return;
 		}
 		
-		extractedCities.add("one two three four");
-		
 		String city = (String)extractedCities.toArray()[0];
 		city = city.trim();
 		

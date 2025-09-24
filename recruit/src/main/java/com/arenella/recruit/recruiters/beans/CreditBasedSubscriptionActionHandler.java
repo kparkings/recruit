@@ -110,9 +110,7 @@ public class CreditBasedSubscriptionActionHandler implements RecruiterSubscripti
 						currentSubscription.endSubscription();
 						currentSubscription.setCurrentSubscription(false);
 					}
-					
-				//	externEventPublisher.publishRecruiterNoOpenSubscriptionsEvent(recruiter.getUserId());
-					
+				
 					return Optional.empty();
 				}
 				default:{}

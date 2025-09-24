@@ -15,7 +15,7 @@ import com.arenella.recruit.authentication.beans.User.USER_ROLE;
 * Unit tests for the UserEntity class 
 * @author K Parkings
 */
-public class UserEntityTest {
+class UserEntityTest {
 
 	private static final String 			USERNAME 	= "username";
 	private static final String 			PASSWORD 	= "password";
@@ -35,7 +35,7 @@ public class UserEntityTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testUserEntityBuilder() throws Exception{
+	void testUserEntityBuilder() {
 		
 		UserEntity entity = UserEntity
 								.builder()
@@ -61,7 +61,7 @@ public class UserEntityTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testConvertToEntity() throws Exception {
+	void testConvertToEntity() {
 		
 		User user = User
 				.builder()
@@ -89,7 +89,7 @@ public class UserEntityTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testConvertFromEntity() throws Exception {
+	void testConvertFromEntity() {
 		
 		UserEntity entity = UserEntity
 				.builder()
@@ -116,7 +116,7 @@ public class UserEntityTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testUpdatePassword() throws Exception{
+	void testUpdatePassword() {
 		
 		final String newPassword = "newPass1";
 		

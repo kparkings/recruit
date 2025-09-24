@@ -11,14 +11,14 @@ import com.arenella.recruit.recruiters.beans.Recruiter.language;
 * Unit tests for the RecruiterUpdatedEvent class
 * @author K Parkings
 */
-public class RecruiterUpdatedEventTest {
+class RecruiterUpdatedEventTest {
 
 	/**
 	* Tests construction
 	* @throws Exception
 	*/
 	@Test
-	public void testConsructor() throws Exception{
+	void testConsructor() {
 		
 		final String 	recruiterId					= "kparkings";
 		final String 	firstName					= "kevin";

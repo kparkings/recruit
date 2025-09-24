@@ -13,14 +13,14 @@ import org.junit.jupiter.api.Test;
 * Unit tests for the AuthenticatedEvent class
 * @author K Parkings
 */
-public class AuthenticatedEventTest {
+class AuthenticatedEventTest {
 
 	/**
 	* Tests Construction
 	* @throws Exception
 	*/
 	@Test
-	public void testContructor() throws Exception{
+	void testContructor() {
 		
 		final String 			userId 		= "kparkings";
 		final boolean 			recruiter 	= false;

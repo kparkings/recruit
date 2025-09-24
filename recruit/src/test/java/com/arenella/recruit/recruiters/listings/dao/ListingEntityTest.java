@@ -2,6 +2,7 @@ package com.arenella.recruit.recruiters.listings.dao;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertSame;
 
 import java.time.LocalDateTime;
 import java.util.LinkedHashSet;
@@ -29,7 +30,7 @@ import com.arenella.recruit.listings.dao.ListingViewedEventEntity;
 * @author K Parkings
 */
 @ExtendWith(MockitoExtension.class)
-public class ListingEntityTest {
+class ListingEntityTest {
 
 	private static final 	String 			SKILL_JAVA 			= "java";
 	private static final 	String 			SKILL_CSHARP 		= "c#";
@@ -57,7 +58,7 @@ public class ListingEntityTest {
 	* Sets up test environment 
 	*/
 	@BeforeEach
-	public void init() {
+	void init() {
 		this.languages.add(language.DUTCH);
 		this.languages.add(language.FRENCH);
 	}
@@ -67,7 +68,7 @@ public class ListingEntityTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testBuilder() throws Exception {
+	void testBuilder() {
 		
 		ListingEntity listing = ListingEntity
 										.builder()
@@ -109,7 +110,7 @@ public class ListingEntityTest {
 		
 		assertTrue(listing.getLanguages().contains(Listing.language.DUTCH));
 		assertTrue(listing.getLanguages().contains(Listing.language.FRENCH));
-		assertEquals(listing.getLanguages().size(), 2);
+		assertEquals(2, listing.getLanguages().size());
 		assertTrue(listing.isActive());
 		
 		assertTrue(listing.getSkills().contains(SKILL_JAVA));
@@ -124,7 +125,7 @@ public class ListingEntityTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testBuilder_defaults() throws Exception {
+	void testBuilder_defaults() {
 		
 		ListingEntity listing = ListingEntity.builder().build();
 		
@@ -137,7 +138,7 @@ public class ListingEntityTest {
 	* Tests conversion from Entity to Domain representation of Listing 
 	*/
 	@Test
-	public void testConvertFromEntity() {
+	void testConvertFromEntity() {
 		
 		ListingEntity listingEntity = ListingEntity
 				.builder()
@@ -180,7 +181,7 @@ public class ListingEntityTest {
 		
 		assertTrue(listing.getLanguages().contains(Listing.language.DUTCH));
 		assertTrue(listing.getLanguages().contains(Listing.language.FRENCH));
-		assertEquals(listing.getLanguages().size(), 2);
+		assertEquals(2, listing.getLanguages().size());
 		
 		assertTrue(listing.getSkills().contains(SKILL_JAVA));
 		assertTrue(listing.getSkills().contains(SKILL_CSHARP));
@@ -194,7 +195,7 @@ public class ListingEntityTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testConvertToEntity_existingEntity() throws Exception {
+	void testConvertToEntity_existingEntity() {
 		
 		Listing listing = Listing
 				.builder()
@@ -221,7 +222,7 @@ public class ListingEntityTest {
 			ListingEntity existingEntity	= ListingEntity.builder().listingId(listingId).build();
 			ListingEntity entity 			= ListingEntity.convertToEntity(listing, Optional.of(existingEntity));
 
-			assertTrue(entity == existingEntity);
+			assertSame(entity,existingEntity);
 			
 			assertEquals(country, 						entity.getCountry());
 			assertEquals(existingEntity.getCreated(), 	entity.getCreated());
@@ -246,7 +247,7 @@ public class ListingEntityTest {
 			
 			assertTrue(entity.getSkills().contains(SKILL_JAVA));
 			assertTrue(entity.getSkills().contains(SKILL_CSHARP));
-			assertEquals(entity.getSkills().size(), 2);
+			assertEquals(2, entity.getSkills().size());
 
 	}
 	
@@ -304,7 +305,7 @@ public class ListingEntityTest {
 			ListingEntity existingEntity	= ListingEntity.builder().listingId(listingId).views(entityViews).build();
 			ListingEntity entity 			= ListingEntity.convertToEntity(listing, Optional.of(existingEntity));
 
-			assertTrue(entity == existingEntity);
+			assertSame(entity, existingEntity);
 			
 			assertEquals(country, 						entity.getCountry());
 			assertEquals(existingEntity.getCreated(), 	entity.getCreated());
@@ -324,7 +325,7 @@ public class ListingEntityTest {
 			
 			assertTrue(entity.getLanguages().contains(Listing.language.DUTCH));
 			assertTrue(entity.getLanguages().contains(Listing.language.FRENCH));
-			assertEquals(entity.getLanguages().size(), 2);
+			assertEquals(2, entity.getLanguages().size());
 			
 			assertTrue(entity.getSkills().contains(SKILL_JAVA));
 			assertTrue(entity.getSkills().contains(SKILL_CSHARP));
@@ -344,7 +345,7 @@ public class ListingEntityTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testConvertToEntity_noExistingEntity() throws Exception {
+	void testConvertToEntity_noExistingEntity() {
 		
 		Listing listing = Listing
 				.builder()
@@ -388,13 +389,13 @@ public class ListingEntityTest {
 			
 			assertTrue(entity.getLanguages().contains(Listing.language.DUTCH));
 			assertTrue(entity.getLanguages().contains(Listing.language.FRENCH));
-			assertEquals(entity.getLanguages().size(), 2);
+			assertEquals(2, entity.getLanguages().size());
 			
 			assertTrue(entity.isActive());
 			
 			assertTrue(entity.getSkills().contains(SKILL_JAVA));
 			assertTrue(entity.getSkills().contains(SKILL_CSHARP));
-			assertEquals(entity.getSkills().size(), 2);
+			assertEquals(2, entity.getSkills().size());
 			
 	}
 	

@@ -11,7 +11,7 @@ public class UserLoginSummary{
 		LOW(2), 
 		NONE(1);
 		
-		public int levelCode;
+		protected int levelCode;
 		
 		ActivityLevel(int levelCode) {
 			this.levelCode = levelCode;
@@ -126,21 +126,10 @@ public class UserLoginSummary{
 		}
 			
 		switch(score) {
-			case 4 -> {
-				this.activityLevel = ActivityLevel.HIGH;
-				break;
-			}
-			case  2, 3 -> {
-				this.activityLevel = ActivityLevel.MEDIUM;
-				break;
-			}
-			case 1 -> {
-				this.activityLevel = ActivityLevel.LOW;
-				break;
-			}
-			default -> {
-				this.activityLevel = ActivityLevel.NONE;
-			}
+			case 4 		-> 		this.activityLevel = ActivityLevel.HIGH;
+			case 2, 3 	-> 		this.activityLevel = ActivityLevel.MEDIUM;
+			case 1 		-> 		this.activityLevel = ActivityLevel.LOW;
+			default 	-> 		this.activityLevel = ActivityLevel.NONE;
 		}
 				
 	}

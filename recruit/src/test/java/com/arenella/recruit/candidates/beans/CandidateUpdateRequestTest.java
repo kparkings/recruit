@@ -68,7 +68,7 @@ public class CandidateUpdateRequestTest {
 	* @throws Exception
 	*/
 	@Test
-	void testBuilder_defaults() throws Exception {
+	void testBuilder_defaults() {
 		
 		CandidateUpdateRequest candidate = CandidateUpdateRequest.builder().build();
 		

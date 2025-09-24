@@ -10,7 +10,7 @@ import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_
 * Unit tests for the SubscriptionAddedEvent class
 * @author K Parkings
 */
-public class SubscriptionAddedEventTest {
+class SubscriptionAddedEventTest {
 
 	final String 			recruiterId 		= "rec33";
 	final subscription_type subscriptionType 	= subscription_type.SIX_MONTHS_SUBSCRIPTION;
@@ -20,7 +20,7 @@ public class SubscriptionAddedEventTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testConstructr() throws Exception{
+	void testConstructr() {
 		
 		SubscriptionAddedEvent event = new SubscriptionAddedEvent(recruiterId, subscriptionType);
 		

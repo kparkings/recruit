@@ -11,7 +11,7 @@ import com.arenella.recruit.candidates.beans.Candidate.Photo.PHOTO_FORMAT;
 * Unit tests for the PhotoDocument class
 * @author K Parkings
 */
-public class PhotoDocumentTest {
+class PhotoDocumentTest {
 
 	private static final byte[] 		IMAGE_BYTES = new byte[] {};
 	private static final PHOTO_FORMAT 	FORMAT		= PHOTO_FORMAT.jpeg;
@@ -21,7 +21,7 @@ public class PhotoDocumentTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testConstruction() throws Exception{
+	void testConstruction() {
 		
 		PhotoDocument doc = new PhotoDocument(IMAGE_BYTES, FORMAT);
 		
@@ -34,7 +34,7 @@ public class PhotoDocumentTest {
 	* Tests conversion from Persistence to Domain representation
 	* @throws Exception
 	*/
-	public void testConvertFromDomain() throws Exception{
+	void testConvertFromDomain() {
 		
 		Candidate.Photo photo 	= new Candidate.Photo(IMAGE_BYTES, FORMAT);
 		PhotoDocument 	doc	 	= PhotoDocument.convertFromDomain(photo);
@@ -48,7 +48,7 @@ public class PhotoDocumentTest {
 	* Tests conversion from Domain to Persistence representation
 	* @throws Exception
 	*/
-	public void testConvertToDomain() throws Exception{
+	void testConvertToDomain() {
 		
 		PhotoDocument 	doc 	= new PhotoDocument(IMAGE_BYTES, FORMAT);
 		Candidate.Photo photo 	= PhotoDocument.convertToDomain(doc);

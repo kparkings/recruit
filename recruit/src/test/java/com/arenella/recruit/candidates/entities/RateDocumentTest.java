@@ -12,7 +12,7 @@ import com.arenella.recruit.candidates.beans.Candidate.Rate.PERIOD;
 * Unit tests for the RateDocument class
 * @author K Parkings
 */
-public class RateDocumentTest {
+class RateDocumentTest {
 
 	private static final CURRENCY 	CURRENCY_VAL	= CURRENCY.EUR;
 	private static final PERIOD 	PERIOD_VAL		= PERIOD.YEAR;
@@ -24,7 +24,7 @@ public class RateDocumentTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testConstruction() throws Exception{
+	void testConstruction() {
 		
 		RateDocument doc = new RateDocument(CURRENCY_VAL, PERIOD_VAL, VALUE_MIN, VALUE_MAX);
 		
@@ -40,7 +40,7 @@ public class RateDocumentTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testConvertFromDomain() throws Exception{
+	void testConvertFromDomain() {
 		
 		 Candidate.Rate rate 	= new Candidate.Rate(CURRENCY_VAL, PERIOD_VAL, VALUE_MIN, VALUE_MAX);
 		 RateDocument 	doc 	= RateDocument.convertFromDomain(rate);
@@ -57,7 +57,7 @@ public class RateDocumentTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testConvertToDomain() throws Exception{
+	void testConvertToDomain() {
 		
 		RateDocument 	doc 	= new RateDocument(CURRENCY_VAL, PERIOD_VAL, VALUE_MIN, VALUE_MAX);
 		Candidate.Rate 	rate 	= RateDocument.convertToDomain(doc);

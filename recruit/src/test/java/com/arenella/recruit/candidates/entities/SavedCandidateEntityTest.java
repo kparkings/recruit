@@ -10,7 +10,7 @@ import com.arenella.recruit.candidates.controllers.SavedCandidate;
 * Unit tests for the SavedCandidateEntity class 
 * @author K Parkings
 */
-public class SavedCandidateEntityTest {
+class SavedCandidateEntityTest {
 
 	private static final String 	USER_ID 		= "kparkings";
 	private static final long 		CANDIDATE_ID 	= 123;
@@ -21,7 +21,7 @@ public class SavedCandidateEntityTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testConstructor() throws Exception{
+	void testConstructor() {
 		
 		SavedCandidateEntity savedCandidate = 
 				SavedCandidateEntity
@@ -41,7 +41,7 @@ public class SavedCandidateEntityTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testConvertToDomain() throws Exception {
+	void testConvertToDomain() {
 		
 		SavedCandidate savedCandidate = SavedCandidateEntity.convertFromEntity(SavedCandidateEntity
 				.builder()
@@ -62,7 +62,7 @@ public class SavedCandidateEntityTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testConvertFromDomain() throws Exception {
+	void testConvertFromDomain() {
 		
 		SavedCandidateEntity savedCandidate = SavedCandidateEntity.convertToEntity(SavedCandidate
 				.builder()

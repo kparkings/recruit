@@ -19,7 +19,7 @@ public class CandidateSearchAlertMatchTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testBuilder() throws Exception{
+	void testBuilder() {
 		
 		final UUID					alertId			= UUID.randomUUID();
 		final String 				alertName 		= "alertName";

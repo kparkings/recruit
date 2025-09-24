@@ -1,7 +1,6 @@
 package com.arenella.recruit.adapters;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Set;
 
@@ -32,7 +31,7 @@ import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_
 * @author K Parkings
 */
 @ExtendWith(MockitoExtension.class)
-public class AuthenticationMonolithExternalEventListenerTest {
+class AuthenticationMonolithExternalEventListenerTest {
 	
 	@InjectMocks
 	private AuthenticationMonolithExternalEventListener eventListener = new AuthenticationMonolithExternalEventListener();
@@ -48,7 +47,7 @@ public class AuthenticationMonolithExternalEventListenerTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testListenForRecruiterCreatedEvent() throws Exception{
+	void testListenForRecruiterCreatedEvent() {
 		
 		final String recruiterId 		= "kparkings";
 		final String encryptedPassword	= "fesf777@@@7d!";
@@ -68,7 +67,7 @@ public class AuthenticationMonolithExternalEventListenerTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testListenForRecruiterNoOpenSubscriptionsEvent() throws Exception {
+	void testListenForRecruiterNoOpenSubscriptionsEvent() {
 	
 		final String 			recruiterId 		= "kparkings";
 		final Set<USER_ROLE>	userRoles 			= Set.of(USER_ROLE.recruiterNoSubscrition);
@@ -88,7 +87,7 @@ public class AuthenticationMonolithExternalEventListenerTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testListenForRecruiterHasOpenSubscriptionEvent() throws Exception {
+	void testListenForRecruiterHasOpenSubscriptionEvent() {
 	
 		final String 			recruiterId 		= "kparkings";
 		
@@ -103,7 +102,7 @@ public class AuthenticationMonolithExternalEventListenerTest {
 		
 		Set<USER_ROLE> roles = userRoleArgCapt.getValue();
 		
-		assertTrue(roles.size() == 1);
+		assertEquals(1, roles.size());
 		assertEquals(USER_ROLE.recruiter, roles.stream().findFirst().get());
 		
 	}
@@ -113,7 +112,7 @@ public class AuthenticationMonolithExternalEventListenerTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testListenForRecruiterPasswordUpdatedEvent() throws Exception{
+	void testListenForRecruiterPasswordUpdatedEvent() {
 		
 		final String userId 	= "kparkings";
 		final String password 		= "sklf@@9";
@@ -133,7 +132,7 @@ public class AuthenticationMonolithExternalEventListenerTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testListenForCandidateAccountCreatedEvent() throws Exception{
+	void testListenForCandidateAccountCreatedEvent() {
 		
 		CandidateAccountCreatedEvent event = new CandidateAccountCreatedEvent("can1","@@3##d31@");
 		
@@ -148,7 +147,7 @@ public class AuthenticationMonolithExternalEventListenerTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testListenForCandidatePasswordUpdatedEvent() throws Exception{
+	void testListenForCandidatePasswordUpdatedEvent() {
 		
 		CandidatePasswordUpdatedEvent event = new CandidatePasswordUpdatedEvent("can1", "33344!!F$%");
 		
@@ -163,7 +162,7 @@ public class AuthenticationMonolithExternalEventListenerTest {
 	* @throws Exception 
 	*/
 	@Test
-	public void testListenForRecruiterAccountDeletedEvent() throws Exception{
+	void testListenForRecruiterAccountDeletedEvent() {
 		
 		final String recruiterId = "aRecId";
 		

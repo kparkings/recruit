@@ -8,14 +8,14 @@ import org.junit.jupiter.api.Test;
 * Unit tests for the CandidateNoLongerAvailableEvent class
 * @author K Parkings
 */
-public class CandidateNoLongerAvailableEventTest {
+class CandidateNoLongerAvailableEventTest {
 
 	/**
 	* Tests construction of the Event
 	* @throws Exception
 	*/
 	@Test
-	public void testConstruction() throws Exception {
+	void testConstruction() {
 		
 		final long candidateId = 123L;
 		

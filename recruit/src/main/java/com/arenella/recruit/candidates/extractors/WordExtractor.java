@@ -19,11 +19,13 @@ public class WordExtractor implements DocumentFilterExtractor{
 	public String extract(byte[] fileBytes) throws Exception {
 		
 		InputStream 		is 				= new ByteArrayInputStream(fileBytes);
-		OPCPackage 			docPackage 		= OPCPackage.open(is);
-		XWPFWordExtractor 	extractor 		= new XWPFWordExtractor(docPackage);
-		String 				text 			= extractor.getText();
+		String 				text = "";
 		
-		extractor.close();
+		try (OPCPackage docPackage = OPCPackage.open(is)){
+			XWPFWordExtractor extractor = new XWPFWordExtractor(docPackage);
+			text = extractor.getText();
+			extractor.close();
+		}
 		
 		return text;
 	}

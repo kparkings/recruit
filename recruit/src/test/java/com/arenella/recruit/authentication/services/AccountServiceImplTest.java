@@ -1,7 +1,6 @@
 package com.arenella.recruit.authentication.services;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -27,7 +26,7 @@ import com.arenella.recruit.authentication.entity.UserEntity;
 * @author K Parkings
 */
 @ExtendWith(MockitoExtension.class)
-public class AccountServiceImplTest {
+class AccountServiceImplTest {
 	
 	@Mock
 	private UserDao 			mockUserDao;
@@ -41,7 +40,7 @@ public class AccountServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testreplaceRolesForUser_unknownUser() throws Exception {
+	void testreplaceRolesForUser_unknownUser() {
 		
 		final String userId = "kparkings";
 		
@@ -58,7 +57,7 @@ public class AccountServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testreplaceRolesForUser() throws Exception {
+	void testreplaceRolesForUser() {
 		
 		final String 		userId 							= "kparkings";
 		final USER_ROLE 	recruiterRole 					= USER_ROLE.recruiter;
@@ -78,7 +77,7 @@ public class AccountServiceImplTest {
 		
 		assertEquals(userId, userEntity.getUsername());
 		assertEquals(recruiterNoSubscriptionRole, userEntity.getRoles().stream().findFirst().get());
-		assertTrue(userEntity.getRoles().size() == 1);
+		assertEquals(1, userEntity.getRoles().size());
 		
 	}
 	
@@ -87,7 +86,7 @@ public class AccountServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testUpdateUserPassword_unknownUser() throws Exception{
+	void testUpdateUserPassword_unknownUser() {
 		
 		final String userId 	= "kparkings";
 		final String password 	= "dad##@&!3";
@@ -105,7 +104,7 @@ public class AccountServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testUpdateUserPassword() throws Exception{
+	void testUpdateUserPassword() {
 		
 		final String	userId 		= "kparkings";
 		final String 	password 	= "dad##@&!3";
@@ -129,7 +128,7 @@ public class AccountServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testDeleteAccount() throws Exception{
+	void testDeleteAccount() {
 		
 		final String userId = "11";
 	
@@ -146,7 +145,7 @@ public class AccountServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testDeleteAccount_non_existent() throws Exception{
+	void testDeleteAccount_non_existent() {
 		
 		final String userId = "11";
 	
@@ -169,7 +168,7 @@ public class AccountServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testUpdateUsersCreditStatus_unknownUser() throws Exception{
+	void testUpdateUsersCreditStatus_unknownUser() {
 		
 		final String userId 	= "kparkings";
 		
@@ -186,7 +185,7 @@ public class AccountServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testupdateUsersCreditStatus() throws Exception{
+	void testupdateUsersCreditStatus() {
 		
 		final String	userId 		= "kparkings";
 		final User		user		= User.builder().username(userId).useCredits(true).build();

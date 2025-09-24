@@ -14,14 +14,14 @@ import com.arenella.recruit.curriculum.enums.FileType;
 * Unit tests for the DocumentFilterExtractionFactory class
 * @author K Parkings
 */
-public class DocumentFilterExtractionFactoryTest {
+class DocumentFilterExtractionFactoryTest {
 
 	/**
 	* Tests correct extractor returned for file type
 	* @throws Exception
 	*/
 	@Test
-	public void testGetInstance() throws Exception{
+	void testGetInstance() {
 		
 		DocumentFilterExtractionUtil util = new DocumentFilterExtractionUtil();
 		assertTrue(util.getInstance(FileType.doc) instanceof WordExtractor);

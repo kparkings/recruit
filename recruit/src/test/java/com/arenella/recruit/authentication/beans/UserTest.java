@@ -15,7 +15,7 @@ import com.arenella.recruit.authentication.beans.User.USER_ROLE;
 * Unit tests for the User class
 * @author K Parkings
 */
-public class UserTest {
+class UserTest {
 
 	private static final String 			USERNAME 		= "aUser";
 	private static final String 			PASSWORD 		= "aPassword";
@@ -28,15 +28,15 @@ public class UserTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testBuilder() throws Exception{
+	void testBuilder() throws Exception{
 		
 		ROLES.add(USER_ROLE.admin);
 		
 		User user = User.builder().username(USERNAME).password(PASSWORD).enabled(ENABLED).roles(ROLES).build();
 		
-		assertEquals(user.getUsername(), 	USERNAME);
-		assertEquals(user.getPassword(), 	PASSWORD);
-		assertEquals(user.isEnabled(), 		ENABLED);
+		assertEquals(USERNAME,	user.getUsername());
+		assertEquals(PASSWORD, 	user.getPassword());
+		assertEquals(ENABLED, 	user.isEnabled());
 		
 		user.getRoles().stream().filter(r -> r == USER_ROLE.admin).findAny().orElseThrow(() -> new RuntimeException("Expected Role"));
 		
@@ -47,7 +47,7 @@ public class UserTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testReplaceRoles() throws Exception {
+	void testReplaceRoles() {
 		
 		final String 			username 	= "aUser";
 		final String 			password 	= "aPassword";
@@ -57,13 +57,13 @@ public class UserTest {
 		
 		User user = User.builder().username(username).password(password).enabled(enabled).roles(roles).build();
 		
-		assertTrue(user.getRoles().size() == 1);
+		assertEquals(1,user.getRoles().size());
 		
 		assertEquals(USER_ROLE.admin, user.getRoles().stream().findFirst().get());
 		
 		user.replaceRoles(rolesNew);
 		
-		assertTrue(user.getRoles().size() == 1);
+		assertEquals(1, user.getRoles().size());
 	
 		assertEquals(USER_ROLE.recruiter, user.getRoles().stream().findFirst().get());
 		
@@ -74,7 +74,7 @@ public class UserTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testUpdatePassword() throws Exception{
+	void testUpdatePassword() {
 		
 		final String newPassword = "newPass1";
 		
@@ -99,7 +99,7 @@ public class UserTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testUseCredits() throws Exception{
+	void testUseCredits() {
 		
 		User user = User
 				.builder()

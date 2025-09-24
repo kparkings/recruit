@@ -11,14 +11,14 @@ import org.junit.jupiter.api.Test;
 * Unit tests for the SkillSynonym class 
 * @author K Parkings
 */
-public class SkillSynonymTest {
+class SkillSynonymTest {
 
 	/**
 	* Tests case in which skill is one of the synonyms for the skill
 	* @throws Exception
 	*/
 	@Test
-	public void testIsSynonym() throws Exception{
+	void testIsSynonym() {
 		
 		Set<String> extracted = new HashSet<>();
 		
@@ -35,7 +35,7 @@ public class SkillSynonymTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testIsNotSynonym() throws Exception{
+	void testIsNotSynonym() {
 		
 		Set<String> extracted = new HashSet<>();
 		
@@ -58,7 +58,7 @@ public class SkillSynonymTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testSecondaySynonyms_butNoMatchOnPrimary() throws Exception{
+	void testSecondaySynonyms_butNoMatchOnPrimary() {
 		
 		Set<String> extracted = new HashSet<>();
 		
@@ -84,7 +84,7 @@ public class SkillSynonymTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testSecondaySynonyms_MatchOnPrimary() throws Exception{
+	void testSecondaySynonyms_MatchOnPrimary() {
 		
 		Set<String> extracted = new HashSet<>();
 		
@@ -104,7 +104,7 @@ public class SkillSynonymTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testSecondaySynonyms_nested_extraction() throws Exception{
+	void testSecondaySynonyms_nested_extraction() {
 		
 		Set<String> extracted = new HashSet<>();
 		

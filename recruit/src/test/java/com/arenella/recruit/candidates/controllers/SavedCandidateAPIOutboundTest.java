@@ -11,7 +11,7 @@ import com.arenella.recruit.candidates.beans.CandidateSearchAccuracyWrapper;
 * Unit tests for the SavedCandidateAPIOutbound class
 * @author K Parkings
 */
-public class SavedCandidateAPIOutboundTest {
+class SavedCandidateAPIOutboundTest {
 
 	private static final String 	USER_ID 		= "kparkings";
 	private static final long 		CANDIDATE_ID 	= 123;
@@ -22,7 +22,7 @@ public class SavedCandidateAPIOutboundTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testConstructor() throws Exception{
+	void testConstructor() {
 		
 		SavedCandidateAPIOutbound savedCanidate = 
 				SavedCandidateAPIOutbound
@@ -43,7 +43,7 @@ public class SavedCandidateAPIOutboundTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testConvertFromDomain() throws Exception {
+	void testConvertFromDomain() {
 		
 		Candidate candidate = Candidate.builder().candidateId(String.valueOf(CANDIDATE_ID)).build();
 		

@@ -12,7 +12,7 @@ import com.arenella.recruit.candidates.beans.SkillUpdateStat;
 * Unit tests for the SkillUpdateStatEntity class
 * @author K Parkings
 */
-public class SkillUpdateStatEntityTest {
+class SkillUpdateStatEntityTest {
 
 	private static final long 		CANDIDATE_ID 		= 111;
 	private static final LocalDate 	LAST_UPDATED 		= LocalDate.of(2024, 8, 24);
@@ -23,7 +23,7 @@ public class SkillUpdateStatEntityTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testConstructor() throws Exception{
+	void testConstructor() {
 	
 		SkillUpdateStatEntity entity = new SkillUpdateStatEntity(CANDIDATE_ID, LAST_UPDATED, ADDED_SKILL_COUNT);
 	
@@ -38,7 +38,7 @@ public class SkillUpdateStatEntityTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testFromEntity() throws Exception{
+	void testFromEntity() {
 	
 		SkillUpdateStatEntity 	entity = new SkillUpdateStatEntity(CANDIDATE_ID, LAST_UPDATED, ADDED_SKILL_COUNT);
 		SkillUpdateStat 		stat = SkillUpdateStatEntity.fromEntity(entity);
@@ -54,7 +54,7 @@ public class SkillUpdateStatEntityTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testToEntity() throws Exception{
+	void testToEntity() {
 		
 		SkillUpdateStat 		stat 	= new SkillUpdateStat(CANDIDATE_ID, LAST_UPDATED, ADDED_SKILL_COUNT);
 		SkillUpdateStatEntity 	entity 	= SkillUpdateStatEntity.toEntity(stat);

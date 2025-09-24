@@ -56,7 +56,6 @@ public class Candidate {
 	private String 						email;
 	private String						roleSought;
 	private Set<FUNCTION>				functions					= new LinkedHashSet<>();
-	//private FUNCTION					function;
 	private COUNTRY 					country;
 	private String 						city;
 	private double						latitude;
@@ -127,7 +126,6 @@ public class Candidate {
 		this.lastAvailabilityCheckIdSent 		= builder.lastAvailabilityCheckIdSent;
 		this.lastAvailabilityCheckConfirmedOn 	= builder.lastAvailabilityCheckConfirmedOn;
 		this.industries							= builder.industries;
-		//this.function							= builder.function;
 		this.skills.addAll(builder.skills);
 		this.languages.addAll(builder.languages);
 		this.functions.addAll(builder.functions);
@@ -182,10 +180,6 @@ public class Candidate {
 	public Set<FUNCTION> getFunctions() {
 		return this.functions;
 	}
-	
-	//public FUNCTION getFunction() {
-	//	return this.function;
-	//}
 	
 	/**
 	* Returns the Country in which the candidate is 
@@ -611,7 +605,7 @@ public class Candidate {
 		private String 						email;
 		private String						roleSought;
 		private Set<FUNCTION>				functions					= new LinkedHashSet<>();
-		private FUNCTION					function;
+		private FUNCTION					function;					//[KP] Do not remove unless you want searches in ES to stop working
 		private COUNTRY 					country;
 		private String 						city;
 		private double						longitude;

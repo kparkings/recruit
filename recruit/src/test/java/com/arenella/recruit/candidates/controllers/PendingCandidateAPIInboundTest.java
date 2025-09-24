@@ -23,48 +23,48 @@ import com.arenella.recruit.candidates.controllers.CandidateUpdateRequestAPIInbo
 * @author K Parkings
 */
 @ExtendWith(MockitoExtension.class)
-public class PendingCandidateAPIInboundTest {
+class PendingCandidateAPIInboundTest {
 
 	@Mock
 	private MultipartFile mockMultipartFile;
 	
-	private static final UUID	 		candidateId 			= UUID.randomUUID();
-	private static final String 		firstname				= "Kevin";
-	private static final String 		surname					= "Parkings";
-	private static final String 		email					= "admin@arenella-ict.com";
-	private static final boolean 		freelance 				= true;
-	private static final boolean 		perm 					= true;
+	private static final UUID	 		CANDIDATE_ID 			= UUID.randomUUID();
+	private static final String 		FIRSTNAME				= "Kevin";
+	private static final String 		SURNAME					= "Parkings";
+	private static final String 		EMAIL					= "admin@arenella-ict.com";
+	private static final boolean 		FREELANCE 				= true;
+	private static final boolean 		PERM 					= true;
 	private static final Rate			RATE_CONTRACT			= new Rate(CURRENCY.EUR, PERIOD.HOUR, 300, 400);
 	private static final Rate			RATE_PERM				= new Rate(CURRENCY.GBP, PERIOD.DAY, 300, 500);
-	private static final String			introduction			= "an intro";
+	private static final String			INTRODUCTION			= "an intro";
 	private static final byte[]			PHOTO_BYTES				= new byte[] {1,33,4};
 	
 	/**
 	* Test Builder values used to initialize instance of the Candidate Class 
 	*/
 	@Test
-	public void testInitializationFromBuilder() {
+	void testInitializationFromBuilder() {
 
 		PendingCandidateAPIInbound candidate = PendingCandidateAPIInbound
 						.builder()
-							.pendingCandidateId(candidateId)
-							.firstname(firstname)
-							.surname(surname)
-							.email(email)
-							.freelance(freelance)
-							.perm(perm)
+							.pendingCandidateId(CANDIDATE_ID)
+							.firstname(FIRSTNAME)
+							.surname(SURNAME)
+							.email(EMAIL)
+							.freelance(FREELANCE)
+							.perm(PERM)
 							.rateContract(RATE_CONTRACT)
 							.ratePerm(RATE_PERM)
-							.introduction(introduction)
+							.introduction(INTRODUCTION)
 							.build();
 		
-		assertEquals(candidate.getPendingCandidateId(), 		candidateId);
-		assertEquals(candidate.getFirstname(), 					firstname);
-		assertEquals(candidate.getSurname(), 					surname);
-		assertEquals(candidate.getEmail(), 						email);
-		assertEquals(candidate.isFreelance(), 					freelance);
-		assertEquals(candidate.isPerm(), 						perm);
-		assertEquals(introduction, 								candidate.getIntroduction());
+		assertEquals(CANDIDATE_ID, 					candidate.getPendingCandidateId());
+		assertEquals(FIRSTNAME, 					candidate.getFirstname());
+		assertEquals(SURNAME, 						candidate.getSurname());
+		assertEquals(EMAIL, 						candidate.getEmail());
+		assertEquals(FREELANCE, 					candidate.isFreelance());
+		assertEquals(PERM, 							candidate.isPerm());
+		assertEquals(INTRODUCTION, 					candidate.getIntroduction());
 		
 		assertEquals(RATE_CONTRACT.getCurrency(), 	candidate.getRateContract().get().getCurrency());
 		assertEquals(RATE_CONTRACT.getPeriod(), 	candidate.getRateContract().get().getPeriod());
@@ -84,30 +84,30 @@ public class PendingCandidateAPIInboundTest {
 	* successfully 
 	*/
 	@Test
-	public void testConversionToCandidate() throws Exception {
+	void testConversionToCandidate() throws Exception {
 		
 		PendingCandidateAPIInbound pendingCandidateEntity = PendingCandidateAPIInbound
 				.builder()
-					.pendingCandidateId(candidateId)
-					.firstname(firstname)
-					.surname(surname)
-					.email(email)
-					.freelance(freelance)
-					.perm(perm)
+					.pendingCandidateId(CANDIDATE_ID)
+					.firstname(FIRSTNAME)
+					.surname(SURNAME)
+					.email(EMAIL)
+					.freelance(FREELANCE)
+					.perm(PERM)
 					.rateContract(RATE_CONTRACT)
 					.ratePerm(RATE_PERM)
-					.introduction(introduction)
+					.introduction(INTRODUCTION)
 					.build();
 		
 		PendingCandidate pendingCandidate = PendingCandidateAPIInbound.convertToPendingCandidate(pendingCandidateEntity, Optional.empty());
 
-		assertEquals(pendingCandidate.getPendingCandidateId(), 	candidateId);
-		assertEquals(pendingCandidate.getFirstname(), 			firstname);
-		assertEquals(pendingCandidate.getSurname(), 			surname);
-		assertEquals(pendingCandidate.getEmail(), 				email);
-		assertEquals(pendingCandidate.isFreelance(), 			freelance);
-		assertEquals(pendingCandidate.isPerm(), 				perm);
-		assertEquals(introduction, 								pendingCandidate.getIntroduction());
+		assertEquals(CANDIDATE_ID, 					pendingCandidate.getPendingCandidateId());
+		assertEquals(FIRSTNAME, 					pendingCandidate.getFirstname());
+		assertEquals(SURNAME, 						pendingCandidate.getSurname());
+		assertEquals(EMAIL, 						pendingCandidate.getEmail());
+		assertEquals(FREELANCE, 					pendingCandidate.isFreelance());
+		assertEquals(PERM, 						 pendingCandidate.isPerm());
+		assertEquals(INTRODUCTION, 					pendingCandidate.getIntroduction());
 		
 		assertEquals(RATE_CONTRACT.getCurrency(), 	pendingCandidate.getRateContract().get().getCurrency());
 		assertEquals(RATE_CONTRACT.getPeriod(), 	pendingCandidate.getRateContract().get().getPeriod());
@@ -126,35 +126,34 @@ public class PendingCandidateAPIInboundTest {
 	* successfully 
 	*/
 	@Test
-	public void testConversionToCandidate_profilePhoto() throws Exception {
+	void testConversionToCandidate_profilePhoto() throws Exception {
 		
 		PendingCandidateAPIInbound pendingCandidateEntity = PendingCandidateAPIInbound
 				.builder()
-					.pendingCandidateId(candidateId)
-					.firstname(firstname)
-					.surname(surname)
-					.email(email)
-					.freelance(freelance)
-					.perm(perm)
+					.pendingCandidateId(CANDIDATE_ID)
+					.firstname(FIRSTNAME)
+					.surname(SURNAME)
+					.email(EMAIL)
+					.freelance(FREELANCE)
+					.perm(PERM)
 					.rateContract(RATE_CONTRACT)
 					.ratePerm(RATE_PERM)
-					.introduction(introduction)
+					.introduction(INTRODUCTION)
 					.build();
 		
 		Mockito.when(this.mockMultipartFile.getBytes()).thenReturn(PHOTO_BYTES);
 		
-		
 		PendingCandidate pendingCandidate = PendingCandidateAPIInbound.convertToPendingCandidate(pendingCandidateEntity, Optional.of(mockMultipartFile));
 
-		assertEquals(pendingCandidate.getPendingCandidateId(), 	candidateId);
-		assertEquals(pendingCandidate.getFirstname(), 			firstname);
-		assertEquals(pendingCandidate.getSurname(), 			surname);
-		assertEquals(pendingCandidate.getEmail(), 				email);
-		assertEquals(pendingCandidate.isFreelance(), 			freelance);
-		assertEquals(pendingCandidate.isPerm(), 				perm);
-		assertEquals(introduction, 								pendingCandidate.getIntroduction());
-		assertEquals(PHOTO_BYTES,								pendingCandidate.getPhoto().get().getImageBytes());
-		assertEquals(PHOTO_FORMAT.jpeg,							pendingCandidate.getPhoto().get().getFormat());
+		assertEquals(CANDIDATE_ID, 					pendingCandidate.getPendingCandidateId());
+		assertEquals(FIRSTNAME, 					pendingCandidate.getFirstname());
+		assertEquals(SURNAME, 						pendingCandidate.getSurname());
+		assertEquals(EMAIL, 						pendingCandidate.getEmail());
+		assertEquals(FREELANCE, 					pendingCandidate.isFreelance());
+		assertEquals(PERM, 							pendingCandidate.isPerm());
+		assertEquals(INTRODUCTION, 					pendingCandidate.getIntroduction());
+		assertEquals(PHOTO_BYTES,					pendingCandidate.getPhoto().get().getImageBytes());
+		assertEquals(PHOTO_FORMAT.jpeg,				pendingCandidate.getPhoto().get().getFormat());
 	
 		assertEquals(RATE_CONTRACT.getCurrency(), 	pendingCandidate.getRateContract().get().getCurrency());
 		assertEquals(RATE_CONTRACT.getPeriod(), 	pendingCandidate.getRateContract().get().getPeriod());
@@ -167,6 +166,5 @@ public class PendingCandidateAPIInboundTest {
 		assertEquals(RATE_PERM.getValueMax(), 		pendingCandidate.getRatePerm().get().getValueMax());
 		
 	}
-	
 	
 }

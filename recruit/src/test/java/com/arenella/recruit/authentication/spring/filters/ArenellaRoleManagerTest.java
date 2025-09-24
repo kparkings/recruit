@@ -23,7 +23,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 * @author K Parkings
 */
 @ExtendWith(MockitoExtension.class)
-public class ArenellaRoleManagerTest {
+class ArenellaRoleManagerTest {
 
 	@Mock
 	private SecurityContext							mockSecurityContext;
@@ -38,7 +38,7 @@ public class ArenellaRoleManagerTest {
 	* Sets up test environment 
 	*/
 	@BeforeEach
-	public void init() throws Exception{
+	 void init() {
 		SecurityContextHolder.setContext(mockSecurityContext);
 	}
 	
@@ -48,7 +48,7 @@ public class ArenellaRoleManagerTest {
 	*/
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Test
-	public void testIsAdmin() throws Exception{
+	void testIsAdmin() {
 		
 		Collection authorities = new HashSet<>();
 		authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
@@ -70,7 +70,7 @@ public class ArenellaRoleManagerTest {
 	*/
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Test
-	public void testIsRecruiter() throws Exception{
+	void testIsRecruiter() {
 		
 		Collection authorities = new HashSet<>();
 		authorities.add(new SimpleGrantedAuthority("ROLE_RECRUITER"));
@@ -92,7 +92,7 @@ public class ArenellaRoleManagerTest {
 	*/
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Test
-	public void testIsCandidate() throws Exception{
+	void testIsCandidate() {
 		
 		Collection authorities = new HashSet<>();
 		authorities.add(new SimpleGrantedAuthority("ROLE_CANDIDATE"));

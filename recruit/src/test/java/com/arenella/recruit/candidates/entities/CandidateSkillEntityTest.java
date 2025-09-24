@@ -11,15 +11,15 @@ import com.arenella.recruit.candidates.entities.CandidateSkillEntity.VALIDATION_
 * Unit tests for the CandidateSkillEntity class
 * @author K Parkings
 */
-public class CandidateSkillEntityTest {
+class CandidateSkillEntityTest {
 
-	final static String SKILL = "Java";
+	private static final String SKILL = "Java";
 	
 	/**
 	* Tests construction 
 	*/
 	@Test
-	public void testConstructor() {
+	 void testConstructor() {
 		
 		
 		CandidateSkillEntity entity = new CandidateSkillEntity(SKILL);
@@ -38,7 +38,7 @@ public class CandidateSkillEntityTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testConvertFromEntity() throws Exception {
+	void testConvertFromEntity() {
 		
 		CandidateSkillEntity entity = new CandidateSkillEntity(SKILL);
 		entity.setValidationStatus(VALIDATION_STATUS.ACCEPTED);
@@ -55,7 +55,7 @@ public class CandidateSkillEntityTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testConvertToEntity() throws Exception {
+	void testConvertToEntity() {
 		
 		CandidateSkill skill = CandidateSkill
 				.builder()

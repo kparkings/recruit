@@ -22,11 +22,6 @@ import com.arenella.recruit.listings.beans.ListingAlertFilterOptions;
 @Component
 public class CategoryExtractorUtil{
 	
-	//public static final ListingCategory scrumMaster			= new ListingCategory(Listing.TECH.scrumMaster, 		Set.of("scrum master","scrummaster"));
-	//public static final ListingCategory dataScientist		= new ListingCategory(Listing.TECH.dataScientist, 		Set.of("data engineer","data scientist", "data analyst", "data science"));
-	//public static final ListingCategory softwareDeveloper	= new ListingCategory(Listing.TECH.softwareDeveloper, 	Set.of("php developer", "software ontwikkelaar", "php ontwikkelaar", "software developer", "software engineer", "software engineers", "application engineer", "application developer"));
-		
-	
 	public static final ListingCategory java 				= new ListingCategory(Listing.TECH.JAVA, 				Set.of("ontwikkelen van java", "programmeren van java", "engineer (java","developer (java","java developer", "java software engineer", "java engineer", "java software ontwikkelaar", "java ontwikkelaar", "fullstack java", "java backend developer"));
 	public static final ListingCategory csharp 				= new ListingCategory(Listing.TECH.DOT_NET, 			Set.of("c#/.net","c#.net", ".net software engineer", "c# developer", "c# software engineer", "c# engineer", "c# software ontwikkelaar", "c# ontwikkelaar", "fullstack c#", "c# backend developer", "c#"));
 	public static final ListingCategory ba 					= new ListingCategory(Listing.TECH.BUSINESS_ANALYSTS, 	Set.of("business analyst","business analist"));
@@ -39,10 +34,6 @@ public class CategoryExtractorUtil{
 	public static final ListingCategory networkAdmin		= new ListingCategory(Listing.TECH.NETWORKS, 			Set.of("linux systems engineer", "aws devops", "cloud devops", "azure devops", "platform engineer", "cloud engineer", "devops engineer","dev-ops engineer", "network admin", "network administrator", "network engineer", "network specialist", "system admin", "system administrator"));
 	public static final ListingCategory itSecurity			= new ListingCategory(Listing.TECH.SECURITY, 			Set.of("security engineer", "ethical hacker", "security officer", "security consultant", "security specialist", "security engineering", "security lead", "cyber consultant", "security advisor", "security manager", "security operations"));
 	public static final ListingCategory itRecruiter			= new ListingCategory(Listing.TECH.REC2REC, 			Set.of("it-recruitment","recruitment specialist", "recruitmentcampagne", "it recruiter ", "it recruiters", "recruitment consultant", "recruiter"));
-	//DEV_OPS
-	//CLOUD
-	//CLOUD, 
-	//BI
 	
 	/**
 	* Refer to JobSpecifcationFilterExtractor interface for details
@@ -62,11 +53,7 @@ public class CategoryExtractorUtil{
 		scored.put(Listing.TECH.WEB, 				new AtomicInteger(0));
 		scored.put(Listing.TECH.NETWORKS, 			new AtomicInteger(0));
 		scored.put(Listing.TECH.REC2REC, 			new AtomicInteger(0));
-		//DEV_OPS
-		//CLOUD
-		//CLOUD, 
-		//BI
-			
+		
 		Set<ListingCategory> categories = new LinkedHashSet<>();
 		
 		categories.add(itRecruiter);
@@ -81,9 +68,6 @@ public class CategoryExtractorUtil{
 		categories.add(webDeveloper);
 		categories.add(networkAdmin);
 		categories.add(itSecurity);
-		//jobs.add(scrumMaster);
-		//jobs.add(dataScientist);
-		//jobs.add(softwareDeveloper);
 		
 		categories.stream().forEach(jobType -> 
 			jobType.getKeywords().stream().forEach(title -> {
@@ -107,28 +91,6 @@ public class CategoryExtractorUtil{
 		filterBuilder.categories(Set.of(type));
 		
 	}
-	
-	/**
-	* For when a job spec is identified as a Software Developer we want to try and narrow down 
-	* to the type of developer. In this case the job spec contains more matches for software developer 
-	* keywords that the specific development type but we then take the most mentioned specific 
-	* developer type and use that. If no specific type can be identified we revert to the more 
-	* general software developer type
-	*/
-	//private Listing.TECH applySoftwareDeveloperWeighting(Map<Listing.TECH, AtomicInteger> scored, ListingAlertFilterOptions.ListingAlertFilterOptionsBuilder filterBuilder, Comparator<AtomicInteger> comparator) {
-		
-	//	Map<Listing.TECH, AtomicInteger> weighted = new HashMap<>(scored); 
-		
-	//	weighted.remove(Listing.TECH.softwareDeveloper);
-		
-	//	Listing.TECH type = Collections.max(weighted.entrySet(), Map.Entry.comparingByValue(comparator)).getKey();
-		
-	//	return switch(type) {
-	//		case csharp, java -> type;
-	//		default -> JobType.Type.softwareDeveloper;
-	//	};
-		
-	//}
 	
 	private int getNumOccurrencesOfMatchingTitle(String documentText, String title) {
 		

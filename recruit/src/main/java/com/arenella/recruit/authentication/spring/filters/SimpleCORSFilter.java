@@ -21,11 +21,9 @@ public class SimpleCORSFilter extends OncePerRequestFilter {
 	* Filter to add CORS headers for the current request
 	*/
 	@Override
-	protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain chain) throws ServletException, IOException {
+	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
 		
-	    HttpServletRequest request = (HttpServletRequest) req;
-	    HttpServletResponse response = (HttpServletResponse) res;
-	
+	 
 	    String origin = request.getHeader("Origin");
 	    
 	    response.setHeader("Access-Control-Allow-Origin", 				origin);
@@ -39,6 +37,6 @@ public class SimpleCORSFilter extends OncePerRequestFilter {
 	        response.setStatus(HttpServletResponse.SC_OK);
 	    }
 	    
-	    chain.doFilter(req, res);	
+	    chain.doFilter(request, response);	
 	}
 }

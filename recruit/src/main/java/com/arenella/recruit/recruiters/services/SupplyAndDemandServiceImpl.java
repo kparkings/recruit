@@ -171,11 +171,6 @@ public class SupplyAndDemandServiceImpl implements SupplyAndDemandService{
 	@Override
 	public void registerOfferedCandidateViewedEvent(UUID id) {
 	
-		//TODO: [KP] Now just standard candidate. If we show stats need to re-implement this
-		//if (this.isOwnerOfOfferedCandidate(id)) {
-		//	return;
-		//}
-		
 		if (isAdmin()) {
 			return;
 		}

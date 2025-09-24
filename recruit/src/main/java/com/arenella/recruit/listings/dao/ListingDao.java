@@ -22,7 +22,6 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.CrudRepository;
 
 import com.arenella.recruit.listings.beans.Listing;
-import com.arenella.recruit.listings.beans.Listing.LISTING_AGE;
 import com.arenella.recruit.listings.beans.Listing.listing_type;
 import com.arenella.recruit.listings.beans.ListingFilter;
 
@@ -102,18 +101,6 @@ public interface ListingDao extends CrudRepository<ListingEntity, UUID>, JpaSpec
 			
 			List<Predicate> predicates = new ArrayList<>();
 			
-			//this.filterOptions.getSearchTerm().ifPresent(searchTerm -> {
-				
-			//	if (!searchTerm.isBlank()) {
-				
-			//		Expression<String> ownerIdExpression 	= root.get("title");
-			//		Expression<String> upperExpression 		= criteriaBuilder.upper(ownerIdExpression);
-				
-			//		predicates.add(criteriaBuilder.like(upperExpression, this.filterOptions.getSearchTerm().orElse("").toUpperCase()));
-				
-			//	}
-			//});
-			
 			/**
 			* Apply ownerId filter if value present 
 			*/
@@ -156,25 +143,6 @@ public interface ListingDao extends CrudRepository<ListingEntity, UUID>, JpaSpec
 				
 				LocalDateTime todayStart 		= LocalDateTime.now().minusHours(24);
 				LocalDateTime todayEnd 			= LocalDateTime.now();
-				
-				LocalDateTime thisWeekStart 	= todayStart.minusDays(7);
-				LocalDateTime thisWeekEnd 		= todayEnd;
-				
-				LocalDateTime thisMonthStart 	= todayStart.minusDays(31);
-				LocalDateTime thisMonthEnd 		= todayEnd;
-				
-				
-				//if (this.filterOptions.getListingAge().get() == LISTING_AGE.TODAY){
-				//	predicates.add(criteriaBuilder.between(typeExpression, todayStart, todayEnd));
-				//}
-				
-				//if (this.filterOptions.getListingAge().get() == LISTING_AGE.THIS_WEEK){
-				//	predicates.add(criteriaBuilder.between(typeExpression, thisWeekStart, thisWeekEnd));
-				//}
-
-				//if (this.filterOptions.getListingAge().get() == LISTING_AGE.THIS_MONTH){
-				//	predicates.add(criteriaBuilder.between(typeExpression, thisMonthStart, thisMonthEnd));
-				//}
 				
 				predicates.add(criteriaBuilder.between(typeExpression, todayStart.minusDays(360), todayEnd));
 				

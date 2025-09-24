@@ -11,14 +11,14 @@ import org.junit.jupiter.api.Test;
 * Unit tests for the CurriculumSkillsExtractionEvent class
 * @author K Parkings
 */
-public class CurriculumSkillsExtractionEventTest {
+class CurriculumSkillsExtractionEventTest {
 
 	/**
 	* Tests construction
 	* @throws Exception
 	*/
 	@Test
-	public void testConstructor() throws Exception {
+	void testConstructor() {
 		
 		final long	 		id 		= 7889;
 		final Set<String> 	skills 	= Set.of("java", "react");

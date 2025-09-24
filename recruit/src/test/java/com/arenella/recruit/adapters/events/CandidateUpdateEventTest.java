@@ -10,7 +10,7 @@ import com.arenella.recruit.newsfeed.beans.NewsFeedItem.NEWSFEED_ITEM_TYPE;
 * Unit tests for the CandidateUpdateEvent class 
 * @author K Parkings
 */
-public class CandidateUpdateEventTest {
+class CandidateUpdateEventTest {
 
 	private static final NEWSFEED_ITEM_TYPE 	ITEM_TYPE 		= NEWSFEED_ITEM_TYPE.CANDIDATE_ADDED;
 	private static final int					CANDIDATE_ID 	= 1001;;
@@ -23,7 +23,7 @@ public class CandidateUpdateEventTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testBuilder() throws Exception{
+	void testBuilder() {
 		
 		CandidateUpdateEvent event = CandidateUpdateEvent
 				.builder()

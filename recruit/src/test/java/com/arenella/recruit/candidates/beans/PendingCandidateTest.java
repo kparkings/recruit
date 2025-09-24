@@ -16,7 +16,7 @@ import com.arenella.recruit.candidates.beans.Candidate.Rate.PERIOD;
 * Unit test for the PendingCandidate Class
 * @author K Parkings
 */
-public class PendingCandidateTest {
+class PendingCandidateTest {
 
 	private static final UUID 			pendingCandidateId 		= UUID.fromString("123e4567-e89b-12d3-a456-426614174000");
 	private static final String 		email					= "admin@arenella-ict.com";
@@ -31,7 +31,7 @@ public class PendingCandidateTest {
 	* Test Builder values used to initialize instance of the Candidate Class 
 	*/
 	@Test
-	public void testInitializationFromBuilder() {
+	void testInitializationFromBuilder() {
 		
 		PendingCandidate candidate = PendingCandidate
 												.builder()

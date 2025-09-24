@@ -38,7 +38,7 @@ import com.arenella.recruit.recruiters.services.RecruiterService;
 * @author K Parkings
 */
 @ExtendWith(MockitoExtension.class)
-public class RecruiterControllerTest {
+class RecruiterControllerTest {
 
 	@InjectMocks
 	private RecruiterController 	recruiterController;
@@ -63,7 +63,7 @@ public class RecruiterControllerTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testUpdateRecruiter() throws Exception{
+	void testUpdateRecruiter() throws Exception{
 	
 		ArgumentCaptor<Recruiter> recruiterArg = ArgumentCaptor.forClass(Recruiter.class);
 		
@@ -99,7 +99,7 @@ public class RecruiterControllerTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testFetchRecruiters() throws Exception {
+	void testFetchRecruiters() {
 		
 		Set<Recruiter> recruiters = Set.of(Recruiter
 				.builder()
@@ -134,7 +134,7 @@ public class RecruiterControllerTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testFetchRecruiter() throws Exception{
+	void testFetchRecruiter() throws Exception{
 		
 		Recruiter recruiter = Recruiter
 								.builder()
@@ -168,7 +168,7 @@ public class RecruiterControllerTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testRequestRecruiterAccount() throws Exception {
+	void testRequestRecruiterAccount() {
 
 		RecruiterAccountRequestAPIInbound request = RecruiterAccountRequestAPIInbound.builder()
 																						.companyName(companyName)
@@ -182,7 +182,7 @@ public class RecruiterControllerTest {
 		
 		ResponseEntity<Void> response = this.recruiterController.requestRecruiterAccount(request);
 		
-		assertEquals(response.getStatusCode(), HttpStatus.OK);
+		assertEquals( HttpStatus.OK, response.getStatusCode());
 		
 	}
 	
@@ -191,7 +191,7 @@ public class RecruiterControllerTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testPerformSubscriptionAction() throws Exception {
+	void testPerformSubscriptionAction() throws Exception {
 		
 		final String 				recruiterId 			= "kparkings";
 		final UUID 					subscriptionId 			= UUID.randomUUID();
@@ -203,7 +203,7 @@ public class RecruiterControllerTest {
 		
 		Mockito.verify(this.mockRecruiterService).performSubscriptionAction(recruiterId, subscriptionId, action);
 		
-		assertEquals(response.getStatusCode(), HttpStatus.OK);
+		assertEquals(HttpStatus.OK, response.getStatusCode());
 	
 	}
 	
@@ -212,7 +212,7 @@ public class RecruiterControllerTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testAddSubscription() throws Exception {
+	void testAddSubscription() throws Exception {
 		
 		final String 					recruiterId 	= "kparkings";
 		final SubscriptionAPIInbound 	type		 	= SubscriptionAPIInbound.builder().type(subscription_type.YEAR_SUBSCRIPTION).invoiceType(INVOICE_TYPE.BUSINESS).build();
@@ -223,7 +223,7 @@ public class RecruiterControllerTest {
 		
 		Mockito.verify(this.mockRecruiterService).addSubscription(recruiterId, type.getType(), INVOICE_TYPE.BUSINESS);
 		
-		assertEquals(response.getStatusCode(), HttpStatus.OK);
+		assertEquals(HttpStatus.OK, response.getStatusCode());
 		
 	}
 	
@@ -232,7 +232,7 @@ public class RecruiterControllerTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testResetPassword() throws Exception{
+	void testResetPassword() {
 		
 		final String email = "kparkings";
 		
@@ -240,9 +240,9 @@ public class RecruiterControllerTest {
 		
 		ResponseEntity<Void> response = this.recruiterController.resetPassword(email);
 		
-		Mockito.verify(this.mockRecruiterService).resetPassword(Mockito.eq(email));
+		Mockito.verify(this.mockRecruiterService).resetPassword(email);
 		
-		assertEquals(response.getStatusCode(), HttpStatus.OK);
+		assertEquals(HttpStatus.OK, response.getStatusCode());
 		
 	}
 	
@@ -251,7 +251,7 @@ public class RecruiterControllerTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testHasPaidSubscription() throws Exception{
+	void testHasPaidSubscription() {
 		
 		Mockito.when(this.mockPrincipal.getName()).thenReturn("rec1");
 		Mockito.when(this.mockRecruiterService.hasPaidSubscription(Mockito.anyString())).thenReturn(true);
@@ -268,7 +268,7 @@ public class RecruiterControllerTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testDeleteRecruiter() throws Exception {
+	void testDeleteRecruiter() {
 		
 		final String recruiterId = "kparkings";
 		
@@ -286,7 +286,7 @@ public class RecruiterControllerTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testGetInvoiceForRecruiterSubscription() throws Exception {
+	void testGetInvoiceForRecruiterSubscription() throws Exception {
 		
 		final UUID 								subscriptionId 		= UUID.randomUUID();
 		final String							invoiceNumber		= "2025-01-00001";

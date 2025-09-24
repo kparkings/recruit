@@ -24,43 +24,43 @@ import com.arenella.recruit.emailservice.beans.Email.Sender.SenderType;
 * Unit tests for the EmailEntity class
 * @author K Parkings
 */
-public class EmailEntityTest {
+class EmailEntityTest {
 
-	final private String						recip1Address				= "norepy1@renella-ict.com";
-	final private String						recip2Address				= "norepy2@renella-ict.com";
-	final private UUID 							recip1Id 					= UUID.randomUUID();
-	final private UUID	 						recip2Id 					= UUID.randomUUID();
-	final private UUID 							id							= UUID.randomUUID();
-	final private String 						title						= "aTitle";
-	final private EmailType 					emailType					= EmailType.EXTERN;
-	final private String						firstNameRecip1				= "Kevin1";
-	final private String						firstNameRecip2				= "Kevin2";
-	final private SenderEntity 					sender						= SenderEntity.builder().id(UUID.randomUUID().toString()).contactType(SenderType.SYSTEM).emailAddress("norepy@renella-ict.com").emailId(id).build(); 
-	final private Sender<?> 					senderDomain				= new Sender<UUID>(UUID.randomUUID(), "", SenderType.SYSTEM, "norepy@renella-ict.com"); 
-	final private LocalDateTime 				created						= LocalDateTime.of(2022,11,17, 19,11,00);
-	final private LocalDateTime 				scheduledToBeSentAfter		= LocalDateTime.of(2022,11,17, 19,11,10);;
-	final private LocalDateTime 				sent						= LocalDateTime.of(2022,11,17, 19,11,20);;
-	final private String 						body						= "aBody";
-	final private Status 						status						= Status.DRAFT;
-	final private EmailRecipient<UUID>			emailRecip1					= new EmailRecipient<UUID>(recip1Id, "rec1", ContactType.RECRUITER);
-	final private EmailRecipient<UUID>			emailRecip2					= new EmailRecipient<UUID>(recip2Id, "rec2", ContactType.SYSTEM);
-	final private Set<EmailRecipientEntity> 	recipients					= Set.of(EmailRecipientEntity.builder().id(recip1Id).contactType(ContactType.RECRUITER).emailAddress(recip1Address).firstName(firstNameRecip1).emailId(id).build(),
+	private final String						recip1Address				= "norepy1@renella-ict.com";
+	private final String						recip2Address				= "norepy2@renella-ict.com";
+	private final UUID 							recip1Id 					= UUID.randomUUID();
+	private final UUID	 						recip2Id 					= UUID.randomUUID();
+	private final UUID 							id							= UUID.randomUUID();
+	private final String 						title						= "aTitle";
+	private final EmailType 					emailType					= EmailType.EXTERN;
+	private final String						firstNameRecip1				= "Kevin1";
+	private final String						firstNameRecip2				= "Kevin2";
+	private final SenderEntity 					sender						= SenderEntity.builder().id(UUID.randomUUID().toString()).contactType(SenderType.SYSTEM).emailAddress("norepy@renella-ict.com").emailId(id).build(); 
+	private final Sender<?> 					senderDomain				= new Sender<UUID>(UUID.randomUUID(), "", SenderType.SYSTEM, "norepy@renella-ict.com"); 
+	private final LocalDateTime 				created						= LocalDateTime.of(2022,11,17, 19,11,00);
+	private final LocalDateTime 				scheduledToBeSentAfter		= LocalDateTime.of(2022,11,17, 19,11,10);
+	private final LocalDateTime 				sent						= LocalDateTime.of(2022,11,17, 19,11,20);
+	private final String 						body						= "aBody";
+	private final Status 						status						= Status.DRAFT;
+	private final EmailRecipient<UUID>			emailRecip1					= new EmailRecipient<UUID>(recip1Id, "rec1", ContactType.RECRUITER);
+	private final EmailRecipient<UUID>			emailRecip2					= new EmailRecipient<UUID>(recip2Id, "rec2", ContactType.SYSTEM);
+	private final Set<EmailRecipientEntity> 	recipients					= Set.of(EmailRecipientEntity.builder().id(recip1Id).contactType(ContactType.RECRUITER).emailAddress(recip1Address).firstName(firstNameRecip1).emailId(id).build(),
 																	 			EmailRecipientEntity.builder().id(recip2Id).contactType(ContactType.SYSTEM).emailAddress(recip2Address).firstName(firstNameRecip2).emailId(id).build());
-	final private Set<EmailRecipient<UUID>> 	recipientsDomain			= Set.of(emailRecip1,emailRecip2);
-	final private EmailAttachmentEntity			attachment1					= EmailAttachmentEntity.builder().attachmentId(UUID.randomUUID()).emailId(UUID.randomUUID()).fileBytes(new byte[] {1}).fileType(FileType.doc).build();
-	final private EmailAttachmentEntity			attachment2					= EmailAttachmentEntity.builder().attachmentId(UUID.randomUUID()).emailId(UUID.randomUUID()).fileBytes(new byte[] {2}).fileType(FileType.pdf).build();
-	final private Set<EmailAttachmentEntity>	attachments					= Set.of(attachment1, attachment2);
+	private final Set<EmailRecipient<UUID>> 	recipientsDomain			= Set.of(emailRecip1,emailRecip2);
+	private final EmailAttachmentEntity			attachment1					= EmailAttachmentEntity.builder().attachmentId(UUID.randomUUID()).emailId(UUID.randomUUID()).fileBytes(new byte[] {1}).fileType(FileType.doc).build();
+	private final EmailAttachmentEntity			attachment2					= EmailAttachmentEntity.builder().attachmentId(UUID.randomUUID()).emailId(UUID.randomUUID()).fileBytes(new byte[] {2}).fileType(FileType.pdf).build();
+	private final Set<EmailAttachmentEntity>	attachments					= Set.of(attachment1, attachment2);
 	
-	final private EmailAttachment				attachment1Domain			= EmailAttachment.builder().attachmentId(UUID.randomUUID()).emailId(UUID.randomUUID()).fileBytes(new byte[] {1}).fileType(FileType.doc).build();
-	final private EmailAttachment				attachment2Domain			= EmailAttachment.builder().attachmentId(UUID.randomUUID()).emailId(UUID.randomUUID()).fileBytes(new byte[] {2}).fileType(FileType.pdf).build();
-	final private Set<EmailAttachment>			attachmentsDomain			= Set.of(attachment1Domain, attachment2Domain);
+	private final EmailAttachment				attachment1Domain			= EmailAttachment.builder().attachmentId(UUID.randomUUID()).emailId(UUID.randomUUID()).fileBytes(new byte[] {1}).fileType(FileType.doc).build();
+	private final EmailAttachment				attachment2Domain			= EmailAttachment.builder().attachmentId(UUID.randomUUID()).emailId(UUID.randomUUID()).fileBytes(new byte[] {2}).fileType(FileType.pdf).build();
+	private final Set<EmailAttachment>			attachmentsDomain			= Set.of(attachment1Domain, attachment2Domain);
 	
 	
 	/**
 	* Sets up test environment 
 	*/
 	@BeforeEach
-	public void init() {
+	void init() {
 		emailRecip1.setEmail(recip1Address);
 		emailRecip1.setFirstName(firstNameRecip1);
 		emailRecip2.setEmail(recip2Address);
@@ -72,7 +72,7 @@ public class EmailEntityTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testConstructor() throws Exception{
+	void testConstructor() {
 		
 		EmailEntity email = EmailEntity
 				.builder()
@@ -131,7 +131,7 @@ public class EmailEntityTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testConvertFromEntity() throws Exception{
+	void testConvertFromEntity() {
 		
 		Email email = Email
 				.builder()
@@ -202,7 +202,7 @@ public class EmailEntityTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testConvertToEntity() throws Exception{
+	void testConvertToEntity() {
 		
 		EmailEntity entity = EmailEntity
 				.builder()
@@ -230,7 +230,7 @@ public class EmailEntityTest {
 		assertEquals(body, 						email.getBody());
 		assertEquals(status, 					email.getStatus());
 		
-		assertEquals(sender.getId().toString(), 	email.getSender().getId().toString());
+		assertEquals(sender.getId(), 				email.getSender().getId().toString());
 		assertEquals(sender.getEmailAddress(), 		email.getSender().getEmail());
 		assertEquals(sender.getContactType(), 		email.getSender().getContactType());
 		

@@ -28,6 +28,13 @@ import co.elastic.clients.json.JsonData;
 public class ESFilteredListingSearchRequestBuilder {
 
 	/**
+	* Hide default constructor 
+	*/
+	private ESFilteredListingSearchRequestBuilder() {
+		
+	}
+	
+	/**
 	* Creates Query
 	* @param filterOptions - Filters to based query on
 	* @return Query based upon the filters
@@ -42,12 +49,12 @@ public class ESFilteredListingSearchRequestBuilder {
 				.mustNot(mustNotQueries)
 			)._toQuery();
 		
-		filterOptions.getActive().ifPresent(value -> {
+		filterOptions.getActive().ifPresent(value -> 
 			mustQueries.add(MatchQuery.of(m -> m
 					.field("active")
 					.query(value)
-			)._toQuery());
-		});
+			)._toQuery())
+		);
 		
 		if (!filterOptions.getCountries().isEmpty()) {
 			List<FieldValue> fieldValueList = filterOptions.getCountries().stream().map(c -> FieldValue.of(c.name())).toList();
@@ -63,10 +70,6 @@ public class ESFilteredListingSearchRequestBuilder {
 					
 			)._toQuery());
 		}
-		
-		//if (!filterOptions.getGeoZones().isEmpty()) {
-		//	
-		//}
 		
 		filterOptions.getListingAge().ifPresent(value -> {
 			
@@ -86,38 +89,38 @@ public class ESFilteredListingSearchRequestBuilder {
 				cutOff = Optional.empty();
 			}
 			
-			cutOff.ifPresent(cutOffDate -> {
+			cutOff.ifPresent(cutOffDate -> 
 				mustQueries.add(RangeQuery.of(m -> m
 						.queryName("created")
 						.field("created")
 						.gte(JsonData.of(Date.from(cutOffDate.atStartOfDay(ZoneId.systemDefault()).toInstant())))
-						)._toQuery());
-			});
+						)._toQuery())
+			);
 			
 			
 		});
 		
-		filterOptions.getListingId().ifPresent(value -> {
+		filterOptions.getListingId().ifPresent(value -> 
 			mustQueries.add(MatchQuery.of(m -> m
 					.field("listingId")
 					.query(value.toString())
-					)._toQuery());
-		});
+					)._toQuery())
+		);
 		
-		filterOptions.getOwnerId().ifPresent(value -> {
+		filterOptions.getOwnerId().ifPresent(value -> 
 			mustQueries.add(MatchQuery.of(m -> m
 					.field("ownerId")
-					.query(value.toString())
-					)._toQuery());
-		});
+					.query(value)
+					)._toQuery())
+		);
 		
 		if (!filterOptions.getSearchTerms().isEmpty()) {
 			 
 			List<co.elastic.clients.elasticsearch._types.query_dsl.Query> shouldQueries 		= new ArrayList<>();
 			
-			filterOptions.getSearchTerms().stream().forEach(term -> {
-				shouldQueries.add(new WildcardQuery.Builder().field("title").value("*"+term+"*").caseInsensitive(true).build()._toQuery());
-			});
+			filterOptions.getSearchTerms().stream().forEach(term -> 
+				shouldQueries.add(new WildcardQuery.Builder().field("title").value("*"+term+"*").caseInsensitive(true).build()._toQuery())
+			);
 			
 			mustQueries.add(BoolQuery.of(m -> m
 			.queryName("atLeastOneTerm")

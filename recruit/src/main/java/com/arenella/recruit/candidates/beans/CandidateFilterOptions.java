@@ -559,7 +559,7 @@ public class CandidateFilterOptions {
 		* @return Builder
 		*/
 		public CandidateFilterOptionsBuilder freelance(Boolean freelance) {
-			this.freelance = Optional.ofNullable(freelance); // == null ? false : freelance;
+			this.freelance = Optional.ofNullable(freelance);
 			return this;
 		}
 		
@@ -569,7 +569,7 @@ public class CandidateFilterOptions {
 		* @return Builder
 		*/
 		public CandidateFilterOptionsBuilder perm(Boolean perm) {
-			this.perm = Optional.ofNullable(perm); // == null ? false : perm;
+			this.perm = Optional.ofNullable(perm); 
 			return this;
 		}
 		

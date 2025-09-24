@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 * Unit tests for the CurriculumUpdloadDetailsOutbound class
 * @author K Parkings
 */
-public class CurriculumUpdloadDetailsTest {
+class CurriculumUpdloadDetailsTest {
 
 	private static final String java 			= "Java";
 	private static final String cSharp 			= "C#";
@@ -24,7 +24,7 @@ public class CurriculumUpdloadDetailsTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testBuilder() throws Exception{
+	void testBuilder() {
 		
 		final String java = "Java";
 		final String cSharp = "C#";
@@ -49,7 +49,7 @@ public class CurriculumUpdloadDetailsTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testSkillsOverridesExistingValues() throws Exception{
+	void testSkillsOverridesExistingValues() {
 		CurriculumUpdloadDetails cvDetails = CurriculumUpdloadDetails
 																.builder()
 																	.skills(Set.of(java))
@@ -67,7 +67,7 @@ public class CurriculumUpdloadDetailsTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testSkillsInitializedByDefault() throws Exception{
+	void testSkillsInitializedByDefault() {
 		
 		CurriculumUpdloadDetails cvDetails = CurriculumUpdloadDetails
 				.builder().build();

@@ -14,14 +14,14 @@ import com.arenella.recruit.curriculum.enums.FileType;
 * Unit tests for the CurriculumEntity class
 * @author K Parkings
 */
-public class PendingCurriculumEntityTest {
+class PendingCurriculumEntityTest {
 
 	/**
 	* Tests builder and associated Getters
 	* @throws Exception
 	*/
 	@Test
-	public void testBuilder() throws Exception {
+	void testBuilder() {
 		
 		final UUID 		curriculumId 	= UUID.fromString("123e4567-e89b-12d3-a456-426614174000");
 		final byte[] 	fileBytes 		= new byte[] {};
@@ -46,7 +46,7 @@ public class PendingCurriculumEntityTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testConvertFromEntity() throws Exception {
+	void testConvertFromEntity() {
 		
 		final UUID 		curriculumId 	= UUID.fromString("123e4567-e89b-12d3-a456-426614174000");
 		final byte[] 	fileBytes 		= new byte[] {};
@@ -73,7 +73,7 @@ public class PendingCurriculumEntityTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testConvertToEntity() throws Exception {
+	void testConvertToEntity() {
 		
 		final UUID	curriculumId 	= UUID.fromString("123e4567-e89b-12d3-a456-426614174000");
 		final byte[] 	fileBytes 		= new byte[] {};

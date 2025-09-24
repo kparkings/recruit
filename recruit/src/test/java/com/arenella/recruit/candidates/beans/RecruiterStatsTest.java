@@ -15,14 +15,14 @@ import com.arenella.recruit.candidates.enums.FUNCTION;
 * Unit tests for the RecruiterStats class
 * @author K Parkings
 */
-public class RecruiterStatsTest {
+class RecruiterStatsTest {
 
 	/**
 	* Tests Stat's are constructed correctly
 	* @throws Exception
 	*/
 	@Test
-	public void testConstructor() throws Exception{
+	void testConstructor() {
 		
 		final CandidateSearchEvent event0 = CandidateSearchEvent.builder().country(COUNTRY.NETHERLANDS).function(FUNCTION.ARCHITECT).build();
 		final CandidateSearchEvent event1 = CandidateSearchEvent.builder().country(COUNTRY.BELGIUM).function(FUNCTION.ARCHITECT).build();

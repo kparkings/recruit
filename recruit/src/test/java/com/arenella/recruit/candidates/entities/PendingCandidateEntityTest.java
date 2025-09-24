@@ -16,16 +16,15 @@ import com.arenella.recruit.candidates.beans.Candidate.Rate.PERIOD;
 /**
 * Unit tests for the PendingCandidateEntity class
 * @author K Parkings
-*/
-public class PendingCandidateEntityTest {
+*/class PendingCandidateEntityTest {
 
-	private static final UUID	 		pendingCandidateId 		= UUID.fromString("123e4567-e89b-12d3-a456-426614174000");
-	private static final String 		firstname				= "Kevin";
-	private static final String 		surname					= "Parkings";
-	private static final String 		email					= "admin@arenella-ict.com";
-	private static final boolean 		freelance 				= true;
-	private static final boolean		perm 					= true;
-	private static final String			introduction			= "intro";
+	private static final UUID	 		PENDING_CANDIDATE_ID 		= UUID.fromString("123e4567-e89b-12d3-a456-426614174000");
+	private static final String 		FIRSTNAME				= "Kevin";
+	private static final String 		SURNAME					= "Parkings";
+	private static final String 		EMAIL					= "admin@arenella-ict.com";
+	private static final boolean 		FREELANCE 				= true;
+	private static final boolean		PERM 					= true;
+	private static final String			INTRODUCTION			= "intro";
 	private static final Rate			RATE_CONTRACT			= new Rate(CURRENCY.EUR, PERIOD.DAY, 1f, 2f);
 	private static final Rate			RATE_PERM				= new Rate(CURRENCY.GBP, PERIOD.YEAR, 1100f, 2200f);
 	private static final byte[]			photoBytes			 	= new byte[] {1,2,3};
@@ -37,17 +36,17 @@ public class PendingCandidateEntityTest {
 	* successfully 
 	*/
 	@Test
-	public void testConversionToEntity() {
+	void testConversionToEntity() {
 		
 		PendingCandidate candidate = PendingCandidate
 												.builder()
-													.pendingCandidateId(pendingCandidateId)
-													.firstname(firstname)
-													.surname(surname)
-													.email(email)
-													.freelance(freelance)
-													.perm(perm)
-													.introduction(introduction)
+													.pendingCandidateId(PENDING_CANDIDATE_ID)
+													.firstname(FIRSTNAME)
+													.surname(SURNAME)
+													.email(EMAIL)
+													.freelance(FREELANCE)
+													.perm(PERM)
+													.introduction(INTRODUCTION)
 													.rateContract(RATE_CONTRACT)
 													.ratePerm(RATE_PERM)
 													.photo(new Photo(photoBytes, photoFormat))
@@ -56,23 +55,23 @@ public class PendingCandidateEntityTest {
 		
 		PendingCandidateEntity candidateEntity = PendingCandidateEntity.convertToEntity(candidate);
 
-		assertEquals(candidateEntity.getPendingCandidateId(), 		pendingCandidateId);
-		assertEquals(candidateEntity.getFirstname(), 				firstname);
-		assertEquals(candidateEntity.getSurname(), 					surname);
-		assertEquals(candidateEntity.getEmail(), 					email);
-		assertEquals(candidateEntity.isFreelance(), 				freelance);
-		assertEquals(candidateEntity.isPerm(), 						perm);
-		assertEquals(candidateEntity.getIntroduction(), 			introduction);
+		assertEquals(PENDING_CANDIDATE_ID, 							candidateEntity.getPendingCandidateId());
+		assertEquals(FIRSTNAME, 								 	candidateEntity.getFirstname());
+		assertEquals(SURNAME, 										candidateEntity.getSurname());
+		assertEquals(EMAIL, 										candidateEntity.getEmail());
+		assertEquals(FREELANCE, 									candidateEntity.isFreelance());
+		assertEquals(PERM, 											candidateEntity.isPerm());
+		assertEquals(INTRODUCTION, 									candidateEntity.getIntroduction());
 		assertEquals(RATE_CONTRACT.getCurrency(), 					candidateEntity.getRateContractCurrency());
-		assertEquals(RATE_CONTRACT.getPeriod(), 						candidateEntity.getRateContractPeriod());
+		assertEquals(RATE_CONTRACT.getPeriod(), 					candidateEntity.getRateContractPeriod());
 		assertEquals(RATE_CONTRACT.getValueMin(), 					candidateEntity.getRateContractValueMin());
 		assertEquals(RATE_CONTRACT.getValueMax(), 					candidateEntity.getRateContractValueMax());
 		assertEquals(RATE_PERM.getCurrency(), 						candidateEntity.getRatePermCurrency());
-		assertEquals(RATE_PERM.getPeriod(), 							candidateEntity.getRatePermPeriod());
+		assertEquals(RATE_PERM.getPeriod(), 						candidateEntity.getRatePermPeriod());
 		assertEquals(RATE_PERM.getValueMin(), 						candidateEntity.getRatePermValueMin());
 		assertEquals(RATE_PERM.getValueMax(), 						candidateEntity.getRatePermValueMax());
-		assertEquals(candidateEntity.getPhotoBytes(), 				photoBytes);
-		assertEquals(candidateEntity.getPhotoFormat(), 				photoFormat);
+		assertEquals(photoBytes, 									candidateEntity.getPhotoBytes());
+		assertEquals(photoFormat, 									candidateEntity.getPhotoFormat());
 		
 	}
 	
@@ -82,17 +81,17 @@ public class PendingCandidateEntityTest {
 	* successfully 
 	*/
 	@Test
-	public void testConversionFromEntity() {
+	void testConversionFromEntity() {
 		
 		PendingCandidateEntity candidateEntity = PendingCandidateEntity
 																.builder()
-																	.pendingCandidateId(pendingCandidateId)
-																	.firstname(firstname)
-																	.surname(surname)
-																	.email(email)
-																	.freelance(freelance)
-																	.perm(perm)
-																	.introduction(introduction)
+																	.pendingCandidateId(PENDING_CANDIDATE_ID)
+																	.firstname(FIRSTNAME)
+																	.surname(SURNAME)
+																	.email(EMAIL)
+																	.freelance(FREELANCE)
+																	.perm(PERM)
+																	.introduction(INTRODUCTION)
 																	.rateContractCurrency(RATE_CONTRACT.getCurrency())
 																	.rateContractPeriod(RATE_CONTRACT.getPeriod())
 																	.rateContractValueMin(RATE_CONTRACT.getValueMin())
@@ -107,13 +106,13 @@ public class PendingCandidateEntityTest {
 														
 		PendingCandidate candidate = PendingCandidateEntity.convertFromEntity(candidateEntity);
 
-		assertEquals(pendingCandidateId,			candidate.getPendingCandidateId());
-		assertEquals(firstname, 					candidate.getFirstname());
-		assertEquals(surname, 						candidate.getSurname());
-		assertEquals(email, 						candidate.getEmail());
-		assertEquals(freelance, 					candidate.isFreelance());
-		assertEquals(perm, 							candidate.isPerm());
-		assertEquals(introduction, 					candidate.getIntroduction());
+		assertEquals(PENDING_CANDIDATE_ID,			candidate.getPendingCandidateId());
+		assertEquals(FIRSTNAME, 					candidate.getFirstname());
+		assertEquals(SURNAME, 						candidate.getSurname());
+		assertEquals(EMAIL, 						candidate.getEmail());
+		assertEquals(FREELANCE, 					candidate.isFreelance());
+		assertEquals(PERM, 							candidate.isPerm());
+		assertEquals(INTRODUCTION, 					candidate.getIntroduction());
 		assertEquals(RATE_CONTRACT.getCurrency(), 	candidate.getRateContract().get().getCurrency());
 		assertEquals(RATE_CONTRACT.getPeriod(), 	candidate.getRateContract().get().getPeriod());
 		assertEquals(RATE_CONTRACT.getValueMin(), 	candidate.getRateContract().get().getValueMin());

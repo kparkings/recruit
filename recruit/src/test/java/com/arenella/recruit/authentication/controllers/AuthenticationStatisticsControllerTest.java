@@ -25,7 +25,7 @@ import com.arenella.recruit.authentication.services.AuthenticationStatisticsServ
 * @author K Parkings
 */
 @ExtendWith(MockitoExtension.class)
-public class AuthenticationStatisticsControllerTest {
+class AuthenticationStatisticsControllerTest {
 	
 	@InjectMocks
 	private AuthenticationStatisticsController controller = new AuthenticationStatisticsController();
@@ -37,7 +37,7 @@ public class AuthenticationStatisticsControllerTest {
 	* Tests ordering and inclusions
 	*/
 	@Test
-	public void testEventsToday() throws Exception{
+	void testEventsToday() {
 		Set<AuthenticatedEvent> events = Set.of(
 			new AuthenticatedEvent("user1", true, false, LocalDateTime.now()),
 			new AuthenticatedEvent("user2", false, true, LocalDateTime.now()),
@@ -77,7 +77,7 @@ public class AuthenticationStatisticsControllerTest {
 	* Tests ordering and inclusions
 	*/
 	@Test
-	public void testEventsWeek() throws Exception{
+	void testEventsWeek() {
 		Set<AuthenticatedEvent> events = Set.of(
 			new AuthenticatedEvent("user1", true, false, LocalDateTime.now()),
 			new AuthenticatedEvent("user2", false, true, LocalDateTime.now()),

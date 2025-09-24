@@ -84,21 +84,10 @@ public class UserLoginStats {
 		loginSummaries.stream().forEach(recStat -> {
 			
 			switch(recStat.getActivityLevel()) {
-				case UserLoginSummary.ActivityLevel.HIGH -> {
-					this.activityHigh = this.activityHigh+1;
-					break;
-				}
-				case  UserLoginSummary.ActivityLevel.MEDIUM -> {
-					this.activityMedium = this.activityMedium+1;
-					break;
-				}
-				case UserLoginSummary.ActivityLevel.LOW -> {
-					this.activityLow = this.activityLow+1;
-					break;
-				}
-				default -> {
-					this.activityNone = this.activityNone+1;
-				}
+				case UserLoginSummary.ActivityLevel.HIGH 	-> this.activityHigh 	= this.activityHigh+1;
+				case UserLoginSummary.ActivityLevel.MEDIUM 	-> this.activityMedium 	= this.activityMedium+1;
+				case UserLoginSummary.ActivityLevel.LOW 	-> this.activityLow 	= this.activityLow+1;
+				default 									-> this.activityNone 	= this.activityNone+1;
 			}
 			
 		});

@@ -23,15 +23,9 @@ public class SkillSynonym {
 	*/
 	@SafeVarargs
 	public SkillSynonym(String groupName, Set<String> skills, SkillSynonym... secondarySynonyms) {
-		
 		this.groupName = groupName;
 		this.skills.addAll(skills.stream().map(String::toLowerCase).map(String::trim).collect(Collectors.toSet()));
 		this.secondarySynonyms = secondarySynonyms;
-		
-		//Arrays.asList(secondarySynonyms).stream().forEach(ss -> {
-		//	this.secondarySynonyms.addAll(ss.stream().map(s -> s.toLowerCase()).map(s -> s.trim()).collect(Collectors.toSet()));
-		//});
-		
 	}
 	
 	/**

@@ -16,14 +16,14 @@ import com.arenella.recruit.candidates.beans.CandidateExtractedFilters.Candidate
 * Unit tests for the LanguageExtractor class
 * @author K Parkings
 */
-public class LanguageExtractorTest {
+class LanguageExtractorTest {
 
 	/**
 	* Tests conditions to filter by English language
 	* @throws Exception
 	*/
 	@Test
-	public void testForEnglish() throws Exception {
+	void testForEnglish() {
 		runTest(LanguageExtractor.ENGLISH, Language.LANGUAGE.ENGLISH);
 	}
 	
@@ -32,7 +32,7 @@ public class LanguageExtractorTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testForDutch() throws Exception {
+	void testForDutch() {
 		runTest(LanguageExtractor.DUTCH, Language.LANGUAGE.DUTCH);
 	}
 	
@@ -41,7 +41,7 @@ public class LanguageExtractorTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testForFrench() throws Exception {
+	void testForFrench() {
 		runTest(LanguageExtractor.FRENCH, Language.LANGUAGE.FRENCH);
 	}
 	
@@ -51,17 +51,13 @@ public class LanguageExtractorTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testNoLanguagesIdentified() throws Exception{
+	void testNoLanguagesIdentified() {
 		
 		CandidateExtractedFiltersBuilder filterBuilder = CandidateExtractedFilters.builder();
 		
 		LanguageExtractor extractor = new LanguageExtractor();
 		
 		extractor.extractFilters("adadad adad", filterBuilder);
-		
-		//assertFalse(filterBuilder.build().getEnglish());
-		//assertFalse(filterBuilder.build().getDutch());
-		//assertFalse(filterBuilder.build().getFrench());
 		
 		assertFalse(filterBuilder.build().getLanguages().contains(Language.LANGUAGE.ENGLISH));
 		assertFalse(filterBuilder.build().getLanguages().contains(Language.LANGUAGE.DUTCH));
@@ -75,7 +71,7 @@ public class LanguageExtractorTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testBasedOnUKPlaceNames() throws Exception{
+	void testBasedOnUKPlaceNames() {
 		
 		CandidateExtractedFiltersBuilder filterBuilder = CandidateExtractedFilters.builder();
 		
@@ -94,17 +90,13 @@ public class LanguageExtractorTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testMultipleMatchesIdentified() throws Exception{
+	void testMultipleMatchesIdentified() {
 		
 		CandidateExtractedFiltersBuilder filterBuilder = CandidateExtractedFilters.builder();
 		
 		LanguageExtractor extractor = new LanguageExtractor();
 		
 		extractor.extractFilters("adadad english french adad", filterBuilder);
-		
-		//assertTrue(filterBuilder.build().getEnglish());
-		//assertFalse(filterBuilder.build().getDutch());
-		//assertTrue(filterBuilder.build().getFrench());
 		
 		assertTrue(filterBuilder.build().getLanguages().contains(Language.LANGUAGE.ENGLISH));
 		assertFalse(filterBuilder.build().getLanguages().contains(Language.LANGUAGE.DUTCH));
@@ -115,10 +107,6 @@ public class LanguageExtractorTest {
 		extractor = new LanguageExtractor();
 		
 		extractor.extractFilters("adadad english dutch adad", filterBuilder);
-		
-		//assertTrue(filterBuilder.build().getEnglish());
-		//assertTrue(filterBuilder.build().getDutch());
-		//assertFalse(filterBuilder.build().getFrench());
 		
 		assertTrue(filterBuilder.build().getLanguages().contains(Language.LANGUAGE.ENGLISH));
 		assertTrue(filterBuilder.build().getLanguages().contains(Language.LANGUAGE.DUTCH));
@@ -143,7 +131,7 @@ public class LanguageExtractorTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testAllLanguagesIdentified() throws Exception{
+	void testAllLanguagesIdentified() {
 		
 		CandidateExtractedFiltersBuilder filterBuilder = CandidateExtractedFilters.builder();
 		
@@ -184,7 +172,7 @@ public class LanguageExtractorTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testIfCountryEnglandIncludEnglishLang() throws Exception{
+	void testIfCountryEnglandIncludEnglishLang() {
 		
 		CandidateExtractedFiltersBuilder filterBuilder = CandidateExtractedFilters.builder();
 		

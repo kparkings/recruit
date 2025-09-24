@@ -164,7 +164,7 @@ class YearlySubscriptionActionHandlerTest {
 	* @throws Exception
 	*/
 	@Test
-	void testActionHAndler_disablePendingPayment_admin_invalidState() throws Exception {
+	void testActionHAndler_disablePendingPayment_admin_invalidState() {
 		
 		final LocalDateTime 		created 			= LocalDateTime.of(2021, 12, 18, 10, 10);
 		final String				recruiterId			= "kparkings";

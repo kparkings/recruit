@@ -33,7 +33,7 @@ import com.arenella.recruit.authentication.utils.JwtTokenUtil;
 * @author K Parkings
 */
 @ExtendWith(MockitoExtension.class)
-public class AuthenticationServiceImplTest {
+class AuthenticationServiceImplTest {
 
 	@InjectMocks
 	private AuthenticationServiceImpl 	authService;
@@ -61,7 +61,7 @@ public class AuthenticationServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testAuthenticateUser_badAuthentication() throws Exception{
+	void testAuthenticateUser_badAuthentication() throws Exception{
 		
 		final String username = "aUser";
 		final String password = "aPassword";
@@ -77,7 +77,7 @@ public class AuthenticationServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testAuthenticateUser_succes() throws Exception{
+	void testAuthenticateUser_succes() throws Exception{
 		
 		final String username 	= "aUser";
 		final String password 	= "aPassword";
@@ -103,7 +103,7 @@ public class AuthenticationServiceImplTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testLogLogin() throws Exception {
+	void testLogLogin() {
 		
 		final Set<String> roles = Set.of("ROLE_RECRUITER");
 		

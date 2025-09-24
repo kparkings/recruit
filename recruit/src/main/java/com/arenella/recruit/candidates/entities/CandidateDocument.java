@@ -151,14 +151,6 @@ public class CandidateDocument {
 	@Field(type = FieldType.Keyword)
 	private Set<Industry> 		industries					= new LinkedHashSet<>();
 	
-	//@Field(type = FieldType.Keyword)
-	//private Set<String> 			topSkills					= new LinkedHashSet<>();
-	
-	//@Field(type = FieldType.Keyword)
-	//private Set<String> 			certifications				= new LinkedHashSet<>();
-	
-	
-	
 	/**
 	* Check if we need this. with Hibernate yes but with ES maybe not
 	*/

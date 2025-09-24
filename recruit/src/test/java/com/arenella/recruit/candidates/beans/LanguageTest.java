@@ -17,7 +17,7 @@ public class LanguageTest {
 	* Test that the Instance if populated with the values set in the Builder
 	* @throws Exception
 	*/
-	public void testInitializationWithBuilder() throws Exception{
+	public void testInitializationWithBuilder() {
 		
 		final LANGUAGE 	lang 	= LANGUAGE.FRENCH;
 		final LEVEL 	level 	= LEVEL.PROFICIENT;
@@ -35,7 +35,7 @@ public class LanguageTest {
 	* @throws Exception
 	*/
 	@Test(expected=IllegalStateException.class)
-	public void testExceptionIfLanguageMissingInBuilder() throws Exception{
+	public void testExceptionIfLanguageMissingInBuilder() {
 		Language.builder().level(LEVEL.BASIC).build();
 	}
 	
@@ -45,7 +45,7 @@ public class LanguageTest {
 	* @throws Exception
 	*/
 	@Test(expected=IllegalStateException.class)
-	public void testExceptionIfLevelMissingInBuilder() throws Exception{
+	public void testExceptionIfLevelMissingInBuilder() {
 		Language.builder().language(LANGUAGE.DUTCH).build();
 	}
 }

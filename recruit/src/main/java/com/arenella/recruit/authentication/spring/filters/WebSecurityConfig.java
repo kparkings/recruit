@@ -70,12 +70,12 @@ public class WebSecurityConfig {
 	@Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		http.csrf(AbstractHttpConfigurer::disable);
-		http.headers((headers) -> headers.frameOptions().disable());
+		http.headers(headers -> headers.frameOptions().disable());
         http.exceptionHandling().authenticationEntryPoint(authenticationEntryPoint);
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         
 		http
-            .authorizeHttpRequests((authz) -> authz
+            .authorizeHttpRequests(authz -> authz
             	.requestMatchers(new AntPathRequestMatcher("/api/candidate/stats/total-active")).permitAll()
             	.requestMatchers(new AntPathRequestMatcher("/candidate/stats/total-active")).permitAll()
             	.requestMatchers(new AntPathRequestMatcher("/api/authenticate")).permitAll()

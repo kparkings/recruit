@@ -102,7 +102,7 @@ public class ListingServiceImpl implements ListingService{
 		* 1. Only the owner can perform an update
 		* 2. The owner cannot change the owner from themselves to another recruiter 
 		*/
-		if (!originalListing.getOwnerId().toString().equals(currentUser)) {
+		if (!originalListing.getOwnerId().equals(currentUser)) {
 			throw new AccessDeniedException("Not authroised to alter this Listing");
 		}
 		
@@ -122,7 +122,7 @@ public class ListingServiceImpl implements ListingService{
 		Listing 	listing 			= this.listingRepository.findListingById(listingId).orElseThrow(() -> new IllegalArgumentException("Cannot delete unknown listing: " + listingId));
 		String 			currentUser		= SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
 		
-		if (!listing.getOwnerId().toString().equals(currentUser)) {
+		if (!listing.getOwnerId().equals(currentUser)) {
 			throw new AccessDeniedException("Not authroised to alter this Listing");
 		}
 		
@@ -139,15 +139,11 @@ public class ListingServiceImpl implements ListingService{
 		
 		GEO_ZONE[] geoZones = filters.getGeoZones().toArray(new GEO_ZONE[] {});
 		
-		listingGeoZoneSearchUtil.fetchCountriesFor(geoZones).stream().forEach(country -> filters.addCountry(country));
+		listingGeoZoneSearchUtil.fetchCountriesFor(geoZones).stream().forEach(filters::addCountry);
 		
 		if (!filters.getSearchTerms().isEmpty()) {
 			String originalTerm = (String)filters.getSearchTerms().toArray()[0];
-			
-			this.functionSynonymUil.extractAllFunctionAndSynonyms(originalTerm).stream().forEach(synonym -> {
-				filters.addSearchTerm(synonym);
-			});
-			
+			this.functionSynonymUil.extractAllFunctionAndSynonyms(originalTerm).stream().forEach(filters::addSearchTerm);
 		}
 		
 		return listingRepository.findAll(filters, this.esClient, pageable);

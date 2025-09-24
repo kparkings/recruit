@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 import org.junit.jupiter.api.Test;
 
-public class RecruiterCreditTest {
+class RecruiterCreditTest {
 
 	final String 	RECRUITER_ID 		= "recruiter44";
 	final int 		CREDITS 			= 4;
@@ -16,7 +16,7 @@ public class RecruiterCreditTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testDefaultCredits() throws Exception{
+	void testDefaultCredits() {
 		
 		RecruiterCredit recruiterCredit = 
 			RecruiterCredit
@@ -32,7 +32,7 @@ public class RecruiterCreditTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testBuilder() throws Exception{
+	void testBuilder() {
 		
 		RecruiterCredit recruiterCredit = 
 				RecruiterCredit
@@ -52,7 +52,7 @@ public class RecruiterCreditTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testIncrementDecrementCredits() throws Exception{
+	void testIncrementDecrementCredits() {
 		
 		final int newCreditsAmount = 2;
 		
@@ -89,7 +89,7 @@ public class RecruiterCreditTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testSetters() throws Exception{
+	void testSetters() {
 		
 		RecruiterCredit recruiterCredit = 
 				RecruiterCredit

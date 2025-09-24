@@ -14,33 +14,33 @@ import com.arenella.recruit.recruiters.beans.SupplyAndDemandEvent.EventType;
 * Unit tests for the SupplyAndDemandEventEntity class
 * @author K Parkings
 */
-public class SupplyAndDemandEventEntityTest {
+class SupplyAndDemandEventEntityTest {
 
-	private static final LocalDateTime 		created 		= LocalDateTime.of(2022, 12, 8, 21, 33);
-	private static final UUID				id				= UUID.randomUUID();
-	private static final String				recruiterId 	= "kparkings";
-	private static final EventType 			type 			= EventType.OFFERED_CANDIDATE;
+	private static final LocalDateTime 		CREATED 		= LocalDateTime.of(2022, 12, 8, 21, 33);
+	private static final UUID				ID				= UUID.randomUUID();
+	private static final String				RECRUITER_ID 	= "kparkings";
+	private static final EventType 			TYPE 			= EventType.OFFERED_CANDIDATE;
 	
 	/**
 	* Tests construction via the Builder
 	* @throws Exception
 	*/
 	@Test
-	public void testBuilder() throws Exception{
+	void testBuilder() {
 		
 		SupplyAndDemandEventEntity entity = 
 				SupplyAndDemandEventEntity
 				.builder()
-					.created(created)
-					.eventId(id)
-					.recruiterId(recruiterId)
-					.type(type)
+					.created(CREATED)
+					.eventId(ID)
+					.recruiterId(RECRUITER_ID)
+					.type(TYPE)
 				.build();
 		
-		assertEquals(created, 		entity.getCreated());
-		assertEquals(id, 			entity.getId().getEventId());
-		assertEquals(recruiterId, 	entity.getId().getRecruiterId());
-		assertEquals(type, 			entity.getType());
+		assertEquals(CREATED, 		entity.getCreated());
+		assertEquals(ID, 			entity.getId().getEventId());
+		assertEquals(RECRUITER_ID, 	entity.getId().getRecruiterId());
+		assertEquals(TYPE, 			entity.getType());
 		
 	}
 	
@@ -49,23 +49,23 @@ public class SupplyAndDemandEventEntityTest {
 	* @throws Exception
 	*/
 	@Test 
-	public void testConvertToEntity() throws Exception{
+	void testConvertToEntity() {
 		
 		SupplyAndDemandEventEntity entity = 
 				SupplyAndDemandEventEntity
 				.builder()
-					.created(created)
-					.eventId(id)
-					.recruiterId(recruiterId)
-					.type(type)
+					.created(CREATED)
+					.eventId(ID)
+					.recruiterId(RECRUITER_ID)
+					.type(TYPE)
 				.build();
 		
 		SupplyAndDemandEvent event = SupplyAndDemandEventEntity.convertFromEntity(entity);
 		
-		assertEquals(created, 		event.getCreated());
-		assertEquals(id, 			event.getEventId());
-		assertEquals(recruiterId, 	event.getRecruiterId());
-		assertEquals(type, 			event.getType());
+		assertEquals(CREATED, 		event.getCreated());
+		assertEquals(ID, 			event.getEventId());
+		assertEquals(RECRUITER_ID, 	event.getRecruiterId());
+		assertEquals(TYPE, 			event.getType());
 		
 	}
 	
@@ -74,23 +74,23 @@ public class SupplyAndDemandEventEntityTest {
 	* @throws Exception
 	*/
 	@Test 
-	public void testConvertFromEntity() throws Exception{
+	void testConvertFromEntity() {
 		
 		SupplyAndDemandEvent event = 
 				SupplyAndDemandEvent
 				.builder()
-					.created(created)
-					.eventId(id)
-					.recruiterId(recruiterId)
-					.type(type)
+					.created(CREATED)
+					.eventId(ID)
+					.recruiterId(RECRUITER_ID)
+					.type(TYPE)
 				.build();
 		
 		SupplyAndDemandEventEntity entity = SupplyAndDemandEventEntity.convertToEntity(event);
 		
-		assertEquals(created, 		entity.getCreated());
-		assertEquals(id, 			entity.getId().getEventId());
-		assertEquals(recruiterId, 	entity.getId().getRecruiterId());
-		assertEquals(type, 			entity.getType());
+		assertEquals(CREATED, 		entity.getCreated());
+		assertEquals(ID, 			entity.getId().getEventId());
+		assertEquals(RECRUITER_ID, 	entity.getId().getRecruiterId());
+		assertEquals(TYPE, 			entity.getType());
 		
 	}
 	

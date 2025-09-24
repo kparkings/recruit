@@ -32,6 +32,13 @@ import co.elastic.clients.json.JsonData;
 public class ESFilteredSearchRequestBuilder {
 
 	/**
+	* Hide default constructor 
+	*/
+	private ESFilteredSearchRequestBuilder() {
+		
+	}
+	
+	/**
 	* Creates Query
 	* @param filterOptions - Filters to based query on
 	* @return Query based upon the filters
@@ -50,12 +57,12 @@ public class ESFilteredSearchRequestBuilder {
 			
 			List<co.elastic.clients.elasticsearch._types.query_dsl.Query> scLevelQueries = new ArrayList<>();
 			
-			filterOptions.getSecurityLevels().stream().forEach(l -> {
+			filterOptions.getSecurityLevels().stream().forEach(l -> 
 				scLevelQueries.add(BoolQuery.of(m -> m
 						.must(List.of(
 								MatchQuery.of(m1 -> m1.field("securityClearance").query(l.toString()))._toQuery()))
-					)._toQuery());
-			});
+					)._toQuery())
+			);
 			
 			mustQueries.add(BoolQuery.of(m -> m
 					.queryName("scLevelQueries")
@@ -149,7 +156,7 @@ public class ESFilteredSearchRequestBuilder {
 		if (!filterOptions.getLanguages().isEmpty()) {
 			
 			
-			List<String> 		languages 		= filterOptions.getLanguages().stream().map(l -> l.toString()).map(l -> l.toUpperCase()).collect(Collectors.toList());
+			List<String> 		languages 		= filterOptions.getLanguages().stream().map(Object::toString).map(String::toUpperCase).collect(Collectors.toList());
 			
 			/**
 			* For speed. Almost all candidates speak English. Therefore we filter on the remaining languages which in most
@@ -166,13 +173,13 @@ public class ESFilteredSearchRequestBuilder {
 			
 			List<co.elastic.clients.elasticsearch._types.query_dsl.Query> langQueries 		= new ArrayList<>();
 			
-			languages.stream().forEach(l -> {
+			languages.stream().forEach(l -> 
 				langQueries.add(BoolQuery.of(m -> m
 						.must(List.of(
 								MatchQuery.of(m1 -> m1.field("languages.language.keyword").query(l))._toQuery(),
 								MatchQuery.of(m2 -> m2.field("languages.level.keyword").query("PROFICIENT"))._toQuery()))
-					)._toQuery());
-			});
+					)._toQuery())
+			);
 			
 			mustQueries.add(BoolQuery.of(m -> m
 					.queryName("languages")
@@ -200,12 +207,12 @@ public class ESFilteredSearchRequestBuilder {
 			
 			List<co.elastic.clients.elasticsearch._types.query_dsl.Query> langQueries 		= new ArrayList<>();
 			
-			filterOptions.getFunctions().stream().forEach(l -> {
+			filterOptions.getFunctions().stream().forEach(l -> 
 				langQueries.add(BoolQuery.of(m -> m
 						.must(List.of(
 								MatchQuery.of(m1 -> m1.field("functions").query(l.toString()))._toQuery()))
-					)._toQuery());
-			});
+					)._toQuery())
+			);
 			
 			mustQueries.add(BoolQuery.of(m -> m
 					.queryName("functions")

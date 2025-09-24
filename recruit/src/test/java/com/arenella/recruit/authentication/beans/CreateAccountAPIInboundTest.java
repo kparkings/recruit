@@ -10,14 +10,14 @@ import com.arenella.recruit.authentication.enums.AccountType;
 * Unit tests for the CreateAccountAPIInbound class
 * @author K Parkings
 */
-public class CreateAccountAPIInboundTest {
+class CreateAccountAPIInboundTest {
 
 	/**
 	* Test creation via Builder
 	* @throws Exception
 	*/
 	@Test
-	public void testBuilder() throws Exception {
+	void testBuilder() {
 		
 		final String 		proposedUsername 	= "kparkings";
 		final AccountType 	accountType 		= AccountType.RECRUITER;
@@ -26,7 +26,6 @@ public class CreateAccountAPIInboundTest {
 		
 		assertEquals(proposedUsername, 	createRequest.getProposedUsername());
 		assertEquals(accountType, 		createRequest.getAccountType());
-		
 		
 	}
 	

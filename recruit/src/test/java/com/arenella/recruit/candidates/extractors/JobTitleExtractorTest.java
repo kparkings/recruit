@@ -11,7 +11,8 @@ import com.arenella.recruit.candidates.beans.CandidateExtractedFilters.Candidate
 * Unit test for JobTitleExtractor class
 * @author K Parkings
 */
-public class JobTitleExtractorTest {
+
+class JobTitleExtractorTest {
 
 	/**
 	* Tests that if no job title determined no 
@@ -19,7 +20,7 @@ public class JobTitleExtractorTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testNoJobTitlesFound() throws Exception{
+	void testNoJobTitlesFound() {
 		
 		final CandidateExtractedFiltersBuilder 	filterBuilder 	= CandidateExtractedFilters.builder();
 		final JobTitleExtractor 				extractor 		= new JobTitleExtractor();
@@ -36,7 +37,7 @@ public class JobTitleExtractorTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testSingleJobTitlesFound() throws Exception{
+	void testSingleJobTitlesFound()  {
 		
 		final CandidateExtractedFiltersBuilder 	filterBuilder 	= CandidateExtractedFilters.builder();
 		final JobTitleExtractor 				extractor 		= new JobTitleExtractor();
@@ -53,7 +54,7 @@ public class JobTitleExtractorTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testMultipleJobTitlesFoundSingleHasHighestWeight() throws Exception{
+	void testMultipleJobTitlesFoundSingleHasHighestWeight() {
 		
 		final CandidateExtractedFiltersBuilder 	filterBuilder 	= CandidateExtractedFilters.builder();
 		final JobTitleExtractor 				extractor 		= new JobTitleExtractor();
@@ -70,7 +71,7 @@ public class JobTitleExtractorTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testGiveWeightToNonITRecruiterJobType() throws Exception {
+	void testGiveWeightToNonITRecruiterJobType() {
 		
 		final CandidateExtractedFiltersBuilder 	filterBuilder 	= CandidateExtractedFilters.builder();
 		final JobTitleExtractor 				extractor 		= new JobTitleExtractor();

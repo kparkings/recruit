@@ -12,14 +12,14 @@ import com.arenella.recruit.curriculum.enums.FileType;
 * Unit tests for the CurriculumEntity class
 * @author K Parkings
 */
-public class CurriculumEntityTest {
+class CurriculumEntityTest {
 
 	/**
 	* Tests builder and associated Getters
 	* @throws Exception
 	*/
 	@Test
-	public void testBuilder() throws Exception {
+	void testBuilder() {
 		
 		final int 		curriculumId 	= 1;
 		final byte[] 	fileBytes 		= new byte[] {};
@@ -44,7 +44,7 @@ public class CurriculumEntityTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testConvertFromEntity() throws Exception {
+	void testConvertFromEntity() {
 		
 		final int 		curriculumId 	= 1;
 		final byte[] 	fileBytes 		= new byte[] {};
@@ -71,7 +71,7 @@ public class CurriculumEntityTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testConvertToEntity() throws Exception {
+	void testConvertToEntity() {
 		
 		final String	curriculumId 	= "1";
 		final byte[] 	fileBytes 		= new byte[] {};

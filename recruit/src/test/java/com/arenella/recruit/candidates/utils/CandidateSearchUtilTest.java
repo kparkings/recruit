@@ -28,7 +28,7 @@ import java.util.List;
 * @author K Parkings
 */
 @ExtendWith(MockitoExtension.class)
-public class CandidateSearchUtilTest {
+class CandidateSearchUtilTest {
 
 	@InjectMocks 
 	private CandidateSearchUtil 					util 						= new CandidateSearchUtil();
@@ -48,7 +48,7 @@ public class CandidateSearchUtilTest {
 	*/
 	@SuppressWarnings({"unchecked", "rawtypes" })
 	@Test
-	public void testRecriterWithExpiredCredits() throws Exception{
+	void testRecriterWithExpiredCredits() throws Exception{
 		
 		final String 	firstName 	= "Keivn";
 		final String 	surname 	= "parkings";
@@ -66,7 +66,6 @@ public class CandidateSearchUtilTest {
 		
 		ArgumentCaptor<CandidateFilterOptions> filtersArgCapt = ArgumentCaptor.forClass(CandidateFilterOptions.class);
 		
-		//Mockito.when(this.mockPageable.getPageSize()).thenReturn(pageSize);
 		Mockito.when(this.mockCandidateService.getCandidateSuggestions(filtersArgCapt.capture(), Mockito.eq(pageSize), Mockito.eq(false))).thenReturn(pageResults);
 		
 		Page<CandidateAPIOutbound> results = this.util.searchAndPackageForAPIOutput(true, true, true, filters, false);
@@ -94,7 +93,7 @@ public class CandidateSearchUtilTest {
 	*/
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Test
-	public void testRecruiterWithRemainingCredits() throws Exception{
+	void testRecruiterWithRemainingCredits() throws Exception{
 	
 		final String firstName 	= "Keivn";
 		final String surname 	= "parkings";
@@ -136,7 +135,7 @@ public class CandidateSearchUtilTest {
 	*/
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Test
-	public void testNonCreditSubscriptionRecruiter() throws Exception{
+	void testNonCreditSubscriptionRecruiter() throws Exception{
 	
 		final String firstName 	= "Keivn";
 		final String surname 	= "parkings";

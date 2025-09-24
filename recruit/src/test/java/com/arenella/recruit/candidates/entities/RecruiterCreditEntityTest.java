@@ -10,7 +10,7 @@ import com.arenella.recruit.candidates.beans.RecruiterCredit;
 * Unit tests for the RecruiterCreditEntity class
 * @author K Parkings
 */
-public class RecruiterCreditEntityTest {
+class RecruiterCreditEntityTest {
 
 	private static final String 	RECRUITER_ID 		= "recruiter44";
 	private static final int 		CREDITS 			= 4;
@@ -21,7 +21,7 @@ public class RecruiterCreditEntityTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testBuilder() throws Exception{
+	void testBuilder() {
 		
 		CandidateRecruiterCreditEntity entity = 
 				CandidateRecruiterCreditEntity
@@ -42,7 +42,7 @@ public class RecruiterCreditEntityTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testConvertFromEntity() throws Exception{
+	void testConvertFromEntity() {
 		
 		CandidateRecruiterCreditEntity entity = 
 				CandidateRecruiterCreditEntity
@@ -69,7 +69,7 @@ public class RecruiterCreditEntityTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testConvertToEntity() throws Exception{
+	void testConvertToEntity() {
 		
 		RecruiterCredit domain = 
 				RecruiterCredit

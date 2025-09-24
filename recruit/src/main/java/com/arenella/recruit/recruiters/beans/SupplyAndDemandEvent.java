@@ -9,7 +9,7 @@ import java.util.UUID;
 */
 public class SupplyAndDemandEvent {
 
-	public static enum EventType {OPEN_POSITION, OFFERED_CANDIDATE}
+	public enum EventType {OPEN_POSITION, OFFERED_CANDIDATE}
 	
 	private UUID 			eventId;
 	private String 			recruiterId;

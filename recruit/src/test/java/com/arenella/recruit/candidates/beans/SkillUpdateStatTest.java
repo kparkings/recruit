@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 * Unit tests for the SkillUpdateStat class
 * @author K Parkings
 */
-public class SkillUpdateStatTest {
+class SkillUpdateStatTest {
 
 	private static final long 		CANDIDATE_ID 		= 111;
 	private static final LocalDate 	LAST_UPDATED 		= LocalDate.of(2024, 8, 24);
@@ -21,7 +21,7 @@ public class SkillUpdateStatTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testConstructor() throws Exception{
+	void testConstructor() {
 	
 		SkillUpdateStat stat = new SkillUpdateStat(CANDIDATE_ID, LAST_UPDATED, ADDED_SKILL_COUNT);
 	

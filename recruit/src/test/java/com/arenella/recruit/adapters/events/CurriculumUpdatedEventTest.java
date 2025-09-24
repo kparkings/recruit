@@ -8,14 +8,14 @@ import org.junit.jupiter.api.Test;
 * Unit tests for the CurriculumUpdatedEvent class
 * @author K Parkings
 */
-public class CurriculumUpdatedEventTest {
+class CurriculumUpdatedEventTest {
 
 	/**
 	* Tests construction
 	* @throws Exception
 	*/
 	@Test
-	public void testConstruction() throws Exception{
+	void testConstruction() {
 		
 		final String curriculumId = "1232";
 		

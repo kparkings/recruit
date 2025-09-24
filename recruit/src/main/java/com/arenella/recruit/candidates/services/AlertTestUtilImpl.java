@@ -136,7 +136,7 @@ public class AlertTestUtilImpl implements AlertTestUtil{
 					
 					Page<CandidateSearchAccuracyWrapper> results =  candidateService.getCandidateSuggestions(filterOptions, 1, false, true);
 					
-					results.stream().filter(r -> r.getAccuracySkills() != suggestion_accuracy.poor).forEach(match -> {
+					results.stream().filter(r -> r.getAccuracySkills() != suggestion_accuracy.poor).forEach(match -> 
 						matchDao.saveMatch(CandidateSearchAlertMatch
 												.builder()
 													.id(UUID.randomUUID())
@@ -146,8 +146,8 @@ public class AlertTestUtilImpl implements AlertTestUtil{
 													.roleSought("")
 													.accuracy(match.getAccuracySkills())
 													.alertId(alert.getId())
-												.build());
-					});
+												.build())
+					);
 					
 				}catch(Exception e) {
 					e.printStackTrace();

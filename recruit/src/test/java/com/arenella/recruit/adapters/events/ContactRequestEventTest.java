@@ -8,14 +8,14 @@ import org.junit.jupiter.api.Test;
 * Unit tests for the ContactRequestEvent class
 * @author K Parkings
 */
-public class ContactRequestEventTest {
+class ContactRequestEventTest {
 
 	/**
 	* Tests constructor
 	* @throws Exception
 	*/
 	@Test
-	public void testConstructor() throws Exception{
+	void testConstructor() {
 		
 		final String senderRecruiterId 	= "rec30";
 		final String recipientId 		= "can10";
