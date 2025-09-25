@@ -440,7 +440,7 @@ public class CandidateController {
 	*/
 	@GetMapping(path="/candidate/countries")
 	public ResponseEntity<Set<CountryEnumAPIOutbound>> fetchSupportedCountries(){
-		return ResponseEntity.ok(Arrays.stream(COUNTRY.values()).map(c -> new CountryEnumAPIOutbound(c)).collect(Collectors.toCollection(LinkedHashSet::new)));
+		return ResponseEntity.ok(Arrays.stream(COUNTRY.values()).map(CountryEnumAPIOutbound::new).collect(Collectors.toCollection(LinkedHashSet::new)));
 	}
 	
 	/**
@@ -557,7 +557,7 @@ public class CandidateController {
 		
 		ClaimsUsernamePasswordAuthenticationToken user = (ClaimsUsernamePasswordAuthenticationToken)principal;
 		
-		return user.getAuthorities().stream().filter(a -> a.getAuthority().equals(role)).findAny().isPresent();
+		return user.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals(role));
 		
 	}
 	

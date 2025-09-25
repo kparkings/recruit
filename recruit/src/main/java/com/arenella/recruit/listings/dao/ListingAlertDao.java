@@ -45,7 +45,7 @@ public interface ListingAlertDao extends CrudRepository<ListingAlertEntity, UUID
 		
 		List<ListingAlertEntity> matches =  this.findAll(new FilterSpecification(filterOptions));
 		
-		return matches.stream().map(match -> ListingAlertEntity.convertFromEntity(match)).collect(Collectors.toCollection(LinkedHashSet::new));
+		return matches.stream().map(ListingAlertEntity::convertFromEntity).collect(Collectors.toCollection(LinkedHashSet::new));
 		
 	}
 	

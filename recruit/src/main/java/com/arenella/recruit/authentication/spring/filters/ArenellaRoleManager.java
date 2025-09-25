@@ -19,7 +19,7 @@ public class ArenellaRoleManager {
 	* @return Whether the authenticated user has the desired role
 	*/
 	private boolean checkHasRole(String roleToCheck) {
-		return SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream().filter(role -> role.getAuthority().equals(roleToCheck)).findAny().isPresent();
+		return SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream().anyMatch(role -> role.getAuthority().equals(roleToCheck));
 	}
 	
 	/**

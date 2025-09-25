@@ -243,7 +243,7 @@ public class SupplyAndDemandController {
 	public ResponseEntity<Boolean> passesCreditCheck(Principal principal){
 		
 		ClaimsUsernamePasswordAuthenticationToken 	user 			= (ClaimsUsernamePasswordAuthenticationToken)principal;
-		boolean 									isRecruiter 	= user.getAuthorities().stream().filter(a -> a.getAuthority().equals("ROLE_RECRUITER")).findAny().isPresent();
+		boolean 									isRecruiter 	= user.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_RECRUITER"));
 		boolean 									useCredits 		= (Boolean)user.getClaim("useCredits").get();
 		
 		if (isRecruiter && useCredits) {
@@ -261,7 +261,7 @@ public class SupplyAndDemandController {
 	private void performCreditCheck(Principal principal) {
 		
 		ClaimsUsernamePasswordAuthenticationToken 	user 			= (ClaimsUsernamePasswordAuthenticationToken)principal;
-		boolean 									isRecruiter 	= user.getAuthorities().stream().filter(a -> a.getAuthority().equals("ROLE_RECRUITER")).findAny().isPresent();
+		boolean 									isRecruiter 	= user.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_RECRUITER"));
 		boolean 									useCredits 		= (Boolean)user.getClaim("useCredits").get();
 		
 		if (isRecruiter && useCredits) {

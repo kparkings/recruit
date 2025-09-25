@@ -121,7 +121,7 @@ class ListingAlertTest {
 						.userId(USER_ID)
 					.build();
 		
-		Assertions.assertThrows(IllegalStateException.class, () -> alert.initializeAlert());
+		Assertions.assertThrows(IllegalStateException.class, alert::initializeAlert);
 		
 	}
 	

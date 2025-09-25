@@ -26,24 +26,24 @@ import com.arenella.recruit.candidates.enums.PERM;
 */
 class CandidateAPIInboundTest {
 
-	private static final String 					candidateId 			= "Candidate1";
-	private static final String 					firstname				= "Kevin";
-	private static final String 					surname					= "Parkings";
-	private static final String 					email					= "admin@arenella-ict.com";
-	private static final String						roleSought				= "Junior C# developer";
-	private static final FUNCTION					function				= FUNCTION.JAVA_DEV;
-	private static final COUNTRY 					country 				= COUNTRY.NETHERLANDS;
-	private static final String 					city 					= "Den Haag";
-	private static final boolean 					available 				= true;
-	private static final FREELANCE 					freelance 				= FREELANCE.TRUE;
-	private static final PERM	 					perm 					= PERM.TRUE;
-	private static final int 						yearsExperience 		= 21;
-	private static final Set<String>				skills					= new LinkedHashSet<>();
+	private static final String 					CANDIDATE_ID 			= "Candidate1";
+	private static final String 					FIRST_NAME				= "Kevin";
+	private static final String 					SURNAME					= "Parkings";
+	private static final String 					EMAIL					= "admin@arenella-ict.com";
+	private static final String						ROLE_SOUGHT				= "Junior C# developer";
+	private static final FUNCTION					FUNCTION_VAL			= FUNCTION.JAVA_DEV;
+	private static final COUNTRY 					COUNTRY_VAL 			= COUNTRY.NETHERLANDS;
+	private static final String 					CITY 					= "Den Haag";
+	private static final boolean 					AVAILABLE 				= true;
+	private static final FREELANCE 					FREELANCE_VAL			= FREELANCE.TRUE;
+	private static final PERM	 					PERM_VAL				= PERM.TRUE;
+	private static final int 						YEARS_EXPERIENCE 		= 21;
+	private static final Set<String>				SKILLS					= new LinkedHashSet<>();
 	private static final Set<Language>				languages				= new LinkedHashSet<>();
-	private static final String						skill					= "Java";
-	private static final Language					language				= Language.builder().language(LANGUAGE.DUTCH).level(LEVEL.PROFICIENT).build();
+	private static final String						SKILL					= "Java";
+	private static final Language					LANGUAGE_VAL			= Language.builder().language(LANGUAGE.DUTCH).level(LEVEL.PROFICIENT).build();
 	private static final SECURITY_CLEARANCE_TYPE 	SECURITY_CLEARANCE		= SECURITY_CLEARANCE_TYPE.DV;
-	private static final boolean					REQUIRES_SPONSORSHIP	= false;;
+	private static final boolean					REQUIRES_SPONSORSHIP	= false;
 	private static final Set<Industry> 				INDUSTRIES				= Set.of(Industry.AGRICULTURE, Industry.CYBER_SECURITY);
 	
 	/**
@@ -51,8 +51,8 @@ class CandidateAPIInboundTest {
 	*/
 	public CandidateAPIInboundTest(){
 		
-		languages.add(language);
-		skills.add(skill);
+		languages.add(LANGUAGE_VAL);
+		SKILLS.add(SKILL);
 		
 	}
 	
@@ -64,42 +64,42 @@ class CandidateAPIInboundTest {
 		
 		CandidateAPIInbound candidate = CandidateAPIInbound
 						.builder()
-							.candidateId(candidateId)
-							.firstname(firstname)
-							.surname(surname)
-							.email(email)
-							.roleSought(roleSought)
-							.functions(Set.of(function))
-							.country(country)
-							.city(city)
-							.available(available)
-							.freelance(freelance)
-							.perm(perm)
-							.yearsExperience(yearsExperience)
-							.skills(skills)
+							.candidateId(CANDIDATE_ID)
+							.firstname(FIRST_NAME)
+							.surname(SURNAME)
+							.email(EMAIL)
+							.roleSought(ROLE_SOUGHT)
+							.functions(Set.of(FUNCTION_VAL))
+							.country(COUNTRY_VAL)
+							.city(CITY)
+							.available(AVAILABLE)
+							.freelance(FREELANCE_VAL)
+							.perm(PERM_VAL)
+							.yearsExperience(YEARS_EXPERIENCE)
+							.skills(SKILLS)
 							.languages(languages)
 							.requiresSponsorship(REQUIRES_SPONSORSHIP)
 							.securityClearance(SECURITY_CLEARANCE)
 							.industries(INDUSTRIES)
 							.build();
 		
-		assertEquals(candidateId, 			candidate.getCandidateId());
-		assertEquals(firstname, 			candidate.getFirstname());
-		assertEquals(surname, 				candidate.getSurname());
-		assertEquals(email, 				candidate.getEmail());
-		assertEquals(function, 				candidate.getFunctions().toArray()[0]);
-		assertEquals(roleSought, 			candidate.getRoleSought());
-		assertEquals(country, 				candidate.getCountry());
-		assertEquals(city, 					candidate.getCity());
-		assertEquals(available, 			candidate.isAvailable());
-		assertEquals(freelance, 			candidate.isFreelance());
-		assertEquals(perm, 					candidate.isPerm());
-		assertEquals(yearsExperience, 		candidate.getYearsExperience());
+		assertEquals(CANDIDATE_ID, 			candidate.getCandidateId());
+		assertEquals(FIRST_NAME, 			candidate.getFirstname());
+		assertEquals(SURNAME, 				candidate.getSurname());
+		assertEquals(EMAIL, 				candidate.getEmail());
+		assertEquals(FUNCTION_VAL, 				candidate.getFunctions().toArray()[0]);
+		assertEquals(ROLE_SOUGHT, 			candidate.getRoleSought());
+		assertEquals(COUNTRY_VAL, 				candidate.getCountry());
+		assertEquals(CITY, 					candidate.getCity());
+		assertEquals(AVAILABLE, 			candidate.isAvailable());
+		assertEquals(FREELANCE_VAL, 			candidate.isFreelance());
+		assertEquals(PERM_VAL, 					candidate.isPerm());
+		assertEquals(YEARS_EXPERIENCE, 		candidate.getYearsExperience());
 		assertEquals(REQUIRES_SPONSORSHIP, 	candidate.getRequiresSponsorship());
 		assertEquals(SECURITY_CLEARANCE, 	candidate.getSecurityClearance());
 		
-		assertTrue(candidate.getSkills().contains(skill));
-		candidate.getLanguages().stream().filter(l -> l.getLanguage() == language.getLanguage()).findAny().orElseThrow();
+		assertTrue(candidate.getSkills().contains(SKILL));
+		candidate.getLanguages().stream().filter(l -> l.getLanguage() == LANGUAGE_VAL.getLanguage()).findAny().orElseThrow();
 		
 		assertTrue(candidate.getIndustries().contains(Industry.AGRICULTURE));
 		assertTrue(candidate.getIndustries().contains(Industry.CYBER_SECURITY));
@@ -116,19 +116,19 @@ class CandidateAPIInboundTest {
 		
 		CandidateAPIInbound candidateEntity = CandidateAPIInbound
 				.builder()
-					.candidateId(candidateId)
-					.firstname(firstname)
-					.surname(surname)
-					.email(email)
-					.roleSought(roleSought)
-					.functions(Set.of(function))
-					.country(country)
-					.city(city)
-					.available(available)
-					.freelance(freelance)
-					.perm(perm)
-					.yearsExperience(yearsExperience)
-					.skills(skills)
+					.candidateId(CANDIDATE_ID)
+					.firstname(FIRST_NAME)
+					.surname(SURNAME)
+					.email(EMAIL)
+					.roleSought(ROLE_SOUGHT)
+					.functions(Set.of(FUNCTION_VAL))
+					.country(COUNTRY_VAL)
+					.city(CITY)
+					.available(AVAILABLE)
+					.freelance(FREELANCE_VAL)
+					.perm(PERM_VAL)
+					.yearsExperience(YEARS_EXPERIENCE)
+					.skills(SKILLS)
 					.languages(languages)
 					.requiresSponsorship(REQUIRES_SPONSORSHIP)
 					.securityClearance(SECURITY_CLEARANCE)
@@ -137,23 +137,23 @@ class CandidateAPIInboundTest {
 		
 		Candidate candidate = CandidateAPIInbound.convertToCandidate(candidateEntity, Optional.empty());
 
-		assertEquals(candidateId, 			candidate.getCandidateId());
-		assertEquals(firstname, 			candidate.getFirstname());
-		assertEquals(surname, 				candidate.getSurname());
-		assertEquals(email, 				candidate.getEmail());
-		assertEquals(roleSought, 			candidate.getRoleSought());
-		assertEquals(function, 				candidate.getFunctions().toArray()[0]);
-		assertEquals(country, 				candidate.getCountry());
-		assertEquals(city, 					candidate.getCity());
-		assertEquals(available, 			candidate.isAvailable());
-		assertEquals(freelance, 			candidate.isFreelance());
-		assertEquals(perm, 					candidate.isPerm());
-		assertEquals(yearsExperience, 		candidate.getYearsExperience());
+		assertEquals(CANDIDATE_ID, 			candidate.getCandidateId());
+		assertEquals(FIRST_NAME, 			candidate.getFirstname());
+		assertEquals(SURNAME, 				candidate.getSurname());
+		assertEquals(EMAIL, 				candidate.getEmail());
+		assertEquals(ROLE_SOUGHT, 			candidate.getRoleSought());
+		assertEquals(FUNCTION_VAL, 				candidate.getFunctions().toArray()[0]);
+		assertEquals(COUNTRY_VAL, 				candidate.getCountry());
+		assertEquals(CITY, 					candidate.getCity());
+		assertEquals(AVAILABLE, 			candidate.isAvailable());
+		assertEquals(FREELANCE_VAL, 			candidate.isFreelance());
+		assertEquals(PERM_VAL, 					candidate.isPerm());
+		assertEquals(YEARS_EXPERIENCE, 		candidate.getYearsExperience());
 		assertEquals(REQUIRES_SPONSORSHIP, 	candidate.getRequiresSponsorship());
 		assertEquals(SECURITY_CLEARANCE, 	candidate.getSecurityClearance());
 		
-		assertTrue(candidate.getSkills().contains(skill));
-		assertEquals(candidate.getLanguages().stream().findFirst().get().getLanguage(), language.getLanguage());
+		assertTrue(candidate.getSkills().contains(SKILL));
+		assertEquals(candidate.getLanguages().stream().findFirst().get().getLanguage(), LANGUAGE_VAL.getLanguage());
 		
 		assertTrue(candidate.getIndustries().contains(Industry.AGRICULTURE));
 		assertTrue(candidate.getIndustries().contains(Industry.CYBER_SECURITY));

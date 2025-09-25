@@ -14,11 +14,9 @@ import com.arenella.recruit.candidates.beans.Candidate;
 import com.arenella.recruit.candidates.beans.CandidateFilterOptions;
 import com.arenella.recruit.candidates.beans.City;
 import com.arenella.recruit.candidates.controllers.CandidateSuggestionAPIOutbound;
-import com.arenella.recruit.candidates.entities.CandidateDocument;
-import com.arenella.recruit.candidates.enums.FUNCTION;
+
 import com.arenella.recruit.candidates.enums.RESULT_ORDER;
 import com.arenella.recruit.candidates.repos.CandidateRepository;
-import com.arenella.recruit.candidates.services.CandidateService;
 import com.arenella.recruit.candidates.services.CityService;
 import com.arenella.recruit.curriculum.adapters.CurriculumExternalEventListener;
 import com.arenella.recruit.emailservice.adapters.RequestSendEmailCommand;

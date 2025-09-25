@@ -358,13 +358,13 @@ public interface CandidateRepository extends ElasticsearchRepository<CandidateDo
 				
 				List<LongTermsBucket> availability = bucket.aggregations().get("availability").lterms().buckets().array();
 				
-				availability.stream().filter(a -> a.keyAsString().equals("true")).findFirst().ifPresent(count -> {
-					available.set(count.docCount());
-				});
+				availability.stream().filter(a -> a.keyAsString().equals("true")).findFirst().ifPresent(count -> 
+					available.set(count.docCount())
+				);
 				
-				availability.stream().filter(a -> a.keyAsString().equals("false")).findFirst().ifPresent(count -> {
-					unavailable.set(count.docCount());
-				});
+				availability.stream().filter(a -> a.keyAsString().equals("false")).findFirst().ifPresent(count -> 
+					unavailable.set(count.docCount())
+				);
 				
 				stats.add(new CandidateRoleStatsView(com.arenella.recruit.candidates.enums.FUNCTION.valueOf(role), available.get(), unavailable.get()));
 				
@@ -426,13 +426,13 @@ public interface CandidateRepository extends ElasticsearchRepository<CandidateDo
 				
 				List<LongTermsBucket> availability = bucket.aggregations().get("availability").lterms().buckets().array();
 				
-				availability.stream().filter(a -> a.keyAsString().equals("true")).findFirst().ifPresent(count -> {
-					available.set(count.docCount());
-				});
+				availability.stream().filter(a -> a.keyAsString().equals("true")).findFirst().ifPresent(count -> 
+					available.set(count.docCount())
+				);
 				
-				availability.stream().filter(a -> a.keyAsString().equals("false")).findFirst().ifPresent(count -> {
-					unavailable.set(count.docCount());
-				});
+				availability.stream().filter(a -> a.keyAsString().equals("false")).findFirst().ifPresent(count -> 
+					unavailable.set(count.docCount())
+				);
 				
 				stats.add(new RoleTotals(com.arenella.recruit.candidates.enums.COUNTRY.valueOf(role), available.get(), unavailable.get()));
 				

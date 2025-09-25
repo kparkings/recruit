@@ -71,7 +71,7 @@ public class ListingAlertServiceImpl implements ListingAlertService{
 		
 		ClaimsUsernamePasswordAuthenticationToken user = (ClaimsUsernamePasswordAuthenticationToken)principal;
 		
-		return user.getAuthorities().stream().filter(a -> a.getAuthority().equals(role)).findAny().isPresent();
+		return user.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals(role));
 		
 	}
 	

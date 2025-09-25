@@ -24,7 +24,7 @@ public class CandidateListingContactRequest {
 		this.candidateId	= builder.candidateId;
 		this.listingId		= builder.listingId;
 		this.message		= builder.message;
-		this.attachment		= builder.attachment;;
+		this.attachment		= builder.attachment;
 		
 	}
 	

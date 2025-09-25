@@ -96,13 +96,13 @@ class ESFilteredSearchRequestBuilderTest {
 		List<TermsQuery> 	mustTerms 		= new ArrayList<>();
 		List<ExistsQuery> 	mustNotExists 	= new ArrayList<>();
 		
-		boolQuery.must().stream().filter(q -> q.isMatch()).forEach(q -> mustMatch.add((MatchQuery)q._get()));
-		boolQuery.must().stream().filter(q -> q.isRange()).forEach(q -> mustRange.add((RangeQuery)q._get()));
-		boolQuery.must().stream().filter(q -> q.isBool()).forEach(q -> mustBool.add((BoolQuery)q._get()));
-		boolQuery.must().stream().filter(q -> q.isTerms()).forEach(q -> mustTerms.add((TermsQuery)q._get()));
+		boolQuery.must().stream().filter(Query::isMatch).forEach(q -> mustMatch.add((MatchQuery)q._get()));
+		boolQuery.must().stream().filter(Query::isRange).forEach(q -> mustRange.add((RangeQuery)q._get()));
+		boolQuery.must().stream().filter(Query::isBool).forEach(q -> mustBool.add((BoolQuery)q._get()));
+		boolQuery.must().stream().filter(Query::isTerms).forEach(q -> mustTerms.add((TermsQuery)q._get()));
 		
-		boolQuery.mustNot().stream().filter(q -> q.isMatch()).forEach(q -> mustNotMatch.add((MatchQuery)q._get()));
-		boolQuery.mustNot().stream().filter(q -> q.isExists()).forEach(q -> mustNotExists.add((ExistsQuery)q._get()));
+		boolQuery.mustNot().stream().filter(Query::isMatch).forEach(q -> mustNotMatch.add((MatchQuery)q._get()));
+		boolQuery.mustNot().stream().filter(Query::isExists).forEach(q -> mustNotExists.add((ExistsQuery)q._get()));
 		
 		assertTrue(mustNotMatch.isEmpty());
 		
@@ -161,12 +161,11 @@ class ESFilteredSearchRequestBuilderTest {
 		List<BoolQuery>  mustBool 		= new ArrayList<>();
 		List<TermsQuery> mustTerms 		= new ArrayList<>();
 		
-		boolQuery.must().stream().filter(q -> q.isMatch()).forEach(q -> mustMatch.add((MatchQuery)q._get()));
-		boolQuery.must().stream().filter(q -> q.isRange()).forEach(q -> mustRange.add((RangeQuery)q._get()));
-		boolQuery.must().stream().filter(q -> q.isBool()).forEach(q -> mustBool.add((BoolQuery)q._get()));
-		boolQuery.must().stream().filter(q -> q.isTerms()).forEach(q -> mustTerms.add((TermsQuery)q._get()));
-		
-		boolQuery.mustNot().stream().filter(q -> q.isMatch()).forEach(q -> mustNotMatch.add((MatchQuery)q._get()));
+		boolQuery.must().stream().filter(Query::isMatch).forEach(q -> mustMatch.add((MatchQuery)q._get()));
+		boolQuery.must().stream().filter(Query::isRange).forEach(q -> mustRange.add((RangeQuery)q._get()));
+		boolQuery.must().stream().filter(Query::isBool).forEach(q -> mustBool.add((BoolQuery)q._get()));
+		boolQuery.must().stream().filter(Query::isTerms).forEach(q -> mustTerms.add((TermsQuery)q._get()));
+		boolQuery.mustNot().stream().filter(Query::isMatch).forEach(q -> mustNotMatch.add((MatchQuery)q._get()));
 		
 		assertTrue(mustMatch.isEmpty());
 		assertTrue(mustRange.isEmpty());

@@ -42,7 +42,7 @@ public class CandidateMonolithExternalEventListener implements CandidateExternal
 	private CandidateRepository 		canidateRepo;
 	
 	@Autowired
-	private SkillUpdateStatDao			SkillUpdateStatDao;
+	private SkillUpdateStatDao			skillUpdateStatDao;
 	
 	/**
 	* Refer to CandidateExternalEventListener for details 
@@ -135,7 +135,7 @@ public class CandidateMonolithExternalEventListener implements CandidateExternal
 		long updatedSkillCount = candidateOpt.get().getSkills().size();
 		
 		this.canidateRepo.saveCandidate(candidateOpt.get());
-		this.SkillUpdateStatDao.saveSkillUpdateStat(new SkillUpdateStat(event.getCurriculumId(), LocalDate.now(), updatedSkillCount - originalSkillCount));
+		this.skillUpdateStatDao.saveSkillUpdateStat(new SkillUpdateStat(event.getCurriculumId(), LocalDate.now(), updatedSkillCount - originalSkillCount));
 		
 	}
 

@@ -148,9 +148,9 @@ public class RecruiterProfileController {
 		RecruiterProfileFilterBuilder filters = RecruiterProfileFilter.builder();
 		
 		UsernamePasswordAuthenticationToken user = (UsernamePasswordAuthenticationToken)authenticatedUser;
-		boolean isCandidate = user.getAuthorities().stream().filter(a -> a.getAuthority().equals("ROLE_CANDIDATE")).findAny().isPresent();
-		boolean isRecruiter = user.getAuthorities().stream().filter(a -> a.getAuthority().equals("ROLE_RECRUITER")).findAny().isPresent();
-		boolean isAdmin 	= user.getAuthorities().stream().filter(a -> a.getAuthority().equals("ROLE_ADMIN")).findAny().isPresent();
+		boolean isCandidate = user.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_CANDIDATE"));
+		boolean isRecruiter = user.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_RECRUITER"));
+		boolean isAdmin 	= user.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
 		
 		
 		if (isCandidate) {

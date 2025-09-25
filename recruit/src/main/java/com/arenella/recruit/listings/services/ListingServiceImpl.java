@@ -445,7 +445,7 @@ public class ListingServiceImpl implements ListingService{
 	* @return Whether or not the current User is an Admin
 	*/
 	private boolean isAdmin() {
-		return SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream().filter(role -> role.getAuthority().equals("ROLE_ADMIN")).findAny().isPresent();
+		return SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream().anyMatch(role -> role.getAuthority().equals("ROLE_ADMIN"));
 	}
 	
 }

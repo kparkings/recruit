@@ -71,7 +71,7 @@ public class ListingFunctionSynonymUtil {
 		
 		functionsAndSynonyms.add(searchTerm);
 		
-		AtomicReference<String> rawTerm = new AtomicReference<String>(searchTerm);
+		AtomicReference<String> rawTerm = new AtomicReference<>(searchTerm);
 		
 		GERNERIC_TERM_EXCLUSIONS.stream().forEach(term -> rawTerm.set(rawTerm.get().replaceAll(term, "")));
 		

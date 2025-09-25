@@ -7,9 +7,9 @@ import org.junit.jupiter.api.Test;
 
 class RecruiterCreditTest {
 
-	final String 	RECRUITER_ID 		= "recruiter44";
-	final int 		CREDITS 			= 4;
-	final boolean 	PAID_SUBSCRIPTION 	= true;
+	private static final String 	RECRUITER_ID 		= "recruiter44";
+	private static final int 		CREDITS 			= 4;
+	private static final boolean 	PAID_SUBSCRIPTION 	= true;
 	
 	/**
 	* Tests credit default values

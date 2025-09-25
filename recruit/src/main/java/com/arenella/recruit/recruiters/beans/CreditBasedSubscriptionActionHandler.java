@@ -52,7 +52,7 @@ public class CreditBasedSubscriptionActionHandler implements RecruiterSubscripti
 			switch (action) {
 				case ACTIVATE_SUBSCRIPTION:{
 					
-					if (!isAdminUser) {
+					if (Boolean.FALSE.equals(isAdminUser)) {
 						throw new IllegalAccessException("You are not authorized to carry out this action");
 					}
 					
@@ -102,7 +102,7 @@ public class CreditBasedSubscriptionActionHandler implements RecruiterSubscripti
 				}
 				case REJECT_SUBSCRIPTION:{
 					
-					if (!isAdminUser) {
+					if (Boolean.FALSE.equals(isAdminUser)) {
 						throw new IllegalAccessException("You are not authorized to carry out this action");
 					}
 					

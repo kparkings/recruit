@@ -228,7 +228,7 @@ public class JobTitleExtractor implements JobSpecifcationFilterExtractor{
 		* If there is a tie. Use first occurrence of 
 		*/
 		OptionalInt tieScore 		= scored.values().stream().mapToInt(v -> v.get()).max();
-		Set<Type> 	tiedJobTypes 	= scored.entrySet().stream().filter(a -> a.getValue().get() == tieScore.getAsInt()).map(k -> k.getKey()).collect(Collectors.toSet());
+		Set<Type> 	tiedJobTypes 	= scored.entrySet().stream().filter(a -> a.getValue().get() == tieScore.getAsInt()).map(Entry::getKey).collect(Collectors.toSet());
 		
 		if(tieScore.isPresent() && tieScore.getAsInt() != 0 && tiedJobTypes.size() > 1) {
 			

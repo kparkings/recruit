@@ -43,7 +43,7 @@ public interface CandidateSkillsDao extends CrudRepository<CandidateSkillEntity,
 	* @return skills
 	*/
 	default Set<CandidateSkill> getValidationPendingSkills(){
-		return getValidationPendingSkillsEntities().stream().map(s -> CandidateSkillEntity.convertFromEntity(s)).collect(Collectors.toCollection(LinkedHashSet::new));
+		return getValidationPendingSkillsEntities().stream().map(CandidateSkillEntity::convertFromEntity).collect(Collectors.toCollection(LinkedHashSet::new));
 	}
 	
 	/**
@@ -59,7 +59,7 @@ public interface CandidateSkillsDao extends CrudRepository<CandidateSkillEntity,
 	* @param skills - Skills to update
 	*/
 	default void persistExistingSkills(Set<CandidateSkill> skills) {
-		this.saveAll(skills.stream().map(skill -> CandidateSkillEntity.convertToEntity(skill)).collect(Collectors.toSet()));
+		this.saveAll(skills.stream().map(CandidateSkillEntity::convertToEntity).collect(Collectors.toSet()));
 	}
 	
 }

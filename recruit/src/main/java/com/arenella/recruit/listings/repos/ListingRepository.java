@@ -43,7 +43,7 @@ public interface ListingRepository extends ElasticsearchRepository<ListingDocume
 				.map(h -> ListingDocument.fromEntity(h.source()))
 				.collect(Collectors.toCollection(LinkedList::new));
 		
-			return new PageImpl<Listing>(listings);
+			return new PageImpl<>(listings);
 			
 		}catch(Exception e) {
 			throw new RuntimeException();
@@ -79,7 +79,7 @@ public interface ListingRepository extends ElasticsearchRepository<ListingDocume
 	* @param listings
 	*/
 	public default void saveListings(Set<Listing> listings) {
-		this.saveAll(listings.stream().map(l -> ListingDocument.toEntity(l)).collect(Collectors.toSet()));
+		this.saveAll(listings.stream().map(ListingDocument::toEntity).collect(Collectors.toSet()));
 	}
 	
 	/**

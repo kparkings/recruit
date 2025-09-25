@@ -58,7 +58,7 @@ class MonolithExternalEventPublisherTest {
 		final String skill1 = "aSkill1";
 		final String skill2 = "aSkill2";
 		
-		List<GrantedAuthority> roles = List.of("ROLE_RECRUITER").stream().map(role -> new SimpleGrantedAuthority(role)).collect(Collectors.toList());
+		List<GrantedAuthority> roles = List.of("ROLE_RECRUITER").stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList());
 		
 		UsernamePasswordAuthenticationToken  authToken = new UsernamePasswordAuthenticationToken("username", "", roles);
 		
@@ -87,7 +87,7 @@ class MonolithExternalEventPublisherTest {
 		final String skill1 = "aSkill1";
 		final String skill2 = "aSkill2";
 		
-		List<GrantedAuthority> roles = List.of("ROLE_ADMIN").stream().map(role -> new SimpleGrantedAuthority(role)).collect(Collectors.toList());
+		List<GrantedAuthority> roles = List.of("ROLE_ADMIN").stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList());
 		
 		UsernamePasswordAuthenticationToken  authToken = new UsernamePasswordAuthenticationToken("username", "", roles);
 		

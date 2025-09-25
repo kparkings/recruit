@@ -55,7 +55,7 @@ public interface CandidateRecruiterCreditDao extends CrudRepository<CandidateRec
 	* @param credits
 	*/
 	default void saveAll(Set<RecruiterCredit> credits) {
-		credits.stream().map(recruiterCredit -> CandidateRecruiterCreditEntity.convertToEntity(recruiterCredit)).forEach(entity -> this.save(entity));
+		credits.stream().map(CandidateRecruiterCreditEntity::convertToEntity).forEach(this::save);
 	}
 	
 }

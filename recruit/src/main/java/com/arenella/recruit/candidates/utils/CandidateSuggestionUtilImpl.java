@@ -1,6 +1,5 @@
 package com.arenella.recruit.candidates.utils;
 
-import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
@@ -49,7 +48,7 @@ public class CandidateSuggestionUtilImpl implements CandidateSuggestionUtil{
 		
 		String title = candidate.get().getRoleSought().toLowerCase();
 		
-		Set<String> matchingKeywords = searchTermKeywords.stream().map(String::toLowerCase).filter(keyword -> title.contains(keyword)).collect(Collectors.toSet());
+		Set<String> matchingKeywords = searchTermKeywords.stream().map(String::toLowerCase).filter(title::contains).collect(Collectors.toSet());
 		
 		if (matchingKeywords.isEmpty()) {
 			return 0;

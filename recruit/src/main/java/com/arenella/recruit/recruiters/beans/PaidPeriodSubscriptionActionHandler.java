@@ -31,7 +31,7 @@ public class PaidPeriodSubscriptionActionHandler implements RecruiterSubscriptio
 		switch(action) {
 			case INVOICE_SENT:{
 			
-				if (!isAdminUser) {
+				if (Boolean.FALSE.equals(isAdminUser)) {
 					throw new IllegalAccessException("You are not authorized to carry out this action");
 				}
 				
@@ -48,7 +48,7 @@ public class PaidPeriodSubscriptionActionHandler implements RecruiterSubscriptio
 			}
 			case ACTIVATE_SUBSCRIPTION:{
 			
-				if (!isAdminUser) {
+				if (Boolean.FALSE.equals(isAdminUser)) {
 					throw new IllegalAccessException("You are not authorized to carry out this action");
 				}
 				
@@ -73,7 +73,7 @@ public class PaidPeriodSubscriptionActionHandler implements RecruiterSubscriptio
 			}
 			case DISABLE_PENDING_PAYMENT: {
 				
-				if (!isAdminUser) {
+				if (Boolean.FALSE.equals(isAdminUser)) {
 					throw new IllegalAccessException("You are not authorized to carry out this action");
 				}
 				
@@ -89,15 +89,15 @@ public class PaidPeriodSubscriptionActionHandler implements RecruiterSubscriptio
 			}
 			case END_SUBSCRIPTION: {
 				
-				if (!isAdminUser && subscription.getStatus() == subscription_status.DISABLED_PENDING_PAYMENT) {
+				if (Boolean.FALSE.equals(isAdminUser) && subscription.getStatus() == subscription_status.DISABLED_PENDING_PAYMENT) {
 					throw new IllegalAccessException("You are not authorized to carry out this action");
 				}
 				
-				if (!isAdminUser && subscription.getStatus() == subscription_status.ACTIVE_INVOICE_SENT) {
+				if (Boolean.FALSE.equals(isAdminUser) && subscription.getStatus() == subscription_status.ACTIVE_INVOICE_SENT) {
 					throw new IllegalAccessException("You are not authorized to carry out this action");
 				}
 				
-				if (!isAdminUser && subscription.getStatus() == subscription_status.SUBSCRIPTION_INVOICE_UNPAID) {
+				if (Boolean.FALSE.equals(isAdminUser) && subscription.getStatus() == subscription_status.SUBSCRIPTION_INVOICE_UNPAID) {
 					throw new IllegalAccessException("You are not authorized to carry out this action");
 				}
 				
@@ -117,7 +117,7 @@ public class PaidPeriodSubscriptionActionHandler implements RecruiterSubscriptio
 			}
 			case RENEW_SUBSCRIPTION: {
 				
-				if (!isAdminUser) {
+				if (Boolean.FALSE.equals(isAdminUser)) {
 					throw new IllegalAccessException("You are not authorized to carry out this action");
 				}
 				

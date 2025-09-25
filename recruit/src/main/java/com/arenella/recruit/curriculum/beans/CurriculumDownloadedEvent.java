@@ -23,7 +23,7 @@ public class CurriculumDownloadedEvent {
 		
 		this.curriculumId 	= builder.curriculumId;
 		this.userId			= SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
-		this.isAdminUser	= SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream().filter(role -> role.getAuthority().equals("ROLE_ADMIN")).findAny().isPresent();
+		this.isAdminUser	= SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream().anyMatch(role -> role.getAuthority().equals("ROLE_ADMIN"));
 		this.timestamp		= LocalDateTime.now();
 		
 	}

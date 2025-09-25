@@ -1006,7 +1006,7 @@ public class CandidateDocument {
 					.freelance(candidate.isFreelance())
 					.functions(candidate.getFunctions())
 					.introduction(candidate.getIntroduction())
-					.languages(candidate.getLanguages().stream().map(l ->  LanguageDocument.convertFromDomain(l)).collect(Collectors.toCollection(LinkedHashSet::new)))
+					.languages(candidate.getLanguages().stream().map(LanguageDocument::convertFromDomain).collect(Collectors.toCollection(LinkedHashSet::new)))
 					.lastAvailabilityCheck(candidate.getLastAvailabilityCheckOn())
 					.ownerId(candidate.getOwnerId().isEmpty() ? null : candidate.getOwnerId().get())
 					.perm(candidate.isPerm())

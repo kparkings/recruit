@@ -36,7 +36,7 @@ public interface SupplyAndDemandService {
 	* @param openPosition 	- OpenPosition to be updated
 	* @throws IllegalAccessException
 	*/
-	public void updateOpenPosition(UUID OpenPositionId, OpenPosition openPosition) throws IllegalAccessException;
+	public void updateOpenPosition(UUID openPositionId, OpenPosition openPosition) throws IllegalAccessException;
 	
 	/**
 	* Returns details of a Recruiter based upon their unique identifier

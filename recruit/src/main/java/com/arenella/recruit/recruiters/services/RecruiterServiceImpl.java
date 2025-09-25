@@ -311,7 +311,7 @@ public class RecruiterServiceImpl implements RecruiterService{
 		/**
 		* Ensure that at max only non ended PAID_SUBSCRIPTION exists per recruiter 
 		*/
-		if (recruiter.getSubscriptions().stream().filter(s -> paidSubscriptionTypes.contains(s.getType()) && s.getStatus() != subscription_status.SUBSCRIPTION_ENDED).findAny().isPresent()) {
+		if (recruiter.getSubscriptions().stream().anyMatch(s -> paidSubscriptionTypes.contains(s.getType()) && s.getStatus() != subscription_status.SUBSCRIPTION_ENDED)) {
 			throw new IllegalStateException("Subscription already exists. Cannot add a second time.");
 		}
 		
@@ -440,7 +440,7 @@ public class RecruiterServiceImpl implements RecruiterService{
 	*/
 	private boolean isAdmin() {
 		
-		return SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream().filter(role -> role.getAuthority().equals("ROLE_ADMIN")).findAny().isPresent();
+		return SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream().anyMatch(role -> role.getAuthority().equals("ROLE_ADMIN"));
 		
 		
 	}
