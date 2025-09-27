@@ -2,7 +2,6 @@ package com.arenella.recruit.candidates.utils;
 
 import java.time.LocalDate;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -52,23 +51,37 @@ public class CandidateAccountRefreshUtil {
 	@Value("${arenella.ict.candidate.email.availability}")
 	public String candidateAvailabilityEmailEnabled = "true";
 	
-	@Autowired
 	private CandidateRepository 				candidateRepository;
-	
-	@Autowired
 	private ElasticsearchClient 				esClient;
-	
-	@Autowired
 	private CurriculumExternalEventListener 	eventPublisher;
-	
-	@Autowired
 	private CandidateSearchUtil					candidateSearchUtil;
-	
-	@Autowired
 	private ExternalEventPublisher				externalEventPublisher;
-	
-	@Autowired
 	private CityService							cityService;
+	
+	/**
+	* 
+	* @param candidateRepository	- Repo containing Candidate profiles
+	* @param esClient				- Elasticsearch client
+	* @param eventPublisher			- Publishes events to other services
+	* @param candidateSearchUtil	- Utilities for searching for Candidates
+	* @param externalEventPublisher	- Publishes events to external services
+	* @param cityService			- Services realting to Cities
+	*/
+	public CandidateAccountRefreshUtil( CandidateRepository candidateRepository,
+										ElasticsearchClient esClient,
+										CurriculumExternalEventListener eventPublisher,
+										CandidateSearchUtil	candidateSearchUtil,
+										ExternalEventPublisher externalEventPublisher,
+										CityService cityService) {
+	
+		this.candidateRepository 	= candidateRepository;
+		this.esClient 				= esClient;
+		this.eventPublisher 		= eventPublisher;
+		this.candidateSearchUtil 	= candidateSearchUtil;
+		this.externalEventPublisher = externalEventPublisher;
+		this.cityService 			= cityService;
+		
+	}
 	
 	/**
 	* Triggers refresh actions for Candidates that are outdated

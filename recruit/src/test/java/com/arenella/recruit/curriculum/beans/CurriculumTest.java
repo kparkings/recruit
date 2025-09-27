@@ -31,9 +31,9 @@ class CurriculumTest {
 								.file(file)
 							.build();
 
-		assertEquals(curriculum.getId().get(), 	id);
-		assertEquals(curriculum.getFileType(), 	fileType);
-		assertEquals(curriculum.getFile(), 		file);
+		assertEquals(id, 		curriculum.getId().get());
+		assertEquals(fileType, 	curriculum.getFileType());
+		assertEquals(file, 		curriculum.getFile());
 		
 	}
 	

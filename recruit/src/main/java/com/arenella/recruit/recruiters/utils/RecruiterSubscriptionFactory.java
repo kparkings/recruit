@@ -1,6 +1,5 @@
 package com.arenella.recruit.recruiters.utils;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.arenella.recruit.recruiters.beans.CreditBasedSubscriptionActionHandler;
@@ -15,12 +14,18 @@ import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_
 @Component
 public class RecruiterSubscriptionFactory {
 	
-	@Autowired
 	private CreditBasedSubscriptionActionHandler 	creditBasedActionHandler;
-	
-	
-	@Autowired
 	private PaidPeriodSubscriptionActionHandler 	paidPeriodSubscriptionActionHandler;
+	
+	/**
+	* 
+	* @param creditBasedActionHandler				- Handles actions relating to credit based access
+	* @param paidPeriodSubscriptionActionHandler	- Hanles action relating to paid subscription based access
+	*/
+	public RecruiterSubscriptionFactory(CreditBasedSubscriptionActionHandler creditBasedActionHandler, PaidPeriodSubscriptionActionHandler paidPeriodSubscriptionActionHandler) {
+		this.creditBasedActionHandler 				= creditBasedActionHandler;
+		this.paidPeriodSubscriptionActionHandler 	= paidPeriodSubscriptionActionHandler;
+	}
 	
 	/**
 	* Returns appropriate Action handler for the Subscription type

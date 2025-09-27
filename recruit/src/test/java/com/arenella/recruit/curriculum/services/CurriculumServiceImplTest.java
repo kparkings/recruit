@@ -481,7 +481,7 @@ public class CurriculumServiceImplTest {
 					.file(file)
 				.build();
 		
-		long id = Long.valueOf(curriculumId);
+		long id = Long.parseLong(curriculumId);
 		
 		Assertions.assertThrows(IllegalArgumentException.class, () -> {
 			service.updateCurriculum(id, curriculum);

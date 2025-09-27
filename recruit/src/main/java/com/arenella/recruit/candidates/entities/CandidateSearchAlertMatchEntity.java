@@ -71,7 +71,7 @@ public class CandidateSearchAlertMatchEntity {
 	*/
 	public UUID getId() {
 		return this.id;
-	};
+	}
 	
 	/**
 	* Returns the Unique Id of the recruiter that owns the Alert

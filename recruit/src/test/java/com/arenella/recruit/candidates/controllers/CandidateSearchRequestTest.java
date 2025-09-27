@@ -349,9 +349,6 @@ class CandidateSearchRequestTest {
 		
 		CandidateFilterOptions filters = CandidateSearchRequest.convertToCandidateFilterOptions(csr, orderAttribute, RESULT_ORDER.desc);
 	
-		//TOOO: [KP] See if we still need functions
-		//assertTrue(filters.getFunctions().contains(FUNCTION.ARCHITECT));
-		
 		assertTrue(filters.getSkills().contains(SKILL_CSHARP));
 		assertTrue(filters.getSkills().contains(SKILL_JAVA));
 		assertTrue(filters.getLanguages().contains(LANG_IT));

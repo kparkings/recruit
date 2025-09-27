@@ -74,12 +74,12 @@ public class CandidateResultAccumulatorUtil {
 			}
 		});
 		
-		this.getAccuracy(wrappedCandidate).ifPresent(newCandiadteAccuracy -> {
+		this.getAccuracy(wrappedCandidate).ifPresent(newCandiadteAccuracy -> 
 			this.buckets.entrySet().stream().filter(kv -> isLessAccurate(kv.getValue(), newCandiadteAccuracy)).findFirst().ifPresent(replace -> {
 				this.buckets.remove(replace.getKey());
 				this.buckets.put(wrappedCandidate, newCandiadteAccuracy);
-			});
-		});
+			})
+		);
 		
 		long perfectBuckets = this.buckets.values().stream().filter(accuracy -> accuracy == suggestion_accuracy.perfect).count();
 	
@@ -113,9 +113,7 @@ public class CandidateResultAccumulatorUtil {
 		}
 		
 		return true;
-		
-		
-		
+	
 	}
 	
 	/**
@@ -149,6 +147,5 @@ public class CandidateResultAccumulatorUtil {
 		return Optional.empty();
 		
 	}
-	
 	
 }

@@ -78,7 +78,7 @@ public interface ContactDao extends CrudRepository<ContactEntity, ContactEntityP
 	* @param contactIds - Id's to filter on
 	* @return matching Contacts
 	*/
-	default public Set<Contact> fetchContacts(Set<String> contactIds){
+	default Set<Contact> fetchContacts(Set<String> contactIds){
 		return this.getEntitiesByIdAndType(Set.of(ContactType.RECRUITER,ContactType.CANDIDATE), contactIds).stream().map(ContactEntity::convertFromEntity).collect(Collectors.toSet());
 	}
 	

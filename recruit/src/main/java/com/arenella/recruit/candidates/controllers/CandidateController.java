@@ -11,7 +11,6 @@ import java.util.stream.Collectors;
 
 import jakarta.servlet.http.HttpServletResponse;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -53,11 +52,18 @@ import com.arenella.recruit.curriculum.enums.FileType;
 @RestController
 public class CandidateController {
 
-	@Autowired
 	private CandidateService			candidateService;
-	
-	@Autowired
 	private CandidateSearchUtil			candidateSearchUtil;
+	
+	/**
+	* Constructor
+	* @param candidateService		- Service to Candidates
+	* @param candidateSearchUtil	- Utility for searching on Candidates
+	*/
+	public CandidateController(CandidateService candidateService, CandidateSearchUtil candidateSearchUtil) {
+		this.candidateService 		= candidateService;
+		this.candidateSearchUtil	= candidateSearchUtil;
+	}
 	
 	/**
 	* Adds a new Candidate
@@ -85,7 +91,7 @@ public class CandidateController {
 		return ResponseEntity.ok().build();
 	}
 	
-	public static enum CANDIDATE_UPDATE_ACTIONS {enable, disable}
+	public enum CANDIDATE_UPDATE_ACTIONS {enable, disable}
 	
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@PutMapping(path="candidate/{candidateId}/")
@@ -193,12 +199,12 @@ public class CandidateController {
 		* older requests responses. Implementation carries 
 		* out in front end  
 		*/
-		searchRequest.requestFilters().ifPresent(f -> {
+		searchRequest.requestFilters().ifPresent(f -> 
 			f.getBackendRequestId().ifPresent(id ->{
 				int backendRequestId = searchRequest.requestFilters().map(RequestFilters::getBackendRequestId).orElse(Optional.of(0)).get();
 				response.setHeader("X-Arenella-Request-Id", ""+backendRequestId);
-			});
-		});
+			})
+		);
 	
 		return candidateSearchUtil.searchAndPackageForAPIOutput(isRecruiter(principal), isUseCredits(principal), userCreditsExpired(getLoggedInUserName(principal)), filterOptions, unfiltered);
 		
@@ -274,7 +280,7 @@ public class CandidateController {
 	*/
 	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('ROLE_RECRUITER')")
 	@PostMapping(value="/extract-filters-text")
-	public ResponseEntity<CandidateExtractedFilters> extractSearchFiltersFromText(@RequestBody String jobspec) throws Exception{
+	public ResponseEntity<CandidateExtractedFilters> extractSearchFiltersFromText(@RequestBody String jobspec) {
 		
 		CandidateExtractedFilters extractedFilters = this.candidateService.extractFiltersFromText(jobspec);
 		

@@ -23,7 +23,7 @@ class DocumentFilterExtractionFactoryTest {
 	@Test
 	void testGetInstance() {
 		
-		DocumentFilterExtractionUtil util = new DocumentFilterExtractionUtil();
+		DocumentFilterExtractionUtil util = new DocumentFilterExtractionUtil(null, null, null, null, null, null, null);
 		assertTrue(util.getInstance(FileType.doc) instanceof WordExtractor);
 		assertTrue(util.getInstance(FileType.docx) instanceof WordExtractor);
 		assertTrue(util.getInstance(FileType.pdf) instanceof PDFExtractor);

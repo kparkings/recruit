@@ -3,7 +3,6 @@ package com.arenella.recruit.candidates.extractors;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.arenella.recruit.candidates.beans.CandidateExtractedFilters.CandidateExtractedFiltersBuilder;
@@ -16,8 +15,15 @@ import com.arenella.recruit.candidates.dao.CandidateSkillsDao;
 @Component
 public class SkillExtractor implements JobSpecifcationFilterExtractor{
 	
-	@Autowired
 	private CandidateSkillsDao skillsDao;
+	
+	/**
+	* Constructor
+	* @param skillsDao - DAO for accessing candidate Skill Data
+	*/
+	public SkillExtractor(CandidateSkillsDao skillsDao) {
+		this.skillsDao = skillsDao;
+	}
 	
 	private String sanitizeDocumentText(String documentText) {
 		
@@ -74,9 +80,6 @@ public class SkillExtractor implements JobSpecifcationFilterExtractor{
 	 * 
 	 * 
 	 */
-	
-	//TODO: [KP] Software developer not being filtered out for C#
-	
 	private void removeBlacklistedItems(Set<String> extractedSkills, CandidateExtractedFiltersBuilder filterBuilder) {
 		
 		Set<String> blacklist 				= Set.of("master","food","e","r","c","applicatie","insight","team player","dynamics", "teamplayer", "elk","net","teams", "na","core java", "11","qa","test","testing","delivery","transformation", "it", "back", "informatica","capital","people","idea","auto","ideal", "development", "express", "front", "native","data");

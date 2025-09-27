@@ -6,7 +6,6 @@ import java.util.stream.Collectors;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -44,11 +43,18 @@ import com.arenella.recruit.authentication.services.AuthenticationService;
 @RestController
 public class AuthenticationController {
 
-	@Autowired
 	private AuthenticationService		authenticationService;
-	
-	@Autowired
 	private UserDetailsService			userDetailsService;
+	
+	/**
+	* Constructor
+	* @param authenticationService	- Authentication services
+	* @param userDetailsService		- User Detail services
+	*/
+	public AuthenticationController(AuthenticationService authenticationService, UserDetailsService	userDetailsService) {
+		this.authenticationService 	= authenticationService;
+		this.userDetailsService 	= userDetailsService;
+	}
 	
 	/**
 	* EndPoint validated users login credentials and returns a JWT token wrapped 

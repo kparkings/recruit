@@ -32,9 +32,6 @@ import com.arenella.recruit.authentication.dao.AuthenticatedEventDao;
 */
 @ExtendWith(MockitoExtension.class)
 class AuthenticationStatisticsServiceImplTest {
-
-	@InjectMocks 
-	private AuthenticationStatisticsServiceImpl service						= new AuthenticationStatisticsServiceImpl();
 	
 	@Mock
 	private SecurityContext 					mockSecurityContext;
@@ -44,6 +41,9 @@ class AuthenticationStatisticsServiceImplTest {
 	
 	@Mock
 	private AuthenticatedEventDao 				mockAuthenticatedEventDao;
+	
+	@InjectMocks 
+	private AuthenticationStatisticsServiceImpl service	= new AuthenticationStatisticsServiceImpl(mockAuthenticatedEventDao);
 	
 	private static final String 				USER_ID_1 		= "recruiter1";
 	private static final boolean 				RECRUITER_ID_1 		= true;

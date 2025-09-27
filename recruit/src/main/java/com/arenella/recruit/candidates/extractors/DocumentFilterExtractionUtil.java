@@ -5,7 +5,6 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.arenella.recruit.candidates.beans.CandidateExtractedFilters;
@@ -19,28 +18,43 @@ import com.arenella.recruit.curriculum.enums.FileType;
 @Component
 public class DocumentFilterExtractionUtil {
 
-	@Autowired
 	private JobTitleExtractor 		jobTitleExtractor;
-	
-	@Autowired
 	private SeniorityExtractor 		seniorityExtractor;
-	
-	@Autowired
 	private CountryExtractor 		countryExtractor;
-	
-	@Autowired
 	private CityExtractor			cityExtractor;
-	
-	@Autowired
 	private LanguageExtractor 		languageExtractor;
-	
-	@Autowired
 	private SkillExtractor 			skillExtractor;
-	
-	@Autowired
 	private ContractTypeExtractor 	contractTypeExtractor;
 	
 	public static final Set<String> UK = Set.of("norfolk","newcastle","cambridge","bristol","gbp","stockport","£"," uk ", "uk.","uk\\t", "ir35", "milton keynes", "england", "midlands", "derby", "wales", "scotland", "edinburgh","glasgow", "london", "liverpool", "manchester", "oxford", "glousester", "surrey", "Buckinghamshire", "Berkshire", "hounslow", "Milton Keynes", "edgware", "Leicester", "bracknell", "barking", "Colchester", "cardiff", "Brentford", "Stoke-on-Trent", "maidenhead", "guildford", " reading ", "leeds");
+	
+	/**
+	* Constructor
+	* @param jobTitleExtractor		- Extracts the job title from text
+	* @param seniorityExtractor		- Extracts seniority from text
+	* @param countryExtractor		- Extracts countries from text
+	* @param cityExtractor			- Extracts city from test
+	* @param languageExtractor		- Extracts required languages form text
+	* @param skillExtractor			- Extracts skills from text
+	* @param contractTypeExtractor	- Extracts contract type from text
+	*/
+	public DocumentFilterExtractionUtil(JobTitleExtractor 		jobTitleExtractor,
+										SeniorityExtractor 		seniorityExtractor,
+										CountryExtractor 		countryExtractor,
+										CityExtractor			cityExtractor,
+										LanguageExtractor 		languageExtractor,
+										SkillExtractor 			skillExtractor,
+										ContractTypeExtractor 	contractTypeExtractor) {
+		
+		this.jobTitleExtractor 		= jobTitleExtractor;
+		this.seniorityExtractor 	= seniorityExtractor;
+		this.countryExtractor 		= countryExtractor;
+		this.cityExtractor 			= cityExtractor;
+		this.languageExtractor 		= languageExtractor;
+		this.skillExtractor 		= skillExtractor;
+		this.contractTypeExtractor 	= contractTypeExtractor;
+		
+	}
 	
 	/**
 	* Extracts Filters from a document

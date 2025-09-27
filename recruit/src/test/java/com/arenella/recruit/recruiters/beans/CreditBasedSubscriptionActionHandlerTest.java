@@ -22,11 +22,11 @@ import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_
 @ExtendWith(MockitoExtension.class)
 class CreditBasedSubscriptionActionHandlerTest {
 
-	@InjectMocks
-	private CreditBasedSubscriptionActionHandler 	handler 					= new CreditBasedSubscriptionActionHandler();
-	
 	@Mock
 	private RecruitersExternalEventPublisher 		mockExternEventPublisher;
+	
+	@InjectMocks
+	private CreditBasedSubscriptionActionHandler 	handler 					= new CreditBasedSubscriptionActionHandler(mockExternEventPublisher);
 	
 	/**
 	* Tests if Action provided is not supported an Exception is thrown

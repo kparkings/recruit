@@ -29,9 +29,6 @@ import java.util.List;
 */
 @ExtendWith(MockitoExtension.class)
 class CandidateSearchUtilTest {
-
-	@InjectMocks 
-	private CandidateSearchUtil 					util 						= new CandidateSearchUtil();
 	
 	@Mock
 	private CandidateService 						mockCandidateService;
@@ -41,6 +38,9 @@ class CandidateSearchUtilTest {
 	
 	@Mock
 	private Page<CandidateSearchAccuracyWrapper>	mockPage;
+	
+	@InjectMocks 
+	private CandidateSearchUtil 					util 						= new CandidateSearchUtil(mockCandidateService);
 	
 	/**
 	* Tests all candidates have appropriate details masked

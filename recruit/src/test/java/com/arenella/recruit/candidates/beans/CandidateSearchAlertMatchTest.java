@@ -12,7 +12,7 @@ import com.arenella.recruit.candidates.utils.CandidateSuggestionUtil.suggestion_
 * Unit tests for the CandidateSearchAlertMatch class
 * @author K Parkings
 */
-public class CandidateSearchAlertMatchTest {
+class CandidateSearchAlertMatchTest {
 
 	/**
 	* Tests construction via builder

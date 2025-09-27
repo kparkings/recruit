@@ -8,7 +8,6 @@ import java.util.concurrent.TimeUnit;
 
 import jakarta.annotation.PostConstruct;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
@@ -36,17 +35,29 @@ public class AlertTestUtilImpl implements AlertTestUtil{
 	private final ScheduledExecutorService 		scheduler 			= Executors.newScheduledThreadPool(5);
 	private final ScheduledExecutorService		endOfDayScheduler 	= Executors.newScheduledThreadPool(1);
 	
-	@Autowired
 	private CandidateService 					candidateService;
-	
-	@Autowired
 	private CandidateSearchAlertMatchDao		matchDao;
-	
-	@Autowired
 	private ExternalEventPublisher				commandPublisher;
-	
-	@Autowired
 	private ObjectMapper						objectMapper;
+	
+	/**
+	* Constructor
+	* @param candidateService	- Services realating to candidates
+	* @param matchDao			- DAO operations for matched
+	* @param commandPublisher	- Publishes commands to other services
+	* @param objectMapper		- Object Mapper
+	*/
+	public AlertTestUtilImpl(CandidateService 					candidateService,
+							 CandidateSearchAlertMatchDao		matchDao,
+							 ExternalEventPublisher				commandPublisher,
+							 ObjectMapper						objectMapper) {
+		
+		this.candidateService	= candidateService;
+		this.matchDao 			= matchDao;
+		this.commandPublisher 	= commandPublisher;
+		this.objectMapper 		= objectMapper;
+		
+	}
 	
 	/**
 	* Kicks off the Scheduler to package Matches 

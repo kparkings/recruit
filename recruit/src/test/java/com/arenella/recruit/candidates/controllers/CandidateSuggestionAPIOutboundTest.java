@@ -26,26 +26,26 @@ import com.arenella.recruit.candidates.utils.CandidateSuggestionUtil.suggestion_
 */
 class CandidateSuggestionAPIOutboundTest {
 
-	private static final String 					candidateId				= "999";
-	private static final String 					firstname				= "Kevin";
-	private static final String 					surname					= "Parkings";
-	private static final String 					email					= "admin@arenella-ict.com";
-	private static final String						roleSought				= "Senior Java Developer";
-	private static final FUNCTION					function				= FUNCTION.JAVA_DEV;
-	private static final COUNTRY 					country					= COUNTRY.NETHERLANDS;
-	private static final String 					city					= "Noordwijk";
-	private static final PERM 						perm					= PERM.FALSE;
-	private static final FREELANCE 					freelance				= FREELANCE.TRUE;
-	private static final int						yearsExperience			= 22;
-	private static final boolean					flaggedAsUnavailable	= true;
-	private static final boolean 					available				= true;
-	private static final Set<String> 				skills					= Set.of("Java","Angular");
-	private static final Set<Language> 				languages				= Set.of(Language.builder().language(LANGUAGE.DUTCH).level(LEVEL.PROFICIENT).build());
-	private static final LocalDate					lastAvailabilityCheck	= LocalDate.of(2022, 05, 20);
-	private static final LocalDate					registered				= LocalDate.of(2021, 05, 20);
-	private static final suggestion_accuracy 		accuracySkills			= suggestion_accuracy.perfect;
-	private static final suggestion_accuracy 		accuracyLanguages		= suggestion_accuracy.poor; 
-	private static final String						ownerId 				= "rec44";
+	private static final String 					CANDIDATE_ID			= "999";
+	private static final String 					FIRST_NAME				= "Kevin";
+	private static final String 					SURNAME					= "Parkings";
+	private static final String 					EMAIL					= "admin@arenella-ict.com";
+	private static final String						ROLE_SOUGHT				= "Senior Java Developer";
+	private static final FUNCTION					FUNCTION_VAL			= FUNCTION.JAVA_DEV;
+	private static final COUNTRY 					COUNTRY_VAL				= COUNTRY.NETHERLANDS;
+	private static final String 					CITY					= "Noordwijk";
+	private static final PERM 						PERM_VAL				= PERM.FALSE;
+	private static final FREELANCE 					FREELANCE_VAL			= FREELANCE.TRUE;
+	private static final int						YEARS_EXPERIENCE		= 22;
+	private static final boolean					FLAGGED_AS_UNAVAILABLE	= true;
+	private static final boolean 					AVAILABLE				= true;
+	private static final Set<String> 				SKILLS					= Set.of("Java","Angular");
+	private static final Set<Language> 				LANGUAGES				= Set.of(Language.builder().language(LANGUAGE.DUTCH).level(LEVEL.PROFICIENT).build());
+	private static final LocalDate					LAST_AVAILABILITY_CHK	= LocalDate.of(2022, 05, 20);
+	private static final LocalDate					REGISTERED				= LocalDate.of(2021, 05, 20);
+	private static final suggestion_accuracy 		ACCURACY_SKILLS			= suggestion_accuracy.perfect;
+	private static final suggestion_accuracy 		ACCURACY_LANGUAGES		= suggestion_accuracy.poor; 
+	private static final String						OWNER_ID 				= "rec44";
 	private static final SECURITY_CLEARANCE_TYPE 	SECURITY_CLEARANCE 		= SECURITY_CLEARANCE_TYPE.DV;
 	private static final boolean					REQUIRES_SPONSORSHIP 	= true;
 	
@@ -54,48 +54,48 @@ class CandidateSuggestionAPIOutboundTest {
 	* @throws Exception
 	*/
 	@Test
-	void testBuilder() throws Exception{
+	void testBuilder() {
 		
 		CandidateSuggestionAPIOutbound candidate =  CandidateSuggestionAPIOutbound
 														.builder()
-															.available(available)
-															.candidateId(candidateId)
-															.city(city)
-															.country(country)
-															.freelance(freelance)
-															.functions(Set.of(function))
-															.languages(languages)
-															.flaggedAsUnavailable(flaggedAsUnavailable)
-															.lastAvailabilityCheck(lastAvailabilityCheck)
-															.perm(perm)
-															.roleSought(roleSought)
-															.skills(skills)
-															.yearsExperience(yearsExperience)
-															.firstname(firstname)
-															.surname(surname)
-															.email(email)
-															.accuracyLanguages(accuracyLanguages)
-															.accuracySkills(accuracySkills)
+															.available(AVAILABLE)
+															.candidateId(CANDIDATE_ID)
+															.city(CITY)
+															.country(COUNTRY_VAL)
+															.freelance(FREELANCE_VAL)
+															.functions(Set.of(FUNCTION_VAL))
+															.languages(LANGUAGES)
+															.flaggedAsUnavailable(FLAGGED_AS_UNAVAILABLE)
+															.lastAvailabilityCheck(LAST_AVAILABILITY_CHK)
+															.perm(PERM_VAL)
+															.roleSought(ROLE_SOUGHT)
+															.skills(SKILLS)
+															.yearsExperience(YEARS_EXPERIENCE)
+															.firstname(FIRST_NAME)
+															.surname(SURNAME)
+															.email(EMAIL)
+															.accuracyLanguages(ACCURACY_LANGUAGES)
+															.accuracySkills(ACCURACY_SKILLS)
 															.securityClearance(SECURITY_CLEARANCE)
 															.requiresSponsorship(REQUIRES_SPONSORSHIP)
 														.build();
 		
-		assertEquals(candidateId, 				candidate.getCandidateId());
-		assertEquals(roleSought, 				candidate.getRoleSought());
-		assertEquals(function, 					candidate.getFunctions().toArray()[0]);
-		assertEquals(country, 					candidate.getCountry());
-		assertEquals(city, 						candidate.getCity());
-		assertEquals(perm, 						candidate.getPerm());
-		assertEquals(freelance, 				candidate.getFreelance());
-		assertEquals(yearsExperience, 			candidate.getYearsExperience());
-		assertEquals(available, 				candidate.isAvailable());
-		assertEquals(flaggedAsUnavailable, 		candidate.isFlaggedAsUnavailable());
-		assertEquals(lastAvailabilityCheck, 	candidate.getLastAvailabilityCheckOn());
-		assertEquals(firstname, 				candidate.getFirstname());
-		assertEquals(surname, 					candidate.getSurname());
-		assertEquals(email, 					candidate.getEmail());
-		assertEquals(accuracyLanguages, 		candidate.getAccuracyLanguages());
-		assertEquals(accuracySkills, 			candidate.getAccuracySkills());
+		assertEquals(CANDIDATE_ID, 				candidate.getCandidateId());
+		assertEquals(ROLE_SOUGHT, 				candidate.getRoleSought());
+		assertEquals(FUNCTION_VAL, 				candidate.getFunctions().toArray()[0]);
+		assertEquals(COUNTRY_VAL, 				candidate.getCountry());
+		assertEquals(CITY, 						candidate.getCity());
+		assertEquals(PERM_VAL, 					candidate.getPerm());
+		assertEquals(FREELANCE_VAL, 			candidate.getFreelance());
+		assertEquals(YEARS_EXPERIENCE, 			candidate.getYearsExperience());
+		assertEquals(AVAILABLE, 				candidate.isAvailable());
+		assertEquals(FLAGGED_AS_UNAVAILABLE, 	candidate.isFlaggedAsUnavailable());
+		assertEquals(LAST_AVAILABILITY_CHK, 	candidate.getLastAvailabilityCheckOn());
+		assertEquals(FIRST_NAME, 				candidate.getFirstname());
+		assertEquals(SURNAME, 					candidate.getSurname());
+		assertEquals(EMAIL, 					candidate.getEmail());
+		assertEquals(ACCURACY_LANGUAGES, 		candidate.getAccuracyLanguages());
+		assertEquals(ACCURACY_SKILLS, 			candidate.getAccuracySkills());
 		assertEquals(SECURITY_CLEARANCE, 		candidate.getSecurityClearance());
 		assertEquals(REQUIRES_SPONSORSHIP, 		candidate.getRequiresSponsorship());
 		
@@ -112,7 +112,7 @@ class CandidateSuggestionAPIOutboundTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testBuilderDefaultCollections() throws Exception {
+	void testBuilderDefaultCollections() {
 		
 		CandidateSuggestionAPIOutbound candidate = CandidateSuggestionAPIOutbound.builder().build();
 		
@@ -127,56 +127,56 @@ class CandidateSuggestionAPIOutboundTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testConvertFromCandidate() throws Exception{
+	void testConvertFromCandidate() {
 		
 		Candidate candidate = Candidate
 									.builder()
-										.flaggedAsUnavailable(flaggedAsUnavailable)
-										.available(available)
-										.candidateId(candidateId)
-										.city(city)
-										.email(email)
-										.country(country)
-										.freelance(freelance)
-										.functions(Set.of(function))
-										.languages(languages)
-										.lastAvailabilityCheck(lastAvailabilityCheck)
-										.perm(perm)
-										.roleSought(roleSought)
-										.skills(skills)
-										.yearsExperience(yearsExperience)
-										.firstname(firstname)
-										.registerd(registered)
-										.surname(surname)
-										.available(available)
-										.ownerId(ownerId)
+										.flaggedAsUnavailable(FLAGGED_AS_UNAVAILABLE)
+										.available(AVAILABLE)
+										.candidateId(CANDIDATE_ID)
+										.city(CITY)
+										.email(EMAIL)
+										.country(COUNTRY_VAL)
+										.freelance(FREELANCE_VAL)
+										.functions(Set.of(FUNCTION_VAL))
+										.languages(LANGUAGES)
+										.lastAvailabilityCheck(LAST_AVAILABILITY_CHK)
+										.perm(PERM_VAL)
+										.roleSought(ROLE_SOUGHT)
+										.skills(SKILLS)
+										.yearsExperience(YEARS_EXPERIENCE)
+										.firstname(FIRST_NAME)
+										.registerd(REGISTERED)
+										.surname(SURNAME)
+										.available(AVAILABLE)
+										.ownerId(OWNER_ID)
 										.securityClearance(SECURITY_CLEARANCE)
 										.requiresSponsorship(REQUIRES_SPONSORSHIP)
 									.build();
 		
 		CandidateSearchAccuracyWrapper wrapper = new CandidateSearchAccuracyWrapper(candidate);
 		
-		wrapper.setAccuracyLanguages(accuracyLanguages);
-		wrapper.setAccuracySkills(accuracySkills);
+		wrapper.setAccuracyLanguages(ACCURACY_LANGUAGES);
+		wrapper.setAccuracySkills(ACCURACY_SKILLS);
 		
 		CandidateSuggestionAPIOutbound candidateAPIOutbound = CandidateSuggestionAPIOutbound.convertFromCandidate(wrapper);
 		
-		assertEquals(candidateId, 				candidateAPIOutbound.getCandidateId());
-		assertEquals(roleSought, 				candidateAPIOutbound.getRoleSought());
-		assertEquals(function, 					candidateAPIOutbound.getFunctions().toArray()[0]);
-		assertEquals(country, 					candidateAPIOutbound.getCountry());
-		assertEquals(city, 						candidateAPIOutbound.getCity());
-		assertEquals(perm, 						candidateAPIOutbound.getPerm());
-		assertEquals(freelance, 				candidateAPIOutbound.getFreelance());
-		assertEquals(yearsExperience, 			candidateAPIOutbound.getYearsExperience());
-		assertEquals(available, 				candidateAPIOutbound.isAvailable());
-		assertEquals(flaggedAsUnavailable, 		candidateAPIOutbound.isFlaggedAsUnavailable());
-		assertEquals(lastAvailabilityCheck, 	candidateAPIOutbound.getLastAvailabilityCheckOn());
-		assertEquals(firstname, 				candidateAPIOutbound.getFirstname());
-		assertEquals(surname, 					candidateAPIOutbound.getSurname());
-		assertEquals(email, 					candidateAPIOutbound.getEmail());
-		assertEquals(accuracyLanguages, 		candidateAPIOutbound.getAccuracyLanguages());
-		assertEquals(accuracySkills, 			candidateAPIOutbound.getAccuracySkills());
+		assertEquals(CANDIDATE_ID, 				candidateAPIOutbound.getCandidateId());
+		assertEquals(ROLE_SOUGHT, 				candidateAPIOutbound.getRoleSought());
+		assertEquals(FUNCTION_VAL,				candidateAPIOutbound.getFunctions().toArray()[0]);
+		assertEquals(COUNTRY_VAL,				candidateAPIOutbound.getCountry());
+		assertEquals(CITY, 						candidateAPIOutbound.getCity());
+		assertEquals(PERM_VAL,					candidateAPIOutbound.getPerm());
+		assertEquals(FREELANCE_VAL,				candidateAPIOutbound.getFreelance());
+		assertEquals(YEARS_EXPERIENCE, 			candidateAPIOutbound.getYearsExperience());
+		assertEquals(AVAILABLE, 				candidateAPIOutbound.isAvailable());
+		assertEquals(FLAGGED_AS_UNAVAILABLE,	candidateAPIOutbound.isFlaggedAsUnavailable());
+		assertEquals(LAST_AVAILABILITY_CHK, 	candidateAPIOutbound.getLastAvailabilityCheckOn());
+		assertEquals(FIRST_NAME, 				candidateAPIOutbound.getFirstname());
+		assertEquals(SURNAME, 					candidateAPIOutbound.getSurname());
+		assertEquals(EMAIL, 					candidateAPIOutbound.getEmail());
+		assertEquals(ACCURACY_LANGUAGES, 		candidateAPIOutbound.getAccuracyLanguages());
+		assertEquals(ACCURACY_SKILLS, 			candidateAPIOutbound.getAccuracySkills());
 		assertEquals(SECURITY_CLEARANCE, 		candidateAPIOutbound.getSecurityClearance());
 		assertEquals(REQUIRES_SPONSORSHIP, 		candidateAPIOutbound.getRequiresSponsorship());
 		
@@ -187,61 +187,61 @@ class CandidateSuggestionAPIOutboundTest {
 	}
 	
 	/**
-	* Tests convertsion from Domain representatin of Candidate to API Outbound
+	* Tests conversion from Domain representatin of Candidate to API Outbound
 	* representation
 	* @throws Exception
 	*/
 	@Test
-	public void testConvertFromCandidateAsCensored() throws Exception{
+	void testConvertFromCandidateAsCensored() {
 		
 		Candidate candidate = Candidate
 									.builder()
-										.flaggedAsUnavailable(flaggedAsUnavailable)
-										.available(available)
-										.candidateId(candidateId)
-										.city(city)
-										.email(email)
-										.country(country)
-										.freelance(freelance)
-										.functions(Set.of(function))
-										.languages(languages)
-										.lastAvailabilityCheck(lastAvailabilityCheck)
-										.perm(perm)
-										.roleSought(roleSought)
-										.skills(skills)
-										.yearsExperience(yearsExperience)
-										.firstname(firstname)
-										.registerd(registered)
-										.surname(surname)
-										.available(available)
-										.ownerId(ownerId)
+										.flaggedAsUnavailable(FLAGGED_AS_UNAVAILABLE)
+										.available(AVAILABLE)
+										.candidateId(CANDIDATE_ID)
+										.city(CITY)
+										.email(EMAIL)
+										.country(COUNTRY_VAL)
+										.freelance(FREELANCE_VAL)
+										.functions(Set.of(FUNCTION_VAL))
+										.languages(LANGUAGES)
+										.lastAvailabilityCheck(LAST_AVAILABILITY_CHK)
+										.perm(PERM_VAL)
+										.roleSought(ROLE_SOUGHT)
+										.skills(SKILLS)
+										.yearsExperience(YEARS_EXPERIENCE)
+										.firstname(FIRST_NAME)
+										.registerd(REGISTERED)
+										.surname(SURNAME)
+										.available(AVAILABLE)
+										.ownerId(OWNER_ID)
 										.securityClearance(SECURITY_CLEARANCE)
 										.requiresSponsorship(REQUIRES_SPONSORSHIP)
 									.build();
 		
 		CandidateSearchAccuracyWrapper wrapper = new CandidateSearchAccuracyWrapper(candidate);
 		
-		wrapper.setAccuracyLanguages(accuracyLanguages);
-		wrapper.setAccuracySkills(accuracySkills);
+		wrapper.setAccuracyLanguages(ACCURACY_LANGUAGES);
+		wrapper.setAccuracySkills(ACCURACY_SKILLS);
 		
 		CandidateSuggestionAPIOutbound candidateAPIOutbound = CandidateSuggestionAPIOutbound.convertFromCandidateAsCensored(wrapper);
 		
-		assertEquals(candidateId, 									candidateAPIOutbound.getCandidateId());
-		assertEquals(roleSought, 									candidateAPIOutbound.getRoleSought());
-		assertEquals(function, 										candidateAPIOutbound.getFunctions().toArray()[0]);
-		assertEquals(country, 										candidateAPIOutbound.getCountry());
-		assertEquals(city, 											candidateAPIOutbound.getCity());
-		assertEquals(perm, 											candidateAPIOutbound.getPerm());
-		assertEquals(freelance, 									candidateAPIOutbound.getFreelance());
-		assertEquals(yearsExperience, 								candidateAPIOutbound.getYearsExperience());
-		assertEquals(available, 									candidateAPIOutbound.isAvailable());
-		assertEquals(flaggedAsUnavailable, 							candidateAPIOutbound.isFlaggedAsUnavailable());
-		assertEquals(lastAvailabilityCheck, 						candidateAPIOutbound.getLastAvailabilityCheckOn());
-		assertEquals(firstname, 									candidateAPIOutbound.getFirstname());
+		assertEquals(CANDIDATE_ID, 									candidateAPIOutbound.getCandidateId());
+		assertEquals(ROLE_SOUGHT, 									candidateAPIOutbound.getRoleSought());
+		assertEquals(FUNCTION_VAL,									candidateAPIOutbound.getFunctions().toArray()[0]);
+		assertEquals(COUNTRY_VAL,									candidateAPIOutbound.getCountry());
+		assertEquals(CITY, 											candidateAPIOutbound.getCity());
+		assertEquals(PERM_VAL,										candidateAPIOutbound.getPerm());
+		assertEquals(FREELANCE_VAL,									candidateAPIOutbound.getFreelance());
+		assertEquals(YEARS_EXPERIENCE, 								candidateAPIOutbound.getYearsExperience());
+		assertEquals(AVAILABLE, 									candidateAPIOutbound.isAvailable());
+		assertEquals(FLAGGED_AS_UNAVAILABLE,						candidateAPIOutbound.isFlaggedAsUnavailable());
+		assertEquals(LAST_AVAILABILITY_CHK, 						candidateAPIOutbound.getLastAvailabilityCheckOn());
+		assertEquals(FIRST_NAME, 									candidateAPIOutbound.getFirstname());
 		assertEquals(CandidateSuggestionAPIOutbound.CENSORED_ITEM, 	candidateAPIOutbound.getSurname());
 		assertEquals(CandidateSuggestionAPIOutbound.CENSORED_ITEM, 	candidateAPIOutbound.getEmail());
-		assertEquals(accuracyLanguages, 							candidateAPIOutbound.getAccuracyLanguages());
-		assertEquals(accuracySkills, 								candidateAPIOutbound.getAccuracySkills());
+		assertEquals(ACCURACY_LANGUAGES, 							candidateAPIOutbound.getAccuracyLanguages());
+		assertEquals(ACCURACY_SKILLS, 								candidateAPIOutbound.getAccuracySkills());
 		assertEquals(SECURITY_CLEARANCE, 							candidateAPIOutbound.getSecurityClearance());
 		assertEquals(REQUIRES_SPONSORSHIP, 							candidateAPIOutbound.getRequiresSponsorship());
 		
@@ -252,61 +252,61 @@ class CandidateSuggestionAPIOutboundTest {
 	}
 	
 	/**
-	* Tests convertsion from Domain representatin of Candidate to API Outbound
+	* Tests conversion from Domain representation of Candidate to API Outbound
 	* representation
 	* @throws Exception
 	*/
 	@Test
-	public void testConvertFromCandidateAsCensoredForActiveCredits() throws Exception{
+	void testConvertFromCandidateAsCensoredForActiveCredits() {
 		
 		Candidate candidate = Candidate
 									.builder()
-										.flaggedAsUnavailable(flaggedAsUnavailable)
-										.available(available)
-										.candidateId(candidateId)
-										.city(city)
-										.email(email)
-										.country(country)
-										.freelance(freelance)
-										.functions(Set.of(function))
-										.languages(languages)
-										.lastAvailabilityCheck(lastAvailabilityCheck)
-										.perm(perm)
-										.roleSought(roleSought)
-										.skills(skills)
-										.yearsExperience(yearsExperience)
-										.firstname(firstname)
-										.registerd(registered)
-										.surname(surname)
-										.available(available)
-										.ownerId(ownerId)
+										.flaggedAsUnavailable(FLAGGED_AS_UNAVAILABLE)
+										.available(AVAILABLE)
+										.candidateId(CANDIDATE_ID)
+										.city(CITY)
+										.email(EMAIL)
+										.country(COUNTRY_VAL)
+										.freelance(FREELANCE_VAL)
+										.functions(Set.of(FUNCTION_VAL))
+										.languages(LANGUAGES)
+										.lastAvailabilityCheck(LAST_AVAILABILITY_CHK)
+										.perm(PERM_VAL)
+										.roleSought(ROLE_SOUGHT)
+										.skills(SKILLS)
+										.yearsExperience(YEARS_EXPERIENCE)
+										.firstname(FIRST_NAME)
+										.registerd(REGISTERED)
+										.surname(SURNAME)
+										.available(AVAILABLE)
+										.ownerId(OWNER_ID)
 										.securityClearance(SECURITY_CLEARANCE)
 										.requiresSponsorship(REQUIRES_SPONSORSHIP)
 									.build();
 		
 		CandidateSearchAccuracyWrapper wrapper = new CandidateSearchAccuracyWrapper(candidate);
 		
-		wrapper.setAccuracyLanguages(accuracyLanguages);
-		wrapper.setAccuracySkills(accuracySkills);
+		wrapper.setAccuracyLanguages(ACCURACY_LANGUAGES);
+		wrapper.setAccuracySkills(ACCURACY_SKILLS);
 		
 		CandidateSuggestionAPIOutbound candidateAPIOutbound = CandidateSuggestionAPIOutbound.convertFromCandidateAsCensoredForActiveCredits(wrapper);
 		
-		assertEquals(candidateId, 									candidateAPIOutbound.getCandidateId());
-		assertEquals(roleSought, 									candidateAPIOutbound.getRoleSought());
-		assertEquals(function, 										candidateAPIOutbound.getFunctions().toArray()[0]);
-		assertEquals(country, 										candidateAPIOutbound.getCountry());
-		assertEquals(city, 											candidateAPIOutbound.getCity());
-		assertEquals(perm, 											candidateAPIOutbound.getPerm());
-		assertEquals(freelance, 									candidateAPIOutbound.getFreelance());
-		assertEquals(yearsExperience, 								candidateAPIOutbound.getYearsExperience());
-		assertEquals(available, 									candidateAPIOutbound.isAvailable());
-		assertEquals(flaggedAsUnavailable, 							candidateAPIOutbound.isFlaggedAsUnavailable());
-		assertEquals(lastAvailabilityCheck, 						candidateAPIOutbound.getLastAvailabilityCheckOn());
-		assertEquals(firstname, 	candidateAPIOutbound.getFirstname());
-		assertEquals(" ", 	candidateAPIOutbound.getSurname());
-		assertEquals(email, 	candidateAPIOutbound.getEmail());
-		assertEquals(accuracyLanguages, 							candidateAPIOutbound.getAccuracyLanguages());
-		assertEquals(accuracySkills, 								candidateAPIOutbound.getAccuracySkills());
+		assertEquals(CANDIDATE_ID, 									candidateAPIOutbound.getCandidateId());
+		assertEquals(ROLE_SOUGHT, 									candidateAPIOutbound.getRoleSought());
+		assertEquals(FUNCTION_VAL, 									candidateAPIOutbound.getFunctions().toArray()[0]);
+		assertEquals(COUNTRY_VAL,									candidateAPIOutbound.getCountry());
+		assertEquals(CITY, 											candidateAPIOutbound.getCity());
+		assertEquals(PERM_VAL, 										candidateAPIOutbound.getPerm());
+		assertEquals(FREELANCE_VAL,									candidateAPIOutbound.getFreelance());
+		assertEquals(YEARS_EXPERIENCE, 								candidateAPIOutbound.getYearsExperience());
+		assertEquals(AVAILABLE, 									candidateAPIOutbound.isAvailable());
+		assertEquals(FLAGGED_AS_UNAVAILABLE,						candidateAPIOutbound.isFlaggedAsUnavailable());
+		assertEquals(LAST_AVAILABILITY_CHK, 						candidateAPIOutbound.getLastAvailabilityCheckOn());
+		assertEquals(FIRST_NAME, 									candidateAPIOutbound.getFirstname());
+		assertEquals(" ", 											candidateAPIOutbound.getSurname());
+		assertEquals(EMAIL, 										candidateAPIOutbound.getEmail());
+		assertEquals(ACCURACY_LANGUAGES, 							candidateAPIOutbound.getAccuracyLanguages());
+		assertEquals(ACCURACY_SKILLS, 								candidateAPIOutbound.getAccuracySkills());
 		assertEquals(SECURITY_CLEARANCE, 							candidateAPIOutbound.getSecurityClearance());
 		assertEquals(REQUIRES_SPONSORSHIP, 							candidateAPIOutbound.getRequiresSponsorship());
 		

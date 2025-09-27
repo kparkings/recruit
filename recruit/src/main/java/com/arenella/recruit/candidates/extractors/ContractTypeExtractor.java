@@ -2,7 +2,6 @@ package com.arenella.recruit.candidates.extractors;
 
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Component;
 

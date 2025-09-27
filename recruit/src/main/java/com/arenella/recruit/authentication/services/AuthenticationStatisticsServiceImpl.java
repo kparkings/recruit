@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -23,9 +22,16 @@ import com.arenella.recruit.authentication.dao.AuthenticatedEventDao;
 @Service
 public class AuthenticationStatisticsServiceImpl implements AuthenticationStatisticsService {
 
-	@Autowired
 	private AuthenticatedEventDao authenticatedEventDao;
 
+	/**
+	* Constructor
+	* @param authenticatedEventDao - DAO for Authenticated events
+	*/
+	public AuthenticationStatisticsServiceImpl(AuthenticatedEventDao authenticatedEventDao) {
+		this.authenticatedEventDao = authenticatedEventDao;
+	}
+	
 	/**
 	* Refer to AuthenticationStatisticsService for details 
 	*/

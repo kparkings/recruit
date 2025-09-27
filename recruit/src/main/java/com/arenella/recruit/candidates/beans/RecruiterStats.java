@@ -13,7 +13,7 @@ import com.arenella.recruit.candidates.enums.FUNCTION;
 */
 public class RecruiterStats {
 
-	private final Set<Search> SEARCHES = new LinkedHashSet<>();
+	private final Set<Search> searches = new LinkedHashSet<>();
 	
 	/**
 	* Constructor
@@ -26,8 +26,8 @@ public class RecruiterStats {
 			COUNTRY 	country 	= evt.getCountry().orElse(null);
 			FUNCTION 	function 	= evt.getFunction().orElse(null); 
 			
-			if (!SEARCHES.stream().anyMatch(s -> s.function == function && s.country == country)) {
-				this.SEARCHES.add(new Search(country, function));
+			if (!searches.stream().anyMatch(s -> s.function == function && s.country == country)) {
+				this.searches.add(new Search(country, function));
 			}
 			
 		});
@@ -40,7 +40,7 @@ public class RecruiterStats {
 	* @return - Type of search
 	*/
 	public Set<Search> getUniqueSearches(){
-		return this.SEARCHES.stream().sorted((i1, i2) -> {
+		return this.searches.stream().sorted((i1, i2) -> {
 			
 			if (i2.getCountry() == null) {
 				return 0;

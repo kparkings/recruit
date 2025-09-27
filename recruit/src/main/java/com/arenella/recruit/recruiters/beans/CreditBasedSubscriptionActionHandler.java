@@ -5,7 +5,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.arenella.recruit.adapters.events.RecruiterCreatedEvent;
@@ -31,9 +30,15 @@ import com.arenella.recruit.recruiters.utils.RecruiterSubscriptionActionHandler;
 @Component
 public class CreditBasedSubscriptionActionHandler implements RecruiterSubscriptionActionHandler{
 
-	@Autowired
-	private RecruitersExternalEventPublisher 	externEventPublisher;
+	private RecruitersExternalEventPublisher externEventPublisher;
 	
+	/**
+	* Constructor
+	* @param externEventPublisher - Publishes events to other services
+	*/
+	public CreditBasedSubscriptionActionHandler(RecruitersExternalEventPublisher externEventPublisher) {
+		this.externEventPublisher = externEventPublisher;
+	}
 	/**
 	* Refer to the RecruiterSubscriptionActionHandler interface for details 
 	*/

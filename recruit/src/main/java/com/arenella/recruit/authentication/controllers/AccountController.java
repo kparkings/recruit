@@ -1,6 +1,5 @@
 package com.arenella.recruit.authentication.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,9 +30,15 @@ import com.arenella.recruit.authentication.services.AccountService;
 @RestController
 public class AccountController {
 
-	@Autowired
 	private AccountService accountService;
 	
+	/**
+	* Consturctor
+	* @param accountService - provides services relating to accounts
+	*/
+	public AccountController(AccountService accountService) {
+		this.accountService = accountService;
+	}
 	/**
 	* Creates a new User account
 	* @param account - Details of the account to create
@@ -47,6 +52,5 @@ public class AccountController {
 		return AccountCreatedAPIOutbound.convertFromUser(accountService.createAccount(account.getProposedUsername(), account.getAccountType()));
 		
 	}
-	
 	
 }

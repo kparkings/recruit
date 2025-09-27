@@ -8,7 +8,6 @@ import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_action;
@@ -36,16 +35,26 @@ public class RecruiterSubscriptonScheduler {
 	
 	private static final Set<subscription_status> ACTIVE_STATUSES = Set.of(subscription_status.ACTIVE, subscription_status.ACTIVE_INVOICE_SENT);
 	
-	@Autowired
 	private RecruiterService 				recruiterService;
-	
-	@Autowired
 	private RecruiterSubscriptionFactory 	subscriptionFactory;
-	
-	@Autowired
 	private RecruiterDao					recruiterDao;
 	
 	private final ScheduledExecutorService 	scheduler 			= Executors.newSingleThreadScheduledExecutor();
+	
+	/**
+	* Constructor
+	* @param recruiterService		- Services relating to Recruiters
+	* @param subscriptionFactory	- Factory to types of Subscription
+	* @param recruiterDao			- DAO for recruiters
+	*/
+	public RecruiterSubscriptonScheduler(RecruiterService 				recruiterService,
+										 RecruiterSubscriptionFactory 	subscriptionFactory,
+										 RecruiterDao					recruiterDao) {
+	
+		this.recruiterService 		= recruiterService;
+		this.subscriptionFactory 	= subscriptionFactory;
+		this.recruiterDao 			= recruiterDao;
+	}
 	
 	/**
 	* Initiates the schedulting
@@ -107,7 +116,7 @@ public class RecruiterSubscriptonScheduler {
 														
 													} catch (IllegalAccessException e) {
 														throw new RuntimeException(e);
-													};
+													}
 												}
 											} default ->{
 												//Only need to deal with subscription longer than 1 month. This switch is to update the status of 

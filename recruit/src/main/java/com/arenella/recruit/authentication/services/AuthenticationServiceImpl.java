@@ -6,7 +6,6 @@ import java.util.Set;
 
 import jakarta.servlet.http.Cookie;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -26,20 +25,33 @@ import com.arenella.recruit.authentication.utils.JwtTokenUtil;
 @Service
 public class AuthenticationServiceImpl implements AuthenticationService{
 
-	@Autowired
 	private AuthenticationManager 		authenticationManager;
-	
-	@Autowired
 	private JwtTokenUtil 				jwtTokenUtil;
-	
-	@Autowired
 	private UserDetailsService	 		userDetailsService;
-	
-	@Autowired
 	private AuthenticatedEventDao		authenticatedEventDao;
-	
-	@Autowired
 	private UserDao						userDao;
+	
+	/**
+	* Constructor
+	* @param authenticationManager	- Manages authentication
+	* @param jwtTokenUtil			- Provides Utilities for working with JTWs
+	* @param userDetailsService		- Services relating to User details
+	* @param authenticatedEventDao	- DAO for authentication
+	* @param userDao				- DAO dor users
+	*/
+	public AuthenticationServiceImpl(AuthenticationManager authenticationManager,
+									 JwtTokenUtil jwtTokenUtil,
+									 UserDetailsService userDetailsService,
+									 AuthenticatedEventDao authenticatedEventDao,
+									 UserDao	userDao) {
+	
+		this.authenticationManager 	= authenticationManager;
+		this.jwtTokenUtil 			= jwtTokenUtil;
+		this.userDetailsService 	= userDetailsService;
+		this.authenticatedEventDao 	= authenticatedEventDao;
+		this.userDao			 	= userDao;
+		
+	}
 	
 	/**
 	* Refer to the AuthenticationService for details

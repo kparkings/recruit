@@ -6,7 +6,6 @@ import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -23,10 +22,16 @@ import com.arenella.recruit.authentication.enums.AccountType;
 @Service
 public class AccountServiceImpl implements AccountService{
 
-	@Autowired
 	private UserDao userDao;
+	private static final Random random = new Random();
 	
-	
+	/**
+	* Constructor
+	* @param userDao - DAO for User data
+	*/
+	public AccountServiceImpl(UserDao userDao) {
+		this.userDao = userDao;
+	}
 	
 	/**
 	* Refer to AccountService for details 
@@ -140,7 +145,6 @@ public class AccountServiceImpl implements AccountService{
 			default: {return new HashSet<>();}
 		} 
 		
-		
 	}
 	
 	/**
@@ -150,24 +154,17 @@ public class AccountServiceImpl implements AccountService{
 	*/
 	private String generatePassword(String username) {
 		
-		Random x = new Random();
+		final String code =	String.valueOf(random.nextInt()).substring(1,5);
 		
-		final String 	code 		=	String.valueOf(x.nextInt()).substring(1,5);
-		
-		String passwordUnencoded = username + "!" + code;
-		
-		return passwordUnencoded;
-		
-		
+		return username + "!" + code;
+	
 	}
 	
 	private String encryptPassword(String passwordUnencoded) {
 		
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 		
-		String password = encoder.encode(passwordUnencoded);
-		
-		return password;
+		return encoder.encode(passwordUnencoded);
 		
 	}
 

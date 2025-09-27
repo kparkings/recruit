@@ -1234,9 +1234,9 @@ public class CandidateSearchRequest {
 			f.includeRequiresSponsorshipCandidates().ifPresent(builder::includeRequiresSponsorship);
 		});
 		
-		req.languageFilters().ifPresent(f -> {
-			builder.languages(f.getLanguages());
-		});
+		req.languageFilters().ifPresent(f -> 
+			builder.languages(f.getLanguages())
+		);
 		
 		req.locationFilters().ifPresent(f -> {
 			builder.countries(f.getCountries());
@@ -1265,9 +1265,9 @@ public class CandidateSearchRequest {
 			builder.candidateIds(f.getCandidateIds());
 		});
 		
-		req.securityFilters().ifPresent(s ->{
-			builder.securityLevels(s.getSecurityLevels());
-		});
+		req.securityFilters().ifPresent(s ->
+			builder.securityLevels(s.getSecurityLevels())
+		);
 		
 		return builder.build();
 		

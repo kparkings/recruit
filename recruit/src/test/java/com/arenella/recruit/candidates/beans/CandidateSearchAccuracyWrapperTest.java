@@ -23,33 +23,33 @@ import com.arenella.recruit.candidates.utils.CandidateSuggestionUtil.suggestion_
 */
 class CandidateSearchAccuracyWrapperTest {
 
-	private static final String 				candidateId 			= "Candidate1";
-	private static final FUNCTION				function				= FUNCTION.JAVA_DEV;
-	private static final COUNTRY 				country 				= COUNTRY.NETHERLANDS;
-	private static final String 				city 					= "Den Haag";
-	private static final String 				email					= "admin@arenella-ict.com";
-	private static final String 				roleSought				= "Senior java Dev";
-	private static final boolean 				available 				= true;
-	private static final boolean 				flaggedAsUnavailable	= true;
-	private static final FREELANCE 				freelance 				= FREELANCE.TRUE;
-	private static final PERM 					perm 					= PERM.TRUE;
-	private static final LocalDate 				lastAvailabilityCheck 	= LocalDate.of(1980, 12, 3);
-	private static final LocalDate 				registerd 				= LocalDate.of(2021, 02, 20);
-	private static final int 					yearsExperience 		= 21;
-	private static final Set<String>			skills					= new LinkedHashSet<>();
-	private static final Set<Language>			languages				= new LinkedHashSet<>();
-	private static final String					skill					= "Java";
-	private static final Language				language				= Language.builder().language(LANGUAGE.DUTCH).level(LEVEL.PROFICIENT).build();
-	private static final suggestion_accuracy 	accuracySkills			= suggestion_accuracy.perfect;
-	private static final suggestion_accuracy 	accuracyLanguages		= suggestion_accuracy.poor; 
+	private static final String 				CANDIDATE_ID 			= "Candidate1";
+	private static final FUNCTION				FUNCTION_VAL			= FUNCTION.JAVA_DEV;
+	private static final COUNTRY 				COUNTRY_VAL				= COUNTRY.NETHERLANDS;
+	private static final String 				CITY 					= "Den Haag";
+	private static final String 				EMAIL					= "admin@arenella-ict.com";
+	private static final String 				ROLE_SOUGHT				= "Senior java Dev";
+	private static final boolean 				AVAILABLE 				= true;
+	private static final boolean 				FLAGGED_AS_UNAVAILABLE	= true;
+	private static final FREELANCE 				FREELANCE_VAL			= FREELANCE.TRUE;
+	private static final PERM 					PERM_VAL				= PERM.TRUE;
+	private static final LocalDate 				LAST_AVAILABILITY_CHK 	= LocalDate.of(1980, 12, 3);
+	private static final LocalDate 				REGISTERD 				= LocalDate.of(2021, 02, 20);
+	private static final int 					YEARS_EXPERIENCE 		= 21;
+	private static final Set<String>			SKILLS					= new LinkedHashSet<>();
+	private static final Set<Language>			LANGUAGES				= new LinkedHashSet<>();
+	private static final String					SKILL					= "Java";
+	private static final Language				LANGUAGE_VAL			= Language.builder().language(LANGUAGE.DUTCH).level(LEVEL.PROFICIENT).build();
+	private static final suggestion_accuracy 	ACCURACY_SKILLS			= suggestion_accuracy.perfect;
+	private static final suggestion_accuracy 	ACCURACY_LANGUAGES		= suggestion_accuracy.poor; 
 	
 	/**
 	* Sets up test environment 
 	*/
 	public CandidateSearchAccuracyWrapperTest(){
 		
-		languages.add(language);
-		skills.add(skill);
+		LANGUAGES.add(LANGUAGE_VAL);
+		SKILLS.add(SKILL);
 		
 	}
 	
@@ -58,52 +58,52 @@ class CandidateSearchAccuracyWrapperTest {
 	* @throws Exception
 	*/
 	@Test
-	public void testInstantiations() throws Exception {
+	void testInstantiations() {
 		
 		Candidate candidate = Candidate
 				.builder()
-					.candidateId(candidateId)
-					.functions(Set.of(function))
-					.country(country)
-					.city(city)
-					.email(email)
-					.roleSought(roleSought)
-					.available(available)
-					.flaggedAsUnavailable(flaggedAsUnavailable)
-					.freelance(freelance)
-					.perm(perm)
-					.lastAvailabilityCheck(lastAvailabilityCheck)
-					.registerd(registerd)
-					.yearsExperience(yearsExperience)
-					.skills(skills)
-					.languages(languages)
+					.candidateId(CANDIDATE_ID)
+					.functions(Set.of(FUNCTION_VAL))
+					.country(COUNTRY_VAL)
+					.city(CITY)
+					.email(EMAIL)
+					.roleSought(ROLE_SOUGHT)
+					.available(AVAILABLE)
+					.flaggedAsUnavailable(FLAGGED_AS_UNAVAILABLE)
+					.freelance(FREELANCE_VAL)
+					.perm(PERM_VAL)
+					.lastAvailabilityCheck(LAST_AVAILABILITY_CHK)
+					.registerd(REGISTERD)
+					.yearsExperience(YEARS_EXPERIENCE)
+					.skills(SKILLS)
+					.languages(LANGUAGES)
 					.build();
 
 			CandidateSearchAccuracyWrapper wrapper = new CandidateSearchAccuracyWrapper(candidate);
 		
-			wrapper.setAccuracyLanguages(accuracyLanguages);
-			wrapper.setAccuracySkills(accuracySkills);
+			wrapper.setAccuracyLanguages(ACCURACY_LANGUAGES);
+			wrapper.setAccuracySkills(ACCURACY_SKILLS);
 			
-			assertEquals(candidateId, 								wrapper.get().getCandidateId());
-			assertEquals(function, 									wrapper.get().getFunctions().toArray()[0]);
-			assertEquals(country, 									wrapper.get().getCountry());
-			assertEquals(city, 										wrapper.get().getCity());
-			assertEquals(email, 									wrapper.get().getEmail());
-			assertEquals(roleSought, 								wrapper.get().getRoleSought());
-			assertEquals(available, 								wrapper.get().isAvailable());
-			assertEquals(flaggedAsUnavailable, 						wrapper.get().isFlaggedAsUnavailable());
-			assertEquals(freelance, 								wrapper.get().isFreelance());
-			assertEquals(perm, 										wrapper.get().isPerm());
-			assertEquals(lastAvailabilityCheck, 					wrapper.get().getLastAvailabilityCheckOn());
-			assertEquals(registerd, 								wrapper.get().getRegisteredOn());
-			assertEquals(yearsExperience, 							wrapper.get().getYearsExperience());
-			assertEquals(accuracyLanguages, 						wrapper.getAccuracyLanguages());
-			assertEquals(accuracySkills, 							wrapper.getAccuracySkills());
+			assertEquals(CANDIDATE_ID, 								wrapper.get().getCandidateId());
+			assertEquals(FUNCTION_VAL, 								wrapper.get().getFunctions().toArray()[0]);
+			assertEquals(COUNTRY_VAL, 								wrapper.get().getCountry());
+			assertEquals(CITY, 										wrapper.get().getCity());
+			assertEquals(EMAIL, 									wrapper.get().getEmail());
+			assertEquals(ROLE_SOUGHT, 								wrapper.get().getRoleSought());
+			assertEquals(AVAILABLE, 								wrapper.get().isAvailable());
+			assertEquals(FLAGGED_AS_UNAVAILABLE, 					wrapper.get().isFlaggedAsUnavailable());
+			assertEquals(FREELANCE_VAL, 							wrapper.get().isFreelance());
+			assertEquals(PERM_VAL, 									wrapper.get().isPerm());
+			assertEquals(LAST_AVAILABILITY_CHK, 					wrapper.get().getLastAvailabilityCheckOn());
+			assertEquals(REGISTERD, 								wrapper.get().getRegisteredOn());
+			assertEquals(YEARS_EXPERIENCE, 							wrapper.get().getYearsExperience());
+			assertEquals(ACCURACY_LANGUAGES, 						wrapper.getAccuracyLanguages());
+			assertEquals(ACCURACY_SKILLS, 							wrapper.getAccuracySkills());
 			assertEquals(suggestion_accuracy.perfect.asNumber(), 	wrapper.getAccuracySkillsAsNumber());
 			assertEquals(suggestion_accuracy.poor.asNumber(), 		wrapper.getAccuracyLanguagesAsNumber());
 			
-			assertTrue(wrapper.get().getSkills().contains(skill));
-			wrapper.get().getLanguages().stream().filter(l -> l.getLanguage() == language.getLanguage()).findAny().orElseThrow();
+			assertTrue(wrapper.get().getSkills().contains(SKILL));
+			wrapper.get().getLanguages().stream().filter(l -> l.getLanguage() == LANGUAGE_VAL.getLanguage()).findAny().orElseThrow();
 
 	}
 	

@@ -44,15 +44,15 @@ class DocumentFilterExtractionUtilTest {
 	
 	private CityExtractor 			cityExtractor				= new CityExtractor();
 	
-	private SkillExtractor 			skillExtractor				= new SkillExtractor();
-	
 	private ContractTypeExtractor 	contractTypeExtractor 		= new ContractTypeExtractor();
 	
 	@Mock
 	private CandidateSkillsDao 		mockSkillsDao;
 	
+	private SkillExtractor 			skillExtractor				= new SkillExtractor(mockSkillsDao);
+	
 	@InjectMocks
-	private DocumentFilterExtractionUtil util = new DocumentFilterExtractionUtil();
+	private DocumentFilterExtractionUtil util = new DocumentFilterExtractionUtil(jobTitleExtractor, seniorityExtractor, countryExtractor, cityExtractor, languageExtractor, skillExtractor, contractTypeExtractor);
 	
 	/**
 	* Sets up test environment 

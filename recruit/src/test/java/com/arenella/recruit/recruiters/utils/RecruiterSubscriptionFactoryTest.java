@@ -19,11 +19,11 @@ import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_
 @ExtendWith(MockitoExtension.class)
 class RecruiterSubscriptionFactoryTest {
 	
-	@InjectMocks
-	private RecruiterSubscriptionFactory 			factory = new RecruiterSubscriptionFactory();
-	
 	@Mock
 	private PaidPeriodSubscriptionActionHandler 	paidPeriodSubscriptionActionHandler;
+	
+	@InjectMocks
+	private RecruiterSubscriptionFactory 			factory = new RecruiterSubscriptionFactory(null, paidPeriodSubscriptionActionHandler);
 	
 	/**
 	* Tests exception thrown if type is null

@@ -1240,9 +1240,9 @@ public class CandidateServiceImpl implements CandidateService{
 	*/
 	@Override
 	public void deleteSavedCandidateSearchesForUser(String userId) {
-		this.fetchSavedCandidateSearches(userId).forEach(search -> {
-			this.savedCandidateSearchEntityDao.deleteById(search.getId());
-		});
+		this.fetchSavedCandidateSearches(userId).forEach(search -> 
+			this.savedCandidateSearchEntityDao.deleteById(search.getId())
+		);
 	}
 	
 }

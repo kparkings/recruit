@@ -32,8 +32,7 @@ class AccountServiceImplTest {
 	private UserDao 			mockUserDao;
 	
 	@InjectMocks
-	private AccountServiceImpl 	service 		= new AccountServiceImpl();
-	
+	private AccountServiceImpl 	service = new AccountServiceImpl(mockUserDao);
 	
 	/**
 	* Tests Exception is thrown if User is unknown
@@ -46,9 +45,10 @@ class AccountServiceImplTest {
 		
 		Mockito.when(this.mockUserDao.fetchUser(userId)).thenReturn(Optional.empty());
 		
-		assertThrows(IllegalArgumentException.class, () -> {
-			this.service.replaceRolesForUser(userId, Set.of());
-		});
+		Set<USER_ROLE> roles = Set.of();
+		assertThrows(IllegalArgumentException.class, () -> 
+			this.service.replaceRolesForUser(userId, roles)
+		);
 		
 	}
 	

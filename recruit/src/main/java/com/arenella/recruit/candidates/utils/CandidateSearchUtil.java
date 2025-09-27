@@ -2,7 +2,6 @@ package com.arenella.recruit.candidates.utils;
 
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
@@ -19,8 +18,15 @@ import com.arenella.recruit.candidates.services.CandidateService;
 @Component
 public class CandidateSearchUtil {
 
-	@Autowired
 	private CandidateService candidateService;
+	
+	/**
+	* Constructor
+	* @param candidateService - Services for interacting with Candidates
+	*/
+	public CandidateSearchUtil(CandidateService candidateService) {
+		this.candidateService = candidateService;
+	}
 	
 	/**
 	* Fetches Candidates based upon filters and then applies masking to details of results based upon

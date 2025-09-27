@@ -235,15 +235,15 @@ public class JobTitleExtractor implements JobSpecifcationFilterExtractor{
 			AtomicReference<Type> 	xType 		= new AtomicReference<>();
 			AtomicInteger 			xFirstPos 	= new AtomicInteger(1000000);
 			
-			jobs.stream().filter(jt -> tiedJobTypes.contains(jt.getType())).forEach(jobType -> {
+			jobs.stream().filter(jt -> tiedJobTypes.contains(jt.getType())).forEach(jobType -> 
 				
 				jobType.getTitles().stream().forEach(title -> {
 					if(documentText.contains(title) && documentText.indexOf(title) < xFirstPos.get()) {
 						xType.set(jobType.getType());
 						xFirstPos.set(documentText.indexOf(title));
 					}
-				});
-			});
+				})
+			);
 			
 			filterBuilder.jobTitle(xType.get().role);
 		}
