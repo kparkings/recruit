@@ -215,6 +215,9 @@ export class SuggestionsComponent implements OnInit {
 	public doReset():void{
 		this.searchBar.resetSearchFilters();
 		this.searchBar.addChangeListener(true);
+		this.filterByJobSpecForm = new UntypedFormGroup({
+			specAsText: new UntypedFormControl('Enter Job specification Text here...'),
+		});
 	}
 		
 	public showCVInline(candidateId:string):void{
@@ -415,9 +418,9 @@ export class SuggestionsComponent implements OnInit {
 		
 		this.switchJobSpecUpldOpt('chooseType');
 		
-		this.filterByJobSpecForm = new UntypedFormGroup({
-			specAsText: new UntypedFormControl('Enter Job specification Text here...'),
-		});
+		//this.filterByJobSpecForm = new UntypedFormGroup({
+		//	specAsText: new UntypedFormControl('Enter Job specification Text here...'),
+		//});
 		
 		this.showFilterByJonSpecFailure  	= false;
 		this.showFilterByJobSpec 			= true;
@@ -528,6 +531,11 @@ export class SuggestionsComponent implements OnInit {
 	* Extracts filters from job specification file
 	*/	
 	public extractFiltersFromJobSpec():void{
+		
+		this.filterByJobSpecForm = new UntypedFormGroup({
+			specAsText: new UntypedFormControl('Enter Job specification Text here...'),
+		});
+				
 		this.candidateService.extractFiltersFromDocument(this.jobSpecFile).subscribe(extractedFilters=>{
 			this.extractFiltersSuccess(extractedFilters);
 		},(() =>{

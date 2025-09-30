@@ -40,7 +40,7 @@ public class JobTitleExtractor implements JobSpecifcationFilterExtractor{
 	public static final JobType webDeveloper		= new JobType(JobType.Type.webDeveloper, 		Set.of("web developer","front end developer", "frontend developer", "front-end developer", "web ontwikkelaar", "FE developer", "front-end ontwikkelaar"));
 	public static final JobType scrumMaster			= new JobType(JobType.Type.scrumMaster, 		Set.of("scrum master","scrummaster"));
 	public static final JobType dataScientist		= new JobType(JobType.Type.dataScientist, 		Set.of("data engineer","data scientist", "data analyst", "data science"));
-	public static final JobType networkAdmin		= new JobType(JobType.Type.networkAdmin, 		Set.of("system engineer","sysadmin","systeembeheerder","linux systems engineer", "aws devops", "cloud devops", "azure devops", "platform engineer", "cloud engineer", "devops engineer","dev-ops engineer", "network admin", "network administrator", "network engineer", "network specialist", "system admin", "system administrator", "devops"));
+	public static final JobType networkAdmin		= new JobType(JobType.Type.networkAdmin, 		Set.of("infrastructure consultant","system engineer","sysadmin","systeembeheerder","linux systems engineer", "aws devops", "cloud devops", "azure devops", "platform engineer", "cloud engineer", "devops engineer","dev-ops engineer", "network admin", "network administrator", "network engineer", "network specialist", "system admin", "system administrator", "devops"));
 	public static final JobType softwareDeveloper	= new JobType(JobType.Type.softwareDeveloper, 	Set.of("software ontwikkelaar", "software developer", "software engineer", "software engineers", "application engineer", "application developer"));
 	public static final JobType itSecurity			= new JobType(JobType.Type.itSecurity, 			Set.of("security engineer", "ethical hacker", "security officer", "security consultant", "security specialist", "security engineering", "security lead", "cyber consultant", "security advisor", "security manager", "security operations"));
 	public static final JobType itRecruiter			= new JobType(JobType.Type.itRecruiter, 		Set.of("it-recruitment","recruitment specialist", "recruitmentcampagne", "it recruiter ", "it recruiters", "recruitment consultant", "recruiter"));
@@ -57,7 +57,7 @@ public class JobTitleExtractor implements JobSpecifcationFilterExtractor{
 	public static final JobType expres 				= new JobType(JobType.Type.expres, 				Set.of("expres","expresjs","expres.js"));
 	public static final JobType rust 				= new JobType(JobType.Type.rust, 				Set.of(" rust "));
 	public static final JobType testManager 		= new JobType(JobType.Type.testManager, 		Set.of("test manager","qa manager"));
-	public static final JobType productOwner 		= new JobType(JobType.Type.productOwner, 		Set.of("product owner"));
+	public static final JobType productOwner 		= new JobType(JobType.Type.productOwner, 		Set.of("product owner", "product manager"));
 	public static final JobType node 				= new JobType(JobType.Type.node, 				Set.of("node","nodejs","node.js"));
 	public static final JobType python 				= new JobType(JobType.Type.python, 				Set.of("python", "flask", "django", "chrerrypy", "fastapi","odoo"));
 	public static final JobType angular 			= new JobType(JobType.Type.angular, 			Set.of("angular","angularjs","angular.js"));
