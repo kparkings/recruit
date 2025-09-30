@@ -45,7 +45,9 @@ public class Candidate {
 		RETAIL,
 		SPACE, 
 		TELECOMS,
-		TOURISM
+		TOURISM,
+		MANUFACTURING,
+		TRANSPORTATION
 		}
 	
 	public static final String ANONYMOUS_USER_ATTR_VALUE = "unknown";
