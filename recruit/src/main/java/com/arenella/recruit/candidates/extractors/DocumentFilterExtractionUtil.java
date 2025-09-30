@@ -175,6 +175,7 @@ public class DocumentFilterExtractionUtil {
 		documentText = documentText.replace("!", " ");
 		documentText = documentText.replace("\\(", " ");
 		documentText = documentText.replace("\\)", " ");
+		documentText = documentText.replace(" #", " ");
 		
 		jobTitleExtractor.extractFilters(documentText, filterBuilder);
 		seniorityExtractor.extractFilters(documentText, filterBuilder);
