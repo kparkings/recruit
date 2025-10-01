@@ -17,35 +17,35 @@
       "sourceRoot": "src",
       "prefix": "app",
       "architect": {
-        "build": {
-          "builder": "@angular-devkit/build-angular:browser",
-          "options": {
-            "outputPath": "dist/recruit-ui",
-            "index": "src/index.html",
-            "main": "src/main.ts",
-            "polyfills": "src/polyfills.ts",
-            "tsConfig": "tsconfig.app.json",
-            "assets": [
-              "src/favicon.ico",
-              "src/assets"
-            ],
-            "styles": [
-              "src/custom-theme.scss",
-              "node_modules/bootstrap/dist/css/bootstrap.css",
-              "src/styles.css",
-              "node_modules/flag-icon-css/css/flag-icons.min.css" 
-            ],
-            "scripts": [
-              "node_modules/popper.js/dist/umd/popper.min.js",
-              "node_modules/bootstrap/dist/js/bootstrap.min.js"
-            ],
-            "vendorChunk": true,
-            "extractLicenses": false,
-            "buildOptimizer": false,
-            "sourceMap": true,
-            "optimization": false,
-            "namedChunks": true
-          },
+		"build": {
+			"builder": "@angular-devkit/build-angular:browser",
+		    	"options": {
+		        "outputPath": "dist/recruit-ui",
+		        "index": "src/index.html",
+		        "main": "src/main.ts",
+		        "polyfills": "src/polyfills.ts",
+		        "tsConfig": "tsconfig.app.json",
+		        "assets": [
+		        	"src/favicon.ico",
+		            "src/assets"
+		        ],
+		        "styles": [
+		        	"src/custom-theme.scss",
+		            "node_modules/bootstrap/dist/css/bootstrap.css",
+		            "src/styles.css",
+		            "node_modules/flag-icon-css/css/flag-icons.min.css" 
+		        ],
+		        "scripts": [
+		        	"node_modules/popper.js/dist/umd/popper.min.js",
+		            "node_modules/bootstrap/dist/js/bootstrap.min.js"
+		        ],
+		        "vendorChunk": true,
+		        "extractLicenses": false,
+		        "buildOptimizer": false,
+		        "sourceMap": true,
+		        "optimization": false,
+		        "namedChunks": true
+		  },
           "configurations": {
             "production": {
               "fileReplacements": [
@@ -59,8 +59,6 @@
               "sourceMap": false,
               "namedChunks": false,
               "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true,
               "budgets": [
                 {
                   "type": "initial",
