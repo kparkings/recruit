@@ -21,9 +21,10 @@ import { CurrentUserAuth } 								from '../current-user-auth';
 import { Industry } 									from '../industry';
 
 @Component({
-  selector: 'app-new-candidate',
-  templateUrl: './new-candidate.component.html',
-  styleUrls: ['./new-candidate.component.css']
+    selector: 'app-new-candidate',
+    templateUrl: './new-candidate.component.html',
+    styleUrls: ['./new-candidate.component.css'],
+    standalone: false
 })
 export class NewCandidateComponent implements OnInit {
 

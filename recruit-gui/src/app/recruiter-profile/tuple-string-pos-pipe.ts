@@ -1,6 +1,9 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-@Pipe({name: 'tupleStrValueByPos'})
+@Pipe({
+    name: 'tupleStrValueByPos',
+    standalone: false
+})
 export class TupleStrValueByPos implements PipeTransform{
 	
 	transform(value: [string,string], key:boolean): string {

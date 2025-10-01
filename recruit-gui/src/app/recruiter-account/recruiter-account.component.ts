@@ -15,9 +15,10 @@ import { INVOICE_TYPE } from './subscription-api-inbound';
 * account
 */
 @Component({
-  selector: 'app-recruiter-account',
-  templateUrl: './recruiter-account.component.html',
-  styleUrls: ['./recruiter-account.component.css']
+    selector: 'app-recruiter-account',
+    templateUrl: './recruiter-account.component.html',
+    styleUrls: ['./recruiter-account.component.css'],
+    standalone: false
 })
 export class RecruiterAccountComponent implements OnInit {
 

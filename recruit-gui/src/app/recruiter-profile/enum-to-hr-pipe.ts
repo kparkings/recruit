@@ -4,7 +4,10 @@ import { Pipe, PipeTransform } from '@angular/core';
 * Pipe for taking a enum values and converting it to 
 * a human readable version
 **/
-@Pipe({name: 'enumToHumanReadableValue'})
+@Pipe({
+    name: 'enumToHumanReadableValue',
+    standalone: false
+})
 export class EnumToHumanReadableValue implements PipeTransform{
 	
 	transform(value: string): string {

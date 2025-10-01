@@ -13,9 +13,10 @@ import { SupportedCountry } 					from '../supported-candidate';
 import { SuggestionsSearchRequest } 			from '../suggestions/suggestion-search-request';
 
 @Component({
-  selector: 'app-accounts',
-  templateUrl: './accounts.component.html',
-  styleUrls: ['./accounts.component.css']
+    selector: 'app-accounts',
+    templateUrl: './accounts.component.html',
+    styleUrls: ['./accounts.component.css'],
+    standalone: false
 })
 export class AccountsComponent implements OnInit {
 	

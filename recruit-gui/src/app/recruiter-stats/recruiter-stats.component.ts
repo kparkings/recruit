@@ -8,9 +8,10 @@ import { Chart, ChartType } from 'chart.js';
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
-  selector: 'app-recruiter-stats',
-  templateUrl: './recruiter-stats.component.html',
-  styleUrls: ['./recruiter-stats.component.css']
+    selector: 'app-recruiter-stats',
+    templateUrl: './recruiter-stats.component.html',
+    styleUrls: ['./recruiter-stats.component.css'],
+    standalone: false
 })
 export class RecruiterStatsComponent implements OnInit{
 	

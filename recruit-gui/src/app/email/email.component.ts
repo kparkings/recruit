@@ -11,9 +11,10 @@ import { Observable, Observer }                 from 'rxjs';
 * Internal Email client
 */
 @Component({
-  selector: 'app-email',
-  templateUrl: './email.component.html',
-  styleUrls: ['./email.component.css']
+    selector: 'app-email',
+    templateUrl: './email.component.html',
+    styleUrls: ['./email.component.css'],
+    standalone: false
 })
 export class EmailComponent {
 

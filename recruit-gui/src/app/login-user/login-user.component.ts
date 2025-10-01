@@ -10,9 +10,10 @@ import { CreditsService } from '../credits.service';
 import { CandidateServiceService } from '../candidate-service.service';
 
 @Component({
-  selector: 'app-login-user',
-  templateUrl: './login-user.component.html',
-  styleUrls: ['./login-user.component.css']
+    selector: 'app-login-user',
+    templateUrl: './login-user.component.html',
+    styleUrls: ['./login-user.component.css'],
+    standalone: false
 })
 /**
 * Component for logging Users into the System 

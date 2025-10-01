@@ -11,9 +11,10 @@ import { TranslateService } from '@ngx-translate/core';
 * Component for Candidates to present their own Curriculum and Profile.
 */
 @Component({
-  selector: 'app-create-candidate',
-  templateUrl: './create-candidate.component.html',
-  styleUrls: ['./create-candidate.component.css']
+    selector: 'app-create-candidate',
+    templateUrl: './create-candidate.component.html',
+    styleUrls: ['./create-candidate.component.css'],
+    standalone: false
 })
 export class CreateCandidateComponent implements OnInit {
 
