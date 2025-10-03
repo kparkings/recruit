@@ -19,6 +19,7 @@ import { CurrentUserAuth }											from './../../current-user-auth';
 import { SearchBarFilterFormHelper } 								from './search-fiter-form-helper';
 import { SuggestionsSearchRequest } 								from '../suggestion-search-request';
 import { SavedCandidateSearch } 									from '../saved-search';
+import { SearchBarAPI }												from './searchbar-api';
 	
 @Component({
   selector: 'app-searchbar',
@@ -35,8 +36,10 @@ export class SearchbarComponent {
 	 	
 	@Output() newSuggestionResults 								= new EventEmitter<Array<Candidate>>();
 	
-	private FIRST_NAME_DEFAULT:string 							= 'First Name';
-	private SURNAME_DEFAULT:string 								= 'Surname';
+	public api:SearchBarAPI = new SearchBarAPI(this, this.translate);
+	
+	public FIRST_NAME_DEFAULT:string 							= 'First Name';
+	public SURNAME_DEFAULT:string 								= 'Surname';
 	
 	public showGeoZoneFilters:string							= "";
 	public includeUnavailableCandidatesSelected:string 			= 'true';
@@ -70,9 +73,9 @@ export class SearchbarComponent {
 			enableEmails: 											new UntypedFormControl(false)
 		});
 	
-	public getCurrentSearchFilterType():string{
-		return this.filterTypeFormGroup.get('searchType')?.value;
-	}
+	//public getCurrentSearchFilterType():string{
+	//	return this.filterTypeFormGroup.get('searchType')?.value;
+	//}
 	
 	public filterTypeFormGroup:UntypedFormGroup					= new UntypedFormGroup({
 		searchType:												new UntypedFormControl('FUNCTION'),
@@ -97,15 +100,15 @@ export class SearchbarComponent {
 	/**
 	* Toggles between displaying and hiding of the filters
 	*/
-	public toggleFilters():void{
+	//public toggleFilters():void{
 		
-		if (this.filterView == 'collapsed'){
-			this.filterView = 'expanded';
-		} else {
-			this.filterView = 'collapsed';
-		}
+	//	if (this.filterView == 'collapsed'){
+	//		this.filterView = 'expanded';
+	//	} else {
+	//		this.filterView = 'collapsed';
+	//	}
 		
-	}
+	//}
 		
 	/**
 	* Angular lifecycyle: Initializes Component
@@ -158,34 +161,34 @@ export class SearchbarComponent {
 	/**
 	* Shows search type selection modal 
 	*/
-	public doShowSearchTypeFilterSelectionModal():void{
+	//public doShowSearchTypeFilterSelectionModal():void{
 			
-		this.FIRST_NAME_DEFAULT 	= this.translate.instant('arenella-suggestions-search-type-name-firstname-default');
-		this.SURNAME_DEFAULT 		= this.translate.instant('arenella-suggestions-search-type-name-surname-default');
+	//	this.FIRST_NAME_DEFAULT 	= this.translate.instant('arenella-suggestions-search-type-name-firstname-default');
+	//	this.SURNAME_DEFAULT 		= this.translate.instant('arenella-suggestions-search-type-name-surname-default');
 			
-		this.searchTypeFilterSelectionModal.nativeElement.showModal();;
-	}
+	//	this.searchTypeFilterSelectionModal.nativeElement.showModal();;
+	//}
 	
 	/**
 	* Sets the default values in the firstname/surname fields of the search form
 	* when a User selects to search on names
 	*/
-	public cssSearchNameDefault():string{
+	//public cssSearchNameDefault():string{
 		
-		if (this.getCurrentSearchFilterType() != 'NAME') {
-			return '';
-		}
+	//	if (this.getCurrentSearchFilterType() != 'NAME') {
+	//		return '';
+	//	}
 		
-		let firstName:string 	= this.suggestionFilterForm.get('searchPhraseFirstName')?.value;
-		let surname:string 		= this.suggestionFilterForm.get('searchPhraseSurname')?.value;
+	//	let firstName:string 	= this.suggestionFilterForm.get('searchPhraseFirstName')?.value;
+	//	let surname:string 		= this.suggestionFilterForm.get('searchPhraseSurname')?.value;
 		
-		if (firstName == this.FIRST_NAME_DEFAULT || surname == this.SURNAME_DEFAULT){
-			return 'search-name-default';
-		}
+	//	if (firstName == this.FIRST_NAME_DEFAULT || surname == this.SURNAME_DEFAULT){
+	//		return 'search-name-default';
+	//	}
 		
-		return '';
+	//	return '';
 		
-	}
+	//}
 	
 	/**
 	* When a User clicks in the firstname/surname search fields, removes the default 
@@ -282,6 +285,10 @@ export class SearchbarComponent {
 	public switchIncludeFilterView(view:string):void{
 		this.showIncludeFilters = view;
 	}
+	
+	public showAResult():string{
+		return "aRecult";
+	}
 
 	/**
 	*  
@@ -314,9 +321,9 @@ export class SearchbarComponent {
 		return true;
 	}
 	
-	public showSavedSearchQueriesBox():void{
-		this.savedSearchQueriesBox.nativeElement.showModal();
-	}
+	//public showSavedSearchQueriesBox():void{
+	//	this.savedSearchQueriesBox.nativeElement.showModal();
+	//}
 						
 	public choseSubscription():void{
 		this.creditsService.buySubscription();
@@ -347,15 +354,15 @@ export class SearchbarComponent {
 	/**
 	* Swithches between open and closed filter view for Location 
 	*/
-	public switchLocationFilterView(view:string):void{
-		this.showLocationFilters = view;
-		setTimeout(()=>{ 
-			if (this.extractedFilters.city != "") {
-				this.suggestionFilterForm.get('locationCity')?.setValue(this.extractedFilters.city);
-			}	
-		 }, 50)
-		
-	}
+	//public switchLocationFilterView(view:string):void{
+	//	this.showLocationFilters = view;
+	//	setTimeout(()=>{ 
+	//		if (this.extractedFilters.city != "") {
+	//			this.suggestionFilterForm.get('locationCity')?.setValue(this.extractedFilters.city);
+	//		}	
+	//	 }, 50)
+	//	
+	//}
 	
 	public getIso2CodeByCountryName(country:string):string {
 		
@@ -374,9 +381,9 @@ export class SearchbarComponent {
 	/**
 	* Swithches between open and closed filter view for GeoZones 
 	*/
-	public switchGeoZoneFilterView(view:string):void{
-		this.showGeoZoneFilters = view;
-	}
+	//public switchGeoZoneFilterView(view:string):void{
+	//	this.showGeoZoneFilters = view;
+	//}
 
 	/**
 	*  
@@ -440,33 +447,33 @@ export class SearchbarComponent {
 	/**
 	* Toggles GeoCpde
 	*/
-	public toggleGeoZoneSelection(geoZone:GeoZone):void{
+	//public toggleGeoZoneSelection(geoZone:GeoZone):void{
 		
-		let included:boolean = this.suggestionFilterForm.get((geoZone.geoZoneId.toLowerCase()+'Results'))?.value;
-		this.suggestionFilterForm.get((geoZone.geoZoneId.toLowerCase()+'Results'))?.setValue(!included);
+	//	let included:boolean = this.suggestionFilterForm.get((geoZone.geoZoneId.toLowerCase()+'Results'))?.value;
+	//	this.suggestionFilterForm.get((geoZone.geoZoneId.toLowerCase()+'Results'))?.setValue(!included);
 	
-		let geoZoneActive = this.candidateService.getGeoZones().filter(gz => this.suggestionFilterForm.get((gz.geoZoneId.toLowerCase()+'Results'))?.value == true).length > 0;
+	//	let geoZoneActive = this.candidateService.getGeoZones().filter(gz => this.suggestionFilterForm.get((gz.geoZoneId.toLowerCase()+'Results'))?.value == true).length > 0;
 	
-		if (!geoZoneActive) {
-			this.candidateService.getSupportedCountries().forEach(country => {
-				this.suggestionFilterForm.get(country.name)?.setValue(true);
-			});
-		} else {
-			this.candidateService.getSupportedCountries().forEach(country => {
-				this.suggestionFilterForm.get(country.name)?.setValue(false);
-			});
+	//	if (!geoZoneActive) {
+	//		this.candidateService.getSupportedCountries().forEach(country => {
+	//			this.suggestionFilterForm.get(country.name)?.setValue(true);
+	//		});
+	//	} else {
+	//		this.candidateService.getSupportedCountries().forEach(country => {
+	//			this.suggestionFilterForm.get(country.name)?.setValue(false);
+	//		});
 		
-		}
+	//	}
 		
-	}
+	//}
 										
 	/**
 	* Returns whether Candidates from the selected GeoZone are currently
 	* included in the Suggestion results
 	*/
-	public includeResultsForGeoZone(geoZone:GeoZone):boolean{
-		return this.suggestionFilterForm.get((geoZone.geoZoneId.toLowerCase()+'Results'))?.value;
-	}
+	//public includeResultsForGeoZone(geoZone:GeoZone):boolean{
+	//	return this.suggestionFilterForm.get((geoZone.geoZoneId.toLowerCase()+'Results'))?.value;
+	//}
 											
 	private initSupportedCountries():void{
 		this.supportedCountries = this.candidateService.getSupportedCountries();
@@ -775,7 +782,7 @@ export class SearchbarComponent {
 		});
 		
 		searchRequest.locationFilters.geoZones.forEach(geoZone => {
-			this.toggleGeoZoneSelection(new GeoZone(geoZone.toUpperCase()));
+			this.api.toggleGeoZoneSelection(new GeoZone(geoZone.toUpperCase()));
 		});
 		
 		searchRequest.locationFilters.countries?.forEach(country => {

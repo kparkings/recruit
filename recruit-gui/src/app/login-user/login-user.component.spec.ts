@@ -1,6 +1,9 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { ComponentFixture, TestBed } from '@angular/core/testing';	                               
 import { LoginUserComponent } from './login-user.component';
+import { TranslateModule} 					from '@ngx-translate/core';
+import { provideHttpClient } 				from '@angular/common/http';
+import { provideHttpClientTesting } 		from '@angular/common/http/testing';
+import { ReactiveFormsModule } from '@angular/forms';
 
 describe('LoginUserComponent', () => {
   let component: LoginUserComponent;
@@ -8,7 +11,9 @@ describe('LoginUserComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ LoginUserComponent ]
+		imports: [TranslateModule.forRoot(),ReactiveFormsModule],
+      	declarations: [ LoginUserComponent ],
+	  	providers: [ provideHttpClient(), provideHttpClientTesting(), ],
     })
     .compileComponents();
   });

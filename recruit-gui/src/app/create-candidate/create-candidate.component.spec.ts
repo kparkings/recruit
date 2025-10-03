@@ -1,6 +1,9 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { CreateCandidateComponent } from './create-candidate.component';
+import { ComponentFixture, TestBed } 		from '@angular/core/testing';
+import { CreateCandidateComponent } 		from './create-candidate.component';
+import { TranslateModule} 					from '@ngx-translate/core';
+import { provideHttpClient } 				from '@angular/common/http';
+import { provideHttpClientTesting } 		from '@angular/common/http/testing';
+import { ReactiveFormsModule } from '@angular/forms';
 
 describe('CreateCandidateComponent', () => {
   let component: CreateCandidateComponent;
@@ -8,7 +11,9 @@ describe('CreateCandidateComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ CreateCandidateComponent ]
+	  imports: [TranslateModule.forRoot(),ReactiveFormsModule],
+      declarations: [ CreateCandidateComponent ],
+	  providers: [ provideHttpClient(), provideHttpClientTesting(), ReactiveFormsModule],
     })
     .compileComponents();
   });

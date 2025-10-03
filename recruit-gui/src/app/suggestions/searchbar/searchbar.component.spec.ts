@@ -1,5 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
+import { TranslateModule} 					from '@ngx-translate/core';
+import { provideHttpClient } 				from '@angular/common/http';
+import { provideHttpClientTesting } 		from '@angular/common/http/testing';
+import { ReactiveFormsModule } from '@angular/forms';
 import { SearchbarComponent } from './searchbar.component';
 
 describe('SearchbarComponent', () => {
@@ -8,16 +12,20 @@ describe('SearchbarComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SearchbarComponent]
+		imports: [TranslateModule.forRoot(),ReactiveFormsModule],
+      	declarations: [ SearchbarComponent ],
+	  	providers: [ provideHttpClient(), provideHttpClientTesting(),ReactiveFormsModule],
     })
     .compileComponents();
-    
+
     fixture = TestBed.createComponent(SearchbarComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  it(`sampleKevTest`, () => {
+    let result = component.showAResult();
+    expect(result).toEqual('aRecult');
   });
 });
+

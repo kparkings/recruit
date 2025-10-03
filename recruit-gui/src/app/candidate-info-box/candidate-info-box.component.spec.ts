@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { CandidateInfoBoxComponent } from './candidate-info-box.component';
+import { TranslateModule } from '@ngx-translate/core';
 
 describe('CandidateInfoBoxComponent', () => {
   let component: CandidateInfoBoxComponent;
@@ -8,7 +9,8 @@ describe('CandidateInfoBoxComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [CandidateInfoBoxComponent]
+		imports: [TranslateModule.forRoot()],
+		declarations: [CandidateInfoBoxComponent]
     })
     .compileComponents();
     

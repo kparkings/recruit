@@ -1,6 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { RecruitersComponent } from './recruiters.component';
+import { TranslateModule} 					from '@ngx-translate/core';
+import { provideHttpClient } 				from '@angular/common/http';
+import { provideHttpClientTesting } 		from '@angular/common/http/testing';
 
 describe('RecruitersComponent', () => {
   let component: RecruitersComponent;
@@ -8,7 +11,9 @@ describe('RecruitersComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [RecruitersComponent]
+		imports: [TranslateModule.forRoot()],
+		      	declarations: [ RecruitersComponent ],
+				providers: [ provideHttpClient(), provideHttpClientTesting(), ],
     })
     .compileComponents();
     

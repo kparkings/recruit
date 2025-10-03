@@ -1,6 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { RecruiterAccountComponent } from './recruiter-account.component';
+import { TranslateModule} 					from '@ngx-translate/core';
+import { provideHttpClient } 				from '@angular/common/http';
+import { provideHttpClientTesting } 		from '@angular/common/http/testing';
+import { ReactiveFormsModule } from '@angular/forms';
 
 describe('RecruiterAccountComponent', () => {
   let component: RecruiterAccountComponent;
@@ -8,7 +12,9 @@ describe('RecruiterAccountComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ RecruiterAccountComponent ]
+		imports: [TranslateModule.forRoot(),ReactiveFormsModule],
+      	declarations: [ RecruiterAccountComponent ],
+	  	providers: [ provideHttpClient(), provideHttpClientTesting(), ],
     })
     .compileComponents();
   });

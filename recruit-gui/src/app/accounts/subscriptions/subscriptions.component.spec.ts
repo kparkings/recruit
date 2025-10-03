@@ -1,6 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { SubscriptionsComponent } from './subscriptions.component';
+import { TranslateModule } from '@ngx-translate/core';
+import { provideHttpClient } 				from '@angular/common/http';
+import { provideHttpClientTesting } 		from '@angular/common/http/testing';
 
 describe('SubscriptionsComponent', () => {
   let component: SubscriptionsComponent;
@@ -8,7 +11,9 @@ describe('SubscriptionsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SubscriptionsComponent]
+		imports: [TranslateModule.forRoot()],
+		declarations: [SubscriptionsComponent],
+		providers: [ provideHttpClient(), provideHttpClientTesting()],
     })
     .compileComponents();
     

@@ -6,15 +6,15 @@
 		  	<div>
 				<table class="mobile-search-box search-filter-pane">
 					<tr>
-						<td class="sugg-srch-hdr">{{'arenella-suggestions-job-title' | translate}}<span style="cursor:pointer; color:#6a5acd;" (click)='doShowSearchTypeFilterSelectionModal()'> ...</span></td>
+						<td class="sugg-srch-hdr">{{'arenella-suggestions-job-title' | translate}}<span style="cursor:pointer; color:#6a5acd;" (click)='api.doShowSearchTypeFilterSelectionModal()'> ...</span></td>
 						<td class="sugg-srch-bdy">
-							<input type="text" class="sugg-srch-job-title" 									formControlName="searchPhrase" 				*ngIf="getCurrentSearchFilterType() === 'FUNCTION' || getCurrentSearchFilterType() == 'EMAIL' || getCurrentSearchFilterType() == 'CANDIDATE_ID'">
-							<input type="text" class="sugg-srch-job-title-name {{cssSearchNameDefault()}}" 	formControlName="searchPhraseFirstName" 	*ngIf="getCurrentSearchFilterType() === 'NAME'" (click)="activateFirstnameSurnameFields()">
-							<input type="text" class="sugg-srch-job-title-name {{cssSearchNameDefault()}}" 	formControlName="searchPhraseSurname" 		*ngIf="getCurrentSearchFilterType() === 'NAME'" (click)="activateFirstnameSurnameFields()">
+							<input type="text" class="sugg-srch-job-title" 										formControlName="searchPhrase" 				*ngIf="api.getCurrentSearchFilterType() === 'FUNCTION' || api.getCurrentSearchFilterType() == 'EMAIL' || api.getCurrentSearchFilterType() == 'CANDIDATE_ID'">
+							<input type="text" class="sugg-srch-job-title-name {{api.cssSearchNameDefault()}}" 	formControlName="searchPhraseFirstName" 	*ngIf="api.getCurrentSearchFilterType() === 'NAME'" (click)="activateFirstnameSurnameFields()">
+							<input type="text" class="sugg-srch-job-title-name {{api.cssSearchNameDefault()}}" 	formControlName="searchPhraseSurname" 		*ngIf="api.getCurrentSearchFilterType() === 'NAME'" (click)="activateFirstnameSurnameFields()">
 							
 						</td>
-						<td *ngIf="getCurrentSearchFilterType() === 'FUNCTION'" class="hide-me-mobile-candidates-page"> 
-							<div (click)="showSavedSearchQueriesBox()" class="material-icons sugg-srch-job-title-queries">
+						<td *ngIf="api.getCurrentSearchFilterType() === 'FUNCTION'" class="hide-me-mobile-candidates-page"> 
+							<div (click)="api.showSavedSearchQueriesBox()" class="material-icons sugg-srch-job-title-queries">
 								list
 							</div>
 						</td>
@@ -22,19 +22,19 @@
 				</table>
 			</div>
 			
-			<span class="filters-collapse-options" *ngIf="filterView == 'expanded'" (click)=toggleFilters()>{{'hide-filters' | translate}}...</span>	
-			<span class="filters-collapse-options" *ngIf="filterView != 'expanded'" (click)=toggleFilters()>{{'show-filters' | translate}}...</span>
+			<span class="filters-collapse-options" *ngIf="filterView == 'expanded'" (click)=api.toggleFilters()>{{'hide-filters' | translate}}...</span>	
+			<span class="filters-collapse-options" *ngIf="filterView != 'expanded'" (click)=api.toggleFilters()>{{'show-filters' | translate}}...</span>
 			
 			<table class="mobile-search-box search-filter-pane" *ngIf="filterView == 'expanded'">
 		
 				<tr>
 					<td class="sugg-srch-hdr">{{'arenella-suggestions-geoZones' | translate}}</td>
 					<td *ngIf="!showGeoZoneFilters">
-						<p class="toggle-filter-option" (click)="switchGeoZoneFilterView('showGeoZoneFilters')">{{'Show' | translate}}..</p>
+						<p class="toggle-filter-option" (click)="api.switchGeoZoneFilterView('showGeoZoneFilters')">{{'Show' | translate}}..</p>
 					</td>
 					<td *ngIf="showGeoZoneFilters" class="sugg-srch-bdy geo-zone-filters">
-						<p class="toggle-filter-option" (click)="switchGeoZoneFilterView('')">{{'Hide' | translate}}..</p>
-						<div *ngFor="let geoZone of geoZones" class="geo-code-filter geo-code-selected-{{includeResultsForGeoZone(geoZone)}}" (click)="toggleGeoZoneSelection(geoZone)">
+						<p class="toggle-filter-option" (click)="api.switchGeoZoneFilterView('')">{{'Hide' | translate}}..</p>
+						<div *ngFor="let geoZone of geoZones" class="geo-code-filter geo-code-selected-{{api.includeResultsForGeoZone(geoZone)}}" (click)="api.toggleGeoZoneSelection(geoZone)">
 							{{geoZone.geoZoneId | translate}}
 						</div>
 						
@@ -44,10 +44,10 @@
 				<tr>
 					<td class="sugg-srch-hdr">{{'arenella-suggestions-location' | translate}}</td>
 					<td *ngIf="!showLocationFilters">
-						<p class="toggle-filter-option" (click)="switchLocationFilterView('showLocationFilters')">{{'Show' | translate}}..</p>
+						<p class="toggle-filter-option" (click)="api.switchLocationFilterView('showLocationFilters')">{{'Show' | translate}}..</p>
 					</td>
 					<td *ngIf="showLocationFilters" class="sugg-srch-bdy location-filters">
-						<p class="toggle-filter-option" (click)="switchLocationFilterView('')">{{'Hide' | translate}}..</p>
+						<p class="toggle-filter-option" (click)="api.switchLocationFilterView('')">{{'Hide' | translate}}..</p>
 						<div style="max-width:100%;">
 							
 							<div>

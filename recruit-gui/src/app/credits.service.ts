@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } 					from '@angular/common/http';
 import { Injectable } 								from '@angular/core';
 import { Observable, BehaviorSubject  }             from 'rxjs';
 import { environment }								from './../environments/environment';
+import { of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -79,16 +80,19 @@ export class CreditsService {
 	* of purchasing a subscription
 	*/
 	public isPurchaseSubscription():Observable<boolean>{
-		return this.purchaseSubscription;
+		let x:boolean = this.purchaseSubscription.value; 
+		//this.setPurchaseSubscription(false)
+		this.purchaseSubscription.next(false);
+		return of(x);
 	}
 	
 	/**
 	* Set whether User is in the process of buying a 
 	* subscription
 	*/
-	public setPurchaseSubscription(inProcess:boolean):void{
-		this.purchaseSubscription.next(inProcess);
-	}
+	//public setPurchaseSubscription(inProcess:boolean):void{
+	//	this.purchaseSubscription.next(inProcess);
+	//}
 	
 	/**
 	* sets the User is currently in the process of buying subscriptions 

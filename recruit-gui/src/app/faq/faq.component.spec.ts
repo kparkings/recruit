@@ -1,6 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { FaqComponent } from './faq.component';
+import { TranslateModule} 					from '@ngx-translate/core';
+import { provideHttpClient } 				from '@angular/common/http';
+import { provideHttpClientTesting } 		from '@angular/common/http/testing';
 
 describe('FaqComponent', () => {
   let component: FaqComponent;
@@ -8,7 +11,9 @@ describe('FaqComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ FaqComponent ]
+		imports: [TranslateModule.forRoot()],
+      declarations: [ FaqComponent ],
+	  providers: [ provideHttpClient(), provideHttpClientTesting(), ],
     })
     .compileComponents();
 

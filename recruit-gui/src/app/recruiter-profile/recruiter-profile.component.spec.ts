@@ -1,6 +1,9 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { RecruiterProfileComponent } from './recruiter-profile.component';
+import { ComponentFixture, TestBed } 		from '@angular/core/testing';
+import { RecruiterProfileComponent }	 	from './recruiter-profile.component';
+import { TranslateModule} 					from '@ngx-translate/core';
+import { provideHttpClient } 				from '@angular/common/http';
+import { provideHttpClientTesting } 		from '@angular/common/http/testing';
+import { ReactiveFormsModule } from '@angular/forms';
 
 describe('RecruiterProfileComponent', () => {
   let component: RecruiterProfileComponent;
@@ -8,7 +11,9 @@ describe('RecruiterProfileComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ RecruiterProfileComponent ]
+		imports: [TranslateModule.forRoot(),ReactiveFormsModule],
+      	declarations: [ RecruiterProfileComponent ],
+	  	providers: [ provideHttpClient(), provideHttpClientTesting(), ],
     })
     .compileComponents();
 

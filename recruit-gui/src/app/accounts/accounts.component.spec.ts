@@ -1,6 +1,13 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { AccountsComponent } from './accounts.component';
+import { TranslateModule} 					from '@ngx-translate/core';
+import { provideHttpClient } 				from '@angular/common/http';
+import { provideHttpClientTesting } 		from '@angular/common/http/testing';
+import { AppComponent} 						from '../app.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import { RecruitersComponent } from './recruiters/recruiters.component';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 describe('AccountsComponent', () => {
   let component: AccountsComponent;
@@ -8,7 +15,10 @@ describe('AccountsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ AccountsComponent ]
+		imports: [TranslateModule.forRoot(),ReactiveFormsModule],
+      	declarations: [ AccountsComponent ],
+	  	providers: [ provideHttpClient(), provideHttpClientTesting(), AppComponent, RecruitersComponent],
+		schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
     })
     .compileComponents();
   });

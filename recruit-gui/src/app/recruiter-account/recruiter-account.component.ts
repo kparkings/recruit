@@ -42,9 +42,10 @@ export class RecruiterAccountComponent implements OnInit {
 				private router: 				Router, 
 				private creditsService: 		CreditsService,
 				private translate:				TranslateService) { 
-					
+			
+		//Wants to set to false but use value prior to setting false					
 		this.creditsService.isPurchaseSubscription().subscribe(value => {
-			this.creditsService.setPurchaseSubscription(false);
+			//this.creditsService.setPurchaseSubscription(false);
 			this.isBuyingSubscription = value;
 		});					
 					
@@ -54,6 +55,7 @@ export class RecruiterAccountComponent implements OnInit {
 	* Initializes the Component
 	*/
 	ngOnInit(): void {
+	
 		if (this.isRecruiter() || this.isRecruiterNoSubscription()) {
 			this.fetchRecruiterDetails();
 		}
