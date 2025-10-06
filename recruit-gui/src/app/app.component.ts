@@ -15,7 +15,7 @@ import { CurrentUserAuth }					from './current-user-auth';
 @Component({
     selector: 'app-root',
     templateUrl: './app.component.html',
-    styleUrls: ['./app.component.css'],
+    styleUrls: ['./app.component.css','./app.component-mob.css'],
     standalone: false
 }) 
 export class AppComponent {
@@ -23,6 +23,7 @@ export class AppComponent {
 	@ViewChild('validationExBox', { static: false }) private validationExBox:any;
 	@ViewChild('noCreditsBox', { static: false }) 	 private noCreditsBox:any;
 	@ViewChild('quickActionsBox', { static: false }) 	 private quickActionsBox:any;
+	@ViewChild('tandcBox', { static: false }) 	 private tandcBox:any;
 	
 	public currentUserAuth:CurrentUserAuth 						= new CurrentUserAuth();
 	
@@ -46,6 +47,9 @@ export class AppComponent {
 	
 	public lastNewsfeedView:Date		= new Date();
 	public unseenNewsfeedItems:boolean  = true;
+	
+	public toggleMobileMenu:string = "toggleMobileMenuOff";
+	public toggleMobileAuthMenu:string = "toggleMobileAuthMenuOff";
 	
 	/**
 	* Constructor
@@ -93,6 +97,41 @@ export class AppComponent {
 		if(!this.isAuthenticatedAsCandidate()){
 			this.refreschUnreadAlerts();
 		}
+	}
+	
+	ngAfterViewInit():void{
+		if (this.tandcBox.nativeElement && this.termsAndConditionsAccepted != true) {
+			this.tandcBox.nativeElement.showModal();
+		}
+	}
+	
+	/**
+	* When using mobile. Shows or hides menu options
+	*/
+	public toggleMobileMenuOpt():void {
+		this.toggleMobileAuthMenu = 'toggleMobileAuthMenuOff';
+		if(this.toggleMobileMenu == 'toggleMobileMenuOff'){
+			this.toggleMobileMenu = 'toggleMobileMenuOn';
+		} else {
+			this.toggleMobileMenu = 'toggleMobileMenuOff';
+		}
+	}
+	
+	public toggleMobileAuthMenuOpt():void {
+		this.toggleMobileMenu = 'toggleMobileMenuOff';
+		if(this.toggleMobileAuthMenu == 'toggleMobileAuthMenuOff'){
+			this.toggleMobileAuthMenu = 'toggleMobileAuthMenuOn';
+		} else {
+			this.toggleMobileAuthMenu = 'toggleMobileAuthMenuOff';
+		}
+	}
+	
+	/**
+	* Closes menu when routing to new page
+	*/
+	public resetMenu():void{
+		this.toggleMobileMenu = 'toggleMobileMenuOff';
+		this.toggleMobileAuthMenu = 'toggleMobileAuthMenuOff';
 	}
 	
 	private lastAlertRefresh!:Date;
@@ -208,6 +247,7 @@ export class AppComponent {
 		this.cookieService.set(this.getTandCsCookieName(),"Accepted",{expires: date});
 		
 		this.termsAndConditionsAccepted = true;
+		this.tandcBox.nativeElement.close();
 	}
 	
 	/**

@@ -1,7 +1,20 @@
-@media (min-width:701px)  {
+@media (max-width:700px)  {
 	
+	.app-main-menu{
+		background:black;
+	}
+	
+	.footer {
+    	clear: both;
+    	position: relative;
+    	height: 200px;
+    	margin-top: -200px;
+	}
+
 	.main-app-header{
 		width:100%;
+		font-family:allessa;
+		text-align:center;
 	}
 	
 	.arenella-primary-background{
@@ -36,77 +49,18 @@
 		color:#002549;
 	}
 	
-	
-
-	.terms-and-conditions-box{
-		position:absolute;
-		float:right;
-		right:0;
-		bottom:0;
-		width: 500px;
-		margin:auto;
-		background-color: white;
-		border:5px solid #6A5ACD;
-		width:500px;
-		height:250px;
-		border-radius:25px;
-	}
-	
-	.cookie-policy-hdr{
-		color:#6A5ACD;
-		text-align:center;
+	.arenella-navbar{
+		padding:0;
 	}
 
-	.cookie-policy-btn{
-		margin-top:20px;
-		margin-right:10px;
-		width:100%;
-		text-align:center;
-	}
-
-	.cookie-policy-title{
-		font-size:24px;
-		font-weight:bold;
-		margin-top:10px;
-		position:relative;
-		top:5px;
-		margin-left:10px;
-		color:#6A5ACD;
-		margin-bottom:20px;
-	}
-
-	.cookie-policy-text{
-		overflow-y:scroll; 
-		height:150px;
-		margin:10px;
-		font-size:12px;
-		color:black;
-	}
-	
-	.li-arenella-nav{
-		margin-bottom:5px;
-		min-width:140px;
-		text-align:center;
-		border-right: solid 1px grey;
-	}
-	
-	.li-arenella-nav-mob{
-		margin-bottom:5px;
-		width:48%;
-		margin-left:1%;
-		margin-right:1%;
-		text-align:center;
-	}
-	
 	.li-arenella-nav-pre-login{
-		margin-bottom:5px;
-		float:left;
-		min-width:105px;
-		border-right: solid 1px grey;
-		text-align:center;
-		border-right: none;
+		margin-left:0px;
+		padding-left:0px;
+		list-style-type: none;
+		
+		
 	}
-	
+	/*
 	.li-arenella-nav-pre-login-std{
 		min-width:80px;
 		max-width:85px;
@@ -128,13 +82,59 @@
 		margin-right:10px;
 		float:right;
 	}
-	
+
+	.signup-candidate{
+		width:99%;
+		margin:1%;
+	}
 	.signup-recruiter{
-		width:200px;
+		width:99%;
+		margin:1%;
+	}
+	*/
+	.spacer-for-mobile-menu{
+		margin-bottom:5px;
+		float:left;
+		border-right: none;
+		width:100%;
 	}
 	
-	.signup-candidate{
-		width:200px;
+	.terms-and-conditions-box{
+	
+		width:100%;
+		background:black;
+	}
+	
+	.cookie-policy-hdr{
+		background:black;
+		color:white;
+		text-align:center;
+	}
+
+	.cookie-policy-btn{
+		margin-top:20px;
+		margin-right:10px;
+		width:100%;
+		text-align:center;
+	}
+
+	.cookie-policy-title{
+		font-size:24px;
+		font-weight:bold;
+		margin-top:10px;
+		position:relative;
+		top:5px;
+		margin-left:10px;
+		color:white;
+		margin-bottom:20px;
+	}
+
+	.cookie-policy-text{
+		overflow-y:scroll; 
+		height:150px;
+		margin:10px;
+		font-size:12px;
+		color:white;
 	}
 	
 	.filter-close-box{
@@ -170,7 +170,7 @@
 	.quick-actions-box{
 		margin:20px;
 		text-align:center;
-		width:600px;
+		width:100%;
 	}
 	
 	.quick-actions-box button {
@@ -183,9 +183,26 @@
 		margin-right:20px;
 	}
 	
+	.toggleMobileMenuOn{
+		display:block;
+	}
+	
+	.toggleMobileMenuOff{
+		display:none;
+	}
+	
+	.toggleMobileAuthMenuOn{
+		display:block;
+	}
+	
+	.toggleMobileAuthMenuOff{
+		display:none;
+	}
+	
 	.quick-actions-btn{
 		float:right;
-		width:200px;
+		width:100%;
 		background:green;
+		
 	}
 }

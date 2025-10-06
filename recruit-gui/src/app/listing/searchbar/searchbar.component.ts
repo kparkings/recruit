@@ -16,7 +16,7 @@ import { ActivatedRoute } 											from '@angular/router';
   selector: 'app-searchbarlisting',
   standalone: false,
   templateUrl: './searchbar.component.html',
-  styleUrl: './searchbar.component.css'
+  styleUrls: ['./searchbar.component.css','./searchbar.component-mob.css']
 })
 export class SearchbarComponentListing {
 

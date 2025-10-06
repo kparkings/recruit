@@ -1,0 +1,118 @@
+@media ( max-width :700px) {
+
+	.filters {
+		margin-left: 0%;
+	}
+
+	.desc-body {
+		min-width: 98%;
+		padding-right: 0px;
+		padding-left: 5px;
+	}
+	
+	.listing-alert-option {
+		border-radius: 0%;
+		border: black;
+		margin-bottom: 5px;
+		white-space: nowrap;
+		float: left;
+		width:85px;
+		font-size:12px;
+	}
+	
+	.country-flag{
+		height:25px;
+		width:30px;
+		padding-left:0px;
+		margin-left:0px;
+		margin-bottom:5px;
+		background-position:0%;
+	}
+	
+	.share-post{
+		height:200px;	
+	}
+	
+	.share-post-clipboard{
+		margin: 0 auto;
+		width:250px;
+		height:100px;
+	}
+	
+	.statistics-table{
+		width:100%;
+	}
+	
+	.statistics-table-pane{
+		width:100%;
+	}
+	
+	.stat-option-bar{
+		max-width:160px;
+		padding:5px;
+	}
+	
+	.listing-stats-pane{
+		display:none;
+	}
+	
+	.listing-pane-right{
+		width:100%;
+	}
+
+	.search-filter-pane{
+		margin-left:0px;
+	}
+	
+	.sugg-srch-ctry-chkbox{
+		display:inline-block;
+		margin:0;
+		padding:0;
+		width:100%;
+	}	
+	
+	.sugg-srch-job-title-name{
+		margin-right:20px;
+		min-width:0px;
+	}
+
+	.geo-code-filter{
+		width:100%;	
+	}
+	
+	.search-filter-pane{
+		margin-left:1%;
+		margin-right:1%;
+		width:98%;
+	}
+	
+	.filters-collapse-options{
+		margin-left:5px;
+		color:#6A5ACD;
+		font-weight:bold;
+		cursor:pointer;
+	}
+	
+	.action-buttons{
+		width:100%;
+		text-align:center;
+		margin-top:15px;
+		margin-bottom:15px;
+	}
+	
+	.listing-main-action-button{
+		width:90%;
+	}
+	
+	.listing-pane{
+		width:100%;
+	}
+	
+	.job-post{
+		background:white;
+		border-top: solid 1px grey;
+		width:100%;
+		margin-top:0px;
+	}
+	
+}

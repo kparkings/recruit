@@ -6,7 +6,7 @@ import { InfoItem, InfoItemConfig } 				from './info-item';
   selector: 'app-candidate-info-box',
   standalone: false,
   templateUrl: './candidate-info-box.component.html',
-  styleUrl: './candidate-info-box.component.css'
+  styleUrls: ['./candidate-info-box.component.css','./candidate-info-box.component-mob.css']
 })
 export class CandidateInfoBoxComponent {
 

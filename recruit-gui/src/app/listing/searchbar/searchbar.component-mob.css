@@ -1,0 +1,37 @@
+@media (max-width:700px)  {
+
+	.sugg-srch-job-title{
+		border-radius:12px;
+		margin-left:15px;
+		text-align:center;
+		width:90%;
+		margin-bottom:10px;
+	}
+	
+	.sugg-srch-job-title-name{
+		border-radius:12px;
+	}
+	
+	.sugg-srch-hdr{
+		margin-bottom:10px;
+	}
+	
+	.sugg-srch-hdr-search{
+		text-align:center;
+	}
+
+	.lising-pane-left {
+		padding-bottom:0px;
+	}
+	
+	.filters-collapse-options{
+		margin-left:5px;
+		color:#6A5ACD;
+		font-weight:bold;
+		cursor:pointer;
+	}
+
+	.search-filter-pane tr td {
+		padding:4px;
+	}
+}

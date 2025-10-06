@@ -7,8 +7,8 @@
 		<div [ngSwitch]="activeView">
 		
 		<div class="action-buttons" *ngSwitchCase="'list'">
-				<button class="btn btn-secondary arenella-btn" (click)="openCreateAlertDialog()" *ngIf="!isAuthenticated() || isAuthenticated() && isCandidate()">{{'arenella-listing-btn-create' | translate}}</button>
-				<button class="btn btn-secondary arenella-btn" routerLink="/recruiter-listings" *ngIf="isAuthenticated() && !isAuthenticatedAsAdmin() && !isCandidate()">{{'arenella-listing-btn-your-posts' | translate}}</button>
+			<button class="btn btn-secondary arenella-btn listing-main-action-button" (click)="openCreateAlertDialog()" *ngIf="!isAuthenticated() || isAuthenticated() && isCandidate()">{{'arenella-listing-btn-create' | translate}}</button>
+			<button class="btn btn-secondary arenella-btn listing-main-action-button" routerLink="/recruiter-listings" *ngIf="isAuthenticated() && !isAuthenticatedAsAdmin() && !isCandidate()">{{'arenella-listing-btn-your-posts' | translate}}</button>
 		</div>
 	
 		<div>
@@ -75,7 +75,7 @@
 										<span title="{{listing.listingId}}" class="flag-icon flag-icon-{{getCountryISO2Code(listing.country)}} suggestion-flag-country listing-country"></span>
 									</div>
 									<div class="job-post-contract-type">
-										{{getFormattedContractType(listing.type)}}
+										{{getContractType(listing.type)}}
 									</div>
 									<div>
 										<a href="{{getExternalUrl(listing.listingId)}}"></a>
@@ -228,7 +228,7 @@
 	</div>
 	<div class="feedbackBox;">
 		<form [formGroup]="alertFormBean">
-			<div class="modal-body"  style="height:400px;">
+			<div class="modal-body">
 				<div *ngIf="createAlertStep == 0">
 					<P>{{'arenella-listing-email-alert-1' | translate}}</P>
 					<select formControlName="contractType">
@@ -256,14 +256,12 @@
 					
 				</div>
 				<div *ngIf="createAlertStep == 3">
-					<P>{{'arenella-listing-email-alert-confirm' | translate}}</P>
-					<div style="margin-top:50px;">
+						<div>
 						<b style="margin-right:10px;">{{'arenella-listing-email-alert-email' | translate}}:</b><input type="email" formControlName="emailAddress" (keyup)="handleAlertEmailOnChange()"/>
 					</div>
 				</div>
 				<div *ngIf="createAlertStep == 4">
-					<P>&nbsp;</P>
-					<div style="margin-top:50px;">
+					<div style="margin-top:0px;">
 						<h1>{{'arenella-listing-email-alert-created' | translate}}</h1>
 					</div>
 				</div>

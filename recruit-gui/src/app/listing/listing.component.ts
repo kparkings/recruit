@@ -28,7 +28,7 @@ import { Router}										from '@angular/router';
 @Component({
     selector: 'app-listing',
     templateUrl: './listing.component.html',
-    styleUrls: ['./listing.component.css'],
+    styleUrls: ['./listing.component.css','./listing.component-mob.css'],
     standalone: false
 })
 export class ListingComponent implements OnInit {
@@ -455,13 +455,6 @@ export class ListingComponent implements OnInit {
 		return supportedCountry.iso2Code;
 		
   	}
-	
-	/**
-	* Returns human readable version
-	*/
-	public getFormattedContractType(type:string):string{
-		return type.replace('_ROLE','');
-	}
 	
 	/**
 	* Returns size limited version
