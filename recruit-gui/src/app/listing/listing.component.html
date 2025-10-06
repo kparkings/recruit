@@ -110,6 +110,9 @@
 							<div>
 								<pre style="white-space:pre-line;font-family: Roboto, 'Helvetica Neue', sans-serif;">{{selectedListing.description}}</pre>
 							</div>
+							<div class="mobile-only-element contact-recruiter-header">
+								<h1>{{'arenella-listing-contact-recruiter' | translate}}</h1>
+							</div>
 							<div *ngIf="!isCandidate()" style="min-width:75%">
 								<form [formGroup]="emailRequestFormBean">
 									<div>
@@ -128,8 +131,8 @@
 										<div style="margin-top:10px">{{'arenella-listing-your-doc-types' | translate}}</div>
 									</div>
 										<div class="action-buttons">
-											<button class="btn btn-secondary arenella-btn" (click)="sendEmailRequest()" *ngIf="enableSendEmail()">{{'arenella-listing-btn-send' | translate}}</button>
-											<button class="btn btn-secondary arenella-btn" disabled *ngIf="!enableSendEmail()">{{'arenella-listing-btn-send' | translate}}</button>
+											<button class="btn btn-secondary arenella-btn contact-recruiter-btn" (click)="sendEmailRequest()" *ngIf="enableSendEmail()">{{'arenella-listing-btn-send' | translate}}</button>
+											<button class="btn btn-secondary arenella-btn contact-recruiter-btn" disabled *ngIf="!enableSendEmail()">{{'arenella-listing-btn-send' | translate}}</button>
 										</div>
 								</form>
 							</div>
@@ -149,8 +152,8 @@
 										<div style="margin-top:10px">{{'arenella-listing-your-doc-types' | translate}}</div>
 									</div>
 									<div class="action-buttons">
-										<button class="btn btn-secondary arenella-btn" (click)="sendEmailRequest()" *ngIf="enableSendEmail()">{{'arenella-listing-btn-send' | translate}}</button>
-										<button class="btn btn-secondary arenella-btn" disabled *ngIf="!enableSendEmail()">{{'arenella-listing-btn-send' | translate}}Send</button>
+										<button class="btn btn-secondary arenella-btn contact-recruiter-btn" (click)="sendEmailRequest()" *ngIf="enableSendEmail()">{{'arenella-listing-btn-send' | translate}}</button>
+										<button class="btn btn-secondary arenella-btn contact-recruiter-btn" disabled *ngIf="!enableSendEmail()">{{'arenella-listing-btn-send' | translate}}Send</button>
 									</div>
 								</form>
 							</div>

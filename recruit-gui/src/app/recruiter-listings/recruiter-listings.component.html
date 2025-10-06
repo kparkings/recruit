@@ -16,7 +16,7 @@
 				<div class="listing-pane">
 					<div class="job-post" *ngFor="let listing of listings">
 						<div (click)="showListingDetails(listing)">
-							<div class="listing-title">{{getFormattedJobTitle(listing.title)}}</div>
+							<div class="listing-title listing-view-title">{{getFormattedJobTitle(listing.title)}}</div>
 							<div>
 								<span title="{{listing.listingId}}" class="flag-icon flag-icon-{{getCountryISO2Code(listing.country)}} suggestion-flag-country listing-country"></span>
 							</div>

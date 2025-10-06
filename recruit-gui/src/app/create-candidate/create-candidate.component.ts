@@ -13,7 +13,7 @@ import { TranslateService } from '@ngx-translate/core';
 @Component({
     selector: 'app-create-candidate',
     templateUrl: './create-candidate.component.html',
-    styleUrls: ['./create-candidate.component.css'],
+    styleUrls: ['./create-candidate.component.css','./create-candidate.component-mob.css'],
     standalone: false
 })
 export class CreateCandidateComponent implements OnInit {

@@ -26,7 +26,7 @@ import { UntypedFormControl } 							from "@angular/forms";
 @Component({
     selector: 'app-recruiter-listings',
     templateUrl: './recruiter-listings.component.html',
-    styleUrls: ['./recruiter-listings.component.css'],
+    styleUrls: ['./recruiter-listings.component.css','./recruiter-listings.component-mob.css'],
     standalone: false
 })
 export class RecruiterListingsComponent implements OnInit {

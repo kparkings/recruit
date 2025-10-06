@@ -115,4 +115,23 @@
 		margin-top:0px;
 	}
 	
+	.listing-view-title{
+		color:#002549;
+		text-align:center;
+	}
+	
+	textarea{
+		width:100%;
+		height:300px;
+	}
+
+	.contact-recruiter-btn{
+		width:90%;
+	}
+	
+	.contact-recruiter-header{
+		color:#002549;
+		text-align:center;
+	}
+	
 }

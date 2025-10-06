@@ -15,11 +15,15 @@
 		margin-top:20px;
 	}
 	
+	.left-box{
+		margin-bottom:20px;
+	}
+	
 	.left-box-body{
 		padding:5px;
 		background:none;
 		border-bottom: 2px solid gainsboro;
+		padding-bottom: 20px;
 	}
-	
 	
 }
