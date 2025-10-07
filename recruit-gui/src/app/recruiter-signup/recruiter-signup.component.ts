@@ -11,7 +11,7 @@ import { TranslateService } from '@ngx-translate/core';
 @Component({
     selector: 'app-recruiter-signup',
     templateUrl: './recruiter-signup.component.html',
-    styleUrls: ['./recruiter-signup.component.css'],
+    styleUrls: ['./recruiter-signup.component.css','./recruiter-signup.component-mob.css'],
     standalone: false
 })
 export class RecruiterSignupComponent implements OnInit {

@@ -1,0 +1,39 @@
+@media (max-width:700px)  {
+ 
+	h3 {
+   		color: #002549;
+    	background: none;
+    	padding: 10px;
+    	text-align:center;
+	}
+
+	.faq {
+   		width:95%;
+	}
+	
+	.faq {
+   		color: #002549;
+    	background: none;
+    	padding: 10px;
+    	text-align:center;
+    	margin-top:0px;
+	}
+	
+	.faq h3{
+   		color: #002549;
+    	background: none;
+    	padding: 10px;
+    	text-align:center;
+	}
+	
+	.subject-header{
+		width:100%;
+		padding-bottom:0px;
+		color:#002549;
+		text-align:center;
+	}
+	
+	.faqs faq p {
+		text-align:left;
+	}
+}

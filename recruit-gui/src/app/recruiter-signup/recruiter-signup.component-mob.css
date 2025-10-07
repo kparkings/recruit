@@ -1,0 +1,40 @@
+@media (max-width:700px)  {
+ 
+	h3 {
+   		color: #002549;
+    	background: none;
+    	padding: 10px;
+    	text-align:center;
+	}
+	
+	.action-buttons{
+		text-align:center;
+	}
+	
+	.arenella-btn{
+		width:100%;
+		text-align:center;
+		margin-top:20px;
+	}
+	
+	.recruiter-signup-panel{
+		width:90%;
+		margin-top:0px;
+		margin-left:5%;
+		margin-right:5%;
+		margin-bottom:0px;
+	}
+	
+	.recruiter-signup-box{
+		width:100%;
+		margin-top:20px;
+		margin-left:0%;
+		margin-right:0%;
+		margin-bottom:30px;
+	}
+		
+	h5{
+		margin-top:20px;
+	}
+	
+}

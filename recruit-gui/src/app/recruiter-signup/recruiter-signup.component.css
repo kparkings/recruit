@@ -82,22 +82,3 @@ h3 {
     padding: 10px;
     border-radius: 0 0 50px;
 }
-
-@media ( max-width :700px) {
-	.recruiter-signup-panel{
-		width:100%;
-		margin-top:50px;
-		margin-left:0%;
-		margin-right:0%;
-		margin-bottom:50px;
-	}
-	.arenella-btn{
-		margin-top:20px;
-		width:200px
-	}
-	
-	.recruiter-info-box{
-		margin-top:20px;
-	}
-	
-}
