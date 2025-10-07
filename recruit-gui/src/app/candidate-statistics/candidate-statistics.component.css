@@ -10,20 +10,12 @@
 	width:80%;
 }
 
-@media (max-width:700px)  {
+.stat-canvas{
+	width:90%;
+	min-width:370px;
 	
-	.stat-canvas{
-		width:90%;
-		min-width:370px;
-		max-width:90%;
-		float:left;
-		padding:5px;
-		padding-right:0px;
-		margin-bottom:40px;
-	}
+}
 
-	.statChartDiv{
-		width:90%;
-	}
-	
+canvas{
+	width:100%;
 }

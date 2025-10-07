@@ -60,12 +60,12 @@ suggestion-perception-excellent{
 		min-width:100%
 	}
 	.details-right h1{
-		background:#6A5ACD; 
 		width:100%;
 		margin-bottom:10px;
 		margin-left:0px;
 		padding:10px;
 		text-align:center;
+		background:none;
 	}	
 }
 
@@ -126,4 +126,10 @@ suggestion-perception-excellent{
 
 .profile-container{
 	margin-top:20px;
+}
+
+.contact-box-title-input{
+	margin-bottom:20px;
+	margin-left:10px;
+	width:300px;
 }

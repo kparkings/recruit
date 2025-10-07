@@ -185,16 +185,16 @@
 	</div>
 	<div class="quick-actions-box">
 		<div>
-			<button *ngIf="isShowGoPro()"  class="btn btn-secondary main-btn" (click)="quickActionGoPro()"><b>Go Pro</b> {{'quick-action-text-gopro' | translate}}</button>
-			<button *ngIf="!isShowGoPro()" class="btn btn-secondary main-btn" disabled><b>Go Pro</b> {{'quick-action-text-gopro' | translate}}</button>
+			<button *ngIf="isShowGoPro()"  class="btn btn-secondary main-btn" (click)="quickActionGoPro()"><b>Go Pro</b><br> {{'quick-action-text-gopro' | translate}}</button>
+			<button *ngIf="!isShowGoPro()" class="btn btn-secondary main-btn" disabled><b>Go Pro</b><br> {{'quick-action-text-gopro' | translate}}</button>
 		</div>
 		<div>
-			<button *ngIf="passedListingCreditCheck"  class="btn btn-secondary main-btn" (click)="quickActionJobboardPost()"><b>{{'arenella-app-menu-job-board' | translate}}</b> {{'quick-action-text-jobboard' | translate}}</button>
-			<button *ngIf="!passedListingCreditCheck" class="btn btn-secondary main-btn" (click)="showNoCredits()"><b>{{'arenella-app-menu-job-board' | translate}}</b> {{'quick-action-text-jobboard' | translate}}</button>
+			<button *ngIf="passedListingCreditCheck"  class="btn btn-secondary main-btn" (click)="quickActionJobboardPost()"><b>{{'arenella-app-menu-job-board' | translate}}</b><br> {{'quick-action-text-jobboard' | translate}}</button>
+			<button *ngIf="!passedListingCreditCheck" class="btn btn-secondary main-btn" (click)="showNoCredits()"><b>{{'arenella-app-menu-job-board' | translate}}</b><br> {{'quick-action-text-jobboard' | translate}}</button>
 		</div>
 		<div>
-			<button *ngIf="passedMarketplaceCreditCheck" class="btn btn-secondary main-btn" (click)="quickActionMarketplacePost()"><b>{{'arenella-app-menu-mp' | translate}}</b> {{'quick-action-text-mp' | translate}}</button>
-			<button *ngIf="!passedMarketplaceCreditCheck" class="btn btn-secondary main-btn" (click)="showNoCredits()"><b>{{'arenella-app-menu-mp' | translate}}</b> {{'quick-action-text-mp' | translate}}</button>
+			<button *ngIf="passedMarketplaceCreditCheck" class="btn btn-secondary main-btn" (click)="quickActionMarketplacePost()"><b>{{'arenella-app-menu-mp' | translate}}</b><br> {{'quick-action-text-mp' | translate}}</button>
+			<button *ngIf="!passedMarketplaceCreditCheck" class="btn btn-secondary main-btn" (click)="showNoCredits()"><b>{{'arenella-app-menu-mp' | translate}}</b><br> {{'quick-action-text-mp' | translate}}</button>
 		</div>
 		
 	</div>

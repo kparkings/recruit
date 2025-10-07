@@ -80,7 +80,7 @@
 			<form [formGroup]="replyFormGroup">
 				<textarea formControlName="message"></textarea>
 			</form>
-			<button class="btn btn-secondary arenella-btn" (click)="sendReply()">{{'arenella-email-msg-send' | translate}}</button>
+			<button class="btn btn-secondary arenella-btn arenella-btn-contact" (click)="sendReply()">{{'arenella-email-msg-send' | translate}}</button>
 		</div>
 		<div class="modal-body modal-feedback" *ngIf="replyState === 'success'">
 			<p>{{'arenella-email-msg-reply-sent' | translate}}</p>

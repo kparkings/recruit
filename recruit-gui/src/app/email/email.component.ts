@@ -13,7 +13,7 @@ import { Observable, Observer }                 from 'rxjs';
 @Component({
     selector: 'app-email',
     templateUrl: './email.component.html',
-    styleUrls: ['./email.component.css'],
+    styleUrls: ['./email.component.css','./email.component-mob.css'],
     standalone: false
 })
 export class EmailComponent {

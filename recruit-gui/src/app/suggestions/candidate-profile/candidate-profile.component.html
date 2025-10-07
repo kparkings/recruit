@@ -94,12 +94,12 @@
 	</div>
 	<div class="modal-body" *ngIf="contactCandidateView === 'message'">
 		<form [formGroup]="sendMessageGroup">
-			<div style="float:left;margin:0px; margin-bottom:10px;">
-				<b>{{'arenella-suggestions-profile-box-contact-title' | translate}}:</b><input type="text" style="margin-left:10px;width:300px;" formControlName="title"/>
+			<div>
+				<b>{{'arenella-suggestions-profile-box-contact-title' | translate}}:</b><input type="text" class="contact-box-title-input" formControlName="title"/>
 				<br>
 			</div>
 			<textarea formControlName="message"></textarea>
-			<button class="btn btn-secondary arenella-btn" (click)="sendMessageToCandidate()">{{'arenella-suggestions-profile-box-contact-btn-send' | translate}}</button>
+			<button class="btn btn-secondary arenella-btn arenella-btn-contact" (click)="sendMessageToCandidate()">{{'arenella-suggestions-profile-box-contact-btn-send' | translate}}</button>
 		</form>	
 	</div>
 	<div class="modal-body message-send-success" *ngIf="contactCandidateView === 'success'">

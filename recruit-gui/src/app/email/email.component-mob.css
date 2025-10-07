@@ -1,0 +1,20 @@
+@media ( max-width :700px) {
+
+	.email-header{
+		background:none;
+		color:black;
+		border-top:2px black solid;
+	}
+	
+	.email-body{
+		background:none;
+		color:black;
+	}
+	.email-title{
+		margin-top:20px;
+	}
+	
+	.arenella-btn-contact{
+		width:100%;
+	}
+}

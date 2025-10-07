@@ -6,7 +6,7 @@ import { Chart } 											from 'chart.js';
   selector: 'app-candidate-staistics',
   standalone: false,
   templateUrl: './candidate-statistics.component.html',
-  styleUrl: './candidate-statistics.component.css'
+  styleUrls: ['./candidate-statistics.component.css','./candidate-statistics.component-mob.css']
 })
 export class CandidateStatisticsComponent {
 
@@ -66,7 +66,9 @@ export class CandidateStatisticsComponent {
 			       datasets: leftChartData
 		      },
 		      options: {
-		        aspectRatio:2.5
+		        aspectRatio:2.5,
+				responsive:true,
+				maintainAspectRatio:false
 		      }
 		      
 		    });

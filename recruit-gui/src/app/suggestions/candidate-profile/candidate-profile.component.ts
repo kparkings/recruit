@@ -24,7 +24,7 @@ import { CurrentUserAuth } 													from 'src/app/current-user-auth';
   selector: 'app-candidate-profile',
   standalone: false,
   templateUrl: './candidate-profile.component.html',
-  styleUrl: './candidate-profile.component.css'
+  styleUrls: ['./candidate-profile.component.css','./candidate-profile.component-mob.css']
 })
 export class CandidateProfileComponent {
 

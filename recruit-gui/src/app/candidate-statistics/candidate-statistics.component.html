@@ -13,12 +13,14 @@
 				<button class="btn btn-secondary arenella-btn" (click)="refreshStats()">{{'arenella-stats-btn-refresh' | translate}}</button>
 			</div>
 			<div>
-				<h3>{{'arenella-stats-current-week' | translate}}: {{todaysDate | date:'w'}}</h3>
-				<div class="stat-canvas">
+				
+				<div class="stat-canvas candidate-stats">
+					<h3>{{'arenella-stats-current-week' | translate}}: {{todaysDate | date:'w'}}</h3>
 					<div class="statChartDiv">
 						<canvas  id="leftChart" >{{ leftChart }}</canvas>	
 					</div>
 				</div>
+			</div>
 		</div>
 	</div>
 </div>

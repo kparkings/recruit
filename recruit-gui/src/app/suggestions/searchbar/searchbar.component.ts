@@ -25,7 +25,7 @@ import { SearchBarAPI }												from './searchbar-api';
   selector: 'app-searchbar',
   standalone: false,
   templateUrl: './searchbar.component.html',
-  styleUrls: ['./searchbar.component.css']
+  styleUrls: ['./searchbar.component.css','./searchbar.component-mob.css']
 })
 export class SearchbarComponent {
 
