@@ -96,16 +96,14 @@
 
 
 @media ( max-width :700px) {
-	
+	/**
 	.search-filter-pane{
 		margin-left:40px;
-	}
+	}*/
 	
 	.search-filter-pane{
 		margin-left:0px;
 	}
-	
-	
 	
 	.sugg-srch-ctry-chkbox{
 		display:inline-block;
@@ -136,7 +134,4 @@
 		cursor:pointer;
 	}
 	
-	
-	
 }
-

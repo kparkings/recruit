@@ -35,33 +35,56 @@
 						</tr>
 						<tr>
 							<td class="hdr-label">{{'arenella-new-candidate-firstname' | translate}}</td>
-							<input formControlName="firstName" type="text"/>
+							<td ><input formControlName="firstName" type="text"/></td>
 						</tr>
 						<tr>
 							<td class="hdr-label">{{'arenella-new-candidate-surname' | translate}}</td>
-							<input formControlName="surname" type="text"/>
+							<td><input formControlName="surname" type="text"/></td>
 						</tr>
 						<tr *ngIf="!currentUserAuth.isRecruiter()">
 							<td class="hdr-label">{{'arenella-new-candidate-email' | translate}}</td>
-							<td class="hdr-value">
-								<input formControlName="email" type="text"/>
-							</td>	
+							<td><input formControlName="email" type="text"/></td>
+							
 						</tr>
 						<tr>
-							<td class="hdr-label">{{'arenella-new-candidate-function-group' | translate}}</td>
-							<td>
-								<div style="min-height:35px;">
-									<div *ngFor="let function of functionTypes" class="function-selectable function-selected-{{isSelectedFunction(function)}}" (click)="toggleSelectedFunction(function)">{{function.id | translate}}
+							<td class="hdr-label">
+								{{'arenella-new-candidate-function-group' | translate}}
+								<br>
+							</td>
+							<td class="hdr-label">
+								<span class="collapse-options" *ngIf="showFunctionOptions" (click)=toggleFunctionOptions()>{{'hide-options' | translate}}...</span>	
+								<span class="collapse-options" *ngIf="!showFunctionOptions" (click)=toggleFunctionOptions()>{{'show-options' | translate}}...</span>
+							</td>
+						</tr>
+						<tr *ngIf="showFunctionOptions">
+							<td colspan="2">
+								<div style="min-height:35px;" *ngIf="showFunctionOptions">
+									<div *ngFor="let function of functionTypes" class="function-selectable function-selected-{{isSelectedFunction(function)}}" (click)="toggleSelectedFunction(function)">
+										{{function.id | translate}}
 									</div>
+								</div>
+								<div style="min-height:35px;" *ngIf="!showFunctionOptions">
+									
 								</div>
 							</td>
 						</tr>
 						<tr>
-							<td class="hdr-label">{{'arenella-new-candidate-industries-group' | translate}}</td>
+							<td class="hdr-label">
+								{{'arenella-new-candidate-industries-group' | translate}}
 							<td>
-								<div style="min-height:35px;">
-									<div *ngFor="let industry of industries" class="industry-selectable industry-selected-{{isSelectedIndustry(industry)}}" (click)="toggleSelectedIndustry(industry)">{{industry | translate}}
+								<span class="collapse-options" *ngIf="showIndustryOptions" (click)=toggleIndustryOptions()>{{'hide-options' | translate}}...</span>	
+								<span class="collapse-options" *ngIf="!showIndustryOptions" (click)=toggleIndustryOptions()>{{'show-options' | translate}}...</span>
+							</td>
+						</tr>
+						<tr *ngIf="showIndustryOptions">
+							<td colspan="2">
+								<div style="min-height:35px;" *ngIf="showIndustryOptions">
+									<div *ngFor="let industry of industries" class="industry-selectable industry-selected-{{isSelectedIndustry(industry)}}" (click)="toggleSelectedIndustry(industry)">
+										{{industry | translate}}
 									</div>
+								</div>
+								<div style="min-height:35px;" *ngIf="!showIndustryOptions">
+									
 								</div>
 							</td>
 						</tr>
@@ -179,7 +202,7 @@
 						</tr>
 						<tr>
 							<td class="sugg-srch-bdy" colspan="2">
-								<div style="min-height:35px;">
+								<div class="selected-skills">
 									<div class="selected-skill" *ngFor="let skill of coreSkills" (click)="removeOfferedCandidateSkill(skill)">{{skill}}</div>
 								</div>
 								<input type="text" formControlName="skill">
@@ -193,8 +216,10 @@
 							</td>	
 						</tr>
 						<tr>
-							<td class="hdr-label">{{'arenella-new-candidate-introduction' | translate}}</td>
-							<td>
+							<td class="hdr-label" colspan="2">{{'arenella-new-candidate-introduction' | translate}}</td>
+						</tr>
+						<tr>
+							<td colspan="2">
 								<textarea formControlName="introduction"></textarea>
 							</td>
 						</tr>

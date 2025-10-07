@@ -23,7 +23,7 @@ import { Industry } 									from '../industry';
 @Component({
     selector: 'app-new-candidate',
     templateUrl: './new-candidate.component.html',
-    styleUrls: ['./new-candidate.component.css'],
+    styleUrls: ['./new-candidate.component.css','./new-candidate.component-mob.css'],
     standalone: false
 })
 export class NewCandidateComponent implements OnInit {
@@ -56,6 +56,9 @@ export class NewCandidateComponent implements OnInit {
 	
 	public currentUserAuth:CurrentUserAuth = new CurrentUserAuth();
 	public currencies:Array<string> 		  = new Array<string>();
+	
+	public showFunctionOptions:boolean = false;
+	public showIndustryOptions:boolean = false;
 	
 	/**
   	* Constructor
@@ -703,6 +706,20 @@ export class NewCandidateComponent implements OnInit {
 	
 	public setLanguageFormValue(langCode:string, langSelection:string):void{
 		this.offeredCandidateFormBean.get(langCode)?.setValue(langSelection);
+	}
+	
+	/**
+	* Toggles Function options.
+	*/
+	public toggleFunctionOptions():void {
+		this.showFunctionOptions = !this.showFunctionOptions;
+	}
+	
+	/**
+	* Toggles Industry options.
+	*/
+	public toggleIndustryOptions():void {
+		this.showIndustryOptions = !this.showIndustryOptions;
 	}
 	
 }
