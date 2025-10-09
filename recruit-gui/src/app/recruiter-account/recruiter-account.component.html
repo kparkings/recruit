@@ -279,7 +279,7 @@
 				</thead>
 				<tr *ngFor="let subscription of getOrderedRecruiterSubscriptions()">
 					<td class="subscription-tab-col">{{subscription.subscriptionId}}</td>
-					<td class="subscription-tab-col">{{subscription.type}}</td>
+					<td class="subscription-tab-col">{{subscription.type | translate}}</td>
 					<td class="subscription-tab-col">{{subscription.created | date:'yyyy-MM-dd'}}</td>
 					<td class="subscription-tab-col">{{subscription.activatedDate | date:'yyyy-MM-dd'}}</td>
 					<td class="subscription-tab-col">{{subscription.status}}</td>

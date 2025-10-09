@@ -17,4 +17,10 @@
 	.arenella-btn-contact{
 		width:100%;
 	}
+	
+	.left-div{
+		width:100%;
+		margin-left: 0px;
+    	max-width: 100%;
+	}
 }
