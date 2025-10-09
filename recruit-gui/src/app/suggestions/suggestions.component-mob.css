@@ -1,0 +1,38 @@
+@media (max-width:700px)  {
+
+	    .page-body {
+        	width: 96%;
+        	margin: auto;
+         	margin-top: 20px;
+    	}
+    
+	 .suggestion-icon{
+	 	width:100%;
+		margin-right:2%;
+		margin-bottom:2%;
+	 }
+	 
+	 .country-selections{
+		width:100%;
+	 }
+	 	 
+	 .sugg-srch-job-title{
+		min-width:0px;
+	}
+	
+	.sugg-srch-job-title-name{
+		margin-right:20px;
+		min-width:0px;
+	}
+	
+	.desc-body{
+		min-width:100%;
+		padding-right:0px;
+		padding-left:0px;
+	}
+	
+	.suggestion-icon-header{
+		background:#dee2e6;
+		color:#002549;
+	}
+}

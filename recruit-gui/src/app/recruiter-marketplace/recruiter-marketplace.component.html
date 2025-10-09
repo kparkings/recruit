@@ -57,7 +57,7 @@
 				<button class="btn btn-secondary arenella-btn" (click)="fetchOpenPositions()" 		*ngIf="showJustMyOpenPositionsActive">{{'arenella-recruiter-mp-btn-all-roles' | translate}}</button>
 				<button class="btn btn-secondary arenella-btn" (click)="switchTab('addDemand')" 	*ngIf="!isAuthenticatedAsAdmin() && passedCreditCheck">{{'arenella-recruiter-mp-btn-make-request' | translate}}</button>
 				<button class="btn btn-secondary arenella-btn" (click)="showNoCredits()" 			*ngIf="!isAuthenticatedAsAdmin() && !passedCreditCheck">{{'arenella-recruiter-mp-btn-request-candidate' | translate}}</button>
-				<button class="btn btn-secondary arenella-btn" (click)="showPublicity()"			*ngIf="showDemand && isAuthenticatedAsAdmin()">{{'arenella-mp-publicity' | translate}}</button>
+				<button class="btn btn-secondary arenella-btn non-mobile-only-element" (click)="showPublicity()"			*ngIf="showDemand && isAuthenticatedAsAdmin()">{{'arenella-mp-publicity' | translate}}</button>
 		
 			</div>
 			<p>{{'arenella-recruiter-mp-roles-desc' | translate}}
@@ -322,7 +322,7 @@
 	<div class="modal-body" *ngIf="contactRecruiterView === 'message'">
 		<form [formGroup]="sendMessageGroup">
 			<textarea formControlName="message"></textarea>
-			<button class="btn btn-secondary arenella-btn" (click)="sendMessageToRecruiter()" 	*ngIf="!showJustMyOpenPositionsActive">{{'arenella-recruiter-mp-box-contact-btn-send' | translate}}</button>
+			<button class="btn btn-secondary arenella-btn contact-button" (click)="sendMessageToRecruiter()" 	*ngIf="!showJustMyOpenPositionsActive">{{'arenella-recruiter-mp-box-contact-btn-send' | translate}}</button>
 		</form>	
 	</div>
 	<div class="modal-body message-send-success" *ngIf="contactRecruiterView === 'success'">
@@ -360,7 +360,7 @@
 	</div>
 	<div class="feedbackBox">
 		<div class="modal-body">
-			<table>
+			<table class="mp-publicity">
 				<tbody>
 					<tr  *ngFor="let openPosition of openPositions.slice(0,10)" class="as-link">
 						<td class="table-bdy-td-publicity" align="center">{{openPosition.country}}</td>

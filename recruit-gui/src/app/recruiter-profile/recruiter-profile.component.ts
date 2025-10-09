@@ -15,7 +15,7 @@ import { TranslateService } from '@ngx-translate/core';
 @Component({
     selector: 'app-recruiter-profile',
     templateUrl: './recruiter-profile.component.html',
-    styleUrls: ['./recruiter-profile.component.css'],
+    styleUrls: ['./recruiter-profile.component.css','./recruiter-profile.component-mob.css'],
     standalone: false
 })
 export class RecruiterProfileComponent {

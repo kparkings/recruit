@@ -9,7 +9,7 @@
 	}	
 	
 	.non-mobile-only-element{
-		display:block;
+		display:inline;
 	}
 	
 	.arenella-whole-width-page{
@@ -292,8 +292,8 @@
     	margin-bottom: 0px;
     	margin-top: 5px;
     	border-radius:12px;
-    	background:#24629e;
-    	color:white;
+    	background:#dee2e6;
+    	color:black;
 	}
 	
 	.arenella-btn:focus{

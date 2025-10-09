@@ -1,0 +1,11 @@
+@media (max-width:700px)  {
+
+	.contact-button{
+		width:90%;
+	}
+	
+	.tabNavActive{
+		color:grey;
+	}
+
+}

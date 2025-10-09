@@ -10,7 +10,7 @@ import { TranslateService } from '@ngx-translate/core';
 @Component({
     selector: 'app-recruiter-stats',
     templateUrl: './recruiter-stats.component.html',
-    styleUrls: ['./recruiter-stats.component.css'],
+    styleUrls: ['./recruiter-stats.component.css','./recruiter-stats.component-mob.css'],
     standalone: false
 })
 export class RecruiterStatsComponent implements OnInit{
@@ -247,7 +247,9 @@ export class RecruiterStatsComponent implements OnInit{
 		       datasets: topChartData
 	      },
 	      options: {
-	        aspectRatio:2.5
+	        aspectRatio:2.5,
+			responsive:true,
+			maintainAspectRatio:false
 	      }
 	      
 	    });
@@ -271,7 +273,9 @@ export class RecruiterStatsComponent implements OnInit{
 		       datasets: chartData
 	      },
 	      options: {
-	        aspectRatio:2.5
+	        aspectRatio:2.5,
+			responsive:true,
+			maintainAspectRatio:false
 	      }
 	      
 	    });

@@ -26,7 +26,7 @@ import { ListingService }								from '../listing.service';
 @Component({
     selector: 'app-recruiter-marketplace',
     templateUrl: './recruiter-marketplace.component.html',
-    styleUrls: ['./recruiter-marketplace.component.css'],
+    styleUrls: ['./recruiter-marketplace.component.css','./recruiter-marketplace.component-mob.css'],
     standalone: false
 })
 export class RecruiterMarketplaceComponent implements OnInit {

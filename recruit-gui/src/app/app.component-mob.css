@@ -202,7 +202,19 @@
 	.quick-actions-btn{
 		float:right;
 		width:100%;
-		background:green;
+		background:darkgrey;
 		
+	}
+	
+	.quick-actions-btn:hover{
+		background:grey;
+		cursor:pointer
+		
+	}
+	
+	.contact-button{
+		width:100%;
+		margin-bottom:10px;
+		background:grey;
 	}
 }

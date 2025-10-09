@@ -34,7 +34,7 @@ import { SuggestionsSearchRequest } 												from './suggestion-search-reques
   selector: 'app-suggestions',
   standalone: false,
   templateUrl: './suggestions.component.html',
-  styleUrls: ['./suggestions.component.css','./suggestions.component.two.css']
+  styleUrls: ['./suggestions.component.css','./suggestions.component.two.css','./suggestions.component-mob.css']
 })
 export class SuggestionsComponent implements OnInit {
 

@@ -19,6 +19,7 @@
 			<button class="btn btn-secondary arenella-btn" (click)="refreshData()">{{'arenella-recruiter-stats-btn-refresh' | translate}}</button>
 		</div>
 		
+		
 		<div *ngIf="currentTab == 'jobboard-stats' && listingStatistics.listingStats.length == 0" class="no-posts">
 			<h2>{{'arenella-recruiter-stats-jb-stats' | translate}}</h2>
 			<br>
@@ -64,7 +65,8 @@
 					<h3 style="margin-left:20px;">{{listingViewsChart.chartTitle | translate}}</h3>
 				</div>
 			</div>
-			<div class="chart-panel">
+			
+		<div class="chart-panel">
 				<div class="stat-canvas">
 					<canvas  id="topChart" >{{ topChart }}</canvas>
 				<div>
@@ -87,6 +89,7 @@
 					</table>
 				</div>
 			</div>
+			
 			<div class="chart-panel">
 				<div class="chart-panel">
 					<div class="stat-canvas">
@@ -94,7 +97,6 @@
 					<div>
 				</div>	
 			</div>
-			<div class="chart-panel">
-		</div>
+		<div class="chart-panel"></div>
 	</div>
 </div>

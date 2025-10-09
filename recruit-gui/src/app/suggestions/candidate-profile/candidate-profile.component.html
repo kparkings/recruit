@@ -133,7 +133,7 @@
 			<div class="modal-body" *ngIf="!updatedSavedCandidate">
 				<textarea class="notes-textarea" formControlName="notes"></textarea>
 				<br/>
-				<button class="btn btn-secondary" (click)="updateSavedCandidate()" *ngIf="!isNoLongerAvailable()" download>{{'arenella-suggestions-profile-box-notes-btn-saved' | translate}}</button>
+				<button class="btn btn-secondary arenella-btn notesbox" (click)="updateSavedCandidate()" *ngIf="!isNoLongerAvailable()" download>{{'arenella-suggestions-profile-box-notes-btn-saved' | translate}}</button>
 			</div>
 			<div class="modal-body" *ngIf="updatedSavedCandidate">
 				<h1>{{'arenella-suggestions-profile-box-msg-updated' | translate}}</h1>
