@@ -14,7 +14,7 @@ import { SupportedCountry } 								from '../supported-candidate';
 @Component({
     selector: 'app-statistics',
     templateUrl: './statistics.component.html',
-    styleUrls: ['./statistics.component.css'],
+    styleUrls: ['./statistics.component.css','./statistics.component-mob.css'],
     standalone: false
 })
 export class StatisticsComponent implements OnInit {
@@ -114,6 +114,7 @@ export class StatisticsComponent implements OnInit {
 	
   	public marketPlaceEventsChartOptions = {
     	responsive: true,
+		maintainAspectRatio:false
   	};
 
   	/**
@@ -708,7 +709,9 @@ export class StatisticsComponent implements OnInit {
 		       datasets: leftChartData
 	      },
 	      options: {
-	        aspectRatio:1.75
+	        aspectRatio:1.75,
+			responsive:true,
+			maintainAspectRatio:false
 	      }
 	      
 	    });
@@ -731,6 +734,8 @@ export class StatisticsComponent implements OnInit {
 		      options: {
 		        aspectRatio:1.75,
 				indexAxis: 'y',
+				responsive:true,
+				maintainAspectRatio:false
 		      }
 		      
 		    });
@@ -754,7 +759,9 @@ export class StatisticsComponent implements OnInit {
 		       datasets: leftChartData
 	      },
 	      options: {
-	        aspectRatio:1.75
+	        aspectRatio:1.75,
+			responsive:true,
+			maintainAspectRatio:false
 	      }
 	      
 	    });
@@ -778,7 +785,9 @@ export class StatisticsComponent implements OnInit {
 		       datasets: rightChartData
 	      },
 	      options: {
-	        aspectRatio:1.75
+	        aspectRatio:1.75,
+			responsive:true,
+			maintainAspectRatio:false
 	      }
 	      
 	    });
