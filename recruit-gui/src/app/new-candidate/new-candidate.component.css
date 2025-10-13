@@ -82,7 +82,8 @@
 	margin:2px;
  	padding:5px;
  	border-radius:5px;
- 	background:green;
+ 	background:#6f42c1;
+ 	color:white;
  	display:inline-block;
  }
  
@@ -124,7 +125,7 @@
 input{
 	max-width:50%;
 	min-width:25%;
-	min-width: 180px;
+	min-width: 300px;
 }
  
  .button-panel-mobile{

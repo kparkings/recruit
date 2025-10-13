@@ -31,7 +31,7 @@
 		
 			<div class="suggestion-result-icons">
 			
-				<div class="suggestion-icon {{suggestionMobileClass}} {{getUnvailableCssClass(suggestion)}}" *ngFor="let suggestion of this.suggestions" (click)="showSuggestedCandidateOverview(suggestion)">
+				<div id="candidate-id-{{suggestion.candidateId}}" class="suggestion-icon {{suggestionMobileClass}} {{getUnvailableCssClass(suggestion)}}" *ngFor="let suggestion of this.suggestions" (click)="showSuggestedCandidateOverview(suggestion)">
 					<div>
 						
 						<div *ngIf="!isSavedCandidate(suggestion)" class="suggestion-icon-header">	

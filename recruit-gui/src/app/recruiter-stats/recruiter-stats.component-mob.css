@@ -36,4 +36,16 @@
 	.listing-filter-panel{
 		width:100%;
 	}
+	
+	.listing-filter-panel{
+		overflow:auto;
+		height:100px;
+		border: solid 1px grey;
+		margin-bottom:10px;
+	}
+	
+	.stat-canvas{
+		max-height:240px;
+	}
+
 }

@@ -63,3 +63,8 @@
 .stat-canvas{
 	max-height:300px;
 }
+
+canvas{
+	width:100%;
+	height:400px;
+}

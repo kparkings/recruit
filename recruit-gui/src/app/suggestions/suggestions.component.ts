@@ -25,6 +25,7 @@ import { City } 																	from '../city';
 import { InfoPaneUtil } 															from './info-pane-util';
 import { SearchbarComponent } 														from '../suggestions/searchbar/searchbar.component';
 import { SuggestionsSearchRequest } 												from './suggestion-search-request';
+import { ViewportScroller } 														from '@angular/common';
 
 /**
 * Component to suggest suitable Candidates based upon a 
@@ -94,6 +95,8 @@ export class SuggestionsComponent implements OnInit {
 	public includeRequiresSponsorshipCandidatesSelected:string 	= 'true';
 	safeUrl:any
 	public publicityView:string									= 'basic';
+	private lastViewedCandidate:string							= '';
+	private backButtonToResultsPressed:boolean					= false;
 			
 	public createAlertForm:UntypedFormGroup 					= new UntypedFormGroup({
 		alertName:												new UntypedFormControl(''),
@@ -132,7 +135,8 @@ export class SuggestionsComponent implements OnInit {
 				private candidateNavService: 	CandidateNavService,
 				private creditsService:			CreditsService,
 				private appComponent:			AppComponent,
-				private translate:				TranslateService) { 
+				private translate:				TranslateService,
+				private scroller: 				ViewportScroller,) { 
 					
 		this.trustedResourceUrl = this.sanitizer.bypassSecurityTrustResourceUrl('');
 		
@@ -262,6 +266,11 @@ export class SuggestionsComponent implements OnInit {
 				this.savedCandidates = response;
 			});
 		}
+		
+		if (this.backButtonToResultsPressed == true) {
+			this.backButtonToResultsPressed = false;
+			this.navigateToLastViewedCandidate();
+		}	
 	}
 	
 	private initSupportedCountries():void{		
@@ -298,9 +307,6 @@ export class SuggestionsComponent implements OnInit {
 	public showSavedCandidates():void{
 		this.currentView 	= 'saved-candidates';
 		this.lastView 		= 'saved-candidates';
-		//this.candidateService.fetchSavedCandidates().subscribe(response => {
-		//	this.savedCandidates = response;
-		//});
 	}
 	
 	/**
@@ -308,6 +314,8 @@ export class SuggestionsComponent implements OnInit {
 	*/
 	public showSuggestionsResults():void{
 	
+		this.backButtonToResultsPressed = true;
+		
 		if (this.isAuthenticatedAsCandidate()) {
 			return;
 		}
@@ -328,6 +336,13 @@ export class SuggestionsComponent implements OnInit {
 			}	
 		}
 		
+	}
+	
+	/**
+	* Scrolls to the top of the last candidate viewed by the user in the search results  
+	*/
+	public navigateToLastViewedCandidate():void{
+		this.scroller.scrollToAnchor('candidate-id-'+ this.lastViewedCandidate);
 	}
 	
 	public doCreditCheck():void{
@@ -356,6 +371,7 @@ export class SuggestionsComponent implements OnInit {
 	*/
 	public showSuggestedCandidateOverview(candidateSuggestion:Candidate):void{
 		
+		this.lastViewedCandidate = candidateSuggestion.candidateId;
 		this.skillFilters = this.searchBar.skillFilters;
 		
 		if (this.currentUserAuth.isCandidate()) {

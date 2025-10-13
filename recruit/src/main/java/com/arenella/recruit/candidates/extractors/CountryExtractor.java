@@ -34,7 +34,7 @@ public class CountryExtractor implements JobSpecifcationFilterExtractor{
 	protected Set<String> romania 				= Set.of("roemenië","roumanie","rumania","rumänien","r𝗼𝗺𝗮𝗻𝗶𝗮","romania","bucharest");
 	protected Set<String> greece 				= Set.of("griekenland","grèce","grecia","griechenland","greece");
 	protected Set<String> ukraine 				= Set.of("oekraïne","ucrania","ukraine","ucraine","ucraina");
-	protected Set<String> switzerland 			= Set.of("switzerland ","zwitserland","svizzera","suisse","suiza","Schweiz","zwitzerland");
+	protected Set<String> switzerland 			= Set.of("switzerland","switzerland ","zwitserland","svizzera","suisse","suiza","Schweiz","zwitzerland");
 	protected Set<String> czechRepublic 		= Set.of("tsjechische republiek","repubblica ceca","république tchèque","república checa","tschechische republik","czech republic");
 	protected Set<String> sweden 				= Set.of("stockholm","zweden","svezia","suède","suecia","schweden","sweden");
 	protected Set<String> hungary 				= Set.of("esztergom","siófok","győr","miskolc","eger","szeged","pécs","debrecen","budapest","hongarije","ungheria","hongrie","hungría","ungarn","hungary");
