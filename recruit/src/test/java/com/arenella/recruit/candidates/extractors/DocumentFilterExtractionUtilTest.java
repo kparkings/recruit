@@ -1288,4 +1288,36 @@ class DocumentFilterExtractionUtilTest {
 		assertTrue(filters.getSkills().isEmpty());
 		
 	}
+	
+	/**
+	* Test FREELANCE COPENHAGEN TEST MANAGER
+	* 
+	* @throws IOException
+	*/
+	@Test
+	void testExtractFunctionD5() throws IOException {
+		
+		File file = new File("src/test/resources/extractorscripts/extractorscenarioD5.txt");
+		
+		String 						contents 	= FileUtils.readFileToString(file, Charset.defaultCharset());
+		CandidateExtractedFilters 	filters 	= util.extractFilters(contents);
+		
+		assertEquals("Test Manager", 		filters.getJobTitle());	
+		assertEquals("", 					filters.getExperienceGTE());
+		assertEquals("",	 				filters.getExperienceLTE());
+		
+		assertTrue(filters.getCountries().contains(COUNTRY.DENMARK));
+		assertEquals(1, 					filters.getCountries().size());
+		
+		assertEquals("Copenhagen",filters.getCity());
+		
+		assertNull(filters.getPerm());
+		assertNull(filters.getFreelance());
+
+		assertTrue(filters.getLanguages().isEmpty());
+		
+		assertTrue(filters.getSkills().isEmpty());
+		
+	}
+	
 }

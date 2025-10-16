@@ -17,7 +17,7 @@ import com.arenella.recruit.candidates.enums.PERM;
 public class ContractTypeExtractor implements JobSpecifcationFilterExtractor{
 
 	final Set<String> perm 		= Set.of("salarispakket","0k","1k","2k","3k","4k","5k","6k","7k","8k","9k","pensioen","paid leave","13e mois", "pas de freelance","cdi","salaris ", "altersvorsorge ","5,000","0,000","5.000","0.000","annual bonus", "vast contract","vakantiedagen","reiskostenvergoeding", "% bonus", "jaarsalaris","+ bonus", "bruto per jaar","bruto per maand", "wat bieden we", "maandsalaris", "permanent", "perm.","perm ", "vast", "vaste", "per year", "per anum", "days holiday", "vakantie dagen", "vacation days", "full-time", "full time");
-	final Set<String> contract 	= Set.of("maanden contract","type: contract","+ months","year contract","contract role","contract opportunity","months contract"," maanden","monate", "cdd"," p.u"," p/u"," p/d","detachering", "verlenging", "euros/day","daily rate","b2b","optie tot verlenging","6 month", "3 month", "interim", "ir35","freelance", "per hour", "per uur", "uurtarief", "hourly rate", "day rate","month contract","per day", "payroll constructie");
+	final Set<String> contract 	= Set.of("tjm","zzp","maanden contract","type: contract","+ months","year contract","contract role","contract opportunity","months contract"," maanden","monate", "cdd"," p.u"," p/u"," p/d","detachering", "verlenging", "euros/day","daily rate","b2b","optie tot verlenging","6 month", "3 month", "interim", "ir35","freelance", "per hour", "per uur", "uurtarief", "hourly rate", "day rate","month contract","per day", "payroll constructie");
 	
 	final Set<String> permExcludeTerms 		= Set.of("payroll constructie","vaste klant");
 	final Set<String> contractExcludeTerms 	= Set.of();

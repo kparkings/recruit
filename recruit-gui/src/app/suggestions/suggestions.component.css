@@ -237,10 +237,16 @@ suggestion-results-flag-country{
 	width:100%;
 }
 
+.upoad-dialog{
+	width:50%;
+}
 
+.modal-body{
+	width:100%;
+}
 
 .sugg-pub-advanced-table-filters{
-	margin-bottom:40px;	
+	margin-bottom:20px;	
 }
 
 .sugg-pub-advanced-table{

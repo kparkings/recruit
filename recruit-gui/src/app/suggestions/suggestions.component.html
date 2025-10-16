@@ -117,7 +117,7 @@
 		 	<button class="btn btn-secondary arenella-btn not-available-mobile" (click)="showPublicityAdvanced()">Advanced</button>
 		 </div>
 		 
-		 <div *ngIf="publicityView != 'advanced'" styele="width:100%;">
+		 <div *ngIf="publicityView != 'advanced'">
 		 	<div style="margin: 0 auto; min-width:50%;max-width:600px;">
 		 		<div *ngFor="let c of publicitySuggestions" >
 				{{getCountryCode(c.country)}} - {{'arenella-suggestions-box-publicity-exp' | translate}}: {{c.yearsExperience}}  {{'arenella-suggestions-box-publicity-years' | translate}} -  {{c.roleSought}}
@@ -176,8 +176,8 @@
 				<tr>
 					<th>{{'arenella-suggestions-skills' | translate}}</th>
 					<td>
-						<span *ngFor="let skill of this.searchBar.extractedFilters.skills.slice(0,3) " class="function-selectable function-selected-true">{{skill}}</span>
-						<span class="extra-option-count" *ngIf="this.searchBar.extractedFilters.skills.length >= 4 " style="font-weight:bold">+ {{this.searchBar.extractedFilters.skills.length - 4}}</span>
+						<span *ngFor="let skill of this.searchBar.extractedFilters.skills.slice(0,10) " class="function-selectable function-selected-true">{{skill}}</span>
+						<span class="extra-option-count" *ngIf="this.searchBar.extractedFilters.skills.length >= 9 " style="font-weight:bold">+ {{this.searchBar.extractedFilters.skills.length - 10}}</span>
 					</td>
 					
 						
@@ -187,6 +187,7 @@
 			<table class="sugg-pub-advanced-table">
 				<tr>
 					<th>id</th>
+					<th>id</th>
 					<th>Name</th>
 					<th>Role</th>
 					<th>Years Experience</th>
@@ -194,6 +195,7 @@
 					<th>Accuracy language</th>
 				</tr>
 				<tr *ngFor="let c of publicitySuggestions">
+					<td><span class=" flag-icon {{infoPaneUtil.getFlagClassFromCountry(c.country)}} suggestion-results-flag-country"></span></td>
 					<td>{{c.candidateId}}</td>
 					<td>{{c.firstname}}</td>
 					<td>{{c.roleSought}}</td>
