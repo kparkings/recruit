@@ -1,5 +1,7 @@
 .chart-data-panel-page{
 	margin:0px;
+	width:50%;
+	min-width:650px;
 }
 
 .chart-panel{

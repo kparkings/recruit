@@ -458,7 +458,7 @@ export class SuggestionsComponent implements OnInit {
 	
 	public openPublicityDialog() {
 		
-		this.publicityView = 'basic';
+		this.publicityView = 'advanced';
 		
 		this.publicitySuggestions = this.suggestions.slice();
 		
@@ -612,15 +612,15 @@ export class SuggestionsComponent implements OnInit {
 	/**
 	* Shows basic view in publicity popup 
 	*/
-	public showPublicityBasic():void {
-		this.publicityView = 'basic';
-	}
+	//public showPublicityBasic():void {
+	//	this.publicityView = 'basic';
+	//}
 	
 	/**
 	* Shows advanced view in publicity popup 
 	*/
-	public showPublicityAdvanced():void {
-		this.publicityView = 'advanced';
-	}
+	//public showPublicityAdvanced():void {
+	//	this.publicityView = 'advanced';
+	//}
 	
 }

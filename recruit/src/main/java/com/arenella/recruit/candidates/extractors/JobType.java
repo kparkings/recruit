@@ -48,8 +48,22 @@ public class JobType{
 		ccplusplus("C/C++ Developer"),
 		cobol("Cobol Developer"),
 		sap("SAP Developer"),
-		kotlin("Kotlin Developer");
-	
+		kotlin("Kotlin Developer"),
+		
+		salesforce("Salesforce"),
+		
+		softwareArchitect("Software architect"), 
+		dataArchitect("Data architect"), 
+		infrastructureArchitect("Infrastructure architect"), 
+		solutionsArchitect("Solutions architect"), 
+		enterpriseArchitect("Enterprise architect"), 
+		
+		
+		softwareManager("Software development manager"), 
+		infrastructureManager("Infrastructure manager"), 
+		cto("CTO"),
+		diretor("Director");
+			
 		public final String role;
 		
 		Type(String role) {
@@ -57,6 +71,51 @@ public class JobType{
 		}
 		
 	}
+	
+	private static Set<Type> softwareDeveloperTypes = Set.of(
+			JobType.Type.android,
+			JobType.Type.angular,
+			JobType.Type.ccplusplus,
+			JobType.Type.expres,
+			JobType.Type.go,
+			JobType.Type.ios,
+			JobType.Type.java,
+			JobType.Type.kotlin,
+			JobType.Type.next,
+			JobType.Type.node,
+			JobType.Type.php,
+			JobType.Type.python,
+			JobType.Type.react,
+			JobType.Type.ruby,
+			JobType.Type.rubyOnRails,
+			JobType.Type.rust,
+			JobType.Type.sap,
+			JobType.Type.vue);
+	
+	private static Set<Type> webDeveloperTypes = Set.of(
+			JobType.Type.angular,
+			JobType.Type.expres,
+			JobType.Type.go,
+			JobType.Type.next,
+			JobType.Type.node,
+			JobType.Type.react,
+			JobType.Type.ruby,
+			JobType.Type.rubyOnRails,
+			JobType.Type.rust,
+			JobType.Type.vue);
+	
+	private static Set<Type> architectTypes = Set.of(
+			JobType.Type.softwareArchitect,
+			JobType.Type.dataArchitect,
+			JobType.Type.solutionsArchitect,
+			JobType.Type.enterpriseArchitect,
+			JobType.Type.infrastructureArchitect);
+	 
+	private static Set<Type> managerTypes = Set.of(
+			JobType.Type.softwareManager,
+			JobType.Type.infrastructureManager,
+			JobType.Type.cto,
+			JobType.Type.diretor);
 	
 	private Type 		type;
 	private Set<String> titles;
@@ -106,6 +165,41 @@ public class JobType{
 		
 		return matches.stream().findFirst().get();
 		
+	}
+	
+	/**
+	* Returns all types that can be considered a type of 
+	* software developer
+	*/
+	public static Set<Type>getSoftwareDeveloperTypes() {
+		return softwareDeveloperTypes;
+	}
+	
+	/**
+	* Returns all types that can be considered a type of 
+	* web developer
+	* @return
+	*/
+	public static Set<Type>getWebDeveloperTypes() {
+		return webDeveloperTypes;
+	}
+	
+	/**
+	* Returns all types that can be considered a type of 
+	* architect
+	* @return
+	*/
+	public static Set<Type>getArchitectTypes() {
+		return architectTypes;
+	}
+	
+	/**
+	* Returns all types that can be considered a type of 
+	* manager
+	* @return
+	*/
+	public static Set<Type>getManagerTypes() {
+		return managerTypes;
 	}
 	
 }

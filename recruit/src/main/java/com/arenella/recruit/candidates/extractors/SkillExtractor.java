@@ -307,6 +307,66 @@ public class SkillExtractor implements JobSpecifcationFilterExtractor{
 				jobTypeBlacklist.addAll(blackListNonRecruiter);
 				break;
 			}
+			case salesforce: {
+				jobTypeBlacklist.addAll(Set.of());
+				jobTypeBlacklist.addAll(blackTesters);
+				jobTypeBlacklist.addAll(blackListNonRecruiter);
+				break;
+			}
+			case softwareArchitect: {
+				jobTypeBlacklist.addAll(Set.of());
+				jobTypeBlacklist.addAll(blackTesters);
+				jobTypeBlacklist.addAll(blackListNonRecruiter);
+				break;
+			}
+			case dataArchitect: {
+				jobTypeBlacklist.addAll(Set.of());
+				jobTypeBlacklist.addAll(blackTesters);
+				jobTypeBlacklist.addAll(blackListNonRecruiter);
+				break;
+			}
+			case infrastructureArchitect: {
+				jobTypeBlacklist.addAll(Set.of());
+				jobTypeBlacklist.addAll(blackTesters);
+				jobTypeBlacklist.addAll(blackListNonRecruiter);
+				break;
+			}
+			case solutionsArchitect: {
+				jobTypeBlacklist.addAll(Set.of());
+				jobTypeBlacklist.addAll(blackTesters);
+				jobTypeBlacklist.addAll(blackListNonRecruiter);
+				break;
+			}
+			case enterpriseArchitect: {
+				jobTypeBlacklist.addAll(Set.of());
+				jobTypeBlacklist.addAll(blackTesters);
+				jobTypeBlacklist.addAll(blackListNonRecruiter);
+				break;
+			}
+			case softwareManager: {
+				jobTypeBlacklist.addAll(Set.of());
+				jobTypeBlacklist.addAll(blackTesters);
+				jobTypeBlacklist.addAll(blackListNonRecruiter);
+				break;
+			}
+			case infrastructureManager: {
+				jobTypeBlacklist.addAll(Set.of());
+				jobTypeBlacklist.addAll(blackTesters);
+				jobTypeBlacklist.addAll(blackListNonRecruiter);
+				break;
+			}
+			case cto: {
+				jobTypeBlacklist.addAll(Set.of());
+				jobTypeBlacklist.addAll(blackTesters);
+				jobTypeBlacklist.addAll(blackListNonRecruiter);
+				break;
+			}
+			case diretor: {
+				jobTypeBlacklist.addAll(Set.of());
+				jobTypeBlacklist.addAll(blackTesters);
+				jobTypeBlacklist.addAll(blackListNonRecruiter);
+				break;
+			}
 			default:{
 				throw new RuntimeException("SkillExtractor not configred for " + JobType.Type.valueOf(filterBuilder.build().getJobTitle()));
 			}

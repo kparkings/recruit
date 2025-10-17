@@ -91,6 +91,7 @@
 					
 				</textarea>
 				<br><br>
+					<button class="btn btn-secondary suggestion-extract-btn" (click)="doReset()">{{'arenella-suggestions-btn-reset' | translate}}</button>
 					<button class="btn btn-secondary" (click)="extractFiltersFromJobSpecText()">{{'arenella-suggestions-box-spec-extraction' | translate}}</button>
 				<br><br>
 				<br><br>
@@ -111,20 +112,6 @@
 		<div class="filter-close-box" (click)="publicityModal.close()">X</div>
 	</div>
 	<div class="modal-body publicity-suggestions">
-		
-		 <div class='suggestions-dialog-publicity-btns'>
-		 	<button class="btn btn-secondary arenella-btn" (click)="showPublicityBasic()">Basic</button>
-		 	<button class="btn btn-secondary arenella-btn not-available-mobile" (click)="showPublicityAdvanced()">Advanced</button>
-		 </div>
-		 
-		 <div *ngIf="publicityView != 'advanced'">
-		 	<div style="margin: 0 auto; min-width:50%;max-width:600px;">
-		 		<div *ngFor="let c of publicitySuggestions" >
-				{{getCountryCode(c.country)}} - {{'arenella-suggestions-box-publicity-exp' | translate}}: {{c.yearsExperience}}  {{'arenella-suggestions-box-publicity-years' | translate}} -  {{c.roleSought}}
-			</div>
-			</div>
-		 </div>
-		 
 		<div *ngIf="publicityView == 'advanced'">
 			<h4>Applied filters</h4>
 			<table class="sugg-pub-advanced-table-filters">
@@ -152,7 +139,6 @@
 						</mat-icon>
 					</td>
 					
-					
 					<th *ngIf="this.searchBar.extractedFilters.city != ''">City</th>
 					<td *ngIf="this.searchBar.extractedFilters.city != ''">{{this.searchBar.extractedFilters.city}}</td>	
 					<th *ngIf="this.searchBar.extractedFilters.city != ''"></th>
@@ -179,8 +165,6 @@
 						<span *ngFor="let skill of this.searchBar.extractedFilters.skills.slice(0,10) " class="function-selectable function-selected-true">{{skill}}</span>
 						<span class="extra-option-count" *ngIf="this.searchBar.extractedFilters.skills.length >= 9 " style="font-weight:bold">+ {{this.searchBar.extractedFilters.skills.length - 10}}</span>
 					</td>
-					
-						
 				</tr>
 			</table> 
 			<h4>Best matches</h4>

@@ -218,3 +218,8 @@ textarea {
 .showChild{
 	visibility:visible;
 }
+
+.suggestion-extract-btn {
+	width:200px;
+	margin:5px;
+}

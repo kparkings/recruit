@@ -69,29 +69,15 @@
 							</td>
 						</tr>
 						<tr>
-							<td class="hdr-label">
-								{{'arenella-new-candidate-industries-group' | translate}}
-							<td>
-								<span class="collapse-options" *ngIf="showIndustryOptions" (click)=toggleIndustryOptions()>{{'hide-options' | translate}}...</span>	
-								<span class="collapse-options" *ngIf="!showIndustryOptions" (click)=toggleIndustryOptions()>{{'show-options' | translate}}...</span>
-							</td>
-						</tr>
-						<tr *ngIf="showIndustryOptions">
-							<td colspan="2">
-								<div style="min-height:35px;" *ngIf="showIndustryOptions">
-									<div *ngFor="let industry of industries" class="industry-selectable industry-selected-{{isSelectedIndustry(industry)}}" (click)="toggleSelectedIndustry(industry)">
-										{{industry | translate}}
-									</div>
-								</div>
-								<div style="min-height:35px;" *ngIf="!showIndustryOptions">
-									
-								</div>
-							</td>
-						</tr>
-						<tr>
 							<td class="hdr-label">{{'arenella-new-candidate-role-sought' | translate}}</td>
 							<td class="hdr-value">
 								<input formControlName="roleSought" type="text"/>
+							</td>	
+						</tr>
+						<tr>
+							<td class="hdr-label">{{'arenella-new-candidate-years-experience' | translate}}</td>
+							<td>
+								<input  formControlName="yearsExperience" type="number"/>
 							</td>	
 						</tr>
 						<tr>
@@ -161,6 +147,26 @@
 							{{'arenella-new-candidate-to' | translate}}: <input type="number" formControlName="contractTo">
 						</tr>
 						<tr>
+							<td class="hdr-label">
+								{{'arenella-new-candidate-industries-group' | translate}}
+							<td>
+								<span class="collapse-options" *ngIf="showIndustryOptions" (click)=toggleIndustryOptions()>{{'hide-options' | translate}}...</span>	
+								<span class="collapse-options" *ngIf="!showIndustryOptions" (click)=toggleIndustryOptions()>{{'show-options' | translate}}...</span>
+							</td>
+						</tr>
+						<tr *ngIf="showIndustryOptions">
+							<td colspan="2">
+								<div style="min-height:35px;" *ngIf="showIndustryOptions">
+									<div *ngFor="let industry of industries" class="industry-selectable industry-selected-{{isSelectedIndustry(industry)}}" (click)="toggleSelectedIndustry(industry)">
+										{{industry | translate}}
+									</div>
+								</div>
+								<div style="min-height:35px;" *ngIf="!showIndustryOptions">
+									
+								</div>
+							</td>
+						</tr>
+						<tr>
 							<td class="hdr-label">{{'arenella-new-candidate-days-on-site' | translate}}</td>
 							<td>
 								<select  formControlName="daysOnSite">
@@ -207,12 +213,6 @@
 								</div>
 								<input type="text" formControlName="skill">
 								<button (click)="addOfferedCandidateSkill()" class="btn btn-secondary add-skill-btn">{{'arenella-new-candidate-btn-add' | translate}}</button>
-							</td>	
-						</tr>
-						<tr>
-							<td class="hdr-label">{{'arenella-new-candidate-years-experience' | translate}}</td>
-							<td>
-								<input  formControlName="yearsExperience" type="number"/>
 							</td>	
 						</tr>
 						<tr>

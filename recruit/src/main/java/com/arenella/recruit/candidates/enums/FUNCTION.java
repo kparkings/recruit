@@ -40,8 +40,17 @@ public enum FUNCTION {
 	KOTLIN("Kotlin"),
 	CCPLUSPLUS("C/C++"),
 	SAP("SAP"),
-	COBOL("COBOL")
-	;
+	COBOL("COBOL"),
+	SALESFORCE("Salesforce"),
+	SOFTWARE_ARCHITECT("Software architect"), 
+	DATA_ARCHITECT("Data architect"),
+	SOLUTIONS_ARCHITECT("Solutions architect"),
+	ENTERPRISE_ARCHITECT("Enterprise architect"),
+	INFRASTRUCTURE_ARCHITECT("Infrastructure architect"), 
+	SOFTWARE_MANAGER("Software development manager"), 
+	INFRASTRUCTURE_MANAGER("Infrastructure manager"), 
+	CTO("CTO"),
+	DIRECTOR("Director");
 	
 	private String desc;
 	

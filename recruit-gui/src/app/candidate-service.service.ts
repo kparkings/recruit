@@ -319,6 +319,20 @@ export class CandidateServiceService {
 		functionTypes.push(new CandidateFunction('CCPLUSPLUS',				this.translate.instant('ccplusplus')));//'c/c++'));
 		functionTypes.push(new CandidateFunction('COBOL',					this.translate.instant('cobol')));//'cobol'));
 		functionTypes.push(new CandidateFunction('SAP',						this.translate.instant('sap')));//'sap'));
+		
+		
+		
+		functionTypes.push(new CandidateFunction('SALESFORCE',				this.translate.instant('salesforce')));//'sap'));
+		functionTypes.push(new CandidateFunction('SOFTWARE_ARCHITECT',		this.translate.instant('softwareArchitect')));//'sap'));
+		functionTypes.push(new CandidateFunction('DATA_ARCHITECT',			this.translate.instant('dataArchitect')));//'sap'));
+		functionTypes.push(new CandidateFunction('INFRASTRUCTURE_ARCHITECT',this.translate.instant('infrastructureArchitect')));//'sap'));
+		functionTypes.push(new CandidateFunction('SOLUTIONS_ARCHITECT',		this.translate.instant('solutionsArchitect')));//'sap'));
+		functionTypes.push(new CandidateFunction('ENTERPRISE_ARCHITECT',	this.translate.instant('enterpriseArchitect')));//'sap'));
+				
+		functionTypes.push(new CandidateFunction('SOFTWARE_MANAGER',		this.translate.instant('softwareManager')));//'sap'));
+		functionTypes.push(new CandidateFunction('INFRASTRUCTURE_MANAGER',	this.translate.instant('infrastructureManager')));//'sap'));
+		functionTypes.push(new CandidateFunction('CTO',						this.translate.instant('cto')));//'sap'));
+		functionTypes.push(new CandidateFunction('DIRECTOR',				this.translate.instant('diretor')));//'sap'));
 				
 		return functionTypes;
 	

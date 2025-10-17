@@ -36,7 +36,7 @@ public class CandidateFunctionExtractorImpl implements CandidateFunctionExtracto
 		all.put(FUNCTION.WEB_DEV, 					Set.of("web developer","front end","front-end","js","wordpress"));
 		all.put(FUNCTION.SCRUM_MASTER, 				Set.of("scrum master","scrum","master"));
 		all.put(FUNCTION.DATA_SCIENTIST, 			Set.of("data scientist","data", "data analyst","bi","business intelligence"));
-		all.put(FUNCTION.NETWORK_ADMINISTRATOR, 	Set.of("network administrator","devops","network","admin","administrator","ops","operations", "cisco", "cloud", "windows", "ansible", "kubernetes", "salesforce","docker", "citrix", "servicenow", "tibco", "warehouse", "terraform", "dns", "o365", "vmware", "scripting", "firewall", "wireshark", "azure"));
+		all.put(FUNCTION.NETWORK_ADMINISTRATOR, 	Set.of("network administrator","devops","network","admin","administrator","ops","operations", "cisco", "cloud", "windows", "ansible", "kubernetes","docker", "citrix", "servicenow", "tibco", "warehouse", "terraform", "dns", "o365", "vmware", "scripting", "firewall", "wireshark", "azure"));
 		all.put(FUNCTION.SOFTWARE_DEVELOPER, 		Set.of("software developer","wordpress","software engineer", "vb", "pl-sql","t-sql", "groovy", "sql", "swift",  "scala", "microservices", "oracle", "plsql", "bdd", "dba", "embedded", "oauth", "liferay"));
 		all.put(FUNCTION.IT_SECURITY, 				Set.of("it security","security","cyber","malware","owasp", "pen"));
 		all.put(FUNCTION.IT_RECRUITER, 				Set.of("it recruiter","recruiter","account manager"));
@@ -64,6 +64,19 @@ public class CandidateFunctionExtractorImpl implements CandidateFunctionExtracto
 		all.put(FUNCTION.CCPLUSPLUS, 				Set.of("c++","c/c++"));
 		all.put(FUNCTION.COBOL, 					Set.of("cobol"));
 		all.put(FUNCTION.SAP, 						Set.of("sap"));
+		
+		all.put(FUNCTION.SALESFORCE, 				Set.of("salesforce"));
+		
+		all.put(FUNCTION.SOFTWARE_ARCHITECT, 		Set.of("software architect", "application architect")); 
+		all.put(FUNCTION.DATA_ARCHITECT, 			Set.of("data architect"));		
+		all.put(FUNCTION.INFRASTRUCTURE_ARCHITECT, 	Set.of("infrascructure architect", "infra architect", "network architect"));
+		all.put(FUNCTION.SOLUTIONS_ARCHITECT, 		Set.of("solutions architect"));
+		all.put(FUNCTION.ENTERPRISE_ARCHITECT, 		Set.of("enterprise architect"));
+		
+		all.put(FUNCTION.SOFTWARE_MANAGER, 			Set.of("software manager","application manager", "development manager"));
+		all.put(FUNCTION.INFRASTRUCTURE_MANAGER, 	Set.of("infrascructure manager", "infra manager", "network manager"));
+		all.put(FUNCTION.CTO, 						Set.of("cto"));
+		all.put(FUNCTION.DIRECTOR, 					Set.of("director"));
 		
 	}
 	
