@@ -35,7 +35,6 @@ public class JobTitleExtractor implements JobSpecifcationFilterExtractor{
 	public static final JobType qa 						= new JobType(JobType.Type.qa, 						Set.of("test utomation ","quality engineer","/qa","quality assurance","testautomation specialist", "qa engineer","test engineer", "test automation engineer", "test specialist", "test analyst", "performance tester", "automation tester", "qa tester", "software tester", "penetration tester", "software testers", "test lead", "qauality engineer"));
 	public static final JobType itSupport				= new JobType(JobType.Type.itSupport, 				Set.of("helpdeskmedewerker","supportmedewerker","servicedeskmedewerker", "it support", "it helpdesk","helpdesk support", "support engineer", "support developer", "support analyst", "tech support", "service agent", "support manager", "1st line support", "2nd line support", "3rd line support", "support specialist", "support technician"));
 	public static final JobType uiux					= new JobType(JobType.Type.uiux, 					Set.of("ux/","/ux ","ui/ux", "interaction design","ui/ux designer", "ui designer", "ui engineer", "product designer"));
-	public static final JobType projectManager			= new JobType(JobType.Type.projectManager, 			Set.of("projektleiter"," director", " cto ","pmo","project manager", "program manager", "it manager", "procurement manager", "control manager", "operations manager", "ops manager", "head of it", "infrastructure manager", "infra manager", "development manager", "engineering manager", "security manager", "services manager", "delivery manager", "service manager", "asset manager"));
 	public static final JobType architect				= new JobType(JobType.Type.architect, 				Set.of("architect", "solution architect", "solutions architect", "enterprise architect", "application architect", "infrastructure architect", "security architect", "domain architect", "service now architect", "system architect", "systems architect","technical architect"));
 	public static final JobType webDeveloper			= new JobType(JobType.Type.webDeveloper, 			Set.of("web developer","front end developer", "frontend developer", "front-end developer", "web ontwikkelaar", "FE developer", "front-end ontwikkelaar"));
 	public static final JobType scrumMaster				= new JobType(JobType.Type.scrumMaster, 			Set.of("scrum master","scrummaster"));
@@ -76,10 +75,13 @@ public class JobTitleExtractor implements JobSpecifcationFilterExtractor{
 	public static final JobType solutionsArchitect 		= new JobType(JobType.Type.solutionsArchitect, 		Set.of("solutions architect"));
 	public static final JobType enterpriseArchitect 	= new JobType(JobType.Type.enterpriseArchitect, 	Set.of("enterprise architect"));
 	
+	public static final JobType projectManager			= new JobType(JobType.Type.projectManager, 			Set.of("projektleiter","pmo","project manager", "it manager", "procurement manager", "control manager", "engineering manager", "security manager", "services manager", "service manager", "asset manager"));
 	public static final JobType softwareManager 		= new JobType(JobType.Type.softwareManager, 		Set.of("software manager","application manager", "development manager"));
-	public static final JobType infrastructureManager 	= new JobType(JobType.Type.infrastructureManager, 	Set.of("infrascructure manager", "infra manager", "network manager"));
-	public static final JobType cto 					= new JobType(JobType.Type.cto, 					Set.of(" cto"));
+	public static final JobType infrastructureManager 	= new JobType(JobType.Type.infrastructureManager, 	Set.of("infrastructure manager", "infra manager", "network manager","operations manager", "ops manager"));
+	public static final JobType cto 					= new JobType(JobType.Type.cto, 					Set.of(" cto","head of it"));
 	public static final JobType diretor 				= new JobType(JobType.Type.diretor, 				Set.of("director"));
+	public static final JobType programmeManager 		= new JobType(JobType.Type.programmeManager, 		Set.of("programme manager","program manager"));
+	public static final JobType deliveryManager 		= new JobType(JobType.Type.deliveryManager, 		Set.of("delivery manager"));
 	
 	/**
 	* Refer to JobSpecifcationFilterExtractor interface for details
@@ -138,6 +140,8 @@ public class JobTitleExtractor implements JobSpecifcationFilterExtractor{
 		scored.put(JobType.Type.infrastructureManager, 		new AtomicInteger(0));
 		scored.put(JobType.Type.cto, 						new AtomicInteger(0));
 		scored.put(JobType.Type.diretor, 					new AtomicInteger(0));
+		scored.put(JobType.Type.programmeManager, 			new AtomicInteger(0));
+		scored.put(JobType.Type.deliveryManager, 			new AtomicInteger(0));
 		
 		Set<JobType> jobs = new LinkedHashSet<>();
 		
@@ -191,12 +195,13 @@ public class JobTitleExtractor implements JobSpecifcationFilterExtractor{
 		jobs.add(infrastructureManager);
 		jobs.add(cto);
 		jobs.add(diretor);
+		jobs.add(programmeManager);
+		jobs.add(deliveryManager);
+		jobs.add(projectManager);
 		
 		Set<JobType.Type> softwareDevelopmentTypes = new HashSet<>();
 		softwareDevelopmentTypes.add(java.getType());
 		softwareDevelopmentTypes.add(csharp.getType());
-		softwareDevelopmentTypes.add(webDeveloper.getType());
-		softwareDevelopmentTypes.add(softwareDeveloper.getType());
 		softwareDevelopmentTypes.add(kotlin.getType());
 		softwareDevelopmentTypes.add(ruby.getType());
 		softwareDevelopmentTypes.add(rubyOnRails.getType());
@@ -249,7 +254,7 @@ public class JobTitleExtractor implements JobSpecifcationFilterExtractor{
 		* so we remote Software Developer
 		*/
 		
-		Set<Type> foundTypes = scored.entrySet().stream().filter(kv -> kv.getValue().intValue() > 0).toList().stream().map(f -> f.getKey()).collect(Collectors.toSet());
+		Set<Type> foundTypes = scored.entrySet().stream().filter(kv -> kv.getValue().intValue() > 0).toList().stream().map(Entry::getKey).collect(Collectors.toSet());
 		
 		if (type == JobType.Type.softwareDeveloper) {
 			this.removeParentType(JobType.Type.softwareDeveloper, JobType.getSoftwareDeveloperTypes(), foundTypes, scored);
@@ -302,10 +307,18 @@ public class JobTitleExtractor implements JobSpecifcationFilterExtractor{
 		/**
 		* If there is a tie. Use first occurrence of 
 		*/
-		OptionalInt tieScore 		= scored.values().stream().mapToInt(v -> v.get()).max();
-		Set<Type> 	tiedJobTypes 	= scored.entrySet().stream().filter(a -> a.getValue().get() == tieScore.getAsInt()).map(Entry::getKey).collect(Collectors.toSet());
+		OptionalInt tieScore 					= scored.values().stream().mapToInt(v -> v.get()).max();
+		Set<Type> 	tiedJobTypes 				= scored.entrySet().stream().filter(a -> a.getValue().get() == tieScore.getAsInt()).map(Entry::getKey).collect(Collectors.toSet());
 		
-		if(tieScore.isPresent() && tieScore.getAsInt() != 0 && tiedJobTypes.size() > 1) {
+		/**
+		* If tie and at least 1 result is not a parent group, remove parent groups to ensure
+		* first child is found
+		*/
+		if(tiedJobTypes.stream().filter(t -> !JobType.PARENT_TYPES.contains(t)).toList().size() > 0 ) {
+			JobType.PARENT_TYPES.forEach(tiedJobTypes::remove);
+		}
+		
+		if (tieScore.isPresent() && tieScore.getAsInt() != 0 && tiedJobTypes.size() > 1) {
 			
 			AtomicReference<Type> 	xType 		= new AtomicReference<>();
 			AtomicInteger 			xFirstPos 	= new AtomicInteger(1000000);
@@ -356,10 +369,14 @@ public class JobTitleExtractor implements JobSpecifcationFilterExtractor{
 		
 		weighted.remove(JobType.Type.softwareDeveloper);
 		
-		JobType.Type type = Collections.max(weighted.entrySet(), Map.Entry.comparingByValue(comparator)).getKey();
+		JobType.Type typePreFilter = Collections.max(weighted.entrySet(), Map.Entry.comparingByValue(comparator)).getKey();
+		
+		Map<JobType.Type, AtomicInteger> weightedDeveloperRoles = weighted.entrySet().stream().filter(i -> JobType.getSoftwareDeveloperTypes().contains(i.getKey()) || JobType.getWebDeveloperTypes().contains(i.getKey())).collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue()));
+		
+		JobType.Type type = Collections.max(weightedDeveloperRoles.entrySet(), Map.Entry.comparingByValue(comparator)).getKey();
 	
 		if (scored.get(type).intValue() == 0) {
-			return JobType.Type.softwareDeveloper;
+			return typePreFilter;
 		}
 		
 		return switch(type) {

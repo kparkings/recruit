@@ -178,8 +178,6 @@ class JobTitleExtractorTest {
 		
 	}
 	
-	
-	
 	/**
 	* Tests case that if both Manager and a subtype of 
 	* Manager are found the sub type is selected

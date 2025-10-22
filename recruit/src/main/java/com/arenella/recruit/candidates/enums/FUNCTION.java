@@ -50,8 +50,10 @@ public enum FUNCTION {
 	SOFTWARE_MANAGER("Software development manager"), 
 	INFRASTRUCTURE_MANAGER("Infrastructure manager"), 
 	CTO("CTO"),
-	DIRECTOR("Director");
-	
+	DIRECTOR("Director"),
+	PROGRAMME_MANAGER("Programme manager"),
+	DELIVERY_MANAGER("Delivery manager");
+
 	private String desc;
 	
 	FUNCTION(String desc){

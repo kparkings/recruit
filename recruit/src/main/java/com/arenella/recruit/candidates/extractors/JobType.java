@@ -62,8 +62,10 @@ public class JobType{
 		softwareManager("Software development manager"), 
 		infrastructureManager("Infrastructure manager"), 
 		cto("CTO"),
-		diretor("Director");
-			
+		diretor("Director"),
+		programmeManager("Programme manager"),
+		deliveryManager("Delivery manager");
+		
 		public final String role;
 		
 		Type(String role) {
@@ -72,9 +74,15 @@ public class JobType{
 		
 	}
 	
+	public static Set<Type> PARENT_TYPES = Set.of(
+			JobType.Type.softwareDeveloper, 
+			JobType.Type.webDeveloper, 
+			JobType.Type.architect, 
+			JobType.Type.projectManager);
+	
 	private static Set<Type> softwareDeveloperTypes = Set.of(
+			JobType.Type.csharp,
 			JobType.Type.android,
-			JobType.Type.angular,
 			JobType.Type.ccplusplus,
 			JobType.Type.expres,
 			JobType.Type.go,
@@ -115,7 +123,9 @@ public class JobType{
 			JobType.Type.softwareManager,
 			JobType.Type.infrastructureManager,
 			JobType.Type.cto,
-			JobType.Type.diretor);
+			JobType.Type.diretor,
+			JobType.Type.programmeManager,
+			JobType.Type.deliveryManager);
 	
 	private Type 		type;
 	private Set<String> titles;

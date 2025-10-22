@@ -35,4 +35,11 @@
 		background:#dee2e6;
 		color:#002549;
 	}
+	
+	.suggestion-extract-btn{
+		width:90%;
+		background: #dee2e6;
+        color: black;
+	}
+	
 }

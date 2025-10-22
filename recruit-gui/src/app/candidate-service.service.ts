@@ -329,10 +329,12 @@ export class CandidateServiceService {
 		functionTypes.push(new CandidateFunction('SOLUTIONS_ARCHITECT',		this.translate.instant('solutionsArchitect')));//'sap'));
 		functionTypes.push(new CandidateFunction('ENTERPRISE_ARCHITECT',	this.translate.instant('enterpriseArchitect')));//'sap'));
 				
-		functionTypes.push(new CandidateFunction('SOFTWARE_MANAGER',		this.translate.instant('softwareManager')));//'sap'));
-		functionTypes.push(new CandidateFunction('INFRASTRUCTURE_MANAGER',	this.translate.instant('infrastructureManager')));//'sap'));
-		functionTypes.push(new CandidateFunction('CTO',						this.translate.instant('cto')));//'sap'));
-		functionTypes.push(new CandidateFunction('DIRECTOR',				this.translate.instant('diretor')));//'sap'));
+		functionTypes.push(new CandidateFunction('SOFTWARE_MANAGER',		this.translate.instant('softwareManager')));
+		functionTypes.push(new CandidateFunction('INFRASTRUCTURE_MANAGER',	this.translate.instant('infrastructureManager')));
+		functionTypes.push(new CandidateFunction('CTO',						this.translate.instant('cto')));
+		functionTypes.push(new CandidateFunction('DIRECTOR',				this.translate.instant('diretor')));
+		functionTypes.push(new CandidateFunction('PROGRAMME_MANAGER',		this.translate.instant('programmeManager')));
+		functionTypes.push(new CandidateFunction('DELIVERY_MANAGER',		this.translate.instant('deliveryManager')));
 				
 		return functionTypes;
 	

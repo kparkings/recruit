@@ -355,6 +355,18 @@ public class SkillExtractor implements JobSpecifcationFilterExtractor{
 				jobTypeBlacklist.addAll(blackListNonRecruiter);
 				break;
 			}
+			case programmeManager: {
+				jobTypeBlacklist.addAll(Set.of());
+				jobTypeBlacklist.addAll(blackTesters);
+				jobTypeBlacklist.addAll(blackListNonRecruiter);
+				break;
+			}
+			case deliveryManager: {
+				jobTypeBlacklist.addAll(Set.of());
+				jobTypeBlacklist.addAll(blackTesters);
+				jobTypeBlacklist.addAll(blackListNonRecruiter);
+				break;
+			}
 			case cto: {
 				jobTypeBlacklist.addAll(Set.of());
 				jobTypeBlacklist.addAll(blackTesters);

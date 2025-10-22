@@ -30,7 +30,6 @@ public class CandidateFunctionExtractorImpl implements CandidateFunctionExtracto
 		all.put(FUNCTION.SUPPORT, 					Set.of("it support analyst","support","helpdesk","service desk"));
 		all.put(FUNCTION.BA, 						Set.of("business analyst","ba"));
 		all.put(FUNCTION.UI_UX, 					Set.of("ui/ux designer","ui\\ux","designer","ui","ux"));
-		all.put(FUNCTION.PROJECT_MANAGER, 			Set.of("project manager", "pm", "it project manager", "pmo"));
 		all.put(FUNCTION.ARCHITECT, 				Set.of("architect","solutions","enterprise"));
 		all.put(FUNCTION.TESTER, 					Set.of("test analyst","tester","qa","automation","manual","quality","assurance", "selenium", "cucumber","testing","robot","playwright"));
 		all.put(FUNCTION.WEB_DEV, 					Set.of("web developer","front end","front-end","js","wordpress"));
@@ -73,10 +72,13 @@ public class CandidateFunctionExtractorImpl implements CandidateFunctionExtracto
 		all.put(FUNCTION.SOLUTIONS_ARCHITECT, 		Set.of("solutions architect"));
 		all.put(FUNCTION.ENTERPRISE_ARCHITECT, 		Set.of("enterprise architect"));
 		
+		all.put(FUNCTION.PROJECT_MANAGER, 			Set.of("projektleiter","pmo","project manager", "it manager", "procurement manager", "control manager", "engineering manager", "security manager", "services manager", "service manager", "asset manager"));
 		all.put(FUNCTION.SOFTWARE_MANAGER, 			Set.of("software manager","application manager", "development manager"));
-		all.put(FUNCTION.INFRASTRUCTURE_MANAGER, 	Set.of("infrascructure manager", "infra manager", "network manager"));
-		all.put(FUNCTION.CTO, 						Set.of("cto"));
+		all.put(FUNCTION.INFRASTRUCTURE_MANAGER, 	Set.of("infrastructure manager", "infra manager", "network manager","operations manager", "ops manager"));
+		all.put(FUNCTION.CTO, 						Set.of(" cto","head of it"));
 		all.put(FUNCTION.DIRECTOR, 					Set.of("director"));
+		all.put(FUNCTION.PROGRAMME_MANAGER, 		Set.of("programme manager","program manager"));
+		all.put(FUNCTION.DELIVERY_MANAGER, 			Set.of("delivery manager"));
 		
 	}
 	
