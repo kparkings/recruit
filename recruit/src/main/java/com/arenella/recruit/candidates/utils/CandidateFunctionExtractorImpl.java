@@ -34,7 +34,7 @@ public class CandidateFunctionExtractorImpl implements CandidateFunctionExtracto
 		all.put(FUNCTION.TESTER, 					Set.of("test analyst","tester","qa","automation","manual","quality","assurance", "selenium", "cucumber","testing","robot","playwright"));
 		all.put(FUNCTION.WEB_DEV, 					Set.of("web developer","front end","front-end","js","wordpress"));
 		all.put(FUNCTION.SCRUM_MASTER, 				Set.of("scrum master","scrum","master"));
-		all.put(FUNCTION.DATA_SCIENTIST, 			Set.of("data scientist","data", "data analyst","bi","business intelligence"));
+		all.put(FUNCTION.DATA_SCIENTIST, 			Set.of("data scientist","data analyst","bi","business intelligence"));
 		all.put(FUNCTION.NETWORK_ADMINISTRATOR, 	Set.of("network administrator","devops","network","admin","administrator","ops","operations", "cisco", "cloud", "windows", "ansible", "kubernetes","docker", "citrix", "servicenow", "tibco", "warehouse", "terraform", "dns", "o365", "vmware", "scripting", "firewall", "wireshark", "azure"));
 		all.put(FUNCTION.SOFTWARE_DEVELOPER, 		Set.of("software developer","wordpress","software engineer", "vb", "pl-sql","t-sql", "groovy", "sql", "swift",  "scala", "microservices", "oracle", "plsql", "bdd", "dba", "embedded", "oauth", "liferay"));
 		all.put(FUNCTION.IT_SECURITY, 				Set.of("it security","security","cyber","malware","owasp", "pen"));
@@ -106,6 +106,29 @@ public class CandidateFunctionExtractorImpl implements CandidateFunctionExtracto
 				identifiedFunctions.add(function);
 			}
 		});
+		
+		/**
+		* Check top level functions and if found add all child function 
+		*/
+		if (identifiedFunctions.contains(FUNCTION.ARCHITECT) && identifiedFunctions.size() == 1) {
+			identifiedFunctions.add(FUNCTION.SOFTWARE_ARCHITECT);
+			identifiedFunctions.add(FUNCTION.DATA_ARCHITECT);
+			identifiedFunctions.add(FUNCTION.INFRASTRUCTURE_ARCHITECT);
+			identifiedFunctions.add(FUNCTION.SOLUTIONS_ARCHITECT);
+			identifiedFunctions.add(FUNCTION.ENTERPRISE_ARCHITECT);
+		}
+		
+		if (identifiedFunctions.contains(FUNCTION.WEB_DEV)) {
+			identifiedFunctions.add(FUNCTION.RUBY);
+			identifiedFunctions.add(FUNCTION.RUBY_ON_RAILS);
+			identifiedFunctions.add(FUNCTION.GO);
+			identifiedFunctions.add(FUNCTION.REACT);
+			identifiedFunctions.add(FUNCTION.VUE);
+			identifiedFunctions.add(FUNCTION.NEXT);
+			identifiedFunctions.add(FUNCTION.EXPRES);
+			identifiedFunctions.add(FUNCTION.RUST);
+			
+		}
 		
 		return identifiedFunctions;
 	}

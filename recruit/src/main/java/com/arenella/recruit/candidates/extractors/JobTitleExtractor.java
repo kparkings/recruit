@@ -77,7 +77,7 @@ public class JobTitleExtractor implements JobSpecifcationFilterExtractor{
 	
 	public static final JobType projectManager			= new JobType(JobType.Type.projectManager, 			Set.of("projektleiter","pmo","project manager", "it manager", "procurement manager", "control manager", "engineering manager", "security manager", "services manager", "service manager", "asset manager"));
 	public static final JobType softwareManager 		= new JobType(JobType.Type.softwareManager, 		Set.of("software manager","application manager", "development manager"));
-	public static final JobType infrastructureManager 	= new JobType(JobType.Type.infrastructureManager, 	Set.of("infrastructure manager", "infra manager", "network manager","operations manager", "ops manager"));
+	public static final JobType infrastructureManager 	= new JobType(JobType.Type.infrastructureManager, 	Set.of("infrascructure manager", "infra manager", "network manager","operations manager", "ops manager"));
 	public static final JobType cto 					= new JobType(JobType.Type.cto, 					Set.of(" cto","head of it"));
 	public static final JobType diretor 				= new JobType(JobType.Type.diretor, 				Set.of("director"));
 	public static final JobType programmeManager 		= new JobType(JobType.Type.programmeManager, 		Set.of("programme manager","program manager"));
