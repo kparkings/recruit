@@ -80,6 +80,7 @@ public class CandidateFunctionExtractorImpl implements CandidateFunctionExtracto
 		all.put(FUNCTION.PROGRAMME_MANAGER, 		Set.of("programme manager","program manager"));
 		all.put(FUNCTION.DELIVERY_MANAGER, 			Set.of("delivery manager"));
 		
+		all.put(FUNCTION.MOBILE_DEVELOPER, 			Set.of("mobile developer", "mobile ontwikkelaar"));
 	}
 	
 	/**
@@ -128,6 +129,11 @@ public class CandidateFunctionExtractorImpl implements CandidateFunctionExtracto
 			identifiedFunctions.add(FUNCTION.EXPRES);
 			identifiedFunctions.add(FUNCTION.RUST);
 			
+		}
+		
+		if (identifiedFunctions.contains(FUNCTION.MOBILE_DEVELOPER)) {
+			identifiedFunctions.add(FUNCTION.IOS);
+			identifiedFunctions.add(FUNCTION.ANDROID);
 		}
 		
 		return identifiedFunctions;

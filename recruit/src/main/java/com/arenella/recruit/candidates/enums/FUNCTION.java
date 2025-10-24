@@ -52,7 +52,8 @@ public enum FUNCTION {
 	CTO("CTO"),
 	DIRECTOR("Director"),
 	PROGRAMME_MANAGER("Programme manager"),
-	DELIVERY_MANAGER("Delivery manager");
+	DELIVERY_MANAGER("Delivery manager"), 
+	MOBILE_DEVELOPER("Mobile developer");
 
 	private String desc;
 	

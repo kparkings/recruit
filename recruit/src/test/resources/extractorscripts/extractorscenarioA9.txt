@@ -27,7 +27,7 @@ Mehrjährige Erfahrung in der Softwareentwicklung, idealerweise im agilen Umfeld
 Sehr gute Java-Kenntnisse
 Leidenschaft für innovative Lösungen und Teamarbeit
 Know-how in Technologien wie Java EE, Spring, Hibernate/JPA/JDBC, HTML, CSS/Bootstrap, JavaScript/TypeScript, JAX-RS sowie Tools wie Git, Maven, IntelliJ/Eclipse und Jira
-Sehr gute Deutsch- und Englischkenntnisse in Wort und Schrift
+Sehr gute Deutsch - und Englischkenntnisse in Wort und Schrift
  
 Klingt spannend?
 Dann bewirb dich mit deinen aussagekräftigen Unterlagen direkt.

@@ -210,4 +210,100 @@ class JobTitleExtractorTest {
 		
 	}
 	
+	/**
+	* Mobile developers testing
+	* - Only mobile found 
+	*/
+	@Test
+	void testMobileOnly() {
+		
+		final CandidateExtractedFiltersBuilder 	filterBuilder 	= CandidateExtractedFilters.builder();
+		final JobTitleExtractor 				extractor 		= new JobTitleExtractor();
+		
+		extractor.extractFilters(" mobile developer ", filterBuilder);
+		
+		assertEquals("Mobile Developer",filterBuilder.build().getJobTitle());
+		
+	}
+	
+	/**
+	* Mobile developers testing
+	* - Only IOS found 
+	*/
+	@Test
+	void testIOSOnly() {
+		
+		final CandidateExtractedFiltersBuilder 	filterBuilder 	= CandidateExtractedFilters.builder();
+		final JobTitleExtractor 				extractor 		= new JobTitleExtractor();
+		
+		extractor.extractFilters(" ios developer ", filterBuilder);
+		
+		assertEquals("IOS Developer",filterBuilder.build().getJobTitle());
+		
+		
+	}
+	
+	/**
+	* Mobile developers testing
+	* - Only Android found 
+	*/
+	@Test
+	void testAndroidOnly() {
+		
+		final CandidateExtractedFiltersBuilder 	filterBuilder 	= CandidateExtractedFilters.builder();
+		final JobTitleExtractor 				extractor 		= new JobTitleExtractor();
+		
+		extractor.extractFilters(" android developer ", filterBuilder);
+		
+		assertEquals("Android Developer",filterBuilder.build().getJobTitle());
+		
+	}
+	
+	/**
+	* Mobile developers testing
+	* - Both mobile and Android found 
+	*/
+	@Test
+	void testMobileAndroidOnly() {
+		
+		final CandidateExtractedFiltersBuilder 	filterBuilder 	= CandidateExtractedFilters.builder();
+		final JobTitleExtractor 				extractor 		= new JobTitleExtractor();
+		
+		extractor.extractFilters(" mobile developer android ", filterBuilder);
+		
+		assertEquals("Android Developer",filterBuilder.build().getJobTitle());
+		
+	}
+	
+	/**
+	* Mobile developers testing
+	* - Both mobile and IOS found 
+	*/
+	@Test
+	void testMobileIOSOnly() {
+		
+		final CandidateExtractedFiltersBuilder 	filterBuilder 	= CandidateExtractedFilters.builder();
+		final JobTitleExtractor 				extractor 		= new JobTitleExtractor();
+		
+		extractor.extractFilters(" mobile developer ios ", filterBuilder);
+		
+		assertEquals("IOS Developer",filterBuilder.build().getJobTitle());
+	}
+	
+	/**
+	* Mobile developers testing
+	* - Both IOS and Android found no Mobile
+	*/
+	@Test
+	void testAndroidIOSOnly() {
+		
+		final CandidateExtractedFiltersBuilder 	filterBuilder 	= CandidateExtractedFilters.builder();
+		final JobTitleExtractor 				extractor 		= new JobTitleExtractor();
+		
+		extractor.extractFilters(" android ios ", filterBuilder);
+		
+		assertEquals("Mobile Developer",filterBuilder.build().getJobTitle());
+		
+	}
+	
 }

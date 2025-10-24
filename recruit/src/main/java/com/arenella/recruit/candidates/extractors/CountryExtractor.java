@@ -19,7 +19,7 @@ import com.arenella.recruit.candidates.enums.COUNTRY;
 public class CountryExtractor implements JobSpecifcationFilterExtractor{
 	
 	protected Set<String> uk 					= DocumentFilterExtractionUtil.UK;
-	protected Set<String> netherlands 			= Set.of("zeist","olanda","pays-bas","países bajos","niederlande","brabant","zuid-holland","schiphol","netherlands","nederland","randstad","overijssel", "gelderland","limburg", "flevoland","zsm","vaardigheden","vereiste","softwareontwikkeling");
+	protected Set<String> netherlands 			= Set.of("zeist","olanda","pays-bas","países bajos","niederlande","brabant","zuid-holland","schiphol","netherlands","nederland ","nederland.","randstad","overijssel", "gelderland","limburg", "flevoland","zsm","vaardigheden","vereiste","softwareontwikkeling");
 	protected Set<String> belgium 				= Set.of("vlaanderen","belgië","belgio","belgique","bélgica","belgien","belgium", "flemish", "flams", "wallon"); 
 	protected Set<String> luxembourg 			= Set.of("lussemburgo","luxemburgo","luxembourg","luxemburg","luxembourgish");
 	protected Set<String> republicOfIreland 	= Set.of("irlande","irlanda","irland","ireland" );

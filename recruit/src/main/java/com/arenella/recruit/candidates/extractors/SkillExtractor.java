@@ -379,6 +379,12 @@ public class SkillExtractor implements JobSpecifcationFilterExtractor{
 				jobTypeBlacklist.addAll(blackListNonRecruiter);
 				break;
 			}
+			case mobileDeveloper: {
+				jobTypeBlacklist.addAll(Set.of());
+				jobTypeBlacklist.addAll(blackTesters);
+				jobTypeBlacklist.addAll(blackListNonRecruiter);
+				break;
+			}
 			default:{
 				throw new RuntimeException("SkillExtractor not configred for " + JobType.Type.valueOf(filterBuilder.build().getJobTitle()));
 			}

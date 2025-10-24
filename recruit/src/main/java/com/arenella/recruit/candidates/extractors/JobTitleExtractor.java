@@ -19,6 +19,7 @@ import org.springframework.stereotype.Component;
 import com.arenella.recruit.candidates.beans.CandidateExtractedFilters.CandidateExtractedFiltersBuilder;
 
 import com.arenella.recruit.candidates.extractors.JobType.Type;
+import java.util.Optional;
 
 /**
 * Class to extract Job Title from Document. Will take into account all the keywords in the
@@ -61,8 +62,8 @@ public class JobTitleExtractor implements JobSpecifcationFilterExtractor{
 	public static final JobType python 					= new JobType(JobType.Type.python, 					Set.of("python", "flask", "django", "chrerrypy", "fastapi","odoo"));
 	public static final JobType angular 				= new JobType(JobType.Type.angular, 				Set.of("angular","angularjs","angular.js"));
 	public static final JobType php 					= new JobType(JobType.Type.php, 					Set.of("php", "laravel","sfmfony","lumen","cakephp","codeigniter","fuelphp"));
-	public static final JobType android 				= new JobType(JobType.Type.android, 				Set.of("android","mobile"));
-	public static final JobType ios 					= new JobType(JobType.Type.ios, 					Set.of("ios","mobile"));
+	public static final JobType android 				= new JobType(JobType.Type.android, 				Set.of("android"));
+	public static final JobType ios 					= new JobType(JobType.Type.ios, 					Set.of("ios"));
 	public static final JobType ccplusplus 				= new JobType(JobType.Type.ccplusplus, 				Set.of("c++","c/c++"));
 	public static final JobType cobol 					= new JobType(JobType.Type.cobol, 					Set.of("cobol"));
 	public static final JobType sap 					= new JobType(JobType.Type.sap, 					Set.of(" sap "));
@@ -82,6 +83,8 @@ public class JobTitleExtractor implements JobSpecifcationFilterExtractor{
 	public static final JobType diretor 				= new JobType(JobType.Type.diretor, 				Set.of("director"));
 	public static final JobType programmeManager 		= new JobType(JobType.Type.programmeManager, 		Set.of("programme manager","program manager"));
 	public static final JobType deliveryManager 		= new JobType(JobType.Type.deliveryManager, 		Set.of("delivery manager"));
+	
+	public static final JobType mobileDeveloper 		= new JobType(JobType.Type.mobileDeveloper, 		Set.of("mobile developer", "mobile ontwikkelaar"));
 	
 	/**
 	* Refer to JobSpecifcationFilterExtractor interface for details
@@ -143,6 +146,8 @@ public class JobTitleExtractor implements JobSpecifcationFilterExtractor{
 		scored.put(JobType.Type.programmeManager, 			new AtomicInteger(0));
 		scored.put(JobType.Type.deliveryManager, 			new AtomicInteger(0));
 		
+		scored.put(JobType.Type.mobileDeveloper, 			new AtomicInteger(0));
+		
 		Set<JobType> jobs = new LinkedHashSet<>();
 		
 		jobs.add(itRecruiter);
@@ -198,6 +203,8 @@ public class JobTitleExtractor implements JobSpecifcationFilterExtractor{
 		jobs.add(programmeManager);
 		jobs.add(deliveryManager);
 		jobs.add(projectManager);
+		
+		jobs.add(mobileDeveloper);
 		
 		Set<JobType.Type> softwareDevelopmentTypes = new HashSet<>();
 		softwareDevelopmentTypes.add(java.getType());
@@ -276,6 +283,10 @@ public class JobTitleExtractor implements JobSpecifcationFilterExtractor{
 			type = Collections.max(scored.entrySet(), Map.Entry.comparingByValue(comparator)).getKey();
 		}
 		
+		if(type == JobType.Type.mobileDeveloper || type == JobType.Type.ios || type == JobType.Type.android) {
+			type = handleMobileCase(scored.entrySet(), type);
+		}
+		
 		if (softwareDevelopmentTypes.contains(type)) {
 			type = applySoftwareDeveloperWeighting(scored, filterBuilder, comparator);
 		}
@@ -336,6 +347,75 @@ public class JobTitleExtractor implements JobSpecifcationFilterExtractor{
 			filterBuilder.jobTitle(xType.get().role);
 		}
 		
+	}
+	
+	/**
+	* Rule. If both Android and IOS use mobile developer
+	* 		If only IOS and mobile use IOS
+	* 		IF only Andorid and mobile use Android
+	* 		IF only mobile use mobile
+	*/
+	private JobType.Type handleMobileCase(Set<Entry<Type, AtomicInteger>> scored, Type originalType) {
+		
+		
+		Entry<Type, AtomicInteger> mobile 	= scored.stream().filter(e -> e.getKey() == Type.mobileDeveloper).findAny().orElseThrow();
+		Entry<Type, AtomicInteger> ios 		= scored.stream().filter(e -> e.getKey() == Type.ios).findAny().orElseThrow();
+		Entry<Type, AtomicInteger> android 	= scored.stream().filter(e -> e.getKey() == Type.android).findAny().orElseThrow();
+		
+		boolean isMobile 	= mobile.getValue().get() 	> 0;
+		boolean isIos 		= ios.getValue().get()	 	> 0;
+		boolean isAndroid 	= android.getValue().get() 	> 0;
+		
+		JobType.Type foundType = null;
+		
+		if (isMobile && !isIos && !isAndroid) {
+			foundType = JobType.Type.mobileDeveloper;
+		}
+		
+		if (!isMobile && !isIos && isAndroid) {
+			foundType = JobType.Type.android;
+		}
+		
+		if (!isMobile && !isAndroid && isIos) {
+			foundType = JobType.Type.ios;
+		}
+		
+		if (isMobile && isAndroid && !isIos) {
+			foundType = JobType.Type.android;
+		}
+		
+		if (isMobile && isIos && !isAndroid) {
+			foundType = JobType.Type.ios;
+		}
+		
+		if (!isMobile && isAndroid && isIos) {
+			foundType = JobType.Type.mobileDeveloper;
+		}
+		
+		if (isMobile && isAndroid && isIos) {
+			foundType =  JobType.Type.mobileDeveloper;
+		}
+		
+		Optional.of(foundType).ifPresent(ft -> {
+			switch(ft) {
+				case JobType.Type.mobileDeveloper -> {
+					ios.getValue().set(0);
+					android.getValue().set(0);
+					mobile.getValue().set(1);
+				}
+				case JobType.Type.ios -> {
+					mobile.getValue().set(0);
+					android.getValue().set(0);
+				}
+				case JobType.Type.android -> {
+					mobile.getValue().set(0);
+					ios.getValue().set(0);
+				}
+				default -> {}
+			}
+		});
+		
+		return Optional.ofNullable(foundType).isPresent() ? foundType : originalType;
 	}
 	
 	/**

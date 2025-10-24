@@ -64,7 +64,9 @@ public class JobType{
 		cto("CTO"),
 		diretor("Director"),
 		programmeManager("Programme manager"),
-		deliveryManager("Delivery manager");
+		deliveryManager("Delivery manager"),
+		
+		mobileDeveloper("Mobile Developer");
 		
 		public final String role;
 		
@@ -126,6 +128,10 @@ public class JobType{
 			JobType.Type.diretor,
 			JobType.Type.programmeManager,
 			JobType.Type.deliveryManager);
+	
+	private static Set<Type> mobileDeveloperTypes = Set.of(
+			JobType.Type.ios,
+			JobType.Type.android);
 	
 	private Type 		type;
 	private Set<String> titles;
@@ -212,4 +218,13 @@ public class JobType{
 		return managerTypes;
 	}
 	
+	/**
+	* Returns all types that can be considered a type of 
+	* mobile developers
+	* @return
+	*/
+	public static Set<Type>getMobileDeveloperTypes() {
+		return mobileDeveloperTypes;
+	}
+
 }

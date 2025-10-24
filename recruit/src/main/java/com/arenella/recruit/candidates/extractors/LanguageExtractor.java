@@ -25,7 +25,7 @@ public class LanguageExtractor implements JobSpecifcationFilterExtractor{
 	public static final Set<String> DANISH 		= Set.of("deens","danese","danois","danés","dänisch","danish");
 	public static final Set<String> ESTONIAN 	= Set.of("estisch","estone","estonien","estonio","estnisch","estonian");
 	public static final Set<String> FINNISH 	= Set.of("fins","finlandese","finlandais","finlandés","finnisch","finnish"); 
-	public static final Set<String> GERMAN 		= Set.of("duits","tedesco","allemand","alemán","deutsch","german ","german."); 
+	public static final Set<String> GERMAN 		= Set.of("duits ","duits.","tedesco","allemand","alemán","deutsch ","deutsch.","german ","german."); 
 	public static final Set<String> GREEK 		= Set.of("grieks","greco","grec","griego","griechisch","greek"); 
 	public static final Set<String> HUNGARIAN 	= Set.of("hongaars","ungherese","hongrois","húngaro","ungarisch","hungarian");
 	public static final Set<String> HINDI 		= Set.of("hindi");

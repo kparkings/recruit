@@ -91,4 +91,22 @@ class CandidateFunctionExtractorImplTest {
 	
 	}
 	
+	/**
+	* If a user searches for mobile developers but doesn't specify the type all 
+	* sub mobile types must be added 
+	*/
+	@Test
+	void testMobilebDevTopLevelFunctionAddsChildWebFunctions() {
+		
+		CandidateFunctionExtractorImpl extractor = new CandidateFunctionExtractorImpl();
+		
+		ReflectionTestUtils.invokeMethod(extractor, "init");
+		
+		Set<FUNCTION> extractedFunctions = extractor.extractFunctions("mobile developer");
+		
+		assertTrue(extractedFunctions.contains(FUNCTION.IOS));
+		assertTrue(extractedFunctions.contains(FUNCTION.ANDROID));
+	
+	}
+	
 }
