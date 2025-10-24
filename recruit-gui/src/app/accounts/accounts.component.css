@@ -103,6 +103,32 @@ h3{
 	margin-left:10px;
 }
 
+.country-filter{
+	margin-left:8px;
+}
+
+.country-selected-true{
+	opacity:1;
+}
+
+.country-selected-false{
+	opacity:0.25;
+}
+
+.flag-icon-med{
+	width:30px;
+	height:30px;
+	margin:10px;
+	margin-top:0px;
+	margin-left:0px;
+	cursor:pointer;
+}
+
+.country-selections{
+	margin-top:10px;
+	margin-bottom:10px;
+}
+
 @media (max-width:700px)  {
 	
 	.delete-btn{

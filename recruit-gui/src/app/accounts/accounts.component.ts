@@ -39,6 +39,7 @@ export class AccountsComponent implements OnInit {
 	activateRecruiterUserPassword:string							= '';
 	candidatesToCheckForAvailability:Array<Candidate>				= Array<Candidate>();
 	recruitersWithSubscriptionActions:Array<SubscriptionAction>		= new Array<SubscriptionAction>();
+	public suggestionFilterForm:UntypedFormGroup 				= new UntypedFormGroup({});
 	
 	public candidateFormGroup:UntypedFormGroup = new UntypedFormGroup({
 		firstname:	new UntypedFormControl(''),
@@ -58,9 +59,11 @@ export class AccountsComponent implements OnInit {
 	}
 	
 	private initSupportedCountries():void{
-		
 		this.supportedCountries = this.candidateService.getSupportedCountries();
 		
+		this.candidateService.getSupportedCountries().forEach(c => {
+			this.suggestionFilterForm.addControl(c.name, new UntypedFormControl(false));
+		});
 		
 	}
 
@@ -294,11 +297,22 @@ export class AccountsComponent implements OnInit {
 		availableRequest.candidateFilters.available = true;
 		availableRequest.requestFilters.unfiltered=true;
 		
+		
 		let unavailableRequest:SuggestionsSearchRequest = new SuggestionsSearchRequest();
 		unavailableRequest.candidateFilters.daysSinceLastAvailabilityCheck = 33;
 		unavailableRequest.requestFilters.maxNumberOfSuggestions=1000;
 		unavailableRequest.candidateFilters.available = false;
 		unavailableRequest.requestFilters.unfiltered=true;
+		
+		/**
+		* Add any country filters 	
+		*/
+		this.supportedCountries.forEach(country => {
+			if (this.suggestionFilterForm.get(country.name)?.value) {
+				availableRequest.locationFilters.countries?.push(country.name);
+				unavailableRequest.locationFilters.countries?.push(country.name);
+			}
+		});
 		
 		if (this.showAvailable && !this.showUnavailable) {
 			this.candidateService.getCandidateSuggestions(availableRequest).subscribe(data => {
@@ -372,6 +386,28 @@ export class AccountsComponent implements OnInit {
 	*/
 	public deleteCandidate(candidateId:string):void{
 		this.candidateToDelete = candidateId;
+	}
+	
+	/**
+	* Returns whether Candidates from the selected country are currently
+	* included in the Suggestion results
+	*/
+	public includeResultsForCountry(country:string):boolean{
+		return this.suggestionFilterForm.get((country))?.value;
+	}
+	
+	/**
+	* Toggles whether Candidates from selected country 
+	* should be included in the Suggestions 
+	* @param country - Country to toggle
+	*/
+	public toggleCountrySelection(country:string):void{
+		
+		let included:boolean = this.suggestionFilterForm.get((country))?.value;
+		
+		this.suggestionFilterForm.get((country))?.setValue(!included);
+		this.fetchCandidatesDueForAvailabilityCheck();
+		
 	}
 	
 }

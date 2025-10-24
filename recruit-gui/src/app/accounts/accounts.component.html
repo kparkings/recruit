@@ -48,6 +48,15 @@
 					</tbody>
 				</table>
 			</div>
+			<div>
+				<div class="country-selections">
+					<span *ngFor="let supportedCountry of supportedCountries" class="country-filter country-selected-{{includeResultsForCountry(supportedCountry.name)}}" (click)="toggleCountrySelection(supportedCountry.name)">
+						<mat-icon title="{{supportedCountry.name}}">
+							<span class="flag-icon flag-icon-{{supportedCountry.iso2Code}} flag-icon-med"></span>
+						</mat-icon>
+					</span>
+				</div>
+			</div>
 			<table class="table candidate-table availability">
 				<thead>
 		      		<tr>
