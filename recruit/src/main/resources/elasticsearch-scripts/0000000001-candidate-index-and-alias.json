@@ -80,6 +80,7 @@ PUT candidates_001
           "type": "text"
         },
         "languages": {
+        "type": "nested",
           "properties": {
             "language": {
               "type": "text",

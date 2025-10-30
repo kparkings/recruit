@@ -18,6 +18,7 @@ import co.elastic.clients.elasticsearch._types.query_dsl.BoolQuery;
 import co.elastic.clients.elasticsearch._types.query_dsl.ExistsQuery;
 import co.elastic.clients.elasticsearch._types.query_dsl.GeoDistanceQuery;
 import co.elastic.clients.elasticsearch._types.query_dsl.MatchQuery;
+import co.elastic.clients.elasticsearch._types.query_dsl.NestedQuery;
 import co.elastic.clients.elasticsearch._types.query_dsl.Query;
 import co.elastic.clients.elasticsearch._types.query_dsl.QueryBuilders;
 import co.elastic.clients.elasticsearch._types.query_dsl.RangeQuery;
@@ -173,13 +174,15 @@ public class ESFilteredSearchRequestBuilder {
 			
 			List<co.elastic.clients.elasticsearch._types.query_dsl.Query> langQueries 		= new ArrayList<>();
 			
-			languages.stream().forEach(l -> 
-				langQueries.add(BoolQuery.of(m -> m
-						.must(List.of(
-								MatchQuery.of(m1 -> m1.field("languages.language.keyword").query(l))._toQuery(),
-								MatchQuery.of(m2 -> m2.field("languages.level.keyword").query("PROFICIENT"))._toQuery()))
-					)._toQuery())
-			);
+			languages.stream().forEach(l -> {
+			NestedQuery h = NestedQuery.of(nq -> nq.path("languages").query(BoolQuery.of(m -> m
+					.must(List.of(
+							MatchQuery.of(m1 -> m1.field("languages.language").query(l))._toQuery(),
+							MatchQuery.of(m2 -> m2.field("languages.level").query("PROFICIENT"))._toQuery()))
+				)._toQuery()));
+			
+				langQueries.add(h._toQuery());
+			});
 			
 			mustQueries.add(BoolQuery.of(m -> m
 					.queryName("languages")

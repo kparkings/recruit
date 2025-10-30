@@ -26,7 +26,7 @@ public class DocumentFilterExtractionUtil {
 	private SkillExtractor 			skillExtractor;
 	private ContractTypeExtractor 	contractTypeExtractor;
 	
-	public static final Set<String> UK = Set.of("lancaster","warrington","watford","burnley","norfolk","newcastle","cambridge","bristol","gbp","stockport","£"," uk ", "uk.","uk\\t", "ir35", "milton keynes", "england", "midlands", "derby", "wales", "scotland", "edinburgh","glasgow", "london", "liverpool", "manchester", "oxford", "glousester", "surrey", "Buckinghamshire", "Berkshire", "hounslow", "Milton Keynes", "edgware", "Leicester", "bracknell", "barking", "Colchester", "cardiff", "Brentford", "Stoke-on-Trent", "maidenhead", "guildford", " reading ", "leeds");
+	public static final Set<String> UK = Set.of("bournemouth","lancaster","warrington","watford","burnley","norfolk","newcastle","cambridge","bristol","gbp","stockport","£"," uk ", "uk.","uk\\t", "ir35", "milton keynes", "england", "midlands", "derby", "wales", "scotland", "edinburgh","glasgow", "london", "liverpool", "manchester", "oxford", "glousester", "surrey", "Buckinghamshire", "Berkshire", "hounslow", "Milton Keynes", "edgware", "Leicester", "bracknell", "barking", "Colchester", "cardiff", "Brentford", "Stoke-on-Trent", "maidenhead", "guildford", " reading ", "leeds");
 	
 	/**
 	* Constructor

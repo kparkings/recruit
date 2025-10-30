@@ -71,20 +71,17 @@ public class CandidateResultAccumulatorUtil {
 		this.getAccuracy(wrappedCandidate).ifPresent(accuracy -> {
 			if (buckets.size() < maxResults) {
 				buckets.put(wrappedCandidate, accuracy);
+			} else {
+				this.buckets.entrySet().stream().filter(kv -> isLessAccurate(kv.getValue(), accuracy)).findFirst().ifPresent(replace -> {
+					this.buckets.remove(replace.getKey());
+					this.buckets.put(wrappedCandidate, accuracy);
+				});
 			}
 		});
 		
-		this.getAccuracy(wrappedCandidate).ifPresent(newCandiadteAccuracy -> 
-			this.buckets.entrySet().stream().filter(kv -> isLessAccurate(kv.getValue(), newCandiadteAccuracy)).findFirst().ifPresent(replace -> {
-				this.buckets.remove(replace.getKey());
-				this.buckets.put(wrappedCandidate, newCandiadteAccuracy);
-			})
-		);
-		
 		long perfectBuckets = this.buckets.values().stream().filter(accuracy -> accuracy == suggestion_accuracy.perfect).count();
 	
-		
-		if(perfectBuckets == maxResults) {
+		if (perfectBuckets == maxResults) {
 			this.obtainedPerfectResults = true;
 		}
 		
@@ -122,7 +119,6 @@ public class CandidateResultAccumulatorUtil {
 	* @return Accuracy of Candidate against search Filters
 	*/
 	private Optional<suggestion_accuracy> getAccuracy(CandidateSearchAccuracyWrapper wrappedCandidate) {
-		
 		
 		if (this.suggestionsUtil.isPerfectMatch(wrappedCandidate, this.suggestionFilterOptions, this.searchTermKeywords)) {
 			return Optional.of(suggestion_accuracy.perfect);
