@@ -1,6 +1,7 @@
 package com.arenella.recruit.listings.services;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -25,12 +26,14 @@ import com.arenella.recruit.listings.adapters.ExternalEventPublisher;
 import com.arenella.recruit.listings.adapters.RequestListingContactEmailCommand;
 import com.arenella.recruit.listings.adapters.RequestListingContactEmailCommand.RequestListingContactEmailCommandBuilder;
 import com.arenella.recruit.listings.beans.Listing;
+import com.arenella.recruit.listings.beans.ListingContactRequestEvent;
+import com.arenella.recruit.listings.beans.ListingContactRequestEvent.CONTACT_USER_TYPE;
 import com.arenella.recruit.listings.beans.ListingFilter;
 import com.arenella.recruit.listings.beans.ListingViewedEvent;
 import com.arenella.recruit.listings.beans.RecruiterCredit;
 import com.arenella.recruit.listings.controllers.CandidateListingContactRequest;
 import com.arenella.recruit.listings.controllers.ListingContactRequest;
-
+import com.arenella.recruit.listings.dao.ListingContactRequestEventDao;
 import com.arenella.recruit.listings.dao.ListingRecruiterCreditDao;
 import com.arenella.recruit.listings.exceptions.ListingValidationException;
 import com.arenella.recruit.listings.exceptions.ListingValidationException.ListingValidationExceptionBuilder;
@@ -62,10 +65,14 @@ public class ListingServiceImpl implements ListingService{
 	private ListingRecruiterCreditDao 		creditDao;
 	
 	@Autowired
+	private ListingContactRequestEventDao	listingContactRequestEventDao;
+	
+	@Autowired
 	private ListingGeoZoneSearchUtil		listingGeoZoneSearchUtil;
 	
 	@Autowired
 	private ListingFunctionSynonymUtil		functionSynonymUil;
+	
 	
 	/**
 	* Refer to the Listing interface for details
@@ -238,6 +245,18 @@ public class ListingServiceImpl implements ListingService{
 			
 			externalEventPublisher
 				.publicRequestSendListingContactEmailCommand(builder.build());
+			
+			try {
+				this.listingContactRequestEventDao.persistEvent(ListingContactRequestEvent
+					.builder()
+						.eventId(UUID.randomUUID())
+						.listingId(contactRequest.getListingId())
+						.userType(CONTACT_USER_TYPE.UNREGISTERED)
+						.created(LocalDateTime.now())
+					.build());
+			}catch(Exception e) {
+				//If this fails we still want the request to be sent
+			}
 		
 		}catch(IOException e) {
 			throw new RuntimeException("Unable to send request"); 
@@ -308,7 +327,19 @@ public class ListingServiceImpl implements ListingService{
 			
 			externalEventPublisher
 				.publicRequestSendListingContactEmailCommand(builder.build());
-		
+			
+			try {
+				this.listingContactRequestEventDao.persistEvent(ListingContactRequestEvent
+					.builder()
+						.eventId(UUID.randomUUID())
+						.listingId(contactRequest.getListingId())
+						.userType(CONTACT_USER_TYPE.REGISTERED)
+						.created(LocalDateTime.now())
+					.build());
+			}catch(Exception e) {
+				//If this fails we still want the request to be sent
+			}
+			
 		} catch(IOException e) {
 			throw new RuntimeException("Unable to send request"); 
 		}

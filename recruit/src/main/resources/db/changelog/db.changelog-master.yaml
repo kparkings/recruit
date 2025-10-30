@@ -2525,3 +2525,32 @@ databaseChangeLog:
             cascadeConstraints:  true  
             schemaName: candidate  
             tableName: candidate_search_alert
+  - changeSet:
+      id: listing_table_contact_request_listing_event
+      author: kparkings
+      changes:
+        - createTable:                    
+            tableName: listing_contact_request_event
+            schemaName: listings
+            columns:
+              - column:
+                  name: event_id
+                  type: UUID
+                  constraints:
+                    nullable: false                    
+                    primaryKey: true
+              - column:
+                  name: listing_id
+                  type: UUID
+                  constraints:
+                    nullable: false
+              - column:
+                  name: user_type
+                  type: varchar
+                  constraints:
+                    nullable: false           
+              - column:
+                  name: created
+                  type: timestamp
+                  constraints:
+                    nullable: false                    

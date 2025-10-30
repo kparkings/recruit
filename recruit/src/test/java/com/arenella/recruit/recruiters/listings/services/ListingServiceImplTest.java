@@ -21,6 +21,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -29,6 +30,7 @@ import com.arenella.recruit.adapters.actions.GrantCreditCommand;
 import com.arenella.recruit.listings.adapters.ExternalEventPublisher;
 import com.arenella.recruit.listings.adapters.RequestListingContactEmailCommand;
 import com.arenella.recruit.listings.beans.Listing;
+import com.arenella.recruit.listings.beans.ListingContactRequestEvent;
 import com.arenella.recruit.listings.beans.ListingViewedEvent;
 import com.arenella.recruit.listings.controllers.ListingContactRequest;
 import com.arenella.recruit.listings.exceptions.ListingValidationException;
@@ -36,6 +38,7 @@ import com.arenella.recruit.listings.repos.ListingRepository;
 import com.arenella.recruit.listings.services.FileSecurityParser;
 import com.arenella.recruit.listings.services.FileSecurityParser.FileType;
 import com.arenella.recruit.listings.beans.RecruiterCredit;
+import com.arenella.recruit.listings.dao.ListingContactRequestEventDao;
 import com.arenella.recruit.listings.dao.ListingRecruiterCreditDao;
 import com.arenella.recruit.listings.services.ListingServiceImpl;
 import com.arenella.recruit.listings.utils.ListingFunctionSynonymUtil;
@@ -75,6 +78,9 @@ class ListingServiceImplTest {
 	
 	@Mock
 	private ListingFunctionSynonymUtil		mockListingFunctionSynonymUtil;
+	
+	@Mock
+	private ListingContactRequestEventDao	mockListingContactRequestEventDao;
 	
 	/**
 	* Sets up test environment
@@ -494,6 +500,8 @@ class ListingServiceImplTest {
 			this.service.sendContactRequestToListingOwner(ListingContactRequest.builder().attachment(mockMultipartFile).build());
 		});
 		
+		Mockito.verify(this.mockListingContactRequestEventDao, Mockito.never()).persistEvent(Mockito.any(ListingContactRequestEvent.class));
+		
 	}
 
 	/**
@@ -509,6 +517,9 @@ class ListingServiceImplTest {
 		Assertions.assertThrows(RuntimeException.class, () -> {
 			this.service.sendContactRequestToListingOwner(ListingContactRequest.builder().build());
 		});
+		
+		
+		Mockito.verify(this.mockListingContactRequestEventDao, Mockito.never()).persistEvent(Mockito.any(ListingContactRequestEvent.class));
 		
 	}
 	
@@ -559,6 +570,8 @@ class ListingServiceImplTest {
 		assertEquals(ownerId, 				capt.getValue().getRecruiterId());
 		assertEquals(senderEmail, 			capt.getValue().getSenderEmail());
 		assertEquals(senderName, 			capt.getValue().getSenderName());
+		
+		Mockito.verify(this.mockListingContactRequestEventDao).persistEvent(Mockito.any(ListingContactRequestEvent.class));
 		
 	}
 	
