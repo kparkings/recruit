@@ -1,29 +1,27 @@
-import { Component, ElementRef, OnInit, ViewChild } 	from '@angular/core';
-import { ListingService }								from '../listing.service';
-import { EmailService, EmailRequest }					from '../email.service';
-import { Listing}										from './listing';
-import { ActivatedRoute } 								from '@angular/router';
-import { UntypedFormGroup, UntypedFormControl,  }		from '@angular/forms';
-import { NgbModal }										from '@ng-bootstrap/ng-bootstrap';
-import { HostListener}									from '@angular/core';
-import { RecruiterProfileService} 						from '../recruiter-profile.service';
-import { RecruiterProfile }								from '../recruiter-profile/recruiter-profile';
-import { ListingAlertAddRequest } 						from './listing-alert-add-request';
-import { SelectableFunctionType } 						from '../shared-domain-object/function-type';
-import { SelectableCountry } 							from '../shared-domain-object/country';
-import { StaticDataService } 							from '../static-data.service';
-import { HtmlOption } 									from '../html-option';
+import { Component, ElementRef, OnInit, ViewChild, HostListener } 	from '@angular/core';
+import { ListingService }											from '../listing.service';
+import { EmailService, EmailRequest }								from '../email.service';
+import { Listing}													from './listing';
+import { ActivatedRoute, Router } 									from '@angular/router';
+import { UntypedFormGroup, UntypedFormControl,  }					from '@angular/forms';
+import { NgbModal }													from '@ng-bootstrap/ng-bootstrap';
+import { RecruiterProfileService} 									from '../recruiter-profile.service';
+import { RecruiterProfile }											from '../recruiter-profile/recruiter-profile';
+import { ListingAlertAddRequest } 									from './listing-alert-add-request';
+import { SelectableFunctionType } 									from '../shared-domain-object/function-type';
+import { SelectableCountry } 										from '../shared-domain-object/country';
+import { StaticDataService } 										from '../static-data.service';
+import { HtmlOption } 												from '../html-option';
 import { InfoItemBlock, InfoItemConfig, InfoItemRowKeyValue, InfoItemRowKeyValueFlag, InfoItemRowMultiValues, InfoItemRowSingleValue } 				from '../candidate-info-box/info-item';
-import { TranslateService } 							from '@ngx-translate/core';
-import { SupportedCountry } 							from '../supported-candidate';
-import { CandidateServiceService } 						from '../candidate-service.service';
-import { Clipboard } 									from '@angular/cdk/clipboard';
-import { SearchStats } 									from '../search-stats';
-import { SearchbarComponentListing }	 				from './searchbar/searchbar.component';
-import { ListingSearchRequest }							from './../listing-search-request';
-import { ViewportScroller } 							from '@angular/common';
-import { Router}										from '@angular/router';
-
+import { TranslateService } 										from '@ngx-translate/core';
+import { SupportedCountry } 										from '../supported-candidate';
+import { CandidateServiceService } 									from '../candidate-service.service';
+import { Clipboard } 												from '@angular/cdk/clipboard';
+import { SearchStats } 												from '../search-stats';
+import { SearchbarComponentListing }	 							from './searchbar/searchbar.component';
+import { ListingSearchRequest }										from './../listing-search-request';
+import { ViewportScroller } 										from '@angular/common';
+import { ListingStatContactRequests }								from './../listing-stat-contact-requests'
 
 @Component({
     selector: 'app-listing',
@@ -106,26 +104,21 @@ export class ListingComponent implements OnInit {
 		var id = this._Activatedroute.snapshot.paramMap.get("id");
 		
 		if (id ) {
-			//this.fetchListings(id);
-			
 
-			//START - Possibility of duplicate
-					
-			if (id ) {
-				let filters:ListingSearchRequest = new ListingSearchRequest();
-				filters.listingId = id;
-					this.listingService
-						.fetchAllListings('created',"desc", 0, 1, filters)
-							.subscribe(data => {
-								let lis:Array<Listing> = data.content;
-								if(lis[0]) {
-									this.showListingDetails(lis[0]);
-								}
-							}, 
-							err => {
-								console.log("Error retrieving listings for all recruiters" + JSON.stringify(err));			
-							});
+			let filters:ListingSearchRequest = new ListingSearchRequest();
+			filters.listingId = id;
+			this.listingService
+				.fetchAllListings('created',"desc", 0, 1, filters)
+				.subscribe(data => {
+					let lis:Array<Listing> = data.content;
+					if (lis[0]) {
+						this.showListingDetails(lis[0]);
 					}
+				}, 
+				err => {
+					console.log("Error retrieving listings for all recruiters" + JSON.stringify(err));			
+				});
+					
 			//END
 	
 		} else {
@@ -154,12 +147,39 @@ export class ListingComponent implements OnInit {
 		this.searchBar.resetSearchFilters();
 	}
 	
+	private listingContactStats:Array<ListingStatContactRequests> = new Array<ListingStatContactRequests>();
+	
 	public handleNewSearchRequest(newListings:Array<Listing>){
+		
 		this.listings = newListings;
 		if (this.searchBar.signalResetOfSearch == true) {
 			this.currentPage=0;
 			this.pageYPos=0;
 			this.searchBar.signalResetOfSearch=false;
+		}
+		
+		let ids:Array<string> = Array.from(new Set(this.listings.map(l => ''+l.listingId)));
+		
+		this.listingService.getListingContactRequestStats(ids).subscribe(statResults => {
+			statResults.forEach(stat => {
+				this.listingContactStats.push(stat);	
+			});
+			
+		});
+		
+	}
+	
+	/**
+	* Returns the stats relating for contact requests for a given Listing
+	*/
+	public getContactRequestStatForListing(listingId:string):ListingStatContactRequests {
+		
+		let matchingStat:ListingStatContactRequests = this.listingContactStats.filter(s => s.listingId == listingId)[0];
+		
+		if (matchingStat) {
+			return matchingStat;
+		} else {
+			return new ListingStatContactRequests(listingId, 777,777);
 		}
 		
 	}

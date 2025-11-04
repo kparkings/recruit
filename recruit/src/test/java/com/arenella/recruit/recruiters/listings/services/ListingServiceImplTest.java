@@ -5,6 +5,8 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import static org.mockito.Mockito.*;
+
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.HashSet;
@@ -19,9 +21,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -31,6 +31,8 @@ import com.arenella.recruit.listings.adapters.ExternalEventPublisher;
 import com.arenella.recruit.listings.adapters.RequestListingContactEmailCommand;
 import com.arenella.recruit.listings.beans.Listing;
 import com.arenella.recruit.listings.beans.ListingContactRequestEvent;
+import com.arenella.recruit.listings.beans.ListingContactRequestEvent.CONTACT_USER_TYPE;
+import com.arenella.recruit.listings.beans.ListingStatContactRequests;
 import com.arenella.recruit.listings.beans.ListingViewedEvent;
 import com.arenella.recruit.listings.controllers.ListingContactRequest;
 import com.arenella.recruit.listings.exceptions.ListingValidationException;
@@ -113,7 +115,7 @@ class ListingServiceImplTest {
 			throw new RuntimeException();
 		}
 		
-		Mockito.verify(mockListingRepository).saveListings(Mockito.anySet());
+		verify(mockListingRepository).saveListings(anySet());
 		
 	}
 	
@@ -144,8 +146,8 @@ class ListingServiceImplTest {
 		final Listing			listing			= Listing.builder().ownerId("kevin").title("a").description("b").ownerCompany("c").ownerName("d").ownerEmail("e").build();
 		final Listing 			existingListing = Listing.builder().ownerId("kevin").title("a").description("b").ownerCompany("c").ownerName("d").ownerEmail("e").build();
 		
-		Mockito.when(this.mockListingRepository.findListingById(listingId)).thenReturn(Optional.of(existingListing));
-		Mockito.when(mockAuthentication.getPrincipal()).thenReturn("notKevin");
+		when(this.mockListingRepository.findListingById(listingId)).thenReturn(Optional.of(existingListing));
+		when(mockAuthentication.getPrincipal()).thenReturn("notKevin");
 		
 		Assertions.assertThrows(AccessDeniedException.class, () -> {
 			this.service.updateListing(listingId, listing);
@@ -165,8 +167,8 @@ class ListingServiceImplTest {
 		final Listing			listing			= Listing.builder().ownerId("kevin2").title("a").description("b").ownerCompany("c").ownerName("d").ownerEmail("e").build();
 		final Listing 			existingListing = Listing.builder().ownerId("kevin2").title("a").description("b").ownerCompany("c").ownerName("d").ownerEmail("e").build();
 		
-		Mockito.when(this.mockListingRepository.findListingById(listingId)).thenReturn(Optional.of(existingListing));
-		Mockito.when(mockAuthentication.getPrincipal()).thenReturn("kevin");
+		when(this.mockListingRepository.findListingById(listingId)).thenReturn(Optional.of(existingListing));
+		when(mockAuthentication.getPrincipal()).thenReturn("kevin");
 		
 		Assertions.assertThrows(AccessDeniedException.class, () -> {
 			this.service.updateListing(listingId, listing);
@@ -200,8 +202,8 @@ class ListingServiceImplTest {
 		final UUID 				listingId 		= UUID.randomUUID();
 		final Listing 			listing 		= Listing.builder().ownerId("kevin").title("a").description("b").ownerCompany("c").ownerName("d").ownerEmail("e").build();
 		
-		Mockito.when(this.mockListingRepository.findListingById(listingId)).thenReturn(Optional.of(listing));
-		Mockito.when(mockAuthentication.getPrincipal()).thenReturn("notKevin");
+		when(this.mockListingRepository.findListingById(listingId)).thenReturn(Optional.of(listing));
+		when(mockAuthentication.getPrincipal()).thenReturn("notKevin");
 		
 		Assertions.assertThrows(AccessDeniedException.class, () -> {
 			this.service.deleteListing(listingId);
@@ -221,12 +223,12 @@ class ListingServiceImplTest {
 		final Listing			listing				= Listing.builder().ownerId("kevin").title("a").description("b").ownerCompany("c").ownerName("d").ownerEmail("e").build();
 		final Listing 			existingListing 	= Listing.builder().ownerId(ownerId).title("a").description("b").ownerCompany("c").ownerName("d").ownerEmail("e").build();
 		
-		Mockito.when(this.mockListingRepository.findListingById(listingId)).thenReturn(Optional.of(existingListing));
-		Mockito.when(mockAuthentication.getPrincipal()).thenReturn(ownerId);
+		when(this.mockListingRepository.findListingById(listingId)).thenReturn(Optional.of(existingListing));
+		when(mockAuthentication.getPrincipal()).thenReturn(ownerId);
 		
 		this.service.updateListing(listingId, listing);
 		
-		Mockito.verify(this.mockListingRepository).saveListings(Mockito.anySet());
+		verify(this.mockListingRepository).saveListings(anySet());
 	}
 	
 	/**
@@ -240,12 +242,12 @@ class ListingServiceImplTest {
 		final String	ownerId			= "kevin";
 		final Listing 	existingListing = Listing.builder().ownerId(ownerId).title("a").description("b").ownerCompany("c").ownerName("d").ownerEmail("e").build();
 		
-		Mockito.when(this.mockListingRepository.findListingById(listingId)).thenReturn(Optional.of(existingListing));
-		Mockito.when(mockAuthentication.getPrincipal()).thenReturn(ownerId);
+		when(this.mockListingRepository.findListingById(listingId)).thenReturn(Optional.of(existingListing));
+		when(mockAuthentication.getPrincipal()).thenReturn(ownerId);
 		
 		this.service.deleteListing(listingId);
 		
-		Mockito.verify(this.mockListingRepository).deleteById(listingId);
+		verify(this.mockListingRepository).deleteById(listingId);
 		
 	}
 	
@@ -333,78 +335,70 @@ class ListingServiceImplTest {
 	@Test
 	void testAddListingValidation_emptyStringValue() {
 
-		Assertions.assertThrows(ListingValidationException.class, () -> {
-			
-			Listing 			listing 		= Listing
-					.builder()
-						.title("  ")
-						.description("aDesc")
-						.ownerName("anOwnerName")
-						.ownerEmail("anEmail")
-						.ownerCompany("aCompany")
-					.build();
-
-			service.addListing(listing, true);
-
-		});
-
-		Assertions.assertThrows(ListingValidationException.class, () -> {
-			Listing 			listing 		= Listing
-					.builder()
-						.title("aTitle")
-						.description("  ")
-						.ownerName("anOwnerName")
-						.ownerEmail("anEmail")
-						.ownerCompany("aCompany")
-					.build();
-
-			service.addListing(listing, true);
-
-		});
-
-		Assertions.assertThrows(ListingValidationException.class, () -> {
-			Listing 			listing 		= Listing
-					.builder()
-						.title("aTitle")
-						.description("aDesc")
-						.ownerName("  ")
-						.ownerEmail("anEmail")
-						.ownerCompany("aCompany")
-					.build();
-
-			service.addListing(listing, true);
-
-		});
+		Listing listing1 = Listing
+				.builder()
+					.title("  ")
+					.description("aDesc")
+					.ownerName("anOwnerName")
+					.ownerEmail("anEmail")
+					.ownerCompany("aCompany")
+				.build();
 		
-		Assertions.assertThrows(ListingValidationException.class, () -> {
-			
-			Listing 			listing 		= Listing
-					.builder()
-						.title("aTitle")
-						.description("aDesc")
-						.ownerName("anOwnerName")
-						.ownerEmail("  ")
-						.ownerCompany("aCompany")
-					.build();
+		assertThrows(ListingValidationException.class, () -> 
+			service.addListing(listing1, true)
+		);
 
-			service.addListing(listing, true);
+		Listing listing2 = Listing
+				.builder()
+					.title("aTitle")
+					.description("  ")
+					.ownerName("anOwnerName")
+					.ownerEmail("anEmail")
+					.ownerCompany("aCompany")
+				.build();
+		
+		assertThrows(ListingValidationException.class, () -> 
+			service.addListing(listing2, true)
+		);
 
-		});
+		Listing listing3 = Listing
+				.builder()
+					.title("aTitle")
+					.description("aDesc")
+					.ownerName("  ")
+					.ownerEmail("anEmail")
+					.ownerCompany("aCompany")
+				.build();
+		
+		assertThrows(ListingValidationException.class, () -> 
+			service.addListing(listing3, true)
+		);
+		
+		Listing listing4 = Listing
+				.builder()
+					.title("aTitle")
+					.description("aDesc")
+					.ownerName("anOwnerName")
+					.ownerEmail("  ")
+					.ownerCompany("aCompany")
+				.build();
+		
+		assertThrows(ListingValidationException.class, () -> 
+			service.addListing(listing4, true)
+		);
 
-		Assertions.assertThrows(ListingValidationException.class, () -> {
-			
-			Listing 			listing 		= Listing
-					.builder()
-						.title(null)
-						.description("aDesc")
-						.ownerName("anOwnerName")
-						.ownerEmail("anEmail")
-						.ownerCompany("  ")
-					.build();
-
-			service.addListing(listing, true);
-			
-		});
+		Listing listing5 = Listing
+				.builder()
+					.title(null)
+					.description("aDesc")
+					.ownerName("anOwnerName")
+					.ownerEmail("anEmail")
+					.ownerCompany("  ")
+				.build();
+		
+		assertThrows(ListingValidationException.class, () -> 
+			service.addListing(listing5, true)
+		);
 
 	}
 	
@@ -420,14 +414,14 @@ class ListingServiceImplTest {
 		Collection authorities = new HashSet<>();
 		authorities.add(new SimpleGrantedAuthority("ROLE_RECRUITER"));
 
-		Mockito.when(mockAuthentication.getAuthorities()).thenReturn(authorities);
+		when(mockAuthentication.getAuthorities()).thenReturn(authorities);
 		
-		final UUID eventId 		= UUID.randomUUID();
-		final UUID listingId 	= UUID.randomUUID();
-		final LocalDateTime created = LocalDateTime.of(2022, 1, 14, 10, 11, 12);
-		ListingViewedEvent event = ListingViewedEvent.builder().eventId(eventId).created(created).listingId(listingId).build();
+		final UUID 			eventId 	= UUID.randomUUID();
+		final UUID 			listingId 	= UUID.randomUUID();
+		final LocalDateTime created 	= LocalDateTime.of(2022, 1, 14, 10, 11, 12);
+		ListingViewedEvent 	event 		= ListingViewedEvent.builder().eventId(eventId).created(created).listingId(listingId).build();
 		
-		Assertions.assertThrows(IllegalArgumentException.class, () -> {
+		assertThrows(IllegalArgumentException.class, () -> {
 			this.service.registerListingViewedEvent(event);
 		});
 		
@@ -444,7 +438,7 @@ class ListingServiceImplTest {
 		Collection authorities = new HashSet<>();
 		authorities.add(new SimpleGrantedAuthority("ROLE_RECRUITER"));
 
-		Mockito.when(mockAuthentication.getAuthorities()).thenReturn(authorities);
+		when(mockAuthentication.getAuthorities()).thenReturn(authorities);
 		
 		final UUID eventId 		= UUID.randomUUID();
 		final UUID listingId 	= UUID.randomUUID();
@@ -453,11 +447,11 @@ class ListingServiceImplTest {
 		ListingViewedEvent 	event 		= ListingViewedEvent.builder().eventId(eventId).created(created).listingId(listingId).build();
 		Listing 			listingObj  = Listing.builder().created(created).listingId(listingId).build();
 				
-		Mockito.when(this.mockListingRepository.findListingById(event.getListingId())).thenReturn(Optional.of(listingObj));
+		when(this.mockListingRepository.findListingById(event.getListingId())).thenReturn(Optional.of(listingObj));
 		
 		this.service.registerListingViewedEvent(event);
 		
-		Mockito.verify(this.mockListingRepository, Mockito.times(1)).saveListings(Mockito.anySet());
+		verify(this.mockListingRepository, times(1)).saveListings(anySet());
 		
 	}
 	
@@ -472,7 +466,7 @@ class ListingServiceImplTest {
 		Collection authorities = new HashSet<>();
 		authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
 
-		Mockito.when(mockAuthentication.getAuthorities()).thenReturn(authorities);
+		when(mockAuthentication.getAuthorities()).thenReturn(authorities);
 		
 		final UUID eventId 		= UUID.randomUUID();
 		final UUID listingId 	= UUID.randomUUID();
@@ -482,7 +476,7 @@ class ListingServiceImplTest {
 		
 		this.service.registerListingViewedEvent(event);
 		
-		Mockito.verify(this.mockListingRepository, Mockito.times(0)).save(Mockito.any());
+		verify(this.mockListingRepository, times(0)).save(any());
 		
 	}
 	
@@ -493,14 +487,16 @@ class ListingServiceImplTest {
 	@Test
 	void testSendContactRequestToListingOwner_unsafeFile() {
 		
-		Mockito.when(this.mockFileSecurityParser.isSafe(Mockito.any())).thenReturn(false);
-		MultipartFile mockMultipartFile = Mockito.mock(MultipartFile.class);
+		when(this.mockFileSecurityParser.isSafe(any())).thenReturn(false);
+		MultipartFile mockMultipartFile = mock(MultipartFile.class);
 		
-		Assertions.assertThrows(RuntimeException.class, () -> {
-			this.service.sendContactRequestToListingOwner(ListingContactRequest.builder().attachment(mockMultipartFile).build());
+		ListingContactRequest req = ListingContactRequest.builder().attachment(mockMultipartFile).build();
+		
+		assertThrows(RuntimeException.class, () -> {
+			this.service.sendContactRequestToListingOwner(req);
 		});
 		
-		Mockito.verify(this.mockListingContactRequestEventDao, Mockito.never()).persistEvent(Mockito.any(ListingContactRequestEvent.class));
+		verify(this.mockListingContactRequestEventDao, never()).persistEvent(any(ListingContactRequestEvent.class));
 		
 	}
 
@@ -511,15 +507,17 @@ class ListingServiceImplTest {
 	@Test
 	void testSendContactRequestToListingOwner_unknownListing() {
 		
-		Mockito.when(this.mockFileSecurityParser.isSafe(Mockito.any())).thenReturn(true);
-		Mockito.when(this.mockListingRepository.findListingById(Mockito.any(UUID.class))).thenReturn(Optional.empty());
+		when(this.mockFileSecurityParser.isSafe(any())).thenReturn(true);
+		when(this.mockListingRepository.findListingById(any(UUID.class))).thenReturn(Optional.empty());
 		
-		Assertions.assertThrows(RuntimeException.class, () -> {
-			this.service.sendContactRequestToListingOwner(ListingContactRequest.builder().build());
+		ListingContactRequest req = ListingContactRequest.builder().build();
+		
+		assertThrows(RuntimeException.class, () -> {
+			this.service.sendContactRequestToListingOwner(req);
 		});
 		
 		
-		Mockito.verify(this.mockListingContactRequestEventDao, Mockito.never()).persistEvent(Mockito.any(ListingContactRequestEvent.class));
+		verify(this.mockListingContactRequestEventDao, never()).persistEvent(any(ListingContactRequestEvent.class));
 		
 	}
 	
@@ -533,7 +531,7 @@ class ListingServiceImplTest {
 		final UUID				listingId		= UUID.randomUUID();
 		final String 			title 			= "Java Developer";
 		final String 			ownerId			= "kparkings001";
-		final MultipartFile 	attachment 		= Mockito.mock(MultipartFile.class);
+		final MultipartFile 	attachment 		= mock(MultipartFile.class);
 		final String			message			= "dear recruiter blah blah";
 		final String 			senderName		= "Kevin Parkings";
 		final String			senderEmail		= "admin@arenella-ict.com";
@@ -544,12 +542,12 @@ class ListingServiceImplTest {
 		
 		final Listing listing = Listing.builder().title(title).ownerId(ownerId).build();
 		
-		Mockito.when(this.mockFileSecurityParser.isSafe(Mockito.any())).thenReturn(true);
-		Mockito.when(this.mockListingRepository.findListingById(Mockito.any(UUID.class))).thenReturn(Optional.of(listing));
-		Mockito.when(this.mockFileSecurityParser.getFileType(Mockito.any())).thenReturn(fileType);
-		Mockito.when(attachment.getBytes()).thenReturn(attachmentBytes);
+		when(this.mockFileSecurityParser.isSafe(any())).thenReturn(true);
+		when(this.mockListingRepository.findListingById(any(UUID.class))).thenReturn(Optional.of(listing));
+		when(this.mockFileSecurityParser.getFileType(any())).thenReturn(fileType);
+		when(attachment.getBytes()).thenReturn(attachmentBytes);
 		
-		Mockito.doNothing().when(this.mockExternalEventPublisher).publicRequestSendListingContactEmailCommand(capt.capture());
+		doNothing().when(this.mockExternalEventPublisher).publicRequestSendListingContactEmailCommand(capt.capture());
 		
 		ListingContactRequest contactRequest = 
 				ListingContactRequest
@@ -571,7 +569,7 @@ class ListingServiceImplTest {
 		assertEquals(senderEmail, 			capt.getValue().getSenderEmail());
 		assertEquals(senderName, 			capt.getValue().getSenderName());
 		
-		Mockito.verify(this.mockListingContactRequestEventDao).persistEvent(Mockito.any(ListingContactRequestEvent.class));
+		verify(this.mockListingContactRequestEventDao).persistEvent(any(ListingContactRequestEvent.class));
 		
 	}
 	
@@ -589,12 +587,12 @@ class ListingServiceImplTest {
 		@SuppressWarnings("unchecked")
 		ArgumentCaptor<Set<Listing>> listingArgCapt = ArgumentCaptor.forClass(Set.class);
 		
-		Mockito.when(this.mockListingRepository.findAllListings(Mockito.any(), Mockito.any())).thenReturn(listings);
-		Mockito.doNothing().when(this.mockListingRepository).saveListings(listingArgCapt.capture());
+		when(this.mockListingRepository.findAllListings(any(), any())).thenReturn(listings);
+		doNothing().when(this.mockListingRepository).saveListings(listingArgCapt.capture());
 		
 		this.service.enableListingsForRecruiter(recruiterId);
 		
-		Mockito.verify(this.mockListingRepository).saveListings(Mockito.anySet());
+		verify(this.mockListingRepository).saveListings(anySet());
 		
 		listingArgCapt.getValue().stream().forEach(l -> Assertions.assertTrue(l.isActive()));
 		
@@ -614,12 +612,12 @@ class ListingServiceImplTest {
 		@SuppressWarnings("unchecked")
 		ArgumentCaptor<Set<Listing>> listingArgCapt = ArgumentCaptor.forClass(Set.class);
 		
-		Mockito.when(this.mockListingRepository.findAllListings(Mockito.any(), Mockito.any())).thenReturn(listings);
-		Mockito.doNothing().when(this.mockListingRepository).saveListings(listingArgCapt.capture());
+		when(this.mockListingRepository.findAllListings(any(), any())).thenReturn(listings);
+		doNothing().when(this.mockListingRepository).saveListings(listingArgCapt.capture());
 		
 		this.service.disableListingsForRecruiter(recruiterId);
 		
-		Mockito.verify(this.mockListingRepository).saveListings(Mockito.anySet());
+		verify(this.mockListingRepository).saveListings(anySet());
 		
 		listingArgCapt.getValue().stream().forEach(l -> Assertions.assertFalse(l.isActive()));
 		
@@ -639,8 +637,8 @@ class ListingServiceImplTest {
 		RecruiterCredit rc2 = RecruiterCredit.builder().recruiterId("rec2").credits(2).build();
 		RecruiterCredit rc3 = RecruiterCredit.builder().recruiterId("rec3").credits(RecruiterCredit.DISABLED_CREDITS).build();
 		
-		Mockito.doNothing().when(this.mockCreditDao).saveAll(argCapt.capture());
-		Mockito.when(this.mockCreditDao.fetchRecruiterCredits()).thenReturn(Set.of(rc1,rc2,rc3));
+		doNothing().when(this.mockCreditDao).saveAll(argCapt.capture());
+		when(this.mockCreditDao.fetchRecruiterCredits()).thenReturn(Set.of(rc1,rc2,rc3));
 		
 		service.updateCredits(new GrantCreditCommand());
 		
@@ -656,7 +654,7 @@ class ListingServiceImplTest {
 	@Test
 	void testDoCreditsCheck_unknownUser() {
 		
-		Mockito.when(this.mockCreditDao.getByRecruiterId(Mockito.anyString())).thenReturn(Optional.empty());
+		when(this.mockCreditDao.getByRecruiterId(anyString())).thenReturn(Optional.empty());
 		
 		assertFalse(service.doCreditsCheck("recruiter33"));
 		
@@ -671,7 +669,7 @@ class ListingServiceImplTest {
 		
 		RecruiterCredit rc = RecruiterCredit.builder().credits(0).build();
 		
-		Mockito.when(this.mockCreditDao.getByRecruiterId(Mockito.anyString())).thenReturn(Optional.of(rc));
+		when(this.mockCreditDao.getByRecruiterId(anyString())).thenReturn(Optional.of(rc));
 		
 		assertFalse(service.doCreditsCheck("recruiter33"));
 		
@@ -686,7 +684,7 @@ class ListingServiceImplTest {
 		
 		RecruiterCredit rc = RecruiterCredit.builder().credits(1).build();
 		
-		Mockito.when(this.mockCreditDao.getByRecruiterId(Mockito.anyString())).thenReturn(Optional.of(rc));
+		when(this.mockCreditDao.getByRecruiterId(anyString())).thenReturn(Optional.of(rc));
 		
 		assertTrue(service.doCreditsCheck("recruiter33"));
 		
@@ -706,12 +704,12 @@ class ListingServiceImplTest {
 		
 		RecruiterCredit recCredits = RecruiterCredit.builder().recruiterId(userId).credits(30).build();
 		
-		Mockito.when(this.mockCreditDao.getByRecruiterId(userId)).thenReturn(Optional.of(recCredits));
-		Mockito.doNothing().when(this.mockCreditDao).persist(argCapt.capture());
+		when(this.mockCreditDao.getByRecruiterId(userId)).thenReturn(Optional.of(recCredits));
+		doNothing().when(this.mockCreditDao).persist(argCapt.capture());
 		
 		this.service.updateCreditsForUser(userId, credits);
 	
-		Mockito.verify(this.mockCreditDao).persist(Mockito.any());
+		verify(this.mockCreditDao).persist(any());
 		
 		assertEquals(credits, argCapt.getValue().getCredits());
 		
@@ -727,11 +725,11 @@ class ListingServiceImplTest {
 		final String 	userId 		= "kparkings";
 		final int 		credits 	= 20;
 
-		Mockito.when(this.mockCreditDao.getByRecruiterId(userId)).thenReturn(Optional.empty());
+		when(this.mockCreditDao.getByRecruiterId(userId)).thenReturn(Optional.empty());
 		
 		this.service.updateCreditsForUser(userId, credits);
 	
-		Mockito.verify(this.mockCreditDao, Mockito.never()).persist(Mockito.any());
+		verify(this.mockCreditDao, never()).persist(any());
 		
 	}
 	
@@ -742,7 +740,7 @@ class ListingServiceImplTest {
 	@Test
 	void testGetCreditCountForUser_unknownUser() {
 		
-		Mockito.when(this.mockCreditDao.getByRecruiterId(Mockito.anyString())).thenReturn(Optional.empty());
+		when(this.mockCreditDao.getByRecruiterId(anyString())).thenReturn(Optional.empty());
 		
 		assertThrows(IllegalArgumentException.class, () -> {
 			this.service.getCreditCountForUser("rec22");
@@ -761,7 +759,7 @@ class ListingServiceImplTest {
 		
 		RecruiterCredit rc = RecruiterCredit.builder().credits(credits).build();
 		
-		Mockito.when(this.mockCreditDao.getByRecruiterId(Mockito.anyString())).thenReturn(Optional.of(rc));
+		when(this.mockCreditDao.getByRecruiterId(anyString())).thenReturn(Optional.of(rc));
 		
 		assertEquals(credits, this.service.getCreditCountForUser("rec22"));
 		
@@ -776,11 +774,59 @@ class ListingServiceImplTest {
 		
 		final String recruiterId = "anId";
 		
-		Mockito.when(this.mockListingRepository.findAllListings(Mockito.any(), Mockito.any())).thenReturn(Set.of(Listing.builder().listingId(UUID.randomUUID()).build(), Listing.builder().listingId(UUID.randomUUID()).build()));
+		when(this.mockListingRepository.findAllListings(any(), any())).thenReturn(Set.of(Listing.builder().listingId(UUID.randomUUID()).build(), Listing.builder().listingId(UUID.randomUUID()).build()));
 		
 		this.service.deleteRecruiterListings(recruiterId);
 		
-		Mockito.verify(this.mockListingRepository, Mockito.times(2)).deleteById(Mockito.any());
+		verify(this.mockListingRepository, times(2)).deleteById(any());
+		
+	}
+	
+	/**
+	* Test grouping of individual events into stats
+	*/
+	@Test
+	void testFetchListingContactRequestStats() {
+		
+		UUID listing1Id = UUID.randomUUID();
+		UUID listing2Id = UUID.randomUUID();
+		UUID listing3Id = UUID.randomUUID();
+		
+		ListingContactRequestEvent ev1 = ListingContactRequestEvent.builder().eventId(null).listingId(listing1Id).userType(CONTACT_USER_TYPE.REGISTERED).build();
+		ListingContactRequestEvent ev2 = ListingContactRequestEvent.builder().eventId(null).listingId(listing2Id).userType(CONTACT_USER_TYPE.REGISTERED).build();
+		ListingContactRequestEvent ev3 = ListingContactRequestEvent.builder().eventId(null).listingId(listing3Id).userType(CONTACT_USER_TYPE.UNREGISTERED).build();
+		ListingContactRequestEvent ev4 = ListingContactRequestEvent.builder().eventId(null).listingId(listing1Id).userType(CONTACT_USER_TYPE.UNREGISTERED).build();
+		ListingContactRequestEvent ev5 = ListingContactRequestEvent.builder().eventId(null).listingId(listing1Id).userType(CONTACT_USER_TYPE.REGISTERED).build();
+		ListingContactRequestEvent ev6 = ListingContactRequestEvent.builder().eventId(null).listingId(listing1Id).userType(CONTACT_USER_TYPE.REGISTERED).build();
+		ListingContactRequestEvent ev7 = ListingContactRequestEvent.builder().eventId(null).listingId(listing2Id).userType(CONTACT_USER_TYPE.UNREGISTERED).build();
+		ListingContactRequestEvent ev8 = ListingContactRequestEvent.builder().eventId(null).listingId(listing3Id).userType(CONTACT_USER_TYPE.UNREGISTERED).build();
+		ListingContactRequestEvent ev9 = ListingContactRequestEvent.builder().eventId(null).listingId(listing3Id).userType(CONTACT_USER_TYPE.REGISTERED).build();
+		ListingContactRequestEvent ev0 = ListingContactRequestEvent.builder().eventId(null).listingId(listing3Id).userType(CONTACT_USER_TYPE.UNREGISTERED).build();
+		
+		Set<ListingContactRequestEvent> events = Set.of(ev1,ev2,ev3,ev4,ev5,ev6,ev7,ev8,ev9,ev0);
+		
+		when(this.mockListingContactRequestEventDao.fetchEventForListings(anySet())).thenReturn(events);
+		
+		Set<UUID> ids = new HashSet<>();
+		
+		ids.add(listing1Id);
+		ids.add(listing2Id);
+		ids.add(listing3Id);
+		
+		Set<ListingStatContactRequests> stats = this.service.fetchListingContactRequestStats(ids);
+		
+		ListingStatContactRequests stat1 = stats.stream().filter(s -> s.getListingId() == listing1Id).findAny().orElseThrow();
+		ListingStatContactRequests stat2 = stats.stream().filter(s -> s.getListingId() == listing2Id).findAny().orElseThrow();
+		ListingStatContactRequests stat3 = stats.stream().filter(s -> s.getListingId() == listing3Id).findAny().orElseThrow();
+		
+		assertEquals(3, stat1.getRegisteredUserRequests());
+		assertEquals(1, stat1.getUnregisteredUserRequests());
+		
+		assertEquals(1, stat2.getRegisteredUserRequests());
+		assertEquals(1, stat1.getUnregisteredUserRequests());
+		
+		assertEquals(1, stat3.getRegisteredUserRequests());
+		assertEquals(3, stat3.getUnregisteredUserRequests());
 		
 	}
 	

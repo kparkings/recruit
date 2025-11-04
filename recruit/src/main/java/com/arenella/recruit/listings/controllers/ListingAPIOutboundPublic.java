@@ -36,6 +36,7 @@ public class ListingAPIOutboundPublic {
 	private Set<String>			skills				= new LinkedHashSet<>();
 	private String 				rate;
 	private currency			currency;
+	private int 				views;
 	
 	/**
 	* Constructor based upon a builder
@@ -57,6 +58,7 @@ public class ListingAPIOutboundPublic {
 		this.yearsExperience 	= builder.yearsExperience;
 		this.rate 				= builder.rate;
 		this.currency 			= builder.currency;
+		this.views				= builder.views;
 		
 		this.languages.addAll(builder.languages);
 		this.skills.addAll(builder.skills);
@@ -188,12 +190,21 @@ public class ListingAPIOutboundPublic {
 	}
 	
 	/**
-	* Returns the Id of the Recruiter who pwns
+	* Returns the Id of the Recruiter who owns
 	* the Listing
 	* @return id of Owner
 	*/
 	public String getOwnerId() {
 		return this.ownerId;
+	}
+	
+	/**
+	* Returns the number of times the Listing has
+	* been viewed
+	* @return views by candidates 
+	*/
+	public int getViews() {
+		return this.views;
 	}
 	
 	/**
@@ -226,6 +237,7 @@ public class ListingAPIOutboundPublic {
 		private Set<String>			skills				= new LinkedHashSet<>();
 		private String 				rate;
 		private currency			currency;
+		private int					views;
 		
 		/**
 		* Sets the Unique Identifier for the Listing
@@ -393,6 +405,16 @@ public class ListingAPIOutboundPublic {
 		}
 		
 		/**
+		* Sets the number of times the Listing has been viewed
+		* @param views - number of views
+		* @return Builder
+		*/
+		public ListingAPIOutboundBuilder views(int views) {
+			this.views = views;
+			return this;
+		}
+		
+		/**
 		* Returns an instantiated instance of the ListingAPIOutbound class
 		* @return instance of Listing
 		*/
@@ -429,6 +451,7 @@ public class ListingAPIOutboundPublic {
 									.ownerCompany(listing.getOwnerCompany())
 									.ownerEmail(listing.getOwnerEmail())
 									.ownerId(listing.getOwnerId())
+									.views(listing.getViews().size())
 								.build();
 		
 	}

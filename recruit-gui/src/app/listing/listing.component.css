@@ -25,34 +25,44 @@
 }
 
 .job-post {
-	width: 22%;
-	height: 150px;
-	padding: 20px;
-	padding-left:2px;
-	padding-right:2px;
-	background: #e8e8e8;
+	width: 100%;
+	height: 120px;
 	margin-top: 15px;
 	margin-right: 3%;
 	display: inline-block;
 	vertical-align: top;
 	cursor: pointer;
+	border-bottom:1px solid #002549;	
+}
+
+.listing-country-title{
+	font-weight:bold;
+}
+
+.contract-type-listing{
+ 	float:right;
+ 	width:200px;
+ 	text-align:center;	
 }
 
 .listing-title {
     font-weight: 700;
+    font-size:20px;
     width: 100%;
     padding-top: 0;
     padding-bottom: 0;
     min-width: 100%;
-    text-align: center;
+    text-align: left;
     margin-bottom:5px;
-    height:50px;
+    height:40px;
 }
 
 .listing-country {
 	display: table;
-	margin: 0 auto;
 	margin-top:0px;
+	margin-bottom:10px;
+	line-height:20px;
+	width:30px;
 }
 
 .job-post-contract-type {
@@ -248,14 +258,18 @@
 	float:left;
 	padding:10px;
 	margin:1px;
+	margin-top:25px;
+	margin-right:20px;	
 	width:24%;
 	max-width:24%;
+	border:2px solid grey;
+	border-radius:0px 10px 10px 0px;
 }
 
 .listing-pane-right{
 	float:left;
 	padding:10px;
-	width:75%;
+	width:70%;
 }
 
 .hideChild{
@@ -265,4 +279,16 @@
 
 .showChild{
 	visibility:visible;
+}
+
+.listing-view-table th {
+	width:80px;
+	font-weight:bold;
+	
+}
+
+.listing-view-table td {
+	width:80px;
+	padding-left:20px;
+	padding-right:20px;
 }

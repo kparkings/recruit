@@ -1,5 +1,6 @@
 package com.arenella.recruit.listings.services;
 
+import java.util.Set;
 import java.util.UUID;
 
 import org.springframework.data.domain.Page;
@@ -8,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import com.arenella.recruit.adapters.actions.GrantCreditCommand;
 import com.arenella.recruit.listings.beans.Listing;
 import com.arenella.recruit.listings.beans.ListingFilter;
+import com.arenella.recruit.listings.beans.ListingStatContactRequests;
 import com.arenella.recruit.listings.beans.ListingViewedEvent;
 import com.arenella.recruit.listings.controllers.CandidateListingContactRequest;
 import com.arenella.recruit.listings.controllers.ListingContactRequest;
@@ -130,5 +132,13 @@ public interface ListingService {
 	* for the User
 	*/
 	void addCreditsRecordForUser(String userId);
+
+	/**
+	* Returns contact request statistics for Listing whose Ids
+	* are in the id parameter
+	* @param ids - Listing Ids to retrieve stats for
+	* @return Stats for Listings
+	*/
+	public Set<ListingStatContactRequests> fetchListingContactRequestStats(Set<UUID> ids);
 
 }

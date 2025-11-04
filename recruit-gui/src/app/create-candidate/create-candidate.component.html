@@ -1,5 +1,5 @@
 <div class="page">
-	<div class="nav-tabs-bar"></div>
+	<div class="nav-tabs-bar" *ngIf="isAuthenticated()"></div>
     <div class="page-body" style="width:95%;">
     	<div class="center-div">
     		<form [formGroup]="formBean">

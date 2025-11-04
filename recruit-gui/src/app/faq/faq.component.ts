@@ -8,4 +8,11 @@ import { Component } from '@angular/core';
 })
 export class FaqComponent {
 
+	/**
+	* Whether or not the user has authenticated with the System 
+	*/
+	public isAuthenticated():boolean {
+		return sessionStorage.getItem('loggedIn') === 'true';
+	}
+	
 }

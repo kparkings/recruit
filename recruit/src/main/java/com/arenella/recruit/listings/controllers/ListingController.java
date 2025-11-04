@@ -154,6 +154,18 @@ public class ListingController {
 	}
 	
 	/**
+	* Returns statistics relating to the number of contact requests sent to the Recruiter
+	* relating to the Listings whose id's are specified in the url param ids
+	* @param ids - list of listingIds to return stat's for
+	* @return Status for listings
+	*/
+	@GetMapping(value="/listing/public/stats/contact-requests")
+	public ResponseEntity<Set<ListingStatContactRequestsAPIOutbound>> fetchListingContactRequestStats(@RequestParam UUID[] ids) {
+		return ResponseEntity.ok(this.service.fetchListingContactRequestStats(Set.of(ids))
+				.stream().map(ListingStatContactRequestsAPIOutbound::fromDomain).collect(Collectors.toSet()));
+	}
+	
+	/**
 	* Logs a viewed Listing event
 	* @param listingId
 	*/

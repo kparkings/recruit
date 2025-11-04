@@ -1,7 +1,7 @@
 <div class="page">
 
 	<!-- Nav options -->
-	<div class="nav-tabs-bar"></div>
+	<div class="nav-tabs-bar" *ngIf="isAuthenticated()"></div>
 
 	<div class="page-body">
 		<div [ngSwitch]="activeView">
@@ -24,7 +24,7 @@
 				
 					<div class="listing-pane" >
 					
-						<div class="listing-pane-left">
+						<div class="listing-pane-left non-mobile-only-element">
 							
 							<table class="listing-stats-pane" style="table-layout: fixed">
 								<tr style="padding-bottom:20px;">
@@ -35,7 +35,7 @@
 								<tr *ngFor="let stat of stats.countryStats">
 									<td style="width:150px;font-size:14px;">{{stat.country | translate}}</td>
 									<td style="padding-left:5px;width:180px;">
-										<div class="stat-option-bar" [ngStyle]="{'width':(stat.percentageOfTotal/highestCountryPerc*100)+'%','background':'green', 'max-width':'180px'}">
+										<div class="stat-option-bar" [ngStyle]="{'width':(stat.percentageOfTotal/highestCountryPerc*100)+'%','background':'#adb5bd', 'max-width':'180px'}">
 										</div>
 									</td>
 								</tr>
@@ -47,7 +47,7 @@
 								<tr *ngFor="let stat of stats.functionStats">
 									<td style="width:150px;font-size:14px;">{{(stat.function) | translate}}</td>
 									<td style="padding-left:5px;width:180px;">
-										<div class="stat-option-bar" [ngStyle]="{'width':(stat.percentageOfTotal/highestFunctionPerc*100)+'%','background':'orange', 'max-width':'180px'}">
+										<div class="stat-option-bar" [ngStyle]="{'width':(stat.percentageOfTotal/highestFunctionPerc*100)+'%','background':'#adb5bd', 'max-width':'180px'}">
 										</div>
 									</td>
 									
@@ -70,16 +70,44 @@
 										<a style="color:#002549;" href="{{getExternalUrl(listing.listingId)}}" (click)="handleClick($event)" id="{{getFormattedJobTitle(listing.title)}}" title="{{getFormattedJobTitle(listing.title)}}">
 											{{getFormattedJobTitle(listing.title)}}
 										</a>
+										<span class="non-mobile-only-element contract-type-listing">{{getContractType(listing.type)}}</span>
 									</div>
-									<div class="listing-country">
-										<span title="{{listing.listingId}}" class="flag-icon flag-icon-{{getCountryISO2Code(listing.country)}} suggestion-flag-country listing-country"></span>
+									<div class="listing-country ">
+										<table class="non-mobile-only-element" style="width:500px;">
+											<tr>
+												<td style="width:500px;">
+													<span class="non-mobile-only-element listing-country-title"  style="float:left">{{listing.country | translate}}</span>
+													<span class="non-mobile-only-element"  style="float:left;margin-left:10px;">{{listing.location}}</span>
+												</td> 
+											</tr>
+											
+										</table>
+										<table class="mobile-only-element">
+											<tr>
+											<tr>
+												<td>
+													<span title="{{listing.listingId}}" class="flag-icon flag-icon-{{getCountryISO2Code(listing.country)}} suggestion-flag-country listing-country mobile-only-element"></span>
+												</td> 
+											</tr>
+										</table>
 									</div>
-									<div class="job-post-contract-type">
+									<div class="job-post-contract-type mobile-only-element">
 										{{getContractType(listing.type)}}
+									</div>
+									<div class="non-mobile-only-element">
+										<table class="listing-view-table">
+											<tr>
+												<th>{{'listings-views' | translate}}</th>
+												<td>{{listing.views}}</td>
+												<th>{{'listings-applications' | translate}}</th>
+												<td>{{getContactRequestStatForListing(listing.listingId).registeredUserRequests + getContactRequestStatForListing(listing.listingId).unregisteredUserRequests}}</td>
+											</tr>
+										</table>
 									</div>
 									<div>
 										<a href="{{getExternalUrl(listing.listingId)}}"></a>
 									</div>
+									
 								</div>
 							</div>
 						</div>
@@ -105,8 +133,8 @@
 				<div>
 	       			
 	       			<div class="desc-body">
-			       		<h1 class="listing-view-title">{{selectedListing.title}}</h1>	
-						<div>
+			       		<h1 class="listing-view-title">{{selectedListing.title}}</h1>
+			       		<div>
 							<div>
 								<pre style="white-space:pre-line;font-family: Roboto, 'Helvetica Neue', sans-serif;">{{selectedListing.description}}</pre>
 							</div>

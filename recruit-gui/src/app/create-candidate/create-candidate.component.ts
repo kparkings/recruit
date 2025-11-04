@@ -319,4 +319,11 @@ export class CreateCandidateComponent implements OnInit {
 		this.permOnChange(!this.formBean.get('perm')?.value);
 	}
 	
+	/**
+	* Whether or not the user has authenticated with the System 
+	*/
+	public isAuthenticated():boolean {
+		return sessionStorage.getItem('loggedIn') === 'true';
+	}
+	
 }

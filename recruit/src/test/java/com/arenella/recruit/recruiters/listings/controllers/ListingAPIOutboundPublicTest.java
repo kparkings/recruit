@@ -49,6 +49,7 @@ class ListingAPIOutboundPublicTest {
 	private final 			String 						ownerCompany		= "Arenella BV";
 	private final 			String						ownerEmail			= "admin@arenella-ict.com";
 	
+	
 	/**
 	* Sets up test environment 
 	*/
@@ -83,6 +84,7 @@ class ListingAPIOutboundPublicTest {
 														.type(type)
 														.yearsExperience(yearsExperience)
 														.ownerId(ownerId)
+														.views(views.size())
 													.build();
 		
 		assertEquals(country, 			listing.getCountry());
@@ -99,6 +101,7 @@ class ListingAPIOutboundPublicTest {
 		assertEquals(ownerCompany, 		listing.getOwnerCompany());
 		assertEquals(ownerEmail, 		listing.getOwnerEmail());
 		assertEquals(ownerId, 			listing.getOwnerId());
+		assertEquals(1, 				listing.getViews());
 		
 		assertTrue(listing.getLanguages().contains(Listing.language.DUTCH));
 		assertTrue(listing.getLanguages().contains(Listing.language.FRENCH));
@@ -153,6 +156,7 @@ class ListingAPIOutboundPublicTest {
 					.yearsExperience(yearsExperience)
 					.views(views)
 					.ownerId(ownerId)
+					.views(views)
 				.build();
 		
 		ListingAPIOutboundPublic outbound = ListingAPIOutboundPublic.convertFromListing(listing);
@@ -171,6 +175,7 @@ class ListingAPIOutboundPublicTest {
 		assertEquals(ownerCompany, 		outbound.getOwnerCompany());
 		assertEquals(ownerEmail, 		outbound.getOwnerEmail());
 		assertEquals(ownerId, 			outbound.getOwnerId());
+		assertEquals(1, 				outbound.getViews());
 		
 		assertTrue(outbound.getLanguages().contains(Listing.language.DUTCH));
 		assertTrue(outbound.getLanguages().contains(Listing.language.FRENCH));

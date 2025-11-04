@@ -58,6 +58,7 @@
 	
 	.listing-pane-right{
 		width:100%;
+		margin-top:20px;
 	}
 
 	.search-filter-pane{
@@ -113,6 +114,8 @@
 		border-top: solid 1px grey;
 		width:100%;
 		margin-top:0px;
+		border-bottom:none;
+		height:150px;	
 	}
 	
 	.listing-view-title{
@@ -132,6 +135,28 @@
 	.contact-recruiter-header{
 		color:#002549;
 		text-align:center;
+	}
+	
+	
+	.listing-title {
+	    font-weight: 700;
+	    width: 100%;
+	    font-size:16px;
+	    padding-top: 20px;
+	    padding-bottom: 0;
+	    min-width: 100%;
+	    text-align: center;
+	    margin-bottom:5px;
+	    height:50px;
+	}
+	
+	.listing-country {
+		display: table;
+		margin: 0 auto;
+		margin-top:10px;
+		margin-bottom:0px;
+    	width: 1.33333em;
+    	line-height: 1em;
 	}
 	
 }

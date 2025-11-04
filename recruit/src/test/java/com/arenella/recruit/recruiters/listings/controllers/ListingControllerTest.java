@@ -36,6 +36,7 @@ import com.arenella.recruit.listings.beans.Listing.language;
 import com.arenella.recruit.listings.beans.Listing.listing_type;
 import com.arenella.recruit.authentication.spring.filters.ClaimsUsernamePasswordAuthenticationToken;
 import com.arenella.recruit.listings.beans.ListingFilter;
+import com.arenella.recruit.listings.beans.ListingStatContactRequests;
 import com.arenella.recruit.listings.beans.ListingViewedEvent;
 import com.arenella.recruit.listings.controllers.CandidateListingContactRequest;
 import com.arenella.recruit.listings.controllers.ListingAPIInbound;
@@ -44,8 +45,10 @@ import com.arenella.recruit.listings.controllers.ListingAPIOutboundPublic;
 import com.arenella.recruit.listings.controllers.ListingContactRequest;
 import com.arenella.recruit.listings.controllers.ListingController;
 import com.arenella.recruit.listings.controllers.ListingSearchRequestAPIInbound;
+import com.arenella.recruit.listings.controllers.ListingStatContactRequestsAPIOutbound;
 import com.arenella.recruit.listings.services.ListingService;
 import com.arenella.recruit.listings.utils.ListingAlertHitTesterUtil;
+import static org.mockito.Mockito.*;
 
 /**
 * Unit tests for the ListingController Class
@@ -95,12 +98,12 @@ class ListingControllerTest {
 		Collection authorities = new HashSet<>();
 		authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
 		
-		Mockito.when(this.mockUsernamePasswordAuthenticationToken.getAuthorities()).thenReturn(authorities);		
+		when(this.mockUsernamePasswordAuthenticationToken.getAuthorities()).thenReturn(authorities);		
 		
 		ListingAPIInbound 	listing 		= ListingAPIInbound.builder().build();
 		
-		Mockito.when(mockListingService.addListing(Mockito.any(), Mockito.anyBoolean())).thenReturn(UUID.randomUUID());
-		Mockito.when(this.mockUsernamePasswordAuthenticationToken.getClaim("useCredits")).thenReturn(Optional.of(Boolean.TRUE));
+		when(mockListingService.addListing(any(), anyBoolean())).thenReturn(UUID.randomUUID());
+		when(this.mockUsernamePasswordAuthenticationToken.getClaim("useCredits")).thenReturn(Optional.of(Boolean.TRUE));
 		
 		ResponseEntity<UUID> response = controller.addListing(listing, mockUsernamePasswordAuthenticationToken);
 		
@@ -110,7 +113,7 @@ class ListingControllerTest {
 		
 		assertEquals(HttpStatus.CREATED, response.getStatusCode());
 		
-		Mockito.verify(this.mockListingAlertHitUtil).registerListing(Mockito.any(Listing.class));
+		verify(this.mockListingAlertHitUtil).registerListing(any(Listing.class));
 		
 	}
 	
@@ -125,13 +128,13 @@ class ListingControllerTest {
 		Collection authorities = new HashSet<>();
 		authorities.add(new SimpleGrantedAuthority("ROLE_RECRUITER"));
 		
-		Mockito.when(this.mockUsernamePasswordAuthenticationToken.getAuthorities()).thenReturn(authorities);
-		Mockito.when(this.mockUsernamePasswordAuthenticationToken.getName()).thenReturn("kevin");
-		Mockito.when(this.mockUsernamePasswordAuthenticationToken.getClaim("useCredits")).thenReturn(Optional.of(Boolean.TRUE));
+		when(this.mockUsernamePasswordAuthenticationToken.getAuthorities()).thenReturn(authorities);
+		when(this.mockUsernamePasswordAuthenticationToken.getName()).thenReturn("kevin");
+		when(this.mockUsernamePasswordAuthenticationToken.getClaim("useCredits")).thenReturn(Optional.of(Boolean.TRUE));
 		
-		ListingAPIInbound 	listing 		= ListingAPIInbound.builder().build();
+		ListingAPIInbound listing = ListingAPIInbound.builder().build();
 		
-		Mockito.when(mockListingService.addListing(Mockito.any(), Mockito.anyBoolean())).thenReturn(UUID.randomUUID());
+		when(mockListingService.addListing(any(), anyBoolean())).thenReturn(UUID.randomUUID());
 		
 		ResponseEntity<UUID> response = controller.addListing(listing, mockUsernamePasswordAuthenticationToken);
 		
@@ -141,7 +144,7 @@ class ListingControllerTest {
 		
 		assertEquals(HttpStatus.CREATED, response.getStatusCode());
 		
-		Mockito.verify(this.mockListingAlertHitUtil).registerListing(Mockito.any(Listing.class));
+		verify(this.mockListingAlertHitUtil).registerListing(any(Listing.class));
 		
 	}
 	
@@ -156,18 +159,18 @@ class ListingControllerTest {
 		Collection authorities = new HashSet<>();
 		authorities.add(new SimpleGrantedAuthority("ROLE_RECRUITER"));
 		
-		Mockito.when(this.mockUsernamePasswordAuthenticationToken.getAuthorities()).thenReturn(authorities);
-		Mockito.when(this.mockUsernamePasswordAuthenticationToken.getName()).thenReturn("kevin");
-		Mockito.when(this.mockUsernamePasswordAuthenticationToken.getClaim("useCredits")).thenReturn(Optional.of(Boolean.TRUE));
-		Mockito.doThrow(new IllegalStateException("")).when(mockListingService).useCredit("kevin");
+		when(this.mockUsernamePasswordAuthenticationToken.getAuthorities()).thenReturn(authorities);
+		when(this.mockUsernamePasswordAuthenticationToken.getName()).thenReturn("kevin");
+		when(this.mockUsernamePasswordAuthenticationToken.getClaim("useCredits")).thenReturn(Optional.of(Boolean.TRUE));
+		doThrow(new IllegalStateException("")).when(mockListingService).useCredit("kevin");
 		
-		ListingAPIInbound 	listing 		= ListingAPIInbound.builder().build();
+		ListingAPIInbound listing = ListingAPIInbound.builder().build();
 		
 		assertThrows(IllegalStateException.class, () -> {
 			controller.addListing(listing, mockUsernamePasswordAuthenticationToken);
 		});
 		
-		Mockito.verify(this.mockListingAlertHitUtil, Mockito.never()).registerListing(Mockito.any(Listing.class));
+		verify(this.mockListingAlertHitUtil, never()).registerListing(any(Listing.class));
 	}
 	
 	/**
@@ -184,7 +187,7 @@ class ListingControllerTest {
 		
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		
-		Mockito.verify(mockListingService).updateListing(Mockito.eq(listingId), Mockito.any());
+		verify(mockListingService).updateListing(eq(listingId), any());
 		
 	}
 	
@@ -195,13 +198,13 @@ class ListingControllerTest {
 	@Test
 	void testDeleteListing() {
 		
-		UUID				listingId		= UUID.randomUUID();
+		UUID listingId = UUID.randomUUID();
 		
 		ResponseEntity<Void> response = controller.deleteListing(listingId);
 		
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		
-		Mockito.verify(mockListingService).deleteListing(listingId);
+		verify(mockListingService).deleteListing(listingId);
 		
 	}
 	
@@ -214,7 +217,7 @@ class ListingControllerTest {
 		
 		ArgumentCaptor<ListingFilter> filterArgCapt = ArgumentCaptor.forClass(ListingFilter.class);
 		
-		Mockito.when(this.mockListingService.fetchListings(filterArgCapt.capture(), Mockito.any())).thenReturn(Page.empty());
+		when(this.mockListingService.fetchListings(filterArgCapt.capture(), any())).thenReturn(Page.empty());
 		
 		Page<ListingAPIOutbound> response = controller.fetchListings(null, LISTING_AGE.ALL, mockPageable);
 	
@@ -233,7 +236,7 @@ class ListingControllerTest {
 		
 		ArgumentCaptor<ListingFilter> filterArgCapt = ArgumentCaptor.forClass(ListingFilter.class);
 		
-		Mockito.when(this.mockListingService.fetchListings(filterArgCapt.capture(), Mockito.any())).thenReturn(Page.empty());
+		when(this.mockListingService.fetchListings(filterArgCapt.capture(), any())).thenReturn(Page.empty());
 		
 		Page<ListingAPIOutboundPublic> response = controller.fetchListingsPubilc(ListingSearchRequestAPIInbound.builder().build(), mockPageable);
 	
@@ -253,7 +256,7 @@ class ListingControllerTest {
 		
 		ArgumentCaptor<ListingFilter> 	filterArgCapt = ArgumentCaptor.forClass(ListingFilter.class);
 		
-		Mockito.when(this.mockListingService.fetchListings(filterArgCapt.capture(), Mockito.any())).thenReturn(Page.empty());
+		when(this.mockListingService.fetchListings(filterArgCapt.capture(), any())).thenReturn(Page.empty());
 		
 		Page<ListingAPIOutboundPublic> response = controller.fetchListingsPubilc(ListingSearchRequestAPIInbound.builder().contractType(listingType).build(), mockPageable);
 	
@@ -272,7 +275,7 @@ class ListingControllerTest {
 	
 		ArgumentCaptor<ListingFilter> filterArgCapt = ArgumentCaptor.forClass(ListingFilter.class);
 		
-		Mockito.when(this.mockListingService.fetchListings(filterArgCapt.capture(), Mockito.any())).thenReturn(Page.empty());
+		when(this.mockListingService.fetchListings(filterArgCapt.capture(), any())).thenReturn(Page.empty());
 		
 		final String recruiterId = "kparking";
 		
@@ -296,11 +299,11 @@ class ListingControllerTest {
 		
 		ArgumentCaptor<ListingViewedEvent> captor = ArgumentCaptor.forClass(ListingViewedEvent.class);
 		
-		Mockito.doNothing().when(this.mockListingService).registerListingViewedEvent(captor.capture());
+		doNothing().when(this.mockListingService).registerListingViewedEvent(captor.capture());
 		
 		controller.registerListingViewedEvent(listingId);
 		
-		Mockito.verify(this.mockListingService).registerListingViewedEvent(Mockito.any(ListingViewedEvent.class));
+		verify(this.mockListingService).registerListingViewedEvent(any(ListingViewedEvent.class));
 	
 		assertTrue(captor.getValue().getEventId() instanceof UUID);
 		assertTrue(captor.getValue().getCreated() instanceof LocalDateTime);
@@ -323,11 +326,11 @@ class ListingControllerTest {
 		
 		ArgumentCaptor<ListingContactRequest> argCaptContactRequest = ArgumentCaptor.forClass(ListingContactRequest.class);
 		
-		Mockito.doNothing().when(this.mockListingService).sendContactRequestToListingOwner(argCaptContactRequest.capture());
+		doNothing().when(this.mockListingService).sendContactRequestToListingOwner(argCaptContactRequest.capture());
 		
 		ResponseEntity<Void> response = this.controller.sendContactRequestToListingOwner(listingId, senderName, senderEmail, message, Optional.of(attachment));
 		
-		Mockito.verify(this.mockListingService).sendContactRequestToListingOwner(Mockito.any(ListingContactRequest.class));
+		verify(this.mockListingService).sendContactRequestToListingOwner(Mockito.any(ListingContactRequest.class));
 		
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		
@@ -353,12 +356,12 @@ class ListingControllerTest {
 		
 		ArgumentCaptor<CandidateListingContactRequest> argCaptContactRequest = ArgumentCaptor.forClass(CandidateListingContactRequest.class);
 		
-		Mockito.when(this.mockUsernamePasswordAuthenticationToken.getName()).thenReturn(candidateId);
-		Mockito.doNothing().when(this.mockListingService).sendContactRequestFomCandidateToListingOwner(argCaptContactRequest.capture());
+		when(this.mockUsernamePasswordAuthenticationToken.getName()).thenReturn(candidateId);
+		doNothing().when(this.mockListingService).sendContactRequestFomCandidateToListingOwner(argCaptContactRequest.capture());
 		
 		ResponseEntity<Void> response = this.controller.sendContactRequestToListingOwnerFromCandidate(listingId, message, Optional.of(attachment), this.mockUsernamePasswordAuthenticationToken);
 		
-		Mockito.verify(this.mockListingService).sendContactRequestFomCandidateToListingOwner(Mockito.any(CandidateListingContactRequest.class));
+		verify(this.mockListingService).sendContactRequestFomCandidateToListingOwner(Mockito.any(CandidateListingContactRequest.class));
 		
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		
@@ -380,14 +383,14 @@ class ListingControllerTest {
 		Collection authorities = new HashSet<>();
 		authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
 		
-		Mockito.when(this.mockUsernamePasswordAuthenticationToken.getAuthorities()).thenReturn(authorities);
-		Mockito.when(this.mockUsernamePasswordAuthenticationToken.getClaim("useCredits")).thenReturn(Optional.of(Boolean.TRUE));
+		when(this.mockUsernamePasswordAuthenticationToken.getAuthorities()).thenReturn(authorities);
+		when(this.mockUsernamePasswordAuthenticationToken.getClaim("useCredits")).thenReturn(Optional.of(Boolean.TRUE));
 		
 		ResponseEntity<Boolean> response = this.controller.passesCreditCheck(mockUsernamePasswordAuthenticationToken);
 		
 		assertTrue(response.getBody());
 
-		Mockito.verify(this.mockListingService, Mockito.never()).doCreditsCheck(mockUsernamePasswordAuthenticationToken.getName());
+		verify(this.mockListingService, never()).doCreditsCheck(mockUsernamePasswordAuthenticationToken.getName());
 		
 	}
 	
@@ -402,14 +405,14 @@ class ListingControllerTest {
 		Collection authorities = new HashSet<>();
 		authorities.add(new SimpleGrantedAuthority("ROLE_RECRUITER"));
 		
-		Mockito.when(this.mockUsernamePasswordAuthenticationToken.getAuthorities()).thenReturn(authorities);
-		Mockito.when(this.mockUsernamePasswordAuthenticationToken.getClaim("useCredits")).thenReturn(Optional.of(Boolean.FALSE));
+		when(this.mockUsernamePasswordAuthenticationToken.getAuthorities()).thenReturn(authorities);
+		when(this.mockUsernamePasswordAuthenticationToken.getClaim("useCredits")).thenReturn(Optional.of(Boolean.FALSE));
 		
 		ResponseEntity<Boolean> response = this.controller.passesCreditCheck(mockUsernamePasswordAuthenticationToken);
 		
 		assertTrue(response.getBody());
 		
-		Mockito.verify(this.mockListingService, Mockito.never()).doCreditsCheck(mockUsernamePasswordAuthenticationToken.getName());
+		verify(this.mockListingService, never()).doCreditsCheck(mockUsernamePasswordAuthenticationToken.getName());
 
 	}
 	
@@ -424,16 +427,16 @@ class ListingControllerTest {
 		Collection authorities = new HashSet<>();
 		authorities.add(new SimpleGrantedAuthority("ROLE_RECRUITER"));
 		
-		Mockito.when(this.mockListingService.doCreditsCheck(Mockito.any())).thenReturn(true);
-		Mockito.when(this.mockUsernamePasswordAuthenticationToken.getAuthorities()).thenReturn(authorities);
-		Mockito.when(this.mockUsernamePasswordAuthenticationToken.getClaim("useCredits")).thenReturn(Optional.of(Boolean.TRUE));
-		Mockito.when(this.mockUsernamePasswordAuthenticationToken.getName()).thenReturn("userId");
+		when(this.mockListingService.doCreditsCheck(Mockito.any())).thenReturn(true);
+		when(this.mockUsernamePasswordAuthenticationToken.getAuthorities()).thenReturn(authorities);
+		when(this.mockUsernamePasswordAuthenticationToken.getClaim("useCredits")).thenReturn(Optional.of(Boolean.TRUE));
+		when(this.mockUsernamePasswordAuthenticationToken.getName()).thenReturn("userId");
 		
 		ResponseEntity<Boolean> response = this.controller.passesCreditCheck(mockUsernamePasswordAuthenticationToken);
 		
 		assertTrue(response.getBody());
 		
-		Mockito.verify(this.mockListingService).doCreditsCheck(mockUsernamePasswordAuthenticationToken.getName());
+		verify(this.mockListingService).doCreditsCheck(mockUsernamePasswordAuthenticationToken.getName());
 
 	}
 	
@@ -446,8 +449,8 @@ class ListingControllerTest {
 	
 		final int count = 6;
 		
-		Mockito.when(mockPrincipal.getName()).thenReturn("rec22");
-		Mockito.when(this.mockListingService.getCreditCountForUser(Mockito.anyString())).thenReturn(count);
+		when(mockPrincipal.getName()).thenReturn("rec22");
+		when(this.mockListingService.getCreditCountForUser(anyString())).thenReturn(count);
 		
 		ResponseEntity<Integer> response = this.controller.fetchRemainingCreditCount(mockPrincipal);
 	
@@ -469,4 +472,26 @@ class ListingControllerTest {
 	
 	}
 		
+	/**ù
+	* Tests fetch of statistics relating to 
+	*/
+	@Test
+	void testFetchListingContactRequestStats() {
+		
+		UUID listingId1 = UUID.randomUUID();
+		UUID listingId2 = UUID.randomUUID();
+		
+		UUID[] 					ids = new UUID[] {listingId1, listingId2};
+		ListingStatContactRequests  stat1 = ListingStatContactRequests.builder().listingId(listingId1).build();
+		ListingStatContactRequests  stat2 = ListingStatContactRequests.builder().listingId(listingId2).build();
+		
+		when(this.mockListingService.fetchListingContactRequestStats(Set.of(ids))).thenReturn(Set.of(stat1,stat2));
+		
+		ResponseEntity<Set<ListingStatContactRequestsAPIOutbound>> response = this.controller.fetchListingContactRequestStats(ids);
+		
+		assertEquals(HttpStatus.OK, response.getStatusCode());
+		assertEquals(ids.length, 	response.getBody().size());
+		
+	}
+	
 }

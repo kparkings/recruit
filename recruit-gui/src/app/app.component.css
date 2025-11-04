@@ -13,7 +13,8 @@
 	}
 	
 	.arenella-secondary-background{
-		background:#d2d2d2;		
+		/*background:#d2d2d2;*/
+		background:white;		
 	}
 	
 	.arenella-secondary-colour{
@@ -87,7 +88,6 @@
 		margin-bottom:5px;
 		min-width:140px;
 		text-align:center;
-		border-right: solid 1px grey;
 	}
 	
 	.li-arenella-nav-mob{
@@ -122,10 +122,8 @@
 	}
 	
 	.li-arenella-nav-pre-signup{
-		width:190px;
-		text-align:center;
-		margin-left:10px;
-		margin-right:10px;
+		font-weight:bold;
+		background:none;
 		float:right;
 	}
 	

@@ -5,6 +5,7 @@ import { environment }								from './../environments/environment';
 import { NewListingRequest } 						from './recruiter-listings/new-listing-request';
 import { ListingAlertAddRequest } 					from './listing/listing-alert-add-request';
 import { ListingSearchRequest }						from './listing-search-request';
+import { ListingStatContactRequests }				from './listing-stat-contact-requests';
 
 /**
 * Service relating to the management of listings
@@ -209,5 +210,15 @@ export class ListingService {
 	
 	}
 	
+	/**
+	* Retrieves statistics relating to contact requests sent to a Recruiter
+	* for a given set of Listings 
+	*/
+	public getListingContactRequestStats(listingIds:Array<string>):Observable<Array<ListingStatContactRequests>> {
+		
+		const backendUrl:string = environment.backendUrl +'listing/public/stats/contact-requests?ids='+listingIds;
+		return this.httpClient.get<any>(backendUrl, this.httpOptions);
+				
+	}
 
 }

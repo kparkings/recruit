@@ -2,6 +2,7 @@ package com.arenella.recruit.listings.services;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -29,6 +30,7 @@ import com.arenella.recruit.listings.beans.Listing;
 import com.arenella.recruit.listings.beans.ListingContactRequestEvent;
 import com.arenella.recruit.listings.beans.ListingContactRequestEvent.CONTACT_USER_TYPE;
 import com.arenella.recruit.listings.beans.ListingFilter;
+import com.arenella.recruit.listings.beans.ListingStatContactRequests;
 import com.arenella.recruit.listings.beans.ListingViewedEvent;
 import com.arenella.recruit.listings.beans.RecruiterCredit;
 import com.arenella.recruit.listings.controllers.CandidateListingContactRequest;
@@ -457,6 +459,30 @@ public class ListingServiceImpl implements ListingService{
 		
 		this.listingRepository.findAllListings(filters, this.esClient).forEach(listing -> this.listingRepository.deleteById(listing.getListingId()));
 		
+	}
+	
+	/**
+	* Refer to the ListingsService for details 
+	*/
+	@Override
+	public Set<ListingStatContactRequests> fetchListingContactRequestStats(Set<UUID> ids) {
+		
+		Set<ListingStatContactRequests> stats = new HashSet<>();
+		
+		ids.stream().forEach(listingId -> 
+			stats.add(ListingStatContactRequests.builder().listingId(listingId).build())
+		);
+		
+		this.listingContactRequestEventDao.fetchEventForListings(ids).stream().forEach(stat -> 
+			stats.stream().filter(s -> s.getListingId().equals(stat.getListingId())).findAny().ifPresent(s -> {
+				switch(stat.getUserType()) {
+					case CONTACT_USER_TYPE.REGISTERED -> s.increaseRegisteredCount();
+					case CONTACT_USER_TYPE.UNREGISTERED -> s.increaseUnregisteredCount();
+				}
+			})
+		);
+		
+		return stats;
 	}
 	
 	/**

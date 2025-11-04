@@ -215,4 +215,12 @@ export class LoginUserComponent implements OnInit {
 	
 	}
 	
+	/**
+	* Whether or not the user has authenticated with the System 
+	*/
+	public isAuthenticated():boolean {
+		return sessionStorage.getItem('loggedIn') === 'true';
+	}
+	
+	
 }

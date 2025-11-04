@@ -17,7 +17,6 @@
 
 .left-box-body{
 	padding:5px;
-	background:#e8e8e8;
 }
 
 .left-box table{
@@ -30,6 +29,7 @@
 
 .left-box h5{
 	border-bottom:2px solid black;
+	color:#002549;
 }
 
 .skill{
