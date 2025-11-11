@@ -1,16 +1,18 @@
 package com.arenella.recruit.listings.services;
 
 import java.security.Principal;
+import java.time.LocalDate;
 import java.util.Set;
 import java.util.UUID;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.arenella.recruit.authentication.spring.filters.ClaimsUsernamePasswordAuthenticationToken;
 import com.arenella.recruit.listings.beans.ListingAlert;
 import com.arenella.recruit.listings.beans.ListingAlertFilterOptions;
+import com.arenella.recruit.listings.beans.ListingAlertSentEvent;
 import com.arenella.recruit.listings.dao.ListingAlertDao;
+import com.arenella.recruit.listings.dao.ListingAlertSentEventDao;
 
 /**
 * Services for interacting with ListingAlert's
@@ -19,8 +21,18 @@ import com.arenella.recruit.listings.dao.ListingAlertDao;
 @Service
 public class ListingAlertServiceImpl implements ListingAlertService{
 
-	@Autowired
 	private ListingAlertDao listingAlertDao;
+	private ListingAlertSentEventDao listingAlertSentEventDao;
+	
+	/**
+	* Constructor
+	* @param listingAlertDao 			- DAO access to Listings
+	* @param listingAlertSentEventDao	- DAO for events relating to alerts 
+	*/
+	public ListingAlertServiceImpl(ListingAlertDao listingAlertDao, ListingAlertSentEventDao listingAlertSentEventDao) {
+		this.listingAlertDao 			= listingAlertDao;
+		this.listingAlertSentEventDao 	= listingAlertSentEventDao;
+	}
 	
 	/**
 	* Refer to the ListingAlertService for details 
@@ -53,6 +65,14 @@ public class ListingAlertServiceImpl implements ListingAlertService{
 	public void deleteListingAlert(UUID id) {
 		this.listingAlertDao.deleteById(id);
 		
+	}
+	
+	/**
+	* Refer to the ListingAlertService for details 
+	*/
+	@Override
+	public void registerListingAlertEmailSent(UUID listingId) {
+		this.listingAlertSentEventDao.saveEvent(new ListingAlertSentEvent(UUID.randomUUID(), listingId, LocalDate.now()));
 	}
 	
 	/**

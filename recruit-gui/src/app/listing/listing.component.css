@@ -282,7 +282,7 @@
 }
 
 .listing-view-table th {
-	width:80px;
+	max-width:200px;
 	font-weight:bold;
 	
 }

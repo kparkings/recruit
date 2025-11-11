@@ -226,13 +226,22 @@
 					
 					<!-- Weekly Stats -->
 					<div *ngIf="showNewCandidates && showNewCandidatesDiv">
-					<p>{{'arenella-stats-new-candidates' | translate}}
-						
-					</p>
+					<h3>{{'arenella-stats-new-candidates' | translate}}</h3>
 					<br/>
-					<ul *ngFor="let candidate of newCandidates">
-						<li>{{countryToCode(candidate.country)}} - {{'arenella-stats-new-candidates-exp' | translate}}: {{candidate.yearsExperience}} {{'arenella-stats-new-candidates-years' | translate}} - {{candidate.functionDesc}}</li>	
-					</ul>
+					
+					<table style="min-width:500px;font-size:12px;">
+						<tr>
+							<th style="padding:5px;padding-left:0px;padding-right:30px;">Country</th>
+							<th style="padding:5px;padding-left:0px;padding-right:30px;">Years Experience</th>
+							<th style="padding:5px;padding-left:0px;padding-right:30px;">Role</th>
+						</tr>
+						<tr *ngFor="let candidate of newCandidates">
+							<td><mat-icon><span class="flag-icon flag-icon-{{getIso2Code(candidate.country)}} flag-icon-med new-candidate-stat-flag"></span></mat-icon></td>
+							<td>{{candidate.yearsExperience}}</td>
+							<td style="text-align:left">{{candidate.functionDesc}}</td>
+						</tr>
+					</table>
+					
 					<br/>
 					<p>
 						https://www.arenella-ict.com
@@ -246,7 +255,7 @@
 						<p>{{'arenella-stats-added-candidates' | translate}}</p>
 						<table>
 						<tr *ngFor="let candidateStat of newCandidateStats">
-							<td class="new-candidate-table-td">{{candidateStat.count}}</td>  <td class="new-candidate-table-td">x</td> <td class="new-candidate-table-td">{{candidateStat.functionType}}</td>
+							<td class="new-candidate-table-td">{{candidateStat.count}}</td>  <td class="new-candidate-table-td">x</td> <td class="new-candidate-table-td">{{candidateStat.functionType | translate}}</td>
 						</tr>
 						</table>
 					</div>

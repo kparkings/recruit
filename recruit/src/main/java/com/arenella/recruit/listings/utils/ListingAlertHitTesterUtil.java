@@ -82,6 +82,8 @@ public class ListingAlertHitTesterUtil {
 						.build();
 				
 				this.eventPublisher.RequestSendListingAlertHitEmailCommand(command);
+				this.listingAlertService.registerListingAlertEmailSent(listing.get().getListingId());
+				
 			}catch(Exception e) {
 				e.printStackTrace();
 			}

@@ -179,7 +179,7 @@ export class ListingComponent implements OnInit {
 		if (matchingStat) {
 			return matchingStat;
 		} else {
-			return new ListingStatContactRequests(listingId, 777,777);
+			return new ListingStatContactRequests(listingId, 777,777, 777);
 		}
 		
 	}

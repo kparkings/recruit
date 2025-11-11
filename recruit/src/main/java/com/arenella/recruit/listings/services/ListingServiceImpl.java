@@ -35,6 +35,7 @@ import com.arenella.recruit.listings.beans.ListingViewedEvent;
 import com.arenella.recruit.listings.beans.RecruiterCredit;
 import com.arenella.recruit.listings.controllers.CandidateListingContactRequest;
 import com.arenella.recruit.listings.controllers.ListingContactRequest;
+import com.arenella.recruit.listings.dao.ListingAlertSentEventDao;
 import com.arenella.recruit.listings.dao.ListingContactRequestEventDao;
 import com.arenella.recruit.listings.dao.ListingRecruiterCreditDao;
 import com.arenella.recruit.listings.exceptions.ListingValidationException;
@@ -74,6 +75,9 @@ public class ListingServiceImpl implements ListingService{
 	
 	@Autowired
 	private ListingFunctionSynonymUtil		functionSynonymUil;
+	
+	@Autowired
+	private ListingAlertSentEventDao		listingAlertSentEventDao;
 	
 	
 	/**
@@ -481,6 +485,12 @@ public class ListingServiceImpl implements ListingService{
 				}
 			})
 		);
+		
+		this.listingAlertSentEventDao.fetchEventForListings(ids).stream().forEach(event -> {
+			stats.stream().filter(s -> s.getListingId().equals(event.listingId())).findAny().ifPresent(s -> {
+				s.increaseAlertSentCount();
+			});
+		});
 		
 		return stats;
 	}

@@ -22,6 +22,7 @@ import com.arenella.recruit.authentication.spring.filters.ClaimsUsernamePassword
 import com.arenella.recruit.listings.beans.ListingAlert;
 import com.arenella.recruit.listings.beans.ListingAlertFilterOptions;
 import com.arenella.recruit.listings.dao.ListingAlertDao;
+import com.arenella.recruit.listings.dao.ListingAlertSentEventDao;
 
 /**
 * Unit tests for the ListingAlertService class
@@ -34,10 +35,13 @@ class ListingAlertServiceImplTest {
 	private ListingAlertDao 										mockListingAlertDao; 
 	
 	@Mock
+	private ListingAlertSentEventDao 								mockListingAlertSentEventDao;
+	
+	@Mock
 	private ClaimsUsernamePasswordAuthenticationToken				mockPrincipal;
 	
 	@InjectMocks
-	private ListingAlertServiceImpl 								service = new ListingAlertServiceImpl();
+	private ListingAlertServiceImpl 								service = new ListingAlertServiceImpl(mockListingAlertDao, mockListingAlertSentEventDao);
 
 	/**
 	* Tests adding a new alert

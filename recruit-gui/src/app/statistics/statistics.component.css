@@ -201,6 +201,12 @@ canvas{
 	height:400px;
 }
 
+.new-candidate-stat-flag{
+	width:25px;
+	height:15px;
+	margin-right:10px;
+}
+
 @media (max-width:700px)  {
 	
 	.stat-canvas{

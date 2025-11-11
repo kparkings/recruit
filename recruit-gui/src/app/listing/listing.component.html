@@ -97,6 +97,8 @@
 									<div class="non-mobile-only-element">
 										<table class="listing-view-table">
 											<tr>
+												<th>{{'listings-alerts' | translate}}</th>
+												<td>{{getContactRequestStatForListing(listing.listingId).alertsSent}}</td>
 												<th>{{'listings-views' | translate}}</th>
 												<td>{{listing.views}}</td>
 												<th>{{'listings-applications' | translate}}</th>

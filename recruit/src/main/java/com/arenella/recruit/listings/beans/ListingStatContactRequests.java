@@ -12,6 +12,7 @@ public class ListingStatContactRequests {
 	private UUID 	listingId; 
 	private int 	registeredUserRequests; 
 	private int 	unregisteredUserRequests;
+	private int		alertSentCount;
 
 	/**
 	* Default constructor
@@ -28,6 +29,7 @@ public class ListingStatContactRequests {
 		this.listingId 					= builder.listingId; 
 		this.registeredUserRequests 	= builder.registeredUserRequests; 
 		this.unregisteredUserRequests 	= builder.unregisteredUserRequests;
+		this.alertSentCount				= builder.alertSentCount;
 	}
 	
 	/**
@@ -53,6 +55,16 @@ public class ListingStatContactRequests {
 	public int 	getUnregisteredUserRequests() {
 		return this.unregisteredUserRequests;
 	}
+	
+	/**
+	* Returns the number of email alerts that were sent to candidates
+	* informing them that the listing was created. These are email alerts 
+	* for candidates that have created job alerts matching the listing
+	* @return
+	*/
+	public int getAlertSentCount() {
+		return this.alertSentCount;
+	}
 
 	/**
 	* Increase the number of contact requests from a 
@@ -71,6 +83,13 @@ public class ListingStatContactRequests {
 	}
 	
 	/**
+	* Increase the number of alerts sent to a user
+	*/
+	public void increaseAlertSentCount() {
+		this.alertSentCount ++;
+	}
+	
+	/**
 	* Returns a builder for the class
 	* @return
 	*/
@@ -86,6 +105,7 @@ public class ListingStatContactRequests {
 		private UUID 	listingId; 
 		private int 	registeredUserRequests; 
 		private int 	unregisteredUserRequests;
+		private int 	alertSentCount;
 		
 		/**
 		* Sets the Id of the Listing the stats relate to
@@ -120,6 +140,16 @@ public class ListingStatContactRequests {
 		}
 		
 		/**
+		* Sets the number of alerts sent to Users when the Listing was created
+		* @param alertSentCount - number of alerts sent for Listing
+		* @return Builder
+		*/
+		public ListingStatContactRequestsBuilder alertSentCount(int alertSentCount) {
+			this.alertSentCount = alertSentCount;
+			return this;
+		}
+		
+		/**
 		* Returns an initialized instance of the class
 		* @return initalized instance of the class
 		*/
@@ -128,5 +158,5 @@ public class ListingStatContactRequests {
 		} 
 		
 	}
-	
+
 }

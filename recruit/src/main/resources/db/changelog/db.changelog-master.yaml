@@ -2553,4 +2553,28 @@ databaseChangeLog:
                   name: created
                   type: timestamp
                   constraints:
+                    nullable: false                 
+  - changeSet:
+      id: listing_alert_sent_event
+      author: kparkings
+      changes:
+        - createTable:                    
+            tableName: listing_alert_sent_event
+            schemaName: listings
+            columns:
+              - column:
+                  name: id
+                  type: UUID
+                  constraints:
                     nullable: false                    
+                    primaryKey: true
+              - column:
+                  name: listing_id
+                  type: UUID
+                  constraints:
+                    nullable: false
+              - column:
+                  name: alert_sent
+                  type: timestamp
+                  constraints:
+                    nullable: false 

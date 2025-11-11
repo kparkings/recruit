@@ -40,6 +40,7 @@ import com.arenella.recruit.listings.repos.ListingRepository;
 import com.arenella.recruit.listings.services.FileSecurityParser;
 import com.arenella.recruit.listings.services.FileSecurityParser.FileType;
 import com.arenella.recruit.listings.beans.RecruiterCredit;
+import com.arenella.recruit.listings.dao.ListingAlertSentEventDao;
 import com.arenella.recruit.listings.dao.ListingContactRequestEventDao;
 import com.arenella.recruit.listings.dao.ListingRecruiterCreditDao;
 import com.arenella.recruit.listings.services.ListingServiceImpl;
@@ -83,6 +84,9 @@ class ListingServiceImplTest {
 	
 	@Mock
 	private ListingContactRequestEventDao	mockListingContactRequestEventDao;
+	
+	@Mock
+	private ListingAlertSentEventDao 		listingAlertSentEventDao;
 	
 	/**
 	* Sets up test environment

@@ -32,6 +32,14 @@ public interface ListingAlertService {
 	* @param id - Unique id of the ListingAlert
 	*/
 	public void deleteListingAlert(UUID id);
-	
+
+	/**
+	* Registers an event stating that an email alert was triggered
+	* and the user receiver an alert informing them that a new 
+	* listing matching their requirements has been added to the 
+	* job board
+	* @param listingId
+	*/
+	public void registerListingAlertEmailSent(UUID listingId);
 	
 }

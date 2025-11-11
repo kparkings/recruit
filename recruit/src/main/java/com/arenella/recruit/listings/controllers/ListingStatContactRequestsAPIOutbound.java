@@ -8,7 +8,7 @@ import com.arenella.recruit.listings.beans.ListingStatContactRequests;
 * API Outbound view containing information about the contact requests sent
 * to a recruiter regarding a specific Listing
 */
-public record ListingStatContactRequestsAPIOutbound(UUID listingId, int registeredUserRequests, int unregisteredUserRequests) {
+public record ListingStatContactRequestsAPIOutbound(UUID listingId, int registeredUserRequests, int unregisteredUserRequests, int alertsSent) {
 
 	/**
 	* Converts from Domain to API Outbound representation
@@ -16,7 +16,7 @@ public record ListingStatContactRequestsAPIOutbound(UUID listingId, int register
 	* @return converted stat
 	*/
 	public static ListingStatContactRequestsAPIOutbound fromDomain(ListingStatContactRequests stat) {
-		return new ListingStatContactRequestsAPIOutbound(stat.getListingId(), stat.getRegisteredUserRequests(), stat.getUnregisteredUserRequests());
+		return new ListingStatContactRequestsAPIOutbound(stat.getListingId(), stat.getRegisteredUserRequests(), stat.getUnregisteredUserRequests(), stat.getAlertSentCount());
 	}
 	
 }
