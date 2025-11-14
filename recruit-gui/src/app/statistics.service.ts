@@ -50,6 +50,17 @@ export class StatisticsService {
 		return this.httpClient.get<any>(backendUrl, this.httpOptions);
 
 	}
+	
+	/**
+	* Returns a list of available Candidates 
+	*/
+	public getProfileContactRequestStatistics(): Observable<Array<BucketAPIOutbound>>{
+	    
+		const backendUrl:string = environment.backendUrl +'candidate/stat/contact-requests/years/5';
+
+		return this.httpClient.get<any>(backendUrl, this.httpOptions);
+
+	}
 
 	/**
 	* Returns a list of available Candidates 

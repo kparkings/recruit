@@ -12,9 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.arenella.recruit.listings.beans.Listing;
+import com.arenella.recruit.listings.beans.ListingContactRequestEvent;
 import com.arenella.recruit.listings.beans.ListingFilter;
 import com.arenella.recruit.listings.beans.ListingViewedEvent;
 import com.arenella.recruit.listings.controllers.ListingStatistics;
+import com.arenella.recruit.listings.dao.ListingContactRequestEventDao;
 import com.arenella.recruit.listings.dao.ListingDao;
 import com.arenella.recruit.listings.dao.ListingStatisticsDao;
 import com.arenella.recruit.listings.dao.ListingViewedEventEntity;
@@ -33,19 +35,28 @@ public class ListingStatisticsServiceImpl implements ListingStatisticsService{
 	private ListingRepository	listingRepo;
 	
 	@Autowired
+	private ListingContactRequestEventDao	listingContactRequestEventDao;
+	
+	@Autowired
 	private ElasticsearchClient	esClient;
+	
+	
 	/**
 	* Refer to the StatisticsService interface for details 
 	*/
 	@Override
 	public ListingStatistics fetchListingStatistics() {
 		
+		//TODO: [KP] Two issues. First events is storing events in the document which can be deleted by the recruiter. Need to be moved to table to match contactEvents
+		//TODO: [KP] Both need to retrieve just events for past 5 years otherwise system will slow down over time
 		
 		List<ListingViewedEvent> events = this.listingRepo.findAllListings(ListingFilter.builder().build(), this.esClient)
 		.stream()
 		.map(Listing::getViews).flatMap(Collection::stream).toList();
 		
-		return new ListingStatistics(events);
+		List<ListingContactRequestEvent> contactRequestvents = this.listingContactRequestEventDao.fetchAllEvents().stream().toList();
+		
+		return new ListingStatistics(events,contactRequestvents);
 		
 	}
 

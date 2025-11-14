@@ -8,9 +8,12 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.LinkedHashSet;
 import java.util.stream.Collectors;
 
+import com.arenella.recruit.listings.beans.ListingContactRequestEvent;
+import com.arenella.recruit.listings.beans.ListingEvent;
 import com.arenella.recruit.listings.beans.ListingViewedEvent;
 
 /**
@@ -19,9 +22,27 @@ import com.arenella.recruit.listings.beans.ListingViewedEvent;
 */
 public class ListingStatistics {
 
-	private Map<String, Long> 	viewsPerWeek 		= new LinkedHashMap<>();
-	private long 				viewsThisWeek;
-	private long 				viewsToday;
+	private Map<String, Long> 	viewsPerWeek 				= new LinkedHashMap<>();
+	private Map<String, Long> 	contactRequestsPerWeek 		= new LinkedHashMap<>();
+	private AtomicLong 			viewsThisWeek				= new AtomicLong();
+	private AtomicLong 			viewsToday 					= new AtomicLong();
+	private AtomicLong 			contactRequestsThisWeek		= new AtomicLong();
+	private AtomicLong 			contactRequestsToday		= new AtomicLong();
+	
+	/**
+	* Returns contact request events info grouped by week
+	* @return
+	*/
+	public Set<ViewItem> getContactRequestsPerWeek() {
+		
+		Set<ViewItem> items = new LinkedHashSet<>();
+		
+		this.contactRequestsPerWeek.entrySet().forEach(entry ->{
+			items.add(new ViewItem(entry.getKey(), entry.getValue()));
+		});
+		
+		return items;
+	}
 	
 	/**
 	* Returns view events info grouped by week
@@ -37,14 +58,32 @@ public class ListingStatistics {
 		
 		return items;
 	}
-
+	
+	/**
+	* Returns the total number of contact request events there 
+	* were for listings this week
+	* @return views this week
+	*/
+	public long getContactRequestsThisWeek() {
+		return this.contactRequestsThisWeek.longValue();
+	}
+	
+	/**
+	* Returns the total number of contact request events there 
+	* were for listings today
+	* @return views today
+	*/
+	public long getContactRequestsToday() {
+		return this.contactRequestsToday.longValue();
+	}
+	
 	/**
 	* Returns the total number of vies events there 
 	* were for listings this week
 	* @return views this week
 	*/
 	public long getViewsThisWeek() {
-		return this.viewsThisWeek;
+		return this.viewsThisWeek.longValue();
 	}
 	
 	/**
@@ -53,19 +92,33 @@ public class ListingStatistics {
 	* @return views today
 	*/
 	public long getViewsToday() {
-		return this.viewsToday;
+		return this.viewsToday.longValue();
 	}
 	
 	/**
 	* Processes the raw events to useful status
 	* @param events
 	*/
-	public ListingStatistics(List<ListingViewedEvent> events) {
+	public ListingStatistics(List<ListingViewedEvent> events, List<ListingContactRequestEvent> contactRequestEvents) {
 		
-		events.stream().forEach( 
-			this::processCreatedByWeek
+		events.stream().forEach( evt ->
+			this.processCreatedByWeek(evt, viewsPerWeek, viewsToday, viewsThisWeek)
 		);
-	
+		
+		this.viewsPerWeek.keySet().stream().sorted().forEach(s -> 
+			this.contactRequestsPerWeek.put(s, 0L)
+		);
+		
+		contactRequestEvents.stream().forEach( evt ->
+				this.processCreatedByWeek(evt, contactRequestsPerWeek, contactRequestsToday, contactRequestsThisWeek)
+		);
+		
+		this.contactRequestsPerWeek.keySet().stream().sorted().forEach(s -> {
+			if (!this.viewsPerWeek.keySet().contains(s)) {
+				this.viewsPerWeek.put(s, 0L);
+			}
+		});
+		
 		this.viewsPerWeek = this.viewsPerWeek.entrySet()
 				.stream()
 				.sorted(Map.Entry.<String, Long>comparingByKey())
@@ -77,30 +130,34 @@ public class ListingStatistics {
 		String 			key = LocalDate.now().getYear() + " - " + String.format("%02d", weekNumber);
 		
 		if (this.viewsPerWeek.containsKey(key)) {
-			this.viewsThisWeek = this.viewsPerWeek.get(key);
+			this.viewsThisWeek.set(this.viewsPerWeek.get(key).longValue());
+		}
+		
+		if (this.contactRequestsPerWeek.containsKey(key)) {
+			this.contactRequestsThisWeek.set(this.contactRequestsPerWeek.get(key).longValue());
 		}
 		
 	}
-	
+
 	/**
 	* Processes the event so that it is grouped by week
 	* @param event - event to process
 	*/
-	private void processCreatedByWeek(ListingViewedEvent event) {
+	private void processCreatedByWeek(ListingEvent event, Map<String, Long> eventsCountByWeekContainer, AtomicLong dayCount, AtomicLong weekCount ) {
 		
 		TemporalField 	weekOfYear = WeekFields.of(Locale.getDefault()).weekOfYear();
 		int 			weekNumber = event.getCreated().get(weekOfYear);
 		
 		String 			key = event.getCreated().getYear() + " - " + String.format("%02d", weekNumber);
 		
-		if (viewsPerWeek.containsKey(key)) {
-			viewsPerWeek.put(key, viewsPerWeek.get(key) + 1 );
+		if (eventsCountByWeekContainer.containsKey(key)) {
+			eventsCountByWeekContainer.put(key, eventsCountByWeekContainer.get(key) + 1 );
 		} else {
-			viewsPerWeek.put(key, 1L);
+			eventsCountByWeekContainer.put(key, 1L);
 		}
 		
 		if (LocalDate.now().equals(event.getCreated().toLocalDate())) {
-			this.viewsToday = this.viewsToday + 1;
+			dayCount.set(dayCount.get());
 		}
 		
 	}

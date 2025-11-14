@@ -44,7 +44,7 @@ export class RecruitersComponent {
 		* Returns Rectuiter with a paid subscription orderd by most active 
 		*/
 	public  getSubscriptionRecruiters():Array<RecruiterDetails>{
-		return  this.recruiters.filter(rec => rec.isPaidSubscription == true).sort((a, b) => 
+		return  this.recruiters.filter(rec => rec.isPaidSubscription == true && rec.subscriptionStatus != 'DISABLED_PENDING_PAYMENT').sort((a, b) => 
 					this.getActivityScore(b.loginSummary)
 						.localeCompare(this.getActivityScore(a.loginSummary)));
 	}
@@ -75,7 +75,7 @@ export class RecruitersComponent {
 	* Reutrns the total number of active recruiters
 	*/
 	public getTotalActiveRecruiters():number{
-		return this.recruiters.length;
+		return this.recruiters.filter(rec => rec.subscriptionStatus != 'DISABLED_PENDING_PAYMENT').length;
 	}
 	
 	/**

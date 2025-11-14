@@ -6,7 +6,7 @@ import { RecruiterSignup }							from './recruiter-signup/signup-recruiter';
 import { INVOICE_TYPE, SubscriptionAPIInbound }		from './recruiter-account/subscription-api-inbound';
 import { RecruiterUpdateRequest }					from './recruiter-account/recruiter-update-request';
 import { GenerateInvoiceRequest } 					from './generate-invoice-request';
-import {LoginSummary, UserLoginStats} 				from './login-summary';
+import { UserLoginStats} 							from './login-summary';
 
 @Injectable({
   providedIn: 'root'

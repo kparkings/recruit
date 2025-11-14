@@ -73,10 +73,6 @@ export class SearchbarComponent {
 			enableEmails: 											new UntypedFormControl(false)
 		});
 	
-	//public getCurrentSearchFilterType():string{
-	//	return this.filterTypeFormGroup.get('searchType')?.value;
-	//}
-	
 	public filterTypeFormGroup:UntypedFormGroup					= new UntypedFormGroup({
 		searchType:												new UntypedFormControl('FUNCTION'),
 	});
@@ -96,20 +92,7 @@ export class SearchbarComponent {
 		this.init();	
 			
 	}
-
-	/**
-	* Toggles between displaying and hiding of the filters
-	*/
-	//public toggleFilters():void{
-		
-	//	if (this.filterView == 'collapsed'){
-	//		this.filterView = 'expanded';
-	//	} else {
-	//		this.filterView = 'collapsed';
-	//	}
-		
-	//}
-		
+	
 	/**
 	* Angular lifecycyle: Initializes Component
 	*/
@@ -157,38 +140,6 @@ export class SearchbarComponent {
 	public includeResultsForSC(sc:string):string{
 		return this.suggestionFilterForm.get((sc))?.value;
 	}
-	
-	/**
-	* Shows search type selection modal 
-	*/
-	//public doShowSearchTypeFilterSelectionModal():void{
-			
-	//	this.FIRST_NAME_DEFAULT 	= this.translate.instant('arenella-suggestions-search-type-name-firstname-default');
-	//	this.SURNAME_DEFAULT 		= this.translate.instant('arenella-suggestions-search-type-name-surname-default');
-			
-	//	this.searchTypeFilterSelectionModal.nativeElement.showModal();;
-	//}
-	
-	/**
-	* Sets the default values in the firstname/surname fields of the search form
-	* when a User selects to search on names
-	*/
-	//public cssSearchNameDefault():string{
-		
-	//	if (this.getCurrentSearchFilterType() != 'NAME') {
-	//		return '';
-	//	}
-		
-	//	let firstName:string 	= this.suggestionFilterForm.get('searchPhraseFirstName')?.value;
-	//	let surname:string 		= this.suggestionFilterForm.get('searchPhraseSurname')?.value;
-		
-	//	if (firstName == this.FIRST_NAME_DEFAULT || surname == this.SURNAME_DEFAULT){
-	//		return 'search-name-default';
-	//	}
-		
-	//	return '';
-		
-	//}
 	
 	/**
 	* When a User clicks in the firstname/surname search fields, removes the default 
@@ -320,10 +271,6 @@ export class SearchbarComponent {
 		}
 		return true;
 	}
-	
-	//public showSavedSearchQueriesBox():void{
-	//	this.savedSearchQueriesBox.nativeElement.showModal();
-	//}
 						
 	public choseSubscription():void{
 		this.creditsService.buySubscription();
@@ -350,19 +297,6 @@ export class SearchbarComponent {
 	public showSecurityFiltersView(view:string):void{
 		this.showSecurityFilters = view;
 	}
-
-	/**
-	* Swithches between open and closed filter view for Location 
-	*/
-	//public switchLocationFilterView(view:string):void{
-	//	this.showLocationFilters = view;
-	//	setTimeout(()=>{ 
-	//		if (this.extractedFilters.city != "") {
-	//			this.suggestionFilterForm.get('locationCity')?.setValue(this.extractedFilters.city);
-	//		}	
-	//	 }, 50)
-	//	
-	//}
 	
 	public getIso2CodeByCountryName(country:string):string {
 		
@@ -377,13 +311,6 @@ export class SearchbarComponent {
 	public switchSecurityFilterView(view:string):void{
 		this.showSecurityFilters = view;
 	}
-	
-	/**
-	* Swithches between open and closed filter view for GeoZones 
-	*/
-	//public switchGeoZoneFilterView(view:string):void{
-	//	this.showGeoZoneFilters = view;
-	//}
 
 	/**
 	*  
@@ -443,37 +370,6 @@ export class SearchbarComponent {
 			this.citiesForSelectedCountry = b;	
 		});
 	}
-									
-	/**
-	* Toggles GeoCpde
-	*/
-	//public toggleGeoZoneSelection(geoZone:GeoZone):void{
-		
-	//	let included:boolean = this.suggestionFilterForm.get((geoZone.geoZoneId.toLowerCase()+'Results'))?.value;
-	//	this.suggestionFilterForm.get((geoZone.geoZoneId.toLowerCase()+'Results'))?.setValue(!included);
-	
-	//	let geoZoneActive = this.candidateService.getGeoZones().filter(gz => this.suggestionFilterForm.get((gz.geoZoneId.toLowerCase()+'Results'))?.value == true).length > 0;
-	
-	//	if (!geoZoneActive) {
-	//		this.candidateService.getSupportedCountries().forEach(country => {
-	//			this.suggestionFilterForm.get(country.name)?.setValue(true);
-	//		});
-	//	} else {
-	//		this.candidateService.getSupportedCountries().forEach(country => {
-	//			this.suggestionFilterForm.get(country.name)?.setValue(false);
-	//		});
-		
-	//	}
-		
-	//}
-										
-	/**
-	* Returns whether Candidates from the selected GeoZone are currently
-	* included in the Suggestion results
-	*/
-	//public includeResultsForGeoZone(geoZone:GeoZone):boolean{
-	//	return this.suggestionFilterForm.get((geoZone.geoZoneId.toLowerCase()+'Results'))?.value;
-	//}
 											
 	private initSupportedCountries():void{
 		this.supportedCountries = this.candidateService.getSupportedCountries();

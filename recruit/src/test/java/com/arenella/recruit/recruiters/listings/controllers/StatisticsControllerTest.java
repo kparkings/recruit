@@ -37,7 +37,7 @@ class StatisticsControllerTest {
 	@Test
 	void testFetchDownloadStats() {
 		
-		ListingStatistics stats = new ListingStatistics(List.of());
+		ListingStatistics stats = new ListingStatistics(List.of(), List.of());
 		
 		Mockito.when(this.statisticsService.fetchListingStatistics()).thenReturn(stats);
 		

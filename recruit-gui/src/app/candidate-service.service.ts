@@ -22,6 +22,7 @@ import { NewSavedSearchRequest } 						from './suggestions/new-saved-search-req'
 import { SavedCandidateSearch } 						from './suggestions/saved-search';
 import { UpdateSavedSearchRequest }						from './suggestions/update-saved-search-req';
 import { SearchStats } 									from './search-stats';
+import { of } 											from 'rxjs';
 
 /**
 * Services for new Candidates
@@ -142,7 +143,12 @@ export class CandidateServiceService {
 	* Returns Cities of a given country 
 	*/
 	public getCitiesForCountry(country:string): Observable<Array<City>>{
+		
 		const backendUrl:string = environment.backendUrl +'city/'+country;
+		
+		if (!country) {
+			return of(new Array<City>());
+		}
 		
 		return this.httpClient.get<Array<City>>(backendUrl, this.httpOptions);
 	}

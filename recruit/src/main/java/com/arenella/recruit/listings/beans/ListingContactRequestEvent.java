@@ -8,7 +8,7 @@ import java.util.UUID;
 * a User sent a contact request to a Recruiter 
 * relating to a Listing on the job board. 
 */
-public class ListingContactRequestEvent {
+public class ListingContactRequestEvent implements ListingEvent{
 
 	public enum CONTACT_USER_TYPE {REGISTERED, UNREGISTERED}
 	

@@ -9,7 +9,7 @@ import java.util.UUID;
 * by a User.
 * @author K Parkings
 */
-public class ListingViewedEvent {
+public class ListingViewedEvent implements ListingEvent{
 
 	private UUID 			eventId;
 	private UUID 			listingId;

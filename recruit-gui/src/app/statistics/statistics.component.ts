@@ -20,6 +20,7 @@ import { SupportedCountry } 								from '../supported-candidate';
 export class StatisticsComponent implements OnInit {
 
 	public chartColor:string = 'grey';
+	public chartColor2:string = 'purple';
 	public unavailableChartColor:string = 'purple';
 	public totalNumberActiveCandidates:number 			= 0;
 	public candidatesByFunction:Map<string,number> 		= new Map<string,number>();
@@ -42,6 +43,8 @@ export class StatisticsComponent implements OnInit {
 	public chartDownloadsTotal							= 0;		
 	public listingViewsToday 							= 0;
 	public listingViewsThisWeek 						= 0;
+	public contactRequestsToday 						= 0;
+	public contactRequestsThisWeek 						= 0;
 	public showNewCandidateStatsDiv:boolean 			= false;
 	public showNewCandidatesDiv:boolean 				= false;
 	public loginCountRecruiter:number 					= 0;
@@ -70,6 +73,7 @@ export class StatisticsComponent implements OnInit {
 	
 	private listingViewsWeekKeys:string[] 						= new Array<string>();
 	private listingViewWeekValues:string[] 						= new Array<string>();
+	private listingContactRequestsWeekValues:string[]			= new Array<string>();
 	private marketplaceViewsKeys:string[] 						= new Array<string>();
 	private marketpalceViewsValues:string[] 					= new Array<string>();
 	private marketplaceViewsWeekKeys:string[] 					= new Array<string>();
@@ -98,6 +102,7 @@ export class StatisticsComponent implements OnInit {
 	private recruiterLoginsChartData 							= [{label: "",data: [''],backgroundColor: ''}];
 	private downloadsChartData 									= [{label: "",data: [''], backgroundColor: ''}];
 	private viewsChartData 										= [{label: "",data: [''], backgroundColor: ''}];
+	private contactRequestsChartData 							= [{label: "",data: [''], backgroundColor: ''}];
 	private recruiterDownloadsChartData 						= [{label: "", data: [''], backgroundColor: ''}];
 
 	public statChartDivMobile:string 							= '';
@@ -299,10 +304,18 @@ export class StatisticsComponent implements OnInit {
 					this.listingViewsToday 		= listingData.viewsToday;
 					this.listingViewsThisWeek 	= listingData.viewsThisWeek;
 
+					this.contactRequestsToday 		= listingData.contactRequestsToday;
+					this.contactRequestsThisWeek 	= listingData.contactRequestsThisWeek;
+					
 					this.listingViewsWeekKeys 		= listingData.viewsPerWeek.map(aa => aa.bucketName);
 					this.listingViewWeekValues 		= listingData.viewsPerWeek.map(aa => aa.count);
 					
-					this.listingsChartData = [{label: "Job Board Views", data: this.listingViewWeekValues, backgroundColor: this.chartColor}];
+					this.listingContactRequestsWeekValues 	= listingData.contactRequestsPerWeek.map(aa => aa.count);
+					
+					this.listingsChartData = [
+						{label: "Views", data: this.listingViewWeekValues, backgroundColor: this.chartColor},
+						{label: "Contact Requests", data: this.listingContactRequestsWeekValues, backgroundColor: this.chartColor2}
+					];
 					this.listingsChartLabels = this.listingViewsWeekKeys; 
 					
 				}, err => {

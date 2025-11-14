@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
+import com.arenella.recruit.listings.beans.ListingContactRequestEvent;
 import com.arenella.recruit.listings.beans.ListingViewedEvent;
 import com.arenella.recruit.listings.controllers.ListingStatistics;
 
@@ -25,9 +26,10 @@ class ListingStatisticsTest {
 	@Test
 	void testNoEventsForCurrentWeek() {
 		
-		List<ListingViewedEvent> events = new LinkedList<>();
+		List<ListingViewedEvent> 			events 			= new LinkedList<>();
+		List<ListingContactRequestEvent> 	contactEvents 	= new LinkedList<>();
 		
-		ListingStatistics stats = new ListingStatistics(events);
+		ListingStatistics stats = new ListingStatistics(events, contactEvents);
 		
 		assertEquals(0L, stats.getViewsThisWeek());
 		assertEquals(0L, stats.getViewsToday());
@@ -42,9 +44,10 @@ class ListingStatisticsTest {
 	@Test
 	void testDefaults() {
 		
-		List<ListingViewedEvent> events = new LinkedList<>();
+		List<ListingViewedEvent> 			events 			= new LinkedList<>();
+		List<ListingContactRequestEvent> 	contactEvents 	= new LinkedList<>();
 		
-		ListingStatistics stats = new ListingStatistics(events);
+		ListingStatistics stats = new ListingStatistics(events, contactEvents);
 		
 		assertTrue(stats.getViewsPerWeek().isEmpty());
 		

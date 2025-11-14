@@ -5,7 +5,6 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.ListCrudRepository;
 
 import com.arenella.recruit.listings.beans.ListingContactRequestEvent;
@@ -34,6 +33,11 @@ public interface ListingContactRequestEventDao extends ListCrudRepository<Listin
 		return this.findByListingIdIn(listingIds)
 				.stream()
 				.map(ListingContactRequestEventEntity::fromEntity)
+				.collect(Collectors.toSet());
+	}
+	
+	default Set<ListingContactRequestEvent> fetchAllEvents() {
+		return this.findAll().stream().map(ListingContactRequestEventEntity::fromEntity)
 				.collect(Collectors.toSet());
 	}
 	

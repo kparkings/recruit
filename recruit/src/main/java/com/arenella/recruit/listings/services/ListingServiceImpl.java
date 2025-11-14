@@ -132,8 +132,8 @@ public class ListingServiceImpl implements ListingService{
 	@Override
 	public void deleteListing(UUID listingId) {
 		
-		Listing 	listing 			= this.listingRepository.findListingById(listingId).orElseThrow(() -> new IllegalArgumentException("Cannot delete unknown listing: " + listingId));
-		String 			currentUser		= SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+		Listing 	listing 		= this.listingRepository.findListingById(listingId).orElseThrow(() -> new IllegalArgumentException("Cannot delete unknown listing: " + listingId));
+		String 		currentUser		= SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
 		
 		if (!listing.getOwnerId().equals(currentUser)) {
 			throw new AccessDeniedException("Not authroised to alter this Listing");
