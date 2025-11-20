@@ -102,7 +102,7 @@ public class ListingStatistics {
 	public ListingStatistics(List<ListingViewedEvent> events, List<ListingContactRequestEvent> contactRequestEvents) {
 		
 		events.stream().forEach( evt ->
-			this.processCreatedByWeek(evt, viewsPerWeek, viewsToday, viewsThisWeek)
+			this.processCreatedByWeek(evt, viewsPerWeek, viewsToday)
 		);
 		
 		this.viewsPerWeek.keySet().stream().sorted().forEach(s -> 
@@ -110,7 +110,7 @@ public class ListingStatistics {
 		);
 		
 		contactRequestEvents.stream().forEach( evt ->
-				this.processCreatedByWeek(evt, contactRequestsPerWeek, contactRequestsToday, contactRequestsThisWeek)
+				this.processCreatedByWeek(evt, contactRequestsPerWeek, contactRequestsToday)
 		);
 		
 		this.contactRequestsPerWeek.keySet().stream().sorted().forEach(s -> {
@@ -143,7 +143,7 @@ public class ListingStatistics {
 	* Processes the event so that it is grouped by week
 	* @param event - event to process
 	*/
-	private void processCreatedByWeek(ListingEvent event, Map<String, Long> eventsCountByWeekContainer, AtomicLong dayCount, AtomicLong weekCount ) {
+	private void processCreatedByWeek(ListingEvent event, Map<String, Long> eventsCountByWeekContainer, AtomicLong dayCount ) {
 		
 		TemporalField 	weekOfYear = WeekFields.of(Locale.getDefault()).weekOfYear();
 		int 			weekNumber = event.getCreated().get(weekOfYear);
@@ -157,7 +157,7 @@ public class ListingStatistics {
 		}
 		
 		if (LocalDate.now().equals(event.getCreated().toLocalDate())) {
-			dayCount.set(dayCount.get());
+			dayCount.set(dayCount.get()+1);
 		}
 		
 	}
