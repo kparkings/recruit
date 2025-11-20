@@ -39,6 +39,9 @@ import { ViewportScroller } 														from '@angular/common';
 })
 export class SuggestionsComponent implements OnInit {
 
+	private maxResultsOnPage:number = 21;
+	private maxWidthMobileDevice = 700;
+	
 	@Input()  externalProvileViewCandidateId:string = "";
 	@Input()  parentComponent:string = "";
 	
@@ -97,6 +100,7 @@ export class SuggestionsComponent implements OnInit {
 	public publicityView:string									= 'basic';
 	private lastViewedCandidate:string							= '';
 	private backButtonToResultsPressed:boolean					= false;
+	private topRowIds:Array<string> 							= new Array<string>();
 			
 	public createAlertForm:UntypedFormGroup 					= new UntypedFormGroup({
 		alertName:												new UntypedFormControl(''),
@@ -148,6 +152,21 @@ export class SuggestionsComponent implements OnInit {
 		
 	public handleNewSearchRequest(newSuggestions:Array<Candidate>){
 		this.suggestions = newSuggestions;
+		
+		this.topRowIds = new Array<string>();
+		
+		/**
+		* Defines all the candidates in the first page of results
+		*/
+		if (newSuggestions.length >= this.maxResultsOnPage) {
+			newSuggestions.slice(0,this.maxResultsOnPage).map(c => c.candidateId).forEach(c => {
+				this.topRowIds.push(c);
+			})
+		} else {
+			newSuggestions.slice(0,newSuggestions.length).map(c => c.candidateId).forEach(c => {
+				this.topRowIds.push(c);
+			})
+		}
 	}
 	
 	private init():void{
@@ -172,7 +191,6 @@ export class SuggestionsComponent implements OnInit {
 			searchRequest.candidateFilters.candidateIds.push(this.candidateNavService.getCandidateId());
 												
 			this.candidateService.getCandidateSuggestions(searchRequest).subscribe(candidate => {
-			//this.candidateService.getCandidateByIdWithRecruiterAsOwner(this.candidateNavService.getCandidateId(), this.currentUserAuth.getLoggedInUserId()).subscribe(candidate => {
 				this.showSuggestedCandidateOverview(candidate.body.content[0]);	
 			});
 		}
@@ -222,6 +240,7 @@ export class SuggestionsComponent implements OnInit {
 		this.filterByJobSpecForm = new UntypedFormGroup({
 			specAsText: new UntypedFormControl('Enter Job specification Text here...'),
 		});
+		this.doScrollTop();
 	}
 		
 	public showCVInline(candidateId:string):void{
@@ -342,7 +361,20 @@ export class SuggestionsComponent implements OnInit {
 	* Scrolls to the top of the last candidate viewed by the user in the search results  
 	*/
 	public navigateToLastViewedCandidate():void{
-		this.scroller.scrollToAnchor('candidate-id-'+ this.lastViewedCandidate);
+		
+		let isMob:boolean = window.innerWidth <= this.maxWidthMobileDevice;			
+		
+		/**
+		* To avoid jumping on the screen, if the user is using a desktop dont 
+		* scroll to element if the selected candidate is on the top page of 
+		* results 
+		*/
+		if (this.topRowIds.indexOf(this.lastViewedCandidate) >= 0 && !isMob) {
+			this.doScrollTop();
+		} else {
+			this.scroller.scrollToAnchor('candidate-id-'+ this.lastViewedCandidate);	
+		}
+		
 	}
 	
 	public doCreditCheck():void{
