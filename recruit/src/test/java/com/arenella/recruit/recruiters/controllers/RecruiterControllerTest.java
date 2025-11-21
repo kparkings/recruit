@@ -17,7 +17,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -281,27 +280,4 @@ class RecruiterControllerTest {
 		
 	}
 	
-	/**
-	* Tests request to generate invoice for a Subscription
-	* @throws Exception
-	*/
-	@Test
-	void testGetInvoiceForRecruiterSubscription() throws Exception {
-		
-		final UUID 								subscriptionId 		= UUID.randomUUID();
-		final String							invoiceNumber		= "2025-01-00001";
-		final String							unitDescription		= "subscription part 3/12";
-		final LocalDate							invoiceDate			= LocalDate.of(2024, 10, 13);
-		final ByteArrayResource 				invoiceFile 		= new ByteArrayResource(new byte[] {});
-		
-		Mockito.when(this.mockRecruiterService.generateInvoiceForSubscription(subscriptionId, invoiceNumber, Optional.empty(), Optional.of(invoiceDate), Optional.of(unitDescription))).thenReturn(invoiceFile);
-		
-		byte[] response = this.recruiterController.getInvoiceForRecruiterSubscription(subscriptionId, invoiceNumber, unitDescription,Optional.empty(), invoiceDate);
-		
-		Mockito.verify(this.mockRecruiterService).generateInvoiceForSubscription(subscriptionId, invoiceNumber, Optional.empty(), Optional.of(invoiceDate), Optional.of(unitDescription));
-		
-		assertEquals(invoiceFile.getByteArray(), response);
-		
-	}
-
 }

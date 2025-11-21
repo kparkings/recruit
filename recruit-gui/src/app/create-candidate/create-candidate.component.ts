@@ -184,9 +184,6 @@ export class CreateCandidateComponent implements OnInit {
 		let contractFrom:string 	= this.formBean.get('contractFrom')?.value;
 		let contractTo:string 		= this.formBean.get('contractTo')?.value;
 			
-			console.log("PERM " + permCurrency.length + " " + (permTimeUnit.length > 0));
-			console.log("CONT " + contractCurrency.length + " " + (contractTimeUnit.length > 0));
-			
 		this.curriculumService.uploadPendingCurriculum(this.curriculumFile).subscribe(pendingCandidateId =>{
 			
 			const pc:NewPendingCandidate = new NewPendingCandidate();
@@ -198,9 +195,6 @@ export class CreateCandidateComponent implements OnInit {
 			pc.introduction 		= introduction;
 			pc.freelance			= contract;
 			pc.perm					= perm;
-			
-			console.log("PERM " + permCurrency.length + " " + (permTimeUnit.length > 0));
-			console.log("CONT " + contractCurrency.length + " " + (contractTimeUnit.length > 0));
 			
 			if (permCurrency.length > 0 && permTimeUnit.length > 0){
 				let permRate:Rate = new Rate();	

@@ -262,6 +262,7 @@ suggestion-results-flag-country{
 	padding-top:5px;
 	padding-left:5px;
 	padding-right:20px;
+	min-width:90px;
 }
 
 .function-selectable{

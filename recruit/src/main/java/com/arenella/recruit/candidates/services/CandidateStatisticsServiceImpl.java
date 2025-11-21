@@ -153,18 +153,18 @@ public class CandidateStatisticsServiceImpl implements CandidateStatisticsServic
 			if (filterOptions.getFunctions().isEmpty()) {
 				events.add(this.generateEvent(userId, searchId ,null, null, null, filterOptions));
 			} else {
-				filterOptions.getFunctions().stream().forEach(function -> {
-					events.add(this.generateEvent(userId, searchId ,null, null, function, filterOptions));
-				});
+				filterOptions.getFunctions().stream().forEach(function -> 
+					events.add(this.generateEvent(userId, searchId ,null, null, function, filterOptions))
+				);
 			}
 		} else {
 			filterOptions.getCountries().stream().forEach(country -> {
 				if (filterOptions.getFunctions().isEmpty()) {
 					events.add(this.generateEvent(userId, searchId ,null, country, null, filterOptions));
 				} else {
-					filterOptions.getFunctions().stream().forEach(function -> {
-						events.add(this.generateEvent(userId, searchId ,null, country, function, filterOptions));
-					});
+					filterOptions.getFunctions().stream().forEach(function -> 
+						events.add(this.generateEvent(userId, searchId ,null, country, function, filterOptions))
+					);
 				}
 			});
 		}

@@ -82,7 +82,7 @@
 	      		<!-- Table row -->
 	      		<ng-container *ngFor="let recruiter of getSubscriptionRecruiters()" class="recruiter-active-subscription">
 	      			<tr  class="recruiter-active-subscription" (click)="toggleRecruiterDetails(recruiter.recruiter)">
-	      				<td style="width:20px"><span class="subscription{{recruiter.subscriptionStatus}}" style="padding-top:10px"></span></td>
+	      				<td *ngIf="showActivePaidSubscription" style="width:20px"><span class="subscription{{recruiter.subscriptionStatus}}" style="padding-top:10px"></span></td>
 	      				<td *ngIf="showActivePaidSubscription" class="candidate-tab-col medicol">
 	      					{{recruiter.recruiter.userId}}
 	      				</td>
@@ -122,7 +122,7 @@
       			</ng-container>
       			<ng-container *ngFor="let recruiter of getCreditBasedRecruiters()">
 	      			<tr  class="recruiter-credit-based-subscription" (click)="toggleRecruiterDetails(recruiter.recruiter)">
-	      				<td style="width:20px"><span class="subscription{{recruiter.subscriptionStatus}}"></span></td>
+	      				<td *ngIf="showCreditBasedSubscription" style="width:20px"><span class="subscription{{recruiter.subscriptionStatus}}"></span></td>
 	      				<td *ngIf="showCreditBasedSubscription" class="candidate-tab-col medicol"><span class="candidate-id-prefix">
 	      					</span>{{recruiter.recruiter.userId}}
 	      				</td>

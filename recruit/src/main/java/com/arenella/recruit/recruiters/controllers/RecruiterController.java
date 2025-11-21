@@ -1,15 +1,12 @@
 package com.arenella.recruit.recruiters.controllers;
 
 import java.security.Principal;
-import java.time.LocalDate;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -19,7 +16,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.arenella.recruit.recruiters.beans.RecruiterAPIInbound;
@@ -37,9 +33,16 @@ import com.arenella.recruit.recruiters.services.RecruiterService;
 @RestController
 public class RecruiterController {
 
-	@Autowired
 	private RecruiterService recruiterService;
-
+	
+	/**
+	* Constructor
+	* @param recruiterService
+	*/
+	public RecruiterController(RecruiterService recruiterService) {
+		this.recruiterService = recruiterService;
+	}
+	
 	/**
 	* Adds a new Recruiter
 	* @param recruiter
@@ -159,27 +162,6 @@ public class RecruiterController {
 		this.recruiterService.deleteRecruiter(recruiterId);
 		
 		return ResponseEntity.ok().build();
-	}
-	
-	/**
-	* Generates and returns a PDF Invoice for the Subscription
-	* @param subscriptionId		- Unique Id of the Subscription to generate invoice for
-	* @param invoiceNumber		- Id of the invoice
-	* @param unitDescription	- Description of unit of service being invoiced
-	* @param invoiceDate		- Date to apply to the invoice
-	* @return PDF Invoice for the Subscription
-	* @throws Exception
-	*/
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	@GetMapping(value = "recruiter/invoice/{subscriptionId}/", produces = MediaType.APPLICATION_PDF_VALUE)
-	public @ResponseBody byte[] getInvoiceForRecruiterSubscription(	@PathVariable("subscriptionId") UUID 				subscriptionId,  
-																	@RequestParam(required=true) 	String 				invoiceNumber, 
-																	@RequestParam(required=false) 	String 				unitDescription,
-																	@RequestParam(required=false) 	Optional<Boolean>	btwApplies,
-																	@RequestParam(required=false) 	LocalDate 			invoiceDate) throws Exception{
-		
-		return recruiterService.generateInvoiceForSubscription(subscriptionId, invoiceNumber, btwApplies, Optional.ofNullable(invoiceDate), Optional.ofNullable(unitDescription)).getByteArray();
-		
 	}
 	
 }

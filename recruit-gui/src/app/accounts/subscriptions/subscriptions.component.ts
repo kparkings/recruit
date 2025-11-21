@@ -6,7 +6,6 @@ import { Recruiter }							from './../recruiter';
 import { Subscription }							from './../subscription';
 import { environment }							from '../../../environments/environment';
 import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
-import { GenerateInvoiceRequest } 				from 'src/app/generate-invoice-request';
 import { CurriculumService }					from '../../curriculum.service';
 import { DomSanitizer, SafeResourceUrl } 		from '@angular/platform-browser';
 import { TranslateService } 					from '@ngx-translate/core';
@@ -19,19 +18,19 @@ import { TranslateService } 					from '@ngx-translate/core';
 })
 export class SubscriptionsComponent {
 	
-	@ViewChild('invoiceDetailsBox', { static: true }) 			invoiceDetailsBox!: ElementRef<HTMLDialogElement>;
+	//@ViewChild('invoiceDetailsBox', { static: true }) 			invoiceDetailsBox!: ElementRef<HTMLDialogElement>;
 	
 
 	public SUBSCRIPTION_VIEW = SUBSCRIPTION_VIEW;
 	
 	public currentView:SUBSCRIPTION_VIEW = SUBSCRIPTION_VIEW.SELECT_SUBSCRIPTION_STATUS; 
 
-	public invoiceDetailsForm:UntypedFormGroup 	= new UntypedFormGroup({
-		invoiceNumber:			new UntypedFormControl(''),
-		invoiceDate:			new UntypedFormControl(''),
-		unitDescription:		new UntypedFormControl(''),
-		btwApplies:				new UntypedFormControl(''),
-	});
+	//public invoiceDetailsForm:UntypedFormGroup 	= new UntypedFormGroup({
+	//	invoiceNumber:			new UntypedFormControl(''),
+	//	invoiceDate:			new UntypedFormControl(''),
+	//	unitDescription:		new UntypedFormControl(''),
+	//	btwApplies:				new UntypedFormControl(''),
+	//});
 	
 	recruiters:Array<Recruiter>										= new Array<Recruiter>();
 	recruitersWithSubscriptionActions:Array<SubscriptionAction>		= new Array<SubscriptionAction>();
@@ -39,7 +38,6 @@ export class SubscriptionsComponent {
 	public selectedRecruiter:Recruiter 								= new Recruiter();
 	public lastCurrentView:SUBSCRIPTION_VIEW 						= SUBSCRIPTION_VIEW.SELECT_SUBSCRIPTION_STATUS;
 	
-	private invoiceRequest:GenerateInvoiceRequest = new GenerateInvoiceRequest();
 	public 	trustedResourceUrl:SafeResourceUrl;
 	public 	invoiceData:any;
 	
@@ -246,84 +244,84 @@ export class SubscriptionsComponent {
 		this.currentView = SUBSCRIPTION_VIEW.SUBSCRIPTION_DETAILS;
 	}
 	
-	public showGenerateInvoiceOptions():void{
+	//public showGenerateInvoiceOptions():void{
 		
-		this.invoiceDetailsForm 	= new UntypedFormGroup({
-			invoiceNumber:			new UntypedFormControl(''),
-			invoiceDate:			new UntypedFormControl(''),
-			unitDescription:		new UntypedFormControl(''),
-			btwApplies:				new UntypedFormControl(''),
+	//	this.invoiceDetailsForm 	= new UntypedFormGroup({
+	//		invoiceNumber:			new UntypedFormControl(''),
+	//		invoiceDate:			new UntypedFormControl(''),
+	//		unitDescription:		new UntypedFormControl(''),
+	//		btwApplies:				new UntypedFormControl(''),
 		
-		});
+	//	});
 		
-		this.invoiceDetailsBox.nativeElement.showModal();
+	//	this.invoiceDetailsBox.nativeElement.showModal();
 		
-	}
+	//}
 	
 	/**
 	*  Sets URL to generate and return Invoice for a subscription
 	*/
-	public getInvoiceUrlForInlinePdf(invoiceId:string):void{
+	//public getInvoiceUrlForInlinePdf(invoiceId:string):void{
 		
-		let params:string 			= '?invoiceNumber='+this.invoiceRequest.invoiceNumber+'&invoiceDate='+this.invoiceRequest.invoiceDate+''+this.addUnitDescriptionString()+"&btwApplies="+this.invoiceRequest.btwApplies;
-		let url 					=  environment.backendUrl + 'recruiter/invoice/'+this.invoiceRequest.subscriptionId+"/"+params;
-		this.trustedResourceUrl 	= this.sanitizer.bypassSecurityTrustResourceUrl(url);
+	//	let params:string 			= '?invoiceNumber='+this.invoiceRequest.invoiceNumber+'&invoiceDate='+this.invoiceRequest.invoiceDate+''+this.addUnitDescriptionString()+"&btwApplies="+this.invoiceRequest.btwApplies;
+	//	let url 					=  environment.backendUrl + 'recruiter/invoice/'+this.invoiceRequest.subscriptionId+"/"+params;
+	//	this.trustedResourceUrl 	= this.sanitizer.bypassSecurityTrustResourceUrl(url);
 		
-	}
+	//}
 	
-	private addUnitDescriptionString():string{
+	//private addUnitDescriptionString():string{
 		
-		if (!this.invoiceRequest.unitDescription || this.invoiceRequest.unitDescription == ""){
-			return "";
-		}
+	//	if (!this.invoiceRequest.unitDescription || this.invoiceRequest.unitDescription == ""){
+	//		return "";
+	//	}
 		
-		return '&unitDescription='+this.invoiceRequest.unitDescription;
-	}
+	//	return '&unitDescription='+this.invoiceRequest.unitDescription;
+	//}
 	
-	public isInvoiceButtonEnabled():boolean{
+	//public isInvoiceButtonEnabled():boolean{
 		
-		let invoiceNumber 		= this.invoiceDetailsForm.get('invoiceNumber')?.value;
+	//	let invoiceNumber 		= this.invoiceDetailsForm.get('invoiceNumber')?.value;
+	//	
+	//	if (!invoiceNumber || invoiceNumber.length <2){
+	////		return false;
+	//	}
 		
-		if (!invoiceNumber || invoiceNumber.length <2){
-			return false;
-		}
+	//	return true;
 		
-		return true;
-		
-	}
+	//}
 	
 	/**
 	*  Returns the url to perform the download of the candidates CV
 	*/
-	public generateInvoice():void{
+	//public generateInvoice():void{
 		
-		this.invoiceRequest.subscriptionId 		= this.selectedSubscriptionAction.subscriptionId;
-		this.invoiceRequest.invoiceNumber 		= this.invoiceDetailsForm.get('invoiceNumber')?.value;
-		this.invoiceRequest.invoiceDate 		= this.invoiceDetailsForm.get('invoiceDate')?.value;
-		this.invoiceRequest.unitDescription 	= this.invoiceDetailsForm.get('unitDescription')?.value;
-		this.invoiceRequest.btwApplies			= this.invoiceDetailsForm.get('btwApplies')?.value;
+	//	this.invoiceRequest.subscriptionId 		= this.selectedSubscriptionAction.subscriptionId;
+	//	this.invoiceRequest.invoiceNumber 		= this.invoiceDetailsForm.get('invoiceNumber')?.value;
+	//	this.invoiceRequest.invoiceDate 		= this.invoiceDetailsForm.get('invoiceDate')?.value;
+	//	this.invoiceRequest.unitDescription 	= this.invoiceDetailsForm.get('unitDescription')?.value;
+	//	this.invoiceRequest.btwApplies			= this.invoiceDetailsForm.get('btwApplies')?.value;
 		
-		this.getInvoiceUrlForInlinePdf(this.selectedSubscriptionAction.subscriptionId);
+	//	this.f(this.selectedSubscriptionAction.subscriptionId);
 			
-		this.invoiceDetailsForm 	= new UntypedFormGroup({
-			invoiceNumber:			new UntypedFormControl(''),
-			invoiceDate:			new UntypedFormControl(''),
-			unitDescrition:			new UntypedFormControl(''),
-			btwApplies:				new UntypedFormControl(''),
-		});
+	//	this.invoiceDetailsForm 	= new UntypedFormGroup({
+	//		invoiceNumber:			new UntypedFormControl(''),
+	//		invoiceDate:			new UntypedFormControl(''),
+	//		unitDescrition:			new UntypedFormControl(''),
+	//		btwApplies:				new UntypedFormControl(''),
+	//	});
 			
-		this.invoiceDetailsBox.nativeElement.close();
+	//	this.invoiceDetailsBox.nativeElement.close();
 		
-		this.currentView = SUBSCRIPTION_VIEW.SUBSCRIPTION_INVOICE_INLINE;
+	//	this.currentView = SUBSCRIPTION_VIEW.SUBSCRIPTION_INVOICE_INLINE;
 		
-	}
+	//}
 	
-	public showBtnDownloadCV():boolean{
-		return this.selectedSubscriptionAction.type == 'ONE_MONTH_SUBSCRIPTION' 
-			|| this.selectedSubscriptionAction.type == 'THREE_MONTHS_SUBSCRIPTION' 
-			|| this.selectedSubscriptionAction.type == 'SIX_MONTHS_SUBSCRIPTION' 
-			|| this.selectedSubscriptionAction.type == 'YEAR_SUBSCRIPTION';
-	}
+	//public showBtnDownloadCV():boolean{
+	//	return this.selectedSubscriptionAction.type == 'ONE_MONTH_SUBSCRIPTION' 
+	//		|| this.selectedSubscriptionAction.type == 'THREE_MONTHS_SUBSCRIPTION' 
+	//		|| this.selectedSubscriptionAction.type == 'SIX_MONTHS_SUBSCRIPTION' 
+	//		|| this.selectedSubscriptionAction.type == 'YEAR_SUBSCRIPTION';
+	//}
 	
 	public backFromSubscriptionDetails():void{
 		this.currentView 					= this.lastCurrentView;
@@ -383,6 +381,6 @@ enum SUBSCRIPTION_VIEW {
 	ACTIVE_INVOICE_SENT						= "ACTIVE_INVOICE_SENT",
 	SUBSCRIPTION_STATUS_DISABLED 			= "DISABLED_PENDING_PAYMENT",
 	SUBSCRIPTION_DETAILS			  		= "SUBSCRIPTION_DETAILS",
-	SUBSCRIPTION_INVOICE_INLINE 			= "SUBSCRIPTION_INVOICE_INLINE",
+	//SUBSCRIPTION_INVOICE_INLINE 			= "SUBSCRIPTION_INVOICE_INLINE",
 	SUBSCRIPTION_INVOICE_UNPAID				= "SUBSCRIPTION_INVOICE_UNPAID"
 };

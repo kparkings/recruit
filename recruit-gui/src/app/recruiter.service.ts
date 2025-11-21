@@ -5,7 +5,6 @@ import { environment }								from './../environments/environment';
 import { RecruiterSignup }							from './recruiter-signup/signup-recruiter';
 import { INVOICE_TYPE, SubscriptionAPIInbound }		from './recruiter-account/subscription-api-inbound';
 import { RecruiterUpdateRequest }					from './recruiter-account/recruiter-update-request';
-import { GenerateInvoiceRequest } 					from './generate-invoice-request';
 import { UserLoginStats} 							from './login-summary';
 
 @Injectable({
@@ -133,17 +132,6 @@ export class RecruiterService {
   
         return this.httpClient.put<any>(backendUrl, recruiter, this.httpOptions);
 
-    }
-
-	/**
-	* Sends request to API to generate invoice for a subscription and return the file
-	*/
-	public generateInvoiceForRecruiterSubscription(invoiceRequest: GenerateInvoiceRequest): Observable<any> {
-          
-        const backendUrl:string = environment.backendUrl +'recruiter/invoice';
-	
-		return this.httpClient.post<any>(backendUrl, JSON.stringify(invoiceRequest), this.httpOptions);
-		
     }
 
 }
