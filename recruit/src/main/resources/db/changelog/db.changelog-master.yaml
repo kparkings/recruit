@@ -2577,4 +2577,119 @@ databaseChangeLog:
                   name: alert_sent
                   type: timestamp
                   constraints:
-                    nullable: false 
+                    nullable: false
+  - changeSet:
+      id: privatechats
+      author: kparkings
+      changes:
+        - createTable:
+            tableName: private_chats
+            schemaName: chats
+            columns:
+              - column:
+                  name: id
+                  type: UUID
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: sender_id
+                  type: UUID
+                  constraints:
+                    nullable: false
+              - column:
+                  name: recipient_id
+                  type: UUID
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created
+                  type: timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: last_updated
+                  type: timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: last_key_press_sender
+                  type: timestamp
+                  constraints:
+                    nullable: true 
+              - column:
+                  name: last_key_press_recipient
+                  type: timestamp
+                  constraints:
+                    nullable: true
+              - column:
+                  name: blocked_by_sender
+                  type: boolean
+                  constraints:
+                    nullable: true 
+              - column:
+                  name: blocked_by_recipient
+                  type: boolean
+                  constraints:
+                    nullable: true
+              - column:
+                  name: last_viewed_by_sender
+                  type: timestamp
+                  constraints:
+                    nullable: true 
+              - column:
+                  name: last_viewed_by_recipient
+                  type: timestamp
+                  constraints:
+                    nullable: true
+        - createTable:
+            tableName: chat_messages
+            schemaName: chats
+            columns:
+              - column:
+                  name: id
+                  type: UUID
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: chat_id
+                  type: UUID
+                  constraints:
+                    nullable: false
+              - column:
+                  name: sender_id
+                  type: UUID
+                  constraints:
+                    nullable: false
+              - column:
+                  name: recipient_id
+                  type: UUID
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created
+                  type: timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: message
+                  type: varchar
+                  constraints:
+                    nullable: false
+        - createTable:
+            tableName: message_likes
+            schemaName: chats
+            columns:
+              - column:
+                  name: message_id
+                  type: UUID
+                  constraints:
+                    nullable: false                    
+                    foreignKeyName: fk_message_msg_likes
+                    references: chats.chat_messages(id)
+              - column:
+                  name: user
+                  type: varchar
+                  constraints:
+                    nullable: false
