@@ -23,7 +23,7 @@ import org.springframework.data.elasticsearch.repository.config.EnableElasticsea
 * @author Hp
 */
 @Configuration
-@EnableElasticsearchRepositories(basePackages = "github.io.truongbn.elasticsearch.repository")
+@EnableElasticsearchRepositories(basePackages = {"github.io.truongbn.elasticsearch.repository","com.arenella"})
 public class ElasticSearchConfig extends ElasticsearchConfiguration {
 
 	@Value("${elasticsearch-use-ssl}")

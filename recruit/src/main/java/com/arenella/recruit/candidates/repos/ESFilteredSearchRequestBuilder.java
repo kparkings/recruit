@@ -2,6 +2,7 @@ package com.arenella.recruit.candidates.repos;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -32,6 +33,8 @@ import co.elastic.clients.json.JsonData;
 */
 public class ESFilteredSearchRequestBuilder {
 
+	public static final DateTimeFormatter FMT_DATE_TIME = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+	
 	/**
 	* Hide default constructor 
 	*/
@@ -95,11 +98,19 @@ public class ESFilteredSearchRequestBuilder {
 		
 		if (!filterOptions.getLastAccountRefreshLtEq().isEmpty()) {
 			LocalDate cutOff = filterOptions.getLastAccountRefreshLtEq().get();
+			//mustQueries.add(RangeQuery.of(m -> m
+			//		.queryName("lastAccountRefresh")
+			//		.field("lastAccountRefresh")
+			//		.lte(JsonData.of(Date.from(cutOff.atStartOfDay(ZoneId.systemDefault()).toInstant())))
+			//)._toQuery());
+			
 			mustQueries.add(RangeQuery.of(m -> m
+					.date(n -> n
 					.queryName("lastAccountRefresh")
 					.field("lastAccountRefresh")
-					.lte(JsonData.of(Date.from(cutOff.atStartOfDay(ZoneId.systemDefault()).toInstant())))
+					.lte(cutOff.atStartOfDay(ZoneId.systemDefault()).format(FMT_DATE_TIME)))
 			)._toQuery());
+			
 		}
 		
 		if (!filterOptions.getGeoPosFilter().isEmpty()) {
@@ -238,37 +249,65 @@ public class ESFilteredSearchRequestBuilder {
 		}
 		
 		if (filterOptions.getYearsExperienceGtEq() > 0 ) {
+			//mustQueries.add(RangeQuery.of(m -> m
+			//		.queryName("yearsExperienceGte")
+			//		.field("yearsExperience")
+			//		.gte(JsonData.of(filterOptions.getYearsExperienceGtEq()))
+			//)._toQuery());
 			mustQueries.add(RangeQuery.of(m -> m
+					.number(n -> n
 					.queryName("yearsExperienceGte")
 					.field("yearsExperience")
-					.gte(JsonData.of(filterOptions.getYearsExperienceGtEq()))
+					.gte(Double.valueOf(filterOptions.getYearsExperienceGtEq())))
 			)._toQuery());
+			
 		}
 		
 		if (filterOptions.getYearsExperienceLtEq() > 0 ) {
+			//mustQueries.add(RangeQuery.of(m -> m
+			//		.queryName("yearsExperienceLte")
+			//		.field("yearsExperience")
+			//		.lte(JsonData.of(filterOptions.getYearsExperienceLtEq()))
+			//)._toQuery());
+			
 			mustQueries.add(RangeQuery.of(m -> m
+					.number(n -> n
 					.queryName("yearsExperienceLte")
 					.field("yearsExperience")
-					.lte(JsonData.of(filterOptions.getYearsExperienceLtEq()))
+					.lte(Double.valueOf(filterOptions.getYearsExperienceLtEq())))
 			)._toQuery());
+			
 		}
 		
 		if (filterOptions.getDaysSinceLastAvailabilityCheck().isPresent()) {
 			LocalDate cutOff = LocalDate.now().minusDays(filterOptions.getDaysSinceLastAvailabilityCheck().get());
+			//mustQueries.add(RangeQuery.of(m -> m
+			//		.queryName("lastAvailabilityCheck")
+			//		.field("lastAvailabilityCheck")
+			//		.lte(JsonData.of(Date.from(cutOff.atStartOfDay(ZoneId.systemDefault()).toInstant())))
+			//)._toQuery());
 			mustQueries.add(RangeQuery.of(m -> m
+					.date(n -> n
 					.queryName("lastAvailabilityCheck")
 					.field("lastAvailabilityCheck")
-					.lte(JsonData.of(Date.from(cutOff.atStartOfDay(ZoneId.systemDefault()).toInstant())))
+					.lte(cutOff.atStartOfDay(ZoneId.systemDefault()).format(FMT_DATE_TIME)))
 			)._toQuery());
+			
 		}
 		
 		if (filterOptions.getDaysSincelastAvailabilityCheckEmailSent().isPresent()) {
 			LocalDate cutOff = LocalDate.now().minusDays(filterOptions.getDaysSincelastAvailabilityCheckEmailSent().get());
 			
+			//Query daysSinceLastEmail = RangeQuery.of(m -> m
+			//		.queryName("lastAvailabilityCheckEmailSent")
+			//		.field("lastAvailabilityCheckEmailSent")
+			//		.lte(JsonData.of(Date.from(cutOff.atStartOfDay(ZoneId.systemDefault()).toInstant())))
+			//)._toQuery();
 			Query daysSinceLastEmail = RangeQuery.of(m -> m
+					.date(n -> n
 					.queryName("lastAvailabilityCheckEmailSent")
 					.field("lastAvailabilityCheckEmailSent")
-					.lte(JsonData.of(Date.from(cutOff.atStartOfDay(ZoneId.systemDefault()).toInstant())))
+					.lte(cutOff.atStartOfDay(ZoneId.systemDefault()).format(FMT_DATE_TIME)))
 			)._toQuery();
 			
 			Query lastEmailSentDateExists = ExistsQuery.of(m -> m
@@ -290,11 +329,18 @@ public class ESFilteredSearchRequestBuilder {
 							lastEmailSentDateExists))
 				)._toQuery();
 			
+			
 			Query queryAdminUpdatedAlready = RangeQuery.of(m -> m
-					.queryName("lastAvailabilityCheck")
-					.field("lastAvailabilityCheck")
-					.gt(JsonData.of(Date.from(cutOff.atStartOfDay(ZoneId.systemDefault()).toInstant())))
-			)._toQuery();
+					.date(n -> n
+				    .queryName("lastAvailabilityCheck")
+				    .field("lastAvailabilityCheck")
+				    .gt(cutOff.atStartOfDay(ZoneId.systemDefault()).format(FMT_DATE_TIME)))
+				)._toQuery();
+			//Query queryAdminUpdatedAlready = RangeQuery.of(m -> m
+			//		.queryName("lastAvailabilityCheck")
+			//		.field("lastAvailabilityCheck")
+			//		.gt(JsonData.of(Date.from(cutOff.atStartOfDay(ZoneId.systemDefault()).toInstant())))
+			//)._toQuery();
 			
 			shouldQueries.add(queryCuttoffLastEmailSent);
 			shouldQueries.add(queryEmailNeverSent);
@@ -307,12 +353,20 @@ public class ESFilteredSearchRequestBuilder {
 		
 		if (filterOptions.getRegisteredAfter().isPresent()) {
 			LocalDate cutOff = filterOptions.getRegisteredAfter().get();
+			//mustQueries.add(RangeQuery.of(m -> m
+			//		.queryName("registeredAfterCheck")
+			//		.field("registerd")
+			//		.gte(JsonData.of(Date.from(cutOff.atStartOfDay(ZoneId.systemDefault()).toInstant())))
+			//)._toQuery());
 			mustQueries.add(RangeQuery.of(m -> m
+					.date(n -> n
 					.queryName("registeredAfterCheck")
 					.field("registerd")
-					.gte(JsonData.of(Date.from(cutOff.atStartOfDay(ZoneId.systemDefault()).toInstant())))
+					.gte(cutOff.atStartOfDay(ZoneId.systemDefault()).format(FMT_DATE_TIME)))
 			)._toQuery());
 		}
+		
+		
 		
 		if (filterOptions.getOwnerId().isPresent()) {
 			mustQueries.add(MatchQuery.of(m -> m

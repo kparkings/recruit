@@ -7,7 +7,7 @@ import org.apache.tika.detect.Detector;
 import org.springframework.stereotype.Component;
 
 import com.arenella.recruit.recruiters.beans.RecruiterProfile.Photo.PHOTO_FORMAT;
-import com.mchange.v1.db.sql.UnsupportedTypeException;
+import com.arenella.recruit.recruiters.exceptions.UnsupportedTypeException;
 
 import org.apache.tika.metadata.Metadata;
 import org.apache.tika.mime.MediaType;

@@ -3,6 +3,7 @@ package com.arenella.recruit.candidates.repos;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.joda.time.LocalDateTime;
 import org.junit.jupiter.api.Test;
 
 import com.arenella.recruit.candidates.beans.CandidateFilterOptions;
@@ -17,6 +18,9 @@ import co.elastic.clients.elasticsearch._types.query_dsl.Query;
 import co.elastic.clients.elasticsearch._types.query_dsl.RangeQuery;
 import co.elastic.clients.elasticsearch._types.query_dsl.TermsQuery;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.*;
@@ -26,7 +30,6 @@ import java.util.*;
 * @author K Parkings
 */
 class ESFilteredSearchRequestBuilderTest {
-	
 	
 	private static final String 			CANDIDATE_ID 						= "1234";
 	private static final String				SEARCH_TEXT							= "Java Developer";
@@ -81,10 +84,11 @@ class ESFilteredSearchRequestBuilderTest {
 	
 	/**
 	* Tests filter - firstname
+	 * @throws ParseException 
 	* @throws Exception
 	*/
 	@Test
-	void testFilters() {
+	void testFilters() throws ParseException {
 		
 		Query 					query 		= ESFilteredSearchRequestBuilder.createFilteredQuery(filters);
 		BoolQuery 				boolQuery 	= (BoolQuery) query._get();
@@ -116,20 +120,24 @@ class ESFilteredSearchRequestBuilderTest {
 		assertEquals(OWNER_ID, 								mustMatch.stream().filter(q -> q.field().equals("ownerId")).findFirst().get().query().stringValue());
 		assertEquals(EMAIL, 								mustMatch.stream().filter(q -> q.field().equals("email")).findFirst().get().query().stringValue());
 		
-		Date dateLocal 	= Date.from(LAST_REFRESH.atStartOfDay(ZoneId.systemDefault()).toInstant());
-		Date dateES 	= (Date)mustRange.stream().filter(q -> q.field().equals("lastAccountRefresh")).findFirst().get().lte().to(Date.class);
-		assertEquals(dateLocal, dateES);  				
-		
 		mustNotExists.stream().filter(q -> q.queryName().equals("lastAccountRefreshMissing")).findFirst().orElseThrow();
 		
-		mustRange.stream().filter(q -> q.queryName().equals("yearsExperienceGte") 		&& q.gte().toString().equals(String.valueOf(YEARS_EXPERIENCE_GTE))).findFirst().orElseThrow();
-		mustRange.stream().filter(q -> q.queryName().equals("yearsExperienceLte") 		&& q.lte().toString().equals(String.valueOf(YEARS_EXPERIENCE_LTE))).findFirst().orElseThrow();
+		List<RangeQuery> numberRangeQueries = mustRange.stream().filter(q -> q._kind() == RangeQuery.Kind.Number).toList();
+		List<RangeQuery> dateRangeQueries = mustRange.stream().filter(q -> q._kind() == RangeQuery.Kind.Date).toList();
 		
-		LocalDate ld 						= LocalDate.now().minusDays(DAYS_SINCE_LAST_AVAILABILITY_CHECK);
+		Date dateLocal 	= Date.from(LAST_REFRESH.atStartOfDay(ZoneId.systemDefault()).toInstant());
+		String dateStr = dateRangeQueries.stream().filter(q -> q.date().field().equals("lastAccountRefresh")).findFirst().get().date().lte();
+		
+		Date dateES 	= LocalDateTime.parse(dateStr).toDate();
+		
+		assertEquals(dateLocal, dateES); 
+		
+		numberRangeQueries.stream().filter(q -> q.number().queryName().equals("yearsExperienceGte") 		&& q.number().gte().toString().equals(String.valueOf((double)YEARS_EXPERIENCE_GTE))).findFirst().orElseThrow();
+		numberRangeQueries.stream().filter(q -> q.number().queryName().equals("yearsExperienceLte") 		&& q.number().lte().toString().equals(String.valueOf((double)YEARS_EXPERIENCE_LTE))).findFirst().orElseThrow();
 		
 		mustBool.stream().filter(q -> q.queryName().equals("lastAvailabilityCheckEmailSent")).findFirst().orElseThrow();
-		mustRange.stream().filter(q -> q.queryName().equals("lastAvailabilityCheck")	&& q.lte().toString().equals(String.valueOf(Date.from(ld.atStartOfDay(ZoneId.systemDefault()).toInstant())))).findFirst().orElseThrow();
-		mustRange.stream().filter(q -> q.queryName().equals("registeredAfterCheck")		&& q.gte().toString().equals(String.valueOf(Date.from(REGISTERED_AFTER.atStartOfDay(ZoneId.systemDefault()).toInstant())))).findFirst().orElseThrow();
+		dateRangeQueries.stream().filter(q -> q.date().queryName().equals("lastAvailabilityCheck")	&& q.date().lte().equals("2025-11-21T00:00:00")).findFirst().orElseThrow();
+		dateRangeQueries.stream().filter(q -> q.date().queryName().equals("registeredAfterCheck")	&& q.date().gte().equals("2024-05-08T00:00:00")).findFirst().orElseThrow();
 		
 		TermsQuery skills = mustTerms.stream().filter(q -> q.field().equals("skills")).findFirst().get();
 		skills.terms().value().stream().filter(f -> f.stringValue().equals("JaVa")).findAny().orElseThrow();

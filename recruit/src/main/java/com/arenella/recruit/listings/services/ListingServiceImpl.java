@@ -79,7 +79,6 @@ public class ListingServiceImpl implements ListingService{
 	@Autowired
 	private ListingAlertSentEventDao		listingAlertSentEventDao;
 	
-	
 	/**
 	* Refer to the Listing interface for details
 	*/

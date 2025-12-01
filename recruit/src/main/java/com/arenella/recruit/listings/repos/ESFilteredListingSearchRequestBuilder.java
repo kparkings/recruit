@@ -3,6 +3,7 @@ package com.arenella.recruit.listings.repos;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -27,6 +28,8 @@ import co.elastic.clients.json.JsonData;
 */
 public class ESFilteredListingSearchRequestBuilder {
 
+	public static final DateTimeFormatter FMT_DATE_TIME = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+	
 	/**
 	* Hide default constructor 
 	*/
@@ -89,13 +92,28 @@ public class ESFilteredListingSearchRequestBuilder {
 				cutOff = Optional.empty();
 			}
 			
+			try {
 			cutOff.ifPresent(cutOffDate -> 
+				//mustQueries.add(RangeQuery.of(m -> m
+				//		.queryName("created")
+				//		.field("created")
+				//		.gte(JsonData.of(Date.from(cutOffDate.atStartOfDay(ZoneId.systemDefault()).toInstant())))
+				//		)._toQuery())
+				
 				mustQueries.add(RangeQuery.of(m -> m
-						.queryName("created")
-						.field("created")
-						.gte(JsonData.of(Date.from(cutOffDate.atStartOfDay(ZoneId.systemDefault()).toInstant())))
-						)._toQuery())
+					.date(n -> n
+					.queryName("created")
+					.field("created")
+					.gte(cutOffDate.atStartOfDay(ZoneId.systemDefault()).format(FMT_DATE_TIME)))
+					)._toQuery())
+				
+				
+				
 			);
+			
+			}catch(Exception e) {
+				e.printStackTrace();
+			}
 			
 			
 		});

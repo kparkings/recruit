@@ -21,7 +21,6 @@ import co.elastic.clients.elasticsearch._types.FieldSort;
 import co.elastic.clients.elasticsearch._types.SortOrder;
 import co.elastic.clients.elasticsearch.core.SearchResponse;
 
-
 public interface ListingRepository extends ElasticsearchRepository<ListingDocument,UUID>{
 
 	/**

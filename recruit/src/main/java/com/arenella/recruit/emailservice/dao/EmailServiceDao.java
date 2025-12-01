@@ -46,13 +46,13 @@ public interface EmailServiceDao extends CrudRepository<EmailEntity, UUID> {
 		
 	}
 	
-	@Query("FROM EmailEntity where status = :status ")
+	@Query("SELECT e FROM EmailEntity e where status = :status ")
 	Set<EmailEntity> findEmailEntitiessByStatus(@Param("status") Status status);
 	   
-	@Query("FROM EmailEntity e left join e.recipients r where r.contactId = :recipientId")
+	@Query("SELECT e FROM EmailEntity e left join e.recipients r where r.contactId = :recipientId")
 	Set<EmailEntity> fetchEmailEntitiesByRecipientId(@Param("recipientId") String recipientId);
 	
-	@Query("FROM EmailEntity e left join e.recipients r left join e.attachments a where r.contactId = :recipientId and e.id = :emailId and a.id = :attachmentId " )
+	@Query("SELECT e FROM EmailEntity e left join e.recipients r left join e.attachments a where r.contactId = :recipientId and e.id = :emailId and a.id = :attachmentId " )
 	Set<EmailEntity> fetchAttachment(@Param("recipientId") String recipientId, @Param("emailId") UUID emailId, @Param("attachmentId") UUID attachmentId);
 	
 	

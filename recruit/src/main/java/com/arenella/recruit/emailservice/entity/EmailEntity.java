@@ -65,13 +65,9 @@ public class EmailEntity {
 	private SenderEntity 			sender; 
 	
 	@OneToMany(mappedBy = "emailId", cascade = CascadeType.ALL, orphanRemoval=true, fetch=FetchType.EAGER)
-	//@OneToMany(cascade = CascadeType.ALL, orphanRemoval=true, fetch=FetchType.EAGER)
-	//@JoinColumn(name = "email_id")
 	private Set<EmailRecipientEntity> 	recipients					= new LinkedHashSet<>(); 
 	
 	@OneToMany(mappedBy = "emailId", cascade = CascadeType.ALL, orphanRemoval=true, fetch=FetchType.EAGER)
-	//@OneToMany(cascade = CascadeType.ALL, orphanRemoval=true, fetch=FetchType.EAGER)
-	//@JoinColumn(name = "email_id")
 	private Set<EmailAttachmentEntity> 	attachments					= new LinkedHashSet<>(); 
 	
 	/**

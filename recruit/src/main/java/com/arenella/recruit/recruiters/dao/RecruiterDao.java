@@ -50,7 +50,8 @@ public interface RecruiterDao extends CrudRepository<RecruiterEntity, String>{
 	* @param id - id of the Subscription
 	* @return If found the associated Recruiter
 	*/
-	@Query("FROM RecruiterEntity e left join e.subscriptions s where s.subscriptionId = :subscriptionId " )
+	//@Query("FROM RecruiterEntity e left join e.subscriptions s where s.subscriptionId = :subscriptionId " )
+	@Query("SELECT RecruiterEntity FROM RecruiterEntity e left join e.subscriptions s where s.subscriptionId = :subscriptionId " )
 	Optional<RecruiterEntity> getSubscriptionById(UUID subscriptionId);
 	
 

@@ -7,7 +7,7 @@ import org.apache.tika.detect.Detector;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.mchange.v1.db.sql.UnsupportedTypeException;
+import com.arenella.recruit.listings.exceptions.UnsupportedTypeException;
 
 import org.apache.tika.metadata.Metadata;
 import org.apache.tika.mime.MediaType;
@@ -71,7 +71,7 @@ public class FileSecurityParserImpl implements FileSecurityParser{
 					return file.getContentType().equals("application/vnd.openxmlformats-officedocument.wordprocessingml.document") ? FileType.docx : null;
 				}
 				default:{
-					throw new UnsupportedTypeException("Unsu");
+					throw new UnsupportedTypeException("Unsupported Type");
 				}
 			}
 			

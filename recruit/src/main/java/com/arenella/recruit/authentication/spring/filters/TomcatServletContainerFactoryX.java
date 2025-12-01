@@ -26,7 +26,7 @@ public class TomcatServletContainerFactoryX {
 		ajpConnector.setPort(9090);
 		ajpConnector.setSecure(false);
 		ajpConnector.setScheme("http");
-		
+		//tomcat.addAdditionalConnectors(ajpConnector);
 		tomcat.addAdditionalTomcatConnectors(ajpConnector);
 	      
 		return tomcat;

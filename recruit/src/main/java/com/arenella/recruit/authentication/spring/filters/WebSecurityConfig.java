@@ -17,7 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.servlet.util.matcher.PathPatternRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 
 import java.util.Arrays;
@@ -61,38 +61,36 @@ public class WebSecurityConfig {
 	}
 		
 	@Bean
-	public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) 
-	         throws Exception {
+	public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
 	    return authenticationConfiguration.getAuthenticationManager();
 	}
 	
-	@SuppressWarnings("removal")
 	@Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		http.csrf(AbstractHttpConfigurer::disable);
-		http.headers(headers -> headers.frameOptions().disable());
-        http.exceptionHandling().authenticationEntryPoint(authenticationEntryPoint);
-        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+		http.headers(headers -> headers.frameOptions((frameOptions) -> frameOptions.disable()));
+        http.exceptionHandling((exceptionHandling) -> exceptionHandling.authenticationEntryPoint(authenticationEntryPoint));
+        http.sessionManagement((sessionManagement)-> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         
 		http
             .authorizeHttpRequests(authz -> authz
-            	.requestMatchers(new AntPathRequestMatcher("/api/candidate/stats/total-active")).permitAll()
-            	.requestMatchers(new AntPathRequestMatcher("/candidate/stats/total-active")).permitAll()
-            	.requestMatchers(new AntPathRequestMatcher("/api/authenticate")).permitAll()
-            	.requestMatchers(new AntPathRequestMatcher("/authenticate")).permitAll()
-            	.requestMatchers(new AntPathRequestMatcher("/pending-curriculum")).permitAll()
-            	.requestMatchers(new AntPathRequestMatcher("/pending-candidate")).permitAll()
-            	.requestMatchers(new AntPathRequestMatcher("/listing/public/**")).permitAll()
-            	.requestMatchers(new AntPathRequestMatcher("/public/recruiter")).permitAll()
-            	.requestMatchers(new AntPathRequestMatcher("authenticate")).permitAll()
-            	.requestMatchers(new AntPathRequestMatcher("/public/listing-alert")).permitAll()
-            	.requestMatchers(new AntPathRequestMatcher("/public/listing-alert/**")).permitAll()
-            	.requestMatchers(new AntPathRequestMatcher("/public/candidate/**")).permitAll()
-            	.requestMatchers(new AntPathRequestMatcher("/candidate/countries")).permitAll()
-            	.requestMatchers(new AntPathRequestMatcher("/candidate/geo-zone")).permitAll()
-            	.requestMatchers(new AntPathRequestMatcher("/candidate/languages")).permitAll()
-            	.requestMatchers(new AntPathRequestMatcher("/candidate/public/function-count/**")).permitAll()
-            	.requestMatchers(new AntPathRequestMatcher("/candidate/public/search-history")).permitAll()
+            	.requestMatchers(PathPatternRequestMatcher.withDefaults().matcher("/api/candidate/stats/total-active")).permitAll()
+            	.requestMatchers(PathPatternRequestMatcher.withDefaults().matcher("/candidate/stats/total-active")).permitAll()
+            	.requestMatchers(PathPatternRequestMatcher.withDefaults().matcher("/api/authenticate")).permitAll()
+            	.requestMatchers(PathPatternRequestMatcher.withDefaults().matcher("/authenticate")).permitAll()
+            	.requestMatchers(PathPatternRequestMatcher.withDefaults().matcher("/pending-curriculum")).permitAll()
+            	.requestMatchers(PathPatternRequestMatcher.withDefaults().matcher("/pending-candidate")).permitAll()
+            	.requestMatchers(PathPatternRequestMatcher.withDefaults().matcher("/listing/public/**")).permitAll()
+            	.requestMatchers(PathPatternRequestMatcher.withDefaults().matcher("/public/recruiter")).permitAll()
+            	.requestMatchers(PathPatternRequestMatcher.withDefaults().matcher("/authenticate")).permitAll()
+            	.requestMatchers(PathPatternRequestMatcher.withDefaults().matcher("/public/listing-alert")).permitAll()
+            	.requestMatchers(PathPatternRequestMatcher.withDefaults().matcher("/public/listing-alert/**")).permitAll()
+            	.requestMatchers(PathPatternRequestMatcher.withDefaults().matcher("/public/candidate/**")).permitAll()
+            	.requestMatchers(PathPatternRequestMatcher.withDefaults().matcher("/candidate/countries")).permitAll()
+            	.requestMatchers(PathPatternRequestMatcher.withDefaults().matcher("/candidate/geo-zone")).permitAll()
+            	.requestMatchers(PathPatternRequestMatcher.withDefaults().matcher("/candidate/languages")).permitAll()
+            	.requestMatchers(PathPatternRequestMatcher.withDefaults().matcher("/candidate/public/function-count/**")).permitAll()
+            	.requestMatchers(PathPatternRequestMatcher.withDefaults().matcher("/candidate/public/search-history")).permitAll()
             	.anyRequest().authenticated()
         	);
 		
