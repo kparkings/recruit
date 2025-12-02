@@ -20,7 +20,7 @@ public class CandidateFilterOptions {
 	
 	private String 							orderAttribute;
 	private RESULT_ORDER					order;
-	private int								maxResults										= 750;
+	private int								maxResults									= 750;
 	private String							searchText									= "";
 	private Set<String> 					candidateIds								= new HashSet<>();
 	private Set<GEO_ZONE>					geoZones									= new HashSet<>();

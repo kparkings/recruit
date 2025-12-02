@@ -9,17 +9,20 @@ import org.junit.jupiter.api.Test;
 */
 class ChatMessageAPIInboundTest {
 
+	private static final String 	MESSAGE 		= "a Message";
+	
 	/**
 	* Tests construction via Builder 
 	*/
 	@Test
 	void testCreation() {
 		
-		final String message = "aMessafe";
+		ChatMessageAPIInbound msg = ChatMessageAPIInbound
+				.builder()
+					.message(MESSAGE)
+				.build();
 		
-		ChatMessageAPIInbound msg = ChatMessageAPIInbound.builder().message(message).build();
-		
-		assertEquals(message, msg.getMessage());
+		assertEquals(MESSAGE, 		msg.getMessage());
 		
 	}
 	

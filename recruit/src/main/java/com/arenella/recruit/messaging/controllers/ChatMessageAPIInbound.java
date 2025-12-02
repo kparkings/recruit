@@ -10,7 +10,7 @@ import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 public class ChatMessageAPIInbound {
 
 	private String 	message;
-
+	
 	/**
 	* Constructor base upon a Builder
 	* @param builder - Contains initialization values
@@ -20,8 +20,8 @@ public class ChatMessageAPIInbound {
 	}
 	
 	/**
-	* 
-	* @return
+	* Returns the message text
+	* @return message text	
 	*/
 	public String getMessage() {
 		return this.message;
@@ -42,7 +42,7 @@ public class ChatMessageAPIInbound {
 	public static class ChatMessageAPIInboundBuilder{
 	
 		private String 	message;
-
+		
 		/**
 		* Sets the message to add to the Chat
 		* @param message - message

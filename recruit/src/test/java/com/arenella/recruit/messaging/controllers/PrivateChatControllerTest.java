@@ -146,4 +146,42 @@ class PrivateChatControllerTest {
 		
 	}
 	
+	/**
+	* Tests adding new message to Char
+	*/
+	@Test
+	void testAddMessage() {
+		
+		final UUID chatId = UUID.randomUUID();
+		
+		when(this.mockPrincipal.getName()).thenReturn("1234");
+		
+		ChatMessageAPIInbound msg = ChatMessageAPIInbound.builder().build();
+		
+		ResponseEntity<Void> response = controller.doAddMessageToChat(chatId, msg, mockPrincipal);
+		
+		verify(this.mockPrivateChatService).addMessage(chatId, msg.getMessage(), mockPrincipal.getName());
+		
+		assertEquals(HttpStatus.OK, response.getStatusCode());
+		
+	}
+	
+	/**
+	* Tests marking existing message as deleted 
+	*/
+	void testDeleteMessage() {
+		
+		final UUID chatId 		= UUID.randomUUID();
+		final UUID messageId 	= UUID.randomUUID();
+		
+		when(this.mockPrincipal.getName()).thenReturn("1234");
+		
+		ResponseEntity<Void> response = controller.doDeleteMessageFromChat(chatId, messageId, mockPrincipal);
+		
+		verify(this.mockPrivateChatService).deleteMessage(chatId, messageId, mockPrincipal.getName());
+		
+		assertEquals(HttpStatus.OK, response.getStatusCode());
+		
+	}
+	
 }

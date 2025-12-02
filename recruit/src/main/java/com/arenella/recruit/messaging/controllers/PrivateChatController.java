@@ -112,12 +112,12 @@ public class PrivateChatController {
 	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('RECRUITER') OR hasRole('CANDIDATE')")
 	@PutMapping(path="privatechat/{chatId}/message", produces="application/json")
 	public ResponseEntity<Void> doAddMessageToChat(@PathVariable("chatId") UUID chatId, @RequestBody ChatMessageAPIInbound message, Principal principal) {
-		//this.privateChatService
+		this.privateChatService.addMessage(chatId, message.getMessage(), principal.getName());
 		return ResponseEntity.ok().build();
 	}
 	
 	/**
-	* 
+	* Marks the Message as deleted
 	* @param chatId 	- Id of Chat to delete Message from
 	* @param messageId	- Id of Message to delete
 	* @param principal  - Authenticated User
@@ -126,7 +126,7 @@ public class PrivateChatController {
 	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('RECRUITER') OR hasRole('CANDIDATE')")
 	@DeleteMapping(path="privatechat/{chatId}/message/{messageId}", produces="application/json")
 	public ResponseEntity<Void> doDeleteMessageFromChat(@PathVariable("chatId") UUID chatId, @PathVariable("messageId") UUID messageId, Principal principal) {
-		//this.privateChatService.setLastKeyPress(chatId, principal.getName());
+		this.privateChatService.deleteMessage(chatId, messageId, principal.getName());
 		return ResponseEntity.ok().build();
 	}
 	

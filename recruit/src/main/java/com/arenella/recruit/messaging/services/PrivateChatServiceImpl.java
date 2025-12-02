@@ -7,6 +7,7 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
+import com.arenella.recruit.messaging.beans.ChatMessage;
 import com.arenella.recruit.messaging.beans.PrivateChat;
 import com.arenella.recruit.messaging.beans.PrivateChat.PrivateChatBuilder;
 import com.arenella.recruit.messaging.dao.PrivateChatDao;
@@ -17,8 +18,13 @@ import com.arenella.recruit.messaging.dao.PrivateChatDao;
 @Service
 public class PrivateChatServiceImpl implements PrivateChatService{
 
-	private PrivateChatDao privateChatDao;
+	//TODO: [KP] Need a scheduled task to look for messages sent before x minutes after the user last logged in
 	
+	public static final String ERR_MSG_CANNOT_ADD_MESSAGE = "Cannot add message";
+	public static final String ERR_MSG_CANNOT_DEL_MESSAGE = "Cannot delete message";
+	
+	private PrivateChatDao privateChatDao;
+
 	/**
 	* Constructor
 	* @param privateChatDao - DAO for persisting/retrieving Chat data
@@ -135,6 +141,57 @@ public class PrivateChatServiceImpl implements PrivateChatService{
 	@Override
 	public void deleteUserChats(String userId) {
 		this.privateChatDao.fetchUserChats(userId).forEach(c -> privateChatDao.deleteById(c.getId()));
+	}
+	
+	/**
+	* Refer to the PrivateChatService for details 
+	*/
+	@Override
+	public void addMessage(UUID chatId, String message, String userId) {
+		
+		PrivateChat chat = privateChatDao.fetchChatById(chatId).orElseThrow(() -> new RuntimeException(ERR_MSG_CANNOT_ADD_MESSAGE));
+		
+		if (!userId.equals(chat.getSenderId()) && !userId.equals(chat.getRecipientId())) {
+			throw new RuntimeException(ERR_MSG_CANNOT_ADD_MESSAGE);
+		}
+		
+		String recipientId = chat.getSenderId().equals(userId) ? chat.getRecipientId() : chat.getSenderId();
+		
+		chat.addReply(ChatMessage
+				.builder()
+					.id(UUID.randomUUID())
+					.chatId(chatId)
+					.created(LocalDateTime.now())
+					.message(message)
+					.senderId(userId)
+					.recipientId(recipientId)
+				.build());
+		
+		this.privateChatDao.saveChat(chat);
+	}
+
+	/**
+	* Refer to the PrivateChatService for details 
+	*/
+	@Override
+	public void deleteMessage(UUID chatId, UUID messageId, String userId) {
+		
+		PrivateChat chat = privateChatDao.fetchChatById(chatId).orElseThrow(() -> new RuntimeException(ERR_MSG_CANNOT_DEL_MESSAGE));
+		
+		if (!chat.getReplies().keySet().contains(messageId)) {
+			throw new RuntimeException(ERR_MSG_CANNOT_DEL_MESSAGE);
+		}
+		
+		ChatMessage message = chat.getReplies().get(messageId);
+		
+		if (!userId.equals(message.getSenderId())) {
+			throw new RuntimeException(ERR_MSG_CANNOT_DEL_MESSAGE);
+		}
+		
+		chat.deleteReply(messageId);
+		
+		this.privateChatDao.saveChat(chat);
+	
 	}
 	
 	/**

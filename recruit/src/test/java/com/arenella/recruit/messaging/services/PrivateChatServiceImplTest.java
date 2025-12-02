@@ -1,9 +1,11 @@
 package com.arenella.recruit.messaging.services;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
@@ -26,6 +28,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.arenella.recruit.messaging.beans.ChatMessage;
 import com.arenella.recruit.messaging.beans.PrivateChat;
 import com.arenella.recruit.messaging.dao.PrivateChatDao;
 
@@ -332,6 +335,181 @@ class PrivateChatServiceImplTest {
 		this.service.deleteUserChats(userId);
 		
 		verify(this.mockChatDao, times(2)).deleteById(Mockito.any(UUID.class));
+		
+	}
+	
+	/**
+	* Tests exception thrown if request made to add 
+	* message to non existent Chat 
+	*/
+	@Test
+	void testAddMessageNoMatchingChat() {
+		
+		final UUID 		chatId 		= UUID.randomUUID();
+		final String 	userId 		= "aUser";
+		final String 	message		= "aMessage";
+		
+		when(this.mockChatDao.fetchChatById(chatId)).thenReturn(Optional.empty());
+		
+		RuntimeException ex = assertThrows(RuntimeException.class, () -> this.service.addMessage(chatId, message, userId));
+		
+		assertEquals(PrivateChatServiceImpl.ERR_MSG_CANNOT_ADD_MESSAGE, ex.getMessage());
+	
+	}
+	
+	/**
+	* Tests exception thrown if request made to add 
+	* message to a Chat where the User is nether the 
+	* Sender or Recipient in the Chat exchange 
+	*/
+	@Test
+	void testAddMessageUserNeitherSenderNorRecipient() {
+		
+		final UUID 			chatId 			= UUID.randomUUID();
+		final String 		chatSenderId 	= "u1";
+		final String 		chatRecipientId = "u2";
+		final String 		userId 			= "aUser";
+		final String 		message			= "aMessage";
+		final PrivateChat 	chat 			= PrivateChat.builder().senderId(chatSenderId).recipientId(chatRecipientId).build();
+		
+		when(this.mockChatDao.fetchChatById(chatId)).thenReturn(Optional.of(chat));
+		
+		RuntimeException ex = assertThrows(RuntimeException.class, () -> this.service.addMessage(chatId, message, userId));
+		
+		assertEquals(PrivateChatServiceImpl.ERR_MSG_CANNOT_ADD_MESSAGE, ex.getMessage());
+		
+		assertDoesNotThrow(()-> this.service.addMessage(chatId, message, chatSenderId));
+		assertDoesNotThrow(()-> this.service.addMessage(chatId, message, chatRecipientId));
+		
+	}
+	
+	/**
+	* Tests if validation is successful Message is added and 
+	* persisted to the Chat 
+	*/
+	@Test
+	void testAddMessageHappyPath() {
+		
+		final UUID 			chatId 			= UUID.randomUUID();
+		final String 		chatSenderId 	= "u1";
+		final String 		chatRecipientId = "u2";
+		final String 		message			= "aMessage";
+		final PrivateChat 	chat 			= PrivateChat.builder().senderId(chatSenderId).recipientId(chatRecipientId).build();
+		
+		ArgumentCaptor<PrivateChat> argCaptChat = ArgumentCaptor.forClass(PrivateChat.class);
+		
+		when(this.mockChatDao.fetchChatById(chatId)).thenReturn(Optional.of(chat));
+		doNothing().when(this.mockChatDao).saveChat(argCaptChat.capture());
+		
+		this.service.addMessage(chatId, message, chatRecipientId);
+		
+		verify(this.mockChatDao).saveChat(chat);
+		
+		ChatMessage chatMessage = argCaptChat.getValue().getReplies().values().stream().findFirst().orElseThrow();
+		
+		assertTrue(chatMessage.getId() 		instanceof UUID);
+		assertTrue(chatMessage.getCreated() instanceof LocalDateTime);
+		
+		assertEquals(chatId, 			chatMessage.getChatId());
+		assertEquals(message, 			chatMessage.getMessage());
+		assertEquals(chatRecipientId, 	chatMessage.getSenderId());
+		assertEquals(chatSenderId, 		chatMessage.getRecipientId());
+		
+	}
+	
+	/**
+	* Tests Exception is thrown if associated Chat is not found
+	*/
+	@Test
+	void testDeleteMessageFromNonExistentChat() {
+	
+		final UUID 		chatId 		= UUID.randomUUID();
+		final UUID 		messageId	= UUID.randomUUID();
+		final String 	userId 		= "aUser";
+		
+		when(this.mockChatDao.fetchChatById(chatId)).thenReturn(Optional.empty());
+		
+		RuntimeException ex = assertThrows(RuntimeException.class, () -> this.service.deleteMessage(chatId, messageId, userId));
+		
+		assertEquals(PrivateChatServiceImpl.ERR_MSG_CANNOT_DEL_MESSAGE, ex.getMessage());
+		
+	}
+	
+	/**
+	* Tests Exception is thrown if associated Chat is available but the 
+	* message does not exist in the Chat
+	*/
+	@Test
+	void testDeleteNonExistentMessageFromChat() {
+	
+		final UUID 			chatId 			= UUID.randomUUID();
+		final UUID 			messageId		= UUID.randomUUID();
+		final String 		userId 			= "aUser";
+		final String 		chatSenderId 	= "u1";
+		final String 		chatRecipientId = "u2";
+		final PrivateChat 	chat 			= PrivateChat.builder().senderId(chatSenderId).recipientId(chatRecipientId).build();
+		
+		when(this.mockChatDao.fetchChatById(chatId)).thenReturn(Optional.of(chat));
+		
+		RuntimeException ex = assertThrows(RuntimeException.class, () -> this.service.deleteMessage(chatId, messageId, userId));
+		
+		assertEquals(PrivateChatServiceImpl.ERR_MSG_CANNOT_DEL_MESSAGE, ex.getMessage());
+		
+	}
+	
+	/**
+	* Tests Exception is thrown if associated Chat is available but the 
+	* message does not exist in the Chat
+	*/
+	@Test
+	void testDeleteMessageFromAnotherSender() {
+	
+		final UUID 			chatId 			= UUID.randomUUID();
+		final UUID 			messageId		= UUID.randomUUID();
+		final String 		userId 			= "aUser";
+		final String 		chatSenderId 	= "u1";
+		final String 		chatRecipientId = "u2";
+		final ChatMessage	message			= ChatMessage.builder().id(messageId).senderId(chatRecipientId).build();
+		final PrivateChat 	chat 			= PrivateChat.builder().senderId(chatSenderId).recipientId(chatRecipientId).build();
+	
+		chat.addReply(message);
+		
+		when(this.mockChatDao.fetchChatById(chatId)).thenReturn(Optional.of(chat));
+		
+		RuntimeException ex = assertThrows(RuntimeException.class, () -> this.service.deleteMessage(chatId, messageId, userId));
+		
+		assertEquals(PrivateChatServiceImpl.ERR_MSG_CANNOT_DEL_MESSAGE, ex.getMessage());
+		
+	}
+	
+	/**
+	* Tests happy path where user is the sender and message exists on chat
+	*/
+	@Test
+	void testDeleteMessageHappyPath() {
+	
+		final UUID 			chatId 			= UUID.randomUUID();
+		final UUID 			messageId		= UUID.randomUUID();
+		final String 		chatSenderId 	= "u1";
+		final String 		chatRecipientId = "u2";
+		final ChatMessage	message			= ChatMessage.builder().id(messageId).senderId(chatSenderId).build();
+		final PrivateChat 	chat 			= PrivateChat.builder().senderId(chatSenderId).recipientId(chatRecipientId).build();
+	
+		ArgumentCaptor<PrivateChat> argCaptChat = ArgumentCaptor.forClass(PrivateChat.class);
+		
+		chat.addReply(message);
+		
+		assertNotNull(chat.getReplies().get(messageId));
+		
+		doNothing().when(this.mockChatDao).saveChat(argCaptChat.capture());
+		
+		when(this.mockChatDao.fetchChatById(chatId)).thenReturn(Optional.of(chat));
+		
+		this.service.deleteMessage(chatId, messageId, chatSenderId);
+		
+		verify(this.mockChatDao).saveChat(chat);
+		
+		assertNull(argCaptChat.getValue().getReplies().get(messageId));
 		
 	}
 	

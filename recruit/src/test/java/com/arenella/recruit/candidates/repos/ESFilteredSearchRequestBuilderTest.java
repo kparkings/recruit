@@ -18,9 +18,7 @@ import co.elastic.clients.elasticsearch._types.query_dsl.Query;
 import co.elastic.clients.elasticsearch._types.query_dsl.RangeQuery;
 import co.elastic.clients.elasticsearch._types.query_dsl.TermsQuery;
 
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.*;
@@ -136,7 +134,10 @@ class ESFilteredSearchRequestBuilderTest {
 		numberRangeQueries.stream().filter(q -> q.number().queryName().equals("yearsExperienceLte") 		&& q.number().lte().toString().equals(String.valueOf((double)YEARS_EXPERIENCE_LTE))).findFirst().orElseThrow();
 		
 		mustBool.stream().filter(q -> q.queryName().equals("lastAvailabilityCheckEmailSent")).findFirst().orElseThrow();
-		dateRangeQueries.stream().filter(q -> q.date().queryName().equals("lastAvailabilityCheck")	&& q.date().lte().equals("2025-11-21T00:00:00")).findFirst().orElseThrow();
+		
+		String todayMin10StartOfDay = LocalDate.now().minusDays(10).atStartOfDay(ZoneId.systemDefault()).format(ESFilteredSearchRequestBuilder.FMT_DATE_TIME);
+		
+		dateRangeQueries.stream().filter(q -> q.date().queryName().equals("lastAvailabilityCheck")	&& q.date().lte().equals(todayMin10StartOfDay)).findFirst().orElseThrow();
 		dateRangeQueries.stream().filter(q -> q.date().queryName().equals("registeredAfterCheck")	&& q.date().gte().equals("2024-05-08T00:00:00")).findFirst().orElseThrow();
 		
 		TermsQuery skills = mustTerms.stream().filter(q -> q.field().equals("skills")).findFirst().get();

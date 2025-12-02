@@ -69,4 +69,22 @@ public interface PrivateChatService {
 	*/
 	void deleteUserChats(String userId);
 	
+	/**
+	* Adds a Message to an existing Chat. Only a User who is a 
+	* Sender/Receiver of the Chat can add a Message
+	* @param charId		- Id of Chat to add message to
+	* @param message	- new Message
+	* @param userId		- Currently authorized User id
+	*/
+	void addMessage(UUID chatId, String message, String userId);
+	
+	/**
+	* Marks a Message in a Chat as being Deleted. Only the User who
+	* created the message can mark it as Deleted 
+	* @param chatId		- Id of Chat message belongs to
+	* @param messageId	- Id of Message to Delete
+	* @param userId		- Currently authorized User id
+	*/
+	void deleteMessage(UUID chatId, UUID messageId, String userId);
+	
 }
