@@ -9,8 +9,9 @@ import { CandidateNavService } 				from './candidate-nav.service';
 import { CreditsService } 					from './credits.service';
 import { NewsfeedService } 					from './newsfeed.service';
 import { ListingService }					from './listing.service';
-import {TranslateService} 					from "@ngx-translate/core";
+import { TranslateService} 					from "@ngx-translate/core";
 import { CurrentUserAuth }					from './current-user-auth';
+import { PrivateMessagingComponent }		from './private-messaging/private-messaging.component';
 
 @Component({
     selector: 'app-root',
@@ -20,10 +21,11 @@ import { CurrentUserAuth }					from './current-user-auth';
 }) 
 export class AppComponent {
 
-	@ViewChild('validationExBox', { static: false }) private validationExBox:any;
-	@ViewChild('noCreditsBox', { static: false }) 	 private noCreditsBox:any;
-	@ViewChild('quickActionsBox', { static: false }) 	 private quickActionsBox:any;
-	@ViewChild('tandcBox', { static: false }) 	 private tandcBox:any;
+	@ViewChild('validationExBox', { static: false }) 	private validationExBox:any;
+	@ViewChild('noCreditsBox', { static: false }) 	 	private noCreditsBox:any;
+	@ViewChild('quickActionsBox', { static: false }) 	private quickActionsBox:any;
+	@ViewChild('tandcBox', { static: false }) 	 		private tandcBox:any;
+	@ViewChild(PrivateMessagingComponent) 				privateChat!:PrivateMessagingComponent;
 	
 	public currentUserAuth:CurrentUserAuth 						= new CurrentUserAuth();
 	

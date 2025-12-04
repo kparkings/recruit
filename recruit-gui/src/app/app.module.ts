@@ -53,7 +53,7 @@ import { ListingService } 					from './listing.service';
 
 import { ClipboardModule } 					from '@angular/cdk/clipboard'
 import { CandidateStatisticsComponent } 	from './candidate-statistics/candidate-statistics.component';
-
+import { PrivateMessagingComponent } 		from './private-messaging/private-messaging.component';
 
 @NgModule({
   declarations: [
@@ -89,6 +89,8 @@ import { CandidateStatisticsComponent } 	from './candidate-statistics/candidate-
  	SubscriptionsComponent,
 	CitiesComponent,
 	CandidateStatisticsComponent,
+	PrivateMessagingComponent,
+	
   ],
   imports: [
     BrowserModule,

@@ -87,14 +87,6 @@ export class CreditsService {
 	}
 	
 	/**
-	* Set whether User is in the process of buying a 
-	* subscription
-	*/
-	//public setPurchaseSubscription(inProcess:boolean):void{
-	//	this.purchaseSubscription.next(inProcess);
-	//}
-	
-	/**
 	* sets the User is currently in the process of buying subscriptions 
 	*/
 	public buySubscription():void{
