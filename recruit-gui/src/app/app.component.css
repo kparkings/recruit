@@ -1,5 +1,9 @@
 @media (min-width:701px)  {
 	
+	.chat-icon{
+		cursor:pointer;
+	}
+	
 	.main-app-header{
 		width:100%;
 	}

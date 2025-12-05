@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output } 	from '@angular/core';
 import { CommonModule } 							from '@angular/common';
 import { InfoItem, InfoItemConfig } 				from './info-item';
-
+import { AppComponent } 							from 'src/app/app.component';
 @Component({
   selector: 'app-candidate-info-box',
   standalone: false,
@@ -16,12 +16,16 @@ export class CandidateInfoBoxComponent {
 	/**
 	* Constructor
  	*/	
-	public constructor(){
+	public constructor(private appComponent:AppComponent){
 	
 	}
 	
 	public openContatBox() {
     	this.openContactBoxEvent.emit('openContactDialogBox');
   	}
+	
+	public openChat():void{
+		this.appComponent.currentChatWindowState = "maximized";
+	}
 	
 }

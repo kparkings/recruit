@@ -27,6 +27,8 @@ export class AppComponent {
 	@ViewChild('tandcBox', { static: false }) 	 		private tandcBox:any;
 	@ViewChild(PrivateMessagingComponent) 				privateChat!:PrivateMessagingComponent;
 	
+	public currentChatWindowState:string = "closed";
+	
 	public currentUserAuth:CurrentUserAuth 						= new CurrentUserAuth();
 	
 	private readonly termsAndConditionsCookieVersion:string = '3';
@@ -371,6 +373,9 @@ export class AppComponent {
 			this.passedMarketplaceCreditCheck = passed;
 		});
 	}
-	
+
+	public openChat():void{
+		this.currentChatWindowState = "maximized";
+	}
 	
 }

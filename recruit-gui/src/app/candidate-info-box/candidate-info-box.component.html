@@ -8,6 +8,7 @@
        	</div>
        	<div>
        		<button *ngIf="config.showContactButton()" class="btn btn-secondary arenella-btn contact-button"  (click)="openContatBox()">{{'arenella-infobox-contact' | translate}}</button>
+       		<button *ngIf="config.showContactButton()" class="btn btn-secondary arenella-btn contact-button"  (click)="openChat()">{{'arenella-chat' | translate}}</button>
 	   	</div>
        	<div *ngFor="let infoItem of config.getItems()" class="left-box">
        		<h5>{{infoItem.getTitle()}}</h5>

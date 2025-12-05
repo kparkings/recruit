@@ -1,3 +1,32 @@
-<div style="height:70%;width:30%;border:2px solid blue;background:white;z-index:1000;position:fixed;top:30%;margin-left:70%;">
-	Chat screen ..
+<div class="chatwindow chatwindow-{{getChatWindowState()}}">
+	
+	<div class="chatwindow-header">
+		<span class="chatwindow-header-item" (click)="closeChat()">x</span>
+		<span class="chatwindow-header-item" (click)="minimizeChat()" *ngIf="getChatWindowState() == 'maximized'">-</span>
+		<span class="chatwindow-header-item" (click)="maximizeChat()" *ngIf="getChatWindowState() == 'minimized'">+</span>
+	</div>
+	
+	<div class="chatwindow-chat">
+		<div class="chatwindow-view">
+			<div class="chatwindow-view-item {{viewItemContactsSeleted}}" (click)="showContactsItemView()">Contacts</div>
+			<div class="chatwindow-view-item {{viewItemMessageSeleted}}" (click)="showMessageItemView()">Message</div>
+			<div class="chat-view-item-panel" *ngIf="chatViewItem == 'contacts'">
+				<div class="no-contacts-message" *ngIf="chats.length == 0 && isCandidate()">
+					<h3>No contacts </h3>
+					<p>Contacts will appear in this panel when Recruiters contact you.</p>
+				</div>
+				<div class="no-contacts-message" *ngIf="chats.length == 0 && isRecruiter()">
+					<h3>No contacts </h3>
+					<p>Use the Chat button in the Candidate profiles to start a Chat.</p>
+					<p>This feature is only available on the paid tier.</p>
+				</div>
+				Contacts
+			</div>
+			<div class="chat-view-item-panel" *ngIf="chatViewItem == 'message'">
+				Messages
+			</div>
+		</div>
+		
+	</div>
+	
 </div>

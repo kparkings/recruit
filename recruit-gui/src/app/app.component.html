@@ -106,16 +106,17 @@
            <a  class="dropdown-item" routerLink="/accounts">{{'arenella-app-menu-accounts' | translate}}</a>
         </li>
 		<li class="li-arenella-nav {{menuItemMobileCss}}" *ngIf="isAuthenticated() && !isAuthenticatedAsAdmin() && !isCandidate()" (click)="refreschUnreadAlerts()">
-           <a class="dropdown-item recruiter-account" routerLink="/recruiter-account">{{'arenella-app-menu-account' | translate}}</a>
-        </li>		
+           <a class="dropdown-item recruiter-account " routerLink="/recruiter-account">{{'arenella-app-menu-account' | translate}}</a>
+        </li>
+        <li class="li-arenella-nav {{menuItemMobileCss}}" *ngIf="isAuthenticated()" (click)="openChat()">
+           <span class="chat-icon material-icons">chat</span>
+        </li>      		
       </ul>
-
-	
 </div>
 
 <router-outlet></router-outlet>
 
-<app-private-messaging #privateChat ></app-private-messaging>
+<app-private-messaging #privateChat></app-private-messaging>
 
 <dialog #tandcBox class="terms-and-conditions-box">
 
