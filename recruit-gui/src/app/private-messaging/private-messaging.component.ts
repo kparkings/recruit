@@ -1,6 +1,7 @@
-import { Component } 					from '@angular/core';
-import { AppComponent } 				from 'src/app/app.component';
-import { PrivateChatAPIOutbound } 		from '../private-messaging.service';
+import { Component } 											from '@angular/core';
+import { AppComponent } 										from 'src/app/app.component';
+import { PrivateChatAPIOutbound, PrivateMessagingService } 		from '../private-messaging.service';
+import { CurrentUserAuth }										from '../current-user-auth';
 
 /**
 * Backing Component for the Chat window 
@@ -16,17 +17,53 @@ export class PrivateMessagingComponent {
 	public chatViewItem:string 						= "message";
 	public viewItemContactsSeleted:string 			= "";
 	public viewItemMessageSeleted:string 			= "view-item-selected";
-	
+	public currentUserAuth:CurrentUserAuth 			= new CurrentUserAuth();
 	public chats:Array<PrivateChatAPIOutbound>		= new Array<PrivateChatAPIOutbound>();
 	
 	/**
 	* Constructor
 	* @param appComponent - Main component, Chat window component 
 	* 						is embedded here and we need to share 
-	* 						information between the two components 
+	* 						information between the two components I
 	*/
-	constructor(private readonly appComponent:AppComponent){
+	constructor(private readonly appComponent:AppComponent, private chatService:PrivateMessagingService){
 		
+	}
+	
+	public openChat(candidateId:string):void{
+		
+		console.log("Open chat for recipient" 	+ candidateId)
+		console.log("Open chat for sender " 	+ this.currentUserAuth.getLoggedInUserId())
+
+		console.log(JSON.stringify(this.chats));
+		
+		this.chatService.fetchChatsByUserId().subscribe(chats => {
+			this.chats = chats;
+			if (this.chats.filter(c => 
+					c.senderId == this.currentUserAuth.getLoggedInUserId() 	&& c.recipientId == candidateId
+				|| 	c.senderId == candidateId 								&& c.recipientId == this.currentUserAuth.getLoggedInUserId()).length == 0
+			) {
+					
+				this.chatService.createChat(this.currentUserAuth.getLoggedInUserId(), candidateId).subscribe(response => {
+					this.chatService.fetchChatsByUserId().subscribe(chats => {
+						this.chats = chats;
+					});
+				})
+			}
+		});
+				
+		
+		
+		//createChat(senderId:string, recipientId:string)
+	}
+	
+	private fetchChats():void{
+		if (this.chats.length == 0) {
+			this.chatService.fetchChatsByUserId().subscribe(chats => {
+				this.chats = chats;
+			});
+		}
+				
 	}
 	
 	/**
@@ -65,6 +102,7 @@ export class PrivateMessagingComponent {
 	*/
 	public maximizeChat():void{
 		this.appComponent.currentChatWindowState = "maximized";
+		this.fetchChats();
 	}
 		
 	/**

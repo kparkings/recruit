@@ -2,8 +2,11 @@ package com.arenella.recruit.messaging.entities;
 
 import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import com.arenella.recruit.messaging.beans.ChatMessage;
 import com.arenella.recruit.messaging.beans.PrivateChat;
@@ -59,7 +62,12 @@ public class PrivateChatEntity {
 	private LocalDateTime   			lastViewedByRecipient; 
 	
 	@OneToMany(mappedBy = "chatId", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval=true)
-	private Map<UUID,ChatMessageEntity>	replies 				= new LinkedHashMap<>();
+	private Set<ChatMessageEntity>	replies 				= new LinkedHashSet<>();
+	//private Map<UUID,ChatMessageEntity>	replies 				= new LinkedHashMap<>();
+	
+	public PrivateChatEntity() {
+		//Hibernate
+	}
 	
 	/**
 	* Constructor based upon a builder
@@ -71,7 +79,7 @@ public class PrivateChatEntity {
 		this.recipientId 			= builder.recipientId;
 		this.created 				= builder.created;
 		this.lastUpdated			= builder.lastUpdated;
-		this.replies 				= builder.replies;
+		this.replies 				= builder.replies.values().stream().collect(Collectors.toCollection(LinkedHashSet::new));
 		this.lastKeyPressSender 	= builder.lastKeyPressSender;
 		this.lastKeyPressRecipient 	= builder.lastKeyPressRecipient;
 		this.blockedBySender		= builder.blockedBySender;
@@ -125,7 +133,12 @@ public class PrivateChatEntity {
 	* @return replies
 	*/
 	public Map<UUID, ChatMessageEntity> getReplies() {
-		return this.replies;
+		
+		Map<UUID, ChatMessageEntity> replies = new LinkedHashMap<>();
+		
+		this.replies.stream().forEach(r -> replies.put(r.getId(), r));
+		
+		return replies;
 	}
 	
 	/**

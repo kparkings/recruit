@@ -465,11 +465,6 @@ export class SuggestionsComponent implements OnInit {
 	public showFilterByJobSpecDialog(content:any):void{
 		
 		this.switchJobSpecUpldOpt('chooseType');
-		
-		//this.filterByJobSpecForm = new UntypedFormGroup({
-		//	specAsText: new UntypedFormControl('Enter Job specification Text here...'),
-		//});
-		
 		this.showFilterByJonSpecFailure  	= false;
 		this.showFilterByJobSpec 			= true;
 	

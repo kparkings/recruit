@@ -2,6 +2,8 @@ import { Component, EventEmitter, Input, Output } 	from '@angular/core';
 import { CommonModule } 							from '@angular/common';
 import { InfoItem, InfoItemConfig } 				from './info-item';
 import { AppComponent } 							from 'src/app/app.component';
+import { PrivateMessagingService } 					from '../private-messaging.service';
+
 @Component({
   selector: 'app-candidate-info-box',
   standalone: false,
@@ -10,13 +12,14 @@ import { AppComponent } 							from 'src/app/app.component';
 })
 export class CandidateInfoBoxComponent {
 
-	@Input()  config:InfoItemConfig = new InfoItemConfig();
-	@Output() openContactBoxEvent 	= new EventEmitter<string>();
+	@Input()  config:InfoItemConfig 	= new InfoItemConfig();
+	@Input()  candidateId:string 		= '';
+	@Output() openContactBoxEvent 		= new EventEmitter<string>();
 
 	/**
 	* Constructor
  	*/	
-	public constructor(private appComponent:AppComponent){
+	public constructor(private appComponent:AppComponent, private readonly chatService:PrivateMessagingService){
 	
 	}
 	
@@ -26,6 +29,6 @@ export class CandidateInfoBoxComponent {
 	
 	public openChat():void{
 		this.appComponent.currentChatWindowState = "maximized";
+		this.appComponent.privateChat.openChat(this.candidateId);
 	}
-	
 }

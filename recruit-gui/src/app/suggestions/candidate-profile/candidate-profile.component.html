@@ -21,7 +21,7 @@
 
 	<!-- Left Pane -->
 	<div  *ngIf="currentView === 'suggestion-results' || currentView === 'saved-candidates'">
-		<app-candidate-info-box [config]="infoItemConfig" (openContactBoxEvent)="contactCandidate(contactBox)" *ngIf="!this.suggestedCandidate.removed"></app-candidate-info-box>
+		<app-candidate-info-box [config]="infoItemConfig" [candidateId]="candidateProfile.candidateId" (openContactBoxEvent)="contactCandidate(contactBox)" *ngIf="!this.suggestedCandidate.removed"></app-candidate-info-box>
 					
 		<!-- div class="details-right" -->
 		<div class="right-body-pane details-right" *ngIf="!this.suggestedCandidate.removed">

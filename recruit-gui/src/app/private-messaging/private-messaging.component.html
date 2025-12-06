@@ -20,7 +20,11 @@
 					<p>Use the Chat button in the Candidate profiles to start a Chat.</p>
 					<p>This feature is only available on the paid tier.</p>
 				</div>
-				Contacts
+				<div class="contacts" *ngIf="chats.length != 0">
+					<div class="chat-list-box" *ngFor="let chat of chats">
+						{{chat.recipientId}}
+					</div>
+				</div>
 			</div>
 			<div class="chat-view-item-panel" *ngIf="chatViewItem == 'message'">
 				Messages

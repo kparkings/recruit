@@ -47,6 +47,10 @@ public class ChatMessageEntity {
 	@CollectionTable(schema="chats", name="message_likes", joinColumns=@JoinColumn(name="message_id"))
 	private Set<String>		likes							= new LinkedHashSet<>();
 	
+	public ChatMessageEntity() {
+		//Hibernate
+	}
+	
 	/**
 	* Constructor based upon a builder
 	* @param builder - Contains initialization values

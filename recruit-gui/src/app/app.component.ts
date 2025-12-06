@@ -25,7 +25,7 @@ export class AppComponent {
 	@ViewChild('noCreditsBox', { static: false }) 	 	private noCreditsBox:any;
 	@ViewChild('quickActionsBox', { static: false }) 	private quickActionsBox:any;
 	@ViewChild('tandcBox', { static: false }) 	 		private tandcBox:any;
-	@ViewChild(PrivateMessagingComponent) 				privateChat!:PrivateMessagingComponent;
+	@ViewChild(PrivateMessagingComponent) 				public privateChat!:PrivateMessagingComponent;
 	
 	public currentChatWindowState:string = "closed";
 	
@@ -375,7 +375,8 @@ export class AppComponent {
 	}
 
 	public openChat():void{
-		this.currentChatWindowState = "maximized";
+		//this.currentChatWindowState = "maximized";
+		this.privateChat.maximizeChat();
 	}
 	
 }

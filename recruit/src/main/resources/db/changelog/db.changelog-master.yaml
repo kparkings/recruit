@@ -2692,4 +2692,40 @@ databaseChangeLog:
                   name: user
                   type: varchar
                   constraints:
-                    nullable: false
+                    nullable: false				
+  - changeSet:
+      id: privatechats-datatypeupdt
+      author: kparkings
+      changes:
+        - modifyDataType:
+            columnName: sender_id
+            newDataType: varchar
+            schemaName: chats
+            tableName: private_chats
+        - modifyDataType:
+            columnName: recipient_id
+            newDataType: varchar
+            schemaName: chats
+            tableName: private_chats	
+        - modifyDataType:
+            columnName: sender_id
+            newDataType: varchar
+            schemaName: chats
+            tableName: chat_messages
+        - modifyDataType:
+            columnName: recipient_id
+            newDataType: varchar
+            schemaName: chats
+            tableName: chat_messages	
+  - changeSet:
+      id: fk_chatmessages
+      author: kparkings
+      changes:
+        - addForeignKeyConstraint:  
+             constraintName: fk_chat_messages
+             baseColumnNames: chat_id
+             baseTableName: chat_messages
+             baseTableSchemaName: chats
+             referencedTableName: private_chats
+             referencedTableSchemaName: chats
+             referencedColumnNames: id
