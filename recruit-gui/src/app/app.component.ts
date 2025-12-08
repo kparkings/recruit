@@ -374,9 +374,14 @@ export class AppComponent {
 		});
 	}
 
+	/**
+	* Used to not only maximize the chat window but also 
+	* fetch the Chats of the user to populate the 
+	* contacts panel
+	*/
 	public openChat():void{
-		//this.currentChatWindowState = "maximized";
-		this.privateChat.maximizeChat();
+		this.privateChat.maximizeOnOpen();
+		
 	}
 	
 }

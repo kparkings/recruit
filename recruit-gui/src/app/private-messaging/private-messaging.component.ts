@@ -1,7 +1,9 @@
 import { Component } 											from '@angular/core';
 import { AppComponent } 										from 'src/app/app.component';
 import { PrivateChatAPIOutbound, PrivateMessagingService } 		from '../private-messaging.service';
+import { CandidateServiceService,  CandidateSuggestionAPIOutbound} 	from '../candidate-service.service';
 import { CurrentUserAuth }										from '../current-user-auth';
+import { SuggestionsSearchRequest }						from '../suggestions/suggestion-search-request';
 
 /**
 * Backing Component for the Chat window 
@@ -14,56 +16,123 @@ import { CurrentUserAuth }										from '../current-user-auth';
 })
 export class PrivateMessagingComponent {
 
-	public chatViewItem:string 						= "message";
-	public viewItemContactsSeleted:string 			= "";
-	public viewItemMessageSeleted:string 			= "view-item-selected";
-	public currentUserAuth:CurrentUserAuth 			= new CurrentUserAuth();
-	public chats:Array<PrivateChatAPIOutbound>		= new Array<PrivateChatAPIOutbound>();
+	public chatViewItem:string 										= "contacts";
+	public viewItemContactsSeleted:string 							= "";
+	public viewItemMessageSeleted:string 							= "view-item-selected";
+	public currentUserAuth:CurrentUserAuth 							= new CurrentUserAuth();
+	public chats:Array<PrivateChatAPIOutbound>						= new Array<PrivateChatAPIOutbound>();
+	public candidates:Array<CandidateSuggestionAPIOutbound>			= new Array<CandidateSuggestionAPIOutbound>();
+	public currentChat:PrivateChatAPIOutbound | undefined;
+		
 	
 	/**
 	* Constructor
-	* @param appComponent - Main component, Chat window component 
-	* 						is embedded here and we need to share 
-	* 						information between the two components I
+	* @param appComponent 		- 	Main component, Chat window component 
+	* 								is embedded here and we need to share 
+	* 								information between the two components I
+	* @param chatService  		- 	Services for Chats
+	* @param candidateService	-	Services for Candidates
 	*/
-	constructor(private readonly appComponent:AppComponent, private chatService:PrivateMessagingService){
+	constructor(private readonly appComponent:AppComponent, private chatService:PrivateMessagingService, private candidateService:CandidateServiceService){
 		
 	}
 	
+	/**
+	* Opens the chat window.
+	* If the Chat is new, sends request to create the Chat between the Recruiter and the Candidate.
+	* Once Chat's are retrieved fetches the Candidate details for each of the Chats
+	*/
 	public openChat(candidateId:string):void{
-		
-		console.log("Open chat for recipient" 	+ candidateId)
-		console.log("Open chat for sender " 	+ this.currentUserAuth.getLoggedInUserId())
-
-		console.log(JSON.stringify(this.chats));
-		
+				
 		this.chatService.fetchChatsByUserId().subscribe(chats => {
+			
 			this.chats = chats;
+			
 			if (this.chats.filter(c => 
 					c.senderId == this.currentUserAuth.getLoggedInUserId() 	&& c.recipientId == candidateId
 				|| 	c.senderId == candidateId 								&& c.recipientId == this.currentUserAuth.getLoggedInUserId()).length == 0
 			) {
-					
 				this.chatService.createChat(this.currentUserAuth.getLoggedInUserId(), candidateId).subscribe(response => {
-					this.chatService.fetchChatsByUserId().subscribe(chats => {
-						this.chats = chats;
-					});
+						this.fetchChats();
 				})
 			}
 		});
-				
 		
-		
-		//createChat(senderId:string, recipientId:string)
+		this.chatViewItem = "message";
 	}
 	
+	/**
+	* Fetches the Chat's for the User. It will subsequently 
+	* retrieve all the Candidates involved in the Chat's 
+	*/
 	private fetchChats():void{
-		if (this.chats.length == 0) {
-			this.chatService.fetchChatsByUserId().subscribe(chats => {
-				this.chats = chats;
-			});
-		}
+		
+		let searchRequest:SuggestionsSearchRequest = new SuggestionsSearchRequest();
+		searchRequest.requestFilters.maxNumberOfSuggestions = 100000;
+					
+		this.chatService.fetchChatsByUserId().subscribe(chats => {
+			
+			this.chats = chats;
+									
+			chats.forEach(c => {
+				searchRequest.candidateFilters.candidateIds.push(c.recipientId);	
+			})
+			
+			this.candidateService.getCandidateSuggestions(searchRequest).subscribe(response => {
 				
+				let candidates:Array<CandidateSuggestionAPIOutbound> = response.body.content;
+				
+				candidates.forEach(candidate => {
+					
+					let candidateDetails:CandidateSuggestionAPIOutbound = new CandidateSuggestionAPIOutbound();
+					
+					candidateDetails.candidateId = candidate.candidateId;
+					candidateDetails.firstname = candidate.firstname;
+					candidateDetails.surname = candidate.surname;
+					
+					this.candidates.push(candidateDetails);
+				});
+				
+			});
+		});			
+	}
+	
+	/**
+	* Sets the current chat and then retrieves the represenation containing the 
+	* replies
+	* @param chat selected from Chat list.
+	*/
+	public showChatMessages(currentChat:PrivateChatAPIOutbound):void{
+		this.showMessageItemView();
+		this.chatService.fetchPrivateChatById(currentChat.id).subscribe(chat => {
+			this.currentChat = chat;
+		});
+	}
+	
+	/**
+	* Display name of the User in the Chat
+	* TODO: [KP] When candidate logged in need to retrieve recruiters and return Recruiters name
+	* TODO: [KP] Need to take account of Admin account. Edge case which can start chat with any user. 
+	*/
+	public getUserName(userId:string):string{
+		
+		let candidate = this.candidates.filter(c => c.candidateId == userId)[0];
+		
+		if (!candidate) {
+			return "-";
+		}
+		
+		let fn = candidate.firstname.charAt(0).toUpperCase() + candidate.firstname.slice(1);
+		let sn = candidate.surname.charAt(0).toUpperCase() + candidate.surname.slice(1);
+
+		let fullName = fn + " " + sn;
+		
+		if (fullName.length >= 50) {
+			return fullName.substring(0,48) + "..";
+		} else {
+			return fullName;	
+		}
+		 
 	}
 	
 	/**
@@ -103,6 +172,15 @@ export class PrivateMessagingComponent {
 	public maximizeChat():void{
 		this.appComponent.currentChatWindowState = "maximized";
 		this.fetchChats();
+	}
+	
+	/**
+	* Minimizes the chat window as it is opened
+	* and ensure contact list view is displayed
+	*/
+	public maximizeOnOpen():void{
+		this.chatViewItem = "contacts";
+		this.maximizeChat();
 	}
 		
 	/**

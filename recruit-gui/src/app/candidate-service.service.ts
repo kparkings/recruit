@@ -622,7 +622,45 @@ export class CandidateServiceService {
 		return this.httpClient.put<any>(backendUrl,  JSON.stringify(req), this.httpOptions);
 
 	}
-	
-	/** End Saved Searches */
 			
+}
+
+/** End Saved Searches */
+	
+export class CandidateSuggestionAPIOutbound{
+	
+	public candidateId:string="";
+	public functions:Array<string> = new Array<string>();
+	public roleSought:string="";
+	public country:string="";
+	public city:string="";
+	public perm:string="";
+	public freelance:string="";
+	public yearsExperience:number=0;
+	public available:boolean=false;
+	public lastAvailabilityCheck:Date=new Date();
+	public skills:Array<string> = new Array<string>();
+	public languages:Array<string> = new Array<string>();
+	public firstname:string="";
+	public surname:string="";
+	public rateContract:string="";
+	public ratePerm:string="";
+	public photo:string="";
+	public introduction:string="";
+	public email:string="";
+	public comments:string="";
+	public daysOnSite:string="";
+	public availableFromDate:Date=new Date();
+	public candidateType:Date=new Date();
+	public ownerId:string="";
+	public securityClearance:string="";
+	public requiresSponsorship:boolean=false;
+	public industries:Array<string> = new Array<string>();
+			
+			
+	constructor(){}
+	
+	
+		
+	
 }

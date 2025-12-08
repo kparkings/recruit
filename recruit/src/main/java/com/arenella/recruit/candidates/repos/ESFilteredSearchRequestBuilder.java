@@ -142,11 +142,25 @@ public class ESFilteredSearchRequestBuilder {
 		
 		//TODO:[KP] Originally accepts array of CanddiateIds. This impelmentation only 1 Cadidate
 		if (!filterOptions.getCandidateIds().isEmpty()) {
-			String candidateId = (String) filterOptions.getCandidateIds().toArray()[0];
-			mustQueries.add(MatchQuery.of(m -> m
+			//String candidateId = (String) filterOptions.getCandidateIds().toArray()[0];
+			//mustQueries.add(MatchQuery.of(m -> m
+			//		.field("candidateId")
+			//		.query(candidateId)
+			//)._toQuery());
+			
+			List<FieldValue> fieldValueList = filterOptions.getCandidateIds().stream().map(c -> FieldValue.of(c)).toList();
+			 
+			 TermsQueryField termsQueryField = new TermsQueryField.Builder()
+                    .value(fieldValueList)
+                    .build();
+			 
+			mustQueries.add(TermsQuery.of(m -> m
+					.queryName("candidateId")
 					.field("candidateId")
-					.query(candidateId)
+					.terms(termsQueryField)
+					
 			)._toQuery());
+			
 		}
 		
 		if (!filterOptions.getSkills().isEmpty()) {

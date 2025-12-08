@@ -88,13 +88,22 @@
 	font-size:12px;
 	width:100%;
 	text-align:left;
+	overflow-y:scroll;
+	height:420px; 
 }
 
 .chat-list-box{
 	height:50px;
+	line-height:50px; 
 	width:100%;
 	text-align:left;
 	border-bottom:1px solid grey;
-	padding:5px;	
-	
+	padding-left:10px;	
+	font-weight:bold;
+	font-size:14px;
+	cursor:pointer;	
+}
+
+.chat-list-box:hover{
+	background:white;
 }

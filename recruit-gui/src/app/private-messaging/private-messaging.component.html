@@ -21,8 +21,8 @@
 					<p>This feature is only available on the paid tier.</p>
 				</div>
 				<div class="contacts" *ngIf="chats.length != 0">
-					<div class="chat-list-box" *ngFor="let chat of chats">
-						{{chat.recipientId}}
+					<div class="chat-list-box" *ngFor="let chat of chats" (click)="showChatMessages(chat)">
+						{{getUserName(chat.recipientId)}}	
 					</div>
 				</div>
 			</div>
