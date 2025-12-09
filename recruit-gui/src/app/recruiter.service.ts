@@ -133,5 +133,29 @@ export class RecruiterService {
         return this.httpClient.put<any>(backendUrl, recruiter, this.httpOptions);
 
     }
+	
+	/**
+  	* Returns a list of Recruiters by Id
+  	*/
+  	public getRecruitersByIds(ids:Array<string>): Observable<Array<RecruiterBasicInfoAPIOutbound>>{
+      
+		const backendUrl:string = environment.backendUrl +'recruiter/ids/?ids='+ids;
+  
+    	return this.httpClient.get<any>(backendUrl, this.httpOptions);
+  	}
 
+}
+
+/**
+* Class representing basic Recruiter details
+*/	
+export class RecruiterBasicInfoAPIOutbound {
+
+	/**
+	* Constructor
+	* @param recruiterId 	- Id of the Recruiter
+	* @param firstname 		- firstname of Recruiter
+	* @param surname 		- surname of Recruiter
+	*/
+	constructor(public recruiterId:string, public firstname:string, public surname:string){}
 }

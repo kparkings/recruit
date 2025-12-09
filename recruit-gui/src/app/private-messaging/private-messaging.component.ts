@@ -1,9 +1,10 @@
-import { Component } 											from '@angular/core';
-import { AppComponent } 										from 'src/app/app.component';
-import { PrivateChatAPIOutbound, PrivateMessagingService } 		from '../private-messaging.service';
-import { CandidateServiceService,  CandidateSuggestionAPIOutbound} 	from '../candidate-service.service';
-import { CurrentUserAuth }										from '../current-user-auth';
-import { SuggestionsSearchRequest }						from '../suggestions/suggestion-search-request';
+import { Component } 													from '@angular/core';
+import { AppComponent } 												from 'src/app/app.component';
+import { PrivateChatAPIOutbound, PrivateMessagingService } 				from '../private-messaging.service';
+import { CandidateServiceService, CandidateSuggestionAPIOutbound} 		from '../candidate-service.service';
+import { RecruiterService, RecruiterBasicInfoAPIOutbound} 				from '../recruiter.service';
+import { CurrentUserAuth }												from '../current-user-auth';
+import { SuggestionsSearchRequest }										from '../suggestions/suggestion-search-request';
 
 /**
 * Backing Component for the Chat window 
@@ -22,6 +23,7 @@ export class PrivateMessagingComponent {
 	public currentUserAuth:CurrentUserAuth 							= new CurrentUserAuth();
 	public chats:Array<PrivateChatAPIOutbound>						= new Array<PrivateChatAPIOutbound>();
 	public candidates:Array<CandidateSuggestionAPIOutbound>			= new Array<CandidateSuggestionAPIOutbound>();
+	public recruiters:Array<RecruiterBasicInfoAPIOutbound>			= new Array<RecruiterBasicInfoAPIOutbound>();
 	public currentChat:PrivateChatAPIOutbound | undefined;
 		
 	
@@ -33,7 +35,11 @@ export class PrivateMessagingComponent {
 	* @param chatService  		- 	Services for Chats
 	* @param candidateService	-	Services for Candidates
 	*/
-	constructor(private readonly appComponent:AppComponent, private chatService:PrivateMessagingService, private candidateService:CandidateServiceService){
+	constructor(
+		private readonly appComponent:AppComponent, 
+		private readonly chatService:PrivateMessagingService, 
+		private readonly candidateService:CandidateServiceService, 
+		private readonly recruiterService:RecruiterService){
 		
 	}
 	
@@ -69,15 +75,26 @@ export class PrivateMessagingComponent {
 		
 		let searchRequest:SuggestionsSearchRequest = new SuggestionsSearchRequest();
 		searchRequest.requestFilters.maxNumberOfSuggestions = 100000;
-					
+		let recruiterIds:Array<string> = new Array<string>();			
 		this.chatService.fetchChatsByUserId().subscribe(chats => {
 			
 			this.chats = chats;
 									
 			chats.forEach(c => {
-				searchRequest.candidateFilters.candidateIds.push(c.recipientId);	
+				searchRequest.candidateFilters.candidateIds.push(c.recipientId);
+				recruiterIds.push(c.senderId);	
 			})
 			
+			/**
+			* Fetch recruiters 
+			*/
+			this.recruiterService.getRecruitersByIds(recruiterIds).subscribe(result => {
+				this.recruiters = result;
+			})
+			
+			/**
+			* Fetch candidates 
+			*/
 			this.candidateService.getCandidateSuggestions(searchRequest).subscribe(response => {
 				
 				let candidates:Array<CandidateSuggestionAPIOutbound> = response.body.content;
@@ -107,6 +124,8 @@ export class PrivateMessagingComponent {
 		this.chatService.fetchPrivateChatById(currentChat.id).subscribe(chat => {
 			this.currentChat = chat;
 		});
+		
+		//TODO:[KP] If clicking on contacts when in messages need to scroll to previous position in contact list
 	}
 	
 	/**
@@ -114,17 +133,44 @@ export class PrivateMessagingComponent {
 	* TODO: [KP] When candidate logged in need to retrieve recruiters and return Recruiters name
 	* TODO: [KP] Need to take account of Admin account. Edge case which can start chat with any user. 
 	*/
-	public getUserName(userId:string):string{
+	public getUserName(senderId:string,recipientId:string):string{
 		
-		let candidate = this.candidates.filter(c => c.candidateId == userId)[0];
+		let fn:string | undefined;
+		let sn:string | undefined;
 		
-		if (!candidate) {
-			return "-";
+		if (this.isCandidate()) {
+		
+			if (senderId == "kparkings") {
+				return "Kevin Parkings";
+			}
+			
+			let recruiter = this.recruiters.filter(c => c.recruiterId == senderId)[0];
+			
+			if (!recruiter) {
+				return "-";
+			}
+			
+			fn = recruiter.firstname.charAt(0).toUpperCase() + recruiter.firstname.slice(1);
+			sn = recruiter.surname.charAt(0).toUpperCase() + recruiter.surname.slice(1);
+						
+		} else {
+			
+			if (recipientId == "kparkings") {
+				return "Kevin Parkings";
+			}
+						
+			let candidate = this.candidates.filter(c => c.candidateId == recipientId)[0];
+					
+			if (!candidate) {
+				return "-";
+			}
+			
+			fn = candidate.firstname.charAt(0).toUpperCase() + candidate.firstname.slice(1);
+			sn = candidate.surname.charAt(0).toUpperCase() + candidate.surname.slice(1);
+
+						
 		}
 		
-		let fn = candidate.firstname.charAt(0).toUpperCase() + candidate.firstname.slice(1);
-		let sn = candidate.surname.charAt(0).toUpperCase() + candidate.surname.slice(1);
-
 		let fullName = fn + " " + sn;
 		
 		if (fullName.length >= 50) {

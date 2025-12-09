@@ -22,7 +22,7 @@
 				</div>
 				<div class="contacts" *ngIf="chats.length != 0">
 					<div class="chat-list-box" *ngFor="let chat of chats" (click)="showChatMessages(chat)">
-						{{getUserName(chat.recipientId)}}	
+						{{getUserName(chat.senderId, chat.recipientId)}}	
 					</div>
 				</div>
 			</div>

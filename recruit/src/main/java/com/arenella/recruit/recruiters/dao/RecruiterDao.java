@@ -1,5 +1,7 @@
 package com.arenella.recruit.recruiters.dao;
 
+import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -31,6 +33,18 @@ public interface RecruiterDao extends CrudRepository<RecruiterEntity, String>{
 	}
 	
 	/**
+	* Returns Recruiters matching the provided Id's
+	* @param ids - Id's of Recruiters to fetch
+	* @return Recruiters
+	*/
+	default Set<Recruiter> fetchRecruiterByIds(Set<String> ids){
+		return this.findByIds(ids).stream().map(RecruiterEntity::convertFromEntity).collect(Collectors.toCollection(LinkedHashSet::new));
+	}
+	
+	@Query("FROM RecruiterEntity where userId in :ids " )
+	List<RecruiterEntity> findByIds(Set<String> ids);
+	
+	/**
 	* Attempts to find a Recruiter by its Id regardless of the case 
 	* used
 	* @param userId - Unique id of recruiter to search for
@@ -50,7 +64,6 @@ public interface RecruiterDao extends CrudRepository<RecruiterEntity, String>{
 	* @param id - id of the Subscription
 	* @return If found the associated Recruiter
 	*/
-	//@Query("FROM RecruiterEntity e left join e.subscriptions s where s.subscriptionId = :subscriptionId " )
 	@Query("SELECT RecruiterEntity FROM RecruiterEntity e left join e.subscriptions s where s.subscriptionId = :subscriptionId " )
 	Optional<RecruiterEntity> getSubscriptionById(UUID subscriptionId);
 	

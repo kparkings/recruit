@@ -5,7 +5,9 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.mockito.ArgumentMatchers.anySet;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
 import java.util.Collection;
@@ -921,6 +923,22 @@ class RecruiterServiceImplTest {
 		Mockito.verify(this.mockExternEventPublisher).publishRecruiterAccountDeleted(Mockito.any());
 		
 		assertEquals(recruiterId, argCaptEvent.getValue().getRecruiterId());
+		
+	}
+	
+	/**
+	* Test fetch of recruiters by Id's 
+	*/
+	@Test
+	void testFetchRecruitersByIds() {
+		
+		Set<String> ids = Set.of("rec1","rec2");
+		
+		when(this.mockDao.fetchRecruiterByIds(anySet())).thenReturn(Set.of(Recruiter.builder().build(), Recruiter.builder().build()));
+		
+		Set<Recruiter> recruiters = this.service.fetchRecruitersByIds(ids);
+		
+		assertEquals(2, recruiters.size());
 		
 	}
 	

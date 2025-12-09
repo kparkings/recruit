@@ -373,6 +373,14 @@ public class RecruiterServiceImpl implements RecruiterService{
 		this.externEventPublisher.publishRecruiterAccountDeleted(new RecruiterDeletedEvent(recruiterId));
 	}
 	
+	/**
+	* Refer to the RecruiterService for details 
+	*/
+	@Override
+	public Set<Recruiter> fetchRecruitersByIds(Set<String> ids) {
+		return this.recruiterDao.fetchRecruiterByIds(ids);
+	}
+	
 	//MOVE TO FACTORY
 	private PaidPeriodRecruiterSubscription paidPeriodRecruiterSubscription(Recruiter recruiter, subscription_type type, INVOICE_TYPE invoiceType, LocalDateTime activationDate, LocalDateTime createdDate) {
 		return PaidPeriodRecruiterSubscription

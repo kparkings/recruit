@@ -1,6 +1,7 @@
 package com.arenella.recruit.recruiters.controllers;
 
 import java.security.Principal;
+import java.util.LinkedHashSet;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -79,6 +80,19 @@ public class RecruiterController {
 				.stream()
 				.map(RecruiterAPIOutbound::convertFromDomain)
 				.collect(Collectors.toSet());
+	}
+	
+	/**
+	* Returns basic information about requested recruiters. This is available 
+	* to candidates, intended to be used with the chats and therefore should 
+	* only contain the most basic, non personal data.
+	* @param ids - Id's of recruiters to return details for
+	* @return Basic details of selected recruiters
+	*/
+	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('ROLE_CANDIDATE')")
+	@GetMapping(value="/recruiter/ids/")
+	public ResponseEntity<Set<RecruiterBasicInfoAPIOutbound>> fetchRecruiters(@RequestParam("ids") Set<String> ids) {
+		return ResponseEntity.ok(this.recruiterService.fetchRecruitersByIds(ids).stream().map(RecruiterBasicInfoAPIOutbound::fromDomain).collect(Collectors.toCollection(LinkedHashSet::new)));
 	}
 	
 	/**

@@ -91,5 +91,11 @@ public interface RecruiterService {
 	* @param recruiterId - Unique identifier of the Recruiter
 	*/
 	public void deleteRecruiter(String recruiterId);
+	
+	/**
+	* Fetches recruiters matching Id's
+	* @param ids - RecruiterId's 
+	*/
+	public Set<Recruiter> fetchRecruitersByIds(Set<String> ids);
 
 }
