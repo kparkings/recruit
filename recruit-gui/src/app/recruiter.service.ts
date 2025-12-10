@@ -143,7 +143,7 @@ export class RecruiterService {
   
     	return this.httpClient.get<any>(backendUrl, this.httpOptions);
   	}
-
+	
 }
 
 /**

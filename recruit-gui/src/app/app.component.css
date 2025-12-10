@@ -1,5 +1,12 @@
 @media (min-width:701px)  {
 	
+	.no-chat-box{
+		text-align:center;
+		line-height:100px; 
+		height:100px;
+		font-weight:bold;
+	}
+	
 	.chat-icon{
 		cursor:pointer;
 	}

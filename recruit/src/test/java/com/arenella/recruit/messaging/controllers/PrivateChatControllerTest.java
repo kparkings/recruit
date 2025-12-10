@@ -48,8 +48,7 @@ class PrivateChatControllerTest {
 		final String 						senderId 		= "1234";
 		final String 						recipientId 	= "5678";
 		
-		when(this.mockPrincipal.getName()).thenReturn("1234");
-		when(this.mockPrivateChatService.saveChat(chatArgCapt.capture(), Mockito.anyString())).thenReturn(id);
+		when(this.mockPrivateChatService.saveChat(chatArgCapt.capture(), Mockito.any())).thenReturn(id);
 		
 		PrivateChatAPIInbound 	chat 		= PrivateChatAPIInbound.builder().senderId(senderId).recipientId(recipientId).build();
 		ResponseEntity<UUID> 	response 	= this.controller.createPrivateChat(chat, mockPrincipal);
@@ -68,7 +67,7 @@ class PrivateChatControllerTest {
 		final UUID chatId = UUID.randomUUID();
 		final PrivateChat chat = PrivateChat.builder().id(chatId).build();
 		
-		when(this.mockPrivateChatService.getChat(chatId, mockPrincipal.getName())).thenReturn(chat);
+		when(this.mockPrivateChatService.getChat(chatId, mockPrincipal)).thenReturn(chat);
 		
 		ResponseEntity<PrivateChatAPIOutbound> response = controller.fetchPrivateChatById(chatId, mockPrincipal);
 		
@@ -86,7 +85,7 @@ class PrivateChatControllerTest {
 		final UUID chatId = UUID.randomUUID();
 		final PrivateChat chat = PrivateChat.builder().id(chatId).build();
 		
-		when(this.mockPrivateChatService.getUsersChats(mockPrincipal.getName())).thenReturn(Set.of(chat));
+		when(this.mockPrivateChatService.getUsersChats(mockPrincipal)).thenReturn(Set.of(chat));
 		
 		ResponseEntity<Set<PrivateChatAPIOutbound>> response = controller.fetchChatsByUserId(mockPrincipal);
 		
@@ -106,7 +105,7 @@ class PrivateChatControllerTest {
 		
 		ResponseEntity<Void> response = controller.doSetBlockedStatus(chatId, blocked, mockPrincipal);
 		
-		verify(this.mockPrivateChatService).setBlockedStatus(chatId, mockPrincipal.getName(), true);
+		verify(this.mockPrivateChatService).setBlockedStatus(chatId, mockPrincipal, true);
 		
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		
@@ -123,7 +122,7 @@ class PrivateChatControllerTest {
 		
 		ResponseEntity<Void> response = controller.doSetLastViewed(chatId, mockPrincipal);
 		
-		verify(this.mockPrivateChatService).setLastViewed(chatId, mockPrincipal.getName());
+		verify(this.mockPrivateChatService).setLastViewed(chatId, mockPrincipal);
 		
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		
@@ -140,7 +139,7 @@ class PrivateChatControllerTest {
 		
 		ResponseEntity<Void> response = controller.doSetKeyPressed(chatId, mockPrincipal);
 		
-		verify(this.mockPrivateChatService).setLastKeyPress(chatId, mockPrincipal.getName());
+		verify(this.mockPrivateChatService).setLastKeyPress(chatId, mockPrincipal);
 		
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		
@@ -154,13 +153,11 @@ class PrivateChatControllerTest {
 		
 		final UUID chatId = UUID.randomUUID();
 		
-		when(this.mockPrincipal.getName()).thenReturn("1234");
-		
 		ChatMessageAPIInbound msg = ChatMessageAPIInbound.builder().build();
 		
 		ResponseEntity<Void> response = controller.doAddMessageToChat(chatId, msg, mockPrincipal);
 		
-		verify(this.mockPrivateChatService).addMessage(chatId, msg.getMessage(), mockPrincipal.getName());
+		verify(this.mockPrivateChatService).addMessage(chatId, msg.getMessage(), mockPrincipal);
 		
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		
@@ -178,7 +175,7 @@ class PrivateChatControllerTest {
 		
 		ResponseEntity<Void> response = controller.doDeleteMessageFromChat(chatId, messageId, mockPrincipal);
 		
-		verify(this.mockPrivateChatService).deleteMessage(chatId, messageId, mockPrincipal.getName());
+		verify(this.mockPrivateChatService).deleteMessage(chatId, messageId, mockPrincipal);
 		
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		

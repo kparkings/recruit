@@ -1,5 +1,6 @@
 package com.arenella.recruit.messaging.services;
 
+import java.security.Principal;
 import java.util.Set;
 import java.util.UUID;
 
@@ -20,71 +21,82 @@ public interface PrivateChatService {
 	/**
 	* Returns Chats where the user is either the 
 	* Sender or Recipient 
-	* @param userId - Unique Id of theUser
+	* @param user - Authenticated User
 	* @return Users Chat's
 	*/
-	Set<PrivateChat> getUsersChats(String userId);
+	Set<PrivateChat> getUsersChats(Principal user);
 	
 	/**
 	* Retrieves a Chat including its messages
 	* @param chatId - UniqueId of the Chat
-	* @param userId - UniqueId of the User requesting the Chat
+	* @param user - Authenticated User
 	* @return Chat matching the chatId
 	*/
-	PrivateChat getChat(UUID chatId, String userId);
+	PrivateChat getChat(UUID chatId, Principal user);
 
 	/**
 	* Persists a new or existing Chat
 	* @param chat - To be persisted
+	* @param user - Authenticated User
 	*/
-	UUID saveChat(PrivateChat chat, String userId);
+	UUID saveChat(PrivateChat chat, Principal user);
 
 	/**
 	* Sets when the user last viewed the Chat
 	* @param chatId - Unique Id of the Chat viewed
-	* @param userId - Unique Id of the User viewing the Chat
+	* @param user - Authenticated User
 	*/
-	void setLastViewed(UUID chatId, String userId);
+	void setLastViewed(UUID chatId, Principal user);
 
 	/**
 	* Sets when the user last typed the Chat
 	* @param chatId - Unique Id of the Chat typed in
-	* @param userId - Unique Id of the User typing in the Chat
+	* @param user - Authenticated User
 	*/
-	void setLastKeyPress(UUID chatId, String userId);
+	void setLastKeyPress(UUID chatId, Principal user);
 
 	/**
 	* Updates the blocked status of the Chat by either the 
 	* Sender or the Recipient
 	* @param chatId		- Id of Chat to update
-	* @param userId		- Id of User making update
+	* @param user - Authenticated User
 	* @param blocked	- new blocked status of Chat for the User
 	*/
-	void setBlockedStatus(UUID chatId, String userId, boolean blocked);
+	void setBlockedStatus(UUID chatId, Principal user, boolean blocked);
 	
 	/**
 	* Deletes an existing Chat
 	* Needed if either the Candidate or Recruiters account is deleted
-	* @param chat - Delete Chat
+	* @param user - Authenticated User
 	*/
-	void deleteUserChats(String userId);
+	void deleteUserChats(Principal user);
 	
 	/**
 	* Adds a Message to an existing Chat. Only a User who is a 
 	* Sender/Receiver of the Chat can add a Message
 	* @param charId		- Id of Chat to add message to
 	* @param message	- new Message
-	* @param userId		- Currently authorized User id
+	* @param user - Authenticated User
 	*/
-	void addMessage(UUID chatId, String message, String userId);
+	void addMessage(UUID chatId, String message, Principal user);
 	
 	/**
 	* Marks a Message in a Chat as being Deleted. Only the User who
 	* created the message can mark it as Deleted 
 	* @param chatId		- Id of Chat message belongs to
 	* @param messageId	- Id of Message to Delete
-	* @param userId		- Currently authorized User id
+	* @param user - Authenticated User
 	*/
-	void deleteMessage(UUID chatId, UUID messageId, String userId);
+	void deleteMessage(UUID chatId, UUID messageId, Principal user);
+	
+	/**
+	* Returns whether a authenticated User has permission to use the
+	* Private Chat. The method can optionally throw an exception if
+	* the User does not have permission
+	* @param principal			- Authenticated User
+	* @param throwIfCannotChat	- Throws Exception if User cannot chat and value equals true
+	* @return whether the User has permissions to use the Private Chat functionality
+	*/
+	boolean canChat(Principal principal, boolean throwIfCannotChat);
 	
 }

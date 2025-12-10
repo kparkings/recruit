@@ -181,6 +181,17 @@
 		</div>
 	</div>
 </dialog>
+<dialog #noChatAccessBox>
+	<div class="modal-header">
+		<h4 class="modal-title">{{'arenella-app-paid-feature' | translate}}</h4>
+ 		<div class="filter-close-box" (click)="noChatAccessBox.close()">X</div>
+	</div>
+	<div class="no-chat-box">
+	
+		{{'arenella-app-paid-feature-text' | translate}}
+		
+	</div>
+</dialog>
 <dialog #quickActionsBox>
 	<div class="modal-header">
 		<h4 class="modal-title">{{'quick-actions-title' | translate}}</h4>

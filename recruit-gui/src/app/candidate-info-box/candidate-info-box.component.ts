@@ -24,11 +24,12 @@ export class CandidateInfoBoxComponent {
 	}
 	
 	public openContatBox() {
-    	this.openContactBoxEvent.emit('openContactDialogBox');
+    	//this.openContactBoxEvent.emit('openContactDialogBox');
   	}
 	
 	public openChat():void{
-		this.appComponent.currentChatWindowState = "maximized";
-		this.appComponent.privateChat.openChat(this.candidateId);
+		//this.appComponent.currentChatWindowState = "maximized";
+		this.appComponent.privateChat.openChat(this.candidateId);	
 	}
+	
 }

@@ -20,6 +20,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -27,7 +28,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.core.GrantedAuthority;
 
+import com.arenella.recruit.authentication.spring.filters.ClaimsUsernamePasswordAuthenticationToken;
 import com.arenella.recruit.messaging.beans.ChatMessage;
 import com.arenella.recruit.messaging.beans.PrivateChat;
 import com.arenella.recruit.messaging.dao.PrivateChatDao;
@@ -48,10 +51,40 @@ class PrivateChatServiceImplTest {
 	private static final LocalDateTime 	NON_DEFAULT_LASTVIEW_RECIPIENT 		= LocalDateTime.of(2025, 11, 27, 23, 8, 6);
 	
 	@Mock
-	private PrivateChatDao 			mockChatDao;
+	private PrivateChatDao 								mockChatDao;
+	
+	@Mock
+	private ClaimsUsernamePasswordAuthenticationToken	mockPrincipal;
+	
+	@Mock
+	private GrantedAuthority							mockGrantedAuthority;
 	
 	@InjectMocks
-	private PrivateChatServiceImpl 	service;
+	private PrivateChatServiceImpl 						service;
+	
+	/**
+	* Sets up test environment 
+	*/
+	@BeforeEach
+	void init() {
+		when(this.mockPrincipal.getAuthorities()).thenReturn(Set.of(mockGrantedAuthority));
+		when(this.mockGrantedAuthority.getAuthority()).thenReturn("ROLE_RECRUITER");
+	}
+	
+	/**
+	* Test Exception is thrown if User does not have permission 
+	* to use Chat services
+	*/
+	@Test
+	void testFetchUserChatsNoChatPermissions() {
+		
+		when(this.mockPrincipal.getClaim("useCredits")).thenReturn(Optional.of(true));
+		
+		assertThrows(RuntimeException.class, ()-> 
+			service.getUsersChats(this.mockPrincipal)
+		);
+		
+	}
 	
 	/**
 	* Tests retrieval of User's chats 
@@ -61,15 +94,35 @@ class PrivateChatServiceImplTest {
 		
 		final String userId = "1234";
 		
+		when(this.mockPrincipal.getName()).thenReturn(userId);
+		when(this.mockPrincipal.getClaim("useCredits")).thenReturn(Optional.of(false));
+		
 		PrivateChat chat1 = PrivateChat.builder().id(UUID.randomUUID()).build();
 		PrivateChat chat2 = PrivateChat.builder().id(UUID.randomUUID()).build();
 		
 		when(mockChatDao.fetchUserChats(userId)).thenReturn(Set.of(chat1,chat2));
 		
-		assertTrue(service.getUsersChats(userId).stream().filter(c -> c.getId().equals(chat1.getId())).findAny().isPresent());
-		assertTrue(service.getUsersChats(userId).stream().filter(c -> c.getId().equals(chat2.getId())).findAny().isPresent());
+		assertTrue(service.getUsersChats(this.mockPrincipal).stream().filter(c -> c.getId().equals(chat1.getId())).findAny().isPresent());
+		assertTrue(service.getUsersChats(this.mockPrincipal).stream().filter(c -> c.getId().equals(chat2.getId())).findAny().isPresent());
 	
-		assertEquals(2, service.getUsersChats(userId).size());
+		assertEquals(2, service.getUsersChats(this.mockPrincipal).size());
+		
+	}
+	
+	/**
+	* Test Exception is thrown if User does not have permission 
+	* to use Chat services
+	*/
+	@Test
+	void testFetchChatNoChatPermissions() {
+		
+		final UUID 		chatId 	= UUID.randomUUID();
+		
+		when(this.mockPrincipal.getClaim("useCredits")).thenReturn(Optional.of(true));
+		
+		assertThrows(RuntimeException.class, ()-> 
+		this.service.getChat(chatId, this.mockPrincipal)
+		);
 		
 	}
 	
@@ -79,13 +132,13 @@ class PrivateChatServiceImplTest {
 	@Test
 	void testFetchChatUnknownChat() {
 		
-		final String 	userId 	= "1234";
 		final UUID 		chatId 	= UUID.randomUUID();
 		
+		when(this.mockPrincipal.getClaim("useCredits")).thenReturn(Optional.of(false));
 		when(this.mockChatDao.fetchChatById(chatId)).thenReturn(Optional.empty());
 		
 		RuntimeException ex = assertThrows(RuntimeException.class, ()->{
-			this.service.getChat(chatId, userId);
+			this.service.getChat(chatId, this.mockPrincipal);
 		});
 		
 		assertEquals(PrivateChatService.ERR_MSG_UNKNOWN_CHAT, ex.getMessage());
@@ -105,10 +158,12 @@ class PrivateChatServiceImplTest {
 		final UUID 			chatId 		= UUID.randomUUID();
 		final PrivateChat 	chat 		= PrivateChat.builder().id(chatId).senderId(senderId).recipientId(recipientId).build();
 		
+		when(this.mockPrincipal.getName()).thenReturn(userId);
+		when(this.mockPrincipal.getClaim("useCredits")).thenReturn(Optional.of(false));
 		when(this.mockChatDao.fetchChatById(chatId)).thenReturn(Optional.of(chat));
 		
 		RuntimeException ex = assertThrows(RuntimeException.class, ()->{
-			this.service.getChat(chatId, userId);
+			this.service.getChat(chatId, this.mockPrincipal);
 		});
 		
 		assertEquals(PrivateChatService.ERR_MSG_UNAUTHORISED_CHAT, ex.getMessage());
@@ -126,9 +181,11 @@ class PrivateChatServiceImplTest {
 		final UUID 			chatId 		= UUID.randomUUID();
 		final PrivateChat 	chat 		= PrivateChat.builder().id(chatId).senderId(userId).recipientId(recipientId).build();
 		
+		when(this.mockPrincipal.getName()).thenReturn(userId);
+		when(this.mockPrincipal.getClaim("useCredits")).thenReturn(Optional.of(false));
 		when(this.mockChatDao.fetchChatById(chatId)).thenReturn(Optional.of(chat));
 		
-		PrivateChat requestedChat = this.service.getChat(chatId, userId);
+		PrivateChat requestedChat = this.service.getChat(chatId, this.mockPrincipal);
 		
 		assertEquals(chatId, requestedChat.getId());
 		
@@ -145,11 +202,33 @@ class PrivateChatServiceImplTest {
 		final UUID 			chatId 		= UUID.randomUUID();
 		final PrivateChat 	chat 		= PrivateChat.builder().id(chatId).senderId(senderId).recipientId(userId).build();
 		
+		when(this.mockPrincipal.getName()).thenReturn(userId);
+		when(this.mockPrincipal.getClaim("useCredits")).thenReturn(Optional.of(false));
 		when(this.mockChatDao.fetchChatById(chatId)).thenReturn(Optional.of(chat));
 		
-		PrivateChat requestedChat = this.service.getChat(chatId, userId);
+		PrivateChat requestedChat = this.service.getChat(chatId, this.mockPrincipal);
 		
 		assertEquals(chatId, requestedChat.getId());
+		
+	}
+	
+	/**
+	* Test Exception is thrown if User does not have permission 
+	* to use Chat services
+	*/
+	@Test
+	void testSaveChatNoChatPermissions() {
+		
+		final UUID 			chatId 		= UUID.randomUUID();
+		final String		senderId 	= "rec001";
+		final String		recipientId	= "5577";
+		final PrivateChat 	chat 		= PrivateChat.builder().id(chatId).senderId(senderId).recipientId(recipientId).build();
+		
+		when(this.mockPrincipal.getClaim("useCredits")).thenReturn(Optional.of(true));
+		
+		assertThrows(RuntimeException.class, ()-> 
+			this.service.saveChat(chat, this.mockPrincipal)
+		);
 		
 	}
 	
@@ -165,10 +244,12 @@ class PrivateChatServiceImplTest {
 		final String		recipientId	= "5577";
 		final PrivateChat 	chat 		= PrivateChat.builder().id(chatId).senderId(senderId).recipientId(recipientId).build();
 		
+		when(this.mockPrincipal.getName()).thenReturn(userId);
+		when(this.mockPrincipal.getClaim("useCredits")).thenReturn(Optional.of(false));
 		when(this.mockChatDao.existsById(chatId)).thenReturn(true);
 		
 		RuntimeException ex = assertThrows(RuntimeException.class, ()-> {
-			this.service.saveChat(chat, userId);
+			this.service.saveChat(chat, this.mockPrincipal);
 		});
 		
 		assertEquals(PrivateChatService.ERR_MSG_CANNOT_CREATE_CHAT, ex.getMessage());
@@ -188,10 +269,12 @@ class PrivateChatServiceImplTest {
 		final String		recipientId	= "5577";
 		final PrivateChat 	chat 		= PrivateChat.builder().id(chatId).senderId(senderId).recipientId(recipientId).build();
 		
+		when(this.mockPrincipal.getName()).thenReturn(userId);
+		when(this.mockPrincipal.getClaim("useCredits")).thenReturn(Optional.of(false));
 		when(this.mockChatDao.existsById(chatId)).thenReturn(false);
 		
 		RuntimeException ex = assertThrows(RuntimeException.class, ()-> {
-			this.service.saveChat(chat, userId);
+			this.service.saveChat(chat, this.mockPrincipal);
 		});
 		
 		assertEquals(PrivateChatService.ERR_MSG_CANNOT_CREATE_CHAT_FOR_ANOTHER_USER, ex.getMessage());
@@ -209,10 +292,12 @@ class PrivateChatServiceImplTest {
 		final String		userId		= "authenticatedUser";
 		final PrivateChat 	chat 		= PrivateChat.builder().id(chatId).senderId(userId).recipientId(userId).build();
 		
+		when(this.mockPrincipal.getName()).thenReturn(userId);
+		when(this.mockPrincipal.getClaim("useCredits")).thenReturn(Optional.of(false));
 		when(this.mockChatDao.existsById(chatId)).thenReturn(false);
 		
 		RuntimeException ex = assertThrows(RuntimeException.class, ()-> {
-			this.service.saveChat(chat, userId);
+			this.service.saveChat(chat, this.mockPrincipal);
 		});
 		
 		assertEquals(PrivateChatService.ERR_MSG_CANNOT_CREATE_CHAT_WITH_YOURSELF, ex.getMessage());
@@ -231,11 +316,13 @@ class PrivateChatServiceImplTest {
 		final String		recipientId	= "5577";
 		final PrivateChat 	chat 		= PrivateChat.builder().id(chatId).senderId(userId).recipientId(recipientId).build();
 		
+		when(this.mockPrincipal.getName()).thenReturn(userId);
+		when(this.mockPrincipal.getClaim("useCredits")).thenReturn(Optional.of(false));
 		when(this.mockChatDao.existsById(chatId)).thenReturn(false);
 		when(this.mockChatDao.fetchUserChats(userId)).thenReturn(Set.of(PrivateChat.builder().senderId(userId).recipientId(recipientId).build()));
 		
 		RuntimeException ex = assertThrows(RuntimeException.class, ()-> {
-			this.service.saveChat(chat, userId);
+			this.service.saveChat(chat, this.mockPrincipal);
 		});
 		
 		assertEquals(PrivateChatService.ERR_MSG_CANNOT_CREATE_CHAT_COMBINATION_EXISTS, ex.getMessage());
@@ -254,11 +341,13 @@ class PrivateChatServiceImplTest {
 		final String		recipientId	= "5577";
 		final PrivateChat 	chat 		= PrivateChat.builder().id(chatId).senderId(userId).recipientId(recipientId).build();
 		
+		when(this.mockPrincipal.getName()).thenReturn(userId);
+		when(this.mockPrincipal.getClaim("useCredits")).thenReturn(Optional.of(false));
 		when(this.mockChatDao.existsById(chatId)).thenReturn(false);
 		when(this.mockChatDao.fetchUserChats(userId)).thenReturn(Set.of(PrivateChat.builder().senderId(recipientId).recipientId(userId).build()));
 	
 		RuntimeException ex = assertThrows(RuntimeException.class, ()-> {
-			this.service.saveChat(chat, userId);
+			this.service.saveChat(chat, this.mockPrincipal);
 		});
 		
 		assertEquals(PrivateChatService.ERR_MSG_CANNOT_CREATE_CHAT_COMBINATION_EXISTS, ex.getMessage());
@@ -296,11 +385,13 @@ class PrivateChatServiceImplTest {
 					.lastViewedBySender(NON_DEFUALT_LASTVIEW_SENDER)
 				.build();
 		
+		when(this.mockPrincipal.getName()).thenReturn(userId);
+		when(this.mockPrincipal.getClaim("useCredits")).thenReturn(Optional.of(false));
 		doNothing().when(mockChatDao).saveChat(chatArgCapt.capture());
 		when(this.mockChatDao.existsById(chatId)).thenReturn(false);
 		when(this.mockChatDao.fetchUserChats(userId)).thenReturn(Set.of(PrivateChat.builder().senderId(userId).recipientId(recipientIdOther).build(),PrivateChat.builder().senderId(recipientIdOther).recipientId(userId).build()));
 	
-		this.service.saveChat(chat, userId);
+		this.service.saveChat(chat, this.mockPrincipal);
 		
 		verify(this.mockChatDao).saveChat(any(PrivateChat.class));
 		
@@ -322,6 +413,21 @@ class PrivateChatServiceImplTest {
 	}
 	
 	/**
+	* Test Exception is thrown if User does not have permission 
+	* to use Chat services
+	*/
+	@Test
+	void testDeleteUserChatsNoChatPermissions() {
+		
+		when(this.mockPrincipal.getClaim("useCredits")).thenReturn(Optional.of(true));
+		
+		assertThrows(RuntimeException.class, ()-> 
+			this.service.deleteUserChats(this.mockPrincipal)
+		);
+		
+	}
+	
+	/**
 	* Tests deletion of Chats where User is either
 	* Sender or Recipient 
 	*/
@@ -330,11 +436,31 @@ class PrivateChatServiceImplTest {
 		
 		final String userId = "kprec01";
 		
-		when(this.service.getUsersChats(userId)).thenReturn(Set.of(PrivateChat.builder().id(UUID.randomUUID()).build(),PrivateChat.builder().id(UUID.randomUUID()).build()));
+		when(this.mockPrincipal.getName()).thenReturn(userId);
+		when(this.mockPrincipal.getClaim("useCredits")).thenReturn(Optional.of(false));
+		when(this.service.getUsersChats(this.mockPrincipal)).thenReturn(Set.of(PrivateChat.builder().id(UUID.randomUUID()).build(),PrivateChat.builder().id(UUID.randomUUID()).build()));
 		
-		this.service.deleteUserChats(userId);
+		this.service.deleteUserChats(this.mockPrincipal);
 		
 		verify(this.mockChatDao, times(2)).deleteById(Mockito.any(UUID.class));
+		
+	}
+	
+	/**
+	* Test Exception is thrown if User does not have permission 
+	* to use Chat services
+	*/
+	@Test
+	void testAddMessageNoChatPermissions() {
+		
+		final UUID 		chatId 		= UUID.randomUUID();
+		final String 	message		= "aMessage";
+		
+		when(this.mockPrincipal.getClaim("useCredits")).thenReturn(Optional.of(true));
+		
+		assertThrows(RuntimeException.class, ()-> 
+			this.service.addMessage(chatId, message, this.mockPrincipal)
+		);
 		
 	}
 	
@@ -346,12 +472,12 @@ class PrivateChatServiceImplTest {
 	void testAddMessageNoMatchingChat() {
 		
 		final UUID 		chatId 		= UUID.randomUUID();
-		final String 	userId 		= "aUser";
 		final String 	message		= "aMessage";
 		
+		when(this.mockPrincipal.getClaim("useCredits")).thenReturn(Optional.of(false));
 		when(this.mockChatDao.fetchChatById(chatId)).thenReturn(Optional.empty());
 		
-		RuntimeException ex = assertThrows(RuntimeException.class, () -> this.service.addMessage(chatId, message, userId));
+		RuntimeException ex = assertThrows(RuntimeException.class, () -> this.service.addMessage(chatId, message, this.mockPrincipal));
 		
 		assertEquals(PrivateChatServiceImpl.ERR_MSG_CANNOT_ADD_MESSAGE, ex.getMessage());
 	
@@ -372,14 +498,18 @@ class PrivateChatServiceImplTest {
 		final String 		message			= "aMessage";
 		final PrivateChat 	chat 			= PrivateChat.builder().senderId(chatSenderId).recipientId(chatRecipientId).build();
 		
+		when(this.mockPrincipal.getName()).thenReturn(userId);
+		when(this.mockPrincipal.getClaim("useCredits")).thenReturn(Optional.of(false));
 		when(this.mockChatDao.fetchChatById(chatId)).thenReturn(Optional.of(chat));
 		
-		RuntimeException ex = assertThrows(RuntimeException.class, () -> this.service.addMessage(chatId, message, userId));
+		RuntimeException ex = assertThrows(RuntimeException.class, () -> this.service.addMessage(chatId, message, this.mockPrincipal));
 		
 		assertEquals(PrivateChatServiceImpl.ERR_MSG_CANNOT_ADD_MESSAGE, ex.getMessage());
 		
-		assertDoesNotThrow(()-> this.service.addMessage(chatId, message, chatSenderId));
-		assertDoesNotThrow(()-> this.service.addMessage(chatId, message, chatRecipientId));
+		when(this.mockPrincipal.getName()).thenReturn(chatSenderId);
+		assertDoesNotThrow(()-> this.service.addMessage(chatId, message, this.mockPrincipal));
+		when(this.mockPrincipal.getName()).thenReturn(chatRecipientId);
+		assertDoesNotThrow(()-> this.service.addMessage(chatId, message, this.mockPrincipal));
 		
 	}
 	
@@ -398,10 +528,12 @@ class PrivateChatServiceImplTest {
 		
 		ArgumentCaptor<PrivateChat> argCaptChat = ArgumentCaptor.forClass(PrivateChat.class);
 		
+		when(this.mockPrincipal.getName()).thenReturn(chatRecipientId);
+		when(this.mockPrincipal.getClaim("useCredits")).thenReturn(Optional.of(false));
 		when(this.mockChatDao.fetchChatById(chatId)).thenReturn(Optional.of(chat));
 		doNothing().when(this.mockChatDao).saveChat(argCaptChat.capture());
 		
-		this.service.addMessage(chatId, message, chatRecipientId);
+		this.service.addMessage(chatId, message, this.mockPrincipal);
 		
 		verify(this.mockChatDao).saveChat(chat);
 		
@@ -418,6 +550,24 @@ class PrivateChatServiceImplTest {
 	}
 	
 	/**
+	* Test Exception is thrown if User does not have permission 
+	* to use Chat services
+	*/
+	@Test
+	void testDeleteMessageNoChatPermissions() {
+		
+		final UUID 		chatId 		= UUID.randomUUID();
+		final UUID 		messageId	= UUID.randomUUID();
+		
+		when(this.mockPrincipal.getClaim("useCredits")).thenReturn(Optional.of(true));
+		
+		assertThrows(RuntimeException.class, ()-> 
+			this.service.deleteMessage(chatId, messageId, this.mockPrincipal)
+		);
+		
+	}
+	
+	/**
 	* Tests Exception is thrown if associated Chat is not found
 	*/
 	@Test
@@ -425,11 +575,11 @@ class PrivateChatServiceImplTest {
 	
 		final UUID 		chatId 		= UUID.randomUUID();
 		final UUID 		messageId	= UUID.randomUUID();
-		final String 	userId 		= "aUser";
 		
+		when(this.mockPrincipal.getClaim("useCredits")).thenReturn(Optional.of(false));
 		when(this.mockChatDao.fetchChatById(chatId)).thenReturn(Optional.empty());
 		
-		RuntimeException ex = assertThrows(RuntimeException.class, () -> this.service.deleteMessage(chatId, messageId, userId));
+		RuntimeException ex = assertThrows(RuntimeException.class, () -> this.service.deleteMessage(chatId, messageId, this.mockPrincipal));
 		
 		assertEquals(PrivateChatServiceImpl.ERR_MSG_CANNOT_DEL_MESSAGE, ex.getMessage());
 		
@@ -444,14 +594,14 @@ class PrivateChatServiceImplTest {
 	
 		final UUID 			chatId 			= UUID.randomUUID();
 		final UUID 			messageId		= UUID.randomUUID();
-		final String 		userId 			= "aUser";
 		final String 		chatSenderId 	= "u1";
 		final String 		chatRecipientId = "u2";
 		final PrivateChat 	chat 			= PrivateChat.builder().senderId(chatSenderId).recipientId(chatRecipientId).build();
 		
+		when(this.mockPrincipal.getClaim("useCredits")).thenReturn(Optional.of(false));
 		when(this.mockChatDao.fetchChatById(chatId)).thenReturn(Optional.of(chat));
 		
-		RuntimeException ex = assertThrows(RuntimeException.class, () -> this.service.deleteMessage(chatId, messageId, userId));
+		RuntimeException ex = assertThrows(RuntimeException.class, () -> this.service.deleteMessage(chatId, messageId, this.mockPrincipal));
 		
 		assertEquals(PrivateChatServiceImpl.ERR_MSG_CANNOT_DEL_MESSAGE, ex.getMessage());
 		
@@ -474,9 +624,11 @@ class PrivateChatServiceImplTest {
 	
 		chat.addReply(message);
 		
+		when(this.mockPrincipal.getName()).thenReturn(userId);
+		when(this.mockPrincipal.getClaim("useCredits")).thenReturn(Optional.of(false));
 		when(this.mockChatDao.fetchChatById(chatId)).thenReturn(Optional.of(chat));
 		
-		RuntimeException ex = assertThrows(RuntimeException.class, () -> this.service.deleteMessage(chatId, messageId, userId));
+		RuntimeException ex = assertThrows(RuntimeException.class, () -> this.service.deleteMessage(chatId, messageId, this.mockPrincipal));
 		
 		assertEquals(PrivateChatServiceImpl.ERR_MSG_CANNOT_DEL_MESSAGE, ex.getMessage());
 		
@@ -503,9 +655,11 @@ class PrivateChatServiceImplTest {
 		
 		doNothing().when(this.mockChatDao).saveChat(argCaptChat.capture());
 		
+		when(this.mockPrincipal.getName()).thenReturn(chatSenderId);
+		when(this.mockPrincipal.getClaim("useCredits")).thenReturn(Optional.of(false));
 		when(this.mockChatDao.fetchChatById(chatId)).thenReturn(Optional.of(chat));
 		
-		this.service.deleteMessage(chatId, messageId, chatSenderId);
+		this.service.deleteMessage(chatId, messageId, this.mockPrincipal);
 		
 		verify(this.mockChatDao).saveChat(chat);
 		

@@ -1,5 +1,6 @@
 package com.arenella.recruit.messaging.services;
 
+import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.Set;
@@ -7,6 +8,7 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
+import com.arenella.recruit.authentication.spring.filters.ClaimsUsernamePasswordAuthenticationToken;
 import com.arenella.recruit.messaging.beans.ChatMessage;
 import com.arenella.recruit.messaging.beans.PrivateChat;
 import com.arenella.recruit.messaging.beans.PrivateChat.PrivateChatBuilder;
@@ -37,15 +39,20 @@ public class PrivateChatServiceImpl implements PrivateChatService{
 	* Refer to the PrivateChatService for details 
 	*/
 	@Override
-	public Set<PrivateChat> getUsersChats(String userId) {
-		return this.privateChatDao.fetchUserChats(userId);
+	public Set<PrivateChat> getUsersChats(Principal user) {
+		
+		this.canChat(user, true);
+		
+		return this.privateChatDao.fetchUserChats(user.getName());
 	}
 
 	/**
 	* Refer to the PrivateChatService for details 
 	*/
 	@Override
-	public PrivateChat getChat(UUID chatId, String userId) {
+	public PrivateChat getChat(UUID chatId, Principal user) {
+		
+		this.canChat(user, true);
 		
 		Optional<PrivateChat> chatOpt  = this.privateChatDao.fetchChatById(chatId);
 		
@@ -55,7 +62,7 @@ public class PrivateChatServiceImpl implements PrivateChatService{
 		
 		PrivateChat chat = chatOpt.orElseThrow();
 		
-		if (!userId.equals(chat.getSenderId()) && !userId.equals(chat.getRecipientId())) {
+		if (!user.getName().equals(chat.getSenderId()) && !user.getName().equals(chat.getRecipientId())) {
 			throw new RuntimeException(PrivateChatService.ERR_MSG_UNAUTHORISED_CHAT);
 		}
 		
@@ -67,8 +74,11 @@ public class PrivateChatServiceImpl implements PrivateChatService{
 	* Refer to the PrivateChatService for details 
 	*/
 	@Override
-	public UUID saveChat(PrivateChat chat, String userId) {
-		this.saveInitialChat(chat, userId);
+	public UUID saveChat(PrivateChat chat, Principal user) {
+		
+		this.canChat(user, true);
+		
+		this.saveInitialChat(chat, user.getName());
 		return chat.getId();
 	}
 	
@@ -76,16 +86,18 @@ public class PrivateChatServiceImpl implements PrivateChatService{
 	* Refer to the PrivateChatService for details 
 	*/
 	@Override
-	public void setBlockedStatus(UUID chatId, String userId, boolean blocked) {
+	public void setBlockedStatus(UUID chatId, Principal user, boolean blocked) {
 		
-		PrivateChat 		chat 		= this.fetchAndValidateChatForUpdate(chatId, userId);
+		this.canChat(user, true);
+		
+		PrivateChat 		chat 		= this.fetchAndValidateChatForUpdate(chatId, user.getName());
 		PrivateChatBuilder 	updatedChat = chat.cloneToBuilder();
 		
-		if (userId.equals(chat.getSenderId())) {
+		if (user.getName().equals(chat.getSenderId())) {
 			updatedChat.blockedBySender(blocked);
 		}
 		
-		if (userId.equals(chat.getRecipientId())) {
+		if (user.getName().equals(chat.getRecipientId())) {
 			updatedChat.blockedByRecipient(blocked);
 		}
 		
@@ -97,16 +109,18 @@ public class PrivateChatServiceImpl implements PrivateChatService{
 	* Refer to the PrivateChatService for details 
 	*/
 	@Override
-	public void setLastViewed(UUID chatId, String userId) {
+	public void setLastViewed(UUID chatId, Principal user) {
 		
-		PrivateChat 		chat 		= this.fetchAndValidateChatForUpdate(chatId, userId);
+		this.canChat(user, true);
+		
+		PrivateChat 		chat 		= this.fetchAndValidateChatForUpdate(chatId, user.getName());
 		PrivateChatBuilder 	updatedChat = chat.cloneToBuilder();
 		
-		if (userId.equals(chat.getSenderId())) {
+		if (user.getName().equals(chat.getSenderId())) {
 			updatedChat.lastViewedBySender(LocalDateTime.now());
 		}
 		
-		if (userId.equals(chat.getRecipientId())) {
+		if (user.getName().equals(chat.getRecipientId())) {
 			updatedChat.lastViewedByRecipient(LocalDateTime.now());
 		}
 	
@@ -118,16 +132,18 @@ public class PrivateChatServiceImpl implements PrivateChatService{
 	* Refer to the PrivateChatService for details 
 	*/
 	@Override
-	public void setLastKeyPress(UUID chatId, String userId) {
+	public void setLastKeyPress(UUID chatId, Principal user) {
 		
-		PrivateChat 		chat 		= this.fetchAndValidateChatForUpdate(chatId, userId);
+		this.canChat(user, true);
+		
+		PrivateChat 		chat 		= this.fetchAndValidateChatForUpdate(chatId, user.getName());
 		PrivateChatBuilder 	updatedChat = chat.cloneToBuilder();
 		
-		if (userId.equals(chat.getSenderId())) {
+		if (user.getName().equals(chat.getSenderId())) {
 			updatedChat.lastKeyPressSender(LocalDateTime.now());
 		}
 		
-		if (userId.equals(chat.getRecipientId())) {
+		if (user.getName().equals(chat.getRecipientId())) {
 			updatedChat.lastKeyPressRecipient(LocalDateTime.now());
 		}
 		
@@ -139,23 +155,28 @@ public class PrivateChatServiceImpl implements PrivateChatService{
 	* Refer to the PrivateChatService for details 
 	*/
 	@Override
-	public void deleteUserChats(String userId) {
-		this.privateChatDao.fetchUserChats(userId).forEach(c -> privateChatDao.deleteById(c.getId()));
+	public void deleteUserChats(Principal user) {
+		
+		this.canChat(user, true);
+		
+		this.privateChatDao.fetchUserChats(user.getName()).forEach(c -> privateChatDao.deleteById(c.getId()));
 	}
 	
 	/**
 	* Refer to the PrivateChatService for details 
 	*/
 	@Override
-	public void addMessage(UUID chatId, String message, String userId) {
+	public void addMessage(UUID chatId, String message, Principal user) {
+		
+		this.canChat(user, true);
 		
 		PrivateChat chat = privateChatDao.fetchChatById(chatId).orElseThrow(() -> new RuntimeException(ERR_MSG_CANNOT_ADD_MESSAGE));
 		
-		if (!userId.equals(chat.getSenderId()) && !userId.equals(chat.getRecipientId())) {
+		if (!user.getName().equals(chat.getSenderId()) && !user.getName().equals(chat.getRecipientId())) {
 			throw new RuntimeException(ERR_MSG_CANNOT_ADD_MESSAGE);
 		}
 		
-		String recipientId = chat.getSenderId().equals(userId) ? chat.getRecipientId() : chat.getSenderId();
+		String recipientId = chat.getSenderId().equals(user.getName()) ? chat.getRecipientId() : chat.getSenderId();
 		
 		chat.addReply(ChatMessage
 				.builder()
@@ -163,7 +184,7 @@ public class PrivateChatServiceImpl implements PrivateChatService{
 					.chatId(chatId)
 					.created(LocalDateTime.now())
 					.message(message)
-					.senderId(userId)
+					.senderId(user.getName())
 					.recipientId(recipientId)
 				.build());
 		
@@ -174,7 +195,9 @@ public class PrivateChatServiceImpl implements PrivateChatService{
 	* Refer to the PrivateChatService for details 
 	*/
 	@Override
-	public void deleteMessage(UUID chatId, UUID messageId, String userId) {
+	public void deleteMessage(UUID chatId, UUID messageId, Principal user) {
+		
+		this.canChat(user, true);
 		
 		PrivateChat chat = privateChatDao.fetchChatById(chatId).orElseThrow(() -> new RuntimeException(ERR_MSG_CANNOT_DEL_MESSAGE));
 		
@@ -184,7 +207,7 @@ public class PrivateChatServiceImpl implements PrivateChatService{
 		
 		ChatMessage message = chat.getReplies().get(messageId);
 		
-		if (!userId.equals(message.getSenderId())) {
+		if (!user.getName().equals(message.getSenderId())) {
 			throw new RuntimeException(ERR_MSG_CANNOT_DEL_MESSAGE);
 		}
 		
@@ -192,6 +215,28 @@ public class PrivateChatServiceImpl implements PrivateChatService{
 		
 		this.privateChatDao.saveChat(chat);
 	
+	}
+	
+	
+	
+	/**
+	* Refer to the PrivateChatService for details 
+	*/
+	@Override
+	public boolean canChat(Principal principal, boolean throwIfCannotChat) {
+		
+		ClaimsUsernamePasswordAuthenticationToken 	user 			= (ClaimsUsernamePasswordAuthenticationToken)principal;
+		boolean 									isRecruiter 	= user.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_RECRUITER"));
+		boolean 									useCredits 		= (Boolean)user.getClaim("useCredits").get();
+	
+		if (isRecruiter && useCredits && throwIfCannotChat) {
+			throw new RuntimeException("Nope");
+		} else if (isRecruiter && useCredits) {
+			return false;
+		}
+		
+		return true;
+		
 	}
 	
 	/**

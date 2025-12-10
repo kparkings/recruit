@@ -118,6 +118,17 @@ export class PrivateMessagingService {
 		return this.httpClient.put<any>(backendUrl, {}, this.httpOptions);
 	
 	}
+	
+	/**
+	* Returns whether or not the Recruiter has access to the Private Chat functinality 
+	*/
+	public hasChatAccess():Observable<boolean>{
+		
+		const backendUrl:string = environment.backendUrl +'privatechat/hasAccess';
+		  
+		return this.httpClient.get<any>(backendUrl, this.httpOptions);
+		
+	}
   
 }
 

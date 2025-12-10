@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.arenella.recruit.authentication.spring.filters.ClaimsUsernamePasswordAuthenticationToken;
 import com.arenella.recruit.messaging.services.PrivateChatService;
 
 /**
@@ -44,7 +45,7 @@ public class PrivateChatController {
 	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('RECRUITER')")
 	@PostMapping(path="privatechat", produces="application/json")
 	public ResponseEntity<UUID> createPrivateChat(@RequestBody PrivateChatAPIInbound chat, Principal principal) {
-		return new ResponseEntity<>(this.privateChatService.saveChat(PrivateChatAPIInbound.toDomain(chat), principal.getName()), HttpStatus.CREATED);
+		return new ResponseEntity<>(this.privateChatService.saveChat(PrivateChatAPIInbound.toDomain(chat), principal), HttpStatus.CREATED);
 	}
 	
 	/**
@@ -56,7 +57,7 @@ public class PrivateChatController {
 	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('RECRUITER') OR hasRole('CANDIDATE')")
 	@GetMapping(path="privatechat/{chatId}", produces="application/json")
 	public ResponseEntity<PrivateChatAPIOutbound> fetchPrivateChatById(@PathVariable("chatId") UUID chatId, Principal principal) {
-		return ResponseEntity.ok(PrivateChatAPIOutbound.fromDomain(this.privateChatService.getChat(chatId, principal.getName())));
+		return ResponseEntity.ok(PrivateChatAPIOutbound.fromDomain(this.privateChatService.getChat(chatId, principal)));
 	}
 	
 	/**
@@ -67,7 +68,7 @@ public class PrivateChatController {
 	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('RECRUITER') OR hasRole('CANDIDATE')")
 	@GetMapping(path="privatechat", produces="application/json")
 	public ResponseEntity<Set<PrivateChatAPIOutbound>> fetchChatsByUserId(Principal principal) {
-		return ResponseEntity.ok(this.privateChatService.getUsersChats(principal.getName()).stream().map(PrivateChatAPIOutbound::fromDomain).collect(Collectors.toCollection(LinkedHashSet::new)));
+		return ResponseEntity.ok(this.privateChatService.getUsersChats(principal).stream().map(PrivateChatAPIOutbound::fromDomain).collect(Collectors.toCollection(LinkedHashSet::new)));
 	}
 	
 	/**
@@ -77,7 +78,7 @@ public class PrivateChatController {
 	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('RECRUITER') OR hasRole('CANDIDATE')")
 	@PutMapping(path="privatechat/{chatId}/block/{blocked}", produces="application/json")
 	public ResponseEntity<Void> doSetBlockedStatus(@PathVariable("chatId") UUID chatId, @PathVariable("blocked") boolean blocked, Principal principal) {
-		this.privateChatService.setBlockedStatus(chatId, principal.getName(), blocked);
+		this.privateChatService.setBlockedStatus(chatId, principal, blocked);
 		return ResponseEntity.ok().build();
 	}
 	
@@ -88,7 +89,7 @@ public class PrivateChatController {
 	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('RECRUITER') OR hasRole('CANDIDATE')")
 	@PutMapping(path="privatechat/{chatId}/viewed", produces="application/json")
 	public ResponseEntity<Void> doSetLastViewed(@PathVariable("chatId") UUID chatId, Principal principal) {
-		this.privateChatService.setLastViewed(chatId, principal.getName());
+		this.privateChatService.setLastViewed(chatId, principal);
 		return ResponseEntity.ok().build();
 	}
 	
@@ -99,7 +100,7 @@ public class PrivateChatController {
 	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('RECRUITER') OR hasRole('CANDIDATE')")
 	@PutMapping(path="privatechat/{chatId}/keypressed", produces="application/json")
 	public ResponseEntity<Void> doSetKeyPressed(@PathVariable("chatId") UUID chatId, Principal principal) {
-		this.privateChatService.setLastKeyPress(chatId, principal.getName());
+		this.privateChatService.setLastKeyPress(chatId, principal);
 		return ResponseEntity.ok().build();
 	}
 	
@@ -112,7 +113,7 @@ public class PrivateChatController {
 	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('RECRUITER') OR hasRole('CANDIDATE')")
 	@PutMapping(path="privatechat/{chatId}/message", produces="application/json")
 	public ResponseEntity<Void> doAddMessageToChat(@PathVariable("chatId") UUID chatId, @RequestBody ChatMessageAPIInbound message, Principal principal) {
-		this.privateChatService.addMessage(chatId, message.getMessage(), principal.getName());
+		this.privateChatService.addMessage(chatId, message.getMessage(), principal);
 		return ResponseEntity.ok().build();
 	}
 	
@@ -126,8 +127,22 @@ public class PrivateChatController {
 	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('RECRUITER') OR hasRole('CANDIDATE')")
 	@DeleteMapping(path="privatechat/{chatId}/message/{messageId}", produces="application/json")
 	public ResponseEntity<Void> doDeleteMessageFromChat(@PathVariable("chatId") UUID chatId, @PathVariable("messageId") UUID messageId, Principal principal) {
-		this.privateChatService.deleteMessage(chatId, messageId, principal.getName());
+		this.privateChatService.deleteMessage(chatId, messageId, principal);
 		return ResponseEntity.ok().build();
 	}
+	
+	//TODO: [KP] 1. Add endpoint for canChat so we can display message to user in FE if they have no access
+	//TODO: [KP] 2. use this function to throw exception if User attempts to access chat directly via API
+	
+	/**
+	* Determines if User has access to the Chat's
+	* @param principal - currently logged in user
+	*/
+	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('RECRUITER') OR hasRole('CANDIDATE')")
+	@GetMapping(path="privatechat/hasAccess", produces="application/json")
+	public ResponseEntity<Boolean> hasChatAccess(Principal principal) {
+		return ResponseEntity.ok(this.privateChatService.canChat(principal, false));
+	}
+	
 	
 }

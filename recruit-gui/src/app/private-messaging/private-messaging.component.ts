@@ -25,7 +25,7 @@ export class PrivateMessagingComponent {
 	public candidates:Array<CandidateSuggestionAPIOutbound>			= new Array<CandidateSuggestionAPIOutbound>();
 	public recruiters:Array<RecruiterBasicInfoAPIOutbound>			= new Array<RecruiterBasicInfoAPIOutbound>();
 	public currentChat:PrivateChatAPIOutbound | undefined;
-		
+	public userHasChatAccess:boolean									= false;	
 	
 	/**
 	* Constructor
@@ -40,7 +40,6 @@ export class PrivateMessagingComponent {
 		private readonly chatService:PrivateMessagingService, 
 		private readonly candidateService:CandidateServiceService, 
 		private readonly recruiterService:RecruiterService){
-		
 	}
 	
 	/**
@@ -49,22 +48,35 @@ export class PrivateMessagingComponent {
 	* Once Chat's are retrieved fetches the Candidate details for each of the Chats
 	*/
 	public openChat(candidateId:string):void{
-				
-		this.chatService.fetchChatsByUserId().subscribe(chats => {
-			
-			this.chats = chats;
-			
-			if (this.chats.filter(c => 
-					c.senderId == this.currentUserAuth.getLoggedInUserId() 	&& c.recipientId == candidateId
-				|| 	c.senderId == candidateId 								&& c.recipientId == this.currentUserAuth.getLoggedInUserId()).length == 0
-			) {
-				this.chatService.createChat(this.currentUserAuth.getLoggedInUserId(), candidateId).subscribe(response => {
-						this.fetchChats();
-				})
-			}
-		});
 		
-		this.chatViewItem = "message";
+		this.chatService.hasChatAccess().subscribe(res => {
+					
+			if (res == true) {
+
+				this.chatService.fetchChatsByUserId().subscribe(chats => {
+					
+					this.chats = chats;
+					
+					if (this.chats.filter(c => 
+							c.senderId == this.currentUserAuth.getLoggedInUserId() 	&& c.recipientId == candidateId
+						|| 	c.senderId == candidateId 								&& c.recipientId == this.currentUserAuth.getLoggedInUserId()).length == 0
+					) {
+						this.chatService.createChat(this.currentUserAuth.getLoggedInUserId(), candidateId).subscribe(response => {
+							this.fetchChats();
+						})
+					} else {
+						this.fetchChats();
+					}
+				});
+
+				this.chatViewItem = "message";
+				this.appComponent.currentChatWindowState = "maximized";
+			} else {
+				this.appComponent.openNoChatAccessBox();
+			}
+			
+			
+		});
 	}
 	
 	/**
@@ -221,12 +233,19 @@ export class PrivateMessagingComponent {
 	}
 	
 	/**
-	* Minimizes the chat window as it is opened
+	* Maximizes the chat window as it is opened
 	* and ensure contact list view is displayed
 	*/
 	public maximizeOnOpen():void{
-		this.chatViewItem = "contacts";
-		this.maximizeChat();
+		this.chatService.hasChatAccess().subscribe(res => {
+							
+			if (res == true) {
+				this.chatViewItem = "contacts";
+				this.maximizeChat();
+			} else {
+				this.appComponent.openNoChatAccessBox();
+			}	
+		});
 	}
 		
 	/**

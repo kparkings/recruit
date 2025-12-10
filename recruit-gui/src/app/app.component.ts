@@ -26,12 +26,13 @@ export class AppComponent {
 	@ViewChild('quickActionsBox', { static: false }) 	private quickActionsBox:any;
 	@ViewChild('tandcBox', { static: false }) 	 		private tandcBox:any;
 	@ViewChild(PrivateMessagingComponent) 				public privateChat!:PrivateMessagingComponent;
+	@ViewChild('noChatAccessBox')						private noChatAccessBox:any;
 	
 	public currentChatWindowState:string = "closed";
 	
 	public currentUserAuth:CurrentUserAuth 						= new CurrentUserAuth();
 	
-	private readonly termsAndConditionsCookieVersion:string = '3';
+	private readonly termsAndConditionsCookieVersion:string = '4';
 
   	title = 'Arenella-ICT - IT Candidates for Recruiters';
 
@@ -323,6 +324,13 @@ export class AppComponent {
 			return true;
 		}
 		return false;
+	}
+	
+	/**
+	* Opens no chat access box
+	*/
+	public openNoChatAccessBox():void{
+		this.popupsService.openModal(this.noChatAccessBox);
 	}
 	
 	/**
