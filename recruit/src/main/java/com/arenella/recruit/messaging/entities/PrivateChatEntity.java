@@ -1,6 +1,7 @@
 package com.arenella.recruit.messaging.entities;
 
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
@@ -63,11 +64,11 @@ public class PrivateChatEntity {
 	
 	@OneToMany(mappedBy = "chatId", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval=true)
 	private Set<ChatMessageEntity>	replies 				= new LinkedHashSet<>();
-	//private Map<UUID,ChatMessageEntity>	replies 				= new LinkedHashMap<>();
 	
 	public PrivateChatEntity() {
 		//Hibernate
 	}
+	
 	
 	/**
 	* Constructor based upon a builder
@@ -79,7 +80,7 @@ public class PrivateChatEntity {
 		this.recipientId 			= builder.recipientId;
 		this.created 				= builder.created;
 		this.lastUpdated			= builder.lastUpdated;
-		this.replies 				= builder.replies.values().stream().collect(Collectors.toCollection(LinkedHashSet::new));
+		this.replies 				= builder.replies.values().stream().sorted(Comparator.comparing(ChatMessageEntity::getCreated)).collect(Collectors.toCollection(LinkedHashSet::new));
 		this.lastKeyPressSender 	= builder.lastKeyPressSender;
 		this.lastKeyPressRecipient 	= builder.lastKeyPressRecipient;
 		this.blockedBySender		= builder.blockedBySender;
@@ -88,7 +89,7 @@ public class PrivateChatEntity {
 		this.lastViewedByRecipient	= builder.lastViewedByRecipient;
 	}
 	
-	/**
+	/*
 	* Returns the unique Id of the Char
 	* @return unique id
 	*/

@@ -8,8 +8,10 @@
 	
 	<div class="chatwindow-chat">
 		<div class="chatwindow-view">
-			<div class="chatwindow-view-item {{viewItemContactsSeleted}}" (click)="showContactsItemView()">Contacts</div>
-			<div class="chatwindow-view-item {{viewItemMessageSeleted}}" (click)="showMessageItemView()">Message</div>
+			<div class="chatwindow-view-item {{viewItemContactsSeleted}}" (click)="showContactsItemView()" *ngIf="chatViewItem == 'contacts'">Contacts</div>
+			<div class="chatwindow-view-item {{viewItemContactsSeleted}}" (click)="showContactsItemView()" *ngIf="chatViewItem == 'message'">
+				<span class="chat-iconX material-icons">arrow_back</span>
+			</div>
 			<div class="chat-view-item-panel" *ngIf="chatViewItem == 'contacts'">
 				<div class="no-contacts-message" *ngIf="chats.length == 0 && isCandidate()">
 					<h3>No contacts </h3>
@@ -27,7 +29,19 @@
 				</div>
 			</div>
 			<div class="chat-view-item-panel" *ngIf="chatViewItem == 'message'">
-				Messages
+				<div class="pm-messages-header">
+					<span class="pm-messages-header-username">{{getSelectedChatOtherUserName()}}</span>
+				</div>
+				<div class="pm-messages-messages">
+					<div id="reply.id" class="msg-reply" *ngFor="let reply of currentChat!.replies | keyvalue ">{{reply.value.message}}</div>
+					<div id="boop">---</div>
+				</div>
+				<div class="pm-messages-new-message">
+					<form [formGroup]="messageForm">
+						<textarea formControlName="newMessage" #newMsgBox></textarea>
+					</form>
+					<button	class="btnXX btn-secondaryXX arenella-btnXX" (click)="sendMessage()">Send</button>
+				</div>
 			</div>
 		</div>
 		

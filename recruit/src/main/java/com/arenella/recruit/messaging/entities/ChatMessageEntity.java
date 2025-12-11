@@ -42,7 +42,7 @@ public class ChatMessageEntity {
 	@Column(name="message")
 	private String 			message;
 	
-	@Column(name="skill")
+	@Column(name="user")
 	@ElementCollection(targetClass=String.class, fetch = FetchType.LAZY)
 	@CollectionTable(schema="chats", name="message_likes", joinColumns=@JoinColumn(name="message_id"))
 	private Set<String>		likes							= new LinkedHashSet<>();

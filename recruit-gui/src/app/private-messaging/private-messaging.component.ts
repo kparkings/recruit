@@ -1,4 +1,5 @@
-import { Component } 													from '@angular/core';
+import { Component, ViewChild } 										from '@angular/core';
+import { UntypedFormControl, UntypedFormGroup } 						from '@angular/forms';
 import { AppComponent } 												from 'src/app/app.component';
 import { PrivateChatAPIOutbound, PrivateMessagingService } 				from '../private-messaging.service';
 import { CandidateServiceService, CandidateSuggestionAPIOutbound} 		from '../candidate-service.service';
@@ -18,8 +19,8 @@ import { SuggestionsSearchRequest }										from '../suggestions/suggestion-sea
 export class PrivateMessagingComponent {
 
 	public chatViewItem:string 										= "contacts";
-	public viewItemContactsSeleted:string 							= "";
-	public viewItemMessageSeleted:string 							= "view-item-selected";
+	public viewItemContactsSeleted:string 							= "view-item-selected";
+	public viewItemMessageSeleted:string 							= "";
 	public currentUserAuth:CurrentUserAuth 							= new CurrentUserAuth();
 	public chats:Array<PrivateChatAPIOutbound>						= new Array<PrivateChatAPIOutbound>();
 	public candidates:Array<CandidateSuggestionAPIOutbound>			= new Array<CandidateSuggestionAPIOutbound>();
@@ -41,6 +42,10 @@ export class PrivateMessagingComponent {
 		private readonly candidateService:CandidateServiceService, 
 		private readonly recruiterService:RecruiterService){
 	}
+	
+	public messageForm:UntypedFormGroup 	= new UntypedFormGroup({
+		newMessage:			new UntypedFormControl(''),
+	});
 	
 	/**
 	* Opens the chat window.
@@ -135,9 +140,18 @@ export class PrivateMessagingComponent {
 		this.showMessageItemView();
 		this.chatService.fetchPrivateChatById(currentChat.id).subscribe(chat => {
 			this.currentChat = chat;
+			this.doScrollTop('boop');
 		});
 		
 		//TODO:[KP] If clicking on contacts when in messages need to scroll to previous position in contact list
+	}
+	
+	/**
+	* Retuens the name of the User who the user is chatting with in the 
+	* currently selected chat.
+	*/
+	public getSelectedChatOtherUserName():string {
+		return this.getUserName(this.currentChat?.senderId || '-', this.currentChat?.recipientId || '-');
 	}
 	
 	/**
@@ -282,6 +296,35 @@ export class PrivateMessagingComponent {
 	*/
 	public isRecruiterNoSubscription():boolean{
 		return sessionStorage.getItem('isRecruiterNoSubscription') === 'true';
+	}
+	
+	/**
+	* Scrolls to top of page
+	*/
+	public doScrollTop(elementId:string):void{
+		(<HTMLInputElement>document.getElementById(elementId)).scrollIntoView({
+			block: "start",
+			inline: "nearest"
+			});
+		
+	}
+	
+	public sendMessage():void{
+		
+		let msg:string = this.messageForm.get('newMessage')?.value;
+		
+		this.messageForm = new UntypedFormGroup({
+			newMessage:			new UntypedFormControl(''),	
+		});
+		
+		this.chatService.addMessageToExistingChat(this.currentChat!.id || '', msg).subscribe(res => {
+			this.chatService.fetchPrivateChatById(this.currentChat!.id || '').subscribe(chat => {
+				this.currentChat = chat;	
+				this.doScrollTop('boop');
+			});
+			
+		});
+		
 	}
 	
 }	

@@ -112,7 +112,7 @@ class ESFilteredSearchRequestBuilderTest {
 		assertEquals("TRUE", 								mustMatch.stream().filter(q -> q.field().equals("freelance")).findFirst().get().query().stringValue());
 		assertEquals("TRUE", 								mustMatch.stream().filter(q -> q.field().equals("perm")).findFirst().get().query().stringValue());
 		
-		assertEquals(CANDIDATE_IDS.toArray()[0], 			mustMatch.stream().filter(q -> q.field().equals("candidateId")).findFirst().get().query().stringValue());
+		assertEquals(CANDIDATE_IDS.toArray()[0], 			mustTerms.stream().filter(q -> q.field().equals("candidateId")).findFirst().get().terms().value().getFirst().stringValue());
 		assertEquals(FIRSTNAME, 							mustMatch.stream().filter(q -> q.field().equals("firstname")).findFirst().get().query().stringValue());
 		assertEquals(SURNAME, 								mustMatch.stream().filter(q -> q.field().equals("surname")).findFirst().get().query().stringValue());
 		assertEquals(OWNER_ID, 								mustMatch.stream().filter(q -> q.field().equals("ownerId")).findFirst().get().query().stringValue());
