@@ -1,12 +1,12 @@
-import { Component, ViewChild } 										from '@angular/core';
-import { UntypedFormControl, UntypedFormGroup } 						from '@angular/forms';
-import { AppComponent } 												from 'src/app/app.component';
-import { PrivateChatAPIOutbound, PrivateMessagingService } 				from '../private-messaging.service';
-import { CandidateServiceService, CandidateSuggestionAPIOutbound} 		from '../candidate-service.service';
-import { RecruiterService, RecruiterBasicInfoAPIOutbound} 				from '../recruiter.service';
-import { CurrentUserAuth }												from '../current-user-auth';
-import { SuggestionsSearchRequest }										from '../suggestions/suggestion-search-request';
-
+import { Component, ViewChild } 																from '@angular/core';
+import { UntypedFormControl, UntypedFormGroup } 												from '@angular/forms';
+import { AppComponent } 																		from 'src/app/app.component';
+import { PrivateChatAPIOutbound, ChatMessageAPIOutbound, PrivateMessagingService } 				from '../private-messaging.service';
+import { CandidateServiceService, CandidateSuggestionAPIOutbound} 								from '../candidate-service.service';
+import { RecruiterService, RecruiterBasicInfoAPIOutbound} 										from '../recruiter.service';
+import { CurrentUserAuth }																		from '../current-user-auth';
+import { SuggestionsSearchRequest }																from '../suggestions/suggestion-search-request';
+	
 /**
 * Backing Component for the Chat window 
 */
@@ -68,6 +68,7 @@ export class PrivateMessagingComponent {
 					) {
 						this.chatService.createChat(this.currentUserAuth.getLoggedInUserId(), candidateId).subscribe(response => {
 							this.fetchChats();
+							//TOO: [KP] Need to navigate to new Chat. Maybe make backend retun newly created chat and set to currentChat.??
 						})
 					} else {
 						this.fetchChats();
@@ -142,8 +143,6 @@ export class PrivateMessagingComponent {
 			this.currentChat = chat;
 			this.doScrollTop('boop');
 		});
-		
-		//TODO:[KP] If clicking on contacts when in messages need to scroll to previous position in contact list
 	}
 	
 	/**
@@ -156,8 +155,6 @@ export class PrivateMessagingComponent {
 	
 	/**
 	* Display name of the User in the Chat
-	* TODO: [KP] When candidate logged in need to retrieve recruiters and return Recruiters name
-	* TODO: [KP] Need to take account of Admin account. Edge case which can start chat with any user. 
 	*/
 	public getUserName(senderId:string,recipientId:string):string{
 		
@@ -215,6 +212,7 @@ export class PrivateMessagingComponent {
 		this.chatViewItem = "contacts";
 		this.viewItemContactsSeleted = "view-item-selected";
 		this.viewItemMessageSeleted = "";
+		this.fetchChats();
 	}
 	
 	/**
@@ -306,9 +304,11 @@ export class PrivateMessagingComponent {
 			block: "start",
 			inline: "nearest"
 			});
-		
 	}
 	
+	/**
+	* Sens a message to the other user in the current Chat 
+	*/
 	public sendMessage():void{
 		
 		let msg:string = this.messageForm.get('newMessage')?.value;
@@ -325,6 +325,77 @@ export class PrivateMessagingComponent {
 			
 		});
 		
+	}
+	
+	/**
+	* Compares messages so the last added message appears at the bottom
+	* of the list
+	*/
+	private compareMessages(a:ChatMessageAPIOutbound, b:ChatMessageAPIOutbound) {
+		
+		if (a.created > b.created) {
+			return 1;
+		}
+		
+		if(b.created > a.created) {
+			return -1;
+		}
+		
+		return 0;
+	}
+	
+	/**
+	* Compares Chats so the last modified chat appears at the top
+	* of the list
+	*/
+	private compareChats(a:PrivateChatAPIOutbound, b:PrivateChatAPIOutbound) {
+			
+		if (a.lastUpdated > b.lastUpdated) {
+			return -1;
+		}
+		
+		if(b.lastUpdated > a.lastUpdated) {
+			return 1;
+		}
+		
+		return 0;
+	}
+	
+	/**
+	* Returns sorted chats
+	*/
+	public getChats():Array<PrivateChatAPIOutbound>{
+		return this.chats.sort(this.compareChats);
+	}
+	
+	/**
+	* Takes the replies to the current chat and orders them to the 
+	* latest message is shown at the bottom and scrolls to that 
+	* message
+	*/
+	public getCurrentChatReplies():Array<ChatMessageAPIOutbound>{
+
+		let replies:Array<ChatMessageAPIOutbound> = new Array<ChatMessageAPIOutbound>();
+		
+		const map:Map<string,ChatMessageAPIOutbound> = new Map(Object.entries(this.currentChat!.replies));
+
+		map.forEach((value: ChatMessageAPIOutbound, key: string) => {
+			replies.push(value);
+		});
+		
+		this.doScrollTop('boop');
+		
+		return replies.sort(this.compareMessages);
+		
+	}
+	
+	/**
+	* Returns whether a given message was created by the authenticated
+	* user or another user
+	* @param msg: Message to be checked
+	*/
+	public isOwnMessage(msg:ChatMessageAPIOutbound):string{
+		return msg.senderId == sessionStorage.getItem("userId") ? "true" : "false";
 	}
 	
 }	

@@ -23,8 +23,12 @@
 					<p>This feature is only available on the paid tier.</p>
 				</div>
 				<div class="contacts" *ngIf="chats.length != 0">
-					<div class="chat-list-box" *ngFor="let chat of chats" (click)="showChatMessages(chat)">
-						{{getUserName(chat.senderId, chat.recipientId)}}	
+					<div class="chat-list-box" style="clear:both" *ngFor="let chat of getChats()" (click)="showChatMessages(chat)">
+						<div>
+							<div style="float:left;">{{getUserName(chat.senderId, chat.recipientId)}}</div>
+							<div style="float:right;color:green;padding-top:5px;padding-right:5px;"><span class="chat-iconX material-icons">chat_bubble</span></div>
+						</div>
+						
 					</div>
 				</div>
 			</div>
@@ -33,14 +37,20 @@
 					<span class="pm-messages-header-username">{{getSelectedChatOtherUserName()}}</span>
 				</div>
 				<div class="pm-messages-messages">
-					<div id="reply.id" class="msg-reply" *ngFor="let reply of currentChat!.replies | keyvalue ">{{reply.value.message}}</div>
-					<div id="boop">---</div>
+					<div id="reply.id" class="msg-reply" *ngFor="let reply of getCurrentChatReplies() ">
+						<div>{{reply.created | date:  'dd MMM yy - hh:mm'}}</div>
+						<div class="message-own-{{isOwnMessage(reply)}}">{{reply.message}}</div>
+						
+					</div>
+					<div id="boop"></div>
 				</div>
 				<div class="pm-messages-new-message">
 					<form [formGroup]="messageForm">
-						<textarea formControlName="newMessage" #newMsgBox></textarea>
+						<textarea formControlName="newMessage" #newMsgBox>
+							
+						</textarea>
+						<button class="btn btn-secondary chatBtn" (click)="sendMessage()">Send</button>
 					</form>
-					<button	class="btnXX btn-secondaryXX arenella-btnXX" (click)="sendMessage()">Send</button>
 				</div>
 			</div>
 		</div>
