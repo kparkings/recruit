@@ -2,8 +2,8 @@
 	
 	<div class="chatwindow-header">
 		<span class="chatwindow-header-item" (click)="closeChat()">x</span>
-		<span class="chatwindow-header-item" (click)="minimizeChat()" *ngIf="getChatWindowState() == 'maximized'">-</span>
-		<span class="chatwindow-header-item" (click)="maximizeChat()" *ngIf="getChatWindowState() == 'minimized'">+</span>
+		<span class="chatwindow-header-item non-mobile-only-element" (click)="minimizeChat()" *ngIf="getChatWindowState() == 'maximized'">-</span>
+		<span class="chatwindow-header-item non-mobile-only-element" (click)="maximizeChat()" *ngIf="getChatWindowState() == 'minimized'">+</span>
 	</div>
 	
 	<div class="chatwindow-chat">
@@ -40,8 +40,8 @@
 						<span class="chat-header-other-user-typing material-icons " *ngIf="otherUserTypeing == true">chat</span>
 					</span>
 				</div>
-				<div class="pm-messages-messages">
-					<div id="reply.id" class="msg-reply" *ngFor="let reply of getCurrentChatReplies() ">
+				<div class="pm-messages-messages" (scroll)="setScrollOff()">
+					<div id="reply.id" class="msg-reply" *ngFor="let reply of currentReplies ">
 						<div class="message-header">{{reply.created | date:  'dd MMM yy - hh:mm'}}
 							<span *ngIf="isOwnMessage(reply) == 'true' && getBlockedStatus() == 'unblocked'" class="message-header-delete material-icons" (click)="deleteReply(reply)" >delete</span>
 						</div>
@@ -52,7 +52,7 @@
 				</div>
 				<div class="pm-messages-new-message">
 					<form [formGroup]="messageForm">
-						<textarea formControlName="newMessage" #newMsgBox *ngIf="getBlockedStatus() == 'unblocked'" (keypress)="handleIsTyping()">
+						<textarea formControlName="newMessage" #newMsgBox *ngIf="getBlockedStatus() == 'unblocked'" (keypress)="handleIsTyping()" (click)="setScrollOn()">
 							
 						</textarea>
 						<div *ngIf="getBlockedStatus() != 'unblocked'">

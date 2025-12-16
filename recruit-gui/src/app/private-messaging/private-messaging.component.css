@@ -224,8 +224,10 @@
 
 .unread-messages-true{
 	color:green;
+	margin-top:8px;
 }
 
 .unread-messages-false{
 	color:grey;
+	margin-top:8px;
 }

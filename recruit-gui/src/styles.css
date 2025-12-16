@@ -349,6 +349,14 @@
 		text-decoration: none;
 	}
 	
+	.unread-chats-true{
+		color:green;
+	}
+
+	.unread-chats-false{
+		color:#002549;
+	}
+	
 	
 	dialog {
 		overflow: hidden;

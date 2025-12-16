@@ -1,0 +1,235 @@
+@media (max-width:700px)  {
+	.chatwindow{
+		height:100%;
+		width:100%;
+		border:3px solid black;
+		border-radius:0% 0% 0% 0%;
+		background:#002549;
+		z-index:1000;
+		position:fixed;
+		top:0%;
+		margin-left:0%;
+	}
+	
+	.chatwindow-maximized{
+		top:0px;
+		height:100%;
+	}
+	
+	.chatwindow-minimized{
+		top:90%;
+		height:10%;
+	}
+	
+	.chatwindow-closed{
+		display:none;
+	}
+	
+	.chatwindow-header{
+		height:50px;
+		width:95%;
+		color:white;
+		font-weight:bold;
+		padding:5px;
+		margin-right:50px;
+	}
+	
+	.chatwindow-header-item{
+		float:right;
+		margin:5px;
+		font-size:20px;
+	}
+	
+	.chatwindow-header-item:hover{
+		cursor:pointer;
+	}
+	
+	.chatwindow-chat{
+		width:100%;
+		height:85%;
+		background:#FAF9F6	;	
+	}
+	
+	.chatwindow-view{
+		width:100%;
+		
+	}
+	
+	.chatwindow-view-item{
+		float:left;
+		text-align:center;
+		width:100%;
+		cursor:pointer;
+		border-bottom:1px solid grey;
+		border-right:1px solid grey;
+		padding:5px;
+		font-weight:bold;
+	}
+	
+	.view-item-selected{
+		cursor:default;
+	}
+	
+	.chat-view-item-panel{
+		padding:0px;
+		clear:both;
+	}
+	
+	.no-contacts-message{
+		padding-top:30%;
+		padding-left:10%;
+		padding-right:10%;
+		height:100%;
+		text-align:center;
+		font-size:18px;
+	}
+	
+	.contacts{
+		clear: both;
+		position:relative;
+		font-size:12px;
+		width:100%;
+		text-align:left;
+		overflow-y:scroll;
+		height:550px; 
+	}
+	
+	.chat-list-box{
+		height:50px;
+		line-height:50px; 
+		width:100%;
+		text-align:left;
+		border-bottom:1px solid grey;
+		padding-left:10px;		
+		font-weight:bold;
+		font-size:14px;
+		cursor:pointer;	
+	}
+	
+	.chat-list-box:hover{
+		background:white;
+	}
+	
+	.pm-messages-header{
+		width:100%;
+		height:50px;
+		border-bottom:2px solid grey;
+		padding:5px;
+		padding-top:10px;
+		background:#E8E8E8;
+	}
+	
+	.pm-messages-header-username{
+		color:#00004d;
+		padding:10px;
+		font-size:18px;
+		font-weight:bold;
+		margin-top:10px;
+	}
+	
+	.pm-messages-messages{
+		padding:5px;
+		padding-left:10px;
+		padding-right:10px;
+		color:#66a3ff;
+		width:100%;
+		height:300px;
+		overflow-y:scroll;
+		
+	}
+	
+	.pm-messages-new-message{
+		border-top:2px solid black;
+		padding:5px;
+		width:100%;
+		height:180px;
+	}
+	
+	.pm-messages-new-message textarea{
+		border-top:2px solid grey;
+		width:100%;
+		height:130px;
+		border: none;
+	    outline: none;
+	    resize: none;
+	}
+	
+	.msg-reply{
+		padding-top:10px;
+		color:lightgrey;
+		width:100%;
+		padding-bottom:5px;
+		border-bottom:1px solid lightgrey;
+	}
+	
+	.chatBtn{
+		float:right;
+		margin-right:10px;
+	}
+	
+	.message-own-true{
+		color:blue;
+	}
+	
+	.message-own-false{
+		color:black;
+	}
+	
+	.message-header{
+		padding-bottom:5px;
+	}
+	
+	.chat-header-blocked-by-other-user{
+		float:right;
+		color:red;
+		cursor:default;
+	}
+	
+	.chat-header-other-user-typing{
+		float:right;
+		color:green;
+		margin-right:10px;
+	}
+	
+	.chat-header-blocked{
+		float:right;
+		color:black;
+		cursor:pointer;
+	}
+	
+	.chat-header-unblocked{
+		float:right;
+		color:black;
+		cursor:pointer;
+		color:grey;
+	}
+	
+	.message-header-delete{
+		float:right;
+		color:black;
+		cursor
+		:pointer;
+		padding-bottom:5px;
+		font-size:16px;
+	}
+	
+	.message-header-delete:hover{
+		color:red;
+	}
+	
+	.private-chat-bubble {
+		float:right;
+		padding-top:5px;
+		padding-right:5px;
+	} 
+	
+	.unread-messages-true{
+		color:green;
+		margin-top:8px;
+	}
+	
+	.unread-messages-false{
+		color:grey;
+		margin-top:8px;
+	}
+}

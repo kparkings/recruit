@@ -12,9 +12,10 @@ import { SuggestionsSearchRequest }																from '../suggestions/suggesti
 */
 @Component({
   selector: 'app-private-messaging',
+  styleUrls: ['./private-messaging.component.css','./private-messaging.component-mob.css'],
   standalone: false,
   templateUrl: './private-messaging.component.html',
-  styleUrl: './private-messaging.component.css'
+  
 })
 export class PrivateMessagingComponent {
 	
@@ -149,13 +150,12 @@ export class PrivateMessagingComponent {
 	* @param chat selected from Chat list.
 	*/
 	public showChatMessages(currentChat:PrivateChatAPIOutbound):void{
-		
-		//clearInterval(this.scheduleContactListRefresh);
-			
+		this.setScrollOn();
 		this.lastKeyPress = new Date();
 		this.showMessageItemView();
 		this.chatService.fetchPrivateChatById(currentChat.id).subscribe(chat => {
 			this.currentChat = chat;
+			
 			this.doScrollTop('boop');
 			
 			//Last viewed functionality
@@ -498,10 +498,12 @@ export class PrivateMessagingComponent {
 	* latest message is shown at the bottom and scrolls to that 
 	* message
 	*/
-	public sortedReplies:Array<ChatMessageAPIOutbound> = new Array<ChatMessageAPIOutbound>();
+	public currentReplies:Array<ChatMessageAPIOutbound> = new Array<ChatMessageAPIOutbound>();
+	public scrollOff:boolean = false;
 	
-	public getCurrentChatReplies():Array<ChatMessageAPIOutbound>{
+	public getCurrentChatReplies():void{
 
+		
 		let replies:Array<ChatMessageAPIOutbound> = new Array<ChatMessageAPIOutbound>();
 		
 		const map:Map<string,ChatMessageAPIOutbound> = new Map(Object.entries(this.currentChat!.replies));
@@ -510,11 +512,26 @@ export class PrivateMessagingComponent {
 			replies.push(value);
 		});
 		
-		this.doScrollTop('boop');
+		this.currentReplies = replies.sort(this.compareMessages);
+			
+			if(this.scrollOff == false) {
+				this.doScrollTop('boop');
+			}
+		//}
 		
-		return replies.sort(this.compareMessages);
+		
+		
+		//return replies.sort(this.compareMessages);
 		
 	}
+	
+	public setScrollOff():void{
+		this.scrollOff = true;
+	}
+	
+	public setScrollOn():void{
+			this.scrollOff = false;
+		}
 	
 	/**
 	* Deletes the Chat message 

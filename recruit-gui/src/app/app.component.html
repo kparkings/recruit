@@ -2,12 +2,16 @@
 </div>
 <div class="mobile-only-element">
 	<span class="material-icons" style="width:100%;">
+	 	 
 		<a class="mobile-menu-bar-icon" style="text-decoration:none; cursor:pointer; color:#002549;float:left;" (click)="toggleMobileMenuOpt()">
 			menu
 		</a>
 		<a class="mobile-menu-bar-icon" style="text-decoration:none; cursor:pointer; color:#002549;float:right;" (click)="toggleMobileAuthMenuOpt()">
 			account_box
-		</a>
+		</a> 
+		<a class="mobile-menu-bar-icon unread-chats-{{hasUnreadMessages()}}" style="text-decoration:none; margin-top:2px; padding-right:0px; cursor:pointer; float:right;"  (click)="openChat()" *ngIf="isAuthenticated()">
+           chat
+        </a> 
 	</span>
 	
 </div>
