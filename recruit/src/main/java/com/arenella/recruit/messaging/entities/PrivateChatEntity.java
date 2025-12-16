@@ -419,7 +419,7 @@ public class PrivateChatEntity {
 		
 		Map<UUID, ChatMessageEntity> replies = new LinkedHashMap<>();
 		
-		chat.getReplies().values().stream().forEach(r -> replies.put(r.getId(), ChatMessageEntity.toEntity(r)));
+		chat.getReplies().entrySet().stream().forEach(r -> replies.put(r.getKey(), ChatMessageEntity.toEntity(r.getValue())));
 		
 		return PrivateChatEntity
 			.builder()

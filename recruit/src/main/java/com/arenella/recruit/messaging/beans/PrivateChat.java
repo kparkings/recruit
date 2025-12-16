@@ -149,9 +149,19 @@ public class PrivateChat {
 	* @param message - reply message
 	*/
 	public void addReply(ChatMessage reply) {
+		
 		this.lastUpdated = reply.getCreated();
+		
+		if (reply.getSenderId().equals(this.recipientId)) {
+			this.lastViewedByRecipient = this.lastUpdated;
+		} else {
+			this.lastViewedBySender = this.lastUpdated;
+		}
+		
 		this.replies.put(reply.getId(), reply);
 	}
+	
+	
 	
 	/**
 	* Removed an existing reply
@@ -159,7 +169,7 @@ public class PrivateChat {
 	*/
 	public void deleteReply(UUID replyId) {
 		if (this.replies.keySet().contains(replyId)) {
-			this.replies.put(replyId, null);
+			this.replies.remove(replyId);
 		}
 	}
 	
@@ -369,6 +379,7 @@ public class PrivateChat {
 					.recipientId(this.getRecipientId())
 					.created(this.getCreated())
 					.lastUpdate(this.getLastUpdated())
+					.replies(this.getReplies())
 					.lastKeyPressSender(this.getLastKeyPressSender().orElse(null))
 					.lastKeyPressRecipient(this.getLastKeyPressRecipient().orElse(null))
 					.blockedBySender(this.isBlockedBySender())

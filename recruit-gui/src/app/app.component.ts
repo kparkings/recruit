@@ -108,6 +108,7 @@ export class AppComponent {
 		if (this.tandcBox.nativeElement && this.termsAndConditionsAccepted != true) {
 			this.tandcBox.nativeElement.showModal();
 		}
+		this.privateChat.startChatContactListPolling();
 	}
 	
 	/**
@@ -389,6 +390,21 @@ export class AppComponent {
 	*/
 	public openChat():void{
 		this.privateChat.maximizeOnOpen();
+		
+	}
+	
+	/**
+	* Whether at least one of the users chats has not been
+	* read by the User  
+	*/
+	public hasUnreadMessages():boolean{
+		
+		if (this.privateChat) {
+			return this.privateChat.getHasUnreadMessagesTracker();	
+		}
+		
+		return false;
+		
 		
 	}
 	

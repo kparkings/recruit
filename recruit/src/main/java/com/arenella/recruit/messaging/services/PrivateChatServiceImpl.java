@@ -172,6 +172,8 @@ public class PrivateChatServiceImpl implements PrivateChatService{
 		
 		PrivateChat chat = privateChatDao.fetchChatById(chatId).orElseThrow(() -> new RuntimeException(ERR_MSG_CANNOT_ADD_MESSAGE));
 		
+		this.doCheckIsBlocked(chat);
+		
 		if (!user.getName().equals(chat.getSenderId()) && !user.getName().equals(chat.getRecipientId())) {
 			throw new RuntimeException(ERR_MSG_CANNOT_ADD_MESSAGE);
 		}
@@ -200,6 +202,8 @@ public class PrivateChatServiceImpl implements PrivateChatService{
 		this.canChat(user, true);
 		
 		PrivateChat chat = privateChatDao.fetchChatById(chatId).orElseThrow(() -> new RuntimeException(ERR_MSG_CANNOT_DEL_MESSAGE));
+		
+		this.doCheckIsBlocked(chat);
 		
 		if (!chat.getReplies().keySet().contains(messageId)) {
 			throw new RuntimeException(ERR_MSG_CANNOT_DEL_MESSAGE);
@@ -300,10 +304,22 @@ public class PrivateChatServiceImpl implements PrivateChatService{
 					.recipientId(chat.getRecipientId())
 					.created(currentTime)
 					.lastUpdate(currentTime)
+					.lastViewedBySender(currentTime)
+					.lastViewedByRecipient(currentTime)
 				.build();
 		
 		this.privateChatDao.saveChat(newChat);
 		
+	}
+	
+	/**
+	* Throws Exception if an attempt is made to perform an action 
+	* that is not permitted when a Chat is blocked
+	*/
+	private void doCheckIsBlocked(PrivateChat chat) {
+		if (chat.isBlockedByRecipient() || chat.isBlockedBySender()) {
+			throw new IllegalStateException("Blocked");
+		}
 	}
 		
 }

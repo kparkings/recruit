@@ -263,6 +263,7 @@ public class ChatMessageEntity {
 	* @return Converted
 	*/
 	public static ChatMessageEntity toEntity(ChatMessage message) {
+		
 		return ChatMessageEntity
 				.builder()
 				.id(message.getId())

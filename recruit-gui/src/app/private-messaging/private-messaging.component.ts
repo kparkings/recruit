@@ -17,6 +17,10 @@ import { SuggestionsSearchRequest }																from '../suggestions/suggesti
   styleUrl: './private-messaging.component.css'
 })
 export class PrivateMessagingComponent {
+	
+	public readonly UNBLOCKED:string 		= "unblocked";
+	public readonly BLOCKED:string 			= "blocked";
+	public readonly BLOCKED_BY_OTHER_USER 	= "blocked-by-other-user";
 
 	public chatViewItem:string 										= "contacts";
 	public viewItemContactsSeleted:string 							= "view-item-selected";
@@ -26,7 +30,8 @@ export class PrivateMessagingComponent {
 	public candidates:Array<CandidateSuggestionAPIOutbound>			= new Array<CandidateSuggestionAPIOutbound>();
 	public recruiters:Array<RecruiterBasicInfoAPIOutbound>			= new Array<RecruiterBasicInfoAPIOutbound>();
 	public currentChat:PrivateChatAPIOutbound | undefined;
-	public userHasChatAccess:boolean									= false;	
+	public userHasChatAccess:boolean								= false;	
+	public lastKeyPress:Date										= new Date();
 	
 	/**
 	* Constructor
@@ -68,6 +73,9 @@ export class PrivateMessagingComponent {
 					) {
 						this.chatService.createChat(this.currentUserAuth.getLoggedInUserId(), candidateId).subscribe(response => {
 							this.fetchChats();
+							this.chatService.fetchPrivateChatById(response).subscribe(res => {
+								this.currentChat = res;
+							});
 							//TOO: [KP] Need to navigate to new Chat. Maybe make backend retun newly created chat and set to currentChat.??
 						})
 					} else {
@@ -132,17 +140,132 @@ export class PrivateMessagingComponent {
 		});			
 	}
 	
+	private scheduleOpenChatRefresh = window.setInterval(()=> {},1000);
+	public otherUserTypeing:boolean = false;
+	
 	/**
 	* Sets the current chat and then retrieves the represenation containing the 
 	* replies
 	* @param chat selected from Chat list.
 	*/
 	public showChatMessages(currentChat:PrivateChatAPIOutbound):void{
+		
+		//clearInterval(this.scheduleContactListRefresh);
+			
+		this.lastKeyPress = new Date();
 		this.showMessageItemView();
 		this.chatService.fetchPrivateChatById(currentChat.id).subscribe(chat => {
 			this.currentChat = chat;
 			this.doScrollTop('boop');
+			
+			//Last viewed functionality
+			this.chatService.doSetLastViewed(this.currentChat.id).subscribe(res => {
+				
+			})
+			
+			//User typing functionality
+			this.otherUserTypeing = false;
+			this.scheduleOpenChatRefresh = window.setInterval(()=> {
+				this.chatService.fetchPrivateChatById(currentChat.id).subscribe(chat => {
+					this.currentChat 		= chat;
+					this.otherUserTypeing 	= false;
+					this.getCurrentChatReplies();
+					if (this.isUserChatRecipient()) {
+						let lastKeyPress:Date =  this.currentChat.lastKeyPressSender;
+						let lastKeyPressSecondsAgo = (new Date().getTime() - new Date(lastKeyPress).getTime())/1000;
+						if (lastKeyPressSecondsAgo <= 2){
+							this.otherUserTypeing = true 
+						}	
+					} else {
+						let lastKeyPress:Date =  this.currentChat.lastKeyPressRecipient;
+						let lastKeyPressSecondsAgo = (new Date().getTime() - new Date(lastKeyPress).getTime())/1000;
+						if (lastKeyPressSecondsAgo <= 2){
+							this.otherUserTypeing = true 
+						}
+					}
+					
+					
+				});
+			},1000);
+			
+			
 		});
+	}
+	
+	private scheduleContactListRefresh = window.setInterval(()=> {},1000);
+	public hasUnreadMessagesTracker:boolean = false;
+
+	public getHasUnreadMessagesTracker():boolean{
+		return this.hasUnreadMessagesTracker;
+	}
+	
+	public startChatContactListPolling():void{
+		this.scheduleContactListRefresh = window.setInterval(()=> {
+			this.fetchChats();		
+			this.hasUnreadMessagesTracker = this.hasUnreadMessages();
+		},1000);
+	}
+	
+	
+	public hasUnreadMessages():boolean{
+		
+		let hasUnreadMessages:boolean = false;
+		
+		this.chats.forEach(chat => {
+			if (this.isChatRecipient(chat)) {
+				if (new Date(chat.lastViewedByRecipient).getTime() <  new Date(chat.lastUpdated).getTime()){
+					hasUnreadMessages = true;
+				}
+			} else {
+				if (new Date(chat.lastViewedBySender).getTime() <  new Date(chat.lastUpdated).getTime()) {
+					hasUnreadMessages = true;
+				}
+			}
+		});
+		
+		return hasUnreadMessages;
+	}
+	
+	public hasUnviewedMessages(chat:PrivateChatAPIOutbound):boolean{
+		
+		if (this.isChatRecipient(chat)) {
+			return new Date(chat.lastViewedByRecipient).getTime() <  new Date(chat.lastUpdated).getTime();
+		} else {
+			return new Date(chat.lastViewedBySender).getTime() <  new Date(chat.lastUpdated).getTime();
+		}
+		
+	}
+	
+	
+	/**
+	* Returns if current User is the Chat Recipient 
+	*/
+	private isChatRecipient(chat:PrivateChatAPIOutbound):boolean{
+		
+		let user = sessionStorage.getItem("userId");
+		
+		return chat.recipientId == user;
+	}
+	
+	/**
+	* Returns if current User is the Chat Recipient 
+	*/
+	private isUserChatRecipient():boolean{
+		
+		let user = sessionStorage.getItem("userId");
+		
+		return this.currentChat?.recipientId == user;
+	}
+	
+	/**
+	* Returns if current User is the Chat Sender 
+	*/
+	private isUserChatSender():boolean{
+		
+		let user = sessionStorage.getItem("userId");
+				
+		
+		return this.currentChat?.senderId == user;
 	}
 	
 	/**
@@ -203,7 +326,7 @@ export class PrivateMessagingComponent {
 		}
 		 
 	}
-	
+
 	/**
 	* Shows the list of the User's contacts in the 
 	* Chat window 
@@ -213,6 +336,7 @@ export class PrivateMessagingComponent {
 		this.viewItemContactsSeleted = "view-item-selected";
 		this.viewItemMessageSeleted = "";
 		this.fetchChats();
+		clearInterval(this.scheduleOpenChatRefresh);
 	}
 	
 	/**
@@ -272,6 +396,7 @@ export class PrivateMessagingComponent {
 	*/
 	public closeChat():void{
 		this.appComponent.currentChatWindowState = "closed";
+		clearInterval(this.scheduleOpenChatRefresh);
 	}
 	
 	//TODO: Used in other places. Add to environemnt and refactor everywhere
@@ -373,6 +498,8 @@ export class PrivateMessagingComponent {
 	* latest message is shown at the bottom and scrolls to that 
 	* message
 	*/
+	public sortedReplies:Array<ChatMessageAPIOutbound> = new Array<ChatMessageAPIOutbound>();
+	
 	public getCurrentChatReplies():Array<ChatMessageAPIOutbound>{
 
 		let replies:Array<ChatMessageAPIOutbound> = new Array<ChatMessageAPIOutbound>();
@@ -390,12 +517,92 @@ export class PrivateMessagingComponent {
 	}
 	
 	/**
+	* Deletes the Chat message 
+	*/
+	public deleteReply(msg:ChatMessageAPIOutbound):void{
+		this.chatService.deleteMessageFromExistingChat(this.currentChat!.id, msg.id).subscribe(res => {
+			this.chatService.fetchPrivateChatById(this.currentChat!.id || '').subscribe(chat => {
+				this.currentChat = chat;	
+				this.doScrollTop('boop');
+			});	
+		});
+		
+	}	
+	
+	/**
+	* Returns the blocked state of the Chat
+	* - unblocked
+	* - blocked ( by current user)
+	* - blocked-by-other-user 
+	*/
+	public getBlockedStatus():string{
+		
+		if (this.currentChat) {
+			if (this.currentChat!.blockedBySender == false && this.currentChat!.blockedByRecipient == false) {
+				return this.UNBLOCKED;
+			}
+			
+			if (this.currentChat!.blockedByRecipient && sessionStorage.getItem("userId") == this.currentChat!.recipientId) {
+				return this.BLOCKED;	
+			}
+			
+			if (this.currentChat!.blockedBySender && sessionStorage.getItem("userId") == this.currentChat!.senderId) {
+				return this.BLOCKED;	
+			}
+		}
+		
+		return this.BLOCKED_BY_OTHER_USER;
+	
+	}
+	
+	/**
+	* Blocks the current Chat so that the other User can no longer message
+	* the current USer 
+	*/
+	public toggleBlockUserChat():void{
+		
+		let doBlock:boolean = false;
+		
+		if (this.getBlockedStatus() == this.UNBLOCKED){
+			doBlock = true;
+		} 
+		
+		if (this.getBlockedStatus() != this.BLOCKED_BY_OTHER_USER) {
+			this.chatService.setBlockedStatus(this.currentChat!.id, doBlock).subscribe(res => {
+				this.chatService.fetchPrivateChatById(this.currentChat!.id || '').subscribe(chat => {
+					this.currentChat = chat;	
+					this.doScrollTop('boop');
+				});	
+			});
+		}
+		
+	}
+	
+	/**
 	* Returns whether a given message was created by the authenticated
 	* user or another user
 	* @param msg: Message to be checked
 	*/
 	public isOwnMessage(msg:ChatMessageAPIOutbound):string{
 		return msg.senderId == sessionStorage.getItem("userId") ? "true" : "false";
+	}
+	
+	/**
+	* Sends a request to the backend to indicate the User is typeing in the Chat. A check is done
+	* so that a request is sent max, once every second. 
+	*/
+	public handleIsTyping():void{
+		
+		let currentTime:Date = new Date();
+		let numSecondsSinceBackedLastInformed = (currentTime.getTime() - this.lastKeyPress.getTime())/1000;
+		
+		if (numSecondsSinceBackedLastInformed >= 1) {
+			this.lastKeyPress = currentTime;
+			this.chatService.doSetKeyPressed(this.currentChat!.id).subscribe(res => {
+				
+			});
+		}
+		
 	}
 	
 }	

@@ -403,12 +403,14 @@ class PrivateChatServiceImplTest {
 		assertNotNull(chat.getCreated());
 		assertNotEquals(NON_DEFUALT_CREATED, 	cpt.getCreated());
 		assertEquals(cpt.getCreated(), 			cpt.getLastUpdated());
+		
+		assertEquals(cpt.getCreated(), 			cpt.getLastViewedBySender().get());
+		assertEquals(cpt.getCreated(), 			cpt.getLastViewedByRecipient().get());
+		
 		assertFalse(cpt.isBlockedBySender());
 		assertFalse(cpt.isBlockedByRecipient());
 		assertTrue(cpt.getLastKeyPressSender().isEmpty());
 		assertTrue(cpt.getLastKeyPressRecipient().isEmpty());
-		assertTrue(cpt.getLastViewedBySender().isEmpty());
-		assertTrue(cpt.getLastViewedByRecipient().isEmpty());
 		
 	}
 	
@@ -512,6 +514,55 @@ class PrivateChatServiceImplTest {
 		assertDoesNotThrow(()-> this.service.addMessage(chatId, message, this.mockPrincipal));
 		
 	}
+
+	/**
+	* Tests if chat has been blocked by the Sender no new messages
+	* can be added 
+	*/
+	@Test
+	void testAddMessageChatBlockedBySender() {
+		
+		final UUID 			chatId 			= UUID.randomUUID();
+		final String 		chatSenderId 	= "u1";
+		final String 		chatRecipientId = "u2";
+		final String 		message			= "aMessage";
+		final PrivateChat 	chat 			= PrivateChat.builder().senderId(chatSenderId).recipientId(chatRecipientId).blockedBySender(true).build();
+		
+		when(this.mockPrincipal.getClaim("useCredits")).thenReturn(Optional.of(false));
+		when(this.mockChatDao.fetchChatById(chatId)).thenReturn(Optional.of(chat));
+		
+		IllegalStateException ex = assertThrows(IllegalStateException.class, ()->{
+			this.service.addMessage(chatId, message, this.mockPrincipal);
+		});
+		
+		assertEquals("Blocked", ex.getMessage());
+		
+	}
+	
+	/**
+	* Tests if chat has been blocked by the Sender no new messages
+	* can be added 
+	*/
+	@Test
+	void testAddMessageChatBlockedByRecipient() {
+		
+		final UUID 			chatId 			= UUID.randomUUID();
+		final String 		chatSenderId 	= "u1";
+		final String 		chatRecipientId = "u2";
+		final String 		message			= "aMessage";
+		final PrivateChat 	chat 			= PrivateChat.builder().senderId(chatSenderId).senderId(chatRecipientId).blockedByRecipient(true).build();
+		
+		when(this.mockPrincipal.getClaim("useCredits")).thenReturn(Optional.of(false));
+		when(this.mockChatDao.fetchChatById(chatId)).thenReturn(Optional.of(chat));
+		
+		IllegalStateException ex = assertThrows(IllegalStateException.class, ()->{
+			this.service.addMessage(chatId, message, this.mockPrincipal);
+		});
+		
+		assertEquals("Blocked", ex.getMessage());
+		
+	}
+	
 	
 	/**
 	* Tests if validation is successful Message is added and 
@@ -667,4 +718,49 @@ class PrivateChatServiceImplTest {
 		
 	}
 	
+	/**
+	* Tests exception thrown if attempts is made to delete a message when 
+	* the Chat has been blocked by the Sender
+	*/
+	@Test
+	void testDeleteMessageBlockedBySender() {
+	
+		final UUID 			chatId 			= UUID.randomUUID();
+		final UUID 			messageId		= UUID.randomUUID();
+		final String 		chatSenderId 	= "u1";
+		final String 		chatRecipientId = "u2";
+		final PrivateChat 	chat 			= PrivateChat.builder().senderId(chatSenderId).recipientId(chatRecipientId).blockedBySender(true).build();
+	
+		when(this.mockPrincipal.getClaim("useCredits")).thenReturn(Optional.of(false));
+		when(this.mockChatDao.fetchChatById(chatId)).thenReturn(Optional.of(chat));
+		
+		IllegalStateException ex = assertThrows(IllegalStateException.class, ()->{
+			this.service.deleteMessage(chatId, messageId, this.mockPrincipal);
+		});
+		
+		assertEquals("Blocked", ex.getMessage());
+	}
+	
+	/**
+	* Tests exception thrown if attempts is made to delete a message when 
+	* the Chat has been blocked by the Recipient
+	*/
+	@Test
+	void testDeleteMessageBlockedByRecipient() {
+	
+		final UUID 			chatId 			= UUID.randomUUID();
+		final UUID 			messageId		= UUID.randomUUID();
+		final String 		chatSenderId 	= "u1";
+		final String 		chatRecipientId = "u2";
+		final PrivateChat 	chat 			= PrivateChat.builder().senderId(chatSenderId).recipientId(chatRecipientId).blockedByRecipient(true).build();
+	
+		when(this.mockPrincipal.getClaim("useCredits")).thenReturn(Optional.of(false));
+		when(this.mockChatDao.fetchChatById(chatId)).thenReturn(Optional.of(chat));
+		
+		IllegalStateException ex = assertThrows(IllegalStateException.class, ()->{
+			this.service.deleteMessage(chatId, messageId, this.mockPrincipal);
+		});
+		
+		assertEquals("Blocked", ex.getMessage());
+	}
 }

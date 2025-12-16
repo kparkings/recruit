@@ -26,7 +26,7 @@
 					<div class="chat-list-box" style="clear:both" *ngFor="let chat of getChats()" (click)="showChatMessages(chat)">
 						<div>
 							<div style="float:left;">{{getUserName(chat.senderId, chat.recipientId)}}</div>
-							<div style="float:right;color:green;padding-top:5px;padding-right:5px;"><span class="chat-iconX material-icons">chat_bubble</span></div>
+							<div><span class="chat-iconX material-icons private-chat-bubble unread-messages-{{hasUnviewedMessages(chat)}}">chat_bubble</span></div>
 						</div>
 						
 					</div>
@@ -34,11 +34,17 @@
 			</div>
 			<div class="chat-view-item-panel" *ngIf="chatViewItem == 'message'">
 				<div class="pm-messages-header">
-					<span class="pm-messages-header-username">{{getSelectedChatOtherUserName()}}</span>
+					<span class="pm-messages-header-username">
+						{{getSelectedChatOtherUserName()}}
+						<span class="chat-header-{{getBlockedStatus()}} material-icons " (click)="toggleBlockUserChat()">block</span>
+						<span class="chat-header-other-user-typing material-icons " *ngIf="otherUserTypeing == true">chat</span>
+					</span>
 				</div>
 				<div class="pm-messages-messages">
 					<div id="reply.id" class="msg-reply" *ngFor="let reply of getCurrentChatReplies() ">
-						<div>{{reply.created | date:  'dd MMM yy - hh:mm'}}</div>
+						<div class="message-header">{{reply.created | date:  'dd MMM yy - hh:mm'}}
+							<span *ngIf="isOwnMessage(reply) == 'true' && getBlockedStatus() == 'unblocked'" class="message-header-delete material-icons" (click)="deleteReply(reply)" >delete</span>
+						</div>
 						<div class="message-own-{{isOwnMessage(reply)}}">{{reply.message}}</div>
 						
 					</div>
@@ -46,10 +52,13 @@
 				</div>
 				<div class="pm-messages-new-message">
 					<form [formGroup]="messageForm">
-						<textarea formControlName="newMessage" #newMsgBox>
+						<textarea formControlName="newMessage" #newMsgBox *ngIf="getBlockedStatus() == 'unblocked'" (keypress)="handleIsTyping()">
 							
 						</textarea>
-						<button class="btn btn-secondary chatBtn" (click)="sendMessage()">Send</button>
+						<div *ngIf="getBlockedStatus() != 'unblocked'">
+							<p>This chat is currently blocked.</p>
+						</div>
+						<button class="btn btn-secondary chatBtn" (click)="sendMessage()" *ngIf="getBlockedStatus() == 'unblocked'">Send</button>
 					</form>
 				</div>
 			</div>

@@ -55,7 +55,7 @@ export class PrivateMessagingService {
 	/**
 	* Sends command to update the blockes status for the User of the chat
 	*/
-	public detBlockedStatus(chatId:string, blocked:boolean): Observable<any>{
+	public setBlockedStatus(chatId:string, blocked:boolean): Observable<any>{
 		
 		const backendUrl:string = environment.backendUrl + 'privatechat/'+chatId+'/block/'+blocked;
 			

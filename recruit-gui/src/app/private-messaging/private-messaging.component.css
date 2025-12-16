@@ -115,6 +115,7 @@
 	height:50px;
 	border-bottom:2px solid grey;
 	padding:5px;
+	padding-top:10px;
 	background:#E8E8E8;
 }
 
@@ -173,3 +174,58 @@
 	color:black;
 }
 
+.message-header{
+	padding-bottom:5px;
+}
+
+.chat-header-blocked-by-other-user{
+	float:right;
+	color:red;
+	cursor:default;
+}
+
+.chat-header-other-user-typing{
+	float:right;
+	color:green;
+	margin-right:10px;
+}
+
+.chat-header-blocked{
+	float:right;
+	color:black;
+	cursor:pointer;
+}
+
+.chat-header-unblocked{
+	float:right;
+	color:black;
+	cursor:pointer;
+	color:grey;
+}
+
+.message-header-delete{
+	float:right;
+	color:black;
+	cursor
+	:pointer;
+	padding-bottom:5px;
+	font-size:16px;
+}
+
+.message-header-delete:hover{
+	color:red;
+}
+
+.private-chat-bubble {
+	float:right;
+	padding-top:5px;
+	padding-right:5px;
+} 
+
+.unread-messages-true{
+	color:green;
+}
+
+.unread-messages-false{
+	color:grey;
+}
